@@ -656,6 +656,8 @@
     if (doe.argwaan) delen.push(`argwaan ${teken(doe.argwaan)}${Math.abs(doe.argwaan)}%`);
     // Twee bazen (js/bazen.js): wat de heer en het dorp van je vinden, als de spelregel aan staat.
     if (doe.gunst && T.BAZEN_INSTELLINGEN.aan) delen.push(`gunst van de heer ${teken(doe.gunst)}${Math.abs(doe.gunst)}`);
+    // Een werkplaats in het bos van de heer (js/verzoeken.js, js/bos.js; werklijst vraag 110, e): dat kost zijn gunst.
+    if (doe.bouw && L.bouw && L.bouw.bos && T.BAZEN_INSTELLINGEN.aan) delen.push(`gunst van de heer −${T.ONTGINNEN_INSTELLINGEN.gunst}`);
     if (doe.vertrouwen && T.BAZEN_INSTELLINGEN.aan) delen.push(`vertrouwen van het dorp ${teken(doe.vertrouwen)}${Math.abs(doe.vertrouwen)}`);
     // Ontginnen (js/ontginnen.js): de heide kost vertrouwen, meer naarmate de meent kleiner wordt; het bos de gunst van de
     // heer, of stiekem het risico; en wat er niet meer is, kan niet.

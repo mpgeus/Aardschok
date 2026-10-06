@@ -153,6 +153,109 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 6 okt: de houthakker zonder bomen, en planten tot het bos blijft (werklijst, vraag 129)
+
+Gespeeld in de sessie van de heer, op `claude/heer-game-mechanics-6d9h5l`, na Marcels "Eens" op e en b van vraag 129
+(en f als het bos daarna nog opraakt), en met de kramen van de marktsessie erbij (vraag 127, uit `main`):
+`npm run speeltest -- bouwer sluw --maker --jaren 4`, drie keer, want elke keer liet het iets zien. **E** op `2e8b8fd`
+(e en b: een houthakker zonder bomen laat zijn hand gaan, en komt alleen bij minstens 30 bomen binnen tien tegels);
+**F** op `5bb6833` (een stronk staat niet meer in de weg); **G** op `d7d863c` (f: twee boompjes per boom, en wat hij kapt
+blijft bos; en de put om te rooien bereikt wie er een mist). Daarna **H**: alleen de bouwer op 62707 nog eens, met een
+meting erbij van de huizen die niet doorgroeien. Geen fouten in de console. 62707 is zaad 1, 73425 zaad 2, 72022 zaad 3.
+
+| Land | Speler | Mensen aan het eind van jaar 1 tot 4: E; F; G | Hout van de houthakkers in jaar 1 tot 4: E; F; G | Dagen stil in jaar 4 (samen): F; G |
+|---|---|---|---|---|
+| 62707 | bouwer | 52, 75, ontslagen op Sint-Maarten; 52, 97, 129, 129; 52, 100, 129, 129 | 340, 311; 359, 310, 92, 0; 359, 449, 343, 326 | 720 (twee); 516 (twee) |
+| 73425 | bouwer | 48, 76, 102, 102; 50, 87, 116, ontslagen op Sint-Maarten; 50, 87, 126, 126 | 381, 680, 280, 92 (drie); 402, 379, 91; 402, 488, 387, 405 | ontslagen; 414 (twee) |
+| 72022 | bouwer | 24 (27 doden van de kou), 48, ontslagen op Sint-Maarten; 51, 85, 110, 110; 51, 87, 129, 129 | 90, 187; 410, 66, 166, 57; 410, 246, 426, 310 | 326 (één); 502 (twee) |
+| 62707 | sluw | 55, 105, ontslagen in jaar 3; 56, 90, ontslagen in jaar 3; 56, 94, ontslagen in jaar 3 | | |
+| 73425 | sluw | 50, 94, 114, 121; gevallen op 19 wijnmaand van het eerste jaar; net zo | | |
+| 72022 | sluw | 54, gevallen in oogstmaand van het tweede jaar; net zo; net zo | | |
+
+**Wat het zegt:**
+1. **De houthakker zette zich vast met zijn eigen stronken (E).** Zolang het dorp een nieuwe houthakker vroeg als de
+   andere stilstonden, zag je het niet; met e wel. Op 72022 hakte de enige houthakker negen bomen aan de rand van het bos
+   en stond daarna 299 dagen stil: zijn stronken stonden in de weg, en bij de bomen erachter kon hij niet. Er vroren 27
+   mensen dood, en de bouwer was op Sint-Maarten zijn ambt kwijt. Nu staat een stronk die een boom achterlaat, niet in de
+   weg, zoals in een kapvlakte (`js/wereld.js`; een stronk van de maker wel, `opmerkingen.md`).
+2. **Het bos om de houthakker raakte op (F).** Met één boompje per boom, en alleen waar nog vier volgroeide bomen om de
+   stronk stonden, was zijn bereik in het eerste jaar leeg, en plantte hij daarna niets meer: wat hij dun hakte, telde
+   niet meer als bos. In het vierde jaar hakten de houthakkers op 62707 niets en op 72022 57 hout. Daarom f, eerst
+   gemeten in Node (alleen de houthakker, vier jaar op de drie landen; in het vierde jaar gemiddeld): zo 37 hout en 313
+   tot 354 dagen stil; één boompje ook waar hij het dun hakte 218; twee boompjes 475; één en een boompje waar een stronk
+   verging 376; twee, met de stronken, boompjes en jonge bomen als bos geteld, 424 en 42 tot 66 dagen stil. Dat laatste
+   is het geworden: het plant nog steeds alleen in het bos.
+3. **Het bos blijft (G).** Twee houthakkers hakken tot het eind 310 tot 490 hout per jaar, uit een jong bos: aan het eind
+   van het vierde jaar staan er binnen hun bereik 0 tot 3 volgroeide bomen, maar 11 tot 20 jonge bomen en 15 tot 36
+   boompjes. Elk staat nog zo'n half jaar stil, terwijl zijn boompjes groeien, maar het zakt niet meer weg. De drie
+   dorpen van de bouwer spelen alle vier de jaren uit en komen tot 126, 126 en 129 mensen, zonder doden van kou of
+   honger (in F twee van de drie tot het eind).
+4. **De put die niemand hielp (F, gerepareerd in G).** Vond het dorp voor een put of een kapel geen open plek die het
+   huis bereikt dat erom vroeg, dan rooide het een plek bij het hart van het dorp, die dat huis niet bereikte; een maand
+   later vroeg het opnieuw. Op 72022 kwamen er zo 48 putten, op 73425 acht kapellen. Nu moet ook een plek om te rooien
+   het huis bereiken (`js/verzoeken.js`). In G 10 tot 12 putten, en 72022 was in herfstmaand een dorp in plaats van in
+   lentemaand van het tweede jaar.
+5. **Geen dorp wint, en dat ligt aan een hut die niet kan doorgroeien (H; vraag 130).** In G hadden op 62707 en 73425 alle
+   huizen in het vierde jaar 359 en 360 dagen alles, maar de winst vraagt dat elk huis met mensen een stenen huis is (of
+   een boerderij), en één of twee hutten bleven hut. H laat zien waarom: het zijn hutten die de maker legde, en waar het
+   grotere huis moet komen, staat iets in de weg. Op 62707 hadden ze 1349 dagen alles en groeiden ze nooit: voor de
+   kleinste vorm stond er bij elk één struik, voor de grotere een eik, een bessenstruik of een appelboom, en onder de
+   ene legde de bouwer later een erf. Op elk land staat er bij het begin minstens één zo (op 62707 twee, op 73425 en
+   72022 één), en bijna altijd is het iets wat het dorp sinds vandaag kan rooien.
+6. **De sluwe bouwer** valt op 72022 in het tweede jaar tegen drie wilde rovers, in alle drie de rondes, en in F en G op
+   73425 al in het eerste jaar tegen twee (in E speelde hij daar de vier jaar uit, tot 121 mensen; `opmerkingen.md`, "De
+   schout valt tegen één wilde rover", 2 okt). Op 62707 is hij elke keer in het derde jaar zijn ambt kwijt. Dat heeft
+   niets met het bos te maken.
+
+**Wat het vraagt:** vraag 130 (een hut die niet kan doorgroeien). Vraag 129 is klaar.
+
+## De speeltest van 6 okt: grond uit het bos en de houthakker die hakt en plant (werklijst, vraag 110, e, en 115)
+
+Gespeeld in de sessie van de heer, op `claude/heer-game-mechanics-6d9h5l`, naar stap 4 van het plan bij vraag 115
+(Marcel: "A ja B ja C ja D zo"): `npm run speeltest -- bouwer sluw --maker --jaren 4`, drie spellen tegelijk, een taak
+zo'n 20 minuten, met een nieuw bosboek in de samenvatting ("Het bos"). Vier keer gespeeld, want de eerste twee lieten
+elk iets zien dat gerepareerd moest worden: **A** op het spel van `d0f78d1` (stap 1 tot en met 3); **B** op `fb4ddf3`,
+met het looppad om de hut dat het gezin mee rooit (A liet zien dat het daar misliep); **C** met de bouwer die bij een
+werkplaats in het bos de gunst weegt (`82be2ac`: dezelfde uitslag als B, zie 4 hieronder); en **D**, als C, met variant b
+van vraag 129 (`--getal GEBOUWEN.houthakker.bij.minstens=30 --getal GEBOUWEN.houthakker.bij.straal=10`: een houthakker
+alleen bij minstens 30 bomen binnen tien tegels). Geen fouten in de console, geen doden van kou of honger. 62707 is zaad
+1, 73425 zaad 2 en 72022 zaad 3.
+
+| Land | Speler | Mensen aan het eind van jaar 1 tot 4: A; B en C; D (de markt op 6 okt) | Gewonnen | Houthakkers in jaar 4: A; C; D | Dagen stil in jaar 4: A; C; D | Bomen op de kaart, eind jaar 1 → 4: C; D |
+|---|---|---|---|---|---|---|
+| 62707 | bouwer | 52, 80, 108, 108; 50, 84, 100, ontslagen; 51, 101, 119, 124 (55, 86, 94, 94) | nee | 10; 7 (jaar 3); 7 | 2716; 1445 (jaar 3); 1787 | 456 → 266 (jaar 3); 461 → 182 |
+| 73425 | bouwer | 50, 81, 99, 99; 50, 75, 108, 113; 53, 102, 113, 113 (50, 77, 83, 83) | nee | 9; 9; 6 | 2466; 2319; 1837 | 339 → 119; 337 → 78 |
+| 72022 | bouwer | 66, 118, 123, 123; 62, 102, 102, 107; 62, 107, 116, 145 (65, 79, 79, 79) | in D, op 30 louwmaand van het vierde jaar | 9; 8; 6 | 2432; 2348; 1476 | 730 → 491; 729 → 434 |
+| 62707 | sluw | 53, 108, 110, 110; 55, 75, 113, 118 | nee | 8; 8 | 1680; 2425 | 419 → 151 |
+| 73425 | sluw | ontslagen op Sint-Maarten van het eerste jaar (A en C: een stiekeme akker in het bos gevonden, −60 gunst) | nee | | | |
+| 72022 | sluw | 50, 81, 110, 110; 50, 78, 115, 118 | in B en C, op 24 slachtmaand van het vierde jaar | 8; 9 | 2212; 2024 | 685 → 396 |
+
+**Wat het zegt:**
+1. **Grond uit het bos helpt het dorp verder dan ooit.** Op 6 okt (de markt, nog zonder rooien) bleef het op 94, 83 en
+   79 mensen; nu komt elk dorp boven de 100, tot 145. Een weverij kwam er in elk spel in het tweede jaar (die vraagt 5 bij
+   5 met looppad, en vond eerst geen plek), en elk dorp heeft zijn markt. **Voor het eerst wint een dorp:** de sluwe
+   bouwer op 72022 in B en C, en de bouwer op 72022 in D.
+2. **Het looppad om de hut (gerepareerd na A).** In A vond de bouwer op 73425 vanaf het derde jaar nergens een erf, en
+   bleef het dorp op 99 mensen, één onder de maat van de winst. Een groot huis op een erf heeft zijn looppad buiten het
+   erf, en daar telde een boom nog als in de weg. Nu rooit het gezin dat looppad mee (`T.kavelVanErf`): op een vers land
+   passen er 39 tot 49 erven in plaats van 28 tot 42 (voor het rooien 13 tot 20), en in B kwam 73425 tot 113.
+3. **De houthakkers vermenigvuldigen zich en staan stil (vraag 129).** Een houthakker staat bij zijn plek aan een
+   bosrand met 12 tot 33 bomen binnen bereik, hakt er 73 per jaar, en staat na een paar maanden stil tot zijn boompjes
+   groeien. Dan vraagt het dorp een nieuwe: in het vierde jaar staan er 8 tot 10, samen 2.000 tot 2.700 dagen stil per
+   jaar, en hakken ze samen 400 tot 790 hout, wat één houthakker die het hele jaar werkt, ook maakt. Elk kost 10 hout en
+   4 goud, en houdt een hand vast die niets doet. Met variant b (D) komen er minder (6 à 7 in het vierde jaar) en staan
+   ze minder stil (1.500 tot 1.800 dagen), maar het blijft. **Het bos raakt op:** samen met de boeren die bos ontginnen
+   en wie bouwgrond rooit, staan er na vier jaar nog 78 tot 491 bomen op de kaart, van de 340 tot 735; op 73425 hakten
+   de houthakkers in D in het vijfde jaar niets meer.
+4. **De prijs is de prijs (gerepareerd na C).** De bouwer op 62707 was in B en C zijn ambt kwijt: na Sint-Maarten (26%
+   betaald, gunst 45 → 5, de tweede waarschuwing) zei hij ja tegen een jager, en dat kostte 5 gunst die de prijs onder
+   het antwoord niet noemde: de regel rekende bij het ja opnieuw uit of de plek in het bos van de heer lag. Nu kost ja
+   wat de prijs zei (`e172604`). De bouwer weegt die gunst nu ook, zoals bij het ontginnen (`82be2ac`).
+5. **Het rooien zelf.** Wie een erf of een werkplaats neemt, rooit 5 tot 102 bomen per jaar; de boeren die bos ontginnen
+   10 tot 59. Een put of een jager rooit vaak eerst zijn plek ("Fenna rooit eerst de plek voor de put").
+
+**Wat het vraagt:** vraag 129 (hoeveel bos een houthakker nodig heeft), met deze cijfers erbij. De sluwe bouwer op 73425
+blijft in zijn eerste jaar betrapt op een stiekeme akker in het bos, zoals op 5 okt (vraag 107, g).
 ## De speeltest van 6 okt: de markt die meegroeit (werklijst, vraag 127, stap 2)
 
 Gespeeld in de zesendertigste sessie, op `main` van deze sessie: het spel van `9b3837d` (het marktblok, de marktstraat, vol

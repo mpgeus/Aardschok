@@ -269,8 +269,11 @@
     // Met een erf in de hand: welke put en kapel een huis hier zou halen (2c, vraag 100, c).
     const rechthoek = voet && { x, y, b: voet.b, h: voet.h };
     const kring = voet && (T.GEBOUWEN[S.bouwSoort].erf ? T.erfKringTekst(S.dorp, rechthoek) : T.kringTekst(S.dorp, S.bouwSoort, rechthoek));
+    // En op een erf: wat er eerst gerooid moet, en of het in het bos van de heer ligt (js/erven.js; vraag 110, e).
+    const rooien = voet && T.GEBOUWEN[S.bouwSoort].erf ? T.rooiTekst(S.dorp, rechthoek) : null;
+    const tekst = [kring, rooien].filter(Boolean).join(' ');
     if (reden) T.ui.tooltip(reden, S.muis.x, S.muis.y, true);
-    else if (kring) T.ui.tooltip(kring, S.muis.x, S.muis.y);
+    else if (tekst) T.ui.tooltip(tekst, S.muis.x, S.muis.y);
     else T.ui.verbergTooltip();
     S.hover = null;
     S.handeling = null;
@@ -970,6 +973,59 @@
         staat: D.ontginnen || null,
       };
     },
+    // Het bos (js/bos.js; werklijst vraag 115): per houthakker zijn boom (en of die in het bos staat, dan plant hij er een
+    // boompje naast), hoeveel hout hij er al uit hakte, hoeveel bomen, jonge bomen en boompjes er binnen zijn bereik staan,
+    // of hij stilstaat, en wat zijn hand nu doet; en op de kaart de boompjes, de jonge bomen en de stronken die vergaan.
+    // ('hak'): elke houthakker hakt zijn boom nu om. ('groei'): elk boompje wordt nu een jonge boom, en elke jonge boom een
+    // boom.
+    bos(wat) {
+      const D = T.dorpHier(S);
+      if (!D || !D.kalender) return 'Het bos is er alleen bij een dorp.';
+      const w = S.wereld;
+      const B = T.BOS_INSTELLINGEN;
+      const hakkers = (D.gebouwen || []).filter((g) => g.klaar && T.GEBOUWEN[g.soort].bos);
+      if (wat === 'hak') for (const g of hakkers) if (T.boomVanHouthakker(D, g)) T.houthakkerHakte(D, g, B.houtPerBoom - (g.gehakt || 0));
+      if (wat === 'groei') {
+        for (const v of w.voorwerpen) if (v.geplant != null) v.geplant -= 2 * (B.boompjeDagen + B.jongeBoomDagen);
+        T.tikBosDag(D);
+      }
+      const telBij = (g) => {
+        const f = T.voetVanGebouw(g);
+        const uit = { bomen: 0, jongeBomen: 0, boompjes: 0, stronken: 0 };
+        for (let y = f.y - B.hakStraal; y < f.y + f.h + B.hakStraal; y++) {
+          for (let x = f.x - B.hakStraal; x < f.x + f.b + B.hakStraal; x++) {
+            const v = T.voorwerpOp(w, x, y);
+            if (!v) continue;
+            if (T.NATUUR.bos.telt(w, x, y, v)) uit.bomen++;
+            else if (v.soort === 'boompje') uit.boompjes++;
+            else if (v.geplant != null) uit.jongeBomen++;
+            else if (v.soort === 'boomstronk') uit.stronken++;
+          }
+        }
+        return uit;
+      };
+      const dag = Math.floor(D.kalender.dag);
+      return {
+        aan: B.houthakkerHakt,
+        houthakkers: hakkers.map((g) => {
+          const p = D.bewoners && D.bewoners.mensen.find((q) => q.werk === g);
+          const e = p && p.wezen;
+          const boom = g.boom && T.voorwerpOp(w, g.boom.x, g.boom.y);
+          return {
+            waar: `${g.x},${g.y}`,
+            boom: g.boom ? `${boom ? boom.soort : '?'} op ${g.boom.x},${g.boom.y}${T.isBos(w, g.boom.x, g.boom.y) ? ', in het bos' : ', in de wei'}` : g.boom === null ? 'geen' : 'nog niet gekozen',
+            gehakt: `${Math.round((g.gehakt || 0) * 10) / 10} van ${B.houtPerBoom} hout`,
+            stil: g.stilWant || null,
+            binnenBereik: telBij(g),
+            hand: e ? `${T.naamVanBewoner(p)}: ${e.werkt ? `${e.werkt.soort}${e.werkt.tot == null ? ', op weg' : ''} op ${e.werkt.x},${e.werkt.y}` : e.draagt ? 'brengt een bundel naar de schuur' : 'niet aan het hakken'}` : 'niemand',
+          };
+        }),
+        boompjes: w.voorwerpen.filter((v) => v.soort === 'boompje').length,
+        jongeBomen: w.voorwerpen.filter((v) => v.geplant != null && v.soort !== 'boompje').length,
+        stronken: w.voorwerpen.filter((v) => v.gehaktOp != null).map((v) => `${v.x},${v.y} vergaat op dag ${v.gehaktOp + B.stronkDagen}`).slice(0, 12),
+        vandaag: dag,
+      };
+    },
     // Wie er een praatje maakt (js/praatje.js; werklijst vraag 120): per groepje wie erin staan (en wie nog komt), waar
     // en tot hoe laat, en hoeveel er nu vrij zijn. ('nu'): de twee vrije bekenden die het dichtst bij elkaar staan,
     // beginnen nu een praatje (staan ze verder dan zes tegels uit elkaar, dan zegt het dat).
@@ -1253,7 +1309,8 @@
         const hut = e.hut;
         const wie = hut && S.dorp.bewoners ? S.dorp.bewoners.mensen.filter((p) => p.huis === hut).map((p) => p.naam) : [];
         const vrij = T.hutPastOpErf(S.dorp, e) ? 'vrij' : 'vrij, maar er past geen hut meer op (vraag 110, f)';
-        const staat = !hut ? vrij : hut.wachtOpHout ? 'wacht op hout' : hut.klaar ? `een ${T.GEBOUWEN[hut.soort].naam}` : `in aanbouw, klaar op dag ${hut.klaarOp}`;
+        const rooien = hut && hut.wachtOpRooien ? `het gezin rooit nog ${T.teRooienOp(S.dorp, hut.kavel).length} tegels, tot uiterlijk dag ${hut.rooienTot}` : null;
+        const staat = !hut ? vrij : rooien || (hut.wachtOpHout ? 'wacht op hout' : hut.klaar ? `een ${T.GEBOUWEN[hut.soort].naam}` : `in aanbouw, klaar op dag ${hut.klaarOp}`);
         return { x: e.x, y: e.y, staat, wie: wie.join(', ') };
       });
     },

@@ -8,8 +8,12 @@ const T = require('./laad.cjs').spel();
 
 // Zoals vóór 30 sep, met de spelregel "Het seizoen" op jij: niemand sprokkelt (werklijst vraag 74, stap 2). Voor de
 // toetsen die wat een werkplaats maakt precies nameten.
+// Zonder dat de boeren het seizoen doen (de spelregel "Het seizoen" op jij), en met de houthakker van voor 6 okt, die zijn
+// hout uit het niets maakt: deze toetsen gaan over wat een werkplaats maakt, en hun kaartje heeft geen bomen (wat de
+// houthakker aan bomen omhakt, toetst test/bos.test.cjs).
 function alsJijHetSeizoenDoet(fn) {
   T.zetOptie('seizoen', 'jij');
+  T.zetOptie('houthakker', 'uitHetNiets');
   try {
     return fn();
   } finally {

@@ -32,7 +32,7 @@
 //                                    // bezetting (T.tikGebouwenDag schaalt mee met hoe bezet hij is
 //                                    // én, sinds js/behoeften.js, met de tevredenheid). Wie iets
 //                                    // omzet (met `in`), maakt tot er genoeg ligt (T.maaktTot).
-//     bij:         null,             // of { natuur: 'bos', straal: 7, minstens: 8 }: hij hoort bij het
+//     bij:         null,             // of { natuur: 'bos', straal: 10, minstens: 30 }: hij hoort bij het
 //                                    // bos, de rotsen of het water (T.NATUUR), en wordt alleen gebouwd
 //                                    // waar daarvan zoveel binnen `straal` tegels van zijn voet ligt.
 //                                    // Meer dan het looppad (drie tegels): een boom, een rots en water
@@ -155,7 +155,10 @@
       naam: 'houthakker', trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 10, goud: 4 }, heer: { hout: 20 }, bouwtijd: 3,
       // bos: hij hakt in het bos van de heer, dus de wet Houtkap laat hem meer hakken (js/wetten.js, T.maaktUit).
       handen: 1, woonruimte: 0, maakt: { uit: { hout: 2 } }, bos: true, verdacht: false, menu: true,
-      bij: { natuur: 'bos', straal: 7, minstens: 8 },
+      // Bij genoeg bos voor een tijd werk (werklijst vraag 129, b; Marcel, 6 okt: "Eens"): zijn bereik is tien tegels
+      // (T.BOS_INSTELLINGEN.hakStraal, js/bos.js), en hij hakt 73 bomen per jaar. Tot dan 8 bomen binnen 7 tegels: dan stond
+      // hij na een paar maanden stil.
+      bij: { natuur: 'bos', straal: 10, minstens: 30 },
       tekening: 'gebouwen/houtschuur', beschrijving: 'hout uit het bos van de heer', opmerking: '',
     },
     // Sinds de weides, stap 2 (25 sep 2026) maakt de kooi zelf niets: de schapen van de heide slapen
@@ -599,6 +602,9 @@
   function toestandZin(D, g, soort) {
     const naam = T.hoofdletter(soort.naam);
     if (!g.klaar) {
+      // Nog niet begonnen: de plek wordt eerst gerooid (js/bos.js), of de bouwplaats wacht op hout (js/erven.js).
+      if (g.wachtOpRooien) return `${naam}: eerst wordt de plek gerooid.`;
+      if (g.klaarOp == null) return `${naam}: de bouwplaats wacht op hout.`;
       const dagNu = D.kalender ? Math.floor(D.kalender.dag) : 0;
       const nog = Math.max(1, g.klaarOp - dagNu);
       return `${naam}: in aanbouw, nog ${nog} dag${nog === 1 ? '' : 'en'}.`;
@@ -637,7 +643,9 @@
   // (T.waaromPastErfNiet, js/erven.js). Het bouwmenu laat de reden zien bij de muis en na een klik
   // (js/main.js).
   // Met `tekening` voor een andere tekening dan de volgende (een andere stand, js/bouwstijl.js).
-  T.waaromPastHetNiet = function (D, soort, x, y, tekening) {
+  // `kavel` ({ x, y, b, h }, of null): een stuk dat eerst gerooid wordt (js/bos.js; werklijst vraag 110, e). Wat daarop te
+  // rooien is (een boom, een stronk, een struik), telt dan als vrij, onder de voet en in het looppad.
+  T.waaromPastHetNiet = function (D, soort, x, y, tekening, kavel = null) {
     if (T.GEBOUWEN[soort] && T.GEBOUWEN[soort].erf) return T.waaromPastErfNiet(D, x, y);
     // De markt op het plein (js/markt.js): zijn plek is het plein, waar je ook wijst.
     if (soort === 'markt' && T.marktOpHetPlein(D)) return T.waaromGeenMarktOpHetPlein(D);
@@ -649,7 +657,7 @@
     for (let dy = 0; dy < voet.h; dy++) {
       for (let dx = 0; dx < voet.b; dx++) {
         if (T.opHetPlein(w, x + dx, y + dy)) return 'Op het plein wordt niet gebouwd.';
-        if (T.isVast(w, x + dx, y + dy)) vast = true;
+        if (T.isVast(w, x + dx, y + dy) && !(kavel && T.ontginWerkOp(w, x + dx, y + dy))) vast = true;
         else if (!vast) reden = reden || T.waaromNietOpDezeGrond(D, x + dx, y + dy);
       }
     }
@@ -658,7 +666,7 @@
     const natuur = T.waaromNietBijDeNatuur(D, soort, { x, y, b: voet.b, h: voet.h });
     if (natuur) return natuur;
     const n = T.GEBOUWEN_INSTELLINGEN.looppad;
-    if (!T.looppadOm(D, { x, y, b: voet.b, h: voet.h }, n)) return `Er moet een looppad omheen: ${n === 1 ? 'een tegel' : `${T.telwoord(n)} tegels`} vrij, zonder gebouw of boom.`;
+    if (!T.looppadOm(D, { x, y, b: voet.b, h: voet.h }, n, kavel)) return `Er moet een looppad omheen: ${n === 1 ? 'een tegel' : `${T.telwoord(n)} tegels`} vrij, zonder gebouw of boom.`;
     return T.waaromNietOpIemand(D, { x, y, b: voet.b, h: voet.h });
   };
 
@@ -673,6 +681,9 @@
     bos: { naam: 'het bos', meervoud: 'bomen', telt: (w, x, y, v) => !!v && BOMEN.has(v.soort) },
     rotsen: { naam: 'de rotsen', meervoud: 'rotsen', telt: (w, x, y, v) => !!v && v.soort === 'rots' },
     water: { naam: 'het water', meervoud: 'tegels water', telt: (w, x, y) => !!(w.grond && w.grond[y] && w.grond[y][x] && w.grond[y][x].naam === 'water') },
+    // Wat te rooien is en geen boom (een struik, een stronk; T.ontginWerkOp, js/ontginnen.js): voor wat er op een stuk te
+    // rooien staat (T.watTeRooien, js/bos.js).
+    struiken: { naam: 'de struiken', meervoud: 'struiken en stronken', telt: (w, x, y, v) => !!v && T.ontginWerkOp(w, x, y) === 'rooien' },
   };
   // Per kaart en per soort een optelsom over de tegels, opnieuw als de kaart veranderde (T.kaartVersie, js/wereld.js):
   // zo kost de vraag hoeveel er rond een plek ligt één stap, ook voor de duizenden plekken die een verzoek afzoekt
@@ -718,16 +729,22 @@
 
   // Is er een looppad van `breed` tegels rondom de rechthoek r ({ x, y, b, h })? Elke tegel in die rand is te belopen
   // (T.isBegaanbaar, js/wereld.js: geen muur, geen gebouw, geen boom) en niet de plek van het huis op een erf (T.huisPlekOp,
-  // js/erven.js; behalve van het erf `behalve`), of ligt buiten de kaart, waar niemand loopt.
-  T.looppadOm = function (D, r, breed, behalve = null) {
+  // js/erven.js; behalve van het erf `behalve`), of ligt buiten de kaart, waar niemand loopt. Op het stuk `rooien` (een
+  // rechthoek; zonder: `behalve`) telt wat te rooien is als vrij: het erf, het looppad om de hut op een erf, of het stuk
+  // dat gerooid wordt voor een werkplaats (js/bos.js).
+  T.looppadOm = function (D, r, breed, behalve = null, rooien = behalve) {
     const w = D.wereld;
     const hoog = w.tegels.length;
     const wijd = w.tegels[0].length;
+    // Op het stuk dat gerooid wordt, telt wat te rooien is (een boom, een stronk, een struik) als vrij: dat rooit wie er
+    // komt, voor de bouwplaats er ligt (js/bos.js; werklijst vraag 110, e).
+    const opHetErf = (x, y) => rooien && x >= rooien.x && x < rooien.x + rooien.b && y >= rooien.y && y < rooien.y + rooien.h;
     for (let y = r.y - breed; y < r.y + r.h + breed; y++) {
       for (let x = r.x - breed; x < r.x + r.b + breed; x++) {
         if (x >= r.x && x < r.x + r.b && y >= r.y && y < r.y + r.h) continue;
         if (x < 0 || y < 0 || x >= wijd || y >= hoog) continue;
-        if (!T.isBegaanbaar(w, x, y, { deurenOpenen: true }) || T.huisPlekOp(D, x, y, behalve)) return false;
+        const vrij = T.isBegaanbaar(w, x, y, { deurenOpenen: true }) || (opHetErf(x, y) && T.ontginWerkOp(w, x, y));
+        if (!vrij || T.huisPlekOp(D, x, y, behalve)) return false;
       }
     }
     return true;
@@ -932,14 +949,16 @@
   // { gelukt, reden } terug (reden alleen als het niet lukte), zodat de aanroeper kan zeggen
   // waarom een klik niets deed — dezelfde vorm als handelingVerkennen/handelingGevecht
   // (CLAUDE.md, "Scherm en klik stellen dezelfde vraag").
-  T.plaatsGebouw = function (D, soort, x, y) {
+  // `rooien` ({ x, y, b, h }, of null): het stuk dat de inwoner die erom vroeg eerst rooit (js/verzoeken.js, js/bos.js;
+  // werklijst vraag 110, e). Dan wacht het gebouw, nog niet op de kaart, en begint het pas als dat stuk vrij is.
+  T.plaatsGebouw = function (D, soort, x, y, rooien = null) {
     const g = T.GEBOUWEN[soort];
     if (!g || g.menu === false) return { gelukt: false, reden: 'Dat kan niet via het bouwmenu.' };
     // Een erf is land, geen gebouw: het krijgt geen voorwerp en maakt de grond niet vast (js/erven.js).
     if (g.erf) return T.legErfAan(D, x, y);
     // De markt op het plein: kramen, geen gebouw met een voet (js/markt.js; werklijst vraag 110, d).
     if (soort === 'markt' && T.marktOpHetPlein(D)) return T.zetMarktOpHetPlein(D);
-    const past = T.waaromPastHetNiet(D, soort, x, y);
+    const past = T.waaromPastHetNiet(D, soort, x, y, null, rooien);
     if (past) return { gelukt: false, reden: past };
     if (!T.kanBetalen(D, g.kosten)) return { gelukt: false, reden: 'Daar is de voorraad niet groot genoeg voor.' };
     T.betaalKosten(D, g.kosten);
@@ -948,19 +967,26 @@
     const tekening = T.neemTekening(D, soort);
     const voet = T.gebouwVoet(soort, tekening);
     const instantie = { soort, x, y, tekening, voet, klaar: g.bouwtijd <= 0, klaarOp: dagNu + g.bouwtijd, handen: 0, voorwerp: null };
+    if (rooien && T.teRooienOp(D, rooien).length) {
+      Object.assign(instantie, { klaar: false, klaarOp: null, wachtOpRooien: true, kavel: rooien, rooienTot: dagNu + T.BOS_INSTELLINGEN.rooiDagen });
+    }
     T.bouwGebouw(D, instantie);
+    if (instantie.wachtOpRooien) return { gelukt: true, instantie, bericht: `${T.hoofdletter(g.naam)}: eerst wordt de plek gerooid.` };
     return { gelukt: true, instantie, bericht: `${T.hoofdletter(g.naam)} in aanbouw (${g.bouwtijd} dag${g.bouwtijd === 1 ? '' : 'en'}).` };
   };
 
   // Een gebouw in het dorp zetten: in S.gebouwen, met zijn voorwerp op de kaart (zetGebouwVoorwerp
   // hierboven). Voor wat de speler neerzet (T.plaatsGebouw) en voor de hut die een gezin op zijn erf
-  // zet (T.zetHutOpErf, js/erven.js): één manier voor allebei.
+  // zet (T.zetHutOpErf, js/erven.js): één manier voor allebei. Een hut op een erf dat het gezin nog rooit
+  // (`wachtOpRooien`, werklijst vraag 110, e) telt al als zijn huis, maar komt pas op de kaart als het erf vrij is
+  // (T.zetOpDeKaart, vanuit T.tikRooienDag in js/bos.js).
   T.bouwGebouw = function (D, instantie) {
     D.gebouwen.push(instantie);
-    zetGebouwVoorwerp(D, instantie);
+    if (!instantie.wachtOpRooien) zetGebouwVoorwerp(D, instantie);
     if (T.ui && T.ui.toonBevolking) T.ui.toonBevolking(D);
     return instantie;
   };
+  T.zetOpDeKaart = (D, instantie) => zetGebouwVoorwerp(D, instantie);
 
   // De gebouwen die al op de kaart staan (kaarten/<naam>.betekenis.json, ding "gebouw": de vijf
   // boerderijen en het huis van de schout op het gehucht) meteen als klaar registreren, zodat het
@@ -1033,7 +1059,9 @@
     let vrij = T.werkendeHanden(D);
     for (const g of D.gebouwen) {
       const soort = T.GEBOUWEN[g.soort];
-      if (!g.klaar || !soort.handen || g.verzegeld) {
+      // Een houthakker zonder boom binnen zijn bereik wil geen handen: zijn hand werkt elders tot er weer een boom staat
+      // (js/bos.js; werklijst vraag 129, e).
+      if (!g.klaar || !soort.handen || g.verzegeld || T.houthakkerZonderBoom(g)) {
         g.handen = 0;
         continue;
       }
@@ -1145,8 +1173,12 @@
     // En de feesten (js/feesten.js): begint er vandaag een, dan zegt het dorp het en staat de meiboom er; op een hele
     // feestdag werkt niemand (stap 6 hieronder).
     T.tikFeestenDag(D, dag);
-    // Een hut op een erf die op hout wachtte, begint als het er nu is (js/erven.js).
+    // Een gebouw dat op het rooien wachtte (een hut op een erf, of een werkplaats in het bos), komt op de kaart als zijn
+    // stuk vrij is (js/bos.js); een hut op een erf die op hout wachtte, begint als het er nu is (js/erven.js).
+    T.tikRooienDag(D);
     T.tikErvenDag(D);
+    // Het bos (js/bos.js): een boompje wordt een jonge boom, een jonge boom een boom, en een oude stronk vergaat.
+    T.tikBosDag(D);
     // 1. Gebouwen die vandaag klaarkomen: het spookbeeld wordt de tekening zelf (dezelfde
     // voorwerp-ingang, zie zetGebouwVoorwerp hierboven — er komt er geen tweede bij). Een bouwplaats
     // die nog niet begon (klaarOp null, js/erven.js), komt niet klaar.
@@ -1224,7 +1256,8 @@
         g.stilWant = 'het dorp viert feest';
         continue;
       }
-      const stil = soort.stilIn && seizoen && soort.stilIn[seizoen];
+      // Wie in dit seizoen stilligt, of een houthakker die binnen zijn bereik geen boom meer vindt (js/bos.js).
+      const stil = (soort.stilIn && seizoen && soort.stilIn[seizoen]) || T.waaromHaktHijNiet(D, g);
       if (stil) {
         g.stilWant = stil;
         if (!wasStil && T.ui && T.ui.bericht) T.zeg(D, `${T.hoofdletter(soort.naam)} staat stil: ${stil}.`);
@@ -1273,6 +1306,9 @@
       if (soort.maakt.in) for (const wat in soort.maakt.in) T.wijzigVoorraad(D, wat, -soort.maakt.in[wat] * factor);
       const uit = T.maaktUit(D, soort);
       if (uit) for (const wat in uit) T.wijzigVoorraad(D, wat, uit[wat] * factor);
+      // Het hout van de houthakker kwam uit zijn boom: is die om, dan staat er een stronk, en hakt hij morgen de volgende
+      // (js/bos.js).
+      if (uit && uit.hout) T.houthakkerHakte(D, g, uit.hout * factor);
     }
     // Wat in gebruik was, slijt: één stuk per hand die vandaag echt iets maakte (een smidse zonder
     // ijzer slijt zijn hamers niet).

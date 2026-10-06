@@ -362,7 +362,35 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   zijn erf doorgroeit. Zonder vrij erf zegt het dorp dat er geen plaats is (`T.gezinZoektEenErf`). Wat in het
   bouwmenu staat, zegt `T.inBouwmenu`: het erf, en de woningen niet, tenzij de spelregel "Huizen" anders zegt. Op
   een akker, een weide, een pad of een erf bouw je niet (`T.waaromNietOpDezeGrond`). De paaltjes op een vrij erf
-  tekent `js/tekenen.js` (`T.paaltjesVan`, `T.sprites.paaltje`).
+  tekent `js/tekenen.js` (`T.paaltjesVan`, `T.sprites.paaltje`). **Een erf mag op struiken en bomen** (vraag 110, e, 6
+  okt): wat te rooien is (`T.ontginWerkOp` in `js/bos.js`) houdt het niet tegen (`T.rooiTekst` voor de muis), ook niet in
+  het looppad om de hut buiten het erf; het gezin dat het neemt, rooit het erf met dat looppad zelf (`T.kavelVanErf`), en
+  zolang wacht de hut, nog niet op de kaart (`js/bos.js`). Een erf in het bos van de heer kost zijn gunst.
+- `js/bos.js`: **het bos: omhakken, rooien, planten en groeien** (vraag 110, e, met 115, 6 okt; Marcel: "A ja B ja C ja D
+  zo"), met de getallen in `T.BOS_INSTELLINGEN`. Wat te rooien is, zegt `T.ontginWerkOp` ('hakken' voor een boom,
+  'rooien' voor een stronk, een struik, een boompje of een jonge boom); een boom om met `T.hakBoom` (het hout naar de
+  schuur: `houtPerBoom`, wie hem ook omhakt) of `T.velBoom` (zonder), en de rest eruit met `T.rooi`. Bos is waar minstens
+  `bosBomen` bomen in de vijf bij vijf tegels staan (`T.isBos`; ook de bosrand waar de boeren sprokkelen). **De
+  houthakker** (vraag 115; de spelregel "De houthakker") maakt zijn hout zoals altijd (2 per dag, in `T.tikGebouwenDag`),
+  maar uit een boom: de dichtste binnen `hakStraal` van zijn schuur (`T.boomVanHouthakker`, `g.boom`), en elke
+  `houtPerBoom` hout is die om (`T.houthakkerHakte`, `g.gehakt`): een stronk (`v.gehaktOp`, vergaat na `stronkDagen`, en
+  staat niet in de weg), en stond hij in het bos, twee boompjes ernaast (`boompjesPerBoom`, `T.plantNaast`, `v.geplant`,
+  `v.wordt`; wat hij kapt en inplant, blijft bos: `T.isBos` met `ookJong`, vraag 129, f), die in een jaar of twee via een
+  jonge boom een boom worden (`T.tikBosDag`; de tekeningen `boompje`, `jongeEik`, `jongeDen`, `jongeBerk` in het vel van
+  de bomen). Staat er binnen zijn bereik geen boom meer, dan staat hij stil (`T.waaromHaktHijNiet`) en wil hij geen handen
+  (`T.houthakkerZonderBoom`, in `T.verdeelHanden`): zijn hand werkt elders tot er weer een boom staat; de raad zegt het
+  (`geenBoom`), en een nieuwe houthakker vraagt het dorp pas als het hout de winter niet haalt (vraag 129, e). Hij komt
+  alleen bij minstens 30 bomen binnen tien tegels (`bij` in `T.GEBOUWEN`; vraag 129, b). Zijn poppetje hakt aan zijn
+  boom en brengt het hout in bundels naar de schuur (`hakHout` in `js/veldwerk.js`). **Rooien:** een gebouw op een stuk
+  waar nog iets te rooien staat (een boom, een stronk, een struik: `T.teRooienOp`, `T.watTeRooien`), wacht erop
+  (`g.wachtOpRooien`, met `g.kavel` en `g.rooienTot`), nog niet op de kaart (`T.bouwGebouw` zet het er pas met
+  `T.zetOpDeKaart` op), maar telt al mee: de hut van een gezin op zijn erf (`js/erven.js`), of een werkplaats die een
+  inwoner vroeg waar geen open grond meer was (`T.plekVoor` in `js/verzoeken.js`; `rooien` bij `T.plaatsGebouw` en
+  `T.waaromPastHetNiet`). Wie rooit (`T.rooitHij`: het hoofd van het gezin, of wie de werkplaats vroeg, `p.rooit`), hakt en
+  rooit met de bijl zoals een boer ontgint (`T.werkVeldwerkBij` in `js/veldwerk.js`; het gezin van een erf helpt,
+  `T.helpAnker`) en werkt zolang nergens; is het stuk vrij, dan ligt de bouwplaats er de volgende dag, en na `rooiDagen`
+  rooien de buren de rest (`T.tikRooienDag`). Een stuk in het bos van de heer (`T.inHetBosVanDeHeer`: zoveel bomen als een
+  stuk bos bij het ontginnen) kost zijn gunst.
 - `js/bouwstijl.js`: **de bouwstijl van een land** (vraag 114, stap 2, 4 okt): elk land van de maker bouwt in één stijl
   (`w.stijl`, uit het nummer van het land, `T.stijlVoorLand`; het ontworpen gehucht heeft er geen en bouwt zoals altijd),
   met per soort een paar vormen, elk met de deur naar elke kant. De huizenbouwer noemt dat een stand; in het spel heet het
@@ -518,7 +546,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   etc. Ze vragen alleen toestemming om te bouwen"): met de spelregel "Wie bouwt" op "De mensen"
   (`T.VERZOEKEN_INSTELLINGEN.mensen`) staat alleen het erf in het bouwmenu, en vraagt een inwoner je wat het dorp mist
   (`T.watTeBouwen` in `js/raad.js`): een voorval `bouwverzoek` (`T.beginBouwverzoek`, vanuit `T.tikVoorvallenDag`), met `L.bouw` = { soort, x,
-  y, waarom, nut } en de woorden `{wil}`, `{gebouw}`, `{plek}`, `{waarom}`, `{kosten}`. Waar het komt, zegt `T.plekVoor` (met drie tegels looppad rondom, zoals elk gebouw);
+  y, waarom, nut } en de woorden `{wil}`, `{gebouw}`, `{plek}`, `{waarom}`, `{kosten}`. Waar het komt, zegt `T.plekVoor` (met drie tegels looppad rondom, zoals elk gebouw; is er geen open grond meer, dan een plek die hij eerst rooit, `js/bos.js`);
   ja (`doe.bouw`) zet het neer (`T.verzoekToegestaan`, met `g.meester`), nee (`doe.weiger`) onthoudt het (`D.verzoeken`).
   Een oproep op het plein (`T.doeOproep`, de rij Oproepen in het bouwmenu) gaat voor, met een premie bovenop de kosten.
   Wat er mag (de trede), vraag je aan `T.magGebouwd`; wat jij in het bouwmenu hebt, aan `T.inBouwmenu` (`js/gebouwen.js`).
@@ -626,7 +654,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   van zijn werk (`WERKFIGUREN`: de zaaier, de wieder, de sprokkelaar, en de hakker met de bijl in het bos; een boerin die van een
   vrouw, `werkVelVan`; wie naast zijn werk staat, kijkt ernaar, `e.werkt.op`). De schaft houdt hij op de akker. Zijn boerin en
   grote kinderen helpen bij het zaaien, de oogst en het ontginnen (`T.helpAnker`, voor `T.dagAnker`; een anker dat
-  meeloopt, zonder veld: `veld: false`). De regels veranderen niet; de getallen in `T.VELDWERK_INSTELLINGEN`.
+  meeloopt, zonder veld: `veld: false`). Net zo rooit wie zijn erf of de plek van zijn werkplaats rooit, en hakt de
+  houthakker aan zijn boom (`js/bos.js`). De regels veranderen niet; de getallen in `T.VELDWERK_INSTELLINGEN`.
 - `js/ontginnen.js`: **ontginnen** (vraag 107, stap 1 en 2, 5 okt; Marcel: "107 a b c d e ja", en voor het bos "A a2, B
   ok, C ja, D ok, E ok, F Ja, G ok, H goed idee"): komt het dorp graan tekort (`T.graanTekort`), dan wijst een boer of
   zijn zoon een stuk heide en een stuk bos aan, dertig tegels elk, en jij kiest (a2): een voorval `ontginverzoek`
@@ -647,8 +676,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   zegt `T.ontginPrijs` (voor `T.prijsVanKeuze`). Ja (`T.ontginToegestaan(D, L, soort)`) maakt er een veld van zijn
   boerderij van, met `veld.ontginning` = { tot, op ('heide' of 'bos'), gestoken } en `veld.ontgonnen`; een nieuw veld
   meldt `T.kaartVeranderd`. Het werk staat in `js/veldwerk.js` (`ontgin`, `T.volgendeOntginning`): plaggen steken, en
-  in het bos van recht naast de tegel een boom omhakken (`T.hakBoom`: 4 hout, een stronk, en de tegel wordt weer vloer) en
-  een stronk of struik rooien (`T.rooi`, `T.ontginWerkOp`), en omspitten (`T.steekPlag`, die ook wat laag groeit
+  in het bos van recht naast de tegel een boom omhakken (`T.hakBoom` in `js/bos.js`: 10 hout, een stronk, en de tegel
+  wordt weer vloer) en een stronk of struik rooien (`T.rooi`, `T.ontginWerkOp`), en omspitten (`T.steekPlag`, die ook wat laag groeit
   weghaalt); een half werk onthoudt hij in `e.veldwerk.over`, en wat hij niet af heeft, is nog heide of bos
   (`T.akkerTegelStadium`). Is het af, of is de maand of de winter om, dan is het ontgonnen, en doen zijn mensen de rest
   (`T.tikOntginnenDag`). De plekken liggen in goud op de grond, met een rand bovenop (`tekenOntginRand` in
@@ -983,7 +1012,9 @@ staan nu beginnen (vraag 120). `Spel.debug.veldwerk()` zegt per boer wat hij van
 en waar, hoe ver hij is en wie hem helpt (vraag 111). `Spel.debug.ontginnen()` zegt of het dorp graan tekortkomt, welk
 stuk heide elke boer zou vragen, hoeveel stukken er al af zijn en wat het volgende kost, wat er ontgonnen wordt en hoe
 ver; `('nu')` laat het verzoek nu komen, ook zonder tekort
-(vraag 107). `Spel.debug.getuigen()` zegt hoe ver je de schout nu ziet waar
+(vraag 107). `Spel.debug.bos()` zegt per houthakker zijn boom, hoeveel hout hij er al uit hakte, wat er binnen zijn bereik
+staat (bomen, jonge bomen, boompjes, stronken), of hij stilstaat en wat zijn hand doet; `('hak')` laat elke houthakker nu
+zijn boom omhakken, `('groei')` laat elk boompje en elke jonge boom nu een maat groeien (vraag 115). `Spel.debug.getuigen()` zegt hoe ver je de schout nu ziet waar
 hij staat, wie er kijkt, en welk licht er brandt.
 `Spel.debug.slachten()` opent het slachtvenster nu (anders op 1
 slachtmaand). `Spel.debug.opslaan('2')` zet het spel op plek 2, `Spel.debug.laden('auto')` laadt wat er vanzelf

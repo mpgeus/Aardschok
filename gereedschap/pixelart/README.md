@@ -47,7 +47,10 @@ Dat schrijft alle beelden naar `uit/` (niet in git). Er zijn geen afhankelijkhed
 De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
 
 - `bomen.cjs`: eik, herfsteik, den, berk, dode boom, treurwilg en appelboom, plus struiken,
-  varens, gras, bloemen, paddenstoelen, stronken en rotsen, en een grasvloer.
+  varens, gras, bloemen, paddenstoelen, stronken en rotsen, en een grasvloer. Sinds 6 okt (vraag
+  115, f) ook het boompje dat de houthakker plant en een jonge eik, den en berk (`o.jong`, de maten
+  in `JONG`); `node export-bomen.cjs jong` maakt er de proefplaat van, per soort naast de volwassen
+  boom en een boer (`uit/buiten/jonge-bomen-proef.png`).
 - `dorp.cjs` en `dorp2.cjs`: de grond (gras, zandpad, kasseien, water), de huizen (`huis(o)`
   bouwt er een uit onderdelen), en de plekken: kapel, kerkhof, watermolen, bakkerij, kruidenhut,
   jagershut, het huis van de dorpsoudste, het bruggetje en de vijver. De werkplaatsen van het spel

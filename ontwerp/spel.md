@@ -26,8 +26,9 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | De raadsman | gebouwd (30 sep): een van de boeren, met twee gelote vaardigheden, die de voorvallen beslist als je weg bent, naar zijn karakter; je kiest hem met de knop Raadsman (R) | vraag 64, 65, 66, 67, 68 |
 | Het rapport van de raadsman | gebouwd (1 okt): de eerste fase van de dag; elke ochtend brengt hij je aan je deur wat er gebeurde, hoe het graan en het hout gaan, of ze de winter halen, wat er speelt en wat er komt, met zijn rekenen in de getallen | vraag 75 |
 | De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf; sinds 1 okt ook wat je mist voor de kapel en de smidse, en waar het vandaan komt; sinds 2 okt wat de huizen missen, en de ketens (een molen voor de bakkerij) | vraag 58, 79, 87, 90 |
+| De houthakker hakt en plant | gebouwd (6 okt; Marcel: "A ja B ja C ja D zo"): zijn hout komt uit de bomen om zijn schuur, elke tien hout een boom; naast de stronk twee boompjes, in een jaar of twee bomen, zodat het bos om hem blijft; zonder boom staat hij stil, en werkt zijn hand elders; hij komt alleen bij minstens 30 bomen binnen tien tegels, en loopt tussen zijn stronken door (vraag 129, e, b en f); in de speeltest van vier jaar komt elk dorp boven de 100 en wint er voor het eerst een | vraag 115, 129 |
 | De markt op het plein | gebouwd (6 okt; vraag 110, d, en 127, stap 1 en 2): een marktblok van twee rijen kramen met manden op het plein, voor 8 hout en 6 goud, dat meegroeit met het dorp (een kraam per 15 mensen, daarna langs de weg), met kramen vol of leeg naar wat het dorp heeft; de maker legt een groter plein; de kooplui, de boodschappen en de marktdag nog niet | vraag 110, d; 127 |
-| De verzoeken | stap 1 tot en met 3 gebouwd (3 okt): wat het dorp mist, komt een inwoner je vragen, met de plek die hij koos en wat het kost; ja of nee, en ben je weg, dan beslist je raadsman; in het bouwmenu alleen nog het erf en oproepen met een premie (de spelregel "Wie bouwt"); de speeltest speelt zo; en uit eigen wil: een ondernemer die wapens wil maken (verboden) of een tweede herberg beginnen, met wat ja en nee aan gevolgen hebben (vraag 104) | vraag 103, 104 |
+| De verzoeken | stap 1 tot en met 3 gebouwd (3 okt): wat het dorp mist, komt een inwoner je vragen, met de plek die hij koos en wat het kost; ja of nee, en ben je weg, dan beslist je raadsman; in het bouwmenu alleen nog het erf en oproepen met een premie (de spelregel "Wie bouwt"); de speeltest speelt zo; en uit eigen wil: een ondernemer die wapens wil maken (verboden) of een tweede herberg beginnen, met wat ja en nee aan gevolgen hebben (vraag 104); sinds 6 okt rooit wie een werkplaats vraagt zijn plek eerst, als er geen open grond meer is (vraag 110, e) | vraag 103, 104, 110 |
 | Twee bazen | stap 1 en 2 gebouwd (3 okt; Marcel: "106 a b c d ja"): de gunst van de heer en het vertrouwen van het dorp in de balk, met een waarschuwing onder 20 en op 0 weg (ontslagen of weggejaagd); betrapt op verstoppen is de laatste waarschuwing; elke maand een gril van de heer in een brief, die zijn gunst tegen het dorp weegt | vraag 106 |
 | Dorpsfeesten | gebouwd (3 okt): het oogstfeest en de meiboom; zeg je ja, dan viert het hele dorp het op het plein, een hele dag (en niemand werkt) of een avond, met licht en de meiboom in pixel art; de rest (meer feesten, een grote bruiloft) later | vraag 84, 97 |
 | Besloten | het spel zelf (23 sep); geldt nog | |
@@ -444,7 +445,11 @@ letter voor letter mee zoals ervoor).
   hadden tot 1 okt geen voorwerp, en groeiden nooit. **Het stenen huis** is het stenen broertje van een van de zes huizen,
   met dezelfde vorm, veldsteen en een stenen schoorsteen, onder riet (vraag 85, d; leien en pannen staan op de proefplaat
   van 1 okt): een huis versteent op zijn eigen grond. Het broertje van het huis met de schoor is twee tegels smaller, want
-  een stenen muur heeft geen schoor.
+  een stenen muur heeft geen schoor. Een huis groeit vanaf zijn linkerbovenhoek naar rechts en naar onder, en waar het
+  grotere huis komt, mag niets vast staan; past geen vorm, dan wacht het, zonder het te zeggen. **Open (vraag 130, 6
+  okt):** op elk land van de maker staat bij het begin een hut die zo nooit kan groeien, meestal door één struik, en dan
+  wint het dorp nooit; voorstel: wie doorgroeit, rooit wat in de weg staat, zoals bij een erf, en het briefje zegt
+  waarom een huis niet groeit.
 - **Achteruitgaan: zacht** (vraag 85, c), zoals in Anno 1602: mist een huis iets, dan groeit het niet verder en is het
   minder tevreden; er trekt pas een gezin weg als het huis onder de vertrekdrempel zakt, en dat gebeurt alleen als het
   eten of het brandhout mist. De spelregel "Achteruitgaan" kan het streng: mist een huis een maand iets, dan trekt zijn
@@ -575,6 +580,14 @@ wachthuis na de rovers, de bouwstof en de wensen van de huizen, en wat het doel 
   midden van het gehucht komt een werkplaats zo verder van wie hem vraagt (de wapenmaker in een toets op 20 tegels in
   plaats van 10), en een put of een kapel bereikt soms een huis minder. Een dak steekt nog over het pad: een huis is
   breder getekend dan zijn muren.
+- **Geen open grond meer** (6 okt, de sessie van de heer; werklijst vraag 110, e, stap 2; Marcel: "A ja B ja"): past het
+  nergens binnen bereik, dan kiest hij een plek die hij eerst rooit, met zo weinig mogelijk bomen en dan zo dicht
+  mogelijk, en zegt het ("Naast mijn huis, waar ik eerst 4 bomen en één struik of stronk (+40 hout) rooi, in het bos van
+  de heer."). Ja kost wat het altijd kost, en in het bos van de heer ook zijn gunst (−5, onder het antwoord; wat de prijs
+  noemde, ook als er intussen een boompje een boom werd of de plek verschoof). De
+  werkplaats wacht dan, nog niet op de kaart, en wie hem vroeg, rooit de voet en het looppad met de bijl, zoals een gezin
+  zijn erf (`js/bos.js`), en werkt zolang nergens; is het vrij, dan begint de bouw de volgende dag, en na een maand
+  rooien de buren de rest. Een put of een kapel net zo: wie hem vroeg, rooit, ook een boer (het maaien gaat voor).
 - **Wanneer:** om de vier dagen kan er een komen, als er niets anders loopt (het gaat vóór een geloot voorval), en alleen
   als het dorp het kan betalen. Hij komt je zoeken zoals bij een voorval ("Aafke wil een kapel bouwen, en zoekt je."),
   en zegt waarom en wat het kost; onder elk antwoord staat de prijs. **Ja:** het gebouw komt er, het dorp betaalt.
@@ -2470,7 +2483,8 @@ dichtbij als het kan.
     vertelt het in de herberg, als die een plek van gesprekken wordt (3c).
   Het bos is een winter werk (drie maanden uiterlijk; in de lente is een stuk na 41 à 56 dagen af, in de herfst en de
   winter na zo'n 85): hij hakt boom voor boom om, van een tegel recht ernaast en met zijn gezicht naar de boom (schuin is
-  de stam te ver voor de bijl; 4 hout per boom naar de schuur: een stuk geeft er 40 à 100), rooit de stronk (die staat tot
+  de stam te ver voor de bijl; 10 hout per boom naar de schuur, sinds 6 okt (vraag 115, C; tot dan 4): een stuk geeft er
+  100 à 250), rooit de stronk (die staat tot
   dan op de plek van de boom) en de struiken, en spit de grond om. Waar een boom stond, wordt de tegel weer vloer (wat
   vast op de kaart stond, lag op een muur). Zijn boerin en grote kinderen helpen, zoals bij het zaaien en de oogst. Hij
   draagt dan het vel van de hakker, met een bijl (vraag 107, f; een boerin dat van de hakster).
@@ -3015,8 +3029,8 @@ vandaag aan een veld verandert, doet hij morgen. In de browser: `Spel.debug.veld
 Hij werkt in het vel van zijn werk (stap 2, 5 okt): de zaaier, de wieder (ook voor spitten en mest) en de sprokkelaar
 met zijn bundel, uit code zoals de maaier, en een boerin in dat van een vrouw (de zaaister, de wiedster, de
 sprokkelaarster, de maaister; `beeld.md`, "De werkfiguren").
-**Nog niet:** na de huizen de houthakker die hakt en plant (vraag 115) en de wolven (vraag 116). Het dorsen heeft nog
-geen beweging, en wie helpt, loopt in zijn eigen vel mee.
+Sinds 6 okt hakt ook de houthakker in het bos, met dezelfde bijl ("De houthakker hakt en plant", hieronder).
+**Nog niet:** de wolven (vraag 116). Het dorsen heeft nog geen beweging, en wie helpt, loopt in zijn eigen vel mee.
 
 **Hoe het zo kwam:** Marcel, 3 okt: "Ook wil ik dat boeren op hun veld aan het werk zijn. Nu hebben ze wel velden, maar
 lopen ze gewoon random door het dorp. Ze moeten zaaien en op het veld bezig zijn." Het dagritme stuurde een boer overdag
@@ -3026,6 +3040,51 @@ die zijn goed"), en op 5 okt dat het nu kon, terwijl een andere sessie de huizen
 Na de eerste proefplaat van de figuren: "a ja b ja c nu" (ze gaan zo in het spel, een boerin krijgt een eigen werkvel, en
 het rapen, de schoffel en de hand worden nu beter). In het spel bleek de bosrand bij een boerderij vaak een losse boom
 achter een dak; nu is het de rand van een echt stuk bos, waar je de boer ziet.
+
+### De houthakker hakt en plant (Marcel, 4 en 6 okt 2026; werklijst vraag 115)
+
+**Zo werkt het nu** (6 okt, de sessie van de heer; stap 3 van vraag 110, e, met 115; `js/bos.js`; Marcel: "De houthakker
+hakt bomen om uiteindelijk en plant nieuwe boompjes terug", en "A ja B ja C ja D zo"): de houthakker maakt evenveel hout
+als altijd, 2 per dag (4 met de wet Houtkap), maar het komt uit een boom. Hij hakt aan de boom binnen tien tegels van
+zijn schuur die het dichtst bij zijn deur staat, en elke tien hout is die om: er blijft een stronk staan, die na een
+jaar vergaan is en waar je tussendoor loopt, zoals in een kapvlakte, zodat hij bij de bomen erachter komt (een stronk
+die de maker legde, staat wel in de weg; `opmerkingen.md`), en stond de boom in het bos (minstens vier bomen in de vijf
+bij vijf tegels eromheen, waar ook de jonge bomen, de boompjes en de stronken meetellen: wat hij kapt en inplant, blijft
+bos), dan plant hij er twee boompjes naast (vraag 129, f), nooit op een veld, een weg, een erf, een paadje of voor een
+deur. Een boompje is na een half jaar tot een jaar een jonge boom, en na nog eens zo lang een boom van dezelfde soort
+(een wilg of een dode boom wordt een eik): in een jaar of twee. Zo wordt het bos om de schuur eerst dunner, met
+stronken, boompjes en jonge bomen, en daarna jonger en dichter dan het was: in het vierde jaar hakt hij weer bijna het
+hele jaar. Met de wet Houtkap of een tweede houthakker gaat het harder. Staat er binnen tien tegels geen boom meer, dan
+staat hij stil: het dorp zegt het de eerste dag, de raad zolang het duurt ("De houthakker staat stil: er staat geen boom
+meer binnen tien tegels van zijn schuur, tot zijn boompjes bomen zijn. Zijn hand werkt zolang ergens anders."), en zijn
+hand werkt elders. Een nieuwe houthakker vraagt het dorp pas als het hout de winter niet haalt, niet omdat hij stilstaat
+(vraag 129, e). Groeien de boompjes weer, dan krijgt hij de nacht erna zijn hand terug en hakt hij verder. Een
+houthakker komt alleen bij minstens dertig bomen binnen tien tegels (vraag 129, b; tot dan 8 binnen 7). Zijn poppetje
+loopt naar zijn boom, hakt er twee uur aan met de bijl, brengt een bundel naar de schuur en gaat terug; de boom valt 's
+nachts, als de regel zegt dat hij om is. Een boompje en een jonge boom rooit wie er bouwt, zonder hout; een boompje
+staat niet in de weg, een jonge boom wel. De spelregel "De houthakker" zet het terug op hout uit het niets (zoals voor 6
+okt); de getallen in de werkbank ("Het bos", `T.BOS_INSTELLINGEN`, waar nu ook het hout per boom en de dagen om te
+rooien staan). In de browser: `Spel.debug.bos()`. Wat een boom is, wat te rooien is, omhakken en rooien staan nu
+allemaal in `js/bos.js`, ook voor het ontginnen en het rooien van een erf.
+
+**Hoeveel bos heeft een houthakker nodig?** (vraag 129; besloten, Marcel, 6 okt: "Eens" op e en b, en f als het bos
+daarna nog opraakt; e, b en f zijn gebouwd, zie hierboven, en de speeltest van vier jaar staat in `speelbaar.md`.) Gemeten op het ontworpen gehucht en vier landen van de maker (6 okt):
+een houthakker mag staan op een open plek van vier bij vier met het looppad eromheen, bij minstens 8 bomen binnen 7
+tegels; een verzoek kiest de plek die het dichtst bij het dorp past. Daar staan binnen zijn bereik (tien tegels om de
+schuur) 12 tot 33 bomen; op de beste plek die er is 36 tot 88. Hij hakt er 73 per jaar, en een boompje is pas na een
+jaar of twee een boom. Op de plek die het spel nu kiest, heeft hij zijn bereik dus in twee tot vijf maanden leeg, en
+hakt hij daarna alleen zo snel als zijn boompjes groeien. Het plan zei "met één houthakker wordt het bos dunner maar
+blijft het": het blijft, maar hij staat dan vaak stil. Wat we kunnen doen: **a**, zo laten: het bos is een voorraad die
+opraakt, je ziet het, en het dorp vraagt een houthakker elders (de raad zegt het); **b**, een houthakker alleen laten
+bouwen bij meer bos (minstens 30 bomen binnen tien tegels): dan staat hij verder van het dorp (22 tot 43 tegels van het
+huis van de schout, in plaats van 20 tot 29), en heeft hij een half jaar werk voor hij op de boompjes wacht; **c**, een
+boompje sneller laten groeien (een half jaar tot een jaar); **d**, hem verder laten hakken (vijftien tegels). De
+speeltest van vier jaar (6 okt, `speelbaar.md`) bevestigt het: elke keer dat alle houthakkers stilstaan, vraagt het dorp
+een nieuwe, dus in het vierde jaar staan er 8 tot 10, die samen 2.000 tot 2.700 dagen stilstaan; met b 6 à 7, die minder
+stilstaan. En het bos raakt op: met de boeren die bos ontginnen en wie bouwgrond rooit, staan er na vier jaar nog 78 tot
+491 bomen van de 340 tot 735. Daarom nog **e**, een houthakker zonder bomen laat zijn hand gaan, en het dorp vraagt pas
+een nieuwe als het hout de winter niet haalt; en **f**, hij plant meer (twee boompjes per boom, of in een gat in het
+bos). Werklijst vraag 129.
 
 ### Mensen worden poppetjes
 
@@ -3300,6 +3359,26 @@ wordt gepraat:
   als plaats (`T.bruikbareErven`, `T.hutPastOpErf`): de groei en de raad zeggen dan dat er geen plaats is, het bouwmenu
   telt het niet als vrij, en `Spel.debug.erven()` zegt het erbij. Tot dan zagen de groei en de raad er een vrij erf, en
   kwam er twee en een half jaar geen gezin.
+- **Een erf mag op struiken en bomen** (6 okt, de sessie van de heer; werklijst vraag 110, e, met 115; Marcel: "A ja B ja
+  C ja D zo"). Gemeten op vier landen van de maker: zo passen er 39 tot 49 erven in plaats van 13 tot 20, en een groot
+  deel komt al uit losse struiken en bomen in de wei. Ook het looppad om de hut mag buiten het erf in het bos liggen:
+  het gezin rooit het mee (`T.kavelVanErf`). Dat kwam er na de speeltest van vier jaar: tot dan telde een boom daar als
+  in de weg, pasten er 28 tot 42 erven, en vond de bouwer op 73425 vanaf het derde jaar nergens een erf en bleef hij op
+  99 mensen steken. Water, een rots, een gebouw, een veld of een pad houden een erf
+  nog tegen, maar wat te rooien is (een boom, een stronk, een struik) niet. Met het erf in de hand zegt de muis wat er
+  eerst weg moet en wat het oplevert ("Het gezin dat er komt, rooit eerst 3 bomen (+30 hout)", `T.rooiTekst`). Het
+  gezin dat zo'n erf neemt, rooit het zelf: het hoofd van het gezin hakt de bomen om en rooit de stronken en de
+  struiken, met dezelfde bijl en op dezelfde manier als een boer die bos ontgint (`js/veldwerk.js`), zijn gezin helpt
+  (`T.helpAnker`), en zolang werkt niemand van hen ergens anders. De hut wacht intussen, nog niet op de kaart
+  (`wachtOpRooien`); het gezin woont er al, en de paaltjes blijven staan. Is het erf vrij, dan ligt de bouwplaats er de
+  volgende dag (`T.tikRooienDag` in `js/bos.js`, `T.zetOpDeKaart`); is het na een maand niet af (`rooiDagen` in de werkbank), dan rooien
+  de buren de rest in één keer. Elke boom geeft 10 hout (ook bij het ontginnen; tot 6 okt 4). Een nieuw gezin neemt eerst
+  een erf waar niets te rooien staat (`T.kiesErf`). **Het bos is van de heer** (B): een erf met minstens zoveel bomen als
+  een stuk bos bij het ontginnen (10) kost zijn gunst als je het aanwijst (−5), en de muis zegt het vooraf; losse bomen
+  en struiken in de wei kosten niets. De speler van de speeltest legt een erf liever niet in het bos van de heer, en bij
+  gelijke kringen liever waar minder te rooien is. Een werkplaats die een inwoner vraagt, rooit zijn plek net zo als er
+  geen open grond meer is (stap 2; "De stad groeit door haar mensen", Geen open grond meer), en de houthakker hakt en
+  plant (stap 3; "De houthakker hakt en plant").
 - **Een huis met plaats gaat voor.** Is het dorp vol, dan neemt een nieuw gezin op een groeidag het vrije erf dat
   het dichtst bij de werkplaats ligt die de meeste handen mist (anders bij het plein), en komt over de weg. Het
   zet er zelf een hut op (8 hout uit de voorraad, twee dagen), woont er al terwijl hij oprijst, en is er overdag

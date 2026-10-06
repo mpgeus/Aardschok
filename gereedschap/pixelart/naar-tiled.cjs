@@ -76,7 +76,7 @@ function veilig(naam, f) {
 // RAND_CAPACITEIT en padRandTegels() verderop.
 const VELCONFIG = {
   grond: { capaciteit: 160, kolommen: 4 }, // nu 58 (3 grondsoorten × 19 + water): vijf soorten erbij kan
-  bomen: { capaciteit: 32, kolommen: 8 }, // nu 7: vijfentwintig boomsoorten erbij kan
+  bomen: { capaciteit: 32, kolommen: 8 }, // nu 11 in 16 vakken (het boompje en de jonge bomen kwamen er op 6 okt bij): zestien erbij kan
   begroeiing: { capaciteit: 40, kolommen: 8 }, // nu 10: dertig planten erbij kan
   gebouwen: { capaciteit: 96, kolommen: 8 }, // nu 27, en daar kwamen er vandaag al twaalf van: een heel dorp moet erin passen
   toren: { capaciteit: 8, kolommen: 4 }, // nu 1 (er is er maar één); een beetje lucht is vrijwel gratis
@@ -400,8 +400,11 @@ function bouwModelVel(veldNaam, lijst, vastVan) {
   return beschrijving;
 }
 
-const BOMEN = ['eik', 'herfstEik', 'den', 'berk', 'dodeBoom', 'wilg', 'appelboom'];
-const BOMEN_VAST = () => true; // een boom staat altijd in de weg
+// Achteraan het boompje dat de houthakker plant en de jonge bomen waar het in een jaar of twee via
+// groeit (vraag 115, f).
+const BOMEN = ['eik', 'herfstEik', 'den', 'berk', 'dodeBoom', 'wilg', 'appelboom', 'boompje', 'jongeEik', 'jongeDen', 'jongeBerk'];
+// een boom staat altijd in de weg, ook een jonge; langs een boompje dat net geplant is, loop je
+const BOMEN_VAST = (naam) => naam !== 'boompje';
 
 // Bm.BEGROEIING komt uit bomen.cjs zelf (zie module.exports daar): zo blijft dit script kloppen
 // als daar later iets bij komt of verandert, zonder dat hier iets hoeft mee te veranderen.

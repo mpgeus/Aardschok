@@ -37,6 +37,11 @@
   const over = (n) => (n <= 1 ? 'morgen' : `over ${n} dagen`);
   const maandIdx = (naam) => T.MAANDEN.findIndex((m) => m.naam === naam);
   const heeft = (D, soort) => (D.gebouwen || []).some((g) => g.soort === soort);
+  // Staat elke houthakker stil omdat er binnen zijn bereik geen boom meer staat (T.houthakkerZonderBoom, js/bos.js)?
+  const geenBoomMeer = (D) => {
+    const hakkers = (D.gebouwen || []).filter((g) => g.klaar && T.GEBOUWEN[g.soort].bos);
+    return hakkers.length > 0 && hakkers.every(T.houthakkerZonderBoom);
+  };
 
   // Hoeveel mensen het doel nog vraagt: de volgende trede (js/treden.js), en na de laatste de maat van de winst
   // (js/einde.js; werklijst vraag 102, c).
@@ -198,6 +203,14 @@
         return `Het eten haalt ${haalt(T.etenVoorDeWinter(D, D.kalender.dag))} van de winter${T.BEHOEFTEN_INSTELLINGEN.vleesIsEten ? jager : ''}.${T.BEHOEFTEN_INSTELLINGEN.vleesIsEten ? verzoekZin(D, 'jager') : ''}${geenGezin()}`;
       },
     },
+    // De houthakker hakt bomen om (js/bos.js; vraag 115): staat er binnen zijn bereik geen boom meer, dan hakt hij niets,
+    // tot de boompjes die hij plantte, bomen zijn, en werkt zijn hand zolang elders (vraag 129, e). Haalt het hout de
+    // winter niet, dan zegt de raad daarboven dat een houthakker zou helpen.
+    {
+      id: 'geenBoom',
+      als: (D) => geenBoomMeer(D),
+      tekst: () => `De houthakker staat stil: er staat geen boom meer binnen ${T.telwoord(T.BOS_INSTELLINGEN.hakStraal)} tegels van zijn schuur, tot zijn boompjes bomen zijn. Zijn hand werkt zolang ergens anders.`,
+    },
     {
       id: 'kelders',
       als: (D) => naSintMaarten(D) && !(D.heer && D.heer.bezoek) && T.verstoptTotaal(D).graan >= 1,
@@ -320,6 +333,8 @@
     // houthakker, zoals de bouwer van de speeltest hem er altijd eerst neerzette (vraag 86, b). Zonder dat at het dorp in
     // de eerste speeltest van vraag 103 zijn hout op aan de kapel en de putten, en kon het daarna geen houthakker en geen
     // jager meer betalen.
+    // Een houthakker die stilstaat omdat zijn bomen op zijn, is geen reden voor een nieuwe zolang het hout de winter
+    // haalt (werklijst vraag 129, e): in de speeltest van 6 okt stonden er zo na vier jaar 8 tot 10, die vooral stilstonden.
     if (!heeft(D, 'houthakker')) erbij('houthakker', 'Er hakt niemand hout, en elke hut en elk gebouw kost hout.', 'hout');
     for (const x of T.watDeHuizenMissen(D)) if (x.kan && x.bouw) erbij(x.bouw, x.zin, x.soort);
     for (const soort of T.doelGebouwen(D)) erbij(soort, `Voor het doel is er een ${T.GEBOUWEN[soort].naam} nodig.`, 'doel');

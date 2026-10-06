@@ -20,6 +20,17 @@
 // het niet als plaats (T.bruikbareErven): dan zegt de raad dat er geen plaats is, en wijs je een ander erf aan (werklijst
 // vraag 110, f; in de speeltest van vier jaar kwam er op 62707 zo twee en een half jaar geen gezin).
 //
+// Een erf mag op struiken en bomen (werklijst vraag 110, e; Marcel, 6 okt: "A ja B ja C ja D zo"; gemeten: zo passen er
+// twee à drie keer zoveel erven op een land). Water, een rots, een gebouw, een veld of een pad houden het tegen, maar wat
+// te rooien is (een boom, een stronk, een struik: T.ontginWerkOp, js/bos.js) niet, ook niet in het looppad om de hut
+// buiten het erf. Het gezin dat het erf neemt, rooit het eerst zelf, met dat looppad: de man met de bijl, en zijn gezin
+// helpt (js/veldwerk.js, zoals de boer bij het ontginnen). Zolang wacht de hut, nog niet op de kaart (`wachtOpRooien`,
+// met het erf en het looppad om de hut als kavel, T.kavelVanErf), en het gezin woont er al, zoals terwijl de
+// hut oprijst. Is het na een maand niet af, dan rooien de buren de rest (js/bos.js, T.tikRooienDag, dat ook een werkplaats
+// in het bos zo laat wachten). Een erf waar niets op staat, gaat voor (T.kiesErf).
+// Staan er minstens zoveel bomen op als op een stuk bos bij het ontginnen, dan ligt het in het bos van de heer, en dat
+// kost zijn gunst als je het aanwijst; de wei kost niets.
+//
 //   S.erven = [{ x, y, b, h, hut, plan }]  // waar een erf ligt, en de hut erop (een gebouw uit S.gebouwen),
 //                                          // of null zolang het vrij is. De hut wijst terug: hut.erf. plan: waar het
 //                                          // huis komt, { hut, huis, dx, dy, b, h } (de hoek in het erf, en de maat
@@ -90,7 +101,8 @@
     for (let dy = 0; dy < h; dy++) {
       for (let dx = 0; dx < b; dx++) {
         if (T.opHetPlein(w, x + dx, y + dy)) return 'Op het plein wordt niet gebouwd.';
-        if (T.isVast(w, x + dx, y + dy)) vast = true;
+        // Wat te rooien is (een boom, een stronk, een struik), houdt een erf niet tegen: dat rooit het gezin dat er komt.
+        if (T.isVast(w, x + dx, y + dy) && !T.ontginWerkOp(w, x + dx, y + dy)) vast = true;
         else reden = reden || T.waaromNietOpDezeGrond(D, x + dx, y + dy);
       }
     }
@@ -139,8 +151,14 @@
     const { b, h } = T.erfMaat();
     const erf = { x, y, b, h, hut: null, plan: null };
     erf.plan = planVan(kiesTekeningen(D, erf, erf));
+    // In het bos van de heer wil hij erom gevraagd worden (Marcel, 6 okt, B: "ja"), zoals bij een stuk bos dat een boer
+    // ontgint; de wei kost niets.
+    const bos = T.inHetBosVanDeHeer(D, erf);
+    if (bos) T.wijzigGunst(D, -T.ONTGINNEN_INSTELLINGEN.gunst, 'Een erf in zijn bos');
     ervenVan(D).push(erf);
-    return { gelukt: true, erf, bericht: 'Een erf aangewezen. Een nieuw gezin zet er zelf een hut op.' };
+    const wat = T.watTeRooien(D, T.kavelVanErf(D, erf));
+    const rooien = wat.bomen || wat.struiken ? ` Het rooit eerst ${T.rooiWoorden(wat)}.` : '';
+    return { gelukt: true, erf, bericht: `Een erf aangewezen. Een nieuw gezin zet er zelf een hut op.${rooien}${bos ? ' Het ligt in het bos van de heer.' : ''}` };
   };
 
   // Een vrij erf weer gewone grond maken: in het bouwmenu, met het erf in de hand, klik je erop
@@ -153,12 +171,26 @@
     return { gelukt: true, bericht: 'Het erf is weer gewone grond.' };
   };
 
-  // De hoeken van een vrij erf, voor de paaltjes (js/tekenen.js). Een erf met een hut heeft ze niet meer.
+  // De hoeken van een vrij erf, voor de paaltjes (js/tekenen.js). Een erf met een hut heeft ze niet meer; een erf dat
+  // het gezin nog rooit wel, want daar staat de hut nog niet.
   T.paaltjesVan = function (erf) {
-    if (erf.hut) return [];
+    if (erf.hut && !erf.hut.wachtOpRooien) return [];
     const r = erf.x + erf.b - 1;
     const o = erf.y + erf.h - 1;
     return [{ x: erf.x, y: erf.y }, { x: r, y: erf.y }, { x: erf.x, y: o }, { x: r, y: o }];
+  };
+
+  // ---------------------------------------------------------------------------------------------
+  // Wat er eerst weg moet (werklijst vraag 110, e; wat te rooien is en wie het rooit: js/bos.js)
+  // ---------------------------------------------------------------------------------------------
+
+  // Wat de muis zegt met een erf in de hand op het vak r (js/main.js): wat er eerst weg moet, en of het in het bos van de
+  // heer ligt, of null als er niets staat.
+  T.rooiTekst = function (D, r) {
+    const wat = T.watTeRooien(D, T.kavelVanErf(D, r));
+    if (!wat.bomen && !wat.struiken) return null;
+    const bos = T.inHetBosVanDeHeer(D, r);
+    return `Het gezin dat er komt, rooit eerst ${T.rooiWoorden(wat)}.${bos ? ` Dit is het bos van de heer: hij wil erom gevraagd worden (gunst −${T.ONTGINNEN_INSTELLINGEN.gunst}).` : ''}`;
   };
 
   // ---------------------------------------------------------------------------------------------
@@ -193,6 +225,29 @@
   // zo ver mogelijk naar achteren (noord), zodat de voorkant van het erf vrij blijft voor een moestuin. Met
   // `erf` (waar het erf ligt) alleen een hoek waar het huis rondom een looppad heeft. Geeft { hut, huis, dx, dy },
   // of null als er niets past.
+  // Het looppad om de hut (de rechthoek `huis`) op een erf: vrij, of met wat het gezin er rooit (een boom, een stronk,
+  // een struik), ook waar het buiten het erf valt (werklijst vraag 110, e). Tot de speeltest van 6 okt telde dat buiten
+  // het erf als in de weg, en paste er in het bos zelden een erf.
+  const ringOm = (r, n) => ({ x: r.x - n, y: r.y - n, b: r.b + 2 * n, h: r.h + 2 * n });
+  function looppadOmDeHut(D, erf, huis) {
+    const n = T.GEBOUWEN_INSTELLINGEN.looppad;
+    return T.looppadOm(D, huis, n, erf, ringOm(huis, n));
+  }
+
+  // Het stuk dat het gezin rooit voor zijn hut (js/bos.js, `kavel`): het erf, en het looppad om de plek van zijn huis
+  // (erf.plan), binnen de kaart. Zonder plan het plan dat er nu zou komen; past er niets, dan het erf.
+  T.kavelVanErf = function (D, erf) {
+    const plan = erf.plan || planVan(kiesTekeningen(D, erf, erf));
+    if (!plan) return { x: erf.x, y: erf.y, b: erf.b, h: erf.h };
+    const w = D.wereld;
+    const ring = ringOm({ x: erf.x + plan.dx, y: erf.y + plan.dy, b: plan.b, h: plan.h }, T.GEBOUWEN_INSTELLINGEN.looppad);
+    const x0 = Math.max(0, Math.min(erf.x, ring.x));
+    const y0 = Math.max(0, Math.min(erf.y, ring.y));
+    const x1 = Math.min(w.tegels[0].length, Math.max(erf.x + erf.b, ring.x + ring.b));
+    const y1 = Math.min(w.tegels.length, Math.max(erf.y + erf.h, ring.y + ring.h));
+    return { x: x0, y: y0, b: x1 - x0, h: y1 - y0 };
+  };
+
   function kiesTekeningen(D, maat, erf = null) {
     if (T.stijlVan(D)) return kiesInStijl(D, maat, erf);
     for (const huis of opVolgorde(D, 'huis')) {
@@ -203,7 +258,7 @@
         for (let dy = 0; dy < maat.h; dy++) {
           for (let dx = 0; dx < maat.b; dx++) {
             if (!pastOp(maat, vormen, dx, dy)) continue;
-            if (erf && !T.looppadOm(D, { x: erf.x + dx, y: erf.y + dy, b, h }, T.GEBOUWEN_INSTELLINGEN.looppad, erf)) continue;
+            if (erf && !looppadOmDeHut(D, erf, { x: erf.x + dx, y: erf.y + dy, b, h })) continue;
             return { hut, huis, dx, dy };
           }
         }
@@ -230,7 +285,7 @@
           const h = Math.max(...vormen.map((v) => v.h));
           for (const [dx, dy] of hoekenVanAchter(maat, kant)) {
             if (!pastOp(maat, vormen, dx, dy)) continue;
-            if (erf && !T.looppadOm(D, { x: erf.x + dx, y: erf.y + dy, b, h }, T.GEBOUWEN_INSTELLINGEN.looppad, erf)) continue;
+            if (erf && !looppadOmDeHut(D, erf, { x: erf.x + dx, y: erf.y + dy, b, h })) continue;
             return { hut, huis, dx, dy };
           }
         }
@@ -270,22 +325,22 @@
     return beste;
   }
 
-  // Welk vrij erf een nieuw gezin neemt: het dichtst bij waar werk is, en is er nergens werk, het dichtst
-  // bij het plein. Of null.
+  // Welk vrij erf een nieuw gezin neemt: een erf waar niets te rooien staat gaat voor (vraag 110, e), en dan het dichtst
+  // bij waar werk is, en is er nergens werk, het dichtst bij het plein. Of null.
   T.kiesErf = function (D) {
     const vrij = T.bruikbareErven(D);
     if (!vrij.length) return null;
     const doel = waarWerkIs(D) || T.pleinVan(D.wereld) || { x: 0, y: 0 };
     const afstand = (e) => Math.hypot(e.x + e.b / 2 - doel.x, e.y + e.h / 2 - doel.y);
-    return vrij.slice().sort((a, b) => afstand(a) - afstand(b))[0];
+    const rooien = (e) => (T.teRooienOp(D, T.kavelVanErf(D, e)).length ? 1 : 0);
+    return vrij.slice().sort((a, b) => rooien(a) - rooien(b) || afstand(a) - afstand(b))[0];
   };
 
   // Welke hut en welk huis er op dit erf komen: zijn plan, als het looppad om het huis nog vrij is, en anders een hut en
   // een huis die er nu wel passen (kiesTekeningen), of null. Iets wat later naast het erf kwam, kan het looppad innemen.
   function hutVoorErf(D, erf) {
     const plan = erf.plan;
-    const n = T.GEBOUWEN_INSTELLINGEN.looppad;
-    return plan && T.looppadOm(D, { x: erf.x + plan.dx, y: erf.y + plan.dy, b: plan.b, h: plan.h }, n, erf) ? plan : kiesTekeningen(D, erf, erf);
+    return plan && looppadOmDeHut(D, erf, { x: erf.x + plan.dx, y: erf.y + plan.dy, b: plan.b, h: plan.h }) ? plan : kiesTekeningen(D, erf, erf);
   }
 
   // Past er een hut op dit erf (hutVoorErf)? Onthouden zolang de kaart en de erven dezelfde zijn (T.kaartVersie,
@@ -303,8 +358,9 @@
 
   // De hut op het erf: een gebouw als elk ander (T.bouwGebouw, js/gebouwen.js), maar met zijn erf erbij en
   // de tekening van het huis waar hij later in doorgroeit (`wordtTekening`, js/behoeften.js). Hij begint
-  // pas als het hout er is (`wachtOpHout`, en dan nog geen `klaarOp`). Geeft de hut, of null als er niets
-  // past.
+  // pas als het hout er is (`wachtOpHout`, en dan nog geen `klaarOp`). Staat er op het erf nog iets te rooien, dan wacht
+  // hij daar eerst op (`wachtOpRooien`, met het erf en het looppad om de hut als kavel): hij telt al als het huis van het gezin, maar komt pas op de
+  // kaart als het erf vrij is (T.tikRooienDag, js/bos.js). Geeft de hut, of null als er niets past.
   T.zetHutOpErf = function (D, erf) {
     const keus = hutVoorErf(D, erf);
     if (!keus) return null;
@@ -312,14 +368,17 @@
     // Wat genomen is, is genomen: de volgende hut en het volgende huis worden een andere tekening.
     if (T.vormVan(keus.hut) === T.vormVan(T.volgendeTekening(D, 'hut'))) T.neemTekening(D, 'hut');
     if (T.vormVan(keus.huis) === T.vormVan(T.volgendeTekening(D, 'huis'))) T.neemTekening(D, 'huis');
+    const kavel = T.kavelVanErf(D, erf);
+    const rooien = T.teRooienOp(D, kavel).length > 0;
     const hut = {
       soort: 'hut', x: erf.x + keus.dx, y: erf.y + keus.dy, tekening: keus.hut, voet: T.gebouwVoet('hut', keus.hut),
       klaar: false, klaarOp: null, handen: 0, voorwerp: null,
-      erf, wordtTekening: keus.huis, wachtOpHout: true,
+      erf, wordtTekening: keus.huis, wachtOpHout: !rooien, wachtOpRooien: rooien,
     };
+    if (rooien) Object.assign(hut, { kavel, rooienTot: dagNu(D) + T.BOS_INSTELLINGEN.rooiDagen });
     erf.hut = hut;
     T.bouwGebouw(D, hut);
-    begin(D, hut);
+    if (!rooien) begin(D, hut);
     return hut;
   };
 
@@ -356,15 +415,17 @@
     }
     D.woonruimte = T.telWoonruimte(D);
     T.wijzigBevolking(D, Math.min(T.GEBOUWEN_INSTELLINGEN.gezinGrootte, T.GEBOUWEN.hut.woonruimte), 'groei');
-    if (hut.wachtOpHout) {
+    if (hut.wachtOpRooien) {
+      T.zeg(D, `${T.hoofdletter(gezinVan(D, hut))} rooit eerst zijn erf: ${T.rooiWoorden(T.watTeRooien(D, erf))}.`);
+    } else if (hut.wachtOpHout) {
       const hout = T.GEBOUWEN.hut.kosten.hout;
       T.zeg(D, `${T.hoofdletter(gezinVan(D, hut))} wacht op hout voor zijn hut: daar is ${hout} hout voor nodig.`, 'gevaar');
     }
     return hut;
   };
 
-  // Elke dag (T.tikGebouwenDag, js/gebouwen.js, vóór de gebouwen die klaarkomen): een bouwplaats die op
-  // hout wacht, begint als het er nu is.
+  // Elke dag (T.tikGebouwenDag, js/gebouwen.js, vóór de gebouwen die klaarkomen, en na het rooien, js/bos.js): een
+  // bouwplaats die op hout wacht, begint als het er nu is.
   T.tikErvenDag = function (D) {
     for (const erf of D.erven || []) {
       const hut = erf.hut;

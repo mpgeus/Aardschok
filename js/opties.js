@@ -394,6 +394,18 @@
           uitleg: 'Het land blijft zoals het is. Zoals voor 5 okt.' },
       ],
     },
+    // De houthakker (werklijst vraag 115; Marcel, 4 okt: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes
+    // terug", en 6 okt: "A ja B ja C ja D zo"; js/bos.js).
+    {
+      id: 'houthakker', naam: 'De houthakker', standaard: 'hakt',
+      uitleg: 'Of het hout van de houthakker uit de bomen om zijn schuur komt.',
+      keuzes: [
+        { id: 'hakt', naam: 'Hakt en plant', zet: { 'BOS_INSTELLINGEN.houthakkerHakt': true },
+          uitleg: 'De houthakker hakt de bomen binnen tien tegels van zijn schuur om, de dichtste eerst: elke tien hout een boom. Naast de stronk plant hij twee boompjes, die in een jaar of twee weer bomen zijn, en de stronk vergaat. Zo wordt het bos om hem heen eerst dunner en daarna jonger en dichter; met twee houthakkers of de wet Houtkap wijkt het. Staat er geen boom meer, dan staat hij stil, en werkt zijn hand elders tot er weer een boom staat. Hij komt alleen bij minstens dertig bomen binnen tien tegels.' },
+        { id: 'uitHetNiets', naam: 'Hout uit het niets', zet: { 'BOS_INSTELLINGEN.houthakkerHakt': false },
+          uitleg: 'De houthakker maakt zijn hout zonder een boom om te hakken, en het bos blijft zoals het is. Zoals voor 6 okt.' },
+      ],
+    },
     // Een praatje (werklijst vraag 120; Marcel, 4 okt: "Het dorp moet echt levendig en realistisch aanvoelen", en "geen
     // praatjes forceren. Alleen als mensen een reden hebben en elkaar toevallig tegenkomen"; js/praatje.js).
     {
@@ -651,6 +663,7 @@
     { naam: 'De velden', blok: 'VELDEN_INSTELLINGEN' },
     { naam: 'Het veldwerk', blok: 'VELDWERK_INSTELLINGEN' },
     { naam: 'Ontginnen', blok: 'ONTGINNEN_INSTELLINGEN' },
+    { naam: 'Het bos', blok: 'BOS_INSTELLINGEN' },
     { naam: 'Het vee', blok: 'VEE_INSTELLINGEN' },
     { naam: 'De doorkijk', blok: 'DOORKIJK_INSTELLINGEN' },
     { naam: 'Het zichtveld', blok: 'ZIEN_INSTELLINGEN' },

@@ -321,7 +321,7 @@ test('a2: wie vraagt, wijst een stuk heide en een stuk bos aan, allebei in goud,
   assert.match(vraagt(S), /heide.*Of het stuk bos achter .* Maar het bos is van de heer\. Van de weg en de akkers ziet niemand het/);
   assert.deepEqual(zichtbaar(S).map((k) => k.zeg), ['De heide.', 'Het bos. Ik meld het de heer.', 'Het bos. De heer hoeft het niet te weten.', 'Nee, nu niet.']);
   assert.match(T.prijsVanKeuze(D, antwoord(S, 'De heide').doe).tekst, /vertrouwen van het dorp −5/);
-  assert.match(T.prijsVanKeuze(D, antwoord(S, 'Het bos. Ik meld').doe).tekst, new RegExp(`\\+${b.bomen * 4} hout.*gunst van de heer −5.*de inner telt het`));
+  assert.match(T.prijsVanKeuze(D, antwoord(S, 'Het bos. Ik meld').doe).tekst, new RegExp(`\\+${b.bomen * T.BOS_INSTELLINGEN.houtPerBoom} hout.*gunst van de heer −5.*de inner telt het`));
   assert.match(T.prijsVanKeuze(D, antwoord(S, 'Het bos. De heer hoeft').doe).tekst, /de inner ziet het daar niet.*betrapt/);
   zeg(S, 'Nee');
   assert.ok(!T.heeftVlag(D, 'ontginHeide') && !T.heeftVlag(D, 'ontginBos'), 'om: de vlaggen zijn weg');
@@ -385,9 +385,9 @@ test('een boom omhakken geeft hout en laat een stronk, die hij rooit; na de wint
   const boom = T.akkerTegels(veld).find((t) => T.ontginWerkOp(w, t.x, t.y) === 'hakken');
   const hout = D.voorraad.hout;
   assert.ok(T.hakBoom(D, boom.x, boom.y));
-  assert.equal(D.voorraad.hout, hout + T.ONTGINNEN_INSTELLINGEN.houtPerBoom, 'het hout gaat naar de schuur');
+  assert.equal(D.voorraad.hout, hout + T.BOS_INSTELLINGEN.houtPerBoom, 'het hout gaat naar de schuur');
   assert.equal(T.ontginWerkOp(w, boom.x, boom.y), 'rooien', 'een stronk');
-  assert.ok(!T.isBegaanbaar(w, boom.x, boom.y), 'over een stronk loop je niet');
+  assert.ok(T.isBegaanbaar(w, boom.x, boom.y), 'tussen de stronken loop je door (js/wereld.js, boomstronk)');
   assert.ok(T.rooi(D, boom.x, boom.y));
   assert.equal(T.ontginWerkOp(w, boom.x, boom.y), null);
   assert.ok(T.isBegaanbaar(w, boom.x, boom.y));
@@ -402,7 +402,7 @@ test('een boom omhakken geeft hout en laat een stronk, die hij rooit; na de wint
   T.tikGebouwenDag(D, veld.ontginning.tot);
   assert.equal(veld.ontginning, undefined, 'ontgonnen');
   for (const t of T.akkerTegels(veld)) assert.equal(T.voorwerpOp(w, t.x, t.y), null, `${t.x},${t.y} is leeg`);
-  assert.ok(D.voorraad.hout >= voor + rest * T.ONTGINNEN_INSTELLINGEN.houtPerBoom - 1e-9, `${rest} bomen: ${D.voorraad.hout - voor} hout`);
+  assert.ok(D.voorraad.hout >= voor + rest * T.BOS_INSTELLINGEN.houtPerBoom - 1e-9, `${rest} bomen: ${D.voorraad.hout - voor} hout`);
   assert.ok(berichten.some((t) => /Het bos van .* is ontgonnen/.test(t)), berichten.slice(-2).join(' | '));
 });
 

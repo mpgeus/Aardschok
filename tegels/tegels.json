@@ -1299,8 +1299,8 @@
  "bomen": {
   "tsx": "tegels/bomen.tsx",
   "bestand": "tegels/bomen.png",
-  "breedte": 498,
-  "hoogte": 928,
+  "breedte": 996,
+  "hoogte": 618,
   "ingepakt": true,
   "tiles": [
    {
@@ -1341,8 +1341,8 @@
      26
     ],
     "cel": [
+     365,
      0,
-     310,
      180,
      308
     ],
@@ -1365,8 +1365,8 @@
      17
     ],
     "cel": [
-     133,
-     620,
+     0,
+     310,
      124,
      308
     ],
@@ -1389,8 +1389,8 @@
      6
     ],
     "cel": [
+     865,
      0,
-     620,
      131,
      308
     ],
@@ -1413,8 +1413,8 @@
      14
     ],
     "cel": [
-     344,
-     310,
+     709,
+     0,
      154,
      308
     ],
@@ -1461,8 +1461,8 @@
      19
     ],
     "cel": [
-     182,
-     310,
+     547,
+     0,
      160,
      308
     ],
@@ -1481,40 +1481,100 @@
     "doos": null
    },
    {
-    "naam": null,
+    "naam": "boompje",
     "vast": false,
     "beslaat": null,
     "groep": null,
     "staat": null,
     "deur": null,
-    "doos": null
+    "doos": [
+     12,
+     38,
+     10,
+     2
+    ],
+    "cel": [
+     396,
+     310,
+     22,
+     308
+    ],
+    "anker": [
+     12,
+     282
+    ]
    },
    {
-    "naam": null,
-    "vast": false,
+    "naam": "jongeEik",
+    "vast": true,
     "beslaat": null,
     "groep": null,
     "staat": null,
     "deur": null,
-    "doos": null
+    "doos": [
+     53,
+     122,
+     48,
+     6
+    ],
+    "cel": [
+     126,
+     310,
+     101,
+     308
+    ],
+    "anker": [
+     53,
+     282
+    ]
    },
    {
-    "naam": null,
-    "vast": false,
+    "naam": "jongeDen",
+    "vast": true,
     "beslaat": null,
     "groep": null,
     "staat": null,
     "deur": null,
-    "doos": null
+    "doos": [
+     41,
+     155,
+     39,
+     20
+    ],
+    "cel": [
+     314,
+     310,
+     80,
+     308
+    ],
+    "anker": [
+     41,
+     282
+    ]
    },
    {
-    "naam": null,
-    "vast": false,
+    "naam": "jongeBerk",
+    "vast": true,
     "beslaat": null,
     "groep": null,
     "staat": null,
     "deur": null,
-    "doos": null
+    "doos": [
+     43,
+     141,
+     40,
+     4
+    ],
+    "cel": [
+     229,
+     310,
+     83,
+     308
+    ],
+    "anker": [
+     43,
+     282
+    ]
    },
    {
     "naam": null,

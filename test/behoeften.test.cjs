@@ -33,9 +33,11 @@ const WINTERDAG = 280;
 const ZOMERDAG = 30;
 
 // Zoals vóór 30 sep, met de spelregel "Het seizoen" op jij: niemand sprokkelt (werklijst vraag 74, stap 2). Voor de
-// toetsen die het stoken of de houthakker precies nameten; wat het sprokkelen doet, toetsen de toetsen erover.
+// toetsen die het stoken of de houthakker precies nameten; wat het sprokkelen doet, toetsen de toetsen erover. En met de
+// houthakker van voor 6 okt, die zijn hout uit het niets maakt: wat hij aan bomen omhakt, toetst test/bos.test.cjs.
 function alsJijHetSeizoenDoet(fn) {
   T.zetOptie('seizoen', 'jij');
+  T.zetOptie('houthakker', 'uitHetNiets');
   try {
     return fn();
   } finally {

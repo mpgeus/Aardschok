@@ -9,6 +9,15 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Twee soorten stronken** (6 okt, zesendertigste sessie; vraag 129): een stronk die de houthakker of een boer achterlaat
+  (`T.velBoom`, `js/bos.js`), staat niet in de weg (`boomstronk` in `T.VOORWERPEN`, `js/wereld.js`), want in de speeltest
+  zette de houthakker zich met zijn eigen stronken vast. Een stronk die de maker in het bos legde, heeft nog een muur
+  onder zich, zoals elk vast ding uit het vel (`vast` bij `boomstronk` in `gereedschap/pixelart/naar-tiled.cjs`, en zo in
+  `tegels/tegels.js`). Gelijktrekken kan door dat `vast` uit te zetten, maar dan legt de maker zijn landen anders
+  (`isVastNaam` in `js/maker.js`) en tekent het spel een stronk plat in de grond (`isPlat` in `js/tekenen.js`); niet
+  gedaan zolang de speeltest de landen vergelijkt. Een omgehakte stronk wordt ook nog rechtop getekend: wie erop staat,
+  staat ervoor of erachter.
+
 - **De markt op het plein, wat opviel** (6 okt, zesendertigste sessie; vraag 110, d; `js/markt.js`):
   - Met de spelregel "Wie bouwt" op "Jij bouwt" toont het bouwmenu bij de markt nog het spookbeeld van 6 bij 6, maar
     waar je ook klikt, de kramen komen op het plein. Zolang de mensen bouwen (de standaard), zie je dat niet.

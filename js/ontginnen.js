@@ -66,11 +66,11 @@
     // tweede 10, het derde 15. Hoe kleiner de meent, hoe meer het dorp eraan hecht (vraag 107, f3; Marcel, 5 okt: "We
     // gaan met jouw suggestie"). Zo wordt dezelfde vraag elke keer een zwaardere.
     vertrouwen: 5,
-    // Het bos. Een stuk is bos als er minstens zoveel bomen op staan; zo ver van zijn akker zoekt de boer een stuk dat de
-    // inner van zijn ronde niet ziet (verder neemt hij het dichtste); en een boom geeft zoveel hout.
+    // Het bos. Een stuk is bos als er minstens zoveel bomen op staan (ook een erf of een werkplaats in het bos van de heer,
+    // js/bos.js); en zo ver van zijn akker zoekt de boer een stuk dat de inner van zijn ronde niet ziet (verder neemt hij
+    // het dichtste). Wat een boom geeft, staat in T.BOS_INSTELLINGEN.houtPerBoom (js/bos.js).
     bosBomen: 10,
     bosZoeken: 25,
-    houtPerBoom: 4,
     // Wat het bos de gunst van de heer kost als je het hem meldt (vraag 107, b: hij wil erom gevraagd worden).
     gunst: 5,
     // Wat stiekem de raadsman lijkt te kosten, maal hoe zwaar hij de argwaan van de heer weegt (js/raadsman.js, zijn
@@ -182,20 +182,12 @@
   // Het bos
   // ---------------------------------------------------------------------------------------------
 
-  // Wat de boer in het bos opruimt: een boom (T.NATUUR.bos, js/gebouwen.js) hakt hij om, een stronk of een struik rooit
-  // hij, en wat laag groeit (varens, gras, bloemen, een keitje) gaat mee als hij de grond omspit, ook op de heide.
-  const ROOIEN = new Set(['boomstronk', 'struik', 'bessenStruik']);
+  // Wat de boer in het bos opruimt (een boom hakt hij om, een stronk of een struik rooit hij), staat in js/bos.js
+  // (T.ontginWerkOp, T.hakBoom, T.rooi). Wat laag groeit (varens, gras, bloemen, een keitje) gaat mee als hij de grond
+  // omspit, ook op de heide; en een boompje dat de houthakker plant, maakt er plaats voor (js/bos.js).
   const LAAG = new Set(['varen', 'grasPol', 'bloemen', 'paddenstoelen', 'hoogGras', 'kleineRots']);
+  T.groeitLaag = (v) => !!v && LAAG.has(v.soort);
   const isBoom = (w, x, y, v) => !!v && T.NATUUR.bos.telt(w, x, y, v);
-
-  // Wat er op deze tegel eerst weg moet voor hij hem kan omspitten: 'hakken' (een boom), 'rooien' (een stronk of een
-  // struik), of null. Voor js/veldwerk.js, dat er het werk en het figuur bij kiest.
-  T.ontginWerkOp = function (w, x, y) {
-    const v = T.voorwerpOp(w, x, y);
-    if (isBoom(w, x, y, v)) return 'hakken';
-    if (v && ROOIEN.has(v.soort)) return 'rooien';
-    return null;
-  };
 
   // Per kaart en per dag: welke tegels niet in een stuk bos mogen en welke een boom hebben, als optelsommen (zodat de vraag
   // of een stuk van dertig tegels kan, één stap is, ook voor de tienduizend plekken die de boer afzoekt), en de tegels van
@@ -382,7 +374,7 @@
       return { delen: o.vertrouwen ? [`vertrouwen van het dorp −${o.vertrouwen}`] : [], kan: true };
     }
     if (!o.bos) return { delen: [], kan: false, waarom: 'er is geen bos' };
-    const delen = [`+${o.bos.bomen * IN().houtPerBoom} hout`];
+    const delen = [`+${o.bos.bomen * T.BOS_INSTELLINGEN.houtPerBoom} hout`];
     if (soort === 'bos') {
       if (o.gunst) delen.push(`gunst van de heer −${o.gunst}`);
       delen.push('de inner telt het');
@@ -446,41 +438,9 @@
     if (!veld.ontginning) return;
     veld.ontginning.gestoken.add(sleutel(x, y));
     const v = w && T.voorwerpOp(w, x, y);
-    if (v && LAAG.has(v.soort)) T.haalVoorwerpWeg(w, v);
+    if (T.groeitLaag(v)) T.haalVoorwerpWeg(w, v);
   };
   T.isGestoken = (veld, x, y) => !veld.ontginning || veld.ontginning.gestoken.has(sleutel(x, y));
-
-  // Weg met wat op deze tegel stond (een boom, een stronk, een struik). Van de kaart kwam het met een muur eronder (een
-  // vast ding, js/kaart.js), dus de tegel wordt weer vloer; een stronk die erop komt, houdt hem zelf tegen.
-  function haalWeg(w, v) {
-    if (w.tegels[v.y] && w.tegels[v.y][v.x] === 'muur') w.tegels[v.y][v.x] = 'vloer';
-    T.haalVoorwerpWeg(w, v);
-  }
-
-  // Een boom omgehakt (js/veldwerk.js): het hout gaat naar de schuur, en er blijft een stronk staan, tot hij die rooit.
-  T.hakBoom = function (D, x, y) {
-    const w = D.wereld;
-    const v = T.voorwerpOp(w, x, y);
-    if (!isBoom(w, x, y, v)) return false;
-    haalWeg(w, v);
-    T.wijzigVoorraad(D, 'hout', IN().houtPerBoom);
-    const t = T.opzoekTegelNaam('boomstronk');
-    if (t) {
-      const stronk = { soort: 'boomstronk', x, y, vel: t.vel, id: t.id, beslaat: [1, 1] };
-      T.kenSoortVan(stronk);
-      T.zetVoorwerp(w, stronk);
-    }
-    return true;
-  };
-
-  // Een stronk of een struik gerooid (js/veldwerk.js): weg.
-  T.rooi = function (D, x, y) {
-    const w = D.wereld;
-    const v = T.voorwerpOp(w, x, y);
-    if (!v || !ROOIEN.has(v.soort)) return false;
-    haalWeg(w, v);
-    return true;
-  };
 
   // Elke dag (T.tikGebouwenDag, js/gebouwen.js, vóór T.tikAkkersDag): een stuk dat af is, of waarvan de tijd om is, is
   // ontgonnen; wat de boer niet af had, doen zijn mensen dan nog (zoals het vangnet van de oogst, js/akkers.js): in het bos

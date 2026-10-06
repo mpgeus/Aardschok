@@ -49,6 +49,11 @@
     kraam: { blokkeert: true, zichtDicht: false, naam: 'een kraam' },
     // Een mand, kist, zak of ton naast een kraam (js/markt.js): wat niet op de toonbank past.
     mand: { blokkeert: true, zichtDicht: false, naam: 'een mand' },
+    // Een stronk die achterblijft als een boom om is (T.velBoom, js/bos.js): je loopt tussen de stronken door, zoals in een
+    // kapvlakte, en zo komt de houthakker bij de bomen erachter. In de speeltest van 6 okt zette hij zich met zijn eigen
+    // stronken vast: na de rand van het bos kon hij er niet meer in. Een stronk die de maker op de kaart zette, heeft een
+    // muur onder zich, zoals elk vast ding uit het vel (js/kaart.js).
+    boomstronk: { blokkeert: false, zichtDicht: false },
   };
 
   // Hoe snel de schout loopt, in tegels per seconde: wat vlotter dan een dorpeling (1,2 tot 1,5),
