@@ -69,9 +69,14 @@
     },
     // Het plein, in halve maten langs u (in beeld naar rechts) en v (naar de camera). Het ontworpen plein is zo'n
     // 10,7 bij 6,2, en 214 tegels.
-    pleinBreed: [9.5, 11.5],
-    pleinDiep: [5.8, 7],
-    pleinTegels: [165, 250],
+    // Sinds vraag 127, c1 (Marcel, 6 okt: "Desnoods moeten we de afmeting van het plein aanpassen en groter maken, zodat
+    // deze kan meegroeien met de afmeting van de stad") groter, zo'n 290 tot 380 tegels, met ruimte voor de markt.
+    pleinBreed: [12.5, 14],
+    pleinDiep: [7.4, 8.6],
+    pleinTegels: [260, 410],
+    // De eiken staan alleen achter deze lijn, in delen van de diepte van het plein vanaf zijn midden (0 is het midden, 1
+    // de voorste rand): de voorkant blijft vrij voor de markt (js/markt.js, vraag 127, c1).
+    eikenTot: 0.15,
     // Een dak dekt in ons beeld tot zo'n acht tegels erachter af (ontwerp/spel.md, bij het plein). Van het plein
     // mag niet meer dan dit deel achter een dak liggen: in het ontworpen gehucht, dat Marcel goedkeurde, is dat 23 van
     // de 214 tegels (11%), zo geteld.
@@ -995,6 +1000,8 @@
       for (let y = 0; y < H; y++) {
         for (let x = 0; x < B; x++) {
           if (op(x, y) !== PLEIN || !vrijVoor(x, y) || T.binnenRand(zand, x + 0.5, y + 0.5)) continue;
+          // de voorkant van het plein (naar de camera) blijft vrij voor de markt
+          if ((x + 0.5 - cx + (y + 0.5 - cy)) * Math.SQRT1_2 > I.eikenTot * pd) continue;
           let rondom = true;
           for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) if (op(x + dx, y + dy) !== PLEIN) rondom = false;
           if (rondom) opties.push([x, y]);
