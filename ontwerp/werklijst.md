@@ -5561,6 +5561,13 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
       kramen even veel zijn als één lange.
     Vragen: **a**, één tot drie tegels? **b**, naar de waar met toeval, of alleen toeval? **c**, deze vormen erbij, of
     eerst alleen de lengte? **d**, tellen in kramen of in tegels?
+    **Marcel koos (6 okt): "plein iets kleiner, a ja, b naar waar, c: ja goed idee, d. ja eens", en bij het voorstel na
+    de speeltest: "1. prima 2. graag".** Dus: het plein van de maker iets kleiner (zo'n 260 tot 300 tegels, een blok van
+    zo'n 8 kramen, de rest langs de straat); kramen van één tot drie tegels lang, naar de waar met wat toeval; de andere
+    vormen erbij (het puntdakje, de tafel onder een zeil, de kar); en het meegroeien telt in tegels toonbank. En e
+    (bouwgrond uit het bos, vraag 110) komt eerder. **Volgorde:** eerst het kleinere plein (klein, nu), dan de proefplaat
+    van de kramen in lengtes en vormen voor Marcel (stap 2b), dan e, dan stap 3 (de kooplui, de boodschappen, de
+    marktdag).
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

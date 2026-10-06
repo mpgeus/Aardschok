@@ -70,10 +70,11 @@
     // Het plein, in halve maten langs u (in beeld naar rechts) en v (naar de camera). Het ontworpen plein is zo'n
     // 10,7 bij 6,2, en 214 tegels.
     // Sinds vraag 127, c1 (Marcel, 6 okt: "Desnoods moeten we de afmeting van het plein aanpassen en groter maken, zodat
-    // deze kan meegroeien met de afmeting van de stad") groter, zo'n 290 tot 380 tegels, met ruimte voor de markt.
-    pleinBreed: [12.5, 14],
-    pleinDiep: [7.4, 8.6],
-    pleinTegels: [260, 410],
+    // deze kan meegroeien met de afmeting van de stad") groter, met ruimte voor de markt: zo'n 260 tot 300 tegels. Eerst
+    // was het 290 tot 380, maar dat kostte bouwgrond (de speeltest van 6 okt; Marcel: "plein iets kleiner").
+    pleinBreed: [11.5, 12.5],
+    pleinDiep: [7, 7.6],
+    pleinTegels: [230, 330],
     // De eiken staan alleen achter deze lijn, in delen van de diepte van het plein vanaf zijn midden (0 is het midden, 1
     // de voorste rand): de voorkant blijft vrij voor de markt (js/markt.js, vraag 127, c1).
     eikenTot: 0.15,
