@@ -144,6 +144,9 @@
   // Geen open grond meer (werklijst vraag 110, e; Marcel, 6 okt: "A ja B ja"): dan een plek waar wie het vraagt eerst
   // rooit (een boom, een stronk, een struik, onder de voet en in het looppad), met zo weinig mogelijk bomen, en dan het
   // dichtst bij `bij`. Wat bij de natuur hoort, zoekt over de hele kaart, de rest binnen 45 tegels, zoals hierboven.
+  // Een plek met een kring (een put, een kapel) moet net als hierboven de huizen bereiken die er nog geen hebben, de
+  // meeste eerst, en zoekt dus ook over de hele kaart: in de speeltest van 6 okt kwam er anders elke maand een put bij het
+  // hart van het dorp, terwijl de hut die erom vroeg er niets aan had (op 72022 48 putten in vier jaar).
   // Eerst wat er op elke plek te rooien staat (één stap per plek, T.watTeRooien), dan van de beste plek af of hij past.
   // Geeft { x, y, rooien: het stuk dat eerst vrij moet }, of null.
   function zoekPlekOmTeRooien(D, soort, bij) {
@@ -151,16 +154,19 @@
     const g = T.GEBOUWEN[soort];
     if (!g || g.erf || soort === 'markt') return null;
     const voet = T.gebouwVoet(soort, T.volgendeTekening(D, soort)) || g.voet;
-    const tot = g.bij ? Math.max(45, w.tegels.length, w.tegels[0].length) : 45;
+    const kring = heeftKring(soort) ? T.kringTeller(D, soort) : null;
+    const tot = g.bij || kring ? Math.max(45, w.tegels.length, w.tegels[0].length) : 45;
     const plekken = [];
     for (let y = Math.max(0, bij.y - tot); y < Math.min(w.tegels.length, bij.y + tot); y++) {
       for (let x = Math.max(0, bij.x - tot); x < Math.min(w.tegels[0].length, bij.x + tot); x++) {
+        const zonder = kring ? kring({ x, y, b: voet.b, h: voet.h }).zonder : 0;
+        if (kring && !(zonder > 0)) continue;
         const kavel = T.kavelVan(D, x, y, voet);
         const wat = T.watTeRooien(D, kavel);
-        if (wat.bomen || wat.struiken) plekken.push({ x, y, kavel, bomen: wat.bomen, d: Math.hypot(x - bij.x, y - bij.y) });
+        if (wat.bomen || wat.struiken) plekken.push({ x, y, kavel, zonder, bomen: wat.bomen, d: Math.hypot(x - bij.x, y - bij.y) });
       }
     }
-    plekken.sort((a, b) => a.bomen - b.bomen || a.d - b.d);
+    plekken.sort((a, b) => b.zonder - a.zonder || a.bomen - b.bomen || a.d - b.d);
     const plek = plekken.find((p) => !T.waaromPastHetNiet(D, soort, p.x, p.y, null, p.kavel));
     return plek ? { x: plek.x, y: plek.y, rooien: plek.kavel } : null;
   }

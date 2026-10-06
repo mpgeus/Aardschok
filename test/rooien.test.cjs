@@ -380,6 +380,30 @@ test('een plek om te rooien voor een werkplaats: met zo weinig mogelijk bomen, e
   });
 });
 
+test('een put op een plek om te rooien bereikt een huis dat er nog geen heeft, hoe ver wie hem vraagt ook woont; mist niemand er een, dan geen plek', () => {
+  zo(() => {
+    const S = gehucht();
+    const D = S.dorp;
+    const voet = T.gebouwVoet('put', T.volgendeTekening(D, 'put'));
+    const kring = T.kringTeller(D, 'put');
+    // In de speeltest van 6 okt koos hij de plek met de minste bomen bij het hart van het dorp, en kwam er elke maand een
+    // put die niemand bereikte.
+    for (const bij of [{ x: 0, y: 0 }, { x: S.wereld.b - 1, y: S.wereld.h - 1 }]) {
+      const plek = T.plekOmTeRooien(D, 'put', bij);
+      assert.ok(plek, 'er is een plek om te rooien');
+      assert.ok(kring({ x: plek.x, y: plek.y, b: voet.b, h: voet.h }).zonder > 0, `${plek.x},${plek.y} bereikt een huis zonder put`);
+    }
+    // Bereikt de put die er staat iedereen, dan is er geen plek: niemand mist er een.
+    const oud = T.WENSEN_INSTELLINGEN.kring.put;
+    T.WENSEN_INSTELLINGEN.kring.put = 200;
+    try {
+      assert.equal(T.plekOmTeRooien(D, 'put', { x: 0, y: 0 }), null);
+    } finally {
+      T.WENSEN_INSTELLINGEN.kring.put = oud;
+    }
+  });
+});
+
 test('ja kost de gunst die de prijs noemde: een plek die bij de vraag niet in het bos van de heer lag, kost niets', () => {
   zo(() => {
     const S = gehucht();
