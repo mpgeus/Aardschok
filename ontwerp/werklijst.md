@@ -62,7 +62,7 @@ en plant een boompje naast de stronk, met tekeningen van een boompje en een jong
 vier jaar komt elk dorp boven de 100, en wint er voor het eerst een (op 72022). **Vraag 129 is klaar** (Marcel:
 "Eens"): een houthakker zonder bomen laat zijn hand gaan, komt alleen bij genoeg bos, loopt tussen zijn stronken door, en
 plant twee boompjes per boom, zodat het bos om hem blijft (310 tot 490 hout per jaar tot het eind). **Vraag 130 is
-gebouwd** (Marcel: "Ok" op a met c; op de branch, nog niet in `main`): op elk land stond een hut van de maker die nooit
+gebouwd** (Marcel: "Ok" op a met c; sinds 6 okt in `main`, Marcel: "Push main"): op elk land stond een hut van de maker die nooit
 kon doorgroeien (meestal door één struik); nu rooit het gezin eerst wat in de weg staat, en zegt het briefje anders
 waarom, en in de speeltest van vier jaar wint de bouwer op 73425. **Open: vraag 130, d**: op 62707 legde de bouwer een
 erf onder een hut, en die groeit dan nooit.
