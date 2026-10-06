@@ -605,3 +605,126 @@ test('rooit niemand het, dan doen de buren de rest na een maand; staat er iets w
     }
   });
 });
+
+// De appelboom (werklijst vraag 130; Marcel, 6 okt: "A"): die is van het gezin, en gaat alleen om als geen vorm zonder hem
+// past. Gemeten op veertig landen van de maker stond er op drie bij het begin bij elke vorm van een hut een in de weg, en
+// bleef die hut altijd hut.
+function zetAppelboom(D, x, y) {
+  const t = T.opzoekTegelNaam('appelboom');
+  const v = { soort: 'appelboom', x, y, vel: t.vel, id: t.id, beslaat: [1, 1] };
+  T.kenSoortVan(v);
+  const daar = T.voorwerpOp(D.wereld, x, y);
+  if (daar) T.haalVoorwerpWeg(D.wereld, daar);
+  T.zetVoorwerp(D.wereld, v);
+  D.wereld.tegels[y][x] = 'muur';
+  T.kaartVeranderd(D.wereld);
+  return v;
+}
+
+test('staat er bij elke vorm een appelboom in de weg, dan gaat hij om, met zijn hout naar de schuur; wie wegtrekt, laat hem staan', () => {
+  zo(() => {
+    const gezinDagen = T.GEBOUWEN_INSTELLINGEN.gezinDagen;
+    T.GEBOUWEN_INSTELLINGEN.gezinDagen = 1e9;
+    try {
+      const S = landVanDeMaker(62707);
+      const D = S.dorp;
+      const hut = hutMetAlles(S);
+      const oud = hut.voet || T.gebouwVoet(hut.soort, hut.tekening);
+      // Net onder de hut, in elke grotere vorm (zoals de rots in de toets hierboven).
+      const x = hut.x + 1;
+      const y = hut.y + oud.h;
+      const appel = zetAppelboom(D, x, y);
+      const plan = T.groeiRooiPlan(D, hut);
+      assert.ok(plan, 'er is nog een plan');
+      assert.ok(x < plan.x + plan.b && y < plan.y + plan.h, 'met de appelboom erin');
+      hut.groeiDagen = T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen;
+      assert.equal(T.waaromGroeitHetNiet(D, hut), null, 'het briefje zegt niet dat de appelboom het tegenhoudt');
+      let dag = 1;
+      while (!hut.groeitNaRooien && dag < 80) nachtMetGenoeg(S, dag++);
+      assert.ok(hut.groeitNaRooien, 'het gezin rooit');
+      assert.equal(appel.omhakken, true, 'de appelboom mag om');
+      assert.equal(T.ontginWerkOp(D.wereld, x, y), 'hakken');
+      assert.match(T.waaromGroeitHetNiet(D, hut), /de appelboom/);
+      // Trekt het gezin weg voor het klaar is, dan blijft hij staan.
+      const S2 = landVanDeMaker(62707);
+      const D2 = S2.dorp;
+      const hut2 = hutMetAlles(S2);
+      const appel2 = zetAppelboom(D2, x, y);
+      hut2.groeiDagen = T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen;
+      let dag2 = 1;
+      while (!hut2.groeitNaRooien && dag2 < 80) nachtMetGenoeg(S2, dag2++);
+      assert.equal(appel2.omhakken, true);
+      const gezin = D2.bewoners.mensen.filter((p) => p.huis === hut2);
+      T.wijzigBevolking(D2, -gezin.length, 'vertrek', 'ze trekken weg', gezin);
+      nachtMetGenoeg(S2, dag2++);
+      assert.ok(!hut2.groeitNaRooien, 'niemand rooit meer');
+      assert.ok(T.isAppelboom(D2.wereld, x, y), 'de appelboom staat er nog');
+      assert.equal(appel2.omhakken, undefined);
+      assert.equal(T.ontginWerkOp(D2.wereld, x, y), null);
+      // Hij gaat om zoals een boom: het hout naar de schuur, en een stronk die eruit gaat.
+      T.zetVoorraad(D, 'hout', 0);
+      assert.equal(T.hakBoom(D, x, y), true);
+      assert.equal(D.voorraad.hout, T.BOS_INSTELLINGEN.houtPerBoom);
+      assert.ok(!T.isAppelboom(D.wereld, x, y));
+      // De rest rooien de buren na een maand, en dan groeit de hut.
+      const tot = hut.rooienTot;
+      while (hut.soort === 'hut' && dag < tot + 5) nachtMetGenoeg(S, dag++);
+      assert.equal(hut.soort, 'huis', `de hut groeit (dag ${dag})`);
+    } finally {
+      T.GEBOUWEN_INSTELLINGEN.gezinDagen = gezinDagen;
+    }
+  });
+});
+
+test('een appelboom blijft staan als een vorm zonder hem past, ook als daar eerst een struik weg moet', () => {
+  const tegels = [];
+  for (let y = 0; y < 30; y++) tegels.push(new Array(30).fill('vloer'));
+  const D = {
+    wereld: { b: 30, h: 30, tegels, voorwerpen: [] },
+    voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0, kalender: { dag: 0 }, behoeften: T.nieuweBehoeften(),
+  };
+  T.zetVoorraad(D, 'hout', 100);
+  T.zetVoorraad(D, 'goud', 100);
+  // huizen/hut1 (5 bij 4) groeit naar huizen/huis2 (5 bij 7, naar het zuiden) of naar een vorm die ook naar het oosten gaat.
+  D.volgendeTekening = { hut: 'huizen/hut1' };
+  const hut = T.plaatsGebouw(D, 'hut', 5, 5).instantie;
+  const v = T.voetVanGebouw(hut);
+  zetAppelboom(D, v.x + v.b, v.y); // ten oosten van de hut
+  assert.equal(T.groeiRooiPlan(D, hut), null, 'naar het zuiden past hij zo');
+  const zone = T.groeiZone(D, hut);
+  assert.deepEqual([zone.b, zone.h], [5, 7], 'en daar houdt hij de grond vrij');
+  // Een struik naar het zuiden: dan rooit het gezin liever de struik dan de appelboom.
+  const t = T.opzoekTegelNaam('struik');
+  const struik = { soort: 'struik', x: v.x, y: v.y + v.h + 1, vel: t.vel, id: t.id, beslaat: [1, 1] };
+  T.kenSoortVan(struik);
+  T.zetVoorwerp(D.wereld, struik);
+  const plan = T.groeiRooiPlan(D, hut);
+  assert.ok(plan, 'nu moet er iets weg');
+  assert.deepEqual([plan.b, plan.h], [5, 7], 'de struik, niet de appelboom');
+  assert.ok(T.isAppelboom(D.wereld, v.x + v.b, v.y));
+});
+
+// Het briefje vraagt elk beeld waarom een huis niet groeit, en een erf vraagt het voor duizenden plekken: dat loot geen
+// tekening (T.volgendeTekening), anders liep het spel anders naar waar de muis stond (werklijst vraag 130, het puntje bij
+// c). Alleen het groeien zelf, elke nacht, loot.
+test('wat het briefje en een erf vragen over het groeien, loot niets', () => {
+  const S = landVanDeMaker(62707);
+  const D = S.dorp;
+  const hut = hutMetAlles(S);
+  hut.groeiDagen = T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen;
+  D.volgendeTekening = {};
+  const toeval = Math.random;
+  Math.random = () => {
+    throw new Error('geloot');
+  };
+  try {
+    T.waaromGroeitHetNiet(D, hut);
+    T.huisToestand(D, hut);
+    T.groeiRooiPlan(D, hut);
+    assert.ok(T.groeiZones(D).length > 0);
+    T.huisDatHierGroeit(D, { x: hut.x, y: hut.y, b: 20, h: 20 });
+  } finally {
+    Math.random = toeval;
+  }
+  assert.deepEqual(D.volgendeTekening, {}, 'er is niets gekozen');
+});

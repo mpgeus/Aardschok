@@ -5870,6 +5870,13 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     erf (48, 50) uit de toets van de raad (en uit `Spel.debug.bouw('erf', 48, 50)` in CLAUDE.md), en sprong hij als er
     ergens een huis bijkwam. Het rooiplan (`T.groeiRooiPlan`) kiest nu op dezelfde manier (`vormMetPlaats`). `npm test`:
     998/998.
+    **"A" en het puntje bij c gebouwd** (6 okt, de sessie van de heer, uit de tweede versie in de opbouw van `main`): een
+    appelboom telt bij het groeien als iets wat het gezin weg kan halen (`'appel'` in `watStaatInDeWeg`), maar een vorm
+    met een appelboom komt pas als geen vorm zonder past (`vormMetPlaats`); dan krijgt hij `omhakken`, is hij een boom om
+    te hakken (`T.ontginWerkOp`, `T.velBoom`), en gaat zijn hout naar de schuur. Trekt het gezin weg voor hij om is, dan
+    blijft hij staan. En alleen het groeien zelf, elke nacht, loot een tekening (`kiezen` in `groeiVormen`): het briefje,
+    de grond die een erf vrijlaat en een toets niet. Het erf in het bouwmenu loot nog wel; dat stond er al
+    (`opmerkingen.md`). `npm test`: 1001/1001.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

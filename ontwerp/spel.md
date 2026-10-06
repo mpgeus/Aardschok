@@ -450,8 +450,10 @@ letter voor letter mee zoals ervoor).
   boompje), dan rooit het gezin dat eerst, zoals een erf: het hoofd met de bijl, wie van het gezin geen werk heeft helpt,
   en na een maand rooien de buren de rest; dan groeit het, de vorm met het minste te rooien, en dan de kleinste. Een nieuw
   erf blijft van die grond af (vraag 130, d, hieronder bij de erven). Staat er iets wat niet te
-  rooien is (een gebouw, een ander erf, een rots, een appelboom), dan blijft het wat het is, en zegt het briefje bij de
-  muis waarom ("Het kan een huis worden, maar er staat een rots waar het groter moet worden"). Zo kon op elk land van de
+  rooien is (een gebouw, een ander erf, een rots), dan blijft het wat het is, en zegt het briefje bij de muis waarom
+  ("Het kan een huis worden, maar er staat een rots waar het groter moet worden"). **Een appelboom** is van het gezin en
+  blijft staan, behalve als geen vorm zonder hem past (Marcel, 6 okt: "A"): dan gaat hij om, met zijn hout naar de
+  schuur; zonder dat bleef op drie van veertig landen van de maker een hut altijd hut. Zo kon op elk land van de
   maker een hut nooit groeien, meestal door één struik, en won geen dorp (vraag 130, 6 okt; Marcel: "Ok").
 - **Achteruitgaan: zacht** (vraag 85, c), zoals in Anno 1602: mist een huis iets, dan groeit het niet verder en is het
   minder tevreden; er trekt pas een gezin weg als het huis onder de vertrekdrempel zakt, en dat gebeurt alleen als het

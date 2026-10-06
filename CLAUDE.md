@@ -455,8 +455,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   de woningen van het begin (`T.zetBestaandeGebouwen` geeft ze hun tekening als voorwerp), en het rijst op in de laatste
   bouwfasen terwijl zijn mensen erin blijven wonen (alleen het voorwerp is `inAanbouw`, `groeiVanafFase`; G, vraag 114).
   Staat er alleen iets te rooien waar het groter wordt, dan rooit het gezin dat eerst (`T.groeiRooiPlan`,
-  `T.rooiOmTeGroeien` in `js/bos.js`, `g.groeitNaRooien`), en anders zegt het briefje waarom (`T.waaromGroeitHetNiet`;
-  vraag 130). De grond waar een huis nog groeit (`T.groeiZone`: de vorm met het minste te rooien, dan de kleinste), houdt
+  `T.rooiOmTeGroeien` in `js/bos.js`, `g.groeitNaRooien`; een appelboom alleen als geen vorm zonder hem past, `v.omhakken`),
+  en anders zegt het briefje waarom (`T.waaromGroeitHetNiet`; vraag 130). Alleen het groeien zelf loot een tekening
+  (`kiezen` in `groeiVormen`); wat het briefje of een erf vraagt, niet. De grond waar een huis nog groeit (`T.groeiZone`: de vorm met het minste te rooien, dan de kleinste), houdt
   een nieuw erf vrij (vraag 130, d). Achteruitgaan is zacht (een
   gezin trekt alleen weg uit een huis onder de vertrekdrempel) of streng (de spelregel "Achteruitgaan"); een hogere stand
   betaalt meer belasting (`T.belastbaar`). De spelregel "Wensen" op "Het dorp als geheel" is het spel van vóór 1 okt; de
