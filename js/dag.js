@@ -248,8 +248,10 @@
     const plek = p.plek || {};
     if (deel === 'ochtend') return (p.haaltWater && plek.put) || erf;
     if (deel === 'avond') return erf;
-    // Wie zijn eigen hut bouwt op een erf (js/erven.js), werkt er overdag aan, en niet op zijn werk.
-    if (p.huis && p.huis.erf && !p.huis.klaar) return erf;
+    // Wie zijn eigen hut bouwt op een erf (js/erven.js), werkt er overdag aan, en niet op zijn werk; net zo het hoofd van
+    // een gezin dat de grond van zijn grotere huis rooit (js/bos.js; werklijst vraag 130), zodat hij tussen twee struiken
+    // niet naar zijn werk loopt.
+    if (p.huis && ((p.huis.erf && !p.huis.klaar) || (p.huis.rooitVoorGroei && !p.hoofd))) return erf;
     // De boerin en de grote kinderen helpen hun boer bij het zaaien en de oogst (js/veldwerk.js).
     const helpt = deel === 'werk' && T.helpAnker ? T.helpAnker(D, e) : null;
     if (helpt) return helpt;

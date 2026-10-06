@@ -131,6 +131,16 @@
     return null;
   }
 
+  // Een huis met mensen dat alles heeft, maar niet kan doorgroeien (vraag 130, c2): { g, reden }, of null.
+  function huisDatNietGroeit(D) {
+    for (const g of D.gebouwen || []) {
+      if (!g.wensen || !g.wensen.mensen || !g.wensen.alles) continue;
+      const plan = T.groeiPlan(D, g, { mensen: false });
+      if (plan && plan.reden) return { g, reden: plan.reden };
+    }
+    return null;
+  }
+
   // Het eerste wat de huizen missen waar je nu iets aan kunt doen (T.watDeHuizenMissen, js/wensen.js), van deze soort
   // ('bouwstof' of 'wens'), of null.
   const watNuHelpt = (D, soort) => T.watDeHuizenMissen(D).find((x) => x.soort === soort && x.kan) || null;
@@ -247,6 +257,17 @@
       tekst: (D) => {
         const wat = T.vrijeErven(D).length === 1 ? 'het erf' : 'de vrije erven';
         return `Genoeg mensen voor de winst. Op een vrij erf begint een nieuw gezin in een hut, en dan begint de teller opnieuw: haal ${wat} weg ([B], Erf, en klik erop).`;
+      },
+    },
+    {
+      // Een huis dat alles heeft, maar niet kan doorgroeien (werklijst vraag 130, c2; Marcel, 6 okt: "Eens alle 3"): voor de
+      // winst moet het een stenen huis worden, en zonder de raad zie je niet waarom de teller niet loopt. Wat er in de weg
+      // staat, zegt T.groeiPlan (js/behoeften.js), net als het briefje bij het huis.
+      id: 'groeitNiet',
+      als: (D) => T.maatGehaald(D) && !!huisDatNietGroeit(D),
+      tekst: (D) => {
+        const { g, reden } = huisDatNietGroeit(D);
+        return `Genoeg mensen voor de winst, maar ${T.huisVan(D, g)} kan geen ${T.GEBOUWEN[T.GEBOUWEN[g.soort].wordt].naam} worden: ${reden}.`;
       },
     },
     {

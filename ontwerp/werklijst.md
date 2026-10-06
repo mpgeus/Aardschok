@@ -5833,6 +5833,9 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     meer op de grond waar een huis ernaast nog moet doorgroeien ("Hier groeit straks het huis van ...")? Op 62707 legde de
     bouwer er een erf onder, en dan helpt rooien niet meer. Mijn voorkeur: alle drie ja; ze zijn klein, en elk houdt een
     dorp tegen dat niet meer kan winnen.
+    **Marcel koos (6 okt): "Eens alle 3".** Dus a met a2, c met c2, en d: het gezin rooit wat in de weg staat, ook zijn
+    eigen appelboom; het briefje en de raad zeggen waarom een huis niet groeit; en een erf komt niet op de grond waar een
+    huis ernaast nog moet doorgroeien.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

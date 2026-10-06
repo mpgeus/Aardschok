@@ -77,16 +77,20 @@
   // Ligt (x, y) op een ander erf dan `behalve`, of binnen het looppad om de plek van het huis op een ander erf? Daar
   // groeit een huis niet heen (js/behoeften.js), zoals een gebouw dat er later komt er ook vandaan blijft (T.looppadOm,
   // js/gebouwen.js, met T.huisPlekOp).
-  T.opDeGrondVanEenErf = function (D, x, y, behalve = null) {
-    const n = T.GEBOUWEN_INSTELLINGEN.looppad;
-    for (const e of D.erven || []) {
-      if (e === behalve) continue;
-      if (x >= e.x && x < e.x + e.b && y >= e.y && y < e.y + e.h) return true;
-      const p = e.plan;
-      if (p && x >= e.x + p.dx - n && x < e.x + p.dx + p.b + n && y >= e.y + p.dy - n && y < e.y + p.dy + p.h + n) return true;
-    }
-    return false;
+  T.opDeGrondVanEenErf = (D, x, y, behalve = null) => !!T.erfMetGrondOp(D, x, y, behalve);
+  // Het erf (niet `behalve`) op wiens grond (x, y) ligt, of null: voor wat er in de weg staat van een huis dat doorgroeit
+  // (werklijst vraag 130, c).
+  T.erfMetGrondOp = function (D, x, y, behalve = null) {
+    for (const e of D.erven || []) if (e !== behalve && opGrondVan(e, x, y)) return e;
+    return null;
   };
+  // Ligt (x, y) op de grond van erf e: in het erf, of binnen het looppad om de plek van zijn huis (e.plan)?
+  function opGrondVan(e, x, y) {
+    if (x >= e.x && x < e.x + e.b && y >= e.y && y < e.y + e.h) return true;
+    const n = T.GEBOUWEN_INSTELLINGEN.looppad;
+    const p = e.plan;
+    return !!p && x >= e.x + p.dx - n && x < e.x + p.dx + p.b + n && y >= e.y + p.dy - n && y < e.y + p.dy + p.h + n;
+  }
 
   // Waarom past een erf niet met zijn linkerbovenhoek op (x, y)? De reden, of null. Het hele vak moet vrij
   // zijn: niet op het plein, niets vasts (water, een boom, een gebouw, de rand van de kaart), geen veld,
@@ -111,12 +115,35 @@
     // Geen deur op een erf (werklijst vraag 88, js/gebouwen.js): de hut erop zou hem dichtzetten.
     if (T.deurOpRechthoek(D, { x, y, b, h })) return 'Daar is een deur.';
     if (!maatPast(D, b, h)) return 'Een erf van deze maat is te klein voor een hut.';
-    if (!kiesTekeningen(D, { b, h }, { x, y, b, h })) {
+    const keus = kiesTekeningen(D, { b, h }, { x, y, b, h });
+    if (!keus) {
       const n = T.GEBOUWEN_INSTELLINGEN.looppad;
       return `Hier past geen huis met een looppad van ${T.telwoord(n)} tegels rondom.`;
     }
+    const groeit = groeitOpErf(D, { x, y, b, h, plan: planVan(keus) });
+    if (groeit) return `Hier groeit ${T.huisVan(D, groeit)} straks tot een ${T.GEBOUWEN[T.GEBOUWEN[groeit.soort].wordt].naam}.`;
     return null;
   };
+
+  // Een huis dat niet meer kan doorgroeien als dit erf er komt: elke vorm die het nog kan nemen, komt dan op de grond van
+  // het erf (het erf, en het looppad om de plek van zijn huis); of null. Daar komt geen erf (werklijst vraag 130, d;
+  // Marcel, 6 okt: "Eens alle 3"): in de speeltest legde de bouwer op 62707 een erf waar een hut moest groeien, en die
+  // bleef een hut, zodat het dorp niet meer kon winnen. Kan het huis nog een andere vorm nemen, dan mag het erf. Welke
+  // vormen dat zijn, zegt T.groeiRuimte (js/behoeften.js).
+  function groeitOpErf(D, erf) {
+    const n = T.GEBOUWEN_INSTELLINGEN.looppad;
+    const p = erf.plan;
+    const x0 = Math.min(erf.x, p ? erf.x + p.dx - n : erf.x);
+    const y0 = Math.min(erf.y, p ? erf.y + p.dy - n : erf.y);
+    const x1 = Math.max(erf.x + erf.b, p ? erf.x + p.dx + p.b + n : 0) - 1;
+    const y1 = Math.max(erf.y + erf.h, p ? erf.y + p.dy + p.h + n : 0) - 1;
+    for (const h of T.groeiRuimte(D)) {
+      const d = h.doos;
+      if (d.x1 < x0 || d.x0 > x1 || d.y1 < y0 || d.y0 > y1) continue;
+      if (h.vormen.every((tegels) => tegels.some((t) => opGrondVan(erf, t.x, t.y)))) return h.g;
+    }
+    return null;
+  }
 
   // Ligt (x, y) op de plek van het huis van een erf (erf.plan)? Een gebouw blijft er met zijn looppad vandaan, ook als
   // het huis er nog niet staat (T.looppadOm, js/gebouwen.js). `behalve`: het erf dat zelf zijn plek zoekt.
