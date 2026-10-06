@@ -55,6 +55,10 @@ op weg naar de heer. Samen spelen, met een speler als heer, komt na de release; 
 bond met het buurdorp (vraag 72). Zie `spel.md`, "De heer als tegenstander". Het staat sinds 6 okt in `main`
 (Marcel: "ja push main").
 
+**Vraag 128 wacht op Marcel** (6 okt): een analyse van buiten van onze samenvatting ("Richting & Game Design Ideeën")
+zegt dat mensen, informatie en de zitting eerst moeten, vóór meer beeld en meer bouwen. Het sterkste ervan ligt al bij ons
+open (vraag 105, b en e, en de zitting, 3b). Het advies van Claude is een proef met één keten, de verdwenen graanzak.
+
 **Sinds de sessie van het licht (4 okt, vraag 125, in `main`):** met de videokaart kleurt het dorp met het uur (roze
 bij het opkomen, oranje bij het ondergaan, blauw in de nacht), geven de lantaarns, de ramen en de herberg warme plassen
 licht die flakkeren, en werpt alles wat staat een schaduw die met de zon meegaat. De schout draagt 's avonds buiten een
@@ -5572,6 +5576,65 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     (groente en fruit: luifel, kar of puntdak, 1 à 2 tegels; brood: luifel, puntdak of zeil, 1; vis en vlees: luifel,
     zeil of puntdak, 2 à 3; laken en garen: luifel, puntdak of zeil, 2 à 3; potten en gerei: zeil of luifel, 1 à 2), en
     tellen in tegels toonbank (een per 10 mensen, minstens 6), komen nu in het spel.
+128. **Richting en ontwerpideeën van buiten** (Marcel, 6 okt, zesendertigste sessie: "Kijk hier eens naar", met een pdf
+    van vijftien bladzijden, "Aardschok — Richting & Game Design Ideeën": een analyse van de samenvatting van vier
+    bladzijden die we die dag voor een gamedesigner maakten; de pdf staat niet in git, dit is wat erin staat; plan van
+    Claude; open).
+    **In één zin:** "maak de game smaller in scope, maar dieper in menselijke consequenties": informatie, mensen, politiek
+    en gevolgen gaan boven bouw- en productiediepte. Zijn ontwerpregel: "Wat gebeurde er in mijn dorp, waarom gebeurde
+    het, wat weet ik ervan, en wie wordt boos als ik ingrijp?" Zijn positionering: "A medieval political life-sim where
+    you govern a village from within."
+    **Wat we al hebben of besloten** (de samenvatting vertelde het hele spel zonder te zeggen wat er staat, dus het raadt
+    dit aan): niet bouwen om het bouwen (vraag 103), twee bazen (106), de dag in fasen (75), een heer met per spel een
+    ander karakter (126, c3), de wereldkaart pas na de kern (72), samen spelen na de release (126, f), vechten klein en
+    als gevolg (de rovers, 55), een probleem met een oorzaak die je had kunnen zien (`T.OORZAKEN`), en richting via de
+    raad (58).
+    **Wat nieuw is, of verder gaat dan wat we hebben:**
+    - **a, informatie als speelstuk, in drie lagen:** wat er echt gebeurde ("de molenaar steelt graan"), wat er gezegd
+      wordt ("mensen zeggen dat de boer steelt"), en wat jij weet ("je zag de molenaar 's nachts bij de voorraad").
+      Weten doe je door er zelf te zijn, te praten, in de herberg, door de raadsman iets te laten uitzoeken of een wachter
+      te laten kijken, de boeken na te lezen, iemand te volgen, of een tegenstrijdig verhaal te herkennen; een gerucht
+      heeft een andere status dan een feit. Het document maakt dit de kern: "De speler moet een reden hebben om ergens
+      naartoe te lopen. Anders is het 'lopen' alleen cosmetisch." Bij ons is dit vraag 105, b en e (open sinds 3 okt).
+      Wat er al is: de getuigen (`js/zien.js`), de roddelaar in de herberg, en de inner die alleen telt wat hij ziet.
+    - **b, de zitting als het moment van het spel:** een rechtszaak met een aanklager, een verdachte, getuigen, bewijs,
+      geruchten, wat jij zelf weet, en de druk van het dorp. Je weet soms dat iemand schuldig is, maar kunt het niet
+      bewijzen, of je hebt bewijs dat de heer liever niet ziet. De zitting staat in het plan (3b, vraag 75); nu is
+      rechtspraak alleen een soort voorval.
+    - **c, het dorp is verdeeld:** niet één vertrouwen, maar per groep (boeren, ambachtslieden, handelaren,
+      geestelijkheid, rijke families, wachters), zodat je kunt zeggen: "De boeren zijn voor mij, maar de ambachtslieden
+      zijn tegen." Bij ons hebben de standen al hun eigen wensen, en werken de wetten al per stand.
+    - **d, mensen die onthouden:** geen veertien balken per mens, maar wat later iets verandert: wie geholpen werd,
+      gestraft, land kreeg of stierf; met relaties (familie, vrienden, rivalen, schulden), belangen en soms een geheim.
+      Dat geeft vraag 118 (inwoners met stats) een richting.
+    - **e, de heer leert van jou:** lieg je vaak, dan laat hij controleren; betaal je veel, dan vraagt hij meer; bescherm
+      je steeds het dorp, dan test hij je trouw. "Een personage, geen quest machine." Naast onze karakters (de gierige, de
+      bange, de ijdele, de wrokkige; `spel.md`, "Zijn karakters") noemt het de oorlogsheer (wil mannen), de vrome
+      (kapellen, zeden) en de domme (bevliegingen).
+    - **f, gevolgen in ketens:** elke grote keuze maakt minstens één nieuw gevolg, soms maanden later. Vier voorbeelden:
+      de verdwenen graanzak (het graan ging naar een zieke familie: straffen, vrijspreken of verbergen, en dan merkt de
+      heer het tekort), de heer wil mannen midden in de oogst (wie gaat, en de familie protesteert), de verboden smidse
+      (bij ons al gebouwd, vraag 104), en het huwelijk (land tegen invloed, en jaren later een erfkwestie).
+    - **g, klein en goedkoop:** de proef voor een tester (begrijpt hij in 5 minuten wie hij is, heeft hij na 10 minuten
+      iemand die hij onthoudt, maakt hij binnen 15 minuten een keuze waar hij spijt van heeft of trots op is, kan hij
+      na 30 minuten een verhaal over zijn dorp vertellen?); een eindscherm met de geschiedenis van jouw schout (wat voor
+      schout je werd: rechtvaardig, corrupt, volks, trouw), bovenop het jaarboek (vraag 101); en voor `commercieel.md`
+      een opzet van de trailer (het levende dorp, een boer die iets vraagt, de brief van de heer, verstoppen, de herberg
+      en een gerucht, en dan rovers of opstand: "And your people remember"), een pitch ("You are the village bailiff.
+      Your lord wants gold. Your people want to live. …") en de streamertest: "Mijn smid verraadde me nadat ik zijn broer
+      liet arresteren" verkoopt beter dan "mijn productieketen heeft 14% hogere efficiëntie".
+    **Waar het anders is dan wat Marcel koos:** een slice van 30 tot 50 inwoners (Marcel, 1 okt: 100 tot 200, "een dorp
+    van 50 is echt te klein"); als eind van de demo één grote politieke keuze (bij ons het jaar van geluk, vraag 126, b3);
+    en vijf of zes grondstoffen, waar wij er zo'n vijftien hebben. Die laatste regel ("voeg een grondstof alleen toe als
+    hij een interessante beslissing veroorzaakt") past wel bij Marcels zorg van 3 okt: "weer een bouw spelletje, zelfde
+    kettingen van materialen".
+    **Advies van Claude:** a en b zijn het sterkst, en ze liggen al bij ons klaar (105 b en e, en de zitting, 3b). Nu komt
+    bijna alles naar je toe: elk verzoek, het rapport, en de echte voorraad in de balk; lopen is fijn, maar voor een
+    keuze nog niet nodig. Na de markt (vraag 127) staat in de werklijst vooral beeld (stap 3 van de bouwstijl, de
+    houthakker, de camera, de hoogte); dit document zegt dat mensen en informatie eerst moeten. Een proef: één keten van
+    begin tot eind, de verdwenen graanzak, op wat er al is (een voorval, de getuigen, de herberg), met een eerste zitting
+    als slot. Speelt dat goed, dan weten we de richting.
+    Vragen: **a** tot en met **g**: welke ja? En de volgorde: de proef met de graanzak vóór het beeld, of erna?
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
