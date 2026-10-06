@@ -271,8 +271,11 @@
       if (s.dorp.jaarverslag) (boek.jaarverslagen = boek.jaarverslagen || []).push({ datum: datum(), regels: s.dorp.jaarverslag.regels.slice() });
       if (!klik('#brief [data-actie="sluit"]')) T.ui.sluitBrief(s);
     }
-    // Gewonnen (js/einde.js): het eindscherm over het feest. De speler schrijft de dag op, en speelt verder.
-    if (s.dorp.eind && s.dorp.eind.gewonnen && !document.querySelector('#overlay').classList.contains('verborgen')) {
+    // Gewonnen (js/einde.js): het eindscherm over het feest. De speler schrijft de dag op, en speelt verder. Niet als het
+    // spel daarna uit is (je ambt kwijt, gevallen): dan staat er een ander scherm, met als knop "Naar het titelscherm", en
+    // die begon een nieuw spel onder de speler (speeltest van 6 okt, de sluwe bouwer op 62707: hij won, en werd daarna
+    // op Sint-Maarten ontslagen).
+    if (s.dorp.eind && s.dorp.eind.gewonnen && !s.dorp.einde && s.modus !== 'dood' && !document.querySelector('#overlay').classList.contains('verborgen')) {
       boek.gewonnen = boek.gewonnen || datum();
       klik('#overlay-knop');
     }
