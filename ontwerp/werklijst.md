@@ -5542,7 +5542,12 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     door de week een paar kramen, op de marktdag alle, met meer volk op het plein.
     **Stap 1 is af** (6 okt): de proefplaat van de kramen met hun waar en de manden (Marcel: "push main; ga door met stap
     2"). **Stap 2 is gebouwd** (6 okt): het marktblok, het meegroeien, de marktstraat, vol of leeg, en het grotere plein
-    van de maker (`spel.md`, "De markt op het plein, die meegroeit"); de speeltest loopt.
+    van de maker (`spel.md`, "De markt op het plein, die meegroeit"). **De speeltest erna** (`speelbaar.md`): op elk land
+    komt de markt en groeit hij mee (vijf kramen bij zo'n 80 mensen, het blok heeft plaats voor 10 à 12), maar **het
+    grotere plein kost bouwgrond**: het dorp eindigt op 83, 79 en 85 (gisteren 94, 83 en 79), op 62707 is de weverij weg,
+    en op alle drie is er aan het eind geen plek voor een weverij. Voorstel van Claude (open): het plein van de maker iets
+    kleiner dan nu (zo'n 260 tot 300 tegels, een blok van 8 kramen), en de rest van de groei van de markt langs de straat;
+    en e (bouwgrond uit het bos, vraag 110) eerder, want de grond is de knoop naar de winst, met of zonder markt.
     **Marcel (6 okt, tijdens stap 2): "Misschien verschillende kramen? Ook in afmeting? Voornamelijk lengte".** Voorstel
     van Claude (open):
     - **a, de lengte:** kramen van één, twee en drie tegels lang, langs de rij. Een lange kraam heeft een langere toonbank
