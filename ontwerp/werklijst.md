@@ -4764,7 +4764,18 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     van de heer kost ja diens gunst (−5, onder het antwoord). De werkplaats wacht dan, nog niet op de kaart, en wie hem
     vroeg, rooit met de bijl en werkt zolang nergens; daarna begint de bouw, en na een maand rooien de buren de rest. Een
     put of een kapel net zo (wie hem vroeg, rooit, ook een boer). Een gebouw dat wacht, zegt het bij de muis ("eerst
-    wordt de plek gerooid", of "de bouwplaats wacht op hout": dat zei "nog 1 dag"). `npm test`: 977/977. Volgende: stap 3.
+    wordt de plek gerooid", of "de bouwplaats wacht op hout": dat zei "nog 1 dag"). `npm test`: 977/977.
+    **Stap 3 is gebouwd** (6 okt, de sessie van de heer; `js/bos.js`, `js/veldwerk.js`, `test/bos.test.cjs`; `spel.md`,
+    "De houthakker hakt en plant"): de houthakker maakt evenveel hout als altijd, maar het komt uit de boom die het
+    dichtst bij zijn deur staat, binnen tien tegels van zijn schuur; elke tien hout is die om, met een stronk die na een
+    jaar vergaat, en in het bos een boompje ernaast, dat in een jaar of twee via een jonge boom weer een boom van dezelfde
+    soort is. Zonder boom staat hij stil, zegt de raad het en vraagt het dorp een nieuwe. Zijn poppetje hakt aan zijn boom
+    en brengt het hout in bundels naar de schuur. Vier tekeningen erbij in het vel van de bomen (het boompje, de jonge eik,
+    den en berk; `gereedschap/pixelart/bomen.cjs`). Omhakken, rooien en wat bos is, staan nu op één plek (`js/bos.js`),
+    met de getallen in de werkbank ("Het bos"); de spelregel "De houthakker" zet het terug op hout uit het niets.
+    **Gemeten, en een vraag (vraag 128):** een houthakker heeft op de plek die een verzoek kiest 12 tot 33 bomen binnen
+    zijn bereik, en hakt er 73 per jaar; hij staat dus na een paar maanden stil tot zijn boompjes groeien. Volgende: stap
+    4, en Marcels antwoord op vraag 128.
 116. **Beesten in het bos** (Marcel, 4 okt, zesentwintigste sessie: "Ik wil dat er beesten kunnen rondlopen in het bos.
     Wolven etc. Die de houthakker kunnen bedreigen. Rode ogen uit het duister."; plan van Claude; open).
     **Wat er al is:** de wolf staat in `T.WEZENS` (`js/wereld.js`): een monster om mee te vechten, uit het oude spel, met
@@ -5597,6 +5608,26 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     trailer: het laat in één plaatje zien dat het dorp leeft en wat het heeft.
     Vragen: **A**, een kraam per waar, met wat het dorp heeft? **B**, één marktblok? **C**, welke van c1, c2, c3?
     **D**, boodschappen eerst alleen om te zien, en een koopman per kraam? **E**, een marktdag, of elke dag even druk?
+128. **Hoeveel bos heeft een houthakker nodig?** (Claude, 6 okt, de sessie van de heer, bij stap 3 van vraag 110, e, met
+    115; `spel.md`, "De houthakker hakt en plant", Open; open).
+    **Gemeten** (het ontworpen gehucht en de landen 5, 62707, 72022 en 73425): een houthakker mag staan op een open plek
+    van vier bij vier met het looppad eromheen, bij minstens 8 bomen binnen 7 tegels, en een verzoek kiest de plek die
+    het dichtst bij het dorp past. Daar staan binnen zijn bereik (tien tegels om de schuur) 12 tot 33 bomen; op de beste
+    plek die er is 36 tot 88. Hij hakt 73 bomen per jaar (2 hout per dag, 10 per boom), en een boompje is pas na een jaar
+    of twee een boom. Op de plek die het spel nu kiest, heeft hij zijn bereik dus in twee tot vijf maanden leeg, en hakt
+    hij daarna alleen zo snel als zijn boompjes groeien. Het plan zei "met één houthakker wordt het bos dunner maar
+    blijft het": het blijft, maar hij staat vaak stil, en het dorp vraagt dan een houthakker elders.
+    Voorstel, kies er een of meer:
+    - **a, zo laten:** het bos is een voorraad die opraakt; je ziet het (stronken, boompjes), de raad zegt het, en het dorp
+      vraagt een houthakker elders. Hout wordt een zorg die meegroeit met het dorp.
+    - **b, een houthakker alleen bij meer bos** (minstens 30 bomen binnen tien tegels, in plaats van 8 binnen 7): hij
+      staat verder van het dorp (22 tot 43 tegels van het huis van de schout, in plaats van 20 tot 29), en heeft een half
+      jaar werk voor hij op zijn boompjes wacht. Mijn voorkeur, samen met a.
+    - **c, sneller groeien:** een boompje is in een half jaar tot een jaar een boom; dan houdt één houthakker op een
+      goede plek het bij. Dat is minder dan "een jaar of twee" (vraag 115, b).
+    - **d, verder hakken:** vijftien tegels in plaats van tien; twee keer zoveel bomen, maar een langere weg.
+    Klaar als: de speeltest van vier jaar (stap 4) laat zien dat het dorp genoeg hout heeft, en dat je het bos om een
+    houthakker dunner ziet worden en weer ziet aangroeien.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

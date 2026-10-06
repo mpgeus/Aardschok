@@ -111,7 +111,7 @@ test('een erf mag op bomen en struiken, niet op water; het bouwmenu zegt wat er 
     const wat = T.watTeRooien(S.dorp, r);
     assert.ok(wat.bomen > 0 && wat.bomen < BOS());
     assert.equal(T.inHetBosVanDeHeer(S.dorp, r), false);
-    assert.match(T.rooiTekst(S.dorp, r), new RegExp(`rooit eerst .*\\(\\+${wat.bomen * T.ONTGINNEN_INSTELLINGEN.houtPerBoom} hout\\)`));
+    assert.match(T.rooiTekst(S.dorp, r), new RegExp(`rooit eerst .*\\(\\+${wat.bomen * T.BOS_INSTELLINGEN.houtPerBoom} hout\\)`));
     assert.doesNotMatch(T.rooiTekst(S.dorp, r), /bos van de heer/);
     // Water houdt een erf nog altijd tegen.
     const water = [];
@@ -159,7 +159,7 @@ test('een gezin rooit zijn erf eerst: de hut wacht, nog niet op de kaart, en het
     assert.equal(hut.wachtOpRooien, true);
     assert.equal(hut.wachtOpHout, false);
     assert.equal(hut.voorwerp, null, 'nog niet op de kaart');
-    assert.equal(hut.rooienTot, Math.floor(S.kalender.dag) + T.ERVEN_INSTELLINGEN.rooiDagen);
+    assert.equal(hut.rooienTot, Math.floor(S.kalender.dag) + T.BOS_INSTELLINGEN.rooiDagen);
     assert.equal(D.voorraad.hout, hout, 'het hout voor de hut gaat er pas af als hij begint');
     assert.equal(T.paaltjesVan(erf).length, 4, 'de paaltjes staan er nog');
     // Het gezin woont er al, en werkt nergens zolang het rooit.
@@ -179,7 +179,7 @@ test('een gezin rooit zijn erf eerst: de hut wacht, nog niet op de kaart, en het
       if (T.ontginWerkOp(S.wereld, t.x, t.y) === 'hakken') assert.ok(T.hakBoom(D, t.x, t.y));
       assert.ok(T.rooi(D, t.x, t.y));
     }
-    assert.equal(D.voorraad.hout, hout + bomen * T.ONTGINNEN_INSTELLINGEN.houtPerBoom);
+    assert.equal(D.voorraad.hout, hout + bomen * T.BOS_INSTELLINGEN.houtPerBoom);
     // De volgende dag ligt de bouwplaats er, en begint hij met het hout.
     S.kalender.dag = 1;
     T.tikRooienDag(D);
@@ -188,7 +188,7 @@ test('een gezin rooit zijn erf eerst: de hut wacht, nog niet op de kaart, en het
     assert.ok(hut.voorwerp, 'de bouwplaats ligt op de kaart');
     assert.equal(hut.wachtOpHout, false);
     assert.equal(hut.klaarOp, 1 + T.GEBOUWEN.hut.bouwtijd);
-    assert.equal(D.voorraad.hout, hout + bomen * T.ONTGINNEN_INSTELLINGEN.houtPerBoom - T.GEBOUWEN.hut.kosten.hout);
+    assert.equal(D.voorraad.hout, hout + bomen * T.BOS_INSTELLINGEN.houtPerBoom - T.GEBOUWEN.hut.kosten.hout);
     assert.equal(T.paaltjesVan(erf).length, 0);
     T.wijsWerkToe(D);
     assert.ok(!hut.wachtOpRooien && gezin.every((p) => !p.huis.wachtOpRooien));
@@ -216,7 +216,7 @@ test('is de maand om, dan rooien de buren de rest in één keer, en het hout gaa
     assert.equal(hut.wachtOpRooien, false);
     assert.equal(T.teRooienOp(D, erf).length, 0, 'het erf is leeg');
     assert.ok(hut.voorwerp);
-    assert.equal(D.voorraad.hout, hout + bomen * T.ONTGINNEN_INSTELLINGEN.houtPerBoom - T.GEBOUWEN.hut.kosten.hout);
+    assert.equal(D.voorraad.hout, hout + bomen * T.BOS_INSTELLINGEN.houtPerBoom - T.GEBOUWEN.hut.kosten.hout);
   });
 });
 

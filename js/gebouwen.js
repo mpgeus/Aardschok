@@ -964,7 +964,7 @@
     const voet = T.gebouwVoet(soort, tekening);
     const instantie = { soort, x, y, tekening, voet, klaar: g.bouwtijd <= 0, klaarOp: dagNu + g.bouwtijd, handen: 0, voorwerp: null };
     if (rooien && T.teRooienOp(D, rooien).length) {
-      Object.assign(instantie, { klaar: false, klaarOp: null, wachtOpRooien: true, kavel: rooien, rooienTot: dagNu + T.ERVEN_INSTELLINGEN.rooiDagen });
+      Object.assign(instantie, { klaar: false, klaarOp: null, wachtOpRooien: true, kavel: rooien, rooienTot: dagNu + T.BOS_INSTELLINGEN.rooiDagen });
     }
     T.bouwGebouw(D, instantie);
     if (instantie.wachtOpRooien) return { gelukt: true, instantie, bericht: `${T.hoofdletter(g.naam)}: eerst wordt de plek gerooid.` };
@@ -1171,6 +1171,8 @@
     // stuk vrij is (js/bos.js); een hut op een erf die op hout wachtte, begint als het er nu is (js/erven.js).
     T.tikRooienDag(D);
     T.tikErvenDag(D);
+    // Het bos (js/bos.js): een boompje wordt een jonge boom, een jonge boom een boom, en een oude stronk vergaat.
+    T.tikBosDag(D);
     // 1. Gebouwen die vandaag klaarkomen: het spookbeeld wordt de tekening zelf (dezelfde
     // voorwerp-ingang, zie zetGebouwVoorwerp hierboven — er komt er geen tweede bij). Een bouwplaats
     // die nog niet begon (klaarOp null, js/erven.js), komt niet klaar.
@@ -1246,7 +1248,8 @@
         g.stilWant = 'het dorp viert feest';
         continue;
       }
-      const stil = soort.stilIn && seizoen && soort.stilIn[seizoen];
+      // Wie in dit seizoen stilligt, of een houthakker die binnen zijn bereik geen boom meer vindt (js/bos.js).
+      const stil = (soort.stilIn && seizoen && soort.stilIn[seizoen]) || T.waaromHaktHijNiet(D, g);
       if (stil) {
         g.stilWant = stil;
         if (!wasStil && T.ui && T.ui.bericht) T.zeg(D, `${T.hoofdletter(soort.naam)} staat stil: ${stil}.`);
@@ -1295,6 +1298,9 @@
       if (soort.maakt.in) for (const wat in soort.maakt.in) T.wijzigVoorraad(D, wat, -soort.maakt.in[wat] * factor);
       const uit = T.maaktUit(D, soort);
       if (uit) for (const wat in uit) T.wijzigVoorraad(D, wat, uit[wat] * factor);
+      // Het hout van de houthakker kwam uit zijn boom: is die om, dan staat er een stronk, en hakt hij morgen de volgende
+      // (js/bos.js).
+      if (uit && uit.hout) T.houthakkerHakte(D, g, uit.hout * factor);
     }
     // Wat in gebruik was, slijt: één stuk per hand die vandaag echt iets maakte (een smidse zonder
     // ijzer slijt zijn hamers niet).

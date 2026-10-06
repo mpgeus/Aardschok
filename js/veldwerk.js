@@ -12,7 +12,8 @@
 //     die tegel, en spit hij de grond daarna om.
 // Net zo rooit het hoofd van een nieuw gezin zijn erf, als daar nog bomen, stronken of struiken staan, en een inwoner de
 // plek van de werkplaats die hij vroeg (js/bos.js; werklijst vraag 110, e): hij hakt en rooit, en het gezin van wie zijn
-// erf rooit, helpt, tot de bouwplaats kan komen.
+// erf rooit, helpt, tot de bouwplaats kan komen. En de houthakker hakt aan zijn boom in het bos, en brengt het hout in
+// bundels naar zijn schuur (js/bos.js; vraag 115).
 // Wat overblijft (dorsen, het vee, of er is niets te doen), doet hij bij zijn boerderij, zoals tot nu toe: T.dagAnker
 // (js/dag.js) stuurt hem daarheen. De boerin en de grote kinderen helpen bij het zaaien en de oogst (T.helpAnker).
 //
@@ -53,11 +54,10 @@
     hakken: 6,
     rooien: 10,
     ontginnenRust: 0.5,
-    // Sprokkelen: zo lang raapt hij hout aan de bosrand, zo ver van zijn deur zoekt hij die, in tegels, en zoveel bomen
-    // staan er minstens in de vijf bij vijf tegels om hem heen (minder is geen bos, maar een boom tussen de huizen).
+    // Sprokkelen: zo lang raapt hij hout aan de bosrand, en zo ver van zijn deur zoekt hij die, in tegels. Wat bos is,
+    // zegt T.isBos (js/bos.js): minder bomen is een boom tussen de huizen.
     rapen: 3,
     bosrandStraal: 25,
-    bosBomen: 4,
     // Hoe dicht de boerin en de grote kinderen bij de boer blijven als ze helpen, in tegels.
     helpStraal: 2,
   };
@@ -121,8 +121,8 @@
     return m.per[soort] || (m.per[soort] = T.veldwerkTegels(D.wereld, e, soort));
   }
 
-  // De bosrand bij zijn huis: een tegel aan de rand van een echt stuk bos (minstens bosBomen bomen in de vijf bij vijf
-  // eromheen; een losse boom tussen de huizen is geen bos), met de bomen achter hem en niet ervoor, en geen gebouw schuin
+  // De bosrand bij zijn huis: een tegel aan de rand van een echt stuk bos (T.isBos, js/bos.js; een losse boom tussen de
+  // huizen is geen bos), met de bomen achter hem en niet ervoor, en geen gebouw schuin
   // vóór hem: zo zie je hem rapen, en verdwijnt hij niet achter een dak of een boom (wie vóór iets staat, is in dit beeld
   // wie verder naar het zuiden staat, x en y groter). Niet verder dan bosrandStraal van zijn deur, en te bereiken; de
   // dichtste zes, of null als er geen bos in de buurt is. Per kaart onthouden tot de kaart verandert (T.kaartVersie,
@@ -148,7 +148,7 @@
         if (!T.isBegaanbaar(w, x, y) || T.bijDeur(w, x, y)) continue;
         if (!(boom(x - 1, y) || boom(x, y - 1) || boom(x - 1, y - 1))) continue;
         if (boom(x + 1, y) || boom(x, y + 1) || boom(x + 1, y + 1)) continue;
-        if (T.natuurBij(w, 'bos', { x: x - 2, y: y - 2, b: 5, h: 5 }, 0) < IN().bosBomen || gebouwVoor(x, y)) continue;
+        if (!T.isBos(w, x, y) || gebouwVoor(x, y)) continue;
         kandidaten.push({ x, y, d: T.afstand(e.thuis, { x, y }) });
       }
     }
@@ -408,11 +408,74 @@
     } else vw.klaar.sprokkelen = dag; // geen weg: vandaag niet
   }
 
+  // De bewoner van dit poppetje: een nieuw poppetje draagt hem mee, een boer zoeken we op (T.bewonerVan, js/bewoners.js).
+  const bewonerVan = (D, e) => e.bewoner || (e.werkAkkers && e.werkAkkers.length ? T.bewonerVan(D, e) : null);
+
   // Het stuk dat dit poppetje rooit (js/bos.js; werklijst vraag 110, e): het erf van zijn hut als hij het hoofd is van het
-  // gezin, of de plek van de werkplaats die hij vroeg; of null. Het gezin van wie zijn erf rooit, helpt (T.helpAnker).
-  function kavelDieHijRooit(e) {
-    const g = T.rooitHij(e.bewoner);
+  // gezin, of de plek van de werkplaats die hij vroeg (ook een boer die om een put vroeg); of null. Het gezin van wie zijn
+  // erf rooit, helpt (T.helpAnker).
+  function kavelDieHijRooit(D, e) {
+    const g = T.rooitHij(bewonerVan(D, e));
     return g ? g.kavel : null;
+  }
+
+  // De houthakker waar dit poppetje werkt, als die een boom heeft om aan te hakken (js/bos.js, g.boom); of null.
+  function schuurWaarHijHakt(D, e) {
+    const p = bewonerVan(D, e);
+    const g = p && p.werk;
+    return g && g.klaar && g.boom && T.GEBOUWEN[g.soort].bos && T.BOS_INSTELLINGEN.houthakkerHakt ? g : null;
+  }
+
+  // De houthakker aan het werk (js/bos.js; vraag 115): hij hakt aan zijn boom van een tegel recht ernaast, hakUren aan een
+  // stuk, en brengt dan een bundel naar de deur van zijn schuur; dan weer terug. Zijn boom valt 's nachts, als hij er
+  // genoeg hout uit haalde (T.houthakkerHakte): dat zegt de regel, niet het poppetje.
+  function hakHout(S, D, e, vw, nu, g) {
+    const w = D.wereld;
+    const deur = T.deurVan(w, g);
+    const naarDeSchuur = () => {
+      const doel = { x: deur.x, y: deur.y, tot: 1 };
+      const pad = T.zoekRoute(w, { x: e.tx, y: e.ty }, doel, { tot: 1 });
+      if (pad && pad.length) T.geefRoute(e, pad, doel);
+      else e.draagt = null; // hij komt er niet: dan legt hij hem hier neer
+    };
+    if (e.draagt === 'bundel') {
+      if (e.pad.length) return;
+      if (T.afstand(deur, { x: e.tx, y: e.ty }) > 1) {
+        naarDeSchuur();
+        return;
+      }
+      e.draagt = null;
+    }
+    const wt = e.werkt;
+    if (wt && wt.tot != null) {
+      if (nu < wt.tot) return;
+      e.werkt = null;
+      e.draagt = 'bundel';
+      naarDeSchuur();
+      return;
+    }
+    if (e.pad.length) return; // onderweg naar zijn boom
+    // Hakte iemand anders zijn boom vandaag om (wie een erf rooit, een boer die ontgint), dan wacht hij tot morgen: de
+    // regel kiest 's nachts een nieuwe (T.boomVanHouthakker).
+    if (T.ontginWerkOp(w, g.boom.x, g.boom.y) !== 'hakken') {
+      stop(e);
+      return;
+    }
+    const keus = T.volgendeOntginning(w, e, [g.boom]);
+    if (!keus) {
+      stop(e); // nu kan hij er niet bij (iemand staat ervoor): het volgende beeld kijkt opnieuw
+      return;
+    }
+    const { tegel, staan } = keus;
+    if (e.tx === staan.x && e.ty === staan.y) {
+      e.werkt = { soort: 'hakken', x: staan.x, y: staan.y, op: { x: tegel.x, y: tegel.y }, tot: nu + T.BOS_INSTELLINGEN.hakUren * uur(), rust: false };
+      return;
+    }
+    const pad = T.zoekRoute(w, { x: e.tx, y: e.ty }, staan, {});
+    if (pad && pad.length) {
+      T.geefRoute(e, pad, staan);
+      e.werkt = { soort: 'hakken', x: staan.x, y: staan.y, op: { x: tegel.x, y: tegel.y }, tot: null, rust: false };
+    } else stop(e);
   }
 
   // Elk beeld, na het maaien (T.werkOogstBij) en vóór het dwalen (T.dwaal): elke boer doet zijn werk van vandaag, en wie
@@ -429,8 +492,9 @@
     const nu = S.wereldTijd || 0;
     for (const e of w.wezens) {
       if (e.dood) continue;
-      const kavel = kavelDieHijRooit(e);
-      if (!kavel && (!e.werkAkkers || !e.werkAkkers.length)) continue;
+      const kavel = kavelDieHijRooit(D, e);
+      const schuur = kavel ? null : schuurWaarHijHakt(D, e);
+      if (!kavel && !schuur && (!e.werkAkkers || !e.werkAkkers.length)) continue;
       // Wie hout naar huis bracht, legt het bij zijn deur neer.
       if (e.draagt && !e.pad.length && e.thuis && T.afstand(e.thuis, { x: e.tx, y: e.ty }) <= 1) e.draagt = null;
       // De schaft: brood op de akker (js/dag.js). Wie op zijn land werkt, blijft er staan tot het werk weer begint (wie
@@ -444,7 +508,7 @@
         delete e.werkt.schaft;
         e.werkt.tot = Math.min(e.werkt.tot, nu);
       }
-      const soort = werktijd && magWerken(S, D, e) ? (kavel ? 'rooien' : T.veldwerkVandaag(D, e, datum)) : null;
+      const soort = werktijd && magWerken(S, D, e) ? (kavel ? 'rooien' : schuur ? 'hout' : T.veldwerkVandaag(D, e, datum)) : null;
       if (!soort) {
         onthoudPlag(e, nu);
         stop(e);
@@ -457,6 +521,7 @@
       }
       if (soort === 'sprokkelen') sprokkel(S, D, e, vw, nu);
       else if (soort === 'rooien') ontgin(D, e, vw, nu, T.teRooienOp(D, kavel));
+      else if (soort === 'hout') hakHout(S, D, e, vw, nu, schuur);
       else opHetLand(S, D, e, vw, nu, datum);
     }
   };

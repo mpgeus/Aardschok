@@ -25,6 +25,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | De raadsman | gebouwd (30 sep): een van de boeren, met twee gelote vaardigheden, die de voorvallen beslist als je weg bent, naar zijn karakter; je kiest hem met de knop Raadsman (R) | vraag 64, 65, 66, 67, 68 |
 | Het rapport van de raadsman | gebouwd (1 okt): de eerste fase van de dag; elke ochtend brengt hij je aan je deur wat er gebeurde, hoe het graan en het hout gaan, of ze de winter halen, wat er speelt en wat er komt, met zijn rekenen in de getallen | vraag 75 |
 | De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf; sinds 1 okt ook wat je mist voor de kapel en de smidse, en waar het vandaan komt; sinds 2 okt wat de huizen missen, en de ketens (een molen voor de bakkerij) | vraag 58, 79, 87, 90 |
+| De houthakker hakt en plant | gebouwd (6 okt; Marcel: "A ja B ja C ja D zo"): zijn hout komt uit de bomen om zijn schuur, elke tien hout een boom; naast de stronk een boompje, in een jaar of twee een boom; zonder boom staat hij stil; open: hoeveel bos hij nodig heeft | vraag 115 |
 | De markt op het plein | gebouwd (6 okt; Marcel: "Voor nu a1, b tot e ja"): vier kramen aan de rand van het plein, waar je tussendoor loopt, voor 8 hout en 6 goud; het midden blijft vrij voor het feest en de heer; de spelregel "De markt" | vraag 110, d |
 | De verzoeken | stap 1 tot en met 3 gebouwd (3 okt): wat het dorp mist, komt een inwoner je vragen, met de plek die hij koos en wat het kost; ja of nee, en ben je weg, dan beslist je raadsman; in het bouwmenu alleen nog het erf en oproepen met een premie (de spelregel "Wie bouwt"); de speeltest speelt zo; en uit eigen wil: een ondernemer die wapens wil maken (verboden) of een tweede herberg beginnen, met wat ja en nee aan gevolgen hebben (vraag 104); sinds 6 okt rooit wie een werkplaats vraagt zijn plek eerst, als er geen open grond meer is (vraag 110, e) | vraag 103, 104, 110 |
 | Twee bazen | stap 1 en 2 gebouwd (3 okt; Marcel: "106 a b c d ja"): de gunst van de heer en het vertrouwen van het dorp in de balk, met een waarschuwing onder 20 en op 0 weg (ontslagen of weggejaagd); betrapt op verstoppen is de laatste waarschuwing; elke maand een gril van de heer in een brief, die zijn gunst tegen het dorp weegt | vraag 106 |
@@ -2953,8 +2954,8 @@ vandaag aan een veld verandert, doet hij morgen. In de browser: `Spel.debug.veld
 Hij werkt in het vel van zijn werk (stap 2, 5 okt): de zaaier, de wieder (ook voor spitten en mest) en de sprokkelaar
 met zijn bundel, uit code zoals de maaier, en een boerin in dat van een vrouw (de zaaister, de wiedster, de
 sprokkelaarster, de maaister; `beeld.md`, "De werkfiguren").
-**Nog niet:** na de huizen de houthakker die hakt en plant (vraag 115) en de wolven (vraag 116). Het dorsen heeft nog
-geen beweging, en wie helpt, loopt in zijn eigen vel mee.
+Sinds 6 okt hakt ook de houthakker in het bos, met dezelfde bijl ("De houthakker hakt en plant", hieronder).
+**Nog niet:** de wolven (vraag 116). Het dorsen heeft nog geen beweging, en wie helpt, loopt in zijn eigen vel mee.
 
 **Hoe het zo kwam:** Marcel, 3 okt: "Ook wil ik dat boeren op hun veld aan het werk zijn. Nu hebben ze wel velden, maar
 lopen ze gewoon random door het dorp. Ze moeten zaaien en op het veld bezig zijn." Het dagritme stuurde een boer overdag
@@ -2964,6 +2965,39 @@ die zijn goed"), en op 5 okt dat het nu kon, terwijl een andere sessie de huizen
 Na de eerste proefplaat van de figuren: "a ja b ja c nu" (ze gaan zo in het spel, een boerin krijgt een eigen werkvel, en
 het rapen, de schoffel en de hand worden nu beter). In het spel bleek de bosrand bij een boerderij vaak een losse boom
 achter een dak; nu is het de rand van een echt stuk bos, waar je de boer ziet.
+
+### De houthakker hakt en plant (Marcel, 4 en 6 okt 2026; werklijst vraag 115)
+
+**Zo werkt het nu** (6 okt, de sessie van de heer; stap 3 van vraag 110, e, met 115; `js/bos.js`; Marcel: "De
+houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug", en "A ja B ja C ja D zo"): de houthakker maakt
+evenveel hout als altijd, 2 per dag (4 met de wet Houtkap), maar het komt uit een boom. Hij hakt aan de boom binnen tien
+tegels van zijn schuur die het dichtst bij zijn deur staat, en elke tien hout is die om: er blijft een stronk staan, die
+na een jaar vergaan is, en stond de boom in het bos (minstens vier bomen in de vijf bij vijf tegels eromheen), dan plant
+hij er een boompje naast, nooit op een veld, een weg, een erf, een paadje of voor een deur. Een boompje is na een half
+jaar tot een jaar een jonge boom, en na nog eens zo lang een boom van dezelfde soort (een wilg of een dode boom wordt een
+eik): in een jaar of twee. Zo wordt het bos om de schuur dunner, met stronken, boompjes en jonge bomen, en met de wet
+Houtkap of een tweede houthakker gaat het harder. Staat er binnen tien tegels geen boom meer, dan staat hij stil: het
+dorp zegt het de eerste dag, de raad zolang het duurt ("De houthakker staat stil: er staat geen boom meer binnen tien
+tegels van zijn schuur. Een houthakker bij het bos zou helpen."), en het dorp vraagt een nieuwe houthakker. Groeien de
+boompjes weer, dan hakt hij verder. Zijn poppetje loopt naar zijn boom, hakt er twee uur aan met de bijl, brengt een
+bundel naar de schuur en gaat terug; de boom valt 's nachts, als de regel zegt dat hij om is. Een boompje en een jonge
+boom rooit wie er bouwt, zonder hout; een boompje staat niet in de weg, een jonge boom wel. De spelregel "De houthakker"
+zet het terug op hout uit het niets (zoals voor 6 okt); de getallen in de werkbank ("Het bos", `T.BOS_INSTELLINGEN`, waar
+nu ook het hout per boom en de dagen om te rooien staan). In de browser: `Spel.debug.bos()`. Wat een boom is, wat te
+rooien is, omhakken en rooien staan nu allemaal in `js/bos.js`, ook voor het ontginnen en het rooien van een erf.
+
+**Open: hoeveel bos heeft een houthakker nodig?** Gemeten op het ontworpen gehucht en vier landen van de maker (6 okt):
+een houthakker mag staan op een open plek van vier bij vier met het looppad eromheen, bij minstens 8 bomen binnen 7
+tegels; een verzoek kiest de plek die het dichtst bij het dorp past. Daar staan binnen zijn bereik (tien tegels om de
+schuur) 12 tot 33 bomen; op de beste plek die er is 36 tot 88. Hij hakt er 73 per jaar, en een boompje is pas na een
+jaar of twee een boom. Op de plek die het spel nu kiest, heeft hij zijn bereik dus in twee tot vijf maanden leeg, en
+hakt hij daarna alleen zo snel als zijn boompjes groeien. Het plan zei "met één houthakker wordt het bos dunner maar
+blijft het": het blijft, maar hij staat dan vaak stil. Wat we kunnen doen: **a**, zo laten: het bos is een voorraad die
+opraakt, je ziet het, en het dorp vraagt een houthakker elders (de raad zegt het); **b**, een houthakker alleen laten
+bouwen bij meer bos (minstens 30 bomen binnen tien tegels): dan staat hij verder van het dorp (22 tot 43 tegels van het
+huis van de schout, in plaats van 20 tot 29), en heeft hij een half jaar werk voor hij op de boompjes wacht; **c**, een
+boompje sneller laten groeien (een half jaar tot een jaar); **d**, hem verder laten hakken (vijftien tegels). De
+speeltest van vier jaar (stap 4) laat zien hoe het speelt.
 
 ### Mensen worden poppetjes
 
@@ -3253,8 +3287,8 @@ wordt gepraat:
   een stuk bos bij het ontginnen (10) kost zijn gunst als je het aanwijst (−5), en de muis zegt het vooraf; losse bomen
   en struiken in de wei kosten niets. De speler van de speeltest legt een erf liever niet in het bos van de heer, en bij
   gelijke kringen liever waar minder te rooien is. Een werkplaats die een inwoner vraagt, rooit zijn plek net zo als er
-  geen open grond meer is (stap 2; "De stad groeit door haar mensen", Geen open grond meer). Nog niet: de houthakker die
-  hakt en plant (stap 3).
+  geen open grond meer is (stap 2; "De stad groeit door haar mensen", Geen open grond meer), en de houthakker hakt en
+  plant (stap 3; "De houthakker hakt en plant").
 - **Een huis met plaats gaat voor.** Is het dorp vol, dan neemt een nieuw gezin op een groeidag het vrije erf dat
   het dichtst bij de werkplaats ligt die de meeste handen mist (anders bij het plein), en komt over de weg. Het
   zet er zelf een hut op (8 hout uit de voorraad, twee dagen), woont er al terwijl hij oprijst, en is er overdag

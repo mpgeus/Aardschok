@@ -48,9 +48,6 @@
     // zijn deur daarbuiten, en er moet een moestuin bij kunnen.
     breed: 10,
     diep: 10,
-    // Zoveel dagen rooit een gezin zijn erf zelf; wat er daarna nog staat, rooien de buren in één keer (het vangnet, zoals
-    // bij het ontginnen). Een erf in de wei met een paar struiken is in een paar dagen vrij, een erf vol bomen niet.
-    rooiDagen: 30,
   };
   const IN = () => T.ERVEN_INSTELLINGEN;
 
@@ -354,7 +351,7 @@
       klaar: false, klaarOp: null, handen: 0, voorwerp: null,
       erf, wordtTekening: keus.huis, wachtOpHout: !rooien, wachtOpRooien: rooien,
     };
-    if (rooien) Object.assign(hut, { kavel: { x: erf.x, y: erf.y, b: erf.b, h: erf.h }, rooienTot: dagNu(D) + IN().rooiDagen });
+    if (rooien) Object.assign(hut, { kavel: { x: erf.x, y: erf.y, b: erf.b, h: erf.h }, rooienTot: dagNu(D) + T.BOS_INSTELLINGEN.rooiDagen });
     erf.hut = hut;
     T.bouwGebouw(D, hut);
     if (!rooien) begin(D, hut);

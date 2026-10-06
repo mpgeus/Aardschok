@@ -37,6 +37,11 @@
   const over = (n) => (n <= 1 ? 'morgen' : `over ${n} dagen`);
   const maandIdx = (naam) => T.MAANDEN.findIndex((m) => m.naam === naam);
   const heeft = (D, soort) => (D.gebouwen || []).some((g) => g.soort === soort);
+  // Staat elke houthakker stil omdat er binnen zijn bereik geen boom meer staat (g.boom null, js/bos.js)?
+  const geenBoomMeer = (D) => {
+    const hakkers = (D.gebouwen || []).filter((g) => g.soort === 'houthakker' && g.klaar);
+    return T.BOS_INSTELLINGEN.houthakkerHakt && hakkers.length > 0 && hakkers.every((g) => g.boom === null);
+  };
 
   // Hoeveel mensen het doel nog vraagt: de volgende trede (js/treden.js), en na de laatste de maat van de winst
   // (js/einde.js; werklijst vraag 102, c).
@@ -198,6 +203,15 @@
         return `Het eten haalt ${haalt(T.etenVoorDeWinter(D, D.kalender.dag))} van de winter${T.BEHOEFTEN_INSTELLINGEN.vleesIsEten ? jager : ''}.${T.BEHOEFTEN_INSTELLINGEN.vleesIsEten ? verzoekZin(D, 'jager') : ''}${geenGezin()}`;
       },
     },
+    // De houthakker hakt bomen om (js/bos.js; vraag 115): staat er binnen zijn bereik geen boom meer, dan hakt hij niets,
+    // tot de boompjes die hij plantte, bomen zijn.
+    {
+      id: 'geenBoom',
+      als: (D) => geenBoomMeer(D),
+      tekst: (D) => `De houthakker staat stil: er staat geen boom meer binnen ${T.telwoord(T.BOS_INSTELLINGEN.hakStraal)} tegels van zijn schuur. ${mensenBouwen()
+        ? `Een houthakker bij het bos zou helpen.${verzoekZin(D, 'houthakker')}`
+        : 'Bouw een houthakker bij het bos [B].'}`,
+    },
     {
       id: 'kelders',
       als: (D) => naSintMaarten(D) && !(D.heer && D.heer.bezoek) && T.verstoptTotaal(D).graan >= 1,
@@ -321,6 +335,7 @@
     // de eerste speeltest van vraag 103 zijn hout op aan de kapel en de putten, en kon het daarna geen houthakker en geen
     // jager meer betalen.
     if (!heeft(D, 'houthakker')) erbij('houthakker', 'Er hakt niemand hout, en elke hut en elk gebouw kost hout.', 'hout');
+    if (geenBoomMeer(D)) erbij('houthakker', 'De houthakker vindt geen boom meer bij zijn schuur.', 'hout');
     for (const x of T.watDeHuizenMissen(D)) if (x.kan && x.bouw) erbij(x.bouw, x.zin, x.soort);
     for (const soort of T.doelGebouwen(D)) erbij(soort, `Voor het doel is er een ${T.GEBOUWEN[soort].naam} nodig.`, 'doel');
     return uit;

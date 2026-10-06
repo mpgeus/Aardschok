@@ -508,9 +508,11 @@ test('werk in uren: de weg heen is de weg die zijn poppetje loopt, met zijn eige
 
 test('werk in uren: de werkplaats maakt naar de uren dat er gewerkt wordt, en zegt het bij de muis; uit is een hele dag', () => {
   // Twee keer hetzelfde gehucht (hetzelfde lot, dus dezelfde mensen), één keer met de weg die telt en
-  // één keer zonder.
+  // één keer zonder. De houthakker staat ver weg, waar geen bos is: hij maakt zijn hout hier uit het niets, zoals voor 6
+  // okt (de spelregel "De houthakker"), want het gaat om de uren, niet om de bomen (test/bos.test.cjs).
   const echt = T.lootBoeren;
   T.lootBoeren = (S) => echt(S, 12345);
+  T.zetOptie('houthakker', 'uitHetNiets');
   let met;
   let zonder;
   try {
@@ -519,6 +521,13 @@ test('werk in uren: de werkplaats maakt naar de uren dat er gewerkt wordt, en ze
   } finally {
     T.lootBoeren = echt;
   }
+  try {
+    werkInUren(met, zonder);
+  } finally {
+    T.zetOptie('houthakker', 'hakt');
+  }
+});
+function werkInUren(met, zonder) {
   assert.equal(met.p.naam, zonder.p.naam, 'hetzelfde gehucht');
   const dag = Math.floor(met.S.kalender.dag) + 1;
   try {
@@ -535,7 +544,7 @@ test('werk in uren: de werkplaats maakt naar de uren dat er gewerkt wordt, en ze
   assert.ok(Math.abs(met.g.werkte / zonder.g.werkte - u.gewerkt / u.nodig) < 1e-9, 'minder, naar de uren onderweg');
   assert.match(T.gebouwToestand(met.S.dorp, met.g), /aan het werk \(1 van 1 handen\), \d+ van de \d+ uur; \d+ uur onderweg\.$/);
   assert.doesNotMatch(T.gebouwToestand(zonder.S.dorp, zonder.g), /onderweg/);
-});
+}
 
 test('bij de muis staat wie het is', () => {
   const S = gehucht();
