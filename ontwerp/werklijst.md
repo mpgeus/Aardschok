@@ -76,7 +76,7 @@ het beeld hierboven. Zie `spel.md`, "Informatie, de zitting en mensen die onthou
 Marcel: "Ok" op a met c, en "A" voor de appelboom): past geen vorm zoals hij is, dan rooit het gezin van een huis dat
 doorgroeit eerst wat in de weg staat, zoals een gezin zijn erf (de appelboom alleen als geen vorm zonder hem past), en het
 briefje bij een huis zegt wat het gezin rooit, of waarom het niet kan groeien. In de speeltest van vier jaar groeien de
-hutten van de maker door, en **winnen voor het eerst twee dorpen**, 73425 en 72022, in het derde jaar. Op 62707 legde de
+hutten van de maker door, en **winnen voor het eerst twee dorpen**, 73425 en 72022, in het vierde jaar. Op 62707 legde de
 bouwer een erf over de groeigrond van een hut; het voorstel daarvoor is vraag 130, d (een erf blijft van de grond af waar
 een huis heen groeit), en dat wacht op Marcel. `npm test`: 1002/1002.
 
@@ -5840,7 +5840,7 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     voet staat (`planVoorGroei` in `js/behoeften.js`, `rooitVoorGroei` in `js/bos.js`), met de vorm die het minst te
     rooien heeft; het briefje zegt wat het gezin rooit, of wat in de weg staat (`T.waaromGroeitHetNiet`). In de speeltest
     van vier jaar groeien de hutten van de maker door (op elk land rooide een gezin één tot drie dingen, en een tot drie
-    dagen later was de hut een huis), en **winnen twee dorpen van de bouwer**, in het derde jaar: 73425 en 72022. Op 62707
+    dagen later was de hut een huis), en **winnen twee dorpen van de bouwer**, in het vierde jaar: 73425 en 72022. Op 62707
     niet: daar legde de bouwer in de eerste zomer zelf een erf over de groeigrond van de andere hut, en die bleef hut, ook
     bij de sluwe bouwer, terwijl alle huizen het hele vierde jaar alles hadden. Onderweg gerepareerd: een huis dat niet kan
     groeien, bleef "wacht op bouwstof" heten, met dat teken bij zijn deur, ook als het hout er was.
