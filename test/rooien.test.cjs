@@ -380,6 +380,26 @@ test('een plek om te rooien voor een werkplaats: met zo weinig mogelijk bomen, e
   });
 });
 
+test('ja kost de gunst die de prijs noemde: een plek die bij de vraag niet in het bos van de heer lag, kost niets', () => {
+  zo(() => {
+    const S = gehucht();
+    const D = S.dorp;
+    T.zetVoorraad(D, 'hout', 100);
+    T.zetVoorraad(D, 'goud', 100);
+    // Een plek in het bos, maar bij de vraag (zeg: voordat een boompje een boom werd) gold hij als wei.
+    const plek = werkplaatsPlek(S, 'weverij', (n) => n >= BOS());
+    const wie = D.bewoners.mensen.find((p) => p.leeftijd === 'volwassen' && !T.isBoer(p.wezen) && !p.schout);
+    const L = { wie, bouw: { soort: 'weverij', x: plek.x, y: plek.y, waarom: 'Het dorp wil laken.', rooien: plek.rooien, bos: false } };
+    D.voorvallen = D.voorvallen || T.nieuweVoorvallen();
+    D.voorvallen.lopend = L;
+    assert.doesNotMatch(T.prijsVanKeuze(D, { bouw: true }).tekst, /gunst/, 'de prijs noemt geen gunst');
+    const gunst = T.bazenNu(D).gunst;
+    T.verzoekToegestaan(D, L);
+    assert.ok(D.gebouwen.some((g) => g.soort === 'weverij' && g.wachtOpRooien), 'de werkplaats wacht op het rooien');
+    assert.equal(T.bazenNu(D).gunst, gunst, 'en het kostte geen gunst');
+  });
+});
+
 test('ja op een werkplaats in het bos: hij wacht, nog niet op de kaart; wie hem vroeg, rooit en werkt nergens; dan de bouw', () => {
   zo(() => {
     const S = gehucht();

@@ -281,10 +281,11 @@
       return;
     }
     u.instantie.meester = wie;
-    if (u.instantie.wachtOpRooien) {
-      wie.rooit = u.instantie;
-      if (T.inHetBosVanDeHeer(D, u.instantie.kavel)) T.wijzigGunst(D, -T.ONTGINNEN_INSTELLINGEN.gunst, 'Een werkplaats in zijn bos');
-    }
+    if (u.instantie.wachtOpRooien) wie.rooit = u.instantie;
+    // In het bos van de heer kost het zijn gunst (js/bos.js), zoals de prijs onder ja zei (T.prijsVanKeuze,
+    // js/voorvallen.js): de plek waar hij om vroeg. Tussen de vraag en het antwoord kan er een boompje een boom zijn
+    // geworden, of de plek verschoven; in de speeltest van 6 okt kostte ja zo 5 gunst die de prijs niet noemde.
+    if (b.bos) T.wijzigGunst(D, -T.ONTGINNEN_INSTELLINGEN.gunst, 'Een werkplaats in zijn bos');
     const R = verzoekenVan(D);
     R.ja++;
     R.laatst[b.soort] = dagNu(D);
