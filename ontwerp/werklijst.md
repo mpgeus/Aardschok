@@ -5795,6 +5795,9 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     (a). Onderweg gerepareerd: een put of kapel om te rooien bereikte niet wie er een miste, en er kwam elke maand een bij
     (op 72022 48 putten; `a612242`). Er wint nog geen dorp: dat is vraag 130.
 130. **Een hut die niet kan doorgroeien** (Claude, 6 okt, de sessie van de heer, bij de speeltest van vraag 129; open).
+    **Bezig in sessie `ccr-f6ba5992-1e77dw`** (6 okt): a2 (de appelboom, met Marcels "A"), c2 en d staan op die branch, op de versie van
+    vraag 130 die hier in `main` staat, met het briefje dat niet meer loot; de speeltest van vier jaar loopt. Niet opnieuw
+    bouwen: het komt in `main` als Marcel dat vraagt.
     **Wat er is:** een huis dat een maand alles heeft, groeit door als de bouwstof er is en de grotere vorm past
     (`kiesGroei` in `js/behoeften.js`): vanaf zijn linkerbovenhoek naar rechts en naar onder, en waar het nieuwe huis
     buiten het oude komt, mag niets vast staan (een boom, een struik, een gebouw), geen deur zijn en geen grond van een
