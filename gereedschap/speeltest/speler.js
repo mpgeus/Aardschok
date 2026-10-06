@@ -1336,6 +1336,10 @@
       bazen: T.bazenNu(s.dorp),
       // De markt (js/markt.js; vraag 127): hoeveel kramen, waarvan leeg en langs de straat, en hoe groot het blok is.
       markt: marktNu(s),
+      // De huizen die alles hebben maar niet doorgroeien, en waarom (T.waaromGroeitHetNiet, js/behoeften.js; vraag 130):
+      // de winst vraagt stenen huizen.
+      groeitNiet: s.dorp.gebouwen.map((g) => ({ g, waarom: T.waaromGroeitHetNiet(s.dorp, g) })).filter((x) => x.waarom)
+        .map(({ g, waarom }) => ({ soort: g.soort, x: g.x, y: g.y, waarom })),
     };
   }
 
