@@ -10,7 +10,7 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 ## Het spel
 
 - **Een huis dat doorgroeit, kijkt niet naar de paden** (6 okt, zevenendertigste sessie; gezien bij vraag 130): waar het
-  grotere huis komt, mag niets vast staan, geen deur zijn en geen grond van een ander erf (`waaromNietHier` in
+  grotere huis komt, mag niets vast staan, geen deur zijn en geen grond van een ander erf (`watStaatInDeWeg` in
   `js/behoeften.js`), maar een pad houdt het niet tegen. Op 101 landen van de maker komt bij 35 van de 202 hutten het
   grotere huis op een tegel met een pad of de rand ervan; op een akker of het plein nooit. Zo was het al vóór vraag 130.
   Of dat erg is (een weg die smaller wordt, een paadje dat onder een huis verdwijnt), zie je pas in het spel.

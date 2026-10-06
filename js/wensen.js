@@ -513,8 +513,7 @@
   //   wensen: [{ id, naam, heeft, helpt }], in de volgorde van zijn stand (eten en brandhout eerst); `helpt` zegt wat
   //           helpt als het mist ("bouw een visser of een jager [B]"), anders null; voor eten en brandhout zegt dat de raad
   //   teken: wat het als eerste mist, 'bouwstof' als het een maand alles had en op bouwstof wacht, of null
-  //   groei: { dagen, nodig, wordt, kosten }: hoe ver het is met doorgroeien (js/behoeften.js), of null op de hoogste stand;
-  //          met `rooit` en `bezig`, of `waarom` (groeiStand hieronder)
+  //   groei: { dagen, nodig, wordt, kosten }: hoe ver het is met doorgroeien (js/behoeften.js), of null op de hoogste stand
   // Wat een huis als eerste mist, voor het teken bij zijn deur (js/tekenen.js): de eerste wens van zijn stand die het niet
   // heeft, 'bouwstof' als het een maand alles had en op bouwstof wacht, of null. Licht, want het scherm vraagt het elk beeld.
   T.tekenVanHuis = function (g) {
@@ -547,22 +546,13 @@
       teken: T.tekenVanHuis(g),
       // Wat het huis je nadraagt: een ondernemer die nee of ja hoorde (js/ondernemers.js).
       nadraagt: T.huisNadraagtTekst(g, D.kalender ? D.kalender.dag : 0),
+      // Hoe ver het is met doorgroeien, en waarom het niet groeit terwijl het alles heeft (het gezin rooit eerst, of er
+      // staat iets in de weg; T.waaromGroeitHetNiet in js/behoeften.js, werklijst vraag 130, c).
       groei: wordt
-        ? { dagen: g.groeiDagen || 0, nodig: T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen, wordt: wordt.naam, kosten: IN().bouwstof[soort.wordt] || {}, ...groeiStand(D, g) }
+        ? { dagen: g.groeiDagen || 0, nodig: T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen, wordt: wordt.naam, kosten: IN().bouwstof[soort.wordt] || {}, waarom: T.waaromGroeitHetNiet(D, g) }
         : null,
     };
   };
-
-  // Of er plaats is om door te groeien (werklijst vraag 130, c; Marcel, 6 okt: "Eens alle 3"), zoals T.groeiPlan
-  // (js/behoeften.js) het zegt: `rooit`, wat het gezin eerst rooit ("een struik"), met `bezig` als het daar al aan werkt;
-  // of `waarom` het niet kan ("er staat een rots in de weg"). Leeg als er plaats is.
-  function groeiStand(D, g) {
-    const plan = T.groeiPlan(D, g, { mensen: false });
-    if (!plan) return {};
-    if (plan.reden) return { waarom: plan.reden };
-    if (plan.rooien) return { rooit: T.watStaatErOp(D, plan.rooien), bezig: !!g.rooitVoorGroei };
-    return {};
-  }
 
   // De huizen nemen hun goederen uit de voorraad, zoals T.berekenWensen ze verdeelde (vanuit T.tikBehoeftenDag, vóór het
   // eten). Wat eten is (brood, vis, vlees), eten ze op: zoveel eet het dorp daarna minder aan graan (vraag 92, a; Marcel,

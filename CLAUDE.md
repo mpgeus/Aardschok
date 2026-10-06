@@ -388,12 +388,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   inwoner vroeg waar geen open grond meer was (`T.plekVoor` in `js/verzoeken.js`; `rooien` bij `T.plaatsGebouw` en
   `T.waaromPastHetNiet`). Wie rooit (`T.rooitHij`: het hoofd van het gezin, of wie de werkplaats vroeg, `p.rooit`), hakt en
   rooit met de bijl zoals een boer ontgint (`T.werkVeldwerkBij` in `js/veldwerk.js`; het gezin van een erf helpt,
-  `T.helpAnker`) en werkt zolang nergens; is het stuk vrij, dan ligt de bouwplaats er de volgende dag, en na `rooiDagen`
+  `T.helpAnker`; net zo het hoofd van een huis dat wil doorgroeien, `g.groeitNaRooien`, vraag 130) en werkt zolang nergens; is het stuk vrij, dan ligt de bouwplaats er de volgende dag, en na `rooiDagen`
   rooien de buren de rest (`T.tikRooienDag`). Een stuk in het bos van de heer (`T.inHetBosVanDeHeer`: zoveel bomen als een
-  stuk bos bij het ontginnen) kost zijn gunst. **Een huis dat doorgroeit, rooit net zo** (vraag 130): het hoofd van het
-  gezin rooit de grond van het grotere huis (`g.rooitVoorGroei`, met die grond als kavel; `T.rooiVoorGroei`,
-  `T.stopRooienVoorGroei`) en houdt zijn werk, en het gezin kapt dan ook zijn eigen appelboom (`T.isEigenBoom`,
-  `v.teKappen`), die verder van iemand is.
+  stuk bos bij het ontginnen) kost zijn gunst.
 - `js/bouwstijl.js`: **de bouwstijl van een land** (vraag 114, stap 2, 4 okt): elk land van de maker bouwt in één stijl
   (`w.stijl`, uit het nummer van het land, `T.stijlVoorLand`; het ontworpen gehucht heeft er geen en bouwt zoals altijd),
   met per soort een paar vormen, elk met de deur naar elke kant. De huizenbouwer noemt dat een stand; in het spel heet het
@@ -456,9 +453,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   groeit het door naar de volgende stand, als de bouwstof er is (`bouwstof`: een huis hout, een stenen huis steen), ook
   de woningen van het begin (`T.zetBestaandeGebouwen` geeft ze hun tekening als voorwerp), en het rijst op in de laatste
   bouwfasen terwijl zijn mensen erin blijven wonen (alleen het voorwerp is `inAanbouw`, `groeiVanafFase`; G, vraag 114).
-  Hoe het doorgroeit, zegt `T.groeiPlan` (vraag 130): de vorm die past, of wat het gezin eerst rooit (`js/bos.js`), of
-  waarom het niet kan; het briefje en de raad zeggen het, en een erf komt niet waar het een huis elke vorm afneemt
-  (`T.groeiRuimte`, in `T.waaromPastErfNiet`). Achteruitgaan is zacht (een
+  Staat er alleen iets te rooien waar het groter wordt, dan rooit het gezin dat eerst (`T.groeiRooiPlan`,
+  `T.rooiOmTeGroeien` in `js/bos.js`, `g.groeitNaRooien`), en anders zegt het briefje waarom (`T.waaromGroeitHetNiet`;
+  vraag 130). Achteruitgaan is zacht (een
   gezin trekt alleen weg uit een huis onder de vertrekdrempel) of streng (de spelregel "Achteruitgaan"); een hogere stand
   betaalt meer belasting (`T.belastbaar`). De spelregel "Wensen" op "Het dorp als geheel" is het spel van vóór 1 okt; de
   getallen in `T.WENSEN_INSTELLINGEN`.
@@ -994,8 +991,7 @@ gewaarschuwd bent; `('gunst', 15)` zet de gunst op 15 (met de brief als hij onde
 weg als je al gewaarschuwd was. De oude toetsen van de heer en het verstoppen spelen met "Alleen de heer"
 (`T.zetOptie('tweeBazen', 'uit')`); die van de twee bazen staan in `test/bazen.test.cjs`.
 `Spel.debug.wensen()` zegt per huis met mensen zijn stand, wie er woont, hoe tevreden het is en wat het wil, met ✓ of ✗,
-of het kan doorgroeien (wat het gezin eerst rooit, of waarom niet), en daarboven het dorp per stand en wat er gemist
-wordt; `('dorpelingen')` laat alleen die stand zien.
+en daarboven het dorp per stand en wat er gemist wordt; `('dorpelingen')` laat alleen die stand zien.
 `Spel.debug.gehucht()` zegt of dit het ontworpen gehucht is of een van de maker, en uit welk zaad; `(3)` begint nu een
 nieuw spel op het gehucht van zaad 3 (zonder brief), zoals op de pagina "Gehuchten van de maker".
 `Spel.debug.voorval()` zegt welk voorval er loopt, welke vervolgen nog komen, welke voorvallen er nu kunnen (met hoe

@@ -23,18 +23,13 @@
     const wensen = t.wensen.map((w) => `<span class="${w.heeft ? 'ja' : 'nee'}">${w.heeft ? '✓' : '✗'} ${w.naam}</span>`).join('');
     const eerste = t.wensen.find((w) => !w.heeft && w.helpt);
     const helpt = eerste ? `<div class="briefje-helpt">${T.hoofdletter(eerste.naam)}: ${toets(eerste.helpt)}.</div>` : '';
-    // Kan het niet doorgroeien, dan zegt het waarom; staat er iets in de weg wat het gezin rooit, dan zegt het dat erbij,
-    // of dat het daar nu aan werkt (werklijst vraag 130, c).
     let groei = '';
-    const gr = t.groei;
-    if (gr) {
-      const nog = Math.max(0, gr.nodig - gr.dagen);
-      const eerst = gr.rooit ? ` Eerst rooit het gezin ${gr.rooit}.` : '';
-      if (gr.waarom) groei = `Het kan geen ${gr.wordt} worden: ${gr.waarom}.`;
-      else if (gr.bezig) groei = `Het gezin rooit ${gr.rooit}, en dan wordt het een ${gr.wordt}.`;
-      else if (t.teken === 'bouwstof') groei = `Het kan een ${gr.wordt} worden, maar daar is ${kosten(gr.kosten)} voor nodig.${eerst}`;
-      else if (!t.teken) groei = `Nog ${nog} ${nog === 1 ? 'dag' : 'dagen'} alles, dan wordt het een ${gr.wordt}${Object.keys(gr.kosten).length ? ` (${kosten(gr.kosten)})` : ''}.${eerst}`;
-      else groei = `Heeft het ${gr.nodig} dagen alles, dan wordt het een ${gr.wordt}.${eerst}`;
+    if (t.groei) {
+      const nog = Math.max(0, t.groei.nodig - t.groei.dagen);
+      if (t.teken === 'bouwstof') groei = `Het kan een ${t.groei.wordt} worden, maar daar is ${kosten(t.groei.kosten)} voor nodig.`;
+      else if (t.groei.waarom) groei = `Het kan een ${t.groei.wordt} worden, maar ${t.groei.waarom}.`;
+      else if (!t.teken) groei = `Nog ${nog} ${nog === 1 ? 'dag' : 'dagen'} alles, dan wordt het een ${t.groei.wordt}${Object.keys(t.groei.kosten).length ? ` (${kosten(t.groei.kosten)})` : ''}.`;
+      else groei = `Heeft het ${t.groei.nodig} dagen alles, dan wordt het een ${t.groei.wordt}.`;
     }
     return (
       `<div class="briefje-kop">${kop}</div>` +
