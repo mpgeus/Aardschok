@@ -1160,6 +1160,8 @@
         g.voorwerp.inAanbouw = false;
       }
     }
+    // De markt op het plein groeit mee met het dorp, en zijn kramen liggen vol of leeg (js/markt.js).
+    T.tikMarktDag(D);
     // 2. Woonruimte (T.telWoonruimte hieronder).
     const woonruimte = T.telWoonruimte(D);
     D.woonruimte = woonruimte;
