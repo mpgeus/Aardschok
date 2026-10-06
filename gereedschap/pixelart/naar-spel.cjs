@@ -6,6 +6,7 @@
 //   node gereedschap/pixelart/naar-spel.cjs --alleen schandpaal
 //   node gereedschap/pixelart/naar-spel.cjs --alleen paaltje
 //   node gereedschap/pixelart/naar-spel.cjs --alleen meiboom
+//   node gereedschap/pixelart/naar-spel.cjs --alleen marktkraam
 //   node gereedschap/pixelart/naar-spel.cjs --alleen tekens
 //
 // Met --alleen werkt het alleen de genoemde figuren bij: het leest de bestaande
@@ -15,7 +16,7 @@
 // in git staat: in een verse kopie is het (bijna) leeg, en zonder --alleen bouwt dit script de
 // beschrijving opnieuw op uit wat daar staat — dan verdwijnen alle andere figuren uit het spel.
 // Een los vel dat hier zelf gerenderd wordt en niets uit uit/ nodig heeft (LOSSE_VELLEN: de
-// schandpaal, het paaltje, de meiboom en de tekens met het papier) kan ook met --alleen: dan wordt alleen dat vel gerenderd en alleen zijn
+// schandpaal, het paaltje, de meiboom, de marktkraam en de tekens met het papier) kan ook met --alleen: dan wordt alleen dat vel gerenderd en alleen zijn
 // ingang gezet.
 //
 // Twee soorten werk:
@@ -34,6 +35,7 @@ const Graan = require('./graan-vel.cjs');
 const Schandpaal = require('./schandpaal.cjs');
 const Paaltje = require('./paaltje.cjs');
 const Meiboom = require('./meiboom.cjs');
+const Marktkraam = require('./marktkraam.cjs');
 const Papieren = require('./papieren.cjs');
 const I = require('./inpakken.cjs');
 
@@ -155,6 +157,15 @@ function meiboom() {
   return Meiboom.beschrijving('meiboom.png');
 }
 
+// ---------------------------------------------------------------- de marktkraam
+//
+// Vier cellen: een kraam van de markt op het plein, van elke kant waarheen hij kijkt (marktkraam.cjs, ontwerp/werklijst.md,
+// vraag 110, d). js/sprites.js zoekt hem op met S.kraam(richting) en legt zijn anker op de tegel.
+function marktkraam() {
+  schrijf('marktkraam.png', Marktkraam.vel());
+  return Marktkraam.beschrijving('marktkraam.png');
+}
+
 // ---------------------------------------------------------------- de tekens, het papier en de spijker
 //
 // De tekens bij de deur van een huis dat iets mist (papieren.cjs; werklijst vraag 100, 2c), één rij cellen: js/sprites.js
@@ -169,7 +180,7 @@ function tekens() {
 
 // Losse vellen die --alleen ook kent, naast de figuren: ze worden hier gerenderd, niet gekopieerd
 // uit uit/, en geven hun ingang in de beschrijving terug.
-const LOSSE_VELLEN = { schandpaal, paaltje, meiboom, tekens };
+const LOSSE_VELLEN = { schandpaal, paaltje, meiboom, marktkraam, tekens };
 
 // ---------------------------------------------------------------- kopiëren
 

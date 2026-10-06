@@ -71,6 +71,7 @@
       if (gegevens.schandpaal) vellen.push(gegevens.schandpaal.bestand);
       if (gegevens.paaltje) vellen.push(gegevens.paaltje.bestand);
       if (gegevens.meiboom) vellen.push(gegevens.meiboom.bestand);
+      if (gegevens.marktkraam) vellen.push(gegevens.marktkraam.bestand);
       if (gegevens.tekens) vellen.push(gegevens.tekens.bestand);
       // De figuren laden hier niet: een figuur komt pas als zijn wezen op de kaart staat (S.laadWatErStaat, vraag 114,
       // stap 1b).
@@ -484,6 +485,15 @@
     if (!gegevens || !gegevens.meiboom) return null;
     const t = gegevens.meiboom;
     return stuk(MAP + t.bestand, 0, 0, t.cel[0], t.cel[1], t.anker);
+  };
+
+  // Een kraam van de markt op het plein (js/markt.js, gereedschap/pixelart/marktkraam.cjs): één cel per kant waarheen hij
+  // kijkt ('ZO', 'ZW', 'NW', 'NO'), met het anker op de grond in het midden van de tegel. Null als het vel er niet is.
+  S.kraam = function (richting) {
+    if (!gegevens || !gegevens.marktkraam) return null;
+    const t = gegevens.marktkraam;
+    const i = Math.max(0, t.richtingen.indexOf(richting));
+    return stuk(MAP + t.bestand, i * t.cel[0], 0, t.cel[0], t.cel[1], t.anker);
   };
 
   // ---------------------------------------------------------------- bouwfasen (tegels/bouwfasen/<tekening>.png, bouwfasen.js)
