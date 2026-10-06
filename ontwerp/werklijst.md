@@ -5608,6 +5608,11 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     trailer: het laat in één plaatje zien dat het dorp leeft en wat het heeft.
     Vragen: **A**, een kraam per waar, met wat het dorp heeft? **B**, één marktblok? **C**, welke van c1, c2, c3?
     **D**, boodschappen eerst alleen om te zien, en een koopman per kraam? **E**, een marktdag, of elke dag even druk?
+    **Marcel koos (6 okt, zesendertigste sessie): "A ja, B ja, C c1 en c2, D ja, E marktdag".** Dus A tot en met E zoals
+    voorgesteld, met c1 (de maker legt het plein groter, met een kant vrij voor de markt) en c2 (is het plein vol, dan
+    komen er kramen langs de weg naar het plein, een marktstraat); c3 (het plein groeit zelf) valt af. En een marktdag:
+    door de week een paar kramen, op de marktdag alle, met meer volk op het plein.
+    **Stap 1 loopt** (6 okt): de proefplaat van de kramen met hun waar en de manden, die Marcel keurt.
 128. **Hoeveel bos heeft een houthakker nodig?** (Claude, 6 okt, de sessie van de heer, bij stap 3 van vraag 110, e, met
     115; `spel.md`, "De houthakker hakt en plant", Open; open).
     **Gemeten** (het ontworpen gehucht en de landen 5, 62707, 72022 en 73425): een houthakker mag staan op een open plek
