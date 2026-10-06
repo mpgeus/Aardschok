@@ -1,6 +1,7 @@
 // Het briefje bij een huis (2c, werklijst vraag 100; Marcel, 3 okt: "100 ja", in de stijl van vraag 98: "98 C", de
 // schrijftafel): staat de muis op een huis met mensen, dan hangt er naast zijn deur een papiertje aan een spijker, met wie
-// er woont, wat het huis wil (✓ en ✗) en wat helpt, en hoe ver het is met doorgroeien. Alles uit T.huisToestand
+// er woont, wat het huis wil (✓ en ✗) en wat helpt, en hoe ver het is met doorgroeien: wat het gezin daarvoor eerst rooit,
+// of waarom het niet kan (werklijst vraag 130, c: anders stond er "Nog 0 dagen alles" voor altijd). Alles uit T.huisToestand
 // (js/wensen.js), zodat het zegt wat de raad zegt. Een klik blijft wat hij was: verstoppen in de kelder (js/hud.js). Het
 // eerste venster in de stijl van de schrijftafel; de rest van de ui volgt later (vraag 98, c).
 (function (T) {
@@ -26,7 +27,9 @@
     let groei = '';
     if (t.groei) {
       const nog = Math.max(0, t.groei.nodig - t.groei.dagen);
-      if (t.teken === 'bouwstof') groei = `Het kan een ${t.groei.wordt} worden, maar daar is ${kosten(t.groei.kosten)} voor nodig.`;
+      if (t.groei.inDeWeg) groei = `Het kan geen ${t.groei.wordt} worden: ${t.groei.inDeWeg}.`;
+      else if (t.groei.rooit) groei = `Het gezin rooit eerst ${t.groei.rooit}; dan wordt het een ${t.groei.wordt}.`;
+      else if (t.teken === 'bouwstof') groei = `Het kan een ${t.groei.wordt} worden, maar daar is ${kosten(t.groei.kosten)} voor nodig.`;
       else if (!t.teken) groei = `Nog ${nog} ${nog === 1 ? 'dag' : 'dagen'} alles, dan wordt het een ${t.groei.wordt}${Object.keys(t.groei.kosten).length ? ` (${kosten(t.groei.kosten)})` : ''}.`;
       else groei = `Heeft het ${t.groei.nodig} dagen alles, dan wordt het een ${t.groei.wordt}.`;
     }

@@ -638,7 +638,7 @@ test('2c: een huis zegt wie er woont, wat het wil met wat helpt, wat het als eer
   const kapel = t.wensen.find((w) => w.id === 'kapel');
   assert.equal(kapel.helpt, `bouw er een binnen ${T.WENSEN_INSTELLINGEN.kring.kapel} tegels [B]`);
   assert.equal(t.teken, t.wensen.find((w) => !w.heeft).id, 'het teken is wat het als eerste mist');
-  assert.deepEqual(t.groei, { dagen: 0, nodig: T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen, wordt: 'stenen huis', kosten: T.WENSEN_INSTELLINGEN.bouwstof.stenenHuis });
+  assert.deepEqual(t.groei, { dagen: 0, nodig: T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen, wordt: 'stenen huis', kosten: T.WENSEN_INSTELLINGEN.bouwstof.stenenHuis, rooit: null, inDeWeg: null });
   // Een huis zonder mensen laat niets zien.
   assert.equal(T.huisToestand(D, D.gebouwen.find((g) => g.huis === 'schout')), null);
   // Heeft het alles, dan geen teken; wacht het op bouwstof, dan dat.

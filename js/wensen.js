@@ -513,7 +513,9 @@
   //   wensen: [{ id, naam, heeft, helpt }], in de volgorde van zijn stand (eten en brandhout eerst); `helpt` zegt wat
   //           helpt als het mist ("bouw een visser of een jager [B]"), anders null; voor eten en brandhout zegt dat de raad
   //   teken: wat het als eerste mist, 'bouwstof' als het een maand alles had en op bouwstof wacht, of null
-  //   groei: { dagen, nodig, wordt, kosten }: hoe ver het is met doorgroeien (js/behoeften.js), of null op de hoogste stand
+  //   groei: { dagen, nodig, wordt, kosten, rooit, inDeWeg }: hoe ver het is met doorgroeien (js/behoeften.js), of null op
+  //          de hoogste stand; `rooit` zegt wat het gezin eerst rooit ("één struik of stronk", js/bos.js), `inDeWeg` waarom
+  //          het niet kan ("de put staat in de weg", T.waaromGroeitHetNiet; werklijst vraag 130, c), anders null
   // Wat een huis als eerste mist, voor het teken bij zijn deur (js/tekenen.js): de eerste wens van zijn stand die het niet
   // heeft, 'bouwstof' als het een maand alles had en op bouwstof wacht, of null. Licht, want het scherm vraagt het elk beeld.
   T.tekenVanHuis = function (g) {
@@ -547,7 +549,11 @@
       // Wat het huis je nadraagt: een ondernemer die nee of ja hoorde (js/ondernemers.js).
       nadraagt: T.huisNadraagtTekst(g, D.kalender ? D.kalender.dag : 0),
       groei: wordt
-        ? { dagen: g.groeiDagen || 0, nodig: T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen, wordt: wordt.naam, kosten: IN().bouwstof[soort.wordt] || {} }
+        ? {
+            dagen: g.groeiDagen || 0, nodig: T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen, wordt: wordt.naam, kosten: IN().bouwstof[soort.wordt] || {},
+            rooit: (g.rooitVoorGroei && T.rooiWoorden(T.watNogTeRooienVoorGroei(D, g))) || null,
+            inDeWeg: T.waaromGroeitHetNiet(D, g),
+          }
         : null,
     };
   };

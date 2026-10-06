@@ -412,8 +412,8 @@
   const bewonerVan = (D, e) => e.bewoner || (e.werkAkkers && e.werkAkkers.length ? T.bewonerVan(D, e) : null);
 
   // Het stuk dat dit poppetje rooit (js/bos.js; werklijst vraag 110, e): het erf van zijn hut als hij het hoofd is van het
-  // gezin, of de plek van de werkplaats die hij vroeg (ook een boer die om een put vroeg); of null. Het gezin van wie zijn
-  // erf rooit, helpt (T.helpAnker).
+  // gezin, de nieuwe voet van zijn huis als het doorgroeit (vraag 130), of de plek van de werkplaats die hij vroeg (ook een
+  // boer die om een put vroeg); of null. Het gezin van wie zijn erf of zijn huis rooit, helpt (T.helpAnker).
   function kavelDieHijRooit(D, e) {
     const g = T.rooitHij(bewonerVan(D, e));
     return g ? g.kavel : null;
@@ -546,9 +546,9 @@
     const p = e.bewoner;
     if (!p || !p.huis || p.weg || p.komt) return null;
     if (p.leeftijd !== 'volwassen' && p.leeftijd !== 'jong') return null;
-    // Het gezin van wie zijn erf rooit (js/erven.js; werklijst vraag 110, e) helpt net zo: zolang hij hakt of rooit,
-    // blijven ze dicht bij hem.
-    if (p.huis.wachtOpRooien) {
+    // Het gezin van wie zijn erf rooit (js/erven.js; werklijst vraag 110, e), of wat in de weg staat om zijn huis te laten
+    // doorgroeien (vraag 130), helpt net zo: zolang hij hakt of rooit, blijven ze dicht bij hem.
+    if (T.gezinRooit(p.huis)) {
       const hoofd = p.hoofd && p.hoofd.wezen;
       if (!hoofd || hoofd.dood || !hoofd.werkt || !ONTGINWERK.has(hoofd.werkt.soort)) return null;
       return { x: hoofd.tx, y: hoofd.ty, straal: IN().helpStraal, veld: false };

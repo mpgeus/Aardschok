@@ -5825,6 +5825,8 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     het niet zien. En nu zegt het briefje van zo'n hut voor altijd "Nog 0 dagen alles, dan wordt het een huis (8 hout)".
     Vraag aan Marcel: mag de appelboom ook om, alleen als geen enkele vorm zonder past (dan staat er op geen van de
     veertig landen bij het begin nog een hut die nooit kan groeien), of houdt hij het tegen, en zegt het briefje het?
+    **Marcel koos (6 okt): "A".** De appelboom mag ook om, maar alleen als geen enkele vorm zonder hem past: het gezin
+    houdt zijn boom waar het kan.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

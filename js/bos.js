@@ -15,6 +15,12 @@
 // dag; na `rooiDagen` rooien de buren de rest in één keer (T.tikRooienDag). En het bos is van de heer: een stuk met
 // minstens zoveel bomen als een stuk bos bij het ontginnen, kost zijn gunst (T.inHetBosVanDeHeer).
 //
+// Ook een huis dat doorgroeit, maar waar geen vorm past zoals hij is (js/behoeften.js; werklijst vraag 130, Marcel: "Ok"),
+// rooit eerst: het gezin dat erin woont, rooit wat op de nieuwe voet in de weg staat (`rooitVoorGroei`), zoals een gezin
+// zijn erf, en daarna groeit het huis. Het staat al op de kaart; alleen werkt het gezin zolang nergens. Een appelboom gaat
+// alleen om als geen enkele vorm zonder hem past (Marcel, 6 okt: "A"): die krijgt `omhakken`, en is dan een boom om te
+// hakken, met zijn hout naar de schuur.
+//
 // De houthakker (vraag 115; Marcel, 4 okt: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug")
 // maakt zijn hout zoals elke werkplaats (T.tikGebouwenDag, js/gebouwen.js), maar het komt uit een boom: hij hakt aan de
 // dichtste boom binnen `hakStraal` van zijn schuur (g.boom), en elke `houtPerBoom` hout is die om (T.houthakkerHakte): een
@@ -26,6 +32,9 @@
 //   g.kavel          { x, y, b, h }: het stuk dat eerst vrij moet (bij een erf het erf met het looppad om de hut,
 //                    T.kavelVanErf in js/erven.js; bij een werkplaats zijn voet met het looppad eromheen)
 //   g.rooienTot      de dag waarop de buren de rest rooien
+//   g.rooitVoorGroei het gezin in dit huis rooit wat in de weg staat om door te groeien (met g.kavel: de nieuwe voet, en
+//                    g.rooienTot)
+//   v.omhakken       (op een appelboom) hij mag om, voor een huis dat doorgroeit
 //   p.rooit          de werkplaats die deze inwoner vroeg en nu rooit (bij een hut volgt het uit het gezin)
 //   g.boom           { x, y }: de boom waar de houthakker aan hakt; null als er geen meer binnen bereik staat
 //   g.gehakt         het hout dat hij al uit die boom haalde
@@ -83,12 +92,14 @@
   const JONG_BOS = new Set(['boomstronk', 'boompje', ...Object.values(JONG)]);
   const ROOIEN = new Set(['struik', 'bessenStruik', ...JONG_BOS]);
   const isBoom = (w, x, y, v) => !!v && T.NATUUR.bos.telt(w, x, y, v);
+  // Een boom om te hakken: een boom van het bos, of een appelboom die om mag (`omhakken`, T.beginRooienVoorGroei hieronder).
+  const omTeHakken = (w, x, y, v) => isBoom(w, x, y, v) || !!(v && v.omhakken);
 
   // Wat er op deze tegel eerst weg moet voor er gespit of gebouwd kan worden: 'hakken' (een boom), 'rooien' (een stronk,
   // een struik, een boompje of een jonge boom), of null. Voor js/veldwerk.js, dat er het werk en het figuur bij kiest.
   T.ontginWerkOp = function (w, x, y) {
     const v = T.voorwerpOp(w, x, y);
-    if (isBoom(w, x, y, v)) return 'hakken';
+    if (omTeHakken(w, x, y, v)) return 'hakken';
     if (v && ROOIEN.has(v.soort)) return 'rooien';
     return null;
   };
@@ -133,7 +144,7 @@
   T.velBoom = function (D, x, y) {
     const w = D.wereld;
     const v = T.voorwerpOp(w, x, y);
-    if (!isBoom(w, x, y, v)) return null;
+    if (!omTeHakken(w, x, y, v)) return null;
     haalWeg(w, v);
     zetNeer(w, 'boomstronk', x, y, { gehaktOp: dagNu(D) });
     return v.soort;
@@ -177,12 +188,14 @@
   // (T.ONTGINNEN_INSTELLINGEN.bosBomen)? Losse bomen en struiken in de wei zijn van niemand.
   T.inHetBosVanDeHeer = (D, r) => T.watTeRooien(D, r).bomen >= T.ONTGINNEN_INSTELLINGEN.bosBomen;
 
-  // "3 bomen en 2 struiken en stronken (+30 hout)": wat er gerooid wordt, en wat het de schuur oplevert.
+  // "3 bomen en 2 struiken en stronken (+30 hout)": wat er gerooid wordt, en wat het de schuur oplevert. Een huis dat
+  // doorgroeit, telt ook zijn appelboom (`appelbomen`, T.watNogTeRooienVoorGroei hieronder).
   T.rooiWoorden = function (wat) {
     const delen = [];
     if (wat.bomen) delen.push(wat.bomen === 1 ? 'één boom' : `${wat.bomen} bomen`);
     if (wat.struiken) delen.push(wat.struiken === 1 ? 'één struik of stronk' : `${wat.struiken} struiken en stronken`);
-    const hout = wat.bomen * IN().houtPerBoom;
+    if (wat.appelbomen) delen.push(wat.appelbomen === 1 ? 'de appelboom' : `${wat.appelbomen} appelbomen`);
+    const hout = (wat.bomen + (wat.appelbomen || 0)) * IN().houtPerBoom;
     return `${delen.join(' en ')}${hout ? ` (+${hout} hout)` : ''}`;
   };
 
@@ -198,18 +211,22 @@
     return { x: x0, y: y0, b: x1 - x0, h: y1 - y0 };
   };
 
-  // Het gebouw dat deze inwoner nu rooit, of null: zijn hut als hij het hoofd van het gezin is en de hut daarop wacht
-  // (js/erven.js), of de werkplaats die hij vroeg (js/verzoeken.js).
+  // Rooit het gezin in dit huis nu: zijn erf (de hut wacht erop, js/erven.js), of wat in de weg staat om door te groeien
+  // (vraag 130)? Dan werkt het nergens (js/bewoners.js), en helpt het wie rooit (T.helpAnker, js/veldwerk.js).
+  T.gezinRooit = (g) => !!(g && (g.wachtOpRooien || g.rooitVoorGroei));
+
+  // Het gebouw dat deze inwoner nu rooit, of null: zijn huis als hij het hoofd van het gezin is en het gezin rooit (zijn
+  // erf, of om door te groeien), of de werkplaats die hij vroeg (js/verzoeken.js).
   T.rooitHij = (p) => {
     if (!p) return null;
-    if (p.huis && p.huis.wachtOpRooien && !p.hoofd) return p.huis;
+    if (T.gezinRooit(p.huis) && !p.hoofd) return p.huis;
     return p.rooit && p.rooit.wachtOpRooien ? p.rooit : null;
   };
 
-  // Wie dit gebouw rooit: het hoofd van het gezin in de hut, of de meester van de werkplaats; null als hij er niet meer
-  // is.
+  // Wie dit gebouw rooit: het hoofd van het gezin in de hut of het huis, of de meester van de werkplaats; null als hij er
+  // niet meer is.
   function rooierVan(D, g) {
-    if (g.erf) return (D.bewoners && D.bewoners.mensen.find((p) => p.huis === g && !p.hoofd)) || null;
+    if (g.erf || g.rooitVoorGroei) return (D.bewoners && D.bewoners.mensen.find((p) => p.huis === g && !p.hoofd)) || null;
     return g.meester && D.bewoners && D.bewoners.mensen.includes(g.meester) ? g.meester : null;
   }
 
@@ -220,12 +237,80 @@
     T.rooi(D, t.x, t.y);
   }
 
+  // ---------------------------------------------------------------------------------------------
+  // Rooien om door te groeien (werklijst vraag 130)
+  // ---------------------------------------------------------------------------------------------
+
+  // Een huis dat doorgroeit, maar waar geen vorm past zoals hij is (js/behoeften.js): het gezin rooit eerst wat op de nieuwe
+  // voet in de weg staat (plan.rooien, op plan.voet), en het huis groeit zodra die vrij is, de nacht erna, als het dan nog
+  // alles heeft en de bouwstof er is. Een appelboom in het plan mag om (`omhakken`).
+  T.beginRooienVoorGroei = function (D, g, plan) {
+    for (const t of plan.rooien) {
+      const v = T.voorwerpOp(D.wereld, t.x, t.y);
+      if (v && v.soort === 'appelboom') v.omhakken = true;
+    }
+    Object.assign(g, { rooitVoorGroei: true, kavel: { x: g.x, y: g.y, b: plan.voet.b, h: plan.voet.h }, rooienTot: dagNu(D) + IN().rooiDagen });
+    const p = rooierVan(D, g);
+    const soort = T.GEBOUWEN[g.soort];
+    const wie = p ? `Het gezin van ${T.naamVanBewoner(p)}` : 'Een gezin';
+    T.zeg(D, `${wie} rooit eerst ${T.rooiWoorden(T.watNogTeRooienVoorGroei(D, g))}: hun ${soort.naam} wordt een ${T.GEBOUWEN[soort.wordt].naam}.`);
+  };
+
+  // Wat het gezin in dit huis nog rooit om door te groeien, zoals T.rooiWoorden het zegt: { bomen, struiken, appelbomen };
+  // of null als het niet rooit. Voor het briefje bij het huis (js/huisbriefje.js).
+  T.watNogTeRooienVoorGroei = function (D, g) {
+    if (!g.rooitVoorGroei) return null;
+    const w = D.wereld;
+    const wat = { bomen: 0, struiken: 0, appelbomen: 0 };
+    for (const t of T.teRooienOp(D, g.kavel)) {
+      const v = T.voorwerpOp(w, t.x, t.y);
+      if (v && v.soort === 'appelboom') wat.appelbomen++;
+      else if (T.ontginWerkOp(w, t.x, t.y) === 'hakken') wat.bomen++;
+      else wat.struiken++;
+    }
+    return wat;
+  };
+
+  // Het gezin is klaar met rooien, of het huis groeide al (js/behoeften.js): wat het huis erover onthield, gaat weg, en een
+  // appelboom die om mocht maar nog staat, blijft staan.
+  T.klaarMetRooienVoorGroei = function (D, g) {
+    if (!g.rooitVoorGroei) return;
+    const k = g.kavel;
+    for (let y = k.y; y < k.y + k.h; y++) {
+      for (let x = k.x; x < k.x + k.b; x++) {
+        const v = T.voorwerpOp(D.wereld, x, y);
+        if (v && v.omhakken) delete v.omhakken;
+      }
+    }
+    delete g.rooitVoorGroei;
+    delete g.kavel;
+    delete g.rooienTot;
+  };
+
+  // Een huis dat rooit om door te groeien, elke nacht: is de nieuwe voet vrij, of is de tijd om (dan rooien de buren eerst
+  // de rest), dan is het gezin klaar. Groeide het huis deze nacht niet al (T.tikBehoeftenDag gaat voor), dan groeit het
+  // zodra het weer alles heeft en de bouwstof er is.
+  function rooienVoorGroeiDag(D, g, dag) {
+    const over = T.teRooienOp(D, g.kavel);
+    if (over.length && dag < g.rooienTot) return;
+    for (const t of over) rooiNu(D, t);
+    if (over.length) {
+      const p = rooierVan(D, g);
+      T.zeg(D, `De buren helpen ${p ? `het gezin van ${T.naamVanBewoner(p)}` : 'een gezin'} de rest te rooien.`);
+    }
+    T.klaarMetRooienVoorGroei(D, g);
+  }
+
   // Elke dag (T.tikGebouwenDag, js/gebouwen.js, vóór de erven): een gebouw dat op het rooien wachtte en nu vrij is, komt op
   // de kaart, en is de tijd om, dan rooien de buren eerst de rest. Een hut wacht dan op hout (T.tikErvenDag, js/erven.js),
-  // een werkplaats begint: zijn kosten zijn al betaald.
+  // een werkplaats begint: zijn kosten zijn al betaald. Een huis dat rooit om door te groeien, net zo (hierboven).
   T.tikRooienDag = function (D) {
     const dag = dagNu(D);
     for (const g of D.gebouwen || []) {
+      if (g.rooitVoorGroei) {
+        rooienVoorGroeiDag(D, g, dag);
+        continue;
+      }
       if (!g.wachtOpRooien) continue;
       const over = T.teRooienOp(D, g.kavel);
       if (over.length && dag < g.rooienTot) continue;

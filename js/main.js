@@ -1286,14 +1286,24 @@
     // De erven (js/erven.js): waar ze liggen, en wie er woont of bouwt. Een erf aanwijzen gaat als een
     // gebouw: Spel.debug.bouw('erf', 30, 20).
     // De wensen per huis (js/wensen.js): per huis met mensen zijn stand, wie er woont, hoe tevreden het is, en wat het
-    // wil, met ✓ of ✗ (een goed dat maar deels gedekt is, met hoeveel); daarboven het dorp per stand, en wat er gemist
-    // wordt. Spel.debug.wensen('dorpelingen') laat alleen die stand zien.
+    // wil, met ✓ of ✗ (een goed dat maar deels gedekt is, met hoeveel), en hoe ver het is met doorgroeien (wat het gezin
+    // eerst rooit, of wat in de weg staat); daarboven het dorp per stand, en wat er gemist wordt.
+    // Spel.debug.wensen('dorpelingen') laat alleen die stand zien.
     wensen(stand) {
       const b = T.berekenTevredenheid(S.dorp, Math.floor(S.kalender.dag));
       if (!b.wensen) return `Geen wensen per huis: het dorp rekent als geheel (${Math.round(b.tevredenheid * 100)}%).`;
       const pct = (x) => `${Math.round(x * 100)}%`;
       const wie = (g) => S.dorp.bewoners.mensen.filter((p) => p.huis === g).map((p) => p.naam || T.naamVanMens(p.wie)).join(', ');
       const huizen = (n) => (n === 1 ? 'één huis' : `${n} huizen`);
+      // Hoe ver het is met doorgroeien, en wat het gezin daarvoor rooit of wat in de weg staat (vraag 130).
+      const groei = (g) => {
+        const t = T.huisToestand(S.dorp, g);
+        const x = t && t.groei;
+        if (!x) return 'hoogste stand';
+        if (x.inDeWeg) return `kan geen ${x.wordt} worden: ${x.inDeWeg}`;
+        if (x.rooit) return `het gezin rooit eerst ${x.rooit}, tot uiterlijk dag ${g.rooienTot}`;
+        return `${x.dagen} van ${x.nodig} dagen alles${g.wachtOpBouwstof ? ', wacht op bouwstof' : ''}`;
+      };
       return {
         dorp: pct(b.tevredenheid),
         standen: Object.fromEntries(Object.entries(b.wensen.standen).map(([s, x]) => [s, `${pct(x.tevredenheid)}, ${x.mensen} mensen, alles in ${x.alles} van ${huizen(x.huizen)}`])),
@@ -1301,6 +1311,7 @@
         huizen: b.wensen.huizen.filter((h) => !stand || h.stand === stand).map((h) => ({
           huis: `${T.GEBOUWEN[h.g.soort].naam} op ${h.g.x},${h.g.y}`, stand: h.stand, wie: wie(h.g), tevreden: pct(h.tevredenheid),
           wil: Object.entries(h.heeft).map(([id, x]) => `${T.WENSEN[id].naam} ${x >= 1 - 1e-9 ? '✓' : x > 0 ? `✗ (${pct(x)})` : '✗'}`).join(' · '),
+          groei: groei(h.g),
         })),
       };
     },
