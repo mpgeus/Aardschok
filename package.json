@@ -12,6 +12,7 @@
     "grootte": "node gereedschap/grootte/grootte.cjs",
     "schermen": "node gereedschap/schermen/schermen.cjs",
     "tekenmeting": "node gereedschap/schermen/tekenmeting.cjs",
+    "samenvatting": "node gereedschap/samenvatting/samenvatting.cjs",
     "pixelart": "node gereedschap/pixelart/export.cjs",
     "pixelart:animaties": "node gereedschap/pixelart/animaties-export.cjs",
     "pixelart:spel": "node gereedschap/pixelart/naar-spel.cjs",

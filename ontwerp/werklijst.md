@@ -72,6 +72,12 @@ besloten), een zitting met getuigen en bewijs, het vertrouwen per groep, mensen 
 en gevolgen in ketens. De proef, één keten van begin tot eind (de verdwenen graanzak, met een eerste zitting), komt na
 het beeld hierboven. Zie `spel.md`, "Informatie, de zitting en mensen die onthouden".
 
+**De samenvatting** (6 okt, de sessie van de samenvatting; in `main`, Marcel: "Ja main"): het spel in vijf bladzijden
+voor wie het niet kent (een gamedesigner), met vier beelden uit het spel, het hele spel als één verhaal, en sinds vraag
+128 ook met wat je weet, de zitting en mensen die onthouden: `ontwerp/het-spel-in-het-kort.pdf`. Verandert het spel, werk
+dan de tekst bij (`gereedschap/samenvatting/samenvatting.html`) en maak hem opnieuw: `npm run samenvatting` (met
+`-- --beelden` ook de beelden, uit het spel zelf).
+
 **Sinds de sessie van het licht (4 okt, vraag 125, in `main`):** met de videokaart kleurt het dorp met het uur (roze
 bij het opkomen, oranje bij het ondergaan, blauw in de nacht), geven de lantaarns, de ramen en de herberg warme plassen
 licht die flakkeren, en werpt alles wat staat een schaduw die met de zon meegaat. De schout draagt 's avonds buiten een
@@ -5668,7 +5674,7 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     (groente en fruit: luifel, kar of puntdak, 1 à 2 tegels; brood: luifel, puntdak of zeil, 1; vis en vlees: luifel,
     zeil of puntdak, 2 à 3; laken en garen: luifel, puntdak of zeil, 2 à 3; potten en gerei: zeil of luifel, 1 à 2), en
     tellen in tegels toonbank (een per 10 mensen, minstens 6), komen nu in het spel.
-128. **Richting en ontwerpideeën van buiten** (Marcel, 6 okt, zesendertigste sessie: "Kijk hier eens naar", met een pdf
+128. **Richting en ontwerpideeën van buiten** (Marcel, 6 okt, de sessie van de samenvatting: "Kijk hier eens naar", met een pdf
     van vijftien bladzijden, "Aardschok — Richting & Game Design Ideeën": een analyse van de samenvatting van vier
     bladzijden die we die dag voor een gamedesigner maakten; de pdf staat niet in git, dit is wat erin staat; plan van
     Claude; open).
@@ -6034,6 +6040,13 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 6 okt 2026 — **Het spel in het kort, als pdf** (de sessie van de samenvatting; Marcel: "Maak een korte samenvatting van
+  wat ons spel is en hoe het speelt in pdf vorm aub. Zodat iemand anders het kan lezen", voor een gamedesigner, met
+  beelden, het hele spel als één verhaal; en "Misschien nog een plaatje van de heer met zijn soldaten"). Vier beelden uit
+  het spel (het gehucht van boven, een boer die wil ontginnen, de heer met zijn twee soldaten, een zomeravond), in de
+  letters van het spel, nu vijf bladzijden: `ontwerp/het-spel-in-het-kort.pdf`, met `npm run samenvatting`
+  (`gereedschap/samenvatting/`; de server geeft `.jpg` nu als beeld). Marcel liet hem lezen, en de analyse die terugkwam,
+  werd vraag 128 (besloten). `npm test` 995/995.
 - 6 okt 2026 — **De markt op het plein** (zesendertigste sessie; vraag 110, d; Marcel: "Voor nu a1, b tot e ja"). Een
   inwoner vraagt de markt zoals elk gebouw, maar hij komt op het plein: vier kramen aan de rand, één per kant en naar het
   midden, waar je tussendoor loopt, buiten de kring van het feest en weg van de heer en zijn schandpaal (`js/markt.js`).
