@@ -590,6 +590,16 @@ test('rooit niemand het, dan doen de buren de rest na een maand; staat er iets w
       assert.ok(!hut2.groeitNaRooien);
       assert.match(T.waaromGroeitHetNiet(D2, hut2), /er staat een rots waar het groter moet worden/);
       assert.match(T.huisToestand(D2, hut2).groei.waarom, /een rots/);
+      // Is het hout een dag op, dan wacht hij nog steeds op plaats, niet op hout: in de speeltest van 6 okt bleef een hut
+      // die door een erf niet kon groeien, zo drie jaar "wachten op 8 hout".
+      T.zetVoorraad(D2, 'hout', 0);
+      T.zetVoorraad(D2, 'graan', 2000);
+      S2.kalender.dag = dag2 + 0.3;
+      S2.kalender.stil = [];
+      T.tikGebouwenDag(D2, dag2++);
+      assert.ok(!hut2.wachtOpBouwstof, 'hij wacht niet op hout');
+      assert.notEqual(T.huisToestand(D2, hut2).teken, 'bouwstof');
+      assert.match(T.huisToestand(D2, hut2).groei.waarom, /een rots/);
     } finally {
       T.GEBOUWEN_INSTELLINGEN.gezinDagen = gezinDagen;
     }

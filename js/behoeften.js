@@ -481,6 +481,14 @@
     return uit;
   }
 
+  // Heeft dit huis plaats om door te groeien: 'past' (er staat niets in de weg, of alleen iemand die morgen weg is),
+  // 'rooien' (alleen na het rooien, T.groeiRooiPlan), of null (er staat iets wat het gezin niet kan rooien).
+  function groeiRuimte(D, g, soort) {
+    const oudeVoet = g.voet || T.gebouwVoet(g.soort, g.tekening) || { b: 1, h: 1 };
+    if (groeiVormen(D, g, soort.wordt, oudeVoet).some((v) => v.inDeWeg.every((t) => t.wat === 'iemand'))) return 'past';
+    return T.groeiRooiPlan(D, g) ? 'rooien' : null;
+  }
+
   // Kan dit huis (met mensen, dat een maand alles had) niet doorgroeien, maar wel als zijn gezin eerst rooit wat er staat
   // (werklijst vraag 130; Marcel, 6 okt: "Ok")? Dan het stuk dat vrij moet ({ x, y, b, h }: de nieuwe voet), van de vorm
   // met het minste te rooien; anders null. Wie er alleen staat, telt niet: die is morgen weg.
@@ -505,7 +513,7 @@
     const soort = T.GEBOUWEN[g.soort];
     if (!soort || !soort.wordt || !T.GEBOUWEN[soort.wordt] || !g.voorwerp) return null;
     if (g.groeitNaRooien) return `het gezin rooit eerst ${T.rooiWoorden(T.watTeRooien(D, g.kavel)).replace(/ \(.*\)$/, '')} waar het groter wordt`;
-    if (!((g.groeiDagen || 0) >= T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen) || g.wachtOpBouwstof) return null;
+    if (!((g.groeiDagen || 0) >= T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen)) return null;
     const oudeVoet = g.voet || T.gebouwVoet(g.soort, g.tekening) || { b: 1, h: 1 };
     const vormen = groeiVormen(D, g, soort.wordt, oudeVoet);
     if (!vormen.length || vormen.some((v) => v.inDeWeg.every((t) => t.wat === 'iemand' || t.wat === 'rooien'))) return null;
@@ -562,6 +570,15 @@
       g.groeiDagen = h.alles ? (g.groeiDagen || 0) + 1 : 0;
       if (!h.alles) delete g.wachtOpBouwstof;
       if (g.groeiDagen < IN.huisGroeiDagen) continue;
+      if (g.groeitNaRooien) continue; // het gezin rooit nog wat in de weg staat (js/bos.js)
+      // Is er geen plaats, ook niet na het rooien, dan wacht het op plaats, niet op bouwstof: het briefje zegt waarom
+      // (T.waaromGroeitHetNiet; werklijst vraag 130). In de speeltest van 6 okt was het hout één keer op, en bleef een hut
+      // die door een erf niet kon groeien, drie jaar "wachten op 8 hout".
+      const ruimte = groeiRuimte(D, g, soort);
+      if (!ruimte) {
+        delete g.wachtOpBouwstof;
+        continue;
+      }
       const nieuw = T.GEBOUWEN[soort.wordt];
       const kosten = T.WENSEN_INSTELLINGEN.bouwstof[soort.wordt] || {};
       if (!T.kanBetalen(D, kosten)) {
@@ -569,16 +586,14 @@
         g.wachtOpBouwstof = true;
         continue;
       }
-      if (g.groeitNaRooien) continue; // het gezin rooit nog wat in de weg staat (js/bos.js)
-      if (!groeiGebouw(D, g, soort)) {
-        // Geen ruimte. Staat er alleen iets wat het gezin kan rooien, dan rooit het dat eerst (werklijst vraag 130); anders
-        // morgen weer, en zegt het briefje waarom (T.waaromGroeitHetNiet).
-        const kavel = T.groeiRooiPlan(D, g);
-        if (kavel) T.rooiOmTeGroeien(D, g, kavel);
+      delete g.wachtOpBouwstof;
+      // Staat er alleen iets wat het gezin kan rooien, dan rooit het dat eerst (werklijst vraag 130).
+      if (ruimte === 'rooien') {
+        T.rooiOmTeGroeien(D, g, T.groeiRooiPlan(D, g));
         continue;
       }
+      if (!groeiGebouw(D, g, soort)) continue; // er stond iemand: morgen weer
       T.betaalKosten(D, kosten);
-      delete g.wachtOpBouwstof;
       const voor = Object.keys(kosten).length ? `, voor ${kostenTekst(kosten)}` : '';
       T.zeg(D, `Een ${soort.naam} is gegroeid tot een ${nieuw.naam}${voor}: wie erin woont, hoort nu bij de ${T.STANDEN[T.standVan(g)].naam}.`, 'goed');
       // Voor het rapport van de raadsman (js/ochtendrapport.js; vraag 87): "De hut van Geert is een huis geworden".
