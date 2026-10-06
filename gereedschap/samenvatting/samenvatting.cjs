@@ -1,6 +1,6 @@
 'use strict';
 // Het spel in het kort (Marcel, 6 okt: "Maak een korte samenvatting van wat ons spel is en hoe het speelt in pdf vorm
-// aub. Zodat iemand anders het kan lezen"): vier bladzijden voor een gamedesigner, met beelden uit het spel. De tekst
+// aub. Zodat iemand anders het kan lezen"): een paar bladzijden voor een gamedesigner, met beelden uit het spel. De tekst
 // staat in samenvatting.html, de beelden in beelden/, en de pdf komt in ontwerp/het-spel-in-het-kort.pdf; alle drie in
 // git, zodat een sessie die alleen de tekst bijwerkt, altijd een pdf kan maken, ook als een beeld niet meer lukt.
 //

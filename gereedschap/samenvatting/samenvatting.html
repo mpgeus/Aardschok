@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-  Het spel in het kort: vier bladzijden voor wie het spel niet kent (Marcel, 6 okt: "Maak een korte samenvatting van
+  Het spel in het kort: een paar bladzijden voor wie het spel niet kent (Marcel, 6 okt: "Maak een korte samenvatting van
   wat ons spel is en hoe het speelt in pdf vorm aub. Zodat iemand anders het kan lezen"; voor een gamedesigner). Hij
   vertelt het hele spel als één verhaal, zonder te zeggen wat er al gebouwd is (Marcel koos dat zo).
   npm run samenvatting maakt er ontwerp/het-spel-in-het-kort.pdf van; met -- --beelden eerst de beelden opnieuw, uit het
@@ -110,6 +110,11 @@
   ol.regels li { counter-increment: regel; position: relative; padding-left: 7mm; margin-bottom: 1.4mm; break-inside: avoid-column; }
   ol.regels li::before { content: counter(regel); position: absolute; left: 0; top: -0.8mm; font-family: var(--gotisch); font-size: 14pt; color: var(--goud); }
 
+  /* Een voorbeeld in een kader */
+  .verhaal { background: var(--perkament); border-left: 2pt solid var(--rood); padding: 2.4mm 4.5mm 1.4mm; margin: 0.5mm 0 1mm; break-inside: avoid; }
+  .verhaal h3 { color: var(--rood); }
+  .verhaal p { margin: 0 0 1mm; }
+
   .blok { break-inside: avoid; }
 </style>
 </head>
@@ -128,11 +133,11 @@
 </figure>
 
 <dl class="feiten">
-  <dt>Soort spel</dt><dd>Een dorp laten groeien en besturen, met politiek en avontuur</dd>
+  <dt>Soort spel</dt><dd>Een dorp besturen van binnenuit, met politiek en avontuur</dd>
   <dt>Je speelt</dt><dd>Eén mens: de schout, een poppetje in het dorp</dd>
   <dt>Beeld</dt><dd>Isometrisch, HD-pixel art, dag en nacht</dd>
   <dt>Vechten</dt><dd>In beurten, op dezelfde tegels als het rondlopen</dd>
-  <dt>Verwant aan</dt><dd class="breed"><em>Anno 1602</em>, <em>Yes, Your Grace</em>, <em>Kingdom Two Crowns</em>, <em>Democracy 3</em>, <em>Lords of the Realm 2</em>, <em>Jagged Alliance 2</em></dd>
+  <dt>Verwant aan</dt><dd class="breed"><em>Anno 1602</em>, <em>Yes, Your Grace</em>, <em>Kingdom Two Crowns</em>, <em>Democracy 3</em>, <em>Lords of the Realm 2</em>, <em>RimWorld</em>, <em>Jagged Alliance 2</em></dd>
   <dt>Voor</dt><dd class="breed">De pc, via Steam</dd>
 </dl>
 
@@ -145,7 +150,7 @@
 <h2>Twee bazen</h2>
 <div class="naast">
   <div>
-    <p>De heer en het dorp kunnen je allebei wegsturen. In de balk staan twee meters van 0 tot 100: de gunst van de heer (de kroon) en het vertrouwen van het dorp (de hoed). Zakt er een onder de 20, dan krijg je een waarschuwing. Op 0 ben je je ambt kwijt, of jaagt het dorp je weg.</p>
+    <p>De heer en het dorp kunnen je allebei wegsturen. In de balk staan twee meters van 0 tot 100: de gunst van de heer (de kroon) en het vertrouwen van het dorp (de hoed). Zakt er een onder de 20, dan krijg je een waarschuwing. Op 0 ben je je ambt kwijt, of jaagt het dorp je weg. En het dorp is geen blok: elke groep vertrouwt je op zijn eigen manier, en de boeren kunnen voor je zijn terwijl de ambachtslieden tegen je zijn.</p>
     <p>Bijna elke keuze kost aan de ene kant wat ze aan de andere wint. Een voorbeeld, rechts: het graan komt tekort, en een boer wil land ontginnen. De heide is de meent van het dorp, dus dat kost vertrouwen. Het bos is van de heer: melden kost zijn gunst, en stiekem kost niets, tot zijn inner of zijn soldaten het vinden.</p>
     <p>Elk antwoord zegt vooraf wat het kost. Wie je niet op tijd spreekt, gaat weer weg, en ben je op reis, dan beslist je raadsman, naar zijn eigen karakter.</p>
   </div>
@@ -154,6 +159,17 @@
   </figure>
 </div>
 
+<h2>Wat je weet</h2>
+<div class="kolommen">
+  <p>In het dorp is er altijd wat er echt gebeurde, wat er gezegd wordt, en wat jij weet. Niemand vertelt je alles, en een gerucht is geen feit. Je weet iets omdat je erbij was, omdat iemand het je vertelde of je het in de herberg hoorde, omdat je je raadsman of een wachter liet kijken, omdat je de boeken nalas of iemand volgde, of omdat twee verhalen niet kloppen. Ook de balk toont wat er het laatst geteld werd, niet wat er nu ligt.</p>
+  <p><strong>De zitting.</strong> ’s&nbsp;Middags spreek je recht, met een aanklager, een verdachte, getuigen, bewijs, geruchten en wat jij zelf weet, onder de ogen van het dorp. Soms weet je dat iemand schuldig is, maar kun je het niet bewijzen. Soms heb je bewijs dat de heer liever niet ziet.</p>
+</div>
+<div class="verhaal">
+  <h3>Een voorbeeld: de verdwenen graanzak</h3>
+  <p>Er ontbreekt graan in de schuur, en een buurman wijst de molenaar aan, die het ontkent. Je gaat kijken, en in de herberg hoor je wie er ’s&nbsp;nachts liep. Het graan blijkt naar een zieke familie te zijn gegaan. In de zitting kies je: straffen, vrijspreken, of de diefstal verbergen. Het dorp onthoudt wat je deed, en op Sint-Maarten merkt de heer het tekort.</p>
+</div>
+
+<div class="blok">
 <h2>De dag en het jaar</h2>
 <p>Een dag duurt vijf minuten, en sneller kan. Hij heeft vaste momenten:</p>
 <div class="strook dag">
@@ -161,6 +177,7 @@
   <div class="vak"><h3>Overdag</h3>komen inwoners je zoeken, met een vraag, een ruzie, een ramp of een plan om te bouwen. ’s&nbsp;Middags houd je zitting als er rechtszaken zijn.</div>
   <div class="vak"><h3>’s&nbsp;Avonds</h3>zit het dorp in de herberg. Daar hoor je wat er speelt, en daar vertellen getuigen wat ze zagen.</div>
   <div class="vak"><h3>’s&nbsp;Nachts</h3>slaap je, net als het dorp, tot de ochtend.</div>
+</div>
 </div>
 <p>Het jaar geeft het spel zijn ritme. De boeren doen het werk van het seizoen zelf, en de heer komt op vaste tijden.</p>
 <div class="strook">
@@ -192,6 +209,7 @@
 <h2>Het dorp groeit door zijn mensen</h2>
 <ul class="lijst kolommen">
   <li><strong>Je bouwt het dorp niet, je bestuurt het.</strong> Wat het dorp mist, komt een inwoner je vragen. De plek ligt in goud op de grond, met wat het kost, en jij zegt ja of nee. Jij wijst erven aan voor nieuwe gezinnen, en hangt oproepen op het plein (“Het dorp zoekt een steengroeve”, met een premie). Een ondernemer wil soms iets wat niemand mist: wapens smeden, wat de heer verbiedt, of een tweede herberg, tot woede van de herbergierster.</li>
+  <li><strong>Mensen die onthouden.</strong> Elke inwoner heeft familie, vrienden, rivalen en schulden, eigen belangen en soms een geheim, en onthoudt wat je deed: wie je hielp, wie je strafte, wie land kreeg. Zo komt een grote keuze maanden later terug.</li>
   <li><strong>Elk huis heeft een stand, met wensen,</strong> zoals in <em>Anno 1602</em>: keuters in hutten, dorpelingen in huizen, ambachtslieden in stenen huizen, en de boeren op hun boerderij. Wie hoger staat, wil wat de stand eronder wil, en meer: bier, vlees of vis, brood, laken, een put en een kapel in de buurt, de herberg en de markt. Heeft een huis een maand lang alles, dan groeit het door naar de volgende stand.</li>
   <li><strong>Treden.</strong> Bij 20 dorpelingen wordt het gehucht een dorp, bij 20 ambachtslieden krijgt het marktrecht, en zo groeit het naar een stad.</li>
   <li><strong>Wetten</strong> kies je in een menu zoals in <em>Democracy 3</em>: het rantsoen, vreemden welkom, houtkap in het bos van de heer, de belasting. Elke wet weegt per stand anders.</li>
@@ -203,6 +221,7 @@
   <ul class="lijst">
     <li>Telkens wil hij in een brief iets geks: een standbeeld, een vet varken, de bruiloft van zijn neef. Wat je antwoordt, kost de een of de ander iets.</li>
     <li>In oogstmaand komt zijn inner tellen wat hij ziet, en op Sint-Maarten komt de heer zelf innen, naar wat het dorp lijkt te hebben. Zo word je rijk en lijk je arm: wat je opzij zet, verstop je in een kelder of in de kapel. Maar wie het zag, kan het in de herberg vertellen, en zijn soldaten doorzoeken het dorp.</li>
+    <li>Hij leert van je. Lieg je vaak, dan laat hij controleren; betaal je veel, dan vraagt hij meer; bescherm je steeds het dorp, dan test hij je trouw.</li>
     <li>Voert hij oorlog, dan vraagt hij mannen voor zijn heervaart, of goud.</li>
   </ul>
   <div>
@@ -226,7 +245,7 @@
 </div>
 </div>
 <div class="kolommen">
-  <p>Sterk word je door te veroveren en bevriend te raken, zoals in <em>Civilization</em>, en door je mensen gelukkig te maken: een dorp waar iedereen een jaar lang in al zijn wensen voorzien is, volgt je in de opstand, en een bloeiend dorp krijgt het oor van de koning.</p>
+  <p>Sterk word je door te veroveren en bevriend te raken, zoals in <em>Civilization</em>, en door je mensen gelukkig te maken: een dorp waar iedereen een jaar lang in al zijn wensen voorzien is, volgt je in de opstand, en een bloeiend dorp krijgt het oor van de koning. Aan het eind zie je de geschiedenis van jouw schout: de grote keuzes, wie er stierf, wie jouw kant koos, en wat voor schout je werd: rechtvaardig, corrupt, volks of trouw.</p>
   <p>Je kunt ook verliezen: de heer ontslaat je, het dorp jaagt je weg, het dorp loopt leeg, of de schout sneuvelt. En omdat de heer kiest uit dezelfde handelingen als een mens in zijn plaats, kan na de release ook een vriend de heer spelen.</p>
 </div>
 
@@ -251,8 +270,10 @@
 <h2>Ontwerpregels</h2>
 <ol class="regels kolommen">
   <li>Wat elders één klik is, gaat hier via een persoon, een plek, een papier of een handeling.</li>
+  <li>Wat je weet, komt ergens vandaan, en een gerucht is geen feit.</li>
   <li>Je bouwt het dorp niet, je bestuurt het.</li>
-  <li>Elke keuze zegt vooraf wat ze kost, en bijna elke keuze kost de ene baas wat de andere wint.</li>
+  <li>Een inwoner is geen getal, maar een mens met belangen, die onthoudt wat je deed.</li>
+  <li>Elke keuze zegt vooraf wat ze kost, bijna elke keuze kost de ene baas wat de andere wint, en een grote keuze komt later terug.</li>
   <li>Een probleem heeft een oorzaak die je had kunnen zien, en een toestand (honger, droogte) heeft een begin en een eind.</li>
   <li>Een keuze die op je wacht, heeft een termijn: wie je niet spreekt, gaat weer weg, en ben je weg, dan beslist je raadsman.</li>
   <li>Een eenvoudige regel gaat voor een regel die klopt met vroeger.</li>

@@ -54,7 +54,7 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   bouwstap komt.
 - `ontwerp/opmerkingen.md`: wat onderweg opviel en nog niet af is, om later na te lopen (Marcel,
   25 sep). Zie je iets, zet het erbij.
-- `ontwerp/het-spel-in-het-kort.pdf`: het spel in vier bladzijden voor wie het niet kent (Marcel, 6 okt; voor een
+- `ontwerp/het-spel-in-het-kort.pdf`: het spel in een paar bladzijden voor wie het niet kent (Marcel, 6 okt; voor een
   gamedesigner), met beelden uit het spel; het hele spel als één verhaal, zonder te zeggen wat er al is. Verandert het
   spel, werk dan de tekst bij (`gereedschap/samenvatting/samenvatting.html`) en maak hem opnieuw (`npm run samenvatting`).
 - Van het oude spel, alleen nog als bron: `ontwerp/verhaal.md` (met de vijf rondes ideeën van
