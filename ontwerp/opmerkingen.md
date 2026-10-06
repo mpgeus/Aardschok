@@ -101,7 +101,8 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   eet. In de winter is het andersom: het zaaigraan eet het dorp bij nood, "anders sterven er mensen" (Marcel). Is een
   dorp in grasmaand aan het verhongeren, dan gaat graan dat binnenkomt dus eerst de grond in. Wie het als zaaigraan kocht,
   wil dat; wie het als eten haalde, niet. Een mogelijkheid: nazaaien laat een paar dagen eten liggen. Voor Marcel.
-- **De heer als eerste tegenstander** (1 okt, eenentwintigste sessie; een idee van Claude, niet gekozen). Met de
+- **De heer als eerste tegenstander** (1 okt, eenentwintigste sessie; een idee van Claude; sinds 6 okt gekozen, groter:
+  de heer is het eind van het spel, werklijst vraag 126, en `spel.md`, "De heer als tegenstander"). Met de
   verovering van de wereld als einddoel (werklijst vraag 78, B) wordt de heer vanzelf de eerste die je verslaat: eerst
   betaal je hem, omdat je zwak bent, en als je sterk genoeg bent, sla je hem (de opstand uit het eerste plan, "Het
   spel in het kort"). Dan is wat je voor hem verstopte, de kas van je opstand. Voor als het land en het vechten

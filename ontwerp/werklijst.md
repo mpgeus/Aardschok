@@ -43,12 +43,14 @@ vertrouwen van het dorp, want de meent is van iedereen (een maand plaggen steken
 dan kost het zijn gunst, en doe je het stiekem, dan ben je betrapt als de inner of zijn soldaten het vinden (een winter
 bomen hakken, met de bijl, en het hout is voor het dorp). In lentemaand is het een akker. `npm test`: 954/954.
 
-**Vraag 126 wacht op Marcel** (5 okt, vijfendertigste sessie; alleen papier, er is niets gebouwd): de heer krijgt een
-kasteel op de kaart, en het doel van het spel wordt hem verstoten en verslaan; hij smeedt bonden met de andere spelers,
-je kunt ook aan zijn kant winnen of hem via de koning laten afzetten, en later samen spelen, met een speler als heer.
-Het voorstel (drie wegen die je onderweg voorbereidt, zijn bond te koop, diplomatie te voet, samen spelen na de
-release) staat in `spel.md`, "De heer als tegenstander", met zeven vragen bij vraag 126. Het verandert niet wat er nu
-gebouwd wordt.
+**Vraag 126 is besloten** (5 en 6 okt, vijfendertigste sessie; Marcel: "A ja B b2 en b3 C c3 D ja E ja F Ja G zo";
+alleen papier, er is niets gebouwd): het doel van het spel is de heer verstoten en verslaan. Hij krijgt een kasteel op
+de kaart, smeedt bonden met de andere spelers, en heeft per spel een ander karakter. Veroveren en bevriend raken zijn de
+weg erheen, langs drie wegen: de opstand, de koning achter zijn rug om, of trouw (en dan ben jij de nieuwe heer). Je
+sluit een bond te voet, niet in een menu. Het jaar van geluk blijft het eind van de demo en wordt in het hele spel kracht
+op weg naar de heer. Samen spelen, met een speler als heer, komt na de release; tot dan bouwen we zo dat het kan
+(`CLAUDE.md`, "Afspraken in de code"). Niets hiervan vóór de kern: het kasteel komt met het eiland (vraag 117, c), de
+bond met het buurdorp (vraag 72). Zie `spel.md`, "De heer als tegenstander".
 
 **Sinds de sessie van het licht (4 okt, vraag 125, in `main`):** met de videokaart kleurt het dorp met het uur (roze
 bij het opkomen, oranje bij het ondergaan, blauw in de nacht), geven de lantaarns, de ramen en de herberg warme plassen
@@ -2421,6 +2423,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     eigen namen? **B**, zijn schout een poppetje dat nog niets beslist? **C**, erheen zoals naar elke provincie? **D**, 0
     of 1 tegenspeler bij Nieuw spel, met 0 als standaard tot stap 1b? **E**, dezelfde heer en inner, voorlopig op
     dezelfde dag?
+    **Sinds 6 okt** (vraag 126, g): met het buurdorp komt ook de bond van de heer: een dorp in zijn bond of niet, en een
+    bond sluit je te voet (je reist er zelf heen).
 73. **Het concept: de schout als de manier waarop je bestuurt** (Marcel, 30 sep, negentiende sessie: een concept van 15
     bladzijden, "De Schout: Game Concept & Mini GDD", met "Ik denk dat we hiermee een goede kant opgaan"; wacht op
     Marcel). Wat erin staat en hoe het naast ons spel ligt: `concept.md`. Kort: zijn regel is dat wat in een
@@ -4606,7 +4610,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     schip)? **d**, de mist zo, zwart en grijs? **e**, deze volgorde?
     **Marcel koos (4 okt): "2500x2500 is goed"** en "akkoord" op de volgorde (eerst de huizen, dan de boeren met de
     houthakker en de beesten, dan het eiland). Het kasteel, de stad, het schip en de mist zijn nog niet beantwoord: het
-    voorstel hierboven staat, en dat vragen we opnieuw als het eiland begint.
+    voorstel hierboven staat, en dat vragen we opnieuw als het eiland begint. **Het kasteel wel** (Marcel, 6 okt, vraag
+    126, g): het komt op het eiland, met het eiland, en de heer is het eind van het spel.
     **Wat 2500 bij 2500 betekent (Claude, 4 okt):** 6,25 miljoen tegels, 625 keer het land van nu. Het kan, maar niet zoals
     de kaart nu in het spel zit, en het is de grootste technische stap tot nu toe. Vijf dingen moeten anders, en daarom
     eerst een proef die het meet, vóór er iets op het eiland komt:
@@ -5197,7 +5202,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     heer ingaat moeilijker wordt. Uiteindelijk zie ik een multiplayer voor me waarin spelers ook de heer kunnen spelen
     tegen de andere spelers. Ook moet een andere mogelijkheid zijn dat je kunt winnen als je de kant van de heer kiest
     en de rest 'verslaat'. Of achter zijn rug om contact met de koning leggen om de heer af te zetten."; voorstel van
-    Claude; open).
+    Claude; besloten op 6 okt, zie onderaan).
     **Wat er al is:** het kasteel als provincie op de kaart van het land (`js/land.js`, achter de spelregel Land), en in
     het plan voor het eiland (vraag 117, c) de heer, de inner en de soldaten die van daar komen. De gunst van de heer en
     het vertrouwen van het dorp (vraag 106), de heervaart met zijn veteranen (vraag 60), de verboden wapenmaker (vraag
@@ -5239,6 +5244,21 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     - **g, de volgorde:** niets hiervan vóór de kern; of wil je er iets van naar voren?
     **Advies:** a ja; b2, en b3 voor de demo, die dan eindigt op het moment dat de heer je zijn bond aanbiedt; c1, want
     het past bij zijn karakter, is eenvoudig, en je kunt het bespelen; d, e en f ja; g zo.
+    **Marcel koos (6 okt): "A ja B b2 en b3 C c3 D ja E ja F Ja G zo".** Dus:
+    - **a:** het eind is de heer; veroveren en bevriend raken zijn de weg erheen.
+    - **b2 en b3:** het jaar van geluk (vraag 101) blijft het eind van de demo, en wordt in het hele spel kracht op weg
+      naar de heer. In de code verandert er nu niets. Nog open, voor als de demo er is: of het laatste beeld van de demo
+      de heer is die je zijn bond aanbiedt (het advies).
+    - **c3, niet het advies:** de heer heeft per spel een ander karakter, en dat zegt wie hij in zijn bond neemt. Een
+      voorstel voor als hij gebouwd wordt (stap 2 in `spel.md`): "wie het meest betaalt" (c1) en "verdeel en heers" (c2)
+      worden er twee van, en welk karakter hij heeft, lees je af aan zijn brieven en aan wie hij beloont.
+    - **d:** de drie wegen; "Niet: de heer langs een omweg ten val brengen" (23 sep) vervalt.
+    - **e:** diplomatie te voet. **f:** samen spelen na de release; de twee regels om het niet te blokkeren staan in
+      `CLAUDE.md`, "Afspraken in de code". **g:** niets hiervan vóór de kern; het kasteel komt met het eiland (vraag
+      117, c), de bond met het buurdorp (vraag 72), dan de drie wegen.
+    - **Wat eruit volgt** (Claude, 6 okt, uit a en d): vechten tussen dorpen komt vóór de vrijheid, niet erna, zoals op
+      28 sep ("De buren, en wanneer" in `spel.md`); en "winnen is voor nu alles veroveren" (vraag 61, D) is nu de heer
+      verslaan.
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste
@@ -5476,8 +5496,10 @@ nog nodig is".
     handelaars) en een stad wordt, met schepenen die stemmen. Met het dorp komt de voerman met
     een kar, die stenen brengt (`spel.md`, "Handel"), en een tapperij of kroeg naast de herberg
     (Marcel, 27 sep).
-15. **Stadsrechten kopen.**
-16. **De opstand:** trainen, wapens verbergen, en het gevecht in beurten.
+15. **Stadsrechten kopen.** Sinds 6 okt via de koning, achter de heer om: hij zet de heer af en geeft jou stadsrechten
+    (vraag 126, d).
+16. **De opstand:** trainen, wapens verbergen, en het gevecht in beurten. Sinds 6 okt: je eigen dorp verdedigen en het
+    kasteel van de heer bestormen; en een derde weg, trouw, waarin jij de nieuwe heer wordt (vraag 126, d).
 
 *F. Afwerking*
 

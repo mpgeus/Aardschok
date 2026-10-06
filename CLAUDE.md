@@ -4,12 +4,12 @@ Aardschok (werktitel, past niet meer): een spel dat Marcel en Claude samen bouwe
 uiteindelijk te verkopen (Steam eerst, als los programma verpakt). Een bouw- en beheerspel in
 isometrisch beeld, met politiek en avontuur erin. Je bent de schout van een dorp onder een verwarde
 heer die alleen geld ziet. Je breidt het dorp uit tot een stad en bestuurt het met wetten. **Het doel
-wordt de heer verstoten en verslaan** (Marcel, 5 okt): hij krijgt een kasteel op de kaart, is sterk en
-smeedt bonden met de andere spelers, en je kunt ook aan zijn kant winnen, of hem via de koning laten
-afzetten; later misschien samen spelen, met een speler als heer. Hoe dat samengaat met wat er was (al
-het land veroveren of met iedereen bevriend raken, zoals in Civilization, 29 sep; iedereen super
-gelukkig, het eind van de kern), is vraag 126 (`ontwerp/spel.md`, "De heer als tegenstander"). Zie
-"Het spel in het kort" hieronder.
+is de heer verstoten en verslaan** (Marcel, 5 en 6 okt, vraag 126): hij krijgt een kasteel op de kaart,
+is sterk, smeedt bonden met de andere spelers en heeft per spel een ander karakter. Veroveren en
+bevriend raken (zoals in Civilization, 29 sep) zijn de weg erheen, langs drie wegen: de opstand, de
+koning achter zijn rug om, of trouw, en dan word jij de nieuwe heer. Iedereen super gelukkig, het eind
+van de kern, blijft het eind van de demo. Na de release misschien samen spelen, met een speler als heer
+(`ontwerp/spel.md`, "De heer als tegenstander"). Zie "Het spel in het kort" hieronder.
 
 Het beeld is isometrisch (Mystic Towers als voorbeeld), de HD-pixel art komt uit code, en
 rondlopen gaat naadloos over in een gevecht in beurten op dezelfde tegels (Fallout, Jagged
@@ -732,26 +732,30 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
 - De **heer** is verward en ziet alleen geld. Levert het dorp te weinig, dan straft hij: in het
   dorp, jou zelf, met hogere eisen, en met soldaten. Zijn **inner** komt kijken, en wat je opzij
   zet, moet uit zijn zicht. Hij stelt geen doelen (Marcel, 1 okt, vraag 78, a): "de heer moet alleen betaald
-  worden, en hij mag wel eisen stellen. Maar meer om het je moeilijk te maken."
+  worden, en hij mag wel eisen stellen. Maar meer om het je moeilijk te maken." Sinds 6 okt is hij ook de
+  tegenstander: met een kasteel, bondgenoten en per spel een ander karakter (vraag 126).
 - Het dorp groeit tot een stad met boeren, winkels, een markt en handel. Het zit vol **groepen**
   met eigen belangen (de politiek) en mensen met een verhaal (het avontuur).
 - Vrij word je door **stadsrechten** te kopen of door een **opstand**, een gevecht in beurten op
-  dezelfde kaart. Dan word je burgemeester. Sinds 5 okt (vraag 126, open) ook via de koning, achter de heer om, en
-  je kunt ook aan zijn kant winnen.
+  dezelfde kaart. Dan word je burgemeester. Sinds 6 okt (vraag 126) zijn het drie wegen: de opstand (je dorp
+  verdedigen, dan het kasteel bestormen), de koning (die zet de heer af en geeft jou stadsrechten), en trouw (je
+  onderwerpt de rest voor hem en wordt zijn erfgenaam). Een bond sluit je te voet, niet in een menu.
 - **Het einddoel** (Marcel, 1 okt, vraag 78, B en C; eerder, 29 sep: "al het land veroveren of met iedereen vriendjes
   maken. Denk aan civilisation"): "totale verovering van de wereld", en "dat mensen super gelukkig zijn en in al hun
   wensen zijn voorzien. Denk aan eisen van mensen zoals in anno 1602". Dat zijn twee manieren om te winnen (vraag
   79: "a twee manieren"). **Eerst een speelbare kern** ("Daarna komt oorlog etc erbij en de rest van het land
   diplomatie trading etc"): één stad die je wint als iedereen een jaar lang super gelukkig is, met wensen per stand en
   per huis (vraag 79 en 80), en klein: eerst drie standen op de huizen die er al zijn (vraag 82). Sinds 3 okt is dat eind
-  gebouwd (vraag 101, `js/einde.js`): een jaar lang alle huizen alles, vanaf 100 mensen, en het dorp viert het. Sinds 5 okt is de heer het doel (Marcel: "Het doel van het spel wordt de heer verstoten en
-  verslaan"); hoe het eind van de kern en het veroveren daarin passen, is vraag 126 (`spel.md`, "De heer als
-  tegenstander").
+  gebouwd (vraag 101, `js/einde.js`): een jaar lang alle huizen alles, vanaf 100 mensen, en het dorp viert het. Sinds 6
+  okt (vraag 126) is de heer het eind (Marcel: "Het doel van het spel wordt de heer verstoten en verslaan"), met
+  veroveren en bevriend raken als de weg erheen; het jaar van geluk blijft het eind van de demo, en wordt in het hele
+  spel kracht op weg naar de heer (`spel.md`, "De heer als tegenstander"). In de code verandert er nu niets.
 - **Tegenspelers** (Marcel, 29 sep, vraag 60, D): aan het begin kies je hoeveel. Het zijn dorpen met een AI, die
   tegelijk met jou beginnen, ergens op de kaart waar je ze nog moet vinden, en zelf bouwen om de grootste te worden;
   "intelligent genoeg om echt weerstand te bieden". Marcel koos (vraag 61 en 62): een land met provincies waar je
   dagen reist, zoals Lords of the Realm ("Denk in dagen"); een tegenspeler met een willekeurig dorp, een eigen weg en
-  een voorsprong; een moeilijkheidsgraad; winnen is voor nu alles veroveren, en een veroverd dorp blijft bestaan en
+  een voorsprong; een moeilijkheidsgraad; winnen is voor nu alles veroveren (sinds 6 okt de heer verslaan, met
+  veroveren als de weg erheen, vraag 126), en een veroverd dorp blijft bestaan en
   leid je erbij; 5 of 6 spelers kan. Het land (vraag 63, besloten): een kaart met provincies waarop je reist, en per
   provincie een kaart waar je loopt en vecht; elke tegenspeler een karakter met een voorsprong; een provincie zonder
   karakter bestuurt zichzelf en is zwakker. Met 0 tegenspelers blijft het spel zoals nu. Je eigen dorp krijgt bij
@@ -767,7 +771,8 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   bouwen en plannen. **Rijk worden en arm lijken** (de heer, de inner en het verstoppen), eerst de
   kern, blijft als de druk van boven. **Vechten** begint met aanvallen op je eigen dorp (rovers, de
   heervaart, dan een rivaal), in beurten op je eigen kaart met je militie; daarna de streek als
-  kaarten naast elkaar; tussen steden pas na de vrijheid.
+  kaarten naast elkaar; tussen dorpen sinds 6 okt al vóór de vrijheid, op weg naar de heer (vraag 126; eerst
+  was het: pas na de vrijheid).
 - Toon: zwarte satire. De heer is lachwekkend, zijn straffen niet (voorstel).
 - **Geld verdienen** (Marcel, 1 okt): "we moeten echt denken aan het commerciële deel van het project. Ik wil hier
   eigenlijk geld mee verdienen." En: "Volgens mij is ons idee dieper dan wat er op Steam staat? Ook de art stijl speelt
@@ -826,6 +831,14 @@ of `if (T.x)` voor een regel uit `js/` doet niets, behalve lezen alsof een deel 
 niet is. Ze blijven alleen waar een bladzijde een deel van het spel laadt (`gereedschap/wereld.html`
 zonder het vee, de heer en de bewoners, en de gespreksschrijver zonder de inner), op `T.ui`, en op
 gegevens (`T.MENSEN.x && ...`).
+
+**Zo dat samen spelen later kan** (Marcel, 6 okt, vraag 126, f: na de release, met een speler als heer). Twee regels
+voor nieuw werk: wat de heer (of een ander dorp) beslist, kiest hij uit dezelfde handelingen als een mens in zijn plaats
+zou hebben, zoals de raadsman kiest uit de antwoorden van een voorval (`T.raadsmanKeuze`), en niet langs een eigen weg
+eromheen; en een keuze die op de speler wacht, heeft ook een termijn en een uitkomst als die om is, zoals een gril (tien
+dagen) of een voorval (twee dagen, en ben je weg, dan beslist de raadsman). De pauze is gemak voor wie alleen speelt,
+geen regel. Wat er later nog
+bij moet (de regels in vaste tikken, geen `Math.random`), staat in `ontwerp/spel.md`, "De heer als tegenstander".
 
 Over het raster, het gevecht in beurten en de overgang ernaartoe.
 
