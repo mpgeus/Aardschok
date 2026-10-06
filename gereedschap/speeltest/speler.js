@@ -1489,6 +1489,67 @@
     };
     betrapt.voor = (D_) => D_ && D_.bazen && D_.bazen.betraptOp;
     na('betrapt', betrapt);
+    // Het bosboek (werklijst vraag 115; stap 4 van vraag 110, e): per jaar hoeveel houthakkers er stonden en hoeveel hout
+    // ze uit hun bomen haalden (js/bos.js), hoeveel bomen er omgingen en waarvoor (de houthakker, wie zijn plek rooit, wie
+    // ontgint), hoeveel boompjes er geplant werden, een jonge boom werden en een boom, hoeveel dagen een houthakker
+    // stilstond zonder boom (opgeteld over de houthakkers), en aan het eind van het jaar wat er stond: op de kaart, en
+    // binnen het bereik van de houthakkers.
+    const bosJaar = () => {
+      const j = Math.floor(s.kalender.dag / JAAR);
+      return boek.bos[j] || (boek.bos[j] = { houthakkers: 0, hout: 0, om: {}, geplant: 0, jong: 0, volgroeid: 0, stil: 0, eind: null });
+    };
+    const inStuk = (r, x, y) => !!r && x >= r.x && x < r.x + r.b && y >= r.y && y < r.y + r.h;
+    let hakt = 0;
+    let groeit = 0;
+    const houthakker = (r, voor, D_, g, hout) => {
+      hakt--;
+      if (D_ === s.dorp && hout > 0) bosJaar().hout += hout;
+    };
+    houthakker.voor = () => { hakt++; };
+    na('houthakkerHakte', houthakker);
+    const groei = () => { groeit--; };
+    groei.voor = () => { groeit++; };
+    na('tikBosDag', groei);
+    na('velBoom', (r, voor, D_, x, y) => {
+      if (!r || D_ !== s.dorp) return;
+      const veld = T.veldOp(D_.wereld, x, y);
+      const wie = hakt > 0 ? 'houthakker'
+        : (D_.gebouwen || []).some((g) => g.wachtOpRooien && inStuk(g.kavel, x, y)) ? 'rooien'
+          : veld && veld.ontginning ? 'ontginnen' : 'anders';
+      const b = bosJaar();
+      b.om[wie] = (b.om[wie] || 0) + 1;
+    });
+    na('zetVoorwerp', (r, voor, w_, v) => {
+      if (!v || w_ !== s.dorp.wereld) return;
+      if (v.soort === 'boompje') bosJaar().geplant++;
+      else if (groeit > 0 && v.geplant != null) bosJaar().jong++;
+      else if (groeit > 0 && T.NATUUR.bos.telt(w_, v.x, v.y, v)) bosJaar().volgroeid++;
+    });
+    const bosStand = (D_, hakkers) => {
+      const w_ = D_.wereld;
+      const r = T.BOS_INSTELLINGEN.hakStraal;
+      const stukken = hakkers.map((g) => {
+        const f = T.voetVanGebouw(g);
+        return { x: f.x - r, y: f.y - r, b: f.b + 2 * r, h: f.h + 2 * r };
+      });
+      const kaart = { bomen: 0, jong: 0, boompjes: 0, stronken: 0 };
+      const bij = { bomen: 0, jong: 0, boompjes: 0 };
+      for (const v of w_.voorwerpen) {
+        const wat = T.NATUUR.bos.telt(w_, v.x, v.y, v) ? 'bomen' : v.soort === 'boompje' ? 'boompjes' : v.geplant != null ? 'jong' : v.soort === 'boomstronk' ? 'stronken' : null;
+        if (!wat) continue;
+        kaart[wat]++;
+        if (wat !== 'stronken' && stukken.some((st) => inStuk(st, v.x, v.y))) bij[wat]++;
+      }
+      return { ...kaart, bij };
+    };
+    na('tikGebouwenDag', (r, voor, D_) => {
+      if (D_ !== s.dorp) return;
+      const b = bosJaar();
+      const hakkers = (D_.gebouwen || []).filter((g) => g.klaar && T.GEBOUWEN[g.soort] && T.GEBOUWEN[g.soort].bos);
+      b.houthakkers = Math.max(b.houthakkers, hakkers.length);
+      b.stil += hakkers.filter((g) => g.boom === null).length;
+      b.eind = bosStand(D_, hakkers);
+    });
     na('werdGezien', (r, voor, S_, D_, g, handeling, wat, n) => {
       boek.getuigen.push({ dag: heel(s.kalender.dag), datum: datum(), plek: T.verstopPlekVan(D_, g).naam, handeling, wat, n, wie: (r && r.bericht) || '' });
     });
@@ -1663,7 +1724,7 @@
         argwaan: { naInner: null, opSintMaarten: null }, heer: null, brief: null, naSintMaarten: null, luisterFouten: [],
         heerJaren: [], dorp: null, marktrecht: null, groei: [], raad: {}, voorvallen: [],
         jaren: jaren && (SPELERS[speler].jaren || 1) > 1 ? jaren : (SPELERS[speler].jaren || 1), graan: [], geluk: [],
-        reeks: { nu: 0, langste: 0 }, breuken: [], bosZoeken: [], betrapt: [],
+        reeks: { nu: 0, langste: 0 }, breuken: [], bosZoeken: [], betrapt: [], bos: [],
       };
       const s = S();
       luister();

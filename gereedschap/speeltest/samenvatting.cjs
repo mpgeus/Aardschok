@@ -125,6 +125,7 @@ exports.maak = function (uitslagen, stand) {
   uit.push(...deTweeBazen(goed));
   uit.push(...naarDeWinst(goed));
   uit.push(...hetOntginnen(goed));
+  uit.push(...hetBos(goed));
   uit.push(...vanGehuchtTotDorp(goed));
   uit.push(...hetGraanboek(goed));
   return uit.join('\n') + '\n';
@@ -278,6 +279,33 @@ function hetOntginnen(goed) {
     if (!stiekem) continue;
     const gevonden = som(u.bosZoeken || [], (z) => z.gevonden);
     uit.push(`- ${NAMEN[u.speler] || u.speler}, zaad ${u.zaad}: ${stiekem} ${stiekem === 1 ? 'stuk' : 'stukken'} stiekem ontgonnen, ${gevonden} gevonden, ${stiekem - gevonden} aan het eind nog niet.`);
+  }
+  uit.push('');
+  return uit;
+}
+
+// Het bos (js/bos.js; werklijst vraag 115, stap 4 van vraag 110, e): per jaar hoeveel houthakkers er stonden, hoeveel
+// hout ze uit hun bomen haalden, hoeveel bomen er omgingen en waarvoor, hoeveel boompjes er geplant werden, een jonge
+// boom werden en een boom, hoeveel dagen een houthakker stilstond zonder boom, en wat er aan het eind van het jaar stond,
+// op de kaart en binnen het bereik van de houthakkers (`bos` in speler.js).
+function hetBos(goed) {
+  const met = goed.filter((u) => (u.bos || []).some(Boolean));
+  if (!met.length) return [];
+  const uit = ['## Het bos', '', 'Per jaar: hoeveel houthakkers er stonden, hoeveel hout ze uit hun bomen haalden, welke bomen er omgingen (door de houthakker, voor een erf of een werkplaats die gerooid werd, of voor een akker die ontgonnen werd), hoeveel boompjes er geplant werden, een jonge boom werden en een boom, en hoeveel dagen een houthakker stilstond zonder boom (opgeteld over de houthakkers). Wat er staat, is aan het eind van het jaar: op de hele kaart, en binnen tien tegels van een houthakker. Het laatste jaar is de eerste maand, tot 1 grasmaand.', ''];
+  const kop = ['speler', 'zaad', 'jaar', 'houthakkers', 'hout gehakt', 'bomen om', 'geplant', 'jong, boom geworden', 'dagen stil', 'op de kaart', 'bij de houthakkers'];
+  uit.push(regel(kop), regel(kop.map(() => '---')));
+  for (const u of met) {
+    u.bos.forEach((b, j) => {
+      if (!b) return;
+      const om = Object.entries(b.om).map(([wie, n]) => `${n} ${wie}`).join(', ') || '0';
+      const e = b.eind || {};
+      const bij = e.bij || {};
+      uit.push(regel([
+        NAMEN[u.speler] || u.speler, u.zaad, String(j + 1), String(b.houthakkers), getal(b.hout), om, String(b.geplant),
+        `${b.jong}, ${b.volgroeid}`, String(b.stil),
+        `${e.bomen} bomen, ${e.jong} jong, ${e.boompjes} boompjes, ${e.stronken} stronken`, `${bij.bomen} bomen, ${bij.jong} jong, ${bij.boompjes} boompjes`,
+      ]));
+    });
   }
   uit.push('');
   return uit;
