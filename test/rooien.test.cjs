@@ -269,9 +269,22 @@ test('het looppad om de hut mag buiten het erf in het bos liggen: het gezin rooi
     }
     assert.ok(erf, 'er is zo een plek');
     vol(S);
-    const hut = T.gezinZoektEenErf(D);
+    const berichten = [];
+    const ui = T.ui;
+    T.ui = new Proxy({}, { get: (_, k) => (k === 'bericht' ? (t) => berichten.push(t) : () => undefined) });
+    let hut;
+    try {
+      hut = T.gezinZoektEenErf(D);
+    } finally {
+      T.ui = ui;
+    }
     assert.equal(hut && hut.erf, erf);
     assert.equal(hut.wachtOpRooien, true);
+    // Het bericht telt ook wat er in het looppad buiten het erf staat (tot 6 okt: "rooit eerst zijn erf: .").
+    const wat = T.watTeRooien(D, hut.kavel);
+    const opHetErf = T.watTeRooien(D, erf);
+    assert.ok(wat.bomen + wat.struiken > opHetErf.bomen + opHetErf.struiken, 'buiten het erf staat meer');
+    assert.ok(berichten.includes(`Het gezin van ${D.bewoners.mensen.find((p) => p.huis === hut).naam} rooit eerst zijn erf: ${T.rooiWoorden(wat)}.`), berichten.join(' | '));
     assert.ok(hut.kavel.x < erf.x || hut.kavel.y < erf.y || hut.kavel.x + hut.kavel.b > erf.x + erf.b || hut.kavel.y + hut.kavel.h > erf.y + erf.h, 'het stuk is groter dan het erf');
     for (const t of T.teRooienOp(D, hut.kavel)) {
       if (T.ontginWerkOp(w, t.x, t.y) === 'hakken') T.hakBoom(D, t.x, t.y);

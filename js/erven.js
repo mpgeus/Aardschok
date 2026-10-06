@@ -416,7 +416,9 @@
     D.woonruimte = T.telWoonruimte(D);
     T.wijzigBevolking(D, Math.min(T.GEBOUWEN_INSTELLINGEN.gezinGrootte, T.GEBOUWEN.hut.woonruimte), 'groei');
     if (hut.wachtOpRooien) {
-      T.zeg(D, `${T.hoofdletter(gezinVan(D, hut))} rooit eerst zijn erf: ${T.rooiWoorden(T.watTeRooien(D, erf))}.`);
+      // Wat het gezin rooit, is zijn kavel: het erf, en het looppad om de plek van de hut, ook buiten het erf. Telde dit
+      // alleen het erf, dan zei het "rooit eerst zijn erf: ." als er alleen in dat looppad iets stond (speeltest, 6 okt).
+      T.zeg(D, `${T.hoofdletter(gezinVan(D, hut))} rooit eerst zijn erf: ${T.rooiWoorden(T.watTeRooien(D, hut.kavel))}.`);
     } else if (hut.wachtOpHout) {
       const hout = T.GEBOUWEN.hut.kosten.hout;
       T.zeg(D, `${T.hoofdletter(gezinVan(D, hut))} wacht op hout voor zijn hut: daar is ${hout} hout voor nodig.`, 'gevaar');
