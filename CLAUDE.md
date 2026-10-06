@@ -390,7 +390,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   rooit met de bijl zoals een boer ontgint (`T.werkVeldwerkBij` in `js/veldwerk.js`; het gezin van een erf helpt,
   `T.helpAnker`) en werkt zolang nergens; is het stuk vrij, dan ligt de bouwplaats er de volgende dag, en na `rooiDagen`
   rooien de buren de rest (`T.tikRooienDag`). Een stuk in het bos van de heer (`T.inHetBosVanDeHeer`: zoveel bomen als een
-  stuk bos bij het ontginnen) kost zijn gunst.
+  stuk bos bij het ontginnen) kost zijn gunst. **Een huis dat doorgroeit** (vraag 130) en waar geen vorm past zoals hij is,
+  rooit net zo wat op zijn nieuwe voet staat (`g.rooitVoorGroei`, `T.beginRooienVoorGroei`; het gezin rooit, `T.gezinRooit`),
+  met de vorm die het minst te rooien heeft (`planVoorGroei` in `js/behoeften.js`); een appelboom gaat alleen om als geen
+  vorm zonder hem past (`v.omhakken`). Wat het dan nog tegenhoudt, zegt het briefje (`T.waaromGroeitHetNiet`).
 - `js/bouwstijl.js`: **de bouwstijl van een land** (vraag 114, stap 2, 4 okt): elk land van de maker bouwt in één stijl
   (`w.stijl`, uit het nummer van het land, `T.stijlVoorLand`; het ontworpen gehucht heeft er geen en bouwt zoals altijd),
   met per soort een paar vormen, elk met de deur naar elke kant. De huizenbouwer noemt dat een stand; in het spel heet het
@@ -452,7 +455,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`T.kringTekst`). **Doorgroeien per huis** (2b, in `js/behoeften.js`): heeft een huis een maand op rij alles, dan
   groeit het door naar de volgende stand, als de bouwstof er is (`bouwstof`: een huis hout, een stenen huis steen), ook
   de woningen van het begin (`T.zetBestaandeGebouwen` geeft ze hun tekening als voorwerp), en het rijst op in de laatste
-  bouwfasen terwijl zijn mensen erin blijven wonen (alleen het voorwerp is `inAanbouw`, `groeiVanafFase`; G, vraag 114); achteruitgaan is zacht (een
+  bouwfasen terwijl zijn mensen erin blijven wonen (alleen het voorwerp is `inAanbouw`, `groeiVanafFase`; G, vraag 114);
+  staat er iets in de weg, dan rooit het gezin het eerst (vraag 130, `js/bos.js`); achteruitgaan is zacht (een
   gezin trekt alleen weg uit een huis onder de vertrekdrempel) of streng (de spelregel "Achteruitgaan"); een hogere stand
   betaalt meer belasting (`T.belastbaar`). De spelregel "Wensen" op "Het dorp als geheel" is het spel van vóór 1 okt; de
   getallen in `T.WENSEN_INSTELLINGEN`.

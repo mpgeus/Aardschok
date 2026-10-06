@@ -446,10 +446,16 @@ letter voor letter mee zoals ervoor).
   met dezelfde vorm, veldsteen en een stenen schoorsteen, onder riet (vraag 85, d; leien en pannen staan op de proefplaat
   van 1 okt): een huis versteent op zijn eigen grond. Het broertje van het huis met de schoor is twee tegels smaller, want
   een stenen muur heeft geen schoor. Een huis groeit vanaf zijn linkerbovenhoek naar rechts en naar onder, en waar het
-  grotere huis komt, mag niets vast staan; past geen vorm, dan wacht het, zonder het te zeggen. **Open (vraag 130, 6
-  okt):** op elk land van de maker staat bij het begin een hut die zo nooit kan groeien, meestal door één struik, en dan
-  wint het dorp nooit; voorstel: wie doorgroeit, rooit wat in de weg staat, zoals bij een erf, en het briefje zegt
-  waarom een huis niet groeit.
+  grotere huis komt, mag niets vast staan. **Wie doorgroeit, rooit wat in de weg staat** (vraag 130, 6 okt; Marcel: "Ok",
+  en "A" voor de appelboom): past geen vorm zoals hij is, dan rooit het gezin eerst wat op de nieuwe voet staat (een
+  struik, een stronk, een boom), zoals een gezin zijn erf: het hoofd met de bijl, zijn gezin helpt, het hout gaat naar de
+  schuur, en zolang werkt het gezin nergens (een struik is tien uur werk, dus meestal anderhalve dag). Na een maand rooien
+  de buren de rest. De vorm met het minste te rooien gaat voor, en de appelboom die de maker bij elk huis zet, gaat alleen
+  om als geen enkele vorm zonder hem past. Wat al past, groeit zoals altijd; de bouwstof gaat er pas af als het huis
+  groeit. Wat het dan nog tegenhoudt (een gebouw, een erf, de deur van een ander gebouw, een rots, het water), zegt het
+  briefje bij het huis: "Het kan geen huis worden: een erf ligt in de weg." (c; eerst stond er voor altijd "Nog 0 dagen
+  alles"). Op veertig landen van de maker konden bij het begin 13 hutten niet groeien; zo kunnen ze het allemaal
+  (`js/behoeften.js`, `planVoorGroei`; `js/bos.js`, `rooitVoorGroei`).
 - **Achteruitgaan: zacht** (vraag 85, c), zoals in Anno 1602: mist een huis iets, dan groeit het niet verder en is het
   minder tevreden; er trekt pas een gezin weg als het huis onder de vertrekdrempel zakt, en dat gebeurt alleen als het
   eten of het brandhout mist. De spelregel "Achteruitgaan" kan het streng: mist een huis een maand iets, dan trekt zijn
@@ -3378,7 +3384,8 @@ wordt gepraat:
   en struiken in de wei kosten niets. De speler van de speeltest legt een erf liever niet in het bos van de heer, en bij
   gelijke kringen liever waar minder te rooien is. Een werkplaats die een inwoner vraagt, rooit zijn plek net zo als er
   geen open grond meer is (stap 2; "De stad groeit door haar mensen", Geen open grond meer), en de houthakker hakt en
-  plant (stap 3; "De houthakker hakt en plant").
+  plant (stap 3; "De houthakker hakt en plant"). En een huis dat doorgroeit, rooit net zo wat op zijn nieuwe voet staat
+  (vraag 130; "De wensen van de mensen, per stand", Doorgroeien).
 - **Een huis met plaats gaat voor.** Is het dorp vol, dan neemt een nieuw gezin op een groeidag het vrije erf dat
   het dichtst bij de werkplaats ligt die de meeste handen mist (anders bij het plein), en komt over de weg. Het
   zet er zelf een hut op (8 hout uit de voorraad, twee dagen), woont er al terwijl hij oprijst, en is er overdag
