@@ -296,11 +296,13 @@
       // Ontginnen (js/ontginnen.js; werklijst vraag 107, e en g): ja, zoals een bouwverzoek, zolang de baas die het kost
       // daarna op 30 of meer staat (de grens die de slimme ook bij een gril houdt): eerst de heide (het vertrouwen van het
       // dorp; elk volgend stuk kost meer, f3), dan het bos, gemeld (de gunst van de heer). De sluwe bouwer doet het bos
-      // stiekem als de inner het daar niet ziet.
+      // stiekem als de inner het daar niet ziet. Net zo een werkplaats die eerst in het bos van de heer rooit (js/bos.js;
+      // werklijst vraag 110, e): die kost zijn gunst. In de speeltest van 6 okt zei de bouwer op 62707 met 5 gunst nog ja
+      // tegen een jager in het bos, en was hij zijn ambt kwijt.
       const verzoek = L.bouw || L.ontgin;
       const magJa = (b) => {
         const bazen = T.bazenNu(s.dorp);
-        if (!L.ontgin || !bazen) return true;
+        if (!(L.ontgin || (L.bouw && L.bouw.bos)) || !bazen) return true;
         const v = /vertrouwen van het dorp −(\d+)/.exec(prijsVan(b));
         const g = /gunst van de heer −(\d+)/.exec(prijsVan(b));
         return (!v || bazen.vertrouwen - Number(v[1]) >= 30) && (!g || bazen.gunst - Number(g[1]) >= 30);
