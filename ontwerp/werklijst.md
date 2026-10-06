@@ -5815,6 +5815,16 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     Klaar als: in de speeltest van vier jaar groeien de hutten van de maker door, en wint een dorp van de bouwer.
     **Marcel koos (6 okt): "Ok".** Dus a met c: wie doorgroeit, rooit wat in de weg staat, zoals een gezin zijn erf, en
     het briefje bij de muis zegt waarom een huis dat alles heeft niet groeit; daarna de speeltest van vier jaar opnieuw.
+    **Gemeten vóór het bouwen** (6 okt, zevenendertigste sessie, bij het plan; elke vorm die `kiesGroei` probeert, bij het
+    begin van het spel, op veertig landen van de maker: 1 tot 20, de drie van de speeltest en zeventien andere): van de 160
+    hutten en huizen die kunnen doorgroeien, kunnen er 13 het niet. Met a groeien er 10 (één tot drie dingen te rooien:
+    een struik, een stronk, een bessenstruik, een eik); de andere drie (op land 1, 17 en 56789) alleen als ook de
+    appelboom weg mag, want die staat bij elke vorm in de weg: de maker zet bij elk huis een appelboom of een eik, binnen
+    drie tegels, en een huis groeit naar rechts en naar onder. Iets anders (een gebouw, een erf, een deur) houdt bij het
+    begin geen enkele hut tegen. De drie landen van de speeltest hebben geen appelboom in de weg, dus de speeltest laat
+    het niet zien. En nu zegt het briefje van zo'n hut voor altijd "Nog 0 dagen alles, dan wordt het een huis (8 hout)".
+    Vraag aan Marcel: mag de appelboom ook om, alleen als geen enkele vorm zonder past (dan staat er op geen van de
+    veertig landen bij het begin nog een hut die nooit kan groeien), of houdt hij het tegen, en zegt het briefje het?
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
