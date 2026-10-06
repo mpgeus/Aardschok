@@ -4,10 +4,11 @@
 // kroon in het licht (anders is elke bult even licht en wordt de kroon broccoli), en blaadjes die
 // als toetsen op het pixelraster staan, zoals een tekenaar ze zet.
 //
-// Verder: struiken, varens, gras, bloemen, paddenstoelen, een stronk en stenen; een grasvloer voor
-// dozen (zoals zandVloer in kamers.cjs); slagschaduw die tot een hoge kroon reikt; en ontspikkel,
-// dat losse pixels in loof weghaalt. Alles staat met de voet op het midden van de tegel en is
-// gemaakt voor richting 'Z': het licht op de vorm en de blaadjes rekenen met die kant.
+// Verder: een boompje en jonge bomen (JONG), struiken, varens, gras, bloemen, paddenstoelen, een
+// stronk en stenen; een grasvloer voor dozen (zoals zandVloer in kamers.cjs); slagschaduw die tot
+// een hoge kroon reikt; en ontspikkel, dat losse pixels in loof weghaalt. Alles staat met de voet op
+// het midden van de tegel en is gemaakt voor richting 'Z': het licht op de vorm en de blaadjes
+// rekenen met die kant.
 'use strict';
 const K = require('./kern.cjs');
 const { sdf, klem, mix, hash, rnd, ruis2, ruis3, RAMP, UIT, VLAG, TEGEL, PXH } = K;
@@ -322,14 +323,15 @@ function schorsMat(o = {}) {
 
 // Berkenbast: wit, met korte donkere streepjes dwars (lenticellen), donkere vlekken, en een
 // ruwe zwarte voet.
-function berkMat(zaad) {
+function berkMat(zaad, hoog = 1) {
   return {
     ramp: 'berk',
     lo: 1.2,
     hi: 5.6,
     omslag: 0.25,
     patroon: (x, y, z, nx, ny, nz, stap) => {
-      const voet = ruis3(x * 0.25, y * 0.25, z * 0.12, zaad) - (z - 8) / 34;
+      // de voet reikt zo hoog als de boom groot is (hoog: zie JONG)
+      const voet = ruis3(x * 0.25, y * 0.25, z * 0.12, zaad) - (z / hoog - 8) / 34;
       if (voet > 0.55) return { ramp: 'schors', stap: klem(stap - 3.2, 0.6, 2.4) };
       const streep = ruis3(x * 0.3, y * 0.3, z * 2, zaad + 1);
       if (streep > 0.76) return { ramp: 'schors', stap: klem(stap - 3.4, 0.8, 2) };
@@ -338,6 +340,54 @@ function berkMat(zaad) {
       return 0;
     },
   };
+}
+
+// ---------------------------------------------------------------- jonge bomen
+
+// De houthakker plant een boompje naast elke stronk, en dat groeit in een jaar of twee via een
+// jonge boom tot een boom (vraag 115, f). Een jonge eik, den of berk (o.jong) is dezelfde boom uit
+// hetzelfde zaad, maar zo'n drie vijfde zo hoog, smaller, met een dunnere stam en een kleinere,
+// lichtere kroon van minder klompen. hoog, breed en dik (en twijg: de takjes van de berk) zijn
+// factoren op de maten van de volwassen boom; vol rekent overal met 1, zodat een volwassen boom
+// pixel voor pixel blijft wat hij was. Verder hoeveel wortels hij heeft, bij de eik de opties van
+// zijn kroon en tot welke klompen zijn takken reiken (takTot), en bij de den en de berk de opties
+// die ze al hadden.
+const JONG = {
+  vol: { hoog: 1, breed: 1, dik: 1, twijg: 1 },
+  eik: { hoog: 0.6, breed: 0.5, dik: 0.5, wortels: 4, takTot: 0.6, kroon: { n: 7, straal: [16, 21], bult: 10, ver: 0.78, kern: false } },
+  den: { hoog: 0.6, breed: 0.6, dik: 0.6, wortels: 4, opties: { lagen: 6, onder: 36, breed: 40, dik: 12, zak: 10, hang: 0.006 } },
+  berk: { hoog: 0.6, breed: 0.6, dik: 0.55, twijg: 0.7, opties: { hoogte: 114, RK: [32, 31, 48], n: 10, straal: [9, 13], bult: 9 } },
+};
+
+// Een boompje dat net geplant is: een dun stammetje met een paar takjes en een handvol blad, zo'n
+// halve mens hoog. Er is nog geen soort aan te zien.
+function boompje(zaad = 1, o = {}) {
+  const R = (i) => rnd(zaad, i, 97);
+  const mat = [schorsMat({ zaad, lo: 1.2, hi: 5 })];
+  const delen = [];
+  const top = [R(1) * 3 - 1.5, R(2) * 3 - 1.5, 35];
+  const stam = bocht([0, 0, -2], [R(3) * 2 - 1, R(4) * 2 - 1, 16], top, 4);
+  delen.push(tak(stam, [1.4, 1.2, 1, 0.85, 0.7], 0, 1, 0.4));
+  // takjes: om en om schuin omhoog uit de bovenste helft, elk met een plukje blad aan het eind
+  const plukjes = [[top, 3.6]];
+  const n = 5;
+  for (let i = 0; i < n; i++) {
+    const a = i * 2.4 + R(10 + i) * 0.8;
+    const van = langs(stam[1], top, 0.2 + (i / n) * 0.7);
+    const l = 7 + R(20 + i) * 2 - i * 0.6;
+    const eind = [van[0] + Math.cos(a) * l, van[1] + Math.sin(a) * l, van[2] + 6 + R(30 + i) * 3];
+    delen.push(tak([van, eind], [0.6, 0.45], 0, 2, 0.3));
+    plukjes.push([eind, 2.8 + R(40 + i) * 1]);
+  }
+  const C = [top[0], top[1], 26];
+  const RK = [12, 12, 12];
+  plukjes.forEach(([p, r], i) => {
+    const s = [r * 1.15, r * 1.15, r * 0.86];
+    const m = loof(mat, 'blad', zaad * 10 + i, { klomp: [p, s], kroon: [C, RK], lo: 2.4, hi: 4.2, plus: 0.3, toetsen: { raster: 5, kans: 0.6 } });
+    delen.push(klomp(p, s, 3.5, m, 10 + i, zaad * 10 + i, { rMin: 0.5 }));
+  });
+  delen.push(onderGrond);
+  return model(delen, mat, omhul(delen));
 }
 
 // ---------------------------------------------------------------- eik
@@ -358,29 +408,31 @@ function wortels(delen, n, zaad, o = {}) {
 
 // Een eik: dikke stam met uitwaaierende wortels, een brede kroon van klompen, en takken die je
 // tussen de klompen door ziet. o.herfst: bruin, oranje en rood blad, en blad op de grond.
+// o.jong: een jonge eik uit hetzelfde zaad (jongeEik), zie JONG.
 function eik(zaad = 1, o = {}) {
   const R = (i) => rnd(zaad, i, 17);
   const herfst = !!o.herfst;
+  const J = o.jong ? JONG.eik : JONG.vol;
   const mat = [schorsMat({ zaad })];
   const delen = [];
-  const scheef = [R(1) * 16 - 8, R(2) * 16 - 8];
+  const scheef = [(R(1) * 16 - 8) * J.breed, (R(2) * 16 - 8) * J.breed];
   // het zaad bepaalt ook de maat: een lage brede eik of een hogere smallere
-  const breed = 0.9 + R(5) * 0.2;
-  const hoog = 0.92 + R(6) * 0.16;
+  const breed = (0.9 + R(5) * 0.2) * J.breed;
+  const hoog = (0.92 + R(6) * 0.16) * J.hoog;
   const vork = [scheef[0], scheef[1], (66 + R(3) * 14) * hoog];
-  delen.push(tak(bocht([0, 0, -3], [scheef[0] * 0.1 + R(4) * 6 - 3, scheef[1] * 0.1, 34], vork, 5), [14, 11, 9.8, 9.2, 8.8, 8.4], 0, 1, 3));
-  wortels(delen, 6, zaad, { lengte: [22, 32], straal: 7.5 });
+  delen.push(tak(bocht([0, 0, -3], [scheef[0] * 0.1 + R(4) * 6 * J.breed - 3 * J.breed, scheef[1] * 0.1, 34 * J.hoog], vork, 5), [14, 11, 9.8, 9.2, 8.8, 8.4].map((r) => r * J.dik), 0, 1, 3 * J.dik));
+  wortels(delen, J.wortels ?? 6, zaad, { lengte: [22 * J.breed, 32 * J.breed], straal: 7.5 * J.dik, hoogte: 22 * J.hoog });
   const C = [scheef[0], scheef[1], 152 * hoog];
   const RK = [84 * breed, 80 * breed, (54 + R(7) * 8) * hoog];
   // herfst: vooral oranje, met vaste tussenpozen een gele en een rode klomp, verschoven per zaad
   const ramp = herfst ? (i) => ((i + zaad) % 6 === 2 ? 'goud' : (i + 2 * zaad) % 9 === 4 ? 'rood' : 'herfst') : 'blad';
-  const klompen = kroon(delen, mat, { C, RK, n: 11 + (zaad % 3), zaad, ramp, loof: o.loof });
-  // takken van de vork naar de onderste klompen
+  const klompen = kroon(delen, mat, { C, RK, n: 11 + (zaad % 3), zaad, ramp, loof: o.loof, ...J.kroon });
+  // takken van de vork naar de onderste klompen (bij een jonge eik naar meer: zijn kroon is open)
   for (const [p, , zz] of klompen) {
-    if (zz > 0.15) continue;
+    if (zz > (J.takTot ?? 0.15)) continue;
     const eind = langs(vork, p, 0.72);
     const mid = [mix(vork[0], p[0], 0.45), mix(vork[1], p[1], 0.45), mix(vork[2], p[2], 0.2)];
-    delen.push(tak(bocht(vork, mid, eind, 3), [7, 5.2, 3.8, 2.8], 0, 2, 2));
+    delen.push(tak(bocht(vork, mid, eind, 3), [7, 5.2, 3.8, 2.8].map((r) => r * J.dik), 0, 2, 2 * J.dik));
   }
   if (herfst) gevallenBlad(delen, mat, zaad, { n: 26, straal: 37 });
   delen.push(onderGrond);
@@ -461,23 +513,25 @@ function sparLaag(z0, R, n, fase, L, m, deel, zaad, o = {}) {
 }
 
 // Een spar: een rechte dunne stam en lagen hangende takken die naar boven kleiner worden, met
-// een spits erop.
+// een spits erop. o.jong: een jonge den uit hetzelfde zaad (jongeDen), zie JONG.
 function den(zaad = 1, o = {}) {
   const R = (i) => rnd(zaad, i, 23);
-  const H = 286 + R(1) * 22;
+  const J = o.jong ? JONG.den : JONG.vol;
+  o = { ...J.opties, ...o };
+  const H = (286 + R(1) * 22) * J.hoog;
   const mat = [schorsMat({ zaad, ramp: 'hout', lo: 0.8, hi: 4.6, rek: 0.12 })];
   const delen = [];
-  delen.push(tak([[0, 0, -3], [0, 0, H * 0.5], [0, 0, H - 12]], [7.5, 4.6, 1.4], 0, 1, 0));
-  wortels(delen, 5, zaad, { lengte: [13, 18], straal: 4.2, hoogte: 11 });
+  delen.push(tak([[0, 0, -3], [0, 0, H * 0.5], [0, 0, H - 12 * J.hoog]], [7.5, 4.6, 1.4].map((r) => r * J.dik), 0, 1, 0));
+  wortels(delen, J.wortels ?? 5, zaad, { lengte: [13 * J.breed, 18 * J.breed], straal: 4.2 * J.dik, hoogte: 11 * J.hoog });
   const n = o.lagen ?? 7;
   const kroonC = [0, 0, H * 0.55];
-  const kroonS = [60, 60, H * 0.5];
+  const kroonS = [60 * J.breed, 60 * J.breed, H * 0.5];
   const naald = { vormen: NAALDEN, raster: 5, kans: 0.85, drempel: 3.2 };
   const laag = { helling: o.helling, hang: o.hang, dik: o.dik, lob: o.lob, zak: o.zak, macht: o.macht, bult: o.bultVorm, tussen: o.tussen };
   for (let i = 0; i < n; i++) {
     const t = i / (n - 1);
-    const z0 = mix(o.onder ?? 74, H - 30, t ** 0.92);
-    const Rl = mix(o.breed ?? 62, 15, t) * (0.92 + R(10 + i) * 0.14);
+    const z0 = mix(o.onder ?? 74, H - 30 * J.hoog, t ** 0.92);
+    const Rl = mix(o.breed ?? 62, 15 * J.breed, t) * (0.92 + R(10 + i) * 0.14);
     const fase = R(20 + i) * 6.28;
     const takken = o.takken ?? 7 + (i % 3);
     const m = loof(mat, 'den', zaad * 100 + i, {
@@ -495,8 +549,8 @@ function den(zaad = 1, o = {}) {
     delen.push(sparLaag(z0, Rl, takken, fase, o.bult ?? 5, m, 10 + i, zaad * 100 + i, laag));
   }
   // de spits
-  const mt = loof(mat, 'den', zaad * 100 + 50, { klomp: [[0, 0, H - 14], [8, 8, 16]], kroon: [kroonC, kroonS], lo: 1.8, hi: 3.6, vorm: 2, diep: 0, toetsen: naald });
-  delen.push(bultig((x, y, z) => sdf.rondeKegel(x, y, z, 0, 0, H - 34, 0, 0, H + 6, 9, 1.2), [0, 0, H - 14, 22], 6, mt, 30, zaad * 100 + 50, { plat: 1.3 }));
+  const mt = loof(mat, 'den', zaad * 100 + 50, { klomp: [[0, 0, H - 14 * J.hoog], [8 * J.breed, 8 * J.breed, 16 * J.hoog]], kroon: [kroonC, kroonS], lo: 1.8, hi: 3.6, vorm: 2, diep: 0, toetsen: naald });
+  delen.push(bultig((x, y, z) => sdf.rondeKegel(x, y, z, 0, 0, H - 34 * J.hoog, 0, 0, H + 6 * J.hoog, 9 * J.breed, 1.2), [0, 0, H - 14 * J.hoog, 22 * J.hoog], 6, mt, 30, zaad * 100 + 50, { plat: 1.3 }));
   delen.push(onderGrond);
   return model(delen, mat, omhul(delen));
 }
@@ -504,20 +558,23 @@ function den(zaad = 1, o = {}) {
 // ---------------------------------------------------------------- berk
 
 // Een berk: een slanke witte stam met zwarte vlekken, dunne takken omhoog en een luchtige kroon
-// van kleine klompen, met gaten waardoor je de takken ziet.
+// van kleine klompen, met gaten waardoor je de takken ziet. o.jong: een jonge berk uit hetzelfde
+// zaad (jongeBerk), zie JONG.
 function berk(zaad = 1, o = {}) {
   const R = (i) => rnd(zaad, i, 31);
-  const mat = [berkMat(zaad), schorsMat({ zaad, ramp: 'vacht', lo: 1, hi: 4.4 })];
+  const J = o.jong ? JONG.berk : JONG.vol;
+  o = { ...J.opties, ...o };
+  const mat = [berkMat(zaad, J.hoog), schorsMat({ zaad, ramp: 'vacht', lo: 1, hi: 4.4 })];
   const delen = [];
-  const top = [R(1) * 18 - 9, R(2) * 18 - 9, 218];
-  const stam = bocht([0, 0, -3], [R(3) * 16 - 8, R(4) * 16 - 8, 110], top, 7);
-  delen.push(tak(stam, [7, 6.2, 5.6, 5, 4.4, 3.8, 3.1, 2.4], 0, 1, 1.5));
-  wortels(delen, 4, zaad, { lengte: [11, 15], straal: 5, hoogte: 9 });
+  const top = [(R(1) * 18 - 9) * J.breed, (R(2) * 18 - 9) * J.breed, 218 * J.hoog];
+  const stam = bocht([0, 0, -3], [(R(3) * 16 - 8) * J.breed, (R(4) * 16 - 8) * J.breed, 110 * J.hoog], top, 7);
+  delen.push(tak(stam, [7, 6.2, 5.6, 5, 4.4, 3.8, 3.1, 2.4].map((r) => r * J.dik), 0, 1, 1.5 * J.dik));
+  wortels(delen, 4, zaad, { lengte: [11 * J.breed, 15 * J.breed], straal: 5 * J.dik, hoogte: 9 * J.hoog });
   // een tweede, dunnere stam bij de helft van de bomen
   if (R(5) > 0.5) {
     const a = R(6) * Math.PI * 2;
-    const top2 = [Math.cos(a) * 34, Math.sin(a) * 34, 170];
-    delen.push(tak(bocht([Math.cos(a) * 2, Math.sin(a) * 2, 4], [Math.cos(a) * 12, Math.sin(a) * 12, 80], top2, 5), [4.6, 4, 3.4, 2.8, 2.2, 1.8], 0, 2, 1.5));
+    const top2 = [Math.cos(a) * 34 * J.breed, Math.sin(a) * 34 * J.breed, 170 * J.hoog];
+    delen.push(tak(bocht([Math.cos(a) * 2, Math.sin(a) * 2, 4], [Math.cos(a) * 12 * J.breed, Math.sin(a) * 12 * J.breed, 80 * J.hoog], top2, 5), [4.6, 4, 3.4, 2.8, 2.2, 1.8].map((r) => r * J.dik), 0, 2, 1.5 * J.dik));
   }
   const C = [top[0] * 0.7, top[1] * 0.7, o.hoogte ?? 190];
   const RK = o.RK ?? [54, 52, 80];
@@ -540,10 +597,10 @@ function berk(zaad = 1, o = {}) {
   });
   // takken: van de stam omhoog en naar buiten, naar elke klomp
   klompen.forEach(([p], i) => {
-    const t = klem((p[2] - 90) / 140, 0.15, 0.85);
+    const t = klem((p[2] - 90 * J.hoog) / (140 * J.hoog), 0.15, 0.85);
     const van = stam[Math.round(t * (stam.length - 1))];
     const mid = [mix(van[0], p[0], 0.5), mix(van[1], p[1], 0.5), mix(van[2], p[2], 0.7)];
-    delen.push(tak(bocht(van, mid, langs(van, p, 0.85), 3), [2.6, 2, 1.5, 1.1], i % 2 ? 0 : 1, 2, 1));
+    delen.push(tak(bocht(van, mid, langs(van, p, 0.85), 3), [2.6, 2, 1.5, 1.1].map((r) => r * J.twijg), i % 2 ? 0 : 1, 2, 1));
   });
   delen.push(onderGrond);
   return model(delen, mat, omhul(delen));
@@ -1322,6 +1379,9 @@ function ontspikkel(plaat, rampen = ['blad', 'den', 'herfst', 'gras', 'mos', 'go
 const bessenStruik = (zaad = 1, o = {}) => struik(zaad, { ...o, bessen: true });
 const hoogGras = (zaad = 1, o = {}) => grasPol(zaad, { ...o, hoog: true });
 const kleineRots = (zaad = 1, o = {}) => rots(zaad, { ...o, klein: true });
+const jongeEik = (zaad = 1, o = {}) => eik(zaad, { ...o, jong: true });
+const jongeDen = (zaad = 1, o = {}) => den(zaad, { ...o, jong: true });
+const jongeBerk = (zaad = 1, o = {}) => berk(zaad, { ...o, jong: true });
 
 const BEGROEIING = ['struik', 'bessenStruik', 'varen', 'grasPol', 'hoogGras', 'bloemen', 'paddenstoelen', 'boomstronk', 'rots', 'kleineRots'];
 
@@ -1333,6 +1393,10 @@ module.exports = {
   dodeBoom,
   wilg,
   appelboom,
+  boompje,
+  jongeEik,
+  jongeDen,
+  jongeBerk,
   struik,
   bessenStruik,
   varen,
