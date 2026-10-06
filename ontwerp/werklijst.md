@@ -5809,6 +5809,30 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     Klaar als: in de speeltest van vier jaar groeien de hutten van de maker door, en wint een dorp van de bouwer.
     **Marcel koos (6 okt): "Ok".** Dus a met c: wie doorgroeit, rooit wat in de weg staat, zoals een gezin zijn erf, en
     het briefje bij de muis zegt waarom een huis dat alles heeft niet groeit; daarna de speeltest van vier jaar opnieuw.
+    **Gemeten vóór het bouwen** (6 okt, zevenendertigste sessie; een meting in Node, niet in git, met dezelfde vormen als
+    `kiesGroei`): op 201 landen van de maker (de zaden 1000 tot 2400, om de zeven) staan bij het begin 402 hutten. 344
+    kunnen doorgroeien, 58 niet, op 48 landen (een op de vier). Met a kunnen er 36 van die 58 alsnog; de andere 22, op 16
+    landen (een op de twaalf), houdt bij elke vorm een appelboom tegen, en verder niets. Een gebouw, een rots of een erf
+    stond bij het begin nergens in de weg; dat komt pas later, zoals het erf van de bouwer op 62707. Op de drie landen van
+    de speeltest en op land 5 is a genoeg: van de acht hutten zitten er vijf vast, en bij elk staat er alleen een struik,
+    een bessenstruik, een eik of een stronk.
+    **Plan van Claude (wacht op Marcel):**
+    1. **a, het gezin rooit voor zijn nieuwe huis.** Heeft een huis een maand alles en ligt de bouwstof er, maar past geen
+       vorm, dan kiest het de vorm met het minste te rooien, waar alleen staat wat te rooien is. Het hoofd van het gezin
+       rooit het met de bijl, het gezin helpt, het hout gaat naar de schuur, en na een maand rooien de buren de rest: het
+       rooien van een erf (`js/bos.js`), maar aan het eind groeit het huis door, in plaats van dat er een hut op de kaart
+       komt. Het gezin blijft erin wonen. Meestal is het één struik, een dag of twee werk.
+    2. **c, het briefje zegt waarom.** Bij de muis: "Het gezin rooit eerst een struik, dan groeit het huis", of "Er staat
+       een appelboom waar het grotere huis moet komen" (of het erf van de buren, of een gebouw). Eén regel zegt het.
+    3. **Toetsen**, en dan de speeltest van vier jaar, de bouwer op de drie landen. Klaar als: de hutten van de maker
+       groeien door, en een dorp van de bouwer wint.
+    Vragen: **a2**, mag het gezin ook zijn eigen appelboom rooien als die staat waar het grotere huis moet komen? Zonder dat
+    blijft op een op de twaalf landen een hut vanaf het begin een hut, en is dat land niet te winnen. Bij het ontginnen
+    blijft een appelboom staan, want hij is van iemand; deze is van het gezin zelf. **c2**, zegt ook de raad het, als zo'n
+    huis de winst tegenhoudt? Na de laatste trede zie je anders niet waarom de teller niet loopt. **d**, mag een erf niet
+    meer op de grond waar een huis ernaast nog moet doorgroeien ("Hier groeit straks het huis van ...")? Op 62707 legde de
+    bouwer er een erf onder, en dan helpt rooien niet meer. Mijn voorkeur: alle drie ja; ze zijn klein, en elk houdt een
+    dorp tegen dat niet meer kan winnen.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
