@@ -598,7 +598,9 @@
   // tweede vond in de speeltest van vraag 94 geen plek meer), dan een markt, een kapel en een put. Het huis komt ergens op
   // het erf, dus telt het midden van het erf, met 2 tegels speling. Van de plekken waar een erf past, die met de beste
   // kringen; bij gelijk spel het dichtst bij de deur van de schout, zoals bouw(). Tot 3 okt kwam een erf gewoon zo dicht
-  // mogelijk bij de schout, en misten een paar huizen het hele tweede jaar de herberg of een markt.
+  // mogelijk bij de schout, en misten een paar huizen het hele tweede jaar de herberg of een markt. Sinds 6 okt mag een erf
+  // op struiken en bomen (vraag 110, e): hij legt het liever niet in het bos van de heer (dat kost zijn gunst), en bij
+  // gelijke kringen liever waar minder te rooien is.
   const KRINGEN_VAN_EEN_ERF = [['herberg', 8], ['markt', 4], ['kapel', 2], ['put', 1]];
   function bouwErf() {
     const s = S();
@@ -613,10 +615,14 @@
       for (let x = 0; x < s.wereld.tegels[0].length; x++) {
         if (!T.gebouwPast(s.dorp, 'erf', x, y)) continue;
         const erf = { x, y, b: maat.b, h: maat.h };
+        const bos = T.inHetBosVanDeHeer(s.dorp, erf) ? 1 : 0;
+        if (beste && bos > beste.bos) continue;
         const kringen = plekken.filter((p) => p.er.some((r) => T.inDeKring(erf, r, p.straal)));
         const n = kringen.reduce((som, p) => som + p.telt, 0);
+        const rooien = T.teRooienOpErf(s.dorp, erf).length;
         const d = Math.hypot(x - midden.x, y - midden.y);
-        if (!beste || n > beste.n || (n === beste.n && d < beste.d)) beste = { x, y, n, d, kringen };
+        const beter = !beste || bos < beste.bos || n > beste.n || (n === beste.n && (rooien < beste.rooien || (rooien === beste.rooien && d < beste.d)));
+        if (beter) beste = { x, y, n, d, kringen, bos, rooien };
       }
     }
     if (!beste) {
@@ -626,7 +632,8 @@
     const u = T.plaatsGebouw(s.dorp, 'erf', beste.x, beste.y);
     boek.gebouwd.push({ dag: heel(dagNu()), datum: datum(), soort: 'erf', gelukt: u.gelukt, reden: u.reden || null });
     const bij = beste.kringen.map((p) => (p.soort === 'herberg' ? 'de herberg' : `een ${p.soort}`));
-    daad(u.gelukt ? `wijst een erf aan${bij.length ? ` binnen de kring van ${bij.join(', ')}` : ', buiten elke kring'}` : `wil een erf aanwijzen, maar: ${u.reden}`);
+    const rooi = beste.bos ? ', in het bos van de heer' : beste.rooien ? `, waar het gezin eerst ${beste.rooien} tegels rooit` : '';
+    daad(u.gelukt ? `wijst een erf aan${bij.length ? ` binnen de kring van ${bij.join(', ')}` : ', buiten elke kring'}${rooi}` : `wil een erf aanwijzen, maar: ${u.reden}`);
     return u.gelukt;
   }
 

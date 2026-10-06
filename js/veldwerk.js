@@ -10,6 +10,8 @@
 //   - en ontgint hij heide of bos (js/ontginnen.js), dan werkt hij daar, behalve als hij zaait: op de heide steekt hij
 //     plaggen, tegel voor tegel; in het bos hakt hij eerst de bomen om en rooit hij de stronken en de struiken, van naast
 //     die tegel, en spit hij de grond daarna om.
+// Net zo rooit het hoofd van een nieuw gezin zijn erf, als daar nog bomen, stronken of struiken staan (js/erven.js;
+// werklijst vraag 110, e): hij hakt en rooit, en zijn gezin helpt, tot zijn hut kan komen.
 // Wat overblijft (dorsen, het vee, of er is niets te doen), doet hij bij zijn boerderij, zoals tot nu toe: T.dagAnker
 // (js/dag.js) stuurt hem daarheen. De boerin en de grote kinderen helpen bij het zaaien en de oogst (T.helpAnker).
 //
@@ -405,8 +407,17 @@
     } else vw.klaar.sprokkelen = dag; // geen weg: vandaag niet
   }
 
-  // Elk beeld, na het maaien (T.werkOogstBij) en vóór het dwalen (T.dwaal): elke boer doet zijn werk van vandaag. Waar
-  // je bent vanuit js/main.js, de andere dorpen vanuit T.werkDorpBij (js/dorp.js).
+  // Het erf dat dit poppetje rooit (js/erven.js; werklijst vraag 110, e): als hij het hoofd is van een gezin waarvan de hut
+  // daarop wacht, of null. Het gezin helpt (T.helpAnker).
+  function erfDatHijRooit(e) {
+    const p = e.bewoner;
+    const hut = p && !p.hoofd && p.huis;
+    return hut && hut.wachtOpRooien && hut.erf ? hut.erf : null;
+  }
+
+  // Elk beeld, na het maaien (T.werkOogstBij) en vóór het dwalen (T.dwaal): elke boer doet zijn werk van vandaag, en wie
+  // zijn erf rooit, rooit (met dezelfde bijl en op dezelfde manier als een boer die bos ontgint). Waar je bent vanuit
+  // js/main.js, de andere dorpen vanuit T.werkDorpBij (js/dorp.js).
   T.werkVeldwerkBij = function (S, D) {
     const w = D.wereld;
     if (!w || !w.akkers || !w.akkers.length || !D.kalender) return;
@@ -417,7 +428,9 @@
     const werktijd = deel === 'werk' && !T.vrijeDag(D, dag);
     const nu = S.wereldTijd || 0;
     for (const e of w.wezens) {
-      if (e.dood || !e.werkAkkers || !e.werkAkkers.length) continue;
+      if (e.dood) continue;
+      const erf = erfDatHijRooit(e);
+      if (!erf && (!e.werkAkkers || !e.werkAkkers.length)) continue;
       // Wie hout naar huis bracht, legt het bij zijn deur neer.
       if (e.draagt && !e.pad.length && e.thuis && T.afstand(e.thuis, { x: e.tx, y: e.ty }) <= 1) e.draagt = null;
       // De schaft: brood op de akker (js/dag.js). Wie op zijn land werkt, blijft er staan tot het werk weer begint (wie
@@ -431,7 +444,7 @@
         delete e.werkt.schaft;
         e.werkt.tot = Math.min(e.werkt.tot, nu);
       }
-      const soort = werktijd && magWerken(S, D, e) ? T.veldwerkVandaag(D, e, datum) : null;
+      const soort = werktijd && magWerken(S, D, e) ? (erf ? 'erf' : T.veldwerkVandaag(D, e, datum)) : null;
       if (!soort) {
         onthoudPlag(e, nu);
         stop(e);
@@ -443,6 +456,7 @@
         vw = e.veldwerk = { soort, i: null, gedaan: 0, klaar: (vw && vw.klaar) || {} };
       }
       if (soort === 'sprokkelen') sprokkel(S, D, e, vw, nu);
+      else if (soort === 'erf') ontgin(D, e, vw, nu, T.teRooienOpErf(D, erf));
       else opHetLand(S, D, e, vw, nu, datum);
     }
   };
@@ -463,10 +477,18 @@
   // ergens anders werkt, gaat daarheen. Het anker voor T.dagAnker (js/dag.js) in de werkuren, of null. Het loopt met de
   // boer mee, dus zonder veld (`veld: false`; een veld is voor een plek waar velen heen gaan, js/lopen.js).
   T.helpAnker = function (D, e) {
-    if (!IN().aan || (e.werkAkkers && e.werkAkkers.length)) return null;
+    if (e.werkAkkers && e.werkAkkers.length) return null;
     const p = e.bewoner;
-    if (!p || !p.huis || p.huis.soort !== 'boerderij' || p.weg || p.komt) return null;
+    if (!p || !p.huis || p.weg || p.komt) return null;
     if (p.leeftijd !== 'volwassen' && p.leeftijd !== 'jong') return null;
+    // Het gezin van wie zijn erf rooit (js/erven.js; werklijst vraag 110, e) helpt net zo: zolang hij hakt of rooit,
+    // blijven ze dicht bij hem.
+    if (p.huis.wachtOpRooien) {
+      const hoofd = p.hoofd && p.hoofd.wezen;
+      if (!hoofd || hoofd.dood || !hoofd.werkt || !ONTGINWERK.has(hoofd.werkt.soort)) return null;
+      return { x: hoofd.tx, y: hoofd.ty, straal: IN().helpStraal, veld: false };
+    }
+    if (!IN().aan || p.huis.soort !== 'boerderij') return null;
     if (p.werk && p.werk !== p.huis) return null;
     const boer = boerVanHuis(D, p.huis);
     if (!boer || boer.dood || boer.binnen) return null;

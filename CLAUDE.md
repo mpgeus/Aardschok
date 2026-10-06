@@ -355,7 +355,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   zijn erf doorgroeit. Zonder vrij erf zegt het dorp dat er geen plaats is (`T.gezinZoektEenErf`). Wat in het
   bouwmenu staat, zegt `T.inBouwmenu`: het erf, en de woningen niet, tenzij de spelregel "Huizen" anders zegt. Op
   een akker, een weide, een pad of een erf bouw je niet (`T.waaromNietOpDezeGrond`). De paaltjes op een vrij erf
-  tekent `js/tekenen.js` (`T.paaltjesVan`, `T.sprites.paaltje`).
+  tekent `js/tekenen.js` (`T.paaltjesVan`, `T.sprites.paaltje`). **Een erf mag op struiken en bomen** (vraag 110, e, 6
+  okt): wat te rooien is (`T.ontginWerkOp` in `js/ontginnen.js`) houdt het niet tegen (`T.teRooienOpErf`,
+  `T.watTeRooien`, `T.rooiTekst` voor de muis); het gezin dat het neemt, rooit het zelf (het hoofd met de bijl, vanuit
+  `T.werkVeldwerkBij` in `js/veldwerk.js`, zoals een boer ontgint; zijn gezin helpt, `T.helpAnker`), en zolang wacht de
+  hut nog niet op de kaart (`wachtOpRooien`; `T.bouwGebouw` zet hem er pas met `T.zetOpDeKaart` op) en werkt het gezin
+  nergens; na `rooiDagen` rooien de buren de rest (`T.tikErvenDag`). Een erf in het bos van de heer
+  (`T.inHetBosVanDeHeer`: zoveel bomen als een stuk bos bij het ontginnen) kost zijn gunst; een boom geeft
+  `T.ONTGINNEN_INSTELLINGEN.houtPerBoom` hout, wie hem ook omhakt.
 - `js/bouwstijl.js`: **de bouwstijl van een land** (vraag 114, stap 2, 4 okt): elk land van de maker bouwt in één stijl
   (`w.stijl`, uit het nummer van het land, `T.stijlVoorLand`; het ontworpen gehucht heeft er geen en bouwt zoals altijd),
   met per soort een paar vormen, elk met de deur naar elke kant. De huizenbouwer noemt dat een stand; in het spel heet het

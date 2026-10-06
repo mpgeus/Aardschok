@@ -321,7 +321,7 @@ test('a2: wie vraagt, wijst een stuk heide en een stuk bos aan, allebei in goud,
   assert.match(vraagt(S), /heide.*Of het stuk bos achter .* Maar het bos is van de heer\. Van de weg en de akkers ziet niemand het/);
   assert.deepEqual(zichtbaar(S).map((k) => k.zeg), ['De heide.', 'Het bos. Ik meld het de heer.', 'Het bos. De heer hoeft het niet te weten.', 'Nee, nu niet.']);
   assert.match(T.prijsVanKeuze(D, antwoord(S, 'De heide').doe).tekst, /vertrouwen van het dorp −5/);
-  assert.match(T.prijsVanKeuze(D, antwoord(S, 'Het bos. Ik meld').doe).tekst, new RegExp(`\\+${b.bomen * 4} hout.*gunst van de heer −5.*de inner telt het`));
+  assert.match(T.prijsVanKeuze(D, antwoord(S, 'Het bos. Ik meld').doe).tekst, new RegExp(`\\+${b.bomen * T.ONTGINNEN_INSTELLINGEN.houtPerBoom} hout.*gunst van de heer −5.*de inner telt het`));
   assert.match(T.prijsVanKeuze(D, antwoord(S, 'Het bos. De heer hoeft').doe).tekst, /de inner ziet het daar niet.*betrapt/);
   zeg(S, 'Nee');
   assert.ok(!T.heeftVlag(D, 'ontginHeide') && !T.heeftVlag(D, 'ontginBos'), 'om: de vlaggen zijn weg');

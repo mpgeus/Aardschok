@@ -66,11 +66,13 @@
     // tweede 10, het derde 15. Hoe kleiner de meent, hoe meer het dorp eraan hecht (vraag 107, f3; Marcel, 5 okt: "We
     // gaan met jouw suggestie"). Zo wordt dezelfde vraag elke keer een zwaardere.
     vertrouwen: 5,
-    // Het bos. Een stuk is bos als er minstens zoveel bomen op staan; zo ver van zijn akker zoekt de boer een stuk dat de
-    // inner van zijn ronde niet ziet (verder neemt hij het dichtste); en een boom geeft zoveel hout.
+    // Het bos. Een stuk is bos als er minstens zoveel bomen op staan (ook een erf in het bos van de heer, js/erven.js); zo
+    // ver van zijn akker zoekt de boer een stuk dat de inner van zijn ronde niet ziet (verder neemt hij het dichtste); en
+    // een boom geeft zoveel hout, wie hem ook omhakt: een boer die ontgint, een gezin dat zijn erf rooit (Marcel, 6 okt, bij
+    // vraag 115: "C ja"; tot dan 4).
     bosBomen: 10,
     bosZoeken: 25,
-    houtPerBoom: 4,
+    houtPerBoom: 10,
     // Wat het bos de gunst van de heer kost als je het hem meldt (vraag 107, b: hij wil erom gevraagd worden).
     gunst: 5,
     // Wat stiekem de raadsman lijkt te kosten, maal hoe zwaar hij de argwaan van de heer weegt (js/raadsman.js, zijn

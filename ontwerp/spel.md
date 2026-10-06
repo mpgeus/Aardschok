@@ -2400,7 +2400,8 @@ dichtbij als het kan.
     vertelt het in de herberg, als die een plek van gesprekken wordt (3c).
   Het bos is een winter werk (drie maanden uiterlijk; in de lente is een stuk na 41 à 56 dagen af, in de herfst en de
   winter na zo'n 85): hij hakt boom voor boom om, van een tegel recht ernaast en met zijn gezicht naar de boom (schuin is
-  de stam te ver voor de bijl; 4 hout per boom naar de schuur: een stuk geeft er 40 à 100), rooit de stronk (die staat tot
+  de stam te ver voor de bijl; 10 hout per boom naar de schuur, sinds 6 okt (vraag 115, C; tot dan 4): een stuk geeft er
+  100 à 250), rooit de stronk (die staat tot
   dan op de plek van de boom) en de struiken, en spit de grond om. Waar een boom stond, wordt de tegel weer vloer (wat
   vast op de kaart stond, lag op een muur). Zijn boerin en grote kinderen helpen, zoals bij het zaaien en de oogst. Hij
   draagt dan het vel van de hakker, met een bijl (vraag 107, f; een boerin dat van de hakster).
@@ -3230,6 +3231,22 @@ wordt gepraat:
   als plaats (`T.bruikbareErven`, `T.hutPastOpErf`): de groei en de raad zeggen dan dat er geen plaats is, het bouwmenu
   telt het niet als vrij, en `Spel.debug.erven()` zegt het erbij. Tot dan zagen de groei en de raad er een vrij erf, en
   kwam er twee en een half jaar geen gezin.
+- **Een erf mag op struiken en bomen** (6 okt, de sessie van de heer; werklijst vraag 110, e, met 115; Marcel: "A ja B ja
+  C ja D zo"). Gemeten op vier landen van de maker: zo passen er 39 tot 49 erven in plaats van 13 tot 20, en een groot
+  deel komt al uit losse struiken en bomen in de wei. Water, een rots, een gebouw, een veld of een pad houden een erf
+  nog tegen, maar wat te rooien is (een boom, een stronk, een struik) niet. Met het erf in de hand zegt de muis wat er
+  eerst weg moet en wat het oplevert ("Het gezin dat er komt, rooit eerst 3 bomen (+30 hout)", `T.rooiTekst`). Het
+  gezin dat zo'n erf neemt, rooit het zelf: het hoofd van het gezin hakt de bomen om en rooit de stronken en de
+  struiken, met dezelfde bijl en op dezelfde manier als een boer die bos ontgint (`js/veldwerk.js`), zijn gezin helpt
+  (`T.helpAnker`), en zolang werkt niemand van hen ergens anders. De hut wacht intussen, nog niet op de kaart
+  (`wachtOpRooien`); het gezin woont er al, en de paaltjes blijven staan. Is het erf vrij, dan ligt de bouwplaats er de
+  volgende dag (`T.tikErvenDag`, `T.zetOpDeKaart`); is het na een maand niet af (`rooiDagen` in de werkbank), dan rooien
+  de buren de rest in één keer. Elke boom geeft 10 hout (ook bij het ontginnen; tot 6 okt 4). Een nieuw gezin neemt eerst
+  een erf waar niets te rooien staat (`T.kiesErf`). **Het bos is van de heer** (B): een erf met minstens zoveel bomen als
+  een stuk bos bij het ontginnen (10) kost zijn gunst als je het aanwijst (−5), en de muis zegt het vooraf; losse bomen
+  en struiken in de wei kosten niets. De speler van de speeltest legt een erf liever niet in het bos van de heer, en bij
+  gelijke kringen liever waar minder te rooien is. Nog niet: een werkplaats die zo rooit (stap 2), en de houthakker die
+  hakt en plant (stap 3).
 - **Een huis met plaats gaat voor.** Is het dorp vol, dan neemt een nieuw gezin op een groeidag het vrije erf dat
   het dichtst bij de werkplaats ligt die de meeste handen mist (anders bij het plein), en komt over de weg. Het
   zet er zelf een hut op (8 hout uit de voorraad, twee dagen), woont er al terwijl hij oprijst, en is er overdag

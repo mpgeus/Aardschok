@@ -143,7 +143,8 @@
   const vanSchout = (p) => !!(p.schout || (p.hoofd && p.hoofd.schout));
   // Kan hij werken? Iedereen, behalve de schout zelf, een kleuter, en wie een tijd weg is (p.weg: de heervaart,
   // js/heervaart.js). Het gezin van de schout werkt alleen als er niemand anders meer is (T.wijsWerkToe).
-  const kanWerken = (p) => !p.schout && !p.weg && !!T.LEEFTIJDEN[p.leeftijd] && T.LEEFTIJDEN[p.leeftijd].werkt != null;
+  // Wie zijn erf nog rooit (js/erven.js; werklijst vraag 110, e), werkt nog nergens: daar is zijn gezin druk mee.
+  const kanWerken = (p) => !p.schout && !p.weg && !(p.huis && p.huis.wachtOpRooien) && !!T.LEEFTIJDEN[p.leeftijd] && T.LEEFTIJDEN[p.leeftijd].werkt != null;
 
   // De bewoner van een poppetje: een nieuw poppetje draagt hem mee (e.bewoner); de schout en de boeren
   // hebben hun wezen al van de kaart, en die zoeken we op.
@@ -473,8 +474,9 @@
         continue;
       }
       for (const p of leden) p.komt = true;
-      // Wie een erf nam (js/erven.js), bouwt daar zelf zijn hut.
-      const erf = leden[0].huis && leden[0].huis.erf && !leden[0].huis.klaar ? ' Ze zetten een hut op hun erf.' : '';
+      // Wie een erf nam (js/erven.js), bouwt daar zelf zijn hut, en staat er nog iets op, dan rooit hij het eerst.
+      const huis = leden[0].huis;
+      const erf = huis && huis.erf && !huis.klaar ? (huis.wachtOpRooien ? ' Ze rooien hun erf, en zetten dan hun hut.' : ' Ze zetten een hut op hun erf.') : '';
       B.komen.push({ mensen: leden, aankomst: { tekst: `Er komt een nieuw gezin over de weg: ${gezinTekst(D, leden)}.${erf} (+${leden.length})` } });
     }
     return gezinnen.flat();

@@ -4752,6 +4752,12 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Marcel koos (6 okt): "A ja B ja C ja D zo".** Dus: wie er komt wonen of werken, rooit zijn eigen plek, met zijn
     gezin; een erf in het bos van de heer kost zijn gunst (−5), de wei niets; een boom geeft 10 hout, ook bij het
     ontginnen; en de stappen zoals voorgesteld, te beginnen met 1 (a en b, met de speler van de speeltest).
+    **Stap 1 is gebouwd** (6 okt, de sessie van de heer; `js/erven.js`, `js/veldwerk.js`, `test/rooien.test.cjs`): een erf
+    mag op struiken en bomen, en de muis zegt wat er eerst weg moet; het hoofd van het gezin dat het neemt, rooit het met
+    de bijl, zijn gezin helpt, en zolang wacht de hut (nog niet op de kaart) en werkt het gezin nergens; is het vrij, dan
+    ligt de bouwplaats er de volgende dag, en na een maand rooien de buren de rest. Een erf in het bos van de heer kost zijn
+    gunst (−5), een boom geeft 10 hout (ook bij het ontginnen), een nieuw gezin neemt eerst een erf waar niets op staat, en
+    de speler van de speeltest legt een erf liever niet in het bos van de heer. `npm test`: 975/975. Volgende: stap 2.
 116. **Beesten in het bos** (Marcel, 4 okt, zesentwintigste sessie: "Ik wil dat er beesten kunnen rondlopen in het bos.
     Wolven etc. Die de houthakker kunnen bedreigen. Rode ogen uit het duister."; plan van Claude; open).
     **Wat er al is:** de wolf staat in `T.WEZENS` (`js/wereld.js`): een monster om mee te vechten, uit het oude spel, met

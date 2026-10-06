@@ -723,11 +723,15 @@
     const w = D.wereld;
     const hoog = w.tegels.length;
     const wijd = w.tegels[0].length;
+    // Op het erf zelf telt wat te rooien is (een boom, een stronk, een struik) als vrij: dat rooit het gezin voor het zijn
+    // hut zet (js/erven.js; werklijst vraag 110, e).
+    const opHetErf = (x, y) => behalve && x >= behalve.x && x < behalve.x + behalve.b && y >= behalve.y && y < behalve.y + behalve.h;
     for (let y = r.y - breed; y < r.y + r.h + breed; y++) {
       for (let x = r.x - breed; x < r.x + r.b + breed; x++) {
         if (x >= r.x && x < r.x + r.b && y >= r.y && y < r.y + r.h) continue;
         if (x < 0 || y < 0 || x >= wijd || y >= hoog) continue;
-        if (!T.isBegaanbaar(w, x, y, { deurenOpenen: true }) || T.huisPlekOp(D, x, y, behalve)) return false;
+        const vrij = T.isBegaanbaar(w, x, y, { deurenOpenen: true }) || (opHetErf(x, y) && T.ontginWerkOp(w, x, y));
+        if (!vrij || T.huisPlekOp(D, x, y, behalve)) return false;
       }
     }
     return true;
@@ -954,13 +958,16 @@
 
   // Een gebouw in het dorp zetten: in S.gebouwen, met zijn voorwerp op de kaart (zetGebouwVoorwerp
   // hierboven). Voor wat de speler neerzet (T.plaatsGebouw) en voor de hut die een gezin op zijn erf
-  // zet (T.zetHutOpErf, js/erven.js): één manier voor allebei.
+  // zet (T.zetHutOpErf, js/erven.js): één manier voor allebei. Een hut op een erf dat het gezin nog rooit
+  // (`wachtOpRooien`, werklijst vraag 110, e) telt al als zijn huis, maar komt pas op de kaart als het erf vrij is
+  // (T.zetOpDeKaart, vanuit T.tikErvenDag).
   T.bouwGebouw = function (D, instantie) {
     D.gebouwen.push(instantie);
-    zetGebouwVoorwerp(D, instantie);
+    if (!instantie.wachtOpRooien) zetGebouwVoorwerp(D, instantie);
     if (T.ui && T.ui.toonBevolking) T.ui.toonBevolking(D);
     return instantie;
   };
+  T.zetOpDeKaart = (D, instantie) => zetGebouwVoorwerp(D, instantie);
 
   // De gebouwen die al op de kaart staan (kaarten/<naam>.betekenis.json, ding "gebouw": de vijf
   // boerderijen en het huis van de schout op het gehucht) meteen als klaar registreren, zodat het

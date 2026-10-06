@@ -269,8 +269,11 @@
     // Met een erf in de hand: welke put en kapel een huis hier zou halen (2c, vraag 100, c).
     const rechthoek = voet && { x, y, b: voet.b, h: voet.h };
     const kring = voet && (T.GEBOUWEN[S.bouwSoort].erf ? T.erfKringTekst(S.dorp, rechthoek) : T.kringTekst(S.dorp, S.bouwSoort, rechthoek));
+    // En op een erf: wat er eerst gerooid moet, en of het in het bos van de heer ligt (js/erven.js; vraag 110, e).
+    const rooien = voet && T.GEBOUWEN[S.bouwSoort].erf ? T.rooiTekst(S.dorp, rechthoek) : null;
+    const tekst = [kring, rooien].filter(Boolean).join(' ');
     if (reden) T.ui.tooltip(reden, S.muis.x, S.muis.y, true);
-    else if (kring) T.ui.tooltip(kring, S.muis.x, S.muis.y);
+    else if (tekst) T.ui.tooltip(tekst, S.muis.x, S.muis.y);
     else T.ui.verbergTooltip();
     S.hover = null;
     S.handeling = null;
@@ -1253,7 +1256,8 @@
         const hut = e.hut;
         const wie = hut && S.dorp.bewoners ? S.dorp.bewoners.mensen.filter((p) => p.huis === hut).map((p) => p.naam) : [];
         const vrij = T.hutPastOpErf(S.dorp, e) ? 'vrij' : 'vrij, maar er past geen hut meer op (vraag 110, f)';
-        const staat = !hut ? vrij : hut.wachtOpHout ? 'wacht op hout' : hut.klaar ? `een ${T.GEBOUWEN[hut.soort].naam}` : `in aanbouw, klaar op dag ${hut.klaarOp}`;
+        const rooien = hut && hut.wachtOpRooien ? `het gezin rooit nog ${T.teRooienOpErf(S.dorp, e).length} tegels, tot uiterlijk dag ${e.rooienTot}` : null;
+        const staat = !hut ? vrij : rooien || (hut.wachtOpHout ? 'wacht op hout' : hut.klaar ? `een ${T.GEBOUWEN[hut.soort].naam}` : `in aanbouw, klaar op dag ${hut.klaarOp}`);
         return { x: e.x, y: e.y, staat, wie: wie.join(', ') };
       });
     },
