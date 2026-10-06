@@ -5685,6 +5685,10 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     - **f, hij plant meer:** twee boompjes per boom, of ook in een gat in het bos waar een stronk vergaan is; dan blijft
       het bos om hem heen staan, en raakt het niet op.
     Mijn voorkeur nu: **e en b**, en f als het bos dan nog opraakt.
+    **Marcel koos (6 okt): "Eens".** Dus e en b: een houthakker zonder bomen laat zijn hand gaan, die elders werkt tot er
+    weer een boom staat, en het dorp vraagt pas een nieuwe houthakker als het hout de winter niet haalt; en een
+    houthakker komt alleen bij minstens 30 bomen binnen tien tegels. Raakt het bos in de speeltest van vier jaar daarna
+    nog op, dan ook f (hij plant meer).
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
