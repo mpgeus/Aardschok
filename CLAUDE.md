@@ -54,6 +54,9 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   bouwstap komt.
 - `ontwerp/opmerkingen.md`: wat onderweg opviel en nog niet af is, om later na te lopen (Marcel,
   25 sep). Zie je iets, zet het erbij.
+- `ontwerp/het-spel-in-het-kort.pdf`: het spel in vier bladzijden voor wie het niet kent (Marcel, 6 okt; voor een
+  gamedesigner), met beelden uit het spel; het hele spel als één verhaal, zonder te zeggen wat er al is. Verandert het
+  spel, werk dan de tekst bij (`gereedschap/samenvatting/samenvatting.html`) en maak hem opnieuw (`npm run samenvatting`).
 - Van het oude spel, alleen nog als bron: `ontwerp/verhaal.md` (met de vijf rondes ideeën van
   23 sep die tot het nieuwe spel leidden), `ontwerp/toren.md` en `ontwerp/spreuken.md`.
 
@@ -130,6 +133,10 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
 - `npm run tekenmeting` meet waar het tekenen zijn tijd kwijt is, per laag (vraag 123, f): land 5 van de maker op
   1920×1080, 4K en 4K op 200%, dichtbij en in het overzicht, overdag en 's avonds; `-- 1920x1080@1` voor één scherm. In
   `gereedschap/schermen/uit/tekenmeting.json` (niet in git).
+- `npm run samenvatting` maakt `ontwerp/het-spel-in-het-kort.pdf` uit `gereedschap/samenvatting/samenvatting.html` en de
+  vier beelden in `gereedschap/samenvatting/beelden/` (alle drie in git); `-- --beelden` speelt eerst het spel en maakt
+  de beelden opnieuw, elk uit een vers spel op land 5 van de maker (een minuut). Lukt een beeld niet meer, dan zegt het
+  waar het vastliep, en blijft het oude staan.
 - `npm run maker` legt gehuchten met de maker (`js/maker.js`, `T.maakGehucht(zaad)`: elk spel een ander gehucht, vraag
   69 en 70) en tekent ze als plattegrond naast het ontworpen gehucht, in `gereedschap/maker/uit/` (niet in git);
   `-- 7 12` voor andere zaden.

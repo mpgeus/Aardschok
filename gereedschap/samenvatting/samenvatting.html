@@ -1,0 +1,264 @@
+<!doctype html>
+<!--
+  Het spel in het kort: vier bladzijden voor wie het spel niet kent (Marcel, 6 okt: "Maak een korte samenvatting van
+  wat ons spel is en hoe het speelt in pdf vorm aub. Zodat iemand anders het kan lezen"; voor een gamedesigner). Hij
+  vertelt het hele spel als één verhaal, zonder te zeggen wat er al gebouwd is (Marcel koos dat zo).
+  npm run samenvatting maakt er ontwerp/het-spel-in-het-kort.pdf van; met -- --beelden eerst de beelden opnieuw, uit het
+  spel zelf (gereedschap/samenvatting/samenvatting.cjs). Te zien in de browser via de server:
+  http://localhost:8123/gereedschap/samenvatting/samenvatting.html. De naam komt uit js/naam.js; de letters zijn die van
+  het spel (letters/).
+-->
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<title>{naam}: het spel in het kort</title>
+<script src="../../js/naam.js"></script>
+<style>
+  @font-face { font-family: 'Jacquarda Bastarda 9'; src: url('../../letters/jacquarda-bastarda-9.woff2') format('woff2'); }
+  @font-face { font-family: 'IM Fell English'; src: url('../../letters/imfell-english.woff2') format('woff2'); }
+  @font-face { font-family: 'IM Fell English'; font-style: italic; src: url('../../letters/imfell-english-cursief.woff2') format('woff2'); }
+
+  :root {
+    --inkt: #2c1d12;
+    --grijs: #5a4430;
+    --rood: #7a2022;
+    --lijn: #b9a37f;
+    --goud: #a8801f;
+    --perkament: #f7f0e1;
+    --boek: 'IM Fell English', Georgia, serif;
+    --gotisch: 'Jacquarda Bastarda 9', 'IM Fell English', Georgia, serif;
+  }
+
+  @page {
+    size: A4;
+    margin: 14mm 16mm 15mm;
+    @bottom-center { content: counter(page); font-family: var(--boek); font-size: 9pt; color: #8a7558; }
+  }
+  @page :first { @bottom-center { content: none; } }
+
+  * { box-sizing: border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { margin: 0; font-family: var(--boek); font-size: 10.6pt; line-height: 1.4; color: var(--inkt); hyphens: auto; }
+  /* In de browser een blad op het scherm; de pdf neemt de maten van @page. */
+  @media screen { body { max-width: 178mm; margin: 10mm auto; } }
+  p { margin: 0 0 2mm; }
+  strong { font-weight: normal; color: var(--rood); }
+
+  /* De kop */
+  header { text-align: center; margin: 0 0 4mm; }
+  .naam { font-family: var(--gotisch); font-weight: normal; font-size: 48pt; line-height: 1; margin: 0; letter-spacing: 0.5pt; }
+  .werktitel { font-style: italic; color: var(--grijs); font-size: 9.5pt; margin-top: 0.5mm; }
+  .haak { font-style: italic; font-size: 15.5pt; line-height: 1.28; color: var(--rood); margin: 3.5mm auto 1.8mm; }
+  .ondertitel { font-size: 11.5pt; color: var(--grijs); margin: 0 auto; }
+
+  h2 {
+    font-family: var(--gotisch); font-weight: normal; font-size: 18pt; line-height: 1.1; color: var(--rood);
+    margin: 4.6mm 0 2.2mm; padding-bottom: 1mm; border-bottom: 0.4pt solid var(--lijn); break-after: avoid;
+  }
+  h3 { font-family: var(--gotisch); font-weight: normal; font-size: 12.5pt; margin: 0 0 1.2mm; break-after: avoid; }
+
+  /* Tekst in twee kolommen */
+  .kolommen { columns: 2; column-gap: 7mm; }
+  .kolommen > * { break-inside: avoid-column; }
+
+  /* De feiten */
+  .feiten {
+    display: grid; grid-template-columns: 22mm 1fr 22mm 1fr; gap: 1.2mm 3mm;
+    background: var(--perkament); border: 0.4pt solid var(--lijn); padding: 3mm 4.5mm;
+    margin: 0 0 1mm; font-size: 9.6pt; line-height: 1.3;
+  }
+  .feiten dt { color: var(--grijs); font-style: italic; }
+  .feiten dd { margin: 0; }
+  .feiten .breed { grid-column: 2 / 5; }
+
+  figure { margin: 0; break-inside: avoid; }
+  figure img { display: block; width: 100%; border: 0.4pt solid #6b5940; }
+  figcaption { font-style: italic; font-size: 9.3pt; line-height: 1.32; color: var(--grijs); margin-top: 1.4mm; }
+  .held { margin: 0 0 3.5mm; }
+  .heerbeeld { margin: 0.6mm 0 2.2mm; }
+  .slotbeeld { margin: 1mm auto 0; width: 160mm; }
+
+  /* Een beeld naast de tekst, en twee kolommen naast elkaar */
+  .naast { display: grid; grid-template-columns: 1fr 98mm; gap: 6mm; align-items: start; break-inside: avoid; }
+  .tweeluik { display: grid; grid-template-columns: 1fr 1fr; gap: 7mm; break-inside: avoid; }
+
+  ul.lijst { margin: 0 0 1mm; padding: 0; list-style: none; }
+  ul.lijst li { position: relative; padding-left: 4.5mm; margin-bottom: 1.8mm; }
+  ul.lijst li::before { content: '❧'; position: absolute; left: 0; top: 0; color: var(--goud); font-size: 8.5pt; }
+
+  /* De dag en het jaar, als stroken van vier */
+  .strook {
+    display: grid; grid-template-columns: repeat(4, 1fr); border: 0.4pt solid var(--lijn); background: var(--perkament);
+    margin: 1mm 0 1.5mm; font-size: 9.2pt; line-height: 1.28; break-inside: avoid;
+  }
+  .strook.dag { font-size: 9.6pt; line-height: 1.32; }
+  .vak { padding: 2.4mm 3mm 1.6mm; border-left: 0.4pt solid var(--lijn); }
+  .vak:first-child { border-left: none; }
+  .vak h3 { font-size: 13pt; color: var(--rood); margin-bottom: 1.2mm; }
+  .strook.dag h3 { font-size: 12pt; }
+  .maand { margin-bottom: 1.5mm; }
+  .maand b { display: block; font-weight: normal; font-style: italic; color: var(--grijs); }
+  .altijd { font-size: 9.3pt; color: var(--grijs); font-style: italic; margin: 0; }
+
+  /* De drie wegen */
+  .wegen { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5mm; margin: 1mm 0 3mm; break-inside: avoid; }
+  .weg { border-top: 1.2pt solid var(--rood); padding-top: 1.6mm; }
+  .weg h3 { color: var(--rood); }
+
+  /* De ontwerpregels */
+  ol.regels { counter-reset: regel; list-style: none; margin: 0; padding: 0; }
+  ol.regels li { counter-increment: regel; position: relative; padding-left: 7mm; margin-bottom: 1.4mm; break-inside: avoid-column; }
+  ol.regels li::before { content: counter(regel); position: absolute; left: 0; top: -0.8mm; font-family: var(--gotisch); font-size: 14pt; color: var(--goud); }
+
+  .blok { break-inside: avoid; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1 class="naam" data-spelnaam></h1>
+  <div class="werktitel">werktitel</div>
+  <p class="haak">De heer wil goud. Het dorp wil leven. Dien hem, verraad hem, of verjaag hem.</p>
+  <p class="ondertitel">Een bouw- en bestuurspel in isometrische pixel art. Je bent geen god boven het dorp, maar de schout erin.</p>
+</header>
+
+<figure class="held">
+  <img src="beelden/dorp.jpg" alt="Het gehucht op een zomerochtend, met de balk van het spel">
+  <figcaption>Het gehucht op een zomerochtend. Bovenin de voorraad, de bevolking, de tevredenheid en de twee bazen; linksboven het doel (een dorp worden) en de raad: wat er nu tussen jou en dat doel staat. Linksonder wat er in het dorp gebeurt.</figcaption>
+</figure>
+
+<dl class="feiten">
+  <dt>Soort spel</dt><dd>Een dorp laten groeien en besturen, met politiek en avontuur</dd>
+  <dt>Je speelt</dt><dd>Eén mens: de schout, een poppetje in het dorp</dd>
+  <dt>Beeld</dt><dd>Isometrisch, HD-pixel art, dag en nacht</dd>
+  <dt>Vechten</dt><dd>In beurten, op dezelfde tegels als het rondlopen</dd>
+  <dt>Verwant aan</dt><dd class="breed"><em>Anno 1602</em>, <em>Yes, Your Grace</em>, <em>Kingdom Two Crowns</em>, <em>Democracy 3</em>, <em>Lords of the Realm 2</em>, <em>Jagged Alliance 2</em></dd>
+  <dt>Voor</dt><dd class="breed">De pc, via Steam</dd>
+</dl>
+
+<h2>Het idee</h2>
+<div class="kolommen">
+  <p>Je bent de schout van een gehucht. Boven je staat een heer die verward is en alleen geld ziet. Om je heen wonen de mensen die het dorp maken, en die willen leven. Jij staat ertussen. Je laat het gehucht groeien tot een dorp en een stad, je bestuurt het met wetten, en aan het eind ben je van de heer af.</p>
+  <p>Je hangt niet als hand boven het dorp: je loopt erin rond. Wat in andere bouwspellen één klik is, gaat hier via een persoon, een plek, een papier of een handeling. Een inwoner komt je iets vragen, je raadsman brengt ’s&nbsp;ochtends zijn rapport aan je deur, en de heer stuurt een brief. Wie wil weten hoe het ervoor staat, gaat zelf kijken: wat je weet, is wat je zag of hoorde.</p>
+</div>
+
+<h2>Twee bazen</h2>
+<div class="naast">
+  <div>
+    <p>De heer en het dorp kunnen je allebei wegsturen. In de balk staan twee meters van 0 tot 100: de gunst van de heer (de kroon) en het vertrouwen van het dorp (de hoed). Zakt er een onder de 20, dan krijg je een waarschuwing. Op 0 ben je je ambt kwijt, of jaagt het dorp je weg.</p>
+    <p>Bijna elke keuze kost aan de ene kant wat ze aan de andere wint. Een voorbeeld, rechts: het graan komt tekort, en een boer wil land ontginnen. De heide is de meent van het dorp, dus dat kost vertrouwen. Het bos is van de heer: melden kost zijn gunst, en stiekem kost niets, tot zijn inner of zijn soldaten het vinden.</p>
+    <p>Elk antwoord zegt vooraf wat het kost. Wie je niet op tijd spreekt, gaat weer weg, en ben je op reis, dan beslist je raadsman, naar zijn eigen karakter.</p>
+  </div>
+  <figure>
+    <img src="beelden/vraag.jpg" alt="Een boer vraagt de schout om land te ontginnen">
+  </figure>
+</div>
+
+<h2>De dag en het jaar</h2>
+<p>Een dag duurt vijf minuten, en sneller kan. Hij heeft vaste momenten:</p>
+<div class="strook dag">
+  <div class="vak"><h3>’s&nbsp;Ochtends</h3>staat je raadsman aan je deur met zijn rapport: wat er gebeurde, hoe het graan en het hout gaan, of het dorp de winter haalt, en wat er komt.</div>
+  <div class="vak"><h3>Overdag</h3>komen inwoners je zoeken, met een vraag, een ruzie, een ramp of een plan om te bouwen. ’s&nbsp;Middags houd je zitting als er rechtszaken zijn.</div>
+  <div class="vak"><h3>’s&nbsp;Avonds</h3>zit het dorp in de herberg. Daar hoor je wat er speelt, en daar vertellen getuigen wat ze zagen.</div>
+  <div class="vak"><h3>’s&nbsp;Nachts</h3>slaap je, net als het dorp, tot de ochtend.</div>
+</div>
+<p>Het jaar geeft het spel zijn ritme. De boeren doen het werk van het seizoen zelf, en de heer komt op vaste tijden.</p>
+<div class="strook">
+  <div class="vak">
+    <h3>Lente</h3>
+    <div class="maand"><b>lentemaand</b>de boeren zaaien; het jaarverslag</div>
+    <div class="maand"><b>grasmaand</b>de marskramer; de meiboom</div>
+    <div class="maand"><b>bloeimaand</b>het graan staat groen</div>
+  </div>
+  <div class="vak">
+    <h3>Zomer</h3>
+    <div class="maand"><b>zomermaand</b>de schapen worden geschoren</div>
+    <div class="maand"><b>hooimaand</b>het graan is rijp; hooien; de heer vraagt mannen voor zijn oorlog</div>
+    <div class="maand"><b>oogstmaand</b>de oogst; de inner komt tellen</div>
+  </div>
+  <div class="vak">
+    <h3>Herfst</h3>
+    <div class="maand"><b>herfstmaand</b>de boeren kiezen hun velden; het oogstfeest</div>
+    <div class="maand"><b>wijnmaand</b>de brief met de schatting</div>
+    <div class="maand"><b>slachtmaand</b>slachten; op Sint-Maarten komt de heer innen, en zoeken zijn soldaten</div>
+  </div>
+  <div class="vak">
+    <h3>Winter</h3>
+    <div class="maand"><b>wintermaand tot sprokkelmaand</b>haalt het hout en het eten de winter? Het vee eet hooi.</div>
+  </div>
+</div>
+<p class="altijd">Bijna elke maand een gril van de heer in een brief. En altijd: inwoners met een vraag, nieuwe gezinnen, en soms rovers.</p>
+
+<h2>Het dorp groeit door zijn mensen</h2>
+<ul class="lijst kolommen">
+  <li><strong>Je bouwt het dorp niet, je bestuurt het.</strong> Wat het dorp mist, komt een inwoner je vragen. De plek ligt in goud op de grond, met wat het kost, en jij zegt ja of nee. Jij wijst erven aan voor nieuwe gezinnen, en hangt oproepen op het plein (“Het dorp zoekt een steengroeve”, met een premie). Een ondernemer wil soms iets wat niemand mist: wapens smeden, wat de heer verbiedt, of een tweede herberg, tot woede van de herbergierster.</li>
+  <li><strong>Elk huis heeft een stand, met wensen,</strong> zoals in <em>Anno 1602</em>: keuters in hutten, dorpelingen in huizen, ambachtslieden in stenen huizen, en de boeren op hun boerderij. Wie hoger staat, wil wat de stand eronder wil, en meer: bier, vlees of vis, brood, laken, een put en een kapel in de buurt, de herberg en de markt. Heeft een huis een maand lang alles, dan groeit het door naar de volgende stand.</li>
+  <li><strong>Treden.</strong> Bij 20 dorpelingen wordt het gehucht een dorp, bij 20 ambachtslieden krijgt het marktrecht, en zo groeit het naar een stad.</li>
+  <li><strong>Wetten</strong> kies je in een menu zoals in <em>Democracy 3</em>: het rantsoen, vreemden welkom, houtkap in het bos van de heer, de belasting. Elke wet weegt per stand anders.</li>
+  <li><strong>De boeren doen het werk zelf:</strong> zaaien, wieden, mest uitrijden, maaien, slachten, hout sprokkelen. Jij houdt een oogje in het zeil. Een probleem heeft altijd een oorzaak die je had kunnen zien: honger, kou, een vol dorp, onvrede.</li>
+</ul>
+
+<h2>De heer</h2>
+<div class="tweeluik">
+  <ul class="lijst">
+    <li>Telkens wil hij in een brief iets geks: een standbeeld, een vet varken, de bruiloft van zijn neef. Wat je antwoordt, kost de een of de ander iets.</li>
+    <li>In oogstmaand komt zijn inner tellen wat hij ziet, en op Sint-Maarten komt de heer zelf innen, naar wat het dorp lijkt te hebben. Zo word je rijk en lijk je arm: wat je opzij zet, verstop je in een kelder of in de kapel. Maar wie het zag, kan het in de herberg vertellen, en zijn soldaten doorzoeken het dorp.</li>
+    <li>Voert hij oorlog, dan vraagt hij mannen voor zijn heervaart, of goud.</li>
+  </ul>
+  <div>
+    <figure class="heerbeeld">
+      <img src="beelden/heer.jpg" alt="De heer komt het dorp in, met zijn twee soldaten">
+      <figcaption>De heer komt het dorp in, met zijn twee soldaten. Hij is lachwekkend, zijn straffen niet: zwarte satire.</figcaption>
+    </figure>
+    <ul class="lijst">
+      <li>Hij woont in een kasteel op de kaart, heeft elk spel een ander karakter, en sluit bonden met de andere dorpen.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="blok">
+<h2>Het doel: de heer verstoten en verslaan</h2>
+<p>Er zijn drie wegen, die je onderweg voorbereidt en kunt wisselen:</p>
+<div class="wegen">
+  <div class="weg"><h3>De opstand</h3>Je verdedigt je eigen dorp, en bestormt dan zijn kasteel.</div>
+  <div class="weg"><h3>De koning</h3>Achter zijn rug om, met bewijs en een bode. De koning zet hem af en geeft jou stadsrechten.</div>
+  <div class="weg"><h3>Trouw</h3>Je onderwerpt de rest van het land voor hem, en wordt zijn erfgenaam: de nieuwe heer.</div>
+</div>
+</div>
+<div class="kolommen">
+  <p>Sterk word je door te veroveren en bevriend te raken, zoals in <em>Civilization</em>, en door je mensen gelukkig te maken: een dorp waar iedereen een jaar lang in al zijn wensen voorzien is, volgt je in de opstand, en een bloeiend dorp krijgt het oor van de koning.</p>
+  <p>Je kunt ook verliezen: de heer ontslaat je, het dorp jaagt je weg, het dorp loopt leeg, of de schout sneuvelt. En omdat de heer kiest uit dezelfde handelingen als een mens in zijn plaats, kan na de release ook een vriend de heer spelen.</p>
+</div>
+
+<h2>De wereld</h2>
+<ul class="lijst kolommen">
+  <li><strong>Elk spel een ander land.</strong> Je gehucht ligt op een kaart van 100 bij 100 tegels, met bossen, vijvers en rotsen, en een eigen bouwstijl. Wat er ligt, doet ertoe: een houthakker hoort bij het bos, een steengroeve bij de rotsen, een visser aan het water.</li>
+  <li><strong>Een land in dagen.</strong> Over de weg kom je op een kaart met provincies, waar je dagen reist, zoals in <em>Lords of the Realm 2</em>. Daar liggen andere dorpen, elk met een eigen karakter, die net als jij de grootste willen worden; hoeveel, kies je aan het begin. Een bond sluit je te voet: je reist er zelf heen. Een veroverd dorp blijft bestaan, en je bestuurt het erbij.</li>
+  <li><strong>Vechten.</strong> Wie het dorp verlaat, kan als rover terugkomen. Rovers vallen tegen de avond een akker aan, en de wachters lopen met je mee. Rondlopen gaat dan naadloos over in een gevecht in beurten, op dezelfde tegels, zoals in <em>Fallout</em> en <em>Jagged Alliance 2</em>. Wie valt, is dood; valt de schout, dan is het spel uit.</li>
+</ul>
+
+<h2>Hoe het eruitziet</h2>
+<div class="kolommen">
+  <p>Isometrisch, met <em>Mystic Towers</em> als voorbeeld, in HD-pixel art die uit code komt: kleine 3D-modellen, uit acht richtingen getekend. Het licht volgt het uur, ’s&nbsp;avonds branden de lantaarns en de ramen van wie thuis is, en alles wat staat, werpt een schaduw die met de zon meedraait.</p>
+  <p>Elke inwoner heeft een naam, een leeftijd, een huis, een gezin en werk, en loopt zijn dag. Wie een buur tegenkomt, blijft soms staan voor een praatje, waar veel gelopen wordt, slijt een paadje in het gras, en het dorp viert feesten, zoals de meiboom en het oogstfeest.</p>
+</div>
+<figure class="slotbeeld">
+  <img src="beelden/avond.jpg" alt="Een zomeravond op het plein, met lantaarns en brandende ramen">
+  <figcaption>Een zomeravond op het plein: de lantaarns branden, en wie nog buiten is, staat in het licht.</figcaption>
+</figure>
+
+<div class="blok">
+<h2>Ontwerpregels</h2>
+<ol class="regels kolommen">
+  <li>Wat elders één klik is, gaat hier via een persoon, een plek, een papier of een handeling.</li>
+  <li>Je bouwt het dorp niet, je bestuurt het.</li>
+  <li>Elke keuze zegt vooraf wat ze kost, en bijna elke keuze kost de ene baas wat de andere wint.</li>
+  <li>Een probleem heeft een oorzaak die je had kunnen zien, en een toestand (honger, droogte) heeft een begin en een eind.</li>
+  <li>Een keuze die op je wacht, heeft een termijn: wie je niet spreekt, gaat weer weg, en ben je weg, dan beslist je raadsman.</li>
+  <li>Een eenvoudige regel gaat voor een regel die klopt met vroeger.</li>
+  <li>Heeft een ontwerpvraag meer dan één goed antwoord, dan kies je het zelf, in de spelregels.</li>
+</ol>
+</div>
+
+</body>
+</html>
