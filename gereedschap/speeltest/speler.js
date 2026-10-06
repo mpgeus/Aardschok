@@ -1325,6 +1325,11 @@
       // huizen alles hebben, en hoeveel woningen er van elke soort staan (wat er doorgroeide).
       standen: s.dorp.behoeften.standen ? Object.fromEntries(Object.entries(s.dorp.behoeften.standen).map(([k, x]) => [k, { mensen: x.mensen, huizen: x.huizen, alles: x.alles, tevreden: heel(x.tevredenheid * 100) / 100 }])) : null,
       woningen: Object.fromEntries(['hut', 'huis', 'stenenHuis'].map((soort) => [soort, s.dorp.gebouwen.filter((g) => g.soort === soort && g.huis !== 'schout').length])),
+      // De huizen die langer dan een maand alles hebben en toch niet doorgroeien, met de bouwstof erbij (werklijst vraag
+      // 130): het gezin rooit nog wat in de weg staat, of er staat iets wat niet te rooien is (T.waaromGroeitHetNiet).
+      groeitNiet: s.dorp.gebouwen
+        .filter((g) => T.GEBOUWEN[g.soort] && T.GEBOUWEN[g.soort].wordt && (g.groeiDagen || 0) > T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen && !g.wachtOpBouwstof)
+        .map((g) => `${T.GEBOUWEN[g.soort].naam} op ${g.x},${g.y}: ${g.rooitVoorGroei ? 'het gezin rooit' : T.waaromGroeitHetNiet(s.dorp, g) || 'wacht'}`),
       // Wat de huizen missen, zoals de raad en het rapport het zeggen (T.watDeHuizenMissen, js/wensen.js; vraag 87).
       missen: T.watDeHuizenMissen(s.dorp).slice(0, 5).map((x) => x.tekst),
       // Wat het dorp zou willen bouwen (T.watTeBouwen, js/raad.js), en of het te betalen is en er plek voor is bij het hart
