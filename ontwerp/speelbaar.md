@@ -149,6 +149,78 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 5 okt: vier jaar op de landen van de maker (werklijst, vraag 107, stap 3)
+
+Gespeeld in de vijfendertigste sessie, op `ccr-482eb0e9-wc6s8z`: het spel van `a83501d` (`main` met het bos, g1 en de vier
+bouwstijlen), naar het plan bij vraag 107 (Marcel: "a ja b ja c ja d ja"). Drie taken na elkaar, elk drie spellen tegelijk:
+`npm run speeltest -- bouwer --maker --jaren 4`, hetzelfde met `sluw`, en de bouwer met `--regel ontginnen=uit`. Een taak
+duurde 13 à 17 minuten (een spel van vier jaar 6 à 17 minuten, niet het uur van 3 okt). Geen fouten in de console. 62707
+bouwt in wit, 73425 in planken en 72022 in roze. De bouwer met ontginnen speelde nog een keer met de nieuwe telling (wat het
+dorp zou willen bouwen, en wat een vrij erf tegenhoudt), en dat jaar liep letter voor letter hetzelfde: de telling verandert
+niets aan het spel.
+
+| Land | Speler | Mensen aan het eind van jaar 1, 2, 3, 4 | Oogst jaar 1, 2, 3, 4 | Dagen zonder laken, jaar 2, 3, 4 | Ontgonnen | Erven | Betrapt |
+|---|---|---|---|---|---|---|---|
+| 62707 | bouwer | 54, 67, 67, 67 | 612, 958, 1371, 1308 | 360, 360, 360 | 5 heide, 5 bos gemeld | 3 | |
+| 73425 | bouwer | 50, 77, 83, 83 | 626, 917, 1278, 1331 | 360, 360, 360 | 4 heide, 6 bos gemeld | 4 | |
+| 72022 | bouwer | 66, 79, 79, 79 | 641, 892, 1090, 884 | 360, 360, 360 | 4 heide, 2 bos gemeld | 4 | |
+| 62707 | sluw | 57, 67, 67, 67 | 612, 759, 1088, 1235 | 66, 0, 0 | 8 bos stiekem | | 2 keer (jaar 3 en 4) |
+| 73425 | sluw | 50, ontslagen op Sint-Maarten | 626 | | 2 heide, 1 bos stiekem | | 1 keer, en ontslagen |
+| 72022 | sluw | 50, 74, 82, 82 | 641, 813, 1101, 1167 | 347, 321, 311 | 8 bos stiekem | | 4 keer (elk jaar) |
+| 62707 | zonder ontginnen | 65, 101, 105, 100 | 612, 522, 489, 440 | 97, 0, 0 | | 7 | |
+| 73425 | zonder ontginnen | 77, 96, 93, 71 | 626, 485, 417, 266 | 9, 69, 78 | | 6 | |
+| 72022 | zonder ontginnen | 77, 76, 81, 77 | 641, 489, 505, 443 | 360, 360, 360 | | 4 | |
+
+**Wat het zegt, langs de vijf vragen van het plan:**
+1. **Wint er een dorp? Nee, geen van de negen.** Na het eerste jaar had geen dorp nog één dag waarop alle huizen alles
+   hadden. De knoop is niet het graan maar de grond. De stenen huizen willen een markt, en **een markt werd in geen enkel
+   spel gebouwd**; een weverij drie keer van de negen, en alleen in het tweede jaar. De maandelijkse telling zegt waarom:
+   de markt had alleen plek in de eerste winter na het dorp (0 tot 6 van de 40 à 43 maanden), en toen was er geen goud
+   en gingen de jager, de molen, de bakkerij en de weverij voor; toen er goud was, was de grond op. Een markt vraagt 6
+   bij 6 open grond die geen akker, pad of erf is, met drie tegels vrij rondom: 12 bij 12. Op deze landen ligt rond het
+   dorp bos, en de open grond is na het eerste jaar weg aan erven, akkers, putten en werkplaatsen. Op 62707 kon het dorp
+   aan het eind een weverij en een markt betalen, maar was er voor allebei geen plek.
+2. **Het graan: ontginnen lost het op.** Met ontginnen groeit de oogst van 612 à 641 naar 1090 à 1371 in het derde jaar,
+   en is er na het eerste jaar geen dag honger meer. Zonder zakt hij naar 266 à 443 in het vierde jaar, met weer honger in
+   het derde en vierde jaar (op 62707 3 en 51 dagen, op 73425 134 en 113, op 72022 13 en 39), en op 73425 krimpt het dorp
+   van 96 naar 71, en zakt het vertrouwen tot 28. Zoals op 3 okt.
+3. **Het land: ontginnen stopt vanzelf, maar kost grond om te bouwen.** De heide is in het eerste jaar op (4 à 5 stukken),
+   het bos gemeld volgt in het tweede en derde (2 à 6 stukken), en in het vierde jaar vraagt niemand meer: het tekort is
+   weg. De prijs bijt niet: het vertrouwen bleef boven de 70, en de gunst zakte alleen op 72022 (tot 22), door wat de heer
+   kreeg (63% tot 22% van zijn eis), niet door de twee stukken bos. Wat wel bijt: **de heide was de open grond voor
+   erven.** Met ontginnen wees de bouwer op 62707 en 73425 3 en 4 erven
+   aan, zonder 7 en 6, en "Er wil een gezin komen, maar er is geen plaats" kwam met ontginnen 62 à 89 keer, zonder 7 à 15.
+   Met ontginnen blijft het dorp op 67, 83 en 79 steken (de grond), zonder haalt 62707 er 105 en 73425 96 (tot de honger
+   komt). Allebei onder de 100, de een op de grond, de ander op het graan.
+4. **Stiekem, met g1: de soldaten vinden het, maar betrapt kost weinig.** In 7 van de 9 jaren met een stiekeme akker
+   vonden ze er een (op 62707 de eerste twee jaar niets, met 3 en 6 stukken; op 72022 elk jaar). De inner vond in vier
+   jaar niets. Betrapt is de laatste waarschuwing (gunst 5), maar wie de heer daarna betaalt wat hij vraagt, staat het
+   jaar erna weer ruim: de sluwe bouwer op 72022 werd vier keer betrapt en bleef schout. Alleen op 73425, met één stuk,
+   kwam de rekening dezelfde dag te laag uit: ontslagen in het eerste jaar (alles of niets).
+5. **Wat er verder vastliep:**
+   - **Een erf dat vrij heet, maar waar geen hut meer op past** (62707, met ontginnen). Een stenen huis ernaast groeide
+     door in het looppad om de plek van de hut (21 tegels). Vanaf het tweede jaar kwam "Er wil een gezin komen, maar er is
+     geen plaats" 79 keer, maar de groei en de raad zagen een vrij erf (`T.kanEenErfNemen`), dus zei de raad het niet, en
+     wees de bouwer geen nieuw erf aan: twee en een half jaar geen gezin, op 67.
+   - **Geen goud voor laken:** de bouwer wilde zes à zeven keer per spel laken kopen bij de marskramer, maar had het goud
+     niet. De sluwe bouwer, die de heer minder geeft, kocht het op 72022 vier keer.
+
+**Wat het vraagt:** zie vraag 110 in de werklijst (de grond om te bouwen: de markt, bouwgrond uit het bos, en het erf dat
+vastzit). Stap 3 van vraag 107 is daarmee gespeeld.
+
+**Daarna, met f** (`f706100`: een huis groeit niet meer op een erf of in het looppad om zijn huis, en een vrij erf waar
+geen hut op past, telt niet als plaats; Marcel: "D, e, f Ja"). Alleen de bouwer met ontginnen, `npm run speeltest -- bouwer
+--maker --jaren 4`, 14 minuten:
+- **73425 en 72022 speelden letter voor letter hetzelfde** (83 en 79 mensen): daar zat geen erf vast; daar is de grond
+  voor erven op (vraag 110, e).
+- **Op 62707 kwam de groei los:** "Er wil een gezin komen, maar er is geen plaats" 0 keer (was 85), 5 erven (was 3), en
+  aan het eind van het tweede jaar 73 mensen (was 67). Het spel loopt al vanaf het eerste jaar anders, want het huis van
+  de maker groeide niet meer op het erf.
+- **Maar op Sint-Maarten van het tweede jaar was de bouwer zijn ambt kwijt.** De heer kreeg 54% en 39% van zijn eis (was
+  75% en 54%), zijn soldaten vonden de wapens van de wapenmaker (gunst −30), en dan "je betaalde te weinig". Een dorp dat
+  sneller groeit, kost de heer meer dan het aan goud opbrengt. Het goud remde vandaag drie keer: de bouwer kon nooit laken
+  kopen, de markt kwam in de eerste winter niet door het goud, en nu dit (vraag 110, "Het goud").
+
 ## De speeltest van 5 okt: ontginnen in het bos (werklijst, vraag 107, stap 2)
 
 Gespeeld in de vierendertigste sessie, op `ccr-96e0aab5-w9cesu` op `2aac3b8` (de heide en het bos naast elkaar, gemeld of

@@ -1171,7 +1171,8 @@
           }
         }
         const erfMag = (houthakker || T.VERZOEKEN_INSTELLINGEN.mensen) && !maat;
-        if (erfMag && !T.vrijeErven(s.dorp).length && dagNu() >= erfNietVoor && !bouwErf()) erfNietVoor = dagNu() + 30;
+        // Een vrij erf waar geen hut meer op past, telt niet (T.bruikbareErven; vraag 110, f).
+        if (erfMag && !T.bruikbareErven(s.dorp).length && dagNu() >= erfNietVoor && !bouwErf()) erfNietVoor = dagNu() + 30;
         // Bouwen wat hij wil, zodra het goud en het hout er zijn; een kapel waar hij de meeste huizen bereikt. Wat het doel
         // vraagt en er al staat (een kapel voor de wensen), hoeft niet meer.
         while (wil.length && wil[0] !== 'houthakker' && !T.doelGebouwen(s.dorp).includes(wil[0])) wil.shift();
@@ -1235,6 +1236,66 @@
     return Object.fromEntries(eis.volgorde.map((w) => [w, eis.per[w]]));
   }
 
+  // Het hart van het dorp, waar een verzoek zijn plek zoekt: de deur van het huis van de schout (zoals hartVan in
+  // js/verzoeken.js).
+  function hartVanHetDorp() {
+    const s = S();
+    const huis = s.dorp.gebouwen.find((g) => g.huis === 'schout');
+    return huis ? T.deurVan(s.wereld, huis) : { x: Math.floor(s.wereld.tegels[0].length / 2), y: Math.floor(s.wereld.tegels.length / 2) };
+  }
+
+  // Wat er in het looppad om de plek van de hut op een erf staat (zoals T.looppadOm het nakijkt), geteld per soort: een
+  // gebouw, een voorwerp, de plek van het huis op een ander erf, of iets anders wat niet te belopen is. Leeg als hij past.
+  function watStaatOmDeHut(D, e) {
+    const p = e.plan;
+    if (!p) return { 'geen plan': 1 };
+    const w = D.wereld;
+    const n = T.GEBOUWEN_INSTELLINGEN.looppad;
+    const r = { x: e.x + p.dx, y: e.y + p.dy, b: p.b, h: p.h };
+    const uit = {};
+    for (let y = r.y - n; y < r.y + r.h + n; y++) {
+      for (let x = r.x - n; x < r.x + r.b + n; x++) {
+        if ((x >= r.x && x < r.x + r.b && y >= r.y && y < r.y + r.h) || x < 0 || y < 0 || x >= w.tegels[0].length || y >= w.tegels.length) continue;
+        let wat = null;
+        if (T.huisPlekOp(D, x, y, e)) wat = 'de plek van een huis op een ander erf';
+        else if (!T.isBegaanbaar(w, x, y, { deurenOpenen: true })) {
+          const g = T.gebouwOp(D, x, y);
+          const v = T.voorwerpOp(w, x, y);
+          wat = g ? g.soort : v ? v.soort : 'iets vasts';
+        }
+        if (wat) uit[wat] = (uit[wat] || 0) + 1;
+      }
+    }
+    return uit;
+  }
+
+  // De gebouwen in het looppad om de plek van de hut op een erf: waar ze staan, hun voet, of ze zelf op een erf staan, en
+  // hoeveel van hun tegels op dit erf liggen.
+  function gebouwenOmDeHut(D, e) {
+    const p = e.plan;
+    if (!p) return [];
+    const n = T.GEBOUWEN_INSTELLINGEN.looppad;
+    const r = { x: e.x + p.dx - n, y: e.y + p.dy - n, b: p.b + 2 * n, h: p.h + 2 * n };
+    const binnen = (x, y, q) => x >= q.x && x < q.x + q.b && y >= q.y && y < q.y + q.h;
+    const uit = [];
+    for (const g of D.gebouwen || []) {
+      // De voet zoals T.gebouwOp (js/gebouwen.js) hem leest: wat het voorwerp beslaat, anders de voet van het gebouw.
+      const w = g.voorwerp;
+      const v = w && w.beslaat ? { x: w.x, y: w.y, b: w.beslaat[0], h: w.beslaat[1] } : g.voet ? { x: g.x, y: g.y, b: g.voet.b, h: g.voet.h } : null;
+      if (!v) continue;
+      let inRing = 0;
+      let opErf = 0;
+      for (let dy = 0; dy < v.h; dy++) {
+        for (let dx = 0; dx < v.b; dx++) {
+          if (binnen(v.x + dx, v.y + dy, r)) inRing++;
+          if (binnen(v.x + dx, v.y + dy, e)) opErf++;
+        }
+      }
+      if (inRing) uit.push({ soort: g.soort, tekening: g.tekening, ...v, inRing, opDitErf: opErf, eigenErf: g.erf ? { x: g.erf.x, y: g.erf.y } : null });
+    }
+    return uit;
+  }
+
   function tel() {
     const s = S();
     const v = T.verstoptTotaal(s.dorp);
@@ -1252,6 +1313,9 @@
       woningen: Object.fromEntries(['hut', 'huis', 'stenenHuis'].map((soort) => [soort, s.dorp.gebouwen.filter((g) => g.soort === soort && g.huis !== 'schout').length])),
       // Wat de huizen missen, zoals de raad en het rapport het zeggen (T.watDeHuizenMissen, js/wensen.js; vraag 87).
       missen: T.watDeHuizenMissen(s.dorp).slice(0, 5).map((x) => x.tekst),
+      // Wat het dorp zou willen bouwen (T.watTeBouwen, js/raad.js), en of het te betalen is en er plek voor is bij het hart
+      // van het dorp (T.plekVoor, js/verzoeken.js): zo zie je waarom er geen verzoek komt (werklijst vraag 107, stap 3).
+      wilBouwen: T.watTeBouwen(s.dorp).slice(0, 4).map((x) => ({ soort: x.soort, betalen: T.kanBetalen(s.dorp, T.GEBOUWEN[x.soort].kosten || {}), plek: !!T.plekVoor(s.dorp, x.soort, hartVanHetDorp()) })),
       argwaan: heel(argwaan() * 100) / 100,
       houthakkers: houthakkers.map((g) => ({ klaar: !!g.klaar, handen: g.handen || 0 })),
       // De twee bazen (js/bazen.js; vraag 106): de gunst van de heer en het vertrouwen van het dorp.
@@ -1399,6 +1463,25 @@
     };
     zoek.voor = (S_, p) => Object.assign({}, p.gebouw.verstopt || { graan: 0, goud: 0 });
     na('zoekOpPlek', zoek);
+    // Stiekem ontgonnen (js/ontginnen.js; werklijst vraag 107, stap 3): elke keer dat er een akker in het bos werd gezocht
+    // die niet in de boeken staat (de soldaten in het bos of bij het hele dorp, of de heer met wat zijn inner zag): hoeveel
+    // er lagen en hoeveel ze vonden. En elke keer dat de schout betrapt werd (js/bazen.js), waarom, en de gunst daarna.
+    const stiekemeAkkers = (D_) => ((D_.wereld && D_.wereld.akkers) || []).filter((v) => v.stiekem).length;
+    const gezocht = (D_, wie, lagen, r) => {
+      if (D_ === s.dorp && lagen) boek.bosZoeken.push({ dag: heel(s.kalender.dag), datum: datum(), wie, lagen, gevonden: r.length });
+    };
+    const zoekBos = (r, lagen, D_, getal, heelDorp = true) => gezocht(D_, heelDorp ? 'het hele dorp' : 'het bos', lagen, r);
+    zoekBos.voor = stiekemeAkkers;
+    na('zoekBosAkkers', zoekBos);
+    const inner = (r, lagen, D_) => gezocht(D_, 'de inner', lagen, r);
+    inner.voor = stiekemeAkkers;
+    na('heerVindtBosAkkers', inner);
+    const betrapt = (r, voor, D_, tekst) => {
+      if (D_ !== s.dorp || !D_.bazen || D_.bazen.betraptOp === voor) return; // telde niet: al betrapt vandaag, of geen bazen
+      boek.betrapt.push({ dag: heel(s.kalender.dag), datum: datum(), tekst: tekst || 'zijn soldaten vonden wat je verstopte', gunst: Math.round(D_.bazen.gunst) });
+    };
+    betrapt.voor = (D_) => D_ && D_.bazen && D_.bazen.betraptOp;
+    na('betrapt', betrapt);
     na('werdGezien', (r, voor, S_, D_, g, handeling, wat, n) => {
       boek.getuigen.push({ dag: heel(s.kalender.dag), datum: datum(), plek: T.verstopPlekVan(D_, g).naam, handeling, wat, n, wie: (r && r.bericht) || '' });
     });
@@ -1573,7 +1656,7 @@
         argwaan: { naInner: null, opSintMaarten: null }, heer: null, brief: null, naSintMaarten: null, luisterFouten: [],
         heerJaren: [], dorp: null, marktrecht: null, groei: [], raad: {}, voorvallen: [],
         jaren: jaren && (SPELERS[speler].jaren || 1) > 1 ? jaren : (SPELERS[speler].jaren || 1), graan: [], geluk: [],
-        reeks: { nu: 0, langste: 0 }, breuken: [],
+        reeks: { nu: 0, langste: 0 }, breuken: [], bosZoeken: [], betrapt: [],
       };
       const s = S();
       luister();
@@ -1630,6 +1713,9 @@
       };
       boek.eind = eind();
       boek.winter = winter();
+      // De vrije erven aan het eind, en wat er in het looppad om de plek van hun hut staat (T.looppadOm, js/gebouwen.js):
+      // een erf dat vrij heet maar waar geen hut meer op past, houdt de groei tegen (werklijst vraag 107, stap 3).
+      boek.vrijeErven = T.vrijeErven(s.dorp).map((e) => ({ x: e.x, y: e.y, b: e.b, h: e.h, plan: e.plan && { dx: e.plan.dx, dy: e.plan.dy, b: e.plan.b, h: e.plan.h }, inDeWeg: watStaatOmDeHut(s.dorp, e), gebouwen: gebouwenOmDeHut(s.dorp, e) }));
       // De raadsman (js/raadsman.js): wie het was, en hoeveel voorvallen hij besliste.
       const rm = T.raadsmanVan(s.dorp);
       boek.raadsman = rm ? { over: T.overRaadsmanTekst(s.dorp, rm), door: (s.dorp.voorvallen && s.dorp.voorvallen.doorRaadsman) || 0, laatste: ((s.dorp.raadsman && s.dorp.raadsman.besluiten) || []).slice(-5) } : null;

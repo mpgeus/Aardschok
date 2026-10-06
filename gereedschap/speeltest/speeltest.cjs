@@ -18,6 +18,9 @@
 //                                                        jaar als zonder opslaan (--opslaan 245: een andere dag)
 //   npm run speeltest -- bouwer --maker        op een gehucht van de maker (vraag 70, C): de spelregel "Je
 //                                              gehucht" op "Elk spel een ander", elk zaad een ander gehucht
+//   npm run speeltest -- bouwer sluw --maker --samenvatting
+//                                              niet spelen, maar de samenvatting opnieuw maken uit wat er al in uit/
+//                                              ligt: zo geeft een speeltest die over meer taken verdeeld is, één tabel
 //   npm run speeltest -- --regel seizoen=jij   met een spelregel anders dan de standaard (T.OPTIES in js/opties.js),
 //   npm run speeltest -- --getal VOORVALLEN_INSTELLINGEN.metOorzaak=1
 //                                              of met een getal uit de werkbank; allebei zo vaak als je wilt, zoals
@@ -61,6 +64,7 @@ function leesOpdracht(argv) {
     const a = argv[i];
     if (a === '--opslaan') o.opslaan = /^\d+$/.test(argv[i + 1] || '') ? Number(argv[++i]) : OOGSTMAAND;
     else if (a === '--maker') o.maker = true;
+    else if (a === '--samenvatting') o.samenvatting = true;
     else if (a === '--regel' || a === '--getal') {
       const [naam, waarde] = String(argv[++i] || '').split('=');
       if (!naam || waarde == null || waarde === '') {
@@ -79,7 +83,7 @@ function leesOpdracht(argv) {
       for (let z = van; z <= (tot || van); z++) o.zaden.push(z);
     } else if (SPELERS.includes(a)) o.spelers.push(a);
     else {
-      console.error(`Onbekend: ${a}. Spelers: ${SPELERS.join(', ')}; en --zaad n, --zaden van-tot, --jaren n, --tegelijk n, --opslaan [dag], --maker, --regel naam=keuze of --getal pad=waarde.`);
+      console.error(`Onbekend: ${a}. Spelers: ${SPELERS.join(', ')}; en --zaad n, --zaden van-tot, --jaren n, --tegelijk n, --opslaan [dag], --maker, --samenvatting, --regel naam=keuze of --getal pad=waarde.`);
       process.exit(1);
     }
   }
@@ -156,6 +160,22 @@ async function main() {
     (vies ? ', met wijzigingen in het spel die nog niet gecommit zijn' : '');
   const op = stand + (o.maker ? ', op gehuchten van de maker' : '') + (o.anders.length ? `, met ${o.anders.join(', ')}` : '');
   const achter = (o.maker ? '-maker' : '') + (o.anders.length ? '-regels' : '');
+  // Niet spelen, maar de samenvatting opnieuw maken uit wat er al in uit/ ligt, voor deze spelers en zaden (met dezelfde
+  // --maker, --regel en --getal). Een taak op de achtergrond stopt na twee uur, dus een speeltest van vier jaar gaat in
+  // meer taken (werklijst, vraag 107, stap 3); zo geven ze samen één tabel.
+  if (o.samenvatting) {
+    const uitslagen = [];
+    for (const speler of o.spelers) for (const zaad of o.zaden) {
+      const bestand = path.join(UIT, `${speler}-${zaad}${achter}.json`);
+      if (fs.existsSync(bestand)) uitslagen.push(JSON.parse(fs.readFileSync(bestand, 'utf8')));
+      else console.log(`Niet gevonden: ${path.relative(WORTEL, bestand)}`);
+    }
+    const standen = [...new Set(uitslagen.map((u) => u.stand).filter(Boolean))];
+    const tabel = require('./samenvatting.cjs').maak(uitslagen, standen.join('; ') || op);
+    fs.writeFileSync(path.join(UIT, `samenvatting${achter}.md`), tabel);
+    console.log('\n' + tabel);
+    return;
+  }
   console.log(`De speeltest speelt op ${op}.`);
   fs.mkdirSync(UIT, { recursive: true });
   const { chromium } = laadPlaywright();

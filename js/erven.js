@@ -15,7 +15,10 @@
 //
 // Het huis krijgt rondom een looppad, zoals elk gebouw (T.GEBOUWEN_INSTELLINGEN.looppad, js/gebouwen.js; Marcel, 3 okt:
 // "Ja" op drie tegels ook om een huis op een erf): waar het komt, ligt vast als je het erf aanwijst (erf.plan), en een
-// gebouw dat later komt, blijft er met zijn looppad vandaan, ook als het huis er nog niet staat (T.huisPlekOp).
+// gebouw dat later komt, blijft er met zijn looppad vandaan, ook als het huis er nog niet staat (T.huisPlekOp). Een huis
+// dat doorgroeit, net zo (T.opDeGrondVanEenErf, js/behoeften.js). En past er toch geen hut meer op een vrij erf, dan telt
+// het niet als plaats (T.bruikbareErven): dan zegt de raad dat er geen plaats is, en wijs je een ander erf aan (werklijst
+// vraag 110, f; in de speeltest van vier jaar kwam er op 62707 zo twee en een half jaar geen gezin).
 //
 //   S.erven = [{ x, y, b, h, hut, plan }]  // waar een erf ligt, en de hut erop (een gebouw uit S.gebouwen),
 //                                          // of null zolang het vrij is. De hut wijst terug: hut.erf. plan: waar het
@@ -53,9 +56,26 @@
 
   T.vrijeErven = (D) => (D.erven || []).filter((e) => !e.hut);
 
-  // Kan een nieuw gezin een erf nemen? Als het dorp zelf bouwt en er een vrij erf is (T.gezinZoektEenErf
-  // hieronder; en T.waaromGeenGezin in js/gebouwen.js, die zegt of er plaats is).
-  T.kanEenErfNemen = (D) => IN().dorpBouwtZelf && T.vrijeErven(D).length > 0;
+  // De vrije erven waar nog een hut op past (T.hutPastOpErf): daar kan een nieuw gezin heen.
+  T.bruikbareErven = (D) => T.vrijeErven(D).filter((e) => T.hutPastOpErf(D, e));
+
+  // Kan een nieuw gezin een erf nemen? Als het dorp zelf bouwt en er een vrij erf is waar een hut op past
+  // (T.gezinZoektEenErf hieronder; en T.waaromGeenGezin in js/gebouwen.js, die zegt of er plaats is).
+  T.kanEenErfNemen = (D) => IN().dorpBouwtZelf && T.bruikbareErven(D).length > 0;
+
+  // Ligt (x, y) op een ander erf dan `behalve`, of binnen het looppad om de plek van het huis op een ander erf? Daar
+  // groeit een huis niet heen (js/behoeften.js), zoals een gebouw dat er later komt er ook vandaan blijft (T.looppadOm,
+  // js/gebouwen.js, met T.huisPlekOp).
+  T.opDeGrondVanEenErf = function (D, x, y, behalve = null) {
+    const n = T.GEBOUWEN_INSTELLINGEN.looppad;
+    for (const e of D.erven || []) {
+      if (e === behalve) continue;
+      if (x >= e.x && x < e.x + e.b && y >= e.y && y < e.y + e.h) return true;
+      const p = e.plan;
+      if (p && x >= e.x + p.dx - n && x < e.x + p.dx + p.b + n && y >= e.y + p.dy - n && y < e.y + p.dy + p.h + n) return true;
+    }
+    return false;
+  };
 
   // Waarom past een erf niet met zijn linkerbovenhoek op (x, y)? De reden, of null. Het hele vak moet vrij
   // zijn: niet op het plein, niets vasts (water, een boom, een gebouw, de rand van de kaart), geen veld,
@@ -253,11 +273,32 @@
   // Welk vrij erf een nieuw gezin neemt: het dichtst bij waar werk is, en is er nergens werk, het dichtst
   // bij het plein. Of null.
   T.kiesErf = function (D) {
-    const vrij = T.vrijeErven(D);
+    const vrij = T.bruikbareErven(D);
     if (!vrij.length) return null;
     const doel = waarWerkIs(D) || T.pleinVan(D.wereld) || { x: 0, y: 0 };
     const afstand = (e) => Math.hypot(e.x + e.b / 2 - doel.x, e.y + e.h / 2 - doel.y);
     return vrij.slice().sort((a, b) => afstand(a) - afstand(b))[0];
+  };
+
+  // Welke hut en welk huis er op dit erf komen: zijn plan, als het looppad om het huis nog vrij is, en anders een hut en
+  // een huis die er nu wel passen (kiesTekeningen), of null. Iets wat later naast het erf kwam, kan het looppad innemen.
+  function hutVoorErf(D, erf) {
+    const plan = erf.plan;
+    const n = T.GEBOUWEN_INSTELLINGEN.looppad;
+    return plan && T.looppadOm(D, { x: erf.x + plan.dx, y: erf.y + plan.dy, b: plan.b, h: plan.h }, n, erf) ? plan : kiesTekeningen(D, erf, erf);
+  }
+
+  // Past er een hut op dit erf (hutVoorErf)? Onthouden zolang de kaart en de erven dezelfde zijn (T.kaartVersie,
+  // js/wereld.js): zoeken kost veel, en de groei en de raad vragen het vaak (T.waaromGeenGezin). Geen spelstaat, maar
+  // wat uit de kaart volgt.
+  const PAST_ER_EEN_HUT = new WeakMap();
+  T.hutPastOpErf = function (D, erf) {
+    const sleutel = `${T.kaartVersie(D.wereld)}:${(D.erven || []).length}`;
+    const oud = PAST_ER_EEN_HUT.get(erf);
+    if (oud && oud.sleutel === sleutel) return oud.past;
+    const past = !!hutVoorErf(D, erf);
+    PAST_ER_EEN_HUT.set(erf, { sleutel, past });
+    return past;
   };
 
   // De hut op het erf: een gebouw als elk ander (T.bouwGebouw, js/gebouwen.js), maar met zijn erf erbij en
@@ -265,9 +306,7 @@
   // pas als het hout er is (`wachtOpHout`, en dan nog geen `klaarOp`). Geeft de hut, of null als er niets
   // past.
   T.zetHutOpErf = function (D, erf) {
-    const plan = erf.plan;
-    const n = T.GEBOUWEN_INSTELLINGEN.looppad;
-    const keus = plan && T.looppadOm(D, { x: erf.x + plan.dx, y: erf.y + plan.dy, b: plan.b, h: plan.h }, n, erf) ? plan : kiesTekeningen(D, erf, erf);
+    const keus = hutVoorErf(D, erf);
     if (!keus) return null;
     erf.plan = planVan(keus);
     // Wat genomen is, is genomen: de volgende hut en het volgende huis worden een andere tekening.

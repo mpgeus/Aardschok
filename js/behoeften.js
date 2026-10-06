@@ -450,7 +450,10 @@
 
   // Is er plaats voor de nieuwe voet: wat buiten de oude voet valt, mag niet vast zijn (een muur, een boom, een gebouw),
   // er mag niemand staan, en het mag niet de deur van een ander gebouw zijn (werklijst vraag 88: in de nulmeting groeide
-  // een hut over twee mensen heen, die er tot het eind ingemetseld stonden). Staat er iemand, dan morgen weer.
+  // een hut over twee mensen heen, die er tot het eind ingemetseld stonden). Staat er iemand, dan morgen weer. En het
+  // blijft van een ander erf af, en drie tegels van de plek van het huis erop, zoals een nieuw gebouw (T.opDeGrondVanEenErf,
+  // js/erven.js; werklijst vraag 110, f: op 62707 groeide een buurhuis in het looppad van een vrij erf, en kwam er twee en
+  // een half jaar geen gezin).
   function heeftRuimte(D, instantie, oudeVoet, voet) {
     const w = D.wereld;
     for (let dy = 0; dy < voet.h; dy++) {
@@ -459,6 +462,7 @@
         const x = instantie.x + dx;
         const y = instantie.y + dy;
         if (T.isVast(w, x, y) || T.waaromNietOpIemand(D, { x, y, b: 1, h: 1 }, instantie)) return false;
+        if (T.opDeGrondVanEenErf(D, x, y, instantie.erf)) return false;
       }
     }
     return true;

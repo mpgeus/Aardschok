@@ -9,6 +9,12 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Een erf dat vrij heet, maar geen hut meer neemt** (5 okt, vijfendertigste sessie; de speeltest van vier jaar, op
+  62707): een buurhuis groeide door tot stenen huis, in het looppad om de plek van de hut op een vrij erf. Daarna zet
+  `T.zetHutOpErf` er niets meer op (het dorp zegt "Er wil een gezin komen, maar er is geen plaats"), maar `T.kanEenErfNemen`
+  vraagt alleen of er een vrij erf is, dus zien de groei (`T.waaromGeenGezin`) en de raad plaats, en wijst niemand een
+  nieuw erf aan: twee en een half jaar geen gezin. Het voorstel om het te repareren is vraag 110, f, in de werklijst.
+  Ook na te lopen: of een huis dat doorgroeit, het looppad om andere gebouwen zo ook kan innemen.
 - **Ontginnen in het bos, wat opviel** (5 okt, vierendertigste sessie; vraag 107, stap 2). Na te lopen:
   - Een boer die midden in een bosje hakt, zie je vaak niet: de bomen voor hem dekken hem af, want de doorkijk is voor de
     schout en wie ertoe doet (`T.zichtbaarDoor`, js/doorkijk.js; Marcel, 26 sep: niet door een boom voor iedereen). Loop
