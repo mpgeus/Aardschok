@@ -2996,7 +2996,8 @@ achter een dak; nu is het de rand van een echt stuk bos, waar je de boer ziet.
 houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug", en "A ja B ja C ja D zo"): de houthakker maakt
 evenveel hout als altijd, 2 per dag (4 met de wet Houtkap), maar het komt uit een boom. Hij hakt aan de boom binnen tien
 tegels van zijn schuur die het dichtst bij zijn deur staat, en elke tien hout is die om: er blijft een stronk staan, die
-na een jaar vergaan is, en stond de boom in het bos (minstens vier bomen in de vijf bij vijf tegels eromheen), dan plant
+na een jaar vergaan is en waar je tussendoor loopt, zoals in een kapvlakte, zodat hij bij de bomen erachter komt (een
+stronk die de maker legde, staat wel in de weg; `opmerkingen.md`), en stond de boom in het bos (minstens vier bomen in de vijf bij vijf tegels eromheen), dan plant
 hij er een boompje naast, nooit op een veld, een weg, een erf, een paadje of voor een deur. Een boompje is na een half
 jaar tot een jaar een jonge boom, en na nog eens zo lang een boom van dezelfde soort (een wilg of een dode boom wordt een
 eik): in een jaar of twee. Zo wordt het bos om de schuur dunner, met stronken, boompjes en jonge bomen, en met de wet
