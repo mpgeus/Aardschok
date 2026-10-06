@@ -5817,6 +5817,25 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     Klaar als: in de speeltest van vier jaar groeien de hutten van de maker door, en wint een dorp van de bouwer.
     **Marcel koos (6 okt): "Ok".** Dus a met c: wie doorgroeit, rooit wat in de weg staat, zoals een gezin zijn erf, en
     het briefje bij de muis zegt waarom een huis dat alles heeft niet groeit; daarna de speeltest van vier jaar opnieuw.
+    **Marcel koos ook (6 okt, in de zevenendertigste sessie, die vraag 130 tegelijk bouwde): "A" voor de appelboom.** De
+    appelboom mag ook om, maar alleen als geen enkele vorm zonder hem past: het gezin houdt zijn boom waar het kan. Nog
+    niet in `main`: daar houdt een appelboom het groeien tegen (`'vast'` in `watStaatInDeWeg`, `js/behoeften.js`).
+    Waarom het ertoe doet, **gemeten** bij het begin van het spel op veertig landen van de maker (1 tot 20, de drie van de
+    speeltest en zeventien andere), met elke vorm die het groeien probeert: van de 160 hutten en huizen die kunnen
+    doorgroeien, kunnen er 13 het niet. Met a groeien er 10 (één tot drie dingen te rooien), de andere drie (op land 1, 17
+    en 56789) alleen als ook de appelboom weg mag: die staat bij elke vorm in de weg, want de maker zet bij elk huis een
+    appelboom of een eik, binnen drie tegels, en een huis groeit naar rechts en naar onder. Iets anders (een gebouw, een
+    erf, een deur) houdt bij het begin geen enkele hut tegen. Op zo'n land win je dus nooit; de drie landen van de
+    speeltest hebben het niet, dus de speeltest laat het niet zien.
+    **En een puntje bij c:** het briefje vraagt elk beeld `T.waaromGroeitHetNiet`, en dat vraagt via `groeiVormen`
+    `T.volgendeTekening`, die een tekening loot als die nog niet gekozen is (bijvoorbeeld als een ander huis die nacht de
+    zijne nam); dan loopt het spel anders naar waar de muis stond. In de tweede versie slaat het briefje die vorm over, want
+    hij zit ook tussen de andere (`vormenVoorGroei` met `kiezen`).
+    **De tweede versie** staat op de branch `claude/vraag-130-tweede-versie` (`5444d24`, met de appelboom, het briefje
+    zonder loten en `test/doorgroeien.test.cjs`); daar werkt het hele gezin niet zolang het rooit (in `main` alleen het
+    hoofd), en telt een boompje dat niet vaststaat niet mee als iets in de weg (`main` doet dat wel goed). In de speeltest
+    van die versie wonnen 73425 en 72022, allebei in het vierde jaar (op 1 slachtmaand en 1 wijnmaand); 62707 niet, door
+    hetzelfde erf.
     **Gebouwd** (6 okt, de sessie van de heer; `js/behoeften.js`, `js/bos.js`, `test/rooien.test.cjs`): het groeien zegt
     per vorm wat er in de weg staat (te rooien, een erf, een deur, iemand, of iets vasts). Past geen vorm, maar staat er
     bij een vorm alleen iets te rooien, dan rooit het gezin dat eerst (`T.groeiRooiPlan`, `T.rooiOmTeGroeien`,
