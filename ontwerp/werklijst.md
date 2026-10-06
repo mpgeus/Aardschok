@@ -5836,6 +5836,17 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     **Marcel koos (6 okt): "Eens alle 3".** Dus a met a2, c met c2, en d: het gezin rooit wat in de weg staat, ook zijn
     eigen appelboom; het briefje en de raad zeggen waarom een huis niet groeit; en een erf komt niet op de grond waar een
     huis ernaast nog moet doorgroeien.
+    **Gebouwd** (6 okt, zevenendertigste sessie; `9524c1c`; `test/doorgroeien.test.cjs`; `spel.md`, "De wensen van de
+    mensen", 2b): één regel zegt hoe een huis doorgroeit (`T.groeiPlan`, js/behoeften.js): past een vorm, dan dezelfde als
+    vroeger, zodat verder niets verandert; staat er alleen iets wat te rooien is, dan de vorm met het minste te rooien, en
+    het hoofd van het gezin rooit het met de bijl (`rooitVoorGroei`, js/bos.js), terwijl hij zijn werk houdt; wie in het
+    gezin geen werk heeft, helpt. Zijn eigen appelboom kapt het gezin ook (`teKappen`), voor 10 hout. Het briefje zegt
+    "Eerst rooit het gezin een struik", "Het gezin rooit een struik, en dan wordt het een huis" of "Het kan geen huis
+    worden: er staat een rots in de weg" (in de browser gezien op 62707), en de raad zegt het na de maat van de winst.
+    **Wat Claude erin zag bij d:** de vorm die een hut het liefst neemt vrijhouden, was strenger dan nodig: het weigerde
+    zelfs het erf op 48, 50 in het ontworpen gehucht, terwijl de hut ernaast nog andere vormen had. Nu weigert een erf
+    alleen als het een huis elke vorm afneemt (`T.groeiRuimte`); op 62707 zijn dat 63 plekken, op het ontworpen gehucht
+    geen. Ook gezien (`opmerkingen.md`): een huis dat doorgroeit, kijkt niet naar de paden.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
