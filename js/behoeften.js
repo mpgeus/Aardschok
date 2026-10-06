@@ -601,9 +601,11 @@
         g.wachtOpBouwstof = true;
         continue;
       }
+      // De bouwstof is er, dus het wacht er niet meer op, ook als het toch niet kan groeien: dan zegt het briefje waarom
+      // (vraag 130, c), en hoort er geen teken van bouwstof bij zijn deur.
+      delete g.wachtOpBouwstof;
       if (!groeiGebouw(D, g, soort)) continue; // geen ruimte: morgen weer, of het gezin rooit eerst (js/bos.js)
       T.betaalKosten(D, kosten);
-      delete g.wachtOpBouwstof;
       const voor = Object.keys(kosten).length ? `, voor ${kostenTekst(kosten)}` : '';
       T.zeg(D, `Een ${soort.naam} is gegroeid tot een ${nieuw.naam}${voor}: wie erin woont, hoort nu bij de ${T.STANDEN[T.standVan(g)].naam}.`, 'goed');
       // Voor het rapport van de raadsman (js/ochtendrapport.js; vraag 87): "De hut van Geert is een huis geworden".

@@ -195,10 +195,20 @@ test('het briefje zegt waarom een huis dat alles heeft niet kan doorgroeien: een
     const groei = T.huisToestand(D, g).groei;
     assert.equal(groei.inDeWeg, 'een erf ligt in de weg');
     assert.equal(groei.rooit, null);
+    // Was er een nacht te weinig hout, en is het er weer, dan wacht het huis niet meer op bouwstof: geen teken van
+    // bouwstof bij zijn deur, want het hout is er (eerst bleef dat staan zolang het huis niet groeide).
+    const hout = D.voorraad.hout;
+    T.zetVoorraad(D, 'hout', 0);
+    nachten(S, 2, 2);
+    assert.equal(T.tekenVanHuis(g), 'bouwstof');
+    T.zetVoorraad(D, 'hout', hout);
+    nachten(S, 3, 3);
+    assert.equal(T.tekenVanHuis(g), null);
+    assert.equal(T.huisToestand(D, g).groei.inDeWeg, 'een erf ligt in de weg');
     // Is het erf weg, dan kan het weer (meteen, niet pas morgen), en rooit het de nacht erna.
     D.erven.splice(D.erven.indexOf(erf), 1);
     assert.equal(T.waaromGroeitHetNiet(D, g), null);
-    nachten(S, 2, 2);
+    nachten(S, 4, 4);
     assert.equal(g.rooitVoorGroei, true);
   });
 });
