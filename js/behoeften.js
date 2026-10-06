@@ -454,12 +454,13 @@
   }
 
   // Wat staat er in de weg waar de nieuwe voet buiten de oude valt: [{ x, y, wat }], leeg als hij past. `wat` is 'rooien'
-  // (een boom, een stronk, een struik, een boompje: het gezin kan het rooien, js/bos.js; werklijst vraag 130), 'iemand'
+  // (een boom, een stronk, een struik, een boompje: het gezin kan het rooien, js/bos.js; werklijst vraag 130; en zijn eigen
+  // appelboom, a2: die is van hem, T.isEigenBoom), 'iemand'
   // (die staat er, morgen weer), 'deur' (van een ander gebouw: werklijst vraag 88, in de nulmeting groeide een hut over
   // twee mensen heen, die er tot het eind ingemetseld stonden), 'erf' (de grond van een ander erf, en drie tegels van de
   // plek van het huis erop, zoals bij een nieuw gebouw: T.opDeGrondVanEenErf, js/erven.js; werklijst vraag 110, f: op
   // 62707 groeide een buurhuis in het looppad van een vrij erf, en kwam er twee en een half jaar geen gezin), of 'vast'
-  // (een muur, een gebouw, een rots, een appelboom).
+  // (een muur, een gebouw, een rots).
   function watStaatInDeWeg(D, instantie, oudeVoet, voet) {
     const w = D.wereld;
     const uit = [];
@@ -471,7 +472,7 @@
         const r = { x, y, b: 1, h: 1 };
         let wat = null;
         if (T.opDeGrondVanEenErf(D, x, y, instantie.erf)) wat = 'erf';
-        else if (T.ontginWerkOp(w, x, y)) wat = 'rooien';
+        else if (T.ontginWerkOp(w, x, y) || T.isEigenBoom(T.voorwerpOp(w, x, y))) wat = 'rooien';
         else if (T.isVast(w, x, y)) wat = 'vast';
         else if (T.deurOpRechthoek(D, r, instantie)) wat = 'deur';
         else if (T.wieStaatOp(w, r)) wat = 'iemand';
@@ -512,7 +513,7 @@
   T.waaromGroeitHetNiet = function (D, g) {
     const soort = T.GEBOUWEN[g.soort];
     if (!soort || !soort.wordt || !T.GEBOUWEN[soort.wordt] || !g.voorwerp) return null;
-    if (g.groeitNaRooien) return `het gezin rooit eerst ${T.rooiWoorden(T.watTeRooien(D, g.kavel)).replace(/ \(.*\)$/, '')} waar het groter wordt`;
+    if (g.groeitNaRooien) return `het gezin rooit eerst ${T.rooiWoordenOp(D, g.kavel).replace(/ \(.*\)$/, '')} waar het groter wordt`;
     if (!((g.groeiDagen || 0) >= T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen)) return null;
     const oudeVoet = g.voet || T.gebouwVoet(g.soort, g.tekening) || { b: 1, h: 1 };
     const vormen = groeiVormen(D, g, soort.wordt, oudeVoet);
@@ -527,8 +528,55 @@
     const naam = g2 ? `een ${T.GEBOUWEN[g2.soort].naam}` : v && T.VOORWERPEN[v.soort] && T.VOORWERPEN[v.soort].naam ? T.VOORWERPEN[v.soort].naam : v ? NAMEN[v.soort] || 'iets' : 'een muur';
     return `er staat ${naam} waar het groter moet worden`;
   };
-  // Wat er van de natuur in de weg kan staan en niet te rooien is.
-  const NAMEN = { rots: 'een rots', kleineRots: 'een rots', appelboom: 'een appelboom' };
+  // Wat er van de natuur in de weg kan staan en niet te rooien is (een appelboom rooit het gezin zelf: vraag 130, a2).
+  const NAMEN = { rots: 'een rots', kleineRots: 'een rots' };
+
+  // "de hut van Swier" (het hoofd van het gezin dat er woont), of "een hut" als er niemand woont: voor de raad en de erven
+  // (werklijst vraag 130, c2 en d).
+  T.huisVan = function (D, g) {
+    const naam = T.GEBOUWEN[g.soort].naam;
+    const mensen = ((D.bewoners && D.bewoners.mensen) || []).filter((p) => p.huis === g);
+    const p = mensen.find((m) => !m.hoofd) || mensen[0];
+    return p ? `de ${naam} van ${T.naamVanBewoner(p)}` : `een ${naam}`;
+  };
+
+  // Waar de huizen nog heen kunnen groeien (werklijst vraag 130, d; Marcel, 6 okt: "Eens alle 3"): per huis dat kan
+  // doorgroeien, nu of als het gezin eerst rooit, de vormen die het kan nemen, elk met de tegels van het grotere huis
+  // buiten het oude, en de doos om al die tegels: [{ g, vormen: [[{ x, y }]], doos: { x0, y0, x1, y1 } }]. Een erf komt
+  // niet waar het een huis elke vorm afneemt (T.waaromPastErfNiet, js/erven.js). Wie er staat, telt niet: die is morgen
+  // weg. Geen spelstaat, maar wat uit de kaart, de huizen en de erven volgt: de bouwer van de speeltest vraagt het voor
+  // elke tegel van de kaart, dus één keer per stand van het dorp en per dag.
+  const GROEIGROND = new WeakMap(); // dorp → { sleutel, grond }
+  T.groeiGrond = function (D) {
+    let sleutel = `${T.kaartVersie(D.wereld)}:${Math.floor((D.kalender && D.kalender.dag) || 0)}:${(D.gebouwen || []).length}`;
+    for (const e of D.erven || []) sleutel += `:${e.x},${e.y}`;
+    const oud = GROEIGROND.get(D);
+    if (oud && oud.sleutel === sleutel) return oud.grond;
+    const grond = [];
+    for (const g of D.gebouwen || []) {
+      const soort = T.GEBOUWEN[g.soort];
+      if (!g.klaar || !g.voorwerp || !soort || !soort.wordt || !T.GEBOUWEN[soort.wordt]) continue;
+      const oudeVoet = g.voet || T.gebouwVoet(g.soort, g.tekening) || { b: 1, h: 1 };
+      const kan = groeiVormen(D, g, soort.wordt, oudeVoet).filter((v) => v.inDeWeg.every((t) => t.wat === 'rooien' || t.wat === 'iemand'));
+      const vormen = kan.map((v) => {
+        const tegels = [];
+        for (let dy = 0; dy < v.voet.h; dy++) {
+          for (let dx = 0; dx < v.voet.b; dx++) if (dx >= oudeVoet.b || dy >= oudeVoet.h) tegels.push({ x: g.x + dx, y: g.y + dy });
+        }
+        return tegels;
+      });
+      // Een vorm op zijn eigen voet (een huis en zijn stenen broertje) heeft geen grond nodig: dat huis groeit altijd.
+      if (!vormen.length || vormen.some((tegels) => !tegels.length)) continue;
+      const alle = vormen.flat();
+      const doos = {
+        x0: Math.min(...alle.map((t) => t.x)), y0: Math.min(...alle.map((t) => t.y)),
+        x1: Math.max(...alle.map((t) => t.x)), y1: Math.max(...alle.map((t) => t.y)),
+      };
+      grond.push({ g, vormen, doos });
+    }
+    GROEIGROND.set(D, { sleutel, grond });
+    return grond;
+  };
 
   const kostenTekst = (kosten) => T.opsomming(Object.keys(kosten).map((wat) => `${kosten[wat]} ${wat}`));
 

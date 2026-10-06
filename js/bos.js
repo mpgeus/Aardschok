@@ -15,6 +15,10 @@
 // dag; na `rooiDagen` rooien de buren de rest in één keer (T.tikRooienDag). En het bos is van de heer: een stuk met
 // minstens zoveel bomen als een stuk bos bij het ontginnen, kost zijn gunst (T.inHetBosVanDeHeer).
 //
+// Een appelboom is van iemand: wie ontgint of een erf rooit, laat hem staan. Maar staat hij waar het grotere huis van een
+// gezin moet komen, dan is hij van dat gezin, en kapt het hem zelf (werklijst vraag 130, a2; Marcel, 6 okt: "Eens alle
+// 3"; T.isEigenBoom): zolang het gezin rooit (T.rooiOmTeGroeien), heeft hij `teKappen`, en is hij een boom als elke andere.
+//
 // De houthakker (vraag 115; Marcel, 4 okt: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug")
 // maakt zijn hout zoals elke werkplaats (T.tikGebouwenDag, js/gebouwen.js), maar het komt uit een boom: hij hakt aan de
 // dichtste boom binnen `hakStraal` van zijn schuur (g.boom), en elke `houtPerBoom` hout is die om (T.houthakkerHakte): een
@@ -33,6 +37,7 @@
 //   g.gehakt         het hout dat hij al uit die boom haalde
 //   v.geplant        (op een boompje of een jonge boom) de dag dat het geplant is, en v.wordt: de boom die het wordt
 //   v.gehaktOp       (op een stronk) de dag dat de boom omging
+//   v.teKappen       (op een appelboom) het gezin kapt hem, omdat zijn huis daar groter wordt (vraag 130, a2)
 //
 // Regels zonder scherm, dus te toetsen (test/rooien.test.cjs, test/bos.test.cjs).
 (function (T) {
@@ -85,12 +90,15 @@
   const JONG_BOS = new Set(['boomstronk', 'boompje', ...Object.values(JONG)]);
   const ROOIEN = new Set(['struik', 'bessenStruik', ...JONG_BOS]);
   const isBoom = (w, x, y, v) => !!v && T.NATUUR.bos.telt(w, x, y, v);
+  // Een boom die om mag: een boom van het bos, of een appelboom die een gezin kapt voor zijn grotere huis.
+  const teHakken = (w, x, y, v) => isBoom(w, x, y, v) || !!(v && v.teKappen);
+  T.isEigenBoom = (v) => !!v && v.soort === 'appelboom';
 
   // Wat er op deze tegel eerst weg moet voor er gespit of gebouwd kan worden: 'hakken' (een boom), 'rooien' (een stronk,
   // een struik, een boompje of een jonge boom), of null. Voor js/veldwerk.js, dat er het werk en het figuur bij kiest.
   T.ontginWerkOp = function (w, x, y) {
     const v = T.voorwerpOp(w, x, y);
-    if (isBoom(w, x, y, v)) return 'hakken';
+    if (teHakken(w, x, y, v)) return 'hakken';
     if (v && ROOIEN.has(v.soort)) return 'rooien';
     return null;
   };
@@ -135,7 +143,7 @@
   T.velBoom = function (D, x, y) {
     const w = D.wereld;
     const v = T.voorwerpOp(w, x, y);
-    if (!isBoom(w, x, y, v)) return null;
+    if (!teHakken(w, x, y, v)) return null;
     haalWeg(w, v);
     zetNeer(w, 'boomstronk', x, y, { gehaktOp: dagNu(D) });
     return v.soort;
@@ -187,6 +195,13 @@
     const hout = wat.bomen * IN().houtPerBoom;
     return `${delen.join(' en ')}${hout ? ` (+${hout} hout)` : ''}`;
   };
+  // Net zo, maar geteld op de tegels zelf (T.teRooienOp), zodat ook een appelboom die het gezin kapt een boom is (vraag 130,
+  // a2). Voor wat een huis rooit om te groeien: dat zijn een paar tegels, geen duizenden plekken.
+  T.rooiWoordenOp = function (D, r) {
+    const tegels = T.teRooienOp(D, r);
+    const bomen = tegels.filter((t) => T.ontginWerkOp(D.wereld, t.x, t.y) === 'hakken').length;
+    return T.rooiWoorden({ bomen, struiken: tegels.length - bomen });
+  };
 
   // Het stuk dat vrij moet voor een gebouw met voet `voet` op (x, y): zijn voet en het looppad eromheen
   // (T.GEBOUWEN_INSTELLINGEN.looppad), binnen de kaart.
@@ -222,10 +237,22 @@
   // nog alles heeft.
   T.rooiOmTeGroeien = function (D, g, kavel) {
     Object.assign(g, { groeitNaRooien: true, kavel, rooienTot: dagNu(D) + IN().rooiDagen });
+    zetTeKappen(D, kavel, true); // zijn eigen appelboom kapt het gezin ook (a2)
     const p = rooierVan(D, g);
     const wie = p && p.naam ? `Het gezin van ${p.naam}` : 'Het gezin';
-    T.zeg(D, `${wie} rooit eerst ${T.rooiWoorden(T.watTeRooien(D, kavel))}: daar wordt hun ${T.GEBOUWEN[g.soort].naam} groter.`, 'goed');
+    T.zeg(D, `${wie} rooit eerst ${T.rooiWoordenOp(D, kavel)}: daar wordt hun ${T.GEBOUWEN[g.soort].naam} groter.`, 'goed');
   };
+  // De appelbomen op het stuk r krijgen `teKappen` (aan), of zijn weer van iemand (uit).
+  function zetTeKappen(D, r, aan) {
+    for (let y = r.y; y < r.y + r.h; y++) {
+      for (let x = r.x; x < r.x + r.b; x++) {
+        const v = T.voorwerpOp(D.wereld, x, y);
+        if (!T.isEigenBoom(v)) continue;
+        if (aan) v.teKappen = true;
+        else delete v.teKappen;
+      }
+    }
+  }
 
   // Wat er op deze tegel te rooien staat, in één keer weg: een boom om (het hout naar de schuur) en zijn stronk eruit, of
   // wat er verder staat eruit.
@@ -275,6 +302,7 @@
     const bewoond = !!(D.bewoners && D.bewoners.mensen.some((p) => p.huis === g));
     if (over.length && dag < g.rooienTot && bewoond) return;
     if (bewoond) for (const t of over) rooiNu(D, t);
+    else zetTeKappen(D, g.kavel, false); // wie zijn appelboom zou kappen, is weg
     const p = rooierVan(D, g);
     delete g.groeitNaRooien;
     delete g.kavel;

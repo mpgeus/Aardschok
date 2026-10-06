@@ -390,7 +390,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   rooit met de bijl zoals een boer ontgint (`T.werkVeldwerkBij` in `js/veldwerk.js`; het gezin van een erf helpt,
   `T.helpAnker`; net zo het hoofd van een huis dat wil doorgroeien, `g.groeitNaRooien`, vraag 130) en werkt zolang nergens; is het stuk vrij, dan ligt de bouwplaats er de volgende dag, en na `rooiDagen`
   rooien de buren de rest (`T.tikRooienDag`). Een stuk in het bos van de heer (`T.inHetBosVanDeHeer`: zoveel bomen als een
-  stuk bos bij het ontginnen) kost zijn gunst.
+  stuk bos bij het ontginnen) kost zijn gunst. Een appelboom is van iemand, behalve waar het huis van een gezin groter
+  wordt: die kapt het gezin zelf (`T.isEigenBoom`, `v.teKappen`; vraag 130, a2).
 - `js/bouwstijl.js`: **de bouwstijl van een land** (vraag 114, stap 2, 4 okt): elk land van de maker bouwt in één stijl
   (`w.stijl`, uit het nummer van het land, `T.stijlVoorLand`; het ontworpen gehucht heeft er geen en bouwt zoals altijd),
   met per soort een paar vormen, elk met de deur naar elke kant. De huizenbouwer noemt dat een stand; in het spel heet het
@@ -455,7 +456,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   bouwfasen terwijl zijn mensen erin blijven wonen (alleen het voorwerp is `inAanbouw`, `groeiVanafFase`; G, vraag 114).
   Staat er alleen iets te rooien waar het groter wordt, dan rooit het gezin dat eerst (`T.groeiRooiPlan`,
   `T.rooiOmTeGroeien` in `js/bos.js`, `g.groeitNaRooien`), en anders zegt het briefje waarom (`T.waaromGroeitHetNiet`;
-  vraag 130). Achteruitgaan is zacht (een
+  vraag 130), en de raad ook als het genoeg mensen is voor de winst (c2); een erf komt niet waar het een huis elke vorm
+  afneemt waarin het nog kan groeien (`T.groeiGrond`, in `T.waaromPastErfNiet`; d). Achteruitgaan is zacht (een
   gezin trekt alleen weg uit een huis onder de vertrekdrempel) of streng (de spelregel "Achteruitgaan"); een hogere stand
   betaalt meer belasting (`T.belastbaar`). De spelregel "Wensen" op "Het dorp als geheel" is het spel van vóór 1 okt; de
   getallen in `T.WENSEN_INSTELLINGEN`.
@@ -991,7 +993,8 @@ gewaarschuwd bent; `('gunst', 15)` zet de gunst op 15 (met de brief als hij onde
 weg als je al gewaarschuwd was. De oude toetsen van de heer en het verstoppen spelen met "Alleen de heer"
 (`T.zetOptie('tweeBazen', 'uit')`); die van de twee bazen staan in `test/bazen.test.cjs`.
 `Spel.debug.wensen()` zegt per huis met mensen zijn stand, wie er woont, hoe tevreden het is en wat het wil, met ✓ of ✗,
-en daarboven het dorp per stand en wat er gemist wordt; `('dorpelingen')` laat alleen die stand zien.
+hoe het met doorgroeien staat (wat het gezin rooit, of waarom het niet groeit), en daarboven het dorp per stand en wat er
+gemist wordt; `('dorpelingen')` laat alleen die stand zien.
 `Spel.debug.gehucht()` zegt of dit het ontworpen gehucht is of een van de maker, en uit welk zaad; `(3)` begint nu een
 nieuw spel op het gehucht van zaad 3 (zonder brief), zoals op de pagina "Gehuchten van de maker".
 `Spel.debug.voorval()` zegt welk voorval er loopt, welke vervolgen nog komen, welke voorvallen er nu kunnen (met hoe

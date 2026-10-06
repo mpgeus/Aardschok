@@ -618,3 +618,127 @@ test('rooit niemand het, dan doen de buren de rest na een maand; staat er iets w
     }
   });
 });
+
+// Vraag 130, wat Marcel er in de zevenendertigste sessie bij koos ("Eens alle 3"): a2, het gezin kapt ook zijn eigen
+// appelboom; c2, de raad zegt het als een huis dat alles heeft, niet kan groeien; d, een erf komt niet waar het een huis
+// elke vorm afneemt.
+
+test('a2: een appelboom is van iemand, maar staat hij waar het huis groter wordt, dan kapt het gezin hem, voor 10 hout', () => {
+  zo(() => {
+    const gezinDagen = T.GEBOUWEN_INSTELLINGEN.gezinDagen;
+    T.GEBOUWEN_INSTELLINGEN.gezinDagen = 1e9;
+    try {
+      // Op land 7777 staat een hut waar alleen een appelboom in de weg staat, bij elke vorm van het huis.
+      const S = landVanDeMaker(7777);
+      const D = S.dorp;
+      vol(S);
+      const hut = hutMetAlles(S);
+      const plan = T.groeiRooiPlan(D, hut);
+      const appels = [];
+      for (let y = plan.y; y < plan.y + plan.h; y++) {
+        for (let x = plan.x; x < plan.x + plan.b; x++) if (T.isEigenBoom(T.voorwerpOp(D.wereld, x, y))) appels.push({ x, y });
+      }
+      assert.ok(appels.length >= 1, 'een appelboom waar het huis groter wordt');
+      const a = appels[0];
+      const appel = T.voorwerpOp(D.wereld, a.x, a.y);
+      assert.equal(T.ontginWerkOp(D.wereld, a.x, a.y), null, 'wie ontgint of een erf rooit, laat hem staan');
+      assert.equal(T.hakBoom(D, a.x, a.y), false, 'en omhakken kan niet');
+      let dag = 1;
+      while (!hut.groeitNaRooien && dag < 80) nachtMetGenoeg(S, dag++);
+      assert.ok(hut.groeitNaRooien, 'het gezin rooit');
+      assert.equal(appel.teKappen, true);
+      assert.equal(T.ontginWerkOp(D.wereld, a.x, a.y), 'hakken', 'nu is hij een boom als elke andere');
+      assert.match(T.waaromGroeitHetNiet(D, hut), /één boom/);
+      const hout = D.voorraad.hout;
+      assert.equal(T.hakBoom(D, a.x, a.y), true);
+      assert.equal(D.voorraad.hout - hout, T.BOS_INSTELLINGEN.houtPerBoom);
+      T.rooi(D, a.x, a.y);
+      while (hut.soort === 'hut' && dag < 80 + T.BOS_INSTELLINGEN.rooiDagen) nachtMetGenoeg(S, dag++);
+      assert.equal(hut.soort, 'huis', 'en de hut groeit');
+    } finally {
+      T.GEBOUWEN_INSTELLINGEN.gezinDagen = gezinDagen;
+    }
+  });
+});
+
+test('a2: woont er niemand meer in het huis dat zou groeien, dan is de appelboom weer van iemand', () => {
+  zo(() => {
+    const S = landVanDeMaker(7777);
+    const D = S.dorp;
+    const hut = D.gebouwen.find((g) => g.soort === 'hut' && T.groeiRooiPlan(D, g));
+    const plan = T.groeiRooiPlan(D, hut);
+    T.rooiOmTeGroeien(D, hut, plan);
+    const appels = [];
+    for (let y = plan.y; y < plan.y + plan.h; y++) {
+      for (let x = plan.x; x < plan.x + plan.b; x++) {
+        const v = T.voorwerpOp(D.wereld, x, y);
+        if (T.isEigenBoom(v)) appels.push(v);
+      }
+    }
+    assert.ok(appels.length && appels.every((v) => v.teKappen));
+    S.kalender.dag = 1.3;
+    T.tikRooienDag(D); // er woont niemand in deze hut
+    assert.ok(!hut.groeitNaRooien);
+    assert.ok(appels.every((v) => !v.teKappen && T.voorwerpOp(D.wereld, v.x, v.y) === v), 'hij staat er nog, en is weer van iemand');
+  });
+});
+
+test('c2: heeft een huis alles maar kan het niet groeien, dan zegt de raad het, zodra het genoeg mensen is voor de winst', () => {
+  zo(() => {
+    const gezinDagen = T.GEBOUWEN_INSTELLINGEN.gezinDagen;
+    T.GEBOUWEN_INSTELLINGEN.gezinDagen = 1e9;
+    try {
+      const S = landVanDeMaker(62707);
+      const D = S.dorp;
+      const raad = T.RADEN.find((r) => r.id === 'groeitNiet');
+      const hut = hutMetAlles(S);
+      // Een muur op alle grond waar de hut kan groeien: dan kan hij niet, ook niet na het rooien.
+      for (const h of T.groeiGrond(D).filter((h) => h.g === hut)) {
+        for (const v of h.vormen) for (const t of v) if (!T.voorwerpOp(D.wereld, t.x, t.y)) D.wereld.tegels[t.y][t.x] = 'muur';
+      }
+      T.kaartVeranderd(D.wereld);
+      assert.equal(T.groeiRooiPlan(D, hut), null);
+      let dag = 1;
+      while (dag < 40) nachtMetGenoeg(S, dag++);
+      assert.ok(hut.wensen.alles, 'hij heeft alles');
+      assert.equal(hut.soort, 'hut');
+      while (T.volgendeTrede(D)) D.trede = T.volgendeTrede(D);
+      D.bevolking = T.EINDE_INSTELLINGEN.minstensMensen - 1;
+      assert.ok(!raad.als(D), 'nog niet genoeg mensen: dan zegt de raad wat er nog komt');
+      D.bevolking = T.EINDE_INSTELLINGEN.minstensMensen;
+      assert.ok(raad.als(D));
+      assert.match(raad.tekst(D), /^Genoeg mensen voor de winst, maar de hut van \S+ kan geen huis worden: er staat \S+ \S+ waar het groter moet worden\.$/);
+      hut.wensen.alles = false;
+      assert.ok(!raad.als(D), 'een huis dat iets mist, wacht daar eerst op');
+    } finally {
+      T.GEBOUWEN_INSTELLINGEN.gezinDagen = gezinDagen;
+    }
+  });
+});
+
+test('d: geen erf waar het een huis elke vorm afneemt; wel als het nog een andere vorm kan nemen', () => {
+  zo(() => {
+    const S = landVanDeMaker(62707);
+    const D = S.dorp;
+    let geweigerd = null;
+    for (let y = 0; y < S.wereld.tegels.length && !geweigerd; y++) {
+      for (let x = 0; x < S.wereld.tegels[0].length && !geweigerd; x++) {
+        const reden = T.waaromPastErfNiet(D, x, y);
+        if (reden && reden.startsWith('Hier groeit')) geweigerd = { x, y, reden };
+      }
+    }
+    assert.ok(geweigerd, 'naast een hut die nog moet groeien, komt geen erf');
+    assert.match(geweigerd.reden, /^Hier groeit (de hut van \S+|een hut) straks tot een huis\.$/);
+    assert.equal(T.legErfAan(D, geweigerd.x, geweigerd.y).gelukt, false);
+    // Het ontworpen gehucht: een erf op 48, 50 neemt de hut ernaast een paar vormen af, maar niet alle. Dat mag, en de hut
+    // kan daarna nog groeien.
+    const S2 = gehucht();
+    const D2 = S2.dorp;
+    const maat = T.erfMaat();
+    const buur = T.groeiGrond(D2).find((h) => h.vormen.some((v) => v.some((t) => t.x >= 48 && t.x < 48 + maat.b && t.y >= 50 && t.y < 50 + maat.h)));
+    assert.ok(buur, 'het erf raakt de grond van een hut');
+    assert.equal(T.waaromPastErfNiet(D2, 48, 50), null);
+    assert.ok(T.legErfAan(D2, 48, 50).gelukt);
+    assert.ok(T.groeiGrond(D2).some((h) => h.g === buur.g), 'de hut kan nog groeien');
+  });
+});

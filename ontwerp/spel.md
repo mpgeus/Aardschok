@@ -4,7 +4,7 @@ Besloten op 23 sep 2026: dit wordt het spel. Het vervangt De laatste klim (de to
 toren, de leeftijd als levensbalk); hoe het zo kwam, staat in `verhaal.md`, "Het doel staat weer
 open". De werktitel "Aardschok" past niet meer; een nieuwe naam is nog open.
 
-## Waar staat wat (bijgewerkt 6 okt 2026, zesendertigste sessie, de sessie van de heer en die van de samenvatting)
+## Waar staat wat (bijgewerkt 6 okt 2026, zesendertigste en zevenendertigste sessie, de sessie van de heer en die van de samenvatting)
 
 Elk onderwerp begint met **Zo werkt het nu**: wat er gebouwd is, of wat besloten is en nog komt, met
 wat nog open is. Daaronder staat hoe het zo kwam: het voorstel, wat Marcel koos, wat er gebouwd
@@ -14,7 +14,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Onderwerp | Stand | Werklijst |
 |---|---|---|
 | De vertical slice | besloten (Marcel, 1 okt, vraag 77): het doel is de vertical slice uit het concept: je begint als gehucht, zoals nu, en groeit naar haar maat (een kleine stad van 100 tot 200 mensen; een dorp van 50 is als doel te klein), en uiteindelijk naar een stad van mogelijk 5000 of meer ("we moeten een manier zoeken", vraag 78, E), in zes stappen te beginnen met de wensen van de mensen, zoals in Anno 1602 (vraag 78; het plan is vraag 79); statussen met niveaus; een ambtenaar voor elke tak van het bestuur; en later een scherm met de statussen en de laatst bekende inventarisatie | vraag 77, 78, 79 |
-| De wensen per stand | besloten (Marcel, 1 okt, vraag 80 en 85); 2a en 2b gebouwd (1 okt): elk huis een stand (keuters, dorpelingen, ambachtslieden, en de boeren ernaast) met wensen zoals in Anno 1602, de hoogste stand neemt eerst, een kring om de kapel, de herberg en de markt, en wie een jaar lang alles heeft, wint; 2d gebouwd (2 okt, vraag 90): de treden uit de standen, een dorp bij 20 dorpelingen en marktrecht bij 20 ambachtslieden, met de markt en de weverij al in een dorp; 2c en 2e gebouwd (3 okt, vraag 100 en 101): een teken bij de deur en een briefje bij de muis, en het eind: een jaar lang iedereen gelukkig vanaf 100 mensen is gewonnen, met het grote feest, onder 10 mensen verloren, en op 1 lentemaand het jaarverslag | vraag 79, 80, 82, 85, 90, 100, 101 |
+| De wensen per stand | besloten (Marcel, 1 okt, vraag 80 en 85); 2a en 2b gebouwd (1 okt): elk huis een stand (keuters, dorpelingen, ambachtslieden, en de boeren ernaast) met wensen zoals in Anno 1602, de hoogste stand neemt eerst, een kring om de kapel, de herberg en de markt, en wie een jaar lang alles heeft, wint; 2d gebouwd (2 okt, vraag 90): de treden uit de standen, een dorp bij 20 dorpelingen en marktrecht bij 20 ambachtslieden, met de markt en de weverij al in een dorp; 2c en 2e gebouwd (3 okt, vraag 100 en 101): een teken bij de deur en een briefje bij de muis, en het eind: een jaar lang iedereen gelukkig vanaf 100 mensen is gewonnen, met het grote feest, onder 10 mensen verloren, en op 1 lentemaand het jaarverslag; sinds 6 okt rooit een huis dat niet past wat in de weg staat (ook zijn eigen appelboom), zeggen het briefje en de raad waarom een huis niet groeit, en komt een erf niet waar het een huis elke vorm afneemt (vraag 130) | vraag 79, 80, 82, 85, 90, 100, 101, 130 |
 | Een nieuwe richting | besloten (Marcel, 28 sep): besturen en groeien worden het hart, de heer de druk van boven, en vechten begint bij je eigen dorp; sinds 29 sep: het hogere doel is al het land veroveren of met iedereen bevriend raken (Civilization), en sinds 1 okt: de hele wereld veroveren, en je mensen super gelukkig, met wensen zoals in Anno 1602, terwijl de heer geen doelen stelt maar het je moeilijk maakt (vraag 78), eenvoud boven werkelijkheid, en wetten in een menu zoals Democracy 3; sinds 30 sep: meer een management sim, met het concept als kompas (het poppetje is hoe je bestuurt, `concept.md`), de boeren die het seizoen doen, en eerst de kern; sinds 3 okt: de stad groeit door haar mensen (inwoners beginnen zelf een ambacht en vragen toestemming), en jij bepaalt de richting, want "weer een bouw spelletje" wordt te snel saai (het plan is vraag 103, open) | vraag 50, 51, 54, 73, 74, 78, 103 |
 | De heer als tegenstander | besloten (Marcel, 5 en 6 okt: "A ja B b2 en b3 C c3 D ja E ja F Ja G zo"), niets gebouwd: het eind van het spel is de heer verstoten en verslaan, met een kasteel op de kaart, bondgenoten en per spel een ander karakter; veroveren en bevriend raken zijn de weg erheen, langs drie wegen (de opstand, de koning, trouw, en dan ben jij de nieuwe heer); een bond sluit je te voet; het jaar van geluk blijft het eind van de demo en wordt in het hele spel kracht; samen spelen, met een speler als heer, na de release; niets hiervan vóór de kern | vraag 126 |
 | Informatie, de zitting en mensen die onthouden | besloten (Marcel, 6 okt: "A tot g allemaal, en de proef komt erna"), niets gebouwd: wat er gebeurde, wat er gezegd wordt en wat jij weet; 's middags een zitting met getuigen en bewijs; het vertrouwen per groep; mensen die onthouden wat je deed; een heer die van je leert; gevolgen in ketens; eerst een proef met één keten (de verdwenen graanzak, met een eerste zitting), na het beeld dat in de werklijst staat | vraag 105, 118, 128 |
@@ -448,10 +448,16 @@ letter voor letter mee zoals ervoor).
   een stenen muur heeft geen schoor. Een huis groeit vanaf zijn linkerbovenhoek naar rechts en naar onder, en waar het
   grotere huis komt, mag niets staan. **Staat er alleen iets wat te rooien is** (een struik, een boom, een stronk, een
   boompje), dan rooit het gezin dat eerst, zoals een erf: het hoofd met de bijl, wie van het gezin geen werk heeft helpt,
-  en na een maand rooien de buren de rest; dan groeit het, de vorm met het minste te rooien. Staat er iets wat niet te
-  rooien is (een gebouw, een ander erf, een rots, een appelboom), dan blijft het wat het is, en zegt het briefje bij de
-  muis waarom ("Het kan een huis worden, maar er staat een rots waar het groter moet worden"). Zo kon op elk land van de
-  maker een hut nooit groeien, meestal door één struik, en won geen dorp (vraag 130, 6 okt; Marcel: "Ok").
+  en na een maand rooien de buren de rest; dan groeit het, de vorm met het minste te rooien. Ook de eigen appelboom van
+  het gezin, die verder van iemand is en blijft staan (a2; Marcel, 6 okt, zevenendertigste sessie: "Eens alle 3"; op een
+  op de twaalf landen stond die als enige in de weg). Staat er iets wat niet te rooien is (een gebouw, een ander erf, een
+  rots), dan blijft het wat het is, en zegt het briefje bij de muis waarom ("Het kan een huis worden, maar er staat een
+  rots waar het groter moet worden"); heeft het alles en is het genoeg mensen voor de winst, dan zegt de raad het ook
+  ("Genoeg mensen voor de winst, maar de hut van Swier kan geen huis worden: …"; c2). En een erf komt niet waar het een
+  huis elke vorm afneemt waarin het nog kan groeien ("Hier groeit de hut van Swier straks tot een huis."; d,
+  `T.groeiGrond`); neemt het een huis maar een paar vormen af, dan mag het. Zo kon op elk land van de maker een hut nooit
+  groeien, meestal door één struik, en won geen dorp (vraag 130, 6 okt; Marcel: "Ok"). `Spel.debug.wensen()` zegt per
+  huis hoe het met doorgroeien staat.
 - **Achteruitgaan: zacht** (vraag 85, c), zoals in Anno 1602: mist een huis iets, dan groeit het niet verder en is het
   minder tevreden; er trekt pas een gezin weg als het huis onder de vertrekdrempel zakt, en dat gebeurt alleen als het
   eten of het brandhout mist. De spelregel "Achteruitgaan" kan het streng: mist een huis een maand iets, dan trekt zijn
@@ -3357,7 +3363,9 @@ wordt gepraat:
   Twee erven naast elkaar mogen: hun huizen houden vanzelf drie of vier tegels tussen zich. **Sinds 5 okt (werklijst
   vraag 110, f)** blijft ook een huis dat doorgroeit van een ander erf af, en drie tegels van de plek van het huis erop
   (`T.opDeGrondVanEenErf`, in `js/behoeften.js`): in de speeltest van vier jaar groeide op 62707 een huis van de maker
-  door tot stenen huis, met 21 tegels óp een vrij erf. En past er toch geen hut meer op een vrij erf, dan telt het niet
+  door tot stenen huis, met 21 tegels óp een vrij erf. Andersom komt **sinds 6 okt (vraag 130, d)** een erf niet waar het
+  een huis ernaast elke vorm afneemt waarin het nog kan doorgroeien ("Hier groeit de hut van Swier straks tot een
+  huis."; `T.groeiGrond`): op 62707 legde de bouwer een erf onder de hut van een oud stel, en die bleef een hut. En past er toch geen hut meer op een vrij erf, dan telt het niet
   als plaats (`T.bruikbareErven`, `T.hutPastOpErf`): de groei en de raad zeggen dan dat er geen plaats is, het bouwmenu
   telt het niet als vrij, en `Spel.debug.erven()` zegt het erbij. Tot dan zagen de groei en de raad er een vrij erf, en
   kwam er twee en een half jaar geen gezin.
