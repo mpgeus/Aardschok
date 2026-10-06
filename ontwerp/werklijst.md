@@ -55,9 +55,9 @@ op weg naar de heer. Samen spelen, met een speler als heer, komt na de release; 
 bond met het buurdorp (vraag 72). Zie `spel.md`, "De heer als tegenstander". Het staat sinds 6 okt in `main`
 (Marcel: "ja push main").
 
-**Het plan voor vraag 110, e, met 115 wacht op Marcel** (6 okt, de sessie van de heer, naast de marktsessie): grond
-uit het bos voor erven en werkplaatsen, en de houthakker die hakt en plant. Gemeten: rooien geeft twee à drie keer
-zoveel plaats voor erven. Het plan en vier vragen staan bij vraag 115.
+**Vraag 110, e, met 115 is besloten en in het werk** (6 okt, de sessie van de heer, naast de marktsessie; Marcel: "A ja
+B ja C ja D zo"): grond uit het bos voor erven en werkplaatsen, en de houthakker die hakt en plant. Gemeten: rooien
+geeft twee à drie keer zoveel plaats voor erven. Het plan en de stappen staan bij vraag 115.
 
 **Sinds de sessie van het licht (4 okt, vraag 125, in `main`):** met de videokaart kleurt het dorp met het uur (roze
 bij het opkomen, oranje bij het ondergaan, blauw in de nacht), geven de lantaarns, de ramen en de herberg warme plassen
@@ -4749,6 +4749,9 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     groen.
     Vragen: **A**, rooit wie er komt wonen of werken zijn eigen plek (of de houthakker)? **B**, kost een erf in het bos
     de gunst van de heer (−5), en de wei niets? **C**, een boom 10 hout, ook bij het ontginnen? **D**, deze stappen?
+    **Marcel koos (6 okt): "A ja B ja C ja D zo".** Dus: wie er komt wonen of werken, rooit zijn eigen plek, met zijn
+    gezin; een erf in het bos van de heer kost zijn gunst (−5), de wei niets; een boom geeft 10 hout, ook bij het
+    ontginnen; en de stappen zoals voorgesteld, te beginnen met 1 (a en b, met de speler van de speeltest).
 116. **Beesten in het bos** (Marcel, 4 okt, zesentwintigste sessie: "Ik wil dat er beesten kunnen rondlopen in het bos.
     Wolven etc. Die de houthakker kunnen bedreigen. Rode ogen uit het duister."; plan van Claude; open).
     **Wat er al is:** de wolf staat in `T.WEZENS` (`js/wereld.js`): een monster om mee te vechten, uit het oude spel, met
