@@ -153,6 +153,43 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 6 okt: wie doorgroeit, rooit wat in de weg staat (werklijst, vraag 130)
+
+Gespeeld in de zevenendertigste sessie, op `ccr-5dda8920-e5vtu0`, op het spel van `96c7b8a` (met de telling van de
+huizen die niet doorgroeien, `60b5c9b`), na Marcels "Ok" op a met c en "A" voor de appelboom:
+`npm run speeltest -- bouwer sluw --maker --jaren 4`, in één taak van 14 minuten. Geen fouten in de console. 62707 is
+zaad 1, 73425 zaad 2, 72022 zaad 3.
+
+| Land | Speler | Mensen aan het eind van jaar 1 tot 4 | Gewonnen |
+|---|---|---|---|
+| 62707 | bouwer | 51, 105, 126, 126 | nee: alle huizen het hele vierde jaar alles (360 van 360), maar één hut bleef hut |
+| 73425 | bouwer | 51, 74, 107, 120 | **op 1 slachtmaand van het derde jaar** |
+| 72022 | bouwer | 49, 78, 123, 142 | **op 1 wijnmaand van het derde jaar** |
+| 62707 | sluw | 51, 102, 102, 102 | nee: net zo, 360 van 360 in het derde en vierde jaar, maar die ene hut |
+| 73425 | sluw | gevallen op 19 wijnmaand van het eerste jaar | |
+| 72022 | sluw | 53, gevallen op 15 oogstmaand van het tweede jaar | |
+
+**Wat het zegt:**
+1. **De hutten van de maker groeien door.** Op elk land rooide een gezin eerst wat in de weg stond, en een tot drie
+   dagen later was de hut een huis: op 62707 Johan (één struik), op 73425 Lubbert (een boom en twee struiken), op 72022
+   Tamme (één struik), allemaal in oogstmaand van het eerste jaar. Nergens maakten de buren het rooien af, en nergens ging
+   een appelboom om.
+2. **Twee dorpen van de bouwer winnen**, in het derde jaar: 73425 en 72022. In de speeltest hiervoor (G, vraag 129) won
+   er geen.
+3. **Op 62707 legde de bouwer zelf een erf over de groeigrond van de andere hut** (op 54,64), in de eerste zomer, voor
+   die hut een maand alles had. Vanaf herfstmaand zegt het spel "een erf ligt in de weg", en die hut blijft tot het eind
+   een hut; daarom wint 62707 niet, ook niet bij de sluwe bouwer, terwijl alle huizen het hele vierde jaar alles hadden.
+   Een speler ziet het nu op het briefje bij de hut, maar kan een erf waar al een gezin woont niet weghalen; de bouwer
+   leest geen briefjes. Dat vraagt vraag 130, d.
+4. **De telling keek ernaast, en het teken bij de deur ook.** Na één nacht met te weinig hout bleef de hut "wacht op
+   bouwstof" heten zolang hij niet groeide: daardoor viel hij na sprokkelmaand van het tweede jaar uit de telling, en
+   stond het teken van bouwstof bij zijn deur terwijl het hout er was. Gerepareerd (`6cf87c3`): een huis wacht alleen op
+   bouwstof zolang die er niet is.
+5. De sluwe bouwer valt op 73425 en 72022 weer tegen de rovers, op dezelfde dagen als in de speeltests ervoor; dat heeft
+   niets met het doorgroeien te maken (`opmerkingen.md`, "De schout valt tegen één wilde rover").
+
+**Wat het vraagt:** vraag 130, d (een erf blijft van de grond af waar een huis heen groeit).
+
 ## De speeltest van 6 okt: de houthakker zonder bomen, en planten tot het bos blijft (werklijst, vraag 129)
 
 Gespeeld in de sessie van de heer, op `claude/heer-game-mechanics-6d9h5l`, na Marcels "Eens" op e en b van vraag 129

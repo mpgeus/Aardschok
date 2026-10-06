@@ -455,7 +455,10 @@ letter voor letter mee zoals ervoor).
   groeit. Wat het dan nog tegenhoudt (een gebouw, een erf, de deur van een ander gebouw, een rots, het water), zegt het
   briefje bij het huis: "Het kan geen huis worden: een erf ligt in de weg." (c; eerst stond er voor altijd "Nog 0 dagen
   alles"). Op veertig landen van de maker konden bij het begin 13 hutten niet groeien; zo kunnen ze het allemaal
-  (`js/behoeften.js`, `planVoorGroei`; `js/bos.js`, `rooitVoorGroei`).
+  (`js/behoeften.js`, `planVoorGroei`; `js/bos.js`, `rooitVoorGroei`). In de speeltest van vier jaar winnen zo twee
+  dorpen van de bouwer (73425 en 72022). **Open (vraag 130, d):** een erf mag nog vlak naast een hut liggen, en op 62707
+  legde de bouwer er een over de groeigrond van een hut, die daardoor nooit een huis werd; voorstel: een erf blijft van
+  de grond af waar een huis heen groeit.
 - **Achteruitgaan: zacht** (vraag 85, c), zoals in Anno 1602: mist een huis iets, dan groeit het niet verder en is het
   minder tevreden; er trekt pas een gezin weg als het huis onder de vertrekdrempel zakt, en dat gebeurt alleen als het
   eten of het brandhout mist. De spelregel "Achteruitgaan" kan het streng: mist een huis een maand iets, dan trekt zijn

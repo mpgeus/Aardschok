@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (6 okt 2026, zesendertigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt en het spel laadt alleen wat er staat (vraag 114, 2a, stap 1 en 1b); sinds de eenendertigste sessie bouwt elk land van de maker in een bouwstijl, met het dak van zijn trede en de deur naar de weg (vraag 114, stap 2a: de stijl wit), en tekent het spel met WebGL, gebouwd in een eigen sessie naast de huizen (vraag 123); sinds de tweeëndertigste sessie bouwt de huizenbouwer elk huis van vier kanten en tekent hij het een kwartslag gedraaid, en staat wit zo in het spel, met alle bouwfasen (vraag 124, B, en G); sinds de drieëndertigste sessie werken de boeren overdag op hun land, naar het seizoen en in het vel van hun werk, een boerin in dat van een vrouw (vraag 111, stap 1 en 2), en vraagt een boer heide te ontginnen als het graan tekortkomt (vraag 107, stap 1); sinds de vierendertigste sessie wijst hij een stuk heide en een stuk bos aan, en kies jij: de heide tegen het vertrouwen, het bos gemeld tegen de gunst, of stiekem (vraag 107, stap 2), met de hakker en zijn bijl; sinds de vijfendertigste sessie is de speeltest van vier jaar gespeeld (vraag 107, stap 3): ontginnen lost het graan op, maar geen dorp wint, want de grond om te bouwen is op, en de markt komt er nooit (vraag 110: f, het erf dat vastzat, is gerepareerd; e komt met de houthakker); sinds de zesendertigste sessie staat de markt met vier kramen op het plein (vraag 110, d), en hebben de stenen huizen op elk land hun markt; en sinds de tweede sessie daarnaast bouwt elk land in een van vier stijlen, wit, oker, planken of roze, elk met eigen huizen en boerderijen en alle bouwfasen (vraag 114, 2b); dan de herberg, de kapel en de woontoren (stap 3); sinds de sessie van de heer mogen erven en werkplaatsen op bomen en struiken, die wie er komt zelf rooit, en hakt de houthakker de bomen om zijn schuur om en plant hij er twee terug, zodat het bos om hem blijft (vraag 110, e, 115 en 129; in de speeltest van vier jaar komen de dorpen van de bouwer tot 126 à 129 mensen; en vraag 130, gekozen: een hut van de maker die nooit kan doorgroeien, waardoor er nu geen dorp wint, gaat rooien wat in de weg staat); dan de wolven (vraag 116), het draaien van de camera (vraag 124) en de hoogteverschillen (vraag 121); dan de proef van vraag 128 (de verdwenen graanzak, met een eerste zitting)
+## De stand (6 okt 2026, zevenendertigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt en het spel laadt alleen wat er staat (vraag 114, 2a, stap 1 en 1b); sinds de eenendertigste sessie bouwt elk land van de maker in een bouwstijl, met het dak van zijn trede en de deur naar de weg (vraag 114, stap 2a: de stijl wit), en tekent het spel met WebGL, gebouwd in een eigen sessie naast de huizen (vraag 123); sinds de tweeëndertigste sessie bouwt de huizenbouwer elk huis van vier kanten en tekent hij het een kwartslag gedraaid, en staat wit zo in het spel, met alle bouwfasen (vraag 124, B, en G); sinds de drieëndertigste sessie werken de boeren overdag op hun land, naar het seizoen en in het vel van hun werk, een boerin in dat van een vrouw (vraag 111, stap 1 en 2), en vraagt een boer heide te ontginnen als het graan tekortkomt (vraag 107, stap 1); sinds de vierendertigste sessie wijst hij een stuk heide en een stuk bos aan, en kies jij: de heide tegen het vertrouwen, het bos gemeld tegen de gunst, of stiekem (vraag 107, stap 2), met de hakker en zijn bijl; sinds de vijfendertigste sessie is de speeltest van vier jaar gespeeld (vraag 107, stap 3): ontginnen lost het graan op, maar geen dorp wint, want de grond om te bouwen is op, en de markt komt er nooit (vraag 110: f, het erf dat vastzat, is gerepareerd; e komt met de houthakker); sinds de zesendertigste sessie staat de markt met vier kramen op het plein (vraag 110, d), en hebben de stenen huizen op elk land hun markt; en sinds de tweede sessie daarnaast bouwt elk land in een van vier stijlen, wit, oker, planken of roze, elk met eigen huizen en boerderijen en alle bouwfasen (vraag 114, 2b); dan de herberg, de kapel en de woontoren (stap 3); sinds de sessie van de heer mogen erven en werkplaatsen op bomen en struiken, die wie er komt zelf rooit, en hakt de houthakker de bomen om zijn schuur om en plant hij er twee terug, zodat het bos om hem blijft (vraag 110, e, 115 en 129; in de speeltest van vier jaar komen de dorpen van de bouwer tot 126 à 129 mensen; en sinds de zevenendertigste sessie rooit wie doorgroeit eerst wat in de weg staat, zodat de hutten van de maker doorgroeien, en winnen in de speeltest van vier jaar twee dorpen van de bouwer, 73425 en 72022 (vraag 130, a en c); op 62707 legde de bouwer een erf over de groeigrond van een hut: vraag 130, d, wacht op Marcel); dan de wolven (vraag 116), het draaien van de camera (vraag 124) en de hoogteverschillen (vraag 121); dan de proef van vraag 128 (de verdwenen graanzak, met een eerste zitting)
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Het hart is het
 gehucht besturen terwijl het groeit, terwijl de heer eraan trekt; rijk worden en arm lijken blijft de druk van boven.
@@ -71,6 +71,14 @@ de zitting de richting: wat er gebeurde, wat er gezegd wordt en wat jij weet (da
 besloten), een zitting met getuigen en bewijs, het vertrouwen per groep, mensen die onthouden, een heer die van je leert,
 en gevolgen in ketens. De proef, één keten van begin tot eind (de verdwenen graanzak, met een eerste zitting), komt na
 het beeld hierboven. Zie `spel.md`, "Informatie, de zitting en mensen die onthouden".
+
+**Vraag 130 is gebouwd en gespeeld** (6 okt, zevenendertigste sessie, op `ccr-5dda8920-e5vtu0`, nog niet in `main`;
+Marcel: "Ok" op a met c, en "A" voor de appelboom): past geen vorm zoals hij is, dan rooit het gezin van een huis dat
+doorgroeit eerst wat in de weg staat, zoals een gezin zijn erf (de appelboom alleen als geen vorm zonder hem past), en het
+briefje bij een huis zegt wat het gezin rooit, of waarom het niet kan groeien. In de speeltest van vier jaar groeien de
+hutten van de maker door, en **winnen voor het eerst twee dorpen**, 73425 en 72022, in het derde jaar. Op 62707 legde de
+bouwer een erf over de groeigrond van een hut; het voorstel daarvoor is vraag 130, d (een erf blijft van de grond af waar
+een huis heen groeit), en dat wacht op Marcel. `npm test`: 1002/1002.
 
 **De samenvatting** (6 okt, de sessie van de samenvatting; in `main`, Marcel: "Ja main"): het spel in vijf bladzijden
 voor wie het niet kent (een gamedesigner), met vier beelden uit het spel, het hele spel als één verhaal, en sinds vraag
@@ -5827,6 +5835,22 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     veertig landen bij het begin nog een hut die nooit kan groeien), of houdt hij het tegen, en zegt het briefje het?
     **Marcel koos (6 okt): "A".** De appelboom mag ook om, maar alleen als geen enkele vorm zonder hem past: het gezin
     houdt zijn boom waar het kan.
+    **Gebouwd en gespeeld** (6 okt, zevenendertigste sessie; `96c7b8a`, `6cf87c3`; `speelbaar.md`, "De speeltest van 6 okt:
+    wie doorgroeit, rooit wat in de weg staat"): past geen vorm zoals hij is, dan rooit het gezin eerst wat op de nieuwe
+    voet staat (`planVoorGroei` in `js/behoeften.js`, `rooitVoorGroei` in `js/bos.js`), met de vorm die het minst te
+    rooien heeft; het briefje zegt wat het gezin rooit, of wat in de weg staat (`T.waaromGroeitHetNiet`). In de speeltest
+    van vier jaar groeien de hutten van de maker door (op elk land rooide een gezin één tot drie dingen, en een tot drie
+    dagen later was de hut een huis), en **winnen twee dorpen van de bouwer**, in het derde jaar: 73425 en 72022. Op 62707
+    niet: daar legde de bouwer in de eerste zomer zelf een erf over de groeigrond van de andere hut, en die bleef hut, ook
+    bij de sluwe bouwer, terwijl alle huizen het hele vierde jaar alles hadden. Onderweg gerepareerd: een huis dat niet kan
+    groeien, bleef "wacht op bouwstof" heten, met dat teken bij zijn deur, ook als het hout er was.
+    **d, een erf blijft van de grond af waar een huis heen groeit** (Claude, 6 okt, na de speeltest; open): een gebouw
+    houdt al drie tegels looppad, maar een erf keurt alleen zijn eigen vak (`T.waaromPastErfNiet`), en mag dus vlak naast
+    een hut liggen. Voorstel: een erf mag niet op de grond waar een huis nu heen zou groeien (de vorm die `T.groeiPlanVan`
+    kiest), en ook het looppad om de plek van zijn hut niet; de muis zegt dan "Daar groeit de hut van Johan straks". Zoals
+    een huis dat doorgroeit van een erf af blijft (vraag 110, f), maar dan andersom. De bouwer van de speeltest kiest zijn
+    erven met dezelfde vraag, dus hij legt het dan ergens anders. Klaar als: in de speeltest van vier jaar wint ook 62707.
+    Anders zo laten: het briefje zegt het, maar een erf waar al een gezin woont, haal je niet weg.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
@@ -6045,6 +6069,16 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 6 okt 2026 — **Wie doorgroeit, rooit wat in de weg staat** (zevenendertigste sessie; vraag 130, a en c; Marcel: "Ok",
+  en "A" voor de appelboom). Gemeten vóór het bouwen, op veertig landen van de maker: 13 hutten konden bij het begin nooit
+  groeien, 10 met a, en de andere drie alleen als ook de appelboom weg mocht. Past geen vorm zoals hij is, dan rooit het
+  gezin eerst wat op de nieuwe voet staat, met de vorm die het minst te rooien heeft: het hoofd met de bijl, zijn gezin
+  helpt, en zolang werkt het nergens; na een maand rooien de buren de rest (`planVoorGroei` in `js/behoeften.js`,
+  `rooitVoorGroei` in `js/bos.js`). Een appelboom gaat alleen om als geen vorm zonder hem past (`v.omhakken`). Het
+  briefje zegt wat het gezin rooit, of wat in de weg staat ("Het kan geen huis worden: een erf ligt in de weg."), en
+  loot daarbij niets. Een huis dat niet kan groeien, wacht niet meer op bouwstof die er al is. `test/doorgroeien.test.cjs`
+  (zeven toetsen), `npm test` 1002/1002. De speeltest van vier jaar: de hutten van de maker groeien door, en de bouwer
+  wint op 73425 en 72022; op 62707 niet, door een erf over de groeigrond van een hut (vraag 130, d). Zie `speelbaar.md`.
 - 6 okt 2026 — **Het spel in het kort, als pdf** (de sessie van de samenvatting; Marcel: "Maak een korte samenvatting van
   wat ons spel is en hoe het speelt in pdf vorm aub. Zodat iemand anders het kan lezen", voor een gamedesigner, met
   beelden, het hele spel als één verhaal; en "Misschien nog een plaatje van de heer met zijn soldaten"). Vier beelden uit
