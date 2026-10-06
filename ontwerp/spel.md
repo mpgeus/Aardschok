@@ -446,10 +446,12 @@ letter voor letter mee zoals ervoor).
   met dezelfde vorm, veldsteen en een stenen schoorsteen, onder riet (vraag 85, d; leien en pannen staan op de proefplaat
   van 1 okt): een huis versteent op zijn eigen grond. Het broertje van het huis met de schoor is twee tegels smaller, want
   een stenen muur heeft geen schoor. Een huis groeit vanaf zijn linkerbovenhoek naar rechts en naar onder, en waar het
-  grotere huis komt, mag niets vast staan; past geen vorm, dan wacht het, zonder het te zeggen. **Open (vraag 130, 6
-  okt):** op elk land van de maker staat bij het begin een hut die zo nooit kan groeien, meestal door één struik, en dan
-  wint het dorp nooit; voorstel: wie doorgroeit, rooit wat in de weg staat, zoals bij een erf, en het briefje zegt
-  waarom een huis niet groeit.
+  grotere huis komt, mag niets staan. **Staat er alleen iets wat te rooien is** (een struik, een boom, een stronk, een
+  boompje), dan rooit het gezin dat eerst, zoals een erf: het hoofd met de bijl, wie van het gezin geen werk heeft helpt,
+  en na een maand rooien de buren de rest; dan groeit het, de vorm met het minste te rooien. Staat er iets wat niet te
+  rooien is (een gebouw, een ander erf, een rots, een appelboom), dan blijft het wat het is, en zegt het briefje bij de
+  muis waarom ("Het kan een huis worden, maar er staat een rots waar het groter moet worden"). Zo kon op elk land van de
+  maker een hut nooit groeien, meestal door één struik, en won geen dorp (vraag 130, 6 okt; Marcel: "Ok").
 - **Achteruitgaan: zacht** (vraag 85, c), zoals in Anno 1602: mist een huis iets, dan groeit het niet verder en is het
   minder tevreden; er trekt pas een gezin weg als het huis onder de vertrekdrempel zakt, en dat gebeurt alleen als het
   eten of het brandhout mist. De spelregel "Achteruitgaan" kan het streng: mist een huis een maand iets, dan trekt zijn

@@ -27,6 +27,8 @@
 //                    T.kavelVanErf in js/erven.js; bij een werkplaats zijn voet met het looppad eromheen)
 //   g.rooienTot      de dag waarop de buren de rest rooien
 //   p.rooit          de werkplaats die deze inwoner vroeg en nu rooit (bij een hut volgt het uit het gezin)
+//   g.groeitNaRooien een huis dat wil doorgroeien, en waar het gezin eerst rooit wat in de weg staat (g.kavel: de nieuwe
+//                    voet; werklijst vraag 130)
 //   g.boom           { x, y }: de boom waar de houthakker aan hakt; null als er geen meer binnen bereik staat
 //   g.gehakt         het hout dat hij al uit die boom haalde
 //   v.geplant        (op een boompje of een jonge boom) de dag dat het geplant is, en v.wordt: de boom die het wordt
@@ -199,19 +201,31 @@
   };
 
   // Het gebouw dat deze inwoner nu rooit, of null: zijn hut als hij het hoofd van het gezin is en de hut daarop wacht
-  // (js/erven.js), of de werkplaats die hij vroeg (js/verzoeken.js).
+  // (js/erven.js), zijn huis als het wil doorgroeien (werklijst vraag 130), of de werkplaats die hij vroeg
+  // (js/verzoeken.js).
   T.rooitHij = (p) => {
     if (!p) return null;
-    if (p.huis && p.huis.wachtOpRooien && !p.hoofd) return p.huis;
+    if (p.huis && (p.huis.wachtOpRooien || p.huis.groeitNaRooien) && !p.hoofd) return p.huis;
     return p.rooit && p.rooit.wachtOpRooien ? p.rooit : null;
   };
 
-  // Wie dit gebouw rooit: het hoofd van het gezin in de hut, of de meester van de werkplaats; null als hij er niet meer
-  // is.
+  // Wie dit gebouw rooit: het hoofd van het gezin in de hut of het huis, of de meester van de werkplaats; null als hij er
+  // niet meer is.
   function rooierVan(D, g) {
-    if (g.erf) return (D.bewoners && D.bewoners.mensen.find((p) => p.huis === g && !p.hoofd)) || null;
+    if (g.erf || g.groeitNaRooien) return (D.bewoners && D.bewoners.mensen.find((p) => p.huis === g && !p.hoofd)) || null;
     return g.meester && D.bewoners && D.bewoners.mensen.includes(g.meester) ? g.meester : null;
   }
+
+  // Een huis dat wil doorgroeien, maar waar iets staat wat het gezin kan rooien (T.groeiRooiPlan, js/behoeften.js;
+  // werklijst vraag 130; Marcel, 6 okt: "Ok"): het gezin rooit eerst het stuk `kavel` (de nieuwe voet), zoals zijn erf, met
+  // de bijl van het hoofd en het gezin erbij, en na rooiDagen rooien de buren de rest. Daarna groeit het huis, als het dan
+  // nog alles heeft.
+  T.rooiOmTeGroeien = function (D, g, kavel) {
+    Object.assign(g, { groeitNaRooien: true, kavel, rooienTot: dagNu(D) + IN().rooiDagen });
+    const p = rooierVan(D, g);
+    const wie = p && p.naam ? `Het gezin van ${p.naam}` : 'Het gezin';
+    T.zeg(D, `${wie} rooit eerst ${T.rooiWoorden(T.watTeRooien(D, kavel))}: daar wordt hun ${T.GEBOUWEN[g.soort].naam} groter.`, 'goed');
+  };
 
   // Wat er op deze tegel te rooien staat, in één keer weg: een boom om (het hout naar de schuur) en zijn stronk eruit, of
   // wat er verder staat eruit.
@@ -226,6 +240,10 @@
   T.tikRooienDag = function (D) {
     const dag = dagNu(D);
     for (const g of D.gebouwen || []) {
+      if (g.groeitNaRooien) {
+        groeiGerooid(D, g, dag);
+        continue;
+      }
       if (!g.wachtOpRooien) continue;
       const over = T.teRooienOp(D, g.kavel);
       if (over.length && dag < g.rooienTot) continue;
@@ -248,6 +266,24 @@
       }
     }
   };
+
+  // Een huis dat wil doorgroeien (T.rooiOmTeGroeien): is zijn stuk vrij, of is de tijd om (dan rooien de buren de rest),
+  // dan kan het groeien, de eerstvolgende dag dat het nog alles heeft (js/behoeften.js). Woont er niemand meer, dan houdt
+  // het op.
+  function groeiGerooid(D, g, dag) {
+    const over = T.teRooienOp(D, g.kavel);
+    const bewoond = !!(D.bewoners && D.bewoners.mensen.some((p) => p.huis === g));
+    if (over.length && dag < g.rooienTot && bewoond) return;
+    if (bewoond) for (const t of over) rooiNu(D, t);
+    const p = rooierVan(D, g);
+    delete g.groeitNaRooien;
+    delete g.kavel;
+    delete g.rooienTot;
+    if (!bewoond) return;
+    const wie = p && p.naam ? `het gezin van ${p.naam}` : 'het gezin';
+    const hulp = over.length ? `De buren helpen ${wie} de rest te rooien` : `${T.hoofdletter(wie)} heeft gerooid`;
+    T.zeg(D, `${hulp}: nu kan hun ${T.GEBOUWEN[g.soort].naam} groter worden.`);
+  }
 
   // ---------------------------------------------------------------------------------------------
   // De houthakker (vraag 115)

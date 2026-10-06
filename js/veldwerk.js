@@ -547,8 +547,8 @@
     if (!p || !p.huis || p.weg || p.komt) return null;
     if (p.leeftijd !== 'volwassen' && p.leeftijd !== 'jong') return null;
     // Het gezin van wie zijn erf rooit (js/erven.js; werklijst vraag 110, e) helpt net zo: zolang hij hakt of rooit,
-    // blijven ze dicht bij hem.
-    if (p.huis.wachtOpRooien) {
+    // blijven ze dicht bij hem. Rooit hij waar zijn huis groter wordt (vraag 130), dan helpt wie geen werk heeft.
+    if (p.huis.wachtOpRooien || (p.huis.groeitNaRooien && !p.werk)) {
       const hoofd = p.hoofd && p.hoofd.wezen;
       if (!hoofd || hoofd.dood || !hoofd.werkt || !ONTGINWERK.has(hoofd.werkt.soort)) return null;
       return { x: hoofd.tx, y: hoofd.ty, straal: IN().helpStraal, veld: false };

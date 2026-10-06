@@ -423,6 +423,12 @@
   // het dak "Alleen als het doorgroeit of gebouwd wordt daarna"): wat zijn erf al voor hem koos, zijn stenen broertje, de
   // volgende vorm van zijn nieuwe soort, of een andere die past.
   function kiesGroei(D, instantie, nieuw, oudeVoet) {
+    const vorm = groeiVormen(D, instantie, nieuw, oudeVoet).find((v) => !v.inDeWeg.length);
+    return vorm ? { tekening: vorm.tekening, voet: vorm.voet } : null;
+  }
+  // De vormen waar dit huis in kan groeien, in de volgorde waarin het ze probeert (hierboven), elk met wat er in de weg
+  // staat: [{ tekening, voet, inDeWeg }].
+  function groeiVormen(D, instantie, nieuw, oudeVoet) {
     const soort = T.GEBOUWEN[nieuw];
     const kandidaten = [];
     const kant = T.deurKantVan(instantie.tekening);
@@ -441,32 +447,80 @@
       kandidaten.push(T.volgendeTekening(D, nieuw));
       for (const t of soort.tekeningen || []) if (!kandidaten.includes(t)) kandidaten.push(t);
     }
-    for (const tekening of kandidaten.filter((t, i, a) => a.indexOf(t) === i)) {
+    return kandidaten.filter((t, i, a) => a.indexOf(t) === i).map((tekening) => {
       const voet = T.gebouwVoet(nieuw, tekening) || oudeVoet;
-      if (heeftRuimte(D, instantie, oudeVoet, voet)) return { tekening, voet };
-    }
-    return null;
+      return { tekening, voet, inDeWeg: watStaatInDeWeg(D, instantie, oudeVoet, voet) };
+    });
   }
 
-  // Is er plaats voor de nieuwe voet: wat buiten de oude voet valt, mag niet vast zijn (een muur, een boom, een gebouw),
-  // er mag niemand staan, en het mag niet de deur van een ander gebouw zijn (werklijst vraag 88: in de nulmeting groeide
-  // een hut over twee mensen heen, die er tot het eind ingemetseld stonden). Staat er iemand, dan morgen weer. En het
-  // blijft van een ander erf af, en drie tegels van de plek van het huis erop, zoals een nieuw gebouw (T.opDeGrondVanEenErf,
-  // js/erven.js; werklijst vraag 110, f: op 62707 groeide een buurhuis in het looppad van een vrij erf, en kwam er twee en
-  // een half jaar geen gezin).
-  function heeftRuimte(D, instantie, oudeVoet, voet) {
+  // Wat staat er in de weg waar de nieuwe voet buiten de oude valt: [{ x, y, wat }], leeg als hij past. `wat` is 'rooien'
+  // (een boom, een stronk, een struik, een boompje: het gezin kan het rooien, js/bos.js; werklijst vraag 130), 'iemand'
+  // (die staat er, morgen weer), 'deur' (van een ander gebouw: werklijst vraag 88, in de nulmeting groeide een hut over
+  // twee mensen heen, die er tot het eind ingemetseld stonden), 'erf' (de grond van een ander erf, en drie tegels van de
+  // plek van het huis erop, zoals bij een nieuw gebouw: T.opDeGrondVanEenErf, js/erven.js; werklijst vraag 110, f: op
+  // 62707 groeide een buurhuis in het looppad van een vrij erf, en kwam er twee en een half jaar geen gezin), of 'vast'
+  // (een muur, een gebouw, een rots, een appelboom).
+  function watStaatInDeWeg(D, instantie, oudeVoet, voet) {
     const w = D.wereld;
+    const uit = [];
     for (let dy = 0; dy < voet.h; dy++) {
       for (let dx = 0; dx < voet.b; dx++) {
         if (dx < oudeVoet.b && dy < oudeVoet.h) continue; // eigen grond: was toch al van dit huis
         const x = instantie.x + dx;
         const y = instantie.y + dy;
-        if (T.isVast(w, x, y) || T.waaromNietOpIemand(D, { x, y, b: 1, h: 1 }, instantie)) return false;
-        if (T.opDeGrondVanEenErf(D, x, y, instantie.erf)) return false;
+        const r = { x, y, b: 1, h: 1 };
+        let wat = null;
+        if (T.opDeGrondVanEenErf(D, x, y, instantie.erf)) wat = 'erf';
+        else if (T.ontginWerkOp(w, x, y)) wat = 'rooien';
+        else if (T.isVast(w, x, y)) wat = 'vast';
+        else if (T.deurOpRechthoek(D, r, instantie)) wat = 'deur';
+        else if (T.wieStaatOp(w, r)) wat = 'iemand';
+        if (wat) uit.push({ x, y, wat });
       }
     }
-    return true;
+    return uit;
   }
+
+  // Kan dit huis (met mensen, dat een maand alles had) niet doorgroeien, maar wel als zijn gezin eerst rooit wat er staat
+  // (werklijst vraag 130; Marcel, 6 okt: "Ok")? Dan het stuk dat vrij moet ({ x, y, b, h }: de nieuwe voet), van de vorm
+  // met het minste te rooien; anders null. Wie er alleen staat, telt niet: die is morgen weg.
+  T.groeiRooiPlan = function (D, g) {
+    const soort = T.GEBOUWEN[g.soort];
+    if (!soort || !soort.wordt || !T.GEBOUWEN[soort.wordt] || !g.voorwerp) return null;
+    const oudeVoet = g.voet || T.gebouwVoet(g.soort, g.tekening) || { b: 1, h: 1 };
+    const vormen = groeiVormen(D, g, soort.wordt, oudeVoet);
+    if (vormen.some((v) => v.inDeWeg.every((t) => t.wat === 'iemand'))) return null; // hij past al
+    let beste = null;
+    for (const v of vormen) {
+      const rooien = v.inDeWeg.filter((t) => t.wat === 'rooien').length;
+      if (!rooien || v.inDeWeg.some((t) => t.wat !== 'rooien' && t.wat !== 'iemand')) continue;
+      if (!beste || rooien < beste.rooien) beste = { rooien, voet: v.voet };
+    }
+    return beste ? { x: g.x, y: g.y, b: beste.voet.b, h: beste.voet.h } : null;
+  };
+
+  // Waarom dit huis niet doorgroeit, terwijl het alles heeft en de bouwstof er is (het briefje, js/huisbriefje.js;
+  // werklijst vraag 130, c), of null: het gezin rooit eerst, of er staat iets wat het niet kan rooien.
+  T.waaromGroeitHetNiet = function (D, g) {
+    const soort = T.GEBOUWEN[g.soort];
+    if (!soort || !soort.wordt || !T.GEBOUWEN[soort.wordt] || !g.voorwerp) return null;
+    if (g.groeitNaRooien) return `het gezin rooit eerst ${T.rooiWoorden(T.watTeRooien(D, g.kavel)).replace(/ \(.*\)$/, '')} waar het groter wordt`;
+    if (!((g.groeiDagen || 0) >= T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen) || g.wachtOpBouwstof) return null;
+    const oudeVoet = g.voet || T.gebouwVoet(g.soort, g.tekening) || { b: 1, h: 1 };
+    const vormen = groeiVormen(D, g, soort.wordt, oudeVoet);
+    if (!vormen.length || vormen.some((v) => v.inDeWeg.every((t) => t.wat === 'iemand' || t.wat === 'rooien'))) return null;
+    // De vorm waar het minste in de weg staat, en daarvan wat het gezin niet kan rooien.
+    const beste = vormen.slice().sort((a, b) => a.inDeWeg.length - b.inDeWeg.length)[0];
+    const t = beste.inDeWeg.find((x) => x.wat !== 'iemand' && x.wat !== 'rooien');
+    if (t.wat === 'erf') return 'er ligt een erf waar het groter moet worden';
+    if (t.wat === 'deur') return 'de deur van een ander huis zit in de weg';
+    const v = T.voorwerpOp(D.wereld, t.x, t.y);
+    const g2 = v && (D.gebouwen || []).find((h) => h.voorwerp === v);
+    const naam = g2 ? `een ${T.GEBOUWEN[g2.soort].naam}` : v && T.VOORWERPEN[v.soort] && T.VOORWERPEN[v.soort].naam ? T.VOORWERPEN[v.soort].naam : v ? NAMEN[v.soort] || 'iets' : 'een muur';
+    return `er staat ${naam} waar het groter moet worden`;
+  };
+  // Wat er van de natuur in de weg kan staan en niet te rooien is.
+  const NAMEN = { rots: 'een rots', kleineRots: 'een rots', appelboom: 'een appelboom' };
 
   const kostenTekst = (kosten) => T.opsomming(Object.keys(kosten).map((wat) => `${kosten[wat]} ${wat}`));
 
@@ -515,7 +569,14 @@
         g.wachtOpBouwstof = true;
         continue;
       }
-      if (!groeiGebouw(D, g, soort)) continue; // geen ruimte: morgen weer
+      if (g.groeitNaRooien) continue; // het gezin rooit nog wat in de weg staat (js/bos.js)
+      if (!groeiGebouw(D, g, soort)) {
+        // Geen ruimte. Staat er alleen iets wat het gezin kan rooien, dan rooit het dat eerst (werklijst vraag 130); anders
+        // morgen weer, en zegt het briefje waarom (T.waaromGroeitHetNiet).
+        const kavel = T.groeiRooiPlan(D, g);
+        if (kavel) T.rooiOmTeGroeien(D, g, kavel);
+        continue;
+      }
       T.betaalKosten(D, kosten);
       delete g.wachtOpBouwstof;
       const voor = Object.keys(kosten).length ? `, voor ${kostenTekst(kosten)}` : '';

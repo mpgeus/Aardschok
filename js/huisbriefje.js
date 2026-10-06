@@ -27,6 +27,7 @@
     if (t.groei) {
       const nog = Math.max(0, t.groei.nodig - t.groei.dagen);
       if (t.teken === 'bouwstof') groei = `Het kan een ${t.groei.wordt} worden, maar daar is ${kosten(t.groei.kosten)} voor nodig.`;
+      else if (t.groei.waarom) groei = `Het kan een ${t.groei.wordt} worden, maar ${t.groei.waarom}.`;
       else if (!t.teken) groei = `Nog ${nog} ${nog === 1 ? 'dag' : 'dagen'} alles, dan wordt het een ${t.groei.wordt}${Object.keys(t.groei.kosten).length ? ` (${kosten(t.groei.kosten)})` : ''}.`;
       else groei = `Heeft het ${t.groei.nodig} dagen alles, dan wordt het een ${t.groei.wordt}.`;
     }

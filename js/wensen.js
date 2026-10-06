@@ -546,8 +546,10 @@
       teken: T.tekenVanHuis(g),
       // Wat het huis je nadraagt: een ondernemer die nee of ja hoorde (js/ondernemers.js).
       nadraagt: T.huisNadraagtTekst(g, D.kalender ? D.kalender.dag : 0),
+      // Hoe ver het is met doorgroeien, en waarom het niet groeit terwijl het alles heeft (het gezin rooit eerst, of er
+      // staat iets in de weg; T.waaromGroeitHetNiet in js/behoeften.js, werklijst vraag 130, c).
       groei: wordt
-        ? { dagen: g.groeiDagen || 0, nodig: T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen, wordt: wordt.naam, kosten: IN().bouwstof[soort.wordt] || {} }
+        ? { dagen: g.groeiDagen || 0, nodig: T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen, wordt: wordt.naam, kosten: IN().bouwstof[soort.wordt] || {}, waarom: T.waaromGroeitHetNiet(D, g) }
         : null,
     };
   };
