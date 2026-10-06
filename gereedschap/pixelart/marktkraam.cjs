@@ -74,11 +74,30 @@ function mandCel(o) {
 
 // Per soort waar vier richtingen, en daarachter dezelfde soort leeg (nog eens vier), en daarna de manden: één rij
 // cellen, zoals de tekens (papieren.cjs). Welke cel waar staat, zegt de beschrijving hieronder.
-function vel() {
-  const cellen = [];
-  for (const soort of SOORTEN) for (const leeg of [false, true]) for (const r of RICHTINGEN) cellen.push(kraamCel(r, { waar: soort, leeg }));
-  const uit = new K.Plaat(CEL[0] * cellen.length, CEL[1]);
-  cellen.forEach((p, i) => uit.plak(p, i * CEL[0], 0));
+// Welke kramen het spel kan zetten: per waar de vormen en lengtes uit T.MARKT_INSTELLINGEN.kramen (js/markt.js), zodat
+// er één tabel is. Als "waar/vorm/lengte", in de volgorde van de rijen op het vel.
+function soortenVanHetSpel() {
+  const T = require('../../test/laad.cjs').spel();
+  const uit = [];
+  for (const [waar, k] of Object.entries(T.MARKT_INSTELLINGEN.kramen)) {
+    for (const vorm of k.vormen) {
+      for (let lengte = k.lengte[0]; lengte <= Math.min(k.lengte[1], vorm === 'kar' ? 2 : 3); lengte++) uit.push(`${waar}/${vorm}/${lengte}`);
+    }
+  }
+  return uit;
+}
+
+// Het vel: een rij per soort kraam (soortenVanHetSpel), met eerst vol en dan leeg, elk van de vier kanten; elke cel even
+// groot, voor de langste kraam.
+function vel(soorten = soortenVanHetSpel()) {
+  const kol = RICHTINGEN.length * 2;
+  const uit = new K.Plaat(LANG_CEL[0] * kol, LANG_CEL[1] * soorten.length);
+  soorten.forEach((naam, rij) => {
+    const [waar, vorm, lengte] = naam.split('/');
+    [false, true].forEach((leeg, l) => RICHTINGEN.forEach((r, i) => {
+      uit.plak(kraamCel(r, { waar, vorm, lengte: Number(lengte), leeg, lang: true }), (l * RICHTINGEN.length + i) * LANG_CEL[0], rij * LANG_CEL[1]);
+    }));
+  });
   return uit;
 }
 
@@ -89,14 +108,14 @@ function mandenVel() {
 }
 
 // Wat in beelden/beschrijving.json komt (naar-spel.cjs): het bestand, de maat van een cel, het anker, en in welke
-// volgorde de cellen staan. Een cel zoekt het spel op met soort, leeg en richting (js/sprites.js, S.kraam).
-function beschrijving(bestand, mandenBestand) {
+// volgorde de rijen staan. Een cel zoekt het spel op met waar, vorm, lengte, leeg en richting (js/sprites.js, S.kraam).
+function beschrijving(bestand, mandenBestand, soorten = soortenVanHetSpel()) {
   return {
     bestand,
-    cel: CEL,
-    anker: ANKER,
+    cel: LANG_CEL,
+    anker: LANG_ANKER,
     richtingen: RICHTINGEN,
-    soorten: SOORTEN,
+    soorten,
     manden: { bestand: mandenBestand, cel: MAND_CEL, anker: MAND_ANKER, namen: MANDEN.map(([n]) => n) },
   };
 }

@@ -472,17 +472,29 @@ spel een markt: een eigen gebouw van 6 bij 6 vroeg 12 bij 12 open grond, en die 
   plekken van de eerste vier kramen in goud op de grond. Kramen zijn geen huis: 8 hout en 6 goud, in plaats van 16 en 14
   (de werkbank, "De markt").
 - **Het marktblok (127, B):** twee rijen kramen tegenover elkaar, langs een as van de kaart, met twee tegels looppad
-  ertussen en een mand, kist, zak of ton naast elke kraam (`T.marktBlok`). Het spel zoekt het grootste open stuk plein,
-  tot zes kramen per rij, buiten de kring van het feest (`T.feestMidden`, `js/feesten.js`) en drie tegels van de plek van
-  de heer, niet op de plek van zijn schandpaal, en alleen als het niemand de weg verspert: wat je eerst over het plein
-  bereikte, bereik je nog. Het blok ligt vast zodra de markt komt. Wie op de plek van een kraam staat, stapt opzij. Tot de
-  markt klaar is (vier dagen), staan de eerste kramen er bleek.
-- **Meegroeien (127, C):** een kraam per 15 mensen, minstens vier (`T.kramenNodig`; de werkbank), elke nacht hooguit één
-  erbij (`T.tikMarktDag`). Is het blok vol, dan komen de volgende langs de weg vanaf het plein, aan weerszijden, met hun
-  toonbank naar de weg: de marktstraat (c2, `T.straatPlek`), niet op een veld, een erf of de weg zelf. **De maker legt
-  het plein groter** (c1): zo'n 290 tot 380 tegels (was 165 tot 250), met de eiken alleen achterin, bij de schout, zodat
-  de voorkant open blijft; daar past een blok van 8 tot 12 kramen. Het ontworpen gehucht houdt zijn plein: daar past een
-  blok van vier, en de rest komt langs de weg.
+  ertussen en een mand, kist, zak of ton naast elke kraam (`T.marktBlok`). Het spel zoekt een open stuk plein, tot twaalf
+  tegels per rij, buiten de kring van het feest (`T.feestMidden`, `js/feesten.js`), drie tegels van de plek van de heer,
+  niet op de plek van zijn schandpaal, twee tegels van een boom, en alleen als het niemand de weg verspert: wat je eerst
+  over het plein bereikte, bereik je nog. **Het blok dat je het best ziet, wint:** in ons beeld dekken de daken van de
+  huizen vóór het plein en de kruinen van de eiken veel af, dus het blok met de meeste tegels die niet achter een dak of
+  een kruin vallen, en dan het langste. Het blok ligt vast zodra de markt komt. Wie op de plek van een kraam staat, stapt
+  opzij. Tot de markt klaar is (vier dagen), staan de eerste kramen er bleek.
+- **De kramen (127, a tot c; Marcel: "Misschien verschillende kramen? Ook in afmeting? Voornamelijk lengte", en "vormen en
+  verdeling ja"):** elke kraam heeft een waar, een vorm en een lengte van één tot drie tegels, geloot uit het zaad van het
+  spel naar wat bij de waar hoort (`kramen` in de werkbank, `T.kraamVoor`): groente en fruit een luifel, een kar of een
+  puntdak, 1 à 2 tegels; brood een luifel, een puntdak of een zeil, 1; vis en vlees een luifel, een zeil of een puntdak,
+  2 à 3; laken en garen net zo, 2 à 3; potten en gerei een zeil of een luifel, 1 à 2. De vormen: de luifel (een toonbank
+  met een gestreepte luifel), het puntdak (een tentje), het zeil (een tafel onder een schuin zeil op twee palen, met
+  touwen naar de grond) en de kar (de boer die van zijn handkar verkoopt, hooguit twee tegels). Een lange kraam heeft per
+  tegel een stuk waar, om en om gespiegeld.
+- **Meegroeien (127, C en d):** de markt telt in tegels toonbank: een per 10 mensen, minstens 6 (`T.tegelsNodig`; de
+  werkbank), elke nacht hooguit één kraam erbij (`T.tikMarktDag`), in de rij van het blok met de meeste plaats. Is het
+  blok vol, dan komen de volgende langs de weg vanaf het plein, aan weerszijden, met hun toonbank naar de weg: de
+  marktstraat (c2, `T.straatPlek`), niet op een veld, een erf of de weg zelf, en ook niet bij de heer. Past een kraam
+  nergens, dan wordt hij een tegel korter. **De maker legt het plein groter** (c1): zo'n 260 tot 300 tegels (was 165 tot
+  250; een plein van 290 tot 380 kostte te veel bouwgrond), met de eiken alleen achterin, bij de schout. Daar past een
+  blok van 6 tot 16 tegels toonbank. Het ontworpen gehucht houdt zijn plein, dat zo vol eiken staat dat de kramen daar
+  langs de weg komen.
 - **Vol of leeg (127, A):** elke kraam heeft zijn waar, op volgorde: groente en fruit, brood, vis en vlees, laken en garen,
   potten en gerei, en dan weer groente. Hij ligt vol als het dorp die waar heeft (`waren` in de werkbank: de groentekraam
   groente, eieren, kaas of graan; de broodkraam brood; de viskraam vis of vlees; de lakenkraam laken of wol; de

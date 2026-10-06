@@ -63,7 +63,7 @@ test('de standaard: de markt komt op het plein, voor 8 hout en 6 goud; als eigen
 });
 
 // De tegels die de markt dichtzet: zijn kramen en de manden ernaast.
-const dichtVan = (markt) => new Set([...markt.kramen, ...markt.manden].map((v) => `${v.x},${v.y}`));
+const dichtVan = (markt) => new Set([...markt.kramen.flatMap((k) => tegelsVan(k)), ...markt.manden].map((v) => `${v.x},${v.y}`));
 // Houdt de markt niemand tegen? Wat je eerst vanaf het midden bereikte, bereik je nog, op wat hij dichtzette na.
 function niemandTegen(w, midden, voor, markt) {
   const na = bereik(w, midden);
@@ -71,6 +71,12 @@ function niemandTegen(w, midden, voor, markt) {
   for (const t of voor) if (!dicht.has(t)) assert.ok(na.has(t), `${t} is niet meer te bereiken`);
 }
 const richting = { ZO: [1, 0], ZW: [0, 1], NW: [-1, 0], NO: [0, -1] };
+// De tegels van een kraam (een lange beslaat er meer, langs zijn rij), en hoeveel tegels toonbank een lijst kramen is.
+const tegelsVan = (k) => {
+  const [b, h] = k.beslaat || [1, 1];
+  return Array.from({ length: Math.max(b, h) }, (_, i) => ({ x: k.x + (b > 1 ? i : 0), y: k.y + (h > 1 ? i : 0) }));
+};
+const tegels = (kramen) => kramen.reduce((s, k) => s + (k.lengte || 1), 0);
 
 for (const zaad of [undefined, 62707, 73425, 72022]) {
   const naam = zaad ? `het land ${zaad}` : 'het ontworpen gehucht';
@@ -89,7 +95,7 @@ for (const zaad of [undefined, 62707, 73425, 72022]) {
     // De plek die een verzoek kiest: het midden van het plein, met de eerste kramen.
     const plek = T.plekVoor(D, 'markt', T.deurVan(w, D.gebouwen.find((g) => g.huis === 'schout')));
     assert.deepEqual({ x: plek.x, y: plek.y }, midden);
-    assert.equal(plek.kramen.length, T.MARKT_INSTELLINGEN.begin);
+    assert.ok(tegels(plek.kramen) >= T.MARKT_INSTELLINGEN.beginTegels, 'de eerste kramen: zoveel tegels toonbank');
     assert.ok(T.gebouwPast(D, 'markt', plek.x, plek.y));
 
     const hout = D.voorraad.hout;
@@ -99,26 +105,30 @@ for (const zaad of [undefined, 62707, 73425, 72022]) {
     assert.deepEqual([hout - D.voorraad.hout, goud - D.voorraad.goud], [8, 6]);
     const markt = D.gebouwen.find((g) => g.soort === 'markt');
     const kramen = w.voorwerpen.filter((v) => v.soort === 'kraam');
-    assert.equal(kramen.length, T.MARKT_INSTELLINGEN.begin);
+    assert.ok(tegels(kramen) >= T.MARKT_INSTELLINGEN.beginTegels);
     assert.deepEqual(kramen, markt.kramen);
-    assert.ok(markt.blok.length >= 4, `een blok van ${markt.blok.length}`);
-    assert.deepEqual(kramen.map((k) => k.waar), ['groente', 'brood', 'vis', 'laken'], 'een kraam per waar');
-    for (const k of kramen) {
-      assert.ok(T.opHetPlein(w, k.x, k.y), 'het blok ligt op het plein');
-      assert.ok(!T.isBegaanbaar(w, k.x, k.y), 'een kraam staat er echt');
-      assert.ok(cheb(k, feest) > T.FEESTEN_INSTELLINGEN.kring, 'buiten de kring van het feest');
-      assert.ok(cheb(k, heer) > T.MARKT_INSTELLINGEN.vanDeHeer, 'weg van de heer');
-      // de klant staat ervoor, op het looppad
-      const [dx, dy] = richting[k.richting];
-      assert.ok(T.isBegaanbaar(w, k.x + dx, k.y + dy), 'voor de toonbank is plaats voor de klant');
-    }
-    // twee aan twee tegenover elkaar, over het looppad heen
-    for (let i = 0; i < kramen.length; i += 2) {
-      const [a, b] = [kramen[i], kramen[i + 1]];
+    assert.deepEqual(kramen.map((k) => k.waar), T.MARKT_INSTELLINGEN.volgorde.slice(0, kramen.length), 'een kraam per waar');
+    // het blok: twee rijen tegenover elkaar, over het looppad heen (op een land van de maker; het plein van het ontworpen
+    // gehucht staat zo vol eiken dat zijn kramen langs de weg komen)
+    if (zaad) {
+      const [a, b] = markt.blok.rijen;
+      assert.ok(a.lengte >= 2, `een rij van ${a.lengte}`);
       const [dx, dy] = richting[a.richting];
       const n = T.MARKT_INSTELLINGEN.tussenRijen;
       assert.deepEqual([b.x, b.y], [a.x + dx * n, a.y + dy * n], 'de rij ertegenover');
       assert.deepEqual(richting[b.richting], [0 - dx || 0, 0 - dy || 0], 'ze kijken elkaar aan');
+    }
+    for (const k of kramen) {
+      const soort = T.MARKT_INSTELLINGEN.kramen[k.waar];
+      assert.ok(soort.vormen.includes(k.vorm), `${k.waar} als ${k.vorm}`);
+      assert.ok(k.lengte >= 1 && k.lengte <= soort.lengte[1], `${k.waar} van ${k.lengte} tegels`);
+      for (const t of tegelsVan(k)) {
+        assert.ok(!T.isBegaanbaar(w, t.x, t.y), 'een kraam staat er echt, over zijn hele lengte');
+        assert.ok(!T.opHetPlein(w, t.x, t.y) || cheb(t, feest) > T.FEESTEN_INSTELLINGEN.kring, 'buiten de kring van het feest');
+        assert.ok(cheb(t, heer) > T.MARKT_INSTELLINGEN.vanDeHeer, 'weg van de heer');
+        const [fx, fy] = richting[k.richting];
+        assert.ok(T.isBegaanbaar(w, t.x + fx, t.y + fy), 'voor de toonbank is plaats voor de klant');
+      }
     }
     assert.ok(markt.manden.length > 0, 'manden en kisten erbij');
 
@@ -151,8 +161,8 @@ for (const zaad of [undefined, 62707, 73425, 72022]) {
 }
 
 // Een markt die klaar is, in het ontworpen gehucht.
-function metMarkt() {
-  const S = nieuwSpel();
+function metMarkt(zaad) {
+  const S = nieuwSpel(zaad);
   const D = S.dorp;
   rijk(D);
   assert.ok(T.plaatsGebouw(D, 'markt', 0, 0).gelukt);
@@ -162,29 +172,49 @@ function metMarkt() {
   return { S, D, w: D.wereld, markt };
 }
 
-test('de markt groeit mee: een kraam per 15 mensen, één per nacht, eerst in het blok en dan langs de weg', () => {
-  const { D, w, markt } = metMarkt();
+test('de markt groeit mee: een tegel toonbank per 10 mensen, één kraam per nacht, eerst in het blok en dan langs de weg', () => {
+  const { D, w, markt } = metMarkt(62707);
   const midden = T.marktMidden(w);
   const voor = bereik(w, midden);
+  const begin = markt.kramen.length;
   T.tikMarktDag(D);
-  assert.equal(markt.kramen.length, 4, 'bij 26 mensen blijft het bij vier');
-  D.bevolking = 150;
-  assert.equal(T.kramenNodig(D), 10);
+  assert.equal(markt.kramen.length, begin, 'bij 26 mensen blijft het bij de eerste');
+  D.bevolking = 220;
+  assert.equal(T.tegelsNodig(D), 22);
   T.tikMarktDag(D);
-  assert.equal(markt.kramen.length, 5, 'één per nacht');
-  for (let i = 0; i < 10; i++) T.tikMarktDag(D);
-  assert.equal(markt.kramen.length, 10);
-  const opHetPlein = markt.kramen.filter((k) => T.opHetPlein(w, k.x, k.y));
-  assert.equal(opHetPlein.length, markt.blok.length, 'het blok is vol');
+  assert.equal(markt.kramen.length, begin + 1, 'één per nacht');
+  for (let i = 0; i < 20; i++) T.tikMarktDag(D);
+  assert.ok(tegels(markt.kramen) >= 22, `${tegels(markt.kramen)} tegels toonbank`);
+  assert.ok(markt.blok.rijen.every((r) => r.vol >= r.lengte - 1), 'het blok is vol');
   const straat = markt.kramen.filter((k) => !T.opHetPlein(w, k.x, k.y));
-  assert.ok(straat.length > 0, 'de rest staat langs de weg');
+  assert.ok(straat.length > 0, 'wat niet in het blok past, staat langs de weg');
   for (const k of straat) {
     const [dx, dy] = richting[k.richting];
-    assert.ok(T.opPad(w, k.x + dx, k.y + dy), 'met de toonbank naar de weg');
-    assert.ok(!T.opPad(w, k.x, k.y), 'niet op de weg zelf');
+    for (const t of tegelsVan(k)) {
+      assert.ok(T.opPad(w, t.x + dx, t.y + dy), 'met de toonbank naar de weg');
+      assert.ok(!T.opPad(w, t.x, t.y), 'niet op de weg zelf');
+    }
   }
   assert.deepEqual(markt.kramen.slice(4, 6).map((k) => k.waar), ['potten', 'groente'], 'de waar gaat rond');
   niemandTegen(w, midden, voor, markt);
+});
+
+test('welke kraam het wordt, ligt vast in het zaad: de vorm uit die van zijn waar, de lengte binnen zijn maat', () => {
+  const { D } = metMarkt();
+  const lengtes = new Set();
+  const vormen = new Set();
+  for (let nr = 0; nr < 60; nr++) {
+    const k = T.kraamVoor(D, nr);
+    assert.deepEqual(T.kraamVoor(D, nr), k, 'hetzelfde nummer, dezelfde kraam');
+    const soort = T.MARKT_INSTELLINGEN.kramen[k.waar];
+    assert.ok(soort.vormen.includes(k.vorm));
+    assert.ok(k.lengte >= soort.lengte[0] && k.lengte <= soort.lengte[1]);
+    if (k.vorm === 'kar') assert.ok(k.lengte <= 2, 'een kar is hooguit twee tegels');
+    lengtes.add(k.lengte);
+    vormen.add(k.vorm);
+  }
+  assert.deepEqual([...lengtes].sort(), [1, 2, 3], 'één, twee en drie tegels');
+  assert.deepEqual([...vormen].sort(), ['kar', 'luifel', 'puntdak', 'zeil'], 'alle vier de vormen');
 });
 
 test('een kraam ligt vol als het dorp zijn waar heeft, en anders staat hij leeg, met een lege mand', () => {
@@ -218,7 +248,7 @@ test('wie op de plek van een kraam staat, stapt opzij; en een bewaarde markt hou
   const S2 = nieuwSpel();
   T.zetSpel(S2, T.leesSpel(T.bewaarSpel(S, { nu: 0 })));
   const markt = S2.dorp.gebouwen.find((g) => g.soort === 'markt');
-  assert.equal(markt.kramen.length, 4);
+  assert.equal(markt.kramen.length, D.gebouwen.find((g) => g.soort === 'markt').kramen.length);
   for (const kraam of [...markt.kramen, ...markt.manden]) assert.ok(S2.dorp.wereld.voorwerpen.includes(kraam), 'dezelfde als op de kaart');
 });
 

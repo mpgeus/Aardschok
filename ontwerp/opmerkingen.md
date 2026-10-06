@@ -629,6 +629,13 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het beeld
 
+- **De markt in ons beeld** (6 okt, zesendertigste sessie; vraag 127): vanuit onze kijkhoek ligt een groot deel van het
+  plein achter de daken van de huizen ervoor; met een harde regel (geen kraam achter een dak) bleef er op vijf van de 33
+  landen geen blok over. Nu wint het blok met de meeste zichtbare tegels. Een zeil van achteren gezien leest als een
+  vlaggetje. En het vel met de kramen is in de browser zo'n 24 MB (veel lege ruimte rond de korte kramen); het laadt pas
+  als er een markt staat, maar inpakken zoals de figuren (`inpakken.cjs`) zou het kleiner maken. Met het draaien van de
+  camera (vraag 124) valt er minder achter een dak.
+
 - Het raster kost tijd: in de proef, in een browser zonder videokaart, duurde een beeld met één groot
   huis in het raster 15 ms tegen 12 ms met het kijkvenster. Een echte browser met videokaart doet het
   sneller, maar nameten als Marcel het raster kiest (`Spel.debug.meet()`). Wordt het te traag, dan kan

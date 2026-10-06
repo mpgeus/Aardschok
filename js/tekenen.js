@@ -1195,9 +1195,11 @@
       // De markt op het plein (js/markt.js): waar de kramen komen.
       ctx.fillStyle = 'rgba(226, 182, 74, 0.42)';
       for (const k of b.kramen) {
-        const p = T.naarScherm(k.x, k.y);
-        T.ruit(ctx, p.x, p.y, 0.94);
-        ctx.fill();
+        for (const t of k.tegels || [k]) {
+          const p = T.naarScherm(t.x, t.y);
+          T.ruit(ctx, p.x, p.y, 0.94);
+          ctx.fill();
+        }
       }
       return;
     }
@@ -1786,12 +1788,16 @@
       // naar het midden van het plein. In aanbouw bleker, zoals een gebouw zonder bouwfasen. Zonder kunst: een toonbank
       // en een rode luifel op palen.
       if (v.inAanbouw) ctx.globalAlpha = 0.45;
-      const kraam = metSprites() && T.sprites.kraam && T.sprites.kraam(v.waar || 'groente', v.leeg, v.richting);
+      const kraam = metSprites() && T.sprites.kraam && T.sprites.kraam(v.waar || 'groente', v.vorm || 'luifel', v.lengte || 1, v.leeg, v.richting);
       if (kraam) T.sprites.teken(ctx, kraam, p.x, p.y, helder);
       else {
-        T.blok(ctx, p.x, p.y, 0.34, 0.34, 14, '#7a5532', { helder });
-        T.blok(ctx, p.x, p.y, 0.04, 0.04, 22, '#5e4128', { helder, basis: 14 });
-        if (!v.leeg) T.blok(ctx, p.x, p.y, 0.42, 0.42, 3, '#b8432f', { helder, basis: 36 });
+        const [b, h] = v.beslaat || [1, 1];
+        for (let i = 0; i < Math.max(b, h); i++) {
+          const q = T.naarScherm(v.x + (b > 1 ? i : 0), v.y + (h > 1 ? i : 0));
+          T.blok(ctx, q.x, q.y, 0.34, 0.34, 14, '#7a5532', { helder });
+          T.blok(ctx, q.x, q.y, 0.04, 0.04, 22, '#5e4128', { helder, basis: 14 });
+          if (!v.leeg) T.blok(ctx, q.x, q.y, 0.42, 0.42, 3, '#b8432f', { helder, basis: 36 });
+        }
       }
       ctx.globalAlpha = 1;
       return;

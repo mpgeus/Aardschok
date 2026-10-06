@@ -5568,6 +5568,10 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     (bouwgrond uit het bos, vraag 110) komt eerder. **Volgorde:** eerst het kleinere plein (klein, nu), dan de proefplaat
     van de kramen in lengtes en vormen voor Marcel (stap 2b), dan e, dan stap 3 (de kooplui, de boodschappen, de
     marktdag).
+    **Marcel (6 okt): "push main; vormen en verdeling ja".** De proefplaat van de vormen en de verdeling naar de waar
+    (groente en fruit: luifel, kar of puntdak, 1 à 2 tegels; brood: luifel, puntdak of zeil, 1; vis en vlees: luifel,
+    zeil of puntdak, 2 à 3; laken en garen: luifel, puntdak of zeil, 2 à 3; potten en gerei: zeil of luifel, 1 à 2), en
+    tellen in tegels toonbank (een per 10 mensen, minstens 6), komen nu in het spel.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
