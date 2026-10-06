@@ -35,6 +35,13 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   (Marcel, 28 sep, vraag 51: eerst wat de proef "van gehucht tot dorp" nodig heeft): neem het
   bovenste, en begin met een plan voor Marcel.
   Werk de stand bij aan het eind van de sessie.
+  **Wie aan een punt begint, zegt het eerst in `main`** (Marcel, 6 okt: "Ja zet erin"; op 6 okt bouwden drie sessies
+  tegelijk vraag 130, omdat elk het bovenste punt nam). Haal vlak voor je begint `main` op (`git fetch origin main`), en
+  staat er bij het punt al "**Bezig in sessie …**", neem dan een ander punt of vraag het Marcel. Anders zet je bij het
+  punt "**Bezig in sessie `<je branch>`** (datum): wat je doet", en push je dat meteen naar `main`, met de controle
+  hieronder (`git push origin HEAD:main` vanaf een commit op `main`, niet je hele branch). Weigert de controle, dan was
+  een andere sessie je voor: haal `main` binnen en kijk opnieuw. Is het werk in `main`, of stop je ermee, haal het teken
+  dan weg.
 - **`ontwerp/spel.md`: het spel.** De schout, de heer en de inner, keuren en politiek, avontuur,
   en wat nog open is. Bovenaan staat per onderwerp de stand, en elk onderwerp begint met **Zo werkt
   het nu**; wie iets bouwt of verandert, werkt dat blok bij (Marcel, 25 sep).
@@ -66,7 +73,8 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
 - Een commit per onderwerp, met een Nederlands bericht dat ook het waarom vertelt.
 - Pushen alleen als Marcel erom vraagt ("push it"); dat is voor hem een aparte stap. En alleen als
   `npm test` groen is: op 22 sep ging er een falende toets mee omdat de opdracht de uitslag wel
-  toonde maar de push niet tegenhield (`npm test && git push`).
+  toonde maar de push niet tegenhield (`npm test && git push`). Eén uitzondering: het teken "Bezig in sessie …" in de
+  werklijst (hierboven, bij de werklijst) gaat zonder vragen naar `main`, en verder niets.
 - In de cloud krijgt elke sessie een eigen branch. Zet die aan het eind in `main` als Marcel dat
   vraagt, anders begint de sessie erna op een oude stand. Kijk vóór het pushen of `main` intussen
   verder is (`git fetch origin main`, dan `git merge origin/main`): twee sessies tegelijk schrijven
