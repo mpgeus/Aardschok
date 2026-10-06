@@ -131,6 +131,25 @@ test('de houthakker hakt de dichtste boom bij zijn schuur, en elke tien hout is 
   if (om.some((t) => t.bos)) assert.ok(geplant.length > 0, 'er staat een boompje');
 }));
 
+test('een stronk staat niet in de weg: wie een boom omhakte, loopt verder het bos in', () => zo(() => {
+  const S = gehucht();
+  const D = S.dorp;
+  const w = D.wereld;
+  const boom = w.voorwerpen.find((v) => T.NATUUR.bos.telt(w, v.x, v.y, v));
+  assert.ok(!T.isBegaanbaar(w, boom.x, boom.y), 'een boom staat in de weg');
+  assert.ok(T.velBoom(D, boom.x, boom.y));
+  assert.equal(soortOp(w, boom), 'boomstronk');
+  assert.ok(T.isBegaanbaar(w, boom.x, boom.y), 'zijn stronk niet');
+  // En de houthakker hakt een half jaar door zonder stil te staan zolang er bomen binnen zijn bereik staan.
+  const g = metHouthakker(S);
+  let stil = 0;
+  for (let dag = 6; dag < 186; dag++) {
+    nacht(S, dag);
+    if (g.boom === null && bomenBij(D, g).length) stil++;
+  }
+  assert.equal(stil, 0, 'nooit stil met bomen binnen bereik');
+}));
+
 test('hij maakt evenveel hout als de houthakker uit het niets: twee per dag, maal hoe hard er gewerkt wordt', () => {
   const telHout = (regels) => zo(() => {
     const S = gehucht();

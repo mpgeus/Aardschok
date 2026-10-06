@@ -387,7 +387,7 @@ test('een boom omhakken geeft hout en laat een stronk, die hij rooit; na de wint
   assert.ok(T.hakBoom(D, boom.x, boom.y));
   assert.equal(D.voorraad.hout, hout + T.BOS_INSTELLINGEN.houtPerBoom, 'het hout gaat naar de schuur');
   assert.equal(T.ontginWerkOp(w, boom.x, boom.y), 'rooien', 'een stronk');
-  assert.ok(!T.isBegaanbaar(w, boom.x, boom.y), 'over een stronk loop je niet');
+  assert.ok(T.isBegaanbaar(w, boom.x, boom.y), 'tussen de stronken loop je door (js/wereld.js, boomstronk)');
   assert.ok(T.rooi(D, boom.x, boom.y));
   assert.equal(T.ontginWerkOp(w, boom.x, boom.y), null);
   assert.ok(T.isBegaanbaar(w, boom.x, boom.y));
