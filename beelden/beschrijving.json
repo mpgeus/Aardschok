@@ -3771,11 +3771,11 @@
  "marktkraam": {
   "bestand": "marktkraam.png",
   "cel": [
-   96,
-   96
+   224,
+   136
   ],
   "anker": [
-   48,
+   112,
    74
   ],
   "richtingen": [
@@ -3785,11 +3785,31 @@
    "NO"
   ],
   "soorten": [
-   "groente",
-   "brood",
-   "vis",
-   "laken",
-   "potten"
+   "groente/luifel/1",
+   "groente/luifel/2",
+   "groente/kar/1",
+   "groente/kar/2",
+   "groente/puntdak/1",
+   "groente/puntdak/2",
+   "brood/luifel/1",
+   "brood/puntdak/1",
+   "brood/zeil/1",
+   "vis/luifel/2",
+   "vis/luifel/3",
+   "vis/zeil/2",
+   "vis/zeil/3",
+   "vis/puntdak/2",
+   "vis/puntdak/3",
+   "laken/luifel/2",
+   "laken/luifel/3",
+   "laken/puntdak/2",
+   "laken/puntdak/3",
+   "laken/zeil/2",
+   "laken/zeil/3",
+   "potten/zeil/1",
+   "potten/zeil/2",
+   "potten/luifel/1",
+   "potten/luifel/2"
   ],
   "manden": {
    "bestand": "marktmanden.png",

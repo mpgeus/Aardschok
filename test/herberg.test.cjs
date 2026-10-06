@@ -22,7 +22,13 @@ const bijUur = (dag, uur) => Math.floor(dag) + uur / 24;
 // Het echte gehucht. Er wordt niet geloot: elke boer heeft het karakter zoals het in T.MENSEN staat, of
 // zoals het hier gezet wordt (`karakters`: { boer4: 'drinker' }). Het zaad van het spel ligt vast
 // (`zaad`), want daaruit komen de gezinnen, en dus wie er 's avonds gaat. Er ligt bier genoeg.
+// En het toeval ligt vast (het dwalen, de praatjes, de tekening van een huis): anders speelt elke keer een ander avondje,
+// en zat de drinker heel soms een half uur voor bedtijd nog niet binnen (6 okt, één keer in drie keer de hele npm test).
+let toeval = 11;
+Math.random = () => (toeval = (toeval * 16807) % 2147483647) / 2147483647;
+
 function gehucht(opties = {}) {
+  toeval = 11;
   const echt = console.warn;
   const loten = T.BOEREN_INSTELLINGEN.loten;
   const echtLot = T.lootBoeren;

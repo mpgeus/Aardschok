@@ -71,8 +71,7 @@
       if (gegevens.schandpaal) vellen.push(gegevens.schandpaal.bestand);
       if (gegevens.paaltje) vellen.push(gegevens.paaltje.bestand);
       if (gegevens.meiboom) vellen.push(gegevens.meiboom.bestand);
-      if (gegevens.marktkraam) vellen.push(gegevens.marktkraam.bestand);
-      if (gegevens.marktkraam && gegevens.marktkraam.manden) vellen.push(gegevens.marktkraam.manden.bestand);
+      // De kramen en de manden van de markt laden pas als er een getekend wordt (S.kraam, S.mand): zo'n 24 MB.
       if (gegevens.tekens) vellen.push(gegevens.tekens.bestand);
       // De figuren laden hier niet: een figuur komt pas als zijn wezen op de kaart staat (S.laadWatErStaat, vraag 114,
       // stap 1b).
@@ -488,24 +487,26 @@
     return stuk(MAP + t.bestand, 0, 0, t.cel[0], t.cel[1], t.anker);
   };
 
-  // Een kraam van de markt (js/markt.js, gereedschap/pixelart/marktkraam.cjs; vraag 127, A): per waar ('groente',
-  // 'brood', ...) een volle en een lege, van elke kant waarheen hij kijkt ('ZO', 'ZW', 'NW', 'NO'), met het anker op de
-  // grond in het midden van de tegel. Null als het vel er niet is. Een vel van vóór vraag 127 heeft één kraam, zonder
-  // soorten.
-  S.kraam = function (waar, leeg, richting) {
-    if (!gegevens || !gegevens.marktkraam) return null;
+  // Een kraam van de markt (js/markt.js, gereedschap/pixelart/marktkraam.cjs; vraag 127): per waar ('groente', 'brood',
+  // ...), vorm ('luifel', 'puntdak', 'zeil', 'kar') en lengte een rij cellen, vol en leeg, van elke kant waarheen hij
+  // kijkt ('ZO', 'ZW', 'NW', 'NO'), met het anker op de grond in het midden van zijn eerste tegel. Bestaat die soort niet
+  // op het vel, dan de eerste van dezelfde waar. Null als het vel er niet is.
+  S.kraam = function (waar, vorm, lengte, leeg, richting) {
+    if (!gegevens || !gegevens.marktkraam || !gegevens.marktkraam.soorten) return null;
     const t = gegevens.marktkraam;
+    let rij = t.soorten.indexOf(`${waar}/${vorm}/${lengte}`);
+    if (rij < 0) rij = Math.max(0, t.soorten.findIndex((s) => s.startsWith(`${waar}/`)));
     const r = Math.max(0, t.richtingen.indexOf(richting));
-    const s = t.soorten ? Math.max(0, t.soorten.indexOf(waar)) : 0;
-    const i = t.soorten ? (s * 2 + (leeg ? 1 : 0)) * t.richtingen.length + r : r;
-    return stuk(MAP + t.bestand, i * t.cel[0], 0, t.cel[0], t.cel[1], t.anker);
+    const kol = (leeg ? t.richtingen.length : 0) + r;
+    if (!laadAlsNodig(MAP + t.bestand)) return null;
+    return stuk(MAP + t.bestand, kol * t.cel[0], rij * t.cel[1], t.cel[0], t.cel[1], t.anker);
   };
   // Een mand, kist, zak of ton naast een kraam ('mand appels', 'ton leeg', ...). Null als het vel er niet is.
   S.mand = function (naam) {
     const m = gegevens && gegevens.marktkraam && gegevens.marktkraam.manden;
     if (!m) return null;
     const i = m.namen.indexOf(naam);
-    if (i < 0) return null;
+    if (i < 0 || !laadAlsNodig(MAP + m.bestand)) return null;
     return stuk(MAP + m.bestand, i * m.cel[0], 0, m.cel[0], m.cel[1], m.anker);
   };
 
