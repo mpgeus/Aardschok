@@ -45,6 +45,16 @@ bomen hakken, met de bijl, en het hout is voor het dorp). In lentemaand is het e
 markt op het plein: een inwoner vraagt hem, en er komen vier kramen aan de rand, waar je tussendoor loopt, voor 8 hout en
 6 goud; het midden blijft vrij voor het feest en de heer (de spelregel "De markt"). `npm test`: 968/968.
 
+**Vraag 126 is besloten** (5 en 6 okt, in de sessie van de heer, naast de vijfendertigste; Marcel: "A ja B b2 en b3 C c3 D ja E ja F Ja G zo";
+alleen papier, er is niets gebouwd): het doel van het spel is de heer verstoten en verslaan. Hij krijgt een kasteel op
+de kaart, smeedt bonden met de andere spelers, en heeft per spel een ander karakter. Veroveren en bevriend raken zijn de
+weg erheen, langs drie wegen: de opstand, de koning achter zijn rug om, of trouw (en dan ben jij de nieuwe heer). Je
+sluit een bond te voet, niet in een menu. Het jaar van geluk blijft het eind van de demo en wordt in het hele spel kracht
+op weg naar de heer. Samen spelen, met een speler als heer, komt na de release; tot dan bouwen we zo dat het kan
+(`CLAUDE.md`, "Afspraken in de code"). Niets hiervan vóór de kern: het kasteel komt met het eiland (vraag 117, c), de
+bond met het buurdorp (vraag 72). Zie `spel.md`, "De heer als tegenstander". Het staat sinds 6 okt in `main`
+(Marcel: "ja push main").
+
 **Sinds de sessie van het licht (4 okt, vraag 125, in `main`):** met de videokaart kleurt het dorp met het uur (roze
 bij het opkomen, oranje bij het ondergaan, blauw in de nacht), geven de lantaarns, de ramen en de herberg warme plassen
 licht die flakkeren, en werpt alles wat staat een schaduw die met de zon meegaat. De schout draagt 's avonds buiten een
@@ -170,7 +180,8 @@ vraag 107 en 110, en `speelbaar.md`): ontginnen lost het graan op, maar geen dor
 bouwde d bij vraag 110, de markt op het plein (Marcel: "Voor nu a1, b tot e ja"), met de marktkraam van vier kanten; de
 speeltest van vier jaar erna: op elk land een markt zodra het mocht en het goud er was, en de stenen huizen hebben hem; op
 62707 had elk huis het hele vierde jaar alles, maar 94 mensen en één hut is geen winst (`speelbaar.md`). Dit werk staat op
-`main` van de sessie, nog niet gepusht (wacht op Marcel). De markt wordt later de deur naar de handel met buren (vraag
+`main` sinds 6 okt (Marcel: "push main"). Marcel is nog niet tevreden met de kramen: vraag 127, de levende markt die
+meegroeit, wacht op zijn keuzes. De markt wordt later de deur naar de handel met buren (vraag
 72). **Het volgende:** stap 3 van vraag 114, en e
 (bouwgrond uit het bos) met de houthakker (vraag 115). f (het erf dat vastzat) is gebouwd. Daarna het goud (een opmerking
 bij vraag 110). Van vraag 107 blijft g3 (de roddelaar) met de herberg als plek van gesprekken (3c). **Stap 2b is af en staat in `main`** (de andere drie
@@ -2426,6 +2437,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Marcel (5 okt, vijfendertigste sessie, bij vraag 110, d):** "De markt wordt essentieel voor de handel, vanaf dat
     punt kan een nederzetting pas handelen met buren etc." Handel met een buurdorp begint dus pas als een dorp een markt
     heeft.
+    **Sinds 6 okt** (vraag 126, g): met het buurdorp komt ook de bond van de heer: een dorp in zijn bond of niet, en een
+    bond sluit je te voet (je reist er zelf heen).
 73. **Het concept: de schout als de manier waarop je bestuurt** (Marcel, 30 sep, negentiende sessie: een concept van 15
     bladzijden, "De Schout: Game Concept & Mini GDD", met "Ik denk dat we hiermee een goede kant opgaan"; wacht op
     Marcel). Wat erin staat en hoe het naast ons spel ligt: `concept.md`. Kort: zijn regel is dat wat in een
@@ -4739,7 +4752,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     schip)? **d**, de mist zo, zwart en grijs? **e**, deze volgorde?
     **Marcel koos (4 okt): "2500x2500 is goed"** en "akkoord" op de volgorde (eerst de huizen, dan de boeren met de
     houthakker en de beesten, dan het eiland). Het kasteel, de stad, het schip en de mist zijn nog niet beantwoord: het
-    voorstel hierboven staat, en dat vragen we opnieuw als het eiland begint.
+    voorstel hierboven staat, en dat vragen we opnieuw als het eiland begint. **Het kasteel wel** (Marcel, 6 okt, vraag
+    126, g): het komt op het eiland, met het eiland, en de heer is het eind van het spel.
     **Wat 2500 bij 2500 betekent (Claude, 4 okt):** 6,25 miljoen tegels, 625 keer het land van nu. Het kan, maar niet zoals
     de kaart nu in het spel zit, en het is de grootste technische stap tot nu toe. Vijf dingen moeten anders, en daarom
     eerst een proef die het meet, vóór er iets op het eiland komt:
@@ -5324,6 +5338,69 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Wat Marcel kan proberen:** een nieuw spel, en tegen de avond (`Spel.debug.uur(19)`) naar het plein: de lantaarn bij
     de put, de ramen, de herberg. Druk `S` en kijk hoe je lantaarn uitgaat. Bij zonsopgang en zonsondergang kleurt het
     dorp. De kleuren en de kracht staan in de werkbank (`O`), onder "De dag" en "Het licht".
+126. **De heer als tegenstander: zijn kasteel, zijn bond en drie wegen naar het eind** (Marcel, 5 okt, in de sessie
+    van de heer: "De heer krijgt een kasteel op de kaart. Het doel van het spel wordt de heer verstoten en verslaan. De heer
+    is sterk, en smeedt allianties met ander spelers; spelers moeten profiteren van een bond met de heer, zodat tegen de
+    heer ingaat moeilijker wordt. Uiteindelijk zie ik een multiplayer voor me waarin spelers ook de heer kunnen spelen
+    tegen de andere spelers. Ook moet een andere mogelijkheid zijn dat je kunt winnen als je de kant van de heer kiest
+    en de rest 'verslaat'. Of achter zijn rug om contact met de koning leggen om de heer af te zetten."; voorstel van
+    Claude; besloten op 6 okt, zie onderaan).
+    **Wat er al is:** het kasteel als provincie op de kaart van het land (`js/land.js`, achter de spelregel Land), en in
+    het plan voor het eiland (vraag 117, c) de heer, de inner en de soldaten die van daar komen. De gunst van de heer en
+    het vertrouwen van het dorp (vraag 106), de heervaart met zijn veteranen (vraag 60), de verboden wapenmaker (vraag
+    104), de inner met het verstoppen en de getuigen, de grillen in zijn brieven, de raadsman die beslist als je weg bent,
+    en het gevecht in beurten met de militie. In het ontwerp van 23 sep hangt de heer onder een koning, en zijn de
+    ridders van de koning. Wat nieuw is: de heer als tegenstander met bondgenoten, het kasteel als plek, de koning als
+    weg, winnen aan zijn kant, en samen spelen.
+    **Voorstel** (alles in `spel.md`, "De heer als tegenstander"):
+    - **Bijna alles wat er is, krijgt een tweede betekenis:** de gunst is je plaats in zijn bond, het vertrouwen zegt of
+      het dorp je volgt als je opstaat, de heervaart is zijn leger (en traint je opstandelingen), de wapenmaker maakt de
+      wapens voor de opstand, wat je verstopt is de kas ervan, en zijn grillen zijn bewijs voor de koning.
+    - **Drie wegen, die je onderweg voorbereidt:** de opstand (het kasteel bestormen in beurten), de koning (bewijs en
+      een bode achter zijn rug om; slaagt het, dan zet de koning hem af en krijg je stadsrechten), en trouw (de rest voor
+      hem onderwerpen; jij wordt zijn erfgenaam, de nieuwe heer). Ze raken elkaar: een opstand zonder de zegen van de
+      koning brengt zijn ridders.
+    - **Zijn bond is te koop:** wie hem het meest betaalt, krijgt bescherming, een lagere schatting en het land van wie
+      hij verslaat. Zijn kracht is zijn kist: wordt hij arm, dan lopen zijn bondgenoten over.
+    - **Diplomatie te voet:** je reist zelf naar het kasteel of een ander dorp om een bond te sluiten, geen menu; je
+      raadsman bestuurt thuis.
+    - **Samen spelen na de release, als update:** twee kanten met verraad, de heer met een eigen scherm (rapporten,
+      brieven, soldaten), alleen met vrienden via Steam. Het vraagt de regels in vaste tikken in plaats van per beeld,
+      geen `Math.random` in de regels, en een termijn bij elke keuze waarvoor de tijd nu stilstaat. Tot dan kiest de heer
+      uit dezelfde knoppen als een mens zou hebben, zoals de raadsman nu kiest uit de antwoorden van een voorval.
+    - **Wanneer:** na de kern en de demo; het kasteel met het eiland (vraag 117, c), de bond met het buurdorp (vraag 72),
+      dan de drie wegen, en na de release samen spelen.
+    Vragen:
+    - **a, het eind:** de heer verslaan (of laten afzetten) is het eind van het spel, en veroveren en bevriend raken
+      (29 sep) worden de manieren om sterk genoeg te worden, geen eind ernaast?
+    - **b, het eind van de kern** (een jaar lang iedereen gelukkig, gebouwd, vraag 101): **b1** een eigen manier van
+      winnen, naast de heer; **b2** kracht op weg naar de heer (een gelukkig dorp volgt je in de opstand, een bloeiend
+      dorp krijgt het oor van de koning); **b3** alleen het eind van de demo, als eerste hoofdstuk.
+    - **c, wie de heer in zijn bond neemt:** **c1** wie hem het meest betaalt; **c2** verdeel en heers (hij steunt de
+      zwakke tegen de sterke); **c3** per spel een ander karakter.
+    - **d, de drie wegen** zoals hierboven, met de trouwe weg die eindigt als jij de nieuwe heer bent? Daarmee vervalt
+      "Niet: de heer langs een omweg ten val brengen" van 23 sep.
+    - **e, diplomatie te voet?**
+    - **f, samen spelen** na de release, en tot dan bouwen zodat het kan (de heer kiest uit knoppen, elke pauze een
+      termijn)?
+    - **g, de volgorde:** niets hiervan vóór de kern; of wil je er iets van naar voren?
+    **Advies:** a ja; b2, en b3 voor de demo, die dan eindigt op het moment dat de heer je zijn bond aanbiedt; c1, want
+    het past bij zijn karakter, is eenvoudig, en je kunt het bespelen; d, e en f ja; g zo.
+    **Marcel koos (6 okt): "A ja B b2 en b3 C c3 D ja E ja F Ja G zo".** Dus:
+    - **a:** het eind is de heer; veroveren en bevriend raken zijn de weg erheen.
+    - **b2 en b3:** het jaar van geluk (vraag 101) blijft het eind van de demo, en wordt in het hele spel kracht op weg
+      naar de heer. In de code verandert er nu niets. Nog open, voor als de demo er is: of het laatste beeld van de demo
+      de heer is die je zijn bond aanbiedt (het advies).
+    - **c3, niet het advies:** de heer heeft per spel een ander karakter, en dat zegt wie hij in zijn bond neemt. Een
+      voorstel voor als hij gebouwd wordt (stap 2 in `spel.md`): "wie het meest betaalt" (c1) en "verdeel en heers" (c2)
+      worden er twee van, en welk karakter hij heeft, lees je af aan zijn brieven en aan wie hij beloont.
+    - **d:** de drie wegen; "Niet: de heer langs een omweg ten val brengen" (23 sep) vervalt.
+    - **e:** diplomatie te voet. **f:** samen spelen na de release; de twee regels om het niet te blokkeren staan in
+      `CLAUDE.md`, "Afspraken in de code". **g:** niets hiervan vóór de kern; het kasteel komt met het eiland (vraag
+      117, c), de bond met het buurdorp (vraag 72), dan de drie wegen.
+    - **Wat eruit volgt** (Claude, 6 okt, uit a en d): vechten tussen dorpen komt vóór de vrijheid, niet erna, zoals op
+      28 sep ("De buren, en wanneer" in `spel.md`); en "winnen is voor nu alles veroveren" (vraag 61, D) is nu de heer
+      verslaan.
 *De code begrijpelijk houden* (Marcel, 26 sep: "Laten we wel zorgen dat de code goed te begrijpen
 blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afspraken in de code"):
 25. Welke opruimklussen, en wanneer? Gemeten op 26 sep; voorstel van Claude, van meeste naar minste
@@ -5417,6 +5494,48 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
   de boeren stel je zelf in (spelregels).
 - De ideeën uit Lords of the Realm 2, in `spel.md`, "Lords of the Realm 2 als voorbeeld": welke wil
   je, en wanneer? Geen haast; ze horen bij de punten 8 tot 16.
+127. **De levende markt, die meegroeit met de stad** (Marcel, 6 okt, zesendertigste sessie, na de markt op het plein:
+    "ik ben nog niet tevreden met de kramen. Deze moeten beter, levendiger. Ik wil producten zien, manden met fruit er
+    omheen etc. Desnoods moeten we de afmeting van het plein aanpassen en groter maken, zodat deze kan meergroeien met de
+    afmeting van de stad. Grotere stad = grotere markt; mensen moeten daar ook hun "boodschappen" kunnen doen."; plan van
+    Claude; open).
+    **Wat er nu is** (vraag 110, d): vier kramen van één tegel, elk alleen aan een kant van het plein, tien à vijftien
+    tegels uit elkaar tussen de eiken, met een kistje appels, kolen, broden en een kruik op de toonbank. Niemand staat
+    erachter en niemand komt er; de wens "markt" van de stenen huizen is vervuld zodra hij staat. Het plein ligt vast
+    (de maker legt het, 165 à 250 tegels) en er wordt niet op gebouwd.
+    Voorstel:
+    - **A, het beeld: een kraam per waar, met wat erbij hoort.** Een kraam wordt twee tegels breed (de schaal van het
+      dorpsplein in `dorp.cjs`, 1,5), met eromheen manden, kisten, zakken en tonnen op de grond (je loopt eromheen, ze
+      liggen plat zoals bloemen). Soorten: groente en fruit, brood, vis en vlees, laken en garen, en potten en gerei. **En
+      wat er ligt, is wat het dorp heeft:** geen brood in de voorraad, dan een lege broodkraam met de luifel half dicht.
+      Zo zie je op de markt hoe het dorp ervoor staat, zonder balk; dat past bij het concept (wat elders een getal is,
+      zie je hier in het dorp).
+    - **B, waar: één marktblok in plaats van vier losse kramen.** De kramen in een rij of in twee rijen tegenover elkaar,
+      aan één kant van het plein, met een looppad ertussen; het midden blijft vrij voor het feest en de heer.
+    - **C, meegroeien: meer kramen bij een groter dorp, en een plein dat ruimte laat.** Een kraam per zoveel mensen (een
+      getal in de werkbank; voorstel: 4 in een dorp, en dan een per 15 mensen), en met marktrecht de rest van de soorten.
+      Voor de ruimte drie wegen, van klein naar groot:
+      - c1: de maker legt het plein groter (zo'n 300 à 400 tegels), met een kant die vrij blijft voor de markt;
+      - c2: de markt loopt de straat in: is het plein vol, dan komen er kramen langs de weg naar het plein, een
+        marktstraat, zoals in een echte stad;
+      - c3: het plein groeit zelf: het dorp maakt open grond naast het plein tot plein (zoals ontginnen), als het dorp
+        groter wordt.
+      Voorstel van Claude: c1 en c2 (eenvoudig, en het oogt zoals een stad groeide); c3 is het grootst, want huizen
+      staan er al omheen.
+    - **D, boodschappen doen.** Elk huis stuurt om de paar dagen iemand naar de markt (de vrouw of een groot kind, op de
+      vrije uren), die naar de kraam loopt van wat het huis wil, er even staat, en met een mand naar huis gaat.
+      Achter elke kraam staat een koopman, een bewoner die er werkt (de markt krijgt zoveel handen als kramen). De
+      regels veranderen eerst niet: een huis krijgt zijn brood en laken zoals nu, je ziet alleen waar het vandaan komt.
+      Later kan het wel tellen (wie ver weg woont, gaat minder vaak), maar dat is een tweede stap.
+    - **E, de marktdag** (was f bij vraag 110, d): door de week een paar kramen, op de marktdag (een vaste dag in de
+      week) alle, met meer volk op het plein en kooplui van buiten. Of elke dag even druk.
+    **In stappen:** 1. een proefplaat van de kramen met hun waar en de manden (A), die Marcel keurt; 2. het marktblok en
+    het meegroeien (B, C); 3. de koopman en de boodschappen (D, E); 4. een speeltest en schermafdrukken, en meten wat
+    de extra lopers kosten (de snelheid gaat voor alles, vraag 113).
+    **Commercieel** (`commercieel.md`): een volle, levende markt is een van de beste beelden voor de Steam-pagina en een
+    trailer: het laat in één plaatje zien dat het dorp leeft en wat het heeft.
+    Vragen: **A**, een kraam per waar, met wat het dorp heeft? **B**, één marktblok? **C**, welke van c1, c2, c3?
+    **D**, boodschappen eerst alleen om te zien, en een koopman per kraam? **E**, een marktdag, of elke dag even druk?
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
@@ -5561,8 +5680,10 @@ nog nodig is".
     handelaars) en een stad wordt, met schepenen die stemmen. Met het dorp komt de voerman met
     een kar, die stenen brengt (`spel.md`, "Handel"), en een tapperij of kroeg naast de herberg
     (Marcel, 27 sep).
-15. **Stadsrechten kopen.**
-16. **De opstand:** trainen, wapens verbergen, en het gevecht in beurten.
+15. **Stadsrechten kopen.** Sinds 6 okt via de koning, achter de heer om: hij zet de heer af en geeft jou stadsrechten
+    (vraag 126, d).
+16. **De opstand:** trainen, wapens verbergen, en het gevecht in beurten. Sinds 6 okt: je eigen dorp verdedigen en het
+    kasteel van de heer bestormen; en een derde weg, trouw, waarin jij de nieuwe heer wordt (vraag 126, d).
 
 *F. Afwerking*
 
