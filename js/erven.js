@@ -91,7 +91,9 @@
   // Waarom past een erf niet met zijn linkerbovenhoek op (x, y)? De reden, of null. Het hele vak moet vrij
   // zijn: niet op het plein, niets vasts (water, een boom, een gebouw, de rand van de kaart), geen veld,
   // geen pad en geen ander erf (T.waaromNietOpDezeGrond, js/gebouwen.js). En er moet een hut in passen die
-  // tot een huis kan doorgroeien, voor als iemand de maat in de werkbank kleiner zette.
+  // tot een huis kan doorgroeien, voor als iemand de maat in de werkbank kleiner zette. En het blijft, met het looppad om
+  // zijn huis, van de grond waar een huis van een ander straks groter wordt (T.huisDatHierGroeit, js/behoeften.js;
+  // werklijst vraag 130, d), zoals een huis dat groeit van een erf afblijft (T.opDeGrondVanEenErf).
   T.waaromPastErfNiet = function (D, x, y) {
     const w = D.wereld;
     if (!w) return 'Daar past het niet.';
@@ -111,12 +113,19 @@
     // Geen deur op een erf (werklijst vraag 88, js/gebouwen.js): de hut erop zou hem dichtzetten.
     if (T.deurOpRechthoek(D, { x, y, b, h })) return 'Daar is een deur.';
     if (!maatPast(D, b, h)) return 'Een erf van deze maat is te klein voor een hut.';
-    if (!kiesTekeningen(D, { b, h }, { x, y, b, h })) {
-      const n = T.GEBOUWEN_INSTELLINGEN.looppad;
-      return `Hier past geen huis met een looppad van ${T.telwoord(n)} tegels rondom.`;
-    }
-    return null;
+    const keus = kiesTekeningen(D, { b, h }, { x, y, b, h });
+    const n = T.GEBOUWEN_INSTELLINGEN.looppad;
+    if (!keus) return `Hier past geen huis met een looppad van ${T.telwoord(n)} tegels rondom.`;
+    const p = planVan(keus);
+    const looppad = { x: x + p.dx - n, y: y + p.dy - n, b: p.b + 2 * n, h: p.h + 2 * n }; // het huis met zijn looppad
+    const g = T.huisDatHierGroeit(D, { x, y, b, h }) || T.huisDatHierGroeit(D, looppad);
+    return g ? `Hier wordt ${huisVan(D, g)} straks groter.` : null;
   };
+  // "de hut van Swier", of "een hut" als er niemand woont.
+  function huisVan(D, g) {
+    const hoofd = D.bewoners && D.bewoners.mensen.find((p) => p.huis === g && !p.hoofd);
+    return hoofd ? `${T.metLidwoord(g.soort)} van ${T.naamVanBewoner(hoofd)}` : `een ${T.GEBOUWEN[g.soort].naam}`;
+  }
 
   // Ligt (x, y) op de plek van het huis van een erf (erf.plan)? Een gebouw blijft er met zijn looppad vandaan, ook als
   // het huis er nog niet staat (T.looppadOm, js/gebouwen.js). `behalve`: het erf dat zelf zijn plek zoekt.

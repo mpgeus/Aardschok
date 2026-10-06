@@ -448,7 +448,8 @@ letter voor letter mee zoals ervoor).
   een stenen muur heeft geen schoor. Een huis groeit vanaf zijn linkerbovenhoek naar rechts en naar onder, en waar het
   grotere huis komt, mag niets staan. **Staat er alleen iets wat te rooien is** (een struik, een boom, een stronk, een
   boompje), dan rooit het gezin dat eerst, zoals een erf: het hoofd met de bijl, wie van het gezin geen werk heeft helpt,
-  en na een maand rooien de buren de rest; dan groeit het, de vorm met het minste te rooien. Staat er iets wat niet te
+  en na een maand rooien de buren de rest; dan groeit het, de vorm met het minste te rooien, en dan de kleinste. Een nieuw
+  erf blijft van die grond af (vraag 130, d, hieronder bij de erven). Staat er iets wat niet te
   rooien is (een gebouw, een ander erf, een rots, een appelboom), dan blijft het wat het is, en zegt het briefje bij de
   muis waarom ("Het kan een huis worden, maar er staat een rots waar het groter moet worden"). Zo kon op elk land van de
   maker een hut nooit groeien, meestal door één struik, en won geen dorp (vraag 130, 6 okt; Marcel: "Ok").
@@ -3360,7 +3361,13 @@ wordt gepraat:
   door tot stenen huis, met 21 tegels óp een vrij erf. En past er toch geen hut meer op een vrij erf, dan telt het niet
   als plaats (`T.bruikbareErven`, `T.hutPastOpErf`): de groei en de raad zeggen dan dat er geen plaats is, het bouwmenu
   telt het niet als vrij, en `Spel.debug.erven()` zegt het erbij. Tot dan zagen de groei en de raad er een vrij erf, en
-  kwam er twee en een half jaar geen gezin.
+  kwam er twee en een half jaar geen gezin. **Sinds 6 okt (werklijst vraag 130, d; Marcel: "Ja prima")** komt een erf,
+  met het looppad om zijn huis, ook niet op de grond waar een hut van een ander nog groter wordt (`T.huisDatHierGroeit`, in
+  `js/behoeften.js`), en het bouwmenu zegt het ("Hier wordt de hut van Geert straks groter."). Die grond is de vorm die
+  het minste rooien vraagt, en dan de kleinste: genoeg om te groeien, en zo min mogelijk grond. Bij gelijke maat beslist
+  de naam, niet de tekening die het spel loot, zodat de grond niet verspringt als er ergens een huis bijkomt. Is er meer
+  plaats, dan groeit een hut groter. In de speeltest van 6 okt legde de bouwer op 62707 in zijn eerste jaar een erf onder
+  de hut van het oude stel, en die groeide nooit meer.
 - **Een erf mag op struiken en bomen** (6 okt, de sessie van de heer; werklijst vraag 110, e, met 115; Marcel: "A ja B ja
   C ja D zo"). Gemeten op vier landen van de maker: zo passen er 39 tot 49 erven in plaats van 13 tot 20, en een groot
   deel komt al uit losse struiken en bomen in de wei. Ook het looppad om de hut mag buiten het erf in het bos liggen:

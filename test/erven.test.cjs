@@ -59,6 +59,15 @@ function erfPlek(S) {
   return plekken.find((p) => !T.waaromPastErfNiet(S.dorp, p.x, p.y)) || null;
 }
 
+// De tegels van een groeizone (T.groeiZone, js/behoeften.js): de nieuwe voet van het huis, buiten de oude.
+function tegelsVan(z) {
+  const uit = [];
+  for (let y = z.y; y < z.y + z.h; y++) {
+    for (let x = z.x; x < z.x + z.b; x++) if (x >= z.x + z.oud.b || y >= z.y + z.oud.h) uit.push({ x, y });
+  }
+  return uit;
+}
+
 // Een tegel met een zandpad die geen veld, plein of iets vasts is.
 function padTegel(w) {
   for (let y = 0; y < w.tegels.length; y++) {
@@ -412,8 +421,17 @@ test('het huis op een erf krijgt drie tegels looppad rondom, en wat later komt, 
   const hut = T.plaatsGebouw(D, 'hut', 5, 5);
   assert.equal(hut.gelukt, true, hut.reden);
   const v = T.voetVanGebouw(hut.instantie);
-  const r = T.legErfAan(D, v.x + v.b, v.y);
+  // Recht ernaast groeit de hut straks heen (werklijst vraag 130, d): de kleinste vorm, bij gelijke maat de eerste op naam,
+  // huizen/huis1 (7 bij 5), en niet huizen/huis2 (5 bij 7) of de geloote. Daar komt geen erf; een stuk verder wel.
+  const ernaast = T.legErfAan(D, v.x + v.b, v.y);
+  assert.equal(ernaast.gelukt, false);
+  assert.equal(ernaast.reden, 'Hier wordt een hut straks groter.');
+  let r = ernaast;
+  for (let x = v.x + v.b + 1; !r.gelukt && x < v.x + v.b + 20; x++) r = T.legErfAan(D, x, v.y);
   assert.equal(r.gelukt, true, r.reden);
+  const zone = tegelsVan(T.groeiZone(D, hut.instantie));
+  assert.ok(zone.length > 0, 'de hut kan nog groter worden');
+  assert.ok(zone.every((t) => !T.opDeGrondVanEenErf(D, t.x, t.y)), 'en het erf ligt er niet op');
   const p = r.erf.plan;
   assert.ok(p, 'het erf weet waar het huis komt');
   assert.ok(r.erf.x + p.dx - (v.x + v.b) >= n, 'drie tegels tussen de hut en het huis');
@@ -500,4 +518,47 @@ test('de grond van een erf: het erf zelf, en het looppad om de plek van zijn hui
   assert.ok(west < erf.x || noord < erf.y, 'het looppad komt ergens buiten het erf');
   // Een tegel verder is het gewone grond.
   assert.equal(T.opDeGrondVanEenErf(D, Math.min(west, erf.x) - 1, erf.y + p.dy), false);
+});
+
+// Een erf blijft van de grond waar een hut straks groter wordt (werklijst vraag 130, d; Marcel, 6 okt: "Ja prima"): in de
+// speeltest van 6 okt legde de bouwer een erf onder een hut, en die groeide nooit meer.
+test('een erf komt niet waar een hut straks groter wordt; die plek ligt vast, wat het spel ook loot (vraag 130, d)', () => {
+  // Welke vorm een hut het eerst probeert, loot het spel (T.volgendeTekening); de grond die vrij blijft, niet: de kleinste
+  // vorm, bij gelijke maat de eerste op naam. Eerst hing die af van de loting, en lag het erf uit de toets van de raad
+  // (48, 50) bij vier van de zes tekeningen op de grond van een hut.
+  const gezien = new Set();
+  for (const huis of T.GEBOUWEN.huis.tekeningen) {
+    const S = gehucht();
+    S.dorp.volgendeTekening = Object.assign(S.dorp.volgendeTekening || {}, { huis });
+    gezien.add(T.groeiZones(S.dorp).map((z) => `${z.x},${z.y} ${z.b}x${z.h}`).join(' '));
+  }
+  assert.equal(gezien.size, 1, 'dezelfde grond bij elke geloote tekening');
+  const S = gehucht();
+  const D = S.dorp;
+  const zones = T.groeiZones(D);
+  assert.ok(zones.length > 0, 'in het gehucht kunnen hutten groeien');
+  // Het huis van de schout groeit nooit door (het heeft geen stand), dus het houdt ook geen grond vrij.
+  const schout = D.gebouwen.find((g) => g.huis === 'schout');
+  assert.ok(schout && T.GEBOUWEN[schout.soort].wordt);
+  assert.equal(T.groeiZone(D, schout), null);
+  assert.ok(zones.every((z) => T.standVan(z.g)));
+  // Wie een erf op die grond wil, hoort wiens hut daar groter wordt (een lege hut: "een hut", in de toets van het
+  // looppad hierboven). Het dorp vol, zodat elke hut bewoners heeft.
+  vol(S);
+  const redenen = new Set();
+  for (let y = 0; y < D.wereld.h; y++) {
+    for (let x = 0; x < D.wereld.b; x++) {
+      const r = T.waaromPastErfNiet(D, x, y);
+      if (r && r.startsWith('Hier wordt')) redenen.add(r);
+    }
+  }
+  let gehoord = 0;
+  for (const { g } of zones) {
+    const hoofd = D.bewoners.mensen.find((p) => p.huis === g && !p.hoofd);
+    assert.ok(hoofd, `de hut op ${g.x},${g.y} is bewoond`);
+    const naam = `Hier wordt de hut van ${T.naamVanBewoner(hoofd)} straks groter.`;
+    if (redenen.has(naam)) gehoord++;
+  }
+  assert.ok(gehoord > 0, `een erf noemt wiens hut het is (gehoord: ${[...redenen].join(' / ')})`);
+  assert.ok([...redenen].every((r) => /^Hier wordt de hut van .+ straks groter\.$/.test(r)), [...redenen].join(' / '));
 });

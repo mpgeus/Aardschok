@@ -5840,6 +5840,17 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     - **e, een huis mag ook de andere kant op groeien** (naar links of naar boven), als het daar wel past. Meer werk: de
       deur en de tekening schuiven mee.
     - **f, zo laten:** het briefje zegt het nu, en een vrij erf kun je weghalen; een bewoond erf blijft.
+    **Marcel koos (6 okt): "Ja prima"** op d: een erf komt niet waar een huis van een ander nog groter wordt, en het
+    bouwmenu zegt het.
+    **d gebouwd** (6 okt; `js/behoeften.js`, `js/erven.js`, `test/erven.test.cjs`): elk huis dat nog doorgroeit, houdt de
+    grond vrij van de vorm met het minste te rooien, en dan de kleinste (`T.groeiZone`; rooit het gezin al, het stuk dat
+    het rooit), en een erf blijft daar met het looppad om zijn huis van af (`T.huisDatHierGroeit` in `T.waaromPastErfNiet`):
+    "Hier wordt de hut van Geert straks groter." Het huis van de schout houdt niets vrij, want het groeit nooit door (het
+    heeft geen stand). Bij gelijke maat beslist de naam van de tekening: eerst besliste de tekening die het spel loot
+    (`T.volgendeTekening`), en dan lag de grond van een hut in het ontworpen gehucht bij vier van de zes lotingen onder het
+    erf (48, 50) uit de toets van de raad (en uit `Spel.debug.bouw('erf', 48, 50)` in CLAUDE.md), en sprong hij als er
+    ergens een huis bijkwam. Het rooiplan (`T.groeiRooiPlan`) kiest nu op dezelfde manier (`vormMetPlaats`). `npm test`:
+    998/998.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

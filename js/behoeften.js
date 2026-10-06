@@ -490,21 +490,77 @@
   }
 
   // Kan dit huis (met mensen, dat een maand alles had) niet doorgroeien, maar wel als zijn gezin eerst rooit wat er staat
-  // (werklijst vraag 130; Marcel, 6 okt: "Ok")? Dan het stuk dat vrij moet ({ x, y, b, h }: de nieuwe voet), van de vorm
-  // met het minste te rooien; anders null. Wie er alleen staat, telt niet: die is morgen weg.
+  // (werklijst vraag 130; Marcel, 6 okt: "Ok")? Dan het stuk dat vrij moet ({ x, y, b, h }: de nieuwe voet, van
+  // vormMetPlaats hieronder); anders null. Wie er alleen staat, telt niet: die is morgen weg.
   T.groeiRooiPlan = function (D, g) {
     const soort = T.GEBOUWEN[g.soort];
     if (!soort || !soort.wordt || !T.GEBOUWEN[soort.wordt] || !g.voorwerp) return null;
     const oudeVoet = g.voet || T.gebouwVoet(g.soort, g.tekening) || { b: 1, h: 1 };
     const vormen = groeiVormen(D, g, soort.wordt, oudeVoet);
     if (vormen.some((v) => v.inDeWeg.every((t) => t.wat === 'iemand'))) return null; // hij past al
+    const v = vormMetPlaats(vormen);
+    return v ? { x: g.x, y: g.y, b: v.voet.b, h: v.voet.h } : null;
+  };
+  // De vorm waarvoor een huis plaats maakt of houdt: van de vormen waar hooguit iets te rooien of iemand in de weg staat,
+  // die met het minste te rooien, dan de kleinste, dan op naam; null als er geen is. Een vaste keus, en niet de volgorde
+  // van groeiVormen, waarin de geloote tekening voorop staat (T.volgendeTekening): die kiest alleen waarin het huis groeit
+  // als er plaats is (kiesGroei).
+  function vormMetPlaats(vormen) {
+    const voor = (a, b) => a.rooien - b.rooien || a.maat - b.maat || (a.v.tekening < b.v.tekening ? -1 : 1);
     let beste = null;
     for (const v of vormen) {
-      const rooien = v.inDeWeg.filter((t) => t.wat === 'rooien').length;
-      if (!rooien || v.inDeWeg.some((t) => t.wat !== 'rooien' && t.wat !== 'iemand')) continue;
-      if (!beste || rooien < beste.rooien) beste = { rooien, voet: v.voet };
+      if (v.inDeWeg.some((t) => t.wat !== 'rooien' && t.wat !== 'iemand')) continue;
+      const k = { v, rooien: v.inDeWeg.filter((t) => t.wat === 'rooien').length, maat: v.voet.b * v.voet.h };
+      if (!beste || voor(k, beste) < 0) beste = k;
     }
-    return beste ? { x: g.x, y: g.y, b: beste.voet.b, h: beste.voet.h } : null;
+    return beste && beste.v;
+  }
+
+  // Waar dit huis straks groter wordt: de voet van de vorm waarvoor het plaats houdt (vormMetPlaats: met het minste te
+  // rooien, dan de kleinste), of van het stuk dat zijn gezin al rooit (g.kavel), met zijn oude voet erbij, want daar staat
+  // het al: { x, y, b, h, oud: { b, h } }, allebei vanaf zijn linkerbovenhoek. Null als het op zijn eigen grond groeit (een
+  // stenen huis is het stenen broertje van zijn huis), nooit doorgroeit (het huis van de schout heeft geen stand,
+  // T.standVan) of iets in de weg heeft wat het gezin niet kan rooien. Een nieuw erf blijft ervan af (T.waaromPastErfNiet,
+  // js/erven.js; werklijst vraag 130, d; Marcel, 6 okt: "Ja prima"): in de speeltest van 6 okt legde de bouwer een erf
+  // onder een hut, en die groeide nooit meer. De kleinste vorm, omdat dat genoeg is om te groeien en de minste grond kost;
+  // is er meer plaats, dan groeit het huis groter (kiesGroei).
+  T.groeiZone = function (D, g) {
+    const soort = T.GEBOUWEN[g.soort];
+    if (!g.voorwerp || !soort || !soort.wordt || !T.GEBOUWEN[soort.wordt]) return null;
+    if (T.WENSEN_INSTELLINGEN.perHuis && !T.standVan(g)) return null;
+    const oud = g.voet || T.gebouwVoet(g.soort, g.tekening) || { b: 1, h: 1 };
+    const vorm = g.groeitNaRooien ? null : vormMetPlaats(groeiVormen(D, g, soort.wordt, oud));
+    const voet = g.groeitNaRooien ? g.kavel : vorm && vorm.voet;
+    if (!voet || (voet.b <= oud.b && voet.h <= oud.h)) return null;
+    return { x: g.x, y: g.y, b: voet.b, h: voet.h, oud: { b: oud.b, h: oud.h } };
+  };
+  // Alle groeizones van een dorp ({ g, x, y, b, h, oud }). Een nieuw erf vraagt het voor duizenden plekken, dus één keer
+  // per stand van de kaart, de gebouwen en de erven (geen spelstaat: het volgt eruit; een erf verandert de kaart niet,
+  // dus het telt zelf mee).
+  const ZONES = new WeakMap();
+  T.groeiZones = function (D) {
+    const sleutel = [T.kaartVersie(D.wereld), (D.gebouwen || []).length, ...(D.erven || []).map((e) => `${e.x},${e.y}`)].join('|');
+    const al = ZONES.get(D);
+    if (al && al.sleutel === sleutel) return al.zones;
+    const zones = [];
+    for (const g of D.gebouwen || []) {
+      const z = T.groeiZone(D, g);
+      if (z) zones.push(Object.assign({ g }, z));
+    }
+    ZONES.set(D, { sleutel, zones });
+    return zones;
+  };
+  // Het huis dat ergens in het vak r ({ x, y, b, h }) straks groter wordt, of null: r raakt de nieuwe voet ergens buiten
+  // de oude.
+  T.huisDatHierGroeit = function (D, r) {
+    for (const z of T.groeiZones(D)) {
+      const x1 = Math.min(r.x + r.b, z.x + z.b);
+      const y1 = Math.min(r.y + r.h, z.y + z.h);
+      if (Math.max(r.x, z.x) >= x1 || Math.max(r.y, z.y) >= y1) continue; // het raakt de nieuwe voet niet
+      if (x1 <= z.x + z.oud.b && y1 <= z.y + z.oud.h) continue; // alleen waar het huis al staat
+      return z.g;
+    }
+    return null;
   };
 
   // Waarom dit huis niet doorgroeit, terwijl het alles heeft en de bouwstof er is (het briefje, js/huisbriefje.js;
