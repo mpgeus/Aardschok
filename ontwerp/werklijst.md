@@ -50,7 +50,8 @@ weg erheen, langs drie wegen: de opstand, de koning achter zijn rug om, of trouw
 sluit een bond te voet, niet in een menu. Het jaar van geluk blijft het eind van de demo en wordt in het hele spel kracht
 op weg naar de heer. Samen spelen, met een speler als heer, komt na de release; tot dan bouwen we zo dat het kan
 (`CLAUDE.md`, "Afspraken in de code"). Niets hiervan vóór de kern: het kasteel komt met het eiland (vraag 117, c), de
-bond met het buurdorp (vraag 72). Zie `spel.md`, "De heer als tegenstander".
+bond met het buurdorp (vraag 72). Zie `spel.md`, "De heer als tegenstander". Het staat sinds 6 okt in `main`
+(Marcel: "ja push main").
 
 **Sinds de sessie van het licht (4 okt, vraag 125, in `main`):** met de videokaart kleurt het dorp met het uur (roze
 bij het opkomen, oranje bij het ondergaan, blauw in de nacht), geven de lantaarns, de ramen en de herberg warme plassen
