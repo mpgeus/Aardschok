@@ -4,7 +4,7 @@ Besloten op 23 sep 2026: dit wordt het spel. Het vervangt De laatste klim (de to
 toren, de leeftijd als levensbalk); hoe het zo kwam, staat in `verhaal.md`, "Het doel staat weer
 open". De werktitel "Aardschok" past niet meer; een nieuwe naam is nog open.
 
-## Waar staat wat (bijgewerkt 6 okt 2026, zesendertigste en zevenendertigste sessie, en de sessie van de heer)
+## Waar staat wat (bijgewerkt 6 okt 2026, zesendertigste en zevenendertigste sessie, de sessie van de heer en die van de samenvatting)
 
 Elk onderwerp begint met **Zo werkt het nu**: wat er gebouwd is, of wat besloten is en nog komt, met
 wat nog open is. Daaronder staat hoe het zo kwam: het voorstel, wat Marcel koos, wat er gebouwd
