@@ -56,14 +56,14 @@ bond met het buurdorp (vraag 72). Zie `spel.md`, "De heer als tegenstander". Het
 (Marcel: "ja push main").
 
 **Vraag 110, e, met 115 is gebouwd en gespeeld** (6 okt, de sessie van de heer, naast de marktsessie; Marcel: "A ja B
-ja C ja D zo"; op `claude/heer-game-mechanics-6d9h5l`, nog niet in `main`): een erf en een werkplaats mogen op bomen
+ja C ja D zo"; sinds 6 okt in `main`, met vraag 128: Marcel, "Ok en push main"): een erf en een werkplaats mogen op bomen
 en struiken, en wie er komt wonen of werken, rooit het zelf (`js/bos.js`); de houthakker hakt de bomen om zijn schuur om
 en plant een boompje naast de stronk, met tekeningen van een boompje en een jonge eik, den en berk. In de speeltest van
 vier jaar komt elk dorp boven de 100, en wint er voor het eerst een (op 72022). **Vraag 128 is klaar** (Marcel:
 "Eens"): een houthakker zonder bomen laat zijn hand gaan, komt alleen bij genoeg bos, loopt tussen zijn stronken door, en
-plant twee boompjes per boom, zodat het bos om hem blijft (310 tot 490 hout per jaar tot het eind). **Open: vraag 129**:
-op elk land staat een hut van de maker die nooit kan doorgroeien (meestal staat er één struik in de weg), en daarom wint
-er nu geen dorp.
+plant twee boompjes per boom, zodat het bos om hem blijft (310 tot 490 hout per jaar tot het eind). **Vraag 129** (Marcel:
+"Ok" op a met c): op elk land staat een hut van de maker die nooit kan doorgroeien (meestal staat er één struik in de
+weg), en daarom wint er nu geen dorp; wie doorgroeit, gaat rooien wat in de weg staat.
 
 **Sinds de sessie van het licht (4 okt, vraag 125, in `main`):** met de videokaart kleurt het dorp met het uur (roze
 bij het opkomen, oranje bij het ondergaan, blauw in de nacht), geven de lantaarns, de ramen en de herberg warme plassen
@@ -5731,6 +5731,8 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
       gebouw waar het huis moet komen"), zodat je het ziet.
     Mijn voorkeur: **a met c**. Het gezin rooit, zoals bij een erf; c voor wat dan nog in de weg staat.
     Klaar als: in de speeltest van vier jaar groeien de hutten van de maker door, en wint een dorp van de bouwer.
+    **Marcel koos (6 okt): "Ok".** Dus a met c: wie doorgroeit, rooit wat in de weg staat, zoals een gezin zijn erf, en
+    het briefje bij de muis zegt waarom een huis dat alles heeft niet groeit; daarna de speeltest van vier jaar opnieuw.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
