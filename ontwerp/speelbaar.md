@@ -153,6 +153,40 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 6 okt: vraag 130 met a2, c2 en d (werklijst, vraag 130)
+
+Gespeeld in de zevenendertigste sessie, op `ccr-f6ba5992-1e77dw` op `9d509b9`: de versie van vraag 130 uit `main` (van de
+sessie van de heer, hieronder), met wat Marcel er in de zevenendertigste sessie bij koos (a2, de eigen appelboom alleen
+als het niet anders kan; c2, de raad; d, geen erf waar het een huis elke vorm afneemt), en het briefje dat niet loot.
+`npm run speeltest -- bouwer sluw --maker --jaren 4`, drie tegelijk, in ruim een uur. Geen fouten in de console. 62707
+is zaad 1, 73425 zaad 2, 72022 zaad 3.
+
+| Land | Speler | Mensen aan het eind van jaar 1 tot 4 | Dagen dat alle huizen alles hadden, per jaar (waarvan alle woningen in steen) | Hoe het eindigde |
+|---|---|---|---|---|
+| 62707 | bouwer | 53, 75 | 26 (0), 85 van 251 (85) | ontslagen op Sint-Maarten van het tweede jaar, om de wapens (vraag 131) |
+| 73425 | bouwer | 48, 70, 88, 107 | 32 (0), 198 (198), 205 (128), 238 (238) | de vier jaar uit, de teller op 241 |
+| 72022 | bouwer | 49, 78, 123, 141 | 42 (0), 191 (124), 182 (152), 311 (300) | **gewonnen**, op 29 herfstmaand van het vierde jaar |
+| 62707 | sluw | 52, 102, 115, 156 | 26 (0), 264 (189), 355 (296), 78 (70) | **gewonnen**, op 5 bloeimaand van het vierde jaar |
+| 73425 | sluw | 52, 96, 100 | 62 (0), 0, 0 van 121 | weggejaagd op 1 hooimaand van het derde jaar: hij stuurde mannen naar de oorlog |
+| 72022 | sluw | 53, 70 | 42 (0), 58 van 165 (56) | gevallen tegen een rover, in oogstmaand van het tweede jaar |
+
+**Wat het zegt:**
+1. **Geen huis bleef staan.** De speler schrijft elke maand op welke huizen alles hebben maar niet doorgroeien, en
+   waarom (`T.waaromGroeitHetNiet`): in alle zes de spellen nooit, op één keer na dat een gezin eerst een struik rooide.
+   In de speeltest hieronder (zonder d) legde de bouwer op 62707 in het eerste jaar een erf onder de hut van het oude
+   stel, en groeide die nooit; nu waren op 62707 in het tweede jaar alle woningen stenen huizen, op 85 dagen met alles.
+2. **Twee dorpen winnen**, de bouwer op 72022 en de sluwe bouwer op 62707, allebei in het vierde jaar. De sluwe bouwer
+   speelde na zijn winst gewoon door: in een speeltest eerder deze sessie klikte de speler na de winst op het scherm van
+   een ontslag ("Naar het titelscherm"), en liep hij vast; dat is gerepareerd (`71415e1`). Op 73425 groeide het dorp van
+   de bouwer deze keer trager (107 mensen in plaats van 139; elke verandering geeft een andere worp), en stond de teller
+   aan het eind op 241.
+3. **De bouwer op 62707 werd weer ontslagen om de wapens**: ja op de wapenmaker, de inner zag hem, de heer vond de wapens
+   (30 gunst), en daarna betaalde hij te weinig. Dat is vraag 131.
+4. De sluwe bouwer viel op 72022 weer tegen een rover in het tweede jaar, zoals in elke speeltest sinds 2 okt
+   (`opmerkingen.md`), en werd op 73425 weggejaagd: tien mannen naar de oorlog van de heer kostten het laatste vertrouwen.
+
+**Wat het vraagt:** vraag 130 is klaar, ook met a2, c2 en d. Vraag 131 (de bouwer en de wapens) wacht op Marcel.
+
 ## De speeltest van 6 okt: wie doorgroeit, rooit wat in de weg staat (werklijst, vraag 130)
 
 Gespeeld in de sessie van de heer, op `claude/heer-game-mechanics-6d9h5l`, na Marcels "Ok" op a met c van vraag 130:

@@ -5893,6 +5893,11 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     Ook gerepareerd: het bericht van een gezin dat zijn erf rooit, telde het looppad buiten het erf niet mee ("rooit
     eerst zijn erf: ."), en de speler van de speeltest klikte na een winst op het eindscherm van een ontslag, en begon zo
     een nieuw spel onder zichzelf (vraag 131).
+    **De speeltest van vier jaar met a2, c2 en d** (6 okt, `9d509b9`; `speelbaar.md`, "vraag 130 met a2, c2 en d"): in
+    geen van de zes spellen bleef een huis staan dat alles had (de speler schrijft het elke maand op), ook niet op 62707,
+    waar zonder d een erf onder de hut van het oude stel kwam. **De bouwer won op 72022 en de sluwe bouwer op 62707**,
+    allebei in het vierde jaar; op 73425 stond de teller van de bouwer aan het eind op 241. De bouwer op 62707 was in het
+    tweede jaar zijn ambt kwijt om de wapens (vraag 131). **Klaar**, ook met a2, c2 en d.
 131. **De bouwer en de wapens** (Claude, 6 okt, zevenendertigste sessie, bij de speeltest van vraag 130; open).
     **Wat er is:** een inwoner die wapens wil maken, vraagt het je (vraag 104); zeg je ja, dan staat er een verboden
     werkplaats, en ziet de inner hem, dan verzegelt de heer hem op Sint-Maarten: 30 gunst eraf, en volgend jaar 20 goud
