@@ -2992,26 +2992,29 @@ achter een dak; nu is het de rand van een echt stuk bos, waar je de boer ziet.
 
 ### De houthakker hakt en plant (Marcel, 4 en 6 okt 2026; werklijst vraag 115)
 
-**Zo werkt het nu** (6 okt, de sessie van de heer; stap 3 van vraag 110, e, met 115; `js/bos.js`; Marcel: "De
-houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug", en "A ja B ja C ja D zo"): de houthakker maakt
-evenveel hout als altijd, 2 per dag (4 met de wet Houtkap), maar het komt uit een boom. Hij hakt aan de boom binnen tien
-tegels van zijn schuur die het dichtst bij zijn deur staat, en elke tien hout is die om: er blijft een stronk staan, die
-na een jaar vergaan is en waar je tussendoor loopt, zoals in een kapvlakte, zodat hij bij de bomen erachter komt (een
-stronk die de maker legde, staat wel in de weg; `opmerkingen.md`), en stond de boom in het bos (minstens vier bomen in de vijf bij vijf tegels eromheen), dan plant
-hij er een boompje naast, nooit op een veld, een weg, een erf, een paadje of voor een deur. Een boompje is na een half
-jaar tot een jaar een jonge boom, en na nog eens zo lang een boom van dezelfde soort (een wilg of een dode boom wordt een
-eik): in een jaar of twee. Zo wordt het bos om de schuur dunner, met stronken, boompjes en jonge bomen, en met de wet
-Houtkap of een tweede houthakker gaat het harder. Staat er binnen tien tegels geen boom meer, dan staat hij stil: het
-dorp zegt het de eerste dag, de raad zolang het duurt ("De houthakker staat stil: er staat geen boom meer binnen tien
-tegels van zijn schuur, tot zijn boompjes bomen zijn. Zijn hand werkt zolang ergens anders."), en zijn hand werkt elders.
-Een nieuwe houthakker vraagt het dorp pas als het hout de winter niet haalt, niet omdat hij stilstaat (vraag 128, e).
-Groeien de boompjes weer, dan krijgt hij de nacht erna zijn hand terug en hakt hij verder. Een houthakker komt alleen bij
-minstens dertig bomen binnen tien tegels (vraag 128, b; tot dan 8 binnen 7). Zijn poppetje loopt naar zijn boom, hakt er twee uur aan met de bijl, brengt een
-bundel naar de schuur en gaat terug; de boom valt 's nachts, als de regel zegt dat hij om is. Een boompje en een jonge
-boom rooit wie er bouwt, zonder hout; een boompje staat niet in de weg, een jonge boom wel. De spelregel "De houthakker"
-zet het terug op hout uit het niets (zoals voor 6 okt); de getallen in de werkbank ("Het bos", `T.BOS_INSTELLINGEN`, waar
-nu ook het hout per boom en de dagen om te rooien staan). In de browser: `Spel.debug.bos()`. Wat een boom is, wat te
-rooien is, omhakken en rooien staan nu allemaal in `js/bos.js`, ook voor het ontginnen en het rooien van een erf.
+**Zo werkt het nu** (6 okt, de sessie van de heer; stap 3 van vraag 110, e, met 115; `js/bos.js`; Marcel: "De houthakker
+hakt bomen om uiteindelijk en plant nieuwe boompjes terug", en "A ja B ja C ja D zo"): de houthakker maakt evenveel hout
+als altijd, 2 per dag (4 met de wet Houtkap), maar het komt uit een boom. Hij hakt aan de boom binnen tien tegels van
+zijn schuur die het dichtst bij zijn deur staat, en elke tien hout is die om: er blijft een stronk staan, die na een
+jaar vergaan is en waar je tussendoor loopt, zoals in een kapvlakte, zodat hij bij de bomen erachter komt (een stronk
+die de maker legde, staat wel in de weg; `opmerkingen.md`), en stond de boom in het bos (minstens vier bomen in de vijf
+bij vijf tegels eromheen, waar ook de jonge bomen, de boompjes en de stronken meetellen: wat hij kapt en inplant, blijft
+bos), dan plant hij er twee boompjes naast (vraag 128, f), nooit op een veld, een weg, een erf, een paadje of voor een
+deur. Een boompje is na een half jaar tot een jaar een jonge boom, en na nog eens zo lang een boom van dezelfde soort
+(een wilg of een dode boom wordt een eik): in een jaar of twee. Zo wordt het bos om de schuur eerst dunner, met
+stronken, boompjes en jonge bomen, en daarna jonger en dichter dan het was: in het vierde jaar hakt hij weer bijna het
+hele jaar. Met de wet Houtkap of een tweede houthakker gaat het harder. Staat er binnen tien tegels geen boom meer, dan
+staat hij stil: het dorp zegt het de eerste dag, de raad zolang het duurt ("De houthakker staat stil: er staat geen boom
+meer binnen tien tegels van zijn schuur, tot zijn boompjes bomen zijn. Zijn hand werkt zolang ergens anders."), en zijn
+hand werkt elders. Een nieuwe houthakker vraagt het dorp pas als het hout de winter niet haalt, niet omdat hij stilstaat
+(vraag 128, e). Groeien de boompjes weer, dan krijgt hij de nacht erna zijn hand terug en hakt hij verder. Een
+houthakker komt alleen bij minstens dertig bomen binnen tien tegels (vraag 128, b; tot dan 8 binnen 7). Zijn poppetje
+loopt naar zijn boom, hakt er twee uur aan met de bijl, brengt een bundel naar de schuur en gaat terug; de boom valt 's
+nachts, als de regel zegt dat hij om is. Een boompje en een jonge boom rooit wie er bouwt, zonder hout; een boompje
+staat niet in de weg, een jonge boom wel. De spelregel "De houthakker" zet het terug op hout uit het niets (zoals voor 6
+okt); de getallen in de werkbank ("Het bos", `T.BOS_INSTELLINGEN`, waar nu ook het hout per boom en de dagen om te
+rooien staan). In de browser: `Spel.debug.bos()`. Wat een boom is, wat te rooien is, omhakken en rooien staan nu
+allemaal in `js/bos.js`, ook voor het ontginnen en het rooien van een erf.
 
 **Hoeveel bos heeft een houthakker nodig?** (vraag 128; besloten, Marcel, 6 okt: "Eens" op e en b, en f als het bos
 daarna nog opraakt; e en b zijn gebouwd, zie hierboven.) Gemeten op het ontworpen gehucht en vier landen van de maker (6 okt):

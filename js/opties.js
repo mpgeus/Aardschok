@@ -401,7 +401,7 @@
       uitleg: 'Of het hout van de houthakker uit de bomen om zijn schuur komt.',
       keuzes: [
         { id: 'hakt', naam: 'Hakt en plant', zet: { 'BOS_INSTELLINGEN.houthakkerHakt': true },
-          uitleg: 'De houthakker hakt de bomen binnen tien tegels van zijn schuur om, de dichtste eerst: elke tien hout een boom. Naast de stronk plant hij een boompje, dat in een jaar of twee weer een boom is, en de stronk vergaat. Zo wordt het bos om hem heen dunner; met twee houthakkers of de wet Houtkap wijkt het. Staat er geen boom meer, dan staat hij stil, en werkt zijn hand elders tot er weer een boom staat. Hij komt alleen bij minstens dertig bomen binnen tien tegels.' },
+          uitleg: 'De houthakker hakt de bomen binnen tien tegels van zijn schuur om, de dichtste eerst: elke tien hout een boom. Naast de stronk plant hij twee boompjes, die in een jaar of twee weer bomen zijn, en de stronk vergaat. Zo wordt het bos om hem heen eerst dunner en daarna jonger en dichter; met twee houthakkers of de wet Houtkap wijkt het. Staat er geen boom meer, dan staat hij stil, en werkt zijn hand elders tot er weer een boom staat. Hij komt alleen bij minstens dertig bomen binnen tien tegels.' },
         { id: 'uitHetNiets', naam: 'Hout uit het niets', zet: { 'BOS_INSTELLINGEN.houthakkerHakt': false },
           uitleg: 'De houthakker maakt zijn hout zonder een boom om te hakken, en het bos blijft zoals het is. Zoals voor 6 okt.' },
       ],

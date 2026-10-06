@@ -90,7 +90,7 @@ function boompjeNaast(w, t) {
   return null;
 }
 
-test('de houthakker hakt de dichtste boom bij zijn schuur, en elke tien hout is er een om: een stronk, met een boompje ernaast', () => zo(() => {
+test('de houthakker hakt de dichtste boom bij zijn schuur, en elke tien hout is er een om: een stronk, met twee boompjes ernaast', () => zo(() => {
   const S = gehucht();
   const D = S.dorp;
   const w = D.wereld;
@@ -107,7 +107,7 @@ test('de houthakker hakt de dichtste boom bij zijn schuur, en elke tien hout is 
   const om = [];
   let dag = T.GEBOUWEN.houthakker.bouwtijd + 2;
   while (om.length < 4 && dag < 80) {
-    const t = g.boom && { x: g.boom.x, y: g.boom.y, bos: T.isBos(w, g.boom.x, g.boom.y), soort: soortOp(w, g.boom) };
+    const t = g.boom && { x: g.boom.x, y: g.boom.y, bos: T.isBos(w, g.boom.x, g.boom.y, true), soort: soortOp(w, g.boom) };
     nacht(S, dag++);
     if (t && !boomOp(w, t)) om.push({ ...t, dag: dag - 1 });
   }
@@ -120,7 +120,8 @@ test('de houthakker hakt de dichtste boom bij zijn schuur, en elke tien hout is 
     assert.equal(stronk && stronk.soort, 'boomstronk');
     assert.equal(stronk.gehaktOp, t.dag, 'de stronk weet wanneer hij omging');
   }
-  // Naast een stronk in het bos een boompje, dat weer wordt wat er stond; naast een boom in de wei niets.
+  // Naast een stronk in het bos (het jonge bos meegeteld, T.isBos) twee boompjes, die weer worden wat er stond; naast een
+  // boom in de wei niets.
   const geplant = w.voorwerpen.filter((v) => v.soort === 'boompje');
   for (const v of geplant) {
     const t = om.find((b) => b.dag === v.geplant && Math.abs(b.x - v.x) <= 1 && Math.abs(b.y - v.y) <= 1);
@@ -128,7 +129,46 @@ test('de houthakker hakt de dichtste boom bij zijn schuur, en elke tien hout is 
     assert.ok(t.bos, 'alleen in het bos');
     assert.equal(v.wordt, ['eik', 'herfstEik', 'den', 'berk'].includes(t.soort) ? t.soort : 'eik', `het wordt weer een ${t.soort}`);
   }
-  if (om.some((t) => t.bos)) assert.ok(geplant.length > 0, 'er staat een boompje');
+  const inHetBos = om.filter((t) => t.bos).length;
+  if (inHetBos) assert.ok(geplant.length > inHetBos, `meer dan één boompje per boom: ${geplant.length} voor ${inHetBos}`);
+  assert.ok(geplant.length <= inHetBos * T.BOS_INSTELLINGEN.boompjesPerBoom, 'hooguit twee per boom');
+}));
+
+test('wat hij kapt en inplant, blijft bos: na vier jaar hakt hij minstens zoveel als in het eerste (vraag 128, f)', () => zo(() => {
+  // Alleen de houthakker: geen nieuwe gezinnen (wie komt, loopt hier niet binnen, want alleen de nachten tikken), en
+  // genoeg graan en hout, zodat het dorp niet krimpt.
+  const gezinDagen = T.GEBOUWEN_INSTELLINGEN.gezinDagen;
+  const hakte = T.houthakkerHakte;
+  T.GEBOUWEN_INSTELLINGEN.gezinDagen = 1e9;
+  try {
+    const S = gehucht();
+    const D = S.dorp;
+    const g = metHouthakker(S);
+    const hout = [];
+    const stil = [];
+    T.houthakkerHakte = (D2, g2, h) => {
+      hout[hout.length - 1] += h;
+      return hakte(D2, g2, h);
+    };
+    let dag = T.GEBOUWEN.houthakker.bouwtijd + 2;
+    for (let jaar = 0; jaar < 4; jaar++) {
+      hout.push(0);
+      stil.push(0);
+      for (let i = 0; i < 360; i++, dag++) {
+        T.zetVoorraad(D, 'graan', 2000);
+        T.zetVoorraad(D, 'hout', 300);
+        nacht(S, dag);
+        if (g.boom === null) stil[jaar]++;
+      }
+    }
+    // Met één boompje, en alleen waar nog volgroeide bomen stonden, hakte hij in het vierde jaar 140 hout en stond hij
+    // 280 dagen stil; met twee, en het jonge bos meegeteld, 473 en 88.
+    assert.ok(hout[3] >= hout[0], `vierde jaar ${Math.round(hout[3])} hout, eerste ${Math.round(hout[0])}`);
+    assert.ok(stil[3] < 180, `${stil[3]} dagen stil in het vierde jaar`);
+  } finally {
+    T.GEBOUWEN_INSTELLINGEN.gezinDagen = gezinDagen;
+    T.houthakkerHakte = hakte;
+  }
 }));
 
 test('een stronk staat niet in de weg: wie een boom omhakte, loopt verder het bos in', () => zo(() => {

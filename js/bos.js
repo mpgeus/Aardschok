@@ -18,8 +18,8 @@
 // De houthakker (vraag 115; Marcel, 4 okt: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug")
 // maakt zijn hout zoals elke werkplaats (T.tikGebouwenDag, js/gebouwen.js), maar het komt uit een boom: hij hakt aan de
 // dichtste boom binnen `hakStraal` van zijn schuur (g.boom), en elke `houtPerBoom` hout is die om (T.houthakkerHakte): een
-// stronk, die na een jaar vergaan is, en stond hij in het bos, een boompje ernaast. Dat wordt in een jaar of twee een jonge
-// boom en dan een boom (T.tikBosDag). Staat er binnen zijn bereik geen boom meer, dan staat hij stil, en zegt de raad het
+// stronk, die na een jaar vergaan is, en stond hij in het bos, twee boompjes ernaast (een stuk dat hij kapt en inplant,
+// blijft bos: T.isBos met het jonge bos erbij). Dat wordt in een jaar of twee een jonge boom en dan een boom (T.tikBosDag). Staat er binnen zijn bereik geen boom meer, dan staat hij stil, en zegt de raad het
 // (js/raad.js). Het poppetje erbij hakt aan zijn boom en brengt het hout in bundels naar de schuur (js/veldwerk.js).
 //
 //   g.wachtOpRooien  het gebouw wacht nog op het rooien
@@ -50,9 +50,15 @@
     houthakkerHakt: true,
     hakStraal: 10,
     // Een boom staat in het bos als er in de vijf bij vijf tegels om hem heen minstens zoveel bomen staan, hijzelf
-    // meegeteld; minder is een boom in de wei of tussen de huizen. Alleen naast een stronk in het bos plant de houthakker
-    // een boompje, en aan de rand van het bos rapen de boeren hout (js/veldwerk.js).
+    // meegeteld; minder is een boom in de wei of tussen de huizen. Aan de rand van het bos rapen de boeren hout
+    // (js/veldwerk.js). Alleen in het bos plant de houthakker, en daar tellen ook de jonge bomen, de boompjes en de
+    // stronken mee: wat hij zelf kapt en weer inplant, blijft bos.
     bosBomen: 4,
+    // Zoveel boompjes plant de houthakker naast de stronk van elke boom die hij in het bos omhakt (vraag 128, f; Marcel,
+    // 6 okt: "Eens"). Met één hakte hij zijn bereik in een jaar leeg en daarna bijna niets meer: van de boompjes ging ook
+    // een deel verloren, en wat hij dun hakte, telde niet meer als bos. Met twee hakt hij in het vierde jaar weer bijna het
+    // hele jaar (gemeten op de drie landen van de speeltest, alleen de houthakker: 424 hout per jaar, met één 37).
+    boompjesPerBoom: 2,
     // Zo lang is een boompje een boompje, en daarna een jonge boom, in dagen: elke boom tot twee keer zo lang, naar zijn
     // plek, zodat het bos niet in één keer opgroeit (zo is hij in een jaar of twee een boom; vraag 115, b). En zo lang
     // staat een stronk die de houthakker achterliet, voor hij vergaan is.
@@ -73,7 +79,9 @@
 
   // Een boom (T.NATUUR.bos, js/gebouwen.js) hak je om; een stronk, een struik, een boompje of een jonge boom rooi je.
   const JONG = { eik: 'jongeEik', herfstEik: 'jongeEik', den: 'jongeDen', berk: 'jongeBerk' };
-  const ROOIEN = new Set(['boomstronk', 'struik', 'bessenStruik', 'boompje', ...new Set(Object.values(JONG))]);
+  // Het jonge bos: wat van een boom overbleef of een boom wordt (een stronk, een boompje, een jonge boom; T.isBos).
+  const JONG_BOS = new Set(['boomstronk', 'boompje', ...Object.values(JONG)]);
+  const ROOIEN = new Set(['struik', 'bessenStruik', ...JONG_BOS]);
   const isBoom = (w, x, y, v) => !!v && T.NATUUR.bos.telt(w, x, y, v);
 
   // Wat er op deze tegel eerst weg moet voor er gespit of gebouwd kan worden: 'hakken' (een boom), 'rooien' (een stronk,
@@ -85,8 +93,19 @@
     return null;
   };
 
-  // Staat (x, y) in het bos: minstens bosBomen bomen in de vijf bij vijf tegels eromheen?
-  T.isBos = (w, x, y) => T.natuurBij(w, 'bos', { x, y, b: 1, h: 1 }, 2) >= IN().bosBomen;
+  // Staat (x, y) in het bos: minstens bosBomen bomen in de vijf bij vijf tegels eromheen? Met `ookJong` tellen ook de jonge
+  // bomen, de boompjes en de stronken mee: een stuk dat de houthakker kapt en weer inplant, is nog bos (vraag 128, f).
+  T.isBos = function (w, x, y, ookJong = false) {
+    if (!ookJong) return T.natuurBij(w, 'bos', { x, y, b: 1, h: 1 }, 2) >= IN().bosBomen;
+    let n = 0;
+    for (let dy = -2; dy <= 2; dy++) {
+      for (let dx = -2; dx <= 2; dx++) {
+        const v = T.voorwerpOp(w, x + dx, y + dy);
+        if (v && (isBoom(w, x + dx, y + dy, v) || JONG_BOS.has(v.soort))) n++;
+      }
+    }
+    return n >= IN().bosBomen;
+  };
 
   // Weg met wat op deze tegel stond. Van de kaart kwam het met een muur eronder (een vast ding, js/kaart.js), dus de tegel
   // wordt weer vloer; wat er daarna op komt (een stronk, een jonge boom), houdt hem zelf tegen.
@@ -288,18 +307,18 @@
   };
 
   // Na zijn werk van vandaag (T.tikGebouwenDag): het hout dat hij maakte, kwam uit zijn boom (g.gehakt), en zijn het er
-  // houtPerBoom, dan is die om: een stronk, met een boompje ernaast als hij in het bos stond. Morgen hakt hij aan de
-  // volgende.
+  // houtPerBoom, dan is die om: een stronk, met boompjesPerBoom boompjes ernaast als hij in het bos stond (het jonge bos
+  // meegeteld). Morgen hakt hij aan de volgende.
   T.houthakkerHakte = function (D, g, hout) {
     if (!hakt(g) || !(hout > 0)) return;
     g.gehakt = (g.gehakt || 0) + hout;
     while (g.gehakt >= IN().houtPerBoom && T.boomVanHouthakker(D, g)) {
       const t = g.boom;
       g.gehakt -= IN().houtPerBoom;
-      const bos = T.isBos(D.wereld, t.x, t.y);
+      const bos = T.isBos(D.wereld, t.x, t.y, true);
       const soort = T.velBoom(D, t.x, t.y);
       g.boom = null;
-      if (bos) plantNaast(D, t, soort);
+      if (bos) for (let i = 0; i < IN().boompjesPerBoom; i++) plantNaast(D, t, soort);
     }
     T.boomVanHouthakker(D, g);
   };
