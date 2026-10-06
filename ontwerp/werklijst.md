@@ -5871,9 +5871,14 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     **Marcel koos (6 okt): "Eens alle 3".** Beide sessies bouwden toen vraag 130; de versie in `main` bleef, en de
     zevenendertigste zette er a2, c2 en d op (`js/bos.js`, `js/behoeften.js`, `js/raad.js`, `js/erven.js`; toetsen in
     `test/rooien.test.cjs`):
-    - **a2:** een appelboom waar het huis groter wordt, telt als iets te rooien (`T.isEigenBoom`); zolang het gezin rooit,
-      heeft hij `teKappen` en is hij een boom als elke andere, voor 10 hout. Wie ontgint of een erf rooit, laat hem staan.
-      Zo kunnen alle 58 hutten groeien.
+    - **a2:** een appelboom waar het huis groter wordt, kapt het gezin ook (`T.isEigenBoom`), maar alleen als geen vorm
+      zonder hem kan: zo koos Marcel het in de derde versie ("A"; hierboven). Zolang het gezin rooit, heeft hij
+      `teKappen` en is hij een boom als elke andere, voor 10 hout. Wie ontgint of een erf rooit, laat hem staan. Zo kunnen
+      alle 58 hutten groeien.
+    - **Uit de derde versie** (`claude/vraag-130-tweede-versie`) ook: het briefje, de raad en de grond om te groeien loten
+      geen volgende tekening meer (`kiezen` in `groeiVormen`), zodat het spel niet anders loopt naar waar de muis stond.
+      De rest van die versie (het hele gezin werkt niet zolang het rooit) niet: in `main` is dat alleen het hoofd.
+      Daarmee is die branch opgenomen.
     - **c2:** heeft een huis alles en kan het niet groeien, ook niet na het rooien, dan zegt de raad het zodra het genoeg
       mensen is voor de winst ("Genoeg mensen voor de winst, maar de hut van Swier kan geen huis worden: er staat een rots
       waar het groter moet worden.").

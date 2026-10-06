@@ -449,8 +449,8 @@ letter voor letter mee zoals ervoor).
   grotere huis komt, mag niets staan. **Staat er alleen iets wat te rooien is** (een struik, een boom, een stronk, een
   boompje), dan rooit het gezin dat eerst, zoals een erf: het hoofd met de bijl, wie van het gezin geen werk heeft helpt,
   en na een maand rooien de buren de rest; dan groeit het, de vorm met het minste te rooien. Ook de eigen appelboom van
-  het gezin, die verder van iemand is en blijft staan (a2; Marcel, 6 okt, zevenendertigste sessie: "Eens alle 3"; op een
-  op de twaalf landen stond die als enige in de weg). Staat er iets wat niet te rooien is (een gebouw, een ander erf, een
+  het gezin, die verder van iemand is en blijft staan, maar alleen als geen vorm zonder hem kan (a2; Marcel, 6 okt:
+  "Eens alle 3", en "A"; op een op de twaalf landen stond die als enige in de weg). Staat er iets wat niet te rooien is (een gebouw, een ander erf, een
   rots), dan blijft het wat het is, en zegt het briefje bij de muis waarom ("Het kan een huis worden, maar er staat een
   rots waar het groter moet worden"); heeft het alles en is het genoeg mensen voor de winst, dan zegt de raad het ook
   ("Genoeg mensen voor de winst, maar de hut van Swier kan geen huis worden: …"; c2). En een erf komt niet waar het een

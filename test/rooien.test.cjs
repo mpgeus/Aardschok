@@ -742,3 +742,60 @@ test('d: geen erf waar het een huis elke vorm afneemt; wel als het nog een ander
     assert.ok(T.groeiGrond(D2).some((h) => h.g === buur.g), 'de hut kan nog groeien');
   });
 });
+
+test('a2: de eigen appelboom gaat alleen om als geen vorm zonder hem kan (Marcel: "A")', () => {
+  zo(() => {
+    const S = gehucht();
+    const D = S.dorp;
+    const w = S.wereld;
+    // De hut op 44, 44 in het ontworpen gehucht groeit naar rechts (x 50) of naar onder (y 50), elk een eigen vorm.
+    const hut = D.gebouwen.find((g) => g.soort === 'hut' && g.x === 44 && g.y === 44);
+    assert.ok(hut, 'de hut op 44, 44');
+    const zet = (soort, x, y) => {
+      const t = T.opzoekTegelNaam(soort);
+      const v = { soort, x, y, vel: t.vel, id: t.id, beslaat: [1, 1] };
+      T.kenSoortVan(v);
+      const daar = T.voorwerpOp(w, x, y);
+      if (daar) T.haalVoorwerpWeg(w, daar);
+      T.zetVoorwerp(w, v);
+      w.tegels[y][x] = 'muur';
+      T.kaartVeranderd(w);
+    };
+    zet('appelboom', 50, 46); // rechts: één appelboom
+    zet('struik', 45, 50); // onder: twee struiken
+    zet('struik', 47, 50);
+    const plan = T.groeiRooiPlan(D, hut);
+    assert.ok(plan, 'het gezin kan rooien');
+    const appelErin = plan.x <= 50 && 50 < plan.x + plan.b && plan.y <= 46 && 46 < plan.y + plan.h;
+    assert.ok(!appelErin, 'twee struiken liever dan zijn appelboom');
+    assert.deepEqual(T.teRooienOp(D, plan).map((t) => `${t.x},${t.y}`).sort(), ['45,50', '47,50']);
+    // Ligt er onder een rots, dan kan het niet anders: dan gaat de appelboom om.
+    zet('rots', 46, 50);
+    const nu = T.groeiRooiPlan(D, hut);
+    assert.ok(nu && nu.x <= 50 && 50 < nu.x + nu.b && nu.y <= 46 && 46 < nu.y + nu.h, 'nu de vorm met de appelboom');
+  });
+});
+
+// (Een erf in de hand loot wel, maar dat deed het al: T.waaromPastErfNiet kiest de hut en het huis voor het erf;
+// opmerkingen.md.)
+test('wat het briefje, de raad en de grond om te groeien vragen, loot geen volgende tekening (het spel loopt niet anders naar de muis)', () => {
+  zo(() => {
+    const S = landVanDeMaker(62707);
+    const D = S.dorp;
+    const hut = D.gebouwen.find((g) => g.soort === 'hut' && T.groeiRooiPlan(D, g, false));
+    hut.groeiDagen = T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen;
+    if (D.volgendeTekening) delete D.volgendeTekening.huis;
+    const toeval = Math.random;
+    Math.random = () => {
+      throw new Error('geloot');
+    };
+    try {
+      T.waaromGroeitHetNiet(D, hut);
+      T.groeiRooiPlan(D, hut, false);
+      T.groeiGrond(D);
+    } finally {
+      Math.random = toeval;
+    }
+    assert.ok(!D.volgendeTekening || D.volgendeTekening.huis === undefined, 'er is geen huis geloot');
+  });
+});

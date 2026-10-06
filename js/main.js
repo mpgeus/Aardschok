@@ -1300,7 +1300,7 @@
         if (g.groeitNaRooien) return `het gezin rooit ${T.rooiWoordenOp(S.dorp, g.kavel)}, tot uiterlijk dag ${g.rooienTot}`;
         const waarom = T.waaromGroeitHetNiet(S.dorp, g);
         if (waarom) return `groeit niet: ${waarom}`;
-        return `${g.groeiDagen || 0} van ${T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen} dagen alles${T.groeiRooiPlan(S.dorp, g) ? ', en dan rooit het gezin eerst' : ''}`;
+        return `${g.groeiDagen || 0} van ${T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen} dagen alles${T.groeiRooiPlan(S.dorp, g, false) ? ', en dan rooit het gezin eerst' : ''}`;
       };
       return {
         dorp: pct(b.tevredenheid),

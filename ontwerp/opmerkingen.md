@@ -9,6 +9,13 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Een erf in de hand loot de volgende hut en het volgende huis** (6 okt, zevenendertigste sessie; gezien bij vraag 130):
+  `T.waaromPastErfNiet` kiest de hut en het huis voor het erf (`kiesTekeningen` in `js/erven.js`), en `T.volgendeTekening`
+  loot er een als die er nog niet is; het spookbeeld van een gebouw in het bouwmenu net zo (`js/tekenen.js`, `js/main.js`).
+  Dan loopt het spel anders naar waar de muis stond. Het briefje bij een huis loot sinds vraag 130 niet meer (`kiezen` in
+  `groeiVormen`, `js/behoeften.js`); voor het erf en het bouwmenu kan het op dezelfde manier, als het ertoe doet (de
+  speeltest wijst niet aan met de muis, dus die blijft hetzelfde).
+
 - **Een huis dat doorgroeit, kijkt niet naar de paden** (6 okt, zevenendertigste sessie; gezien bij vraag 130): waar het
   grotere huis komt, mag niets vast staan, geen deur zijn en geen grond van een ander erf (`watStaatInDeWeg` in
   `js/behoeften.js`), maar een pad houdt het niet tegen. Op 101 landen van de maker komt bij 35 van de 202 hutten het
