@@ -466,6 +466,17 @@
           uitleg: 'Een huis wil de herberg en een markt binnen 30 tegels, zoals een put en een kapel in hun kring. Een dorp dat groeit, heeft er dan meer nodig, en daar is niet altijd plaats voor.' },
       ],
     },
+    // De markt (werklijst vraag 110, d; Marcel, 5 okt: "Voor nu a1, b tot e ja"; js/markt.js).
+    {
+      id: 'markt', naam: 'De markt', standaard: 'plein',
+      uitleg: 'Waar de markt komt: met kramen op het plein, of als een eigen gebouw op eigen grond.',
+      keuzes: [
+        { id: 'plein', naam: 'Op het plein', zet: { 'MARKT_INSTELLINGEN.opHetPlein': true },
+          uitleg: 'Vier kramen aan de rand van het plein, waar je tussendoor loopt; het midden blijft vrij voor het feest en de heer. Kramen zijn geen huis: 8 hout en 6 goud.' },
+        { id: 'gebouw', naam: 'Een eigen gebouw', zet: { 'MARKT_INSTELLINGEN.opHetPlein': false },
+          uitleg: 'Een gebouw van 6 bij 6, met drie tegels vrij rondom, voor 16 hout en 14 goud. Zo was het vóór 6 okt.' },
+      ],
+    },
     // Achteruitgaan (werklijst vraag 85, c; Marcel, 1 okt: "c zacht"; js/behoeften.js). Alleen met de wensen per huis.
     {
       id: 'achteruit', naam: 'Achteruitgaan', standaard: 'zacht',
@@ -624,6 +635,7 @@
     { naam: 'De heervaart', blok: 'HEERVAART_INSTELLINGEN' },
     { naam: 'De voorvallen', blok: 'VOORVALLEN_INSTELLINGEN' },
     { naam: 'De feesten', blok: 'FEESTEN_INSTELLINGEN' },
+    { naam: 'De markt', blok: 'MARKT_INSTELLINGEN' },
     { naam: 'Het eind', blok: 'EINDE_INSTELLINGEN' },
     { naam: 'De verzoeken', blok: 'VERZOEKEN_INSTELLINGEN' },
     { naam: 'De ondernemers', blok: 'ONDERNEMERS_INSTELLINGEN' },

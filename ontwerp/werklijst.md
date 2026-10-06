@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (5 okt 2026, vijfendertigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt en het spel laadt alleen wat er staat (vraag 114, 2a, stap 1 en 1b); sinds de eenendertigste sessie bouwt elk land van de maker in een bouwstijl, met het dak van zijn trede en de deur naar de weg (vraag 114, stap 2a: de stijl wit), en tekent het spel met WebGL, gebouwd in een eigen sessie naast de huizen (vraag 123); sinds de tweeëndertigste sessie bouwt de huizenbouwer elk huis van vier kanten en tekent hij het een kwartslag gedraaid, en staat wit zo in het spel, met alle bouwfasen (vraag 124, B, en G); sinds de drieëndertigste sessie werken de boeren overdag op hun land, naar het seizoen en in het vel van hun werk, een boerin in dat van een vrouw (vraag 111, stap 1 en 2), en vraagt een boer heide te ontginnen als het graan tekortkomt (vraag 107, stap 1); sinds de vierendertigste sessie wijst hij een stuk heide en een stuk bos aan, en kies jij: de heide tegen het vertrouwen, het bos gemeld tegen de gunst, of stiekem (vraag 107, stap 2), met de hakker en zijn bijl; sinds de vijfendertigste sessie is de speeltest van vier jaar gespeeld (vraag 107, stap 3): ontginnen lost het graan op, maar geen dorp wint, want de grond om te bouwen is op, en de markt komt er nooit (vraag 110: f, het erf dat vastzat, is gerepareerd; d, de markt op het plein, is gekozen en komt nu; e komt met de houthakker); en sinds de tweede sessie daarnaast bouwt elk land in een van vier stijlen, wit, oker, planken of roze, elk met eigen huizen en boerderijen en alle bouwfasen (vraag 114, 2b); dan de herberg, de kapel en de woontoren (stap 3), dan de houthakker die hakt en plant en de wolven (vraag 115 en 116), het draaien van de camera (vraag 124) en de hoogteverschillen (vraag 121)
+## De stand (6 okt 2026, zesendertigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt en het spel laadt alleen wat er staat (vraag 114, 2a, stap 1 en 1b); sinds de eenendertigste sessie bouwt elk land van de maker in een bouwstijl, met het dak van zijn trede en de deur naar de weg (vraag 114, stap 2a: de stijl wit), en tekent het spel met WebGL, gebouwd in een eigen sessie naast de huizen (vraag 123); sinds de tweeëndertigste sessie bouwt de huizenbouwer elk huis van vier kanten en tekent hij het een kwartslag gedraaid, en staat wit zo in het spel, met alle bouwfasen (vraag 124, B, en G); sinds de drieëndertigste sessie werken de boeren overdag op hun land, naar het seizoen en in het vel van hun werk, een boerin in dat van een vrouw (vraag 111, stap 1 en 2), en vraagt een boer heide te ontginnen als het graan tekortkomt (vraag 107, stap 1); sinds de vierendertigste sessie wijst hij een stuk heide en een stuk bos aan, en kies jij: de heide tegen het vertrouwen, het bos gemeld tegen de gunst, of stiekem (vraag 107, stap 2), met de hakker en zijn bijl; sinds de vijfendertigste sessie is de speeltest van vier jaar gespeeld (vraag 107, stap 3): ontginnen lost het graan op, maar geen dorp wint, want de grond om te bouwen is op, en de markt komt er nooit (vraag 110: f, het erf dat vastzat, is gerepareerd; e komt met de houthakker); sinds de zesendertigste sessie staat de markt met vier kramen op het plein (vraag 110, d), en hebben de stenen huizen op elk land hun markt; en sinds de tweede sessie daarnaast bouwt elk land in een van vier stijlen, wit, oker, planken of roze, elk met eigen huizen en boerderijen en alle bouwfasen (vraag 114, 2b); dan de herberg, de kapel en de woontoren (stap 3), dan de houthakker die hakt en plant en de wolven (vraag 115 en 116), het draaien van de camera (vraag 124) en de hoogteverschillen (vraag 121)
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Het hart is het
 gehucht besturen terwijl het groeit, terwijl de heer eraan trekt; rijk worden en arm lijken blijft de druk van boven.
@@ -41,7 +41,9 @@ zaaien en de oogst. **Sinds vraag 107** komt een boer of zijn zoon je vragen om 
 tekortkomt: een stuk heide en een stuk bos, allebei met een gouden rand op de grond, en jij kiest. De heide kost het
 vertrouwen van het dorp, want de meent is van iedereen (een maand plaggen steken); het bos is van de heer: meld je het,
 dan kost het zijn gunst, en doe je het stiekem, dan ben je betrapt als de inner of zijn soldaten het vinden (een winter
-bomen hakken, met de bijl, en het hout is voor het dorp). In lentemaand is het een akker. `npm test`: 961/961.
+bomen hakken, met de bijl, en het hout is voor het dorp). In lentemaand is het een akker. **Sinds vraag 110, d** komt de
+markt op het plein: een inwoner vraagt hem, en er komen vier kramen aan de rand, waar je tussendoor loopt, voor 8 hout en
+6 goud; het midden blijft vrij voor het feest en de heer (de spelregel "De markt"). `npm test`: 968/968.
 
 **Vraag 126 is besloten** (5 en 6 okt, in de sessie van de heer, naast de vijfendertigste; Marcel: "A ja B b2 en b3 C c3 D ja E ja F Ja G zo";
 alleen papier, er is niets gebouwd): het doel van het spel is de heer verstoten en verslaan. Hij krijgt een kasteel op
@@ -178,9 +180,13 @@ net als het werk van de tweeëndertigste (Marcel: "1 ja" op "Zal ik het in main 
 vierendertigste sessie staat sinds 5 okt ook in `main` (Marcel: "Pushen naar main"): het bos (vraag 107, stap 2), met g1
 (de soldaten lopen elk jaar door het bos; Marcel: "1 en 3 later inderdaad") en de hakker. Stap 3 van vraag 107, de speeltest
 van vier jaar, is gespeeld in de vijfendertigste sessie, en dat werk staat sinds 5 okt in `main` (Marcel: "push main";
-vraag 107 en 110, en `speelbaar.md`): ontginnen lost het graan op, maar geen dorp wint, want de grond om te bouwen is op. **Het volgende:**
-d bij vraag 110, de markt op het plein (Marcel: "Voor nu a1, b tot e ja"; het plan staat er), met de marktkraam uit
-`dorp.cjs` naar het spel; de markt wordt later de deur naar de handel met buren (vraag 72). Dan stap 3 van vraag 114, en e
+vraag 107 en 110, en `speelbaar.md`): ontginnen lost het graan op, maar geen dorp wint, want de grond om te bouwen is op. **De zesendertigste sessie**
+bouwde d bij vraag 110, de markt op het plein (Marcel: "Voor nu a1, b tot e ja"), met de marktkraam van vier kanten; de
+speeltest van vier jaar erna: op elk land een markt zodra het mocht en het goud er was, en de stenen huizen hebben hem; op
+62707 had elk huis het hele vierde jaar alles, maar 94 mensen en één hut is geen winst (`speelbaar.md`). Dit werk staat op
+`main` sinds 6 okt (Marcel: "push main"). Marcel is nog niet tevreden met de kramen: vraag 127, de levende markt die
+meegroeit, wacht op zijn keuzes. De markt wordt later de deur naar de handel met buren (vraag
+72). **Het volgende:** stap 3 van vraag 114, en e
 (bouwgrond uit het bos) met de houthakker (vraag 115). f (het erf dat vastzat) is gebouwd. Daarna het goud (een opmerking
 bij vraag 110). Van vraag 107 blijft g3 (de roddelaar) met de herberg als plek van gesprekken (3c). **Stap 2b is af en staat in `main`** (de andere drie
 bouwstijlen, oker, planken en roze, in een eigen sessie; zie onder Af, en vraag 114); deze branch heeft het samengevoegd.
@@ -4122,6 +4128,14 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     essentieel voor de handel, vanaf dat punt kan een nederzetting pas handelen met buren etc." Dus nu de markt op het
     plein zoals voorgesteld (a1, b tot en met e), en later is de markt de deur naar de handel met andere dorpen (vraag
     72; `spel.md`, "Handel").
+    **d is gebouwd** (6 okt, zesendertigste sessie; `js/markt.js`, `spel.md`, "De markt op het plein"): a1 tot en met e
+    zoals gekozen. Wat Claude erbij koos: een kraam staat echt op zijn tegel (je loopt er niet doorheen, zoals de
+    meiboom), en alleen waar de tegels eromheen één stuk blijven. **De speeltest erna** (`speelbaar.md`): op 62707, 73425 en
+    72022 staat de markt op het plein, de dag na het dorp, na 42 en na 99 dagen (daar wachtte hij op het goud en het
+    eerste stenen huis), en daarna mist geen huis hem meer. Op 62707 had elk huis het hele vierde jaar alles, maar het
+    dorp bleef op 94 mensen met één hut: geen winst. Op 73425 en 72022 blijft het laken de knoop (geen grond voor een
+    weverij), en dus e en het goud. Wat opviel: vier kramen ver uit elkaar tussen de eiken lezen nog niet als een markt
+    (`opmerkingen.md`, "Het beeld").
 111. **De boeren aan het werk op hun veld** (Marcel, 3 okt, vijfentwintigste sessie: "Ook wil ik dat boeren op hun veld
     aan het werk zijn. Nu hebben ze wel velden, maar lopen ze gewoon random door het dorp. Ze moeten zaaien en op het
     veld bezig zijn."; plan van Claude; open).
@@ -5525,6 +5539,48 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
   de boeren stel je zelf in (spelregels).
 - De ideeën uit Lords of the Realm 2, in `spel.md`, "Lords of the Realm 2 als voorbeeld": welke wil
   je, en wanneer? Geen haast; ze horen bij de punten 8 tot 16.
+127. **De levende markt, die meegroeit met de stad** (Marcel, 6 okt, zesendertigste sessie, na de markt op het plein:
+    "ik ben nog niet tevreden met de kramen. Deze moeten beter, levendiger. Ik wil producten zien, manden met fruit er
+    omheen etc. Desnoods moeten we de afmeting van het plein aanpassen en groter maken, zodat deze kan meergroeien met de
+    afmeting van de stad. Grotere stad = grotere markt; mensen moeten daar ook hun "boodschappen" kunnen doen."; plan van
+    Claude; open).
+    **Wat er nu is** (vraag 110, d): vier kramen van één tegel, elk alleen aan een kant van het plein, tien à vijftien
+    tegels uit elkaar tussen de eiken, met een kistje appels, kolen, broden en een kruik op de toonbank. Niemand staat
+    erachter en niemand komt er; de wens "markt" van de stenen huizen is vervuld zodra hij staat. Het plein ligt vast
+    (de maker legt het, 165 à 250 tegels) en er wordt niet op gebouwd.
+    Voorstel:
+    - **A, het beeld: een kraam per waar, met wat erbij hoort.** Een kraam wordt twee tegels breed (de schaal van het
+      dorpsplein in `dorp.cjs`, 1,5), met eromheen manden, kisten, zakken en tonnen op de grond (je loopt eromheen, ze
+      liggen plat zoals bloemen). Soorten: groente en fruit, brood, vis en vlees, laken en garen, en potten en gerei. **En
+      wat er ligt, is wat het dorp heeft:** geen brood in de voorraad, dan een lege broodkraam met de luifel half dicht.
+      Zo zie je op de markt hoe het dorp ervoor staat, zonder balk; dat past bij het concept (wat elders een getal is,
+      zie je hier in het dorp).
+    - **B, waar: één marktblok in plaats van vier losse kramen.** De kramen in een rij of in twee rijen tegenover elkaar,
+      aan één kant van het plein, met een looppad ertussen; het midden blijft vrij voor het feest en de heer.
+    - **C, meegroeien: meer kramen bij een groter dorp, en een plein dat ruimte laat.** Een kraam per zoveel mensen (een
+      getal in de werkbank; voorstel: 4 in een dorp, en dan een per 15 mensen), en met marktrecht de rest van de soorten.
+      Voor de ruimte drie wegen, van klein naar groot:
+      - c1: de maker legt het plein groter (zo'n 300 à 400 tegels), met een kant die vrij blijft voor de markt;
+      - c2: de markt loopt de straat in: is het plein vol, dan komen er kramen langs de weg naar het plein, een
+        marktstraat, zoals in een echte stad;
+      - c3: het plein groeit zelf: het dorp maakt open grond naast het plein tot plein (zoals ontginnen), als het dorp
+        groter wordt.
+      Voorstel van Claude: c1 en c2 (eenvoudig, en het oogt zoals een stad groeide); c3 is het grootst, want huizen
+      staan er al omheen.
+    - **D, boodschappen doen.** Elk huis stuurt om de paar dagen iemand naar de markt (de vrouw of een groot kind, op de
+      vrije uren), die naar de kraam loopt van wat het huis wil, er even staat, en met een mand naar huis gaat.
+      Achter elke kraam staat een koopman, een bewoner die er werkt (de markt krijgt zoveel handen als kramen). De
+      regels veranderen eerst niet: een huis krijgt zijn brood en laken zoals nu, je ziet alleen waar het vandaan komt.
+      Later kan het wel tellen (wie ver weg woont, gaat minder vaak), maar dat is een tweede stap.
+    - **E, de marktdag** (was f bij vraag 110, d): door de week een paar kramen, op de marktdag (een vaste dag in de
+      week) alle, met meer volk op het plein en kooplui van buiten. Of elke dag even druk.
+    **In stappen:** 1. een proefplaat van de kramen met hun waar en de manden (A), die Marcel keurt; 2. het marktblok en
+    het meegroeien (B, C); 3. de koopman en de boodschappen (D, E); 4. een speeltest en schermafdrukken, en meten wat
+    de extra lopers kosten (de snelheid gaat voor alles, vraag 113).
+    **Commercieel** (`commercieel.md`): een volle, levende markt is een van de beste beelden voor de Steam-pagina en een
+    trailer: het laat in één plaatje zien dat het dorp leeft en wat het heeft.
+    Vragen: **A**, een kraam per waar, met wat het dorp heeft? **B**, één marktblok? **C**, welke van c1, c2, c3?
+    **D**, boodschappen eerst alleen om te zien, en een koopman per kraam? **E**, een marktdag, of elke dag even druk?
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
@@ -5743,6 +5799,13 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 6 okt 2026 — **De markt op het plein** (zesendertigste sessie; vraag 110, d; Marcel: "Voor nu a1, b tot e ja"). Een
+  inwoner vraagt de markt zoals elk gebouw, maar hij komt op het plein: vier kramen aan de rand, één per kant en naar het
+  midden, waar je tussendoor loopt, buiten de kring van het feest en weg van de heer en zijn schandpaal (`js/markt.js`).
+  Hij staat als gebouw in de lijst, zonder voet, zodat de stenen huizen hem tellen. 8 hout en 6 goud (de werkbank), de
+  spelregel "De markt" (op het plein, of een eigen gebouw), en de marktkraam uit `dorp.cjs` van vier kanten
+  (`marktkraam.cjs`). `test/markt.test.cjs` (zeven toetsen, op het ontworpen gehucht en de drie landen), `npm test`
+  968/968. De speeltest van vier jaar: op elk land een markt, en de stenen huizen hebben hem. Zie `speelbaar.md`.
 - 5 okt 2026 — **Het erf dat vrij heet maar geen hut meer neemt** (vijfendertigste sessie; vraag 110, f; Marcel: "D, e,
   f Ja"). Op 62707 groeide een huis van de maker door tot stenen huis, met 21 tegels op een vrij erf, en kwam er twee en
   een half jaar geen gezin, terwijl de groei en de raad plaats zagen. Een huis dat doorgroeit, blijft nu van een ander

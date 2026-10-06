@@ -1191,6 +1191,16 @@
     }
     if (!L || !L.bouw || S.bouwSoort) return;
     const b = L.bouw;
+    if (b.kramen) {
+      // De markt op het plein (js/markt.js): waar de kramen komen.
+      ctx.fillStyle = 'rgba(226, 182, 74, 0.42)';
+      for (const k of b.kramen) {
+        const p = T.naarScherm(k.x, k.y);
+        T.ruit(ctx, p.x, p.y, 0.94);
+        ctx.fill();
+      }
+      return;
+    }
     const voet = T.gebouwVoet(b.soort, T.volgendeTekening(D, b.soort)) || T.GEBOUWEN[b.soort].voet;
     if (!voet) return;
     ctx.fillStyle = 'rgba(226, 182, 74, 0.42)';
@@ -1769,6 +1779,21 @@
       }
       T.blok(ctx, p.x, p.y, 0.05, 0.05, 140, '#e6e2da', { helder });
       T.blok(ctx, p.x, p.y, 0.16, 0.16, 16, '#5d8a34', { helder, basis: 140 });
+      return;
+    }
+    if (v.soort === 'kraam') {
+      // Een kraam van de markt op het plein (js/markt.js; werklijst vraag 110, d): een toonbank met een gestreepte luifel,
+      // naar het midden van het plein. In aanbouw bleker, zoals een gebouw zonder bouwfasen. Zonder kunst: een toonbank
+      // en een rode luifel op palen.
+      if (v.inAanbouw) ctx.globalAlpha = 0.45;
+      const kraam = metSprites() && T.sprites.kraam && T.sprites.kraam(v.richting);
+      if (kraam) T.sprites.teken(ctx, kraam, p.x, p.y, helder);
+      else {
+        T.blok(ctx, p.x, p.y, 0.34, 0.34, 14, '#7a5532', { helder });
+        T.blok(ctx, p.x, p.y, 0.04, 0.04, 22, '#5e4128', { helder, basis: 14 });
+        T.blok(ctx, p.x, p.y, 0.42, 0.42, 3, '#b8432f', { helder, basis: 36 });
+      }
+      ctx.globalAlpha = 1;
       return;
     }
     if (v.soort === 'pilaar') {

@@ -9,6 +9,14 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **De markt op het plein, wat opviel** (6 okt, zesendertigste sessie; vraag 110, d; `js/markt.js`):
+  - Met de spelregel "Wie bouwt" op "Jij bouwt" toont het bouwmenu bij de markt nog het spookbeeld van 6 bij 6, maar
+    waar je ook klikt, de kramen komen op het plein. Zolang de mensen bouwen (de standaard), zie je dat niet.
+  - De markt heeft nog één hand, zoals het eigen gebouw: zijn "deur" is het midden van het plein, dus daar staat overdag
+    iemand die er werkt. Wat hij doet, komt met de marktdag (f, later).
+  - De kramen komen er pas als het mag (een dorp) en het goud er is; op een plein waar later een eik of een lantaarn bij
+    komt, zoekt hij zijn plekken op dat moment.
+
 - **Een erf dat vrij heet, maar geen hut meer neemt** (5 okt, vijfendertigste sessie; de speeltest van vier jaar, op
   62707): een buurhuis groeide door tot stenen huis, in het looppad om de plek van de hut op een vrij erf. Daarna zet
   `T.zetHutOpErf` er niets meer op (het dorp zegt "Er wil een gezin komen, maar er is geen plaats"), maar `T.kanEenErfNemen`
@@ -620,6 +628,12 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   `npm start` draait `server.cjs`. Het mag weg.
 
 ## Het beeld
+
+- **De kramen lezen nog niet als een markt** (6 okt, zesendertigste sessie; vraag 110, e): vier kramen, elk alleen aan
+  een kant van het plein en tussen de eiken, liggen tien à vijftien tegels uit elkaar. Van dichtbij zie je een kraam, van
+  een afstand geen markt. Wat zou helpen, als Marcel het wil: de kramen in een rij of twee rijen langs één kant, of een
+  paar kisten, manden en een kar ertussen, of mensen die er staan als het markt is (de marktdag, f).
+  Marcel (6 okt): "ik ben nog niet tevreden met de kramen. Deze moeten beter, levendiger": het plan is vraag 127.
 
 **De werkfiguren, wat nog beter kan** (5 okt, drieëndertigste sessie; werklijst vraag 111, b; `beeld.md`, "De
 werkfiguren"). Uit wat de agent zelf nog niet goed vond, na de tweede ronde: van voren (Z, ZO) leest het blad van de

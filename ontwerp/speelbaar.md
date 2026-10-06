@@ -149,6 +149,37 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 6 okt: de markt op het plein (werklijst, vraag 110, d)
+
+Gespeeld in de zesendertigste sessie, op `main` van deze sessie: het spel van `f1ca26d` (de markt op het plein, nog zonder
+de tekening van de kraam, die de regels niet raakt). `npm run speeltest -- bouwer --maker --jaren 4`, drie spellen tegelijk,
+16 minuten. Geen fouten in de console.
+
+| Land | Een dorp op | De markt op | Mensen aan het eind van jaar 1, 2, 3, 4 (op 5 okt, na f) | Dagen alle huizen alles, jaar 1 tot 4 | Dagen zonder laken, jaar 2, 3, 4 |
+|---|---|---|---|---|---|
+| 62707 | dag 233 | dag 234, de dag erna | 55, 86, 94, 94 (54, 73, ...) | 22, 203, 355, 360 | 126, 0, 0 |
+| 73425 | dag 202 | dag 301 | 50, 77, 83, 83 (50, 77, 83, 83) | 87, 0, 0, 0 | 360, 360, 360 |
+| 72022 | dag 173 | dag 215 | 65, 79, 79, 79 (66, 79, 79, 79) | 39, 0, 0, 0 | 360, 360, 360 |
+
+**Wat het zegt:**
+1. **Op elk land staat de markt op het plein, zodra het mag en het goud er is.** Een inwoner vroeg hem, de bouwer zei ja,
+   en de kramen kwamen er. Op 62707 de dag na de trede van dorp; op 72022 na 42 dagen; op 73425 na 99 dagen: daar kwam
+   het eerste stenen huis pas rond dag 240, en lag er 4 à 8 goud in de kist, terwijl de jager en de bakkerij eerst vroegen.
+   Toen de markt aan de beurt was en 6 goud kon, kwam hij (dag 301). Plek was er altijd (`wilBouwen`: "plek" ja).
+2. **De stenen huizen hebben hun markt.** Na de markt mist in geen maand nog een huis een markt (0 van de 39 à 42
+   maanden), op alle drie de landen; ervoor zeiden de maanden "Zes stenen huizen willen een markt."
+3. **Op 62707 komt het dorp tot vlak bij de winst.** Met de markt, een weverij (vanaf het derde jaar geen dag zonder
+   laken) en f groeit het naar 94 mensen, en hadden alle huizen 731 dagen achter elkaar alles, het hele vierde jaar. Het
+   wint niet: het eind vraagt 100 mensen en alles in steen, en het had 8 stenen huizen en één hut, en geen grond voor een
+   erf meer (763 keer "geen plaats"). De gunst zakte er tot 15 (de heer kreeg 28% à 37%, en drie keer de schandpaal), maar
+   de bouwer bleef schout.
+4. **Op 73425 en 72022 is het laken de knoop, en de grond.** Geen weverij (die vraagt nog 5 bij 5 met looppad), dus elk
+   jaar 360 dagen zonder laken, en op 72022 ook geen brood; het dorp blijft op 83 en 79, zoals op 5 okt. Dat is e,
+   bouwgrond uit het bos (vraag 110), en het goud.
+
+**Wat het vraagt:** d is af. De volgende knopen naar de winst zijn dezelfde als bij vraag 110: de grond (e, voor een erf
+en een weverij) en het goud. En op 62707: winnen vraagt 100 mensen, en één hut die nog geen steen werd.
+
 ## De speeltest van 5 okt: vier jaar op de landen van de maker (werklijst, vraag 107, stap 3)
 
 Gespeeld in de vijfendertigste sessie, op `ccr-482eb0e9-wc6s8z`: het spel van `a83501d` (`main` met het bos, g1 en de vier

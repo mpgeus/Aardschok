@@ -3770,6 +3770,23 @@
      "markt",
      "bouwstof"
     ]
+   },
+   "marktkraam": {
+    "bestand": "marktkraam.png",
+    "cel": [
+     96,
+     96
+    ],
+    "anker": [
+     48,
+     74
+    ],
+    "richtingen": [
+     "ZO",
+     "ZW",
+     "NW",
+     "NO"
+    ]
    }
   };
 })(globalThis.Spel = globalThis.Spel || {});
