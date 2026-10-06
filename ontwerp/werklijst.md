@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (5 okt 2026, vijfendertigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt en het spel laadt alleen wat er staat (vraag 114, 2a, stap 1 en 1b); sinds de eenendertigste sessie bouwt elk land van de maker in een bouwstijl, met het dak van zijn trede en de deur naar de weg (vraag 114, stap 2a: de stijl wit), en tekent het spel met WebGL, gebouwd in een eigen sessie naast de huizen (vraag 123); sinds de tweeëndertigste sessie bouwt de huizenbouwer elk huis van vier kanten en tekent hij het een kwartslag gedraaid, en staat wit zo in het spel, met alle bouwfasen (vraag 124, B, en G); sinds de drieëndertigste sessie werken de boeren overdag op hun land, naar het seizoen en in het vel van hun werk, een boerin in dat van een vrouw (vraag 111, stap 1 en 2), en vraagt een boer heide te ontginnen als het graan tekortkomt (vraag 107, stap 1); sinds de vierendertigste sessie wijst hij een stuk heide en een stuk bos aan, en kies jij: de heide tegen het vertrouwen, het bos gemeld tegen de gunst, of stiekem (vraag 107, stap 2), met de hakker en zijn bijl; sinds de vijfendertigste sessie is de speeltest van vier jaar gespeeld (vraag 107, stap 3): ontginnen lost het graan op, maar geen dorp wint, want de grond om te bouwen is op, en de markt komt er nooit (vraag 110: f, het erf dat vastzat, is gerepareerd; d, de markt op het plein, is gekozen en komt nu; e komt met de houthakker); en sinds de tweede sessie daarnaast bouwt elk land in een van vier stijlen, wit, oker, planken of roze, elk met eigen huizen en boerderijen en alle bouwfasen (vraag 114, 2b); dan de herberg, de kapel en de woontoren (stap 3), dan de houthakker die hakt en plant en de wolven (vraag 115 en 116), het draaien van de camera (vraag 124) en de hoogteverschillen (vraag 121)
+## De stand (6 okt 2026, zesendertigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt en het spel laadt alleen wat er staat (vraag 114, 2a, stap 1 en 1b); sinds de eenendertigste sessie bouwt elk land van de maker in een bouwstijl, met het dak van zijn trede en de deur naar de weg (vraag 114, stap 2a: de stijl wit), en tekent het spel met WebGL, gebouwd in een eigen sessie naast de huizen (vraag 123); sinds de tweeëndertigste sessie bouwt de huizenbouwer elk huis van vier kanten en tekent hij het een kwartslag gedraaid, en staat wit zo in het spel, met alle bouwfasen (vraag 124, B, en G); sinds de drieëndertigste sessie werken de boeren overdag op hun land, naar het seizoen en in het vel van hun werk, een boerin in dat van een vrouw (vraag 111, stap 1 en 2), en vraagt een boer heide te ontginnen als het graan tekortkomt (vraag 107, stap 1); sinds de vierendertigste sessie wijst hij een stuk heide en een stuk bos aan, en kies jij: de heide tegen het vertrouwen, het bos gemeld tegen de gunst, of stiekem (vraag 107, stap 2), met de hakker en zijn bijl; sinds de vijfendertigste sessie is de speeltest van vier jaar gespeeld (vraag 107, stap 3): ontginnen lost het graan op, maar geen dorp wint, want de grond om te bouwen is op, en de markt komt er nooit (vraag 110: f, het erf dat vastzat, is gerepareerd; e komt met de houthakker); sinds de zesendertigste sessie staat de markt met vier kramen op het plein (vraag 110, d), en hebben de stenen huizen op elk land hun markt; en sinds de tweede sessie daarnaast bouwt elk land in een van vier stijlen, wit, oker, planken of roze, elk met eigen huizen en boerderijen en alle bouwfasen (vraag 114, 2b); dan de herberg, de kapel en de woontoren (stap 3), dan de houthakker die hakt en plant en de wolven (vraag 115 en 116), het draaien van de camera (vraag 124) en de hoogteverschillen (vraag 121)
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Het hart is het
 gehucht besturen terwijl het groeit, terwijl de heer eraan trekt; rijk worden en arm lijken blijft de druk van boven.
@@ -41,7 +41,9 @@ zaaien en de oogst. **Sinds vraag 107** komt een boer of zijn zoon je vragen om 
 tekortkomt: een stuk heide en een stuk bos, allebei met een gouden rand op de grond, en jij kiest. De heide kost het
 vertrouwen van het dorp, want de meent is van iedereen (een maand plaggen steken); het bos is van de heer: meld je het,
 dan kost het zijn gunst, en doe je het stiekem, dan ben je betrapt als de inner of zijn soldaten het vinden (een winter
-bomen hakken, met de bijl, en het hout is voor het dorp). In lentemaand is het een akker. `npm test`: 954/954.
+bomen hakken, met de bijl, en het hout is voor het dorp). In lentemaand is het een akker. **Sinds vraag 110, d** komt de
+markt op het plein: een inwoner vraagt hem, en er komen vier kramen aan de rand, waar je tussendoor loopt, voor 8 hout en
+6 goud; het midden blijft vrij voor het feest en de heer (de spelregel "De markt"). `npm test`: 968/968.
 
 **Sinds de sessie van het licht (4 okt, vraag 125, in `main`):** met de videokaart kleurt het dorp met het uur (roze
 bij het opkomen, oranje bij het ondergaan, blauw in de nacht), geven de lantaarns, de ramen en de herberg warme plassen
@@ -164,9 +166,12 @@ net als het werk van de tweeëndertigste (Marcel: "1 ja" op "Zal ik het in main 
 vierendertigste sessie staat sinds 5 okt ook in `main` (Marcel: "Pushen naar main"): het bos (vraag 107, stap 2), met g1
 (de soldaten lopen elk jaar door het bos; Marcel: "1 en 3 later inderdaad") en de hakker. Stap 3 van vraag 107, de speeltest
 van vier jaar, is gespeeld in de vijfendertigste sessie, en dat werk staat sinds 5 okt in `main` (Marcel: "push main";
-vraag 107 en 110, en `speelbaar.md`): ontginnen lost het graan op, maar geen dorp wint, want de grond om te bouwen is op. **Het volgende:**
-d bij vraag 110, de markt op het plein (Marcel: "Voor nu a1, b tot e ja"; het plan staat er), met de marktkraam uit
-`dorp.cjs` naar het spel; de markt wordt later de deur naar de handel met buren (vraag 72). Dan stap 3 van vraag 114, en e
+vraag 107 en 110, en `speelbaar.md`): ontginnen lost het graan op, maar geen dorp wint, want de grond om te bouwen is op. **De zesendertigste sessie**
+bouwde d bij vraag 110, de markt op het plein (Marcel: "Voor nu a1, b tot e ja"), met de marktkraam van vier kanten; de
+speeltest van vier jaar erna: op elk land een markt zodra het mocht en het goud er was, en de stenen huizen hebben hem; op
+62707 had elk huis het hele vierde jaar alles, maar 94 mensen en één hut is geen winst (`speelbaar.md`). Dit werk staat op
+`main` van de sessie, nog niet gepusht (wacht op Marcel). De markt wordt later de deur naar de handel met buren (vraag
+72). **Het volgende:** stap 3 van vraag 114, en e
 (bouwgrond uit het bos) met de houthakker (vraag 115). f (het erf dat vastzat) is gebouwd. Daarna het goud (een opmerking
 bij vraag 110). Van vraag 107 blijft g3 (de roddelaar) met de herberg als plek van gesprekken (3c). **Stap 2b is af en staat in `main`** (de andere drie
 bouwstijlen, oker, planken en roze, in een eigen sessie; zie onder Af, en vraag 114); deze branch heeft het samengevoegd.
@@ -4106,6 +4111,14 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     essentieel voor de handel, vanaf dat punt kan een nederzetting pas handelen met buren etc." Dus nu de markt op het
     plein zoals voorgesteld (a1, b tot en met e), en later is de markt de deur naar de handel met andere dorpen (vraag
     72; `spel.md`, "Handel").
+    **d is gebouwd** (6 okt, zesendertigste sessie; `js/markt.js`, `spel.md`, "De markt op het plein"): a1 tot en met e
+    zoals gekozen. Wat Claude erbij koos: een kraam staat echt op zijn tegel (je loopt er niet doorheen, zoals de
+    meiboom), en alleen waar de tegels eromheen één stuk blijven. **De speeltest erna** (`speelbaar.md`): op 62707, 73425 en
+    72022 staat de markt op het plein, de dag na het dorp, na 42 en na 99 dagen (daar wachtte hij op het goud en het
+    eerste stenen huis), en daarna mist geen huis hem meer. Op 62707 had elk huis het hele vierde jaar alles, maar het
+    dorp bleef op 94 mensen met één hut: geen winst. Op 73425 en 72022 blijft het laken de knoop (geen grond voor een
+    weverij), en dus e en het goud. Wat opviel: vier kramen ver uit elkaar tussen de eiken lezen nog niet als een markt
+    (`opmerkingen.md`, "Het beeld").
 111. **De boeren aan het werk op hun veld** (Marcel, 3 okt, vijfentwintigste sessie: "Ook wil ik dat boeren op hun veld
     aan het werk zijn. Nu hebben ze wel velden, maar lopen ze gewoon random door het dorp. Ze moeten zaaien en op het
     veld bezig zijn."; plan van Claude; open).
@@ -5620,6 +5633,13 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 6 okt 2026 — **De markt op het plein** (zesendertigste sessie; vraag 110, d; Marcel: "Voor nu a1, b tot e ja"). Een
+  inwoner vraagt de markt zoals elk gebouw, maar hij komt op het plein: vier kramen aan de rand, één per kant en naar het
+  midden, waar je tussendoor loopt, buiten de kring van het feest en weg van de heer en zijn schandpaal (`js/markt.js`).
+  Hij staat als gebouw in de lijst, zonder voet, zodat de stenen huizen hem tellen. 8 hout en 6 goud (de werkbank), de
+  spelregel "De markt" (op het plein, of een eigen gebouw), en de marktkraam uit `dorp.cjs` van vier kanten
+  (`marktkraam.cjs`). `test/markt.test.cjs` (zeven toetsen, op het ontworpen gehucht en de drie landen), `npm test`
+  968/968. De speeltest van vier jaar: op elk land een markt, en de stenen huizen hebben hem. Zie `speelbaar.md`.
 - 5 okt 2026 — **Het erf dat vrij heet maar geen hut meer neemt** (vijfendertigste sessie; vraag 110, f; Marcel: "D, e,
   f Ja"). Op 62707 groeide een huis van de maker door tot stenen huis, met 21 tegels op een vrij erf, en kwam er twee en
   een half jaar geen gezin, terwijl de groei en de raad plaats zagen. Een huis dat doorgroeit, blijft nu van een ander
