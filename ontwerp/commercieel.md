@@ -276,6 +276,25 @@ met lantaarns en muziek, een moment voor de trailer. Het ontwerp staat in `spel.
 - **Daarna:** early access, zoals Manor Lords en Foundation, voor zo'n 15 tot 20 euro, met updates; of een volledige
   release als de kern dat draagt.
 
+## De trailer, de pitch en de streamertest (6 okt; werklijst vraag 128, g)
+
+Uit een analyse van buiten van onze samenvatting (vraag 128; Marcel: "A tot g allemaal"):
+- **De streamertest:** kan een streamer in één zin zeggen waarom zijn dorp interessant is? "Mijn smid verraadde me
+  nadat ik zijn broer liet arresteren" is beter dan "mijn productieketen heeft 14% hogere efficiëntie".
+- **Een pitch:** "You are the village bailiff. Your lord wants gold. Your people want to live. Govern your village,
+  uncover its secrets, survive impossible demands, and decide who you will betray when the time comes." En als
+  positionering: "A medieval political life-sim where you govern a village from within." Naast de kandidaten voor de
+  haak hierboven; welke zin het wordt, blijft vraag 83, c.
+- **De trailer, anderhalve minuut:** het levende dorp ("You are the bailiff."), een boer die iets vraagt ("The village
+  needs you."), een brief van de heer ("Your lord needs 20 men."), verstoppen of liegen ("Every choice has a price."), de
+  herberg, een gerucht, een rechtszaak ("Not everything you hear is true."), en dan rovers, soldaten of opstand ("And
+  your people remember.").
+- **Het beeld voor de Steam-pagina:** zonder volle ui; een zomeravond op het plein met veel mensen, herkenbare
+  gebouwen, de schout in beeld, en een brief van de heer open op tafel.
+- **Wat we niet beloven:** de grootste citybuilder, de diepste economie, de beste gevechten in beurten, een grand
+  strategy, of een historische simulatie. **Wel:** een dorp dat je leert kennen, mensen die je beslissingen onthouden,
+  een heer die steeds meer vraagt, en keuzes waarbij je nooit iedereen tevreden houdt.
+
 ## Open
 
 Zie de werklijst, vraag 83, c: welke zin de haak wordt (na het nazoeken, hierboven), en of wat hem zichtbaar maakt ("wat

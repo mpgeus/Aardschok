@@ -135,7 +135,11 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 5. ~~Opslaan, Verder en een titelscherm.~~ Af (28 sep).
 6. De afrekening na het eerste jaar. Geparkeerd (Marcel, 28 sep); het plan staat in de werklijst, vraag 49.
 7. De eerste weken als opdrachten.
-8. Een tester die het niet kent laten spelen, en kijken waar hij vastloopt.
+8. Een tester die het niet kent laten spelen, en kijken waar hij vastloopt. Met vijf vragen, zonder uitleg vooraf
+   (werklijst vraag 128, g): begrijpt hij binnen 5 minuten wie hij is? Heeft hij na 10 minuten iemand die hij onthoudt?
+   Maakt hij binnen 15 minuten een keuze waar hij spijt van heeft of trots op is? Kan hij uitleggen waarom het dorp in
+   problemen kwam? Kan hij na 30 minuten een verhaal over zijn dorp vertellen? Is het antwoord op de laatste ja, dan zit
+   de richting goed.
 
 ## Vragen aan Marcel
 
@@ -149,9 +153,9 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
-## De speeltest van 6 okt: de houthakker zonder bomen, en planten tot het bos blijft (werklijst, vraag 128)
+## De speeltest van 6 okt: de houthakker zonder bomen, en planten tot het bos blijft (werklijst, vraag 129)
 
-Gespeeld in de sessie van de heer, op `claude/heer-game-mechanics-6d9h5l`, na Marcels "Eens" op e en b van vraag 128
+Gespeeld in de sessie van de heer, op `claude/heer-game-mechanics-6d9h5l`, na Marcels "Eens" op e en b van vraag 129
 (en f als het bos daarna nog opraakt), en met de kramen van de marktsessie erbij (vraag 127, uit `main`):
 `npm run speeltest -- bouwer sluw --maker --jaren 4`, drie keer, want elke keer liet het iets zien. **E** op `2e8b8fd`
 (e en b: een houthakker zonder bomen laat zijn hand gaan, en komt alleen bij minstens 30 bomen binnen tien tegels);
@@ -191,7 +195,7 @@ meting erbij van de huizen die niet doorgroeien. Geen fouten in de console. 6270
    later vroeg het opnieuw. Op 72022 kwamen er zo 48 putten, op 73425 acht kapellen. Nu moet ook een plek om te rooien
    het huis bereiken (`js/verzoeken.js`). In G 10 tot 12 putten, en 72022 was in herfstmaand een dorp in plaats van in
    lentemaand van het tweede jaar.
-5. **Geen dorp wint, en dat ligt aan een hut die niet kan doorgroeien (H; vraag 129).** In G hadden op 62707 en 73425 alle
+5. **Geen dorp wint, en dat ligt aan een hut die niet kan doorgroeien (H; vraag 130).** In G hadden op 62707 en 73425 alle
    huizen in het vierde jaar 359 en 360 dagen alles, maar de winst vraagt dat elk huis met mensen een stenen huis is (of
    een boerderij), en één of twee hutten bleven hut. H laat zien waarom: het zijn hutten die de maker legde, en waar het
    grotere huis moet komen, staat iets in de weg. Op 62707 hadden ze 1349 dagen alles en groeiden ze nooit: voor de
@@ -203,7 +207,7 @@ meting erbij van de huizen die niet doorgroeien. Geen fouten in de console. 6270
    schout valt tegen één wilde rover", 2 okt). Op 62707 is hij elke keer in het derde jaar zijn ambt kwijt. Dat heeft
    niets met het bos te maken.
 
-**Wat het vraagt:** vraag 129 (een hut die niet kan doorgroeien). Vraag 128 is klaar.
+**Wat het vraagt:** vraag 130 (een hut die niet kan doorgroeien). Vraag 129 is klaar.
 
 ## De speeltest van 6 okt: grond uit het bos en de houthakker die hakt en plant (werklijst, vraag 110, e, en 115)
 
@@ -213,7 +217,7 @@ zo'n 20 minuten, met een nieuw bosboek in de samenvatting ("Het bos"). Vier keer
 elk iets zien dat gerepareerd moest worden: **A** op het spel van `d0f78d1` (stap 1 tot en met 3); **B** op `fb4ddf3`,
 met het looppad om de hut dat het gezin mee rooit (A liet zien dat het daar misliep); **C** met de bouwer die bij een
 werkplaats in het bos de gunst weegt (`82be2ac`: dezelfde uitslag als B, zie 4 hieronder); en **D**, als C, met variant b
-van vraag 128 (`--getal GEBOUWEN.houthakker.bij.minstens=30 --getal GEBOUWEN.houthakker.bij.straal=10`: een houthakker
+van vraag 129 (`--getal GEBOUWEN.houthakker.bij.minstens=30 --getal GEBOUWEN.houthakker.bij.straal=10`: een houthakker
 alleen bij minstens 30 bomen binnen tien tegels). Geen fouten in de console, geen doden van kou of honger. 62707 is zaad
 1, 73425 zaad 2 en 72022 zaad 3.
 
@@ -235,7 +239,7 @@ alleen bij minstens 30 bomen binnen tien tegels). Geen fouten in de console, gee
    bleef het dorp op 99 mensen, één onder de maat van de winst. Een groot huis op een erf heeft zijn looppad buiten het
    erf, en daar telde een boom nog als in de weg. Nu rooit het gezin dat looppad mee (`T.kavelVanErf`): op een vers land
    passen er 39 tot 49 erven in plaats van 28 tot 42 (voor het rooien 13 tot 20), en in B kwam 73425 tot 113.
-3. **De houthakkers vermenigvuldigen zich en staan stil (vraag 128).** Een houthakker staat bij zijn plek aan een
+3. **De houthakkers vermenigvuldigen zich en staan stil (vraag 129).** Een houthakker staat bij zijn plek aan een
    bosrand met 12 tot 33 bomen binnen bereik, hakt er 73 per jaar, en staat na een paar maanden stil tot zijn boompjes
    groeien. Dan vraagt het dorp een nieuwe: in het vierde jaar staan er 8 tot 10, samen 2.000 tot 2.700 dagen stil per
    jaar, en hakken ze samen 400 tot 790 hout, wat één houthakker die het hele jaar werkt, ook maakt. Elk kost 10 hout en
@@ -250,7 +254,7 @@ alleen bij minstens 30 bomen binnen tien tegels). Geen fouten in de console, gee
 5. **Het rooien zelf.** Wie een erf of een werkplaats neemt, rooit 5 tot 102 bomen per jaar; de boeren die bos ontginnen
    10 tot 59. Een put of een jager rooit vaak eerst zijn plek ("Fenna rooit eerst de plek voor de put").
 
-**Wat het vraagt:** vraag 128 (hoeveel bos een houthakker nodig heeft), met deze cijfers erbij. De sluwe bouwer op 73425
+**Wat het vraagt:** vraag 129 (hoeveel bos een houthakker nodig heeft), met deze cijfers erbij. De sluwe bouwer op 73425
 blijft in zijn eerste jaar betrapt op een stiekeme akker in het bos, zoals op 5 okt (vraag 107, g).
 ## De speeltest van 6 okt: de markt die meegroeit (werklijst, vraag 127, stap 2)
 

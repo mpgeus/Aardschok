@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (6 okt 2026, zesendertigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt en het spel laadt alleen wat er staat (vraag 114, 2a, stap 1 en 1b); sinds de eenendertigste sessie bouwt elk land van de maker in een bouwstijl, met het dak van zijn trede en de deur naar de weg (vraag 114, stap 2a: de stijl wit), en tekent het spel met WebGL, gebouwd in een eigen sessie naast de huizen (vraag 123); sinds de tweeëndertigste sessie bouwt de huizenbouwer elk huis van vier kanten en tekent hij het een kwartslag gedraaid, en staat wit zo in het spel, met alle bouwfasen (vraag 124, B, en G); sinds de drieëndertigste sessie werken de boeren overdag op hun land, naar het seizoen en in het vel van hun werk, een boerin in dat van een vrouw (vraag 111, stap 1 en 2), en vraagt een boer heide te ontginnen als het graan tekortkomt (vraag 107, stap 1); sinds de vierendertigste sessie wijst hij een stuk heide en een stuk bos aan, en kies jij: de heide tegen het vertrouwen, het bos gemeld tegen de gunst, of stiekem (vraag 107, stap 2), met de hakker en zijn bijl; sinds de vijfendertigste sessie is de speeltest van vier jaar gespeeld (vraag 107, stap 3): ontginnen lost het graan op, maar geen dorp wint, want de grond om te bouwen is op, en de markt komt er nooit (vraag 110: f, het erf dat vastzat, is gerepareerd; e komt met de houthakker); sinds de zesendertigste sessie staat de markt met vier kramen op het plein (vraag 110, d), en hebben de stenen huizen op elk land hun markt; en sinds de tweede sessie daarnaast bouwt elk land in een van vier stijlen, wit, oker, planken of roze, elk met eigen huizen en boerderijen en alle bouwfasen (vraag 114, 2b); dan de herberg, de kapel en de woontoren (stap 3); sinds de sessie van de heer mogen erven en werkplaatsen op bomen en struiken, die wie er komt zelf rooit, en hakt de houthakker de bomen om zijn schuur om en plant hij er twee terug, zodat het bos om hem blijft (vraag 110, e, 115 en 128; in de speeltest van vier jaar komen de dorpen van de bouwer tot 126 à 129 mensen; open: vraag 129, een hut van de maker die nooit kan doorgroeien, en daarom wint er nu geen dorp); dan de wolven (vraag 116), het draaien van de camera (vraag 124) en de hoogteverschillen (vraag 121)
+## De stand (6 okt 2026, zesendertigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt en het spel laadt alleen wat er staat (vraag 114, 2a, stap 1 en 1b); sinds de eenendertigste sessie bouwt elk land van de maker in een bouwstijl, met het dak van zijn trede en de deur naar de weg (vraag 114, stap 2a: de stijl wit), en tekent het spel met WebGL, gebouwd in een eigen sessie naast de huizen (vraag 123); sinds de tweeëndertigste sessie bouwt de huizenbouwer elk huis van vier kanten en tekent hij het een kwartslag gedraaid, en staat wit zo in het spel, met alle bouwfasen (vraag 124, B, en G); sinds de drieëndertigste sessie werken de boeren overdag op hun land, naar het seizoen en in het vel van hun werk, een boerin in dat van een vrouw (vraag 111, stap 1 en 2), en vraagt een boer heide te ontginnen als het graan tekortkomt (vraag 107, stap 1); sinds de vierendertigste sessie wijst hij een stuk heide en een stuk bos aan, en kies jij: de heide tegen het vertrouwen, het bos gemeld tegen de gunst, of stiekem (vraag 107, stap 2), met de hakker en zijn bijl; sinds de vijfendertigste sessie is de speeltest van vier jaar gespeeld (vraag 107, stap 3): ontginnen lost het graan op, maar geen dorp wint, want de grond om te bouwen is op, en de markt komt er nooit (vraag 110: f, het erf dat vastzat, is gerepareerd; e komt met de houthakker); sinds de zesendertigste sessie staat de markt met vier kramen op het plein (vraag 110, d), en hebben de stenen huizen op elk land hun markt; en sinds de tweede sessie daarnaast bouwt elk land in een van vier stijlen, wit, oker, planken of roze, elk met eigen huizen en boerderijen en alle bouwfasen (vraag 114, 2b); dan de herberg, de kapel en de woontoren (stap 3); sinds de sessie van de heer mogen erven en werkplaatsen op bomen en struiken, die wie er komt zelf rooit, en hakt de houthakker de bomen om zijn schuur om en plant hij er twee terug, zodat het bos om hem blijft (vraag 110, e, 115 en 129; in de speeltest van vier jaar komen de dorpen van de bouwer tot 126 à 129 mensen; en vraag 130, gekozen: een hut van de maker die nooit kan doorgroeien, waardoor er nu geen dorp wint, gaat rooien wat in de weg staat); dan de wolven (vraag 116), het draaien van de camera (vraag 124) en de hoogteverschillen (vraag 121); dan de proef van vraag 128 (de verdwenen graanzak, met een eerste zitting)
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Het hart is het
 gehucht besturen terwijl het groeit, terwijl de heer eraan trekt; rijk worden en arm lijken blijft de druk van boven.
@@ -56,14 +56,21 @@ bond met het buurdorp (vraag 72). Zie `spel.md`, "De heer als tegenstander". Het
 (Marcel: "ja push main").
 
 **Vraag 110, e, met 115 is gebouwd en gespeeld** (6 okt, de sessie van de heer, naast de marktsessie; Marcel: "A ja B
-ja C ja D zo"; sinds 6 okt in `main`, met vraag 128: Marcel, "Ok en push main"): een erf en een werkplaats mogen op bomen
+ja C ja D zo"; sinds 6 okt in `main`, met vraag 129: Marcel, "Ok en push main"): een erf en een werkplaats mogen op bomen
 en struiken, en wie er komt wonen of werken, rooit het zelf (`js/bos.js`); de houthakker hakt de bomen om zijn schuur om
 en plant een boompje naast de stronk, met tekeningen van een boompje en een jonge eik, den en berk. In de speeltest van
-vier jaar komt elk dorp boven de 100, en wint er voor het eerst een (op 72022). **Vraag 128 is klaar** (Marcel:
+vier jaar komt elk dorp boven de 100, en wint er voor het eerst een (op 72022). **Vraag 129 is klaar** (Marcel:
 "Eens"): een houthakker zonder bomen laat zijn hand gaan, komt alleen bij genoeg bos, loopt tussen zijn stronken door, en
-plant twee boompjes per boom, zodat het bos om hem blijft (310 tot 490 hout per jaar tot het eind). **Vraag 129** (Marcel:
+plant twee boompjes per boom, zodat het bos om hem blijft (310 tot 490 hout per jaar tot het eind). **Vraag 130** (Marcel:
 "Ok" op a met c): op elk land staat een hut van de maker die nooit kan doorgroeien (meestal staat er één struik in de
 weg), en daarom wint er nu geen dorp; wie doorgroeit, gaat rooien wat in de weg staat.
+
+**Vraag 128 is besloten** (6 okt; Marcel: "A tot g allemaal, en de proef komt erna"; alleen papier, er is niets
+gebouwd): uit een analyse van buiten van onze samenvatting ("Richting & Game Design Ideeën") worden mensen, informatie en
+de zitting de richting: wat er gebeurde, wat er gezegd wordt en wat jij weet (daarmee is ook vraag 105, b en e,
+besloten), een zitting met getuigen en bewijs, het vertrouwen per groep, mensen die onthouden, een heer die van je leert,
+en gevolgen in ketens. De proef, één keten van begin tot eind (de verdwenen graanzak, met een eerste zitting), komt na
+het beeld hierboven. Zie `spel.md`, "Informatie, de zitting en mensen die onthouden".
 
 **Sinds de sessie van het licht (4 okt, vraag 125, in `main`):** met de videokaart kleurt het dorp met het uur (roze
 bij het opkomen, oranje bij het ondergaan, blauw in de nacht), geven de lantaarns, de ramen en de herberg warme plassen
@@ -3709,6 +3716,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     langer boeiend. Of de gevolgen moeten echt groter zijn. Je wordt weg gevraagd als je niet ophoest wat ze willen hebben
     van je ofzo. Maar als de grote hook, te slap." Dus a en c niet als haak: ze zijn verstoppen in een nieuw jasje. Wat dan
     wel: vraag 106. De rest (b, d, e, f) wacht op zijn antwoord.
+    **Sinds 6 okt** (vraag 128, a; Marcel: "A tot g allemaal"): b en e zijn besloten, als deel van de informatie in drie
+    lagen; d is gebouwd (de grillen, vraag 106); f wacht nog.
 106. **Twee bazen: de heer en het dorp kunnen je allebei wegsturen** (Claude, 3 okt, vijfentwintigste sessie, na Marcels
     reactie op vraag 105; voorstel; open). **Waarom verstoppen maar één keer leuk is:** het is een puzzel met één
     oplossing. Weet je eenmaal waar de inner kijkt, dan is hij opgelost; hij komt één keer per jaar, en een fout kost
@@ -4779,18 +4788,18 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     en brengt het hout in bundels naar de schuur. Vier tekeningen erbij in het vel van de bomen (het boompje, de jonge eik,
     den en berk; `gereedschap/pixelart/bomen.cjs`). Omhakken, rooien en wat bos is, staan nu op één plek (`js/bos.js`),
     met de getallen in de werkbank ("Het bos"); de spelregel "De houthakker" zet het terug op hout uit het niets.
-    **Gemeten, en een vraag (vraag 128):** een houthakker heeft op de plek die een verzoek kiest 12 tot 33 bomen binnen
+    **Gemeten, en een vraag (vraag 129):** een houthakker heeft op de plek die een verzoek kiest 12 tot 33 bomen binnen
     zijn bereik, en hakt er 73 per jaar; hij staat dus na een paar maanden stil tot zijn boompjes groeien.
     **Stap 4 is gespeeld** (6 okt, de sessie van de heer; `speelbaar.md`, "De speeltest van 6 okt: grond uit het bos"):
     vier jaar op de drie landen, vier keer, want de eerste twee lieten elk iets zien dat gerepareerd moest worden. Elk
     dorp komt nu boven de 100 mensen (op 6 okt nog 94, 83 en 79), tot 145; overal een weverij in het tweede jaar en een
-    markt; en **voor het eerst wint een dorp**, op 72022 (de sluwe bouwer, en met variant b van vraag 128 ook de bouwer).
+    markt; en **voor het eerst wint een dorp**, op 72022 (de sluwe bouwer, en met variant b van vraag 129 ook de bouwer).
     Gerepareerd: het gezin rooit ook het looppad om zijn hut buiten het erf (`T.kavelVanErf`; daar telde een boom nog als
     in de weg, en bleef 73425 op 99 mensen), en ja op een werkplaats kost de gunst die de prijs noemde (de bouwer op 62707
-    was er zijn ambt door kwijt). Wat open blijft, is vraag 128: in het vierde jaar staan er 8 tot 10 houthakkers, die
+    was er zijn ambt door kwijt). Wat open blijft, is vraag 129: in het vierde jaar staan er 8 tot 10 houthakkers, die
     het grootste deel van het jaar stilstaan, en het bos raakt op. `npm test`: 988/988. Klaar als (het plan): erven op
     gerooide grond ja, 100 mensen ja, een weverij ja, het bos om de houthakker dunner en weer aangroeiend ja, maar te
-    dun: zie vraag 128.
+    dun: zie vraag 129.
 116. **Beesten in het bos** (Marcel, 4 okt, zesentwintigste sessie: "Ik wil dat er beesten kunnen rondlopen in het bos.
     Wolven etc. Die de houthakker kunnen bedreigen. Rode ogen uit het duister."; plan van Claude; open).
     **Wat er al is:** de wolf staat in `T.WEZENS` (`js/wereld.js`): een monster om mee te vechten, uit het oude spel, met
@@ -5659,7 +5668,74 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     (groente en fruit: luifel, kar of puntdak, 1 à 2 tegels; brood: luifel, puntdak of zeil, 1; vis en vlees: luifel,
     zeil of puntdak, 2 à 3; laken en garen: luifel, puntdak of zeil, 2 à 3; potten en gerei: zeil of luifel, 1 à 2), en
     tellen in tegels toonbank (een per 10 mensen, minstens 6), komen nu in het spel.
-128. **Hoeveel bos heeft een houthakker nodig?** (Claude, 6 okt, de sessie van de heer, bij stap 3 van vraag 110, e, met
+128. **Richting en ontwerpideeën van buiten** (Marcel, 6 okt, zesendertigste sessie: "Kijk hier eens naar", met een pdf
+    van vijftien bladzijden, "Aardschok — Richting & Game Design Ideeën": een analyse van de samenvatting van vier
+    bladzijden die we die dag voor een gamedesigner maakten; de pdf staat niet in git, dit is wat erin staat; plan van
+    Claude; open).
+    **In één zin:** "maak de game smaller in scope, maar dieper in menselijke consequenties": informatie, mensen, politiek
+    en gevolgen gaan boven bouw- en productiediepte. Zijn ontwerpregel: "Wat gebeurde er in mijn dorp, waarom gebeurde
+    het, wat weet ik ervan, en wie wordt boos als ik ingrijp?" Zijn positionering: "A medieval political life-sim where
+    you govern a village from within."
+    **Wat we al hebben of besloten** (de samenvatting vertelde het hele spel zonder te zeggen wat er staat, dus het raadt
+    dit aan): niet bouwen om het bouwen (vraag 103), twee bazen (106), de dag in fasen (75), een heer met per spel een
+    ander karakter (126, c3), de wereldkaart pas na de kern (72), samen spelen na de release (126, f), vechten klein en
+    als gevolg (de rovers, 55), een probleem met een oorzaak die je had kunnen zien (`T.OORZAKEN`), en richting via de
+    raad (58).
+    **Wat nieuw is, of verder gaat dan wat we hebben:**
+    - **a, informatie als speelstuk, in drie lagen:** wat er echt gebeurde ("de molenaar steelt graan"), wat er gezegd
+      wordt ("mensen zeggen dat de boer steelt"), en wat jij weet ("je zag de molenaar 's nachts bij de voorraad").
+      Weten doe je door er zelf te zijn, te praten, in de herberg, door de raadsman iets te laten uitzoeken of een wachter
+      te laten kijken, de boeken na te lezen, iemand te volgen, of een tegenstrijdig verhaal te herkennen; een gerucht
+      heeft een andere status dan een feit. Het document maakt dit de kern: "De speler moet een reden hebben om ergens
+      naartoe te lopen. Anders is het 'lopen' alleen cosmetisch." Bij ons is dit vraag 105, b en e (open sinds 3 okt).
+      Wat er al is: de getuigen (`js/zien.js`), de roddelaar in de herberg, en de inner die alleen telt wat hij ziet.
+    - **b, de zitting als het moment van het spel:** een rechtszaak met een aanklager, een verdachte, getuigen, bewijs,
+      geruchten, wat jij zelf weet, en de druk van het dorp. Je weet soms dat iemand schuldig is, maar kunt het niet
+      bewijzen, of je hebt bewijs dat de heer liever niet ziet. De zitting staat in het plan (3b, vraag 75); nu is
+      rechtspraak alleen een soort voorval.
+    - **c, het dorp is verdeeld:** niet één vertrouwen, maar per groep (boeren, ambachtslieden, handelaren,
+      geestelijkheid, rijke families, wachters), zodat je kunt zeggen: "De boeren zijn voor mij, maar de ambachtslieden
+      zijn tegen." Bij ons hebben de standen al hun eigen wensen, en werken de wetten al per stand.
+    - **d, mensen die onthouden:** geen veertien balken per mens, maar wat later iets verandert: wie geholpen werd,
+      gestraft, land kreeg of stierf; met relaties (familie, vrienden, rivalen, schulden), belangen en soms een geheim.
+      Dat geeft vraag 118 (inwoners met stats) een richting.
+    - **e, de heer leert van jou:** lieg je vaak, dan laat hij controleren; betaal je veel, dan vraagt hij meer; bescherm
+      je steeds het dorp, dan test hij je trouw. "Een personage, geen quest machine." Naast onze karakters (de gierige, de
+      bange, de ijdele, de wrokkige; `spel.md`, "Zijn karakters") noemt het de oorlogsheer (wil mannen), de vrome
+      (kapellen, zeden) en de domme (bevliegingen).
+    - **f, gevolgen in ketens:** elke grote keuze maakt minstens één nieuw gevolg, soms maanden later. Vier voorbeelden:
+      de verdwenen graanzak (het graan ging naar een zieke familie: straffen, vrijspreken of verbergen, en dan merkt de
+      heer het tekort), de heer wil mannen midden in de oogst (wie gaat, en de familie protesteert), de verboden smidse
+      (bij ons al gebouwd, vraag 104), en het huwelijk (land tegen invloed, en jaren later een erfkwestie).
+    - **g, klein en goedkoop:** de proef voor een tester (begrijpt hij in 5 minuten wie hij is, heeft hij na 10 minuten
+      iemand die hij onthoudt, maakt hij binnen 15 minuten een keuze waar hij spijt van heeft of trots op is, kan hij
+      na 30 minuten een verhaal over zijn dorp vertellen?); een eindscherm met de geschiedenis van jouw schout (wat voor
+      schout je werd: rechtvaardig, corrupt, volks, trouw), bovenop het jaarboek (vraag 101); en voor `commercieel.md`
+      een opzet van de trailer (het levende dorp, een boer die iets vraagt, de brief van de heer, verstoppen, de herberg
+      en een gerucht, en dan rovers of opstand: "And your people remember"), een pitch ("You are the village bailiff.
+      Your lord wants gold. Your people want to live. …") en de streamertest: "Mijn smid verraadde me nadat ik zijn broer
+      liet arresteren" verkoopt beter dan "mijn productieketen heeft 14% hogere efficiëntie".
+    **Waar het anders is dan wat Marcel koos:** een slice van 30 tot 50 inwoners (Marcel, 1 okt: 100 tot 200, "een dorp
+    van 50 is echt te klein"); als eind van de demo één grote politieke keuze (bij ons het jaar van geluk, vraag 126, b3);
+    en vijf of zes grondstoffen, waar wij er zo'n vijftien hebben. Die laatste regel ("voeg een grondstof alleen toe als
+    hij een interessante beslissing veroorzaakt") past wel bij Marcels zorg van 3 okt: "weer een bouw spelletje, zelfde
+    kettingen van materialen".
+    **Advies van Claude:** a en b zijn het sterkst, en ze liggen al bij ons klaar (105 b en e, en de zitting, 3b). Nu komt
+    bijna alles naar je toe: elk verzoek, het rapport, en de echte voorraad in de balk; lopen is fijn, maar voor een
+    keuze nog niet nodig. Na de markt (vraag 127) staat in de werklijst vooral beeld (stap 3 van de bouwstijl, de
+    houthakker, de camera, de hoogte); dit document zegt dat mensen en informatie eerst moeten. Een proef: één keten van
+    begin tot eind, de verdwenen graanzak, op wat er al is (een voorval, de getuigen, de herberg), met een eerste zitting
+    als slot. Speelt dat goed, dan weten we de richting.
+    Vragen: **a** tot en met **g**: welke ja? En de volgorde: de proef met de graanzak vóór het beeld, of erna?
+    **Marcel koos (6 okt): "A tot g allemaal, en de proef komt erna".** Dus a tot en met g zijn de richting, en vraag 105,
+    b en e (wat je weet, is wat je zag; het dorp praat) zijn daarmee ook besloten. De proef, de verdwenen graanzak met
+    een eerste zitting, komt na het beeld dat nu in de werklijst staat (stap 3 van de bouwstijl, de houthakker en de
+    wolven, de camera, de hoogte). **Daarna** (voorstel van Claude): c (het vertrouwen per stand), d (wat de mensen
+    onthouden) en e (de heer die van je leert; zijn karakters komen met de rest van vraag 126). g past tussendoor: de
+    vijf vragen voor een tester staan in `speelbaar.md` (bij de eerste proefversie, 33d), het eindscherm komt bij het
+    jaarboek, en de trailer en de pitch staan in `commercieel.md`. Het ontwerp: `spel.md`, "Informatie, de zitting en
+    mensen die onthouden".
+129. **Hoeveel bos heeft een houthakker nodig?** (Claude, 6 okt, de sessie van de heer, bij stap 3 van vraag 110, e, met
     115; `spel.md`, "De houthakker hakt en plant", Open; open).
     **Gemeten** (het ontworpen gehucht en de landen 5, 62707, 72022 en 73425): een houthakker mag staan op een open plek
     van vier bij vier met het looppad eromheen, bij minstens 8 bomen binnen 7 tegels, en een verzoek kiest de plek die
@@ -5706,8 +5782,8 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     het eind 310 tot 490 hout per jaar, uit een jong bos, en komen de drie dorpen van de bouwer tot 126 à 129 mensen,
     zonder doden van kou of honger. Elke houthakker staat nog zo'n half jaar stil terwijl zijn boompjes groeien; dat mag
     (a). Onderweg gerepareerd: een put of kapel om te rooien bereikte niet wie er een miste, en er kwam elke maand een bij
-    (op 72022 48 putten; `a612242`). Er wint nog geen dorp: dat is vraag 129.
-129. **Een hut die niet kan doorgroeien** (Claude, 6 okt, de sessie van de heer, bij de speeltest van vraag 128; open).
+    (op 72022 48 putten; `a612242`). Er wint nog geen dorp: dat is vraag 130.
+130. **Een hut die niet kan doorgroeien** (Claude, 6 okt, de sessie van de heer, bij de speeltest van vraag 129; open).
     **Wat er is:** een huis dat een maand alles heeft, groeit door als de bouwstof er is en de grotere vorm past
     (`kiesGroei` in `js/behoeften.js`): vanaf zijn linkerbovenhoek naar rechts en naar onder, en waar het nieuwe huis
     buiten het oude komt, mag niets vast staan (een boom, een struik, een gebouw), geen deur zijn en geen grond van een

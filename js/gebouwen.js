@@ -155,7 +155,7 @@
       naam: 'houthakker', trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 10, goud: 4 }, heer: { hout: 20 }, bouwtijd: 3,
       // bos: hij hakt in het bos van de heer, dus de wet Houtkap laat hem meer hakken (js/wetten.js, T.maaktUit).
       handen: 1, woonruimte: 0, maakt: { uit: { hout: 2 } }, bos: true, verdacht: false, menu: true,
-      // Bij genoeg bos voor een tijd werk (werklijst vraag 128, b; Marcel, 6 okt: "Eens"): zijn bereik is tien tegels
+      // Bij genoeg bos voor een tijd werk (werklijst vraag 129, b; Marcel, 6 okt: "Eens"): zijn bereik is tien tegels
       // (T.BOS_INSTELLINGEN.hakStraal, js/bos.js), en hij hakt 73 bomen per jaar. Tot dan 8 bomen binnen 7 tegels: dan stond
       // hij na een paar maanden stil.
       bij: { natuur: 'bos', straal: 10, minstens: 30 },
@@ -1060,7 +1060,7 @@
     for (const g of D.gebouwen) {
       const soort = T.GEBOUWEN[g.soort];
       // Een houthakker zonder boom binnen zijn bereik wil geen handen: zijn hand werkt elders tot er weer een boom staat
-      // (js/bos.js; werklijst vraag 128, e).
+      // (js/bos.js; werklijst vraag 129, e).
       if (!g.klaar || !soort.handen || g.verzegeld || T.houthakkerZonderBoom(g)) {
         g.handen = 0;
         continue;

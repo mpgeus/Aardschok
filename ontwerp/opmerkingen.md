@@ -9,7 +9,7 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
-- **Twee soorten stronken** (6 okt, zesendertigste sessie; vraag 128): een stronk die de houthakker of een boer achterlaat
+- **Twee soorten stronken** (6 okt, zesendertigste sessie; vraag 129): een stronk die de houthakker of een boer achterlaat
   (`T.velBoom`, `js/bos.js`), staat niet in de weg (`boomstronk` in `T.VOORWERPEN`, `js/wereld.js`), want in de speeltest
   zette de houthakker zich met zijn eigen stronken vast. Een stronk die de maker in het bos legde, heeft nog een muur
   onder zich, zoals elk vast ding uit het vel (`vast` bij `boomstronk` in `gereedschap/pixelart/naar-tiled.cjs`, en zo in

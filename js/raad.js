@@ -204,7 +204,7 @@
       },
     },
     // De houthakker hakt bomen om (js/bos.js; vraag 115): staat er binnen zijn bereik geen boom meer, dan hakt hij niets,
-    // tot de boompjes die hij plantte, bomen zijn, en werkt zijn hand zolang elders (vraag 128, e). Haalt het hout de
+    // tot de boompjes die hij plantte, bomen zijn, en werkt zijn hand zolang elders (vraag 129, e). Haalt het hout de
     // winter niet, dan zegt de raad daarboven dat een houthakker zou helpen.
     {
       id: 'geenBoom',
@@ -334,7 +334,7 @@
     // de eerste speeltest van vraag 103 zijn hout op aan de kapel en de putten, en kon het daarna geen houthakker en geen
     // jager meer betalen.
     // Een houthakker die stilstaat omdat zijn bomen op zijn, is geen reden voor een nieuwe zolang het hout de winter
-    // haalt (werklijst vraag 128, e): in de speeltest van 6 okt stonden er zo na vier jaar 8 tot 10, die vooral stilstonden.
+    // haalt (werklijst vraag 129, e): in de speeltest van 6 okt stonden er zo na vier jaar 8 tot 10, die vooral stilstonden.
     if (!heeft(D, 'houthakker')) erbij('houthakker', 'Er hakt niemand hout, en elke hut en elk gebouw kost hout.', 'hout');
     for (const x of T.watDeHuizenMissen(D)) if (x.kan && x.bouw) erbij(x.bouw, x.zin, x.soort);
     for (const soort of T.doelGebouwen(D)) erbij(soort, `Voor het doel is er een ${T.GEBOUWEN[soort].naam} nodig.`, 'doel');

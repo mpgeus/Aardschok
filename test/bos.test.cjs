@@ -134,7 +134,7 @@ test('de houthakker hakt de dichtste boom bij zijn schuur, en elke tien hout is 
   assert.ok(geplant.length <= inHetBos * T.BOS_INSTELLINGEN.boompjesPerBoom, 'hooguit twee per boom');
 }));
 
-test('wat hij kapt en inplant, blijft bos: na vier jaar hakt hij minstens zoveel als in het eerste (vraag 128, f)', () => zo(() => {
+test('wat hij kapt en inplant, blijft bos: na vier jaar hakt hij minstens zoveel als in het eerste (vraag 129, f)', () => zo(() => {
   // Alleen de houthakker: geen nieuwe gezinnen (wie komt, loopt hier niet binnen, want alleen de nachten tikken), en
   // genoeg graan en hout, zodat het dorp niet krimpt.
   const gezinDagen = T.GEBOUWEN_INSTELLINGEN.gezinDagen;
@@ -237,7 +237,7 @@ test('staat er binnen tien tegels geen boom meer, dan staat hij stil en zegt de 
   const raad = T.RADEN.find((x) => x.id === 'geenBoom');
   assert.ok(raad.als(D), 'de raad zegt het');
   assert.match(raad.tekst(D), /De houthakker staat stil.*Zijn hand werkt zolang ergens anders/);
-  // Vraag 128, e: de volgende nacht wil hij geen handen meer, en zijn hand gaat; een nieuwe houthakker vraagt het dorp
+  // Vraag 129, e: de volgende nacht wil hij geen handen meer, en zijn hand gaat; een nieuwe houthakker vraagt het dorp
   // niet, want het hout haalt de winter (het is lente).
   nacht(S, 11);
   assert.equal(g.handen, 0);

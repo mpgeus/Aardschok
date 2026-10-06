@@ -368,12 +368,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   maar uit een boom: de dichtste binnen `hakStraal` van zijn schuur (`T.boomVanHouthakker`, `g.boom`), en elke
   `houtPerBoom` hout is die om (`T.houthakkerHakte`, `g.gehakt`): een stronk (`v.gehaktOp`, vergaat na `stronkDagen`, en
   staat niet in de weg), en stond hij in het bos, twee boompjes ernaast (`boompjesPerBoom`, `T.plantNaast`, `v.geplant`,
-  `v.wordt`; wat hij kapt en inplant, blijft bos: `T.isBos` met `ookJong`, vraag 128, f), die in een jaar of twee via een
+  `v.wordt`; wat hij kapt en inplant, blijft bos: `T.isBos` met `ookJong`, vraag 129, f), die in een jaar of twee via een
   jonge boom een boom worden (`T.tikBosDag`; de tekeningen `boompje`, `jongeEik`, `jongeDen`, `jongeBerk` in het vel van
   de bomen). Staat er binnen zijn bereik geen boom meer, dan staat hij stil (`T.waaromHaktHijNiet`) en wil hij geen handen
   (`T.houthakkerZonderBoom`, in `T.verdeelHanden`): zijn hand werkt elders tot er weer een boom staat; de raad zegt het
-  (`geenBoom`), en een nieuwe houthakker vraagt het dorp pas als het hout de winter niet haalt (vraag 128, e). Hij komt
-  alleen bij minstens 30 bomen binnen tien tegels (`bij` in `T.GEBOUWEN`; vraag 128, b). Zijn poppetje hakt aan zijn
+  (`geenBoom`), en een nieuwe houthakker vraagt het dorp pas als het hout de winter niet haalt (vraag 129, e). Hij komt
+  alleen bij minstens 30 bomen binnen tien tegels (`bij` in `T.GEBOUWEN`; vraag 129, b). Zijn poppetje hakt aan zijn
   boom en brengt het hout in bundels naar de schuur (`hakHout` in `js/veldwerk.js`). **Rooien:** een gebouw op een stuk
   waar nog iets te rooien staat (een boom, een stronk, een struik: `T.teRooienOp`, `T.watTeRooien`), wacht erop
   (`g.wachtOpRooien`, met `g.kavel` en `g.rooienTot`), nog niet op de kaart (`T.bouwGebouw` zet het er pas met
@@ -773,6 +773,12 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   gunst van de heer en het vertrouwen van het dorp in jou zijn twee meters in de balk, met een waarschuwing onder een
   grens, en op 0 ben je weg; bijna elke keuze kost aan de ene kant wat de andere wint. Verstoppen is één kaart met echte
   gevolgen, niet de haak (Marcel: "als de grote hook, te slap").
+- **Mensen en informatie eerst** (Marcel, 6 okt, vraag 128: "A tot g allemaal, en de proef komt erna"; uit een analyse
+  van buiten: "kleiner in omvang, dieper in menselijke gevolgen"): wat je weet, komt ergens vandaan (wat er gebeurde,
+  wat er gezegd wordt, en wat jij weet), 's middags is er een zitting met getuigen en bewijs, het vertrouwen van het
+  dorp is per groep, mensen onthouden wat je deed, de heer leert van je, en een grote keuze komt later terug. Eerst een
+  proef met één keten (de verdwenen graanzak), na het beeld in de werklijst (`spel.md`, "Informatie, de zitting en
+  mensen die onthouden").
 - De **heer** is verward en ziet alleen geld. Levert het dorp te weinig, dan straft hij: in het
   dorp, jou zelf, met hogere eisen, en met soldaten. Zijn **inner** komt kijken, en wat je opzij
   zet, moet uit zijn zicht. Hij stelt geen doelen (Marcel, 1 okt, vraag 78, a): "de heer moet alleen betaald

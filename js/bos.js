@@ -54,7 +54,7 @@
     // (js/veldwerk.js). Alleen in het bos plant de houthakker, en daar tellen ook de jonge bomen, de boompjes en de
     // stronken mee: wat hij zelf kapt en weer inplant, blijft bos.
     bosBomen: 4,
-    // Zoveel boompjes plant de houthakker naast de stronk van elke boom die hij in het bos omhakt (vraag 128, f; Marcel,
+    // Zoveel boompjes plant de houthakker naast de stronk van elke boom die hij in het bos omhakt (vraag 129, f; Marcel,
     // 6 okt: "Eens"). Met één hakte hij zijn bereik in een jaar leeg en daarna bijna niets meer: van de boompjes ging ook
     // een deel verloren, en wat hij dun hakte, telde niet meer als bos. Met twee hakt hij in het vierde jaar weer bijna het
     // hele jaar (gemeten op de drie landen van de speeltest, alleen de houthakker: 424 hout per jaar, met één 37).
@@ -94,7 +94,7 @@
   };
 
   // Staat (x, y) in het bos: minstens bosBomen bomen in de vijf bij vijf tegels eromheen? Met `ookJong` tellen ook de jonge
-  // bomen, de boompjes en de stronken mee: een stuk dat de houthakker kapt en weer inplant, is nog bos (vraag 128, f).
+  // bomen, de boompjes en de stronken mee: een stuk dat de houthakker kapt en weer inplant, is nog bos (vraag 129, f).
   T.isBos = function (w, x, y, ookJong = false) {
     if (!ookJong) return T.natuurBij(w, 'bos', { x, y, b: 1, h: 1 }, 2) >= IN().bosBomen;
     let n = 0;
@@ -295,7 +295,7 @@
   };
 
   // Staat deze houthakker stil omdat er binnen zijn bereik geen boom meer staat (g.boom null, gezet door
-  // T.boomVanHouthakker)? Dan wil hij geen handen (T.verdeelHanden, js/gebouwen.js; werklijst vraag 128, e): zijn hand
+  // T.boomVanHouthakker)? Dan wil hij geen handen (T.verdeelHanden, js/gebouwen.js; werklijst vraag 129, e): zijn hand
   // werkt elders, tot de nacht waarin er weer een boom staat.
   T.houthakkerZonderBoom = (g) => hakt(g) && g.boom === null;
 
