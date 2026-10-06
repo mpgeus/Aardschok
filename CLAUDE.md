@@ -369,9 +369,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `houtPerBoom` hout is die om (`T.houthakkerHakte`, `g.gehakt`): een stronk (`v.gehaktOp`, vergaat na `stronkDagen`), en
   stond hij in het bos, een boompje ernaast (`T.plantNaast`, `v.geplant`, `v.wordt`), dat in een jaar of twee via een
   jonge boom een boom wordt (`T.tikBosDag`; de tekeningen `boompje`, `jongeEik`, `jongeDen`, `jongeBerk` in het vel van
-  de bomen). Staat er binnen zijn bereik geen boom meer, dan staat hij stil (`T.waaromHaktHijNiet`), zegt de raad het
-  (`geenBoom`) en vraagt het dorp een nieuwe. Zijn poppetje hakt aan zijn boom en brengt het hout in bundels naar de
-  schuur (`hakHout` in `js/veldwerk.js`). **Rooien:** een gebouw op een stuk
+  de bomen). Staat er binnen zijn bereik geen boom meer, dan staat hij stil (`T.waaromHaktHijNiet`) en wil hij geen handen
+  (`T.houthakkerZonderBoom`, in `T.verdeelHanden`): zijn hand werkt elders tot er weer een boom staat; de raad zegt het
+  (`geenBoom`), en een nieuwe houthakker vraagt het dorp pas als het hout de winter niet haalt (vraag 128, e). Hij komt
+  alleen bij minstens 30 bomen binnen tien tegels (`bij` in `T.GEBOUWEN`; vraag 128, b). Zijn poppetje hakt aan zijn
+  boom en brengt het hout in bundels naar de schuur (`hakHout` in `js/veldwerk.js`). **Rooien:** een gebouw op een stuk
   waar nog iets te rooien staat (een boom, een stronk, een struik: `T.teRooienOp`, `T.watTeRooien`), wacht erop
   (`g.wachtOpRooien`, met `g.kavel` en `g.rooienTot`), nog niet op de kaart (`T.bouwGebouw` zet het er pas met
   `T.zetOpDeKaart` op), maar telt al mee: de hut van een gezin op zijn erf (`js/erven.js`), of een werkplaats die een

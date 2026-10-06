@@ -161,12 +161,15 @@ test('met de wet Houtkap hakt hij twee keer zo hard, en gaan er twee keer zoveel
   assert.ok(kap > gewoon, `met de houtkap ${kap}, zonder ${gewoon}`);
 });
 
-test('staat er binnen tien tegels geen boom meer, dan staat hij stil, zegt de raad het en vraagt het dorp een nieuwe', () => zo(() => {
+test('staat er binnen tien tegels geen boom meer, dan staat hij stil en zegt de raad het; zijn hand werkt elders, en het dorp vraagt geen nieuwe', () => zo(() => {
   const S = gehucht();
   const D = S.dorp;
   const w = D.wereld;
   const g = metHouthakker(S);
-  for (const t of bomenBij(D, g)) T.velBoom(D, t.x, t.y);
+  const hand = D.bewoners.mensen.find((p) => p.werk === g);
+  assert.ok(hand, 'hij heeft een hand');
+  const bomen = bomenBij(D, g);
+  for (const t of bomen) T.velBoom(D, t.x, t.y);
   nacht(S, 10);
   assert.equal(g.boom, null);
   assert.match(g.stilWant, /geen boom meer binnen tien tegels/);
@@ -174,8 +177,50 @@ test('staat er binnen tien tegels geen boom meer, dan staat hij stil, zegt de ra
   assert.match(T.gebouwToestand(D, g), /staat stil, er staat geen boom meer/);
   const raad = T.RADEN.find((x) => x.id === 'geenBoom');
   assert.ok(raad.als(D), 'de raad zegt het');
-  assert.match(raad.tekst(D), /De houthakker staat stil/);
-  assert.ok(T.watTeBouwen(D).some((x) => x.soort === 'houthakker'), 'het dorp wil een nieuwe houthakker');
+  assert.match(raad.tekst(D), /De houthakker staat stil.*Zijn hand werkt zolang ergens anders/);
+  // Vraag 128, e: de volgende nacht wil hij geen handen meer, en zijn hand gaat; een nieuwe houthakker vraagt het dorp
+  // niet, want het hout haalt de winter (het is lente).
+  nacht(S, 11);
+  assert.equal(g.handen, 0);
+  assert.notEqual(hand.werk, g, 'zijn hand werkt er niet meer');
+  assert.ok(!T.watTeBouwen(D).some((x) => x.soort === 'houthakker'), 'geen nieuwe houthakker omdat hij stilstaat');
+  // Staat er weer een boom (een boompje is opgegroeid), dan hakt hij weer, met een hand.
+  const t = bomen[0];
+  const stronk = T.voorwerpOp(w, t.x, t.y);
+  if (stronk) T.haalVoorwerpWeg(w, stronk);
+  // Waar de stronk stond, staat nu een boom, zoals een boompje dat opgroeide.
+  const eik = T.opzoekTegelNaam('eik');
+  const boom = { soort: 'eik', x: t.x, y: t.y, vel: eik.vel, id: eik.id, beslaat: [1, 1] };
+  T.kenSoortVan(boom);
+  T.zetVoorwerp(w, boom);
+  nacht(S, 12);
+  assert.deepEqual(g.boom, { x: t.x, y: t.y }, 'hij heeft weer een boom');
+  nacht(S, 13);
+  assert.equal(g.handen, 1, 'en weer een hand');
+  assert.ok(g.werkte > 0, 'en hakt');
+}));
+
+test('een houthakker komt alleen bij genoeg bos: minstens dertig bomen binnen tien tegels', () => zo(() => {
+  const S = gehucht();
+  const D = S.dorp;
+  const bij = T.GEBOUWEN.houthakker.bij;
+  assert.deepEqual({ straal: bij.straal, minstens: bij.minstens }, { straal: T.BOS_INSTELLINGEN.hakStraal, minstens: 30 });
+  const g = metHouthakker(S);
+  assert.ok(T.natuurBij(D.wereld, 'bos', T.voetVanGebouw(g), bij.straal) >= 30, 'waar hij kwam, staan er minstens dertig');
+  // Een plek met wat bos, maar minder dan dertig bomen binnen tien tegels, zegt waarom niet; met dertig of meer niets.
+  const voet = T.gebouwVoet('houthakker', T.volgendeTekening(D, 'houthakker'));
+  const plekken = { weinig: null, genoeg: null };
+  for (let y = 0; y < D.wereld.tegels.length; y++) {
+    for (let x = 0; x < D.wereld.tegels[0].length; x++) {
+      const r = { x, y, b: voet.b, h: voet.h };
+      const n = T.natuurBij(D.wereld, 'bos', r, bij.straal);
+      if (n >= 8 && n < 30) plekken.weinig = plekken.weinig || r;
+      if (n >= 30) plekken.genoeg = plekken.genoeg || r;
+    }
+  }
+  assert.ok(plekken.weinig && plekken.genoeg);
+  assert.match(T.waaromNietBijDeNatuur(D, 'houthakker', plekken.weinig) || '', /bos/);
+  assert.equal(T.waaromNietBijDeNatuur(D, 'houthakker', plekken.genoeg), null);
 }));
 
 test('een boompje wordt in een jaar of twee een jonge boom en dan een boom; een stronk vergaat na een jaar', () => zo(() => {

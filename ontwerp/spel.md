@@ -25,7 +25,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | De raadsman | gebouwd (30 sep): een van de boeren, met twee gelote vaardigheden, die de voorvallen beslist als je weg bent, naar zijn karakter; je kiest hem met de knop Raadsman (R) | vraag 64, 65, 66, 67, 68 |
 | Het rapport van de raadsman | gebouwd (1 okt): de eerste fase van de dag; elke ochtend brengt hij je aan je deur wat er gebeurde, hoe het graan en het hout gaan, of ze de winter halen, wat er speelt en wat er komt, met zijn rekenen in de getallen | vraag 75 |
 | De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf; sinds 1 okt ook wat je mist voor de kapel en de smidse, en waar het vandaan komt; sinds 2 okt wat de huizen missen, en de ketens (een molen voor de bakkerij) | vraag 58, 79, 87, 90 |
-| De houthakker hakt en plant | gebouwd (6 okt; Marcel: "A ja B ja C ja D zo"): zijn hout komt uit de bomen om zijn schuur, elke tien hout een boom; naast de stronk een boompje, in een jaar of twee een boom; zonder boom staat hij stil; in de speeltest van vier jaar komt elk dorp boven de 100 en wint er voor het eerst een; open: hoeveel bos hij nodig heeft (8 tot 10 houthakkers die vooral stilstaan, en het bos raakt op) | vraag 115, 128 |
+| De houthakker hakt en plant | gebouwd (6 okt; Marcel: "A ja B ja C ja D zo"): zijn hout komt uit de bomen om zijn schuur, elke tien hout een boom; naast de stronk een boompje, in een jaar of twee een boom; zonder boom staat hij stil, en werkt zijn hand elders; hij komt alleen bij minstens 30 bomen binnen tien tegels (vraag 128, e en b); in de speeltest van vier jaar komt elk dorp boven de 100 en wint er voor het eerst een | vraag 115, 128 |
 | De markt op het plein | gebouwd (6 okt; vraag 110, d, en 127, stap 1 en 2): een marktblok van twee rijen kramen met manden op het plein, voor 8 hout en 6 goud, dat meegroeit met het dorp (een kraam per 15 mensen, daarna langs de weg), met kramen vol of leeg naar wat het dorp heeft; de maker legt een groter plein; de kooplui, de boodschappen en de marktdag nog niet | vraag 110, d; 127 |
 | De verzoeken | stap 1 tot en met 3 gebouwd (3 okt): wat het dorp mist, komt een inwoner je vragen, met de plek die hij koos en wat het kost; ja of nee, en ben je weg, dan beslist je raadsman; in het bouwmenu alleen nog het erf en oproepen met een premie (de spelregel "Wie bouwt"); de speeltest speelt zo; en uit eigen wil: een ondernemer die wapens wil maken (verboden) of een tweede herberg beginnen, met wat ja en nee aan gevolgen hebben (vraag 104); sinds 6 okt rooit wie een werkplaats vraagt zijn plek eerst, als er geen open grond meer is (vraag 110, e) | vraag 103, 104, 110 |
 | Twee bazen | stap 1 en 2 gebouwd (3 okt; Marcel: "106 a b c d ja"): de gunst van de heer en het vertrouwen van het dorp in de balk, met een waarschuwing onder 20 en op 0 weg (ontslagen of weggejaagd); betrapt op verstoppen is de laatste waarschuwing; elke maand een gril van de heer in een brief, die zijn gunst tegen het dorp weegt | vraag 106 |
@@ -2990,15 +2990,18 @@ jaar tot een jaar een jonge boom, en na nog eens zo lang een boom van dezelfde s
 eik): in een jaar of twee. Zo wordt het bos om de schuur dunner, met stronken, boompjes en jonge bomen, en met de wet
 Houtkap of een tweede houthakker gaat het harder. Staat er binnen tien tegels geen boom meer, dan staat hij stil: het
 dorp zegt het de eerste dag, de raad zolang het duurt ("De houthakker staat stil: er staat geen boom meer binnen tien
-tegels van zijn schuur. Een houthakker bij het bos zou helpen."), en het dorp vraagt een nieuwe houthakker. Groeien de
-boompjes weer, dan hakt hij verder. Zijn poppetje loopt naar zijn boom, hakt er twee uur aan met de bijl, brengt een
+tegels van zijn schuur, tot zijn boompjes bomen zijn. Zijn hand werkt zolang ergens anders."), en zijn hand werkt elders.
+Een nieuwe houthakker vraagt het dorp pas als het hout de winter niet haalt, niet omdat hij stilstaat (vraag 128, e).
+Groeien de boompjes weer, dan krijgt hij de nacht erna zijn hand terug en hakt hij verder. Een houthakker komt alleen bij
+minstens dertig bomen binnen tien tegels (vraag 128, b; tot dan 8 binnen 7). Zijn poppetje loopt naar zijn boom, hakt er twee uur aan met de bijl, brengt een
 bundel naar de schuur en gaat terug; de boom valt 's nachts, als de regel zegt dat hij om is. Een boompje en een jonge
 boom rooit wie er bouwt, zonder hout; een boompje staat niet in de weg, een jonge boom wel. De spelregel "De houthakker"
 zet het terug op hout uit het niets (zoals voor 6 okt); de getallen in de werkbank ("Het bos", `T.BOS_INSTELLINGEN`, waar
 nu ook het hout per boom en de dagen om te rooien staan). In de browser: `Spel.debug.bos()`. Wat een boom is, wat te
 rooien is, omhakken en rooien staan nu allemaal in `js/bos.js`, ook voor het ontginnen en het rooien van een erf.
 
-**Open: hoeveel bos heeft een houthakker nodig?** Gemeten op het ontworpen gehucht en vier landen van de maker (6 okt):
+**Hoeveel bos heeft een houthakker nodig?** (vraag 128; besloten, Marcel, 6 okt: "Eens" op e en b, en f als het bos
+daarna nog opraakt; e en b zijn gebouwd, zie hierboven.) Gemeten op het ontworpen gehucht en vier landen van de maker (6 okt):
 een houthakker mag staan op een open plek van vier bij vier met het looppad eromheen, bij minstens 8 bomen binnen 7
 tegels; een verzoek kiest de plek die het dichtst bij het dorp past. Daar staan binnen zijn bereik (tien tegels om de
 schuur) 12 tot 33 bomen; op de beste plek die er is 36 tot 88. Hij hakt er 73 per jaar, en een boompje is pas na een

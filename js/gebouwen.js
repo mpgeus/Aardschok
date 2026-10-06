@@ -32,7 +32,7 @@
 //                                    // bezetting (T.tikGebouwenDag schaalt mee met hoe bezet hij is
 //                                    // én, sinds js/behoeften.js, met de tevredenheid). Wie iets
 //                                    // omzet (met `in`), maakt tot er genoeg ligt (T.maaktTot).
-//     bij:         null,             // of { natuur: 'bos', straal: 7, minstens: 8 }: hij hoort bij het
+//     bij:         null,             // of { natuur: 'bos', straal: 10, minstens: 30 }: hij hoort bij het
 //                                    // bos, de rotsen of het water (T.NATUUR), en wordt alleen gebouwd
 //                                    // waar daarvan zoveel binnen `straal` tegels van zijn voet ligt.
 //                                    // Meer dan het looppad (drie tegels): een boom, een rots en water
@@ -155,7 +155,10 @@
       naam: 'houthakker', trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 10, goud: 4 }, heer: { hout: 20 }, bouwtijd: 3,
       // bos: hij hakt in het bos van de heer, dus de wet Houtkap laat hem meer hakken (js/wetten.js, T.maaktUit).
       handen: 1, woonruimte: 0, maakt: { uit: { hout: 2 } }, bos: true, verdacht: false, menu: true,
-      bij: { natuur: 'bos', straal: 7, minstens: 8 },
+      // Bij genoeg bos voor een tijd werk (werklijst vraag 128, b; Marcel, 6 okt: "Eens"): zijn bereik is tien tegels
+      // (T.BOS_INSTELLINGEN.hakStraal, js/bos.js), en hij hakt 73 bomen per jaar. Tot dan 8 bomen binnen 7 tegels: dan stond
+      // hij na een paar maanden stil.
+      bij: { natuur: 'bos', straal: 10, minstens: 30 },
       tekening: 'gebouwen/houtschuur', beschrijving: 'hout uit het bos van de heer', opmerking: '',
     },
     // Sinds de weides, stap 2 (25 sep 2026) maakt de kooi zelf niets: de schapen van de heide slapen
@@ -1056,7 +1059,9 @@
     let vrij = T.werkendeHanden(D);
     for (const g of D.gebouwen) {
       const soort = T.GEBOUWEN[g.soort];
-      if (!g.klaar || !soort.handen || g.verzegeld) {
+      // Een houthakker zonder boom binnen zijn bereik wil geen handen: zijn hand werkt elders tot er weer een boom staat
+      // (js/bos.js; werklijst vraag 128, e).
+      if (!g.klaar || !soort.handen || g.verzegeld || T.houthakkerZonderBoom(g)) {
         g.handen = 0;
         continue;
       }

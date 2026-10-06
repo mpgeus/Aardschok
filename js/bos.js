@@ -275,6 +275,11 @@
     return g.boom;
   };
 
+  // Staat deze houthakker stil omdat er binnen zijn bereik geen boom meer staat (g.boom null, gezet door
+  // T.boomVanHouthakker)? Dan wil hij geen handen (T.verdeelHanden, js/gebouwen.js; werklijst vraag 128, e): zijn hand
+  // werkt elders, tot de nacht waarin er weer een boom staat.
+  T.houthakkerZonderBoom = (g) => hakt(g) && g.boom === null;
+
   // Waarom deze houthakker vandaag niet hakt (T.tikGebouwenDag, vóór zijn werk), of null: er staat binnen zijn bereik geen
   // boom meer.
   T.waaromHaktHijNiet = function (D, g) {
