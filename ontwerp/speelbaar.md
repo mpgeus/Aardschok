@@ -172,6 +172,12 @@ of leeg, en het grotere plein van de maker), met de speler die per maand de mark
 
 **Wat het vraagt:** zie vraag 127 in de werklijst (het plein en de grond).
 
+**Daarna, met het plein iets kleiner** (`0ae1bb5`, 260 tot 300 tegels, een blok van 8; Marcel: "plein iets kleiner"),
+dezelfde speeltest: het dorp eindigt op **89, 77 en 84** mensen (met het grote plein 83, 79 en 85; met het oude, kleine
+plein 94, 83 en 79). De markt komt op elk land (dag 271, 302 en 452) en heeft vijf kramen. Maar **geen enkel land bouwt een
+weverij**: overal wil het dorp er aan het eind een, met het goud ervoor, en is er geen plek. Op 62707 had het oude plein
+er wel een (en een vierde jaar met alles). De grond is de knoop, en dat is e (vraag 110), dat Marcel eerder wilde.
+
 ## De speeltest van 6 okt: de markt op het plein (werklijst, vraag 110, d)
 
 Gespeeld in de zesendertigste sessie, op `main` van deze sessie: het spel van `f1ca26d` (de markt op het plein, nog zonder
