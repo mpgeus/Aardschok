@@ -153,6 +153,42 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 6 okt: wie doorgroeit, rooit wat in de weg staat (werklijst, vraag 130)
+
+Gespeeld in de zevenendertigste sessie, op `ccr-f6ba5992-1e77dw` op `9524c1c`, na Marcels "Eens alle 3" (a met a2, c met
+c2, en d): `npm run speeltest -- bouwer sluw --maker --jaren 4`, drie tegelijk, in een uur. Geen fouten in de console.
+62707 is zaad 1, 73425 zaad 2, 72022 zaad 3.
+
+| Land | Speler | Mensen aan het eind van jaar 1 tot 4 | Dagen dat alle huizen alles hadden, per jaar (waarvan alle woningen in steen) | Hoe het eindigde |
+|---|---|---|---|---|
+| 62707 | bouwer | 53, 75 | 26 (0), 85 (85) | ontslagen op Sint-Maarten van het tweede jaar |
+| 73425 | bouwer | 51, 87, 115, 139 | 31 (0), 180 (167), 288 (259), 273 (213) | **gewonnen**, op 10 hooimaand van het vierde jaar |
+| 72022 | bouwer | 49, 81, 111 | 41 (0), 187 (124), 159 van 251 (100) | ontslagen op Sint-Maarten van het derde jaar, met de teller op 99 |
+| 62707 | sluw | | | de speler liep vast; zie 3 |
+| 73425 | sluw | 49, 98, 122, 134 | 64 (0), 0, 0, 0 | de vier jaar uit |
+| 72022 | sluw | 49, 70 | 41 (0), 66 van 165 (64) | gevallen tegen een rover, in oogstmaand van het tweede jaar |
+
+**Wat het zegt:**
+1. **De hutten van de maker groeien door, en een dorp van de bouwer wint.** Op alle drie de landen rooide het gezin van
+   de hut die vastzat, wat in de weg stond (op 62707 Swier een struik, op 73425 Lubbert een bessenstruik, een struik en
+   een eik, op 72022 Tamme een struik), en aan het eind is bij de bouwer elke woning een stenen huis (6, 14 en 11). In de
+   speeltest hiervoor (H) hadden de twee hutten op 62707 1349 dagen alles en groeiden ze nooit; nu waren in het tweede
+   jaar op 85 dagen alle huizen stenen huizen met alles. Op 73425 liep de teller in het derde jaar tot 230, en in het
+   vierde jaar won de bouwer, met 139 mensen. De raad "kan geen huis worden" kwam in geen enkel spel: er zat geen huis
+   meer vast.
+2. **De bouwer werd twee keer ontslagen om de wapens.** Op 62707 en 72022 zei hij ja tegen een inwoner die wapens wilde
+   maken (vraag 104), de inner zag de werkplaats, en op Sint-Maarten vond de heer de wapens: 30 gunst eraf, en wat hij
+   daarna te weinig betaalde, maakte zijn gunst op. Op 72022 stond de teller toen op 99. Dat heeft niets met vraag 130 te
+   maken (de worp van het spel is anders, dus andere dorpen vragen andere dingen), maar het laat zien dat ja op de wapens
+   een spel kost, en dat de bouwer van de speeltest dat niet weet.
+3. **De sluwe bouwer op 62707 liep vast** na twaalf minuten, in de speler van de speeltest (`leidDeSoldaten` in
+   `speler.js`: de heer van het dorp was er niet meer). Het spel zelf gaf geen fout; hij wordt nog eens gespeeld, met
+   een controle erbij die zegt wat er gebeurde.
+4. **Gezien en gerepareerd:** het bericht van een gezin dat zijn erf rooit, telde alleen het erf, en zei dus "rooit
+   eerst zijn erf: ." als er alleen in het looppad om de hut buiten het erf iets stond (`fdc8d51`).
+
+**Wat het vraagt:** vraag 130 is klaar. De wapens: zie de vraag aan Marcel in de werklijst.
+
 ## De speeltest van 6 okt: de houthakker zonder bomen, en planten tot het bos blijft (werklijst, vraag 129)
 
 Gespeeld in de sessie van de heer, op `claude/heer-game-mechanics-6d9h5l`, na Marcels "Eens" op e en b van vraag 129
