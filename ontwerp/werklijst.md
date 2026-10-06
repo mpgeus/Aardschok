@@ -53,6 +53,10 @@ op weg naar de heer. Samen spelen, met een speler als heer, komt na de release; 
 bond met het buurdorp (vraag 72). Zie `spel.md`, "De heer als tegenstander". Het staat sinds 6 okt in `main`
 (Marcel: "ja push main").
 
+**Het plan voor vraag 110, e, met 115 wacht op Marcel** (6 okt, de sessie van de heer, naast de marktsessie): grond
+uit het bos voor erven en werkplaatsen, en de houthakker die hakt en plant. Gemeten: rooien geeft twee à drie keer
+zoveel plaats voor erven. Het plan en vier vragen staan bij vraag 115.
+
 **Sinds de sessie van het licht (4 okt, vraag 125, in `main`):** met de videokaart kleurt het dorp met het uur (roze
 bij het opkomen, oranje bij het ondergaan, blauw in de nacht), geven de lantaarns, de ramen en de herberg warme plassen
 licht die flakkeren, en werpt alles wat staat een schaduw die met de zon meegaat. De schout draagt 's avonds buiten een
@@ -4690,6 +4694,47 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     de boeren (vraag 111), dus na de huizen (vraag 114)?
     **Marcel (4 okt): "ja op de openstaande vragen".** Dus a zoals voorgesteld, b een jaar of twee (drie maten), en c
     samen met de boeren en de beesten in het bos (vraag 116), na de huizen.
+    **Plan voor e (bouwgrond uit het bos) samen met 115** (Claude, 6 okt, de sessie van de heer; vraag 110, e; Marcel:
+    "ja, begin met 1", terwijl een andere sessie de markt bouwt; open).
+    **Wat er nu is:** een erf moet helemaal vrij zijn: één struik of boom erop, en het past niet (`T.waaromPastErfNiet`,
+    `js/erven.js`); een verzoek zoekt alleen open grond (`T.plekVoor`, `js/verzoeken.js`). Bomen omhakken en stronken
+    rooien kan al: de boer doet het bij het ontginnen, met de bijl (`T.hakBoom`, `T.rooi`, `T.volgendeOntginning`, de
+    hakker in `js/veldwerk.js`), en een boom geeft 4 hout. De houthakker hakt geen boom om: hij maakt 2 hout per dag uit
+    het niets (met de wet Houtkap 4), zolang er 8 bomen binnen 7 tegels staan. Er zijn alleen tekeningen van volgroeide
+    bomen (eik, herfsteik, den, berk, wilg, dode boom, appelboom).
+    **Gemeten** (6 okt, op de landen 5, 62707, 72022 en 73425, vers en gulzig vol erven gelegd): nu passen er 13 tot 20
+    erven, de meeste 25 tot 50 tegels van het plein; zonder de struiken en stronken 21 tot 31; zonder alle bomen ook 39
+    tot 49. Rooien geeft dus twee à drie keer zoveel grond, en een groot deel komt al uit losse struiken en bomen in de
+    wei, niet uit het bos. Er staan 400 tot 800 bomen op een land, en rond de beste plek voor een houthakker 95 tot 156
+    binnen 10 tegels.
+    Voorstel:
+    - **a, een erf mag op struiken en bomen** (niet op water, een rots, een gebouw, een veld of een pad). Het bouwmenu
+      zegt wat er eerst weg moet ("2 bomen en 3 struiken, +20 hout"). Het gezin dat het erf neemt, rooit het zelf, met de
+      bijl van de hakker en zijn gezin erbij, zoals de boer bij het ontginnen, en zet dan zijn hut, van het hout als het
+      er is; zolang woont het er al, zoals nu terwijl de hut oprijst. Een erf waar niets op staat, gaat voor. Na een
+      maand rooien de buren mee wat er nog staat (het vangnet van het ontginnen).
+    - **b, het bos is van de heer:** een erf met 10 of meer bomen ligt in zijn bos (zoals een stuk bos bij het ontginnen),
+      en dan wil hij erom gevraagd worden: zijn gunst −5. Losse bomen en struiken in de wei kosten niets.
+    - **c, een werkplaats net zo:** vindt een verzoek geen open grond, dan kiest het een plek met zo weinig mogelijk
+      bomen, en zegt de inwoner dat hij die eerst zelf rooit; dan pas begint de bouwplaats.
+    - **d, de houthakker hakt en plant** (115, zoals gekozen): hij loopt naar een boom binnen 10 tegels, hakt hem om met
+      dezelfde bijl, draagt het hout naar zijn schuur, en plant een boompje naast de stronk, alleen in het bos en nooit op
+      open grond. Een boompje is in een jaar of twee een boom, in drie maten (boompje, jonge boom, boom); een stronk
+      vergaat na een jaar.
+    - **e, het hout:** een boom geeft 10 hout (zoals bij 115 voorgesteld), ook bij het ontginnen (nu 4; een stuk bos geeft
+      dan 100 hout in plaats van 40). De houthakker maakt evenveel als nu, 2 per dag; elke 10 hout kost hem een boom, dus
+      één per vijf dagen. Met één houthakker wordt het bos om hem heen dunner maar blijft het; met twee, of met de wet
+      Houtkap, wijkt het. Staat er binnen 10 tegels geen boom meer, dan hakt hij niets, en zegt de raad het.
+    - **f, de tekeningen:** een boompje, en een jonge eik, den en berk, uit `gereedschap/pixelart/bomen.cjs`.
+    - **Waar het komt:** het bos krijgt een eigen bestand (`js/bos.js`): omhakken, rooien, planten en groeien op één
+      plek, en het ontginnen gebruikt het. Botsing met de marktsessie: klein (`T.plekVoor` en de lijst van gebouwen).
+    - **In stappen:** 1, a en b, met de speler van de speeltest erbij (hij legt erven in het bos als de wei vol is, en
+      liever in de wei dan in het bos van de heer); 2, c; 3, d, e en f; 4, de speeltest van vier jaar op de drie landen.
+    Klaar als: in de speeltest van vier jaar legt de bouwer erven op gerooide grond als de wei vol is, haalt een dorp
+    100 mensen, staat er een weverij, en zie je het bos om de houthakker dunner worden en weer aangroeien; `npm test`
+    groen.
+    Vragen: **A**, rooit wie er komt wonen of werken zijn eigen plek (of de houthakker)? **B**, kost een erf in het bos
+    de gunst van de heer (−5), en de wei niets? **C**, een boom 10 hout, ook bij het ontginnen? **D**, deze stappen?
 116. **Beesten in het bos** (Marcel, 4 okt, zesentwintigste sessie: "Ik wil dat er beesten kunnen rondlopen in het bos.
     Wolven etc. Die de houthakker kunnen bedreigen. Rode ogen uit het duister."; plan van Claude; open).
     **Wat er al is:** de wolf staat in `T.WEZENS` (`js/wereld.js`): een monster om mee te vechten, uit het oude spel, met
