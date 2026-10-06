@@ -17,6 +17,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | De wensen per stand | besloten (Marcel, 1 okt, vraag 80 en 85); 2a en 2b gebouwd (1 okt): elk huis een stand (keuters, dorpelingen, ambachtslieden, en de boeren ernaast) met wensen zoals in Anno 1602, de hoogste stand neemt eerst, een kring om de kapel, de herberg en de markt, en wie een jaar lang alles heeft, wint; 2d gebouwd (2 okt, vraag 90): de treden uit de standen, een dorp bij 20 dorpelingen en marktrecht bij 20 ambachtslieden, met de markt en de weverij al in een dorp; 2c en 2e gebouwd (3 okt, vraag 100 en 101): een teken bij de deur en een briefje bij de muis, en het eind: een jaar lang iedereen gelukkig vanaf 100 mensen is gewonnen, met het grote feest, onder 10 mensen verloren, en op 1 lentemaand het jaarverslag | vraag 79, 80, 82, 85, 90, 100, 101 |
 | Een nieuwe richting | besloten (Marcel, 28 sep): besturen en groeien worden het hart, de heer de druk van boven, en vechten begint bij je eigen dorp; sinds 29 sep: het hogere doel is al het land veroveren of met iedereen bevriend raken (Civilization), en sinds 1 okt: de hele wereld veroveren, en je mensen super gelukkig, met wensen zoals in Anno 1602, terwijl de heer geen doelen stelt maar het je moeilijk maakt (vraag 78), eenvoud boven werkelijkheid, en wetten in een menu zoals Democracy 3; sinds 30 sep: meer een management sim, met het concept als kompas (het poppetje is hoe je bestuurt, `concept.md`), de boeren die het seizoen doen, en eerst de kern; sinds 3 okt: de stad groeit door haar mensen (inwoners beginnen zelf een ambacht en vragen toestemming), en jij bepaalt de richting, want "weer een bouw spelletje" wordt te snel saai (het plan is vraag 103, open) | vraag 50, 51, 54, 73, 74, 78, 103 |
 | De heer als tegenstander | besloten (Marcel, 5 en 6 okt: "A ja B b2 en b3 C c3 D ja E ja F Ja G zo"), niets gebouwd: het eind van het spel is de heer verstoten en verslaan, met een kasteel op de kaart, bondgenoten en per spel een ander karakter; veroveren en bevriend raken zijn de weg erheen, langs drie wegen (de opstand, de koning, trouw, en dan ben jij de nieuwe heer); een bond sluit je te voet; het jaar van geluk blijft het eind van de demo en wordt in het hele spel kracht; samen spelen, met een speler als heer, na de release; niets hiervan vóór de kern | vraag 126 |
+| Informatie, de zitting en mensen die onthouden | besloten (Marcel, 6 okt: "A tot g allemaal, en de proef komt erna"), niets gebouwd: wat er gebeurde, wat er gezegd wordt en wat jij weet; 's middags een zitting met getuigen en bewijs; het vertrouwen per groep; mensen die onthouden wat je deed; een heer die van je leert; gevolgen in ketens; eerst een proef met één keten (de verdwenen graanzak, met een eerste zitting), na het beeld dat in de werklijst staat | vraag 105, 118, 128 |
 | Rovers en de militie | gebouwd (29 sep): wie wegtrekt komt als rover terug, wilde rovers van buiten, ze roven een akker, de wachters vechten mee, en wie valt is dood | vraag 55 |
 | De heervaart | gebouwd (29 sep): in een dorp vraagt de heer op 1 hooimaand mannen of goud; wie terugkomt, is veteraan en vecht mee | vraag 60 |
 | Het land | gebouwd, stuk 1 van stap 1a (30 sep): over de weg je gehucht uit naar de kaart van het land, negen provincies uit het zaad, reizen in dagen, wat je niet zag is donker, en thuis gaat alles door zonder je; achter de spelregel Land, tot het buurdorp er is. De maker legt elk spel een ander land, sinds 4 okt de standaard: 100 bij 100, met natuur die ertoe doet, en het nummer van het land bij Nieuw spel (vraag 112). Stuk 2 (30 sep): de snellere dag, alles van een dorp bij elkaar, en elk dorp leeft, ook als je er niet bent; nog één dorp in het spel, tot het buurdorp (stuk 3) | vraag 63, 69, 70, 71 |
@@ -298,11 +299,57 @@ geld, maar kiest anders wie in zijn bond komt:
 - **de bange** steunt de zwakke tegen de sterke, want wie te sterk wordt, vreest hij (verdeel en heers, c2);
 - **de ijdele** neemt wie hem het meest vleit: je antwoorden op zijn grillen tellen zwaarder dan je goud;
 - **de wrokkige** vergeet niet wie hem ooit weigerde, en beloont wie dat dorp straft.
+- en sinds vraag 128, e (6 okt), drie kandidaten uit een analyse van buiten: **de oorlogsheer** (wil mannen: zijn
+  heervaart drukt zwaarder), **de vrome** (kapellen en zeden) en **de domme** (bevliegingen, nog grilliger dan de rest).
+  Ze willen meer dan geld, en dat botst met "hij ziet alleen geld" (23 sep). Voorstel (open): geld blijft zijn taal (de
+  vrome wil een kapel, maar van jouw goud), en het karakter zegt waar hij het aan uitgeeft.
 Welk karakter hij heeft, zegt het spel niet: je leest het af aan zijn brieven en aan wie hij beloont, zoals een
 tegenspeler "moeilijker in te schatten" is (vraag 63), en zoals "wat je weet, is wat je zag" (vraag 105, b). Zo is elk
 spel een andere puzzel, net als het land van de maker.
 
-De vragen en Marcels antwoorden: werklijst, vraag 126.
+**Hij leert van jou** (vraag 128, e; Marcel, 6 okt: "A tot g allemaal"): lieg je vaak, dan laat hij controleren; betaal
+je veel, dan vraagt hij meer; bescherm je steeds het dorp, dan test hij je trouw. "Een personage, geen quest machine."
+De argwaan (`js/inner.js`) is daar al een begin van: wat hij ziet en niet in het rapport van zijn inner staat, maakt hem
+argwanend, en dan zoeken zijn soldaten meer.
+
+De vragen en Marcels antwoorden: werklijst, vraag 126 en 128.
+
+## Informatie, de zitting en mensen die onthouden (Marcel, 6 okt 2026; werklijst vraag 128)
+
+**Zo staat het nu** (6 okt; Marcel: "A tot g allemaal, en de proef komt erna"): besloten, er is niets van gebouwd. Het
+kwam uit een analyse van buiten van onze samenvatting ("Richting & Game Design Ideeën"), met als kern: kleiner in
+omvang, dieper in menselijke gevolgen. Zijn vraag bij elke beslissing: "Wat gebeurde er in mijn dorp, waarom gebeurde
+het, wat weet ik ervan, en wie wordt boos als ik ingrijp?"
+- **a, informatie in drie lagen:** wat er echt gebeurde, wat er gezegd wordt, en wat jij weet. Je weet iets door er
+  zelf te zijn, te praten, in de herberg, door de raadsman iets te laten uitzoeken of een wachter te laten kijken, de
+  boeken na te lezen, iemand te volgen, of een tegenstrijdig verhaal te herkennen. Een gerucht heeft een andere status
+  dan een feit. Dit is ook vraag 105, b (de balk toont wat er het laatst geteld werd) en e (het dorp praat, en je ziet
+  het gaan). Wat er al is: de getuigen (`js/zien.js`), de roddelaar in de herberg (`js/verstoppen.js`), en de inner die
+  alleen telt wat hij ziet. Waarom: nu komt bijna alles naar je toe (elk verzoek, het rapport, de echte voorraad in de
+  balk), dus lopen is fijn, maar voor een keuze nog niet nodig.
+- **b, de zitting:** 's middags, als er rechtszaken zijn (3b, vraag 75), met een aanklager, een verdachte, getuigen,
+  bewijs, geruchten, wat jij zelf weet, en de druk van het dorp. Soms weet je dat iemand schuldig is, maar kun je het
+  niet bewijzen, of heb je bewijs dat de heer liever niet ziet. Nu is rechtspraak een soort voorval ("De voorvallen").
+- **c, het dorp is verdeeld:** het vertrouwen van het dorp (`D.bazen`) per groep, zodat je ziet: "De boeren zijn voor
+  mij, maar de ambachtslieden zijn tegen." Voorstel (open): eerst per stand (keuters, dorpelingen, ambachtslieden,
+  boeren), want de wensen en de wetten werken al per stand; groepen als de geestelijkheid en de wachters later.
+- **d, mensen die onthouden:** geen veertien balken per mens, alleen wat later iets verandert: wie geholpen werd,
+  gestraft, land kreeg of stierf, met relaties (familie, vrienden, rivalen, schulden), belangen en soms een geheim. Dat
+  geeft vraag 118 (inwoners met stats) zijn richting.
+- **e, de heer leert van jou:** zie "Hij leert van jou", hierboven.
+- **f, gevolgen in ketens:** elke grote keuze maakt minstens één nieuw gevolg, soms maanden later. Voorbeelden: de
+  verdwenen graanzak, de heer die mannen wil midden in de oogst, de verboden smidse (gebouwd, vraag 104), en het
+  huwelijk (land tegen invloed, en jaren later een erfkwestie).
+- **g, klein:** vijf vragen voor een tester (`speelbaar.md`), een eindscherm met de geschiedenis van jouw schout (wat
+  voor schout je werd: rechtvaardig, corrupt, volks, trouw; bovenop het jaarboek, vraag 101), en de trailer en de pitch
+  (`commercieel.md`).
+- **De volgorde:** eerst het beeld dat in de werklijst staat, dan de proef: één keten van begin tot eind, **de
+  verdwenen graanzak**. Er verdwijnt graan uit de voorraad en iemand wordt beschuldigd; je gaat kijken en vraagt rond,
+  ook in de herberg; het graan blijkt naar een zieke familie te zijn gegaan; in een eerste zitting kies je straffen,
+  vrijspreken of verbergen; en later merkt de heer het tekort. Alles op wat er al is: een voorval met een vervolg, de
+  getuigen, de herberg en de inner. Speelt dat goed, dan c, d en e (voorstel van Claude).
+- **Wat blijft zoals het was:** de demo gaat van gehucht tot een stad van 100 tot 200 mensen, met het jaar van geluk als
+  eind (Marcel, 1 okt, en vraag 126, b3); het advies van buiten was 30 tot 50 inwoners en één grote politieke keuze.
 
 ## De wensen van de mensen, per stand (Marcel, 1 okt 2026; werklijst vraag 79, 80, 82 en 85)
 

@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (6 okt 2026, zesendertigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt en het spel laadt alleen wat er staat (vraag 114, 2a, stap 1 en 1b); sinds de eenendertigste sessie bouwt elk land van de maker in een bouwstijl, met het dak van zijn trede en de deur naar de weg (vraag 114, stap 2a: de stijl wit), en tekent het spel met WebGL, gebouwd in een eigen sessie naast de huizen (vraag 123); sinds de tweeëndertigste sessie bouwt de huizenbouwer elk huis van vier kanten en tekent hij het een kwartslag gedraaid, en staat wit zo in het spel, met alle bouwfasen (vraag 124, B, en G); sinds de drieëndertigste sessie werken de boeren overdag op hun land, naar het seizoen en in het vel van hun werk, een boerin in dat van een vrouw (vraag 111, stap 1 en 2), en vraagt een boer heide te ontginnen als het graan tekortkomt (vraag 107, stap 1); sinds de vierendertigste sessie wijst hij een stuk heide en een stuk bos aan, en kies jij: de heide tegen het vertrouwen, het bos gemeld tegen de gunst, of stiekem (vraag 107, stap 2), met de hakker en zijn bijl; sinds de vijfendertigste sessie is de speeltest van vier jaar gespeeld (vraag 107, stap 3): ontginnen lost het graan op, maar geen dorp wint, want de grond om te bouwen is op, en de markt komt er nooit (vraag 110: f, het erf dat vastzat, is gerepareerd; e komt met de houthakker); sinds de zesendertigste sessie staat de markt met vier kramen op het plein (vraag 110, d), en hebben de stenen huizen op elk land hun markt; en sinds de tweede sessie daarnaast bouwt elk land in een van vier stijlen, wit, oker, planken of roze, elk met eigen huizen en boerderijen en alle bouwfasen (vraag 114, 2b); dan de herberg, de kapel en de woontoren (stap 3), dan de houthakker die hakt en plant en de wolven (vraag 115 en 116), het draaien van de camera (vraag 124) en de hoogteverschillen (vraag 121)
+## De stand (6 okt 2026, zesendertigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt en het spel laadt alleen wat er staat (vraag 114, 2a, stap 1 en 1b); sinds de eenendertigste sessie bouwt elk land van de maker in een bouwstijl, met het dak van zijn trede en de deur naar de weg (vraag 114, stap 2a: de stijl wit), en tekent het spel met WebGL, gebouwd in een eigen sessie naast de huizen (vraag 123); sinds de tweeëndertigste sessie bouwt de huizenbouwer elk huis van vier kanten en tekent hij het een kwartslag gedraaid, en staat wit zo in het spel, met alle bouwfasen (vraag 124, B, en G); sinds de drieëndertigste sessie werken de boeren overdag op hun land, naar het seizoen en in het vel van hun werk, een boerin in dat van een vrouw (vraag 111, stap 1 en 2), en vraagt een boer heide te ontginnen als het graan tekortkomt (vraag 107, stap 1); sinds de vierendertigste sessie wijst hij een stuk heide en een stuk bos aan, en kies jij: de heide tegen het vertrouwen, het bos gemeld tegen de gunst, of stiekem (vraag 107, stap 2), met de hakker en zijn bijl; sinds de vijfendertigste sessie is de speeltest van vier jaar gespeeld (vraag 107, stap 3): ontginnen lost het graan op, maar geen dorp wint, want de grond om te bouwen is op, en de markt komt er nooit (vraag 110: f, het erf dat vastzat, is gerepareerd; e komt met de houthakker); sinds de zesendertigste sessie staat de markt met vier kramen op het plein (vraag 110, d), en hebben de stenen huizen op elk land hun markt; en sinds de tweede sessie daarnaast bouwt elk land in een van vier stijlen, wit, oker, planken of roze, elk met eigen huizen en boerderijen en alle bouwfasen (vraag 114, 2b); dan de herberg, de kapel en de woontoren (stap 3), dan de houthakker die hakt en plant en de wolven (vraag 115 en 116), het draaien van de camera (vraag 124) en de hoogteverschillen (vraag 121); dan de proef van vraag 128 (de verdwenen graanzak, met een eerste zitting)
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Het hart is het
 gehucht besturen terwijl het groeit, terwijl de heer eraan trekt; rijk worden en arm lijken blijft de druk van boven.
@@ -55,9 +55,12 @@ op weg naar de heer. Samen spelen, met een speler als heer, komt na de release; 
 bond met het buurdorp (vraag 72). Zie `spel.md`, "De heer als tegenstander". Het staat sinds 6 okt in `main`
 (Marcel: "ja push main").
 
-**Vraag 128 wacht op Marcel** (6 okt): een analyse van buiten van onze samenvatting ("Richting & Game Design Ideeën")
-zegt dat mensen, informatie en de zitting eerst moeten, vóór meer beeld en meer bouwen. Het sterkste ervan ligt al bij ons
-open (vraag 105, b en e, en de zitting, 3b). Het advies van Claude is een proef met één keten, de verdwenen graanzak.
+**Vraag 128 is besloten** (6 okt; Marcel: "A tot g allemaal, en de proef komt erna"; alleen papier, er is niets
+gebouwd): uit een analyse van buiten van onze samenvatting ("Richting & Game Design Ideeën") worden mensen, informatie en
+de zitting de richting: wat er gebeurde, wat er gezegd wordt en wat jij weet (daarmee is ook vraag 105, b en e,
+besloten), een zitting met getuigen en bewijs, het vertrouwen per groep, mensen die onthouden, een heer die van je leert,
+en gevolgen in ketens. De proef, één keten van begin tot eind (de verdwenen graanzak, met een eerste zitting), komt na
+het beeld hierboven. Zie `spel.md`, "Informatie, de zitting en mensen die onthouden".
 
 **Sinds de sessie van het licht (4 okt, vraag 125, in `main`):** met de videokaart kleurt het dorp met het uur (roze
 bij het opkomen, oranje bij het ondergaan, blauw in de nacht), geven de lantaarns, de ramen en de herberg warme plassen
@@ -3703,6 +3706,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     langer boeiend. Of de gevolgen moeten echt groter zijn. Je wordt weg gevraagd als je niet ophoest wat ze willen hebben
     van je ofzo. Maar als de grote hook, te slap." Dus a en c niet als haak: ze zijn verstoppen in een nieuw jasje. Wat dan
     wel: vraag 106. De rest (b, d, e, f) wacht op zijn antwoord.
+    **Sinds 6 okt** (vraag 128, a; Marcel: "A tot g allemaal"): b en e zijn besloten, als deel van de informatie in drie
+    lagen; d is gebouwd (de grillen, vraag 106); f wacht nog.
 106. **Twee bazen: de heer en het dorp kunnen je allebei wegsturen** (Claude, 3 okt, vijfentwintigste sessie, na Marcels
     reactie op vraag 105; voorstel; open). **Waarom verstoppen maar één keer leuk is:** het is een puzzel met één
     oplossing. Weet je eenmaal waar de inner kijkt, dan is hij opgelost; hij komt één keer per jaar, en een fout kost
@@ -5635,6 +5640,14 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     begin tot eind, de verdwenen graanzak, op wat er al is (een voorval, de getuigen, de herberg), met een eerste zitting
     als slot. Speelt dat goed, dan weten we de richting.
     Vragen: **a** tot en met **g**: welke ja? En de volgorde: de proef met de graanzak vóór het beeld, of erna?
+    **Marcel koos (6 okt): "A tot g allemaal, en de proef komt erna".** Dus a tot en met g zijn de richting, en vraag 105,
+    b en e (wat je weet, is wat je zag; het dorp praat) zijn daarmee ook besloten. De proef, de verdwenen graanzak met
+    een eerste zitting, komt na het beeld dat nu in de werklijst staat (stap 3 van de bouwstijl, de houthakker en de
+    wolven, de camera, de hoogte). **Daarna** (voorstel van Claude): c (het vertrouwen per stand), d (wat de mensen
+    onthouden) en e (de heer die van je leert; zijn karakters komen met de rest van vraag 126). g past tussendoor: de
+    vijf vragen voor een tester staan in `speelbaar.md` (bij de eerste proefversie, 33d), het eindscherm komt bij het
+    jaarboek, en de trailer en de pitch staan in `commercieel.md`. Het ontwerp: `spel.md`, "Informatie, de zitting en
+    mensen die onthouden".
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

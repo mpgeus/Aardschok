@@ -744,6 +744,12 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   gunst van de heer en het vertrouwen van het dorp in jou zijn twee meters in de balk, met een waarschuwing onder een
   grens, en op 0 ben je weg; bijna elke keuze kost aan de ene kant wat de andere wint. Verstoppen is één kaart met echte
   gevolgen, niet de haak (Marcel: "als de grote hook, te slap").
+- **Mensen en informatie eerst** (Marcel, 6 okt, vraag 128: "A tot g allemaal, en de proef komt erna"; uit een analyse
+  van buiten: "kleiner in omvang, dieper in menselijke gevolgen"): wat je weet, komt ergens vandaan (wat er gebeurde,
+  wat er gezegd wordt, en wat jij weet), 's middags is er een zitting met getuigen en bewijs, het vertrouwen van het
+  dorp is per groep, mensen onthouden wat je deed, de heer leert van je, en een grote keuze komt later terug. Eerst een
+  proef met één keten (de verdwenen graanzak), na het beeld in de werklijst (`spel.md`, "Informatie, de zitting en
+  mensen die onthouden").
 - De **heer** is verward en ziet alleen geld. Levert het dorp te weinig, dan straft hij: in het
   dorp, jou zelf, met hogere eisen, en met soldaten. Zijn **inner** komt kijken, en wat je opzij
   zet, moet uit zijn zicht. Hij stelt geen doelen (Marcel, 1 okt, vraag 78, a): "de heer moet alleen betaald

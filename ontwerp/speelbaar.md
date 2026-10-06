@@ -135,7 +135,11 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 5. ~~Opslaan, Verder en een titelscherm.~~ Af (28 sep).
 6. De afrekening na het eerste jaar. Geparkeerd (Marcel, 28 sep); het plan staat in de werklijst, vraag 49.
 7. De eerste weken als opdrachten.
-8. Een tester die het niet kent laten spelen, en kijken waar hij vastloopt.
+8. Een tester die het niet kent laten spelen, en kijken waar hij vastloopt. Met vijf vragen, zonder uitleg vooraf
+   (werklijst vraag 128, g): begrijpt hij binnen 5 minuten wie hij is? Heeft hij na 10 minuten iemand die hij onthoudt?
+   Maakt hij binnen 15 minuten een keuze waar hij spijt van heeft of trots op is? Kan hij uitleggen waarom het dorp in
+   problemen kwam? Kan hij na 30 minuten een verhaal over zijn dorp vertellen? Is het antwoord op de laatste ja, dan zit
+   de richting goed.
 
 ## Vragen aan Marcel
 
