@@ -155,14 +155,27 @@ function grootGebouw(stijl, soort, o = {}) {
     const dak = o.dak || 'leien';
     const herberg = { zaad: 53, vorm: 'rechthoek', b: 12, d: 6, lagen: 2, wand: 'vakwerk', ...wand, schoorsteen: 'leem', schoor: false, bord: true, ...rond, dak, uit: { kapellen: 3, luiken: S.luiken, bakken: 2 } };
     const stal = { zaad: 57, vorm: 'rechthoek', b: 6, d: 3, lagen: 1, wand: 'planken', hout: 'schors', schoorsteen: false, schoor: false, uit: false, ...rond, dak: dak === 'leien' && stijl !== 'planken' ? S.dak : dak, kalk: S.kalk };
+    // o.stal (Marcel, 7 okt: "Stal misschien los naast de herberg? of aan de achterkant, nu wordt het wat massief"):
+    // 'naast' (los ernaast, met een pad ertussen), 'achter' (achter de herberg, met de binnenplaats ertussen en een muur
+    // met de poort aan de zijkant), of 'tegen' (de eerste proefplaat: tegen de herberg aan, met een binnenplaats ervoor)
+    const waar = o.stal || 'achter';
+    if (waar === 'naast') return { delen: [{ spec: herberg }, { spec: { ...stal, d: 4 }, plek: [10.5, -0.5] }], deurVan: 0 };
+    if (waar === 'achter') {
+      const muur = { zaad: 58, erfmuur: true, steen, stukken: [[[6.3, -3.4], [6.3, -9]], [[-6.3, -3.4], [-6.3, -9]], [[-6.3, -9], [-1.3, -9]]], poort: { stuk: 0, bij: 0.5, breed: 1.8, binnen: [-1, 0] }, draai };
+      return { delen: [{ spec: herberg }, { spec: { ...stal, d: 4 }, plek: [2, -7] }, { spec: muur, plek: [0, 0] }], deurVan: 0 };
+    }
     const muur = { zaad: 58, erfmuur: true, steen, stukken: [[[12.3, 0], [12.3, 3.3]], [[6.2, 3.3], [12.3, 3.3]]], poort: { stuk: 1, bij: 0.5, breed: 1.8, binnen: [0, -1] }, draai };
     return { delen: [{ spec: herberg }, { spec: stal, plek: [9.15, -1.5] }, { spec: muur, plek: [0, 0] }], deurVan: 0 };
   }
   if (soort === 'kapel') {
-    const schip = { zaad: 61, vorm: 'rechthoek', b: 9, d: 5, lagen: 1.5, wand: 'veldsteen', steen, schoorsteen: false, schoor: false, uit: false, ramen: 'kerk', ...rond, dak: 'leien' };
+    // groter dan de herberg (Marcel, 7 okt: "Is de kerk / kapel niet te klein in vergelijk met de rest?"): het schip 12 bij
+    // 6, twee lagen hoog, en een toren van zes lagen, het hoogste punt van het dorp
+    const groot = o.groot !== false;
+    const schip = { zaad: 61, vorm: 'rechthoek', b: groot ? 12 : 9, d: groot ? 6 : 5, lagen: groot ? 2 : 1.5, wand: 'veldsteen', steen, schoorsteen: false, schoor: false, uit: false, ramen: 'kerk', ...rond, dak: 'leien' };
     const zadel = TORENS[stijl].kapel === 'zadel';
-    const toren = { zaad: 62, dak: 'plat', steen, lagen: 4, b: zadel ? 4 : 3, d: zadel ? 4 : 3, torendak: TORENS[stijl].kapel, ramen: 'kerk', rondom: true, draai };
-    return { delen: [{ spec: schip }, { spec: toren, plek: [zadel ? 6.3 : 5.7, 0] }], deurVan: 1 };
+    const tb = groot ? (zadel ? 5 : 4) : zadel ? 4 : 3;
+    const toren = { zaad: 62, dak: 'plat', steen, lagen: groot ? 6 : 4, b: tb, d: tb, torendak: TORENS[stijl].kapel, ramen: 'kerk', rondom: true, draai };
+    return { delen: [{ spec: schip }, { spec: toren, plek: [(groot ? 6 : 4.5) + tb / 2 + (groot ? 0.3 : -0.2), 0] }], deurVan: 1 };
   }
   if (soort === 'woontoren') {
     const tent = TORENS[stijl].woontoren === 'tent';
