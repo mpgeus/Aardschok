@@ -1082,22 +1082,41 @@
     }
   }
 
-  // Het graan op een akker (vraag 121; Marcel, 7 okt: "Ik wil dat de akkers mee bollen met de heuvel"): op een schuine
-  // tegel legt één scheve transformatie de vlakke tegel op het vlak door zijn hoeken. Alleen de hoogte verschuift, dus
-  // de halmen blijven rechtop.
+  // Het graan op een akker (vraag 121; Marcel, 7 okt: "Ik wil dat de akkers mee bollen met de heuvel", en bij het eerste
+  // beeld: "De akkers sluiten nog niet zo mooi aan"). Een graanplaatje is breder dan zijn tegel, dus één scheve
+  // transformatie per tegel sloot niet aan op die van de buren. Nu in smalle stroken van boven naar onder: elke strook
+  // schuift en rekt zo dat hij de hoogte van de grond zelf volgt (T.hoogteOp, die over de hele kaart doorloopt), dus
+  // twee plaatjes die elkaar overlappen, liggen daar precies op elkaar. Alleen de hoogte verschuift: de halmen blijven
+  // rechtop.
+  const GRAAN_STROOK = 6; // pixels breed
+  const GRAAN_STUK = 12; // pixels hoog: zo ver kan de hoogte langs een strook recht genomen worden
   function tekenGraan(ctx, w, deel, x, y, p) {
     if (!deel) return;
     if (!T.isSchuin(w, x, y)) return T.sprites.teken(ctx, deel, p.x, p.y, 1);
-    const [hN, hO, , hW] = T.hoekHoogten(w, x, y);
-    const rr = (hO + hW) / 2; // de hoogte in het midden van het vlak door de noord-, oost- en westhoek
-    const pp = (hO - hW) / 64; // per pixel naar rechts
-    const qq = (rr - hN) / 16; // per pixel naar onder
     const m = T.naarScherm(x, y);
-    ctx.save();
-    ctx.translate(m.x, m.y);
-    ctx.transform(1, -pp, 0, 1 - qq, 0, -rr);
-    T.sprites.teken(ctx, deel, 0, 0, 1);
-    ctx.restore();
+    const mx = Math.round(m.x);
+    const my = Math.round(m.y);
+    for (let s0 = 0; s0 < deel.b; s0 += GRAAN_STROOK) {
+      const sb = Math.min(GRAAN_STROOK, deel.b - s0);
+      const u = s0 - deel.ax + sb / 2; // het midden van de strook, vanaf het midden van de tegel
+      // de hoogte van de grond onder een punt van deze kolom, v pixels onder het midden van de tegel
+      const op = (v) => T.hoogteOp(w, x + (u / 32 + v / 16) / 2, y + (v / 16 - u / 32) / 2);
+      let v0 = -deel.ay;
+      let h0 = op(v0);
+      for (let r0 = 0; r0 < deel.h; r0 += GRAAN_STUK) {
+        const rh = Math.min(GRAAN_STUK, deel.h - r0);
+        const v1 = v0 + rh;
+        const h1 = op(v1);
+        const k = (h1 - h0) / rh;
+        ctx.save();
+        ctx.translate(mx + s0 - deel.ax, my);
+        ctx.transform(1, 0, 0, 1 - k, 0, k * v0 - h0);
+        ctx.drawImage(deel.beeld, deel.sx + s0, deel.sy + r0, sb, rh, 0, v0, sb, rh);
+        ctx.restore();
+        v0 = v1;
+        h0 = h1;
+      }
+    }
   }
 
   // De tegels van een vak, in de volgorde waarin ze getekend worden: rij na rij, of met hoogte van achter naar voren

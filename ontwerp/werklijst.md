@@ -5309,6 +5309,11 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       zo'n 170 ms in plaats van 100 (in de browser zonder videokaart hier; dat gebeurt bij het zoomen en verschuiven
       voorbij de buffer). Eerst met twee geknipte driehoeken per tegel was het 400; nu één scheve tekening per tegel. Kan
       later naar de videokaart, als het hapert.
+    - *De akkers sloten niet aan* (Marcel, 7 okt, met een schermafdruk: "De akkers sluiten nog niet zo mooi aan"): een
+      graanplaatje is breder dan zijn tegel, en één scheve transformatie per tegel paste niet op die van de buren. Nu in
+      stroken van zes pixels breed en stukjes van twaalf hoog, die elk de hoogte van de grond zelf volgen (`tekenGraan`;
+      eerst alleen stroken, maar een graanplaatje loopt tot ver onder het midden van zijn tegel, en daar stonden nog
+      tandjes: "Sluit toch niet aan?"), en de voren lopen door.
     - *Nog voor stap 2*: een heuvel vóór iemand dekt hem nog niet af, de steengroeve of een nieuw erf kan op de richel of
       een flank komen (bouwen weet nog niets van steil), en lopen gaat nog door een rotswand heen.
 122. **De snelheid in de browser en via Steam** (Marcel, 4 okt, achtentwintigste sessie: "Ik wil nu ook weten wat het

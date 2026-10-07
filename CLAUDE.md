@@ -288,7 +288,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   zonder `w.hoogte` tekent pixel voor pixel als vroeger. `js/tekenen.js` tekent alles op de grond met `opGrond` (de
   hoogte eraf), een schuine grondtegel met één scheve transformatie en een lichte of donkere ruit erover
   (`tekenSchuineTegel`), de wanden uit een textuur in code (`tekenWanden`, `wandTextuur`), en het graan dat meebuigt
-  (`tekenGraan`); de grond met hoogte van achter naar voren. Lopen, zien en bouwen weten er nog niets van (stap 2), en
+  (`tekenGraan`, in smalle stroken en korte stukjes die elk de hoogte van de grond volgen, zodat de plaatjes op elkaar
+  aansluiten); de grond
+  met hoogte van achter naar voren. Lopen, zien en bouwen weten er nog niets van (stap 2), en
   een heuvel vóór iemand dekt hem nog niet af. De proefplaat: `gereedschap/pixelart/hoogte-proef.cjs`.
 - `js/sprites.js`: de pixel art uit `beelden/`. `T.sprites.figuur/tegel/muur/voorwerp` wijzen
   een cel op een vel aan, `T.sprites.houding(S, wezen)` kiest houding, richting en fase uit de
