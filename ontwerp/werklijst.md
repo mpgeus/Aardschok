@@ -5340,6 +5340,12 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     een haarfijn naadje tussen de tegels, want het licht in de tegel zelf bakken maakte het tekenen tien keer zo duur.
     Gemeten hier (zonder videokaart): de grond opnieuw tekenen 250 à 300 ms (vlak 50 à 100), en een gewoon beeld 8 ms
     dichtbij (vlak 1), vooral het graan op de hellingen; met "Vlak" is alles byte voor byte als vroeger.
+    **De grote plaat** (Marcel, 7 okt: "ik zou een grote plaat willen zien. Uiteindelijk wil ik een random map generator
+    met alles"): `node gereedschap/pixelart/landschap-plaat.cjs 5 2500` tekent het landschap van land 5 van boven, 2500 bij
+    2500 tegels. Op die maat zie je dat drie lagen ruis een eentonig patroon worden, zonder richting en met een raster
+    erin: voor een heel land zijn grotere vormen nodig (kust, bergruggen van honderden tegels, rivieren die naar zee
+    lopen, bossen en heide per streek, plekken voor dorpen en het kasteel). Dat is de kaartenmaker van vraag 117 (het
+    eiland), met deze hoogte als eerste laag; voorstel: een eigen sessie, beginnend met een plan.
 122. **De snelheid in de browser en via Steam** (Marcel, 4 okt, achtentwintigste sessie: "Ik wil nu ook weten wat het
     verschil in performance is tussen nu spelen in de browser en straks via Steam. Want lag, geheugen tekort etc is geen
     optie straks"; plan van Claude; open). Uitgewerkt in `verpakken.md`, "Snelheid: in de browser of via Steam".
