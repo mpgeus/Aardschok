@@ -4837,6 +4837,26 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     115?
     **Marcel koos (4 okt): "1 ja, doden mag"**: deze dieren, een wolf mag iemand doden, en samen met de boeren (111) en de
     houthakker (115), na de huizen.
+    **Het plan** (Claude, 7 okt, zevenendertigste sessie; de boeren en de houthakker zijn er nu), in drie stappen:
+    - **Stap 1, het beeld:** per land, uit het nummer, zoveel roedels als het bos groot is (twee tot vier wolven), elk met
+      een hol diep in het bos. Overdag rusten ze bij het hol, tegen de avond lopen ze naar de bosrand en 's nachts erlangs,
+      bij het ochtendgloren terug. 's Nachts zie je hun ogen: twee rode puntjes, getekend ná de nacht, zodat ze oplichten
+      waar de wolf zelf zwart is. Alleen de leider zoekt een weg, de rest volgt hem (group steering, Marcel, 2 okt), zodat
+      een roedel bijna niets kost. Herten grazen in kleine groepjes aan de bosrand in de schemering en rennen weg als
+      iemand dichtbij komt (een model in code, zoals de koe en het schaap). De regels veranderen nog niet.
+    - **Stap 2, de dreiging:** wie aan de bosrand werkt (de houthakker, wie sprokkelt, rooit of ontgint, de jager) en een
+      wolf ziet, vlucht naar huis, en zijn werk van die dag is half. In de winter hebben de wolven honger: ze pakken een
+      schaap van de meent (dat zie je gebeuren, en het voorval "wolven" komt erna), of vallen iemand aan die alleen aan de
+      bosrand is: gewond, of een enkele keer dood. Een status "Wolven" (gezien, bij het dorp) voor de raad en het rapport,
+      met een oorzaak die je had kunnen zien: geen jager.
+    - **Stap 3, wat je ertegen doet:** de jager jaagt echt, op herten (vlees en huiden), zoals de houthakker zijn bomen
+      hakt, en zonder herten in de buurt staat hij stil; hij houdt de roedels klein. De jacht uit het voorval wordt echt:
+      de schout en de militie gaan naar het hol en vechten in beurten. Een hek om de schapen, en lantaarns aan de
+      bosrand: wolven mijden licht. De spelregel "Beesten": aan, zonder doden, of uit.
+    Vragen: **a**, nu begint een gevecht zodra een monster de schout ziet (`T.zoekOntdekking`), en valt de schout, dan is
+    het spel uit: mag een wolf de schout zelf aanvallen? Voorstel: wolven gaan mensen uit de weg, behalve in de winter,
+    's nachts, met honger; jij kunt ze altijd aanvallen. **b**, eerst stap 1, met schermafdrukken voor Marcel, en dan 2
+    en 3? **c**, de herten al in stap 1, of pas met de jager in stap 3?
 117. **Eén kaart: het eiland** (Marcel, 4 okt, zesentwintigste sessie: "Ik wil uiteindelijk toch alles op dezelfde kaart.
     Dus de hele spelwereld als het ware. Zo kun je steeds stukken 'ontdekken' in de fog of war. Het idee is een eiland. Met
     water rondom. Je krijgt een random positie op het land. Kan aan de buitenkant zijn of binnen in het land."; plan van
