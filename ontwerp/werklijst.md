@@ -24,8 +24,8 @@ de grond en wat het kost, en jij zegt ja of nee; in het bouwmenu (`B`) wijs je e
 huis aanwijst, ziet een briefje met wat het wil, en een huis dat iets mist, heeft een teken bij zijn deur (2c, vraag 100).
 Linksboven staat de volgende trede, en daarna het eind: een jaar lang iedereen gelukkig, vanaf 100 mensen, en dan viert
 het dorp het grote feest (2e, vraag 101). Op 1 lentemaand brengt de raadsman het jaarverslag. **Sinds vraag 104** vraagt
-een ondernemer je ook wat hij zelf wil: wapens maken (na de rovers; verboden: ziet de inner het, dan verzegelt de heer de
-werkplaats) of een tweede herberg (de herbergierster wordt boos); wie twee keer nee hoort, trekt weg. **Sinds vraag 106**
+een ondernemer je ook wat hij zelf wil: wapens maken (na de rovers; sinds 7 okt niet meer verboden, vraag 131) of een
+tweede herberg (de herbergierster wordt boos); wie twee keer nee hoort, trekt weg. **Sinds vraag 106**
 heb je twee bazen: in de balk staan de gunst van de heer (een kroon) en het vertrouwen van het dorp (een hoed), van 0 tot
 100. Onder 20 komt er een waarschuwing, en op 0 ben je je ambt kwijt, of jaagt het dorp je weg. Elke maand wil de heer in
 een brief iets geks (een gril: een standbeeld, een vet varken, de bruiloft van zijn neef), en wat je antwoordt, kost de
