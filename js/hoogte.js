@@ -61,7 +61,9 @@
     if (naast) for (const [v, d] of naast) h = v.h + (h - v.h) * glad(0, I.vrijRond, d);
     return h;
   }
-  // Het landschap zelf: drie lagen gladde ruis uit het nummer van het land.
+  // Het landschap zelf: drie lagen gladde ruis uit het nummer van het land (ook voor de grote plaat,
+  // gereedschap/pixelart/landschap-plaat.cjs).
+  T.landschapOp = (zaad, vx, vy) => landschapOp(zaad, vx, vy);
   function landschapOp(zaad, vx, vy, alleenGroot) {
     const I = IN();
     const z = (zaad % 9973) * 7.31;
