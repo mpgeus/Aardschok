@@ -5921,6 +5921,8 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     plekken die ooit om een groeiend huis geweigerd worden, op 72022 op 1 van de 3, en op de andere vijf nergens. Het
     klopt wel met het erf dat er dan komt, want de vraag en het aanwijzen nemen dezelfde loting (`opmerkingen.md`).
 131. **De bouwer en de wapens** (Claude, 6 okt, zevenendertigste sessie, bij de speeltest van vraag 130; open).
+    **Bezig in sessie `ccr-f6ba5992-1e77dw`** (7 okt): Marcel besloot dat wapens niet meer verboden zijn ("Alleen weerstand
+    tegen de heer is inacceptabel"); het plan om dat te bouwen ligt bij hem.
     **Wat er is:** een inwoner die wapens wil maken, vraagt het je (vraag 104); zeg je ja, dan staat er een verboden
     werkplaats, en ziet de inner hem, dan verzegelt de heer hem op Sint-Maarten: 30 gunst eraf, en volgend jaar 20 goud
     meer. De bouwer van de speeltest zegt ja op elk verzoek dat hij kan betalen, ook op de wapens.
