@@ -611,21 +611,25 @@
     const [achterX, achterY] = randPunt(-Math.SQRT1_2, -Math.SQRT1_2);
     let schoutHuis;
     {
-      const t = tekening(I.tekeningen.schout[0]);
+      // in de stijl van het land, met zijn deur naar welke kant ook, zolang hij naar het plein kijkt (vraag 114, stap 3)
       const kandidaten = [];
       const v = rondPlein(10);
-      for (let y = v.y0; y <= v.y1; y++) {
-        for (let x = v.x0; x <= v.x1; x++) {
-          if (!past(t, x, y)) continue;
-          const dx = x + t.deur[0];
-          const dy = y + t.deur[1];
-          if (totPlein(dx, dy) > 3) continue;
-          kandidaten.push({ x, y, score: -Math.hypot(dx - achterX, dy - achterY) - totPlein(dx, dy) * 0.5 + tussen(0, 1.5) });
+      for (const naam of vormenVoor(stijl, 'schout').flat()) {
+        const t = tekening(naam);
+        for (let y = v.y0; y <= v.y1; y++) {
+          for (let x = v.x0; x <= v.x1; x++) {
+            if (!past(t, x, y)) continue;
+            const dx = x + t.deur[0];
+            const dy = y + t.deur[1];
+            if (totPlein(dx, dy) > 3) continue;
+            if ((cx - dx) * t.kant.x + (cy - dy) * t.kant.y < 0) continue;
+            kandidaten.push({ x, y, t, score: -Math.hypot(dx - achterX, dy - achterY) - totPlein(dx, dy) * 0.5 + tussen(0, 1.5) });
+          }
         }
       }
       const k = besteVan(kandidaten);
       if (!k) return mis('geen plek voor het huis van de schout');
-      schoutHuis = bouw(t, k.x, k.y, { rol: 'schout', huis: 'schout' });
+      schoutHuis = bouw(k.t, k.x, k.y, { rol: 'schout', huis: 'schout' });
     }
     // Het zand: het uitgesleten stuk van zijn deur het plein op. De plek van de marskramer (en van de heer op
     // Sint-Maarten) komt erop, zodra de put staat (hieronder, bij stap 12).
@@ -657,7 +661,7 @@
     {
       const hutten = schud(vormenVoor(stijl, 'hut'));
       const rij = [
-        { rol: 'herberg', namen: I.tekeningen.herberg, huis: 'herbergierster', totPlein: 3 },
+        { rol: 'herberg', namen: vormenVoor(stijl, 'herberg').flat(), huis: 'herbergierster', totPlein: 3 },
         { rol: 'huis', namen: schud(vormenVoor(stijl, 'huis').flat()), bewoners: 'jongGezin', totPlein: 3 },
         { rol: 'hut', namen: hutten[0], bewoners: 'oudStel', totPlein: 8, deurVrij: true },
         { rol: 'hut', namen: hutten[1], totPlein: 8, deurVrij: true },

@@ -82,19 +82,22 @@
   T.heeftSteenbakkerij = (D) => (D.gebouwen || []).some((g) => g.soort === 'steenbakkerij' && g.klaar);
 
   // Het dak en de steen van wat nu gebouwd wordt of doorgroeit: het dak van het gehucht, leien in een dorp, pannen met
-  // marktrecht en daarna; een hut houdt het dak van het gehucht. Een stenen huis ligt nooit onder riet (in een gehucht
-  // krijgt het leien), is van de natuursteen van zijn stijl, en van baksteen onder pannen als het dorp een steenbakkerij
-  // heeft (Marcel, 4 okt: "Ja, baksteen na de steenbakker").
+  // marktrecht en daarna; een hut houdt het dak van het gehucht. Een stenen gebouw (een stenen huis, de kapel, de
+  // woontoren) ligt nooit onder riet (in een gehucht krijgt het leien), is van de natuursteen van zijn stijl, en van
+  // baksteen als het dorp een steenbakkerij heeft (Marcel, 4 okt: "Ja, baksteen na de steenbakker"). Heeft een soort
+  // maar één dak bij die steen (de kapel leien, de woontoren pannen), dan krijgt hij dat.
   function nu(D, stijl, soort) {
     const gehucht = gehuchtDak(stijl);
     const trede = Math.max(0, T.GEBOUW_TREDEN.indexOf(D.trede || 'gehucht'));
     if (soort === 'hut') return { dak: gehucht, steen: null };
-    if (soort === 'stenenHuis') {
-      if (T.heeftSteenbakkerij(D)) return { dak: 'pannen', steen: 'baksteen' };
-      const natuur = (index().stijlen[stijl].stenenHuis || []).find((t) => t.steen !== 'baksteen');
-      return { dak: trede >= 2 ? 'pannen' : 'leien', steen: natuur ? natuur.steen : null };
-    }
-    return { dak: trede >= 2 ? 'pannen' : trede === 1 ? 'leien' : gehucht, steen: null };
+    const gewenst = trede >= 2 ? 'pannen' : trede === 1 ? 'leien' : gehucht;
+    const lijst = index().stijlen[stijl][soort] || [];
+    if (!lijst.some((t) => t.steen)) return { dak: gewenst, steen: null };
+    const bak = T.heeftSteenbakkerij(D) && lijst.some((t) => t.steen === 'baksteen');
+    const natuur = lijst.find((t) => t.steen && t.steen !== 'baksteen');
+    const steen = bak ? 'baksteen' : natuur ? natuur.steen : null;
+    const daken = [...new Set(lijst.filter((t) => t.steen === steen).map((t) => t.dak))];
+    return { dak: daken.includes(gewenst) ? gewenst : daken.includes('leien') ? 'leien' : daken[0], steen };
   }
 
   // De tekeningen die een nieuw gebouw van deze soort nu kan krijgen: één per vorm, met de deur naar het zuiden, het dak
@@ -110,13 +113,15 @@
   };
 
   // De vormen van een soort in een stijl, voor de maker (js/maker.js): per vorm de namen met de deur naar elke kant,
-  // onder het dak van het gehucht, zonder "huizen/" (zoals de maker ze opzoekt).
+  // onder het dak van het gehucht, zonder "huizen/" (zoals de maker ze opzoekt). Een stenen gebouw (het huis van de
+  // schout) in de natuursteen van zijn stijl; de grote herberg, met een dak van een dorp, komt er dus niet bij.
   T.vormenVanStijl = function (stijl, soort) {
     const lijst = (index().stijlen[stijl] || {})[soort] || [];
     const dak = gehuchtDak(stijl);
     const vormen = [...new Set(lijst.map((t) => t.vorm))];
     return vormen
-      .map((v) => T.DEURKANTEN.map((kant) => zoek(stijl, soort, v, dak, null, kant)).filter(Boolean).map((t) => t.naam.replace(/^huizen\//, '')))
+      .map((v) => T.DEURKANTEN.map((kant) => lijst.find((t) => t.vorm === v && t.dak === dak && t.kant === kant && t.steen !== 'baksteen'))
+        .filter(Boolean).map((t) => t.naam.replace(/^huizen\//, '')))
       .filter((namen) => namen.length);
   };
 
