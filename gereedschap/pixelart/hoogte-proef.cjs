@@ -17,6 +17,7 @@
 //     dag-32.png       overdag, met een trede van 32 pixels (een hele tegelhoogte; Marcel koos die boven 16)
 //     avond-32.png     's avonds, met licht bij de deuren
 //     uitsnede-32.png  de helling en de hoek van de rotswand op 2×
+//     akkers-32.png    de akkers die meebollen met de heuvel, op 2×
 'use strict';
 
 const fs = require('fs');
@@ -80,7 +81,9 @@ for (let x = 9; x <= 23; x++) { pad(x, 13); pad(x, 12); }
 const isPad = (x, y) => PAD.has(x + ',' + y);
 
 // De akker op de flank van de heuvel.
-const isAkker = (x, y) => x >= 17 && x <= 21 && y >= 14 && y <= 16; // op de zuidflank, naar je toe
+const isAkker = (x, y) => (x >= 16 && x <= 21 && y >= 13 && y <= 16) || (x >= 27 && x <= 29 && y >= 4 && y <= 13);
+// groen koren op de zuidflank, naar je toe; geploegd op de oostflank, waar je de voren ziet buigen
+const akkerStadium = (x, y) => (x >= 27 ? 'geploegd' : 'groen');
 
 // ---------------------------------------------------------------- de vellen
 
@@ -175,7 +178,7 @@ function helderheid(p, q, r) {
   return K.klem(1 + (d / LICHT[2] - 1) * 1.5, 0.5, 1.4);
 }
 
-function tekenDriehoek(doek, oog, s, w, t, tegel, licht) {
+function tekenDriehoek(doek, oog, s, w, t, kleurVan, licht, ophoging = 0) {
   // s: drie schermpunten [sx, sy]; w: drie wereldpunten [wx, wy]; t: drie punten in de tegel [tx, ty]
   const minX = Math.floor(Math.min(s[0][0], s[1][0], s[2][0]));
   const maxX = Math.ceil(Math.max(s[0][0], s[1][0], s[2][0]));
@@ -197,11 +200,11 @@ function tekenDriehoek(doek, oog, s, w, t, tegel, licht) {
       if (l0 < -E || l1 < -E || l2 < -E) continue;
       const tx = l0 * t[0][0] + l1 * t[1][0] + l2 * t[2][0];
       const ty = l0 * t[0][1] + l1 * t[1][1] + l2 * t[2][1];
-      const kleur = monster(tegel, tx, ty);
-      if (!kleur) continue;
       const wx = l0 * w[0][0] + l1 * w[1][0] + l2 * w[2][0];
       const wy = l0 * w[0][1] + l1 * w[1][1] + l2 * w[2][1];
-      zet(doek, px - oog.x, py - oog.y, kleur[0] * licht, kleur[1] * licht, kleur[2] * licht, wx + wy, wx, wy);
+      const kleur = kleurVan(tx, ty, wx, wy);
+      if (!kleur) continue;
+      zet(doek, px - oog.x, py - oog.y, kleur[0] * licht, kleur[1] * licht, kleur[2] * licht, wx + wy + ophoging, wx, wy);
     }
   }
 }
@@ -234,13 +237,89 @@ function tekenGrond(doek, oog, trede) {
       const s = wereld.map(([wx, wy], k) => scherm(wx, wy, hoogten[k]));
       const tex = [[32, 0], [64, 16], [32, 32], [0, 16]];
       const tegel = tegelVan(x, y);
+      const kleurVan = (tx, ty) => monster(tegel, tx, ty);
       const p = wereld.map(([wx, wy], k) => [wx, wy, hoogten[k]]);
       const zak = isWater(x, y) ? 3 : 0; // het water ligt iets onder de oever
       const s2 = s.map(([sx, sy]) => [sx, sy + zak]);
       // twee driehoeken, langs de lijn van noord naar zuid (op het scherm van boven naar onder)
-      tekenDriehoek(doek, oog, [s2[0], s2[1], s2[2]], [wereld[0], wereld[1], wereld[2]], [tex[0], tex[1], tex[2]], tegel, helderheid(p[0], p[1], p[2]));
-      tekenDriehoek(doek, oog, [s2[0], s2[2], s2[3]], [wereld[0], wereld[2], wereld[3]], [tex[0], tex[2], tex[3]], tegel, helderheid(p[0], p[2], p[3]));
+      tekenDriehoek(doek, oog, [s2[0], s2[1], s2[2]], [wereld[0], wereld[1], wereld[2]], [tex[0], tex[1], tex[2]], kleurVan, helderheid(p[0], p[1], p[2]));
+      tekenDriehoek(doek, oog, [s2[0], s2[2], s2[3]], [wereld[0], wereld[2], wereld[3]], [tex[0], tex[2], tex[3]], kleurVan, helderheid(p[0], p[2], p[3]));
     }
+  }
+}
+
+// ---------------------------------------------------------------- de akkers, die meebollen met de heuvel
+
+// Marcel, 7 okt: "Ik wil dat de akkers mee bollen met de heuvel". Het graan wordt eerst plat getekend, zoals het spel
+// het nu doet, op een eigen laag; dan wordt die laag net als de grond over de schuine tegels getrokken: elke pixel van
+// een tegel vraagt waar hij in de wereld ligt, en neemt het graan dat plat op die plek lag. Zo buigen de rijen mee met
+// de heuvel, en het koren dat boven een tegel uitsteekt, komt op de tegel erachter terecht (daarom ook een rand
+// tegels rond de akker). De zon valt erop zoals op de grond eronder.
+function plattePlaat() {
+  const links = scherm(-0.5, H - 0.5, 0)[0] - 64;
+  const boven = scherm(-0.5, -0.5, 0)[1] - 128;
+  const b = Math.ceil(scherm(B - 0.5, -0.5, 0)[0] - links) + 128;
+  const h = Math.ceil(scherm(B - 0.5, H - 0.5, 0)[1] - boven) + 128;
+  return { links, boven, b, h, rgba: new Uint8ClampedArray(b * h * 4) };
+}
+function legPlat(plat, rel, cel, anker, sx, sy) {
+  const vel = beeld(rel);
+  const [cx, cy, cb, ch] = cel;
+  for (let y = 0; y < ch; y++) {
+    for (let x = 0; x < cb; x++) {
+      const i = ((cy + y) * vel.b + cx + x) * 4;
+      if (vel.rgba[i + 3] < 128) continue;
+      const px = Math.round(sx - anker[0] + x - plat.links);
+      const py = Math.round(sy - anker[1] + y - plat.boven);
+      if (px < 0 || py < 0 || px >= plat.b || py >= plat.h) continue;
+      const o = (py * plat.b + px) * 4;
+      plat.rgba[o] = vel.rgba[i];
+      plat.rgba[o + 1] = vel.rgba[i + 1];
+      plat.rgba[o + 2] = vel.rgba[i + 2];
+      plat.rgba[o + 3] = 255;
+    }
+  }
+}
+function tekenAkkers(doek, oog, trede) {
+  const g = BESCHRIJVING.graan;
+  const plat = plattePlaat();
+  const tegels = [];
+  for (let y = 0; y < H; y++) for (let x = 0; x < B; x++) if (isAkker(x, y)) tegels.push([x, y]);
+  tegels.sort((a, b) => a[0] + a[1] - (b[0] + b[1]));
+  for (const laag of ['achter', 'voor']) {
+    for (const [x, y] of tegels) {
+      const stadium = akkerStadium(x, y);
+      const st = g.stadia[stadium];
+      const v = K.hash(x, y) % g.varianten;
+      const [sx, sy] = scherm(x, y, 0);
+      if (st.frames) {
+        const kol = laag === 'voor' ? st.frames : 0; // groen en rijp: een achter- en een voorlaag (js/sprites.js, graanLaag)
+        legPlat(plat, 'beelden/' + g.bestand, [kol * st.cel[0], st.y0 + v * st.cel[1], st.cel[0], st.cel[1]], st.anker, sx, sy);
+      } else if (laag === 'achter') {
+        legPlat(plat, 'beelden/' + g.bestand, [v * st.cel[0], st.y0, st.cel[0], st.cel[1]], st.anker, sx, sy);
+      }
+    }
+  }
+  const kleurVan = (tx, ty, wx, wy) => {
+    const [sx, sy] = scherm(wx, wy, 0);
+    const px = Math.floor(sx - plat.links);
+    const py = Math.floor(sy - plat.boven);
+    if (px < 0 || py < 0 || px >= plat.b || py >= plat.h) return null;
+    const o = (py * plat.b + px) * 4;
+    return plat.rgba[o + 3] ? [plat.rgba[o], plat.rgba[o + 1], plat.rgba[o + 2]] : null;
+  };
+  const rond = new Set();
+  for (const [x, y] of tegels) for (let dy = -2; dy <= 1; dy++) for (let dx = -2; dx <= 1; dx++) rond.add(x + dx + ',' + (y + dy));
+  for (const sleutel of rond) {
+    const [x, y] = sleutel.split(',').map(Number);
+    if (x < 0 || y < 0 || x >= B || y >= H) continue;
+    const hoogten = [0, 1, 2, 3].map((k) => hoekHoogte(x, y, k, trede));
+    const wereld = HOEK.map(([dx, dy]) => [x + dx, y + dy]);
+    const s = wereld.map(([wx, wy], k) => scherm(wx, wy, hoogten[k]));
+    const p = wereld.map(([wx, wy], k) => [wx, wy, hoogten[k]]);
+    const t = [[0, 0], [0, 0], [0, 0], [0, 0]];
+    tekenDriehoek(doek, oog, [s[0], s[1], s[2]], [wereld[0], wereld[1], wereld[2]], [t[0], t[1], t[2]], kleurVan, helderheid(p[0], p[1], p[2]), 0.01);
+    tekenDriehoek(doek, oog, [s[0], s[2], s[3]], [wereld[0], wereld[2], wereld[3]], [t[0], t[2], t[3]], kleurVan, helderheid(p[0], p[2], p[3]), 0.01);
   }
 }
 
@@ -376,16 +455,9 @@ function watErStaat(trede) {
     const rij = f.richtingen.indexOf(richting);
     lijst.push({ rel: 'beelden/figuren/' + st.bestand, cel: [0, rij * st.cel[1], st.cel[0], st.cel[1]], anker: st.anker, x, y, h: middenHoogte(x, y, trede), d: x + y + 0.5 });
   };
-  const graan = (stadium, x, y) => {
-    const g = BESCHRIJVING.graan;
-    const st = g.stadia[stadium];
-    const v = K.hash(x, y) % g.varianten;
-    lijst.push({ rel: 'beelden/' + g.bestand, cel: [v * st.cel[0], st.y0, st.cel[0], st.cel[1]], anker: st.anker, x, y, h: middenHoogte(x, y, trede), d: x + y + 1.2 }); // plat op de grond: ook over de tegels ervoor
-  };
 
   huis('wit-hut1-riet-z', HUIS_HEUVEL.x, HUIS_HEUVEL.y); // op de vlakke top van de heuvel
   huis('wit-hut3-riet-z', 5, 3); // op de richel
-  for (let y = 0; y < H; y++) for (let x = 0; x < B; x++) if (isAkker(x, y)) graan('kiemend', x, y);
   voorwerp('bomen', 'eik', 2, 1); // op de bovenste trede
   voorwerp('bomen', 'den', 1, 6);
   voorwerp('bomen', 'den', 14, 3);
@@ -448,6 +520,7 @@ function maakPlaat(trede, nacht) {
   const doek = maakDoek(breed, hoog);
   tekenGrond(doek, oog, trede);
   tekenWanden(doek, oog, trede);
+  tekenAkkers(doek, oog, trede);
   for (const s of watErStaat(trede)) {
     const [sx, sy] = scherm(s.x, s.y, s.h);
     tekenStuk(doek, oog, s.rel, s.cel, s.anker, sx, sy, s.d, s.x, s.y);
@@ -485,6 +558,10 @@ function main() {
     const [hx, hy] = scherm(8, 8.5, trede / 2);
     const uitsnede = { x: Math.round(hx - oog.x - 260), y: Math.round(hy - oog.y - 230), b: 520, h: 340 };
     fs.writeFileSync(path.join(UIT, `uitsnede-${trede}.png`), naarPng(doek, [24, 20, 30], uitsnede, 2));
+    // de akkers op de flanken van de heuvel, op 2×
+    const [ax, ay] = scherm(24, 13, glooiing(24, 13));
+    const akkers = { x: Math.round(ax - oog.x - 300), y: Math.round(ay - oog.y - 140), b: 520, h: 300 };
+    fs.writeFileSync(path.join(UIT, `akkers-${trede}.png`), naarPng(doek, [24, 20, 30], akkers, 2));
     console.log(`dag-${trede}.png ${doek.b}×${doek.h}`);
   }
   const { doek } = maakPlaat(32, true);

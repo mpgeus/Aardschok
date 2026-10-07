@@ -5250,6 +5250,11 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     rijker getekend worden). Gezien op de plaat: een wand die schuin over het raster loopt, wordt een trapje, dus wanden
     lopen langs de tegels, en wat schuin moet, glooit; het graan buigt nog niet mee, en een huis staat alleen op een vlak
     stuk.
+    **Marcel (7 okt): "Ik wil dat de akkers mee bollen met de heuvel".** Gedaan op de plaat: het graan wordt eerst plat
+    getekend, zoals nu, op een eigen laag, en die laag wordt net als de grond over de schuine tegels getrokken (elke pixel
+    neemt het graan dat plat op dezelfde plek in de wereld lag). De voren van een geploegde akker buigen zo over de
+    heuvel, groen koren ook, en de zon valt erop zoals op de grond. In het spel gaat dat net zo met de videokaart: geen
+    nieuwe kunst, de akker wordt een laag die meebuigt.
 122. **De snelheid in de browser en via Steam** (Marcel, 4 okt, achtentwintigste sessie: "Ik wil nu ook weten wat het
     verschil in performance is tussen nu spelen in de browser en straks via Steam. Want lag, geheugen tekort etc is geen
     optie straks"; plan van Claude; open). Uitgewerkt in `verpakken.md`, "Snelheid: in de browser of via Steam".
