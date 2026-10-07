@@ -27,7 +27,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Het rapport van de raadsman | gebouwd (1 okt): de eerste fase van de dag; elke ochtend brengt hij je aan je deur wat er gebeurde, hoe het graan en het hout gaan, of ze de winter halen, wat er speelt en wat er komt, met zijn rekenen in de getallen | vraag 75 |
 | De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf; sinds 1 okt ook wat je mist voor de kapel en de smidse, en waar het vandaan komt; sinds 2 okt wat de huizen missen, en de ketens (een molen voor de bakkerij) | vraag 58, 79, 87, 90 |
 | De houthakker hakt en plant | gebouwd (6 okt; Marcel: "A ja B ja C ja D zo"): zijn hout komt uit de bomen om zijn schuur, elke tien hout een boom; naast de stronk twee boompjes, in een jaar of twee bomen, zodat het bos om hem blijft; zonder boom staat hij stil, en werkt zijn hand elders; hij komt alleen bij minstens 30 bomen binnen tien tegels, en loopt tussen zijn stronken door (vraag 129, e, b en f); in de speeltest van vier jaar komt elk dorp boven de 100 en wint er voor het eerst een | vraag 115, 129 |
-| Beesten in het bos | stap 1 gebouwd (7 okt; Marcel: "a ja, b ja, c ja"): roedels wolven en groepjes herten, elk met een plek diep in het bos; overdag rusten ze, 's nachts lopen de wolven langs de bosrand met rode ogen, in de schemering grazen de herten aan de rand; ze gaan mensen uit de weg, en een wolf begint geen gevecht; de dreiging en wat je ertegen doet komen nog | vraag 116 |
+| Beesten in het bos | stap 1 en 2a gebouwd (7 okt; Marcel: "a ja, b ja, c ja", en d tot i): roedels wolven en groepjes herten, elk met een plek diep in het bos; overdag rusten ze, 's nachts lopen de wolven langs de bosrand met rode ogen, in de schemering grazen de herten aan de rand; ze gaan mensen uit de weg, en een wolf begint geen gevecht; in de winter jagen de wolven met honger op de herten, in de lente komen er jongen, en wie zijn bos kwijt is, verhuist of trekt weg; de dreiging (2b) en wat je ertegen doet (3) komen nog | vraag 116 |
 | De markt op het plein | gebouwd (6 okt; vraag 110, d, en 127, stap 1 en 2): een marktblok van twee rijen kramen met manden op het plein, voor 8 hout en 6 goud, dat meegroeit met het dorp (een kraam per 15 mensen, daarna langs de weg), met kramen vol of leeg naar wat het dorp heeft; de maker legt een groter plein; de kooplui, de boodschappen en de marktdag nog niet | vraag 110, d; 127 |
 | De verzoeken | stap 1 tot en met 3 gebouwd (3 okt): wat het dorp mist, komt een inwoner je vragen, met de plek die hij koos en wat het kost; ja of nee, en ben je weg, dan beslist je raadsman; in het bouwmenu alleen nog het erf en oproepen met een premie (de spelregel "Wie bouwt"); de speeltest speelt zo; en uit eigen wil: een ondernemer die wapens wil maken (sinds 7 okt niet meer verboden, vraag 131) of een tweede herberg beginnen, met wat ja en nee aan gevolgen hebben (vraag 104); sinds 6 okt rooit wie een werkplaats vraagt zijn plek eerst, als er geen open grond meer is (vraag 110, e) | vraag 103, 104, 110 |
 | Twee bazen | stap 1 en 2 gebouwd (3 okt; Marcel: "106 a b c d ja"): de gunst van de heer en het vertrouwen van het dorp in de balk, met een waarschuwing onder 20 en op 0 weg (ontslagen of weggejaagd); betrapt op verstoppen is de laatste waarschuwing; elke maand een gril van de heer in een brief, die zijn gunst tegen het dorp weegt | vraag 106 |
@@ -648,7 +648,7 @@ wachthuis na de rovers, de bouwstof en de wensen van de huizen, en wat het doel 
 
 "Jij bouwt" is het spel van vóór 3 okt. Het besluit en waarom staan bovenaan bij "Een nieuwe richting".
 
-## Beesten in het bos (Marcel, 4 okt 2026; werklijst vraag 116, stap 1 gebouwd op 7 okt)
+## Beesten in het bos (Marcel, 4 okt 2026; werklijst vraag 116, stap 1 en 2a gebouwd op 7 okt)
 
 **Zo werkt het nu** (stap 1, het beeld; Marcel, 7 okt: "a ja, b ja, c ja"; `js/beesten.js`): op elk land van de maker
 leven roedels wolven (twee tot vier) en groepjes herten (een hert met een gewei voorop, en een tot drie hindes in twee
@@ -660,8 +660,20 @@ tegels dichterbij), dan gaat de groep van hem weg, het bos in: de wolven sluipen
 Een wolf begint nooit zelf een gevecht (a: "wolven gaan mensen uit de weg"); de schout kan hem wel aanvallen, als
 monster in een gevecht in beurten. 's Nachts lichten hun ogen rood op, ook waar je de wolf zelf niet ziet. Alleen de
 leider zoekt een weg, de anderen lopen in zijn spoor (Marcels "group steering"): een roedel kost het spel bijna niets. De
-regels van het dorp veranderen nog niet. De spelregel "Beesten" (aan of uit). **Nog niet:** stap 2 (de dreiging: wie
-aan de bosrand werkt, vlucht; in de winter honger, een schaap, een aanval) en stap 3 (de jager die jaagt, de jacht, een
+regels van het dorp veranderen nog niet. De spelregel "Beesten" (aan of uit).
+
+**Het leven in het bos** (stap 2a, 7 okt; Marcel: "d ja, e ja" en "g ja"; elke nacht, `T.tikBeestenDag`): een roedel
+woont alleen waar hij herten kan halen (eerst komen de herten, dan de wolven). In de winter krijgt een roedel elke nacht
+honger, een grote sneller; met genoeg honger (twintig dagen voor een roedel van vier) jaagt hij 's nachts op de dichtste
+groep herten in zijn bos, en vangt hij er soms een (een op de vijf nachten); dan is zijn honger weg. Elke lente (de
+wolven in grasmaand, de herten in bloeimaand) krijgt elke groep een of twee jongen, tot zes; dan splitst hij, en de helft
+zoekt een eigen thuis als het bos plaats heeft, en trekt anders weg. Een roedel die de winter honger leed, krijgt geen
+jongen: zonder prooi groeit hij niet. Ligt een hol of legerplek niet meer diep genoeg in het bos (een erf, een werkplaats
+of een akker haalde het weg; wat de houthakker kapt en inplant, blijft bos), dan zoekt de groep er dichtbij een nieuw, en
+zonder diep bos trekt hij weg, en dat zegt het dorp. In vijf jaar op zeven landen vangt een roedel twee tot vier herten
+per winter; waar weinig herten zijn, zijn die na een jaar of twee op, en dan heeft de roedel elke winter honger. Wat die
+honger doet, is stap 2b. **Nog niet:** stap 2b (de dreiging: wie aan de bosrand werkt, vlucht; een roedel met honger
+neemt een schaap of valt aan; de lantaarn; de status "Wolven") en stap 3 (de jager die jaagt, de jacht naar het hol, een
 hek, lantaarns); zie de werklijst, vraag 116.
 
 "Ik wil dat er beesten kunnen rondlopen in het bos. Wolven etc. Die de houthakker kunnen bedreigen. Rode ogen uit het

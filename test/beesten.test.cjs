@@ -230,3 +230,135 @@ test('het hert: drie vellen met vijf houdingen, en lopen en rennen zo snel als h
     assert.equal(f.houdingen.rennen.snelheid, T.BEESTEN.hert.vlucht);
   }
 });
+
+// ── Stap 2a, het leven in het bos (Marcel, 7 okt: "d ja, e ja, f ja" en "g ja, h ja, i ja") ──
+
+// De eerste dag van een maand, vanaf vandaag (een nacht van T.tikBeestenDag).
+function eersteVan(S, maand) {
+  const nu = Math.floor(S.kalender.dag);
+  for (let dag = nu; dag <= nu + T.DAGEN_PER_JAAR; dag++) {
+    const d = T.datumVanDag(dag);
+    if (d.dagVanMaand === 1 && T.MAANDEN[d.maand].naam === maand) return dag;
+  }
+  return null;
+}
+
+// Een stuk kaal maken: elke boom om, en elke stronk en struik eruit (zoals een erf dat gerooid wordt).
+function kaal(D, x0, y0, r) {
+  const w = D.wereld;
+  for (let y = Math.max(0, y0 - r); y <= Math.min(w.tegels.length - 1, y0 + r); y++) {
+    for (let x = Math.max(0, x0 - r); x <= Math.min(w.tegels[0].length - 1, x0 + r); x++) {
+      T.velBoom(D, x, y);
+      T.rooi(D, x, y);
+    }
+  }
+}
+
+const hertenIn = (D) => T.beestenVan(D).filter((g) => g.G.soort === 'hert').reduce((n, g) => n + g.leden.length, 0);
+
+test('eerst de herten, en een roedel woont alleen waar hij herten kan halen', () => {
+  for (const zaad of [62707, 73425, 72022, 11]) {
+    const S = landVanDeMaker(zaad);
+    const groepen = T.zetBeesten(S.dorp);
+    const herten = groepen.filter((G) => G.soort === 'hert');
+    for (const G of groepen.filter((x) => x.soort === 'wolf')) {
+      assert.ok(herten.some((H) => T.afstand(H.thuis, G.thuis) <= T.BEESTEN_INSTELLINGEN.honger.jaagStraal && T.kanErKomen(S.dorp.wereld, G.thuis, H.thuis)), `${zaad}: herten bij het hol`);
+    }
+  }
+});
+
+test('in de winter krijgt een roedel honger, en met honger vangt hij een hert uit de dichtste groep; buiten de winter niet', () => {
+  const S = landVanDeMaker(62707);
+  const D = S.dorp;
+  T.zetBeesten(D);
+  const { G, leden } = groepVan(S, 'wolf');
+  const zomer = eersteVan(S, 'hooimaand');
+  for (let dag = zomer; dag < zomer + 30; dag++) T.tikBeestenDag(D, dag);
+  assert.equal(G.honger, 0, 'in de zomer vindt hij genoeg');
+  const voor = hertenIn(D);
+  const winter = eersteVan(S, 'wintermaand');
+  let dag = winter;
+  while (!G.gevangen && dag < winter + 90) T.tikBeestenDag(D, dag++);
+  assert.equal(G.gevangen, 1, 'in de winter vangt hij een hert');
+  assert.equal(hertenIn(D), voor - 1);
+  assert.ok(((dag - winter) * leden.length) / 4 >= T.BEESTEN_INSTELLINGEN.honger.jagenVanaf, 'pas als hij honger heeft');
+  assert.equal(G.honger, 0, 'en dan is zijn honger weg');
+});
+
+test('in de lente krijgen ze jongen, tot zes; dan splitst de groep, en de helft zoekt een eigen thuis of trekt weg', () => {
+  const S = landVanDeMaker(72022);
+  const D = S.dorp;
+  T.zetBeesten(D);
+  const G = groepVan(S, 'hert').G;
+  const ledenVan = (x) => T.beestenVan(D).find((g) => g.G === x).leden;
+  const voor = ledenVan(G).length;
+  const lente = eersteVan(S, 'bloeimaand');
+  T.tikBeestenDag(D, lente - 1);
+  assert.equal(ledenVan(G).length, voor, 'niet voor hun maand');
+  T.tikBeestenDag(D, lente);
+  const na = ledenVan(G).length;
+  assert.ok(na > voor && na <= voor + 2, `een of twee jongen (${voor} → ${na})`);
+  for (const e of ledenVan(G).slice(voor)) assert.ok(T.afstand(T.tegelVan(e), G.thuis) <= 3, 'bij hun legerplek');
+  T.tikBeestenDag(D, lente + T.DAGEN_PER_MAAND);
+  assert.equal(ledenVan(G).length, na, 'één keer per jaar');
+  // Tot de groep zo groot is dat hij splitst.
+  const oud = new Set(T.beestenVan(D).map((g) => g.G));
+  for (let k = 0; k < 6 && T.beestenVan(D).length === oud.size; k++) T.tikBeestenDag(D, lente, { jongen: true });
+  const nieuwe = T.beestenVan(D).filter((g) => !oud.has(g.G));
+  assert.equal(nieuwe.length, 1, 'gesplitst');
+  assert.ok(ledenVan(G).length < T.BEESTEN_INSTELLINGEN.groot);
+  const nieuw = nieuwe[0];
+  assert.equal(nieuw.G.soort, 'hert');
+  assert.ok(nieuw.leden.length >= 2);
+  assert.equal(nieuw.leden.filter((e) => e.leider).length, 1);
+  assert.equal(nieuw.leden.find((e) => e.leider).vel, 'hert2', 'wie het groepje leidt, krijgt een gewei');
+  if (nieuw.G.trektWeg) {
+    T.werkBeestenBij(S, D);
+    assert.ok(!D.wereld.wezens.some((e) => e.groep === nieuw.G), 'geen plaats: die helft trekt weg');
+  } else {
+    for (const { G: ander } of T.beestenVan(D)) if (ander !== nieuw.G) assert.ok(T.afstand(ander.thuis, nieuw.G.thuis) >= T.BEESTEN_INSTELLINGEN.uitElkaar, 'een eigen thuis');
+  }
+});
+
+test('een roedel die de winter honger leed, krijgt in de lente geen jongen', () => {
+  const S = landVanDeMaker(62707);
+  const D = S.dorp;
+  T.zetBeesten(D);
+  const { G, leden } = groepVan(S, 'wolf');
+  const voor = leden.length;
+  const lente = eersteVan(S, 'grasmaand');
+  G.leedOp = lente - 40;
+  T.tikBeestenDag(D, lente);
+  assert.equal(groepVan(S, 'wolf').leden.length, voor, 'honger geleden: geen jongen');
+  T.tikBeestenDag(D, lente + T.DAGEN_PER_JAAR);
+  assert.ok(groepVan(S, 'wolf').leden.length > voor, 'een jaar later wel');
+});
+
+test('wordt het bos om het hol te dun, dan zoekt de roedel dieper een nieuw; zonder bos trekt hij weg, en het dorp zegt het', () => {
+  const S = landVanDeMaker(62707);
+  const D = S.dorp;
+  T.zetBeesten(D);
+  const G = groepVan(S, 'wolf').G;
+  const oud = { ...G.thuis };
+  const gezegd = [];
+  const zeg = T.zeg;
+  T.zeg = (D2, tekst) => gezegd.push(tekst);
+  try {
+    const dag = eersteVan(S, 'hooimaand');
+    T.tikBeestenDag(D, dag);
+    assert.deepEqual(G.thuis, oud, 'zolang het bos er is, blijft het hol');
+    kaal(D, oud.x, oud.y, 4);
+    T.tikBeestenDag(D, dag + 1);
+    assert.notDeepEqual(G.thuis, oud, 'een nieuw hol');
+    assert.ok(T.isBos(D.wereld, G.thuis.x, G.thuis.y, true), 'in het bos');
+    assert.ok(!G.trektWeg && !gezegd.length);
+    kaal(D, 50, 50, 60);
+    T.tikBeestenDag(D, dag + 2);
+    assert.ok(G.trektWeg);
+    assert.ok(gezegd.some((t) => /wolven zijn weggetrokken/.test(t)), gezegd.join(' | '));
+    T.werkBeestenBij(S, D);
+    assert.ok(!D.wereld.wezens.some((e) => e.beest), 'het bos is leeg');
+  } finally {
+    T.zeg = zeg;
+  }
+});

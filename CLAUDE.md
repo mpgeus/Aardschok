@@ -410,9 +410,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.ontwijk` ruilt de leider met wie van zijn groep in de weg staat. Een dier heeft `e.beest` (geen `e.dier`: dat is vee,
   dat de inner telt), en `e.rust` en `e.rent` voor js/sprites.js (liggen, grazen, rennen). Een wolf begint geen gevecht
   (`T.zoekOntdekking`), de schout kan hem aanvallen; 's nachts lichten zijn ogen rood op (`tekenOgen` in js/tekenen.js,
-  met `beelden/ogen.js` uit `gereedschap/pixelart/ogen.cjs`). Het hert komt uit `gereedschap/pixelart/wild.cjs`. De
-  spelregel "Beesten"; de getallen in `T.BEESTEN_INSTELLINGEN`. De dreiging (stap 2) en wat je ertegen doet (stap 3) komen
-  nog.
+  met `beelden/ogen.js` uit `gereedschap/pixelart/ogen.cjs`). Het hert komt uit `gereedschap/pixelart/wild.cjs`. **Het
+  leven in het bos** (stap 2a; elke nacht `T.tikBeestenDag`, vanuit `T.tikGebouwenDag` na het bos): eerst de herten, en
+  een roedel alleen waar hij herten kan halen; in de winter krijgt een roedel honger (`G.honger`) en jaagt hij op de
+  dichtste herten (`jaag`, `G.gevangen`); elke lente jongen tot zes (`jongen`), en dan splitst de groep (`splits`): de
+  helft zoekt een eigen thuis of trekt weg (`G.trektWeg`: `T.werkBeestenBij` haalt hem van de kaart, niet midden in een
+  gevecht); wie honger leed, krijgt geen jongen (`G.leedOp`); een thuis dat niet meer diep in het bos ligt, verhuist of de
+  groep trekt weg (`blijfOfVerhuis`; wat de houthakker inplant, telt als bos). De spelregel "Beesten"; de getallen in
+  `T.BEESTEN_INSTELLINGEN`. De dreiging (stap 2b) en wat je ertegen doet (stap 3) komen nog.
 - `js/bouwstijl.js`: **de bouwstijl van een land** (vraag 114, stap 2, 4 okt): elk land van de maker bouwt in één stijl
   (`w.stijl`, uit het nummer van het land, `T.stijlVoorLand`; het ontworpen gehucht heeft er geen en bouwt zoals altijd),
   met per soort een paar vormen, elk met de deur naar elke kant. De huizenbouwer noemt dat een stand; in het spel heet het
@@ -1009,8 +1014,10 @@ zijn; `('wapens')` laat de eerste die wapens wil het nu vragen, alsof de rovers 
 `Spel.debug.trede('dorp')`, en sluit dan de brief van de heer), `('herberg')` de eerste die een tweede herberg wil (vanaf
 `T.ONDERNEMERS_INSTELLINGEN.herberg.vanaf` mensen).
 `Spel.debug.beesten()` zegt per groep wolven of herten hoeveel het er zijn, waar de leider is en wat hij doet, wat de groep
-wil (thuis, aan de rand, of weg van iemand), zijn thuis en zijn plekken aan de rand; `('hier')` zet de schout tien tegels
-van de dichtste groep, om ze te bekijken, en `('opnieuw')` legt de groepen opnieuw.
+wil (thuis, aan de rand, of weg van iemand), zijn thuis en zijn plekken aan de rand, de honger van een roedel en hoeveel
+herten hij ving, en wanneer de groep jongen kreeg; `('hier')` zet de schout tien tegels van de dichtste groep, om ze te
+bekijken, `('opnieuw')` legt de groepen opnieuw, `('jongen')` geeft elke groep nu jongen (en wie groot wordt, splitst), en
+`('jacht')` laat elke roedel nu jagen.
 `Spel.debug.gril()` zegt welke gril op je antwoord wacht, met de keuzes en wat ze kosten; `('jacht')` laat die nu komen.
 `Spel.debug.bazen()` zegt de gunst van de heer en het vertrouwen van het dorp, waarom ze het laatst veranderden en of je
 gewaarschuwd bent; `('gunst', 15)` zet de gunst op 15 (met de brief als hij onder 20 komt), `('vertrouwen', 0)` jaagt je

@@ -977,7 +977,8 @@
     // De beesten in het bos (js/beesten.js; werklijst vraag 116): per groep de soort, hoeveel dieren, waar de leider is en
     // wat de groep wil (thuis, aan de rand, of weg van iemand), zijn hol en zijn plekken aan de rand, en of hij nu wegrent.
     // ('hier'): de schout staat nu tien tegels van de dichtste groep, net buiten wat ze schuw maakt, om ze te bekijken.
-    // ('opnieuw'): de groepen opnieuw, uit het zaad van het land.
+    // ('opnieuw'): de groepen opnieuw, uit het zaad van het land. ('jongen'): elke groep krijgt nu jongen, en wie groot
+    // wordt, splitst. ('jacht'): elke roedel jaagt nu op de herten, alsof het winter is en hij honger heeft.
     beesten(wat) {
       const D = T.dorpHier(S);
       if (!D || !D.kalender) return 'De beesten zijn er alleen bij een dorp.';
@@ -985,6 +986,7 @@
         S.wereld.wezens = S.wereld.wezens.filter((e) => !e.beest);
         T.zetBeesten(D);
       }
+      if (wat === 'jongen' || wat === 'jacht') T.tikBeestenDag(D, Math.floor(D.kalender.dag), { [wat]: true });
       const h = T.tegelVan(S.schout);
       const groepen = T.beestenVan(D);
       if (wat === 'hier' && groepen.length) {
@@ -1013,6 +1015,9 @@
             thuis: `${G.thuis.x},${G.thuis.y}`,
             rand: G.rand.map((p) => `${p.x},${p.y}`).join(' '),
             rent: leden.some((e) => e.rent),
+            ...(G.soort === 'wolf' ? { honger: `${(G.honger || 0).toFixed(1)} (jaagt vanaf ${T.BEESTEN_INSTELLINGEN.honger.jagenVanaf})`, gevangen: G.gevangen || 0 } : {}),
+            jongen: G.jongenJaar ? `in ${G.jongenJaar}` : 'nog niet',
+            ...(G.trektWeg ? { trektWeg: true } : {}),
           };
         }),
       };

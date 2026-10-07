@@ -9,6 +9,13 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Het leven in het bos, wat nog niet te zien is** (7 okt, zevenendertigste sessie; vraag 116, stap 2a): de jongen van
+  de wolven en de herten hebben nog geen eigen tekening (een welp, een kalf: nu zijn het kleine volwassenen, even groot);
+  de jacht van een roedel op de herten is een lot in de nacht, niet te zien (een hert is 's ochtends weg; later de roedel
+  die de kudde opjaagt, en botten bij het hol, vraag 116, f); en zijn de herten van een land op, dan komen er geen nieuwe
+  van buiten, zodat de roedel elke winter honger heeft. Een vraag voor Marcel als dat te hard blijkt: een groepje herten
+  dat in de lente van buiten komt als het bos leeg is.
+
 - **Het hert kost veel plaatjes** (7 okt, zevenendertigste sessie; vraag 116, stap 1): de drie vellen van het hert
   (gereedschap/pixelart/wild.cjs) houden samen zo'n 38 MB vast als ze alle drie geladen zijn (hert2 alleen 16 MB, om het
   gewei en de sprongen), ongeveer wat de drie koeien kosten; ze staan op elk land van de maker. Een figuur laadt al zijn
