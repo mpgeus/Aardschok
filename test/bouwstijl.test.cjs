@@ -51,8 +51,9 @@ test('elke tekening van een stijl staat op het vel, met de naam van zijn stijl, 
   assert.equal(tegels.length, opgaven.length);
   const per = {};
   for (const tg of tegels) per[tg.stijl.stijl] = (per[tg.stijl.stijl] || 0) + 1;
-  // elk 12 hutten, 36 huizen, 36 stenen huizen en 24 boerderijen; oker en roze nemen de hutten van wit (vraag 114, 2b)
-  assert.deepEqual(per, { wit: 108, oker: 96, planken: 108, roze: 96 });
+  // elk 12 hutten, 36 huizen, 36 stenen huizen en 24 boerderijen; oker en roze nemen de hutten van wit (vraag 114, 2b);
+  // en elk 32 grote gebouwen: de kleine en de grote herberg, de kapel, de woontoren en het huis van de schout (stap 3)
+  assert.deepEqual(per, { wit: 140, oker: 128, planken: 140, roze: 128 });
   for (const t of tegels) {
     const s = t.stijl;
     assert.equal(t.naam, HZ.stijlNaam(s.stijl, s.vorm, s.steen === 'baksteen' ? 'baksteen' : s.dak, s.stand));

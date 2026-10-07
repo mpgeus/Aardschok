@@ -485,9 +485,10 @@ test('ja op een werkplaats in het bos: hij wacht, nog niet op de kaart; wie hem 
   });
 });
 
-// Doorgroeien (werklijst vraag 130; Marcel, 6 okt: "Ok"): op land 62707 van de maker staat de hut van een oud stel waar
+// Doorgroeien (werklijst vraag 130; Marcel, 6 okt: "Ok"): op land 62707 van de maker stond de hut van een oud stel waar
 // het kleinste huis dat hij kan worden, één struik in de weg heeft. In de speeltest van vier jaar had die hut 1349 dagen
-// alles en groeide hij nooit, en won daarom geen dorp. Nu rooit het gezin wat in de weg staat, en dan groeit hij.
+// alles en groeide hij nooit, en won daarom geen dorp. Nu rooit het gezin wat in de weg staat, en dan groeit hij. Sinds de
+// grote gebouwen (vraag 114, stap 3) ligt dat land anders, en spelen de toetsen op land 62710, met net zo'n hut.
 function landVanDeMaker(zaad) {
   const echt = console.warn;
   const toeval = Math.random;
@@ -530,7 +531,7 @@ test('een hut die alles heeft maar niet past, rooit eerst wat in de weg staat, e
     const gezinDagen = T.GEBOUWEN_INSTELLINGEN.gezinDagen;
     T.GEBOUWEN_INSTELLINGEN.gezinDagen = 1e9; // geen nieuwe gezinnen: die lopen hier niet binnen
     try {
-      const S = landVanDeMaker(62707);
+      const S = landVanDeMaker(62710);
       const D = S.dorp;
       const hut = hutMetAlles(S);
       const plan = T.groeiRooiPlan(D, hut);
@@ -567,7 +568,7 @@ test('rooit niemand het, dan doen de buren de rest na een maand; staat er iets w
     const gezinDagen = T.GEBOUWEN_INSTELLINGEN.gezinDagen;
     T.GEBOUWEN_INSTELLINGEN.gezinDagen = 1e9;
     try {
-      const S = landVanDeMaker(62707);
+      const S = landVanDeMaker(62710);
       const D = S.dorp;
       const hut = hutMetAlles(S);
       let dag = 1;
@@ -580,7 +581,7 @@ test('rooit niemand het, dan doen de buren de rest na een maand; staat er iets w
 
       // Een ander land, dezelfde hut, maar met een rots waar elke vorm van het huis komt: niets te rooien, dus geen plan,
       // en het briefje zegt waarom.
-      const S2 = landVanDeMaker(62707);
+      const S2 = landVanDeMaker(62710);
       const D2 = S2.dorp;
       const hut2 = hutMetAlles(S2);
       const plan = T.groeiRooiPlan(D2, hut2);
@@ -665,7 +666,15 @@ test('a2: woont er niemand meer in het huis dat zou groeien, dan is de appelboom
   zo(() => {
     const S = landVanDeMaker(7777);
     const D = S.dorp;
-    const hut = D.gebouwen.find((g) => g.soort === 'hut' && T.groeiRooiPlan(D, g));
+    // een hut waar niemand woont, met een appelboom waar hij groter wordt
+    const metAppel = (g) => {
+      const p = T.groeiRooiPlan(D, g);
+      if (!p) return false;
+      for (let y = p.y; y < p.y + p.h; y++) for (let x = p.x; x < p.x + p.b; x++) if (T.isEigenBoom(T.voorwerpOp(D.wereld, x, y))) return true;
+      return false;
+    };
+    const hut = D.gebouwen.find((g) => g.soort === 'hut' && !D.bewoners.mensen.some((p) => p.huis === g) && metAppel(g));
+    assert.ok(hut, 'een lege hut met een appelboom in de weg');
     const plan = T.groeiRooiPlan(D, hut);
     T.rooiOmTeGroeien(D, hut, plan);
     const appels = [];
@@ -688,7 +697,7 @@ test('c2: heeft een huis alles maar kan het niet groeien, dan zegt de raad het, 
     const gezinDagen = T.GEBOUWEN_INSTELLINGEN.gezinDagen;
     T.GEBOUWEN_INSTELLINGEN.gezinDagen = 1e9;
     try {
-      const S = landVanDeMaker(62707);
+      const S = landVanDeMaker(62710);
       const D = S.dorp;
       const raad = T.RADEN.find((r) => r.id === 'groeitNiet');
       const hut = hutMetAlles(S);
@@ -718,7 +727,7 @@ test('c2: heeft een huis alles maar kan het niet groeien, dan zegt de raad het, 
 
 test('d: geen erf waar het een huis elke vorm afneemt; wel als het nog een andere vorm kan nemen', () => {
   zo(() => {
-    const S = landVanDeMaker(62707);
+    const S = landVanDeMaker(62710);
     const D = S.dorp;
     let geweigerd = null;
     for (let y = 0; y < S.wereld.tegels.length && !geweigerd; y++) {
@@ -747,7 +756,7 @@ test('d: geen erf waar het een huis elke vorm afneemt; wel als het nog een ander
 // groeien, en telde alleen de geloote, dan sprong de grond die vrij moest blijven, en faalde een toets één keer op de drie.
 test('d hangt niet van de loting af: elke tekening die het spel kan loten, geeft dezelfde grond om te groeien', () => {
   zo(() => {
-    for (const S of [gehucht(), landVanDeMaker(62707)]) {
+    for (const S of [gehucht(), landVanDeMaker(62710)]) {
       const D = S.dorp;
       const grond = new Set();
       for (const hut of T.tekeningenVan(D, 'hut')) {
@@ -803,7 +812,7 @@ test('a2: de eigen appelboom gaat alleen om als geen vorm zonder hem kan (Marcel
 // opmerkingen.md.)
 test('wat het briefje, de raad en de grond om te groeien vragen, loot geen volgende tekening (het spel loopt niet anders naar de muis)', () => {
   zo(() => {
-    const S = landVanDeMaker(62707);
+    const S = landVanDeMaker(62710);
     const D = S.dorp;
     const hut = D.gebouwen.find((g) => g.soort === 'hut' && T.groeiRooiPlan(D, g, false));
     hut.groeiDagen = T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen;
