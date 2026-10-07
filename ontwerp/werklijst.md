@@ -4718,6 +4718,29 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     de maker (zaad 1 tot en met 4, twee jaar): geen fouten in de console, elk land een dorp en marktrecht in het eerste
     jaar, 26 naar 67 tot 82 mensen, geen doden van kou of honger. Opslagplaats: `tegels/huizen/` 24 MB, `tegels/bouwfasen/`
     58 MB. Nog niet in `main`. Het huis van de schout, de herberg en de kapel krijgen hun stijl in stap 3.
+    **Plan voor stap 3, de grote gebouwen (Claude, 7 okt, sessie `claude/project-thread-cyjrql`; wacht op Marcel).** Wat
+    er is: de proefplaten `verhouding` en `steen` (29e sessie) hebben de nieuwe herberg (12 bij 6, twee lagen, met een stal),
+    de kapel met beide torens en de woontoren in beide vormen, maar nog niet rondom gebouwd en niet per stijl. In het spel
+    staat op elk land van de maker nog `herberg1` (een T van vakwerk onder riet) en `schoutshuis`, in elke stijl hetzelfde;
+    wie later een herberg of kapel bouwt, krijgt de oude tekening uit `dorp.cjs` (voet 6 bij 6 en 5 bij 5). Een woontoren
+    is er niet. Wat Marcel al koos (4 okt): de toren per stijl (wit en roze een zadeldaktoren en kantelen, oker en planken
+    een naaldspits en een tentdak), eerst natuursteen en baksteen pas met een steenbakkerij, en een muur met een poort om
+    de binnenplaats van de herberg. Het plan, in vier stappen:
+    1. **De bouwer:** de herberg, de stal, de kapel (schip en toren), de woontoren en het huis van de schout als vormen
+       per stijl in `huizen.cjs`, rondom gebouwd, in de vier standen; een gebouw uit delen (`samen`) ook rondom, met zijn
+       voet en deur van het geheel. Klaar als: elke bestaande tekening byte voor byte dezelfde.
+    2. **Een proefplaat voor Marcel:** per stijl een rij (de kleine herberg, de grote met stal en poort, de kapel, de
+       woontoren, het huis van de schout), en de grote herberg in zijn vier standen. Nog niets in het spel.
+    3. **Renderen:** de tekeningen en hun bouwfasen (niet voor het huis van de schout), in delen van minder dan twee uur.
+    4. **In het spel:** de maker zet de herberg en het huis van de schout in de stijl van het land; een kapel en een
+       herberg die later komen, krijgen die van de stijl, met de deur naar de weg; de woontoren als regel (een stenen huis
+       dat een maand alles heeft, groeit vanaf marktrecht door tot woontoren met drie gezinnen, `T.WENSEN_INSTELLINGEN`);
+       dan `npm test`, `npm run schermen` en de speeltest van vier jaar.
+    Vragen: **A**, groeit de herberg mee (het gehucht begint met de kleine in de stijl, en in een dorp groeit hij door tot
+    de grote met stal en binnenplaats), of komt de grote meteen? **B**, de woontoren: drie gezinnen op 5 bij 5, dezelfde
+    stand als het stenen huis (ambachtslieden)? Op een kleinere voet dan het stenen huis waaruit hij groeit, dus hij geeft
+    grond terug, en de grond om te bouwen was wat de winst tegenhield (vraag 110). **C**, eerst de proefplaat, en pas
+    renderen als Marcel hem gezien heeft?
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag
