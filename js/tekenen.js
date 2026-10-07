@@ -2092,6 +2092,18 @@
       T.blok(ctx, p.x, p.y, 0.16, 0.16, 16, '#5d8a34', { helder, basis: 140 });
       return;
     }
+    if (v.soort === 'hol') {
+      // Het hol van een roedel wolven (js/beesten.js): een kuil onder een omgevallen boom, met botten ervoor. Zonder kunst:
+      // een donkere kuil met een omgevallen stam erachter.
+      const hol = metSprites() && T.sprites.hol();
+      if (hol) {
+        T.sprites.teken(ctx, hol, p.x, p.y, helder);
+        return;
+      }
+      T.blok(ctx, p.x, p.y, 0.3, 0.3, 2, '#1c1410', { helder });
+      T.blok(ctx, p.x, p.y, 0.5, 0.1, 10, '#5e4a36', { helder, basis: 2 });
+      return;
+    }
     if (v.soort === 'kraam') {
       // Een kraam van de markt op het plein (js/markt.js; werklijst vraag 110, d): een toonbank met een gestreepte luifel,
       // naar het midden van het plein. In aanbouw bleker, zoals een gebouw zonder bouwfasen. Zonder kunst: een toonbank

@@ -54,6 +54,7 @@
 //         trektWeg (de groep gaat weg: T.werkBeestenBij haalt hem van de kaart), prooi { e, soort } en prooiDoel (een
 //         roedel met honger: wie of wat hij zoekt, en waar zijn leider heen loopt), kiest (S.wereldTijd: wanneer hij weer
 //         een prooi kiest) }
+// Het hol van een roedel is een voorwerp op de kaart naast zijn thuis, { soort: 'hol', x, y, groep: G } (T.holVan, stap 3b).
 // In het dorp: D.beesten = { gezet, gezien { dag, wat ('gezien', 'schaap' of 'aanval'), wie } (het laatste wat de wolven
 // bij het dorp deden: de status), roedel (de roedel die het laatst een schaap nam: daar gaat de jacht heen), hek (true:
 // een hek om de schapen) }. Op een bewoner: p.thuisTot en p.gewond.
@@ -270,6 +271,7 @@
       const G = nieuweGroep(soort, Math.floor(r() * 1e9), plek);
       const [van, tot] = soort === 'wolf' ? IN().roedel : IN().kudde;
       plekkenBij(w, G.thuis, van + Math.floor(r() * (tot - van + 1))).forEach((p) => w.wezens.push(maakBeest(G, p, G.geteld++)));
+      if (soort === 'wolf') zetHol(D, G);
       groepen.push(G);
     }
     return groepen;
@@ -283,6 +285,53 @@
     soort, zaad, thuis: { x: plek.thuis.x, y: plek.thuis.y }, rand: plek.rand.map((q) => ({ x: q.x, y: q.y })),
     bij: 0, doel: 'thuis', spoor: [], wacht: 0, weg: 0, vluchtNaar: null, keek: 0, zoekt: 0, honger: 0, geteld: 0,
   });
+
+  // Het hol van een roedel (stap 3b; Marcel: "het hol is een plek op de kaart (een kuil onder een omgevallen boom, met
+  // botten ervoor) die de schout kan vinden, en waar de jacht heen gaat"): een voorwerp { soort: 'hol', x, y, groep: G } op
+  // een vrije tegel naast zijn thuis, niet op het thuis zelf, want daar loopt de roedel heen, en niet op een plek aan de
+  // rand. Het is vast: je loopt eromheen. Blijft de roedel dan nog overal te bereiken (de plekken aan de rand), anders de
+  // volgende tegel. Een groep heeft er één; waar het thuis verandert, gaat het hol mee (blijfOfVerhuis, splits), en wie
+  // weggaat of doodgaat, neemt het mee (onderhoudHollen).
+  T.holVan = (D, G) => ((D.wereld && D.wereld.voorwerpen) || []).find((v) => v.soort === 'hol' && v.groep === G) || null;
+
+  function zetHol(D, G) {
+    const w = D.wereld;
+    haalHolWeg(D, G);
+    const kandidaten = [];
+    for (let ring = 1; ring <= 3; ring++) {
+      for (let dy = -ring; dy <= ring; dy++) {
+        for (let dx = -ring; dx <= ring; dx++) {
+          if (Math.max(Math.abs(dx), Math.abs(dy)) !== ring) continue;
+          const x = G.thuis.x + dx;
+          const y = G.thuis.y + dy;
+          if (x < 0 || y < 0 || y >= w.tegels.length || x >= w.tegels[0].length) continue;
+          if (!vrij(w, x, y) || T.opPad(w, x, y) || G.rand.some((p) => p.x === x && p.y === y)) continue;
+          kandidaten.push({ x, y, ring, sleutel: lot(G.zaad, y * w.tegels[0].length + x, 118) });
+        }
+      }
+    }
+    kandidaten.sort((a, b) => a.ring - b.ring || a.sleutel - b.sleutel);
+    for (const k of kandidaten) {
+      const v = T.zetVoorwerp(w, { soort: 'hol', x: k.x, y: k.y, groep: G });
+      if (G.rand.every((p) => T.kanErKomen(w, G.thuis, p))) return v;
+      T.haalVoorwerpWeg(w, v);
+    }
+    return null;
+  }
+
+  function haalHolWeg(D, G) {
+    const v = T.holVan(D, G);
+    if (v) T.haalVoorwerpWeg(D.wereld, v);
+  }
+
+  // Elke nacht: een roedel zonder hol (een spel van vóór het hol) krijgt er een, en een hol zonder roedel (hij trok weg of
+  // is verslagen) gaat weg.
+  function onderhoudHollen(D) {
+    const w = D.wereld;
+    const levend = new Set(T.beestenVan(D).filter(({ G }) => G.soort === 'wolf' && !G.trektWeg).map(({ G }) => G));
+    for (const v of (w.voorwerpen || []).filter((x) => x.soort === 'hol' && !levend.has(x.groep))) T.haalVoorwerpWeg(w, v);
+    for (const G of levend) if (!T.holVan(D, G)) zetHol(D, G);
+  }
 
   // Een thuis voor een groep van deze soort: de eerste plek uit de kandidaten (thuisKandidaten) die ver genoeg van de
   // andere thuizen ligt (uitElkaar) en plekken aan de rand heeft. Geeft { thuis, rand }, of null. Hooguit `proeven`
@@ -397,7 +446,10 @@
   // De spelregel ging uit: de dieren gaan weg, het bos in.
   function haalWeg(D) {
     const w = D.wereld;
-    if (w) w.wezens = w.wezens.filter((e) => !e.beest);
+    if (w) {
+      w.wezens = w.wezens.filter((e) => !e.beest);
+      for (const v of (w.voorwerpen || []).filter((x) => x.soort === 'hol')) T.haalVoorwerpWeg(w, v);
+    }
     D.beesten.gezet = false;
   }
 
@@ -648,6 +700,7 @@
     if (!IN().aan || !D.beesten || !D.beesten.gezet || !w || !w.tegels || !w.tegels.length) return;
     // Een wolf die in een gevecht viel, ligt er niet meer.
     if (w.wezens.some((e) => e.beest && e.dood)) w.wezens = w.wezens.filter((e) => !(e.beest && e.dood));
+    onderhoudHollen(D);
     let groepen = T.beestenVan(D).filter(({ G }) => !G.trektWeg);
     if (!groepen.length) return;
     const kaart = bosKaart(w, true);
@@ -680,10 +733,16 @@
       plek = nieuwThuis(w, kaart, open, midden, G.soort, kandidaten, thuizen, 15);
     }
     if (plek) {
+      const verhuisd = plek.thuis !== G.thuis;
       Object.assign(G, { thuis: { x: plek.thuis.x, y: plek.thuis.y }, rand: plek.rand, bij: 0, wacht: 0, doel: null });
+      // Het hol gaat mee naar het nieuwe thuis; blijft het thuis, dan staat het nog goed (een nieuwe rand kan wel op de tegel van
+      // het hol liggen).
+      const hol = T.holVan(D, G);
+      if (G.soort === 'wolf' && (verhuisd || !hol || plek.rand.some((p) => p.x === hol.x && p.y === hol.y))) zetHol(D, G);
       return;
     }
     G.trektWeg = true;
+    haalHolWeg(D, G);
     T.zeg(D, `De ${T.BEESTEN[G.soort].meervoud} zijn weggetrokken: hun bos is te klein geworden.`, G.soort === 'wolf' ? 'goed' : '');
   }
 
@@ -751,6 +810,7 @@
       leden.splice(leden.indexOf(e), 1);
     });
     if (G.soort === 'hert') helft[0].vel = T.BEESTEN.hert.leider;
+    if (plek && G.soort === 'wolf') zetHol(D, G2);
     groepen.push({ G: G2, leden: helft });
   }
 

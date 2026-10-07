@@ -71,6 +71,7 @@
       if (gegevens.schandpaal) vellen.push(gegevens.schandpaal.bestand);
       if (gegevens.paaltje) vellen.push(gegevens.paaltje.bestand);
       if (gegevens.meiboom) vellen.push(gegevens.meiboom.bestand);
+      if (gegevens.hol) vellen.push(gegevens.hol.bestand);
       // De kramen en de manden van de markt laden pas als er een getekend wordt (S.kraam, S.mand): zo'n 24 MB.
       if (gegevens.tekens) vellen.push(gegevens.tekens.bestand);
       // De figuren laden hier niet: een figuur komt pas als zijn wezen op de kaart staat (S.laadWatErStaat, vraag 114,
@@ -484,6 +485,14 @@
   S.meiboom = function () {
     if (!gegevens || !gegevens.meiboom) return null;
     const t = gegevens.meiboom;
+    return stuk(MAP + t.bestand, 0, 0, t.cel[0], t.cel[1], t.anker);
+  };
+
+  // Het hol van een roedel wolven (js/beesten.js, gereedschap/pixelart/hol.cjs): één tekening, zoals de meiboom, met het
+  // anker op de grond in het midden van de tegel. Null als het vel er niet is.
+  S.hol = function () {
+    if (!gegevens || !gegevens.hol) return null;
+    const t = gegevens.hol;
     return stuk(MAP + t.bestand, 0, 0, t.cel[0], t.cel[1], t.anker);
   };
 
