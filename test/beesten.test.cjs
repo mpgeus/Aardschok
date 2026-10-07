@@ -754,3 +754,78 @@ test('overdag loert de jager in het bos op zijn groep, net buiten waar ze schuw 
   assert.ok(loerde >= T.BEESTEN_INSTELLINGEN.schuw.hert && loerde <= J.loerAfstand + 5, `op ${loerde} tegels`);
   assert.ok(thuis, 'en ging terug naar zijn hut');
 }));
+
+// ---------------------------------------------------------------------------------------------
+// Stap 3b, de jacht te voet (Marcel, 7 okt: "Ja dat is goed")
+// ---------------------------------------------------------------------------------------------
+
+// Een jacht op de roedel die een schaap nam, op een zomerochtend; zonder militie gaan er twee weerbare mannen mee.
+function jacht() {
+  const S = landVanDeMaker(62707);
+  const D = S.dorp;
+  T.zetBeesten(D);
+  const roedel = groepVan(S, 'wolf');
+  D.beesten.roedel = roedel.G;
+  opUur(S, 9);
+  let J;
+  luister((gezegd) => {
+    J = T.beginJacht(D, S.kalender.dag);
+    assert.ok(gezegd.some((z) => /De jacht op de wolven: .* gaan met je mee/.test(z)), gezegd.join(' / '));
+  });
+  return { S, D, J, roedel };
+}
+
+test('een jacht te voet: de mannen lopen met de schout mee, en bij de roedel begint een gevecht in beurten', () => {
+  const { S, D, J, roedel } = jacht();
+  assert.equal(J.roedel, roedel.G);
+  assert.equal(J.mannen.length, T.BEESTEN_INSTELLINGEN.jacht.mannen, 'twee weerbare mannen');
+  for (const e of J.mannen) assert.ok(e.opgeroepen && e.kant === 'speler', `${e.naam} gaat mee`);
+  assert.deepEqual(T.holVanDeJacht(D), roedel.G.thuis, 'het hol ligt in goud op de grond');
+  // De schout loopt naar het hol, de mannen naast hem; binnen negen tegels van een wolf begint het gevecht.
+  const leider = leiderVan(roedel);
+  const plek = zetBij(D.wereld, S.schout, { x: leider.tx + T.BEESTEN_INSTELLINGEN.jacht.bij, y: leider.ty });
+  for (const e of J.mannen) zetBij(D.wereld, e, plek);
+  T.werkBeestenBij(S, D);
+  assert.equal(S.modus, 'overgang', 'het gevecht begint');
+  T.beginGevecht(S);
+  for (const e of J.mannen) assert.ok(S.gevecht.volgorde.includes(e), `${e.naam} vecht mee`);
+  assert.ok(S.gevecht.monsters.some((m) => m.groep === roedel.G), 'tegen de roedel');
+  // Een wolf valt, de rest is gevlucht: de jacht is voorbij, en de mannen gaan naar huis.
+  S.gevecht.monsters.find((m) => m.groep === roedel.G).dood = true;
+  luister((gezegd) => {
+    T.eindeGevecht(S, 'kwijt');
+    assert.ok(gezegd.some((z) => /een wolf minder, de rest is gevlucht/.test(z)), gezegd.join(' / '));
+  });
+  assert.ok(roedel.G.weg > S.kalender.dag, 'de rest vlucht naar het hol');
+  assert.equal(D.beesten.jacht, null);
+  assert.equal(T.holVanDeJacht(D), null);
+  for (const e of J.mannen) assert.ok(!e.opgeroepen && e.kant === 'neutraal', `${e.naam} gaat naar huis`);
+});
+
+test('gaat de schout niet binnen twee dagen, dan gaan de mannen zonder hem: de roedel verliest twee wolven', () => {
+  const { S, D, J, roedel } = jacht();
+  const voor = roedel.leden.length;
+  S.kalender.dag = J.tot - 0.1;
+  T.werkBeestenBij(S, D);
+  assert.ok(D.beesten.jacht, 'nog niet');
+  S.kalender.dag = J.tot;
+  luister((gezegd) => {
+    T.werkBeestenBij(S, D);
+    assert.ok(gezegd.some((z) => /zonder je/.test(z)), gezegd.join(' / '));
+  });
+  assert.equal(D.beesten.jacht, null);
+  assert.equal(D.wereld.wezens.filter((e) => e.groep === roedel.G).length, Math.max(0, voor - T.BEESTEN_INSTELLINGEN.jacht.zonderJou));
+  for (const e of J.mannen) assert.ok(!e.opgeroepen);
+});
+
+test('het voorval "wolven": "Een jacht" is een jacht te voet, en het venster zegt wat het vraagt', () => {
+  const S = landVanDeMaker(62707);
+  const D = S.dorp;
+  T.zetBeesten(D);
+  D.beesten.roedel = groepVan(S, 'wolf').G;
+  const keuze = T.GESPREKKEN.wolven.knopen.begin.keuzes.find((k) => /jacht/.test(k.zeg) && k.als && k.als.vlag === 'wolvenNamenSchaap');
+  assert.ok(keuze.doe.jacht);
+  assert.match(T.prijsVanKeuze(D, keuze.doe).tekst, /de mannen gaan met je mee naar de wolven/);
+  luister(() => T.voorvalGevolg(D, keuze.doe));
+  assert.ok(D.beesten.jacht, 'de jacht loopt');
+});

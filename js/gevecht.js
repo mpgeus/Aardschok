@@ -218,9 +218,11 @@
     for (const m of S.wereld.wezens) {
       if (m.kant === 'monster' && !m.dood) m.dwaalTijd = 2.5;
     }
-    // Waren het rovers, dan zegt js/rovers.js wat er van hun aanval overblijft.
+    // Waren het rovers, dan zegt js/rovers.js wat er van hun aanval overblijft; was het de jacht op de wolven, dan is die
+    // voorbij (js/beesten.js).
     const D = T.dorpHier(S);
     if (D) T.naGevecht(D, reden);
+    if (D) T.naJacht(D);
   };
 
   // Waar wie aan de beurt is heen kan met zijn punten.

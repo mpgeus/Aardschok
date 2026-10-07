@@ -132,8 +132,12 @@
     // Wie aan het werk de wolven ziet: alleen wie aan of in het bos werkt (BOSWERK), alleen als de roedel honger heeft
     // (vanaf honger.jagenVanaf: dan laten ze zich zien), en per uur met schrikKans.
     dreiging: { stout: 30, donker: 0.6, zoekStraal: 30, alleen: 4, gewondDagen: 3, doodKans: 0.2, schrik: 0.5, schrikKans: 0.5, statusDagen: 10 },
-    // Een jacht op de wolven (het voorval "wolven"): de roedel verliest er zoveel.
-    jacht: 2,
+    // ── Stap 3b, de jacht te voet ──
+    // Een jacht op de wolven (het voorval "wolven"; Marcel, 7 okt: "Ja dat is goed"): de mannen van de militie, of zonder
+    // militie zoveel weerbare mannen, lopen met de schout mee naar de roedel; komt hij binnen bij tegels van een wolf, dan
+    // is het een gevecht in beurten. Gaat hij niet binnen dagen dagen, dan gaan ze zonder hem: de roedel verliest
+    // zonderJou wolven, en met sterfkans procent kans komt een van de mannen niet terug.
+    jacht: { mannen: 2, bij: 9, dagen: 2, zonderJou: 2, sterfkans: 15 },
 
     // ── Stap 3a, de jager ──
     // De jager jaagt echt (vraag 116, stap 3; Marcel, 7 okt: "Altijd een paar herten over houden. Anders krijgen we geen
@@ -407,6 +411,7 @@
       return;
     }
     if (!B.gezet) T.zetBeesten(D);
+    if (B.jacht) werkJachtBij(S, D);
     const groepen = new Map();
     let weg = false;
     for (const e of w.wezens) {
@@ -1000,14 +1005,109 @@
 
   // Een jacht op de wolven (het voorval "wolven"): de roedel die het laatst een schaap nam (of, is die er niet meer, de
   // roedel met de meeste honger) verliest er zoveel, de leider het laatst. Geeft hoeveel.
-  T.jaagOpDeWolven = function (D, n = IN().jacht) {
-    const roedels = T.beestenVan(D).filter(({ G }) => G.soort === 'wolf' && !G.trektWeg);
-    const doel = roedels.find(({ G }) => G === D.beesten.roedel) || roedels.sort((a, b) => (b.G.honger || 0) - (a.G.honger || 0))[0];
+  T.jaagOpDeWolven = function (D, n = IN().jacht.zonderJou) {
+    const doel = roedelVoorDeJacht(D);
     if (!doel) return 0;
     const weg = doel.leden.filter((e) => !e.leider).concat(doel.leden.filter((e) => e.leider)).slice(0, n);
     D.wereld.wezens = D.wereld.wezens.filter((e) => !weg.includes(e));
     T.zeg(D, weg.length === doel.leden.length ? 'De jacht: de roedel is er niet meer.' : `De jacht: ${T.telwoord(weg.length)} ${weg.length === 1 ? 'wolf' : 'wolven'} minder.`, 'goed');
     return weg.length;
+  };
+
+  // De roedel waar een jacht heen gaat: die het laatst een schaap nam, of, is die er niet meer, die met de meeste honger.
+  // Geeft { G, leden } of null.
+  function roedelVoorDeJacht(D) {
+    const roedels = T.beestenVan(D).filter(({ G }) => G.soort === 'wolf' && !G.trektWeg);
+    return roedels.find(({ G }) => G === D.beesten.roedel) || roedels.sort((a, b) => (b.G.honger || 0) - (a.G.honger || 0))[0] || null;
+  }
+
+  // ---------------------------------------------------------------------------------------------
+  // De jacht te voet (stap 3b)
+  // ---------------------------------------------------------------------------------------------
+  // D.beesten.jacht = { roedel (G), tot (de dag waarop de mannen zonder je gaan), mannen [wezens] }, zolang hij loopt.
+
+  // Een jacht begint (het voorval "wolven", doe.jacht): de mannen van de militie (T.militieVan, js/rovers.js), of zonder
+  // militie de weerbare mannen (T.weerbareMannen, js/bewoners.js), komen bij de schout en lopen met hem mee.
+  T.beginJacht = function (D, dag) {
+    const doel = roedelVoorDeJacht(D);
+    if (!doel) {
+      T.zeg(D, 'De wolven zijn al weg: er is niets meer om op te jagen.');
+      return null;
+    }
+    const militie = T.militieVan(D);
+    const mannen = (militie.length ? militie : T.weerbareMannen(D).filter((p) => p.wezen && !p.wezen.dood).slice(0, IN().jacht.mannen).map((p) => p.wezen));
+    for (const e of mannen) T.roepOp(e);
+    D.beesten.jacht = { roedel: doel.G, tot: dag + IN().jacht.dagen, mannen };
+    const wie = mannen.length ? `${T.opsomming(mannen.map((e) => e.naam))} ${mannen.length === 1 ? 'gaat' : 'gaan'} met je mee` : 'Er is niemand die meegaat';
+    T.zeg(D, `De jacht op de wolven: ${wie}. Hun hol ligt in het bos, in goud op de grond. Ga je niet binnen ${T.telwoord(IN().jacht.dagen)} dagen, dan gaan ze zonder je.`);
+    return D.beesten.jacht;
+  };
+
+  // Elk beeld (T.werkBeestenBij): de mannen lopen met de schout mee, en komt hij binnen jacht.bij tegels van een wolf van
+  // de roedel, dan begint het gevecht. Is zijn tijd om, dan gaan ze zonder hem.
+  function werkJachtBij(S, D) {
+    const J = D.beesten.jacht;
+    const leden = D.wereld.wezens.filter((e) => e.groep === J.roedel && !e.dood);
+    if (!leden.length || J.roedel.trektWeg) {
+      eindJacht(D, 'De jacht: de roedel is weg.');
+      return;
+    }
+    if (S.modus === 'gevecht' || S.modus === 'overgang' || S.modus === 'dood') return;
+    if (D.kalender.dag >= J.tot) {
+      zonderJou(D, J);
+      return;
+    }
+    if (T.schoutIsWeg(D)) return;
+    for (const e of J.mannen) if (!e.dood && e.opgeroepen && !e.onderweg) T.loopNaastDeSchout(D, e);
+    if (S.modus !== 'verkennen' || S.wereld !== D.wereld || S.spreektMet) return;
+    const h = T.tegelVan(D.schout);
+    let wolf = null;
+    for (const e of leden) if (T.afstand(h, T.tegelVan(e)) <= IN().jacht.bij && (!wolf || T.afstand(h, T.tegelVan(e)) < T.afstand(h, T.tegelVan(wolf)))) wolf = e;
+    if (!wolf) return;
+    J.gevecht = true;
+    T.startGevecht(S, wolf, true);
+  }
+
+  // De tijd is om: de mannen gingen zonder de schout. De roedel verliest wolven, en een van de mannen komt misschien
+  // niet terug.
+  function zonderJou(D, J) {
+    const dag = D.kalender.dag;
+    const mannen = J.mannen.filter((e) => !e.dood);
+    T.jaagOpDeWolven(D);
+    if (mannen.length && lot(J.roedel.zaad, Math.floor(dag), 61) < IN().jacht.sterfkans / 100) {
+      const e = mannen[Math.floor(lot(J.roedel.zaad, Math.floor(dag), 63) * mannen.length)];
+      const p = T.bewonerVan(D, e);
+      if (p) T.wijzigBevolking(D, -1, 'wolven', 'Hij kwam niet terug van de jacht op de wolven', [p]);
+    }
+    eindJacht(D, mannen.length ? 'De mannen gingen zonder je op jacht.' : null);
+  }
+
+  // Na een gevecht (T.eindeGevecht, js/gevecht.js): was het de jacht, dan is hij voorbij. Wie van de roedel overbleef,
+  // vlucht naar zijn hol.
+  T.naJacht = function (D) {
+    const J = D.beesten && D.beesten.jacht;
+    if (!J || !J.gevecht) return;
+    const leden = D.wereld.wezens.filter((e) => e.groep === J.roedel && !e.dood);
+    const dood = D.wereld.wezens.filter((e) => e.groep === J.roedel && e.dood).length;
+    if (leden.length) {
+      J.roedel.weg = D.kalender.dag + IN().wegUren / 24;
+      J.roedel.vluchtNaar = { x: J.roedel.thuis.x, y: J.roedel.thuis.y };
+    }
+    eindJacht(D, !leden.length ? 'De jacht: de roedel is er niet meer.' : dood ? `De jacht: ${T.telwoord(dood)} ${dood === 1 ? 'wolf' : 'wolven'} minder, de rest is gevlucht.` : 'De jacht: de wolven zijn gevlucht.');
+  };
+
+  // De jacht is voorbij: de mannen gaan naar huis of aan het werk.
+  function eindJacht(D, tekst) {
+    const J = D.beesten.jacht;
+    for (const e of J.mannen) if (!e.dood) T.laatGaan(e);
+    D.beesten.jacht = null;
+    if (tekst) T.zeg(D, tekst, 'goed');
+  }
+
+  // Het hol waar de jacht heen gaat, voor js/tekenen.js (in goud op de grond): { x, y }, of null.
+  T.holVanDeJacht = function (D) {
+    const J = D && D.beesten && D.beesten.jacht;
+    return J ? { x: J.roedel.thuis.x, y: J.roedel.thuis.y } : null;
   };
 
   // Een hek om de schapen (het voorval "wolven"): een roedel met honger laat ze voortaan met rust, en zoekt andere prooi.
