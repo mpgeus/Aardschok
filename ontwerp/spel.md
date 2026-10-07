@@ -651,8 +651,8 @@ wachthuis na de rovers, de bouwstof en de wensen van de huizen, en wat het doel 
 ## Beesten in het bos (Marcel, 4 okt 2026; werklijst vraag 116, stap 1 gebouwd op 7 okt)
 
 **Zo werkt het nu** (stap 1, het beeld; Marcel, 7 okt: "a ja, b ja, c ja"; `js/beesten.js`): op elk land van de maker
-leven roedels wolven (twee tot vier) en groepjes herten (twee hindes en een hert met een gewei), zoveel als het bos groot
-is: op de landen van nu een of twee roedels en een tot vier groepjes. Elke groep heeft een plek diep in het bos (het hol,
+leven roedels wolven (twee tot vier) en groepjes herten (een hert met een gewei voorop, en een tot drie hindes in twee
+kleuren; hun tekening komt uit `gereedschap/pixelart/wild.cjs`), zoveel als het bos groot is: op de landen van nu een of twee roedels en een tot vier groepjes. Elke groep heeft een plek diep in het bos (het hol,
 de legerplek) en een paar plekken aan de bosrand. Overdag liggen ze thuis; de wolven lopen vanaf een uur voor
 zonsondergang tot zonsopgang langs de rand, van plek naar plek, en de herten grazen rond zonsopgang en zonsondergang op
 open grond aan de rand. Komt er een mens dichtbij (acht tegels voor een wolf, zeven voor een hert; wie sluipt, komt twee
