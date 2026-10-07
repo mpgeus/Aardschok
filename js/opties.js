@@ -419,13 +419,15 @@
       ],
     },
     // De beesten in het bos (werklijst vraag 116; Marcel, 4 okt: "Ik wil dat er beesten kunnen rondlopen in het bos",
-    // en 7 okt: "a ja, b ja, c ja"; js/beesten.js).
+    // en "doden mag"; 7 okt: "a ja, b ja, c ja", en "i ja": aan, zonder doden of uit; js/beesten.js).
     {
       id: 'beesten', naam: 'Beesten', standaard: 'aan',
-      uitleg: 'Of er wolven en herten in het bos leven.',
+      uitleg: 'Of er wolven en herten in het bos leven, en wat de wolven doen als ze honger hebben.',
       keuzes: [
-        { id: 'aan', naam: 'Aan', zet: { 'BEESTEN_INSTELLINGEN.aan': true },
-          uitleg: 'Roedels wolven rusten overdag bij hun hol en lopen \'s nachts langs de bosrand, waar je hun ogen ziet oplichten; herten grazen in de schemering aan de rand. Komt er iemand dichtbij, dan gaan ze weg. Een wolf valt niet aan, maar jij kunt hem aanvallen.' },
+        { id: 'aan', naam: 'Aan', zet: { 'BEESTEN_INSTELLINGEN.aan': true, 'BEESTEN_INSTELLINGEN.doden': true },
+          uitleg: 'Roedels wolven rusten overdag bij hun hol en lopen \'s nachts langs de bosrand, waar je hun ogen ziet oplichten; herten grazen in de schemering aan de rand. In de winter jagen de wolven op de herten, en zijn die op, dan komen ze met honger naar het dorp: ze nemen een schaap, en wie alleen in het donker loopt, kunnen ze aanvallen. Een enkele keer is hij dood.' },
+        { id: 'zonderDoden', naam: 'Zonder doden', zet: { 'BEESTEN_INSTELLINGEN.aan': true, 'BEESTEN_INSTELLINGEN.doden': false },
+          uitleg: 'Zoals aan, maar wie de wolven aanvallen, is gewond en ligt een paar dagen in bed; niemand gaat dood.' },
         { id: 'uit', naam: 'Uit', zet: { 'BEESTEN_INSTELLINGEN.aan': false },
           uitleg: 'Het bos is leeg. Zoals voor 7 okt.' },
       ],

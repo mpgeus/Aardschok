@@ -46,8 +46,10 @@
 
   // Alle getallen in één blok, zoals elders (CLAUDE.md); ze staan ook in de werkbank (js/opties.js).
   T.BEESTEN_INSTELLINGEN = {
-    // De spelregel "Beesten": aan of uit. Uit: ze gaan weg, en er komen er geen.
+    // De spelregel "Beesten": aan, zonder doden of uit. Uit: ze gaan weg, en er komen er geen. Zonder doden: wie de wolven
+    // aanvallen, is gewond, nooit dood.
     aan: true,
+    doden: true,
     // Hoeveel groepen er komen: een roedel per zoveel tegels bos (T.isBos, js/bos.js) en een groepje herten per zoveel,
     // minstens een van elk als er zoveel bos is, en niet meer dan zoveel. Op de landen van de maker is het bos 800 tot
     // 1.600 tegels (de rest staat om de kaart heen): een of twee roedels, en een tot vier groepjes herten.
