@@ -290,6 +290,12 @@ const FIGUURLIJST = {
   schaap0: { map: ['vee', 'animaties'], houdingen: ['grazen', 'staan', 'lopen', 'liggen'], bron: 'vee-anim.cjs schaap0' },
   schaap1: { map: ['vee', 'animaties'], houdingen: ['grazen', 'staan', 'lopen', 'liggen'], bron: 'vee-anim.cjs schaap1' },
   schaap2: { map: ['vee', 'animaties'], houdingen: ['grazen', 'staan', 'lopen', 'liggen'], bron: 'vee-anim.cjs schaap2' },
+  // Het wild (wild.cjs, ontwerp/beeld.md "Het wild", vraag 116): het edelhert, twee hindes en een hert met gewei, een vel
+  // per kleur. Naast grazen, staan, lopen en liggen heeft het rennen: in sprongen, voor als het vlucht. Lopen en rennen
+  // hebben elk hun `snelheid` en `stap` in de beschrijving, zodat de voeten niet glijden.
+  hert0: { map: ['wild', 'animaties'], houdingen: ['grazen', 'staan', 'lopen', 'rennen', 'liggen'], bron: 'wild-anim.cjs hert0' },
+  hert1: { map: ['wild', 'animaties'], houdingen: ['grazen', 'staan', 'lopen', 'rennen', 'liggen'], bron: 'wild-anim.cjs hert1' },
+  hert2: { map: ['wild', 'animaties'], houdingen: ['grazen', 'staan', 'lopen', 'rennen', 'liggen'], bron: 'wild-anim.cjs hert2' },
 };
 
 // Een figuurvel op schijf laten krimpen tot wat er in al zijn cellen samen staat (inpakken.cjs,

@@ -133,6 +133,13 @@ De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
   cel (128×108). `node vee-anim.cjs` rendert ze (met namen erachter alleen die) en maakt de
   proefplaat `uit/vee-proef.png` (`--proef` alleen die); daarna
   `node naar-spel.cjs --alleen koe0,koe1,koe2,schaap0,schaap1,schaap2`.
+- `wild.cjs`: het wild (werklijst vraag 116, stap 1), op dezelfde bouwstenen als het vee en de wolf: het edelhert,
+  slank, met lange poten, een lange hals, grote oren, een korte staart in een lichte spiegel, en bij het mannetje een
+  gewei. Drie vellen (`hert0` een roodbruine hinde, `hert1` een grijsbruine, `hert2` een hert met gewei) in vijf
+  houdingen: grazen, staan (alert), lopen (1,0 tegel per seconde), rennen (in sprongen, 4,0) en liggen; de snelheden
+  staan bovenaan in `SNELHEID`. `node wild-anim.cjs` rendert ze en maakt de proefplaat `uit/wild-proef.png` (`--proef`
+  alleen die; `--meet hert2` meet hoe ver de beelden van het anker reiken, om de cel in `CELLEN` te kiezen); daarna
+  `node naar-spel.cjs --alleen hert0,hert1,hert2`. Het wilde zwijn en de beer komen er later bij.
 - `toren.cjs`: de toren van de oude meester in drie staten, met een eigen renderer voor zijn
   hoogte, en `toren-lagen.cjs` dat hem in lagen snijdt voor het spel.
 - `trap.cjs`: de spiraaltrap, in dezelfde drie staten als de toren (ingestort, provisorisch,
