@@ -4987,6 +4987,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     is goed. C. Ja goed idee."** De jager laat altijd een paar herten per groep staan, zodat er in de lente jongen komen;
     de jacht te voet met twee dagen, zonder wachthuis twee weerbare mannen; om hulp roepen nu bij de wolven. Over d vroeg
     Marcel welk hek (het antwoord "Een hoger hek om de schapen" in het voorval "wolven"); dat staat nog open.
+    **Marcel (7 okt): "D ja allebei, begin maar".** Het hek wordt zichtbaar, en de lantaarns aan de bosrand vallen weg.
     **Bezig in sessie `ccr-77327776-rqjldz`** (7 okt): stap 3, wat je tegen de wolven doet; eerst het plan voor Marcel.
 117. **Eén kaart: het eiland** (Marcel, 4 okt, zesentwintigste sessie: "Ik wil uiteindelijk toch alles op dezelfde kaart.
     Dus de hele spelwereld als het ware. Zo kun je steeds stukken 'ontdekken' in de fog of war. Het idee is een eiland. Met
