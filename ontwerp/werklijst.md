@@ -4926,6 +4926,11 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     valt hij aan, in een gevecht in beurten. De status "Er zijn wolven bij het dorp" in het rapport, en de raad als ze een
     schaap of een mens namen. **Voor stap 3:** de status en de raad noemen de jager nog niet als oorzaak, want die doet nog
     niets tegen de wolven; dat komt erbij als hij echt jaagt.
+    **Marcel (7 okt): "even noteren dat mensen ook om hulp roepen".** Nog niet gebouwd. Nu valt een roedel aan en is het
+    meteen beslist (gewond of dood). Hoe het zou kunnen (Claude): wie de wolven aanvallen, roept om hulp; wie het hoort,
+    komt erheen, en de schout hoort het ook (een bericht met waar, later geluid); is hij er op tijd, dan schiet hij te hulp,
+    en is het een gevecht in beurten, zoals bij de rovers. Hoort bij stap 3, wat je ertegen doet; misschien ook bij andere
+    nood (een brand, de rovers).
 117. **Eén kaart: het eiland** (Marcel, 4 okt, zesentwintigste sessie: "Ik wil uiteindelijk toch alles op dezelfde kaart.
     Dus de hele spelwereld als het ware. Zo kun je steeds stukken 'ontdekken' in de fog of war. Het idee is een eiland. Met
     water rondom. Je krijgt een random positie op het land. Kan aan de buitenkant zijn of binnen in het land."; plan van

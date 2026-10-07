@@ -704,7 +704,8 @@ voor stap 2:** "g ja, h ja, i ja": een roedel eet eerst herten, en komt pas naar
 (dan heeft de jager een keuze: veel herten geeft vlees en huiden, maar wolven met honger); de lantaarn van de schout
 houdt de wolven op afstand, ze blijven aan de rand van het licht met hun ogen, en wie sluipt, kan een roedel met
 honger aanvallen, in een gevecht in beurten; gewond is een paar dagen in bed, zonder werk, en de spelregel "Beesten"
-wordt aan, zonder doden of uit.
+wordt aan, zonder doden of uit. **En (7 okt), na stap 2b:** "even noteren dat mensen ook om hulp roepen": wie de wolven
+aanvallen, roept om hulp (nog niet gebouwd; werklijst vraag 116, bij stap 3).
 
 ## Rovers en de militie (Marcel, 28 en 29 sep 2026; werklijst vraag 51 en 55)
 
