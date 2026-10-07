@@ -4887,6 +4887,25 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     dieper een nieuw hol, en zonder diep bos trekt hij weg; elke lente krijgen de roedels en de kuddes jongen, tot zes,
     en dan splitsen ze; het hol is een plek op de kaart die de schout kan vinden, en waar de jacht heen gaat. Stap 1
     staat in main.
+    **Het plan voor stap 2** (Claude, 7 okt, met d en e; f komt met de jacht in stap 3), in twee delen:
+    - **2a, het leven in het bos:** in de winter krijgt een roedel elke dag meer honger. Hij eet herten: 's nachts jaagt
+      hij op een kudde in zijn bos, en soms vangt hij er een. Elke lente krijgen de roedels en de kuddes jongen, tot zes,
+      en dan splitst de groep: de helft zoekt een eigen thuis als het bos groot genoeg is (zoveel bos per groep als bij
+      het begin), en trekt anders weg (e). Elke nacht kijkt een groep of zijn thuis nog diep genoeg in het bos ligt, en
+      zoekt anders dieper een nieuw; zonder diep bos trekt hij weg (d).
+    - **2b, de dreiging:** het werk eindigt bij zonsondergang, en de wolven komen een uur ervoor naar de rand. In dat
+      laatste uur (behalve midden in de zomer) ziet wie aan de bosrand werkt soms een wolf: hij rent naar huis, en zijn
+      werk van die dag is half (de houthakker, wie sprokkelt, rooit of ontgint). Een roedel met honger gaat 's nachts naar
+      de schaapskooi en neemt een schaap; het voorval "wolven" komt dan de ochtend erna, niet meer zomaar. Wie in de
+      winter 's avonds alleen in het donker loopt (van de herberg, tussen vier en half negen), kan worden aangevallen:
+      gewond (een paar dagen in bed, zonder werk) of een enkele keer dood. Een status "Wolven" (gezien bij het dorp;
+      erger als ze een schaap of een mens namen) voor de raad en het rapport, met de oorzaak die je had kunnen zien: geen
+      jager. De spelregel "Beesten" krijgt "zonder doden". Daarna een speeltest: wint het dorp nog?
+    Vragen: **g**, de herten als prooi: een roedel eet eerst herten, en komt pas naar het dorp als die in zijn bos op
+    zijn; dan heeft de jager in stap 3 een keuze (veel herten geeft vlees en huiden, maar wolven met honger). **h**, de
+    lantaarn van de schout houdt de wolven op afstand: ze blijven aan de rand van het licht, en je ziet hun ogen; wie
+    sluipt, heeft geen licht, en die kan een roedel met honger aanvallen, in een gevecht in beurten. **i**, gewond is een
+    paar dagen in bed, en de spelregel "Beesten" wordt aan, zonder doden of uit.
 117. **Eén kaart: het eiland** (Marcel, 4 okt, zesentwintigste sessie: "Ik wil uiteindelijk toch alles op dezelfde kaart.
     Dus de hele spelwereld als het ware. Zo kun je steeds stukken 'ontdekken' in de fog of war. Het idee is een eiland. Met
     water rondom. Je krijgt een random positie op het land. Kan aan de buitenkant zijn of binnen in het land."; plan van
