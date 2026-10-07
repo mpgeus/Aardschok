@@ -4745,6 +4745,12 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     kleine in de stijl van zijn land, en in een dorp groeit hij door tot de grote met stal en binnenplaats); de woontoren
     heeft drie gezinnen op 5 bij 5, in de stand van het stenen huis (ambachtslieden), vanaf marktrecht; en eerst de
     proefplaat, het renderen pas als Marcel hem gezien heeft.
+    **De proefplaat is gemaakt (7 okt; nog niets in het spel):** `node gereedschap/pixelart/huis-sdf-export.cjs groot`
+    (21 minuten; `groot wit` voor één stijl, `groot standen` voor de herberg in vier standen). De bouwer kreeg een toren
+    rondom (ramen op elke muur, de deur voor), een muur om een erf met een poort (`HS.erfmuur`), en `kaderSamen` dat
+    draait; `grootGebouw` in `huizen.cjs` geeft per stijl de kleine en de grote herberg, de kapel, de woontoren en het huis
+    van de schout. De grote herberg met zijn stal en binnenplaats is zo'n 18 bij 7 tegels (de herberg in `T.GEBOUWEN` nu 6
+    bij 6), de kapel zo'n 13 bij 5, de woontoren 5 bij 5. Wacht op Marcel.
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag
