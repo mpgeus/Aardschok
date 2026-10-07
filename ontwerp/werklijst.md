@@ -5000,6 +5000,19 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Dertig en vijftig zijn eerste getallen (vijfendertig tegels haalde op twee van de drie landen geen enkele groep); de
     speeltest zegt of het dorp nog wint zonder dat vlees. Een eigen tekening voor de jager (met boog, een hert op zijn
     rug) is pixel art voor later; nu loopt hij in zijn eigen vel.
+    **De speeltest na 3a (7 okt, op `c28458f`; `-- bouwer sluw --maker --jaren 4`, na de drie bouwers gestopt):** alle
+    drie de bouwers vielen in het eerste jaar, twee weggejaagd door het dorp (honger in louwmaand) en een zijn ambt kwijt
+    (de heer kreeg geen vlees). De oorzaak: het dorp leunde op de jager voor het eten in de winter (vlees vult een maag,
+    `vleesIsEten`). Een jager maakte 1 vlees per dag uit het niets, en de bouwer had er een paar; nu schieten ze bijna
+    niets, want de herten groeien maar een of twee per groepje per jaar aan. Maar het dorp vraagt nog steeds om een jager
+    zolang het eten de winter niet haalt (`T.watTeBouwen` in `js/raad.js`, zonder te kijken of er wild is), dus bouwde de
+    bouwer er 9 tot 11, die stilstonden, en vroeg de heer 5 vlees per jager. **Vragen voor Marcel** (Claude, 7 okt):
+    **j**, hoe zwaar weegt de jager voor het eten? **j1**, klein wild erbij: naast de herten vangt hij hazen, konijnen en
+    vogels, een vast deel per dag (de helft van nu), en de herten geven de rest; hij staat nooit helemaal stil (voorstel).
+    **j2**, een hert is meer waard (zestig vlees) en het bos groeit sneller aan (twee à drie jongen). **j3**, de jager
+    blijft schaars, en het dorp moet zijn eten ergens anders halen (akkers, visser, vee); dan moet de balans van het spel
+    opnieuw. En los daarvan, wat er hoe dan ook bij hoort: **k**, het dorp vraagt geen jager waar hij geen wild vindt, en
+    de heer vraagt geen vlees van een jager die stilstaat.
     **Bezig in sessie `ccr-77327776-rqjldz`** (7 okt): stap 3, wat je tegen de wolven doet; eerst het plan voor Marcel.
 117. **Eén kaart: het eiland** (Marcel, 4 okt, zesentwintigste sessie: "Ik wil uiteindelijk toch alles op dezelfde kaart.
     Dus de hele spelwereld als het ware. Zo kun je steeds stukken 'ontdekken' in de fog of war. Het idee is een eiland. Met
