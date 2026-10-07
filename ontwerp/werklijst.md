@@ -4917,14 +4917,18 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     jongen; een thuis dat niet meer diep in het bos ligt, verhuist, en zonder bos trekt de groep weg (en het dorp zegt
     het). In vijf jaar op zeven landen (een simulatie van alleen de nachten) vangt een roedel twee tot vier herten per
     winter; waar weinig herten zijn (73425), zijn die na twee jaar op, en dan heeft de roedel elke winter honger.
-    **Gebouwd, stap 2b (7 okt, zevenendertigste sessie; zeven toetsen erbij):** wie aan het werk een roedel ziet, rent naar
-    huis (`T.blijftThuis`, `p.thuisTot`: hij werkt niet en blijft binnen), en zijn werkplaats maakte die dag de helft; een
-    roedel met dertig dagen honger is in het donker stout, en neemt een schaap van de meent (de herder komt het de ochtend
-    erna zeggen: het voorval "wolven", met beesten in het bos niet meer geloot, en daarin doen de jacht, twee wolven minder,
+    **Gebouwd, stap 2b (7 okt, zevenendertigste sessie; zeven toetsen erbij):** wie aan het bos werkt en een roedel met
+    honger ziet, rent naar huis (per uur de helft van de keren; `T.blijftThuis`, `p.thuisTot`: hij werkt niet en blijft
+    binnen), en zijn werkplaats maakte die dag de helft; een roedel met dertig dagen honger is in het donker stout, en
+    neemt eerst een schaap van de meent (de herder komt het de ochtend erna zeggen: het voorval "wolven", met beesten in het bos niet meer geloot, en daarin doen de jacht, twee wolven minder,
     en het hek nu echt iets), of valt wie alleen in het donker loopt aan: drie dagen in bed, of een op de vijf keer dood
     (de spelregel "Zonder doden"); bij de schout met zijn lantaarn blijft hij aan de rand van het licht, en wie sluipt,
     valt hij aan, in een gevecht in beurten. De status "Er zijn wolven bij het dorp" in het rapport, en de raad als ze een
-    schaap of een mens namen. **Voor stap 3:** de status en de raad noemen de jager nog niet als oorzaak, want die doet nog
+    schaap of een mens namen. **De eerste speeltest** (6bb5cc1, vier jaar, de bouwer en de sluwe bouwer op 1 tot 3):
+    vier van de zes wonnen (voor 2b drie), maar wie werkte, schrok 470 tot 910 keer in vier jaar, met bijna elke avond
+    een bericht, en er werd geen enkel schaap genomen (de roedel nam de dichtste prooi: wie uit de herberg kwam, twee tot
+    acht keer gebeten, twee doden in zes spellen). Daarom nu: alleen wie aan het bos werkt, alleen van een roedel met
+    honger, met een kans, een bericht als de status begint, en eerst de schapen (2551cfb). **Voor stap 3:** de status en de raad noemen de jager nog niet als oorzaak, want die doet nog
     niets tegen de wolven; dat komt erbij als hij echt jaagt.
     **Marcel (7 okt): "even noteren dat mensen ook om hulp roepen".** Nog niet gebouwd. Nu valt een roedel aan en is het
     meteen beslist (gewond of dood). Hoe het zou kunnen (Claude): wie de wolven aanvallen, roept om hulp; wie het hoort,

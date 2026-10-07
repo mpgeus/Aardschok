@@ -673,12 +673,13 @@ of een akker haalde het weg; wat de houthakker kapt en inplant, blijft bos), dan
 zonder diep bos trekt hij weg, en dat zegt het dorp. In vijf jaar op zeven landen vangt een roedel twee tot vier herten
 per winter; waar weinig herten zijn, zijn die na een jaar of twee op, en dan heeft de roedel elke winter honger.
 
-**De dreiging** (stap 2b, 7 okt; Marcel: "a ja", en "h ja, i ja"): wie aan het werk de wolven ziet (de houthakker aan
-zijn boom, wie sprokkelt, rooit of ontgint), rent naar huis; hij werkt die dag niet meer, en zijn werkplaats maakte die
-dag de helft. Dat valt vanzelf in het laatste werkuur, want de wolven komen een uur voor zonsondergang naar de rand en
-het werk houdt op met de zon (midden in de zomer niet). Een roedel met honger (dertig dagen voor een roedel van vier; en
-honger komt alleen in de winter, als er geen hert te vangen is) is in het donker niet schuw meer: hij neemt een schaap
-van de meent, en de herder komt het je de ochtend erna zeggen (het voorval "wolven", dat met beesten in het bos niet meer
+**De dreiging** (stap 2b, 7 okt; Marcel: "a ja", en "h ja, i ja"): een roedel met honger laat zich zien, en wie aan het
+bos werkt (de houthakker aan zijn boom, wie sprokkelt, rooit of ontgint) en hem ziet, rent soms naar huis (per uur de
+helft van de keren); hij werkt die dag niet meer, en zijn werkplaats maakte die dag de helft. Dat valt vanzelf in het
+laatste werkuur, want de wolven komen een uur voor zonsondergang naar de rand en het werk houdt op met de zon, en honger
+is er alleen in de winter. Het dorp zegt het als de status begint, niet elke keer. Met meer honger (dertig dagen voor een
+roedel van vier, als er geen hert te vangen is) is hij in het donker niet schuw meer: eerst neemt hij een schaap van de
+meent, en de herder komt het je de ochtend erna zeggen (het voorval "wolven", dat met beesten in het bos niet meer
 zomaar komt; een jacht kost de roedel twee wolven, een hek houdt hem bij de schapen weg). Met een hek, of zonder schapen,
 zoekt hij wie alleen in het donker loopt (niemand binnen vier tegels, en geen licht): die is gewond en ligt drie dagen in
 bed, zonder werk, of is een op de vijf keer dood (de spelregel "Zonder doden": alleen gewond). Licht houdt hem weg: bij de
