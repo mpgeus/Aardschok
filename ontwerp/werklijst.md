@@ -5236,6 +5236,14 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     tegelhoogte) en van 32 (een hele), om te kiezen. Erbij een uitsnede op 2× van een hoek van de wand en de helling,
     en overdag en 's avonds (de wand donkerder aan de kant van de schaduw, het licht van linksboven zoals de huizen).
     Wat de plaat nog niet doet: lopen, zien en bouwen (dat is het spel, na de keuze), en de maker.
+    **Marcel (7 okt): "ik doel ook meer op heuvels in het landschap"**, dus niet alleen een rand achter het dorp, en op
+    het voorstel om allebei te tonen: "Ja maak de plaat met beide". Dus twee soorten hoogte op één stuk land: **glooiende
+    heuvels** (de grond buigt: elke hoek van een tegel heeft een hoogte, en de videokaart trekt de gewone grondtegel over
+    de schuine ruit, lichter naar de zon toe; geen nieuwe kunst, en een huis staat op een vlak stuk), en **terrassen**
+    met een rotswand of een begroeide wal waar het steil wordt. Eén model voor beide: een tegel heeft vier hoeken met een
+    hoogte; delen buren hun hoek, dan glooit het, en verschillen ze, dan staat er een wand. Een helling is een tegel die
+    schuin loopt tussen twee treden. Lage glooiing verbergt bijna niets, dus het niet-draaien knelt minder dan hierboven.
+    De plaat: `node gereedschap/pixelart/hoogte-proef.cjs`, naar `gereedschap/pixelart/uit/hoogte/`.
 122. **De snelheid in de browser en via Steam** (Marcel, 4 okt, achtentwintigste sessie: "Ik wil nu ook weten wat het
     verschil in performance is tussen nu spelen in de browser en straks via Steam. Want lag, geheugen tekort etc is geen
     optie straks"; plan van Claude; open). Uitgewerkt in `verpakken.md`, "Snelheid: in de browser of via Steam".
