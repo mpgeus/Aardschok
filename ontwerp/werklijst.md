@@ -4755,7 +4755,10 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     herberg? of aan de achterkant, nu wordt het wat massief".** Daarop de plaat `groot2` (`huis-sdf-export.cjs groot2`, of
     `groot2 kapel`): de herberg met de stal los ernaast (`stal: 'naast'`, zo'n 16 bij 6) en met de stal achter de herberg,
     met de binnenplaats ertussen en de poort opzij (`'achter'`, zo'n 13 bij 12), en de kapel groter: het schip 12 bij 6,
-    twee lagen steen, en een toren van zes lagen (`groot` in `grootGebouw`). Wacht op Marcel: naast of achter.
+    twee lagen steen, en een toren van zes lagen (`groot` in `grootGebouw`).
+    **Marcel (7 okt): "Ik denk dat we de stal bij de herberg maar gaan laten".** Dus de grote herberg heeft geen stal en
+    geen binnenplaats: alleen het gebouw van twee lagen, 12 bij 6 (`grootGebouw(stijl, 'herberg')`; de varianten met een
+    stal blijven alleen op de proefplaat). Dat spaart grond.
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag
