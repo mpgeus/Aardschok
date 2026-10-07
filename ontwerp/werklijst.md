@@ -65,7 +65,7 @@ plant twee boompjes per boom, zodat het bos om hem blijft (310 tot 490 hout per 
 gebouwd** (Marcel: "Ok" op a met c; sinds 6 okt in `main`, Marcel: "Push main"): op elk land stond een hut van de maker die nooit
 kon doorgroeien (meestal door één struik); nu rooit het gezin eerst wat in de weg staat, en zegt het briefje anders
 waarom, en in de speeltest van vier jaar wint de bouwer op 73425. **Sinds de zevenendertigste sessie ook a2, c2 en d**
-(Marcel: "Eens alle 3"; op `ccr-f6ba5992-1e77dw`, nog niet in `main`): het gezin kapt ook zijn eigen appelboom, de raad
+(Marcel: "Eens alle 3"; sinds 7 okt in `main`, Marcel: "1 ja"): het gezin kapt ook zijn eigen appelboom, de raad
 zegt het als een huis dat alles heeft niet kan groeien, en een erf komt niet waar het een huis elke vorm afneemt (zo
 legde de bouwer op 62707 een erf onder een hut, en die groeide nooit). Twee sessies bouwden vraag 130 tegelijk; de versie
 in `main` bleef, en a2, c2 en d staan erop. **Vraag 131** (de bouwer en de wapens) wacht op Marcel.
@@ -5794,10 +5794,8 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     zonder doden van kou of honger. Elke houthakker staat nog zo'n half jaar stil terwijl zijn boompjes groeien; dat mag
     (a). Onderweg gerepareerd: een put of kapel om te rooien bereikte niet wie er een miste, en er kwam elke maand een bij
     (op 72022 48 putten; `a612242`). Er wint nog geen dorp: dat is vraag 130.
-130. **Een hut die niet kan doorgroeien** (Claude, 6 okt, de sessie van de heer, bij de speeltest van vraag 129; open).
-    **Bezig in sessie `ccr-f6ba5992-1e77dw`** (6 okt): a2 (de appelboom, met Marcels "A"), c2 en d staan op die branch, op de versie van
-    vraag 130 die hier in `main` staat, met het briefje dat niet meer loot; de speeltest van vier jaar loopt. Niet opnieuw
-    bouwen: het komt in `main` als Marcel dat vraagt.
+130. **Een hut die niet kan doorgroeien** (Claude, 6 okt, de sessie van de heer, bij de speeltest van vraag 129; af,
+    met a2, c2 en d sinds 7 okt in `main`).
     **Wat er is:** een huis dat een maand alles heeft, groeit door als de bouwstof er is en de grotere vorm past
     (`kiesGroei` in `js/behoeften.js`): vanaf zijn linkerbovenhoek naar rechts en naar onder, en waar het nieuwe huis
     buiten het oude komt, mag niets vast staan (een boom, een struik, een gebouw), geen deur zijn en geen grond van een
@@ -5824,8 +5822,8 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     **Marcel koos (6 okt): "Ok".** Dus a met c: wie doorgroeit, rooit wat in de weg staat, zoals een gezin zijn erf, en
     het briefje bij de muis zegt waarom een huis dat alles heeft niet groeit; daarna de speeltest van vier jaar opnieuw.
     **Marcel koos ook (6 okt, in de zevenendertigste sessie, die vraag 130 tegelijk bouwde): "A" voor de appelboom.** De
-    appelboom mag ook om, maar alleen als geen enkele vorm zonder hem past: het gezin houdt zijn boom waar het kan. Nog
-    niet in `main`: daar houdt een appelboom het groeien tegen (`'vast'` in `watStaatInDeWeg`, `js/behoeften.js`).
+    appelboom mag ook om, maar alleen als geen enkele vorm zonder hem past: het gezin houdt zijn boom waar het kan. Zo
+    gebouwd als a2 (hieronder); daarvoor hield een appelboom het groeien tegen (`'vast'` in `watStaatInDeWeg`).
     Waarom het ertoe doet, **gemeten** bij het begin van het spel op veertig landen van de maker (1 tot 20, de drie van de
     speeltest en zeventien andere), met elke vorm die het groeien probeert: van de 160 hutten en huizen die kunnen
     doorgroeien, kunnen er 13 het niet. Met a groeien er 10 (één tot drie dingen te rooien), de andere drie (op land 1, 17
@@ -6134,8 +6132,8 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
-- 6 okt 2026 — **Vraag 130, a2, c2 en d** (zevenendertigste sessie; Marcel: "Eens alle 3"). Op de versie van vraag 130 in
-  `main`: het gezin kapt ook zijn eigen appelboom waar zijn huis groter wordt (`T.isEigenBoom`, `v.teKappen`), de raad
+- 6 okt 2026 — **Vraag 130, a2, c2 en d** (zevenendertigste sessie; Marcel: "Eens alle 3"; op 7 okt in `main`, Marcel:
+  "1 ja"). Op de versie van vraag 130 in `main`: het gezin kapt ook zijn eigen appelboom waar zijn huis groter wordt (`T.isEigenBoom`, `v.teKappen`), de raad
   zegt het als een huis dat alles heeft niet kan groeien (`groeitNiet`), en een erf komt niet waar het een huis elke vorm
   afneemt (`T.groeiGrond`). Gemeten op 201 landen: zo kunnen alle 58 hutten die bij het begin vastzaten, groeien. Ook
   gerepareerd: het erfbericht met het looppad, en de speler van de speeltest na een winst. `Spel.debug.wensen()` zegt per
