@@ -9,6 +9,12 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Als wapens mogen, waar zit dan de spanning van de opstand?** (7 okt, zevenendertigste sessie; een idee van Claude bij
+  vraag 131, voor vraag 126): sinds wapens niet meer verboden zijn, gaat het niet meer om wat je hebt, maar om wat je
+  ermee doet. De heer kan er zelf om vragen: wie op de heervaart gaat, neemt zijn wapen mee (`js/heervaart.js`), of een
+  gril vraagt "twintig speren voor mijn oorlog" (`js/grillen.js`). Dan kost trouw je juist wat je voor een opstand nodig
+  hebt, en een heer met een ander karakter (vraag 126) kijkt er anders naar. Niet nu: eerst de kern.
+
 - **Een erf in de hand loot de volgende hut en het volgende huis** (6 okt, zevenendertigste sessie, en 7 okt, de sessie
   van de heer; gezien bij vraag 130): wie met een erf in de hand over de kaart gaat, vraagt voor elke plek welke hut en
   welk huis erop passen (`T.waaromPastErfNiet`, `kiesTekeningen` in `js/erven.js`), en dat begint met de volgende
