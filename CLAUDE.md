@@ -450,8 +450,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   is klein wild, de rest komt uit de herten in zijn bereik (`T.wildVanJager`, `g.wild`; `T.watDeJagerSchiet` en
   `T.jagerJaagde` vanuit `T.tikGebouwenDag`), twee per groepje laat hij staan, en een roedel van meer dan drie maakt hij
   kleiner; vindt hij geen hert (`g.zonderHerten`, `T.jagersZonderHerten`), dan vraagt het dorp geen nieuwe jager en de heer
-  van hem geen vlees. Zijn poppetje loert in het bos (`jaag` in `js/veldwerk.js`).
-  De rest van stap 3 (de jacht te voet, om hulp roepen, het hek) komt nog.
+  van hem geen vlees. Zijn poppetje loert in het bos (`jaag` in `js/veldwerk.js`). **Het hol** (`zetHol`, `T.holVan`):
+  elke roedel heeft er een op de kaart, naast zijn thuis, dat meegaat als hij verhuist (`gereedschap/pixelart/hol.cjs`).
+  **De jacht te voet** (stap 3b): "Een jacht" in het voorval (`doe.jacht`, `T.beginJacht`, `D.beesten.jacht`) roept de
+  militie op (`T.roepOp`, `T.laatGaan`, `T.militieVan` in `js/rovers.js`), het hol ligt in goud (`T.holVanDeJacht`), bij
+  de roedel is het een gevecht (`T.naJacht` vanuit `T.eindeGevecht`), en na twee dagen gaan de mannen zonder je. **Om hulp
+  roepen** (3c, `G.aanval`, `e.roeptOmHulp`): wie de wolven aanvallen, roept, de mannen die het horen komen (`moetNaar`
+  met `hulp`), een buur jaagt ze weg, de schout vecht, en na een kwartier bijten ze. **Het hek** (3d,
+  `T.hekOmDeSchapen`): latten om de meent, met hekjes.
 - `js/bouwstijl.js`: **de bouwstijl van een land** (vraag 114, stap 2, 4 okt): elk land van de maker bouwt in één stijl
   (`w.stijl`, uit het nummer van het land, `T.stijlVoorLand`; het ontworpen gehucht heeft er geen en bouwt zoals altijd),
   met per soort een paar vormen, elk met de deur naar elke kant. De huizenbouwer noemt dat een stand; in het spel heet het
