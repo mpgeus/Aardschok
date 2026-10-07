@@ -376,6 +376,14 @@ komen. Alle drie versterken ze de afweging tussen jaren en veiligheid.
 **Wanneer:** na de randtegels en nadat elke kaart vanzelf een gebied is, want hoogte bouwen in een
 wereld die nog niet af is, is de verkeerde volgorde.
 
+**Zo werkt het nu (7 okt, vraag 121, stap 1):** niet uit Tiled en niet als getal per tegel, maar als rekensom
+(`js/hoogte.js`): elke hoek van een tegel heeft een hoogte, de glooiing uit het nummer van het land (drie lagen ruis, die
+ook buiten de kaart doorlopen) plus een niveau per tegel maal een trede van 32 pixels voor een richel, met een helling
+erop; vlak waar een huis met zijn looppad, het plein of het water ligt. Een wand (rotswand of begroeide wal) staat waar
+twee buren hun hoek niet delen, en je ziet hem alleen aan de zuid- en oostkant. Achter de spelregel "Hoogte" (standaard
+vlak); lopen, zien en bouwen volgen in stap 2. Wat hieronder staat (een laag in Tiled, het palet van acht hoogtes), is
+daarmee vervallen; het idee van de afgeleide wand is gebleven.
+
 **Opnieuw gevraagd (Marcel, 4 okt: "Hoogte verschillen op de kaart. 😁"; werklijst vraag 121).** Sinds 4 okt maakt de
 maker het land (`js/maker.js`), en schildert Marcel in Tiled alleen nog de grond; de hoogte komt dus uit de maker, niet
 uit een laag in Tiled. Het plan (terrassen met wanden en hellingen, wat het doet aan lopen, zien en bouwen, en wanneer)

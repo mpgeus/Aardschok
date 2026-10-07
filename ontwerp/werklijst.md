@@ -73,6 +73,20 @@ in `main` bleef, met a2, c2 en d erop, en die koos Marcel (7 okt). **Vraag 131 i
 verdacht, en in de speeltest van vier jaar wint ook de bouwer op 62707, die eerst om de wapens werd ontslagen: drie van
 de zes spellen winnen.
 
+**De sessie van de hoogte** (7 okt, `claude/elegant-meitner-d3ss2z`, naast die van de wolven; in `main`, Marcel: "Ja
+push main"). **Vraag 124, de camera draaien, is geparkeerd** (Marcel: "Is het echt iets wat iets toevoegd? Ik wil geen
+zinloze functie toevoegen"): het voegt weinig toe en kost bij elk nieuw gebouw vier aanzichten. **Vraag 121, de hoogte:**
+de proefplaat met glooiing en terrassen (Marcel: "a ja 32, b hoger, c ja", en "Ik wil dat de akkers mee bollen met de
+heuvel"), en stap 1 in het spel achter de spelregel "Hoogte" (standaard vlak): de hoogte is een rekensom uit het nummer
+van het land, die overal doorloopt (Marcel: "Uiteindelijk wilde ik een map van 2500x2500", en "Waar alles doorloopt"), met
+het dorp op een vlakte, vlak onder huizen, plein en water, een richel met een rotswand en een helling, akkers die
+meebollen, en zacht licht naar de zon (`js/hoogte.js`). Met "Vlak" zijn de vaste schermafdrukken byte voor byte gelijk.
+Open: stap 2 (een heuvel dekt nog niet af, lopen gaat door een rotswand, bouwen weet niets van steil), een haarfijn naadje
+in het licht, en de kosten van het tekenen op een echte videokaart (hier zonder gemeten: de grond 250 à 300 ms per keer
+opnieuw, vlak 50 à 100). De grote plaat (`node gereedschap/pixelart/landschap-plaat.cjs 5 2500`) liet zien dat het
+landschap op de maat van het eiland grotere vormen nodig heeft: **de volgende sessie begint met het plan voor de
+kaartenmaker** (vraag 117, met deze hoogte als eerste laag). `npm test`: 1029/1029.
+
 **Vraag 128 is besloten** (6 okt; Marcel: "A tot g allemaal, en de proef komt erna"; alleen papier, er is niets
 gebouwd): uit een analyse van buiten van onze samenvatting ("Richting & Game Design Ideeën") worden mensen, informatie en
 de zitting de richting: wat er gebeurde, wat er gezegd wordt en wat jij weet (daarmee is ook vraag 105, b en e,
@@ -6459,6 +6473,10 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 7 okt 2026 — **Vraag 121, stap 1: de hoogte in het spel** (de sessie van de hoogte; Marcel: "Ja, begin met stap 1",
+  "Waar alles doorloopt", "Ja push main"). Een landschap uit het nummer van het land dat overal doorloopt, met een
+  richel, akkers die meebollen en zacht licht, achter de spelregel "Hoogte" (standaard vlak); de proefplaat en de grote
+  plaat van 2500 bij 2500. Vraag 124 (de camera draaien) is geparkeerd.
 - 7 okt 2026 — **Vraag 131: wapens zijn niet meer verboden** (zevenendertigste sessie; Marcel: "Wapens zijn niet meer
   verboden. Het is logisch dat er wapens zijn om de stad te verdedigen. Alleen weerstand tegen de heer is
   inacceptabel", en "Ja allebei"). De wapenmaker is een gewone werkplaats: de inner wordt er niet argwanend van, de heer
