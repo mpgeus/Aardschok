@@ -13,7 +13,8 @@
 // Net zo rooit het hoofd van een nieuw gezin zijn erf, als daar nog bomen, stronken of struiken staan, en een inwoner de
 // plek van de werkplaats die hij vroeg (js/bos.js; werklijst vraag 110, e): hij hakt en rooit, en het gezin van wie zijn
 // erf rooit, helpt, tot de bouwplaats kan komen. En de houthakker hakt aan zijn boom in het bos, en brengt het hout in
-// bundels naar zijn schuur (js/bos.js; vraag 115).
+// bundels naar zijn schuur (js/bos.js; vraag 115). En de jager loert in het bos op de groep herten of de roedel waar hij op
+// jaagt, en gaat dan terug naar zijn hut (js/beesten.js; vraag 116, stap 3a).
 // Wat overblijft (dorsen, het vee, of er is niets te doen), doet hij bij zijn boerderij, zoals tot nu toe: T.dagAnker
 // (js/dag.js) stuurt hem daarheen. De boerin en de grote kinderen helpen bij het zaaien en de oogst (T.helpAnker).
 //
@@ -478,6 +479,77 @@
     } else stop(e);
   }
 
+  // De jager waar dit poppetje werkt, als die wild heeft om op te jagen (js/beesten.js, g.wild); of null.
+  function hutWaarHijJaagt(D, e) {
+    const p = T.bewonerVan(D, e);
+    const g = p && p.werk;
+    return g && g.klaar && g.soort === 'jager' && g.wild ? g : null;
+  }
+
+  // Waar de jager loert: op loerAfstand tegels van de leider van zijn groep, aan de kant van zijn hut (net buiten waar
+  // de dieren schuw worden, T.BEESTEN_INSTELLINGEN.schuw), op een tegel waar hij kan staan en kan komen; of null.
+  function loerPlek(w, e, leider, deur) {
+    const L = T.tegelVan(leider);
+    const d = Math.hypot(deur.x - L.x, deur.y - L.y) || 1;
+    const A = T.BEESTEN_INSTELLINGEN.jager.loerAfstand;
+    for (let r = A; r <= A + 4; r++) {
+      for (const hoek of [0, 0.4, -0.4, 0.8, -0.8]) {
+        const c = Math.cos(hoek);
+        const z = Math.sin(hoek);
+        const ux = ((deur.x - L.x) * c - (deur.y - L.y) * z) / d;
+        const uy = ((deur.x - L.x) * z + (deur.y - L.y) * c) / d;
+        const t = { x: Math.round(L.x + ux * r), y: Math.round(L.y + uy * r) };
+        if (T.isBegaanbaar(w, t.x, t.y) && T.kanErKomen(w, { x: e.tx, y: e.ty }, t)) return t;
+      }
+    }
+    return null;
+  }
+
+  // De jager aan het werk (js/beesten.js; vraag 116, stap 3a): hij loopt het bos in naar de groep waar hij op jaagt,
+  // loert er jager.loerUren aan een stuk vanaf jager.loerAfstand tegels, en gaat dan terug naar zijn hut; dan weer
+  // erheen. Wat hij schiet, zegt 's nachts de regel (T.jagerJaagde), niet het poppetje.
+  function jaag(S, D, e, nu, g) {
+    const w = D.wereld;
+    const deur = T.deurVan(w, g);
+    const wt = e.werkt;
+    if (wt && wt.soort === 'naarHuis') {
+      if (e.pad.length) return;
+      e.werkt = null;
+      return;
+    }
+    if (wt && wt.tot != null) {
+      if (nu < wt.tot) return;
+      const pad = T.zoekRoute(w, { x: e.tx, y: e.ty }, { x: deur.x, y: deur.y, tot: 1 }, { tot: 1 });
+      e.werkt = { soort: 'naarHuis', x: deur.x, y: deur.y, tot: null, rust: false };
+      if (pad && pad.length) T.geefRoute(e, pad, { x: deur.x, y: deur.y, tot: 1 });
+      else e.werkt = null;
+      return;
+    }
+    if (e.pad.length) return; // onderweg naar zijn groep
+    const groep = T.beestenVan(D).find(({ G }) => G.thuis.x === g.wild.x && G.thuis.y === g.wild.y);
+    const leider = groep && (groep.leden.find((x) => x.leider) || groep.leden[0]);
+    if (!leider) {
+      stop(e);
+      return;
+    }
+    if (wt && e.tx === wt.x && e.ty === wt.y) {
+      e.werkt = { soort: 'loeren', x: wt.x, y: wt.y, op: T.tegelVan(leider), tot: nu + T.BEESTEN_INSTELLINGEN.jager.loerUren * uur(), rust: false };
+      return;
+    }
+    const plek = loerPlek(w, e, leider, deur);
+    if (!plek) {
+      stop(e);
+      return;
+    }
+    const pad = T.zoekRoute(w, { x: e.tx, y: e.ty }, plek, {});
+    if (pad && pad.length) {
+      T.geefRoute(e, pad, plek);
+      e.werkt = { soort: 'loeren', x: plek.x, y: plek.y, op: T.tegelVan(leider), tot: null, rust: false };
+    } else if (e.tx === plek.x && e.ty === plek.y) {
+      e.werkt = { soort: 'loeren', x: plek.x, y: plek.y, op: T.tegelVan(leider), tot: nu + T.BEESTEN_INSTELLINGEN.jager.loerUren * uur(), rust: false };
+    } else stop(e);
+  }
+
   // Elk beeld, na het maaien (T.werkOogstBij) en vóór het dwalen (T.dwaal): elke boer doet zijn werk van vandaag, en wie
   // zijn erf rooit, rooit (met dezelfde bijl en op dezelfde manier als een boer die bos ontgint). Waar je bent vanuit
   // js/main.js, de andere dorpen vanuit T.werkDorpBij (js/dorp.js).
@@ -494,7 +566,8 @@
       if (e.dood) continue;
       const kavel = kavelDieHijRooit(D, e);
       const schuur = kavel ? null : schuurWaarHijHakt(D, e);
-      if (!kavel && !schuur && (!e.werkAkkers || !e.werkAkkers.length)) continue;
+      const hut = kavel || schuur ? null : hutWaarHijJaagt(D, e);
+      if (!kavel && !schuur && !hut && (!e.werkAkkers || !e.werkAkkers.length)) continue;
       // Wie hout naar huis bracht, legt het bij zijn deur neer.
       if (e.draagt && !e.pad.length && e.thuis && T.afstand(e.thuis, { x: e.tx, y: e.ty }) <= 1) e.draagt = null;
       // De schaft: brood op de akker (js/dag.js). Wie op zijn land werkt, blijft er staan tot het werk weer begint (wie
@@ -508,7 +581,7 @@
         delete e.werkt.schaft;
         e.werkt.tot = Math.min(e.werkt.tot, nu);
       }
-      const soort = werktijd && magWerken(S, D, e) ? (kavel ? 'rooien' : schuur ? 'hout' : T.veldwerkVandaag(D, e, datum)) : null;
+      const soort = werktijd && magWerken(S, D, e) ? (kavel ? 'rooien' : schuur ? 'hout' : hut ? 'jagen' : T.veldwerkVandaag(D, e, datum)) : null;
       if (!soort) {
         onthoudPlag(e, nu);
         stop(e);
@@ -522,6 +595,7 @@
       if (soort === 'sprokkelen') sprokkel(S, D, e, vw, nu);
       else if (soort === 'rooien') ontgin(D, e, vw, nu, T.teRooienOp(D, kavel));
       else if (soort === 'hout') hakHout(S, D, e, vw, nu, schuur);
+      else if (soort === 'jagen') jaag(S, D, e, nu, hut);
       else opHetLand(S, D, e, vw, nu, datum);
     }
   };

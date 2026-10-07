@@ -134,6 +134,17 @@
     dreiging: { stout: 30, donker: 0.6, zoekStraal: 30, alleen: 4, gewondDagen: 3, doodKans: 0.2, schrik: 0.5, schrikKans: 0.5, statusDagen: 10 },
     // Een jacht op de wolven (het voorval "wolven"): de roedel verliest er zoveel.
     jacht: 2,
+
+    // ── Stap 3a, de jager ──
+    // De jager jaagt echt (vraag 116, stap 3; Marcel, 7 okt: "Altijd een paar herten over houden. Anders krijgen we geen
+    // jonge hertjes meer"): zijn vlees en huiden (T.GEBOUWEN.jager.maakt) komen uit de herten binnen straal tegels van zijn
+    // deur (het thuis van de groep), en elke perDier vlees is er een dier minder. Van een groepje herten laat hij er altijd
+    // laatStaan staan; een roedel die groter is dan hooguit, maakt hij kleiner, een wolf per wolfDagen (een wolf is een huid,
+    // geen vlees). Is er binnen
+    // zijn bereik niets dat hij mag nemen, dan staat hij stil, en werkt zijn hand elders (zoals de houthakker zonder boom).
+    // Uit (jaagt: false): zijn vlees komt uit het niets, zoals tot 7 okt. Het poppetje loert op loerAfstand tegels van de
+    // groep, loerUren aan een stuk, en gaat dan terug naar zijn hut.
+    jager: { jaagt: true, straal: 50, perDier: 30, laatStaan: 2, hooguit: 3, wolfDagen: 5, loerAfstand: 9, loerUren: 2 },
   };
   const IN = () => T.BEESTEN_INSTELLINGEN;
 
@@ -892,6 +903,100 @@
     L.vlaggen = ['wolvenNamenSchaap'];
     T.zetVlag(D, 'wolvenNamenSchaap');
   }
+
+  // ---------------------------------------------------------------------------------------------
+  // De jager (stap 3a)
+  // ---------------------------------------------------------------------------------------------
+
+  // Jaagt deze jager echt: een jager, de spelregel "Beesten" aan, de beesten gezet, en jager.jaagt? Anders maakt hij zijn
+  // vlees uit het niets (het ontworpen gehucht heeft geen beesten).
+  const isJager = (g) => g.soort === 'jager';
+  const jaagtEcht = (D, g) => isJager(g) && IN().aan && IN().jager.jaagt && !!(D.beesten && D.beesten.gezet);
+
+  // Wat deze jager binnen zijn bereik mag nemen (jager.straal tegels van zijn deur tot het thuis van de groep, waar hij kan
+  // komen, het dichtste eerst): { hert: het groepje herten met meer dan jager.laatStaan dieren, wolf: de roedel die groter
+  // is dan jager.hooguit }, elk { G, leden } of null. Zet g.wild: het thuis van de groep waar hij op jaagt (de roedel
+  // eerst), of null: dan staat hij stil.
+  T.wildVanJager = function (D, g) {
+    if (!jaagtEcht(D, g)) {
+      delete g.wild;
+      return { hert: null, wolf: null };
+    }
+    const w = D.wereld;
+    const deur = T.deurVan(w, g);
+    const J = IN().jager;
+    const groepen = deur ? T.beestenVan(D).filter(({ G }) => !G.trektWeg && T.afstand(deur, G.thuis) <= J.straal && T.kanErKomen(w, deur, G.thuis)) : [];
+    groepen.sort((a, b) => T.afstand(deur, a.G.thuis) - T.afstand(deur, b.G.thuis));
+    const wild = {
+      hert: groepen.find(({ G, leden }) => G.soort === 'hert' && leden.length > J.laatStaan) || null,
+      wolf: groepen.find(({ G, leden }) => G.soort === 'wolf' && leden.length > J.hooguit) || null,
+    };
+    const op = wild.wolf || wild.hert;
+    g.wild = op ? { x: op.G.thuis.x, y: op.G.thuis.y, soort: op.G.soort } : null;
+    return wild;
+  };
+
+  // Staat deze jager stil omdat er binnen zijn bereik niets is dat hij mag nemen (g.wild null, gezet door
+  // T.wildVanJager)? Dan wil hij geen handen (T.verdeelHanden, js/gebouwen.js), zoals de houthakker zonder boom.
+  T.jagerZonderWild = (g) => isJager(g) && g.wild === null;
+
+  // Waarom deze jager vandaag niet jaagt (T.tikGebouwenDag, vóór zijn werk), of null.
+  T.waaromJaagtHijNiet = function (D, g) {
+    if (!jaagtEcht(D, g)) return null;
+    const wild = T.wildVanJager(D, g);
+    if (wild.hert || wild.wolf) return null;
+    return `er is binnen ${T.telwoord(IN().jager.straal)} tegels van zijn hut geen wild meer dat hij mag schieten (de laatste herten laat hij staan voor de jongen)`;
+  };
+
+  // Een dier uit een groep halen: het laatste, de leider nooit. Geeft het dier, of null.
+  function neemUit(D, g, { G, leden }) {
+    const dier = leden.filter((e) => !e.leider).pop();
+    if (!dier) return null;
+    leden.splice(leden.indexOf(dier), 1);
+    D.wereld.wezens = D.wereld.wezens.filter((e) => e !== dier);
+    g.gevangen = g.gevangen || {};
+    g.gevangen[G.soort] = (g.gevangen[G.soort] || 0) + 1;
+    return dier;
+  }
+
+  // Wat deze jager vandaag maakt (T.tikGebouwenDag, uit T.maaktUit): is er geen hert dat hij mag nemen, dan jaagt hij op
+  // de wolven, en een wolf is een huid, geen vlees.
+  T.watDeJagerSchiet = function (D, g, uit) {
+    if (!uit || !jaagtEcht(D, g) || T.wildVanJager(D, g).hert) return uit;
+    const zonder = { ...uit };
+    delete zonder.vlees;
+    return zonder;
+  };
+
+  // Na zijn werk van vandaag (T.tikGebouwenDag): het vlees dat hij maakte, kwam uit de herten (g.gejaagd), en elke
+  // jager.perDier is er een hert minder. Een roedel die te groot is, verliest elke jager.wolfDagen een wolf. Morgen kiest
+  // hij opnieuw. `werkte`: hoeveel van een dag hij werkte (de factor van T.tikGebouwenDag).
+  T.jagerJaagde = function (D, g, vlees, dag, werkte = 1) {
+    if (!jaagtEcht(D, g) || !(werkte > 0)) return;
+    let wild = T.wildVanJager(D, g);
+    if (wild.hert) g.gejaagd = (g.gejaagd || 0) + (vlees || 0);
+    while (g.gejaagd >= IN().jager.perDier && wild.hert) {
+      g.gejaagd -= IN().jager.perDier;
+      neemUit(D, g, wild.hert);
+      wild = T.wildVanJager(D, g);
+    }
+    if (wild.wolf && !(dag - (g.wolfDag ?? -Infinity) < IN().jager.wolfDagen) && neemUit(D, g, wild.wolf)) {
+      g.wolfDag = dag;
+      T.zeg(D, wild.wolf.leden.length > IN().jager.hooguit ? 'De jager schoot een wolf.' : 'De jager schoot een wolf: de roedel is weer klein.', 'goed');
+    }
+    T.wildVanJager(D, g);
+  };
+
+  // Is er een jager die de wolven in de gaten houdt: een jager die echt jaagt, met een roedel binnen zijn bereik? Voor
+  // de raad en de status: zonder is "geen jager" de oorzaak die je had kunnen zien.
+  T.jagerBijDeWolven = function (D) {
+    const J = IN().jager;
+    const roedels = T.beestenVan(D).filter(({ G }) => G.soort === 'wolf' && !G.trektWeg);
+    return (D.gebouwen || []).some((g) => g.klaar && jaagtEcht(D, g) && roedels.some(({ G }) => {
+      const deur = T.deurVan(D.wereld, g);
+      return deur && T.afstand(deur, G.thuis) <= J.straal;
+    }));
+  };
 
   // Een jacht op de wolven (het voorval "wolven"): de roedel die het laatst een schaap nam (of, is die er niet meer, de
   // roedel met de meeste honger) verliest er zoveel, de leider het laatst. Geeft hoeveel.

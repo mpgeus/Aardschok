@@ -1059,8 +1059,8 @@
     for (const g of D.gebouwen) {
       const soort = T.GEBOUWEN[g.soort];
       // Een houthakker zonder boom binnen zijn bereik wil geen handen: zijn hand werkt elders tot er weer een boom staat
-      // (js/bos.js; werklijst vraag 129, e).
-      if (!g.klaar || !soort.handen || T.houthakkerZonderBoom(g)) {
+      // (js/bos.js; werklijst vraag 129, e). Net zo een jager zonder wild dat hij mag nemen (js/beesten.js; vraag 116).
+      if (!g.klaar || !soort.handen || T.houthakkerZonderBoom(g) || T.jagerZonderWild(g)) {
         g.handen = 0;
         continue;
       }
@@ -1254,8 +1254,9 @@
         g.stilWant = 'het dorp viert feest';
         continue;
       }
-      // Wie in dit seizoen stilligt, of een houthakker die binnen zijn bereik geen boom meer vindt (js/bos.js).
-      const stil = (soort.stilIn && seizoen && soort.stilIn[seizoen]) || T.waaromHaktHijNiet(D, g);
+      // Wie in dit seizoen stilligt, een houthakker die binnen zijn bereik geen boom meer vindt (js/bos.js), of een jager
+      // zonder wild (js/beesten.js).
+      const stil = (soort.stilIn && seizoen && soort.stilIn[seizoen]) || T.waaromHaktHijNiet(D, g) || T.waaromJaagtHijNiet(D, g);
       if (stil) {
         g.stilWant = stil;
         if (!wasStil && T.ui && T.ui.bericht) T.zeg(D, `${T.hoofdletter(soort.naam)} staat stil: ${stil}.`);
@@ -1302,11 +1303,14 @@
       g.werkte = factor;
       if (factor <= 0) continue;
       if (soort.maakt.in) for (const wat in soort.maakt.in) T.wijzigVoorraad(D, wat, -soort.maakt.in[wat] * factor);
-      const uit = T.maaktUit(D, soort);
+      // De jager schiet vlees als er een hert is dat hij mag nemen; jaagt hij op de wolven, alleen huiden (js/beesten.js).
+      const uit = T.watDeJagerSchiet(D, g, T.maaktUit(D, soort));
       if (uit) for (const wat in uit) T.wijzigVoorraad(D, wat, uit[wat] * factor);
       // Het hout van de houthakker kwam uit zijn boom: is die om, dan staat er een stronk, en hakt hij morgen de volgende
       // (js/bos.js).
       if (uit && uit.hout) T.houthakkerHakte(D, g, uit.hout * factor);
+      // Het vlees van de jager kwam uit het wild: elke zoveel is er een hert of een wolf minder (js/beesten.js).
+      if (uit && uit.huiden) T.jagerJaagde(D, g, (uit.vlees || 0) * factor, dag, factor);
     }
     // Wat in gebruik was, slijt: één stuk per hand die vandaag echt iets maakte (een smidse zonder
     // ijzer slijt zijn hamers niet).

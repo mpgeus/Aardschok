@@ -4988,6 +4988,18 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     de jacht te voet met twee dagen, zonder wachthuis twee weerbare mannen; om hulp roepen nu bij de wolven. Over d vroeg
     Marcel welk hek (het antwoord "Een hoger hek om de schapen" in het voorval "wolven"); dat staat nog open.
     **Marcel (7 okt): "D ja allebei, begin maar".** Het hek wordt zichtbaar, en de lantaarns aan de bosrand vallen weg.
+    **Gebouwd, stap 3a (7 okt, achtendertigste sessie; `js/beesten.js`, `js/veldwerk.js`, vier toetsen erbij):** de jager
+    haalt zijn vlees en huiden uit het wild binnen vijftig tegels van zijn hut (het thuis van de groep): elke dertig vlees
+    is een hert minder, en van elk groepje laat hij er altijd twee staan. Een roedel van meer dan drie verliest elke vijf
+    dagen een wolf aan hem (een huid, geen vlees: op zo'n dag maakt hij alleen huiden). Is er niets dat hij mag nemen, dan
+    staat hij stil en werkt zijn hand elders, zoals de houthakker zonder boom; het dorp vraagt dan geen tweede jager. Zijn
+    poppetje loopt het bos in, loert twee uur op zijn groep van negen tegels (net buiten waar ze schuw worden), en gaat
+    terug naar zijn hut. De raad noemt nu de jager als de wolven bij het dorp zijn en er geen jager bij hen is. **Wat het
+    doet** (twee jaar alleen de nachten, op drie landen, een jager bij het huis van de schout): hij schoot 2 tot 9 herten
+    en 0 tot 3 wolven, en stond 420 tot 650 van de 720 dagen stil; zijn vlees ging van zo'n 360 per jaar naar 50 tot 160.
+    Dertig en vijftig zijn eerste getallen (vijfendertig tegels haalde op twee van de drie landen geen enkele groep); de
+    speeltest zegt of het dorp nog wint zonder dat vlees. Een eigen tekening voor de jager (met boog, een hert op zijn
+    rug) is pixel art voor later; nu loopt hij in zijn eigen vel.
     **Bezig in sessie `ccr-77327776-rqjldz`** (7 okt): stap 3, wat je tegen de wolven doet; eerst het plan voor Marcel.
 117. **Eén kaart: het eiland** (Marcel, 4 okt, zesentwintigste sessie: "Ik wil uiteindelijk toch alles op dezelfde kaart.
     Dus de hele spelwereld als het ware. Zo kun je steeds stukken 'ontdekken' in de fog of war. Het idee is een eiland. Met

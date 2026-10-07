@@ -446,7 +446,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `wolvenNamenSchaap`: dan doen de jacht, `T.jaagOpDeWolven`, en het hek, `T.hekOmDeSchapen`, echt iets), een mens
   (`bijt`: gewond, `p.gewond`, of dood), of de schout zonder licht (een gevecht); bij zijn lantaarn blijft hij aan de rand
   van het licht (`randVanHetLicht`). De status "Wolven" (`T.wolvenBijHetDorp`, in `T.OORZAKEN`) en de raad. De spelregel
-  "Beesten" (aan, zonder doden of uit); de getallen in `T.BEESTEN_INSTELLINGEN`. Wat je ertegen doet (stap 3) komt nog.
+  "Beesten" (aan, zonder doden of uit); de getallen in `T.BEESTEN_INSTELLINGEN`. **De jager** (stap 3a): zijn vlees komt
+  uit de herten in zijn bereik (`T.wildVanJager`, `g.wild`; `T.watDeJagerSchiet` en `T.jagerJaagde` vanuit
+  `T.tikGebouwenDag`), twee per groepje laat hij staan, een roedel van meer dan drie maakt hij kleiner, en zonder wild staat
+  hij stil (`T.jagerZonderWild`, `T.waaromJaagtHijNiet`); zijn poppetje loert in het bos (`jaag` in `js/veldwerk.js`).
+  De rest van stap 3 (de jacht te voet, om hulp roepen, het hek) komt nog.
 - `js/bouwstijl.js`: **de bouwstijl van een land** (vraag 114, stap 2, 4 okt): elk land van de maker bouwt in één stijl
   (`w.stijl`, uit het nummer van het land, `T.stijlVoorLand`; het ontworpen gehucht heeft er geen en bouwt zoals altijd),
   met per soort een paar vormen, elk met de deur naar elke kant. De huizenbouwer noemt dat een stand; in het spel heet het
@@ -1047,7 +1051,8 @@ wil (thuis, aan de rand, of weg van iemand), zijn thuis en zijn plekken aan de r
 herten hij ving, en wanneer de groep jongen kreeg; `('hier')` zet de schout tien tegels van de dichtste groep, om ze te
 bekijken, `('opnieuw')` legt de groepen opnieuw, `('jongen')` geeft elke groep nu jongen (en wie groot wordt, splitst),
 `('jacht')` laat elke roedel nu jagen, `('honger')` geeft elke roedel zoveel honger dat hij in het donker naar het dorp
-komt (met `Spel.debug.uur(21)`), en `('schaap')` laat de eerste roedel nu een schaap nemen.
+komt (met `Spel.debug.uur(21)`), en `('schaap')` laat de eerste roedel nu een schaap nemen. Onder `jagers` staat per jager waar hij op jaagt, wat hij
+schoot en of hij stilstaat.
 `Spel.debug.gril()` zegt welke gril op je antwoord wacht, met de keuzes en wat ze kosten; `('jacht')` laat die nu komen.
 `Spel.debug.bazen()` zegt de gunst van de heer en het vertrouwen van het dorp, waarom ze het laatst veranderden en of je
 gewaarschuwd bent; `('gunst', 15)` zet de gunst op 15 (met de brief als hij onder 20 komt), `('vertrouwen', 0)` jaagt je

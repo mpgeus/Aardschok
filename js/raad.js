@@ -194,12 +194,17 @@
         ? `De rovers komen terug. Een wachthuis zou je ${T.telwoord(T.GEBOUWEN.wachthuis.handen)} man geven die meevechten.${verzoekZin(D, 'wachthuis')}`
         : `De rovers komen terug. Een wachthuis [B] geeft je ${T.telwoord(T.GEBOUWEN.wachthuis.handen)} man die meevechten.`),
     },
-    // De wolven (js/beesten.js; werklijst vraag 116, stap 2b): ze namen een schaap of vielen iemand aan. Wat ertegen helpt
-    // (de jager, lantaarns aan de bosrand), komt met stap 3; nu het licht, en het hek uit het voorval.
+    // De wolven (js/beesten.js; werklijst vraag 116, stap 2b): ze namen een schaap of vielen iemand aan. Wat ertegen helpt:
+    // het licht, het hek uit het voorval, en een jager die de roedels klein houdt (stap 3a; is er geen bij de wolven, dan
+    // zegt de raad het, met waar hij vandaan komt).
     {
       id: 'wolven',
       als: (D) => T.wolvenBijHetDorp(D, dagNu(D)) != null && D.beesten.gezien.wat !== 'gezien',
-      tekst: () => 'Er zijn wolven bij het dorp. Wie \'s avonds alleen in het donker loopt, loopt gevaar; licht houdt ze weg.',
+      tekst: (D) => {
+        const zin = 'Er zijn wolven bij het dorp. Wie \'s avonds alleen in het donker loopt, loopt gevaar; licht houdt ze weg.';
+        if (T.jagerBijDeWolven(D)) return zin;
+        return mensenBouwen() ? `${zin} Een jager zou de roedels klein houden.${verzoekZin(D, 'jager')}` : `${zin} Een jager [B] houdt de roedels klein.`;
+      },
     },
     {
       id: 'hout',
