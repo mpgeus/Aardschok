@@ -853,6 +853,42 @@ proefplaat is `uit/vee-proef.png`.
   15%; het schaap graast meer. Nooit ligt de hele kudde tegelijk, en dieren slaan niet op
   hetzelfde moment om.
 
+## Het wild: een edelhert (7 okt 2026)
+
+Voor de beesten in het bos (`werklijst.md`, vraag 116, stap 1: herten die in kleine groepjes aan de bosrand grazen en
+wegrennen als iemand dichtbij komt; Marcel, 7 okt: "de herten al in stap 1"). Een edelhert, net als de koe en het schaap uit
+code en op hetzelfde tuig (dat van de wolf): `gereedschap/pixelart/wild.cjs`, gerenderd door `wild-anim.cjs`; het wilde zwijn
+en de beer komen er later bij. De proefplaat is `uit/wild-proef.png`, met de drie herten naast de boer op ware grootte.
+
+Slank, met lange dunne poten (35 van de 58 eenheden in de schoft is been), een lange hals, grote oren, een korte staart in een
+lichte spiegel, en een lichte buik en lichte binnenkant van de poten. Middeleeuws vee is klein, maar wild niet: met de kop omhoog
+komt een hinde bijna tot de hoed van een boer (82 eenheden), en een hert met zijn gewei erboven.
+
+| | kleuren | maat in de schoft |
+|---|---|---|
+| hert0 | roodbruine hinde, een gele spiegel | 52 eenheden (1,08 m) |
+| hert1 | grijsbruine hinde, een bijna witte spiegel | 51 eenheden (1,06 m) |
+| hert2 | hert met gewei: bruin, een donkere hals met manen, zes punten per kant (ogentak, ijsvogeltak, middentak en een kroon van drie) | 58 eenheden (1,2 m) |
+
+- **Vijf houdingen, elk een lus van acht beelden.** Grazen (5 fps): de kop tot op het gras, een ruk aan een pluk, een oor dat
+  flikkert, en eens per rondje de kop omhoog om rond te kijken. Staan (5 fps), alert: de kop omhoog en heen en weer, de oren
+  draaien om de beurt, de staart tikt en een voorhoef komt even omhoog. Lopen (8 fps): stapvoets, 1,0 tegel per seconde, een
+  pas is 0,5 tegel. Rennen (12 fps): in sprongen, 4,0 tegel per seconde, een pas is 1,333 tegel: eerst komen de achterpoten
+  neer en duwen af, dan de voorpoten, en twee keer per rondje zweeft het dier met alle vier de poten van de grond; de oren
+  liggen plat en de staart staat omhoog, met de spiegel wijd open. Liggen (4 fps): op de borst, de kop omhoog, herkauwend,
+  met een oor dat draait.
+- **De snelheden** staan bovenaan `wild.cjs` (`SNELHEID.hert`: lopen 1,0, rennen 4,0). Het spel moet ze overnemen, anders
+  glijden de voeten: lopen en rennen hebben in `beelden/beschrijving.json` elk hun `snelheid` en hun `stap` (tegels per pas, een
+  half rondje; `js/sprites.js` rekent `cyclus = 2 × stap`), en een voet op de grond schuift per beeld precies zo ver terug als
+  het spel het dier vooruit schuift (nagerekend op de botten, ook voor het rennen).
+- **De cel** is 160×148 met het anker op (80, 118): gemeten (`node wild-anim.cjs --meet hert2`) reikt het hert met gewei 111
+  pixels boven de grond, 71 opzij (grazend, met het gewei naar voren) en 22 eronder. `naar-spel.cjs` krimpt hem per houding;
+  dat is samen zo'n 40 MB aan plaatjes in de browser als alle drie de vellen geladen zijn (het hert met gewei 17).
+
+Nog ruw: het rennen is een gestileerde sprong van acht beelden en geen echte galop; de hoef heeft geen spleet; het hert heeft
+één vacht (geen zomer- en winterkleed) en één gewei (geen kaal gewei of fluweel); en de oren kunnen naar voren en achteren
+draaien, maar niet apart opzij.
+
 ## De heide (25 sep 2026)
 
 Nieuwe grondsoort voor de meent, waar de schapen van het gehucht grazen (Marcel koos dit op 25 sep,

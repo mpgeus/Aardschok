@@ -20,7 +20,8 @@
 //
 // De boer is 82 eenheden hoog met zijn hoed, zo'n 1,70 meter, en een eenheid is dus ruim 2 centimeter. Een
 // edelhert staat zo'n 1,2 meter in de schoft: 58 eenheden voor het mannetje, 52 voor de hindes. Middeleeuws
-// vee is klein, maar wild niet: met de kop omhoog komt een hert boven een koe en bijna boven een boer uit.
+// vee is klein, maar wild niet: met de kop omhoog komt een hinde boven een koe uit en bijna tot de hoed van een boer,
+// en een hert met zijn gewei erboven.
 // Niets is gelijk: drie vellen (hert0 een roodbruine hinde, hert1 een grijsbruine, hert2 een hert met een
 // gewei), elk met een eigen maat en eigen kleuren.
 'use strict';
@@ -39,7 +40,7 @@ const { standen } = V.rig;
 // ---------------------------------------------------------------- maten van het spel
 
 // Snelheden in tegels per seconde, per soort en per gang: de voeten schuiven er precies mee. Het spel moet
-// ze overnemen (straks T.WILD in js/), anders glijden de voeten.
+// ze overnemen (js/beesten.js), anders glijden de voeten.
 const SNELHEID = { hert: { lopen: 1.0, rennen: 4.0 } };
 // Beelden per seconde van de loopcycli: één rondje is één pas van elke poot (lopen), of één sprong van het
 // hele dier (rennen). Een hert doet stapvoets een rondje per seconde, en rent in anderhalve sprong per seconde.
@@ -423,7 +424,7 @@ function hert(o = {}) {
   const P = houdingVan(o.houding || 'staan', o.fase || 0, kleur.schaal);
   const T = standen(P, HERT);
   const { M, mat } = hertMaterialen(kleur, P);
-  const D = { lijf: 1, kop: 2, voorL: 3, voorR: 4, achterL: 5, achterR: 6, staart: 7, oorL: 8, oorR: 9, gewei: 10, hals: 11 };
+  const D = { lijf: 1, kop: 2, voorL: 3, voorR: 4, achterL: 5, achterR: 6, staart: 7, oorL: 8, oorR: 9, gewei: 10 };
   const L = (d) => beweeg(d, T.lijf);
   const N = (d) => beweeg(d, T.nek);
   const K = (d) => beweeg(d, T.kop);

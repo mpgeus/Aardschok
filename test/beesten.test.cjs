@@ -219,3 +219,14 @@ test('de ogen van de wolf: twee van voren, een van opzij, geen van achteren, in 
   // Ze zitten in zijn kop: boven zijn voeten, niet verder dan de cel.
   for (const [dx, dy] of O.staan[Z][0]) assert.ok(dy < -5 && Math.abs(dx) < f.houdingen.staan.cel[0]);
 });
+
+test('het hert: drie vellen met vijf houdingen, en lopen en rennen zo snel als het spel het laat gaan', () => {
+  for (const vel of [...T.BEESTEN.hert.vellen, T.BEESTEN.hert.leider]) {
+    const f = T.BEELDEN.figuren[vel];
+    assert.ok(f, `${vel} staat in beelden/`);
+    assert.deepEqual(Object.keys(f.houdingen).sort(), ['grazen', 'liggen', 'lopen', 'rennen', 'staan']);
+    // Anders glijden de voeten (gereedschap/pixelart/wild.cjs, SNELHEID), zoals bij het vee.
+    assert.equal(f.houdingen.lopen.snelheid, T.BEESTEN.hert.snelheid);
+    assert.equal(f.houdingen.rennen.snelheid, T.BEESTEN.hert.vlucht);
+  }
+});

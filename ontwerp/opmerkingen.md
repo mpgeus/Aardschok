@@ -9,6 +9,12 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Het hert kost veel plaatjes** (7 okt, zevenendertigste sessie; vraag 116, stap 1): de drie vellen van het hert
+  (gereedschap/pixelart/wild.cjs) houden samen zo'n 38 MB vast als ze alle drie geladen zijn (hert2 alleen 16 MB, om het
+  gewei en de sprongen), ongeveer wat de drie koeien kosten; ze staan op elk land van de maker. Een figuur laadt al zijn
+  houdingen tegelijk (laadFiguur in js/sprites.js). Te verkleinen als het nodig is (vraag 113): rennen pas laden als een
+  hert rent (tot dan loopt het), zes beelden in plaats van acht voor lopen en rennen, of één hinde in twee kleuren minder.
+
 - **Als wapens mogen, waar zit dan de spanning van de opstand?** (7 okt, zevenendertigste sessie; een idee van Claude bij
   vraag 131, voor vraag 126): sinds wapens niet meer verboden zijn, gaat het niet meer om wat je hebt, maar om wat je
   ermee doet. De heer kan er zelf om vragen: wie op de heervaart gaat, neemt zijn wapen mee (`js/heervaart.js`), of een

@@ -3552,6 +3552,306 @@
        ]
       }
      }
+    },
+    "hert0": {
+     "naam": "hert0",
+     "kleur": "roodbruin",
+     "cel": [
+      160,
+      148
+     ],
+     "anker": [
+      80,
+      118
+     ],
+     "snelheid": 1,
+     "snelheidEenheid": "tegels per seconde",
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "grazen": {
+       "bestand": "hert0-grazen.png",
+       "beelden": 8,
+       "fps": 5,
+       "herhaal": true,
+       "cel": [
+        92,
+        73
+       ],
+       "anker": [
+        46,
+        59
+       ]
+      },
+      "staan": {
+       "bestand": "hert0-staan.png",
+       "beelden": 8,
+       "fps": 5,
+       "herhaal": true,
+       "cel": [
+        92,
+        98
+       ],
+       "anker": [
+        46,
+        85
+       ]
+      },
+      "lopen": {
+       "bestand": "hert0-lopen.png",
+       "beelden": 8,
+       "fps": 8,
+       "herhaal": true,
+       "snelheid": 1,
+       "stap": 0.5,
+       "cel": [
+        104,
+        99
+       ],
+       "anker": [
+        52,
+        80
+       ]
+      },
+      "rennen": {
+       "bestand": "hert0-rennen.png",
+       "beelden": 8,
+       "fps": 12,
+       "herhaal": true,
+       "snelheid": 4,
+       "stap": 1.333,
+       "cel": [
+        118,
+        101
+       ],
+       "anker": [
+        59,
+        80
+       ]
+      },
+      "liggen": {
+       "bestand": "hert0-liggen.png",
+       "beelden": 8,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        92,
+        74
+       ],
+       "anker": [
+        46,
+        57
+       ]
+      }
+     }
+    },
+    "hert1": {
+     "naam": "hert1",
+     "kleur": "grijsbruin",
+     "cel": [
+      160,
+      148
+     ],
+     "anker": [
+      80,
+      118
+     ],
+     "snelheid": 1,
+     "snelheidEenheid": "tegels per seconde",
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "grazen": {
+       "bestand": "hert1-grazen.png",
+       "beelden": 8,
+       "fps": 5,
+       "herhaal": true,
+       "cel": [
+        90,
+        72
+       ],
+       "anker": [
+        45,
+        58
+       ]
+      },
+      "staan": {
+       "bestand": "hert1-staan.png",
+       "beelden": 8,
+       "fps": 5,
+       "herhaal": true,
+       "cel": [
+        90,
+        96
+       ],
+       "anker": [
+        45,
+        83
+       ]
+      },
+      "lopen": {
+       "bestand": "hert1-lopen.png",
+       "beelden": 8,
+       "fps": 8,
+       "herhaal": true,
+       "snelheid": 1,
+       "stap": 0.5,
+       "cel": [
+        102,
+        97
+       ],
+       "anker": [
+        51,
+        78
+       ]
+      },
+      "rennen": {
+       "bestand": "hert1-rennen.png",
+       "beelden": 8,
+       "fps": 12,
+       "herhaal": true,
+       "snelheid": 4,
+       "stap": 1.333,
+       "cel": [
+        114,
+        99
+       ],
+       "anker": [
+        57,
+        78
+       ]
+      },
+      "liggen": {
+       "bestand": "hert1-liggen.png",
+       "beelden": 8,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        90,
+        73
+       ],
+       "anker": [
+        45,
+        56
+       ]
+      }
+     }
+    },
+    "hert2": {
+     "naam": "hert2",
+     "kleur": "met gewei",
+     "cel": [
+      160,
+      148
+     ],
+     "anker": [
+      80,
+      118
+     ],
+     "snelheid": 1,
+     "snelheidEenheid": "tegels per seconde",
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "grazen": {
+       "bestand": "hert2-grazen.png",
+       "beelden": 8,
+       "fps": 5,
+       "herhaal": true,
+       "cel": [
+        142,
+        84
+       ],
+       "anker": [
+        71,
+        65
+       ]
+      },
+      "staan": {
+       "bestand": "hert2-staan.png",
+       "beelden": 8,
+       "fps": 5,
+       "herhaal": true,
+       "cel": [
+        102,
+        126
+       ],
+       "anker": [
+        51,
+        111
+       ]
+      },
+      "lopen": {
+       "bestand": "hert2-lopen.png",
+       "beelden": 8,
+       "fps": 8,
+       "herhaal": true,
+       "snelheid": 1,
+       "stap": 0.5,
+       "cel": [
+        116,
+        129
+       ],
+       "anker": [
+        58,
+        108
+       ]
+      },
+      "rennen": {
+       "bestand": "hert2-rennen.png",
+       "beelden": 8,
+       "fps": 12,
+       "herhaal": true,
+       "snelheid": 4,
+       "stap": 1.333,
+       "cel": [
+        130,
+        129
+       ],
+       "anker": [
+        65,
+        106
+       ]
+      },
+      "liggen": {
+       "bestand": "hert2-liggen.png",
+       "beelden": 8,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        102,
+        101
+       ],
+       "anker": [
+        51,
+        82
+       ]
+      }
+     }
     }
    },
    "muren": {
