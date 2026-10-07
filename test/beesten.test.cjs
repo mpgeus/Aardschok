@@ -508,11 +508,14 @@ test('bij de schout met zijn lantaarn blijft de roedel aan de rand van het licht
   assert.equal(S.modus, 'overgang', 'zonder licht valt hij aan: een gevecht');
 });
 
-test('wie aan het werk de wolven ziet, rent naar huis: hij werkt die dag niet meer, en zijn werkplaats maakte de helft', () => {
+test('wie aan het bos werkt en een roedel met honger ziet, rent naar huis: hij werkt die dag niet meer, en zijn werkplaats maakte de helft', () => {
   const S = landVanDeMaker(62707);
   const D = S.dorp;
   T.zetBeesten(D);
-  const { leden } = groepVan(S, 'wolf');
+  const { G, leden } = groepVan(S, 'wolf');
+  const I = T.BEESTEN_INSTELLINGEN;
+  const kans = I.dreiging.schrikKans;
+  I.dreiging.schrikKans = 1; // per uur een kans: hier altijd
   const leider = leiderVan({ leden });
   opUur(S, 17);
   const plein = T.pleinVan(D.wereld);
@@ -528,10 +531,18 @@ test('wie aan het werk de wolven ziet, rent naar huis: hij werkt die dag niet me
   const werk = { soort: 'houthakker', werkte: 1 };
   p.werk = werk;
   T.zetVoorraad(D, 'hout', 10);
-  luister((gezegd) => {
+  try {
     T.werkBeestenBij(S, D);
-    assert.ok(gezegd.some((t) => t.includes(T.naamVanBewoner(p)) && /rende naar huis/.test(t)), gezegd.join(' | '));
-  });
+    assert.ok(!T.blijftThuis(p, S.kalender.dag), 'een roedel zonder honger blijft uit het zicht');
+    G.honger = I.honger.jagenVanaf;
+    G.keek = 0;
+    luister((gezegd) => {
+      T.werkBeestenBij(S, D);
+      assert.ok(gezegd.some((t) => t.includes(T.naamVanBewoner(p)) && /rende naar huis/.test(t)), gezegd.join(' | '));
+    });
+  } finally {
+    I.dreiging.schrikKans = kans;
+  }
   assert.ok(T.blijftThuis(p, S.kalender.dag), 'hij werkt vandaag niet meer');
   assert.ok(!T.blijftThuis(p, Math.floor(S.kalender.dag) + 1), 'morgen weer wel');
   assert.equal(D.voorraad.hout, 10 - T.maaktUit(D, T.GEBOUWEN.houthakker).hout * T.BEESTEN_INSTELLINGEN.dreiging.schrik);

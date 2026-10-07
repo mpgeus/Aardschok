@@ -29,11 +29,12 @@
 //            de groep dieper een nieuw; is er geen bos meer dat diep genoeg is, dan trekt hij weg (d).
 //
 // Stap 2b is de dreiging (Marcel, 7 okt: "a ja", en "h ja, i ja"); nu raakt het het dorp:
-//   schrik   ziet een roedel iemand die aan het werk is, en die hem, dan rent hij naar huis: hij werkt die dag niet meer,
-//            en zijn werkplaats maakte die dag de helft (T.blijftThuis, js/bewoners.js). Dat valt vanzelf in het laatste
-//            werkuur, want de wolven komen een uur voor zonsondergang naar de rand, en het werk houdt op met de zon.
-//   stout    een roedel met honger is in het donker niet schuw meer (T.wolvenStout): hij zoekt prooi in het dorp, een
-//            schaap op de meent (zonder hek), of wie alleen in het donker loopt. Hij neemt het schaap, en de herder komt
+//   schrik   ziet een roedel met honger iemand die aan het bos werkt, en die hem, dan rent hij naar huis: hij werkt die dag
+//            niet meer, en zijn werkplaats maakte die dag de helft (T.blijftThuis, js/bewoners.js). Dat valt vanzelf in
+//            het laatste werkuur, want de wolven komen een uur voor zonsondergang naar de rand, en het werk houdt op met de
+//            zon; en honger is er alleen in de winter.
+//   stout    een roedel met honger is in het donker niet schuw meer (T.wolvenStout): hij zoekt prooi in het dorp, eerst een
+//            schaap op de meent (zonder hek), en anders wie alleen in het donker loopt. Hij neemt het schaap, en de herder komt
 //            het je de ochtend erna zeggen (het voorval "wolven"); wie hij aanvalt, is gewond en ligt een paar dagen in
 //            bed, of is een enkele keer dood (de spelregel "Beesten": "Zonder doden" maakt het alleen gewond).
 //   licht    licht houdt hem weg: wie in het licht staat, valt hij niet aan, en bij de schout met zijn lantaarn blijft hij
@@ -54,8 +55,8 @@
 //         roedel met honger: wie of wat hij zoekt, en waar zijn leider heen loopt), kiest (S.wereldTijd: wanneer hij weer
 //         een prooi kiest) }
 // In het dorp: D.beesten = { gezet, gezien { dag, wat ('gezien', 'schaap' of 'aanval'), wie } (het laatste wat de wolven
-// bij het dorp deden: de status), gemeld (de dag dat het dorp zei dat iemand ze zag), roedel (de roedel die het laatst een
-// schaap nam: daar gaat de jacht heen), hek (true: een hek om de schapen) }. Op een bewoner: p.thuisTot en p.gewond.
+// bij het dorp deden: de status), roedel (de roedel die het laatst een schaap nam: daar gaat de jacht heen), hek (true:
+// een hek om de schapen) }. Op een bewoner: p.thuisTot en p.gewond.
 // Op een dier: e.beest (zijn soort), e.groep, e.leider, e.rust (wat het doet als het stilstaat: 'staan', 'grazen',
 // 'liggen'; js/sprites.js), e.rent (een hert dat vlucht: dan 'rennen'), e.zoektWeg (S.wereldTijd waarna een volger weer
 // een weg mag zoeken). In het dorp: D.beesten = { gezet }.
@@ -128,7 +129,9 @@
     // binnen alleen tegels, en geen licht), en rent erheen. Wie hij aanvalt, ligt gewondDagen dagen in bed, of is met
     // doodKans dood (met de spelregel). Wie aan het werk de wolven ziet, rent naar huis, en zijn werkplaats maakte die dag
     // schrik minder. De status "Wolven" speelt tot statusDagen dagen na wat ze het laatst deden.
-    dreiging: { stout: 30, donker: 0.6, zoekStraal: 30, alleen: 4, gewondDagen: 3, doodKans: 0.2, schrik: 0.5, statusDagen: 10 },
+    // Wie aan het werk de wolven ziet: alleen wie aan of in het bos werkt (BOSWERK), alleen als de roedel honger heeft
+    // (vanaf honger.jagenVanaf: dan laten ze zich zien), en per uur met schrikKans.
+    dreiging: { stout: 30, donker: 0.6, zoekStraal: 30, alleen: 4, gewondDagen: 3, doodKans: 0.2, schrik: 0.5, schrikKans: 0.5, statusDagen: 10 },
     // Een jacht op de wolven (het voorval "wolven"): de roedel verliest er zoveel.
     jacht: 2,
   };
@@ -457,7 +460,7 @@
     if (!stout && t >= (G.keek || 0)) {
       G.keek = t + 0.5;
       const mens = mensBij(S, w, leden, IN().schuw[G.soort]);
-      if (mens && G.soort === 'wolf') schrik(D, mens, leden);
+      if (mens && G.soort === 'wolf') schrik(D, G, mens, leden);
       if (mens) {
         const m = T.tegelVan(mens);
         const naar = [G.thuis, ...G.rand].reduce((a, b) => (T.afstand(b, m) > T.afstand(a, m) ? b : a));
@@ -735,14 +738,20 @@
     return G.soort === 'wolf' && (G.honger || 0) >= IN().dreiging.stout && T.lichtVan(D.kalender.dag).nacht >= IN().dreiging.donker;
   };
 
-  // Wie aan het werk is (e.werkt: het veldwerk, de houthakker aan zijn boom, wie rooit of ontgint) en een wolf van deze
-  // roedel ziet, rent naar huis: hij werkt die dag niet meer (T.blijftThuis, js/bewoners.js), en wat zijn werkplaats die
-  // dag maakte (T.tikGebouwenDag schreef het bij het begin van de dag bij), gaat voor zijn deel voor de helft weer af. Eén
-  // keer per dag; en het dorp zegt het één keer per dag.
-  function schrik(D, mens, leden) {
+  // Werk aan of in het bos (e.werkt.soort, js/veldwerk.js): de houthakker aan zijn boom, wie sprokkelt, rooit of ontgint.
+  const BOSWERK = new Set(['hakken', 'rooien', 'ontginnen', 'sprokkelen']);
+
+  // Wie aan het bos werkt en een wolf van deze roedel ziet, rent naar huis: hij werkt die dag niet meer (T.blijftThuis,
+  // js/bewoners.js), en wat zijn werkplaats die dag maakte (T.tikGebouwenDag schreef het bij het begin van de dag bij),
+  // gaat voor zijn deel voor de helft weer af. Alleen een roedel met honger laat zich zo zien (vanaf honger.jagenVanaf;
+  // anders blijft hij uit het zicht), en per uur met schrikKans. Het dorp zegt het als de status "Wolven" begint, niet
+  // elke keer (Marcel, 1 okt: een toestand is een status).
+  function schrik(D, G, mens, leden) {
     const w = D.wereld;
     const dag = D.kalender.dag;
-    const p = mens.werkt && mens !== D.schout ? T.bewonerVan(D, mens) : null;
+    if (!mens.werkt || !BOSWERK.has(mens.werkt.soort) || mens === D.schout || (G.honger || 0) < IN().honger.jagenVanaf) return;
+    if (lot(G.zaad, Math.floor(dag * 24), 61) >= IN().dreiging.schrikKans) return;
+    const p = T.bewonerVan(D, mens);
     if (!p || T.blijftThuis(p, dag)) return;
     const m = T.tegelVan(mens);
     if (!leden.some((e) => T.zichtTussen(w, m, T.tegelVan(e)))) return;
@@ -756,11 +765,9 @@
         if (minder > 0) T.wijzigVoorraad(D, wat, -minder);
       }
     }
-    const B = D.beesten;
-    B.gezien = { dag, wat: 'gezien', wie: T.naamVanBewoner(p) };
-    if (B.gemeld === Math.floor(dag)) return;
-    B.gemeld = Math.floor(dag);
-    T.zeg(D, `${T.naamVanBewoner(p)} zag wolven bij de bosrand, en rende naar huis.`);
+    const nieuw = T.wolvenBijHetDorp(D, dag) == null;
+    D.beesten.gezien = { dag, wat: 'gezien', wie: T.naamVanBewoner(p) };
+    if (nieuw) T.zeg(D, `${T.naamVanBewoner(p)} zag wolven bij de bosrand, en rende naar huis.`);
   }
 
   // Wat een roedel met honger zoekt: elke halve seconde kiest hij opnieuw (kiesProoi), en daartussen houdt hij wat hij
@@ -779,9 +786,9 @@
     return { ...P, doel: T.tegelVan(P.e), slaat: true };
   }
 
-  // De dichtste prooi binnen zoekStraal van de leider: een schaap (zonder hek om de schapen), wie van het dorp alleen in
-  // het donker buiten is (niemand anders binnen `alleen` tegels, en geen licht om hem heen), of de schout. Geeft { e,
-  // soort ('schaap', 'mens' of 'schout') } of null.
+  // De prooi: eerst een schaap (het dichtste, waar het ook staat), zonder hek om de schapen; anders de dichtste binnen
+  // zoekStraal van de leider: wie van het dorp alleen in het donker buiten is (niemand anders binnen `alleen` tegels, en
+  // geen licht om hem heen), of de schout. Geeft { e, soort ('schaap', 'mens' of 'schout') } of null.
   function kiesProoi(D, leider) {
     const w = D.wereld;
     const lt = T.tegelVan(leider);
@@ -798,7 +805,11 @@
         beste = { e, soort };
       }
     };
-    if (!D.beesten.hek) for (const e of w.wezens) if (e.dier === 'schaap' && !e.dood) neem(e, 'schaap');
+    if (!D.beesten.hek) {
+      let schaap = null;
+      for (const e of w.wezens) if (e.dier === 'schaap' && !e.dood && (!schaap || T.afstand(lt, T.tegelVan(e)) < T.afstand(lt, T.tegelVan(schaap)))) schaap = e;
+      if (schaap && T.kanErKomen(w, lt, T.tegelVan(schaap))) return { e: schaap, soort: 'schaap' };
+    }
     for (const e of mensen) {
       if (e === D.schout) {
         if (!T.schoutIsWeg(D)) neem(e, 'schout');
