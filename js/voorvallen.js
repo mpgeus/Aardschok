@@ -21,6 +21,8 @@
 //                     lijstje is: niets. Dat zegt het venster niet: wie je liet gaan, kan terugkomen.
 //   feest: 'dag'      het dorp viert dit voorval op het plein (js/feesten.js): 'dag' is morgen de hele dag, en niemand
 //                     werkt; 'avond' is 's avonds, vanavond nog als het kan
+//   jacht: true       een jacht te voet op de wolven (js/beesten.js): de mannen lopen met de schout mee naar de roedel
+//   wolven: -2        de roedel verliest meteen twee wolven; hek: true, een hek om de schapen (js/beesten.js)
 // Een voorval komt geloot, of op een vaste dag (op: { maand, dag }, de meiboom).
 //
 // Wanneer er een komt en welke, zegt dit bestand (T.VOORVALLEN hieronder). Wie je zoekt, loopt naar de schout en
@@ -645,9 +647,10 @@
     if (doe.weiger && L.bouw) T.verzoekGeweigerd(D, L);
     // Ontginnen (js/ontginnen.js): ja, de heide of het bos (gemeld of stiekem), en het wordt een veld van zijn boerderij.
     if (doe.ontgin && L.ontgin) T.ontginToegestaan(D, L, doe.ontgin === true ? 'heide' : doe.ontgin);
-    // De wolven (js/beesten.js): een jacht neemt de roedel die het schaap nam wolven af, en een hek houdt ze bij de
-    // schapen weg. gereedschap/wereld.html laadt de beesten niet.
+    // De wolven (js/beesten.js): een jacht te voet naar de roedel die het schaap nam (doe.jacht; stap 3b), of meteen wolven
+    // minder (doe.wolven), en een hek houdt ze bij de schapen weg. gereedschap/wereld.html laadt de beesten niet.
     if (doe.wolven < 0 && T.jaagOpDeWolven) T.jaagOpDeWolven(D, -doe.wolven);
+    if (doe.jacht && T.beginJacht) T.beginJacht(D, D.kalender ? D.kalender.dag : dag);
     if (doe.hek && T.hekOmDeSchapen) T.hekOmDeSchapen(D);
     if (doe.voorval && L.wie) {
       const lijst = elk(doe.voorval);
@@ -705,6 +708,7 @@
     }
     if (doe.sterfkans) delen.push(`${doe.sterfkans}% kans op een dode`);
     if (doe.wolven < 0) delen.push(`${T.telwoord(-doe.wolven)} wolven minder`);
+    if (doe.jacht) delen.push(`de mannen gaan met je mee naar de wolven (${T.telwoord(T.BEESTEN_INSTELLINGEN.jacht.dagen)} dagen)`);
     if (doe.hek) delen.push('een hek om de schapen');
     if (doe.feest && T.feestPrijs(doe.feest)) delen.push(T.feestPrijs(doe.feest));
     // Een ondernemer (js/ondernemers.js): nee, en hij neemt het je kwalijk of trekt weg; en wat de herbergierster ervan
