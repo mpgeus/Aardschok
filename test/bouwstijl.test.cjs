@@ -200,3 +200,68 @@ test('een verzoek keert zijn deur naar de weg, en het goud op de grond en het ge
     assert.equal(u.instantie.tekening, tekening);
   }
 });
+
+// De grote gebouwen (werklijst vraag 114, stap 3; Marcel, 7 okt: "A; ja goed idee / B: Ja"): de kapel en de woontoren
+// van steen, de herberg die meegroeit met het dorp, en het huis van de schout en de herberg van de maker in de stijl.
+test('de kapel en de woontoren zijn van de steen van hun stijl, en van baksteen met een steenbakkerij', () => {
+  const D = leeg();
+  assert.deepEqual(T.stijlTekeningen(D, 'kapel'), ['huizen/wit-kapel-leien-z']);
+  assert.deepEqual(T.stijlTekeningen(D, 'woontoren'), ['huizen/wit-woontoren-pannen-z']);
+  assert.deepEqual(T.stijlTekeningen(D, 'herberg'), ['huizen/wit-herberg1-riet-z'], 'in het gehucht de kleine herberg');
+  D.trede = 'dorp';
+  assert.deepEqual(T.stijlTekeningen(D, 'herberg'), ['huizen/wit-herberg2-leien-z'], 'in een dorp de grote');
+  D.gebouwen.push({ soort: 'steenbakkerij', x: 1, y: 1, klaar: true, klaarOp: 0, handen: 0, voorwerp: null });
+  assert.deepEqual(T.stijlTekeningen(D, 'kapel'), ['huizen/wit-kapel-baksteen-z']);
+  assert.deepEqual(T.stijlTekeningen(D, 'woontoren'), ['huizen/wit-woontoren-baksteen-z']);
+  // wie in een woontoren woont, is ambachtsman, zoals in een stenen huis
+  assert.equal(T.standVan({ soort: 'woontoren' }), 'ambachtslieden');
+});
+
+test('de maker legt het huis van de schout en de herberg in de stijl van het land, met de deur naar het plein', () => {
+  for (const zaad of [5, 62710]) {
+    const S = nieuwSpel(zaad);
+    const D = S.dorp;
+    const schout = D.gebouwen.find((g) => g.huis === 'schout');
+    const herberg = D.gebouwen.find((g) => g.soort === 'herberg');
+    assert.equal(T.vormVan(schout.tekening), 'schoutshuis');
+    assert.equal(T.vormVan(herberg.tekening), 'herberg1');
+    assert.ok(T.deurKantVan(schout.tekening) && T.deurKantVan(herberg.tekening), 'allebei van de stijl');
+    assert.equal(T.stijlVan(D), T.stijlVoorLand(zaad));
+  }
+});
+
+test('in een dorp groeit de herberg door tot de grote, met zijn deur aan dezelfde kant, voor hout', () => {
+  const S = nieuwSpel(5);
+  const D = S.dorp;
+  const g = D.gebouwen.find((x) => x.soort === 'herberg');
+  const kant = T.deurKantVan(g.tekening);
+  const voor = T.voetVanGebouw(g);
+  T.zetVoorraad(D, 'graan', 2000);
+  T.zetVoorraad(D, 'hout', 0);
+  T.tikBehoeftenDag(D, 1);
+  assert.equal(T.vormVan(g.tekening), 'herberg1', 'in het gehucht blijft hij klein');
+  D.trede = 'dorp';
+  T.tikBehoeftenDag(D, 2);
+  assert.equal(T.vormVan(g.tekening), 'herberg1', 'zonder hout wacht hij');
+  assert.ok(g.wachtOpBouwstof);
+  T.zetVoorraad(D, 'hout', 100);
+  T.tikBehoeftenDag(D, 3);
+  assert.equal(T.vormVan(g.tekening), 'herberg2');
+  assert.equal(T.deurKantVan(g.tekening), kant);
+  // (de mensen sprokkelen die dag ook wat hout)
+  assert.ok(Math.abs(D.voorraad.hout - (100 - T.WENSEN_INSTELLINGEN.bouwstof.herberg.hout)) < 1, `${D.voorraad.hout} hout over`);
+  // de kant van de deur ligt waar hij lag
+  const na = T.voetVanGebouw(g);
+  const zijde = (r) => ({ z: r.y + r.h, o: r.x + r.b, n: r.y, w: r.x })[kant];
+  assert.equal(zijde(na), zijde(voor));
+  assert.equal(g.voorwerp.x, g.x);
+  assert.equal(g.voorwerp.y, g.y);
+  for (let y = na.y; y < na.y + na.h; y++) for (let x = na.x; x < na.x + na.b; x++) assert.equal(D.wereld.tegels[y][x], 'muur');
+});
+
+test('een stenen huis wordt pas met marktrecht een woontoren', () => {
+  assert.equal(T.GEBOUWEN.stenenHuis.wordt, 'woontoren');
+  assert.equal(T.GEBOUWEN.stenenHuis.wordtVanaf, 'marktrecht');
+  assert.equal(T.GEBOUWEN.woontoren.woonruimte, 3 * T.GEBOUWEN_INSTELLINGEN.gezinGrootte, 'drie gezinnen');
+  assert.ok(!T.inBouwmenu(leeg(), 'woontoren'), 'niemand bouwt hem: hij groeit');
+});
