@@ -5019,6 +5019,16 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     herten vindt, en de heer vraagt geen vlees van een jager zonder herten. J3 is een richting: het eten van het dorp komt
     niet uit één bron (nu kon de jager het alleen dragen); wat dat voor de wensen en de balans vraagt, staat bij
     `opmerkingen.md` tot na de speeltest.
+    **Gebouwd, stap 3b, 3c en 3d (7 okt, achtendertigste sessie):** **3b**, "Een jacht" in het voorval van de wolven is
+    een jacht te voet: de militie (zonder militie twee weerbare mannen) loopt met de schout mee, het hol ligt in goud op de
+    grond, en binnen negen tegels van de roedel is het een gevecht in beurten; wie overblijft, vlucht. Ga je niet binnen
+    twee dagen, dan gaan ze zonder je (twee wolven minder, 15% kans dat een van de mannen niet terugkomt). Het oproepen en
+    laten gaan van de militie komt uit `js/rovers.js` (`T.roepOp`, `T.laatGaan`, `T.militieVan`). **3c**, wie de wolven
+    aanvallen, roept om hulp: het dorp zegt het, een rood uitroepteken, de tijd naar 1×, en de weerbare mannen binnen
+    twaalf tegels lopen erheen; komt er een buur, dan vlucht de roedel, komt de schout (zes tegels), dan is het een gevecht,
+    en is er na een kwartier niemand, dan bijt hij zoals voorheen. **3d**, het hek om de schapen staat om de meent, van de
+    latten van de tuinen, met een hekje in elke zijde en waar een pad de rand kruist. De tekening van het hol (f) maakt een
+    agent; tot dan is het hol alleen de gouden rand.
     **Bezig in sessie `ccr-77327776-rqjldz`** (7 okt): stap 3, wat je tegen de wolven doet; eerst het plan voor Marcel.
 117. **Eén kaart: het eiland** (Marcel, 4 okt, zesentwintigste sessie: "Ik wil uiteindelijk toch alles op dezelfde kaart.
     Dus de hele spelwereld als het ware. Zo kun je steeds stukken 'ontdekken' in de fog of war. Het idee is een eiland. Met
