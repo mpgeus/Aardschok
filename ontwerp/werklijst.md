@@ -4873,6 +4873,16 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Het hert is een nieuw model in code (`gereedschap/pixelart/wild.cjs`): twee hindes en een hert met een gewei, dat
     leidt, met staan, grazen, liggen, lopen en rennen (samen zo'n 38 MB aan plaatjes, `opmerkingen.md`). De spelregel
     "Beesten" (aan of uit), `Spel.debug.beesten()`. De regels van het dorp veranderen nog niet.
+    **Vragen na stap 1** (Claude, 7 okt, met de schermafdrukken): **d**, het hol en het bos dat verdwijnt: het hol ligt
+    vast, uit het nummer van het land. Een erf, een werkplaats of een akker in het bos (vraag 107 en 110, e) haalt het
+    bos weg, en een stiekeme akker ligt juist diep, waar de inner niet kijkt, dus dicht bij de wolven. Voorstel: wordt
+    het bos om het hol te dun, dan zoekt de roedel een nieuw hol, dieper in het bos; is er geen bos meer dat diep genoeg
+    is, dan trekt hij weg van het land. Zo is kappen een keuze: hout en grond tegen wolven dichtbij. **e**, de roedels
+    groeien: nu blijft een roedel zo groot als hij begon, en dan betekent "de jager houdt ze klein" (stap 3) niets.
+    Voorstel: elke lente krijgt een roedel jongen, tot zes wolven, en een roedel van zes splitst zich en zoekt een
+    tweede hol; de herten net zo. Zonder jager wordt het bos dus elk jaar voller. **f**, het hol als plek: overdag zie je
+    de wolven niet, want ze liggen diep tussen de bomen. Voorstel: het hol is iets op de kaart (een kuil onder een
+    omgevallen boom, met botten ervoor) dat de schout kan vinden, en waar de jacht in stap 3 heen gaat.
 117. **Eén kaart: het eiland** (Marcel, 4 okt, zesentwintigste sessie: "Ik wil uiteindelijk toch alles op dezelfde kaart.
     Dus de hele spelwereld als het ware. Zo kun je steeds stukken 'ontdekken' in de fog of war. Het idee is een eiland. Met
     water rondom. Je krijgt een random positie op het land. Kan aan de buitenkant zijn of binnen in het land."; plan van
