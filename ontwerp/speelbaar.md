@@ -185,7 +185,7 @@ console. 62707 is zaad 1, 73425 zaad 2, 72022 zaad 3.
 
 **Wat het vraagt:** stap 2b doet wat hij moet zonder het spel te breken. Een vraag voor Marcel: de wolven zijn nu vooral
 een gevaar voor de schapen; mensen lopen pas gevaar met een hek om de schapen, of zonder schapen. Is dat de dreiging die
-hij wil, of moeten ze ook zonder dat iemand kunnen pakken?
+hij wil, of moeten ze ook zonder dat iemand kunnen pakken? **Marcel (7 okt): "Ja"**: zo is het goed.
 
 ## De speeltest van 7 okt: wapens zijn niet meer verboden (werklijst, vraag 131)
 

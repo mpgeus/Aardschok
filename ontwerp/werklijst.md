@@ -4817,7 +4817,6 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     dun: zie vraag 129.
 116. **Beesten in het bos** (Marcel, 4 okt, zesentwintigste sessie: "Ik wil dat er beesten kunnen rondlopen in het bos.
     Wolven etc. Die de houthakker kunnen bedreigen. Rode ogen uit het duister."; plan van Claude; open).
-    **Bezig in sessie `ccr-f6ba5992-1e77dw`** (7 okt): stap 1 staat in main, 2a en 2b op de branch, met de speeltest; dan stap 3.
     **Wat er al is:** de wolf staat in `T.WEZENS` (`js/wereld.js`): een monster om mee te vechten, uit het oude spel, met
     een tekening en een loopbeweging (`gereedschap/pixelart/bosvijanden.cjs`, met de reuzenspin en de kobold), en hij kan
     al dwalen. Het voorval "wolven" kost een schaap. Op de kaart loopt nog geen dier in het bos.
@@ -4930,7 +4929,9 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     acht keer gebeten, twee doden in zes spellen). Daarom nu: alleen wie aan het bos werkt, alleen van een roedel met
     honger, met een kans, een bericht als de status begint, en eerst de schapen (2551cfb). **De tweede speeltest**
     (2551cfb; `speelbaar.md`): vier van de zes wonnen; de wolven namen een tot vier schapen per dorp in vier jaar, de
-    speler koos dan de jacht, en niemand werd gebeten. **Voor stap 3:** de status en de raad noemen de jager nog niet als oorzaak, want die doet nog
+    speler koos dan de jacht, en niemand werd gebeten. **Marcel (7 okt), op de vragen daarbij: "1. Ja 2. Ja".** De dreiging
+    is goed zo (de wolven zijn vooral een gevaar voor de schapen; mensen pas met een hek of zonder schapen), en 2a en 2b
+    gaan in main; stap 3 begint in een nieuwe sessie. **Voor stap 3:** de status en de raad noemen de jager nog niet als oorzaak, want die doet nog
     niets tegen de wolven; dat komt erbij als hij echt jaagt.
     **Marcel (7 okt): "even noteren dat mensen ook om hulp roepen".** Nog niet gebouwd. Nu valt een roedel aan en is het
     meteen beslist (gewond of dood). Hoe het zou kunnen (Claude): wie de wolven aanvallen, roept om hulp; wie het hoort,
