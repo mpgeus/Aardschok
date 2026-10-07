@@ -4952,6 +4952,37 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     komt erheen, en de schout hoort het ook (een bericht met waar, later geluid); is hij er op tijd, dan schiet hij te hulp,
     en is het een gevecht in beurten, zoals bij de rovers. Hoort bij stap 3, wat je ertegen doet; misschien ook bij andere
     nood (een brand, de rovers).
+    **Het plan voor stap 3** (Claude, 7 okt, achtendertigste sessie; wacht op Marcel). **Wat er nu is:** de jager maakt
+    elke dag 1 vlees en 1 huid uit het niets, los van de herten; de jacht in het voorval "wolven" haalt meteen twee wolven
+    van de kaart (`T.jaagOpDeWolven`); het hek is een vlag (`T.hekOmDeSchapen`), op de kaart zie je niets; en de wolven
+    mijden al het licht (`T.lichtBronnen`): wie bij een lantaarn loopt, vallen ze niet aan, maar een schaap wel.
+    - **3a, de jager jaagt echt**, zoals de houthakker hakt: hij loopt het bos in naar de dichtste groep herten binnen zijn
+      bereik, en om de paar dagen komt hij terug met een hert (vlees en een huid). Staan er geen herten in zijn bereik,
+      dan staat hij stil en werkt zijn hand elders (zoals de houthakker zonder boom), en de raad zegt het. Een roedel in
+      zijn bereik houdt hij klein: in de lente neemt hij de jongen (een wolvenvel is een huid). Pas dan noemen de status
+      en de raad "geen jager" als oorzaak.
+    - **3b, het hol en de jacht te voet:** het hol is een plek op de kaart (f: een kuil onder een omgevallen boom, met
+      botten ervoor; een nieuw voorwerp in code). "Een jacht" in het voorval haalt de wolven niet meer meteen weg: de
+      mannen van het wachthuis (zonder wachthuis twee weerbare mannen) lopen met de schout mee, het hol ligt in goud op de
+      grond, en daar is het een gevecht in beurten tegen de roedel, overdag, als ze bij het hol liggen. Ga je niet binnen
+      twee dagen, dan gaan de mannen zonder jou, en loopt het af zoals nu (een kans op een dode, twee wolven minder): een
+      keuze die wacht, heeft een termijn (`CLAUDE.md`, samen spelen).
+    - **3c, om hulp roepen** (Marcel: "even noteren dat mensen ook om hulp roepen"): valt een roedel iemand aan, dan is
+      het niet meteen beslist. Hij roept: een bericht met waar, de tijd naar 1×, en wie in de buurt is, komt (twee mensen
+      laten de wolven al met rust). Is de schout er binnen een kwartier, dan is het een gevecht in beurten; anders gewond
+      of dood, zoals nu.
+    - **3d, het hek op de kaart:** het hek om de schapen wordt iets wat je ziet (een hoger hek om de weide of de kooi).
+    **Wat Claude erin zag:** (1) de jager en de wolven eten van dezelfde herten (g): een jager in een klein bos maakt de
+    wolven juist eerder hongerig, en dan komen ze naar het dorp. Hij moet dus maat houden, of dat is jouw probleem.
+    (2) Lantaarns aan de bosrand (stap 3 van het eerste plan) doen bijna niets meer: de wolven mijden het licht al, en wie
+    alleen in het donker loopt, is zelden aan de bosrand; ze nemen eerst een schaap, en daar helpt het hek. Voorstel: ze
+    vallen weg. (3) De herten zijn van de heer (de opmerking bij de jager: "stropen is ook een keuze"); dat laat het plan
+    liggen, en het gaat naar `opmerkingen.md`.
+    Volgorde: 3a, 3b, 3c, 3d, en dan de speeltest van vier jaar (wint het dorp nog, en hoeveel herten en wolven blijven
+    er?). Vragen: **a**, houdt de jager maat (hij laat altijd een paar herten per groep staan), of jaagt hij tot ze op
+    zijn? **b**, de jacht te voet met een termijn van twee dagen, en zonder wachthuis twee weerbare mannen? **c**, om hulp
+    roepen nu alleen bij de wolven (een brand of de rovers later op dezelfde manier)? **d**, de lantaarns aan de bosrand
+    vallen weg, en het hek wordt zichtbaar?
     **Bezig in sessie `ccr-77327776-rqjldz`** (7 okt): stap 3, wat je tegen de wolven doet; eerst het plan voor Marcel.
 117. **Eén kaart: het eiland** (Marcel, 4 okt, zesentwintigste sessie: "Ik wil uiteindelijk toch alles op dezelfde kaart.
     Dus de hele spelwereld als het ware. Zo kun je steeds stukken 'ontdekken' in de fog of war. Het idee is een eiland. Met
