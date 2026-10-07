@@ -674,7 +674,8 @@
     }
     if (doe.sterfkans) delen.push(`${doe.sterfkans}% kans op een dode`);
     if (doe.feest && T.feestPrijs(doe.feest)) delen.push(T.feestPrijs(doe.feest));
-    // Een ondernemer (js/ondernemers.js): nee, en hij neemt het je kwalijk of trekt weg; ja, en het is verboden.
+    // Een ondernemer (js/ondernemers.js): nee, en hij neemt het je kwalijk of trekt weg; en wat de herbergierster ervan
+    // vindt.
     if (L.bouw && L.bouw.eigen) delen.push(...T.eigenPrijs(D, L, doe));
     uit.tekst = delen.join(', ');
     return uit;

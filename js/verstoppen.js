@@ -341,25 +341,19 @@
   // dat is weg; elke vondst maakt argwanend. Geeft wat ze vonden als tekst ("20 graan in de kelder van
   // Klaas"), of null. `r` (voor een toets) is een getal 0..1 in plaats van het lot. Voor het hele dorp
   // (T.zoekVerstopt) en voor de soldaten die met de schout meelopen (js/doorzoeken.js).
-  // Smeedt iemand er stiekem wapens (g.stiekem, js/ondernemers.js), dan vinden ze die ook, en straft de heer.
   T.zoekOpPlek = function (D, p, r) {
     const g = p.gebouw;
     const tekst = T.inhoudTekst(inhoudVan(g));
-    if (!tekst && !g.stiekem) return null;
+    if (!tekst) return null;
     if ((r != null ? r : lot(D, g)) >= p.vinden) return null;
-    const delen = [];
-    if (tekst) {
-      g.verstopt = { graan: 0, goud: 0 };
-      delete g.verteld;
-      delete g.verteldDoor;
-      if (VI().argwaanPerVondst > 0 && T.zetArgwaan) T.zetArgwaan(D, VI().argwaanPerVondst, 'de soldaten vonden wat je verstopte');
-      delen.push(`${tekst} in ${p.naam}`);
-      // Twee bazen (js/bazen.js; werklijst vraag 106, c): betrapt. De laatste waarschuwing, of meteen weg.
-      T.betrapt(D);
-    }
-    if (g.stiekem) delen.push(T.verbodenGevonden(D, g));
+    g.verstopt = { graan: 0, goud: 0 };
+    delete g.verteld;
+    delete g.verteldDoor;
+    if (VI().argwaanPerVondst > 0 && T.zetArgwaan) T.zetArgwaan(D, VI().argwaanPerVondst, 'de soldaten vonden wat je verstopte');
+    // Twee bazen (js/bazen.js; werklijst vraag 106, c): betrapt. De laatste waarschuwing, of meteen weg.
+    T.betrapt(D);
     if (T.ui && T.ui.toonVoorraad) T.ui.toonVoorraad(D);
-    return delen.join(', en ');
+    return `${tekst} in ${p.naam}`;
   };
 
   // Het hele dorp, plek voor plek, en de akkers in het bos die niet in de boeken staan (js/ontginnen.js). Geeft wat ze

@@ -1,7 +1,8 @@
 // De ondernemers (js/ondernemers.js; werklijst vraag 104, Marcel, 3 okt: "Stel er is een ondernemende inwoner die wapens
 // wil maken etc", en "104 a b c d ja"): wie iets wil beginnen wat niemand mist, uit zichzelf. Eerst de wapenmaker: na
-// een aanval van de rovers, in een dorp, komt hij het vragen. Ja: de militie slaat harder, maar het is verboden. Nee: hij
-// neemt het je kwalijk, doet het stiekem in zijn kelder, en na twee keer nee trekt hij weg.
+// een aanval van de rovers, in een dorp, komt hij het vragen. Ja: de militie slaat harder, en dat mag (Marcel, 7 okt:
+// "Wapens zijn niet meer verboden"; werklijst vraag 131). Nee: hij neemt het je kwalijk, en na twee keer nee trekt hij
+// weg.
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
@@ -161,7 +162,7 @@ test('ja: de wapenmaker komt er, hij is er de meester en je dankbaar, en hij maa
   assert.equal(T.wapensInHetDorp(D), Math.floor(D.voorraad.wapens));
 }));
 
-test('nee: zijn huis neemt het je kwalijk, hij smeedt stiekem in zijn kelder, en na twee keer trekt hij weg', () => allemaal(() => {
+test('nee: zijn huis neemt het je kwalijk, en na twee keer trekt hij weg', () => allemaal(() => {
   const S = dorp();
   const D = S.dorp;
   roversKwamen(D, 0);
@@ -169,19 +170,16 @@ test('nee: zijn huis neemt het je kwalijk, hij smeedt stiekem in zijn kelder, en
   const nee = T.GESPREKKEN.wapenverzoek.knopen.begin.keuzes[1].doe;
   const ja = T.GESPREKKEN.wapenverzoek.knopen.begin.keuzes[0].doe;
   assert.match(T.prijsVanKeuze(D, nee).tekst, /neemt het je kwalijk/, 'het venster zegt wat nee doet');
-  assert.match(T.prijsVanKeuze(D, ja).tekst, /verboden/, 'en dat ja verboden is');
+  assert.doesNotMatch(T.prijsVanKeuze(D, ja).tekst, /verboden|heer/, 'ja is niet verboden (vraag 131)');
   const L = zeg(S, false);
   const p = L.wie;
   assert.ok(T.huisStemming(p.huis, 2) < 0, 'zijn huis neemt het je kwalijk');
   assert.match(T.huisNadraagtTekst(p.huis, 2), /neemt je je nee kwalijk/, 'en het briefje bij zijn huis zegt het');
   assert.equal(D.verzoeken.eigen[p.id].nee, 1);
-  assert.ok(p.huis.stiekem, 'hij doet het stiekem, in zijn kelder');
-  assert.ok(berichten.some((t) => /hameren/.test(t)), 'en je hoort het');
   assert.ok(!D.gebouwen.some((g) => g.soort === 'wapenmaker'));
-  // Elke dag een paar wapens, die de militie ook heeft.
+  // Hij smeedt niet stiekem in zijn kelder: er valt niets te verbergen (tot 7 okt wel, vraag 131).
   for (let dag = 2; dag < 10; dag++) nacht(S, dag);
-  assert.ok(p.huis.stiekem.wapens > 1, `${p.huis.stiekem.wapens} wapens in zijn kelder`);
-  assert.equal(T.wapensInHetDorp(D), Math.floor(p.huis.stiekem.wapens + ((D.voorraad.wapens) || 0)));
+  assert.equal(T.wapensInHetDorp(D), 0, 'zonder werkplaats geen wapens');
   // Niet binnen naNee dagen opnieuw; daarna wel, en een tweede nee: hij trekt weg, met zijn gezin, het bos in.
   for (let dag = 10; dag < 31; dag++) {
     nacht(S, dag);
@@ -210,37 +208,12 @@ test('nee: zijn huis neemt het je kwalijk, hij smeedt stiekem in zijn kelder, en
   assert.equal(D.bevolking, bevolking - weg.length);
   assert.ok(D.rovers.bende.some((l) => l.id === p.id), 'en kan als rover terugkomen');
   assert.ok(berichten.some((t) => /twee keer nee/.test(t)));
-  nacht(S, 41);
-  assert.ok(!D.gebouwen.some((g) => g.stiekem), 'zijn kelder is stil');
 }));
 
-test('de inner die een wapenmaker ziet, wordt argwanend; één keer per jaar', () => {
-  const S = dorp();
-  const D = S.dorp;
-  const huis = D.gebouwen.find((g) => g.huis === 'schout');
-  const plek = T.plekVoor(D, 'wapenmaker', T.deurVan(D.wereld, huis));
-  const g = T.plaatsGebouw(D, 'wapenmaker', plek.x, plek.y).instantie;
-  g.klaar = true;
-  D.inner = T.nieuweInner();
-  T.innerKomt(D, 1, false);
-  const voor = D.inner.argwaan;
-  const naast = { x: plek.x - 1, y: plek.y + 1 };
-  T.innerKijkt(D, naast);
-  assert.ok(D.inner.bezoek.gebouwen.has(g), 'hij zag hem');
-  assert.ok(Math.abs(D.inner.argwaan - voor - T.ONDERNEMERS_INSTELLINGEN.wapens.argwaanGezien) < 1e-9);
-  assert.ok(berichten.some((t) => /De inner blijft staan bij de wapenmaker/.test(t)));
-  T.innerKijkt(D, naast);
-  assert.ok(Math.abs(D.inner.argwaan - voor - T.ONDERNEMERS_INSTELLINGEN.wapens.argwaanGezien) < 1e-9, 'niet twee keer');
-  // Zijn rapport onthoudt het: een tweede bezoek dit jaar maakt niet nog eens argwanend.
-  T.innerVertrekt(D);
-  const na = D.inner.argwaan;
-  D.inner.bezoek = null;
-  T.innerKomt(D, 20, true);
-  T.innerKijkt(D, naast);
-  assert.equal(D.inner.argwaan, na);
-});
-
-test('op Sint-Maarten: wat de inner zag, laat de heer verzegelen, met de wapens weg en een boete volgend jaar', () => {
+// Wapens zijn niet verboden (Marcel, 7 okt: "Het is logisch dat er wapens zijn om de stad te verdedigen. Alleen weerstand
+// tegen de heer is inacceptabel"; werklijst vraag 131). Tot dan maakte een wapenmaker de inner argwanend, en liet de heer
+// hem op Sint-Maarten verzegelen, met de wapens weg, 30 gunst eraf en 20 goud boete.
+test('de inner die een wapenmaker ziet, wordt er niet argwanend van, en de heer laat hem op Sint-Maarten staan', () => {
   const S = dorp();
   const D = S.dorp;
   const huis = D.gebouwen.find((g) => g.huis === 'schout');
@@ -248,67 +221,30 @@ test('op Sint-Maarten: wat de inner zag, laat de heer verzegelen, met de wapens 
   const g = T.plaatsGebouw(D, 'wapenmaker', plek.x, plek.y).instantie;
   g.klaar = true;
   T.zetVoorraad(D, 'wapens', 6);
-  // Niemand zag hem: dan weet de heer van niets, tenzij zijn soldaten het hele dorp doorzoeken.
-  assert.deepEqual(T.heerVindtVerboden(D, false), []);
   D.inner = T.nieuweInner();
   T.innerKomt(D, 1, false);
-  T.innerKijkt(D, { x: plek.x - 1, y: plek.y + 1 });
-  T.innerVertrekt(D);
-  D.heer = T.nieuweHeer();
-  D.heer.bezoek = { staat: true, weg: false, wezens: [], betaald: null };
   const argwaan = D.inner.argwaan;
-  assert.deepEqual(T.heerVindtVerboden(D, false), ['de wapenmaker']);
-  assert.ok(g.verzegeld, 'verzegeld');
-  assert.equal(D.voorraad.wapens || 0, 0, 'de wapens neemt hij mee');
-  assert.ok(D.inner.argwaan > argwaan);
-  assert.equal(D.heer.erbij, T.ONDERNEMERS_INSTELLINGEN.wapens.boete, 'de boete wacht tot de schatting betaald is');
-  assert.ok(berichten.some((t) => /Wapens, schout\? In Mijn dorp\?/.test(t)));
-  assert.deepEqual(T.heerVindtVerboden(D, true), [], 'wat verzegeld is, vindt hij niet nog eens');
-  // Verzegeld: geen handen, en hij maakt niets.
+  T.innerKijkt(D, { x: plek.x - 1, y: plek.y + 1 });
+  assert.ok(D.inner.bezoek.gebouwen.has(g), 'hij zag hem');
+  assert.equal(D.inner.argwaan, argwaan, 'en wordt er niet argwanend van');
+  T.innerVertrekt(D);
+  // Op Sint-Maarten, ook als zijn soldaten het hele dorp doorzoeken: de wapens blijven, en het kost niets.
+  D.inner.argwaan = T.INNER_INSTELLINGEN.doorzoekenVanaf;
+  D.heer = T.nieuweHeer();
+  D.heer.bezoek = { staat: false, weg: false, wezens: [], betaald: null };
+  const gunst = T.bazenNu(D).gunst;
+  const schuld = D.heer.schuld || 0;
+  T.heerStaatErOp(D);
+  assert.equal(D.voorraad.wapens, 6, 'de wapens blijven');
+  assert.equal(T.bazenNu(D).gunst, gunst, 'zijn gunst blijft');
+  assert.equal(D.heer.schuld || 0, schuld, 'geen boete');
+  assert.ok(!berichten.some((t) => /Wapens, schout/.test(t)));
+  // En hij werkt gewoon door.
   T.zetVoorraad(D, 'ijzer', 10);
   nacht(S, 2);
-  assert.equal(g.handen, 0);
-  assert.equal(D.voorraad.wapens || 0, 0);
-  assert.match(T.gebouwToestand(D, g), /verzegeld door de heer/);
-  // Na de schatting staat de boete op de rekening van volgend jaar.
-  T.heerRekentErbij(D, 0);
-  D.heer.bezoek.betaald = { deel: 1 };
-  T.heerRekentErbij(D, 5);
-  assert.equal(D.heer.schuld, 5, 'na de betaling komt een boete meteen op de schuld');
+  nacht(S, 3);
+  assert.ok(D.voorraad.wapens > 6, `hij maakt wapens (${D.voorraad.wapens})`);
 });
-
-test('de schatting betaald: de boete voor de wapens komt bij de schuld van volgend jaar', () => {
-  const S = dorp();
-  const D = S.dorp;
-  D.heer = T.nieuweHeer();
-  D.heer.bezoek = { staat: true, weg: false, wezens: [], betaald: null };
-  D.heer.brief = { dag: 0, eis: T.eisVanDeHeer(D) };
-  T.heerRekentErbij(D, 20);
-  const g = T.betaalHeer(D, { ...T.eisVanDeHeer(D).per });
-  assert.equal(D.heer.schuld, g.schuld + 20);
-  assert.equal(D.heer.erbij, 0);
-});
-
-test('de soldaten vinden een kelder waar stiekem gesmeed wordt, als ze daar zoeken', () => allemaal(() => {
-  const S = dorp();
-  const D = S.dorp;
-  roversKwamen(D, 0);
-  nacht(S, 1);
-  const p = zeg(S, false).wie;
-  for (let dag = 2; dag < 10; dag++) nacht(S, dag);
-  D.heer = T.nieuweHeer();
-  D.heer.bezoek = { staat: true, weg: false, wezens: [], betaald: null };
-  const plek = T.verstopPlekVan(D, p.huis);
-  assert.equal(T.zoekOpPlek(D, plek, 0.999), null, 'buiten de kans vinden ze niets');
-  assert.ok(p.huis.stiekem);
-  const tekst = T.zoekOpPlek(D, plek, 0);
-  assert.match(tekst, /de wapens in de kelder van/);
-  assert.ok(!p.huis.stiekem, 'zijn werkplaats is weg');
-  assert.equal(T.wapensInHetDorp(D), 0);
-  assert.equal(D.heer.erbij, T.ONDERNEMERS_INSTELLINGEN.wapens.boete);
-  // Hij kan het nog eens vragen: hij hoorde maar één keer nee.
-  assert.ok(T.eigenVerzoeken(D, 20).some((x) => x.wie === p));
-}));
 
 test('wie van de militie een wapen heeft, slaat harder', () => {
   const S = dorp();
@@ -339,23 +275,18 @@ test('ben je weg, dan beslist de raadsman het wapenverzoek, zoals elk verzoek', 
   assert.ok(keuze.doe.bouw ? D.gebouwen.some((g) => g.soort === 'wapenmaker') : D.verzoeken.eigen[L.wie.id].nee === 1);
 }));
 
-test('wat een ondernemer onthoudt, wat zijn huis nadraagt en wat verzegeld is, gaat mee in een opgeslagen spel', () => allemaal(() => {
+test('wat een ondernemer onthoudt en wat zijn huis nadraagt, gaat mee in een opgeslagen spel', () => allemaal(() => {
   const S = dorp();
   const D = S.dorp;
   roversKwamen(D, 0);
   nacht(S, 1);
   const p = zeg(S, false).wie;
   nacht(S, 2);
-  const huis = D.gebouwen.find((g) => g.huis === 'schout');
-  const plek = T.plekVoor(D, 'smidse', T.deurVan(D.wereld, huis));
-  const g = T.plaatsGebouw(D, 'smidse', plek.x, plek.y).instantie;
-  g.verzegeld = { dag: 2 };
   const terug = T.leesSpel(T.bewaarSpel(S)).staat.dorp;
   const p2 = terug.bewoners.mensen.find((x) => x.id === p.id);
   assert.equal(terug.verzoeken.eigen[p.id].nee, 1);
-  assert.deepEqual(p2.huis.stiekem, p.huis.stiekem);
+  assert.ok(T.huisStemming(p.huis, 3) < 0);
   assert.equal(T.huisStemming(p2.huis, 3), T.huisStemming(p.huis, 3));
-  assert.deepEqual(terug.gebouwen.find((x) => x.soort === 'smidse').verzegeld, { dag: 2 });
 }));
 
 // ── De tweede herberg ──

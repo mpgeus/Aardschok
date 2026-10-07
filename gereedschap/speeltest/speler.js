@@ -1677,10 +1677,9 @@
       ondernemers: {
         vroegen: boek.voorvallen.filter((v) => v.id === 'wapenverzoek' || v.id === 'herbergverzoek')
           .map((v) => `${v.datum}: ${v.wie}, ${v.id === 'wapenverzoek' ? 'wapens' : 'een tweede herberg'}: ${v.antwoord}`),
-        berichten: boek.berichten.filter((b) => /Wapens, schout|De inner blijft staan bij|hameren|Een tweede herberg, schout|vat bier|keer nee van de schout/.test(b.tekst))
+        berichten: boek.berichten.filter((b) => /Een tweede herberg, schout|vat bier|keer nee van de schout/.test(b.tekst))
           .map((b) => `${b.datum}: ${b.tekst}`),
         wapens: T.wapensInHetDorp(s.dorp),
-        verzegeld: s.dorp.gebouwen.filter((g) => g.verzegeld).map((g) => g.soort),
         herbergen: T.herbergenVan(s.dorp).length,
       },
       getuigenPerPlek: plekken().filter((p) => (p.gebouw.getuigen || []).length).map((p) => ({ plek: p.naam, getuigen: p.gebouw.getuigen.length, verteldDoor: p.gebouw.verteldDoor || null })),

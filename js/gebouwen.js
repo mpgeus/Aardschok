@@ -39,7 +39,6 @@
 //                                    // staan in de weg, dus ze liggen pas daarbuiten
 //     stilIn:      null,             // of { winter: 'de beek ligt dicht' }: in dat seizoen maakt hij
 //                                    // niets, en dit is waarom (de visser; spel.md, "Handel")
-//     verdacht:    false,            // moet de heer dit niet zien? (wapenmaker, schuttershof, …)
 //     kerk:        false,            // telt als "een kerk" voor de behoeften (js/behoeften.js:
 //                                    // T.heeftKerk) — nu alleen de kapel, later ook de kerk zelf
 //     lantaarn:    true,             // van het dorp: als hij klaar is, komt er een lantaarn naast de
@@ -111,13 +110,13 @@
     // gezin zet er zelf een hut op. De maat staat in T.ERVEN_INSTELLINGEN; de rest in js/erven.js.
     erf: {
       naam: 'erf', trede: 'gehucht', voet: null, kosten: {}, heer: {}, bouwtijd: 0,
-      handen: 0, woonruimte: 0, maakt: null, verdacht: false, menu: true, erf: true,
+      handen: 0, woonruimte: 0, maakt: null, menu: true, erf: true,
       tekening: null, beschrijving: 'bouwgrond: een nieuw gezin zet er zelf een hut op, met hout uit de voorraad',
       opmerking: '',
     },
     hut: {
       naam: 'hut', meervoud: 'hutten', trede: 'gehucht', voet: { b: 3, h: 3 }, kosten: { hout: 8 }, heer: {}, bouwtijd: 2,
-      handen: 0, woonruimte: 3, wordt: 'huis', maakt: null, verdacht: false, menu: true, woning: true,
+      handen: 0, woonruimte: 3, wordt: 'huis', maakt: null, menu: true, woning: true,
       tekening: 'huizen/hut1', beschrijving: 'ruimte voor een gezin; goedkoop, en arm om te zien',
       // Vier echte hutten van vlechtwerk en leem onder riet, laag, zonder schoorsteen (ronde 4b van de
       // huizenbouwer, gereedschap/pixelart/huizen.cjs), zodat een rij hutten niet uit één stempel komt
@@ -127,7 +126,7 @@
     },
     huis: {
       naam: 'huis', meervoud: 'huizen', trede: 'gehucht', voet: { b: 6, h: 6 }, kosten: { hout: 16, goud: 4 }, heer: { goud: 2 }, bouwtijd: 4,
-      handen: 0, woonruimte: 5, wordt: 'stenenHuis', maakt: null, verdacht: false, menu: true, woning: true,
+      handen: 0, woonruimte: 5, wordt: 'stenenHuis', maakt: null, menu: true, woning: true,
       tekening: 'huizen/huis1', beschrijving: 'ruimte voor meer mensen', opmerking: '',
       // Zes huizen van vakwerk onder riet, met een schoorsteen van leem, want steen hoort pas bij een
       // dorp (Marcel, 26 sep; spel.md, "Beter bouwen"; ronde 4b van de huizenbouwer).
@@ -135,7 +134,7 @@
     },
     boerderij: {
       naam: 'boerderij', meervoud: 'boerderijen', trede: 'gehucht', voet: { b: 7, h: 8 }, kosten: { hout: 20, goud: 6 }, heer: { goud: 1 }, bouwtijd: 5,
-      handen: 2, woonruimte: 4, maakt: null, verdacht: false, menu: true,
+      handen: 2, woonruimte: 4, maakt: null, menu: true,
       tekening: 'huizen/boerderij1', beschrijving: 'boeren voor de akkers, en een schuur voor de oogst',
       // De vijf boerderijen van het gehucht (ronde 4b): een L, een T, twee met hun deur achter, en een
       // blokhut onder spanen. Die met de deur achter staat met zijn achterkant naar je toe.
@@ -146,7 +145,7 @@
     },
     akker: {
       naam: 'akker', trede: 'gehucht', voet: null, kosten: { hout: 2 }, heer: {}, bouwtijd: 1,
-      handen: 0, woonruimte: 0, maakt: null, verdacht: false, menu: false,
+      handen: 0, woonruimte: 0, maakt: null, menu: false,
       tekening: null, beschrijving: 'graan (rogge, gerst)',
       opmerking: 'Geen los blokje maar een hele strook; gaat niet via het bouwmenu. Zie "akker" in '
         + 'js/kaart.js en gereedschap/tiled/maak-gehucht.cjs. Het graan zelf: gereedschap/pixelart/graan.cjs.',
@@ -154,7 +153,7 @@
     houthakker: {
       naam: 'houthakker', trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 10, goud: 4 }, heer: { hout: 20 }, bouwtijd: 3,
       // bos: hij hakt in het bos van de heer, dus de wet Houtkap laat hem meer hakken (js/wetten.js, T.maaktUit).
-      handen: 1, woonruimte: 0, maakt: { uit: { hout: 2 } }, bos: true, verdacht: false, menu: true,
+      handen: 1, woonruimte: 0, maakt: { uit: { hout: 2 } }, bos: true, menu: true,
       // Bij genoeg bos voor een tijd werk (werklijst vraag 129, b; Marcel, 6 okt: "Eens"): zijn bereik is tien tegels
       // (T.BOS_INSTELLINGEN.hakStraal, js/bos.js), en hij hakt 73 bomen per jaar. Tot dan 8 bomen binnen 7 tegels: dan stond
       // hij na een paar maanden stil.
@@ -166,32 +165,32 @@
     // zomermaand geschoren worden. Tot dan maakte hij elke dag wol, zonder dat er een schaap was.
     schaapskooi: {
       naam: 'schaapskooi', trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 10 }, heer: { wol: 20 }, bouwtijd: 3,
-      handen: 1, liefst: 'jong', woonruimte: 0, maakt: null, verdacht: false, menu: true,
+      handen: 1, liefst: 'jong', woonruimte: 0, maakt: null, menu: true,
       tekening: 'gebouwen/schuurBlokhut', beschrijving: 'de schapen van de heide slapen erin: mest voor de akkers',
       opmerking: 'nieuw: nog niet getekend, leent voorlopig de blokhutschuur.',
     },
     kippenhok: {
       naam: 'kippenhok', trede: 'gehucht', voet: { b: 2, h: 2 }, kosten: { hout: 4 }, heer: { eieren: 20 }, bouwtijd: 1,
-      handen: 0, woonruimte: 0, maakt: { uit: { eieren: 1 } }, verdacht: false, menu: true,
+      handen: 0, woonruimte: 0, maakt: { uit: { eieren: 1 } }, menu: true,
       tekening: 'gebouwen/kippenhok', beschrijving: 'eieren, en de pachthoenders voor de heer',
       opmerking: '',
     },
     moestuin: {
       naam: 'moestuin', trede: 'gehucht', voet: { b: 2, h: 2 }, kosten: { hout: 2 }, heer: {}, bouwtijd: 1,
-      handen: 0, woonruimte: 0, maakt: { uit: { groente: 1 } }, verdacht: false, menu: true,
+      handen: 0, woonruimte: 0, maakt: { uit: { groente: 1 } }, menu: true,
       tekening: 'erf/moestuin', beschrijving: 'groente bij het huis', opmerking: '',
     },
     put: {
       // Alleen hout (werklijst vraag 89, b; Marcel, 2 okt: "b ja"): een put graaf je zelf, en met 2 goud per put aten de
       // wensen van de hutten in de speeltest het goud op dat de heer en de smidse nodig hadden.
       naam: 'put', trede: 'gehucht', voet: { b: 1, h: 1 }, kosten: { hout: 6 }, heer: {}, bouwtijd: 2,
-      handen: 0, woonruimte: 0, maakt: null, verdacht: false, menu: true,
+      handen: 0, woonruimte: 0, maakt: null, menu: true,
       tekening: 'erf/put', beschrijving: 'water; zonder put wordt het dorp ziek',
       opmerking: 'Het effect ("zonder put wordt het dorp ziek") is nog geen regel, alleen de tekening staat er al.',
     },
     verstopplek: {
       naam: 'verstopplek', trede: 'gehucht', voet: { b: 2, h: 2 }, kosten: { hout: 6 }, heer: {}, bouwtijd: 2,
-      handen: 0, woonruimte: 0, maakt: null, verdacht: false, menu: false,
+      handen: 0, woonruimte: 0, maakt: null, menu: false,
       tekening: null, beschrijving: 'een plek in het bos die de inner niet ziet',
       opmerking: 'Bewust zonder tekening: een verstopplek die je wél ziet staan is geen verstopplek. '
         + 'Niet meer in het bouwmenu sinds 25 sep: Marcel wil geen kuil maar plekken die er al zijn, de '
@@ -203,27 +202,27 @@
     //    spel.md, "Grondstoffen halen"). De houthakker staat hierboven al. ──
     steengroeve: {
       naam: 'steengroeve', trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 12, goud: 4 }, heer: { steen: 10 }, bouwtijd: 3,
-      handen: 2, woonruimte: 0, maakt: { uit: { steen: 1 } }, verdacht: false, menu: true,
+      handen: 2, woonruimte: 0, maakt: { uit: { steen: 1 } }, menu: true,
       bij: { natuur: 'rotsen', straal: 6, minstens: 2 },
       tekening: 'gebouwen/houtschuur', beschrijving: 'steen voor funderingen en stenen huizen',
       opmerking: 'nieuw: nog niet getekend (een groeve is een kuil met een kraan, geen huis), leent voorlopig de houtschuur.',
     },
     kleiput: {
       naam: 'kleiput', trede: 'gehucht', voet: { b: 3, h: 3 }, kosten: { hout: 6 }, heer: { goud: 1 }, bouwtijd: 2,
-      handen: 1, woonruimte: 0, maakt: { uit: { klei: 2 } }, verdacht: false, menu: true,
+      handen: 1, woonruimte: 0, maakt: { uit: { klei: 2 } }, menu: true,
       tekening: 'erf/schuurtje', beschrijving: 'klei voor de steenbakkerij: bakstenen, zo bouwde men hier echt',
       opmerking: 'nieuw: nog niet getekend, leent voorlopig het schuurtje.',
     },
     rietsnijder: {
       naam: 'rietsnijder', trede: 'gehucht', voet: { b: 3, h: 3 }, kosten: { hout: 6 }, heer: { goud: 1 }, bouwtijd: 2,
-      handen: 1, woonruimte: 0, maakt: { uit: { riet: 2 } }, verdacht: false, menu: true,
+      handen: 1, woonruimte: 0, maakt: { uit: { riet: 2 } }, menu: true,
       bij: { natuur: 'water', straal: 5, minstens: 3 },
       tekening: 'erf/schuurtje', beschrijving: 'riet uit de beek en het moeras, voor rieten daken',
       opmerking: 'nieuw: nog niet getekend, leent voorlopig het schuurtje. Hoort aan het water.',
     },
     jager: {
       naam: 'jager', trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 8 }, heer: { vlees: 5 }, bouwtijd: 2,
-      handen: 1, woonruimte: 0, maakt: { uit: { vlees: 1, huiden: 1 } }, verdacht: false, menu: true,
+      handen: 1, woonruimte: 0, maakt: { uit: { vlees: 1, huiden: 1 } }, menu: true,
       // Geen `bij`: hij loopt het bos in. Met de eis van het bos (4 okt) vond de jager aan de bosrand al in de eerste
       // herfst geen plek meer, en at het dorp in de speeltest zijn zaaigraan op.
       tekening: 'gebouwen/jagershut', beschrijving: 'wild uit het bos, en huiden voor de looier',
@@ -231,7 +230,7 @@
     },
     visser: {
       naam: 'visser', trede: 'gehucht', voet: { b: 3, h: 3 }, kosten: { hout: 6 }, heer: { vis: 10 }, bouwtijd: 2,
-      handen: 1, woonruimte: 0, maakt: { uit: { vis: 2 } }, verdacht: false, menu: true,
+      handen: 1, woonruimte: 0, maakt: { uit: { vis: 2 } }, menu: true,
       bij: { natuur: 'water', straal: 5, minstens: 3 },
       // Marcel, 24 sep: 's winters ligt de beek dicht, dus wie dan vis wil eten, heeft hem in de
       // herfst gezouten (spel.md, "Handel").
@@ -241,7 +240,7 @@
     },
     wachthuis: {
       naam: 'wachthuis', trede: 'gehucht', voet: { b: 3, h: 3 }, kosten: { hout: 10, goud: 4 }, heer: { goud: 2 }, bouwtijd: 3,
-      handen: 2, woonruimte: 0, maakt: null, verdacht: false, menu: true, lantaarn: true,
+      handen: 2, woonruimte: 0, maakt: null, menu: true, lantaarn: true,
       tekening: 'gebouwen/dorpKlein3', beschrijving: 'rakkers en de nachtwacht: orde houden, dieven pakken, keuren handhaven, of wegkijken',
       opmerking: 'nieuw (Marcel, 23 sep: "orde bewaarders, leger etc moeten een optie zijn"): nog niet getekend, '
         + 'leent voorlopig een klein dorpshuis. De heer vindt het goed; voor wie de rakkers echt werken, is de vraag.',
@@ -251,7 +250,7 @@
     // af van de marskramer (js/handel.js), de ertsgraver (dorp) maakt hem later vrij.
     smidse: {
       naam: 'smidse', trede: 'gehucht', voet: { b: 5, h: 5 }, kosten: { hout: 14, goud: 10 }, heer: { goud: 4 }, bouwtijd: 4,
-      handen: 2, woonruimte: 0, maakt: { in: { ijzer: 1 }, uit: { gereedschap: 1 } }, verdacht: false,
+      handen: 2, woonruimte: 0, maakt: { in: { ijzer: 1 }, uit: { gereedschap: 1 } },
       menu: true, tekening: 'gebouwen/smidse', beschrijving: 'ijzer tot gereedschap; betere werktuigen, sneller werk',
       opmerking: 'Zonder ijzer staat hij stil (T.tikGebouwenDag, stap 6). IJzer komt van de marskramer, tot er een ertsgraver is.',
     },
@@ -259,24 +258,24 @@
     // ── Dorp ──
     timmerman: {
       naam: 'timmerman', trede: 'dorp', voet: { b: 5, h: 5 }, kosten: { hout: 12, goud: 6 }, heer: { goud: 3 }, bouwtijd: 3,
-      handen: 2, woonruimte: 0, maakt: { in: { hout: 2 }, uit: { planken: 2 } }, verdacht: false,
+      handen: 2, woonruimte: 0, maakt: { in: { hout: 2 }, uit: { planken: 2 } },
       menu: true, tekening: 'gebouwen/dorpshuis3', beschrijving: 'hout tot planken en balken, nodig om te bouwen',
       opmerking: 'nieuw: nog niet getekend, leent voorlopig een dorpshuis.',
     },
     molen: {
       naam: 'molen', trede: 'dorp', voet: { b: 6, h: 6 }, kosten: { hout: 18, goud: 10 }, heer: { goud: 5 }, bouwtijd: 5,
-      handen: 1, woonruimte: 0, maakt: { in: { graan: 3 }, uit: { meel: 3 } }, verdacht: false,
+      handen: 1, woonruimte: 0, maakt: { in: { graan: 3 }, uit: { meel: 3 } },
       menu: true, tekening: 'gebouwen/watermolen', beschrijving: 'graan tot meel. De heer wil dat je bij zíjn molen maalt en betaalt (het banrecht); een eigen molen is verzet',
       opmerking: 'Het banrecht zelf (de heer die erop heft) is nog geen regel.',
     },
     bakkerij: {
       naam: 'bakkerij', trede: 'dorp', voet: { b: 5, h: 5 }, kosten: { hout: 12, goud: 8 }, heer: { goud: 3 }, bouwtijd: 3,
-      handen: 1, woonruimte: 0, maakt: { in: { meel: 2 }, uit: { brood: 2 } }, verdacht: false,
+      handen: 1, woonruimte: 0, maakt: { in: { meel: 2 }, uit: { brood: 2 } },
       menu: true, tekening: 'gebouwen/bakkerij', beschrijving: 'meel tot brood', opmerking: '',
     },
     brouwerij: {
       naam: 'brouwerij', trede: 'dorp', voet: { b: 5, h: 5 }, kosten: { hout: 14, goud: 10 }, heer: { goud: 4 }, bouwtijd: 4,
-      handen: 2, woonruimte: 0, maakt: { in: { graan: 2 }, uit: { bier: 2 } }, verdacht: false,
+      handen: 2, woonruimte: 0, maakt: { in: { graan: 2 }, uit: { bier: 2 } },
       menu: true, tekening: 'gebouwen/dorpshuis5', beschrijving: 'gerst tot bier; de heer heft er belasting op',
       opmerking: 'nieuw: nog niet getekend, leent voorlopig een dorpshuis. De belasting is nog geen regel.',
     },
@@ -284,7 +283,7 @@
       naam: 'herberg', trede: 'dorp', voet: { b: 6, h: 6 }, kosten: { hout: 16, goud: 12 }, heer: { goud: 5 }, bouwtijd: 4,
       // Wie er woont, tapt en brouwt: van graan, zolang er niet genoeg bier ligt (27 sep, werklijst punt
       // 2). Een kan bier kost een veertigste graan; wie er 's avonds heen gaat, staat in js/herberg.js.
-      handen: 1, woonruimte: 1, maakt: { in: { graan: 0.2 }, uit: { bier: 8 } }, verdacht: false, menu: true, lantaarn: true,
+      handen: 1, woonruimte: 1, maakt: { in: { graan: 0.2 }, uit: { bier: 8 } }, menu: true, lantaarn: true,
       tekening: 'gebouwen/herberg', beschrijving: 'reizigers, nieuws en verhalen, bier',
       opmerking: 'In het gehucht staat er een vanaf het begin, met de herbergierster (kaarten/gehucht.betekenis.json), '
         + 'in een eigen tekening van vakwerk onder riet (huizen/herberg1). Wie hem in het dorp bouwt, krijgt nog de '
@@ -293,7 +292,7 @@
     },
     kapel: {
       naam: 'kapel', trede: 'gehucht', voet: { b: 5, h: 5 }, kosten: { hout: 10, goud: 8 }, heer: {}, bouwtijd: 4,
-      handen: 1, woonruimte: 0, maakt: null, verdacht: false, kerk: true, menu: true, lantaarn: true,
+      handen: 1, woonruimte: 0, maakt: null, kerk: true, menu: true, lantaarn: true,
       tekening: 'gebouwen/kapel', beschrijving: 'de kerk als groep, en tevredenheid',
       opmerking: 'De tevredenheid (T.heeftKerk, js/behoeften.js, werklijst.md punt 3) is er; de kerk '
         + 'als groep met eigen belangen komt pas met de politiek (werklijst.md, punt 9). Zijn trede '
@@ -302,7 +301,7 @@
     },
     tiendschuur: {
       naam: 'tiendschuur', trede: 'dorp', voet: { b: 6, h: 5 }, kosten: { hout: 14, goud: 6 }, heer: { goud: 3 }, bouwtijd: 3,
-      handen: 0, woonruimte: 0, maakt: null, verdacht: false, menu: true,
+      handen: 0, woonruimte: 0, maakt: null, menu: true,
       tekening: 'gebouwen/schuurBlokhut', beschrijving: 'van de heer: hier lever je op Sint-Maarten, en hier zit de inner',
       opmerking: 'nieuw: nog niet getekend, leent voorlopig de blokhutschuur. Sint-Maarten zelf staat '
         + 'al in T.SINT_MAARTEN (js/tijd.js); wat er dan gebeurt is het tweede proefje (werklijst.md, punt 3).',
@@ -312,14 +311,14 @@
     // willen brood, laken en een markt (js/wensen.js), en zo heeft een huis dat versteent meteen wat het wil.
     markt: {
       naam: 'markt', trede: 'dorp', voet: { b: 6, h: 6 }, kosten: { hout: 16, goud: 14 }, heer: { goud: 10 }, bouwtijd: 4,
-      handen: 1, woonruimte: 0, maakt: null, verdacht: false, menu: true, lantaarn: true,
+      handen: 1, woonruimte: 0, maakt: null, menu: true, lantaarn: true,
       tekening: 'gebouwen/dorpGroot1', beschrijving: 'handel met buiten; handelaars komen',
       opmerking: 'nieuw in gebouwen.tsx (de kraam bestaat als model in gereedschap/pixelart/dorp.cjs, '
         + 'nog niet geëxporteerd); leent voorlopig een groot dorpshuis.',
     },
     weverij: {
       naam: 'weverij', trede: 'dorp', voet: { b: 5, h: 5 }, kosten: { hout: 14, goud: 12 }, heer: { goud: 6 }, bouwtijd: 4,
-      handen: 2, woonruimte: 0, maakt: { in: { wol: 2 }, uit: { laken: 2 } }, verdacht: false,
+      handen: 2, woonruimte: 0, maakt: { in: { wol: 2 }, uit: { laken: 2 } },
       menu: true, tekening: 'gebouwen/dorpGroot2', beschrijving: 'wol tot laken, het rijkste handelsgoed',
       opmerking: 'nieuw: nog niet getekend, leent voorlopig een groot dorpshuis.',
     },
@@ -327,52 +326,52 @@
     // ── Marktrecht ──
     pakhuis: {
       naam: 'pakhuis', trede: 'marktrecht', voet: { b: 6, h: 6 }, kosten: { hout: 18, goud: 10 }, heer: { goud: 5 }, bouwtijd: 3,
-      handen: 0, woonruimte: 0, maakt: null, verdacht: false, menu: true,
+      handen: 0, woonruimte: 0, maakt: null, menu: true,
       tekening: 'gebouwen/schuurBlokhut', beschrijving: 'opslag, en een goede plek om iets tussen te schuiven',
       opmerking: 'nieuw: nog niet getekend, leent voorlopig de blokhutschuur. "Iets tussenschuiven" '
         + '(voor de heer verbergen) is nog geen regel.',
     },
     kuiper: {
       naam: 'kuiper', trede: 'marktrecht', voet: { b: 4, h: 4 }, kosten: { hout: 10, goud: 8 }, heer: { goud: 3 }, bouwtijd: 3,
-      handen: 1, woonruimte: 0, maakt: { in: { hout: 1 }, uit: { vaten: 1 } }, verdacht: false,
+      handen: 1, woonruimte: 0, maakt: { in: { hout: 1 }, uit: { vaten: 1 } },
       menu: true, tekening: 'gebouwen/dorpKlein1', beschrijving: 'vaten voor bier en opslag',
       opmerking: 'nieuw: nog niet getekend, leent voorlopig een klein dorpshuis.',
     },
     slager: {
       naam: 'slager', trede: 'marktrecht', voet: { b: 4, h: 4 }, kosten: { hout: 10, goud: 8 }, heer: { goud: 3 }, bouwtijd: 3,
-      handen: 1, woonruimte: 0, maakt: null, verdacht: false, menu: true,
+      handen: 1, woonruimte: 0, maakt: null, menu: true,
       tekening: 'gebouwen/dorpKlein2', beschrijving: 'vlees, van het vee',
       opmerking: 'nieuw: nog niet getekend, leent voorlopig een klein dorpshuis. Niets levert nu nog vee aan.',
     },
     leerlooier: {
       naam: 'leerlooier', trede: 'marktrecht', voet: { b: 4, h: 4 }, kosten: { hout: 10, goud: 6 }, heer: { goud: 2 }, bouwtijd: 3,
-      handen: 1, woonruimte: 0, maakt: null, verdacht: false, menu: true,
+      handen: 1, woonruimte: 0, maakt: null, menu: true,
       tekening: 'gebouwen/dorpKlein3', beschrijving: 'leer — hij stinkt, dus hoort hij aan de rand',
       opmerking: 'nieuw: nog niet getekend, leent voorlopig een klein dorpshuis. "Aan de rand" is nu '
         + 'nog een advies, geen regel die het bouwmenu afdwingt.',
     },
     steenbakkerij: {
       naam: 'steenbakkerij', trede: 'marktrecht', voet: { b: 6, h: 6 }, kosten: { hout: 20, goud: 16 }, heer: { goud: 6 }, bouwtijd: 5,
-      handen: 2, woonruimte: 0, maakt: { uit: { steen: 2 } }, verdacht: false, menu: true,
+      handen: 2, woonruimte: 0, maakt: { uit: { steen: 2 } }, menu: true,
       tekening: 'gebouwen/houtschuur', beschrijving: 'stenen voor stenen huizen, die rijk ogen',
       opmerking: 'nieuw: nog niet getekend, leent voorlopig de houtschuur. "steen" is de eerste '
         + 'grondstof naast T.GRONDSTOFFEN; die vier blijven voorlopig het enige dat de voorraadbalk toont.',
     },
     badhuis: {
       naam: 'badhuis', trede: 'marktrecht', voet: { b: 5, h: 5 }, kosten: { hout: 12, goud: 14 }, heer: { goud: 5 }, bouwtijd: 3,
-      handen: 1, woonruimte: 0, maakt: null, verdacht: false, menu: true,
+      handen: 1, woonruimte: 0, maakt: null, menu: true,
       tekening: 'gebouwen/oudstehuis', beschrijving: 'gezondheid', opmerking: 'nieuw: nog niet getekend, leent voorlopig het huis van de dorpsoudste.',
     },
     gasthuis: {
       naam: 'gasthuis', trede: 'marktrecht', voet: { b: 5, h: 5 }, kosten: { hout: 12, goud: 12 }, heer: { goud: 2 }, bouwtijd: 3,
-      handen: 1, woonruimte: 0, maakt: null, verdacht: false, menu: true,
+      handen: 1, woonruimte: 0, maakt: null, menu: true,
       tekening: 'gebouwen/oudstehuis', beschrijving: 'armenzorg', opmerking: 'nieuw: nog niet getekend, leent voorlopig het huis van de dorpsoudste.',
     },
 
     // ── Stad ──
     stenenHuis: {
       naam: 'stenen huis', meervoud: 'stenen huizen', trede: 'stad', voet: { b: 7, h: 5 }, kosten: { hout: 20, goud: 30 }, heer: { goud: 6 }, bouwtijd: 6,
-      handen: 0, woonruimte: 8, maakt: null, verdacht: false, menu: true, woning: true,
+      handen: 0, woonruimte: 8, maakt: null, menu: true, woning: true,
       tekening: 'huizen/steen1', beschrijving: 'veel ruimte, en rijk om te zien', opmerking: '',
       // Het stenen broertje van elk huis, met dezelfde vorm (werklijst vraag 85, d; gereedschap/pixelart/huizen.cjs): een
       // huis dat doorgroeit, versteent op zijn eigen grond (js/behoeften.js), en je herkent het. Tot 1 okt was er één
@@ -385,72 +384,73 @@
     },
     raadhuis: {
       naam: 'raadhuis', trede: 'stad', voet: { b: 8, h: 6 }, kosten: { hout: 24, goud: 40 }, heer: { goud: 20 }, bouwtijd: 8,
-      handen: 0, woonruimte: 0, maakt: null, verdacht: false, menu: true,
+      handen: 0, woonruimte: 0, maakt: null, menu: true,
       tekening: 'gebouwen/dorpGroot1', beschrijving: 'waar de schepenen stemmen; de schout wordt burgemeester',
       opmerking: 'nieuw: nog niet getekend, leent voorlopig een groot dorpshuis. De schepenen zelf komen met de politiek (werklijst.md, punt 6).',
     },
     stadsmuur: {
       naam: 'stadsmuur en poort', trede: 'stad', voet: null, kosten: { hout: 60, goud: 80 }, heer: { goud: 30 }, bouwtijd: 20,
-      handen: 0, woonruimte: 0, maakt: null, verdacht: false, menu: false,
+      handen: 0, woonruimte: 0, maakt: null, menu: false,
       tekening: null, beschrijving: 'pas mag het met stadsrechten; zonder is het opstand',
       opmerking: 'Een muur is geen los blokje van één voet; die komt met het geschilderde-omheiningen-'
         + 'systeem (werklijst.md, "Omheiningen die je schildert"), niet via dit bouwmenu.',
     },
 
-    // ── Verdacht: wat de heer niet mag zien ──
+    // ── Verdediging: wapens zijn niet verboden (Marcel, 7 okt: "Het is logisch dat er wapens zijn om de stad te
+    // verdedigen. Alleen weerstand tegen de heer is inacceptabel"; werklijst vraag 131) ──
     wapenmaker: {
       naam: 'wapenmaker', trede: 'dorp', voet: { b: 4, h: 4 }, kosten: { hout: 12, goud: 14 }, heer: { goud: 4 }, bouwtijd: 4,
-      handen: 2, woonruimte: 0, maakt: { in: { hout: 1, ijzer: 1 }, uit: { wapens: 1 } }, verdacht: true,
-      menu: true, tekening: 'gebouwen/smidse', beschrijving: 'ijzer en hout tot wapens, voor de opstand. Verboden, dus verstopt: achter de smidse, of \'s nachts',
-      opmerking: 'nieuw: nog niet getekend, leent voorlopig het vel van de smidse — toepasselijk, want hij hoort er toch achter.',
+      handen: 2, woonruimte: 0, maakt: { in: { hout: 1, ijzer: 1 }, uit: { wapens: 1 } },
+      menu: true, tekening: 'gebouwen/smidse', beschrijving: 'ijzer en hout tot wapens, om het dorp te verdedigen',
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig het vel van de smidse.',
     },
     schuttershof: {
       naam: 'schuttershof', trede: 'dorp', voet: { b: 6, h: 6 }, kosten: { hout: 10, goud: 10 }, heer: { goud: 3 }, bouwtijd: 3,
-      handen: 0, woonruimte: 0, maakt: null, verdacht: true, menu: true,
-      tekening: 'gebouwen/dorpKlein1', beschrijving: 'mannen oefenen; als de inner het ziet, heet het een feest',
+      handen: 0, woonruimte: 0, maakt: null, menu: true,
+      tekening: 'gebouwen/dorpKlein1', beschrijving: 'de militie oefent er met boog en speer',
       opmerking: 'nieuw: nog niet getekend, leent voorlopig een klein dorpshuis.',
     },
     palissade: {
       naam: 'palissade', trede: 'dorp', voet: null, kosten: { hout: 40 }, heer: { goud: 5 }, bouwtijd: 10,
-      handen: 0, woonruimte: 0, maakt: null, verdacht: true, menu: false,
-      tekening: null, beschrijving: 'een muur zonder stadsrechten is een opstand die je aankondigt',
+      handen: 0, woonruimte: 0, maakt: null, menu: false,
+      tekening: null, beschrijving: 'een muur van palen om het dorp, tegen rovers en wolven',
       opmerking: 'Zelfde reden als stadsmuur hierboven: geen los blokje, gaat niet via dit bouwmenu.',
     },
     tuighuis: {
       naam: 'tuighuis', trede: 'dorp', voet: { b: 4, h: 4 }, kosten: { hout: 14, goud: 10 }, heer: { goud: 3 }, bouwtijd: 4,
-      handen: 0, woonruimte: 0, maakt: null, verdacht: true, menu: true,
-      tekening: 'gebouwen/schuur', beschrijving: 'waar de wapens liggen; wie een tuighuis heeft, heeft een leger',
+      handen: 0, woonruimte: 0, maakt: null, menu: true,
+      tekening: 'gebouwen/schuur', beschrijving: 'waar de wapens van de militie liggen',
       opmerking: 'nieuw: nog niet getekend, leent voorlopig de schuur. Bergt wat de wapenmaker maakt.',
     },
     kazerne: {
       naam: 'kazerne', trede: 'stad', voet: { b: 6, h: 6 }, kosten: { hout: 30, steen: 30, goud: 30 }, heer: { goud: 10 }, bouwtijd: 8,
-      handen: 0, woonruimte: 6, maakt: null, verdacht: true, menu: true,
-      tekening: 'gebouwen/dorpGroot1', beschrijving: 'huurlingen: duur, en een leger is een opstand',
-      opmerking: 'nieuw: nog niet getekend, leent voorlopig een groot dorpshuis. Verdacht tot de stad vrij is.',
+      handen: 0, woonruimte: 6, maakt: null, menu: true,
+      tekening: 'gebouwen/dorpGroot1', beschrijving: 'huurlingen: duur, maar ze vechten voor het dorp',
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig een groot dorpshuis.',
     },
 
     // ── Grondstoffen en orde die pas bij het dorp komen ──
     turfsteker: {
       naam: 'turfsteker', trede: 'dorp', voet: { b: 3, h: 3 }, kosten: { hout: 8 }, heer: { goud: 1 }, bouwtijd: 2,
-      handen: 2, woonruimte: 0, maakt: { uit: { turf: 2 } }, verdacht: false, menu: true,
+      handen: 2, woonruimte: 0, maakt: { uit: { turf: 2 } }, menu: true,
       tekening: 'erf/schuurtje', beschrijving: 'turf uit het veen, om te stoken als het bos op is',
       opmerking: 'nieuw: nog niet getekend, leent voorlopig het schuurtje.',
     },
     ertsgraver: {
       naam: 'ertsgraver', trede: 'dorp', voet: { b: 4, h: 4 }, kosten: { hout: 14, goud: 8 }, heer: { goud: 4 }, bouwtijd: 4,
-      handen: 2, woonruimte: 0, maakt: { uit: { ijzer: 1 } }, verdacht: false, menu: true,
+      handen: 2, woonruimte: 0, maakt: { uit: { ijzer: 1 } }, menu: true,
       tekening: 'gebouwen/houtschuur', beschrijving: 'moerasijzer uit de grond, zoals op de Veluwe: ijzer zonder de marskramer',
-      opmerking: 'nieuw: nog niet getekend, leent voorlopig de houtschuur. IJzer wordt ook wapens; dat ziet de inner graag van dichtbij.',
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig de houtschuur. IJzer wordt ook wapens.',
     },
     kalkbrander: {
       naam: 'kalkbrander', trede: 'dorp', voet: { b: 3, h: 3 }, kosten: { hout: 10, steen: 4 }, heer: { goud: 2 }, bouwtijd: 3,
-      handen: 1, woonruimte: 0, maakt: { in: { hout: 1 }, uit: { kalk: 1 } }, verdacht: false, menu: true,
+      handen: 1, woonruimte: 0, maakt: { in: { hout: 1 }, uit: { kalk: 1 } }, menu: true,
       tekening: 'erf/schuurtje', beschrijving: 'kalk uit schelpen, voor metselspecie',
       opmerking: 'nieuw: nog niet getekend, leent voorlopig het schuurtje.',
     },
     gevang: {
       naam: 'gevang', trede: 'dorp', voet: { b: 3, h: 3 }, kosten: { hout: 8, steen: 10, goud: 6 }, heer: { goud: 2 }, bouwtijd: 4,
-      handen: 1, woonruimte: 0, maakt: null, verdacht: false, menu: true,
+      handen: 1, woonruimte: 0, maakt: null, menu: true,
       tekening: 'gebouwen/dorpKlein1', beschrijving: 'wie de schout veroordeelt, zit hier',
       opmerking: 'nieuw: nog niet getekend, leent voorlopig een klein dorpshuis. Hoort bij de rechtspraak (werklijst 10).',
     },
@@ -609,7 +609,6 @@
       const nog = Math.max(1, g.klaarOp - dagNu);
       return `${naam}: in aanbouw, nog ${nog} dag${nog === 1 ? '' : 'en'}.`;
     }
-    if (g.verzegeld) return `${naam}: verzegeld door de heer.`;
     if (!soort.maakt) return `${naam}: ${soort.beschrijving}.`;
     if (g.stilWant) return `${naam}: staat stil, ${g.stilWant}.`;
     if (soort.handen > 0 && !g.handen) return `${naam}: staat stil, er zijn geen handen voor.`;
@@ -1061,7 +1060,7 @@
       const soort = T.GEBOUWEN[g.soort];
       // Een houthakker zonder boom binnen zijn bereik wil geen handen: zijn hand werkt elders tot er weer een boom staat
       // (js/bos.js; werklijst vraag 129, e).
-      if (!g.klaar || !soort.handen || g.verzegeld || T.houthakkerZonderBoom(g)) {
+      if (!g.klaar || !soort.handen || T.houthakkerZonderBoom(g)) {
         g.handen = 0;
         continue;
       }
@@ -1242,12 +1241,8 @@
       g.stilWant = null;
       g.uren = null;
       if (!g.klaar || !soort.maakt) continue;
-      // Verzegeld door de heer (js/ondernemers.js): hij maakt niets meer. En wie er werkt en het een tijd weigert (de
-      // herbergierster die boos is om een tweede herberg), maakt tot dan niets.
-      if (g.verzegeld) {
-        g.stilWant = 'de heer liet hem verzegelen';
-        continue;
-      }
+      // Wie er werkt en het een tijd weigert (de herbergierster die boos is om een tweede herberg, js/ondernemers.js),
+      // maakt tot dan niets.
       if (g.weigert && dag < g.weigert.tot) {
         g.stilWant = g.weigert.waarom;
         continue;
@@ -1316,7 +1311,7 @@
     for (const g of D.gebouwen) if (g.werkte > 0 && g.handen > 0) aanHetWerk += g.handen;
     const slijt = Math.min(D.voorraad.gereedschap || 0, aanHetWerk) / IN.gereedschapSlijtDagen;
     if (slijt > 0) T.wijzigVoorraad(D, 'gereedschap', -slijt);
-    // De ondernemers (js/ondernemers.js): wie stiekem werkt, maakt wapens in zijn kelder, en wat een huis nadroeg, slijt.
+    // De ondernemers (js/ondernemers.js): wat een huis nadroeg, slijt.
     T.tikOndernemersDag(D, dag);
     // 7. De wetten (js/wetten.js): wie vandaag in het bos van de heer hakte, en de belasting op de eerste van de maand.
     T.tikWettenDag(D, dag);

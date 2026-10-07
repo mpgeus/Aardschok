@@ -175,17 +175,17 @@ function deVoorvallen(goed) {
   return uit;
 }
 
-// De ondernemers (js/ondernemers.js, vraag 104): wat ze vroegen, wat de speler zei, en wat ervan kwam (de inner, de
-// heer, stiekem, de herbergierster, wie wegtrok). Alleen wie er een had.
+// De ondernemers (js/ondernemers.js, vraag 104): wat ze vroegen, wat de speler zei, en wat ervan kwam (de
+// herbergierster, wie wegtrok). Alleen wie er een had.
 function deOndernemers(goed) {
   const met = goed.filter((u) => u.eind && u.eind.ondernemers && (u.eind.ondernemers.vroegen.length || u.eind.ondernemers.berichten.length));
   const uit = ['## De ondernemers', ''];
   if (!met.length) return uit.concat('Geen ondernemer vroeg iets.', '');
-  const kop = ['speler', 'zaad', 'vroegen', 'wat ervan kwam', 'wapens aan het eind', 'verzegeld', 'herbergen'];
+  const kop = ['speler', 'zaad', 'vroegen', 'wat ervan kwam', 'wapens aan het eind', 'herbergen'];
   uit.push(regel(kop), regel(kop.map(() => '---')));
   for (const u of met) {
     const o = u.eind.ondernemers;
-    uit.push(regel([NAMEN[u.speler] || u.speler, u.zaad, o.vroegen.join('; '), o.berichten.join('; '), String(o.wapens), o.verzegeld.join(', ') || 'niets', String(o.herbergen)]));
+    uit.push(regel([NAMEN[u.speler] || u.speler, u.zaad, o.vroegen.join('; '), o.berichten.join('; '), String(o.wapens), String(o.herbergen)]));
   }
   uit.push('');
   return uit;

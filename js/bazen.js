@@ -4,7 +4,7 @@
 //
 // De haak ("De heer wil geld. Het dorp wil leven. Jij staat ertussen.") als de kern van het spel: twee meters, van 0 tot 100.
 //   gunst       wat de heer van je vindt: de schatting op Sint-Maarten, de heervaart, of je naar hem toe kwam, en wat
-//               zijn soldaten vinden (wapens, en wat je verstopte).
+//               zijn soldaten vinden (wat je verstopte).
 //   vertrouwen  wat het dorp van jóú vindt, niet hoe tevreden het is: je antwoorden op de voorvallen (zo zwaar als ze het
 //               dorp tevreden of ontevreden maken), wie je naar de oorlog stuurde of vrijkocht, wie je aan de
 //               schandpaal zette, wie verhongerde of bevroor, wie sneuvelde, de soldaten van de heer in huis, en wie
@@ -48,8 +48,6 @@
     nietGekomen: -10,
     // De heervaart (js/heervaart.js): je stuurde de mannen, kocht ze vrij, of hij haalde ze op omdat je niet antwoordde.
     heervaart: { gestuurd: 10, vrijgekocht: 5, gehaald: -10 },
-    // Zijn soldaten vonden wapens (js/ondernemers.js).
-    wapens: -30,
     // Het dorp. Een antwoord op een voorval telt zo zwaar als het het dorp tevreden of ontevreden maakt (doe.tevreden,
     // in procenten), keer zoveel; besliste je raadsman, dan keer doorRaadsman. Een verzoek om te bouwen telt niet: ja
     // zeggen op wat het dorp mist, is je werk (de speeltest van 3 okt: met +3 per ja stond het vertrouwen na een jaar

@@ -162,8 +162,6 @@
     const nieuw = [];
     for (const g of D.gebouwen || []) {
       if (b.gebouwen.has(g) || !zichtbaarGebouw(g) || !zietGebouw(w, van, g, IN().zicht)) continue;
-      // Een verboden werkplaats (de wapenmaker) maakt hem argwanend (js/ondernemers.js).
-      T.innerZietVerboden(D, g);
       b.gebouwen.add(g);
       nieuw.push(T.GEBOUWEN[g.soort].naam);
     }

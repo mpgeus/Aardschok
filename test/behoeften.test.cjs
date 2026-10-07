@@ -391,8 +391,8 @@ test('T.tikBehoeftenDag: een huis dat van vorm wisselt (smal en diep naar breed 
   // gewone groei in twee richtingen, maar een andere vorm. Dat hier nabootsen met twee eigen soorten
   // zonder tekening (dus met hun eigen voet), zodat de toets niet afhangt van welke tekeningen er op
   // het vel staan.
-  T.GEBOUWEN._proefSmal = { naam: 'smal', trede: 'gehucht', voet: { b: 3, h: 7 }, kosten: {}, bouwtijd: 0, handen: 0, woonruimte: 1, wordt: '_proefBreed', maakt: null, verdacht: false, menu: false, tekening: null, beschrijving: '', opmerking: 'alleen voor deze toets' };
-  T.GEBOUWEN._proefBreed = { naam: 'breed', trede: 'gehucht', voet: { b: 7, h: 3 }, kosten: {}, bouwtijd: 0, handen: 0, woonruimte: 2, maakt: null, verdacht: false, menu: false, tekening: null, beschrijving: '', opmerking: 'alleen voor deze toets' };
+  T.GEBOUWEN._proefSmal = { naam: 'smal', trede: 'gehucht', voet: { b: 3, h: 7 }, kosten: {}, bouwtijd: 0, handen: 0, woonruimte: 1, wordt: '_proefBreed', maakt: null, menu: false, tekening: null, beschrijving: '', opmerking: 'alleen voor deze toets' };
+  T.GEBOUWEN._proefBreed = { naam: 'breed', trede: 'gehucht', voet: { b: 7, h: 3 }, kosten: {}, bouwtijd: 0, handen: 0, woonruimte: 2, maakt: null, menu: false, tekening: null, beschrijving: '', opmerking: 'alleen voor deze toets' };
   try {
     const S = maakS(30, 30);
     const instantie = { soort: '_proefSmal', x: 5, y: 5, klaar: true, klaarOp: 0, handen: 0, voorwerp: { soort: 'gebouw:_proefSmal', vel: null, id: null, beslaat: [3, 7] } };
@@ -425,8 +425,8 @@ test('T.tikBehoeftenDag: een huis dat van vorm wisselt (smal en diep naar breed 
 // (werklijst vraag 110, f: in de speeltest van vier jaar groeide op 62707 een huis van de maker door tot stenen huis, met
 // 21 tegels op een vrij erf, en kwam er twee en een half jaar geen gezin).
 test('T.tikBehoeftenDag: een huis groeit niet op een erf, en niet in het looppad om de plek van het huis erop', () => {
-  T.GEBOUWEN._proefKlein = { naam: 'klein', trede: 'gehucht', voet: { b: 3, h: 3 }, kosten: {}, bouwtijd: 0, handen: 0, woonruimte: 1, wordt: '_proefGroot', maakt: null, verdacht: false, menu: false, tekening: null, beschrijving: '', opmerking: 'alleen voor deze toets' };
-  T.GEBOUWEN._proefGroot = { naam: 'groot', trede: 'gehucht', voet: { b: 6, h: 6 }, kosten: {}, bouwtijd: 0, handen: 0, woonruimte: 2, maakt: null, verdacht: false, menu: false, tekening: null, beschrijving: '', opmerking: 'alleen voor deze toets' };
+  T.GEBOUWEN._proefKlein = { naam: 'klein', trede: 'gehucht', voet: { b: 3, h: 3 }, kosten: {}, bouwtijd: 0, handen: 0, woonruimte: 1, wordt: '_proefGroot', maakt: null, menu: false, tekening: null, beschrijving: '', opmerking: 'alleen voor deze toets' };
+  T.GEBOUWEN._proefGroot = { naam: 'groot', trede: 'gehucht', voet: { b: 6, h: 6 }, kosten: {}, bouwtijd: 0, handen: 0, woonruimte: 2, maakt: null, menu: false, tekening: null, beschrijving: '', opmerking: 'alleen voor deze toets' };
   // Het dorp vol, maar zonder dat een gezin het erf neemt: dan blijft het vrij, en kan het straks weer weg.
   const zelf = T.ERVEN_INSTELLINGEN.dorpBouwtZelf;
   T.ERVEN_INSTELLINGEN.dorpBouwtZelf = false;

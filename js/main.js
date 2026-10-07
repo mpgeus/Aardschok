@@ -1392,11 +1392,9 @@
       };
     },
     // De ondernemers (js/ondernemers.js; werklijst vraag 104): wie wat wil beginnen, of hij het nu zou vragen, wat hij
-    // onthoudt (nee, ja), wie stiekem wapens maakt en hoeveel, wat de heer verzegelde, en de wapens in het dorp.
-    // Spel.debug.ondernemers('wapens') laat de eerste die wapens wil het nu vragen, alsof de rovers net kwamen (in een
-    // dorp: Spel.debug.trede('dorp')); ('herberg') de eerste die een tweede herberg wil (vanaf
-    // T.ONDERNEMERS_INSTELLINGEN.herberg.vanaf mensen); ('stiekem') laat de eerste wapenmaker beginnen in zijn kelder,
-    // alsof je nee zei.
+    // onthoudt (nee, ja), en de wapens in het dorp. Spel.debug.ondernemers('wapens') laat de eerste die wapens wil het nu
+    // vragen, alsof de rovers net kwamen (in een dorp: Spel.debug.trede('dorp')); ('herberg') de eerste die een tweede
+    // herberg wil (vanaf T.ONDERNEMERS_INSTELLINGEN.herberg.vanaf mensen).
     ondernemers(wat) {
       const D = S.dorp;
       const dag = Math.floor(S.kalender.dag);
@@ -1417,11 +1415,6 @@
         if (!T.beginBouwverzoek(D, dag) || V.lopend.bouw.eigen !== wat) return 'Er kwam iets anders tussen, of het dorp kan het niet betalen.';
         V.lopend.vanaf = S.kalender.dag;
       }
-      if (wat === 'stiekem') {
-        const p = eerste('wapens');
-        if (!p || !p.huis || !T.verstopPlekVan(D, p.huis)) return 'Niemand die wapens wil maken, heeft een kelder.';
-        p.huis.stiekem = { wat: 'wapens', wie: p.id, sinds: dag, wapens: 0 };
-      }
       const E = (D.verzoeken && D.verzoeken.eigen) || {};
       return {
         ondernemers: mensen.map((p) => {
@@ -1432,8 +1425,6 @@
           const onthoudt = e ? `, ${e.nee}× nee${e.ja != null ? `, ja op ${T.datumVanDag(e.ja).tekst}` : ''}` : '';
           return `${T.naamVanBewoner(p)} (${p.huis ? T.GEBOUWEN[p.huis.soort].naam : 'zonder huis'}): ${wil}, ${nu}${onthoudt}`;
         }),
-        stiekem: (D.gebouwen || []).filter((g) => g.stiekem).map((g) => `de kelder op ${g.x},${g.y}: ${g.stiekem.wapens.toFixed(2)} wapens, sinds ${T.datumVanDag(g.stiekem.sinds).tekst}`),
-        verzegeld: (D.gebouwen || []).filter((g) => g.verzegeld).map((g) => `${T.GEBOUWEN[g.soort].naam}, op ${T.datumVanDag(g.verzegeld.dag).tekst}`),
         wapens: T.wapensInHetDorp(D),
         herbergen: T.herbergenVan(D).map((g) => `${g.x},${g.y}${g.meester ? ` (${T.naamVanBewoner(g.meester)})` : ''}${g.weigert && S.kalender.dag < g.weigert.tot ? `: ${g.weigert.waarom}, tot ${T.datumVanDag(g.weigert.tot).tekst}` : ''}`),
       };

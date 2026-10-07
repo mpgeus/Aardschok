@@ -5959,6 +5959,8 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     - De teksten erbij (het briefje bij de wapens in de balk, de samenvatting en haar pdf, `spel.md`, CLAUDE.md), de
       toetsen, en daarna de speeltest van vier jaar opnieuw.
     Klaar als: geen spel van de bouwer eindigt meer om de wapens, en de wapens helpen de militie nog zoals nu.
+    **Marcel (7 okt): "Ja allebei"**: `verdacht` gaat er helemaal uit, ook bij het schuttershof, het tuighuis, de
+    palissade en de kazerne, en het oude blijft niet als spelregel.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
