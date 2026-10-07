@@ -670,7 +670,12 @@ duister." Het voorstel (vraag 116): wolven in roedels diep in het bos, herten di
 naar huis, en in de winter pakken ze een schaap of vallen ze iemand aan; de jager, een jacht, de militie, een hek en een
 lantaarn helpen. De wolf staat al in `T.WEZENS` (`js/wereld.js`), als monster om mee te vechten, met een tekening.
 Samen met de houthakker die hakt en plant (vraag 115) en de boeren op hun veld (vraag 111). **Marcel koos (4 okt):** "ja,
-doden mag".
+doden mag". **En (7 okt), na de schermafdrukken van stap 1:** "d ja, e ja, f ja": wordt het bos om het hol te dun
+(een erf, een werkplaats, een akker in het bos; een stiekeme akker ligt juist diep, dicht bij de wolven), dan zoekt de
+roedel dieper een nieuw hol, en zonder diep bos trekt hij weg, zodat kappen een keuze is: hout en grond tegen wolven
+dichtbij; elke lente krijgen de roedels en de kuddes jongen, tot zes, en dan splitsen ze en zoekt de helft een nieuw
+thuis, zodat het bos zonder jager elk jaar voller wordt; en het hol is een plek op de kaart (een kuil onder een
+omgevallen boom, met botten ervoor) die de schout kan vinden, en waar de jacht heen gaat.
 
 ## Rovers en de militie (Marcel, 28 en 29 sep 2026; werklijst vraag 51 en 55)
 
