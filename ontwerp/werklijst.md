@@ -4817,7 +4817,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     dun: zie vraag 129.
 116. **Beesten in het bos** (Marcel, 4 okt, zesentwintigste sessie: "Ik wil dat er beesten kunnen rondlopen in het bos.
     Wolven etc. Die de houthakker kunnen bedreigen. Rode ogen uit het duister."; plan van Claude; open).
-    **Bezig in sessie `ccr-f6ba5992-1e77dw`** (7 okt): stap 1 staat in main; het plan voor stap 2 ligt bij Marcel.
+    **Bezig in sessie `ccr-f6ba5992-1e77dw`** (7 okt): stap 1 staat in main; nu stap 2a, het leven in het bos.
     **Wat er al is:** de wolf staat in `T.WEZENS` (`js/wereld.js`): een monster om mee te vechten, uit het oude spel, met
     een tekening en een loopbeweging (`gereedschap/pixelart/bosvijanden.cjs`, met de reuzenspin en de kobold), en hij kan
     al dwalen. Het voorval "wolven" kost een schaap. Op de kaart loopt nog geen dier in het bos.
