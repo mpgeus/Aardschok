@@ -840,7 +840,11 @@
       wolvenVoorval(D, dag);
     } else {
       const p = T.bewonerVan(D, prooi.e);
-      if (p) bijt(D, G, p, dag);
+      if (!p) {
+        G.prooi = null; // geen mens van het dorp (meer): een andere prooi
+        return;
+      }
+      bijt(D, G, p, dag);
     }
     if (prooi.soort !== 'schout') G.honger = 0;
     G.prooi = null;
