@@ -194,6 +194,13 @@
         ? `De rovers komen terug. Een wachthuis zou je ${T.telwoord(T.GEBOUWEN.wachthuis.handen)} man geven die meevechten.${verzoekZin(D, 'wachthuis')}`
         : `De rovers komen terug. Een wachthuis [B] geeft je ${T.telwoord(T.GEBOUWEN.wachthuis.handen)} man die meevechten.`),
     },
+    // De wolven (js/beesten.js; werklijst vraag 116, stap 2b): ze namen een schaap of vielen iemand aan. Wat ertegen helpt
+    // (de jager, lantaarns aan de bosrand), komt met stap 3; nu het licht, en het hek uit het voorval.
+    {
+      id: 'wolven',
+      als: (D) => T.wolvenBijHetDorp(D, dagNu(D)) != null && D.beesten.gezien.wat !== 'gezien',
+      tekst: () => 'Er zijn wolven bij het dorp. Wie \'s avonds alleen in het donker loopt, loopt gevaar; licht houdt ze weg.',
+    },
     {
       id: 'hout',
       als: (D) => haaltHetNiet(D, T.houtVoorDeWinter),

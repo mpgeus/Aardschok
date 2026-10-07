@@ -978,7 +978,9 @@
     // wat de groep wil (thuis, aan de rand, of weg van iemand), zijn hol en zijn plekken aan de rand, en of hij nu wegrent.
     // ('hier'): de schout staat nu tien tegels van de dichtste groep, net buiten wat ze schuw maakt, om ze te bekijken.
     // ('opnieuw'): de groepen opnieuw, uit het zaad van het land. ('jongen'): elke groep krijgt nu jongen, en wie groot
-    // wordt, splitst. ('jacht'): elke roedel jaagt nu op de herten, alsof het winter is en hij honger heeft.
+    // wordt, splitst. ('jacht'): elke roedel jaagt nu op de herten, alsof het winter is en hij honger heeft. ('honger'):
+    // elke roedel heeft nu zoveel honger dat hij in het donker naar het dorp komt (zet er de avond bij met
+    // Spel.debug.uur(21)). ('schaap'): de eerste roedel neemt nu het dichtste schaap, en de herder zegt het morgen.
     beesten(wat) {
       const D = T.dorpHier(S);
       if (!D || !D.kalender) return 'De beesten zijn er alleen bij een dorp.';
@@ -987,6 +989,15 @@
         T.zetBeesten(D);
       }
       if (wat === 'jongen' || wat === 'jacht') T.tikBeestenDag(D, Math.floor(D.kalender.dag), { [wat]: true });
+      const roedels = T.beestenVan(D).filter(({ G }) => G.soort === 'wolf');
+      if (wat === 'honger') for (const { G } of roedels) G.honger = T.BEESTEN_INSTELLINGEN.dreiging.stout;
+      if (wat === 'schaap' && roedels.length) {
+        const { G, leden } = roedels[0];
+        const l = leden.find((e) => e.leider) || leden[0];
+        const schapen = S.wereld.wezens.filter((e) => e.dier === 'schaap' && !e.dood);
+        const schaap = schapen.sort((a, b) => T.afstand(T.tegelVan(a), T.tegelVan(l)) - T.afstand(T.tegelVan(b), T.tegelVan(l)))[0];
+        if (schaap) T.wolvenSlaanToe(S, D, G, l, { e: schaap, soort: 'schaap' });
+      }
       const h = T.tegelVan(S.schout);
       const groepen = T.beestenVan(D);
       if (wat === 'hier' && groepen.length) {
@@ -1004,18 +1015,24 @@
       }
       const nu = T.uurTekst(D.kalender.dag);
       return {
-        aan: T.BEESTEN_INSTELLINGEN.aan, uur: nu,
+        aan: T.BEESTEN_INSTELLINGEN.aan, uur: nu, hek: !!(D.beesten && D.beesten.hek),
+        status: T.wolvenBijHetDorp(D, D.kalender.dag),
         groepen: groepen.map(({ G, leden }) => {
           const l = leden.find((e) => e.leider) || leden[0];
           const lt = T.tegelVan(l);
           return {
             soort: `${leden.length} ${T.BEESTEN[G.soort][leden.length === 1 ? 'naam' : 'meervoud']}`,
             leider: `${lt.x},${lt.y}${l.pad.length ? ` (loopt, nog ${l.pad.length})` : ` (${l.rust})`}, ${T.afstand(lt, T.tegelVan(S.schout))} tegels van de schout`,
-            wil: G.weg > D.kalender.dag ? `weg van iemand, naar ${G.vluchtNaar.x},${G.vluchtNaar.y}` : T.beestenWillen(D, G),
+            wil: G.weg > D.kalender.dag ? `weg van iemand, naar ${G.vluchtNaar.x},${G.vluchtNaar.y}` : G.doel === 'prooi' ? 'prooi' : T.beestenWillen(D, G),
             thuis: `${G.thuis.x},${G.thuis.y}`,
             rand: G.rand.map((p) => `${p.x},${p.y}`).join(' '),
             rent: leden.some((e) => e.rent),
-            ...(G.soort === 'wolf' ? { honger: `${(G.honger || 0).toFixed(1)} (jaagt vanaf ${T.BEESTEN_INSTELLINGEN.honger.jagenVanaf})`, gevangen: G.gevangen || 0 } : {}),
+            ...(G.soort === 'wolf' ? {
+              honger: `${(G.honger || 0).toFixed(1)} (jaagt vanaf ${T.BEESTEN_INSTELLINGEN.honger.jagenVanaf}, stout vanaf ${T.BEESTEN_INSTELLINGEN.dreiging.stout})`,
+              gevangen: G.gevangen || 0,
+              stout: T.wolvenStout(D, G),
+              ...(G.prooi ? { prooi: `${G.prooi.soort === 'schaap' ? 'een schaap' : G.prooi.soort === 'schout' ? 'de schout' : T.naamVanBewoner(T.bewonerVan(D, G.prooi.e))}` } : {}),
+            } : {}),
             jongen: G.jongenJaar ? `in ${G.jongenJaar}` : 'nog niet',
             ...(G.trektWeg ? { trektWeg: true } : {}),
           };
@@ -1226,8 +1243,9 @@
       if (id) {
         if (!T.VOORVALLEN[id]) return `Er is geen voorval "${id}". Er zijn: ${Object.keys(T.VOORVALLEN).join(', ')}.`;
         const v = T.VOORVALLEN[id];
-        const oud = { vervolg: v.vervolg, als: v.als, pauze: v.pauze };
-        Object.assign(v, { vervolg: false, als: undefined, pauze: 0 });
+        // Ook een voorval dat de beesten zelf beginnen ('wolven', js/beesten.js); dan zonder dat de wolven echt iets namen.
+        const oud = { vervolg: v.vervolg, als: v.als, pauze: v.pauze, zelf: v.zelf };
+        Object.assign(v, { vervolg: false, als: undefined, pauze: 0, zelf: v.zelf === true });
         const mensen = T.voorvalKan(S.dorp, id, dag);
         Object.assign(v, oud);
         if (!mensen) return `Voor "${id}" is er nu niemand die het kan zeggen, of over wie het kan gaan.`;

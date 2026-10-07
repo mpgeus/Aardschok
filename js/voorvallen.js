@@ -90,7 +90,9 @@
   //            (metOorzaak, zonderOorzaak), en het bericht zegt waarom
   //   pauze    niet binnen zoveel dagen terug (zonder: de pauze uit het blok hierboven)
   //   vervolg  true: komt alleen als vervolg op een ander voorval; na: [van, tot], na zoveel dagen
-  //   zelf     true: wordt niet geloot; een ander deel van het spel begint het (het bouwverzoek, js/verzoeken.js)
+  //   zelf     true: wordt niet geloot; een ander deel van het spel begint het (het bouwverzoek, js/verzoeken.js).
+  //            'beesten': zo zolang er beesten in het bos leven (de spelregel "Beesten"): de wolven namen dan echt een
+  //            schaap (js/beesten.js); zonder beesten wordt het geloot, zoals voor 7 okt
   //   roep     het bericht als hij je gaat zoeken (zonder: "{wie} zoekt je."), met de woorden van een gesprek (js/gesprek.js)
   //   sterft   wie er sterft, zegt het bericht zo: "De koorts: ..." (zonder: de titel)
   const MAN = { geslacht: 'man', leeftijd: ['jong', 'volwassen'] };
@@ -136,7 +138,7 @@
     },
     ziekte: { soort: 'ramp', titel: 'de koorts', winter: 2, oorzaak: ['kou', 'vol'], sterft: 'De koorts', wie: { geslacht: 'vrouw' } },
     wolven: {
-      soort: 'ramp', titel: 'de wolven', als: { seizoen: 'winter', vee: { schaap: 3 } }, winter: 3, sterft: 'De jacht op de wolven',
+      soort: 'ramp', titel: 'de wolven', als: { seizoen: 'winter', vee: { schaap: 3 } }, winter: 3, sterft: 'De jacht op de wolven', zelf: 'beesten', oorzaak: 'wolven',
       roep: 'Wolven! {wie} komt je halen.', wie: [{ werk: 'schaapskooi' }, MAN], ander: MAN,
     },
     storm: {
@@ -271,6 +273,14 @@
       voorbij: 'Er is weer plaats in de huizen',
       speelt: (D) => ((D.bevolking || 0) > 0 && D.bevolking >= T.telWoonruimte(D) ? '' : null),
     },
+    // De wolven (js/beesten.js; werklijst vraag 116, stap 2b): de laatste dagen kwamen ze bij het dorp (wie werkte, zag
+    // ze; ze namen een schaap; ze vielen iemand aan).
+    wolven: {
+      kop: 'Er zijn wolven bij het dorp',
+      nog: 'Er zijn nog steeds wolven bij het dorp',
+      voorbij: 'De wolven blijven weer in het bos',
+      speelt: (D, dag) => (T.wolvenBijHetDorp ? T.wolvenBijHetDorp(D, dag) : null), // wereld.html laadt de beesten niet
+    },
     onvrede: {
       kop: 'Het dorp is ontevreden',
       nog: 'Het dorp is nog steeds ontevreden',
@@ -330,11 +340,23 @@
   // zeggen (en over wie het gaat). Geeft { wie, ander } of null. Een vervolg komt alleen na zijn eerste keer.
   T.voorvalKan = function (D, id, dag) {
     const v = T.VOORVALLEN[id];
-    if (!v || v.vervolg || v.zelf || !T.GESPREKKEN[id] || !D.bewoners) return null;
+    if (!v || v.vervolg || zelfBegonnen(v) || !T.GESPREKKEN[id] || !D.bewoners) return null;
     const V = D.voorvallen || T.nieuweVoorvallen();
     const vorige = V.geweest[id];
     if (vorige != null && dag - vorige < (v.pauze != null ? v.pauze : IN().pauze)) return null;
     if (!tijdVoor(D, v.als || {}, dag)) return null;
+    return T.wieZegtHet(D, id, dag);
+  };
+
+  // Of een ander deel van het spel dit voorval begint (zelf): dan wordt het niet geloot. gereedschap/wereld.html laadt de
+  // beesten niet.
+  const zelfBegonnen = (v) => v.zelf === true || (v.zelf === 'beesten' && !!T.BEESTEN_INSTELLINGEN && T.BEESTEN_INSTELLINGEN.aan);
+
+  // Wie een voorval komt zeggen en over wie het gaat (zijn wie en ander), zonder te vragen of het nu kan: ook voor een
+  // deel van het spel dat het zelf begint (js/beesten.js). Geeft { wie, ander } of null.
+  T.wieZegtHet = function (D, id, dag) {
+    const v = T.VOORVALLEN[id];
+    if (!v || !D.bewoners) return null;
     const wie = kies(D, v.wie || {}, dag, 11, kanKomen, null);
     const ander = wie && v.ander ? kies(D, v.ander, dag, 13, kanHetBetreffen, wie) : null;
     if (!wie || (v.ander && !ander)) return null;
@@ -492,7 +514,12 @@
       const w = V.wacht.splice(i, 1)[0];
       const mensen = mensenVanVervolg(D, w, dag);
       if (mensen) {
-        T.beginVoorval(D, w.id, mensen.wie, mensen.ander, dag);
+        const L = T.beginVoorval(D, w.id, mensen.wie, mensen.ander, dag);
+        // Wat wachtte, kan vlaggen meebrengen, zoals een voorval dat nu begint (L.vlaggen; js/beesten.js).
+        if (w.vlaggen) {
+          L.vlaggen = w.vlaggen;
+          for (const vlag of w.vlaggen) T.zetVlag(D, vlag);
+        }
         return;
       }
     }
@@ -618,6 +645,10 @@
     if (doe.weiger && L.bouw) T.verzoekGeweigerd(D, L);
     // Ontginnen (js/ontginnen.js): ja, de heide of het bos (gemeld of stiekem), en het wordt een veld van zijn boerderij.
     if (doe.ontgin && L.ontgin) T.ontginToegestaan(D, L, doe.ontgin === true ? 'heide' : doe.ontgin);
+    // De wolven (js/beesten.js): een jacht neemt de roedel die het schaap nam wolven af, en een hek houdt ze bij de
+    // schapen weg. gereedschap/wereld.html laadt de beesten niet.
+    if (doe.wolven < 0 && T.jaagOpDeWolven) T.jaagOpDeWolven(D, -doe.wolven);
+    if (doe.hek && T.hekOmDeSchapen) T.hekOmDeSchapen(D);
     if (doe.voorval && L.wie) {
       const lijst = elk(doe.voorval);
       const id = lijst[Math.floor(lot(D, dag, 41 + V.aantal) * lijst.length)];
@@ -673,6 +704,8 @@
       if (!T.plaatsVoorEenGezin(D) && uit.kan) Object.assign(uit, { kan: false, waarom: 'er is geen plaats: wijs een erf aan (B)' });
     }
     if (doe.sterfkans) delen.push(`${doe.sterfkans}% kans op een dode`);
+    if (doe.wolven < 0) delen.push(`${T.telwoord(-doe.wolven)} wolven minder`);
+    if (doe.hek) delen.push('een hek om de schapen');
     if (doe.feest && T.feestPrijs(doe.feest)) delen.push(T.feestPrijs(doe.feest));
     // Een ondernemer (js/ondernemers.js): nee, en hij neemt het je kwalijk of trekt weg; en wat de herbergierster ervan
     // vindt.
