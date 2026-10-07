@@ -4751,6 +4751,11 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     draait; `grootGebouw` in `huizen.cjs` geeft per stijl de kleine en de grote herberg, de kapel, de woontoren en het huis
     van de schout. De grote herberg met zijn stal en binnenplaats is zo'n 18 bij 7 tegels (de herberg in `T.GEBOUWEN` nu 6
     bij 6), de kapel zo'n 13 bij 5, de woontoren 5 bij 5. Wacht op Marcel.
+    **Marcel (7 okt): "D: Is de kerk / kapel niet te klein in vergelijk met de rest? E: Stal misschien los naast de
+    herberg? of aan de achterkant, nu wordt het wat massief".** Daarop de plaat `groot2` (`huis-sdf-export.cjs groot2`, of
+    `groot2 kapel`): de herberg met de stal los ernaast (`stal: 'naast'`, zo'n 16 bij 6) en met de stal achter de herberg,
+    met de binnenplaats ertussen en de poort opzij (`'achter'`, zo'n 13 bij 12), en de kapel groter: het schip 12 bij 6,
+    twee lagen steen, en een toren van zes lagen (`groot` in `grootGebouw`). Wacht op Marcel: naast of achter.
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag
