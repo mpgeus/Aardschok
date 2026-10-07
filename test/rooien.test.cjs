@@ -743,6 +743,29 @@ test('d: geen erf waar het een huis elke vorm afneemt; wel als het nog een ander
   });
 });
 
+// Wat d zegt, mag niet van de loting afhangen (de sessie van de heer, 7 okt): een hut kan vaak in twee even grote vormen
+// groeien, en telde alleen de geloote, dan sprong de grond die vrij moest blijven, en faalde een toets één keer op de drie.
+test('d hangt niet van de loting af: elke tekening die het spel kan loten, geeft dezelfde grond om te groeien', () => {
+  zo(() => {
+    for (const S of [gehucht(), landVanDeMaker(62707)]) {
+      const D = S.dorp;
+      const grond = new Set();
+      for (const hut of T.tekeningenVan(D, 'hut')) {
+        for (const huis of T.tekeningenVan(D, 'huis')) {
+          D.volgendeTekening = { hut, huis };
+          T.kaartVeranderd(D.wereld); // anders onthoudt T.groeiGrond wat het de vorige keer uitrekende
+          const gg = T.groeiGrond(D);
+          assert.ok(gg.length, 'er is een huis dat nog moet groeien');
+          grond.add(JSON.stringify(gg.map((h) => [h.g.x, h.g.y, h.vormen])));
+          // het ontworpen gehucht: het erf op 48, 50 (CLAUDE.md, Spel.debug.bouw) mag bij elke loting
+          if (!T.stijlVan(D)) assert.equal(T.waaromPastErfNiet(D, 48, 50), null, `${hut} en ${huis}`);
+        }
+      }
+      assert.equal(grond.size, 1, 'elke loting geeft dezelfde grond om te groeien');
+    }
+  });
+});
+
 test('a2: de eigen appelboom gaat alleen om als geen vorm zonder hem kan (Marcel: "A")', () => {
   zo(() => {
     const S = gehucht();

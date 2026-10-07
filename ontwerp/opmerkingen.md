@@ -9,12 +9,20 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
-- **Een erf in de hand loot de volgende hut en het volgende huis** (6 okt, zevenendertigste sessie; gezien bij vraag 130):
-  `T.waaromPastErfNiet` kiest de hut en het huis voor het erf (`kiesTekeningen` in `js/erven.js`), en `T.volgendeTekening`
-  loot er een als die er nog niet is; het spookbeeld van een gebouw in het bouwmenu net zo (`js/tekenen.js`, `js/main.js`).
-  Dan loopt het spel anders naar waar de muis stond. Het briefje bij een huis loot sinds vraag 130 niet meer (`kiezen` in
-  `groeiVormen`, `js/behoeften.js`); voor het erf en het bouwmenu kan het op dezelfde manier, als het ertoe doet (de
-  speeltest wijst niet aan met de muis, dus die blijft hetzelfde).
+- **Een erf in de hand loot de volgende hut en het volgende huis** (6 okt, zevenendertigste sessie, en 7 okt, de sessie
+  van de heer; gezien bij vraag 130): wie met een erf in de hand over de kaart gaat, vraagt voor elke plek welke hut en
+  welk huis erop passen (`T.waaromPastErfNiet`, `kiesTekeningen` in `js/erven.js`), en dat begint met de volgende
+  tekening (`opVolgorde`, `T.volgendeTekening`), die er een loot als er nog geen gekozen is; het spookbeeld van een
+  gebouw in het bouwmenu net zo (`js/tekenen.js`, `js/main.js`). Dan loopt het spel anders naar waar de muis stond. De
+  keus wordt wel bewaard, dus bewaren en laden geven hetzelfde spel, en de speeltest wijst niet aan met de muis, dus die
+  blijft hetzelfde. Het briefje bij een huis loot sinds vraag 130 niet meer (`kiezen` in `groeiVormen`,
+  `js/behoeften.js`). Waar het looppad om het huis van een erf ligt, hangt ook van de loting af, en dus ook of een erf een
+  hut tegenhoudt (vraag 130, d): gemeten op zeven landen (7 okt; het ontworpen gehucht, 62707, 73425, 72022, 5, 1 en 17,
+  elke loting van hut en huis) wisselt het oordeel op 62707 op 12 van de 64 plekken die ooit om een groeiend huis
+  geweigerd worden, op 72022 op 1 van de 3, en op de andere vijf nergens. Het klopt wel met het erf dat er dan komt, want
+  de vraag en het aanwijzen nemen dezelfde loting; alleen kan een plek die vandaag geweigerd wordt, morgen mogen, of
+  andersom. Op te lossen zoals het groeien: de vraag loot niet, en de geloote vorm zit ook tussen de andere. Voor als de
+  regels in vaste tikken moeten (`spel.md`, "De heer als tegenstander").
 
 - **Een huis dat doorgroeit, kijkt niet naar de paden** (6 okt, zevenendertigste sessie; gezien bij vraag 130): waar het
   grotere huis komt, mag niets vast staan, geen deur zijn en geen grond van een ander erf (`watStaatInDeWeg` in

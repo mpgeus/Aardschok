@@ -67,8 +67,8 @@ kon doorgroeien (meestal door één struik); nu rooit het gezin eerst wat in de 
 waarom, en in de speeltest van vier jaar wint de bouwer op 73425. **Sinds de zevenendertigste sessie ook a2, c2 en d**
 (Marcel: "Eens alle 3"; sinds 7 okt in `main`, Marcel: "1 ja"): het gezin kapt ook zijn eigen appelboom, de raad
 zegt het als een huis dat alles heeft niet kan groeien, en een erf komt niet waar het een huis elke vorm afneemt (zo
-legde de bouwer op 62707 een erf onder een hut, en die groeide nooit). Twee sessies bouwden vraag 130 tegelijk; de versie
-in `main` bleef, en a2, c2 en d staan erop. **Vraag 131** (de bouwer en de wapens) wacht op Marcel.
+legde de bouwer op 62707 een erf onder een hut, en die groeide nooit). Drie sessies bouwden vraag 130 tegelijk; de versie
+in `main` bleef, met a2, c2 en d erop, en die koos Marcel (7 okt). **Vraag 131** (de bouwer en de wapens) wacht op Marcel.
 
 **Vraag 128 is besloten** (6 okt; Marcel: "A tot g allemaal, en de proef komt erna"; alleen papier, er is niets
 gebouwd): uit een analyse van buiten van onze samenvatting ("Richting & Game Design Ideeën") worden mensen, informatie en
@@ -5896,6 +5896,30 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     waar zonder d een erf onder de hut van het oude stel kwam. **De bouwer won op 72022 en de sluwe bouwer op 62707**,
     allebei in het vierde jaar; op 73425 stond de teller van de bouwer aan het eind op 241. De bouwer op 62707 was in het
     tweede jaar zijn ambt kwijt om de wapens (vraag 131). **Klaar**, ook met a2, c2 en d.
+    **Marcel koos (7 okt) de versie van `ccr-f6ba5992-1e77dw` voor `main`.** De sessie van de heer bouwde d en "A"
+    tegelijk (op `claude/heer-game-mechanics-6d9h5l`, `a57b436`; daar houdt een huis de grond van zijn kleinste vorm
+    vrij), en zet daaruit hier alleen twee punten voor die versie (Marcel: "Zet ze in main"):
+    - **Even grote vormen.** Een hut kan vaak in twee even grote vormen groeien (7 bij 5 en 5 bij 7). Besliste de loting
+      (`T.volgendeTekening`) welke vorm telde, dan sprong de grond die vrij moest blijven als er ergens een huis bijkwam,
+      en lag het erf op (48, 50) uit de toets van de raad (en uit `Spel.debug.bouw('erf', 48, 50)` in CLAUDE.md) bij vier
+      van de zes tekeningen op de grond van de hut op 44,44: de toets faalde één keer op de drie. Wat d zegt, mag dus niet
+      van de loting afhangen; een toets die het nakijkt, zet elke tekening die het spel kan loten en verwacht dezelfde
+      uitslag.
+    - **Het erf zelf loot ook** (`opmerkingen.md`): welke hut en welk huis op een erf komen, begint met de geloote
+      tekening (`opVolgorde` in `js/erven.js`), en daarmee ook waar het looppad om het huis ligt. Zo kan ook daardoor
+      een erf op dezelfde plek de ene keer wel en de andere keer niet een hut tegenhouden.
+    In de speeltest van vier jaar op die versie (`a57b436`, als vergelijking) groeide de hut van het oude stel op 62707 in
+    beide spellen door. De sluwe bouwer won op 62707 (5 bloeimaand van het vierde jaar) en de bouwer op 72022 (29
+    herfstmaand); de andere vier verloren om iets anders: op 62707 werd de bouwer ontslagen (te weinig betaald, en de
+    soldaten vonden wapens), op 73425 kwam de bouwer tot 241 van de 360 dagen en joeg het dorp de sluwe bouwer weg na de
+    heervaart, en op 72022 viel de sluwe bouwer tegen een rover.
+    **In `main`** (7 okt, Marcel: "1 ja"). Bij de twee punten: in deze versie hangt d niet van de loting af, want
+    `T.groeiGrond` neemt elke vorm, ook de geloote (`kiezen` in `groeiVormen`). Gemeten op zeven landen (het ontworpen
+    gehucht, 62707, 73425, 72022, 5, 1 en 17): elke loting van hut en huis geeft dezelfde grond om te groeien, en op het
+    ontworpen gehucht weigert geen loting een erf, dus ook 48, 50 niet. De toets van d zet nu elke tekening die het spel
+    kan loten (`test/rooien.test.cjs`). Het erf zelf loot wel: op 62707 wisselt het oordeel met de loting op 12 van de 64
+    plekken die ooit om een groeiend huis geweigerd worden, op 72022 op 1 van de 3, en op de andere vijf nergens. Het
+    klopt wel met het erf dat er dan komt, want de vraag en het aanwijzen nemen dezelfde loting (`opmerkingen.md`).
 131. **De bouwer en de wapens** (Claude, 6 okt, zevenendertigste sessie, bij de speeltest van vraag 130; open).
     **Wat er is:** een inwoner die wapens wil maken, vraagt het je (vraag 104); zeg je ja, dan staat er een verboden
     werkplaats, en ziet de inner hem, dan verzegelt de heer hem op Sint-Maarten: 30 gunst eraf, en volgend jaar 20 goud
