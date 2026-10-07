@@ -14,10 +14,9 @@
 // doen. Niets hiervan zit in het spel.
 //
 //   node gereedschap/pixelart/hoogte-proef.cjs     → gereedschap/pixelart/uit/hoogte/
-//     dag-16.png    overdag, een trede van 16 pixels (een halve tegelhoogte)
-//     dag-32.png    overdag, een trede van 32 pixels (een hele)
-//     avond-16.png  's avonds, met licht bij de deuren
-//     uitsnede-16.png en uitsnede-32.png   de helling en de hoek van de rotswand op 2×
+//     dag-32.png       overdag, met een trede van 32 pixels (een hele tegelhoogte; Marcel koos die boven 16)
+//     avond-32.png     's avonds, met licht bij de deuren
+//     uitsnede-32.png  de helling en de hoek van de rotswand op 2×
 'use strict';
 
 const fs = require('fs');
@@ -57,7 +56,7 @@ function glooiing(vx, vy) {
   const dx = Math.max(r.x - 0.5 - vx, 0, vx - (r.x + r.b - 0.5));
   const dy = Math.max(r.y - 0.5 - vy, 0, vy - (r.y + r.h - 0.5));
   const d = Math.hypot(dx, dy);
-  let h = 84 * (1 - K.glad(0, 7, d));
+  let h = 150 * (1 - K.glad(0, 9, d)); // Marcel, 7 okt: "hoger"
   const d2 = Math.hypot(vx - 5, vy - 14.5);
   h += 18 * (1 - K.glad(0, 4.2, d2));
   return h;
@@ -479,7 +478,7 @@ function naarPng(doek, achtergrond, uitsnede, schaal = 1) {
 function main() {
   fs.mkdirSync(UIT, { recursive: true });
   const t0 = Date.now();
-  for (const trede of [16, 32]) {
+  for (const trede of [32]) { // Marcel, 7 okt: "a ja 32" (16 was naast de huizen een streepje)
     const { doek, oog } = maakPlaat(trede, false);
     fs.writeFileSync(path.join(UIT, `dag-${trede}.png`), naarPng(doek, [24, 20, 30]));
     // de helling en de hoek van de rotswand, op 2×
@@ -488,9 +487,9 @@ function main() {
     fs.writeFileSync(path.join(UIT, `uitsnede-${trede}.png`), naarPng(doek, [24, 20, 30], uitsnede, 2));
     console.log(`dag-${trede}.png ${doek.b}×${doek.h}`);
   }
-  const { doek } = maakPlaat(16, true);
-  fs.writeFileSync(path.join(UIT, 'avond-16.png'), naarPng(doek, [10, 10, 18]));
-  console.log(`avond-16.png, klaar in ${((Date.now() - t0) / 1000).toFixed(1)} s, in ${path.relative(WORTEL, UIT)}`);
+  const { doek } = maakPlaat(32, true);
+  fs.writeFileSync(path.join(UIT, 'avond-32.png'), naarPng(doek, [10, 10, 18]));
+  console.log(`avond-32.png, klaar in ${((Date.now() - t0) / 1000).toFixed(1)} s, in ${path.relative(WORTEL, UIT)}`);
 }
 
 main();

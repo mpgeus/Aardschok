@@ -5244,6 +5244,12 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     hoogte; delen buren hun hoek, dan glooit het, en verschillen ze, dan staat er een wand. Een helling is een tegel die
     schuin loopt tussen twee treden. Lage glooiing verbergt bijna niets, dus het niet-draaien knelt minder dan hierboven.
     De plaat: `node gereedschap/pixelart/hoogte-proef.cjs`, naar `gereedschap/pixelart/uit/hoogte/`.
+    **De plaat is gemaakt, en Marcel koos (7 okt): "a ja 32, b hoger, c ja".** Een trede van **32 pixels** (een hele
+    tegelhoogte; 16 was naast de huizen een streepje), de glooiende heuvels **hoger** (op de plaat nu 150 pixels, zo'n
+    vijf treden, met een flank van negen tegels), en de rotswand en de begroeide wal zijn de richting (ze mogen nog
+    rijker getekend worden). Gezien op de plaat: een wand die schuin over het raster loopt, wordt een trapje, dus wanden
+    lopen langs de tegels, en wat schuin moet, glooit; het graan buigt nog niet mee, en een huis staat alleen op een vlak
+    stuk.
 122. **De snelheid in de browser en via Steam** (Marcel, 4 okt, achtentwintigste sessie: "Ik wil nu ook weten wat het
     verschil in performance is tussen nu spelen in de browser en straks via Steam. Want lag, geheugen tekort etc is geen
     optie straks"; plan van Claude; open). Uitgewerkt in `verpakken.md`, "Snelheid: in de browser of via Steam".
