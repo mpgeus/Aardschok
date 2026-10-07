@@ -4773,7 +4773,10 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     landen van de maker anders liggen, spelen de toetsen van het doorgroeien op land 62710, en staat het midden van de
     markt op een tegel waar je kunt staan (op 72022 stond er een bank). De grote herberg heeft bouwfasen; de kapel en de
     woontoren nog niet (de bouwfasen kennen alleen een huis, geen toren of gebouw uit delen): die rijzen nog bleek op.
-    Open: bouwfasen voor de kapel en de woontoren; een grote herberg krijgt nog geen plaatsen voor meer gasten.
+    De speeltest van vier jaar (`speelbaar.md`, 7 okt): vier van de zes spellen winnen (was drie), met 7 tot 13
+    woontorens per dorp, en op 62707 191 mensen. Open: bouwfasen voor de kapel en de woontoren; een grote herberg krijgt
+    nog geen plaatsen voor meer gasten; en de herberg houdt de grond niet vrij waar hij groter wordt (op 62707 stond er in
+    de speeltest iets toen het een dorp werd, en groeide hij nooit; hij zegt het dan ook niet).
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag

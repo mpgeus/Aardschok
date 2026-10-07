@@ -153,6 +153,33 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 7 okt: de grote gebouwen (werklijst, vraag 114, stap 3)
+
+Gespeeld op `claude/project-thread-cyjrql` op `6b61305`: de versie van vraag 131 hieronder, met de grote gebouwen (het huis
+van de schout en de herberg in de stijl van het land, de herberg die in een dorp meegroeit, de kapel van steen, en het
+stenen huis dat met marktrecht een woontoren wordt). `npm run speeltest -- bouwer sluw --maker --jaren 4 --tegelijk 2`,
+naast het renderen van de bouwfasen. Geen fouten in de console. De landen liggen anders dan hieronder, want de maker
+legt nu andere tekeningen; 62707 is zaad 1, 73425 zaad 2, 72022 zaad 3.
+
+| Land | Speler | Mensen aan het eind van jaar 1 tot 4 | Dagen dat alle huizen alles hadden, per jaar (waarvan alle woningen in steen) | Hoe het eindigde |
+|---|---|---|---|---|
+| 62707 | bouwer | 54, 110, 120, 191 | 26 (0), 228 (166), 331 (330), 0 | **gewonnen**, op 30 louwmaand van het derde jaar |
+| 73425 | bouwer | 56, 91, 111, 138 | 27 (0), 297 (297), 335 (293), 146 (140) | **gewonnen**, op 12 hooimaand van het vierde jaar |
+| 72022 | bouwer | 61, 103, 159, 159 | 46 (0), 171 (135), 329 (329), 235 (235) | de vier jaar uit; de reeks brak drie keer, om brood en laken |
+| 62707 | sluw | 54, 80, 123, 179 | 26 (0), 124 (72), 360 (360), 185 (160) | **gewonnen**, op 10 oogstmaand van het vierde jaar |
+| 73425 | sluw | 52, 83, 111, 124 | 27 (0), 286 (286), 357 (297), 228 (220) | **gewonnen**, op 4 wijnmaand van het vierde jaar |
+| 72022 | sluw | 50 | 69 van 251 (0) | ontslagen in het eerste jaar: de soldaten vonden een akker in het bos van de heer |
+
+**Wat het zegt:**
+1. **Vier van de zes spellen winnen** (hieronder drie): de bouwer op 62707 nu al in het derde jaar, en voor het eerst de
+   bouwer en de sluwe bouwer op 73425. Op 73425 werd de sluwe bouwer hieronder weggejaagd; nu wint hij.
+2. **De woontorens komen:** op de drie landen van de bouwer 13, 9 en 12 keer een stenen huis dat een woontoren werd, bij de
+   sluwe bouwer minder. Op 62707 woonden er aan het eind 191 mensen (hieronder 147): de torens geven grond terug.
+3. **De herberg groeit mee** op vier van de zes spellen. Op 62707 niet: daar stond er al iets in de weg toen het een dorp
+   werd (aan het begin past hij daar wel); het zegt dan niets.
+4. Op 72022 haalt de bouwer het niet om brood en laken, en wordt de sluwe bouwer al in het eerste jaar ontslagen om een
+   akker in het bos: de landen liggen anders, dus wat daar gebeurt, is niet te vergelijken met hieronder.
+
 ## De speeltest van 7 okt: wapens zijn niet meer verboden (werklijst, vraag 131)
 
 Gespeeld in de zevenendertigste sessie, op `ccr-f6ba5992-1e77dw` op `88d6e8d`: de versie van vraag 130 hieronder, en
