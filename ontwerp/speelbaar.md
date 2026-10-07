@@ -153,6 +153,34 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 7 okt: wapens zijn niet meer verboden (werklijst, vraag 131)
+
+Gespeeld in de zevenendertigste sessie, op `ccr-f6ba5992-1e77dw` op `88d6e8d`: de versie van vraag 130 hieronder, en
+wapens die niet meer verboden zijn (Marcel: "Wapens zijn niet meer verboden. Het is logisch dat er wapens zijn om de stad
+te verdedigen. Alleen weerstand tegen de heer is inacceptabel"). `npm run speeltest -- bouwer sluw --maker --jaren 4`,
+drie tegelijk, in een klein uur. Geen fouten in de console. 62707 is zaad 1, 73425 zaad 2, 72022 zaad 3.
+
+| Land | Speler | Mensen aan het eind van jaar 1 tot 4 | Dagen dat alle huizen alles hadden, per jaar (waarvan alle woningen in steen) | Hoe het eindigde |
+|---|---|---|---|---|
+| 62707 | bouwer | 53, 90, 123, 147 | 26 (0), 162 (144), 273 (214), 161 (150) | **gewonnen**, op 27 hooimaand van het vierde jaar |
+| 73425 | bouwer | 48, 70, 88, 107 | 32 (0), 198 (198), 205 (128), 238 (238) | de vier jaar uit, de teller op 241 |
+| 72022 | bouwer | 49, 78, 123, 138 | 42 (0), 191 (124), 182 (152), 311 (300) | **gewonnen**, op 29 herfstmaand van het vierde jaar |
+| 62707 | sluw | 52, 102, 115, 156 | 26 (0), 264 (189), 355 (296), 78 (70) | **gewonnen**, op 5 bloeimaand van het vierde jaar |
+| 73425 | sluw | 52, 96, 100 | 62 (0), 0, 0 van 121 | weggejaagd op 1 hooimaand van het derde jaar: hij stuurde mannen naar de oorlog |
+| 72022 | sluw | 53, 70 | 42 (0), 58 van 165 (56) | gevallen, op 15 oogstmaand van het tweede jaar |
+
+**Wat het zegt:**
+1. **Geen spel eindigt meer om de wapens.** De bouwer zei op alle drie de landen ja tegen de wapenmaker (op 62707 al in
+   het begin van het tweede jaar), en speelde de vier jaar uit. Op 62707 werd hij in de speeltest hieronder in het
+   tweede jaar ontslagen, nadat de heer de wapens vond; nu **wint hij**, op 27 hooimaand van het vierde jaar. Zijn gunst
+   kwam nog wel tot 6, om wat hij te weinig betaalde (drie waarschuwingen), maar niet op 0.
+2. **Drie van de zes spellen winnen**: de bouwer op 62707 en 72022, en de sluwe bouwer op 62707. De andere vijf spellen
+   lopen zoals hieronder: de wapens deden er daar niets toe (op 72022 had de bouwer aan het eind 138 mensen in plaats van
+   141, en hij won op dezelfde dag).
+3. Zoals hieronder werd de sluwe bouwer op 73425 weggejaagd na de heervaart, en viel hij op 72022 in het tweede jaar.
+
+**Wat het vraagt:** vraag 131 is klaar.
+
 ## De speeltest van 6 okt: vraag 130 met a2, c2 en d (werklijst, vraag 130)
 
 Gespeeld in de zevenendertigste sessie, op `ccr-f6ba5992-1e77dw` op `9d509b9`: de versie van vraag 130 uit `main` (van de
