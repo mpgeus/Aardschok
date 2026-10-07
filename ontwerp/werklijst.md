@@ -4741,6 +4741,10 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     stand als het stenen huis (ambachtslieden)? Op een kleinere voet dan het stenen huis waaruit hij groeit, dus hij geeft
     grond terug, en de grond om te bouwen was wat de winst tegenhield (vraag 110). **C**, eerst de proefplaat, en pas
     renderen als Marcel hem gezien heeft?
+    **Marcel (7 okt): "A; ja goed idee, B: Ja, C: Ja graag".** Dus: de herberg groeit mee (het gehucht begint met de
+    kleine in de stijl van zijn land, en in een dorp groeit hij door tot de grote met stal en binnenplaats); de woontoren
+    heeft drie gezinnen op 5 bij 5, in de stand van het stenen huis (ambachtslieden), vanaf marktrecht; en eerst de
+    proefplaat, het renderen pas als Marcel hem gezien heeft.
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag
