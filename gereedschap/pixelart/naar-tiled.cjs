@@ -82,7 +82,7 @@ const VELCONFIG = {
   toren: { capaciteit: 8, kolommen: 4 }, // nu 1 (er is er maar één); een beetje lucht is vrijwel gratis
   erf: { capaciteit: 24, kolommen: 8 }, // nu 7: nog een stuk of zeventien erfstukken erbij kan
   tuin: { capaciteit: 48, kolommen: 8 }, // nu 33 (tuin-sdf.cjs se STUKKEN): ruim voor een derde hek of meer groente
-  huizen: { capaciteit: 512, kolommen: 8 }, // nu 431 in 448 vakken: de 32 van ronde 4b (23 huizen en 9 lege), de 108 van de stijl wit en de 300 van oker, planken en roze (huizen.cjs, STIJLEN; vraag 114, stap 2a en 2b). Een leeg vak kost sinds het inpakken (vraag 114, 2a) geen geheugen meer in de browser; huizen is het laatste vel in elke kaart, dus een grotere capaciteit schuift geen nummers op
+  huizen: { capaciteit: 640, kolommen: 8 }, // nu 559 in 576 vakken: de 128 grote gebouwen van de stijlen erbij (vraag 114, stap 3), en daarvoor 431: de 32 van ronde 4b (23 huizen en 9 lege), de 108 van de stijl wit en de 300 van oker, planken en roze (huizen.cjs, STIJLEN; vraag 114, stap 2a en 2b). Een leeg vak kost sinds het inpakken (vraag 114, 2a) geen geheugen meer in de browser; huizen is het laatste vel in elke kaart, dus een grotere capaciteit schuift geen nummers op
 };
 
 // items: [{ key, ...eigen velden zoals `plaat` }]. `key` is de identiteit die nooit meer

@@ -32,6 +32,8 @@
 //          spel; ramenVan hieronder). 's Avonds branden die van de herberg (js/tekenen.js).
 const fs = require('fs');
 const os = require('os');
+const path = require('path');
+const crypto = require('crypto');
 const { Worker, isMainThread, parentPort, workerData } = require('worker_threads');
 const K = require('./kern.cjs');
 const D = require('./dorp.cjs');
@@ -262,10 +264,40 @@ function stijlHuizen() {
       zet('stenenHuis', broertje, basis, [['leien', S.steen], ['pannen', S.steen], ['pannen', 'baksteen']], { ...(S.boven ? { boven: S.boven } : {}), uit: metLuiken(vormVan(vorm)) });
     }
     for (const vorm of S.boerderij) zet('boerderij', vorm, vormVan(vorm), daken, { uit: metLuiken(vormVan(vorm)) });
+    // de grote gebouwen (vraag 114, stap 3; grootGebouw hieronder): de kleine herberg van het gehucht, de grote waar
+    // hij in een dorp toe doorgroeit (leien, pannen), de kapel en de woontoren in de steen van de stijl of in baksteen
+    // (met een steenbakkerij), en het huis van de schout. Nog zonder bouwfasen: de kapel en de woontoren zijn een toren
+    // of een gebouw uit delen, en de bouwfasen kennen alleen een huis; niemand bouwt het huis van de schout.
+    const groot = (soort, vorm, welk, daken, fasen) => {
+      for (const [dak, steen] of daken) {
+        for (const [stand, st] of Object.entries(STANDEN)) {
+          const naam = stijlNaam(stijl, vorm, steen === 'baksteen' ? 'baksteen' : dak, stand);
+          const g = grootGebouw(stijl, welk, { dak, steen, draai: st.draai });
+          uit[naam] = {
+            ...(g.spec || { delen: g.delen, deurVan: g.deurVan }), gebouw: soort, draai: st.draai, ...(fasen ? {} : { fasen: false }),
+            stijl: { stijl, vorm, soort, dak, steen: steen || null, stand },
+          };
+        }
+      }
+    };
+    groot('herberg', 'herberg1', 'herbergKlein', [[S.dak]], true);
+    groot('herberg', 'herberg2', 'herberg', [['leien'], ['pannen']], true);
+    groot('kapel', 'kapel', 'kapel', [['leien', S.steen], ['leien', 'baksteen']], false);
+    groot('woontoren', 'woontoren', 'woontoren', [['pannen', S.steen], ['pannen', 'baksteen']], false);
+    groot('schout', 'schoutshuis', 'schout', [[S.dak, S.steen]], false);
   }
   return uit;
 }
 Object.assign(HUIZEN, stijlHuizen());
+
+// De wereld van een opgave: een huis of een toren van de bouwer, of een gebouw uit delen ({ delen: [{ spec, plek }],
+// deurVan }: de kapel met haar toren, HS.samen; vraag 114, stap 3).
+function wereldVan(spec) {
+  if (!spec.delen) return HS.huis(spec.zaad, spec);
+  const W = HS.samen(spec.delen.map((d) => ({ W: d.spec.erfmuur ? HS.erfmuur(d.spec.zaad, d.spec) : HS.huis(d.spec.zaad, d.spec), plek: d.plek })));
+  W.deurVan = spec.deurVan || 0;
+  return W;
+}
 
 // ---------------------------------------------------------------- meten: voet en deur
 
@@ -291,12 +323,16 @@ function meetHuis(W, draai = 0) {
   const terug = (x, y) => (draai ? Tr.draaiTerug(draai, [x, y]) : [x, y]);
   // de achterste hoek van het plan, op een halve tegel afgerond (de vleugels staan scheef, en een
   // tweede vleugel een graad of twee uit het haakse: dat mag de hoek niet verschuiven)
+  // een gebouw uit delen (HS.samen: de kapel met haar toren; vraag 114, stap 3) meet al zijn delen, elk op zijn plek
+  const delen = W.delen ? W.delen.map((d) => ({ H: d.H, dx: d.plek[0], dy: d.plek[1] })) : [{ H, dx: 0, dy: 0 }];
+  const vleugels = delen.flatMap((d) => d.H.vleugels.map((V) => ({ V, dx: d.dx, dy: d.dy })));
   let px = Infinity;
   let py = Infinity;
-  for (const V of H.vleugels) {
+  for (const { V, dx: ox, dy: oy } of vleugels) {
     for (const sa of [-1, 1]) {
       for (const sq of [-1, 1]) {
-        const [x, y] = naar(V.wereld(sa * V.ha, sq * V.hq));
+        const [wx, wy] = V.wereld(sa * V.ha, sq * V.hq);
+        const [x, y] = naar([wx + ox, wy + oy]);
         px = Math.min(px, x);
         py = Math.min(py, y);
       }
@@ -318,7 +354,7 @@ function meetHuis(W, draai = 0) {
     return false;
   };
   const RUIM = 4;
-  const maat = Math.ceil(Math.max(...H.vleugels.map((V) => Math.hypot(V.cx, V.cy) + Math.hypot(V.ha, V.hq))) / TEGEL) * 2 + RUIM * 2;
+  const maat = Math.ceil(Math.max(...vleugels.map(({ V, dx: ox, dy: oy }) => Math.hypot(V.cx + ox, V.cy + oy) + Math.hypot(V.ha, V.hq))) / TEGEL) * 2 + RUIM * 2;
   let i0 = Infinity;
   let j0 = Infinity;
   let i1 = -Infinity;
@@ -365,10 +401,13 @@ function meetHuis(W, draai = 0) {
   };
   // De voordeur, of een andere deur op de grond die aan de rand van de voet ligt: de bouwer zet een
   // aanbouw altijd tegen de lange muur, naast de voordeur, en dan gaat de boer door de staldeur.
-  const deuren = [(a) => naar(HS.voorDeDeur(H, a))];
-  for (const d of H.deuren) {
-    if (d === H.deur || d.h0 > 20) continue;
-    deuren.push((a) => naar(d.P.pos(d.u, 0, a * TEGEL).slice(0, 2).map((v) => v / TEGEL)));
+  // bij een gebouw uit delen de deur van het deel W.deurVan (de toren van een kapel), op zijn plek
+  const DD = delen[W.deurVan || 0];
+  const opPlek = ([x, y]) => [x + DD.dx / TEGEL, y + DD.dy / TEGEL];
+  const deuren = [(a) => naar(opPlek(HS.voorDeDeur(DD.H, a)))];
+  for (const d of DD.H.deuren) {
+    if (d === DD.H.deur || d.h0 > 20) continue;
+    deuren.push((a) => naar(opPlek(d.P.pos(d.u, 0, a * TEGEL).slice(0, 2).map((v) => v / TEGEL))));
   }
   let beste = null;
   for (const plek of deuren) {
@@ -387,10 +426,10 @@ function meetHuis(W, draai = 0) {
 function renderHuis(spec) {
   const t0 = Date.now();
   const draai = spec.draai || 0;
-  const W = HS.huis(spec.zaad, spec);
+  const W = wereldVan(spec);
   const H = W.H;
   const m = meetHuis(W, draai);
-  const kd = HS.kaderVan(H, [], draai);
+  const kd = W.delen ? HS.kaderSamen(W, draai) : HS.kaderVan(H, [], draai);
   const RAND = 12;
   const b = Math.ceil(kd.b + RAND * 2);
   const h = Math.ceil(kd.h + RAND * 2);
@@ -800,7 +839,39 @@ const DRADEN = () => Math.max(1, Math.min(8, os.cpus().length));
 
 // namen: welke huizen (standaard alle). Geeft per huis { naam, plaat, anker, voet, deur, ms }, in
 // dezelfde volgorde; een huis dat mislukt, meldt zich en valt weg.
+// Wat al gerenderd is, ligt in uit/huizen-cache (niet in git), per huis onder een sleutel uit zijn opgave en de code van
+// de bouwer: zo kan het renderen van het hele vel in delen (een taak op de achtergrond stopt na twee uur; vraag 114, stap
+// 3), en rendert een tweede keer alleen wat nieuw of veranderd is.
+const CACHE = path.join(__dirname, 'uit', 'huizen-cache');
+let codeSleutel = null;
+function cacheBestand(naam) {
+  if (!codeSleutel) {
+    const h = crypto.createHash('sha1');
+    for (const f of ['huizen.cjs', 'huis-sdf.cjs', 'toren.cjs', 'kern.cjs', 'dorp.cjs']) h.update(fs.readFileSync(path.join(__dirname, f)));
+    codeSleutel = h.digest('hex').slice(0, 12);
+  }
+  const s = crypto.createHash('sha1').update(codeSleutel + JSON.stringify(HUIZEN[naam])).digest('hex').slice(0, 16);
+  return path.join(CACHE, `${naam}-${s}.json`);
+}
 function renderHuizen(namen = Object.keys(HUIZEN), draden = DRADEN()) {
+  fs.mkdirSync(CACHE, { recursive: true });
+  const bewaard = new Map();
+  for (const naam of namen) {
+    const f = cacheBestand(naam);
+    if (!fs.existsSync(f)) continue;
+    const m = JSON.parse(fs.readFileSync(f, 'utf8'));
+    const plaat = new K.Plaat(m.b, m.h);
+    plaat.px = Int16Array.from(m.px);
+    bewaard.set(naam, { naam, plaat, anker: m.anker, voet: m.voet, deur: m.deur, deurVer: m.deurVer, ramen: m.ramen, ms: 0 });
+  }
+  if (bewaard.size) console.log(`  ${bewaard.size} huizen uit ${path.relative(process.cwd(), CACHE)}`);
+  const nog = namen.filter((n) => !bewaard.has(n));
+  return renderNieuw(nog, draden).then((r) => {
+    const per = new Map(r.map((x) => [x.naam, x]));
+    return namen.map((n) => bewaard.get(n) || per.get(n)).filter(Boolean);
+  });
+}
+function renderNieuw(namen, draden) {
   return new Promise((klaar, fout) => {
     const uit = new Array(namen.length);
     let volgende = 0;
@@ -824,6 +895,7 @@ function renderHuizen(namen = Object.keys(HUIZEN), draden = DRADEN()) {
           const plaat = new K.Plaat(m.b, m.h);
           plaat.px = m.px;
           uit[m.i] = { naam: m.naam, plaat, anker: m.anker, voet: m.voet, deur: m.deur, deurVer: m.deurVer, ramen: m.ramen, ms: m.ms };
+          fs.writeFileSync(cacheBestand(m.naam), JSON.stringify({ b: m.b, h: m.h, px: Array.from(m.px), anker: m.anker, voet: m.voet, deur: m.deur, deurVer: m.deurVer, ramen: m.ramen }));
           console.log(`  ${m.naam.padEnd(12)} ${m.b}×${m.h}  voet ${m.voet.join('×')}  deur ${m.deur} (${m.deurVer} tegel voor de muur)  ${m.ramen.length} ramen  ${(m.ms / 1000).toFixed(1)} s`);
         }
         if (++gedaan === namen.length) {
