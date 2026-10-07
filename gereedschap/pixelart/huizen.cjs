@@ -171,7 +171,7 @@ function grootGebouw(stijl, soort, o = {}) {
     // groter dan de herberg (Marcel, 7 okt: "Is de kerk / kapel niet te klein in vergelijk met de rest?"): het schip 12 bij
     // 6, twee lagen hoog, en een toren van zes lagen, het hoogste punt van het dorp
     const groot = o.groot !== false;
-    const schip = { zaad: 61, vorm: 'rechthoek', b: groot ? 12 : 9, d: groot ? 6 : 5, lagen: groot ? 2 : 1.5, wand: 'veldsteen', steen, schoorsteen: false, schoor: false, uit: false, ramen: 'kerk', ...rond, dak: 'leien' };
+    const schip = { zaad: 61, vorm: 'rechthoek', b: groot ? 12 : 9, d: groot ? 6 : 5, lagen: groot ? 2 : 1.5, boven: 'veldsteen', wand: 'veldsteen', steen, schoorsteen: false, schoor: false, uit: false, ramen: 'kerk', ...rond, dak: 'leien' };
     const zadel = TORENS[stijl].kapel === 'zadel';
     const tb = groot ? (zadel ? 5 : 4) : zadel ? 4 : 3;
     const toren = { zaad: 62, dak: 'plat', steen, lagen: groot ? 6 : 4, b: tb, d: tb, torendak: TORENS[stijl].kapel, ramen: 'kerk', rondom: true, draai };

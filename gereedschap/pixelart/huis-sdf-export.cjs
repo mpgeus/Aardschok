@@ -1290,7 +1290,7 @@ if (isMainThread && require.main === module) {
   } else if (wat === 'verhouding' || wat === 'steen') {
     rijenPlaat(wat === 'steen' ? STEEN_PLAAT : VERHOUDING, `${wat}.png`).then(() => log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`));
   } else if (wat === 'groot2') {
-    rijenPlaat(groot2Rijen(), 'groot2.png').then(() => log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`));
+    rijenPlaat(groot2Rijen().filter((r) => !process.argv[3] || r.naam.includes(process.argv[3])), `groot2${process.argv[3] ? `-${process.argv[3]}` : ''}.png`).then(() => log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`));
   } else if (wat === 'groot') {
     // node huis-sdf-export.cjs groot [stijl]: de grote gebouwen van elke stijl (of één), en de herberg in vier standen
     const alleen = process.argv[3];
