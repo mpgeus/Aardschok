@@ -2092,6 +2092,18 @@
       T.blok(ctx, p.x, p.y, 0.16, 0.16, 16, '#5d8a34', { helder, basis: 140 });
       return;
     }
+    if (v.soort === 'hol') {
+      // Het hol van een roedel wolven (js/beesten.js): een kuil onder een omgevallen boom, met botten ervoor. Zonder kunst:
+      // een donkere kuil met een omgevallen stam erachter.
+      const hol = metSprites() && T.sprites.hol();
+      if (hol) {
+        T.sprites.teken(ctx, hol, p.x, p.y, helder);
+        return;
+      }
+      T.blok(ctx, p.x, p.y, 0.3, 0.3, 2, '#1c1410', { helder });
+      T.blok(ctx, p.x, p.y, 0.5, 0.1, 10, '#5e4a36', { helder, basis: 2 });
+      return;
+    }
     if (v.soort === 'kraam') {
       // Een kraam van de markt op het plein (js/markt.js; werklijst vraag 110, d): een toonbank met een gestreepte luifel,
       // naar het midden van het plein. In aanbouw bleker, zoals een gebouw zonder bouwfasen. Zonder kunst: een toonbank
@@ -2346,6 +2358,8 @@
     if (e.alarm > 0) roep(ctx, '!', cx, top - 14 - Math.abs(Math.sin(e.alarm * 9)) * 4, '#ffd24a');
     // Wie de schout zoekt met een voorval (js/voorvallen.js): een uitroepteken dat zacht op en neer gaat.
     else if (e.zoektSchout && !e.binnen) roep(ctx, '!', cx, top - 12 - Math.abs(Math.sin(S.tijd * 3)) * 3, '#f3e2a4');
+    // Wie de wolven aanvallen, roept om hulp (js/beesten.js): een rood uitroepteken dat sneller springt.
+    else if (e.roeptOmHulp) roep(ctx, '!', cx, top - 12 - Math.abs(Math.sin(S.tijd * 8)) * 4, '#ff6a50');
   }
 
   // Het teken bij de deur van een huis dat iets mist (2c, werklijst vraag 100; js/wensen.js, T.tekenVanHuis): een

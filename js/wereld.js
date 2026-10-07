@@ -45,6 +45,9 @@
     schandpaal: { blokkeert: true, zichtDicht: false, naam: 'de schandpaal' },
     // De meiboom op het plein: de jongeren zetten hem op 1 bloeimaand, en hij blijft een maand staan (js/feesten.js).
     meiboom: { blokkeert: true, zichtDicht: false, naam: 'de meiboom' },
+    // Het hol van een roedel wolven, op een tegel naast zijn thuis diep in het bos (js/beesten.js, T.zetHol): een kuil onder een
+    // omgevallen boom. Je loopt er niet overheen, maar langs.
+    hol: { blokkeert: true, zichtDicht: false, naam: 'een wolvenhol' },
     // Een kraam van de markt op het plein (js/markt.js): een toonbank met een luifel. Je loopt eromheen, en ertussendoor.
     kraam: { blokkeert: true, zichtDicht: false, naam: 'een kraam' },
     // Een mand, kist, zak of ton naast een kraam (js/markt.js): wat niet op de toonbank past.

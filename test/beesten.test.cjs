@@ -844,3 +844,194 @@ test('het voorval "wolven": "Een jacht" is een jacht te voet, en het venster zeg
   luister(() => T.voorvalGevolg(D, keuze.doe));
   assert.ok(D.beesten.jacht, 'de jacht loopt');
 });
+
+// ---------------------------------------------------------------------------------------------
+// Stap 3c, om hulp roepen (Marcel, 7 okt: "even noteren dat mensen ook om hulp roepen", en "C. Ja goed idee")
+// ---------------------------------------------------------------------------------------------
+
+// Een roedel met honger valt iemand aan die alleen in het donker loopt; geeft { S, D, G, p, e, gezegd } zodra hij om
+// hulp roept.
+function aanval() {
+  const { S, D, G, leider } = stouteRoedel();
+  const p = D.bewoners.mensen.find((q) => q.wezen && !q.schout && q.leeftijd === 'volwassen');
+  const e = p.wezen;
+  e.binnen = false;
+  zetBij(D.wereld, e, { x: leider.tx + 10, y: leider.ty });
+  const gezegd = [];
+  luister((z) => {
+    for (let k = 0; k < 400 && !G.aanval; k++) uren(S, 0.05);
+    gezegd.push(...z);
+  });
+  assert.ok(G.aanval, 'de roedel valt aan');
+  return { S, D, G, p, e, gezegd };
+}
+
+test('wie de wolven aanvallen, roept om hulp: het dorp zegt het, hij blijft staan, en zonder hulp bijt de roedel na een kwartier', () => {
+  const { S, D, G, p, e, gezegd } = aanval();
+  assert.ok(gezegd.some((t) => t.includes(T.naamVanBewoner(p)) && /roept om hulp/.test(t)), gezegd.join(' | '));
+  assert.ok(e.roeptOmHulp && e.moetNaar, 'hij staat en roept');
+  assert.ok(!p.gewond, 'nog niet gebeten');
+  luister((z) => {
+    uren(S, T.BEESTEN_INSTELLINGEN.hulp.uren + 0.05);
+    assert.ok(z.some((t) => /gebeten|vielen de wolven aan/.test(t)), z.join(' | '));
+  });
+  assert.equal(G.aanval, null);
+  assert.ok(!e.roeptOmHulp && !e.moetNaar);
+});
+
+test('komt er een buur, dan vluchten de wolven; komt de schout, dan is het een gevecht in beurten', () => {
+  {
+    const { S, D, G, p, e } = aanval();
+    const buur = D.bewoners.mensen.find((q) => q !== p && q.wezen && !q.schout && q.leeftijd === 'volwassen').wezen;
+    buur.binnen = false;
+    zetBij(D.wereld, buur, T.tegelVan(e));
+    luister((z) => {
+      uren(S, 0.05);
+      assert.ok(z.some((t) => /te hulp, en de wolven zijn gevlucht/.test(t)), z.join(' | '));
+    });
+    assert.equal(G.aanval, null);
+    assert.ok(G.weg > S.kalender.dag, 'ze vluchten');
+    assert.ok(!p.gewond);
+  }
+  {
+    const { S, D, G, e } = aanval();
+    S.schout.binnen = false;
+    zetBij(D.wereld, S.schout, { x: e.tx + T.BEESTEN_INSTELLINGEN.hulp.schout, y: e.ty });
+    uren(S, 0.05);
+    assert.equal(S.modus, 'overgang', 'het gevecht begint');
+    assert.equal(G.aanval, null);
+  }
+});
+
+// ---------------------------------------------------------------------------------------------
+// Stap 3d, het hek op de kaart (Marcel, 7 okt: "D ja allebei")
+// ---------------------------------------------------------------------------------------------
+
+test('een hek om de schapen staat om de meent, met een hekje in elke zijde, en de meent blijft te bereiken', () => {
+  for (const zaad of [62707, 73425, 72022]) {
+    const S = landVanDeMaker(zaad);
+    const D = S.dorp;
+    const w = D.wereld;
+    const m = w.meenten[0];
+    const binnen = { x: m.x + Math.floor(m.b / 2), y: m.y + Math.floor(m.h / 2) };
+    const plein = T.pleinVan(w);
+    T.hekOmDeSchapen(D);
+    const hek = w.voorwerpen.filter((v) => v.hek);
+    assert.ok(hek.length >= m.b + m.h, `${zaad}: een hek (${hek.length} stukken)`);
+    for (const v of hek) {
+      const opRand = v.x === m.x || v.y === m.y || v.x === m.x + m.b - 1 || v.y === m.y + m.h - 1;
+      assert.ok(opRand, `${zaad}: op de rand van de meent`);
+    }
+    const hekjes = hek.filter((v) => v.soort.startsWith('hekje'));
+    assert.ok(hekjes.length >= 2, `${zaad}: hekjes om door te lopen`);
+    assert.ok(hekjes.every((v) => !T.isVast(w, v.x, v.y)), 'door een hekje loop je');
+    assert.ok(T.kanErKomen(w, plein, binnen), `${zaad}: de meent blijft te bereiken`);
+    for (const e of T.veeVan(D)) assert.ok(T.kanErKomen(w, plein, T.tegelVan(e)), `${zaad}: geen dier opgesloten`);
+  }
+});
+
+// ---------------------------------------------------------------------------------------------
+// Stap 3b, het hol op de kaart (Marcel, 7 okt: "een kuil onder een omgevallen boom, met botten ervoor")
+// ---------------------------------------------------------------------------------------------
+
+test('elke roedel heeft een hol op de kaart naast zijn thuis, vast, en zijn plekken blijven te bereiken', () => {
+  for (const zaad of [62707, 73425, 72022]) {
+    const S = landVanDeMaker(zaad);
+    const D = S.dorp;
+    const w = D.wereld;
+    T.zetBeesten(D);
+    const roedels = T.beestenVan(D).filter(({ G }) => G.soort === 'wolf');
+    assert.ok(roedels.length, `${zaad}: roedels`);
+    for (const { G } of roedels) {
+      const hol = T.holVan(D, G);
+      assert.ok(hol, `${zaad}: een hol`);
+      assert.ok(w.voorwerpen.includes(hol), 'op de kaart');
+      assert.ok(T.afstand(hol, G.thuis) <= 3 && T.afstand(hol, G.thuis) > 0, `${zaad}: naast het thuis, niet erop`);
+      assert.ok(T.isVast(w, hol.x, hol.y), 'je loopt er niet overheen');
+      assert.ok(!T.isVast(w, G.thuis.x, G.thuis.y), 'het thuis zelf blijft vrij');
+      assert.ok(T.kanErKomen(w, G.thuis, G.rand[0]) && G.rand.every((p) => T.kanErKomen(w, G.thuis, p)), 'de rand is te bereiken');
+      assert.ok(T.zoekRoute(w, G.rand[0], G.thuis, { tot: 0 }), 'en er is een weg naar het thuis');
+    }
+    assert.equal(w.voorwerpen.filter((v) => v.soort === 'hol').length, roedels.length, 'een hol per roedel, en niet voor de herten');
+  }
+});
+
+test('verhuist een roedel, dan gaat zijn hol mee; trekt hij weg, dan verdwijnt het', () => {
+  const S = landVanDeMaker(62707);
+  const D = S.dorp;
+  T.zetBeesten(D);
+  const G = groepVan(S, 'wolf').G;
+  const oud = { ...G.thuis };
+  const dag = eersteVan(S, 'hooimaand');
+  kaal(D, oud.x, oud.y, 4);
+  const zeg = T.zeg;
+  T.zeg = () => {};
+  try {
+    T.tikBeestenDag(D, dag);
+    assert.notDeepEqual(G.thuis, oud, 'een nieuw thuis');
+    const hol = T.holVan(D, G);
+    assert.ok(hol && T.afstand(hol, G.thuis) <= 3, 'het hol staat nu bij het nieuwe thuis');
+    assert.equal(D.wereld.voorwerpen.filter((v) => v.groep === G).length, 1, 'het oude is weg');
+    kaal(D, 50, 50, 60);
+    T.tikBeestenDag(D, dag + 1);
+    assert.ok(G.trektWeg);
+    assert.ok(!T.holVan(D, G), 'de roedel trekt weg, het hol ook');
+  } finally {
+    T.zeg = zeg;
+  }
+});
+
+test('een nieuwe roedel (de helft die splitst) krijgt een eigen hol, en een roedel die verslagen is laat het niet achter', () => {
+  const IN = T.BEESTEN_INSTELLINGEN;
+  const { plaatsPerRoedel, uitElkaar } = IN;
+  Object.assign(IN, { plaatsPerRoedel: 50, uitElkaar: 6 }); // plaats genoeg in het bos, zodat de helft een eigen thuis vindt
+  try {
+    const S = landVanDeMaker(62707);
+    const D = S.dorp;
+    T.zetBeesten(D);
+    const w = D.wereld;
+    const G = groepVan(S, 'wolf').G;
+    const lente = eersteVan(S, 'bloeimaand');
+    const oud = new Set(T.beestenVan(D).map((g) => g.G));
+    for (let k = 0; k < 8 && T.beestenVan(D).every((g) => oud.has(g.G) || g.G.soort !== 'wolf'); k++) T.tikBeestenDag(D, lente, { jongen: true });
+    const nieuwe = T.beestenVan(D).filter((g) => !oud.has(g.G) && g.G.soort === 'wolf' && !g.G.trektWeg);
+    assert.ok(nieuwe.length, 'de roedel splitste');
+    for (const { G: nieuw } of nieuwe) {
+      const hol = T.holVan(D, nieuw);
+      assert.ok(hol && T.afstand(hol, nieuw.thuis) <= 3, 'een eigen hol bij zijn eigen thuis');
+      assert.notEqual(hol, T.holVan(D, G));
+    }
+    // Verslagen: geen dier meer van de groep.
+    w.wezens = w.wezens.filter((e) => e.groep !== G);
+    T.tikBeestenDag(D, lente + 1);
+    assert.ok(!T.holVan(D, G), 'zonder roedel geen hol');
+  } finally {
+    Object.assign(IN, { plaatsPerRoedel, uitElkaar });
+  }
+});
+
+test('het hol blijft na opslaan en laden bij zijn roedel', () => {
+  const S = landVanDeMaker(62707);
+  T.zetBeesten(S.dorp);
+  const terug = T.leesSpel(T.bewaarSpel(S)).staat;
+  const D = terug.dorp;
+  const hol = D.wereld.voorwerpen.find((v) => v.soort === 'hol');
+  assert.ok(hol, 'het hol is er nog');
+  assert.ok(D.wereld.wezens.some((e) => e.groep === hol.groep), 'en nog van dezelfde roedel als zijn wolven');
+});
+
+test('met de spelregel "Beesten" uit is het hol weg', () => {
+  const S = landVanDeMaker(62707);
+  const D = S.dorp;
+  T.zetBeesten(D);
+  assert.ok(D.wereld.voorwerpen.some((v) => v.soort === 'hol'));
+  T.zetOptie('beesten', 'uit');
+  try {
+    uren(S, 0.1);
+    assert.ok(!D.wereld.voorwerpen.some((v) => v.soort === 'hol'), 'geen hol zonder wolven');
+  } finally {
+    T.optiesTerug();
+  }
+  uren(S, 0.1);
+  assert.ok(D.wereld.voorwerpen.some((v) => v.soort === 'hol'), 'weer aan: het hol is er weer');
+});
