@@ -139,6 +139,10 @@
     // is het een gevecht in beurten. Gaat hij niet binnen dagen dagen, dan gaan ze zonder hem: de roedel verliest
     // zonderJou wolven, en met sterfkans procent kans komt een van de mannen niet terug.
     jacht: { mannen: 2, bij: 9, dagen: 2, zonderJou: 2, sterfkans: 15 },
+    // ── Stap 3c, om hulp roepen ──
+    // Wie de wolven aanvallen, roept om hulp: zoveel uur blijven ze bij hem (een kwartier), wie binnen hoort tegels is,
+    // komt erheen, en is de schout binnen schout tegels, dan is het een gevecht in beurten.
+    hulp: { uren: 0.25, hoort: 12, schout: 6 },
 
     // ── Stap 3a, de jager ──
     // De jager jaagt echt (vraag 116, stap 3; Marcel, 7 okt: "Altijd een paar herten over houden. Anders krijgen we geen
@@ -469,6 +473,11 @@
     if (!leider) {
       leider = leden[0];
       leider.leider = true;
+    }
+    // Valt de roedel iemand aan, en roept die om hulp (stap 3c), dan blijft hij bij hem tot er hulp komt of zijn tijd om is.
+    if (G.aanval) {
+      werkAanvalBij(S, D, G, leider);
+      return;
     }
     // 0. Een roedel met honger, in het donker (stap 2b): niet schuw, maar op zoek naar prooi.
     const stout = G.soort === 'wolf' && T.wolvenStout(D, G);
@@ -872,12 +881,84 @@
         G.prooi = null; // geen mens van het dorp (meer): een andere prooi
         return;
       }
-      bijt(D, G, p, dag);
+      roeptOmHulp(S, D, G, leider, p);
+      return;
     }
     if (prooi.soort !== 'schout') G.honger = 0;
     G.prooi = null;
     G.weg = dag + IN().wegUren / 24;
     G.vluchtNaar = { x: G.thuis.x, y: G.thuis.y };
+  }
+
+  // ── Om hulp roepen (stap 3c; Marcel, 7 okt: "even noteren dat mensen ook om hulp roepen", en "C. Ja goed idee") ──
+  // G.aanval = { e (wie ze aanvallen), tot (S.wereldTijd: dan is het beslist), helpers [wezens die erheen lopen] }.
+
+  // Wie de roedel aanvalt, roept om hulp: hij blijft staan, het dorp zegt het (en de tijd gaat naar 1×), en de weerbare
+  // mannen die het horen (hulp.hoort tegels, ook wie binnen is), lopen erheen.
+  function roeptOmHulp(S, D, G, leider, p) {
+    const e = p.wezen;
+    const H = IN().hulp;
+    e.pad = e.onderweg ? [e.pad[0]] : [];
+    if (!e.moetNaar) e.moetNaar = { x: e.tx, y: e.ty, straal: 0, hulp: true };
+    e.roeptOmHulp = true;
+    const plek = T.tegelVan(e);
+    const helpers = T.weerbareMannen(D)
+      .map((m) => m.wezen)
+      .filter((m) => m && m !== e && !m.dood && !m.moetNaar && !m.opgeroepen && T.afstand(T.tegelVan(m), plek) <= H.hoort);
+    for (const m of helpers) m.moetNaar = { x: plek.x, y: plek.y, straal: 1, hulp: true };
+    G.aanval = { e, tot: (S.wereldTijd || 0) + H.uren * (T.DAG_LENGTE / 24), helpers };
+    leider.pad = leider.onderweg ? [leider.pad[0]] : [];
+    D.beesten.gezien = { dag: D.kalender.dag, wat: 'aanval', wie: T.naamVanBewoner(p) };
+    T.zeg(D, `${T.naamVanBewoner(p)} roept om hulp: de wolven vallen ${p.geslacht === 'vrouw' ? 'haar' : 'hem'} aan!`, 'gevaar');
+    T.naarGewoneSnelheid(D);
+  }
+
+  // Elk beeld zolang de roedel iemand aanvalt: komt de schout binnen hulp.schout tegels, dan is het een gevecht in beurten;
+  // staat er een ander binnen dreiging.alleen tegels, dan vlucht de roedel; is de tijd om, dan bijt hij (bijt).
+  function werkAanvalBij(S, D, G, leider) {
+    const A = G.aanval;
+    const e = A.e;
+    const p = T.bewonerVan(D, e);
+    const plek = T.tegelVan(e);
+    const t = S.wereldTijd || 0;
+    if (!p || e.dood || !D.wereld.wezens.includes(e)) {
+      eindAanval(D, G);
+      return;
+    }
+    if (S.modus === 'gevecht' || S.modus === 'overgang') return;
+    const schout = D.schout;
+    if (!T.schoutIsWeg(D) && S.wereld === D.wereld && S.modus === 'verkennen' && T.afstand(T.tegelVan(schout), plek) <= IN().hulp.schout) {
+      eindAanval(D, G);
+      T.startGevecht(S, leider, true);
+      return;
+    }
+    const mensen = D.wereld.wezens.filter((m) => m !== e && (m.bewoner || m.werkAkkers) && !m.binnen && !m.dood && !m.beest && !m.dier);
+    const helper = mensen.find((m) => T.afstand(T.tegelVan(m), plek) <= IN().dreiging.alleen);
+    if (helper) {
+      const wie = helper === schout ? 'De schout' : T.naamVanBewoner(T.bewonerVan(D, helper)) || helper.naam;
+      eindAanval(D, G);
+      G.weg = D.kalender.dag + IN().wegUren / 24;
+      G.vluchtNaar = { x: G.thuis.x, y: G.thuis.y };
+      T.zeg(D, `${wie} kwam ${T.naamVanBewoner(p)} te hulp, en de wolven zijn gevlucht.`, 'goed');
+      return;
+    }
+    if (t < A.tot) return;
+    eindAanval(D, G);
+    bijt(D, G, p, D.kalender.dag);
+    G.honger = 0;
+    G.weg = D.kalender.dag + IN().wegUren / 24;
+    G.vluchtNaar = { x: G.thuis.x, y: G.thuis.y };
+  }
+
+  // De aanval is voorbij: wie riep en wie hielp, gaan weer hun gang.
+  function eindAanval(D, G) {
+    const A = G.aanval;
+    G.aanval = null;
+    G.prooi = null;
+    for (const m of [A.e, ...A.helpers]) {
+      if (m.moetNaar && m.moetNaar.hulp) m.moetNaar = null;
+      delete m.roeptOmHulp;
+    }
   }
 
   // Wie de wolven aanvallen: met de spelregel een enkele keer dood (doodKans), anders gewond, een paar dagen in bed.

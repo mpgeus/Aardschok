@@ -844,3 +844,61 @@ test('het voorval "wolven": "Een jacht" is een jacht te voet, en het venster zeg
   luister(() => T.voorvalGevolg(D, keuze.doe));
   assert.ok(D.beesten.jacht, 'de jacht loopt');
 });
+
+// ---------------------------------------------------------------------------------------------
+// Stap 3c, om hulp roepen (Marcel, 7 okt: "even noteren dat mensen ook om hulp roepen", en "C. Ja goed idee")
+// ---------------------------------------------------------------------------------------------
+
+// Een roedel met honger valt iemand aan die alleen in het donker loopt; geeft { S, D, G, p, e, gezegd } zodra hij om
+// hulp roept.
+function aanval() {
+  const { S, D, G, leider } = stouteRoedel();
+  const p = D.bewoners.mensen.find((q) => q.wezen && !q.schout && q.leeftijd === 'volwassen');
+  const e = p.wezen;
+  e.binnen = false;
+  zetBij(D.wereld, e, { x: leider.tx + 10, y: leider.ty });
+  const gezegd = [];
+  luister((z) => {
+    for (let k = 0; k < 400 && !G.aanval; k++) uren(S, 0.05);
+    gezegd.push(...z);
+  });
+  assert.ok(G.aanval, 'de roedel valt aan');
+  return { S, D, G, p, e, gezegd };
+}
+
+test('wie de wolven aanvallen, roept om hulp: het dorp zegt het, hij blijft staan, en zonder hulp bijt de roedel na een kwartier', () => {
+  const { S, D, G, p, e, gezegd } = aanval();
+  assert.ok(gezegd.some((t) => t.includes(T.naamVanBewoner(p)) && /roept om hulp/.test(t)), gezegd.join(' | '));
+  assert.ok(e.roeptOmHulp && e.moetNaar, 'hij staat en roept');
+  assert.ok(!p.gewond, 'nog niet gebeten');
+  luister((z) => {
+    uren(S, T.BEESTEN_INSTELLINGEN.hulp.uren + 0.05);
+    assert.ok(z.some((t) => /gebeten|vielen de wolven aan/.test(t)), z.join(' | '));
+  });
+  assert.equal(G.aanval, null);
+  assert.ok(!e.roeptOmHulp && !e.moetNaar);
+});
+
+test('komt er een buur, dan vluchten de wolven; komt de schout, dan is het een gevecht in beurten', () => {
+  {
+    const { S, D, G, p, e } = aanval();
+    const buur = D.bewoners.mensen.find((q) => q !== p && q.wezen && !q.schout && q.leeftijd === 'volwassen').wezen;
+    buur.binnen = false;
+    zetBij(D.wereld, buur, T.tegelVan(e));
+    luister((z) => {
+      uren(S, 0.05);
+      assert.ok(z.some((t) => /te hulp, en de wolven zijn gevlucht/.test(t)), z.join(' | '));
+    });
+    assert.equal(G.aanval, null);
+    assert.ok(G.weg > S.kalender.dag, 'ze vluchten');
+    assert.ok(!p.gewond);
+  }
+  {
+    const { S, D, G, e } = aanval();
+    S.schout.binnen = false;
+    zetBij(D.wereld, S.schout, { x: e.tx + T.BEESTEN_INSTELLINGEN.hulp.schout, y: e.ty });
+    uren(S, 0.05);
+    assert.equal(S.modus, 'overgang', 'het gevecht begint');
+    assert.equal(G.aanval, null);
+  }
+});
