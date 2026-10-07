@@ -297,14 +297,20 @@ test('in de lente krijgen ze jongen, tot zes; dan splitst de groep, en de helft 
   assert.equal(ledenVan(G).length, voor, 'niet voor hun maand');
   T.tikBeestenDag(D, lente);
   const na = ledenVan(G).length;
-  assert.ok(na > voor && na <= voor + 2, `een of twee jongen (${voor} → ${na})`);
+  const [van, tot] = T.BEESTEN_INSTELLINGEN.jongen.hert.aantal;
+  assert.ok(na >= Math.min(voor + van, T.BEESTEN_INSTELLINGEN.groot) && na <= voor + tot, `twee of drie jongen (${voor} → ${na})`);
   for (const e of ledenVan(G).slice(voor)) assert.ok(T.afstand(T.tegelVan(e), G.thuis) <= 3, 'bij hun legerplek');
   T.tikBeestenDag(D, lente + T.DAGEN_PER_MAAND);
   assert.equal(ledenVan(G).length, na, 'één keer per jaar');
   // Tot de groep zo groot is dat hij splitst.
+  // (Andere groepen kunnen in dezelfde lente ook splitsen; het gaat om de helft die uit G kwam.)
   const oud = new Set(T.beestenVan(D).map((g) => g.G));
-  for (let k = 0; k < 6 && T.beestenVan(D).length === oud.size; k++) T.tikBeestenDag(D, lente, { jongen: true });
-  const nieuwe = T.beestenVan(D).filter((g) => !oud.has(g.G));
+  const uitG = () => T.beestenVan(D).filter((g) => !oud.has(g.G) && g.leden.some((e) => e.uitG));
+  for (let k = 0; k < 6 && !uitG().length; k++) {
+    for (const e of ledenVan(G)) e.uitG = true;
+    T.tikBeestenDag(D, lente, { jongen: true });
+  }
+  const nieuwe = uitG();
   assert.equal(nieuwe.length, 1, 'gesplitst');
   assert.ok(ledenVan(G).length < T.BEESTEN_INSTELLINGEN.groot);
   const nieuw = nieuwe[0];
@@ -631,40 +637,48 @@ function telVlees(f) {
 
 const binnenBereik = (D, g) => T.beestenVan(D).filter(({ G }) => T.afstand(T.deurVan(D.wereld, g), G.thuis) <= T.BEESTEN_INSTELLINGEN.jager.straal);
 
-test('de jager jaagt op de herten in zijn bereik, laat er altijd twee per groep staan, en staat dan stil', () => metJager(72022, ({ S, D, g }) => {
+test('de jager schiet klein wild en herten in zijn bereik, laat er altijd twee per groep staan, en dan alleen klein wild', () => metJager(72022, ({ S, D, g }) => {
   const J = T.BEESTEN_INSTELLINGEN.jager;
   // Zonder wolven: wat er van de herten verdwijnt, nam de jager.
   D.wereld.wezens = D.wereld.wezens.filter((e) => !(e.groep && e.groep.soort === 'wolf'));
-  const herten = binnenBereik(D, g).filter(({ G }) => G.soort === 'hert');
+  // Elk groepje drie herten: na een hert per groepje is er geen meer dat hij mag nemen. Vanaf hooimaand, na de jongen
+  // van dit jaar (bloeimaand): in een jaar groeit het bos aan met meer herten dan één jager schiet.
+  for (const { G, leden } of T.beestenVan(D)) if (G.soort === 'hert') leden.slice(J.laatStaan + 1).forEach((e) => (D.wereld.wezens = D.wereld.wezens.filter((x) => x !== e)));
+  const herten = binnenBereik(D, g).filter(({ G, leden }) => G.soort === 'hert' && leden.length > J.laatStaan);
   assert.ok(herten.length, 'er zijn herten in zijn bereik');
   const voor = new Map(herten.map(({ G, leden }) => [G, leden.length]));
   const al = { vlees: g.gejaagd || 0, herten: (g.gevangen && g.gevangen.hert) || 0 }; // wat hij al deed terwijl de hut klaarkwam
-  let dag = T.GEBOUWEN.jager.bouwtijd + 2;
-  let stil = null;
+  let dag = eersteVan(S, 'hooimaand');
+  const totDag = dag + 300;
+  let zonder = null;
+  let uitHerten = 0;
   const vlees = telVlees(() => {
-    for (; dag < 300 && !stil; dag++) {
-      nachtVan(S, dag);
+    for (; dag < totDag && !zonder; dag++) {
+      const had = !g.zonderHerten;
+      const v = telVlees(() => nachtVan(S, dag));
+      if (had && v > 0) uitHerten += v * (1 - J.kleinWild);
       for (const { G, leden } of binnenBereik(D, g)) {
         if (G.soort === 'hert' && voor.has(G)) assert.ok(leden.length >= Math.min(J.laatStaan, voor.get(G)), 'nooit onder de twee');
       }
-      if (g.stilWant) stil = dag;
+      if (g.zonderHerten) zonder = dag;
     }
   });
   assert.ok(g.gevangen && g.gevangen.hert > 0, 'hij schoot herten');
-  assert.ok(stil, 'en toen stond hij stil');
-  assert.match(g.stilWant, /geen wild meer/);
-  assert.equal(g.wild, null);
-  // Elke perDier vlees is een hert: wat hij schoot, en wat hij nog op de lat heeft.
+  assert.ok(zonder, 'tot er geen hert meer was dat hij mocht nemen');
+  // Elke perDier vlees uit de herten is een hert: wat hij schoot, en wat hij nog op de lat heeft.
   const geschoten = g.gevangen.hert - al.herten;
-  assert.ok(Math.abs(al.vlees + vlees - (geschoten * J.perDier + g.gejaagd)) < 1e-6, `${vlees} vlees voor ${geschoten} herten`);
+  assert.ok(Math.abs(al.vlees + uitHerten - (geschoten * J.perDier + g.gejaagd)) < 1e-6, `${uitHerten} vlees uit ${geschoten} herten`);
   assert.ok(g.gejaagd < J.perDier);
-  // De volgende nacht wil hij geen handen: zijn hand werkt elders, tot er weer wild is.
-  nachtVan(S, dag++);
-  assert.equal(g.handen, 0);
-  for (const { G, leden } of binnenBereik(D, g)) if (G.soort === 'hert') assert.ok(leden.length <= J.laatStaan || !T.kanErKomen(D.wereld, T.deurVan(D.wereld, g), G.thuis));
+  // Dan schiet hij alleen klein wild: hij werkt door, voor de helft van zijn vlees, en het dorp vraagt geen tweede jager.
+  const nu = telVlees(() => nachtVan(S, dag++));
+  assert.ok(g.handen > 0, 'hij werkt door');
+  assert.ok(Math.abs(nu - T.GEBOUWEN.jager.maakt.uit.vlees * J.kleinWild * g.werkte) < 1e-6, `klein wild: ${nu}`);
+  assert.equal(T.jagersZonderHerten(D), 1);
+  assert.ok(!T.watTeBouwen(D).some((x) => x.soort === 'jager'), 'geen tweede jager');
+  assert.ok(vlees > 0);
 }));
 
-test('een roedel die groter is dan drie, verliest elke vijf dagen een wolf aan de jager; dat vlees eet het dorp niet', () => metJager(72022, ({ S, D, g }) => {
+test('een roedel die groter is dan drie, verliest elke vijf dagen een wolf aan de jager; zonder herten schiet hij verder alleen klein wild', () => metJager(72022, ({ S, D, g }) => {
   const J = T.BEESTEN_INSTELLINGEN.jager;
   // Een roedel van zes in zijn bereik, en geen herten die hij mag nemen.
   const roedel = () => binnenBereik(D, g).find(({ G }) => G.soort === 'wolf');
@@ -685,11 +699,13 @@ test('een roedel die groter is dan drie, verliest elke vijf dagen een wolf aan d
   for (const { G, leden } of T.beestenVan(D)) if (G.soort === 'hert') leden.slice(J.laatStaan).forEach((e) => (D.wereld.wezens = D.wereld.wezens.filter((x) => x !== e)));
   const dagen = [];
   let vlees;
+  let werkte = 0;
   luister((gezegd) => {
     vlees = telVlees(() => {
       for (let n = 0; n < 30; n++, dag++) {
         const voor = roedel().leden.length;
         nachtVan(S, dag);
+        werkte += g.werkte;
         if (roedel().leden.length < voor) dagen.push(dag);
       }
     });
@@ -700,7 +716,7 @@ test('een roedel die groter is dan drie, verliest elke vijf dagen een wolf aan d
   for (let i = 1; i < dagen.length; i++) assert.ok(dagen[i] - dagen[i - 1] >= J.wolfDagen, 'een per vijf dagen');
   assert.ok(roedel().leden.some((e) => e.leider), 'de leider blijft');
   assert.equal(g.gevangen.wolf, 6 - J.hooguit);
-  assert.ok(Math.abs(vlees) < 1e-9, `geen vlees van de wolven (${vlees})`);
+  assert.ok(Math.abs(vlees - werkte * T.GEBOUWEN.jager.maakt.uit.vlees * J.kleinWild) < 1e-6, `alleen klein wild, geen vlees van de wolven (${vlees})`);
 }));
 
 test('zonder beesten (het ontworpen gehucht, of de spelregel uit) maakt de jager zijn vlees zoals altijd', () => {
@@ -710,8 +726,7 @@ test('zonder beesten (het ontworpen gehucht, of de spelregel uit) maakt de jager
     try {
       if (regel === 'aan') delete S.dorp.beesten; // zoals het ontworpen gehucht: geen beesten gezet
       const g = { soort: 'jager', klaar: true, x: 40, y: 40 };
-      assert.equal(T.waaromJaagtHijNiet(S.dorp, g), null);
-      assert.equal(T.jagerZonderWild(g), false);
+      assert.equal(T.jagersZonderHerten(S.dorp), 0);
       const uit = { vlees: 1, huiden: 1 };
       assert.equal(T.watDeJagerSchiet(S.dorp, g, uit), uit, 'het vlees blijft');
       T.jagerJaagde(S.dorp, g, 1, 10);

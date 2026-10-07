@@ -112,10 +112,11 @@
     // Een roedel die de afgelopen winter zoveel honger leed (geen herten), krijgt in de lente geen jongen: zonder prooi
     // groeit hij niet.
     zonderJongen: 45,
-    // De jongen (e): op de eerste dag van deze maand krijgt elke groep er zoveel bij, van tot, en niet meer dan tot hij
+    // De jongen (e): op de eerste dag van deze maand krijgt elke groep er zoveel bij, van tot (herten twee à drie: Marcel, 7
+    // okt, "J2 logisch eigenlijk"), en niet meer dan tot hij
     // groot is; dan splitst hij. De helft zoekt een eigen thuis als het bos plaats heeft: niet meer roedels dan een per
     // plaatsPerRoedel tegels bos, en groepjes herten een per plaatsPerKudde (bij het begin zijn het er de helft).
-    jongen: { wolf: { maand: 'grasmaand', aantal: [1, 2] }, hert: { maand: 'bloeimaand', aantal: [1, 2] } },
+    jongen: { wolf: { maand: 'grasmaand', aantal: [1, 2] }, hert: { maand: 'bloeimaand', aantal: [2, 3] } },
     groot: 6,
     plaatsPerRoedel: 500,
     plaatsPerKudde: 200,
@@ -141,14 +142,14 @@
 
     // ── Stap 3a, de jager ──
     // De jager jaagt echt (vraag 116, stap 3; Marcel, 7 okt: "Altijd een paar herten over houden. Anders krijgen we geen
-    // jonge hertjes meer"): zijn vlees en huiden (T.GEBOUWEN.jager.maakt) komen uit de herten binnen straal tegels van zijn
-    // deur (het thuis van de groep), en elke perDier vlees is er een dier minder. Van een groepje herten laat hij er altijd
-    // laatStaan staan; een roedel die groter is dan hooguit, maakt hij kleiner, een wolf per wolfDagen (een wolf is een huid,
-    // geen vlees). Is er binnen
-    // zijn bereik niets dat hij mag nemen, dan staat hij stil, en werkt zijn hand elders (zoals de houthakker zonder boom).
+    // jonge hertjes meer", en "J1 vind ik goed idee. J2 logisch eigenlijk"): van zijn vlees (T.GEBOUWEN.jager.maakt) komt
+    // het deel kleinWild altijd uit klein wild (hazen, konijnen, vogels), en de rest uit de herten binnen straal tegels van
+    // zijn deur (het thuis van de groep): elke perDier vlees uit de herten is er een hert minder. Van een groepje herten
+    // laat hij er altijd laatStaan staan; zijn er geen herten die hij mag nemen, dan schiet hij alleen klein wild. Een
+    // roedel die groter is dan hooguit, maakt hij kleiner, een wolf per wolfDagen (een wolf is een huid, geen vlees).
     // Uit (jaagt: false): zijn vlees komt uit het niets, zoals tot 7 okt. Het poppetje loert op loerAfstand tegels van de
     // groep, loerUren aan een stuk, en gaat dan terug naar zijn hut.
-    jager: { jaagt: true, straal: 50, perDier: 30, laatStaan: 2, hooguit: 3, wolfDagen: 5, loerAfstand: 9, loerUren: 2 },
+    jager: { jaagt: true, straal: 50, kleinWild: 0.5, perDier: 60, laatStaan: 2, hooguit: 3, wolfDagen: 5, loerAfstand: 9, loerUren: 2 },
   };
   const IN = () => T.BEESTEN_INSTELLINGEN;
 
@@ -920,11 +921,12 @@
 
   // Wat deze jager binnen zijn bereik mag nemen (jager.straal tegels van zijn deur tot het thuis van de groep, waar hij kan
   // komen, het dichtste eerst): { hert: het groepje herten met meer dan jager.laatStaan dieren, wolf: de roedel die groter
-  // is dan jager.hooguit }, elk { G, leden } of null. Zet g.wild: het thuis van de groep waar hij op jaagt (de roedel
-  // eerst), of null: dan staat hij stil.
+  // is dan jager.hooguit }, elk { G, leden } of null. Zet g.wild: het thuis van de groep waar zijn poppetje op loert (de
+  // roedel eerst), of null; en g.zonderHerten: er is geen hert dat hij mag nemen (dan alleen klein wild).
   T.wildVanJager = function (D, g) {
     if (!jaagtEcht(D, g)) {
       delete g.wild;
+      delete g.zonderHerten;
       return { hert: null, wolf: null };
     }
     const w = D.wereld;
@@ -938,19 +940,19 @@
     };
     const op = wild.wolf || wild.hert;
     g.wild = op ? { x: op.G.thuis.x, y: op.G.thuis.y, soort: op.G.soort } : null;
+    g.zonderHerten = !wild.hert;
     return wild;
   };
 
-  // Staat deze jager stil omdat er binnen zijn bereik niets is dat hij mag nemen (g.wild null, gezet door
-  // T.wildVanJager)? Dan wil hij geen handen (T.verdeelHanden, js/gebouwen.js), zoals de houthakker zonder boom.
-  T.jagerZonderWild = (g) => isJager(g) && g.wild === null;
+  // Hoeveel jagers er zijn die geen hert vinden dat ze mogen nemen (g.zonderHerten, gezet door T.wildVanJager): het dorp
+  // vraagt dan geen nieuwe jager (T.watTeBouwen, js/raad.js), en de heer vraagt van hen geen vlees (js/heer.js).
+  T.jagersZonderHerten = (D) => (D.gebouwen || []).filter((g) => g.soort === 'jager' && g.klaar && g.zonderHerten).length;
 
-  // Waarom deze jager vandaag niet jaagt (T.tikGebouwenDag, vóór zijn werk), of null.
-  T.waaromJaagtHijNiet = function (D, g) {
-    if (!jaagtEcht(D, g)) return null;
-    const wild = T.wildVanJager(D, g);
-    if (wild.hert || wild.wolf) return null;
-    return `er is binnen ${T.telwoord(IN().jager.straal)} tegels van zijn hut geen wild meer dat hij mag schieten (de laatste herten laat hij staan voor de jongen)`;
+  // Wat deze jager vandaag maakt (T.tikGebouwenDag, uit T.maaktUit): zonder herten die hij mag nemen alleen het klein wild,
+  // jager.kleinWild van zijn vlees.
+  T.watDeJagerSchiet = function (D, g, uit) {
+    if (!uit || !uit.vlees || !jaagtEcht(D, g) || T.wildVanJager(D, g).hert) return uit;
+    return { ...uit, vlees: uit.vlees * IN().jager.kleinWild };
   };
 
   // Een dier uit een groep halen: het laatste, de leider nooit. Geeft het dier, of null.
@@ -964,22 +966,13 @@
     return dier;
   }
 
-  // Wat deze jager vandaag maakt (T.tikGebouwenDag, uit T.maaktUit): is er geen hert dat hij mag nemen, dan jaagt hij op
-  // de wolven, en een wolf is een huid, geen vlees.
-  T.watDeJagerSchiet = function (D, g, uit) {
-    if (!uit || !jaagtEcht(D, g) || T.wildVanJager(D, g).hert) return uit;
-    const zonder = { ...uit };
-    delete zonder.vlees;
-    return zonder;
-  };
-
-  // Na zijn werk van vandaag (T.tikGebouwenDag): het vlees dat hij maakte, kwam uit de herten (g.gejaagd), en elke
-  // jager.perDier is er een hert minder. Een roedel die te groot is, verliest elke jager.wolfDagen een wolf. Morgen kiest
-  // hij opnieuw. `werkte`: hoeveel van een dag hij werkte (de factor van T.tikGebouwenDag).
+  // Na zijn werk van vandaag (T.tikGebouwenDag): wat hij maakte boven het klein wild, kwam uit de herten (g.gejaagd), en
+  // elke jager.perDier is er een hert minder. Een roedel die te groot is, verliest elke jager.wolfDagen een wolf. Morgen
+  // kiest hij opnieuw. `werkte`: hoeveel van een dag hij werkte (de factor van T.tikGebouwenDag).
   T.jagerJaagde = function (D, g, vlees, dag, werkte = 1) {
     if (!jaagtEcht(D, g) || !(werkte > 0)) return;
     let wild = T.wildVanJager(D, g);
-    if (wild.hert) g.gejaagd = (g.gejaagd || 0) + (vlees || 0);
+    if (wild.hert) g.gejaagd = (g.gejaagd || 0) + (vlees || 0) * (1 - IN().jager.kleinWild);
     while (g.gejaagd >= IN().jager.perDier && wild.hert) {
       g.gejaagd -= IN().jager.perDier;
       neemUit(D, g, wild.hert);

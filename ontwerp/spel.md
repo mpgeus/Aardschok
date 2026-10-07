@@ -27,7 +27,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Het rapport van de raadsman | gebouwd (1 okt): de eerste fase van de dag; elke ochtend brengt hij je aan je deur wat er gebeurde, hoe het graan en het hout gaan, of ze de winter halen, wat er speelt en wat er komt, met zijn rekenen in de getallen | vraag 75 |
 | De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf; sinds 1 okt ook wat je mist voor de kapel en de smidse, en waar het vandaan komt; sinds 2 okt wat de huizen missen, en de ketens (een molen voor de bakkerij) | vraag 58, 79, 87, 90 |
 | De houthakker hakt en plant | gebouwd (6 okt; Marcel: "A ja B ja C ja D zo"): zijn hout komt uit de bomen om zijn schuur, elke tien hout een boom; naast de stronk twee boompjes, in een jaar of twee bomen, zodat het bos om hem blijft; zonder boom staat hij stil, en werkt zijn hand elders; hij komt alleen bij minstens 30 bomen binnen tien tegels, en loopt tussen zijn stronken door (vraag 129, e, b en f); in de speeltest van vier jaar komt elk dorp boven de 100 en wint er voor het eerst een | vraag 115, 129 |
-| Beesten in het bos | stap 1, 2a en 2b gebouwd (7 okt; Marcel: "a ja, b ja, c ja", en d tot i): roedels wolven en groepjes herten, elk met een plek diep in het bos; overdag rusten ze, 's nachts lopen de wolven langs de bosrand met rode ogen, in de schemering grazen de herten aan de rand; ze gaan mensen uit de weg, en een wolf begint geen gevecht; in de winter jagen de wolven met honger op de herten, in de lente komen er jongen, en wie zijn bos kwijt is, verhuist of trekt weg; zijn de herten op, dan komen ze in het donker naar het dorp: een schaap, of wie alleen loopt, en wie werkt en ze ziet, rent naar huis; licht houdt ze weg (2b); de jager jaagt op het wild, laat twee herten per groepje staan en houdt de roedels klein (3a); de jacht te voet, om hulp roepen en het hek komen nog | vraag 116 |
+| Beesten in het bos | stap 1, 2a en 2b gebouwd (7 okt; Marcel: "a ja, b ja, c ja", en d tot i): roedels wolven en groepjes herten, elk met een plek diep in het bos; overdag rusten ze, 's nachts lopen de wolven langs de bosrand met rode ogen, in de schemering grazen de herten aan de rand; ze gaan mensen uit de weg, en een wolf begint geen gevecht; in de winter jagen de wolven met honger op de herten, in de lente komen er jongen, en wie zijn bos kwijt is, verhuist of trekt weg; zijn de herten op, dan komen ze in het donker naar het dorp: een schaap, of wie alleen loopt, en wie werkt en ze ziet, rent naar huis; licht houdt ze weg (2b); de jager schiet klein wild en herten, laat twee per groepje staan en houdt de roedels klein (3a); de jacht te voet naar de roedel (3b); om hulp roepen en het hek komen nog | vraag 116 |
 | De markt op het plein | gebouwd (6 okt; vraag 110, d, en 127, stap 1 en 2): een marktblok van twee rijen kramen met manden op het plein, voor 8 hout en 6 goud, dat meegroeit met het dorp (een kraam per 15 mensen, daarna langs de weg), met kramen vol of leeg naar wat het dorp heeft; de maker legt een groter plein; de kooplui, de boodschappen en de marktdag nog niet | vraag 110, d; 127 |
 | De verzoeken | stap 1 tot en met 3 gebouwd (3 okt): wat het dorp mist, komt een inwoner je vragen, met de plek die hij koos en wat het kost; ja of nee, en ben je weg, dan beslist je raadsman; in het bouwmenu alleen nog het erf en oproepen met een premie (de spelregel "Wie bouwt"); de speeltest speelt zo; en uit eigen wil: een ondernemer die wapens wil maken (sinds 7 okt niet meer verboden, vraag 131) of een tweede herberg beginnen, met wat ja en nee aan gevolgen hebben (vraag 104); sinds 6 okt rooit wie een werkplaats vraagt zijn plek eerst, als er geen open grond meer is (vraag 110, e) | vraag 103, 104, 110 |
 | Twee bazen | stap 1 en 2 gebouwd (3 okt; Marcel: "106 a b c d ja"): de gunst van de heer en het vertrouwen van het dorp in de balk, met een waarschuwing onder 20 en op 0 weg (ontslagen of weggejaagd); betrapt op verstoppen is de laatste waarschuwing; elke maand een gril van de heer in een brief, die zijn gunst tegen het dorp weegt | vraag 106 |
@@ -687,17 +687,26 @@ schout met zijn lantaarn blijft de roedel aan de rand van het licht, met zijn ro
 die valt hij aan, in een gevecht in beurten. Zolang de wolven iets deden (tien dagen), speelt de status "Er zijn wolven
 bij het dorp" in het rapport, en namen ze een schaap of een mens, dan zegt de raad het.
 
-**De jager** (stap 3a, 7 okt; Marcel: "Altijd een paar herten over houden. Anders krijgen we geen jonge hertjes meer"):
-zijn vlees en huiden komen uit het wild binnen vijftig tegels van zijn hut. Elke dertig vlees is er een hert minder, en
-van elk groepje laat hij er altijd twee staan, voor de jongen in de lente. Een roedel van meer dan drie maakt hij kleiner,
-een wolf per vijf dagen (een wolf is een huid, geen vlees), en het dorp zegt het. Is er niets dat hij mag nemen, dan staat
-hij stil en werkt zijn hand elders, zoals de houthakker zonder boom; meestal is dat een groot deel van het jaar, want de
-herten groeien maar een of twee per groepje per jaar aan, en de wolven eten er in de winter ook van. Overdag loopt hij
-het bos in, loert twee uur op zijn groep van net buiten waar ze schuw worden, en gaat terug naar zijn hut. Zonder jager
-bij de wolven zegt de raad het ("Een jager houdt de roedels klein"). Op het ontworpen gehucht, zonder beesten, maakt hij
-zijn vlees zoals altijd. De getallen in `T.BEESTEN_INSTELLINGEN.jager`. **Nog niet:** de jacht te voet naar het hol
-(3b), om hulp roepen (3c) en het hek op de kaart (3d); de lantaarns aan de bosrand vallen weg (Marcel: "D ja allebei").
-Zie de werklijst, vraag 116.
+**De jager** (stap 3a, 7 okt; Marcel: "Altijd een paar herten over houden. Anders krijgen we geen jonge hertjes meer",
+en na de speeltest "J1 vind ik goed idee. J2 logisch eigenlijk ... K, klopt"): de helft van zijn vlees is klein wild
+(hazen, konijnen, vogels), altijd; de rest komt uit de herten binnen vijftig tegels van zijn hut. Elke zestig vlees uit de
+herten is er een hert minder, en van elk groepje laat hij er altijd twee staan, voor de jongen in de lente (twee à drie
+per groepje). Vindt hij geen hert, dan schiet hij alleen klein wild; het dorp vraagt dan geen nieuwe jager, en de heer
+vraagt van hem geen vlees. Een roedel van meer dan drie maakt hij kleiner, een wolf per vijf dagen (een huid, geen vlees),
+en het dorp zegt het. Overdag loopt hij het bos in, loert twee uur op zijn groep van net buiten waar ze schuw worden, en
+gaat terug naar zijn hut. Zonder jager bij de wolven zegt de raad het ("Een jager houdt de roedels klein"). Op het
+ontworpen gehucht, zonder beesten, maakt hij zijn vlees zoals altijd. De getallen in `T.BEESTEN_INSTELLINGEN.jager`.
+Waarom klein wild: met alleen herten vielen alle bouwers van de speeltest in het eerste jaar, want het dorp at zijn winter
+op vlees uit het niets, en vroeg jager na jager. **Het dorp eet gevarieerd** (Marcel: "Graan, brood, vlees, vis etc."):
+een richting, zie `opmerkingen.md`.
+
+**De jacht te voet** (stap 3b, 7 okt; Marcel: "Ja dat is goed"): "Een jacht" in het voorval van de wolven stuurt de
+mannen van de militie (zonder militie twee weerbare mannen) met de schout mee, en het hol ligt in goud op de grond. Komt
+hij binnen negen tegels van een wolf van de roedel, dan is het een gevecht in beurten, met de mannen aan zijn kant; wie
+overblijft, vlucht naar het hol, en de jacht is voorbij. Gaat hij niet binnen twee dagen, dan gaan de mannen zonder hem:
+de roedel verliest twee wolven, en een op de zeven keer komt een van de mannen niet terug. **Nog niet:** het hol als
+tekening op de kaart, om hulp roepen (3c) en het hek op de kaart (3d); de lantaarns aan de bosrand vallen weg (Marcel: "D
+ja allebei"). Zie de werklijst, vraag 116.
 
 "Ik wil dat er beesten kunnen rondlopen in het bos. Wolven etc. Die de houthakker kunnen bedreigen. Rode ogen uit het
 duister." Het voorstel (vraag 116): wolven in roedels diep in het bos, herten die wegrennen, later een zwijn of een beer;

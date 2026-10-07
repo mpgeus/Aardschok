@@ -113,6 +113,10 @@
   // Bouwen de mensen (js/verzoeken.js, de spelregel "Wie bouwt"; werklijst vraag 103), dan zegt de raad wat zou helpen,
   // zonder [B], en of iemand je er al om vraagt.
   const mensenBouwen = () => T.VERZOEKEN_INSTELLINGEN.mensen;
+  // Helpt een jager tegen een winter zonder eten: vlees vult een maag, en er is geen jager die geen hert vindt dat hij mag
+  // schieten (T.jagersZonderHerten, js/beesten.js; Marcel, 7 okt, vraag 116, k). In de speeltest van 7 okt vroeg het dorp
+  // anders jager na jager, tot er 9 tot 11 stonden, die alleen klein wild schoten.
+  const jagerHelpt = (D) => T.BEHOEFTEN_INSTELLINGEN.vleesIsEten && T.jagersZonderHerten(D) === 0;
   const verzoekZin = (D, soort) => (mensenBouwen() && soort ? T.verzoekZin(D, soort) : '');
 
   // Je oproep op het plein (js/verzoeken.js; vraag 103, c) die er al oproepNa dagen hangt, terwijl het dorp niet kan
@@ -219,11 +223,13 @@
     {
       id: 'eten',
       als: (D) => haaltHetNiet(D, T.etenVoorDeWinter),
-      // Wat helpt, zegt het dorp ook (js/behoeften.js): een jager, als vlees een maag vult.
+      // Wat helpt, zegt het dorp ook (js/behoeften.js): een jager, als vlees een maag vult en er herten zijn die hij mag
+      // schieten (jagerHelpt; js/beesten.js).
       tekst: (D) => {
         const vlees = T.GEBOUWEN.jager.maakt.uit.vlees;
+        const helpt = jagerHelpt(D);
         const jager = mensenBouwen() ? `: een jager zou ${vlees} vlees per dag schieten` : `: een jager [B] schiet ${vlees} vlees per dag`;
-        return `Het eten haalt ${haalt(T.etenVoorDeWinter(D, D.kalender.dag))} van de winter${T.BEHOEFTEN_INSTELLINGEN.vleesIsEten ? jager : ''}.${T.BEHOEFTEN_INSTELLINGEN.vleesIsEten ? verzoekZin(D, 'jager') : ''}${geenGezin()}`;
+        return `Het eten haalt ${haalt(T.etenVoorDeWinter(D, D.kalender.dag))} van de winter${helpt ? jager : ''}.${helpt ? verzoekZin(D, 'jager') : ''}${geenGezin()}`;
       },
     },
     // De houthakker hakt bomen om (js/bos.js; vraag 115): staat er binnen zijn bereik geen boom meer, dan hakt hij niets,
@@ -360,7 +366,7 @@
       erbij('wachthuis', 'De rovers komen terug.', 'rovers');
     }
     if (haaltHetNiet(D, T.houtVoorDeWinter)) erbij('houthakker', `Het hout haalt ${haalt(T.houtVoorDeWinter(D, D.kalender.dag))} van de winter.`, 'winter');
-    if (T.BEHOEFTEN_INSTELLINGEN.vleesIsEten && haaltHetNiet(D, T.etenVoorDeWinter)) {
+    if (jagerHelpt(D) && haaltHetNiet(D, T.etenVoorDeWinter)) {
       erbij('jager', `Het eten haalt ${haalt(T.etenVoorDeWinter(D, D.kalender.dag))} van de winter.`, 'winter');
     }
     // Er hakt niemand hout: dan stopt alles, want elke hut op een erf (js/erven.js) en elk gebouw kost hout. Dus eerst een

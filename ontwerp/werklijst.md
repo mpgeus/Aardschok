@@ -5013,6 +5013,12 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     blijft schaars, en het dorp moet zijn eten ergens anders halen (akkers, visser, vee); dan moet de balans van het spel
     opnieuw. En los daarvan, wat er hoe dan ook bij hoort: **k**, het dorp vraagt geen jager waar hij geen wild vindt, en
     de heer vraagt geen vlees van een jager die stilstaat.
+    **Marcel koos (7 okt): "J1 vind ik goed idee. J2 logisch eigenlijk. J3 het dorp moet gevarieerd eten. Graan, brood,
+    vlees, vis etc. K, klopt".** Dus: klein wild erbij (de helft van zijn vlees, altijd, uit hazen, konijnen en vogels),
+    een hert is zestig vlees en een groepje herten krijgt twee à drie jongen, het dorp vraagt geen jager waar hij geen
+    herten vindt, en de heer vraagt geen vlees van een jager zonder herten. J3 is een richting: het eten van het dorp komt
+    niet uit één bron (nu kon de jager het alleen dragen); wat dat voor de wensen en de balans vraagt, staat bij
+    `opmerkingen.md` tot na de speeltest.
     **Bezig in sessie `ccr-77327776-rqjldz`** (7 okt): stap 3, wat je tegen de wolven doet; eerst het plan voor Marcel.
 117. **Eén kaart: het eiland** (Marcel, 4 okt, zesentwintigste sessie: "Ik wil uiteindelijk toch alles op dezelfde kaart.
     Dus de hele spelwereld als het ware. Zo kun je steeds stukken 'ontdekken' in de fog of war. Het idee is een eiland. Met
