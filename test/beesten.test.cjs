@@ -902,3 +902,30 @@ test('komt er een buur, dan vluchten de wolven; komt de schout, dan is het een g
     assert.equal(G.aanval, null);
   }
 });
+
+// ---------------------------------------------------------------------------------------------
+// Stap 3d, het hek op de kaart (Marcel, 7 okt: "D ja allebei")
+// ---------------------------------------------------------------------------------------------
+
+test('een hek om de schapen staat om de meent, met een hekje in elke zijde, en de meent blijft te bereiken', () => {
+  for (const zaad of [62707, 73425, 72022]) {
+    const S = landVanDeMaker(zaad);
+    const D = S.dorp;
+    const w = D.wereld;
+    const m = w.meenten[0];
+    const binnen = { x: m.x + Math.floor(m.b / 2), y: m.y + Math.floor(m.h / 2) };
+    const plein = T.pleinVan(w);
+    T.hekOmDeSchapen(D);
+    const hek = w.voorwerpen.filter((v) => v.hek);
+    assert.ok(hek.length >= m.b + m.h, `${zaad}: een hek (${hek.length} stukken)`);
+    for (const v of hek) {
+      const opRand = v.x === m.x || v.y === m.y || v.x === m.x + m.b - 1 || v.y === m.y + m.h - 1;
+      assert.ok(opRand, `${zaad}: op de rand van de meent`);
+    }
+    const hekjes = hek.filter((v) => v.soort.startsWith('hekje'));
+    assert.ok(hekjes.length >= 2, `${zaad}: hekjes om door te lopen`);
+    assert.ok(hekjes.every((v) => !T.isVast(w, v.x, v.y)), 'door een hekje loop je');
+    assert.ok(T.kanErKomen(w, plein, binnen), `${zaad}: de meent blijft te bereiken`);
+    for (const e of T.veeVan(D)) assert.ok(T.kanErKomen(w, plein, T.tegelVan(e)), `${zaad}: geen dier opgesloten`);
+  }
+});

@@ -1185,9 +1185,44 @@
   };
 
   // Een hek om de schapen (het voorval "wolven"): een roedel met honger laat ze voortaan met rust, en zoekt andere prooi.
+  // Het hek staat op de kaart (stap 3d; Marcel, 7 okt: "D ja allebei"), om de meent waar ze grazen (zetHek).
   T.hekOmDeSchapen = function (D) {
     (D.beesten || (D.beesten = {})).hek = true;
+    if (D.wereld && D.wereld.meenten) for (const m of D.wereld.meenten) zetHek(D, m);
   };
+
+  // Het hek om een meent (een rechthoek, js/kaart.js): latten op de rand, met een hoekpaal op elke hoek (de tekeningen van
+  // de tuinen, `hek-lat-*` in tegels/), en een hekje waar je doorheen loopt midden in elke zijde, waar een pad of een
+  // paadje de rand kruist, en waar iemand staat. Waar al iets ligt, op een akker (een ontgonnen stuk heide), of waar je
+  // niet kunt staan (water), blijft de rand open.
+  function zetHek(D, m) {
+    const w = D.wereld;
+    const x1 = m.x + m.b - 1;
+    const y1 = m.y + m.h - 1;
+    const midX = m.x + Math.floor(m.b / 2);
+    const midY = m.y + Math.floor(m.h / 2);
+    const akker = (x, y) => (w.akkers || []).some((a) => x >= a.x && x < a.x + a.b && y >= a.y && y < a.y + a.h);
+    for (let y = m.y; y <= y1; y++) {
+      for (let x = m.x; x <= x1; x++) {
+        const rand = { boven: y === m.y, onder: y === y1, links: x === m.x, rechts: x === x1 };
+        if (!rand.boven && !rand.onder && !rand.links && !rand.rechts) continue;
+        if (T.voorwerpOp(w, x, y) || akker(x, y) || !T.isBegaanbaar(w, x, y)) continue;
+        const langsX = rand.boven || rand.onder; // de zijde loopt langs x
+        const hoek = (rand.boven || rand.onder) && (rand.links || rand.rechts);
+        const doorgang = T.opPad(w, x, y) || T.isSpoor(D, x, y) || T.wezenOp(w, x, y) || (langsX ? x === midX : y === midY);
+        let naam;
+        if (hoek) naam = `hek-lat-hoek-${rand.boven ? (rand.links ? 'boven' : 'rechts') : rand.links ? 'links' : 'onder'}`;
+        else naam = `${doorgang ? 'hekje' : 'hek'}-lat-${langsX ? 'x' : 'y'}`;
+        if (hoek && doorgang) continue; // een hoek waar je doorloopt, blijft open
+        const t = T.opzoekTegelNaam(naam);
+        if (!t) continue;
+        const v = { soort: naam, x, y, vel: t.vel, id: t.id, beslaat: [1, 1], hek: true };
+        T.kenSoortVan(v);
+        T.zetVoorwerp(w, v);
+      }
+    }
+    T.kaartVeranderd(w);
+  }
 
   // De status "Wolven" (T.OORZAKEN.wolven, js/voorvallen.js): speelt hij, dan waarom (het stuk na "want"; '' als ze alleen
   // gezien zijn), anders null. Hij speelt tot statusDagen na wat de wolven het laatst bij het dorp deden.
