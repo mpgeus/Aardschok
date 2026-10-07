@@ -5863,6 +5863,23 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     - **e, een huis mag ook de andere kant op groeien** (naar links of naar boven), als het daar wel past. Meer werk: de
       deur en de tekening schuiven mee.
     - **f, zo laten:** het briefje zegt het nu, en een vrij erf kun je weghalen; een bewoond erf blijft.
+    **Marcel koos (7 okt) de versie van `ccr-f6ba5992-1e77dw` voor `main`.** De sessie van de heer bouwde d en "A"
+    tegelijk (op `claude/heer-game-mechanics-6d9h5l`, `a57b436`; daar houdt een huis de grond van zijn kleinste vorm
+    vrij), en zet daaruit hier alleen twee punten voor die versie (Marcel: "Zet ze in main"):
+    - **Even grote vormen.** Een hut kan vaak in twee even grote vormen groeien (7 bij 5 en 5 bij 7). Besliste de loting
+      (`T.volgendeTekening`) welke vorm telde, dan sprong de grond die vrij moest blijven als er ergens een huis bijkwam,
+      en lag het erf op (48, 50) uit de toets van de raad (en uit `Spel.debug.bouw('erf', 48, 50)` in CLAUDE.md) bij vier
+      van de zes tekeningen op de grond van de hut op 44,44: de toets faalde één keer op de drie. Wat d zegt, mag dus niet
+      van de loting afhangen; een toets die het nakijkt, zet elke tekening die het spel kan loten en verwacht dezelfde
+      uitslag.
+    - **Het erf zelf loot ook** (`opmerkingen.md`): welke hut en welk huis op een erf komen, begint met de geloote
+      tekening (`opVolgorde` in `js/erven.js`), en daarmee ook waar het looppad om het huis ligt. Zo kan ook daardoor
+      een erf op dezelfde plek de ene keer wel en de andere keer niet een hut tegenhouden.
+    In de speeltest van vier jaar op die versie (`a57b436`, als vergelijking) groeide de hut van het oude stel op 62707 in
+    beide spellen door. De sluwe bouwer won op 62707 (5 bloeimaand van het vierde jaar) en de bouwer op 72022 (29
+    herfstmaand); de andere vier verloren om iets anders: op 62707 werd de bouwer ontslagen (te weinig betaald, en de
+    soldaten vonden wapens), op 73425 kwam de bouwer tot 241 van de 360 dagen en joeg het dorp de sluwe bouwer weg na de
+    heervaart, en op 72022 viel de sluwe bouwer tegen een rover.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

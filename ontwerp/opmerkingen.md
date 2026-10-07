@@ -9,6 +9,14 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Ook het erf in het bouwmenu loot een tekening** (7 okt, de sessie van de heer; vraag 130): wie met een erf in de
+  hand over de kaart gaat, vraagt voor elke plek welke hut en welk huis erop passen (`kiesTekeningen` in `js/erven.js`),
+  en dat begint met de volgende tekening (`opVolgorde`, `T.volgendeTekening`), die er een loot als er nog geen gekozen
+  is. Dan loopt het spel anders naar waar de muis stond, zoals bij het briefje van vraag 130 (het puntje bij c); de keus
+  wordt wel bewaard, dus bewaren en laden geven hetzelfde spel. Waar het looppad om het huis ligt, hangt er ook van af,
+  en dus ook of een erf een hut tegenhoudt (vraag 130, d). Op te lossen zoals het groeien: de vraag loot niet, en de
+  geloote vorm zit ook tussen de andere. Voor als de regels in vaste tikken moeten (`spel.md`, "De heer als
+  tegenstander").
 - **Twee soorten stronken** (6 okt, zesendertigste sessie; vraag 129): een stronk die de houthakker of een boer achterlaat
   (`T.velBoom`, `js/bos.js`), staat niet in de weg (`boomstronk` in `T.VOORWERPEN`, `js/wereld.js`), want in de speeltest
   zette de houthakker zich met zijn eigen stronken vast. Een stronk die de maker in het bos legde, heeft nog een muur
