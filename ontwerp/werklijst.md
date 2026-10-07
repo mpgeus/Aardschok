@@ -5255,6 +5255,47 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     neemt het graan dat plat op dezelfde plek in de wereld lag). De voren van een geploegde akker buigen zo over de
     heuvel, groen koren ook, en de zon valt erop zoals op de grond. In het spel gaat dat net zo met de videokaart: geen
     nieuwe kunst, de akker wordt een laag die meebuigt.
+    **Het plan voor de hoogte in het spel** (Claude, 7 okt; Marcel: "Ja, schrijf het plan uit"; wacht op Marcel). Drie
+    stappen, elk een sessie; de spelregel "Hoogte" (aan of vlak) staat op vlak tot stap 3, zodat de toetsen, de speeltest
+    en `npm run schermen` tot dan precies blijven zoals ze zijn.
+    - **Stap 1, de kaart en de grond.**
+      - *Wat de kaart weet:* per tegel een niveau (0, 1, 2, of -1 in een dal; maal 32 pixels) en per hoekpunt de
+        glooiing (in pixels), allebei in de wereld (`w.niveau`, `w.glooiing`, dus bewaard met het spel), en de hellingen.
+        Eén vraag voor alles: `T.hoekHoogte(w, x, y, hoek)` en `T.hoogteOp(w, x, y)` (de hoogte op een punt, voor wie
+        erop staat) in een nieuw `js/hoogte.js`. Het ontworpen gehucht heeft geen hoogte (alles 0).
+      - *De maker* legt de hoogte uit het nummer van het land: hoge heuvels (tot zo'n 150 pixels, flanken van acht à
+        tien tegels) in het wilde land, bij het bos, de heide en de rotsen; laag en glooiend rond het plein, de huizen en
+        de akkers; een richel met een rotswand bij de rotsen (de steengroeve), met een helling erop; wanden langs de
+        tegels, niet schuin. Een huis, een erf en het plein liggen vlak (de maker egaliseert ze).
+      - *De grond* wordt al in een buffer getekend die alleen opnieuw gaat als het beeld verschuift (`werkGrondBij` in
+        `js/tekenen.js`); daarin komt elke tegel als twee schuine driehoeken (een plaatje met een scheve transformatie
+        per driehoek), lichter naar de zon, zoals op de plaat. Dat kost alleen iets bij het opnieuw tekenen van de
+        buffer, met of zonder videokaart, dus de videokaart hoeft er niets nieuws voor te leren. De wanden (rotswand,
+        begroeide wal) komen uit code, zoals op de plaat, maar rijker.
+      - *Wat erop staat* schuift omhoog met zijn grond (wezens, voorwerpen, huizen, lichten, de doorkijk); de camera volgt
+        de schout op zijn hoogte; de muis zoekt de tegel van voor naar achter (een tegel op een heuvel ligt hoger in beeld
+        dan `T.naarWereld` denkt).
+      - *De akkers* bollen mee: per tegel één scheve transformatie die de vlakke tegel op de schuine legt (een tegel is
+        bijna vlak, dus dat is genoeg), voor het graan dat elk beeld getekend wordt (met de wind); de halmen blijven
+        rechtop, alleen hun voet volgt.
+      - Klaar als: een land van de maker met heuvels, een richel en meebollende akkers in het spel, overdag en 's avonds,
+        en met "Hoogte" op vlak alles byte voor byte gelijk (`npm run schermen -- --tegen voor`).
+    - **Stap 2, wat de hoogte doet.**
+      - *Wat voor wat staat:* een heuvel vóór een poppetje moet hem afdekken, en de grond ligt in één buffer onder alles.
+        Dus gaat een tegel die hoger ligt dan wat erachter staat (een flank naar je toe, een wand) ook als stuk in de
+        tekenlijst, net als een huis, en dekt hij af wat erachter staat; wie achter een heuvel staat, krijgt het silhouet
+        van de doorkijk, zoals achter een huis. Dit is het lastigste deel.
+      - *Lopen:* een stap mag niet over een wand (de hoeken aan weerskanten verschillen meer dan een paar pixels), wel
+        over een helling en over glooiing; één vraag (`T.kanStappen`), en A*, de eilanden en de velden (`js/pad.js`,
+        `js/wereld.js`, `js/lopen.js`) vragen hem allemaal.
+      - *Zien:* wie hoog staat, ziet verder, en een heuvel tussen twee mensen houdt het zicht tegen (`T.zietTegel`; dus
+        ook de inner, de getuigen en de wolven).
+      - *Bouwen:* een gebouw, een erf en zijn looppad op een vlak stuk (`T.waaromPastHetNiet`: "te steil"), en de
+        verzoeken en de erven kiezen zo'n plek.
+    - **Stap 3, de proef.** De speeltest van vier jaar met "Hoogte" aan, op de drie landen: groeien de dorpen nog even
+      ver, en lopen de mensen niet vast? Dan wordt aan de standaard, en wordt de samenvatting (de pdf) bijgewerkt.
+    - Later, niet nu: een huis op een helling (een sokkel), een windmolen of de kapel op de heuvel, het wachthuis dat van
+      boven verder ziet, het hoge punt in een gevecht, en schaduwen die over de heuvel buigen.
 122. **De snelheid in de browser en via Steam** (Marcel, 4 okt, achtentwintigste sessie: "Ik wil nu ook weten wat het
     verschil in performance is tussen nu spelen in de browser en straks via Steam. Want lag, geheugen tekort etc is geen
     optie straks"; plan van Claude; open). Uitgewerkt in `verpakken.md`, "Snelheid: in de browser of via Steam".
