@@ -122,6 +122,59 @@ const STIJLEN = {
   // (4) roze, "het rijke vakwerk": roze kalk, kale luiken, zandsteen; twee lagen die overkragen, een erker, een T
   roze: { kalk: 'roze', luiken: 'hout', steen: 'zandsteen', dak: 'riet', hut: 'wit', huis: ['huis10', 'huis11', 'huis12'], boerderij: ['boerderij8', 'boerderij9'] },
 };
+// De toren van de kapel en de woontoren per stijl (Marcel, 4 okt: "1. Afwisselen ... 2. Zelfde als 1"), zoals in het plan
+// (werklijst vraag 114, "Plan voor de huizen in het spel", 2): wit een zadeldaktoren en kantelen, oker een naaldspits en een tentdak, planken een naaldspits en kantelen, roze een
+// zadeldaktoren en een tentdak.
+const TORENS = {
+  wit: { kapel: 'zadel', woontoren: 'kantelen' },
+  oker: { kapel: 'spits', woontoren: 'tent' },
+  planken: { kapel: 'spits', woontoren: 'kantelen' },
+  roze: { kapel: 'zadel', woontoren: 'tent' },
+};
+
+// De grote gebouwen van een stijl (werklijst vraag 114, stap 3; Marcel, 7 okt: "A; ja goed idee, B: Ja, C: Ja graag"):
+// de kleine herberg (het gehucht), de grote met een stal aan een binnenplaats met een muur en een poort (een dorp: hij
+// groeit door), de kapel met de toren van de stijl, de woontoren (vanaf marktrecht, drie gezinnen) en het huis van de
+// schout. Elk rondom, met de deur naar zuid; draai geeft een andere stand. Een gebouw uit delen is { delen: [{ spec,
+// plek }], deurVan }, anders { spec }. dak: het dak van de trede (zonder: dat van het gehucht, of leien in een dorp);
+// steen: de natuursteen van de stijl, of 'baksteen' (met een steenbakkerij).
+function grootGebouw(stijl, soort, o = {}) {
+  const S = STIJLEN[stijl];
+  if (!S) throw new Error(`geen stijl "${stijl}"`);
+  const steen = o.steen || S.steen;
+  const draai = o.draai || 0;
+  const rond = { rondom: true, nok: 'x', deur: 'voor', deurOp: 'hoofd', draai, kalk: S.kalk };
+  const wand = S.wand ? { wand: S.wand } : {};
+  if (soort === 'herbergKlein') {
+    const h = HUIZEN.herberg1;
+    return { spec: { ...h, ...rond, ...wand, dak: o.dak || S.dak, uit: { ...h.uit, luiken: S.luiken } } };
+  }
+  if (soort === 'herberg') {
+    // twee lagen van 12 bij 6 met een uithangbord; rechts ervan de binnenplaats, achterin de stal, en langs de andere
+    // twee kanten een muur met de poort aan de straat (de kant van de deur)
+    const dak = o.dak || 'leien';
+    const herberg = { zaad: 53, vorm: 'rechthoek', b: 12, d: 6, lagen: 2, wand: 'vakwerk', ...wand, schoorsteen: 'leem', schoor: false, bord: true, ...rond, dak, uit: { kapellen: 3, luiken: S.luiken, bakken: 2 } };
+    const stal = { zaad: 57, vorm: 'rechthoek', b: 6, d: 3, lagen: 1, wand: 'planken', hout: 'schors', schoorsteen: false, schoor: false, uit: false, ...rond, dak: dak === 'leien' && stijl !== 'planken' ? S.dak : dak, kalk: S.kalk };
+    const muur = { zaad: 58, erfmuur: true, steen, stukken: [[[12.3, 0], [12.3, 3.3]], [[6.2, 3.3], [12.3, 3.3]]], poort: { stuk: 1, bij: 0.5, breed: 1.8, binnen: [0, -1] }, draai };
+    return { delen: [{ spec: herberg }, { spec: stal, plek: [9.15, -1.5] }, { spec: muur, plek: [0, 0] }], deurVan: 0 };
+  }
+  if (soort === 'kapel') {
+    const schip = { zaad: 61, vorm: 'rechthoek', b: 9, d: 5, lagen: 1.5, wand: 'veldsteen', steen, schoorsteen: false, schoor: false, uit: false, ramen: 'kerk', ...rond, dak: 'leien' };
+    const zadel = TORENS[stijl].kapel === 'zadel';
+    const toren = { zaad: 62, dak: 'plat', steen, lagen: 4, b: zadel ? 4 : 3, d: zadel ? 4 : 3, torendak: TORENS[stijl].kapel, ramen: 'kerk', rondom: true, draai };
+    return { delen: [{ spec: schip }, { spec: toren, plek: [zadel ? 6.3 : 5.7, 0] }], deurVan: 1 };
+  }
+  if (soort === 'woontoren') {
+    const tent = TORENS[stijl].woontoren === 'tent';
+    return { spec: { zaad: tent ? 52 : 54, dak: 'plat', steen, lagen: 4, b: 5, d: 5, ramen: 'woon', rondom: true, draai, ...(tent ? { torendak: 'tent', dekking: 'pannen' } : { kantelen: true }) } };
+  }
+  if (soort === 'schout') {
+    const h = HUIZEN.schoutshuis;
+    return { spec: { ...h, ...rond, dak: o.dak || S.dak, steen, boven: S.boven || 'vakwerk', uit: { ...h.uit, luiken: S.luiken } } };
+  }
+  throw new Error(`geen groot gebouw "${soort}"`);
+}
+
 // De vormen die alleen een stijl heeft (stap 2b): zoals de huizen hierboven, maar nooit een losse tekening op het vel. Van
 // een huis maakt stijlHuizen zelf zijn stenen broertje (steenVan). `luiken: 'hout'` hierboven: kaal hout, de kleur van het
 // hout van het huis.
@@ -768,7 +821,7 @@ function renderHuizen(namen = Object.keys(HUIZEN), draden = DRADEN()) {
   });
 }
 
-module.exports = { HUIZEN, STIJLEN, VORMEN, huttenVan, STANDEN, stijlNaam, FASEN, renderHuis, renderHuizen, renderHuisFasen, meetHuis };
+module.exports = { HUIZEN, STIJLEN, TORENS, grootGebouw, VORMEN, huttenVan, STANDEN, stijlNaam, FASEN, renderHuis, renderHuizen, renderHuisFasen, meetHuis };
 
 // node gereedschap/pixelart/huizen.cjs [naam ...]: de huizen los op een proefplaat, met hun voet
 // (een ruit) en de tegel voor hun deur (een punt), om te zien of die kloppen. Naar
