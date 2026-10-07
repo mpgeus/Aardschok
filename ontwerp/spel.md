@@ -675,7 +675,12 @@ doden mag". **En (7 okt), na de schermafdrukken van stap 1:** "d ja, e ja, f ja"
 roedel dieper een nieuw hol, en zonder diep bos trekt hij weg, zodat kappen een keuze is: hout en grond tegen wolven
 dichtbij; elke lente krijgen de roedels en de kuddes jongen, tot zes, en dan splitsen ze en zoekt de helft een nieuw
 thuis, zodat het bos zonder jager elk jaar voller wordt; en het hol is een plek op de kaart (een kuil onder een
-omgevallen boom, met botten ervoor) die de schout kan vinden, en waar de jacht heen gaat.
+omgevallen boom, met botten ervoor) die de schout kan vinden, en waar de jacht heen gaat. **En (7 okt), bij het plan
+voor stap 2:** "g ja, h ja, i ja": een roedel eet eerst herten, en komt pas naar het dorp als die in zijn bos op zijn
+(dan heeft de jager een keuze: veel herten geeft vlees en huiden, maar wolven met honger); de lantaarn van de schout
+houdt de wolven op afstand, ze blijven aan de rand van het licht met hun ogen, en wie sluipt, kan een roedel met
+honger aanvallen, in een gevecht in beurten; gewond is een paar dagen in bed, zonder werk, en de spelregel "Beesten"
+wordt aan, zonder doden of uit.
 
 ## Rovers en de militie (Marcel, 28 en 29 sep 2026; werklijst vraag 51 en 55)
 
