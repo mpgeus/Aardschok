@@ -5220,6 +5220,22 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     erf op één niveau); en e, na de boeren (vraag 111 met 115 en 116), vóór het eiland (vraag 117). Eerst een proefplaat,
     die met die van de huizen mee kan. Nog niet gekozen: c (waar de maker de heuvels legt) en d (de proefplaat zelf);
     die volgen het voorstel, tenzij Marcel bij de proefplaat iets anders ziet.
+    **Zonder draaien** (7 okt; vraag 124 is geparkeerd): de camera kijkt altijd van het zuidoosten. Een verhoogde tegel
+    dekt dan de rij erachter af (met een trede van een halve tegelhoogte één rij, met een hele twee), en een wand aan de
+    noord- of westkant van een heuvel zie je nooit. Dus legt de maker de heuvels en richels **aan de achterkant van het
+    dorp** (noord en west, tegen de bosrand), met hun wanden naar het dorp toe; wat er toch achter valt, laat de doorkijk
+    zien. Dat maakt het ook goedkoper: een wand heeft maar twee kanten met kunst nodig (zuidwest en zuidoost, zoals de
+    muren van een huis), met hoeken, net als een randtegel.
+    **Het plan voor d, de proefplaat** (Claude, 7 okt; alleen gereedschap, niets in het spel):
+    `gereedschap/pixelart/hoogte-proef.cjs`, naar `gereedschap/pixelart/uit/hoogte/` (niet in git). Een stuk land van zo'n
+    20 bij 14 tegels, gelegd met de echte grond uit `tegels/` en getekend in de volgorde van het spel: een dal met de beek
+    (een trede omlaag) en daarlangs een begroeide wal (aarde met gras en wortels erover), het maaiveld met een akker, en
+    achteraan een heuvel van één trede met een rotswand (de steen van de rotsen van de maker), met erachter nog een
+    trede. Een helling met een zandpad loopt de heuvel op; boven staan een huis van de stijl wit, een boom en een
+    poppetje, en beneden ook een poppetje, voor de maat. Twee keer naast elkaar: met een trede van 16 pixels (een halve
+    tegelhoogte) en van 32 (een hele), om te kiezen. Erbij een uitsnede op 2× van een hoek van de wand en de helling,
+    en overdag en 's avonds (de wand donkerder aan de kant van de schaduw, het licht van linksboven zoals de huizen).
+    Wat de plaat nog niet doet: lopen, zien en bouwen (dat is het spel, na de keuze), en de maker.
 122. **De snelheid in de browser en via Steam** (Marcel, 4 okt, achtentwintigste sessie: "Ik wil nu ook weten wat het
     verschil in performance is tussen nu spelen in de browser en straks via Steam. Want lag, geheugen tekort etc is geen
     optie straks"; plan van Claude; open). Uitgewerkt in `verpakken.md`, "Snelheid: in de browser of via Steam".
@@ -5365,7 +5381,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Marcel (4 okt): "Ja"** op E: in het overzicht mag WebGL andere pixels kiezen dan 2D. En over de proefversie: "Ik
     maak hem straks wel zelf" (hij kon niet mee: de zip van 161 MB, en ook een stuk van 55 MB, gaf bij het sturen een 502).
 124. **De camera draaien** (Marcel, 4 okt, gevraagd in de sessie van de huizen en doorgegeven aan die van WebGL: "ik wil
-    ook de camera kunnen draaien. Is dat mogelijk"; plan van Claude; open).
+    ook de camera kunnen draaien. Is dat mogelijk"; plan van Claude; geparkeerd, 7 okt).
     **Kan het?** Ja, in kwartslagen (`Q` en `E`, zoals in Anno, The Sims en Project Zomboid). Vrij draaien niet: pixel art
     is getekend voor één hoek, en tussenstanden worden vlekken. Bij een kwartslag blijft de kaart dezelfde (Tiled, de
     regels, het lopen, het zicht: niets verandert); alleen hoe hij op het scherm komt, draait.
@@ -5460,6 +5476,14 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     aanzichten renderen en dan pas draaien? **c**, de stand bewaard met het spel, of elk spel weer met het noorden
     linksboven? Voorstel: a ja, b eerst draaien (dan zie je het meteen, en de bouwers kunnen in een eigen sessie), c
     bewaard. **Hoe groot:** een sessie voor stap 1.
+    **Geparkeerd (Marcel, 7 okt: "Is het echt iets wat iets toevoegd? Ik wil geen zinloze functie toevoegen", en op
+    het voorstel om het te parkeren: "Ja zo doen we het voor nu").** Waarom: wat draaien elders oplevert, hebben we al
+    of hoeven we niet (achter een huis kijken doet de doorkijk, het overzicht doet `Tab`, en je bent de schout in het
+    dorp, geen god die zijn stad van alle kanten bewondert); de voorbeelden van de beeldstijl (Mystic Towers, Fallout 1
+    en 2, Jagged Alliance 2) draaien ook niet; en het kost niet één keer, maar altijd: elk nieuw gebouw, voorwerp en
+    elke bouwfase in vier aanzichten, en elke tekencode door `T.draai`. Wat al gedaan is (de huizen van vier kanten,
+    124 B), blijft liggen, en het plan hierboven ook. Opnieuw bekijken als testers erom vragen, of als de hoogte (vraag
+    121) iets verbergt wat de doorkijk niet oplost.
 125. **Schaduwen en licht met de videokaart** (Marcel, 4 okt, na WebGL: "Ja schaduwen en licht etc"; plan van Claude;
     open). Nu: de pixel art heeft zijn licht ingebakken (van linksboven, met een schaduw op de vloer, `belicht` en
     `schaduwOpVloer` in `gereedschap/pixelart/kern.cjs`; `beeld.md`), en de nacht is een donkere laag met lichtere
