@@ -5426,6 +5426,40 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       zon (vraag 125, B), dan moet de ingebakken schaduw eruit, en dan hoeven de huizen alleen nog één keer door de bouwer.
       **Vervallen** (4 okt): de huizen in het spel hebben geen schaduw op de vloer (zie vraag 125, "Bij het nakijken
       bleek").
+    **Het plan voor stap 1, het spel zelf** (Claude, 7 okt, naast de sessie van de wolven; wacht op Marcel). Nagegaan
+    in de code: niet alleen `T.naarScherm` neemt aan dat het noorden linksboven ligt, ook de volgorde van tekenen, de
+    grond, de muren, de richting van de figuren, het anker van een gebouw en de zonneschaduw. Dus:
+    - **Eén naad:** `T.draai(x, y)` in `js/iso.js` (de wereld in de stand van nu: 0 tot 3), waar `T.naarScherm`,
+      `T.naarWereld` en `T.blokPunt` doorheen gaan, en elke vraag "wat staat ervoor": `diepteVan`, `staatVoorGebouw`,
+      `gebouwVoorGebouw`, `tekenVolgorde` (de diagonale rijen), `isVoorrand`, en het klikken in `zoekDoel`. Een voet
+      `{x, y, b, h}` wordt in stand 1 en 3 een voet van h bij b. De regels, de kaart, het lopen en het zien blijven in
+      de wereld en veranderen niet.
+    - **Het anker** van een voorwerp ligt op de tegel van de voet die in die stand bovenaan staat (`tekenVoorwerp`,
+      `brandendeRamen`, het erf of gebouw onder de muis in het bouwmenu).
+    - **De figuren:** `richtingVan` krijgt de draai erbij, en wat als naam onthouden is (`e.kijkt = 'Z'`, de kramen)
+      schuift twee richtingen per kwartslag.
+    - **De huizen van de vier stijlen** kiezen de tekening met hun deur naar de gedraaide kant (`T.metDeurNaar`); het
+      hek in de tuin kiest zijn stuk opnieuw (x en y wisselen).
+    - **De grond:** een randtegel krijgt de tegel waarvan de hoeken op het scherm kloppen (de hoeken een plaats
+      opschuiven, en `grondMetHoeken`); de buffers van de grond en het bos om de kaart krijgen de stand in hun sleutel,
+      en welke kant van het bos achter staat, gaat mee.
+    - **De camera** blijft op wat je ziet: wat in het midden staat, staat na de draai nog in het midden.
+    - **De zon blijft linksboven op het scherm** (de afspraak van 4 okt bij de bouwer): de zonneschaduw draait dus
+      niet mee met de wereld, anders valt hij tegen het licht van de tekeningen in.
+    - **Wat nog één aanzicht heeft** (de gebouwen uit `dorp.cjs`: de kapel, de put, de molen, de huizen van het
+      ontworpen gehucht, hun bouwfasen; de bomen, struiken, rotsen, het graan, de rand van het bos): in stap 1 tonen ze
+      van elke kant dezelfde tekening. Bij wat rond is (bomen, struiken, rotsen) ziet niemand dat; bij de kapel en de
+      molen wel. Vier aanzichten voor die gebouwen is stap 2 (renderen in de bouwers, zoals de huizen).
+    - **De binnenmuren** (alleen een noord- en westkant getekend; alleen in de proefkamers van het gevecht): daar draait
+      de camera in stap 1 niet.
+    - **Toetsen:** het noorden staat erbij in beeld, een kleine windroos in een hoek, zodat je weet hoe je kijkt.
+      `test/wereld.test.cjs` en `test/tegelanker.test.cjs` krijgen de gedraaide standen erbij, en `npm run schermen`
+      laat zien dat stand 0 byte voor byte gelijk blijft.
+    Vragen: **a**, `Q` en `E`, een kwartslag, meteen (zonder overgang, want pixel art laat zich niet half draaien)?
+    **b**, in stap 1 de kapel en de molen van elke kant dezelfde tekening, en stap 2 daarna, of eerst de vier
+    aanzichten renderen en dan pas draaien? **c**, de stand bewaard met het spel, of elk spel weer met het noorden
+    linksboven? Voorstel: a ja, b eerst draaien (dan zie je het meteen, en de bouwers kunnen in een eigen sessie), c
+    bewaard. **Hoe groot:** een sessie voor stap 1.
 125. **Schaduwen en licht met de videokaart** (Marcel, 4 okt, na WebGL: "Ja schaduwen en licht etc"; plan van Claude;
     open). Nu: de pixel art heeft zijn licht ingebakken (van linksboven, met een schaduw op de vloer, `belicht` en
     `schaduwOpVloer` in `gereedschap/pixelart/kern.cjs`; `beeld.md`), en de nacht is een donkere laag met lichtere
