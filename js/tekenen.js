@@ -17,6 +17,7 @@
   // van de grond eraf. kaartNu is de kaart die getekend wordt (T.tekenScene zet hem); zonder hoogte is opGrond precies
   // T.naarScherm, dus een vlakke kaart tekent pixel voor pixel als vroeger.
   let kaartNu = null;
+  let zoomNu = 1; // voor wat ver uitgezoomd grover mag (het graan op een helling)
   const opGrond = (x, y) => T.naarSchermOp(kaartNu, x, y);
 
   const GEDIMD = 0.58;
@@ -324,6 +325,7 @@
   T.tekenScene = function (ctx, S, bw, bh) {
     const w = S.wereld;
     kaartNu = w;
+    zoomNu = S.zoom;
     if (metSprites()) laadWatErStaat(w);
     const dpr = ctx.getTransform().a || 1; // pixels per css-pixel (js/main.js, formaat)
     // Het dorp dat hier ligt (js/dorp.js), of geen: een ander gebied, of het gereedschap.
@@ -1013,7 +1015,10 @@
         const p = opGrond(x, y);
         // elke tegel een eigen stapje donkerder of lichter, zodat het donker geen strepen langs de rand legt
         const rij = Math.max(0, r + (hasj(x, y, zaad + 1) - 0.5) * 2.5);
-        T.sprites.teken(c, bosrandGedimd(deel, bosrandHelder(rij)), p.x, p.y, 1);
+        const gedimd = bosrandGedimd(deel, bosrandHelder(rij));
+        // het landschap loopt door buiten de kaart (vraag 121)
+        if (T.heeftHoogte(w)) tekenGrondMetLicht(c, w, gedimd, x, y);
+        else T.sprites.teken(c, gedimd, p.x, p.y, 1);
       }
     }
   }
@@ -1060,9 +1065,10 @@
         if (metPad && !sp && metPad.every((soort) => soort === 'zandpad')) hex = BUITENKLEUR.zandpad[(x + y) % 2];
         const deel = sp && ((metPad && T.sprites.grondMetHoeken(g.vel, metPad, x, y)) || (g ? T.sprites.buiten(g.vel, g.id) : !buiten && T.sprites.tegel(vloerSoort(w, x, y), x, y)));
         if (deel) {
-          if (hoog && T.isSchuin(w, x, y)) tekenSchuineTegel(ctx, w, deel, x, y);
-          else T.sprites.teken(ctx, deel, p.x, p.y, helder);
-          if (hoog) tekenWanden(ctx, w, x, y);
+          if (hoog) {
+            tekenGrondMetLicht(ctx, w, deel, x, y);
+            tekenWanden(ctx, w, x, y);
+          } else T.sprites.teken(ctx, deel, p.x, p.y, helder);
           if (dof < 1) ctx.globalAlpha = 1;
           continue;
         }
@@ -1088,23 +1094,26 @@
   // schuift en rekt zo dat hij de hoogte van de grond zelf volgt (T.hoogteOp, die over de hele kaart doorloopt), dus
   // twee plaatjes die elkaar overlappen, liggen daar precies op elkaar. Alleen de hoogte verschuift: de halmen blijven
   // rechtop.
-  const GRAAN_STROOK = 6; // pixels breed
-  const GRAAN_STUK = 12; // pixels hoog: zo ver kan de hoogte langs een strook recht genomen worden
+  const GRAAN_STROOK = 8; // pixels breed
+  const GRAAN_STUK = 20; // pixels hoog: zo ver kan de hoogte langs een strook recht genomen worden
   function tekenGraan(ctx, w, deel, x, y, p) {
     if (!deel) return;
     if (!T.isSchuin(w, x, y)) return T.sprites.teken(ctx, deel, p.x, p.y, 1);
     const m = T.naarScherm(x, y);
     const mx = Math.round(m.x);
     const my = Math.round(m.y);
-    for (let s0 = 0; s0 < deel.b; s0 += GRAAN_STROOK) {
-      const sb = Math.min(GRAAN_STROOK, deel.b - s0);
+    // ver uitgezoomd grovere stukjes: op het scherm blijven ze even klein
+    const strook = Math.round(GRAAN_STROOK / Math.min(1, zoomNu));
+    const stuk = Math.round(GRAAN_STUK / Math.min(1, zoomNu));
+    for (let s0 = 0; s0 < deel.b; s0 += strook) {
+      const sb = Math.min(strook, deel.b - s0);
       const u = s0 - deel.ax + sb / 2; // het midden van de strook, vanaf het midden van de tegel
       // de hoogte van de grond onder een punt van deze kolom, v pixels onder het midden van de tegel
       const op = (v) => T.hoogteOp(w, x + (u / 32 + v / 16) / 2, y + (v / 16 - u / 32) / 2);
       let v0 = -deel.ay;
       let h0 = op(v0);
-      for (let r0 = 0; r0 < deel.h; r0 += GRAAN_STUK) {
-        const rh = Math.min(GRAAN_STUK, deel.h - r0);
+      for (let r0 = 0; r0 < deel.h; r0 += stuk) {
+        const rh = Math.min(stuk, deel.h - r0);
         const v1 = v0 + rh;
         const h1 = op(v1);
         const k = (h1 - h0) / rh;
@@ -1129,43 +1138,104 @@
   }
 
   // Een grondtegel op een schuine plek (vraag 121): één scheve transformatie legt de vlakke tegel op het vlak dat het
-  // best bij zijn vier hoeken past, een tikje groter zodat er tussen twee tegels geen naad valt, en een ruit erover
-  // maakt hem lichter naar de zon of donkerder ervan af (T.helderheidVanVlak). Geen nieuwe kunst en geen knip: zo kost
-  // een schuine tegel twee plaatjes (gemeten op 7 okt: met twee geknipte driehoeken per tegel duurde de grond in het
-  // overzicht vier keer zo lang).
+  // best bij zijn vier hoeken past, een tikje groter zodat er tussen twee tegels geen naad valt. Geen nieuwe kunst en geen
+  // knip (gemeten op 7 okt: met twee geknipte driehoeken per tegel duurde de grond in het overzicht vier keer zo lang).
   function tekenSchuineTegel(ctx, w, deel, x, y) {
-    const [hN, hO, hZ, hW] = T.hoekHoogten(w, x, y);
-    const r = (hN + hO + hZ + hW) / 4;
-    const pp = (hO - hW) / 64; // per pixel naar rechts
-    const qq = (hZ - hN) / 32; // per pixel naar onder
-    const m = T.naarScherm(x, y);
     ctx.save();
-    ctx.translate(m.x, m.y);
-    ctx.transform(1, -pp, 0, 1 - qq, 0, -r);
+    opTegelVlak(ctx, w, x, y);
     ctx.scale(1.04, 1.04);
     T.sprites.teken(ctx, deel, 0, 0, 1);
-    const f = T.helderheidVanVlak([x - 1, y, hW], [x + 1, y, hO], [x, y + 1, hZ]) * 0.5 + T.helderheidVanVlak([x - 1, y, hW], [x, y - 1, hN], [x + 1, y, hO]) * 0.5;
-    if (Math.abs(f - 1) > 0.01) {
-      ctx.globalAlpha *= f < 1 ? (1 - f) * 0.95 : (f - 1) * 0.45;
-      ctx.drawImage(lichtRuit(f < 1), -32, -16);
-    }
     ctx.restore();
   }
+  // Zet het doek op het vlak van tegel (x, y): (0, 0) is zijn midden, en een punt (u, v) op het scherm van een vlakke
+  // tegel schuift omhoog met de hoogte van het vlak door zijn vier hoeken daar.
+  function opTegelVlak(ctx, w, x, y) {
+    const [hN, hO, hZ, hW] = T.hoekHoogten(w, x, y);
+    const m = T.naarScherm(x, y);
+    ctx.translate(m.x, m.y);
+    ctx.transform(1, -(hO - hW) / 64, 0, 1 - (hZ - hN) / 32, 0, -(hN + hO + hZ + hW) / 4);
+  }
 
-  // Een ruit van één tegel die een schuine tegel donkerder maakt (een koel donker) of lichter (een warm licht), eens
-  // gemaakt; hoe sterk, zegt de doorzichtigheid.
-  const lichtRuiten = new Map();
-  function lichtRuit(donker) {
-    if (lichtRuiten.has(donker)) return lichtRuiten.get(donker);
+  // Het licht op de grond (vraag 121): lichter naar de zon, donkerder ervan af, zacht verlopend over elke tegel. Per
+  // kaart één klein plaatje met een pixel per hoekpunt (T.lichtOpHoekpunt), met een rand erbuiten voor het land om de
+  // kaart; per tegel komt het stukje tussen zijn vier hoekpunten vloeiend uitgerekt over de tegel (zoals de grond zelf
+  // op het vlak van de tegel). Zo verloopt het licht van tegel tot tegel zonder trapjes.
+  const LICHT_RAND = 24;
+  const lichtKaarten = new WeakMap();
+  function lichtKaartVan(w) {
+    const hg = w.hoogte;
+    const bestaand = lichtKaarten.get(hg);
+    if (bestaand && bestaand.versie === (hg.versie || 0)) return bestaand.canvas;
+    const R = LICHT_RAND;
     const c = document.createElement('canvas');
-    c.width = 64;
-    c.height = 32;
+    c.width = w.b + 1 + 2 * R;
+    c.height = w.h + 1 + 2 * R;
     const k = c.getContext('2d');
-    k.fillStyle = donker ? '#141020' : '#fff4d6';
-    T.ruit(k, 32, 16, 1);
-    k.fill();
-    lichtRuiten.set(donker, c);
+    const beeld = k.createImageData(c.width, c.height);
+    for (let py = 0; py < c.height; py++) {
+      for (let px = 0; px < c.width; px++) {
+        const f = T.lichtOpHoekpunt(w, px - R, py - R);
+        const o = (py * c.width + px) * 4;
+        if (f < 1) {
+          beeld.data[o] = 20;
+          beeld.data[o + 1] = 16;
+          beeld.data[o + 2] = 32;
+          beeld.data[o + 3] = Math.round(Math.min(1, (1 - f) * 0.95) * 255);
+        } else {
+          beeld.data[o] = 255;
+          beeld.data[o + 1] = 244;
+          beeld.data[o + 2] = 214;
+          beeld.data[o + 3] = Math.round(Math.min(1, (f - 1) * 0.45) * 255);
+        }
+      }
+    }
+    k.putImageData(beeld, 0, 0);
+    lichtKaarten.set(hg, { versie: hg.versie || 0, canvas: c });
     return c;
+  }
+  // Een grondtegel op een kaart met hoogte: eerst het licht in de tegel zelf (op een kladje: de tegel, en daarop het licht,
+  // alleen waar de tegel is), dan de belichte tegel op het vlak van de tegel. Zo valt er tussen twee tegels geen naad
+  // in het licht: ze overlappen een tikje, maar dat is grond over grond.
+  let tegelKlad = null;
+  // Het licht in de tegel zelf bakken (een kladje per tegel) gaf geen naadjes, maar maakte het tekenen van de grond tien
+  // keer zo duur (gemeten op 7 okt); het licht als laag over de tegel laat een haarfijn naadje, en kost één plaatje.
+  const lichtInDeTegel = false;
+  function tekenGrondMetLicht(ctx, w, deel, x, y) {
+    const R = LICHT_RAND;
+    if (x < -R || y < -R || x > w.b + R - 1 || y > w.h + R - 1) return tekenSchuineTegel(ctx, w, deel, x, y);
+    if (!lichtInDeTegel) {
+      tekenSchuineTegel(ctx, w, deel, x, y);
+      ctx.save();
+      opTegelVlak(ctx, w, x, y);
+      ctx.transform(32, 16, -32, 16, 0, 0); // van de wereld (een tegel is 1 bij 1) naar het scherm
+      ctx.imageSmoothingEnabled = true;
+      ctx.drawImage(lichtKaartVan(w), x + R + 0.5, y + R + 0.5, 1, 1, -0.5, -0.5, 1, 1);
+      ctx.restore();
+      return;
+    }
+    if (!tegelKlad) {
+      tegelKlad = document.createElement('canvas');
+      tegelKlad.width = 128;
+      tegelKlad.height = 64;
+    }
+    const k = tegelKlad.getContext('2d');
+    k.clearRect(0, 0, tegelKlad.width, tegelKlad.height);
+    k.globalCompositeOperation = 'source-over';
+    k.imageSmoothingEnabled = false;
+    k.drawImage(deel.beeld, deel.sx, deel.sy, deel.b, deel.h, 0, 0, deel.b, deel.h);
+    k.globalCompositeOperation = 'source-atop';
+    k.save();
+    k.translate(deel.ax, deel.ay);
+    k.transform(32, 16, -32, 16, 0, 0); // van de wereld (een tegel is 1 bij 1) naar de tegel
+    k.imageSmoothingEnabled = true;
+    k.drawImage(lichtKaartVan(w), x + R + 0.5, y + R + 0.5, 1, 1, -0.5, -0.5, 1, 1);
+    k.restore();
+    k.globalCompositeOperation = 'source-over';
+    ctx.save();
+    opTegelVlak(ctx, w, x, y);
+    ctx.scale(1.04, 1.04);
+    ctx.drawImage(tegelKlad, 0, 0, deel.b, deel.h, -deel.ax, -deel.ay, deel.b, deel.h);
+    ctx.restore();
   }
 
   // Een driehoek uit een plaatje op een driehoek op het doek: t zijn drie punten in het plaatje (vanaf sx, sy), p drie

@@ -17,15 +17,14 @@
   T.HOOGTE_INSTELLINGEN = {
     aan: false, // de spelregel "Hoogte": of de maker heuvels legt
     trede: 32, // een niveau hoger, in pixels (Marcel, 7 okt: "a ja 32")
-    // de maker
-    heuvels: [3, 5], // hoeveel hoge heuvels per land
-    heuvelHoog: [90, 150], // hoe hoog, in pixels (Marcel: "b hoger"; zo'n drie tot vijf treden)
-    heuvelStraal: [7, 11], // hoe breed de flank, in tegels
-    wildVanaf: 3, // dichter bij een huis (met zijn looppad) of het plein dan dit, in tegels, komt geen hoge heuvel ...
-    wildTot: 9, // ... en vanaf hier helemaal; de boerderijen liggen aan de buitenkant, dus veel verder is er weinig land
-    golf: 16, // de zachte glooiing overal, in pixels
-    vrijRond: 5, // in zoveel tegels loopt het van vlak (een huis, het plein, het water) naar vrij
-    vrijRand: 4, // en net zo naar de rand van de kaart, waar het bos eromheen vlak ligt
+    // het landschap (Marcel, 7 okt: "De heuvels moeten niet alleen kleine bultjes zijn ... Uiteindelijk wilde ik een map
+    // van 2500x2500", en "Waar alles doorloopt"): drie lagen gladde ruis, overal te vragen, ook buiten de kaart
+    groot: { hoog: 420, golf: 64 }, // lange heuvelruggen en dalen: hoe hoog van dal tot top (pixels), en hoe breed (tegels)
+    midden: { hoog: 110, golf: 20 }, // heuvels daarop
+    klein: { hoog: 14, golf: 7 }, // een zachte golving overal
+    vlakteVan: 10, // het dorp ligt op een vlakte: tot zoveel tegels van het midden van het plein glooit het nauwelijks ...
+    vlakteTot: 32, // ... en vanaf hier loopt het landschap helemaal door
+    vrijRond: 6, // in zoveel tegels loopt het van een vlak stuk (een huis met zijn looppad, het water) naar het landschap
     richel: [4.5, 6.5], // de richel bij de rotsen: hoe ver hij reikt
     hellingBreed: 2, // de helling de richel op, in tegels
   };
@@ -41,28 +40,65 @@
   function niveauVan(hg, x, y) {
     return hg.niveau[sleutel(x, y)] || 0;
   }
+  // De glooiing op hoekpunt (vx, vy), in pixels: het landschap uit het nummer van het land, platter op de vlakte om het
+  // dorp, en vlak op de vlakke stukken (een huis met zijn looppad, het water), met een overgang van `vrijRond` tegels.
+  // Een rekensom en geen lijst: ook buiten de kaart (het bos eromheen, en straks een groter land), en een bewaard spel
+  // hoeft alleen het nummer en de vlakke stukken te onthouden.
   function glooiingOp(hg, vx, vy) {
-    if (vx < 0 || vy < 0 || vx > hg.b || vy > hg.h) return 0;
-    return hg.glooiing[vy * (hg.b + 1) + vx];
+    const I = IN();
+    let h = landschapOp(hg.zaad, vx, vy);
+    const d = Math.hypot(vx - hg.midden[0], vy - hg.midden[1]);
+    h = hg.dorpHoogte + (h - hg.dorpHoogte) * glad(I.vlakteVan, I.vlakteTot, d);
+    // op een vlak stuk precies zijn hoogte; ernaast een overgang naar elk vlak stuk in de buurt
+    let naast = null;
+    for (const v of hg.vlakken) {
+      const dx = Math.max(v.x0 - vx, 0, vx - v.x1);
+      const dy = Math.max(v.y0 - vy, 0, vy - v.y1);
+      if (dx === 0 && dy === 0) return v.h;
+      if (dx >= I.vrijRond || dy >= I.vrijRond) continue;
+      (naast || (naast = [])).push([v, Math.hypot(dx, dy)]);
+    }
+    if (naast) for (const [v, d] of naast) h = v.h + (h - v.h) * glad(0, I.vrijRond, d);
+    return h;
+  }
+  // Het landschap zelf: drie lagen gladde ruis uit het nummer van het land.
+  function landschapOp(zaad, vx, vy, alleenGroot) {
+    const I = IN();
+    const z = (zaad % 9973) * 7.31;
+    let h = I.groot.hoog * ruis(vx / I.groot.golf + z, vy / I.groot.golf - z);
+    if (alleenGroot) return h;
+    h += I.midden.hoog * ruis(vx / I.midden.golf - z * 1.7, vy / I.midden.golf + z * 0.3);
+    h += I.klein.hoog * ruis(vx / I.klein.golf + z * 0.9, vy / I.klein.golf + z * 2.3);
+    return h;
+  }
+  function glad(a, b, x) {
+    const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
+    return t * t * (3 - 2 * t);
   }
 
   // De hoogte van hoek k (0 noord, 1 oost, 2 zuid, 3 west) van tegel (x, y), in pixels. Uit een lijst die eens per
   // hoogte wordt uitgerekend (het tekenen vraagt het elk beeld voor duizenden tegels); verandert de hoogte, dan krijgt
   // ze een nieuwe `versie`, en wordt de lijst opnieuw gemaakt.
+  // De lijst loopt `RAND` tegels buiten de kaart door, voor het land eromheen dat het spel tekent.
+  const RAND = 48;
   const lijsten = new WeakMap();
   function hoekenLijst(hg) {
     let l = lijsten.get(hg);
     if (l && l.versie === (hg.versie || 0)) return l.hoeken;
-    const hoeken = new Float32Array(hg.b * hg.h * 4);
-    for (let y = 0; y < hg.h; y++) for (let x = 0; x < hg.b; x++) for (let k = 0; k < 4; k++) hoeken[(y * hg.b + x) * 4 + k] = rekenHoek(hg, x, y, k);
+    const b = hg.b + 2 * RAND;
+    const hoeken = new Float64Array(b * (hg.h + 2 * RAND) * 4);
+    for (let y = -RAND; y < hg.h + RAND; y++) {
+      for (let x = -RAND; x < hg.b + RAND; x++) for (let k = 0; k < 4; k++) hoeken[((y + RAND) * b + x + RAND) * 4 + k] = rekenHoek(hg, x, y, k);
+    }
     lijsten.set(hg, { versie: hg.versie || 0, hoeken });
     return hoeken;
   }
   T.hoekHoogte = function (w, x, y, k) {
     const hg = w && w.hoogte;
     if (!hg) return 0;
-    if (x < 0 || y < 0 || x >= hg.b || y >= hg.h) return 0;
-    return hoekenLijst(hg)[(y * hg.b + x) * 4 + k];
+    // het landschap loopt door, ook buiten de kaart
+    if (x < -RAND || y < -RAND || x >= hg.b + RAND || y >= hg.h + RAND) return rekenHoek(hg, x, y, k);
+    return hoekenLijst(hg)[((y + RAND) * (hg.b + 2 * RAND) + x + RAND) * 4 + k];
   };
   function rekenHoek(hg, x, y, k) {
     const vx = x + (k === 1 || k === 2 ? 1 : 0);
@@ -73,7 +109,8 @@
   }
   T.hoekHoogten = (w, x, y) => [T.hoekHoogte(w, x, y, 0), T.hoekHoogte(w, x, y, 1), T.hoekHoogte(w, x, y, 2), T.hoekHoogte(w, x, y, 3)];
 
-  // De hoogte op een punt in de wereld (het midden van tegel (x, y) is (x, y)): tussen de vier hoeken van zijn tegel.
+  // De hoogte op een punt in de wereld (het midden van tegel (x, y) is (x, y)): op een van de twee driehoeken van zijn
+  // tegel (noord-oost-zuid of noord-zuid-west), net als de muis ze ziet (T.naarWereldOp).
   T.hoogteOp = function (w, px, py) {
     if (!w || !w.hoogte) return 0;
     const x = Math.round(px);
@@ -81,16 +118,20 @@
     const u = px - (x - 0.5);
     const v = py - (y - 0.5);
     const [n, o, z, ws] = T.hoekHoogten(w, x, y);
-    return n * (1 - u) * (1 - v) + o * u * (1 - v) + z * u * v + ws * (1 - u) * v;
+    // de lijn van noord (0, 0) naar zuid (1, 1) deelt de tegel: rechts ervan (u > v) de oostdriehoek
+    return u >= v ? n + (o - n) * u + (z - o) * v : n + (z - ws) * u + (ws - n) * v;
   };
 
   // Is tegel (x, y) schuin (niet alle vier de hoeken even hoog)?
   T.isSchuin = function (w, x, y) {
     if (!w || !w.hoogte) return false;
     const hg = w.hoogte;
-    if (x < 0 || y < 0 || x >= hg.b || y >= hg.h) return false;
+    if (x < -RAND || y < -RAND || x >= hg.b + RAND || y >= hg.h + RAND) {
+      const h = T.hoekHoogten(w, x, y);
+      return h[0] !== h[1] || h[1] !== h[2] || h[2] !== h[3];
+    }
     const l = hoekenLijst(hg);
-    const i = (y * hg.b + x) * 4;
+    const i = ((y + RAND) * (hg.b + 2 * RAND) + x + RAND) * 4;
     return l[i] !== l[i + 1] || l[i + 1] !== l[i + 2] || l[i + 2] !== l[i + 3];
   };
 
@@ -107,14 +148,13 @@
   T.naarWereldOp = function (w, sx, sy) {
     const vlak = T.naarWereld(sx, sy);
     if (!w || !w.hoogte) return vlak;
-    const hoogst = IN().heuvelHoog[1] + 4 * w.hoogte.trede;
+    const hoogst = IN().groot.hoog + IN().midden.hoog + 4 * w.hoogte.trede;
     const stappen = Math.ceil(hoogst / 32) + 2; // een hoogte van 32 pixels is één tegel naar voren (x en y elk +1)
     let beste = null;
-    for (let s = -1; s <= stappen; s++) {
+    for (let s = -stappen; s <= stappen; s++) { // een dal ligt lager in beeld, een heuvel hoger
       for (const [dx, dy] of [[0, 0], [1, 0], [0, 1]]) {
         const x = Math.round(vlak.x) + s + dx;
         const y = Math.round(vlak.y) + s + dy;
-        if (x < 0 || y < 0 || x >= w.b || y >= w.h) continue;
         const raak = inRuit(w, x, y, sx, sy);
         if (raak && (!beste || x + y > beste.x + beste.y)) beste = { x, y, u: raak.u, v: raak.v };
       }
@@ -165,6 +205,16 @@
     return f < 0.5 ? 0.5 : f > 1.35 ? 1.35 : f;
   };
 
+  // Hoe licht de grond op hoekpunt (vx, vy) is (1 op een vlak stuk), uit hoe hij daar helt: de hoogte van het hoekpunt is
+  // het gemiddelde van de hoeken van de vier tegels die er samenkomen (bij een wand dus de helft van de trede). Voor het
+  // licht dat zacht over een tegel verloopt (js/tekenen.js).
+  T.lichtOpHoekpunt = function (w, vx, vy) {
+    const hp = (px, py) => (T.hoekHoogte(w, px - 1, py - 1, 2) + T.hoekHoogte(w, px, py - 1, 3) + T.hoekHoogte(w, px, py, 0) + T.hoekHoogte(w, px - 1, py, 1)) / 4;
+    const hx = (hp(vx + 1, vy) - hp(vx - 1, vy)) / 2;
+    const hy = (hp(vx, vy + 1) - hp(vx, vy - 1)) / 2;
+    return T.helderheidVanVlak([0, 0, 0], [1, 0, hx], [0, 1, hy]);
+  };
+
   // De wanden van tegel (x, y): aan zijn zuid- en oostkant (de kanten die je ziet), waar hij hoger ligt dan zijn buur.
   // Elk { kant, van: [x, y], tot: [x, y] (de rand in de wereld), boven: [h, h], onder: [h, h], soort }.
   // Een rotswand waar een richel stopt, een begroeide wal elders.
@@ -196,94 +246,65 @@
 
   // ---------------------------------------------------------------- de maker legt de hoogte
 
-  // Uit het plan van de maker (js/maker.js): hoge heuvels in het wilde land, een zachte glooiing overal, vlak waar een
-  // huis, het plein of het water ligt (en naar de rand van de kaart toe), en een richel met een rotswand bij de rotsen,
-  // met een helling erop. Geeft wat in `w.hoogte` komt.
+  // Uit het plan van de maker (js/maker.js): het nummer van het land (het landschap), het dorp op een vlakte, de vlakke
+  // stukken (een huis met zijn looppad, het water), en een richel met een rotswand bij de rotsen, met een helling erop.
+  // Geeft wat in `w.hoogte` komt: alleen dat, want de glooiing zelf is een rekensom (glooiingOp).
   T.legHoogte = function (plan) {
     const I = IN();
     const B = plan.b;
     const H = plan.h;
     const r = T.dobbelsteen((Math.imul(plan.zaad >>> 0, 2654435761) ^ 0x9e3779b9) >>> 0);
     const tussen = (a, b) => a + (b - a) * r();
-    const glad = (a, b, x) => {
-      const t = Math.min(1, Math.max(0, (x - a) / (b - a)));
-      return t * t * (3 - 2 * t);
-    };
-
-    // Wat vlak moet: de voet van een huis met zijn looppad, het plein, en het water met een rand.
-    const vast = new Uint8Array((B + 1) * (H + 1));
-    const zetVast = (x0, y0, x1, y1) => {
-      // de hoekpunten van de tegels x0..x1, y0..y1
-      for (let vy = Math.max(0, y0); vy <= Math.min(H, y1 + 1); vy++) for (let vx = Math.max(0, x0); vx <= Math.min(B, x1 + 1); vx++) vast[vy * (B + 1) + vx] = 1;
-    };
-    const lp = T.GEBOUWEN_INSTELLINGEN.looppad;
-    for (const h of plan.huizen) zetVast(h.x - lp, h.y - lp, h.x + h.b - 1 + lp, h.y + h.d - 1 + lp);
-    for (const [px, py] of plan.plein) zetVast(Math.round(px) - 1, Math.round(py) - 1, Math.round(px) + 1, Math.round(py) + 1);
-    // Hoe ver het dorp is (de huizen en het plein, niet het water): daar ver vandaan is het wilde land, met de hoge heuvels.
-    const dorp = afstandTot(vast.slice(), B + 1, H + 1, I.wildTot + 1);
-    for (let vy = 0; vy <= H; vy++) {
-      for (let vx = 0; vx <= B; vx++) {
-        if (plan.grond[vy][vx] === 'w') zetVast(vx - 2, vy - 2, vx + 1, vy + 1);
-      }
-    }
-    for (const p of plan.brug || []) zetVast(p.x - 1, p.y - 1, p.x + 1, p.y + 1);
-    // Hoe ver elk hoekpunt van wat vlak moet ligt (in stappen, tot vrijRond).
-    const afstand = afstandTot(vast, B + 1, H + 1, I.vrijRond + 1);
-
-    // Het hart van het dorp: het midden van het plein (voor de helling de richel op).
     const cx = plan.plein.reduce((s, p) => s + p[0], 0) / plan.plein.length;
     const cy = plan.plein.reduce((s, p) => s + p[1], 0) / plan.plein.length;
-
-    // De hoge heuvels, in het wilde land, en het liefst in het open: onder het bos zie je een heuvel niet.
-    const heuvels = [];
-    const aantal = Math.round(tussen(I.heuvels[0], I.heuvels[1] + 0.99) - 0.49);
-    const bomen = new Uint16Array(B * H);
-    for (const v of plan.voorwerpen) if (T.TEGELS && T.TEGELS.bomen && T.TEGELS.bomen.tiles.some((t) => t && t.naam === v.naam)) bomen[v.y * B + v.x]++;
-    const bomenRond = (x, y, straal) => {
-      let n = 0;
-      for (let dy = -straal; dy <= straal; dy++) for (let dx = -straal; dx <= straal; dx++) {
-        const tx = x + dx;
-        const ty = y + dy;
-        if (tx >= 0 && ty >= 0 && tx < B && ty < H) n += bomen[ty * B + tx];
-      }
-      return n;
+    const hg = { trede: I.trede, zaad: plan.zaad, b: B, h: H, midden: [cx, cy], dorpHoogte: 0, vlakken: [], niveau: {}, hellingen: {} };
+    hg.dorpHoogte = Math.round(landschapOp(plan.zaad, cx, cy));
+    // de hoogte van een plek zonder de vlakke stukken: daarop komt een vlak stuk te liggen
+    const vrijOp = (vx, vy, alleenGroot) => {
+      const h = landschapOp(plan.zaad, vx, vy, alleenGroot) + (alleenGroot ? hg.dorpHoogte - landschapOp(plan.zaad, cx, cy, true) : 0);
+      return hg.dorpHoogte + (h - hg.dorpHoogte) * glad(I.vlakteVan, I.vlakteTot, Math.hypot(vx - cx, vy - cy));
     };
-    const kandidaten = [];
-    for (let y = 8; y < H - 8; y += 2) {
-      for (let x = 8; x < B - 8; x += 2) {
-        if (dorp[y * (B + 1) + x] < I.wildTot - 1) continue;
-        kandidaten.push({ x: x + tussen(-1, 1), y: y + tussen(-1, 1), score: -bomenRond(x, y, 5) + tussen(0, 6) });
-      }
-    }
-    kandidaten.sort((a, b) => b.score - a.score);
-    for (const k of kandidaten) {
-      if (heuvels.length >= aantal) break;
-      if (heuvels.some((h) => Math.hypot(h.x - k.x, h.y - k.y) < 14)) continue;
-      heuvels.push({ x: k.x, y: k.y, hoog: tussen(I.heuvelHoog[0], I.heuvelHoog[1]), straal: tussen(I.heuvelStraal[0], I.heuvelStraal[1]) });
-    }
-    const golfZaad = r() * 1000;
-
-    const glooiing = new Array((B + 1) * (H + 1));
+    // de huizen, met hun looppad, op de hoogte van hun midden (de hoekpunten van hun tegels)
+    // Huizen waarvan het looppad elkaar raakt, liggen samen op één hoogte, anders lag een van beide scheef.
+    const lp = T.GEBOUWEN_INSTELLINGEN.looppad;
+    const huizen = plan.huizen.map((h) => ({ x0: h.x - lp, y0: h.y - lp, x1: h.x + h.b + lp, y1: h.y + h.d + lp }));
+    // het plein ook, op de hoogte van het dorp (een huis dat eraan raakt, komt op dezelfde hoogte)
+    const px = plan.plein.map((p) => Math.round(p[0]));
+    const py = plan.plein.map((p) => Math.round(p[1]));
+    huizen.unshift({ x0: Math.min(...px) - 1, y0: Math.min(...py) - 1, x1: Math.max(...px) + 2, y1: Math.max(...py) + 2, plein: true });
+    const groep = huizen.map((_, i) => i);
+    const wortel = (i) => (groep[i] === i ? i : (groep[i] = wortel(groep[i])));
+    const raken = (a, b) => a.x0 <= b.x1 + 1 && b.x0 <= a.x1 + 1 && a.y0 <= b.y1 + 1 && b.y0 <= a.y1 + 1;
+    for (let i = 0; i < huizen.length; i++) for (let j = i + 1; j < huizen.length; j++) if (raken(huizen[i], huizen[j])) groep[wortel(i)] = wortel(j);
+    const som = new Map();
+    huizen.forEach((v, i) => {
+      const g = wortel(i);
+      const [t, n] = som.get(g) || [0, 0];
+      som.set(g, [t + vrijOp((v.x0 + v.x1) / 2, (v.y0 + v.y1) / 2), n + 1]);
+    });
+    const metPlein = wortel(0);
+    huizen.forEach((v, i) => {
+      const [t, n] = som.get(wortel(i));
+      v.h = wortel(i) === metPlein ? hg.dorpHoogte : Math.round(t / n);
+      delete v.plein;
+      hg.vlakken.push(v);
+    });
+    // het water, in stukken langs een rij hoekpunten, op de hoogte van de grote glooiing (een beek daalt zo met het dal mee)
     for (let vy = 0; vy <= H; vy++) {
       for (let vx = 0; vx <= B; vx++) {
-        let h = 0;
-        for (const k of heuvels) {
-          const d = Math.hypot(vx - k.x, vy - k.y);
-          if (d < k.straal) h += k.hoog * (0.5 + 0.5 * Math.cos((Math.PI * d) / k.straal));
-        }
-        const wild = glad(I.wildVanaf, I.wildTot, dorp[vy * (B + 1) + vx]);
-        h = h * wild + I.golf * golf(vx * 0.12 + golfZaad, vy * 0.12);
-        const rand = Math.min(vx, vy, B - vx, H - vy);
-        const vrij = glad(0, I.vrijRond, afstand[vy * (B + 1) + vx]) * glad(0, I.vrijRand, rand);
-        glooiing[vy * (B + 1) + vx] = Math.round(h * vrij);
+        if (plan.grond[vy][vx] !== 'w') continue;
+        let tot = vx;
+        while (tot + 1 <= B && plan.grond[vy][tot + 1] === 'w') tot++;
+        const v = { x0: vx - 1, y0: vy - 1, x1: tot + 1, y1: vy + 1 };
+        v.h = Math.round(vrijOp((vx + tot) / 2, vy, true));
+        hg.vlakken.push(v);
+        vx = tot;
       }
     }
 
-    // De richel bij de rotsen: niveau 1, met een helling naar het dorp toe.
-    const niveau = {};
-    const hellingen = {};
-    const grootsteRotsen = (plan.rotsen || []).slice(0, 2);
-    for (const k of grootsteRotsen) {
+    // De richel bij de rotsen: niveau 1, met een helling naar het dorp toe; alleen waar geen vlak stuk in de buurt ligt.
+    const vrijVanVlak = (vx, vy) => hg.vlakken.every((v) => Math.max(v.x0 - vx, 0, vx - v.x1) >= I.vrijRond || Math.max(v.y0 - vy, 0, vy - v.y1) >= I.vrijRond);
+    for (const k of (plan.rotsen || []).slice(0, 2)) {
       const straal = tussen(I.richel[0], I.richel[1]);
       const fase = r() * Math.PI * 2;
       const tegels = [];
@@ -293,28 +314,24 @@
           const hoek = Math.atan2(y - k.y, x - k.x);
           const rr = straal * (0.85 + 0.15 * Math.sin(hoek * 3 + fase));
           if (Math.hypot(x - k.x, y - k.y) > rr) continue;
-          // alleen waar het vrij is: alle vier de hoekpunten ver genoeg van wat vlak moet
-          let vrij = true;
-          for (const [dx, dy] of [[0, 0], [1, 0], [0, 1], [1, 1]]) if (afstand[(y + dy) * (B + 1) + x + dx] < I.vrijRond) vrij = false;
-          if (vrij) tegels.push([x, y]);
+          if ([[0, 0], [1, 0], [0, 1], [1, 1]].every(([dx, dy]) => vrijVanVlak(x + dx, y + dy))) tegels.push([x, y]);
         }
       }
       if (tegels.length < 12) continue;
       const mag = new Set(tegels.map(([x, y]) => sleutel(x, y)));
-      for (const t of mag) niveau[t] = 1;
+      for (const t of mag) hg.niveau[t] = 1;
       // twee keer gladstrijken: een uitsteeksel eraf en een inham dicht, zodat de wand niet rafelt
       for (let ronde = 0; ronde < 2; ronde++) {
         for (const t of mag) {
           const [x, y] = t.split(',').map(Number);
-          const buren = [[1, 0], [-1, 0], [0, 1], [0, -1]].filter(([dx, dy]) => niveau[sleutel(x + dx, y + dy)]).length;
-          if (niveau[t] && buren <= 1) delete niveau[t];
-          else if (!niveau[t] && buren >= 3) niveau[t] = 1;
+          const buren = [[1, 0], [-1, 0], [0, 1], [0, -1]].filter(([dx, dy]) => hg.niveau[sleutel(x + dx, y + dy)]).length;
+          if (hg.niveau[t] && buren <= 1) delete hg.niveau[t];
+          else if (!hg.niveau[t] && buren >= 3) hg.niveau[t] = 1;
         }
       }
-      legHelling(niveau, hellingen, k, cx, cy, I.hellingBreed, B, H);
+      legHelling(hg.niveau, hg.hellingen, k, cx, cy, I.hellingBreed, B, H);
     }
-
-    return { trede: I.trede, b: B, h: H, glooiing, niveau, hellingen };
+    return hg;
   };
 
   // De helling de richel op: aan de zuid- of oostkant (de kant die je ziet), het dichtst bij het dorp. Een helling
@@ -350,35 +367,7 @@
     }
   }
 
-  // Hoeveel stappen (in acht richtingen) elk punt van een raster van een gezet punt ligt, tot `tot`.
-  function afstandTot(gezet, b, h, tot) {
-    const uit = new Float32Array(b * h).fill(tot);
-    let rand = [];
-    for (let i = 0; i < b * h; i++) if (gezet[i]) { uit[i] = 0; rand.push(i); }
-    for (let d = 1; d < tot && rand.length; d++) {
-      const volgende = [];
-      for (const i of rand) {
-        const x = i % b;
-        const y = (i - x) / b;
-        for (let dy = -1; dy <= 1; dy++) {
-          for (let dx = -1; dx <= 1; dx++) {
-            const nx = x + dx;
-            const ny = y + dy;
-            if (nx < 0 || ny < 0 || nx >= b || ny >= h) continue;
-            const j = ny * b + nx;
-            if (uit[j] > d) { uit[j] = d; volgende.push(j); }
-          }
-        }
-      }
-      rand = volgende;
-    }
-    return uit;
-  }
-
-  // Een zachte golving tussen -0,5 en 0,5 (twee lagen gladde ruis).
-  function golf(x, y) {
-    return ruis(x, y) * 0.7 + ruis(x * 2.1 + 17, y * 2.1 + 5) * 0.3 - 0.5;
-  }
+  // Gladde ruis tussen -0,5 en 0,5.
   function ruis(x, y) {
     const xi = Math.floor(x);
     const yi = Math.floor(y);
@@ -390,7 +379,7 @@
     const b = hasj(xi + 1, yi);
     const c = hasj(xi, yi + 1);
     const d = hasj(xi + 1, yi + 1);
-    return a + (b - a) * sx + (c - a) * sy + (a - b - c + d) * sx * sy;
+    return a + (b - a) * sx + (c - a) * sy + (a - b - c + d) * sx * sy - 0.5;
   }
   function hasj(x, y) {
     let h = Math.imul(x | 0, 374761393) ^ Math.imul(y | 0, 668265263);

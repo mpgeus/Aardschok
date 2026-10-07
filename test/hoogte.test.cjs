@@ -29,35 +29,44 @@ test('hoogte: op "Vlak" heeft een land geen hoogte, en ligt alles op de grond zo
   assert.deepEqual(T.wandenVan(w, 40, 51), []);
 });
 
-test('hoogte: uit hetzelfde nummer hetzelfde land, met hoge heuvels en een richel', () => {
+test('hoogte: uit hetzelfde nummer hetzelfde land, met heuvels en dalen die doorlopen, en een richel', () => {
   const a = land(5, true);
   const b = land(5, true);
   assert.deepEqual(a.hoogte, b.hoogte);
-  const I = T.HOOGTE_INSTELLINGEN;
-  const hoogst = Math.max(...a.hoogte.glooiing);
-  assert.ok(hoogst >= 80 && hoogst <= I.heuvelHoog[1] + I.golf, `de hoogste heuvel is ${hoogst} pixels`);
+  let laag = Infinity;
+  let hoog = -Infinity;
+  for (let y = 0; y < a.h; y++) for (let x = 0; x < a.b; x++) {
+    const h = T.hoogteOp(a, x, y);
+    laag = Math.min(laag, h);
+    hoog = Math.max(hoog, h);
+  }
+  assert.ok(hoog - laag >= 200, `van dal tot top ${Math.round(hoog - laag)} pixels`);
   assert.ok(Object.keys(a.hoogte.niveau).length >= 12, 'een richel bij de rotsen');
   assert.ok(Object.keys(a.hoogte.hellingen).length >= 1, 'met een helling erop');
+  // het landschap loopt door buiten de kaart: geen vlakke rand
+  assert.notEqual(T.hoogteOp(a, -5, 40), 0);
+  assert.equal(T.hoekHoogte(a, -1, 40, 1), T.hoekHoogte(a, 0, 40, 0), 'de hoek buiten de kaart past op die erbinnen');
+  // wat bewaard wordt, is klein: het nummer en de vlakke stukken, niet een getal per hoekpunt
+  assert.ok(JSON.stringify(a.hoogte).length < 20000);
   // een ander land is anders
-  assert.notDeepEqual(land(7, true).hoogte.glooiing, a.hoogte.glooiing);
+  assert.notDeepEqual(T.hoekHoogten(land(7, true), 20, 20), T.hoekHoogten(a, 20, 20));
 });
 
-test('hoogte: een huis met zijn looppad en het plein liggen vlak, op het maaiveld', () => {
+test('hoogte: een huis met zijn looppad ligt vlak, en het plein ook', () => {
   for (const zaad of [3, 5, 7]) {
     const w = land(zaad, true);
     const plan = T.maakGehucht(zaad);
     const lp = T.GEBOUWEN_INSTELLINGEN.looppad;
     for (const h of plan.huizen) {
+      const hoogten = new Set();
       for (let y = h.y - lp; y < h.y + h.d + lp; y++) {
-        for (let x = h.x - lp; x < h.x + h.b + lp; x++) {
-          if (x < 0 || y < 0 || x >= w.b || y >= w.h) continue;
-          assert.deepEqual(T.hoekHoogten(w, x, y), [0, 0, 0, 0], `land ${zaad}: ${h.rol} op (${h.x}, ${h.y}), tegel (${x}, ${y})`);
-        }
+        for (let x = h.x - lp; x < h.x + h.b + lp; x++) for (const v of T.hoekHoogten(w, x, y)) hoogten.add(Math.round(v * 100));
       }
+      assert.equal(hoogten.size, 1, `land ${zaad}: ${h.rol} op (${h.x}, ${h.y}) ligt niet vlak`);
     }
     for (const [px, py] of plan.plein) {
-      const [x, y] = [Math.round(px), Math.round(py)];
-      assert.deepEqual(T.hoekHoogten(w, x, y), [0, 0, 0, 0], `land ${zaad}: het plein op (${x}, ${y})`);
+      const hoeken = T.hoekHoogten(w, Math.round(px), Math.round(py));
+      assert.ok(Math.max(...hoeken) - Math.min(...hoeken) < 1, `land ${zaad}: het plein op (${Math.round(px)}, ${Math.round(py)})`);
     }
   }
 });

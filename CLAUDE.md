@@ -277,21 +277,27 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.PRAATJE_INSTELLINGEN`.
 - `js/iso.js`: de isometrische projectie (tegel 64×32) en tekenhulpen (`ruit`, `blok`).
 - `js/hoogte.js`: **de hoogte van het land** (vraag 121, stap 1, 7 okt; Marcel: "ik doel ook meer op heuvels in het
-  landschap", "a ja 32, b hoger", "Ik wil dat de akkers mee bollen met de heuvel"): elke hoek van een tegel heeft een
-  hoogte in pixels, de glooiing van het hoekpunt (`w.hoogte.glooiing`) plus het niveau van de tegel maal een trede van 32
-  (`w.hoogte.niveau`), of per hoek voor een helling (`w.hoogte.hellingen`); delen buren hun hoek, dan glooit het, anders
-  staat er een wand (`T.wandenVan`, alleen aan de zuid- en oostkant, want die zie je). De vragen: `T.hoekHoogte`,
-  `T.hoogteOp` (op een punt), `T.isSchuin`, `T.naarSchermOp` en `T.naarWereldOp` (het scherm en de muis, met de hoogte),
+  landschap", "a ja 32", "Ik wil dat de akkers mee bollen met de heuvel", en "De heuvels moeten niet alleen kleine bultjes
+  zijn ... Uiteindelijk wilde ik een map van 2500x2500", "Waar alles doorloopt"): elke hoek van een tegel heeft een hoogte
+  in pixels, de glooiing van het hoekpunt plus het niveau van de tegel maal een trede van 32 (`w.hoogte.niveau`), of per
+  hoek voor een helling (`w.hoogte.hellingen`); delen buren hun hoek, dan glooit het, anders staat er een wand
+  (`T.wandenVan`, alleen aan de zuid- en oostkant, want die zie je). **De glooiing is een rekensom, geen lijst**
+  (`glooiingOp`): drie lagen gladde ruis uit het nummer van het land (`groot`, `midden`, `klein` in
+  `T.HOOGTE_INSTELLINGEN`, van dal tot top zo'n 300 à 400 pixels), overal te vragen, ook buiten de kaart, platter op de
+  vlakte om het dorp, en vlak op de vlakke stukken (`w.hoogte.vlakken`: een huis met zijn looppad, het plein, het water),
+  dus een bewaard spel onthoudt alleen het nummer en die stukken, en het landschap loopt door als het land groter wordt.
+  Voor het tekenen staan de hoeken in een lijst (met een rand van 48 tegels om de kaart), opnieuw als `w.hoogte.versie`
+  verandert. De vragen: `T.hoekHoogte`, `T.hoogteOp` (op een punt, op de driehoeken van de tegel), `T.isSchuin`,
+  `T.naarSchermOp` en `T.naarWereldOp` (het scherm en de muis, met de hoogte), `T.lichtOpHoekpunt` en
   `T.helderheidVanVlak` (lichter naar de zon). De maker legt hem met de spelregel "Hoogte" op "Heuvels" (`T.legHoogte`,
-  vanuit `T.laadGemaaktGehucht`): hoge heuvels in het open, wilde land, een zachte glooiing, vlak bij een huis, het plein
-  en het water, en een richel met een rotswand en een helling bij de rotsen. Standaard staat hij op "Vlak", en een kaart
-  zonder `w.hoogte` tekent pixel voor pixel als vroeger. `js/tekenen.js` tekent alles op de grond met `opGrond` (de
-  hoogte eraf), een schuine grondtegel met één scheve transformatie en een lichte of donkere ruit erover
-  (`tekenSchuineTegel`), de wanden uit een textuur in code (`tekenWanden`, `wandTextuur`), en het graan dat meebuigt
-  (`tekenGraan`, in smalle stroken en korte stukjes die elk de hoogte van de grond volgen, zodat de plaatjes op elkaar
-  aansluiten); de grond
-  met hoogte van achter naar voren. Lopen, zien en bouwen weten er nog niets van (stap 2), en
-  een heuvel vóór iemand dekt hem nog niet af. De proefplaat: `gereedschap/pixelart/hoogte-proef.cjs`.
+  vanuit `T.laadGemaaktGehucht`), met een richel met een rotswand en een helling bij de rotsen. Standaard staat hij op
+  "Vlak", en een kaart zonder `w.hoogte` tekent pixel voor pixel als vroeger. `js/tekenen.js` tekent alles op de grond met
+  `opGrond` (de hoogte eraf), een grondtegel op het vlak van zijn hoeken (`tekenSchuineTegel`, `opTegelVlak`), het licht
+  zacht verlopend uit een plaatje met een pixel per hoekpunt (`lichtKaartVan`, `tekenGrondMetLicht`), de wanden uit een
+  textuur in code (`tekenWanden`, `wandTextuur`), het land om de kaart ook op de helling, en het graan dat meebuigt
+  (`tekenGraan`, in smalle stroken en korte stukjes die elk de hoogte van de grond volgen, ver uitgezoomd grover); de grond
+  met hoogte van achter naar voren. Lopen, zien en bouwen weten er nog niets van (stap 2), en een heuvel vóór iemand dekt
+  hem nog niet af. De proefplaat: `gereedschap/pixelart/hoogte-proef.cjs`.
 - `js/sprites.js`: de pixel art uit `beelden/`. `T.sprites.figuur/tegel/muur/voorwerp` wijzen
   een cel op een vel aan, `T.sprites.houding(S, wezen)` kiest houding, richting en fase uit de
   spelstaat zelf (pad, uitval, flits, dood), en

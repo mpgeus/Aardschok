@@ -5330,6 +5330,16 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     - **C, de kom open naar de camera:** de camera draait niet, en een hoge heuvel dekt veel af (320 pixels is zo'n twintig
       rijen tegels). Dus loopt het land achter het dorp op (noord en west) en blijft het ervoor laag, zodat het dorp
       zichtbaar blijft; wat achter een heuvel valt, krijgt in stap 2 de doorkijk.
+    **Marcel (7 okt): "Waar alles doorloopt".** Dus het dorp op een vlakte met heuvels overal eromheen (niet in een kom),
+    en het landschap loopt overal door, ook buiten de kaart. **Gebouwd** (deze sessie): de glooiing is nu een rekensom uit
+    het nummer van het land (A), drie lagen ruis van zo'n 64, 20 en 7 tegels breed, van dal tot top 300 à 400 pixels
+    binnen het stuk van 100 bij 100 (B, tot zo'n tien treden), platter op de vlakte om het plein (10 tot 32 tegels), vlak
+    onder een huis met zijn looppad (huizen die elkaar raken op één hoogte), het plein en het water (een beek op de hoogte
+    van het grote dal). Een bewaard spel onthoudt alleen het nummer en de vlakke stukken (zo'n 5 kB). Het land om de kaart
+    ligt ook op de helling. Het licht verloopt nu zacht over elke tegel (een pixel per hoekpunt), zonder trapjes; er blijft
+    een haarfijn naadje tussen de tegels, want het licht in de tegel zelf bakken maakte het tekenen tien keer zo duur.
+    Gemeten hier (zonder videokaart): de grond opnieuw tekenen 250 à 300 ms (vlak 50 à 100), en een gewoon beeld 8 ms
+    dichtbij (vlak 1), vooral het graan op de hellingen; met "Vlak" is alles byte voor byte als vroeger.
 122. **De snelheid in de browser en via Steam** (Marcel, 4 okt, achtentwintigste sessie: "Ik wil nu ook weten wat het
     verschil in performance is tussen nu spelen in de browser en straks via Steam. Want lag, geheugen tekort etc is geen
     optie straks"; plan van Claude; open). Uitgewerkt in `verpakken.md`, "Snelheid: in de browser of via Steam".
