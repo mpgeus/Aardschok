@@ -28,7 +28,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf; sinds 1 okt ook wat je mist voor de kapel en de smidse, en waar het vandaan komt; sinds 2 okt wat de huizen missen, en de ketens (een molen voor de bakkerij) | vraag 58, 79, 87, 90 |
 | De houthakker hakt en plant | gebouwd (6 okt; Marcel: "A ja B ja C ja D zo"): zijn hout komt uit de bomen om zijn schuur, elke tien hout een boom; naast de stronk twee boompjes, in een jaar of twee bomen, zodat het bos om hem blijft; zonder boom staat hij stil, en werkt zijn hand elders; hij komt alleen bij minstens 30 bomen binnen tien tegels, en loopt tussen zijn stronken door (vraag 129, e, b en f); in de speeltest van vier jaar komt elk dorp boven de 100 en wint er voor het eerst een | vraag 115, 129 |
 | De markt op het plein | gebouwd (6 okt; vraag 110, d, en 127, stap 1 en 2): een marktblok van twee rijen kramen met manden op het plein, voor 8 hout en 6 goud, dat meegroeit met het dorp (een kraam per 15 mensen, daarna langs de weg), met kramen vol of leeg naar wat het dorp heeft; de maker legt een groter plein; de kooplui, de boodschappen en de marktdag nog niet | vraag 110, d; 127 |
-| De verzoeken | stap 1 tot en met 3 gebouwd (3 okt): wat het dorp mist, komt een inwoner je vragen, met de plek die hij koos en wat het kost; ja of nee, en ben je weg, dan beslist je raadsman; in het bouwmenu alleen nog het erf en oproepen met een premie (de spelregel "Wie bouwt"); de speeltest speelt zo; en uit eigen wil: een ondernemer die wapens wil maken (verboden) of een tweede herberg beginnen, met wat ja en nee aan gevolgen hebben (vraag 104); sinds 6 okt rooit wie een werkplaats vraagt zijn plek eerst, als er geen open grond meer is (vraag 110, e) | vraag 103, 104, 110 |
+| De verzoeken | stap 1 tot en met 3 gebouwd (3 okt): wat het dorp mist, komt een inwoner je vragen, met de plek die hij koos en wat het kost; ja of nee, en ben je weg, dan beslist je raadsman; in het bouwmenu alleen nog het erf en oproepen met een premie (de spelregel "Wie bouwt"); de speeltest speelt zo; en uit eigen wil: een ondernemer die wapens wil maken (verboden; sinds 7 okt besloten: niet meer, vraag 131) of een tweede herberg beginnen, met wat ja en nee aan gevolgen hebben (vraag 104); sinds 6 okt rooit wie een werkplaats vraagt zijn plek eerst, als er geen open grond meer is (vraag 110, e) | vraag 103, 104, 110 |
 | Twee bazen | stap 1 en 2 gebouwd (3 okt; Marcel: "106 a b c d ja"): de gunst van de heer en het vertrouwen van het dorp in de balk, met een waarschuwing onder 20 en op 0 weg (ontslagen of weggejaagd); betrapt op verstoppen is de laatste waarschuwing; elke maand een gril van de heer in een brief, die zijn gunst tegen het dorp weegt | vraag 106 |
 | Dorpsfeesten | gebouwd (3 okt): het oogstfeest en de meiboom; zeg je ja, dan viert het hele dorp het op het plein, een hele dag (en niemand werkt) of een avond, met licht en de meiboom in pixel art; de rest (meer feesten, een grote bruiloft) later | vraag 84, 97 |
 | Besloten | het spel zelf (23 sep); geldt nog | |
@@ -230,7 +230,9 @@ spel naartoe gaat:
     volgen als je opstaat;
   - de heervaart (vraag 60) is zijn leger: de mannen van zijn bondgenoten; en wie terugkomt, is veteraan en vecht mee in
     jouw opstand (de heer traint je opstandelingen);
-  - de wapenmaker (vraag 104) maakt de wapens voor de opstand, en die zijn verboden;
+  - de wapenmaker (vraag 104) maakt de wapens voor de opstand, en die zijn verboden; **sinds 7 okt niet meer** (Marcel:
+    "Wapens zijn niet meer verboden. Het is logisch dat er wapens zijn om de stad te verdedigen. Alleen weerstand tegen
+    de heer is inacceptabel"): de heer straft niet wat je hebt, maar wat je tegen hem doet (werklijst vraag 131);
   - de inner, de argwaan, het verstoppen en de getuigen zijn de dekking voor wat je voorbereidt: wat je voor hem
     verstopt, is de kas van je opstand (`opmerkingen.md`, "De heer als eerste tegenstander", 1 okt). Verstoppen wordt
     geen haak, maar krijgt een doel;
@@ -629,6 +631,9 @@ wachthuis na de rovers, de bouwstof en de wensen van de huizen, en wat het doel 
     **stiekem** ("Een paar dagen later hoor je hameren, 's nachts, onder zijn huis."): een wapen per vier dagen, die de
     inner niet ziet, maar de soldaten vinden als ze die kelder doorzoeken, en dan straft de heer net zo. Na de tweede
     nee trekt hij weg.
+    **Besloten (7 okt, Marcel; nog niet gebouwd, werklijst vraag 131):** "Wapens zijn niet meer verboden. Het is logisch
+    dat er wapens zijn om de stad te verdedigen. Alleen weerstand tegen de heer is inacceptabel." Dan is de wapenmaker
+    een gewone werkplaats, zonder inner, verzegelen of kelder; het plan staat bij vraag 131.
   - **De tweede herberg (gebouwd, 3 okt).** In een dorp met één herberg, vanaf 50 mensen, wil iemand er een tweede
     beginnen: "Schout, ik wil een tweede herberg beginnen, naast mijn huis. Elf mensen wonen meer dan een uur van de
     herberg, en komen er zelden." (of: de herberg is droog; of: één is te weinig). **Ja:** hij brouwt ook, en ze vechten
