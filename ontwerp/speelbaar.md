@@ -153,6 +153,40 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 7 okt: de wolven, stap 2a en 2b (werklijst, vraag 116)
+
+Gespeeld in de zevenendertigste sessie, op `ccr-f6ba5992-1e77dw` op `2551cfb`: de beesten in het bos met het leven in het
+bos (stap 2a: honger, de jacht op herten, jongen, holen die verhuizen) en de dreiging (stap 2b), na een eerste speeltest op
+`6bb5cc1`. `npm run speeltest -- bouwer sluw --maker --jaren 4`, drie tegelijk, in een klein uur. Geen fouten in de
+console. 62707 is zaad 1, 73425 zaad 2, 72022 zaad 3.
+
+| Land | Speler | Mensen aan het eind van jaar 1 tot 4 | Dagen dat alle huizen alles hadden, per jaar (waarvan alle woningen in steen) | Wolven: schapen genomen, gebeten, dood | Hoe het eindigde |
+|---|---|---|---|---|---|
+| 62707 | bouwer | 53, 102, 115, 158 | 26 (0), 186 (126), 360 (307), 68 (60) | 3, 0, 0 | **gewonnen**, op 24 grasmaand van het vierde jaar |
+| 73425 | bouwer | 50, 75, 107, 112 | 32 (0), 81 (81), 255 (159), 346 (270) | 3, 0, 0 | **gewonnen**, op 23 slachtmaand van het vierde jaar |
+| 72022 | bouwer | 51, 76, 114, 130 | 43 (0), 199 (199), 252 (191), 346 (320) | 3, 0, 0 | **gewonnen**, op 20 louwmaand van het vierde jaar |
+| 62707 | sluw | 57, 100, 115, 164 | 26 (0), 169 (91), 336 (277), 95 (90) | 2, 0, 0 | **gewonnen**, op 24 bloeimaand van het vierde jaar |
+| 73425 | sluw | 52, 101, 120, 131 | 33 (0), 0, 0, 297 (268) | 4, 0, 0 | de vier jaar uit, de teller op 298 |
+| 72022 | sluw | 49, 70 | 41 (0), 28 van 165 (26) | 1, 0, 0 | gevallen, op 15 oogstmaand van het tweede jaar (een rover, zoals hieronder) |
+
+**Wat het zegt:**
+1. **Vier van de zes spellen winnen** (zonder de wolven drie, hieronder): de bouwer op alle drie de landen, en de sluwe
+   bouwer op 62707. De sluwe bouwer op 73425 haalde nu de vier jaar (hieronder werd hij in het derde jaar weggejaagd) en
+   kwam tot 298 dagen op de teller. De wolven maken het winnen niet onmogelijk; wat er verder anders liep, is ook toeval:
+   wie door de wolven anders loopt of werkt, verandert de rest van het spel.
+2. **De wolven nemen een tot vier schapen per dorp in vier jaar,** en de herder komt het de ochtend erna zeggen; de speler
+   koos dan de jacht (een tot drie keer per spel), en die kost de roedel twee wolven. **Niemand werd gebeten:** zolang er
+   schapen op de meent staan, gaan de wolven daarheen. Wie werkt, schrok in vier jaar een paar keer zichtbaar (het dorp
+   zegt het als de status begint).
+3. **De eerste speeltest (`6bb5cc1`) dreigde te veel en verkeerd:** wie werkte, schrok 470 tot 910 keer in vier jaar, met
+   bijna elke avond een bericht, en er werd geen schaap genomen, maar wie uit de herberg kwam, werd gebeten (twee tot
+   acht keer, twee doden in zes spellen). Daarom schrikt nu alleen wie aan het bos werkt, van een roedel met honger, met
+   een kans, en gaat een roedel eerst naar de schapen. Ook toen wonnen er vier van de zes.
+
+**Wat het vraagt:** stap 2b doet wat hij moet zonder het spel te breken. Een vraag voor Marcel: de wolven zijn nu vooral
+een gevaar voor de schapen; mensen lopen pas gevaar met een hek om de schapen, of zonder schapen. Is dat de dreiging die
+hij wil, of moeten ze ook zonder dat iemand kunnen pakken?
+
 ## De speeltest van 7 okt: wapens zijn niet meer verboden (werklijst, vraag 131)
 
 Gespeeld in de zevenendertigste sessie, op `ccr-f6ba5992-1e77dw` op `88d6e8d`: de versie van vraag 130 hieronder, en
