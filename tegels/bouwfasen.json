@@ -30095,6 +30095,1046 @@
      "naam": "half-gedekt"
     }
    ]
+  },
+  "planken-herberg2-leien-z": {
+   "gebouw": "herberg",
+   "beslaat": [
+    12,
+    6
+   ],
+   "bestand": "bouwfasen/planken-herberg2-leien-z.png",
+   "fasen": [
+    {
+     "x": 580,
+     "y": 747,
+     "b": 623,
+     "h": 302,
+     "anker": [
+      239,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 747,
+     "b": 578,
+     "h": 587,
+     "anker": [
+      193,
+      312
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1323,
+     "y": 0,
+     "b": 633,
+     "h": 589,
+     "anker": [
+      221,
+      312
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 673,
+     "y": 0,
+     "b": 648,
+     "h": 745,
+     "anker": [
+      227,
+      468
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 671,
+     "h": 745,
+     "anker": [
+      239,
+      468
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "planken-herberg2-leien-o": {
+   "gebouw": "herberg",
+   "beslaat": [
+    6,
+    12
+   ],
+   "bestand": "bouwfasen/planken-herberg2-leien-o.png",
+   "fasen": [
+    {
+     "x": 580,
+     "y": 747,
+     "b": 624,
+     "h": 302,
+     "anker": [
+      431,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 747,
+     "b": 578,
+     "h": 587,
+     "anker": [
+      385,
+      312
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1326,
+     "y": 0,
+     "b": 633,
+     "h": 589,
+     "anker": [
+      406,
+      312
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 673,
+     "y": 0,
+     "b": 651,
+     "h": 745,
+     "anker": [
+      419,
+      468
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 671,
+     "h": 745,
+     "anker": [
+      431,
+      468
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "planken-herberg2-leien-n": {
+   "gebouw": "herberg",
+   "beslaat": [
+    12,
+    6
+   ],
+   "bestand": "bouwfasen/planken-herberg2-leien-n.png",
+   "fasen": [
+    {
+     "x": 580,
+     "y": 747,
+     "b": 623,
+     "h": 302,
+     "anker": [
+      239,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 747,
+     "b": 578,
+     "h": 587,
+     "anker": [
+      193,
+      312
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1323,
+     "y": 0,
+     "b": 633,
+     "h": 589,
+     "anker": [
+      220,
+      312
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 673,
+     "y": 0,
+     "b": 648,
+     "h": 745,
+     "anker": [
+      229,
+      468
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 671,
+     "h": 745,
+     "anker": [
+      240,
+      468
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "planken-herberg2-leien-w": {
+   "gebouw": "herberg",
+   "beslaat": [
+    6,
+    12
+   ],
+   "bestand": "bouwfasen/planken-herberg2-leien-w.png",
+   "fasen": [
+    {
+     "x": 580,
+     "y": 747,
+     "b": 623,
+     "h": 302,
+     "anker": [
+      431,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 747,
+     "b": 578,
+     "h": 587,
+     "anker": [
+      385,
+      312
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1326,
+     "y": 0,
+     "b": 633,
+     "h": 589,
+     "anker": [
+      419,
+      312
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 673,
+     "y": 0,
+     "b": 651,
+     "h": 745,
+     "anker": [
+      424,
+      468
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 671,
+     "h": 745,
+     "anker": [
+      432,
+      468
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "planken-herberg2-pannen-z": {
+   "gebouw": "herberg",
+   "beslaat": [
+    12,
+    6
+   ],
+   "bestand": "bouwfasen/planken-herberg2-pannen-z.png",
+   "fasen": [
+    {
+     "x": 580,
+     "y": 704,
+     "b": 623,
+     "h": 302,
+     "anker": [
+      239,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 704,
+     "b": 578,
+     "h": 587,
+     "anker": [
+      193,
+      312
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1321,
+     "y": 0,
+     "b": 633,
+     "h": 589,
+     "anker": [
+      221,
+      312
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 672,
+     "y": 0,
+     "b": 647,
+     "h": 702,
+     "anker": [
+      226,
+      425
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 670,
+     "h": 702,
+     "anker": [
+      238,
+      425
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "planken-herberg2-pannen-o": {
+   "gebouw": "herberg",
+   "beslaat": [
+    6,
+    12
+   ],
+   "bestand": "bouwfasen/planken-herberg2-pannen-o.png",
+   "fasen": [
+    {
+     "x": 580,
+     "y": 704,
+     "b": 624,
+     "h": 302,
+     "anker": [
+      431,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 704,
+     "b": 578,
+     "h": 587,
+     "anker": [
+      385,
+      312
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1324,
+     "y": 0,
+     "b": 633,
+     "h": 589,
+     "anker": [
+      406,
+      312
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 672,
+     "y": 0,
+     "b": 650,
+     "h": 702,
+     "anker": [
+      418,
+      425
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 670,
+     "h": 702,
+     "anker": [
+      430,
+      425
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "planken-herberg2-pannen-n": {
+   "gebouw": "herberg",
+   "beslaat": [
+    12,
+    6
+   ],
+   "bestand": "bouwfasen/planken-herberg2-pannen-n.png",
+   "fasen": [
+    {
+     "x": 580,
+     "y": 704,
+     "b": 623,
+     "h": 302,
+     "anker": [
+      239,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 704,
+     "b": 578,
+     "h": 587,
+     "anker": [
+      193,
+      312
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1321,
+     "y": 0,
+     "b": 633,
+     "h": 589,
+     "anker": [
+      220,
+      312
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 672,
+     "y": 0,
+     "b": 647,
+     "h": 702,
+     "anker": [
+      229,
+      425
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 670,
+     "h": 702,
+     "anker": [
+      240,
+      425
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "planken-herberg2-pannen-w": {
+   "gebouw": "herberg",
+   "beslaat": [
+    6,
+    12
+   ],
+   "bestand": "bouwfasen/planken-herberg2-pannen-w.png",
+   "fasen": [
+    {
+     "x": 580,
+     "y": 704,
+     "b": 623,
+     "h": 302,
+     "anker": [
+      431,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 704,
+     "b": 578,
+     "h": 587,
+     "anker": [
+      385,
+      312
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1324,
+     "y": 0,
+     "b": 633,
+     "h": 589,
+     "anker": [
+      419,
+      312
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 672,
+     "y": 0,
+     "b": 650,
+     "h": 702,
+     "anker": [
+      424,
+      425
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 670,
+     "h": 702,
+     "anker": [
+      432,
+      425
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "roze-herberg2-leien-z": {
+   "gebouw": "herberg",
+   "beslaat": [
+    12,
+    6
+   ],
+   "bestand": "bouwfasen/roze-herberg2-leien-z.png",
+   "fasen": [
+    {
+     "x": 580,
+     "y": 747,
+     "b": 623,
+     "h": 302,
+     "anker": [
+      239,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 747,
+     "b": 578,
+     "h": 587,
+     "anker": [
+      193,
+      312
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1323,
+     "y": 0,
+     "b": 633,
+     "h": 589,
+     "anker": [
+      221,
+      312
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 673,
+     "y": 0,
+     "b": 648,
+     "h": 745,
+     "anker": [
+      227,
+      468
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 671,
+     "h": 745,
+     "anker": [
+      239,
+      468
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "roze-herberg2-leien-o": {
+   "gebouw": "herberg",
+   "beslaat": [
+    6,
+    12
+   ],
+   "bestand": "bouwfasen/roze-herberg2-leien-o.png",
+   "fasen": [
+    {
+     "x": 580,
+     "y": 747,
+     "b": 624,
+     "h": 302,
+     "anker": [
+      431,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 747,
+     "b": 578,
+     "h": 587,
+     "anker": [
+      385,
+      312
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1328,
+     "y": 0,
+     "b": 633,
+     "h": 589,
+     "anker": [
+      406,
+      312
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 673,
+     "y": 0,
+     "b": 653,
+     "h": 745,
+     "anker": [
+      419,
+      468
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 671,
+     "h": 745,
+     "anker": [
+      431,
+      468
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "roze-herberg2-leien-n": {
+   "gebouw": "herberg",
+   "beslaat": [
+    12,
+    6
+   ],
+   "bestand": "bouwfasen/roze-herberg2-leien-n.png",
+   "fasen": [
+    {
+     "x": 580,
+     "y": 747,
+     "b": 623,
+     "h": 302,
+     "anker": [
+      239,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 747,
+     "b": 578,
+     "h": 587,
+     "anker": [
+      193,
+      312
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1323,
+     "y": 0,
+     "b": 633,
+     "h": 589,
+     "anker": [
+      220,
+      312
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 673,
+     "y": 0,
+     "b": 648,
+     "h": 745,
+     "anker": [
+      229,
+      468
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 671,
+     "h": 745,
+     "anker": [
+      240,
+      468
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "roze-herberg2-leien-w": {
+   "gebouw": "herberg",
+   "beslaat": [
+    6,
+    12
+   ],
+   "bestand": "bouwfasen/roze-herberg2-leien-w.png",
+   "fasen": [
+    {
+     "x": 580,
+     "y": 747,
+     "b": 623,
+     "h": 302,
+     "anker": [
+      431,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 747,
+     "b": 578,
+     "h": 587,
+     "anker": [
+      385,
+      312
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1328,
+     "y": 0,
+     "b": 633,
+     "h": 589,
+     "anker": [
+      419,
+      312
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 673,
+     "y": 0,
+     "b": 653,
+     "h": 745,
+     "anker": [
+      426,
+      468
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 671,
+     "h": 745,
+     "anker": [
+      432,
+      468
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "roze-herberg2-pannen-z": {
+   "gebouw": "herberg",
+   "beslaat": [
+    12,
+    6
+   ],
+   "bestand": "bouwfasen/roze-herberg2-pannen-z.png",
+   "fasen": [
+    {
+     "x": 580,
+     "y": 704,
+     "b": 623,
+     "h": 302,
+     "anker": [
+      239,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 704,
+     "b": 578,
+     "h": 587,
+     "anker": [
+      193,
+      312
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1321,
+     "y": 0,
+     "b": 633,
+     "h": 589,
+     "anker": [
+      221,
+      312
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 672,
+     "y": 0,
+     "b": 647,
+     "h": 702,
+     "anker": [
+      226,
+      425
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 670,
+     "h": 702,
+     "anker": [
+      238,
+      425
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "roze-herberg2-pannen-o": {
+   "gebouw": "herberg",
+   "beslaat": [
+    6,
+    12
+   ],
+   "bestand": "bouwfasen/roze-herberg2-pannen-o.png",
+   "fasen": [
+    {
+     "x": 580,
+     "y": 704,
+     "b": 624,
+     "h": 302,
+     "anker": [
+      431,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 704,
+     "b": 578,
+     "h": 587,
+     "anker": [
+      385,
+      312
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1326,
+     "y": 0,
+     "b": 633,
+     "h": 589,
+     "anker": [
+      406,
+      312
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 672,
+     "y": 0,
+     "b": 652,
+     "h": 702,
+     "anker": [
+      418,
+      425
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 670,
+     "h": 702,
+     "anker": [
+      430,
+      425
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "roze-herberg2-pannen-n": {
+   "gebouw": "herberg",
+   "beslaat": [
+    12,
+    6
+   ],
+   "bestand": "bouwfasen/roze-herberg2-pannen-n.png",
+   "fasen": [
+    {
+     "x": 580,
+     "y": 704,
+     "b": 623,
+     "h": 302,
+     "anker": [
+      239,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 704,
+     "b": 578,
+     "h": 587,
+     "anker": [
+      193,
+      312
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1321,
+     "y": 0,
+     "b": 633,
+     "h": 589,
+     "anker": [
+      220,
+      312
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 672,
+     "y": 0,
+     "b": 647,
+     "h": 702,
+     "anker": [
+      229,
+      425
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 670,
+     "h": 702,
+     "anker": [
+      240,
+      425
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "roze-herberg2-pannen-w": {
+   "gebouw": "herberg",
+   "beslaat": [
+    6,
+    12
+   ],
+   "bestand": "bouwfasen/roze-herberg2-pannen-w.png",
+   "fasen": [
+    {
+     "x": 580,
+     "y": 704,
+     "b": 623,
+     "h": 302,
+     "anker": [
+      431,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 0,
+     "y": 704,
+     "b": 578,
+     "h": 587,
+     "anker": [
+      385,
+      312
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 1326,
+     "y": 0,
+     "b": 633,
+     "h": 589,
+     "anker": [
+      419,
+      312
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 672,
+     "y": 0,
+     "b": 652,
+     "h": 702,
+     "anker": [
+      426,
+      425
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 670,
+     "h": 702,
+     "anker": [
+      432,
+      425
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
   }
  }
 }
