@@ -5188,6 +5188,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     200 zo'n 25, 's avonds anderhalf tegelijk. De oude toetsen van het dagritme zijn weer zoals ze waren.
 121. **Hoogteverschillen op de kaart** (Marcel, 4 okt, achtentwintigste sessie: "Ik heb wel 1 extra verzoek. Hoogte
     verschillen op de kaart. 😁"; plan van Claude; open).
+    **Bezig in sessie `claude/elegant-meitner-d3ss2z`** (7 okt): d, de proefplaat (gereedschap, niets in het spel), naast de wolven en de grote gebouwen.
     **Wat er al is:** het ontwerp van 20 sep (`kaarten.md`, "Hoogte is een getal per tegel", Marcels keuze toen): een
     getal per tegel, de wand tussen twee hoogtes afgeleid zoals een randtegel tussen twee grondsoorten, een helling waar
     je over mag, alles op een hogere tegel een trede omhoog, en wie hoog staat, ziet verder. Dat was nog voor Tiled en de
@@ -5365,7 +5366,6 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     maak hem straks wel zelf" (hij kon niet mee: de zip van 161 MB, en ook een stuk van 55 MB, gaf bij het sturen een 502).
 124. **De camera draaien** (Marcel, 4 okt, gevraagd in de sessie van de huizen en doorgegeven aan die van WebGL: "ik wil
     ook de camera kunnen draaien. Is dat mogelijk"; plan van Claude; open).
-    **Bezig in sessie `claude/elegant-meitner-d3ss2z`** (7 okt): het plan voor stap 1, het spel zelf in kwartslagen (`Q` en `E`), naast de sessie van de wolven.
     **Kan het?** Ja, in kwartslagen (`Q` en `E`, zoals in Anno, The Sims en Project Zomboid). Vrij draaien niet: pixel art
     is getekend voor één hoek, en tussenstanden worden vlekken. Bij een kwartslag blijft de kaart dezelfde (Tiled, de
     regels, het lopen, het zicht: niets verandert); alleen hoe hij op het scherm komt, draait.
