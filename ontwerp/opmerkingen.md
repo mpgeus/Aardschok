@@ -827,3 +827,7 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   zouden er het hele jaar kunnen zijn, onder een toets: wat je echt hebt, en wat de heer tot nu toe van je
   weet (wat zijn inner telde, wat de marskramer hem vertelde). Dat zijn de rekenboeken van `spel.md` (punt 6),
   en het maakt de kern elke dag zichtbaar, niet pas in lentemaand. Na de proef; niet gekozen.
+- **Stropen: de herten zijn van de heer** (7 okt, achtendertigste sessie, bij het plan voor vraag 116, stap 3). De
+  jager jaagt in het bos van de heer, en zijn opmerking in `T.GEBOUWEN.jager` zegt al "stropen is ook een keuze". Als
+  de jager echt herten neemt, kan de heer er iets van vinden (zoals de houtkap en het bos ontginnen: gemeld kost gunst,
+  stiekem is betrapt worden). Niet in stap 3; misschien met de wetten (een wet "jagen in het bos van de heer").
