@@ -125,8 +125,8 @@
         e.y = volgende.y;
         e.pad.shift();
         e.onderweg = false;
-        // Waar mensen lopen, slijt het gras tot een paadje (js/paden.js); een koe of een schaap telt niet.
-        if (w.paden && !e.dier) T.telStap(w, volgende.x, volgende.y);
+        // Waar mensen lopen, slijt het gras tot een paadje (js/paden.js); een koe, een schaap of het wild telt niet.
+        if (w.paden && !e.dier && !e.beest) T.telStap(w, volgende.x, volgende.y);
         if (hier) T.bijAankomst(S, e, volgende);
         if (!e.pad.length) klaar(e);
       } else {

@@ -400,6 +400,19 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   rooien de buren de rest (`T.tikRooienDag`). Een stuk in het bos van de heer (`T.inHetBosVanDeHeer`: zoveel bomen als een
   stuk bos bij het ontginnen) kost zijn gunst. Een appelboom is van iemand, behalve waar het huis van een gezin groter
   wordt: die kapt het gezin zelf, als geen vorm zonder hem kan (`T.isEigenBoom`, `v.teKappen`; vraag 130, a2).
+- `js/beesten.js`: **het wild in het bos** (vraag 116, stap 1, 7 okt; Marcel: "Rode ogen uit het duister", en "a ja, b
+  ja, c ja"): roedels wolven en groepjes herten, zoveel als het bos groot is, uit het nummer van het land (`T.zetBeesten`,
+  de eerste keer dat het dorp leeft: `T.werkBeestenBij`, elk beeld vanuit js/main.js en `T.werkDorpBij`), elk met een plek
+  diep in het bos (`G.thuis`) en plekken aan de bosrand (`G.rand`). Overdag rusten ze thuis; de wolven lopen 's nachts
+  langs de rand, de herten grazen er in de schemering (`T.beestenWillen`). Komt er een mens dichtbij (voor een hert ook een
+  wolf), dan gaan ze weg (`G.weg`, `G.vluchtNaar`); wie sluipt, komt dichterbij. Een groep is een ding dat de dieren delen
+  (`e.groep`, zoals `e.praatje`): alleen de leider zoekt een weg, de anderen lopen zijn weg af (`G.spoor`), en in
+  `T.ontwijk` ruilt de leider met wie van zijn groep in de weg staat. Een dier heeft `e.beest` (geen `e.dier`: dat is vee,
+  dat de inner telt), en `e.rust` en `e.rent` voor js/sprites.js (liggen, grazen, rennen). Een wolf begint geen gevecht
+  (`T.zoekOntdekking`), de schout kan hem aanvallen; 's nachts lichten zijn ogen rood op (`tekenOgen` in js/tekenen.js,
+  met `beelden/ogen.js` uit `gereedschap/pixelart/ogen.cjs`). Het hert komt uit `gereedschap/pixelart/wild.cjs`. De
+  spelregel "Beesten"; de getallen in `T.BEESTEN_INSTELLINGEN`. De dreiging (stap 2) en wat je ertegen doet (stap 3) komen
+  nog.
 - `js/bouwstijl.js`: **de bouwstijl van een land** (vraag 114, stap 2, 4 okt): elk land van de maker bouwt in één stijl
   (`w.stijl`, uit het nummer van het land, `T.stijlVoorLand`; het ontworpen gehucht heeft er geen en bouwt zoals altijd),
   met per soort een paar vormen, elk met de deur naar elke kant. De huizenbouwer noemt dat een stand; in het spel heet het
@@ -995,6 +1008,9 @@ met "Jij bouwt" (`T.zetOptie('wieBouwt', 'jij')`); die van de verzoeken staan in
 zijn; `('wapens')` laat de eerste die wapens wil het nu vragen, alsof de rovers net kwamen (in een dorp:
 `Spel.debug.trede('dorp')`, en sluit dan de brief van de heer), `('herberg')` de eerste die een tweede herberg wil (vanaf
 `T.ONDERNEMERS_INSTELLINGEN.herberg.vanaf` mensen).
+`Spel.debug.beesten()` zegt per groep wolven of herten hoeveel het er zijn, waar de leider is en wat hij doet, wat de groep
+wil (thuis, aan de rand, of weg van iemand), zijn thuis en zijn plekken aan de rand; `('hier')` zet de schout tien tegels
+van de dichtste groep, om ze te bekijken, en `('opnieuw')` legt de groepen opnieuw.
 `Spel.debug.gril()` zegt welke gril op je antwoord wacht, met de keuzes en wat ze kosten; `('jacht')` laat die nu komen.
 `Spel.debug.bazen()` zegt de gunst van de heer en het vertrouwen van het dorp, waarom ze het laatst veranderden en of je
 gewaarschuwd bent; `('gunst', 15)` zet de gunst op 15 (met de brief als hij onder 20 komt), `('vertrouwen', 0)` jaagt je

@@ -480,6 +480,7 @@
       if (hier) {
         T.werkOogstBij(S, hier, dtWereld);
         T.werkVeldwerkBij(S, hier);
+        T.werkBeestenBij(S, hier); // de wolven en de herten in het bos (js/beesten.js)
       }
       T.laatDwalen(S, dtWereld);
       const m = S.modus === 'verkennen' && T.zoekOntdekking(S);
@@ -971,6 +972,49 @@
           spoor: T.spoorNaar(D, v), soldatenVinden: { elkJaar: T.vindKansVanBosAkker(D, v, false), heelDorp: T.vindKansVanBosAkker(D, v, true) },
         })),
         staat: D.ontginnen || null,
+      };
+    },
+    // De beesten in het bos (js/beesten.js; werklijst vraag 116): per groep de soort, hoeveel dieren, waar de leider is en
+    // wat de groep wil (thuis, aan de rand, of weg van iemand), zijn hol en zijn plekken aan de rand, en of hij nu wegrent.
+    // ('hier'): de schout staat nu tien tegels van de dichtste groep, net buiten wat ze schuw maakt, om ze te bekijken.
+    // ('opnieuw'): de groepen opnieuw, uit het zaad van het land.
+    beesten(wat) {
+      const D = T.dorpHier(S);
+      if (!D || !D.kalender) return 'De beesten zijn er alleen bij een dorp.';
+      if (wat === 'opnieuw') {
+        S.wereld.wezens = S.wereld.wezens.filter((e) => !e.beest);
+        T.zetBeesten(D);
+      }
+      const h = T.tegelVan(S.schout);
+      const groepen = T.beestenVan(D);
+      if (wat === 'hier' && groepen.length) {
+        const dichtst = groepen.reduce((a, b) => (T.afstand(T.tegelVan(b.leden[0]), h) < T.afstand(T.tegelVan(a.leden[0]), h) ? b : a));
+        const lt = T.tegelVan(dichtst.leden[0]);
+        let plek = null;
+        for (let r = 10; r <= 16 && !plek; r++) {
+          for (let dy = -r; dy <= r && !plek; dy++) {
+            for (let dx = -r; dx <= r && !plek; dx++) {
+              if (Math.max(Math.abs(dx), Math.abs(dy)) === r && T.isBegaanbaar(S.wereld, lt.x + dx, lt.y + dy, { wezensBlokkeren: true })) plek = { x: lt.x + dx, y: lt.y + dy };
+            }
+          }
+        }
+        if (plek) Object.assign(S.schout, { x: plek.x, y: plek.y, tx: plek.x, ty: plek.y, pad: [], onderweg: false });
+      }
+      const nu = T.uurTekst(D.kalender.dag);
+      return {
+        aan: T.BEESTEN_INSTELLINGEN.aan, uur: nu,
+        groepen: groepen.map(({ G, leden }) => {
+          const l = leden.find((e) => e.leider) || leden[0];
+          const lt = T.tegelVan(l);
+          return {
+            soort: `${leden.length} ${T.BEESTEN[G.soort][leden.length === 1 ? 'naam' : 'meervoud']}`,
+            leider: `${lt.x},${lt.y}${l.pad.length ? ` (loopt, nog ${l.pad.length})` : ` (${l.rust})`}, ${T.afstand(lt, T.tegelVan(S.schout))} tegels van de schout`,
+            wil: G.weg > D.kalender.dag ? `weg van iemand, naar ${G.vluchtNaar.x},${G.vluchtNaar.y}` : T.beestenWillen(D, G),
+            thuis: `${G.thuis.x},${G.thuis.y}`,
+            rand: G.rand.map((p) => `${p.x},${p.y}`).join(' '),
+            rent: leden.some((e) => e.rent),
+          };
+        }),
       };
     },
     // Het bos (js/bos.js; werklijst vraag 115): per houthakker zijn boom (en of die in het bos staat, dan plant hij er een

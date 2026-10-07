@@ -61,7 +61,7 @@
   // aankomen, een tijd weg, aan zijn eigen hut bouwen, de herbergierster 's avonds, en de raadsman met zijn rapport.
   // `deel` is het deel van de dag (T.dagdeelVan, js/dag.js).
   T.kanPraten = function (S, D, e, deel) {
-    if (e.dood || e.binnen || e.dier || e.maait || e.werkt || e.opgeroepen || e.zoektSchout || e.moetNaar || e.vertrekt) return false;
+    if (e.dood || e.binnen || e.dier || e.beest || e.maait || e.werkt || e.opgeroepen || e.zoektSchout || e.moetNaar || e.vertrekt) return false;
     if (e === S.schout || e === D.schout || e === S.spreektMet || e.kant === 'monster') return false;
     if (S.gevecht && D.wereld === S.wereld) return false;
     if (deel === 'nacht') return false;

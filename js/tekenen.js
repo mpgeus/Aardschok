@@ -488,6 +488,7 @@
     ctx.scale(S.zoom, S.zoom);
     ctx.translate(-Math.round(S.camera.x), -Math.round(S.camera.y));
     for (const r of ramen) vulRamen(ctx, S, r);
+    tekenOgen(ctx, S);
     tekenHuisTekens(ctx, S);
     tekenOogjes(ctx, S);
     tekenWolkjes(ctx, S);
@@ -2096,6 +2097,43 @@
   // de praatjes niet.
   const BEURT = 2.2; // seconden per beurt, op het scherm
   const PRATEN = 0.75; // zo'n deel van een beurt staat het wolkje er; dan een stilte
+  // De ogen van de wolven, 's nachts (js/beesten.js; werklijst vraag 116, Marcel: "Rode ogen uit het duister"): ná de
+  // nacht getekend, zodat ze oplichten waar de wolf zelf zwart is, ook achter een boom. Waar ze in elk beeld zitten,
+  // staat in beelden/ogen.js (T.OGEN, gemaakt door gereedschap/pixelart/ogen.cjs: twee van voren, een van opzij, geen
+  // van achteren); welk beeld de wolf nu heeft, onthoudt hij zelf (e.beeldStand.laatste, js/sprites.js). Ver uitgezoomd
+  // blijven ze even groot op het scherm, en af en toe knippert hij.
+  const OOG_RICHTINGEN = ['Z', 'ZW', 'W', 'NW', 'N', 'NO', 'O', 'ZO'];
+  function tekenOgen(ctx, S) {
+    if (!S.kalender || !T.OGEN || !metSprites() || (T.debug && T.debug.geenNacht)) return;
+    const sterk = Math.min(1, (T.lichtVan(S.kalender.dag).nacht - 0.35) / 0.4);
+    if (sterk <= 0) return;
+    const k = 1 / Math.min(1, Math.max(0.3, S.zoom));
+    for (const e of S.wereld.wezens) {
+      if (!e.beest || e.dood || !e.beeldStand || !e.beeldStand.laatste) continue;
+      const l = e.beeldStand.laatste;
+      const rij = T.OGEN[l.naam] && T.OGEN[l.naam][l.houding] && T.OGEN[l.naam][l.houding][OOG_RICHTINGEN.indexOf(l.richting)];
+      const ogen = rij && rij[l.beeld];
+      if (!ogen || !ogen.length) continue;
+      if ((S.tijd + e.fase * 3) % (5 + (e.fase % 2)) < 0.14) continue;
+      const p = T.naarScherm(e.x, e.y);
+      for (const [dx, dy] of ogen) {
+        const x = p.x + dx;
+        const y = p.y + dy;
+        const r = 6 * k;
+        const gloed = ctx.createRadialGradient(x, y, 0, x, y, r);
+        gloed.addColorStop(0, `rgba(255,30,20,${0.75 * sterk})`);
+        gloed.addColorStop(0.35, `rgba(220,20,10,${0.35 * sterk})`);
+        gloed.addColorStop(1, 'rgba(200,0,0,0)');
+        ctx.fillStyle = gloed;
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = `rgba(255,${Math.round(70 + 60 * sterk)},60,${sterk})`;
+        ctx.fillRect(x - 0.9 * k, y - 0.9 * k, 1.8 * k, 1.8 * k);
+      }
+    }
+  }
+
   function tekenWolkjes(ctx, S) {
     if (!T.praatjesOp || S.gevecht) return;
     const w = S.wereld;

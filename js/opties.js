@@ -418,6 +418,18 @@
           uitleg: 'Ieder gaat zijn eigen gang, zonder te blijven staan. Zoals voor 4 okt.' },
       ],
     },
+    // De beesten in het bos (werklijst vraag 116; Marcel, 4 okt: "Ik wil dat er beesten kunnen rondlopen in het bos",
+    // en 7 okt: "a ja, b ja, c ja"; js/beesten.js).
+    {
+      id: 'beesten', naam: 'Beesten', standaard: 'aan',
+      uitleg: 'Of er wolven en herten in het bos leven.',
+      keuzes: [
+        { id: 'aan', naam: 'Aan', zet: { 'BEESTEN_INSTELLINGEN.aan': true },
+          uitleg: 'Roedels wolven rusten overdag bij hun hol en lopen \'s nachts langs de bosrand, waar je hun ogen ziet oplichten; herten grazen in de schemering aan de rand. Komt er iemand dichtbij, dan gaan ze weg. Een wolf valt niet aan, maar jij kunt hem aanvallen.' },
+        { id: 'uit', naam: 'Uit', zet: { 'BEESTEN_INSTELLINGEN.aan': false },
+          uitleg: 'Het bos is leeg. Zoals voor 7 okt.' },
+      ],
+    },
     // Wie betrapt wordt op verstoppen (werklijst vraag 106, c; Marcel koos niet tussen de twee, dus de laatste
     // waarschuwing als standaard tot hij kiest; js/bazen.js, T.betrapt).
     {
@@ -663,6 +675,7 @@
     { naam: 'De velden', blok: 'VELDEN_INSTELLINGEN' },
     { naam: 'Het veldwerk', blok: 'VELDWERK_INSTELLINGEN' },
     { naam: 'Ontginnen', blok: 'ONTGINNEN_INSTELLINGEN' },
+    { naam: 'De beesten in het bos', blok: 'BEESTEN_INSTELLINGEN' },
     { naam: 'Het bos', blok: 'BOS_INSTELLINGEN' },
     { naam: 'Het vee', blok: 'VEE_INSTELLINGEN' },
     { naam: 'De doorkijk', blok: 'DOORKIJK_INSTELLINGEN' },

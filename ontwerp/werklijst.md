@@ -4857,6 +4857,9 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     het spel uit: mag een wolf de schout zelf aanvallen? Voorstel: wolven gaan mensen uit de weg, behalve in de winter,
     's nachts, met honger; jij kunt ze altijd aanvallen. **b**, eerst stap 1, met schermafdrukken voor Marcel, en dan 2
     en 3? **c**, de herten al in stap 1, of pas met de jager in stap 3?
+    **Marcel koos (7 okt): "a ja, b ja, c ja".** Wolven gaan mensen uit de weg, behalve in de winter, 's nachts, met
+    honger (dat komt met stap 2), en de schout kan ze altijd aanvallen; eerst stap 1, met schermafdrukken voor Marcel,
+    en dan 2 en 3; de herten al in stap 1.
 117. **Eén kaart: het eiland** (Marcel, 4 okt, zesentwintigste sessie: "Ik wil uiteindelijk toch alles op dezelfde kaart.
     Dus de hele spelwereld als het ware. Zo kun je steeds stukken 'ontdekken' in de fog of war. Het idee is een eiland. Met
     water rondom. Je krijgt een random positie op het land. Kan aan de buitenkant zijn of binnen in het land."; plan van
