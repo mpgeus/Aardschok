@@ -182,7 +182,7 @@
 
     // De camera springt mee: hij glijdt normaal achter de schout aan, maar over een gebied heen
     // glijden zou een reis door het niets zijn.
-    const p = T.naarScherm(S.schout.x, S.schout.y);
+    const p = T.naarSchermOp(nieuw, S.schout.x, S.schout.y);
     S.camera = { x: p.x, y: p.y - 24 };
     if (S.grond) S.grond.sleutel = ''; // de grondbuffer opnieuw tekenen (js/tekenen.js)
 

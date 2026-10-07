@@ -1526,6 +1526,7 @@
     const w = T.laadKaart(kaart, betekenis);
     w.maker = { zaad: plan.zaad, poging: plan.poging };
     if (plan.stijl) w.stijl = plan.stijl;
+    if (T.HOOGTE_INSTELLINGEN.aan) w.hoogte = T.legHoogte(plan); // de spelregel "Hoogte" (js/hoogte.js)
     return w;
   };
 })(globalThis.Spel = globalThis.Spel || {});

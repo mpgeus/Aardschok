@@ -763,6 +763,11 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 - in een huis in aanbouw branden de ramen al;
 - het zwad van de maaier staat als paaltjes, en zijn slag is symmetrisch.
 
+- **Bomen in het bos die doorschijnend worden** (7 okt, de sessie van de hoogte, gezien op land 5 van de maker, ook met
+  de hoogte op vlak): in het grote bos rechtsonder worden hele stroken bomen half doorzichtig, ook waar geen schout of
+  dorpeling staat. Waarschijnlijk de doorkijk (`js/doorkijk.js`) voor de wolven en de herten van vraag 116, die daar
+  diep in het bos rusten. Nog niet nagelopen.
+
 ## Voorstellen van Claude die nog niet gekozen zijn
 
 - **De heer kijkt op Sint-Maarten zelf rond vanaf het plein** (24 sep, gebouwd). Wat hij ziet en niet

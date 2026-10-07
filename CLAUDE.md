@@ -276,6 +276,20 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `js/tekenen.js` (`tekenWolkjes`). De regels van het spel veranderen niet. De spelregel "Praatjes"; de getallen in
   `T.PRAATJE_INSTELLINGEN`.
 - `js/iso.js`: de isometrische projectie (tegel 64×32) en tekenhulpen (`ruit`, `blok`).
+- `js/hoogte.js`: **de hoogte van het land** (vraag 121, stap 1, 7 okt; Marcel: "ik doel ook meer op heuvels in het
+  landschap", "a ja 32, b hoger", "Ik wil dat de akkers mee bollen met de heuvel"): elke hoek van een tegel heeft een
+  hoogte in pixels, de glooiing van het hoekpunt (`w.hoogte.glooiing`) plus het niveau van de tegel maal een trede van 32
+  (`w.hoogte.niveau`), of per hoek voor een helling (`w.hoogte.hellingen`); delen buren hun hoek, dan glooit het, anders
+  staat er een wand (`T.wandenVan`, alleen aan de zuid- en oostkant, want die zie je). De vragen: `T.hoekHoogte`,
+  `T.hoogteOp` (op een punt), `T.isSchuin`, `T.naarSchermOp` en `T.naarWereldOp` (het scherm en de muis, met de hoogte),
+  `T.helderheidVanVlak` (lichter naar de zon). De maker legt hem met de spelregel "Hoogte" op "Heuvels" (`T.legHoogte`,
+  vanuit `T.laadGemaaktGehucht`): hoge heuvels in het open, wilde land, een zachte glooiing, vlak bij een huis, het plein
+  en het water, en een richel met een rotswand en een helling bij de rotsen. Standaard staat hij op "Vlak", en een kaart
+  zonder `w.hoogte` tekent pixel voor pixel als vroeger. `js/tekenen.js` tekent alles op de grond met `opGrond` (de
+  hoogte eraf), een schuine grondtegel met één scheve transformatie en een lichte of donkere ruit erover
+  (`tekenSchuineTegel`), de wanden uit een textuur in code (`tekenWanden`, `wandTextuur`), en het graan dat meebuigt
+  (`tekenGraan`); de grond met hoogte van achter naar voren. Lopen, zien en bouwen weten er nog niets van (stap 2), en
+  een heuvel vóór iemand dekt hem nog niet af. De proefplaat: `gereedschap/pixelart/hoogte-proef.cjs`.
 - `js/sprites.js`: de pixel art uit `beelden/`. `T.sprites.figuur/tegel/muur/voorwerp` wijzen
   een cel op een vel aan, `T.sprites.houding(S, wezen)` kiest houding, richting en fase uit de
   spelstaat zelf (pad, uitval, flits, dood), en
@@ -1034,6 +1048,9 @@ weg als je al gewaarschuwd was. De oude toetsen van de heer en het verstoppen sp
 `Spel.debug.wensen()` zegt per huis met mensen zijn stand, wie er woont, hoe tevreden het is en wat het wil, met ✓ of ✗,
 hoe het met doorgroeien staat (wat het gezin rooit, of waarom het niet groeit), en daarboven het dorp per stand en wat er
 gemist wordt; `('dorpelingen')` laat alleen die stand zien.
+`Spel.debug.hoogte()` zegt of de kaart hoogte heeft, waar het hoogste punt is, de richel en zijn helling, en hoe hoog de
+schout staat; `(5)` begint een nieuw spel op land 5 met heuvels (de spelregel "Hoogte" op "Heuvels"), `('top')` zet de
+schout op het hoogste punt.
 `Spel.debug.gehucht()` zegt of dit het ontworpen gehucht is of een van de maker, en uit welk zaad; `(3)` begint nu een
 nieuw spel op het gehucht van zaad 3 (zonder brief), zoals op de pagina "Gehuchten van de maker".
 `Spel.debug.voorval()` zegt welk voorval er loopt, welke vervolgen nog komen, welke voorvallen er nu kunnen (met hoe

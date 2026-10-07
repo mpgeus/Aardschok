@@ -61,8 +61,8 @@
   };
 
   // De doos die een wezen op het scherm inneemt, ruim genomen: zijn lijf plus wat lucht.
-  function wezenDoos(e) {
-    const p = T.naarScherm(e.x, e.y);
+  function wezenDoos(w, e) {
+    const p = T.naarSchermOp(w, e.x, e.y);
     const h = T.metSprites() ? T.sprites.hoogte(e.soort) : 52;
     return { x0: p.x - 15, x1: p.x + 15, y0: p.y - h - 6, y1: p.y + 6 };
   }
@@ -72,7 +72,7 @@
   // een bank is geen waslijn. Zonder die maat valt het terug op zijn cel op het vel
   // (T.sprites.celVan). Dit gaat op de voettegel en de maat van het beeld, niet op pixels: genoeg
   // om te weten of er iemand achter kan staan.
-  function voorwerpDoos(v) {
+  function voorwerpDoos(w, v) {
     const vel = T.TEGELS && T.TEGELS[v.vel];
     const tegel = vel && vel.tiles[v.id];
     const plek = T.sprites.celVan(v.vel, v.id);
@@ -80,7 +80,7 @@
     const a = plek.anker;
     const d = (tegel && tegel.doos) || [a[0], a[1], plek.cel[2] - a[0], plek.cel[3] - a[1]];
     if (d[1] < T.DOORKIJK_INSTELLINGEN.hoogGenoeg) return null; // laag spul verbergt niemand
-    const p = T.naarScherm(v.x, v.y);
+    const p = T.naarSchermOp(w, v.x, v.y);
     return { x0: p.x - d[0], x1: p.x + d[2], y0: p.y - d[1], y1: p.y + d[3] };
   }
 
@@ -96,10 +96,10 @@
     const doorHuis = [];
     for (const e of S.wereld.wezens) {
       const door = T.zichtbaarDoor(S, e);
-      if (door) (door === 'alles' ? doorAlles : doorHuis).push({ e, doos: wezenDoos(e) });
+      if (door) (door === 'alles' ? doorAlles : doorHuis).push({ e, doos: wezenDoos(S.wereld, e) });
     }
     for (const v of voorwerpen) {
-      const doos = voorwerpDoos(v);
+      const doos = voorwerpDoos(S.wereld, v);
       const dekkers = [];
       if (doos) {
         const zoek = (kandidaten) => {
@@ -150,7 +150,7 @@
   T.tekenKijkgat = function (ctx, S, e, sterkte, v) {
     if (typeof document === 'undefined') return;
     const I = T.DOORKIJK_INSTELLINGEN;
-    const p = T.naarScherm(e.x, e.y);
+    const p = T.naarSchermOp(S.wereld, e.x, e.y);
     const mx = p.x;
     const my = p.y - I.kijkgatOmhoog;
     const pad = 12;
@@ -168,7 +168,7 @@
     const erin = S.wereld.wezens.filter((o) => {
       if (o.dood || (o.binnen && !T.deurStap(S, o))) return false;
       if (o !== e && v && T.staatVoorGebouw(o.tx, o.ty, v)) return false;
-      const q = T.naarScherm(o.x, o.y);
+      const q = T.naarSchermOp(S.wereld, o.x, o.y);
       return Math.hypot(q.x - mx, q.y - I.kijkgatOmhoog - my) < ver;
     });
     erin.sort((a, b) => a.x + a.y - (b.x + b.y));

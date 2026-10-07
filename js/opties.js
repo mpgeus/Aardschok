@@ -309,6 +309,18 @@
           uitleg: 'Alleen het schaduwtje onder de voeten van wie er loopt, zoals vóór 4 okt 2026.' },
       ],
     },
+    // De hoogte van het land (Marcel, 7 okt, werklijst vraag 121: "ik doel ook meer op heuvels in het landschap"; js/hoogte.js).
+    // Vlak tot de speeltest van stap 3 laat zien dat het spel er net zo goed mee loopt.
+    {
+      id: 'hoogte', naam: 'Hoogte', standaard: 'vlak',
+      uitleg: 'Of een nieuw land heuvels heeft. Alleen voor een land van de maker; het ontworpen gehucht blijft vlak.',
+      keuzes: [
+        { id: 'vlak', naam: 'Vlak', zet: { 'HOOGTE_INSTELLINGEN.aan': false },
+          uitleg: 'Het land is vlak, zoals vóór 7 okt 2026.' },
+        { id: 'heuvels', naam: 'Heuvels', zet: { 'HOOGTE_INSTELLINGEN.aan': true },
+          uitleg: 'Hoge heuvels in het wilde land, een zachte glooiing rond het dorp, en een richel met een rotswand bij de rotsen. Lopen, zien en bouwen weten er nog niets van.' },
+      ],
+    },
     // De lantaarn van de schout (Marcel, 4 okt, werklijst vraag 125, C: "ook spel. Voegt leuke elementen toe"; js/zien.js).
     {
       id: 'lantaarn', naam: 'De lantaarn van de schout', standaard: 'spel',

@@ -13,6 +13,12 @@
 (function (T) {
   'use strict';
 
+  // De hoogte van het land (werklijst vraag 121, js/hoogte.js): wat op de grond staat, komt op het scherm met de hoogte
+  // van de grond eraf. kaartNu is de kaart die getekend wordt (T.tekenScene zet hem); zonder hoogte is opGrond precies
+  // T.naarScherm, dus een vlakke kaart tekent pixel voor pixel als vroeger.
+  let kaartNu = null;
+  const opGrond = (x, y) => T.naarSchermOp(kaartNu, x, y);
+
   const GEDIMD = 0.58;
 
   // Hoe het beeld getekend wordt (werklijst vraag 123). `tussenbuffer`: op een groot scherm tekent het spel op de
@@ -175,7 +181,7 @@
     const lijst = platVan(w).lijst.filter((v) => v.x >= vak.x0 && v.x <= vak.x1 && v.y >= vak.y0 && v.y <= vak.y1 && !opPaadje(v.x, v.y));
     lijst.sort((a, b) => a.x + a.y - (b.x + b.y) || a.y - b.y);
     for (const v of lijst) {
-      const p = T.naarScherm(v.x, v.y);
+      const p = opGrond(v.x, v.y);
       const dof = randDof(w, v.x, v.y);
       const stuk = metSprites() && T.sprites.buitenAan && T.sprites.buiten(v.vel, v.id, 0);
       if (!stuk || dof <= 0.02) continue;
@@ -279,7 +285,7 @@
 
   // Eén boom van de bosrand in een buffer: zoals tekenBosrandBoom, zonder wind en zonder doorkijk.
   function tekenGebakkenBoom(c, v) {
-    const p = T.naarScherm(v.x, v.y);
+    const p = opGrond(v.x, v.y);
     const helder = bosrandHelder(v.r);
     const ruw = metSprites() && T.sprites.buitenAan && T.sprites.buiten(v.vel, v.id, 0);
     if (ruw) T.sprites.teken(c, bosrandGedimd(ruw, helder), p.x, p.y, 1);
@@ -317,6 +323,7 @@
 
   T.tekenScene = function (ctx, S, bw, bh) {
     const w = S.wereld;
+    kaartNu = w;
     if (metSprites()) laadWatErStaat(w);
     const dpr = ctx.getTransform().a || 1; // pixels per css-pixel (js/main.js, formaat)
     // Het dorp dat hier ligt (js/dorp.js), of geen: een ander gebied, of het gereedschap.
@@ -411,16 +418,16 @@
             if (stadium === 'weide') continue; // dat is gras, al getekend (tekenWeides hieronder)
             if (stadium === 'heide' || stadium === 'bos') continue; // nog niet ontgonnen (js/ontginnen.js): wat er al ligt
             const variant = T.akkerVariant(x, y, varianten);
-            const p = T.naarScherm(x, y);
+            const p = opGrond(x, y);
             if (stadium === 'groen' || stadium === 'rijp') {
               const frame = T.windBeeld(S.tijd, x, y);
               const achter = T.sprites.graanLaag(stadium, variant, 'achter', frame);
               const voor = T.sprites.graanLaag(stadium, variant, 'voor', frame);
-              lijst.push({ d: x + y, l: 1, punt: { x, y }, zonderSchaduw: true, f: () => T.sprites.teken(ctx, achter, p.x, p.y, 1) });
-              lijst.push({ d: x + y, l: 2.5, punt: { x, y }, zonderSchaduw: true, f: () => T.sprites.teken(ctx, voor, p.x, p.y, 1) });
+              lijst.push({ d: x + y, l: 1, punt: { x, y }, zonderSchaduw: true, f: () => tekenGraan(ctx, w, achter, x, y, p) });
+              lijst.push({ d: x + y, l: 2.5, punt: { x, y }, zonderSchaduw: true, f: () => tekenGraan(ctx, w, voor, x, y, p) });
             } else {
               const deel = T.sprites.graanTegel(stadium, variant);
-              lijst.push({ d: x + y, l: 1, punt: { x, y }, zonderSchaduw: true, f: () => T.sprites.teken(ctx, deel, p.x, p.y, 1) });
+              lijst.push({ d: x + y, l: 1, punt: { x, y }, zonderSchaduw: true, f: () => tekenGraan(ctx, w, deel, x, y, p) });
             }
           }
         }
@@ -557,7 +564,7 @@
     }
     const uit = [];
     for (const b of bronnen) {
-      const q = T.naarScherm(b.x, b.y);
+      const q = opGrond(b.x, b.y);
       const x = Math.round(bw / 2) + (q.x - Math.round(S.camera.x)) * S.zoom;
       const y = Math.round(bh / 2) + (q.y - L.boven - Math.round(S.camera.y)) * S.zoom;
       const rx = Math.max(1, b.straal * L.breedte * S.zoom);
@@ -584,7 +591,7 @@
     // De schout op het scherm, met dezelfde omrekening als de camera in T.tekenScene; het licht
     // valt om zijn lijf, niet om zijn voeten.
     const h = S.schout;
-    const p = h ? T.naarScherm(h.x, h.y) : null;
+    const p = h ? opGrond(h.x, h.y) : null;
     const sx = p ? Math.round(bw / 2) + (p.x - Math.round(S.camera.x)) * S.zoom : bw / 2;
     const sy = p ? Math.round(bh / 2) + (p.y - 20 - Math.round(S.camera.y)) * S.zoom : bh / 2;
     const tegels = T.DAG_INSTELLINGEN ? T.DAG_INSTELLINGEN.lichtStraal : 5;
@@ -601,7 +608,7 @@
     const nacht = nachtVan(S); // vol als het nacht is, zwakker in de schemering
     const D = T.dorpHier(S);
     for (const b of T.lichtBronnen && D ? T.lichtBronnen(D) : []) {
-      const q = T.naarScherm(b.x, b.y);
+      const q = opGrond(b.x, b.y);
       const lx = Math.round(bw / 2) + (q.x - Math.round(S.camera.x)) * S.zoom;
       const ly = Math.round(bh / 2) + (q.y - 24 - Math.round(S.camera.y)) * S.zoom;
       const r = Math.max(1, b.straal * 32 * S.zoom);
@@ -641,7 +648,7 @@
       const g = b.ramenVan;
       const opz = g && g.tekening && T.opzoekTegelNaam(g.tekening);
       const ramen = opz && opz.eig && opz.eig.ramen;
-      if (ramen && ramen.length) uit.push({ g, ramen, schimmen: b.schimmen || 0, fel: 0.9 * nacht, hoek: T.naarScherm(g.x, g.y) });
+      if (ramen && ramen.length) uit.push({ g, ramen, schimmen: b.schimmen || 0, fel: 0.9 * nacht, hoek: opGrond(g.x, g.y) });
     }
     return uit;
   }
@@ -756,7 +763,7 @@
           if (gehad.has(sleutel) || !T.isZichtbaar(w, x, y)) continue;
           gehad.add(sleutel);
           const zelf = opWeide(x, y);
-          const p = T.naarScherm(x, y);
+          const p = opGrond(x, y);
           if (!sp) {
             if (!zelf) continue;
             T.ruit(ctx, p.x, p.y, 1);
@@ -1003,7 +1010,7 @@
         const hoeken = [randHoek(w, x, y), randHoek(w, x + 1, y), randHoek(w, x + 1, y + 1), randHoek(w, x, y + 1)];
         const deel = T.sprites.grondMetHoeken(vel, hoeken, x, y) || T.sprites.grasTegel(x, y);
         if (!deel) continue;
-        const p = T.naarScherm(x, y);
+        const p = opGrond(x, y);
         // elke tegel een eigen stapje donkerder of lichter, zodat het donker geen strepen langs de rand legt
         const rij = Math.max(0, r + (hasj(x, y, zaad + 1) - 0.5) * 2.5);
         T.sprites.teken(c, bosrandGedimd(deel, bosrandHelder(rij)), p.x, p.y, 1);
@@ -1016,13 +1023,14 @@
     const sp = metSprites();
     const buiten = !!w.buiten;
     const paden = buiten ? zandVan(S) : null;
-    for (let y = vak.y0; y <= vak.y1; y++) {
-      for (let x = vak.x0; x <= vak.x1; x++) {
+    const hoog = T.heeftHoogte(w);
+    for (const [x, y] of tegelVolgorde(vak, hoog)) {
+      {
         const t = T.tegel(w, x, y);
         // Buiten ligt er ook gras onder een boom of een huis (die tegel heet "muur"): het
         // plaatje van de boom laat het gras eromheen zien.
         if (t === 'buiten' || (!buiten && t !== 'vloer' && t !== 'deur') || !T.isZichtbaar(w, x, y)) continue;
-        const p = T.naarScherm(x, y);
+        const p = opGrond(x, y);
         const g = buiten && w.grond && w.grond[y] ? w.grond[y][x] : null;
         let hex;
         let helder;
@@ -1052,7 +1060,9 @@
         if (metPad && !sp && metPad.every((soort) => soort === 'zandpad')) hex = BUITENKLEUR.zandpad[(x + y) % 2];
         const deel = sp && ((metPad && T.sprites.grondMetHoeken(g.vel, metPad, x, y)) || (g ? T.sprites.buiten(g.vel, g.id) : !buiten && T.sprites.tegel(vloerSoort(w, x, y), x, y)));
         if (deel) {
-          T.sprites.teken(ctx, deel, p.x, p.y, helder);
+          if (hoog && T.isSchuin(w, x, y)) tekenSchuineTegel(ctx, w, deel, x, y);
+          else T.sprites.teken(ctx, deel, p.x, p.y, helder);
+          if (hoog) tekenWanden(ctx, w, x, y);
           if (dof < 1) ctx.globalAlpha = 1;
           continue;
         }
@@ -1072,6 +1082,196 @@
     }
   }
 
+  // Het graan op een akker (vraag 121; Marcel, 7 okt: "Ik wil dat de akkers mee bollen met de heuvel"): op een schuine
+  // tegel legt één scheve transformatie de vlakke tegel op het vlak door zijn hoeken. Alleen de hoogte verschuift, dus
+  // de halmen blijven rechtop.
+  function tekenGraan(ctx, w, deel, x, y, p) {
+    if (!deel) return;
+    if (!T.isSchuin(w, x, y)) return T.sprites.teken(ctx, deel, p.x, p.y, 1);
+    const [hN, hO, , hW] = T.hoekHoogten(w, x, y);
+    const rr = (hO + hW) / 2; // de hoogte in het midden van het vlak door de noord-, oost- en westhoek
+    const pp = (hO - hW) / 64; // per pixel naar rechts
+    const qq = (rr - hN) / 16; // per pixel naar onder
+    const m = T.naarScherm(x, y);
+    ctx.save();
+    ctx.translate(m.x, m.y);
+    ctx.transform(1, -pp, 0, 1 - qq, 0, -rr);
+    T.sprites.teken(ctx, deel, 0, 0, 1);
+    ctx.restore();
+  }
+
+  // De tegels van een vak, in de volgorde waarin ze getekend worden: rij na rij, of met hoogte van achter naar voren
+  // (een heuvel vooraan gaat over wat erachter ligt).
+  function tegelVolgorde(vak, hoog) {
+    const uit = [];
+    for (let y = vak.y0; y <= vak.y1; y++) for (let x = vak.x0; x <= vak.x1; x++) uit.push([x, y]);
+    if (hoog) uit.sort((a, b) => a[0] + a[1] - (b[0] + b[1]) || a[0] - b[0]);
+    return uit;
+  }
+
+  // Een grondtegel op een schuine plek (vraag 121): één scheve transformatie legt de vlakke tegel op het vlak dat het
+  // best bij zijn vier hoeken past, een tikje groter zodat er tussen twee tegels geen naad valt, en een ruit erover
+  // maakt hem lichter naar de zon of donkerder ervan af (T.helderheidVanVlak). Geen nieuwe kunst en geen knip: zo kost
+  // een schuine tegel twee plaatjes (gemeten op 7 okt: met twee geknipte driehoeken per tegel duurde de grond in het
+  // overzicht vier keer zo lang).
+  function tekenSchuineTegel(ctx, w, deel, x, y) {
+    const [hN, hO, hZ, hW] = T.hoekHoogten(w, x, y);
+    const r = (hN + hO + hZ + hW) / 4;
+    const pp = (hO - hW) / 64; // per pixel naar rechts
+    const qq = (hZ - hN) / 32; // per pixel naar onder
+    const m = T.naarScherm(x, y);
+    ctx.save();
+    ctx.translate(m.x, m.y);
+    ctx.transform(1, -pp, 0, 1 - qq, 0, -r);
+    ctx.scale(1.04, 1.04);
+    T.sprites.teken(ctx, deel, 0, 0, 1);
+    const f = T.helderheidVanVlak([x - 1, y, hW], [x + 1, y, hO], [x, y + 1, hZ]) * 0.5 + T.helderheidVanVlak([x - 1, y, hW], [x, y - 1, hN], [x + 1, y, hO]) * 0.5;
+    if (Math.abs(f - 1) > 0.01) {
+      ctx.globalAlpha *= f < 1 ? (1 - f) * 0.95 : (f - 1) * 0.45;
+      ctx.drawImage(lichtRuit(f < 1), -32, -16);
+    }
+    ctx.restore();
+  }
+
+  // Een ruit van één tegel die een schuine tegel donkerder maakt (een koel donker) of lichter (een warm licht), eens
+  // gemaakt; hoe sterk, zegt de doorzichtigheid.
+  const lichtRuiten = new Map();
+  function lichtRuit(donker) {
+    if (lichtRuiten.has(donker)) return lichtRuiten.get(donker);
+    const c = document.createElement('canvas');
+    c.width = 64;
+    c.height = 32;
+    const k = c.getContext('2d');
+    k.fillStyle = donker ? '#141020' : '#fff4d6';
+    T.ruit(k, 32, 16, 1);
+    k.fill();
+    lichtRuiten.set(donker, c);
+    return c;
+  }
+
+  // Een driehoek uit een plaatje op een driehoek op het doek: t zijn drie punten in het plaatje (vanaf sx, sy), p drie
+  // punten op het doek. Geknipt op de driehoek, een halve pixel ruimer, zodat er tussen twee driehoeken geen naad valt.
+  // `erna(ctx, vak)` tekent nog iets binnen dezelfde knip (vak: [x0, y0, x1, y1] om de driehoek).
+  function driehoekUitPlaatje(ctx, beeld, sx, sy, sb, sh, t, p, erna) {
+    const [[u0, v0], [u1, v1], [u2, v2]] = t;
+    const [[x0, y0], [x1, y1], [x2, y2]] = p;
+    const d = (u1 - u0) * (v2 - v0) - (u2 - u0) * (v1 - v0);
+    if (Math.abs(d) < 1e-6) return;
+    const a = ((x1 - x0) * (v2 - v0) - (x2 - x0) * (v1 - v0)) / d;
+    const c = ((u1 - u0) * (x2 - x0) - (u2 - u0) * (x1 - x0)) / d;
+    const b = ((y1 - y0) * (v2 - v0) - (y2 - y0) * (v1 - v0)) / d;
+    const dd = ((u1 - u0) * (y2 - y0) - (u2 - u0) * (y1 - y0)) / d;
+    const mx = (x0 + x1 + x2) / 3;
+    const my = (y0 + y1 + y2) / 3;
+    ctx.save();
+    ctx.beginPath();
+    p.forEach(([x, y], i) => {
+      const l = Math.hypot(x - mx, y - my) || 1;
+      const q = [x + ((x - mx) / l) * 0.7, y + ((y - my) / l) * 0.7];
+      if (i === 0) ctx.moveTo(q[0], q[1]);
+      else ctx.lineTo(q[0], q[1]);
+    });
+    ctx.closePath();
+    ctx.clip();
+    ctx.save();
+    ctx.transform(a, b, c, dd, x0 - a * u0 - c * v0, y0 - b * u0 - dd * v0);
+    ctx.drawImage(beeld, sx, sy, sb, sh, 0, 0, sb, sh);
+    ctx.restore();
+    if (erna) erna(ctx, [Math.min(x0, x1, x2) - 2, Math.min(y0, y1, y2) - 2, Math.max(x0, x1, x2) + 2, Math.max(y0, y1, y2) + 2]);
+    ctx.restore();
+  }
+
+  // De wanden van een tegel (T.wandenVan: aan zijn zuid- en oostkant, waar hij hoger ligt dan zijn buur): een
+  // rotswand of een begroeide wal, uit een textuur die eens gemaakt wordt (wandTextuur), met de grasrand bovenaan.
+  function tekenWanden(ctx, w, x, y) {
+    for (const wand of T.wandenVan(w, x, y)) {
+      const s1 = T.naarScherm(wand.van[0], wand.van[1]);
+      const s2 = T.naarScherm(wand.tot[0], wand.tot[1]);
+      const A = [s1.x, s1.y - wand.boven[0]];
+      const B = [s2.x, s2.y - wand.boven[1]];
+      const C = [s2.x, s2.y - wand.onder[1]];
+      const Dp = [s1.x, s1.y - wand.onder[0]];
+      const tex = wandTextuur(wand.soort, wand.kant);
+      const u0 = (Math.round((wand.van[0] * 7 + wand.van[1] * 13) * 32) % (WAND_B - 40) + (WAND_B - 40)) % (WAND_B - 40);
+      const hA = Math.min(WAND_H - 1, wand.boven[0] - wand.onder[0]);
+      const hB = Math.min(WAND_H - 1, wand.boven[1] - wand.onder[1]);
+      const ta = [u0, 0];
+      const tb = [u0 + 32, 0];
+      const tc = [u0 + 32, Math.max(0.01, hB)];
+      const td = [u0, Math.max(0.01, hA)];
+      driehoekUitPlaatje(ctx, tex, 0, 0, WAND_B, WAND_H, [ta, tb, tc], [A, B, C]);
+      driehoekUitPlaatje(ctx, tex, 0, 0, WAND_B, WAND_H, [ta, tc, td], [A, C, Dp]);
+    }
+  }
+
+  // De textuur van een wand, per soort en kant, eens gemaakt: lagen steen met voegen voor een rotswand, aarde met
+  // wortels voor een wal, en bovenaan een rand gras die over de rand hangt; de oostkant ligt verder uit de zon, zoals de
+  // muren van een huis (dezelfde kleuren als de proefplaat, gereedschap/pixelart/hoogte-proef.cjs).
+  const WAND_B = 256;
+  const WAND_H = 320;
+  const wandTexturen = new Map();
+  function wandTextuur(soort, kant) {
+    const sl = soort + ',' + kant;
+    if (wandTexturen.has(sl)) return wandTexturen.get(sl);
+    const c = document.createElement('canvas');
+    c.width = WAND_B;
+    c.height = WAND_H;
+    const k = c.getContext('2d');
+    const beeld = k.createImageData(WAND_B, WAND_H);
+    const hex = (s) => [parseInt(s.slice(1, 3), 16), parseInt(s.slice(3, 5), 16), parseInt(s.slice(5, 7), 16)];
+    const ROTS = ['#5b5650', '#77716a', '#948d84', '#b0a89c'].map(hex);
+    const AARDE = ['#3e2c1e', '#5a3f29', '#735237', '#8a6744'].map(hex);
+    const GRAS = ['#3d5a26', '#567a33', '#6f9440'].map(hex);
+    const zij = kant === 'oost' ? 0.72 : 0.9;
+    const ruis = (x, y) => {
+      const xi = Math.floor(x);
+      const yi = Math.floor(y);
+      const fx = x - xi;
+      const fy = y - yi;
+      const a = hasj(xi, yi, 3);
+      const b = hasj(xi + 1, yi, 3);
+      const cc = hasj(xi, yi + 1, 3);
+      const d = hasj(xi + 1, yi + 1, 3);
+      const sx = fx * fx * (3 - 2 * fx);
+      const sy = fy * fy * (3 - 2 * fy);
+      return a + (b - a) * sx + (cc - a) * sy + (a - b - cc + d) * sx * sy;
+    };
+    const klem = (n, a, b) => (n < a ? a : n > b ? b : n);
+    for (let v = 0; v < WAND_H; v++) {
+      for (let u = 0; u < WAND_B; u++) {
+        const r = ruis(u * 0.18, v * 0.18);
+        const grasDiep = (soort === 'rots' ? 2.5 : 4.5) + 3 * ruis(u * 0.35, 7.3) + (hasj(u, 91, 5) < 0.33 ? 2 : 0);
+        let kleur;
+        if (v < grasDiep) {
+          kleur = GRAS[klem(Math.floor((1 - v / grasDiep) * 2.99 + (r - 0.5)), 0, 2)];
+        } else if (soort === 'rots') {
+          const lv = v / 7 + ruis(u * 0.05, 1.7) * 1.2;
+          const laag = Math.floor(lv);
+          const breed = 10 + Math.floor(hasj(laag, 5, 7) * 9);
+          const blok = Math.floor((u + laag * 13) / breed);
+          const voeg = lv % 1 < 0.12 || (u + laag * 13) % breed < 1;
+          let tint = 1 + (hasj(blok, laag, 9) - 0.5) * 0.25 + (r - 0.5) * 0.35;
+          if (voeg) tint *= 0.6;
+          if (v > 2 && v < 4.5) tint *= 0.8;
+          kleur = ROTS[klem(Math.floor(tint * 2.2), 0, 3)];
+        } else {
+          let tint = 1 + (r - 0.5) * 0.5;
+          if (Math.abs(Math.sin(u * 0.09 + v * 0.21 + ruis(u * 0.12, v * 0.12) * 3)) < 0.05 && v < 14) tint = 0.5;
+          if (v > grasDiep && v < grasDiep + 2) tint *= 0.75;
+          kleur = hasj(u >> 1, v >> 1, 11) < 1 / 61 ? ROTS[2] : AARDE[klem(Math.floor(tint * 2.2), 0, 3)];
+        }
+        const o = (v * WAND_B + u) * 4;
+        beeld.data[o] = kleur[0] * zij;
+        beeld.data[o + 1] = kleur[1] * zij;
+        beeld.data[o + 2] = kleur[2] * zij;
+        beeld.data[o + 3] = 255;
+      }
+    }
+    k.putImageData(beeld, 0, 0);
+    wandTexturen.set(sl, c);
+    return c;
+  }
+
   // Het raster rolt uit vanaf de plek van de schout, als een rimpeling over de vloer, en
   // vervaagt weer als het gevecht voorbij is.
   function tekenRaster(ctx, S) {
@@ -1086,7 +1286,7 @@
       const golf = S.modus === 'gevecht' ? Math.min(1, Math.max(0, verstreken * 16 - Math.hypot(t.x - van.x, t.y - van.y))) : 1;
       if (golf <= 0) continue;
       ctx.globalAlpha = S.rasterAlpha * golf;
-      const p = T.naarScherm(t.x, t.y);
+      const p = opGrond(t.x, t.y);
       T.ruit(ctx, p.x, p.y, 0.9);
       ctx.stroke();
     }
@@ -1096,7 +1296,7 @@
   // Een paaltje op de hoek van een vrij erf (js/erven.js, T.paaltjesVan): de kunst als die er is
   // (gereedschap/pixelart/paaltje.cjs), anders een dun houten paaltje in vlakken.
   function tekenPaaltje(ctx, x, y) {
-    const p = T.naarScherm(x, y);
+    const p = opGrond(x, y);
     const deel = metSprites() && T.sprites.paaltje && T.sprites.paaltje();
     if (deel) T.sprites.teken(ctx, deel, p.x, p.y, 1);
     else T.blok(ctx, p.x, p.y, 0.05, 0.05, 18, '#8a6a42', { helder: 1 });
@@ -1128,7 +1328,7 @@
       ctx.fillStyle = 'rgba(224, 96, 79, 0.35)';
       for (let dy = 0; dy < weg.h; dy++) {
         for (let dx = 0; dx < weg.b; dx++) {
-          const p = T.naarScherm(weg.x + dx, weg.y + dy);
+          const p = opGrond(weg.x + dx, weg.y + dy);
           T.ruit(ctx, p.x, p.y, 0.94);
           ctx.fill();
         }
@@ -1141,7 +1341,7 @@
     ctx.fillStyle = S.bouwHover.ok ? 'rgba(134, 196, 111, 0.45)' : 'rgba(224, 96, 79, 0.45)';
     for (let dy = 0; dy < voet.h; dy++) {
       for (let dx = 0; dx < voet.b; dx++) {
-        const p = T.naarScherm(S.bouwHover.x + dx, S.bouwHover.y + dy);
+        const p = opGrond(S.bouwHover.x + dx, S.bouwHover.y + dy);
         T.ruit(ctx, p.x, p.y, 0.94);
         ctx.fill();
       }
@@ -1157,7 +1357,7 @@
     if (!L || !L.ontgin || S.bouwSoort) return;
     for (const stuk of [L.ontgin.heide, L.ontgin.bos]) {
       if (!stuk) continue;
-      const hoeken = [[0, 0], [stuk.b, 0], [stuk.b, stuk.h], [0, stuk.h]].map(([dx, dy]) => T.naarScherm(stuk.x + dx - 0.5, stuk.y + dy - 0.5));
+      const hoeken = [[0, 0], [stuk.b, 0], [stuk.b, stuk.h], [0, stuk.h]].map(([dx, dy]) => opGrond(stuk.x + dx - 0.5, stuk.y + dy - 0.5));
       ctx.beginPath();
       hoeken.forEach((p, i) => (i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)));
       ctx.closePath();
@@ -1182,7 +1382,7 @@
         if (!stuk) continue;
         for (let dy = 0; dy < stuk.h; dy++) {
           for (let dx = 0; dx < stuk.b; dx++) {
-            const p = T.naarScherm(stuk.x + dx, stuk.y + dy);
+            const p = opGrond(stuk.x + dx, stuk.y + dy);
             T.ruit(ctx, p.x, p.y, 0.94);
             ctx.fill();
           }
@@ -1197,7 +1397,7 @@
       ctx.fillStyle = 'rgba(226, 182, 74, 0.42)';
       for (const k of b.kramen) {
         for (const t of k.tegels || [k]) {
-          const p = T.naarScherm(t.x, t.y);
+          const p = opGrond(t.x, t.y);
           T.ruit(ctx, p.x, p.y, 0.94);
           ctx.fill();
         }
@@ -1209,7 +1409,7 @@
     ctx.fillStyle = 'rgba(226, 182, 74, 0.42)';
     for (let dy = 0; dy < voet.h; dy++) {
       for (let dx = 0; dx < voet.b; dx++) {
-        const p = T.naarScherm(b.x + dx, b.y + dy);
+        const p = opGrond(b.x + dx, b.y + dy);
         T.ruit(ctx, p.x, p.y, 0.94);
         ctx.fill();
       }
@@ -1220,8 +1420,8 @@
   // Een rechthoek van tegels { x, y, b, h } als lijn langs de buitenkant, op de grond (zoals de erven hierboven).
   function tekenRand(ctx, r) {
     const hoeken = [
-      T.naarScherm(r.x - 0.5, r.y - 0.5), T.naarScherm(r.x + r.b - 0.5, r.y - 0.5),
-      T.naarScherm(r.x + r.b - 0.5, r.y + r.h - 0.5), T.naarScherm(r.x - 0.5, r.y + r.h - 0.5),
+      opGrond(r.x - 0.5, r.y - 0.5), opGrond(r.x + r.b - 0.5, r.y - 0.5),
+      opGrond(r.x + r.b - 0.5, r.y + r.h - 0.5), opGrond(r.x - 0.5, r.y + r.h - 0.5),
     ];
     ctx.beginPath();
     hoeken.forEach((q, i) => (i ? ctx.lineTo(q.x, q.y) : ctx.moveTo(q.x, q.y)));
@@ -1237,10 +1437,10 @@
     const wens = Object.keys(T.WENSEN).find((id) => T.WENSEN[id].plek === soort);
     if (!straal || !wens) return;
     const m = { x: plek.x + plek.b / 2 - 0.5, y: plek.y + plek.h / 2 - 0.5 };
-    const c = T.naarScherm(m.x, m.y);
+    const c = opGrond(m.x, m.y);
     const d = straal / Math.SQRT2;
-    const ax = Math.abs(T.naarScherm(m.x + d, m.y - d).x - c.x);
-    const ay = Math.abs(T.naarScherm(m.x + d, m.y + d).y - c.y);
+    const ax = Math.abs(T.naarScherm(m.x + d, m.y - d).x - T.naarScherm(m.x, m.y).x);
+    const ay = Math.abs(T.naarScherm(m.x + d, m.y + d).y - T.naarScherm(m.x, m.y).y);
     ctx.save();
     ctx.beginPath();
     ctx.ellipse(c.x, c.y, ax, ay, 0, 0, Math.PI * 2);
@@ -1271,7 +1471,7 @@
       ctx.fillStyle = 'rgba(111, 160, 230, 0.17)';
       for (const k of S.bereik.keys()) {
         const [x, y] = k.split(',').map(Number);
-        const p = T.naarScherm(x, y);
+        const p = opGrond(x, y);
         T.ruit(ctx, p.x, p.y, 0.86);
         ctx.fill();
       }
@@ -1282,13 +1482,13 @@
       const kleur = h.kan === false ? rood : licht;
       ctx.fillStyle = kleur;
       for (const t of h.pad) {
-        const p = T.naarScherm(t.x, t.y);
+        const p = opGrond(t.x, t.y);
         ctx.beginPath();
         ctx.ellipse(p.x, p.y, 4, 2.5, 0, 0, Math.PI * 2);
         ctx.fill();
       }
       const laatste = h.pad[h.pad.length - 1];
-      const p = T.naarScherm(laatste.x, laatste.y);
+      const p = opGrond(laatste.x, laatste.y);
       T.ruit(ctx, p.x, p.y, 0.82);
       ctx.strokeStyle = kleur;
       ctx.lineWidth = 2;
@@ -1300,14 +1500,14 @@
     if (!doel || !(S.modus === 'verkennen' || S.modus === 'gevecht')) return;
     if (doel.wezen || doel.voorwerp) {
       const e = doel.wezen || doel.voorwerp;
-      const p = T.naarScherm(e.x, e.y);
+      const p = opGrond(e.x, e.y);
       ctx.strokeStyle = doel.wezen && doel.wezen.kant === 'monster' ? rood : 'rgba(250, 240, 210, 0.75)';
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.ellipse(p.x, p.y, 20, 10, 0, 0, Math.PI * 2);
       ctx.stroke();
     } else if (h && !(h.pad && h.pad.length)) {
-      const p = T.naarScherm(doel.x, doel.y);
+      const p = opGrond(doel.x, doel.y);
       T.ruit(ctx, p.x, p.y, 0.9);
       ctx.strokeStyle = h.fout || h.kan === false ? rood : 'rgba(250, 240, 210, 0.55)';
       ctx.lineWidth = 1.5;
@@ -1342,22 +1542,22 @@
     if (laag) {
       const stomp = T.sprites.muur('laag');
       if (!stomp) return false;
-      const p = T.naarScherm(x, y);
+      const p = opGrond(x, y);
       T.sprites.teken(ctx, stomp, p.x, p.y, helder);
       return true;
     }
     const vlak = T.sprites.muur('muur', false);
     if (!vlak) return false;
-    const achter = T.naarScherm(x, y + 0.5);
+    const achter = opGrond(x, y + 0.5);
     T.sprites.teken(ctx, vlak, achter.x, achter.y, helder);
-    const voor = T.naarScherm(x, y + 1);
+    const voor = opGrond(x, y + 1);
     const naarKamer = isRuimte(w, x, y + 1);
     T.sprites.teken(ctx, (naarKamer && T.sprites.muur(muurDeco(w, x, y, false), false)) || vlak, voor.x, voor.y, helder);
     if (isRuimte(w, x + 1, y)) {
       const soort = muurDeco(w, x, y, true);
       const zij = soort !== 'muur' && T.sprites.muur(soort, true);
       if (zij) {
-        const o = T.naarScherm(x + 1, y);
+        const o = opGrond(x + 1, y);
         T.sprites.teken(ctx, zij, o.x, o.y, helder);
       }
     }
@@ -1366,7 +1566,7 @@
 
   function tekenMuur(ctx, w, x, y, laag, helder) {
     if (metSprites() && tekenMuurSprites(ctx, w, x, y, laag, helder)) return;
-    const p = T.naarScherm(x, y);
+    const p = opGrond(x, y);
     const hoogte = laag ? T.MUUR_LAAG : T.MUUR_HOOG;
     T.blok(ctx, p.x, p.y, 0.5, 0.5, hoogte, '#7b7368', { helder });
     if (laag) return;
@@ -1395,17 +1595,17 @@
     if (!deel) return false;
     if (d.staat !== 'open') {
       const achter = T.sprites.muur('muur', west);
-      const a = west ? T.naarScherm(d.x + 0.5, d.y) : T.naarScherm(d.x, d.y + 0.5);
+      const a = west ? opGrond(d.x + 0.5, d.y) : opGrond(d.x, d.y + 0.5);
       if (achter) T.sprites.teken(ctx, achter, a.x, a.y, helder);
     }
-    const b = west ? T.naarScherm(d.x + 1, d.y) : T.naarScherm(d.x, d.y + 1);
+    const b = west ? opGrond(d.x + 1, d.y) : opGrond(d.x, d.y + 1);
     T.sprites.teken(ctx, deel, b.x, b.y, helder);
     return true;
   }
 
   function tekenDeur(ctx, d, laag, helder) {
     if (metSprites() && tekenDeurSprites(ctx, d, laag, helder)) return;
-    const p = T.naarScherm(d.x, d.y);
+    const p = opGrond(d.x, d.y);
     const ns = d.richting === 'ns'; // de muur loopt van noord naar zuid: het paneel is dun in x
     // Een laag stompje naast een lage muur van sprites moet even hoog zijn als die muur.
     const laagH = metSprites() ? T.sprites.laagHoogte() : T.MUUR_LAAG;
@@ -1413,7 +1613,7 @@
     const steen = '#6f675c';
     if (d.staat === 'open') {
       for (const s of [-0.4, 0.4]) {
-        const q = ns ? T.naarScherm(d.x, d.y + s) : T.naarScherm(d.x + s, d.y);
+        const q = ns ? opGrond(d.x, d.y + s) : opGrond(d.x + s, d.y);
         T.blok(ctx, q.x, q.y, ns ? 0.5 : 0.1, ns ? 0.1 : 0.5, muurHoogte, steen, { helder });
       }
       if (!laag) T.blok(ctx, p.x, p.y, 0.5, 0.5, 12, steen, { helder, basis: muurHoogte - 12 });
@@ -1473,7 +1673,7 @@
   };
 
   function tekenBuitenVlak(ctx, v, helder) {
-    const p = T.naarScherm(v.x, v.y);
+    const p = opGrond(v.x, v.y);
     const b = v.beslaat || [1, 1];
     const vorm = BUITENVLAK[v.soort];
     if (vorm) {
@@ -1483,7 +1683,7 @@
       return;
     }
     // een gebouw: een blok zo groot als zijn voet, met zijn midden op het midden van die voet
-    const m = T.naarScherm(v.x + (b[0] - 1) / 2, v.y + (b[1] - 1) / 2);
+    const m = opGrond(v.x + (b[0] - 1) / 2, v.y + (b[1] - 1) / 2);
     const hoog = Math.max(40, 26 * Math.max(b[0], b[1]));
     T.blok(ctx, m.x, m.y, b[0] / 2, b[1] / 2, hoog, '#8a6f4e', { helder });
   }
@@ -1668,7 +1868,7 @@
   function tekenBosrandBoom(ctx, S, v) {
     const zicht = 1 - (v.doorkijk || 0);
     if (zicht <= 0.02) return; // helemaal weggevallen: dan is er niets te tekenen
-    const p = T.naarScherm(v.x, v.y);
+    const p = opGrond(v.x, v.y);
     if (zicht < 1) ctx.globalAlpha = zicht;
     const helder = bosrandHelder(v.r);
     const ruw = metSprites() && T.sprites.buitenAan && T.sprites.buiten(v.vel, v.id, windVoorInstantie(S, v));
@@ -1685,7 +1885,7 @@
   function tekenHalsijzer(ctx, e) {
     const deel = T.sprites.schandpaal && T.sprites.schandpaal('halsijzer');
     if (!deel) return;
-    const p = T.naarScherm(e.x, e.y);
+    const p = opGrond(e.x, e.y);
     T.sprites.teken(ctx, deel, p.x, p.y - T.sprites.nekHoogte(e), 1);
   }
 
@@ -1694,7 +1894,7 @@
   const vorigBeeld = new WeakMap();
 
   function tekenVoorwerp(ctx, S, v, helder) {
-    const p = T.naarScherm(v.x, v.y);
+    const p = opGrond(v.x, v.y);
     // Buiten komt het plaatje uit de tegelvellen (tegels/, zie js/sprites.js): een boom, een
     // struik, een gebouw. Het anker van de cel is de voet, dus hij valt precies op het
     // midden van zijn eigen tegel.
@@ -1794,7 +1994,7 @@
       else {
         const [b, h] = v.beslaat || [1, 1];
         for (let i = 0; i < Math.max(b, h); i++) {
-          const q = T.naarScherm(v.x + (b > 1 ? i : 0), v.y + (h > 1 ? i : 0));
+          const q = opGrond(v.x + (b > 1 ? i : 0), v.y + (h > 1 ? i : 0));
           T.blok(ctx, q.x, q.y, 0.34, 0.34, 14, '#7a5532', { helder });
           T.blok(ctx, q.x, q.y, 0.04, 0.04, 22, '#5e4128', { helder, basis: 14 });
           if (!v.leeg) T.blok(ctx, q.x, q.y, 0.42, 0.42, 3, '#b8432f', { helder, basis: 36 });
@@ -1980,11 +2180,11 @@
   T.tekenWezen = tekenWezen; // ook voor het kijkgat (js/doorkijk.js)
   function tekenWezen(ctx, S, e) {
     const stap = deurStap(S, e);
-    const p = stap ? T.naarScherm(stap.x, stap.y) : T.naarScherm(e.x, e.y);
+    const p = stap ? opGrond(stap.x, stap.y) : opGrond(e.x, e.y);
     let cx = p.x;
     let cy = p.y;
     if (e.uitval) {
-      const q = T.naarScherm(e.uitval.doel.x, e.uitval.doel.y);
+      const q = opGrond(e.uitval.doel.x, e.uitval.doel.y);
       const k = e.uitval.t < 0.5 ? e.uitval.t * 2 : (1 - e.uitval.t) * 2;
       cx += (q.x - p.x) * 0.32 * k;
       cy += (q.y - p.y) * 0.32 * k;
@@ -2051,7 +2251,7 @@
       const deel = naam && T.sprites.huisTeken(naam);
       if (!deel) continue;
       const deur = T.deurVan(S.wereld, g);
-      const p = T.naarScherm(deur.x, deur.y);
+      const p = opGrond(deur.x, deur.y);
       T.sprites.teken(ctx, deel, p.x, p.y - 66, 1); // boven hoofdhoogte, zodat het bij het huis hoort en niet bij wie ervoor staat
     }
   }
@@ -2063,7 +2263,7 @@
     for (const e of S.wereld.wezens) {
       const over = (e.oogje || 0) - S.tijd;
       if (over <= 0 || e.binnen) continue;
-      const p = T.naarScherm(e.x, e.y);
+      const p = opGrond(e.x, e.y);
       const hoogte = metSprites() ? T.sprites.hoogte(e.soort) : 52;
       const cx = p.x;
       const cy = p.y - hoogte - 16 - Math.abs(Math.sin(S.tijd * 3)) * 2;
@@ -2115,7 +2315,7 @@
       const ogen = rij && rij[l.beeld];
       if (!ogen || !ogen.length) continue;
       if ((S.tijd + e.fase * 3) % (5 + (e.fase % 2)) < 0.14) continue;
-      const p = T.naarScherm(e.x, e.y);
+      const p = opGrond(e.x, e.y);
       for (const [dx, dy] of ogen) {
         const x = p.x + dx;
         const y = p.y + dy;
@@ -2153,7 +2353,7 @@
   }
 
   function wolkje(ctx, e, alpha) {
-    const p = T.naarScherm(e.x, e.y);
+    const p = opGrond(e.x, e.y);
     const hoogte = metSprites() ? T.sprites.hoogte(e.soort) : 52;
     const b = 22;
     const h = 13;
@@ -2224,7 +2424,7 @@
     for (const fx of S.effecten) {
       const f = fx.t / fx.duur;
       if (fx.t < 0 || fx.soort !== 'tekst') continue; // een tekst die nog even wacht
-      const p = T.naarScherm(fx.x, fx.y);
+      const p = opGrond(fx.x, fx.y);
       const y = p.y - 64 - f * 30;
       ctx.save();
       ctx.globalAlpha = Math.max(0, 1 - f * f);

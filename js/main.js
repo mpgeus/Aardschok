@@ -81,7 +81,7 @@
   };
 
   function zetCameraOpSchout() {
-    const p = T.naarScherm(S.schout.x, S.schout.y);
+    const p = T.naarSchermOp(S.wereld, S.schout.x, S.schout.y);
     S.camera = { x: p.x, y: p.y - 24 };
   }
 
@@ -200,7 +200,7 @@
     const kandidaten = [];
     for (const e of w.wezens) {
       if (e.dood || e.binnen || e === S.schout || !T.isZichtbaar(w, e.tx, e.ty)) continue;
-      const p = T.naarScherm(e.x, e.y);
+      const p = T.naarSchermOp(S.wereld, e.x, e.y);
       const hoog = hoogteVan(e);
       if (sx > p.x - 17 && sx < p.x + 17 && sy > p.y - hoog && sy < p.y + 9) {
         kandidaten.push({ d: e.x + e.y + 0.01, wezen: e, x: e.tx, y: e.ty });
@@ -209,7 +209,7 @@
     for (const v of w.voorwerpen) {
       const hoog = voorwerpHoogte(v);
       if (!hoog || !T.isZichtbaar(w, v.x, v.y)) continue;
-      const p = T.naarScherm(v.x, v.y);
+      const p = T.naarSchermOp(S.wereld, v.x, v.y);
       if (sx > p.x - 20 && sx < p.x + 20 && sy > p.y - hoog && sy < p.y + 10) {
         kandidaten.push({ d: v.x + v.y, voorwerp: v, x: v.x, y: v.y });
       }
@@ -218,7 +218,7 @@
       kandidaten.sort((a, b) => b.d - a.d);
       return kandidaten[0];
     }
-    const f = T.naarWereld(sx, sy);
+    const f = T.naarWereldOp(S.wereld, sx, sy);
     const x = Math.round(f.x);
     const y = Math.round(f.y);
     if (x < 0 || y < 0 || x >= w.b || y >= w.h) return null;
@@ -246,7 +246,7 @@
       return;
     }
     const { x: sx, y: sy } = naarVlak(S.muis.x, S.muis.y);
-    const f = T.naarWereld(sx, sy);
+    const f = T.naarWereldOp(S.wereld, sx, sy);
     const x = Math.round(f.x);
     const y = Math.round(f.y);
     // Met een erf in de hand op een vrij erf: een klik maakt het weer gewone grond (js/erven.js).
@@ -289,7 +289,7 @@
       return;
     }
     const deur = T.deurVan(S.wereld, g);
-    const p = T.naarScherm(deur.x, deur.y);
+    const p = T.naarSchermOp(S.wereld, deur.x, deur.y);
     const c = vanVlak(p.x, p.y);
     T.ui.toonHuisbriefje(S, g, c.x, c.y);
   }
@@ -354,7 +354,7 @@
       my = rand.reduce((n, [, y]) => n + y, 0) / rand.length;
     }
     const hoek = (S.tijd / 120) * 2 * Math.PI;
-    const p = T.naarScherm(mx + 4 * Math.cos(hoek), my + 4 * Math.sin(hoek));
+    const p = T.naarSchermOp(S.wereld, mx + 4 * Math.cos(hoek), my + 4 * Math.sin(hoek));
     return { x: p.x, y: p.y - 24 };
   }
   T.titelCamera = titelCamera;
@@ -373,7 +373,7 @@
     let x = 0;
     let y = 0;
     for (const e of lijst) {
-      const p = T.naarScherm(e.x, e.y);
+      const p = T.naarSchermOp(S.wereld, e.x, e.y);
       x += p.x;
       y += p.y;
     }
@@ -416,7 +416,7 @@
   // Staat de muis op het lijf van de schout (met dezelfde maten als zoekDoel)?
   function opDeSchout(mx, my) {
     const { x: sx, y: sy } = naarVlak(mx, my);
-    const p = T.naarScherm(S.schout.x, S.schout.y);
+    const p = T.naarSchermOp(S.wereld, S.schout.x, S.schout.y);
     return sx > p.x - 17 && sx < p.x + 17 && sy > p.y - hoogteVan(S.schout) && sy < p.y + 9;
   }
   const SCHUIF = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] };
@@ -770,7 +770,7 @@
     vlakken: false,
     // Waar staat tegel (x, y) nu op het scherm, in css-pixels? Voor echte klikken.
     naarBeeld(x, y) {
-      const p = T.naarScherm(x, y);
+      const p = T.naarSchermOp(S.wereld, x, y);
       return vanVlak(p.x, p.y);
     },
     // De kalender een dag of een snelheid geven zonder te wachten: Spel.debug.kalender(310) →
@@ -1194,6 +1194,29 @@
       const w = S.gebieden && S.gebieden.gehucht;
       const stijl = w && w.stijl ? `, in de bouwstijl ${w.stijl} (js/bouwstijl.js)` : '';
       return w && w.maker ? `Een gehucht van de maker, uit zaad ${w.maker.zaad}${stijl}.` : 'Het ontworpen gehucht.';
+    },
+    // De hoogte van het land (js/hoogte.js, vraag 121): of deze kaart hoogte heeft, hoe hoog het hoogste punt is en
+    // waar, de richel en zijn helling, en de hoogte waar de schout staat. Spel.debug.hoogte(5) begint een nieuw spel op
+    // land 5 met heuvels (de spelregel "Hoogte" op "Heuvels"), Spel.debug.hoogte('top') zet de schout op de hoogste plek.
+    hoogte(wat) {
+      if (typeof wat === 'number') {
+        T.zetOptie('hoogte', 'heuvels');
+        T.nieuwSpel(wat);
+      }
+      const w = S.wereld;
+      if (!T.heeftHoogte(w)) return 'Deze kaart is vlak (de spelregel "Hoogte" staat op "Vlak", of het is het ontworpen gehucht).';
+      let top = null;
+      for (let y = 0; y < w.h; y++) for (let x = 0; x < w.b; x++) {
+        const h = T.hoogteOp(w, x, y);
+        if (!top || h > top.h) top = { x, y, h: Math.round(h) };
+      }
+      if (wat === 'top') Object.assign(S.schout, { x: top.x, y: top.y, tx: top.x, ty: top.y, pad: [], onderweg: false });
+      return {
+        hoogste: top,
+        richel: Object.keys(w.hoogte.niveau).length + ' tegels',
+        helling: Object.keys(w.hoogte.hellingen),
+        schout: Math.round(T.hoogteOp(w, S.schout.x, S.schout.y)),
+      };
     },
     // De raad onder het doel (js/raad.js): wat er nu staat, en welke raden nu allemaal gelden, in hun volgorde.
     raad() {
