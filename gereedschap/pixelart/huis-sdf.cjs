@@ -5274,7 +5274,7 @@ function erfmuur(zaad = 1, o = {}) {
       const lang = half - 1.5;
       const eind = [scharnier[0] + rx * lang, scharnier[1] + ry * lang];
       const zD = E(hoog + 4);
-      voeg(poort, { ...balk([scharnier[0], scharnier[1], zD / 2 + 2], [eind[0], eind[1], zD / 2 + 2], 1.6, zD / 2, [binnen[0], binnen[1], 0], 0.3), m: 'deur', zaad: zaad + kant, toon: 0, deel: 994 + kant });
+      voeg(poort, { ...balk([scharnier[0], scharnier[1], zD / 2 + 2], [eind[0], eind[1], zD / 2 + 2], zD / 2, 1.6, [binnen[0], binnen[1], 0], 0.3), m: 'deur', zaad: zaad + kant, toon: 0, deel: 994 + kant });
       for (const zr of [zD * 0.22, zD * 0.78]) voeg(poort, { ...balk([scharnier[0], scharnier[1], zr], [eind[0] * 0.6 + scharnier[0] * 0.4, eind[1] * 0.6 + scharnier[1] * 0.4, zr], 1.9, 1.4, [0, 0, 1], 0.2), m: 'ijzer', deel: 996 + kant });
     }
   });
