@@ -5316,6 +5316,20 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       tandjes: "Sluit toch niet aan?"), en de voren lopen door.
     - *Nog voor stap 2*: een heuvel vóór iemand dekt hem nog niet af, de steengroeve of een nieuw erf kan op de richel of
       een flank komen (bouwen weet nog niets van steil), en lopen gaat nog door een rotswand heen.
+    **Marcel (7 okt, na de beelden van stap 1): "De heuvels moeten niet alleen kleine bultjes zijn. Het land wordt
+    uiteindelijk groter. We hebben nu als het ware een chunk in zicht. Dus er is wel meer ruimte. Uiteindelijk wilde ik
+    een map van 2500x2500"** (het eiland, vraag 117). Voorstel van Claude (wacht op Marcel):
+    - **A, de hoogte als rekensom, niet als lijst:** nu is de hoogte een getal per hoekpunt, bewaard met het spel. Op 2500
+      bij 2500 zijn dat ruim zes miljoen getallen, en dat past niet in een bewaard spel. Dus: de hoogte komt uit het
+      nummer van het land (gladde ruis op een paar schalen), overal te vragen, ook buiten de kaart van nu; bewaard wordt
+      alleen wat het spel eraan verandert (een plek die geëgaliseerd wordt voor een huis). Zo lopen de heuvels door als
+      het land groter wordt, en ligt het bos om de kaart heen ook op de helling.
+    - **B, landschap op een grote schaal:** lange glooiingen van tientallen tegels, en hoge heuvels tot zo'n tien treden
+      (320 pixels), die ook buiten het stuk van nu verder gaan. Het dorp ligt in een kom of op een vlakte, en de grond
+      loopt naar de randen op: zo voelt het als een groot land waarvan je een stuk ziet.
+    - **C, de kom open naar de camera:** de camera draait niet, en een hoge heuvel dekt veel af (320 pixels is zo'n twintig
+      rijen tegels). Dus loopt het land achter het dorp op (noord en west) en blijft het ervoor laag, zodat het dorp
+      zichtbaar blijft; wat achter een heuvel valt, krijgt in stap 2 de doorkijk.
 122. **De snelheid in de browser en via Steam** (Marcel, 4 okt, achtentwintigste sessie: "Ik wil nu ook weten wat het
     verschil in performance is tussen nu spelen in de browser en straks via Steam. Want lag, geheugen tekort etc is geen
     optie straks"; plan van Claude; open). Uitgewerkt in `verpakken.md`, "Snelheid: in de browser of via Steam".
