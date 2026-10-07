@@ -570,9 +570,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`T.eigenToegestaan`) en nee (`T.eigenGeweigerd`: na twee keer trekt hij weg) laten een stemming op zijn huis
   (`g.stemming`, `T.huisStemming` in `T.berekenWensen`), en wat een onderneming verder doet, staat bij haar (`ja`, `nee`,
   `prijs` in `T.ONDERNEMINGEN`): de tweede herberg maakt de herbergierster boos (`g.weigert`: ze brouwt een tijd niet). De wapenmaker: wapens (`T.wapensInHetDorp`, `T.bewapen` bij een aanval,
-  `T.slagSchade` in `js/gevecht.js`), stiekem in een kelder (`g.stiekem`), de inner die het ziet (`T.innerZietVerboden`),
-  en de heer die het op Sint-Maarten verzegelt (`T.heerVindtVerboden`, `T.verbodenGevonden`, `g.verzegeld`, de boete via
-  `T.heerRekentErbij` in `js/heer.js`). De getallen in `T.ONDERNEMERS_INSTELLINGEN`.
+  `T.slagSchade` in `js/gevecht.js`), en die zijn niet verboden (Marcel, 7 okt: "Het is logisch dat er wapens zijn om de
+  stad te verdedigen. Alleen weerstand tegen de heer is inacceptabel"; vraag 131): de inner en de heer laten hem met rust,
+  en wat de heer niet mocht zien (`verdacht` in `T.GEBOUWEN`), is er niet meer. De getallen in `T.ONDERNEMERS_INSTELLINGEN`.
 - `js/bazen.js`: **twee bazen, de heer en het dorp** (vraag 106, 3 okt; Marcel: "106 a b c d ja"): de gunst van de heer
   en het vertrouwen van het dorp in jou (`D.bazen`, 0 tot 100), veranderd met `T.wijzigGunst(D, n, waarom)` en
   `T.wijzigVertrouwen(D, n, waarom)` vanuit de regels waar het gebeurt (de schatting via `T.gunstNaSchatting` in
@@ -799,11 +799,12 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   dorp is per groep, mensen onthouden wat je deed, de heer leert van je, en een grote keuze komt later terug. Eerst een
   proef met één keten (de verdwenen graanzak), na het beeld in de werklijst (`spel.md`, "Informatie, de zitting en
   mensen die onthouden").
-- De **heer** is verward en ziet alleen geld. Levert het dorp te weinig, dan straft hij: in het
-  dorp, jou zelf, met hogere eisen, en met soldaten. Zijn **inner** komt kijken, en wat je opzij
-  zet, moet uit zijn zicht. Hij stelt geen doelen (Marcel, 1 okt, vraag 78, a): "de heer moet alleen betaald
-  worden, en hij mag wel eisen stellen. Maar meer om het je moeilijk te maken." Sinds 6 okt is hij ook de
-  tegenstander: met een kasteel, bondgenoten en per spel een ander karakter (vraag 126).
+- De **heer** is verward en ziet alleen geld. Levert het dorp te weinig, dan straft hij: in het dorp, jou zelf, met
+  hogere eisen, en met soldaten. Zijn **inner** komt kijken, en wat je opzij zet, moet uit zijn zicht. Wapens zijn niet
+  verboden (Marcel, 7 okt: "Alleen weerstand tegen de heer is inacceptabel"): hij straft niet wat je hebt, maar wat je
+  tegen hem doet. Hij stelt geen doelen (Marcel, 1 okt, vraag 78, a): "de heer moet alleen betaald worden, en hij mag
+  wel eisen stellen. Maar meer om het je moeilijk te maken." Sinds 6 okt is hij ook de tegenstander: met een kasteel,
+  bondgenoten en per spel een ander karakter (vraag 126).
 - Het dorp groeit tot een stad met boeren, winkels, een markt en handel. Het zit vol **groepen**
   met eigen belangen (de politiek) en mensen met een verhaal (het avontuur).
 - Vrij word je door **stadsrechten** te kopen of door een **opstand**, een gevecht in beurten op
@@ -990,11 +991,10 @@ toont het jaar in het kort nu.
 zei; `('nu')` laat het eerste nu vragen, `('oproep', 'steengroeve')` hangt een oproep op (of haalt hem weg), `('jij')` of
 `('mensen')` zet de spelregel "Wie bouwt". De oude toetsen spelen
 met "Jij bouwt" (`T.zetOptie('wieBouwt', 'jij')`); die van de verzoeken staan in `test/verzoeken.test.cjs`.
-`Spel.debug.ondernemers()` zegt wie wat wil beginnen, of hij het nu zou vragen, wat hij onthoudt, wie stiekem smeedt,
-wat de heer verzegelde en hoeveel wapens er zijn; `('wapens')` laat de eerste die wapens wil het nu vragen, alsof de rovers
-net kwamen (in een dorp: `Spel.debug.trede('dorp')`, en sluit dan de brief van de heer), `('herberg')` de eerste die een
-tweede herberg wil (vanaf `T.ONDERNEMERS_INSTELLINGEN.herberg.vanaf` mensen), `('stiekem')` laat de wapenmaker
-beginnen in zijn kelder.
+`Spel.debug.ondernemers()` zegt wie wat wil beginnen, of hij het nu zou vragen, wat hij onthoudt en hoeveel wapens er
+zijn; `('wapens')` laat de eerste die wapens wil het nu vragen, alsof de rovers net kwamen (in een dorp:
+`Spel.debug.trede('dorp')`, en sluit dan de brief van de heer), `('herberg')` de eerste die een tweede herberg wil (vanaf
+`T.ONDERNEMERS_INSTELLINGEN.herberg.vanaf` mensen).
 `Spel.debug.gril()` zegt welke gril op je antwoord wacht, met de keuzes en wat ze kosten; `('jacht')` laat die nu komen.
 `Spel.debug.bazen()` zegt de gunst van de heer en het vertrouwen van het dorp, waarom ze het laatst veranderden en of je
 gewaarschuwd bent; `('gunst', 15)` zet de gunst op 15 (met de brief als hij onder 20 komt), `('vertrouwen', 0)` jaagt je

@@ -28,7 +28,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf; sinds 1 okt ook wat je mist voor de kapel en de smidse, en waar het vandaan komt; sinds 2 okt wat de huizen missen, en de ketens (een molen voor de bakkerij) | vraag 58, 79, 87, 90 |
 | De houthakker hakt en plant | gebouwd (6 okt; Marcel: "A ja B ja C ja D zo"): zijn hout komt uit de bomen om zijn schuur, elke tien hout een boom; naast de stronk twee boompjes, in een jaar of twee bomen, zodat het bos om hem blijft; zonder boom staat hij stil, en werkt zijn hand elders; hij komt alleen bij minstens 30 bomen binnen tien tegels, en loopt tussen zijn stronken door (vraag 129, e, b en f); in de speeltest van vier jaar komt elk dorp boven de 100 en wint er voor het eerst een | vraag 115, 129 |
 | De markt op het plein | gebouwd (6 okt; vraag 110, d, en 127, stap 1 en 2): een marktblok van twee rijen kramen met manden op het plein, voor 8 hout en 6 goud, dat meegroeit met het dorp (een kraam per 15 mensen, daarna langs de weg), met kramen vol of leeg naar wat het dorp heeft; de maker legt een groter plein; de kooplui, de boodschappen en de marktdag nog niet | vraag 110, d; 127 |
-| De verzoeken | stap 1 tot en met 3 gebouwd (3 okt): wat het dorp mist, komt een inwoner je vragen, met de plek die hij koos en wat het kost; ja of nee, en ben je weg, dan beslist je raadsman; in het bouwmenu alleen nog het erf en oproepen met een premie (de spelregel "Wie bouwt"); de speeltest speelt zo; en uit eigen wil: een ondernemer die wapens wil maken (verboden; sinds 7 okt besloten: niet meer, vraag 131) of een tweede herberg beginnen, met wat ja en nee aan gevolgen hebben (vraag 104); sinds 6 okt rooit wie een werkplaats vraagt zijn plek eerst, als er geen open grond meer is (vraag 110, e) | vraag 103, 104, 110 |
+| De verzoeken | stap 1 tot en met 3 gebouwd (3 okt): wat het dorp mist, komt een inwoner je vragen, met de plek die hij koos en wat het kost; ja of nee, en ben je weg, dan beslist je raadsman; in het bouwmenu alleen nog het erf en oproepen met een premie (de spelregel "Wie bouwt"); de speeltest speelt zo; en uit eigen wil: een ondernemer die wapens wil maken (sinds 7 okt niet meer verboden, vraag 131) of een tweede herberg beginnen, met wat ja en nee aan gevolgen hebben (vraag 104); sinds 6 okt rooit wie een werkplaats vraagt zijn plek eerst, als er geen open grond meer is (vraag 110, e) | vraag 103, 104, 110 |
 | Twee bazen | stap 1 en 2 gebouwd (3 okt; Marcel: "106 a b c d ja"): de gunst van de heer en het vertrouwen van het dorp in de balk, met een waarschuwing onder 20 en op 0 weg (ontslagen of weggejaagd); betrapt op verstoppen is de laatste waarschuwing; elke maand een gril van de heer in een brief, die zijn gunst tegen het dorp weegt | vraag 106 |
 | Dorpsfeesten | gebouwd (3 okt): het oogstfeest en de meiboom; zeg je ja, dan viert het hele dorp het op het plein, een hele dag (en niemand werkt) of een avond, met licht en de meiboom in pixel art; de rest (meer feesten, een grote bruiloft) later | vraag 84, 97 |
 | Besloten | het spel zelf (23 sep); geldt nog | |
@@ -495,7 +495,8 @@ met een mond die zegt hoe ze erbij staan (blij, tevreden, ontevreden, boos) en b
 veranderde. Ze beginnen op 50.
 - **De gunst van de heer:** de schatting op Sint-Maarten (alles betaald +15, een boete −10, ook soldaten −25, ook de
   schandpaal −40; het venster zegt vooraf waar zijn gunst dan staat), niet naar het plein komen −10, de heervaart
-  (mannen gestuurd +10, vrijgekocht +5, niet geantwoord −10), en wapens die zijn soldaten vinden −30.
+  (mannen gestuurd +10, vrijgekocht +5, niet geantwoord −10). Wapens die zijn soldaten vonden, kostten tot 7 okt −30;
+  sinds wapens niet meer verboden zijn, niet meer (vraag 131).
 - **Het vertrouwen van het dorp:** elk antwoord op een voorval of een verzoek, zo zwaar als het het dorp tevreden of
   ontevreden maakt (besliste je raadsman, de helft); niet gevonden of geen tijd −2; mannen naar de oorlog −8, vrijgekocht
   +8; wie verhongerde of bevroor −3 per mens, wie sneuvelde −2; soldaten in huis −10; jezelf aan de schandpaal +10,
@@ -621,19 +622,19 @@ wachthuis na de rovers, de bouwstof en de wensen van de huizen, en wat het doel 
   twee keer nee trekt hij weg, met zijn gezin als hij het hoofd is of diens vrouw of man, en kan als rover terugkomen.
   Onder elk antwoord staat het ("Janna neemt het je kwalijk", "Janna trekt weg, met haar gezin"), en het briefje bij
   zijn huis zegt het ook.
-  - **De wapenmaker (gebouwd, 3 okt).** In een dorp, na een aanval van de rovers (60 dagen lang) of als er een smidse
-    staat, wil hij wapens maken: "Schout, ik wil wapens maken, naast mijn huis. Na de rovers wil niemand nog met een
-    hooivork voor zijn akker staan. Het mag niet van de heer, dus het blijft onder ons." Hij zoekt je onder vier ogen.
-    De wapenmaker maakt wapens van hout en ijzer (de marskramer verkoopt ijzer), en wie van de militie er een heeft,
-    slaat 2 harder. Maar het is verboden: **ziet de inner hem**, dan stijgt de argwaan (20%), en op Sint-Maarten **laat
-    de heer hem verzegelen** als zijn inner of hijzelf hem zag, of als zijn soldaten het hele dorp doorzoeken: de wapens
-    gaan mee, en volgend jaar komt er 20 goud bij wat hij vraagt. Zeg je nee en heeft hij een kelder, dan smeedt hij
-    **stiekem** ("Een paar dagen later hoor je hameren, 's nachts, onder zijn huis."): een wapen per vier dagen, die de
-    inner niet ziet, maar de soldaten vinden als ze die kelder doorzoeken, en dan straft de heer net zo. Na de tweede
-    nee trekt hij weg.
-    **Besloten (7 okt, Marcel; nog niet gebouwd, werklijst vraag 131):** "Wapens zijn niet meer verboden. Het is logisch
-    dat er wapens zijn om de stad te verdedigen. Alleen weerstand tegen de heer is inacceptabel." Dan is de wapenmaker
-    een gewone werkplaats, zonder inner, verzegelen of kelder; het plan staat bij vraag 131.
+  - **De wapenmaker (gebouwd, 3 okt; niet meer verboden sinds 7 okt).** In een dorp, na een aanval van de rovers (60
+    dagen lang) of als er een smidse staat, wil hij wapens maken: "Schout, ik wil wapens maken, naast mijn huis. Na de
+    rovers wil niemand nog met een hooivork voor zijn akker staan. Het dorp betaalt 12 hout en 14 goud." Hij zoekt je
+    onder vier ogen, en je zegt "Ja, bouw maar." of "Nee, nu niet.". De wapenmaker maakt wapens van hout en ijzer (de
+    marskramer verkoopt ijzer), en wie van de militie er een heeft, slaat 2 harder. Na de tweede nee trekt hij weg.
+    **Wapens zijn niet verboden** (Marcel, 7 okt: "Wapens zijn niet meer verboden. Het is logisch dat er wapens zijn om
+    de stad te verdedigen. Alleen weerstand tegen de heer is inacceptabel", en "Ja allebei"; werklijst vraag 131): de
+    inner en de heer laten de wapenmaker met rust, en wat de heer niet mocht zien (`verdacht` in `T.GEBOUWEN`, ook het
+    schuttershof, het tuighuis, de palissade en de kazerne), is er niet meer. Tot dan was het verboden: zag de inner hem,
+    dan steeg de argwaan, en op Sint-Maarten liet de heer hem verzegelen, nam de wapens mee, rekende 20 goud erbij en
+    nam 30 gunst; wie nee hoorde, smeedde stiekem in zijn kelder. In de speeltest van 6 okt kostte dat de bouwer twee
+    keer zijn ambt. Wat als weerstand telt, blijft gestraft: niet betalen, betrapt worden op verstoppen, de heervaart
+    weigeren; de opstand komt met vraag 126.
   - **De tweede herberg (gebouwd, 3 okt).** In een dorp met één herberg, vanaf 50 mensen, wil iemand er een tweede
     beginnen: "Schout, ik wil een tweede herberg beginnen, naast mijn huis. Elf mensen wonen meer dan een uur van de
     herberg, en komen er zelden." (of: de herberg is droog; of: één is te weinig). **Ja:** hij brouwt ook, en ze vechten
@@ -1749,13 +1750,14 @@ werk sneller.
 | Raadhuis | waar de schepenen stemmen; de schout wordt burgemeester | nieuw |
 | Stadsmuur en poort | pas mag het met stadsrechten; zonder is het opstand | nieuw (palissade staat op de lijst) |
 
-*Verdacht: wat de heer niet mag zien*
+*Verdediging* (tot 7 okt "Verdacht: wat de heer niet mag zien"; sinds dan niet meer: Marcel, "Het is logisch dat er
+wapens zijn om de stad te verdedigen. Alleen weerstand tegen de heer is inacceptabel"; werklijst vraag 131)
 
 | Gebouw | Wat het doet | Tekening |
 |---|---|---|
-| Wapenmaker | ijzer en hout tot wapens, voor de opstand. Verboden, dus verstopt: achter de smidse, of 's nachts | nieuw |
-| Schuttershof | mannen oefenen; als de inner het ziet, heet het een feest | nieuw |
-| Palissade | een muur zonder stadsrechten is een opstand die je aankondigt | nieuw |
+| Wapenmaker | ijzer en hout tot wapens, om het dorp te verdedigen | nieuw |
+| Schuttershof | de militie oefent er met boog en speer | nieuw |
+| Palissade | een muur van palen om het dorp, tegen rovers en wolven | nieuw |
 
 **Grondstoffen halen** (Marcel, 23 sep: "houthakkers, steengroeve etc moeten we ook hebben").
 Bouwen vraagt materiaal, en dat moet ergens vandaan. Voorstel (Claude) voor wat erbij hoort:
@@ -1772,7 +1774,7 @@ Bouwen vraagt materiaal, en dat moet ergens vandaan. Voorstel (Claude) voor wat 
 | Kalkbrander | kalk uit schelpen | metselspecie |
 
 Een eigen ertsgraver betekent dat je voor ijzer niet van de marskramer afhangt, en ijzer wordt ook
-wapens: dat ziet de inner graag van dichtbij.
+wapens.
 
 **Ordebewaarders en een leger** (Marcel, 23 sep: "orde bewaarders, leger etc moeten een optie
 zijn"). Voorstel (Claude), van mag tot mag niet:
@@ -1783,6 +1785,9 @@ zijn"). Voorstel (Claude), van mag tot mag niet:
 | Nachtwacht | met een lantaarn rond, roept de uren, ziet wie er na de avondklok buiten is, ook jouw eigen smokkelaars | goed |
 | Schutterij | een burgerwacht die oefent met boog en piek, tegen rovers en wolven | verdacht zodra ze te goed worden |
 | Huurlingen | betaalde soldaten, duur, voor verdediging en voor de opstand | een leger is een opstand |
+
+Sinds 7 okt (vraag 131) hangt wat de heer ervan vindt niet meer af van wat het is, maar van wat je ermee doet (Marcel:
+"Alleen weerstand tegen de heer is inacceptabel").
 
 Gebouwen erbij: wachthuis, gevang, schuttershof (doelen), tuighuis (wapens), en later een kazerne en
 een poort met wacht. Daartegenover staan de soldaten van de heer, die hij bij je inkwartiert. Wie je
@@ -2895,7 +2900,7 @@ Wat het vraagt:
   andere voet: een hut van 5×7 tegels wordt een huis van 7×5, en dan een stenen huis van 6×8. Past
   dat niet, dan wacht het huis voor altijd. Zo kan een huis in het eerste jaar al een stenen huis
   worden, zonder één steen, terwijl het stenen huis bij de trede stad hoort.
-- De herberg, de bakkerij, de brouwerij, de markt en de wapenmaker (verdacht) staan al in
+- De herberg, de bakkerij, de brouwerij, de markt en de wapenmaker staan al in
   `T.GEBOUWEN`, maar alleen het gehucht is te bouwen. Een paard of een stal staat nergens.
 - De huizenbouwer maakt elk huis in elk materiaal: vlechtwerk, planken, blokhut, vakwerk en veldsteen,
   onder riet, spanen, leien of pannen (`beeld.md`). In het spel staan die huizen nog niet (ronde 4b).
@@ -3501,7 +3506,8 @@ wordt, wordt dus vanzelf duurder. De schout moet kiezen:
 
 ### De wapenmaker, en wat erbij hoort
 
-- De wapenmaker staat al in `T.GEBOUWEN`: verdacht, trede dorp, hout en ijzer tot wapens. Erbij,
+- De wapenmaker staat al in `T.GEBOUWEN`: trede dorp, hout en ijzer tot wapens (sinds 7 okt niet meer verdacht,
+  werklijst vraag 131). Erbij,
   voorstel: een boogmaker (bogen en pijlen "voor de jacht": een goede smoes), een zadelmaker bij de
   stal, en later een harnasmaker.
 - Het dagritme maakt hem spannend: overdag maakt de smid hoefijzers en ploegijzers, 's nachts wapens.
