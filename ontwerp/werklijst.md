@@ -4277,7 +4277,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
 114. **Gebouwen in verhouding, en een woontoren** (Marcel, 3 okt, vijfentwintigste sessie: "Gebouwen moeten in
     verhouding komen. Een herberg is vaak veel groter dan een huis. Een kapel zelfde verhaal. Een warehouse ook.
     Misschien moeten we ook een woontoren hebben"; plan van Claude; open).
-    **Bezig in sessie `claude/project-thread-cyjrql`** (7 okt): stap 3, de grote gebouwen (de herberg, de kapel, de woontoren en het huis van de schout, draaibaar); eerst het plan en een proefplaat voor Marcel.
+    **Bezig in sessie `claude/project-thread-cyjrql`** (7 okt): stap 3, de grote gebouwen (de herberg, de kapel, de woontoren en het huis van de schout, draaibaar); gebouwd op de branch, wacht op Marcel om in `main` te zetten.
     **Hoe het nu is:** een huis is 7 bij 5 tot 10 bij 7 tegels, een boerderij 6 bij 8 tot 9 bij 8. De herberg is 9 bij 7
     (die op de kaart 8 bij 11), nauwelijks groter dan een huis. De kapel is 5 bij 10, smal, en met zijn dak niet hoger
     dan een huis. Het pakhuis en de tiendschuur lenen een blokhutschuur van 5 bij 7, kleiner dan een huis; de markt en
@@ -4759,6 +4759,21 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Marcel (7 okt): "Ik denk dat we de stal bij de herberg maar gaan laten".** Dus de grote herberg heeft geen stal en
     geen binnenplaats: alleen het gebouw van twee lagen, 12 bij 6 (`grootGebouw(stijl, 'herberg')`; de varianten met een
     stal blijven alleen op de proefplaat). Dat spaart grond.
+    **Marcel (7 okt): "Ja prima" (renderen, en dan in het spel). Gebouwd (7 okt, branch `claude/project-thread-cyjrql`):**
+    het vel heeft 559 tekeningen, 128 nieuw: per stijl de kleine herberg (11 bij 8), de grote (12 bij 6, leien en
+    pannen), de kapel (18 bij 6, in de steen van de stijl of baksteen), de woontoren (5 bij 5, idem) en het huis van de
+    schout (8 bij 6), elk in vier standen; de oude tekeningen bleven byte voor byte gelijk. De huizenbouwer kent een gebouw
+    uit delen (`wereldVan`, `meetHuis` met `delen`) en bewaart elke tekening in `uit/huizen-cache/` (met een hash over de
+    code en de opgave), zodat een tweede taak verdergaat waar de eerste na twee uur stopte. In het spel: de maker legt het
+    huis van de schout en de herberg in de stijl, met de deur naar het plein; een kapel of herberg die je later bouwt,
+    krijgt die van de stijl (`nu` in `js/bouwstijl.js` kent nu stenen gebouwen met één dak); de herberg groeit in een dorp
+    door tot de grote, voor 16 hout, met zijn deur aan dezelfde kant (`groeitMee` op de soort, `laatMeegroeien` en
+    `groeiSchuif` in `js/behoeften.js`); en een stenen huis dat alles heeft, wordt met marktrecht een woontoren voor drie
+    gezinnen, ambachtslieden, voor 20 steen (`woontoren` in `T.GEBOUWEN`, `wordtVanaf`, `ook` bij de stand). Doordat de
+    landen van de maker anders liggen, spelen de toetsen van het doorgroeien op land 62710, en staat het midden van de
+    markt op een tegel waar je kunt staan (op 72022 stond er een bank). De grote herberg heeft bouwfasen; de kapel en de
+    woontoren nog niet (de bouwfasen kennen alleen een huis, geen toren of gebouw uit delen): die rijzen nog bleek op.
+    Open: bouwfasen voor de kapel en de woontoren; een grote herberg krijgt nog geen plaatsen voor meer gasten.
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag
