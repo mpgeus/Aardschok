@@ -346,18 +346,8 @@
         && D.kalender.dag >= 1 && dagNu(D) < T.OCHTENDRAPPORT_INSTELLINGEN.raadTot,
       tekst: () => 'Een raadsman brengt je elke ochtend een rapport: kies er een [R].',
     },
-    {
-      // Groeien en winnen (werklijst vraag 102, c; Marcel, 3 okt: "102 a b c d e ja"): op een vrij erf zet een nieuw
-      // gezin een hut, en wie in een hut woont, is niet super gelukkig (js/einde.js). Heeft het dorp de maat van de winst,
-      // dan zegt de raad dat je het erf weghaalt (in het bouwmenu, met het erf in de hand, klik je erop; js/main.js).
-      // Nieuwe gezinnen trekken dan alleen nog in de plaats die doorgroeiende huizen vrijmaken.
-      id: 'geenErf',
-      als: (D) => T.maatGehaald(D) && T.vrijeErven(D).length > 0,
-      tekst: (D) => {
-        const wat = T.vrijeErven(D).length === 1 ? 'het erf' : 'de vrije erven';
-        return `Genoeg mensen voor de winst. Op een vrij erf begint een nieuw gezin in een hut, en dan begint de teller opnieuw: haal ${wat} weg ([B], Erf, en klik erop).`;
-      },
-    },
+    // Een vrij erf weghalen na de maat van de winst (vraag 102, c) zegt de raad niet meer (Marcel, 8 okt: "2. B"): voor een
+    // tester is dat vreemd. Een nieuw gezin in een hut zet de teller stil, en dat zie je bij het doel (js/einde.js).
     {
       // Een huis dat alles heeft, maar niet kan doorgroeien (werklijst vraag 130, c2; Marcel, 6 okt: "Eens alle 3"): voor de
       // winst moet het een stenen huis worden, en zonder de raad zie je niet waarom de teller niet loopt. Waarom, zegt

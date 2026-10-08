@@ -565,8 +565,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   een gezin komt aan de groei (`T.waaromGeenGezin` en `T.volgendeGezinDag` in `js/gebouwen.js`), het hout en het eten
   aan de winter, wat de huizen missen aan de wensen (`T.watDeHuizenMissen`, vóór het doel; vraag 87), en wat je mist voor
   wat het doel vraagt aan de treden (`T.doelGebouwen`), met waar het vandaan komt. Na de laatste trede telt hij tot de
-  maat van de winst (`T.mensenVoorDeWinst` in `js/einde.js`), en is die gehaald (`T.maatGehaald`), dan zegt hij dat je
-  een vrij erf weghaalt (vraag 102, c). Haalt het eten de winter niet, dan zegt hij wat helpt (`T.watHelptAanEten`, vraag
+  maat van de winst (`T.mensenVoorDeWinst` in `js/einde.js`); dat je dan een vrij erf weghaalt, zegt hij sinds 8 okt niet
+  meer (Marcel: "2. B"). Haalt het eten de winter niet, dan zegt hij wat helpt (`T.watHelptAanEten`, vraag
   133, b: ontginnen, een visser per dertig mensen, een jager als er herten zijn, een graanschuur, meer weide, zaaigraan
   kopen), en vraagt het dorp het gebouw dat hij noemt. Na een voorjaar met honger maakt een boer zelf een veld weide
   (`weideErbij` in `T.boerenKiezenVelden`, `D.behoeften.voorjaarsHonger`). Vanaf de herfst zegt hij of vis en vlees de
@@ -625,7 +625,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   in `tegels.json`), en `js/tekenen.js` tekent ze zo dat wat ervoor staat ze afdekt (`brandendeRamen`). Sinds vraag 104
   kan er een tweede herberg komen (`js/ondernemers.js`): `T.herbergenVan` geeft ze allemaal, `T.herbergVan` de eerste
   (waar de herbergierster woont en de marskramer logeert), en wie 's avonds gaat, gaat naar de dichtste
-  (`T.herbergVanGast`).
+  (`T.herbergVanGast`). De grote herberg, van twee lagen (`T.isDorpsVorm` in `js/bouwstijl.js`), trekt meer gasten:
+  de kans dat iemand gaat, maal `groteHerberg` (vraag 133).
 - `js/doorzoeken.js`: **de soldaten doorzoeken het dorp** (werklijst punt 4, stuk 1, 27 sep): op
   Sint-Maarten onder de grens van de argwaan op twee of drie plekken (`T.beginDoorzoeken`, vanuit
   `T.heerStaatErOp`). Ze lopen met de schout mee (`T.loopNaastDeSchout` in `js/inner.js`, zoals de inner)

@@ -14,13 +14,14 @@ groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
 Marcel, 8 okt: "snel, duidelijk en low cost". Elke sessie werkt dit blok bij aan het eind; wat af is, gaat eruit.
 
-**Loopt** (het teken "Bezig in sessie" staat bij het punt zelf): de dagloners (vraag 140); vraag 133 en de raad over het vrije erf (Marcel: "1. A 2. B"). De wijnboerderij (vraag 136) en het graan dat
-pas binnen telt (vraag 140) staan in `main`.
+**Loopt** (het teken "Bezig in sessie" staat bij het punt zelf): niets. De dagloners (vraag 140: wie geen werk heeft,
+maait, bindt en draagt in de oogst) staan in `main`.
 
 **Wacht op Marcel:**
+- Vraag 142, een bladzijde met alle getallen en spelregels ("een bladzijde met duidelijk overzicht van alles"): eerst een
+  plan voor Marcel.
 - Vraag 141, een economie binnen het dorp: Marcel koos B, een beurs per huis, **voor de demo** ("Belangrijk concept"),
-  met munten van koper, zilver en goud, de kas van het dorp naast de beurs van de schout; na 140 en 142.
-- Vraag 142, een bladzijde met alle getallen en spelregels ("een bladzijde met duidelijk overzicht van alles"); na 140.
+  met munten van koper, zilver en goud, de kas van het dorp naast de beurs van de schout; na 142.
 
 **Daarna, in deze volgorde:**
 1. Een proefversie voor Marcels 4K-scherm en een eerste tester (33d; `npm run proefversie`, ook `-- --windows`), met de
@@ -6786,8 +6787,10 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     dorp tot de grote, dan heeft hij nog evenveel plaatsen voor gasten als de kleine (`T.herbergGasten`): een grotere
     herberg zou meer mensen moeten trekken, en dat haalt bier weg voor de huizen. Vraag aan Marcel: meer plaatsen naar de
     maat van de herberg, of laten zoals het is?
-    **Bezig in sessie `ccr-79f625a6-efv7a8`** (8 okt): A, de grote herberg trekt meer gasten (Marcel: "1. A"), en de raad
-    zegt na 100 mensen niet meer "haal een vrij erf weg" (Marcel: "2. B").
+    **Marcel (8 okt): "1. A"**, en bij de raad over het vrije erf (vraag 102, c) "2. B". **Af (8 okt):** plaatsen had de
+    herberg niet (alleen het bier houdt de gasten tegen), dus in de grote, van twee lagen, is de kans dat iemand gaat 1,5
+    keer zo groot (`groteHerberg` in `T.HERBERG_INSTELLINGEN`, `T.isDorpsVorm` in `js/bouwstijl.js`). En de raad zegt na
+    100 mensen niet meer "haal een vrij erf weg"; de bouwer van de speeltest doet het dan ook niet meer.
 134. **Zaken als sjabloon** (Claude, 8 okt, bij vraag 128; Marcel: "prima"; open). De graanzak is één vaste zaak: het
     verhaal, de rollen en de zinnen met de hand, alleen de mensen komen per spel uit het dorp (`T.mensenVoorDeZaak`). Het
     voorstel: een zaak wordt een sjabloon met gegevens (de rollen en wie erin past, wat er echt gebeurde, wie wat weet, het
@@ -6916,8 +6919,6 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     maait het graan van zijn boerderij, en bindt eerst als er meer dan vier tegels zwad liggen (`zwadGrens`). Op land 5
     is alles op dag 50 gemaaid en binnen (714), zonder het vangnet; alleen maaien zonder die grens gaf 474 op dag 50,
     omdat het binden dan bleef liggen.
-    **Bezig in sessie `ccr-77327776-rqjldz`** (8 okt): de dagloners (Marcel: "Dagloners is een goed idee", "mensen in het
-    dorp", en "We beginnen met de dagloners"): wie in de oogst geen werk heeft, helpt de boeren binden en dragen.
 
 141. **Een economie binnen het dorp** (Marcel, 8 okt: "Ik denk dat we binnen in het dorp ook een economie nodig hebben. Hoe
     kopen onze inwoners anders dingen?"; open, eerst overleg). Nu is alles van het dorp samen (`D.voorraad`): een huis

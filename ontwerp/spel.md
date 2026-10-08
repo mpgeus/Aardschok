@@ -1095,9 +1095,7 @@ doel"):
   marskramer er in de herfst is en je te weinig hebt; een wachthuis, tien dagen na een aanval als er geen is; het hout
   en het eten voor de winter, vanaf drie maanden ervoor, met de houthakker en de jager erbij, en dat er zolang geen
   gezin komt (sinds 1 okt, vraag 59, B); het graan dat na Sint-Maarten nog in de kelders ligt ("dat eet niemand en
-  zaait niemand"); de eerste dag hoe de tijd sneller gaat en hoe je slaapt; met de maat van de winst (100 mensen, na de
-  laatste trede) dat je een vrij erf weghaalt, want daarop begint een nieuw gezin in een hut, en dan begint de teller
-  opnieuw (sinds 3 okt, vraag 102, c); dan of het dorp vol is (wijs een erf aan);
+  zaait niemand"); de eerste dag hoe de tijd sneller gaat en hoe je slaapt; dan of het dorp vol is (wijs een erf aan);
   dan **de wensen** (sinds 2 okt, vraag 86, a, en 87; Marcel: "a ja"): een huis dat een maand alles had en op bouwstof
   wacht ("Een hut kan een huis worden, maar er is geen 8 hout: bouw een houthakker [B]."), en anders wat de meeste mensen
   missen ("Vijf boerderijen en een huis willen een kapel binnen 40 tegels [B]."), alleen als je er nu iets aan kunt doen,
@@ -3467,7 +3465,9 @@ eigen erf.
   eerst. Het lot ligt vast per mens per dag, dus het klopt ook als je slaapt of versnelt. In het
   gehucht wonen de meesten sinds stuk 3 zo'n anderhalf uur lopen van de herberg (op de klok van het
   spel is twintig tegels ruim een uur); zo gaan er gemiddeld twee per avond, in de zomer minder en in
-  de winter iets meer.
+  de winter iets meer. **Sinds 8 okt trekt de grote herberg meer** (werklijst vraag 133; Marcel: "1. A"): in de herberg
+  van twee lagen, waartoe de kleine in een dorp groeit, is de kans dat iemand gaat 1,5 keer zo groot
+  (`groteHerberg`); het bier blijft de grens.
 - **Erheen, en weer naar huis:** na het werk lopen ze de herberg in en zijn ze binnen. Bij bedtijd
   komen ze naar buiten en lopen ze in het donker naar hun eigen deur; wie ver woont, is pas na
   middernacht thuis. De herbergierster staat 's avonds binnen, achter de tap. Bij de muis staat bij een

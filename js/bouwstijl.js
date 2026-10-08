@@ -133,16 +133,27 @@
     const d = ding(tekening);
     if (!d) return [];
     const lijst = (index().stijlen[d.stijl] || {})[d.soort] || [];
-    const dak = gehuchtDak(d.stijl);
-    const vanHetGehucht = (vorm) => lijst.some((t) => t.vorm === vorm && t.dak === dak);
-    if (!vanHetGehucht(d.vorm)) return [];
+    if (!vanHetGehucht(d, d.vorm)) return [];
     const uit = [];
     for (const vorm of new Set(lijst.map((t) => t.vorm))) {
-      const t = !vanHetGehucht(vorm) && lijst.find((x) => x.vorm === vorm && x.kant === d.kant);
+      const t = !vanHetGehucht(d, vorm) && lijst.find((x) => x.vorm === vorm && x.kant === d.kant);
       if (t) uit.push(t.naam);
     }
     return uit;
   };
+
+  // Is deze tekening een vorm die pas in een dorp komt (de grote herberg, van twee lagen)? Een tekening zonder stijl niet.
+  T.isDorpsVorm = function (tekening) {
+    const d = ding(tekening);
+    return !!d && !vanHetGehucht(d, d.vorm);
+  };
+
+  // Heeft de soort van tekening `d` deze vorm ook onder het dak van het gehucht?
+  function vanHetGehucht(d, vorm) {
+    const lijst = (index().stijlen[d.stijl] || {})[d.soort] || [];
+    const dak = gehuchtDak(d.stijl);
+    return lijst.some((t) => t.vorm === vorm && t.dak === dak);
+  }
 
   // Dezelfde vorm, dak en steen, met de deur naar een andere kant. Een tekening zonder stijl blijft zichzelf.
   T.metDeurNaar = function (tekening, kant) {

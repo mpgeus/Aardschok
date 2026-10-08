@@ -173,6 +173,27 @@ test('wie ver woont, gaat minder vaak, en in de winter gaan ze vaker', () => {
   assert.ok(totaal(winter) > totaal(herfst), `winter ${totaal(winter)}, herfst ${totaal(herfst)}`);
 });
 
+test('de grote herberg, van twee lagen, trekt meer gasten dan de kleine (vraag 133)', () => {
+  assert.ok(T.isDorpsVorm('huizen/wit-herberg2-leien-z'), 'de grote komt pas in een dorp');
+  assert.ok(!T.isDorpsVorm('huizen/wit-herberg1-riet-z'), 'de kleine is van het gehucht');
+  assert.ok(!T.isDorpsVorm('huizen/herberg1'), 'een tekening zonder stijl is geen grote');
+  const tel = () => {
+    const S = gehucht();
+    let n = 0;
+    for (let d = HERFST; d < HERFST + 60; d++) n += T.herbergGasten(S.dorp, d).length;
+    return n;
+  };
+  const klein = tel();
+  const echt = T.isDorpsVorm;
+  T.isDorpsVorm = () => true; // de herberg van het ontworpen gehucht, alsof hij de grote is
+  try {
+    const groot = tel();
+    assert.ok(groot > klein * 1.2, `groot ${groot}, klein ${klein}`);
+  } finally {
+    T.isDorpsVorm = echt;
+  }
+});
+
 // ---------------------------------------------------------------------------------------------
 // Erheen, en weer naar huis
 // ---------------------------------------------------------------------------------------------
