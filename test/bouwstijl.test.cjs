@@ -21,9 +21,12 @@ function nieuwSpel(zaad) {
   const echt = console.warn;
   console.warn = () => {};
   const S = { kalender: T.nieuweKalender() };
+  const opEiland = T.MAKER_INSTELLINGEN.opEiland;
+  T.MAKER_INSTELLINGEN.opEiland = false; // de landen van de maker zelf, zonder het eiland (vraag 117)
   try {
     assert.ok(T.beginOpKaart(S, 'gehucht', zaad));
   } finally {
+    T.MAKER_INSTELLINGEN.opEiland = opEiland;
     console.warn = echt;
   }
   Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
