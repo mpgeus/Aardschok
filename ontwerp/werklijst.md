@@ -14,15 +14,13 @@ groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
 Marcel, 8 okt: "snel, duidelijk en low cost". Elke sessie werkt dit blok bij aan het eind; wat af is, gaat eruit.
 
-**Loopt** (het teken "Bezig in sessie" staat bij het punt zelf): vraag 133 en de raad over het vrije erf (Marcel: "1. A 2. B"). De wijnboerderij (vraag 136) en het graan dat
+**Loopt** (het teken "Bezig in sessie" staat bij het punt zelf): de dagloners (vraag 140); vraag 133 en de raad over het vrije erf (Marcel: "1. A 2. B"). De wijnboerderij (vraag 136) en het graan dat
 pas binnen telt (vraag 140) staan in `main`.
 
 **Wacht op Marcel:**
-- Vraag 140: wie helpt bij de oogst. Marcel koos dagloners; het plan wacht op hem.
 - Vraag 141, een economie binnen het dorp: Marcel koos B, een beurs per huis, **voor de demo** ("Belangrijk concept"),
-  met munten van koper, zilver en goud; het plan wacht op hem.
-- Vraag 142, een gereedschap voor alle getallen: "echt een robuuste losse tool. Voor alle settings etc."; het plan wacht
-  op hem.
+  met munten van koper, zilver en goud, de kas van het dorp naast de beurs van de schout; na 140 en 142.
+- Vraag 142, een bladzijde met alle getallen en spelregels ("een bladzijde met duidelijk overzicht van alles"); na 140.
 
 **Daarna, in deze volgorde:**
 1. Een proefversie voor Marcels 4K-scherm en een eerste tester (33d; `npm run proefversie`, ook `-- --windows`), met de
@@ -6907,8 +6905,11 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     de oogst staat er nog zo'n 230 op het veld. **Marcel (8 okt): "Misschien kunnen er meer arbeiders in het dorp?"** Open:
     wie helpt bij de oogst (zie het antwoord van Claude in het gesprek; eerst een getal, "Niets erbij zonder overleg").
     Claude stelde voor: A, een getal (meer schoven per vracht, sneller binden), of B, dagloners: wie in de oogsttijd geen
-    werk heeft, helpt de boeren binden en dragen. **Marcel (8 okt): "Dagloners is een goed idee."** Het plan staat in het
-    gesprek en wacht op Marcel.
+    werk heeft, helpt de boeren binden en dragen. **Marcel (8 okt): "Dagloners is een goed idee"**, en op de vraag of het
+    mensen uit het dorp zijn of seizoenarbeiders: **"mensen in het dorp, misschien dat er rondreizende mensen kunnen helpen
+    als ze er zijn"**. Dus eerst wie in het dorp woont; rondreizenden later, als die er komen.
+    **Bezig in sessie `ccr-77327776-rqjldz`** (8 okt): de dagloners (Marcel: "Dagloners is een goed idee", "mensen in het
+    dorp", en "We beginnen met de dagloners"): wie in de oogst geen werk heeft, helpt de boeren binden en dragen.
 
 141. **Een economie binnen het dorp** (Marcel, 8 okt: "Ik denk dat we binnen in het dorp ook een economie nodig hebben. Hoe
     kopen onze inwoners anders dingen?"; open, eerst overleg). Nu is alles van het dorp samen (`D.voorraad`): een huis
@@ -6919,14 +6920,21 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     halen); B, een beurs per huis (loon voor wie werkt, een huis koopt op de markt wat het kan betalen, de belasting uit
     wat de huizen verdienen); C, een vrije markt met prijzen die meebewegen. **Marcel (8 okt): "En voor de economie B voor
     de demo ook. Belangrijk concept"**, en over het geld: **"Het goud is gelijk, misschien koper, zilver en gouden munten
-    maken?"** Dus in de demo, niet na de kern. Het plan staat in het gesprek en wacht op Marcel.
+    maken?"** Dus in de demo, niet na de kern. Op het plan van Claude (de voorraad blijft het pakhuis, een huis koopt op de
+    markt, het geld gaat naar wie het maakte, de prijzen vast; munten van koper, zilver en goud):
+    **Marcel (8 okt): "schout heeft losse beurs en beheert de dorpskas / stadsgeld. Komt uit de huizen, de belasting. De
+    markt betaald een vergoeding aan het dorp of stad. De boer kan hier zelf kiezen. Mensen hebben hun eigen gedachten."**
+    Dus: de schout heeft een eigen beurs, en daarnaast de kas van het dorp; die vult zich met de belasting van de huizen en
+    met marktgeld van de markt; en een boer kiest zelf hoe hij zijn dagloner betaalt (munten of graan), naar wie hij is.
+    Na de dagloners en de bladzijde voor de getallen (vraag 142).
 
 142. **Een gereedschap voor alle getallen** (Marcel, 8 okt: "Ik wil straks wel een tool waarin we al deze parameters kunnen
     instellen."; open). Er is de werkbank in de spelregels (`T.WERKBANK` in `js/opties.js`: elk getal uit de blokken
     `*_INSTELLINGEN`), en de speeltest neemt er een getal uit met `--getal`. Open: is dat genoeg, of een eigen bladzijde in
     `gereedschap/`, met de getallen per onderwerp, wat ze doen, en een speeltest erbij die zegt wat een getal deed.
     **Marcel (8 okt): "Kwa gereedschap bedoel ik echt een robuuste losse tool. Voor alle settings etc."** De werkbank is
-    dus niet genoeg. Het plan staat in het gesprek en wacht op Marcel.
+    dus niet genoeg. **Marcel (8 okt), op de vraag bladzijde of los programma: "Ja misschien een bladzijde met duidelijk
+    overzicht van alles."** Een bladzijde in `gereedschap/`, na de dagloners.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
