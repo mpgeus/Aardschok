@@ -6778,6 +6778,9 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     een wijngaard als soort veld, zoals een akker of weide in het veldenvenster, van een boer; de oogst in wijnmaand (die
     heet al zo); wijn als wens van een hogere stand, of als eten; en de heer die wijn wil, zoals nu de eieren.
     **Marcel (8 okt): "Wijn wordt drank, zoals bier. Mensen dronken geen water."** Dus een wens, geen eten.
+    **Bezig in sessie `ccr-77327776-rqjldz`** (8 okt): de wijnboerderij bouwen (Marcel: "Ik wil z.s.m. aan een
+    wijnboerderij", en "Ja zo bouwen" op het plan: een boerderij met een gezin en wijngaarden, de pluk in wijnmaand, de
+    wens bier wordt drank, bier of wijn, geen vaten, de heer wil wijn).
 137. **Doorgroeien zonder vaste maat** (Marcel, 8 okt: "We moeten ook stoppen met het dorp een vaste maat geven. Als alles
     straks 1 eiland is, is het logisch dat je gewoon door kunt groeien naar buiten."; open). Hoort bij het eiland (vraag
     117). Er zijn twee vaste maten: het land van de maker (100 bij 100, met bos tot de rand), en de maat van de winst (vanaf
