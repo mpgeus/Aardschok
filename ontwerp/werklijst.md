@@ -14,13 +14,10 @@ groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
 Marcel, 8 okt: "snel, duidelijk en low cost". Elke sessie werkt dit blok bij aan het eind; wat af is, gaat eruit.
 
-**Loopt** (het teken "Bezig in sessie" staat bij het punt zelf): niets. De wijnboerderij (vraag 136) en het graan dat
+**Loopt** (het teken "Bezig in sessie" staat bij het punt zelf): vraag 133 en de raad over het vrije erf (Marcel: "1. A 2. B"). De wijnboerderij (vraag 136) en het graan dat
 pas binnen telt (vraag 140) staan in `main`.
 
 **Wacht op Marcel:**
-- Vraag 133: meer plaatsen voor gasten in de grote herberg, of laten zoals het is?
-- Na 100 mensen zegt de raad "haal een vrij erf weg" (vraag 102, c), omdat een nieuw gezin de reeks van geluk breekt.
-  Voor een tester is dat vreemd; bespreken vóór de proefversie (het hoort bij vraag 137).
 - Vraag 140: wie helpt bij de oogst (eerst een getal).
 - Vraag 141 (een economie binnen het dorp) en 142 (een gereedschap voor de getallen; de werkbank is er al): na de kern,
   tenzij Marcel anders kiest.
@@ -6789,6 +6786,8 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     dorp tot de grote, dan heeft hij nog evenveel plaatsen voor gasten als de kleine (`T.herbergGasten`): een grotere
     herberg zou meer mensen moeten trekken, en dat haalt bier weg voor de huizen. Vraag aan Marcel: meer plaatsen naar de
     maat van de herberg, of laten zoals het is?
+    **Bezig in sessie `ccr-79f625a6-efv7a8`** (8 okt): A, de grote herberg trekt meer gasten (Marcel: "1. A"), en de raad
+    zegt na 100 mensen niet meer "haal een vrij erf weg" (Marcel: "2. B").
 134. **Zaken als sjabloon** (Claude, 8 okt, bij vraag 128; Marcel: "prima"; open). De graanzak is één vaste zaak: het
     verhaal, de rollen en de zinnen met de hand, alleen de mensen komen per spel uit het dorp (`T.mensenVoorDeZaak`). Het
     voorstel: een zaak wordt een sjabloon met gegevens (de rollen en wie erin past, wat er echt gebeurde, wie wat weet, het
