@@ -153,6 +153,26 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 8 okt, laat: Net rond als standaard, en vis en vlees zouten (werklijst, vraag 133, A en B)
+
+Op `ffa2003` (branch `ccr-77327776-rqjldz`), `npm run speeltest -- bouwer sluw --maker --jaren 4`, als meting: Marcel (8 okt)
+wil dat we stoppen met het ene oplossen met iets anders, dus hier komt niets meer voor.
+
+| Speler, land | Mensen per jaar | Hoe het eindigde |
+| --- | --- | --- |
+| bouwer 1 (62707) | 61, 82, 104, 115 | vier jaar uit; de reeks brak op 15 wintermaand 1326 na 154 dagen (vlees of vis) |
+| bouwer 2 (73425) | 52, 74, 119, 127 | vier jaar uit; brak op 20 wintermaand 1326 na 157 dagen (vlees of vis), en in lentemaand op eten |
+| bouwer 3 (72022) | 53, 74 | ontslagen in jaar 2: de gunst van de heer op (te weinig betaald) |
+| sluw 1 (62707) | 53, 80, 107, 110 | **gewonnen** op 13 sprokkelmaand 1327 |
+| sluw 2 (73425) | 49, 64, 56 | weggejaagd in jaar 3: het vertrouwen op (mannen naar de oorlog) |
+| sluw 3 (72022) | 49, 70, 112, 115 | de teller op 360 op de laatste dag: zo goed als gewonnen |
+
+**Wat het zegt:** twee van de zes winnen (eerst één, met Net rond als spelregel). Het zout was niet wat ontbrak: de speler
+kocht er hooguit één, want er lag in de herfst nauwelijks vis of vlees om te zouten. De vissers en jagers vangen niet
+meer dan de huizen in de zomer eten, dus er komt geen voorraad voor de winter, en daar breekt de reeks van de bouwers
+nog op. Wat dat verandert, is een getal (wat een visser vangt, of een visser per minder mensen), geen nieuwe regel; dat
+is aan Marcel.
+
 ## De proef met de spelregel "Graan" op "Net rond" (8 okt; werklijst, vraag 133)
 
 Dezelfde stand (`e9cc2cd`), `npm run speeltest -- bouwer sluw --maker --jaren 4 --regel graan=netRond`: een akkertegel
