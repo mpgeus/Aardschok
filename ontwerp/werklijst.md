@@ -6819,6 +6819,11 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     voor de wijngaard; plan van Claude, wacht op Marcel). Wat er is: de akker heeft vijf standen (geploegd, kiemend, groen,
     rijp, gemaaid), de boer zaait, wiedt en maait, en het graan gaat bij het maaien meteen de voorraad in; de boerin en de
     kinderen helpen, en in de winter gebeurt er bij de boerderij niets te zien.
+    Plan: A, het graan dichterbij (halmen, gebogen gouden aren, korte stoppels); B, schoven: de boerin en de kinderen
+    binden wat de boer maait, en zetten het in hokken op het veld; C, binnenhalen: na een paar dagen drogen naar de schuur
+    van de boerderij; D, dorsen in de winter, met een vlegel in de deur van de schuur. **Marcel (8 okt): "Correct; dat is
+    precies wat ik bedoel. Alles telt pas als het binnen is."** Dus het graan komt pas in de voorraad als de schoven in de
+    schuur zijn, en de wijn als de manden bij het huis zijn (vraag 136). Eerst de wijngaard, dan het graan.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
