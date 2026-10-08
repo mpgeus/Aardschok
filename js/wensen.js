@@ -311,14 +311,18 @@
     const mist = (r, wie) => {
       if (!er.some((p) => T.inDeKring(r, p, straal))) zonder.push({ r, wie, plekken: plekken.filter((p) => T.inDeKring(r, p, straal)) });
     };
+    // Een hut op een erf telt met het huis dat hij wordt (T.huisPlekVan, js/erven.js): in de speeltest groeide op 73425 een
+    // hut met een put binnen zijn kring tot een huis waarvan het midden net buiten de kring viel, en toen lagen er al erven
+    // om hem heen, en was er geen plek meer.
     const tel = mensenPerHuis(D);
     for (const g of D.gebouwen || []) {
       const stand = T.standVan(g);
-      if (stand && tel.get(g) && T.wensenVanStand(stand).includes(wens)) mist(T.voetVanGebouw(g), T.huisVan(D, g));
+      if (!stand || !tel.get(g) || !T.wensenVanStand(stand).includes(wens)) continue;
+      mist((g.soort === 'hut' && g.erf && T.huisPlekVan(g.erf)) || T.voetVanGebouw(g), T.huisVan(D, g));
     }
     const vanDeHut = Object.keys(T.STANDEN).find((s) => T.STANDEN[s].huis === 'hut');
     if (vanDeHut && T.wensenVanStand(vanDeHut).includes(wens)) {
-      for (const e of T.vrijeErven(D)) if (e.plan) mist({ x: e.x + e.plan.dx, y: e.y + e.plan.dy, b: e.plan.b, h: e.plan.h }, 'de hut op een ander erf');
+      for (const e of T.vrijeErven(D)) if (e.plan) mist(T.huisPlekVan(e), 'de hut op een ander erf');
     }
     const grond = { straal, er, plekken, zonder };
     perSoort[soort] = { sleutel, grond };

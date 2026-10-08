@@ -523,7 +523,7 @@ test('hoe dicht de erven ook liggen, elk huis houdt een plek voor een put (werkl
     for (const h of T.kringGrond(D, 'put').zonder) assert.ok(h.plekken.length > 0, `${h.wie} heeft geen plek meer voor een put`);
   }
   assert.ok(D.erven.length >= 10, `zoveel erven: ${D.erven.length}`);
-  assert.ok(redenen.some((r) => r.startsWith('Dan kan de hut op een ander erf geen put meer krijgen')), 'een erf dat de laatste plek nam, mocht niet');
+  assert.ok(redenen.some((r) => r.startsWith('Dan kan de hut op een ander erf straks geen put meer krijgen')), 'een erf dat de laatste plek nam, mocht niet');
 });
 
 test('het huis van, de hut van: het lidwoord bij wie er woont (T.huisVan)', () => {
@@ -532,4 +532,29 @@ test('het huis van, de hut van: het lidwoord bij wie er woont (T.huisVan)', () =
   assert.match(T.huisVan(D, D.gebouwen.find((g) => g.soort === 'huis')), /^het huis van /);
   assert.match(T.huisVan(D, D.gebouwen.find((g) => g.soort === 'hut')), /^de hut van /);
   assert.match(T.huisVan(D, D.gebouwen.find((g) => g.soort === 'boerderij')), /^de boerderij van /);
+});
+
+test('een hut op een erf telt bij de put met het huis dat hij wordt (werklijst vraag 117, 2d)', () => {
+  // Op het eiland van 73425 groeide een hut met een put binnen zijn kring tot een huis waarvan het midden net buiten de
+  // kring viel; toen lagen er al erven om hem heen, en was er geen plek meer voor een put.
+  const S = gehucht();
+  vol(S);
+  const plein = T.pleinVan(S.wereld);
+  const plekken = [];
+  for (let y = 0; y < S.wereld.tegels.length; y += 2) {
+    for (let x = 0; x < S.wereld.tegels[0].length; x += 2) plekken.push({ x, y, d: Math.hypot(x + 5 - plein.x, y + 5 - plein.y) });
+  }
+  plekken.sort((a, b) => b.d - a.d); // het verst van het plein, en van de put daar
+  const plek = plekken.find((p) => !T.waaromPastErfNiet(S.dorp, p.x, p.y));
+  assert.ok(T.plaatsGebouw(S.dorp, 'erf', plek.x, plek.y).gelukt);
+  const hut = T.gezinZoektEenErf(S.dorp);
+  const huis = T.huisPlekVan(hut.erf);
+  const voet = T.voetVanGebouw(hut);
+  assert.ok(huis.b * huis.h > voet.b * voet.h, 'het huis is groter dan de hut');
+  const k = T.kringGrond(S.dorp, 'put');
+  assert.ok(!k.er.some((p) => T.inDeKring(huis, p, k.straal)), 'geen put binnen de kring van het huis dat hij wordt');
+  const zelf = k.zonder.find((h) => h.wie === T.huisVan(S.dorp, hut));
+  assert.ok(zelf, 'de hut mist een put');
+  assert.deepEqual(zelf.r, huis);
+  assert.ok(zelf.plekken.length > 0, 'en er is een plek voor een');
 });

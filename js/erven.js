@@ -151,8 +151,7 @@
     const k = T.kringGrond(D, 'put');
     if (!k) return null;
     const n = T.GEBOUWEN_INSTELLINGEN.looppad;
-    const p = erf.plan;
-    const hut = p ? { x: erf.x + p.dx, y: erf.y + p.dy, b: p.b, h: p.h } : erf;
+    const hut = T.huisPlekVan(erf) || erf;
     const raakt = (a, c) => a.x < c.x + c.b && c.x < a.x + a.b && a.y < c.y + c.h && c.y < a.y + a.h;
     const blijft = (q) => !raakt(q, erf) && !raakt({ x: q.x - n, y: q.y - n, b: q.b + 2 * n, h: q.h + 2 * n }, hut);
     // ver weg komt een put er niet bij: dat scheelt de wortel
@@ -161,12 +160,16 @@
     if (!k.er.some(haalt) && !k.plekken.some((q) => haalt(q) && blijft(q))) {
       return `De hut op dit erf kan straks geen put halen: er staat er geen binnen ${k.straal} tegels, en er is geen plek meer voor een.`;
     }
-    for (const h of k.zonder) if (h.plekken.length && h.plekken.every((q) => !blijft(q))) return `Dan kan ${h.wie} geen put meer krijgen: dit erf neemt de laatste plek ervoor.`;
+    for (const h of k.zonder) if (h.plekken.length && h.plekken.every((q) => !blijft(q))) return `Dan kan ${h.wie} straks geen put meer krijgen: dit erf neemt de laatste plek ervoor.`;
     return null;
   }
 
   // Ligt (x, y) op de plek van het huis van een erf (erf.plan)? Een gebouw blijft er met zijn looppad vandaan, ook als
   // het huis er nog niet staat (T.looppadOm, js/gebouwen.js). `behalve`: het erf dat zelf zijn plek zoekt.
+  // Waar het huis van een erf komt (erf.plan), als rechthoek { x, y, b, h }: zo groot als de hut of het huis dat hij wordt,
+  // wat het grootst is. Of null zonder plan.
+  T.huisPlekVan = (e) => (e.plan ? { x: e.x + e.plan.dx, y: e.y + e.plan.dy, b: e.plan.b, h: e.plan.h } : null);
+
   T.huisPlekOp = function (D, x, y, behalve) {
     for (const e of D.erven || []) {
       const p = e !== behalve && e.plan;
