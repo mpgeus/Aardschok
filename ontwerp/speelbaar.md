@@ -153,6 +153,23 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 8 okt, avond: de rekensom van het zout zonder de jagers (werklijst, vraag 133, B)
+
+Op `f096831` (branch `ccr-77327776-rqjldz`), `npm run speeltest -- bouwer sluw --maker --jaren 4`.
+
+| Speler, land | Mensen per jaar | Hongerdagen per jaar | Zout gekocht | Hoe het eindigde |
+| --- | --- | --- | --- | --- |
+| sluw 1 (62707) | 53, 80, 123, 123 | 77, 93, 91, 56 | 1, 13, 16 | niet gewonnen; de teller op 274 aan het eind, de reeks brak in bloeimaand op eten |
+| sluw 3 (72022) | 49, 70, 107, 107 | 77, 105, 110, 86 | 2, 11, 14 | niet gewonnen; de teller op 282, brak in grasmaand op eten |
+| bouwer 1 (62707) | 61, 82, 104, 115 | 77, 122, 119, 115 | geen | als hiervoor: brak in wintermaand op vlees of vis |
+| bouwer 2 (73425) | 52, 74, 119, 127 | 78, 122, 120, 64 | geen | als hiervoor |
+| bouwer 3, sluw 2 | 74; 56 | | | ambt kwijt in jaar 2; weggejaagd in jaar 3 |
+
+**Wat het zegt:** wie zout koopt, haalt nu de winter: bij de sluwe bouwers breekt de reeks niet meer in de winter, maar
+in het voorjaar, op eten. De eerlijke bouwer koopt geen zout: hij wilde 5 tot 19 zout, maar hield zijn goud voor de heer
+(de marskramer komt op 5 wijnmaand, vlak voor Sint-Maarten). Dat is het knelpunt van de eerlijke bouwer weer. Twee van
+de zes winnen hier niet, waar het hiervoor wel zo was: de reeks van sluw 1 brak nu in het voorjaar.
+
 ## De speeltest van 8 okt, laat: Net rond als standaard, en vis en vlees zouten (werklijst, vraag 133, A en B)
 
 Op `ffa2003` (branch `ccr-77327776-rqjldz`), `npm run speeltest -- bouwer sluw --maker --jaren 4`, als meting: Marcel (8 okt)
@@ -167,11 +184,10 @@ wil dat we stoppen met het ene oplossen met iets anders, dus hier komt niets mee
 | sluw 2 (73425) | 49, 64, 56 | weggejaagd in jaar 3: het vertrouwen op (mannen naar de oorlog) |
 | sluw 3 (72022) | 49, 70, 112, 115 | de teller op 360 op de laatste dag: zo goed als gewonnen |
 
-**Wat het zegt:** twee van de zes winnen (eerst één, met Net rond als spelregel). Het zout was niet wat ontbrak: de speler
-kocht er hooguit één, want er lag in de herfst nauwelijks vis of vlees om te zouten. De vissers en jagers vangen niet
-meer dan de huizen in de zomer eten, dus er komt geen voorraad voor de winter, en daar breekt de reeks van de bouwers
-nog op. Wat dat verandert, is een getal (wat een visser vangt, of een visser per minder mensen), geen nieuwe regel; dat
-is aan Marcel.
+**Wat het zegt:** twee van de zes winnen (eerst één, met Net rond als spelregel). De speler kocht hooguit één zout. Eerst
+leek dat te komen doordat er niets te zouten was, maar dat klopte niet: vier vissers vangen 8 vis per dag, de huizen
+eten er 2,2. De rekensom telde vijf jagers als genoeg vlees voor de winter, dus raadde hij geen zout aan (verholpen in
+`f096831`, hieronder).
 
 ## De proef met de spelregel "Graan" op "Net rond" (8 okt; werklijst, vraag 133)
 
