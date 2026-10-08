@@ -5320,7 +5320,18 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     ander huis (of de hut op een ander erf) de laatste plek voor een put afneemt (`T.kringGrond` in `js/wensen.js`, en
     in `T.waaromPastErfNiet`). Op het ontworpen gehucht, met de erven zo dicht als het mag, houdt zo elk huis een plek
     (zonder de regel bleven er drie hutten zonder over). Ook: `T.huisVan` zegt nu "het huis van", niet "de huis van".
-    De speeltest van vier jaar loopt opnieuw, op de drie eilanden en de drie landen van de maker.
+    De speeltest erna (`speelbaar.md`, "De speeltest van 8 okt: een erf houdt plaats voor een put"): tien van de twaalf
+    spellen letter voor letter als in 2c, en op 73425 winnen ze nu allebei. De eerste versie van de regel deed niets: de
+    hut had nog een put toen de erven om hem heen kwamen, en verloor hem pas toen hij een huis werd; nu telt een hut op
+    een erf met het huis dat hij wordt (`T.huisPlekVan`).
+    **Een tweede weg naar hetzelfde** (8 okt): op 72022 (en op `main` met de grote gebouwen ook op 62707) zette het dorp
+    een put die de hut haalde maar niet het huis dat hij werd (11,7 tegels tegen 12,35), en het looppad van die put nam
+    de laatste plekken die het huis wel haalden. Nu komt een put voor een hut op een erf waar hij allebei haalt
+    (`T.kringVoetenVan`, `T.kringTeller` met `straks` in `T.plekVoor`).
+    **Een put per dorp in plaats van in de buurt?** Claude zag dat de dorpen van de speeltest bijna een put per huis
+    hebben (9 tot 18 putten op 14 tot 24 huizen: de erven liggen ver uit elkaar, en een kring van 12 haalt twee à drie
+    huizen), en stelde voor: één put per zoveel mensen, waar ook. Marcel (8 okt): "Nee, misschien toch houden zoals het
+    nu is. Het dorp moet gewoon uitdijen. Er is ruimte genoeg." De kring van 12 blijft.
 118. **Inwoners met stats, zoals in Dwarf Fortress** (Marcel, 4 okt, zesentwintigste sessie: "Inwoners krijgen ook
     'stats' hp, skills, eigenschappen, etc ala dwarf fortress"; plan van Claude; open).
     **Wat er al is:** elke bewoner heeft een naam, een leeftijd, een huis, een gezin en werk (`js/bewoners.js`); de vijf
