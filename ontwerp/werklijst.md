@@ -6368,7 +6368,11 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     halen, met een voorraad die de raad laat aanleggen voordat de vissers stilliggen. **Marcel (8 okt): "A en B samen".**
     A is gebouwd (`T.GRAAN_PER_TEGEL` 4, `standaard: 'netRond'`), en B ook: `T.visEnVleesVoorDeWinter` en de raad
     `visEnVlees` (zout kopen, een visser of jager), de marskramer met 40 zout in de herfst, verse vis eerst, en de speler
-    van de speeltest koopt het zout. Dan de speeltest van vier jaar.
+    van de speeltest koopt het zout. Dan de speeltest van vier jaar (`ontwerp/speelbaar.md`): twee van de zes winnen, maar
+    het zout bleef liggen, want de rekensom telde vijf jagers als genoeg vlees voor de winter. **Marcel (8 okt): "We kunnen
+    de visser nu bijstellen voor nu. Laten we finetunen."** De vissers vangen al vier keer wat de huizen eten (vier
+    vissers, 8 vis per dag, voor 2,2); wat ontbrak, was het zout. Dus eerst de rekensom zonder de jagers, en dan opnieuw
+    meten; de visser pas als hij dan tekortschiet.
 
 134. **Minder grondstoffen** (Marcel, 8 okt: "Er blijven steeds dingen bijkomen zo. Dat wil ik voorkomen. We moeten stoppen
     met het ene op te lossen met iets anders", en "We blijven grondstoffen toevoegen"; open, wacht op Marcels keuze).
@@ -6379,11 +6383,14 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     brood, bier, wol, laken, hout, steen, turf, goud, zout, ijzer, gereedschap en wapens (met wijn, vraag 135, 18).
     Daarbij een regel voor CLAUDE.md: wat een speeltest scheef laat zien, eerst met een getal; een nieuwe regel of
     grondstof alleen als Marcel hem kiest, en alleen met iets dat hem gebruikt.
+    **Marcel (8 okt): "Houd het maar even zo. Maar geen erbij zonder overleg."** De negen blijven voorlopig; de regel staat
+    in CLAUDE.md ("Niets erbij zonder overleg").
 135. **Wijn uit wijngaarden** (Marcel, 8 okt: "Ik zou ook wijn willen met wijngaarden. Dus meer als knights and merchants.
     Dat je ook een boer met wijnranken hebt."; open, na vraag 134). In Knights and Merchants is wijn een van de vier soorten
     eten (met brood, worst en vis), en de wijnboer haalt het van zijn wijngaard. Gedachten van Claude, nog niet gekozen:
     een wijngaard als soort veld, zoals een akker of weide in het veldenvenster, van een boer; de oogst in wijnmaand (die
     heet al zo); wijn als wens van een hogere stand, of als eten; en de heer die wijn wil, zoals nu de eieren.
+    **Marcel (8 okt): "Wijn wordt drank, zoals bier. Mensen dronken geen water."** Dus een wens, geen eten.
 136. **Doorgroeien zonder vaste maat** (Marcel, 8 okt: "We moeten ook stoppen met het dorp een vaste maat geven. Als alles
     straks 1 eiland is, is het logisch dat je gewoon door kunt groeien naar buiten."; open). Hoort bij het eiland (vraag
     117). Er zijn twee vaste maten: het land van de maker (100 bij 100, met bos tot de rand), en de maat van de winst (vanaf

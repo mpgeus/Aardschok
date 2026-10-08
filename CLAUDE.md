@@ -950,6 +950,11 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   toevoegen voor we bij een speelbaar product komen." Een nieuw idee, ook een goed idee van Claude,
   gaat naar `ontwerp/opmerkingen.md` of achteraan de werklijst, niet in de stap die loopt. Wie iets
   nieuws wil beginnen, vraagt eerst: brengt dit een speelbaar product dichterbij?
+- **Niets erbij zonder overleg** (Marcel, 8 okt: "Er blijven steeds dingen bijkomen zo. ... We moeten stoppen met het
+  ene op te lossen met iets anders", en "geen erbij zonder overleg"): wat een speeltest scheef laat zien, los je eerst op
+  met een getal uit de werkbank, niet met een nieuwe regel, een nieuw gebouw of een nieuwe grondstof. Iets nieuws komt er
+  alleen als Marcel het kiest, als eigen punt achteraan de werklijst, en een grondstof alleen met iets dat hem gebruikt.
+  Op 7 en 8 okt groeide vraag 116 en 133 zo uit tot een graanschuur, wachters, advies, weides, vissers, meer graan en zout.
 
 In een gevecht heeft de schout levenspunten, net als een vijand. Wie valt, is dood (Marcel, 29 sep, vraag 55:
 "mensen kunnen sterven"): valt de schout, dan is het spel uit. Wie het overleeft, geneest na een nacht.

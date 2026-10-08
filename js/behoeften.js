@@ -836,8 +836,8 @@
   // Of vis en vlees de winter halen voor de huizen die ze willen (vraag 133, B; Marcel, 8 okt: "A en B samen"). In de
   // winter ligt de beek dicht (T.GEBOUWEN.visser.stilIn), dus wat de huizen dan eten, ligt er al, en gezouten, want
   // ongezouten bederft het (bederfPerDag). Vanaf `dag`, zolang de winter in zicht is en nog niet begon; null als geen huis
-  // vis of vlees wil. Geeft { nodig (wat de huizen in de winter willen, min wat de jagers dan schieten), ligt (vis en
-  // vlees nu), dan (wat er ligt als de winter begint: met wat de vissers en de jagers vangen, min wat de huizen eten), gezouten
+  // vis of vlees wil. Geeft { nodig (wat de huizen in de winter willen), ligt (vis en vlees nu), dan (wat er ligt als de
+  // winter begint: met wat de vissers vangen, min wat de huizen eten), gezouten
   // (wat het zout nu goed houdt), zout (hoeveel zout er nog bij moet voor wat er dan ligt, tot wat nodig is), tekort (wat
   // er dan nog mist), tot (dagen tot de winter), winter (zijn duur) }.
   T.visEnVleesVoorDeWinter = function (D, dag) {
@@ -851,19 +851,14 @@
       if (T.wensenVanStand(s).includes('vleesOfVis')) perDag += st[s].mensen * T.WENSEN_INSTELLINGEN.perMens.vleesOfVis;
     }
     if (perDag <= 0) return null;
-    // Wat de vissers en de jagers op een dag vangen: een jager die geen hert vindt, alleen klein wild (js/beesten.js).
-    const B = T.BEESTEN_INSTELLINGEN.jager;
+    // Wat de vissers op een dag vangen. Wat de jagers schieten, telt niet mee: in de speeltest van 8 okt rekende het dorp
+    // met vijf jagers op genoeg vlees voor de winter, kocht het geen zout, en was de vis na twee weken winter op.
     let vis = 0;
-    let jacht = 0;
-    for (const g of D.gebouwen || []) {
-      if (!g.klaar) continue;
-      if (g.soort === 'visser') vis += T.GEBOUWEN.visser.maakt.uit.vis;
-      if (g.soort === 'jager') jacht += T.GEBOUWEN.jager.maakt.uit.vlees * (g.zonderHerten ? B.kleinWild : 1);
-    }
+    for (const g of D.gebouwen || []) if (g.klaar && g.soort === 'visser') vis += T.GEBOUWEN.visser.maakt.uit.vis;
     const v = D.voorraad || {};
     const ligt = IN.bederfelijk.reduce((n, wat) => n + (v[wat] || 0), 0);
-    const nodig = Math.max(0, (perDag - jacht) * duur);
-    const dan = Math.max(0, ligt + (vis + jacht - perDag) * tot);
+    const nodig = perDag * duur;
+    const dan = Math.max(0, ligt + (vis - perDag) * tot);
     const gezouten = Math.min(ligt, (v.zout || 0) * IN.zoutHoudtGoed);
     const zout = Math.max(0, Math.ceil(Math.min(dan, nodig) / IN.zoutHoudtGoed - (v.zout || 0) - 1e-9));
     return { nodig, ligt, dan, gezouten, zout, tekort: Math.max(0, nodig - dan), tot, winter: duur };
