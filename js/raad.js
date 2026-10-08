@@ -23,6 +23,9 @@
     // Wat helpt aan eten (T.watHelptAanEten; vraag 132): een visser per zoveel mensen, en per zoveel tegels water.
     mensenPerVisser: 30,
     waterPerVisser: 60,
+    // Vis en vlees voor de winter (T.visEnVleesVoorDeWinter; vraag 132, B): de raad zegt het als er meer dan dit deel
+    // van wat de huizen in de winter willen, zal missen, of als er zout bij moet.
+    visEnVleesMarge: 0.1,
     // Zoveel dagen vóór de inner komt, zegt de raad het.
     innerVooraf: 3,
     // Zoveel dagen na een aanval van de rovers zegt de raad wat een wachthuis doet, als er geen is.
@@ -159,6 +162,37 @@
     return uit;
   };
 
+  // Vis en vlees voor de winter (vraag 132, B; Marcel, 8 okt: "A en B samen"): { v (T.visEnVleesVoorDeWinter), mist (er
+  // mist meer dan visEnVleesMarge), zout (er moet zout bij, en de marskramer komt nog voor de winter), hulp (wat meer
+  // vangt: een visser of een jager, uit T.watHelptAanEten) }, of null als er niets te zeggen is.
+  T.visEnVleesRaad = function (D) {
+    const v = T.visEnVleesVoorDeWinter(D, D.kalender.dag);
+    if (!v) return null;
+    const H = T.HANDEL_INSTELLINGEN;
+    const nogVoorDeWinter = T.kanHandelen(D) || T.volgendeMarskramer(D.kalender.dag) !== H.bezoeken[0].maand;
+    const zout = v.zout >= 1 && nogVoorDeWinter;
+    const mist = v.tekort > v.nodig * IN().visEnVleesMarge;
+    if (!zout && !mist) return null;
+    const hulp = mist ? T.watHelptAanEten(D).filter((h) => h.id === 'visser' || h.id === 'jager') : [];
+    return { v, mist, zout, hulp };
+  };
+  function visEnVleesTekst(D, r) {
+    const { v } = r;
+    const zinnen = [];
+    const n = (x) => Math.round(x);
+    if (r.mist) {
+      zinnen.push(`De huizen willen in de winter ${n(v.nodig)} vis of vlees, als de beek dichtligt, en er is er dan zo'n ${n(v.dan)}${r.hulp.length ? `: ${T.opsomming(r.hulp.map((h) => h.zin))}` : ''}.`);
+    } else {
+      zinnen.push(`De huizen willen in de winter ${n(v.nodig)} vis of vlees, als de beek dichtligt.`);
+    }
+    if (r.zout) {
+      const waar = T.kanHandelen(D) ? 'bij de marskramer, nu hij er is' : `bij de marskramer in ${T.volgendeMarskramer(D.kalender.dag)}`;
+      zinnen.push(`Zonder zout bederft het: koop ${v.zout} zout ${waar}; een zout houdt ${T.telwoord(T.BEHOEFTEN_INSTELLINGEN.zoutHoudtGoed)} vis of vlees goed.`);
+    }
+    const bouw = r.hulp.find((h) => h.bouw);
+    return `${zinnen.join(' ')}${bouw ? verzoekZin(D, bouw.bouw) : ''}`;
+  }
+
   const verzoekZin = (D, soort) => (mensenBouwen() && soort ? T.verzoekZin(D, soort) : '');
 
   // Je oproep op het plein (js/verzoeken.js; vraag 103, c) die er al oproepNa dagen hangt, terwijl het dorp niet kan
@@ -271,6 +305,12 @@
         const bouw = hulp.find((h) => h.bouw);
         return `Het eten haalt ${haalt(T.etenVoorDeWinter(D, D.kalender.dag))} van de winter${hulp.length ? `. Wat helpt: ${T.opsomming(hulp.map((h) => h.zin))}` : ''}.${bouw ? verzoekZin(D, bouw.bouw) : ''}${geenGezin()}`;
       },
+    },
+    // Vis en vlees voor de winter (vraag 132, B): zout, en een voorraad voordat de vissers stilliggen.
+    {
+      id: 'visEnVlees',
+      als: (D) => !!T.visEnVleesRaad(D),
+      tekst: (D) => visEnVleesTekst(D, T.visEnVleesRaad(D)),
     },
     // De houthakker hakt bomen om (js/bos.js; vraag 115): staat er binnen zijn bereik geen boom meer, dan hakt hij niets,
     // tot de boompjes die hij plantte, bomen zijn, en werkt zijn hand zolang elders (vraag 129, e). Haalt het hout de
@@ -410,6 +450,9 @@
       const bouw = T.watHelptAanEten(D).find((h) => h.bouw);
       if (bouw) erbij(bouw.bouw, `Het eten haalt ${haalt(T.etenVoorDeWinter(D, D.kalender.dag))} van de winter.`, 'winter');
     }
+    const vis = T.visEnVleesRaad(D);
+    const visBouw = vis && vis.hulp.find((h) => h.bouw);
+    if (visBouw) erbij(visBouw.bouw, `De huizen willen in de winter meer vis of vlees dan er dan ligt.`, 'winter');
     // Er hakt niemand hout: dan stopt alles, want elke hut op een erf (js/erven.js) en elk gebouw kost hout. Dus eerst een
     // houthakker, zoals de bouwer van de speeltest hem er altijd eerst neerzette (vraag 86, b). Zonder dat at het dorp in
     // de eerste speeltest van vraag 103 zijn hout op aan de kapel en de putten, en kon het daarna geen houthakker en geen

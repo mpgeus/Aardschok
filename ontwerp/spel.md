@@ -1946,6 +1946,12 @@ Besloten op een voorstel van Claude (`werklijst.md`, punt 4):
 - **De beek vriest 's winters dicht** (Marcel, 24 sep: "die beek is wel een leuk detail"). De
   visser vangt dan niets, dus vis die je in de winter wilt eten, moet je in de herfst zouten. Zo
   telt het zout. Of je het ijs ook ziet, is nog open: dat is tekenwerk.
+  **Sinds 8 okt zegt de raad het** (vraag 132, B; Marcel: "A en B samen"): vanaf de herfst rekent het dorp uit wat de
+  huizen in de winter aan vis en vlees willen, wat er dan ligt, en hoeveel zout dat vraagt, en de raad zegt het zolang de
+  marskramer nog voor de winter komt ("koop 18 zout bij de marskramer in wijnmaand; een zout houdt tien vis of vlees
+  goed"); ligt er te weinig, dan vraagt het dorp een visser of een jager. De marskramer heeft in de herfst 40 zout (eerst
+  15), en wie eet, eet eerst de verse vis: tot 8 okt at elke vis zijn zout mee, ook in de zomer, en was het zout op
+  voordat de winter kwam.
 - **Stenen komen later, met een kar.** Een marskramer draagt zijn waar op zijn rug: zout en een
   staaf ijzer passen erin, een lading stenen niet. Bij de trede dorp komt er een voerman met een
   kar. Zo groeit de handel mee met het dorp: de marskramer in het gehucht, de voerman in het dorp,

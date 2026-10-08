@@ -160,6 +160,51 @@ test('het eten: vanaf drie maanden voor de winter, als het hem niet haalt: wat e
   assert.notEqual(id(S), 'eten');
 });
 
+test('vis en vlees voor de winter: zout bij de marskramer, en een voorraad voordat de beek dichtligt (vraag 132, B)', () => {
+  const S = gehucht();
+  const D = S.dorp;
+  T.zetVoorraad(D, 'hout', 5000);
+  T.zetVoorraad(D, 'graan', 5000);
+  D.gebouwen = D.gebouwen.filter((g) => g.soort !== 'visser' && g.soort !== 'jager');
+  D.gebouwen.push({ soort: 'visser', x: 0, y: 0, klaar: true });
+  const vleesOfVis = T.WENSEN_INSTELLINGEN.perMens.vleesOfVis;
+  D.behoeften.standen = { dorpelingen: { mensen: 50, huizen: 10, alles: 0, tevredenheid: 1 } };
+  const raadVis = () => T.RADEN.find((r) => r.id === 'visEnVlees');
+  // In de zomer is de winter nog niet in zicht.
+  opDag(S, dagVan('hooimaand', 1) + 0.5);
+  assert.equal(T.visEnVleesVoorDeWinter(D, S.kalender.dag), null);
+  // Op 1 wijnmaand: genoeg vis, maar geen zout.
+  opDag(S, dagVan('wijnmaand', 1) + 0.5);
+  T.zetVoorraad(D, 'vis', 200);
+  T.zetVoorraad(D, 'zout', 0);
+  const v = T.visEnVleesVoorDeWinter(D, S.kalender.dag);
+  assert.ok(Math.abs(v.nodig - 50 * vleesOfVis * v.winter) < 1e-9, 'wat vijftig dorpelingen in de winter willen');
+  assert.ok(Math.abs(v.dan - (200 + (T.GEBOUWEN.visser.maakt.uit.vis - 50 * vleesOfVis) * v.tot)) < 1e-9, 'wat er dan ligt');
+  assert.equal(v.zout, Math.ceil(v.nodig / T.BEHOEFTEN_INSTELLINGEN.zoutHoudtGoed));
+  assert.ok(raadVis().als(D));
+  const tekst = raadVis().tekst(D);
+  assert.match(tekst, new RegExp(`koop ${v.zout} zout bij de marskramer in wijnmaand`), tekst);
+  assert.doesNotMatch(tekst, /er is er dan/, 'er is genoeg');
+  // Met genoeg zout zegt hij niets.
+  T.zetVoorraad(D, 'zout', v.zout);
+  assert.ok(!raadVis().als(D));
+  // Zonder vis en zonder visser: er mist, en het dorp vraagt een visser.
+  T.zetVoorraad(D, 'vis', 0);
+  D.gebouwen = D.gebouwen.filter((g) => g.soort !== 'visser');
+  const r = T.visEnVleesRaad(D);
+  assert.ok(r && r.mist, 'er mist vis of vlees');
+  assert.match(raadVis().tekst(D), /er is er dan zo'n 0/);
+  // Na het laatste bezoek van de marskramer vóór de winter zegt hij niets meer over zout.
+  T.zetVoorraad(D, 'zout', 0);
+  T.zetVoorraad(D, 'vis', 1000);
+  opDag(S, dagVan('slachtmaand', 1) + 0.5);
+  assert.ok(!T.visEnVleesRaad(D), 'de marskramer komt pas in de lente weer');
+  // In de winter zelf niet: dan is het te laat.
+  T.zetVoorraad(D, 'vis', 0);
+  opDag(S, dagVan('wintermaand', 1) + 0.5);
+  assert.equal(T.visEnVleesVoorDeWinter(D, S.kalender.dag), null);
+});
+
 test('de inner: een paar dagen vooraf, en op zijn dag zelf niet meer', () => {
   const S = gehucht();
   const komt = dagVan(T.INNER_INSTELLINGEN.komt.maand, T.INNER_INSTELLINGEN.komt.dag);

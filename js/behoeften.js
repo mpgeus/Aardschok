@@ -94,7 +94,8 @@
     // Zout (Marcel, 24 sep 2026; spel.md, "Handel"): vis en vlees bederven, tenzij ze gezouten zijn.
     // Eén zout houdt zoveel vis of vlees goed (zoutHoudtGoed); van wat het zout niet dekt, bederft
     // elke dag een deel (bederfPerDag). Wie gezouten vis eet, eet het zout mee op. Zout komt van de
-    // marskramer (js/handel.js).
+    // marskramer (js/handel.js). Wie eet, eet eerst wat ongezouten is (8 okt, vraag 132, B): tot dan at elke vis die een
+    // huis at, ook een verse in de zomer, zijn zout mee, en was het zout op voordat de winter kwam.
     bederfelijk: ['vis', 'vlees'],
     zoutHoudtGoed: 10,
     bederfPerDag: 0.1,
@@ -239,12 +240,17 @@
   // een huis laten doorgroeien. Los van elkaar, zodat T.tikBehoeftenDag zelf leest als de lijst
   // hierboven.
 
-  // Wat vandaag van vis en vlees gegeten is, neemt zijn zout mee; van wat daarna nog ongezouten
-  // ligt, bederft een deel. Naar rato verdeeld over vis en vlees.
+  // Wat vandaag van vis en vlees gegeten is, neemt zijn zout mee, voor zover het gezouten was: eerst is wat ongezouten lag
+  // gegeten (vraag 132, B). Van wat daarna nog ongezouten ligt, bederft een deel. Naar rato verdeeld over vis en vlees.
   function pasBederfToe(D, gegeten) {
     const IN = T.BEHOEFTEN_INSTELLINGEN;
     const v = D.voorraad;
-    if (gegeten > 0 && (v.zout || 0) > 0) T.wijzigVoorraad(D, 'zout', -Math.min(v.zout, gegeten / IN.zoutHoudtGoed));
+    if (gegeten > 0 && (v.zout || 0) > 0) {
+      const ervoor = T.zoutDekking(D).totaal + gegeten;
+      const ongezouten = Math.max(0, ervoor - v.zout * IN.zoutHoudtGoed);
+      const gezouten = Math.max(0, gegeten - ongezouten);
+      if (gezouten > 0) T.wijzigVoorraad(D, 'zout', -Math.min(v.zout, gezouten / IN.zoutHoudtGoed));
+    }
     const d = T.zoutDekking(D);
     if (d.onbeschermd <= 0) return;
     for (const wat of IN.bederfelijk) {
@@ -825,6 +831,42 @@
       winter: duur,
     });
     return Object.assign(r, { tot, eet });
+  };
+
+  // Of vis en vlees de winter halen voor de huizen die ze willen (vraag 132, B; Marcel, 8 okt: "A en B samen"). In de
+  // winter ligt de beek dicht (T.GEBOUWEN.visser.stilIn), dus wat de huizen dan eten, ligt er al, en gezouten, want
+  // ongezouten bederft het (bederfPerDag). Vanaf `dag`, zolang de winter in zicht is en nog niet begon; null als geen huis
+  // vis of vlees wil. Geeft { nodig (wat de huizen in de winter willen, min wat de jagers dan schieten), ligt (vis en
+  // vlees nu), dan (wat er ligt als de winter begint: met wat de vissers en de jagers vangen, min wat de huizen eten), gezouten
+  // (wat het zout nu goed houdt), zout (hoeveel zout er nog bij moet voor wat er dan ligt, tot wat nodig is), tekort (wat
+  // er dan nog mist), tot (dagen tot de winter), winter (zijn duur) }.
+  T.visEnVleesVoorDeWinter = function (D, dag) {
+    const IN = T.BEHOEFTEN_INSTELLINGEN;
+    if (!T.winterInZicht(dag)) return null;
+    const { tot, duur } = T.periodeVanaf(dag, isWinter);
+    if (tot <= 0) return null;
+    const st = D.behoeften && D.behoeften.standen;
+    let perDag = 0;
+    for (const s of Object.keys(st || {})) {
+      if (T.wensenVanStand(s).includes('vleesOfVis')) perDag += st[s].mensen * T.WENSEN_INSTELLINGEN.perMens.vleesOfVis;
+    }
+    if (perDag <= 0) return null;
+    // Wat de vissers en de jagers op een dag vangen: een jager die geen hert vindt, alleen klein wild (js/beesten.js).
+    const B = T.BEESTEN_INSTELLINGEN.jager;
+    let vis = 0;
+    let jacht = 0;
+    for (const g of D.gebouwen || []) {
+      if (!g.klaar) continue;
+      if (g.soort === 'visser') vis += T.GEBOUWEN.visser.maakt.uit.vis;
+      if (g.soort === 'jager') jacht += T.GEBOUWEN.jager.maakt.uit.vlees * (g.zonderHerten ? B.kleinWild : 1);
+    }
+    const v = D.voorraad || {};
+    const ligt = IN.bederfelijk.reduce((n, wat) => n + (v[wat] || 0), 0);
+    const nodig = Math.max(0, (perDag - jacht) * duur);
+    const dan = Math.max(0, ligt + (vis + jacht - perDag) * tot);
+    const gezouten = Math.min(ligt, (v.zout || 0) * IN.zoutHoudtGoed);
+    const zout = Math.max(0, Math.ceil(Math.min(dan, nodig) / IN.zoutHoudtGoed - (v.zout || 0) - 1e-9));
+    return { nodig, ligt, dan, gezouten, zout, tekort: Math.max(0, nodig - dan), tot, winter: duur };
   };
 
   // Wat de winter niet haalt, nu hij in zicht is (T.winterInZicht): ['hout'], ['eten'], allebei, of niets (ook als de

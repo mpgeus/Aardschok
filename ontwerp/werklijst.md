@@ -6366,7 +6366,9 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     uit, maar het graan is van lentemaand tot de oogst op, en de reeks breekt in de winter op vlees of vis. Claude stelde
     voor: A, de spelregel "Graan" standaard op "Net rond" (4 per tegel), en B, vis en vlees zouten zodat ze de winter
     halen, met een voorraad die de raad laat aanleggen voordat de vissers stilliggen. **Marcel (8 okt): "A en B samen".**
-    A is gebouwd (`T.GRAAN_PER_TEGEL` 4, `standaard: 'netRond'`); B volgt.
+    A is gebouwd (`T.GRAAN_PER_TEGEL` 4, `standaard: 'netRond'`), en B ook: `T.visEnVleesVoorDeWinter` en de raad
+    `visEnVlees` (zout kopen, een visser of jager), de marskramer met 40 zout in de herfst, verse vis eerst, en de speler
+    van de speeltest koopt het zout. Dan de speeltest van vier jaar.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
