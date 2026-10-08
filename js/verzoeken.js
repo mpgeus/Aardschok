@@ -83,7 +83,8 @@
   }
 
   // Waar een gebouw van deze soort komt, zoals wie het wil bouwen het kiest: { x, y }, of null. Een plek met een kring (een
-  // put, een kapel; js/wensen.js): waar hij de meeste huizen bereikt die er nog geen hebben (T.watDeKringBereikt), bij
+  // put, een kapel; js/wensen.js): waar hij de meeste huizen bereikt die er nog geen hebben (T.kringTeller, een hut op een
+  // erf ook met het huis dat hij wordt: anders is hij zijn put kwijt als hij groeit; werklijst vraag 117, 2d), bij
   // gelijk spel het dichtst bij `bij` (met `zonder`: hoeveel); bereikt hij nergens zo'n huis, dan nergens. De rest: zo
   // dicht mogelijk bij `bij`
   // (een deur), in ringen, op de eerste plek waar het past (T.gebouwPast). Zo zocht de bouwer van de speeltest al
@@ -108,7 +109,7 @@
     if (soort === 'markt' && T.marktOpHetPlein(D)) return T.marktPlek(D);
     if (heeftKring(soort)) {
       const voet = T.gebouwVoet(soort, T.volgendeTekening(D, soort)) || T.GEBOUWEN[soort].voet;
-      const kring = T.kringTeller(D, soort);
+      const kring = T.kringTeller(D, soort, true);
       let beste = null;
       for (let y = 0; y < w.tegels.length; y++) {
         for (let x = 0; x < w.tegels[0].length; x++) {
@@ -154,7 +155,7 @@
     const g = T.GEBOUWEN[soort];
     if (!g || g.erf || soort === 'markt') return null;
     const voet = T.gebouwVoet(soort, T.volgendeTekening(D, soort)) || g.voet;
-    const kring = heeftKring(soort) ? T.kringTeller(D, soort) : null;
+    const kring = heeftKring(soort) ? T.kringTeller(D, soort, true) : null;
     const tot = g.bij || kring ? Math.max(45, w.tegels.length, w.tegels[0].length) : 45;
     const plekken = [];
     for (let y = Math.max(0, bij.y - tot); y < Math.min(w.tegels.length, bij.y + tot); y++) {

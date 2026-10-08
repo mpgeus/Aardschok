@@ -257,7 +257,9 @@
   // Hetzelfde voor veel plekken na elkaar (T.plekVoor, js/verzoeken.js, vraagt het voor elke tegel van de kaart): welke
   // huizen het willen en of ze er al een hebben, staat één keer vast, en per plek wordt alleen nog geteld. Geeft een
   // functie van de plek, of een die null geeft als deze soort geen kring heeft.
-  T.kringTeller = function (D, soort) {
+  // Met `straks` telt een hut op een erf alleen als de plek ook het huis haalt dat hij wordt (T.kringVoetenVan): zo kiest
+  // het dorp waar een put komt. Zonder telt wat hij nu haalt, zoals de muis en de kring in beeld het zeggen.
+  T.kringTeller = function (D, soort, straks = false) {
     const wens = Object.keys(T.WENSEN).find((id) => T.WENSEN[id].plek === soort);
     const straal = IN().kring[soort];
     if (!wens || !straal) return () => null;
@@ -267,20 +269,31 @@
     for (const g of D.gebouwen || []) {
       const stand = T.standVan(g);
       if (!stand || !tel.get(g) || !T.wensenVanStand(stand).includes(wens)) continue;
-      const r = T.voetVanGebouw(g);
-      willen.push({ r, heeft: er.some((p) => T.inDeKring(r, p, straal)) });
+      const voeten = straks ? T.kringVoetenVan(g) : [T.voetVanGebouw(g)];
+      willen.push({ voeten, heeft: er.some((p) => haaltAlle(voeten, p, straal)) });
     }
     return (plek) => {
       let huizen = 0;
       let zonder = 0;
       for (const h of willen) {
-        if (!T.inDeKring(h.r, plek, straal)) continue;
+        if (!haaltAlle(h.voeten, plek, straal)) continue;
         huizen++;
         if (!h.heeft) zonder++;
       }
       return { wens, straal, huizen, zonder };
     };
   };
+
+  // Wat een plek met een kring moet halen om een huis te dienen, ook als het groeit: zijn voet, en bij een hut op een erf
+  // ook het huis dat hij wordt (T.huisPlekVan, js/erven.js; werklijst vraag 117, 2d). Een put die alleen de hut haalt, is
+  // hij kwijt als hij groeit: op het eiland van 72022 kwam zo een put op 11,7 tegels van de hut en 12,35 van zijn huis, en
+  // zijn looppad nam de laatste plekken die het huis wel haalden.
+  T.kringVoetenVan = function (g) {
+    const voet = T.voetVanGebouw(g);
+    const huis = g.soort === 'hut' && g.erf && T.huisPlekVan(g.erf);
+    return huis ? [voet, huis] : [voet];
+  };
+  const haaltAlle = (voeten, plek, straal) => voeten.every((r) => T.inDeKring(r, plek, straal));
 
   // Waar nog een plek met een kring kan komen, en wie hem nog mist (werklijst vraag 117, 2d; Marcel, 8 okt: "A ja"): de
   // plekken op de kaart waar er een kan komen (T.kanHierKomen, js/verzoeken.js: op open grond of na het rooien), die er
@@ -308,21 +321,23 @@
     }
     const er = T.plekkenVan(D, soort);
     const zonder = [];
-    const mist = (r, wie) => {
-      if (!er.some((p) => T.inDeKring(r, p, straal))) zonder.push({ r, wie, plekken: plekken.filter((p) => T.inDeKring(r, p, straal)) });
+    // `r`: waar het huis straks staat (het laatste van `voeten`), voor wie het naleest.
+    const mist = (voeten, wie) => {
+      if (er.some((p) => haaltAlle(voeten, p, straal))) return;
+      zonder.push({ r: voeten[voeten.length - 1], wie, plekken: plekken.filter((p) => haaltAlle(voeten, p, straal)) });
     };
-    // Een hut op een erf telt met het huis dat hij wordt (T.huisPlekVan, js/erven.js): in de speeltest groeide op 73425 een
-    // hut met een put binnen zijn kring tot een huis waarvan het midden net buiten de kring viel, en toen lagen er al erven
-    // om hem heen, en was er geen plek meer.
+    // Een hut op een erf telt met zijn hut en met het huis dat hij wordt (T.kringVoetenVan): in de speeltest groeide op
+    // 73425 een hut met een put binnen zijn kring tot een huis waarvan het midden net buiten de kring viel, en toen lagen
+    // er al erven om hem heen, en was er geen plek meer.
     const tel = mensenPerHuis(D);
     for (const g of D.gebouwen || []) {
       const stand = T.standVan(g);
       if (!stand || !tel.get(g) || !T.wensenVanStand(stand).includes(wens)) continue;
-      mist((g.soort === 'hut' && g.erf && T.huisPlekVan(g.erf)) || T.voetVanGebouw(g), T.huisVan(D, g));
+      mist(T.kringVoetenVan(g), T.huisVan(D, g));
     }
     const vanDeHut = Object.keys(T.STANDEN).find((s) => T.STANDEN[s].huis === 'hut');
     if (vanDeHut && T.wensenVanStand(vanDeHut).includes(wens)) {
-      for (const e of T.vrijeErven(D)) if (e.plan) mist(T.huisPlekVan(e), 'de hut op een ander erf');
+      for (const e of T.vrijeErven(D)) if (e.plan) mist([T.huisPlekVan(e)], 'de hut op een ander erf');
     }
     const grond = { straal, er, plekken, zonder };
     perSoort[soort] = { sleutel, grond };

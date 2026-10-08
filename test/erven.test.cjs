@@ -534,9 +534,8 @@ test('het huis van, de hut van: het lidwoord bij wie er woont (T.huisVan)', () =
   assert.match(T.huisVan(D, D.gebouwen.find((g) => g.soort === 'boerderij')), /^de boerderij van /);
 });
 
-test('een hut op een erf telt bij de put met het huis dat hij wordt (werklijst vraag 117, 2d)', () => {
-  // Op het eiland van 73425 groeide een hut met een put binnen zijn kring tot een huis waarvan het midden net buiten de
-  // kring viel; toen lagen er al erven om hem heen, en was er geen plek meer voor een put.
+// Een vol gehucht met een erf zo ver als het mag van het plein (en van de put daar), en een gezin dat er zijn hut op zet.
+function hutVerVanHetPlein() {
   const S = gehucht();
   vol(S);
   const plein = T.pleinVan(S.wereld);
@@ -544,10 +543,16 @@ test('een hut op een erf telt bij de put met het huis dat hij wordt (werklijst v
   for (let y = 0; y < S.wereld.tegels.length; y += 2) {
     for (let x = 0; x < S.wereld.tegels[0].length; x += 2) plekken.push({ x, y, d: Math.hypot(x + 5 - plein.x, y + 5 - plein.y) });
   }
-  plekken.sort((a, b) => b.d - a.d); // het verst van het plein, en van de put daar
+  plekken.sort((a, b) => b.d - a.d);
   const plek = plekken.find((p) => !T.waaromPastErfNiet(S.dorp, p.x, p.y));
   assert.ok(T.plaatsGebouw(S.dorp, 'erf', plek.x, plek.y).gelukt);
-  const hut = T.gezinZoektEenErf(S.dorp);
+  return { S, hut: T.gezinZoektEenErf(S.dorp) };
+}
+
+test('een hut op een erf telt bij de put met het huis dat hij wordt (werklijst vraag 117, 2d)', () => {
+  // Op het eiland van 73425 groeide een hut met een put binnen zijn kring tot een huis waarvan het midden net buiten de
+  // kring viel; toen lagen er al erven om hem heen, en was er geen plek meer voor een put.
+  const { S, hut } = hutVerVanHetPlein();
   const huis = T.huisPlekVan(hut.erf);
   const voet = T.voetVanGebouw(hut);
   assert.ok(huis.b * huis.h > voet.b * voet.h, 'het huis is groter dan de hut');
@@ -557,4 +562,45 @@ test('een hut op een erf telt bij de put met het huis dat hij wordt (werklijst v
   assert.ok(zelf, 'de hut mist een put');
   assert.deepEqual(zelf.r, huis);
   assert.ok(zelf.plekken.length > 0, 'en er is een plek voor een');
+});
+
+test('het dorp zet een put voor een hut op een erf waar hij ook het huis haalt dat de hut wordt (werklijst vraag 117, 2d)', () => {
+  // Op het eiland van 72022 kwam een put op 11,7 tegels van een hut en op 12,35 van het huis dat hij werd; zijn looppad
+  // nam de laatste plekken die het huis wel haalden, en toen de hut groeide, had het huis geen put meer, en nergens plek.
+  const { S, hut } = hutVerVanHetPlein();
+  const D = S.dorp;
+  const voet = T.voetVanGebouw(hut);
+  const huis = T.huisPlekVan(hut.erf);
+  const straal = T.WENSEN_INSTELLINGEN.kring.put;
+  const put = T.gebouwVoet('put', T.volgendeTekening(D, 'put'));
+  const rechthoek = (p) => ({ x: p.x, y: p.y, b: put.b, h: put.h });
+  const deHut = T.huisVan(D, hut);
+  // Eerst een put voor elk ander huis dat er een mist, waar hij de hut niet haalt: dan mist alleen de hut er nog een.
+  for (let n = 0; n < 6; n++) {
+    const ander = T.kringGrond(D, 'put').zonder.find((h) => h.wie !== deHut && !/ander erf/.test(h.wie));
+    if (!ander) break;
+    const p = ander.plekken.find((q) => !T.inDeKring(voet, q, straal) && T.gebouwPast(D, 'put', q.x, q.y));
+    assert.ok(p, `een plek voor ${ander.wie}`);
+    const u = T.plaatsGebouw(D, 'put', p.x, p.y);
+    assert.ok(u.gelukt, u.bericht);
+    u.instantie.klaar = true;
+    T.kaartVeranderd(S.wereld);
+  }
+  assert.deepEqual(T.kringGrond(D, 'put').zonder.filter((h) => !/ander erf/.test(h.wie)).map((h) => h.wie), [deHut]);
+  // Een plek die de hut haalt en het huis niet: de muis telt de hut daar (zo is het nu), het dorp niet.
+  let rand = null;
+  for (let y = 0; y < S.wereld.tegels.length && !rand; y++) {
+    for (let x = 0; x < S.wereld.tegels[0].length && !rand; x++) {
+      const p = rechthoek({ x, y });
+      if (T.inDeKring(voet, p, straal) && !T.inDeKring(huis, p, straal) && T.gebouwPast(D, 'put', x, y)) rand = p;
+    }
+  }
+  assert.ok(rand, 'er is een plek die de hut haalt en het huis niet');
+  assert.equal(T.kringTeller(D, 'put')(rand).zonder, 1);
+  assert.equal(T.kringTeller(D, 'put', true)(rand).zonder, 0);
+  // Vraagt iemand daar om een put, dan komt hij toch waar hij allebei haalt (tot nu: op die plek zelf).
+  const plek = T.plekVoor(D, 'put', { x: rand.x, y: rand.y });
+  assert.ok(plek, 'er is een plek voor een put');
+  assert.ok(T.inDeKring(voet, rechthoek(plek), straal), 'de put haalt de hut');
+  assert.ok(T.inDeKring(huis, rechthoek(plek), straal), 'en het huis dat hij wordt');
 });
