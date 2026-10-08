@@ -34,7 +34,7 @@ maait, bindt en draagt in de oogst) staan in `main`.
 5. Later: het hele eiland met de mist (vraag 117, stap 3) en doorgroeien zonder vaste maat (vraag 137), plunderen
    (vraag 138), het buurdorp (vraag 72).
 
-## De stand (7 okt 2026, zevenendertigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt en het spel laadt alleen wat er staat (vraag 114, 2a, stap 1 en 1b); sinds de eenendertigste sessie bouwt elk land van de maker in een bouwstijl, met het dak van zijn trede en de deur naar de weg (vraag 114, stap 2a: de stijl wit), en tekent het spel met WebGL, gebouwd in een eigen sessie naast de huizen (vraag 123); sinds de tweeëndertigste sessie bouwt de huizenbouwer elk huis van vier kanten en tekent hij het een kwartslag gedraaid, en staat wit zo in het spel, met alle bouwfasen (vraag 124, B, en G); sinds de drieëndertigste sessie werken de boeren overdag op hun land, naar het seizoen en in het vel van hun werk, een boerin in dat van een vrouw (vraag 111, stap 1 en 2), en vraagt een boer heide te ontginnen als het graan tekortkomt (vraag 107, stap 1); sinds de vierendertigste sessie wijst hij een stuk heide en een stuk bos aan, en kies jij: de heide tegen het vertrouwen, het bos gemeld tegen de gunst, of stiekem (vraag 107, stap 2), met de hakker en zijn bijl; sinds de vijfendertigste sessie is de speeltest van vier jaar gespeeld (vraag 107, stap 3): ontginnen lost het graan op, maar geen dorp wint, want de grond om te bouwen is op, en de markt komt er nooit (vraag 110: f, het erf dat vastzat, is gerepareerd; e komt met de houthakker); sinds de zesendertigste sessie staat de markt met vier kramen op het plein (vraag 110, d), en hebben de stenen huizen op elk land hun markt; en sinds de tweede sessie daarnaast bouwt elk land in een van vier stijlen, wit, oker, planken of roze, elk met eigen huizen en boerderijen en alle bouwfasen (vraag 114, 2b); dan de herberg, de kapel en de woontoren (stap 3); sinds de sessie van de heer mogen erven en werkplaatsen op bomen en struiken, die wie er komt zelf rooit, en hakt de houthakker de bomen om zijn schuur om en plant hij er twee terug, zodat het bos om hem blijft (vraag 110, e, 115 en 129; in de speeltest van vier jaar komen de dorpen van de bouwer tot 126 à 129 mensen; en sinds vraag 130 rooit een hut die niet kan doorgroeien eerst wat in de weg staat, en wint er weer een dorp, op 73425; sinds de zevenendertigste sessie kapt het gezin daarbij ook zijn eigen appelboom, zegt de raad het als een huis dat alles heeft niet kan groeien, en komt een erf niet waar het een huis elke vorm afneemt (vraag 130, a2, c2 en d); sinds vraag 131 zijn wapens niet meer verboden, en winnen drie van de zes spellen van de speeltest); sinds vraag 116, stap 1, lopen er roedels wolven en groepjes herten in het bos, met rode ogen in het donker, en sinds 2a jagen de wolven in de winter op de herten, komen er in de lente jongen, en verhuist wie zijn bos kwijt is; sinds 2b komen ze met honger in het donker naar het dorp (een schaap, of wie alleen loopt), houdt licht ze weg, en rent wie werkt en ze ziet naar huis; dan wat je ertegen doet (vraag 116, stap 3), de hoogteverschillen (vraag 121: sinds stap 1, in `main` op 7 okt, een landschap dat overal doorloopt, uit het nummer van het land, met een richel en akkers die meebollen, achter de spelregel "Hoogte", standaard vlak; sinds stap 2 loopt niemand door een rotswand, wordt niet op steile grond gebouwd, houdt een heuvel het zicht tegen en dekt hij af wat erachter staat; het draaien van de camera, vraag 124, is geparkeerd); dan de kaartenmaker voor het eiland van 2500 bij 2500 (vraag 117: sinds 8 okt maakt hij uit één nummer het eiland, en sinds stap 2a begint elk nieuw spel erop, met je gehucht als een dorp dat er al was; sinds 2b loopt het eiland om je land door, en met heuvels is het land dat van het eiland; 2c, de speeltest, is gespeeld; sinds 2d houdt een erf plaats voor een put, en haalt een put voor een hut ook het huis dat de hut wordt; dan de kern); dan de proef van vraag 128 (de verdwenen graanzak, met een eerste zitting)
+## De stand (8 okt 2026): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt en het spel laadt alleen wat er staat (vraag 114, 2a, stap 1 en 1b); sinds de eenendertigste sessie bouwt elk land van de maker in een bouwstijl, met het dak van zijn trede en de deur naar de weg (vraag 114, stap 2a: de stijl wit), en tekent het spel met WebGL, gebouwd in een eigen sessie naast de huizen (vraag 123); sinds de tweeëndertigste sessie bouwt de huizenbouwer elk huis van vier kanten en tekent hij het een kwartslag gedraaid, en staat wit zo in het spel, met alle bouwfasen (vraag 124, B, en G); sinds de drieëndertigste sessie werken de boeren overdag op hun land, naar het seizoen en in het vel van hun werk, een boerin in dat van een vrouw (vraag 111, stap 1 en 2), en vraagt een boer heide te ontginnen als het graan tekortkomt (vraag 107, stap 1); sinds de vierendertigste sessie wijst hij een stuk heide en een stuk bos aan, en kies jij: de heide tegen het vertrouwen, het bos gemeld tegen de gunst, of stiekem (vraag 107, stap 2), met de hakker en zijn bijl; sinds de vijfendertigste sessie is de speeltest van vier jaar gespeeld (vraag 107, stap 3): ontginnen lost het graan op, maar geen dorp wint, want de grond om te bouwen is op, en de markt komt er nooit (vraag 110: f, het erf dat vastzat, is gerepareerd; e komt met de houthakker); sinds de zesendertigste sessie staat de markt met vier kramen op het plein (vraag 110, d), en hebben de stenen huizen op elk land hun markt; en sinds de tweede sessie daarnaast bouwt elk land in een van vier stijlen, wit, oker, planken of roze, elk met eigen huizen en boerderijen en alle bouwfasen (vraag 114, 2b); dan de herberg, de kapel en de woontoren (stap 3); sinds de sessie van de heer mogen erven en werkplaatsen op bomen en struiken, die wie er komt zelf rooit, en hakt de houthakker de bomen om zijn schuur om en plant hij er twee terug, zodat het bos om hem blijft (vraag 110, e, 115 en 129; in de speeltest van vier jaar komen de dorpen van de bouwer tot 126 à 129 mensen; en sinds vraag 130 rooit een hut die niet kan doorgroeien eerst wat in de weg staat, en wint er weer een dorp, op 73425; sinds de zevenendertigste sessie kapt het gezin daarbij ook zijn eigen appelboom, zegt de raad het als een huis dat alles heeft niet kan groeien, en komt een erf niet waar het een huis elke vorm afneemt (vraag 130, a2, c2 en d); sinds vraag 131 zijn wapens niet meer verboden, en winnen drie van de zes spellen van de speeltest); sinds vraag 116, stap 1, lopen er roedels wolven en groepjes herten in het bos, met rode ogen in het donker, en sinds 2a jagen de wolven in de winter op de herten, komen er in de lente jongen, en verhuist wie zijn bos kwijt is; sinds 2b komen ze met honger in het donker naar het dorp (een schaap, of wie alleen loopt), houdt licht ze weg, en rent wie werkt en ze ziet naar huis; dan wat je ertegen doet (vraag 116, stap 3), de hoogteverschillen (vraag 121: sinds stap 1, in `main` op 7 okt, een landschap dat overal doorloopt, uit het nummer van het land, met een richel en akkers die meebollen, achter de spelregel "Hoogte", standaard vlak; sinds stap 2 loopt niemand door een rotswand, wordt niet op steile grond gebouwd, houdt een heuvel het zicht tegen en dekt hij af wat erachter staat; het draaien van de camera, vraag 124, is geparkeerd); dan de kaartenmaker voor het eiland van 2500 bij 2500 (vraag 117: sinds 8 okt maakt hij uit één nummer het eiland, en sinds stap 2a begint elk nieuw spel erop, met je gehucht als een dorp dat er al was; sinds 2b loopt het eiland om je land door, en met heuvels is het land dat van het eiland; 2c, de speeltest, is gespeeld; sinds 2d houdt een erf plaats voor een put, en haalt een put voor een hut ook het huis dat de hut wordt; dan de kern); dan de proef van vraag 128 (de verdwenen graanzak, met een eerste zitting); sinds 8 okt eet het dorp gevarieerd (vis en vlees vullen een maag, met zout voor de winter, vraag 132), is er een wijnboerderij met een wijngaard waar het gezin in wijnmaand plukt (vraag 136), telt het graan pas als het in de schuur is, en maaien, binden en dragen dagloners mee (vraag 140), en staan alle getallen, spelregels en gebouwen op één bladzijde die meteen in de code schrijft (vraag 142, stap 1 en 2); daarna de beurs per huis (vraag 141), voor de demo
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Het hart is het
 gehucht besturen terwijl het groeit, terwijl de heer eraan trekt; rijk worden en arm lijken blijft de druk van boven.
@@ -7170,6 +7170,28 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 8 okt 2026 — **Vraag 142, stap 1 en 2: de bladzijde met alle getallen** (Marcel: "een bladzijde met duidelijk overzicht
+  van alles", "1. Ja dan 2. Gelijk veranderen 3. Prima"). `gereedschap/instellingen.html` met `npm start`: elk getal, elke
+  spelregel en elk gebouw (1659 waarden), met de uitleg uit het commentaar in de code en wat de spelregels erop zetten;
+  opslaan schrijft meteen alleen dat getal in het bestand, en Toetsen draaien zegt welke toetsen het oude getal
+  verwachten. Stap 3, een speeltest met een set getallen, wacht. `npm test` 1111/1111.
+- 8 okt 2026 — **Vraag 140: het graan pas binnen in de schuur, en de dagloners** (Marcel: "Alles telt pas als het binnen
+  is", "Dagloners is een goed idee", "Ja dagloners mogen maaien"). Wat de boer maait, blijft als zwad liggen, het gezin
+  bindt het tot hokken, die drogen, en dan dragen ze de schoven naar de schuur; in de winter dorst de boer. Wie in het
+  dorp geen werk heeft, maait, bindt en draagt in de oogst bij de dichtste boerderij (de spelregel "Dagloners"). Op land
+  5 is de oogst nu op dag 50 binnen, ruim voor het vangnet. `npm test` 1105/1105.
+- 8 okt 2026 — **Vraag 136: de wijnboerderij** (Marcel: "Ik wil z.s.m. aan een wijnboerderij", "Wijn wordt drank, zoals
+  bier", en "Dat je de boeren ziet plukken, volle en lege ranken"). Een huis met een wijngaard in zijn voet, de ranken
+  kaal, in blad, vol en leeg door het jaar, en in wijnmaand plukt het gezin met een mand; pas in het huis is de wijn
+  binnen. De wens bier heet nu drank (bier of wijn), en de heer wil er wijn voor. In de speeltest bouwt nog niemand er
+  een.
+- 8 okt 2026 — **Vraag 132: het dorp eet gevarieerd** (Marcel: "Vis mag een maag vullen, zoals vlees", "We kunnen de
+  visser nu bijstellen", "Zout mag dan wel goedkoper", en "gerandimiseerd maken. Geen vaste intervallen"). Vis en vlees
+  vullen een maag, wat ongezouten is eerst; de raad zegt vanaf de herfst of vis en vlees de winter halen en hoeveel zout
+  erbij moet (de marskramer verkoopt het in de herfst voor 1 goud); de bouwverzoeken komen om de 2 tot 6 dagen. Daarna,
+  na de speeltest, twee getallen uit de werkbank: 16 wol per schaap (was 8) en een werkplaats die iets omzet maakt tot
+  60 (was 30). In de speeltest van vier jaar is er nauwelijks honger meer.
+
 - 8 okt 2026 — **Vraag 117, stap 2b: het eiland om je land** (de sessie van de kaartenmaker; Marcel: "A ja", en "Zet 2b
   ook in main"). Buiten de kaart loopt het eiland door, de zee, het strand, de heide, het bos, de rotsen en de weg naar de
   buren, met de regels waarmee de maker binnen de grond en de bomen legt, zonder naad (`T.randVanHetEiland`); met
@@ -8150,66 +8172,3 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
   maakt alleen wat zijn grondstof toelaat, de smidse kan al in het gehucht, gereedschap laat
   harder werken, en zout houdt vis en vlees goed. Het eerste voorstel ging aan Marcel voor, en hij
   koos alle vier de keuzes; wat Claude zag voordat er gebouwd werd, staat in `spel.md`, "Handel".
-
-- 23 sep 2026 — **Het gehucht speelt.** Punt 1: graan als plaat en in het spel (groeit met de
-  kalender, wuift, boeren maaien, de oogst brengt het graan binnen). Punt 2 en 2b: 45 soorten
-  gebouwen (`js/gebouwen.js`) met bouwmenu, bevolking, handen, en een huis dat in vijf fases
-  oprijst (`bouwfasen.cjs`). Punt 3: behoeften, tevredenheid en de winter (`js/behoeften.js`).
-  Verder de interface (kalender, voorraad), de kale kaart met de es, het kijkgat, de maaier, en
-  `Toren.debug.schermafdruk`. Details in `git log`.
-
-- 23 sep 2026 — **Het nieuwe spel gekozen:** de schout, de heer en het dorp dat een stad wordt, met
-  keuren, politiek en avontuur (`spel.md`). De laatste klim is vervallen.
-
-- 22 sep 2026 — **De verhaaleditor kan quests** (`gereedschap/quests.html`): de fasen en wegen als
-  boom met hun prijs ernaast, formulieren voor fase, weg, klaarAls en beloning, drie vormen om mee
-  te beginnen die meteen de toets van drie antwoorden halen, en opslaan dat `js/quests.js`
-  terugschrijft met de uitleg tussen de gegevens intact. Twee dingen die er beter uit kwamen dan
-  gevraagd: de proef per fase zet een merkje bij **wie het merkt** (het vergelijkt met hoe het dorp
-  zou praten zonder de quest), en de controle kijkt naast het tellen van routes ook of een gesprek
-  de quest wel begint, of een weg wacht op iets wat niets geeft, en of wat in Tiled aan een fase
-  hangt die fase ook heeft. Eén afwijking van het plan: het werd een tweede bladzijde naast
-  gesprekken.html, met een link ertussen — waarom staat in `verhaal.md`.
-  Erbij: `Toren.debug.quest('bakker', 'terug')` zet een quest in een fase zonder hem te spelen.
-
-- 22 sep 2026 — **De koude oven, de eerste quest:** vier wegen die elk iets anders kosten (de kuil
-  met wat erin huist, de vuurklei van de marskramer, de vuurstenen van de smidsvrouw, en een
-  vuurschicht in de oven), met de gesprekken erbij en een toets die alle vier uitspeelt. Twee
-  besluiten van Marcel: een gunst moet ook echt iets kosten, dus de smidsvrouw vraagt de eerste
-  grondstof uit de toren; en je erft acht munten van de meester, zeven te weinig voor de
-  marskramer. De bakker en de marskramer bestaan nu als wezen en lenen tot fase B2b het vel van
-  Wim.
-
-- 22 sep 2026 — **Het questsysteem, de regels:** quests als gegevens (`js/quests.js`) met de
-  regels erachter (`js/quest.js`), goud naast de leeftijd, het vak linksboven dat nu ook van een
-  quest kan zijn, en in Tiled `quest="bakker:zoeken"` op een voorwerp. Twee dingen die uit het
-  bouwen kwamen: een weg door een quest is nu een ding in de gegevens met een `kost`, zodat
-  `npm test` de toets van drie antwoorden bewaakt en het spel onthoudt *hoe* je iets oploste; en
-  een spreuk kan een ding raken in plaats van alleen een wezen (`raak="oven"`), waarmee de
-  toverweg van De koude oven kan bestaan zonder dat de oven een uitzondering wordt.
-
-- 22 sep 2026 — Wachter voor gebouwen die elkaar overlappen: `npm run kaarten` klaagt als twee
-  gebouwen van meer dan één tegel over elkaar staan.
-
-- 22 sep 2026 — Huizenbouwer ronde 1 en 2: elke vorm (rechthoek, L, T; één, anderhalf en twee
-  lagen, met riet dat in de kil doorloopt) en alle materialen (vakwerk, vlechtwerk, planken,
-  blokhut, veldsteen; riet, spanen, leien, pannen; een wachttoren met plat dak). Platen in
-  `gereedschap/pixelart/uit/proefhuis/`.
-
-- 21 sep 2026 — **Eén doorlopende wereld:** `kaarten/wereld.tmj` met het erf (nu met randtegels)
-  en het dorp op één kaart, en een strook ertussen voor het bos; de losse kaarten staan in
-  `kaarten/oud/`. De camera volgt de held altijd, en om elke buitenkaart staat bos. De gebouwen
-  staan op hun voet, en een tegelnummer verandert nooit meer.
-
-- 21 sep 2026 — De meester in het spel: zes houdingen, een eigen leeftijd, en hij scharrelt bij
-  zijn moestuin. Meldingen die zich herhalen worden één regel met een teller.
-- 21 sep 2026 — Spreukanimaties met een worp, een vlucht en een inslag, en een grijze zucht die
-  van de tovenaar opstijgt als hij betaalt (zie `spreuken.md`, "Je ziet de prijs gebeuren").
-- 21 sep 2026 — Twaalf nieuwe gebouwen naar referentie één, met aanbouw en L-vorm; en
-  tegelnummers die nooit meer verschuiven, zodat kaarten die Marcel tekent blijven kloppen.
-- 21 sep 2026 — Fundering van de tutorial: `T.verouder` voor elk wezen, en een regieboek
-  (`js/regie.js`) waarin overslaan dezelfde eindtoestand geeft als uitkijken.
-- 21 sep 2026 — De verhaalsamenvatting in `CLAUDE.md` bijgewerkt; Wim is de knecht van de meester.
-- 20 sep 2026 — Sprites in het spel; naar buiten lopen; wereld en dorp op referentie één; de
-  toren op 8,7 tegels; randtegels met water en brug; elke kaart een gebied; gesprekken als
-  gegevens met een editor; de spiraaltrap in drie staten.

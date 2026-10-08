@@ -9,6 +9,17 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Niemand bouwt een wijnboerderij** (8 okt, bij vraag 136): in de speeltest vraagt geen dorp er een, want de wens drank
+  is met bier al gehaald, en de bouwer volgt wat de raad zegt. Wil de wijn in het spel meetellen, dan kan het met een
+  getal (de heer die meer wijn vraagt) of met een wens van een hogere stand naar wijn; dat laatste is iets erbij, dus eerst
+  Marcels keuze. Later ook: de wijngaard op de zonkant van een heuvel, en snoeien in de winter (vraag 136, F en E).
+
+- **Dagloners die praten** (8 okt, bij vraag 140): houdt het gezin het binden bij en is het graan van hun boerderij
+  gemaaid, dan staan de dagloners te praten tot morgen, terwijl een buurboerderij nog werk heeft. Ze worden 's nachts
+  verdeeld (`T.kiesDagloners`), niet overdag; per dag kiezen is genoeg zolang het niet opvalt. Rondreizenden die
+  meehelpen (Marcel: "misschien dat er rondreizende mensen kunnen helpen als ze er zijn") komen pas als er rondreizenden
+  zijn.
+
 - **Een huis zonder kapel, en nergens plek voor een kapel** (8 okt, de sessie van de kaartenmaker; vraag 117, 2d): de put
   zonder plek is opgelost (een erf houdt plaats voor een put, en een put voor een hut op een erf haalt ook het huis dat de
   hut wordt), maar met de kapel kan hetzelfde: op het eiland van 62707 (`main` met de grote gebouwen) vond een huis
@@ -864,10 +875,6 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   jager jaagt in het bos van de heer, en zijn opmerking in `T.GEBOUWEN.jager` zegt al "stropen is ook een keuze". Als
   de jager echt herten neemt, kan de heer er iets van vinden (zoals de houtkap en het bos ontginnen: gemeld kost gunst,
   stiekem is betrapt worden). Niet in stap 3; misschien met de wetten (een wet "jagen in het bos van de heer").
-- **Het dorp eet gevarieerd** (Marcel, 7 okt, bij vraag 116, stap 3a: "het dorp moet gevarieerd eten. Graan, brood,
-  vlees, vis etc."). Tot de jager echt jaagde, kon een dorp zijn winter op vlees uit het niets halen, en vroeg het om
-  jager na jager. Een richting: het eten komt uit meer bronnen, en een dorp dat op één bron leunt, voelt dat (een wens
-  per stand naar afwisseling, of de raad die het zegt). Na de speeltest met klein wild bekijken wat er nodig is.
 - **Een paadje slijt alleen in gras** (8 okt, bij vraag 117, B van 2a): `T.hoekenMetPaden` (`js/paden.js`) maakt alleen
   van gras zandpad, en voor zandpad naast veen, broek, heide of strand is er geen tegel. Wie op het eiland door het veen
   of over het strand loopt, laat dus geen spoor zien (het spoor telt wel, `T.isSpoor`). Pas als het opvalt: een
