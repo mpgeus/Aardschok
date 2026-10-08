@@ -14,12 +14,16 @@ groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
 Marcel, 8 okt: "snel, duidelijk en low cost". Elke sessie werkt dit blok bij aan het eind; wat af is, gaat eruit.
 
-**Loopt** (het teken "Bezig in sessie" staat bij het punt zelf): de wijnboerderij (vraag 136).
+**Loopt** (het teken "Bezig in sessie" staat bij het punt zelf): niets. De wijnboerderij (vraag 136) en het graan dat
+pas binnen telt (vraag 140) staan in `main`.
 
 **Wacht op Marcel:**
 - Vraag 133: meer plaatsen voor gasten in de grote herberg, of laten zoals het is?
 - Na 100 mensen zegt de raad "haal een vrij erf weg" (vraag 102, c), omdat een nieuw gezin de reeks van geluk breekt.
   Voor een tester is dat vreemd; bespreken vóór de proefversie (het hoort bij vraag 137).
+- Vraag 140: wie helpt bij de oogst (eerst een getal).
+- Vraag 141 (een economie binnen het dorp) en 142 (een gereedschap voor de getallen; de werkbank is er al): na de kern,
+  tenzij Marcel anders kiest.
 
 **Daarna, in deze volgorde:**
 1. Een proefversie voor Marcels 4K-scherm en een eerste tester (33d; `npm run proefversie`, ook `-- --windows`), met de
