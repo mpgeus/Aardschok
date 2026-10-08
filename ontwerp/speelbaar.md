@@ -180,6 +180,34 @@ Op het eiland winnen er zo vier van de zes, net als op de landen van de maker.
    maker op 62707 bij allebei) of een put (62707 op het land van de maker, de bouwer). Wat na de winst gebouwd wordt,
    neemt de grond; dat stond er in 2c ook.
 
+**Daarna op `main`, met de grote gebouwen, en de put die ook het huis haalt.** Intussen kwamen de grote gebouwen van vraag
+114, stap 3, in `main` (de herberg die meegroeit, het stenen huis dat een woontoren wordt); niemand had ze nog op het eiland
+gespeeld. Dezelfde zes spellen op het eiland, op `9e8e7bb` (`main` met 2d), en op `e0f3e6c` (daarbij een put voor een hut
+op een erf die ook het huis haalt dat de hut wordt; werklijst, vraag 117, 2d):
+
+| Land | Speler | Op `main` met 2d | Met de put die ook het huis haalt |
+|---|---|---|---|
+| 62707 | bouwer | de vier jaar uit, 109 mensen: 15 maanden een put zonder plek, 16 een kapel zonder plek | de vier jaar uit, 109 mensen: geen put meer zonder plek, maar 16 maanden een kapel zonder plek |
+| 73425 | bouwer | **gewonnen** op 10 louwmaand van het vierde jaar; na de winst weggejaagd door het dorp | **gewonnen** op dezelfde dag, en de vier jaar uit, met 160 mensen |
+| 72022 | bouwer | **gewonnen** op 1 slachtmaand van het vierde jaar; na de winst het ambt kwijt | het ambt kwijt op 12 wintermaand van het derde jaar, zoals in 2c en 2d |
+| 62707 | sluw | het ambt kwijt op 11 slachtmaand van het derde jaar: te weinig betaald | hetzelfde |
+| 73425 | sluw | **gewonnen** op 19 grasmaand van het vierde jaar | hetzelfde |
+| 72022 | sluw | het ambt kwijt in het eerste jaar, zoals in 2c | hetzelfde |
+
+**Wat het zegt:**
+1. **De put zonder plek is weg,** op alle zes spellen. Op 72022 en op 62707 kwam hij van een put die de hut haalde maar
+   niet het huis dat de hut werd (11,7 tegels tegen 12,35, en 11,05 tegen 12,26): zijn looppad nam de laatste plekken die
+   het huis wel haalden.
+2. **Op 62707 houdt nu de kapel het tegen:** een huis vindt binnen 40 tegels nergens plek voor een kapel, zestien maanden
+   lang, en het jaar van geluk begint niet. Dat is hetzelfde als met de put, met een grotere kring; de regel van 2d geldt
+   nog alleen voor de put.
+3. **72022 beslist de gunst van de heer, niet de put.** Bij de bouwer staat de gunst na Sint-Maarten bijna elk jaar op 5
+   (de laagste stand vóór 0: eerst komt de waarschuwing), en komt op 12 wintermaand de gril van het vette varken, dan zegt
+   hij "Onze varkens zijn mager", en is zijn ambt weg. Zo verloor hij in 2c, in 2d en hier; op `main` met 2d kwam dezelfde
+   gril dat jaar ook, maar had hij tien vlees en gaf hij die, en won hij (een jaar later, na de winst, niet meer). Wat er
+   met de put verandert, verschuift het spel net genoeg om die gril anders te laten vallen; de val zelf staat in
+   `opmerkingen.md`.
+
 ## De speeltest van 8 okt: vier jaar op het eiland (werklijst, vraag 117, stap 2c)
 
 Gespeeld in de sessie van de kaartenmaker, in een losse kopie van `main` op `6dba60e` (het spel van `25934d7`): elk nieuw

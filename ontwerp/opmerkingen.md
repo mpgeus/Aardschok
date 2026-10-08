@@ -9,14 +9,22 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
-- **Een huis zonder put, en nergens plek voor een put** (8 okt, de sessie van de kaartenmaker; vraag 117, stap 2c): op
-  het eiland van 73425 wil een huis met vijf dorpelingen een put binnen 12 tegels, en het dorp vindt er nergens een
-  (`wilBouwen` met `plek: false` in de speeltest): geen open grond met drie tegels looppad rondom, en niets om te rooien.
-  Het jaar van geluk begint dan nooit; bij de bouwer en de sluwe bouwer twee jaar lang. Ook op een land van de maker
-  komt het voor (62707, aan het eind: een put en een kapel zonder plek), maar daar pas na de winst. Nog niet bekeken:
-  waarom er daar niets past. De speeltest is te naspelen tot dat moment (`-- bouwer --zaad 2 --eiland --jaren 4`).
-  Voorstel: een erf komt niet waar een put het niet meer kan halen, zoals het al niet komt waar een huis niet meer kan
-  groeien (`T.groeiGrond`, vraag 130, d).
+- **Een huis zonder kapel, en nergens plek voor een kapel** (8 okt, de sessie van de kaartenmaker; vraag 117, 2d): de put
+  zonder plek is opgelost (een erf houdt plaats voor een put, en een put voor een hut op een erf haalt ook het huis dat de
+  hut wordt), maar met de kapel kan hetzelfde: op het eiland van 62707 (`main` met de grote gebouwen) vond een huis
+  zestien maanden lang binnen 40 tegels nergens plek voor een kapel, en won het dorp niet; elders kwam het pas na de winst.
+  `T.kringGrond` werkt al per soort, dus de regel van 2d kan ook voor de kapel gelden (een erf in `T.waaromPastErfNiet`
+  vraagt het dan voor de put en de kapel). Nog niet bekeken: wat er daar de laatste plek nam. Ook kan wat er verder
+  gebouwd wordt (een werkplaats, een kraam) de laatste plek nemen; de regel geldt alleen voor erven en de put zelf.
+
+- **De gunst na Sint-Maarten, en de gril in wintermaand** (8 okt, de sessie van de kaartenmaker; vraag 117, 2d): bij de
+  bouwer van de speeltest staat de gunst van de heer na Sint-Maarten bijna elk jaar op 5, de laagste stand vóór 0 (eerst
+  komt de waarschuwing). Komt dan op 12 wintermaand de gril van het vette varken, en heeft hij geen tien vlees, dan zegt
+  hij "Onze varkens zijn mager", en is zijn ambt weg: zo verloor hij op het eiland van 72022 in 2c, in 2d en met de put
+  die ook het huis haalt, en won hij alleen in de speeltest waar hij die dag tien vlees had. In 2c leek het op de rovers
+  (`speelbaar.md`): die maakten de oogst klein en de gunst laag, maar de gril gaf de laatste duw. Vragen: kiest de bouwer
+  van de speeltest zijn antwoord slecht (hij weet dat zijn gunst op 5 staat), of is een gril die je ambt kost bij de
+  laagste gunst te hard?
 
 - **Rovers die blijven komen als er niets te halen is** (8 okt, de sessie van de kaartenmaker; vraag 117, stap 2c): op het
   eiland van 72022 kwam de bende bij de bouwer vanaf het tweede jaar om de tien dagen, 32 keer in drie jaar (op het land
