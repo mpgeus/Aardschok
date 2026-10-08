@@ -18,10 +18,10 @@ Marcel, 8 okt: "snel, duidelijk en low cost". Elke sessie werkt dit blok bij aan
 maait, bindt en draagt in de oogst) staan in `main`.
 
 **Wacht op Marcel:**
-- Vraag 142, een bladzijde met alle getallen en spelregels ("een bladzijde met duidelijk overzicht van alles"): eerst een
-  plan voor Marcel.
+- Vraag 142, de bladzijde met alle getallen (`gereedschap/instellingen.html`): stap 1 en 2 staan in `main`; stap 3 (een
+  speeltest met een set getallen, naast de vorige) wacht.
 - Vraag 141, een economie binnen het dorp: Marcel koos B, een beurs per huis, **voor de demo** ("Belangrijk concept"),
-  met munten van koper, zilver en goud, de kas van het dorp naast de beurs van de schout; na 142.
+  met munten van koper, zilver en goud, de kas van het dorp naast de beurs van de schout; eerst een plan voor Marcel.
 
 **Daarna, in deze volgorde:**
 1. Een proefversie voor Marcels 4K-scherm en een eerste tester (33d; `npm run proefversie`, ook `-- --windows`), met de
@@ -6944,8 +6944,8 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     **Marcel (8 okt): "Kwa gereedschap bedoel ik echt een robuuste losse tool. Voor alle settings etc."** De werkbank is
     dus niet genoeg. **Marcel (8 okt), op de vraag bladzijde of los programma: "Ja misschien een bladzijde met duidelijk
     overzicht van alles."** Een bladzijde in `gereedschap/`, na de dagloners.
-    **Bezig in sessie `ccr-77327776-rqjldz`** (8 okt): de bladzijde bouwen, stap 1 en 2 (Marcel: "1. Ja dan 2. Gelijk
-    veranderen 3. Prima": de gebouwen erbij, opslaan verandert de standaard meteen, de speeltest later).
+    Marcel (8 okt), op het plan: "1. Ja dan 2. Gelijk veranderen 3. Prima": de gebouwen erbij, opslaan verandert de
+    standaard meteen, de speeltest later.
     **Gebouwd (8 okt), stap 1 en 2:** `gereedschap/instellingen.html` (met `npm start`): 51 onderwerpen (de werkbank en de
     blokken die er niet in staan, zoals de oogst en de wijngaard), 54 spelregels en 49 gebouwen, samen 1659 waarden, met
     het commentaar uit de code als uitleg, een zoekveld, en per getal wat de spelregels erop zetten (en of de standaard
