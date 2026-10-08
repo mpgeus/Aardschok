@@ -153,6 +153,25 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De proef met de spelregel "Graan" op "Net rond" (8 okt; werklijst, vraag 132)
+
+Dezelfde stand (`e9cc2cd`), `npm run speeltest -- bouwer sluw --maker --jaren 4 --regel graan=netRond`: een akkertegel
+geeft 4 graan in plaats van 3,5. Naast "Honger" (de standaard, hierboven):
+
+| Speler, land | Mensen na vier jaar (Honger → Net rond) | Hongerdagen in jaar 4 | Hoe het eindigde met Net rond |
+|---|---|---|---|
+| bouwer 1 | 100 → 115 | 115 → 115 | vier jaar uit; de reeks brak na 154 dagen (vlees of vis) |
+| bouwer 2 | 90 → 127 | 33 → 64 | vier jaar uit; de reeks brak na 157 dagen (vlees of vis) |
+| bouwer 3 | 74 → 74 | | ambt kwijt in jaar 2, net als met Honger |
+| sluw 1 | 115 → 122 | 67 → 0 | **gewonnen**, op 13 sprokkelmaand van het vierde jaar |
+| sluw 2 | 49 → 56 | | weggejaagd door het dorp in jaar 3 (eerst gevallen in jaar 1) |
+| sluw 3 | 107 → 115 | 0 → 0 | vier jaar uit, het hele vierde jaar alles, de teller net niet rond |
+
+**Wat het zegt:** met een halve graan meer per tegel worden de dorpen groter (115 tot 127 mensen), en wint de sluwe
+bouwer weer een keer; een tweede haalt het bijna. De gewone bouwer, die de heer alles probeert te betalen, wint nog
+steeds niet: zijn reeks breekt in de winter op vlees of vis (de vissers liggen stil, en hij heeft weinig jagers). De
+bouwer op 72022 verliest zijn ambt op beide in het tweede jaar.
+
 ## De speeltest van 8 okt, avond: vee en vissers erbij (werklijst, vraag 132)
 
 Op `ccr-77327776-rqjldz` op `e9cc2cd`, `npm run speeltest -- bouwer sluw --maker --jaren 4`.
