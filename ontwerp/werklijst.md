@@ -5005,6 +5005,69 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       poppetjes en ver weg als getallen (vraag 79, D).
     - **De tijd.** Op 1× loopt de schout zo'n kwartier van de ene kust naar de andere, op 30× minder dan een minuut; later
       een paard. Dat past bij het ontdekken.
+    **Het plan voor de kaartenmaker** (Claude, 8 okt, sessie `ccr-f03157dc-9d2dtu`; Marcel, 7 okt: "Uiteindelijk wil ik
+    een random map generator met alles", en de grote plaat bij vraag 121; wacht op Marcel). De grote plaat van nu
+    (`node gereedschap/pixelart/landschap-plaat.cjs 5 2500`) is een eentonig groen vlak met een raster erin: de drie
+    lagen ruis van `js/hoogte.js` liggen op een vierkant rooster (waarde-ruis), en op die maat zie je de hokjes. Een
+    eiland vraagt bovendien vormen die het hele eiland kennen: een rivier moet weten waar de zee is, een weg waar het
+    volgende dorp ligt. Dat kan geen rekensom per tegel zijn, en elke boom wel. Daarom:
+    - **Twee schalen.** *Het overzicht:* het eiland in vakken van 8 bij 8 tegels (zo'n 310 bij 310), met wat het hele
+      eiland moet kennen: de kust, de bergen en heuvels, waar het water heen stroomt (rivieren die in zee uitkomen, meren
+      in de kommen), de streken, de plekken voor de dorpen, het kasteel en de stad, en de wegen ertussen. Een nieuw spel
+      maakt het uit het nummer (in minder dan een seconde, te meten), en het wordt niet bewaard: hetzelfde nummer maakt
+      het opnieuw. *Het detail:* per tegel een rekensom uit het nummer en het overzicht, zoals de hoogte nu: de kustlijn,
+      de bochten van de rivier, elke boom en struik. Dat is overal te vragen, dus kan later een stuk van het eiland
+      gemaakt worden als je in de buurt komt (de stukken hierboven).
+    - **De vormen.** Een kust met baaien en kapen, en een paar eilandjes ervoor; het land loopt van de kust naar binnen
+      op; een bergrug met passen (B), waar de rivieren ontspringen; en heuvels overal, met de glooiing van nu als fijnste
+      laag. De ruis wordt gradiënt-ruis, elke laag een andere kant op gedraaid, en het land zelf een beetje verbogen
+      (domain warping): dan is er geen raster meer en geen voorkeursrichting.
+    - **De streken** (D): de zes wildernissen van de landkaart (`js/land.js`), het woud, de heide, het veen, het broek,
+      het zand en de kampen, en de kust met strand en duinen, uit hoe hoog, hoe nat en hoe steil het er is: het veen laag
+      en nat, de heide droog en hoger, het broek langs de rivieren, de kampen waar het vruchtbaar is, rotsen waar het
+      steil is. Wat er op een tegel groeit, komt uit zijn streek, met de tabel van de maker (`groei` in
+      `T.MAKER_INSTELLINGEN`).
+    - **De plekken en de wegen.** Plekken voor de dorpen (een per speler, tot zes, en een paar die zichzelf besturen;
+      vraag 61 en 63), het kasteel op een heuvel (vraag 126), de stad aan de monding van de grootste rivier (later een
+      haven), ver genoeg uit elkaar; wegen ertussen die de dalen volgen, met een brug waar de rivier smal is. Op 2,2
+      tegels per seconde is het eiland van kust tot kust bijna vier dagen lopen in het spel (twintig minuten op 1×,
+      veertig seconden op 30×), en een buurdorp een dag of anderhalf: dezelfde dagen als op de landkaart (één tot drie),
+      zonder aparte kaart (vraag 62: "Denk in dagen").
+    - **Je plek** (C): het lot kiest, aan de kust of binnenin (Marcel, 4 okt), maar alleen waar een dorp kan groeien:
+      vlak genoeg, zoet water, grond voor akkers, bos in de buurt, en geen berg tussen je dorp en de camera (die draait
+      niet, vraag 124). Elke plek begint anders: aan de kust vis (en later een haven), aan een rivier een brug en een
+      molen, op de heide schapen en weinig hout, aan de bosrand hout en wolven. En de weg door je land is de weg naar het
+      kasteel en de stad: de heer en de marskramer komen van waar ze wonen.
+    In stappen, elk met eerst iets om te zien:
+    - **Stap 1, de plaat** (niets in het spel): `js/eiland.js`, het overzicht en het detail zonder scherm, met toetsen
+      (hetzelfde nummer geeft hetzelfde eiland, elke rivier komt in zee, elke plek is over de weg te bereiken), en
+      `gereedschap/pixelart/eiland-plaat.cjs`: het hele eiland van boven, met de zee, de kust, het licht van de zon, de
+      rivieren en meren, de streken in hun kleur, de wegen en de plekken, en ernaast je land van 100 bij 100 met de rand
+      eromheen, tegel voor tegel. Klaar als: drie eilanden die Marcel als eiland herkent, elk anders, zonder raster, en
+      het overzicht gemeten.
+    - **Stap 2, je land komt van het eiland** (een spelregel, standaard uit tot de speeltest het zegt): een nieuw spel
+      maakt het eiland, en je land van 100 bij 100 is het stuk om je plek. De grond, het water, het bos, de rotsen en de
+      hoogte komen van het eiland; de maker legt het gehucht erop zoals nu (het plein, de boerderijen met hun akkers, de
+      meent op de heide); en de rand om de kaart is ook het eiland (de zee, de bergen in de verte). Een houthakker bij het
+      bos en een visser aan het water gaan vanzelf (`T.natuurBij`). Er hoeft nog niets in stukken: het spel blijft 100
+      bij 100. Klaar als: de speeltest van vier jaar op drie eilanden zoals op de landen van de maker, en met de
+      spelregel uit alles byte voor byte gelijk (`npm run schermen`).
+    - **Stap 3, de proef met stukken** (hierboven: de kaart in stukken van 64 bij 64 als compacte getallen, gemaakt als
+      je in de buurt komt; opslaan wat veranderde; HPA\* over de stukken), op 500 bij 500 en dan het hele eiland, gemeten
+      op Marcels pc. **Stap 4, de mist** (zwart wat niemand zag, grijs wat je je herinnert; vraag d hierboven). **Stap
+      5, het kasteel, de stad en de andere dorpen** op het eiland (vraag 126 en 72), en de landkaart gaat weg.
+    - **Voor de demo:** stap 1 en 2 brengen de demo iets (elk spel een andere plek op een eiland, de kust en een rivier,
+      beelden voor de Steam-pagina); stap 3 tot en met 5 zijn voor het hele spel, en de grootste technische stap tot nu
+      toe. Voorstel: na stap 2 terug naar de kern (de proef van vraag 128, en stap 2 van de hoogte), en stap 3 later.
+      Stap 2 van de hoogte (lopen, zien, bouwen, afdekken) hoeft niet vóór het eiland: de plek komt waar het steile
+      buiten je land blijft, en met "Hoogte" op vlak ligt ook het eiland vlak.
+    - **Goed om nu al te weten:** hetzelfde nummer geeft hetzelfde eiland zolang de kaartenmaker niet verandert. Tot de
+      release mag hij veranderen (een bewaard spel past dan niet meer, zoals bij een nieuwe `versie`); daarna onthoudt
+      een spel met welke kaartenmaker het begon.
+    Vragen: **A**, twee schalen, deze stappen, en na stap 2 terug naar de kern? **B**, de bergen: b1 een bergrug met
+    passen en verder heuvels, of b2 alleen heuvels, zoals nu maar groter? **C**, je plek: altijd waar een dorp kan
+    groeien en niet achter een berg, of ook een moeilijke plek (als spelregel)? **D**, de streken: de zes van de
+    landkaart en de kust, of wil je er iets bij?
 118. **Inwoners met stats, zoals in Dwarf Fortress** (Marcel, 4 okt, zesentwintigste sessie: "Inwoners krijgen ook
     'stats' hp, skills, eigenschappen, etc ala dwarf fortress"; plan van Claude; open).
     **Wat er al is:** elke bewoner heeft een naam, een leeftijd, een huis, een gezin en werk (`js/bewoners.js`); de vijf
