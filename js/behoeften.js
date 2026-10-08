@@ -681,13 +681,17 @@
     const ongezouten = d && d.totaal > 0 ? vleesNu * (d.onbeschermd / d.totaal) : vleesNu;
     const vers = perVlees > 0 ? Math.max(0, Math.min((nodig - melk) / perVlees, ongezouten)) : 0;
     // Het zaaigraan eet het dorp pas bij nood (T.zaaigraanApart, js/akkers.js; werklijst vraag 81): eerst het andere
-    // graan, dan de kaas en het gezouten vlees, en pas dan het zaaigraan, liever dan dat er mensen sterven.
+    // graan, dan de kaas en het gezouten vlees, en pas dan het zaaigraan, liever dan dat er mensen sterven. Wat er bij de
+    // graanschuur bewaakt wordt, pakt het niet (T.zaaigraanBeschermd, js/graanschuur.js; vraag 132).
     const apart = Math.min(v.graan || 0, T.zaaigraanApart(D, dag));
     const graan = Math.max(0, Math.min(nodig - melk - vers * perVlees, (v.graan || 0) - apart));
     const kaas = Math.max(0, Math.min(nodig - melk - vers * perVlees - graan, v.kaas || 0));
     const rest = nodig - melk - vers * perVlees - graan - kaas;
     const gezouten = perVlees > 0 ? Math.max(0, Math.min(rest / perVlees, vleesNu - vers)) : 0;
-    const zaaigraan = Math.max(0, Math.min(rest - gezouten * perVlees, apart));
+    const vrij = apart * (1 - T.zaaigraanBeschermd(D));
+    const zaaigraan = Math.max(0, Math.min(rest - gezouten * perVlees, vrij));
+    // Komt de honger aan het zaaigraan, dan zoekt een boer je (js/graanschuur.js).
+    if (rest - gezouten * perVlees > 0 && apart > 0) T.zaaigraanInGevaar(D, dag);
     const vlees = vers + gezouten;
     if (graan + zaaigraan > 0) T.wijzigVoorraad(D, 'graan', -(graan + zaaigraan));
     zegHetZaaigraan(D, zaaigraan, apart);

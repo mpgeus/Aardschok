@@ -376,6 +376,10 @@
     // Een houthakker die stilstaat omdat zijn bomen op zijn, is geen reden voor een nieuwe zolang het hout de winter
     // haalt (werklijst vraag 129, e): in de speeltest van 6 okt stonden er zo na vier jaar 8 tot 10, die vooral stilstonden.
     if (!heeft(D, 'houthakker')) erbij('houthakker', 'Er hakt niemand hout, en elke hut en elk gebouw kost hout.', 'hout');
+    // Het zaaigraan ligt nergens veilig (js/graanschuur.js; vraag 132): zodra er zaaigraan apart ligt, na de oogst.
+    if (T.GRAANSCHUUR_INSTELLINGEN.bewaken && !heeft(D, 'graanschuur') && T.zaaigraanApart(D, D.kalender.dag) > 0) {
+      erbij('graanschuur', 'Het zaaigraan ligt nergens veilig: in een hongerwinter eet het dorp het op, en dan blijven de akkers leeg.', 'zaaigraan');
+    }
     for (const x of T.watDeHuizenMissen(D)) if (x.kan && x.bouw) erbij(x.bouw, x.zin, x.soort);
     for (const soort of T.doelGebouwen(D)) erbij(soort, `Voor het doel is er een ${T.GEBOUWEN[soort].naam} nodig.`, 'doel');
     return uit;

@@ -38,7 +38,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Het eerste proefje | gebouwd (23 sep); de kaart sinds 26 sep rond het plein (vierde versie) | 1 |
 | De kern voor het tweede proefje | voorstel; de heer en de inner kwamen anders, groepen en keuren wachten | 9 |
 | Rijk worden en arm lijken | de inner, de argwaan en verstoppen deel 1 gebouwd; de soldaten zoeken altijd, en de inner afleiden en omkopen (27 sep) | 4, 6 |
-| Het dorp: mensen, behoeften en de winter | gebouwd (23 sep); de winter zie je aankomen (28 sep); de mensen sprokkelen hout, maar niet genoeg (30 sep); een gezin wacht op de winter als het hout of het eten hem niet haalt, en het zaaigraan eet het dorp pas bij nood (1 okt) | 3, vraag 74, 79, 81 |
+| Het dorp: mensen, behoeften en de winter | gebouwd (23 sep); de winter zie je aankomen (28 sep); de mensen sprokkelen hout, maar niet genoeg (30 sep); een gezin wacht op de winter als het hout of het eten hem niet haalt, en het zaaigraan eet het dorp pas bij nood (1 okt), tenzij er wachters bij de graanschuur staan (8 okt) | 3, vraag 74, 79, 81, 132 |
 | Gebouwen | 45 soorten; 16 in het bouwmenu van het gehucht | 2, 14 |
 | Handel: de marskramer | gebouwd (24 sep); in de lente ook zaaigraan, en de boeren zaaien na tot 1 bloeimaand (1 okt) | 4, vraag 79 |
 | Sint-Maarten | gebouwd (24 sep) | 5 |
@@ -1663,6 +1663,15 @@ Nog open na deel 1 (vragen van Claude):
   de kaas en het gezouten vlees, en zegt het als het zover is ("De honger is groot: het dorp eet van het zaaigraan."). De
   winter rekent het eten zonder het zaaigraan, en bij de muis op het graan in de balk staat hoeveel ervan zaaigraan is.
   De spelregel "Zaaigraan" (Als ander graan: het spel van vóór 1 okt).
+- **De graanschuur en de wachters** (8 okt; werklijst vraag 132; Marcel: "bij honger grijpen mensen alles aan. Je moet
+  mensen inzetten om het warenhuis te beschermen", "Ja, er moet een graanschuur komen", en een wachter per twintig mensen,
+  "anders maken ze geen kans"; `js/graanschuur.js`): het zaaigraan ligt in de graanschuur, en zodra er zaaigraan apart
+  ligt, vraagt het dorp er een. Komt de honger eraan, dan zoekt een boer je: "Ze praten over de graanschuur." Je zet er
+  mannen bij (alles, of de helft, en de rest mag het dorp eten), of je laat ze eten. Wachters (de militie eerst, dan de
+  weerbare mannen), een per twintig mensen en minstens twee, staan dag en nacht bij de schuur en werken nergens; met te
+  weinig pakt het dorp een deel. Elke dag honger terwijl het graan bewaakt wordt, kost vertrouwen; bij het zaaien gaan ze
+  naar huis. Zonder graanschuur eet het dorp het op zoals hierboven. De spelregel "Zaaigraan" op "Bewaken" (de
+  standaard), "Pas bij nood" of "Als ander graan". De graanschuur leent nog de tekening van de blokhutschuur.
 - **Brandhout:** in wintermaand, louwmaand en sprokkelmaand (90 dagen) stookt elk huishouden van vier
   mensen 0,15 hout of turf per dag; het gehucht van 26 mensen zo'n 95 hout per winter. Het begint met
   40, en een houthakker hakt 2 per dag; de marskramer verkoopt geen hout.

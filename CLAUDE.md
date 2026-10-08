@@ -458,6 +458,15 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   roepen** (3c, `G.aanval`, `e.roeptOmHulp`): wie de wolven aanvallen, roept, de mannen die het horen komen (`moetNaar`
   met `hulp`), een buur jaagt ze weg, de schout vecht, en na een kwartier bijten ze. **Het hek** (3d,
   `T.hekOmDeSchapen`): latten om de meent, met hekjes.
+- `js/graanschuur.js`: **de graanschuur en de wachters bij het zaaigraan** (vraag 132, 8 okt; Marcel: "bij honger grijpen
+  mensen alles aan. Je moet mensen inzetten om het warenhuis te beschermen", en "Ja, er moet een graanschuur komen"): het
+  zaaigraan ligt in de graanschuur (`T.GEBOUWEN.graanschuur`, `T.graanschuurVan`; het dorp vraagt er een zodra er
+  zaaigraan apart ligt, `T.watTeBouwen`); komt de honger eraan (`T.zaaigraanInGevaar`, vanuit `T.eetVandaag`), dan zoekt
+  een boer je (het voorval `zaaigraanHonger`), en met `doe.bewaak` staan er wachters bij de schuur (`T.bewaakZaaigraan`:
+  een per twintig mensen, minstens twee, `T.wachtersNodig`; `p.wacht`, ze werken niet, en `moetNaar` met `wacht`), die
+  zoveel beschermen als er staan (`T.zaaigraanBeschermd`). Honger kost dan elke dag vertrouwen, en bij het zaaien gaan ze
+  naar huis (`T.tikGraanschuurDag`). De spelregel "Zaaigraan" (bewaken, pas bij nood, als ander graan); de getallen in
+  `T.GRAANSCHUUR_INSTELLINGEN`.
 - `js/bouwstijl.js`: **de bouwstijl van een land** (vraag 114, stap 2, 4 okt): elk land van de maker bouwt in één stijl
   (`w.stijl`, uit het nummer van het land, `T.stijlVoorLand`; het ontworpen gehucht heeft er geen en bouwt zoals altijd),
   met per soort een paar vormen, elk met de deur naar elke kant. De huizenbouwer noemt dat een stand; in het spel heet het

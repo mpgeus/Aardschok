@@ -169,6 +169,12 @@
       tekening: 'gebouwen/schuurBlokhut', beschrijving: 'de schapen van de heide slapen erin: mest voor de akkers',
       opmerking: 'nieuw: nog niet getekend, leent voorlopig de blokhutschuur.',
     },
+    graanschuur: {
+      naam: 'graanschuur', trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 15 }, heer: {}, bouwtijd: 3,
+      handen: 0, woonruimte: 0, maakt: null, menu: true,
+      tekening: 'gebouwen/schuurBlokhut', beschrijving: 'hier ligt het zaaigraan; met wachters erbij eet het dorp het in een hongerwinter niet op',
+      opmerking: 'nieuw (vraag 132): nog niet getekend, leent voorlopig de blokhutschuur.',
+    },
     kippenhok: {
       naam: 'kippenhok', trede: 'gehucht', voet: { b: 2, h: 2 }, kosten: { hout: 4 }, heer: { eieren: 20 }, bouwtijd: 1,
       handen: 0, woonruimte: 0, maakt: { uit: { eieren: 1 } }, menu: true,
@@ -1204,7 +1210,9 @@
     // js/behoeften.js). Eerst de melk van vandaag, dan graan, dan kaas, en wat er van de melk over
     // is, wordt kaas; het zaaigraan pas bij nood (T.eetVandaag, js/behoeften.js). Wat de huizen al aten aan brood, vis
     // en vlees van hun wensen, eet het dorp minder (vraag 92, a).
-    T.eetVandaag(D, dag, alGegeten);
+    const gegeten = T.eetVandaag(D, dag, alGegeten);
+    // De wachters bij de graanschuur (js/graanschuur.js): na het zaaien naar huis, en honger kost vertrouwen.
+    T.tikGraanschuurDag(D, dag, gegeten.tekort > 0);
     // 4. Groei: om de gezinDagen dagen komt er een gezin bij, als de voorraad een buffer overhoudt
     // (zodat een net geboren gezin niet meteen honger lijdt), het dorp tevreden genoeg is
     // (js/behoeften.js, T.BEHOEFTEN_INSTELLINGEN.groeiDrempel), en het de winter haalt als die in zicht

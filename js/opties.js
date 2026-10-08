@@ -471,12 +471,14 @@
     // Het zaaigraan (werklijst vraag 81; Marcel, 1 okt: "zaaigraan wordt bij nood opgegeten, anders sterven er mensen";
     // js/akkers.js, T.zaaigraanApart). Als ander graan is het spel van vóór 1 okt.
     {
-      id: 'zaaigraan', naam: 'Zaaigraan', standaard: 'nood',
+      id: 'zaaigraan', naam: 'Zaaigraan', standaard: 'bewaken',
       uitleg: 'Wanneer het dorp het zaaigraan voor volgend jaar opeet.',
       keuzes: [
-        { id: 'nood', naam: 'Pas bij nood', zet: { 'VELDEN_INSTELLINGEN.zaaigraanApart': true },
+        { id: 'bewaken', naam: 'Bewaken', zet: { 'VELDEN_INSTELLINGEN.zaaigraanApart': true, 'GRAANSCHUUR_INSTELLINGEN.bewaken': true },
+          uitleg: 'Van de oogst tot het zaaien ligt het zaaigraan in de graanschuur. Komt de honger eraan, dan vraagt een boer je wat er moet gebeuren: zet je er mannen bij, een per twintig mensen, dan blijft het liggen, maar elke hongerdag kost vertrouwen. Zonder graanschuur eet het dorp het bij nood op (vraag 132, 8 okt).' },
+        { id: 'nood', naam: 'Pas bij nood', zet: { 'VELDEN_INSTELLINGEN.zaaigraanApart': true, 'GRAANSCHUUR_INSTELLINGEN.bewaken': false },
           uitleg: 'Van de oogst tot het zaaien houden de boeren het zaaigraan achter. Het dorp eet het pas als er niets anders meer is, en de winter rekent het eten zonder.' },
-        { id: 'gewoon', naam: 'Als ander graan', zet: { 'VELDEN_INSTELLINGEN.zaaigraanApart': false },
+        { id: 'gewoon', naam: 'Als ander graan', zet: { 'VELDEN_INSTELLINGEN.zaaigraanApart': false, 'GRAANSCHUUR_INSTELLINGEN.bewaken': false },
           uitleg: 'Het dorp eet het zaaigraan als elk ander graan. Wie in de winter alles opeet, heeft in de lente niets te zaaien.' },
       ],
     },
@@ -690,6 +692,7 @@
     { naam: 'Het veldwerk', blok: 'VELDWERK_INSTELLINGEN' },
     { naam: 'Ontginnen', blok: 'ONTGINNEN_INSTELLINGEN' },
     { naam: 'De beesten in het bos', blok: 'BEESTEN_INSTELLINGEN' },
+    { naam: 'De graanschuur en het zaaigraan', blok: 'GRAANSCHUUR_INSTELLINGEN' },
     { naam: 'Het bos', blok: 'BOS_INSTELLINGEN' },
     { naam: 'Het vee', blok: 'VEE_INSTELLINGEN' },
     { naam: 'De doorkijk', blok: 'DOORKIJK_INSTELLINGEN' },

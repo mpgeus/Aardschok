@@ -6357,6 +6357,10 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
       zicht is), een visser aan het water (niet voor de winter), herten voor een jager, slachten, of de molen en de
       bakkerij als er meel of brood ontbreekt. Het dorp vraagt het gebouw dat de raad noemt.
     - **c, dan de speeltest van vier jaar**, naast de stand van voor 3a.
+    Vragen van Claude: waar ligt het graan (er is geen warenhuis; de schuur van de schout, of een eigen gebouw), en twee
+    wachters, of meer naar hoe groot het dorp is (een per twintig mensen)? **Marcel (8 okt): "Ja, er moet een graanschuur
+    komen. 2. Ja goed idee, anders maken ze geen kans".** Dus een graanschuur als gebouw, en een wachter per twintig mensen
+    (minstens twee); met te weinig wachters grijpt het dorp een deel.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

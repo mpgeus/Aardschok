@@ -21,6 +21,7 @@
 //                     lijstje is: niets. Dat zegt het venster niet: wie je liet gaan, kan terugkomen.
 //   feest: 'dag'      het dorp viert dit voorval op het plein (js/feesten.js): 'dag' is morgen de hele dag, en niemand
 //                     werkt; 'avond' is 's avonds, vanavond nog als het kan
+//   bewaak: 1         mannen bij de graanschuur, die het zaaigraan bewaken (0.5: de helft; js/graanschuur.js)
 //   jacht: true       een jacht te voet op de wolven (js/beesten.js): de mannen lopen met de schout mee naar de roedel
 //   wolven: -2        de roedel verliest meteen twee wolven; hek: true, een hek om de schapen (js/beesten.js)
 // Een voorval komt geloot, of op een vaste dag (op: { maand, dag }, de meiboom).
@@ -139,6 +140,8 @@
       wie: { leeftijd: ['jong', 'volwassen'] }, ander: { boer: false },
     },
     ziekte: { soort: 'ramp', titel: 'de koorts', winter: 2, oorzaak: ['kou', 'vol'], sterft: 'De koorts', wie: { geslacht: 'vrouw' } },
+    // De honger komt aan het zaaigraan in de graanschuur (js/graanschuur.js; vraag 132): een boer zoekt je.
+    zaaigraanHonger: { soort: 'ramp', titel: 'het zaaigraan', zelf: true, oorzaak: 'honger', roep: '{wie} zoekt je: het dorp wil het zaaigraan eten.', wie: [{ boer: true }, MAN] },
     wolven: {
       soort: 'ramp', titel: 'de wolven', als: { seizoen: 'winter', vee: { schaap: 3 } }, winter: 3, sterft: 'De jacht op de wolven', zelf: 'beesten', oorzaak: 'wolven',
       roep: 'Wolven! {wie} komt je halen.', wie: [{ werk: 'schaapskooi' }, MAN], ander: MAN,
@@ -651,6 +654,8 @@
     // minder (doe.wolven), en een hek houdt ze bij de schapen weg. gereedschap/wereld.html laadt de beesten niet.
     if (doe.wolven < 0 && T.jaagOpDeWolven) T.jaagOpDeWolven(D, -doe.wolven);
     if (doe.jacht && T.beginJacht) T.beginJacht(D, D.kalender ? D.kalender.dag : dag);
+    // Het zaaigraan bewaken (js/graanschuur.js): mannen bij de graanschuur, voor alles of een deel.
+    if (doe.bewaak && T.bewaakZaaigraan) T.bewaakZaaigraan(D, doe.bewaak);
     if (doe.hek && T.hekOmDeSchapen) T.hekOmDeSchapen(D);
     if (doe.voorval && L.wie) {
       const lijst = elk(doe.voorval);
@@ -708,6 +713,7 @@
     }
     if (doe.sterfkans) delen.push(`${doe.sterfkans}% kans op een dode`);
     if (doe.wolven < 0) delen.push(`${T.telwoord(-doe.wolven)} wolven minder`);
+    if (doe.bewaak && T.wachtersNodig) delen.push(`${T.telwoord(T.wachtersNodig(D))} mannen bij de graanschuur tot het zaaien${doe.bewaak < 1 ? ', de helft voor het dorp' : ''}; elke hongerdag kost vertrouwen`);
     if (doe.jacht) delen.push(`de mannen gaan met je mee naar de wolven (${T.telwoord(T.BEESTEN_INSTELLINGEN.jacht.dagen)} dagen)`);
     if (doe.hek) delen.push('een hek om de schapen');
     if (doe.feest && T.feestPrijs(doe.feest)) delen.push(T.feestPrijs(doe.feest));

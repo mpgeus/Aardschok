@@ -144,8 +144,9 @@
   // Kan hij werken? Iedereen, behalve de schout zelf, een kleuter, en wie een tijd weg is (p.weg: de heervaart,
   // js/heervaart.js). Het gezin van de schout werkt alleen als er niemand anders meer is (T.wijsWerkToe).
   // Wie zijn erf nog rooit, werkt nog nergens: daar is zijn gezin druk mee; en wie de plek rooit van een werkplaats die
-  // hij vroeg, ook niet (js/bos.js; werklijst vraag 110, e), of wat er staat waar zijn huis groter wordt (vraag 130).
-  const kanWerken = (p) => !p.schout && !p.weg && !(p.huis && p.huis.wachtOpRooien) && !(p.rooit && p.rooit.wachtOpRooien) && !(p.huis && p.huis.groeitNaRooien && !p.hoofd) && !!T.LEEFTIJDEN[p.leeftijd] && T.LEEFTIJDEN[p.leeftijd].werkt != null;
+  // hij vroeg, ook niet (js/bos.js; werklijst vraag 110, e), of wat er staat waar zijn huis groter wordt (vraag 130); en
+  // wie de graanschuur bewaakt evenmin (p.wacht, js/graanschuur.js; vraag 132).
+  const kanWerken = (p) => !p.schout && !p.weg && !p.wacht && !(p.huis && p.huis.wachtOpRooien) && !(p.rooit && p.rooit.wachtOpRooien) && !(p.huis && p.huis.groeitNaRooien && !p.hoofd) && !!T.LEEFTIJDEN[p.leeftijd] && T.LEEFTIJDEN[p.leeftijd].werkt != null;
 
   // De bewoner van een poppetje: een nieuw poppetje draagt hem mee (e.bewoner); de schout en de boeren
   // hebben hun wezen al van de kaart, en die zoeken we op.

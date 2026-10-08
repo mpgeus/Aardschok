@@ -877,6 +877,24 @@
         },
       },
     },
+    zaaigraanHonger: {
+      naam: '{wie}',
+      start: 'begin',
+      // De honger komt aan het zaaigraan in de graanschuur (js/graanschuur.js; werklijst vraag 132; Marcel, 8 okt: "bij
+      // honger grijpen mensen alles aan. Je moet mensen inzetten om het warenhuis te beschermen").
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Schout, de mensen hebben honger. Ze praten over de graanschuur. Eten ze het zaaigraan nu op, dan blijven de akkers in de lente leeg.' },
+          ],
+          keuzes: [
+            { zeg: 'Zet mannen bij de graanschuur. Het zaaigraan blijft liggen.', sluit: true, doe: { bewaak: 1, vertrouwen: -3 } },
+            { zeg: 'Geef ze de helft, en bewaak de rest.', sluit: true, doe: { bewaak: 0.5, vertrouwen: -1 } },
+            { zeg: 'Laat ze eten. Honger is erger.', sluit: true, doe: { tevreden: 2 } },
+          ],
+        },
+      },
+    },
     wolven: {
       naam: '{wie}',
       start: 'begin',
