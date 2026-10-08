@@ -143,14 +143,19 @@ test('het hout: vanaf drie maanden voor de winter, als het hem niet haalt, en da
   assert.notEqual(id(S), 'hout');
 });
 
-test('het eten: vanaf drie maanden voor de winter, als het hem niet haalt: een jager', () => {
+test('het eten: vanaf drie maanden voor de winter, als het hem niet haalt: wat er helpt (vraag 132, b)', () => {
   const S = gehucht();
   T.zetVoorraad(S.dorp, 'hout', 5000);
   T.zetVoorraad(S.dorp, 'graan', 0);
   opDag(S, dagVan('herfstmaand', 1) + 0.5);
   assert.equal(id(S), 'eten');
   const v = T.etenVoorDeWinter(S.dorp, S.kalender.dag);
-  assert.equal(raad(S).tekst, `Het eten haalt ${v.dagen} van de ${v.winter} dagen van de winter: een jager [B] schiet ${T.GEBOUWEN.jager.maakt.uit.vlees} vlees per dag. Tot het genoeg is, komt er geen gezin.`);
+  const hulp = T.watHelptAanEten(S.dorp).slice(0, 2);
+  assert.ok(hulp.length, 'er is iets wat helpt');
+  assert.equal(raad(S).tekst, `Het eten haalt ${v.dagen} van de ${v.winter} dagen van de winter. Wat helpt: ${T.opsomming(hulp.map((h) => h.zin))}. Tot het genoeg is, komt er geen gezin.`);
+  // Wat er kan: ontginnen, en op het ontworpen gehucht (zonder beesten) een jager.
+  const ids = T.watHelptAanEten(S.dorp).map((h) => h.id);
+  assert.ok(ids.includes('ontginnen') && ids.includes('jager'), ids.join(', '));
   T.zetVoorraad(S.dorp, 'graan', 5000);
   assert.notEqual(id(S), 'eten');
 });

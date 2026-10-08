@@ -173,3 +173,21 @@ test('het dorp vraagt een graanschuur zodra er zaaigraan apart ligt', () => {
     T.optiesTerug();
   }
 });
+
+test('wat helpt aan eten: een graanschuur als die er niet is, en zaaigraan kopen als het te weinig is (vraag 132, b)', () => {
+  const { D, schuur } = gehucht();
+  try {
+    const dag = winterdag(D);
+    D.kalender.dag = dag + 0.3;
+    D.gebouwen.splice(D.gebouwen.indexOf(schuur), 1);
+    T.zetVoorraad(D, 'graan', T.zaaigraanApart(D, dag) / 2);
+    const hulp = T.watHelptAanEten(D);
+    const ids = hulp.map((h) => h.id);
+    assert.ok(ids.includes('graanschuur'), ids.join(', '));
+    const kopen = hulp.find((h) => h.id === 'kopen');
+    assert.ok(kopen && /marskramer/.test(kopen.zin), 'zaaigraan kopen bij de marskramer');
+    assert.ok(hulp.filter((h) => h.bouw).every((h) => T.GEBOUWEN[h.bouw]), 'wat het dorp vraagt, is een gebouw');
+  } finally {
+    T.optiesTerug();
+  }
+});

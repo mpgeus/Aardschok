@@ -1672,6 +1672,11 @@ Nog open na deel 1 (vragen van Claude):
   weinig pakt het dorp een deel. Elke dag honger terwijl het graan bewaakt wordt, kost vertrouwen; bij het zaaien gaan ze
   naar huis. Zonder graanschuur eet het dorp het op zoals hierboven. De spelregel "Zaaigraan" op "Bewaken" (de
   standaard), "Pas bij nood" of "Als ander graan". De graanschuur leent nog de tekening van de blokhutschuur.
+- **Wat helpt aan eten** (8 okt; vraag 132, b; Marcel: "ze mogen advies geven op wat te doen. dit kan kopen, planten,
+  bakken etc zijn"): haalt het eten de winter niet, dan zegt de raad wat er nu kan en helpt, de eerste twee: land
+  ontginnen (een boer komt het vragen), een visser aan het water (niet in de winter), een jager als er herten zijn, een
+  graanschuur voor het zaaigraan, en zaaigraan kopen bij de marskramer als er te weinig is om te zaaien. Het dorp vraagt
+  het gebouw dat hij noemt; tot 8 okt vroeg het alleen een jager.
 - **Brandhout:** in wintermaand, louwmaand en sprokkelmaand (90 dagen) stookt elk huishouden van vier
   mensen 0,15 hout of turf per dag; het gehucht van 26 mensen zo'n 95 hout per winter. Het begint met
   40, en een houthakker hakt 2 per dag; de marskramer verkoopt geen hout.
