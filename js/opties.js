@@ -220,6 +220,17 @@
           uitleg: 'De huizen eten de vis die ze willen; wat over is, bederft. Zoals voor 8 okt.' },
       ],
     },
+    // Marcel, 8 okt (werklijst vraag 140): "Dagloners is een goed idee", en "mensen in het dorp".
+    {
+      id: 'dagloners', naam: 'Dagloners', standaard: 'aan',
+      uitleg: 'Of wie in het dorp geen werk heeft, in de oogst de boeren helpt binden en dragen.',
+      keuzes: [
+        { id: 'aan', naam: 'Wie geen werk heeft', zet: { 'SCHOVEN_INSTELLINGEN.dagloners': true },
+          uitleg: 'Ligt de oogst op het veld, dan helpt wie geen werk heeft de dichtste boerderij, tot drie per boerderij.' },
+        { id: 'uit', naam: 'Alleen het gezin', zet: { 'SCHOVEN_INSTELLINGEN.dagloners': false },
+          uitleg: 'Alleen de boer, zijn boerin en de grote kinderen halen de oogst binnen. Zoals voor 8 okt.' },
+      ],
+    },
     // Stap 2 van de inner, de verstopplekken (Marcel, 25 sep; spel.md, "Marcel koos voor stap 2").
     {
       id: 'sporen', naam: 'Sporen', standaard: 'alles',

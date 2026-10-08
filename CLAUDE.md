@@ -813,7 +813,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`a.schoven`), de boerin en de kinderen (en de boer als er niets meer te maaien is) binden het tot hokken
   (`T.bindSchoof`), die drogen `droogDagen`, en dan dragen ze de schoven naar de schuur (`T.neemSchoven`, `e.vracht`,
   `T.haalSchovenBinnen`; het werk is `haalBinnen` in `js/veldwerk.js`); een tegel is zwad, hokken of stoppels
-  (`T.akkerTegelStadium`). Het vangnet op 1 herfstmaand haalt ook de schoven binnen, en `T.graanOpHetVeld` telt mee voor
+  (`T.akkerTegelStadium`). **De dagloners** (Marcel: "Dagloners is een goed idee", en "mensen in het dorp"): elke nacht
+  kiest het dorp wie morgen helpt (`T.kiesDagloners` in `js/veldwerk.js`, `p.dagloner`): wie niet op een boerderij woont
+  en geen werk heeft (`T.kanWerken` in `js/bewoners.js`), bij de dichtste boerderij met de oogst op het veld, tot
+  `daglonersPerBoerderij`; de spelregel "Dagloners". Het vangnet op 1 herfstmaand haalt ook de schoven binnen, en `T.graanOpHetVeld` telt mee voor
   de winter. In de winter dorst de boer na het sprokkelen in de deur van zijn schuur (`dors`, alleen beeld). De getallen
   in `T.SCHOVEN_INSTELLINGEN`.
 - `js/veldwerk.js`: **de boeren aan het werk** (vraag 111, 5 okt; Marcel: "Ze moeten zaaien en op het veld bezig
@@ -1206,7 +1209,7 @@ en het bier (`(30)` zet eerst 30 bier). `Spel.debug.meter()` (of `F2`) zet de me
 wachten en op wie, en hoeveel wegen en velden de kaart onthoudt (vraag 119). `Spel.debug.praatjes()` zegt wie er waar
 staat te praten en tot hoe laat, en hoeveel er vrij zijn; `('nu')` laat de twee vrije bekenden die het dichtst bij elkaar
 staan nu beginnen (vraag 120). `Spel.debug.veldwerk()` zegt per boer wat hij vandaag op zijn land doet, wat hij nu doet
-en waar, hoe ver hij is en wie hem helpt (vraag 111). `Spel.debug.ontginnen()` zegt of het dorp graan tekortkomt, welk
+en waar, hoe ver hij is, wie hem helpt (vraag 111) en zijn dagloners (vraag 140). `Spel.debug.ontginnen()` zegt of het dorp graan tekortkomt, welk
 stuk heide elke boer zou vragen, hoeveel stukken er al af zijn en wat het volgende kost, wat er ontgonnen wordt en hoe
 ver; `('nu')` laat het verzoek nu komen, ook zonder tekort
 (vraag 107). `Spel.debug.bos()` zegt per houthakker zijn boom, hoeveel hout hij er al uit hakte, wat er binnen zijn bereik

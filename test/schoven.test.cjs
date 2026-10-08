@@ -99,3 +99,60 @@ test('wat nog op het veld staat als de oogsttijd om is, halen ze in één keer b
   assert.equal(a.schoven.size, 0);
   assert.ok(D.voorraad.graan >= 8, `${D.voorraad.graan}`);
 });
+
+// De dagloners (vraag 140; Marcel, 8 okt: "Dagloners is een goed idee", en "mensen in het dorp").
+test('in de oogst helpt wie in het dorp geen werk heeft de dichtste boerderij, tot drie per boerderij', () => {
+  const dag = dagIn('hooimaand', 15);
+  const S = gehucht(dag + 6 / 24);
+  const D = S.dorp;
+  const vrij = D.bewoners.mensen.filter((p) => p.huis && p.huis.soort !== 'boerderij' && !p.werk && p.wezen && !p.komt
+    && (p.leeftijd === 'volwassen' || p.leeftijd === 'jong') && T.kanWerken(p));
+  assert.ok(vrij.length > 0, 'er is wie geen werk heeft');
+  T.kiesDagloners(D, dag);
+  const dagloners = D.bewoners.mensen.filter((p) => p.dagloner);
+  assert.equal(dagloners.length, Math.min(vrij.length, 3 * D.gebouwen.filter((g) => g.soort === 'boerderij').length));
+  for (const p of dagloners) {
+    assert.equal(p.dagloner.soort, 'boerderij');
+    assert.ok(vrij.includes(p), `${p.naam} heeft geen werk en woont niet op een boerderij`);
+  }
+  const perBoerderij = new Map();
+  for (const p of dagloners) perBoerderij.set(p.dagloner, (perBoerderij.get(p.dagloner) || 0) + 1);
+  for (const n of perBoerderij.values()) assert.ok(n <= T.SCHOVEN_INSTELLINGEN.daglonersPerBoerderij);
+  // Buiten de oogst niemand, en met de spelregel uit ook niet.
+  T.kiesDagloners(D, dagIn('louwmaand', 10));
+  assert.equal(D.bewoners.mensen.filter((p) => p.dagloner).length, 0);
+  T.zetOptie('dagloners', 'uit');
+  try {
+    T.kiesDagloners(D, dag);
+    assert.equal(D.bewoners.mensen.filter((p) => p.dagloner).length, 0);
+  } finally {
+    T.optiesTerug();
+  }
+});
+
+test('een dagloner bindt en draagt de schoven van zijn boerderij naar de schuur', () => {
+  const dag = dagIn('hooimaand', 15);
+  const S = gehucht(dag + 6 / 24);
+  const D = S.dorp;
+  T.zetOptie('voorvallen', 'uit');
+  try {
+    T.kiesDagloners(D, dag);
+    const p = D.bewoners.mensen.find((q) => q.dagloner);
+    assert.ok(p, 'er is een dagloner');
+    // Het gezin houdt het maaien makkelijk bij; leg er zwad bij, zoals na een paar dagen maaien op een groot land.
+    const boer = D.bewoners.mensen.find((q) => q.huis === p.dagloner && q.wezen && q.wezen.werkAkkers && q.wezen.werkAkkers.length);
+    const a = boer.wezen.werkAkkers.find((v) => T.planVan(v) === 'akker');
+    a.schoven = new Map(T.akkerTegels(a).slice(0, 30).map((t) => [`${t.x},${t.y}`, { graan: 4, gebonden: null }]));
+    a.geoogst = new Set(a.schoven.keys());
+    const werk = new Set();
+    for (let u = 7; u <= 17; u++) {
+      totUur(S, dag, u);
+      const wt = p.wezen.werkt;
+      if (wt) werk.add(wt.soort);
+      if (p.wezen.draagt === 'schoof') werk.add('schoof');
+    }
+    assert.ok(werk.has('binden'), `${p.naam} bond: ${[...werk]}`);
+  } finally {
+    T.optiesTerug();
+  }
+});

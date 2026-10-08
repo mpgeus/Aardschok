@@ -648,7 +648,14 @@
   // akkers staan, of zolang hij nog schoven draagt.
   function oogstVan(D, e) {
     const p = T.bewonerVan(D, e);
-    if (!p || !p.huis || p.huis.soort !== 'boerderij' || p.weg) return null;
+    if (!p || !p.huis || p.weg) return null;
+    // Een dagloner helpt de boerderij die hem nam (T.kiesDagloners hieronder), zolang hij geen werk heeft.
+    if (p.huis.soort !== 'boerderij') {
+      const g = !p.werk && T.SCHOVEN_INSTELLINGEN.dagloners && p.dagloner;
+      const boer = g && D.gebouwen.includes(g) ? boerVanHuis(D, g) : null;
+      if (!boer || (!(e.vracht > 0) && !boer.werkAkkers.some((a) => a.schoven && a.schoven.size))) return null;
+      return { akkers: boer.werkAkkers, schuur: g };
+    }
     let boer = e.werkAkkers && e.werkAkkers.length ? e : null;
     if (boer) {
       if (e.maait || e.oogstDoel) return null;
@@ -661,6 +668,43 @@
     if (!(e.vracht > 0) && !boer.werkAkkers.some((a) => a.schoven && a.schoven.size)) return null;
     return { akkers: boer.werkAkkers, schuur: p.huis };
   }
+
+  // De dagloners (vraag 140; Marcel, 8 okt: "Dagloners is een goed idee", en "mensen in het dorp"): elke nacht kiest het
+  // dorp wie morgen bij welke boerderij helpt binden en dragen (`p.dagloner`). Een boerderij neemt er hulp bij als de oogst
+  // er rijp is of er schoven op het veld liggen, tot daglonersPerBoerderij (T.SCHOVEN_INSTELLINGEN); een dagloner is een
+  // volwassene of een grote zoon of dochter die niet op een boerderij woont, kan werken (T.kanWerken in js/bewoners.js) en
+  // geen werk heeft, en gaat naar de dichtste boerderij met plaats. Krijgt hij werk, dan gaat hij daarheen (oogstVan).
+  T.kiesDagloners = function (D, dag) {
+    const B = D.bewoners;
+    if (!B || !B.mensen) return;
+    for (const p of B.mensen) if (p.dagloner) p.dagloner = null;
+    const IN = T.SCHOVEN_INSTELLINGEN;
+    if (!IN.dagloners || !D.wereld) return;
+    const d = T.datumVanDag(dag);
+    const rijp = T.akkerStadium(d.maand, d.dagVanMaand) === 'rijp';
+    const boerderijen = (D.gebouwen || []).filter((g) => {
+      if (g.soort !== 'boerderij' || !g.klaar) return false;
+      const boer = boerVanHuis(D, g);
+      return boer && boer.werkAkkers.some((a) => (a.schoven && a.schoven.size) || (rijp && T.bestemmingVan(a) === 'akker'));
+    });
+    if (!boerderijen.length) return;
+    const plaats = new Map(boerderijen.map((g) => [g, IN.daglonersPerBoerderij]));
+    const deurVan = (g) => T.deurVan(D.wereld, g) || { x: g.x, y: g.y };
+    for (const p of B.mensen) {
+      if (!p.huis || p.huis.soort === 'boerderij' || p.werk || !p.wezen || p.komt) continue;
+      if (p.leeftijd !== 'volwassen' && p.leeftijd !== 'jong') continue;
+      if (!T.kanWerken(p)) continue;
+      const thuis = deurVan(p.huis);
+      let beste = null;
+      for (const g of boerderijen) {
+        if (!(plaats.get(g) > 0)) continue;
+        if (!beste || T.afstand(deurVan(g), thuis) < T.afstand(deurVan(beste), thuis)) beste = g;
+      }
+      if (!beste) break;
+      p.dagloner = beste;
+      plaats.set(beste, plaats.get(beste) - 1);
+    }
+  };
 
   // Binden en dragen (vraag 140): eerst wat droog in de hokken staat, naar de schuur (perVracht tegels in één keer), dan
   // het zwad binden tot hokken, de dichtste tegel eerst die niemand anders neemt. In de schuur is het graan binnen.

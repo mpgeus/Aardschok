@@ -1712,7 +1712,11 @@ Nog open na deel 1 (vragen van Claude):
 - **Het graan is pas binnen in de schuur** (8 okt; werklijst vraag 140; Marcel: "Alles telt pas als het binnen is"): wat
   de boer maait, blijft als zwad liggen; de boerin en de kinderen binden het tot hokken, die drie dagen drogen, en dan
   dragen ze de schoven naar de schuur. Pas dan is het in de voorraad. Wat er op 1 herfstmaand nog staat, halen ze in één
-  keer binnen. In de winter dorst de boer met een vlegel in de deur van zijn schuur.
+  keer binnen. In de winter dorst de boer met een vlegel in de deur van zijn schuur. **De dagloners** (8 okt; Marcel:
+  "Dagloners is een goed idee", en "mensen in het dorp, misschien dat er rondreizende mensen kunnen helpen als ze er
+  zijn"): ligt de oogst op het veld, dan helpt wie in het dorp geen werk heeft de dichtste boerderij binden en dragen, tot
+  drie per boerderij; wie werk krijgt, gaat daarheen. De spelregel "Dagloners" (Alleen het gezin: zoals ervoor).
+  Rondreizenden helpen later, als die er komen; loon komt met de economie (vraag 141).
 - **Het zaaigraan, pas bij nood** (1 okt, eenentwintigste sessie; werklijst vraag 81; Marcel: "zaaigraan wordt bij nood
   opgegeten, anders sterven er mensen"): van de oogst tot het zaaien houden de boeren het zaaigraan voor volgend jaar
   achter, zoveel als de akkers van volgend jaar vragen (`T.zaaigraanApart`). Het dorp eet het pas na het andere graan,

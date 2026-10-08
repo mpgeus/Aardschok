@@ -930,6 +930,9 @@
           const a = T.helpAnker(D, h);
           return a && a.x === e.tx && a.y === e.ty;
         }).map(naam).join(', '),
+        // De dagloners van zijn boerderij (vraag 140), met wat ze nu doen.
+        dagloners: (D.bewoners ? D.bewoners.mensen : []).filter((p) => p.dagloner && p.dagloner === (T.bewonerVan(D, e) || {}).huis && p.wezen)
+          .map((p) => `${p.naam}: ${p.wezen.draagt === 'schoof' ? 'draagt schoven naar de schuur' : nu(p.wezen)}`).join('; '),
       }));
       return { datum: `${datum.dagVanMaand} ${T.MAANDEN[datum.maand].naam}, ${T.uurTekst(D.kalender.dag)}`, boeren };
     },

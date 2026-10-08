@@ -148,6 +148,7 @@
   // wie de graanschuur bewaakt evenmin (p.wacht, js/graanschuur.js; vraag 132).
   // Wie in de wijnboerderij woont, plukt in wijnmaand (`g.plukt`, js/wijngaard.js) en werkt dan nergens anders.
   const kanWerken = (p) => !p.schout && !p.weg && !p.wacht && !(p.huis && p.huis.plukt) && !(p.huis && p.huis.wachtOpRooien) && !(p.rooit && p.rooit.wachtOpRooien) && !(p.huis && p.huis.groeitNaRooien && !p.hoofd) && !!T.LEEFTIJDEN[p.leeftijd] && T.LEEFTIJDEN[p.leeftijd].werkt != null;
+  T.kanWerken = kanWerken;
 
   // De bewoner van een poppetje: een nieuw poppetje draagt hem mee (e.bewoner); de schout en de boeren
   // hebben hun wezen al van de kaart, en die zoeken we op.

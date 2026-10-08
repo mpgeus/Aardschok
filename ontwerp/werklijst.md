@@ -6908,6 +6908,11 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     werk heeft, helpt de boeren binden en dragen. **Marcel (8 okt): "Dagloners is een goed idee"**, en op de vraag of het
     mensen uit het dorp zijn of seizoenarbeiders: **"mensen in het dorp, misschien dat er rondreizende mensen kunnen helpen
     als ze er zijn"**. Dus eerst wie in het dorp woont; rondreizenden later, als die er komen.
+    **Gebouwd (8 okt):** `T.kiesDagloners` in `js/veldwerk.js` (elke nacht, tot drie per boerderij, de spelregel
+    "Dagloners"), in dezelfde figuren als de boerin. Gemeten op land 5 (de oogst van hooimaand tot herfstmaand): op dag 50
+    ligt er nog 111 graan op het veld in plaats van 236, en is er 563 binnen in plaats van 435; aan het eind is het
+    hetzelfde (704). Wat opviel: het gezin houdt het binden vaak bij, en de dagloners praten dan; het maaien is wat
+    langzaam gaat, en dat doet alleen de boer.
     **Bezig in sessie `ccr-77327776-rqjldz`** (8 okt): de dagloners (Marcel: "Dagloners is een goed idee", "mensen in het
     dorp", en "We beginnen met de dagloners"): wie in de oogst geen werk heeft, helpt de boeren binden en dragen.
 

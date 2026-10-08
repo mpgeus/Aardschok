@@ -110,6 +110,11 @@
     droogDagen: 3,
     // Zoveel tegels schoven draagt hij in één keer naar de schuur.
     perVracht: 2,
+    // De dagloners (Marcel, 8 okt: "Dagloners is een goed idee", en "mensen in het dorp"): wie in het dorp geen werk heeft,
+    // helpt in de oogst een boerderij binden en dragen (T.kiesDagloners in js/veldwerk.js); de spelregel "Dagloners".
+    dagloners: true,
+    // Zoveel dagloners neemt een boerderij er hooguit bij.
+    daglonersPerBoerderij: 3,
   };
   const SIN = () => T.SCHOVEN_INSTELLINGEN;
 
@@ -996,6 +1001,7 @@
       T.zaaiNa(D); // wat niet gezaaid kon worden, zodra er graan is (hierboven)
     }
     T.tikSchovenDag(D);
+    T.kiesDagloners(D, dag + 1); // wie morgen bij welke boerderij helpt (js/veldwerk.js)
     if (nu === stadiumBegin('gemaaid')) {
       T.haalOogstBinnen(D);
       T.boerenKiezenVelden(D); // na de oogst kiezen de boeren wat hun velden volgend jaar worden
