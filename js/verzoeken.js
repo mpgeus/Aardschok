@@ -172,6 +172,16 @@
   }
   T.plekOmTeRooien = zoekPlekOmTeRooien; // ook voor test/rooien.test.cjs
 
+  // Kan hier een gebouw van deze soort komen (met `voet` zijn voet), op open grond of nadat wie het vraagt er rooit, zoals
+  // hierboven? Wie er nu staat, telt niet: die is morgen weg. Voor de plekken waar nog een put kan komen (T.kringGrond,
+  // js/wensen.js).
+  T.kanHierKomen = function (D, soort, x, y, voet) {
+    if (!T.waaromPastHetNiet(D, soort, x, y, null, null, false)) return true;
+    const kavel = T.kavelVan(D, x, y, voet);
+    const wat = T.watTeRooien(D, kavel);
+    return !!(wat.bomen || wat.struiken) && !T.waaromPastHetNiet(D, soort, x, y, null, kavel, false);
+  };
+
   // Een werkplaats komt bij het huis van wie hem vraagt; wat van iedereen is (een plek met een kring, en wat geen handen
   // heeft of het hele dorp dient: de markt, het wachthuis), bij het hart van het dorp.
   const vanIedereen = (soort) => heeftKring(soort) || !T.GEBOUWEN[soort].handen || T.WENSEN_INSTELLINGEN.kring[soort] === null || soort === 'wachthuis';

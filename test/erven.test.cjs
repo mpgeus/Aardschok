@@ -501,3 +501,35 @@ test('de grond van een erf: het erf zelf, en het looppad om de plek van zijn hui
   // Een tegel verder is het gewone grond.
   assert.equal(T.opDeGrondVanEenErf(D, Math.min(west, erf.x) - 1, erf.y + p.dy), false);
 });
+
+test('hoe dicht de erven ook liggen, elk huis houdt een plek voor een put (werklijst vraag 117, 2d)', () => {
+  // Zoals de bouwer van de speeltest: steeds het eerste erf dat mag, zo dicht mogelijk op elkaar. Zonder deze regel bleven
+  // er op het ontworpen gehucht drie hutten zonder plek voor een put over; op het eiland van 73425 bleef zo een huis twee
+  // jaar zonder put, en won het dorp nooit (Marcel, 8 okt: "A ja").
+  const S = gehucht();
+  const D = S.dorp;
+  const w = D.wereld;
+  const redenen = [];
+  for (let ronde = 0; ronde < 40; ronde++) {
+    let gelegd = false;
+    for (let y = 0; y < w.h && !gelegd; y += 2) {
+      for (let x = 0; x < w.b && !gelegd; x += 2) {
+        const r = T.waaromPastErfNiet(D, x, y);
+        if (r && /put/.test(r)) redenen.push(r);
+        if (!r) gelegd = T.plaatsGebouw(D, 'erf', x, y).gelukt;
+      }
+    }
+    if (!gelegd) break;
+    for (const h of T.kringGrond(D, 'put').zonder) assert.ok(h.plekken.length > 0, `${h.wie} heeft geen plek meer voor een put`);
+  }
+  assert.ok(D.erven.length >= 10, `zoveel erven: ${D.erven.length}`);
+  assert.ok(redenen.some((r) => r.startsWith('Dan kan de hut op een ander erf geen put meer krijgen')), 'een erf dat de laatste plek nam, mocht niet');
+});
+
+test('het huis van, de hut van: het lidwoord bij wie er woont (T.huisVan)', () => {
+  const S = gehucht();
+  const D = S.dorp;
+  assert.match(T.huisVan(D, D.gebouwen.find((g) => g.soort === 'huis')), /^het huis van /);
+  assert.match(T.huisVan(D, D.gebouwen.find((g) => g.soort === 'hut')), /^de hut van /);
+  assert.match(T.huisVan(D, D.gebouwen.find((g) => g.soort === 'boerderij')), /^de boerderij van /);
+});

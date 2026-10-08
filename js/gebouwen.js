@@ -644,7 +644,8 @@
   // Met `tekening` voor een andere tekening dan de volgende (een andere stand, js/bouwstijl.js).
   // `kavel` ({ x, y, b, h }, of null): een stuk dat eerst gerooid wordt (js/bos.js; werklijst vraag 110, e). Wat daarop te
   // rooien is (een boom, een stronk, een struik), telt dan als vrij, onder de voet en in het looppad.
-  T.waaromPastHetNiet = function (D, soort, x, y, tekening, kavel = null) {
+  // `wieErStaat` false: wie er nu staat, telt niet (die is morgen weg), voor wie vooruit kijkt (T.kanHierKomen).
+  T.waaromPastHetNiet = function (D, soort, x, y, tekening, kavel = null, wieErStaat = true) {
     if (T.GEBOUWEN[soort] && T.GEBOUWEN[soort].erf) return T.waaromPastErfNiet(D, x, y);
     // De markt op het plein (js/markt.js): zijn plek is het plein, waar je ook wijst.
     if (soort === 'markt' && T.marktOpHetPlein(D)) return T.waaromGeenMarktOpHetPlein(D);
@@ -666,7 +667,7 @@
     if (natuur) return natuur;
     const n = T.GEBOUWEN_INSTELLINGEN.looppad;
     if (!T.looppadOm(D, { x, y, b: voet.b, h: voet.h }, n, kavel)) return `Er moet een looppad omheen: ${n === 1 ? 'een tegel' : `${T.telwoord(n)} tegels`} vrij, zonder gebouw of boom.`;
-    return T.waaromNietOpIemand(D, { x, y, b: voet.b, h: voet.h });
+    return T.waaromNietOpIemand(D, { x, y, b: voet.b, h: voet.h }, undefined, wieErStaat);
   };
 
   // ---------------------------------------------------------------------------------------------
@@ -802,8 +803,8 @@
   }
 
   // Waarom hier niets mag komen, of null: er staat iemand, of het is de deur van een gebouw.
-  T.waaromNietOpIemand = function (D, r, behalve) {
-    if (T.wieStaatOp(D.wereld, r)) return 'Daar staat iemand.';
+  T.waaromNietOpIemand = function (D, r, behalve, wieErStaat = true) {
+    if (wieErStaat && T.wieStaatOp(D.wereld, r)) return 'Daar staat iemand.';
     if (T.deurOpRechthoek(D, r, behalve)) return 'Daar is een deur.';
     return null;
   };

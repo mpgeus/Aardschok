@@ -282,6 +282,49 @@
     };
   };
 
+  // Waar nog een plek met een kring kan komen, en wie hem nog mist (werklijst vraag 117, 2d; Marcel, 8 okt: "A ja"): de
+  // plekken op de kaart waar er een kan komen (T.kanHierKomen, js/verzoeken.js: op open grond of na het rooien), die er
+  // al staan, en de huizen die hem willen en er geen in hun kring hebben, elk met de plekken die het zouden halen; ook de
+  // hut die straks op een vrij erf komt. Geeft { straal, er, plekken, zonder: [{ r, wie, plekken }] }, of null zonder
+  // kring. Geen spelstaat, maar wat uit de kaart, de gebouwen en de erven volgt, dus één keer per stand van het dorp en
+  // per dag, zoals T.groeiGrond (js/behoeften.js): een erf vraagt het op elke tegel waar het zou kunnen komen
+  // (T.waaromPastErfNiet, js/erven.js).
+  const KRINGGROND = new WeakMap(); // dorp → { soort: { sleutel, grond } }
+  T.kringGrond = function (D, soort) {
+    const wens = Object.keys(T.WENSEN).find((id) => T.WENSEN[id].plek === soort);
+    const straal = IN().kring[soort];
+    if (!wens || !straal) return null;
+    let sleutel = `${T.kaartVersie(D.wereld)}:${Math.floor((D.kalender && D.kalender.dag) || 0)}:${(D.gebouwen || []).length}`;
+    for (const e of D.erven || []) sleutel += `:${e.x},${e.y}${e.hut ? 'h' : ''}`;
+    let perSoort = KRINGGROND.get(D);
+    if (!perSoort) KRINGGROND.set(D, (perSoort = {}));
+    const oud = perSoort[soort];
+    if (oud && oud.sleutel === sleutel) return oud.grond;
+    const voet = T.gebouwVoet(soort, T.volgendeTekening(D, soort)) || T.GEBOUWEN[soort].voet;
+    const w = D.wereld;
+    const plekken = [];
+    for (let y = 0; y < w.tegels.length; y++) {
+      for (let x = 0; x < w.tegels[0].length; x++) if (T.kanHierKomen(D, soort, x, y, voet)) plekken.push({ x, y, b: voet.b, h: voet.h });
+    }
+    const er = T.plekkenVan(D, soort);
+    const zonder = [];
+    const mist = (r, wie) => {
+      if (!er.some((p) => T.inDeKring(r, p, straal))) zonder.push({ r, wie, plekken: plekken.filter((p) => T.inDeKring(r, p, straal)) });
+    };
+    const tel = mensenPerHuis(D);
+    for (const g of D.gebouwen || []) {
+      const stand = T.standVan(g);
+      if (stand && tel.get(g) && T.wensenVanStand(stand).includes(wens)) mist(T.voetVanGebouw(g), T.huisVan(D, g));
+    }
+    const vanDeHut = Object.keys(T.STANDEN).find((s) => T.STANDEN[s].huis === 'hut');
+    if (vanDeHut && T.wensenVanStand(vanDeHut).includes(wens)) {
+      for (const e of T.vrijeErven(D)) if (e.plan) mist({ x: e.x + e.plan.dx, y: e.y + e.plan.dy, b: e.plan.b, h: e.plan.h }, 'de hut op een ander erf');
+    }
+    const grond = { straal, er, plekken, zonder };
+    perSoort[soort] = { sleutel, grond };
+    return grond;
+  };
+
   // Hetzelfde in een zin, voor bij de muis: "Binnen 30 tegels: 6 huizen die een kapel willen. Ze hebben er nu geen."
   T.kringTekst = function (D, soort, plek) {
     const k = T.watDeKringBereikt(D, soort, plek);

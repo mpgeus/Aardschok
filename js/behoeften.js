@@ -544,7 +544,8 @@
     const naam = T.GEBOUWEN[g.soort].naam;
     const mensen = ((D.bewoners && D.bewoners.mensen) || []).filter((p) => p.huis === g);
     const p = mensen.find((m) => !m.hoofd) || mensen[0];
-    return p ? `de ${naam} van ${T.naamVanBewoner(p)}` : `een ${naam}`;
+    const lidwoord = /huis$/.test(naam) ? 'het' : 'de'; // het huis, het stenen huis; de hut, de boerderij
+    return p ? `${lidwoord} ${naam} van ${T.naamVanBewoner(p)}` : `een ${naam}`;
   };
 
   // Waar de huizen nog heen kunnen groeien (werklijst vraag 130, d; Marcel, 6 okt: "Eens alle 3"): per huis dat kan
