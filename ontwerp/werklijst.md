@@ -5133,6 +5133,36 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Marcel (8 okt): "1 ja goed 2 a1 3 prima".** De eilanden zijn goed. a1: eerst je dorp op het eiland (stap 2), dan
     de kern (de proef van vraag 128, en stap 2 van de hoogte), en het hele eiland (de mist en een kaart die meegroeit)
     later. Stap 1 staat sinds 8 okt in `main`.
+    **Het plan voor stap 2, je dorp op het eiland** (Claude, 8 okt; wacht op Marcel). Een nieuw spel maakt het eiland uit
+    het nummer van het land, en je land van 100 bij 100 is het stuk om jouw plek; het spel blijft 100 bij 100, er hoeft
+    nog niets in stukken. Wat er nu is: de maker legt zelf de natuur (een bosrand langs een of twee kanten, bosjes,
+    vijvers, rotsen, de heide met de kooi, een rechte weg met een beek en een bruggetje) en het gehucht erin; de grond
+    kent vijf soorten tegels (gras, zandpad, kasseien, water en heide), en heide grenst alleen aan gras. Om de kaart
+    tekent het spel een rand van bos.
+    - **2a, de maker op het eiland:** het water (de zee, een meer, een rivier, met een brug waar de weg erover gaat), het
+      bos, de heide, de rotsen, de weg (die van het eiland, naar het kasteel en naar de buren) en de hoogte (als
+      "Hoogte" aan staat) komen van het eiland. Het gehucht legt de maker erop zoals nu (het plein, de schout, de
+      herberg, de hutten, de vijf boerderijen met hun akkers, de meent met de kooi, op de heide als die er ligt), en hij
+      keurt het zoals nu. De grond met de tegels die er zijn: de kampen en het woud gras, de heide heide, het strand, de
+      duinen en het zand zandpad, het veen en het broek gras, het water water (B). Achter de spelregel "Je gehucht", met
+      een derde keus: "Op het eiland" (de standaard blijft "Elk spel een ander"). Klaar als: drie eilanden in het spel,
+      door de keuring, en met de spelregel zoals nu alles byte voor byte gelijk.
+    - **2b, het eiland om je land:** de rand om de kaart toont het eiland (de zee, het bos, de heide, en met hoogte de
+      bergen in de verte), niet alleen bos. Die rand kennen je mensen; de rest is mist (stap 3).
+    - **2c, de proef:** de speeltest van vier jaar op drie eilanden, naast die op de landen van de maker. Groeien de
+      dorpen even ver, dan wordt "Op het eiland" de standaard.
+    Wat Claude erin ziet:
+    - *Een dorp dat er al was* (C): het gehucht bestaat al als het spel begint, dus is gerooid wat het nodig heeft (het
+      plein, de erven, de akkers), en staat het bos van het eiland eromheen. Zo kan het op elke plek, ook aan de bosrand.
+    - *De weg wijst*: de weg door je land is die naar het kasteel, dus komen de heer, de inner en de soldaten van die
+      kant, en de marskramer van de stad; je ziet waar ze wonen, ook al ligt het nog in de mist.
+    - *Elke plek begint anders*: aan zee vis, aan een rivier een molen, op de heide schapen en weinig hout, aan de
+      bosrand hout en wolven. De speeltest zegt of dat eerlijk blijft.
+    - *Heide grenst alleen aan gras*: op het eiland ligt heide ook naast zand en water; tot er overgangen zijn, legt de
+      maker er een strook gras tussen.
+    Vragen: **A**, deze drie stukken, achter de spelregel? **B**, nieuwe grondtegels voor de zee, het strand, het veen
+    en het broek (en de overgangen van de heide): nu in 2a, of eerst met wat er is en later? **C**, het gehucht als een
+    dorp dat er al was (gerooid wat het nodig heeft), of alleen op open land?
 118. **Inwoners met stats, zoals in Dwarf Fortress** (Marcel, 4 okt, zesentwintigste sessie: "Inwoners krijgen ook
     'stats' hp, skills, eigenschappen, etc ala dwarf fortress"; plan van Claude; open).
     **Wat er al is:** elke bewoner heeft een naam, een leeftijd, een huis, een gezin en werk (`js/bewoners.js`); de vijf
