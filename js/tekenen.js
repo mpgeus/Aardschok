@@ -982,19 +982,14 @@
   // Waar de kaart aan open land grenst, loopt de grond door: elke hoek buiten de kaart neemt de soort van de dichtstbijzijnde
   // hoek op de rand over (zo lopen de weg en de beek rechtdoor de kaart uit), en ring na ring wordt het donkerder en
   // dunner, gedithered zoals het bos (ontwerp/beeld.md), tot het donker van de achtergrond. Onder het bos blijft het donker.
+  // Op het eiland loopt het eiland zelf door (vraag 117, 2b): de grond die het er heeft (T.randVanHetEiland in
+  // js/maker.js), ook onder het bos.
   const BUITENGROND_DIEP = 10; // zoveel ringen ver
   const BUITENGROND_VOL = 4; // tot hier ligt elke tegel er
   function randHoek(w, vx, vy) {
-    const x = Math.max(0, Math.min(w.b, vx));
-    const y = Math.max(0, Math.min(w.h, vy));
-    const tx = Math.min(x, w.b - 1);
-    const ty = Math.min(y, w.h - 1);
-    const g = w.grond && w.grond[ty] && w.grond[ty][tx];
-    const hoeken = g && T.sprites.grondHoeken(g.vel, g.id);
-    if (!hoeken) return 'gras';
-    const dx = x - tx;
-    const dy = y - ty;
-    return hoeken[dx === 0 ? (dy === 0 ? 0 : 3) : dy === 0 ? 1 : 2]; // boven, rechts, onder, links
+    const eiland = w.eiland && T.randVanHetEiland(w).hoek(vx, vy);
+    if (eiland) return eiland;
+    return T.sprites.grondHoekOp(w, Math.max(0, Math.min(w.b, vx)), Math.max(0, Math.min(w.h, vy))) || 'gras';
   }
   function tekenBuitenGrond(c, S, g) {
     const w = S.wereld;
@@ -1008,7 +1003,7 @@
         const r = bosrandRing(w, x, y);
         if (r > BUITENGROND_DIEP) continue;
         const dicht = r <= BUITENGROND_VOL ? 1 : 1 - (r - BUITENGROND_VOL) / (BUITENGROND_DIEP - BUITENGROND_VOL + 1);
-        if (hasj(x, y, zaad) >= dicht * (1 - bosBuiten(w, x, y))) continue;
+        if (hasj(x, y, zaad) >= dicht * (1 - (w.eiland ? 0 : bosBuiten(w, x, y)))) continue;
         const hoeken = [randHoek(w, x, y), randHoek(w, x + 1, y), randHoek(w, x + 1, y + 1), randHoek(w, x, y + 1)];
         const deel = T.sprites.grondMetHoeken(vel, hoeken, x, y) || T.sprites.grasTegel(x, y);
         if (!deel) continue;
@@ -1852,6 +1847,24 @@
     return r;
   }
 
+  // De tekeningen van een boom of een rots, op naam, in tegels/bomen.png en tegels/begroeiing.png: voor wat het eiland
+  // om de kaart heeft (bosrandOp).
+  const tekeningenPerNaam = {};
+  function tekeningenVan(naam) {
+    if (!tekeningenPerNaam[naam]) {
+      const r = [];
+      for (const velNaam of ['bomen', 'begroeiing']) {
+        const vel = T.TEGELS && T.TEGELS[velNaam];
+        if (!vel) continue;
+        vel.tiles.forEach((t, id) => {
+          if (t && t.naam === naam) r.push({ vel: velNaam, id });
+        });
+      }
+      tekeningenPerNaam[naam] = r;
+    }
+    return tekeningenPerNaam[naam];
+  }
+
   // Hoeveel ringen deze tegel buiten de kaart ligt (1 = er direct tegenaan, schuin telt ook als
   // één ring — dezelfde maat als T.afstand, maar dan tot de rechthoek van de kaart in plaats van
   // tot een punt). Binnen de kaart, of op de rand zelf, is dit 0.
@@ -1896,8 +1909,16 @@
     let v = null;
     if (r >= 1 && r <= BOSRAND_DIEP) {
       const zaad = bosrandZaad(w);
-      // alleen aan de kant van het bos; in het open land erbuiten hier en daar een boom (Marcel, 4 okt)
-      if (hasj(x, y, zaad) < bosrandDichtheid(r) * Math.max(BOSRAND_OPEN, bosBuiten(w, x, y))) {
+      if (w.eiland) {
+        // op het eiland: wat het eiland er heeft, een boom of een rots (js/maker.js, vraag 117, 2b), naar buiten dunner
+        const soort = T.randVanHetEiland(w).voorwerp(x, y);
+        const keuzes = soort ? tekeningenVan(soort) : [];
+        if (keuzes.length && hasj(x, y, zaad) < bosrandDichtheid(r)) {
+          const keuze = keuzes[Math.floor(hasj(x, y, zaad + 1) * keuzes.length)];
+          v = { soort, vel: keuze.vel, id: keuze.id, x, y, beslaat: [1, 1], r, bosrand: true };
+        }
+      } else if (hasj(x, y, zaad) < bosrandDichtheid(r) * Math.max(BOSRAND_OPEN, bosBuiten(w, x, y))) {
+        // alleen aan de kant van het bos; in het open land erbuiten hier en daar een boom (Marcel, 4 okt)
         const metHerfst = !BOSRAND_GEBIEDEN_ZONDER_HERFST.includes(w.gebied);
         const soort = metHerfst ? 'met' : 'zonder';
         if (!bosrandVellenPerSoort[soort]) bosrandVellenPerSoort[soort] = bosrandVellenOpbouwen(metHerfst);

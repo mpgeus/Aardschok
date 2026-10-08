@@ -318,7 +318,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   om jouw dorp:
   `T.landVanEiland(E, plek, b, h)` geeft de maker de streek per tegel en per hoekpunt, de bomen en waar de wegen het land
   verlaten, en `T.eilandVan(zaad)` onthoudt het laatste eiland. De maker (`js/maker.js`, met `land`) legt het gehucht erop
-  als een dorp dat er al was; de kaart onthoudt waar hij ligt (`w.eiland`). De plaat:
+  als een dorp dat er al was; de kaart onthoudt waar hij ligt (`w.eiland`). **Het eiland om je land** (stap 2b): buiten
+  de kaart loopt het eiland door, met de regels van de maker (`T.randVanHetEiland(w)` in `js/maker.js`, één keer per kaart,
+  niet in `Spel.S`; `T.grondVanStreek`), en `js/tekenen.js` tekent het als het land en het bos om de kaart. De plaat:
   `node gereedschap/pixelart/eiland-plaat.cjs [nummer] [--groot]` (in `gereedschap/pixelart/uit/eiland/`). De getallen in
   `T.EILAND_INSTELLINGEN`.
 - `js/sprites.js`: de pixel art uit `beelden/`. `T.sprites.figuur/tegel/muur/voorwerp` wijzen

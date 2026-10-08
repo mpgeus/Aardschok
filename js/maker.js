@@ -37,6 +37,9 @@
     // (tegels water) en kost zoveel stappen extra, zodat een weg liever om het water heen loopt.
     eilandKern: 16,
     eilandBrug: { lang: 7, kost: 12 },
+    // Zo ver om de kaart weet de rand wat het eiland er heeft (tegels; T.randVanHetEiland): zo ver tekent js/tekenen.js
+    // het bos om de kaart.
+    eilandRand: 16,
     // Uit zoveel zaden kiest een nieuw spel zijn land: een getal van vijf cijfers, om te onthouden.
     zaden: 99999,
     // Hoe groot het land is (vraag 112, b; Marcel, 3 okt: "Alles moet denk ik ook wijder opgezet worden"). Het
@@ -234,6 +237,22 @@
     return st;
   }
 
+  // De grond op een hoekpunt van het eiland, uit zijn streek (js/eiland.js): het water ('w') is de zee, een meer of een
+  // rivier, de heide heide ('h'), het strand, de duinen en het zand zandpad ('z'), en de rest gras ('g'): het veen en het
+  // broek ook, tot er tegels voor zijn (Marcel, 8 okt: "B later"). De maker legt zo de grond van je land (stap 11), en
+  // de rand om de kaart die van het eiland eromheen (T.randVanHetEiland).
+  const NAT_STREKEN = ['zee', 'meer', 'rivier'];
+  T.grondVanStreek = (s) => (NAT_STREKEN.includes(s) ? 'w' : s === 'heide' ? 'h' : s === 'strand' || s === 'duinen' || s === 'zand' ? 'z' : 'g');
+
+  // Welke boom er staat waar het eiland een boom heeft: in het broek vaak een wilg, hier en daar een dode boom, en verder
+  // dennen, eiken en berken. `toeval` geeft een getal van 0 tot 1: de maker loot, de rand om de kaart neemt een vaste
+  // keus per tegel.
+  const BOSBOMEN = ['den', 'eik', 'berk', 'den', 'eik'];
+  function boomOpEiland(streek, toeval) {
+    if (streek === 'broek' && toeval() < 0.5) return 'wilg';
+    return toeval() < 0.03 ? 'dodeBoom' : BOSBOMEN[Math.floor(toeval() * BOSBOMEN.length)];
+  }
+
   // Eén poging: een plan, of null met de reden waarom het niet deugde. Met `land` (T.landVanEiland, js/eiland.js) legt
   // hij het gehucht op het land van het eiland: zie bij elke stap "Op het eiland".
   function leg(zaad, poging, land) {
@@ -417,8 +436,7 @@
       return Math.abs(a - beekMidden(c)) <= BEEK_HALF;
     };
     // Op het eiland is een hoekpunt nat waar het eiland water is: de zee, een meer of een rivier.
-    const NAT_STREKEN = ['zee', 'meer', 'rivier'];
-    const natOpEiland = (x, y) => NAT_STREKEN.includes(land.hoek(x, y));
+    const natOpEiland = (x, y) => T.grondVanStreek(land.hoek(x, y)) === 'w';
     // De vijvers (vraag 112, c) komen later, als het dorp ligt (stap 9b), maar zijn water zoals de beek: een golvende
     // ellips om hun midden.
     const vijvers = [];
@@ -1135,13 +1153,9 @@
       const rand = x === m.x || x === m.x + m.b || y === m.y || y === m.y + m.h;
       return !rand || r() < 0.5;
     };
-    // Op het eiland: de heide is heide, het strand, de duinen en het zand zijn zandpad, en de rest is gras (het veen en
-    // het broek ook, tot er tegels voor zijn; Marcel, 8 okt: "B later").
-    const grondOpEiland = (x, y) => {
-      const s = land.hoek(x, y);
-      if (Math.hypot(x - cx, y - cy) < I.eilandKern) return 'g'; // de kern van het dorp: weiden en tuinen
-      return s === 'heide' ? 'h' : s === 'strand' || s === 'duinen' || s === 'zand' ? 'z' : 'g';
-    };
+    // Op het eiland: de grond van het eiland (T.grondVanStreek; het water heeft `nat` hierboven al), en in de kern van het
+    // dorp gras: weiden en tuinen.
+    const grondOpEiland = (x, y) => (Math.hypot(x - cx, y - cy) < I.eilandKern ? 'g' : T.grondVanStreek(land.hoek(x, y)));
     const hoeken = [];
     for (let y = 0; y <= H; y++) {
       const rij = [];
@@ -1418,14 +1432,13 @@
     }
     // Het bos: bomen in de zone langs de randen, dicht aan de rand van de kaart, dunner naar het dorp toe, en met open
     // plekken waar de ruis hoog is. Hier en daar een dode boom.
-    const BOSBOMEN = ['den', 'eik', 'berk', 'den', 'eik'];
     const boom = () => (r() < 0.03 ? 'dodeBoom' : kies(BOSBOMEN));
     for (let y = 0; y < H; y++) {
       for (let x = 0; x < B; x++) {
         if (op(x, y) !== BOS || !vrijVoor(x, y) || !opGras(x, y)) continue;
         if (land) {
-          // op het eiland: een boom waar het eiland er een heeft, in het broek vaak een wilg
-          if (land.boom(x, y)) leg1(land.streek(x, y) === 'broek' && r() < 0.5 ? 'wilg' : boom(), x, y);
+          // op het eiland: een boom waar het eiland er een heeft
+          if (land.boom(x, y)) leg1(boomOpEiland(land.streek(x, y), r), x, y);
           continue;
         }
         const f = bosDeel(x, y);
@@ -1790,6 +1803,106 @@
     }
     throw new Error(`geen gehucht op het eiland van ${zaad}: ${waarom.join('; ')}`);
   }
+
+  // ---- Het eiland om je land (vraag 117, stap 2b) ----
+  // Buiten de kaart loopt het eiland door (Marcel, 8 okt: "A ja"), zoals de maker het binnen legt (stap 11 en 12): het
+  // water is water, wat ernaast ligt gras, de weg van het eiland zandpad, en verder de grond van zijn streek
+  // (T.grondVanStreek), met de heide alleen naast gras; een boom waar het eiland er een heeft, en de rotsen van het
+  // eiland, allebei op gras. Aan de naad past de rand zich aan de kaart aan: wat er niet naast kan liggen (water naast
+  // haar zandpad, zandpad naast haar heide), wordt gras, want voor zo'n paar heeft tegels/rand.tsx geen tegel. Alleen om
+  // te tekenen (js/tekenen.js: het land en het bos om de kaart); het komt uit het nummer van het eiland, dus het staat
+  // niet in Spel.S, en het wordt één keer per kaart uitgerekend.
+  const RAND = new WeakMap();
+  const LETTER = { gras: 'g', water: 'w', zandpad: 'z', heide: 'h', kasseien: 'k' };
+  const naastElkaar = (a, b) => a === b || a === 'g' || b === 'g'; // voor zo'n paar is er een tegel
+  T.randVanHetEiland = function (w) {
+    let rand = RAND.get(w);
+    if (rand) return rand;
+    const D = IN().eilandRand;
+    const B = w.b;
+    const H = w.h;
+    const nb = B + 2 * D; // het stuk eiland in tegels, vanaf (-D, -D)
+    const nh = H + 2 * D;
+    const n = nb + 1; // en in hoekpunten
+    const E = T.eilandVan(w.eiland.zaad);
+    const tegels = T.eilandStuk(E, w.eiland.x0 - D, w.eiland.y0 - D, nb, nh);
+    const punten = T.eilandStuk(E, w.eiland.x0 - D - 0.5, w.eiland.y0 - D - 0.5, n, nh + 1);
+    const hi = (vx, vy) => (vy + D) * n + vx + D; // hoekpunt (vx, vy), met (0, 0) de hoek van de kaart
+    const opKaart = (vx, vy) => vx >= 0 && vy >= 0 && vx <= B && vy <= H;
+    const inStuk = (vx, vy) => vx >= -D && vy >= -D && vx <= B + D && vy <= H + D;
+    const hoek = new Array(n * (nh + 1)).fill(null);
+    // Ligt er naast hoekpunt (vx, vy) iets waarvoor `test` ja zegt (met of die buur op de kaart ligt)?
+    const eenBuur = (vx, vy, test) => {
+      for (let dy = -1; dy <= 1; dy++) {
+        for (let dx = -1; dx <= 1; dx++) {
+          if ((!dx && !dy) || !inStuk(vx + dx, vy + dy)) continue;
+          const l = hoek[hi(vx + dx, vy + dy)];
+          if (l && test(l, opKaart(vx + dx, vy + dy))) return true;
+        }
+      }
+      return false;
+    };
+    // de rand van de kaart zelf: wat er ligt (alleen die raakt de hoekpunten erbuiten)
+    const vanKaart = (vx, vy) => {
+      hoek[hi(vx, vy)] = LETTER[T.sprites.grondHoekOp(w, vx, vy)] || 'g';
+    };
+    for (let vx = 0; vx <= B; vx++) {
+      vanKaart(vx, 0);
+      vanKaart(vx, H);
+    }
+    for (let vy = 0; vy <= H; vy++) {
+      vanKaart(0, vy);
+      vanKaart(B, vy);
+    }
+    const buiten = []; // de hoekpunten om de kaart
+    for (let vy = -D; vy <= H + D; vy++) for (let vx = -D; vx <= B + D; vx++) if (!opKaart(vx, vy)) buiten.push(hi(vx, vy), vx, vy);
+    const elk = (f) => {
+      for (let k = 0; k < buiten.length; k += 3) f(buiten[k], buiten[k + 1], buiten[k + 2]);
+    };
+    const streek = (i) => T.EILAND_STREKEN[punten.streek[i]];
+    // eerst het water; wat ernaast ligt, is gras; dan de weg, en de grond van de streek
+    elk((i) => {
+      if (T.grondVanStreek(streek(i)) === 'w') hoek[i] = 'w';
+    });
+    elk((i, vx, vy) => {
+      if (hoek[i] !== 'w') hoek[i] = eenBuur(vx, vy, (l) => l === 'w') ? 'g' : punten.weg[i] ? 'z' : T.grondVanStreek(streek(i));
+    });
+    // de heide grenst alleen aan gras (stap 11)
+    elk((i, vx, vy) => {
+      if (hoek[i] === 'h' && eenBuur(vx, vy, (l) => l === 'z' || l === 'w')) hoek[i] = 'g';
+    });
+    // de naad: wat niet naast de rand van de kaart kan liggen, wordt gras
+    elk((i, vx, vy) => {
+      const l = hoek[i];
+      if (l !== 'g' && eenBuur(vx, vy, (m, kaart) => kaart && !naastElkaar(l, m))) hoek[i] = 'g';
+    });
+    // de bomen en de rotsen, op gras (stap 12)
+    const ding = new Array(nb * nh).fill(null);
+    const opGras = (x, y) => [hi(x, y), hi(x + 1, y), hi(x + 1, y + 1), hi(x, y + 1)].every((i) => hoek[i] === 'g');
+    for (let y = -D; y < H + D; y++) {
+      for (let x = -D; x < B + D; x++) {
+        if ((x >= 0 && y >= 0 && x < B && y < H) || !opGras(x, y)) continue;
+        const t = (y + D) * nb + x + D;
+        const s = T.EILAND_STREKEN[tegels.streek[t]];
+        let k = 0;
+        if (tegels.boom[t]) ding[t] = boomOpEiland(s, () => hash(x, y, 801 + k++));
+        else if (s === 'rots') {
+          const lot = hash(x, y, 811);
+          ding[t] = lot < 0.3 ? 'rots' : lot < 0.55 ? 'kleineRots' : null;
+        }
+      }
+    }
+    rand = {
+      diep: D,
+      // de grond op hoekpunt (vx, vy) om de kaart ('gras', 'water', 'zandpad' of 'heide'); op de kaart, en verder dan
+      // `diep`, null
+      hoek: (vx, vy) => (opKaart(vx, vy) || !inStuk(vx, vy) ? null : GRONDSOORT[hoek[hi(vx, vy)]]),
+      // wat er op tegel (x, y) om de kaart staat: een boom of een rots (de naam van zijn tekening), of null
+      voorwerp: (x, y) => (x < -D || y < -D || x >= B + D || y >= H + D ? null : ding[(y + D) * nb + x + D]),
+    };
+    RAND.set(w, rand);
+    return rand;
+  };
 
   // Een gemaakt gehucht als wereld, zoals T.gebied (js/gebied.js) een kaart uit kaarten/ inleest. `maker` zegt uit welk
   // zaad hij komt.

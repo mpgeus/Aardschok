@@ -252,3 +252,52 @@ test('een nieuw spel op het eiland: je dorp op jouw plek, 26 mensen, en bewaren 
     assert.equal(T.bewaarSpel(S2, { nu: 1790000000000 }), tekst);
   });
 });
+
+test('het eiland om je land: buiten de kaart de grond en de bomen van het eiland, en aan de naad past elke tegel (vraag 117, 2b)', () => {
+  const echt = console.warn;
+  console.warn = () => {};
+  try {
+    for (const zaad of [1, 5]) {
+      const w = T.laadGemaaktGehucht(zaad);
+      const R = T.randVanHetEiland(w);
+      assert.equal(T.randVanHetEiland(w), R, 'één keer per kaart');
+      const D = R.diep;
+      const n = w.b + 2 * D + 1;
+      const punten = T.eilandStuk(T.eilandVan(zaad), w.eiland.x0 - D - 0.5, w.eiland.y0 - D - 0.5, n, w.h + 2 * D + 1);
+      const streek = (vx, vy) => T.EILAND_STREKEN[punten.streek[(vy + D) * n + vx + D]];
+      const ring = (vx, vy) => Math.max(-vx, -vy, vx - w.b, vy - w.h);
+      const hoek = (vx, vy) => R.hoek(vx, vy) || T.sprites.grondHoekOp(w, vx, vy);
+      let water = 0;
+      for (let vy = -D; vy <= w.h + D; vy++) {
+        for (let vx = -D; vx <= w.b + D; vx++) {
+          const opKaart = ring(vx, vy) <= 0;
+          assert.equal(R.hoek(vx, vy) === null, opKaart, `land ${zaad}: (${vx}, ${vy}) op de kaart heeft de rand niets`);
+          if (opKaart) continue;
+          const nat = T.grondVanStreek(streek(vx, vy)) === 'w';
+          if (R.hoek(vx, vy) === 'water') water++;
+          // water waar het eiland water is, en nergens anders (op de naad mag het gras worden)
+          if (R.hoek(vx, vy) === 'water') assert.ok(nat, `land ${zaad}: water op (${vx}, ${vy}) waar het eiland droog is`);
+          else if (ring(vx, vy) >= 2) assert.ok(!nat, `land ${zaad}: geen water op (${vx}, ${vy}) waar het eiland water is`);
+        }
+      }
+      let dingen = 0;
+      for (let y = -D; y < w.h + D; y++) {
+        for (let x = -D; x < w.b + D; x++) {
+          if (x >= 0 && y >= 0 && x < w.b && y < w.h) continue;
+          // elke tegel om de kaart heeft een tegel in tegels/rand.tsx: één soort grond, of gras met één andere
+          const soorten = [...new Set([hoek(x, y), hoek(x + 1, y), hoek(x + 1, y + 1), hoek(x, y + 1)])];
+          assert.ok(soorten.length === 1 || (soorten.length === 2 && soorten.includes('gras')), `land ${zaad}: tegel (${x}, ${y}) is ${soorten}`);
+          // een boom of een rots staat op gras
+          if (R.voorwerp(x, y)) {
+            dingen++;
+            assert.deepEqual(soorten, ['gras'], `land ${zaad}: ${R.voorwerp(x, y)} op (${x}, ${y}) staat op ${soorten}`);
+          }
+        }
+      }
+      if (zaad === 1) assert.ok(water > 2000, `land 1 ligt aan zee (${water} hoekpunten water om de kaart)`);
+      if (zaad === 5) assert.ok(dingen > 2000, `land 5 ligt in het bos (${dingen} bomen en rotsen om de kaart)`);
+    }
+  } finally {
+    console.warn = echt;
+  }
+});

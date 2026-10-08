@@ -48,7 +48,16 @@ de heide heide, het strand, de duinen en het zand zandpad, het water water, en d
 het strand, het veen en het broek komen later). Een kaart van het eiland onthoudt waar hij ligt (`w.eiland`: het nummer en
 de hoek van je land op het eiland). Lukt het gehucht op jouw plek niet, dan op die van een ander dorp.
 
-**Wat er nog komt:** 2b, de rand om de kaart toont het eiland (en de hoogte komt van het eiland), 2c de speeltest; en
+**Het eiland om je land (stap 2b, 8 okt; Marcel: "A ja"):** buiten de kaart loopt het eiland door: de zee, het strand,
+de heide, het bos en de rotsen die het eiland daar heeft, en de weg naar de buren, ring na ring donkerder tot het donker
+(zoals het bos om een land van de maker, `js/tekenen.js`). `T.randVanHetEiland(w)` (`js/maker.js`) rekent het één keer
+per kaart uit, 16 tegels ver, met de regels waarmee de maker binnen de grond en de bomen legt (`T.grondVanStreek`: water
+wint, wat ernaast ligt is gras, de weg zandpad, de heide alleen naast gras; een boom waar het eiland er een heeft, op
+gras); aan de naad past de rand zich aan de kaart aan, zodat elke tegel een tegel heeft. Het staat niet in `Spel.S`: het
+komt uit het nummer. Onder het bos ligt op het eiland gras, net als binnen, zodat er geen naad is; om een land van de maker
+blijft het zoals het was.
+
+**Wat er nog komt:** 2b, de hoogte van het eiland (met "Hoogte" op "Heuvels"), 2c de speeltest; en
 daarna de mist en een kaart die meegroeit (de stukken, opslaan wat veranderde, HPA\*).
 
 ## Werken in Tiled: zo teken je een kaart (21 sep 2026)

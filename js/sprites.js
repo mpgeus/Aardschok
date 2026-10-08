@@ -584,6 +584,16 @@
     return hoeken;
   };
 
+  // De grond van de kaart op hoekpunt (vx, vy), van 0 tot w.b en w.h: uit de tegel die eraan ligt; null zonder grond.
+  S.grondHoekOp = function (w, vx, vy) {
+    const tx = Math.min(vx, w.b - 1);
+    const ty = Math.min(vy, w.h - 1);
+    const g = w.grond && w.grond[ty] && w.grond[ty][tx];
+    const hoeken = g && S.grondHoeken(g.vel, g.id);
+    if (!hoeken) return null;
+    return hoeken[vx === tx ? (vy === ty ? 0 : 3) : vy === ty ? 1 : 2]; // boven, rechts, onder, links
+  };
+
   S.grondMetHoeken = function (velNaam, hoeken, x, y) {
     let index = tegelsMetHoeken.get(velNaam);
     if (!index) {

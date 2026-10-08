@@ -5213,6 +5213,11 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     blijft vlak waar het staat; "Hoogte" blijft standaard op "Vlak" tot lopen, zien en bouwen de hoogte kennen (stap 2
     van vraag 121). Tegelijk 2c op de achtergrond, in een losse kopie van `main`: de speeltest van vier jaar op drie
     eilanden, naast die op de landen van de maker, zodat we weten of een dorp er even ver groeit vóór de rand mooi is.
+    **De rand van 2b is gebouwd** (8 okt): buiten de kaart loopt het eiland door (`T.randVanHetEiland` in `js/maker.js`,
+    getekend door `js/tekenen.js`): de zee, het strand, de heide, het bos en de rotsen van het eiland, en de weg naar de
+    buren, met de regels waarmee de maker binnen de grond en de bomen legt; aan de naad past elke tegel, en onder het bos
+    ligt gras zoals binnen, zodat er geen naad te zien is. Om een land van de maker blijft de rand zoals hij was. Wat
+    opviel: de oude rand zette aan een kust losse bomen in de zee. Nog in 2b: de hoogte van het eiland.
 118. **Inwoners met stats, zoals in Dwarf Fortress** (Marcel, 4 okt, zesentwintigste sessie: "Inwoners krijgen ook
     'stats' hp, skills, eigenschappen, etc ala dwarf fortress"; plan van Claude; open).
     **Wat er al is:** elke bewoner heeft een naam, een leeftijd, een huis, een gezin en werk (`js/bewoners.js`); de vijf
