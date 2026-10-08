@@ -173,6 +173,11 @@ en op vlees of vis in de winter (zout). Het binnenhalen zelf kost geen graan: op
 alleen later; tegen het eind van de oogst staat er zo'n 230 graan op het veld, dat het vangnet binnenhaalt. De
 verschillen tussen de spellen komen ook door de wisselende dagen van de verzoeken (een ander jaar met hetzelfde zaad).
 
+**Wat Marcel koos (8 okt), twee getallen uit de werkbank:** een schaap geeft 16 wol in plaats van 8 ("Kunnen we
+proberen"), en een werkplaats die iets omzet maakt tot er 60 ligt in plaats van 30 ("We kunnen die opvoeren naar 60"):
+de molen en de bakkerij hielden zo'n 65 dagen brood achter de hand, en de winter vraagt er ruim 100. Ook de herberg
+brouwt nu tot 60. Nog niet gespeeld.
+
 ## De speeltest van 8 okt, nacht: vis vult een maag (werklijst, vraag 132)
 
 Op `7e1b786` (branch `ccr-77327776-rqjldz`), `npm run speeltest -- bouwer sluw --maker --jaren 4`; Marcel: "Vis mag een

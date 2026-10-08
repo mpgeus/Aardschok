@@ -94,8 +94,9 @@
     // Een werkplaats die iets omzet (maakt.in: de molen graan tot meel, de timmerman hout tot planken), maakt tot er
     // zoveel ligt van wat hij maakt (Marcel, 2 okt, werklijst vraag 91, b: "b ja"). Daarvoor maalde een molen elke dag
     // graan tot meel, ook als niemand brood wilde: ruim 880 graan per jaar. Wie iets uit het land haalt (de houthakker,
-    // de visser), maakt door. De herberg brouwt zo tot er 30 bier is, zoals sinds 27 sep.
-    werkplaatsMaaktTot: 30,
+    // de visser), maakt door. 60 (Marcel, 8 okt: "We kunnen die opvoeren naar 60"; was 30): met 30 hield de bakkerij
+    // zo'n 65 dagen brood achter de hand, en de winter vraagt er ruim 100. De herberg brouwt zo ook tot 60 bier.
+    werkplaatsMaaktTot: 60,
     // Een looppad om elk nieuw gebouw (Marcel, 3 okt: "Er moet wel altijd een looppad zijn, het liefste van 3 tegels
     // breed", met een kapel die klem stond tussen twee huizen, met struiken voor de deur; en op de vraag of één tegel
     // genoeg is: "Nee ik wil 3 tegels"): rondom moeten zoveel tegels te belopen zijn, zonder gebouw en zonder boom, ook in

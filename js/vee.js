@@ -86,9 +86,11 @@
     // Op deze dag worden de schapen geschoren: elk volwassen schaap geeft zoveel wol. Een lam van
     // dit voorjaar nog niet. De heer vraagt 20 wol per schaapskooi (js/gebouwen.js). 8 wol per schaap
     // (Marcel, 3 okt, werklijst vraag 99, a; was 4): met 4 gaf het eerste jaar laken voor zes
-    // ambachtslieden en een volle kooi voor 33, en een stad van tien stenen huizen heeft er 80.
+    // ambachtslieden en een volle kooi voor 33, en een stad van tien stenen huizen heeft er 80. 16 (Marcel, 8 okt: "Kunnen
+    // we proberen"; was 8): in de speeltest brak de reeks naar de winst op laken, want 88 ambachtslieden willen er zo'n
+    // 160 per jaar.
     scheren: { maand: 'zomermaand', dag: 1 },
-    wolPerSchaap: 8,
+    wolPerSchaap: 16,
     // Zoveel karren mest geeft één schaap per jaar in de kooi, als de kooi zijn herder heeft (zijn
     // hand, js/gebouwen.js). De mest leg je in het veldenvenster op een akker (js/akkers.js).
     mestPerSchaap: 2.5,

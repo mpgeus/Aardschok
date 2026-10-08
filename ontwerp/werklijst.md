@@ -6796,10 +6796,7 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     rij met een mand, en de wijn komt per geplukte rank (zoals graan per gemaaide tegel), niet meer per dag; D, een plukker
     met een mand als poppetje; E, later misschien snoeien in de winter. **Marcel: "Ja dat lijkt mij in orde."**
     **Gebouwd (8 okt):** `js/wijngaard.js`, het wijnhuis, de ranken in vier standen en de plukker en plukster; in de
-    browser gezien: drie plukkers in de wijngaard, de geplukte rijen geel.
-    **Bezig in sessie `ccr-77327776-rqjldz`** (8 okt): de wijnboerderij bouwen (Marcel: "Ik wil z.s.m. aan een
-    wijnboerderij", en "Ja zo bouwen" op het plan: een boerderij met een gezin en wijngaarden, de pluk in wijnmaand, de
-    wens bier wordt drank, bier of wijn, geen vaten, de heer wil wijn).
+    browser gezien: drie plukkers in de wijngaard, de geplukte rijen geel. In de speeltest bouwt nog geen speler er een.
 137. **Doorgroeien zonder vaste maat** (Marcel, 8 okt: "We moeten ook stoppen met het dorp een vaste maat geven. Als alles
     straks 1 eiland is, is het logisch dat je gewoon door kunt groeien naar buiten."; open). Hoort bij het eiland (vraag
     117). Er zijn twee vaste maten: het land van de maker (100 bij 100, met bos tot de rand), en de maat van de winst (vanaf
@@ -6829,8 +6826,21 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     **Gebouwd (8 okt):** B, C en D (`a.schoven`, `haalBinnen` en `dors` in `js/veldwerk.js`), A (de standen zwad, hokken en
     stoppels, en rijp met aren, op `beelden/graan.png`), en de figuren van de binder, de drager en de dorser (ook als
     vrouw). In de browser op land 5: het gezin bindt in het graan. Wat opviel: het maaien gaat traag (in vier dagen 13
-    tegels met vijf boeren); het vangnet op 1 herfstmaand haalt de rest binnen. Of dat zo was voor het binden, is nog niet
-    nagemeten.
+    tegels met vijf boeren); het vangnet op 1 herfstmaand haalt de rest binnen. Nagemeten op land 5: het maaien gaat even
+    snel als voor het binden (179 tegels in 60 dagen), er komt evenveel binnen (705 graan), alleen later; aan het eind van
+    de oogst staat er nog zo'n 230 op het veld. **Marcel (8 okt): "Misschien kunnen er meer arbeiders in het dorp?"** Open:
+    wie helpt bij de oogst (zie het antwoord van Claude in het gesprek; eerst een getal, "Niets erbij zonder overleg").
+
+141. **Een economie binnen het dorp** (Marcel, 8 okt: "Ik denk dat we binnen in het dorp ook een economie nodig hebben. Hoe
+    kopen onze inwoners anders dingen?"; open, eerst overleg). Nu is alles van het dorp samen (`D.voorraad`): een huis
+    neemt zijn goederen uit de voorraad (`T.gebruikGoederen`), niemand betaalt iets, en goud is alleen van de schout (de
+    heer, de marskramer, de bouw). Wat erbij hoort, als het komt: loon voor wie werkt, een beurs per huis, prijzen, de
+    kramen op de markt die verkopen, en de belasting die je int uit wat de huizen verdienen.
+
+142. **Een gereedschap voor alle getallen** (Marcel, 8 okt: "Ik wil straks wel een tool waarin we al deze parameters kunnen
+    instellen."; open). Er is de werkbank in de spelregels (`T.WERKBANK` in `js/opties.js`: elk getal uit de blokken
+    `*_INSTELLINGEN`), en de speeltest neemt er een getal uit met `--getal`. Open: is dat genoeg, of een eigen bladzijde in
+    `gereedschap/`, met de getallen per onderwerp, wat ze doen, en een speeltest erbij die zegt wat een getal deed.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
