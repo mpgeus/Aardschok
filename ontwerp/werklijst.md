@@ -5029,6 +5029,12 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     en is er na een kwartier niemand, dan bijt hij zoals voorheen. **3d**, het hek om de schapen staat om de meent, van de
     latten van de tuinen, met een hekje in elke zijde en waar een pad de rand kruist. De tekening van het hol (f) maakt een
     agent; tot dan is het hol alleen de gouden rand.
+    **Na de vergelijking (8 okt, `speelbaar.md`, "De speeltest van 8 okt"):** voor 3a at het dorp op vlees uit het niets
+    van 13 tot 15 jagers; nu eet het in de eerste winter zijn zaaigraan op, en de oogst zakt in (612, 205, 32). Voorstel
+    van Claude: het zaaigraan blijft liggen (a), en de raad zegt wat het meest helpt aan eten (b). **Marcel (8 okt): "a.
+    eten ze wel op, bij honger grijpen mensen alles aan. Je moet mensen inzetten om het warenhuis te beschermen. b. dat is
+    goed. ze mogen advies geven op wat te doen. dit kan kopen, planten, bakken etc zijn."** Dat wordt vraag 132 (hieronder,
+    bij de vragen), met het plan.
     **Bezig in sessie `ccr-77327776-rqjldz`** (7 okt): stap 3, wat je tegen de wolven doet; eerst het plan voor Marcel.
 117. **Eén kaart: het eiland** (Marcel, 4 okt, zesentwintigste sessie: "Ik wil uiteindelijk toch alles op dezelfde kaart.
     Dus de hele spelwereld als het ware. Zo kun je steeds stukken 'ontdekken' in de fog of war. Het idee is een eiland. Met
@@ -6333,6 +6339,24 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     **Gespeeld** (7 okt; `speelbaar.md`, "De speeltest van 7 okt: wapens zijn niet meer verboden"): de bouwer zei op alle
     drie de landen ja tegen de wapenmaker en speelde de vier jaar uit; **op 62707 wint hij nu**, op 27 hooimaand van het
     vierde jaar, waar hij eerst in het tweede jaar werd ontslagen. Drie van de zes spellen winnen. **Klaar.**
+
+132. **Het dorp eet gevarieerd, en het zaaigraan moet bewaakt** (Marcel, 8 okt, na de speeltest van de jager die echt
+    jaagt: "het dorp moet gevarieerd eten. Graan, brood, vlees, vis etc.", en "a. eten ze wel op, bij honger grijpen mensen
+    alles aan. Je moet mensen inzetten om het warenhuis te beschermen. b. dat is goed. ze mogen advies geven op wat te
+    doen. dit kan kopen, planten, bakken etc zijn."; plan van Claude; open).
+    **Wat er nu is:** het zaaigraan houdt het dorp apart tot het zaaien (`T.zaaigraanApart`), maar bij nood eet het het op;
+    een plek waar het graan ligt, is er niet (de voorraad is een getal). Komt het eten de winter niet door, dan vraagt het
+    dorp alleen een jager (`T.watTeBouwen` in `js/raad.js`), en de raad noemt alleen de jager.
+    - **a, het zaaigraan bewaken:** komt de honger, dan komt er iemand je zeggen dat het dorp het zaaigraan wil eten (een
+      voorval, met een termijn zoals elk voorval). Je kiest: het vrijgeven (het dorp eet, de lente wordt krap), een deel
+      uitdelen, of mannen bij het graan zetten. Dan staan er twee mannen (de militie, of weerbare mannen) dag en nacht bij
+      de schuur van de schout, waar het zaaigraan ligt, werken ze nergens, en kost elke hongerdag vertrouwen; wie het
+      ziet, mort. Zonder wachters eet het dorp het zaaigraan, zoals nu.
+    - **b, de raad zegt wat helpt aan eten:** niet alleen een jager, maar wat er nu kan en het meest oplevert: graan kopen
+      bij de marskramer (wanneer hij komt, en wat het kost), land ontginnen (het verzoek komt eerder, al als de winter in
+      zicht is), een visser aan het water (niet voor de winter), herten voor een jager, slachten, of de molen en de
+      bakkerij als er meel of brood ontbreekt. Het dorp vraagt het gebouw dat de raad noemt.
+    - **c, dan de speeltest van vier jaar**, naast de stand van voor 3a.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
