@@ -119,7 +119,7 @@
     }
     const groeit = groeitOpErf(D, { x, y, b, h, plan: planVan(keus) });
     if (groeit) return `Hier groeit ${T.huisVan(D, groeit)} straks tot een ${T.GEBOUWEN[T.GEBOUWEN[groeit.soort].wordt].naam}.`;
-    return zonderPut(D, { x, y, b, h, plan: planVan(keus) });
+    return zonderPlek(D, { x, y, b, h, plan: planVan(keus) });
   };
 
   // Een huis dat niet meer kan doorgroeien als dit erf er komt: elke vorm die het nog kan nemen, komt dan op de grond van
@@ -142,25 +142,35 @@
     return null;
   }
 
-  // Een erf komt niet waar zijn hut straks geen put kan halen, of waar het een ander huis de laatste plek voor een put
-  // afneemt (werklijst vraag 117, 2d; Marcel, 8 okt: "A ja"): in de speeltest lagen de erven op het eiland van 73425 zo
-  // dicht tegen elkaar dat een huis in het midden twee jaar lang geen put kon krijgen, en het dorp dus nooit won. Waar nog
-  // een put kan komen, zegt T.kringGrond (js/wensen.js); na dit erf kan hij er nog als hij niet op het erf komt, en zijn
-  // looppad de hut erop niet raakt. Geeft de reden, of null.
-  function zonderPut(D, erf) {
-    const k = T.kringGrond(D, 'put');
-    if (!k) return null;
-    const n = T.GEBOUWEN_INSTELLINGEN.looppad;
-    const hut = T.huisPlekVan(erf) || erf;
-    const raakt = (a, c) => a.x < c.x + c.b && c.x < a.x + a.b && a.y < c.y + c.h && c.y < a.y + a.h;
-    const blijft = (q) => !raakt(q, erf) && !raakt({ x: q.x - n, y: q.y - n, b: q.b + 2 * n, h: q.h + 2 * n }, hut);
-    // ver weg komt een put er niet bij: dat scheelt de wortel
-    const dichtBij = (q) => Math.abs(q.x - hut.x) <= k.straal + hut.b + q.b && Math.abs(q.y - hut.y) <= k.straal + hut.h + q.h;
-    const haalt = (q) => dichtBij(q) && T.inDeKring(hut, q, k.straal);
-    if (!k.er.some(haalt) && !k.plekken.some((q) => haalt(q) && blijft(q))) {
-      return `De hut op dit erf kan straks geen put halen: er staat er geen binnen ${k.straal} tegels, en er is geen plek meer voor een.`;
+  // Een erf komt niet waar zijn huis straks geen put of kapel kan halen, of waar het een ander huis de laatste plek ervoor
+  // afneemt (werklijst vraag 117, 2d; Marcel, 8 okt: "A ja", en voor de kapel "Prima"): in de speeltest lagen de erven op
+  // het eiland van 73425 zo dicht tegen elkaar dat een huis in het midden twee jaar lang geen put kon krijgen, en het dorp
+  // dus nooit won; op 62707 vond een huis zo zestien maanden geen plek voor een kapel. Waar er nog een kan komen, zegt
+  // T.kringGrond (js/wensen.js); na dit erf kan hij er nog als hij niet op het erf komt, en zijn looppad het huis erop
+  // niet raakt. Geeft de reden, of null.
+  function zonderPlek(D, erf) {
+    for (const soort of Object.keys(T.WENSEN_INSTELLINGEN.kring)) {
+      const reden = zonderPlekVoor(D, erf, soort);
+      if (reden) return reden;
     }
-    for (const h of k.zonder) if (h.plekken.length && h.plekken.every((q) => !blijft(q))) return `Dan kan ${h.wie} straks geen put meer krijgen: dit erf neemt de laatste plek ervoor.`;
+    return null;
+  }
+  function zonderPlekVoor(D, erf, soort) {
+    const k = T.kringGrond(D, soort);
+    if (!k) return null;
+    const naam = T.GEBOUWEN[soort].naam;
+    const n = T.GEBOUWEN_INSTELLINGEN.looppad;
+    const huis = T.huisPlekVan(erf) || erf;
+    const raakt = (a, c) => a.x < c.x + c.b && c.x < a.x + a.b && a.y < c.y + c.h && c.y < a.y + a.h;
+    const blijft = (q) => !raakt(q, erf) && !raakt({ x: q.x - n, y: q.y - n, b: q.b + 2 * n, h: q.h + 2 * n }, huis);
+    // ver weg komt een plek er niet bij: dat scheelt de wortel
+    const dichtBij = (q) => Math.abs(q.x - huis.x) <= k.straal + huis.b + q.b && Math.abs(q.y - huis.y) <= k.straal + huis.h + q.h;
+    const haalt = (q) => dichtBij(q) && T.inDeKring(huis, q, k.straal);
+    if (T.wilStraks({ soort: 'hut', erf: true }, k.wens) && !k.er.some(haalt) && !k.plekken.some((q) => haalt(q) && blijft(q))) {
+      const wie = T.wilStraks({ soort: 'hut' }, k.wens) ? 'De hut' : 'Het huis';
+      return `${wie} op dit erf kan straks geen ${naam} halen: er staat er geen binnen ${k.straal} tegels, en er is geen plek meer voor een.`;
+    }
+    for (const h of k.zonder) if (h.plekken.length && h.plekken.every((q) => !blijft(q))) return `Dan kan ${h.wie} straks geen ${naam} meer krijgen: dit erf neemt de laatste plek ervoor.`;
     return null;
   }
 

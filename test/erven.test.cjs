@@ -502,10 +502,11 @@ test('de grond van een erf: het erf zelf, en het looppad om de plek van zijn hui
   assert.equal(T.opDeGrondVanEenErf(D, Math.min(west, erf.x) - 1, erf.y + p.dy), false);
 });
 
-test('hoe dicht de erven ook liggen, elk huis houdt een plek voor een put (werklijst vraag 117, 2d)', () => {
+test('hoe dicht de erven ook liggen, elk huis houdt een plek voor een put en een kapel (werklijst vraag 117, 2d)', () => {
   // Zoals de bouwer van de speeltest: steeds het eerste erf dat mag, zo dicht mogelijk op elkaar. Zonder deze regel bleven
   // er op het ontworpen gehucht drie hutten zonder plek voor een put over; op het eiland van 73425 bleef zo een huis twee
-  // jaar zonder put, en won het dorp nooit (Marcel, 8 okt: "A ja").
+  // jaar zonder put, en won het dorp nooit (Marcel, 8 okt: "A ja"). Voor de kapel net zo (Marcel: "Prima"): het ontworpen
+  // gehucht heeft er bij het begin geen.
   const S = gehucht();
   const D = S.dorp;
   const w = D.wereld;
@@ -515,15 +516,18 @@ test('hoe dicht de erven ook liggen, elk huis houdt een plek voor een put (werkl
     for (let y = 0; y < w.h && !gelegd; y += 2) {
       for (let x = 0; x < w.b && !gelegd; x += 2) {
         const r = T.waaromPastErfNiet(D, x, y);
-        if (r && /put/.test(r)) redenen.push(r);
+        if (r && /put|kapel/.test(r)) redenen.push(r);
         if (!r) gelegd = T.plaatsGebouw(D, 'erf', x, y).gelukt;
       }
     }
     if (!gelegd) break;
-    for (const h of T.kringGrond(D, 'put').zonder) assert.ok(h.plekken.length > 0, `${h.wie} heeft geen plek meer voor een put`);
+    for (const soort of ['put', 'kapel']) {
+      for (const h of T.kringGrond(D, soort).zonder) assert.ok(h.plekken.length > 0, `${h.wie} heeft geen plek meer voor een ${soort}`);
+    }
   }
   assert.ok(D.erven.length >= 10, `zoveel erven: ${D.erven.length}`);
   assert.ok(redenen.some((r) => r.startsWith('Dan kan de hut op een ander erf straks geen put meer krijgen')), 'een erf dat de laatste plek nam, mocht niet');
+  assert.ok(redenen.some((r) => /geen kapel/.test(r)), 'en net zo voor de kapel');
 });
 
 test('het huis van, de hut van: het lidwoord bij wie er woont (T.huisVan)', () => {
@@ -603,4 +607,27 @@ test('het dorp zet een put voor een hut op een erf waar hij ook het huis haalt d
   assert.ok(plek, 'er is een plek voor een put');
   assert.ok(T.inDeKring(voet, rechthoek(plek), straal), 'de put haalt de hut');
   assert.ok(T.inDeKring(huis, rechthoek(plek), straal), 'en het huis dat hij wordt');
+});
+
+test('de plekken voor een put of een kapel: hetzelfde als elke tegel afvragen (werklijst vraag 117, 2d)', () => {
+  // T.kringGrond filtert eerst per tegel wat er nooit kan, en vraagt de rest aan T.kanHierKomen; dat mag niets veranderen.
+  const { S } = hutVerVanHetPlein();
+  const D = S.dorp;
+  for (const soort of ['put', 'kapel']) {
+    const voet = T.gebouwVoet(soort, T.volgendeTekening(D, soort)) || T.GEBOUWEN[soort].voet;
+    const alle = [];
+    for (let y = 0; y < S.wereld.tegels.length; y++) {
+      for (let x = 0; x < S.wereld.tegels[0].length; x++) if (T.kanHierKomen(D, soort, x, y, voet)) alle.push(`${x},${y}`);
+    }
+    assert.ok(alle.length > 0, `er zijn plekken voor een ${soort}`);
+    assert.deepEqual(T.kringGrond(D, soort).plekken.map((q) => `${q.x},${q.y}`), alle);
+  }
+});
+
+test('een hut op een erf wil straks wat het huis wil dat hij wordt: een kapel (werklijst vraag 117, 2d)', () => {
+  const { S, hut } = hutVerVanHetPlein();
+  assert.equal(T.wilStraks({ soort: 'hut' }, 'kapel'), false, 'een hut wil nog geen kapel');
+  assert.equal(T.wilStraks(hut, 'kapel'), true, 'een hut op een erf straks wel');
+  assert.equal(T.wilStraks(hut, 'put'), true);
+  assert.equal(T.wilStraks(S.dorp.gebouwen.find((g) => g.soort === 'boerderij'), 'put'), false, 'een boerderij wil geen put');
 });

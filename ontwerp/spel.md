@@ -3468,7 +3468,9 @@ wordt gepraat:
   komt **sinds 8 okt (vraag 117, 2d; Marcel: "A ja")** een erf niet waar zijn hut straks geen put kan halen, of waar het
   een ander huis de laatste plek voor een put afneemt ("Dan kan het huis van Evert geen put meer krijgen: dit erf neemt
   de laatste plek ervoor."; `T.kringGrond`): op het eiland van 73425 lagen de erven zo dicht dat een huis in het midden
-  twee jaar geen put kon krijgen, en het dorp nooit won. En past er toch geen hut meer op een vrij erf, dan telt het niet
+  twee jaar geen put kon krijgen, en het dorp nooit won. Een hut op een erf telt daarbij als het huis dat hij wordt, en
+  het dorp zet een put voor hem waar hij dat huis ook haalt; en voor de kapel geldt hetzelfde (Marcel: "Prima"), want het
+  huis dat de hut wordt, wil er een. En past er toch geen hut meer op een vrij erf, dan telt het niet
   als plaats (`T.bruikbareErven`, `T.hutPastOpErf`): de groei en de raad zeggen dan dat er geen plaats is, het bouwmenu
   telt het niet als vrij, en `Spel.debug.erven()` zegt het erbij. Tot dan zagen de groei en de raad er een vrij erf, en
   kwam er twee en een half jaar geen gezin.
