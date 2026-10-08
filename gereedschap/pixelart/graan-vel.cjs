@@ -6,7 +6,9 @@
 // (zoals `naar-spel.cjs` al doet voor de muren en de trap, zie daar `muren()`/`trap()`) roept
 // hiervandaan `vel()` aan.
 //
-//   node gereedschap/pixelart/graan-vel.cjs
+//   node gereedschap/pixelart/graan-vel.cjs         (de proefvellen in uit/graan/)
+//   node gereedschap/pixelart/graan-vel.cjs --spel  (ook beelden/graan.png en zijn ingang in beelden/beschrijving.*; naar-spel.cjs
+//                                                    doet dat ook, maar dan met alles wat daar bij hoort)
 //     -> gereedschap/pixelart/uit/graan/spel-vel.png       (het spritesheet)
 //     -> gereedschap/pixelart/uit/graan/naad-proef-*.png   (3×3 tegels, ter controle op naden)
 'use strict';
@@ -25,7 +27,8 @@ const FRAMES = 8; // windfasen per tegel, zoals graan-proef.cjs (sectie 5, "wind
 
 // Van boven naar beneden op de plaat: de groeivolgorde, dezelfde volgorde als MAX_HOOG in
 // graan.cjs zelf.
-const VOLGORDE = ['geploegd', 'kiemend', 'groen', 'rijp', 'gemaaid'];
+// De drie van na de oogst (8 okt, vraag 140) staan er achteraan, zodat de oude cellen niet verschuiven.
+const VOLGORDE = ['geploegd', 'kiemend', 'groen', 'rijp', 'gemaaid', 'zwad', 'hokken', 'stoppels'];
 const MET_WIND = new Set(['groen', 'rijp']);
 
 // Vergelijkt een net gerenderde celgrootte met wat veldAfmeting voor diezelfde tegel (1×1,
@@ -119,13 +122,20 @@ if (require.main === module) {
   console.log(`graan-vel: spel-vel.png ${plaat.b}×${plaat.h}px, ${(buf.length / 1024).toFixed(0)} kB, ${tegels} tegels (${VARIANTEN} varianten per stadium)`);
   console.log('  stadia:', Object.entries(stadia).map(([s, o]) => `${s} y0=${o.y0} cel=${o.cel.join('x')}`).join(', '));
 
+  if (process.argv.includes('--spel')) {
+    const BEELDEN = path.join(__dirname, '..', '..', 'beelden');
+    fs.writeFileSync(path.join(BEELDEN, 'graan.png'), buf);
+    require('./beschrijving-zet.cjs').zetInBeschrijving('graan', { bestand: 'graan.png', varianten: VARIANTEN, stadia });
+    console.log('  beelden/graan.png en beschrijving.* bijgewerkt');
+  }
+
   // Naadproef: hetzelfde soort akker als 3×3 tegels, met marge 0 — moet naadloos aansluiten (met
   // het oog te controleren; geen automatische toets, want "ziet er naadloos uit" is geen getal).
   for (const stadium of VOLGORDE) {
     const proef = G.renderVeld(3, 3, stadium, { zaad: ZADEN[0], marge: 0, randMarge: 0 });
     fs.writeFileSync(path.join(UIT, `naad-proef-${stadium}.png`), K.png(proef, 1));
   }
-  console.log(`  + 5 naad-proeven (naad-proef-<stadium>.png, telkens 3×3 tegels van variant ${ZADEN[0]})`);
+  console.log(`  + ${VOLGORDE.length} naad-proeven (naad-proef-<stadium>.png, telkens 3×3 tegels van variant ${ZADEN[0]})`);
 
   const duur = ((Date.now() - t0) / 1000).toFixed(1);
   console.log(`klaar in ${duur}s, in ${UIT}`);

@@ -142,6 +142,8 @@ const BUILDINGEN = [
   { id: 'dorpGroot2', tekening: 'dorpGroot2', maak: () => D.dorpshuis(0, 0, 109, { maat: [7, 9], muur: 'planken', dak: 'pannen', rook: false }) },
   // De wijnboerderij: de fases laten alleen het huis rijzen (de wijngaard komt er vanzelf bij), maar het gebouw beslaat 10×8.
   { id: 'wijnboerderij', tekening: 'wijnboerderij', beslaat: [10, 8], maak: () => P.wijnboerderij(0, 0, { rook: false, alleenHuis: true }) },
+  // Het wijnhuis (vraag 140): hetzelfde huis, alleen het huis op zijn eigen voet van 5×4 (de tonnen komen er na de bouw bij).
+  { id: 'wijnhuis', tekening: 'wijnhuis', maak: () => P.wijnboerderij(0, 0, { rook: false, alleenHuis: true }) },
   // ── de huizen van de huizenbouwer (huizen.cjs, ronde 4b): die snijden hun fases uit het huis zelf
   // (renderHuisFasen), niet uit de vormen van dorp.cjs. Niet voor een huis dat niemand bouwt (fasen:
   // false, het huis van de schout) ──

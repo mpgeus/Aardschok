@@ -569,6 +569,9 @@ function gebouwenLijst() {
   if (typeof P.jagershut === 'function') lijst.push(['jagershut', () => P.jagershut(0, 0, { rook: false })]);
   if (typeof P.oudstehuis === 'function') lijst.push(['oudstehuis', () => P.oudstehuis(0, 0, { rook: false })]);
   if (typeof P.wijnboerderij === 'function') lijst.push(['wijnboerderij', () => P.wijnboerderij(0, 0, { rook: false })]);
+  // Het wijnhuis (vraag 140, 8 okt): alleen het huis met de wijntonnen voor de deur, 5 bij 4, zonder wijngaard: de wijngaard komt uit
+  // de ranken op de tegels (wijnrank.cjs).
+  if (typeof P.wijnboerderij === 'function') lijst.push(['wijnhuis', () => P.wijnboerderij(0, 0, { rook: false, alleenHuis: true, metTonnen: true })]);
   if (typeof P.schuur === 'function') lijst.push(['schuur', () => P.schuur(0, 0)]);
   // brug slaan we over: die is geen heel aantal tegels breed, en hoort dus niet in "beslaat".
   return lijst;

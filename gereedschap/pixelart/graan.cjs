@@ -27,10 +27,11 @@ const D = require('./dorp.cjs'); // grondKaart + grondTex: dezelfde ploegvoren a
 // Hoogste punt van de begroeiing per stadium, in pixels boven de grond (bepaalt hoeveel lucht een
 // plaat nodig heeft). geploegd blijft vlak: dat doet akkerPixel al. kiemend en groen zijn in
 // ronde 2 opgehoogd (zie kiemOverAkker en HALM_STIJL.groen), gemaaid vanwege de nieuwe schoof met
-// zijn arenbossen die net iets boven de oude 40px uitkwamen.
-const MAX_HOOG = { geploegd: 2, kiemend: 6, groen: 27, rijp: 45, gemaaid: 48 };
+// zijn arenbossen die net iets boven de oude 40px uitkwamen. Na de oogst (8 okt, vraag 140) komen er drie stadia bij, achteraan:
+// zwad (het graan ligt in banen), hokken (schoven tegen elkaar op het veld) en stoppels (alleen de stoppels).
+const MAX_HOOG = { geploegd: 2, kiemend: 6, groen: 27, rijp: 45, gemaaid: 48, zwad: 7, hokken: 28, stoppels: 5 };
 // Het stadium dat akkerPixel (via dorp.cjs) al kent, als bodem onder de eigen begroeiing hieronder.
-const BODEM_STADIUM = { geploegd: undefined, kiemend: 'jong', groen: undefined, rijp: 'rijp', gemaaid: undefined };
+const BODEM_STADIUM = { geploegd: undefined, kiemend: 'jong', groen: undefined, rijp: 'rijp', gemaaid: undefined, zwad: undefined, hokken: undefined, stoppels: undefined };
 
 // ---------------------------------------------------------------- de schoof
 
@@ -42,7 +43,10 @@ const BODEM_STADIUM = { geploegd: undefined, kiemend: 'jong', groen: undefined, 
 // rond regel 2572), maar nu als eigen model met licht en omlijning, in plaats van een plat teken
 // op een bord. Blijft zelf rechtop: schovenOverAkker zet 'm schuin via `gekanteld`/`geschaald`
 // uit figuren.cjs, zodat deze functie op `zaad` blijft werken zoals ze al aangeroepen wordt.
-function schoof(zaad = 1) {
+// o.smal (standaard 1; hok: 0,6): hoe dik de schoof is vergeleken met de lange dikke van hierboven; een schoof in een hok is
+// slanker, zodat een hok een tentje wordt en geen groepje kegels.
+function schoof(zaad = 1, o = {}) {
+  const smal = o.smal ?? 1;
   const M = { stro: 0, band: 1, aar: 2 };
   const mat = [];
   const gestreept = (x, y, z) => {
@@ -55,10 +59,10 @@ function schoof(zaad = 1) {
   mat[M.aar] = { ramp: 'stro', lo: 3.2, hi: 7.2, patroon: gestreept }; // de aren: lichter, gouder
 
   const hoog = 34 + rnd(zaad, 1) * 12;
-  const rFlare = 9.6 + rnd(zaad, 2) * 1.8; // de gesneden stoppels, iets uitgespreid
-  const rOnder = rFlare - 1.2;
-  const rWaist = 2.3 + rnd(zaad, 8) * 0.7; // de insnoering bij de band: nu een echte taille
-  const rTop = 4.3 + rnd(zaad, 9) * 1.1; // de aren waaieren weer iets open boven de band
+  const rFlare = (9.6 + rnd(zaad, 2) * 1.8) * smal; // de gesneden stoppels, iets uitgespreid
+  const rOnder = rFlare - 1.2 * smal;
+  const rWaist = (2.3 + rnd(zaad, 8) * 0.7) * (0.55 + 0.45 * smal); // de insnoering bij de band: nu een echte taille
+  const rTop = (4.3 + rnd(zaad, 9) * 1.1) * (0.4 + 0.6 * smal); // de aren waaieren weer iets open boven de band
   const flareTop = hoog * 0.09;
   const bz = hoog * (0.67 + rnd(zaad, 10) * 0.07); // bandhoogte: hoog, zodat de waaier kort blijft
   const tipZ = hoog * 1.03;
@@ -186,15 +190,55 @@ function tekenHalm(B, px, py, o) {
   const stappen = Math.ceil(o.hoog);
   const wind = Math.sin(o.fase * Math.PI * 2) * o.zwaai;
   const dikte = o.dikte ?? 1;
-  for (let i = 0; i <= stappen; i++) {
+  // een rijpe halm eindigt in een aar (vraag 140, 8 okt: "aren die je ziet"): die krijgt zijn eigen tekening hieronder
+  const aarLen = o.aar ? Math.max(7, Math.round(stappen * 0.2)) : 0;
+  const eind = stappen - aarLen;
+  for (let i = 0; i <= (o.aar ? eind : stappen); i++) {
     const t = i / stappen;
     const zij = (wind + o.kromming) * t * t;
     const x = Math.round(px + zij);
     const y = py - i;
-    const breed = o.aar && t > 0.84 ? 2 : Math.max(1, Math.round(dikte - (dikte - 1) * t));
+    const breed = Math.max(1, Math.round(dikte - (dikte - 1) * t));
     const stap = klem(o.toon[0] + (o.toon[1] - o.toon[0]) * t + o.jitter, 0, 8);
     for (let w = 0; w < breed; w++) B.verf(x + w - (breed - 1) / 2, y, o.ramp, stap);
+    // een knoop in de halm, een derde van de weg omhoog, iets lichter
+    if (o.aar && i === Math.round(eind * 0.38)) B.verf(x, y, o.ramp, klem(stap + 1.1, 0, 8));
   }
+  if (o.aar) tekenAar(B, px, py, o, stappen, eind, aarLen, wind);
+}
+
+// De aar van een rijpe halm: een kolom pitten van acht pixels hoog, links en rechts om en om een korrel (een visgraat), licht
+// bovenop en donkerder aan de onderkant, de aar zwaar naar één kant gebogen, en bovenaan drie dunne baarden. Vlak bij de
+// stengel begint hij smal en wordt dan breder, en loopt aan het eind weer dun uit.
+function tekenAar(B, px, py, o, stappen, eind, aarLen, wind) {
+  const buig = o.jitter >= 0 ? 1 : -1; // de aar hangt naar rechts of naar links
+  const zwaarte = 2.2 + Math.abs(o.jitter) * 2.4; // hoever hij overhelt
+  let xTop = px;
+  let yTop = py;
+  for (let j = 0; j <= aarLen; j++) {
+    const i = eind + j;
+    const t = i / stappen;
+    const u = j / aarLen;
+    const zij = (wind + o.kromming) * t * t + buig * zwaarte * u * u;
+    const x = Math.round(px + zij);
+    const y = py - i;
+    // de pit in het midden
+    B.verf(x, y, 'stro', klem(3.9 + u * 1.2 + o.jitter * 0.6, 0, 8));
+    // de korrels: breed in het midden van de aar, om en om links en rechts
+    if (j >= 1 && j < aarLen - 1) {
+      const kant = j % 2 === 0 ? -1 : 1;
+      B.verf(x + kant, y, 'stro', klem(5.2 + (kant > 0 ? 0.6 : -0.5) - u * 0.4, 0, 8));
+      if (j >= 2 && j < aarLen - 2 && j % 2 === 1) B.verf(x - kant, y, 'stro', klem(3.2 + u, 0, 8)); // de schaduwkant
+    }
+    xTop = x;
+    yTop = y;
+  }
+  // de baarden: drie dunne pixels die uit de top vallen, de buitenste een pixel opzij
+  B.verf(xTop, yTop - 1, 'stro', 6.3);
+  B.verf(xTop, yTop - 2, 'stro', 6.6);
+  B.verf(xTop - 1, yTop - 2, 'stro', 5.6);
+  B.verf(xTop + 1, yTop - 2, 'stro', 5.6);
+  B.verf(xTop + buig, yTop - 3, 'stro', 6.1);
 }
 
 // Een bloem tussen het graan: een groene steel en een gekleurd kopje (klaproos rood, korenbloem
@@ -231,7 +275,7 @@ const HALM_STIJL = {
   groen: { ramp: 'gras', toon: [1.6, 5.4], aar: false, dicht: 10, kans: 0.92, dikte: 2, bloemKans: 0, zwaai: 3 },
   // het rijpe graan zelf ongemoeid; alleen iets vaker een bloem (ronde 2), zodat er op elke plaat
   // wel een klaproos of korenbloem staat zonder dat het een bloemenveld wordt.
-  rijp: { ramp: 'stro', toon: [1.6, 5.8], aar: true, dicht: 7, kans: 0.85, bloemKans: 1 / 25, zwaai: 5 },
+  rijp: { ramp: 'stro', toon: [1.6, 5.0], aar: true, dicht: 8, kans: 0.85, bloemKans: 1 / 25, zwaai: 5 },
 };
 function halmenOverAkker(B, b, d, stadium, o = {}) {
   const stijl = HALM_STIJL[stadium];
@@ -317,6 +361,46 @@ function stoppelsOverAkker(B, b, d, o = {}) {
   }
 }
 
+// Stoppels na de oogst (vraag 140), dichter dan hierboven: korte gele stoppels in rijen op de ruggen van de akker, hier en daar
+// een gebroken of omgevallen halm, en tussen de rijen de aarde die nog te zien is. De rijen volgen de ploegvoren (AKKER_RIJ),
+// zodat ze op de rug vallen die de bodem tekent. Vanzelf naadloos: elk punt hangt alleen van zijn eigen plek af.
+function stoppelsDicht(B, b, d, langs, o = {}) {
+  const dicht = 26; // monsters per tegel, langs en dwars
+  const zaad = (o.zaad ?? 1) * 5000 + 9;
+  const marge = o.randMarge ?? 0;
+  for (let iy = 0; iy < d * dicht; iy++) {
+    for (let ix = 0; ix < b * dicht; ix++) {
+      const gx = (ix + 0.5) / dicht + (rnd(ix, iy, zaad + 1) - 0.5) / dicht;
+      const gy = (iy + 0.5) / dicht + (rnd(ix, iy, zaad + 2) - 0.5) / dicht;
+      if (gx < 0 || gx > b || gy < 0 || gy > d) continue;
+      const dwars = (langs === 'y' ? gx : gy) / AKKER_RIJ;
+      const fr = dwars - Math.floor(dwars);
+      // op de rug (midden van de rij) staat de stoppel dicht, in de voor spaarzaam
+      const op = 1 - Math.abs(fr - 0.5) * 2; // 0 in de voor, 1 op de rug
+      if (rnd(ix, iy, zaad) >= 0.18 + 0.78 * op * op) continue;
+      const randT = marge > 0 ? randSterkte(gx, gy, b, d, zaad + 300, marge) : 1;
+      if (randT < 0) continue;
+      const [sx, sy] = K.naarScherm(B, gx * TEGEL, gy * TEGEL, 0);
+      const r = rnd(ix, iy, zaad + 3);
+      if (r < 0.06) {
+        // een omgevallen halm: twee pixels schuin over de grond
+        const dx = r < 0.03 ? 1 : -1;
+        B.verf(sx, sy, 'stro', 3.4 + r * 20);
+        B.verf(sx + dx, sy, 'stro', 4.4);
+        continue;
+      }
+      const hoog = 2 + Math.floor(rnd(ix, iy, zaad + 4) * 3) - (op < 0.4 ? 1 : 0);
+      const leun = rnd(ix, iy, zaad + 5) < 0.2 ? (rnd(ix, iy, zaad + 6) < 0.5 ? -1 : 1) : 0;
+      const toon = 3.4 + rnd(ix, iy, zaad + 7) * 1.4;
+      for (let i = 0; i < hoog; i++) {
+        // schuin gesneden: de top is licht, het stuk ervoor bleker, de voet donker
+        const stap = i === hoog - 1 ? toon + 1.4 : i === 0 ? toon - 1.6 : toon;
+        B.verf(sx + (i === hoog - 1 ? leun : 0), sy - i, 'stro', klem(stap, 0, 6));
+      }
+    }
+  }
+}
+
 // Een paar hokken op vaste plekken in de akker: per hok zes à acht schoven schuin tegen elkaar,
 // als een tentje (ronde 2 — hiervoor stonden ze rechtop naast elkaar en leken op een rijtje
 // pylonen). Elke schoof leunt naar het midden van zijn hok toe (`gekanteld` uit figuren.cjs, om
@@ -347,6 +431,120 @@ function schovenOverAkker(B, b, d, o = {}) {
   }
 }
 
+// ---------------------------------------------------------------- na de oogst: zwad, hokken en stoppels
+
+// Het schermrichting van een stap langs de x-as of de y-as van de kaart, als eenheidsvector: een tegel is 64 × 32.
+const RICHTING_X = [Math.hypot(32, 16) ** -1 * 32, Math.hypot(32, 16) ** -1 * 16];
+const RICHTING_Y = [-RICHTING_X[0], RICHTING_X[1]];
+
+// Het zwad (vraag 140: "net gemaaid: het graan ligt in losse banen op korte stoppels"): wat de maaier achterlaat, een baan
+// afgesneden halmen die in dezelfde richting liggen, de aren allemaal naar dezelfde kant. Elke baan is een lage bult van
+// stro, langs de akker (zoals de ploegvoren, `langs`), drie per tegel, met korte stoppels ertussen. Een baan loopt over de
+// hele lengte van de tegel door tot aan zijn rand, zodat hij op de buurtegel aansluit.
+function zwadOverAkker(B, b, d, langs, o = {}) {
+  const zaad = (o.zaad ?? 1) * 4100 + 11;
+  const lang = langs === 'y' ? d : b; // de lengte van een baan, in tegels
+  const breed = langs === 'y' ? b : d;
+  const dir = langs === 'y' ? RICHTING_Y : RICHTING_X;
+  const BANEN = 3;
+  const half = 0.042; // de halve breedte van een baan, in tegels
+  const afbeelden = (u, v, z) => {
+    const gx = langs === 'y' ? v : u;
+    const gy = langs === 'y' ? u : v;
+    const [sx, sy] = K.naarScherm(B, gx * TEGEL, gy * TEGEL, 0);
+    return [sx, sy - z];
+  };
+  for (let k = 0; k < breed * BANEN; k++) {
+    // de banen liggen niet precies gelijk: de maaier zwaait een beetje
+    const midden = (k + 0.5) / BANEN + (rnd(k, 1, zaad) - 0.5) * 0.05;
+    const zwaai = (u) => Math.sin(u * 2.4 + k * 1.7 + zaad) * 0.012;
+    // eerst het lijf van de baan, als kolommetjes stro van de grond omhoog: donker onderin, licht bovenop
+    const stap = 0.012;
+    for (let u = 0; u < lang; u += stap) {
+      for (let dv = -half; dv <= half; dv += 0.011) {
+        const rel = Math.abs(dv) / half;
+        const randig = rel > 0.8 && rnd(Math.floor(u * 100), Math.floor((dv + 1) * 1000), zaad + 2) < (rel - 0.8) * 3.2;
+        if (randig) continue;
+        const hoog = 1 + 3.4 * (1 - rel * rel) + (rnd(Math.floor(u * 90), Math.floor((dv + 1) * 900), zaad + 3) - 0.5) * 1.6;
+        const [px, py] = afbeelden(u, midden + dv + zwaai(u), 0);
+        const n = Math.max(1, Math.round(hoog));
+        for (let i = 0; i < n; i++) {
+          const t = i / Math.max(1, n - 1);
+          B.verf(px, py - i, 'stro', 1.0 + t * 2.4 + (rnd(Math.floor(u * 70), i + Math.floor((dv + 1) * 700), zaad + 4) - 0.5) * 1.1);
+        }
+      }
+    }
+    // dan de halmen zelf: korte lichte strepen langs de baan, een tikje scheef, en aan één kant de aren
+    const aantal = Math.round(lang * 150);
+    for (let i = 0; i < aantal; i++) {
+      const u = rnd(i, k, zaad + 5) * lang;
+      const off = (rnd(i, k, zaad + 6) + rnd(i, k, zaad + 7) - 1) * half * 0.95;
+      const rel = Math.abs(off) / half;
+      const z = 1.2 + 3.4 * (1 - rel * rel) + rnd(i, k, zaad + 8) * 0.8;
+      const [px, py] = afbeelden(u, midden + off + zwaai(u), z);
+      const hoek = (rnd(i, k, zaad + 9) - 0.5) * 0.9;
+      const dx = dir[0] * Math.cos(hoek) - dir[1] * Math.sin(hoek);
+      const dy = dir[0] * Math.sin(hoek) + dir[1] * Math.cos(hoek);
+      const len = 4 + Math.floor(rnd(i, k, zaad + 10) * 4);
+      const toon = 2.6 + z * 0.3 + (rnd(i, k, zaad + 11) - 0.4) * 1.6 - (rnd(i, k, zaad + 13) < 0.22 ? 1.6 : 0);
+      for (let s = 0; s < len; s++) B.verf(px + dx * s, py + dy * s, 'stro', klem(toon - (s === 0 ? 0.6 : 0), 0, 6));
+      // de aar: aan het eind, dikker en goudgeel, met een korte baard
+      if (rnd(i, k, zaad + 12) < 0.55) {
+        const ex = px + dx * len;
+        const ey = py + dy * len;
+        B.verf(ex, ey, 'stro', 5);
+        B.verf(ex + dx, ey + dy, 'stro', 5.6);
+        B.verf(ex, ey - 1, 'stro', 4.2);
+        B.verf(ex + dx * 2, ey + dy * 2 - 1, 'stro', 6);
+      }
+    }
+  }
+}
+
+// Hokken (vraag 140: "twee of drie hokken per tegel: schoven met een band, tegen elkaar rechtop gezet, op stoppels"):
+// vijf schoven rechtop in een kring, elk met zijn top naar het midden geleund tot ze tegen elkaar steunen, als een tentje.
+// De schoof zelf is `schoof` (met zijn band), slanker dan die van de oude `gemaaid`. Een tegel krijgt er twee
+// of drie, uit het zaad; ze blijven binnen de tegel, zodat de buurtegel niets afdekt.
+function hokkenOverAkker(B, b, d, o = {}) {
+  const zaad = o.zaad ?? 1;
+  const hokken = o.hokken || kiesHokken(b, d, zaad);
+  const SCHOVEN = 5;
+  const RING = 0.07; // de straal van de kring van schoven, in tegels
+  let n = 0;
+  for (const [hx, hy] of hokken) {
+    const draai = rnd(zaad, n, 1) * Math.PI * 2;
+    for (let i = 0; i < SCHOVEN; i++) {
+      n += 1;
+      const zi = zaad * 100 + n;
+      const hoek = draai + (i / SCHOVEN) * Math.PI * 2 + (rnd(zi, 1) - 0.5) * 0.25;
+      const schaal = 0.5 + rnd(zi, 3) * 0.05;
+      const gx = hx + Math.cos(hoek) * RING;
+      const gy = hy + Math.sin(hoek) * RING;
+      // de top komt boven het midden uit: de leun volgt uit de kring en de lengte van de schoof
+      const lengte = 38 * schaal;
+      const leun = (Math.atan2(RING * TEGEL * 1.7, lengte * 0.9) * 180) / Math.PI;
+      const as = [Math.sin(hoek), -Math.cos(hoek), 0];
+      let mdl = geschaald(schoof(zi, { smal: 0.62 }), schaal);
+      const pivotAfst = Math.hypot(...mdl.midden);
+      mdl = gekanteld(mdl, as, leun, [0, 0, 0]);
+      mdl.straal += 2 * pivotAfst * Math.sin((leun * Math.PI) / 360);
+      K.tekenModel(B, mdl, { gx, gy, richting: rnd(zi, 5) * 360 });
+    }
+  }
+}
+
+// Waar de hokken staan: twee of drie, op een afstand van elkaar, en niet te dicht bij de rand van de tegel.
+function kiesHokken(b, d, zaad) {
+  // drie opstellingen, gekozen uit het zaad: drie in een driehoek, twee naast elkaar, en drie gespiegeld; op het scherm
+  // staan ze zo ruim uit elkaar als een tegel van 64 bij 32 toelaat
+  const OPSTELLINGEN = [
+    [[0.26, 0.26], [0.76, 0.3], [0.3, 0.76]],
+    [[0.28, 0.64], [0.72, 0.36]],
+    [[0.74, 0.74], [0.24, 0.7], [0.7, 0.24]],
+  ];
+  return OPSTELLINGEN[zaad % 3].map(([x, y], i) => [x * b + (rnd(zaad, i, 40) - 0.5) * 0.06, y * d + (rnd(zaad, i, 41) - 0.5) * 0.06]);
+}
+
 // ---------------------------------------------------------------- een heel veld
 
 // Rendert één akker van b × d tegels op een grasrand: de bodem (ploegvoren via akkerPixel) en
@@ -368,6 +566,14 @@ function renderVeld(b, d, stadium, o = {}) {
   if (stadium === 'gemaaid') {
     stoppelsOverAkker(B, b, d, { zaad: o.zaad, randMarge });
     schovenOverAkker(B, b, d, { zaad: o.zaad, hokken: o.hokken });
+  } else if (stadium === 'stoppels') {
+    stoppelsDicht(B, b, d, langs, { zaad: o.zaad, randMarge });
+  } else if (stadium === 'zwad') {
+    stoppelsDicht(B, b, d, langs, { zaad: o.zaad, randMarge });
+    zwadOverAkker(B, b, d, langs, { zaad: o.zaad });
+  } else if (stadium === 'hokken') {
+    stoppelsDicht(B, b, d, langs, { zaad: o.zaad, randMarge });
+    hokkenOverAkker(B, b, d, { zaad: o.zaad, hokken: o.hokken });
   } else if (stadium === 'kiemend') {
     kiemOverAkker(B, b, d, langs, { zaad: o.zaad, randMarge });
   } else {
@@ -383,7 +589,7 @@ function renderVeld(b, d, stadium, o = {}) {
   }
   if (o.figuur) {
     K.tekenModel(B, o.figuur.model, { gx: o.figuur.gx, gy: o.figuur.gy, richting: o.figuur.richting || 'Z', z: 0 });
-    if (stadium !== 'gemaaid' && stadium !== 'kiemend') {
+    if (stadium === 'groen' || stadium === 'rijp') {
       halmenOverAkker(B, b, d, stadium, { zaad: o.zaad, fase: o.fase, golfA: o.golfA, golfB: o.golfB, laag: 'voor', grens, randMarge });
     }
   }
@@ -418,7 +624,10 @@ module.exports = {
   kiemOverAkker,
   halmenOverAkker,
   stoppelsOverAkker,
+  stoppelsDicht,
   schovenOverAkker,
+  zwadOverAkker,
+  hokkenOverAkker,
   renderVeld,
   tegelLagen,
 };

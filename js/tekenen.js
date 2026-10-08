@@ -2218,6 +2218,19 @@
       T.blok(ctx, p.x, p.y, 0.5, 0.1, 10, '#5e4a36', { helder, basis: 2 });
       return;
     }
+    if (v.soort === 'wijnrank') {
+      // Een wijnrank (js/wijngaard.js; vraag 136): kaal, blad, vol met trossen of leeg, naar de maand en of hij geplukt
+      // is. Zonder kunst: een paal met een groen (of blauw, als hij vol hangt) blok.
+      const stand = T.rankStand(v, S.kalender.dag);
+      const rank = metSprites() && T.sprites.wijnrank && T.sprites.wijnrank(stand, v.variant);
+      if (rank) {
+        T.sprites.teken(ctx, rank, p.x, p.y, helder);
+        return;
+      }
+      T.blok(ctx, p.x, p.y, 0.05, 0.05, 40, '#6b4a2e', { helder });
+      if (stand !== 'kaal') T.blok(ctx, p.x, p.y, 0.4, 0.12, 22, stand === 'vol' ? '#3b2f6b' : stand === 'leeg' ? '#b98a2e' : '#4f7d2e', { helder, basis: 12 });
+      return;
+    }
     if (v.soort === 'kraam') {
       // Een kraam van de markt op het plein (js/markt.js; werklijst vraag 110, d): een toonbank met een gestreepte luifel,
       // naar het midden van het plein. In aanbouw bleker, zoals een gebouw zonder bouwfasen. Zonder kunst: een toonbank

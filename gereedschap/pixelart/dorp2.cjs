@@ -1330,6 +1330,8 @@ function wijnrij(zaad = 1, S = TEGEL) {
 // omgespitte aarde, en voor de deur een paar wijntonnen. 10 × 8 tegels, het huis 5 × 4 achter in de hoek, de deur
 // (gevel 'y') kijkt naar de kijker; de wijngaard ligt rechts ervan en loopt de hele diepte door.
 // o.alleenHuis: alleen het huis, op de voet van het huis (voor de bouwfases).
+// o.metTonnen (met alleenHuis): het huis met de wijntonnen voor de deur, zonder wijngaard: het wijnhuis (8 okt, vraag 140);
+// de voet is dan die van het huis, 5 × 4, en de tonnen staan er iets vóór.
 function wijnboerderij(gx, gy, o = {}) {
   const T = TEGEL;
   const zaad = o.zaad ?? 71;
@@ -1347,56 +1349,58 @@ function wijnboerderij(gx, gy, o = {}) {
     schoorsteen: { t: 0.2, c: -6, hoog: 26, r: 10, steen: true, rook: o.rook !== false },
     ...o,
   });
-  if (o.alleenHuis) return g;
+  if (o.alleenHuis && !o.metTonnen) return g;
   const ex = gx - 0.5; // de achterste hoek van de voet, in tegels
   const ey = gy - 0.5;
-  const hGrond = 3; // de aarde van de wijngaard ligt drie pixels boven het gras
-  const zGrond = hGrond / PXH;
-  const rijX = [0, 1, 2, 3, 4].map((k) => ex + 6.15 + 0.85 * k);
-  // de omgespitte aarde: tussen de rijen ruggen en voren, onder de ranken donkerder met hier en daar gras
-  const aardeTex = (vlak, X, Y, Z) => {
-    const u = X / T;
-    const dich = Math.min(...rijX.map((r) => Math.abs(u - r))) * T; // afstand tot de dichtstbijzijnde rij, in eenheden
-    const n = ruis2(X * 0.3, Y * 0.3, zaad + 5);
-    UIT.ramp = RAMP.aarde;
-    if (vlak !== 'z') {
-      UIT.stap = (vlak === 'y' ? 4.4 : 3) + (hash(Math.floor(X / 3), Math.floor(Y / 3), zaad) % 4 === 0 ? -0.8 : 0);
-      return;
-    }
-    if (dich < 3.6) {
-      UIT.stap = 2 + n * 1.2;
-      if (n > 0.62 && hash(Math.floor(X), Math.floor(Y), zaad + 2) % 3 === 0) {
-        UIT.ramp = RAMP.gras;
-        UIT.stap = 2.6 + n;
+  if (!o.alleenHuis) {
+    const hGrond = 3; // de aarde van de wijngaard ligt drie pixels boven het gras
+    const zGrond = hGrond / PXH;
+    const rijX = [0, 1, 2, 3, 4].map((k) => ex + 6.15 + 0.85 * k);
+    // de omgespitte aarde: tussen de rijen ruggen en voren, onder de ranken donkerder met hier en daar gras
+    const aardeTex = (vlak, X, Y, Z) => {
+      const u = X / T;
+      const dich = Math.min(...rijX.map((r) => Math.abs(u - r))) * T; // afstand tot de dichtstbijzijnde rij, in eenheden
+      const n = ruis2(X * 0.3, Y * 0.3, zaad + 5);
+      UIT.ramp = RAMP.aarde;
+      if (vlak !== 'z') {
+        UIT.stap = (vlak === 'y' ? 4.4 : 3) + (hash(Math.floor(X / 3), Math.floor(Y / 3), zaad) % 4 === 0 ? -0.8 : 0);
+        return;
       }
-      return;
-    }
-    UIT.stap = 3.5 + 1.1 * Math.cos(dich * 0.62) + (n - 0.5) * 1.2;
-    const h = hash(Math.floor(X * 0.5), Math.floor(Y * 0.5), zaad + 9);
-    if (h % 61 === 0) {
-      UIT.ramp = RAMP.steen;
-      UIT.stap = 4.4;
-    }
-  };
-  g.vormen.push(D.blok(ex + 5.5, ey, ex + 10, ey + 8, 0, hGrond, aardeTex, { deel: 40 }));
-  // het pad naar de deur: aangestampte aarde, tot de rand van de voet
-  const padTex = (vlak, X, Y) => {
-    UIT.ramp = RAMP.zand;
-    UIT.stap = (vlak === 'z' ? 4.4 : vlak === 'y' ? 4 : 2.8) + (hash(Math.floor(X * 0.6), Math.floor(Y * 0.6), zaad + 13) % 5 === 0 ? -0.9 : 0);
-  };
-  g.vormen.push(D.blok(ex + 1.95, ey + 4, ex + 3, ey + 8, 0, 1.5, padTex, { deel: 41 }));
-  // de rijen: elk uit stukken, een voor een ingeplant met een eigen zaad
-  const S = (7.5 * T) / 8;
-  for (let k = 0; k < rijX.length; k++) {
-    for (let j = 0; j < 8; j++) {
-      g.modellen.push({ model: wijnrij(zaad + k * 8 + j, S), gx: rijX[k], gy: ey + 0.25 + (j + 0.5) * (7.5 / 8), richting: 'ZO', z: zGrond });
+      if (dich < 3.6) {
+        UIT.stap = 2 + n * 1.2;
+        if (n > 0.62 && hash(Math.floor(X), Math.floor(Y), zaad + 2) % 3 === 0) {
+          UIT.ramp = RAMP.gras;
+          UIT.stap = 2.6 + n;
+        }
+        return;
+      }
+      UIT.stap = 3.5 + 1.1 * Math.cos(dich * 0.62) + (n - 0.5) * 1.2;
+      const h = hash(Math.floor(X * 0.5), Math.floor(Y * 0.5), zaad + 9);
+      if (h % 61 === 0) {
+        UIT.ramp = RAMP.steen;
+        UIT.stap = 4.4;
+      }
+    };
+    g.vormen.push(D.blok(ex + 5.5, ey, ex + 10, ey + 8, 0, hGrond, aardeTex, { deel: 40 }));
+    // het pad naar de deur: aangestampte aarde, tot de rand van de voet
+    const padTex = (vlak, X, Y) => {
+      UIT.ramp = RAMP.zand;
+      UIT.stap = (vlak === 'z' ? 4.4 : vlak === 'y' ? 4 : 2.8) + (hash(Math.floor(X * 0.6), Math.floor(Y * 0.6), zaad + 13) % 5 === 0 ? -0.9 : 0);
+    };
+    g.vormen.push(D.blok(ex + 1.95, ey + 4, ex + 3, ey + 8, 0, 1.5, padTex, { deel: 41 }));
+    // de rijen: elk uit stukken, een voor een ingeplant met een eigen zaad
+    const S = (7.5 * T) / 8;
+    for (let k = 0; k < rijX.length; k++) {
+      for (let j = 0; j < 8; j++) {
+        g.modellen.push({ model: wijnrij(zaad + k * 8 + j, S), gx: rijX[k], gy: ey + 0.25 + (j + 0.5) * (7.5 / 8), richting: 'ZO', z: zGrond });
+      }
     }
   }
   // wijntonnen voor het huis
   g.modellen.push({ model: VW.ton(), gx: ex + 0.8, gy: ey + 4.75, richting: 'ZO', z: 0 });
   g.modellen.push({ model: VW.ton(), gx: ex + 1.4, gy: ey + 4.95, richting: 'Z', z: 0 });
   g.modellen.push({ model: VW.ton(), gx: ex + 0.55, gy: ey + 5.55, richting: 'ZO', z: 0 });
-  g.voet = [ex * T, ey * T, (ex + 10) * T, (ey + 8) * T];
+  if (!o.alleenHuis) g.voet = [ex * T, ey * T, (ex + 10) * T, (ey + 8) * T];
   return g;
 }
 

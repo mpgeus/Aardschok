@@ -302,9 +302,11 @@
  </tile>
  <tile id="40">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="wijnhuis"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="5x4"/>
   </properties>
+  <image source="gebouwen/wijnhuis.png" width="346" height="348"/>
  </tile>
  <tile id="41">
   <properties>

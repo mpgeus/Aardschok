@@ -289,8 +289,9 @@
       naam: 'wijnboerderij', meervoud: 'wijnboerderijen', trede: 'dorp', voet: { b: 10, h: 8 }, kosten: { hout: 18, goud: 8 },
       heer: { wijn: 10 }, bouwtijd: 5, handen: 0, woonruimte: 4, maakt: null, oogst: 'wijn', wijngaard: true,
       alleenIn: { maanden: ['wijnmaand'], waarom: 'de druiven worden pas in wijnmaand geplukt' },
-      // De tekening (gereedschap/pixelart/dorp2.cjs): het huis met de wijntonnen bij de deur, achter in de hoek van de voet.
-      menu: true, tekening: 'gebouwen/wijnboerderij', beschrijving: 'een boerderij met een wijngaard: wijn, geplukt in wijnmaand',
+      // De tekening (gereedschap/pixelart/dorp2.cjs, `gebouwen/wijnhuis`): het huis met de wijntonnen bij de deur, achter in
+      // de hoek van de voet; `gebouwen/wijnboerderij` is het hele plaatje met de wijngaard erin, voor de proefplaten.
+      menu: true, tekening: 'gebouwen/wijnhuis', beschrijving: 'een boerderij met een wijngaard: wijn, geplukt in wijnmaand',
       opmerking: '',
     },
     brouwerij: {

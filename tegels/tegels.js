@@ -3178,13 +3178,32 @@
       "doos": null
      },
      {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
+      "naam": "wijnhuis",
+      "vast": true,
+      "beslaat": [
+       5,
+       4
+      ],
       "groep": null,
       "staat": null,
       "deur": null,
-      "doos": null
+      "doos": [
+       174,
+       218,
+       172,
+       130
+      ],
+      "bestand": "tegels/gebouwen/wijnhuis.png",
+      "cel": [
+       0,
+       0,
+       346,
+       348
+      ],
+      "anker": [
+       174,
+       218
+      ]
      },
      {
       "naam": null,

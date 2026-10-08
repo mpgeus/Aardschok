@@ -1858,6 +1858,522 @@
     }
    }
   },
+  "plukker": {
+   "naam": "plukker",
+   "cel": [
+    76,
+    97
+   ],
+   "anker": [
+    38,
+    83
+   ],
+   "snelheid": 1.5,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "plukker-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true,
+     "cel": [
+      40,
+      82
+     ],
+     "anker": [
+      20,
+      77
+     ]
+    },
+    "lopen": {
+     "bestand": "plukker-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1.5,
+     "stap": 0.6,
+     "cel": [
+      50,
+      88
+     ],
+     "anker": [
+      25,
+      77
+     ]
+    },
+    "plukken": {
+     "bestand": "plukker-plukken.png",
+     "beelden": 12,
+     "fps": 8,
+     "herhaal": true,
+     "cel": [
+      70,
+      85
+     ],
+     "anker": [
+      35,
+      80
+     ]
+    }
+   }
+  },
+  "binder": {
+   "naam": "binder",
+   "cel": [
+    88,
+    96
+   ],
+   "anker": [
+    44,
+    80
+   ],
+   "snelheid": 1.5,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "binder-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true,
+     "cel": [
+      36,
+      82
+     ],
+     "anker": [
+      18,
+      77
+     ]
+    },
+    "lopen": {
+     "bestand": "binder-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1.5,
+     "stap": 0.6,
+     "cel": [
+      50,
+      88
+     ],
+     "anker": [
+      25,
+      77
+     ]
+    },
+    "binden": {
+     "bestand": "binder-binden.png",
+     "beelden": 12,
+     "fps": 8,
+     "herhaal": true,
+     "cel": [
+      82,
+      81
+     ],
+     "anker": [
+      41,
+      68
+     ]
+    }
+   }
+  },
+  "drager": {
+   "naam": "drager",
+   "cel": [
+    92,
+    101
+   ],
+   "anker": [
+    46,
+    87
+   ],
+   "snelheid": 1.5,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "drager-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true,
+     "cel": [
+      84,
+      89
+     ],
+     "anker": [
+      42,
+      84
+     ]
+    },
+    "lopen": {
+     "bestand": "drager-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1.5,
+     "stap": 0.6,
+     "cel": [
+      86,
+      95
+     ],
+     "anker": [
+      43,
+      84
+     ]
+    }
+   }
+  },
+  "dorser": {
+   "naam": "dorser",
+   "cel": [
+    166,
+    153
+   ],
+   "anker": [
+    83,
+    113
+   ],
+   "snelheid": 1.5,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "dorser-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true,
+     "cel": [
+      52,
+      84
+     ],
+     "anker": [
+      26,
+      77
+     ]
+    },
+    "lopen": {
+     "bestand": "dorser-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1.5,
+     "stap": 0.6,
+     "cel": [
+      84,
+      91
+     ],
+     "anker": [
+      42,
+      80
+     ]
+    },
+    "dorsen": {
+     "bestand": "dorser-dorsen.png",
+     "beelden": 12,
+     "fps": 10,
+     "herhaal": true,
+     "cel": [
+      160,
+      147
+     ],
+     "anker": [
+      80,
+      110
+     ]
+    }
+   }
+  },
+  "plukster": {
+   "naam": "plukster",
+   "cel": [
+    70,
+    89
+   ],
+   "anker": [
+    35,
+    75
+   ],
+   "snelheid": 1.4,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "plukster-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true,
+     "cel": [
+      40,
+      79
+     ],
+     "anker": [
+      20,
+      70
+     ]
+    },
+    "lopen": {
+     "bestand": "plukster-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1.4,
+     "stap": 0.56,
+     "cel": [
+      44,
+      81
+     ],
+     "anker": [
+      22,
+      70
+     ]
+    },
+    "plukken": {
+     "bestand": "plukster-plukken.png",
+     "beelden": 12,
+     "fps": 8,
+     "herhaal": true,
+     "cel": [
+      64,
+      81
+     ],
+     "anker": [
+      32,
+      72
+     ]
+    }
+   }
+  },
+  "binster": {
+   "naam": "binster",
+   "cel": [
+    70,
+    89
+   ],
+   "anker": [
+    35,
+    73
+   ],
+   "snelheid": 1.4,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "binster-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true,
+     "cel": [
+      38,
+      79
+     ],
+     "anker": [
+      19,
+      70
+     ]
+    },
+    "lopen": {
+     "bestand": "binster-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1.4,
+     "stap": 0.56,
+     "cel": [
+      44,
+      81
+     ],
+     "anker": [
+      22,
+      70
+     ]
+    },
+    "binden": {
+     "bestand": "binster-binden.png",
+     "beelden": 12,
+     "fps": 8,
+     "herhaal": true,
+     "cel": [
+      64,
+      74
+     ],
+     "anker": [
+      32,
+      61
+     ]
+    }
+   }
+  },
+  "draagster": {
+   "naam": "draagster",
+   "cel": [
+    92,
+    99
+   ],
+   "anker": [
+    46,
+    85
+   ],
+   "snelheid": 1.4,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "draagster-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true,
+     "cel": [
+      86,
+      91
+     ],
+     "anker": [
+      43,
+      82
+     ]
+    },
+    "lopen": {
+     "bestand": "draagster-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1.4,
+     "stap": 0.56,
+     "cel": [
+      86,
+      93
+     ],
+     "anker": [
+      43,
+      82
+     ]
+    }
+   }
+  },
+  "dorster": {
+   "naam": "dorster",
+   "cel": [
+    160,
+    149
+   ],
+   "anker": [
+    80,
+    111
+   ],
+   "snelheid": 1.4,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "dorster-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true,
+     "cel": [
+      52,
+      79
+     ],
+     "anker": [
+      26,
+      70
+     ]
+    },
+    "lopen": {
+     "bestand": "dorster-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1.4,
+     "stap": 0.56,
+     "cel": [
+      84,
+      90
+     ],
+     "anker": [
+      42,
+      79
+     ]
+    },
+    "dorsen": {
+     "bestand": "dorster-dorsen.png",
+     "beelden": 12,
+     "fps": 10,
+     "herhaal": true,
+     "cel": [
+      154,
+      143
+     ],
+     "anker": [
+      77,
+      108
+     ]
+    }
+   }
+  },
   "heer": {
    "naam": "heer",
    "cel": [
@@ -3940,6 +4456,39 @@
      42,
      58
     ]
+   },
+   "zwad": {
+    "y0": 740,
+    "cel": [
+     84,
+     59
+    ],
+    "anker": [
+     42,
+     17
+    ]
+   },
+   "hokken": {
+    "y0": 799,
+    "cel": [
+     84,
+     80
+    ],
+    "anker": [
+     42,
+     38
+    ]
+   },
+   "stoppels": {
+    "y0": 879,
+    "cel": [
+     84,
+     57
+    ],
+    "anker": [
+     42,
+     15
+    ]
    }
   }
  },
@@ -4143,5 +4692,23 @@
    38,
    42
   ]
+ },
+ "wijnrank": {
+  "bestand": "wijnrank.png",
+  "cel": [
+   53,
+   61
+  ],
+  "anker": [
+   26,
+   53
+  ],
+  "standen": [
+   "kaal",
+   "blad",
+   "vol",
+   "leeg"
+  ],
+  "varianten": 3
  }
 }

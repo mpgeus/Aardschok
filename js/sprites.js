@@ -72,6 +72,7 @@
       if (gegevens.paaltje) vellen.push(gegevens.paaltje.bestand);
       if (gegevens.meiboom) vellen.push(gegevens.meiboom.bestand);
       if (gegevens.hol) vellen.push(gegevens.hol.bestand);
+      if (gegevens.wijnrank) vellen.push(gegevens.wijnrank.bestand);
       // De kramen en de manden van de markt laden pas als er een getekend wordt (S.kraam, S.mand): zo'n 24 MB.
       if (gegevens.tekens) vellen.push(gegevens.tekens.bestand);
       // De figuren laden hier niet: een figuur komt pas als zijn wezen op de kaart staat (S.laadWatErStaat, vraag 114,
@@ -496,6 +497,16 @@
     return stuk(MAP + t.bestand, 0, 0, t.cel[0], t.cel[1], t.anker);
   };
 
+  // Een wijnrank (js/wijngaard.js, gereedschap/pixelart/wijnrank.cjs; vraag 136): een rij per stand ('kaal', 'blad', 'vol',
+  // 'leeg'), een kolom per variant, één tegel van een rij langs de x-as, met het anker op de grond in het midden van de
+  // tegel. Null als het vel er niet is.
+  S.wijnrank = function (stand, variant) {
+    if (!gegevens || !gegevens.wijnrank) return null;
+    const t = gegevens.wijnrank;
+    const rij = Math.max(0, t.standen.indexOf(stand));
+    return stuk(MAP + t.bestand, ((variant || 0) % t.varianten) * t.cel[0], rij * t.cel[1], t.cel[0], t.cel[1], t.anker);
+  };
+
   // Een kraam van de markt (js/markt.js, gereedschap/pixelart/marktkraam.cjs; vraag 127): per waar ('groente', 'brood',
   // ...), vorm ('luifel', 'puntdak', 'zeil', 'kar') en lengte een rij cellen, vol en leeg, van elke kant waarheen hij
   // kijkt ('ZO', 'ZW', 'NW', 'NO'), met het anker op de grond in het midden van zijn eerste tegel. Bestaat die soort niet
@@ -710,16 +721,25 @@
     hakken: { figuur: 'hakker', houding: 'hakken' },
     rooien: { figuur: 'hakker', houding: 'hakken' },
     sprokkelen: { figuur: 'sprokkelaar', houding: 'rapen' },
+    // In de wijngaard (js/wijngaard.js, vraag 136): plukken met de mand aan de arm, en met de volle mand naar huis.
+    plukken: { figuur: 'plukker', houding: 'plukken' },
   };
-  const WERKVELLEN = ['maaier', 'zaaier', 'wieder', 'sprokkelaar', 'hakker'];
-  const VAN_EEN_VROUW = { maaier: 'maaister', zaaier: 'zaaister', wieder: 'wiedster', sprokkelaar: 'sprokkelaarster', hakker: 'hakster' };
-  const werkVelVan = (e, naam) => (e.vel === 'boerin' && S.figuurGegevens(VAN_EEN_VROUW[naam]) ? VAN_EEN_VROUW[naam] : naam);
+  // Wat hij draagt, en welk vel daarbij hoort als hij niet aan het werk is (onderweg naar huis).
+  const DRAAGT = { bundel: 'sprokkelaar', mand: 'plukker' };
+  const WERKVELLEN = ['maaier', 'zaaier', 'wieder', 'sprokkelaar', 'hakker', 'plukker', 'binder', 'drager', 'dorser'];
+  const VAN_EEN_VROUW = {
+    maaier: 'maaister', zaaier: 'zaaister', wieder: 'wiedster', sprokkelaar: 'sprokkelaarster', hakker: 'hakster',
+    plukker: 'plukster', binder: 'binster', drager: 'draagster', dorser: 'dorster',
+  };
+  // Een vrouw: een boerin (vel `boerin`), of een bewoner die een vrouw is (js/bewoners.js, e.bewoner).
+  const isVrouw = (e) => e.vel === 'boerin' || !!(e.bewoner && e.bewoner.geslacht === 'vrouw');
+  const werkVelVan = (e, naam) => (isVrouw(e) && S.figuurGegevens(VAN_EEN_VROUW[naam]) ? VAN_EEN_VROUW[naam] : naam);
   // Het vel waarmee deze boer of boerin maait (ook voor test/vellen.test.cjs).
   S.maaierVan = (e) => werkVelVan(e, 'maaier');
   function werkFiguur(e) {
     const wf = e.werkt ? WERKFIGUREN[e.werkt.soort] : null;
     const bundel = e.draagt === 'bundel';
-    const vel = wf && (wf.figuur !== 'sprokkelaar' || bundel) ? wf.figuur : bundel ? 'sprokkelaar' : null;
+    const vel = wf && (wf.figuur !== 'sprokkelaar' || bundel) ? wf.figuur : DRAAGT[e.draagt] || null;
     const naam = vel && werkVelVan(e, vel);
     if (!naam || !S.figuurGegevens(naam)) return null;
     const houding = e.pad && e.pad.length ? 'lopen' : wf && e.werkt.tot != null && !e.werkt.rust ? wf.houding : 'staan';

@@ -17,7 +17,7 @@
 // in git staat: in een verse kopie is het (bijna) leeg, en zonder --alleen bouwt dit script de
 // beschrijving opnieuw op uit wat daar staat — dan verdwijnen alle andere figuren uit het spel.
 // Een los vel dat hier zelf gerenderd wordt en niets uit uit/ nodig heeft (LOSSE_VELLEN: de
-// schandpaal, het paaltje, de meiboom, het wolvenhol, de marktkraam en de tekens met het papier) kan ook met --alleen: dan wordt alleen dat vel gerenderd en alleen zijn
+// schandpaal, het paaltje, de meiboom, het wolvenhol, de wijnrank, de marktkraam en de tekens met het papier) kan ook met --alleen: dan wordt alleen dat vel gerenderd en alleen zijn
 // ingang gezet.
 //
 // Twee soorten werk:
@@ -37,6 +37,7 @@ const Schandpaal = require('./schandpaal.cjs');
 const Paaltje = require('./paaltje.cjs');
 const Meiboom = require('./meiboom.cjs');
 const Hol = require('./hol.cjs');
+const Wijnrank = require('./wijnrank.cjs');
 const Marktkraam = require('./marktkraam.cjs');
 const Papieren = require('./papieren.cjs');
 const I = require('./inpakken.cjs');
@@ -193,7 +194,13 @@ function tekens() {
 
 // Losse vellen die --alleen ook kent, naast de figuren: ze worden hier gerenderd, niet gekopieerd
 // uit uit/, en geven hun ingang in de beschrijving terug.
-const LOSSE_VELLEN = { schandpaal, paaltje, meiboom, hol, marktkraam, tekens };
+// De wijnrank in vier standen (gereedschap/pixelart/wijnrank.cjs; js/wijngaard.js, vraag 136).
+function wijnrank() {
+  schrijf('wijnrank.png', Wijnrank.vel());
+  return Wijnrank.beschrijving('wijnrank.png');
+}
+
+const LOSSE_VELLEN = { schandpaal, paaltje, meiboom, hol, wijnrank, marktkraam, tekens };
 
 // ---------------------------------------------------------------- kopiëren
 
@@ -262,6 +269,18 @@ const FIGUURLIJST = {
   sprokkelaarster: { map: ['sprokkelaarster', 'animaties'], houdingen: ['staan', 'lopen', 'rapen'], bron: 'werkfiguren-anim.cjs sprokkelaarster' }, // de sprokkelaar als boerin
   maaister: { map: ['maaister', 'animaties'], houdingen: ['maaien'], bron: 'werkfiguren-anim.cjs maaister' }, // de maaier als boerin
   hakster: { map: ['hakster', 'animaties'], houdingen: ['staan', 'lopen', 'hakken'], bron: 'werkfiguren-anim.cjs hakster' }, // de hakker als boerin
+  // De oogst (werkfiguren.cjs, werklijst vraag 136 en 140; Marcel, 8 okt: "Dat je de boeren ziet plukken"): de plukker met zijn
+  // tenen mand (de wijnoogst), de binder die een schoof bindt, de drager met een schoof op zijn schouder en de dorser met
+  // zijn vlegel (de graanoogst), elk met zijn vrouw, met dezelfde houdingen, beelden en fps als de man ernaast. De drager
+  // werkt alleen door te lopen en heeft dus geen eigen werkhouding.
+  plukker: { map: ['plukker', 'animaties'], houdingen: ['staan', 'lopen', 'plukken'], bron: 'werkfiguren-anim.cjs plukker' },
+  binder: { map: ['binder', 'animaties'], houdingen: ['staan', 'lopen', 'binden'], bron: 'werkfiguren-anim.cjs binder' },
+  drager: { map: ['drager', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'werkfiguren-anim.cjs drager' },
+  dorser: { map: ['dorser', 'animaties'], houdingen: ['staan', 'lopen', 'dorsen'], bron: 'werkfiguren-anim.cjs dorser' },
+  plukster: { map: ['plukster', 'animaties'], houdingen: ['staan', 'lopen', 'plukken'], bron: 'werkfiguren-anim.cjs plukster' }, // de plukker als boerin
+  binster: { map: ['binster', 'animaties'], houdingen: ['staan', 'lopen', 'binden'], bron: 'werkfiguren-anim.cjs binster' }, // de binder als boerin
+  draagster: { map: ['draagster', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'werkfiguren-anim.cjs draagster' }, // de drager als boerin
+  dorster: { map: ['dorster', 'animaties'], houdingen: ['staan', 'lopen', 'dorsen'], bron: 'werkfiguren-anim.cjs dorster' }, // de dorser als boerin
   // Het huis van de heer (heer.cjs, ontwerp/beeld.md): ze komen over de weg (js/heer.js,
   // js/inner.js) en staan in T.MENSEN (js/mensen.js) onder dezelfde naam als hier.
   heer: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs heer soldaat inner' },
