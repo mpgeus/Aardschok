@@ -20,10 +20,10 @@
   T.RAAD_INSTELLINGEN = {
     // Of de raad er staat (de spelregel "Raad").
     aan: true,
-    // Wat helpt aan eten (T.watHelptAanEten; vraag 132): een visser per zoveel mensen, en per zoveel tegels water.
+    // Wat helpt aan eten (T.watHelptAanEten; vraag 133): een visser per zoveel mensen, en per zoveel tegels water.
     mensenPerVisser: 30,
     waterPerVisser: 60,
-    // Vis en vlees voor de winter (T.visEnVleesVoorDeWinter; vraag 132, B): de raad zegt het als er meer dan dit deel
+    // Vis en vlees voor de winter (T.visEnVleesVoorDeWinter; vraag 133, B): de raad zegt het als er meer dan dit deel
     // van wat de huizen in de winter willen, zal missen, of als er zout bij moet.
     visEnVleesMarge: 0.1,
     // Zoveel dagen vóór de inner komt, zegt de raad het.
@@ -123,7 +123,7 @@
   // schieten (T.jagersZonderHerten, js/beesten.js; Marcel, 7 okt, vraag 116, k). In de speeltest van 7 okt vroeg het dorp
   // anders jager na jager, tot er 9 tot 11 stonden, die alleen klein wild schoten.
   const jagerHelpt = (D) => T.BEHOEFTEN_INSTELLINGEN.vleesIsEten && T.jagersZonderHerten(D) === 0;
-  // Wat er helpt als het eten de winter niet haalt (Marcel, 8 okt, vraag 132, b: "ze mogen advies geven op wat te doen.
+  // Wat er helpt als het eten de winter niet haalt (Marcel, 8 okt, vraag 133, b: "ze mogen advies geven op wat te doen.
   // dit kan kopen, planten, bakken etc zijn"): wat er nu kan, in deze volgorde, elk { id, zin, bouw (de soort die het
   // dorp dan vraagt, of geen) }. Ontginnen (meer akkers: de boeren vragen het zelf, js/ontginnen.js), een visser als er
   // water is en het nog geen winter is, een jager als er herten zijn (jagerHelpt), een graanschuur om het zaaigraan te
@@ -162,7 +162,7 @@
     return uit;
   };
 
-  // Vis en vlees voor de winter (vraag 132, B; Marcel, 8 okt: "A en B samen"): { v (T.visEnVleesVoorDeWinter), mist (er
+  // Vis en vlees voor de winter (vraag 133, B; Marcel, 8 okt: "A en B samen"): { v (T.visEnVleesVoorDeWinter), mist (er
   // mist meer dan visEnVleesMarge), zout (er moet zout bij, en de marskramer komt nog voor de winter), hulp (wat meer
   // vangt: een visser of een jager, uit T.watHelptAanEten) }, of null als er niets te zeggen is.
   T.visEnVleesRaad = function (D) {
@@ -299,14 +299,14 @@
     {
       id: 'eten',
       als: (D) => haaltHetNiet(D, T.etenVoorDeWinter),
-      // Wat helpt, zegt het dorp ook: wat er nu kan en het meest oplevert (T.watHelptAanEten hieronder; vraag 132, b).
+      // Wat helpt, zegt het dorp ook: wat er nu kan en het meest oplevert (T.watHelptAanEten hieronder; vraag 133, b).
       tekst: (D) => {
         const hulp = T.watHelptAanEten(D).slice(0, 2);
         const bouw = hulp.find((h) => h.bouw);
         return `Het eten haalt ${haalt(T.etenVoorDeWinter(D, D.kalender.dag))} van de winter${hulp.length ? `. Wat helpt: ${T.opsomming(hulp.map((h) => h.zin))}` : ''}.${bouw ? verzoekZin(D, bouw.bouw) : ''}${geenGezin()}`;
       },
     },
-    // Vis en vlees voor de winter (vraag 132, B): zout, en een voorraad voordat de vissers stilliggen.
+    // Vis en vlees voor de winter (vraag 133, B): zout, en een voorraad voordat de vissers stilliggen.
     {
       id: 'visEnVlees',
       als: (D) => !!T.visEnVleesRaad(D),
@@ -460,7 +460,7 @@
     // Een houthakker die stilstaat omdat zijn bomen op zijn, is geen reden voor een nieuwe zolang het hout de winter
     // haalt (werklijst vraag 129, e): in de speeltest van 6 okt stonden er zo na vier jaar 8 tot 10, die vooral stilstonden.
     if (!heeft(D, 'houthakker')) erbij('houthakker', 'Er hakt niemand hout, en elke hut en elk gebouw kost hout.', 'hout');
-    // Het zaaigraan ligt nergens veilig (js/graanschuur.js; vraag 132): zodra er zaaigraan apart ligt, na de oogst.
+    // Het zaaigraan ligt nergens veilig (js/graanschuur.js; vraag 133): zodra er zaaigraan apart ligt, na de oogst.
     if (T.GRAANSCHUUR_INSTELLINGEN.bewaken && !heeft(D, 'graanschuur') && T.zaaigraanApart(D, D.kalender.dag) > 0) {
       erbij('graanschuur', 'Het zaaigraan ligt nergens veilig: in een hongerwinter eet het dorp het op, en dan blijven de akkers leeg.', 'zaaigraan');
     }

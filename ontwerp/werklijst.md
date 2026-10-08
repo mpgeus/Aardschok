@@ -5033,7 +5033,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     van 13 tot 15 jagers; nu eet het in de eerste winter zijn zaaigraan op, en de oogst zakt in (612, 205, 32). Voorstel
     van Claude: het zaaigraan blijft liggen (a), en de raad zegt wat het meest helpt aan eten (b). **Marcel (8 okt): "a.
     eten ze wel op, bij honger grijpen mensen alles aan. Je moet mensen inzetten om het warenhuis te beschermen. b. dat is
-    goed. ze mogen advies geven op wat te doen. dit kan kopen, planten, bakken etc zijn."** Dat wordt vraag 132 (hieronder,
+    goed. ze mogen advies geven op wat te doen. dit kan kopen, planten, bakken etc zijn."** Dat wordt vraag 133 (hieronder,
     bij de vragen), met het plan.
     **Bezig in sessie `ccr-77327776-rqjldz`** (7 okt): stap 3, wat je tegen de wolven doet; eerst het plan voor Marcel.
 117. **Eén kaart: het eiland** (Marcel, 4 okt, zesentwintigste sessie: "Ik wil uiteindelijk toch alles op dezelfde kaart.
@@ -6340,7 +6340,7 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     drie de landen ja tegen de wapenmaker en speelde de vier jaar uit; **op 62707 wint hij nu**, op 27 hooimaand van het
     vierde jaar, waar hij eerst in het tweede jaar werd ontslagen. Drie van de zes spellen winnen. **Klaar.**
 
-132. **Het dorp eet gevarieerd, en het zaaigraan moet bewaakt** (Marcel, 8 okt, na de speeltest van de jager die echt
+133. **Het dorp eet gevarieerd, en het zaaigraan moet bewaakt** (Marcel, 8 okt, na de speeltest van de jager die echt
     jaagt: "het dorp moet gevarieerd eten. Graan, brood, vlees, vis etc.", en "a. eten ze wel op, bij honger grijpen mensen
     alles aan. Je moet mensen inzetten om het warenhuis te beschermen. b. dat is goed. ze mogen advies geven op wat te
     doen. dit kan kopen, planten, bakken etc zijn."; plan van Claude; open).
@@ -6369,6 +6369,26 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     A is gebouwd (`T.GRAAN_PER_TEGEL` 4, `standaard: 'netRond'`), en B ook: `T.visEnVleesVoorDeWinter` en de raad
     `visEnVlees` (zout kopen, een visser of jager), de marskramer met 40 zout in de herfst, verse vis eerst, en de speler
     van de speeltest koopt het zout. Dan de speeltest van vier jaar.
+
+134. **Minder grondstoffen** (Marcel, 8 okt: "Er blijven steeds dingen bijkomen zo. Dat wil ik voorkomen. We moeten stoppen
+    met het ene op te lossen met iets anders", en "We blijven grondstoffen toevoegen"; open, wacht op Marcels keuze).
+    Het spel kent 26 grondstoffen; negen worden gemaakt maar door niets gebruikt (behalve dat de marskramer ze koopt):
+    eieren (kippenhok; ook de pacht van de heer), groente (moestuin), huiden (de jager), vaten (kuiper), kalk
+    (kalkbrander), klei (kleiput), riet (rietsnijder), planken (timmerman). Voorstel van Claude: alle negen eruit, gebouw
+    en grondstof (git houdt ze), de marktkraam "potten" ook. Dan blijven er 17: graan, melk, kaas, vlees, vis, meel,
+    brood, bier, wol, laken, hout, steen, turf, goud, zout, ijzer, gereedschap en wapens (met wijn, vraag 135, 18).
+    Daarbij een regel voor CLAUDE.md: wat een speeltest scheef laat zien, eerst met een getal; een nieuwe regel of
+    grondstof alleen als Marcel hem kiest, en alleen met iets dat hem gebruikt.
+135. **Wijn uit wijngaarden** (Marcel, 8 okt: "Ik zou ook wijn willen met wijngaarden. Dus meer als knights and merchants.
+    Dat je ook een boer met wijnranken hebt."; open, na vraag 134). In Knights and Merchants is wijn een van de vier soorten
+    eten (met brood, worst en vis), en de wijnboer haalt het van zijn wijngaard. Gedachten van Claude, nog niet gekozen:
+    een wijngaard als soort veld, zoals een akker of weide in het veldenvenster, van een boer; de oogst in wijnmaand (die
+    heet al zo); wijn als wens van een hogere stand, of als eten; en de heer die wijn wil, zoals nu de eieren.
+136. **Doorgroeien zonder vaste maat** (Marcel, 8 okt: "We moeten ook stoppen met het dorp een vaste maat geven. Als alles
+    straks 1 eiland is, is het logisch dat je gewoon door kunt groeien naar buiten."; open). Hoort bij het eiland (vraag
+    117). Er zijn twee vaste maten: het land van de maker (100 bij 100, met bos tot de rand), en de maat van de winst (vanaf
+    100 mensen: daarna zegt de raad "haal een vrij erf weg", vraag 102, c, omdat een nieuw gezin in een hut de reeks van
+    geluk breekt, en de bouwers van de speeltest stoppen dan met groeien).
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

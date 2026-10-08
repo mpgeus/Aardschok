@@ -880,7 +880,7 @@
     zaaigraanHonger: {
       naam: '{wie}',
       start: 'begin',
-      // De honger komt aan het zaaigraan in de graanschuur (js/graanschuur.js; werklijst vraag 132; Marcel, 8 okt: "bij
+      // De honger komt aan het zaaigraan in de graanschuur (js/graanschuur.js; werklijst vraag 133; Marcel, 8 okt: "bij
       // honger grijpen mensen alles aan. Je moet mensen inzetten om het warenhuis te beschermen").
       knopen: {
         begin: {

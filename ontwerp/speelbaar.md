@@ -153,7 +153,7 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
-## De proef met de spelregel "Graan" op "Net rond" (8 okt; werklijst, vraag 132)
+## De proef met de spelregel "Graan" op "Net rond" (8 okt; werklijst, vraag 133)
 
 Dezelfde stand (`e9cc2cd`), `npm run speeltest -- bouwer sluw --maker --jaren 4 --regel graan=netRond`: een akkertegel
 geeft 4 graan in plaats van 3,5. Naast "Honger" (de standaard, hierboven):
@@ -172,7 +172,7 @@ bouwer weer een keer; een tweede haalt het bijna. De gewone bouwer, die de heer 
 steeds niet: zijn reeks breekt in de winter op vlees of vis (de vissers liggen stil, en hij heeft weinig jagers). De
 bouwer op 72022 verliest zijn ambt op beide in het tweede jaar.
 
-## De speeltest van 8 okt, avond: vee en vissers erbij (werklijst, vraag 132)
+## De speeltest van 8 okt, avond: vee en vissers erbij (werklijst, vraag 133)
 
 Op `ccr-77327776-rqjldz` op `e9cc2cd`, `npm run speeltest -- bouwer sluw --maker --jaren 4`.
 
@@ -191,7 +191,7 @@ lentemaand tot de oogst op, en de reeks breekt in de winter op vlees of vis (de 
 jagers). Er is een spelregel "Graan" (Honger, de standaard: 3,5 graan per akkertegel; Net rond: 4; Ruim: 5): de proef
 hieronder speelt met "Net rond".
 
-## De speeltest van 8 okt, later: de graanschuur en het advies over eten (werklijst, vraag 132, a en b)
+## De speeltest van 8 okt, later: de graanschuur en het advies over eten (werklijst, vraag 133, a en b)
 
 Op `ccr-77327776-rqjldz` op `3290959`, `npm run speeltest -- bouwer sluw --maker --jaren 4`.
 

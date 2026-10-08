@@ -458,7 +458,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   roepen** (3c, `G.aanval`, `e.roeptOmHulp`): wie de wolven aanvallen, roept, de mannen die het horen komen (`moetNaar`
   met `hulp`), een buur jaagt ze weg, de schout vecht, en na een kwartier bijten ze. **Het hek** (3d,
   `T.hekOmDeSchapen`): latten om de meent, met hekjes.
-- `js/graanschuur.js`: **de graanschuur en de wachters bij het zaaigraan** (vraag 132, 8 okt; Marcel: "bij honger grijpen
+- `js/graanschuur.js`: **de graanschuur en de wachters bij het zaaigraan** (vraag 133, 8 okt; Marcel: "bij honger grijpen
   mensen alles aan. Je moet mensen inzetten om het warenhuis te beschermen", en "Ja, er moet een graanschuur komen"): het
   zaaigraan ligt in de graanschuur (`T.GEBOUWEN.graanschuur`, `T.graanschuurVan`; het dorp vraagt er een zodra er
   zaaigraan apart ligt, `T.watTeBouwen`); komt de honger eraan (`T.zaaigraanInGevaar`, vanuit `T.eetVandaag`), dan zoekt
@@ -507,10 +507,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   wat het doel vraagt aan de treden (`T.doelGebouwen`), met waar het vandaan komt. Na de laatste trede telt hij tot de
   maat van de winst (`T.mensenVoorDeWinst` in `js/einde.js`), en is die gehaald (`T.maatGehaald`), dan zegt hij dat je
   een vrij erf weghaalt (vraag 102, c). Haalt het eten de winter niet, dan zegt hij wat helpt (`T.watHelptAanEten`, vraag
-  132, b: ontginnen, een visser per dertig mensen, een jager als er herten zijn, een graanschuur, meer weide, zaaigraan
+  133, b: ontginnen, een visser per dertig mensen, een jager als er herten zijn, een graanschuur, meer weide, zaaigraan
   kopen), en vraagt het dorp het gebouw dat hij noemt. Na een voorjaar met honger maakt een boer zelf een veld weide
   (`weideErbij` in `T.boerenKiezenVelden`, `D.behoeften.voorjaarsHonger`). Vanaf de herfst zegt hij of vis en vlees de
-  winter halen, als de beek dichtligt (`T.visEnVleesVoorDeWinter` in `js/behoeften.js`, `T.visEnVleesRaad`; vraag 132,
+  winter halen, als de beek dichtligt (`T.visEnVleesVoorDeWinter` in `js/behoeften.js`, `T.visEnVleesRaad`; vraag 133,
   B): hoeveel zout er bij moet (de marskramer heeft er in de herfst het meest), en een visser of jager als er dan te
   weinig ligt. Wie eet, eet eerst wat ongezouten is. Uit te zetten in de spelregels ("Raad").
 - `js/wensen.js`: **de wensen van de mensen, per stand** (stap 2 van vraag 79, vraag 80 en 85, 1 okt; zoals in Anno

@@ -173,7 +173,7 @@
       naam: 'graanschuur', trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 15 }, heer: {}, bouwtijd: 3,
       handen: 0, woonruimte: 0, maakt: null, menu: true,
       tekening: 'gebouwen/schuurBlokhut', beschrijving: 'hier ligt het zaaigraan; met wachters erbij eet het dorp het in een hongerwinter niet op',
-      opmerking: 'nieuw (vraag 132): nog niet getekend, leent voorlopig de blokhutschuur.',
+      opmerking: 'nieuw (vraag 133): nog niet getekend, leent voorlopig de blokhutschuur.',
     },
     kippenhok: {
       naam: 'kippenhok', trede: 'gehucht', voet: { b: 2, h: 2 }, kosten: { hout: 4 }, heer: { eieren: 20 }, bouwtijd: 1,
@@ -1214,7 +1214,7 @@
     // De wachters bij de graanschuur (js/graanschuur.js): na het zaaien naar huis, en honger kost vertrouwen.
     T.tikGraanschuurDag(D, dag, gegeten.tekort > 0);
     // Honger in het voorjaar en de zomer, van 1 lentemaand tot de oogst: dan maken de boeren na de oogst een weide erbij
-    // (T.boerenKiezenVelden, js/akkers.js; vraag 132).
+    // (T.boerenKiezenVelden, js/akkers.js; vraag 133).
     if (gegeten.tekort > 0 && D.behoeften && T.datumVanDag(dag).maand <= T.MAANDEN.findIndex((m) => m.naam === 'oogstmaand')) {
       D.behoeften.voorjaarsHonger = (D.behoeften.voorjaarsHonger || 0) + 1;
     }

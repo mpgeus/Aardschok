@@ -1663,7 +1663,7 @@ Nog open na deel 1 (vragen van Claude):
   de kaas en het gezouten vlees, en zegt het als het zover is ("De honger is groot: het dorp eet van het zaaigraan."). De
   winter rekent het eten zonder het zaaigraan, en bij de muis op het graan in de balk staat hoeveel ervan zaaigraan is.
   De spelregel "Zaaigraan" (Als ander graan: het spel van vóór 1 okt).
-- **De graanschuur en de wachters** (8 okt; werklijst vraag 132; Marcel: "bij honger grijpen mensen alles aan. Je moet
+- **De graanschuur en de wachters** (8 okt; werklijst vraag 133; Marcel: "bij honger grijpen mensen alles aan. Je moet
   mensen inzetten om het warenhuis te beschermen", "Ja, er moet een graanschuur komen", en een wachter per twintig mensen,
   "anders maken ze geen kans"; `js/graanschuur.js`): het zaaigraan ligt in de graanschuur, en zodra er zaaigraan apart
   ligt, vraagt het dorp er een. Komt de honger eraan, dan zoekt een boer je: "Ze praten over de graanschuur." Je zet er
@@ -1672,12 +1672,12 @@ Nog open na deel 1 (vragen van Claude):
   weinig pakt het dorp een deel. Elke dag honger terwijl het graan bewaakt wordt, kost vertrouwen; bij het zaaien gaan ze
   naar huis. Zonder graanschuur eet het dorp het op zoals hierboven. De spelregel "Zaaigraan" op "Bewaken" (de
   standaard), "Pas bij nood" of "Als ander graan". De graanschuur leent nog de tekening van de blokhutschuur.
-- **Wat helpt aan eten** (8 okt; vraag 132, b; Marcel: "ze mogen advies geven op wat te doen. dit kan kopen, planten,
+- **Wat helpt aan eten** (8 okt; vraag 133, b; Marcel: "ze mogen advies geven op wat te doen. dit kan kopen, planten,
   bakken etc zijn"): haalt het eten de winter niet, dan zegt de raad wat er nu kan en helpt, de eerste twee: land
   ontginnen (een boer komt het vragen), een visser aan het water (niet in de winter), een jager als er herten zijn, een
   graanschuur voor het zaaigraan, en zaaigraan kopen bij de marskramer als er te weinig is om te zaaien. Het dorp vraagt
   het gebouw dat hij noemt; tot 8 okt vroeg het alleen een jager.
-- **Vee en vissers tegen de honger in het voorjaar** (8 okt; vraag 132; Marcel: "1 en 2 allebei, vee en meer vissers"):
+- **Vee en vissers tegen de honger in het voorjaar** (8 okt; vraag 133; Marcel: "1 en 2 allebei, vee en meer vissers"):
   had het dorp tussen lentemaand en de oogst tien dagen of meer honger, en brengt het hooi geen koe meer de winter door,
   dan maakt een boer na de oogst een veld weide (eerst een veld dat zou rusten, anders de minst vruchtbare akker van een
   boer met meer akkers). Daar krijgen de koeien kalveren, en een koe geeft van grasmaand tot wijnmaand melk voor vijf
@@ -1946,7 +1946,7 @@ Besloten op een voorstel van Claude (`werklijst.md`, punt 4):
 - **De beek vriest 's winters dicht** (Marcel, 24 sep: "die beek is wel een leuk detail"). De
   visser vangt dan niets, dus vis die je in de winter wilt eten, moet je in de herfst zouten. Zo
   telt het zout. Of je het ijs ook ziet, is nog open: dat is tekenwerk.
-  **Sinds 8 okt zegt de raad het** (vraag 132, B; Marcel: "A en B samen"): vanaf de herfst rekent het dorp uit wat de
+  **Sinds 8 okt zegt de raad het** (vraag 133, B; Marcel: "A en B samen"): vanaf de herfst rekent het dorp uit wat de
   huizen in de winter aan vis en vlees willen, wat er dan ligt, en hoeveel zout dat vraagt, en de raad zegt het zolang de
   marskramer nog voor de winter komt ("koop 18 zout bij de marskramer in wijnmaand; een zout houdt tien vis of vlees
   goed"); ligt er te weinig, dan vraagt het dorp een visser of een jager. De marskramer heeft in de herfst 40 zout (eerst
@@ -2081,7 +2081,7 @@ Besloten op een voorstel van Claude (`werklijst.md`, punt 5):
   inhoudt zo'n 70 graan over, en komt wie alles in graan betaalt er zo'n 30 tekort, en 70 als
   hij ook graan moet verkopen voor het goud. (Een eerste gok in één blok, om bij te stellen na
   spelen.)
-  **Sinds 8 okt is de standaard 4** (de spelregel "Graan" op "Net rond"; Marcel: "A en B samen", werklijst vraag 132):
+  **Sinds 8 okt is de standaard 4** (de spelregel "Graan" op "Net rond"; Marcel: "A en B samen", werklijst vraag 133):
   met de jager die echt jaagt en het zaaigraan dat bewaakt wordt, viel een dorp van 100 mensen op 3,5 elk voorjaar
   zonder graan. "Honger" blijft als keuze.
 - **Hij vraagt naar wat hij ziet, en in wat hij ziet.** Voor elke akkertegel een half graan (de

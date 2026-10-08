@@ -143,7 +143,7 @@ test('het hout: vanaf drie maanden voor de winter, als het hem niet haalt, en da
   assert.notEqual(id(S), 'hout');
 });
 
-test('het eten: vanaf drie maanden voor de winter, als het hem niet haalt: wat er helpt (vraag 132, b)', () => {
+test('het eten: vanaf drie maanden voor de winter, als het hem niet haalt: wat er helpt (vraag 133, b)', () => {
   const S = gehucht();
   T.zetVoorraad(S.dorp, 'hout', 5000);
   T.zetVoorraad(S.dorp, 'graan', 0);
@@ -160,7 +160,7 @@ test('het eten: vanaf drie maanden voor de winter, als het hem niet haalt: wat e
   assert.notEqual(id(S), 'eten');
 });
 
-test('vis en vlees voor de winter: zout bij de marskramer, en een voorraad voordat de beek dichtligt (vraag 132, B)', () => {
+test('vis en vlees voor de winter: zout bij de marskramer, en een voorraad voordat de beek dichtligt (vraag 133, B)', () => {
   const S = gehucht();
   const D = S.dorp;
   T.zetVoorraad(D, 'hout', 5000);

@@ -94,7 +94,7 @@
     // Zout (Marcel, 24 sep 2026; spel.md, "Handel"): vis en vlees bederven, tenzij ze gezouten zijn.
     // Eén zout houdt zoveel vis of vlees goed (zoutHoudtGoed); van wat het zout niet dekt, bederft
     // elke dag een deel (bederfPerDag). Wie gezouten vis eet, eet het zout mee op. Zout komt van de
-    // marskramer (js/handel.js). Wie eet, eet eerst wat ongezouten is (8 okt, vraag 132, B): tot dan at elke vis die een
+    // marskramer (js/handel.js). Wie eet, eet eerst wat ongezouten is (8 okt, vraag 133, B): tot dan at elke vis die een
     // huis at, ook een verse in de zomer, zijn zout mee, en was het zout op voordat de winter kwam.
     bederfelijk: ['vis', 'vlees'],
     zoutHoudtGoed: 10,
@@ -241,7 +241,7 @@
   // hierboven.
 
   // Wat vandaag van vis en vlees gegeten is, neemt zijn zout mee, voor zover het gezouten was: eerst is wat ongezouten lag
-  // gegeten (vraag 132, B). Van wat daarna nog ongezouten ligt, bederft een deel. Naar rato verdeeld over vis en vlees.
+  // gegeten (vraag 133, B). Van wat daarna nog ongezouten ligt, bederft een deel. Naar rato verdeeld over vis en vlees.
   function pasBederfToe(D, gegeten) {
     const IN = T.BEHOEFTEN_INSTELLINGEN;
     const v = D.voorraad;
@@ -688,7 +688,7 @@
     const vers = perVlees > 0 ? Math.max(0, Math.min((nodig - melk) / perVlees, ongezouten)) : 0;
     // Het zaaigraan eet het dorp pas bij nood (T.zaaigraanApart, js/akkers.js; werklijst vraag 81): eerst het andere
     // graan, dan de kaas en het gezouten vlees, en pas dan het zaaigraan, liever dan dat er mensen sterven. Wat er bij de
-    // graanschuur bewaakt wordt, pakt het niet (T.zaaigraanBeschermd, js/graanschuur.js; vraag 132).
+    // graanschuur bewaakt wordt, pakt het niet (T.zaaigraanBeschermd, js/graanschuur.js; vraag 133).
     const apart = Math.min(v.graan || 0, T.zaaigraanApart(D, dag));
     const graan = Math.max(0, Math.min(nodig - melk - vers * perVlees, (v.graan || 0) - apart));
     const kaas = Math.max(0, Math.min(nodig - melk - vers * perVlees - graan, v.kaas || 0));
@@ -833,7 +833,7 @@
     return Object.assign(r, { tot, eet });
   };
 
-  // Of vis en vlees de winter halen voor de huizen die ze willen (vraag 132, B; Marcel, 8 okt: "A en B samen"). In de
+  // Of vis en vlees de winter halen voor de huizen die ze willen (vraag 133, B; Marcel, 8 okt: "A en B samen"). In de
   // winter ligt de beek dicht (T.GEBOUWEN.visser.stilIn), dus wat de huizen dan eten, ligt er al, en gezouten, want
   // ongezouten bederft het (bederfPerDag). Vanaf `dag`, zolang de winter in zicht is en nog niet begon; null als geen huis
   // vis of vlees wil. Geeft { nodig (wat de huizen in de winter willen, min wat de jagers dan schieten), ligt (vis en

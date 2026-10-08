@@ -55,7 +55,7 @@
   // Alle getallen van de velden in één blok (ook in de werkbank van de spelregels, js/opties.js).
   // Een eerste gok, uit het voorstel dat Marcel op 25 sep koos.
   T.VELDEN_INSTELLINGEN = {
-    // Een weide erbij (werklijst vraag 132; Marcel, 8 okt: "1 en 2 allebei, vee en meer vissers"): had het dorp dit jaar
+    // Een weide erbij (werklijst vraag 133; Marcel, 8 okt: "1 en 2 allebei, vee en meer vissers"): had het dorp dit jaar
     // zoveel dagen honger tussen 1 lentemaand en de oogst, en is er geen hooi voor nog een koe, dan maakt een boer na de
     // oogst een van zijn velden weide (T.boerenKiezenVelden): de koeien geven juist in het voorjaar melk.
     weideNaHonger: 10,
@@ -468,8 +468,8 @@
   // 70 over. Bij 3 graan per tegel was er ook honger als je de heer niets gaf, en dan is bedriegen
   // geen uitweg meer, alleen ellende. Tot 24 sep was het 2, zonder zaaien en zonder heer. Sinds 8 okt 4 (836 graan op
   // het gehucht): met de jager die echt jaagt en het zaaigraan dat bewaakt wordt, viel een dorp van 100 mensen op 3,5
-  // elk voorjaar zonder graan (ontwerp/speelbaar.md, vraag 132).
-  T.GRAAN_PER_TEGEL = 4; // de spelregel "Graan" op "Net rond" (Marcel, 8 okt, vraag 132: "A en B samen"; was Honger, 3,5)
+  // elk voorjaar zonder graan (ontwerp/speelbaar.md, vraag 133).
+  T.GRAAN_PER_TEGEL = 4; // de spelregel "Graan" op "Net rond" (Marcel, 8 okt, vraag 133: "A en B samen"; was Honger, 3,5)
   T.ZAAIGRAAN_PER_TEGEL = 1;
 
   // Wat een boer kan (js/boeren.js: maaien, opbrengst, zaaien), als factor; 1 zonder dat bestand

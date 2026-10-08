@@ -140,7 +140,7 @@
       wie: { leeftijd: ['jong', 'volwassen'] }, ander: { boer: false },
     },
     ziekte: { soort: 'ramp', titel: 'de koorts', winter: 2, oorzaak: ['kou', 'vol'], sterft: 'De koorts', wie: { geslacht: 'vrouw' } },
-    // De honger komt aan het zaaigraan in de graanschuur (js/graanschuur.js; vraag 132): een boer zoekt je.
+    // De honger komt aan het zaaigraan in de graanschuur (js/graanschuur.js; vraag 133): een boer zoekt je.
     zaaigraanHonger: { soort: 'ramp', titel: 'het zaaigraan', zelf: true, oorzaak: 'honger', roep: '{wie} zoekt je: het dorp wil het zaaigraan eten.', wie: [{ boer: true }, MAN] },
     wolven: {
       soort: 'ramp', titel: 'de wolven', als: { seizoen: 'winter', vee: { schaap: 3 } }, winter: 3, sterft: 'De jacht op de wolven', zelf: 'beesten', oorzaak: 'wolven',

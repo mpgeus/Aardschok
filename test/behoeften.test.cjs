@@ -521,7 +521,7 @@ test('wie gezouten vis eet, eet het zout mee op', () => {
   assert.ok(Math.abs(S.voorraad.zout - (10 - gegeten / IN.zoutHoudtGoed)) < 1e-9);
 });
 
-test('wie eet, eet eerst de verse vis: het zout gaat pas op aan wat gezouten was (vraag 132, B)', () => {
+test('wie eet, eet eerst de verse vis: het zout gaat pas op aan wat gezouten was (vraag 133, B)', () => {
   const IN = T.BEHOEFTEN_INSTELLINGEN;
   const S = maakS();
   S.bevolking = 100;
