@@ -568,6 +568,7 @@ function gebouwenLijst() {
   if (typeof P.kruidenhut === 'function') lijst.push(['kruidenhut', () => P.kruidenhut(0, 0, { rook: false })]);
   if (typeof P.jagershut === 'function') lijst.push(['jagershut', () => P.jagershut(0, 0, { rook: false })]);
   if (typeof P.oudstehuis === 'function') lijst.push(['oudstehuis', () => P.oudstehuis(0, 0, { rook: false })]);
+  if (typeof P.wijnboerderij === 'function') lijst.push(['wijnboerderij', () => P.wijnboerderij(0, 0, { rook: false })]);
   if (typeof P.schuur === 'function') lijst.push(['schuur', () => P.schuur(0, 0)]);
   // brug slaan we over: die is geen heel aantal tegels breed, en hoort dus niet in "beslaat".
   return lijst;

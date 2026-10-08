@@ -3087,13 +3087,32 @@
       "doos": null
      },
      {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
+      "naam": "wijnboerderij",
+      "vast": true,
+      "beslaat": [
+       10,
+       8
+      ],
       "groep": null,
       "staat": null,
       "deur": null,
-      "doos": null
+      "doos": [
+       195,
+       218,
+       321,
+       273
+      ],
+      "bestand": "tegels/gebouwen/wijnboerderij.png",
+      "cel": [
+       0,
+       0,
+       516,
+       491
+      ],
+      "anker": [
+       195,
+       218
+      ]
      },
      {
       "naam": null,

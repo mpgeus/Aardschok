@@ -285,11 +285,13 @@
     // wijn, de rest van het jaar niets, en wijn bederft niet. Een boer met wijnranken: wie er woont, is een boer
     // (T.STANDEN.boeren in js/wensen.js). De heer wil er wijn voor (`heer`).
     wijnboerderij: {
-      naam: 'wijnboerderij', meervoud: 'wijnboerderijen', trede: 'dorp', voet: { b: 7, h: 8 }, kosten: { hout: 18, goud: 8 },
+      naam: 'wijnboerderij', meervoud: 'wijnboerderijen', trede: 'dorp', voet: { b: 10, h: 8 }, kosten: { hout: 18, goud: 8 },
       heer: { wijn: 10 }, bouwtijd: 5, handen: 2, woonruimte: 4, maakt: { uit: { wijn: 10 } },
       alleenIn: { maanden: ['wijnmaand'], waarom: 'de druiven worden pas in wijnmaand geplukt' },
-      menu: true, tekening: 'huizen/boerderij1', beschrijving: 'een boerderij met wijngaarden: wijn, geplukt in wijnmaand',
-      opmerking: 'De tekening van de wijnboerderij komt nog; tot dan leent hij een boerderij.',
+      // De tekening (gereedschap/pixelart/dorp2.cjs): een vakwerkhuis achter in de hoek, met wijntonnen bij de deur, en
+      // rechts vijf rijen ranken met trossen; de bouwfasen laten alleen het huis rijzen.
+      menu: true, tekening: 'gebouwen/wijnboerderij', beschrijving: 'een boerderij met wijngaarden: wijn, geplukt in wijnmaand',
+      opmerking: '',
     },
     brouwerij: {
       naam: 'brouwerij', trede: 'dorp', voet: { b: 5, h: 5 }, kosten: { hout: 14, goud: 10 }, heer: { goud: 4 }, bouwtijd: 4,
