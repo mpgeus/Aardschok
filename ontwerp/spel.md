@@ -932,7 +932,11 @@ zee rondom, met je dorp, het kasteel van de heer, de stad en de andere dorpen er
 zag. Het plan in stappen staat bij vraag 117 in de werklijst. **Marcel koos de maat: 2500 bij 2500 tegels** (4 okt), na
 de kern (eerst de huizen, dan de boeren met de houthakker en de beesten). Wat dat technisch vraagt (de kaart in stukken
 uit het nummer, opslaan wat veranderde, lange tochten met HPA\* over de stukken en de andere drie technieken die Marcel
-op 2 okt gaf, wat ver weg is als getallen), staat erbij.
+op 2 okt gaf, wat ver weg is als getallen), staat erbij. **De kaartenmaker** (8 okt, het plan bij vraag 117; Marcel: "Ik
+wil 1 aaneengesloten landschap", "B 1", en "moeilijke plek mag ook, kunnen we als hard modus later doen?"): één
+aaneengesloten eiland, gemaakt uit het nummer, met een bergrug met passen en verder heuvels, rivieren die in zee
+uitkomen, en de zes streken van de landkaart (het woud, de heide, het veen, het broek, het zand en de kampen) met de
+kust. Je dorp komt altijd waar een dorp kan groeien; een moeilijke plek komt later, bij de moeilijkheidsgraad.
 
 
 **Zo werkt het nu** (30 sep, zeventiende sessie; stuk 1 van stap 1a; `js/land.js` en `js/landkaart.js`, toetsen in

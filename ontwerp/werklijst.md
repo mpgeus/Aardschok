@@ -5068,6 +5068,21 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     passen en verder heuvels, of b2 alleen heuvels, zoals nu maar groter? **C**, je plek: altijd waar een dorp kan
     groeien en niet achter een berg, of ook een moeilijke plek (als spelregel)? **D**, de streken: de zes van de
     landkaart en de kust, of wil je er iets bij?
+    **Marcel (8 okt): "A hoe bedoel je? Ik wil 1 aaneengesloten landschap.. B 1 C moeilijke plek mag ook, kunnen we als
+    hard modus later doen? D Nee voor nu prima."** Dus: **B** een bergrug met passen, en verder heuvels. **C** standaard
+    altijd een plek waar een dorp kan groeien; een moeilijke plek komt later, als zware stand bij de moeilijkheidsgraad
+    (die er al is voor de tegenspelers, vraag 61, C). **D** de zes streken van de landkaart en de kust, voor nu niets
+    erbij. **A** is één aaneengesloten landschap, zoals Marcel al wilde (vraag 61, A: "een grote kaart"; vraag 117: "alles
+    op dezelfde kaart"): één eiland waar alles doorloopt en waar je overal kunt lopen, zonder naden en zonder laadschermen.
+    De twee schalen zijn hoe de maker het maakt, niet wat je ziet (zoals een schilder eerst met grove streken zet waar de
+    zee, de bergrug en de rivieren komen, en daarna elk blaadje schildert: één schilderij, en de schets zie je nooit), en
+    de stukken van 64 bij 64 zijn hoe het in het geheugen staat (zoals in Minecraft: het land om je heen wordt gemaakt
+    terwijl je loopt). De enige grens in het plan is stap 2, een tussenstap: je speelt je dorp van 100 bij 100 al op het
+    eiland en ziet de rest eromheen, maar loopt er nog niet in; stap 3 haalt die grens weg. Het werk van stap 2 (je dorp
+    op het land van het eiland) is ook voor het hele eiland nodig. Opnieuw gevraagd (wacht op Marcel): **a1** de plaat,
+    je dorp op het eiland, dan eerst de kern (voor de demo), en daarna het hele eiland beloopbaar; of **a2** na de plaat
+    meteen het hele eiland beloopbaar, en dan de kern. Voorstel: a1, want de demo gaat over je dorp en zijn mensen, en
+    het hele eiland is het grootste technische werk tot nu toe. De plaat (stap 1) is in beide gevallen de eerste.
 118. **Inwoners met stats, zoals in Dwarf Fortress** (Marcel, 4 okt, zesentwintigste sessie: "Inwoners krijgen ook
     'stats' hp, skills, eigenschappen, etc ala dwarf fortress"; plan van Claude; open).
     **Wat er al is:** elke bewoner heeft een naam, een leeftijd, een huis, een gezin en werk (`js/bewoners.js`); de vijf
