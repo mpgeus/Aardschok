@@ -546,6 +546,26 @@ veranderde. Ze beginnen op 50.
   weigert, is binnen dat jaar zijn ambt kwijt (na de waarschuwing). `Spel.debug.gril('jacht')`.
 - **Nog niet:** de speeltest (stap 3).
 
+## Geld in het dorp: de kas, de beurs van de schout en een beurs per huis (Marcel, 8 okt 2026; werklijst vraag 141)
+
+**Zo werkt het nu** (stap 1, 8 okt): het goud van het dorp is de kas (de balk toont hem in goud, zilver en koper: 1 goud =
+10 zilver = 100 koper, `T.muntTekst` in `js/geld.js`). Daaruit gaan de bouw, de heer en de marskramer, en de belasting
+komt erin. Naast de kas heeft de schout een eigen beurs, in de balk naast de kas: op de eerste van de maand krijgt hij
+zijn loon uit de kas (1 goud), en wie hij omkoopt (de inner), betaalt hij uit eigen zak. De spelregel "Geld" op "Alles uit
+de kas" is het spel van vóór 8 okt.
+
+**Besloten** (Marcel, 8 okt: "Ik denk dat we binnen in het dorp ook een economie nodig hebben. Hoe kopen onze inwoners
+anders dingen?", "En voor de economie B voor de demo ook. Belangrijk concept", "schout heeft losse beurs en beheert de
+dorpskas / stadsgeld. Komt uit de huizen, de belasting. De markt betaald een vergoeding aan het dorp of stad. De boer kan
+hier zelf kiezen. Mensen hebben hun eigen gedachten.", en op het plan: "1. Loon voor de schout. Het gezin koopt ook brood
+etc. Ook voor de wensen van zijn gezinsleden. Omkopen uit eigen zak, eventueel kun je andere mensen helpen. 2. Hoe hij
+uitbetaald maar ook wat hij op de markt wil verkopen. 3. Ze betalen voor alles. 4. Ja"): elk huis krijgt een beurs, de
+voorraad blijft het pakhuis van het dorp, een huis koopt eruit wat het nodig heeft en wil (ook zijn eten), en het geld
+gaat naar wie het maakte; de belasting komt uit de beurzen in de kas, en de markt betaalt marktgeld; een huis kiest zelf
+wat het koopt, en wie te arm is, mist zijn wens; de boer kiest hoe hij zijn dagloner betaalt en wat hij van zijn oogst
+verkoopt; het gezin van de schout koopt uit zijn beurs, en hij kan er anderen mee helpen. Het plan in stappen staat in
+de werklijst bij vraag 141.
+
 ## De markt op het plein, die meegroeit (Marcel, 5 en 6 okt 2026; werklijst vraag 110, d, en vraag 127)
 
 **Zo werkt het nu** (6 okt, zesendertigste sessie; `js/markt.js`; Marcel: "Voor nu a1, b tot e ja" bij 110, d, en "A ja, B

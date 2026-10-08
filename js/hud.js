@@ -116,6 +116,14 @@
     '<circle cx="8.2" cy="15.2" r="1.6" fill="#4b2f6b"/><circle cx="10.6" cy="15.6" r="1.6" fill="#55367a"/><circle cx="9.3" cy="17.8" r="1.6" fill="#4b2f6b"/>' +
     '<path d="M9.4 13.4c.4-1 1.2-1.6 2.2-1.8" fill="none" stroke="#6f8f3a" stroke-width="1.1" stroke-linecap="round"/>' +
     '</svg>';
+  // Een leren beurs met een koord, voor je eigen geld (js/geld.js).
+  const BEURS_ICOON =
+    '<svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true">' +
+    '<path d="M6.2 6.6c-2.6 2-3.8 5-3 7.6.8 2.4 3.6 3.6 6.8 3.6s6-1.2 6.8-3.6c.8-2.6-.4-5.6-3-7.6z" fill="#8a5a33" stroke="#4a2e18" stroke-width="1"/>' +
+    '<path d="M6.4 6.6c1.2-.9 2.3-1.3 3.6-1.3s2.4.4 3.6 1.3" fill="none" stroke="#e2b64a" stroke-width="1.4" stroke-linecap="round"/>' +
+    '<path d="M7.4 4.2l2.6 1.4 2.6-1.4" fill="none" stroke="#4a2e18" stroke-width="1.2" stroke-linecap="round"/>' +
+    '<circle cx="10" cy="12.2" r="1.7" fill="#e2b64a"/>' +
+    '</svg>';
   const GRONDSTOF_ICOON = {
     goud: GOUD_ICOON, graan: GRAAN_ICOON, wol: WOL_ICOON, hout: HOUT_ICOON,
     ijzer: IJZER_ICOON, zout: ZOUT_ICOON, gereedschap: GEREEDSCHAP_ICOON, kaas: KAAS_ICOON,
@@ -123,7 +131,7 @@
     wapens: WAPENS_ICOON,
   };
   const GRONDSTOF_UITLEG = {
-    goud: 'Goud. Wat de heer het liefst ziet.',
+    goud: 'De kas van het dorp, in goud, zilver en koper: wat de heer het liefst ziet. Daaruit gaan de bouw, de heer en de marskramer, en de belasting komt erin.',
     graan: 'Graan. Van de akkers: eten, zaaigoed, en pacht op Sint-Maarten.',
     wol: 'Wol. Van de schapen op de meent.',
     hout: 'Hout. Uit het bos van de heer.',
@@ -194,7 +202,12 @@
     box.innerHTML = BALK.map(
       (wat) =>
         `<div class="grondstof${BALK_LATER.includes(wat) ? ' verborgen' : ''}" data-wat="${wat}" title="${GRONDSTOF_UITLEG[wat]}">` +
-        `<span class="icoon">${GRONDSTOF_ICOON[wat]}</span><span class="aantal">0</span><span class="verstopt"></span></div>`,
+        `<span class="icoon">${GRONDSTOF_ICOON[wat]}</span><span class="aantal">0</span><span class="verstopt"></span></div>` +
+        // Je eigen beurs (js/geld.js) staat naast de kas.
+        (wat === 'goud'
+          ? `<div class="grondstof verborgen" data-wat="beurs" title="Je eigen beurs: je loon uit de kas, op de eerste van de maand. Wie je omkoopt, betaal je hieruit.">` +
+            `<span class="icoon">${BEURS_ICOON}</span><span class="aantal">0</span></div>`
+          : ''),
     ).join('') +
       `<div class="grondstof" data-wat="bevolking" title="Mensen in het dorp, en hoeveel er wonen kunnen (js/gebouwen.js: elk huis geeft woonruimte).">` +
       `<span class="icoon">${BEVOLKING_ICOON}</span><span class="aantal">0/0</span></div>` +
@@ -268,9 +281,14 @@
     if (!box.children.length) bouwVoorraadbalk(box);
     for (const wat of BALK) {
       const cel = box.querySelector(`[data-wat="${wat}"]`);
-      cel.querySelector('.aantal').textContent = Math.floor(S.dorp.voorraad[wat] || 0);
+      // De kas in munten (js/geld.js); de rest in hele stuks.
+      cel.querySelector('.aantal').textContent = wat === 'goud' ? T.muntTekst(S.dorp.voorraad.goud, true) : Math.floor(S.dorp.voorraad[wat] || 0);
       if (BALK_LATER.includes(wat)) cel.classList.toggle('verborgen', !(S.dorp.gehad && S.dorp.gehad[wat]));
     }
+    // Je eigen beurs (js/geld.js), naast de kas, als de spelregel "Geld" beurzen heeft.
+    const beurs = box.querySelector('[data-wat="beurs"]');
+    beurs.classList.toggle('verborgen', !T.metBeurzen());
+    beurs.querySelector('.aantal').textContent = T.muntTekst(T.beursVan(D), true);
     // De twee bazen (js/bazen.js) staan in dezelfde balk, ook meteen bij een nieuw of geladen spel.
     T.ui.toonBazen(D);
     // Wat er verstopt ligt (js/verstoppen.js), klein naast het graan en het goud, en bij de muis

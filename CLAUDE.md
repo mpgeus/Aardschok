@@ -689,6 +689,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`T.zaakAnker`, voor `T.dagAnker`), en komt de schout bij het midden (`T.schoutBijDeZitting`), dan begint ze. Een vonnis
   is `doe.zaak` (`T.zaakGevolg`): de zaak is af, het vervolg wacht (`T.ZAAK_INSTELLINGEN.vervolg`), en een zak die nergens
   staat, leest de inner op Sint-Maarten voor (`T.heerLeestHetBoek`, vanuit `T.heerStaatErOp`). De spelregel "De zaak".
+- `js/geld.js`: **het geld** (vraag 141, stap 1, 8 okt; Marcel: "schout heeft losse beurs en beheert de dorpskas",
+  "Loon voor de schout", "Omkopen uit eigen zak"): het goud van het dorp (`D.voorraad.goud`) is de kas, in de code één
+  getal in goud, op het scherm in goud, zilver en koper (`T.muntenVan`, `T.muntTekst`; 1 goud = 10 zilver = 100 koper).
+  De schout heeft een eigen beurs (`D.geld.beurs`, `T.beursVan`, `T.wijzigBeurs`, `T.betaalUitBeurs`; in de balk naast de
+  kas), met zijn loon uit de kas op de eerste van de maand (`T.tikGeldDag`, vanuit `T.tikGebouwenDag`); omkopen
+  (`T.koopInnerOm`) gaat eruit, en een gesprek vraagt het met `als: { beurs: 5 }`. De spelregel "Geld" ("Alles uit de
+  kas" is het spel van vóór 8 okt: dan is de beurs de kas); de getallen in `T.GELD_INSTELLINGEN`. Een beurs per huis,
+  kopen en verdienen, de belasting uit de beurzen en het marktgeld komen in de stappen hierna.
 - `js/markt.js`: **de markt op het plein, die meegroeit** (vraag 110, d, en vraag 127, 6 okt; Marcel: "Grotere stad =
   grotere markt"): met de spelregel "De markt" op "Op het plein" (`T.MARKT_INSTELLINGEN.opHetPlein`) komt een markt niet
   als gebouw van 6 bij 6, maar als een marktblok op het plein: twee rijen kramen tegenover elkaar met een looppad

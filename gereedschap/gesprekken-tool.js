@@ -249,6 +249,8 @@
     for (const naam of alsLijst(als.vlag)) S.vlaggen.add(naam);
     for (const naam of alsLijst(als.heeft)) S.inventaris.add(naam);
     if (als.goud != null) S.goud = Number(als.goud);
+    // Wat in je eigen beurs zit (js/geld.js): zonder voorraad is de situatie haar eigen dorp.
+    S.geld = { beurs: als.beurs != null ? Number(als.beurs) : 0, loonGehad: null };
     if (als.quest && T.QUESTS && T.QUESTS[als.quest]) {
       const q = T.QUESTS[als.quest];
       const fase = als.fase ? alsLijst(als.fase)[0] : q.begin;
@@ -371,6 +373,7 @@
     fase: (v) => `in fase ${alsLijst(v).join(' of ')}`,
     weg: (v) => `via ${v}`,
     goud: (v) => `als je ${v} goud hebt`,
+    beurs: (v) => `als je ${v} goud in je beurs hebt`,
   };
   function questNaam(id) {
     return (T.QUESTS && T.QUESTS[id] && T.QUESTS[id].naam) || id;

@@ -6956,6 +6956,9 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     munten zijn 1 goud = 10 zilver = 100 koper.
     **Bezig in sessie `ccr-77327776-rqjldz`** (8 okt): stap 1, de munten, de beurs van de schout en zijn loon, en omkopen
     uit eigen zak.
+    **Gebouwd (8 okt), stap 1:** `js/geld.js`: de kas in goud, zilver en koper in de balk, de beurs van de schout ernaast,
+    zijn loon uit de kas (1 goud op de eerste van de maand, in het rapport), en de inner omkopen uit eigen zak; de
+    spelregel "Geld" ("Alles uit de kas": zoals ervoor). Volgende: stap 2, een beurs per huis, kopen en verdienen.
 
 142. **Een gereedschap voor alle getallen** (Marcel, 8 okt: "Ik wil straks wel een tool waarin we al deze parameters kunnen
     instellen."; open). Er is de werkbank in de spelregels (`T.WERKBANK` in `js/opties.js`: elk getal uit de blokken

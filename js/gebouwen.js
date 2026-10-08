@@ -1405,6 +1405,7 @@
     T.tikOndernemersDag(D, dag);
     // 7. De wetten (js/wetten.js): wie vandaag in het bos van de heer hakte, en de belasting op de eerste van de maand.
     T.tikWettenDag(D, dag);
+    T.tikGeldDag(D, dag); // het loon van de schout (js/geld.js)
     // En de rovers (js/rovers.js): de doden begraven, wie het overleefde geneest, en komen ze vandaag?
     T.tikRoversDag(D, dag);
     // 8. De trede (js/treden.js): met genoeg mensen, en een kapel en een smidse klaar, wordt het gehucht een dorp.
