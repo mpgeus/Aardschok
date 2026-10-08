@@ -39,6 +39,9 @@
     // En hij gaat niet als hij er dan niet minstens zo lang kan zitten voor het bedtijd is.
     verstWeg: 3,
     minstensUren: 0.5,
+    // De grote herberg, van twee lagen, die in een dorp uit de kleine groeit (js/behoeften.js), trekt meer: de kans dat
+    // iemand gaat, is zoveel keer zo groot (werklijst vraag 133; Marcel, 8 okt: "1. A"). Het bier blijft de grens.
+    groteHerberg: 1.5,
     // Wat een bezoek drinkt, aan bier. De herbergierster brouwt het zelf (T.GEBOUWEN.herberg.maakt).
     bierPerBezoek: 1,
     // Bier apart voor de huizen (werklijst vraag 102, b; Marcel, 3 okt: "102 a b c d e ja"): de herbergierster houdt
@@ -105,8 +108,8 @@
   }
 
   // Hoe groot de kans is dat p vanavond gaat, en hoe lang hij onderweg is: { kans, heen }. `sleutel` onthoudt zijn weg
-  // erheen (T.looptijdVan): 'herberg' voor de eerste, en een eigen voor een tweede.
-  function kansVan(D, p, deur, dag, sleutel = 'herberg') {
+  // erheen (T.looptijdVan): 'herberg' voor de eerste, en een eigen voor een tweede. `maat` is groteHerberg in de grote.
+  function kansVan(D, p, deur, dag, sleutel = 'herberg', maat = 1) {
     const B = D.bewoners;
     const w = B.wereld;
     const k = karakterVan(p);
@@ -116,16 +119,17 @@
     const heen = T.looptijdVan(w, p, T.deurVan(w, p.huis), { x: deur.x, y: deur.y, straal: 0 }, sleutel);
     if (heen + IN().minstensUren > avondUren(dag)) return { kans: 0, heen };
     // Wie er altijd heen gaat (de drinker), laat zich door een lange weg niet tegenhouden.
-    const kans = basis >= 1 ? 1 : basis * Math.max(0, 1 - heen / IN().verstWeg);
+    const kans = basis >= 1 ? 1 : Math.min(1, basis * maat * Math.max(0, 1 - heen / IN().verstWeg));
     return { kans, heen };
   }
 
   // Naar welke herberg hij vanavond zou gaan: die waar hij het kortst naartoe loopt, met de kans en de weg erheen
   // ({ i, kans, heen }, i in T.herbergenVan), of null als hij nergens heen kan.
-  function besteHerberg(D, p, deuren, dag) {
+  function besteHerberg(D, p, herbergen, deuren, dag) {
     let beste = null;
     deuren.forEach((deur, i) => {
-      const k = kansVan(D, p, deur, dag, i ? `herberg${i}` : 'herberg');
+      const maat = T.isDorpsVorm(herbergen[i].tekening) ? IN().groteHerberg : 1;
+      const k = kansVan(D, p, deur, dag, i ? `herberg${i}` : 'herberg', maat);
       if (k.kans > 0 && (!beste || k.heen < beste.heen)) beste = { i, kans: k.kans, heen: k.heen };
     });
     return beste;
@@ -150,7 +154,7 @@
     const wie = [];
     for (const p of B.mensen) {
       if (!kanGaan(p, herbergen)) continue;
-      const b = besteHerberg(D, p, deuren, d);
+      const b = besteHerberg(D, p, herbergen, deuren, d);
       if (b && lot(B, p, d) < b.kans) wie.push({ p, heen: b.heen, i: b.i });
     }
     wie.sort((a, b) => a.heen - b.heen);
