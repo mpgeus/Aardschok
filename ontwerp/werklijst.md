@@ -4957,6 +4957,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Dus de hele spelwereld als het ware. Zo kun je steeds stukken 'ontdekken' in de fog of war. Het idee is een eiland. Met
     water rondom. Je krijgt een random positie op het land. Kan aan de buitenkant zijn of binnen in het land."; plan van
     Claude; open).
+    **Bezig in sessie `ccr-f03157dc-9d2dtu`** (8 okt): het plan voor de kaartenmaker (het eiland van 2500 bij 2500, met de hoogte van vraag 121 als eerste laag); eerst het plan voor Marcel.
     **Wat er nu is:** het land is een aparte kaart met provincies waar je in dagen reist (vraag 63, `js/land.js`, achter de
     spelregel Land, die standaard uit staat), en elke provincie zou een eigen kaart krijgen. Dit vervangt dat: één grote
     kaart, een eiland met de zee rondom, waarop alles ligt.
