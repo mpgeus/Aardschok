@@ -204,7 +204,7 @@
     const bomen = new Int32Array((b + 1) * (h + 1));
     const ronde = new Uint8Array(b * h);
     const meent = (x, y) => (w.meenten || []).some((m) => opStuk(m, x, y));
-    const water = (x, y) => !!(w.grond && w.grond[y] && w.grond[y][x] && w.grond[y][x].naam === 'water');
+    const water = (x, y) => !!(w.grond && w.grond[y] && w.grond[y][x] && T.isWaterGrond(w.grond[y][x].naam));
     // Een tegel mag in een stuk bos: geen water, geen meent, geen veld, weg, erf of lantaarn (T.waaromNietOpDezeGrond),
     // niet het plein, niet voor een deur en geen paadje van een deur; en te belopen, of met iets wat hij opruimt (een
     // boom, een stronk, een struik). Een rots, een appelboom (van iemand) of een gebouw niet.

@@ -702,7 +702,8 @@
   T.NATUUR = {
     bos: { naam: 'het bos', meervoud: 'bomen', telt: (w, x, y, v) => !!v && BOMEN.has(v.soort) },
     rotsen: { naam: 'de rotsen', meervoud: 'rotsen', telt: (w, x, y, v) => !!v && v.soort === 'rots' },
-    water: { naam: 'het water', meervoud: 'tegels water', telt: (w, x, y) => !!(w.grond && w.grond[y] && w.grond[y][x] && w.grond[y][x].naam === 'water') },
+    // het water van een beek, een meer of een rivier, en de zee (tegels/kust.png): een visser vist er ook
+    water: { naam: 'het water', meervoud: 'tegels water', telt: (w, x, y) => !!(w.grond && w.grond[y] && w.grond[y][x] && T.isWaterGrond(w.grond[y][x].naam)) },
     // Wat te rooien is en geen boom (een struik, een stronk; T.ontginWerkOp, js/ontginnen.js): voor wat er op een stuk te
     // rooien staat (T.watTeRooien, js/bos.js).
     struiken: { naam: 'de struiken', meervoud: 'struiken en stronken', telt: (w, x, y, v) => !!v && T.ontginWerkOp(w, x, y) === 'rooien' },
@@ -869,6 +870,10 @@
     const w = D.wereld;
     if (T.veldOp(w, x, y)) return 'Daar ligt een veld.';
     if (T.opPad(w, x, y)) return 'Daar loopt een pad.';
+    // Op zand wordt niet gebouwd (Marcel, 8 okt: "zand is geen solide basis"): het strand, de duinen en het stuifzand
+    // van het eiland (tegels/kust.png; werklijst vraag 117, B van 2a).
+    const g = w.grond && w.grond[y] && w.grond[y][x];
+    if (g && g.naam === 'strand') return 'Op zand wordt niet gebouwd.';
     if (T.erfOp(D, x, y)) return 'Daar ligt een erf.';
     // Waar de herberg straks met het dorp meegroeit (T.meegroeiGrond, js/behoeften.js), blijft de grond vrij.
     const groeit = T.meegroeiGrondOp(D, x, y);

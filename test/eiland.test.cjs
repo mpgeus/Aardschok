@@ -218,11 +218,13 @@ test('je dorp op het eiland: het water en de wegen zijn die van het eiland, en h
     const land = T.landVanEiland(E, jij, 100, 100);
     const plan = T.maakGehucht(zaad, land, 30); // gooit een fout als geen poging deugt
     assert.deepEqual(plan.eiland, { zaad, x0: land.x0, y0: land.y0 });
-    // het water: elk hoekpunt water waar het eiland water is, en nergens anders
+    // het water: elk hoekpunt water waar het eiland water is, en nergens anders; de zee ('e') en het water van een meer of
+    // een rivier ('w') elk met hun eigen tegels
     for (let y = 0; y <= 100; y++) {
       for (let x = 0; x <= 100; x++) {
-        const nat = ['zee', 'meer', 'rivier'].includes(land.hoek(x, y));
-        assert.equal(plan.grond[y][x] === 'w', nat, `land ${zaad}: hoekpunt (${x}, ${y})`);
+        const streek = land.hoek(x, y);
+        const nat = streek === 'zee' ? 'e' : ['meer', 'rivier'].includes(streek) ? 'w' : null;
+        assert.equal(['w', 'e'].includes(plan.grond[y][x]) ? plan.grond[y][x] : null, nat, `land ${zaad}: hoekpunt (${x}, ${y})`);
       }
     }
     // de uitgang ligt aan de rand, bij een plek waar een weg van het eiland het land verlaat
@@ -257,7 +259,9 @@ test('het eiland om je land: buiten de kaart de grond en de bomen van het eiland
   const echt = console.warn;
   console.warn = () => {};
   try {
-    for (const zaad of [1, 5]) {
+    const LETTER = { gras: 'g', water: 'w', zandpad: 'z', heide: 'h', kasseien: 'k', zee: 'e', strand: 's', veen: 'v', broek: 'b' };
+    // land 3: daar lag het veen van de kaart twee hoekpunten van de zee
+    for (const zaad of [1, 3, 5]) {
       const w = T.laadGemaaktGehucht(zaad);
       const R = T.randVanHetEiland(w);
       assert.equal(T.randVanHetEiland(w), R, 'één keer per kaart');
@@ -273,24 +277,26 @@ test('het eiland om je land: buiten de kaart de grond en de bomen van het eiland
           const opKaart = ring(vx, vy) <= 0;
           assert.equal(R.hoek(vx, vy) === null, opKaart, `land ${zaad}: (${vx}, ${vy}) op de kaart heeft de rand niets`);
           if (opKaart) continue;
-          const nat = T.grondVanStreek(streek(vx, vy)) === 'w';
-          if (R.hoek(vx, vy) === 'water') water++;
-          // water waar het eiland water is, en nergens anders (op de naad mag het gras worden)
-          if (R.hoek(vx, vy) === 'water') assert.ok(nat, `land ${zaad}: water op (${vx}, ${vy}) waar het eiland droog is`);
-          else if (ring(vx, vy) >= 2) assert.ok(!nat, `land ${zaad}: geen water op (${vx}, ${vy}) waar het eiland water is`);
+          const nat = ['w', 'e'].includes(T.grondVanStreek(streek(vx, vy)));
+          const natHier = ['water', 'zee'].includes(R.hoek(vx, vy));
+          if (natHier) water++;
+          // water waar het eiland water is, en nergens anders (op de naad mag het gras of strand worden, en de zee wijkt
+          // daar twee ringen voor strand)
+          if (natHier) assert.ok(nat, `land ${zaad}: water op (${vx}, ${vy}) waar het eiland droog is`);
+          else if (ring(vx, vy) >= 3) assert.ok(!nat, `land ${zaad}: geen water op (${vx}, ${vy}) waar het eiland water is`);
         }
       }
       let dingen = 0;
       for (let y = -D; y < w.h + D; y++) {
         for (let x = -D; x < w.b + D; x++) {
           if (x >= 0 && y >= 0 && x < w.b && y < w.h) continue;
-          // elke tegel om de kaart heeft een tegel in tegels/rand.tsx: één soort grond, of gras met één andere
+          // wat naast elkaar ligt, heeft samen een tegel in tegels/rand.tsx of kust.tsx (T.grondPaar)
           const soorten = [...new Set([hoek(x, y), hoek(x + 1, y), hoek(x + 1, y + 1), hoek(x, y + 1)])];
-          assert.ok(soorten.length === 1 || (soorten.length === 2 && soorten.includes('gras')), `land ${zaad}: tegel (${x}, ${y}) is ${soorten}`);
-          // een boom of een rots staat op gras
+          for (const a of soorten) for (const b of soorten) assert.ok(T.grondPaar(LETTER[a], LETTER[b]), `land ${zaad}: tegel (${x}, ${y}) is ${soorten}`);
+          // een boom of een rots staat op gras, veen of broek
           if (R.voorwerp(x, y)) {
             dingen++;
-            assert.deepEqual(soorten, ['gras'], `land ${zaad}: ${R.voorwerp(x, y)} op (${x}, ${y}) staat op ${soorten}`);
+            assert.ok(soorten.every((s) => ['gras', 'veen', 'broek'].includes(s)), `land ${zaad}: ${R.voorwerp(x, y)} op (${x}, ${y}) staat op ${soorten}`);
           }
         }
       }
@@ -331,4 +337,50 @@ test('het eiland om je land: met "Hoogte" op "Heuvels" is het land dat van het e
     T.zetOptie('hoogte', 'vlak');
     console.warn = echt;
   }
+});
+
+test('de grond van het eiland: wat naast elkaar kan liggen, niet bouwen op zand, en de zee is water (vraag 117, B van 2a)', () => {
+  // een paar heeft een tegel in tegels/rand.tsx of kust.tsx, in welke volgorde ook
+  for (const paar of ['gz', 'gk', 'kz', 'gw', 'gh', 'es', 'gs', 'hs', 'gv', 'bg', 'ew']) {
+    assert.ok(T.grondPaar(paar[0], paar[1]) && T.grondPaar(paar[1], paar[0]), paar);
+  }
+  for (const paar of ['ge', 'sv', 'sw', 'hz', 'vb', 'he']) assert.ok(!T.grondPaar(paar[0], paar[1]), paar);
+  // wat niet past, wijkt: naast de zee voor strand, anders voor gras; het water, de zee, een weg en de kasseien niet
+  assert.equal(T.passendeGrond('g', ['e', 'g']), 's');
+  assert.equal(T.passendeGrond('v', ['s', 'g']), 'g');
+  assert.equal(T.passendeGrond('h', ['h', 's']), 'h');
+  for (const l of 'wezk') assert.equal(T.passendeGrond(l, ['v', 'b']), l);
+  // een tegel met drie soorten wordt er een met twee, en een paar zonder tegel één
+  assert.deepEqual(T.grondTegelHoeken(['gras', 'heide', 'strand', 'strand']), ['gras', 'strand', 'strand', 'strand']);
+  assert.deepEqual(T.grondTegelHoeken(['zee', 'zee', 'water', 'strand']), ['zee', 'zee', 'water', 'zee']);
+  assert.deepEqual(T.grondTegelHoeken(['water', 'strand', 'strand', 'strand']), ['strand', 'strand', 'strand', 'strand']);
+  assert.deepEqual(T.grondTegelHoeken(['gras', 'heide', 'heide', 'gras']), ['gras', 'heide', 'heide', 'gras']);
+
+  // land 1 ligt aan zee: het strand, de zee en het gras van het dorp
+  opEiland(() => {
+    const S = nieuwSpel(1);
+    const D = S.dorp;
+    const w = D.wereld;
+    const naam = (x, y) => w.grond[y][x].naam;
+    let strand = null;
+    let zee = null;
+    for (let y = 0; y < w.h; y++) {
+      for (let x = 0; x < w.b; x++) {
+        if (!strand && naam(x, y) === 'strand' && !T.veldOp(w, x, y) && !T.opPad(w, x, y)) strand = { x, y };
+        if (!zee && naam(x, y) === 'zee') zee = { x, y };
+      }
+    }
+    assert.ok(strand && zee, 'land 1 heeft strand en zee');
+    assert.equal(T.waaromNietOpDezeGrond(D, strand.x, strand.y), 'Op zand wordt niet gebouwd.');
+    // het dorp was er al: geen huis op het zand
+    for (const g of D.gebouwen) {
+      const v = T.voetVanGebouw(g);
+      if (!v) continue;
+      for (let y = v.y; y < v.y + v.h; y++) for (let x = v.x; x < v.x + v.b; x++) assert.notEqual(naam(x, y), 'strand', `${g.soort} op (${x}, ${y}) staat op zand`);
+    }
+    // de zee is water: een visser vist er
+    assert.ok(T.isWaterGrond('zee') && T.isWaterGrond('water') && !T.isWaterGrond('strand'));
+    assert.ok(T.natuurBij(w, 'water', { x: zee.x, y: zee.y, b: 1, h: 1 }, 0) === 1, 'een tegel zee telt als water');
+    assert.ok(T.isVast(w, zee.x, zee.y), 'op de zee loop je niet');
+  });
 });
