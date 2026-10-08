@@ -30,11 +30,11 @@ Komt Marcel met een idee of besluit, schrijf het dan meteen in het juiste bestan
 het gesprek; wat alleen in een gesprek staat, raakt kwijt. Laat groot zoek- en leeswerk aan een
 agent over, zodat alleen de samenvatting in het gesprek komt.
 
-- **`ontwerp/werklijst.md`: wat we doen, in welke volgorde. Begin een sessie hier.** Lees de stand
-  bovenaan en zeg Marcel in een paar regels waar we zijn. Daar staat ook al het werk op prioriteit
-  (Marcel, 28 sep, vraag 51: eerst wat de proef "van gehucht tot dorp" nodig heeft): neem het
-  bovenste, en begin met een plan voor Marcel.
-  Werk de stand bij aan het eind van de sessie.
+- **`ontwerp/werklijst.md`: wat we doen, in welke volgorde. Begin een sessie hier.** Lees het blok
+  **Nu en daarna** bovenaan (Marcel, 8 okt: "snel, duidelijk en low cost"): wat loopt, wat op Marcel wacht, en wat
+  erna komt, in volgorde. Zeg Marcel in een paar regels waar we zijn, neem het bovenste, en begin met een plan voor
+  Marcel. Werk dat blok bij aan het eind van de sessie, en houd het kort: wat af is, gaat eruit; de geschiedenis staat
+  in de stand eronder.
   **Wie aan een punt begint, zegt het eerst in `main`** (Marcel, 6 okt: "Ja zet erin"; op 6 okt bouwden drie sessies
   tegelijk vraag 130, omdat elk het bovenste punt nam). Haal vlak voor je begint `main` op (`git fetch origin main`), en
   staat er bij het punt al "**Bezig in sessie …**", neem dan een ander punt of vraag het Marcel. Anders zet je bij het
