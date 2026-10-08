@@ -684,6 +684,7 @@
     }
     if (vast) return 'Daar past het niet.';
     if (reden) return reden;
+    if (T.teSteil(w, { x, y, b: voet.b, h: voet.h })) return 'Daar is het te steil om te bouwen.';
     const natuur = T.waaromNietBijDeNatuur(D, soort, { x, y, b: voet.b, h: voet.h });
     if (natuur) return natuur;
     const n = T.GEBOUWEN_INSTELLINGEN.looppad;
@@ -963,6 +964,8 @@
         if (w.tegels[yy] && w.tegels[yy][xx] !== undefined) w.tegels[yy][xx] = 'muur';
       }
     }
+    // op een land met hoogte komt het op vlakke grond (js/hoogte.js; vraag 121, stap 2)
+    T.egaliseer(w, { x: instantie.x, y: instantie.y, b: voet.b, h: voet.h });
     T.kaartVeranderd(w); // de voet is muur geworden: de eilanden (js/wereld.js)
     stapEraf(D, { x: instantie.x, y: instantie.y, b: voet.b, h: voet.h });
   }

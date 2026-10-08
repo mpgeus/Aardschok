@@ -298,8 +298,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   zacht verlopend uit een plaatje met een pixel per hoekpunt (`lichtKaartVan`, `tekenGrondMetLicht`), de wanden uit een
   textuur in code (`tekenWanden`, `wandTextuur`), het land om de kaart ook op de helling, en het graan dat meebuigt
   (`tekenGraan`, in smalle stroken en korte stukjes die elk de hoogte van de grond volgen, ver uitgezoomd grover); de grond
-  met hoogte van achter naar voren. Lopen, zien en bouwen weten er nog niets van (stap 2), en een heuvel vóór iemand dekt
-  hem nog niet af. De proefplaat: `gereedschap/pixelart/hoogte-proef.cjs`.
+  met hoogte van achter naar voren. **Wat de hoogte doet** (stap 2, 8 okt; Marcel: "Akkoord"): niemand stapt door een wand
+  (`T.kanStappen`; `T.zoekPad` en `T.bereik` krijgen de kaart mee, `wereld`, en de eilanden en de velden vragen het ook),
+  wel over een helling; een gebouw of erf niet op steile grond (`T.teSteil`, "te steil" in `T.waaromPastHetNiet` en
+  `T.waaromPastErfNiet`), en waar het komt, wordt de grond vlak (`T.egaliseer`, vanuit `zetGebouwVoorwerp` en het
+  doorgroeien: een vlak stuk vooraan in `w.hoogte.vlakken`); een heuvel houdt het zicht tegen (`T.heuvelTussen` in
+  `T.zichtTussen`) en wie hoog staat, ziet verder (`T.verderVanBoven` in `T.zietTegel`); en een tegel die iets achter zich
+  afdekt (`T.dektAf`), komt nog eens in de tekenlijst (`heuvelsErvoor` in `js/tekenen.js`). De proefplaat:
+  `gereedschap/pixelart/hoogte-proef.cjs`.
 - `js/eiland.js`: **het eiland, de kaartenmaker** (vraag 117, stap 1, 8 okt; Marcel: "Ik wil 1 aaneengesloten landschap",
   "B 1"): uit één nummer een eiland van 2500 bij 2500 tegels, gemaakt zoals een schilder werkt, eerst grof en dan elk
   blaadje. **De schets** (`T.maakEiland(zaad)`, zo'n 0,6 s, niet bewaard: hetzelfde nummer maakt hem opnieuw): het eiland

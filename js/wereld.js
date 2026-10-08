@@ -352,6 +352,8 @@
           if (!kan[k] || op[k] >= 0) continue;
           // Schuin alleen als geen van de twee hoektegels vast is, zoals A* (js/pad.js).
           if (dx && dy && (!kan[y * b + nx] || !kan[ny * b + x])) continue;
+          // en niet door een wand van de hoogte (js/hoogte.js; vraag 121, stap 2)
+          if (w.hoogte && !T.kanStappen(w, x, y, nx, ny)) continue;
           op[k] = n;
           rij.push(k);
         }
@@ -594,15 +596,18 @@
     }
   };
 
-  // Een lijn is niet altijd heen en terug dezelfde; zien werkt hier twee kanten op.
-  T.zichtTussen = (w, a, b, open) => T.zicht(w, a, b, open) || T.zicht(w, b, a, open);
+  // Een lijn is niet altijd heen en terug dezelfde; zien werkt hier twee kanten op. Op een land met hoogte houdt ook een
+  // heuvel het zicht (T.heuvelTussen, js/hoogte.js; vraag 121, stap 2).
+  T.zichtTussen = (w, a, b, open) => (T.zicht(w, a, b, open) || T.zicht(w, b, a, open)) && !(w.hoogte && T.heuvelTussen(w, a, b));
 
   // Ziet wie op `van` staat de tegel `naar`, als hij `ver` tegels ver kijkt? Hemelsbreed (een cirkel,
   // geen vierkant) en met niets ertussen. Zo kijken de inner (js/inner.js) en de getuigen (js/zien.js);
-  // een monster kijkt nog in een vierkant (T.zoekOntdekking, js/verkennen.js).
+  // een monster kijkt nog in een vierkant (T.zoekOntdekking, js/verkennen.js). Wie hoger staat, ziet verder
+  // (T.verderVanBoven, js/hoogte.js; vraag 121, stap 2).
   T.zietTegel = function (w, van, naar, ver, open) {
     const dx = naar.x - van.x;
     const dy = naar.y - van.y;
+    if (w.hoogte) ver += T.verderVanBoven(w, van, naar);
     if (dx * dx + dy * dy > ver * ver) return false;
     return !w.tegels || T.zichtTussen(w, van, naar, open);
   };

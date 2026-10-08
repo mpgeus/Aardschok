@@ -161,7 +161,7 @@
     });
     if (!beste) return false;
     if (beste.x === van.x && beste.y === van.y) return true;
-    const pad = T.zoekPad(van, beste, vrij, (x, y) => T.isVast(w, x, y), { max: 60 });
+    const pad = T.zoekPad(van, beste, vrij, (x, y) => T.isVast(w, x, y), { max: 60, wereld: w });
     if (!pad || !pad.length || pad.length > IN().afstand * 3) return false;
     T.geefRoute(e, pad, beste);
     return true;

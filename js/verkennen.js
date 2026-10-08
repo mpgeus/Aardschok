@@ -240,6 +240,7 @@
   // dan zijn eigen `straal` mee, en anders valt het terug op `e.straal`.
   function magDwalenNaar(w, e, x, y, thuisNu) {
     if (!T.isBegaanbaar(w, x, y, { wezensBlokkeren: true, wie: e })) return false;
+    if (!T.kanStappen(w, e.tx, e.ty, x, y)) return false;
     if (T.bijDeur(w, x, y)) return false;
     if (thuisNu) return T.afstand(thuisNu, { x, y }) <= (thuisNu.straal != null ? thuisNu.straal : (e.straal || 3));
     const k = T.kamerVan(w, e.tx, e.ty);
@@ -272,7 +273,7 @@
     for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
       const x = e.tx + dx;
       const y = e.ty + dy;
-      if (land.op(x, y) && !onderweg.has(x + ',' + y) && mag(x, y) && !T.bijDeur(w, x, y)) opties.push({ x, y });
+      if (land.op(x, y) && !onderweg.has(x + ',' + y) && mag(x, y) && !T.bijDeur(w, x, y) && T.kanStappen(w, e.tx, e.ty, x, y)) opties.push({ x, y });
     }
     return opties;
   };

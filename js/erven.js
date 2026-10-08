@@ -109,6 +109,8 @@
     }
     if (vast) return 'Daar staat iets in de weg: een erf moet helemaal vrij zijn.';
     if (reden) return reden;
+    if (T.teSteil(w, { x, y, b, h })) return 'Daar is het te steil voor een erf.'; // js/hoogte.js
+
     // Geen deur op een erf (werklijst vraag 88, js/gebouwen.js): de hut erop zou hem dichtzetten.
     if (T.deurOpRechthoek(D, { x, y, b, h })) return 'Daar is een deur.';
     if (!maatPast(D, b, h)) return 'Een erf van deze maat is te klein voor een hut.';
