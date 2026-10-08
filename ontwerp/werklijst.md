@@ -6741,6 +6741,12 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     knelpunten"; een doc, "Het spelverloop: kengetallen en knelpunten") vond nog een knelpunt: de vis die de huizen niet
     aten, bedierf, terwijl het dorp in het voorjaar honger had, want bij honger at het alleen vlees. **Marcel (8 okt):
     "Vis mag een maag vullen, zoals vlees"** (de spelregel "Vis", `visIsEten`).
+    De speeltest erna (`speelbaar.md`): de honger is weg, twee van de zes winnen. **Marcel (8 okt), op de vragen uit het
+    overzicht:** brood en laken uitzoeken: "Ok"; de eerlijke bouwer: "Zout mag dan wel goedkoper, misschien wel uit de zee
+    halen?" (het zout kost in de herfst 1 goud, was 2; uit de zee: vraag 139); minder voorvallen: "Nee, maar moet wel
+    gerandomiseerd maken. Geen vaste intervallen" (de voorvallen kwamen al op 5 tot 15 dagen, maar een bouwverzoek precies
+    om de 4; nu ook dat tussen de 2 en 6); wijn: "Ik wil z.s.m. aan een wijnboerderij" (vraag 136); naar `main`: "Ja dat
+    mag" (8 okt, `e521060`).
 
 135. **Minder grondstoffen** (Marcel, 8 okt: "Er blijven steeds dingen bijkomen zo. Dat wil ik voorkomen. We moeten stoppen
     met het ene op te lossen met iets anders", en "We blijven grondstoffen toevoegen"; open, wacht op Marcels keuze).
@@ -6770,6 +6776,11 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     open). Hoort bij de dorpen op het eiland (vraag 117) en het vechten tussen dorpen (vraag 126): met je militie naar
     een buurdorp, en terug met zijn graan en vee, tegen wat het kost (mannen, de gunst van de heer, wat het buurdorp
     onthoudt). Niet nu: eerst de kern.
+
+139. **Zout uit de zee** (Marcel, 8 okt: "Zout mag dan wel goedkoper, misschien wel uit de zee halen?"; open, na het eiland,
+    vraag 117). Op het eiland ligt de zee om het land: een zoutpan of zoutzieder aan de kust, zodat het dorp zijn zout zelf
+    maakt in plaats van het van de marskramer te kopen. Een gebouw erbij, dus eerst Marcels keuze ("Niets erbij zonder
+    overleg"), en alleen voor een dorp aan de kust.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
