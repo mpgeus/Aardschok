@@ -868,3 +868,7 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   vlees, vis etc."). Tot de jager echt jaagde, kon een dorp zijn winter op vlees uit het niets halen, en vroeg het om
   jager na jager. Een richting: het eten komt uit meer bronnen, en een dorp dat op één bron leunt, voelt dat (een wens
   per stand naar afwisseling, of de raad die het zegt). Na de speeltest met klein wild bekijken wat er nodig is.
+- **Een paadje slijt alleen in gras** (8 okt, bij vraag 117, B van 2a): `T.hoekenMetPaden` (`js/paden.js`) maakt alleen
+  van gras zandpad, en voor zandpad naast veen, broek, heide of strand is er geen tegel. Wie op het eiland door het veen
+  of over het strand loopt, laat dus geen spoor zien (het spoor telt wel, `T.isSpoor`). Pas als het opvalt: een
+  overgang erbij, of het spoor daar als stempel.

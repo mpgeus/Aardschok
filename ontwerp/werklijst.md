@@ -5138,7 +5138,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Dus de hele spelwereld als het ware. Zo kun je steeds stukken 'ontdekken' in de fog of war. Het idee is een eiland. Met
     water rondom. Je krijgt een random positie op het land. Kan aan de buitenkant zijn of binnen in het land."; plan van
     Claude; open).
-    **Bezig in sessie `ccr-f03157dc-9d2dtu`** (8 okt): stap 2, je dorp op het eiland; 2a, 2b, het verslag van 2c, 2d en de kapel staan in `main`; nu B van 2a, eigen grondtegels voor het eiland: de proefplaat is goed (Marcel: "Ja, ziet er goed uit zo"), nu de tegels in het spel.
+    **Bezig in sessie `ccr-f03157dc-9d2dtu`** (8 okt): stap 2, je dorp op het eiland; 2a, 2b, het verslag van 2c, 2d en de kapel staan in `main`; nu B van 2a, eigen grondtegels voor het eiland: de tegels liggen in het spel, de speeltest is gespeeld, en het wacht op Marcel voor `main`.
     **Wat er nu is:** het land is een aparte kaart met provincies waar je in dagen reist (vraag 63, `js/land.js`, achter de
     spelregel Land, die standaard uit staat), en elke provincie zou een eigen kaart krijgen. Dit vervangt dat: één grote
     kaart, een eiland met de zee rondom, waarop alles ligt.
@@ -5467,6 +5467,9 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     rand van de kaart kon er tussen het veen van de kaart en de zee erbuiten geen tegel passen; daar wijkt nu de zee
     (hooguit twee hoekpunten), en een tegel met drie soorten tekent zoals op de kaart (`T.grondTegelHoeken`). De landen van
     de maker zonder het eiland blijven tegel voor tegel hetzelfde; `kaarten.md` en `beeld.md` zeggen hoe het werkt.
+    **De speeltest** (`speelbaar.md`, "de grond van het eiland"): het zand houdt niets tegen, twee van de zes winnen, vóór
+    en na; waar het anders liep (62707 en 72022), is het toeval van andere planten op de kaart. Vraag aan Marcel: naar
+    `main`?
 118. **Inwoners met stats, zoals in Dwarf Fortress** (Marcel, 4 okt, zesentwintigste sessie: "Inwoners krijgen ook
     'stats' hp, skills, eigenschappen, etc ala dwarf fortress"; plan van Claude; open).
     **Wat er al is:** elke bewoner heeft een naam, een leeftijd, een huis, een gezin en werk (`js/bewoners.js`); de vijf
