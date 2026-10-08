@@ -27,7 +27,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Het rapport van de raadsman | gebouwd (1 okt): de eerste fase van de dag; elke ochtend brengt hij je aan je deur wat er gebeurde, hoe het graan en het hout gaan, of ze de winter halen, wat er speelt en wat er komt, met zijn rekenen in de getallen | vraag 75 |
 | De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf; sinds 1 okt ook wat je mist voor de kapel en de smidse, en waar het vandaan komt; sinds 2 okt wat de huizen missen, en de ketens (een molen voor de bakkerij) | vraag 58, 79, 87, 90 |
 | De houthakker hakt en plant | gebouwd (6 okt; Marcel: "A ja B ja C ja D zo"): zijn hout komt uit de bomen om zijn schuur, elke tien hout een boom; naast de stronk twee boompjes, in een jaar of twee bomen, zodat het bos om hem blijft; zonder boom staat hij stil, en werkt zijn hand elders; hij komt alleen bij minstens 30 bomen binnen tien tegels, en loopt tussen zijn stronken door (vraag 129, e, b en f); in de speeltest van vier jaar komt elk dorp boven de 100 en wint er voor het eerst een | vraag 115, 129 |
-| Beesten in het bos | stap 1, 2a en 2b gebouwd (7 okt; Marcel: "a ja, b ja, c ja", en d tot i): roedels wolven en groepjes herten, elk met een plek diep in het bos; overdag rusten ze, 's nachts lopen de wolven langs de bosrand met rode ogen, in de schemering grazen de herten aan de rand; ze gaan mensen uit de weg, en een wolf begint geen gevecht; in de winter jagen de wolven met honger op de herten, in de lente komen er jongen, en wie zijn bos kwijt is, verhuist of trekt weg; zijn de herten op, dan komen ze in het donker naar het dorp: een schaap, of wie alleen loopt, en wie werkt en ze ziet, rent naar huis; licht houdt ze weg (2b); wat je ertegen doet (3) komt nog | vraag 116 |
+| Beesten in het bos | stap 1, 2a en 2b gebouwd (7 okt; Marcel: "a ja, b ja, c ja", en d tot i): roedels wolven en groepjes herten, elk met een plek diep in het bos; overdag rusten ze, 's nachts lopen de wolven langs de bosrand met rode ogen, in de schemering grazen de herten aan de rand; ze gaan mensen uit de weg, en een wolf begint geen gevecht; in de winter jagen de wolven met honger op de herten, in de lente komen er jongen, en wie zijn bos kwijt is, verhuist of trekt weg; zijn de herten op, dan komen ze in het donker naar het dorp: een schaap, of wie alleen loopt, en wie werkt en ze ziet, rent naar huis; licht houdt ze weg (2b); de jager schiet klein wild en herten, laat twee per groepje staan en houdt de roedels klein (3a); de jacht te voet naar de roedel (3b); om hulp roepen en het hek komen nog | vraag 116 |
 | De markt op het plein | gebouwd (6 okt; vraag 110, d, en 127, stap 1 en 2): een marktblok van twee rijen kramen met manden op het plein, voor 8 hout en 6 goud, dat meegroeit met het dorp (een kraam per 15 mensen, daarna langs de weg), met kramen vol of leeg naar wat het dorp heeft; de maker legt een groter plein; de kooplui, de boodschappen en de marktdag nog niet | vraag 110, d; 127 |
 | De verzoeken | stap 1 tot en met 3 gebouwd (3 okt): wat het dorp mist, komt een inwoner je vragen, met de plek die hij koos en wat het kost; ja of nee, en ben je weg, dan beslist je raadsman; in het bouwmenu alleen nog het erf en oproepen met een premie (de spelregel "Wie bouwt"); de speeltest speelt zo; en uit eigen wil: een ondernemer die wapens wil maken (sinds 7 okt niet meer verboden, vraag 131) of een tweede herberg beginnen, met wat ja en nee aan gevolgen hebben (vraag 104); sinds 6 okt rooit wie een werkplaats vraagt zijn plek eerst, als er geen open grond meer is (vraag 110, e) | vraag 103, 104, 110 |
 | Twee bazen | stap 1 en 2 gebouwd (3 okt; Marcel: "106 a b c d ja"): de gunst van de heer en het vertrouwen van het dorp in de balk, met een waarschuwing onder 20 en op 0 weg (ontslagen of weggejaagd); betrapt op verstoppen is de laatste waarschuwing; elke maand een gril van de heer in een brief, die zijn gunst tegen het dorp weegt | vraag 106 |
@@ -38,7 +38,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Het eerste proefje | gebouwd (23 sep); de kaart sinds 26 sep rond het plein (vierde versie) | 1 |
 | De kern voor het tweede proefje | voorstel; de heer en de inner kwamen anders, groepen en keuren wachten | 9 |
 | Rijk worden en arm lijken | de inner, de argwaan en verstoppen deel 1 gebouwd; de soldaten zoeken altijd, en de inner afleiden en omkopen (27 sep) | 4, 6 |
-| Het dorp: mensen, behoeften en de winter | gebouwd (23 sep); de winter zie je aankomen (28 sep); de mensen sprokkelen hout, maar niet genoeg (30 sep); een gezin wacht op de winter als het hout of het eten hem niet haalt, en het zaaigraan eet het dorp pas bij nood (1 okt) | 3, vraag 74, 79, 81 |
+| Het dorp: mensen, behoeften en de winter | gebouwd (23 sep); de winter zie je aankomen (28 sep); de mensen sprokkelen hout, maar niet genoeg (30 sep); een gezin wacht op de winter als het hout of het eten hem niet haalt, en het zaaigraan eet het dorp pas bij nood (1 okt), tenzij er wachters bij de graanschuur staan (8 okt) | 3, vraag 74, 79, 81, 132 |
 | Gebouwen | 45 soorten; 16 in het bouwmenu van het gehucht | 2, 14 |
 | Handel: de marskramer | gebouwd (24 sep); in de lente ook zaaigraan, en de boeren zaaien na tot 1 bloeimaand (1 okt) | 4, vraag 79 |
 | Sint-Maarten | gebouwd (24 sep) | 5 |
@@ -706,9 +706,28 @@ zoekt hij wie alleen in het donker loopt (niemand binnen vier tegels, en geen li
 bed, zonder werk, of is een op de vijf keer dood (de spelregel "Zonder doden": alleen gewond). Licht houdt hem weg: bij de
 schout met zijn lantaarn blijft de roedel aan de rand van het licht, met zijn rode ogen; wie sluipt, heeft geen licht, en
 die valt hij aan, in een gevecht in beurten. Zolang de wolven iets deden (tien dagen), speelt de status "Er zijn wolven
-bij het dorp" in het rapport, en namen ze een schaap of een mens, dan zegt de raad het. **Nog niet:** stap 3: de jager
-die echt jaagt (dan zeggen de status en de raad ook: geen jager), de jacht naar het hol (f), het hek als iets op de kaart,
-en lantaarns aan de bosrand; zie de werklijst, vraag 116.
+bij het dorp" in het rapport, en namen ze een schaap of een mens, dan zegt de raad het.
+
+**De jager** (stap 3a, 7 okt; Marcel: "Altijd een paar herten over houden. Anders krijgen we geen jonge hertjes meer",
+en na de speeltest "J1 vind ik goed idee. J2 logisch eigenlijk ... K, klopt"): de helft van zijn vlees is klein wild
+(hazen, konijnen, vogels), altijd; de rest komt uit de herten binnen vijftig tegels van zijn hut. Elke zestig vlees uit de
+herten is er een hert minder, en van elk groepje laat hij er altijd twee staan, voor de jongen in de lente (twee à drie
+per groepje). Vindt hij geen hert, dan schiet hij alleen klein wild; het dorp vraagt dan geen nieuwe jager, en de heer
+vraagt van hem geen vlees. Een roedel van meer dan drie maakt hij kleiner, een wolf per vijf dagen (een huid, geen vlees),
+en het dorp zegt het. Overdag loopt hij het bos in, loert twee uur op zijn groep van net buiten waar ze schuw worden, en
+gaat terug naar zijn hut. Zonder jager bij de wolven zegt de raad het ("Een jager houdt de roedels klein"). Op het
+ontworpen gehucht, zonder beesten, maakt hij zijn vlees zoals altijd. De getallen in `T.BEESTEN_INSTELLINGEN.jager`.
+Waarom klein wild: met alleen herten vielen alle bouwers van de speeltest in het eerste jaar, want het dorp at zijn winter
+op vlees uit het niets, en vroeg jager na jager. **Het dorp eet gevarieerd** (Marcel: "Graan, brood, vlees, vis etc."):
+een richting, zie `opmerkingen.md`.
+
+**De jacht te voet** (stap 3b, 7 okt; Marcel: "Ja dat is goed"): "Een jacht" in het voorval van de wolven stuurt de
+mannen van de militie (zonder militie twee weerbare mannen) met de schout mee, en het hol ligt in goud op de grond. Komt
+hij binnen negen tegels van een wolf van de roedel, dan is het een gevecht in beurten, met de mannen aan zijn kant; wie
+overblijft, vlucht naar het hol, en de jacht is voorbij. Gaat hij niet binnen twee dagen, dan gaan de mannen zonder hem:
+de roedel verliest twee wolven, en een op de zeven keer komt een van de mannen niet terug. **Nog niet:** het hol als
+tekening op de kaart, om hulp roepen (3c) en het hek op de kaart (3d); de lantaarns aan de bosrand vallen weg (Marcel: "D
+ja allebei"). Zie de werklijst, vraag 116.
 
 "Ik wil dat er beesten kunnen rondlopen in het bos. Wolven etc. Die de houthakker kunnen bedreigen. Rode ogen uit het
 duister." Het voorstel (vraag 116): wolven in roedels diep in het bos, herten die wegrennen, later een zwijn of een beer;
@@ -1675,13 +1694,36 @@ Nog open na deel 1 (vragen van Claude):
 - **Eten:** elk mens eet 0,05 graan per dag. Het dorp eet eerst de melk van vandaag, dan het vlees
   dat anders bederft, dan graan, en pas als het graan op is kaas en gezouten vlees (sinds 25 sep
   vult vlees een maag, een optie; sinds 28 sep telt het ook mee als het dorp kijkt of er eten is).
-  Groente, vis of vlees erbij maakt ook tevredener. Zonder zout bederven vis en vlees.
+  Groente, vis of vlees erbij maakt ook tevredener. Zonder zout bederven vis en vlees. **Sinds 8 okt vult vis een maag,
+  net als vlees** (Marcel: "Vis mag een maag vullen, zoals vlees"; de spelregel "Vis"): wat het zout niet goed houdt,
+  eet het dorp vóór het graan, de gezouten vis na de kaas. Daarvoor at het dorp alleen de vis die de huizen wilden, en
+  bedierf de rest, ook in een voorjaar met honger.
 - **Het zaaigraan, pas bij nood** (1 okt, eenentwintigste sessie; werklijst vraag 81; Marcel: "zaaigraan wordt bij nood
   opgegeten, anders sterven er mensen"): van de oogst tot het zaaien houden de boeren het zaaigraan voor volgend jaar
   achter, zoveel als de akkers van volgend jaar vragen (`T.zaaigraanApart`). Het dorp eet het pas na het andere graan,
   de kaas en het gezouten vlees, en zegt het als het zover is ("De honger is groot: het dorp eet van het zaaigraan."). De
   winter rekent het eten zonder het zaaigraan, en bij de muis op het graan in de balk staat hoeveel ervan zaaigraan is.
   De spelregel "Zaaigraan" (Als ander graan: het spel van vóór 1 okt).
+- **De graanschuur en de wachters** (8 okt; werklijst vraag 132; Marcel: "bij honger grijpen mensen alles aan. Je moet
+  mensen inzetten om het warenhuis te beschermen", "Ja, er moet een graanschuur komen", en een wachter per twintig mensen,
+  "anders maken ze geen kans"; `js/graanschuur.js`): het zaaigraan ligt in de graanschuur, en zodra er zaaigraan apart
+  ligt, vraagt het dorp er een. Komt de honger eraan, dan zoekt een boer je: "Ze praten over de graanschuur." Je zet er
+  mannen bij (alles, of de helft, en de rest mag het dorp eten), of je laat ze eten. Wachters (de militie eerst, dan de
+  weerbare mannen), een per twintig mensen en minstens twee, staan dag en nacht bij de schuur en werken nergens; met te
+  weinig pakt het dorp een deel. Elke dag honger terwijl het graan bewaakt wordt, kost vertrouwen; bij het zaaien gaan ze
+  naar huis. Zonder graanschuur eet het dorp het op zoals hierboven. De spelregel "Zaaigraan" op "Bewaken" (de
+  standaard), "Pas bij nood" of "Als ander graan". De graanschuur leent nog de tekening van de blokhutschuur.
+- **Wat helpt aan eten** (8 okt; vraag 132, b; Marcel: "ze mogen advies geven op wat te doen. dit kan kopen, planten,
+  bakken etc zijn"): haalt het eten de winter niet, dan zegt de raad wat er nu kan en helpt, de eerste twee: land
+  ontginnen (een boer komt het vragen), een visser aan het water (niet in de winter), een jager als er herten zijn, een
+  graanschuur voor het zaaigraan, en zaaigraan kopen bij de marskramer als er te weinig is om te zaaien. Het dorp vraagt
+  het gebouw dat hij noemt; tot 8 okt vroeg het alleen een jager.
+- **Vee en vissers tegen de honger in het voorjaar** (8 okt; vraag 132; Marcel: "1 en 2 allebei, vee en meer vissers"):
+  had het dorp tussen lentemaand en de oogst tien dagen of meer honger, en brengt het hooi geen koe meer de winter door,
+  dan maakt een boer na de oogst een veld weide (eerst een veld dat zou rusten, anders de minst vruchtbare akker van een
+  boer met meer akkers). Daar krijgen de koeien kalveren, en een koe geeft van grasmaand tot wijnmaand melk voor vijf
+  mensen, juist als het graan op is. De raad vraagt een visser per dertig mensen, zolang er water is (een per zestig
+  tegels), en noemt de weide.
 - **Brandhout:** in wintermaand, louwmaand en sprokkelmaand (90 dagen) stookt elk huishouden van vier
   mensen 0,15 hout of turf per dag; het gehucht van 26 mensen zo'n 95 hout per winter. Het begint met
   40, en een houthakker hakt 2 per dag; de marskramer verkoopt geen hout.
@@ -1945,6 +1987,12 @@ Besloten op een voorstel van Claude (`werklijst.md`, punt 4):
 - **De beek vriest 's winters dicht** (Marcel, 24 sep: "die beek is wel een leuk detail"). De
   visser vangt dan niets, dus vis die je in de winter wilt eten, moet je in de herfst zouten. Zo
   telt het zout. Of je het ijs ook ziet, is nog open: dat is tekenwerk.
+  **Sinds 8 okt zegt de raad het** (vraag 132, B; Marcel: "A en B samen"): vanaf de herfst rekent het dorp uit wat de
+  huizen in de winter aan vis en vlees willen, wat er dan ligt, en hoeveel zout dat vraagt, en de raad zegt het zolang de
+  marskramer nog voor de winter komt ("koop 18 zout bij de marskramer in wijnmaand; een zout houdt tien vis of vlees
+  goed"); ligt er te weinig, dan vraagt het dorp een visser of een jager. De marskramer heeft in de herfst 40 zout (eerst
+  15), en wie eet, eet eerst de verse vis: tot 8 okt at elke vis zijn zout mee, ook in de zomer, en was het zout op
+  voordat de winter kwam.
 - **Stenen komen later, met een kar.** Een marskramer draagt zijn waar op zijn rug: zout en een
   staaf ijzer passen erin, een lading stenen niet. Bij de trede dorp komt er een voerman met een
   kar. Zo groeit de handel mee met het dorp: de marskramer in het gehucht, de voerman in het dorp,
@@ -2074,6 +2122,9 @@ Besloten op een voorstel van Claude (`werklijst.md`, punt 5):
   inhoudt zo'n 70 graan over, en komt wie alles in graan betaalt er zo'n 30 tekort, en 70 als
   hij ook graan moet verkopen voor het goud. (Een eerste gok in één blok, om bij te stellen na
   spelen.)
+  **Sinds 8 okt is de standaard 4** (de spelregel "Graan" op "Net rond"; Marcel: "A en B samen", werklijst vraag 132):
+  met de jager die echt jaagt en het zaaigraan dat bewaakt wordt, viel een dorp van 100 mensen op 3,5 elk voorjaar
+  zonder graan. "Honger" blijft als keuze.
 - **Hij vraagt naar wat hij ziet, en in wat hij ziet.** Voor elke akkertegel een half graan (de
   pacht, ook als de tegel braak lag: hij telt de akkers, niet wat erop groeide), voor elke mens
   hoofdgeld in goud, en voor elk gebouw zijn eigen prijs: voor de schaapskooi wol, voor het

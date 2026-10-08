@@ -701,6 +701,11 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   22 sep mee in een commit die met de oude server iets nagemeten had (`e8ab95b`), en niets gebruikt het:
   `npm start` draait `server.cjs`. Het mag weg.
 
+- **Langzamer bergop, sneller bergaf** (8 okt, bij vraag 121, stap 2, "D, wat ik niet doe"; Marcel: "Akkoord"). Met de
+  hoogte zou een stap tegen een helling op meer tijd kunnen kosten, en eraf minder. Niet gebouwd, om niet te blijven
+  toevoegen: lopen kent nu alleen "kan wel" of "kan niet" (een wand). Als het land groter wordt (het eiland) en een tocht
+  over de bergrug ertoe doet, kan het een gewicht in A* worden (een stap omhoog kost meer), met de looptijd erbij.
+
 ## Het beeld
 
 - **De markt in ons beeld** (6 okt, zesendertigste sessie; vraag 127): vanuit onze kijkhoek ligt een groot deel van het
@@ -855,3 +860,11 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   zouden er het hele jaar kunnen zijn, onder een toets: wat je echt hebt, en wat de heer tot nu toe van je
   weet (wat zijn inner telde, wat de marskramer hem vertelde). Dat zijn de rekenboeken van `spel.md` (punt 6),
   en het maakt de kern elke dag zichtbaar, niet pas in lentemaand. Na de proef; niet gekozen.
+- **Stropen: de herten zijn van de heer** (7 okt, achtendertigste sessie, bij het plan voor vraag 116, stap 3). De
+  jager jaagt in het bos van de heer, en zijn opmerking in `T.GEBOUWEN.jager` zegt al "stropen is ook een keuze". Als
+  de jager echt herten neemt, kan de heer er iets van vinden (zoals de houtkap en het bos ontginnen: gemeld kost gunst,
+  stiekem is betrapt worden). Niet in stap 3; misschien met de wetten (een wet "jagen in het bos van de heer").
+- **Het dorp eet gevarieerd** (Marcel, 7 okt, bij vraag 116, stap 3a: "het dorp moet gevarieerd eten. Graan, brood,
+  vlees, vis etc."). Tot de jager echt jaagde, kon een dorp zijn winter op vlees uit het niets halen, en vroeg het om
+  jager na jager. Een richting: het eten komt uit meer bronnen, en een dorp dat op één bron leunt, voelt dat (een wens
+  per stand naar afwisseling, of de raad die het zegt). Na de speeltest met klein wild bekijken wat er nodig is.

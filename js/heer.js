@@ -180,6 +180,9 @@
     const aantal = {};
     if (rapport) Object.assign(aantal, rapport.gebouwen);
     else for (const g of D.gebouwen || []) aantal[g.soort] = (aantal[g.soort] || 0) + 1;
+    // Van een jager die geen hert vindt dat hij mag schieten, vraagt hij geen vlees (js/beesten.js; Marcel, 7 okt, vraag
+    // 116, k): die schiet alleen klein wild.
+    if (aantal.jager) aantal.jager = Math.max(0, aantal.jager - T.jagersZonderHerten(D));
     for (const id of Object.keys(T.GEBOUWEN || {})) {
       const n = aantal[id];
       const prijs = T.GEBOUWEN[id].heer;
@@ -369,7 +372,7 @@
     const na = ((D.voorraad && D.voorraad.graan) || 0) - ((g && g.neemt && g.neemt.graan) || 0);
     const kaas = (D.voorraad && D.voorraad.kaas) || 0;
     // Vlees vult sinds 25 sep ook een maag (js/behoeften.js): het vangt net als de kaas een tekort op.
-    const vlees = T.vleesAlsEten(D);
+    const vlees = T.vleesEnVisAlsEten(D);
     return { na, eten, melk, kaas, vlees, soldaten, zaaien, over: na - eten - soldaten - zaaien, dagen: oogst - dag };
   };
 

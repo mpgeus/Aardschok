@@ -9,8 +9,8 @@
 // (`w.hoogte.hellingen`), schuin tussen twee treden. Een kaart zonder `w.hoogte` is vlak, zoals altijd (het ontworpen
 // gehucht, de proefkamers, en elk land met de spelregel "Hoogte" op vlak).
 //
-// Wat hier staat, verandert de regels nog niet (dat is stap 2: lopen, zien, bouwen): het zegt alleen hoe hoog iets
-// ligt, voor het tekenen (js/tekenen.js) en de muis (js/main.js). De maker legt de hoogte (T.legHoogte).
+// Het zegt hoe hoog iets ligt, voor het tekenen (js/tekenen.js) en de muis (js/main.js), en sinds stap 2 wat dat doet:
+// lopen, bouwen, zien en afdekken (onderaan, "wat de hoogte doet"). De maker legt de hoogte (T.legHoogte).
 (function (T) {
   'use strict';
 
@@ -27,6 +27,9 @@
     vrijRond: 6, // in zoveel tegels loopt het van een vlak stuk (een huis met zijn looppad, het water) naar het landschap
     richel: [4.5, 6.5], // de richel bij de rotsen: hoe ver hij reikt
     hellingBreed: 2, // de helling de richel op, in tegels
+    oog: 32, // zien (vraag 121, stap 2): hoe hoog het oog is boven de grond, in pixels; een heuvel ertussen houdt het zicht
+    verderPer: 64, // ... en wie hoger staat dan wat hij bekijkt, ziet een tegel verder per zoveel pixels (Marcel: twee treden)
+    steil: 6, // bouwen (vraag 121, stap 2): steiler dan zoveel pixels per tegel, over de plek met zijn looppad, is te steil
   };
   const IN = () => T.HOOGTE_INSTELLINGEN;
 
@@ -271,12 +274,172 @@
     return uit;
   };
 
+  // ---------------------------------------------------------------- wat de hoogte doet (vraag 121, stap 2)
+  // Marcel, 8 okt: "Akkoord" (op het plan: niet door een wand, wel over een helling; niet bouwen op steile grond; een
+  // heuvel houdt het zicht tegen; een heuvel voor iemand dekt hem af; wie hoog staat, ziet verder).
+
+  // Kan wie op tegel (x1, y1) staat een stap zetten naar zijn buur (x2, y2)? Niet door een wand: waar de rand die ze delen
+  // aan de ene kant hoger ligt dan aan de andere (een rotswand of een wal, T.wandenVan). Wel over een helling en de
+  // glooiing, want daar delen ze hun hoeken. Een schuine stap gaat over het hoekpunt dat ze delen, en om de hoek langs
+  // een van de twee tegels ernaast, zoals om een muur (js/pad.js). Op een kaart zonder hoogte altijd.
+  T.kanStappen = function (w, x1, y1, x2, y2) {
+    if (!w || !w.hoogte) return true;
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+    if (dx && dy) {
+      if (!hoekpuntGelijk(w, x1, y1, x2, y2)) return false;
+      return (randOpen(w, x1, y1, x2, y1) && randOpen(w, x2, y1, x2, y2)) || (randOpen(w, x1, y1, x1, y2) && randOpen(w, x1, y2, x2, y2));
+    }
+    return randOpen(w, x1, y1, x2, y2);
+  };
+  // De hoeken aan de rand tussen twee buren (recht naast elkaar): [hoek van a, hoek van b] voor elk eind.
+  const RAND_HOEKEN = {
+    '1,0': [[1, 0], [2, 3]], // b ligt oost van a: a's oost- en zuidhoek tegen b's noord- en westhoek
+    '-1,0': [[0, 1], [3, 2]],
+    '0,1': [[3, 0], [2, 1]], // b ligt zuid van a: a's west- en zuidhoek tegen b's noord- en oosthoek
+    '0,-1': [[0, 3], [1, 2]],
+  };
+  function randOpen(w, x1, y1, x2, y2) {
+    if (x1 === x2 && y1 === y2) return true;
+    for (const [ka, kb] of RAND_HOEKEN[(x2 - x1) + ',' + (y2 - y1)]) {
+      if (Math.abs(T.hoekHoogte(w, x1, y1, ka) - T.hoekHoogte(w, x2, y2, kb)) >= 0.5) return false;
+    }
+    return true;
+  }
+  // Het hoekpunt dat twee schuine buren delen: even hoog aan beide kanten?
+  function hoekpuntGelijk(w, x1, y1, x2, y2) {
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+    // de hoek van a naar b toe, en de hoek van b terug
+    const hoek = (sx, sy) => (sx < 0 ? (sy < 0 ? 0 : 3) : sy < 0 ? 1 : 2);
+    return Math.abs(T.hoekHoogte(w, x1, y1, hoek(dx, dy)) - T.hoekHoogte(w, x2, y2, hoek(-dx, -dy))) < 0.5;
+  }
+
+  // Zien (vraag 121, stap 2): ligt er een heuvel (of de rand van een richel) tussen wie kijkt en wat hij ziet? Van oog tot
+  // oog (`oog` boven de grond aan beide kanten, zodat het twee kanten op hetzelfde is), en de grond ertussen om de halve
+  // tegel. Op een kaart zonder hoogte nooit.
+  T.heuvelTussen = function (w, a, b) {
+    if (!w || !w.hoogte) return false;
+    const oog = IN().oog;
+    const ha = T.hoogteOp(w, a.x, a.y) + oog;
+    const hb = T.hoogteOp(w, b.x, b.y) + oog;
+    const n = Math.ceil(Math.hypot(b.x - a.x, b.y - a.y) * 2);
+    for (let i = 1; i < n; i++) {
+      const t = i / n;
+      if (T.hoogteOp(w, a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t) > ha + (hb - ha) * t) return true;
+    }
+    return false;
+  };
+  // Hoeveel verder wie op `van` staat `naar` ziet, omdat hij hoger staat: een tegel per `verderPer` pixels.
+  T.verderVanBoven = function (w, van, naar) {
+    if (!w || !w.hoogte) return 0;
+    return Math.max(0, (T.hoogteOp(w, van.x, van.y) - T.hoogteOp(w, naar.x, naar.y)) / IN().verderPer);
+  };
+
+  // Afdekken (vraag 121, stap 2): welke tegels liggen zo hoog dat ze op het scherm iets achter zich afdekken? Een tegel
+  // dekt af als zijn rand op het scherm hoger komt dan de voeten van wie op een tegel achter hem staat (tot twee rijen
+  // terug), en wel de hoek die recht onder die voeten ligt: links (west) voor wie links erachter staat, de noordhoek
+  // voor wie recht erachter staat, rechts (oost) voor wie rechts erachter staat. Dat is de rand van een richel, en een steile helling; de zachte glooiing
+  // haalt het nooit. js/tekenen.js tekent zo'n tegel nog eens over wat erachter staat. Eén keer per hoogte (`versie`).
+  const dekkerLijsten = new WeakMap();
+  T.dektAf = function (w, x, y) {
+    const hg = w && w.hoogte;
+    if (!hg || x < 0 || y < 0 || x >= hg.b || y >= hg.h) return false;
+    let l = dekkerLijsten.get(hg);
+    if (!l || l.versie !== (hg.versie || 0)) {
+      l = { versie: hg.versie || 0, dekt: new Uint8Array(hg.b * hg.h) };
+      const HH = T.naarScherm(1, 0).y; // een halve tegel hoog op het scherm (16)
+      const voeten = (bx, by) => (bx + by) * HH - T.hoogteOp(w, bx, by);
+      for (let ty = 0; ty < hg.h; ty++) {
+        for (let tx = 0; tx < hg.b; tx++) {
+          const h = T.hoekHoogten(w, tx, ty);
+          // op het scherm: de noordhoek een halve rij terug, oost en west op de rij van de tegel
+          const noord = (tx + ty - 1) * HH - h[0];
+          const oost = (tx + ty) * HH - h[1];
+          const west = (tx + ty) * HH - h[3];
+          let dekt = false;
+          for (const [i, j, rand] of [[1, 0, west], [0, 1, oost], [1, 1, noord], [2, 1, west], [1, 2, oost], [2, 2, noord]]) {
+            if (rand < voeten(tx - i, ty - j) - 2) dekt = true;
+          }
+          l.dekt[ty * hg.b + tx] = dekt ? 1 : 0;
+        }
+      }
+      dekkerLijsten.set(hg, l);
+    }
+    return l.dekt[y * hg.b + x] === 1;
+  };
+
+  // Bouwen (vraag 121, stap 2): een gebouw komt op vlakke grond. Waar het komt, maakt de bouwer de grond vlak
+  // (T.egaliseer): de plek met een looppad eromheen wordt een vlak stuk, zoals de maker de huizen van het begin legt, en
+  // het land glooit er in `vrijRond` tegels naartoe. Is het daar te steil (meer dan `steil` pixels per tegel, of een wand
+  // of een helling op de plek), dan bouwt niemand er (T.teSteil, in T.waaromPastHetNiet en voor een erf).
+  // `plek`: { x, y, b, h }, de voet van het gebouw (of het erf). Het vlakke stuk is de voet met een rand van `rand` tegels,
+  // in hoekpunten (tegel (x, y) heeft zijn noordhoek op hoekpunt (x, y), zoals in glooiingOp en de vlakke stukken van de
+  // maker).
+  const vlakVan = (plek, rand) => ({ x0: plek.x - rand, y0: plek.y - rand, x1: plek.x + plek.b + rand, y1: plek.y + plek.h + rand });
+  function hoekpuntenVan(v, doe) {
+    for (let vy = v.y0; vy <= v.y1; vy++) for (let vx = v.x0; vx <= v.x1; vx++) doe(vx, vy);
+  }
+  const randVanPlek = () => Math.max(0, T.GEBOUWEN_INSTELLINGEN.looppad - 1);
+  T.teSteil = function (w, plek) {
+    if (!w || !w.hoogte) return false;
+    const hg = w.hoogte;
+    const rand = randVanPlek();
+    const niv = niveauVan(hg, plek.x, plek.y);
+    for (let y = plek.y - rand; y < plek.y + plek.h + rand; y++) {
+      for (let x = plek.x - rand; x < plek.x + plek.b + rand; x++) {
+        if (hg.hellingen[sleutel(x, y)] || niveauVan(hg, x, y) !== niv) return true;
+      }
+    }
+    let laag = Infinity;
+    let hoog = -Infinity;
+    hoekpuntenVan(vlakVan(plek, rand), (vx, vy) => {
+      const h = glooiingOp(hg, vx, vy);
+      if (h < laag) laag = h;
+      if (h > hoog) hoog = h;
+    });
+    return hoog - laag > IN().steil * (Math.max(plek.b, plek.h) + 2 * rand);
+  };
+  // Maak de grond onder een nieuw gebouw vlak: op de gemiddelde hoogte van wat er lag. Het nieuwe stuk gaat voor wat er
+  // al lag (glooiingOp neemt het eerste vlakke stuk), en raakt geen ander gebouw: daar blijft een looppad tussen
+  // (T.looppadOm, js/gebouwen.js), en het stuk is een tegel smaller dan het looppad. `zoalsBij`: een tegel { x, y } waarvan de
+  // grond blijft zoals hij ligt (een huis dat doorgroeit, blijft waar het stond). Geeft het vlakke stuk, of null.
+  T.egaliseer = function (w, plek, zoalsBij) {
+    if (!w || !w.hoogte) return null;
+    const hg = w.hoogte;
+    const v = vlakVan(plek, randVanPlek());
+    let som = 0;
+    let n = 0;
+    hoekpuntenVan(v, (vx, vy) => {
+      som += glooiingOp(hg, vx, vy);
+      n++;
+    });
+    const vlak = { ...v, h: zoalsBij ? glooiingOp(hg, zoalsBij.x, zoalsBij.y) : Math.round(som / n) };
+    hg.vlakken.unshift(vlak);
+    // de lijst van de hoeken: alleen opnieuw waar het nieuwe stuk iets verandert (de hele lijst kost een seconde)
+    const l = lijsten.get(hg);
+    const oud = hg.versie || 0;
+    hg.versie = oud + 1;
+    if (l && l.versie === oud) {
+      const r = IN().vrijRond + 1;
+      const bl = hg.b + 2 * RAND;
+      for (let y = Math.max(-RAND, vlak.y0 - r); y < Math.min(hg.h + RAND, vlak.y1 + r); y++) {
+        for (let x = Math.max(-RAND, vlak.x0 - r); x < Math.min(hg.b + RAND, vlak.x1 + r); x++) {
+          for (let k = 0; k < 4; k++) l.hoeken[((y + RAND) * bl + x + RAND) * 4 + k] = rekenHoek(hg, x, y, k);
+        }
+      }
+      l.versie = hg.versie;
+    }
+    return vlak;
+  };
+
   // ---------------------------------------------------------------- de maker legt de hoogte
 
   // Uit het plan van de maker (js/maker.js): het nummer van het land (het landschap), het dorp op een vlakte, de vlakke
   // stukken (een huis met zijn looppad, het water), en een richel met een rotswand bij de rotsen, met een helling erop.
-  // Geeft wat in `w.hoogte` komt: alleen dat, want de glooiing zelf is een rekensom (glooiingOp).
-  T.legHoogte = function (plan) {
+  // Geeft wat in `w.hoogte` komt: alleen dat, want de glooiing zelf is een rekensom (glooiingOp). `w`: de kaart van het
+  // plan, als die er al is: dan komt de helling waar je erop en eraf kunt lopen (vraag 121, stap 2).
+  T.legHoogte = function (plan, w) {
     const I = IN();
     const B = plan.b;
     const H = plan.h;
@@ -359,14 +522,16 @@
           else if (!hg.niveau[t] && buren >= 3) hg.niveau[t] = 1;
         }
       }
-      legHelling(hg.niveau, hg.hellingen, k, cx, cy, I.hellingBreed, B, H);
+      legHelling(hg.niveau, hg.hellingen, k, cx, cy, I.hellingBreed, B, H, w);
     }
     return hg;
   };
 
   // De helling de richel op: aan de zuid- of oostkant (de kant die je ziet), het dichtst bij het dorp. Een helling
-  // ligt buiten de richel: zijn twee hoeken aan de kant van de richel liggen een trede hoger.
-  function legHelling(niveau, hellingen, k, cx, cy, breed, B, H) {
+  // ligt buiten de richel: zijn twee hoeken aan de kant van de richel liggen een trede hoger. Met de kaart erbij (`w`)
+  // alleen waar je op de helling kunt staan, en eronder ook: een struik of een boom aan de voet maakte er een doodlopende
+  // helling van (land 5).
+  function legHelling(niveau, hellingen, k, cx, cy, breed, B, H, w) {
     let beste = null;
     for (const s of Object.keys(niveau)) {
       const [x, y] = s.split(',').map(Number);
@@ -382,6 +547,10 @@
           const rx = x + langs[0] * i;
           const ry = y + langs[1] * i;
           if (hx >= B - 1 || hy >= H - 1 || niveau[hx + ',' + hy] || !niveau[rx + ',' + ry]) past = false;
+          // de voet: de tegel eronder
+          const vx = kant === 'oost' ? hx + 1 : hx;
+          const vy = kant === 'zuid' ? hy + 1 : hy;
+          if (w && past && (!T.isBegaanbaar(w, hx, hy) || !T.isBegaanbaar(w, vx, vy) || !T.isBegaanbaar(w, rx, ry))) past = false;
         }
         if (!past) continue;
         const d = Math.hypot(bx - cx, by - cy);

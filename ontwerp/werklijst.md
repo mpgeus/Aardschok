@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (7 okt 2026, zevenendertigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt en het spel laadt alleen wat er staat (vraag 114, 2a, stap 1 en 1b); sinds de eenendertigste sessie bouwt elk land van de maker in een bouwstijl, met het dak van zijn trede en de deur naar de weg (vraag 114, stap 2a: de stijl wit), en tekent het spel met WebGL, gebouwd in een eigen sessie naast de huizen (vraag 123); sinds de tweeëndertigste sessie bouwt de huizenbouwer elk huis van vier kanten en tekent hij het een kwartslag gedraaid, en staat wit zo in het spel, met alle bouwfasen (vraag 124, B, en G); sinds de drieëndertigste sessie werken de boeren overdag op hun land, naar het seizoen en in het vel van hun werk, een boerin in dat van een vrouw (vraag 111, stap 1 en 2), en vraagt een boer heide te ontginnen als het graan tekortkomt (vraag 107, stap 1); sinds de vierendertigste sessie wijst hij een stuk heide en een stuk bos aan, en kies jij: de heide tegen het vertrouwen, het bos gemeld tegen de gunst, of stiekem (vraag 107, stap 2), met de hakker en zijn bijl; sinds de vijfendertigste sessie is de speeltest van vier jaar gespeeld (vraag 107, stap 3): ontginnen lost het graan op, maar geen dorp wint, want de grond om te bouwen is op, en de markt komt er nooit (vraag 110: f, het erf dat vastzat, is gerepareerd; e komt met de houthakker); sinds de zesendertigste sessie staat de markt met vier kramen op het plein (vraag 110, d), en hebben de stenen huizen op elk land hun markt; en sinds de tweede sessie daarnaast bouwt elk land in een van vier stijlen, wit, oker, planken of roze, elk met eigen huizen en boerderijen en alle bouwfasen (vraag 114, 2b); dan de herberg, de kapel en de woontoren (stap 3); sinds de sessie van de heer mogen erven en werkplaatsen op bomen en struiken, die wie er komt zelf rooit, en hakt de houthakker de bomen om zijn schuur om en plant hij er twee terug, zodat het bos om hem blijft (vraag 110, e, 115 en 129; in de speeltest van vier jaar komen de dorpen van de bouwer tot 126 à 129 mensen; en sinds vraag 130 rooit een hut die niet kan doorgroeien eerst wat in de weg staat, en wint er weer een dorp, op 73425; sinds de zevenendertigste sessie kapt het gezin daarbij ook zijn eigen appelboom, zegt de raad het als een huis dat alles heeft niet kan groeien, en komt een erf niet waar het een huis elke vorm afneemt (vraag 130, a2, c2 en d); sinds vraag 131 zijn wapens niet meer verboden, en winnen drie van de zes spellen van de speeltest); sinds vraag 116, stap 1, lopen er roedels wolven en groepjes herten in het bos, met rode ogen in het donker, en sinds 2a jagen de wolven in de winter op de herten, komen er in de lente jongen, en verhuist wie zijn bos kwijt is; sinds 2b komen ze met honger in het donker naar het dorp (een schaap, of wie alleen loopt), houdt licht ze weg, en rent wie werkt en ze ziet naar huis; dan wat je ertegen doet (vraag 116, stap 3), de hoogteverschillen (vraag 121: sinds stap 1, in `main` op 7 okt, een landschap dat overal doorloopt, uit het nummer van het land, met een richel en akkers die meebollen, achter de spelregel "Hoogte", standaard vlak; stap 2, lopen, zien, bouwen en afdekken, komt nog; het draaien van de camera, vraag 124, is geparkeerd); dan de kaartenmaker voor het eiland van 2500 bij 2500 (vraag 117: sinds 8 okt maakt hij uit één nummer het eiland, en sinds stap 2a begint elk nieuw spel erop, met je gehucht als een dorp dat er al was; sinds 2b loopt het eiland om je land door, en met heuvels is het land dat van het eiland; 2c, de speeltest, is gespeeld; sinds 2d houdt een erf plaats voor een put, en haalt een put voor een hut ook het huis dat de hut wordt; dan de kern); dan de proef van vraag 128 (de verdwenen graanzak, met een eerste zitting)
+## De stand (7 okt 2026, zevenendertigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt en het spel laadt alleen wat er staat (vraag 114, 2a, stap 1 en 1b); sinds de eenendertigste sessie bouwt elk land van de maker in een bouwstijl, met het dak van zijn trede en de deur naar de weg (vraag 114, stap 2a: de stijl wit), en tekent het spel met WebGL, gebouwd in een eigen sessie naast de huizen (vraag 123); sinds de tweeëndertigste sessie bouwt de huizenbouwer elk huis van vier kanten en tekent hij het een kwartslag gedraaid, en staat wit zo in het spel, met alle bouwfasen (vraag 124, B, en G); sinds de drieëndertigste sessie werken de boeren overdag op hun land, naar het seizoen en in het vel van hun werk, een boerin in dat van een vrouw (vraag 111, stap 1 en 2), en vraagt een boer heide te ontginnen als het graan tekortkomt (vraag 107, stap 1); sinds de vierendertigste sessie wijst hij een stuk heide en een stuk bos aan, en kies jij: de heide tegen het vertrouwen, het bos gemeld tegen de gunst, of stiekem (vraag 107, stap 2), met de hakker en zijn bijl; sinds de vijfendertigste sessie is de speeltest van vier jaar gespeeld (vraag 107, stap 3): ontginnen lost het graan op, maar geen dorp wint, want de grond om te bouwen is op, en de markt komt er nooit (vraag 110: f, het erf dat vastzat, is gerepareerd; e komt met de houthakker); sinds de zesendertigste sessie staat de markt met vier kramen op het plein (vraag 110, d), en hebben de stenen huizen op elk land hun markt; en sinds de tweede sessie daarnaast bouwt elk land in een van vier stijlen, wit, oker, planken of roze, elk met eigen huizen en boerderijen en alle bouwfasen (vraag 114, 2b); dan de herberg, de kapel en de woontoren (stap 3); sinds de sessie van de heer mogen erven en werkplaatsen op bomen en struiken, die wie er komt zelf rooit, en hakt de houthakker de bomen om zijn schuur om en plant hij er twee terug, zodat het bos om hem blijft (vraag 110, e, 115 en 129; in de speeltest van vier jaar komen de dorpen van de bouwer tot 126 à 129 mensen; en sinds vraag 130 rooit een hut die niet kan doorgroeien eerst wat in de weg staat, en wint er weer een dorp, op 73425; sinds de zevenendertigste sessie kapt het gezin daarbij ook zijn eigen appelboom, zegt de raad het als een huis dat alles heeft niet kan groeien, en komt een erf niet waar het een huis elke vorm afneemt (vraag 130, a2, c2 en d); sinds vraag 131 zijn wapens niet meer verboden, en winnen drie van de zes spellen van de speeltest); sinds vraag 116, stap 1, lopen er roedels wolven en groepjes herten in het bos, met rode ogen in het donker, en sinds 2a jagen de wolven in de winter op de herten, komen er in de lente jongen, en verhuist wie zijn bos kwijt is; sinds 2b komen ze met honger in het donker naar het dorp (een schaap, of wie alleen loopt), houdt licht ze weg, en rent wie werkt en ze ziet naar huis; dan wat je ertegen doet (vraag 116, stap 3), de hoogteverschillen (vraag 121: sinds stap 1, in `main` op 7 okt, een landschap dat overal doorloopt, uit het nummer van het land, met een richel en akkers die meebollen, achter de spelregel "Hoogte", standaard vlak; sinds stap 2 loopt niemand door een rotswand, wordt niet op steile grond gebouwd, houdt een heuvel het zicht tegen en dekt hij af wat erachter staat; het draaien van de camera, vraag 124, is geparkeerd); dan de kaartenmaker voor het eiland van 2500 bij 2500 (vraag 117: sinds 8 okt maakt hij uit één nummer het eiland, en sinds stap 2a begint elk nieuw spel erop, met je gehucht als een dorp dat er al was; sinds 2b loopt het eiland om je land door, en met heuvels is het land dat van het eiland; 2c, de speeltest, is gespeeld; sinds 2d houdt een erf plaats voor een put, en haalt een put voor een hut ook het huis dat de hut wordt; dan de kern); dan de proef van vraag 128 (de verdwenen graanzak, met een eerste zitting)
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Het hart is het
 gehucht besturen terwijl het groeit, terwijl de heer eraan trekt; rijk worden en arm lijken blijft de druk van boven.
@@ -5050,7 +5050,90 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     komt erheen, en de schout hoort het ook (een bericht met waar, later geluid); is hij er op tijd, dan schiet hij te hulp,
     en is het een gevecht in beurten, zoals bij de rovers. Hoort bij stap 3, wat je ertegen doet; misschien ook bij andere
     nood (een brand, de rovers).
-    **Bezig in sessie `ccr-77327776-rqjldz`** (7 en 8 okt): stap 3, wat je tegen de wolven doet (gebouwd, op de branch), en daaruit vraag 132: het dorp eet gevarieerd, met een graanschuur en wachters bij het zaaigraan (Marcel koos het plan; staat op de branch).
+    **Het plan voor stap 3** (Claude, 7 okt, achtendertigste sessie; wacht op Marcel). **Wat er nu is:** de jager maakt
+    elke dag 1 vlees en 1 huid uit het niets, los van de herten; de jacht in het voorval "wolven" haalt meteen twee wolven
+    van de kaart (`T.jaagOpDeWolven`); het hek is een vlag (`T.hekOmDeSchapen`), op de kaart zie je niets; en de wolven
+    mijden al het licht (`T.lichtBronnen`): wie bij een lantaarn loopt, vallen ze niet aan, maar een schaap wel.
+    - **3a, de jager jaagt echt**, zoals de houthakker hakt: hij loopt het bos in naar de dichtste groep herten binnen zijn
+      bereik, en om de paar dagen komt hij terug met een hert (vlees en een huid). Staan er geen herten in zijn bereik,
+      dan staat hij stil en werkt zijn hand elders (zoals de houthakker zonder boom), en de raad zegt het. Een roedel in
+      zijn bereik houdt hij klein: in de lente neemt hij de jongen (een wolvenvel is een huid). Pas dan noemen de status
+      en de raad "geen jager" als oorzaak.
+    - **3b, het hol en de jacht te voet:** het hol is een plek op de kaart (f: een kuil onder een omgevallen boom, met
+      botten ervoor; een nieuw voorwerp in code). "Een jacht" in het voorval haalt de wolven niet meer meteen weg: de
+      mannen van het wachthuis (zonder wachthuis twee weerbare mannen) lopen met de schout mee, het hol ligt in goud op de
+      grond, en daar is het een gevecht in beurten tegen de roedel, overdag, als ze bij het hol liggen. Ga je niet binnen
+      twee dagen, dan gaan de mannen zonder jou, en loopt het af zoals nu (een kans op een dode, twee wolven minder): een
+      keuze die wacht, heeft een termijn (`CLAUDE.md`, samen spelen).
+    - **3c, om hulp roepen** (Marcel: "even noteren dat mensen ook om hulp roepen"): valt een roedel iemand aan, dan is
+      het niet meteen beslist. Hij roept: een bericht met waar, de tijd naar 1×, en wie in de buurt is, komt (twee mensen
+      laten de wolven al met rust). Is de schout er binnen een kwartier, dan is het een gevecht in beurten; anders gewond
+      of dood, zoals nu.
+    - **3d, het hek op de kaart:** het hek om de schapen wordt iets wat je ziet (een hoger hek om de weide of de kooi).
+    **Wat Claude erin zag:** (1) de jager en de wolven eten van dezelfde herten (g): een jager in een klein bos maakt de
+    wolven juist eerder hongerig, en dan komen ze naar het dorp. Hij moet dus maat houden, of dat is jouw probleem.
+    (2) Lantaarns aan de bosrand (stap 3 van het eerste plan) doen bijna niets meer: de wolven mijden het licht al, en wie
+    alleen in het donker loopt, is zelden aan de bosrand; ze nemen eerst een schaap, en daar helpt het hek. Voorstel: ze
+    vallen weg. (3) De herten zijn van de heer (de opmerking bij de jager: "stropen is ook een keuze"); dat laat het plan
+    liggen, en het gaat naar `opmerkingen.md`.
+    Volgorde: 3a, 3b, 3c, 3d, en dan de speeltest van vier jaar (wint het dorp nog, en hoeveel herten en wolven blijven
+    er?). Vragen: **a**, houdt de jager maat (hij laat altijd een paar herten per groep staan), of jaagt hij tot ze op
+    zijn? **b**, de jacht te voet met een termijn van twee dagen, en zonder wachthuis twee weerbare mannen? **c**, om hulp
+    roepen nu alleen bij de wolven (een brand of de rovers later op dezelfde manier)? **d**, de lantaarns aan de bosrand
+    vallen weg, en het hek wordt zichtbaar?
+    **Marcel koos (7 okt): "A. Altijd een paar herten over houden. Anders krijgen we geen jonge hertjes meer. B. Ja dat
+    is goed. C. Ja goed idee."** De jager laat altijd een paar herten per groep staan, zodat er in de lente jongen komen;
+    de jacht te voet met twee dagen, zonder wachthuis twee weerbare mannen; om hulp roepen nu bij de wolven. Over d vroeg
+    Marcel welk hek (het antwoord "Een hoger hek om de schapen" in het voorval "wolven"); dat staat nog open.
+    **Marcel (7 okt): "D ja allebei, begin maar".** Het hek wordt zichtbaar, en de lantaarns aan de bosrand vallen weg.
+    **Gebouwd, stap 3a (7 okt, achtendertigste sessie; `js/beesten.js`, `js/veldwerk.js`, vier toetsen erbij):** de jager
+    haalt zijn vlees en huiden uit het wild binnen vijftig tegels van zijn hut (het thuis van de groep): elke dertig vlees
+    is een hert minder, en van elk groepje laat hij er altijd twee staan. Een roedel van meer dan drie verliest elke vijf
+    dagen een wolf aan hem (een huid, geen vlees: op zo'n dag maakt hij alleen huiden). Is er niets dat hij mag nemen, dan
+    staat hij stil en werkt zijn hand elders, zoals de houthakker zonder boom; het dorp vraagt dan geen tweede jager. Zijn
+    poppetje loopt het bos in, loert twee uur op zijn groep van negen tegels (net buiten waar ze schuw worden), en gaat
+    terug naar zijn hut. De raad noemt nu de jager als de wolven bij het dorp zijn en er geen jager bij hen is. **Wat het
+    doet** (twee jaar alleen de nachten, op drie landen, een jager bij het huis van de schout): hij schoot 2 tot 9 herten
+    en 0 tot 3 wolven, en stond 420 tot 650 van de 720 dagen stil; zijn vlees ging van zo'n 360 per jaar naar 50 tot 160.
+    Dertig en vijftig zijn eerste getallen (vijfendertig tegels haalde op twee van de drie landen geen enkele groep); de
+    speeltest zegt of het dorp nog wint zonder dat vlees. Een eigen tekening voor de jager (met boog, een hert op zijn
+    rug) is pixel art voor later; nu loopt hij in zijn eigen vel.
+    **De speeltest na 3a (7 okt, op `c28458f`; `-- bouwer sluw --maker --jaren 4`, na de drie bouwers gestopt):** alle
+    drie de bouwers vielen in het eerste jaar, twee weggejaagd door het dorp (honger in louwmaand) en een zijn ambt kwijt
+    (de heer kreeg geen vlees). De oorzaak: het dorp leunde op de jager voor het eten in de winter (vlees vult een maag,
+    `vleesIsEten`). Een jager maakte 1 vlees per dag uit het niets, en de bouwer had er een paar; nu schieten ze bijna
+    niets, want de herten groeien maar een of twee per groepje per jaar aan. Maar het dorp vraagt nog steeds om een jager
+    zolang het eten de winter niet haalt (`T.watTeBouwen` in `js/raad.js`, zonder te kijken of er wild is), dus bouwde de
+    bouwer er 9 tot 11, die stilstonden, en vroeg de heer 5 vlees per jager. **Vragen voor Marcel** (Claude, 7 okt):
+    **j**, hoe zwaar weegt de jager voor het eten? **j1**, klein wild erbij: naast de herten vangt hij hazen, konijnen en
+    vogels, een vast deel per dag (de helft van nu), en de herten geven de rest; hij staat nooit helemaal stil (voorstel).
+    **j2**, een hert is meer waard (zestig vlees) en het bos groeit sneller aan (twee à drie jongen). **j3**, de jager
+    blijft schaars, en het dorp moet zijn eten ergens anders halen (akkers, visser, vee); dan moet de balans van het spel
+    opnieuw. En los daarvan, wat er hoe dan ook bij hoort: **k**, het dorp vraagt geen jager waar hij geen wild vindt, en
+    de heer vraagt geen vlees van een jager die stilstaat.
+    **Marcel koos (7 okt): "J1 vind ik goed idee. J2 logisch eigenlijk. J3 het dorp moet gevarieerd eten. Graan, brood,
+    vlees, vis etc. K, klopt".** Dus: klein wild erbij (de helft van zijn vlees, altijd, uit hazen, konijnen en vogels),
+    een hert is zestig vlees en een groepje herten krijgt twee à drie jongen, het dorp vraagt geen jager waar hij geen
+    herten vindt, en de heer vraagt geen vlees van een jager zonder herten. J3 is een richting: het eten van het dorp komt
+    niet uit één bron (nu kon de jager het alleen dragen); wat dat voor de wensen en de balans vraagt, staat bij
+    `opmerkingen.md` tot na de speeltest.
+    **Gebouwd, stap 3b, 3c en 3d (7 okt, achtendertigste sessie):** **3b**, "Een jacht" in het voorval van de wolven is
+    een jacht te voet: de militie (zonder militie twee weerbare mannen) loopt met de schout mee, het hol ligt in goud op de
+    grond, en binnen negen tegels van de roedel is het een gevecht in beurten; wie overblijft, vlucht. Ga je niet binnen
+    twee dagen, dan gaan ze zonder je (twee wolven minder, 15% kans dat een van de mannen niet terugkomt). Het oproepen en
+    laten gaan van de militie komt uit `js/rovers.js` (`T.roepOp`, `T.laatGaan`, `T.militieVan`). **3c**, wie de wolven
+    aanvallen, roept om hulp: het dorp zegt het, een rood uitroepteken, de tijd naar 1×, en de weerbare mannen binnen
+    twaalf tegels lopen erheen; komt er een buur, dan vlucht de roedel, komt de schout (zes tegels), dan is het een gevecht,
+    en is er na een kwartier niemand, dan bijt hij zoals voorheen. **3d**, het hek om de schapen staat om de meent, van de
+    latten van de tuinen, met een hekje in elke zijde en waar een pad de rand kruist. De tekening van het hol (f) maakt een
+    agent; tot dan is het hol alleen de gouden rand.
+    **Na de vergelijking (8 okt, `speelbaar.md`, "De speeltest van 8 okt"):** voor 3a at het dorp op vlees uit het niets
+    van 13 tot 15 jagers; nu eet het in de eerste winter zijn zaaigraan op, en de oogst zakt in (612, 205, 32). Voorstel
+    van Claude: het zaaigraan blijft liggen (a), en de raad zegt wat het meest helpt aan eten (b). **Marcel (8 okt): "a.
+    eten ze wel op, bij honger grijpen mensen alles aan. Je moet mensen inzetten om het warenhuis te beschermen. b. dat is
+    goed. ze mogen advies geven op wat te doen. dit kan kopen, planten, bakken etc zijn."** Dat wordt vraag 132 (hieronder,
+    bij de vragen), met het plan.
+    **Stap 3 is gebouwd en staat in `main`** (8 okt, sessie `ccr-77327776-rqjldz`), met vraag 132 die eruit kwam.
 117. **Eén kaart: het eiland** (Marcel, 4 okt, zesentwintigste sessie: "Ik wil uiteindelijk toch alles op dezelfde kaart.
     Dus de hele spelwereld als het ware. Zo kun je steeds stukken 'ontdekken' in de fog of war. Het idee is een eiland. Met
     water rondom. Je krijgt een random positie op het land. Kan aan de buitenkant zijn of binnen in het land."; plan van
@@ -5568,8 +5651,6 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     200 zo'n 25, 's avonds anderhalf tegelijk. De oude toetsen van het dagritme zijn weer zoals ze waren.
 121. **Hoogteverschillen op de kaart** (Marcel, 4 okt, achtentwintigste sessie: "Ik heb wel 1 extra verzoek. Hoogte
     verschillen op de kaart. 😁"; plan van Claude; open).
-    **Bezig in sessie `claude/project-thread-cyjrql`** (8 okt): stap 2, wat de hoogte doet (afdekken, lopen, zien,
-    bouwen): eerst een plan voor Marcel.
     **Wat er al is:** het ontwerp van 20 sep (`kaarten.md`, "Hoogte is een getal per tegel", Marcels keuze toen): een
     getal per tegel, de wand tussen twee hoogtes afgeleid zoals een randtegel tussen twee grondsoorten, een helling waar
     je over mag, alles op een hogere tegel een trede omhoog, en wie hoog staat, ziet verder. Dat was nog voor Tiled en de
@@ -5727,6 +5808,27 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     erin: voor een heel land zijn grotere vormen nodig (kust, bergruggen van honderden tegels, rivieren die naar zee
     lopen, bossen en heide per streek, plekken voor dorpen en het kasteel). Dat is de kaartenmaker van vraag 117 (het
     eiland), met deze hoogte als eerste laag; voorstel: een eigen sessie, beginnend met een plan.
+    **Stap 2, het plan** (Claude, 8 okt): A, de volgorde lopen, bouwen, zien, afdekken; B, wie achter een heuvel staat,
+    krijgt de doorkijk zoals achter een huis; C, wie hoog staat, ziet een tegel verder per twee treden; D, langzamer bergop
+    en sneller bergaf niet (naar `opmerkingen.md`). **Marcel (8 okt): "Akkoord".** **Gebouwd** (8 okt,
+    `claude/project-thread-cyjrql`; in `main` sinds 8 okt, Marcel: "push maar"; zo werkt het nu: `kaarten.md`, bij "Hoogte is een getal per tegel"):
+    - *Lopen:* niemand stapt door een wand, wel over een helling en de glooiing (`T.kanStappen`; A*, het bereik in een
+      gevecht, de eilanden, de velden, het dwalen, het vee en opzij stappen vragen het). De helling de richel op kwam op
+      land 5 voor een struik en een boom, en liep dood; nu komt hij alleen waar je erop en eraf kunt.
+    - *Bouwen:* niet waar het te steil is (meer dan 6 pixels per tegel over de plek met zijn looppad, of een wand of
+      helling erop: "Daar is het te steil om te bouwen", en voor een erf ook). Waar een gebouw komt, wordt de grond vlak
+      (`T.egaliseer`): een vlak stuk erbij, bewaard met het spel, en de grond glooit ernaartoe; een huis dat doorgroeit,
+      blijft op zijn hoogte. Dat stond niet in het plan, maar zonder zweeft of zinkt een nieuw huis op de helling.
+    - *Zien:* een heuvel tussen twee mensen houdt het zicht tegen, van oog tot oog (dus de inner, de getuigen, de wolven
+      en de monsters in een gevecht), en wie hoger staat dan wat hij bekijkt, ziet verder.
+    - *Afdekken:* een tegel die zo hoog ligt dat hij iets achter zich afdekt (de rand van een richel, een steile flank;
+      op land 5 zo'n 40 van de 10.000), komt nog eens in de tekenlijst als er iets achter staat; wie je hoort te zien,
+      krijgt het kijkgat. De zachte glooiing dekt nooit iets af.
+    - Gemeten: `npm test` groen (1062, tien in `test/hoogte.test.cjs`). De speeltest van de bouwer op het eiland, twee
+      jaar op zaad 1 en 2, vlak en met heuvels: met heuvels liep niemand vast; zaad 2 haalde 109 mensen (vlak 120) en
+      252 van de 360 dagen naar de winst (vlak 183); zaad 1 groeide tot 99 (vlak 75), maar de bouwer legde zijn erven
+      in het bos van de heer, want het open land was te steil, en werd na anderhalf jaar ontslagen (gunst op). Op "Vlak"
+      verandert er niets (de regels vragen de hoogte alleen als de kaart hem heeft).
 122. **De snelheid in de browser en via Steam** (Marcel, 4 okt, achtentwintigste sessie: "Ik wil nu ook weten wat het
     verschil in performance is tussen nu spelen in de browser en straks via Steam. Want lag, geheugen tekort etc is geen
     optie straks"; plan van Claude; open). Uitgewerkt in `verpakken.md`, "Snelheid: in de browser of via Steam".
@@ -6650,6 +6752,76 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     de marskramer), te lezen in de gespreksschrijver; welke komt, hangt af van wat er speelt (honger: een diefstal),
     zoals bij de voorvallen. Niet willekeurig laten verzinnen: het bewijs moet kloppen. Wanneer: pas als de tweede zaak
     geschreven wordt, na Marcels proef met de graanzak, zodat we weten wat een zaak echt nodig heeft.
+
+132. **Het dorp eet gevarieerd, en het zaaigraan moet bewaakt** (Marcel, 8 okt, na de speeltest van de jager die echt
+    jaagt: "het dorp moet gevarieerd eten. Graan, brood, vlees, vis etc.", en "a. eten ze wel op, bij honger grijpen mensen
+    alles aan. Je moet mensen inzetten om het warenhuis te beschermen. b. dat is goed. ze mogen advies geven op wat te
+    doen. dit kan kopen, planten, bakken etc zijn."; plan van Claude; open).
+    **Wat er nu is:** het zaaigraan houdt het dorp apart tot het zaaien (`T.zaaigraanApart`), maar bij nood eet het het op;
+    een plek waar het graan ligt, is er niet (de voorraad is een getal). Komt het eten de winter niet door, dan vraagt het
+    dorp alleen een jager (`T.watTeBouwen` in `js/raad.js`), en de raad noemt alleen de jager.
+    - **a, het zaaigraan bewaken:** komt de honger, dan komt er iemand je zeggen dat het dorp het zaaigraan wil eten (een
+      voorval, met een termijn zoals elk voorval). Je kiest: het vrijgeven (het dorp eet, de lente wordt krap), een deel
+      uitdelen, of mannen bij het graan zetten. Dan staan er twee mannen (de militie, of weerbare mannen) dag en nacht bij
+      de schuur van de schout, waar het zaaigraan ligt, werken ze nergens, en kost elke hongerdag vertrouwen; wie het
+      ziet, mort. Zonder wachters eet het dorp het zaaigraan, zoals nu.
+    - **b, de raad zegt wat helpt aan eten:** niet alleen een jager, maar wat er nu kan en het meest oplevert: graan kopen
+      bij de marskramer (wanneer hij komt, en wat het kost), land ontginnen (het verzoek komt eerder, al als de winter in
+      zicht is), een visser aan het water (niet voor de winter), herten voor een jager, slachten, of de molen en de
+      bakkerij als er meel of brood ontbreekt. Het dorp vraagt het gebouw dat de raad noemt.
+    - **c, dan de speeltest van vier jaar**, naast de stand van voor 3a.
+    Vragen van Claude: waar ligt het graan (er is geen warenhuis; de schuur van de schout, of een eigen gebouw), en twee
+    wachters, of meer naar hoe groot het dorp is (een per twintig mensen)? **Marcel (8 okt): "Ja, er moet een graanschuur
+    komen. 2. Ja goed idee, anders maken ze geen kans".** Dus een graanschuur als gebouw, en een wachter per twintig mensen
+    (minstens twee); met te weinig wachters grijpt het dorp een deel.
+    **a, b en het vee en de vissers zijn gebouwd** (8 okt; `js/graanschuur.js`, `T.watHelptAanEten` in `js/raad.js`,
+    `weideErbij` in `js/akkers.js`), en de speeltest staat in `ontwerp/speelbaar.md`: vier van de zes spelen de vier jaar
+    uit, maar het graan is van lentemaand tot de oogst op, en de reeks breekt in de winter op vlees of vis. Claude stelde
+    voor: A, de spelregel "Graan" standaard op "Net rond" (4 per tegel), en B, vis en vlees zouten zodat ze de winter
+    halen, met een voorraad die de raad laat aanleggen voordat de vissers stilliggen. **Marcel (8 okt): "A en B samen".**
+    A is gebouwd (`T.GRAAN_PER_TEGEL` 4, `standaard: 'netRond'`), en B ook: `T.visEnVleesVoorDeWinter` en de raad
+    `visEnVlees` (zout kopen, een visser of jager), de marskramer met 40 zout in de herfst, verse vis eerst, en de speler
+    van de speeltest koopt het zout. Dan de speeltest van vier jaar (`ontwerp/speelbaar.md`): twee van de zes winnen, maar
+    het zout bleef liggen, want de rekensom telde vijf jagers als genoeg vlees voor de winter. **Marcel (8 okt): "We kunnen
+    de visser nu bijstellen voor nu. Laten we finetunen."** De vissers vangen al vier keer wat de huizen eten (vier
+    vissers, 8 vis per dag, voor 2,2); wat ontbrak, was het zout. Dus eerst de rekensom zonder de jagers, en dan opnieuw
+    meten; de visser pas als hij dan tekortschiet.
+    Het overzicht van het spelverloop (Marcel, 8 okt: "Ik heb een overzicht nodig met de kengetallen en eventuele
+    knelpunten"; een doc, "Het spelverloop: kengetallen en knelpunten") vond nog een knelpunt: de vis die de huizen niet
+    aten, bedierf, terwijl het dorp in het voorjaar honger had, want bij honger at het alleen vlees. **Marcel (8 okt):
+    "Vis mag een maag vullen, zoals vlees"** (de spelregel "Vis", `visIsEten`).
+
+135. **Minder grondstoffen** (Marcel, 8 okt: "Er blijven steeds dingen bijkomen zo. Dat wil ik voorkomen. We moeten stoppen
+    met het ene op te lossen met iets anders", en "We blijven grondstoffen toevoegen"; open, wacht op Marcels keuze).
+    Het spel kent 26 grondstoffen; negen worden gemaakt maar door niets gebruikt (behalve dat de marskramer ze koopt):
+    eieren (kippenhok; ook de pacht van de heer), groente (moestuin), huiden (de jager), vaten (kuiper), kalk
+    (kalkbrander), klei (kleiput), riet (rietsnijder), planken (timmerman). Voorstel van Claude: alle negen eruit, gebouw
+    en grondstof (git houdt ze), de marktkraam "potten" ook. Dan blijven er 17: graan, melk, kaas, vlees, vis, meel,
+    brood, bier, wol, laken, hout, steen, turf, goud, zout, ijzer, gereedschap en wapens (met wijn, vraag 136, 18).
+    Daarbij een regel voor CLAUDE.md: wat een speeltest scheef laat zien, eerst met een getal; een nieuwe regel of
+    grondstof alleen als Marcel hem kiest, en alleen met iets dat hem gebruikt.
+    **Marcel (8 okt): "Houd het maar even zo. Maar geen erbij zonder overleg."** De negen blijven voorlopig; de regel staat
+    in CLAUDE.md ("Niets erbij zonder overleg").
+136. **Wijn uit wijngaarden** (Marcel, 8 okt: "Ik zou ook wijn willen met wijngaarden. Dus meer als knights and merchants.
+    Dat je ook een boer met wijnranken hebt."; open, na vraag 135). In Knights and Merchants is wijn een van de vier soorten
+    eten (met brood, worst en vis), en de wijnboer haalt het van zijn wijngaard. Gedachten van Claude, nog niet gekozen:
+    een wijngaard als soort veld, zoals een akker of weide in het veldenvenster, van een boer; de oogst in wijnmaand (die
+    heet al zo); wijn als wens van een hogere stand, of als eten; en de heer die wijn wil, zoals nu de eieren.
+    **Marcel (8 okt): "Wijn wordt drank, zoals bier. Mensen dronken geen water."** Dus een wens, geen eten.
+    **Bezig in sessie `ccr-77327776-rqjldz`** (8 okt): de wijnboerderij bouwen (Marcel: "Ik wil z.s.m. aan een
+    wijnboerderij", en "Ja zo bouwen" op het plan: een boerderij met een gezin en wijngaarden, de pluk in wijnmaand, de
+    wens bier wordt drank, bier of wijn, geen vaten, de heer wil wijn).
+137. **Doorgroeien zonder vaste maat** (Marcel, 8 okt: "We moeten ook stoppen met het dorp een vaste maat geven. Als alles
+    straks 1 eiland is, is het logisch dat je gewoon door kunt groeien naar buiten."; open). Hoort bij het eiland (vraag
+    117). Er zijn twee vaste maten: het land van de maker (100 bij 100, met bos tot de rand), en de maat van de winst (vanaf
+    100 mensen: daarna zegt de raad "haal een vrij erf weg", vraag 102, c, omdat een nieuw gezin in een hut de reeks van
+    geluk breekt, en de bouwers van de speeltest stoppen dan met groeien).
+
+138. **Plunderen als het eten op is** (Marcel, 8 okt: "ik denk ook dat we later mee moeten nemen in het verhaal, dat
+    wanneer er tekort is aan voedsel je altijd nog kunt plunderen nabijgelegen dorpen / steden als je wil / kunt"; later,
+    open). Hoort bij de dorpen op het eiland (vraag 117) en het vechten tussen dorpen (vraag 126): met je militie naar
+    een buurdorp, en terug met zijn graan en vee, tegen wat het kost (mannen, de gunst van de heer, wat het buurdorp
+    onthoudt). Niet nu: eerst de kern.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

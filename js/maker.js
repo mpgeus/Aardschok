@@ -1917,7 +1917,7 @@
     w.maker = { zaad: plan.zaad, poging: plan.poging };
     if (plan.eiland) w.eiland = plan.eiland; // waar op het eiland (js/eiland.js), voor de rand om de kaart
     if (plan.stijl) w.stijl = plan.stijl;
-    if (T.HOOGTE_INSTELLINGEN.aan) w.hoogte = T.legHoogte(plan); // de spelregel "Hoogte" (js/hoogte.js)
+    if (T.HOOGTE_INSTELLINGEN.aan) w.hoogte = T.legHoogte(plan, w); // de spelregel "Hoogte" (js/hoogte.js)
     return w;
   };
 })(globalThis.Spel = globalThis.Spel || {});

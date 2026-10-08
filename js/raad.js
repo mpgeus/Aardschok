@@ -20,6 +20,12 @@
   T.RAAD_INSTELLINGEN = {
     // Of de raad er staat (de spelregel "Raad").
     aan: true,
+    // Wat helpt aan eten (T.watHelptAanEten; vraag 132): een visser per zoveel mensen, en per zoveel tegels water.
+    mensenPerVisser: 30,
+    waterPerVisser: 60,
+    // Vis en vlees voor de winter (T.visEnVleesVoorDeWinter; vraag 132, B): de raad zegt het als er meer dan dit deel
+    // van wat de huizen in de winter willen, zal missen, of als er zout bij moet.
+    visEnVleesMarge: 0.1,
     // Zoveel dagen vóór de inner komt, zegt de raad het.
     innerVooraf: 3,
     // Zoveel dagen na een aanval van de rovers zegt de raad wat een wachthuis doet, als er geen is.
@@ -113,6 +119,80 @@
   // Bouwen de mensen (js/verzoeken.js, de spelregel "Wie bouwt"; werklijst vraag 103), dan zegt de raad wat zou helpen,
   // zonder [B], en of iemand je er al om vraagt.
   const mensenBouwen = () => T.VERZOEKEN_INSTELLINGEN.mensen;
+  // Helpt een jager tegen een winter zonder eten: vlees vult een maag, en er is geen jager die geen hert vindt dat hij mag
+  // schieten (T.jagersZonderHerten, js/beesten.js; Marcel, 7 okt, vraag 116, k). In de speeltest van 7 okt vroeg het dorp
+  // anders jager na jager, tot er 9 tot 11 stonden, die alleen klein wild schoten.
+  const jagerHelpt = (D) => T.BEHOEFTEN_INSTELLINGEN.vleesIsEten && T.jagersZonderHerten(D) === 0;
+  // Wat er helpt als het eten de winter niet haalt (Marcel, 8 okt, vraag 132, b: "ze mogen advies geven op wat te doen.
+  // dit kan kopen, planten, bakken etc zijn"): wat er nu kan, in deze volgorde, elk { id, zin, bouw (de soort die het
+  // dorp dan vraagt, of geen) }. Ontginnen (meer akkers: de boeren vragen het zelf, js/ontginnen.js), een visser als er
+  // water is en het nog geen winter is, een jager als er herten zijn (jagerHelpt), een graanschuur om het zaaigraan te
+  // houden (js/graanschuur.js), en in de lente zaaigraan kopen als er te weinig is om te zaaien.
+  T.watHelptAanEten = function (D) {
+    const uit = [];
+    const dag = D.kalender.dag;
+    const datum = T.datumVanDag(dag);
+    const w = D.wereld;
+    const tB = mensenBouwen() ? '' : ' [B]';
+    if (T.ONTGINNEN_INSTELLINGEN.aan && !T.inOntginning(w).length) {
+      uit.push({ id: 'ontginnen', zin: 'land ontginnen voor meer akkers (een boer komt het vragen)' });
+    }
+    // Vissers: een per vissersPer mensen, zolang er water genoeg is (een per waterPerVisser tegels).
+    const water = w && w.tegels && w.tegels.length ? T.natuurBij(w, 'water', { x: 0, y: 0, b: w.tegels[0].length, h: w.tegels.length }, 0) : 0;
+    const visser = T.GEBOUWEN.visser;
+    const vissers = (D.gebouwen || []).filter((g) => g.soort === 'visser').length;
+    const kunnen = Math.min(Math.floor(water / IN().waterPerVisser), Math.max(1, Math.ceil((D.bevolking || 0) / IN().mensenPerVisser)));
+    if (water && T.magGebouwd(D, 'visser') && !(visser.stilIn && visser.stilIn[datum.seizoen]) && vissers < kunnen) {
+      uit.push({ id: 'visser', zin: `${vissers ? 'nog een' : 'een'} visser aan het water${tB} (${visser.maakt.uit.vis} vis per dag, niet in de winter)`, bouw: 'visser' });
+    }
+    // Meer koeien: had het dorp honger in het voorjaar, dan maken de boeren na de oogst een weide erbij (js/akkers.js).
+    if ((D.behoeften && D.behoeften.voorjaarsHonger) >= T.VELDEN_INSTELLINGEN.weideNaHonger) {
+      uit.push({ id: 'weide', zin: `meer weide voor de koeien (${T.VEE_INSTELLINGEN.melkVoorMensen} mensen melk per koe, van grasmaand tot wijnmaand; de boeren doen het na de oogst, of jij in het veldenvenster [V])` });
+    }
+    if (jagerHelpt(D) && T.magGebouwd(D, 'jager')) {
+      uit.push({ id: 'jager', zin: `een jager${tB} (${T.GEBOUWEN.jager.maakt.uit.vlees} vlees per dag, en herten in het bos)`, bouw: 'jager' });
+    }
+    if (T.GRAANSCHUUR_INSTELLINGEN.bewaken && !heeft(D, 'graanschuur') && T.zaaigraanApart(D, dag) > 0 && T.magGebouwd(D, 'graanschuur')) {
+      uit.push({ id: 'graanschuur', zin: `een graanschuur${tB}, zodat het zaaigraan blijft liggen`, bouw: 'graanschuur' });
+    }
+    const zaai = T.zaaigraanApart(D, dag);
+    if (zaai > 0 && ((D.voorraad && D.voorraad.graan) || 0) < zaai) {
+      uit.push({ id: 'kopen', zin: `zaaigraan kopen bij de marskramer (in ${T.volgendeMarskramer(dag)})` });
+    }
+    return uit;
+  };
+
+  // Vis en vlees voor de winter (vraag 132, B; Marcel, 8 okt: "A en B samen"): { v (T.visEnVleesVoorDeWinter), mist (er
+  // mist meer dan visEnVleesMarge), zout (er moet zout bij, en de marskramer komt nog voor de winter), hulp (wat meer
+  // vangt: een visser of een jager, uit T.watHelptAanEten) }, of null als er niets te zeggen is.
+  T.visEnVleesRaad = function (D) {
+    const v = T.visEnVleesVoorDeWinter(D, D.kalender.dag);
+    if (!v) return null;
+    const H = T.HANDEL_INSTELLINGEN;
+    const nogVoorDeWinter = T.kanHandelen(D) || T.volgendeMarskramer(D.kalender.dag) !== H.bezoeken[0].maand;
+    const zout = v.zout >= 1 && nogVoorDeWinter;
+    const mist = v.tekort > v.nodig * IN().visEnVleesMarge;
+    if (!zout && !mist) return null;
+    const hulp = mist ? T.watHelptAanEten(D).filter((h) => h.id === 'visser' || h.id === 'jager') : [];
+    return { v, mist, zout, hulp };
+  };
+  function visEnVleesTekst(D, r) {
+    const { v } = r;
+    const zinnen = [];
+    const n = (x) => Math.round(x);
+    if (r.mist) {
+      zinnen.push(`De huizen willen in de winter ${n(v.nodig)} vis of vlees, als de beek dichtligt, en er is er dan zo'n ${n(v.dan)}${r.hulp.length ? `: ${T.opsomming(r.hulp.map((h) => h.zin))}` : ''}.`);
+    } else {
+      zinnen.push(`De huizen willen in de winter ${n(v.nodig)} vis of vlees, als de beek dichtligt.`);
+    }
+    if (r.zout) {
+      const waar = T.kanHandelen(D) ? 'bij de marskramer, nu hij er is' : `bij de marskramer in ${T.volgendeMarskramer(D.kalender.dag)}`;
+      zinnen.push(`Zonder zout bederft het: koop ${v.zout} zout ${waar}; een zout houdt ${T.telwoord(T.BEHOEFTEN_INSTELLINGEN.zoutHoudtGoed)} vis of vlees goed.`);
+    }
+    const bouw = r.hulp.find((h) => h.bouw);
+    return `${zinnen.join(' ')}${bouw ? verzoekZin(D, bouw.bouw) : ''}`;
+  }
+
   const verzoekZin = (D, soort) => (mensenBouwen() && soort ? T.verzoekZin(D, soort) : '');
 
   // Je oproep op het plein (js/verzoeken.js; vraag 103, c) die er al oproepNa dagen hangt, terwijl het dorp niet kan
@@ -194,12 +274,17 @@
         ? `De rovers komen terug. Een wachthuis zou je ${T.telwoord(T.GEBOUWEN.wachthuis.handen)} man geven die meevechten.${verzoekZin(D, 'wachthuis')}`
         : `De rovers komen terug. Een wachthuis [B] geeft je ${T.telwoord(T.GEBOUWEN.wachthuis.handen)} man die meevechten.`),
     },
-    // De wolven (js/beesten.js; werklijst vraag 116, stap 2b): ze namen een schaap of vielen iemand aan. Wat ertegen helpt
-    // (de jager, lantaarns aan de bosrand), komt met stap 3; nu het licht, en het hek uit het voorval.
+    // De wolven (js/beesten.js; werklijst vraag 116, stap 2b): ze namen een schaap of vielen iemand aan. Wat ertegen helpt:
+    // het licht, het hek uit het voorval, en een jager die de roedels klein houdt (stap 3a; is er geen bij de wolven, dan
+    // zegt de raad het, met waar hij vandaan komt).
     {
       id: 'wolven',
       als: (D) => T.wolvenBijHetDorp(D, dagNu(D)) != null && D.beesten.gezien.wat !== 'gezien',
-      tekst: () => 'Er zijn wolven bij het dorp. Wie \'s avonds alleen in het donker loopt, loopt gevaar; licht houdt ze weg.',
+      tekst: (D) => {
+        const zin = 'Er zijn wolven bij het dorp. Wie \'s avonds alleen in het donker loopt, loopt gevaar; licht houdt ze weg.';
+        if (T.jagerBijDeWolven(D)) return zin;
+        return mensenBouwen() ? `${zin} Een jager zou de roedels klein houden.${verzoekZin(D, 'jager')}` : `${zin} Een jager [B] houdt de roedels klein.`;
+      },
     },
     {
       id: 'hout',
@@ -214,12 +299,18 @@
     {
       id: 'eten',
       als: (D) => haaltHetNiet(D, T.etenVoorDeWinter),
-      // Wat helpt, zegt het dorp ook (js/behoeften.js): een jager, als vlees een maag vult.
+      // Wat helpt, zegt het dorp ook: wat er nu kan en het meest oplevert (T.watHelptAanEten hieronder; vraag 132, b).
       tekst: (D) => {
-        const vlees = T.GEBOUWEN.jager.maakt.uit.vlees;
-        const jager = mensenBouwen() ? `: een jager zou ${vlees} vlees per dag schieten` : `: een jager [B] schiet ${vlees} vlees per dag`;
-        return `Het eten haalt ${haalt(T.etenVoorDeWinter(D, D.kalender.dag))} van de winter${T.BEHOEFTEN_INSTELLINGEN.vleesIsEten ? jager : ''}.${T.BEHOEFTEN_INSTELLINGEN.vleesIsEten ? verzoekZin(D, 'jager') : ''}${geenGezin()}`;
+        const hulp = T.watHelptAanEten(D).slice(0, 2);
+        const bouw = hulp.find((h) => h.bouw);
+        return `Het eten haalt ${haalt(T.etenVoorDeWinter(D, D.kalender.dag))} van de winter${hulp.length ? `. Wat helpt: ${T.opsomming(hulp.map((h) => h.zin))}` : ''}.${bouw ? verzoekZin(D, bouw.bouw) : ''}${geenGezin()}`;
       },
+    },
+    // Vis en vlees voor de winter (vraag 132, B): zout, en een voorraad voordat de vissers stilliggen.
+    {
+      id: 'visEnVlees',
+      als: (D) => !!T.visEnVleesRaad(D),
+      tekst: (D) => visEnVleesTekst(D, T.visEnVleesRaad(D)),
     },
     // De houthakker hakt bomen om (js/bos.js; vraag 115): staat er binnen zijn bereik geen boom meer, dan hakt hij niets,
     // tot de boompjes die hij plantte, bomen zijn, en werkt zijn hand zolang elders (vraag 129, e). Haalt het hout de
@@ -355,9 +446,13 @@
       erbij('wachthuis', 'De rovers komen terug.', 'rovers');
     }
     if (haaltHetNiet(D, T.houtVoorDeWinter)) erbij('houthakker', `Het hout haalt ${haalt(T.houtVoorDeWinter(D, D.kalender.dag))} van de winter.`, 'winter');
-    if (T.BEHOEFTEN_INSTELLINGEN.vleesIsEten && haaltHetNiet(D, T.etenVoorDeWinter)) {
-      erbij('jager', `Het eten haalt ${haalt(T.etenVoorDeWinter(D, D.kalender.dag))} van de winter.`, 'winter');
+    if (haaltHetNiet(D, T.etenVoorDeWinter)) {
+      const bouw = T.watHelptAanEten(D).find((h) => h.bouw);
+      if (bouw) erbij(bouw.bouw, `Het eten haalt ${haalt(T.etenVoorDeWinter(D, D.kalender.dag))} van de winter.`, 'winter');
     }
+    const vis = T.visEnVleesRaad(D);
+    const visBouw = vis && vis.hulp.find((h) => h.bouw);
+    if (visBouw) erbij(visBouw.bouw, `De huizen willen in de winter meer vis of vlees dan er dan ligt.`, 'winter');
     // Er hakt niemand hout: dan stopt alles, want elke hut op een erf (js/erven.js) en elk gebouw kost hout. Dus eerst een
     // houthakker, zoals de bouwer van de speeltest hem er altijd eerst neerzette (vraag 86, b). Zonder dat at het dorp in
     // de eerste speeltest van vraag 103 zijn hout op aan de kapel en de putten, en kon het daarna geen houthakker en geen
@@ -365,6 +460,10 @@
     // Een houthakker die stilstaat omdat zijn bomen op zijn, is geen reden voor een nieuwe zolang het hout de winter
     // haalt (werklijst vraag 129, e): in de speeltest van 6 okt stonden er zo na vier jaar 8 tot 10, die vooral stilstonden.
     if (!heeft(D, 'houthakker')) erbij('houthakker', 'Er hakt niemand hout, en elke hut en elk gebouw kost hout.', 'hout');
+    // Het zaaigraan ligt nergens veilig (js/graanschuur.js; vraag 132): zodra er zaaigraan apart ligt, na de oogst.
+    if (T.GRAANSCHUUR_INSTELLINGEN.bewaken && !heeft(D, 'graanschuur') && T.zaaigraanApart(D, D.kalender.dag) > 0) {
+      erbij('graanschuur', 'Het zaaigraan ligt nergens veilig: in een hongerwinter eet het dorp het op, en dan blijven de akkers leeg.', 'zaaigraan');
+    }
     for (const x of T.watDeHuizenMissen(D)) if (x.kan && x.bouw) erbij(x.bouw, x.zin, x.soort);
     for (const soort of T.doelGebouwen(D)) erbij(soort, `Voor het doel is er een ${T.GEBOUWEN[soort].naam} nodig.`, 'doel');
     return uit;

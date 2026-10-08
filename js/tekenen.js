@@ -474,6 +474,7 @@
       lijst.push({ d: e.x + e.y, l: e.dood ? 1.5 : 2, punt: { x: e.tx, y: e.ty }, f: () => tekenWezen(ctx, S, e) });
       if (e === aanDePaal) lijst.push({ d: e.x + e.y, l: 2.5, punt: { x: e.tx, y: e.ty }, f: () => tekenHalsijzer(ctx, e) });
     }
+    heuvelsErvoor(ctx, S, vak, lijst, g); // een heuvel voor iemand dekt hem af (js/hoogte.js; vraag 121, stap 2)
     // Ramen die branden: meteen na hun gebouw gaat er een gat in het doek waar ze zitten, dat na de
     // nacht licht wordt (brandendeRamen, hieronder).
     const ramen = brandendeRamen(S);
@@ -488,6 +489,7 @@
       ctx.drawImage(voor.canvas, voor.vx, voor.vy, voor.canvas.width / g.k, voor.canvas.height / g.k);
     }
     tekenOntginRand(ctx, S);
+    tekenJachtRand(ctx, S);
     ctx.restore();
 
     // De nacht valt over de wereld, maar niet over de zwevende teksten: die komen erna, met dezelfde
@@ -506,6 +508,71 @@
     ctx.restore();
     tekenVignet(ctx, S, bw, bh);
   };
+
+  // Een heuvel voor iemand dekt hem af (werklijst vraag 121, stap 2; Marcel, 8 okt: "Akkoord"). De grond ligt als één
+  // buffer onder alles (werkGrondBij), dus wie achter de rand van een richel staat, stond er bovenop. Een tegel die
+  // afdekt (T.dektAf, js/hoogte.js) komt daarom nog een keer in de tekenlijst, op zijn eigen diepte en vóór wat er op hem
+  // staat: zijn stuk van de grondbuffer, uitgeknipt op zijn vlak en zijn wanden. Alleen als er achter hem iets staat. Wie
+  // je hoort te zien (T.zichtbaarDoor, js/doorkijk.js, zoals de schout), krijgt er het kijkgat van de doorkijk bij, na de
+  // voorste tegel die hem afdekt, net als achter een huis.
+  const ACHTER = [[1, 0], [0, 1], [1, 1], [2, 1], [1, 2], [2, 2]];
+  function heuvelsErvoor(ctx, S, vak, lijst, g) {
+    const w = S.wereld;
+    if (!w.hoogte) return;
+    let staat = null; // de tegels waar iets op staat dat getekend wordt
+    let kijkgaten = null; // wezen → het item van de voorste tegel die hem afdekt
+    for (let y = Math.max(0, vak.y0); y <= Math.min(w.h - 1, vak.y1); y++) {
+      for (let x = Math.max(0, vak.x0); x <= Math.min(w.b - 1, vak.x1); x++) {
+        if (!T.dektAf(w, x, y)) continue;
+        if (!staat) {
+          staat = new Set();
+          for (const it of lijst) if (it.punt) staat.add(it.punt.x + ',' + it.punt.y);
+        }
+        if (!ACHTER.some(([i, j]) => staat.has(x - i + ',' + (y - j)))) continue;
+        const item = { d: x + y, l: 0.5, punt: { x, y }, zonderSchaduw: true, f: () => tekenTegelOpnieuw(ctx, w, x, y, g) };
+        lijst.push(item);
+        for (const e of w.wezens) {
+          if (!ACHTER.some(([i, j]) => e.tx === x - i && e.ty === y - j) || T.zichtbaarDoor(S, e) !== 'alles') continue;
+          kijkgaten = kijkgaten || new Map();
+          const was = kijkgaten.get(e);
+          if (!was || was.d < item.d) kijkgaten.set(e, item);
+        }
+      }
+    }
+    if (kijkgaten) {
+      for (const [e, item] of kijkgaten) {
+        const teken = item.f;
+        item.f = () => {
+          teken();
+          T.tekenKijkgat(ctx, S, e, 1, null);
+        };
+      }
+    }
+  }
+  // Het stuk van de grondbuffer op tegel (x, y): zijn schuine vlak, en zijn wanden aan de zuid- en oostkant.
+  function tekenTegelOpnieuw(ctx, w, x, y, g) {
+    const h = T.hoekHoogten(w, x, y);
+    ctx.save();
+    ctx.beginPath();
+    T.HOOGTE_HOEKEN.forEach(([dx, dy], k) => {
+      const p = T.naarScherm(x + dx, y + dy);
+      if (k) ctx.lineTo(p.x, p.y - h[k]);
+      else ctx.moveTo(p.x, p.y - h[k]);
+    });
+    ctx.closePath();
+    for (const wand of T.wandenVan(w, x, y)) {
+      const s1 = T.naarScherm(wand.van[0], wand.van[1]);
+      const s2 = T.naarScherm(wand.tot[0], wand.tot[1]);
+      ctx.moveTo(s1.x, s1.y - wand.boven[0]);
+      ctx.lineTo(s2.x, s2.y - wand.boven[1]);
+      ctx.lineTo(s2.x, s2.y - wand.onder[1]);
+      ctx.lineTo(s1.x, s1.y - wand.onder[0]);
+      ctx.closePath();
+    }
+    ctx.clip();
+    ctx.drawImage(g.canvas, g.vx, g.vy, g.canvas.width / g.k, g.canvas.height / g.k);
+    ctx.restore();
+  }
 
   // De nacht en de schemering (js/dag.js, T.lichtVan): een donkerblauwe laag over de wereld, lichter
   // rond de schout. Zo zie je 's nachts wat vlak bij je is, en niet wat verder weg gebeurt (Marcel,
@@ -1454,6 +1521,24 @@
     }
   }
 
+  // Het hol waar de jacht op de wolven heen gaat (js/beesten.js; werklijst vraag 116, stap 3b): zolang de jacht loopt, een
+  // ruit van vijf bij vijf tegels in goud om het hol, bovenop het bos, zodat je hem tussen de bomen vindt.
+  const JACHT_RAND = 2;
+  function tekenJachtRand(ctx, S) {
+    const hol = T.holVanDeJacht && T.holVanDeJacht(T.dorpHier(S)); // gereedschap/wereld.html laadt de beesten niet
+    if (!hol) return;
+    const r = JACHT_RAND + 0.5;
+    const hoeken = [[-r, -r], [r, -r], [r, r], [-r, r]].map(([dx, dy]) => opGrond(hol.x + dx, hol.y + dy));
+    ctx.beginPath();
+    hoeken.forEach((p, i) => (i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)));
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(226, 182, 74, 0.16)';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(240, 200, 96, 0.9)';
+    ctx.lineWidth = 2 / S.zoom;
+    ctx.stroke();
+  }
+
   // De plek van een bouwverzoek (js/verzoeken.js; werklijst vraag 103): zolang iemand je erom vraagt, ligt de voet van
   // wat hij wil bouwen er in goud, met de kring erbij als het een put of een kapel is. Zo kun je gaan kijken waar het
   // komt voor je ja zegt.
@@ -2121,6 +2206,18 @@
       T.blok(ctx, p.x, p.y, 0.16, 0.16, 16, '#5d8a34', { helder, basis: 140 });
       return;
     }
+    if (v.soort === 'hol') {
+      // Het hol van een roedel wolven (js/beesten.js): een kuil onder een omgevallen boom, met botten ervoor. Zonder kunst:
+      // een donkere kuil met een omgevallen stam erachter.
+      const hol = metSprites() && T.sprites.hol();
+      if (hol) {
+        T.sprites.teken(ctx, hol, p.x, p.y, helder);
+        return;
+      }
+      T.blok(ctx, p.x, p.y, 0.3, 0.3, 2, '#1c1410', { helder });
+      T.blok(ctx, p.x, p.y, 0.5, 0.1, 10, '#5e4a36', { helder, basis: 2 });
+      return;
+    }
     if (v.soort === 'kraam') {
       // Een kraam van de markt op het plein (js/markt.js; werklijst vraag 110, d): een toonbank met een gestreepte luifel,
       // naar het midden van het plein. In aanbouw bleker, zoals een gebouw zonder bouwfasen. Zonder kunst: een toonbank
@@ -2375,6 +2472,8 @@
     if (e.alarm > 0) roep(ctx, '!', cx, top - 14 - Math.abs(Math.sin(e.alarm * 9)) * 4, '#ffd24a');
     // Wie de schout zoekt met een voorval (js/voorvallen.js): een uitroepteken dat zacht op en neer gaat.
     else if (e.zoektSchout && !e.binnen) roep(ctx, '!', cx, top - 12 - Math.abs(Math.sin(S.tijd * 3)) * 3, '#f3e2a4');
+    // Wie de wolven aanvallen, roept om hulp (js/beesten.js): een rood uitroepteken dat sneller springt.
+    else if (e.roeptOmHulp) roep(ctx, '!', cx, top - 12 - Math.abs(Math.sin(S.tijd * 8)) * 4, '#ff6a50');
   }
 
   // Het teken bij de deur van een huis dat iets mist (2c, werklijst vraag 100; js/wensen.js, T.tekenVanHuis): een

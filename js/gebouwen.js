@@ -169,6 +169,12 @@
       tekening: 'gebouwen/schuurBlokhut', beschrijving: 'de schapen van de heide slapen erin: mest voor de akkers',
       opmerking: 'nieuw: nog niet getekend, leent voorlopig de blokhutschuur.',
     },
+    graanschuur: {
+      naam: 'graanschuur', trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 15 }, heer: {}, bouwtijd: 3,
+      handen: 0, woonruimte: 0, maakt: null, menu: true,
+      tekening: 'gebouwen/schuurBlokhut', beschrijving: 'hier ligt het zaaigraan; met wachters erbij eet het dorp het in een hongerwinter niet op',
+      opmerking: 'nieuw (vraag 132): nog niet getekend, leent voorlopig de blokhutschuur.',
+    },
     kippenhok: {
       naam: 'kippenhok', trede: 'gehucht', voet: { b: 2, h: 2 }, kosten: { hout: 4 }, heer: { eieren: 20 }, bouwtijd: 1,
       handen: 0, woonruimte: 0, maakt: { uit: { eieren: 1 } }, menu: true,
@@ -678,6 +684,7 @@
     }
     if (vast) return 'Daar past het niet.';
     if (reden) return reden;
+    if (T.teSteil(w, { x, y, b: voet.b, h: voet.h })) return 'Daar is het te steil om te bouwen.';
     const natuur = T.waaromNietBijDeNatuur(D, soort, { x, y, b: voet.b, h: voet.h });
     if (natuur) return natuur;
     const n = T.GEBOUWEN_INSTELLINGEN.looppad;
@@ -957,6 +964,8 @@
         if (w.tegels[yy] && w.tegels[yy][xx] !== undefined) w.tegels[yy][xx] = 'muur';
       }
     }
+    // op een land met hoogte komt het op vlakke grond (js/hoogte.js; vraag 121, stap 2)
+    T.egaliseer(w, { x: instantie.x, y: instantie.y, b: voet.b, h: voet.h });
     T.kaartVeranderd(w); // de voet is muur geworden: de eilanden (js/wereld.js)
     stapEraf(D, { x: instantie.x, y: instantie.y, b: voet.b, h: voet.h });
   }
@@ -1225,7 +1234,14 @@
     // js/behoeften.js). Eerst de melk van vandaag, dan graan, dan kaas, en wat er van de melk over
     // is, wordt kaas; het zaaigraan pas bij nood (T.eetVandaag, js/behoeften.js). Wat de huizen al aten aan brood, vis
     // en vlees van hun wensen, eet het dorp minder (vraag 92, a).
-    T.eetVandaag(D, dag, alGegeten);
+    const gegeten = T.eetVandaag(D, dag, alGegeten);
+    // De wachters bij de graanschuur (js/graanschuur.js): na het zaaien naar huis, en honger kost vertrouwen.
+    T.tikGraanschuurDag(D, dag, gegeten.tekort > 0);
+    // Honger in het voorjaar en de zomer, van 1 lentemaand tot de oogst: dan maken de boeren na de oogst een weide erbij
+    // (T.boerenKiezenVelden, js/akkers.js; vraag 132).
+    if (gegeten.tekort > 0 && D.behoeften && T.datumVanDag(dag).maand <= T.MAANDEN.findIndex((m) => m.naam === 'oogstmaand')) {
+      D.behoeften.voorjaarsHonger = (D.behoeften.voorjaarsHonger || 0) + 1;
+    }
     // 4. Groei: om de gezinDagen dagen komt er een gezin bij, als de voorraad een buffer overhoudt
     // (zodat een net geboren gezin niet meteen honger lijdt), het dorp tevreden genoeg is
     // (js/behoeften.js, T.BEHOEFTEN_INSTELLINGEN.groeiDrempel), en het de winter haalt als die in zicht
@@ -1323,11 +1339,15 @@
       g.werkte = factor;
       if (factor <= 0) continue;
       if (soort.maakt.in) for (const wat in soort.maakt.in) T.wijzigVoorraad(D, wat, -soort.maakt.in[wat] * factor);
-      const uit = T.maaktUit(D, soort);
+      // De jager schiet klein wild, en herten als er een is dat hij mag nemen (js/beesten.js).
+      const uit = T.watDeJagerSchiet(D, g, T.maaktUit(D, soort));
       if (uit) for (const wat in uit) T.wijzigVoorraad(D, wat, uit[wat] * factor);
       // Het hout van de houthakker kwam uit zijn boom: is die om, dan staat er een stronk, en hakt hij morgen de volgende
       // (js/bos.js).
       if (uit && uit.hout) T.houthakkerHakte(D, g, uit.hout * factor);
+      // Het vlees van de jager kwam ook uit de herten: elke zoveel is er een hert minder, en hij houdt de roedels klein
+      // (js/beesten.js).
+      if (uit && uit.huiden) T.jagerJaagde(D, g, (uit.vlees || 0) * factor, dag, factor);
     }
     // Wat in gebruik was, slijt: één stuk per hand die vandaag echt iets maakte (een smidse zonder
     // ijzer slijt zijn hamers niet).

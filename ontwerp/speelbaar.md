@@ -153,6 +153,137 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 8 okt, nacht: vis vult een maag (werklijst, vraag 132)
+
+Op `7e1b786` (branch `ccr-77327776-rqjldz`), `npm run speeltest -- bouwer sluw --maker --jaren 4`; Marcel: "Vis mag een
+maag vullen, zoals vlees".
+
+| Speler, land | Mensen per jaar | Hongerdagen per jaar | Teller aan het eind van jaar 3, 4 | Hoe het eindigde |
+| --- | --- | --- | --- | --- |
+| sluw 1 (62707) | 69, 95, 107, 195 | 8, 0, 0, 0 | 350, 360 | **gewonnen** op 10 lentemaand van het vierde jaar; daarna groeide het door tot 202 |
+| sluw 3 (72022) | 70, 94, 115, 179 | 19, 0, 0, 0 | 350, 360 | **gewonnen** op 10 lentemaand van het vierde jaar |
+| bouwer 2 (73425) | 72, 90, 115, 115 | 0, 1, 1, 0 | 69, 264 | vier jaar uit, teller 295 aan het eind; brak in bloeimaand op laken |
+| bouwer 3 (72022) | 73, 91, 107, 107 | 1, 1, 0, 0 | 53, 237 | vier jaar uit (eerst ambt kwijt in jaar 2), teller 268; brak op vlees of vis en op brood |
+| bouwer 1 (62707) | 69, 87, 104, 107 | 8, 1, 2, 0 | 73, 234 | vier jaar uit, teller 265; brak op vlees of vis en op brood |
+| sluw 2 (73425) | 76 | 0 | | ambt kwijt in jaar 1: de gunst op, te weinig betaald |
+
+**Wat het zegt:** de honger is weg: van zo'n 120 hongerdagen per jaar naar 0 à 2. Twee sluwe bouwers winnen, al in het
+begin van het vierde jaar, en alle drie de eerlijke bouwers spelen de vier jaar uit (ook die op 72022, die eerst altijd
+in jaar 2 zijn ambt kwijtraakte), met de teller op 265 tot 295 van de 360. Wat hun reeks nu breekt, is niet meer het eten,
+maar vlees of vis in de winter (geen goud voor zout), brood en laken. Twee knelpunten blijven: de eerlijke bouwer heeft
+geen goud voor zout, en sluw 2 op 73425 viel in jaar 1 door de heer.
+
+## De speeltest van 8 okt, avond: de rekensom van het zout zonder de jagers (werklijst, vraag 132, B)
+
+Op `f096831` (branch `ccr-77327776-rqjldz`), `npm run speeltest -- bouwer sluw --maker --jaren 4`.
+
+| Speler, land | Mensen per jaar | Hongerdagen per jaar | Zout gekocht | Hoe het eindigde |
+| --- | --- | --- | --- | --- |
+| sluw 1 (62707) | 53, 80, 123, 123 | 77, 93, 91, 56 | 1, 13, 16 | niet gewonnen; de teller op 274 aan het eind, de reeks brak in bloeimaand op eten |
+| sluw 3 (72022) | 49, 70, 107, 107 | 77, 105, 110, 86 | 2, 11, 14 | niet gewonnen; de teller op 282, brak in grasmaand op eten |
+| bouwer 1 (62707) | 61, 82, 104, 115 | 77, 122, 119, 115 | geen | als hiervoor: brak in wintermaand op vlees of vis |
+| bouwer 2 (73425) | 52, 74, 119, 127 | 78, 122, 120, 64 | geen | als hiervoor |
+| bouwer 3, sluw 2 | 74; 56 | | | ambt kwijt in jaar 2; weggejaagd in jaar 3 |
+
+**Wat het zegt:** wie zout koopt, haalt nu de winter: bij de sluwe bouwers breekt de reeks niet meer in de winter, maar
+in het voorjaar, op eten. De eerlijke bouwer koopt geen zout: hij wilde 5 tot 19 zout, maar hield zijn goud voor de heer
+(de marskramer komt op 5 wijnmaand, vlak voor Sint-Maarten). Dat is het knelpunt van de eerlijke bouwer weer. Twee van
+de zes winnen hier niet, waar het hiervoor wel zo was: de reeks van sluw 1 brak nu in het voorjaar.
+
+## De speeltest van 8 okt, laat: Net rond als standaard, en vis en vlees zouten (werklijst, vraag 132, A en B)
+
+Op `ffa2003` (branch `ccr-77327776-rqjldz`), `npm run speeltest -- bouwer sluw --maker --jaren 4`, als meting: Marcel (8 okt)
+wil dat we stoppen met het ene oplossen met iets anders, dus hier komt niets meer voor.
+
+| Speler, land | Mensen per jaar | Hoe het eindigde |
+| --- | --- | --- |
+| bouwer 1 (62707) | 61, 82, 104, 115 | vier jaar uit; de reeks brak op 15 wintermaand 1326 na 154 dagen (vlees of vis) |
+| bouwer 2 (73425) | 52, 74, 119, 127 | vier jaar uit; brak op 20 wintermaand 1326 na 157 dagen (vlees of vis), en in lentemaand op eten |
+| bouwer 3 (72022) | 53, 74 | ontslagen in jaar 2: de gunst van de heer op (te weinig betaald) |
+| sluw 1 (62707) | 53, 80, 107, 110 | **gewonnen** op 13 sprokkelmaand 1327 |
+| sluw 2 (73425) | 49, 64, 56 | weggejaagd in jaar 3: het vertrouwen op (mannen naar de oorlog) |
+| sluw 3 (72022) | 49, 70, 112, 115 | de teller op 360 op de laatste dag: zo goed als gewonnen |
+
+**Wat het zegt:** twee van de zes winnen (eerst één, met Net rond als spelregel). De speler kocht hooguit één zout. Eerst
+leek dat te komen doordat er niets te zouten was, maar dat klopte niet: vier vissers vangen 8 vis per dag, de huizen
+eten er 2,2. De rekensom telde vijf jagers als genoeg vlees voor de winter, dus raadde hij geen zout aan (verholpen in
+`f096831`, hieronder).
+
+## De proef met de spelregel "Graan" op "Net rond" (8 okt; werklijst, vraag 132)
+
+Dezelfde stand (`e9cc2cd`), `npm run speeltest -- bouwer sluw --maker --jaren 4 --regel graan=netRond`: een akkertegel
+geeft 4 graan in plaats van 3,5. Naast "Honger" (de standaard, hierboven):
+
+| Speler, land | Mensen na vier jaar (Honger → Net rond) | Hongerdagen in jaar 4 | Hoe het eindigde met Net rond |
+|---|---|---|---|
+| bouwer 1 | 100 → 115 | 115 → 115 | vier jaar uit; de reeks brak na 154 dagen (vlees of vis) |
+| bouwer 2 | 90 → 127 | 33 → 64 | vier jaar uit; de reeks brak na 157 dagen (vlees of vis) |
+| bouwer 3 | 74 → 74 | | ambt kwijt in jaar 2, net als met Honger |
+| sluw 1 | 115 → 122 | 67 → 0 | **gewonnen**, op 13 sprokkelmaand van het vierde jaar |
+| sluw 2 | 49 → 56 | | weggejaagd door het dorp in jaar 3 (eerst gevallen in jaar 1) |
+| sluw 3 | 107 → 115 | 0 → 0 | vier jaar uit, het hele vierde jaar alles, de teller net niet rond |
+
+**Wat het zegt:** met een halve graan meer per tegel worden de dorpen groter (115 tot 127 mensen), en wint de sluwe
+bouwer weer een keer; een tweede haalt het bijna. De gewone bouwer, die de heer alles probeert te betalen, wint nog
+steeds niet: zijn reeks breekt in de winter op vlees of vis (de vissers liggen stil, en hij heeft weinig jagers). De
+bouwer op 72022 verliest zijn ambt op beide in het tweede jaar.
+
+## De speeltest van 8 okt, avond: vee en vissers erbij (werklijst, vraag 132)
+
+Op `ccr-77327776-rqjldz` op `e9cc2cd`, `npm run speeltest -- bouwer sluw --maker --jaren 4`.
+
+| Speler, land | Mensen, jaar 1 tot 4 | Hongerdagen per jaar | Vissers, jagers | Langste reeks, en wat hem brak | Hoe het eindigde |
+|---|---|---|---|---|---|
+| bouwer 1 (62707) | 53, 75, 98, 100 | 77, 123, 122, 115 | 4, 5 | 115 dagen (vlees of vis) | vier jaar uit |
+| bouwer 2 (73425) | 51, 74, 80, 90 | 78, 122, 125, 33 | 3, 4 | (nooit een maand) | vier jaar uit |
+| bouwer 3 (72022) | 53, 74 | 77, 121 | 3, 3 | | ambt kwijt in jaar 2 |
+| sluw 1 (62707) | 53, 78, 115, 115 | 77, 114, 49, 67 | 4, 4 | 128 dagen (eten) | vier jaar uit |
+| sluw 2 (73425) | 49 | 77 | 2, 1 | | gevallen tegen rovers, jaar 1 |
+| sluw 3 (72022) | 49, 67, 86, 107 | 77, 117, 122, 0 | 4, 6 | 150 dagen (vlees of vis) | vier jaar uit |
+
+**Wat het zegt:** vier van de zes spelen nu de vier jaar uit (eerst twee), en in het vierde jaar is de honger bij twee
+spellen weg (33 en 0 dagen); een boer maakte twee à drie keer een weide erbij. Maar nog steeds is het graan van
+lentemaand tot de oogst op, en de reeks breekt in de winter op vlees of vis (de vissers liggen stil, en er zijn weinig
+jagers). Er is een spelregel "Graan" (Honger, de standaard: 3,5 graan per akkertegel; Net rond: 4; Ruim: 5): de proef
+hieronder speelt met "Net rond".
+
+## De speeltest van 8 okt, later: de graanschuur en het advies over eten (werklijst, vraag 132, a en b)
+
+Op `ccr-77327776-rqjldz` op `3290959`, `npm run speeltest -- bouwer sluw --maker --jaren 4`.
+
+| Speler, land | Mensen, jaar 1 tot 4 | Graan geoogst per jaar | Hongerdagen per jaar | Gunst | Hoe het eindigde |
+|---|---|---|---|---|---|
+| bouwer 1 (62707) | 53, 76, 92, 114 | 612, 753, 1139, 1105 | 77, 121, 121, 110 | 20 à 36 | vier jaar uit, niet gewonnen |
+| bouwer 2 (73425) | 52, 74, 87, 106 | 606, 740, 1124, 1036 | 78, 122, 122, 120 | 20 à 39 | vier jaar uit, niet gewonnen |
+| bouwer 3 (72022) | 53, 74 | 641, 782 | 77, 121 | 16 à 34 | ambt kwijt in jaar 2 |
+| sluw 1 (62707) | 53, 75, 123, 123 | 612, 904, 1251, 1305 | 77, 116, 99, 57 | 100 | ambt kwijt in jaar 4 (de heer kreeg 59%) |
+| sluw 2, sluw 3 | 49; 49, 70 | | | | gevallen tegen rovers, in jaar 1 en 2 |
+
+**Wat het zegt:** de graanschuur werkt: elke bouwer zette er wachters bij, en de oogst groeit weer zoals voor 3a (612,
+753, 1139, 1105; voor 3a 612, 869, 962, 1046). Niemand stierf in de winter. Maar elk jaar is er honger van lentemaand tot
+de oogst: dan is het graan op (in de maanden van bouwer 1: 0 graan van lentemaand tot hooimaand), na het zaaien (350 graan),
+de molen (250) en de herberg (80). Er is nooit kaas: de drie koeien van het begin geven niet genoeg melk. Voor 3a vulde het
+vlees van 13 tot 15 jagers dat gat. Zo komen de dorpen tot 106 à 123 mensen, maar niet tot een jaar lang alles.
+
+## De speeltest van 8 okt: de jager die echt jaagt (werklijst, vraag 116, stap 3a, j1, j2 en k)
+
+Op `ccr-77327776-rqjldz` op `68c83a2` (de jager schiet klein wild, de helft van zijn vlees, en herten), naast dezelfde
+speeltest op de stand ervoor (`efd129a`, de jager maakt zijn vlees uit het niets). `npm run speeltest -- bouwer sluw
+--maker --jaren 4`.
+
+| Speler, land | Jagers (voor → nu) | Graan geoogst per jaar, voor | nu | Hoe het eindigde, voor | nu |
+|---|---|---|---|---|---|
+| bouwer 1 (62707) | 13 → 3 | 612, 869, 962, 1046 | 612, 205, 32 | gewonnen | ambt kwijt in jaar 3 |
+| bouwer 2 (73425) | 14 → 4 | 606, 767, 1248, 1257 | 606, 408, 135, 25 | gewonnen | vier jaar uit, 37 mensen |
+| bouwer 3 (72022) | 15 → 2 | | | gewonnen | ambt kwijt in jaar 2 |
+| sluw 1 (62707) | 14 → 5 | | | gewonnen | vier jaar uit, 152 mensen, net niet |
+| sluw 2, sluw 3 | 7 en 6 → 1 en 2 | | | niet, en gevallen (rover) | gevallen (rovers) |
+
+**Wat het zegt:** het dorp van vóór 3a at bijna alleen vlees uit het niets: de bouwer zette er 13 tot 15 jagers neer,
+en vanaf het tweede jaar at het dorp geen graan meer. Met een jager die echt jaagt (en geen nieuwe waar geen hert is),
+komt het eten weer uit het graan, en dan eet het dorp in de eerste winter het zaaigraan op: de oogst zakt van 612 naar 205
+en 32, en het dorp gaat dood. Het spel was dus in balans op jagers uit het niets; Marcels "het dorp moet gevarieerd eten"
+(j3) is daarmee de echte opgave, niet de jager.
 ## De speeltest van 8 okt: een erf houdt plaats voor een put (werklijst, vraag 117, stap 2d)
 
 Gespeeld in de sessie van de kaartenmaker, in een losse kopie op `5bb7cb6` (de branch `ccr-f03157dc-9d2dtu`, met de regel

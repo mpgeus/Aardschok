@@ -35,7 +35,7 @@
   // Een pad wijst in T: 'GRAAN_PER_TEGEL', of 'HEER_INSTELLINGEN.betalenIn'.
   T.OPTIES = [
     {
-      id: 'graan', naam: 'Graan', standaard: 'honger',
+      id: 'graan', naam: 'Graan', standaard: 'netRond',
       uitleg: 'Hoe krap een gewoon jaar is als je de heer alles in graan geeft.',
       keuzes: [
         { id: 'ruim', naam: 'Ruim', zet: { GRAAN_PER_TEGEL: 5 },
@@ -209,6 +209,17 @@
           uitleg: 'Het dorp eet vlees erbij voor de afwisseling, maar tegen de honger helpt het niet.' },
       ],
     },
+    // Marcel, 8 okt (werklijst vraag 132): "Vis mag een maag vullen, zoals vlees".
+    {
+      id: 'vis', naam: 'Vis', standaard: 'eten',
+      uitleg: 'Of het dorp bij honger ook vis eet, of alleen wat de huizen ervan willen.',
+      keuzes: [
+        { id: 'eten', naam: 'Vult een maag', zet: { 'BEHOEFTEN_INSTELLINGEN.visIsEten': true },
+          uitleg: 'Wat het zout niet goed houdt, eet het dorp eerst op, want het bederft toch. Gezouten vis bewaart het tot het graan op is.' },
+        { id: 'tevredenheid', naam: 'Alleen voor de wensen', zet: { 'BEHOEFTEN_INSTELLINGEN.visIsEten': false },
+          uitleg: 'De huizen eten de vis die ze willen; wat over is, bederft. Zoals voor 8 okt.' },
+      ],
+    },
     // Stap 2 van de inner, de verstopplekken (Marcel, 25 sep; spel.md, "Marcel koos voor stap 2").
     {
       id: 'sporen', naam: 'Sporen', standaard: 'alles',
@@ -318,7 +329,7 @@
         { id: 'vlak', naam: 'Vlak', zet: { 'HOOGTE_INSTELLINGEN.aan': false },
           uitleg: 'Het land is vlak, zoals vóór 7 okt 2026.' },
         { id: 'heuvels', naam: 'Heuvels', zet: { 'HOOGTE_INSTELLINGEN.aan': true },
-          uitleg: 'Hoge heuvels in het wilde land, een zachte glooiing rond het dorp, en een richel met een rotswand bij de rotsen. Lopen, zien en bouwen weten er nog niets van.' },
+          uitleg: 'Hoge heuvels in het wilde land, een zachte glooiing rond het dorp, en een richel met een rotswand bij de rotsen. Niemand loopt door een rotswand, op steile grond wordt niet gebouwd, en een heuvel houdt het zicht tegen en dekt af wat erachter staat.' },
       ],
     },
     // De lantaarn van de schout (Marcel, 4 okt, werklijst vraag 125, C: "ook spel. Voegt leuke elementen toe"; js/zien.js).
@@ -471,12 +482,14 @@
     // Het zaaigraan (werklijst vraag 81; Marcel, 1 okt: "zaaigraan wordt bij nood opgegeten, anders sterven er mensen";
     // js/akkers.js, T.zaaigraanApart). Als ander graan is het spel van vóór 1 okt.
     {
-      id: 'zaaigraan', naam: 'Zaaigraan', standaard: 'nood',
+      id: 'zaaigraan', naam: 'Zaaigraan', standaard: 'bewaken',
       uitleg: 'Wanneer het dorp het zaaigraan voor volgend jaar opeet.',
       keuzes: [
-        { id: 'nood', naam: 'Pas bij nood', zet: { 'VELDEN_INSTELLINGEN.zaaigraanApart': true },
+        { id: 'bewaken', naam: 'Bewaken', zet: { 'VELDEN_INSTELLINGEN.zaaigraanApart': true, 'GRAANSCHUUR_INSTELLINGEN.bewaken': true },
+          uitleg: 'Van de oogst tot het zaaien ligt het zaaigraan in de graanschuur. Komt de honger eraan, dan vraagt een boer je wat er moet gebeuren: zet je er mannen bij, een per twintig mensen, dan blijft het liggen, maar elke hongerdag kost vertrouwen. Zonder graanschuur eet het dorp het bij nood op (vraag 132, 8 okt).' },
+        { id: 'nood', naam: 'Pas bij nood', zet: { 'VELDEN_INSTELLINGEN.zaaigraanApart': true, 'GRAANSCHUUR_INSTELLINGEN.bewaken': false },
           uitleg: 'Van de oogst tot het zaaien houden de boeren het zaaigraan achter. Het dorp eet het pas als er niets anders meer is, en de winter rekent het eten zonder.' },
-        { id: 'gewoon', naam: 'Als ander graan', zet: { 'VELDEN_INSTELLINGEN.zaaigraanApart': false },
+        { id: 'gewoon', naam: 'Als ander graan', zet: { 'VELDEN_INSTELLINGEN.zaaigraanApart': false, 'GRAANSCHUUR_INSTELLINGEN.bewaken': false },
           uitleg: 'Het dorp eet het zaaigraan als elk ander graan. Wie in de winter alles opeet, heeft in de lente niets te zaaien.' },
       ],
     },
@@ -709,6 +722,7 @@
     { naam: 'Het veldwerk', blok: 'VELDWERK_INSTELLINGEN' },
     { naam: 'Ontginnen', blok: 'ONTGINNEN_INSTELLINGEN' },
     { naam: 'De beesten in het bos', blok: 'BEESTEN_INSTELLINGEN' },
+    { naam: 'De graanschuur en het zaaigraan', blok: 'GRAANSCHUUR_INSTELLINGEN' },
     { naam: 'Het bos', blok: 'BOS_INSTELLINGEN' },
     { naam: 'Het vee', blok: 'VEE_INSTELLINGEN' },
     { naam: 'De doorkijk', blok: 'DOORKIJK_INSTELLINGEN' },

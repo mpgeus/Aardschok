@@ -6,6 +6,7 @@
 //   node gereedschap/pixelart/naar-spel.cjs --alleen schandpaal
 //   node gereedschap/pixelart/naar-spel.cjs --alleen paaltje
 //   node gereedschap/pixelart/naar-spel.cjs --alleen meiboom
+//   node gereedschap/pixelart/naar-spel.cjs --alleen hol
 //   node gereedschap/pixelart/naar-spel.cjs --alleen marktkraam
 //   node gereedschap/pixelart/naar-spel.cjs --alleen tekens
 //
@@ -16,7 +17,7 @@
 // in git staat: in een verse kopie is het (bijna) leeg, en zonder --alleen bouwt dit script de
 // beschrijving opnieuw op uit wat daar staat — dan verdwijnen alle andere figuren uit het spel.
 // Een los vel dat hier zelf gerenderd wordt en niets uit uit/ nodig heeft (LOSSE_VELLEN: de
-// schandpaal, het paaltje, de meiboom, de marktkraam en de tekens met het papier) kan ook met --alleen: dan wordt alleen dat vel gerenderd en alleen zijn
+// schandpaal, het paaltje, de meiboom, het wolvenhol, de marktkraam en de tekens met het papier) kan ook met --alleen: dan wordt alleen dat vel gerenderd en alleen zijn
 // ingang gezet.
 //
 // Twee soorten werk:
@@ -35,6 +36,7 @@ const Graan = require('./graan-vel.cjs');
 const Schandpaal = require('./schandpaal.cjs');
 const Paaltje = require('./paaltje.cjs');
 const Meiboom = require('./meiboom.cjs');
+const Hol = require('./hol.cjs');
 const Marktkraam = require('./marktkraam.cjs');
 const Papieren = require('./papieren.cjs');
 const I = require('./inpakken.cjs');
@@ -157,6 +159,15 @@ function meiboom() {
   return Meiboom.beschrijving('meiboom.png');
 }
 
+// ---------------------------------------------------------------- het wolvenhol
+//
+// Eén tekening: het hol van een roedel wolven, een kuil onder een omgevallen boom met botten ervoor (hol.cjs,
+// ontwerp/werklijst.md, vraag 116, f). js/sprites.js zoekt hem op met S.hol() en legt zijn anker op de tegel.
+function hol() {
+  schrijf('hol.png', Hol.vel());
+  return Hol.beschrijving('hol.png');
+}
+
 // ---------------------------------------------------------------- de marktkraam
 //
 // De kramen van de markt (marktkraam.cjs, ontwerp/werklijst.md, vraag 110, d en vraag 127): per waar vol en leeg, van elke
@@ -182,7 +193,7 @@ function tekens() {
 
 // Losse vellen die --alleen ook kent, naast de figuren: ze worden hier gerenderd, niet gekopieerd
 // uit uit/, en geven hun ingang in de beschrijving terug.
-const LOSSE_VELLEN = { schandpaal, paaltje, meiboom, marktkraam, tekens };
+const LOSSE_VELLEN = { schandpaal, paaltje, meiboom, hol, marktkraam, tekens };
 
 // ---------------------------------------------------------------- kopiëren
 

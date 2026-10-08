@@ -521,6 +521,20 @@ test('wie gezouten vis eet, eet het zout mee op', () => {
   assert.ok(Math.abs(S.voorraad.zout - (10 - gegeten / IN.zoutHoudtGoed)) < 1e-9);
 });
 
+test('wie eet, eet eerst de verse vis: het zout gaat pas op aan wat gezouten was (vraag 132, B)', () => {
+  const IN = T.BEHOEFTEN_INSTELLINGEN;
+  const S = maakS();
+  S.bevolking = 100;
+  S.voorraad.graan = 1000;
+  S.voorraad.vis = 100;
+  S.voorraad.zout = 50 / IN.zoutHoudtGoed; // houdt de helft goed
+  T.tikBehoeftenDag(S, ZOMERDAG);
+  const gegeten = 100 * IN.extraVoedselPerMensPerDag;
+  assert.ok(gegeten < 50);
+  assert.equal(S.voorraad.zout, 50 / IN.zoutHoudtGoed, 'het zout bleef: er werd verse vis gegeten');
+  assert.ok(Math.abs(S.voorraad.vis - (100 - gegeten - (50 - gegeten) * IN.bederfPerDag)) < 1e-9, 'van wat ongezouten bleef, bederft een deel');
+});
+
 test('de beek ligt \'s winters dicht: zonder zout is de vis dan op, met zout blijft hij', () => {
   const IN = T.BEHOEFTEN_INSTELLINGEN;
   function winterMetVis(zout) {

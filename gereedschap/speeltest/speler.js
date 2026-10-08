@@ -50,7 +50,8 @@
 //           zijn kring heeft (bouwErf), en niet meer gewoon zo dicht mogelijk bij zijn eigen deur. Sinds vraag 96, b bouwt
 //           hij een keten in één keer: een bakkerij en een molen samen. Sinds vraag 99, c koopt hij laken bij de
 //           marskramer als de ambachtslieden het tot zijn volgende bezoek tekortkomen, met het goud dat hij niet nodig
-//           heeft voor zijn volgende wens.
+//           heeft voor zijn volgende wens. Sinds vraag 132, B koopt hij in de herfst het zout dat vis en vlees de winter
+//           door laat komen (T.visEnVleesVoorDeWinter).
 // En een zesde (werklijst vraag 93, a, en 94; Marcel, 2 okt: "De bouwer mag alles er aan doen, totale vrijheid"):
 //   sluw    de bouwer, maar hij bedriegt de heer, elk jaar zoals de slimme speler: 60% van het graan boven het zaaigraan
 //           en van het goud weg, de inner bespelen, de soldaten langs lege kelders, de heer 90%. Het goud haalt hij terug
@@ -1120,6 +1121,23 @@
       const gekocht = await handelMet(() => klikHandel('koop', 'laken', pakken));
       daad(`koopt ${gekocht * w.per} laken van de marskramer, voor ${gekocht * prijs} goud`);
     }
+    // Zout (werklijst vraag 132, B): zegt het dorp dat vis en vlees de winter alleen gezouten halen
+    // (T.visEnVleesVoorDeWinter, js/behoeften.js), dan koopt hij het zout dat erbij moet, met het goud dat hij niet nodig
+    // heeft voor de heer en zijn volgende wens.
+    async function koopZout() {
+      const w = T.HANDEL_INSTELLINGEN.verkoopt.zout;
+      const m = D().marskramer;
+      const v = T.visEnVleesVoorDeWinter(D(), dagNu());
+      if (!w || !v || !(v.zout > 0) || !((m.heeft && m.heeft.zout) || 0)) return;
+      const prijs = w.prijs[m.bezoek];
+      const stuks = Math.min(m.heeft.zout, v.zout, Math.floor((Math.floor(D().voorraad.goud || 0) - goudNodig()) / prijs));
+      if (stuks <= 0) {
+        daad(`zou ${v.zout} zout kopen van de marskramer, maar heeft het goud niet`);
+        return;
+      }
+      const gekocht = await handelMet(() => klikHandel('koop', 'zout', stuks));
+      daad(`koopt ${gekocht} zout van de marskramer, voor ${gekocht * prijs} goud, voor vis en vlees in de winter`);
+    }
     async function verkoop() {
       const s = S();
       const nodig = goudNodig() - Math.floor(s.dorp.voorraad.goud || 0);
@@ -1198,6 +1216,7 @@
         if (m && !m.weg && m.staat && nuEenKeer(`handel${jaar()}-${m.bezoek}`)) {
           await koopZaaigraan();
           await koopLaken();
+          await koopZout();
           await verkoop();
         }
         if (sluw) await bedrieg();
