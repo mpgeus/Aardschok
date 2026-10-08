@@ -6944,6 +6944,8 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     **Marcel (8 okt): "Kwa gereedschap bedoel ik echt een robuuste losse tool. Voor alle settings etc."** De werkbank is
     dus niet genoeg. **Marcel (8 okt), op de vraag bladzijde of los programma: "Ja misschien een bladzijde met duidelijk
     overzicht van alles."** Een bladzijde in `gereedschap/`, na de dagloners.
+    **Bezig in sessie `ccr-77327776-rqjldz`** (8 okt): de bladzijde bouwen, stap 1 en 2 (Marcel: "1. Ja dan 2. Gelijk
+    veranderen 3. Prima": de gebouwen erbij, opslaan verandert de standaard meteen, de speeltest later).
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
