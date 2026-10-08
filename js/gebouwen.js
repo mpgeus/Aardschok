@@ -279,18 +279,18 @@
       handen: 1, woonruimte: 0, maakt: { in: { meel: 2 }, uit: { brood: 2 } },
       menu: true, tekening: 'gebouwen/bakkerij', beschrijving: 'meel tot brood', opmerking: '',
     },
-    // De wijnboerderij (werklijst vraag 136; Marcel, 8 okt: "Ik wil z.s.m. aan een wijnboerderij", en "Wijn wordt drank,
-    // zoals bier. Mensen dronken geen water"): een boerderij met een gezin, en haar velden zijn wijngaarden. Wijn is drank,
-    // zoals bier (de wens `bier` in js/wensen.js neemt allebei). De pluk is in wijnmaand (`alleenIn`): dan maakt hij zijn
-    // wijn, de rest van het jaar niets, en wijn bederft niet. Een boer met wijnranken: wie er woont, is een boer
-    // (T.STANDEN.boeren in js/wensen.js). De heer wil er wijn voor (`heer`).
+    // De wijnboerderij (werklijst vraag 136; Marcel, 8 okt: "Ik wil z.s.m. aan een wijnboerderij", "Wijn wordt drank,
+    // zoals bier. Mensen dronken geen water", en voor de wijngaard "Dat je de boeren ziet plukken, volle en lege ranken"):
+    // een huis met een gezin van boeren, en ernaast een wijngaard (`wijngaard`: binnen de voet van 10 bij 8 staat alleen het
+    // huis vast; de ranken staan erin als voorwerpen, js/wijngaard.js). Wijn is drank, zoals bier (de wens `bier` in
+    // js/wensen.js neemt allebei). Hij maakt niets per dag: in wijnmaand (`alleenIn`, T.stilOp) plukt het gezin de ranken,
+    // en de wijn is er pas als de mand in het huis is (`oogst`: wat hij binnenhaalt, T.maaktGoed). De heer wil er wijn voor.
     wijnboerderij: {
       naam: 'wijnboerderij', meervoud: 'wijnboerderijen', trede: 'dorp', voet: { b: 10, h: 8 }, kosten: { hout: 18, goud: 8 },
-      heer: { wijn: 10 }, bouwtijd: 5, handen: 2, woonruimte: 4, maakt: { uit: { wijn: 10 } },
+      heer: { wijn: 10 }, bouwtijd: 5, handen: 0, woonruimte: 4, maakt: null, oogst: 'wijn', wijngaard: true,
       alleenIn: { maanden: ['wijnmaand'], waarom: 'de druiven worden pas in wijnmaand geplukt' },
-      // De tekening (gereedschap/pixelart/dorp2.cjs): een vakwerkhuis achter in de hoek, met wijntonnen bij de deur, en
-      // rechts vijf rijen ranken met trossen; de bouwfasen laten alleen het huis rijzen.
-      menu: true, tekening: 'gebouwen/wijnboerderij', beschrijving: 'een boerderij met wijngaarden: wijn, geplukt in wijnmaand',
+      // De tekening (gereedschap/pixelart/dorp2.cjs): het huis met de wijntonnen bij de deur, achter in de hoek van de voet.
+      menu: true, tekening: 'gebouwen/wijnboerderij', beschrijving: 'een boerderij met een wijngaard: wijn, geplukt in wijnmaand',
       opmerking: '',
     },
     brouwerij: {
@@ -501,6 +501,8 @@
     const g = T.GEBOUWEN[soort];
     if (!g) return null;
     if (g.erf) return T.erfMaat();
+    // De wijnboerderij: het huis en zijn wijngaard samen (js/wijngaard.js); de tekening is alleen het huis.
+    if (g.wijngaard) return g.voet;
     const t = tekening || g.tekening;
     if (t && T.opzoekTegelNaam) {
       const opz = T.opzoekTegelNaam(t);
@@ -582,6 +584,13 @@
   function seizoenVan(dag) {
     return dag != null ? T.datumVanDag(dag).seizoen : null;
   }
+
+  // Of een soort dit goed maakt: elke dag (maakt.uit), of wat hij binnenhaalt (`oogst`: de wijnboerderij plukt wijn).
+  // Voor wie vraagt wie iets maakt (js/wensen.js).
+  T.maaktGoed = function (soort, wat) {
+    const g = T.GEBOUWEN[soort];
+    return !!g && !!((g.maakt && g.maakt.uit && g.maakt.uit[wat]) || g.oogst === wat);
+  };
 
   // Of een soort op deze dag stilligt, en waarom (of null): in een seizoen (`stilIn`: de visser als de beek dichtligt), of
   // buiten zijn maanden (`alleenIn`: de wijnboerderij plukt alleen in wijnmaand). Eén vraag voor het werk, het gereedschap,
@@ -888,12 +897,13 @@
 
   // Of er op deze tegel gebouwd mag worden, voor een gebouw en voor een erf: niet op een akker of weide
   // (T.veldOp, js/akkers.js), niet op een pad (T.opPad, js/wereld.js), niet op een erf (T.erfOp,
-  // js/erven.js), en niet op een lantaarn. Geeft de reden, of null.
+  // js/erven.js), niet in een wijngaard (T.wijngaardOp, js/wijngaard.js), en niet op een lantaarn. Geeft de reden, of null.
   T.waaromNietOpDezeGrond = function (D, x, y) {
     const w = D.wereld;
     if (T.veldOp(w, x, y)) return 'Daar ligt een veld.';
     if (T.opPad(w, x, y)) return 'Daar loopt een pad.';
     if (T.erfOp(D, x, y)) return 'Daar ligt een erf.';
+    if (T.wijngaardOp(D, x, y)) return 'Daar ligt de wijngaard.';
     // Waar de herberg straks met het dorp meegroeit (T.meegroeiGrond, js/behoeften.js), blijft de grond vrij.
     const groeit = T.meegroeiGrondOp(D, x, y);
     if (groeit) return `Hier groeit straks de ${T.GEBOUWEN[groeit.soort].naam}.`;
@@ -961,7 +971,10 @@
     const w = D.wereld;
     const tekening = instantie.tekening || g.tekening;
     const opz = tekening && T.opzoekTegelNaam(tekening);
-    const voet = instantie.voet || T.gebouwVoet(instantie.soort, tekening) || { b: 1, h: 1 };
+    const heleVoet = instantie.voet || T.gebouwVoet(instantie.soort, tekening) || { b: 1, h: 1 };
+    // Bij de wijnboerderij is alleen het huis vast: de rest van de voet is de wijngaard (js/wijngaard.js).
+    const eig = g.wijngaard && opz && opz.eig && opz.eig.beslaat;
+    const voet = eig ? { b: eig[0], h: eig[1] } : heleVoet;
     const naam = 'gebouw:' + instantie.soort;
     T.registreerGebouwSoort(naam);
     const v = {
@@ -989,7 +1002,8 @@
       }
     }
     // op een land met hoogte komt het op vlakke grond (js/hoogte.js; vraag 121, stap 2)
-    T.egaliseer(w, { x: instantie.x, y: instantie.y, b: voet.b, h: voet.h });
+    T.egaliseer(w, { x: instantie.x, y: instantie.y, b: heleVoet.b, h: heleVoet.h });
+    if (g.wijngaard) T.zetRanken(D, instantie);
     T.kaartVeranderd(w); // de voet is muur geworden: de eilanden (js/wereld.js)
     stapEraf(D, { x: instantie.x, y: instantie.y, b: voet.b, h: voet.h });
   }
@@ -1261,6 +1275,7 @@
     const gegeten = T.eetVandaag(D, dag, alGegeten);
     // De wachters bij de graanschuur (js/graanschuur.js): na het zaaien naar huis, en honger kost vertrouwen.
     T.tikGraanschuurDag(D, dag, gegeten.tekort > 0);
+    T.tikWijngaardDag(D, dag); // de wijn die nog in de manden zat, en of het gezin morgen plukt (js/wijngaard.js)
     // Honger in het voorjaar en de zomer, van 1 lentemaand tot de oogst: dan maken de boeren na de oogst een weide erbij
     // (T.boerenKiezenVelden, js/akkers.js; vraag 132).
     if (gegeten.tekort > 0 && D.behoeften && T.datumVanDag(dag).maand <= T.MAANDEN.findIndex((m) => m.naam === 'oogstmaand')) {

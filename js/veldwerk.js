@@ -550,6 +550,93 @@
     } else stop(e);
   }
 
+  // De wijnboerderij waar dit poppetje woont, als hij daar nu plukt (js/wijngaard.js): in de pluktijd, zolang er volle
+  // ranken zijn, of als hij nog een mand naar huis moet brengen; of null. Wie te jong of te oud is om te werken, plukt niet.
+  function wijngaardWaarHijPlukt(D, e, dag) {
+    const p = T.bewonerVan(D, e);
+    const g = p && p.huis;
+    if (!g || g.soort !== 'wijnboerderij' || p.weg || !T.LEEFTIJDEN[p.leeftijd] || T.LEEFTIJDEN[p.leeftijd].werkt == null) return null;
+    if (e.mand > 0) return g;
+    return T.isPluktijd(g, dag) && T.volleRanken(D, g, dag).length ? g : null;
+  }
+
+  // Plukken (js/wijngaard.js; vraag 136): naar de dichtste volle rank die niemand anders plukt, van een tegel ernaast,
+  // plukUren aan een stuk; de druiven gaan in zijn mand, en is die vol (of is er niets meer te plukken), dan brengt hij
+  // hem naar de deur van het huis. Pas dan is de wijn binnen (Marcel, 8 okt: "Alles telt pas als het binnen is").
+  function pluk(S, D, e, nu, g) {
+    const w = D.wereld;
+    const dag = D.kalender.dag;
+    const deur = T.deurVan(w, g);
+    const hier = { x: e.tx, y: e.ty };
+    const binnen = () => {
+      T.wijnBinnen(D, e.mand || 0);
+      e.mand = 0;
+      e.draagt = null;
+    };
+    const naarHuis = () => {
+      e.draagt = 'mand';
+      e.werkt = null;
+      const doel = { x: deur.x, y: deur.y, tot: 1 };
+      const pad = T.zoekRoute(w, hier, doel, { tot: 1 });
+      if (pad && pad.length) T.geefRoute(e, pad, doel);
+      else if (T.afstand(deur, hier) <= 1) binnen();
+      else binnen(); // hij komt er niet: dan brengt hij hem toch binnen, langs een andere weg
+    };
+    if (e.draagt === 'mand') {
+      if (e.pad.length) return;
+      if (T.afstand(deur, hier) > 1) naarHuis();
+      else binnen();
+      return;
+    }
+    const wt = e.werkt;
+    if (wt && wt.soort === 'plukken' && wt.tot != null) {
+      if (nu < wt.tot) return;
+      const v = T.voorwerpOp(w, wt.op.x, wt.op.y);
+      if (v && v.soort === 'wijnrank' && T.rankStand(v, dag) === 'vol') {
+        T.plukRank(v, dag);
+        e.mand = (e.mand || 0) + 1;
+      }
+      e.werkt = null;
+      if (e.mand >= T.WIJNGAARD_INSTELLINGEN.mand || !T.volleRanken(D, g, dag).length) naarHuis();
+      return;
+    }
+    if (e.pad.length) return; // onderweg naar zijn rank
+    const bezet = new Set(w.wezens.filter((o) => o !== e && o.werkt && o.werkt.soort === 'plukken' && o.werkt.op).map((o) => `${o.werkt.op.x},${o.werkt.op.y}`));
+    const vol = T.volleRanken(D, g, dag).filter((v) => !bezet.has(`${v.x},${v.y}`)).sort((a, b) => T.afstand(a, hier) - T.afstand(b, hier));
+    if (!vol.length) {
+      if (e.mand > 0) naarHuis();
+      else stop(e);
+      return;
+    }
+    let keus = null;
+    const vrij = (x, y) => (x === e.tx && y === e.ty) || (T.isBegaanbaar(w, x, y) && !T.wezenOp(w, x, y, e));
+    for (const t of vol.slice(0, 6)) {
+      for (const [dx, dy] of NAAST) {
+        const st = { x: t.x + dx, y: t.y + dy };
+        if (vrij(st.x, st.y) && T.kanErKomen(w, hier, st)) {
+          keus = { rank: t, staan: st };
+          break;
+        }
+      }
+      if (keus) break;
+    }
+    if (!keus) {
+      stop(e); // nu kan hij er niet bij: het volgende beeld kijkt opnieuw
+      return;
+    }
+    const { rank, staan } = keus;
+    const tot = e.tx === staan.x && e.ty === staan.y ? nu + T.WIJNGAARD_INSTELLINGEN.plukUren * uur() : null;
+    if (tot == null) {
+      const pad = T.zoekRoute(w, hier, staan, {});
+      if (!pad || !pad.length) {
+        stop(e);
+        return;
+      }
+      T.geefRoute(e, pad, staan);
+    }
+    e.werkt = { soort: 'plukken', x: staan.x, y: staan.y, op: { x: rank.x, y: rank.y }, tot, rust: false };
+  }
+
   // Elk beeld, na het maaien (T.werkOogstBij) en vóór het dwalen (T.dwaal): elke boer doet zijn werk van vandaag, en wie
   // zijn erf rooit, rooit (met dezelfde bijl en op dezelfde manier als een boer die bos ontgint). Waar je bent vanuit
   // js/main.js, de andere dorpen vanuit T.werkDorpBij (js/dorp.js).
@@ -567,7 +654,8 @@
       const kavel = kavelDieHijRooit(D, e);
       const schuur = kavel ? null : schuurWaarHijHakt(D, e);
       const hut = kavel || schuur ? null : hutWaarHijJaagt(D, e);
-      if (!kavel && !schuur && !hut && (!e.werkAkkers || !e.werkAkkers.length)) continue;
+      const wijn = kavel || schuur || hut ? null : wijngaardWaarHijPlukt(D, e, dag);
+      if (!kavel && !schuur && !hut && !wijn && (!e.werkAkkers || !e.werkAkkers.length)) continue;
       // Wie hout naar huis bracht, legt het bij zijn deur neer.
       if (e.draagt && !e.pad.length && e.thuis && T.afstand(e.thuis, { x: e.tx, y: e.ty }) <= 1) e.draagt = null;
       // De schaft: brood op de akker (js/dag.js). Wie op zijn land werkt, blijft er staan tot het werk weer begint (wie
@@ -581,7 +669,7 @@
         delete e.werkt.schaft;
         e.werkt.tot = Math.min(e.werkt.tot, nu);
       }
-      const soort = werktijd && magWerken(S, D, e) ? (kavel ? 'rooien' : schuur ? 'hout' : hut ? 'jagen' : T.veldwerkVandaag(D, e, datum)) : null;
+      const soort = werktijd && magWerken(S, D, e) ? (kavel ? 'rooien' : schuur ? 'hout' : hut ? 'jagen' : wijn ? 'plukken' : T.veldwerkVandaag(D, e, datum)) : null;
       if (!soort) {
         onthoudPlag(e, nu);
         stop(e);
@@ -596,6 +684,7 @@
       else if (soort === 'rooien') ontgin(D, e, vw, nu, T.teRooienOp(D, kavel));
       else if (soort === 'hout') hakHout(S, D, e, vw, nu, schuur);
       else if (soort === 'jagen') jaag(S, D, e, nu, hut);
+      else if (soort === 'plukken') pluk(S, D, e, nu, wijn);
       else opHetLand(S, D, e, vw, nu, datum);
     }
   };

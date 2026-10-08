@@ -410,7 +410,7 @@
   // De ketens (werklijst vraag 90, D; Marcel, 2 okt: "d ja"): wat een werkplaats nodig heeft (T.GEBOUWEN[x].maakt.in), en
   // wie dat maakt. Brood komt van de bakkerij, die meel nodig heeft van de molen; laken van de weverij, met wol van de
   // schapen. Wat geen werkplaats maakt, komt van buiten het bouwmenu: daar valt niets voor te bouwen.
-  const makersVan = (wat) => Object.keys(T.GEBOUWEN).filter((s) => T.GEBOUWEN[s].maakt && T.GEBOUWEN[s].maakt.uit && T.GEBOUWEN[s].maakt.uit[wat]);
+  const makersVan = (wat) => Object.keys(T.GEBOUWEN).filter((s) => T.maaktGoed(s, wat));
   const VAN = { graan: 'graan komt van de akkers', wol: 'wol komt van de schapen, in zomermaand' };
 
   // Wat een werkplaats die je gaat bouwen nodig heeft en nergens gemaakt wordt, en wel te bouwen is: een bakkerij zonder
@@ -477,8 +477,8 @@
   // gehucht helpt een huis buiten zijn kring niet. Een goed: wie het maakt (watHelpt).
   function hulpVoorWens(D, wens) {
     if (wens.plek) return T.magGebouwd(D, wens.plek) ? { kan: true, bouw: wens.plek, tekst: null } : nogNiet(wens.plek);
-    const makers = Object.keys(T.GEBOUWEN).filter((s) => T.GEBOUWEN[s].maakt && wens.goed.some((goed) => T.GEBOUWEN[s].maakt.uit[goed]));
-    makers.sort((a, b) => wens.goed.findIndex((goed) => T.GEBOUWEN[a].maakt.uit[goed]) - wens.goed.findIndex((goed) => T.GEBOUWEN[b].maakt.uit[goed]));
+    const makers = Object.keys(T.GEBOUWEN).filter((s) => wens.goed.some((goed) => T.maaktGoed(s, goed)));
+    makers.sort((a, b) => wens.goed.findIndex((goed) => T.maaktGoed(a, goed)) - wens.goed.findIndex((goed) => T.maaktGoed(b, goed)));
     return watHelpt(D, makers);
   }
 
