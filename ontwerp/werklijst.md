@@ -5459,6 +5459,14 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     gereedschap/pixelart/kusttegels-proef.cjs` (in `uit/kust/`). Marcel liet de punten verbeteren die Claude zelf nog niet
     goed vond ("voer gelijk verbeteringen door"): een bredere branding, heide in pollen op het zand, een lichter broek.
     **Marcel (8 okt): "Ja, ziet er goed uit zo".** Nu stap 2: de tegels in het spel.
+    **Stap 2 is gebouwd** (8 okt, op de branch): het vel `tegels/kust.png` staat in het spel, en de maker legt elke streek
+    van het eiland met zijn eigen grond; welke soorten samen een tegel hebben, zegt `T.grondPaar`, en wat niet past, wijkt
+    (`T.passendeGrond`: naast de zee voor strand, anders voor gras). Op zand wordt niet gebouwd (als eigen regel in
+    `T.waaromNietOpDezeGrond`); waar een huis van het dorp dat er al was met zijn erf op zand stond (op land 1 twee
+    boerderijen), ligt nu gras. De zee is water voor de visser en het bos (`T.isWaterGrond`). Onderweg gevonden: langs de
+    rand van de kaart kon er tussen het veen van de kaart en de zee erbuiten geen tegel passen; daar wijkt nu de zee
+    (hooguit twee hoekpunten), en een tegel met drie soorten tekent zoals op de kaart (`T.grondTegelHoeken`). De landen van
+    de maker zonder het eiland blijven tegel voor tegel hetzelfde; `kaarten.md` en `beeld.md` zeggen hoe het werkt.
 118. **Inwoners met stats, zoals in Dwarf Fortress** (Marcel, 4 okt, zesentwintigste sessie: "Inwoners krijgen ook
     'stats' hp, skills, eigenschappen, etc ala dwarf fortress"; plan van Claude; open).
     **Wat er al is:** elke bewoner heeft een naam, een leeftijd, een huis, een gezin en werk (`js/bewoners.js`); de vijf

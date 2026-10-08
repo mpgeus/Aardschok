@@ -327,7 +327,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   verlaten, en `T.eilandVan(zaad)` onthoudt het laatste eiland. De maker (`js/maker.js`, met `land`) legt het gehucht erop
   als een dorp dat er al was; de kaart onthoudt waar hij ligt (`w.eiland`). **Het eiland om je land** (stap 2b): buiten
   de kaart loopt het eiland door, met de regels van de maker (`T.randVanHetEiland(w)` in `js/maker.js`, één keer per kaart,
-  niet in `Spel.S`; `T.grondVanStreek`), en `js/tekenen.js` tekent het als het land en het bos om de kaart. De plaat:
+  niet in `Spel.S`; `T.grondVanStreek`), en `js/tekenen.js` tekent het als het land en het bos om de kaart. **De grond
+  van het eiland** (B van 2a): de zee, het strand, het veen en het broek hebben eigen tegels (`tegels/kust.png`, uit
+  `node gereedschap/pixelart/randtegels.cjs kust`; `T.sprites.grondMetHoeken` zoekt in rand en kust); welke twee soorten
+  samen een tegel hebben, zegt `T.grondPaar`, wat niet past wijkt (`T.passendeGrond`), en een tegel met drie soorten
+  wordt er een met twee (`T.grondTegelHoeken`); de zee is water (`T.isWaterGrond` in `js/wereld.js`). De plaat:
   `node gereedschap/pixelart/eiland-plaat.cjs [nummer] [--groot]` (in `gereedschap/pixelart/uit/eiland/`). De getallen in
   `T.EILAND_INSTELLINGEN`.
 - `js/sprites.js`: de pixel art uit `beelden/`. `T.sprites.figuur/tegel/muur/voorwerp` wijzen
@@ -423,7 +427,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`T.telWoonruimte` in `js/gebouwen.js`), en de hut weet welk huis hij wordt (`wordtTekening`), zodat hij binnen
   zijn erf doorgroeit. Zonder vrij erf zegt het dorp dat er geen plaats is (`T.gezinZoektEenErf`). Wat in het
   bouwmenu staat, zegt `T.inBouwmenu`: het erf, en de woningen niet, tenzij de spelregel "Huizen" anders zegt. Op
-  een akker, een weide, een pad of een erf bouw je niet (`T.waaromNietOpDezeGrond`). De paaltjes op een vrij erf
+  een akker, een weide, een pad, een erf of zand (het strand van het eiland) bouw je niet (`T.waaromNietOpDezeGrond`). De paaltjes op een vrij erf
   tekent `js/tekenen.js` (`T.paaltjesVan`, `T.sprites.paaltje`). **Een erf mag op struiken en bomen** (vraag 110, e, 6
   okt): wat te rooien is (`T.ontginWerkOp` in `js/bos.js`) houdt het niet tegen (`T.rooiTekst` voor de muis), ook niet in
   het looppad om de hut buiten het erf; het gezin dat het neemt, rooit het erf met dat looppad zelf (`T.kavelVanErf`), en
