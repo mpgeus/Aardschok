@@ -153,6 +153,26 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 8 okt, nacht: vis vult een maag (werklijst, vraag 133)
+
+Op `7e1b786` (branch `ccr-77327776-rqjldz`), `npm run speeltest -- bouwer sluw --maker --jaren 4`; Marcel: "Vis mag een
+maag vullen, zoals vlees".
+
+| Speler, land | Mensen per jaar | Hongerdagen per jaar | Teller aan het eind van jaar 3, 4 | Hoe het eindigde |
+| --- | --- | --- | --- | --- |
+| sluw 1 (62707) | 69, 95, 107, 195 | 8, 0, 0, 0 | 350, 360 | **gewonnen** op 10 lentemaand van het vierde jaar; daarna groeide het door tot 202 |
+| sluw 3 (72022) | 70, 94, 115, 179 | 19, 0, 0, 0 | 350, 360 | **gewonnen** op 10 lentemaand van het vierde jaar |
+| bouwer 2 (73425) | 72, 90, 115, 115 | 0, 1, 1, 0 | 69, 264 | vier jaar uit, teller 295 aan het eind; brak in bloeimaand op laken |
+| bouwer 3 (72022) | 73, 91, 107, 107 | 1, 1, 0, 0 | 53, 237 | vier jaar uit (eerst ambt kwijt in jaar 2), teller 268; brak op vlees of vis en op brood |
+| bouwer 1 (62707) | 69, 87, 104, 107 | 8, 1, 2, 0 | 73, 234 | vier jaar uit, teller 265; brak op vlees of vis en op brood |
+| sluw 2 (73425) | 76 | 0 | | ambt kwijt in jaar 1: de gunst op, te weinig betaald |
+
+**Wat het zegt:** de honger is weg: van zo'n 120 hongerdagen per jaar naar 0 à 2. Twee sluwe bouwers winnen, al in het
+begin van het vierde jaar, en alle drie de eerlijke bouwers spelen de vier jaar uit (ook die op 72022, die eerst altijd
+in jaar 2 zijn ambt kwijtraakte), met de teller op 265 tot 295 van de 360. Wat hun reeks nu breekt, is niet meer het eten,
+maar vlees of vis in de winter (geen goud voor zout), brood en laken. Twee knelpunten blijven: de eerlijke bouwer heeft
+geen goud voor zout, en sluw 2 op 73425 viel in jaar 1 door de heer.
+
 ## De speeltest van 8 okt, avond: de rekensom van het zout zonder de jagers (werklijst, vraag 133, B)
 
 Op `f096831` (branch `ccr-77327776-rqjldz`), `npm run speeltest -- bouwer sluw --maker --jaren 4`.
