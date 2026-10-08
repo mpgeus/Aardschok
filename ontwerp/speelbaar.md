@@ -153,6 +153,24 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 8 okt, later: de graanschuur en het advies over eten (werklijst, vraag 132, a en b)
+
+Op `ccr-77327776-rqjldz` op `3290959`, `npm run speeltest -- bouwer sluw --maker --jaren 4`.
+
+| Speler, land | Mensen, jaar 1 tot 4 | Graan geoogst per jaar | Hongerdagen per jaar | Gunst | Hoe het eindigde |
+|---|---|---|---|---|---|
+| bouwer 1 (62707) | 53, 76, 92, 114 | 612, 753, 1139, 1105 | 77, 121, 121, 110 | 20 à 36 | vier jaar uit, niet gewonnen |
+| bouwer 2 (73425) | 52, 74, 87, 106 | 606, 740, 1124, 1036 | 78, 122, 122, 120 | 20 à 39 | vier jaar uit, niet gewonnen |
+| bouwer 3 (72022) | 53, 74 | 641, 782 | 77, 121 | 16 à 34 | ambt kwijt in jaar 2 |
+| sluw 1 (62707) | 53, 75, 123, 123 | 612, 904, 1251, 1305 | 77, 116, 99, 57 | 100 | ambt kwijt in jaar 4 (de heer kreeg 59%) |
+| sluw 2, sluw 3 | 49; 49, 70 | | | | gevallen tegen rovers, in jaar 1 en 2 |
+
+**Wat het zegt:** de graanschuur werkt: elke bouwer zette er wachters bij, en de oogst groeit weer zoals voor 3a (612,
+753, 1139, 1105; voor 3a 612, 869, 962, 1046). Niemand stierf in de winter. Maar elk jaar is er honger van lentemaand tot
+de oogst: dan is het graan op (in de maanden van bouwer 1: 0 graan van lentemaand tot hooimaand), na het zaaien (350 graan),
+de molen (250) en de herberg (80). Er is nooit kaas: de drie koeien van het begin geven niet genoeg melk. Voor 3a vulde het
+vlees van 13 tot 15 jagers dat gat. Zo komen de dorpen tot 106 à 123 mensen, maar niet tot een jaar lang alles.
+
 ## De speeltest van 8 okt: de jager die echt jaagt (werklijst, vraag 116, stap 3a, j1, j2 en k)
 
 Op `ccr-77327776-rqjldz` op `68c83a2` (de jager schiet klein wild, de helft van zijn vlees, en herten), naast dezelfde
