@@ -125,6 +125,25 @@
       .filter((namen) => namen.length);
   };
 
+  // De vormen die een gebouw van deze soort en stijl pas in een dorp krijgt (geen onder het dak van het gehucht), met de
+  // deur naar dezelfde kant als `tekening` (een dak en een steen, de eerste die er is: de voet hangt er niet van af). Voor
+  // een gebouw dat met het dorp meegroeit (de herberg, `groeitMee` in T.GEBOUWEN): waar het dan komt, blijft de grond
+  // vrij (T.meegroeiGrond, js/behoeften.js). Heeft het zo'n vorm al, dan geen.
+  T.dorpsVormen = function (tekening) {
+    const d = ding(tekening);
+    if (!d) return [];
+    const lijst = (index().stijlen[d.stijl] || {})[d.soort] || [];
+    const dak = gehuchtDak(d.stijl);
+    const vanHetGehucht = (vorm) => lijst.some((t) => t.vorm === vorm && t.dak === dak);
+    if (!vanHetGehucht(d.vorm)) return [];
+    const uit = [];
+    for (const vorm of new Set(lijst.map((t) => t.vorm))) {
+      const t = !vanHetGehucht(vorm) && lijst.find((x) => x.vorm === vorm && x.kant === d.kant);
+      if (t) uit.push(t.naam);
+    }
+    return uit;
+  };
+
   // Dezelfde vorm, dak en steen, met de deur naar een andere kant. Een tekening zonder stijl blijft zichzelf.
   T.metDeurNaar = function (tekening, kant) {
     const d = ding(tekening);

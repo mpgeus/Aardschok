@@ -259,6 +259,79 @@ test('in een dorp groeit de herberg door tot de grote, met zijn deur aan dezelfd
   for (let y = na.y; y < na.y + na.h; y++) for (let x = na.x; x < na.x + na.b; x++) assert.equal(D.wereld.tegels[y][x], 'muur');
 });
 
+// Marcel, 8 okt ("Beiden"): in de speeltest van 7 okt bleef de herberg op 62707 klein, omdat er later iets op de grond
+// kwam waar hij groter wordt. Die grond blijft vrij.
+test('waar de herberg straks groter wordt, komt geen gebouw en geen erf', () => {
+  const S = nieuwSpel(5);
+  const D = S.dorp;
+  const g = D.gebouwen.find((x) => x.soort === 'herberg');
+  const grond = T.meegroeiGrond(D);
+  assert.equal(grond.length, 1);
+  const r = grond[0];
+  const voet = T.voetVanGebouw(g);
+  // een tegel van de grote herberg buiten de kleine
+  let tegel = null;
+  for (let y = r.y; y < r.y + r.h && !tegel; y++) {
+    for (let x = r.x; x < r.x + r.b; x++) {
+      if (x < voet.x || y < voet.y || x >= voet.x + voet.b || y >= voet.y + voet.h) { tegel = { x, y }; break; }
+    }
+  }
+  assert.ok(tegel, 'de grote herberg is groter');
+  assert.equal(T.waaromNietOpDezeGrond(D, tegel.x, tegel.y), 'Hier groeit straks de herberg.');
+  assert.equal(T.meegroeiGrondOp(D, tegel.x, tegel.y, g), null, 'voor de herberg zelf is het zijn eigen grond');
+  // en eenmaal groot, is er niets meer vrij te houden
+  T.zetVoorraad(D, 'hout', 100);
+  D.trede = 'dorp';
+  T.tikBehoeftenDag(D, 1);
+  assert.equal(T.vormVan(g.tekening), 'herberg2');
+  assert.deepEqual(T.meegroeiGrond(D), []);
+});
+
+test('staat er alleen een struik waar de herberg groter wordt, dan gaat die er met de bouw uit', () => {
+  const S = nieuwSpel(62710); // een bessenstruik op 40,62, in de grond van de grote herberg
+  const D = S.dorp;
+  const g = D.gebouwen.find((x) => x.soort === 'herberg');
+  assert.equal(T.voorwerpOp(D.wereld, 40, 62).soort, 'bessenStruik');
+  T.zetVoorraad(D, 'hout', 100);
+  D.trede = 'dorp';
+  T.tikBehoeftenDag(D, 1);
+  assert.equal(T.vormVan(g.tekening), 'herberg2');
+});
+
+test('kan de herberg niet meegroeien, dan zegt het dorp waarom, één keer', () => {
+  const S = nieuwSpel(5);
+  const D = S.dorp;
+  const g = D.gebouwen.find((x) => x.soort === 'herberg');
+  const r = T.meegroeiGrond(D)[0];
+  const voet = T.voetVanGebouw(g);
+  // een rots waar hij groter moet worden (zoals een oud spel, van vóór deze regel)
+  let tegel = null;
+  for (let y = r.y; y < r.y + r.h && !tegel; y++) {
+    for (let x = r.x; x < r.x + r.b; x++) {
+      if (x < voet.x || y < voet.y || x >= voet.x + voet.b || y >= voet.y + voet.h) { tegel = { x, y }; break; }
+    }
+  }
+  T.zetVoorwerp(D.wereld, { soort: 'rots', x: tegel.x, y: tegel.y });
+  D.wereld.tegels[tegel.y][tegel.x] = 'muur';
+  T.kaartVeranderd(D.wereld);
+  const gezegd = [];
+  const zeg = T.zeg;
+  T.zeg = (DD, tekst) => gezegd.push(tekst);
+  try {
+    T.zetVoorraad(D, 'hout', 100);
+    D.trede = 'dorp';
+    T.tikBehoeftenDag(D, 1);
+    T.tikBehoeftenDag(D, 2);
+  } finally {
+    T.zeg = zeg;
+  }
+  assert.equal(T.vormVan(g.tekening), 'herberg1');
+  const over = gezegd.filter((t) => t.startsWith('De herberg kan niet met het dorp meegroeien'));
+  assert.equal(over.length, 1, gezegd.join(' | '));
+  assert.match(over[0], /rots/);
+  assert.match(T.waaromGroeitHetNiet(D, g), /rots/);
+});
+
 test('een stenen huis wordt pas met marktrecht een woontoren', () => {
   assert.equal(T.GEBOUWEN.stenenHuis.wordt, 'woontoren');
   assert.equal(T.GEBOUWEN.stenenHuis.wordtVanaf, 'marktrecht');

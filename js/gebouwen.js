@@ -862,6 +862,9 @@
     if (T.veldOp(w, x, y)) return 'Daar ligt een veld.';
     if (T.opPad(w, x, y)) return 'Daar loopt een pad.';
     if (T.erfOp(D, x, y)) return 'Daar ligt een erf.';
+    // Waar de herberg straks met het dorp meegroeit (T.meegroeiGrond, js/behoeften.js), blijft de grond vrij.
+    const groeit = T.meegroeiGrondOp(D, x, y);
+    if (groeit) return `Hier groeit straks de ${T.GEBOUWEN[groeit.soort].naam}.`;
     // Een lantaarn houdt niemand tegen die loopt, maar er komt geen gebouw overheen (js/paden.js).
     const v = T.voorwerpOp(w, x, y);
     if (v && v.soort === 'lantaarn') return 'Daar staat een lantaarn.';

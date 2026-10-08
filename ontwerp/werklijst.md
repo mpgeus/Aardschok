@@ -4777,6 +4777,18 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     woontorens per dorp, en op 62707 191 mensen. Open: bouwfasen voor de kapel en de woontoren; een grote herberg krijgt
     nog geen plaatsen voor meer gasten; en de herberg houdt de grond niet vrij waar hij groter wordt (op 62707 stond er in
     de speeltest iets toen het een dorp werd, en groeide hij nooit; hij zegt het dan ook niet).
+    **Marcel (8 okt): "Beiden"** (de grond vrijhouden, en de bouwfasen van de kapel en de woontoren), **"maar de woontoren
+    en kerk vallen kwa stijl buiten de boot in vergelijk met de huizen"**. Op het voorstel (A: de woontoren als een hoog
+    huis, een stenen voet met drie verdiepingen vakwerk of planken in de kalk van de stijl en een zadeldak met een
+    dakkapel, geen kantelen; B: de kapel met wit gepleisterde muren, hoeken en voet in de steen van de huizen, een lagere
+    toren met een houten klokkenstoel, en in planken een houten kapel; C: de kleine warme stenen van de huizen, geen grote
+    grijze blokken): **"Ja goed"**. Eerst een proefplaat in de vier stijlen naast een huis, dan het vel en de bouwfasen.
+    **Gebouwd (8 okt): de grond van de herberg blijft vrij.** Waar de kleine herberg in een dorp de grote wordt
+    (`T.meegroeiGrond`, `T.meegroeiGrondOp` in `js/behoeften.js`, uit `T.dorpsVormen` in `js/bouwstijl.js`), komt geen
+    gebouw, erf, kraam, akker of lantaarn ("Hier groeit straks de herberg", in `T.waaromNietOpDezeGrond`), en groeit geen
+    huis heen. Staat er alleen een struik of een boom, dan gaat die er met de bouw uit (`rooiVoorDeGroei`; op 62710 een
+    bessenstruik). Kan hij toch niet groeien (een oud spel), dan zegt het dorp het één keer, met wat er staat. Nog open:
+    de proefplaat, de bouwfasen van de kapel en de woontoren, en de plaatsen voor gasten (achteraan de werklijst).
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag

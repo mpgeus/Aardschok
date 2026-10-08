@@ -491,6 +491,7 @@
         const r = { x, y, b: 1, h: 1 };
         let wat = null;
         if (T.opDeGrondVanEenErf(D, x, y, instantie.erf)) wat = 'erf';
+        else if (T.meegroeiGrondOp(D, x, y, instantie)) wat = 'meegroei';
         else if (T.ontginWerkOp(w, x, y)) wat = 'rooien';
         else if (T.isEigenBoom(T.voorwerpOp(w, x, y))) wat = 'appel';
         else if (T.isVast(w, x, y)) wat = 'vast';
@@ -535,22 +536,28 @@
   // werklijst vraag 130, c), of null: het gezin rooit eerst, of er staat iets wat het niet kan rooien.
   T.waaromGroeitHetNiet = function (D, g) {
     const soort = T.GEBOUWEN[g.soort];
+    if (soort && soort.groeitMee) return g.wachtOpPlaats ? waaromGeenPlaats(D, g, g.soort) : null;
     if (!soort || !soort.wordt || !T.GEBOUWEN[soort.wordt] || !g.voorwerp) return null;
     if (g.groeitNaRooien) return `het gezin rooit eerst ${T.rooiWoordenOp(D, g.kavel).replace(/ \(.*\)$/, '')} waar het groter wordt`;
     if (!((g.groeiDagen || 0) >= T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen)) return null;
+    return waaromGeenPlaats(D, g, soort.wordt);
+  };
+  // Wat er staat waar dit gebouw als `nieuw` groter moet worden en wat het gezin niet kan rooien, in woorden, of null.
+  function waaromGeenPlaats(D, g, nieuw) {
     const oudeVoet = g.voet || T.gebouwVoet(g.soort, g.tekening) || { b: 1, h: 1 };
-    const vormen = groeiVormen(D, g, soort.wordt, oudeVoet, false); // het briefje vraagt het elk beeld: niet loten
+    const vormen = groeiVormen(D, g, nieuw, oudeVoet, false); // het briefje vraagt het elk beeld: niet loten
     if (!vormen.length || vormen.some((v) => v.inDeWeg.every((t) => t.wat === 'iemand' || teRooien(t)))) return null;
     // De vorm waar het minste in de weg staat, en daarvan wat het gezin niet kan rooien.
     const beste = vormen.slice().sort((a, b) => a.inDeWeg.length - b.inDeWeg.length)[0];
     const t = beste.inDeWeg.find((x) => x.wat !== 'iemand' && !teRooien(x));
     if (t.wat === 'erf') return 'er ligt een erf waar het groter moet worden';
+    if (t.wat === 'meegroei') return `daar groeit straks de ${T.GEBOUWEN[T.meegroeiGrondOp(D, t.x, t.y, g).soort].naam}`;
     if (t.wat === 'deur') return 'de deur van een ander huis zit in de weg';
     const v = T.voorwerpOp(D.wereld, t.x, t.y);
     const g2 = v && (D.gebouwen || []).find((h) => h.voorwerp === v);
     const naam = g2 ? `een ${T.GEBOUWEN[g2.soort].naam}` : v && T.VOORWERPEN[v.soort] && T.VOORWERPEN[v.soort].naam ? T.VOORWERPEN[v.soort].naam : v ? NAMEN[v.soort] || 'iets' : 'een muur';
     return `er staat ${naam} waar het groter moet worden`;
-  };
+  }
   // Wat er van de natuur in de weg kan staan en niet te rooien is (een appelboom rooit het gezin zelf: vraag 130, a2).
   const NAMEN = { rots: 'een rots', kleineRots: 'een rots' };
 
@@ -601,6 +608,41 @@
     return grond;
   };
 
+  // Waar een gebouw dat met het dorp meegroeit (de herberg, `groeitMee`) straks groter wordt: per gebouw dat nog de vorm
+  // van het gehucht heeft, de rechthoek van elke vorm van een dorp (T.dorpsVormen, js/bouwstijl.js), met zijn deur waar
+  // hij stond (groeiSchuif). Daar komt niets anders: geen gebouw, geen erf, geen kraam, geen akker (T.waaromNietOpDezeGrond,
+  // js/gebouwen.js), en geen huis dat doorgroeit (watStaatInDeWeg). Werklijst vraag 114, stap 3 (Marcel, 8 okt:
+  // "Beiden"): in de speeltest van 7 okt bleef de herberg op 62707 klein, omdat er later iets op zijn grond kwam.
+  // [{ g, x, y, b, h }]; uit de gebouwen, dus één keer per stand van het dorp.
+  const MEEGROEIGROND = new WeakMap(); // dorp → { sleutel, grond }
+  T.meegroeiGrond = function (D) {
+    const gebouwen = D.gebouwen || [];
+    let sleutel = `${gebouwen.length}`;
+    for (const g of gebouwen) if (T.GEBOUWEN[g.soort] && T.GEBOUWEN[g.soort].groeitMee) sleutel += `:${g.tekening},${g.x},${g.y}`;
+    const oud = MEEGROEIGROND.get(D);
+    if (oud && oud.sleutel === sleutel) return oud.grond;
+    const grond = [];
+    for (const g of gebouwen) {
+      const soort = T.GEBOUWEN[g.soort];
+      if (!soort || !soort.groeitMee || !g.voorwerp) continue;
+      const oudeVoet = g.voet || T.gebouwVoet(g.soort, g.tekening) || { b: 1, h: 1 };
+      for (const t of T.dorpsVormen(g.tekening)) {
+        const voet = T.gebouwVoet(g.soort, t);
+        const schuif = groeiSchuif(g, g.soort, oudeVoet, voet);
+        grond.push({ g, x: g.x + schuif.x, y: g.y + schuif.y, b: voet.b, h: voet.h });
+      }
+    }
+    MEEGROEIGROND.set(D, { sleutel, grond });
+    return grond;
+  };
+  // Ligt (x, y) waar een gebouw straks meegroeit (T.meegroeiGrond)? Het gebouw zelf, of null. `behalve`: dat gebouw zelf.
+  T.meegroeiGrondOp = function (D, x, y, behalve = null) {
+    for (const r of T.meegroeiGrond(D)) {
+      if (r.g !== behalve && x >= r.x && x < r.x + r.b && y >= r.y && y < r.y + r.h) return r.g;
+    }
+    return null;
+  };
+
   const kostenTekst = (kosten) => T.opsomming(Object.keys(kosten).map((wat) => `${kosten[wat]} ${wat}`));
 
   // Het dorp als geheel (de spelregel "Wensen", zoals vóór 1 okt): is het dorp huisGroeiDagen op rij tevreden genoeg,
@@ -641,11 +683,37 @@
         g.wachtOpBouwstof = true;
         continue;
       }
-      if (!groeiGebouw(D, g, soort, g.soort)) continue; // geen plaats, of er stond iemand: morgen weer
+      rooiVoorDeGroei(D, g);
+      // Geen plaats, of er stond iemand: morgen weer. Staat er iets wat niet weggaat, dan zegt het dorp het één keer, en
+      // het briefje zolang het duurt (T.waaromGroeitHetNiet).
+      if (!groeiGebouw(D, g, soort, g.soort)) {
+        const waarom = waaromGeenPlaats(D, g, g.soort);
+        if (waarom && !g.wachtOpPlaats) T.zeg(D, `De ${soort.naam} kan niet met het dorp meegroeien: ${waarom}.`);
+        if (waarom) g.wachtOpPlaats = true;
+        continue;
+      }
       delete g.wachtOpBouwstof;
+      delete g.wachtOpPlaats;
       T.betaalKosten(D, kosten);
       const voor = Object.keys(kosten).length ? `, voor ${kostenTekst(kosten)}` : '';
       T.zeg(D, `De ${soort.naam} groeit met het dorp mee${voor}.`, 'goed');
+    }
+  }
+
+  // Staat er waar een gebouw meegroeit alleen wat te rooien is (een struik, een boom: T.ontginWerkOp, js/bos.js), dan
+  // gaat dat eruit met de bouw mee, het hout van een boom naar de schuur; een appelboom van iemand blijft staan. Er is geen
+  // gezin dat het eerst rooit, zoals bij een huis (T.rooiOmTeGroeien): de herberg staat klaar zodra de bouwstof er is.
+  function rooiVoorDeGroei(D, g) {
+    const oudeVoet = g.voet || T.gebouwVoet(g.soort, g.tekening) || { b: 1, h: 1 };
+    const vormen = groeiVormen(D, g, g.soort, oudeVoet, false);
+    if (vormen.some((v) => v.inDeWeg.every((t) => t.wat === 'iemand'))) return;
+    const vorm = vormen.find((v) => v.inDeWeg.every((t) => t.wat === 'rooien' || t.wat === 'iemand'));
+    if (!vorm) return;
+    for (const t of vorm.inDeWeg) {
+      for (let n = 0; n < 3 && T.ontginWerkOp(D.wereld, t.x, t.y); n++) {
+        if (T.ontginWerkOp(D.wereld, t.x, t.y) === 'hakken') T.hakBoom(D, t.x, t.y);
+        else T.rooi(D, t.x, t.y);
+      }
     }
   }
 
