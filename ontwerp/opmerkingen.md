@@ -9,6 +9,34 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Een huis zonder kapel, en nergens plek voor een kapel** (8 okt, de sessie van de kaartenmaker; vraag 117, 2d): de put
+  zonder plek is opgelost (een erf houdt plaats voor een put, en een put voor een hut op een erf haalt ook het huis dat de
+  hut wordt), maar met de kapel kan hetzelfde: op het eiland van 62707 (`main` met de grote gebouwen) vond een huis
+  zestien maanden lang binnen 40 tegels nergens plek voor een kapel, en won het dorp niet; elders kwam het pas na de winst.
+  `T.kringGrond` werkt al per soort, dus de regel van 2d kan ook voor de kapel gelden (een erf in `T.waaromPastErfNiet`
+  vraagt het dan voor de put en de kapel). Nog niet bekeken: wat er daar de laatste plek nam. Ook kan wat er verder
+  gebouwd wordt (een werkplaats, een kraam) de laatste plek nemen; de regel geldt alleen voor erven en de put zelf.
+
+- **De gunst na Sint-Maarten, en de gril in wintermaand** (8 okt, de sessie van de kaartenmaker; vraag 117, 2d): bij de
+  bouwer van de speeltest staat de gunst van de heer na Sint-Maarten bijna elk jaar op 5, de laagste stand vóór 0 (eerst
+  komt de waarschuwing). Komt dan op 12 wintermaand de gril van het vette varken, en heeft hij geen tien vlees, dan zegt
+  hij "Onze varkens zijn mager", en is zijn ambt weg: zo verloor hij op het eiland van 72022 in 2c, in 2d en met de put
+  die ook het huis haalt, en won hij alleen in de speeltest waar hij die dag tien vlees had. In 2c leek het op de rovers
+  (`speelbaar.md`): die maakten de oogst klein en de gunst laag, maar de gril gaf de laatste duw. Vragen: kiest de bouwer
+  van de speeltest zijn antwoord slecht (hij weet dat zijn gunst op 5 staat), of is een gril die je ambt kost bij de
+  laagste gunst te hard?
+
+- **Rovers die blijven komen als er niets te halen is** (8 okt, de sessie van de kaartenmaker; vraag 117, stap 2c): op het
+  eiland van 72022 kwam de bende bij de bouwer vanaf het tweede jaar om de tien dagen, 32 keer in drie jaar (op het land
+  van de maker 7), ook "met lege handen", en ze vertrapten zes keer een akker. De oogst zakte van 641 naar 190 en 92, er
+  was geen bier en geen brood, hij kon de heer niet betalen, en zijn gunst raakte op. Of het door het eiland komt, zegt
+  één spel niet. Een vraag voor Marcel: komt een bende minder vaak als er niets te halen viel, of valt hij uiteen?
+
+- **Laden maakt eerst een vers spel** (8 okt, de sessie van de kaartenmaker): `T.laadSpel` (js/main.js) begint met
+  `T.nieuwSpel()`, en dat legt nu een heel eiland met een gehucht (1 à 2 s), dat het bewaarde spel daarna overschrijft;
+  het eerste beeld rekent dan nog het eiland van het bewaarde spel uit (0,6 s, en de rand en de hoogte). Laden kan
+  sneller als het nieuwe spel het land van het bewaarde spel neemt, of geen land legt.
+
 - **Het leven in het bos, wat nog niet te zien is** (7 okt, zevenendertigste sessie; vraag 116, stap 2a): de jongen van
   de wolven en de herten hebben nog geen eigen tekening (een welp, een kalf: nu zijn het kleine volwassenen, even groot);
   de jacht van een roedel op de herten is een lot in de nacht, niet te zien (een hert is 's ochtends weg; later de roedel

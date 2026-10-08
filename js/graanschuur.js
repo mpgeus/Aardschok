@@ -1,4 +1,4 @@
-// De graanschuur en de wachters bij het zaaigraan (werklijst vraag 133; Marcel, 8 okt: "bij honger grijpen mensen alles
+// De graanschuur en de wachters bij het zaaigraan (werklijst vraag 132; Marcel, 8 okt: "bij honger grijpen mensen alles
 // aan. Je moet mensen inzetten om het warenhuis te beschermen", "Ja, er moet een graanschuur komen", en over een wachter
 // per twintig mensen: "Ja goed idee, anders maken ze geen kans").
 //

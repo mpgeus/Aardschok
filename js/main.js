@@ -74,8 +74,10 @@
   // klaarstond, zodat hetzelfde zaad hetzelfde spel blijft geven (de speeltest).
   // Geeft true als er een vers spel kwam.
   T.gehuchtNaarDeSpelregel = function () {
-    const gemaakt = !!(S.gebieden && S.gebieden.gehucht && S.gebieden.gehucht.maker);
-    if (S.proefje || gemaakt === !!T.MAKER_INSTELLINGEN.eigenGehucht) return false;
+    const g = S.gebieden && S.gebieden.gehucht;
+    const gemaakt = !!(g && g.maker);
+    const opEiland = !!(g && g.eiland);
+    if (S.proefje || (gemaakt === !!T.MAKER_INSTELLINGEN.eigenGehucht && opEiland === !!T.MAKER_INSTELLINGEN.opEiland)) return false;
     T.nieuwSpel();
     return true;
   };
@@ -1200,12 +1202,44 @@
     },
     // Het gehucht van de maker (js/maker.js): uit welk zaad het gehucht komt (of dat het het ontworpen gehucht is).
     // Spel.debug.gehucht(3) begint nu een nieuw spel op het gehucht van zaad 3, zoals op de pagina "Gehuchten van de
-    // maker", zonder brief; zo kun je een zaad bekijken zonder de spelregel om te zetten.
+    // maker", zonder brief; zo kun je een zaad bekijken zonder de spelregel om te zetten. Het is het land van de maker
+    // zonder het eiland, zoals op die pagina, ook nu een nieuw spel het eiland maakt (vraag 117): de vaste
+    // schermafdrukken, de tekenmeting en de samenvatting spelen op land 5 van de maker (Spel.debug.eiland(5) voor het
+    // eiland).
     gehucht(zaad) {
-      if (zaad != null) T.nieuwSpel(Number(zaad));
+      if (zaad != null) {
+        const opEiland = T.MAKER_INSTELLINGEN.opEiland;
+        T.MAKER_INSTELLINGEN.opEiland = false;
+        try {
+          T.nieuwSpel(Number(zaad));
+        } finally {
+          T.MAKER_INSTELLINGEN.opEiland = opEiland;
+        }
+      }
       const w = S.gebieden && S.gebieden.gehucht;
       const stijl = w && w.stijl ? `, in de bouwstijl ${w.stijl} (js/bouwstijl.js)` : '';
+      if (w && w.eiland) return `Een gehucht op het eiland van ${w.eiland.zaad}, in ${w.eiland.dorp}${stijl} (Spel.debug.eiland()).`;
       return w && w.maker ? `Een gehucht van de maker, uit zaad ${w.maker.zaad}${stijl}.` : 'Het ontworpen gehucht.';
+    },
+    // Je dorp op het eiland (js/eiland.js, vraag 117, stap 2): Spel.debug.eiland(5) begint nu een nieuw spel op het eiland
+    // van nummer 5, zonder brief (en zet de spelregel "Je gehucht" terug op het eiland, als een toets hem omzette);
+    // zonder nummer zegt het waar je dorp op het eiland ligt, wat voor plek het is, en waar de wegen je land verlaten.
+    eiland(zaad) {
+      if (zaad != null) {
+        T.zetOptie('gehucht', 'eiland');
+        T.nieuwSpel(Number(zaad));
+      }
+      const w = S.gebieden && S.gebieden.gehucht;
+      if (!w || !w.eiland) return 'Dit gehucht ligt niet op het eiland (de spelregel "Je gehucht" staat niet op "Op het eiland").';
+      const E = T.eilandVan(w.eiland.zaad);
+      const dorp = E.plekken.find((p) => p.naam === w.eiland.dorp);
+      return {
+        eiland: w.eiland.zaad,
+        dorp: w.eiland.dorp,
+        plek: dorp ? dorp.aard : null,
+        hoek: [w.eiland.x0, w.eiland.y0],
+        uitgang: w.overgangen ? w.overgangen.map((o) => [o.x, o.y]) : null,
+      };
     },
     // De hoogte van het land (js/hoogte.js, vraag 121): of deze kaart hoogte heeft, hoe hoog het hoogste punt is en
     // waar, de richel en zijn helling, en de hoogte waar de schout staat. Spel.debug.hoogte(5) begint een nieuw spel op
@@ -1302,6 +1336,43 @@
         aantal: V.aantal,
         beantwoord: V.beantwoord,
         stemming: T.voorvalStemming(S.dorp, dag),
+      };
+    },
+    // De graanzak (js/zaak.js; vraag 128): wie het nam en wie verdacht wordt, de fase, het spoor, wat je weet, de zitting
+    // en hoe het afliep. ('nu') laat de zak nu verdwijnen, en de boer zoekt je meteen; ('zitting') maakt vandaag de dag
+    // van de zitting (zet er het uur bij met Spel.debug.uur(13)); ('boek') laat de inner het boek nu voorlezen.
+    zaak(wat) {
+      const D = S.dorp;
+      const dag = Math.floor(S.kalender.dag);
+      if (!D.voorvallen) D.voorvallen = T.nieuweVoorvallen();
+      const V = D.voorvallen;
+      if (wat === 'nu' && !D.zaak) {
+        if (V.lopend) T.voorvalBeantwoord(D, V.lopend.id);
+        if (!T.beginZaak(D, dag)) return 'Het dorp heeft de mensen er nog niet voor: een vader met een kind, en een boerderij.';
+        T.beginVoorval(D, 'graanzak', D.zaak.aanklager, D.zaak.verdachte, dag).vanaf = S.kalender.dag;
+      }
+      if (wat === 'zitting' && D.zaak && D.zaak.fase !== 'af') {
+        if (D.zaak.fase === 'gestolen') {
+          T.zaakGevolg(S, D, { zaak: 'zitting' });
+          T.voorvalBeantwoord(D, 'graanzak');
+        }
+        if (V.lopend && V.lopend.id !== 'zitting') T.voorvalBeantwoord(D, V.lopend.id);
+        D.zaak.zitting = dag;
+        T.tikZaakDag(D, dag);
+      }
+      if (wat === 'boek') T.heerLeestHetBoek(D);
+      const Z = D.zaak;
+      if (!Z) return { zaak: null, mensen: T.mensenVoorDeZaak(D, dag) ? 'het dorp heeft ze' : 'het dorp heeft ze nog niet' };
+      const naam = (p) => (p ? T.naamVanBewoner(p) : null);
+      return {
+        fase: Z.fase,
+        verdwenen: T.datumVanDag(Z.dag).tekst,
+        dader: naam(Z.dader), kind: naam(Z.ziek), aanklager: naam(Z.aanklager), verdachte: naam(Z.verdachte), buur: naam(Z.buur),
+        spoor: Z.spoor.map((t) => `${t.x},${t.y}`).join(' '),
+        weet: Z.weet.map((w) => w.id),
+        zitting: Z.zitting != null ? T.datumVanDag(Z.zitting).tekst : null,
+        uitkomst: Z.uitkomst,
+        boek: Z.boek,
       };
     },
     // Het land (js/land.js): waar de schout is, of hij reist, wat hij zag en welke wegen er zijn. ('open') opent de

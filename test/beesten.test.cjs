@@ -18,9 +18,12 @@ function landVanDeMaker(zaad) {
   console.warn = () => {};
   Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
   const S = { kalender: T.nieuweKalender() };
+  const opEiland = T.MAKER_INSTELLINGEN.opEiland;
+  T.MAKER_INSTELLINGEN.opEiland = false; // een land van de maker zonder het eiland: deze toetsen gaan over zijn landen (sinds 8 okt maakt een nieuw spel het eiland, vraag 117)
   try {
     assert.ok(T.beginOpKaart(S, 'gehucht', zaad));
   } finally {
+    T.MAKER_INSTELLINGEN.opEiland = opEiland;
     console.warn = echt;
     Math.random = toeval;
   }
@@ -341,7 +344,7 @@ test('een roedel die de winter honger leed, krijgt in de lente geen jongen', () 
 });
 
 test('wordt het bos om het hol te dun, dan zoekt de roedel dieper een nieuw; zonder bos trekt hij weg, en het dorp zegt het', () => {
-  const S = landVanDeMaker(62707);
+  const S = landVanDeMaker(73425); // op 62707 ligt het hol sinds de grote gebouwen (vraag 114, stap 3) aan de rand van de kaart, zonder ander bos dichtbij
   const D = S.dorp;
   T.zetBeesten(D);
   const G = groepVan(S, 'wolf').G;
@@ -957,7 +960,9 @@ test('elke roedel heeft een hol op de kaart naast zijn thuis, vast, en zijn plek
 });
 
 test('verhuist een roedel, dan gaat zijn hol mee; trekt hij weg, dan verdwijnt het', () => {
-  const S = landVanDeMaker(62707);
+  // Land 73425: sinds het eiland van 8 okt woont de roedel daar aan de rand van het land, met bos om te verhuizen (op 62707
+  // is er na het kappen geen bos meer dicht genoeg, en trekt hij meteen weg).
+  const S = landVanDeMaker(73425);
   const D = S.dorp;
   T.zetBeesten(D);
   const G = groepVan(S, 'wolf').G;

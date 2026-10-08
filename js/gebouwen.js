@@ -173,7 +173,7 @@
       naam: 'graanschuur', trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 15 }, heer: {}, bouwtijd: 3,
       handen: 0, woonruimte: 0, maakt: null, menu: true,
       tekening: 'gebouwen/schuurBlokhut', beschrijving: 'hier ligt het zaaigraan; met wachters erbij eet het dorp het in een hongerwinter niet op',
-      opmerking: 'nieuw (vraag 133): nog niet getekend, leent voorlopig de blokhutschuur.',
+      opmerking: 'nieuw (vraag 132): nog niet getekend, leent voorlopig de blokhutschuur.',
     },
     kippenhok: {
       naam: 'kippenhok', trede: 'gehucht', voet: { b: 2, h: 2 }, kosten: { hout: 4 }, heer: { eieren: 20 }, bouwtijd: 1,
@@ -290,11 +290,15 @@
       // Wie er woont, tapt en brouwt: van graan, zolang er niet genoeg bier ligt (27 sep, werklijst punt
       // 2). Een kan bier kost een veertigste graan; wie er 's avonds heen gaat, staat in js/herberg.js.
       handen: 1, woonruimte: 1, maakt: { in: { graan: 0.2 }, uit: { bier: 8 } }, menu: true, lantaarn: true,
+      // In een land met een bouwstijl groeit de kleine herberg van het gehucht in een dorp door tot de grote, van twee
+      // lagen met een uithangbord (groeitMee, js/behoeften.js; werklijst vraag 114, stap 3), en wie er een bouwt, krijgt
+      // de grote (js/bouwstijl.js).
+      groeitMee: true,
       tekening: 'gebouwen/herberg', beschrijving: 'reizigers, nieuws en verhalen, bier',
       opmerking: 'In het gehucht staat er een vanaf het begin, met de herbergierster (kaarten/gehucht.betekenis.json), '
-        + 'in een eigen tekening van vakwerk onder riet (huizen/herberg1). Wie hem in het dorp bouwt, krijgt nog de '
-        + 'oude tekening van steen onder pannen, zonder ramen die branden. Plaatsen heeft hij nog niet: alleen het bier '
-        + 'houdt de gasten tegen (meegroeien hoort bij punt 5 van de werklijst).',
+        + 'in een eigen tekening van vakwerk onder riet (huizen/herberg1). Wie hem in een land zonder stijl bouwt, krijgt '
+        + 'nog de oude tekening van steen onder pannen, zonder ramen die branden. Plaatsen heeft hij nog niet: alleen het '
+        + 'bier houdt de gasten tegen; groter worden doet hij alleen om te zien.',
     },
     kapel: {
       naam: 'kapel', trede: 'gehucht', voet: { b: 5, h: 5 }, kosten: { hout: 10, goud: 8 }, heer: {}, bouwtijd: 4,
@@ -377,7 +381,7 @@
     // ── Stad ──
     stenenHuis: {
       naam: 'stenen huis', meervoud: 'stenen huizen', trede: 'stad', voet: { b: 7, h: 5 }, kosten: { hout: 20, goud: 30 }, heer: { goud: 6 }, bouwtijd: 6,
-      handen: 0, woonruimte: 8, maakt: null, menu: true, woning: true,
+      handen: 0, woonruimte: 8, wordt: 'woontoren', wordtVanaf: 'marktrecht', maakt: null, menu: true, woning: true,
       tekening: 'huizen/steen1', beschrijving: 'veel ruimte, en rijk om te zien', opmerking: '',
       // Het stenen broertje van elk huis, met dezelfde vorm (werklijst vraag 85, d; gereedschap/pixelart/huizen.cjs): een
       // huis dat doorgroeit, versteent op zijn eigen grond (js/behoeften.js), en je herkent het. Tot 1 okt was er één
@@ -387,6 +391,17 @@
         'huizen/huis1': 'huizen/steen1', 'huizen/huis2': 'huizen/steen2', 'huizen/huis3': 'huizen/steen3',
         'huizen/huis4': 'huizen/steen4', 'huizen/huis5': 'huizen/steen5', 'huizen/huis6': 'huizen/steen6',
       },
+    },
+    // Een stenen huis met marktrecht groeit door tot een woontoren van vier lagen op 5 bij 5, waar drie gezinnen wonen,
+    // ambachtslieden zoals in het stenen huis (werklijst vraag 114, stap 3; Marcel, 7 okt, "B: Ja"): de stad groeit de
+    // hoogte in. Niemand bouwt hem: hij komt alleen door doorgroeien (js/behoeften.js), en vanaf zijn trede. Elke stijl
+    // heeft hem in zijn eigen steen en in baksteen (gereedschap/pixelart/huizen.cjs, TORENS); een land zonder stijl
+    // krijgt die van wit.
+    woontoren: {
+      naam: 'woontoren', meervoud: 'woontorens', trede: 'marktrecht', voet: { b: 5, h: 5 }, kosten: { hout: 10, steen: 30 }, heer: { goud: 8 }, bouwtijd: 8,
+      handen: 0, woonruimte: 12, maakt: null, menu: false, woning: true,
+      tekening: 'huizen/wit-woontoren-pannen-z', beschrijving: 'drie gezinnen boven elkaar, in steen',
+      opmerking: 'Nog zonder bouwfasen: hij groeit in één nacht.',
     },
     raadhuis: {
       naam: 'raadhuis', trede: 'stad', voet: { b: 8, h: 6 }, kosten: { hout: 24, goud: 40 }, heer: { goud: 20 }, bouwtijd: 8,
@@ -650,7 +665,8 @@
   // Met `tekening` voor een andere tekening dan de volgende (een andere stand, js/bouwstijl.js).
   // `kavel` ({ x, y, b, h }, of null): een stuk dat eerst gerooid wordt (js/bos.js; werklijst vraag 110, e). Wat daarop te
   // rooien is (een boom, een stronk, een struik), telt dan als vrij, onder de voet en in het looppad.
-  T.waaromPastHetNiet = function (D, soort, x, y, tekening, kavel = null) {
+  // `wieErStaat` false: wie er nu staat, telt niet (die is morgen weg), voor wie vooruit kijkt (T.kanHierKomen).
+  T.waaromPastHetNiet = function (D, soort, x, y, tekening, kavel = null, wieErStaat = true) {
     if (T.GEBOUWEN[soort] && T.GEBOUWEN[soort].erf) return T.waaromPastErfNiet(D, x, y);
     // De markt op het plein (js/markt.js): zijn plek is het plein, waar je ook wijst.
     if (soort === 'markt' && T.marktOpHetPlein(D)) return T.waaromGeenMarktOpHetPlein(D);
@@ -672,7 +688,7 @@
     if (natuur) return natuur;
     const n = T.GEBOUWEN_INSTELLINGEN.looppad;
     if (!T.looppadOm(D, { x, y, b: voet.b, h: voet.h }, n, kavel)) return `Er moet een looppad omheen: ${n === 1 ? 'een tegel' : `${T.telwoord(n)} tegels`} vrij, zonder gebouw of boom.`;
-    return T.waaromNietOpIemand(D, { x, y, b: voet.b, h: voet.h });
+    return T.waaromNietOpIemand(D, { x, y, b: voet.b, h: voet.h }, undefined, wieErStaat);
   };
 
   // ---------------------------------------------------------------------------------------------
@@ -808,8 +824,8 @@
   }
 
   // Waarom hier niets mag komen, of null: er staat iemand, of het is de deur van een gebouw.
-  T.waaromNietOpIemand = function (D, r, behalve) {
-    if (T.wieStaatOp(D.wereld, r)) return 'Daar staat iemand.';
+  T.waaromNietOpIemand = function (D, r, behalve, wieErStaat = true) {
+    if (wieErStaat && T.wieStaatOp(D.wereld, r)) return 'Daar staat iemand.';
     if (T.deurOpRechthoek(D, r, behalve)) return 'Daar is een deur.';
     return null;
   };
@@ -853,6 +869,9 @@
     if (T.veldOp(w, x, y)) return 'Daar ligt een veld.';
     if (T.opPad(w, x, y)) return 'Daar loopt een pad.';
     if (T.erfOp(D, x, y)) return 'Daar ligt een erf.';
+    // Waar de herberg straks met het dorp meegroeit (T.meegroeiGrond, js/behoeften.js), blijft de grond vrij.
+    const groeit = T.meegroeiGrondOp(D, x, y);
+    if (groeit) return `Hier groeit straks de ${T.GEBOUWEN[groeit.soort].naam}.`;
     // Een lantaarn houdt niemand tegen die loopt, maar er komt geen gebouw overheen (js/paden.js).
     const v = T.voorwerpOp(w, x, y);
     if (v && v.soort === 'lantaarn') return 'Daar staat een lantaarn.';
@@ -1174,6 +1193,8 @@
     // En de inner (js/inner.js): hij komt in oogstmaand tellen, en soms onverwacht terug.
     T.tikInnerDag(D, dag);
     // En de voorvallen (js/voorvallen.js): om de paar dagen komt iemand je zoeken met een vraag, een ruzie of een ramp.
+    // Vóór de voorvallen de graanzak (js/zaak.js): één keer, in de eerste herfst, en de zitting erover.
+    T.tikZaakDag(D, dag);
     T.tikVoorvallenDag(D, dag);
     // En de feesten (js/feesten.js): begint er vandaag een, dan zegt het dorp het en staat de meiboom er; op een hele
     // feestdag werkt niemand (stap 6 hieronder).
@@ -1214,7 +1235,7 @@
     // De wachters bij de graanschuur (js/graanschuur.js): na het zaaien naar huis, en honger kost vertrouwen.
     T.tikGraanschuurDag(D, dag, gegeten.tekort > 0);
     // Honger in het voorjaar en de zomer, van 1 lentemaand tot de oogst: dan maken de boeren na de oogst een weide erbij
-    // (T.boerenKiezenVelden, js/akkers.js; vraag 133).
+    // (T.boerenKiezenVelden, js/akkers.js; vraag 132).
     if (gegeten.tekort > 0 && D.behoeften && T.datumVanDag(dag).maand <= T.MAANDEN.findIndex((m) => m.naam === 'oogstmaand')) {
       D.behoeften.voorjaarsHonger = (D.behoeften.voorjaarsHonger || 0) + 1;
     }

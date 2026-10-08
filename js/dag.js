@@ -238,6 +238,10 @@
     // Wie wegtrekt, loopt overdag de weg af; wie nieuw is, loopt eerst naar zijn huis (js/bewoners.js,
     // T.werkBewonersBij).
     if (e.vertrekt) return { x: e.vertrekt.x, y: e.vertrekt.y, straal: 1 };
+    // Op de dag van de zitting over de graanzak staat wie erbij hoort 's middags op het plein (js/zaak.js).
+    // gereedschap/wereld.html laadt de zaak niet.
+    const zitting = T.zaakAnker ? T.zaakAnker(D, e) : null;
+    if (zitting) return zitting;
     // Op een feest staat het hele dorp op het plein (js/feesten.js): een hele dag vanaf het begin van het werk, of
     // 's avonds; ook een boer, en de herbergierster tapt er.
     const feest = T.feestAnker ? T.feestAnker(D, e) : null;

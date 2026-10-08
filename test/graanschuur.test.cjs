@@ -1,4 +1,4 @@
-// De graanschuur en de wachters bij het zaaigraan (js/graanschuur.js; werklijst vraag 133; Marcel, 8 okt: "bij honger
+// De graanschuur en de wachters bij het zaaigraan (js/graanschuur.js; werklijst vraag 132; Marcel, 8 okt: "bij honger
 // grijpen mensen alles aan. Je moet mensen inzetten om het warenhuis te beschermen", en een wachter per twintig mensen:
 // "anders maken ze geen kans").
 const test = require('node:test');
@@ -174,7 +174,7 @@ test('het dorp vraagt een graanschuur zodra er zaaigraan apart ligt', () => {
   }
 });
 
-test('wat helpt aan eten: een graanschuur als die er niet is, en zaaigraan kopen als het te weinig is (vraag 133, b)', () => {
+test('wat helpt aan eten: een graanschuur als die er niet is, en zaaigraan kopen als het te weinig is (vraag 132, b)', () => {
   const { D, schuur } = gehucht();
   try {
     const dag = winterdag(D);

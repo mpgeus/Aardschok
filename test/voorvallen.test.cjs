@@ -54,7 +54,7 @@ const antwoorden = (id) => knoopVan(id).keuzes;
 
 // Wat een antwoord mag doen: wat elk gesprek kan, en wat js/voorvallen.js erbij doet (het kop-commentaar daar).
 const WAREN = ['graan', 'hout', 'wol', 'bier', 'ijzer', 'zout', 'vlees', 'vis', 'kaas', 'hooi'];
-const GEVOLGEN = new Set(['zetVlag', 'wisVlag', 'geef', 'neem', 'goud', ...WAREN, 'tevreden', 'gunst', 'vertrouwen', 'argwaan', 'verban', 'sterfkans', 'gezin', 'voorval', 'feest', 'bouw', 'weiger', 'ontgin', 'wolven', 'jacht', 'bewaak', 'hek', ...Object.keys(T.VEE)]);
+const GEVOLGEN = new Set(['zetVlag', 'wisVlag', 'geef', 'neem', 'goud', ...WAREN, 'tevreden', 'gunst', 'vertrouwen', 'argwaan', 'verban', 'sterfkans', 'gezin', 'voorval', 'feest', 'bouw', 'weiger', 'ontgin', 'wolven', 'jacht', 'bewaak', 'hek', 'zaak', 'weet', ...Object.keys(T.VEE)]);
 
 test('elk voorval heeft een gesprek onder zijn naam, en elk antwoord gaat ergens heen en doet wat het spel kent', () => {
   for (const [id, v] of Object.entries(T.VOORVALLEN)) {
@@ -77,7 +77,8 @@ test('elk voorval heeft een gesprek onder zijn naam, en elk antwoord gaat ergens
 });
 
 test('een vervolg bestaat, komt ergens vandaan, en {ander} staat alleen waar het over iemand gaat', () => {
-  const vervolgen = new Set();
+  // De vervolgen van de graanzak roept js/zaak.js aan, naar het vonnis.
+  const vervolgen = new Set(Object.values(T.ZAAK_INSTELLINGEN.vervolg).map((v) => v.id));
   for (const [id, g] of Object.entries(T.GESPREKKEN)) {
     if (!T.VOORVALLEN[id]) continue;
     for (const k of Object.values(g.knopen)) {

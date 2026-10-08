@@ -422,7 +422,7 @@ test('eten: ongezouten vlees vóór het graan, gezouten vlees als laatste; de op
   }
 });
 
-// Vis net zo (Marcel, 8 okt: "Vis mag een maag vullen, zoals vlees"; werklijst vraag 133).
+// Vis net zo (Marcel, 8 okt: "Vis mag een maag vullen, zoals vlees"; werklijst vraag 132).
 test('eten: ongezouten vis vóór het graan, gezouten vis na de kaas, en het zout dekt vis en vlees samen; de optie zet het uit', () => {
   const BH = T.BEHOEFTEN_INSTELLINGEN;
   const S = { voorraad: T.nieuweVoorraad(), bevolking: 20, vee: T.nieuwVee() };

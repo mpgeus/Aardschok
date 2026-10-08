@@ -209,7 +209,7 @@
           uitleg: 'Het dorp eet vlees erbij voor de afwisseling, maar tegen de honger helpt het niet.' },
       ],
     },
-    // Marcel, 8 okt (werklijst vraag 133): "Vis mag een maag vullen, zoals vlees".
+    // Marcel, 8 okt (werklijst vraag 132): "Vis mag een maag vullen, zoals vlees".
     {
       id: 'vis', naam: 'Vis', standaard: 'eten',
       uitleg: 'Of het dorp bij honger ook vis eet, of alleen wat de huizen ervan willen.',
@@ -486,7 +486,7 @@
       uitleg: 'Wanneer het dorp het zaaigraan voor volgend jaar opeet.',
       keuzes: [
         { id: 'bewaken', naam: 'Bewaken', zet: { 'VELDEN_INSTELLINGEN.zaaigraanApart': true, 'GRAANSCHUUR_INSTELLINGEN.bewaken': true },
-          uitleg: 'Van de oogst tot het zaaien ligt het zaaigraan in de graanschuur. Komt de honger eraan, dan vraagt een boer je wat er moet gebeuren: zet je er mannen bij, een per twintig mensen, dan blijft het liggen, maar elke hongerdag kost vertrouwen. Zonder graanschuur eet het dorp het bij nood op (vraag 133, 8 okt).' },
+          uitleg: 'Van de oogst tot het zaaien ligt het zaaigraan in de graanschuur. Komt de honger eraan, dan vraagt een boer je wat er moet gebeuren: zet je er mannen bij, een per twintig mensen, dan blijft het liggen, maar elke hongerdag kost vertrouwen. Zonder graanschuur eet het dorp het bij nood op (vraag 132, 8 okt).' },
         { id: 'nood', naam: 'Pas bij nood', zet: { 'VELDEN_INSTELLINGEN.zaaigraanApart': true, 'GRAANSCHUUR_INSTELLINGEN.bewaken': false },
           uitleg: 'Van de oogst tot het zaaien houden de boeren het zaaigraan achter. Het dorp eet het pas als er niets anders meer is, en de winter rekent het eten zonder.' },
         { id: 'gewoon', naam: 'Als ander graan', zet: { 'VELDEN_INSTELLINGEN.zaaigraanApart': false, 'GRAANSCHUUR_INSTELLINGEN.bewaken': false },
@@ -599,6 +599,17 @@
           uitleg: 'Een feest kost wat het antwoord zegt en maakt het dorp blij, maar je ziet er niets van. Zoals vóór 3 okt.' },
       ],
     },
+    // De verdwenen graanzak (werklijst vraag 128; Marcel, 8 okt: "akkoord, bouwen maar"; js/zaak.js).
+    {
+      id: 'zaak', naam: 'De zaak', standaard: 'aan',
+      uitleg: 'De verdwenen graanzak: één zaak in de eerste herfst, die je zelf uitzoekt en op het plein beslist.',
+      keuzes: [
+        { id: 'aan', naam: 'Aan', zet: { 'ZAAK_INSTELLINGEN.aan': true },
+          uitleg: 'Er verdwijnt een zak graan. Je vraagt rond, volgt het spoor, en op de zitting beslis je. Wat je koos, komt later terug.' },
+        { id: 'uit', naam: 'Uit', zet: { 'ZAAK_INSTELLINGEN.aan': false },
+          uitleg: 'Er verdwijnt niets.' },
+      ],
+    },
     // De raadsman (Marcel, 30 sep, werklijst vraag 66: "c Nee, wordt automatisch als de schout er niet is"; en vraag 68:
     // "Ja B inderdaad", alleen als je echt weg bent; js/raadsman.js).
     {
@@ -639,14 +650,21 @@
     },
     {
       // Vraag 70, C (Marcel, 30 sep: "c ja"): de maker (js/maker.js) mag ook je eigen gehucht leggen. Sinds 4 okt de
-      // standaard (vraag 112, a; Marcel: "Eigenlijk een random map generator per nieuwe game").
-      id: 'gehucht', naam: 'Je gehucht', standaard: 'maker',
+      // standaard (vraag 112, a; Marcel: "Eigenlijk een random map generator per nieuwe game"). Sinds 8 okt maakt elk nieuw
+      // spel het eiland, met je gehucht erop (vraag 117, stap 2; Marcel: "Het eiland wordt gewoon altijd gegenereerd bij
+      // een nieuw spel. Ergens op dat eiland staat je gehucht"): geen keuze voor wie speelt, dus niet in het venster
+      // Spelregels (`voorProeven`). De andere keuzes zijn er nog voor de toetsen en de speeltest.
+      id: 'gehucht', naam: 'Je gehucht', standaard: 'eiland', voorProeven: true,
       uitleg: 'Waar een nieuw spel begint. Geldt vanaf het volgende nieuwe spel.',
       keuzes: [
-        { id: 'maker', naam: 'Elk spel een ander', zet: { 'MAKER_INSTELLINGEN.eigenGehucht': true },
+        { id: 'maker', naam: 'Elk spel een ander', zet: { 'MAKER_INSTELLINGEN.eigenGehucht': true, 'MAKER_INSTELLINGEN.opEiland': false },
           uitleg: 'De maker legt elk nieuw spel een ander land, uit dezelfde delen: het plein, de schout erachter, de boerderijen bij hun akkers, de heide, de beek, het bos, vijvers en rotsen, maar elke keer anders. Bij Nieuw spel zie je het nummer van het land: een land dat je mooi vond, speel je opnieuw door dat nummer in te typen.' },
-        { id: 'ontworpen', naam: 'Het ontworpen gehucht', zet: { 'MAKER_INSTELLINGEN.eigenGehucht': false },
+        { id: 'ontworpen', naam: 'Het ontworpen gehucht', zet: { 'MAKER_INSTELLINGEN.eigenGehucht': false, 'MAKER_INSTELLINGEN.opEiland': false },
           uitleg: 'Elk spel hetzelfde gehucht, met de hand gelegd: het plein als hart, en Klaas, Aaltje, Gerrit, Trijn en Wouter bij hun velden.' },
+        // Vraag 117, stap 2 (Marcel, 8 okt: "A ja B later C dorp dat er al was"): je land is het stuk van het eiland om je
+        // dorp (js/eiland.js).
+        { id: 'eiland', naam: 'Op het eiland', zet: { 'MAKER_INSTELLINGEN.eigenGehucht': true, 'MAKER_INSTELLINGEN.opEiland': true },
+          uitleg: 'Elk nummer is een eiland, en je dorp ligt erop: aan de kust, aan een rivier, op de heide of aan de bosrand. Het water, het bos, de heide en de wegen van je land zijn die van het eiland, en de weg door je dorp gaat naar het kasteel van de heer. Het gehucht is een dorp dat er al was: wat het nodig heeft, is gerooid.' },
       ],
     },
   ];
@@ -686,6 +704,7 @@
     { naam: 'De heervaart', blok: 'HEERVAART_INSTELLINGEN' },
     { naam: 'De voorvallen', blok: 'VOORVALLEN_INSTELLINGEN' },
     { naam: 'De feesten', blok: 'FEESTEN_INSTELLINGEN' },
+    { naam: 'De graanzak', blok: 'ZAAK_INSTELLINGEN' },
     { naam: 'De markt', blok: 'MARKT_INSTELLINGEN' },
     { naam: 'Het eind', blok: 'EINDE_INSTELLINGEN' },
     { naam: 'De verzoeken', blok: 'VERZOEKEN_INSTELLINGEN' },
@@ -938,12 +957,18 @@
     }
   };
 
+  // Een spelregel voor de proeven (`voorProeven`, zoals "Je gehucht") staat niet in het venster, dus wat de browser
+  // ervan onthield, telt alleen als een proef het daar zette (de speeltest, met `proef`). Anders liet een keus van
+  // vroeger, toen hij nog in het venster stond, een nieuw spel stil ergens anders beginnen dan op het eiland, zonder dat
+  // je ziet waarom.
   T.laadOpties = function (waar) {
     const o = waar || opslag();
     try {
       const tekst = o && o.getItem(SLEUTEL);
       const i = tekst ? JSON.parse(tekst) : null;
-      return i && typeof i === 'object' ? i : null;
+      if (!i || typeof i !== 'object') return null;
+      if (!i.proef && i.keuzes) for (const optie of T.OPTIES) if (optie.voorProeven) delete i.keuzes[optie.id];
+      return i;
     } catch (e) {
       return null;
     }

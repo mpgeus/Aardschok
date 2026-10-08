@@ -46,7 +46,7 @@
   // hoeft alleen het nummer en de vlakke stukken te onthouden.
   function glooiingOp(hg, vx, vy) {
     const I = IN();
-    let h = landschapOp(hg.zaad, vx, vy);
+    let h = landOp(hg, vx, vy);
     const d = Math.hypot(vx - hg.midden[0], vy - hg.midden[1]);
     h = hg.dorpHoogte + (h - hg.dorpHoogte) * glad(I.vlakteVan, I.vlakteTot, d);
     // op een vlak stuk precies zijn hoogte; ernaast een overgang naar elk vlak stuk in de buurt
@@ -78,6 +78,13 @@
     return t * t * (3 - 2 * t);
   }
 
+  // Het land op hoekpunt (vx, vy), voor het dorp erop ligt: op het eiland de hoogte van het eiland (js/eiland.js; vraag
+  // 117, 2b: "de bergrug en de dalen"), anders het landschap uit het nummer van het land. `alleenGroot`: alleen de grote
+  // glooiing (voor het water; op het eiland ligt het water al op zijn peil).
+  function landOp(hg, vx, vy, alleenGroot) {
+    return hg.eiland ? eilandOp(hg, vx, vy) : landschapOp(hg.zaad, vx, vy, alleenGroot);
+  }
+
   // De hoogte van hoek k (0 noord, 1 oost, 2 zuid, 3 west) van tegel (x, y), in pixels. Uit een lijst die eens per
   // hoogte wordt uitgerekend (het tekenen vraagt het elk beeld voor duizenden tegels); verandert de hoogte, dan krijgt
   // ze een nieuwe `versie`, en wordt de lijst opnieuw gemaakt.
@@ -95,6 +102,24 @@
     lijsten.set(hg, { versie: hg.versie || 0, hoeken });
     return hoeken;
   }
+  // De hoogte van het eiland op punt (vx, vy) van de kaart (een hoekpunt van tegel (x, y) is (x, y) tot (x + 1, y + 1)):
+  // de grond, een meer of een rivier op zijn peil, en de zee op 0. Voor de hoekpunten van de kaart en `RAND` tegels
+  // eromheen uit één lijst, eens per hoogte uitgerekend (T.eilandStuk); het eiland komt uit zijn nummer, dus de lijst
+  // wordt niet bewaard. Een ander punt (het midden van een huis) vraagt hij het eiland zelf.
+  const eilandLijsten = new WeakMap();
+  function eilandOp(hg, vx, vy) {
+    const { zaad, x0, y0 } = hg.eiland;
+    const n = hg.b + 2 * RAND + 1;
+    const opRooster = Number.isInteger(vx) && Number.isInteger(vy) && vx >= -RAND && vy >= -RAND && vx <= hg.b + RAND && vy <= hg.h + RAND;
+    if (!opRooster) return Math.max(0, T.eilandStuk(T.eilandVan(zaad), x0 + vx - 0.5, y0 + vy - 0.5, 1, 1).hoogte[0]);
+    let lijst = eilandLijsten.get(hg);
+    if (!lijst) {
+      lijst = T.eilandStuk(T.eilandVan(zaad), x0 - RAND - 0.5, y0 - RAND - 0.5, n, hg.h + 2 * RAND + 1).hoogte;
+      eilandLijsten.set(hg, lijst);
+    }
+    return Math.max(0, lijst[(vy + RAND) * n + vx + RAND]);
+  }
+
   T.hoekHoogte = function (w, x, y, k) {
     const hg = w && w.hoogte;
     if (!hg) return 0;
@@ -260,10 +285,13 @@
     const cx = plan.plein.reduce((s, p) => s + p[0], 0) / plan.plein.length;
     const cy = plan.plein.reduce((s, p) => s + p[1], 0) / plan.plein.length;
     const hg = { trede: I.trede, zaad: plan.zaad, b: B, h: H, midden: [cx, cy], dorpHoogte: 0, vlakken: [], niveau: {}, hellingen: {} };
-    hg.dorpHoogte = Math.round(landschapOp(plan.zaad, cx, cy));
+    // op het eiland is het land dat van het eiland (vraag 117, 2b)
+    if (plan.eiland) hg.eiland = { zaad: plan.eiland.zaad, x0: plan.eiland.x0, y0: plan.eiland.y0 };
+    hg.dorpHoogte = Math.round(landOp(hg, cx, cy));
     // de hoogte van een plek zonder de vlakke stukken: daarop komt een vlak stuk te liggen
     const vrijOp = (vx, vy, alleenGroot) => {
-      const h = landschapOp(plan.zaad, vx, vy, alleenGroot) + (alleenGroot ? hg.dorpHoogte - landschapOp(plan.zaad, cx, cy, true) : 0);
+      const groot = alleenGroot && !hg.eiland;
+      const h = landOp(hg, vx, vy, groot) + (groot ? hg.dorpHoogte - landOp(hg, cx, cy, true) : 0);
       return hg.dorpHoogte + (h - hg.dorpHoogte) * glad(I.vlakteVan, I.vlakteTot, Math.hypot(vx - cx, vy - cy));
     };
     // de huizen, met hun looppad, op de hoogte van hun midden (de hoekpunten van hun tegels)

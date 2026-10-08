@@ -105,5 +105,7 @@
     // Wat een antwoord op een voorval doet (js/voorvallen.js): graan, tevreden, verban, een vervolg, ... De
     // gespreksschrijver laadt dat bestand niet.
     if (T.voorvalGevolg) T.voorvalGevolg(D, doe);
+    // De graanzak (js/zaak.js): wat je nu weet, en het vonnis. De gespreksschrijver laadt dat bestand niet.
+    if (T.zaakGevolg) T.zaakGevolg(S, D, doe);
   };
 })(globalThis.Spel = globalThis.Spel || {});

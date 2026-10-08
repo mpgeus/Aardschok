@@ -17,7 +17,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | De wensen per stand | besloten (Marcel, 1 okt, vraag 80 en 85); 2a en 2b gebouwd (1 okt): elk huis een stand (keuters, dorpelingen, ambachtslieden, en de boeren ernaast) met wensen zoals in Anno 1602, de hoogste stand neemt eerst, een kring om de kapel, de herberg en de markt, en wie een jaar lang alles heeft, wint; 2d gebouwd (2 okt, vraag 90): de treden uit de standen, een dorp bij 20 dorpelingen en marktrecht bij 20 ambachtslieden, met de markt en de weverij al in een dorp; 2c en 2e gebouwd (3 okt, vraag 100 en 101): een teken bij de deur en een briefje bij de muis, en het eind: een jaar lang iedereen gelukkig vanaf 100 mensen is gewonnen, met het grote feest, onder 10 mensen verloren, en op 1 lentemaand het jaarverslag; sinds 6 okt rooit een huis dat niet past wat in de weg staat (ook zijn eigen appelboom), zeggen het briefje en de raad waarom een huis niet groeit, en komt een erf niet waar het een huis elke vorm afneemt (vraag 130) | vraag 79, 80, 82, 85, 90, 100, 101, 130 |
 | Een nieuwe richting | besloten (Marcel, 28 sep): besturen en groeien worden het hart, de heer de druk van boven, en vechten begint bij je eigen dorp; sinds 29 sep: het hogere doel is al het land veroveren of met iedereen bevriend raken (Civilization), en sinds 1 okt: de hele wereld veroveren, en je mensen super gelukkig, met wensen zoals in Anno 1602, terwijl de heer geen doelen stelt maar het je moeilijk maakt (vraag 78), eenvoud boven werkelijkheid, en wetten in een menu zoals Democracy 3; sinds 30 sep: meer een management sim, met het concept als kompas (het poppetje is hoe je bestuurt, `concept.md`), de boeren die het seizoen doen, en eerst de kern; sinds 3 okt: de stad groeit door haar mensen (inwoners beginnen zelf een ambacht en vragen toestemming), en jij bepaalt de richting, want "weer een bouw spelletje" wordt te snel saai (het plan is vraag 103, open) | vraag 50, 51, 54, 73, 74, 78, 103 |
 | De heer als tegenstander | besloten (Marcel, 5 en 6 okt: "A ja B b2 en b3 C c3 D ja E ja F Ja G zo"), niets gebouwd: het eind van het spel is de heer verstoten en verslaan, met een kasteel op de kaart, bondgenoten en per spel een ander karakter; veroveren en bevriend raken zijn de weg erheen, langs drie wegen (de opstand, de koning, trouw, en dan ben jij de nieuwe heer); een bond sluit je te voet; het jaar van geluk blijft het eind van de demo en wordt in het hele spel kracht; samen spelen, met een speler als heer, na de release; niets hiervan vóór de kern | vraag 126 |
-| Informatie, de zitting en mensen die onthouden | besloten (Marcel, 6 okt: "A tot g allemaal, en de proef komt erna"), niets gebouwd: wat er gebeurde, wat er gezegd wordt en wat jij weet; 's middags een zitting met getuigen en bewijs; het vertrouwen per groep; mensen die onthouden wat je deed; een heer die van je leert; gevolgen in ketens; eerst een proef met één keten (de verdwenen graanzak, met een eerste zitting), na het beeld dat in de werklijst staat | vraag 105, 118, 128 |
+| Informatie, de zitting en mensen die onthouden | besloten (Marcel, 6 okt: "A tot g allemaal, en de proef komt erna"); de proef, de verdwenen graanzak, is gebouwd (8 okt, `js/zaak.js`), de rest nog niet: wat er gebeurde, wat er gezegd wordt en wat jij weet; 's middags een zitting met getuigen en bewijs; het vertrouwen per groep; mensen die onthouden wat je deed; een heer die van je leert; gevolgen in ketens; eerst een proef met één keten (de verdwenen graanzak, met een eerste zitting), na het beeld dat in de werklijst staat | vraag 105, 118, 128 |
 | Rovers en de militie | gebouwd (29 sep): wie wegtrekt komt als rover terug, wilde rovers van buiten, ze roven een akker, de wachters vechten mee, en wie valt is dood | vraag 55 |
 | De heervaart | gebouwd (29 sep): in een dorp vraagt de heer op 1 hooimaand mannen of goud; wie terugkomt, is veteraan en vecht mee | vraag 60 |
 | Het land | gebouwd, stuk 1 van stap 1a (30 sep): over de weg je gehucht uit naar de kaart van het land, negen provincies uit het zaad, reizen in dagen, wat je niet zag is donker, en thuis gaat alles door zonder je; achter de spelregel Land, tot het buurdorp er is. De maker legt elk spel een ander land, sinds 4 okt de standaard: 100 bij 100, met natuur die ertoe doet, en het nummer van het land bij Nieuw spel (vraag 112). Stuk 2 (30 sep): de snellere dag, alles van een dorp bij elkaar, en elk dorp leeft, ook als je er niet bent; nog één dorp in het spel, tot het buurdorp (stuk 3) | vraag 63, 69, 70, 71 |
@@ -320,7 +320,28 @@ De vragen en Marcels antwoorden: werklijst, vraag 126 en 128.
 
 ## Informatie, de zitting en mensen die onthouden (Marcel, 6 okt 2026; werklijst vraag 128)
 
-**Zo staat het nu** (6 okt; Marcel: "A tot g allemaal, en de proef komt erna"): besloten, er is niets van gebouwd. Het
+**Zo werkt het nu** (8 okt; Marcel: "akkoord, bouwen maar"): **de proef, de verdwenen graanzak, is gebouwd**
+(`js/zaak.js`, de spelregel "De zaak"; de rest hieronder is besloten en nog niet gebouwd). Eén keer per spel, in de eerste
+herfst (op een geloote dag in herfstmaand, tot het eind van wijnmaand als er steeds een ander voorval loopt), neemt 's
+nachts een vader met een ziek kind een zak graan (10) uit de schuur van de dichtste boerderij; dat is wat er echt
+gebeurde (`D.zaak`), en er ligt een spoor van gemorst graan van de schuur naar zijn deur. De boer komt je zeggen wie hij
+verdenkt: een man uit een ander huis, de verkeerde (het voorval `graanzak`). Je kunt meteen straffen, het laten rusten,
+of het uitzoeken: dan is de zitting drie dagen later, en sprak je hem niet, dan komt ze er toch. Tot dan vraag je wie je
+aanklikt ernaar (de buur zag laat licht en hoorde een kind hoesten, de herbergierster weet waar de verdachte was en dat
+er een kind ziek is, de dader ontkent tot je bewijs hebt, en de rest zegt wat er gezegd wordt), en wie bij het spoor
+staat, ziet het. Wat je weet, staat op het papier "De zaak" (de knop in de balk), in drie soorten: wat je zelf zag (een
+feit), wat mensen je vertelden (een getuige) en wat er gezegd wordt (een gerucht). Op de dag van de zitting staan de
+aanklager, de verdachte, de dader en zijn vrouw en de buur 's middags op het plein, en komt de schout erbij, dan begint
+ze (het voorval `zitting`, `L.plein`). Je straft de verdachte of spreekt hem vrij, en met bewijs (het spoor, het licht,
+of hij bekende) noem je de dader: straffen, het dorp geeft het graan en het komt in het boek, of het verbergen. Wat je
+koos, komt terug: een vervolg over dezelfde mensen (de gestrafte verdachte wil zijn goud terug, de boer ziet de dader
+weer stelen, het kind van de gestrafte dader is nog ziek, of de dader is je dankbaar), en een zak die nergens staat
+(vrijgesproken, gelaten, geen zitting, of verborgen), leest de inner de heer op Sint-Maarten voor uit het boek van de
+schuur: argwaan erbij, gunst eraf. Twee keuzes van Claude: "krap" werd een gezin in nood (het zieke kind), niet een
+voorraad die op raakt; en de inner leest het boek op Sint-Maarten, niet bij zijn bezoek in oogstmaand, want dat is
+tien maanden later. De getallen in `T.ZAAK_INSTELLINGEN`.
+
+**Zo staat het verder** (6 okt; Marcel: "A tot g allemaal, en de proef komt erna"): besloten, de rest is niet gebouwd. Het
 kwam uit een analyse van buiten van onze samenvatting ("Richting & Game Design Ideeën"), met als kern: kleiner in
 omvang, dieper in menselijke gevolgen. Zijn vraag bij elke beslissing: "Wat gebeurde er in mijn dorp, waarom gebeurde
 het, wat weet ik ervan, en wie wordt boos als ik ingrijp?"
@@ -951,7 +972,24 @@ zee rondom, met je dorp, het kasteel van de heer, de stad en de andere dorpen er
 zag. Het plan in stappen staat bij vraag 117 in de werklijst. **Marcel koos de maat: 2500 bij 2500 tegels** (4 okt), na
 de kern (eerst de huizen, dan de boeren met de houthakker en de beesten). Wat dat technisch vraagt (de kaart in stukken
 uit het nummer, opslaan wat veranderde, lange tochten met HPA\* over de stukken en de andere drie technieken die Marcel
-op 2 okt gaf, wat ver weg is als getallen), staat erbij.
+op 2 okt gaf, wat ver weg is als getallen), staat erbij. **De kaartenmaker** (8 okt, het plan bij vraag 117; Marcel: "Ik
+wil 1 aaneengesloten landschap", "B 1", en "moeilijke plek mag ook, kunnen we als hard modus later doen?"): één
+aaneengesloten eiland, gemaakt uit het nummer, met een bergrug met passen en verder heuvels, rivieren die in zee
+uitkomen, en de zes streken van de landkaart (het woud, de heide, het veen, het broek, het zand en de kampen) met de
+kust. Je dorp komt altijd waar een dorp kan groeien; een moeilijke plek komt later, bij de moeilijkheidsgraad. En
+(Marcel, 8 okt): "Fog of war maakt de rest van het land 'onzichtbaar' tot je het verkent." Wat niemand van jou zag, is
+mist, en het spel maakt het land pas aan de rand van de mist, zodat het alleen houdt wat je verkende. Wat je verkende
+maar nu niet ziet, is grijs, zoals je het het laatst zag (Marcel, 8 okt: "Grijs is goed"). **Stap 1 is er** (8 okt): de
+kaartenmaker (`js/eiland.js`) en de plaat (`node gereedschap/pixelart/eiland-plaat.cjs`), nog niet in het spel; hoe het
+werkt, staat in `kaarten.md`, "Het eiland". Marcel vond de eilanden goed, en koos de volgorde (8 okt, "a1"): eerst je dorp
+op het eiland, dan de kern, en het hele eiland met de mist later. **Je dorp op het eiland** (stap 2a, 8 okt; "C dorp dat
+er al was", en "Het eiland wordt gewoon altijd gegenereerd bij een nieuw spel. Ergens op dat eiland staat je gehucht"):
+elk nieuw spel maakt het eiland, en je dorp ligt op zijn plek erop, aan zee, aan een rivier, op de heide of in het bos,
+met het water, het bos en de wegen van het eiland; de weg door je dorp gaat naar het kasteel. Het gehucht is een dorp
+dat er al was: wat het nodig heeft, is gerooid. Een keuze is het niet (de spelregel "Je gehucht" is er alleen nog voor de
+toetsen en de speeltest). **Het eiland om je land** (stap 2b, 8 okt; "A ja"): buiten de kaart loopt het eiland door, de
+zee, het strand, de heide, het bos en de weg naar de buren, tot het donker; en met "Hoogte" op "Heuvels" is het land dat
+van het eiland.
 
 
 **Zo werkt het nu** (30 sep, zeventiende sessie; stuk 1 van stap 1a; `js/land.js` en `js/landkaart.js`, toetsen in
@@ -1666,7 +1704,7 @@ Nog open na deel 1 (vragen van Claude):
   de kaas en het gezouten vlees, en zegt het als het zover is ("De honger is groot: het dorp eet van het zaaigraan."). De
   winter rekent het eten zonder het zaaigraan, en bij de muis op het graan in de balk staat hoeveel ervan zaaigraan is.
   De spelregel "Zaaigraan" (Als ander graan: het spel van vóór 1 okt).
-- **De graanschuur en de wachters** (8 okt; werklijst vraag 133; Marcel: "bij honger grijpen mensen alles aan. Je moet
+- **De graanschuur en de wachters** (8 okt; werklijst vraag 132; Marcel: "bij honger grijpen mensen alles aan. Je moet
   mensen inzetten om het warenhuis te beschermen", "Ja, er moet een graanschuur komen", en een wachter per twintig mensen,
   "anders maken ze geen kans"; `js/graanschuur.js`): het zaaigraan ligt in de graanschuur, en zodra er zaaigraan apart
   ligt, vraagt het dorp er een. Komt de honger eraan, dan zoekt een boer je: "Ze praten over de graanschuur." Je zet er
@@ -1675,12 +1713,12 @@ Nog open na deel 1 (vragen van Claude):
   weinig pakt het dorp een deel. Elke dag honger terwijl het graan bewaakt wordt, kost vertrouwen; bij het zaaien gaan ze
   naar huis. Zonder graanschuur eet het dorp het op zoals hierboven. De spelregel "Zaaigraan" op "Bewaken" (de
   standaard), "Pas bij nood" of "Als ander graan". De graanschuur leent nog de tekening van de blokhutschuur.
-- **Wat helpt aan eten** (8 okt; vraag 133, b; Marcel: "ze mogen advies geven op wat te doen. dit kan kopen, planten,
+- **Wat helpt aan eten** (8 okt; vraag 132, b; Marcel: "ze mogen advies geven op wat te doen. dit kan kopen, planten,
   bakken etc zijn"): haalt het eten de winter niet, dan zegt de raad wat er nu kan en helpt, de eerste twee: land
   ontginnen (een boer komt het vragen), een visser aan het water (niet in de winter), een jager als er herten zijn, een
   graanschuur voor het zaaigraan, en zaaigraan kopen bij de marskramer als er te weinig is om te zaaien. Het dorp vraagt
   het gebouw dat hij noemt; tot 8 okt vroeg het alleen een jager.
-- **Vee en vissers tegen de honger in het voorjaar** (8 okt; vraag 133; Marcel: "1 en 2 allebei, vee en meer vissers"):
+- **Vee en vissers tegen de honger in het voorjaar** (8 okt; vraag 132; Marcel: "1 en 2 allebei, vee en meer vissers"):
   had het dorp tussen lentemaand en de oogst tien dagen of meer honger, en brengt het hooi geen koe meer de winter door,
   dan maakt een boer na de oogst een veld weide (eerst een veld dat zou rusten, anders de minst vruchtbare akker van een
   boer met meer akkers). Daar krijgen de koeien kalveren, en een koe geeft van grasmaand tot wijnmaand melk voor vijf
@@ -1949,7 +1987,7 @@ Besloten op een voorstel van Claude (`werklijst.md`, punt 4):
 - **De beek vriest 's winters dicht** (Marcel, 24 sep: "die beek is wel een leuk detail"). De
   visser vangt dan niets, dus vis die je in de winter wilt eten, moet je in de herfst zouten. Zo
   telt het zout. Of je het ijs ook ziet, is nog open: dat is tekenwerk.
-  **Sinds 8 okt zegt de raad het** (vraag 133, B; Marcel: "A en B samen"): vanaf de herfst rekent het dorp uit wat de
+  **Sinds 8 okt zegt de raad het** (vraag 132, B; Marcel: "A en B samen"): vanaf de herfst rekent het dorp uit wat de
   huizen in de winter aan vis en vlees willen, wat er dan ligt, en hoeveel zout dat vraagt, en de raad zegt het zolang de
   marskramer nog voor de winter komt ("koop 18 zout bij de marskramer in wijnmaand; een zout houdt tien vis of vlees
   goed"); ligt er te weinig, dan vraagt het dorp een visser of een jager. De marskramer heeft in de herfst 40 zout (eerst
@@ -2084,7 +2122,7 @@ Besloten op een voorstel van Claude (`werklijst.md`, punt 5):
   inhoudt zo'n 70 graan over, en komt wie alles in graan betaalt er zo'n 30 tekort, en 70 als
   hij ook graan moet verkopen voor het goud. (Een eerste gok in één blok, om bij te stellen na
   spelen.)
-  **Sinds 8 okt is de standaard 4** (de spelregel "Graan" op "Net rond"; Marcel: "A en B samen", werklijst vraag 133):
+  **Sinds 8 okt is de standaard 4** (de spelregel "Graan" op "Net rond"; Marcel: "A en B samen", werklijst vraag 132):
   met de jager die echt jaagt en het zaaigraan dat bewaakt wordt, viel een dorp van 100 mensen op 3,5 elk voorjaar
   zonder graan. "Honger" blijft als keuze.
 - **Hij vraagt naar wat hij ziet, en in wat hij ziet.** Voor elke akkertegel een half graan (de
@@ -3477,7 +3515,11 @@ wordt gepraat:
   (`T.opDeGrondVanEenErf`, in `js/behoeften.js`): in de speeltest van vier jaar groeide op 62707 een huis van de maker
   door tot stenen huis, met 21 tegels óp een vrij erf. Andersom komt **sinds 6 okt (vraag 130, d)** een erf niet waar het
   een huis ernaast elke vorm afneemt waarin het nog kan doorgroeien ("Hier groeit de hut van Swier straks tot een
-  huis."; `T.groeiGrond`): op 62707 legde de bouwer een erf onder de hut van een oud stel, en die bleef een hut. En past er toch geen hut meer op een vrij erf, dan telt het niet
+  huis."; `T.groeiGrond`): op 62707 legde de bouwer een erf onder de hut van een oud stel, en die bleef een hut. Net zo
+  komt **sinds 8 okt (vraag 117, 2d; Marcel: "A ja")** een erf niet waar zijn hut straks geen put kan halen, of waar het
+  een ander huis de laatste plek voor een put afneemt ("Dan kan het huis van Evert geen put meer krijgen: dit erf neemt
+  de laatste plek ervoor."; `T.kringGrond`): op het eiland van 73425 lagen de erven zo dicht dat een huis in het midden
+  twee jaar geen put kon krijgen, en het dorp nooit won. En past er toch geen hut meer op een vrij erf, dan telt het niet
   als plaats (`T.bruikbareErven`, `T.hutPastOpErf`): de groei en de raad zeggen dan dat er geen plaats is, het bouwmenu
   telt het niet als vrij, en `Spel.debug.erven()` zegt het erbij. Tot dan zagen de groei en de raad er een vrij erf, en
   kwam er twee en een half jaar geen gezin.
@@ -3547,8 +3589,14 @@ van de trede: riet in het gehucht, leien in een dorp, pannen met marktrecht; wat
 daken zie je hoe het dorp groeide. Een stenen huis is het stenen broertje van zijn huis, in veldsteen, en in baksteen pas
 als het dorp een steenbakkerij heeft. Een hut blijft onder riet. Op een erf kijkt de deur naar de weg, met de moestuin
 ervoor; een verzoek (een boerderij) keert zijn deur ook naar de weg. Het ontworpen gehucht heeft geen stijl en bouwt met
-de huizen van ronde 4b, zoals altijd. Wat volgt: de andere drie stijlen (2b), en de herberg, de kapel en de woontoren
-(stap 3).
+de huizen van ronde 4b, zoals altijd. Sinds 4 okt zijn er vier stijlen (2b: wit, oker, planken en roze). **Sinds 7 okt
+de grote gebouwen** (stap 3; Marcel: "A; ja goed idee, B: Ja", de kapel groter, de herberg zonder stal): het huis van de
+schout en de kleine herberg van het gehucht staan in de stijl van het land, met de deur naar het plein; in een dorp
+groeit de herberg door tot een grote van twee lagen met een uithangbord, voor 16 hout, met zijn deur aan dezelfde kant;
+een kapel (een schip van twee lagen met een toren, 18 bij 6) is van de steen van de stijl, en van baksteen met een
+steenbakkerij; en met marktrecht wordt een stenen huis dat alles heeft een woontoren van vier lagen op 5 bij 5, waar
+drie gezinnen wonen, ambachtslieden zoals in het stenen huis, voor 20 steen: de stad groeit de hoogte in, en geeft grond
+terug. De kapel en de woontoren hebben nog geen bouwfasen.
 
 - Nu wordt een groeiend huis een andere tekening. Voorstel: het blijft hetzelfde huis, met dezelfde
   vorm op dezelfde plek, en krijgt stap voor stap beter materiaal. Je herkent het huis van Klaas, nu

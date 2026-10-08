@@ -153,7 +153,7 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
-## De speeltest van 8 okt, nacht: vis vult een maag (werklijst, vraag 133)
+## De speeltest van 8 okt, nacht: vis vult een maag (werklijst, vraag 132)
 
 Op `7e1b786` (branch `ccr-77327776-rqjldz`), `npm run speeltest -- bouwer sluw --maker --jaren 4`; Marcel: "Vis mag een
 maag vullen, zoals vlees".
@@ -173,7 +173,7 @@ in jaar 2 zijn ambt kwijtraakte), met de teller op 265 tot 295 van de 360. Wat h
 maar vlees of vis in de winter (geen goud voor zout), brood en laken. Twee knelpunten blijven: de eerlijke bouwer heeft
 geen goud voor zout, en sluw 2 op 73425 viel in jaar 1 door de heer.
 
-## De speeltest van 8 okt, avond: de rekensom van het zout zonder de jagers (werklijst, vraag 133, B)
+## De speeltest van 8 okt, avond: de rekensom van het zout zonder de jagers (werklijst, vraag 132, B)
 
 Op `f096831` (branch `ccr-77327776-rqjldz`), `npm run speeltest -- bouwer sluw --maker --jaren 4`.
 
@@ -190,7 +190,7 @@ in het voorjaar, op eten. De eerlijke bouwer koopt geen zout: hij wilde 5 tot 19
 (de marskramer komt op 5 wijnmaand, vlak voor Sint-Maarten). Dat is het knelpunt van de eerlijke bouwer weer. Twee van
 de zes winnen hier niet, waar het hiervoor wel zo was: de reeks van sluw 1 brak nu in het voorjaar.
 
-## De speeltest van 8 okt, laat: Net rond als standaard, en vis en vlees zouten (werklijst, vraag 133, A en B)
+## De speeltest van 8 okt, laat: Net rond als standaard, en vis en vlees zouten (werklijst, vraag 132, A en B)
 
 Op `ffa2003` (branch `ccr-77327776-rqjldz`), `npm run speeltest -- bouwer sluw --maker --jaren 4`, als meting: Marcel (8 okt)
 wil dat we stoppen met het ene oplossen met iets anders, dus hier komt niets meer voor.
@@ -209,7 +209,7 @@ leek dat te komen doordat er niets te zouten was, maar dat klopte niet: vier vis
 eten er 2,2. De rekensom telde vijf jagers als genoeg vlees voor de winter, dus raadde hij geen zout aan (verholpen in
 `f096831`, hieronder).
 
-## De proef met de spelregel "Graan" op "Net rond" (8 okt; werklijst, vraag 133)
+## De proef met de spelregel "Graan" op "Net rond" (8 okt; werklijst, vraag 132)
 
 Dezelfde stand (`e9cc2cd`), `npm run speeltest -- bouwer sluw --maker --jaren 4 --regel graan=netRond`: een akkertegel
 geeft 4 graan in plaats van 3,5. Naast "Honger" (de standaard, hierboven):
@@ -228,7 +228,7 @@ bouwer weer een keer; een tweede haalt het bijna. De gewone bouwer, die de heer 
 steeds niet: zijn reeks breekt in de winter op vlees of vis (de vissers liggen stil, en hij heeft weinig jagers). De
 bouwer op 72022 verliest zijn ambt op beide in het tweede jaar.
 
-## De speeltest van 8 okt, avond: vee en vissers erbij (werklijst, vraag 133)
+## De speeltest van 8 okt, avond: vee en vissers erbij (werklijst, vraag 132)
 
 Op `ccr-77327776-rqjldz` op `e9cc2cd`, `npm run speeltest -- bouwer sluw --maker --jaren 4`.
 
@@ -247,7 +247,7 @@ lentemaand tot de oogst op, en de reeks breekt in de winter op vlees of vis (de 
 jagers). Er is een spelregel "Graan" (Honger, de standaard: 3,5 graan per akkertegel; Net rond: 4; Ruim: 5): de proef
 hieronder speelt met "Net rond".
 
-## De speeltest van 8 okt, later: de graanschuur en het advies over eten (werklijst, vraag 133, a en b)
+## De speeltest van 8 okt, later: de graanschuur en het advies over eten (werklijst, vraag 132, a en b)
 
 Op `ccr-77327776-rqjldz` op `3290959`, `npm run speeltest -- bouwer sluw --maker --jaren 4`.
 
@@ -284,6 +284,113 @@ en vanaf het tweede jaar at het dorp geen graan meer. Met een jager die echt jaa
 komt het eten weer uit het graan, en dan eet het dorp in de eerste winter het zaaigraan op: de oogst zakt van 612 naar 205
 en 32, en het dorp gaat dood. Het spel was dus in balans op jagers uit het niets; Marcels "het dorp moet gevarieerd eten"
 (j3) is daarmee de echte opgave, niet de jager.
+## De speeltest van 8 okt: een erf houdt plaats voor een put (werklijst, vraag 117, stap 2d)
+
+Gespeeld in de sessie van de kaartenmaker, in een losse kopie op `5bb7cb6` (de branch `ccr-f03157dc-9d2dtu`, met de regel
+van 2d, nog zonder de grote gebouwen van vraag 114, stap 3): dezelfde twaalf spellen als in de speeltest van 2c
+hieronder (`npm run speeltest -- bouwer sluw --jaren 4 --eiland`, en `--maker`). Geen fouten in de console.
+
+**Tien van de twaalf liepen letter voor letter als in 2c** (alleen de speelduur en de stand verschillen): daar weigerde de
+regel geen erf dat de bouwer koos, en hij kost geen merkbare tijd. Alleen op het eiland van 73425 liep het anders, en daar
+winnen ze nu allebei:
+
+| Land | Speler | Mensen aan het eind van jaar 1 tot 4 | Dagen dat alle huizen alles hadden, per jaar (waarvan alle woningen in steen) | Hoe het eindigde | In 2c |
+|---|---|---|---|---|---|
+| 73425 | bouwer | 49, 97, 123, 166 | 58 (0), 197 (189), 286 (227), 141 (140) | **gewonnen**, op 14 hooimaand van het vierde jaar, met 170 mensen | de vier jaar uit, op 120 |
+| 73425 | sluw | 50, 89, 107, 153 | 70 (0), 192 (175), 354 (242), 228 (220) | **gewonnen**, op 7 wijnmaand van het vierde jaar, met 158 mensen | de vier jaar uit, op 112 |
+
+Op het eiland winnen er zo vier van de zes, net als op de landen van de maker.
+
+**Wat het zegt:**
+1. **Het huis zonder put was een hut die groeide.** De eerste versie van de regel (`c48f028`) veranderde niets: de hut van
+   Evert had op dag 673 nog een put binnen 12 tegels toen de erven om hem heen kwamen, en op dag 703 groeide hij van een
+   hut van 6 bij 6 tot een huis van 9 bij 7. Zijn midden schoof op, de put stond op 12,7 tegels, en er was geen plek meer
+   voor een nieuwe. Nu telt een hut op een erf met het huis dat hij wordt (`T.huisPlekVan`), en dan komen die erven er
+   niet.
+2. **Na de winst** vindt het dorp soms geen plek meer voor een kapel (kring 40: op 73425 bij allebei, op het land van de
+   maker op 62707 bij allebei) of een put (62707 op het land van de maker, de bouwer). Wat na de winst gebouwd wordt,
+   neemt de grond; dat stond er in 2c ook.
+
+**Daarna op `main`, met de grote gebouwen, en de put die ook het huis haalt.** Intussen kwamen de grote gebouwen van vraag
+114, stap 3, in `main` (de herberg die meegroeit, het stenen huis dat een woontoren wordt); niemand had ze nog op het eiland
+gespeeld. Dezelfde zes spellen op het eiland, op `9e8e7bb` (`main` met 2d), en op `e0f3e6c` (daarbij een put voor een hut
+op een erf die ook het huis haalt dat de hut wordt; werklijst, vraag 117, 2d):
+
+| Land | Speler | Op `main` met 2d | Met de put die ook het huis haalt |
+|---|---|---|---|
+| 62707 | bouwer | de vier jaar uit, 109 mensen: 15 maanden een put zonder plek, 16 een kapel zonder plek | de vier jaar uit, 109 mensen: geen put meer zonder plek, maar 16 maanden een kapel zonder plek |
+| 73425 | bouwer | **gewonnen** op 10 louwmaand van het vierde jaar; na de winst weggejaagd door het dorp | **gewonnen** op dezelfde dag, en de vier jaar uit, met 160 mensen |
+| 72022 | bouwer | **gewonnen** op 1 slachtmaand van het vierde jaar; na de winst het ambt kwijt | het ambt kwijt op 12 wintermaand van het derde jaar, zoals in 2c en 2d |
+| 62707 | sluw | het ambt kwijt op 11 slachtmaand van het derde jaar: te weinig betaald | hetzelfde |
+| 73425 | sluw | **gewonnen** op 19 grasmaand van het vierde jaar | hetzelfde |
+| 72022 | sluw | het ambt kwijt in het eerste jaar, zoals in 2c | hetzelfde |
+
+**Wat het zegt:**
+1. **De put zonder plek is weg,** op alle zes spellen. Op 72022 en op 62707 kwam hij van een put die de hut haalde maar
+   niet het huis dat de hut werd (11,7 tegels tegen 12,35, en 11,05 tegen 12,26): zijn looppad nam de laatste plekken die
+   het huis wel haalden.
+2. **Op 62707 houdt nu de kapel het tegen:** een huis vindt binnen 40 tegels nergens plek voor een kapel, zestien maanden
+   lang, en het jaar van geluk begint niet. Dat is hetzelfde als met de put, met een grotere kring; de regel van 2d geldt
+   nog alleen voor de put.
+3. **72022 beslist de gunst van de heer, niet de put.** Bij de bouwer staat de gunst na Sint-Maarten bijna elk jaar op 5
+   (de laagste stand vóór 0: eerst komt de waarschuwing), en komt op 12 wintermaand de gril van het vette varken, dan zegt
+   hij "Onze varkens zijn mager", en is zijn ambt weg. Zo verloor hij in 2c, in 2d en hier; op `main` met 2d kwam dezelfde
+   gril dat jaar ook, maar had hij tien vlees en gaf hij die, en won hij (een jaar later, na de winst, niet meer). Wat er
+   met de put verandert, verschuift het spel net genoeg om die gril anders te laten vallen; de val zelf staat in
+   `opmerkingen.md`.
+
+## De speeltest van 8 okt: vier jaar op het eiland (werklijst, vraag 117, stap 2c)
+
+Gespeeld in de sessie van de kaartenmaker, in een losse kopie van `main` op `6dba60e` (het spel van `25934d7`): elk nieuw
+spel begint op het eiland (stap 2a). `npm run speeltest -- bouwer sluw --jaren 4 --eiland`, en daarna hetzelfde met
+`--maker`, drie tegelijk, samen zo'n vijf kwartier. Geen fouten in de console, in twaalf spellen. Hetzelfde nummer geeft
+op het eiland een ander stuk land dan de maker legt: 62707 is zaad 1, 73425 zaad 2, 72022 zaad 3.
+
+Op de landen van de maker liep alles dag voor dag zoals in de speeltest van 7 okt hieronder (vier van de zes gewonnen):
+het eiland heeft daar niets aan het spel veranderd. Op het eiland:
+
+| Land | Speler | Mensen aan het eind van jaar 1 tot 4 | Dagen dat alle huizen alles hadden, per jaar (waarvan alle woningen in steen) | Hoe het eindigde | Op het land van de maker |
+|---|---|---|---|---|---|
+| 62707 | bouwer | 50, 75, 123, 132 | 47 (0), 0, 134 (69), 340 (329) | **gewonnen**, op 27 louwmaand van het vierde jaar | gewonnen, 24 grasmaand |
+| 73425 | bouwer | 49, 97, 120, 120 | 58 (0), 207 (189), 0, 0 | de vier jaar uit: één huis mist een put, en er is nergens plek voor een | gewonnen, 23 slachtmaand |
+| 72022 | bouwer | 62, 71, 78 | 22 (0), 0, 0 van 282 | ambt kwijt, op 12 wintermaand van het derde jaar: de gunst was op | gewonnen, 20 louwmaand |
+| 62707 | sluw | 54, 73, 115, 127 | 47 (0), 174 (174), 237 (177), 341 (330) | **gewonnen**, op 14 louwmaand van het vierde jaar | gewonnen, 24 bloeimaand |
+| 73425 | sluw | 50, 89, 112, 112 | 70 (0), 192 (175), 14 (0), 0 | de vier jaar uit: hetzelfde huis zonder put | de vier jaar uit, de teller op 298 |
+| 72022 | sluw | 53 | 23 van 251 | ambt kwijt, op 11 slachtmaand van het eerste jaar: de soldaten vonden zijn akker in het bos (−25) | gevallen, in het tweede jaar |
+
+En het land zelf (`T.isBos`, de bomen en het water op de kaart van 100 bij 100):
+
+| Land | Bos, eiland en maker | Water (tegels), eiland en maker |
+|---|---|---|
+| 62707 | 27% en 10% | 1938 en 367 |
+| 73425 | 4% en 8% | 181 en 365 |
+| 72022 | 35% en 17% | 1358 en 328 |
+
+**Wat het zegt:**
+1. **Op het eiland winnen twee van de zes,** allebei op 62707, en daar acht à negen maanden later dan op het land van de
+   maker. Het groeien gaat even snel (na twee jaar 71 tot 97 mensen, op de landen van de maker 70 tot 102); wat het
+   winnen tegenhoudt, zijn drie dingen die hieronder staan.
+2. **Een dorp op het eiland ligt anders:** op 62707 en 72022 met twee à drie keer zoveel bos en vier à vijf keer zoveel
+   water als het land van de maker, op 73425 juist met minder bos. Het eiland legt het dorp waar het kan groeien, maar
+   het bos en de kust van het eiland komen er dichtbij.
+3. **Meer bos is meer wolven:** op 62707 haalden ze 9 en 14 schapen van de meent (op het land van de maker 3 en 2), en
+   zonder schapen is er geen wol, en zonder wol geen laken: het dorp van de bouwer miste in het tweede jaar elke dag
+   laken, en geen dag had elk huis alles. Wat je tegen de wolven doet, is vraag 116, stap 3.
+4. **Een huis zonder put, en geen plek voor een put** (73425): een huis met vijf dorpelingen wil een put binnen 12 tegels,
+   en het dorp vindt er nergens een (geen open grond met drie tegels looppad rondom, en ook niets om te rooien): het
+   jaar van geluk begint dan nooit, bij allebei de spelers, twee jaar lang. Ook op het land van de maker vindt het dorp
+   aan het eind soms geen plek voor een put of een kapel (62707), maar daar pas na de winst. Waarom daar geen plek is,
+   is nog niet bekeken.
+5. **Rovers die blijven komen** (72022, de bouwer): 32 overvallen in drie jaar (op het land van de maker 7), vanaf het
+   tweede jaar om de tien dagen, ook als er niets te halen is ("met lege handen"), en ze vertrapten zes keer een akker.
+   De oogst zakte van 641 naar 190 en 92, er was geen bier en geen brood, hij kon de heer niet betalen, en zijn gunst
+   raakte op. Of dat door het eiland komt, zegt één spel niet: zodra er iets anders gebeurt, loopt de rest van het spel
+   anders.
+
+**Wat het vraagt** (aan Marcel): de put zonder plek eerst uitzoeken (de speeltest naspelen tot dat moment, en kijken
+waarom er niets past), en dan voorkomen, zoals een erf al niet komt waar een huis niet meer kan groeien (vraag 130, d);
+de wolven pas na vraag 116, stap 3, opnieuw meten; en de rovers die blijven komen als er niets te halen is, staan in
+`opmerkingen.md`.
 
 ## De speeltest van 7 okt: de wolven, stap 2a en 2b (werklijst, vraag 116)
 
@@ -318,6 +425,33 @@ console. 62707 is zaad 1, 73425 zaad 2, 72022 zaad 3.
 **Wat het vraagt:** stap 2b doet wat hij moet zonder het spel te breken. Een vraag voor Marcel: de wolven zijn nu vooral
 een gevaar voor de schapen; mensen lopen pas gevaar met een hek om de schapen, of zonder schapen. Is dat de dreiging die
 hij wil, of moeten ze ook zonder dat iemand kunnen pakken? **Marcel (7 okt): "Ja"**: zo is het goed.
+
+## De speeltest van 7 okt: de grote gebouwen (werklijst, vraag 114, stap 3)
+
+Gespeeld op `claude/project-thread-cyjrql` op `6b61305`: de versie van vraag 131 hieronder, met de grote gebouwen (het huis
+van de schout en de herberg in de stijl van het land, de herberg die in een dorp meegroeit, de kapel van steen, en het
+stenen huis dat met marktrecht een woontoren wordt). `npm run speeltest -- bouwer sluw --maker --jaren 4 --tegelijk 2`,
+naast het renderen van de bouwfasen. Geen fouten in de console. De landen liggen anders dan hieronder, want de maker
+legt nu andere tekeningen; 62707 is zaad 1, 73425 zaad 2, 72022 zaad 3.
+
+| Land | Speler | Mensen aan het eind van jaar 1 tot 4 | Dagen dat alle huizen alles hadden, per jaar (waarvan alle woningen in steen) | Hoe het eindigde |
+|---|---|---|---|---|
+| 62707 | bouwer | 54, 110, 120, 191 | 26 (0), 228 (166), 331 (330), 0 | **gewonnen**, op 30 louwmaand van het derde jaar |
+| 73425 | bouwer | 56, 91, 111, 138 | 27 (0), 297 (297), 335 (293), 146 (140) | **gewonnen**, op 12 hooimaand van het vierde jaar |
+| 72022 | bouwer | 61, 103, 159, 159 | 46 (0), 171 (135), 329 (329), 235 (235) | de vier jaar uit; de reeks brak drie keer, om brood en laken |
+| 62707 | sluw | 54, 80, 123, 179 | 26 (0), 124 (72), 360 (360), 185 (160) | **gewonnen**, op 10 oogstmaand van het vierde jaar |
+| 73425 | sluw | 52, 83, 111, 124 | 27 (0), 286 (286), 357 (297), 228 (220) | **gewonnen**, op 4 wijnmaand van het vierde jaar |
+| 72022 | sluw | 50 | 69 van 251 (0) | ontslagen in het eerste jaar: de soldaten vonden een akker in het bos van de heer |
+
+**Wat het zegt:**
+1. **Vier van de zes spellen winnen** (hieronder drie): de bouwer op 62707 nu al in het derde jaar, en voor het eerst de
+   bouwer en de sluwe bouwer op 73425. Op 73425 werd de sluwe bouwer hieronder weggejaagd; nu wint hij.
+2. **De woontorens komen:** op de drie landen van de bouwer 13, 9 en 12 keer een stenen huis dat een woontoren werd, bij de
+   sluwe bouwer minder. Op 62707 woonden er aan het eind 191 mensen (hieronder 147): de torens geven grond terug.
+3. **De herberg groeit mee** op vier van de zes spellen. Op 62707 niet: daar stond er al iets in de weg toen het een dorp
+   werd (aan het begin past hij daar wel); het zegt dan niets.
+4. Op 72022 haalt de bouwer het niet om brood en laken, en wordt de sluwe bouwer al in het eerste jaar ontslagen om een
+   akker in het bos: de landen liggen anders, dus wat daar gebeurt, is niet te vergelijken met hieronder.
 
 ## De speeltest van 7 okt: wapens zijn niet meer verboden (werklijst, vraag 131)
 

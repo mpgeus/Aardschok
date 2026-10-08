@@ -1415,7 +1415,8 @@
   const alsGetal = (x) => (Number.isInteger(x) ? String(x) : String(Math.round(x * 1000) / 1000).replace('.', ','));
 
   function regelsInhoud() {
-    const keuzes = T.OPTIES.map((o) => {
+    // Een spelregel voor de toetsen en de speeltest (voorProeven) is geen keuze voor wie speelt.
+    const keuzes = T.OPTIES.filter((o) => !o.voorProeven).map((o) => {
       const nu = T.optieKeuze(o.id);
       const gekozen = o.keuzes.find((k) => k.id === nu);
       const knoppen = o.keuzes

@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## De stand (7 okt 2026, zevenendertigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt en het spel laadt alleen wat er staat (vraag 114, 2a, stap 1 en 1b); sinds de eenendertigste sessie bouwt elk land van de maker in een bouwstijl, met het dak van zijn trede en de deur naar de weg (vraag 114, stap 2a: de stijl wit), en tekent het spel met WebGL, gebouwd in een eigen sessie naast de huizen (vraag 123); sinds de tweeëndertigste sessie bouwt de huizenbouwer elk huis van vier kanten en tekent hij het een kwartslag gedraaid, en staat wit zo in het spel, met alle bouwfasen (vraag 124, B, en G); sinds de drieëndertigste sessie werken de boeren overdag op hun land, naar het seizoen en in het vel van hun werk, een boerin in dat van een vrouw (vraag 111, stap 1 en 2), en vraagt een boer heide te ontginnen als het graan tekortkomt (vraag 107, stap 1); sinds de vierendertigste sessie wijst hij een stuk heide en een stuk bos aan, en kies jij: de heide tegen het vertrouwen, het bos gemeld tegen de gunst, of stiekem (vraag 107, stap 2), met de hakker en zijn bijl; sinds de vijfendertigste sessie is de speeltest van vier jaar gespeeld (vraag 107, stap 3): ontginnen lost het graan op, maar geen dorp wint, want de grond om te bouwen is op, en de markt komt er nooit (vraag 110: f, het erf dat vastzat, is gerepareerd; e komt met de houthakker); sinds de zesendertigste sessie staat de markt met vier kramen op het plein (vraag 110, d), en hebben de stenen huizen op elk land hun markt; en sinds de tweede sessie daarnaast bouwt elk land in een van vier stijlen, wit, oker, planken of roze, elk met eigen huizen en boerderijen en alle bouwfasen (vraag 114, 2b); dan de herberg, de kapel en de woontoren (stap 3); sinds de sessie van de heer mogen erven en werkplaatsen op bomen en struiken, die wie er komt zelf rooit, en hakt de houthakker de bomen om zijn schuur om en plant hij er twee terug, zodat het bos om hem blijft (vraag 110, e, 115 en 129; in de speeltest van vier jaar komen de dorpen van de bouwer tot 126 à 129 mensen; en sinds vraag 130 rooit een hut die niet kan doorgroeien eerst wat in de weg staat, en wint er weer een dorp, op 73425; sinds de zevenendertigste sessie kapt het gezin daarbij ook zijn eigen appelboom, zegt de raad het als een huis dat alles heeft niet kan groeien, en komt een erf niet waar het een huis elke vorm afneemt (vraag 130, a2, c2 en d); sinds vraag 131 zijn wapens niet meer verboden, en winnen drie van de zes spellen van de speeltest); sinds vraag 116, stap 1, lopen er roedels wolven en groepjes herten in het bos, met rode ogen in het donker, en sinds 2a jagen de wolven in de winter op de herten, komen er in de lente jongen, en verhuist wie zijn bos kwijt is; sinds 2b komen ze met honger in het donker naar het dorp (een schaap, of wie alleen loopt), houdt licht ze weg, en rent wie werkt en ze ziet naar huis; dan wat je ertegen doet (vraag 116, stap 3), de hoogteverschillen (vraag 121: sinds stap 1, in `main` op 7 okt, een landschap dat overal doorloopt, uit het nummer van het land, met een richel en akkers die meebollen, achter de spelregel "Hoogte", standaard vlak; stap 2, lopen, zien, bouwen en afdekken, komt nog; het draaien van de camera, vraag 124, is geparkeerd); dan de kaartenmaker voor het eiland van 2500 bij 2500 (vraag 117, de grote plaat liet zien waarom), te beginnen met een plan; dan de proef van vraag 128 (de verdwenen graanzak, met een eerste zitting)
+## De stand (7 okt 2026, zevenendertigste sessie): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt en het spel laadt alleen wat er staat (vraag 114, 2a, stap 1 en 1b); sinds de eenendertigste sessie bouwt elk land van de maker in een bouwstijl, met het dak van zijn trede en de deur naar de weg (vraag 114, stap 2a: de stijl wit), en tekent het spel met WebGL, gebouwd in een eigen sessie naast de huizen (vraag 123); sinds de tweeëndertigste sessie bouwt de huizenbouwer elk huis van vier kanten en tekent hij het een kwartslag gedraaid, en staat wit zo in het spel, met alle bouwfasen (vraag 124, B, en G); sinds de drieëndertigste sessie werken de boeren overdag op hun land, naar het seizoen en in het vel van hun werk, een boerin in dat van een vrouw (vraag 111, stap 1 en 2), en vraagt een boer heide te ontginnen als het graan tekortkomt (vraag 107, stap 1); sinds de vierendertigste sessie wijst hij een stuk heide en een stuk bos aan, en kies jij: de heide tegen het vertrouwen, het bos gemeld tegen de gunst, of stiekem (vraag 107, stap 2), met de hakker en zijn bijl; sinds de vijfendertigste sessie is de speeltest van vier jaar gespeeld (vraag 107, stap 3): ontginnen lost het graan op, maar geen dorp wint, want de grond om te bouwen is op, en de markt komt er nooit (vraag 110: f, het erf dat vastzat, is gerepareerd; e komt met de houthakker); sinds de zesendertigste sessie staat de markt met vier kramen op het plein (vraag 110, d), en hebben de stenen huizen op elk land hun markt; en sinds de tweede sessie daarnaast bouwt elk land in een van vier stijlen, wit, oker, planken of roze, elk met eigen huizen en boerderijen en alle bouwfasen (vraag 114, 2b); dan de herberg, de kapel en de woontoren (stap 3); sinds de sessie van de heer mogen erven en werkplaatsen op bomen en struiken, die wie er komt zelf rooit, en hakt de houthakker de bomen om zijn schuur om en plant hij er twee terug, zodat het bos om hem blijft (vraag 110, e, 115 en 129; in de speeltest van vier jaar komen de dorpen van de bouwer tot 126 à 129 mensen; en sinds vraag 130 rooit een hut die niet kan doorgroeien eerst wat in de weg staat, en wint er weer een dorp, op 73425; sinds de zevenendertigste sessie kapt het gezin daarbij ook zijn eigen appelboom, zegt de raad het als een huis dat alles heeft niet kan groeien, en komt een erf niet waar het een huis elke vorm afneemt (vraag 130, a2, c2 en d); sinds vraag 131 zijn wapens niet meer verboden, en winnen drie van de zes spellen van de speeltest); sinds vraag 116, stap 1, lopen er roedels wolven en groepjes herten in het bos, met rode ogen in het donker, en sinds 2a jagen de wolven in de winter op de herten, komen er in de lente jongen, en verhuist wie zijn bos kwijt is; sinds 2b komen ze met honger in het donker naar het dorp (een schaap, of wie alleen loopt), houdt licht ze weg, en rent wie werkt en ze ziet naar huis; dan wat je ertegen doet (vraag 116, stap 3), de hoogteverschillen (vraag 121: sinds stap 1, in `main` op 7 okt, een landschap dat overal doorloopt, uit het nummer van het land, met een richel en akkers die meebollen, achter de spelregel "Hoogte", standaard vlak; stap 2, lopen, zien, bouwen en afdekken, komt nog; het draaien van de camera, vraag 124, is geparkeerd); dan de kaartenmaker voor het eiland van 2500 bij 2500 (vraag 117: sinds 8 okt maakt hij uit één nummer het eiland, en sinds stap 2a begint elk nieuw spel erop, met je gehucht als een dorp dat er al was; sinds 2b loopt het eiland om je land door, en met heuvels is het land dat van het eiland; 2c, de speeltest, is gespeeld; sinds 2d houdt een erf plaats voor een put, en haalt een put voor een hut ook het huis dat de hut wordt; dan de kern); dan de proef van vraag 128 (de verdwenen graanzak, met een eerste zitting)
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Het hart is het
 gehucht besturen terwijl het groeit, terwijl de heer eraan trekt; rijk worden en arm lijken blijft de druk van boven.
@@ -72,6 +72,27 @@ in `main` bleef, met a2, c2 en d erop, en die koos Marcel (7 okt). **Vraag 131 i
 "Wapens zijn niet meer verboden", en "Ja allebei"; in `main`): de wapenmaker is een gewone werkplaats en niets is nog
 verdacht, en in de speeltest van vier jaar wint ook de bouwer op 62707, die eerst om de wapens werd ontslagen: drie van
 de zes spellen winnen.
+
+**De sessie van de kaartenmaker** (8 okt, `ccr-f03157dc-9d2dtu`, naast die van de wolven en die van de grote gebouwen;
+in `main`, Marcel: "prima"). **Vraag 117, het eiland:** het plan (Marcel: "Ik wil 1 aaneengesloten landschap", "B 1", "C
+moeilijke plek mag ook, kunnen we als hard modus later doen?", "D Nee voor nu prima", "Fog of war maakt de rest van het
+land 'onzichtbaar' tot je het verkent", en "Grijs is goed, en ja begin met de plaat"), en stap 1 is gebouwd: de
+kaartenmaker (`js/eiland.js`) maakt uit één nummer een eiland van 2500 bij 2500 met water rondom, een bergrug met
+passen, rivieren naar zee, meren, de zes streken met de kust, het kasteel, de stad, acht dorpen en de wegen ertussen, en
+de plaat (`node gereedschap/pixelart/eiland-plaat.cjs`) toont het, met je land ernaast. Het spel gebruikt het nog niet.
+Marcel vond de eilanden goed ("1 ja goed") en koos a1: eerst je dorp op het eiland (stap 2, het plan staat bij vraag
+117), dan de kern; het hele eiland, met de mist en een kaart die meegroeit, later. **2a is gebouwd** ("A ja B later C dorp
+dat er al was"), en elk nieuw spel maakt het eiland (Marcel: "Het eiland wordt gewoon altijd gegenereerd bij een nieuw
+spel"): je dorp ligt erop als een dorp dat er al was (`Spel.debug.eiland(5)`); in `main` (Marcel: "A ja B ja"). 2b, het eiland
+om je land (de rand, en de hoogte van het eiland), is gebouwd en staat in `main` (Marcel: "Zet 2b ook in main"). 2c is
+gespeeld, vier jaar op drie eilanden (`npm run speeltest -- bouwer sluw --jaren 4 --eiland`) naast dezelfde drie landen
+van de maker: op het eiland winnen er twee van de zes, op de landen van de maker vier. Wat het tegenhoudt (een huis
+zonder plek voor een put, meer wolven in meer bos, rovers die blijven komen), staat bij vraag 117; het verslag staat in
+`main` (Marcel: "A ja, en zet het verslag in main"). **2d is gebouwd**, op de branch: een erf houdt plaats voor een
+put, en een put voor een hut op een erf haalt ook het huis dat de hut wordt; de put zonder plek is weg uit de
+speeltest, en op het eiland winnen op `main` met 2d twee à drie van de zes (`speelbaar.md`). Een put per dorp hoeft niet
+(Marcel: "Het dorp moet gewoon uitdijen. Er is ruimte genoeg"). Wat nog opviel: een kapel zonder plek (62707), en de
+gril die bij de laagste gunst je ambt kost (72022; `opmerkingen.md`). `npm test`: 1053/1053.
 
 **De sessie van de hoogte** (7 okt, `claude/elegant-meitner-d3ss2z`, naast die van de wolven; in `main`, Marcel: "Ja
 push main"). **Vraag 124, de camera draaien, is geparkeerd** (Marcel: "Is het echt iets wat iets toevoegd? Ik wil geen
@@ -4291,7 +4312,6 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
 114. **Gebouwen in verhouding, en een woontoren** (Marcel, 3 okt, vijfentwintigste sessie: "Gebouwen moeten in
     verhouding komen. Een herberg is vaak veel groter dan een huis. Een kapel zelfde verhaal. Een warehouse ook.
     Misschien moeten we ook een woontoren hebben"; plan van Claude; open).
-    **Bezig in sessie `claude/project-thread-cyjrql`** (7 okt): stap 3, de grote gebouwen (de herberg, de kapel, de woontoren en het huis van de schout, draaibaar); eerst het plan en een proefplaat voor Marcel.
     **Hoe het nu is:** een huis is 7 bij 5 tot 10 bij 7 tegels, een boerderij 6 bij 8 tot 9 bij 8. De herberg is 9 bij 7
     (die op de kaart 8 bij 11), nauwelijks groter dan een huis. De kapel is 5 bij 10, smal, en met zijn dak niet hoger
     dan een huis. Het pakhuis en de tiendschuur lenen een blokhutschuur van 5 bij 7, kleiner dan een huis; de markt en
@@ -4732,6 +4752,84 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     de maker (zaad 1 tot en met 4, twee jaar): geen fouten in de console, elk land een dorp en marktrecht in het eerste
     jaar, 26 naar 67 tot 82 mensen, geen doden van kou of honger. Opslagplaats: `tegels/huizen/` 24 MB, `tegels/bouwfasen/`
     58 MB. Nog niet in `main`. Het huis van de schout, de herberg en de kapel krijgen hun stijl in stap 3.
+    **Plan voor stap 3, de grote gebouwen (Claude, 7 okt, sessie `claude/project-thread-cyjrql`; wacht op Marcel).** Wat
+    er is: de proefplaten `verhouding` en `steen` (29e sessie) hebben de nieuwe herberg (12 bij 6, twee lagen, met een stal),
+    de kapel met beide torens en de woontoren in beide vormen, maar nog niet rondom gebouwd en niet per stijl. In het spel
+    staat op elk land van de maker nog `herberg1` (een T van vakwerk onder riet) en `schoutshuis`, in elke stijl hetzelfde;
+    wie later een herberg of kapel bouwt, krijgt de oude tekening uit `dorp.cjs` (voet 6 bij 6 en 5 bij 5). Een woontoren
+    is er niet. Wat Marcel al koos (4 okt): de toren per stijl (wit en roze een zadeldaktoren en kantelen, oker en planken
+    een naaldspits en een tentdak), eerst natuursteen en baksteen pas met een steenbakkerij, en een muur met een poort om
+    de binnenplaats van de herberg. Het plan, in vier stappen:
+    1. **De bouwer:** de herberg, de stal, de kapel (schip en toren), de woontoren en het huis van de schout als vormen
+       per stijl in `huizen.cjs`, rondom gebouwd, in de vier standen; een gebouw uit delen (`samen`) ook rondom, met zijn
+       voet en deur van het geheel. Klaar als: elke bestaande tekening byte voor byte dezelfde.
+    2. **Een proefplaat voor Marcel:** per stijl een rij (de kleine herberg, de grote met stal en poort, de kapel, de
+       woontoren, het huis van de schout), en de grote herberg in zijn vier standen. Nog niets in het spel.
+    3. **Renderen:** de tekeningen en hun bouwfasen (niet voor het huis van de schout), in delen van minder dan twee uur.
+    4. **In het spel:** de maker zet de herberg en het huis van de schout in de stijl van het land; een kapel en een
+       herberg die later komen, krijgen die van de stijl, met de deur naar de weg; de woontoren als regel (een stenen huis
+       dat een maand alles heeft, groeit vanaf marktrecht door tot woontoren met drie gezinnen, `T.WENSEN_INSTELLINGEN`);
+       dan `npm test`, `npm run schermen` en de speeltest van vier jaar.
+    Vragen: **A**, groeit de herberg mee (het gehucht begint met de kleine in de stijl, en in een dorp groeit hij door tot
+    de grote met stal en binnenplaats), of komt de grote meteen? **B**, de woontoren: drie gezinnen op 5 bij 5, dezelfde
+    stand als het stenen huis (ambachtslieden)? Op een kleinere voet dan het stenen huis waaruit hij groeit, dus hij geeft
+    grond terug, en de grond om te bouwen was wat de winst tegenhield (vraag 110). **C**, eerst de proefplaat, en pas
+    renderen als Marcel hem gezien heeft?
+    **Marcel (7 okt): "A; ja goed idee, B: Ja, C: Ja graag".** Dus: de herberg groeit mee (het gehucht begint met de
+    kleine in de stijl van zijn land, en in een dorp groeit hij door tot de grote met stal en binnenplaats); de woontoren
+    heeft drie gezinnen op 5 bij 5, in de stand van het stenen huis (ambachtslieden), vanaf marktrecht; en eerst de
+    proefplaat, het renderen pas als Marcel hem gezien heeft.
+    **De proefplaat is gemaakt (7 okt; nog niets in het spel):** `node gereedschap/pixelart/huis-sdf-export.cjs groot`
+    (21 minuten; `groot wit` voor één stijl, `groot standen` voor de herberg in vier standen). De bouwer kreeg een toren
+    rondom (ramen op elke muur, de deur voor), een muur om een erf met een poort (`HS.erfmuur`), en `kaderSamen` dat
+    draait; `grootGebouw` in `huizen.cjs` geeft per stijl de kleine en de grote herberg, de kapel, de woontoren en het huis
+    van de schout. De grote herberg met zijn stal en binnenplaats is zo'n 18 bij 7 tegels (de herberg in `T.GEBOUWEN` nu 6
+    bij 6), de kapel zo'n 13 bij 5, de woontoren 5 bij 5. Wacht op Marcel.
+    **Marcel (7 okt): "D: Is de kerk / kapel niet te klein in vergelijk met de rest? E: Stal misschien los naast de
+    herberg? of aan de achterkant, nu wordt het wat massief".** Daarop de plaat `groot2` (`huis-sdf-export.cjs groot2`, of
+    `groot2 kapel`): de herberg met de stal los ernaast (`stal: 'naast'`, zo'n 16 bij 6) en met de stal achter de herberg,
+    met de binnenplaats ertussen en de poort opzij (`'achter'`, zo'n 13 bij 12), en de kapel groter: het schip 12 bij 6,
+    twee lagen steen, en een toren van zes lagen (`groot` in `grootGebouw`).
+    **Marcel (7 okt): "Ik denk dat we de stal bij de herberg maar gaan laten".** Dus de grote herberg heeft geen stal en
+    geen binnenplaats: alleen het gebouw van twee lagen, 12 bij 6 (`grootGebouw(stijl, 'herberg')`; de varianten met een
+    stal blijven alleen op de proefplaat). Dat spaart grond.
+    **Marcel (7 okt): "Ja prima" (renderen, en dan in het spel). Gebouwd (7 okt, branch `claude/project-thread-cyjrql`):**
+    het vel heeft 559 tekeningen, 128 nieuw: per stijl de kleine herberg (11 bij 8), de grote (12 bij 6, leien en
+    pannen), de kapel (18 bij 6, in de steen van de stijl of baksteen), de woontoren (5 bij 5, idem) en het huis van de
+    schout (8 bij 6), elk in vier standen; de oude tekeningen bleven byte voor byte gelijk. De huizenbouwer kent een gebouw
+    uit delen (`wereldVan`, `meetHuis` met `delen`) en bewaart elke tekening in `uit/huizen-cache/` (met een hash over de
+    code en de opgave), zodat een tweede taak verdergaat waar de eerste na twee uur stopte. In het spel: de maker legt het
+    huis van de schout en de herberg in de stijl, met de deur naar het plein; een kapel of herberg die je later bouwt,
+    krijgt die van de stijl (`nu` in `js/bouwstijl.js` kent nu stenen gebouwen met één dak); de herberg groeit in een dorp
+    door tot de grote, voor 16 hout, met zijn deur aan dezelfde kant (`groeitMee` op de soort, `laatMeegroeien` en
+    `groeiSchuif` in `js/behoeften.js`); en een stenen huis dat alles heeft, wordt met marktrecht een woontoren voor drie
+    gezinnen, ambachtslieden, voor 20 steen (`woontoren` in `T.GEBOUWEN`, `wordtVanaf`, `ook` bij de stand). Doordat de
+    landen van de maker anders liggen, spelen de toetsen van het doorgroeien op land 62710, en staat het midden van de
+    markt op een tegel waar je kunt staan (op 72022 stond er een bank). De grote herberg heeft bouwfasen; de kapel en de
+    woontoren nog niet (de bouwfasen kennen alleen een huis, geen toren of gebouw uit delen): die rijzen nog bleek op.
+    De speeltest van vier jaar (`speelbaar.md`, 7 okt): vier van de zes spellen winnen (was drie), met 7 tot 13
+    woontorens per dorp, en op 62707 191 mensen. Open: bouwfasen voor de kapel en de woontoren; een grote herberg krijgt
+    nog geen plaatsen voor meer gasten; en de herberg houdt de grond niet vrij waar hij groter wordt (op 62707 stond er in
+    de speeltest iets toen het een dorp werd, en groeide hij nooit; hij zegt het dan ook niet).
+    **Marcel (8 okt): "Beiden"** (de grond vrijhouden, en de bouwfasen van de kapel en de woontoren), **"maar de woontoren
+    en kerk vallen kwa stijl buiten de boot in vergelijk met de huizen"**. Op het voorstel (A: de woontoren als een hoog
+    huis, een stenen voet met drie verdiepingen vakwerk of planken in de kalk van de stijl en een zadeldak met een
+    dakkapel, geen kantelen; B: de kapel met wit gepleisterde muren, hoeken en voet in de steen van de huizen, een lagere
+    toren met een houten klokkenstoel, en in planken een houten kapel; C: de kleine warme stenen van de huizen, geen grote
+    grijze blokken): **"Ja goed"**. Eerst een proefplaat in de vier stijlen naast een huis, dan het vel en de bouwfasen.
+    **Gebouwd (8 okt): de grond van de herberg blijft vrij.** Waar de kleine herberg in een dorp de grote wordt
+    (`T.meegroeiGrond`, `T.meegroeiGrondOp` in `js/behoeften.js`, uit `T.dorpsVormen` in `js/bouwstijl.js`), komt geen
+    gebouw, erf, kraam, akker of lantaarn ("Hier groeit straks de herberg", in `T.waaromNietOpDezeGrond`), en groeit geen
+    huis heen. Staat er alleen een struik of een boom, dan gaat die er met de bouw uit (`rooiVoorDeGroei`; op 62710 een
+    bessenstruik). Kan hij toch niet groeien (een oud spel), dan zegt het dorp het één keer, met wat er staat.
+    **De proefplaat (8 okt, `huis-sdf-export.cjs groot3`): Marcel, "Veel beter zo".** Gebouwd: het schip van de kapel en
+    haar toren gepleisterd in de kalk van de stijl, met een plint, hoekstenen en lijsten van de steen van de huizen
+    (wand `kalk`, `gepleisterd`), de toren vier lagen; in planken een schip van planken onder spanen
+    (`planken-kapel-spanen-*`); de woontoren een hoog huis met een stenen benedenverdieping, een overkragende
+    bovenverdieping in het hout van de stijl en een pannendak met dakkapellen (twee verdiepingen en een zolder; een
+    derde verdieping vraagt dat de huizenbouwer drie lagen leert). Het vel opnieuw (64 tekeningen; de andere 495 byte
+    voor byte gelijk, de cache overgezet), en alle bouwfasen: een gebouw uit delen bouwt per deel (`fasenVanDelen`), de
+    toren zonder latten. Nog open: de plaatsen voor gasten in de grote herberg (achteraan de werklijst).
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag
@@ -5033,13 +5131,14 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     van 13 tot 15 jagers; nu eet het in de eerste winter zijn zaaigraan op, en de oogst zakt in (612, 205, 32). Voorstel
     van Claude: het zaaigraan blijft liggen (a), en de raad zegt wat het meest helpt aan eten (b). **Marcel (8 okt): "a.
     eten ze wel op, bij honger grijpen mensen alles aan. Je moet mensen inzetten om het warenhuis te beschermen. b. dat is
-    goed. ze mogen advies geven op wat te doen. dit kan kopen, planten, bakken etc zijn."** Dat wordt vraag 133 (hieronder,
+    goed. ze mogen advies geven op wat te doen. dit kan kopen, planten, bakken etc zijn."** Dat wordt vraag 132 (hieronder,
     bij de vragen), met het plan.
-    **Bezig in sessie `ccr-77327776-rqjldz`** (7 okt): stap 3, wat je tegen de wolven doet; eerst het plan voor Marcel.
+    **Stap 3 is gebouwd en staat in `main`** (8 okt, sessie `ccr-77327776-rqjldz`), met vraag 132 die eruit kwam.
 117. **Eén kaart: het eiland** (Marcel, 4 okt, zesentwintigste sessie: "Ik wil uiteindelijk toch alles op dezelfde kaart.
     Dus de hele spelwereld als het ware. Zo kun je steeds stukken 'ontdekken' in de fog of war. Het idee is een eiland. Met
     water rondom. Je krijgt een random positie op het land. Kan aan de buitenkant zijn of binnen in het land."; plan van
     Claude; open).
+    **Bezig in sessie `ccr-f03157dc-9d2dtu`** (8 okt): stap 2, je dorp op het eiland; 2a, 2b, het verslag van 2c en 2d staan in `main`; de regel van 2d voor de kapel staat op de branch; nu B van 2a, eigen grondtegels voor het eiland (de zee, het strand, het veen, het broek): eerst een plan (Marcel: "dan gaan we de eigen tegels maken").
     **Wat er nu is:** het land is een aparte kaart met provincies waar je in dagen reist (vraag 63, `js/land.js`, achter de
     spelregel Land, die standaard uit staat), en elke provincie zou een eigen kaart krijgen. Dit vervangt dat: één grote
     kaart, een eiland met de zee rondom, waarop alles ligt.
@@ -5087,6 +5186,242 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
       poppetjes en ver weg als getallen (vraag 79, D).
     - **De tijd.** Op 1× loopt de schout zo'n kwartier van de ene kust naar de andere, op 30× minder dan een minuut; later
       een paard. Dat past bij het ontdekken.
+    **Het plan voor de kaartenmaker** (Claude, 8 okt, sessie `ccr-f03157dc-9d2dtu`; Marcel, 7 okt: "Uiteindelijk wil ik
+    een random map generator met alles", en de grote plaat bij vraag 121; wacht op Marcel). De grote plaat van nu
+    (`node gereedschap/pixelart/landschap-plaat.cjs 5 2500`) is een eentonig groen vlak met een raster erin: de drie
+    lagen ruis van `js/hoogte.js` liggen op een vierkant rooster (waarde-ruis), en op die maat zie je de hokjes. Een
+    eiland vraagt bovendien vormen die het hele eiland kennen: een rivier moet weten waar de zee is, een weg waar het
+    volgende dorp ligt. Dat kan geen rekensom per tegel zijn, en elke boom wel. Daarom:
+    - **Twee schalen.** *Het overzicht:* het eiland in vakken van 8 bij 8 tegels (zo'n 310 bij 310), met wat het hele
+      eiland moet kennen: de kust, de bergen en heuvels, waar het water heen stroomt (rivieren die in zee uitkomen, meren
+      in de kommen), de streken, de plekken voor de dorpen, het kasteel en de stad, en de wegen ertussen. Een nieuw spel
+      maakt het uit het nummer (in minder dan een seconde, te meten), en het wordt niet bewaard: hetzelfde nummer maakt
+      het opnieuw. *Het detail:* per tegel een rekensom uit het nummer en het overzicht, zoals de hoogte nu: de kustlijn,
+      de bochten van de rivier, elke boom en struik. Dat is overal te vragen, dus kan later een stuk van het eiland
+      gemaakt worden als je in de buurt komt (de stukken hierboven).
+    - **De vormen.** Een kust met baaien en kapen, en een paar eilandjes ervoor; het land loopt van de kust naar binnen
+      op; een bergrug met passen (B), waar de rivieren ontspringen; en heuvels overal, met de glooiing van nu als fijnste
+      laag. De ruis wordt gradiënt-ruis, elke laag een andere kant op gedraaid, en het land zelf een beetje verbogen
+      (domain warping): dan is er geen raster meer en geen voorkeursrichting.
+    - **De streken** (D): de zes wildernissen van de landkaart (`js/land.js`), het woud, de heide, het veen, het broek,
+      het zand en de kampen, en de kust met strand en duinen, uit hoe hoog, hoe nat en hoe steil het er is: het veen laag
+      en nat, de heide droog en hoger, het broek langs de rivieren, de kampen waar het vruchtbaar is, rotsen waar het
+      steil is. Wat er op een tegel groeit, komt uit zijn streek, met de tabel van de maker (`groei` in
+      `T.MAKER_INSTELLINGEN`).
+    - **De plekken en de wegen.** Plekken voor de dorpen (een per speler, tot zes, en een paar die zichzelf besturen;
+      vraag 61 en 63), het kasteel op een heuvel (vraag 126), de stad aan de monding van de grootste rivier (later een
+      haven), ver genoeg uit elkaar; wegen ertussen die de dalen volgen, met een brug waar de rivier smal is. Op 2,2
+      tegels per seconde is het eiland van kust tot kust bijna vier dagen lopen in het spel (twintig minuten op 1×,
+      veertig seconden op 30×), en een buurdorp een dag of anderhalf: dezelfde dagen als op de landkaart (één tot drie),
+      zonder aparte kaart (vraag 62: "Denk in dagen").
+    - **Je plek** (C): het lot kiest, aan de kust of binnenin (Marcel, 4 okt), maar alleen waar een dorp kan groeien:
+      vlak genoeg, zoet water, grond voor akkers, bos in de buurt, en geen berg tussen je dorp en de camera (die draait
+      niet, vraag 124). Elke plek begint anders: aan de kust vis (en later een haven), aan een rivier een brug en een
+      molen, op de heide schapen en weinig hout, aan de bosrand hout en wolven. En de weg door je land is de weg naar het
+      kasteel en de stad: de heer en de marskramer komen van waar ze wonen.
+    In stappen, elk met eerst iets om te zien:
+    - **Stap 1, de plaat** (niets in het spel): `js/eiland.js`, het overzicht en het detail zonder scherm, met toetsen
+      (hetzelfde nummer geeft hetzelfde eiland, elke rivier komt in zee, elke plek is over de weg te bereiken), en
+      `gereedschap/pixelart/eiland-plaat.cjs`: het hele eiland van boven, met de zee, de kust, het licht van de zon, de
+      rivieren en meren, de streken in hun kleur, de wegen en de plekken, en ernaast je land van 100 bij 100 met de rand
+      eromheen, tegel voor tegel. Klaar als: drie eilanden die Marcel als eiland herkent, elk anders, zonder raster, en
+      het overzicht gemeten.
+    - **Stap 2, je land komt van het eiland** (een spelregel, standaard uit tot de speeltest het zegt): een nieuw spel
+      maakt het eiland, en je land van 100 bij 100 is het stuk om je plek. De grond, het water, het bos, de rotsen en de
+      hoogte komen van het eiland; de maker legt het gehucht erop zoals nu (het plein, de boerderijen met hun akkers, de
+      meent op de heide); en de rand om de kaart is ook het eiland (de zee, de bergen in de verte). Een houthakker bij het
+      bos en een visser aan het water gaan vanzelf (`T.natuurBij`). Er hoeft nog niets in stukken: het spel blijft 100
+      bij 100. Klaar als: de speeltest van vier jaar op drie eilanden zoals op de landen van de maker, en met de
+      spelregel uit alles byte voor byte gelijk (`npm run schermen`).
+    - **Stap 3, de proef met stukken** (hierboven: de kaart in stukken van 64 bij 64 als compacte getallen, gemaakt als
+      je in de buurt komt; opslaan wat veranderde; HPA\* over de stukken), op 500 bij 500 en dan het hele eiland, gemeten
+      op Marcels pc. **Stap 4, de mist** (zwart wat niemand zag, grijs wat je je herinnert; vraag d hierboven). **Stap
+      5, het kasteel, de stad en de andere dorpen** op het eiland (vraag 126 en 72), en de landkaart gaat weg.
+    - **Voor de demo:** stap 1 en 2 brengen de demo iets (elk spel een andere plek op een eiland, de kust en een rivier,
+      beelden voor de Steam-pagina); stap 3 tot en met 5 zijn voor het hele spel, en de grootste technische stap tot nu
+      toe. Voorstel: na stap 2 terug naar de kern (de proef van vraag 128, en stap 2 van de hoogte), en stap 3 later.
+      Stap 2 van de hoogte (lopen, zien, bouwen, afdekken) hoeft niet vóór het eiland: de plek komt waar het steile
+      buiten je land blijft, en met "Hoogte" op vlak ligt ook het eiland vlak.
+    - **Goed om nu al te weten:** hetzelfde nummer geeft hetzelfde eiland zolang de kaartenmaker niet verandert. Tot de
+      release mag hij veranderen (een bewaard spel past dan niet meer, zoals bij een nieuwe `versie`); daarna onthoudt
+      een spel met welke kaartenmaker het begon.
+    Vragen: **A**, twee schalen, deze stappen, en na stap 2 terug naar de kern? **B**, de bergen: b1 een bergrug met
+    passen en verder heuvels, of b2 alleen heuvels, zoals nu maar groter? **C**, je plek: altijd waar een dorp kan
+    groeien en niet achter een berg, of ook een moeilijke plek (als spelregel)? **D**, de streken: de zes van de
+    landkaart en de kust, of wil je er iets bij?
+    **Marcel (8 okt): "A hoe bedoel je? Ik wil 1 aaneengesloten landschap.. B 1 C moeilijke plek mag ook, kunnen we als
+    hard modus later doen? D Nee voor nu prima."** Dus: **B** een bergrug met passen, en verder heuvels. **C** standaard
+    altijd een plek waar een dorp kan groeien; een moeilijke plek komt later, als zware stand bij de moeilijkheidsgraad
+    (die er al is voor de tegenspelers, vraag 61, C). **D** de zes streken van de landkaart en de kust, voor nu niets
+    erbij. **A** is één aaneengesloten landschap, zoals Marcel al wilde (vraag 61, A: "een grote kaart"; vraag 117: "alles
+    op dezelfde kaart"): één eiland waar alles doorloopt en waar je overal kunt lopen, zonder naden en zonder laadschermen.
+    De twee schalen zijn hoe de maker het maakt, niet wat je ziet (zoals een schilder eerst met grove streken zet waar de
+    zee, de bergrug en de rivieren komen, en daarna elk blaadje schildert: één schilderij, en de schets zie je nooit), en
+    de stukken van 64 bij 64 zijn hoe het in het geheugen staat (zoals in Minecraft: het land om je heen wordt gemaakt
+    terwijl je loopt). De enige grens in het plan is stap 2, een tussenstap: je speelt je dorp van 100 bij 100 al op het
+    eiland en ziet de rest eromheen, maar loopt er nog niet in; stap 3 haalt die grens weg. Het werk van stap 2 (je dorp
+    op het land van het eiland) is ook voor het hele eiland nodig. Opnieuw gevraagd (wacht op Marcel): **a1** de plaat,
+    je dorp op het eiland, dan eerst de kern (voor de demo), en daarna het hele eiland beloopbaar; of **a2** na de plaat
+    meteen het hele eiland beloopbaar, en dan de kern. Voorstel: a1, want de demo gaat over je dorp en zijn mensen, en
+    het hele eiland is het grootste technische werk tot nu toe. De plaat (stap 1) is in beide gevallen de eerste.
+    **Marcel (8 okt): "Fog of war maakt de rest van het land 'onzichtbaar' tot je het verkent."** Je ziet je dorp en een
+    rand eromheen die je mensen kennen; de rest is mist tot je het verkent. Dat helpt ook de techniek, want wat niemand van
+    jou zag, hoeft er nog niet te zijn: het spel maakt een stuk aan de rand van de mist, waar je het niet ziet gebeuren. Zo
+    zie je één aaneengesloten landschap, en houdt het spel alleen wat je verkende. Het geheugen en een bewaard spel groeien
+    dan met wat je verkent, niet met het eiland; wat in de mist ligt, wordt niet getekend; wie in de mist reist (de heer,
+    een ander dorp, een roedel), reist als getallen langs de wegen van de schets en wordt een poppetje als je hem ziet; en
+    een weg zoek je alleen door land dat je kent. Daarom worden stap 3 en 4 één stap: **de mist en een kaart die
+    meegroeit**. Wat groot blijft: het spel gaat nu uit van één vaste kaart (`.tegels[` staat 36 keer in 14 bestanden,
+    `.grond[` 24 keer in 6, en de maat `w.b` en `w.h` 91 keer in 9: lopen, paden zoeken, het bos, tekenen, opslaan), en
+    die moet een kaart worden die meegroeit. Nog open: a1 of a2 (kan als de plaat er is), en wat je verkende maar nu niet
+    ziet: grijs, zoals je het het laatst zag (vraag d hierboven, en Marcels "laatst bekende inventarisatie"), of weer
+    donker.
+    **Marcel (8 okt): "Grijs is goed, en ja begin met de plaat."** Dus wat je verkende maar nu niet ziet, blijft grijs
+    zoals je het het laatst zag (vraag d is daarmee beantwoord), en stap 1, de plaat, is begonnen.
+    **Stap 1 is gebouwd** (8 okt, `ccr-f03157dc-9d2dtu`; wacht op Marcels blik): de kaartenmaker (`js/eiland.js`) en de
+    plaat (`node gereedschap/pixelart/eiland-plaat.cjs`, in `gereedschap/pixelart/uit/eiland/`; zie `kaarten.md`, "Het
+    eiland"). Uit één nummer een eiland met water rondom en een kust met baaien, kapen en eilandjes; een bergrug met twee
+    of drie passen en verder heuvels (B); rivieren die in zee uitkomen, met hun dalen; zeven meren; de zes streken van de
+    landkaart met strand en duinen (D); het kasteel op een heuvel, de stad aan de monding van de grootste rivier, en acht
+    dorpen met een naam, ver genoeg uit elkaar, elk waar een dorp kan groeien (vlak, droog in het midden, water en open
+    land in de buurt, en geen berg naar de camera toe; C); en de wegen van het kasteel naar elk dorp en van elk dorp naar
+    zijn buur, door de dalen en over de passen, met bruggen. De plaat toont het eiland van boven met de namen, en je land
+    van 100 bij 100 met de rand, tegel voor tegel. Gemeten: de schets in 0,5 à 0,7 s, het hele eiland op ware grootte in
+    9 s (een stuk van 64 bij 64 in 6 ms). Van kust tot kust is drie dagen lopen, naar het kasteel een tot drie. Toetsen
+    in `test/eiland.test.cjs` (onder meer: het water stroomt nooit omhoog, over de weg kom je overal, en een stuk is
+    hetzelfde hoe je het ook vraagt); `npm test`: 1036/1036. Wat opviel:
+    - *Heuvels uit ruis hebben overal kommen*: de eerste plaat had 167 meren. Nu worden alleen de zeven grootste een
+      meer, staat een te groot meer lager, en slijt de rivier door de rest een doorbraak, zoals in een echt landschap.
+      De toets vond daarbij water dat omhoog stroomde (een droge kom boven een meer), en dat is gerepareerd.
+    - *Een dorp midden in het bos*: zonder eis aan open land koos het lot een plek die helemaal bos was; nu is minstens
+      een kwart open land (de kampen of de heide), voor de akkers.
+    - *De kust langs de rand*: het eiland liep eerst tot de rand van het vierkant, met rechte kusten; nu blijft de zee
+      ruim rondom, en is het land 40 à 55% van het vierkant.
+    - *Voor stap 2*: een dorp kan aan zee liggen, aan een rivier of in het bos, en de maker legt nu zelf de bosrand, de
+      vijvers en de rotsen; op het eiland moet hij nemen wat er ligt (de zee in een hoek van je land, een rivier erdoor).
+    Het spel gebruikt het eiland nog niet. Nu: Marcel kijkt naar de platen, en kiest a1 (je dorp op het eiland, dan de
+    kern) of a2 (meteen het hele eiland).
+    **Marcel (8 okt): "1 ja goed 2 a1 3 prima".** De eilanden zijn goed. a1: eerst je dorp op het eiland (stap 2), dan
+    de kern (de proef van vraag 128, en stap 2 van de hoogte), en het hele eiland (de mist en een kaart die meegroeit)
+    later. Stap 1 staat sinds 8 okt in `main`.
+    **Het plan voor stap 2, je dorp op het eiland** (Claude, 8 okt; wacht op Marcel). Een nieuw spel maakt het eiland uit
+    het nummer van het land, en je land van 100 bij 100 is het stuk om jouw plek; het spel blijft 100 bij 100, er hoeft
+    nog niets in stukken. Wat er nu is: de maker legt zelf de natuur (een bosrand langs een of twee kanten, bosjes,
+    vijvers, rotsen, de heide met de kooi, een rechte weg met een beek en een bruggetje) en het gehucht erin; de grond
+    kent vijf soorten tegels (gras, zandpad, kasseien, water en heide), en heide grenst alleen aan gras. Om de kaart
+    tekent het spel een rand van bos.
+    - **2a, de maker op het eiland:** het water (de zee, een meer, een rivier, met een brug waar de weg erover gaat), het
+      bos, de heide, de rotsen, de weg (die van het eiland, naar het kasteel en naar de buren) en de hoogte (als
+      "Hoogte" aan staat) komen van het eiland. Het gehucht legt de maker erop zoals nu (het plein, de schout, de
+      herberg, de hutten, de vijf boerderijen met hun akkers, de meent met de kooi, op de heide als die er ligt), en hij
+      keurt het zoals nu. De grond met de tegels die er zijn: de kampen en het woud gras, de heide heide, het strand, de
+      duinen en het zand zandpad, het veen en het broek gras, het water water (B). Achter de spelregel "Je gehucht", met
+      een derde keus: "Op het eiland" (de standaard blijft "Elk spel een ander"). Klaar als: drie eilanden in het spel,
+      door de keuring, en met de spelregel zoals nu alles byte voor byte gelijk.
+    - **2b, het eiland om je land:** de rand om de kaart toont het eiland (de zee, het bos, de heide, en met hoogte de
+      bergen in de verte), niet alleen bos. Die rand kennen je mensen; de rest is mist (stap 3).
+    - **2c, de proef:** de speeltest van vier jaar op drie eilanden, naast die op de landen van de maker. Groeien de
+      dorpen even ver, dan wordt "Op het eiland" de standaard.
+    Wat Claude erin ziet:
+    - *Een dorp dat er al was* (C): het gehucht bestaat al als het spel begint, dus is gerooid wat het nodig heeft (het
+      plein, de erven, de akkers), en staat het bos van het eiland eromheen. Zo kan het op elke plek, ook aan de bosrand.
+    - *De weg wijst*: de weg door je land is die naar het kasteel, dus komen de heer, de inner en de soldaten van die
+      kant, en de marskramer van de stad; je ziet waar ze wonen, ook al ligt het nog in de mist.
+    - *Elke plek begint anders*: aan zee vis, aan een rivier een molen, op de heide schapen en weinig hout, aan de
+      bosrand hout en wolven. De speeltest zegt of dat eerlijk blijft.
+    - *Heide grenst alleen aan gras*: op het eiland ligt heide ook naast zand en water; tot er overgangen zijn, legt de
+      maker er een strook gras tussen.
+    Vragen: **A**, deze drie stukken, achter de spelregel? **B**, nieuwe grondtegels voor de zee, het strand, het veen
+    en het broek (en de overgangen van de heide): nu in 2a, of eerst met wat er is en later? **C**, het gehucht als een
+    dorp dat er al was (gerooid wat het nodig heeft), of alleen op open land?
+    **Marcel (8 okt): "A ja B later C dorp dat er al was".** Dus de drie stukken achter de spelregel "Je gehucht" ("Op
+    het eiland"), eerst met de tegels die er zijn (nieuwe grondtegels later), en het gehucht als een dorp dat er al was.
+    2a is begonnen.
+    **2a is gebouwd** (8 okt, `ccr-f03157dc-9d2dtu`; wacht op Marcels blik): de spelregel "Je gehucht" heeft een derde keus,
+    "Op het eiland" (de standaard blijft "Elk spel een ander"), en dan is je land het stuk van het eiland om jouw dorp
+    (`T.landVanEiland` in `js/eiland.js`, en de maker met `land`, `js/maker.js`). Het water (de zee, de meren, de
+    rivieren), het bos, de heide, het zand, de rotsen en de wegen komen van het eiland; het gehucht legt de maker erop
+    zoals altijd, en het is een dorp dat er al was (C): eerst de huizen om het plein, dan zoekt de weg van het eiland zijn
+    weg ernaartoe (om de huizen heen, en met een recht bruggetje over smal water), dan de boerderijen en akkers (liever op
+    open land), en pas dan het bos van het eiland, met een gerooide kern van zestien tegels om het plein. De uitgang is
+    waar de weg naar het kasteel je land verlaat. `Spel.debug.eiland(5)` begint een spel op het eiland van 5. Op tien
+    landen lukt het op jouw eigen plek, meestal bij de eerste poging (0,2 à 1 s, plus 0,6 s voor het eiland); lukt het
+    ergens niet, dan op de plek van een ander dorp. Met de spelregel zoals het was, maakt de maker op twaalf landen byte
+    voor byte hetzelfde plan en dezelfde kaart. `npm test`: 1039/1039. Wat opviel:
+    - *De weg van het eiland lag waar de herberg moest staan*: de deur van de herberg kijkt naar het plein, en op land 5
+      kwam de weg precies van die kant. Bij de maker kiest het lot de wegen; hier liggen ze vast. Daarom komen op het
+      eiland eerst de huizen en dan de weg, en dat is ook wat "een dorp dat er al was" zegt.
+    - *Rotsen passen niet op heide*: in een heidedorp vond de maker geen plek voor de rotsen en de steengroeve (die staan
+      op gras). Nu is de heide in de kern van het dorp gras (weiden en tuinen), en kiest de rotspartij een plek met
+      genoeg gras; en in een bosland mogen de rotsen in het bos.
+    - *De zee is de tegel van de vijver*: op een groot vlak leest die als donkere grond. Een eigen tegel voor de zee (en
+      het strand, het veen, het broek) is "B later"; tot dan is het strand aan het water een randje gras, want zand
+      grenst niet aan water.
+    - *Om de kaart staat nog bos*, ook aan de kant van de zee: dat is 2b (de rand toont het eiland).
+    - *Hoogte*: met "Hoogte" op "Heuvels" legt de maker op het eiland nog zijn eigen heuvels, niet die van het eiland;
+      dat hoort bij 2b.
+    **Marcel (8 okt): "Hoe bedoel je de spelregel derde keuze? Het eiland wordt gewoon altijd gegenereerd bij een nieuw
+    spel. Ergens op dat eiland staat je gehucht."** Dus geen keuze: elk nieuw spel maakt het eiland, met je gehucht erop
+    (`T.MAKER_INSTELLINGEN.opEiland`, en de spelregel "Je gehucht" staat op "Op het eiland" en niet meer in het venster
+    Spelregels, `voorProeven`). De landen van de maker zonder eiland en het ontworpen gehucht blijven voor de toetsen en
+    de speeltest: de toetsen die over de landen van de maker gaan (de wolven, de hoogte, de natuur, het rooien), leggen
+    hun land zonder het eiland, en de speeltest speelt het eiland met `--eiland` (met `--maker` de landen van de maker,
+    om te vergelijken). 2c, de speeltest van vier jaar op drie eilanden, beslist dus niet meer of het de standaard wordt,
+    maar of de dorpen er even ver groeien. Wat een browser van vroeger voor "Je gehucht" onthield (toen het nog in het
+    venster stond), telt niet meer: anders begon een nieuw spel daar stil zonder het eiland, zonder dat je ziet waarom
+    (`T.laadOpties`; de speeltest zet het met `proef`). En `Spel.debug.gehucht(5)` en `npm run grootte -- --maker 5`
+    blijven op het land van de maker zonder het eiland, zodat de vaste schermafdrukken, de tekenmeting, de samenvatting
+    en de grootte op hetzelfde land blijven meten als ervoor (de wereld byte voor byte gelijk op 5 en 62707).
+    **Marcel (8 okt): "A ja B ja".** Dus 2a, met het eiland bij elk nieuw spel, gaat naar `main`, en nu 2b zoals
+    voorgesteld: de rand om de kaart komt van het eiland zelf (de zee, het strand, het bos, de heide, de rivieren, en de
+    weg die doorloopt naar de buren), zodat je land zonder naad overgaat in de rest; met "Hoogte" op "Heuvels" komt ook
+    de hoogte van het eiland (de bergrug en de dalen) in plaats van de heuvels die de maker er zelf op legt, en je dorp
+    blijft vlak waar het staat; "Hoogte" blijft standaard op "Vlak" tot lopen, zien en bouwen de hoogte kennen (stap 2
+    van vraag 121). Tegelijk 2c op de achtergrond, in een losse kopie van `main`: de speeltest van vier jaar op drie
+    eilanden, naast die op de landen van de maker, zodat we weten of een dorp er even ver groeit vóór de rand mooi is.
+    **De rand van 2b is gebouwd** (8 okt): buiten de kaart loopt het eiland door (`T.randVanHetEiland` in `js/maker.js`,
+    getekend door `js/tekenen.js`): de zee, het strand, de heide, het bos en de rotsen van het eiland, en de weg naar de
+    buren, met de regels waarmee de maker binnen de grond en de bomen legt; aan de naad past elke tegel, en onder het bos
+    ligt gras zoals binnen, zodat er geen naad te zien is. Om een land van de maker blijft de rand zoals hij was. Wat
+    opviel: de oude rand zette aan een kust losse bomen in de zee. **En de hoogte:** met "Hoogte" op "Heuvels" is het land
+    dat van het eiland (`hg.eiland`, `js/hoogte.js`), met het dorp vlak op zijn vlakte en de richel bij de rotsen zoals
+    altijd; een land van de maker houdt byte voor byte zijn heuvels. Om het dorp is het eiland zachter dan de heuvels van
+    de maker (een dorp ligt waar het vlak is: aan de kust 0 tot 80 pixels, landinwaarts 150 à 200), en de bergrug ligt ver
+    weg. 2b is af, en staat in `main` (Marcel, 8 okt: "Zet 2b ook in main").
+    **2c is gespeeld** (8 okt; `speelbaar.md`, "De speeltest van 8 okt"): vier jaar, de bouwer en de sluwe bouwer, op
+    drie eilanden en op dezelfde drie landen van de maker. Op de landen van de maker liep het dag voor dag als op 7 okt
+    (vier van de zes gewonnen); op het eiland winnen er twee van de zes, allebei op 62707, acht à negen maanden later.
+    Het groeien gaat even snel. Wat het winnen tegenhoudt: **a**, een huis zonder put en nergens plek voor een put
+    (73425, bij allebei; ook op een land van de maker, maar daar pas na de winst); **b**, meer bos, dus meer wolven, dus
+    minder schapen en geen laken (62707: twee à drie keer zoveel bos als het land van de maker, 9 en 14 schapen weg tegen
+    3 en 2); en **c**, rovers die om de tien dagen blijven komen, ook met lege handen (72022, de bouwer: 32 keer, en de
+    oogst zakte tot 92). Voorstel van Claude (wacht op Marcel): a eerst uitzoeken en voorkomen (een erf niet waar een put
+    het niet meer haalt, zoals vraag 130, d); b opnieuw meten na vraag 116, stap 3 (wat je tegen de wolven doet); c in
+    `opmerkingen.md`, als vraag voor later. Daarmee is stap 2 af; volgens het plan dan terug naar de kern.
+    **Marcel (8 okt): "A ja, en zet het verslag in main".** Dus nu **2d, de put zonder plek**: de speeltest naspelen tot
+    het huis op 73425 een put mist, zien waarom er nergens plek is, en dan voorkomen (een erf niet waar een put het niet
+    meer haalt, zoals vraag 130, d); b na vraag 116, stap 3; c blijft een vraag voor later.
+    **2d is gebouwd** (8 okt): nagespeeld, stond het huis (dat van Evert, vijf dorpelingen) midden in een blok erven die
+    strak tegen elkaar lagen: binnen 12 tegels was alles een gebouw, een erf of te krap voor drie tegels looppad, en de
+    dichtste put stond op 12,7 tegels. Nu komt een erf niet waar zijn hut straks geen put kan halen, of waar het een
+    ander huis (of de hut op een ander erf) de laatste plek voor een put afneemt (`T.kringGrond` in `js/wensen.js`, en
+    in `T.waaromPastErfNiet`). Op het ontworpen gehucht, met de erven zo dicht als het mag, houdt zo elk huis een plek
+    (zonder de regel bleven er drie hutten zonder over). Ook: `T.huisVan` zegt nu "het huis van", niet "de huis van".
+    De speeltest erna (`speelbaar.md`, "De speeltest van 8 okt: een erf houdt plaats voor een put"): tien van de twaalf
+    spellen letter voor letter als in 2c, en op 73425 winnen ze nu allebei. De eerste versie van de regel deed niets: de
+    hut had nog een put toen de erven om hem heen kwamen, en verloor hem pas toen hij een huis werd; nu telt een hut op
+    een erf met het huis dat hij wordt (`T.huisPlekVan`).
+    **Een tweede weg naar hetzelfde** (8 okt): op 72022 (en op `main` met de grote gebouwen ook op 62707) zette het dorp
+    een put die de hut haalde maar niet het huis dat hij werd (11,7 tegels tegen 12,35), en het looppad van die put nam
+    de laatste plekken die het huis wel haalden. Nu komt een put voor een hut op een erf waar hij allebei haalt
+    (`T.kringVoetenVan`, `T.kringTeller` met `straks` in `T.plekVoor`).
+    **Een put per dorp in plaats van in de buurt?** Claude zag dat de dorpen van de speeltest bijna een put per huis
+    hebben (9 tot 18 putten op 14 tot 24 huizen: de erven liggen ver uit elkaar, en een kring van 12 haalt twee à drie
+    huizen), en stelde voor: één put per zoveel mensen, waar ook. Marcel (8 okt): "Nee, misschien toch houden zoals het
+    nu is. Het dorp moet gewoon uitdijen. Er is ruimte genoeg." De kring van 12 blijft.
+    **Op `main` met de grote gebouwen** (`speelbaar.md`, onder 2d): geen put meer zonder plek; op 62707 houdt nu een kapel
+    zonder plek het jaar van geluk tegen, en 72022 beslist de gril van het vette varken bij een gunst van 5
+    (`opmerkingen.md`). Voorstel van Claude: de regel van 2d ook voor de kapel. Marcel (8 okt): "Prima"; en 2d naar `main`: "Ja doe maar".
 118. **Inwoners met stats, zoals in Dwarf Fortress** (Marcel, 4 okt, zesentwintigste sessie: "Inwoners krijgen ook
     'stats' hp, skills, eigenschappen, etc ala dwarf fortress"; plan van Claude; open).
     **Wat er al is:** elke bewoner heeft een naam, een leeftijd, een huis, een gezin en werk (`js/bewoners.js`); de vijf
@@ -5286,6 +5621,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     200 zo'n 25, 's avonds anderhalf tegelijk. De oude toetsen van het dagritme zijn weer zoals ze waren.
 121. **Hoogteverschillen op de kaart** (Marcel, 4 okt, achtentwintigste sessie: "Ik heb wel 1 extra verzoek. Hoogte
     verschillen op de kaart. 😁"; plan van Claude; open).
+    **Bezig in sessie `claude/project-thread-cyjrql`** (8 okt): stap 2, wat de hoogte doet (afdekken, lopen, zien,
+    bouwen): eerst een plan voor Marcel.
     **Wat er al is:** het ontwerp van 20 sep (`kaarten.md`, "Hoogte is een getal per tegel", Marcels keuze toen): een
     getal per tegel, de wand tussen twee hoogtes afgeleid zoals een randtegel tussen twee grondsoorten, een helling waar
     je over mag, alles op een hogere tegel een trede omhoog, en wie hoog staat, ziet verder. Dat was nog voor Tiled en de
@@ -6117,6 +6454,21 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     vijf vragen voor een tester staan in `speelbaar.md` (bij de eerste proefversie, 33d), het eindscherm komt bij het
     jaarboek, en de trailer en de pitch staan in `commercieel.md`. Het ontwerp: `spel.md`, "Informatie, de zitting en
     mensen die onthouden".
+    **Het plan voor de proef** (Claude, 8 okt, voor Marcel): de keten in vijf stappen. 's Nachts neemt een vader met een
+    ziek kind een zak graan uit de schuur (wat er echt gebeurde, `D.zaak`); een buur beschuldigt de verkeerde (een
+    gerucht); je zoekt het te voet uit: het spoor bij de schuur, een buur die je iets kunt vragen, en de herberg; 's
+    middags op het plein de zitting (straffen, vrijspreken of verbergen), die leest uit wat je weet (een papier "De
+    zaak", met feiten en geruchten); en later een vervolg over dezelfde mensen, en de inner die in het boek van de schuur
+    ziet wat je verborg. Nieuw daarvoor: een bewoner iets vragen, wat je weet, de zitting en het boek. Vragen A tot F
+    (wanneer de zaak komt, het papier, rondvragen, de zitting op het plein, het boek, een spelregel); in vier stukken.
+    **Marcel koos (8 okt): "akkoord, bouwen maar"**, dus de voorstellen van A tot F: de zaak één keer per spel, in de
+    eerste herfst als het graan krap is; het papier "De zaak"; rondvragen alleen zolang de zaak loopt; de zitting op het
+    plein; het boek van de schuur dat de inner leest; en een spelregel "De zaak". Het plan: `/mnt/project-files/aardschok/plan-graanzak.md`.
+    **Gebouwd** (8 okt, op de branch `claude/project-thread-cyjrql`): `js/zaak.js`, met de gesprekken, het papier, het
+    spoor, de zitting op het plein en de vervolgen; hoe het werkt, staat in `spel.md` ("Informatie, de zitting en mensen
+    die onthouden", Zo werkt het nu), de toetsen in `test/zaak.test.cjs`. Twee keuzes van Claude: "krap" werd een gezin in
+    nood, geen voorraad die op raakt, en de inner leest het boek op Sint-Maarten. Open: Marcel speelt het (begin met
+    `Spel.debug.zaak('nu')`), en dan of c, d en e erna komen.
 129. **Hoeveel bos heeft een houthakker nodig?** (Claude, 6 okt, de sessie van de heer, bij stap 3 van vraag 110, e, met
     115; `spel.md`, "De houthakker hakt en plant", Open; open).
     **Gemeten** (het ontworpen gehucht en de landen 5, 62707, 72022 en 73425): een houthakker mag staan op een open plek
@@ -6339,8 +6691,20 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     **Gespeeld** (7 okt; `speelbaar.md`, "De speeltest van 7 okt: wapens zijn niet meer verboden"): de bouwer zei op alle
     drie de landen ja tegen de wapenmaker en speelde de vier jaar uit; **op 62707 wint hij nu**, op 27 hooimaand van het
     vierde jaar, waar hij eerst in het tweede jaar werd ontslagen. Drie van de zes spellen winnen. **Klaar.**
+133. **Plaatsen voor gasten in de grote herberg** (Claude, 8 okt, bij vraag 114, stap 3; open). Groeit de herberg in een
+    dorp tot de grote, dan heeft hij nog evenveel plaatsen voor gasten als de kleine (`T.herbergGasten`): een grotere
+    herberg zou meer mensen moeten trekken, en dat haalt bier weg voor de huizen. Vraag aan Marcel: meer plaatsen naar de
+    maat van de herberg, of laten zoals het is?
+134. **Zaken als sjabloon** (Claude, 8 okt, bij vraag 128; Marcel: "prima"; open). De graanzak is één vaste zaak: het
+    verhaal, de rollen en de zinnen met de hand, alleen de mensen komen per spel uit het dorp (`T.mensenVoorDeZaak`). Het
+    voorstel: een zaak wordt een sjabloon met gegevens (de rollen en wie erin past, wat er echt gebeurde, wie wat weet, het
+    spoor, de keuzes op de zitting en wat terugkomt), en `js/zaak.js` speelt elk sjabloon op dezelfde manier. Een eigen zaak
+    is dan een nieuw sjabloon schrijven, zoals een voorval (een verdwenen schaap, brand in een schuur, een valse munt bij
+    de marskramer), te lezen in de gespreksschrijver; welke komt, hangt af van wat er speelt (honger: een diefstal),
+    zoals bij de voorvallen. Niet willekeurig laten verzinnen: het bewijs moet kloppen. Wanneer: pas als de tweede zaak
+    geschreven wordt, na Marcels proef met de graanzak, zodat we weten wat een zaak echt nodig heeft.
 
-133. **Het dorp eet gevarieerd, en het zaaigraan moet bewaakt** (Marcel, 8 okt, na de speeltest van de jager die echt
+132. **Het dorp eet gevarieerd, en het zaaigraan moet bewaakt** (Marcel, 8 okt, na de speeltest van de jager die echt
     jaagt: "het dorp moet gevarieerd eten. Graan, brood, vlees, vis etc.", en "a. eten ze wel op, bij honger grijpen mensen
     alles aan. Je moet mensen inzetten om het warenhuis te beschermen. b. dat is goed. ze mogen advies geven op wat te
     doen. dit kan kopen, planten, bakken etc zijn."; plan van Claude; open).
@@ -6378,30 +6742,30 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     aten, bedierf, terwijl het dorp in het voorjaar honger had, want bij honger at het alleen vlees. **Marcel (8 okt):
     "Vis mag een maag vullen, zoals vlees"** (de spelregel "Vis", `visIsEten`).
 
-134. **Minder grondstoffen** (Marcel, 8 okt: "Er blijven steeds dingen bijkomen zo. Dat wil ik voorkomen. We moeten stoppen
+135. **Minder grondstoffen** (Marcel, 8 okt: "Er blijven steeds dingen bijkomen zo. Dat wil ik voorkomen. We moeten stoppen
     met het ene op te lossen met iets anders", en "We blijven grondstoffen toevoegen"; open, wacht op Marcels keuze).
     Het spel kent 26 grondstoffen; negen worden gemaakt maar door niets gebruikt (behalve dat de marskramer ze koopt):
     eieren (kippenhok; ook de pacht van de heer), groente (moestuin), huiden (de jager), vaten (kuiper), kalk
     (kalkbrander), klei (kleiput), riet (rietsnijder), planken (timmerman). Voorstel van Claude: alle negen eruit, gebouw
     en grondstof (git houdt ze), de marktkraam "potten" ook. Dan blijven er 17: graan, melk, kaas, vlees, vis, meel,
-    brood, bier, wol, laken, hout, steen, turf, goud, zout, ijzer, gereedschap en wapens (met wijn, vraag 135, 18).
+    brood, bier, wol, laken, hout, steen, turf, goud, zout, ijzer, gereedschap en wapens (met wijn, vraag 136, 18).
     Daarbij een regel voor CLAUDE.md: wat een speeltest scheef laat zien, eerst met een getal; een nieuwe regel of
     grondstof alleen als Marcel hem kiest, en alleen met iets dat hem gebruikt.
     **Marcel (8 okt): "Houd het maar even zo. Maar geen erbij zonder overleg."** De negen blijven voorlopig; de regel staat
     in CLAUDE.md ("Niets erbij zonder overleg").
-135. **Wijn uit wijngaarden** (Marcel, 8 okt: "Ik zou ook wijn willen met wijngaarden. Dus meer als knights and merchants.
-    Dat je ook een boer met wijnranken hebt."; open, na vraag 134). In Knights and Merchants is wijn een van de vier soorten
+136. **Wijn uit wijngaarden** (Marcel, 8 okt: "Ik zou ook wijn willen met wijngaarden. Dus meer als knights and merchants.
+    Dat je ook een boer met wijnranken hebt."; open, na vraag 135). In Knights and Merchants is wijn een van de vier soorten
     eten (met brood, worst en vis), en de wijnboer haalt het van zijn wijngaard. Gedachten van Claude, nog niet gekozen:
     een wijngaard als soort veld, zoals een akker of weide in het veldenvenster, van een boer; de oogst in wijnmaand (die
     heet al zo); wijn als wens van een hogere stand, of als eten; en de heer die wijn wil, zoals nu de eieren.
     **Marcel (8 okt): "Wijn wordt drank, zoals bier. Mensen dronken geen water."** Dus een wens, geen eten.
-136. **Doorgroeien zonder vaste maat** (Marcel, 8 okt: "We moeten ook stoppen met het dorp een vaste maat geven. Als alles
+137. **Doorgroeien zonder vaste maat** (Marcel, 8 okt: "We moeten ook stoppen met het dorp een vaste maat geven. Als alles
     straks 1 eiland is, is het logisch dat je gewoon door kunt groeien naar buiten."; open). Hoort bij het eiland (vraag
     117). Er zijn twee vaste maten: het land van de maker (100 bij 100, met bos tot de rand), en de maat van de winst (vanaf
     100 mensen: daarna zegt de raad "haal een vrij erf weg", vraag 102, c, omdat een nieuw gezin in een hut de reeks van
     geluk breekt, en de bouwers van de speeltest stoppen dan met groeien).
 
-137. **Plunderen als het eten op is** (Marcel, 8 okt: "ik denk ook dat we later mee moeten nemen in het verhaal, dat
+138. **Plunderen als het eten op is** (Marcel, 8 okt: "ik denk ook dat we later mee moeten nemen in het verhaal, dat
     wanneer er tekort is aan voedsel je altijd nog kunt plunderen nabijgelegen dorpen / steden als je wil / kunt"; later,
     open). Hoort bij de dorpen op het eiland (vraag 117) en het vechten tussen dorpen (vraag 126): met je militie naar
     een buurdorp, en terug met zijn graan en vee, tegen wat het kost (mannen, de gunst van de heer, wat het buurdorp
@@ -6624,6 +6988,20 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 8 okt 2026 — **Vraag 117, stap 2b: het eiland om je land** (de sessie van de kaartenmaker; Marcel: "A ja", en "Zet 2b
+  ook in main"). Buiten de kaart loopt het eiland door, de zee, het strand, de heide, het bos, de rotsen en de weg naar de
+  buren, met de regels waarmee de maker binnen de grond en de bomen legt, zonder naad (`T.randVanHetEiland`); met
+  "Hoogte" op "Heuvels" is het land dat van het eiland (`hg.eiland`). `npm test` 1042/1042.
+- 8 okt 2026 — **Vraag 117, stap 2a: je dorp op het eiland** (de sessie van de kaartenmaker; Marcel: "A ja B later C dorp
+  dat er al was", "Het eiland wordt gewoon altijd gegenereerd bij een nieuw spel. Ergens op dat eiland staat je
+  gehucht", en "B ja"). Elk nieuw spel maakt het eiland, en de maker legt je gehucht erop als een dorp dat er al was: de
+  huizen om het plein, de weg van het eiland ernaartoe met rechte bruggetjes, de boerderijen en akkers op open land, en
+  het bos van het eiland eromheen. De landen van de maker zonder eiland blijven voor de toetsen en de speeltest
+  (`--maker`, `--eiland`). `npm test` 1040/1040.
+- 8 okt 2026 — **Vraag 117, stap 1: de plaat van het eiland** (de sessie van de kaartenmaker; Marcel: "Ik wil 1
+  aaneengesloten landschap", "B 1", en "ja begin met de plaat"). De kaartenmaker (`js/eiland.js`): uit één nummer een
+  eiland met water rondom, een bergrug met passen, rivieren die in zee uitkomen, meren, de zes streken van de landkaart
+  met strand en duinen, het kasteel, de stad, acht dorpen en de wegen; de plaat met je land ernaast. Nog niet in het spel.
 - 7 okt 2026 — **Vraag 121, stap 1: de hoogte in het spel** (de sessie van de hoogte; Marcel: "Ja, begin met stap 1",
   "Waar alles doorloopt", "Ja push main"). Een landschap uit het nummer van het land dat overal doorloopt, met een
   richel, akkers die meebollen en zacht licht, achter de spelregel "Hoogte" (standaard vlak); de proefplaat en de grote

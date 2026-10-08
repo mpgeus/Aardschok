@@ -357,6 +357,7 @@
     tekenMarkeringen(ctx, S);
     tekenBouwSpook(ctx, S);
     tekenVerzoekPlek(ctx, S);
+    tekenSpoor(ctx, S);
 
     const lijst = [];
     // Buiten zijn er geen muren: wat daar "muur" heet, is de voet van een boom of een gebouw, en
@@ -983,19 +984,14 @@
   // Waar de kaart aan open land grenst, loopt de grond door: elke hoek buiten de kaart neemt de soort van de dichtstbijzijnde
   // hoek op de rand over (zo lopen de weg en de beek rechtdoor de kaart uit), en ring na ring wordt het donkerder en
   // dunner, gedithered zoals het bos (ontwerp/beeld.md), tot het donker van de achtergrond. Onder het bos blijft het donker.
+  // Op het eiland loopt het eiland zelf door (vraag 117, 2b): de grond die het er heeft (T.randVanHetEiland in
+  // js/maker.js), ook onder het bos.
   const BUITENGROND_DIEP = 10; // zoveel ringen ver
   const BUITENGROND_VOL = 4; // tot hier ligt elke tegel er
   function randHoek(w, vx, vy) {
-    const x = Math.max(0, Math.min(w.b, vx));
-    const y = Math.max(0, Math.min(w.h, vy));
-    const tx = Math.min(x, w.b - 1);
-    const ty = Math.min(y, w.h - 1);
-    const g = w.grond && w.grond[ty] && w.grond[ty][tx];
-    const hoeken = g && T.sprites.grondHoeken(g.vel, g.id);
-    if (!hoeken) return 'gras';
-    const dx = x - tx;
-    const dy = y - ty;
-    return hoeken[dx === 0 ? (dy === 0 ? 0 : 3) : dy === 0 ? 1 : 2]; // boven, rechts, onder, links
+    const eiland = w.eiland && T.randVanHetEiland(w).hoek(vx, vy);
+    if (eiland) return eiland;
+    return T.sprites.grondHoekOp(w, Math.max(0, Math.min(w.b, vx)), Math.max(0, Math.min(w.h, vy))) || 'gras';
   }
   function tekenBuitenGrond(c, S, g) {
     const w = S.wereld;
@@ -1009,7 +1005,7 @@
         const r = bosrandRing(w, x, y);
         if (r > BUITENGROND_DIEP) continue;
         const dicht = r <= BUITENGROND_VOL ? 1 : 1 - (r - BUITENGROND_VOL) / (BUITENGROND_DIEP - BUITENGROND_VOL + 1);
-        if (hasj(x, y, zaad) >= dicht * (1 - bosBuiten(w, x, y))) continue;
+        if (hasj(x, y, zaad) >= dicht * (1 - (w.eiland ? 0 : bosBuiten(w, x, y)))) continue;
         const hoeken = [randHoek(w, x, y), randHoek(w, x + 1, y), randHoek(w, x + 1, y + 1), randHoek(w, x, y + 1)];
         const deel = T.sprites.grondMetHoeken(vel, hoeken, x, y) || T.sprites.grasTegel(x, y);
         if (!deel) continue;
@@ -1480,6 +1476,32 @@
   // De plek van een bouwverzoek (js/verzoeken.js; werklijst vraag 103): zolang iemand je erom vraagt, ligt de voet van
   // wat hij wil bouwen er in goud, met de kring erbij als het een put of een kapel is. Zo kun je gaan kijken waar het
   // komt voor je ja zegt.
+  // Het spoor van de graanzak (js/zaak.js): hoopjes gemorst graan op de grond, van de schuur naar de deur van wie het
+  // nam. Te zien voor wie kijkt; wat het betekent, weet de schout pas als hij erbij staat (T.werkZaakBij).
+  // gereedschap/wereld.html laadt de zaak niet.
+  const KORRELS = [[-14, -3], [-9, 4], [8, -5], [13, 2], [-3, 7], [4, 6], [-12, 1], [11, -1]];
+  function tekenSpoor(ctx, S) {
+    const D = T.dorpHier(S);
+    const Z = D && D.zaak;
+    if (!Z || !Z.spoor || !Z.spoor.length) return;
+    for (const t of Z.spoor) {
+      const p = opGrond(t.x, t.y);
+      const x = Math.round(p.x);
+      const y = Math.round(p.y);
+      // Een hoopje in het midden, met een schaduw eronder, en losse korrels eromheen.
+      ctx.fillStyle = 'rgba(70, 48, 20, 0.55)';
+      ctx.fillRect(x - 6, y, 13, 3);
+      ctx.fillStyle = 'rgb(196, 158, 78)';
+      ctx.fillRect(x - 5, y - 2, 11, 3);
+      ctx.fillStyle = 'rgb(232, 204, 128)';
+      ctx.fillRect(x - 3, y - 3, 6, 2);
+      KORRELS.forEach(([dx, dy], i) => {
+        ctx.fillStyle = i % 2 ? 'rgb(214, 180, 100)' : 'rgb(170, 132, 62)';
+        ctx.fillRect(x + dx, y + dy, 3, 2);
+      });
+    }
+  }
+
   function tekenVerzoekPlek(ctx, S) {
     const D = T.dorpHier(S);
     const L = D && D.voorvallen && D.voorvallen.lopend;
@@ -1871,6 +1893,24 @@
     return r;
   }
 
+  // De tekeningen van een boom of een rots, op naam, in tegels/bomen.png en tegels/begroeiing.png: voor wat het eiland
+  // om de kaart heeft (bosrandOp).
+  const tekeningenPerNaam = {};
+  function tekeningenVan(naam) {
+    if (!tekeningenPerNaam[naam]) {
+      const r = [];
+      for (const velNaam of ['bomen', 'begroeiing']) {
+        const vel = T.TEGELS && T.TEGELS[velNaam];
+        if (!vel) continue;
+        vel.tiles.forEach((t, id) => {
+          if (t && t.naam === naam) r.push({ vel: velNaam, id });
+        });
+      }
+      tekeningenPerNaam[naam] = r;
+    }
+    return tekeningenPerNaam[naam];
+  }
+
   // Hoeveel ringen deze tegel buiten de kaart ligt (1 = er direct tegenaan, schuin telt ook als
   // één ring — dezelfde maat als T.afstand, maar dan tot de rechthoek van de kaart in plaats van
   // tot een punt). Binnen de kaart, of op de rand zelf, is dit 0.
@@ -1915,8 +1955,16 @@
     let v = null;
     if (r >= 1 && r <= BOSRAND_DIEP) {
       const zaad = bosrandZaad(w);
-      // alleen aan de kant van het bos; in het open land erbuiten hier en daar een boom (Marcel, 4 okt)
-      if (hasj(x, y, zaad) < bosrandDichtheid(r) * Math.max(BOSRAND_OPEN, bosBuiten(w, x, y))) {
+      if (w.eiland) {
+        // op het eiland: wat het eiland er heeft, een boom of een rots (js/maker.js, vraag 117, 2b), naar buiten dunner
+        const soort = T.randVanHetEiland(w).voorwerp(x, y);
+        const keuzes = soort ? tekeningenVan(soort) : [];
+        if (keuzes.length && hasj(x, y, zaad) < bosrandDichtheid(r)) {
+          const keuze = keuzes[Math.floor(hasj(x, y, zaad + 1) * keuzes.length)];
+          v = { soort, vel: keuze.vel, id: keuze.id, x, y, beslaat: [1, 1], r, bosrand: true };
+        }
+      } else if (hasj(x, y, zaad) < bosrandDichtheid(r) * Math.max(BOSRAND_OPEN, bosBuiten(w, x, y))) {
+        // alleen aan de kant van het bos; in het open land erbuiten hier en daar een boom (Marcel, 4 okt)
         const metHerfst = !BOSRAND_GEBIEDEN_ZONDER_HERFST.includes(w.gebied);
         const soort = metHerfst ? 'met' : 'zonder';
         if (!bosrandVellenPerSoort[soort]) bosrandVellenPerSoort[soort] = bosrandVellenOpbouwen(metHerfst);

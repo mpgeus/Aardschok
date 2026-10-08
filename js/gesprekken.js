@@ -615,6 +615,243 @@
         },
       },
     },
+    // De verdwenen graanzak (js/zaak.js; werklijst vraag 128): de boer die het je komt zeggen, de zitting op het plein,
+    // wie je ernaar vraagt, en wat er later terugkomt. {dader}, {kind}, {verdachte}, {aanklager}, {buur},
+    // {herbergierster} zijn de mensen van de zaak; {gevraagd} is wie je het vraagt, en {zaakWeet} wat je weet.
+    graanzak: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Schout, vannacht is er een zak graan uit mijn schuur verdwenen. Net gedorst. En gisteravond zag ik {ander} bij mijn schuur rondhangen. Die heeft altijd honger, dat weet iedereen.' },
+          ],
+          keuzes: [
+            { zeg: 'Ik zoek het uit. Over {zittingOver} dagen is de zitting, op het plein.', sluit: true, doe: { zaak: 'zitting' } },
+            { zeg: 'Dan was het {ander}. Hij betaalt een goud boete.', sluit: true, doe: { zaak: 'straf', goud: 1, tevreden: 1 } },
+            { zeg: 'Eén zak graan. Laat het rusten.', sluit: true, doe: { zaak: 'gelaten', tevreden: -2 } },
+          ],
+        },
+      },
+    },
+    zitting: {
+      naam: '{wie}',
+      start: 'begin',
+      // Wat je weet (js/zaak.js): met bewijs (het spoor, wat de buur zag, of hij bekende) kun je de dader noemen.
+      situaties: [
+        { naam: 'Je weet wie het was', als: { vlag: 'zaakBewijs' } },
+      ],
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Het halve dorp staat op het plein. {wie} wijst naar {ander}: "Hij was het, schout. Ik zag hem bij mijn schuur." {ander} schudt zijn hoofd. Iedereen kijkt naar jou.' },
+          ],
+          keuzes: [
+            { zeg: 'Wat weet ik eigenlijk?', naar: 'weet' },
+            { zeg: 'Het was {ander}. Hij betaalt een goud boete.', sluit: true, doe: { zaak: 'straf', goud: 1, tevreden: 1 } },
+            { zeg: 'Er is geen bewijs. {ander} is vrij.', sluit: true, doe: { zaak: 'vrij', tevreden: -1 } },
+            { zeg: 'Het was {ander} niet. Het was {dader}.', naar: 'dader', als: { vlag: 'zaakBewijs' } },
+          ],
+        },
+        weet: {
+          tekst: [
+            { zeg: '{zaakWeet}' },
+          ],
+          keuzes: [
+            { zeg: 'Goed.', naar: 'begin' },
+          ],
+        },
+        dader: {
+          tekst: [
+            { zeg: 'Iedereen draait zich om. {dader} staat achteraan, met zijn pet in zijn handen. "Het was voor {kind}," zegt hij. "Al een week ziek, en er was niets meer in huis."' },
+          ],
+          keuzes: [
+            { zeg: 'Diefstal is diefstal. {dader} betaalt een goud boete.', sluit: true, doe: { zaak: 'strafDader', goud: 1, tevreden: 2, vertrouwen: -2 } },
+            { zeg: 'Het dorp geeft {dader} die zak, en ik schrijf het in het boek.', sluit: true, doe: { zaak: 'geef', tevreden: 3, vertrouwen: 3, gunst: -2 } },
+            { zeg: 'Er is geen zak weg. Ga allemaal naar huis.', sluit: true, doe: { zaak: 'verberg', tevreden: 3, vertrouwen: 4 } },
+          ],
+        },
+      },
+    },
+    zaakBuur: {
+      naam: '{gevraagd}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'De graanzak? Ik weet niet of het ertoe doet, schout. Maar die nacht brandde er laat nog licht bij {dader}. En er hoestte een kind, lang.' },
+          ],
+          keuzes: [
+            { zeg: 'Dank je.', sluit: true, doe: { weet: 'licht' } },
+          ],
+        },
+      },
+    },
+    zaakHerberg: {
+      naam: '{gevraagd}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: '{verdachte}? Die zat hier die avond, schout, tot ik sloot. Hij droeg geen zak graan, hooguit een kroes. Wel zeggen ze dat {kind} van {dader} ziek is, en dat ze thuis niets meer hebben.' },
+          ],
+          keuzes: [
+            { zeg: 'Dank je.', sluit: true, doe: { weet: ['alibi', 'ziek'] } },
+          ],
+        },
+      },
+    },
+    zaakVerdachte: {
+      naam: '{gevraagd}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Zegt {aanklager} dat ik het was? Ik zat in de herberg, schout, de hele avond. Vraag het {herbergierster}.' },
+          ],
+          keuzes: [
+            { zeg: 'Dat zal ik doen.', sluit: true, doe: { weet: 'ontkent' } },
+          ],
+        },
+      },
+    },
+    zaakAanklager: {
+      naam: '{gevraagd}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Ik heb het u gezegd, schout: {verdachte}. Wie anders? Kijk maar eens wat hij eet.' },
+          ],
+          keuzes: [
+            { zeg: 'We zien het op de zitting.', sluit: true },
+          ],
+        },
+      },
+    },
+    zaakDader: {
+      naam: '{gevraagd}',
+      start: 'begin',
+      // Weet je het al (het spoor, of wat de buur zag), dan ontkent hij niet meer.
+      situaties: [
+        { naam: 'Je weet het al', als: { vlag: 'zaakBewijs' } },
+      ],
+      knopen: {
+        begin: {
+          tekst: [
+            { als: { vlag: 'zaakBewijs' }, zeg: 'Hij kijkt naar de grond. "U weet het al, schout. Het was voor {kind}. Er was niets meer in huis, en het hoesten hield niet op. Ik zou het terugbetalen. Ooit."' },
+            { zeg: 'De graanzak? Daar weet ik niets van, schout. Ik heb wel wat anders aan mijn hoofd.' },
+          ],
+          keuzes: [
+            { zeg: 'Dat zeg je op de zitting.', sluit: true, als: { vlag: 'zaakBewijs' }, doe: { weet: 'bekend' } },
+            { zeg: 'Goed.', sluit: true, als: { nietVlag: 'zaakBewijs' } },
+          ],
+        },
+      },
+    },
+    zaakGezin: {
+      naam: '{gevraagd}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: '{dader} zegt dat we niets hoeven te zeggen. Maar {kind} is ziek, schout, al een week, en er is niets meer in huis.' },
+          ],
+          keuzes: [
+            { zeg: 'Ik begrijp het.', sluit: true, doe: { weet: 'ziek' } },
+          ],
+        },
+      },
+    },
+    zaakPraat: {
+      naam: '{gevraagd}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Iedereen weet het toch, schout? {verdachte}. Die heeft altijd honger.' },
+          ],
+          keuzes: [
+            { zeg: 'Zegt iedereen dat?', sluit: true, doe: { weet: 'praat' } },
+          ],
+        },
+      },
+    },
+    zaakNiemand: {
+      naam: '{gevraagd}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Een zak graan? Daar weet ik niks van, schout. Vraag het de buren van de schuur.' },
+          ],
+          keuzes: [
+            { zeg: 'Goed.', sluit: true },
+          ],
+        },
+      },
+    },
+    zaakWrok: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Schout. U liet me betalen voor die zak graan. Nu zegt het halve dorp dat {ander} hem nam, en niet ik. Wie betaalt mij terug?' },
+          ],
+          keuzes: [
+            { zeg: 'Je krijgt je goud terug, en mijn excuus.', sluit: true, doe: { goud: -1, tevreden: 2, vertrouwen: 2 } },
+            { zeg: 'Het vonnis staat.', sluit: true, doe: { tevreden: -2, vertrouwen: -3 } },
+          ],
+        },
+      },
+    },
+    zaakWeer: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Schout, er is weer graan weg uit mijn schuur. En nu zag ik wie: {ander}, met een emmer, in het donker. Niet wie ik dacht.' },
+          ],
+          keuzes: [
+            { zeg: '{ander} betaalt het terug, en een goud boete.', sluit: true, doe: { goud: 1, tevreden: 2 } },
+            { zeg: 'Geef {ander} wat hij nodig heeft, uit de voorraad van het dorp.', sluit: true, doe: { graan: -10, tevreden: 1, vertrouwen: 2 } },
+            { zeg: 'Pas beter op je schuur.', sluit: true, doe: { tevreden: -3 } },
+          ],
+        },
+      },
+    },
+    zaakKind: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: '{ander} is nog altijd ziek, schout. Die boete was ons laatste geld. Ik vraag niets voor mezelf.' },
+          ],
+          keuzes: [
+            { zeg: 'Het dorp geeft je graan tot {ander} beter is.', sluit: true, doe: { graan: -10, tevreden: 2, vertrouwen: 2 } },
+            { zeg: 'Dat had je moeten bedenken voor je stal.', sluit: true, doe: { tevreden: -3, vertrouwen: -2, sterfkans: 30 } },
+          ],
+        },
+      },
+    },
+    zaakDank: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: '{ander} is weer beter, schout. Ik heb niets om u te geven, behalve dit: een week hout hakken voor het dorp, voor niets. En als u ooit iemand nodig hebt die zwijgt, weet u me te vinden.' },
+          ],
+          keuzes: [
+            { zeg: 'Hak dat hout maar.', sluit: true, doe: { hout: 10, tevreden: 1 } },
+            { zeg: 'Ik zal het onthouden.', sluit: true, doe: { vertrouwen: 3 } },
+          ],
+        },
+      },
+    },
     vechtpartij: {
       naam: '{wie}',
       start: 'begin',
@@ -880,7 +1117,7 @@
     zaaigraanHonger: {
       naam: '{wie}',
       start: 'begin',
-      // De honger komt aan het zaaigraan in de graanschuur (js/graanschuur.js; werklijst vraag 133; Marcel, 8 okt: "bij
+      // De honger komt aan het zaaigraan in de graanschuur (js/graanschuur.js; werklijst vraag 132; Marcel, 8 okt: "bij
       // honger grijpen mensen alles aan. Je moet mensen inzetten om het warenhuis te beschermen").
       knopen: {
         begin: {

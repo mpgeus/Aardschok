@@ -47,7 +47,7 @@
     // laken te overbruggen is. Een pak is vier laken: wat drie stenen huizen samen in een maand of twee willen.
     verkoopt: {
       ijzer: { heeft: 12, prijs: [3, 3, 4] },
-      // Zout het meest in de herfst (vraag 133, B): dan zout het dorp vis en vlees in voor de winter, als de beek dichtligt.
+      // Zout het meest in de herfst (vraag 132, B): dan zout het dorp vis en vlees in voor de winter, als de beek dichtligt.
       zout: { heeft: [15, 15, 40], prijs: [1, 1, 2] },
       graan: { naam: 'zaaigraan', per: 10, heeft: [10, 0, 0], prijs: [5, 5, 5] },
       laken: { per: 4, heeft: [0, 3, 3], prijs: [6, 6, 7], trede: 'dorp' },

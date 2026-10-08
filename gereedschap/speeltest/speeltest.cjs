@@ -18,6 +18,8 @@
 //                                                        jaar als zonder opslaan (--opslaan 245: een andere dag)
 //   npm run speeltest -- bouwer --maker        op een gehucht van de maker (vraag 70, C): de spelregel "Je
 //                                              gehucht" op "Elk spel een ander", elk zaad een ander gehucht
+//   npm run speeltest -- bouwer --eiland       op het eiland (vraag 117): elk zaad een ander eiland, met je gehucht
+//                                              erop, zoals een nieuw spel sinds 8 okt begint
 //   npm run speeltest -- bouwer sluw --maker --samenvatting
 //                                              niet spelen, maar de samenvatting opnieuw maken uit wat er al in uit/
 //                                              ligt: zo geeft een speeltest die over meer taken verdeeld is, één tabel
@@ -28,9 +30,9 @@
 //
 // De spelers staan in speler.js (die draait in de bladzijde, naast het spel). Wat er per jaar gebeurde,
 // komt in gereedschap/speeltest/uit/<speler>-<zaad>.json, en een tabel in uit/samenvatting.md (niet in
-// git; met --maker <speler>-<zaad>-maker.json en samenvatting-maker.md, en met --regel of --getal -regels achter de
-// naam). Het spel gebruikt de standaard spelregels, behalve met --maker, --regel en --getal: een nieuwe browser
-// onthoudt niets.
+// git; met --maker <speler>-<zaad>-maker.json en samenvatting-maker.md, met --eiland -eiland, en met --regel of --getal
+// -regels achter de naam). Het spel gebruikt de standaard spelregels, behalve met --maker, --eiland, --regel en --getal:
+// een nieuwe browser onthoudt niets.
 //
 // Nodig: Playwright met Chromium (in de cloud staat het klaar; thuis `npm i -g playwright` en
 // `npx playwright install chromium`). Het spel zelf blijft zonder afhankelijkheden.
@@ -59,11 +61,12 @@ function laadPlaywright() {
 const OOGSTMAAND = 150; // 1 oogstmaand, de dag waarop de proef met opslaan opslaat (vraag 48)
 
 function leesOpdracht(argv) {
-  const o = { spelers: [], zaden: [1, 2, 3], opslaan: null, maker: false, regels: {}, getallen: {}, jaren: null, tegelijk: TEGELIJK };
+  const o = { spelers: [], zaden: [1, 2, 3], opslaan: null, maker: false, eiland: false, regels: {}, getallen: {}, jaren: null, tegelijk: TEGELIJK };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === '--opslaan') o.opslaan = /^\d+$/.test(argv[i + 1] || '') ? Number(argv[++i]) : OOGSTMAAND;
     else if (a === '--maker') o.maker = true;
+    else if (a === '--eiland') o.eiland = true;
     else if (a === '--samenvatting') o.samenvatting = true;
     else if (a === '--regel' || a === '--getal') {
       const [naam, waarde] = String(argv[++i] || '').split('=');
@@ -83,16 +86,17 @@ function leesOpdracht(argv) {
       for (let z = van; z <= (tot || van); z++) o.zaden.push(z);
     } else if (SPELERS.includes(a)) o.spelers.push(a);
     else {
-      console.error(`Onbekend: ${a}. Spelers: ${SPELERS.join(', ')}; en --zaad n, --zaden van-tot, --jaren n, --tegelijk n, --opslaan [dag], --maker, --samenvatting, --regel naam=keuze of --getal pad=waarde.`);
+      console.error(`Onbekend: ${a}. Spelers: ${SPELERS.join(', ')}; en --zaad n, --zaden van-tot, --jaren n, --tegelijk n, --opslaan [dag], --maker, --eiland, --samenvatting, --regel naam=keuze of --getal pad=waarde.`);
       process.exit(1);
     }
   }
   if (!o.spelers.length) o.spelers = SPELERS;
   // De spelregels zoals de browser ze onthoudt (js/opties.js, onder aardschok.spelregels). Het gehucht altijd: zonder
-  // --maker het ontworpen gehucht, ook nu de standaard "Elk spel een ander" is (vraag 112, a), zodat een speeltest te
-  // vergelijken blijft met de speeltests ervoor.
-  const keuzes = { gehucht: o.maker ? 'maker' : 'ontworpen', ...o.regels };
-  o.spelregels = { keuzes, namen: {}, getallen: o.getallen };
+  // --maker of --eiland het ontworpen gehucht, ook nu een nieuw spel het eiland maakt (vraag 117), zodat een speeltest te
+  // vergelijken blijft met de speeltests ervoor; met --maker de landen van de maker zonder het eiland. `proef`: het spel
+  // neemt "Je gehucht" alleen uit de browser als een proef hem zette (T.laadOpties).
+  const keuzes = { gehucht: o.eiland ? 'eiland' : o.maker ? 'maker' : 'ontworpen', ...o.regels };
+  o.spelregels = { keuzes, namen: {}, getallen: o.getallen, proef: true };
   o.anders = [...Object.entries(o.regels), ...Object.entries(o.getallen)].map(([k, v]) => `${k}=${v}`);
   return o;
 }
@@ -158,8 +162,8 @@ async function main() {
   const vies = git(`status --porcelain ${SPEL}`);
   const stand = `het spel van ${git(`log -1 --format=%h ${SPEL}`)} (${git('rev-parse --abbrev-ref HEAD')} op ${git('rev-parse --short HEAD')})` +
     (vies ? ', met wijzigingen in het spel die nog niet gecommit zijn' : '');
-  const op = stand + (o.maker ? ', op gehuchten van de maker' : '') + (o.anders.length ? `, met ${o.anders.join(', ')}` : '');
-  const achter = (o.maker ? '-maker' : '') + (o.anders.length ? '-regels' : '');
+  const op = stand + (o.eiland ? ', op het eiland' : o.maker ? ', op gehuchten van de maker' : '') + (o.anders.length ? `, met ${o.anders.join(', ')}` : '');
+  const achter = (o.eiland ? '-eiland' : o.maker ? '-maker' : '') + (o.anders.length ? '-regels' : '');
   // Niet spelen, maar de samenvatting opnieuw maken uit wat er al in uit/ ligt, voor deze spelers en zaden (met dezelfde
   // --maker, --regel en --getal). Een taak op de achtergrond stopt na twee uur, dus een speeltest van vier jaar gaat in
   // meer taken (werklijst, vraag 107, stap 3); zo geven ze samen één tabel.

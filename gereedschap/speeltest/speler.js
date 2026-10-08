@@ -50,7 +50,7 @@
 //           zijn kring heeft (bouwErf), en niet meer gewoon zo dicht mogelijk bij zijn eigen deur. Sinds vraag 96, b bouwt
 //           hij een keten in één keer: een bakkerij en een molen samen. Sinds vraag 99, c koopt hij laken bij de
 //           marskramer als de ambachtslieden het tot zijn volgende bezoek tekortkomen, met het goud dat hij niet nodig
-//           heeft voor zijn volgende wens. Sinds vraag 133, B koopt hij in de herfst het zout dat vis en vlees de winter
+//           heeft voor zijn volgende wens. Sinds vraag 132, B koopt hij in de herfst het zout dat vis en vlees de winter
 //           door laat komen (T.visEnVleesVoorDeWinter).
 // En een zesde (werklijst vraag 93, a, en 94; Marcel, 2 okt: "De bouwer mag alles er aan doen, totale vrijheid"):
 //   sluw    de bouwer, maar hij bedriegt de heer, elk jaar zoals de slimme speler: 60% van het graan boven het zaaigraan
@@ -1121,7 +1121,7 @@
       const gekocht = await handelMet(() => klikHandel('koop', 'laken', pakken));
       daad(`koopt ${gekocht * w.per} laken van de marskramer, voor ${gekocht * prijs} goud`);
     }
-    // Zout (werklijst vraag 133, B): zegt het dorp dat vis en vlees de winter alleen gezouten halen
+    // Zout (werklijst vraag 132, B): zegt het dorp dat vis en vlees de winter alleen gezouten halen
     // (T.visEnVleesVoorDeWinter, js/behoeften.js), dan koopt hij het zout dat erbij moet, met het goud dat hij niet nodig
     // heeft voor de heer en zijn volgende wens.
     async function koopZout() {
@@ -1782,7 +1782,7 @@
       boek.spelZaad = s.dorp.lot.zaad;
       boek.eindRegels = { ...T.EINDE_INSTELLINGEN }; // wat de winst vraagt, voor de samenvatting (vraag 102, e)
       // Op welk gehucht: het ontworpen, of een van de maker (uit het zaad van het spel; js/maker.js).
-      boek.gehucht = s.gebieden.gehucht && s.gebieden.gehucht.maker ? 'van de maker' : 'ontworpen';
+      boek.gehucht = s.gebieden.gehucht && s.gebieden.gehucht.eiland ? 'op het eiland' : s.gebieden.gehucht && s.gebieden.gehucht.maker ? 'van de maker' : 'ontworpen';
       boek.boeren = Object.fromEntries(Object.entries(s.dorp.lot.boeren).map(([id, b]) => [id, b.karakter]));
       boek.begin = tel(); // de eerste van de maand zelf schrijft de boekhouding op, bij de eerste stap
       const P = SPELERS[speler];

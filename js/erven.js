@@ -119,7 +119,7 @@
     }
     const groeit = groeitOpErf(D, { x, y, b, h, plan: planVan(keus) });
     if (groeit) return `Hier groeit ${T.huisVan(D, groeit)} straks tot een ${T.GEBOUWEN[T.GEBOUWEN[groeit.soort].wordt].naam}.`;
-    return null;
+    return zonderPut(D, { x, y, b, h, plan: planVan(keus) });
   };
 
   // Een huis dat niet meer kan doorgroeien als dit erf er komt: elke vorm die het nog kan nemen, komt dan op de grond van
@@ -142,8 +142,34 @@
     return null;
   }
 
+  // Een erf komt niet waar zijn hut straks geen put kan halen, of waar het een ander huis de laatste plek voor een put
+  // afneemt (werklijst vraag 117, 2d; Marcel, 8 okt: "A ja"): in de speeltest lagen de erven op het eiland van 73425 zo
+  // dicht tegen elkaar dat een huis in het midden twee jaar lang geen put kon krijgen, en het dorp dus nooit won. Waar nog
+  // een put kan komen, zegt T.kringGrond (js/wensen.js); na dit erf kan hij er nog als hij niet op het erf komt, en zijn
+  // looppad de hut erop niet raakt. Geeft de reden, of null.
+  function zonderPut(D, erf) {
+    const k = T.kringGrond(D, 'put');
+    if (!k) return null;
+    const n = T.GEBOUWEN_INSTELLINGEN.looppad;
+    const hut = T.huisPlekVan(erf) || erf;
+    const raakt = (a, c) => a.x < c.x + c.b && c.x < a.x + a.b && a.y < c.y + c.h && c.y < a.y + a.h;
+    const blijft = (q) => !raakt(q, erf) && !raakt({ x: q.x - n, y: q.y - n, b: q.b + 2 * n, h: q.h + 2 * n }, hut);
+    // ver weg komt een put er niet bij: dat scheelt de wortel
+    const dichtBij = (q) => Math.abs(q.x - hut.x) <= k.straal + hut.b + q.b && Math.abs(q.y - hut.y) <= k.straal + hut.h + q.h;
+    const haalt = (q) => dichtBij(q) && T.inDeKring(hut, q, k.straal);
+    if (!k.er.some(haalt) && !k.plekken.some((q) => haalt(q) && blijft(q))) {
+      return `De hut op dit erf kan straks geen put halen: er staat er geen binnen ${k.straal} tegels, en er is geen plek meer voor een.`;
+    }
+    for (const h of k.zonder) if (h.plekken.length && h.plekken.every((q) => !blijft(q))) return `Dan kan ${h.wie} straks geen put meer krijgen: dit erf neemt de laatste plek ervoor.`;
+    return null;
+  }
+
   // Ligt (x, y) op de plek van het huis van een erf (erf.plan)? Een gebouw blijft er met zijn looppad vandaan, ook als
   // het huis er nog niet staat (T.looppadOm, js/gebouwen.js). `behalve`: het erf dat zelf zijn plek zoekt.
+  // Waar het huis van een erf komt (erf.plan), als rechthoek { x, y, b, h }: zo groot als de hut of het huis dat hij wordt,
+  // wat het grootst is. Of null zonder plan.
+  T.huisPlekVan = (e) => (e.plan ? { x: e.x + e.plan.dx, y: e.y + e.plan.dy, b: e.plan.b, h: e.plan.h } : null);
+
   T.huisPlekOp = function (D, x, y, behalve) {
     for (const e of D.erven || []) {
       const p = e !== behalve && e.plan;

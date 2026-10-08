@@ -102,15 +102,17 @@
   // is ZW.
   const richtingNaar = (dx, dy) => (dx > 0 ? 'ZO' : dx < 0 ? 'NW' : dy > 0 ? 'ZW' : 'NO');
 
-  // Het midden van het plein: de tegel van het plein het dichtst bij zijn zwaartepunt, waar het ook staat. Daar is de
+  // Het midden van het plein: de tegel van het plein het dichtst bij zijn zwaartepunt waar je kunt staan. Daar is de
   // markt als gebouw (zijn "deur", T.deurVan), en daarvandaan rekent een kring (de spelregel "De herberg en de markt").
   T.marktMidden = function (w) {
     const tegels = T.pleinTegels(w);
     if (!tegels.length) return null;
     const m = zwaartepunt(tegels);
     let beste = null;
+    // een tegel waar je kunt staan: op land 72022 stond er een bank op het midden (gezien met de grote gebouwen, vraag
+    // 114, stap 3, toen dat land anders kwam te liggen)
     for (const t of tegels) {
-      const a = Math.hypot(t.x - m.x, t.y - m.y);
+      const a = Math.hypot(t.x - m.x, t.y - m.y) + (T.isBegaanbaar(w, t.x, t.y) ? 0 : 1e6);
       if (!beste || a < beste.a) beste = { x: t.x, y: t.y, a };
     }
     return { x: beste.x, y: beste.y };
