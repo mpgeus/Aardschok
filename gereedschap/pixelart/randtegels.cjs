@@ -199,6 +199,8 @@ function randKaart(aNaam, bNaam, hoeken, gx0, gy0) {
   const [hBoven, hRechts, hOnder, hLinks] = hoeken.map((h) => (h ? 1 : -1));
   const heeftKassei = aNaam === 'kasseien' || bNaam === 'kasseien';
   const kust = !!(KUST[aNaam] || KUST[bNaam]);
+  // aan zee golft de grens net zo, maar midden in de zee niet: daar is het overal even diep (de branding volgt de diepte)
+  const zeeKust = aNaam === 'zee' || bNaam === 'zee';
   const spoorAs = duidelijkeDoorgang(hoeken);
   // soort() geeft steeds hetzelfde object terug, precies als grondKaart in dorp.cjs: wie er twee
   // achter elkaar aanroept, moet de waarden eerst in eigen variabelen overschrijven.
@@ -211,7 +213,7 @@ function randKaart(aNaam, bNaam, hoeken, gx0, gy0) {
     // oever wegzakt (waterTreffer kijkt een kwart tegel terug) niet ineens land wordt.
     const bil = (1 - u) * ((1 - v) * hBoven + v * hLinks) + u * ((1 - v) * hRechts + v * hOnder);
     const ruw = (ruis2(gx * 2.4, gy * 2.4, 1) - 0.5) * 1.7 + (ruis2(gx * 6.6, gy * 6.6, 8) - 0.5) * 0.8;
-    const f = bil + demp(u) * demp(v) * ruw;
+    const f = bil + demp(u) * demp(v) * ruw * (zeeKust ? 1 - Math.abs(bil) : 1);
     // Het veld loopt over een tegel van −1 naar +1, dus een halve eenheid is een kwart tegel.
     const af = Math.min(Math.abs(f) / 2, 0.5);
     // Voor de sporen willen we dezelfde afstand, maar zónder de ruw-term: die golft de grens
@@ -235,7 +237,7 @@ function randKaart(aNaam, bNaam, hoeken, gx0, gy0) {
       // De zee is water zoals in dorp.cjs (waterDiepte, waterPixel), maar ondiep aan het strand: geen oeverwand van
       // een beek, maar een paar pixels zand. Welke kleur, zegt kustGrondTex (U.zee).
       U.s = D.WATER;
-      U.d = -Math.min(af, WATER_MAX);
+      U.d = -Math.min(af, ZEE_MAX);
       U.rand = 0;
       U.randS = verlies.s;
       U.vijver = GEEN_STENEN;
@@ -630,9 +632,10 @@ nieuweRamp('zee', ['#101a24', '#172634', '#1f3446', '#294458', '#35566a', '#4a6c
 // Het veen: donkerbruin, nat, naar olijf aan de lichte kant.
 nieuweRamp('veen', ['#140f09', '#1f170e', '#2c2114', '#3a2c1b', '#4a3a22', '#5b4a2c', '#6e5c38']);
 // Het broek: nat gras, donkerder en blauwer dan het gras van het dorp.
-nieuweRamp('broek', ['#121c0e', '#1b2b14', '#26401c', '#325424', '#40692c', '#527d36', '#6a9444', '#8aac58']);
+nieuweRamp('broek', ['#14200f', '#1e3018', '#2a4422', '#36582c', '#446c36', '#568042', '#6e9652', '#90b068']);
 
 const ZEE_DIEP = 3; // pixels dat de zee onder het strand ligt: geen beekoever, een vlakke kust
+const ZEE_MAX = 0.45; // tegels van de kant af waar de zee diep is: de branding krijgt de ruimte (een beek: WATER_MAX)
 const NAT_ZEE = 0.16; // tegels nat zand aan de zee
 const SCHUIM = 0.05; // tegels schuim op de waterlijn
 
@@ -728,12 +731,12 @@ function veenPixel(gx, gy, qx, qy) {
 function broekPixel(gx, gy, qx, qy) {
   UIT.ramp = RAMP.broek;
   const toon = heideRuis(gx, gy, 1.7, 631) * 0.25 + heideRuis(gx, gy, 4.3, 632) * 0.4 + heideRuis(gx, gy, 8.7, 633) * 0.35;
-  let s = toon < 0.42 ? 3 : toon > 0.6 ? 5 : 4;
+  let s = toon < 0.4 ? 3 : toon > 0.66 ? 5 : 4;
   if ((qx + qy * 2) % 3 === 0 && hash(qx, qy, 634) % 3 === 0) s += 1; // gras dat glanst
   const nat = heideRuis(gx, gy, 1.5, 635) * 0.6 + heideRuis(gx, gy, 3.6, 636) * 0.4;
   if (nat > 0.8) {
     UIT.ramp = RAMP.zee;
-    UIT.stap = nat > 0.825 ? (hash(qx, qy, 637) % 17 === 0 ? 3 : 1) : 0;
+    UIT.stap = nat > 0.83 ? (hash(qx, qy, 637) % 7 === 0 ? 5 : 3) : 2;
     return;
   }
   // biezen: een pol van drie of vier halmen, elk een paar pixels hoog
@@ -749,7 +752,20 @@ function broekPixel(gx, gy, qx, qy) {
     }
     if (dy === 1 && Math.abs(dx) <= 1) s -= 1;
   }
-  UIT.stap = klem(s, 1, 7);
+  UIT.stap = klem(s, 2, 7);
+}
+
+// Heide op zand groeit in pollen, met het zand ertussen, en dunner naar de rand van het zand toe: zo loopt het in elkaar
+// over in plaats van als een vlek op het zand te liggen. `af` is hoe ver de pixel van het zand af ligt, in tegels. Geeft
+// true als hier zand ligt (dan staat het al in UIT), anders tekent heidePixel de heide.
+function heideOpZand(gx, gy, qx, qy, af) {
+  const pol = heideRuis(gx, gy, 6.7, 653) * 0.65 + heideRuis(gx, gy, 13.1, 654) * 0.35;
+  const drempel = 0.34 + Math.max(0, 0.32 - af) * 1.1;
+  if (pol >= drempel) return false;
+  UIT.ramp = RAMP.zand;
+  // vlak onder een pol de schaduw, verder het lichte zand
+  UIT.stap = pol > drempel - 0.035 ? 4 : hash(qx, qy, 655) % 11 === 0 ? 5 : 6;
+  return true;
 }
 
 // Na dorp.cjs, op een tegel aan zee: het water krijgt de zee-ramp, met golflijnen en schuim op de waterlijn; de bodem die
@@ -788,8 +804,16 @@ function zeeNa(vlak, X, Y, k) {
     return;
   }
   UIT.ramp = RAMP.zee;
+  // de branding: drie gebroken lijnen schuim die de kust volgen, verder van het strand flauwer
+  for (const [op, sterk] of [[0.11, 7], [0.2, 6], [0.3, 5]]) {
+    const golf = op + (heideRuis(gx, gy, 3.7, 646 + op * 100) - 0.5) * 0.05;
+    if (Math.abs(diepte - golf) < 0.026 && heideRuis(gx, gy, 5.9, 650 + op * 100) > 0.36) {
+      UIT.stap = sterk;
+      return;
+    }
+  }
   // diep en donker, lichter naar de kust
-  let s = diepte < 0.07 ? 5 : diepte < 0.12 ? 4 : 3;
+  let s = diepte < 0.09 ? 5 : diepte < 0.24 ? 4 : 3;
   // golven: lange lijnen dwars op de kijker (langs gx + gy), die breken waar de ruis het wil
   const golf = Math.sin((gx + gy) * 4.1 + heideRuis(gx, gy, 1.2, 643) * 4) * 0.5 + 0.5;
   if (golf > 0.93 && heideRuis(gx, gy, 3.1, 644) > 0.45) s += 1;
@@ -808,6 +832,7 @@ function kustGrondTex(kaart) {
       const gx = X / TEGEL;
       const gy = Y / TEGEL;
       if (k.s === STRAND) return strandPixel(gx, gy, rasterX(X, Y), rasterY(X, Y), k);
+      if (k.s === HEIDE && k.randS === STRAND && heideOpZand(gx, gy, rasterX(X, Y), rasterY(X, Y), -k.d)) return;
       if (k.s === VEEN) return veenPixel(gx, gy, rasterX(X, Y), rasterY(X, Y));
       if (k.s === BROEK) return broekPixel(gx, gy, rasterX(X, Y), rasterY(X, Y));
     }
