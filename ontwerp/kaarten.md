@@ -2,6 +2,42 @@
 
 Wat er op die kaarten komt te staan, staat in `wereld.md` en `toren.md`.
 
+## Het eiland: de kaartenmaker (vraag 117, 8 okt 2026)
+
+Marcel (7 en 8 okt): "Uiteindelijk wil ik een random map generator met alles", "Ik wil 1 aaneengesloten landschap", en
+"Fog of war maakt de rest van het land 'onzichtbaar' tot je het verkent". Het plan en zijn stappen staan bij vraag 117
+in de werklijst.
+
+**Zo werkt het nu (stap 1, alleen de plaat; het spel gebruikt het nog niet):** `js/eiland.js` maakt uit één nummer een
+eiland van 2500 bij 2500 tegels, in twee lagen, zoals een schilder eerst grof zet waar de zee, de bergrug en de rivieren
+komen, en daarna elk blaadje schildert. Het is één landschap; de schets zie je nooit.
+
+- **De schets** (`T.maakEiland`, zo'n 0,6 s): het eiland in vakken van 8 bij 8 tegels. Hij kent wat het hele eiland
+  moet kennen, en dat kan geen rekensom per tegel zijn: een rivier moet weten waar de zee is. Vanaf de zee gaat hij het
+  land in, steeds het laagste vak eerst (priority-flood), zodat elk vak een weg naar zee heeft; waar genoeg regen
+  samenkomt, stroomt een rivier. Heuvels uit ruis hebben overal kommen (de eerste plaat had 167 meren), dus worden alleen
+  de zeven grootste een meer, staat een te groot meer lager, en slijt de rivier zich door de rest een weg naar buiten.
+  Dan de plekken (het kasteel op een heuvel, de stad aan de monding van de grootste rivier, acht dorpen ver genoeg uit
+  elkaar) en de wegen ertussen (A\* over de vakken, door de dalen en over de passen, met een brug waar de rivier smal is,
+  en samen waar het kan). Hij wordt niet bewaard: hetzelfde nummer maakt hem opnieuw.
+- **Het detail** (`T.eilandStuk`, zo'n 1,5 µs per tegel: het hele eiland in 9 s, een stuk van 64 bij 64 in 6 ms): per
+  tegel een rekensom uit het nummer en de schets, zoals de hoogte van vraag 121: de hoogte (de kust, het land dat naar
+  binnen oploopt, de heuvels, de bergrug, de fijne glooiing, en de dalen die de rivieren uitslijten), het water, de weg,
+  de streek en de bomen. Een stuk is hetzelfde hoe je het ook vraagt; zo kan het spel het land maken aan de rand van de
+  mist, waar je het niet ziet gebeuren.
+- **De ruis** is gradiënt-ruis op een driehoeksrooster, elke laag anders gedraaid, en het land een beetje verbogen: de
+  waarde-ruis van `js/hoogte.js` liet op 2500 tegels een raster zien.
+- **Alleen optellen, vermenigvuldigen, delen en wortels**, geen sinus of macht: zo maakt elke browser uit hetzelfde
+  nummer hetzelfde eiland (`test/eiland.test.cjs` kijkt het na). Verandert de kaartenmaker, dan geeft hetzelfde nummer
+  een ander eiland; tot de release mag dat, daarna onthoudt een spel met welke kaartenmaker het begon.
+- **De plaat:** `node gereedschap/pixelart/eiland-plaat.cjs [nummer ...] [--groot]` tekent het eiland van boven, met de
+  namen, en ernaast je land van 100 bij 100 met de rand die je mensen kennen, tegel voor tegel
+  (`gereedschap/pixelart/uit/eiland/`). Op de plaat is x naar rechts en y naar onder; de camera van het spel kijkt dan
+  van rechtsonder.
+
+**Wat er nog komt:** stap 2, je dorp op het eiland (de maker legt het gehucht op het land van het eiland, en de rand om
+de kaart is het eiland), en daarna de mist en een kaart die meegroeit (de stukken, opslaan wat veranderde, HPA\*).
+
 ## Werken in Tiled: zo teken je een kaart (21 sep 2026)
 
 **Het idee in één zin:** in Tiled plak je geen losse tegels, je schildert *soorten grond* — gras,

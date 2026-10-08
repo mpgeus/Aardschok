@@ -298,6 +298,22 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`tekenGraan`, in smalle stroken en korte stukjes die elk de hoogte van de grond volgen, ver uitgezoomd grover); de grond
   met hoogte van achter naar voren. Lopen, zien en bouwen weten er nog niets van (stap 2), en een heuvel vóór iemand dekt
   hem nog niet af. De proefplaat: `gereedschap/pixelart/hoogte-proef.cjs`.
+- `js/eiland.js`: **het eiland, de kaartenmaker** (vraag 117, stap 1, 8 okt; Marcel: "Ik wil 1 aaneengesloten landschap",
+  "B 1"): uit één nummer een eiland van 2500 bij 2500 tegels, gemaakt zoals een schilder werkt, eerst grof en dan elk
+  blaadje. **De schets** (`T.maakEiland(zaad)`, zo'n 0,6 s, niet bewaard: hetzelfde nummer maakt hem opnieuw): het eiland
+  in vakken van 8 bij 8 tegels (`E.n`), met de vorm (`E.vorm`: de lange as, de bergrug met zijn passen), de hoogte per
+  vak, de zee (wat aan de rand vastzit) en het hoofdland; het water, vanaf de zee het land in (priority-flood:
+  `E.afwaarts`, `E.afvoer`, `E.stroomPeil`), waarbij alleen de grootste kommen een meer worden (`E.meren`, `E.meer`) en
+  de rivier zich door de rest een weg slijt; de rivieren als gladde, slingerende lijnen (`E.rivieren`); de streek per vak;
+  de plekken (`E.plekken`: het kasteel op een heuvel, de stad aan de grootste monding, acht dorpen met een naam uit
+  `T.DORPSNAMEN`, elk waar een dorp kan groeien en zonder berg naar de camera toe, en één met `jij`); en de wegen
+  (`E.wegen`, A\* over de vakken, die samen lopen waar het kan). **Het detail** (`T.eilandStuk(E, x0, y0, b, h, stap)`):
+  per tegel de hoogte, de streek (`T.EILAND_STREKEN`: het water, strand en duinen, en de zes van de landkaart), de weg en
+  de bomen, uit het nummer en de schets; een stuk is hetzelfde hoe je het ook vraagt, zodat het spel later het land maakt
+  aan de rand van de mist. Alleen optellen, vermenigvuldigen, delen en wortels (een toets kijkt het na), zodat elke
+  browser hetzelfde eiland maakt. Het spel gebruikt het nog niet (stap 2); de plaat:
+  `node gereedschap/pixelart/eiland-plaat.cjs [nummer] [--groot]` (in `gereedschap/pixelart/uit/eiland/`). De getallen in
+  `T.EILAND_INSTELLINGEN`.
 - `js/sprites.js`: de pixel art uit `beelden/`. `T.sprites.figuur/tegel/muur/voorwerp` wijzen
   een cel op een vel aan, `T.sprites.houding(S, wezen)` kiest houding, richting en fase uit de
   spelstaat zelf (pad, uitval, flits, dood), en

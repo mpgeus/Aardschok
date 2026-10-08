@@ -73,6 +73,16 @@ in `main` bleef, met a2, c2 en d erop, en die koos Marcel (7 okt). **Vraag 131 i
 verdacht, en in de speeltest van vier jaar wint ook de bouwer op 62707, die eerst om de wapens werd ontslagen: drie van
 de zes spellen winnen.
 
+**De sessie van de kaartenmaker** (8 okt, `ccr-f03157dc-9d2dtu`, naast die van de wolven en die van de grote gebouwen;
+nog niet in `main`). **Vraag 117, het eiland:** het plan (Marcel: "Ik wil 1 aaneengesloten landschap", "B 1", "C
+moeilijke plek mag ook, kunnen we als hard modus later doen?", "D Nee voor nu prima", "Fog of war maakt de rest van het
+land 'onzichtbaar' tot je het verkent", en "Grijs is goed, en ja begin met de plaat"), en stap 1 is gebouwd: de
+kaartenmaker (`js/eiland.js`) maakt uit één nummer een eiland van 2500 bij 2500 met water rondom, een bergrug met
+passen, rivieren naar zee, meren, de zes streken met de kust, het kasteel, de stad, acht dorpen en de wegen ertussen, en
+de plaat (`node gereedschap/pixelart/eiland-plaat.cjs`) toont het, met je land ernaast. Het spel gebruikt het nog niet.
+Open: a1 (je dorp op het eiland, en dan eerst de kern) of a2 (meteen het hele eiland, met de mist en een kaart die
+meegroeit). `npm test`: 1036/1036.
+
 **De sessie van de hoogte** (7 okt, `claude/elegant-meitner-d3ss2z`, naast die van de wolven; in `main`, Marcel: "Ja
 push main"). **Vraag 124, de camera draaien, is geparkeerd** (Marcel: "Is het echt iets wat iets toevoegd? Ik wil geen
 zinloze functie toevoegen"): het voegt weinig toe en kost bij elk nieuw gebouw vier aanzichten. **Vraag 121, de hoogte:**
@@ -5097,6 +5107,29 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     donker.
     **Marcel (8 okt): "Grijs is goed, en ja begin met de plaat."** Dus wat je verkende maar nu niet ziet, blijft grijs
     zoals je het het laatst zag (vraag d is daarmee beantwoord), en stap 1, de plaat, is begonnen.
+    **Stap 1 is gebouwd** (8 okt, `ccr-f03157dc-9d2dtu`; wacht op Marcels blik): de kaartenmaker (`js/eiland.js`) en de
+    plaat (`node gereedschap/pixelart/eiland-plaat.cjs`, in `gereedschap/pixelart/uit/eiland/`; zie `kaarten.md`, "Het
+    eiland"). Uit één nummer een eiland met water rondom en een kust met baaien, kapen en eilandjes; een bergrug met twee
+    of drie passen en verder heuvels (B); rivieren die in zee uitkomen, met hun dalen; zeven meren; de zes streken van de
+    landkaart met strand en duinen (D); het kasteel op een heuvel, de stad aan de monding van de grootste rivier, en acht
+    dorpen met een naam, ver genoeg uit elkaar, elk waar een dorp kan groeien (vlak, droog in het midden, water en open
+    land in de buurt, en geen berg naar de camera toe; C); en de wegen van het kasteel naar elk dorp en van elk dorp naar
+    zijn buur, door de dalen en over de passen, met bruggen. De plaat toont het eiland van boven met de namen, en je land
+    van 100 bij 100 met de rand, tegel voor tegel. Gemeten: de schets in 0,5 à 0,7 s, het hele eiland op ware grootte in
+    9 s (een stuk van 64 bij 64 in 6 ms). Van kust tot kust is drie dagen lopen, naar het kasteel een tot drie. Toetsen
+    in `test/eiland.test.cjs` (onder meer: het water stroomt nooit omhoog, over de weg kom je overal, en een stuk is
+    hetzelfde hoe je het ook vraagt); `npm test`: 1036/1036. Wat opviel:
+    - *Heuvels uit ruis hebben overal kommen*: de eerste plaat had 167 meren. Nu worden alleen de zeven grootste een
+      meer, staat een te groot meer lager, en slijt de rivier door de rest een doorbraak, zoals in een echt landschap.
+      De toets vond daarbij water dat omhoog stroomde (een droge kom boven een meer), en dat is gerepareerd.
+    - *Een dorp midden in het bos*: zonder eis aan open land koos het lot een plek die helemaal bos was; nu is minstens
+      een kwart open land (de kampen of de heide), voor de akkers.
+    - *De kust langs de rand*: het eiland liep eerst tot de rand van het vierkant, met rechte kusten; nu blijft de zee
+      ruim rondom, en is het land 40 à 55% van het vierkant.
+    - *Voor stap 2*: een dorp kan aan zee liggen, aan een rivier of in het bos, en de maker legt nu zelf de bosrand, de
+      vijvers en de rotsen; op het eiland moet hij nemen wat er ligt (de zee in een hoek van je land, een rivier erdoor).
+    Het spel gebruikt het eiland nog niet. Nu: Marcel kijkt naar de platen, en kiest a1 (je dorp op het eiland, dan de
+    kern) of a2 (meteen het hele eiland).
 118. **Inwoners met stats, zoals in Dwarf Fortress** (Marcel, 4 okt, zesentwintigste sessie: "Inwoners krijgen ook
     'stats' hp, skills, eigenschappen, etc ala dwarf fortress"; plan van Claude; open).
     **Wat er al is:** elke bewoner heeft een naam, een leeftijd, een huis, een gezin en werk (`js/bewoners.js`); de vijf
@@ -6567,6 +6600,10 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 8 okt 2026 — **Vraag 117, stap 1: de plaat van het eiland** (de sessie van de kaartenmaker; Marcel: "Ik wil 1
+  aaneengesloten landschap", "B 1", en "ja begin met de plaat"). De kaartenmaker (`js/eiland.js`): uit één nummer een
+  eiland met water rondom, een bergrug met passen, rivieren die in zee uitkomen, meren, de zes streken van de landkaart
+  met strand en duinen, het kasteel, de stad, acht dorpen en de wegen; de plaat met je land ernaast. Nog niet in het spel.
 - 7 okt 2026 — **Vraag 121, stap 1: de hoogte in het spel** (de sessie van de hoogte; Marcel: "Ja, begin met stap 1",
   "Waar alles doorloopt", "Ja push main"). Een landschap uit het nummer van het land dat overal doorloopt, met een
   richel, akkers die meebollen en zacht licht, achter de spelregel "Hoogte" (standaard vlak); de proefplaat en de grote
