@@ -6281,6 +6281,7 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     van vijftien bladzijden, "Aardschok — Richting & Game Design Ideeën": een analyse van de samenvatting van vier
     bladzijden die we die dag voor een gamedesigner maakten; de pdf staat niet in git, dit is wat erin staat; plan van
     Claude; open).
+    **Bezig in sessie `claude/project-thread-cyjrql`** (8 okt): het plan voor de proef, de verdwenen graanzak met een eerste zitting, voor Marcel.
     **In één zin:** "maak de game smaller in scope, maar dieper in menselijke consequenties": informatie, mensen, politiek
     en gevolgen gaan boven bouw- en productiediepte. Zijn ontwerpregel: "Wat gebeurde er in mijn dorp, waarom gebeurde
     het, wat weet ik ervan, en wie wordt boos als ik ingrijp?" Zijn positionering: "A medieval political life-sim where
@@ -6566,7 +6567,7 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     **Gespeeld** (7 okt; `speelbaar.md`, "De speeltest van 7 okt: wapens zijn niet meer verboden"): de bouwer zei op alle
     drie de landen ja tegen de wapenmaker en speelde de vier jaar uit; **op 62707 wint hij nu**, op 27 hooimaand van het
     vierde jaar, waar hij eerst in het tweede jaar werd ontslagen. Drie van de zes spellen winnen. **Klaar.**
-132. **Plaatsen voor gasten in de grote herberg** (Claude, 8 okt, bij vraag 114, stap 3; open). Groeit de herberg in een
+133. **Plaatsen voor gasten in de grote herberg** (Claude, 8 okt, bij vraag 114, stap 3; open). Groeit de herberg in een
     dorp tot de grote, dan heeft hij nog evenveel plaatsen voor gasten als de kleine (`T.herbergGasten`): een grotere
     herberg zou meer mensen moeten trekken, en dat haalt bier weg voor de huizen. Vraag aan Marcel: meer plaatsen naar de
     maat van de herberg, of laten zoals het is?
