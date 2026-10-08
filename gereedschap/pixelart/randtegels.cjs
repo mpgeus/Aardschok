@@ -237,7 +237,8 @@ function randKaart(aNaam, bNaam, hoeken, gx0, gy0) {
       // De zee is water zoals in dorp.cjs (waterDiepte, waterPixel), maar ondiep aan het strand: geen oeverwand van
       // een beek, maar een paar pixels zand. Welke kleur, zegt kustGrondTex (U.zee).
       U.s = D.WATER;
-      U.d = -Math.min(af, ZEE_MAX);
+      // aan de monding van een rivier geen branding: daar is de zee overal diep
+      U.d = verlies.s === D.WATER ? -ZEE_MAX : -Math.min(af, ZEE_MAX);
       U.rand = 0;
       U.randS = verlies.s;
       U.vijver = GEEN_STENEN;
@@ -256,9 +257,10 @@ function randKaart(aNaam, bNaam, hoeken, gx0, gy0) {
         // volle breedte die padPixel voor een spoor verwacht.
         U.dwars = spoorAs ? Math.min(afSchoon * 2, 1) : 0;
       } else if (win.s === D.WATER) {
-        U.d = -Math.min(af, WATER_MAX);
+        // waar een rivier de zee in loopt, is er geen oever: even diep als de zee, en overal even ver van de kant
+        U.d = zeeKust ? -WATER_MAX : -Math.min(af, WATER_MAX);
         U.vijver = GEEN_STENEN;
-        U.diep = WATER_DIEP;
+        U.diep = zeeKust ? ZEE_DIEP : WATER_DIEP;
         // rimpels langs lijnen van gelijke schermhoogte: op het scherm lopen ze horizontaal, zoals
         // het water in dorp.cjs.
         U.langs = (gx + gy) * 0.5;
@@ -1169,14 +1171,17 @@ function bouw() {
 //
 // De zee, het strand, het veen en het broek met hun overgangen (werklijst vraag 117, B van 2a; Marcel, 8 okt: "A. Ja,
 // lijkt mij goed"): een eigen vel, tegels/kust.png, zodat geen tegelnummer van rand.png verschuift. Het gras en de heide
-// staan er zelf ook op, want een terreinset in Tiled kent alleen de tegels van zijn eigen vel.
-const VLAKKEN_KUST = ['zee', 'strand', 'veen', 'broek', 'gras', 'heide'];
+// staan er zelf ook op (en het water, voor waar een rivier de zee in loopt), want een terreinset in Tiled kent alleen
+// de tegels van zijn eigen vel.
+const VLAKKEN_KUST = ['zee', 'strand', 'veen', 'broek', 'gras', 'heide', 'water'];
 const PAREN_KUST = [
   { naam: 'Strand aan zee', a: 'zee', b: 'strand' },
   { naam: 'Gras over strand', a: 'strand', b: 'gras' },
   { naam: 'Heide over strand', a: 'strand', b: 'heide' },
   { naam: 'Veen over gras', a: 'gras', b: 'veen' },
   { naam: 'Broek over gras', a: 'gras', b: 'broek' },
+  // waar een rivier de zee in loopt (nodig voor de maker; geen overgang die je ziet als land)
+  { naam: 'Water in zee', a: 'zee', b: 'water' },
 ];
 
 // Met `schrijf` naar tegels/kust.png en kust.tsx; zonder alleen de plaat (voor de proefplaat).

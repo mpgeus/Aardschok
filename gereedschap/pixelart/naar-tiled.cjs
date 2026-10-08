@@ -73,7 +73,7 @@ function veilig(naam, f) {
 // een eigen script met een eigen agent. Zijn volgorde ligt al vast zolang niemand de lijsten
 // SOORTEN/PAREN daar herschikt (een nieuw paar komt er vanzelf achteraan bij, zie de toelichting
 // daar); zijn capaciteit vullen we hieronder aan zonder dat script aan te raken, zie
-// RAND_CAPACITEIT en padRandTegels() verderop.
+// RAND_CAPACITEIT en padGrondVel() verderop.
 const VELCONFIG = {
   grond: { capaciteit: 160, kolommen: 4 }, // nu 58 (3 grondsoorten × 19 + water): vijf soorten erbij kan
   bomen: { capaciteit: 32, kolommen: 8 }, // nu 11 in 16 vakken (het boompje en de jonge bomen kwamen er op 6 okt bij): zestien erbij kan
@@ -884,7 +884,7 @@ function tileUitXml(blok) {
 function leesVelUitTsx(veldNaam) {
   const pad = path.join(TEGELS, `${veldNaam}.tsx`);
   if (!fs.existsSync(pad)) {
-    console.warn(`  overgeslagen: ${veldNaam}.tsx bestaat nog niet — draai eerst npm run ${veldNaam === 'rand' ? 'randtegels' : veldNaam}`);
+    console.warn(`  overgeslagen: ${veldNaam}.tsx bestaat nog niet — draai eerst npm run ${veldNaam === 'rand' ? 'randtegels' : veldNaam === 'kust' ? 'randtegels kust' : veldNaam}`);
     return null;
   }
   const xml = fs.readFileSync(pad, 'utf8');
@@ -936,6 +936,9 @@ function leesVelUitTsx(veldNaam) {
 // met volledige koppeling aan de bestaande vier kost in één klap 4×56+8 = 232. 600 is dus geen
 // overdreven marge: dat is nog niet eens twee van zulke stappen boven de huidige 262.
 const RAND_CAPACITEIT = 600;
+// De grond van het eiland (tegels/kust.tsx): de zee, het strand, het veen en het broek. Een kaart zet hem na de
+// andere vellen (de maker na rand: js/maker.js), dus groeit hij, dan schuift er niets op.
+const KUST_CAPACITEIT = 600;
 
 // Precies de omkering van K.png (kern.cjs): 8-bit RGBA, geen filter (filterbyte 0), één IDAT. We
 // lezen geen pixel uit om te "begrijpen" wat erop staat — de bestaande rijen kopiëren we als ruwe
@@ -1019,10 +1022,11 @@ function vergrootPngHoogte(pngPad, breedte, huidigeHoogte, nieuweHoogte) {
 // Vult tegels/rand.tsx (en zo nodig rand.png) aan met lege cellen tot RAND_CAPACITEIT. Haalt
 // eerst een eerdere opvulling weg (aan de lege naam te herkennen) en telt dan de echte tegels
 // opnieuw: zo werkt dit ook goed na een nieuwe npm run randtegels (dan is er geen eerdere
-// opvulling) en na een latere wijziging van RAND_CAPACITEIT zelf.
-function padRandTegels() {
-  const tsxPad = path.join(TEGELS, 'rand.tsx');
-  const pngPad = path.join(TEGELS, 'rand.png');
+// opvulling) en na een latere wijziging van RAND_CAPACITEIT zelf. Net zo de grond van het eiland,
+// tegels/kust.tsx (KUST_CAPACITEIT; werklijst vraag 117, B van 2a), uit `npm run randtegels kust`.
+function padGrondVel(naam, capaciteit) {
+  const tsxPad = path.join(TEGELS, `${naam}.tsx`);
+  const pngPad = path.join(TEGELS, `${naam}.png`);
   if (!fs.existsSync(tsxPad) || !fs.existsSync(pngPad)) return; // leesVelUitTsx klaagt hier al over
 
   const legeTileRe = / <tile id="\d+"><properties><property name="naam" value=""\/><property name="vast" type="bool" value="false"\/><\/properties><\/tile>\n/g;
@@ -1035,28 +1039,28 @@ function padRandTegels() {
   const breedte = Number(attr(beeldKop, 'width'));
   const huidigeHoogte = Number(attr(beeldKop, 'height'));
 
-  if (nEcht > RAND_CAPACITEIT) {
+  if (nEcht > capaciteit) {
     fs.writeFileSync(tsxPad, xml); // wel de weggehaalde oude opvulling laten staan weg
-    console.warn(`  let op: rand.tsx heeft ${nEcht} echte tegels, meer dan RAND_CAPACITEIT (${RAND_CAPACITEIT}) in naar-tiled.cjs — verhoog die eerst, anders schuiven de vellen na rand in een kaart op`);
+    console.warn(`  let op: ${naam}.tsx heeft ${nEcht} echte tegels, meer dan de capaciteit (${capaciteit}) in naar-tiled.cjs — verhoog die eerst, anders schuiven de vellen na ${naam} in een kaart op`);
     return;
   }
 
   let nieuweTiles = '';
-  for (let id = nEcht; id < RAND_CAPACITEIT; id++) {
+  for (let id = nEcht; id < capaciteit; id++) {
     nieuweTiles += ` <tile id="${id}"><properties><property name="naam" value=""/><property name="vast" type="bool" value="false"/></properties></tile>\n`;
   }
   const wangsetsAt = xml.indexOf(' <wangsets>');
   if (wangsetsAt < 0) throw new Error(`${tsxPad}: geen <wangsets> gevonden — is dit nog wel het bestand dat randtegels.cjs schrijft?`);
   xml = xml.slice(0, wangsetsAt) + nieuweTiles + xml.slice(wangsetsAt);
-  xml = xml.replace(/tilecount="\d+"/, `tilecount="${RAND_CAPACITEIT}"`);
+  xml = xml.replace(/tilecount="\d+"/, `tilecount="${capaciteit}"`);
 
-  const rijenNodig = Math.ceil(RAND_CAPACITEIT / kolommen);
+  const rijenNodig = Math.ceil(capaciteit / kolommen);
   const nieuweHoogte = rijenNodig * 32;
   xml = xml.replace(/(<image[^>]*\bheight=")\d+(")/, `$1${nieuweHoogte}$2`);
   fs.writeFileSync(tsxPad, xml);
 
   if (nieuweHoogte > huidigeHoogte) vergrootPngHoogte(pngPad, breedte, huidigeHoogte, nieuweHoogte);
-  console.log(`rand.tsx aangevuld: ${nEcht} echte tegels, lege cellen tot ${RAND_CAPACITEIT} (${kolommen}×${rijenNodig}, rand.png nu ${breedte}×${nieuweHoogte})`);
+  console.log(`${naam}.tsx aangevuld: ${nEcht} echte tegels, lege cellen tot ${capaciteit} (${kolommen}×${rijenNodig}, ${naam}.png nu ${breedte}×${nieuweHoogte})`);
 }
 
 // ---------------------------------------------------------------- alles samen, en het zijspoor
@@ -1080,14 +1084,17 @@ function padRandTegels() {
 const GEVRAAGD = process.argv.slice(2).filter((a) => !a.startsWith('-'));
 const wil = (naam) => !GEVRAAGD.length || GEVRAAGD.includes(naam);
 
-// rand komt uit randtegels.cjs; hier vullen we hem aan tot RAND_CAPACITEIT (zie padRandTegels
+// rand komt uit randtegels.cjs; hier vullen we hem aan tot RAND_CAPACITEIT (zie padGrondVel
 // hierboven) en lezen we daarna pas zijn .tsx in, zodat tegels.json de aangevulde staat krijgt.
-if (wil('rand')) padRandTegels();
+// Net zo kust, de grond van het eiland (`npm run randtegels kust`).
+if (wil('rand')) padGrondVel('rand', RAND_CAPACITEIT);
+if (wil('kust')) padGrondVel('kust', KUST_CAPACITEIT);
 
 (async () => {
   const velden = [
     wil('grond') && bouwGrondVel(),
     wil('rand') && leesVelUitTsx('rand'),
+    wil('kust') && leesVelUitTsx('kust'),
     wil('bomen') && bouwModelVel('bomen', BOMEN, BOMEN_VAST),
     wil('begroeiing') && bouwModelVel('begroeiing', BEGROEIING, (n) => !!BEGROEIING_VAST[n]),
     wil('gebouwen') && bouwGebouwenVel(),

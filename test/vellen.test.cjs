@@ -68,7 +68,7 @@ test('bij het begin laadt geen enkel huis, gebouw of figuur; wel elk ander vel',
   assert.ok(T.sprites.aan && T.sprites.buitenAan);
   assert.deepEqual(gevraagd.filter(perTekening), []);
   assert.deepEqual(gevraagd.filter(figuur), []);
-  for (const vel of ['grond', 'rand', 'bomen', 'begroeiing', 'erf', 'tuin']) assert.ok(gevraagd.includes(T.TEGELS[vel].bestand), vel);
+  for (const vel of ['grond', 'rand', 'kust', 'bomen', 'begroeiing', 'erf', 'tuin']) assert.ok(gevraagd.includes(T.TEGELS[vel].bestand), vel);
   for (const vel of ['muren', 'vloeren', 'voorwerpen']) assert.ok(gevraagd.includes(`beelden/${T.BEELDEN[vel].bestand}`), vel);
 });
 
