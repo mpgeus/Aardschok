@@ -5083,6 +5083,18 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     je dorp op het eiland, dan eerst de kern (voor de demo), en daarna het hele eiland beloopbaar; of **a2** na de plaat
     meteen het hele eiland beloopbaar, en dan de kern. Voorstel: a1, want de demo gaat over je dorp en zijn mensen, en
     het hele eiland is het grootste technische werk tot nu toe. De plaat (stap 1) is in beide gevallen de eerste.
+    **Marcel (8 okt): "Fog of war maakt de rest van het land 'onzichtbaar' tot je het verkent."** Je ziet je dorp en een
+    rand eromheen die je mensen kennen; de rest is mist tot je het verkent. Dat helpt ook de techniek, want wat niemand van
+    jou zag, hoeft er nog niet te zijn: het spel maakt een stuk aan de rand van de mist, waar je het niet ziet gebeuren. Zo
+    zie je één aaneengesloten landschap, en houdt het spel alleen wat je verkende. Het geheugen en een bewaard spel groeien
+    dan met wat je verkent, niet met het eiland; wat in de mist ligt, wordt niet getekend; wie in de mist reist (de heer,
+    een ander dorp, een roedel), reist als getallen langs de wegen van de schets en wordt een poppetje als je hem ziet; en
+    een weg zoek je alleen door land dat je kent. Daarom worden stap 3 en 4 één stap: **de mist en een kaart die
+    meegroeit**. Wat groot blijft: het spel gaat nu uit van één vaste kaart (`.tegels[` staat 36 keer in 14 bestanden,
+    `.grond[` 24 keer in 6, en de maat `w.b` en `w.h` 91 keer in 9: lopen, paden zoeken, het bos, tekenen, opslaan), en
+    die moet een kaart worden die meegroeit. Nog open: a1 of a2 (kan als de plaat er is), en wat je verkende maar nu niet
+    ziet: grijs, zoals je het het laatst zag (vraag d hierboven, en Marcels "laatst bekende inventarisatie"), of weer
+    donker.
 118. **Inwoners met stats, zoals in Dwarf Fortress** (Marcel, 4 okt, zesentwintigste sessie: "Inwoners krijgen ook
     'stats' hp, skills, eigenschappen, etc ala dwarf fortress"; plan van Claude; open).
     **Wat er al is:** elke bewoner heeft een naam, een leeftijd, een huis, een gezin en werk (`js/bewoners.js`); de vijf

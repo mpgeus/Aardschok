@@ -936,7 +936,9 @@ op 2 okt gaf, wat ver weg is als getallen), staat erbij. **De kaartenmaker** (8 
 wil 1 aaneengesloten landschap", "B 1", en "moeilijke plek mag ook, kunnen we als hard modus later doen?"): één
 aaneengesloten eiland, gemaakt uit het nummer, met een bergrug met passen en verder heuvels, rivieren die in zee
 uitkomen, en de zes streken van de landkaart (het woud, de heide, het veen, het broek, het zand en de kampen) met de
-kust. Je dorp komt altijd waar een dorp kan groeien; een moeilijke plek komt later, bij de moeilijkheidsgraad.
+kust. Je dorp komt altijd waar een dorp kan groeien; een moeilijke plek komt later, bij de moeilijkheidsgraad. En
+(Marcel, 8 okt): "Fog of war maakt de rest van het land 'onzichtbaar' tot je het verkent." Wat niemand van jou zag, is
+mist, en het spel maakt het land pas aan de rand van de mist, zodat het alleen houdt wat je verkende.
 
 
 **Zo werkt het nu** (30 sep, zeventiende sessie; stuk 1 van stap 1a; `js/land.js` en `js/landkaart.js`, toetsen in
