@@ -74,8 +74,10 @@
   // klaarstond, zodat hetzelfde zaad hetzelfde spel blijft geven (de speeltest).
   // Geeft true als er een vers spel kwam.
   T.gehuchtNaarDeSpelregel = function () {
-    const gemaakt = !!(S.gebieden && S.gebieden.gehucht && S.gebieden.gehucht.maker);
-    if (S.proefje || gemaakt === !!T.MAKER_INSTELLINGEN.eigenGehucht) return false;
+    const g = S.gebieden && S.gebieden.gehucht;
+    const gemaakt = !!(g && g.maker);
+    const opEiland = !!(g && g.eiland);
+    if (S.proefje || (gemaakt === !!T.MAKER_INSTELLINGEN.eigenGehucht && opEiland === !!T.MAKER_INSTELLINGEN.opEiland)) return false;
     T.nieuwSpel();
     return true;
   };
@@ -1193,7 +1195,28 @@
       if (zaad != null) T.nieuwSpel(Number(zaad));
       const w = S.gebieden && S.gebieden.gehucht;
       const stijl = w && w.stijl ? `, in de bouwstijl ${w.stijl} (js/bouwstijl.js)` : '';
+      if (w && w.eiland) return `Een gehucht op het eiland van ${w.eiland.zaad}, in ${w.eiland.dorp}${stijl} (Spel.debug.eiland()).`;
       return w && w.maker ? `Een gehucht van de maker, uit zaad ${w.maker.zaad}${stijl}.` : 'Het ontworpen gehucht.';
+    },
+    // Je dorp op het eiland (js/eiland.js, vraag 117, stap 2): Spel.debug.eiland(5) zet de spelregel "Je gehucht" op "Op
+    // het eiland" en begint nu een nieuw spel op het eiland van nummer 5, zonder brief; zonder nummer zegt het waar je
+    // dorp op het eiland ligt, wat voor plek het is, en waar de wegen je land verlaten.
+    eiland(zaad) {
+      if (zaad != null) {
+        T.zetOptie('gehucht', 'eiland');
+        T.nieuwSpel(Number(zaad));
+      }
+      const w = S.gebieden && S.gebieden.gehucht;
+      if (!w || !w.eiland) return 'Dit gehucht ligt niet op het eiland (de spelregel "Je gehucht" staat niet op "Op het eiland").';
+      const E = T.eilandVan(w.eiland.zaad);
+      const dorp = E.plekken.find((p) => p.naam === w.eiland.dorp);
+      return {
+        eiland: w.eiland.zaad,
+        dorp: w.eiland.dorp,
+        plek: dorp ? dorp.aard : null,
+        hoek: [w.eiland.x0, w.eiland.y0],
+        uitgang: w.overgangen ? w.overgangen.map((o) => [o.x, o.y]) : null,
+      };
     },
     // De hoogte van het land (js/hoogte.js, vraag 121): of deze kaart hoogte heeft, hoe hoog het hoogste punt is en
     // waar, de richel en zijn helling, en de hoogte waar de schout staat. Spel.debug.hoogte(5) begint een nieuw spel op

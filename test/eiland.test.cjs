@@ -178,3 +178,84 @@ test('eiland: alleen rekenen dat in elke browser hetzelfde uitkomt (geen sinus, 
     assert.doesNotMatch(bron, verboden);
   }
 });
+
+// ---- stap 2: je dorp op het eiland (Marcel, 8 okt: "a1", en "A ja B later C dorp dat er al was") ----
+
+function opEiland(f) {
+  T.pasOptiesToe({ keuzes: { gehucht: 'eiland' } });
+  try {
+    return f();
+  } finally {
+    T.pasOptiesToe({});
+  }
+}
+function nieuwSpel(zaad) {
+  const echt = console.warn;
+  console.warn = () => {};
+  const S = { kalender: T.nieuweKalender() };
+  try {
+    assert.ok(T.beginOpKaart(S, 'gehucht', zaad));
+  } finally {
+    console.warn = echt;
+  }
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
+  return S;
+}
+
+test('je dorp op het eiland: de spelregel "Je gehucht" heeft een derde keus, en de standaard blijft de maker', () => {
+  const o = T.OPTIES.find((x) => x.id === 'gehucht');
+  assert.equal(o.standaard, 'maker');
+  assert.ok(o.keuzes.some((k) => k.id === 'eiland'));
+  assert.equal(T.MAKER_INSTELLINGEN.opEiland, false);
+  opEiland(() => {
+    assert.equal(T.MAKER_INSTELLINGEN.opEiland, true);
+    assert.equal(T.MAKER_INSTELLINGEN.eigenGehucht, true);
+  });
+  assert.equal(T.MAKER_INSTELLINGEN.opEiland, false);
+  // zonder de spelregel weet het gehucht van de maker niets van het eiland
+  const plan = T.maakGehucht(5);
+  assert.equal(plan.eiland, undefined);
+  assert.equal(plan.bruggen, undefined);
+});
+
+test('je dorp op het eiland: het water en de wegen zijn die van het eiland, en het gehucht deugt', () => {
+  for (const zaad of [5, 62707]) {
+    const E = eiland(zaad);
+    const jij = E.plekken.find((p) => p.jij);
+    const land = T.landVanEiland(E, jij, 100, 100);
+    const plan = T.maakGehucht(zaad, land, 30); // gooit een fout als geen poging deugt
+    assert.deepEqual(plan.eiland, { zaad, x0: land.x0, y0: land.y0 });
+    // het water: elk hoekpunt water waar het eiland water is, en nergens anders
+    for (let y = 0; y <= 100; y++) {
+      for (let x = 0; x <= 100; x++) {
+        const nat = ['zee', 'meer', 'rivier'].includes(land.hoek(x, y));
+        assert.equal(plan.grond[y][x] === 'w', nat, `land ${zaad}: hoekpunt (${x}, ${y})`);
+      }
+    }
+    // de uitgang ligt aan de rand, bij een plek waar een weg van het eiland het land verlaat
+    const u = plan.uitgang;
+    assert.ok(u.x === 0 || u.y === 0 || u.x === 99 || u.y === 99, `land ${zaad}: de uitgang (${u.x}, ${u.y}) ligt aan de rand`);
+    assert.ok(land.uitgangen.some((v) => Math.abs(v.x - u.x) + Math.abs(v.y - u.y) <= 24), `land ${zaad}: de uitgang ligt aan een weg van het eiland`);
+    // een bruggetje ligt over het water, recht, in zijn richting
+    for (const b of plan.bruggen) {
+      for (const t of b.tegels) assert.ok(['w'].includes(plan.grond[t.y][t.x]) || ['w'].includes(plan.grond[t.y + 1][t.x + 1]), `land ${zaad}: een bruggetje over water`);
+      assert.ok(b.tegels.every((t) => (b.as === 'x' ? t.y === b.tegels[0].y : t.x === b.tegels[0].x)), `land ${zaad}: een recht bruggetje`);
+    }
+  }
+});
+
+test('een nieuw spel op het eiland: je dorp op jouw plek, 26 mensen, en bewaren en laden geeft hetzelfde spel', () => {
+  opEiland(() => {
+    const S = nieuwSpel(5);
+    assert.equal(S.wereld.eiland.zaad, 5);
+    assert.equal(S.wereld.eiland.dorp, eiland(5).plekken.find((p) => p.jij).naam);
+    assert.equal(S.wereld.maker.zaad, 5);
+    assert.equal(S.dorp.bevolking, 26);
+    const tekst = T.bewaarSpel(S, { nu: 1790000000000 });
+    const S2 = nieuwSpel(3);
+    const r = T.herstelSpel(S2, tekst);
+    assert.equal(r.gelukt, true, r.reden);
+    assert.deepEqual(S2.wereld.eiland, S.wereld.eiland);
+    assert.equal(T.bewaarSpel(S2, { nu: 1790000000000 }), tekst);
+  });
+});

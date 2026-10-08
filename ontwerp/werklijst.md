@@ -81,7 +81,10 @@ kaartenmaker (`js/eiland.js`) maakt uit één nummer een eiland van 2500 bij 250
 passen, rivieren naar zee, meren, de zes streken met de kust, het kasteel, de stad, acht dorpen en de wegen ertussen, en
 de plaat (`node gereedschap/pixelart/eiland-plaat.cjs`) toont het, met je land ernaast. Het spel gebruikt het nog niet.
 Marcel vond de eilanden goed ("1 ja goed") en koos a1: eerst je dorp op het eiland (stap 2, het plan staat bij vraag
-117), dan de kern; het hele eiland, met de mist en een kaart die meegroeit, later. `npm test`: 1036/1036.
+117), dan de kern; het hele eiland, met de mist en een kaart die meegroeit, later. **2a is gebouwd** ("A ja B later C dorp
+dat er al was"): met de spelregel "Je gehucht" op "Op het eiland" ligt je dorp op het eiland, als een dorp dat er al was
+(`Spel.debug.eiland(5)`); nog op de branch. Volgende: 2b, het eiland om je land (de rand, en de hoogte van het eiland).
+`npm test`: 1039/1039.
 
 **De sessie van de hoogte** (7 okt, `claude/elegant-meitner-d3ss2z`, naast die van de wolven; in `main`, Marcel: "Ja
 push main"). **Vraag 124, de camera draaien, is geparkeerd** (Marcel: "Is het echt iets wat iets toevoegd? Ik wil geen
@@ -5166,6 +5169,29 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Marcel (8 okt): "A ja B later C dorp dat er al was".** Dus de drie stukken achter de spelregel "Je gehucht" ("Op
     het eiland"), eerst met de tegels die er zijn (nieuwe grondtegels later), en het gehucht als een dorp dat er al was.
     2a is begonnen.
+    **2a is gebouwd** (8 okt, `ccr-f03157dc-9d2dtu`; wacht op Marcels blik): de spelregel "Je gehucht" heeft een derde keus,
+    "Op het eiland" (de standaard blijft "Elk spel een ander"), en dan is je land het stuk van het eiland om jouw dorp
+    (`T.landVanEiland` in `js/eiland.js`, en de maker met `land`, `js/maker.js`). Het water (de zee, de meren, de
+    rivieren), het bos, de heide, het zand, de rotsen en de wegen komen van het eiland; het gehucht legt de maker erop
+    zoals altijd, en het is een dorp dat er al was (C): eerst de huizen om het plein, dan zoekt de weg van het eiland zijn
+    weg ernaartoe (om de huizen heen, en met een recht bruggetje over smal water), dan de boerderijen en akkers (liever op
+    open land), en pas dan het bos van het eiland, met een gerooide kern van zestien tegels om het plein. De uitgang is
+    waar de weg naar het kasteel je land verlaat. `Spel.debug.eiland(5)` begint een spel op het eiland van 5. Op tien
+    landen lukt het op jouw eigen plek, meestal bij de eerste poging (0,2 à 1 s, plus 0,6 s voor het eiland); lukt het
+    ergens niet, dan op de plek van een ander dorp. Met de spelregel zoals het was, maakt de maker op twaalf landen byte
+    voor byte hetzelfde plan en dezelfde kaart. `npm test`: 1039/1039. Wat opviel:
+    - *De weg van het eiland lag waar de herberg moest staan*: de deur van de herberg kijkt naar het plein, en op land 5
+      kwam de weg precies van die kant. Bij de maker kiest het lot de wegen; hier liggen ze vast. Daarom komen op het
+      eiland eerst de huizen en dan de weg, en dat is ook wat "een dorp dat er al was" zegt.
+    - *Rotsen passen niet op heide*: in een heidedorp vond de maker geen plek voor de rotsen en de steengroeve (die staan
+      op gras). Nu is de heide in de kern van het dorp gras (weiden en tuinen), en kiest de rotspartij een plek met
+      genoeg gras; en in een bosland mogen de rotsen in het bos.
+    - *De zee is de tegel van de vijver*: op een groot vlak leest die als donkere grond. Een eigen tegel voor de zee (en
+      het strand, het veen, het broek) is "B later"; tot dan is het strand aan het water een randje gras, want zand
+      grenst niet aan water.
+    - *Om de kaart staat nog bos*, ook aan de kant van de zee: dat is 2b (de rand toont het eiland).
+    - *Hoogte*: met "Hoogte" op "Heuvels" legt de maker op het eiland nog zijn eigen heuvels, niet die van het eiland;
+      dat hoort bij 2b.
 118. **Inwoners met stats, zoals in Dwarf Fortress** (Marcel, 4 okt, zesentwintigste sessie: "Inwoners krijgen ook
     'stats' hp, skills, eigenschappen, etc ala dwarf fortress"; plan van Claude; open).
     **Wat er al is:** elke bewoner heeft een naam, een leeftijd, een huis, een gezin en werk (`js/bewoners.js`); de vijf

@@ -35,8 +35,19 @@ komen, en daarna elk blaadje schildert. Het is één landschap; de schets zie je
   (`gereedschap/pixelart/uit/eiland/`). Op de plaat is x naar rechts en y naar onder; de camera van het spel kijkt dan
   van rechtsonder.
 
-**Wat er nog komt:** stap 2, je dorp op het eiland (de maker legt het gehucht op het land van het eiland, en de rand om
-de kaart is het eiland), en daarna de mist en een kaart die meegroeit (de stukken, opslaan wat veranderde, HPA\*).
+**Je dorp op het eiland (stap 2a, 8 okt; Marcel: "A ja B later C dorp dat er al was"):** met de spelregel "Je gehucht"
+op "Op het eiland" is je land van 100 bij 100 het stuk van het eiland om jouw dorp. `T.landVanEiland(E, plek, b, h)` geeft
+de maker per tegel en per hoekpunt de streek, de bomen en waar de wegen van het eiland het land verlaten (die naar het
+kasteel is de uitgang); `T.eilandVan(zaad)` onthoudt het laatste eiland, want het is uit het nummer te maken. De maker
+legt het gehucht erop zoals altijd, maar als een dorp dat er al was: eerst de huizen om het plein, dan de weg ernaartoe
+(A\* om het water en de huizen heen, met een recht bruggetje over smal water), dan de boerderijen en akkers (liever op open
+land) en de meent (liever op de heide), en pas dan het bos van het eiland, met een gerooide kern om het plein. De grond:
+de heide heide, het strand, de duinen en het zand zandpad, het water water, en de rest gras (nieuwe tegels voor de zee,
+het strand, het veen en het broek komen later). Een kaart van het eiland onthoudt waar hij ligt (`w.eiland`: het nummer en
+de hoek van je land op het eiland). Lukt het gehucht op jouw plek niet, dan op die van een ander dorp.
+
+**Wat er nog komt:** 2b, de rand om de kaart toont het eiland (en de hoogte komt van het eiland), 2c de speeltest; en
+daarna de mist en een kaart die meegroeit (de stukken, opslaan wat veranderde, HPA\*).
 
 ## Werken in Tiled: zo teken je een kaart (21 sep 2026)
 

@@ -311,7 +311,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   per tegel de hoogte, de streek (`T.EILAND_STREKEN`: het water, strand en duinen, en de zes van de landkaart), de weg en
   de bomen, uit het nummer en de schets; een stuk is hetzelfde hoe je het ook vraagt, zodat het spel later het land maakt
   aan de rand van de mist. Alleen optellen, vermenigvuldigen, delen en wortels (een toets kijkt het na), zodat elke
-  browser hetzelfde eiland maakt. Het spel gebruikt het nog niet (stap 2); de plaat:
+  browser hetzelfde eiland maakt. **Je dorp op het eiland** (stap 2a, Marcel: "C dorp dat er al was"): met de spelregel
+  "Je gehucht" op "Op het eiland" (`T.MAKER_INSTELLINGEN.opEiland`) is je land het stuk van het eiland om jouw dorp:
+  `T.landVanEiland(E, plek, b, h)` geeft de maker de streek per tegel en per hoekpunt, de bomen en waar de wegen het land
+  verlaten, en `T.eilandVan(zaad)` onthoudt het laatste eiland. De maker (`js/maker.js`, met `land`) legt het gehucht erop
+  als een dorp dat er al was; de kaart onthoudt waar hij ligt (`w.eiland`). De plaat:
   `node gereedschap/pixelart/eiland-plaat.cjs [nummer] [--groot]` (in `gereedschap/pixelart/uit/eiland/`). De getallen in
   `T.EILAND_INSTELLINGEN`.
 - `js/sprites.js`: de pixel art uit `beelden/`. `T.sprites.figuur/tegel/muur/voorwerp` wijzen
@@ -692,7 +696,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   cijfers, in het menu bij Nieuw spel); `T.beginOpKaart` legt alleen met een nummer een land van de maker, dus de
   toetsen spelen op het ontworpen gehucht. De boeren worden uit hetzelfde nummer geloot (`D.lot.zaad`). Het gehucht
   blijft `'gehucht'` heten, zodat alles wat het ontworpen gehucht kent, ook hier werkt; `w.maker` zegt uit welk zaad
-  het komt. **Wat er ligt, doet ertoe:** een houthakker bij het bos, een steengroeve bij de rotsen, een visser en een
+  het komt. **Op het eiland** (`land`, vraag 117, stap 2a): het water, het bos, de heide, het zand, de rotsen en de wegen
+  komen van het eiland (`js/eiland.js`), en het gehucht is een dorp dat er al was: eerst de huizen om het plein, dan de
+  weg van het eiland ernaartoe (`wegenOpEiland`: A\* om het water en de huizen heen, met rechte bruggetjes, `plan.bruggen`),
+  dan de boerderijen, akkers en de meent (liever op open land en de heide), en pas dan het bos van het eiland, met een
+  gerooide kern (`eilandKern`); lukt het op jouw plek niet, dan op die van een ander dorp (`gehuchtOpEiland`). Zonder
+  `land` legt hij byte voor byte wat hij altijd legde. **Wat er ligt, doet ertoe:** een houthakker bij het bos, een steengroeve bij de rotsen, een visser en een
   rietsnijder aan het water (`bij` in `T.GEBOUWEN`, `T.natuurBij` in `js/gebouwen.js`). Wat plat op de
   grond ligt (niet vast, laag), tekent `js/tekenen.js` in de buffer van de grond (`isPlat`), en het maakt plaats voor
   een gebouw.
@@ -1077,6 +1086,8 @@ schout staat; `(5)` begint een nieuw spel op land 5 met heuvels (de spelregel "H
 schout op het hoogste punt.
 `Spel.debug.gehucht()` zegt of dit het ontworpen gehucht is of een van de maker, en uit welk zaad; `(3)` begint nu een
 nieuw spel op het gehucht van zaad 3 (zonder brief), zoals op de pagina "Gehuchten van de maker".
+`Spel.debug.eiland(5)` zet de spelregel "Je gehucht" op "Op het eiland" en begint nu een spel op het eiland van 5 (zonder
+brief); zonder nummer zegt het in welk dorp je op het eiland ligt, wat voor plek het is en waar de uitgang is.
 `Spel.debug.voorval()` zegt welk voorval er loopt, welke vervolgen nog komen, welke voorvallen er nu kunnen (met hoe
 zwaar ze wegen) en welke oorzaken er spelen;
 `('brand')` laat er nu een beginnen, over mensen die erbij passen, en wie het zegt, zoekt je meteen.

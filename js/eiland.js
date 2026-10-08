@@ -1340,6 +1340,83 @@
     E.wegIndex = indexVan(E, lijnen, () => W.breed + 1);
   }
 
+  // ---- je land op het eiland (stap 2) --------------------------------------------------------------------------------
+
+  // Het land van b bij h tegels om een plek van het eiland, voor de maker (js/maker.js, vraag 117, stap 2): per tegel de
+  // streek, de bomen en de weg, per hoekpunt de streek (de grond van de maker gaat per hoekpunt), en waar de wegen van
+  // het eiland het land verlaten (`uitgangen`, op de rand van het land; die naar het kasteel heeft `kasteel`). Tegel
+  // (x, y) van het land is tegel (x0 + x, y0 + y) van het eiland, en zijn hoekpunt (x, y) ligt een halve tegel
+  // linksboven het midden ervan.
+  T.landVanEiland = function (E, plek, b, h) {
+    const x0 = Math.round(plek.x) - Math.floor(b / 2);
+    const y0 = Math.round(plek.y) - Math.floor(h / 2);
+    const tegels = T.eilandStuk(E, x0, y0, b, h);
+    const hoeken = T.eilandStuk(E, x0 - 0.5, y0 - 0.5, b + 1, h + 1);
+    // waar een weg van het eiland de rand van het land kruist
+    const uit = [];
+    const binnen = (q) => q[0] >= x0 - 0.5 && q[0] < x0 + b - 0.5 && q[1] >= y0 - 0.5 && q[1] < y0 + h - 0.5;
+    for (const w of E.wegen) {
+      for (let i = 0; i < w.punten.length - 1; i++) {
+        const a = w.punten[i];
+        const c = w.punten[i + 1];
+        if (binnen(a) === binnen(c)) continue;
+        const [p, q] = binnen(a) ? [a, c] : [c, a];
+        // het punt op de rand: zo ver van binnen naar buiten als het nog binnen is
+        let t0 = 0;
+        let t1 = 1;
+        for (let k = 0; k < 30; k++) {
+          const t = (t0 + t1) / 2;
+          if (binnen([p[0] + (q[0] - p[0]) * t, p[1] + (q[1] - p[1]) * t])) t0 = t;
+          else t1 = t;
+        }
+        const x = Math.min(b - 1, Math.max(0, Math.round(p[0] + (q[0] - p[0]) * t0 - x0)));
+        const y = Math.min(h - 1, Math.max(0, Math.round(p[1] + (q[1] - p[1]) * t0 - y0)));
+        if (!uit.some((u) => Math.abs(u.x - x) + Math.abs(u.y - y) < 8)) uit.push({ x, y });
+      }
+    }
+    // welke naar het kasteel gaat: die het meest zijn kant op wijst
+    const kasteel = E.plekken.find((q) => q.soort === 'kasteel');
+    if (kasteel && uit.length) {
+      const kx = kasteel.x - (x0 + b / 2);
+      const ky = kasteel.y - (y0 + h / 2);
+      const kl = Math.sqrt(kx * kx + ky * ky) || 1;
+      let beste = null;
+      let besteHoek = -2;
+      for (const u of uit) {
+        const ux = u.x - b / 2;
+        const uy = u.y - h / 2;
+        const ul = Math.sqrt(ux * ux + uy * uy) || 1;
+        const cos = (ux * kx + uy * ky) / (ul * kl);
+        if (cos > besteHoek) {
+          besteHoek = cos;
+          beste = u;
+        }
+      }
+      beste.kasteel = true;
+    }
+    const naam = (lijst, i) => T.EILAND_STREKEN[lijst[i]];
+    return {
+      zaad: E.zaad,
+      x0,
+      y0,
+      b,
+      h,
+      // de streek op tegel (x, y) of hoekpunt (x, y), als naam; buiten het land null
+      streek: (x, y) => (x >= 0 && y >= 0 && x < b && y < h ? naam(tegels.streek, y * b + x) : null),
+      hoek: (x, y) => (x >= 0 && y >= 0 && x <= b && y <= h ? naam(hoeken.streek, y * (b + 1) + x) : null),
+      boom: (x, y) => x >= 0 && y >= 0 && x < b && y < h && tegels.boom[y * b + x] === 1,
+      uitgangen: uit,
+    };
+  };
+
+  // Het eiland van een nummer, één keer gemaakt zolang er naar hetzelfde nummer gevraagd wordt (het is uit het nummer
+  // te maken, dus het hoeft niet in Spel.S).
+  let laatsteEiland = null;
+  T.eilandVan = function (zaad) {
+    if (!laatsteEiland || laatsteEiland.zaad !== zaad) laatsteEiland = T.maakEiland(zaad);
+    return laatsteEiland;
+  };
+
   // ---- het eiland ---------------------------------------------------------------------------------------------------
 
   // Het eiland van nummer `zaad`: de schets, met alles wat het hele eiland moet kennen. Wat het per tegel is, vraag je
