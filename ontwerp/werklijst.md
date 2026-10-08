@@ -4967,7 +4967,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Dus de hele spelwereld als het ware. Zo kun je steeds stukken 'ontdekken' in de fog of war. Het idee is een eiland. Met
     water rondom. Je krijgt een random positie op het land. Kan aan de buitenkant zijn of binnen in het land."; plan van
     Claude; open).
-    **Bezig in sessie `ccr-f03157dc-9d2dtu`** (8 okt): stap 2, je dorp op het eiland (Marcel koos a1); eerst het plan voor Marcel.
+    **Bezig in sessie `ccr-f03157dc-9d2dtu`** (8 okt): stap 2, je dorp op het eiland (Marcel koos a1, en "A ja B later C dorp dat er al was"); nu 2a, de maker op het eiland.
     **Wat er nu is:** het land is een aparte kaart met provincies waar je in dagen reist (vraag 63, `js/land.js`, achter de
     spelregel Land, die standaard uit staat), en elke provincie zou een eigen kaart krijgen. Dit vervangt dat: één grote
     kaart, een eiland met de zee rondom, waarop alles ligt.
@@ -5163,6 +5163,9 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Vragen: **A**, deze drie stukken, achter de spelregel? **B**, nieuwe grondtegels voor de zee, het strand, het veen
     en het broek (en de overgangen van de heide): nu in 2a, of eerst met wat er is en later? **C**, het gehucht als een
     dorp dat er al was (gerooid wat het nodig heeft), of alleen op open land?
+    **Marcel (8 okt): "A ja B later C dorp dat er al was".** Dus de drie stukken achter de spelregel "Je gehucht" ("Op
+    het eiland"), eerst met de tegels die er zijn (nieuwe grondtegels later), en het gehucht als een dorp dat er al was.
+    2a is begonnen.
 118. **Inwoners met stats, zoals in Dwarf Fortress** (Marcel, 4 okt, zesentwintigste sessie: "Inwoners krijgen ook
     'stats' hp, skills, eigenschappen, etc ala dwarf fortress"; plan van Claude; open).
     **Wat er al is:** elke bewoner heeft een naam, een leeftijd, een huis, een gezin en werk (`js/bewoners.js`); de vijf
