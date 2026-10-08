@@ -291,7 +291,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   verandert. De vragen: `T.hoekHoogte`, `T.hoogteOp` (op een punt, op de driehoeken van de tegel), `T.isSchuin`,
   `T.naarSchermOp` en `T.naarWereldOp` (het scherm en de muis, met de hoogte), `T.lichtOpHoekpunt` en
   `T.helderheidVanVlak` (lichter naar de zon). De maker legt hem met de spelregel "Hoogte" op "Heuvels" (`T.legHoogte`,
-  vanuit `T.laadGemaaktGehucht`), met een richel met een rotswand en een helling bij de rotsen. Standaard staat hij op
+  vanuit `T.laadGemaaktGehucht`), met een richel met een rotswand en een helling bij de rotsen; op het eiland is het land
+  dat van het eiland (`hg.eiland`: de grond, het water op zijn peil, de zee op 0; vraag 117, 2b). Standaard staat hij op
   "Vlak", en een kaart zonder `w.hoogte` tekent pixel voor pixel als vroeger. `js/tekenen.js` tekent alles op de grond met
   `opGrond` (de hoogte eraf), een grondtegel op het vlak van zijn hoeken (`tekenSchuineTegel`, `opTegelVlak`), het licht
   zacht verlopend uit een plaatje met een pixel per hoekpunt (`lichtKaartVan`, `tekenGrondMetLicht`), de wanden uit een

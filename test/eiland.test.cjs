@@ -301,3 +301,34 @@ test('het eiland om je land: buiten de kaart de grond en de bomen van het eiland
     console.warn = echt;
   }
 });
+
+test('het eiland om je land: met "Hoogte" op "Heuvels" is het land dat van het eiland, en het dorp ligt vlak (vraag 117, 2b)', () => {
+  const echt = console.warn;
+  console.warn = () => {};
+  T.zetOptie('hoogte', 'heuvels');
+  try {
+    const w = T.laadGemaaktGehucht(5);
+    const hg = w.hoogte;
+    assert.deepEqual(hg.eiland, { zaad: 5, x0: w.eiland.x0, y0: w.eiland.y0 });
+    const E = T.eilandVan(5);
+    const eilandOp = (vx, vy) => Math.max(0, T.eilandStuk(E, w.eiland.x0 + vx - 0.5, w.eiland.y0 + vy - 0.5, 1, 1).hoogte[0]);
+    // ver van het dorp en van elk vlak stuk: precies de hoogte van het eiland, ook om de kaart
+    const T_ = T.HOOGTE_INSTELLINGEN;
+    let gekeken = 0;
+    for (const [x, y] of [[-12, -12], [-12, 110], [110, 50], [50, -14], [-30, 40], [120, 120]]) {
+      const vrij = hg.vlakken.every((v) => Math.max(v.x0 - x, 0, x - v.x1) >= T_.vrijRond || Math.max(v.y0 - y, 0, y - v.y1) >= T_.vrijRond);
+      if (!vrij || Math.hypot(x - hg.midden[0], y - hg.midden[1]) < T_.vlakteTot) continue;
+      gekeken++;
+      assert.ok(Math.abs(T.hoekHoogte(w, x, y, 0) - eilandOp(x, y)) < 1e-6, `(${x}, ${y}): ${T.hoekHoogte(w, x, y, 0)} en niet ${eilandOp(x, y)}`);
+    }
+    assert.ok(gekeken >= 3, `zoveel hoekpunten ver van het dorp: ${gekeken}`);
+    // het plein ligt vlak, op de hoogte van het dorp, en dat is die van het eiland op het midden van het plein
+    const plein = hg.vlakken[0];
+    assert.equal(plein.h, hg.dorpHoogte);
+    assert.equal(hg.dorpHoogte, Math.round(eilandOp(hg.midden[0], hg.midden[1])));
+    for (let y = Math.ceil(plein.y0); y < plein.y1; y++) for (let x = Math.ceil(plein.x0); x < plein.x1; x++) if (!hg.niveau[`${x},${y}`] && !hg.hellingen[`${x},${y}`]) assert.equal(T.hoekHoogte(w, x, y, 0), hg.dorpHoogte);
+  } finally {
+    T.zetOptie('hoogte', 'vlak');
+    console.warn = echt;
+  }
+});

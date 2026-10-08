@@ -947,7 +947,9 @@ er al was", en "Het eiland wordt gewoon altijd gegenereerd bij een nieuw spel. E
 elk nieuw spel maakt het eiland, en je dorp ligt op zijn plek erop, aan zee, aan een rivier, op de heide of in het bos,
 met het water, het bos en de wegen van het eiland; de weg door je dorp gaat naar het kasteel. Het gehucht is een dorp
 dat er al was: wat het nodig heeft, is gerooid. Een keuze is het niet (de spelregel "Je gehucht" is er alleen nog voor de
-toetsen en de speeltest).
+toetsen en de speeltest). **Het eiland om je land** (stap 2b, 8 okt; "A ja"): buiten de kaart loopt het eiland door, de
+zee, het strand, de heide, het bos en de weg naar de buren, tot het donker; en met "Hoogte" op "Heuvels" is het land dat
+van het eiland.
 
 
 **Zo werkt het nu** (30 sep, zeventiende sessie; stuk 1 van stap 1a; `js/land.js` en `js/landkaart.js`, toetsen in

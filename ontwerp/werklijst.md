@@ -84,7 +84,7 @@ Marcel vond de eilanden goed ("1 ja goed") en koos a1: eerst je dorp op het eila
 117), dan de kern; het hele eiland, met de mist en een kaart die meegroeit, later. **2a is gebouwd** ("A ja B later C dorp
 dat er al was"), en elk nieuw spel maakt het eiland (Marcel: "Het eiland wordt gewoon altijd gegenereerd bij een nieuw
 spel"): je dorp ligt erop als een dorp dat er al was (`Spel.debug.eiland(5)`); in `main` (Marcel: "A ja B ja"). Nu 2b, het
-eiland om je land (de rand, en de hoogte van het eiland), met 2c op de achtergrond: de speeltest van vier jaar op drie
+eiland om je land (de rand, en de hoogte van het eiland), is gebouwd; 2c loopt: de speeltest van vier jaar op drie
 eilanden (`npm run speeltest -- bouwer sluw --jaren 4 --eiland`), naast die op de landen van de maker.
 `npm test`: 1040/1040.
 
@@ -5217,7 +5217,11 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     getekend door `js/tekenen.js`): de zee, het strand, de heide, het bos en de rotsen van het eiland, en de weg naar de
     buren, met de regels waarmee de maker binnen de grond en de bomen legt; aan de naad past elke tegel, en onder het bos
     ligt gras zoals binnen, zodat er geen naad te zien is. Om een land van de maker blijft de rand zoals hij was. Wat
-    opviel: de oude rand zette aan een kust losse bomen in de zee. Nog in 2b: de hoogte van het eiland.
+    opviel: de oude rand zette aan een kust losse bomen in de zee. **En de hoogte:** met "Hoogte" op "Heuvels" is het land
+    dat van het eiland (`hg.eiland`, `js/hoogte.js`), met het dorp vlak op zijn vlakte en de richel bij de rotsen zoals
+    altijd; een land van de maker houdt byte voor byte zijn heuvels. Om het dorp is het eiland zachter dan de heuvels van
+    de maker (een dorp ligt waar het vlak is: aan de kust 0 tot 80 pixels, landinwaarts 150 à 200), en de bergrug ligt ver
+    weg. 2b is af.
 118. **Inwoners met stats, zoals in Dwarf Fortress** (Marcel, 4 okt, zesentwintigste sessie: "Inwoners krijgen ook
     'stats' hp, skills, eigenschappen, etc ala dwarf fortress"; plan van Claude; open).
     **Wat er al is:** elke bewoner heeft een naam, een leeftijd, een huis, een gezin en werk (`js/bewoners.js`); de vijf

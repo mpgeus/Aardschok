@@ -55,9 +55,14 @@ per kaart uit, 16 tegels ver, met de regels waarmee de maker binnen de grond en 
 wint, wat ernaast ligt is gras, de weg zandpad, de heide alleen naast gras; een boom waar het eiland er een heeft, op
 gras); aan de naad past de rand zich aan de kaart aan, zodat elke tegel een tegel heeft. Het staat niet in `Spel.S`: het
 komt uit het nummer. Onder het bos ligt op het eiland gras, net als binnen, zodat er geen naad is; om een land van de maker
-blijft het zoals het was.
+blijft het zoals het was. Met "Hoogte" op "Heuvels" is het land dat van het eiland (`hg.eiland` in `w.hoogte`, `js/hoogte.js`):
+de grond, een meer of een rivier op zijn peil, en de zee op 0, in plaats van de drie lagen ruis uit het nummer van het
+land; het dorp ligt op zijn vlakte en de vlakke stukken liggen vlak zoals altijd, en de richel bij de rotsen blijft. Om het
+dorp is het eiland zachter dan die ruis: een dorp ligt waar het vlak is (aan de kust 0 tot 80 pixels, landinwaarts zo'n
+150 à 200 van laag tot hoog); de bergrug, tot 1250 pixels, ligt ver weg. De hoogten van het eiland komen voor de kaart en
+48 tegels eromheen uit één lijst (`T.eilandStuk`), eens per hoogte, en ook die staat niet in `Spel.S`.
 
-**Wat er nog komt:** 2b, de hoogte van het eiland (met "Hoogte" op "Heuvels"), 2c de speeltest; en
+**Wat er nog komt:** 2c de speeltest; en
 daarna de mist en een kaart die meegroeit (de stukken, opslaan wat veranderde, HPA\*).
 
 ## Werken in Tiled: zo teken je een kaart (21 sep 2026)
