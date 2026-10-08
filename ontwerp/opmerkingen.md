@@ -693,6 +693,11 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   22 sep mee in een commit die met de oude server iets nagemeten had (`e8ab95b`), en niets gebruikt het:
   `npm start` draait `server.cjs`. Het mag weg.
 
+- **Langzamer bergop, sneller bergaf** (8 okt, bij vraag 121, stap 2, "D, wat ik niet doe"; Marcel: "Akkoord"). Met de
+  hoogte zou een stap tegen een helling op meer tijd kunnen kosten, en eraf minder. Niet gebouwd, om niet te blijven
+  toevoegen: lopen kent nu alleen "kan wel" of "kan niet" (een wand). Als het land groter wordt (het eiland) en een tocht
+  over de bergrug ertoe doet, kan het een gewicht in A* worden (een stap omhoog kost meer), met de looptijd erbij.
+
 ## Het beeld
 
 - **De markt in ons beeld** (6 okt, zesendertigste sessie; vraag 127): vanuit onze kijkhoek ligt een groot deel van het

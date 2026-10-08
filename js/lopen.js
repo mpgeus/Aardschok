@@ -83,7 +83,7 @@
     const sleutel = `${van.x},${van.y}>${doel.x},${doel.y}|${tot}|${naast ? 1 : 0}|${open ? 1 : 0}`;
     if (wegen && wegen.has(sleutel)) return alsPad(wegen.get(sleutel));
     const pad = T.kanErKomen(w, van, doel, { tot, naast })
-      ? T.zoekPad(van, doel, (x, y) => T.isBegaanbaar(w, x, y, { deurenOpenen: open }), (x, y) => T.isVast(w, x, y), { tot, naast })
+      ? T.zoekPad(van, doel, (x, y) => T.isBegaanbaar(w, x, y, { deurenOpenen: open }), (x, y) => T.isVast(w, x, y), { tot, naast, wereld: w })
       : null;
     if (wegen) wegen.set(sleutel, alsRij(pad));
     return pad;
@@ -184,6 +184,7 @@
         const j = ny * b + nx;
         if (v.afstand[j] !== ONBEKEND || !vrijOp(w, raster, j, nx, ny, v.open)) continue;
         if (dx && dy && (vastOp(w, raster, y * b + nx, nx, y) || vastOp(w, raster, ny * b + x, x, ny))) continue;
+        if (w.hoogte && !T.kanStappen(w, x, y, nx, ny)) continue; // niet door een wand (js/hoogte.js)
         v.afstand[j] = d;
         volgende.push(j);
       }
@@ -207,6 +208,7 @@
       const a = v.afstand[ny * b + nx];
       if (a === ONBEKEND) continue;
       if (dx && dy && (vastOp(w, raster, y * b + nx, nx, y) || vastOp(w, raster, ny * b + x, x, ny))) continue;
+      if (w.hoogte && !T.kanStappen(w, x, y, nx, ny)) continue;
       uit.push({ x: nx, y: ny, a, r });
     }
     return uit;
@@ -387,6 +389,7 @@
       if (weg.some((t) => t.x === x && t.y === y)) continue;
       if (!T.isBegaanbaar(w, x, y, { wezensBlokkeren: true, wie: b })) continue;
       if (dx && dy && (T.isVast(w, b.tx + dx, b.ty) || T.isVast(w, b.tx, b.ty + dy))) continue;
+      if (!T.kanStappen(w, b.tx, b.ty, x, y)) continue;
       let s = Math.min(...weg.map((t) => T.afstand(t, { x, y })));
       if (T.bijDeur(w, x, y)) s -= 10;
       if (dx && dy) s -= 0.5;
@@ -412,7 +415,7 @@
     for (let i = 1; i < Math.min(e.pad.length, 5); i++) {
       const t = e.pad[i];
       if (!vrij(t.x, t.y)) continue;
-      const stuk = T.zoekPad(van, t, vrij, vast, { max });
+      const stuk = T.zoekPad(van, t, vrij, vast, { max, wereld: w });
       if (stuk && stuk.length && stuk.length <= i + 1 + IN().omwegLanger) {
         e.pad = stuk.concat(e.pad.slice(i + 1));
         return true;
@@ -421,7 +424,7 @@
     }
     const d = e.padDoel;
     if ((d.tot || d.naast) && e.pad.length <= 5) {
-      const stuk = T.zoekPad(van, d, vrij, vast, { tot: d.tot, naast: d.naast, max });
+      const stuk = T.zoekPad(van, d, vrij, vast, { tot: d.tot, naast: d.naast, max, wereld: w });
       if (stuk && stuk.length) {
         e.pad = stuk;
         return true;

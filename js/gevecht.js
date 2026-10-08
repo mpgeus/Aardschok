@@ -232,6 +232,7 @@
       v.ap,
       (x, y) => T.isZichtbaar(w, x, y) && T.isBegaanbaar(w, x, y, { deurenOpenen: true, wezensBlokkeren: true, wie: v }),
       (x, y) => T.isVast(w, x, y),
+      w,
     );
   };
 
@@ -242,7 +243,7 @@
       doel,
       (x, y) => T.isBegaanbaar(w, x, y, { deurenOpenen: true, wezensBlokkeren: true, wie: v }),
       (x, y) => T.isVast(w, x, y),
-      { naast },
+      { naast, wereld: w },
     );
   }
 
@@ -433,7 +434,7 @@
         T.tegelVan(d),
         (x, y) => T.isBegaanbaar(w, x, y, { deurenOpenen: false, wezensBlokkeren: true, wie: m }),
         (x, y) => T.isVast(w, x, y),
-        { naast: true },
+        { naast: true, wereld: w },
       );
       if (pad !== null && (!beste || pad.length < beste.pad.length)) beste = { pad, doel: d };
     }
@@ -471,7 +472,7 @@
     const a = T.tegelVan(m);
     const h = T.tegelVan(doel);
     if (T.zichtTussen(w, a, h)) return true;
-    const pad = T.zoekPad(a, h, (x, y) => T.isBegaanbaar(w, x, y, { deurenOpenen: false }), (x, y) => T.isVast(w, x, y), { naast: true });
+    const pad = T.zoekPad(a, h, (x, y) => T.isBegaanbaar(w, x, y, { deurenOpenen: false }), (x, y) => T.isVast(w, x, y), { naast: true, wereld: w });
     return pad !== null;
   }
 })(globalThis.Spel = globalThis.Spel || {});

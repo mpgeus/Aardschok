@@ -108,6 +108,7 @@
   // te lopen (een plek met een straal, T.laatDwalen in js/verkennen.js). Het doel zelf mag dan bezet
   // zijn; zonder dit bleef wie naar het erf liep staan zolang er iemand voor de deur stond.
   // opties.max: bekijk hooguit zoveel tegels, en geef het dan op (een korte omweg om iemand heen, js/lopen.js).
+  // opties.wereld: de kaart, voor de hoogte: geen stap door een wand (T.kanStappen, js/hoogte.js; vraag 121, stap 2).
   // Geeft de stappen terug zonder de starttegel, of null als er geen weg is.
   // Tijdens het zoeken staat iedereen stil (T.iedereenStil, js/wereld.js): zo vraagt magBetreden wie er op een tegel
   // staat in één stap, in plaats van alle wezens af te lopen.
@@ -123,6 +124,7 @@
     const naast = !!(opties && opties.naast);
     const tot = opties && opties.tot >= 1 ? Math.floor(opties.tot) : 0;
     const max = opties && opties.max > 0 ? opties.max : Infinity;
+    const hoog = opties && opties.wereld && opties.wereld.hoogte ? opties.wereld : null; // een kaart met hoogte (js/hoogte.js)
     let bekeken = 0;
     const schatting = (x, y) => {
       const d = Math.max(Math.abs(x - doel.x), Math.abs(y - doel.y));
@@ -170,6 +172,7 @@
         if ((np >= 0 && tabel.dicht[np]) || !magBetreden(nx, ny)) continue;
         const schuin = dx !== 0 && dy !== 0;
         if (schuin && (isVast(huidig.x + dx, huidig.y) || isVast(huidig.x, huidig.y + dy))) continue;
+        if (hoog && !T.kanStappen(hoog, huidig.x, huidig.y, nx, ny)) continue;
         // Schuin kost een haar meer, zodat van twee even korte paden het rechtste wint.
         // Het verschil is te klein om ooit een langer pad te laten winnen.
         const g = huidig.g + (schuin ? 1.001 : 1);
@@ -184,8 +187,9 @@
   }
 
   // Alle tegels die binnen `max` stappen te halen zijn, met het aantal stappen erbij.
-  // Voor het gekleurde bereik tijdens de eigen beurt.
-  T.bereik = function (start, max, magBetreden, isVast) {
+  // Voor het gekleurde bereik tijdens de eigen beurt. `wereld`: de kaart, voor de hoogte (zoals bij T.zoekPad).
+  T.bereik = function (start, max, magBetreden, isVast, wereld) {
+    const hoog = wereld && wereld.hoogte ? wereld : null;
     const resultaat = new Map();
     const gezien = new Set([sleutel(start.x, start.y)]);
     let rand = [start];
@@ -198,6 +202,7 @@
           const ns = sleutel(nx, ny);
           if (gezien.has(ns) || !magBetreden(nx, ny)) continue;
           if (dx !== 0 && dy !== 0 && (isVast(t.x + dx, t.y) || isVast(t.x, t.y + dy))) continue;
+          if (hoog && !T.kanStappen(hoog, t.x, t.y, nx, ny)) continue;
           gezien.add(ns);
           resultaat.set(ns, stap);
           volgende.push({ x: nx, y: ny });

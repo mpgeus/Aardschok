@@ -318,7 +318,7 @@
         { id: 'vlak', naam: 'Vlak', zet: { 'HOOGTE_INSTELLINGEN.aan': false },
           uitleg: 'Het land is vlak, zoals vóór 7 okt 2026.' },
         { id: 'heuvels', naam: 'Heuvels', zet: { 'HOOGTE_INSTELLINGEN.aan': true },
-          uitleg: 'Hoge heuvels in het wilde land, een zachte glooiing rond het dorp, en een richel met een rotswand bij de rotsen. Lopen, zien en bouwen weten er nog niets van.' },
+          uitleg: 'Hoge heuvels in het wilde land, een zachte glooiing rond het dorp, en een richel met een rotswand bij de rotsen. Niemand loopt door een rotswand, op steile grond wordt niet gebouwd, en een heuvel houdt het zicht tegen en dekt af wat erachter staat.' },
       ],
     },
     // De lantaarn van de schout (Marcel, 4 okt, werklijst vraag 125, C: "ook spel. Voegt leuke elementen toe"; js/zien.js).

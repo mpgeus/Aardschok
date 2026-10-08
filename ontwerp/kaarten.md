@@ -444,7 +444,14 @@ wereld die nog niet af is, is de verkeerde volgorde.
 ook buiten de kaart doorlopen) plus een niveau per tegel maal een trede van 32 pixels voor een richel, met een helling
 erop; vlak waar een huis met zijn looppad, het plein of het water ligt. Een wand (rotswand of begroeide wal) staat waar
 twee buren hun hoek niet delen, en je ziet hem alleen aan de zuid- en oostkant. Achter de spelregel "Hoogte" (standaard
-vlak); lopen, zien en bouwen volgen in stap 2. Wat hieronder staat (een laag in Tiled, het palet van acht hoogtes), is
+vlak). **Sinds stap 2 (8 okt; Marcel: "Akkoord") doet de hoogte iets:** niemand stapt door een wand, wel over een helling
+en de glooiing (`T.kanStappen`, voor A*, de eilanden en de velden); een gebouw of erf komt niet waar het te steil is (meer
+dan 6 pixels per tegel over de plek met zijn looppad, of een wand of helling erop: `T.teSteil`), en waar het komt, wordt
+de grond vlak (`T.egaliseer`: een vlak stuk erbij, dat met het spel bewaard wordt); een heuvel tussen twee mensen houdt
+het zicht tegen (`T.heuvelTussen`, van oog tot oog), en wie hoger staat dan wat hij bekijkt, ziet een tegel verder per
+twee treden (`T.verderVanBoven`); en een tegel die zo hoog ligt dat hij iets achter zich afdekt (`T.dektAf`: de rand van
+een richel, een steile flank), tekent het spel nog eens over wat erachter staat, met het kijkgat van de doorkijk voor wie
+je hoort te zien. Wat hieronder staat (een laag in Tiled, het palet van acht hoogtes), is
 daarmee vervallen; het idee van de afgeleide wand is gebleven.
 
 **Opnieuw gevraagd (Marcel, 4 okt: "Hoogte verschillen op de kaart. 😁"; werklijst vraag 121).** Sinds 4 okt maakt de
