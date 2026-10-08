@@ -4787,8 +4787,15 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     (`T.meegroeiGrond`, `T.meegroeiGrondOp` in `js/behoeften.js`, uit `T.dorpsVormen` in `js/bouwstijl.js`), komt geen
     gebouw, erf, kraam, akker of lantaarn ("Hier groeit straks de herberg", in `T.waaromNietOpDezeGrond`), en groeit geen
     huis heen. Staat er alleen een struik of een boom, dan gaat die er met de bouw uit (`rooiVoorDeGroei`; op 62710 een
-    bessenstruik). Kan hij toch niet groeien (een oud spel), dan zegt het dorp het één keer, met wat er staat. Nog open:
-    de proefplaat, de bouwfasen van de kapel en de woontoren, en de plaatsen voor gasten (achteraan de werklijst).
+    bessenstruik). Kan hij toch niet groeien (een oud spel), dan zegt het dorp het één keer, met wat er staat.
+    **De proefplaat (8 okt, `huis-sdf-export.cjs groot3`): Marcel, "Veel beter zo".** Gebouwd: het schip van de kapel en
+    haar toren gepleisterd in de kalk van de stijl, met een plint, hoekstenen en lijsten van de steen van de huizen
+    (wand `kalk`, `gepleisterd`), de toren vier lagen; in planken een schip van planken onder spanen
+    (`planken-kapel-spanen-*`); de woontoren een hoog huis met een stenen benedenverdieping, een overkragende
+    bovenverdieping in het hout van de stijl en een pannendak met dakkapellen (twee verdiepingen en een zolder; een
+    derde verdieping vraagt dat de huizenbouwer drie lagen leert). Het vel opnieuw (64 tekeningen; de andere 495 byte
+    voor byte gelijk, de cache overgezet), en alle bouwfasen: een gebouw uit delen bouwt per deel (`fasenVanDelen`), de
+    toren zonder latten. Nog open: de plaatsen voor gasten in de grote herberg (achteraan de werklijst).
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag
@@ -6044,6 +6051,10 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     **Gespeeld** (7 okt; `speelbaar.md`, "De speeltest van 7 okt: wapens zijn niet meer verboden"): de bouwer zei op alle
     drie de landen ja tegen de wapenmaker en speelde de vier jaar uit; **op 62707 wint hij nu**, op 27 hooimaand van het
     vierde jaar, waar hij eerst in het tweede jaar werd ontslagen. Drie van de zes spellen winnen. **Klaar.**
+132. **Plaatsen voor gasten in de grote herberg** (Claude, 8 okt, bij vraag 114, stap 3; open). Groeit de herberg in een
+    dorp tot de grote, dan heeft hij nog evenveel plaatsen voor gasten als de kleine (`T.herbergGasten`): een grotere
+    herberg zou meer mensen moeten trekken, en dat haalt bier weg voor de huizen. Vraag aan Marcel: meer plaatsen naar de
+    maat van de herberg, of laten zoals het is?
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
