@@ -82,8 +82,9 @@ passen, rivieren naar zee, meren, de zes streken met de kust, het kasteel, de st
 de plaat (`node gereedschap/pixelart/eiland-plaat.cjs`) toont het, met je land ernaast. Het spel gebruikt het nog niet.
 Marcel vond de eilanden goed ("1 ja goed") en koos a1: eerst je dorp op het eiland (stap 2, het plan staat bij vraag
 117), dan de kern; het hele eiland, met de mist en een kaart die meegroeit, later. **2a is gebouwd** ("A ja B later C dorp
-dat er al was"): met de spelregel "Je gehucht" op "Op het eiland" ligt je dorp op het eiland, als een dorp dat er al was
-(`Spel.debug.eiland(5)`); nog op de branch. Volgende: 2b, het eiland om je land (de rand, en de hoogte van het eiland).
+dat er al was"), en elk nieuw spel maakt het eiland (Marcel: "Het eiland wordt gewoon altijd gegenereerd bij een nieuw
+spel"): je dorp ligt erop als een dorp dat er al was (`Spel.debug.eiland(5)`); nog op de branch. Volgende: 2b, het eiland
+om je land (de rand, en de hoogte van het eiland), en 2c, de speeltest op het eiland (`npm run speeltest -- --eiland`).
 `npm test`: 1039/1039.
 
 **De sessie van de hoogte** (7 okt, `claude/elegant-meitner-d3ss2z`, naast die van de wolven; in `main`, Marcel: "Ja
@@ -5192,6 +5193,14 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     - *Om de kaart staat nog bos*, ook aan de kant van de zee: dat is 2b (de rand toont het eiland).
     - *Hoogte*: met "Hoogte" op "Heuvels" legt de maker op het eiland nog zijn eigen heuvels, niet die van het eiland;
       dat hoort bij 2b.
+    **Marcel (8 okt): "Hoe bedoel je de spelregel derde keuze? Het eiland wordt gewoon altijd gegenereerd bij een nieuw
+    spel. Ergens op dat eiland staat je gehucht."** Dus geen keuze: elk nieuw spel maakt het eiland, met je gehucht erop
+    (`T.MAKER_INSTELLINGEN.opEiland`, en de spelregel "Je gehucht" staat op "Op het eiland" en niet meer in het venster
+    Spelregels, `voorProeven`). De landen van de maker zonder eiland en het ontworpen gehucht blijven voor de toetsen en
+    de speeltest: de toetsen die over de landen van de maker gaan (de wolven, de hoogte, de natuur, het rooien), leggen
+    hun land zonder het eiland, en de speeltest speelt het eiland met `--eiland` (met `--maker` de landen van de maker,
+    om te vergelijken). 2c, de speeltest van vier jaar op drie eilanden, beslist dus niet meer of het de standaard wordt,
+    maar of de dorpen er even ver groeien.
 118. **Inwoners met stats, zoals in Dwarf Fortress** (Marcel, 4 okt, zesentwintigste sessie: "Inwoners krijgen ook
     'stats' hp, skills, eigenschappen, etc ala dwarf fortress"; plan van Claude; open).
     **Wat er al is:** elke bewoner heeft een naam, een leeftijd, een huis, een gezin en werk (`js/bewoners.js`); de vijf

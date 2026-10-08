@@ -91,19 +91,29 @@ test('een nieuw spel op een gemaakt gehucht: 26 mensen, en het zaad van het spel
   assert.deepEqual(nieuwSpel(5).dorp.lot, S.dorp.lot);
 });
 
-test('de spelregel "Je gehucht": standaard elk spel een ander land (vraag 112, a), en het ontworpen gehucht blijft een keuze', () => {
+test('de spelregel "Je gehucht": elk nieuw spel het eiland (vraag 117), en de maker en het ontworpen gehucht blijven voor de toetsen', () => {
   const o = T.OPTIES.find((x) => x.id === 'gehucht');
-  assert.equal(o.standaard, 'maker');
+  assert.equal(o.standaard, 'eiland');
+  assert.equal(o.voorProeven, true, 'geen keuze voor wie speelt (Marcel, 8 okt: "Het eiland wordt gewoon altijd gegenereerd")');
   assert.equal(T.MAKER_INSTELLINGEN.eigenGehucht, true);
+  assert.equal(T.MAKER_INSTELLINGEN.opEiland, true);
   // een nieuw spel krijgt een land van vijf cijfers, of het land dat je koos
   const zaad = T.landVoorNieuwSpel();
   assert.ok(Number.isInteger(zaad) && zaad >= 1 && zaad <= 99999, `zaad ${zaad}`);
   assert.equal(T.landVoorNieuwSpel(4321), 4321);
   const S = nieuwSpel(T.landVoorNieuwSpel(7));
   assert.equal(S.wereld.maker.zaad, 7);
+  assert.equal(S.wereld.eiland.zaad, 7);
   assert.equal(S.dorp.lot.zaad, 7);
   // zonder zaad is het het ontworpen gehucht: daar spelen de toetsen op
   assert.equal(nieuwSpel().wereld.maker, undefined);
+  T.pasOptiesToe({ keuzes: { gehucht: 'maker' } });
+  try {
+    assert.equal(T.MAKER_INSTELLINGEN.opEiland, false);
+    assert.equal(nieuwSpel(7).wereld.eiland, undefined, 'met "maker" een land van de maker zonder het eiland');
+  } finally {
+    T.pasOptiesToe({});
+  }
   T.pasOptiesToe({ keuzes: { gehucht: 'ontworpen' } });
   try {
     assert.equal(T.MAKER_INSTELLINGEN.eigenGehucht, false);
@@ -113,6 +123,7 @@ test('de spelregel "Je gehucht": standaard elk spel een ander land (vraag 112, a
     T.pasOptiesToe({});
   }
   assert.equal(T.MAKER_INSTELLINGEN.eigenGehucht, true);
+  assert.equal(T.MAKER_INSTELLINGEN.opEiland, true);
 });
 
 test('een spel op een gemaakt gehucht bewaren en weer laden geeft precies hetzelfde spel', () => {

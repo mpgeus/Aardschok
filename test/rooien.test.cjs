@@ -495,9 +495,12 @@ function landVanDeMaker(zaad) {
   console.warn = () => {};
   Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
   const S = { kalender: T.nieuweKalender() };
+  const opEiland = T.MAKER_INSTELLINGEN.opEiland;
+  T.MAKER_INSTELLINGEN.opEiland = false; // een land van de maker zonder het eiland: deze toetsen gaan over zijn landen (sinds 8 okt maakt een nieuw spel het eiland, vraag 117)
   try {
     assert.ok(T.beginOpKaart(S, 'gehucht', zaad));
   } finally {
+    T.MAKER_INSTELLINGEN.opEiland = opEiland;
     console.warn = echt;
     Math.random = toeval;
   }

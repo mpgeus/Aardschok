@@ -27,10 +27,12 @@
     // standaard (vraag 112, a: "Zodat je kunt herspelen"); het ontworpen gehucht blijft een keuze, en de toetsen spelen
     // erop (T.beginOpKaart zonder zaad).
     eigenGehucht: true,
-    // Legt hij het op het eiland (js/eiland.js; vraag 117, stap 2; Marcel, 8 okt: "A ja B later C dorp dat er al was")?
-    // Dan is je land het stuk van het eiland om jouw plek: het water, het bos, de heide, de rotsen en de wegen komen van
-    // het eiland, en het gehucht is een dorp dat er al was: wat het nodig heeft, is gerooid. De spelregel "Je gehucht".
-    opEiland: false,
+    // Legt hij het op het eiland (js/eiland.js; vraag 117, stap 2; Marcel, 8 okt: "A ja B later C dorp dat er al was", en
+    // "Het eiland wordt gewoon altijd gegenereerd bij een nieuw spel. Ergens op dat eiland staat je gehucht")? Dan is je
+    // land het stuk van het eiland om jouw plek: het water, het bos, de heide, de rotsen en de wegen komen van het
+    // eiland, en het gehucht is een dorp dat er al was: wat het nodig heeft, is gerooid. Elk nieuw spel; de spelregel
+    // "Je gehucht" zet het alleen voor de toetsen en de speeltest uit.
+    opEiland: true,
     // Op het eiland: zo ver om het midden van het plein is alles gerooid (tegels), en een bruggetje is hooguit zo lang
     // (tegels water) en kost zoveel stappen extra, zodat een weg liever om het water heen loopt.
     eilandKern: 16,

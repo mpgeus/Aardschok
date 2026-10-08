@@ -11,6 +11,9 @@ function land(zaad, heuvels) {
   const echt = console.warn;
   console.warn = () => {};
   T.zetOptie('hoogte', heuvels ? 'heuvels' : 'vlak');
+  // een land van de maker zonder het eiland: deze toetsen leggen er het plan van de maker naast (sinds 8 okt maakt een
+  // nieuw spel het eiland, vraag 117; de hoogte van het eiland is stap 2b)
+  T.MAKER_INSTELLINGEN.opEiland = false;
   try {
     return T.laadGemaaktGehucht(zaad);
   } finally {

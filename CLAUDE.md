@@ -118,6 +118,7 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   opslaan: de speler slaat op 1 oogstmaand op via het menu, de bladzijde herlaadt, hij gaat verder met Verder,
   en het jaar moet letter voor letter aflopen als hetzelfde jaar zonder opslaan (`uit/opslaan.md`). Met `--maker`
   speelt het op gehuchten van de maker (de spelregel "Je gehucht" op "Elk spel een ander"; `uit/samenvatting-maker.md`).
+  Met `--eiland` speelt het op het eiland, zoals een nieuw spel sinds 8 okt begint (`uit/samenvatting-eiland.md`).
   Met `--regel seizoen=jij` speelt het met een spelregel anders, en met `--getal VOORVALLEN_INSTELLINGEN.metOorzaak=1` met
   een getal uit de werkbank anders (allebei zo vaak als je wilt; de uitslag krijgt `-regels` achter zijn naam). Een
   taak op de achtergrond stopt na twee uur, dus een grote speeltest gaat in meer taken; `--samenvatting` speelt dan
@@ -311,8 +312,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   per tegel de hoogte, de streek (`T.EILAND_STREKEN`: het water, strand en duinen, en de zes van de landkaart), de weg en
   de bomen, uit het nummer en de schets; een stuk is hetzelfde hoe je het ook vraagt, zodat het spel later het land maakt
   aan de rand van de mist. Alleen optellen, vermenigvuldigen, delen en wortels (een toets kijkt het na), zodat elke
-  browser hetzelfde eiland maakt. **Je dorp op het eiland** (stap 2a, Marcel: "C dorp dat er al was"): met de spelregel
-  "Je gehucht" op "Op het eiland" (`T.MAKER_INSTELLINGEN.opEiland`) is je land het stuk van het eiland om jouw dorp:
+  browser hetzelfde eiland maakt. **Je dorp op het eiland** (stap 2a, Marcel: "C dorp dat er al was", en "Het eiland wordt
+  gewoon altijd gegenereerd bij een nieuw spel"): elk nieuw spel maakt het eiland (`T.MAKER_INSTELLINGEN.opEiland`; de
+  spelregel "Je gehucht" zet het alleen voor de toetsen en de speeltest uit, `voorProeven`), en je land is het stuk ervan
+  om jouw dorp:
   `T.landVanEiland(E, plek, b, h)` geeft de maker de streek per tegel en per hoekpunt, de bomen en waar de wegen het land
   verlaten, en `T.eilandVan(zaad)` onthoudt het laatste eiland. De maker (`js/maker.js`, met `land`) legt het gehucht erop
   als een dorp dat er al was; de kaart onthoudt waar hij ligt (`w.eiland`). De plaat:
@@ -1086,8 +1089,8 @@ schout staat; `(5)` begint een nieuw spel op land 5 met heuvels (de spelregel "H
 schout op het hoogste punt.
 `Spel.debug.gehucht()` zegt of dit het ontworpen gehucht is of een van de maker, en uit welk zaad; `(3)` begint nu een
 nieuw spel op het gehucht van zaad 3 (zonder brief), zoals op de pagina "Gehuchten van de maker".
-`Spel.debug.eiland(5)` zet de spelregel "Je gehucht" op "Op het eiland" en begint nu een spel op het eiland van 5 (zonder
-brief); zonder nummer zegt het in welk dorp je op het eiland ligt, wat voor plek het is en waar de uitgang is.
+`Spel.debug.eiland(5)` begint nu een spel op het eiland van 5 (zonder brief); zonder nummer zegt het in welk dorp je op het
+eiland ligt, wat voor plek het is en waar de uitgang is.
 `Spel.debug.voorval()` zegt welk voorval er loopt, welke vervolgen nog komen, welke voorvallen er nu kunnen (met hoe
 zwaar ze wegen) en welke oorzaken er spelen;
 `('brand')` laat er nu een beginnen, over mensen die erbij passen, en wie het zegt, zoekt je meteen.

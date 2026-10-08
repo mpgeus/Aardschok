@@ -943,9 +943,11 @@ maar nu niet ziet, is grijs, zoals je het het laatst zag (Marcel, 8 okt: "Grijs 
 kaartenmaker (`js/eiland.js`) en de plaat (`node gereedschap/pixelart/eiland-plaat.cjs`), nog niet in het spel; hoe het
 werkt, staat in `kaarten.md`, "Het eiland". Marcel vond de eilanden goed, en koos de volgorde (8 okt, "a1"): eerst je dorp
 op het eiland, dan de kern, en het hele eiland met de mist later. **Je dorp op het eiland** (stap 2a, 8 okt; "C dorp dat
-er al was"): met de spelregel "Je gehucht" op "Op het eiland" ligt je dorp op zijn plek op het eiland, aan zee, aan een
-rivier, op de heide of in het bos, met het water, het bos en de wegen van het eiland; de weg door je dorp gaat naar het
-kasteel. Het gehucht is een dorp dat er al was: wat het nodig heeft, is gerooid. Nog niet de standaard (2c, de speeltest).
+er al was", en "Het eiland wordt gewoon altijd gegenereerd bij een nieuw spel. Ergens op dat eiland staat je gehucht"):
+elk nieuw spel maakt het eiland, en je dorp ligt op zijn plek erop, aan zee, aan een rivier, op de heide of in het bos,
+met het water, het bos en de wegen van het eiland; de weg door je dorp gaat naar het kasteel. Het gehucht is een dorp
+dat er al was: wat het nodig heeft, is gerooid. Een keuze is het niet (de spelregel "Je gehucht" is er alleen nog voor de
+toetsen en de speeltest).
 
 
 **Zo werkt het nu** (30 sep, zeventiende sessie; stuk 1 van stap 1a; `js/land.js` en `js/landkaart.js`, toetsen in

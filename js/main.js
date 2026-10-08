@@ -1198,9 +1198,9 @@
       if (w && w.eiland) return `Een gehucht op het eiland van ${w.eiland.zaad}, in ${w.eiland.dorp}${stijl} (Spel.debug.eiland()).`;
       return w && w.maker ? `Een gehucht van de maker, uit zaad ${w.maker.zaad}${stijl}.` : 'Het ontworpen gehucht.';
     },
-    // Je dorp op het eiland (js/eiland.js, vraag 117, stap 2): Spel.debug.eiland(5) zet de spelregel "Je gehucht" op "Op
-    // het eiland" en begint nu een nieuw spel op het eiland van nummer 5, zonder brief; zonder nummer zegt het waar je
-    // dorp op het eiland ligt, wat voor plek het is, en waar de wegen je land verlaten.
+    // Je dorp op het eiland (js/eiland.js, vraag 117, stap 2): Spel.debug.eiland(5) begint nu een nieuw spel op het eiland
+    // van nummer 5, zonder brief (en zet de spelregel "Je gehucht" terug op het eiland, als een toets hem omzette);
+    // zonder nummer zegt het waar je dorp op het eiland ligt, wat voor plek het is, en waar de wegen je land verlaten.
     eiland(zaad) {
       if (zaad != null) {
         T.zetOptie('gehucht', 'eiland');

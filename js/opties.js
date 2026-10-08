@@ -626,8 +626,11 @@
     },
     {
       // Vraag 70, C (Marcel, 30 sep: "c ja"): de maker (js/maker.js) mag ook je eigen gehucht leggen. Sinds 4 okt de
-      // standaard (vraag 112, a; Marcel: "Eigenlijk een random map generator per nieuwe game").
-      id: 'gehucht', naam: 'Je gehucht', standaard: 'maker',
+      // standaard (vraag 112, a; Marcel: "Eigenlijk een random map generator per nieuwe game"). Sinds 8 okt maakt elk nieuw
+      // spel het eiland, met je gehucht erop (vraag 117, stap 2; Marcel: "Het eiland wordt gewoon altijd gegenereerd bij
+      // een nieuw spel. Ergens op dat eiland staat je gehucht"): geen keuze voor wie speelt, dus niet in het venster
+      // Spelregels (`voorProeven`). De andere keuzes zijn er nog voor de toetsen en de speeltest.
+      id: 'gehucht', naam: 'Je gehucht', standaard: 'eiland', voorProeven: true,
       uitleg: 'Waar een nieuw spel begint. Geldt vanaf het volgende nieuwe spel.',
       keuzes: [
         { id: 'maker', naam: 'Elk spel een ander', zet: { 'MAKER_INSTELLINGEN.eigenGehucht': true, 'MAKER_INSTELLINGEN.opEiland': false },
@@ -635,7 +638,7 @@
         { id: 'ontworpen', naam: 'Het ontworpen gehucht', zet: { 'MAKER_INSTELLINGEN.eigenGehucht': false, 'MAKER_INSTELLINGEN.opEiland': false },
           uitleg: 'Elk spel hetzelfde gehucht, met de hand gelegd: het plein als hart, en Klaas, Aaltje, Gerrit, Trijn en Wouter bij hun velden.' },
         // Vraag 117, stap 2 (Marcel, 8 okt: "A ja B later C dorp dat er al was"): je land is het stuk van het eiland om je
-        // dorp (js/eiland.js). Nog niet de standaard, tot de speeltest het zegt.
+        // dorp (js/eiland.js).
         { id: 'eiland', naam: 'Op het eiland', zet: { 'MAKER_INSTELLINGEN.eigenGehucht': true, 'MAKER_INSTELLINGEN.opEiland': true },
           uitleg: 'Elk nummer is een eiland, en je dorp ligt erop: aan de kust, aan een rivier, op de heide of aan de bosrand. Het water, het bos, de heide en de wegen van je land zijn die van het eiland, en de weg door je dorp gaat naar het kasteel van de heer. Het gehucht is een dorp dat er al was: wat het nodig heeft, is gerooid.' },
       ],

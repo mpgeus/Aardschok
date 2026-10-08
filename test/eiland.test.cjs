@@ -181,13 +181,10 @@ test('eiland: alleen rekenen dat in elke browser hetzelfde uitkomt (geen sinus, 
 
 // ---- stap 2: je dorp op het eiland (Marcel, 8 okt: "a1", en "A ja B later C dorp dat er al was") ----
 
+// Het eiland is de standaard; dit hulpje zegt het in de toets erbij, voor wie hem leest.
 function opEiland(f) {
-  T.pasOptiesToe({ keuzes: { gehucht: 'eiland' } });
-  try {
-    return f();
-  } finally {
-    T.pasOptiesToe({});
-  }
+  assert.equal(T.MAKER_INSTELLINGEN.opEiland, true);
+  return f();
 }
 function nieuwSpel(zaad) {
   const echt = console.warn;
@@ -202,17 +199,13 @@ function nieuwSpel(zaad) {
   return S;
 }
 
-test('je dorp op het eiland: de spelregel "Je gehucht" heeft een derde keus, en de standaard blijft de maker', () => {
+test('je dorp op het eiland: elk nieuw spel maakt het eiland, zonder keuze; zonder land legt de maker zoals altijd', () => {
+  // Marcel, 8 okt: "Het eiland wordt gewoon altijd gegenereerd bij een nieuw spel. Ergens op dat eiland staat je gehucht."
   const o = T.OPTIES.find((x) => x.id === 'gehucht');
-  assert.equal(o.standaard, 'maker');
-  assert.ok(o.keuzes.some((k) => k.id === 'eiland'));
-  assert.equal(T.MAKER_INSTELLINGEN.opEiland, false);
-  opEiland(() => {
-    assert.equal(T.MAKER_INSTELLINGEN.opEiland, true);
-    assert.equal(T.MAKER_INSTELLINGEN.eigenGehucht, true);
-  });
-  assert.equal(T.MAKER_INSTELLINGEN.opEiland, false);
-  // zonder de spelregel weet het gehucht van de maker niets van het eiland
+  assert.equal(o.standaard, 'eiland');
+  assert.equal(o.voorProeven, true);
+  assert.equal(T.MAKER_INSTELLINGEN.opEiland, true);
+  // zonder land weet het gehucht van de maker niets van het eiland
   const plan = T.maakGehucht(5);
   assert.equal(plan.eiland, undefined);
   assert.equal(plan.bruggen, undefined);
