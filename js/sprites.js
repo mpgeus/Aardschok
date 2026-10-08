@@ -614,7 +614,18 @@
     return hoeken[vx === tx ? (vy === ty ? 0 : 3) : vy === ty ? 1 : 2]; // boven, rechts, onder, links
   };
 
+  // Eerst in het vel van de kaart zelf, dan in de andere vellen met grond: de grond van het eiland (tegels/kust.png:
+  // de zee, het strand, het veen, het broek) staat naast die van rand, en een tegel aan de rand van de kaart of onder
+  // een weide kan van het ene vel zijn terwijl zijn buur op het andere ligt (werklijst vraag 117, B van 2a).
+  const GROND_VELLEN = ['rand', 'kust'];
   S.grondMetHoeken = function (velNaam, hoeken, x, y) {
+    for (const vel of [velNaam, ...GROND_VELLEN.filter((v) => v !== velNaam)]) {
+      const tegel = grondMetHoekenIn(vel, hoeken, x, y);
+      if (tegel) return tegel;
+    }
+    return null;
+  };
+  function grondMetHoekenIn(velNaam, hoeken, x, y) {
     let index = tegelsMetHoeken.get(velNaam);
     if (!index) {
       index = new Map();
@@ -641,7 +652,7 @@
     }
     if (!ids || !ids.length) return null;
     return S.buiten(velNaam, ids[T.akkerVariant(x, y, ids.length)]);
-  };
+  }
 
   // ---------------------------------------------------------------- het graan (gereedschap/pixelart/graan-vel.cjs)
   //

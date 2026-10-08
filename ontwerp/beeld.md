@@ -944,6 +944,33 @@ tegels.
 - Nog niet op een echte kaart gelegd of in het spel bekeken op speelschaal (alleen als losse
   proefplaat) — dat komt zodra de heide bij het gehucht getekend wordt.
 
+## De grond van het eiland: de zee, het strand, het veen en het broek (8 okt 2026, werklijst vraag 117, B van 2a)
+
+Vier nieuwe grondsoorten voor het eiland (Marcel, 8 okt: "dan gaan we de eigen tegels maken", en "A. Ja, lijkt mij
+goed"), gemaakt zoals de heide in `gereedschap/pixelart/randtegels.cjs`, elk met een eigen ramp en acht vlakke
+varianten, en vijf overgangen van veertien hoeken in vier vormen: strand aan zee, gras over strand, heide over strand,
+veen over gras en broek over gras (en water in zee, voor waar een rivier de zee in loopt). Ze staan op een eigen vel,
+`tegels/kust.png` (`node randtegels.cjs kust`, dan `naar-tiled.cjs kust`), zodat geen tegel van `rand.png` verschuift.
+De proefplaat: `node gereedschap/pixelart/kusttegels-proef.cjs` (in `uit/kust/`).
+
+- **De zee** is blauwer en kouder dan het modderige water in het dorp (Marcel: "Ja hoor, geen probleem"), maar gedempt:
+  grijsblauw van diep tot het schuim. Ondiep aan het strand schemert de zandbodem door, op de waterlijn ligt gebroken
+  schuim, en daarachter de branding: drie gebroken lijnen die de kust volgen, verder van het strand flauwer. Midden in
+  de zee is het overal even diep, dus rustig.
+- **Het strand** (ook de duinen en het stuifzand): licht, droog zand uit de zand-ramp (lichter en geler dan het zandpad),
+  fijn gekorreld, met hier en daar een schelpje; naar de zee toe nat en donkerder; ver van het water een pol helm.
+- **Het veen**: donkerbruin en nat, met pollen pijpenstrootje en hier en daar een plas.
+- **Het broek**: nat gras, donkerder en blauwer dan het gras van het dorp, met biezen in pollen en een plas.
+
+**Wat niet goed was op de eerste plaat** (Marcel: "voer gelijk verbeteringen door voor de punten die je zelf nog niet
+goed vind"): te veel witte spikkels (glinsteringen en goud in het zand), een natte strook die je niet zag, vlekkerig
+zand, plassen die te licht waren, een te donker broek, en op de vlakke zee een rooster van witte spikkels (de ruis van de
+kustlijn liep door in het vlak; nu dooft hij uit van de kust af). De branding werd breder, en de heide op het zand staat
+in pollen, niet als vlak.
+
+**In het spel** (Marcel: "Ja, ziet er goed uit zo"): de maker legt ze op het eiland (`kaarten.md`, "Het eiland"); waar
+niets past, wijkt de zwakke grond voor strand (naast de zee) of gras. Golven die bewegen, komen later.
+
 ## Open
 
 - **Bewegende omgeving:** vlammen, water, en de stofjes in de zonnebundel. De wind staat hierboven.

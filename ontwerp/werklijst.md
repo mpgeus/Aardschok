@@ -88,11 +88,13 @@ om je land (de rand, en de hoogte van het eiland), is gebouwd en staat in `main`
 gespeeld, vier jaar op drie eilanden (`npm run speeltest -- bouwer sluw --jaren 4 --eiland`) naast dezelfde drie landen
 van de maker: op het eiland winnen er twee van de zes, op de landen van de maker vier. Wat het tegenhoudt (een huis
 zonder plek voor een put, meer wolven in meer bos, rovers die blijven komen), staat bij vraag 117; het verslag staat in
-`main` (Marcel: "A ja, en zet het verslag in main"). **2d is gebouwd**, op de branch: een erf houdt plaats voor een
-put, en een put voor een hut op een erf haalt ook het huis dat de hut wordt; de put zonder plek is weg uit de
-speeltest, en op het eiland winnen op `main` met 2d twee à drie van de zes (`speelbaar.md`). Een put per dorp hoeft niet
-(Marcel: "Het dorp moet gewoon uitdijen. Er is ruimte genoeg"). Wat nog opviel: een kapel zonder plek (62707), en de
-gril die bij de laagste gunst je ambt kost (72022; `opmerkingen.md`). `npm test`: 1053/1053.
+`main` (Marcel: "A ja, en zet het verslag in main"). **2d staat in `main`**: een erf houdt plaats voor een put en een
+kapel, en een put voor een hut op een erf haalt ook het huis dat de hut wordt; de put en de kapel zonder plek zijn weg
+uit de speeltest (`speelbaar.md`). Een put per dorp hoeft niet (Marcel: "Het dorp moet gewoon uitdijen. Er is ruimte
+genoeg"). **B van 2a, de grond van het eiland, staat in `main`** (Marcel: "Push main"): de zee, het strand, het veen en
+het broek hebben eigen tegels (`tegels/kust.png`), en op zand wordt niet gebouwd; in de speeltest houdt het zand niets
+tegen (twee van de zes winnen, vóór en na). Wat nog opviel: de gril die bij de laagste gunst je ambt kost (72022), en een
+paadje dat alleen in gras slijt (`opmerkingen.md`). `npm test`: 1095/1095.
 
 **De sessie van de hoogte** (7 okt, `claude/elegant-meitner-d3ss2z`, naast die van de wolven; in `main`, Marcel: "Ja
 push main"). **Vraag 124, de camera draaien, is geparkeerd** (Marcel: "Is het echt iets wat iets toevoegd? Ik wil geen
@@ -5138,7 +5140,6 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Dus de hele spelwereld als het ware. Zo kun je steeds stukken 'ontdekken' in de fog of war. Het idee is een eiland. Met
     water rondom. Je krijgt een random positie op het land. Kan aan de buitenkant zijn of binnen in het land."; plan van
     Claude; open).
-    **Bezig in sessie `ccr-f03157dc-9d2dtu`** (8 okt): stap 2, je dorp op het eiland; 2a, 2b, het verslag van 2c en 2d staan in `main`; de regel van 2d voor de kapel staat op de branch; nu B van 2a, eigen grondtegels voor het eiland (de zee, het strand, het veen, het broek): eerst een plan (Marcel: "dan gaan we de eigen tegels maken").
     **Wat er nu is:** het land is een aparte kaart met provincies waar je in dagen reist (vraag 63, `js/land.js`, achter de
     spelregel Land, die standaard uit staat), en elke provincie zou een eigen kaart krijgen. Dit vervangt dat: één grote
     kaart, een eiland met de zee rondom, waarop alles ligt.
@@ -5422,6 +5423,54 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Op `main` met de grote gebouwen** (`speelbaar.md`, onder 2d): geen put meer zonder plek; op 62707 houdt nu een kapel
     zonder plek het jaar van geluk tegen, en 72022 beslist de gril van het vette varken bij een gunst van 5
     (`opmerkingen.md`). Voorstel van Claude: de regel van 2d ook voor de kapel. Marcel (8 okt): "Prima"; en 2d naar `main`: "Ja doe maar".
+    **De kapel is gebouwd** (8 okt, op de branch): een erf houdt ook plaats voor een kapel (`T.wilStraks`: de hut wil er nog
+    geen, het huis dat hij wordt wel), en het zoeken van de plekken is sneller (dezelfde plekken, een kapel in 0,07 tot
+    0,55 s in plaats van 1,2 tot 1,8). De speeltest op de eilanden (`speelbaar.md`, onder 2d): geen kapel zonder plek meer
+    (op `main` 30 maanden), en drie van de zes winnen in plaats van twee. Marcel (8 okt): naar `main`, "Ja".
+    **B van 2a: eigen grondtegels voor het eiland** (Marcel, 8 okt: "dan gaan we de eigen tegels maken"; plan van Claude,
+    wacht op Marcel). Wat er nu is: de maker kent vier soorten grond (water, zandpad, heide, gras, en de kasseien van het
+    plein), met overgangen alleen tussen gras en de rest, en tussen zand en kasseien (`gereedschap/pixelart/randtegels.cjs`,
+    het vel `tegels/rand.png`). Op het eiland is de zee daarom de tegel van de vijver (op een groot vlak leest die als
+    donkere grond), zijn het strand, de duinen en het stuifzand zandpad, en zijn het veen en het broek gras. En omdat zand
+    nu zandpad is, en op een pad niet gebouwd wordt (`T.opPad`), is al het zand op het eiland onbebouwbaar.
+    Voorstel:
+    - **a, vier nieuwe soorten:** de zee, het strand (ook voor de duinen en het stuifzand), het veen en het broek, elk met
+      acht vlakke tegels.
+    - **b, vijf overgangen**, elk veertien hoeken in vier vormen, zoals de heide: strand aan zee (de kust), gras over strand,
+      veen over gras, broek over gras, en heide over strand (nu legt de maker een strook gras tussen heide en zand). Een
+      meer en een rivier blijven het water van nu; waar een rivier de zee in loopt, maakt de maker de laatste tegels zee.
+    - **c, het beeld:** de zee donkerder en kouder dan het water in het dorp (grijsblauw, met lichte golflijnen), en waar
+      hij het strand raakt een strook schuim; het strand licht en droog, zonder karrensporen; het veen donkerbruin en nat,
+      met pollen en hier en daar een plas; het broek nat gras met biezen. Eerst stil; golven die bewegen, later.
+    - **d, de regels:** de zee is water (niet te belopen, de visser vist er); strand en zand zijn geen pad meer, dus kan er
+      een huis of erf op, maar geen akker; veen en broek zijn als gras.
+    - **e, een eigen vel** (`tegels/kust.png`), zodat geen bestaand tegelnummer verschuift.
+    Stappen: 1, een proefplaat met de vier soorten en hun overgangen, voor Marcels blik (zoals bij de heide); 2, het vel in
+    het spel, en de maker en de rand van het eiland gebruiken het; 3, schermafdrukken op drie eilanden, en de speeltest,
+    want bebouwbaar zand verandert het spel.
+    Vragen: **A**, deze vier soorten en vijf overgangen? **B**, de zee blauwer dan "water is modderig" (`beeld.md`, 20
+    sep), of ook modderig? **C**, zand bebouwbaar (zonder akker), of zoals nu niet?
+    **Marcel (8 okt): "A. Ja, lijkt mij goed B. Ja hoor, geen probleem. C. Onbebouwbaar denk ik, zand is geen solide
+    basis."** Dus de vier soorten en vijf overgangen, de zee mag blauw, en op zand komt geen huis, erf of akker (zoals nu,
+    maar als eigen regel, niet omdat het een pad is). Stap 1, de proefplaat, is begonnen.
+    **Stap 1 is gebouwd** (8 okt): `gereedschap/pixelart/randtegels.cjs` kent de zee (water, maar ondiep aan het strand,
+    met golven, branding en schuim), het strand (licht zand, nat aan de zee, met helm), het veen (donkerbruin, met pollen
+    en plassen) en het broek (nat gras met biezen en plassen), en bouwt er een eigen vel van (`node randtegels.cjs kust`),
+    met de vijf overgangen; `rand.png` blijft letter voor letter gelijk. De proefplaat: `node
+    gereedschap/pixelart/kusttegels-proef.cjs` (in `uit/kust/`). Marcel liet de punten verbeteren die Claude zelf nog niet
+    goed vond ("voer gelijk verbeteringen door"): een bredere branding, heide in pollen op het zand, een lichter broek.
+    **Marcel (8 okt): "Ja, ziet er goed uit zo".** Nu stap 2: de tegels in het spel.
+    **Stap 2 is gebouwd** (8 okt, op de branch): het vel `tegels/kust.png` staat in het spel, en de maker legt elke streek
+    van het eiland met zijn eigen grond; welke soorten samen een tegel hebben, zegt `T.grondPaar`, en wat niet past, wijkt
+    (`T.passendeGrond`: naast de zee voor strand, anders voor gras). Op zand wordt niet gebouwd (als eigen regel in
+    `T.waaromNietOpDezeGrond`); waar een huis van het dorp dat er al was met zijn erf op zand stond (op land 1 twee
+    boerderijen), ligt nu gras. De zee is water voor de visser en het bos (`T.isWaterGrond`). Onderweg gevonden: langs de
+    rand van de kaart kon er tussen het veen van de kaart en de zee erbuiten geen tegel passen; daar wijkt nu de zee
+    (hooguit twee hoekpunten), en een tegel met drie soorten tekent zoals op de kaart (`T.grondTegelHoeken`). De landen van
+    de maker zonder het eiland blijven tegel voor tegel hetzelfde; `kaarten.md` en `beeld.md` zeggen hoe het werkt.
+    **De speeltest** (`speelbaar.md`, "de grond van het eiland"): het zand houdt niets tegen, twee van de zes winnen, vóór
+    en na; waar het anders liep (62707 en 72022), is het toeval van andere planten op de kaart. **Marcel (8 okt): "Push
+    main"**; in `main`.
 118. **Inwoners met stats, zoals in Dwarf Fortress** (Marcel, 4 okt, zesentwintigste sessie: "Inwoners krijgen ook
     'stats' hp, skills, eigenschappen, etc ala dwarf fortress"; plan van Claude; open).
     **Wat er al is:** elke bewoner heeft een naam, een leeftijd, een huis, een gezin en werk (`js/bewoners.js`); de vijf

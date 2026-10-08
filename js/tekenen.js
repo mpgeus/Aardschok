@@ -953,12 +953,17 @@
   }
 
   // De kleuren van de grond buiten, voor als de kunst er niet is (of Spel.debug.vlakken aan
-  // staat): gras, een zandpad, kasseien, water.
+  // staat): gras, een zandpad, kasseien, water, en de grond van het eiland (gemeten op tegels/kust.png).
   const BUITENKLEUR = {
     gras: ['#3f6323', '#395d20'],
     zandpad: ['#7a6238', '#735c33'],
     kasseien: ['#6d6a64', '#65625c'],
     water: ['#2d4f6e', '#284a6a'],
+    heide: ['#5a5d38', '#545734'],
+    zee: ['#2c4456', '#283f51'],
+    strand: ['#d0ab77', '#c8a370'],
+    veen: ['#403320', '#3a2e1c'],
+    broek: ['#446836', '#3f6232'],
   };
 
   // Buiten houdt de kaart ergens op, en op een breed scherm kijk je op de hoek van het beeld
@@ -1073,7 +1078,8 @@
         const dicht = r <= BUITENGROND_VOL ? 1 : 1 - (r - BUITENGROND_VOL) / (BUITENGROND_DIEP - BUITENGROND_VOL + 1);
         if (hasj(x, y, zaad) >= dicht * (1 - (w.eiland ? 0 : bosBuiten(w, x, y)))) continue;
         const hoeken = [randHoek(w, x, y), randHoek(w, x + 1, y), randHoek(w, x + 1, y + 1), randHoek(w, x, y + 1)];
-        const deel = T.sprites.grondMetHoeken(vel, hoeken, x, y) || T.sprites.grasTegel(x, y);
+        // op het eiland kunnen er drie soorten in een tegel liggen (gras, heide en strand): dan zoals op de kaart
+        const deel = T.sprites.grondMetHoeken(vel, w.eiland ? T.grondTegelHoeken(hoeken) : hoeken, x, y) || T.sprites.grasTegel(x, y);
         if (!deel) continue;
         const p = opGrond(x, y);
         // elke tegel een eigen stapje donkerder of lichter, zodat het donker geen strepen langs de rand legt

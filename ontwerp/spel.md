@@ -989,7 +989,8 @@ met het water, het bos en de wegen van het eiland; de weg door je dorp gaat naar
 dat er al was: wat het nodig heeft, is gerooid. Een keuze is het niet (de spelregel "Je gehucht" is er alleen nog voor de
 toetsen en de speeltest). **Het eiland om je land** (stap 2b, 8 okt; "A ja"): buiten de kaart loopt het eiland door, de
 zee, het strand, de heide, het bos en de weg naar de buren, tot het donker; en met "Hoogte" op "Heuvels" is het land dat
-van het eiland.
+van het eiland. **De grond van het eiland** (B van 2a, 8 okt): de zee, het strand, het veen en het broek hebben eigen
+tegels, en op zand wordt niet gebouwd (Marcel: "Onbebouwbaar denk ik, zand is geen solide basis").
 
 
 **Zo werkt het nu** (30 sep, zeventiende sessie; stuk 1 van stap 1a; `js/land.js` en `js/landkaart.js`, toetsen in
@@ -3533,7 +3534,9 @@ wordt gepraat:
   komt **sinds 8 okt (vraag 117, 2d; Marcel: "A ja")** een erf niet waar zijn hut straks geen put kan halen, of waar het
   een ander huis de laatste plek voor een put afneemt ("Dan kan het huis van Evert geen put meer krijgen: dit erf neemt
   de laatste plek ervoor."; `T.kringGrond`): op het eiland van 73425 lagen de erven zo dicht dat een huis in het midden
-  twee jaar geen put kon krijgen, en het dorp nooit won. En past er toch geen hut meer op een vrij erf, dan telt het niet
+  twee jaar geen put kon krijgen, en het dorp nooit won. Een hut op een erf telt daarbij als het huis dat hij wordt, en
+  het dorp zet een put voor hem waar hij dat huis ook haalt; en voor de kapel geldt hetzelfde (Marcel: "Prima"), want het
+  huis dat de hut wordt, wil er een. En past er toch geen hut meer op een vrij erf, dan telt het niet
   als plaats (`T.bruikbareErven`, `T.hutPastOpErf`): de groei en de raad zeggen dan dat er geen plaats is, het bouwmenu
   telt het niet als vrij, en `Spel.debug.erven()` zegt het erbij. Tot dan zagen de groei en de raad er een vrij erf, en
   kwam er twee en een half jaar geen gezin.

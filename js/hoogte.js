@@ -435,6 +435,10 @@
 
   // ---------------------------------------------------------------- de maker legt de hoogte
 
+  // Wat in het plan van de maker water is (js/maker.js, de letters van de grond): een beek, een meer of een rivier, en
+  // de zee van het eiland. Het ligt vlak.
+  const NAT = ['w', 'e'];
+
   // Uit het plan van de maker (js/maker.js): het nummer van het land (het landschap), het dorp op een vlakte, de vlakke
   // stukken (een huis met zijn looppad, het water), en een richel met een rotswand bij de rotsen, met een helling erop.
   // Geeft wat in `w.hoogte` komt: alleen dat, want de glooiing zelf is een rekensom (glooiingOp). `w`: de kaart van het
@@ -485,9 +489,9 @@
     // het water, in stukken langs een rij hoekpunten, op de hoogte van de grote glooiing (een beek daalt zo met het dal mee)
     for (let vy = 0; vy <= H; vy++) {
       for (let vx = 0; vx <= B; vx++) {
-        if (plan.grond[vy][vx] !== 'w') continue;
+        if (!NAT.includes(plan.grond[vy][vx])) continue;
         let tot = vx;
-        while (tot + 1 <= B && plan.grond[vy][tot + 1] === 'w') tot++;
+        while (tot + 1 <= B && NAT.includes(plan.grond[vy][tot + 1])) tot++;
         const v = { x0: vx - 1, y0: vy - 1, x1: tot + 1, y1: vy + 1 };
         v.h = Math.round(vrijOp((vx + tot) / 2, vy, true));
         hg.vlakken.push(v);

@@ -60,6 +60,18 @@ const SOORTEN = {
   water: { s: D.WATER, kleur: '#2e76b6' },
   heide: { s: HEIDE, kleur: '#6e6a3e' },
 };
+// De grond van het eiland (werklijst vraag 117, B van 2a; Marcel, 8 okt: "dan gaan we de eigen tegels maken"): de zee,
+// het strand (ook voor de duinen en het stuifzand), het veen en het broek, elk een eigen getal zoals HEIDE. Ze staan op
+// een eigen vel (tegels/kust.png, bouwKust onderaan), zodat rand.png letter voor letter blijft wat het was.
+const ZEE = 6;
+const STRAND = 7;
+const VEEN = 8;
+const BROEK = 9;
+SOORTEN.zee = { s: ZEE, kleur: '#3d5b6e' };
+SOORTEN.strand = { s: STRAND, kleur: '#d3ad78' };
+SOORTEN.veen = { s: VEEN, kleur: '#40311e' };
+SOORTEN.broek = { s: BROEK, kleur: '#385e36' };
+const KUST = { zee: true, strand: true, veen: true, broek: true };
 const VLAKKEN = ['gras', 'zandpad', 'kasseien', 'water'];
 // Heide kwam er op 25 sep 2026 bij (de meent, ontwerp/spel.md), maar ACHTERAAN in bouw() — na de
 // brug, in een eigen stap — zodat geen bestaand tegelnummer verschuift: kaarten/wereld.tmj wijst
@@ -132,10 +144,10 @@ function helderheid(plaat) {
   return n ? som / n : 0;
 }
 
-function meetPlekken() {
+function meetPlekken(soorten = [...VLAKKEN, ...VLAKKEN_ACHTERAAN]) {
   KEUS.kand = plekken(KANDIDATEN);
   KEUS.vrij = KEUS.kand.map(() => true);
-  for (const naam of [...VLAKKEN, ...VLAKKEN_ACHTERAAN]) {
+  for (const naam of soorten) {
     const h = KEUS.kand.map(([gx, gy]) => helderheid(vlakTegel(naam, gx, gy)));
     const op = [...h].sort((a, b) => a - b);
     const mid = op[op.length >> 1];
@@ -186,10 +198,13 @@ function randKaart(aNaam, bNaam, hoeken, gx0, gy0) {
   const b = SOORTEN[bNaam];
   const [hBoven, hRechts, hOnder, hLinks] = hoeken.map((h) => (h ? 1 : -1));
   const heeftKassei = aNaam === 'kasseien' || bNaam === 'kasseien';
+  const kust = !!(KUST[aNaam] || KUST[bNaam]);
+  // aan zee golft de grens net zo, maar midden in de zee niet: daar is het overal even diep (de branding volgt de diepte)
+  const zeeKust = aNaam === 'zee' || bNaam === 'zee';
   const spoorAs = duidelijkeDoorgang(hoeken);
   // soort() geeft steeds hetzelfde object terug, precies als grondKaart in dorp.cjs: wie er twee
   // achter elkaar aanroept, moet de waarden eerst in eigen variabelen overschrijven.
-  const U = { s: D.GRAS, d: 9, dwars: 0, rand: 9, randS: D.GRAS, langs: 0, diep: 0, vijver: null, akker: null };
+  const U = { s: D.GRAS, d: 9, dwars: 0, rand: 9, randS: D.GRAS, langs: 0, diep: 0, vijver: null, akker: null, zee: false };
   function soort(gx, gy) {
     const u = gx - gx0;
     const v = gy - gy0;
@@ -198,7 +213,7 @@ function randKaart(aNaam, bNaam, hoeken, gx0, gy0) {
     // oever wegzakt (waterTreffer kijkt een kwart tegel terug) niet ineens land wordt.
     const bil = (1 - u) * ((1 - v) * hBoven + v * hLinks) + u * ((1 - v) * hRechts + v * hOnder);
     const ruw = (ruis2(gx * 2.4, gy * 2.4, 1) - 0.5) * 1.7 + (ruis2(gx * 6.6, gy * 6.6, 8) - 0.5) * 0.8;
-    const f = bil + demp(u) * demp(v) * ruw;
+    const f = bil + demp(u) * demp(v) * ruw * (zeeKust ? 1 - Math.abs(bil) : 1);
     // Het veld loopt over een tegel van −1 naar +1, dus een halve eenheid is een kwart tegel.
     const af = Math.min(Math.abs(f) / 2, 0.5);
     // Voor de sporen willen we dezelfde afstand, maar zónder de ruw-term: die golft de grens
@@ -210,17 +225,31 @@ function randKaart(aNaam, bNaam, hoeken, gx0, gy0) {
     U.dwars = 0;
     U.akker = null;
     U.vijver = null;
+    U.zee = false;
     if (win.s === D.GRAS) {
       // gras is de achtergrond: d telt hoe ver het van de dichtstbijzijnde andere soort af ligt.
       U.s = D.GRAS;
       U.d = af;
       U.rand = af;
+      // naar het strand toe dunt het gras uit zoals naar een zandpad (grasPixel kent het strand niet)
+      U.randS = kust && verlies.s === STRAND ? D.PAD : verlies.s;
+    } else if (win.s === ZEE) {
+      // De zee is water zoals in dorp.cjs (waterDiepte, waterPixel), maar ondiep aan het strand: geen oeverwand van
+      // een beek, maar een paar pixels zand. Welke kleur, zegt kustGrondTex (U.zee).
+      U.s = D.WATER;
+      // aan de monding van een rivier geen branding: daar is de zee overal diep
+      U.d = verlies.s === D.WATER ? -ZEE_MAX : -Math.min(af, ZEE_MAX);
+      U.rand = 0;
       U.randS = verlies.s;
+      U.vijver = GEEN_STENEN;
+      U.diep = ZEE_DIEP;
+      U.langs = (gx + gy) * 0.5;
+      U.zee = true;
     } else {
       U.s = win.s;
       U.d = -af;
       U.rand = 0;
-      U.randS = D.GRAS;
+      U.randS = kust ? verlies.s : D.GRAS;
       if (win.s === D.PAD) {
         // karrensporen: alleen zetten waar de hoekcombinatie de rijrichting kent (spoorAs), anders
         // op 0 laten staan — dan tekent padPixel gewoon los zand zonder sporen, wat ook klopt bij
@@ -228,9 +257,10 @@ function randKaart(aNaam, bNaam, hoeken, gx0, gy0) {
         // volle breedte die padPixel voor een spoor verwacht.
         U.dwars = spoorAs ? Math.min(afSchoon * 2, 1) : 0;
       } else if (win.s === D.WATER) {
-        U.d = -Math.min(af, WATER_MAX);
+        // waar een rivier de zee in loopt, is er geen oever: even diep als de zee, en overal even ver van de kant
+        U.d = zeeKust ? -WATER_MAX : -Math.min(af, WATER_MAX);
         U.vijver = GEEN_STENEN;
-        U.diep = WATER_DIEP;
+        U.diep = zeeKust ? ZEE_DIEP : WATER_DIEP;
         // rimpels langs lijnen van gelijke schermhoogte: op het scherm lopen ze horizontaal, zoals
         // het water in dorp.cjs.
         U.langs = (gx + gy) * 0.5;
@@ -240,7 +270,7 @@ function randKaart(aNaam, bNaam, hoeken, gx0, gy0) {
   }
   // grondTex kijkt naar pleinen.length om losse keien over de rand van de kasseien te laten
   // rollen; zonder een plein blijft die rand een gladde snee.
-  return { soort, paden: [], pleinen: heeftKassei ? [{}] : [], akkers: [], beken: [], vijvers: [] };
+  return { soort, paden: [], pleinen: heeftKassei ? [{}] : [], akkers: [], beken: [], vijvers: [], zee: aNaam === 'zee' || bNaam === 'zee' };
 }
 
 // ---------------------------------------------------------------- één tegel renderen
@@ -327,7 +357,7 @@ function rasterTegel(kaart, gx0, gy0, o = {}) {
 function vlakTegel(naam, gx0, gy0) {
   const kaart = randKaart(naam, naam, [1, 1, 1, 1], gx0, gy0);
   return rasterTegel(kaart, gx0, gy0, {
-    grondTex: naam === 'heide' ? heideGrondTex(kaart) : undefined,
+    grondTex: KUST[naam] ? kustGrondTex(kaart) : naam === 'heide' ? heideGrondTex(kaart) : undefined,
     pollen: naam === 'gras',
   });
 }
@@ -584,6 +614,237 @@ function heideGrondTex(kaart) {
   };
 }
 
+// ---------------------------------------------------------------- de grond van het eiland
+//
+// De zee, het strand, het veen en het broek (werklijst vraag 117, B van 2a). Elk volgt het recept van de heide hierboven:
+// een eigen ramp waar de kleur in zit, de fijne ruis (heideRuis, gedraaid, op hoge frequentie) voor de toon, en kleine
+// vormen op het verspringende rooster van de wereld voor wat erop groeit; alles hangt aan gx/gy of qx/qy, dus de naad met
+// de buurtegel is niet te zien.
+function nieuweRamp(naam, hexen) {
+  if (K.RAMP[naam] !== undefined) return;
+  K.RAMPEN[naam] = hexen;
+  K.RAMP[naam] = K.RAMP_NAMEN.length;
+  K.RAMP_NAMEN.push(naam);
+  K.RAMP_RGB.push(hexen.map((h) => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)]));
+  K.RAMP_LEN.push(hexen.length);
+}
+// De zee is blauwer en kouder dan het modderige water in het dorp (Marcel, 8 okt: "Ja hoor, geen probleem"), maar nog
+// gedempt: grijsblauw, van diep tot het schuim.
+nieuweRamp('zee', ['#101a24', '#172634', '#1f3446', '#294458', '#35566a', '#4a6c7e', '#6c8c98', '#d6e0dc']);
+// Het veen: donkerbruin, nat, naar olijf aan de lichte kant.
+nieuweRamp('veen', ['#140f09', '#1f170e', '#2c2114', '#3a2c1b', '#4a3a22', '#5b4a2c', '#6e5c38']);
+// Het broek: nat gras, donkerder en blauwer dan het gras van het dorp.
+nieuweRamp('broek', ['#14200f', '#1e3018', '#2a4422', '#36582c', '#446c36', '#568042', '#6e9652', '#90b068']);
+
+const ZEE_DIEP = 3; // pixels dat de zee onder het strand ligt: geen beekoever, een vlakke kust
+const ZEE_MAX = 0.45; // tegels van de kant af waar de zee diep is: de branding krijgt de ruimte (een beek: WATER_MAX)
+const NAT_ZEE = 0.16; // tegels nat zand aan de zee
+const SCHUIM = 0.05; // tegels schuim op de waterlijn
+
+// Een verspringend rooster van plekjes, zoals heideBolOp: per plekje een hash, of null. `elke` op de zoveel plekken
+// iets, `zaad` om de roosters van verschillende dingen los van elkaar te houden. Geeft { ax, ay, h } van het plekje
+// waar (qx, qy) bij hoort als het binnen `straal` pixels van zijn anker ligt.
+function plekjeOp(qx, qy, elke, zaad, breed = 4, hoog = 3, straal = 1) {
+  const rj = Math.floor(qy / hoog);
+  for (let j = rj - 1; j <= rj + 1; j++) {
+    const verspring = (j & 1) * (breed >> 1);
+    const ri = Math.floor((qx - verspring) / breed);
+    for (let i = ri - 1; i <= ri + 1; i++) {
+      const h = hash(i, j, zaad);
+      if (h % elke !== 0) continue;
+      const ax = i * breed + verspring + ((h >>> 5) % breed);
+      const ay = j * hoog + ((h >>> 9) % hoog);
+      if (Math.abs(qx - ax) <= straal && Math.abs(qy - ay) <= straal) return { ax, ay, h };
+    }
+  }
+  return null;
+}
+
+// Het strand: droog, licht zand uit de zand-ramp (lichter en geler dan het zandpad, dat uit de aarde-ramp komt), fijn
+// gekorreld en zacht golvend, met hier en daar een schelpje of een donkere korrel; naar de zee toe nat en donkerder; en
+// verder van het water (het stuifzand en de duinen) af en toe een pol helm.
+function strandPixel(gx, gy, qx, qy, k) {
+  UIT.ramp = RAMP.zand;
+  const toon = heideRuis(gx, gy, 3.1, 612) * 0.3 + heideRuis(gx, gy, 7.7, 613) * 0.7;
+  let s = toon < 0.3 ? 5 : toon > 0.7 ? 7 : 6;
+  const af = -k.d; // tegels van de rand af
+  if (k.randS === ZEE && af < NAT_ZEE) {
+    // nat zand: donkerder, en op de vloedlijn een rij aangespoeld wier
+    s = af < NAT_ZEE * 0.55 ? 4 : 5;
+    const lijn = Math.abs(af - NAT_ZEE * 0.78) < 0.012 + (heideRuis(gx, gy, 9.7, 614) - 0.5) * 0.02;
+    if (lijn && hash(qx, qy, 615) % 5 === 0) {
+      UIT.ramp = RAMP.veen;
+      UIT.stap = 4;
+      return;
+    }
+  }
+  const korrel = hash(qx, qy, 611);
+  if (korrel % 29 === 0) s -= 1;
+  else if (korrel % 37 === 0 && s >= 6) s = 8; // een schelpje
+  // helm: lichte, grijsgroene pollen, alleen ver van het water
+  if (k.randS !== ZEE || af > 0.3) {
+    const pol = plekjeOp(qx, qy, 23, 616, 6, 4, 1);
+    if (pol) {
+      const dx = qx - pol.ax;
+      const dy = qy - pol.ay;
+      if (dy === 1 && dx === 0) {
+        UIT.ramp = RAMP.zand;
+        UIT.stap = 4; // de schaduw onder de pol
+        return;
+      }
+      if (dy <= 0 && Math.abs(dx) + (dy === -1 ? 1 : 0) <= 1) {
+        UIT.ramp = RAMP.mos;
+        UIT.stap = (pol.h >>> 13) % 3 === 0 ? 5 : 4;
+        return;
+      }
+    }
+  }
+  UIT.stap = klem(s, 3, 8);
+}
+
+// Het veen: donkerbruin en nat, met pollen pijpenstrootje (licht olijf, uit de riet-ramp) en hier en daar een plas.
+function veenPixel(gx, gy, qx, qy) {
+  UIT.ramp = RAMP.veen;
+  const toon = heideRuis(gx, gy, 1.9, 621) * 0.3 + heideRuis(gx, gy, 4.7, 622) * 0.4 + heideRuis(gx, gy, 9.1, 623) * 0.3;
+  let s = toon < 0.42 ? 2 : toon > 0.6 ? 4 : 3;
+  // een plas: donker water met een lichte rand, op een dubbele ruisschaal (nooit één lage: dan strepen)
+  const nat = heideRuis(gx, gy, 1.6, 624) * 0.6 + heideRuis(gx, gy, 3.9, 625) * 0.4;
+  if (nat > 0.74) {
+    UIT.ramp = RAMP.zee;
+    UIT.stap = nat > 0.765 ? (hash(qx, qy, 626) % 17 === 0 ? 3 : 1) : 0;
+    return;
+  }
+  const pol = plekjeOp(qx, qy, 3, 627, 4, 3, 1);
+  if (pol) {
+    const dx = qx - pol.ax;
+    const dy = qy - pol.ay;
+    if (dy === 1) s -= 1; // de schaduw eronder
+    else if (Math.abs(dx) + Math.max(0, dy) <= 1) {
+      UIT.ramp = RAMP.riet;
+      UIT.stap = dy < 0 ? 3 : 2;
+      return;
+    }
+  }
+  UIT.stap = klem(s, 1, 5);
+}
+
+// Het broek: nat, donker gras (de broek-ramp), met biezen in pollen (donkere halmen met een lichte punt) en hier en daar
+// een plas.
+function broekPixel(gx, gy, qx, qy) {
+  UIT.ramp = RAMP.broek;
+  const toon = heideRuis(gx, gy, 1.7, 631) * 0.25 + heideRuis(gx, gy, 4.3, 632) * 0.4 + heideRuis(gx, gy, 8.7, 633) * 0.35;
+  let s = toon < 0.4 ? 3 : toon > 0.66 ? 5 : 4;
+  if ((qx + qy * 2) % 3 === 0 && hash(qx, qy, 634) % 3 === 0) s += 1; // gras dat glanst
+  const nat = heideRuis(gx, gy, 1.5, 635) * 0.6 + heideRuis(gx, gy, 3.6, 636) * 0.4;
+  if (nat > 0.8) {
+    UIT.ramp = RAMP.zee;
+    UIT.stap = nat > 0.83 ? (hash(qx, qy, 637) % 7 === 0 ? 5 : 3) : 2;
+    return;
+  }
+  // biezen: een pol van drie of vier halmen, elk een paar pixels hoog
+  const bies = plekjeOp(qx, qy, 3, 638, 5, 4, 2);
+  if (bies) {
+    const dx = qx - bies.ax;
+    const dy = qy - bies.ay;
+    const hoog = 2 + ((bies.h >>> 11) % 2);
+    if ((dx === -1 || dx === 1 || (dx === 0 && (bies.h >>> 14) % 2)) && dy <= 0 && dy >= -hoog) {
+      UIT.ramp = RAMP.broek;
+      UIT.stap = dy === -hoog ? 6 : 2;
+      return;
+    }
+    if (dy === 1 && Math.abs(dx) <= 1) s -= 1;
+  }
+  UIT.stap = klem(s, 2, 7);
+}
+
+// Heide op zand groeit in pollen, met het zand ertussen, en dunner naar de rand van het zand toe: zo loopt het in elkaar
+// over in plaats van als een vlek op het zand te liggen. `af` is hoe ver de pixel van het zand af ligt, in tegels. Geeft
+// true als hier zand ligt (dan staat het al in UIT), anders tekent heidePixel de heide.
+function heideOpZand(gx, gy, qx, qy, af) {
+  const pol = heideRuis(gx, gy, 6.7, 653) * 0.65 + heideRuis(gx, gy, 13.1, 654) * 0.35;
+  const drempel = 0.34 + Math.max(0, 0.32 - af) * 1.1;
+  if (pol >= drempel) return false;
+  UIT.ramp = RAMP.zand;
+  // vlak onder een pol de schaduw, verder het lichte zand
+  UIT.stap = pol > drempel - 0.035 ? 4 : hash(qx, qy, 655) % 11 === 0 ? 5 : 6;
+  return true;
+}
+
+// Na dorp.cjs, op een tegel aan zee: het water krijgt de zee-ramp, met golflijnen en schuim op de waterlijn; de bodem die
+// in het ondiepe doorschemert en het randje onder het strand zijn zand.
+function zeeNa(vlak, X, Y, k) {
+  const gx = X / TEGEL;
+  const gy = Y / TEGEL;
+  const qx = rasterX(X, Y);
+  const qy = rasterY(X, Y);
+  if (vlak !== 'z') {
+    // de kant onder het strand: nat zand
+    if (UIT.ramp !== RAMP.water) {
+      UIT.ramp = RAMP.zand;
+      UIT.stap = hash(qx, qy, 641) % 4 === 0 ? 3 : 4;
+    }
+    return;
+  }
+  if (!k.zee) return;
+  const diepte = -k.d;
+  // schuim op de waterlijn, gebroken, ook waar de bodem doorschemert
+  const breuk = heideRuis(gx, gy, 7.3, 642);
+  if (diepte < SCHUIM + (breuk - 0.5) * 0.04) {
+    UIT.ramp = RAMP.zee;
+    UIT.stap = breuk > 0.4 ? 7 : 6;
+    return;
+  }
+  if (UIT.ramp === RAMP.aarde) {
+    UIT.ramp = RAMP.zand; // de bodem in het ondiepe
+    UIT.stap = 5;
+    return;
+  }
+  if (UIT.ramp !== RAMP.water) {
+    // de gouden vonk van waterPixel hoort bij een beek in de zon, niet op zee
+    UIT.ramp = RAMP.zee;
+    UIT.stap = 4;
+    return;
+  }
+  UIT.ramp = RAMP.zee;
+  // de branding: drie gebroken lijnen schuim die de kust volgen, verder van het strand flauwer
+  for (const [op, sterk] of [[0.11, 7], [0.2, 6], [0.3, 5]]) {
+    const golf = op + (heideRuis(gx, gy, 3.7, 646 + op * 100) - 0.5) * 0.05;
+    if (Math.abs(diepte - golf) < 0.026 && heideRuis(gx, gy, 5.9, 650 + op * 100) > 0.36) {
+      UIT.stap = sterk;
+      return;
+    }
+  }
+  // diep en donker, lichter naar de kust
+  let s = diepte < 0.09 ? 5 : diepte < 0.24 ? 4 : 3;
+  // golven: lange lijnen dwars op de kijker (langs gx + gy), die breken waar de ruis het wil
+  const golf = Math.sin((gx + gy) * 4.1 + heideRuis(gx, gy, 1.2, 643) * 4) * 0.5 + 0.5;
+  if (golf > 0.93 && heideRuis(gx, gy, 3.1, 644) > 0.45) s += 1;
+  else if (golf < 0.08) s -= 1;
+  if (hash(qx, qy, 645) % 701 === 0) s = 5; // een glinstering, spaarzaam
+  UIT.stap = klem(s, 1, 6);
+}
+
+// Zoals heideGrondTex: dorp.cjs kent deze soorten niet en zou ze als gras tekenen. De heide gaat via heideGrondTex
+// (voor "Heide over strand").
+function kustGrondTex(kaart) {
+  const basis = heideGrondTex(kaart);
+  return (vlak, X, Y, Z) => {
+    const k = kaart.soort(X / TEGEL, Y / TEGEL);
+    if (vlak === 'z') {
+      const gx = X / TEGEL;
+      const gy = Y / TEGEL;
+      if (k.s === STRAND) return strandPixel(gx, gy, rasterX(X, Y), rasterY(X, Y), k);
+      if (k.s === HEIDE && k.randS === STRAND && heideOpZand(gx, gy, rasterX(X, Y), rasterY(X, Y), -k.d)) return;
+      if (k.s === VEEN) return veenPixel(gx, gy, rasterX(X, Y), rasterY(X, Y));
+      if (k.s === BROEK) return broekPixel(gx, gy, rasterX(X, Y), rasterY(X, Y));
+    }
+    const zee = k.zee;
+    const d = k.d;
+    basis(vlak, X, Y, Z);
+    if (kaart.zee) zeeNa(vlak, X, Y, { zee, d });
+  };
+}
+
 // ---------------------------------------------------------------- de brug
 //
 // De vorige brug (dorp2.cjs) is een stenen boogbrug van 2,5 bij 0,9 tegel: prachtig in een plaat,
@@ -793,29 +1054,21 @@ const telBits = (m) => (m & 1) + ((m >> 1) & 1) + ((m >> 2) & 1) + ((m >> 3) & 1
 const maskerHoeken = (m) => [m & 1, (m >> 1) & 1, (m >> 2) & 1, (m >> 3) & 1];
 const HOEK_NAAM = ['boven', 'rechts', 'onder', 'links'];
 
-function bouw() {
-  fs.mkdirSync(TEGELS, { recursive: true });
-  meetPlekken();
-
-  const platen = [];
-  const tiles = [];
-  const vlakId = {}; // grondsoort -> de tegel-ids van zijn vlakke tegels
-
-  // 1. de vlakke tegels, gedeeld door alle terreinsets die deze grondsoort kennen
-  function voegVlakToe(naam) {
-    vlakId[naam] = [];
-    for (let v = 0; v < VARIANTEN_VLAK; v++) {
+// Een vel in opbouw: de platen, wat de .tsx per tegel zegt, en de terreinsets, met de vlakke tegels per grondsoort.
+function nieuwVel() {
+  const v = { platen: [], tiles: [], sets: [], vlakId: {} };
+  // de vlakke tegels, gedeeld door alle terreinsets die deze grondsoort kennen
+  v.voegVlakToe = (naam) => {
+    v.vlakId[naam] = [];
+    for (let i = 0; i < VARIANTEN_VLAK; i++) {
       const [gx0, gy0] = neemPlek([naam]);
-      platen.push(vlakTegel(naam, gx0, gy0));
-      vlakId[naam].push(tiles.length);
-      tiles.push({ naam, vast: naam === 'water', groep: 'vlak' });
+      v.platen.push(vlakTegel(naam, gx0, gy0));
+      v.vlakId[naam].push(v.tiles.length);
+      v.tiles.push({ naam, vast: naam === 'water' || naam === 'zee', groep: 'vlak' });
     }
-  }
-  for (const naam of VLAKKEN) voegVlakToe(naam);
-
-  // 2. de randen, per paar veertien hoekcombinaties
-  const sets = [];
-  function voegPaarToe(paar) {
+  };
+  // de randen, per paar veertien hoekcombinaties
+  v.voegPaarToe = (paar) => {
     const set = {
       naam: paar.naam,
       kleuren: [
@@ -824,73 +1077,86 @@ function bouw() {
       ],
       tegels: [],
     };
-    for (const id of vlakId[paar.a]) set.tegels.push({ id, wangid: wangId([0, 0, 0, 0]) });
-    for (const id of vlakId[paar.b]) set.tegels.push({ id, wangid: wangId([1, 1, 1, 1]) });
+    for (const id of v.vlakId[paar.a]) set.tegels.push({ id, wangid: wangId([0, 0, 0, 0]) });
+    for (const id of v.vlakId[paar.b]) set.tegels.push({ id, wangid: wangId([1, 1, 1, 1]) });
     const water = paar.a === 'water';
+    const nat = water || paar.a === 'zee';
     const kassei = paar.a === 'kasseien' || paar.b === 'kasseien';
     const heide = paar.a === 'heide' || paar.b === 'heide';
+    const kust = KUST[paar.a] || KUST[paar.b];
     for (let m = 1; m <= 14; m++) {
       const hoeken = maskerHoeken(m);
       const tel = telBits(m);
       const kort = HOEK_NAAM.filter((_, i) => hoeken[i]).join('+');
-      for (let v = 0; v < VARIANTEN_RAND; v++) {
+      for (let i = 0; i < VARIANTEN_RAND; i++) {
         const [gx0, gy0] = neemPlek([paar.a, paar.b]);
         const kaart = randKaart(paar.a, paar.b, hoeken, gx0, gy0);
-        platen.push(rasterTegel(kaart, gx0, gy0, {
-          grondTex: water ? oeverTex(kaart) : kassei ? pleinKantTex(kaart) : heide ? heideGrondTex(kaart) : null,
+        v.platen.push(rasterTegel(kaart, gx0, gy0, {
+          grondTex: kust ? kustGrondTex(kaart) : water ? oeverTex(kaart) : kassei ? pleinKantTex(kaart) : heide ? heideGrondTex(kaart) : null,
           pollen: paar.b === 'gras' || paar.a === 'gras',
         }));
-        set.tegels.push({ id: tiles.length, wangid: wangId(hoeken) });
-        tiles.push({
+        set.tegels.push({ id: v.tiles.length, wangid: wangId(hoeken) });
+        v.tiles.push({
           // De naam die het spel ziet: welke soort de tegel in hoofdzaak is.
-          naam: tel > 2 ? paar.b : tel < 2 ? paar.a : water ? 'water' : paar.b,
-          // Half water loopt niet: vanaf twee waterhoeken staat het midden van de tegel in de beek.
-          vast: water && tel <= 2,
+          naam: tel > 2 ? paar.b : tel < 2 ? paar.a : nat ? paar.a : paar.b,
+          // Half water loopt niet: vanaf twee waterhoeken staat het midden van de tegel in de beek (of de zee).
+          vast: nat && tel <= 2,
           groep: `${paar.b} over ${paar.a}: ${kort}`,
         });
       }
     }
-    sets.push(set);
+    v.sets.push(set);
+  };
+  return v;
+}
+
+// Het vel als plaat, acht tegels breed; met `naam` ook naar tegels/<naam>.png en .tsx.
+function legVel(v, naam, notitie) {
+  const kolommen = 8;
+  const rijen = Math.ceil(v.platen.length / kolommen);
+  const vel = new K.Plaat(64 * kolommen, 32 * rijen);
+  v.platen.forEach((p, i) => vel.plak(p, (i % kolommen) * 64, Math.floor(i / kolommen) * 32));
+  if (naam) {
+    fs.writeFileSync(path.join(TEGELS, `${naam}.png`), K.png(vel, 1));
+    schrijfTsx({ naam, bestand: `${naam}.png`, breedte: vel.b, hoogte: vel.h, kolommen, notitie, tiles: v.tiles, sets: v.sets });
   }
-  for (const paar of PAREN) voegPaarToe(paar);
+  return { vel, kolommen, tiles: v.tiles, sets: v.sets };
+}
+
+function bouw() {
+  fs.mkdirSync(TEGELS, { recursive: true });
+  meetPlekken();
+  const v = nieuwVel();
+
+  // 1. de vlakke tegels
+  for (const naam of VLAKKEN) v.voegVlakToe(naam);
+
+  // 2. de randen
+  for (const paar of PAREN) v.voegPaarToe(paar);
 
   // 3. de brug
   for (const richting of ['x', 'y']) {
-    for (const s of BRUG_STUKKEN) {
-      platen.push(brugTegel(richting, s));
-      tiles.push({ naam: 'brug', vast: false, groep: `brug ${richting} ${s.stuk}` });
+    for (const st of BRUG_STUKKEN) {
+      v.platen.push(brugTegel(richting, st));
+      v.tiles.push({ naam: 'brug', vast: false, groep: `brug ${richting} ${st.stuk}` });
     }
   }
 
   // 4. heide: erbij op 25 sep 2026 (de meent, ontwerp/spel.md — de schapen grazen op de heide).
   // ACHTERAAN, na de brug: kaarten/wereld.tmj wijst met de hand naar tegelnummers, en die mogen
   // niet verschuiven. Zie ontwerp/beeld.md, "De heide".
-  for (const naam of VLAKKEN_ACHTERAAN) voegVlakToe(naam);
-  for (const paar of PAREN_ACHTERAAN) voegPaarToe(paar);
+  for (const naam of VLAKKEN_ACHTERAAN) v.voegVlakToe(naam);
+  for (const paar of PAREN_ACHTERAAN) v.voegPaarToe(paar);
 
   // 5. het vel
-  const kolommen = 8;
-  const rijen = Math.ceil(platen.length / kolommen);
-  const vel = new K.Plaat(64 * kolommen, 32 * rijen);
-  platen.forEach((p, i) => vel.plak(p, (i % kolommen) * 64, Math.floor(i / kolommen) * 32));
-  fs.writeFileSync(path.join(TEGELS, 'rand.png'), K.png(vel, 1));
-  schrijfTsx({
-    naam: 'rand',
-    bestand: 'rand.png',
-    breedte: vel.b,
-    hoogte: vel.h,
-    kolommen,
-    notitie: 'Randtegels, oevers, een brug en heide. Kies in het paneel Terreinen een terreinset ("Gras over zand", '
+  const uit = legVel(v, 'rand', 'Randtegels, oevers, een brug en heide. Kies in het paneel Terreinen een terreinset ("Gras over zand", '
       + '"Gras over kasseien", "Zand over kasseien", "Gras aan water" of "Heide over gras") en schilder met de '
       + 'bovenste kleur over de onderste: Tiled kiest zelf de hoektegel. Vul een vlak met de onderste kleur van '
       + 'dezelfde set, niet met de stempel uit grond.tsx, dan sluit alles aan. De zes brugtegels staan na de vier '
       + 'oudste terreinsets en horen niet bij een terreinset: leg begin, dan zoveel midden als je beek breed is, '
-      + 'dan eind.',
-    tiles,
-    sets,
-  });
+      + 'dan eind.');
 
-  console.log(`rand.png  ${vel.b}×${vel.h}  (${platen.length} tegels)`);
+  console.log(`rand.png  ${uit.vel.b}×${uit.vel.h}  (${v.platen.length} tegels)`);
   console.log(`  vlakken     ${VLAKKEN.length} × ${VARIANTEN_VLAK}`);
   for (const p of PAREN) console.log(`  ${p.naam.padEnd(20)} 14 × ${VARIANTEN_RAND} randen`);
   console.log(`  brug        2 × ${BRUG_STUKKEN.length}`);
@@ -898,8 +1164,43 @@ function bouw() {
   for (const p of PAREN_ACHTERAAN) console.log(`  ${p.naam.padEnd(20)} 14 × ${VARIANTEN_RAND} randen  (achteraan)`);
   // tiles en sets gaan mee terug, zodat randtegels-proef.cjs de tegels kan kiezen zoals Tiled dat
   // doet — op wangid uit de terreinset — in plaats van tegelnummers na te rekenen.
-  return { vel, kolommen, tiles, sets };
+  return uit;
 }
 
-if (require.main === module) bouw();
-module.exports = { bouw, randKaart, rasterTegel, plekken };
+// ---------------------------------------------------------------- het vel van het eiland
+//
+// De zee, het strand, het veen en het broek met hun overgangen (werklijst vraag 117, B van 2a; Marcel, 8 okt: "A. Ja,
+// lijkt mij goed"): een eigen vel, tegels/kust.png, zodat geen tegelnummer van rand.png verschuift. Het gras en de heide
+// staan er zelf ook op (en het water, voor waar een rivier de zee in loopt), want een terreinset in Tiled kent alleen
+// de tegels van zijn eigen vel.
+const VLAKKEN_KUST = ['zee', 'strand', 'veen', 'broek', 'gras', 'heide', 'water'];
+const PAREN_KUST = [
+  { naam: 'Strand aan zee', a: 'zee', b: 'strand' },
+  { naam: 'Gras over strand', a: 'strand', b: 'gras' },
+  { naam: 'Heide over strand', a: 'strand', b: 'heide' },
+  { naam: 'Veen over gras', a: 'gras', b: 'veen' },
+  { naam: 'Broek over gras', a: 'gras', b: 'broek' },
+  // waar een rivier de zee in loopt (nodig voor de maker; geen overgang die je ziet als land)
+  { naam: 'Water in zee', a: 'zee', b: 'water' },
+];
+
+// Met `schrijf` naar tegels/kust.png en kust.tsx; zonder alleen de plaat (voor de proefplaat).
+function bouwKust(o = {}) {
+  meetPlekken(VLAKKEN_KUST);
+  const v = nieuwVel();
+  for (const naam of VLAKKEN_KUST) v.voegVlakToe(naam);
+  for (const paar of PAREN_KUST) v.voegPaarToe(paar);
+  const uit = legVel(v, o.schrijf ? 'kust' : null, 'De grond van het eiland: de zee, het strand (ook voor de duinen en het '
+    + 'stuifzand), het veen en het broek, met het gras en de heide. Kies in het paneel Terreinen een terreinset ("Strand '
+    + 'aan zee", "Gras over strand", "Heide over strand", "Veen over gras" of "Broek over gras") en schilder met de '
+    + 'bovenste kleur over de onderste.');
+  console.log(`kust  ${uit.vel.b}×${uit.vel.h}  (${v.platen.length} tegels: ${VLAKKEN_KUST.length} × ${VARIANTEN_VLAK} vlak, `
+    + `${PAREN_KUST.length} × 14 × ${VARIANTEN_RAND} randen)`);
+  return uit;
+}
+
+if (require.main === module) {
+  if (process.argv[2] === 'kust') bouwKust({ schrijf: true });
+  else bouw();
+}
+module.exports = { bouw, bouwKust, randKaart, rasterTegel, plekken };

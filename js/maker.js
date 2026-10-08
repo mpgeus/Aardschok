@@ -237,12 +237,28 @@
     return st;
   }
 
-  // De grond op een hoekpunt van het eiland, uit zijn streek (js/eiland.js): het water ('w') is de zee, een meer of een
-  // rivier, de heide heide ('h'), het strand, de duinen en het zand zandpad ('z'), en de rest gras ('g'): het veen en het
-  // broek ook, tot er tegels voor zijn (Marcel, 8 okt: "B later"). De maker legt zo de grond van je land (stap 11), en
-  // de rand om de kaart die van het eiland eromheen (T.randVanHetEiland).
-  const NAT_STREKEN = ['zee', 'meer', 'rivier'];
-  T.grondVanStreek = (s) => (NAT_STREKEN.includes(s) ? 'w' : s === 'heide' ? 'h' : s === 'strand' || s === 'duinen' || s === 'zand' ? 'z' : 'g');
+  // De grond op een hoekpunt van het eiland, uit zijn streek (js/eiland.js): de zee ('e'), het water van een meer of een
+  // rivier ('w'), de heide ('h'), het strand, de duinen en het zand ('s', strand), het veen ('v'), het broek ('b'), en de
+  // rest gras ('g'). Het strand, het veen, het broek en de zee hebben eigen tegels (tegels/kust.png; werklijst vraag 117,
+  // B van 2a). De maker legt zo de grond van je land (stap 11), en de rand om de kaart die van het eiland eromheen
+  // (T.randVanHetEiland).
+  const GROND_VAN_STREEK = { zee: 'e', meer: 'w', rivier: 'w', heide: 'h', strand: 's', duinen: 's', zand: 's', veen: 'v', broek: 'b' };
+  T.grondVanStreek = (s) => GROND_VAN_STREEK[s] || 'g';
+  // Is deze grond water (de zee, een meer, een rivier)?
+  const isNat = (l) => l === 'w' || l === 'e';
+
+  // Welke grondsoorten samen in één tegel kunnen liggen: voor zo'n paar heeft tegels/rand.tsx of kust.tsx een tegel. Op
+  // een hoekpunt dat naast een buur ligt waarmee het dat niet kan, wijkt de zwakke (T.passendeGrond): naast de zee wordt
+  // het strand, anders gras. Het water, de zee, een weg of akker (zandpad) en de kasseien blijven liggen.
+  const GROND_PAREN = new Set(['gz', 'gk', 'kz', 'gw', 'gh', 'es', 'gs', 'hs', 'gv', 'bg', 'ew']);
+  T.grondPaar = (a, b) => a === b || GROND_PAREN.has(a < b ? a + b : b + a);
+  T.passendeGrond = function (l, buren) {
+    if ('wezk'.includes(l) || buren.every((m) => T.grondPaar(l, m))) return l;
+    return buren.includes('e') ? 's' : 'g';
+  };
+  // Waar groeit wat op gras groeit (een boom, een struik, een rots): gras, en het veen en het broek, die tot 8 okt gras
+  // waren; zo staan de bomen op het eiland waar ze stonden.
+  const GROEIT = new Set(['g', 'v', 'b']);
 
   // Welke boom er staat waar het eiland een boom heeft: in het broek vaak een wilg, hier en daar een dode boom, en verder
   // dennen, eiken en berken. `toeval` geeft een getal van 0 tot 1: de maker loot, de rand om de kaart neemt een vaste
@@ -436,7 +452,7 @@
       return Math.abs(a - beekMidden(c)) <= BEEK_HALF;
     };
     // Op het eiland is een hoekpunt nat waar het eiland water is: de zee, een meer of een rivier.
-    const natOpEiland = (x, y) => T.grondVanStreek(land.hoek(x, y)) === 'w';
+    const natOpEiland = (x, y) => isNat(T.grondVanStreek(land.hoek(x, y)));
     // De vijvers (vraag 112, c) komen later, als het dorp ligt (stap 9b), maar zijn water zoals de beek: een golvende
     // ellips om hun midden.
     const vijvers = [];
@@ -1158,13 +1174,19 @@
       return !rand || r() < 0.5;
     };
     // Op het eiland: de grond van het eiland (T.grondVanStreek; het water heeft `nat` hierboven al), en in de kern van het
-    // dorp gras: weiden en tuinen.
-    const grondOpEiland = (x, y) => (Math.hypot(x - cx, y - cy) < I.eilandKern ? 'g' : T.grondVanStreek(land.hoek(x, y)));
+    // dorp gras: weiden en tuinen. Waar een huis met zijn erf op zand stond, ligt ook gras: het dorp was er al, en op zand
+    // wordt niet gebouwd (T.waaromNietOpDezeGrond, js/gebouwen.js).
+    const opErf = (x, y) => [[0, 0], [-1, 0], [0, -1], [-1, -1]].some(([dx, dy]) => [HUIS, ERF].includes(op(x + dx, y + dy)));
+    const grondOpEiland = (x, y) => {
+      if (Math.hypot(x - cx, y - cy) < I.eilandKern) return 'g';
+      const l = T.grondVanStreek(land.hoek(x, y));
+      return l === 's' && opErf(x, y) ? 'g' : l;
+    };
     const hoeken = [];
     for (let y = 0; y <= H; y++) {
       const rij = [];
       for (let x = 0; x <= B; x++) {
-        if (nat(x, y)) rij.push('w');
+        if (nat(x, y)) rij.push(land && T.grondVanStreek(land.hoek(x, y)) === 'e' ? 'e' : 'w'); // de zee, of ander water
         else if (naastWater(x, y)) rij.push('g');
         else if (opWeg(x, y) || inAkker(x, y) || T.binnenRand(zand, x, y)) rij.push('z');
         else if (opHeide(x, y)) rij.push('h');
@@ -1172,18 +1194,26 @@
       }
       hoeken.push(rij);
     }
-    // Heide grenst alleen aan gras: voor heide naast zandpad of water heeft tegels/rand.tsx geen overgang (net als
-    // voor zandpad vlak naast water, hierboven). Zo'n hoekpunt wordt gras.
-    for (let y = 0; y <= H; y++) {
-      for (let x = 0; x <= B; x++) {
-        if (hoeken[y][x] !== 'h') continue;
-        let naast = false;
-        for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) if (['z', 'w'].includes((hoeken[y + dy] || [])[x + dx])) naast = true;
-        if (naast) hoeken[y][x] = 'g';
+    // Wat niet naast elkaar kan liggen (T.passendeGrond): heide grenst alleen aan gras en strand, het strand aan de zee,
+    // gras en heide, het veen en het broek alleen aan gras (net als zandpad vlak naast water, hierboven). Zo'n hoekpunt
+    // wordt gras, of naast de zee strand; tot er niets meer wijkt.
+    for (let ronde = 0; ronde < 4; ronde++) {
+      let geweken = false;
+      for (let y = 0; y <= H; y++) {
+        for (let x = 0; x <= B; x++) {
+          const buren = [];
+          for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) if ((dx || dy) && (hoeken[y + dy] || [])[x + dx]) buren.push(hoeken[y + dy][x + dx]);
+          const l = T.passendeGrond(hoeken[y][x], buren);
+          if (l !== hoeken[y][x]) {
+            hoeken[y][x] = l;
+            geweken = true;
+          }
+        }
       }
+      if (!geweken) break;
     }
     const grond = hoeken.map((rij) => rij.join(''));
-    const opGras = (x, y) => [[0, 0], [1, 0], [1, 1], [0, 1]].every(([dx, dy]) => (grond[y + dy] || '')[x + dx] === 'g');
+    const opGras = (x, y) => [[0, 0], [1, 0], [1, 1], [0, 1]].every(([dx, dy]) => GROEIT.has((grond[y + dy] || '')[x + dx]));
 
     // ---- 12. Wat er verder staat: de put en de eiken op het plein, bomen, tuinen, en het bos ----
     const bezet = new Set();
@@ -1549,7 +1579,7 @@
     const brug = new Set(plan.brug.map((p) => p.y * B + p.x));
     for (let y = 0; y < H; y++) {
       for (let x = 0; x < B; x++) {
-        const nat = [[0, 0], [1, 0], [0, 1], [1, 1]].some(([dx, dy]) => plan.grond[y + dy][x + dx] === 'w');
+        const nat = [[0, 0], [1, 0], [0, 1], [1, 1]].some(([dx, dy]) => isNat(plan.grond[y + dy][x + dx]));
         if (nat && !brug.has(y * B + x)) zetVast(x, y);
       }
     }
@@ -1653,30 +1683,43 @@
   // Van plan naar kaart: een kaart en een betekenisbestand, zoals Tiled en gereedschap/wereld.html ze maken
   // ---------------------------------------------------------------------------------------------
 
-  // De grondtegels uit tegels/rand.tsx, opgezocht op wat er in hun vier hoeken ligt. Tiled kiest ze met zijn
+  // De grondtegels uit tegels/rand.tsx, en wat daar niet in staat uit tegels/kust.tsx (de zee, het strand, het veen
+  // en het broek; werklijst vraag 117, B van 2a), opgezocht op wat er in hun vier hoeken ligt. Tiled kiest ze met zijn
   // terreinsets; het spel leest hetzelfde uit hun groep: "gras over zandpad: boven+rechts" heeft gras in de hoeken
   // boven en rechts, en zandpad in de andere twee. De hoeken van tegel (x, y) liggen in beeld zo: boven (x, y), rechts
-  // (x+1, y), onder (x+1, y+1) en links (x, y+1).
+  // (x+1, y), onder (x+1, y+1) en links (x, y+1). Een tegel staat er als zijn nummer in de kaart (gid): rand vanaf 1,
+  // kust erachter (KUST_GID), en een kaart noemt kust alleen als hij er een tegel van heeft.
   const HOEKEN = ['boven', 'rechts', 'onder', 'links'];
-  const GRONDSOORT = { g: 'gras', w: 'water', z: 'zandpad', h: 'heide' };
+  const GRONDSOORT = { g: 'gras', w: 'water', z: 'zandpad', h: 'heide', k: 'kasseien', e: 'zee', s: 'strand', v: 'veen', b: 'broek' };
+  const LETTER = Object.fromEntries(Object.entries(GRONDSOORT).map(([l, naam]) => [naam, l])); // en terug: 'gras' is 'g'
+  const KUST_GID = () => 1 + T.TEGELS.rand.tiles.length;
   let grondTegels = null;
   function grondIndex() {
     if (grondTegels) return grondTegels;
     const vlak = {};
     const overgang = {};
     const brug = {};
-    T.TEGELS.rand.tiles.forEach((t, id) => {
-      if (!t || !t.groep) return;
-      if (t.groep === 'vlak') (vlak[t.naam] = vlak[t.naam] || []).push(id);
-      const o = /^(\S+) over (\S+): (.+)$/.exec(t.groep);
-      if (o) {
-        const erin = o[3].split('+');
-        const sleutel = HOEKEN.map((h) => (erin.includes(h) ? o[1] : o[2])).join(',');
-        (overgang[sleutel] = overgang[sleutel] || []).push(id);
-      }
-      const b = /^brug ([xy]) (begin|midden|eind)$/.exec(t.groep);
-      if (b) brug[`${b[1]} ${b[2]}`] = id;
-    });
+    const leesVel = (vel, eerste) => {
+      // wat rand al heeft, neemt kust niet over: zo blijft een land zonder het eiland tegel voor tegel hetzelfde
+      const vlakVan = {};
+      const overgangVan = {};
+      T.TEGELS[vel].tiles.forEach((t, id) => {
+        if (!t || !t.groep) return;
+        if (t.groep === 'vlak') (vlakVan[t.naam] = vlakVan[t.naam] || []).push(eerste + id);
+        const o = /^(\S+) over (\S+): (.+)$/.exec(t.groep);
+        if (o) {
+          const erin = o[3].split('+');
+          const sleutel = HOEKEN.map((h) => (erin.includes(h) ? o[1] : o[2])).join(',');
+          (overgangVan[sleutel] = overgangVan[sleutel] || []).push(eerste + id);
+        }
+        const b = /^brug ([xy]) (begin|midden|eind)$/.exec(t.groep);
+        if (b) brug[`${b[1]} ${b[2]}`] = eerste + id;
+      });
+      for (const n of Object.keys(vlakVan)) if (!vlak[n]) vlak[n] = vlakVan[n];
+      for (const k of Object.keys(overgangVan)) if (!overgang[k]) overgang[k] = overgangVan[k];
+    };
+    leesVel('rand', 1);
+    if (T.TEGELS.kust) leesVel('kust', KUST_GID());
     return (grondTegels = { vlak, overgang, brug });
   }
   // Een vaste keus uit een paar varianten, per tegel (dezelfde als in maak-gehucht.cjs).
@@ -1693,6 +1736,16 @@
     if (volgorde.length <= 2) return soorten;
     return soorten.map((s) => (s === volgorde[0] || s === volgorde[1] ? s : volgorde[0]));
   }
+  // De grond in de vier hoeken van een tegel ('gras', 'zee', ...), zo dat er een grondtegel voor is: van drie soorten
+  // twee (totTwee), en van een paar zonder tegel (T.grondPaar; waar een rivier in zee komt) één, wat er het meest ligt.
+  // Voor de kaart (T.kaartVanGehucht) en het eiland om de kaart (js/tekenen.js).
+  T.grondTegelHoeken = function (soorten) {
+    const twee = totTwee(soorten);
+    const [a, b] = [...new Set(twee)];
+    if (!b || T.grondPaar(LETTER[a], LETTER[b])) return twee;
+    const meest = twee.filter((s) => s === a).length >= twee.filter((s) => s === b).length ? a : b;
+    return twee.map(() => meest);
+  };
   // In welk vel een voorwerp staat, in dezelfde volgorde als maak-gehucht.cjs zoekt: "eik" wordt "bomen/eik".
   const VELLEN = ['bomen', 'begroeiing', 'gebouwen', 'erf', 'tuin', 'huizen'];
   function opNaam(naam) {
@@ -1722,11 +1775,14 @@
     const data = new Array(B * H);
     for (let y = 0; y < H; y++) {
       for (let x = 0; x < B; x++) {
-        const hoeken = totTwee([plan.grond[y][x], plan.grond[y][x + 1], plan.grond[y + 1][x + 1], plan.grond[y + 1][x]].map((s) => GRONDSOORT[s]));
+        const soorten = [plan.grond[y][x], plan.grond[y][x + 1], plan.grond[y + 1][x + 1], plan.grond[y + 1][x]].map((s) => GRONDSOORT[s]);
+        const hoeken = T.grondTegelHoeken(soorten);
+        // waar een paar zonder tegel één soort werd (de monding van een rivier in zee), telt plan.grondNaden het
+        if (new Set(hoeken).size < new Set(totTwee(soorten)).size) plan.grondNaden = (plan.grondNaden || 0) + 1;
         const kies = (lijst) => lijst[Math.floor((hash(x, y, 63) * 1e6) % lijst.length)];
         const lijst = new Set(hoeken).size === 1 ? g.vlak[hoeken[0]] : g.overgang[hoeken.join(',')];
         if (!lijst) throw new Error(`de maker heeft geen grondtegel voor ${hoeken.join(', ')} op (${x}, ${y})`);
-        data[y * B + x] = 1 + kies(lijst);
+        data[y * B + x] = kies(lijst);
       }
     }
     // Het bruggetje over de beek, in de richting van de weg: begin, midden en eind. Op het eiland elk bruggetje met zijn
@@ -1735,7 +1791,7 @@
       const brug = b.tegels.slice().sort((p, q) => p.x + p.y - (q.x + q.y));
       brug.forEach((p, i) => {
         const deel = i === 0 ? 'begin' : i === brug.length - 1 ? 'eind' : 'midden';
-        data[p.y * B + p.x] = 1 + g.brug[`${b.as} ${deel}`];
+        data[p.y * B + p.x] = g.brug[`${b.as} ${deel}`];
       });
     }
     const ontworpen = (T.KAARTEN && T.KAARTEN.gehucht) || {};
@@ -1747,7 +1803,7 @@
       tilewidth: 64,
       tileheight: 32,
       properties: (ontworpen.properties || [{ name: 'naam', type: 'string', value: 'Het gehucht' }]).map((p) => ({ ...p })),
-      tilesets: [{ firstgid: 1, source: '../tegels/rand.tsx' }],
+      tilesets: [{ firstgid: 1, source: '../tegels/rand.tsx' }, ...(data.some((gid) => gid >= KUST_GID()) ? [{ firstgid: KUST_GID(), source: '../tegels/kust.tsx' }] : [])],
       layers: [{ type: 'tilelayer', name: 'grond', width: B, height: H, data }],
     };
 
@@ -1813,12 +1869,11 @@
   // water is water, wat ernaast ligt gras, de weg van het eiland zandpad, en verder de grond van zijn streek
   // (T.grondVanStreek), met de heide alleen naast gras; een boom waar het eiland er een heeft, en de rotsen van het
   // eiland, allebei op gras. Aan de naad past de rand zich aan de kaart aan: wat er niet naast kan liggen (water naast
-  // haar zandpad, zandpad naast haar heide), wordt gras, want voor zo'n paar heeft tegels/rand.tsx geen tegel. Alleen om
+  // haar zandpad, zandpad naast haar heide), wordt gras (of naast de zee strand), want voor zo'n paar heeft
+  // tegels/rand.tsx of kust.tsx geen tegel (T.grondPaar). Alleen om
   // te tekenen (js/tekenen.js: het land en het bos om de kaart); het komt uit het nummer van het eiland, dus het staat
   // niet in Spel.S, en het wordt één keer per kaart uitgerekend.
   const RAND = new WeakMap();
-  const LETTER = { gras: 'g', water: 'w', zandpad: 'z', heide: 'h', kasseien: 'k' };
-  const naastElkaar = (a, b) => a === b || a === 'g' || b === 'g'; // voor zo'n paar is er een tegel
   T.randVanHetEiland = function (w) {
     let rand = RAND.get(w);
     if (rand) return rand;
@@ -1846,6 +1901,15 @@
       }
       return false;
     };
+    // de grond van de buren van hoekpunt (vx, vy); met `alleenKaart` alleen die op de kaart
+    const burenVan = (vx, vy, alleenKaart = false) => {
+      const uit = [];
+      eenBuur(vx, vy, (l, kaart) => {
+        if (kaart || !alleenKaart) uit.push(l);
+        return false;
+      });
+      return uit;
+    };
     // de rand van de kaart zelf: wat er ligt (alleen die raakt de hoekpunten erbuiten)
     const vanKaart = (vx, vy) => {
       hoek[hi(vx, vy)] = LETTER[T.sprites.grondHoekOp(w, vx, vy)] || 'g';
@@ -1864,25 +1928,45 @@
       for (let k = 0; k < buiten.length; k += 3) f(buiten[k], buiten[k + 1], buiten[k + 2]);
     };
     const streek = (i) => T.EILAND_STREKEN[punten.streek[i]];
-    // eerst het water; wat ernaast ligt, is gras; dan de weg, en de grond van de streek
+    // eerst het water (de zee, een meer, een rivier); wat ernaast ligt, is gras; dan de weg, en de grond van de streek
     elk((i) => {
-      if (T.grondVanStreek(streek(i)) === 'w') hoek[i] = 'w';
+      const l = T.grondVanStreek(streek(i));
+      if (isNat(l)) hoek[i] = l;
     });
     elk((i, vx, vy) => {
-      if (hoek[i] !== 'w') hoek[i] = eenBuur(vx, vy, (l) => l === 'w') ? 'g' : punten.weg[i] ? 'z' : T.grondVanStreek(streek(i));
+      if (!isNat(hoek[i])) hoek[i] = eenBuur(vx, vy, isNat) ? 'g' : punten.weg[i] ? 'z' : T.grondVanStreek(streek(i));
     });
-    // de heide grenst alleen aan gras (stap 11)
+    // de naad: wat niet naast de rand van de kaart kan liggen, wijkt, naast de zee voor strand en anders voor gras; en
+    // kan wat er dan ligt niet aan de zee grenzen (gras, veen), dan wijkt de zee ernaast voor strand, want de kaart wijkt
+    // niet
     elk((i, vx, vy) => {
-      if (hoek[i] === 'h' && eenBuur(vx, vy, (l) => l === 'z' || l === 'w')) hoek[i] = 'g';
+      const kaart = burenVan(vx, vy, true);
+      if (!kaart.length) return;
+      if (!kaart.every((m) => T.grondPaar(hoek[i], m))) hoek[i] = eenBuur(vx, vy, (l) => l === 'e') && kaart.every((m) => T.grondPaar('s', m)) ? 's' : 'g';
+      if (T.grondPaar(hoek[i], 'e')) return;
+      for (let dy = -1; dy <= 1; dy++) {
+        for (let dx = -1; dx <= 1; dx++) {
+          const j = hi(vx + dx, vy + dy);
+          if (inStuk(vx + dx, vy + dy) && !opKaart(vx + dx, vy + dy) && hoek[j] === 'e') hoek[j] = 's';
+        }
+      }
     });
-    // de naad: wat niet naast de rand van de kaart kan liggen, wordt gras
-    elk((i, vx, vy) => {
-      const l = hoek[i];
-      if (l !== 'g' && eenBuur(vx, vy, (m, kaart) => kaart && !naastElkaar(l, m))) hoek[i] = 'g';
-    });
-    // de bomen en de rotsen, op gras (stap 12)
+    // en dan wijkt wat niet naast elkaar kan liggen, zoals in de maker (stap 11): de heide grenst alleen aan gras en
+    // strand, het strand aan de zee, enzovoort (T.passendeGrond)
+    for (let ronde = 0; ronde < 4; ronde++) {
+      let geweken = false;
+      elk((i, vx, vy) => {
+        const l = T.passendeGrond(hoek[i], burenVan(vx, vy));
+        if (l !== hoek[i]) {
+          hoek[i] = l;
+          geweken = true;
+        }
+      });
+      if (!geweken) break;
+    }
+    // de bomen en de rotsen, op gras (stap 12; ook op het veen en het broek)
     const ding = new Array(nb * nh).fill(null);
-    const opGras = (x, y) => [hi(x, y), hi(x + 1, y), hi(x + 1, y + 1), hi(x, y + 1)].every((i) => hoek[i] === 'g');
+    const opGras = (x, y) => [hi(x, y), hi(x + 1, y), hi(x + 1, y + 1), hi(x, y + 1)].every((i) => GROEIT.has(hoek[i]));
     for (let y = -D; y < H + D; y++) {
       for (let x = -D; x < B + D; x++) {
         if ((x >= 0 && y >= 0 && x < B && y < H) || !opGras(x, y)) continue;
@@ -1898,7 +1982,8 @@
     }
     rand = {
       diep: D,
-      // de grond op hoekpunt (vx, vy) om de kaart ('gras', 'water', 'zandpad' of 'heide'); op de kaart, en verder dan
+      // de grond op hoekpunt (vx, vy) om de kaart ('gras', 'water', 'zandpad', 'heide', 'zee', 'strand', 'veen' of
+      // 'broek'); op de kaart, en verder dan
       // `diep`, null
       hoek: (vx, vy) => (opKaart(vx, vy) || !inStuk(vx, vy) ? null : GRONDSOORT[hoek[hi(vx, vy)]]),
       // wat er op tegel (x, y) om de kaart staat: een boom of een rots (de naam van zijn tekening), of null

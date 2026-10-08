@@ -178,6 +178,31 @@ proberen"), en een werkplaats die iets omzet maakt tot er 60 ligt in plaats van 
 de molen en de bakkerij hielden zo'n 65 dagen brood achter de hand, en de winter vraagt er ruim 100. Ook de herberg
 brouwt nu tot 60. Nog niet gespeeld.
 
+## De speeltest van 8 okt: de grond van het eiland (werklijst, vraag 117, B van 2a)
+
+Gespeeld in de sessie van de kaartenmaker, op de branch `ccr-f03157dc-9d2dtu`: dezelfde zes spellen op het eiland
+(`npm run speeltest -- bouwer sluw --jaren 4 --eiland`), op `8a5acd6` (vlak vóór de nieuwe grond, met `main` van 8 okt
+erin) en op `d5d2eb6` (met de zee, het strand, het veen en het broek, en niet bouwen op zand). Geen fouten in de console.
+
+| Land | Speler | Vóór de nieuwe grond | Met de nieuwe grond |
+|---|---|---|---|
+| 62707 | bouwer | de vier jaar uit, 123 mensen; na het tweede jaar geen dag meer dat alle huizen alles hadden | het ambt kwijt op 12 wintermaand van het vierde jaar, 109 mensen (de gril van de heer, met de gunst op 0) |
+| 73425 | bouwer | de vier jaar uit, 111 mensen; de teller tot 306, en dan geen brood | hetzelfde, letter voor letter |
+| 72022 | bouwer | het ambt kwijt op Sint-Maarten van het eerste jaar | weggejaagd door het dorp op 17 louwmaand van het tweede jaar, na honger |
+| 62707 | sluw | **gewonnen** in het vierde jaar | **gewonnen** op 20 hooimaand van het vierde jaar |
+| 73425 | sluw | **gewonnen** op 27 sprokkelmaand van het vierde jaar | hetzelfde, letter voor letter |
+| 72022 | sluw | de vier jaar uit, 112 mensen, de teller op 267 | het ambt kwijt op Sint-Maarten van het eerste jaar |
+
+**Wat het zegt:**
+1. **Het zand houdt niets tegen.** Twee van de zes winnen, vóór en na. Het dorp vond net zo vaak een plaats (op 62707
+   zei het 2 keer dat er geen plaats was, vóór de nieuwe grond 47 keer); waar het dorp er al stond, ligt gras.
+2. **Waar het anders liep, is het toeval.** Op 73425 ligt geen zee, veen of broek in het land, en liep alles letter voor
+   letter hetzelfde. Op 62707 en 72022 liggen dezelfde huizen en akkers, maar waar heide aan veen grensde, ligt nu een
+   strook gras, en daar staan andere planten; de maker loot dan alles daarna anders. Het eerste verschil is klein (een
+   plek die een dag eerder gerooid is, een huis dat een dag eerder doorgroeit), en vanaf daar loopt het spel anders.
+3. **72022 valt nog altijd op de gunst van de heer**: wie op Sint-Maarten het ambt houdt, haalt het eind van het spel,
+   wie niet, niet; dat staat al in `opmerkingen.md` (de val van de gunst en de grillen).
+
 ## De speeltest van 8 okt, nacht: vis vult een maag (werklijst, vraag 132)
 
 Op `7e1b786` (branch `ccr-77327776-rqjldz`), `npm run speeltest -- bouwer sluw --maker --jaren 4`; Marcel: "Vis mag een
@@ -363,6 +388,22 @@ op een erf die ook het huis haalt dat de hut wordt; werklijst, vraag 117, 2d):
    gril dat jaar ook, maar had hij tien vlees en gaf hij die, en won hij (een jaar later, na de winst, niet meer). Wat er
    met de put verandert, verschuift het spel net genoeg om die gril anders te laten vallen; de val zelf staat in
    `opmerkingen.md`.
+
+**En de kapel** (werklijst, vraag 117, 2d; Marcel: "Prima"). Op `1ee29ba` (`main`, met 2d en de proef van de graanzak) en op
+`4e7acb5` (daarbij een erf dat ook plaats houdt voor een kapel), dezelfde zes spellen op het eiland, twee tegelijk:
+
+| Land | Speler | Op `main` | Met de regel voor de kapel |
+|---|---|---|---|
+| 62707 | bouwer | de vier jaar uit, 106 mensen; 19 maanden een kapel zonder plek | de vier jaar uit, 104 mensen; geen kapel zonder plek meer, nu houdt het graan het tegen (geen bier en brood voor de woontorens) |
+| 73425 | bouwer | **gewonnen** op 10 louwmaand van het vierde jaar; daarna 11 maanden een kapel zonder plek | **gewonnen** op dezelfde dag, zonder kapel zonder plek |
+| 72022 | bouwer | het ambt kwijt op 12 wintermaand van het derde jaar: de gril van het vette varken | hetzelfde, een jaar later |
+| 62707 | sluw | het ambt kwijt op 11 slachtmaand van het derde jaar: te weinig betaald | **gewonnen** op 10 oogstmaand van het vierde jaar, met 176 mensen |
+| 73425 | sluw | **gewonnen** op 23 grasmaand van het vierde jaar | hetzelfde, letter voor letter |
+| 72022 | sluw | het ambt kwijt in het eerste jaar | hetzelfde |
+
+Een kapel zonder plek komt met de regel nergens meer voor (op `main` 30 maanden, over twee spellen), en er winnen drie van
+de zes in plaats van twee. Het kost geen merkbare tijd: het zoeken van de plekken is sneller geworden (dezelfde plekken,
+een kapel in 0,07 tot 0,55 s in plaats van 1,2 tot 1,8). Geen fouten in de console.
 
 ## De speeltest van 8 okt: vier jaar op het eiland (werklijst, vraag 117, stap 2c)
 

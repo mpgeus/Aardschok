@@ -43,9 +43,8 @@ de maker per tegel en per hoekpunt de streek, de bomen en waar de wegen van het 
 kasteel is de uitgang); `T.eilandVan(zaad)` onthoudt het laatste eiland, want het is uit het nummer te maken. De maker
 legt het gehucht erop zoals altijd, maar als een dorp dat er al was: eerst de huizen om het plein, dan de weg ernaartoe
 (A\* om het water en de huizen heen, met een recht bruggetje over smal water), dan de boerderijen en akkers (liever op open
-land) en de meent (liever op de heide), en pas dan het bos van het eiland, met een gerooide kern om het plein. De grond:
-de heide heide, het strand, de duinen en het zand zandpad, het water water, en de rest gras (nieuwe tegels voor de zee,
-het strand, het veen en het broek komen later). Een kaart van het eiland onthoudt waar hij ligt (`w.eiland`: het nummer en
+land) en de meent (liever op de heide), en pas dan het bos van het eiland, met een gerooide kern om het plein. De grond
+komt van de streek (`T.grondVanStreek`; sinds B van 2a met eigen tegels, hieronder). Een kaart van het eiland onthoudt waar hij ligt (`w.eiland`: het nummer en
 de hoek van je land op het eiland). Lukt het gehucht op jouw plek niet, dan op die van een ander dorp.
 
 **Het eiland om je land (stap 2b, 8 okt; Marcel: "A ja"):** buiten de kaart loopt het eiland door: de zee, het strand,
@@ -61,6 +60,20 @@ land; het dorp ligt op zijn vlakte en de vlakke stukken liggen vlak zoals altijd
 dorp is het eiland zachter dan die ruis: een dorp ligt waar het vlak is (aan de kust 0 tot 80 pixels, landinwaarts zo'n
 150 à 200 van laag tot hoog); de bergrug, tot 1250 pixels, ligt ver weg. De hoogten van het eiland komen voor de kaart en
 48 tegels eromheen uit één lijst (`T.eilandStuk`), eens per hoogte, en ook die staat niet in `Spel.S`.
+
+**De grond van het eiland (B van 2a, 8 okt; Marcel: "dan gaan we de eigen tegels maken"):** elke streek zijn eigen
+grond, met tegels uit `tegels/kust.png` naast die van `rand.png` (`beeld.md`, "De grond van het eiland"): de zee ('e'),
+een meer of een rivier (water, 'w'), het strand, de duinen en het zand (strand, 's'), het veen ('v'), het broek ('b'), de
+heide ('h') en de rest gras ('g'), met de weg en de akkers zandpad ('z'). Welke twee soorten samen in één tegel kunnen,
+zegt `T.grondPaar` (gras met alles behalve de zee, het strand met de zee, het gras en de heide, het water met de zee, en
+het zandpad met de kasseien); wat niet past, wijkt (`T.passendeGrond`): naast de zee voor strand, anders voor gras, en het
+water, de zee, een weg en de kasseien wijken nooit. Waar drie soorten in één tegel samenkomen, of een paar zonder tegel
+(een rivier die in zee loopt), wordt het er een met twee of één (`T.grondTegelHoeken`). De rand om de kaart doet
+hetzelfde, maar de kaart wijkt daar niet: kan wat naast de kaart ligt niet aan de zee grenzen, dan wijkt de zee ervoor
+(hooguit twee hoekpunten). **Op zand wordt niet gebouwd** (Marcel: "zand is geen solide basis"; `T.waaromNietOpDezeGrond`):
+geen huis, erf of akker; waar een huis van het dorp dat er al was met zijn erf op zand stond, ligt gras. De zee is water
+(`T.isWaterGrond`): niet te belopen, de visser vist er, en ze ligt vlak met het andere water. Het veen en het broek zijn
+als gras (er groeit wat op gras groeit). Een land van de maker zonder het eiland blijft tegel voor tegel hetzelfde.
 
 **Wat er nog komt:** 2c de speeltest; en
 daarna de mist en een kaart die meegroeit (de stukken, opslaan wat veranderde, HPA\*).

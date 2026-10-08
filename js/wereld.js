@@ -550,6 +550,10 @@
     return !!(g && PADEN.includes(g.naam));
   };
 
+  // Is deze grond water? Dat van een beek, een meer of een rivier, en de zee van het eiland (tegels/kust.png; werklijst
+  // vraag 117, B van 2a). Daar vist een visser (T.NATUUR, js/gebouwen.js), en daar komt geen stuk bos (js/ontginnen.js).
+  T.isWaterGrond = (naam) => naam === 'water' || naam === 'zee';
+
   // Twee tegels raken elkaar als ze naast elkaar liggen, ook schuin, maar niet schuin
   // om een muurhoek heen. Dat geldt voor slaan, praten en iets gebruiken.
   // Staat deze tegel een doorgang in de weg? Een deur, of de tegel er pal naast: daar mag niemand
