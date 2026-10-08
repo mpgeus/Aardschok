@@ -55,6 +55,10 @@
   // Alle getallen van de velden in één blok (ook in de werkbank van de spelregels, js/opties.js).
   // Een eerste gok, uit het voorstel dat Marcel op 25 sep koos.
   T.VELDEN_INSTELLINGEN = {
+    // Een weide erbij (werklijst vraag 132; Marcel, 8 okt: "1 en 2 allebei, vee en meer vissers"): had het dorp dit jaar
+    // zoveel dagen honger tussen 1 lentemaand en de oogst, en is er geen hooi voor nog een koe, dan maakt een boer na de
+    // oogst een van zijn velden weide (T.boerenKiezenVelden): de koeien geven juist in het voorjaar melk.
+    weideNaHonger: 10,
     // Het zaaigraan (werklijst vraag 81; Marcel, 1 okt: "zaaigraan wordt bij nood opgegeten, anders sterven er mensen"):
     // van de oogst tot het zaaien houden de boeren het zaaigraan voor volgend jaar achter (T.zaaigraanApart), en het dorp
     // eet het pas als er niets anders meer is (T.eetVandaag, js/behoeften.js). Uit (de spelregel "Zaaigraan") is het spel
@@ -299,12 +303,15 @@
       if (waarom) v.planWaarom = waarom;
       else delete v.planWaarom;
     }
+    const weide = weideErbij(D, anders);
+    if (weide) anders.push(weide);
+    if (D.behoeften) D.behoeften.voorjaarsHonger = 0; // een nieuw jaar
     if (anders.length) {
       // "het veld van Klaas rust een jaar en dat van Aaltje krijgt mest"
       const wat = anders.map((a, i) => {
         const boer = T.boerVanVeld(D, a.veld);
         const van = boer ? `${i ? 'dat' : 'het veld'} van ${boer.naam}` : `${i ? 'een' : 'het'} veld zonder boer`;
-        return `${van} ${a.plan === 'braak' ? 'rust een jaar' : a.mest ? 'krijgt mest' : `wordt weer ${a.plan}`}`;
+        return `${van} ${a.plan === 'braak' ? 'rust een jaar' : a.mest ? 'krijgt mest' : a.weide ? 'wordt weide, voor meer koeien: er was honger in het voorjaar' : `wordt weer ${a.plan}`}`;
       });
       const zin = `Na de oogst kozen de boeren wat hun velden volgend jaar worden: ${T.opsomming(wat)}.`;
       T.zeg(D, `${zin} In het veldenvenster (V) kun je het veranderen.`);
@@ -312,6 +319,36 @@
     }
     return anders;
   };
+
+  // Hoeveel koeien de weides de winter door brengen: hun hooi (T.VEE_INSTELLINGEN.hooiPerTegel per tegel) gedeeld door
+  // wat een koe in een winter eet.
+  function koeienVoorHetHooi(w) {
+    const V = T.VEE_INSTELLINGEN;
+    const tegels = w.akkers.filter((v) => T.planVan(v) === 'weide').reduce((n, v) => n + v.b * v.h, 0);
+    return (tegels * V.hooiPerTegel) / (150 * V.hooiPerDag.koe);
+  }
+
+  // Een weide erbij (VIN().weideNaHonger): na een voorjaar met honger, als de koeien die er zijn al het hooi nodig hebben,
+  // maakt een boer een veld weide: eerst een dat zou rusten, anders de minst vruchtbare akker van een boer die er meer
+  // heeft. Eén per jaar; wat jij koos, laten ze staan. Geeft { veld, plan, mest, weide, waarom } of null.
+  function weideErbij(D, anders) {
+    const w = D.wereld;
+    const honger = (D.behoeften && D.behoeften.voorjaarsHonger) || 0;
+    if (!VIN().weideNaHonger || honger < VIN().weideNaHonger) return null;
+    const koeien = T.veeVan(D).filter((e) => e.dier === 'koe').length;
+    if (koeien + 1 <= koeienVoorHetHooi(w)) return null;
+    const vrij = w.akkers.filter((v) => v.planDoor !== 'schout' && T.planVan(v) !== 'weide' && !v.ontginning);
+    const vanBoer = (v) => w.akkers.filter((x) => x.huis === v.huis && T.planVan(x) === 'akker').length;
+    const kies = vrij.find((v) => T.planVan(v) === 'braak') ||
+      vrij.filter((v) => T.planVan(v) === 'akker' && vanBoer(v) > 1).sort((a, b) => T.vruchtbaarheidVan(a) - T.vruchtbaarheidVan(b))[0];
+    if (!kies) return null;
+    const i = anders.findIndex((a) => a.veld === kies);
+    if (i >= 0) anders.splice(i, 1);
+    kies.plan = 'weide';
+    kies.mest = false;
+    kies.planWaarom = 'er was honger in het voorjaar, en de koeien hadden geen hooi meer';
+    return { veld: kies, plan: 'weide', mest: false, weide: true, waarom: kies.planWaarom };
+  }
 
   // Wie het plan van dit veld koos, en waarom, voor het veldenvenster: "Klaas koos het: het land raakt uitgeput", of
   // "Jij koos het", of '' als niemand iets koos.

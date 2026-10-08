@@ -191,3 +191,54 @@ test('wat helpt aan eten: een graanschuur als die er niet is, en zaaigraan kopen
     T.optiesTerug();
   }
 });
+
+test('na een voorjaar met honger maakt een boer een veld weide, als het hooi geen koe meer draagt', () => {
+  for (const honger of [0, 20]) {
+    const { D } = gehucht();
+    try {
+      D.behoeften.voorjaarsHonger = honger;
+      const voor = D.wereld.akkers.filter((v) => T.planVan(v) === 'weide').length;
+      let anders;
+      const gezegd = luister(() => {
+        anders = T.boerenKiezenVelden(D);
+      });
+      const na = D.wereld.akkers.filter((v) => T.planVan(v) === 'weide').length;
+      if (!honger) {
+        assert.equal(na, voor, 'zonder honger geen weide erbij');
+        continue;
+      }
+      assert.equal(na, voor + 1, 'een weide erbij');
+      const w = anders.find((a) => a.weide);
+      assert.ok(w && w.veld.planDoor === 'boer', 'een boer koos het');
+      assert.ok(gezegd.some((t) => /wordt weide/.test(t)), gezegd.join(' / '));
+      assert.equal(D.behoeften.voorjaarsHonger, 0, 'een nieuw jaar telt opnieuw');
+    } finally {
+      T.optiesTerug();
+    }
+  }
+});
+
+test('de raad vraagt meer vissers als het dorp groeit, en meer weide na een voorjaar met honger', () => {
+  const echt = console.warn;
+  console.warn = () => {};
+  const S = { kalender: T.nieuweKalender() };
+  try {
+    assert.ok(T.beginOpKaart(S, 'gehucht', 62707));
+  } finally {
+    console.warn = echt;
+  }
+  const D = S.dorp;
+  try {
+    D.kalender.dag = 100.5; // hooimaand: de visser vist
+    D.bevolking = 70;
+    D.gebouwen.push({ soort: 'visser', x: 0, y: 0, klaar: true });
+    const ids = () => T.watHelptAanEten(D).map((h) => h.id);
+    assert.ok(ids().includes('visser'), `nog een visser bij 70 mensen: ${ids()}`);
+    D.bevolking = 20;
+    assert.ok(!ids().includes('visser'), 'een is genoeg voor twintig');
+    D.behoeften.voorjaarsHonger = 30;
+    assert.ok(ids().includes('weide'), 'meer weide');
+  } finally {
+    T.optiesTerug();
+  }
+});

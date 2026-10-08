@@ -20,6 +20,9 @@
   T.RAAD_INSTELLINGEN = {
     // Of de raad er staat (de spelregel "Raad").
     aan: true,
+    // Wat helpt aan eten (T.watHelptAanEten; vraag 132): een visser per zoveel mensen, en per zoveel tegels water.
+    mensenPerVisser: 30,
+    waterPerVisser: 60,
     // Zoveel dagen vóór de inner komt, zegt de raad het.
     innerVooraf: 3,
     // Zoveel dagen na een aanval van de rovers zegt de raad wat een wachthuis doet, als er geen is.
@@ -131,10 +134,17 @@
     if (T.ONTGINNEN_INSTELLINGEN.aan && !T.inOntginning(w).length) {
       uit.push({ id: 'ontginnen', zin: 'land ontginnen voor meer akkers (een boer komt het vragen)' });
     }
+    // Vissers: een per vissersPer mensen, zolang er water genoeg is (een per waterPerVisser tegels).
     const water = w && w.tegels && w.tegels.length ? T.natuurBij(w, 'water', { x: 0, y: 0, b: w.tegels[0].length, h: w.tegels.length }, 0) : 0;
     const visser = T.GEBOUWEN.visser;
-    if (water && T.magGebouwd(D, 'visser') && !(visser.stilIn && visser.stilIn[datum.seizoen]) && !heeft(D, 'visser')) {
-      uit.push({ id: 'visser', zin: `een visser aan het water${tB} (${visser.maakt.uit.vis} vis per dag, niet in de winter)`, bouw: 'visser' });
+    const vissers = (D.gebouwen || []).filter((g) => g.soort === 'visser').length;
+    const kunnen = Math.min(Math.floor(water / IN().waterPerVisser), Math.max(1, Math.ceil((D.bevolking || 0) / IN().mensenPerVisser)));
+    if (water && T.magGebouwd(D, 'visser') && !(visser.stilIn && visser.stilIn[datum.seizoen]) && vissers < kunnen) {
+      uit.push({ id: 'visser', zin: `${vissers ? 'nog een' : 'een'} visser aan het water${tB} (${visser.maakt.uit.vis} vis per dag, niet in de winter)`, bouw: 'visser' });
+    }
+    // Meer koeien: had het dorp honger in het voorjaar, dan maken de boeren na de oogst een weide erbij (js/akkers.js).
+    if ((D.behoeften && D.behoeften.voorjaarsHonger) >= T.VELDEN_INSTELLINGEN.weideNaHonger) {
+      uit.push({ id: 'weide', zin: `meer weide voor de koeien (${T.VEE_INSTELLINGEN.melkVoorMensen} mensen melk per koe, van grasmaand tot wijnmaand; de boeren doen het na de oogst, of jij in het veldenvenster [V])` });
     }
     if (jagerHelpt(D) && T.magGebouwd(D, 'jager')) {
       uit.push({ id: 'jager', zin: `een jager${tB} (${T.GEBOUWEN.jager.maakt.uit.vlees} vlees per dag, en herten in het bos)`, bouw: 'jager' });

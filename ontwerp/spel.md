@@ -1677,6 +1677,12 @@ Nog open na deel 1 (vragen van Claude):
   ontginnen (een boer komt het vragen), een visser aan het water (niet in de winter), een jager als er herten zijn, een
   graanschuur voor het zaaigraan, en zaaigraan kopen bij de marskramer als er te weinig is om te zaaien. Het dorp vraagt
   het gebouw dat hij noemt; tot 8 okt vroeg het alleen een jager.
+- **Vee en vissers tegen de honger in het voorjaar** (8 okt; vraag 132; Marcel: "1 en 2 allebei, vee en meer vissers"):
+  had het dorp tussen lentemaand en de oogst tien dagen of meer honger, en brengt het hooi geen koe meer de winter door,
+  dan maakt een boer na de oogst een veld weide (eerst een veld dat zou rusten, anders de minst vruchtbare akker van een
+  boer met meer akkers). Daar krijgen de koeien kalveren, en een koe geeft van grasmaand tot wijnmaand melk voor vijf
+  mensen, juist als het graan op is. De raad vraagt een visser per dertig mensen, zolang er water is (een per zestig
+  tegels), en noemt de weide.
 - **Brandhout:** in wintermaand, louwmaand en sprokkelmaand (90 dagen) stookt elk huishouden van vier
   mensen 0,15 hout of turf per dag; het gehucht van 26 mensen zo'n 95 hout per winter. Het begint met
   40, en een houthakker hakt 2 per dag; de marskramer verkoopt geen hout.
