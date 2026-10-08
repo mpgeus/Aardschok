@@ -6904,6 +6904,8 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     snel als voor het binden (179 tegels in 60 dagen), er komt evenveel binnen (705 graan), alleen later; aan het eind van
     de oogst staat er nog zo'n 230 op het veld. **Marcel (8 okt): "Misschien kunnen er meer arbeiders in het dorp?"** Open:
     wie helpt bij de oogst (zie het antwoord van Claude in het gesprek; eerst een getal, "Niets erbij zonder overleg").
+    **Bezig in sessie `ccr-77327776-rqjldz`** (8 okt): de dagloners (Marcel: "Dagloners is een goed idee", "mensen in het
+    dorp", en "We beginnen met de dagloners"): wie in de oogst geen werk heeft, helpt de boeren binden en dragen.
 
 141. **Een economie binnen het dorp** (Marcel, 8 okt: "Ik denk dat we binnen in het dorp ook een economie nodig hebben. Hoe
     kopen onze inwoners anders dingen?"; open, eerst overleg). Nu is alles van het dorp samen (`D.voorraad`): een huis
