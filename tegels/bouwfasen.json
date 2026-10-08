@@ -33735,6 +33735,1046 @@
      "naam": "half-gedekt"
     }
    ]
+  },
+  "oker-kapel-leien-z": {
+   "gebouw": "kapel",
+   "beslaat": [
+    17,
+    6
+   ],
+   "bestand": "bouwfasen/oker-kapel-leien-z.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 1513,
+     "b": 737,
+     "h": 359,
+     "anker": [
+      239,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 718,
+     "y": 864,
+     "b": 691,
+     "h": 647,
+     "anker": [
+      193,
+      315
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 864,
+     "b": 716,
+     "h": 647,
+     "anker": [
+      209,
+      315
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 726,
+     "y": 0,
+     "b": 723,
+     "h": 780,
+     "anker": [
+      216,
+      448
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 724,
+     "h": 862,
+     "anker": [
+      217,
+      530
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-kapel-leien-o": {
+   "gebouw": "kapel",
+   "beslaat": [
+    6,
+    17
+   ],
+   "bestand": "bouwfasen/oker-kapel-leien-o.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 1931,
+     "b": 753,
+     "h": 357,
+     "anker": [
+      591,
+      10
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 718,
+     "y": 1072,
+     "b": 691,
+     "h": 855,
+     "anker": [
+      529,
+      508
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 1072,
+     "b": 716,
+     "h": 857,
+     "anker": [
+      545,
+      508
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 731,
+     "y": 0,
+     "b": 723,
+     "h": 880,
+     "anker": [
+      552,
+      531
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 729,
+     "h": 1070,
+     "anker": [
+      553,
+      721
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-kapel-leien-n": {
+   "gebouw": "kapel",
+   "beslaat": [
+    17,
+    6
+   ],
+   "bestand": "bouwfasen/oker-kapel-leien-n.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 1934,
+     "b": 767,
+     "h": 357,
+     "anker": [
+      239,
+      10
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 718,
+     "y": 1075,
+     "b": 691,
+     "h": 855,
+     "anker": [
+      162,
+      508
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 1075,
+     "b": 716,
+     "h": 857,
+     "anker": [
+      171,
+      508
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 726,
+     "y": 0,
+     "b": 723,
+     "h": 880,
+     "anker": [
+      171,
+      531
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 724,
+     "h": 1073,
+     "anker": [
+      171,
+      724
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-kapel-leien-w": {
+   "gebouw": "kapel",
+   "beslaat": [
+    6,
+    17
+   ],
+   "bestand": "bouwfasen/oker-kapel-leien-w.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 1516,
+     "b": 784,
+     "h": 359,
+     "anker": [
+      591,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 718,
+     "y": 867,
+     "b": 691,
+     "h": 647,
+     "anker": [
+      498,
+      315
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 867,
+     "b": 716,
+     "h": 647,
+     "anker": [
+      507,
+      315
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 731,
+     "y": 0,
+     "b": 723,
+     "h": 780,
+     "anker": [
+      507,
+      448
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 729,
+     "h": 865,
+     "anker": [
+      512,
+      533
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-kapel-baksteen-z": {
+   "gebouw": "kapel",
+   "beslaat": [
+    17,
+    6
+   ],
+   "bestand": "bouwfasen/oker-kapel-baksteen-z.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 1513,
+     "b": 737,
+     "h": 359,
+     "anker": [
+      239,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 718,
+     "y": 864,
+     "b": 691,
+     "h": 647,
+     "anker": [
+      193,
+      315
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 864,
+     "b": 716,
+     "h": 647,
+     "anker": [
+      209,
+      315
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 726,
+     "y": 0,
+     "b": 723,
+     "h": 780,
+     "anker": [
+      216,
+      448
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 724,
+     "h": 862,
+     "anker": [
+      217,
+      530
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-kapel-baksteen-o": {
+   "gebouw": "kapel",
+   "beslaat": [
+    6,
+    17
+   ],
+   "bestand": "bouwfasen/oker-kapel-baksteen-o.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 1931,
+     "b": 753,
+     "h": 357,
+     "anker": [
+      591,
+      10
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 718,
+     "y": 1072,
+     "b": 691,
+     "h": 855,
+     "anker": [
+      529,
+      508
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 1072,
+     "b": 716,
+     "h": 857,
+     "anker": [
+      545,
+      508
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 731,
+     "y": 0,
+     "b": 723,
+     "h": 880,
+     "anker": [
+      552,
+      531
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 729,
+     "h": 1070,
+     "anker": [
+      553,
+      721
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-kapel-baksteen-n": {
+   "gebouw": "kapel",
+   "beslaat": [
+    17,
+    6
+   ],
+   "bestand": "bouwfasen/oker-kapel-baksteen-n.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 1934,
+     "b": 767,
+     "h": 357,
+     "anker": [
+      239,
+      10
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 718,
+     "y": 1075,
+     "b": 691,
+     "h": 855,
+     "anker": [
+      162,
+      508
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 1075,
+     "b": 716,
+     "h": 857,
+     "anker": [
+      171,
+      508
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 726,
+     "y": 0,
+     "b": 723,
+     "h": 880,
+     "anker": [
+      171,
+      531
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 724,
+     "h": 1073,
+     "anker": [
+      171,
+      724
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "oker-kapel-baksteen-w": {
+   "gebouw": "kapel",
+   "beslaat": [
+    6,
+    17
+   ],
+   "bestand": "bouwfasen/oker-kapel-baksteen-w.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 1516,
+     "b": 784,
+     "h": 359,
+     "anker": [
+      591,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 718,
+     "y": 867,
+     "b": 691,
+     "h": 647,
+     "anker": [
+      498,
+      315
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 867,
+     "b": 716,
+     "h": 647,
+     "anker": [
+      507,
+      315
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 731,
+     "y": 0,
+     "b": 723,
+     "h": 780,
+     "anker": [
+      507,
+      448
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 729,
+     "h": 865,
+     "anker": [
+      512,
+      533
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "planken-kapel-spanen-z": {
+   "gebouw": "kapel",
+   "beslaat": [
+    17,
+    6
+   ],
+   "bestand": "bouwfasen/planken-kapel-spanen-z.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 1513,
+     "b": 737,
+     "h": 359,
+     "anker": [
+      239,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 726,
+     "y": 864,
+     "b": 691,
+     "h": 647,
+     "anker": [
+      193,
+      315
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 864,
+     "b": 724,
+     "h": 647,
+     "anker": [
+      217,
+      315
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 746,
+     "y": 0,
+     "b": 733,
+     "h": 780,
+     "anker": [
+      226,
+      448
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 744,
+     "h": 862,
+     "anker": [
+      237,
+      530
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "planken-kapel-spanen-o": {
+   "gebouw": "kapel",
+   "beslaat": [
+    6,
+    17
+   ],
+   "bestand": "bouwfasen/planken-kapel-spanen-o.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 1931,
+     "b": 753,
+     "h": 357,
+     "anker": [
+      591,
+      10
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 733,
+     "y": 1072,
+     "b": 691,
+     "h": 855,
+     "anker": [
+      529,
+      508
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 1072,
+     "b": 731,
+     "h": 857,
+     "anker": [
+      560,
+      508
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 751,
+     "y": 0,
+     "b": 735,
+     "h": 880,
+     "anker": [
+      564,
+      531
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 749,
+     "h": 1070,
+     "anker": [
+      573,
+      721
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "planken-kapel-spanen-n": {
+   "gebouw": "kapel",
+   "beslaat": [
+    17,
+    6
+   ],
+   "bestand": "bouwfasen/planken-kapel-spanen-n.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 1935,
+     "b": 767,
+     "h": 357,
+     "anker": [
+      239,
+      10
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 726,
+     "y": 1076,
+     "b": 691,
+     "h": 855,
+     "anker": [
+      162,
+      508
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 1076,
+     "b": 724,
+     "h": 857,
+     "anker": [
+      171,
+      508
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 746,
+     "y": 0,
+     "b": 733,
+     "h": 880,
+     "anker": [
+      171,
+      531
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 744,
+     "h": 1074,
+     "anker": [
+      171,
+      725
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "planken-kapel-spanen-w": {
+   "gebouw": "kapel",
+   "beslaat": [
+    6,
+    17
+   ],
+   "bestand": "bouwfasen/planken-kapel-spanen-w.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 1516,
+     "b": 784,
+     "h": 359,
+     "anker": [
+      591,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 733,
+     "y": 867,
+     "b": 691,
+     "h": 647,
+     "anker": [
+      498,
+      315
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 867,
+     "b": 731,
+     "h": 647,
+     "anker": [
+      507,
+      315
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 751,
+     "y": 0,
+     "b": 735,
+     "h": 780,
+     "anker": [
+      507,
+      448
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 749,
+     "h": 865,
+     "anker": [
+      512,
+      533
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "planken-kapel-baksteen-z": {
+   "gebouw": "kapel",
+   "beslaat": [
+    17,
+    6
+   ],
+   "bestand": "bouwfasen/planken-kapel-baksteen-z.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 1513,
+     "b": 737,
+     "h": 359,
+     "anker": [
+      239,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 726,
+     "y": 864,
+     "b": 691,
+     "h": 647,
+     "anker": [
+      193,
+      315
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 864,
+     "b": 724,
+     "h": 647,
+     "anker": [
+      217,
+      315
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 746,
+     "y": 0,
+     "b": 733,
+     "h": 780,
+     "anker": [
+      226,
+      448
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 744,
+     "h": 862,
+     "anker": [
+      237,
+      530
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "planken-kapel-baksteen-o": {
+   "gebouw": "kapel",
+   "beslaat": [
+    6,
+    17
+   ],
+   "bestand": "bouwfasen/planken-kapel-baksteen-o.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 1931,
+     "b": 753,
+     "h": 357,
+     "anker": [
+      591,
+      10
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 733,
+     "y": 1072,
+     "b": 691,
+     "h": 855,
+     "anker": [
+      529,
+      508
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 1072,
+     "b": 731,
+     "h": 857,
+     "anker": [
+      560,
+      508
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 751,
+     "y": 0,
+     "b": 735,
+     "h": 880,
+     "anker": [
+      564,
+      531
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 749,
+     "h": 1070,
+     "anker": [
+      573,
+      721
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "planken-kapel-baksteen-n": {
+   "gebouw": "kapel",
+   "beslaat": [
+    17,
+    6
+   ],
+   "bestand": "bouwfasen/planken-kapel-baksteen-n.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 1935,
+     "b": 767,
+     "h": 357,
+     "anker": [
+      239,
+      10
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 726,
+     "y": 1076,
+     "b": 691,
+     "h": 855,
+     "anker": [
+      162,
+      508
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 1076,
+     "b": 724,
+     "h": 857,
+     "anker": [
+      171,
+      508
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 746,
+     "y": 0,
+     "b": 733,
+     "h": 880,
+     "anker": [
+      171,
+      531
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 744,
+     "h": 1074,
+     "anker": [
+      171,
+      725
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "planken-kapel-baksteen-w": {
+   "gebouw": "kapel",
+   "beslaat": [
+    6,
+    17
+   ],
+   "bestand": "bouwfasen/planken-kapel-baksteen-w.png",
+   "fasen": [
+    {
+     "x": 0,
+     "y": 1516,
+     "b": 784,
+     "h": 359,
+     "anker": [
+      591,
+      27
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 733,
+     "y": 867,
+     "b": 691,
+     "h": 647,
+     "anker": [
+      498,
+      315
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 867,
+     "b": 731,
+     "h": 647,
+     "anker": [
+      507,
+      315
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 751,
+     "y": 0,
+     "b": 735,
+     "h": 780,
+     "anker": [
+      507,
+      448
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 749,
+     "h": 865,
+     "anker": [
+      512,
+      533
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
   }
  }
 }
