@@ -4308,7 +4308,6 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
 114. **Gebouwen in verhouding, en een woontoren** (Marcel, 3 okt, vijfentwintigste sessie: "Gebouwen moeten in
     verhouding komen. Een herberg is vaak veel groter dan een huis. Een kapel zelfde verhaal. Een warehouse ook.
     Misschien moeten we ook een woontoren hebben"; plan van Claude; open).
-    **Bezig in sessie `claude/project-thread-cyjrql`** (7 okt): stap 3, de grote gebouwen (de herberg, de kapel, de woontoren en het huis van de schout, draaibaar); gebouwd op de branch, wacht op Marcel om in `main` te zetten.
     **Hoe het nu is:** een huis is 7 bij 5 tot 10 bij 7 tegels, een boerderij 6 bij 8 tot 9 bij 8. De herberg is 9 bij 7
     (die op de kaart 8 bij 11), nauwelijks groter dan een huis. De kapel is 5 bij 10, smal, en met zijn dak niet hoger
     dan een huis. Het pakhuis en de tiendschuur lenen een blokhutschuur van 5 bij 7, kleiner dan een huis; de markt en
