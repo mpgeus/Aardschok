@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.0" name="huizen" tilewidth="771" tileheight="1550" tilecount="640" columns="0" objectalignment="bottom">
+<tileset version="1.10" tiledversion="1.11.0" name="huizen" tilewidth="771" tileheight="1295" tilecount="640" columns="0" objectalignment="bottom">
  <grid orientation="orthogonal" width="1" height="1"/>
  <properties>
   <property name="notitie" value="De huizen van de huizenbouwer (huizen.cjs): de hutten, huizen en boerderijen van ronde 4b en het huis van de schout, en de huizen van de bouwstijlen in hun vier standen. Zet ze neer op de tegel linksboven van hun voet (&quot;beslaat&quot;); &quot;deur&quot; is de tegel voor de deur, gerekend vanaf die tegel. Een plaatje per tekening (tegels/huizen/): het spel laadt een tekening pas als hij op de kaart staat. In Tiled staan de voorwerpen daardoor niet precies op hun plek; het spel zet ze neer met hun eigen anker (tegels.json)."/>
@@ -4100,7 +4100,7 @@
     <property name="beslaat" value="18x6"/>
     <property name="deur" value="14,6"/>
   </properties>
-  <image source="huizen/wit-kapel-leien-z.png" width="769" height="1042"/>
+  <image source="huizen/wit-kapel-leien-z.png" width="769" height="811"/>
  </tile>
  <tile id="461">
   <properties>
@@ -4109,7 +4109,7 @@
     <property name="beslaat" value="6x18"/>
     <property name="deur" value="6,2"/>
   </properties>
-  <image source="huizen/wit-kapel-leien-o.png" width="771" height="1250"/>
+  <image source="huizen/wit-kapel-leien-o.png" width="771" height="997"/>
  </tile>
  <tile id="462">
   <properties>
@@ -4118,7 +4118,7 @@
     <property name="beslaat" value="18x6"/>
     <property name="deur" value="2,-1"/>
   </properties>
-  <image source="huizen/wit-kapel-leien-n.png" width="769" height="1255"/>
+  <image source="huizen/wit-kapel-leien-n.png" width="769" height="1000"/>
  </tile>
  <tile id="463">
   <properties>
@@ -4127,7 +4127,7 @@
     <property name="beslaat" value="6x18"/>
     <property name="deur" value="-1,14"/>
   </properties>
-  <image source="huizen/wit-kapel-leien-w.png" width="771" height="1047"/>
+  <image source="huizen/wit-kapel-leien-w.png" width="771" height="811"/>
  </tile>
  <tile id="464">
   <properties>
@@ -4136,7 +4136,7 @@
     <property name="beslaat" value="18x6"/>
     <property name="deur" value="14,6"/>
   </properties>
-  <image source="huizen/wit-kapel-baksteen-z.png" width="769" height="1042"/>
+  <image source="huizen/wit-kapel-baksteen-z.png" width="769" height="811"/>
  </tile>
  <tile id="465">
   <properties>
@@ -4145,7 +4145,7 @@
     <property name="beslaat" value="6x18"/>
     <property name="deur" value="6,2"/>
   </properties>
-  <image source="huizen/wit-kapel-baksteen-o.png" width="771" height="1250"/>
+  <image source="huizen/wit-kapel-baksteen-o.png" width="771" height="997"/>
  </tile>
  <tile id="466">
   <properties>
@@ -4154,7 +4154,7 @@
     <property name="beslaat" value="18x6"/>
     <property name="deur" value="2,-1"/>
   </properties>
-  <image source="huizen/wit-kapel-baksteen-n.png" width="769" height="1255"/>
+  <image source="huizen/wit-kapel-baksteen-n.png" width="769" height="1000"/>
  </tile>
  <tile id="467">
   <properties>
@@ -4163,7 +4163,7 @@
     <property name="beslaat" value="6x18"/>
     <property name="deur" value="-1,14"/>
   </properties>
-  <image source="huizen/wit-kapel-baksteen-w.png" width="771" height="1047"/>
+  <image source="huizen/wit-kapel-baksteen-w.png" width="771" height="811"/>
  </tile>
  <tile id="468">
   <properties>
@@ -4172,7 +4172,7 @@
     <property name="beslaat" value="5x5"/>
     <property name="deur" value="2,5"/>
   </properties>
-  <image source="huizen/wit-woontoren-pannen-z.png" width="348" height="720"/>
+  <image source="huizen/wit-woontoren-pannen-z.png" width="421" height="579"/>
  </tile>
  <tile id="469">
   <properties>
@@ -4181,7 +4181,7 @@
     <property name="beslaat" value="5x5"/>
     <property name="deur" value="5,2"/>
   </properties>
-  <image source="huizen/wit-woontoren-pannen-o.png" width="342" height="717"/>
+  <image source="huizen/wit-woontoren-pannen-o.png" width="421" height="574"/>
  </tile>
  <tile id="470">
   <properties>
@@ -4190,7 +4190,7 @@
     <property name="beslaat" value="5x5"/>
     <property name="deur" value="2,-1"/>
   </properties>
-  <image source="huizen/wit-woontoren-pannen-n.png" width="348" height="719"/>
+  <image source="huizen/wit-woontoren-pannen-n.png" width="421" height="574"/>
  </tile>
  <tile id="471">
   <properties>
@@ -4199,7 +4199,7 @@
     <property name="beslaat" value="5x5"/>
     <property name="deur" value="-1,2"/>
   </properties>
-  <image source="huizen/wit-woontoren-pannen-w.png" width="342" height="723"/>
+  <image source="huizen/wit-woontoren-pannen-w.png" width="421" height="588"/>
  </tile>
  <tile id="472">
   <properties>
@@ -4208,7 +4208,7 @@
     <property name="beslaat" value="5x5"/>
     <property name="deur" value="2,5"/>
   </properties>
-  <image source="huizen/wit-woontoren-baksteen-z.png" width="348" height="720"/>
+  <image source="huizen/wit-woontoren-baksteen-z.png" width="421" height="579"/>
  </tile>
  <tile id="473">
   <properties>
@@ -4217,7 +4217,7 @@
     <property name="beslaat" value="5x5"/>
     <property name="deur" value="5,2"/>
   </properties>
-  <image source="huizen/wit-woontoren-baksteen-o.png" width="342" height="717"/>
+  <image source="huizen/wit-woontoren-baksteen-o.png" width="421" height="574"/>
  </tile>
  <tile id="474">
   <properties>
@@ -4226,7 +4226,7 @@
     <property name="beslaat" value="5x5"/>
     <property name="deur" value="2,-1"/>
   </properties>
-  <image source="huizen/wit-woontoren-baksteen-n.png" width="348" height="719"/>
+  <image source="huizen/wit-woontoren-baksteen-n.png" width="421" height="574"/>
  </tile>
  <tile id="475">
   <properties>
@@ -4235,7 +4235,7 @@
     <property name="beslaat" value="5x5"/>
     <property name="deur" value="-1,2"/>
   </properties>
-  <image source="huizen/wit-woontoren-baksteen-w.png" width="342" height="723"/>
+  <image source="huizen/wit-woontoren-baksteen-w.png" width="421" height="588"/>
  </tile>
  <tile id="476">
   <properties>
@@ -4388,7 +4388,7 @@
     <property name="beslaat" value="17x6"/>
     <property name="deur" value="14,6"/>
   </properties>
-  <image source="huizen/oker-kapel-leien-z.png" width="726" height="1341"/>
+  <image source="huizen/oker-kapel-leien-z.png" width="729" height="1086"/>
  </tile>
  <tile id="493">
   <properties>
@@ -4397,7 +4397,7 @@
     <property name="beslaat" value="6x17"/>
     <property name="deur" value="6,2"/>
   </properties>
-  <image source="huizen/oker-kapel-leien-o.png" width="735" height="1546"/>
+  <image source="huizen/oker-kapel-leien-o.png" width="735" height="1292"/>
  </tile>
  <tile id="494">
   <properties>
@@ -4406,7 +4406,7 @@
     <property name="beslaat" value="17x6"/>
     <property name="deur" value="2,-1"/>
   </properties>
-  <image source="huizen/oker-kapel-leien-n.png" width="726" height="1550"/>
+  <image source="huizen/oker-kapel-leien-n.png" width="729" height="1295"/>
  </tile>
  <tile id="495">
   <properties>
@@ -4415,7 +4415,7 @@
     <property name="beslaat" value="6x17"/>
     <property name="deur" value="-1,14"/>
   </properties>
-  <image source="huizen/oker-kapel-leien-w.png" width="735" height="1346"/>
+  <image source="huizen/oker-kapel-leien-w.png" width="735" height="1089"/>
  </tile>
  <tile id="496">
   <properties>
@@ -4424,7 +4424,7 @@
     <property name="beslaat" value="17x6"/>
     <property name="deur" value="14,6"/>
   </properties>
-  <image source="huizen/oker-kapel-baksteen-z.png" width="726" height="1341"/>
+  <image source="huizen/oker-kapel-baksteen-z.png" width="729" height="1086"/>
  </tile>
  <tile id="497">
   <properties>
@@ -4433,7 +4433,7 @@
     <property name="beslaat" value="6x17"/>
     <property name="deur" value="6,2"/>
   </properties>
-  <image source="huizen/oker-kapel-baksteen-o.png" width="735" height="1546"/>
+  <image source="huizen/oker-kapel-baksteen-o.png" width="735" height="1292"/>
  </tile>
  <tile id="498">
   <properties>
@@ -4442,7 +4442,7 @@
     <property name="beslaat" value="17x6"/>
     <property name="deur" value="2,-1"/>
   </properties>
-  <image source="huizen/oker-kapel-baksteen-n.png" width="726" height="1550"/>
+  <image source="huizen/oker-kapel-baksteen-n.png" width="729" height="1295"/>
  </tile>
  <tile id="499">
   <properties>
@@ -4451,7 +4451,7 @@
     <property name="beslaat" value="6x17"/>
     <property name="deur" value="-1,14"/>
   </properties>
-  <image source="huizen/oker-kapel-baksteen-w.png" width="735" height="1346"/>
+  <image source="huizen/oker-kapel-baksteen-w.png" width="735" height="1089"/>
  </tile>
  <tile id="500">
   <properties>
@@ -4460,7 +4460,7 @@
     <property name="beslaat" value="5x5"/>
     <property name="deur" value="2,5"/>
   </properties>
-  <image source="huizen/oker-woontoren-pannen-z.png" width="363" height="781"/>
+  <image source="huizen/oker-woontoren-pannen-z.png" width="421" height="579"/>
  </tile>
  <tile id="501">
   <properties>
@@ -4469,7 +4469,7 @@
     <property name="beslaat" value="5x5"/>
     <property name="deur" value="5,2"/>
   </properties>
-  <image source="huizen/oker-woontoren-pannen-o.png" width="358" height="786"/>
+  <image source="huizen/oker-woontoren-pannen-o.png" width="421" height="574"/>
  </tile>
  <tile id="502">
   <properties>
@@ -4478,7 +4478,7 @@
     <property name="beslaat" value="5x5"/>
     <property name="deur" value="2,-1"/>
   </properties>
-  <image source="huizen/oker-woontoren-pannen-n.png" width="362" height="795"/>
+  <image source="huizen/oker-woontoren-pannen-n.png" width="421" height="574"/>
  </tile>
  <tile id="503">
   <properties>
@@ -4487,7 +4487,7 @@
     <property name="beslaat" value="5x5"/>
     <property name="deur" value="-1,2"/>
   </properties>
-  <image source="huizen/oker-woontoren-pannen-w.png" width="358" height="787"/>
+  <image source="huizen/oker-woontoren-pannen-w.png" width="421" height="588"/>
  </tile>
  <tile id="504">
   <properties>
@@ -4496,7 +4496,7 @@
     <property name="beslaat" value="5x5"/>
     <property name="deur" value="2,5"/>
   </properties>
-  <image source="huizen/oker-woontoren-baksteen-z.png" width="363" height="781"/>
+  <image source="huizen/oker-woontoren-baksteen-z.png" width="421" height="579"/>
  </tile>
  <tile id="505">
   <properties>
@@ -4505,7 +4505,7 @@
     <property name="beslaat" value="5x5"/>
     <property name="deur" value="5,2"/>
   </properties>
-  <image source="huizen/oker-woontoren-baksteen-o.png" width="358" height="786"/>
+  <image source="huizen/oker-woontoren-baksteen-o.png" width="421" height="574"/>
  </tile>
  <tile id="506">
   <properties>
@@ -4514,7 +4514,7 @@
     <property name="beslaat" value="5x5"/>
     <property name="deur" value="2,-1"/>
   </properties>
-  <image source="huizen/oker-woontoren-baksteen-n.png" width="362" height="795"/>
+  <image source="huizen/oker-woontoren-baksteen-n.png" width="421" height="574"/>
  </tile>
  <tile id="507">
   <properties>
@@ -4523,7 +4523,7 @@
     <property name="beslaat" value="5x5"/>
     <property name="deur" value="-1,2"/>
   </properties>
-  <image source="huizen/oker-woontoren-baksteen-w.png" width="358" height="787"/>
+  <image source="huizen/oker-woontoren-baksteen-w.png" width="421" height="588"/>
  </tile>
  <tile id="508">
   <properties>
@@ -4671,39 +4671,27 @@
  </tile>
  <tile id="524">
   <properties>
-    <property name="naam" value="planken-kapel-leien-z"/>
-    <property name="vast" type="bool" value="true"/>
-    <property name="beslaat" value="17x6"/>
-    <property name="deur" value="14,6"/>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
   </properties>
-  <image source="huizen/planken-kapel-leien-z.png" width="726" height="1341"/>
  </tile>
  <tile id="525">
   <properties>
-    <property name="naam" value="planken-kapel-leien-o"/>
-    <property name="vast" type="bool" value="true"/>
-    <property name="beslaat" value="6x17"/>
-    <property name="deur" value="6,2"/>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
   </properties>
-  <image source="huizen/planken-kapel-leien-o.png" width="735" height="1546"/>
  </tile>
  <tile id="526">
   <properties>
-    <property name="naam" value="planken-kapel-leien-n"/>
-    <property name="vast" type="bool" value="true"/>
-    <property name="beslaat" value="17x6"/>
-    <property name="deur" value="2,-1"/>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
   </properties>
-  <image source="huizen/planken-kapel-leien-n.png" width="726" height="1550"/>
  </tile>
  <tile id="527">
   <properties>
-    <property name="naam" value="planken-kapel-leien-w"/>
-    <property name="vast" type="bool" value="true"/>
-    <property name="beslaat" value="6x17"/>
-    <property name="deur" value="-1,14"/>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
   </properties>
-  <image source="huizen/planken-kapel-leien-w.png" width="735" height="1346"/>
  </tile>
  <tile id="528">
   <properties>
@@ -4712,7 +4700,7 @@
     <property name="beslaat" value="17x6"/>
     <property name="deur" value="14,6"/>
   </properties>
-  <image source="huizen/planken-kapel-baksteen-z.png" width="726" height="1341"/>
+  <image source="huizen/planken-kapel-baksteen-z.png" width="749" height="1086"/>
  </tile>
  <tile id="529">
   <properties>
@@ -4721,7 +4709,7 @@
     <property name="beslaat" value="6x17"/>
     <property name="deur" value="6,2"/>
   </properties>
-  <image source="huizen/planken-kapel-baksteen-o.png" width="735" height="1546"/>
+  <image source="huizen/planken-kapel-baksteen-o.png" width="755" height="1292"/>
  </tile>
  <tile id="530">
   <properties>
@@ -4730,7 +4718,7 @@
     <property name="beslaat" value="17x6"/>
     <property name="deur" value="2,-1"/>
   </properties>
-  <image source="huizen/planken-kapel-baksteen-n.png" width="726" height="1550"/>
+  <image source="huizen/planken-kapel-baksteen-n.png" width="749" height="1295"/>
  </tile>
  <tile id="531">
   <properties>
@@ -4739,7 +4727,7 @@
     <property name="beslaat" value="6x17"/>
     <property name="deur" value="-1,14"/>
   </properties>
-  <image source="huizen/planken-kapel-baksteen-w.png" width="735" height="1346"/>
+  <image source="huizen/planken-kapel-baksteen-w.png" width="755" height="1089"/>
  </tile>
  <tile id="532">
   <properties>
@@ -4748,7 +4736,7 @@
     <property name="beslaat" value="5x5"/>
     <property name="deur" value="2,5"/>
   </properties>
-  <image source="huizen/planken-woontoren-pannen-z.png" width="348" height="720"/>
+  <image source="huizen/planken-woontoren-pannen-z.png" width="421" height="579"/>
  </tile>
  <tile id="533">
   <properties>
@@ -4757,7 +4745,7 @@
     <property name="beslaat" value="5x5"/>
     <property name="deur" value="5,2"/>
   </properties>
-  <image source="huizen/planken-woontoren-pannen-o.png" width="342" height="717"/>
+  <image source="huizen/planken-woontoren-pannen-o.png" width="421" height="574"/>
  </tile>
  <tile id="534">
   <properties>
@@ -4766,7 +4754,7 @@
     <property name="beslaat" value="5x5"/>
     <property name="deur" value="2,-1"/>
   </properties>
-  <image source="huizen/planken-woontoren-pannen-n.png" width="348" height="719"/>
+  <image source="huizen/planken-woontoren-pannen-n.png" width="421" height="574"/>
  </tile>
  <tile id="535">
   <properties>
@@ -4775,7 +4763,7 @@
     <property name="beslaat" value="5x5"/>
     <property name="deur" value="-1,2"/>
   </properties>
-  <image source="huizen/planken-woontoren-pannen-w.png" width="342" height="723"/>
+  <image source="huizen/planken-woontoren-pannen-w.png" width="421" height="588"/>
  </tile>
  <tile id="536">
   <properties>
@@ -4784,7 +4772,7 @@
     <property name="beslaat" value="5x5"/>
     <property name="deur" value="2,5"/>
   </properties>
-  <image source="huizen/planken-woontoren-baksteen-z.png" width="348" height="720"/>
+  <image source="huizen/planken-woontoren-baksteen-z.png" width="421" height="579"/>
  </tile>
  <tile id="537">
   <properties>
@@ -4793,7 +4781,7 @@
     <property name="beslaat" value="5x5"/>
     <property name="deur" value="5,2"/>
   </properties>
-  <image source="huizen/planken-woontoren-baksteen-o.png" width="342" height="717"/>
+  <image source="huizen/planken-woontoren-baksteen-o.png" width="421" height="574"/>
  </tile>
  <tile id="538">
   <properties>
@@ -4802,7 +4790,7 @@
     <property name="beslaat" value="5x5"/>
     <property name="deur" value="2,-1"/>
   </properties>
-  <image source="huizen/planken-woontoren-baksteen-n.png" width="348" height="719"/>
+  <image source="huizen/planken-woontoren-baksteen-n.png" width="421" height="574"/>
  </tile>
  <tile id="539">
   <properties>
@@ -4811,7 +4799,7 @@
     <property name="beslaat" value="5x5"/>
     <property name="deur" value="-1,2"/>
   </properties>
-  <image source="huizen/planken-woontoren-baksteen-w.png" width="342" height="723"/>
+  <image source="huizen/planken-woontoren-baksteen-w.png" width="421" height="588"/>
  </tile>
  <tile id="540">
   <properties>
@@ -4964,7 +4952,7 @@
     <property name="beslaat" value="18x6"/>
     <property name="deur" value="14,6"/>
   </properties>
-  <image source="huizen/roze-kapel-leien-z.png" width="769" height="1042"/>
+  <image source="huizen/roze-kapel-leien-z.png" width="769" height="811"/>
  </tile>
  <tile id="557">
   <properties>
@@ -4973,7 +4961,7 @@
     <property name="beslaat" value="6x18"/>
     <property name="deur" value="6,2"/>
   </properties>
-  <image source="huizen/roze-kapel-leien-o.png" width="771" height="1250"/>
+  <image source="huizen/roze-kapel-leien-o.png" width="771" height="997"/>
  </tile>
  <tile id="558">
   <properties>
@@ -4982,7 +4970,7 @@
     <property name="beslaat" value="18x6"/>
     <property name="deur" value="2,-1"/>
   </properties>
-  <image source="huizen/roze-kapel-leien-n.png" width="769" height="1255"/>
+  <image source="huizen/roze-kapel-leien-n.png" width="769" height="1000"/>
  </tile>
  <tile id="559">
   <properties>
@@ -4991,7 +4979,7 @@
     <property name="beslaat" value="6x18"/>
     <property name="deur" value="-1,14"/>
   </properties>
-  <image source="huizen/roze-kapel-leien-w.png" width="771" height="1047"/>
+  <image source="huizen/roze-kapel-leien-w.png" width="771" height="811"/>
  </tile>
  <tile id="560">
   <properties>
@@ -5000,7 +4988,7 @@
     <property name="beslaat" value="18x6"/>
     <property name="deur" value="14,6"/>
   </properties>
-  <image source="huizen/roze-kapel-baksteen-z.png" width="769" height="1042"/>
+  <image source="huizen/roze-kapel-baksteen-z.png" width="769" height="811"/>
  </tile>
  <tile id="561">
   <properties>
@@ -5009,7 +4997,7 @@
     <property name="beslaat" value="6x18"/>
     <property name="deur" value="6,2"/>
   </properties>
-  <image source="huizen/roze-kapel-baksteen-o.png" width="771" height="1250"/>
+  <image source="huizen/roze-kapel-baksteen-o.png" width="771" height="997"/>
  </tile>
  <tile id="562">
   <properties>
@@ -5018,7 +5006,7 @@
     <property name="beslaat" value="18x6"/>
     <property name="deur" value="2,-1"/>
   </properties>
-  <image source="huizen/roze-kapel-baksteen-n.png" width="769" height="1255"/>
+  <image source="huizen/roze-kapel-baksteen-n.png" width="769" height="1000"/>
  </tile>
  <tile id="563">
   <properties>
@@ -5027,7 +5015,7 @@
     <property name="beslaat" value="6x18"/>
     <property name="deur" value="-1,14"/>
   </properties>
-  <image source="huizen/roze-kapel-baksteen-w.png" width="771" height="1047"/>
+  <image source="huizen/roze-kapel-baksteen-w.png" width="771" height="811"/>
  </tile>
  <tile id="564">
   <properties>
@@ -5036,7 +5024,7 @@
     <property name="beslaat" value="5x5"/>
     <property name="deur" value="2,5"/>
   </properties>
-  <image source="huizen/roze-woontoren-pannen-z.png" width="363" height="781"/>
+  <image source="huizen/roze-woontoren-pannen-z.png" width="421" height="579"/>
  </tile>
  <tile id="565">
   <properties>
@@ -5045,7 +5033,7 @@
     <property name="beslaat" value="5x5"/>
     <property name="deur" value="5,2"/>
   </properties>
-  <image source="huizen/roze-woontoren-pannen-o.png" width="358" height="786"/>
+  <image source="huizen/roze-woontoren-pannen-o.png" width="421" height="574"/>
  </tile>
  <tile id="566">
   <properties>
@@ -5054,7 +5042,7 @@
     <property name="beslaat" value="5x5"/>
     <property name="deur" value="2,-1"/>
   </properties>
-  <image source="huizen/roze-woontoren-pannen-n.png" width="362" height="795"/>
+  <image source="huizen/roze-woontoren-pannen-n.png" width="421" height="574"/>
  </tile>
  <tile id="567">
   <properties>
@@ -5063,7 +5051,7 @@
     <property name="beslaat" value="5x5"/>
     <property name="deur" value="-1,2"/>
   </properties>
-  <image source="huizen/roze-woontoren-pannen-w.png" width="358" height="787"/>
+  <image source="huizen/roze-woontoren-pannen-w.png" width="421" height="588"/>
  </tile>
  <tile id="568">
   <properties>
@@ -5072,7 +5060,7 @@
     <property name="beslaat" value="5x5"/>
     <property name="deur" value="2,5"/>
   </properties>
-  <image source="huizen/roze-woontoren-baksteen-z.png" width="363" height="781"/>
+  <image source="huizen/roze-woontoren-baksteen-z.png" width="421" height="579"/>
  </tile>
  <tile id="569">
   <properties>
@@ -5081,7 +5069,7 @@
     <property name="beslaat" value="5x5"/>
     <property name="deur" value="5,2"/>
   </properties>
-  <image source="huizen/roze-woontoren-baksteen-o.png" width="358" height="786"/>
+  <image source="huizen/roze-woontoren-baksteen-o.png" width="421" height="574"/>
  </tile>
  <tile id="570">
   <properties>
@@ -5090,7 +5078,7 @@
     <property name="beslaat" value="5x5"/>
     <property name="deur" value="2,-1"/>
   </properties>
-  <image source="huizen/roze-woontoren-baksteen-n.png" width="362" height="795"/>
+  <image source="huizen/roze-woontoren-baksteen-n.png" width="421" height="574"/>
  </tile>
  <tile id="571">
   <properties>
@@ -5099,7 +5087,7 @@
     <property name="beslaat" value="5x5"/>
     <property name="deur" value="-1,2"/>
   </properties>
-  <image source="huizen/roze-woontoren-baksteen-w.png" width="358" height="787"/>
+  <image source="huizen/roze-woontoren-baksteen-w.png" width="421" height="588"/>
  </tile>
  <tile id="572">
   <properties>
@@ -5139,27 +5127,39 @@
  </tile>
  <tile id="576">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="planken-kapel-spanen-z"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="17x6"/>
+    <property name="deur" value="14,6"/>
   </properties>
+  <image source="huizen/planken-kapel-spanen-z.png" width="749" height="1086"/>
  </tile>
  <tile id="577">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="planken-kapel-spanen-o"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="6x17"/>
+    <property name="deur" value="6,2"/>
   </properties>
+  <image source="huizen/planken-kapel-spanen-o.png" width="755" height="1292"/>
  </tile>
  <tile id="578">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="planken-kapel-spanen-n"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="17x6"/>
+    <property name="deur" value="2,-1"/>
   </properties>
+  <image source="huizen/planken-kapel-spanen-n.png" width="749" height="1295"/>
  </tile>
  <tile id="579">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="planken-kapel-spanen-w"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="6x17"/>
+    <property name="deur" value="-1,14"/>
   </properties>
+  <image source="huizen/planken-kapel-spanen-w.png" width="755" height="1089"/>
  </tile>
  <tile id="580">
   <properties>

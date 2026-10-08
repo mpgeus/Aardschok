@@ -277,8 +277,8 @@ function stijlHuizen() {
     for (const vorm of S.boerderij) zet('boerderij', vorm, vormVan(vorm), daken, { uit: metLuiken(vormVan(vorm)) });
     // de grote gebouwen (vraag 114, stap 3; grootGebouw hieronder): de kleine herberg van het gehucht, de grote waar
     // hij in een dorp toe doorgroeit (leien, pannen), de kapel en de woontoren in de steen van de stijl of in baksteen
-    // (met een steenbakkerij), en het huis van de schout. Nog zonder bouwfasen: de kapel en de woontoren zijn een toren
-    // of een gebouw uit delen, en de bouwfasen kennen alleen een huis; niemand bouwt het huis van de schout.
+    // (met een steenbakkerij), en het huis van de schout. Alle met bouwfasen (de kapel per deel, fasenVanDelen), behalve
+    // het huis van de schout: dat bouwt niemand.
     const groot = (soort, vorm, welk, daken, fasen) => {
       for (const [dak, steen] of daken) {
         for (const [stand, st] of Object.entries(STANDEN)) {
@@ -293,8 +293,10 @@ function stijlHuizen() {
     };
     groot('herberg', 'herberg1', 'herbergKlein', [[S.dak]], true);
     groot('herberg', 'herberg2', 'herberg', [['leien'], ['pannen']], true);
-    groot('kapel', 'kapel', 'kapel', [['leien', S.steen], ['leien', 'baksteen']], false);
-    groot('woontoren', 'woontoren', 'woontoren', [['pannen', S.steen], ['pannen', 'baksteen']], false);
+    // de kapel van planken onder spanen (Marcel, 8 okt, op de proefplaat: "Veel beter zo")
+    const kapelDak = stijl === 'planken' ? 'spanen' : 'leien';
+    groot('kapel', 'kapel', 'kapel', [[kapelDak, S.steen], [kapelDak, 'baksteen']], true);
+    groot('woontoren', 'woontoren', 'woontoren', [['pannen', S.steen], ['pannen', 'baksteen']], true);
     groot('schout', 'schoutshuis', 'schout', [[S.dak, S.steen]], false);
   }
   return uit;
@@ -327,7 +329,8 @@ function wereldVan(spec) {
 // draai: het huis zoveel kwartslagen gedraaid (Tr.draaiNaar; een stand van een stijl, vraag 124, B): dan is alles
 // gemeten zoals het in het beeld ligt, de voet, de hoek en de deur.
 const Z_VOET = [10];
-function meetHuis(W, draai = 0) {
+// o.zonderDeur: alleen de voet en de hoek (een deel zonder deur, zoals het schip van een kapel: fasenVanDelen).
+function meetHuis(W, draai = 0, o = {}) {
   const H = W.H;
   // een punt van het huis zoals het in het beeld ligt, en terug
   const naar = (p) => (draai ? Tr.draaiNaar(draai, p) : p);
@@ -395,6 +398,7 @@ function meetHuis(W, draai = 0) {
   const voet = [i1 - i0 + 1, j1 - j0 + 1];
   // de hoek van de voet: de achterste hoek van de eerste bezette tegel
   const hoek = [gx + i0, gy + j0];
+  if (o.zonderDeur) return { voet, hoek };
   // De tegel vóór de deur: een halve tegel voor de muur, en staat daar nog iets van het huis (een
   // aanbouw die verder uitsteekt dan de muur met de deur), dan verder naar buiten tot hij vrij is.
   // deurVer: hoeveel tegels die tegel van de deur zelf af ligt. Meer dan één: de voet, een
@@ -708,7 +712,7 @@ function fasenVanHuis(W, m) {
   // per vleugel dwars op zijn nok; en een nokbalk. `boven`: alleen boven die hoogte (fase 5).
   const dakDeel = groepen.filter((g) => HET_DAK.has(g.naam)).flatMap((g) => g.delen)[0];
   const latten = (N, boven = -Infinity) => {
-    if (!dakDeel) return;
+    if (!dakDeel || H.plat) return; // een toren heeft geen latten: zijn dak komt in één keer (de kapel, vraag 114, stap 3)
     const G = N.groep('dakgebinte');
     const fD = dakDeel.f;
     for (const V of H.vleugels) {
@@ -728,12 +732,12 @@ function fasenVanHuis(W, m) {
       });
     }
   };
-  const zHalf = H.voetZ + (H.zNmax - H.voetZ) * 0.5;
+  const zHalf = H.plat ? H.zDak + ((H.zTop ?? H.zDak) - H.zDak) * 0.5 : H.voetZ + (H.zNmax - H.voetZ) * 0.5;
   const zMuur = z0 + (zTop - z0) * 0.62;
   // Zonder dak zie je de bovenkant van de muren, die schuin onder het riet loopt: die is de zolder,
   // en donker, anders lijkt het tussen de latten een wit dak.
   const zolder = (p, naam) => {
-    if (naam !== 'romp' || !dakDeel) return p;
+    if (naam !== 'romp' || !dakDeel || H.plat) return p; // een toren: zijn topgevels zijn van steen, geen zolder
     const m = p.m;
     return { ...p, m: (x, y, z) => (z > zTop - 4 && dakDeel.f(x, y, z) < 6 ? 'donker' : typeof m === 'function' ? m(x, y, z) : m) };
   };
@@ -764,14 +768,24 @@ function fasenVanHuis(W, m) {
 // cel voor alle vijf (strak om wat ze samen tekenen), met het anker op de achterste hoek van de voet,
 // zodat het huis niet verspringt terwijl het groeit. In de eerste fase liggen er een stapel hout en
 // een hoop steen voor de voet, een maat groter dan anders, net als bij de oude gebouwen.
+// Een gebouw uit delen (de kapel met haar toren; vraag 114, stap 3) bouwt elk deel op zijn eigen manier, met zijn eigen
+// steiger, en elke fase is de delen samen (HS.samen), zoals het afgewerkte gebouw (wereldVan).
+function fasenVanDelen(spec) {
+  const delen = spec.delen.map((d) => {
+    const Wd = HS.huis(d.spec.zaad, d.spec);
+    return { fasen: fasenVanHuis(Wd, meetHuis(Wd, 0, { zonderDeur: true })), plek: d.plek };
+  });
+  return FASEN.map((_, i) => HS.samen(delen.map((d) => ({ W: d.fasen[i], plek: d.plek }))));
+}
+
 function renderHuisFasen(naam) {
   const spec = HUIZEN[naam];
   const draai = spec.draai || 0;
-  const W = HS.huis(spec.zaad, spec);
+  const W = wereldVan(spec);
   const H = W.H;
   // de voet zoals hij in het beeld ligt (het anker, de stapels), en die van het huis zelf (de steiger)
   const m = meetHuis(W, draai);
-  const werelden = fasenVanHuis(W, draai ? meetHuis(W) : m);
+  const werelden = spec.delen ? fasenVanDelen(spec) : fasenVanHuis(W, draai ? meetHuis(W) : m);
   const s = 1.6;
   const x0 = m.hoek[0];
   const y1 = m.hoek[1] + m.voet[1];
@@ -786,7 +800,16 @@ function renderHuisFasen(naam) {
   extra.push([X1 + 30, Y1 + 30, 0], [X1 + 30, m.hoek[1] * TEGEL, H.zM + 40], [m.hoek[0] * TEGEL, Y1 + 30, H.zM + 40]);
   // rondom staat de steiger ook achter
   if (H.rondom) extra.push([m.hoek[0] * TEGEL - 30, m.hoek[1] * TEGEL - 30, H.zM + 40], [m.hoek[0] * TEGEL - 30, Y1 + 30, 0], [X1 + 30, m.hoek[1] * TEGEL - 30, 0]);
-  const kd = HS.kaderVan(H, extra, draai);
+  let kd = HS.kaderVan(H, extra, draai);
+  if (W.delen) {
+    // de delen samen, en de steiger om elk deel: een flinke rand
+    const ks = HS.kaderSamen(W, draai);
+    const x0 = Math.min(kd.x0, ks.x0) - 40;
+    const x1 = Math.max(kd.x1, ks.x1) + 40;
+    const y0 = Math.min(kd.y0, ks.y0) - 40;
+    const y1 = Math.max(kd.y1, ks.y1) + 20;
+    kd = { x0, x1, y0, y1, b: x1 - x0, h: y1 - y0 };
+  }
   const RAND = 12;
   const b = Math.ceil(kd.b + RAND * 2);
   const h = Math.ceil(kd.h + RAND * 2);
