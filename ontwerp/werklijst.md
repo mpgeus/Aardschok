@@ -6345,6 +6345,13 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     vijf vragen voor een tester staan in `speelbaar.md` (bij de eerste proefversie, 33d), het eindscherm komt bij het
     jaarboek, en de trailer en de pitch staan in `commercieel.md`. Het ontwerp: `spel.md`, "Informatie, de zitting en
     mensen die onthouden".
+    **Het plan voor de proef** (Claude, 8 okt, voor Marcel): de keten in vijf stappen. 's Nachts neemt een vader met een
+    ziek kind een zak graan uit de schuur (wat er echt gebeurde, `D.zaak`); een buur beschuldigt de verkeerde (een
+    gerucht); je zoekt het te voet uit: het spoor bij de schuur, een buur die je iets kunt vragen, en de herberg; 's
+    middags op het plein de zitting (straffen, vrijspreken of verbergen), die leest uit wat je weet (een papier "De
+    zaak", met feiten en geruchten); en later een vervolg over dezelfde mensen, en de inner die in het boek van de schuur
+    ziet wat je verborg. Nieuw daarvoor: een bewoner iets vragen, wat je weet, de zitting en het boek. Vragen A tot F
+    (wanneer de zaak komt, het papier, rondvragen, de zitting op het plein, het boek, een spelregel); in vier stukken.
 129. **Hoeveel bos heeft een houthakker nodig?** (Claude, 6 okt, de sessie van de heer, bij stap 3 van vraag 110, e, met
     115; `spel.md`, "De houthakker hakt en plant", Open; open).
     **Gemeten** (het ontworpen gehucht en de landen 5, 62707, 72022 en 73425): een houthakker mag staan op een open plek
