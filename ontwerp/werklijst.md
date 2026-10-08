@@ -5513,6 +5513,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     200 zo'n 25, 's avonds anderhalf tegelijk. De oude toetsen van het dagritme zijn weer zoals ze waren.
 121. **Hoogteverschillen op de kaart** (Marcel, 4 okt, achtentwintigste sessie: "Ik heb wel 1 extra verzoek. Hoogte
     verschillen op de kaart. 😁"; plan van Claude; open).
+    **Bezig in sessie `claude/project-thread-cyjrql`** (8 okt): stap 2, wat de hoogte doet (afdekken, lopen, zien,
+    bouwen): eerst een plan voor Marcel.
     **Wat er al is:** het ontwerp van 20 sep (`kaarten.md`, "Hoogte is een getal per tegel", Marcels keuze toen): een
     getal per tegel, de wand tussen twee hoogtes afgeleid zoals een randtegel tussen twee grondsoorten, een helling waar
     je over mag, alles op een hogere tegel een trede omhoog, en wie hoog staat, ziet verder. Dat was nog voor Tiled en de
