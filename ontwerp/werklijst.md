@@ -14,10 +14,9 @@ groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
 Marcel, 8 okt: "snel, duidelijk en low cost". Elke sessie werkt dit blok bij aan het eind; wat af is, gaat eruit.
 
-**Loopt** (het teken "Bezig in sessie" staat bij het punt zelf): niets.
+**Loopt** (het teken "Bezig in sessie" staat bij het punt zelf): vraag 140, de dagloners (in sessie `ccr-77327776-rqjldz`).
 
 **Wacht op Marcel:**
-- Vraag 140: wie helpt bij de oogst (eerst een getal).
 - Vraag 141 (een economie binnen het dorp) en 142 (een gereedschap voor de getallen; de werkbank is er al): na de kern,
   tenzij Marcel anders kiest.
 
