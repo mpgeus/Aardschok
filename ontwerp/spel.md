@@ -941,7 +941,8 @@ kust. Je dorp komt altijd waar een dorp kan groeien; een moeilijke plek komt lat
 mist, en het spel maakt het land pas aan de rand van de mist, zodat het alleen houdt wat je verkende. Wat je verkende
 maar nu niet ziet, is grijs, zoals je het het laatst zag (Marcel, 8 okt: "Grijs is goed"). **Stap 1 is er** (8 okt): de
 kaartenmaker (`js/eiland.js`) en de plaat (`node gereedschap/pixelart/eiland-plaat.cjs`), nog niet in het spel; hoe het
-werkt, staat in `kaarten.md`, "Het eiland".
+werkt, staat in `kaarten.md`, "Het eiland". Marcel vond de eilanden goed, en koos de volgorde (8 okt, "a1"): eerst je dorp
+op het eiland, dan de kern, en het hele eiland met de mist later.
 
 
 **Zo werkt het nu** (30 sep, zeventiende sessie; stuk 1 van stap 1a; `js/land.js` en `js/landkaart.js`, toetsen in
