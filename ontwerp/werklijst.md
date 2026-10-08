@@ -6352,6 +6352,14 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     zaak", met feiten en geruchten); en later een vervolg over dezelfde mensen, en de inner die in het boek van de schuur
     ziet wat je verborg. Nieuw daarvoor: een bewoner iets vragen, wat je weet, de zitting en het boek. Vragen A tot F
     (wanneer de zaak komt, het papier, rondvragen, de zitting op het plein, het boek, een spelregel); in vier stukken.
+    **Marcel koos (8 okt): "akkoord, bouwen maar"**, dus de voorstellen van A tot F: de zaak één keer per spel, in de
+    eerste herfst als het graan krap is; het papier "De zaak"; rondvragen alleen zolang de zaak loopt; de zitting op het
+    plein; het boek van de schuur dat de inner leest; en een spelregel "De zaak". Het plan: `/mnt/project-files/aardschok/plan-graanzak.md`.
+    **Gebouwd** (8 okt, op de branch `claude/project-thread-cyjrql`): `js/zaak.js`, met de gesprekken, het papier, het
+    spoor, de zitting op het plein en de vervolgen; hoe het werkt, staat in `spel.md` ("Informatie, de zitting en mensen
+    die onthouden", Zo werkt het nu), de toetsen in `test/zaak.test.cjs`. Twee keuzes van Claude: "krap" werd een gezin in
+    nood, geen voorraad die op raakt, en de inner leest het boek op Sint-Maarten. Open: Marcel speelt het (begin met
+    `Spel.debug.zaak('nu')`), en dan of c, d en e erna komen.
 129. **Hoeveel bos heeft een houthakker nodig?** (Claude, 6 okt, de sessie van de heer, bij stap 3 van vraag 110, e, met
     115; `spel.md`, "De houthakker hakt en plant", Open; open).
     **Gemeten** (het ontworpen gehucht en de landen 5, 62707, 72022 en 73425): een houthakker mag staan op een open plek

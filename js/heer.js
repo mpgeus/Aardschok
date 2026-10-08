@@ -686,6 +686,8 @@
     }
     // Een akker in zijn bos die zijn inner zag en die niet in zijn boeken stond: betrapt (js/ontginnen.js).
     T.heerVindtBosAkkers(D);
+    // En de inner leest hem het boek van de schuur voor: mist er een zak graan, dan ziet hij het (js/zaak.js).
+    T.heerLeestHetBoek(D);
     b.wachtTot = dagNu(D) + IN().wachtDagen;
     T.naarGewoneSnelheid(D);
     T.zeg(D, 'De heer staat op het plein en wacht op je.');

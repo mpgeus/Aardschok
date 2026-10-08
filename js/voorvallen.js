@@ -106,6 +106,15 @@
     diefstalWeer: { soort: 'recht', titel: 'de dief', vervolg: true, wie: { leeftijd: ['volwassen', 'oud'] } },
     diefstalWrok: { soort: 'recht', titel: 'de dief', vervolg: true, wie: { leeftijd: ['volwassen', 'oud'] } },
     diefDank: { soort: 'kans', titel: 'de dief', vervolg: true, wie: 'ander', ander: 'wie' },
+    // De verdwenen graanzak (js/zaak.js; werklijst vraag 128): de boer komt je zeggen wie hij verdenkt, en later is de
+    // zitting op het plein (L.plein: wie erbij hoort, staat daar, en komt de schout erbij, dan begint ze). Wie het
+    // vervolg zegt en over wie het gaat, zet js/zaak.js.
+    graanzak: { soort: 'recht', titel: 'de graanzak', zelf: true, wie: { boer: true }, ander: { ...MAN, boer: false }, roep: '{wie} zoekt je: er is een zak graan uit de schuur verdwenen.' },
+    zitting: { soort: 'recht', titel: 'de zitting over de graanzak', zelf: true, wie: { boer: true }, ander: { ...MAN, boer: false }, roep: 'De zitting over de graanzak begint: {wie} en {ander} staan op het plein.' },
+    zaakWrok: { soort: 'recht', titel: 'de graanzak', vervolg: true },
+    zaakWeer: { soort: 'recht', titel: 'de graanzak', vervolg: true },
+    zaakKind: { soort: 'recht', titel: 'de graanzak', vervolg: true },
+    zaakDank: { soort: 'kans', titel: 'de graanzak', vervolg: true },
     vechtpartij: {
       soort: 'recht', titel: 'de vechtpartij', als: { gebouw: 'herberg' }, oorzaak: 'onvrede',
       wie: MAN, ander: [{ karakter: 'heethoofd', geslacht: 'man' }, { karakter: 'drinker', geslacht: 'man' }, MAN],
@@ -546,7 +555,10 @@
   // (js/tekenen.js).
   T.voorvalVan = function (D, e) {
     const L = D.voorvallen && D.voorvallen.lopend;
-    return L && e && e.zoektSchout && L.wie.wezen === e ? L : null;
+    if (!L || !e || L.wie.wezen !== e) return null;
+    // Een zitting op het plein (js/zaak.js): wie aanklaagt, zoekt je niet, maar staat er vanaf zijn uur.
+    if (L.plein) return D.kalender && D.kalender.dag >= L.vanaf ? L : null;
+    return e.zoektSchout ? L : null;
   };
 
   // Elk beeld (js/main.js): overdag, vanaf zijn uur, zoekt hij de schout. Hij loopt naar hem toe (T.loopNaastDeSchout,
@@ -568,6 +580,10 @@
     // beslist zijn raadsman als het er een heeft, tot zijn schout in code kiest (werklijst, vraag 72 en stap 1b).
     const weg = T.schoutIsWeg(D) || !!D.ander;
     if (nu >= L.vanaf && weg && T.raadsmanBeslist(D)) return;
+    if (L.plein) {
+      zittingBij(S, D, L, nu);
+      return;
+    }
     if (nu < L.vanaf || deel === 'avond' || deel === 'nacht' || weg) {
       laatLos(e);
       return;
@@ -598,6 +614,19 @@
     }
     if (!e.onderweg) T.loopNaastDeSchout(D, e);
   };
+
+  // Een zitting op het plein (js/zaak.js): wie erbij hoort, staat er van zichzelf (T.zaakAnker); vanaf zijn uur zegt
+  // het bericht het één keer, en komt de schout bij het midden van het plein, dan begint ze.
+  function zittingBij(S, D, L, nu) {
+    if (nu < L.vanaf || T.schoutIsWeg(D)) return;
+    if (!L.gemeld) {
+      L.gemeld = true;
+      T.zeg(D, T.hoofdletter(T.vulWoordenIn(D, T.VOORVALLEN[L.id].roep)));
+    }
+    if (L.aangesproken || S.modus !== 'verkennen' || S.slaap || !T.schoutBijDeZitting(D) || D.schout.onderweg) return;
+    L.aangesproken = true;
+    if (T.ui && T.ui.spreekAan) T.ui.spreekAan(S, L.wie.wezen, L.id);
+  }
 
   // Je koos een antwoord dat het gesprek sluit (js/dialoog.js), of de raadsman deed het (`door`, js/raadsman.js): het
   // voorval is af, en wie het zei, gaat zijns weegs.
@@ -706,6 +735,8 @@
     if (doe.sterfkans) delen.push(`${doe.sterfkans}% kans op een dode`);
     if (doe.wolven < 0) delen.push(`${T.telwoord(-doe.wolven)} wolven minder`);
     if (doe.hek) delen.push('een hek om de schapen');
+    // De graanzak (js/zaak.js): wat een vonnis verder doet.
+    if (doe.zaak && T.zaakPrijs) delen.push(...T.zaakPrijs(D, doe.zaak));
     if (doe.feest && T.feestPrijs(doe.feest)) delen.push(T.feestPrijs(doe.feest));
     // Een ondernemer (js/ondernemers.js): nee, en hij neemt het je kwalijk of trekt weg; en wat de herbergierster ervan
     // vindt.

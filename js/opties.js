@@ -586,6 +586,17 @@
           uitleg: 'Een feest kost wat het antwoord zegt en maakt het dorp blij, maar je ziet er niets van. Zoals vóór 3 okt.' },
       ],
     },
+    // De verdwenen graanzak (werklijst vraag 128; Marcel, 8 okt: "akkoord, bouwen maar"; js/zaak.js).
+    {
+      id: 'zaak', naam: 'De zaak', standaard: 'aan',
+      uitleg: 'De verdwenen graanzak: één zaak in de eerste herfst, die je zelf uitzoekt en op het plein beslist.',
+      keuzes: [
+        { id: 'aan', naam: 'Aan', zet: { 'ZAAK_INSTELLINGEN.aan': true },
+          uitleg: 'Er verdwijnt een zak graan. Je vraagt rond, volgt het spoor, en op de zitting beslis je. Wat je koos, komt later terug.' },
+        { id: 'uit', naam: 'Uit', zet: { 'ZAAK_INSTELLINGEN.aan': false },
+          uitleg: 'Er verdwijnt niets.' },
+      ],
+    },
     // De raadsman (Marcel, 30 sep, werklijst vraag 66: "c Nee, wordt automatisch als de schout er niet is"; en vraag 68:
     // "Ja B inderdaad", alleen als je echt weg bent; js/raadsman.js).
     {
@@ -680,6 +691,7 @@
     { naam: 'De heervaart', blok: 'HEERVAART_INSTELLINGEN' },
     { naam: 'De voorvallen', blok: 'VOORVALLEN_INSTELLINGEN' },
     { naam: 'De feesten', blok: 'FEESTEN_INSTELLINGEN' },
+    { naam: 'De graanzak', blok: 'ZAAK_INSTELLINGEN' },
     { naam: 'De markt', blok: 'MARKT_INSTELLINGEN' },
     { naam: 'Het eind', blok: 'EINDE_INSTELLINGEN' },
     { naam: 'De verzoeken', blok: 'VERZOEKEN_INSTELLINGEN' },

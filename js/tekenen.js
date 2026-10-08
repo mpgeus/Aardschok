@@ -357,6 +357,7 @@
     tekenMarkeringen(ctx, S);
     tekenBouwSpook(ctx, S);
     tekenVerzoekPlek(ctx, S);
+    tekenSpoor(ctx, S);
 
     const lijst = [];
     // Buiten zijn er geen muren: wat daar "muur" heet, is de voet van een boom of een gebouw, en
@@ -1456,6 +1457,32 @@
   // De plek van een bouwverzoek (js/verzoeken.js; werklijst vraag 103): zolang iemand je erom vraagt, ligt de voet van
   // wat hij wil bouwen er in goud, met de kring erbij als het een put of een kapel is. Zo kun je gaan kijken waar het
   // komt voor je ja zegt.
+  // Het spoor van de graanzak (js/zaak.js): hoopjes gemorst graan op de grond, van de schuur naar de deur van wie het
+  // nam. Te zien voor wie kijkt; wat het betekent, weet de schout pas als hij erbij staat (T.werkZaakBij).
+  // gereedschap/wereld.html laadt de zaak niet.
+  const KORRELS = [[-14, -3], [-9, 4], [8, -5], [13, 2], [-3, 7], [4, 6], [-12, 1], [11, -1]];
+  function tekenSpoor(ctx, S) {
+    const D = T.dorpHier(S);
+    const Z = D && D.zaak;
+    if (!Z || !Z.spoor || !Z.spoor.length) return;
+    for (const t of Z.spoor) {
+      const p = opGrond(t.x, t.y);
+      const x = Math.round(p.x);
+      const y = Math.round(p.y);
+      // Een hoopje in het midden, met een schaduw eronder, en losse korrels eromheen.
+      ctx.fillStyle = 'rgba(70, 48, 20, 0.55)';
+      ctx.fillRect(x - 6, y, 13, 3);
+      ctx.fillStyle = 'rgb(196, 158, 78)';
+      ctx.fillRect(x - 5, y - 2, 11, 3);
+      ctx.fillStyle = 'rgb(232, 204, 128)';
+      ctx.fillRect(x - 3, y - 3, 6, 2);
+      KORRELS.forEach(([dx, dy], i) => {
+        ctx.fillStyle = i % 2 ? 'rgb(214, 180, 100)' : 'rgb(170, 132, 62)';
+        ctx.fillRect(x + dx, y + dy, 3, 2);
+      });
+    }
+  }
+
   function tekenVerzoekPlek(ctx, S) {
     const D = T.dorpHier(S);
     const L = D && D.voorvallen && D.voorvallen.lopend;

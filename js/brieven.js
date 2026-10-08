@@ -183,6 +183,25 @@
         voet: `<p class="venster-voet">Zolang je leest, staat de tijd stil. <kbd>Esc</kbd> sluit.</p>`,
       };
     },
+    // De zaak van de graanzak (js/zaak.js; werklijst vraag 128): je eigen papier, met wat je weet, apart wat je zelf zag,
+    // wat mensen je vertelden en wat er gezegd wordt. Onder de knop De zaak, zolang je het uitzoekt.
+    zaak: (S) => {
+      const Z = S.dorp.zaak;
+      if (!Z || Z.fase !== 'onderzoek') return null;
+      const delen = T.zaakWetenPerSoort(S.dorp).map((d) => `<p><b>${d.kop}</b></p>` +
+        (d.regels.length ? d.regels.map((r) => `<p>${veilig(r)}</p>`).join('') : '<p><i>Nog niets.</i></p>'));
+      const zitting = T.datumVanDag(Z.zitting).tekst.replace(/ \d+$/, '');
+      return {
+        titel: 'De zaak van de graanzak',
+        wanneer: vandaag(S),
+        aan: `Een zak graan uit de schuur van ${veilig(T.naamVanBewoner(Z.aanklager))}.`,
+        tekst: delen.join(''),
+        groet: `De zitting: ${zitting}, 's middags op het plein.`,
+        staat: '<p class="venster-staat">Wie je aanklikt, vraag je ernaar. Wat er gezegd wordt, is nog geen bewijs.</p>',
+        knoppen: [{ actie: 'sluit', tekst: 'Verder zoeken', hoofd: true }],
+        voet: `<p class="venster-voet">Zolang je leest, staat de tijd stil. <kbd>Esc</kbd> sluit.</p>`,
+      };
+    },
     // Het jaar in het kort (js/einde.js; werklijst vraag 101, e): op 1 lentemaand, in de hand van je raadsman, zoals zijn
     // rapport; zonder raadsman staat het gewoon in het jaarboek.
     jaarverslag: (S) => {
@@ -227,6 +246,8 @@
       knop.textContent = tekst;
       knop.title = soort === 'rapport' ? 'Het rapport van je raadsman, dat je nog niet las' : 'Een brief van de heer die op je antwoord wacht';
     }
+    // De knop De zaak: zolang je uitzoekt wie de zak graan nam (js/zaak.js).
+    $('zaak-knop').classList.toggle('verborgen', !T.zaakOnderzoek(S.dorp));
   };
 
   // Een brief in het venster: `soort` uit BRIEVEN, of zonder soort de brief die op je wacht.
@@ -286,6 +307,13 @@
       keuze.doe();
       T.ui.sluitBrief(S);
     }
+  });
+
+  $('zaak-knop').addEventListener('click', (ev) => {
+    ev.currentTarget.blur();
+    if (!T.S) return;
+    if (open === 'zaak') T.ui.sluitBrief(T.S);
+    else T.ui.toonBrief(T.S.dorp, 'zaak');
   });
 
   $('brief-knop').addEventListener('click', (ev) => {

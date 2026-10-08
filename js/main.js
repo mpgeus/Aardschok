@@ -1326,6 +1326,43 @@
         stemming: T.voorvalStemming(S.dorp, dag),
       };
     },
+    // De graanzak (js/zaak.js; vraag 128): wie het nam en wie verdacht wordt, de fase, het spoor, wat je weet, de zitting
+    // en hoe het afliep. ('nu') laat de zak nu verdwijnen, en de boer zoekt je meteen; ('zitting') maakt vandaag de dag
+    // van de zitting (zet er het uur bij met Spel.debug.uur(13)); ('boek') laat de inner het boek nu voorlezen.
+    zaak(wat) {
+      const D = S.dorp;
+      const dag = Math.floor(S.kalender.dag);
+      if (!D.voorvallen) D.voorvallen = T.nieuweVoorvallen();
+      const V = D.voorvallen;
+      if (wat === 'nu' && !D.zaak) {
+        if (V.lopend) T.voorvalBeantwoord(D, V.lopend.id);
+        if (!T.beginZaak(D, dag)) return 'Het dorp heeft de mensen er nog niet voor: een vader met een kind, en een boerderij.';
+        T.beginVoorval(D, 'graanzak', D.zaak.aanklager, D.zaak.verdachte, dag).vanaf = S.kalender.dag;
+      }
+      if (wat === 'zitting' && D.zaak && D.zaak.fase !== 'af') {
+        if (D.zaak.fase === 'gestolen') {
+          T.zaakGevolg(S, D, { zaak: 'zitting' });
+          T.voorvalBeantwoord(D, 'graanzak');
+        }
+        if (V.lopend && V.lopend.id !== 'zitting') T.voorvalBeantwoord(D, V.lopend.id);
+        D.zaak.zitting = dag;
+        T.tikZaakDag(D, dag);
+      }
+      if (wat === 'boek') T.heerLeestHetBoek(D);
+      const Z = D.zaak;
+      if (!Z) return { zaak: null, mensen: T.mensenVoorDeZaak(D, dag) ? 'het dorp heeft ze' : 'het dorp heeft ze nog niet' };
+      const naam = (p) => (p ? T.naamVanBewoner(p) : null);
+      return {
+        fase: Z.fase,
+        verdwenen: T.datumVanDag(Z.dag).tekst,
+        dader: naam(Z.dader), kind: naam(Z.ziek), aanklager: naam(Z.aanklager), verdachte: naam(Z.verdachte), buur: naam(Z.buur),
+        spoor: Z.spoor.map((t) => `${t.x},${t.y}`).join(' '),
+        weet: Z.weet.map((w) => w.id),
+        zitting: Z.zitting != null ? T.datumVanDag(Z.zitting).tekst : null,
+        uitkomst: Z.uitkomst,
+        boek: Z.boek,
+      };
+    },
     // Het land (js/land.js): waar de schout is, of hij reist, wat hij zag en welke wegen er zijn. ('open') opent de
     // kaart, ('reis', 'De heide') of ('reis', 'p3') reist erheen, ('alles') laat het hele land zien, ('nieuw') maakt
     // het land opnieuw uit het zaad. Staat de spelregel Land uit, dan zet hij hem eerst aan.

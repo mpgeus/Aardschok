@@ -92,6 +92,7 @@
     T.werkBewonersBij(D); // een nieuw gezin komt over de weg, wie wegtrekt gaat (js/bewoners.js)
     T.werkRoversBij(S, D); // rovers komen naar een akker, roven en gaan weer; de militie loopt met je mee (js/rovers.js)
     T.werkVoorvallenBij(S, D); // wie je zoekt met een voorval, loopt naar je toe en spreekt je aan (js/voorvallen.js)
+    T.werkZaakBij(S, D); // staat de schout bij het spoor van de graanzak, dan ziet hij het (js/zaak.js)
     T.werkOchtendrapportBij(S, D); // 's ochtends geeft je raadsman je zijn rapport (js/ochtendrapport.js)
     if (D.wereld === S.wereld) return; // waar je bent, lopen en dwalen ze in js/main.js, en worden ze getekend
     T.werkBeestenBij(S, D); // de wolven en de herten in zijn bos (js/beesten.js)
