@@ -35,7 +35,7 @@
   // Een pad wijst in T: 'GRAAN_PER_TEGEL', of 'HEER_INSTELLINGEN.betalenIn'.
   T.OPTIES = [
     {
-      id: 'graan', naam: 'Graan', standaard: 'honger',
+      id: 'graan', naam: 'Graan', standaard: 'netRond',
       uitleg: 'Hoe krap een gewoon jaar is als je de heer alles in graan geeft.',
       keuzes: [
         { id: 'ruim', naam: 'Ruim', zet: { GRAAN_PER_TEGEL: 5 },

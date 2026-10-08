@@ -466,8 +466,10 @@
   // heer 105 (js/heer.js), en 25 mensen eten er 450 (T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag).
   // Wie de heer alles in graan geeft, komt dus zo'n 30 tekort; wie de pacht inhoudt, houdt er zo'n
   // 70 over. Bij 3 graan per tegel was er ook honger als je de heer niets gaf, en dan is bedriegen
-  // geen uitweg meer, alleen ellende. Tot 24 sep was het 2, zonder zaaien en zonder heer.
-  T.GRAAN_PER_TEGEL = 3.5;
+  // geen uitweg meer, alleen ellende. Tot 24 sep was het 2, zonder zaaien en zonder heer. Sinds 8 okt 4 (836 graan op
+  // het gehucht): met de jager die echt jaagt en het zaaigraan dat bewaakt wordt, viel een dorp van 100 mensen op 3,5
+  // elk voorjaar zonder graan (ontwerp/speelbaar.md, vraag 132).
+  T.GRAAN_PER_TEGEL = 4; // de spelregel "Graan" op "Net rond" (Marcel, 8 okt, vraag 132: "A en B samen"; was Honger, 3,5)
   T.ZAAIGRAAN_PER_TEGEL = 1;
 
   // Wat een boer kan (js/boeren.js: maaien, opbrengst, zaaien), als factor; 1 zonder dat bestand

@@ -51,7 +51,7 @@ test('een keuze zet zijn waarden, en terug naar de standaard zet ze terug', () =
   assert.equal(T.BEHOEFTEN_INSTELLINGEN.hongerBuitenWinter, 'sterven');
   assert.equal(T.optieKeuze('graan'), 'ruim');
   T.pasOptiesToe({ keuzes: { telt: 'precies' } });
-  assert.equal(T.GRAAN_PER_TEGEL, 3.5, 'wat je niet meer kiest, gaat terug');
+  assert.equal(T.GRAAN_PER_TEGEL, 4, 'wat je niet meer kiest, gaat terug');
   assert.equal(T.HEER_INSTELLINGEN.telWijze, 'hoeveel');
   assert.equal(T.HEER_INSTELLINGEN.straffen[0].vanaf, 1);
   assert.equal(T.HEER_INSTELLINGEN.ambtKwijtNa, 2);
@@ -112,7 +112,7 @@ test('de doorkijk: het kijkvenster en het plein zijn de standaard, het raster is
 
 test('een onbekende keuze valt terug op de standaard', () => {
   T.pasOptiesToe({ keuzes: { graan: 'bestaatNiet' } });
-  assert.equal(T.GRAAN_PER_TEGEL, 3.5);
+  assert.equal(T.GRAAN_PER_TEGEL, 4);
   assert.deepEqual(T.OPTIES_NU.keuzes, {});
 });
 
@@ -189,17 +189,17 @@ test('onthouden en teruglezen, en een kapotte of lege opslag breekt niets', () =
 });
 
 test('zetOptie, zetGetal, zetNaam en optiesTerug veranderen één ding en laten de rest staan', () => {
-  T.zetOptie('graan', 'netRond');
+  T.zetOptie('graan', 'honger');
   T.zetGetal('HEER_INSTELLINGEN.wachtDagen', 5);
   T.zetNaam('boer5', 'Hein');
-  assert.equal(T.GRAAN_PER_TEGEL, 4);
+  assert.equal(T.GRAAN_PER_TEGEL, 3.5);
   assert.equal(T.HEER_INSTELLINGEN.wachtDagen, 5);
   assert.equal(T.naamVanMens('boer5'), 'Hein');
   T.zetGetal('HEER_INSTELLINGEN.wachtDagen', null);
   assert.equal(T.HEER_INSTELLINGEN.wachtDagen, bestanden.HEER_INSTELLINGEN.wachtDagen);
-  assert.equal(T.GRAAN_PER_TEGEL, 4, 'de keuze blijft');
+  assert.equal(T.GRAAN_PER_TEGEL, 3.5, 'de keuze blijft');
   T.optiesTerug();
-  assert.equal(T.GRAAN_PER_TEGEL, 3.5);
+  assert.equal(T.GRAAN_PER_TEGEL, 4);
   assert.equal(T.naamVanMens('boer5'), namen.boer5);
 });
 

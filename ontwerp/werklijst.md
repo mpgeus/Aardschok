@@ -6361,6 +6361,12 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     wachters, of meer naar hoe groot het dorp is (een per twintig mensen)? **Marcel (8 okt): "Ja, er moet een graanschuur
     komen. 2. Ja goed idee, anders maken ze geen kans".** Dus een graanschuur als gebouw, en een wachter per twintig mensen
     (minstens twee); met te weinig wachters grijpt het dorp een deel.
+    **a, b en het vee en de vissers zijn gebouwd** (8 okt; `js/graanschuur.js`, `T.watHelptAanEten` in `js/raad.js`,
+    `weideErbij` in `js/akkers.js`), en de speeltest staat in `ontwerp/speelbaar.md`: vier van de zes spelen de vier jaar
+    uit, maar het graan is van lentemaand tot de oogst op, en de reeks breekt in de winter op vlees of vis. Claude stelde
+    voor: A, de spelregel "Graan" standaard op "Net rond" (4 per tegel), en B, vis en vlees zouten zodat ze de winter
+    halen, met een voorraad die de raad laat aanleggen voordat de vissers stilliggen. **Marcel (8 okt): "A en B samen".**
+    A is gebouwd (`T.GRAAN_PER_TEGEL` 4, `standaard: 'netRond'`); B volgt.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

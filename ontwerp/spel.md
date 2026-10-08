@@ -2075,6 +2075,9 @@ Besloten op een voorstel van Claude (`werklijst.md`, punt 5):
   inhoudt zo'n 70 graan over, en komt wie alles in graan betaalt er zo'n 30 tekort, en 70 als
   hij ook graan moet verkopen voor het goud. (Een eerste gok in één blok, om bij te stellen na
   spelen.)
+  **Sinds 8 okt is de standaard 4** (de spelregel "Graan" op "Net rond"; Marcel: "A en B samen", werklijst vraag 132):
+  met de jager die echt jaagt en het zaaigraan dat bewaakt wordt, viel een dorp van 100 mensen op 3,5 elk voorjaar
+  zonder graan. "Honger" blijft als keuze.
 - **Hij vraagt naar wat hij ziet, en in wat hij ziet.** Voor elke akkertegel een half graan (de
   pacht, ook als de tegel braak lag: hij telt de akkers, niet wat erop groeide), voor elke mens
   hoofdgeld in goud, en voor elk gebouw zijn eigen prijs: voor de schaapskooi wol, voor het
