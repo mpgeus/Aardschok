@@ -153,6 +153,98 @@ function slaSchermafdrukOp(req, res, naam) {
   });
 }
 
+// De bladzijde met alle getallen (gereedschap/instellingen.html, werklijst vraag 142; Marcel, 8 okt: "Gelijk veranderen").
+// Het leest de bestanden in js/ met gereedschap/instellingen/bron.js. Schrijven gaat naar het bestand waarin het blok
+// staat, en dat zoekt de server zelf op uit de naam van het blok: nooit naar een pad uit het verzoek. Het verandert alleen
+// de tekens van dat ene getal, met de oude tekst ernaast als .bak.
+const INSTELLINGEN = require('./gereedschap/instellingen/bron.js');
+function leesSpelbestanden() {
+  const bronnen = {};
+  for (const f of fs.readdirSync(path.join(MAP, 'js')).filter((f) => f.endsWith('.js')).sort()) {
+    bronnen['js/' + f] = fs.readFileSync(path.join(MAP, 'js', f), 'utf8');
+  }
+  return bronnen;
+}
+function stuurJson(res, code, wat) {
+  res.writeHead(code, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+  res.end(JSON.stringify(wat));
+}
+function instellingenModel(res) {
+  try {
+    stuurJson(res, 200, INSTELLINGEN.model(leesSpelbestanden()));
+  } catch (e) {
+    stuurJson(res, 500, { fout: e.message });
+  }
+}
+function zetInstelling(req, res) {
+  leesLijf(req, res, (body) => {
+    let v;
+    try {
+      v = JSON.parse(body);
+      if (!v || typeof v.blok !== 'string' || !/^[A-Z][A-Z0-9_]*$/.test(v.blok) || !Array.isArray(v.pad) || !v.pad.length) throw new Error('geen { blok, pad, waarde, was }');
+    } catch (e) {
+      stuurJson(res, 400, { fout: 'Onleesbaar: ' + e.message });
+      return;
+    }
+    const bronnen = leesSpelbestanden();
+    const bestand = Object.keys(bronnen).find((b) => INSTELLINGEN.blokkenIn(bronnen[b]).includes(v.blok));
+    if (!bestand || INSTELLINGEN.VERBORGEN.has(v.blok)) {
+      stuurJson(res, 404, { fout: `T.${v.blok} staat in geen bestand in js/` });
+      return;
+    }
+    const tekst = bronnen[bestand];
+    const k = INSTELLINGEN.knoopOp(INSTELLINGEN.leesBlok(tekst, v.blok).waarde, v.pad);
+    // Stond er intussen iets anders (een andere bladzijde, of een sessie die het bestand veranderde)? Dan niet.
+    if (!k || ('was' in v && k.waarde !== v.was)) {
+      stuurJson(res, 409, { fout: `${v.blok}.${v.pad.join('.')} is intussen veranderd; ververs de bladzijde`, nu: k && k.waarde });
+      return;
+    }
+    // Een spelregel krijgt alleen een standaard die een van zijn keuzes is.
+    if (v.blok === 'OPTIES') {
+      const regel = INSTELLINGEN.model({ [bestand]: tekst }).spelregels.find((r) => r.pad[0] === v.pad[0]);
+      if (!regel || v.pad[1] !== 'standaard' || !regel.keuzes.some((kz) => kz.id === v.waarde)) {
+        stuurJson(res, 400, { fout: 'Bij een spelregel verander je alleen de standaard, en dan naar een van zijn keuzes' });
+        return;
+      }
+    }
+    let nieuw;
+    try {
+      nieuw = INSTELLINGEN.zet(tekst, v.blok, v.pad, v.waarde);
+    } catch (e) {
+      stuurJson(res, 400, { fout: e.message });
+      return;
+    }
+    try {
+      const doel = path.join(MAP, bestand);
+      fs.writeFileSync(doel + '.bak', tekst, 'utf8');
+      fs.writeFileSync(doel, nieuw, 'utf8');
+    } catch (e) {
+      stuurJson(res, 500, { fout: 'Schrijven mislukt: ' + e.message });
+      return;
+    }
+    const nu = INSTELLINGEN.knoopOp(INSTELLINGEN.leesBlok(nieuw, v.blok).waarde, v.pad);
+    stuurJson(res, 200, { ok: true, bestand, waarde: nu.waarde });
+  });
+}
+// De toetsen draaien (npm test), na een verandering: geeft { klaar, geslaagd, mislukt, namen } van wat mislukte.
+let toetsenBezig = null;
+function draaiToetsen(res) {
+  if (toetsenBezig) {
+    toetsenBezig.push(res);
+    return;
+  }
+  toetsenBezig = [res];
+  execFile(process.execPath, ['--test'], { cwd: MAP, maxBuffer: 64 * 1024 * 1024, timeout: 15 * 60 * 1000 }, (fout, uit) => {
+    const tekst = String(uit || '');
+    const getal = (naam) => Number((new RegExp(`^# ${naam} (\\d+)`, 'm').exec(tekst) || [])[1] || 0);
+    const namen = [...tekst.matchAll(/^not ok \d+ - (.*)$/gm)].map((m) => m[1]);
+    const antwoord = { klaar: true, geslaagd: getal('pass'), mislukt: getal('fail'), namen };
+    if (!antwoord.geslaagd && fout) antwoord.fout = fout.message;
+    for (const r of toetsenBezig) stuurJson(r, 200, antwoord);
+    toetsenBezig = null;
+  });
+}
+
 // Het lijf van een POST binnenhalen, met een grens eraan.
 function leesLijf(req, res, klaar) {
   let body = '';
@@ -237,6 +329,18 @@ http
       slaOp(req, res, OPSLAAN[pad]);
       return;
     }
+    if (req.method === 'GET' && pad === '/gereedschap/api/instellingen') {
+      instellingenModel(res);
+      return;
+    }
+    if (req.method === 'POST' && pad === '/gereedschap/api/instelling') {
+      zetInstelling(req, res);
+      return;
+    }
+    if (req.method === 'POST' && pad === '/gereedschap/api/toetsen') {
+      draaiToetsen(res);
+      return;
+    }
     if (req.method === 'GET' && pad === '/gereedschap/api/kaarten') {
       kaartNamen(res);
       return;
@@ -283,6 +387,7 @@ http
     console.log(`  de wereld      ${hier}/gereedschap/wereld.html      kaarten, mensen, quests, controle`);
     console.log(`  de gesprekken  ${hier}/gereedschap/gesprekken.html`);
     console.log(`  de quests      ${hier}/gereedschap/quests.html`);
+    console.log(`  de getallen    ${hier}/gereedschap/instellingen.html  alle getallen, spelregels en gebouwen`);
     console.log('');
     console.log(`  alles bij elkaar: ${hier}/gereedschap/index.html`);
   });

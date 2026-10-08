@@ -97,6 +97,14 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   - het spel: `http://localhost:8123/`
   - **het gereedschap: `http://localhost:8123/gereedschap/`** — een bladzijde die naar alle drie
     wijst. De belangrijkste is `gereedschap/wereld.html`: daar wordt het spel gemaakt.
+  - **alle getallen: `http://localhost:8123/gereedschap/instellingen.html`** (vraag 142; Marcel: "een bladzijde met
+    duidelijk overzicht van alles", "Gelijk veranderen"): elk getal uit de blokken `*_INSTELLINGEN` (in de volgorde en met
+    de namen van `T.WERKBANK`), de standaard van elke spelregel en de getallen van elk gebouw, met het commentaar uit de
+    code als uitleg en wat de spelregels erop zetten. Wat je verandert, schrijft de server meteen in het bestand
+    (alleen dat getal, met een `.bak` ernaast), en de knop Toetsen draaien draait `npm test`. De lezer staat in
+    `gereedschap/instellingen/bron.js` (zonder scherm, `test/instellingen.test.cjs`); hij voert niets uit, dus wat geen
+    gewoon getal is (een som, `maandIdx(...)`), toont hij maar verandert hij niet. Verandert Marcel er iets, dan staat het
+    als een gewone wijziging in de werkmap: commit het, en pas een toets die het oude getal verwacht aan.
 - `npm test` draait `node --test`: de toetsen in `test/`, de regels zonder scherm. Een toets laadt het
   spel zoals het draait, met `require('./laad.cjs').spel()`: de scripts uit `index.html`, in die
   volgorde, zonder wat alleen scherm is (`test/laad.cjs`). Een toets van het gereedschap laadt wat

@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{naam} · alle getallen</title>
+  <script src="../js/naam.js"></script>
+  <link rel="stylesheet" href="../stijl.css">
+  <link rel="stylesheet" href="gesprekken-tool.css">
+  <link rel="stylesheet" href="instellingen/instellingen.css">
+</head>
+<body>
+  <header class="in-kop">
+    <div class="in-titel">
+      <a href="index.html">gereedschap</a> ›
+      <strong>Alle getallen</strong>
+    </div>
+    <input id="in-zoek" type="search" placeholder="Zoek een getal, een woord uit de uitleg, een gebouw…" autocomplete="off">
+    <label class="in-alleen"><input id="in-veranderd" type="checkbox"> alleen wat ik veranderde</label>
+    <button id="in-toetsen" type="button">Toetsen draaien</button>
+    <span id="in-toetsen-uit" class="in-gedempt"></span>
+  </header>
+  <div class="in-raam">
+    <nav id="in-lijst" class="in-lijst"></nav>
+    <main id="in-inhoud" class="in-inhoud"><p class="in-gedempt">Laden…</p></main>
+  </div>
+  <script src="instellingen/pagina.js"></script>
+</body>
+</html>

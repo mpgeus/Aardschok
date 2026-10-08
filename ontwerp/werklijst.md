@@ -6946,6 +6946,12 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     overzicht van alles."** Een bladzijde in `gereedschap/`, na de dagloners.
     **Bezig in sessie `ccr-77327776-rqjldz`** (8 okt): de bladzijde bouwen, stap 1 en 2 (Marcel: "1. Ja dan 2. Gelijk
     veranderen 3. Prima": de gebouwen erbij, opslaan verandert de standaard meteen, de speeltest later).
+    **Gebouwd (8 okt), stap 1 en 2:** `gereedschap/instellingen.html` (met `npm start`): 51 onderwerpen (de werkbank en de
+    blokken die er niet in staan, zoals de oogst en de wijngaard), 54 spelregels en 49 gebouwen, samen 1659 waarden, met
+    het commentaar uit de code als uitleg, een zoekveld, en per getal wat de spelregels erop zetten (en of de standaard
+    van een spelregel het in het spel anders zet). Opslaan schrijft meteen in het bestand (`/gereedschap/api/instelling`
+    in `server.cjs`, alleen dat ene getal, met een `.bak`), en Toetsen draaien zegt welke toetsen het oude getal nog
+    verwachten. Stap 3 (een speeltest met een set getallen, naast de vorige) komt hierna.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
