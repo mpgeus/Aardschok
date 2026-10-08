@@ -99,6 +99,20 @@
   };
   const VIN = () => T.VELDEN_INSTELLINGEN;
 
+  // De schoven (werklijst vraag 140; Marcel, 8 okt: "Alles telt pas als het binnen is"): wat de boer maait, blijft als zwad
+  // op de tegel liggen (`a.schoven`: per tegel { graan, gebonden }); de boerin en de kinderen (en de boer, als er niets
+  // meer te maaien is) binden het tot schoven en zetten die in hokken, die drogen droogDagen, en dan dragen ze ze naar de
+  // schuur van de boerderij. Pas daar is het graan binnen (T.haalSchovenBinnen). Het werk staat in js/veldwerk.js.
+  T.SCHOVEN_INSTELLINGEN = {
+    // Zo lang bindt hij een tegel tot schoven, in uren.
+    bindUren: 0.5,
+    // Zoveel dagen drogen de hokken, voor ze naar de schuur kunnen.
+    droogDagen: 3,
+    // Zoveel tegels schoven draagt hij in één keer naar de schuur.
+    perVracht: 2,
+  };
+  const SIN = () => T.SCHOVEN_INSTELLINGEN;
+
   // Wat een veld dit jaar is, en wat het volgend jaar wordt. Zonder (of met een onbekende)
   // bestemming een akker, en zonder plan blijft het wat het is.
   T.bestemmingVan = (veld) => (veld && T.BESTEMMINGEN.includes(veld.bestemming) ? veld.bestemming : 'akker');
@@ -428,7 +442,10 @@
     const bestemming = T.bestemmingVan(akker);
     if (bestemming === 'weide') return 'weide';
     if (bestemming === 'braak' || ongezaaidOp(akker, x, y)) return 'geploegd';
-    if (basisStadium === 'rijp' && akker.geoogst && akker.geoogst.has(sleutel(x, y))) return 'gemaaid';
+    // Gemaaid: het zwad, de hokken als het gebonden is, en de stoppels als het binnen is (vraag 140).
+    const schoof = akker.schoven && akker.schoven.get(sleutel(x, y));
+    if (schoof) return schoof.gebonden != null ? 'hokken' : 'zwad';
+    if ((basisStadium === 'rijp' || basisStadium === 'gemaaid') && akker.geoogst && akker.geoogst.has(sleutel(x, y))) return 'stoppels';
     return basisStadium;
   };
 
@@ -605,6 +622,7 @@
             a.geoogst.clear(); // nieuw jaar, weer vers
             a.gehooid.clear();
             a.half.clear();
+            if (a.schoven) a.schoven.clear();
           }
         }
         e.maait = null;
@@ -612,6 +630,7 @@
         continue;
       }
       if (e.binnen) continue; // 's nachts in zijn huis
+      if (e.draagt === 'schoof') continue; // eerst brengt hij zijn schoven naar de schuur (js/veldwerk.js)
       // Wie de schout zoekt met een voorval (js/voorvallen.js), maait niet: hij stopt zoals in de schaft.
       const werkt = werktijd && !e.zoektSchout && !vrij;
       if (e.maait) {
@@ -632,9 +651,9 @@
             if (D.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(D, 'hooi', T.hooiPerTegel(a, e));
           } else {
             a.geoogst.add(sleutel(e.maait.x, e.maait.y));
-            const graan = T.oogstPerTegel(a, e);
-            if (D.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(D, 'graan', graan);
-            T.telOogstInJaarboek(D, graan); // voor het jaarverslag (js/einde.js)
+            // Het zwad blijft liggen tot het gebonden, gedroogd en binnen is (vraag 140).
+            if (!a.schoven) a.schoven = new Map();
+            a.schoven.set(sleutel(e.maait.x, e.maait.y), { graan: T.oogstPerTegel(a, e), gebonden: null });
           }
           e.maait = null;
           e.oogstDoel = null;
@@ -713,6 +732,21 @@
         tegels++;
         graan += T.oogstPerTegel(akker, boer); // vruchtbaar of uitgeput, groene vingers of slordig
       }
+      // En wat er nog als zwad of in hokken op het veld staat (vraag 140): dat gaat nu ook de schuur in.
+      if (akker.schoven) {
+        for (const s of akker.schoven.values()) {
+          graan += s.graan;
+          tegels++;
+        }
+        akker.schoven.clear();
+      }
+    }
+    // Wat ze nog droegen, is ook binnen.
+    for (const e of w.wezens || []) {
+      if (!(e.vracht > 0)) continue;
+      graan += e.vracht;
+      e.vracht = 0;
+      if (e.draagt === 'schoof') e.draagt = null;
     }
     if (tegels && D.voorraad && T.wijzigVoorraad) {
       T.wijzigVoorraad(D, 'graan', graan);
@@ -720,6 +754,56 @@
       T.zeg(D, `De boeren halen de rest van de oogst binnen: ${Math.round(graan)} graan.`, 'goed');
     }
     return tegels;
+  };
+
+  // De schoven van een akker die nog gebonden moeten worden (zwad), en die droog zijn en naar de schuur kunnen (hokken die
+  // droogDagen stonden), als tegels { x, y }.
+  T.teBinden = (a) => [...((a.schoven && a.schoven.entries()) || [])].filter(([, s]) => s.gebonden == null).map(([k]) => tegelVan(k));
+  T.droogInHokken = (a, dag) => [...((a.schoven && a.schoven.entries()) || [])].filter(([, s]) => s.gebonden != null && dag - s.gebonden >= SIN().droogDagen).map(([k]) => tegelVan(k));
+  const tegelVan = (k) => {
+    const [x, y] = k.split(',').map(Number);
+    return { x, y };
+  };
+  // Wie bindt, zet het zwad van deze tegel in hokken.
+  T.bindSchoof = function (a, x, y, dag) {
+    const s = a.schoven && a.schoven.get(sleutel(x, y));
+    if (s && s.gebonden == null) s.gebonden = Math.floor(dag);
+    return !!s;
+  };
+  // Wie draagt, neemt de schoven van deze tegels mee (ze gaan van het veld): het graan dat hij draagt.
+  T.neemSchoven = function (a, tegels) {
+    let graan = 0;
+    for (const t of tegels) {
+      const s = a.schoven && a.schoven.get(sleutel(t.x, t.y));
+      if (!s) continue;
+      graan += s.graan;
+      a.schoven.delete(sleutel(t.x, t.y));
+    }
+    return graan;
+  };
+  // Het graan is in de schuur: in de voorraad, en in het jaarboek (js/einde.js).
+  T.haalSchovenBinnen = function (D, graan) {
+    if (!(graan > 0)) return;
+    T.wijzigVoorraad(D, 'graan', graan);
+    T.telOogstInJaarboek(D, graan);
+  };
+  // Hoeveel graan er nog op het veld staat, als zwad, in hokken of op iemands schouder: het komt binnen, dus het dorp
+  // rekent ermee als het kijkt of het eten de winter haalt (T.etenVoorDeWinter, js/behoeften.js).
+  T.graanOpHetVeld = function (D) {
+    const w = D.wereld;
+    let graan = 0;
+    for (const a of (w && w.akkers) || []) for (const s of (a.schoven && a.schoven.values()) || []) graan += s.graan;
+    for (const e of (w && w.wezens) || []) graan += e.vracht || 0;
+    return graan;
+  };
+  // Elke nacht (T.tikAkkersDag): wat iemand nog droeg, is mee de schuur in.
+  T.tikSchovenDag = function (D) {
+    for (const e of (D.wereld && D.wereld.wezens) || []) {
+      if (!(e.vracht > 0)) continue;
+      T.haalSchovenBinnen(D, e.vracht);
+      e.vracht = 0;
+      if (e.draagt === 'schoof') e.draagt = null;
+    }
   };
 
   // Het vangnet voor het hooi, op de eerste dag na hooitijd: wat er op een weide met een boer nog
@@ -911,6 +995,7 @@
     } else if (T.isNazaaitijd(dag)) {
       T.zaaiNa(D); // wat niet gezaaid kon worden, zodra er graan is (hierboven)
     }
+    T.tikSchovenDag(D);
     if (nu === stadiumBegin('gemaaid')) {
       T.haalOogstBinnen(D);
       T.boerenKiezenVelden(D); // na de oogst kiezen de boeren wat hun velden volgend jaar worden

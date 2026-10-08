@@ -150,7 +150,11 @@ test('een verzoek komt alleen als het dorp het kan betalen, en niet vaker dan om
   const D = S.dorp;
   nacht(S, 1);
   T.voorvalBeantwoord(D, lopend(D).id);
-  assert.equal(D.verzoeken.volgende, 1 + T.VERZOEKEN_INSTELLINGEN.elke);
+  // Niet vaker dan om de paar dagen, en geen vast getal: tussen de helft en anderhalf keer `elke` (Marcel, 8 okt).
+  const elke = T.VERZOEKEN_INSTELLINGEN.elke;
+  const s = T.VOORVALLEN_INSTELLINGEN.spreiding;
+  const tussen = D.verzoeken.volgende - 1;
+  assert.ok(tussen >= Math.max(1, Math.round(elke * (1 - s))) && tussen <= Math.round(elke * (1 + s)), `${tussen} dagen`);
   assert.equal(T.beginBouwverzoek(D, 2), false, 'niet de dag erna');
   D.verzoeken.volgende = 0;
   T.zetVoorraad(D, 'goud', 0);

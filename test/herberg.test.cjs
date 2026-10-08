@@ -224,7 +224,7 @@ test('de avond wordt verrekend: het bier gaat op, en wie er was, maakt het dorp 
   assert.ok(T.herbergGezelligheid(S.dorp, HERFST + 1 + IN.gezelligheidDagen + 1) === 0, 'een week later is het voorbij');
   assert.ok(!zonder.mist.includes('bier'));
   T.zetVoorraad(S.dorp, 'bier', 0);
-  assert.ok(T.berekenTevredenheid(S.dorp, HERFST + 1).mist.includes('bier'), 'een droge herberg mist het dorp');
+  assert.ok(T.berekenTevredenheid(S.dorp, HERFST + 1).mist.includes('drank'), 'een droge herberg mist het dorp');
 });
 
 test('de herbergierster brouwt van graan, tot er genoeg bier ligt', () => {
@@ -247,7 +247,7 @@ test('de herbergierster brouwt van graan, tot er genoeg bier ligt', () => {
     Object.assign(IN, was);
   }
   assert.ok(Math.abs(S.dorp.voorraad.bier - T.maaktTot(soort, S.dorp).bier) < 1e-9, `${S.dorp.voorraad.bier}`);
-  assert.equal(T.maaktTot(soort).bier, 30, 'zoals sinds 27 sep: tot er 30 bier is, boven wat apart ligt voor de huizen');
+  assert.equal(T.maaktTot(soort).bier, 60, 'sinds 8 okt (was 30): tot er 60 bier is, boven wat apart ligt voor de huizen');
   assert.equal(g.vol, 'bier');
   g.werkte = 0;
   assert.match(T.gebouwToestand(S.dorp, g), /^Herberg: er ligt genoeg bier\./);

@@ -35295,6 +35295,136 @@
      "naam": "half-gedekt"
     }
    ]
+  },
+  "wijnboerderij": {
+   "gebouw": "wijnboerderij",
+   "beslaat": [
+    10,
+    8
+   ],
+   "bestand": "bouwfasen/wijnboerderij.png",
+   "fasen": [
+    {
+     "x": 314,
+     "y": 339,
+     "b": 427,
+     "h": 160,
+     "anker": [
+      263,
+      30
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 628,
+     "y": 0,
+     "b": 298,
+     "h": 261,
+     "anker": [
+      133,
+      131
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 339,
+     "b": 312,
+     "h": 226,
+     "anker": [
+      140,
+      92
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 312,
+     "h": 337,
+     "anker": [
+      140,
+      203
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 314,
+     "y": 0,
+     "b": 312,
+     "h": 337,
+     "anker": [
+      140,
+      203
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
+  },
+  "wijnhuis": {
+   "gebouw": "wijnhuis",
+   "beslaat": [
+    5,
+    4
+   ],
+   "bestand": "bouwfasen/wijnhuis.png",
+   "fasen": [
+    {
+     "x": 314,
+     "y": 339,
+     "b": 427,
+     "h": 160,
+     "anker": [
+      263,
+      30
+     ],
+     "naam": "fundering"
+    },
+    {
+     "x": 628,
+     "y": 0,
+     "b": 298,
+     "h": 261,
+     "anker": [
+      133,
+      131
+     ],
+     "naam": "geraamte"
+    },
+    {
+     "x": 0,
+     "y": 339,
+     "b": 312,
+     "h": 226,
+     "anker": [
+      140,
+      92
+     ],
+     "naam": "muren-steigers"
+    },
+    {
+     "x": 0,
+     "y": 0,
+     "b": 312,
+     "h": 337,
+     "anker": [
+      140,
+      203
+     ],
+     "naam": "dakgebinte"
+    },
+    {
+     "x": 314,
+     "y": 0,
+     "b": 312,
+     "h": 337,
+     "anker": [
+      140,
+      203
+     ],
+     "naam": "half-gedekt"
+    }
+   ]
   }
  }
 }

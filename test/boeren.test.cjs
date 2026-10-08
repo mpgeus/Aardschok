@@ -246,7 +246,7 @@ test('groene vingers geven meer graan per tegel, slordig minder, ook bij het van
       }
       S.wereldTijd = e.maait.tot;
       T.werkOogstBij(S, S, 0.1);
-      assert.ok(Math.abs(S.voorraad.graan - T.GRAAN_PER_TEGEL * verwacht) < 1e-9, `${id}: ${S.voorraad.graan}`);
+      assert.ok(Math.abs(T.graanOpHetVeld(S) - T.GRAAN_PER_TEGEL * verwacht) < 1e-9, `${id}: ${T.graanOpHetVeld(S)}`);
     } finally {
       klaar();
     }

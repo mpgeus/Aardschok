@@ -958,7 +958,8 @@
     const melkVoor = T.verwachteMelk(D, van, van + tot);
     const melkIn = duur > 0 ? T.verwachteMelk(D, van + tot, van + tot + duur) / duur : 0;
     // Het zaaigraan telt niet mee: dat eet het dorp pas bij nood (T.zaaigraanApart, js/akkers.js).
-    const graan = Math.max(0, (v.graan || 0) - T.zaaigraanApart(D, van));
+    // Wat er nog als schoven op het veld staat, komt binnen (js/akkers.js, vraag 140).
+    const graan = Math.max(0, (v.graan || 0) + T.graanOpHetVeld(D) - T.zaaigraanApart(D, van));
     const r = T.haaltDeWinter({
       voorraad: graan + (v.kaas || 0) + T.vleesEnVisAlsEten(D),
       voorWinter: melkVoor - eet * tot,

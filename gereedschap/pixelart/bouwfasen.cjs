@@ -140,6 +140,10 @@ const BUILDINGEN = [
   { id: 'dorpGewoon4', tekening: 'dorpGewoon4', maak: () => D.dorpshuis(0, 0, 107, { maat: [6, 8], muur: 'planken', dak: 'riet', rook: false }) },
   { id: 'dorpGroot1', tekening: 'dorpGroot1', maak: () => D.dorpshuis(0, 0, 108, { maat: [7, 9], muur: 'vlecht', dak: 'riet', rook: false }) },
   { id: 'dorpGroot2', tekening: 'dorpGroot2', maak: () => D.dorpshuis(0, 0, 109, { maat: [7, 9], muur: 'planken', dak: 'pannen', rook: false }) },
+  // De wijnboerderij: de fases laten alleen het huis rijzen (de wijngaard komt er vanzelf bij), maar het gebouw beslaat 10×8.
+  { id: 'wijnboerderij', tekening: 'wijnboerderij', beslaat: [10, 8], maak: () => P.wijnboerderij(0, 0, { rook: false, alleenHuis: true }) },
+  // Het wijnhuis (vraag 140): hetzelfde huis, alleen het huis op zijn eigen voet van 5×4 (de tonnen komen er na de bouw bij).
+  { id: 'wijnhuis', tekening: 'wijnhuis', maak: () => P.wijnboerderij(0, 0, { rook: false, alleenHuis: true }) },
   // ── de huizen van de huizenbouwer (huizen.cjs, ronde 4b): die snijden hun fases uit het huis zelf
   // (renderHuisFasen), niet uit de vormen van dorp.cjs. Niet voor een huis dat niemand bouwt (fasen:
   // false, het huis van de schout) ──
@@ -557,7 +561,7 @@ function renderGebouw(spec) {
   const platen = fasen.map((f, i) => gebouwLos(gAlle[i], cb, ch, ankerX, ankerY, metingen[i].hoek));
   return {
     id: spec.id, tekening: spec.tekening, cb, ch, ankerX, ankerY,
-    beslaat: [Math.max(1, Math.round((g0.voet[2] - g0.voet[0]) / TEGEL)), Math.max(1, Math.round((g0.voet[3] - g0.voet[1]) / TEGEL))],
+    beslaat: spec.beslaat || [Math.max(1, Math.round((g0.voet[2] - g0.voet[0]) / TEGEL)), Math.max(1, Math.round((g0.voet[3] - g0.voet[1]) / TEGEL))],
     fasenNamen: fasen.map((f) => f.naam),
     platen,
   };

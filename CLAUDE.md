@@ -509,6 +509,15 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   zoveel beschermen als er staan (`T.zaaigraanBeschermd`). Honger kost dan elke dag vertrouwen, en bij het zaaien gaan ze
   naar huis (`T.tikGraanschuurDag`). De spelregel "Zaaigraan" (bewaken, pas bij nood, als ander graan); de getallen in
   `T.GRAANSCHUUR_INSTELLINGEN`.
+- `js/wijngaard.js`: **de wijngaard van de wijnboerderij** (vraag 136, 8 okt; Marcel: "Dat je de boeren ziet plukken,
+  volle en lege ranken", en "Alles telt pas als het binnen is"): de wijnboerderij (`T.GEBOUWEN.wijnboerderij`, `wijngaard`)
+  is een huis (`gebouwen/wijnhuis`, alleen dat is vast) met in zijn voet van 10 bij 8 rijen ranken als voorwerpen
+  (`wijnrank`, `T.zetRanken`, `T.rankenVan`, `T.wijngaardOp`: daar bouw je niet). Een rank staat erbij naar de maand
+  (`T.rankStand`: kaal, blad, vol, of leeg als hij geplukt is, `v.geplukt`; het vel `beelden/wijnrank.png` uit
+  `gereedschap/pixelart/wijnrank.cjs`). In wijnmaand (`alleenIn`, `T.isPluktijd`) plukt het gezin dat er woont (`g.plukt`,
+  elke nacht `T.tikWijngaardDag`; zolang werkt het nergens anders) rank voor rank met een mand (`pluk` in
+  `js/veldwerk.js`, `e.mand`, de plukker of plukster), en pas als de mand in het huis is, is de wijn binnen
+  (`T.wijnBinnen`, `wijnPerRank`). De getallen in `T.WIJNGAARD_INSTELLINGEN`.
 - `js/bouwstijl.js`: **de bouwstijl van een land** (vraag 114, stap 2, 4 okt): elk land van de maker bouwt in één stijl
   (`w.stijl`, uit het nummer van het land, `T.stijlVoorLand`; het ontworpen gehucht heeft er geen en bouwt zoals altijd),
   met per soort een paar vormen, elk met de deur naar elke kant. De huizenbouwer noemt dat een stand; in het spel heet het
@@ -799,7 +808,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   wordt weer akker; wat jij koos (`T.zetPlan`, `veld.planDoor`), laten ze staan, en het veldenvenster zegt wie wat koos
   (`T.planTekst`). `js/tekenen.js` tekent ermee (achterlaag,
   wezen, voorlaag, zodat iemand tot zijn middel in het graan staat); `js/kaart.js` koppelt een
-  boer aan zijn akker(s) via `huis`, dezelfde id op de boer als op de akker.
+  boer aan zijn akker(s) via `huis`, dezelfde id op de boer als op de akker. **Het graan is pas binnen in de schuur**
+  (vraag 140, 8 okt; Marcel: "Alles telt pas als het binnen is"): wat de boer maait, blijft als zwad op de tegel liggen
+  (`a.schoven`), de boerin en de kinderen (en de boer als er niets meer te maaien is) binden het tot hokken
+  (`T.bindSchoof`), die drogen `droogDagen`, en dan dragen ze de schoven naar de schuur (`T.neemSchoven`, `e.vracht`,
+  `T.haalSchovenBinnen`; het werk is `haalBinnen` in `js/veldwerk.js`); een tegel is zwad, hokken of stoppels
+  (`T.akkerTegelStadium`). Het vangnet op 1 herfstmaand haalt ook de schoven binnen, en `T.graanOpHetVeld` telt mee voor
+  de winter. In de winter dorst de boer na het sprokkelen in de deur van zijn schuur (`dors`, alleen beeld). De getallen
+  in `T.SCHOVEN_INSTELLINGEN`.
 - `js/veldwerk.js`: **de boeren aan het werk** (vraag 111, 5 okt; Marcel: "Ze moeten zaaien en op het veld bezig
   zijn"): overdag werkt een boer op zijn eigen land, naar het seizoen (`T.veldwerkVandaag`: zaaien, wieden, mest
   uitrijden, spitten, sprokkelen aan de bosrand), rij voor rij (`T.veldwerkTegels`), elk beeld na het maaien en vóór het
@@ -848,7 +864,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.wijzigVoorraad`), `js/gebouwen.js` (`T.GEBOUWEN`: 45
   soorten op één plek, zoals `T.MENSEN`; bevolking, woonruimte, handen, productie per dag,
   `T.plaatsGebouw`, bouwfases via `T.bouwFaseIndex`; niet op iemand en niet op een deur, `T.waaromNietOpIemand`, vraag 88, en altijd met drie tegels looppad rondom, `T.looppadOm` (Marcel, 3 okt); een gebouw maakt alleen wat zijn grondstof
-  toelaat, wie iets omzet maakt tot er genoeg ligt, `T.maaktTot`, en gereedschap laat harder werken), `js/behoeften.js` (tevredenheid uit eten, brandhout
+  toelaat, wie iets omzet maakt tot er genoeg ligt, `T.maaktTot`, en gereedschap laat harder werken; wie stilligt, zegt
+  `T.stilOp`: in een seizoen, `stilIn`, of buiten zijn maanden, `alleenIn`, zoals de wijnboerderij, die alleen in wijnmaand
+  plukt (vraag 136: een boerderij met een gezin van boeren en wijngaarden; wijn is drank, de wens `bier` heet "drank" en
+  neemt bier of wijn, en de heer wil er wijn voor)), `js/behoeften.js` (tevredenheid uit eten, brandhout
   en wat elk huis wil, `js/wensen.js`; de winter, en of het hout en het eten hem halen, `T.houtVoorDeWinter` en
   `T.etenVoorDeWinter`, uit één regel met het hooi, `T.haaltDeWinter` en `T.raaktOp`; vanaf 90 dagen ervoor kijkt het dorp
   ernaar, `T.winterInZicht`, voor de raad, het rapport en de groei: haalt het hem niet, dan komt er geen gezin,

@@ -108,10 +108,18 @@
     '<path d="M5 8.8c-.9-1.8.4-3.8 2.3-3.5.6-1.4 2.5-1.8 3.6-.8 1-1 2.9-.7 3.4.7 1.8-.2 2.8 1.9 1.7 3.6z" fill="#f5eedc" stroke="#e6dcc3" stroke-width="1" stroke-linejoin="round"/>' +
     '<path d="M8.5 12v6M12.5 12v6" stroke="#9c7424" stroke-width="1.1" stroke-linecap="round"/>' +
     '</svg>';
+  // De wijnboerderij (werklijst vraag 136): een kruik met een tros druiven ervoor.
+  const WIJN_ICOON =
+    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
+    '<path d="M9 3.5h5v3c2.4 1.2 3.8 3.6 3.8 6.6 0 4.1-2.8 7.4-6.3 7.4s-6.3-3.3-6.3-7.4c0-3 1.4-5.4 3.8-6.6z" fill="#7a2e3b" stroke="#a2495a" stroke-width="1.1" stroke-linejoin="round"/>' +
+    '<path d="M8.6 3.5h5.8" stroke="#c9a46a" stroke-width="1.6" stroke-linecap="round"/>' +
+    '<circle cx="8.2" cy="15.2" r="1.6" fill="#4b2f6b"/><circle cx="10.6" cy="15.6" r="1.6" fill="#55367a"/><circle cx="9.3" cy="17.8" r="1.6" fill="#4b2f6b"/>' +
+    '<path d="M9.4 13.4c.4-1 1.2-1.6 2.2-1.8" fill="none" stroke="#6f8f3a" stroke-width="1.1" stroke-linecap="round"/>' +
+    '</svg>';
   const GRONDSTOF_ICOON = {
     goud: GOUD_ICOON, graan: GRAAN_ICOON, wol: WOL_ICOON, hout: HOUT_ICOON,
     ijzer: IJZER_ICOON, zout: ZOUT_ICOON, gereedschap: GEREEDSCHAP_ICOON, kaas: KAAS_ICOON,
-    hooi: HOOI_ICOON, mest: MEST_ICOON, vlees: VLEES_ICOON, huiden: HUIDEN_ICOON, bier: BIER_ICOON,
+    hooi: HOOI_ICOON, mest: MEST_ICOON, vlees: VLEES_ICOON, huiden: HUIDEN_ICOON, bier: BIER_ICOON, wijn: WIJN_ICOON,
     wapens: WAPENS_ICOON,
   };
   const GRONDSTOF_UITLEG = {
@@ -129,12 +137,13 @@
     huiden: 'Huiden. Van het slachten.',
     bier: 'Bier. De herbergierster brouwt het van graan, en wie \'s avonds in de herberg zit, drinkt het. Wie er deze week was, is tevredener.',
     wapens: 'Wapens. Van de wapenmaker: wie van de militie er een heeft, slaat harder als de rovers komen.',
+    wijn: 'Wijn. Van de wijnboerderij, geplukt in wijnmaand: drank, zoals bier, en het bederft niet.',
   };
   // Deze staan pas in de balk als het dorp ze eens gehad heeft (S.gehad, js/voorraad.js): in het
   // begin blijft de balk kort. Kaas, hooi, vlees en bier staan naast het graan, want het is allemaal
   // eten en drinken, voor mens of dier; de rest achteraan.
-  const BALK_LATER = ['kaas', 'hooi', 'vlees', 'bier', 'ijzer', 'zout', 'gereedschap', 'wapens', 'mest', 'huiden'];
-  const NAAST_GRAAN = ['kaas', 'hooi', 'vlees', 'bier'];
+  const BALK_LATER = ['kaas', 'hooi', 'vlees', 'bier', 'wijn', 'ijzer', 'zout', 'gereedschap', 'wapens', 'mest', 'huiden'];
+  const NAAST_GRAAN = ['kaas', 'hooi', 'vlees', 'bier', 'wijn'];
   const BALK = T.GRONDSTOFFEN.flatMap((wat) => (wat === 'graan' ? ['graan', ...NAAST_GRAAN] : [wat]))
     .concat(BALK_LATER.filter((wat) => !NAAST_GRAAN.includes(wat)));
   // Het aantal mensen, en hoeveel woonruimte er is (js/gebouwen.js): dezelfde stijl als een

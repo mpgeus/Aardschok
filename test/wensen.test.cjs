@@ -495,7 +495,7 @@ test('de keten van het bier: heeft de herberg geen graan, dan zegt het dat, en v
   T.onthoudWensen(D, T.berekenWensen(D, ZOMERDAG, alles));
   zetHuis(D, 'herberg', 30, 10, 0, { handen: 1, tekort: 'graan', werkte: 0 });
   const x = vind(D, 'bier');
-  assert.equal(x.tekst, 'Een huis wil bier: de herberg heeft geen graan, en graan komt van de akkers.');
+  assert.equal(x.tekst, 'Een huis wil drank: de herberg heeft geen graan, en graan komt van de akkers.');
   assert.deepEqual([x.kan, x.bouw], [false, null]);
 });
 

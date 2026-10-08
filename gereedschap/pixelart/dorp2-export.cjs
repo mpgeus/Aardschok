@@ -69,6 +69,7 @@ const plekken = [
   ['kruidenhut', () => P.kruidenhut(0, 0, { rook: false }), '6×5'],
   ['jagershut', () => P.jagershut(0, 0, { rook: false }), '7×6'],
   ['oudstehuis', () => P.oudstehuis(0, 0, { rook: false }), '7×5'],
+  ['wijnboerderij', () => P.wijnboerderij(0, 0, { rook: false }), '10×8'],
   ['brug', () => P.brug(0.5, 1, { langs: 'y', lang: 2.5, breed: 0.85 }), '0,85×2,5'],
   ['schuur', () => P.schuur(0, 0), '6×9'],
 ];

@@ -36,7 +36,8 @@
   T.VERZOEKEN_INSTELLINGEN = {
     // De spelregel "Wie bouwt": true, de mensen vragen het je; false, jij bouwt met het bouwmenu (zoals vóór 3 okt).
     mensen: true,
-    // Om de zoveel dagen kan er een verzoek komen.
+    // Om de zoveel dagen kan er een verzoek komen: gemiddeld, en nooit precies even vaak (Marcel, 8 okt: "Geen vaste
+    // intervallen"), net als de voorvallen (T.VOORVALLEN_INSTELLINGEN.spreiding: tussen de helft en anderhalf keer).
     elke: 4,
     // Wie nee hoorde, vraagt hetzelfde pas na zoveel dagen weer.
     naNee: 30,
@@ -238,6 +239,14 @@
   // Komt er vandaag iemand iets vragen? Vanuit T.tikVoorvallenDag (js/voorvallen.js), als er niets anders loopt. Het
   // eerste wat er gevraagd kan worden (je oproepen, dan wat het dorp mist), dat het dorp kan betalen, waar niet kort
   // geleden nee op kwam, met een plek en iemand die het vraagt. Geeft of er een verzoek begon.
+  // Om de hoeveel dagen het volgende verzoek kan komen, uit het lot van het dorp (geen Math.random: zo speelt hetzelfde
+  // zaad hetzelfde jaar).
+  function verzoekTussen(D, dag) {
+    const s = T.VOORVALLEN_INSTELLINGEN.spreiding;
+    const lot = T.dobbelsteen(((D.lot && D.lot.zaad) || 1) * 43 + Math.floor(dag) * 7919 + 23)();
+    return Math.max(1, Math.round(IN().elke * (1 - s + 2 * s * lot)));
+  }
+
   T.beginBouwverzoek = function (D, dag) {
     if (!IN().mensen || D.ander || !D.bewoners || !D.wereld || !D.wereld.tegels) return false;
     const R = verzoekenVan(D);
@@ -269,7 +278,7 @@
       if (plek.kramen) L.bouw.kramen = plek.kramen; // de markt op het plein: waar de kramen komen, in goud (js/tekenen.js)
       // Geen open grond: wie het vraagt, rooit de plek eerst (js/bos.js), en in het bos van de heer kost dat zijn gunst.
       if (plek.rooien) Object.assign(L.bouw, { rooien: plek.rooien, bos: T.inHetBosVanDeHeer(D, plek.rooien) });
-      R.volgende = dag + IN().elke;
+      R.volgende = dag + verzoekTussen(D, dag);
       return true;
     }
     R.volgende = dag + 1;

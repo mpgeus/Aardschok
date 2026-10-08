@@ -153,6 +153,31 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 8 okt, laat in de nacht: het graan pas binnen in de schuur (werklijst, vraag 140)
+
+Op `432d644` (branch `ccr-77327776-rqjldz`), `npm run speeltest -- bouwer sluw --maker --jaren 4`. Sinds de vorige speeltest
+ook: het zout in de herfst voor 1 goud, de bouwverzoeken op wisselende dagen, en de wijnboerderij (die geen speler bouwt).
+
+| Speler, land | Mensen per jaar | Teller aan het eind van jaar 4 | Hoe het eindigde (vorige keer) |
+| --- | --- | --- | --- |
+| sluw 1 (62707) | 74, 111, 153, 217 | 360 | **gewonnen** op 26 wijnmaand van het derde jaar (was: begin jaar 4) |
+| sluw 2 (73425) | 70, 103, 135, 135 | 300 | vier jaar uit (was: ambt kwijt in jaar 1) |
+| sluw 3 (72022) | 63, 83 | | ambt kwijt in jaar 2: de gunst op (was: gewonnen) |
+| bouwer 1 (62707) | 69, 111, 111, 111 | 265 | vier jaar uit; brak op vlees of vis en laken (was: 265) |
+| bouwer 2 (73425) | 71, 93, 111, 118 | 53 | vier jaar uit; brak op laken en vlees of vis (was: 295) |
+| bouwer 3 (72022) | 80, 103, 123, 123 | 0 | vier jaar uit; brak op laken en vlees of vis (was: 268) |
+
+Honger is er nauwelijks (0 tot 8 dagen in het eerste jaar, daarna 0 of 1). Een op de zes wint (was twee), en de
+eerlijke bouwers komen minder ver: hun reeks breekt op laken (in grasmaand en sprokkelmaand: de wol van zomermaand is op)
+en op vlees of vis in de winter (zout). Het binnenhalen zelf kost geen graan: op land 5 komt er evenveel binnen (705),
+alleen later; tegen het eind van de oogst staat er zo'n 230 graan op het veld, dat het vangnet binnenhaalt. De
+verschillen tussen de spellen komen ook door de wisselende dagen van de verzoeken (een ander jaar met hetzelfde zaad).
+
+**Wat Marcel koos (8 okt), twee getallen uit de werkbank:** een schaap geeft 16 wol in plaats van 8 ("Kunnen we
+proberen"), en een werkplaats die iets omzet maakt tot er 60 ligt in plaats van 30 ("We kunnen die opvoeren naar 60"):
+de molen en de bakkerij hielden zo'n 65 dagen brood achter de hand, en de winter vraagt er ruim 100. Ook de herberg
+brouwt nu tot 60. Nog niet gespeeld.
+
 ## De speeltest van 8 okt: de grond van het eiland (werklijst, vraag 117, B van 2a)
 
 Gespeeld in de sessie van de kaartenmaker, op de branch `ccr-f03157dc-9d2dtu`: dezelfde zes spellen op het eiland

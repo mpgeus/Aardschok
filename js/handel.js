@@ -48,7 +48,9 @@
     verkoopt: {
       ijzer: { heeft: 12, prijs: [3, 3, 4] },
       // Zout het meest in de herfst (vraag 132, B): dan zout het dorp vis en vlees in voor de winter, als de beek dichtligt.
-      zout: { heeft: [15, 15, 40], prijs: [1, 1, 2] },
+      // In de herfst niet meer duurder (Marcel, 8 okt: "Zout mag dan wel goedkoper"): de eerlijke bouwer kon het vlak voor
+      // Sint-Maarten niet betalen.
+      zout: { heeft: [15, 15, 40], prijs: [1, 1, 1] },
       graan: { naam: 'zaaigraan', per: 10, heeft: [10, 0, 0], prijs: [5, 5, 5] },
       laken: { per: 4, heeft: [0, 3, 3], prijs: [6, 6, 7], trede: 'dorp' },
     },

@@ -1,7 +1,8 @@
 'use strict';
 // Schrijft de werkfiguren (werkfiguren.cjs: de zaaier, de wieder, de sprokkelaar en de hakker, en hun vrouwen de
 // zaaister, de wiedster, de sprokkelaarster en de hakster, en de maaister; werklijst vraag 111, b, en de hakker met zijn
-// bijl, vraag 107, f) weg als spelvellen, op dezelfde manier als
+// bijl, vraag 107, f; en voor de oogst de plukker, de binder, de drager en de dorser met hun vrouwen de plukster, de
+// binster, de draagster en de dorster, vraag 136 en 140) weg als spelvellen, op dezelfde manier als
 // maaier-anim.cjs: per houding één vel (rij per richting, Z ZW W NW N NO O ZO, kolom per beeld) en per figuur een
 // <naam>.json ernaast met { naam, cel, anker, snelheid, richtingen, houdingen }, klaar voor naar-spel.cjs. Elk beeld
 // wordt in een ruime cel gerenderd en daarna krap uitgesneden; de cel van het vel past om alle beelden van de figuur
@@ -9,7 +10,9 @@
 // rand van de ruime cel aan (de maaier deed dat eerst met zijn zeis, zie maaier-anim.cjs), dan meldt het RAND en
 // eindigt het met een fout. Een figuur zonder lopen (de maaister) krijgt geen snelheid, zoals maaier.json.
 //
-//   node gereedschap/pixelart/werkfiguren-anim.cjs                    alle negen, en de proefplaat
+//   node gereedschap/pixelart/werkfiguren-anim.cjs                    alle zeventien, en de proefplaat
+//   node gereedschap/pixelart/werkfiguren-anim.cjs --oogst            alleen de acht van de oogst, en hun eigen proefplaat
+//   node gereedschap/pixelart/werkfiguren-anim.cjs --oogstproef       alleen die proefplaat (uit/werkfiguren-oogst-proef.png)
 //   node gereedschap/pixelart/werkfiguren-anim.cjs zaaier zaaister    alleen deze (een proefplaat alleen als alle meegaan)
 //   node gereedschap/pixelart/werkfiguren-anim.cjs --proef            alleen de proefplaat (rendert alleen wat erop staat)
 //   -> uit/<naam>/animaties/<naam>-<houding>.png       het vel
@@ -17,6 +20,7 @@
 //   -> uit/<naam>/animaties/<naam>-<houding>-zo.png    bewegende proef, richting ZO, twee keer vergroot
 //   -> uit/werkfiguren-proef.png                        de proefplaat, op 1×
 // Daarna: node gereedschap/pixelart/naar-spel.cjs --alleen zaaier,wieder,sprokkelaar,hakker,zaaister,wiedster,sprokkelaarster,maaister,hakster
+//   en voor de oogst: --alleen plukker,plukster,binder,binster,drager,draagster,dorser,dorster
 // Een figuur per proces tegelijk gaat het snelst (de sprokkelaar en de sprokkelaarster duren het langst).
 //
 // De proefplaat: per rij drie groepen (Z, ZO, NW). Bovenaan ter vergelijking de gewone boer en boerin (staan, lopen),
@@ -37,17 +41,20 @@ fs.mkdirSync(UIT, { recursive: true });
 const RUIM = { b: 260, h: 240, anker: [130, 180] }; // de ruime cel om in te renderen (de schoffel reikt ver)
 const RICHTINGEN = K.KANTEN; // altijd alle acht
 const MARGE = 3; // lucht tussen de figuur en de rand van zijn cel, zoals in maaier-anim.cjs
-const FIGUREN = Object.keys(W.HOUDINGEN); // zaaier, wieder, sprokkelaar, hakker, zaaister, wiedster, sprokkelaarster, maaister, hakster
+const FIGUREN = Object.keys(W.HOUDINGEN); // zaaier, wieder, sprokkelaar, hakker, de oogstfiguren, en al hun vrouwen
+const OOGST = ['plukker', 'plukster', 'binder', 'binster', 'drager', 'draagster', 'dorser', 'dorster'];
 
 const args = process.argv.slice(2);
 const alleenProef = args.includes('--proef');
+const oogst = args.includes('--oogst');
+const oogstProef = args.includes('--oogstproef');
 const GEVRAAGD = args.filter((a) => !a.startsWith('--'));
 const onbekend = GEVRAAGD.filter((n) => !FIGUREN.includes(n));
 if (onbekend.length) {
   console.error(`Onbekende figuur: ${onbekend.join(', ')}. Kies uit: ${FIGUREN.join(', ')}.`);
   process.exit(1);
 }
-const TE_RENDEREN = alleenProef ? [] : GEVRAAGD.length ? GEVRAAGD : FIGUREN;
+const TE_RENDEREN = alleenProef || oogstProef ? [] : GEVRAAGD.length ? GEVRAAGD : oogst ? OOGST : FIGUREN;
 
 // de krappe doos om alles wat er op de plaat staat (zoals doosVan in maaier-anim.cjs)
 function doosVan(plaat) {
@@ -173,7 +180,7 @@ const RIJEN = [
   { beelden: werkRij('hakker', 'hakken', [0, 3, 4], 'gras'), vakken: [1, 1, 3] },
   { beelden: werkRij('hakster', 'hakken', [0, 3, 4], 'gras'), vakken: [1, 1, 3] },
 ];
-function proefplaat() {
+function proefplaat(RIJEN, KANTEN_PROEF, bestand = 'werkfiguren-proef.png') {
   const t0 = Date.now();
   const RAND = 3; // rond elk beeld
   const GAT = 4; // tussen twee beelden
@@ -226,9 +233,27 @@ function proefplaat() {
     });
     y += m.h + RIJGAT;
   });
-  fs.writeFileSync(path.join(UIT, 'werkfiguren-proef.png'), K.png(plaat, 1, '#20261a'));
-  console.log(`werkfiguren-proef.png: ${B}×${H} op 1×, in ${((Date.now() - t0) / 1000).toFixed(0)}s`);
+  fs.writeFileSync(path.join(UIT, bestand), K.png(plaat, 1, '#20261a'));
+  console.log(`${bestand}: ${B}×${H} op 1×, in ${((Date.now() - t0) / 1000).toFixed(0)}s`);
 }
-if (alleenProef || FIGUREN.every((n) => TE_RENDEREN.includes(n))) proefplaat();
+// De proefplaat van de oogst: een rij per werk, en per rij vier groepen: de man van schuin voren en van achteren, en zijn
+// vrouw van voren en van schuin voren. Per groep staan, lopen en twee beelden van het werk (de drager heeft er twee van
+// het lopen: hij werkt alleen door te lopen).
+const KANTEN_OOGST = ['m:ZO', 'm:NW', 'v:Z', 'v:ZO'];
+const oogstRij = (man, vrouw, werk, fasen, grond) => ({
+  beelden: (sleutel) => {
+    const [wie, kant] = sleutel.split(':');
+    return werkRij(wie === 'm' ? man : vrouw, werk, fasen, grond)(kant);
+  },
+  vakken: [1, 1, 2],
+});
+const RIJEN_OOGST = [
+  oogstRij('plukker', 'plukster', 'plukken', [4, 9], 'gras'),
+  oogstRij('binder', 'binster', 'binden', [2, 6], 'aarde'),
+  oogstRij('drager', 'draagster', 'lopen', [5, 7], 'gras'),
+  oogstRij('dorser', 'dorster', 'dorsen', [4, 6], 'aarde'),
+];
+if (alleenProef || FIGUREN.every((n) => TE_RENDEREN.includes(n))) proefplaat(RIJEN, KANTEN_PROEF);
+if (oogst || oogstProef || OOGST.every((n) => TE_RENDEREN.includes(n))) proefplaat(RIJEN_OOGST, KANTEN_OOGST, 'werkfiguren-oogst-proef.png');
 
 if (klem) process.exitCode = 1;

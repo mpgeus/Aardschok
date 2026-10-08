@@ -94,7 +94,7 @@ test('wat een boer vandaag doet: zaaien, wieden, maaien (dat is de oogst), mest,
   assert.ok(T.bosrandBij(S.dorp, e), 'er is bos bij zijn boerderij');
   assert.equal(op(275), 'sprokkelen', 'wintermaand');
   e.veldwerk.klaar.sprokkelen = 275;
-  assert.equal(op(275), null, 'een keer per dag; daarna is hij bij zijn boerderij');
+  assert.equal(op(275), 'dorsen', 'een keer per dag; daarna dorst hij in de deur van zijn schuur (vraag 140)');
   T.VELDWERK_INSTELLINGEN.aan = false;
   try {
     assert.equal(op(45), null, 'uit: hij staat overdag bij zijn boerderij, zoals tot 5 okt');
@@ -181,7 +181,7 @@ test('in de winter sprokkelt hij aan de bosrand, en brengt hij een bundel hout n
     // zijn boerderij.
     const boeren = alle.filter((e) => T.bosrandBij(D, e));
     assert.ok(boeren.length >= 3, `${boeren.length} boeren hebben bos in de buurt`);
-    for (const e of alle) if (!boeren.includes(e)) assert.equal(T.veldwerkVandaag(D, e, datumVan(S)), null, `${e.wie} blijft bij zijn boerderij`);
+    for (const e of alle) if (!boeren.includes(e)) assert.equal(T.veldwerkVandaag(D, e, datumVan(S)), 'dorsen', `${e.wie} dorst bij zijn boerderij`);
     const boom = (x, y) => T.NATUUR.bos.telt(w, x, y, T.voorwerpOp(w, x, y));
     const aanDeBosrand = (e) => boom(e.tx - 1, e.ty) || boom(e.tx, e.ty - 1) || boom(e.tx - 1, e.ty - 1);
     const gezien = new Map(boeren.map((e) => [e, { rapen: false, bundel: false }]));

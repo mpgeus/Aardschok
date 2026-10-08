@@ -75,7 +75,13 @@ test('T.windBeeld geeft een beeld 0..7, en verandert met de tijd en de tegel', (
 
 test('T.akkerTegelStadium: gemaaid telt alleen mee zolang het basisstadium "rijp" is', () => {
   const akker = { x: 0, y: 0, b: 2, h: 2, geoogst: new Set(['0,0']) };
-  assert.equal(T.akkerTegelStadium(akker, 0, 0, 'rijp'), 'gemaaid');
+  // Gemaaid en binnen: stoppels; als zwad op het veld, of in hokken (vraag 140).
+  assert.equal(T.akkerTegelStadium(akker, 0, 0, 'rijp'), 'stoppels');
+  akker.schoven = new Map([['0,0', { graan: 4, gebonden: null }]]);
+  assert.equal(T.akkerTegelStadium(akker, 0, 0, 'rijp'), 'zwad');
+  T.bindSchoof(akker, 0, 0, 10);
+  assert.equal(T.akkerTegelStadium(akker, 0, 0, 'rijp'), 'hokken');
+  akker.schoven.clear();
   assert.equal(T.akkerTegelStadium(akker, 1, 0, 'rijp'), 'rijp'); // nog niet gemaaid
   // ná het vangnet is toch alles gemaaid, ook een tegel die niet in `geoogst` stond
   assert.equal(T.akkerTegelStadium(akker, 1, 1, 'gemaaid'), 'gemaaid');
@@ -155,8 +161,10 @@ test('T.werkOogstBij: loopt naar een tegel, maait hem, en gaat door tot de hele 
     }
   }
   assert.equal(akker.geoogst.size, 4, 'niet alle vier de tegels van de akker zijn gemaaid geraakt');
-  // elke gemaaide tegel brengt zijn graan binnen, en dat is de enige weg (geen boerderij-opbrengst)
-  assert.equal(S.voorraad.graan, 4 * T.GRAAN_PER_TEGEL);
+  // elke gemaaide tegel legt zijn graan als zwad op het veld (het komt pas binnen als het in de schuur is, vraag 140), en
+  // dat is de enige weg (geen boerderij-opbrengst)
+  assert.equal(S.voorraad.graan, 0);
+  assert.equal(T.graanOpHetVeld(S), 4 * T.GRAAN_PER_TEGEL);
   assert.equal(boer.maait, null);
   assert.equal(boer.oogstDoel, null);
 });
@@ -193,7 +201,7 @@ test('T.werkOogstBij: een boer met twee akkers maait ze allebei (tot 24 sep blee
   maaiTotKlaar(S, boer, () => eerste.geoogst.size + tweede.geoogst.size === 4);
   assert.equal(eerste.geoogst.size, 2);
   assert.equal(tweede.geoogst.size, 2, 'de tweede akker is niet gemaaid');
-  assert.equal(S.voorraad.graan, 4 * T.GRAAN_PER_TEGEL);
+  assert.equal(T.graanOpHetVeld(S), 4 * T.GRAAN_PER_TEGEL);
 });
 
 // De dag (vanaf het begin van het spel, 1 lentemaand) van een datum, in het eerste of een later jaar.
@@ -379,7 +387,7 @@ test('de oogst gaat maal de vruchtbaarheid: bij het maaien, en bij het vangnet',
   S.kalender.dag = RIJP_DAG;
   maaiTotKlaar(S, boer, () => akker.geoogst.size === 4);
   assert.equal(akker.geoogst.size, 4);
-  assert.ok(bijna(S.voorraad.graan, 4 * T.GRAAN_PER_TEGEL * 0.6), `${S.voorraad.graan}`);
+  assert.ok(bijna(T.graanOpHetVeld(S), 4 * T.GRAAN_PER_TEGEL * 0.6), `${T.graanOpHetVeld(S)}`);
   const v = drieVelden();
   v.akker.vruchtbaarheid = 0.6;
   assert.equal(T.haalOogstBinnen(v.S), 4, 'alleen de akker: op de weide en de braak stond niets');

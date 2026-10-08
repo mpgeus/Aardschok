@@ -1267,6 +1267,143 @@ function oudstehuis(gx, gy, o = {}) {
   return g;
 }
 
+// ---------------------------------------------------------------- de wijnboerderij
+
+// Een stuk van een rij wijnranken, een stuk lang (S eenheden langs lokale x): twee palen met een cross-arm, draden,
+// twee stokken met blad, en donkerblauwe druiventrossen die onder het blad hangen, aan beide kanten. Lokaal staat hij
+// op de grond, z omhoog; met richting 'ZO' loopt de rij langs de y-as van de wereld.
+function wijnrij(zaad = 1, S = TEGEL) {
+  const M = { paal: 0, draad: 1, stam: 2, blad: 3, druif: 4 };
+  const mat = [];
+  mat[M.paal] = { ramp: 'hout', lo: 1.2, hi: 5.4, patroon: (x, y, z) => (ruis3(x * 0.25, y * 0.25, z * 0.5, zaad) > 0.7 ? -0.7 : 0) };
+  mat[M.draad] = { ramp: 'ijzer', lo: 1.6, hi: 5.2 };
+  mat[M.stam] = { ramp: 'schors', lo: 1.2, hi: 5 };
+  mat[M.blad] = {
+    ramp: 'blad',
+    lo: 1.6,
+    hi: 6.4,
+    patroon: (x, y, z) => {
+      const r = ruis3(x * 0.55, y * 0.55, z * 0.55, zaad + 3);
+      return r > 0.68 ? { ramp: 'gras', plus: 0.6 } : r < 0.28 ? -0.8 : 0;
+    },
+  };
+  mat[M.druif] = { ramp: 'gewaad', lo: 0.5, hi: 4.6, glans: 1.5, glansMacht: 18 };
+  const d = [];
+  let deel = 1;
+  const PAAL = 40;
+  for (const x of [-S / 2, S / 2]) {
+    d.push(F.capsule([x, 0, 0], [x, 0, PAAL], 1.5, M.paal, deel++));
+    d.push(F.capsule([x, -6, PAAL - 6], [x, 6, PAAL - 6], 1, M.paal, deel++));
+  }
+  for (const [y, z] of [[0, 11], [0, 25], [-6, PAAL - 6], [6, PAAL - 6]]) d.push(F.capsule([-S / 2, y, z], [S / 2, y, z], 0.45, M.draad, deel++));
+  for (let p = 0; p < 2; p++) {
+    const x0 = (p === 0 ? -0.25 : 0.25) * S;
+    const r = (k) => rnd(zaad, p, k);
+    d.push(F.kegel([x0, 0, 0], [x0 + (r(1) - 0.5) * 3, 0, 24], 1.7, 1.1, M.stam, deel++));
+    // het bladerdak langs de draden: een dichte hoop bollen, onderin schaarser
+    for (let i = 0; i < 11; i++) {
+      const cx = x0 + (r(10 + i) - 0.5) * S * 0.62;
+      const cz = 18 + r(30 + i) * 20;
+      const cy = (r(50 + i) - 0.5) * 7;
+      const rx = 5 + r(70 + i) * 2.4;
+      d.push(F.ellips([cx, cy, cz], [rx, 3.6 + r(90 + i) * 1.4, 4.2 + r(110 + i) * 1.6], M.blad, deel + (i % 5), 1.4));
+    }
+    // de trossen: onder het blad, aan beide kanten, elk een kegeltje van kleine bollen
+    for (const kant of [-1, 1]) {
+      for (let t = 0; t < 2; t++) {
+        const tx = x0 + (t === 0 ? -1 : 1) * (4 + r(130 + t + kant) * 5);
+        const ty = kant * (4.6 + r(140 + t) * 1.2);
+        const top = 20 - r(150 + t) * 2;
+        for (let j = 0; j < 6; j++) {
+          const rad = 2.3 - j * 0.2;
+          const ox = ((j * 7 + t * 3 + p) % 3 - 1) * 1.1;
+          d.push(F.bol([tx + ox, ty + ((j % 2) - 0.5) * 0.8, top - j * 2.2], rad, M.druif, deel + 5 + ((p * 4 + t * 2 + (kant > 0 ? 1 : 0)) % 8), 1));
+        }
+      }
+    }
+    deel += 14;
+  }
+  return F.model(d, mat, { midden: [0, 0, 20], straal: Math.hypot(S / 2 + 8, 10, 24) });
+}
+
+// De wijnboerderij: een klein boerenhuis onder pannen, met ernaast een wijngaard van vijf rijen ranken aan palen op
+// omgespitte aarde, en voor de deur een paar wijntonnen. 10 × 8 tegels, het huis 5 × 4 achter in de hoek, de deur
+// (gevel 'y') kijkt naar de kijker; de wijngaard ligt rechts ervan en loopt de hele diepte door.
+// o.alleenHuis: alleen het huis, op de voet van het huis (voor de bouwfases).
+// o.metTonnen (met alleenHuis): het huis met de wijntonnen voor de deur, zonder wijngaard: het wijnhuis (8 okt, vraag 140);
+// de voet is dan die van het huis, 5 × 4, en de tonnen staan er iets vóór.
+function wijnboerderij(gx, gy, o = {}) {
+  const T = TEGEL;
+  const zaad = o.zaad ?? 71;
+  const g = D.huis({
+    gx, gy, b: 5, d: 4, nok: 'x', muurH: 112, sokkelH: 20, muur: 'vlecht', hout: 'hout', dak: 'pannen', windveer: true, zaad,
+    overstek: 10,
+    gevel: {
+      y: [
+        D.raamElement({ u: 12, b: 22, h: 50, hoog: 26, luiken: 'rood', kol: 2, rijen: 1 }),
+        D.deurElement({ u: 56, b: 46, hoog: 90, ramp: 'hout' }),
+        D.raamElement({ u: 124, b: 22, h: 50, hoog: 26, luiken: 'rood', kol: 2, rijen: 1 }),
+      ],
+      x: [D.raamElement({ u: 24, b: 22, h: 50, hoog: 26, luiken: 'rood', kol: 2, rijen: 1 }), D.raamElement({ u: 84, b: 22, h: 50, hoog: 26, luiken: 'rood', kol: 2, rijen: 1, leeg: true })],
+    },
+    schoorsteen: { t: 0.2, c: -6, hoog: 26, r: 10, steen: true, rook: o.rook !== false },
+    ...o,
+  });
+  if (o.alleenHuis && !o.metTonnen) return g;
+  const ex = gx - 0.5; // de achterste hoek van de voet, in tegels
+  const ey = gy - 0.5;
+  if (!o.alleenHuis) {
+    const hGrond = 3; // de aarde van de wijngaard ligt drie pixels boven het gras
+    const zGrond = hGrond / PXH;
+    const rijX = [0, 1, 2, 3, 4].map((k) => ex + 6.15 + 0.85 * k);
+    // de omgespitte aarde: tussen de rijen ruggen en voren, onder de ranken donkerder met hier en daar gras
+    const aardeTex = (vlak, X, Y, Z) => {
+      const u = X / T;
+      const dich = Math.min(...rijX.map((r) => Math.abs(u - r))) * T; // afstand tot de dichtstbijzijnde rij, in eenheden
+      const n = ruis2(X * 0.3, Y * 0.3, zaad + 5);
+      UIT.ramp = RAMP.aarde;
+      if (vlak !== 'z') {
+        UIT.stap = (vlak === 'y' ? 4.4 : 3) + (hash(Math.floor(X / 3), Math.floor(Y / 3), zaad) % 4 === 0 ? -0.8 : 0);
+        return;
+      }
+      if (dich < 3.6) {
+        UIT.stap = 2 + n * 1.2;
+        if (n > 0.62 && hash(Math.floor(X), Math.floor(Y), zaad + 2) % 3 === 0) {
+          UIT.ramp = RAMP.gras;
+          UIT.stap = 2.6 + n;
+        }
+        return;
+      }
+      UIT.stap = 3.5 + 1.1 * Math.cos(dich * 0.62) + (n - 0.5) * 1.2;
+      const h = hash(Math.floor(X * 0.5), Math.floor(Y * 0.5), zaad + 9);
+      if (h % 61 === 0) {
+        UIT.ramp = RAMP.steen;
+        UIT.stap = 4.4;
+      }
+    };
+    g.vormen.push(D.blok(ex + 5.5, ey, ex + 10, ey + 8, 0, hGrond, aardeTex, { deel: 40 }));
+    // het pad naar de deur: aangestampte aarde, tot de rand van de voet
+    const padTex = (vlak, X, Y) => {
+      UIT.ramp = RAMP.zand;
+      UIT.stap = (vlak === 'z' ? 4.4 : vlak === 'y' ? 4 : 2.8) + (hash(Math.floor(X * 0.6), Math.floor(Y * 0.6), zaad + 13) % 5 === 0 ? -0.9 : 0);
+    };
+    g.vormen.push(D.blok(ex + 1.95, ey + 4, ex + 3, ey + 8, 0, 1.5, padTex, { deel: 41 }));
+    // de rijen: elk uit stukken, een voor een ingeplant met een eigen zaad
+    const S = (7.5 * T) / 8;
+    for (let k = 0; k < rijX.length; k++) {
+      for (let j = 0; j < 8; j++) {
+        g.modellen.push({ model: wijnrij(zaad + k * 8 + j, S), gx: rijX[k], gy: ey + 0.25 + (j + 0.5) * (7.5 / 8), richting: 'ZO', z: zGrond });
+      }
+    }
+  }
+  // wijntonnen voor het huis
+  g.modellen.push({ model: VW.ton(), gx: ex + 0.8, gy: ey + 4.75, richting: 'ZO', z: 0 });
+  g.modellen.push({ model: VW.ton(), gx: ex + 1.4, gy: ey + 4.95, richting: 'Z', z: 0 });
+  g.modellen.push({ model: VW.ton(), gx: ex + 0.55, gy: ey + 5.55, richting: 'ZO', z: 0 });
+  if (!o.alleenHuis) g.voet = [ex * T, ey * T, (ex + 10) * T, (ey + 8) * T];
+  return g;
+}
+
 // ---------------------------------------------------------------- de brug
 
 // Een stenen boogbrug over de beek, met een ezelsrug en twee leuningen. Omdat de bolling van het
@@ -1446,5 +1583,5 @@ module.exports = {
   GLAS, glasraamElement, roosvensterElement, boogdeurElement, klimopElement, klokkentoren, sterSpits, kapel,
   grafsteen, tombe, kerkhofhek, kerkhof, molenrad, molensteen, watermolen, broodplank, bakkerij, schuur,
   houtschuur, kippenhok,
-  prikbord, ketel, kruidenrek, kruidenhut, gewei, huidenrek, jagershut, oudstehuis, brug, yCilinder, beekProef,
+  prikbord, ketel, kruidenrek, kruidenhut, gewei, huidenrek, jagershut, oudstehuis, wijnrij, wijnboerderij, brug, yCilinder, beekProef,
 };
