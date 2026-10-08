@@ -284,11 +284,15 @@
       // Wie er woont, tapt en brouwt: van graan, zolang er niet genoeg bier ligt (27 sep, werklijst punt
       // 2). Een kan bier kost een veertigste graan; wie er 's avonds heen gaat, staat in js/herberg.js.
       handen: 1, woonruimte: 1, maakt: { in: { graan: 0.2 }, uit: { bier: 8 } }, menu: true, lantaarn: true,
+      // In een land met een bouwstijl groeit de kleine herberg van het gehucht in een dorp door tot de grote, van twee
+      // lagen met een uithangbord (groeitMee, js/behoeften.js; werklijst vraag 114, stap 3), en wie er een bouwt, krijgt
+      // de grote (js/bouwstijl.js).
+      groeitMee: true,
       tekening: 'gebouwen/herberg', beschrijving: 'reizigers, nieuws en verhalen, bier',
       opmerking: 'In het gehucht staat er een vanaf het begin, met de herbergierster (kaarten/gehucht.betekenis.json), '
-        + 'in een eigen tekening van vakwerk onder riet (huizen/herberg1). Wie hem in het dorp bouwt, krijgt nog de '
-        + 'oude tekening van steen onder pannen, zonder ramen die branden. Plaatsen heeft hij nog niet: alleen het bier '
-        + 'houdt de gasten tegen (meegroeien hoort bij punt 5 van de werklijst).',
+        + 'in een eigen tekening van vakwerk onder riet (huizen/herberg1). Wie hem in een land zonder stijl bouwt, krijgt '
+        + 'nog de oude tekening van steen onder pannen, zonder ramen die branden. Plaatsen heeft hij nog niet: alleen het '
+        + 'bier houdt de gasten tegen; groter worden doet hij alleen om te zien.',
     },
     kapel: {
       naam: 'kapel', trede: 'gehucht', voet: { b: 5, h: 5 }, kosten: { hout: 10, goud: 8 }, heer: {}, bouwtijd: 4,
@@ -371,7 +375,7 @@
     // ── Stad ──
     stenenHuis: {
       naam: 'stenen huis', meervoud: 'stenen huizen', trede: 'stad', voet: { b: 7, h: 5 }, kosten: { hout: 20, goud: 30 }, heer: { goud: 6 }, bouwtijd: 6,
-      handen: 0, woonruimte: 8, maakt: null, menu: true, woning: true,
+      handen: 0, woonruimte: 8, wordt: 'woontoren', wordtVanaf: 'marktrecht', maakt: null, menu: true, woning: true,
       tekening: 'huizen/steen1', beschrijving: 'veel ruimte, en rijk om te zien', opmerking: '',
       // Het stenen broertje van elk huis, met dezelfde vorm (werklijst vraag 85, d; gereedschap/pixelart/huizen.cjs): een
       // huis dat doorgroeit, versteent op zijn eigen grond (js/behoeften.js), en je herkent het. Tot 1 okt was er één
@@ -381,6 +385,17 @@
         'huizen/huis1': 'huizen/steen1', 'huizen/huis2': 'huizen/steen2', 'huizen/huis3': 'huizen/steen3',
         'huizen/huis4': 'huizen/steen4', 'huizen/huis5': 'huizen/steen5', 'huizen/huis6': 'huizen/steen6',
       },
+    },
+    // Een stenen huis met marktrecht groeit door tot een woontoren van vier lagen op 5 bij 5, waar drie gezinnen wonen,
+    // ambachtslieden zoals in het stenen huis (werklijst vraag 114, stap 3; Marcel, 7 okt, "B: Ja"): de stad groeit de
+    // hoogte in. Niemand bouwt hem: hij komt alleen door doorgroeien (js/behoeften.js), en vanaf zijn trede. Elke stijl
+    // heeft hem in zijn eigen steen en in baksteen (gereedschap/pixelart/huizen.cjs, TORENS); een land zonder stijl
+    // krijgt die van wit.
+    woontoren: {
+      naam: 'woontoren', meervoud: 'woontorens', trede: 'marktrecht', voet: { b: 5, h: 5 }, kosten: { hout: 10, steen: 30 }, heer: { goud: 8 }, bouwtijd: 8,
+      handen: 0, woonruimte: 12, maakt: null, menu: false, woning: true,
+      tekening: 'huizen/wit-woontoren-pannen-z', beschrijving: 'drie gezinnen boven elkaar, in steen',
+      opmerking: 'Nog zonder bouwfasen: hij groeit in één nacht.',
     },
     raadhuis: {
       naam: 'raadhuis', trede: 'stad', voet: { b: 8, h: 6 }, kosten: { hout: 24, goud: 40 }, heer: { goud: 20 }, bouwtijd: 8,
@@ -848,6 +863,9 @@
     if (T.veldOp(w, x, y)) return 'Daar ligt een veld.';
     if (T.opPad(w, x, y)) return 'Daar loopt een pad.';
     if (T.erfOp(D, x, y)) return 'Daar ligt een erf.';
+    // Waar de herberg straks met het dorp meegroeit (T.meegroeiGrond, js/behoeften.js), blijft de grond vrij.
+    const groeit = T.meegroeiGrondOp(D, x, y);
+    if (groeit) return `Hier groeit straks de ${T.GEBOUWEN[groeit.soort].naam}.`;
     // Een lantaarn houdt niemand tegen die loopt, maar er komt geen gebouw overheen (js/paden.js).
     const v = T.voorwerpOp(w, x, y);
     if (v && v.soort === 'lantaarn') return 'Daar staat een lantaarn.';

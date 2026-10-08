@@ -287,7 +287,8 @@
   // ---------------------------------------------------------------------------------------------
 
   // Een plek voor een lantaarn naast deze tegel: te belopen grond zonder iets erop, geen veld, geen erf, geen pad en
-  // geen deur. De eerste die past, in een vaste volgorde.
+  // geen deur, en niet waar de herberg straks groter wordt (T.meegroeiGrondOp, js/behoeften.js). De eerste die past, in
+  // een vaste volgorde.
   const NAAST = [[1, 0], [0, 1], [-1, 0], [0, -1], [1, 1], [-1, 1], [1, -1], [-1, -1]];
   function plekNaast(D, t, net, deuren) {
     const w = D.wereld;
@@ -295,7 +296,7 @@
     for (const [dx, dy] of NAAST) {
       const x = t.x + dx;
       const y = t.y + dy;
-      if (!magPad(w, x, y) || net[x + y * b] || T.erfOp(D, x, y) || deuren.has(x + y * b)) continue;
+      if (!magPad(w, x, y) || net[x + y * b] || T.erfOp(D, x, y) || deuren.has(x + y * b) || T.meegroeiGrondOp(D, x, y)) continue;
       if (T.opHetPlein(w, x, y)) continue; // het plein blijft open
       return { x, y };
     }

@@ -21,9 +21,12 @@ function nieuwSpel(zaad) {
   const echt = console.warn;
   console.warn = () => {};
   const S = { kalender: T.nieuweKalender() };
+  const opEiland = T.MAKER_INSTELLINGEN.opEiland;
+  T.MAKER_INSTELLINGEN.opEiland = false; // de landen van de maker zelf, zonder het eiland (vraag 117)
   try {
     assert.ok(T.beginOpKaart(S, 'gehucht', zaad));
   } finally {
+    T.MAKER_INSTELLINGEN.opEiland = opEiland;
     console.warn = echt;
   }
   Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
@@ -51,8 +54,9 @@ test('elke tekening van een stijl staat op het vel, met de naam van zijn stijl, 
   assert.equal(tegels.length, opgaven.length);
   const per = {};
   for (const tg of tegels) per[tg.stijl.stijl] = (per[tg.stijl.stijl] || 0) + 1;
-  // elk 12 hutten, 36 huizen, 36 stenen huizen en 24 boerderijen; oker en roze nemen de hutten van wit (vraag 114, 2b)
-  assert.deepEqual(per, { wit: 108, oker: 96, planken: 108, roze: 96 });
+  // elk 12 hutten, 36 huizen, 36 stenen huizen en 24 boerderijen; oker en roze nemen de hutten van wit (vraag 114, 2b);
+  // en elk 32 grote gebouwen: de kleine en de grote herberg, de kapel, de woontoren en het huis van de schout (stap 3)
+  assert.deepEqual(per, { wit: 140, oker: 128, planken: 140, roze: 128 });
   for (const t of tegels) {
     const s = t.stijl;
     assert.equal(t.naam, HZ.stijlNaam(s.stijl, s.vorm, s.steen === 'baksteen' ? 'baksteen' : s.dak, s.stand));
@@ -198,4 +202,142 @@ test('een verzoek keert zijn deur naar de weg, en het goud op de grond en het ge
     assert.ok(u.gelukt, u.reden);
     assert.equal(u.instantie.tekening, tekening);
   }
+});
+
+// De grote gebouwen (werklijst vraag 114, stap 3; Marcel, 7 okt: "A; ja goed idee / B: Ja"): de kapel en de woontoren
+// van steen, de herberg die meegroeit met het dorp, en het huis van de schout en de herberg van de maker in de stijl.
+test('de kapel en de woontoren zijn van de steen van hun stijl, en van baksteen met een steenbakkerij', () => {
+  const D = leeg();
+  assert.deepEqual(T.stijlTekeningen(D, 'kapel'), ['huizen/wit-kapel-leien-z']);
+  assert.deepEqual(T.stijlTekeningen(D, 'woontoren'), ['huizen/wit-woontoren-pannen-z']);
+  assert.deepEqual(T.stijlTekeningen(D, 'herberg'), ['huizen/wit-herberg1-riet-z'], 'in het gehucht de kleine herberg');
+  D.trede = 'dorp';
+  assert.deepEqual(T.stijlTekeningen(D, 'herberg'), ['huizen/wit-herberg2-leien-z'], 'in een dorp de grote');
+  D.gebouwen.push({ soort: 'steenbakkerij', x: 1, y: 1, klaar: true, klaarOp: 0, handen: 0, voorwerp: null });
+  assert.deepEqual(T.stijlTekeningen(D, 'kapel'), ['huizen/wit-kapel-baksteen-z']);
+  assert.deepEqual(T.stijlTekeningen(D, 'woontoren'), ['huizen/wit-woontoren-baksteen-z']);
+  // wie in een woontoren woont, is ambachtsman, zoals in een stenen huis
+  assert.equal(T.standVan({ soort: 'woontoren' }), 'ambachtslieden');
+});
+
+test('de maker legt het huis van de schout en de herberg in de stijl van het land, met de deur naar het plein', () => {
+  for (const zaad of [5, 62710]) {
+    const S = nieuwSpel(zaad);
+    const D = S.dorp;
+    const schout = D.gebouwen.find((g) => g.huis === 'schout');
+    const herberg = D.gebouwen.find((g) => g.soort === 'herberg');
+    assert.equal(T.vormVan(schout.tekening), 'schoutshuis');
+    assert.equal(T.vormVan(herberg.tekening), 'herberg1');
+    assert.ok(T.deurKantVan(schout.tekening) && T.deurKantVan(herberg.tekening), 'allebei van de stijl');
+    assert.equal(T.stijlVan(D), T.stijlVoorLand(zaad));
+  }
+});
+
+test('in een dorp groeit de herberg door tot de grote, met zijn deur aan dezelfde kant, voor hout', () => {
+  const S = nieuwSpel(5);
+  const D = S.dorp;
+  const g = D.gebouwen.find((x) => x.soort === 'herberg');
+  const kant = T.deurKantVan(g.tekening);
+  const voor = T.voetVanGebouw(g);
+  T.zetVoorraad(D, 'graan', 2000);
+  T.zetVoorraad(D, 'hout', 0);
+  T.tikBehoeftenDag(D, 1);
+  assert.equal(T.vormVan(g.tekening), 'herberg1', 'in het gehucht blijft hij klein');
+  D.trede = 'dorp';
+  T.tikBehoeftenDag(D, 2);
+  assert.equal(T.vormVan(g.tekening), 'herberg1', 'zonder hout wacht hij');
+  assert.ok(g.wachtOpBouwstof);
+  T.zetVoorraad(D, 'hout', 100);
+  T.tikBehoeftenDag(D, 3);
+  assert.equal(T.vormVan(g.tekening), 'herberg2');
+  assert.equal(T.deurKantVan(g.tekening), kant);
+  // (de mensen sprokkelen die dag ook wat hout)
+  assert.ok(Math.abs(D.voorraad.hout - (100 - T.WENSEN_INSTELLINGEN.bouwstof.herberg.hout)) < 1, `${D.voorraad.hout} hout over`);
+  // de kant van de deur ligt waar hij lag
+  const na = T.voetVanGebouw(g);
+  const zijde = (r) => ({ z: r.y + r.h, o: r.x + r.b, n: r.y, w: r.x })[kant];
+  assert.equal(zijde(na), zijde(voor));
+  assert.equal(g.voorwerp.x, g.x);
+  assert.equal(g.voorwerp.y, g.y);
+  for (let y = na.y; y < na.y + na.h; y++) for (let x = na.x; x < na.x + na.b; x++) assert.equal(D.wereld.tegels[y][x], 'muur');
+});
+
+// Marcel, 8 okt ("Beiden"): in de speeltest van 7 okt bleef de herberg op 62707 klein, omdat er later iets op de grond
+// kwam waar hij groter wordt. Die grond blijft vrij.
+test('waar de herberg straks groter wordt, komt geen gebouw en geen erf', () => {
+  const S = nieuwSpel(5);
+  const D = S.dorp;
+  const g = D.gebouwen.find((x) => x.soort === 'herberg');
+  const grond = T.meegroeiGrond(D);
+  assert.equal(grond.length, 1);
+  const r = grond[0];
+  const voet = T.voetVanGebouw(g);
+  // een tegel van de grote herberg buiten de kleine
+  let tegel = null;
+  for (let y = r.y; y < r.y + r.h && !tegel; y++) {
+    for (let x = r.x; x < r.x + r.b; x++) {
+      if (x < voet.x || y < voet.y || x >= voet.x + voet.b || y >= voet.y + voet.h) { tegel = { x, y }; break; }
+    }
+  }
+  assert.ok(tegel, 'de grote herberg is groter');
+  assert.equal(T.waaromNietOpDezeGrond(D, tegel.x, tegel.y), 'Hier groeit straks de herberg.');
+  assert.equal(T.meegroeiGrondOp(D, tegel.x, tegel.y, g), null, 'voor de herberg zelf is het zijn eigen grond');
+  // en eenmaal groot, is er niets meer vrij te houden
+  T.zetVoorraad(D, 'hout', 100);
+  D.trede = 'dorp';
+  T.tikBehoeftenDag(D, 1);
+  assert.equal(T.vormVan(g.tekening), 'herberg2');
+  assert.deepEqual(T.meegroeiGrond(D), []);
+});
+
+test('staat er alleen een struik waar de herberg groter wordt, dan gaat die er met de bouw uit', () => {
+  const S = nieuwSpel(62710); // een bessenstruik op 40,62, in de grond van de grote herberg
+  const D = S.dorp;
+  const g = D.gebouwen.find((x) => x.soort === 'herberg');
+  assert.equal(T.voorwerpOp(D.wereld, 40, 62).soort, 'bessenStruik');
+  T.zetVoorraad(D, 'hout', 100);
+  D.trede = 'dorp';
+  T.tikBehoeftenDag(D, 1);
+  assert.equal(T.vormVan(g.tekening), 'herberg2');
+});
+
+test('kan de herberg niet meegroeien, dan zegt het dorp waarom, één keer', () => {
+  const S = nieuwSpel(5);
+  const D = S.dorp;
+  const g = D.gebouwen.find((x) => x.soort === 'herberg');
+  const r = T.meegroeiGrond(D)[0];
+  const voet = T.voetVanGebouw(g);
+  // een rots waar hij groter moet worden (zoals een oud spel, van vóór deze regel)
+  let tegel = null;
+  for (let y = r.y; y < r.y + r.h && !tegel; y++) {
+    for (let x = r.x; x < r.x + r.b; x++) {
+      if (x < voet.x || y < voet.y || x >= voet.x + voet.b || y >= voet.y + voet.h) { tegel = { x, y }; break; }
+    }
+  }
+  T.zetVoorwerp(D.wereld, { soort: 'rots', x: tegel.x, y: tegel.y });
+  D.wereld.tegels[tegel.y][tegel.x] = 'muur';
+  T.kaartVeranderd(D.wereld);
+  const gezegd = [];
+  const zeg = T.zeg;
+  T.zeg = (DD, tekst) => gezegd.push(tekst);
+  try {
+    T.zetVoorraad(D, 'hout', 100);
+    D.trede = 'dorp';
+    T.tikBehoeftenDag(D, 1);
+    T.tikBehoeftenDag(D, 2);
+  } finally {
+    T.zeg = zeg;
+  }
+  assert.equal(T.vormVan(g.tekening), 'herberg1');
+  const over = gezegd.filter((t) => t.startsWith('De herberg kan niet met het dorp meegroeien'));
+  assert.equal(over.length, 1, gezegd.join(' | '));
+  assert.match(over[0], /rots/);
+  assert.match(T.waaromGroeitHetNiet(D, g), /rots/);
+});
+
+test('een stenen huis wordt pas met marktrecht een woontoren', () => {
+  assert.equal(T.GEBOUWEN.stenenHuis.wordt, 'woontoren');
+  assert.equal(T.GEBOUWEN.stenenHuis.wordtVanaf, 'marktrecht');
+  assert.equal(T.GEBOUWEN.woontoren.woonruimte, 3 * T.GEBOUWEN_INSTELLINGEN.gezinGrootte, 'drie gezinnen');
+  assert.ok(!T.inBouwmenu(leeg(), 'woontoren'), 'niemand bouwt hem: hij groeit');
 });

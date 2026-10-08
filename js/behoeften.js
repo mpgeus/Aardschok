@@ -354,23 +354,31 @@
   // moet ook weer los — anders blijft daar een onzichtbare muur staan (T.isVast zonder tekening
   // erboven). 'vloer' is de gewone lege vloer (zoals een verse wereld begint, js/wereld.js); de
   // echte grasplaat komt uit een andere laag (js/tekenen.js, S.grond) en verandert dus niet mee.
-  function groeiGebouw(D, instantie, soort) {
-    const nieuweSoort = T.GEBOUWEN[soort.wordt];
+  //
+  // Groeit een gebouw binnen zijn soort (`nieuw` is zijn eigen soort: de herberg die in een dorp groot wordt), dan
+  // blijft de kant van zijn deur staan waar hij stond, en schuift de hoek (groeiSchuif): de deur blijft aan het plein.
+  function groeiGebouw(D, instantie, soort, nieuw = soort.wordt) {
+    const nieuweSoort = T.GEBOUWEN[nieuw];
     if (!nieuweSoort) return false;
     const w = D.wereld;
     const oudeVoet = instantie.voet || T.gebouwVoet(instantie.soort, instantie.tekening) || { b: 1, h: 1 };
-    const keus = kiesGroei(D, instantie, soort.wordt, oudeVoet);
+    const keus = kiesGroei(D, instantie, nieuw, oudeVoet);
     if (!keus) return false; // geen ruimte: morgen weer
-    const { tekening, voet: nieuweVoet } = keus;
-    const inNieuw = (dx, dy) => dx < nieuweVoet.b && dy < nieuweVoet.h;
-    if (!instantie.wordtTekening && T.vormVan(tekening) === T.vormVan(T.volgendeTekening(D, soort.wordt))) T.neemTekening(D, soort.wordt);
+    const { tekening, voet: nieuweVoet, schuif } = keus;
+    const [oudX, oudY] = [instantie.x, instantie.y];
+    instantie.x += schuif.x;
+    instantie.y += schuif.y;
+    instantie.voorwerp.x = instantie.x;
+    instantie.voorwerp.y = instantie.y;
+    const inNieuw = (dx, dy) => dx - schuif.x >= 0 && dy - schuif.y >= 0 && dx - schuif.x < nieuweVoet.b && dy - schuif.y < nieuweVoet.h;
+    if (!instantie.wordtTekening && T.vormVan(tekening) === T.vormVan(T.volgendeTekening(D, nieuw))) T.neemTekening(D, nieuw);
     delete instantie.wordtTekening;
-    instantie.soort = soort.wordt;
+    instantie.soort = nieuw;
     instantie.tekening = tekening;
     instantie.voet = nieuweVoet;
     instantie.groeiDagen = 0;
     const opz = tekening && T.opzoekTegelNaam(tekening);
-    const naam = 'gebouw:' + soort.wordt;
+    const naam = 'gebouw:' + nieuw;
     T.registreerGebouwSoort(naam);
     instantie.voorwerp.soort = naam;
     instantie.voorwerp.vel = opz ? opz.vel : null;
@@ -387,8 +395,8 @@
     for (let dy = 0; dy < oudeVoet.h; dy++) {
       for (let dx = 0; dx < oudeVoet.b; dx++) {
         if (inNieuw(dx, dy)) continue; // blijft vast: hoort nu bij de nieuwe voet
-        const yy = instantie.y + dy;
-        const xx = instantie.x + dx;
+        const yy = oudY + dy;
+        const xx = oudX + dx;
         if (w.tegels[yy] && w.tegels[yy][xx] !== undefined) w.tegels[yy][xx] = 'vloer';
       }
     }
@@ -424,7 +432,14 @@
   // volgende vorm van zijn nieuwe soort, of een andere die past.
   function kiesGroei(D, instantie, nieuw, oudeVoet) {
     const vorm = groeiVormen(D, instantie, nieuw, oudeVoet).find((v) => !v.inDeWeg.length);
-    return vorm ? { tekening: vorm.tekening, voet: vorm.voet } : null;
+    return vorm ? { tekening: vorm.tekening, voet: vorm.voet, schuif: vorm.schuif } : null;
+  }
+  // Hoe ver de hoek schuift als een gebouw binnen zijn soort groeit: de kant van zijn deur blijft liggen (een deur naar
+  // het zuiden houdt zijn onderkant, naar het oosten zijn rechterkant; naar het noorden en het westen ligt die kant al
+  // aan de hoek). Een huis dat een andere soort wordt, groeit vanuit zijn hoek, zoals zijn erf het plande (js/erven.js).
+  function groeiSchuif(instantie, nieuw, oudeVoet, voet) {
+    const kant = instantie.soort === nieuw ? T.deurKantVan(instantie.tekening) : null;
+    return { x: kant === 'o' ? oudeVoet.b - voet.b : 0, y: kant === 'z' ? oudeVoet.h - voet.h : 0 };
   }
   // De vormen waar dit huis in kan groeien, in de volgorde waarin het ze probeert (hierboven), elk met wat er in de weg
   // staat: [{ tekening, voet, inDeWeg }].
@@ -452,7 +467,8 @@
     }
     return kandidaten.filter((t, i, a) => a.indexOf(t) === i).map((tekening) => {
       const voet = T.gebouwVoet(nieuw, tekening) || oudeVoet;
-      return { tekening, voet, inDeWeg: watStaatInDeWeg(D, instantie, oudeVoet, voet) };
+      const schuif = groeiSchuif(instantie, nieuw, oudeVoet, voet);
+      return { tekening, voet, schuif, inDeWeg: watStaatInDeWeg(D, instantie, oudeVoet, voet, schuif) };
     });
   }
 
@@ -464,17 +480,18 @@
   // plek van het huis erop, zoals bij een nieuw gebouw: T.opDeGrondVanEenErf, js/erven.js; werklijst vraag 110, f: op
   // 62707 groeide een buurhuis in het looppad van een vrij erf, en kwam er twee en een half jaar geen gezin), of 'vast'
   // (een muur, een gebouw, een rots).
-  function watStaatInDeWeg(D, instantie, oudeVoet, voet) {
+  function watStaatInDeWeg(D, instantie, oudeVoet, voet, schuif = { x: 0, y: 0 }) {
     const w = D.wereld;
     const uit = [];
-    for (let dy = 0; dy < voet.h; dy++) {
-      for (let dx = 0; dx < voet.b; dx++) {
-        if (dx < oudeVoet.b && dy < oudeVoet.h) continue; // eigen grond: was toch al van dit huis
+    for (let dy = schuif.y; dy < schuif.y + voet.h; dy++) {
+      for (let dx = schuif.x; dx < schuif.x + voet.b; dx++) {
+        if (dx >= 0 && dy >= 0 && dx < oudeVoet.b && dy < oudeVoet.h) continue; // eigen grond: was toch al van dit huis
         const x = instantie.x + dx;
         const y = instantie.y + dy;
         const r = { x, y, b: 1, h: 1 };
         let wat = null;
         if (T.opDeGrondVanEenErf(D, x, y, instantie.erf)) wat = 'erf';
+        else if (T.meegroeiGrondOp(D, x, y, instantie)) wat = 'meegroei';
         else if (T.ontginWerkOp(w, x, y)) wat = 'rooien';
         else if (T.isEigenBoom(T.voorwerpOp(w, x, y))) wat = 'appel';
         else if (T.isVast(w, x, y)) wat = 'vast';
@@ -519,22 +536,28 @@
   // werklijst vraag 130, c), of null: het gezin rooit eerst, of er staat iets wat het niet kan rooien.
   T.waaromGroeitHetNiet = function (D, g) {
     const soort = T.GEBOUWEN[g.soort];
+    if (soort && soort.groeitMee) return g.wachtOpPlaats ? waaromGeenPlaats(D, g, g.soort) : null;
     if (!soort || !soort.wordt || !T.GEBOUWEN[soort.wordt] || !g.voorwerp) return null;
     if (g.groeitNaRooien) return `het gezin rooit eerst ${T.rooiWoordenOp(D, g.kavel).replace(/ \(.*\)$/, '')} waar het groter wordt`;
     if (!((g.groeiDagen || 0) >= T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen)) return null;
+    return waaromGeenPlaats(D, g, soort.wordt);
+  };
+  // Wat er staat waar dit gebouw als `nieuw` groter moet worden en wat het gezin niet kan rooien, in woorden, of null.
+  function waaromGeenPlaats(D, g, nieuw) {
     const oudeVoet = g.voet || T.gebouwVoet(g.soort, g.tekening) || { b: 1, h: 1 };
-    const vormen = groeiVormen(D, g, soort.wordt, oudeVoet, false); // het briefje vraagt het elk beeld: niet loten
+    const vormen = groeiVormen(D, g, nieuw, oudeVoet, false); // het briefje vraagt het elk beeld: niet loten
     if (!vormen.length || vormen.some((v) => v.inDeWeg.every((t) => t.wat === 'iemand' || teRooien(t)))) return null;
     // De vorm waar het minste in de weg staat, en daarvan wat het gezin niet kan rooien.
     const beste = vormen.slice().sort((a, b) => a.inDeWeg.length - b.inDeWeg.length)[0];
     const t = beste.inDeWeg.find((x) => x.wat !== 'iemand' && !teRooien(x));
     if (t.wat === 'erf') return 'er ligt een erf waar het groter moet worden';
+    if (t.wat === 'meegroei') return `daar groeit straks de ${T.GEBOUWEN[T.meegroeiGrondOp(D, t.x, t.y, g).soort].naam}`;
     if (t.wat === 'deur') return 'de deur van een ander huis zit in de weg';
     const v = T.voorwerpOp(D.wereld, t.x, t.y);
     const g2 = v && (D.gebouwen || []).find((h) => h.voorwerp === v);
     const naam = g2 ? `een ${T.GEBOUWEN[g2.soort].naam}` : v && T.VOORWERPEN[v.soort] && T.VOORWERPEN[v.soort].naam ? T.VOORWERPEN[v.soort].naam : v ? NAMEN[v.soort] || 'iets' : 'een muur';
     return `er staat ${naam} waar het groter moet worden`;
-  };
+  }
   // Wat er van de natuur in de weg kan staan en niet te rooien is (een appelboom rooit het gezin zelf: vraag 130, a2).
   const NAMEN = { rots: 'een rots', kleineRots: 'een rots' };
 
@@ -586,6 +609,41 @@
     return grond;
   };
 
+  // Waar een gebouw dat met het dorp meegroeit (de herberg, `groeitMee`) straks groter wordt: per gebouw dat nog de vorm
+  // van het gehucht heeft, de rechthoek van elke vorm van een dorp (T.dorpsVormen, js/bouwstijl.js), met zijn deur waar
+  // hij stond (groeiSchuif). Daar komt niets anders: geen gebouw, geen erf, geen kraam, geen akker (T.waaromNietOpDezeGrond,
+  // js/gebouwen.js), en geen huis dat doorgroeit (watStaatInDeWeg). Werklijst vraag 114, stap 3 (Marcel, 8 okt:
+  // "Beiden"): in de speeltest van 7 okt bleef de herberg op 62707 klein, omdat er later iets op zijn grond kwam.
+  // [{ g, x, y, b, h }]; uit de gebouwen, dus één keer per stand van het dorp.
+  const MEEGROEIGROND = new WeakMap(); // dorp → { sleutel, grond }
+  T.meegroeiGrond = function (D) {
+    const gebouwen = D.gebouwen || [];
+    let sleutel = `${gebouwen.length}`;
+    for (const g of gebouwen) if (T.GEBOUWEN[g.soort] && T.GEBOUWEN[g.soort].groeitMee) sleutel += `:${g.tekening},${g.x},${g.y}`;
+    const oud = MEEGROEIGROND.get(D);
+    if (oud && oud.sleutel === sleutel) return oud.grond;
+    const grond = [];
+    for (const g of gebouwen) {
+      const soort = T.GEBOUWEN[g.soort];
+      if (!soort || !soort.groeitMee || !g.voorwerp) continue;
+      const oudeVoet = g.voet || T.gebouwVoet(g.soort, g.tekening) || { b: 1, h: 1 };
+      for (const t of T.dorpsVormen(g.tekening)) {
+        const voet = T.gebouwVoet(g.soort, t);
+        const schuif = groeiSchuif(g, g.soort, oudeVoet, voet);
+        grond.push({ g, x: g.x + schuif.x, y: g.y + schuif.y, b: voet.b, h: voet.h });
+      }
+    }
+    MEEGROEIGROND.set(D, { sleutel, grond });
+    return grond;
+  };
+  // Ligt (x, y) waar een gebouw straks meegroeit (T.meegroeiGrond)? Het gebouw zelf, of null. `behalve`: dat gebouw zelf.
+  T.meegroeiGrondOp = function (D, x, y, behalve = null) {
+    for (const r of T.meegroeiGrond(D)) {
+      if (r.g !== behalve && x >= r.x && x < r.x + r.b && y >= r.y && y < r.y + r.h) return r.g;
+    }
+    return null;
+  };
+
   const kostenTekst = (kosten) => T.opsomming(Object.keys(kosten).map((wat) => `${kosten[wat]} ${wat}`));
 
   // Het dorp als geheel (de spelregel "Wensen", zoals vóór 1 okt): is het dorp huisGroeiDagen op rij tevreden genoeg,
@@ -598,10 +656,64 @@
       const soort = T.GEBOUWEN[instantie.soort];
       // Alleen een gebouw met een voorwerp groeit mee: dat van een huis dat de speler of een gezin bouwde, of de tekening
       // die al op de kaart stond (T.zetBestaandeGebouwen, js/gebouwen.js).
-      if (!instantie.klaar || !instantie.voorwerp || !soort || !soort.wordt) continue;
+      if (!instantie.klaar || !instantie.voorwerp || !soort || !soort.wordt || !magDoorgroeien(D, soort)) continue;
       instantie.groeiDagen = tevredenGenoeg ? (instantie.groeiDagen || 0) + 1 : 0;
       if (instantie.groeiDagen >= IN.huisGroeiDagen && groeiGebouw(D, instantie, soort)) {
         T.zeg(D, `Een ${soort.naam} is gegroeid tot een ${T.GEBOUWEN[soort.wordt].naam}.`, 'goed');
+      }
+    }
+  }
+
+  // Een stenen huis wordt pas een woontoren met marktrecht (`wordtVanaf` op de soort; vraag 114, stap 3).
+  const magDoorgroeien = (D, soort) => !soort.wordtVanaf || T.tredeMinstens(D, soort.wordtVanaf);
+
+  // Een gebouw dat meegroeit met het dorp (`groeitMee` op de soort: de herberg; werklijst vraag 114, stap 3, Marcel, 7
+  // okt, "A; ja goed idee"): is zijn vorm er een die op deze trede niet meer gebouwd wordt (de kleine herberg van het
+  // gehucht, in een dorp), dan groeit het door tot de vorm van nu, met zijn deur waar hij stond, als de bouwstof er is
+  // (T.WENSEN_INSTELLINGEN.bouwstof) en er plaats is; anders morgen weer. Alleen in een land met een bouwstijl: daar
+  // zijn de vormen per trede (js/bouwstijl.js).
+  function laatMeegroeien(D) {
+    for (const g of D.gebouwen) {
+      const soort = T.GEBOUWEN[g.soort];
+      if (!soort || !soort.groeitMee || !g.klaar || !g.voorwerp || g.voorwerp.inAanbouw) continue;
+      const nu = T.stijlTekeningen(D, g.soort);
+      if (!nu || !T.deurKantVan(g.tekening) || nu.some((t) => T.vormVan(t) === T.vormVan(g.tekening))) continue;
+      const kosten = T.WENSEN_INSTELLINGEN.bouwstof[g.soort] || {};
+      if (!T.kanBetalen(D, kosten)) {
+        if (!g.wachtOpBouwstof) T.zeg(D, `De ${soort.naam} kan groeien met het dorp, maar daar is ${kostenTekst(kosten)} voor nodig.`);
+        g.wachtOpBouwstof = true;
+        continue;
+      }
+      rooiVoorDeGroei(D, g);
+      // Geen plaats, of er stond iemand: morgen weer. Staat er iets wat niet weggaat, dan zegt het dorp het één keer, en
+      // het briefje zolang het duurt (T.waaromGroeitHetNiet).
+      if (!groeiGebouw(D, g, soort, g.soort)) {
+        const waarom = waaromGeenPlaats(D, g, g.soort);
+        if (waarom && !g.wachtOpPlaats) T.zeg(D, `De ${soort.naam} kan niet met het dorp meegroeien: ${waarom}.`);
+        if (waarom) g.wachtOpPlaats = true;
+        continue;
+      }
+      delete g.wachtOpBouwstof;
+      delete g.wachtOpPlaats;
+      T.betaalKosten(D, kosten);
+      const voor = Object.keys(kosten).length ? `, voor ${kostenTekst(kosten)}` : '';
+      T.zeg(D, `De ${soort.naam} groeit met het dorp mee${voor}.`, 'goed');
+    }
+  }
+
+  // Staat er waar een gebouw meegroeit alleen wat te rooien is (een struik, een boom: T.ontginWerkOp, js/bos.js), dan
+  // gaat dat eruit met de bouw mee, het hout van een boom naar de schuur; een appelboom van iemand blijft staan. Er is geen
+  // gezin dat het eerst rooit, zoals bij een huis (T.rooiOmTeGroeien): de herberg staat klaar zodra de bouwstof er is.
+  function rooiVoorDeGroei(D, g) {
+    const oudeVoet = g.voet || T.gebouwVoet(g.soort, g.tekening) || { b: 1, h: 1 };
+    const vormen = groeiVormen(D, g, g.soort, oudeVoet, false);
+    if (vormen.some((v) => v.inDeWeg.every((t) => t.wat === 'iemand'))) return;
+    const vorm = vormen.find((v) => v.inDeWeg.every((t) => t.wat === 'rooien' || t.wat === 'iemand'));
+    if (!vorm) return;
+    for (const t of vorm.inDeWeg) {
+      for (let n = 0; n < 3 && T.ontginWerkOp(D.wereld, t.x, t.y); n++) {
+        if (T.ontginWerkOp(D.wereld, t.x, t.y) === 'hakken') T.hakBoom(D, t.x, t.y);
+        else T.rooi(D, t.x, t.y);
       }
     }
   }
@@ -622,7 +734,7 @@
     for (const h of wensen.huizen) {
       const g = h.g;
       const soort = T.GEBOUWEN[g.soort];
-      if (!g.klaar || !g.voorwerp || !soort.wordt) continue;
+      if (!g.klaar || !g.voorwerp || !soort.wordt || !magDoorgroeien(D, soort)) continue;
       g.groeiDagen = h.alles ? (g.groeiDagen || 0) + 1 : 0;
       if (!h.alles) delete g.wachtOpBouwstof;
       if (g.groeiDagen < IN.huisGroeiDagen) continue;
@@ -933,6 +1045,7 @@
     pasVertrekToe(D, b, dag);
     if (b.wensen) pasStrengToe(D, b.wensen);
     pasHuisGroeiToe(D, b);
+    laatMeegroeien(D);
 
     if (T.ui && T.ui.toonTevredenheid) T.ui.toonTevredenheid(D);
     // Wat de huizen aan brood, vis en vlees aten, in graan: dat eet het dorp vandaag minder (T.eetVandaag, vraag 92, a).

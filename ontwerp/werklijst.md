@@ -4308,7 +4308,6 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
 114. **Gebouwen in verhouding, en een woontoren** (Marcel, 3 okt, vijfentwintigste sessie: "Gebouwen moeten in
     verhouding komen. Een herberg is vaak veel groter dan een huis. Een kapel zelfde verhaal. Een warehouse ook.
     Misschien moeten we ook een woontoren hebben"; plan van Claude; open).
-    **Bezig in sessie `claude/project-thread-cyjrql`** (7 okt): stap 3, de grote gebouwen (de herberg, de kapel, de woontoren en het huis van de schout, draaibaar); eerst het plan en een proefplaat voor Marcel.
     **Hoe het nu is:** een huis is 7 bij 5 tot 10 bij 7 tegels, een boerderij 6 bij 8 tot 9 bij 8. De herberg is 9 bij 7
     (die op de kaart 8 bij 11), nauwelijks groter dan een huis. De kapel is 5 bij 10, smal, en met zijn dak niet hoger
     dan een huis. Het pakhuis en de tiendschuur lenen een blokhutschuur van 5 bij 7, kleiner dan een huis; de markt en
@@ -4749,6 +4748,84 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     de maker (zaad 1 tot en met 4, twee jaar): geen fouten in de console, elk land een dorp en marktrecht in het eerste
     jaar, 26 naar 67 tot 82 mensen, geen doden van kou of honger. Opslagplaats: `tegels/huizen/` 24 MB, `tegels/bouwfasen/`
     58 MB. Nog niet in `main`. Het huis van de schout, de herberg en de kapel krijgen hun stijl in stap 3.
+    **Plan voor stap 3, de grote gebouwen (Claude, 7 okt, sessie `claude/project-thread-cyjrql`; wacht op Marcel).** Wat
+    er is: de proefplaten `verhouding` en `steen` (29e sessie) hebben de nieuwe herberg (12 bij 6, twee lagen, met een stal),
+    de kapel met beide torens en de woontoren in beide vormen, maar nog niet rondom gebouwd en niet per stijl. In het spel
+    staat op elk land van de maker nog `herberg1` (een T van vakwerk onder riet) en `schoutshuis`, in elke stijl hetzelfde;
+    wie later een herberg of kapel bouwt, krijgt de oude tekening uit `dorp.cjs` (voet 6 bij 6 en 5 bij 5). Een woontoren
+    is er niet. Wat Marcel al koos (4 okt): de toren per stijl (wit en roze een zadeldaktoren en kantelen, oker en planken
+    een naaldspits en een tentdak), eerst natuursteen en baksteen pas met een steenbakkerij, en een muur met een poort om
+    de binnenplaats van de herberg. Het plan, in vier stappen:
+    1. **De bouwer:** de herberg, de stal, de kapel (schip en toren), de woontoren en het huis van de schout als vormen
+       per stijl in `huizen.cjs`, rondom gebouwd, in de vier standen; een gebouw uit delen (`samen`) ook rondom, met zijn
+       voet en deur van het geheel. Klaar als: elke bestaande tekening byte voor byte dezelfde.
+    2. **Een proefplaat voor Marcel:** per stijl een rij (de kleine herberg, de grote met stal en poort, de kapel, de
+       woontoren, het huis van de schout), en de grote herberg in zijn vier standen. Nog niets in het spel.
+    3. **Renderen:** de tekeningen en hun bouwfasen (niet voor het huis van de schout), in delen van minder dan twee uur.
+    4. **In het spel:** de maker zet de herberg en het huis van de schout in de stijl van het land; een kapel en een
+       herberg die later komen, krijgen die van de stijl, met de deur naar de weg; de woontoren als regel (een stenen huis
+       dat een maand alles heeft, groeit vanaf marktrecht door tot woontoren met drie gezinnen, `T.WENSEN_INSTELLINGEN`);
+       dan `npm test`, `npm run schermen` en de speeltest van vier jaar.
+    Vragen: **A**, groeit de herberg mee (het gehucht begint met de kleine in de stijl, en in een dorp groeit hij door tot
+    de grote met stal en binnenplaats), of komt de grote meteen? **B**, de woontoren: drie gezinnen op 5 bij 5, dezelfde
+    stand als het stenen huis (ambachtslieden)? Op een kleinere voet dan het stenen huis waaruit hij groeit, dus hij geeft
+    grond terug, en de grond om te bouwen was wat de winst tegenhield (vraag 110). **C**, eerst de proefplaat, en pas
+    renderen als Marcel hem gezien heeft?
+    **Marcel (7 okt): "A; ja goed idee, B: Ja, C: Ja graag".** Dus: de herberg groeit mee (het gehucht begint met de
+    kleine in de stijl van zijn land, en in een dorp groeit hij door tot de grote met stal en binnenplaats); de woontoren
+    heeft drie gezinnen op 5 bij 5, in de stand van het stenen huis (ambachtslieden), vanaf marktrecht; en eerst de
+    proefplaat, het renderen pas als Marcel hem gezien heeft.
+    **De proefplaat is gemaakt (7 okt; nog niets in het spel):** `node gereedschap/pixelart/huis-sdf-export.cjs groot`
+    (21 minuten; `groot wit` voor één stijl, `groot standen` voor de herberg in vier standen). De bouwer kreeg een toren
+    rondom (ramen op elke muur, de deur voor), een muur om een erf met een poort (`HS.erfmuur`), en `kaderSamen` dat
+    draait; `grootGebouw` in `huizen.cjs` geeft per stijl de kleine en de grote herberg, de kapel, de woontoren en het huis
+    van de schout. De grote herberg met zijn stal en binnenplaats is zo'n 18 bij 7 tegels (de herberg in `T.GEBOUWEN` nu 6
+    bij 6), de kapel zo'n 13 bij 5, de woontoren 5 bij 5. Wacht op Marcel.
+    **Marcel (7 okt): "D: Is de kerk / kapel niet te klein in vergelijk met de rest? E: Stal misschien los naast de
+    herberg? of aan de achterkant, nu wordt het wat massief".** Daarop de plaat `groot2` (`huis-sdf-export.cjs groot2`, of
+    `groot2 kapel`): de herberg met de stal los ernaast (`stal: 'naast'`, zo'n 16 bij 6) en met de stal achter de herberg,
+    met de binnenplaats ertussen en de poort opzij (`'achter'`, zo'n 13 bij 12), en de kapel groter: het schip 12 bij 6,
+    twee lagen steen, en een toren van zes lagen (`groot` in `grootGebouw`).
+    **Marcel (7 okt): "Ik denk dat we de stal bij de herberg maar gaan laten".** Dus de grote herberg heeft geen stal en
+    geen binnenplaats: alleen het gebouw van twee lagen, 12 bij 6 (`grootGebouw(stijl, 'herberg')`; de varianten met een
+    stal blijven alleen op de proefplaat). Dat spaart grond.
+    **Marcel (7 okt): "Ja prima" (renderen, en dan in het spel). Gebouwd (7 okt, branch `claude/project-thread-cyjrql`):**
+    het vel heeft 559 tekeningen, 128 nieuw: per stijl de kleine herberg (11 bij 8), de grote (12 bij 6, leien en
+    pannen), de kapel (18 bij 6, in de steen van de stijl of baksteen), de woontoren (5 bij 5, idem) en het huis van de
+    schout (8 bij 6), elk in vier standen; de oude tekeningen bleven byte voor byte gelijk. De huizenbouwer kent een gebouw
+    uit delen (`wereldVan`, `meetHuis` met `delen`) en bewaart elke tekening in `uit/huizen-cache/` (met een hash over de
+    code en de opgave), zodat een tweede taak verdergaat waar de eerste na twee uur stopte. In het spel: de maker legt het
+    huis van de schout en de herberg in de stijl, met de deur naar het plein; een kapel of herberg die je later bouwt,
+    krijgt die van de stijl (`nu` in `js/bouwstijl.js` kent nu stenen gebouwen met één dak); de herberg groeit in een dorp
+    door tot de grote, voor 16 hout, met zijn deur aan dezelfde kant (`groeitMee` op de soort, `laatMeegroeien` en
+    `groeiSchuif` in `js/behoeften.js`); en een stenen huis dat alles heeft, wordt met marktrecht een woontoren voor drie
+    gezinnen, ambachtslieden, voor 20 steen (`woontoren` in `T.GEBOUWEN`, `wordtVanaf`, `ook` bij de stand). Doordat de
+    landen van de maker anders liggen, spelen de toetsen van het doorgroeien op land 62710, en staat het midden van de
+    markt op een tegel waar je kunt staan (op 72022 stond er een bank). De grote herberg heeft bouwfasen; de kapel en de
+    woontoren nog niet (de bouwfasen kennen alleen een huis, geen toren of gebouw uit delen): die rijzen nog bleek op.
+    De speeltest van vier jaar (`speelbaar.md`, 7 okt): vier van de zes spellen winnen (was drie), met 7 tot 13
+    woontorens per dorp, en op 62707 191 mensen. Open: bouwfasen voor de kapel en de woontoren; een grote herberg krijgt
+    nog geen plaatsen voor meer gasten; en de herberg houdt de grond niet vrij waar hij groter wordt (op 62707 stond er in
+    de speeltest iets toen het een dorp werd, en groeide hij nooit; hij zegt het dan ook niet).
+    **Marcel (8 okt): "Beiden"** (de grond vrijhouden, en de bouwfasen van de kapel en de woontoren), **"maar de woontoren
+    en kerk vallen kwa stijl buiten de boot in vergelijk met de huizen"**. Op het voorstel (A: de woontoren als een hoog
+    huis, een stenen voet met drie verdiepingen vakwerk of planken in de kalk van de stijl en een zadeldak met een
+    dakkapel, geen kantelen; B: de kapel met wit gepleisterde muren, hoeken en voet in de steen van de huizen, een lagere
+    toren met een houten klokkenstoel, en in planken een houten kapel; C: de kleine warme stenen van de huizen, geen grote
+    grijze blokken): **"Ja goed"**. Eerst een proefplaat in de vier stijlen naast een huis, dan het vel en de bouwfasen.
+    **Gebouwd (8 okt): de grond van de herberg blijft vrij.** Waar de kleine herberg in een dorp de grote wordt
+    (`T.meegroeiGrond`, `T.meegroeiGrondOp` in `js/behoeften.js`, uit `T.dorpsVormen` in `js/bouwstijl.js`), komt geen
+    gebouw, erf, kraam, akker of lantaarn ("Hier groeit straks de herberg", in `T.waaromNietOpDezeGrond`), en groeit geen
+    huis heen. Staat er alleen een struik of een boom, dan gaat die er met de bouw uit (`rooiVoorDeGroei`; op 62710 een
+    bessenstruik). Kan hij toch niet groeien (een oud spel), dan zegt het dorp het één keer, met wat er staat.
+    **De proefplaat (8 okt, `huis-sdf-export.cjs groot3`): Marcel, "Veel beter zo".** Gebouwd: het schip van de kapel en
+    haar toren gepleisterd in de kalk van de stijl, met een plint, hoekstenen en lijsten van de steen van de huizen
+    (wand `kalk`, `gepleisterd`), de toren vier lagen; in planken een schip van planken onder spanen
+    (`planken-kapel-spanen-*`); de woontoren een hoog huis met een stenen benedenverdieping, een overkragende
+    bovenverdieping in het hout van de stijl en een pannendak met dakkapellen (twee verdiepingen en een zolder; een
+    derde verdieping vraagt dat de huizenbouwer drie lagen leert). Het vel opnieuw (64 tekeningen; de andere 495 byte
+    voor byte gelijk, de cache overgezet), en alle bouwfasen: een gebouw uit delen bouwt per deel (`fasenVanDelen`), de
+    toren zonder latten. Nog open: de plaatsen voor gasten in de grote herberg (achteraan de werklijst).
 115. **De houthakker hakt bomen om, en plant nieuwe** (Marcel, 4 okt, zesentwintigste sessie, terwijl het wijdere land
     gebouwd werd: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes terug"; plan van Claude; open).
     **Hoe het nu is:** een houthakker hoort sinds 4 okt bij het bos (minstens 8 bomen binnen 7 tegels van zijn voet; vraag
@@ -6211,6 +6288,7 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     van vijftien bladzijden, "Aardschok — Richting & Game Design Ideeën": een analyse van de samenvatting van vier
     bladzijden die we die dag voor een gamedesigner maakten; de pdf staat niet in git, dit is wat erin staat; plan van
     Claude; open).
+    **Bezig in sessie `claude/project-thread-cyjrql`** (8 okt): het plan voor de proef, de verdwenen graanzak met een eerste zitting, voor Marcel.
     **In één zin:** "maak de game smaller in scope, maar dieper in menselijke consequenties": informatie, mensen, politiek
     en gevolgen gaan boven bouw- en productiediepte. Zijn ontwerpregel: "Wat gebeurde er in mijn dorp, waarom gebeurde
     het, wat weet ik ervan, en wie wordt boos als ik ingrijp?" Zijn positionering: "A medieval political life-sim where
@@ -6496,6 +6574,10 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     **Gespeeld** (7 okt; `speelbaar.md`, "De speeltest van 7 okt: wapens zijn niet meer verboden"): de bouwer zei op alle
     drie de landen ja tegen de wapenmaker en speelde de vier jaar uit; **op 62707 wint hij nu**, op 27 hooimaand van het
     vierde jaar, waar hij eerst in het tweede jaar werd ontslagen. Drie van de zes spellen winnen. **Klaar.**
+133. **Plaatsen voor gasten in de grote herberg** (Claude, 8 okt, bij vraag 114, stap 3; open). Groeit de herberg in een
+    dorp tot de grote, dan heeft hij nog evenveel plaatsen voor gasten als de kleine (`T.herbergGasten`): een grotere
+    herberg zou meer mensen moeten trekken, en dat haalt bier weg voor de huizen. Vraag aan Marcel: meer plaatsen naar de
+    maat van de herberg, of laten zoals het is?
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

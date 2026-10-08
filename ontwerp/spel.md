@@ -3517,8 +3517,14 @@ van de trede: riet in het gehucht, leien in een dorp, pannen met marktrecht; wat
 daken zie je hoe het dorp groeide. Een stenen huis is het stenen broertje van zijn huis, in veldsteen, en in baksteen pas
 als het dorp een steenbakkerij heeft. Een hut blijft onder riet. Op een erf kijkt de deur naar de weg, met de moestuin
 ervoor; een verzoek (een boerderij) keert zijn deur ook naar de weg. Het ontworpen gehucht heeft geen stijl en bouwt met
-de huizen van ronde 4b, zoals altijd. Wat volgt: de andere drie stijlen (2b), en de herberg, de kapel en de woontoren
-(stap 3).
+de huizen van ronde 4b, zoals altijd. Sinds 4 okt zijn er vier stijlen (2b: wit, oker, planken en roze). **Sinds 7 okt
+de grote gebouwen** (stap 3; Marcel: "A; ja goed idee, B: Ja", de kapel groter, de herberg zonder stal): het huis van de
+schout en de kleine herberg van het gehucht staan in de stijl van het land, met de deur naar het plein; in een dorp
+groeit de herberg door tot een grote van twee lagen met een uithangbord, voor 16 hout, met zijn deur aan dezelfde kant;
+een kapel (een schip van twee lagen met een toren, 18 bij 6) is van de steen van de stijl, en van baksteen met een
+steenbakkerij; en met marktrecht wordt een stenen huis dat alles heeft een woontoren van vier lagen op 5 bij 5, waar
+drie gezinnen wonen, ambachtslieden zoals in het stenen huis, voor 20 steen: de stad groeit de hoogte in, en geeft grond
+terug. De kapel en de woontoren hebben nog geen bouwfasen.
 
 - Nu wordt een groeiend huis een andere tekening. Voorstel: het blijft hetzelfde huis, met dezelfde
   vorm op dezelfde plek, en krijgt stap voor stap beter materiaal. Je herkent het huis van Klaas, nu

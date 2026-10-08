@@ -338,7 +338,7 @@ test('een roedel die de winter honger leed, krijgt in de lente geen jongen', () 
 });
 
 test('wordt het bos om het hol te dun, dan zoekt de roedel dieper een nieuw; zonder bos trekt hij weg, en het dorp zegt het', () => {
-  const S = landVanDeMaker(62707);
+  const S = landVanDeMaker(73425); // op 62707 ligt het hol sinds de grote gebouwen (vraag 114, stap 3) aan de rand van de kaart, zonder ander bos dichtbij
   const D = S.dorp;
   T.zetBeesten(D);
   const G = groepVan(S, 'wolf').G;

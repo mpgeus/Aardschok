@@ -487,7 +487,16 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`T.zijdenNaarDeWeg`, `js/erven.js`), een verzoek keert zijn deur naar de weg (`T.keerNaarDeWeg`, `js/verzoeken.js`),
   en de maker zet een huis ook vóór het plein, met zijn deur ernaartoe (`T.vormenVanStijl`). Elke tekening zegt in
   `tegels.js` wat ze is (`stijl`, en met `ook` de andere stijlen die haar nemen), uit `STIJLEN` in
-  `gereedschap/pixelart/huizen.cjs`; wie doorgroeit, zoekt zijn nieuwe tekening in de stijl van zijn dorp.
+  `gereedschap/pixelart/huizen.cjs`; wie doorgroeit, zoekt zijn nieuwe tekening in de stijl van zijn dorp. **De grote
+  gebouwen** (stap 3, 7 okt): elke stijl heeft ook de kleine en de grote herberg, de kapel, de woontoren en het huis van
+  de schout (`grootGebouw` in `huizen.cjs`); de maker legt het huis van de schout en de herberg in de stijl, een stenen
+  gebouw krijgt de steen van zijn stijl of baksteen (`nu`), de herberg groeit in een dorp mee tot de grote (`groeitMee`,
+  `laatMeegroeien` in `js/behoeften.js`, met zijn deur aan dezelfde kant, `groeiSchuif`; waar hij groot wordt, blijft
+  de grond vrij, `T.meegroeiGrond`), en een stenen huis wordt met marktrecht een woontoren voor drie gezinnen
+  (`wordtVanaf`; de stand ambachtslieden kent hem met `ook`). Sinds 8 okt zijn de kapel en de woontoren in de stijl van
+  de huizen: het schip en de toren gepleisterd in de kalk van de stijl (wand `kalk` en `gepleisterd` in `huis-sdf.cjs`),
+  de woontoren een hoog huis; de proefplaat is `huis-sdf-export.cjs groot3`. De bouwfasen kennen een gebouw uit delen
+  (`fasenVanDelen` in `huizen.cjs`), maar een kapel kost zo'n kwartier per stand: render ze in delen van acht à zestien.
 - `js/paden.js`: **de paadjes en de lantaarns** (vraag 108, b en d, 3 okt): van elke deur een paadje naar de weg, of naar
   het paadje van een buur (`T.aangelegdNet`, uit de kaart en de gebouwen, niet in S: na `T.kaartVeranderd` opnieuw, met
   `T.kaartVersie` in `js/wereld.js`); waar mensen lopen, slijt het gras (`T.telStap` vanuit `js/anim.js`, een dier telt
@@ -846,7 +855,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   staan daar ook (`STIJLEN`, vraag 114, stap 2): wit, oker, planken en roze, per stijl 108 tekeningen, elke vorm in vier
   standen onder elk dak, met zijn `stijl` in `tegels.js`. Elke stijl heeft eigen huizen en boerderijen (vormen die alleen
   een stijl heeft, staan in `VORMEN`); oker en roze nemen de hutten van wit (`hut: 'wit'`, en de tekening krijgt `ook`).
-  `node gereedschap/pixelart/huis-sdf-export.cjs stijl oker` maakt er de proefplaat van, en `bouwfasen.cjs --erbij`
+  `node gereedschap/pixelart/huis-sdf-export.cjs stijl oker` maakt er de proefplaat van (`groot` die van de grote
+  gebouwen), `npm run tiled huizen` bewaart elke tekening in `uit/huizen-cache/` en gaat in een tweede taak verder, en `bouwfasen.cjs --erbij`
   rendert alleen de bouwfasen die er nog niet zijn, met namen in delen (45 tekeningen is zo'n anderhalf uur; een taak op
   de achtergrond stopt na twee uur). **Een stand is hetzelfde huis, een kwartslag gedraaid** (vraag 124, B): een huis van een stijl is gebouwd met elke
   muur ingevuld (`rondom` in `huis-sdf.cjs`), en de tekenaar draait de camera en de zon eromheen (`tekenWereld` met

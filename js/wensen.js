@@ -49,7 +49,7 @@
     kring: { put: 12, kapel: 40, herberg: null, markt: null },
     // Doorgroeien (vraag 80, C; 2b): heeft een huis T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen op rij alles, dan groeit het
     // door naar de volgende stand, en dat kost bouwstof uit de voorraad, naar wat het wordt (zo krijgt steen een doel).
-    bouwstof: { huis: { hout: 8 }, stenenHuis: { steen: 12 } },
+    bouwstof: { huis: { hout: 8 }, stenenHuis: { steen: 12 }, woontoren: { steen: 20 }, herberg: { hout: 16 } },
     // Achteruitgaan (vraag 85, c; de spelregel "Achteruitgaan"): 'zacht' (de standaard, zoals in Anno 1602: een gezin
     // trekt pas weg uit een huis onder de vertrekdrempel, en dat gebeurt alleen als het eten of het brandhout mist) of
     // 'streng' (mist een huis missenDagen op rij iets, dan trekt zijn gezin weg; hooguit één huis per dag).
@@ -84,7 +84,7 @@
   T.STANDEN = {
     keuters: { naam: 'keuters', huis: 'hut', wil: ['eten', 'brandhout', 'put'] },
     dorpelingen: { naam: 'dorpelingen', huis: 'huis', wil: ['bier', 'vleesOfVis', 'kapel', 'herberg'] },
-    ambachtslieden: { naam: 'ambachtslieden', huis: 'stenenHuis', wil: ['brood', 'laken', 'markt'] },
+    ambachtslieden: { naam: 'ambachtslieden', huis: 'stenenHuis', ook: ['woontoren'], wil: ['brood', 'laken', 'markt'] },
     boeren: { naam: 'boeren', huis: 'boerderij', los: true, wil: ['eten', 'brandhout', 'kapel'] },
   };
 
@@ -110,7 +110,7 @@
   // herbergierster. Een werkplaats heeft geen stand.
   T.standVan = function (g) {
     if (!g || g.huis === 'schout') return null;
-    for (const s of Object.keys(T.STANDEN)) if (T.STANDEN[s].huis === g.soort) return s;
+    for (const s of Object.keys(T.STANDEN)) if (T.STANDEN[s].huis === g.soort || (T.STANDEN[s].ook || []).includes(g.soort)) return s;
     return null;
   };
 
