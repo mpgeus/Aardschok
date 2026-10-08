@@ -5095,6 +5095,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     die moet een kaart worden die meegroeit. Nog open: a1 of a2 (kan als de plaat er is), en wat je verkende maar nu niet
     ziet: grijs, zoals je het het laatst zag (vraag d hierboven, en Marcels "laatst bekende inventarisatie"), of weer
     donker.
+    **Marcel (8 okt): "Grijs is goed, en ja begin met de plaat."** Dus wat je verkende maar nu niet ziet, blijft grijs
+    zoals je het het laatst zag (vraag d is daarmee beantwoord), en stap 1, de plaat, is begonnen.
 118. **Inwoners met stats, zoals in Dwarf Fortress** (Marcel, 4 okt, zesentwintigste sessie: "Inwoners krijgen ook
     'stats' hp, skills, eigenschappen, etc ala dwarf fortress"; plan van Claude; open).
     **Wat er al is:** elke bewoner heeft een naam, een leeftijd, een huis, een gezin en werk (`js/bewoners.js`); de vijf
