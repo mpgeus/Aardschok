@@ -1698,6 +1698,12 @@ Nog open na deel 1 (vragen van Claude):
   net als vlees** (Marcel: "Vis mag een maag vullen, zoals vlees"; de spelregel "Vis"): wat het zout niet goed houdt,
   eet het dorp vóór het graan, de gezouten vis na de kaas. Daarvoor at het dorp alleen de vis die de huizen wilden, en
   bedierf de rest, ook in een voorjaar met honger.
+- **Wijn** (8 okt; werklijst vraag 136; Marcel: "Ik wil z.s.m. aan een wijnboerderij", "Wijn wordt drank, zoals bier.
+  Mensen dronken geen water", en "Ja zo bouwen"): een wijnboerderij is een boerderij met een gezin van boeren, en haar
+  velden zijn wijngaarden. Ze komt in een dorp, en plukt in wijnmaand: dan maakt ze 10 wijn per dag met twee handen, de
+  rest van het jaar niets. Wijn bederft niet. De wens die bier heette, heet nu drank, en neemt bier of wijn, bier eerst.
+  De heer wil voor een wijnboerderij 10 wijn. Geen vaten (de kuiper blijft zonder nut, vraag 135); wijngaarden op de
+  zonkant van een heuvel misschien later.
 - **Het zaaigraan, pas bij nood** (1 okt, eenentwintigste sessie; werklijst vraag 81; Marcel: "zaaigraan wordt bij nood
   opgegeten, anders sterven er mensen"): van de oogst tot het zaaien houden de boeren het zaaigraan voor volgend jaar
   achter, zoveel als de akkers van volgend jaar vragen (`T.zaaigraanApart`). Het dorp eet het pas na het andere graan,

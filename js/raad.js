@@ -142,7 +142,7 @@
     const visser = T.GEBOUWEN.visser;
     const vissers = (D.gebouwen || []).filter((g) => g.soort === 'visser').length;
     const kunnen = Math.min(Math.floor(water / IN().waterPerVisser), Math.max(1, Math.ceil((D.bevolking || 0) / IN().mensenPerVisser)));
-    if (water && T.magGebouwd(D, 'visser') && !(visser.stilIn && visser.stilIn[datum.seizoen]) && vissers < kunnen) {
+    if (water && T.magGebouwd(D, 'visser') && !T.stilOp(visser, dag) && vissers < kunnen) {
       uit.push({ id: 'visser', zin: `${vissers ? 'nog een' : 'een'} visser aan het water${tB} (${visser.maakt.uit.vis} vis per dag, niet in de winter)`, bouw: 'visser' });
     }
     // Meer koeien: had het dorp honger in het voorjaar, dan maken de boeren na de oogst een weide erbij (js/akkers.js).

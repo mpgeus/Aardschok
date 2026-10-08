@@ -69,7 +69,9 @@
     eten: { naam: 'eten' },
     brandhout: { naam: 'brandhout' },
     put: { naam: 'een put', plek: 'put' },
-    bier: { naam: 'bier', goed: ['bier'] },
+    // Drank: bier of wijn (Marcel, 8 okt: "Wijn wordt drank, zoals bier. Mensen dronken geen water"; werklijst vraag 136).
+    // De id blijft `bier`, zodat een bewaard spel en de herberg (T.bierApart) hem houden.
+    bier: { naam: 'drank', goed: ['bier', 'wijn'] },
     vleesOfVis: { naam: 'vlees of vis', goed: ['vis', 'vlees'] },
     kapel: { naam: 'een kapel', plek: 'kapel' },
     herberg: { naam: 'de herberg', plek: 'herberg' },
@@ -85,7 +87,7 @@
     keuters: { naam: 'keuters', huis: 'hut', wil: ['eten', 'brandhout', 'put'] },
     dorpelingen: { naam: 'dorpelingen', huis: 'huis', wil: ['bier', 'vleesOfVis', 'kapel', 'herberg'] },
     ambachtslieden: { naam: 'ambachtslieden', huis: 'stenenHuis', ook: ['woontoren'], wil: ['brood', 'laken', 'markt'] },
-    boeren: { naam: 'boeren', huis: 'boerderij', los: true, wil: ['eten', 'brandhout', 'kapel'] },
+    boeren: { naam: 'boeren', huis: 'boerderij', ook: ['wijnboerderij'], los: true, wil: ['eten', 'brandhout', 'kapel'] },
   };
 
   const ladder = () => Object.keys(T.STANDEN).filter((s) => !T.STANDEN[s].los);
@@ -443,7 +445,7 @@
     const staan = (D.gebouwen || []).filter((g) => soorten.includes(g.soort));
     const inBouw = staan.find((g) => !g.klaar);
     if (inBouw) return { kan: false, bouw: null, tekst: `de ${naamVan(inBouw.soort)} wordt gebouwd` };
-    const stil = (soort) => T.GEBOUWEN[soort].stilIn && seizoen && T.GEBOUWEN[soort].stilIn[seizoen];
+    const stil = (soort) => T.stilOp(T.GEBOUWEN[soort], D.kalender ? D.kalender.dag : null, seizoen);
     const werken = staan.filter((g) => !stil(g.soort));
     const zonder = werken.find((g) => g.tekort);
     if (zonder) {

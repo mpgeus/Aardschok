@@ -221,7 +221,7 @@ test('het jaarboek telt het jaar, en op 1 lentemaand komt het jaarverslag', () =
   assert.ok(regels.includes('De oogst bracht 400 graan.'));
   assert.ok(regels.includes('Eén huis groeide door.'));
   assert.ok(regels.includes('We vierden de meiboom.'));
-  assert.ok(regels.some((r) => /^Het meest gemist werd bier, op 2 dagen\.$/.test(r)), regels.join(' | '));
+  assert.ok(regels.some((r) => /^Het meest gemist werd drank, op 2 dagen\.$/.test(r)), regels.join(' | '));
   assert.equal(regels[regels.length - 1], 'Er was geen dag waarop iedereen alles had wat hij wilde.');
   assert.equal(D.jaarboek.begin, lente, 'en het nieuwe jaar begint een nieuw jaarboek');
   assert.equal(D.jaarboek.kwamen, 0);

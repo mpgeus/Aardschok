@@ -279,6 +279,18 @@
       handen: 1, woonruimte: 0, maakt: { in: { meel: 2 }, uit: { brood: 2 } },
       menu: true, tekening: 'gebouwen/bakkerij', beschrijving: 'meel tot brood', opmerking: '',
     },
+    // De wijnboerderij (werklijst vraag 136; Marcel, 8 okt: "Ik wil z.s.m. aan een wijnboerderij", en "Wijn wordt drank,
+    // zoals bier. Mensen dronken geen water"): een boerderij met een gezin, en haar velden zijn wijngaarden. Wijn is drank,
+    // zoals bier (de wens `bier` in js/wensen.js neemt allebei). De pluk is in wijnmaand (`alleenIn`): dan maakt hij zijn
+    // wijn, de rest van het jaar niets, en wijn bederft niet. Een boer met wijnranken: wie er woont, is een boer
+    // (T.STANDEN.boeren in js/wensen.js). De heer wil er wijn voor (`heer`).
+    wijnboerderij: {
+      naam: 'wijnboerderij', meervoud: 'wijnboerderijen', trede: 'dorp', voet: { b: 7, h: 8 }, kosten: { hout: 18, goud: 8 },
+      heer: { wijn: 10 }, bouwtijd: 5, handen: 2, woonruimte: 4, maakt: { uit: { wijn: 10 } },
+      alleenIn: { maanden: ['wijnmaand'], waarom: 'de druiven worden pas in wijnmaand geplukt' },
+      menu: true, tekening: 'huizen/boerderij1', beschrijving: 'een boerderij met wijngaarden: wijn, geplukt in wijnmaand',
+      opmerking: 'De tekening van de wijnboerderij komt nog; tot dan leent hij een boerderij.',
+    },
     brouwerij: {
       naam: 'brouwerij', trede: 'dorp', voet: { b: 5, h: 5 }, kosten: { hout: 14, goud: 10 }, heer: { goud: 4 }, bouwtijd: 4,
       handen: 2, woonruimte: 0, maakt: { in: { graan: 2 }, uit: { bier: 2 } },
@@ -569,6 +581,16 @@
     return dag != null ? T.datumVanDag(dag).seizoen : null;
   }
 
+  // Of een soort op deze dag stilligt, en waarom (of null): in een seizoen (`stilIn`: de visser als de beek dichtligt), of
+  // buiten zijn maanden (`alleenIn`: de wijnboerderij plukt alleen in wijnmaand). Eén vraag voor het werk, het gereedschap,
+  // de raad en wat de huizen missen. `seizoen` mag apart, voor wie zonder dag wil weten of het in een seizoen stilligt.
+  T.stilOp = function (soort, dag, seizoen = seizoenVan(dag)) {
+    if (!soort) return null;
+    if (soort.stilIn && seizoen && soort.stilIn[seizoen]) return soort.stilIn[seizoen];
+    if (soort.alleenIn && dag != null && !soort.alleenIn.maanden.includes(T.MAANDEN[T.datumVanDag(dag).maand].naam)) return soort.alleenIn.waarom;
+    return null;
+  };
+
   // Hoeveel handen er vandaag iets maken, en hoeveel daarvan gereedschap hebben: de dekking
   // (0..1) en wat dat aan harder werken geeft (factor, 1 is niets extra). Leest g.handen van
   // vandaag, dus pas na stap 5 van T.tikGebouwenDag; ook voor de balk (js/hud.js), die bij het
@@ -583,7 +605,7 @@
       // Wie niets te bewerken heeft (een smidse zonder ijzer) of in dit seizoen stilligt (de
       // visser als de beek dichtligt), gebruikt ook geen gereedschap.
       if (soort.maakt.in && Object.keys(soort.maakt.in).some((wat) => !((D.voorraad || {})[wat] > 0))) continue;
-      if (soort.stilIn && nu && soort.stilIn[nu]) continue;
+      if (T.stilOp(soort, D.kalender && D.kalender.dag, nu)) continue;
       handen += g.handen;
     }
     const heeft = (D.voorraad && D.voorraad.gereedschap) || 0;
@@ -1266,8 +1288,8 @@
       : 1;
     // Gereedschap: wie iets maakt en er gereedschap voor heeft, werkt harder (alleen wie handen
     // heeft: een kippenhok werkt niet harder met een hamer), en het slijt (hieronder, na het werk).
-    // Wie in dit seizoen stilligt (T.GEBOUWEN[x].stilIn: de visser als de beek dichtligt), maakt
-    // vandaag niets; de eerste dag dat het zo is, zegt het dorp het.
+    // Wie vandaag stilligt (T.stilOp: de visser als de beek dichtligt, de wijnboerderij buiten de pluk), maakt vandaag
+    // niets; de eerste dag dat het zo is, zegt het dorp het (de pluk niet: die stilte hoort bij het jaar).
     const seizoen = seizoenVan(dag);
     const gereedschap = T.gereedschapDekking(D, seizoen);
     // Op een hele feestdag (js/feesten.js, T.vrijeDag) werkt niemand: wie handen heeft, maakt vandaag niets.
@@ -1292,10 +1314,10 @@
         continue;
       }
       // Wie in dit seizoen stilligt, of een houthakker die binnen zijn bereik geen boom meer vindt (js/bos.js).
-      const stil = (soort.stilIn && seizoen && soort.stilIn[seizoen]) || T.waaromHaktHijNiet(D, g);
+      const stil = T.stilOp(soort, dag, seizoen) || T.waaromHaktHijNiet(D, g);
       if (stil) {
         g.stilWant = stil;
-        if (!wasStil && T.ui && T.ui.bericht) T.zeg(D, `${T.hoofdletter(soort.naam)} staat stil: ${stil}.`);
+        if (!wasStil && T.ui && T.ui.bericht && !soort.alleenIn) T.zeg(D, `${T.hoofdletter(soort.naam)} staat stil: ${stil}.`);
         continue;
       }
       // Werk telt in uren (js/bewoners.js, T.werkUrenVan; een optie, standaard aan): wie ver van zijn

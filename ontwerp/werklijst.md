@@ -6784,6 +6784,11 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     een wijngaard als soort veld, zoals een akker of weide in het veldenvenster, van een boer; de oogst in wijnmaand (die
     heet al zo); wijn als wens van een hogere stand, of als eten; en de heer die wijn wil, zoals nu de eieren.
     **Marcel (8 okt): "Wijn wordt drank, zoals bier. Mensen dronken geen water."** Dus een wens, geen eten.
+    **Marcel (8 okt): "Ik wil z.s.m. aan een wijnboerderij"**, en op het plan van Claude (A: een boerderij met een gezin en
+    wijngaarden; B: de pluk in wijnmaand; C: de wens bier wordt drank, bier of wijn; D: geen vaten; E: de heer wil wijn;
+    F: de zonkant van een heuvel later; G: de beelden uit code) **"Ja zo bouwen"**. Gebouwd: `T.GEBOUWEN.wijnboerderij`
+    (in een dorp; 10 wijn per dag in wijnmaand, `alleenIn`, en wie stilligt zegt `T.stilOp`), de wens drank, wijn in de
+    balk, en de tekening (een agent, `gereedschap/pixelart/`).
     **Bezig in sessie `ccr-77327776-rqjldz`** (8 okt): de wijnboerderij bouwen (Marcel: "Ik wil z.s.m. aan een
     wijnboerderij", en "Ja zo bouwen" op het plan: een boerderij met een gezin en wijngaarden, de pluk in wijnmaand, de
     wens bier wordt drank, bier of wijn, geen vaten, de heer wil wijn).
