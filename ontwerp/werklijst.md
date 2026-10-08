@@ -5341,7 +5341,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     (`opmerkingen.md`). Voorstel van Claude: de regel van 2d ook voor de kapel. Marcel (8 okt): "Prima"; en 2d naar `main`: "Ja doe maar".
     **De kapel is gebouwd** (8 okt, op de branch): een erf houdt ook plaats voor een kapel (`T.wilStraks`: de hut wil er nog
     geen, het huis dat hij wordt wel), en het zoeken van de plekken is sneller (dezelfde plekken, een kapel in 0,07 tot
-    0,55 s in plaats van 1,2 tot 1,8). De speeltest op de eilanden loopt, naast een op `main`.
+    0,55 s in plaats van 1,2 tot 1,8). De speeltest op de eilanden (`speelbaar.md`, onder 2d): geen kapel zonder plek meer
+    (op `main` 30 maanden), en drie van de zes winnen in plaats van twee. Wacht op Marcel: naar `main`?
     **B van 2a: eigen grondtegels voor het eiland** (Marcel, 8 okt: "dan gaan we de eigen tegels maken"; plan van Claude,
     wacht op Marcel). Wat er nu is: de maker kent vier soorten grond (water, zandpad, heide, gras, en de kasseien van het
     plein), met overgangen alleen tussen gras en de rest, en tussen zand en kasseien (`gereedschap/pixelart/randtegels.cjs`,

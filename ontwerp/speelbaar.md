@@ -208,6 +208,22 @@ op een erf die ook het huis haalt dat de hut wordt; werklijst, vraag 117, 2d):
    met de put verandert, verschuift het spel net genoeg om die gril anders te laten vallen; de val zelf staat in
    `opmerkingen.md`.
 
+**En de kapel** (werklijst, vraag 117, 2d; Marcel: "Prima"). Op `1ee29ba` (`main`, met 2d en de proef van de graanzak) en op
+`4e7acb5` (daarbij een erf dat ook plaats houdt voor een kapel), dezelfde zes spellen op het eiland, twee tegelijk:
+
+| Land | Speler | Op `main` | Met de regel voor de kapel |
+|---|---|---|---|
+| 62707 | bouwer | de vier jaar uit, 106 mensen; 19 maanden een kapel zonder plek | de vier jaar uit, 104 mensen; geen kapel zonder plek meer, nu houdt het graan het tegen (geen bier en brood voor de woontorens) |
+| 73425 | bouwer | **gewonnen** op 10 louwmaand van het vierde jaar; daarna 11 maanden een kapel zonder plek | **gewonnen** op dezelfde dag, zonder kapel zonder plek |
+| 72022 | bouwer | het ambt kwijt op 12 wintermaand van het derde jaar: de gril van het vette varken | hetzelfde, een jaar later |
+| 62707 | sluw | het ambt kwijt op 11 slachtmaand van het derde jaar: te weinig betaald | **gewonnen** op 10 oogstmaand van het vierde jaar, met 176 mensen |
+| 73425 | sluw | **gewonnen** op 23 grasmaand van het vierde jaar | hetzelfde, letter voor letter |
+| 72022 | sluw | het ambt kwijt in het eerste jaar | hetzelfde |
+
+Een kapel zonder plek komt met de regel nergens meer voor (op `main` 30 maanden, over twee spellen), en er winnen drie van
+de zes in plaats van twee. Het kost geen merkbare tijd: het zoeken van de plekken is sneller geworden (dezelfde plekken,
+een kapel in 0,07 tot 0,55 s in plaats van 1,2 tot 1,8). Geen fouten in de console.
+
 ## De speeltest van 8 okt: vier jaar op het eiland (werklijst, vraag 117, stap 2c)
 
 Gespeeld in de sessie van de kaartenmaker, in een losse kopie van `main` op `6dba60e` (het spel van `25934d7`): elk nieuw
