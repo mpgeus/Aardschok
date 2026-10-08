@@ -6789,6 +6789,12 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     F: de zonkant van een heuvel later; G: de beelden uit code) **"Ja zo bouwen"**. Gebouwd: `T.GEBOUWEN.wijnboerderij`
     (in een dorp; 10 wijn per dag in wijnmaand, `alleenIn`, en wie stilligt zegt `T.stilOp`), de wens drank, wijn in de
     balk, en de tekening (een agent, `gereedschap/pixelart/`).
+    **Marcel (8 okt), bij de tekening: "Ik wil graag meer detail, dat je de druiven ziet. Dat je de boeren ziet plukken,
+    volle en lege ranken."** Plan van Claude: A, de wijngaard wordt een veld naast het huis (5 bij 4), zoals een akker, waar
+    je tussen de rijen loopt en de boeren werken; B, de ranken per tegel door het jaar: kaal, blad, vol met trossen (vanaf
+    oogstmaand), leeg na het plukken, groter en met trossen die je dichtbij ziet; C, in wijnmaand plukt het gezin rij voor
+    rij met een mand, en de wijn komt per geplukte rank (zoals graan per gemaaide tegel), niet meer per dag; D, een plukker
+    met een mand als poppetje; E, later misschien snoeien in de winter. **Marcel: "Ja dat lijkt mij in orde."**
     **Bezig in sessie `ccr-77327776-rqjldz`** (8 okt): de wijnboerderij bouwen (Marcel: "Ik wil z.s.m. aan een
     wijnboerderij", en "Ja zo bouwen" op het plan: een boerderij met een gezin en wijngaarden, de pluk in wijnmaand, de
     wens bier wordt drank, bier of wijn, geen vaten, de heer wil wijn).
@@ -6808,6 +6814,11 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     vraag 117). Op het eiland ligt de zee om het land: een zoutpan of zoutzieder aan de kust, zodat het dorp zijn zout zelf
     maakt in plaats van het van de marskramer te kopen. Een gebouw erbij, dus eerst Marcels keuze ("Niets erbij zonder
     overleg"), en alleen voor een dorp aan de kust.
+
+140. **Het graan zien en het werk erom** (Marcel, 8 okt: "Kunnen we ook gelijk een plan maken voor het graan?", na het plan
+    voor de wijngaard; plan van Claude, wacht op Marcel). Wat er is: de akker heeft vijf standen (geploegd, kiemend, groen,
+    rijp, gemaaid), de boer zaait, wiedt en maait, en het graan gaat bij het maaien meteen de voorraad in; de boerin en de
+    kinderen helpen, en in de winter gebeurt er bij de boerderij niets te zien.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
