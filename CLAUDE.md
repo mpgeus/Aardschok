@@ -622,6 +622,18 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`T.feestLicht`, in `T.lichtBronnen`), en niemand gaat naar de herberg (`T.feestAvond`). De meiboom komt op een vaste dag
   (`op` in `T.VOORVALLEN`, 30 grasmaand) en staat een maand op het plein (een voorwerp, `gereedschap/pixelart/meiboom.cjs`).
   De spelregel "Feesten"; de getallen in `T.FEESTEN_INSTELLINGEN`.
+- `js/zaak.js`: **de verdwenen graanzak** (vraag 128, 8 okt; Marcel: "akkoord, bouwen maar"): de proef voor informatie,
+  de zitting en gevolgen, één keer per spel in de eerste herfst (`T.tikZaakDag`, vóór `T.tikVoorvallenDag`). Wat er echt
+  gebeurde, staat in `D.zaak` (de dader, het zieke kind, de schuur, de aanklager, de verkeerde verdachte, de buur, het
+  spoor; `T.mensenVoorDeZaak`); wat je weet, in `Z.weet`, elk met een soort uit `T.ZAAK_WETEN` (feit, getuige, gerucht)
+  en een vlag voor de gesprekken (`zaakBewijs` als het naar de dader wijst). De boer komt het zeggen (het voorval
+  `graanzak`); tot de zitting vraag je wie je aanklikt ernaar (`T.zaakGesprekVan` in `js/verkennen.js`, de gesprekken
+  `zaakBuur`, `zaakHerberg`, ...; `doe.weet`), en wie bij het spoor staat, ziet het (`T.werkZaakBij`; het spoor tekent
+  `tekenSpoor` in `js/tekenen.js`). Het papier "De zaak" is een soort in `js/brieven.js`, onder de knop `#zaak-knop`. De
+  zitting is een voorval met `L.plein` (`js/voorvallen.js`): wie erbij hoort, staat 's middags op het plein
+  (`T.zaakAnker`, voor `T.dagAnker`), en komt de schout bij het midden (`T.schoutBijDeZitting`), dan begint ze. Een vonnis
+  is `doe.zaak` (`T.zaakGevolg`): de zaak is af, het vervolg wacht (`T.ZAAK_INSTELLINGEN.vervolg`), en een zak die nergens
+  staat, leest de inner op Sint-Maarten voor (`T.heerLeestHetBoek`, vanuit `T.heerStaatErOp`). De spelregel "De zaak".
 - `js/markt.js`: **de markt op het plein, die meegroeit** (vraag 110, d, en vraag 127, 6 okt; Marcel: "Grotere stad =
   grotere markt"): met de spelregel "De markt" op "Op het plein" (`T.MARKT_INSTELLINGEN.opHetPlein`) komt een markt niet
   als gebouw van 6 bij 6, maar als een marktblok op het plein: twee rijen kramen tegenover elkaar met een looppad
@@ -1113,6 +1125,9 @@ eiland ligt, wat voor plek het is en waar de uitgang is.
 `Spel.debug.voorval()` zegt welk voorval er loopt, welke vervolgen nog komen, welke voorvallen er nu kunnen (met hoe
 zwaar ze wegen) en welke oorzaken er spelen;
 `('brand')` laat er nu een beginnen, over mensen die erbij passen, en wie het zegt, zoekt je meteen.
+`Spel.debug.zaak()` zegt hoe de graanzak ervoor staat: wie het nam en wie verdacht wordt, het spoor, wat je weet, de
+zitting en hoe het afliep; `('nu')` laat de zak nu verdwijnen (de boer zoekt je meteen), `('zitting')` maakt vandaag de
+dag van de zitting (met `Spel.debug.uur(13)` staan ze er), `('boek')` laat de inner het boek nu voorlezen.
 `Spel.debug.raadsman()` zegt wie je raadsman is en wat hij kan, uit wie je kiest, en wat hij besloot; `('Aaltje')` of
 `('boer2')` maakt die boer raadsman. Ga dan met `Spel.debug.gaNaar('proef')` weg, en hij beslist het volgende voorval.
 `Spel.debug.rapport()` zegt wat er in zijn rapport staat, of hij het bracht en je het las, hoe hij rekent en wat het

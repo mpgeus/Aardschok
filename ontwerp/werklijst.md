@@ -5538,6 +5538,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     200 zo'n 25, 's avonds anderhalf tegelijk. De oude toetsen van het dagritme zijn weer zoals ze waren.
 121. **Hoogteverschillen op de kaart** (Marcel, 4 okt, achtentwintigste sessie: "Ik heb wel 1 extra verzoek. Hoogte
     verschillen op de kaart. 😁"; plan van Claude; open).
+    **Bezig in sessie `claude/project-thread-cyjrql`** (8 okt): stap 2, wat de hoogte doet (afdekken, lopen, zien,
+    bouwen): eerst een plan voor Marcel.
     **Wat er al is:** het ontwerp van 20 sep (`kaarten.md`, "Hoogte is een getal per tegel", Marcels keuze toen): een
     getal per tegel, de wand tussen twee hoogtes afgeleid zoals een randtegel tussen twee grondsoorten, een helling waar
     je over mag, alles op een hogere tegel een trede omhoog, en wie hoog staat, ziet verder. Dat was nog voor Tiled en de
@@ -6306,7 +6308,6 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     van vijftien bladzijden, "Aardschok — Richting & Game Design Ideeën": een analyse van de samenvatting van vier
     bladzijden die we die dag voor een gamedesigner maakten; de pdf staat niet in git, dit is wat erin staat; plan van
     Claude; open).
-    **Bezig in sessie `claude/project-thread-cyjrql`** (8 okt): het plan voor de proef, de verdwenen graanzak met een eerste zitting, voor Marcel.
     **In één zin:** "maak de game smaller in scope, maar dieper in menselijke consequenties": informatie, mensen, politiek
     en gevolgen gaan boven bouw- en productiediepte. Zijn ontwerpregel: "Wat gebeurde er in mijn dorp, waarom gebeurde
     het, wat weet ik ervan, en wie wordt boos als ik ingrijp?" Zijn positionering: "A medieval political life-sim where
@@ -6370,6 +6371,21 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     vijf vragen voor een tester staan in `speelbaar.md` (bij de eerste proefversie, 33d), het eindscherm komt bij het
     jaarboek, en de trailer en de pitch staan in `commercieel.md`. Het ontwerp: `spel.md`, "Informatie, de zitting en
     mensen die onthouden".
+    **Het plan voor de proef** (Claude, 8 okt, voor Marcel): de keten in vijf stappen. 's Nachts neemt een vader met een
+    ziek kind een zak graan uit de schuur (wat er echt gebeurde, `D.zaak`); een buur beschuldigt de verkeerde (een
+    gerucht); je zoekt het te voet uit: het spoor bij de schuur, een buur die je iets kunt vragen, en de herberg; 's
+    middags op het plein de zitting (straffen, vrijspreken of verbergen), die leest uit wat je weet (een papier "De
+    zaak", met feiten en geruchten); en later een vervolg over dezelfde mensen, en de inner die in het boek van de schuur
+    ziet wat je verborg. Nieuw daarvoor: een bewoner iets vragen, wat je weet, de zitting en het boek. Vragen A tot F
+    (wanneer de zaak komt, het papier, rondvragen, de zitting op het plein, het boek, een spelregel); in vier stukken.
+    **Marcel koos (8 okt): "akkoord, bouwen maar"**, dus de voorstellen van A tot F: de zaak één keer per spel, in de
+    eerste herfst als het graan krap is; het papier "De zaak"; rondvragen alleen zolang de zaak loopt; de zitting op het
+    plein; het boek van de schuur dat de inner leest; en een spelregel "De zaak". Het plan: `/mnt/project-files/aardschok/plan-graanzak.md`.
+    **Gebouwd** (8 okt, op de branch `claude/project-thread-cyjrql`): `js/zaak.js`, met de gesprekken, het papier, het
+    spoor, de zitting op het plein en de vervolgen; hoe het werkt, staat in `spel.md` ("Informatie, de zitting en mensen
+    die onthouden", Zo werkt het nu), de toetsen in `test/zaak.test.cjs`. Twee keuzes van Claude: "krap" werd een gezin in
+    nood, geen voorraad die op raakt, en de inner leest het boek op Sint-Maarten. Open: Marcel speelt het (begin met
+    `Spel.debug.zaak('nu')`), en dan of c, d en e erna komen.
 129. **Hoeveel bos heeft een houthakker nodig?** (Claude, 6 okt, de sessie van de heer, bij stap 3 van vraag 110, e, met
     115; `spel.md`, "De houthakker hakt en plant", Open; open).
     **Gemeten** (het ontworpen gehucht en de landen 5, 62707, 72022 en 73425): een houthakker mag staan op een open plek
@@ -6596,6 +6612,14 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     dorp tot de grote, dan heeft hij nog evenveel plaatsen voor gasten als de kleine (`T.herbergGasten`): een grotere
     herberg zou meer mensen moeten trekken, en dat haalt bier weg voor de huizen. Vraag aan Marcel: meer plaatsen naar de
     maat van de herberg, of laten zoals het is?
+134. **Zaken als sjabloon** (Claude, 8 okt, bij vraag 128; Marcel: "prima"; open). De graanzak is één vaste zaak: het
+    verhaal, de rollen en de zinnen met de hand, alleen de mensen komen per spel uit het dorp (`T.mensenVoorDeZaak`). Het
+    voorstel: een zaak wordt een sjabloon met gegevens (de rollen en wie erin past, wat er echt gebeurde, wie wat weet, het
+    spoor, de keuzes op de zitting en wat terugkomt), en `js/zaak.js` speelt elk sjabloon op dezelfde manier. Een eigen zaak
+    is dan een nieuw sjabloon schrijven, zoals een voorval (een verdwenen schaap, brand in een schuur, een valse munt bij
+    de marskramer), te lezen in de gespreksschrijver; welke komt, hangt af van wat er speelt (honger: een diefstal),
+    zoals bij de voorvallen. Niet willekeurig laten verzinnen: het bewijs moet kloppen. Wanneer: pas als de tweede zaak
+    geschreven wordt, na Marcels proef met de graanzak, zodat we weten wat een zaak echt nodig heeft.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

@@ -195,7 +195,7 @@
   // (js/bewoners.js, js/heervaart.js), of midden in een praatje (dat houdt na de schaft vanzelf op, js/praatje.js).
   function magWerken(S, D, e) {
     if (e.maait || e.oogstDoel || e.binnen || e === S.spreektMet || e.zoektSchout || e.opgeroepen || e.moetNaar || e.vertrekt || e.praatje) return false;
-    if (T.rapportAnker(D, e)) return false;
+    if (T.rapportAnker(D, e) || T.zaakAnker(D, e)) return false; // en niet op de zitting (js/zaak.js)
     const p = T.bewonerVan(D, e);
     return !(p && (p.weg || p.komt || T.blijftThuis(p, D.kalender.dag)));
   }

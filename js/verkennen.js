@@ -142,7 +142,22 @@
       // Wie je zoekt met een voorval (js/voorvallen.js), daar praat je over het voorval, ook als hij een eigen
       // gesprek heeft.
       const voorval = D && T.voorvalVan(D, e);
-      if (voorval) return { tekst: `Praten met ${T.naamVanBewoner(voorval.wie)} (zoekt je)`, doe: () => loopNaast(S, e, () => T.openDialoog(S, e, voorval.id)) };
+      if (voorval) {
+        const waarom = voorval.plein ? 'de zitting' : 'zoekt je';
+        return { tekst: `Praten met ${T.naamVanBewoner(voorval.wie)} (${waarom})`, doe: () => loopNaast(S, e, () => T.openDialoog(S, e, voorval.id)) };
+      }
+      // Zoek je uit wie de zak graan nam (js/zaak.js), dan vraag je wie je aanklikt ernaar. gereedschap/wereld.html
+      // laadt de zaak niet.
+      const zaak = D && T.zaakGesprekVan ? T.zaakGesprekVan(D, e) : null;
+      if (zaak) {
+        return {
+          tekst: `${T.hoofdletter(T.naamVanBewoner(T.bewonerVan(D, e)))} vragen naar de zak graan`,
+          doe: () => loopNaast(S, e, () => {
+            T.vraagNaarDeZaak(D, e);
+            T.openDialoog(S, e, zaak);
+          }),
+        };
+      }
       // Een bewoner (js/bewoners.js) heeft nog geen gesprek: bij de muis staat wie hij is.
       if (e.bewoner && D && T.overBewonerTekst) return { tekst: T.overBewonerTekst(D, e) };
       // Wie een gesprek heeft (js/gesprekken.js), daar praat je mee: een boer, de heer. Welk
