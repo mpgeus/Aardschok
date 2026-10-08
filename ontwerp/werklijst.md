@@ -6936,6 +6936,19 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     Dus: de schout heeft een eigen beurs, en daarnaast de kas van het dorp; die vult zich met de belasting van de huizen en
     met marktgeld van de markt; en een boer kiest zelf hoe hij zijn dagloner betaalt (munten of graan), naar wie hij is.
     Na de dagloners en de bladzijde voor de getallen (vraag 142).
+    **Plan van Claude (8 okt), wacht op Marcel:** wat er nu is: één pot, `D.voorraad.goud`; de belasting komt op de eerste
+    van de maand per mens en stand (`T.belastbaar`, de wet belasting), de huizen nemen hun waar gratis uit de voorraad
+    (`T.gebruikGoederen`), de markt is alleen beeld, en de schout heeft geen beurs. Het plan: A, munten: in de code blijft
+    het goud één getal, op het scherm goud, zilver en koper (1 goud = 10 zilver = 100 koper); B, drie beurzen: de kas
+    van het dorp (het goud van nu, voor de bouw, de heer en de marskramer), de beurs van de schout, en een beurs per huis;
+    C, de voorraad blijft het pakhuis, een huis koopt eruit tegen vaste prijzen (de werkbank), en het geld gaat naar het
+    huis dat het maakte (wie in die werkplaats werkt, de boer voor zijn graan); D, de belasting uit de beurzen van de
+    huizen in de kas, en met een markt marktgeld (een deel van elke verkoop); E, een huis kiest zelf wat het koopt, naar
+    zijn stand en karakter, en wie te arm is, mist zijn wens ("te arm" op het briefje); F, de dagloner krijgt loon van de
+    boer; G, de spelregel "Geld" (een beurs per huis, of alles van het dorp zoals nu). In stappen: 1 de munten en de beurs
+    van de schout, 2 kopen en verdienen, 3 belasting en marktgeld, 4 het loon, 5 te zien op de markt, 6 speeltest.
+    Vragen: waar de beurs van de schout voor is, wat "de boer kan hier zelf kiezen" betekent, en of een huis ook voor zijn
+    eten betaalt.
 
 142. **Een gereedschap voor alle getallen** (Marcel, 8 okt: "Ik wil straks wel een tool waarin we al deze parameters kunnen
     instellen."; open). Er is de werkbank in de spelregels (`T.WERKBANK` in `js/opties.js`: elk getal uit de blokken
