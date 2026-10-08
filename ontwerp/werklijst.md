@@ -14,14 +14,14 @@ groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
 Marcel, 8 okt: "snel, duidelijk en low cost". Elke sessie werkt dit blok bij aan het eind; wat af is, gaat eruit.
 
-**Loopt** (het teken "Bezig in sessie" staat bij het punt zelf): niets. De dagloners (vraag 140: wie geen werk heeft,
+**Loopt** (het teken "Bezig in sessie" staat bij het punt zelf): vraag 141, de beurs per huis, stap 1. De dagloners (vraag 140: wie geen werk heeft,
 maait, bindt en draagt in de oogst) staan in `main`.
 
 **Wacht op Marcel:**
 - Vraag 142, de bladzijde met alle getallen (`gereedschap/instellingen.html`): stap 1 en 2 staan in `main`; stap 3 (een
   speeltest met een set getallen, naast de vorige) wacht.
-- Vraag 141, een economie binnen het dorp: Marcel koos B, een beurs per huis, **voor de demo** ("Belangrijk concept"),
-  met munten van koper, zilver en goud, de kas van het dorp naast de beurs van de schout; eerst een plan voor Marcel.
+- Vraag 141, een economie binnen het dorp: Marcel koos B, een beurs per huis, **voor de demo** ("Belangrijk concept");
+  het plan en zijn antwoorden staan bij het punt; stap 1 loopt.
 
 **Daarna, in deze volgorde:**
 1. Een proefversie voor Marcels 4K-scherm en een eerste tester (33d; `npm run proefversie`, ook `-- --windows`), met de
@@ -6948,7 +6948,14 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     boer; G, de spelregel "Geld" (een beurs per huis, of alles van het dorp zoals nu). In stappen: 1 de munten en de beurs
     van de schout, 2 kopen en verdienen, 3 belasting en marktgeld, 4 het loon, 5 te zien op de markt, 6 speeltest.
     Vragen: waar de beurs van de schout voor is, wat "de boer kan hier zelf kiezen" betekent, en of een huis ook voor zijn
-    eten betaalt.
+    eten betaalt. **Marcel (8 okt): "1. Loon voor de schout. Het gezin koopt ook brood etc. Ook voor de wensen van zijn
+    gezinsleden. Omkopen uit eigen zak, eventueel kun je andere mensen helpen. 2. Hoe hij uitbetaald maar ook wat hij op
+    de markt wil verkopen. 3. Ze betalen voor alles. 4. Ja"** Dus: de schout krijgt loon uit de kas, en zijn gezin koopt
+    uit zijn beurs wat het nodig heeft en wil; omkopen gaat uit eigen zak, en je kunt er anderen mee helpen; de boer kiest
+    hoe hij zijn dagloner betaalt en wat hij van zijn oogst verkoopt; een huis betaalt voor alles, ook zijn eten; en de
+    munten zijn 1 goud = 10 zilver = 100 koper.
+    **Bezig in sessie `ccr-77327776-rqjldz`** (8 okt): stap 1, de munten, de beurs van de schout en zijn loon, en omkopen
+    uit eigen zak.
 
 142. **Een gereedschap voor alle getallen** (Marcel, 8 okt: "Ik wil straks wel een tool waarin we al deze parameters kunnen
     instellen."; open). Er is de werkbank in de spelregels (`T.WERKBANK` in `js/opties.js`: elk getal uit de blokken
