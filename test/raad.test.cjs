@@ -401,7 +401,7 @@ test('de wensen: wat je nu niet kunt doen, zegt de raad niet; de winter en de sp
   });
 });
 
-test('groeien en winnen: na de laatste trede telt de raad tot de maat van de winst, en daarna zegt hij: haal het vrije erf weg', () => {
+test('groeien en winnen: na de laatste trede telt de raad tot de maat van de winst, en over een vrij erf zegt hij niets', () => {
   const S = metRaadsman(opDag(gehucht(), 3.5));
   const D = S.dorp;
   const raadVan = (id) => T.RADEN.find((r) => r.id === id);
@@ -411,18 +411,11 @@ test('groeien en winnen: na de laatste trede telt de raad tot de maat van de win
   assert.equal(T.mensenVoorDeWinst(D), T.EINDE_INSTELLINGEN.minstensMensen - D.bevolking);
   assert.ok(raadVan('gezin').als(D));
   assert.ok(!T.maatGehaald(D));
-  // Een vrij erf, en de maat gehaald: haal het weg, want daarop begint een nieuw gezin in een hut.
+  // Een vrij erf, en de maat gehaald: dat het erf weg moet, zegt de raad niet meer (Marcel, 8 okt: "2. B").
   assert.ok(T.legErfAan(D, 48, 50).gelukt);
-  assert.ok(!raadVan('geenErf').als(D), 'met minder dan 100 mensen is een vrij erf goed');
   D.bevolking = T.EINDE_INSTELLINGEN.minstensMensen;
   assert.ok(T.maatGehaald(D));
   assert.ok(!raadVan('gezin').als(D), 'genoeg mensen: over de groei zegt hij niets meer');
-  assert.ok(raadVan('geenErf').als(D));
-  assert.match(raadVan('geenErf').tekst(D), /^Genoeg mensen voor de winst\. .*haal het erf weg \(\[B\], Erf, en klik erop\)\.$/);
-  assert.ok(T.haalErfWeg(D, T.vrijeErven(D)[0]).gelukt);
-  assert.ok(!raadVan('geenErf').als(D), 'geen vrij erf meer: niets te zeggen');
-  // Gewonnen: dan mag het dorp weer groeien.
-  assert.ok(T.legErfAan(D, 48, 50).gelukt);
-  D.eind = { dagen: T.EINDE_INSTELLINGEN.dagen, beste: T.EINDE_INSTELLINGEN.dagen, gewonnen: { dag: 400, getoond: true } };
-  assert.ok(!T.maatGehaald(D) && !raadVan('geenErf').als(D));
+  assert.ok(!raadVan('geenErf'), 'de raad over het vrije erf is weg');
+  assert.doesNotMatch(T.raadNu(D) ? T.raadNu(D).tekst : '', /erf weg/);
 });

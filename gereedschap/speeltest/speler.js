@@ -1192,14 +1192,9 @@
         if (!houthakker && !wil.includes('houthakker') && dagNu() >= houthakkerNietVoor) wil.unshift('houthakker');
         // Steeds één erf vrij, binnen de kringen (vraag 95, b). Vragen de mensen het je (vraag 103), dan zonder op een
         // houthakker te wachten: een hut die op hout wacht, is wat de houthakker laat vragen (T.watTeBouwen, js/raad.js).
-        // Heeft het dorp de maat van de winst (vraag 102, c), dan wijst hij geen erf meer aan en haalt hij een vrij erf
-        // weg, zoals de raad zegt: op een vrij erf begint een nieuw gezin in een hut, en dan begint de teller opnieuw.
+        // Heeft het dorp de maat van de winst (vraag 102, c), dan wijst hij geen erf meer aan. Een vrij erf weghalen doet
+        // hij niet meer, want de raad zegt het niet meer (Marcel, 8 okt: "2. B"): hij speelt zoals een tester.
         const maat = T.maatGehaald(s.dorp);
-        if (maat) {
-          for (const e of T.vrijeErven(s.dorp)) {
-            if (T.haalErfWeg(s.dorp, e).gelukt) daad(`haalt een vrij erf weg: ${s.dorp.bevolking} mensen is genoeg voor de winst`);
-          }
-        }
         const erfMag = (houthakker || T.VERZOEKEN_INSTELLINGEN.mensen) && !maat;
         // Een vrij erf waar geen hut meer op past, telt niet (T.bruikbareErven; vraag 110, f).
         if (erfMag && !T.bruikbareErven(s.dorp).length && dagNu() >= erfNietVoor && !bouwErf()) erfNietVoor = dagNu() + 30;
