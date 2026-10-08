@@ -6281,7 +6281,6 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     van vijftien bladzijden, "Aardschok — Richting & Game Design Ideeën": een analyse van de samenvatting van vier
     bladzijden die we die dag voor een gamedesigner maakten; de pdf staat niet in git, dit is wat erin staat; plan van
     Claude; open).
-    **Bezig in sessie `claude/project-thread-cyjrql`** (8 okt): het plan voor de proef, de verdwenen graanzak met een eerste zitting, voor Marcel.
     **In één zin:** "maak de game smaller in scope, maar dieper in menselijke consequenties": informatie, mensen, politiek
     en gevolgen gaan boven bouw- en productiediepte. Zijn ontwerpregel: "Wat gebeurde er in mijn dorp, waarom gebeurde
     het, wat weet ik ervan, en wie wordt boos als ik ingrijp?" Zijn positionering: "A medieval political life-sim where
@@ -6586,6 +6585,14 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     dorp tot de grote, dan heeft hij nog evenveel plaatsen voor gasten als de kleine (`T.herbergGasten`): een grotere
     herberg zou meer mensen moeten trekken, en dat haalt bier weg voor de huizen. Vraag aan Marcel: meer plaatsen naar de
     maat van de herberg, of laten zoals het is?
+134. **Zaken als sjabloon** (Claude, 8 okt, bij vraag 128; Marcel: "prima"; open). De graanzak is één vaste zaak: het
+    verhaal, de rollen en de zinnen met de hand, alleen de mensen komen per spel uit het dorp (`T.mensenVoorDeZaak`). Het
+    voorstel: een zaak wordt een sjabloon met gegevens (de rollen en wie erin past, wat er echt gebeurde, wie wat weet, het
+    spoor, de keuzes op de zitting en wat terugkomt), en `js/zaak.js` speelt elk sjabloon op dezelfde manier. Een eigen zaak
+    is dan een nieuw sjabloon schrijven, zoals een voorval (een verdwenen schaap, brand in een schuur, een valse munt bij
+    de marskramer), te lezen in de gespreksschrijver; welke komt, hangt af van wat er speelt (honger: een diefstal),
+    zoals bij de voorvallen. Niet willekeurig laten verzinnen: het bewijs moet kloppen. Wanneer: pas als de tweede zaak
+    geschreven wordt, na Marcels proef met de graanzak, zodat we weten wat een zaak echt nodig heeft.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
