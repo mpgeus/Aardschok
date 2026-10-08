@@ -174,15 +174,26 @@ function grootGebouw(stijl, soort, o = {}) {
   }
   if (soort === 'kapel') {
     // groter dan de herberg (Marcel, 7 okt: "Is de kerk / kapel niet te klein in vergelijk met de rest?"): het schip 12 bij
-    // 6, twee lagen hoog, en een toren van zes lagen, het hoogste punt van het dorp
+    // 6, twee lagen hoog, en een toren van vier lagen, het hoogste punt van het dorp. In de stijl van de huizen (Marcel, 8
+    // okt: "de woontoren en kerk vallen kwa stijl buiten de boot", en op het voorstel "Ja goed"): het schip met kalk over
+    // de steen, in de kalk van de stijl, met een plint en hoekstenen van de steen van de huizen, en de toren net zo; in
+    // planken een schip van planken. o.oud: de kapel van 7 okt, van steen met een toren van zes lagen.
     const groot = o.groot !== false;
-    const schip = { zaad: 61, vorm: 'rechthoek', b: groot ? 12 : 9, d: groot ? 6 : 5, lagen: groot ? 2 : 1.5, boven: 'veldsteen', wand: 'veldsteen', steen, schoorsteen: false, schoor: false, uit: false, ramen: 'kerk', ...rond, dak: 'leien' };
+    const oud = !!o.oud;
+    const muur = oud ? 'veldsteen' : stijl === 'planken' ? 'planken' : 'kalk';
+    const schip = { zaad: 61, vorm: 'rechthoek', b: groot ? 12 : 9, d: groot ? 6 : 5, lagen: groot ? 2 : 1.5, boven: muur, wand: muur, steen, schoorsteen: false, schoor: false, uit: false, ramen: 'kerk', ...rond, dak: o.dak || (oud ? 'leien' : stijl === 'planken' ? 'spanen' : 'leien') };
     const zadel = TORENS[stijl].kapel === 'zadel';
     const tb = groot ? (zadel ? 5 : 4) : zadel ? 4 : 3;
-    const toren = { zaad: 62, dak: 'plat', steen, lagen: groot ? 6 : 4, b: tb, d: tb, torendak: TORENS[stijl].kapel, ramen: 'kerk', rondom: true, draai };
+    const toren = { zaad: 62, dak: 'plat', steen, lagen: oud ? (groot ? 6 : 4) : groot ? 4 : 3, b: tb, d: tb, torendak: TORENS[stijl].kapel, ramen: 'kerk', rondom: true, draai, ...(oud ? {} : { gepleisterd: true, kalk: S.kalk, dekking: stijl === 'planken' ? 'spanen' : 'leien' }) };
     return { delen: [{ spec: schip }, { spec: toren, plek: [(groot ? 6 : 4.5) + tb / 2 + (groot ? 0.3 : -0.2), 0] }], deurVan: 1 };
   }
   if (soort === 'woontoren') {
+    // een hoog huis (Marcel, 8 okt, op het voorstel: "Ja goed"): op 5 bij 5 een stenen benedenverdieping zoals het stenen
+    // huis, een bovenverdieping die overkraagt in het hout van de stijl, en een steil zadeldak met dakkapellen, onder
+    // het dak van de trede; geen kantelen of tentdak meer. o.oud: de toren van 7 okt.
+    if (!o.oud) {
+      return { spec: { zaad: 54, vorm: 'rechthoek', b: 5, d: 5, lagen: 2, ...rond, wand: 'veldsteen', boven: S.boven || 'vakwerk', steen, dak: o.dak || 'pannen', plint: 36, schoorsteen: 'steen', schoor: false, uit: { kapellen: 2, luiken: S.luiken, bakken: 1 } } };
+    }
     const tent = TORENS[stijl].woontoren === 'tent';
     return { spec: { zaad: tent ? 52 : 54, dak: 'plat', steen, lagen: 4, b: 5, d: 5, ramen: 'woon', rondom: true, draai, ...(tent ? { torendak: 'tent', dekking: 'pannen' } : { kantelen: true }) } };
   }

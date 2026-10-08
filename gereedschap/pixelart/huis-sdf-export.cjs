@@ -1165,6 +1165,38 @@ function groot2Rijen() {
   ];
 }
 
+// groot3.png (Marcel, 8 okt: "de woontoren en kerk vallen kwa stijl buiten de boot in vergelijk met de huizen", en op
+// het voorstel "Ja goed"): per stijl een huis en een stenen huis naast de nieuwe kapel en woontoren, en in de laatste
+// rij die van 7 okt ernaast, en de baksteen.
+function groot3Rijen(alleen) {
+  const { STIJLEN, grootGebouw, stijlNaam } = require('./huizen.cjs');
+  const rijen = Object.keys(STIJLEN).filter((s) => !alleen || s === alleen).map((stijl) => {
+    const S = STIJLEN[stijl];
+    const steen = S.huis[0].replace('huis', 'steen');
+    return {
+      naam: stijl,
+      panelen: [
+        ['huis', { spec: VORM(stijlNaam(stijl, S.huis[0], 'leien', 'z')) }],
+        ['stenen huis', { spec: VORM(stijlNaam(stijl, steen, 'pannen', 'z')) }],
+        ['kapel', grootGebouw(stijl, 'kapel', { dak: stijl === 'planken' ? 'spanen' : 'leien' })],
+        ['woontoren', grootGebouw(stijl, 'woontoren', { dak: 'pannen' })],
+      ],
+    };
+  });
+  if (!alleen) {
+    rijen.push({
+      naam: 'van 7 okt, en baksteen',
+      panelen: [
+        ['kapel 7 okt (wit)', grootGebouw('wit', 'kapel', { oud: true })],
+        ['woontoren 7 okt (wit)', grootGebouw('wit', 'woontoren', { oud: true })],
+        ['kapel baksteen (wit)', grootGebouw('wit', 'kapel', { steen: 'baksteen' })],
+        ['woontoren baksteen (wit)', grootGebouw('wit', 'woontoren', { steen: 'baksteen', dak: 'pannen' })],
+      ],
+    });
+  }
+  return rijen;
+}
+
 // stijl-<naam>.png (werklijst vraag 114, stap 2a; Marcel, 4 okt: "A ja B ja C ik wil overal bouwfase voor"): een
 // bouwstijl zoals het spel hem krijgt (huizen.cjs, STIJLEN): zijn vormen, een huis en een hut in de vier standen, de
 // daken van de treden en de steen, en drie straatjes: het gehucht, een dorp (wat nieuw is of doorgroeit, krijgt leien)
@@ -1289,6 +1321,10 @@ if (isMainThread && require.main === module) {
     afwisseling().then(() => log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`));
   } else if (wat === 'verhouding' || wat === 'steen') {
     rijenPlaat(wat === 'steen' ? STEEN_PLAAT : VERHOUDING, `${wat}.png`).then(() => log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`));
+  } else if (wat === 'groot3') {
+    // node huis-sdf-export.cjs groot3 [stijl]: de kapel en de woontoren in de stijl van de huizen (8 okt)
+    const alleen = process.argv[3];
+    rijenPlaat(groot3Rijen(alleen), `groot3${alleen ? `-${alleen}` : ''}.png`).then(() => log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`));
   } else if (wat === 'groot2') {
     rijenPlaat(groot2Rijen().filter((r) => !process.argv[3] || r.naam.includes(process.argv[3])), `groot2${process.argv[3] ? `-${process.argv[3]}` : ''}.png`).then(() => log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`));
   } else if (wat === 'groot') {
@@ -1336,7 +1372,7 @@ if (isMainThread && require.main === module) {
     vergelijk();
     if (wat === 'knoppen') knoppen();
   }
-  if (!['vormen', 'materiaal', 'uitbouwen', 'ladder', 'afwisseling', 'verhouding', 'steen', 'stijl', 'rondom', 'groot', 'groot2'].includes(wat)) log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`);
+  if (!['vormen', 'materiaal', 'uitbouwen', 'ladder', 'afwisseling', 'verhouding', 'steen', 'stijl', 'rondom', 'groot', 'groot2', 'groot3'].includes(wat)) log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`);
 }
 
 module.exports = { paneelNu, paneelProef, paneelHuis, paneelSamen, paneelTuin, paneelTuintje, paneelZes, kaderVan, grondZon };
