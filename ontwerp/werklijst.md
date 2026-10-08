@@ -5055,7 +5055,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Dus de hele spelwereld als het ware. Zo kun je steeds stukken 'ontdekken' in de fog of war. Het idee is een eiland. Met
     water rondom. Je krijgt een random positie op het land. Kan aan de buitenkant zijn of binnen in het land."; plan van
     Claude; open).
-    **Bezig in sessie `ccr-f03157dc-9d2dtu`** (8 okt): stap 2, je dorp op het eiland; 2a, 2b en het verslag van 2c staan in `main`; nu 2d, de put zonder plek: uitzoeken waarom, en dan voorkomen (Marcel: "A ja").
+    **Bezig in sessie `ccr-f03157dc-9d2dtu`** (8 okt): stap 2, je dorp op het eiland; 2a, 2b, het verslag van 2c en 2d (de put zonder plek) staan in `main` (Marcel: "Ja doe maar"); nu de regel van 2d ook voor de kapel (Marcel: "Prima").
     **Wat er nu is:** het land is een aparte kaart met provincies waar je in dagen reist (vraag 63, `js/land.js`, achter de
     spelregel Land, die standaard uit staat), en elke provincie zou een eigen kaart krijgen. Dit vervangt dat: één grote
     kaart, een eiland met de zee rondom, waarop alles ligt.
@@ -5338,7 +5338,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     nu is. Het dorp moet gewoon uitdijen. Er is ruimte genoeg." De kring van 12 blijft.
     **Op `main` met de grote gebouwen** (`speelbaar.md`, onder 2d): geen put meer zonder plek; op 62707 houdt nu een kapel
     zonder plek het jaar van geluk tegen, en 72022 beslist de gril van het vette varken bij een gunst van 5
-    (`opmerkingen.md`). Voorstel van Claude (wacht op Marcel): de regel van 2d ook voor de kapel.
+    (`opmerkingen.md`). Voorstel van Claude: de regel van 2d ook voor de kapel. Marcel (8 okt): "Prima"; en 2d naar `main`: "Ja doe maar".
 118. **Inwoners met stats, zoals in Dwarf Fortress** (Marcel, 4 okt, zesentwintigste sessie: "Inwoners krijgen ook
     'stats' hp, skills, eigenschappen, etc ala dwarf fortress"; plan van Claude; open).
     **Wat er al is:** elke bewoner heeft een naam, een leeftijd, een huis, een gezin en werk (`js/bewoners.js`); de vijf
