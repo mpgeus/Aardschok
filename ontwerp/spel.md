@@ -3443,7 +3443,11 @@ wordt gepraat:
   (`T.opDeGrondVanEenErf`, in `js/behoeften.js`): in de speeltest van vier jaar groeide op 62707 een huis van de maker
   door tot stenen huis, met 21 tegels óp een vrij erf. Andersom komt **sinds 6 okt (vraag 130, d)** een erf niet waar het
   een huis ernaast elke vorm afneemt waarin het nog kan doorgroeien ("Hier groeit de hut van Swier straks tot een
-  huis."; `T.groeiGrond`): op 62707 legde de bouwer een erf onder de hut van een oud stel, en die bleef een hut. En past er toch geen hut meer op een vrij erf, dan telt het niet
+  huis."; `T.groeiGrond`): op 62707 legde de bouwer een erf onder de hut van een oud stel, en die bleef een hut. Net zo
+  komt **sinds 8 okt (vraag 117, 2d; Marcel: "A ja")** een erf niet waar zijn hut straks geen put kan halen, of waar het
+  een ander huis de laatste plek voor een put afneemt ("Dan kan het huis van Evert geen put meer krijgen: dit erf neemt
+  de laatste plek ervoor."; `T.kringGrond`): op het eiland van 73425 lagen de erven zo dicht dat een huis in het midden
+  twee jaar geen put kon krijgen, en het dorp nooit won. En past er toch geen hut meer op een vrij erf, dan telt het niet
   als plaats (`T.bruikbareErven`, `T.hutPastOpErf`): de groei en de raad zeggen dan dat er geen plaats is, het bouwmenu
   telt het niet als vrij, en `Spel.debug.erven()` zegt het erbij. Tot dan zagen de groei en de raad er een vrij erf, en
   kwam er twee en een half jaar geen gezin.

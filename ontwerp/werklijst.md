@@ -5237,6 +5237,13 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Marcel (8 okt): "A ja, en zet het verslag in main".** Dus nu **2d, de put zonder plek**: de speeltest naspelen tot
     het huis op 73425 een put mist, zien waarom er nergens plek is, en dan voorkomen (een erf niet waar een put het niet
     meer haalt, zoals vraag 130, d); b na vraag 116, stap 3; c blijft een vraag voor later.
+    **2d is gebouwd** (8 okt): nagespeeld, stond het huis (dat van Evert, vijf dorpelingen) midden in een blok erven die
+    strak tegen elkaar lagen: binnen 12 tegels was alles een gebouw, een erf of te krap voor drie tegels looppad, en de
+    dichtste put stond op 12,7 tegels. Nu komt een erf niet waar zijn hut straks geen put kan halen, of waar het een
+    ander huis (of de hut op een ander erf) de laatste plek voor een put afneemt (`T.kringGrond` in `js/wensen.js`, en
+    in `T.waaromPastErfNiet`). Op het ontworpen gehucht, met de erven zo dicht als het mag, houdt zo elk huis een plek
+    (zonder de regel bleven er drie hutten zonder over). Ook: `T.huisVan` zegt nu "het huis van", niet "de huis van".
+    De speeltest van vier jaar loopt opnieuw, op de drie eilanden en de drie landen van de maker.
 118. **Inwoners met stats, zoals in Dwarf Fortress** (Marcel, 4 okt, zesentwintigste sessie: "Inwoners krijgen ook
     'stats' hp, skills, eigenschappen, etc ala dwarf fortress"; plan van Claude; open).
     **Wat er al is:** elke bewoner heeft een naam, een leeftijd, een huis, een gezin en werk (`js/bewoners.js`); de vijf
