@@ -5138,7 +5138,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Dus de hele spelwereld als het ware. Zo kun je steeds stukken 'ontdekken' in de fog of war. Het idee is een eiland. Met
     water rondom. Je krijgt een random positie op het land. Kan aan de buitenkant zijn of binnen in het land."; plan van
     Claude; open).
-    **Bezig in sessie `ccr-f03157dc-9d2dtu`** (8 okt): stap 2, je dorp op het eiland; 2a, 2b, het verslag van 2c en 2d staan in `main`; de regel van 2d voor de kapel staat op de branch; nu B van 2a, eigen grondtegels voor het eiland (de zee, het strand, het veen, het broek): eerst een plan (Marcel: "dan gaan we de eigen tegels maken").
+    **Bezig in sessie `ccr-f03157dc-9d2dtu`** (8 okt): stap 2, je dorp op het eiland; 2a, 2b, het verslag van 2c, 2d en de kapel staan in `main`; nu B van 2a, eigen grondtegels voor het eiland: de proefplaat is goed (Marcel: "Ja, ziet er goed uit zo"), nu de tegels in het spel.
     **Wat er nu is:** het land is een aparte kaart met provincies waar je in dagen reist (vraag 63, `js/land.js`, achter de
     spelregel Land, die standaard uit staat), en elke provincie zou een eigen kaart krijgen. Dit vervangt dat: één grote
     kaart, een eiland met de zee rondom, waarop alles ligt.
@@ -5425,7 +5425,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **De kapel is gebouwd** (8 okt, op de branch): een erf houdt ook plaats voor een kapel (`T.wilStraks`: de hut wil er nog
     geen, het huis dat hij wordt wel), en het zoeken van de plekken is sneller (dezelfde plekken, een kapel in 0,07 tot
     0,55 s in plaats van 1,2 tot 1,8). De speeltest op de eilanden (`speelbaar.md`, onder 2d): geen kapel zonder plek meer
-    (op `main` 30 maanden), en drie van de zes winnen in plaats van twee. Wacht op Marcel: naar `main`?
+    (op `main` 30 maanden), en drie van de zes winnen in plaats van twee. Marcel (8 okt): naar `main`, "Ja".
     **B van 2a: eigen grondtegels voor het eiland** (Marcel, 8 okt: "dan gaan we de eigen tegels maken"; plan van Claude,
     wacht op Marcel). Wat er nu is: de maker kent vier soorten grond (water, zandpad, heide, gras, en de kasseien van het
     plein), met overgangen alleen tussen gras en de rest, en tussen zand en kasseien (`gereedschap/pixelart/randtegels.cjs`,
@@ -5452,6 +5452,13 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Marcel (8 okt): "A. Ja, lijkt mij goed B. Ja hoor, geen probleem. C. Onbebouwbaar denk ik, zand is geen solide
     basis."** Dus de vier soorten en vijf overgangen, de zee mag blauw, en op zand komt geen huis, erf of akker (zoals nu,
     maar als eigen regel, niet omdat het een pad is). Stap 1, de proefplaat, is begonnen.
+    **Stap 1 is gebouwd** (8 okt): `gereedschap/pixelart/randtegels.cjs` kent de zee (water, maar ondiep aan het strand,
+    met golven, branding en schuim), het strand (licht zand, nat aan de zee, met helm), het veen (donkerbruin, met pollen
+    en plassen) en het broek (nat gras met biezen en plassen), en bouwt er een eigen vel van (`node randtegels.cjs kust`),
+    met de vijf overgangen; `rand.png` blijft letter voor letter gelijk. De proefplaat: `node
+    gereedschap/pixelart/kusttegels-proef.cjs` (in `uit/kust/`). Marcel liet de punten verbeteren die Claude zelf nog niet
+    goed vond ("voer gelijk verbeteringen door"): een bredere branding, heide in pollen op het zand, een lichter broek.
+    **Marcel (8 okt): "Ja, ziet er goed uit zo".** Nu stap 2: de tegels in het spel.
 118. **Inwoners met stats, zoals in Dwarf Fortress** (Marcel, 4 okt, zesentwintigste sessie: "Inwoners krijgen ook
     'stats' hp, skills, eigenschappen, etc ala dwarf fortress"; plan van Claude; open).
     **Wat er al is:** elke bewoner heeft een naam, een leeftijd, een huis, een gezin en werk (`js/bewoners.js`); de vijf
