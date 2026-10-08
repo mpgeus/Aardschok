@@ -28,7 +28,8 @@ function geheugenOpslag() {
 }
 
 // Een nieuw spel op het ontworpen gehucht, zoals tweeDorpen() in test/dorpen.test.cjs (zonder buurdorp); met `maker` op
-// het land van de maker uit dat nummer (js/maker.js, vraag 112).
+// het land van de maker uit dat nummer (js/maker.js, vraag 112), zonder het eiland (vraag 117), zodat de metingen te
+// vergelijken blijven met die ervoor.
 function beginSpel({ zaad = 11, opslag = true, maker = null } = {}) {
   const echt = console.warn;
   console.warn = () => {};
@@ -39,10 +40,13 @@ function beginSpel({ zaad = 11, opslag = true, maker = null } = {}) {
     kalender: T.nieuweKalender(), quests: {}, questWeg: {}, questBeloond: new Set(), sleutelGebruikt: false,
     fonteinLeeg: false, sluipen: false, bezocht: new Set(['hal']), naarGebied: null, netGeland: null, zoom: 1,
   }, T.schermVelden());
+  const opEiland = T.MAKER_INSTELLINGEN.opEiland;
+  T.MAKER_INSTELLINGEN.opEiland = false;
   try {
     if (!T.beginOpKaart(S, 'gehucht', maker)) throw new Error('beginOpKaart mislukte');
   } finally {
     console.warn = echt;
+    T.MAKER_INSTELLINGEN.opEiland = opEiland;
   }
   if (opslag) T.gebruikOpslagPlek(geheugenOpslag());
   return S;

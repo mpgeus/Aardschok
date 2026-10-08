@@ -85,7 +85,7 @@ Marcel vond de eilanden goed ("1 ja goed") en koos a1: eerst je dorp op het eila
 dat er al was"), en elk nieuw spel maakt het eiland (Marcel: "Het eiland wordt gewoon altijd gegenereerd bij een nieuw
 spel"): je dorp ligt erop als een dorp dat er al was (`Spel.debug.eiland(5)`); nog op de branch. Volgende: 2b, het eiland
 om je land (de rand, en de hoogte van het eiland), en 2c, de speeltest op het eiland (`npm run speeltest -- --eiland`).
-`npm test`: 1039/1039.
+`npm test`: 1040/1040.
 
 **De sessie van de hoogte** (7 okt, `claude/elegant-meitner-d3ss2z`, naast die van de wolven; in `main`, Marcel: "Ja
 push main"). **Vraag 124, de camera draaien, is geparkeerd** (Marcel: "Is het echt iets wat iets toevoegd? Ik wil geen
@@ -5200,7 +5200,11 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     de speeltest: de toetsen die over de landen van de maker gaan (de wolven, de hoogte, de natuur, het rooien), leggen
     hun land zonder het eiland, en de speeltest speelt het eiland met `--eiland` (met `--maker` de landen van de maker,
     om te vergelijken). 2c, de speeltest van vier jaar op drie eilanden, beslist dus niet meer of het de standaard wordt,
-    maar of de dorpen er even ver groeien.
+    maar of de dorpen er even ver groeien. Wat een browser van vroeger voor "Je gehucht" onthield (toen het nog in het
+    venster stond), telt niet meer: anders begon een nieuw spel daar stil zonder het eiland, zonder dat je ziet waarom
+    (`T.laadOpties`; de speeltest zet het met `proef`). En `Spel.debug.gehucht(5)` en `npm run grootte -- --maker 5`
+    blijven op het land van de maker zonder het eiland, zodat de vaste schermafdrukken, de tekenmeting, de samenvatting
+    en de grootte op hetzelfde land blijven meten als ervoor (de wereld byte voor byte gelijk op 5 en 62707).
 118. **Inwoners met stats, zoals in Dwarf Fortress** (Marcel, 4 okt, zesentwintigste sessie: "Inwoners krijgen ook
     'stats' hp, skills, eigenschappen, etc ala dwarf fortress"; plan van Claude; open).
     **Wat er al is:** elke bewoner heeft een naam, een leeftijd, een huis, een gezin en werk (`js/bewoners.js`); de vijf

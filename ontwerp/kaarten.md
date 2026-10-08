@@ -37,7 +37,8 @@ komen, en daarna elk blaadje schildert. Het is één landschap; de schets zie je
 
 **Je dorp op het eiland (stap 2a, 8 okt; Marcel: "A ja B later C dorp dat er al was", en "Het eiland wordt gewoon altijd
 gegenereerd bij een nieuw spel"):** elk nieuw spel maakt het eiland, en je land van 100 bij 100 is het stuk van het eiland
-om jouw dorp (de spelregel "Je gehucht" zet het alleen voor de toetsen en de speeltest uit). `T.landVanEiland(E, plek, b, h)` geeft
+om jouw dorp (de spelregel "Je gehucht" zet het alleen voor de toetsen en de speeltest uit; wat een browser van vroeger
+voor die spelregel onthield, telt niet meer, `T.laadOpties`). `T.landVanEiland(E, plek, b, h)` geeft
 de maker per tegel en per hoekpunt de streek, de bomen en waar de wegen van het eiland het land verlaten (die naar het
 kasteel is de uitgang); `T.eilandVan(zaad)` onthoudt het laatste eiland, want het is uit het nummer te maken. De maker
 legt het gehucht erop zoals altijd, maar als een dorp dat er al was: eerst de huizen om het plein, dan de weg ernaartoe

@@ -93,9 +93,10 @@ function leesOpdracht(argv) {
   if (!o.spelers.length) o.spelers = SPELERS;
   // De spelregels zoals de browser ze onthoudt (js/opties.js, onder aardschok.spelregels). Het gehucht altijd: zonder
   // --maker of --eiland het ontworpen gehucht, ook nu een nieuw spel het eiland maakt (vraag 117), zodat een speeltest te
-  // vergelijken blijft met de speeltests ervoor; met --maker de landen van de maker zonder het eiland.
+  // vergelijken blijft met de speeltests ervoor; met --maker de landen van de maker zonder het eiland. `proef`: het spel
+  // neemt "Je gehucht" alleen uit de browser als een proef hem zette (T.laadOpties).
   const keuzes = { gehucht: o.eiland ? 'eiland' : o.maker ? 'maker' : 'ontworpen', ...o.regels };
-  o.spelregels = { keuzes, namen: {}, getallen: o.getallen };
+  o.spelregels = { keuzes, namen: {}, getallen: o.getallen, proef: true };
   o.anders = [...Object.entries(o.regels), ...Object.entries(o.getallen)].map(([k, v]) => `${k}=${v}`);
   return o;
 }

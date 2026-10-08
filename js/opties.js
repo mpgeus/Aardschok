@@ -931,12 +931,18 @@
     }
   };
 
+  // Een spelregel voor de proeven (`voorProeven`, zoals "Je gehucht") staat niet in het venster, dus wat de browser
+  // ervan onthield, telt alleen als een proef het daar zette (de speeltest, met `proef`). Anders liet een keus van
+  // vroeger, toen hij nog in het venster stond, een nieuw spel stil ergens anders beginnen dan op het eiland, zonder dat
+  // je ziet waarom.
   T.laadOpties = function (waar) {
     const o = waar || opslag();
     try {
       const tekst = o && o.getItem(SLEUTEL);
       const i = tekst ? JSON.parse(tekst) : null;
-      return i && typeof i === 'object' ? i : null;
+      if (!i || typeof i !== 'object') return null;
+      if (!i.proef && i.keuzes) for (const optie of T.OPTIES) if (optie.voorProeven) delete i.keuzes[optie.id];
+      return i;
     } catch (e) {
       return null;
     }

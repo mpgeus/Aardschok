@@ -131,7 +131,7 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   werkplekken zoals het spel ze bouwt, en meet de wereld per beeld op 30×, de dagtik en het opslaan, elke N in een eigen
   Node (`gereedschap/grootte/`, uitleg bovenin `grootte.cjs`); `-- 26 800` voor andere N, `--browser` ook het tekenen
   (start zelf de server), `--astar` het zoeken van een pad, `--prof` een CPU-profiel, `--maker 5` op land 5 van de maker
-  in plaats van het ontworpen gehucht. De uitslag in
+  (zonder het eiland) in plaats van het ontworpen gehucht. De uitslag in
   `gereedschap/grootte/uit/` (niet in git), met een tabel in `samenvatting.md`. Meet op een stille machine.
 - `npm run schermen` maakt twintig vaste schermafdrukken van het spel (het plein op vier zoomstanden, de herberg 's avonds,
   de nacht, twee bouwplaatsen in hun fases, land 5 van de maker) en meet wat de browser aan plaatjes vasthoudt
@@ -1088,7 +1088,8 @@ gemist wordt; `('dorpelingen')` laat alleen die stand zien.
 schout staat; `(5)` begint een nieuw spel op land 5 met heuvels (de spelregel "Hoogte" op "Heuvels"), `('top')` zet de
 schout op het hoogste punt.
 `Spel.debug.gehucht()` zegt of dit het ontworpen gehucht is of een van de maker, en uit welk zaad; `(3)` begint nu een
-nieuw spel op het gehucht van zaad 3 (zonder brief), zoals op de pagina "Gehuchten van de maker".
+nieuw spel op het gehucht van zaad 3 (zonder brief), zoals op de pagina "Gehuchten van de maker": het land van de maker
+zonder het eiland, waarop de vaste schermafdrukken, de tekenmeting en de samenvatting spelen.
 `Spel.debug.eiland(5)` begint nu een spel op het eiland van 5 (zonder brief); zonder nummer zegt het in welk dorp je op het
 eiland ligt, wat voor plek het is en waar de uitgang is.
 `Spel.debug.voorval()` zegt welk voorval er loopt, welke vervolgen nog komen, welke voorvallen er nu kunnen (met hoe
@@ -1120,7 +1121,8 @@ hij staat, wie er kijkt, en welk licht er brandt.
 slachtmaand). `Spel.debug.opslaan('2')` zet het spel op plek 2, `Spel.debug.laden('auto')` laadt wat er vanzelf
 bewaard is, en `Spel.debug.spellen()` zegt wat er op de plekken staat.
 De spelregels die de browser onthield (`localStorage`, `aardschok.spelregels`) gelden ook voor wie
-test; `Spel.optiesTerug()` zet alles op de standaard, en een nieuwe Playwright-context begint leeg.
+test, behalve een spelregel voor de proeven (`voorProeven`, zoals "Je gehucht"): die alleen als een proef hem daar
+zette (`proef`, zoals de speeltest); `Spel.optiesTerug()` zet alles op de standaard, en een nieuwe Playwright-context begint leeg.
 Een sprong met `kalender` tikt alle dagen ertussen af: valt 1 wijnmaand erin, dan staat de brief
 open en de tijd stil tot je hem sluit.
 

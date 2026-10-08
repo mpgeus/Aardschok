@@ -1190,9 +1190,20 @@
     },
     // Het gehucht van de maker (js/maker.js): uit welk zaad het gehucht komt (of dat het het ontworpen gehucht is).
     // Spel.debug.gehucht(3) begint nu een nieuw spel op het gehucht van zaad 3, zoals op de pagina "Gehuchten van de
-    // maker", zonder brief; zo kun je een zaad bekijken zonder de spelregel om te zetten.
+    // maker", zonder brief; zo kun je een zaad bekijken zonder de spelregel om te zetten. Het is het land van de maker
+    // zonder het eiland, zoals op die pagina, ook nu een nieuw spel het eiland maakt (vraag 117): de vaste
+    // schermafdrukken, de tekenmeting en de samenvatting spelen op land 5 van de maker (Spel.debug.eiland(5) voor het
+    // eiland).
     gehucht(zaad) {
-      if (zaad != null) T.nieuwSpel(Number(zaad));
+      if (zaad != null) {
+        const opEiland = T.MAKER_INSTELLINGEN.opEiland;
+        T.MAKER_INSTELLINGEN.opEiland = false;
+        try {
+          T.nieuwSpel(Number(zaad));
+        } finally {
+          T.MAKER_INSTELLINGEN.opEiland = opEiland;
+        }
+      }
       const w = S.gebieden && S.gebieden.gehucht;
       const stijl = w && w.stijl ? `, in de bouwstijl ${w.stijl} (js/bouwstijl.js)` : '';
       if (w && w.eiland) return `Een gehucht op het eiland van ${w.eiland.zaad}, in ${w.eiland.dorp}${stijl} (Spel.debug.eiland()).`;
