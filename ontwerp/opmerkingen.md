@@ -9,6 +9,26 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Een huis zonder put, en nergens plek voor een put** (8 okt, de sessie van de kaartenmaker; vraag 117, stap 2c): op
+  het eiland van 73425 wil een huis met vijf dorpelingen een put binnen 12 tegels, en het dorp vindt er nergens een
+  (`wilBouwen` met `plek: false` in de speeltest): geen open grond met drie tegels looppad rondom, en niets om te rooien.
+  Het jaar van geluk begint dan nooit; bij de bouwer en de sluwe bouwer twee jaar lang. Ook op een land van de maker
+  komt het voor (62707, aan het eind: een put en een kapel zonder plek), maar daar pas na de winst. Nog niet bekeken:
+  waarom er daar niets past. De speeltest is te naspelen tot dat moment (`-- bouwer --zaad 2 --eiland --jaren 4`).
+  Voorstel: een erf komt niet waar een put het niet meer kan halen, zoals het al niet komt waar een huis niet meer kan
+  groeien (`T.groeiGrond`, vraag 130, d).
+
+- **Rovers die blijven komen als er niets te halen is** (8 okt, de sessie van de kaartenmaker; vraag 117, stap 2c): op het
+  eiland van 72022 kwam de bende bij de bouwer vanaf het tweede jaar om de tien dagen, 32 keer in drie jaar (op het land
+  van de maker 7), ook "met lege handen", en ze vertrapten zes keer een akker. De oogst zakte van 641 naar 190 en 92, er
+  was geen bier en geen brood, hij kon de heer niet betalen, en zijn gunst raakte op. Of het door het eiland komt, zegt
+  één spel niet. Een vraag voor Marcel: komt een bende minder vaak als er niets te halen viel, of valt hij uiteen?
+
+- **Laden maakt eerst een vers spel** (8 okt, de sessie van de kaartenmaker): `T.laadSpel` (js/main.js) begint met
+  `T.nieuwSpel()`, en dat legt nu een heel eiland met een gehucht (1 à 2 s), dat het bewaarde spel daarna overschrijft;
+  het eerste beeld rekent dan nog het eiland van het bewaarde spel uit (0,6 s, en de rand en de hoogte). Laden kan
+  sneller als het nieuwe spel het land van het bewaarde spel neemt, of geen land legt.
+
 - **Het leven in het bos, wat nog niet te zien is** (7 okt, zevenendertigste sessie; vraag 116, stap 2a): de jongen van
   de wolven en de herten hebben nog geen eigen tekening (een welp, een kalf: nu zijn het kleine volwassenen, even groot);
   de jacht van een roedel op de herten is een lot in de nacht, niet te zien (een hert is 's ochtends weg; later de roedel

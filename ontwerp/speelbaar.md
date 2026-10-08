@@ -153,6 +153,59 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 8 okt: vier jaar op het eiland (werklijst, vraag 117, stap 2c)
+
+Gespeeld in de sessie van de kaartenmaker, in een losse kopie van `main` op `6dba60e` (het spel van `25934d7`): elk nieuw
+spel begint op het eiland (stap 2a). `npm run speeltest -- bouwer sluw --jaren 4 --eiland`, en daarna hetzelfde met
+`--maker`, drie tegelijk, samen zo'n vijf kwartier. Geen fouten in de console, in twaalf spellen. Hetzelfde nummer geeft
+op het eiland een ander stuk land dan de maker legt: 62707 is zaad 1, 73425 zaad 2, 72022 zaad 3.
+
+Op de landen van de maker liep alles dag voor dag zoals in de speeltest van 7 okt hieronder (vier van de zes gewonnen):
+het eiland heeft daar niets aan het spel veranderd. Op het eiland:
+
+| Land | Speler | Mensen aan het eind van jaar 1 tot 4 | Dagen dat alle huizen alles hadden, per jaar (waarvan alle woningen in steen) | Hoe het eindigde | Op het land van de maker |
+|---|---|---|---|---|---|
+| 62707 | bouwer | 50, 75, 123, 132 | 47 (0), 0, 134 (69), 340 (329) | **gewonnen**, op 27 louwmaand van het vierde jaar | gewonnen, 24 grasmaand |
+| 73425 | bouwer | 49, 97, 120, 120 | 58 (0), 207 (189), 0, 0 | de vier jaar uit: één huis mist een put, en er is nergens plek voor een | gewonnen, 23 slachtmaand |
+| 72022 | bouwer | 62, 71, 78 | 22 (0), 0, 0 van 282 | ambt kwijt, op 12 wintermaand van het derde jaar: de gunst was op | gewonnen, 20 louwmaand |
+| 62707 | sluw | 54, 73, 115, 127 | 47 (0), 174 (174), 237 (177), 341 (330) | **gewonnen**, op 14 louwmaand van het vierde jaar | gewonnen, 24 bloeimaand |
+| 73425 | sluw | 50, 89, 112, 112 | 70 (0), 192 (175), 14 (0), 0 | de vier jaar uit: hetzelfde huis zonder put | de vier jaar uit, de teller op 298 |
+| 72022 | sluw | 53 | 23 van 251 | ambt kwijt, op 11 slachtmaand van het eerste jaar: de soldaten vonden zijn akker in het bos (−25) | gevallen, in het tweede jaar |
+
+En het land zelf (`T.isBos`, de bomen en het water op de kaart van 100 bij 100):
+
+| Land | Bos, eiland en maker | Water (tegels), eiland en maker |
+|---|---|---|
+| 62707 | 27% en 10% | 1938 en 367 |
+| 73425 | 4% en 8% | 181 en 365 |
+| 72022 | 35% en 17% | 1358 en 328 |
+
+**Wat het zegt:**
+1. **Op het eiland winnen twee van de zes,** allebei op 62707, en daar acht à negen maanden later dan op het land van de
+   maker. Het groeien gaat even snel (na twee jaar 71 tot 97 mensen, op de landen van de maker 70 tot 102); wat het
+   winnen tegenhoudt, zijn drie dingen die hieronder staan.
+2. **Een dorp op het eiland ligt anders:** op 62707 en 72022 met twee à drie keer zoveel bos en vier à vijf keer zoveel
+   water als het land van de maker, op 73425 juist met minder bos. Het eiland legt het dorp waar het kan groeien, maar
+   het bos en de kust van het eiland komen er dichtbij.
+3. **Meer bos is meer wolven:** op 62707 haalden ze 9 en 14 schapen van de meent (op het land van de maker 3 en 2), en
+   zonder schapen is er geen wol, en zonder wol geen laken: het dorp van de bouwer miste in het tweede jaar elke dag
+   laken, en geen dag had elk huis alles. Wat je tegen de wolven doet, is vraag 116, stap 3.
+4. **Een huis zonder put, en geen plek voor een put** (73425): een huis met vijf dorpelingen wil een put binnen 12 tegels,
+   en het dorp vindt er nergens een (geen open grond met drie tegels looppad rondom, en ook niets om te rooien): het
+   jaar van geluk begint dan nooit, bij allebei de spelers, twee jaar lang. Ook op het land van de maker vindt het dorp
+   aan het eind soms geen plek voor een put of een kapel (62707), maar daar pas na de winst. Waarom daar geen plek is,
+   is nog niet bekeken.
+5. **Rovers die blijven komen** (72022, de bouwer): 32 overvallen in drie jaar (op het land van de maker 7), vanaf het
+   tweede jaar om de tien dagen, ook als er niets te halen is ("met lege handen"), en ze vertrapten zes keer een akker.
+   De oogst zakte van 641 naar 190 en 92, er was geen bier en geen brood, hij kon de heer niet betalen, en zijn gunst
+   raakte op. Of dat door het eiland komt, zegt één spel niet: zodra er iets anders gebeurt, loopt de rest van het spel
+   anders.
+
+**Wat het vraagt** (aan Marcel): de put zonder plek eerst uitzoeken (de speeltest naspelen tot dat moment, en kijken
+waarom er niets past), en dan voorkomen, zoals een erf al niet komt waar een huis niet meer kan groeien (vraag 130, d);
+de wolven pas na vraag 116, stap 3, opnieuw meten; en de rovers die blijven komen als er niets te halen is, staan in
+`opmerkingen.md`.
+
 ## De speeltest van 7 okt: de wolven, stap 2a en 2b (werklijst, vraag 116)
 
 Gespeeld in de zevenendertigste sessie, op `ccr-f6ba5992-1e77dw` op `2551cfb`: de beesten in het bos met het leven in het

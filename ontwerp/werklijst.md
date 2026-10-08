@@ -84,10 +84,11 @@ Marcel vond de eilanden goed ("1 ja goed") en koos a1: eerst je dorp op het eila
 117), dan de kern; het hele eiland, met de mist en een kaart die meegroeit, later. **2a is gebouwd** ("A ja B later C dorp
 dat er al was"), en elk nieuw spel maakt het eiland (Marcel: "Het eiland wordt gewoon altijd gegenereerd bij een nieuw
 spel"): je dorp ligt erop als een dorp dat er al was (`Spel.debug.eiland(5)`); in `main` (Marcel: "A ja B ja"). 2b, het eiland
-om je land (de rand, en de hoogte van het eiland), is gebouwd en staat in `main` (Marcel: "Zet 2b ook in main"); 2c loopt:
-de speeltest van vier jaar op drie
-eilanden (`npm run speeltest -- bouwer sluw --jaren 4 --eiland`), naast die op de landen van de maker.
-`npm test`: 1040/1040.
+om je land (de rand, en de hoogte van het eiland), is gebouwd en staat in `main` (Marcel: "Zet 2b ook in main"). 2c is
+gespeeld, vier jaar op drie eilanden (`npm run speeltest -- bouwer sluw --jaren 4 --eiland`) naast dezelfde drie landen
+van de maker: op het eiland winnen er twee van de zes, op de landen van de maker vier. Wat het tegenhoudt (een huis
+zonder plek voor een put, meer wolven in meer bos, rovers die blijven komen), staat bij vraag 117, met een voorstel dat
+op Marcel wacht. `npm test`: 1042/1042.
 
 **De sessie van de hoogte** (7 okt, `claude/elegant-meitner-d3ss2z`, naast die van de wolven; in `main`, Marcel: "Ja
 push main"). **Vraag 124, de camera draaien, is geparkeerd** (Marcel: "Is het echt iets wat iets toevoegd? Ik wil geen
@@ -4973,7 +4974,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Dus de hele spelwereld als het ware. Zo kun je steeds stukken 'ontdekken' in de fog of war. Het idee is een eiland. Met
     water rondom. Je krijgt een random positie op het land. Kan aan de buitenkant zijn of binnen in het land."; plan van
     Claude; open).
-    **Bezig in sessie `ccr-f03157dc-9d2dtu`** (8 okt): stap 2, je dorp op het eiland; 2a en 2b staan in `main`, nu 2c, de speeltest van vier jaar op drie eilanden naast die op de landen van de maker.
+    **Bezig in sessie `ccr-f03157dc-9d2dtu`** (8 okt): stap 2, je dorp op het eiland; 2a en 2b staan in `main`, 2c is gespeeld, en het voorstel over wat het vond (de put zonder plek) wacht op Marcel.
     **Wat er nu is:** het land is een aparte kaart met provincies waar je in dagen reist (vraag 63, `js/land.js`, achter de
     spelregel Land, die standaard uit staat), en elke provincie zou een eigen kaart krijgen. Dit vervangt dat: één grote
     kaart, een eiland met de zee rondom, waarop alles ligt.
@@ -5223,6 +5224,16 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     altijd; een land van de maker houdt byte voor byte zijn heuvels. Om het dorp is het eiland zachter dan de heuvels van
     de maker (een dorp ligt waar het vlak is: aan de kust 0 tot 80 pixels, landinwaarts 150 à 200), en de bergrug ligt ver
     weg. 2b is af, en staat in `main` (Marcel, 8 okt: "Zet 2b ook in main").
+    **2c is gespeeld** (8 okt; `speelbaar.md`, "De speeltest van 8 okt"): vier jaar, de bouwer en de sluwe bouwer, op
+    drie eilanden en op dezelfde drie landen van de maker. Op de landen van de maker liep het dag voor dag als op 7 okt
+    (vier van de zes gewonnen); op het eiland winnen er twee van de zes, allebei op 62707, acht à negen maanden later.
+    Het groeien gaat even snel. Wat het winnen tegenhoudt: **a**, een huis zonder put en nergens plek voor een put
+    (73425, bij allebei; ook op een land van de maker, maar daar pas na de winst); **b**, meer bos, dus meer wolven, dus
+    minder schapen en geen laken (62707: twee à drie keer zoveel bos als het land van de maker, 9 en 14 schapen weg tegen
+    3 en 2); en **c**, rovers die om de tien dagen blijven komen, ook met lege handen (72022, de bouwer: 32 keer, en de
+    oogst zakte tot 92). Voorstel van Claude (wacht op Marcel): a eerst uitzoeken en voorkomen (een erf niet waar een put
+    het niet meer haalt, zoals vraag 130, d); b opnieuw meten na vraag 116, stap 3 (wat je tegen de wolven doet); c in
+    `opmerkingen.md`, als vraag voor later. Daarmee is stap 2 af; volgens het plan dan terug naar de kern.
 118. **Inwoners met stats, zoals in Dwarf Fortress** (Marcel, 4 okt, zesentwintigste sessie: "Inwoners krijgen ook
     'stats' hp, skills, eigenschappen, etc ala dwarf fortress"; plan van Claude; open).
     **Wat er al is:** elke bewoner heeft een naam, een leeftijd, een huis, een gezin en werk (`js/bewoners.js`); de vijf
