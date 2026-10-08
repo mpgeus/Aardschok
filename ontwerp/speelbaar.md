@@ -153,6 +153,33 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 8 okt: een erf houdt plaats voor een put (werklijst, vraag 117, stap 2d)
+
+Gespeeld in de sessie van de kaartenmaker, in een losse kopie op `5bb7cb6` (de branch `ccr-f03157dc-9d2dtu`, met de regel
+van 2d, nog zonder de grote gebouwen van vraag 114, stap 3): dezelfde twaalf spellen als in de speeltest van 2c
+hieronder (`npm run speeltest -- bouwer sluw --jaren 4 --eiland`, en `--maker`). Geen fouten in de console.
+
+**Tien van de twaalf liepen letter voor letter als in 2c** (alleen de speelduur en de stand verschillen): daar weigerde de
+regel geen erf dat de bouwer koos, en hij kost geen merkbare tijd. Alleen op het eiland van 73425 liep het anders, en daar
+winnen ze nu allebei:
+
+| Land | Speler | Mensen aan het eind van jaar 1 tot 4 | Dagen dat alle huizen alles hadden, per jaar (waarvan alle woningen in steen) | Hoe het eindigde | In 2c |
+|---|---|---|---|---|---|
+| 73425 | bouwer | 49, 97, 123, 166 | 58 (0), 197 (189), 286 (227), 141 (140) | **gewonnen**, op 14 hooimaand van het vierde jaar, met 170 mensen | de vier jaar uit, op 120 |
+| 73425 | sluw | 50, 89, 107, 153 | 70 (0), 192 (175), 354 (242), 228 (220) | **gewonnen**, op 7 wijnmaand van het vierde jaar, met 158 mensen | de vier jaar uit, op 112 |
+
+Op het eiland winnen er zo vier van de zes, net als op de landen van de maker.
+
+**Wat het zegt:**
+1. **Het huis zonder put was een hut die groeide.** De eerste versie van de regel (`c48f028`) veranderde niets: de hut van
+   Evert had op dag 673 nog een put binnen 12 tegels toen de erven om hem heen kwamen, en op dag 703 groeide hij van een
+   hut van 6 bij 6 tot een huis van 9 bij 7. Zijn midden schoof op, de put stond op 12,7 tegels, en er was geen plek meer
+   voor een nieuwe. Nu telt een hut op een erf met het huis dat hij wordt (`T.huisPlekVan`), en dan komen die erven er
+   niet.
+2. **Na de winst** vindt het dorp soms geen plek meer voor een kapel (kring 40: op 73425 bij allebei, op het land van de
+   maker op 62707 bij allebei) of een put (62707 op het land van de maker, de bouwer). Wat na de winst gebouwd wordt,
+   neemt de grond; dat stond er in 2c ook.
+
 ## De speeltest van 8 okt: vier jaar op het eiland (werklijst, vraag 117, stap 2c)
 
 Gespeeld in de sessie van de kaartenmaker, in een losse kopie van `main` op `6dba60e` (het spel van `25934d7`): elk nieuw
