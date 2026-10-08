@@ -153,6 +153,25 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 8 okt, avond: vee en vissers erbij (werklijst, vraag 132)
+
+Op `ccr-77327776-rqjldz` op `e9cc2cd`, `npm run speeltest -- bouwer sluw --maker --jaren 4`.
+
+| Speler, land | Mensen, jaar 1 tot 4 | Hongerdagen per jaar | Vissers, jagers | Langste reeks, en wat hem brak | Hoe het eindigde |
+|---|---|---|---|---|---|
+| bouwer 1 (62707) | 53, 75, 98, 100 | 77, 123, 122, 115 | 4, 5 | 115 dagen (vlees of vis) | vier jaar uit |
+| bouwer 2 (73425) | 51, 74, 80, 90 | 78, 122, 125, 33 | 3, 4 | (nooit een maand) | vier jaar uit |
+| bouwer 3 (72022) | 53, 74 | 77, 121 | 3, 3 | | ambt kwijt in jaar 2 |
+| sluw 1 (62707) | 53, 78, 115, 115 | 77, 114, 49, 67 | 4, 4 | 128 dagen (eten) | vier jaar uit |
+| sluw 2 (73425) | 49 | 77 | 2, 1 | | gevallen tegen rovers, jaar 1 |
+| sluw 3 (72022) | 49, 67, 86, 107 | 77, 117, 122, 0 | 4, 6 | 150 dagen (vlees of vis) | vier jaar uit |
+
+**Wat het zegt:** vier van de zes spelen nu de vier jaar uit (eerst twee), en in het vierde jaar is de honger bij twee
+spellen weg (33 en 0 dagen); een boer maakte twee à drie keer een weide erbij. Maar nog steeds is het graan van
+lentemaand tot de oogst op, en de reeks breekt in de winter op vlees of vis (de vissers liggen stil, en er zijn weinig
+jagers). Er is een spelregel "Graan" (Honger, de standaard: 3,5 graan per akkertegel; Net rond: 4; Ruim: 5): de proef
+hieronder speelt met "Net rond".
+
 ## De speeltest van 8 okt, later: de graanschuur en het advies over eten (werklijst, vraag 132, a en b)
 
 Op `ccr-77327776-rqjldz` op `3290959`, `npm run speeltest -- bouwer sluw --maker --jaren 4`.
