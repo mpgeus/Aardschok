@@ -183,6 +183,11 @@
       return heeft('spitten') ? 'spitten' : null;
     }
     if (datum.seizoen === 'winter' && klaar.sprokkelen !== Math.floor(D.kalender.dag) && bosrandVan(D, e)) return 'sprokkelen';
+    // Is het hout geraapt, dan dorst hij in de deur van zijn schuur (vraag 140).
+    if (datum.seizoen === 'winter') {
+      const p = T.bewonerVan(D, e);
+      if (p && p.huis && p.huis.soort === 'boerderij') return 'dorsen';
+    }
     return null;
   };
 
@@ -637,6 +642,120 @@
     e.werkt = { soort: 'plukken', x: staan.x, y: staan.y, op: { x: rank.x, y: rank.y }, tot, rust: false };
   }
 
+  // De oogst binnenhalen (js/akkers.js, T.SCHOVEN_INSTELLINGEN; vraag 140): de akkers waar dit poppetje schoven bindt of
+  // naar de schuur draagt, en de boerderij waar ze heen gaan; of null. De boer zelf als hij niets meer te maaien heeft, en
+  // de boerin en de grote kinderen van zijn boerderij (zoals T.helpAnker hieronder), zolang er zwad of hokken op zijn
+  // akkers staan, of zolang hij nog schoven draagt.
+  function oogstVan(D, e) {
+    const p = T.bewonerVan(D, e);
+    if (!p || !p.huis || p.huis.soort !== 'boerderij' || p.weg) return null;
+    let boer = e.werkAkkers && e.werkAkkers.length ? e : null;
+    if (boer) {
+      if (e.maait || e.oogstDoel) return null;
+    } else {
+      if (p.leeftijd !== 'volwassen' && p.leeftijd !== 'jong') return null;
+      if (p.werk && p.werk !== p.huis) return null;
+      boer = boerVanHuis(D, p.huis);
+      if (!boer) return null;
+    }
+    if (!(e.vracht > 0) && !boer.werkAkkers.some((a) => a.schoven && a.schoven.size)) return null;
+    return { akkers: boer.werkAkkers, schuur: p.huis };
+  }
+
+  // Binden en dragen (vraag 140): eerst wat droog in de hokken staat, naar de schuur (perVracht tegels in één keer), dan
+  // het zwad binden tot hokken, de dichtste tegel eerst die niemand anders neemt. In de schuur is het graan binnen.
+  function haalBinnen(S, D, e, nu, o) {
+    const w = D.wereld;
+    const dag = D.kalender.dag;
+    const deur = T.deurVan(w, o.schuur);
+    const hier = { x: e.tx, y: e.ty };
+    const inDeSchuur = () => {
+      T.haalSchovenBinnen(D, e.vracht || 0);
+      e.vracht = 0;
+      e.draagt = null;
+    };
+    const naarDeSchuur = () => {
+      e.draagt = 'schoof';
+      e.werkt = null;
+      const doel = { x: deur.x, y: deur.y, tot: 1 };
+      const pad = T.zoekRoute(w, hier, doel, { tot: 1 });
+      if (pad && pad.length) T.geefRoute(e, pad, doel);
+      else inDeSchuur(); // hij komt er niet, of hij staat er al
+    };
+    if (e.draagt === 'schoof') {
+      if (e.pad.length) return;
+      if (T.afstand(deur, hier) > 1) naarDeSchuur();
+      else inDeSchuur();
+      return;
+    }
+    const wt = e.werkt;
+    if (wt && wt.soort === 'binden' && wt.tot != null) {
+      if (nu < wt.tot) return;
+      const a = T.veldOp(w, wt.x, wt.y);
+      if (a) T.bindSchoof(a, wt.x, wt.y, dag);
+      e.werkt = null;
+      return;
+    }
+    if (e.pad.length) return; // onderweg
+    const bezet = new Set(w.wezens.filter((x) => x !== e && x.werkt && (x.werkt.soort === 'binden' || x.werkt.soort === 'dragen')).map((x) => `${x.werkt.x},${x.werkt.y}`));
+    const lijst = (vraag) => o.akkers.flatMap((a) => vraag(a).map((t) => ({ x: t.x, y: t.y, a })))
+      .filter((t) => !bezet.has(`${t.x},${t.y}`))
+      .sort((p, q) => T.afstand(p, hier) - T.afstand(q, hier));
+    const naar = (t, soort) => {
+      if (e.tx === t.x && e.ty === t.y) return true;
+      const pad = T.zoekRoute(w, hier, t, {});
+      if (pad && pad.length) {
+        T.geefRoute(e, pad, t);
+        e.werkt = { soort, x: t.x, y: t.y, op: { x: t.x, y: t.y }, tot: null, rust: false };
+      } else stop(e);
+      return false;
+    };
+    const droog = lijst((a) => T.droogInHokken(a, dag));
+    if (droog.length) {
+      const t = droog[0];
+      if (!naar(t, 'dragen')) return;
+      const mee = droog.filter((d) => d.a === t.a).slice(0, T.SCHOVEN_INSTELLINGEN.perVracht);
+      e.vracht = (e.vracht || 0) + T.neemSchoven(t.a, mee);
+      naarDeSchuur();
+      return;
+    }
+    const zwad = lijst((a) => T.teBinden(a));
+    if (!zwad.length) {
+      stop(e);
+      return;
+    }
+    const t = zwad[0];
+    if (!naar(t, 'binden')) return;
+    e.werkt = { soort: 'binden', x: t.x, y: t.y, op: { x: t.x, y: t.y }, tot: nu + T.SCHOVEN_INSTELLINGEN.bindUren * uur(), rust: false };
+  }
+
+  // Dorsen (vraag 140): in de winter, als het hout geraapt is, dorst de boer in de deur van zijn schuur, met zijn vlegel
+  // naar buiten. Alleen beeld: het graan is al binnen.
+  function dors(S, D, e, nu) {
+    const p = T.bewonerVan(D, e);
+    const g = p && p.huis;
+    if (!g || g.soort !== 'boerderij') {
+      stop(e);
+      return;
+    }
+    const deur = T.deurVan(D.wereld, g);
+    const wt = e.werkt;
+    if (wt && wt.soort === 'dorsen' && wt.tot != null) return;
+    if (e.pad.length) return;
+    const r = T.voetVanGebouw(g);
+    const weg = { x: Math.sign(deur.x - (r.x + r.b / 2 - 0.5)), y: Math.sign(deur.y - (r.y + r.h / 2 - 0.5)) };
+    const op = { x: deur.x + weg.x, y: deur.y + weg.y };
+    if (e.tx === deur.x && e.ty === deur.y) {
+      e.werkt = { soort: 'dorsen', x: deur.x, y: deur.y, op, tot: nu + 24 * uur(), rust: false };
+      return;
+    }
+    const pad = T.zoekRoute(D.wereld, { x: e.tx, y: e.ty }, deur, {});
+    if (pad && pad.length) {
+      T.geefRoute(e, pad, deur);
+      e.werkt = { soort: 'dorsen', x: deur.x, y: deur.y, op, tot: null, rust: false };
+    } else stop(e);
+  }
+
   // Elk beeld, na het maaien (T.werkOogstBij) en vóór het dwalen (T.dwaal): elke boer doet zijn werk van vandaag, en wie
   // zijn erf rooit, rooit (met dezelfde bijl en op dezelfde manier als een boer die bos ontgint). Waar je bent vanuit
   // js/main.js, de andere dorpen vanuit T.werkDorpBij (js/dorp.js).
@@ -655,7 +774,8 @@
       const schuur = kavel ? null : schuurWaarHijHakt(D, e);
       const hut = kavel || schuur ? null : hutWaarHijJaagt(D, e);
       const wijn = kavel || schuur || hut ? null : wijngaardWaarHijPlukt(D, e, dag);
-      if (!kavel && !schuur && !hut && !wijn && (!e.werkAkkers || !e.werkAkkers.length)) continue;
+      const oogst = kavel || schuur || hut || wijn ? null : oogstVan(D, e);
+      if (!kavel && !schuur && !hut && !wijn && !oogst && (!e.werkAkkers || !e.werkAkkers.length)) continue;
       // Wie hout naar huis bracht, legt het bij zijn deur neer.
       if (e.draagt && !e.pad.length && e.thuis && T.afstand(e.thuis, { x: e.tx, y: e.ty }) <= 1) e.draagt = null;
       // De schaft: brood op de akker (js/dag.js). Wie op zijn land werkt, blijft er staan tot het werk weer begint (wie
@@ -669,7 +789,7 @@
         delete e.werkt.schaft;
         e.werkt.tot = Math.min(e.werkt.tot, nu);
       }
-      const soort = werktijd && magWerken(S, D, e) ? (kavel ? 'rooien' : schuur ? 'hout' : hut ? 'jagen' : wijn ? 'plukken' : T.veldwerkVandaag(D, e, datum)) : null;
+      const soort = werktijd && magWerken(S, D, e) ? (kavel ? 'rooien' : schuur ? 'hout' : hut ? 'jagen' : wijn ? 'plukken' : oogst ? 'binnenhalen' : T.veldwerkVandaag(D, e, datum)) : null;
       if (!soort) {
         onthoudPlag(e, nu);
         stop(e);
@@ -685,6 +805,8 @@
       else if (soort === 'hout') hakHout(S, D, e, vw, nu, schuur);
       else if (soort === 'jagen') jaag(S, D, e, nu, hut);
       else if (soort === 'plukken') pluk(S, D, e, nu, wijn);
+      else if (soort === 'binnenhalen') haalBinnen(S, D, e, nu, oogst);
+      else if (soort === 'dorsen') dors(S, D, e, nu);
       else opHetLand(S, D, e, vw, nu, datum);
     }
   };

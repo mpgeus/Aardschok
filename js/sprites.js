@@ -723,9 +723,14 @@
     sprokkelen: { figuur: 'sprokkelaar', houding: 'rapen' },
     // In de wijngaard (js/wijngaard.js, vraag 136): plukken met de mand aan de arm, en met de volle mand naar huis.
     plukken: { figuur: 'plukker', houding: 'plukken' },
+    // De oogst binnenhalen (js/veldwerk.js, vraag 140): het zwad binden, naar de hokken lopen om ze te dragen, en in de
+    // winter dorsen in de deur van de schuur.
+    binden: { figuur: 'binder', houding: 'binden' },
+    dragen: { figuur: 'binder', houding: 'lopen' },
+    dorsen: { figuur: 'dorser', houding: 'dorsen' },
   };
-  // Wat hij draagt, en welk vel daarbij hoort als hij niet aan het werk is (onderweg naar huis).
-  const DRAAGT = { bundel: 'sprokkelaar', mand: 'plukker' };
+  // Wat hij draagt, en welk vel daarbij hoort als hij niet aan het werk is (onderweg naar huis of de schuur).
+  const DRAAGT = { bundel: 'sprokkelaar', mand: 'plukker', schoof: 'drager' };
   const WERKVELLEN = ['maaier', 'zaaier', 'wieder', 'sprokkelaar', 'hakker', 'plukker', 'binder', 'drager', 'dorser'];
   const VAN_EEN_VROUW = {
     maaier: 'maaister', zaaier: 'zaaister', wieder: 'wiedster', sprokkelaar: 'sprokkelaarster', hakker: 'hakster',

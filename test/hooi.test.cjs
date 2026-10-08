@@ -85,7 +85,7 @@ test('in hooimaand maait de boer eerst het hooi van zijn weide, en dan pas zijn 
   assert.deepEqual(volgorde, ['hooi', 'hooi', 'hooi', 'hooi', 'hooi', 'hooi', 'graan', 'graan', 'graan', 'graan']);
   assert.equal(weide.gehooid.size, 6);
   assert.ok(bijna(S.voorraad.hooi, 6 * IN.hooiPerTegel));
-  assert.ok(bijna(S.voorraad.graan, 4 * T.GRAAN_PER_TEGEL));
+  assert.ok(bijna(T.graanOpHetVeld(S), 4 * T.GRAAN_PER_TEGEL), 'het graan ligt als zwad op het veld');
   assert.equal(weide.geoogst.size, 0, 'een weide geeft geen graan');
 });
 

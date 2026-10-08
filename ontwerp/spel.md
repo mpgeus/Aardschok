@@ -1704,6 +1704,14 @@ Nog open na deel 1 (vragen van Claude):
   rest van het jaar niets. Wijn bederft niet. De wens die bier heette, heet nu drank, en neemt bier of wijn, bier eerst.
   De heer wil voor een wijnboerderij 10 wijn. Geen vaten (de kuiper blijft zonder nut, vraag 135); wijngaarden op de
   zonkant van een heuvel misschien later.
+  **Sinds later op 8 okt** (Marcel: "Dat je de boeren ziet plukken, volle en lege ranken", en "Alles telt pas als het
+  binnen is"): het huis met ernaast een wijngaard van vier rijen ranken. Een rank is kaal in de winter, groen in de lente
+  en zomer, vol met trossen van oogstmaand tot hij geplukt is, en dan leeg. In wijnmaand plukt het gezin dat er woont rank
+  voor rank met een mand, en de wijn (15 per rank) telt pas als de mand in het huis is; wat niet geplukt wordt, is weg.
+- **Het graan is pas binnen in de schuur** (8 okt; werklijst vraag 140; Marcel: "Alles telt pas als het binnen is"): wat
+  de boer maait, blijft als zwad liggen; de boerin en de kinderen binden het tot hokken, die drie dagen drogen, en dan
+  dragen ze de schoven naar de schuur. Pas dan is het in de voorraad. Wat er op 1 herfstmaand nog staat, halen ze in één
+  keer binnen. In de winter dorst de boer met een vlegel in de deur van zijn schuur.
 - **Het zaaigraan, pas bij nood** (1 okt, eenentwintigste sessie; werklijst vraag 81; Marcel: "zaaigraan wordt bij nood
   opgegeten, anders sterven er mensen"): van de oogst tot het zaaien houden de boeren het zaaigraan voor volgend jaar
   achter, zoveel als de akkers van volgend jaar vragen (`T.zaaigraanApart`). Het dorp eet het pas na het andere graan,

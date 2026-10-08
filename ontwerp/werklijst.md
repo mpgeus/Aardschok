@@ -6795,6 +6795,8 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     oogstmaand), leeg na het plukken, groter en met trossen die je dichtbij ziet; C, in wijnmaand plukt het gezin rij voor
     rij met een mand, en de wijn komt per geplukte rank (zoals graan per gemaaide tegel), niet meer per dag; D, een plukker
     met een mand als poppetje; E, later misschien snoeien in de winter. **Marcel: "Ja dat lijkt mij in orde."**
+    **Gebouwd (8 okt):** `js/wijngaard.js`, het wijnhuis, de ranken in vier standen en de plukker en plukster; in de
+    browser gezien: drie plukkers in de wijngaard, de geplukte rijen geel.
     **Bezig in sessie `ccr-77327776-rqjldz`** (8 okt): de wijnboerderij bouwen (Marcel: "Ik wil z.s.m. aan een
     wijnboerderij", en "Ja zo bouwen" op het plan: een boerderij met een gezin en wijngaarden, de pluk in wijnmaand, de
     wens bier wordt drank, bier of wijn, geen vaten, de heer wil wijn).
@@ -6824,6 +6826,11 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     van de boerderij; D, dorsen in de winter, met een vlegel in de deur van de schuur. **Marcel (8 okt): "Correct; dat is
     precies wat ik bedoel. Alles telt pas als het binnen is."** Dus het graan komt pas in de voorraad als de schoven in de
     schuur zijn, en de wijn als de manden bij het huis zijn (vraag 136). Eerst de wijngaard, dan het graan.
+    **Gebouwd (8 okt):** B, C en D (`a.schoven`, `haalBinnen` en `dors` in `js/veldwerk.js`), A (de standen zwad, hokken en
+    stoppels, en rijp met aren, op `beelden/graan.png`), en de figuren van de binder, de drager en de dorser (ook als
+    vrouw). In de browser op land 5: het gezin bindt in het graan. Wat opviel: het maaien gaat traag (in vier dagen 13
+    tegels met vijf boeren); het vangnet op 1 herfstmaand haalt de rest binnen. Of dat zo was voor het binden, is nog niet
+    nagemeten.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
