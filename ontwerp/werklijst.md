@@ -5339,6 +5339,32 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     **Op `main` met de grote gebouwen** (`speelbaar.md`, onder 2d): geen put meer zonder plek; op 62707 houdt nu een kapel
     zonder plek het jaar van geluk tegen, en 72022 beslist de gril van het vette varken bij een gunst van 5
     (`opmerkingen.md`). Voorstel van Claude: de regel van 2d ook voor de kapel. Marcel (8 okt): "Prima"; en 2d naar `main`: "Ja doe maar".
+    **De kapel is gebouwd** (8 okt, op de branch): een erf houdt ook plaats voor een kapel (`T.wilStraks`: de hut wil er nog
+    geen, het huis dat hij wordt wel), en het zoeken van de plekken is sneller (dezelfde plekken, een kapel in 0,07 tot
+    0,55 s in plaats van 1,2 tot 1,8). De speeltest op de eilanden loopt, naast een op `main`.
+    **B van 2a: eigen grondtegels voor het eiland** (Marcel, 8 okt: "dan gaan we de eigen tegels maken"; plan van Claude,
+    wacht op Marcel). Wat er nu is: de maker kent vier soorten grond (water, zandpad, heide, gras, en de kasseien van het
+    plein), met overgangen alleen tussen gras en de rest, en tussen zand en kasseien (`gereedschap/pixelart/randtegels.cjs`,
+    het vel `tegels/rand.png`). Op het eiland is de zee daarom de tegel van de vijver (op een groot vlak leest die als
+    donkere grond), zijn het strand, de duinen en het stuifzand zandpad, en zijn het veen en het broek gras. En omdat zand
+    nu zandpad is, en op een pad niet gebouwd wordt (`T.opPad`), is al het zand op het eiland onbebouwbaar.
+    Voorstel:
+    - **a, vier nieuwe soorten:** de zee, het strand (ook voor de duinen en het stuifzand), het veen en het broek, elk met
+      acht vlakke tegels.
+    - **b, vijf overgangen**, elk veertien hoeken in vier vormen, zoals de heide: strand aan zee (de kust), gras over strand,
+      veen over gras, broek over gras, en heide over strand (nu legt de maker een strook gras tussen heide en zand). Een
+      meer en een rivier blijven het water van nu; waar een rivier de zee in loopt, maakt de maker de laatste tegels zee.
+    - **c, het beeld:** de zee donkerder en kouder dan het water in het dorp (grijsblauw, met lichte golflijnen), en waar
+      hij het strand raakt een strook schuim; het strand licht en droog, zonder karrensporen; het veen donkerbruin en nat,
+      met pollen en hier en daar een plas; het broek nat gras met biezen. Eerst stil; golven die bewegen, later.
+    - **d, de regels:** de zee is water (niet te belopen, de visser vist er); strand en zand zijn geen pad meer, dus kan er
+      een huis of erf op, maar geen akker; veen en broek zijn als gras.
+    - **e, een eigen vel** (`tegels/kust.png`), zodat geen bestaand tegelnummer verschuift.
+    Stappen: 1, een proefplaat met de vier soorten en hun overgangen, voor Marcels blik (zoals bij de heide); 2, het vel in
+    het spel, en de maker en de rand van het eiland gebruiken het; 3, schermafdrukken op drie eilanden, en de speeltest,
+    want bebouwbaar zand verandert het spel.
+    Vragen: **A**, deze vier soorten en vijf overgangen? **B**, de zee blauwer dan "water is modderig" (`beeld.md`, 20
+    sep), of ook modderig? **C**, zand bebouwbaar (zonder akker), of zoals nu niet?
 118. **Inwoners met stats, zoals in Dwarf Fortress** (Marcel, 4 okt, zesentwintigste sessie: "Inwoners krijgen ook
     'stats' hp, skills, eigenschappen, etc ala dwarf fortress"; plan van Claude; open).
     **Wat er al is:** elke bewoner heeft een naam, een leeftijd, een huis, een gezin en werk (`js/bewoners.js`); de vijf
