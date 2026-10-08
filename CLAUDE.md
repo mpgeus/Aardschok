@@ -118,6 +118,7 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   opslaan: de speler slaat op 1 oogstmaand op via het menu, de bladzijde herlaadt, hij gaat verder met Verder,
   en het jaar moet letter voor letter aflopen als hetzelfde jaar zonder opslaan (`uit/opslaan.md`). Met `--maker`
   speelt het op gehuchten van de maker (de spelregel "Je gehucht" op "Elk spel een ander"; `uit/samenvatting-maker.md`).
+  Met `--eiland` speelt het op het eiland, zoals een nieuw spel sinds 8 okt begint (`uit/samenvatting-eiland.md`).
   Met `--regel seizoen=jij` speelt het met een spelregel anders, en met `--getal VOORVALLEN_INSTELLINGEN.metOorzaak=1` met
   een getal uit de werkbank anders (allebei zo vaak als je wilt; de uitslag krijgt `-regels` achter zijn naam). Een
   taak op de achtergrond stopt na twee uur, dus een grote speeltest gaat in meer taken; `--samenvatting` speelt dan
@@ -130,7 +131,7 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   werkplekken zoals het spel ze bouwt, en meet de wereld per beeld op 30×, de dagtik en het opslaan, elke N in een eigen
   Node (`gereedschap/grootte/`, uitleg bovenin `grootte.cjs`); `-- 26 800` voor andere N, `--browser` ook het tekenen
   (start zelf de server), `--astar` het zoeken van een pad, `--prof` een CPU-profiel, `--maker 5` op land 5 van de maker
-  in plaats van het ontworpen gehucht. De uitslag in
+  (zonder het eiland) in plaats van het ontworpen gehucht. De uitslag in
   `gereedschap/grootte/uit/` (niet in git), met een tabel in `samenvatting.md`. Meet op een stille machine.
 - `npm run schermen` maakt twintig vaste schermafdrukken van het spel (het plein op vier zoomstanden, de herberg 's avonds,
   de nacht, twee bouwplaatsen in hun fases, land 5 van de maker) en meet wat de browser aan plaatjes vasthoudt
@@ -276,6 +277,53 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `js/tekenen.js` (`tekenWolkjes`). De regels van het spel veranderen niet. De spelregel "Praatjes"; de getallen in
   `T.PRAATJE_INSTELLINGEN`.
 - `js/iso.js`: de isometrische projectie (tegel 64×32) en tekenhulpen (`ruit`, `blok`).
+- `js/hoogte.js`: **de hoogte van het land** (vraag 121, stap 1, 7 okt; Marcel: "ik doel ook meer op heuvels in het
+  landschap", "a ja 32", "Ik wil dat de akkers mee bollen met de heuvel", en "De heuvels moeten niet alleen kleine bultjes
+  zijn ... Uiteindelijk wilde ik een map van 2500x2500", "Waar alles doorloopt"): elke hoek van een tegel heeft een hoogte
+  in pixels, de glooiing van het hoekpunt plus het niveau van de tegel maal een trede van 32 (`w.hoogte.niveau`), of per
+  hoek voor een helling (`w.hoogte.hellingen`); delen buren hun hoek, dan glooit het, anders staat er een wand
+  (`T.wandenVan`, alleen aan de zuid- en oostkant, want die zie je). **De glooiing is een rekensom, geen lijst**
+  (`glooiingOp`): drie lagen gladde ruis uit het nummer van het land (`groot`, `midden`, `klein` in
+  `T.HOOGTE_INSTELLINGEN`, van dal tot top zo'n 300 à 400 pixels), overal te vragen, ook buiten de kaart, platter op de
+  vlakte om het dorp, en vlak op de vlakke stukken (`w.hoogte.vlakken`: een huis met zijn looppad, het plein, het water),
+  dus een bewaard spel onthoudt alleen het nummer en die stukken, en het landschap loopt door als het land groter wordt.
+  Voor het tekenen staan de hoeken in een lijst (met een rand van 48 tegels om de kaart), opnieuw als `w.hoogte.versie`
+  verandert. De vragen: `T.hoekHoogte`, `T.hoogteOp` (op een punt, op de driehoeken van de tegel), `T.isSchuin`,
+  `T.naarSchermOp` en `T.naarWereldOp` (het scherm en de muis, met de hoogte), `T.lichtOpHoekpunt` en
+  `T.helderheidVanVlak` (lichter naar de zon). De maker legt hem met de spelregel "Hoogte" op "Heuvels" (`T.legHoogte`,
+  vanuit `T.laadGemaaktGehucht`), met een richel met een rotswand en een helling bij de rotsen; op het eiland is het land
+  dat van het eiland (`hg.eiland`: de grond, het water op zijn peil, de zee op 0; vraag 117, 2b). Standaard staat hij op
+  "Vlak", en een kaart zonder `w.hoogte` tekent pixel voor pixel als vroeger. `js/tekenen.js` tekent alles op de grond met
+  `opGrond` (de hoogte eraf), een grondtegel op het vlak van zijn hoeken (`tekenSchuineTegel`, `opTegelVlak`), het licht
+  zacht verlopend uit een plaatje met een pixel per hoekpunt (`lichtKaartVan`, `tekenGrondMetLicht`), de wanden uit een
+  textuur in code (`tekenWanden`, `wandTextuur`), het land om de kaart ook op de helling, en het graan dat meebuigt
+  (`tekenGraan`, in smalle stroken en korte stukjes die elk de hoogte van de grond volgen, ver uitgezoomd grover); de grond
+  met hoogte van achter naar voren. Lopen, zien en bouwen weten er nog niets van (stap 2), en een heuvel vóór iemand dekt
+  hem nog niet af. De proefplaat: `gereedschap/pixelart/hoogte-proef.cjs`.
+- `js/eiland.js`: **het eiland, de kaartenmaker** (vraag 117, stap 1, 8 okt; Marcel: "Ik wil 1 aaneengesloten landschap",
+  "B 1"): uit één nummer een eiland van 2500 bij 2500 tegels, gemaakt zoals een schilder werkt, eerst grof en dan elk
+  blaadje. **De schets** (`T.maakEiland(zaad)`, zo'n 0,6 s, niet bewaard: hetzelfde nummer maakt hem opnieuw): het eiland
+  in vakken van 8 bij 8 tegels (`E.n`), met de vorm (`E.vorm`: de lange as, de bergrug met zijn passen), de hoogte per
+  vak, de zee (wat aan de rand vastzit) en het hoofdland; het water, vanaf de zee het land in (priority-flood:
+  `E.afwaarts`, `E.afvoer`, `E.stroomPeil`), waarbij alleen de grootste kommen een meer worden (`E.meren`, `E.meer`) en
+  de rivier zich door de rest een weg slijt; de rivieren als gladde, slingerende lijnen (`E.rivieren`); de streek per vak;
+  de plekken (`E.plekken`: het kasteel op een heuvel, de stad aan de grootste monding, acht dorpen met een naam uit
+  `T.DORPSNAMEN`, elk waar een dorp kan groeien en zonder berg naar de camera toe, en één met `jij`); en de wegen
+  (`E.wegen`, A\* over de vakken, die samen lopen waar het kan). **Het detail** (`T.eilandStuk(E, x0, y0, b, h, stap)`):
+  per tegel de hoogte, de streek (`T.EILAND_STREKEN`: het water, strand en duinen, en de zes van de landkaart), de weg en
+  de bomen, uit het nummer en de schets; een stuk is hetzelfde hoe je het ook vraagt, zodat het spel later het land maakt
+  aan de rand van de mist. Alleen optellen, vermenigvuldigen, delen en wortels (een toets kijkt het na), zodat elke
+  browser hetzelfde eiland maakt. **Je dorp op het eiland** (stap 2a, Marcel: "C dorp dat er al was", en "Het eiland wordt
+  gewoon altijd gegenereerd bij een nieuw spel"): elk nieuw spel maakt het eiland (`T.MAKER_INSTELLINGEN.opEiland`; de
+  spelregel "Je gehucht" zet het alleen voor de toetsen en de speeltest uit, `voorProeven`), en je land is het stuk ervan
+  om jouw dorp:
+  `T.landVanEiland(E, plek, b, h)` geeft de maker de streek per tegel en per hoekpunt, de bomen en waar de wegen het land
+  verlaten, en `T.eilandVan(zaad)` onthoudt het laatste eiland. De maker (`js/maker.js`, met `land`) legt het gehucht erop
+  als een dorp dat er al was; de kaart onthoudt waar hij ligt (`w.eiland`). **Het eiland om je land** (stap 2b): buiten
+  de kaart loopt het eiland door, met de regels van de maker (`T.randVanHetEiland(w)` in `js/maker.js`, één keer per kaart,
+  niet in `Spel.S`; `T.grondVanStreek`), en `js/tekenen.js` tekent het als het land en het bos om de kaart. De plaat:
+  `node gereedschap/pixelart/eiland-plaat.cjs [nummer] [--groot]` (in `gereedschap/pixelart/uit/eiland/`). De getallen in
+  `T.EILAND_INSTELLINGEN`.
 - `js/sprites.js`: de pixel art uit `beelden/`. `T.sprites.figuur/tegel/muur/voorwerp` wijzen
   een cel op een vel aan, `T.sprites.houding(S, wezen)` kiest houding, richting en fase uit de
   spelstaat zelf (pad, uitval, flits, dood), en
@@ -400,6 +448,31 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   rooien de buren de rest (`T.tikRooienDag`). Een stuk in het bos van de heer (`T.inHetBosVanDeHeer`: zoveel bomen als een
   stuk bos bij het ontginnen) kost zijn gunst. Een appelboom is van iemand, behalve waar het huis van een gezin groter
   wordt: die kapt het gezin zelf, als geen vorm zonder hem kan (`T.isEigenBoom`, `v.teKappen`; vraag 130, a2).
+- `js/beesten.js`: **het wild in het bos** (vraag 116, stap 1, 7 okt; Marcel: "Rode ogen uit het duister", en "a ja, b
+  ja, c ja"): roedels wolven en groepjes herten, zoveel als het bos groot is, uit het nummer van het land (`T.zetBeesten`,
+  de eerste keer dat het dorp leeft: `T.werkBeestenBij`, elk beeld vanuit js/main.js en `T.werkDorpBij`), elk met een plek
+  diep in het bos (`G.thuis`) en plekken aan de bosrand (`G.rand`). Overdag rusten ze thuis; de wolven lopen 's nachts
+  langs de rand, de herten grazen er in de schemering (`T.beestenWillen`). Komt er een mens dichtbij (voor een hert ook een
+  wolf), dan gaan ze weg (`G.weg`, `G.vluchtNaar`); wie sluipt, komt dichterbij. Een groep is een ding dat de dieren delen
+  (`e.groep`, zoals `e.praatje`): alleen de leider zoekt een weg, de anderen lopen zijn weg af (`G.spoor`), en in
+  `T.ontwijk` ruilt de leider met wie van zijn groep in de weg staat. Een dier heeft `e.beest` (geen `e.dier`: dat is vee,
+  dat de inner telt), en `e.rust` en `e.rent` voor js/sprites.js (liggen, grazen, rennen). Een wolf begint geen gevecht
+  (`T.zoekOntdekking`), de schout kan hem aanvallen; 's nachts lichten zijn ogen rood op (`tekenOgen` in js/tekenen.js,
+  met `beelden/ogen.js` uit `gereedschap/pixelart/ogen.cjs`). Het hert komt uit `gereedschap/pixelart/wild.cjs`. **Het
+  leven in het bos** (stap 2a; elke nacht `T.tikBeestenDag`, vanuit `T.tikGebouwenDag` na het bos): eerst de herten, en
+  een roedel alleen waar hij herten kan halen; in de winter krijgt een roedel honger (`G.honger`) en jaagt hij op de
+  dichtste herten (`jaag`, `G.gevangen`); elke lente jongen tot zes (`jongen`), en dan splitst de groep (`splits`): de
+  helft zoekt een eigen thuis of trekt weg (`G.trektWeg`: `T.werkBeestenBij` haalt hem van de kaart, niet midden in een
+  gevecht); wie honger leed, krijgt geen jongen (`G.leedOp`); een thuis dat niet meer diep in het bos ligt, verhuist of de
+  groep trekt weg (`blijfOfVerhuis`; wat de houthakker inplant, telt als bos). **De dreiging** (stap 2b): wie aan het werk
+  een roedel ziet, rent naar huis (`schrik`; `T.blijftThuis` in js/bewoners.js, `p.thuisTot`: hij werkt niet, en
+  `T.dagAnker` houdt hem binnen), en zijn werkplaats maakte die dag de helft; een roedel met honger is in het donker stout
+  (`T.wolvenStout`) en zoekt prooi (`kiesProoi`: een schaap, wie alleen in het donker loopt, of de schout), en slaat toe
+  (`slaToe`): een schaap (`T.verliesDier` in js/vee.js, en het voorval "wolven" de ochtend erna, met de vlag
+  `wolvenNamenSchaap`: dan doen de jacht, `T.jaagOpDeWolven`, en het hek, `T.hekOmDeSchapen`, echt iets), een mens
+  (`bijt`: gewond, `p.gewond`, of dood), of de schout zonder licht (een gevecht); bij zijn lantaarn blijft hij aan de rand
+  van het licht (`randVanHetLicht`). De status "Wolven" (`T.wolvenBijHetDorp`, in `T.OORZAKEN`) en de raad. De spelregel
+  "Beesten" (aan, zonder doden of uit); de getallen in `T.BEESTEN_INSTELLINGEN`. Wat je ertegen doet (stap 3) komt nog.
 - `js/bouwstijl.js`: **de bouwstijl van een land** (vraag 114, stap 2, 4 okt): elk land van de maker bouwt in één stijl
   (`w.stijl`, uit het nummer van het land, `T.stijlVoorLand`; het ontworpen gehucht heeft er geen en bouwt zoals altijd),
   met per soort een paar vormen, elk met de deur naar elke kant. De huizenbouwer noemt dat een stand; in het spel heet het
@@ -638,7 +711,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   cijfers, in het menu bij Nieuw spel); `T.beginOpKaart` legt alleen met een nummer een land van de maker, dus de
   toetsen spelen op het ontworpen gehucht. De boeren worden uit hetzelfde nummer geloot (`D.lot.zaad`). Het gehucht
   blijft `'gehucht'` heten, zodat alles wat het ontworpen gehucht kent, ook hier werkt; `w.maker` zegt uit welk zaad
-  het komt. **Wat er ligt, doet ertoe:** een houthakker bij het bos, een steengroeve bij de rotsen, een visser en een
+  het komt. **Op het eiland** (`land`, vraag 117, stap 2a): het water, het bos, de heide, het zand, de rotsen en de wegen
+  komen van het eiland (`js/eiland.js`), en het gehucht is een dorp dat er al was: eerst de huizen om het plein, dan de
+  weg van het eiland ernaartoe (`wegenOpEiland`: A\* om het water en de huizen heen, met rechte bruggetjes, `plan.bruggen`),
+  dan de boerderijen, akkers en de meent (liever op open land en de heide), en pas dan het bos van het eiland, met een
+  gerooide kern (`eilandKern`); lukt het op jouw plek niet, dan op die van een ander dorp (`gehuchtOpEiland`). Zonder
+  `land` legt hij byte voor byte wat hij altijd legde. **Wat er ligt, doet ertoe:** een houthakker bij het bos, een steengroeve bij de rotsen, een visser en een
   rietsnijder aan het water (`bij` in `T.GEBOUWEN`, `T.natuurBij` in `js/gebouwen.js`). Wat plat op de
   grond ligt (niet vast, laag), tekent `js/tekenen.js` in de buffer van de grond (`isPlat`), en het maakt plaats voor
   een gebouw.
@@ -1005,6 +1083,12 @@ met "Jij bouwt" (`T.zetOptie('wieBouwt', 'jij')`); die van de verzoeken staan in
 zijn; `('wapens')` laat de eerste die wapens wil het nu vragen, alsof de rovers net kwamen (in een dorp:
 `Spel.debug.trede('dorp')`, en sluit dan de brief van de heer), `('herberg')` de eerste die een tweede herberg wil (vanaf
 `T.ONDERNEMERS_INSTELLINGEN.herberg.vanaf` mensen).
+`Spel.debug.beesten()` zegt per groep wolven of herten hoeveel het er zijn, waar de leider is en wat hij doet, wat de groep
+wil (thuis, aan de rand, of weg van iemand), zijn thuis en zijn plekken aan de rand, de honger van een roedel en hoeveel
+herten hij ving, en wanneer de groep jongen kreeg; `('hier')` zet de schout tien tegels van de dichtste groep, om ze te
+bekijken, `('opnieuw')` legt de groepen opnieuw, `('jongen')` geeft elke groep nu jongen (en wie groot wordt, splitst),
+`('jacht')` laat elke roedel nu jagen, `('honger')` geeft elke roedel zoveel honger dat hij in het donker naar het dorp
+komt (met `Spel.debug.uur(21)`), en `('schaap')` laat de eerste roedel nu een schaap nemen.
 `Spel.debug.gril()` zegt welke gril op je antwoord wacht, met de keuzes en wat ze kosten; `('jacht')` laat die nu komen.
 `Spel.debug.bazen()` zegt de gunst van de heer en het vertrouwen van het dorp, waarom ze het laatst veranderden en of je
 gewaarschuwd bent; `('gunst', 15)` zet de gunst op 15 (met de brief als hij onder 20 komt), `('vertrouwen', 0)` jaagt je
@@ -1013,8 +1097,14 @@ weg als je al gewaarschuwd was. De oude toetsen van de heer en het verstoppen sp
 `Spel.debug.wensen()` zegt per huis met mensen zijn stand, wie er woont, hoe tevreden het is en wat het wil, met ✓ of ✗,
 hoe het met doorgroeien staat (wat het gezin rooit, of waarom het niet groeit), en daarboven het dorp per stand en wat er
 gemist wordt; `('dorpelingen')` laat alleen die stand zien.
+`Spel.debug.hoogte()` zegt of de kaart hoogte heeft, waar het hoogste punt is, de richel en zijn helling, en hoe hoog de
+schout staat; `(5)` begint een nieuw spel op land 5 met heuvels (de spelregel "Hoogte" op "Heuvels"), `('top')` zet de
+schout op het hoogste punt.
 `Spel.debug.gehucht()` zegt of dit het ontworpen gehucht is of een van de maker, en uit welk zaad; `(3)` begint nu een
-nieuw spel op het gehucht van zaad 3 (zonder brief), zoals op de pagina "Gehuchten van de maker".
+nieuw spel op het gehucht van zaad 3 (zonder brief), zoals op de pagina "Gehuchten van de maker": het land van de maker
+zonder het eiland, waarop de vaste schermafdrukken, de tekenmeting en de samenvatting spelen.
+`Spel.debug.eiland(5)` begint nu een spel op het eiland van 5 (zonder brief); zonder nummer zegt het in welk dorp je op het
+eiland ligt, wat voor plek het is en waar de uitgang is.
 `Spel.debug.voorval()` zegt welk voorval er loopt, welke vervolgen nog komen, welke voorvallen er nu kunnen (met hoe
 zwaar ze wegen) en welke oorzaken er spelen;
 `('brand')` laat er nu een beginnen, over mensen die erbij passen, en wie het zegt, zoekt je meteen.
@@ -1044,7 +1134,8 @@ hij staat, wie er kijkt, en welk licht er brandt.
 slachtmaand). `Spel.debug.opslaan('2')` zet het spel op plek 2, `Spel.debug.laden('auto')` laadt wat er vanzelf
 bewaard is, en `Spel.debug.spellen()` zegt wat er op de plekken staat.
 De spelregels die de browser onthield (`localStorage`, `aardschok.spelregels`) gelden ook voor wie
-test; `Spel.optiesTerug()` zet alles op de standaard, en een nieuwe Playwright-context begint leeg.
+test, behalve een spelregel voor de proeven (`voorProeven`, zoals "Je gehucht"): die alleen als een proef hem daar
+zette (`proef`, zoals de speeltest); `Spel.optiesTerug()` zet alles op de standaard, en een nieuwe Playwright-context begint leeg.
 Een sprong met `kalender` tikt alle dagen ertussen af: valt 1 wijnmaand erin, dan staat de brief
 open en de tijd stil tot je hem sluit.
 

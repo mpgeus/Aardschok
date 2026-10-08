@@ -309,6 +309,18 @@
           uitleg: 'Alleen het schaduwtje onder de voeten van wie er loopt, zoals vóór 4 okt 2026.' },
       ],
     },
+    // De hoogte van het land (Marcel, 7 okt, werklijst vraag 121: "ik doel ook meer op heuvels in het landschap"; js/hoogte.js).
+    // Vlak tot de speeltest van stap 3 laat zien dat het spel er net zo goed mee loopt.
+    {
+      id: 'hoogte', naam: 'Hoogte', standaard: 'vlak',
+      uitleg: 'Of een nieuw land heuvels heeft. Alleen voor een land van de maker; het ontworpen gehucht blijft vlak.',
+      keuzes: [
+        { id: 'vlak', naam: 'Vlak', zet: { 'HOOGTE_INSTELLINGEN.aan': false },
+          uitleg: 'Het land is vlak, zoals vóór 7 okt 2026.' },
+        { id: 'heuvels', naam: 'Heuvels', zet: { 'HOOGTE_INSTELLINGEN.aan': true },
+          uitleg: 'Hoge heuvels in het wilde land, een zachte glooiing rond het dorp, en een richel met een rotswand bij de rotsen. Lopen, zien en bouwen weten er nog niets van.' },
+      ],
+    },
     // De lantaarn van de schout (Marcel, 4 okt, werklijst vraag 125, C: "ook spel. Voegt leuke elementen toe"; js/zien.js).
     {
       id: 'lantaarn', naam: 'De lantaarn van de schout', standaard: 'spel',
@@ -416,6 +428,20 @@
           uitleg: 'Wie vrij is en toevallig een buur of iemand van zijn werk tegenkomt, blijft soms staan voor een praatje van een kwartier tot een uur, en wie langskomt, schuift aan. Boven wie praat, staat een wolkje.' },
         { id: 'uit', naam: 'Uit', zet: { 'PRAATJE_INSTELLINGEN.aan': false },
           uitleg: 'Ieder gaat zijn eigen gang, zonder te blijven staan. Zoals voor 4 okt.' },
+      ],
+    },
+    // De beesten in het bos (werklijst vraag 116; Marcel, 4 okt: "Ik wil dat er beesten kunnen rondlopen in het bos",
+    // en "doden mag"; 7 okt: "a ja, b ja, c ja", en "i ja": aan, zonder doden of uit; js/beesten.js).
+    {
+      id: 'beesten', naam: 'Beesten', standaard: 'aan',
+      uitleg: 'Of er wolven en herten in het bos leven, en wat de wolven doen als ze honger hebben.',
+      keuzes: [
+        { id: 'aan', naam: 'Aan', zet: { 'BEESTEN_INSTELLINGEN.aan': true, 'BEESTEN_INSTELLINGEN.doden': true },
+          uitleg: 'Roedels wolven rusten overdag bij hun hol en lopen \'s nachts langs de bosrand, waar je hun ogen ziet oplichten; herten grazen in de schemering aan de rand. In de winter jagen de wolven op de herten, en zijn die op, dan komen ze met honger naar het dorp: ze nemen een schaap, en wie alleen in het donker loopt, kunnen ze aanvallen. Een enkele keer is hij dood.' },
+        { id: 'zonderDoden', naam: 'Zonder doden', zet: { 'BEESTEN_INSTELLINGEN.aan': true, 'BEESTEN_INSTELLINGEN.doden': false },
+          uitleg: 'Zoals aan, maar wie de wolven aanvallen, is gewond en ligt een paar dagen in bed; niemand gaat dood.' },
+        { id: 'uit', naam: 'Uit', zet: { 'BEESTEN_INSTELLINGEN.aan': false },
+          uitleg: 'Het bos is leeg. Zoals voor 7 okt.' },
       ],
     },
     // Wie betrapt wordt op verstoppen (werklijst vraag 106, c; Marcel koos niet tussen de twee, dus de laatste
@@ -600,14 +626,21 @@
     },
     {
       // Vraag 70, C (Marcel, 30 sep: "c ja"): de maker (js/maker.js) mag ook je eigen gehucht leggen. Sinds 4 okt de
-      // standaard (vraag 112, a; Marcel: "Eigenlijk een random map generator per nieuwe game").
-      id: 'gehucht', naam: 'Je gehucht', standaard: 'maker',
+      // standaard (vraag 112, a; Marcel: "Eigenlijk een random map generator per nieuwe game"). Sinds 8 okt maakt elk nieuw
+      // spel het eiland, met je gehucht erop (vraag 117, stap 2; Marcel: "Het eiland wordt gewoon altijd gegenereerd bij
+      // een nieuw spel. Ergens op dat eiland staat je gehucht"): geen keuze voor wie speelt, dus niet in het venster
+      // Spelregels (`voorProeven`). De andere keuzes zijn er nog voor de toetsen en de speeltest.
+      id: 'gehucht', naam: 'Je gehucht', standaard: 'eiland', voorProeven: true,
       uitleg: 'Waar een nieuw spel begint. Geldt vanaf het volgende nieuwe spel.',
       keuzes: [
-        { id: 'maker', naam: 'Elk spel een ander', zet: { 'MAKER_INSTELLINGEN.eigenGehucht': true },
+        { id: 'maker', naam: 'Elk spel een ander', zet: { 'MAKER_INSTELLINGEN.eigenGehucht': true, 'MAKER_INSTELLINGEN.opEiland': false },
           uitleg: 'De maker legt elk nieuw spel een ander land, uit dezelfde delen: het plein, de schout erachter, de boerderijen bij hun akkers, de heide, de beek, het bos, vijvers en rotsen, maar elke keer anders. Bij Nieuw spel zie je het nummer van het land: een land dat je mooi vond, speel je opnieuw door dat nummer in te typen.' },
-        { id: 'ontworpen', naam: 'Het ontworpen gehucht', zet: { 'MAKER_INSTELLINGEN.eigenGehucht': false },
+        { id: 'ontworpen', naam: 'Het ontworpen gehucht', zet: { 'MAKER_INSTELLINGEN.eigenGehucht': false, 'MAKER_INSTELLINGEN.opEiland': false },
           uitleg: 'Elk spel hetzelfde gehucht, met de hand gelegd: het plein als hart, en Klaas, Aaltje, Gerrit, Trijn en Wouter bij hun velden.' },
+        // Vraag 117, stap 2 (Marcel, 8 okt: "A ja B later C dorp dat er al was"): je land is het stuk van het eiland om je
+        // dorp (js/eiland.js).
+        { id: 'eiland', naam: 'Op het eiland', zet: { 'MAKER_INSTELLINGEN.eigenGehucht': true, 'MAKER_INSTELLINGEN.opEiland': true },
+          uitleg: 'Elk nummer is een eiland, en je dorp ligt erop: aan de kust, aan een rivier, op de heide of aan de bosrand. Het water, het bos, de heide en de wegen van je land zijn die van het eiland, en de weg door je dorp gaat naar het kasteel van de heer. Het gehucht is een dorp dat er al was: wat het nodig heeft, is gerooid.' },
       ],
     },
   ];
@@ -663,6 +696,7 @@
     { naam: 'De velden', blok: 'VELDEN_INSTELLINGEN' },
     { naam: 'Het veldwerk', blok: 'VELDWERK_INSTELLINGEN' },
     { naam: 'Ontginnen', blok: 'ONTGINNEN_INSTELLINGEN' },
+    { naam: 'De beesten in het bos', blok: 'BEESTEN_INSTELLINGEN' },
     { naam: 'Het bos', blok: 'BOS_INSTELLINGEN' },
     { naam: 'Het vee', blok: 'VEE_INSTELLINGEN' },
     { naam: 'De doorkijk', blok: 'DOORKIJK_INSTELLINGEN' },
@@ -897,12 +931,18 @@
     }
   };
 
+  // Een spelregel voor de proeven (`voorProeven`, zoals "Je gehucht") staat niet in het venster, dus wat de browser
+  // ervan onthield, telt alleen als een proef het daar zette (de speeltest, met `proef`). Anders liet een keus van
+  // vroeger, toen hij nog in het venster stond, een nieuw spel stil ergens anders beginnen dan op het eiland, zonder dat
+  // je ziet waarom.
   T.laadOpties = function (waar) {
     const o = waar || opslag();
     try {
       const tekst = o && o.getItem(SLEUTEL);
       const i = tekst ? JSON.parse(tekst) : null;
-      return i && typeof i === 'object' ? i : null;
+      if (!i || typeof i !== 'object') return null;
+      if (!i.proef && i.keuzes) for (const optie of T.OPTIES) if (optie.voorProeven) delete i.keuzes[optie.id];
+      return i;
     } catch (e) {
       return null;
     }

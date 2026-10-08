@@ -245,7 +245,7 @@
   // Hoe hoog een figuur boven zijn tegel uitsteekt: waar zijn hoofd zit, voor de levensbalk,
   // het uitroepteken en het aanwijzen met de muis. De cel is hoger dan de figuur (er moet een
   // zwaard in de lucht in passen), dus dit is gemeten aan het vel zelf, op de houding staan.
-  const HOOG = { skelet: 78, slijm: 28, wolf: 46, marskramer: 66, koe: 48, schaap: 30 };
+  const HOOG = { skelet: 78, slijm: 28, wolf: 46, marskramer: 66, koe: 48, schaap: 30, hert: 62 };
   S.figuurNaam = (soort) => soort;
   S.hoogte = (soort) => HOOG[S.figuurNaam(soort)] || 60;
 
@@ -584,6 +584,16 @@
     return hoeken;
   };
 
+  // De grond van de kaart op hoekpunt (vx, vy), van 0 tot w.b en w.h: uit de tegel die eraan ligt; null zonder grond.
+  S.grondHoekOp = function (w, vx, vy) {
+    const tx = Math.min(vx, w.b - 1);
+    const ty = Math.min(vy, w.h - 1);
+    const g = w.grond && w.grond[ty] && w.grond[ty][tx];
+    const hoeken = g && S.grondHoeken(g.vel, g.id);
+    if (!hoeken) return null;
+    return hoeken[vx === tx ? (vy === ty ? 0 : 3) : vy === ty ? 1 : 2]; // boven, rechts, onder, links
+  };
+
   S.grondMetHoeken = function (velNaam, hoeken, x, y) {
     let index = tegelsMetHoeken.get(velNaam);
     if (!index) {
@@ -781,7 +791,8 @@
       return { naam, houding: werk.houding, richting: st.richting, fase: ((spel.tijd + e.fase) / duur) % 1 };
     }
     if (e.pad && e.pad.length) {
-      const houding = 'lopen';
+      // Een hert dat vlucht (js/beesten.js), rent in sprongen, als zijn vel het kan.
+      const houding = e.rent && f.houdingen.rennen ? 'rennen' : 'lopen';
       const h = f.houdingen[houding];
       // Twee passen per cyclus: zo schuift de voet op de grond precies mee met het spel en
       // glijdt hij niet. `stap` staat in het vel beschreven, in tegels per pas.
@@ -792,7 +803,8 @@
     // Een dier (js/vee.js) graast, staat te herkauwen of ligt. Wat het nu doet, komt uit de tijd en
     // zijn zaad (T.rustVanDier), niet uit een worp per beeld: zo flikkert het niet, en gaat niet de
     // hele kudde tegelijk liggen.
-    const rust = e.dier && T.rustVanDier ? T.rustVanDier(e, spel.tijd) : 'staan';
+    // Het wild (js/beesten.js) zegt het zelf: thuis ligt het, aan de bosrand graast een hert of kijkt het om zich heen.
+    const rust = e.dier && T.rustVanDier ? T.rustVanDier(e, spel.tijd) : (e.beest && e.rust) || 'staan';
     const staan = f.houdingen[rust] ? rust : f.houdingen.staan ? 'staan' : Object.keys(f.houdingen)[0];
     const duur = S.houdingDuur(naam, staan) || 1;
     return { naam, houding: staan, richting: st.richting, fase: ((spel.tijd + e.fase) / duur) % 1 };

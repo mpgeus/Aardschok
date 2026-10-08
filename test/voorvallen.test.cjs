@@ -54,7 +54,7 @@ const antwoorden = (id) => knoopVan(id).keuzes;
 
 // Wat een antwoord mag doen: wat elk gesprek kan, en wat js/voorvallen.js erbij doet (het kop-commentaar daar).
 const WAREN = ['graan', 'hout', 'wol', 'bier', 'ijzer', 'zout', 'vlees', 'vis', 'kaas', 'hooi'];
-const GEVOLGEN = new Set(['zetVlag', 'wisVlag', 'geef', 'neem', 'goud', ...WAREN, 'tevreden', 'gunst', 'vertrouwen', 'argwaan', 'verban', 'sterfkans', 'gezin', 'voorval', 'feest', 'bouw', 'weiger', 'ontgin', ...Object.keys(T.VEE)]);
+const GEVOLGEN = new Set(['zetVlag', 'wisVlag', 'geef', 'neem', 'goud', ...WAREN, 'tevreden', 'gunst', 'vertrouwen', 'argwaan', 'verban', 'sterfkans', 'gezin', 'voorval', 'feest', 'bouw', 'weiger', 'ontgin', 'wolven', 'hek', ...Object.keys(T.VEE)]);
 
 test('elk voorval heeft een gesprek onder zijn naam, en elk antwoord gaat ergens heen en doet wat het spel kent', () => {
   for (const [id, v] of Object.entries(T.VOORVALLEN)) {
@@ -178,11 +178,18 @@ test('een voorval komt als het er de tijd voor is: de maand, een gebouw, de voor
   herberg.klaar = false;
   assert.equal(T.voorvalKan(S.dorp, 'vechtpartij', 10), null);
   herberg.klaar = true;
-  // Wolven in de winter, en alleen als er schapen zijn om te halen.
+  // Wolven in de winter, en alleen als er schapen zijn om te halen; met beesten in het bos komen ze niet zomaar, maar als
+  // de wolven echt een schaap namen (js/beesten.js, test/beesten.test.cjs).
   const LOUWMAAND = 10 * T.DAGEN_PER_MAAND;
   const schapen = T.veeVan(S.dorp).filter((e) => e.dier === 'schaap').length;
-  assert.equal(!!T.voorvalKan(S.dorp, 'wolven', LOUWMAAND + 3), schapen >= 3, `wolven met ${schapen} schapen`);
-  assert.equal(T.voorvalKan(S.dorp, 'wolven', GRASMAAND + 3), null, 'niet in grasmaand');
+  assert.equal(T.voorvalKan(S.dorp, 'wolven', LOUWMAAND + 3), null, 'met beesten in het bos niet zomaar');
+  T.zetOptie('beesten', 'uit');
+  try {
+    assert.equal(!!T.voorvalKan(S.dorp, 'wolven', LOUWMAAND + 3), schapen >= 3, `wolven met ${schapen} schapen`);
+    assert.equal(T.voorvalKan(S.dorp, 'wolven', GRASMAAND + 3), null, 'niet in grasmaand');
+  } finally {
+    T.zetOptie('beesten', 'aan');
+  }
   // Hetzelfde voorval niet binnen zijn pauze.
   metVoorval(S, 'zwerver', 20);
   T.voorvalBeantwoord(S.dorp, 'zwerver');

@@ -269,7 +269,7 @@
   // niet in een gevecht. Wie een praatje maakt (js/praatje.js), is ook bezig, maar gaat in een smalle doorgang toch even
   // opzij (`ookPraatje`, hieronder).
   T.magOpzij = (S, b, ookPraatje) =>
-    !b.dood && !b.binnen && b !== S.schout && !b.dier && b.kant !== 'monster' && !b.maait && !b.werkt && b !== S.spreektMet &&
+    !b.dood && !b.binnen && b !== S.schout && !b.dier && !b.beest && b.kant !== 'monster' && !b.maait && !b.werkt && b !== S.spreektMet &&
     !b.zoektSchout && !S.gevecht && !b.onderweg && !b.pad.length && (ookPraatje || !b.praatje);
 
   // Wat doet e, die zijn volgende tegel bezet vindt (js/anim.js)? 'wacht': hij blijft staan, en kijkt het volgende beeld
@@ -292,6 +292,13 @@
     // Ze komen op elkaar af (de ander wil terug, de kant op waar e vandaan komt), of na even wachten dwars: ze schuiven
     // langs elkaar.
     if (tegenOver(w, e, ander, volgende, e.gewacht >= IN().wachtOpLoper) && magRuilen(S, w, e, ander)) {
+      ruil(S, w, e, ander, volgende);
+      return 'verder';
+    }
+    // Het wild (js/beesten.js): staat er voor de leider van een groep een dier van zijn eigen groep in de weg, dan ruilen
+    // ze van plaats, en een ander dier na even wachten ook. Anders wacht hij achter zijn eigen roedel, want een wolf gaat
+    // voor niemand opzij. Wie volgt, ruilt niet met hem: dan duwden de anderen hem bij elk beeld een tegel opzij.
+    if (e.leider && e.groep && ander.beest && !ander.onderweg && (ander.groep === e.groep || e.gewacht >= IN().wachtOpLoper) && T.isBegaanbaar(w, e.tx, e.ty)) {
       ruil(S, w, e, ander, volgende);
       return 'verder';
     }

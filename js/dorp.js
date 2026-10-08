@@ -94,6 +94,7 @@
     T.werkVoorvallenBij(S, D); // wie je zoekt met een voorval, loopt naar je toe en spreekt je aan (js/voorvallen.js)
     T.werkOchtendrapportBij(S, D); // 's ochtends geeft je raadsman je zijn rapport (js/ochtendrapport.js)
     if (D.wereld === S.wereld) return; // waar je bent, lopen en dwalen ze in js/main.js, en worden ze getekend
+    T.werkBeestenBij(S, D); // de wolven en de herten in zijn bos (js/beesten.js)
     T.beweegWezens(S, D.wereld, dt, dtWereld); // lopen (js/anim.js)
     T.werkOogstBij(S, D, dtWereld); // maaien (js/akkers.js)
     T.werkVeldwerkBij(S, D); // de boeren op hun land (js/veldwerk.js)

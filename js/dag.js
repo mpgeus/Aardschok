@@ -230,6 +230,9 @@
     if (rapport) return rapport;
     const p = e.bewoner;
     if (!p && !e.werkAkkers) return null;
+    // Wie de wolven zag of beten, blijft thuis (T.blijftThuis, js/bewoners.js; js/beesten.js). gereedschap/wereld.html
+    // laadt de bewoners niet.
+    if (T.blijftThuis && T.blijftThuis(p || T.bewonerVan(D, e), D.kalender.dag)) return { x: e.thuis.x, y: e.thuis.y, straal: 0, binnen: true };
     const deel = T.dagdeelVan(D.kalender.dag, oogst);
     if (deel === 'nacht') return { x: e.thuis.x, y: e.thuis.y, straal: 0, binnen: true };
     // Wie wegtrekt, loopt overdag de weg af; wie nieuw is, loopt eerst naar zijn huis (js/bewoners.js,

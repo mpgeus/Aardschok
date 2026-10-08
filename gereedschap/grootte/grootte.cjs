@@ -11,8 +11,9 @@
 //                                         `node gereedschap/grootte/profiel.cjs <bestand>`)
 //   npm run grootte -- --astar            ook wat één zoektocht naar een pad kost (astar.cjs)
 //   npm run grootte -- --browser          ook wat het tekenen kost, in een onzichtbare Chromium (browser.cjs)
-//   npm run grootte -- --maker 5          op het land van de maker met nummer 5 (100 bij 100, vraag 112), in plaats
-//                                         van het ontworpen gehucht; de uitslag krijgt -maker5 achter zijn naam
+//   npm run grootte -- --maker 5          op het land van de maker met nummer 5 (100 bij 100, vraag 112, zonder het
+//                                         eiland), in plaats van het ontworpen gehucht; de uitslag krijgt -maker5
+//                                         achter zijn naam
 //
 // De uitslag komt in gereedschap/grootte/uit/ (niet in git): <N>.json per meting, en een tabel in samenvatting.md.
 // Meet op een stille machine: een speeltest of een tweede meting ernaast maakt de getallen te hoog. De uitslag van 30

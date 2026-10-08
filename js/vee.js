@@ -757,6 +757,9 @@
     e.dood = true;
   }
 
+  // Dit dier gaat weg: een wolf nam het (js/beesten.js).
+  T.verliesDier = (D, e) => haalWeg(D, e);
+
   // Het vee verliest dieren van een soort (de wolven, js/voorvallen.js): het jongste eerst, want dat pakt een wolf.
   // Geeft hoeveel.
   T.verliesVee = function (D, soort, n) {

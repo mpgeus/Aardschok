@@ -138,7 +138,7 @@
   // Kijkt dit wezen? Een mens die buiten is: niet de schout zelf, geen dier en geen monster, en niet
   // dood. Wie binnen is of slaapt, ziet niets.
   function kijkt(D, e) {
-    return e !== D.schout && !e.dood && !e.binnen && e.kant !== 'monster' && !(T.VEE && T.VEE[e.soort]);
+    return e !== D.schout && !e.dood && !e.binnen && e.kant !== 'monster' && !e.beest && !(T.VEE && T.VEE[e.soort]);
   }
 
   // Hoe het bericht hem noemt: een bewoner bij zijn naam, een bezoeker zoals T.MENSEN hem noemt.

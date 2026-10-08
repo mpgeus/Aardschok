@@ -137,8 +137,8 @@
     if (doel.wezen) {
       const e = doel.wezen;
       if (e.kant === 'monster') return { tekst: `De ${e.naam} aanvallen`, doe: () => T.startGevecht(S, e, true) };
-      // Een dier (js/vee.js) praat niet en doet nog niets: bij de muis staat alleen wat het is.
-      if (e.dier) return { tekst: T.hoofdletter(`een ${e.naam}`) };
+      // Een dier (js/vee.js) of het wild (js/beesten.js) praat niet en doet nog niets: bij de muis staat alleen wat het is.
+      if (e.dier || e.beest) return { tekst: T.hoofdletter(`een ${e.naam}`) };
       // Wie je zoekt met een voorval (js/voorvallen.js), daar praat je over het voorval, ook als hij een eigen
       // gesprek heeft.
       const voorval = D && T.voorvalVan(D, e);
@@ -428,7 +428,8 @@
     const h = T.tegelVan(S.schout);
     const minder = S.sluipen ? T.SLUIP_ZICHT : 0;
     for (const m of w.wezens) {
-      if (m.dood || m.kant !== 'monster') continue;
+      // Een wolf (js/beesten.js) begint nooit zelf een gevecht: hij gaat je uit de weg (werklijst vraag 116, a).
+      if (m.dood || m.kant !== 'monster' || m.beest) continue;
       const p = T.tegelVan(m);
       if (T.afstand(p, h) <= m.zicht - minder && T.zichtTussen(w, p, h)) return m;
     }

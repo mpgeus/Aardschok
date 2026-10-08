@@ -197,7 +197,7 @@
     if (e.maait || e.oogstDoel || e.binnen || e === S.spreektMet || e.zoektSchout || e.opgeroepen || e.moetNaar || e.vertrekt || e.praatje) return false;
     if (T.rapportAnker(D, e)) return false;
     const p = T.bewonerVan(D, e);
-    return !(p && (p.weg || p.komt));
+    return !(p && (p.weg || p.komt || T.blijftThuis(p, D.kalender.dag)));
   }
 
   // Hij houdt op (de werkdag is om, of hij moet ergens anders zijn). Was hij op weg naar een tegel, dan maakt hij alleen

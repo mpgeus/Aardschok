@@ -9,6 +9,39 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Een huis zonder put, en nergens plek voor een put** (8 okt, de sessie van de kaartenmaker; vraag 117, stap 2c): op
+  het eiland van 73425 wil een huis met vijf dorpelingen een put binnen 12 tegels, en het dorp vindt er nergens een
+  (`wilBouwen` met `plek: false` in de speeltest): geen open grond met drie tegels looppad rondom, en niets om te rooien.
+  Het jaar van geluk begint dan nooit; bij de bouwer en de sluwe bouwer twee jaar lang. Ook op een land van de maker
+  komt het voor (62707, aan het eind: een put en een kapel zonder plek), maar daar pas na de winst. Nog niet bekeken:
+  waarom er daar niets past. De speeltest is te naspelen tot dat moment (`-- bouwer --zaad 2 --eiland --jaren 4`).
+  Voorstel: een erf komt niet waar een put het niet meer kan halen, zoals het al niet komt waar een huis niet meer kan
+  groeien (`T.groeiGrond`, vraag 130, d).
+
+- **Rovers die blijven komen als er niets te halen is** (8 okt, de sessie van de kaartenmaker; vraag 117, stap 2c): op het
+  eiland van 72022 kwam de bende bij de bouwer vanaf het tweede jaar om de tien dagen, 32 keer in drie jaar (op het land
+  van de maker 7), ook "met lege handen", en ze vertrapten zes keer een akker. De oogst zakte van 641 naar 190 en 92, er
+  was geen bier en geen brood, hij kon de heer niet betalen, en zijn gunst raakte op. Of het door het eiland komt, zegt
+  één spel niet. Een vraag voor Marcel: komt een bende minder vaak als er niets te halen viel, of valt hij uiteen?
+
+- **Laden maakt eerst een vers spel** (8 okt, de sessie van de kaartenmaker): `T.laadSpel` (js/main.js) begint met
+  `T.nieuwSpel()`, en dat legt nu een heel eiland met een gehucht (1 à 2 s), dat het bewaarde spel daarna overschrijft;
+  het eerste beeld rekent dan nog het eiland van het bewaarde spel uit (0,6 s, en de rand en de hoogte). Laden kan
+  sneller als het nieuwe spel het land van het bewaarde spel neemt, of geen land legt.
+
+- **Het leven in het bos, wat nog niet te zien is** (7 okt, zevenendertigste sessie; vraag 116, stap 2a): de jongen van
+  de wolven en de herten hebben nog geen eigen tekening (een welp, een kalf: nu zijn het kleine volwassenen, even groot);
+  de jacht van een roedel op de herten is een lot in de nacht, niet te zien (een hert is 's ochtends weg; later de roedel
+  die de kudde opjaagt, en botten bij het hol, vraag 116, f); en zijn de herten van een land op, dan komen er geen nieuwe
+  van buiten, zodat de roedel elke winter honger heeft. Een vraag voor Marcel als dat te hard blijkt: een groepje herten
+  dat in de lente van buiten komt als het bos leeg is.
+
+- **Het hert kost veel plaatjes** (7 okt, zevenendertigste sessie; vraag 116, stap 1): de drie vellen van het hert
+  (gereedschap/pixelart/wild.cjs) houden samen zo'n 38 MB vast als ze alle drie geladen zijn (hert2 alleen 16 MB, om het
+  gewei en de sprongen), ongeveer wat de drie koeien kosten; ze staan op elk land van de maker. Een figuur laadt al zijn
+  houdingen tegelijk (laadFiguur in js/sprites.js). Te verkleinen als het nodig is (vraag 113): rennen pas laden als een
+  hert rent (tot dan loopt het), zes beelden in plaats van acht voor lopen en rennen, of één hinde in twee kleuren minder.
+
 - **Als wapens mogen, waar zit dan de spanning van de opstand?** (7 okt, zevenendertigste sessie; een idee van Claude bij
   vraag 131, voor vraag 126): sinds wapens niet meer verboden zijn, gaat het niet meer om wat je hebt, maar om wat je
   ermee doet. De heer kan er zelf om vragen: wie op de heervaart gaat, neemt zijn wapen mee (`js/heervaart.js`), of een
@@ -749,6 +782,11 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 **Kleine beeldfouten:**
 - in een huis in aanbouw branden de ramen al;
 - het zwad van de maaier staat als paaltjes, en zijn slag is symmetrisch.
+
+- **Bomen in het bos die doorschijnend worden** (7 okt, de sessie van de hoogte, gezien op land 5 van de maker, ook met
+  de hoogte op vlak): in het grote bos rechtsonder worden hele stroken bomen half doorzichtig, ook waar geen schout of
+  dorpeling staat. Waarschijnlijk de doorkijk (`js/doorkijk.js`) voor de wolven en de herten van vraag 116, die daar
+  diep in het bos rusten. Nog niet nagelopen.
 
 ## Voorstellen van Claude die nog niet gekozen zijn
 

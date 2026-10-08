@@ -838,6 +838,11 @@
   // vertrekt als het werk begint; de weg terug gaat van zijn avond af. Wie vandaag pas komt (p.komt),
   // werkt nog niet. Geeft { gewerkt, onderweg, nodig } in uren, nodig voor alle handen die het gebouw
   // vraagt; zonder bewoners (een toets met een eigen, kleine wereld) null.
+  // Wie thuis blijft (p.thuisTot, een dag met uur; js/beesten.js): wie de wolven zag rennen, tot het eind van het werk, en
+  // wie ze beten, een paar dagen in bed (p.gewond). Hij werkt niet (T.werkUrenVan, en het veldwerk), maar houdt zijn werk,
+  // en T.dagAnker houdt hem binnen.
+  T.blijftThuis = (p, dag) => !!p && p.thuisTot != null && dag < p.thuisTot;
+
   T.werkUrenVan = function (D, g, dag) {
     const B = D.bewoners;
     const soort = T.GEBOUWEN[g.soort];
@@ -848,7 +853,7 @@
     let onderweg = 0;
     for (const p of B.mensen) {
       if (p.werk !== g) continue;
-      const heen = p.komt ? perHand : Math.min(perHand, (p.plek && p.plek.heen) || 0);
+      const heen = p.komt || T.blijftThuis(p, dag) ? perHand : Math.min(perHand, (p.plek && p.plek.heen) || 0);
       gewerkt += perHand - heen;
       onderweg += heen;
     }

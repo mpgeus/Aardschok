@@ -1763,7 +1763,7 @@
       boek.spelZaad = s.dorp.lot.zaad;
       boek.eindRegels = { ...T.EINDE_INSTELLINGEN }; // wat de winst vraagt, voor de samenvatting (vraag 102, e)
       // Op welk gehucht: het ontworpen, of een van de maker (uit het zaad van het spel; js/maker.js).
-      boek.gehucht = s.gebieden.gehucht && s.gebieden.gehucht.maker ? 'van de maker' : 'ontworpen';
+      boek.gehucht = s.gebieden.gehucht && s.gebieden.gehucht.eiland ? 'op het eiland' : s.gebieden.gehucht && s.gebieden.gehucht.maker ? 'van de maker' : 'ontworpen';
       boek.boeren = Object.fromEntries(Object.entries(s.dorp.lot.boeren).map(([id, b]) => [id, b.karakter]));
       boek.begin = tel(); // de eerste van de maand zelf schrijft de boekhouding op, bij de eerste stap
       const P = SPELERS[speler];

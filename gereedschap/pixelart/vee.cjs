@@ -669,4 +669,7 @@ module.exports = {
   celVan,
   // het binnenwerk, om na te rekenen dat voeten niet glijden en poten hun doel halen
   rig: { houdingVan, standen, KOE, SCHAAP },
+  // de bouwstenen voor andere viervoeters (wild.cjs: het hert); alleen doorgegeven, de koe en het
+  // schaap veranderen er niet door
+  bouw: { beweeg, GROND, basis },
 };

@@ -74,14 +74,16 @@
   // klaarstond, zodat hetzelfde zaad hetzelfde spel blijft geven (de speeltest).
   // Geeft true als er een vers spel kwam.
   T.gehuchtNaarDeSpelregel = function () {
-    const gemaakt = !!(S.gebieden && S.gebieden.gehucht && S.gebieden.gehucht.maker);
-    if (S.proefje || gemaakt === !!T.MAKER_INSTELLINGEN.eigenGehucht) return false;
+    const g = S.gebieden && S.gebieden.gehucht;
+    const gemaakt = !!(g && g.maker);
+    const opEiland = !!(g && g.eiland);
+    if (S.proefje || (gemaakt === !!T.MAKER_INSTELLINGEN.eigenGehucht && opEiland === !!T.MAKER_INSTELLINGEN.opEiland)) return false;
     T.nieuwSpel();
     return true;
   };
 
   function zetCameraOpSchout() {
-    const p = T.naarScherm(S.schout.x, S.schout.y);
+    const p = T.naarSchermOp(S.wereld, S.schout.x, S.schout.y);
     S.camera = { x: p.x, y: p.y - 24 };
   }
 
@@ -200,7 +202,7 @@
     const kandidaten = [];
     for (const e of w.wezens) {
       if (e.dood || e.binnen || e === S.schout || !T.isZichtbaar(w, e.tx, e.ty)) continue;
-      const p = T.naarScherm(e.x, e.y);
+      const p = T.naarSchermOp(S.wereld, e.x, e.y);
       const hoog = hoogteVan(e);
       if (sx > p.x - 17 && sx < p.x + 17 && sy > p.y - hoog && sy < p.y + 9) {
         kandidaten.push({ d: e.x + e.y + 0.01, wezen: e, x: e.tx, y: e.ty });
@@ -209,7 +211,7 @@
     for (const v of w.voorwerpen) {
       const hoog = voorwerpHoogte(v);
       if (!hoog || !T.isZichtbaar(w, v.x, v.y)) continue;
-      const p = T.naarScherm(v.x, v.y);
+      const p = T.naarSchermOp(S.wereld, v.x, v.y);
       if (sx > p.x - 20 && sx < p.x + 20 && sy > p.y - hoog && sy < p.y + 10) {
         kandidaten.push({ d: v.x + v.y, voorwerp: v, x: v.x, y: v.y });
       }
@@ -218,7 +220,7 @@
       kandidaten.sort((a, b) => b.d - a.d);
       return kandidaten[0];
     }
-    const f = T.naarWereld(sx, sy);
+    const f = T.naarWereldOp(S.wereld, sx, sy);
     const x = Math.round(f.x);
     const y = Math.round(f.y);
     if (x < 0 || y < 0 || x >= w.b || y >= w.h) return null;
@@ -246,7 +248,7 @@
       return;
     }
     const { x: sx, y: sy } = naarVlak(S.muis.x, S.muis.y);
-    const f = T.naarWereld(sx, sy);
+    const f = T.naarWereldOp(S.wereld, sx, sy);
     const x = Math.round(f.x);
     const y = Math.round(f.y);
     // Met een erf in de hand op een vrij erf: een klik maakt het weer gewone grond (js/erven.js).
@@ -289,7 +291,7 @@
       return;
     }
     const deur = T.deurVan(S.wereld, g);
-    const p = T.naarScherm(deur.x, deur.y);
+    const p = T.naarSchermOp(S.wereld, deur.x, deur.y);
     const c = vanVlak(p.x, p.y);
     T.ui.toonHuisbriefje(S, g, c.x, c.y);
   }
@@ -354,7 +356,7 @@
       my = rand.reduce((n, [, y]) => n + y, 0) / rand.length;
     }
     const hoek = (S.tijd / 120) * 2 * Math.PI;
-    const p = T.naarScherm(mx + 4 * Math.cos(hoek), my + 4 * Math.sin(hoek));
+    const p = T.naarSchermOp(S.wereld, mx + 4 * Math.cos(hoek), my + 4 * Math.sin(hoek));
     return { x: p.x, y: p.y - 24 };
   }
   T.titelCamera = titelCamera;
@@ -373,7 +375,7 @@
     let x = 0;
     let y = 0;
     for (const e of lijst) {
-      const p = T.naarScherm(e.x, e.y);
+      const p = T.naarSchermOp(S.wereld, e.x, e.y);
       x += p.x;
       y += p.y;
     }
@@ -416,7 +418,7 @@
   // Staat de muis op het lijf van de schout (met dezelfde maten als zoekDoel)?
   function opDeSchout(mx, my) {
     const { x: sx, y: sy } = naarVlak(mx, my);
-    const p = T.naarScherm(S.schout.x, S.schout.y);
+    const p = T.naarSchermOp(S.wereld, S.schout.x, S.schout.y);
     return sx > p.x - 17 && sx < p.x + 17 && sy > p.y - hoogteVan(S.schout) && sy < p.y + 9;
   }
   const SCHUIF = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] };
@@ -480,6 +482,7 @@
       if (hier) {
         T.werkOogstBij(S, hier, dtWereld);
         T.werkVeldwerkBij(S, hier);
+        T.werkBeestenBij(S, hier); // de wolven en de herten in het bos (js/beesten.js)
       }
       T.laatDwalen(S, dtWereld);
       const m = S.modus === 'verkennen' && T.zoekOntdekking(S);
@@ -769,7 +772,7 @@
     vlakken: false,
     // Waar staat tegel (x, y) nu op het scherm, in css-pixels? Voor echte klikken.
     naarBeeld(x, y) {
-      const p = T.naarScherm(x, y);
+      const p = T.naarSchermOp(S.wereld, x, y);
       return vanVlak(p.x, p.y);
     },
     // De kalender een dag of een snelheid geven zonder te wachten: Spel.debug.kalender(310) →
@@ -973,6 +976,71 @@
         staat: D.ontginnen || null,
       };
     },
+    // De beesten in het bos (js/beesten.js; werklijst vraag 116): per groep de soort, hoeveel dieren, waar de leider is en
+    // wat de groep wil (thuis, aan de rand, of weg van iemand), zijn hol en zijn plekken aan de rand, en of hij nu wegrent.
+    // ('hier'): de schout staat nu tien tegels van de dichtste groep, net buiten wat ze schuw maakt, om ze te bekijken.
+    // ('opnieuw'): de groepen opnieuw, uit het zaad van het land. ('jongen'): elke groep krijgt nu jongen, en wie groot
+    // wordt, splitst. ('jacht'): elke roedel jaagt nu op de herten, alsof het winter is en hij honger heeft. ('honger'):
+    // elke roedel heeft nu zoveel honger dat hij in het donker naar het dorp komt (zet er de avond bij met
+    // Spel.debug.uur(21)). ('schaap'): de eerste roedel neemt nu het dichtste schaap, en de herder zegt het morgen.
+    beesten(wat) {
+      const D = T.dorpHier(S);
+      if (!D || !D.kalender) return 'De beesten zijn er alleen bij een dorp.';
+      if (wat === 'opnieuw') {
+        S.wereld.wezens = S.wereld.wezens.filter((e) => !e.beest);
+        T.zetBeesten(D);
+      }
+      if (wat === 'jongen' || wat === 'jacht') T.tikBeestenDag(D, Math.floor(D.kalender.dag), { [wat]: true });
+      const roedels = T.beestenVan(D).filter(({ G }) => G.soort === 'wolf');
+      if (wat === 'honger') for (const { G } of roedels) G.honger = T.BEESTEN_INSTELLINGEN.dreiging.stout;
+      if (wat === 'schaap' && roedels.length) {
+        const { G, leden } = roedels[0];
+        const l = leden.find((e) => e.leider) || leden[0];
+        const schapen = S.wereld.wezens.filter((e) => e.dier === 'schaap' && !e.dood);
+        const schaap = schapen.sort((a, b) => T.afstand(T.tegelVan(a), T.tegelVan(l)) - T.afstand(T.tegelVan(b), T.tegelVan(l)))[0];
+        if (schaap) T.wolvenSlaanToe(S, D, G, l, { e: schaap, soort: 'schaap' });
+      }
+      const h = T.tegelVan(S.schout);
+      const groepen = T.beestenVan(D);
+      if (wat === 'hier' && groepen.length) {
+        const dichtst = groepen.reduce((a, b) => (T.afstand(T.tegelVan(b.leden[0]), h) < T.afstand(T.tegelVan(a.leden[0]), h) ? b : a));
+        const lt = T.tegelVan(dichtst.leden[0]);
+        let plek = null;
+        for (let r = 10; r <= 16 && !plek; r++) {
+          for (let dy = -r; dy <= r && !plek; dy++) {
+            for (let dx = -r; dx <= r && !plek; dx++) {
+              if (Math.max(Math.abs(dx), Math.abs(dy)) === r && T.isBegaanbaar(S.wereld, lt.x + dx, lt.y + dy, { wezensBlokkeren: true })) plek = { x: lt.x + dx, y: lt.y + dy };
+            }
+          }
+        }
+        if (plek) Object.assign(S.schout, { x: plek.x, y: plek.y, tx: plek.x, ty: plek.y, pad: [], onderweg: false });
+      }
+      const nu = T.uurTekst(D.kalender.dag);
+      return {
+        aan: T.BEESTEN_INSTELLINGEN.aan, uur: nu, hek: !!(D.beesten && D.beesten.hek),
+        status: T.wolvenBijHetDorp(D, D.kalender.dag),
+        groepen: groepen.map(({ G, leden }) => {
+          const l = leden.find((e) => e.leider) || leden[0];
+          const lt = T.tegelVan(l);
+          return {
+            soort: `${leden.length} ${T.BEESTEN[G.soort][leden.length === 1 ? 'naam' : 'meervoud']}`,
+            leider: `${lt.x},${lt.y}${l.pad.length ? ` (loopt, nog ${l.pad.length})` : ` (${l.rust})`}, ${T.afstand(lt, T.tegelVan(S.schout))} tegels van de schout`,
+            wil: G.weg > D.kalender.dag ? `weg van iemand, naar ${G.vluchtNaar.x},${G.vluchtNaar.y}` : G.doel === 'prooi' ? 'prooi' : T.beestenWillen(D, G),
+            thuis: `${G.thuis.x},${G.thuis.y}`,
+            rand: G.rand.map((p) => `${p.x},${p.y}`).join(' '),
+            rent: leden.some((e) => e.rent),
+            ...(G.soort === 'wolf' ? {
+              honger: `${(G.honger || 0).toFixed(1)} (jaagt vanaf ${T.BEESTEN_INSTELLINGEN.honger.jagenVanaf}, stout vanaf ${T.BEESTEN_INSTELLINGEN.dreiging.stout})`,
+              gevangen: G.gevangen || 0,
+              stout: T.wolvenStout(D, G),
+              ...(G.prooi ? { prooi: `${G.prooi.soort === 'schaap' ? 'een schaap' : G.prooi.soort === 'schout' ? 'de schout' : T.naamVanBewoner(T.bewonerVan(D, G.prooi.e))}` } : {}),
+            } : {}),
+            jongen: G.jongenJaar ? `in ${G.jongenJaar}` : 'nog niet',
+            ...(G.trektWeg ? { trektWeg: true } : {}),
+          };
+        }),
+      };
+    },
     // Het bos (js/bos.js; werklijst vraag 115): per houthakker zijn boom (en of die in het bos staat, dan plant hij er een
     // boompje naast), hoeveel hout hij er al uit hakte, hoeveel bomen, jonge bomen en boompjes er binnen zijn bereik staan,
     // of hij stilstaat, en wat zijn hand nu doet; en op de kaart de boompjes, de jonge bomen en de stronken die vergaan.
@@ -1122,12 +1190,67 @@
     },
     // Het gehucht van de maker (js/maker.js): uit welk zaad het gehucht komt (of dat het het ontworpen gehucht is).
     // Spel.debug.gehucht(3) begint nu een nieuw spel op het gehucht van zaad 3, zoals op de pagina "Gehuchten van de
-    // maker", zonder brief; zo kun je een zaad bekijken zonder de spelregel om te zetten.
+    // maker", zonder brief; zo kun je een zaad bekijken zonder de spelregel om te zetten. Het is het land van de maker
+    // zonder het eiland, zoals op die pagina, ook nu een nieuw spel het eiland maakt (vraag 117): de vaste
+    // schermafdrukken, de tekenmeting en de samenvatting spelen op land 5 van de maker (Spel.debug.eiland(5) voor het
+    // eiland).
     gehucht(zaad) {
-      if (zaad != null) T.nieuwSpel(Number(zaad));
+      if (zaad != null) {
+        const opEiland = T.MAKER_INSTELLINGEN.opEiland;
+        T.MAKER_INSTELLINGEN.opEiland = false;
+        try {
+          T.nieuwSpel(Number(zaad));
+        } finally {
+          T.MAKER_INSTELLINGEN.opEiland = opEiland;
+        }
+      }
       const w = S.gebieden && S.gebieden.gehucht;
       const stijl = w && w.stijl ? `, in de bouwstijl ${w.stijl} (js/bouwstijl.js)` : '';
+      if (w && w.eiland) return `Een gehucht op het eiland van ${w.eiland.zaad}, in ${w.eiland.dorp}${stijl} (Spel.debug.eiland()).`;
       return w && w.maker ? `Een gehucht van de maker, uit zaad ${w.maker.zaad}${stijl}.` : 'Het ontworpen gehucht.';
+    },
+    // Je dorp op het eiland (js/eiland.js, vraag 117, stap 2): Spel.debug.eiland(5) begint nu een nieuw spel op het eiland
+    // van nummer 5, zonder brief (en zet de spelregel "Je gehucht" terug op het eiland, als een toets hem omzette);
+    // zonder nummer zegt het waar je dorp op het eiland ligt, wat voor plek het is, en waar de wegen je land verlaten.
+    eiland(zaad) {
+      if (zaad != null) {
+        T.zetOptie('gehucht', 'eiland');
+        T.nieuwSpel(Number(zaad));
+      }
+      const w = S.gebieden && S.gebieden.gehucht;
+      if (!w || !w.eiland) return 'Dit gehucht ligt niet op het eiland (de spelregel "Je gehucht" staat niet op "Op het eiland").';
+      const E = T.eilandVan(w.eiland.zaad);
+      const dorp = E.plekken.find((p) => p.naam === w.eiland.dorp);
+      return {
+        eiland: w.eiland.zaad,
+        dorp: w.eiland.dorp,
+        plek: dorp ? dorp.aard : null,
+        hoek: [w.eiland.x0, w.eiland.y0],
+        uitgang: w.overgangen ? w.overgangen.map((o) => [o.x, o.y]) : null,
+      };
+    },
+    // De hoogte van het land (js/hoogte.js, vraag 121): of deze kaart hoogte heeft, hoe hoog het hoogste punt is en
+    // waar, de richel en zijn helling, en de hoogte waar de schout staat. Spel.debug.hoogte(5) begint een nieuw spel op
+    // land 5 met heuvels (de spelregel "Hoogte" op "Heuvels"), Spel.debug.hoogte('top') zet de schout op de hoogste plek.
+    hoogte(wat) {
+      if (typeof wat === 'number') {
+        T.zetOptie('hoogte', 'heuvels');
+        T.nieuwSpel(wat);
+      }
+      const w = S.wereld;
+      if (!T.heeftHoogte(w)) return 'Deze kaart is vlak (de spelregel "Hoogte" staat op "Vlak", of het is het ontworpen gehucht).';
+      let top = null;
+      for (let y = 0; y < w.h; y++) for (let x = 0; x < w.b; x++) {
+        const h = T.hoogteOp(w, x, y);
+        if (!top || h > top.h) top = { x, y, h: Math.round(h) };
+      }
+      if (wat === 'top') Object.assign(S.schout, { x: top.x, y: top.y, tx: top.x, ty: top.y, pad: [], onderweg: false });
+      return {
+        hoogste: top,
+        richel: Object.keys(w.hoogte.niveau).length + ' tegels',
+        helling: Object.keys(w.hoogte.hellingen),
+        schout: Math.round(T.hoogteOp(w, S.schout.x, S.schout.y)),
+      };
     },
     // De raad onder het doel (js/raad.js): wat er nu staat, en welke raden nu allemaal gelden, in hun volgorde.
     raad() {
@@ -1177,8 +1300,9 @@
       if (id) {
         if (!T.VOORVALLEN[id]) return `Er is geen voorval "${id}". Er zijn: ${Object.keys(T.VOORVALLEN).join(', ')}.`;
         const v = T.VOORVALLEN[id];
-        const oud = { vervolg: v.vervolg, als: v.als, pauze: v.pauze };
-        Object.assign(v, { vervolg: false, als: undefined, pauze: 0 });
+        // Ook een voorval dat de beesten zelf beginnen ('wolven', js/beesten.js); dan zonder dat de wolven echt iets namen.
+        const oud = { vervolg: v.vervolg, als: v.als, pauze: v.pauze, zelf: v.zelf };
+        Object.assign(v, { vervolg: false, als: undefined, pauze: 0, zelf: v.zelf === true });
         const mensen = T.voorvalKan(S.dorp, id, dag);
         Object.assign(v, oud);
         if (!mensen) return `Voor "${id}" is er nu niemand die het kan zeggen, of over wie het kan gaan.`;
