@@ -88,11 +88,13 @@ om je land (de rand, en de hoogte van het eiland), is gebouwd en staat in `main`
 gespeeld, vier jaar op drie eilanden (`npm run speeltest -- bouwer sluw --jaren 4 --eiland`) naast dezelfde drie landen
 van de maker: op het eiland winnen er twee van de zes, op de landen van de maker vier. Wat het tegenhoudt (een huis
 zonder plek voor een put, meer wolven in meer bos, rovers die blijven komen), staat bij vraag 117; het verslag staat in
-`main` (Marcel: "A ja, en zet het verslag in main"). **2d is gebouwd**, op de branch: een erf houdt plaats voor een
-put, en een put voor een hut op een erf haalt ook het huis dat de hut wordt; de put zonder plek is weg uit de
-speeltest, en op het eiland winnen op `main` met 2d twee à drie van de zes (`speelbaar.md`). Een put per dorp hoeft niet
-(Marcel: "Het dorp moet gewoon uitdijen. Er is ruimte genoeg"). Wat nog opviel: een kapel zonder plek (62707), en de
-gril die bij de laagste gunst je ambt kost (72022; `opmerkingen.md`). `npm test`: 1053/1053.
+`main` (Marcel: "A ja, en zet het verslag in main"). **2d staat in `main`**: een erf houdt plaats voor een put en een
+kapel, en een put voor een hut op een erf haalt ook het huis dat de hut wordt; de put en de kapel zonder plek zijn weg
+uit de speeltest (`speelbaar.md`). Een put per dorp hoeft niet (Marcel: "Het dorp moet gewoon uitdijen. Er is ruimte
+genoeg"). **B van 2a, de grond van het eiland, staat in `main`** (Marcel: "Push main"): de zee, het strand, het veen en
+het broek hebben eigen tegels (`tegels/kust.png`), en op zand wordt niet gebouwd; in de speeltest houdt het zand niets
+tegen (twee van de zes winnen, vóór en na). Wat nog opviel: de gril die bij de laagste gunst je ambt kost (72022), en een
+paadje dat alleen in gras slijt (`opmerkingen.md`). `npm test`: 1095/1095.
 
 **De sessie van de hoogte** (7 okt, `claude/elegant-meitner-d3ss2z`, naast die van de wolven; in `main`, Marcel: "Ja
 push main"). **Vraag 124, de camera draaien, is geparkeerd** (Marcel: "Is het echt iets wat iets toevoegd? Ik wil geen
@@ -5138,7 +5140,6 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     Dus de hele spelwereld als het ware. Zo kun je steeds stukken 'ontdekken' in de fog of war. Het idee is een eiland. Met
     water rondom. Je krijgt een random positie op het land. Kan aan de buitenkant zijn of binnen in het land."; plan van
     Claude; open).
-    **Bezig in sessie `ccr-f03157dc-9d2dtu`** (8 okt): stap 2, je dorp op het eiland; 2a, 2b, het verslag van 2c, 2d en de kapel staan in `main`; nu B van 2a, eigen grondtegels voor het eiland: de tegels liggen in het spel, de speeltest is gespeeld, en het wacht op Marcel voor `main`.
     **Wat er nu is:** het land is een aparte kaart met provincies waar je in dagen reist (vraag 63, `js/land.js`, achter de
     spelregel Land, die standaard uit staat), en elke provincie zou een eigen kaart krijgen. Dit vervangt dat: één grote
     kaart, een eiland met de zee rondom, waarop alles ligt.
@@ -5468,8 +5469,8 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     (hooguit twee hoekpunten), en een tegel met drie soorten tekent zoals op de kaart (`T.grondTegelHoeken`). De landen van
     de maker zonder het eiland blijven tegel voor tegel hetzelfde; `kaarten.md` en `beeld.md` zeggen hoe het werkt.
     **De speeltest** (`speelbaar.md`, "de grond van het eiland"): het zand houdt niets tegen, twee van de zes winnen, vóór
-    en na; waar het anders liep (62707 en 72022), is het toeval van andere planten op de kaart. Vraag aan Marcel: naar
-    `main`?
+    en na; waar het anders liep (62707 en 72022), is het toeval van andere planten op de kaart. **Marcel (8 okt): "Push
+    main"**; in `main`.
 118. **Inwoners met stats, zoals in Dwarf Fortress** (Marcel, 4 okt, zesentwintigste sessie: "Inwoners krijgen ook
     'stats' hp, skills, eigenschappen, etc ala dwarf fortress"; plan van Claude; open).
     **Wat er al is:** elke bewoner heeft een naam, een leeftijd, een huis, een gezin en werk (`js/bewoners.js`); de vijf
