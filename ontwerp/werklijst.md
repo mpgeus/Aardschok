@@ -5365,6 +5365,9 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     want bebouwbaar zand verandert het spel.
     Vragen: **A**, deze vier soorten en vijf overgangen? **B**, de zee blauwer dan "water is modderig" (`beeld.md`, 20
     sep), of ook modderig? **C**, zand bebouwbaar (zonder akker), of zoals nu niet?
+    **Marcel (8 okt): "A. Ja, lijkt mij goed B. Ja hoor, geen probleem. C. Onbebouwbaar denk ik, zand is geen solide
+    basis."** Dus de vier soorten en vijf overgangen, de zee mag blauw, en op zand komt geen huis, erf of akker (zoals nu,
+    maar als eigen regel, niet omdat het een pad is). Stap 1, de proefplaat, is begonnen.
 118. **Inwoners met stats, zoals in Dwarf Fortress** (Marcel, 4 okt, zesentwintigste sessie: "Inwoners krijgen ook
     'stats' hp, skills, eigenschappen, etc ala dwarf fortress"; plan van Claude; open).
     **Wat er al is:** elke bewoner heeft een naam, een leeftijd, een huis, een gezin en werk (`js/bewoners.js`); de vijf
