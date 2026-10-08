@@ -18,9 +18,11 @@ Marcel, 8 okt: "snel, duidelijk en low cost". Elke sessie werkt dit blok bij aan
 pas binnen telt (vraag 140) staan in `main`.
 
 **Wacht op Marcel:**
-- Vraag 140: wie helpt bij de oogst (eerst een getal).
-- Vraag 141 (een economie binnen het dorp) en 142 (een gereedschap voor de getallen; de werkbank is er al): na de kern,
-  tenzij Marcel anders kiest.
+- Vraag 140: wie helpt bij de oogst. Marcel koos dagloners; het plan wacht op hem.
+- Vraag 141, een economie binnen het dorp: Marcel koos B, een beurs per huis, **voor de demo** ("Belangrijk concept"),
+  met munten van koper, zilver en goud; het plan wacht op hem.
+- Vraag 142, een gereedschap voor alle getallen: "echt een robuuste losse tool. Voor alle settings etc."; het plan wacht
+  op hem.
 
 **Daarna, in deze volgorde:**
 1. Een proefversie voor Marcels 4K-scherm en een eerste tester (33d; `npm run proefversie`, ook `-- --windows`), met de
@@ -6904,17 +6906,27 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     snel als voor het binden (179 tegels in 60 dagen), er komt evenveel binnen (705 graan), alleen later; aan het eind van
     de oogst staat er nog zo'n 230 op het veld. **Marcel (8 okt): "Misschien kunnen er meer arbeiders in het dorp?"** Open:
     wie helpt bij de oogst (zie het antwoord van Claude in het gesprek; eerst een getal, "Niets erbij zonder overleg").
+    Claude stelde voor: A, een getal (meer schoven per vracht, sneller binden), of B, dagloners: wie in de oogsttijd geen
+    werk heeft, helpt de boeren binden en dragen. **Marcel (8 okt): "Dagloners is een goed idee."** Het plan staat in het
+    gesprek en wacht op Marcel.
 
 141. **Een economie binnen het dorp** (Marcel, 8 okt: "Ik denk dat we binnen in het dorp ook een economie nodig hebben. Hoe
     kopen onze inwoners anders dingen?"; open, eerst overleg). Nu is alles van het dorp samen (`D.voorraad`): een huis
     neemt zijn goederen uit de voorraad (`T.gebruikGoederen`), niemand betaalt iets, en goud is alleen van de schout (de
     heer, de marskramer, de bouw). Wat erbij hoort, als het komt: loon voor wie werkt, een beurs per huis, prijzen, de
     kramen op de markt die verkopen, en de belasting die je int uit wat de huizen verdienen.
+    Claude stelde drie wegen voor: A, zoals in Anno 1602 (de voorraad van iedereen, maar je ziet ze op de markt hun waar
+    halen); B, een beurs per huis (loon voor wie werkt, een huis koopt op de markt wat het kan betalen, de belasting uit
+    wat de huizen verdienen); C, een vrije markt met prijzen die meebewegen. **Marcel (8 okt): "En voor de economie B voor
+    de demo ook. Belangrijk concept"**, en over het geld: **"Het goud is gelijk, misschien koper, zilver en gouden munten
+    maken?"** Dus in de demo, niet na de kern. Het plan staat in het gesprek en wacht op Marcel.
 
 142. **Een gereedschap voor alle getallen** (Marcel, 8 okt: "Ik wil straks wel een tool waarin we al deze parameters kunnen
     instellen."; open). Er is de werkbank in de spelregels (`T.WERKBANK` in `js/opties.js`: elk getal uit de blokken
     `*_INSTELLINGEN`), en de speeltest neemt er een getal uit met `--getal`. Open: is dat genoeg, of een eigen bladzijde in
     `gereedschap/`, met de getallen per onderwerp, wat ze doen, en een speeltest erbij die zegt wat een getal deed.
+    **Marcel (8 okt): "Kwa gereedschap bedoel ik echt een robuuste losse tool. Voor alle settings etc."** De werkbank is
+    dus niet genoeg. Het plan staat in het gesprek en wacht op Marcel.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
