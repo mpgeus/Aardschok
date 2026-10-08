@@ -6373,6 +6373,10 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     de visser nu bijstellen voor nu. Laten we finetunen."** De vissers vangen al vier keer wat de huizen eten (vier
     vissers, 8 vis per dag, voor 2,2); wat ontbrak, was het zout. Dus eerst de rekensom zonder de jagers, en dan opnieuw
     meten; de visser pas als hij dan tekortschiet.
+    Het overzicht van het spelverloop (Marcel, 8 okt: "Ik heb een overzicht nodig met de kengetallen en eventuele
+    knelpunten"; een doc, "Het spelverloop: kengetallen en knelpunten") vond nog een knelpunt: de vis die de huizen niet
+    aten, bedierf, terwijl het dorp in het voorjaar honger had, want bij honger at het alleen vlees. **Marcel (8 okt):
+    "Vis mag een maag vullen, zoals vlees"** (de spelregel "Vis", `visIsEten`).
 
 134. **Minder grondstoffen** (Marcel, 8 okt: "Er blijven steeds dingen bijkomen zo. Dat wil ik voorkomen. We moeten stoppen
     met het ene op te lossen met iets anders", en "We blijven grondstoffen toevoegen"; open, wacht op Marcels keuze).
@@ -6396,6 +6400,12 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     117). Er zijn twee vaste maten: het land van de maker (100 bij 100, met bos tot de rand), en de maat van de winst (vanaf
     100 mensen: daarna zegt de raad "haal een vrij erf weg", vraag 102, c, omdat een nieuw gezin in een hut de reeks van
     geluk breekt, en de bouwers van de speeltest stoppen dan met groeien).
+
+137. **Plunderen als het eten op is** (Marcel, 8 okt: "ik denk ook dat we later mee moeten nemen in het verhaal, dat
+    wanneer er tekort is aan voedsel je altijd nog kunt plunderen nabijgelegen dorpen / steden als je wil / kunt"; later,
+    open). Hoort bij de dorpen op het eiland (vraag 117) en het vechten tussen dorpen (vraag 126): met je militie naar
+    een buurdorp, en terug met zijn graan en vee, tegen wat het kost (mannen, de gunst van de heer, wat het buurdorp
+    onthoudt). Niet nu: eerst de kern.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

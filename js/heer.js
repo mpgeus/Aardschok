@@ -372,7 +372,7 @@
     const na = ((D.voorraad && D.voorraad.graan) || 0) - ((g && g.neemt && g.neemt.graan) || 0);
     const kaas = (D.voorraad && D.voorraad.kaas) || 0;
     // Vlees vult sinds 25 sep ook een maag (js/behoeften.js): het vangt net als de kaas een tekort op.
-    const vlees = T.vleesAlsEten(D);
+    const vlees = T.vleesEnVisAlsEten(D);
     return { na, eten, melk, kaas, vlees, soldaten, zaaien, over: na - eten - soldaten - zaaien, dagen: oogst - dag };
   };
 

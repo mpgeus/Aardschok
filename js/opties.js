@@ -209,6 +209,17 @@
           uitleg: 'Het dorp eet vlees erbij voor de afwisseling, maar tegen de honger helpt het niet.' },
       ],
     },
+    // Marcel, 8 okt (werklijst vraag 133): "Vis mag een maag vullen, zoals vlees".
+    {
+      id: 'vis', naam: 'Vis', standaard: 'eten',
+      uitleg: 'Of het dorp bij honger ook vis eet, of alleen wat de huizen ervan willen.',
+      keuzes: [
+        { id: 'eten', naam: 'Vult een maag', zet: { 'BEHOEFTEN_INSTELLINGEN.visIsEten': true },
+          uitleg: 'Wat het zout niet goed houdt, eet het dorp eerst op, want het bederft toch. Gezouten vis bewaart het tot het graan op is.' },
+        { id: 'tevredenheid', naam: 'Alleen voor de wensen', zet: { 'BEHOEFTEN_INSTELLINGEN.visIsEten': false },
+          uitleg: 'De huizen eten de vis die ze willen; wat over is, bederft. Zoals voor 8 okt.' },
+      ],
+    },
     // Stap 2 van de inner, de verstopplekken (Marcel, 25 sep; spel.md, "Marcel koos voor stap 2").
     {
       id: 'sporen', naam: 'Sporen', standaard: 'alles',

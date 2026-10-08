@@ -1656,7 +1656,10 @@ Nog open na deel 1 (vragen van Claude):
 - **Eten:** elk mens eet 0,05 graan per dag. Het dorp eet eerst de melk van vandaag, dan het vlees
   dat anders bederft, dan graan, en pas als het graan op is kaas en gezouten vlees (sinds 25 sep
   vult vlees een maag, een optie; sinds 28 sep telt het ook mee als het dorp kijkt of er eten is).
-  Groente, vis of vlees erbij maakt ook tevredener. Zonder zout bederven vis en vlees.
+  Groente, vis of vlees erbij maakt ook tevredener. Zonder zout bederven vis en vlees. **Sinds 8 okt vult vis een maag,
+  net als vlees** (Marcel: "Vis mag een maag vullen, zoals vlees"; de spelregel "Vis"): wat het zout niet goed houdt,
+  eet het dorp vóór het graan, de gezouten vis na de kaas. Daarvoor at het dorp alleen de vis die de huizen wilden, en
+  bedierf de rest, ook in een voorjaar met honger.
 - **Het zaaigraan, pas bij nood** (1 okt, eenentwintigste sessie; werklijst vraag 81; Marcel: "zaaigraan wordt bij nood
   opgegeten, anders sterven er mensen"): van de oogst tot het zaaien houden de boeren het zaaigraan voor volgend jaar
   achter, zoveel als de akkers van volgend jaar vragen (`T.zaaigraanApart`). Het dorp eet het pas na het andere graan,
