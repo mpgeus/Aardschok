@@ -115,6 +115,11 @@
     dagloners: true,
     // Zoveel dagloners neemt een boerderij er hooguit bij.
     daglonersPerBoerderij: 3,
+    // Maaien ze ook (Marcel, 8 okt: "Ja dagloners mogen maaien")? Dan maaien ze het graan van hun boerderij zolang er nog
+    // te maaien is, en binden en dragen ze daarna; het hooi maait de boer.
+    daglonersMaaien: true,
+    // Ligt er op zijn boerderij meer zwad dan zoveel tegels, dan bindt een dagloner eerst, en maait hij pas als het minder is.
+    zwadGrens: 4,
   };
   const SIN = () => T.SCHOVEN_INSTELLINGEN;
 
@@ -563,12 +568,19 @@
   // De tegel die deze boer nu gaat maaien: in hooitijd eerst de dichtstbijzijnde tegel hooi op een
   // van zijn weides, waar geen koe staat (die gaat niet opzij voor een zeis); anders, of als al zijn
   // hooi gemaaid is, de dichtstbijzijnde tegel graan. { x, y, akker, hooi } of null.
-  function maaiDoel(w, e, hooitijd, graantijd) {
+  function maaiDoel(w, e, akkers, hooitijd, graantijd) {
     const van = { x: e.tx, y: e.ty };
     let doel = null;
     let beste = Infinity;
+    // Een tegel die een ander al maait of waar hij heen loopt (een dagloner naast de boer), laat hij.
+    const bezet = new Set();
+    for (const x of w.wezens) {
+      const m = x !== e && (x.maait || x.oogstDoel);
+      if (m) bezet.add(sleutel(m.x, m.y));
+    }
     const kijk = (a, tegels, hooi) => {
       for (const t of tegels) {
+        if (bezet.has(sleutel(t.x, t.y))) continue;
         if (hooi && T.wezenOp(w, t.x, t.y, e)) continue;
         const d = T.afstand(van, t);
         if (d < beste) {
@@ -577,10 +589,27 @@
         }
       }
     };
-    if (hooitijd) for (const a of e.werkAkkers) kijk(a, hooiTegels(a), true);
-    if (!doel && graantijd) for (const a of e.werkAkkers) kijk(a, onbeslistTegels(a), false);
+    if (hooitijd) for (const a of akkers) kijk(a, hooiTegels(a), true);
+    if (!doel && graantijd) for (const a of akkers) kijk(a, onbeslistTegels(a), false);
     return doel;
   }
+
+  // Het graan dat een dagloner maait (vraag 140): de akkers van de boerderij die hem nam (`p.dagloner`, T.kiesDagloners in
+  // js/veldwerk.js), zolang hij geen werk heeft, vrij is om te werken en niet al bindt of schoven draagt; anders null.
+  function akkersVanDagloner(D, e) {
+    const IN = SIN();
+    if (!IN.dagloners || !IN.daglonersMaaien) return null;
+    const p = T.bewonerVan(D, e);
+    if (!p || !p.dagloner || p.werk || p.weg || p.komt || !D.gebouwen.includes(p.dagloner)) return null;
+    if (e.werkt || e.draagt || e.vracht > 0 || e.praatje || e.opgeroepen || e.moetNaar || e.vertrekt) return null;
+    if (T.blijftThuis(p, D.kalender.dag)) return null;
+    const boer = D.wereld.wezens.find((b) => !b.dood && b.werkAkkers && b.werkAkkers.length && (T.bewonerVan(D, b) || {}).huis === p.dagloner);
+    if (!boer) return null;
+    // Wie al maait, maait zijn tegel af; anders bindt hij eerst als het zwad zich ophoopt.
+    if (!e.maait && !e.oogstDoel && boer.werkAkkers.reduce((n, a) => n + T.teBinden(a).length, 0) > IN.zwadGrens) return null;
+    return boer.werkAkkers;
+  }
+  T.teMaaien = onbeslistTegels; // voor T.kiesDagloners (js/veldwerk.js)
 
   // Eén stap oogsten, voor elke boer met een akker. Vóór T.laatDwalen aanroepen (js/main.js): wie
   // hier een pad krijgt of aan het maaien is, slaat T.laatDwalen dan vanzelf over (dezelfde
@@ -615,15 +644,26 @@
     const vrij = T.vrijeDag(D, D.kalender.dag);
     const nu = S.wereldTijd || 0;
     for (const e of w.wezens) {
-      if (e.dood || !e.werkAkkers || !e.werkAkkers.length) continue;
-      for (const a of e.werkAkkers) {
+      if (e.dood) continue;
+      // De boer maait zijn eigen akkers en weides; een dagloner het graan van de boerderij die hem nam.
+      const isBoer = !!(e.werkAkkers && e.werkAkkers.length);
+      const akkers = isBoer ? e.werkAkkers : akkersVanDagloner(D, e);
+      if (!akkers) {
+        if (e.maait || e.oogstDoel) Object.assign(e, { maait: null, oogstDoel: null });
+        continue;
+      }
+      if (!isBoer && basis !== 'rijp') {
+        Object.assign(e, { maait: null, oogstDoel: null });
+        continue;
+      }
+      for (const a of akkers) {
         if (!a.geoogst) a.geoogst = new Set();
         if (!a.gehooid) a.gehooid = new Set();
         if (!a.half) a.half = new Map();
       }
       if (basis !== 'rijp' && !hooitijd) {
         if (basis === 'geploegd') {
-          for (const a of e.werkAkkers) {
+          for (const a of akkers) {
             a.geoogst.clear(); // nieuw jaar, weer vers
             a.gehooid.clear();
             a.half.clear();
@@ -653,12 +693,12 @@
           a.half.delete(sleutel(e.maait.x, e.maait.y));
           if (e.maait.hooi) {
             a.gehooid.add(sleutel(e.maait.x, e.maait.y));
-            if (D.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(D, 'hooi', T.hooiPerTegel(a, e));
+            if (D.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(D, 'hooi', T.hooiPerTegel(a, boerVan(w, a) || e));
           } else {
             a.geoogst.add(sleutel(e.maait.x, e.maait.y));
             // Het zwad blijft liggen tot het gebonden, gedroogd en binnen is (vraag 140).
             if (!a.schoven) a.schoven = new Map();
-            a.schoven.set(sleutel(e.maait.x, e.maait.y), { graan: T.oogstPerTegel(a, e), gebonden: null });
+            a.schoven.set(sleutel(e.maait.x, e.maait.y), { graan: T.oogstPerTegel(a, boerVan(w, a) || e), gebonden: null });
           }
           e.maait = null;
           e.oogstDoel = null;
@@ -679,7 +719,7 @@
         e.maait = begin(e, e.oogstDoel, nu);
         continue;
       }
-      const doel = maaiDoel(w, e, hooitijd, basis === 'rijp');
+      const doel = maaiDoel(w, e, akkers, hooitijd && isBoer, basis === 'rijp');
       if (!doel) {
         e.oogstDoel = null;
         continue;

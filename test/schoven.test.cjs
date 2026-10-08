@@ -156,3 +156,30 @@ test('een dagloner bindt en draagt de schoven van zijn boerderij naar de schuur'
     T.optiesTerug();
   }
 });
+
+test('een dagloner maait het graan van zijn boerderij als er weinig zwad ligt, maar niet met de spelregel op binden', () => {
+  const dag = dagIn('oogstmaand', 2);
+  for (const keuze of ['maaien', 'binden']) {
+    const S = gehucht(dag + 6 / 24);
+    const D = S.dorp;
+    T.zetOptie('voorvallen', 'uit');
+    T.zetOptie('dagloners', keuze);
+    try {
+      T.kiesDagloners(D, dag);
+      const dagloners = D.bewoners.mensen.filter((q) => q.dagloner);
+      // Met binden alleen neemt een boerderij pas dagloners als er schoven liggen.
+      if (keuze === 'maaien') assert.ok(dagloners.length, 'er zijn dagloners');
+      let maaide = false;
+      for (let u = 7; u <= 17 && !maaide; u++) {
+        totUur(S, dag, u);
+        maaide = dagloners.some((q) => q.wezen.maait);
+      }
+      assert.equal(maaide, keuze === 'maaien', `${keuze}: maaide ${maaide}`);
+      // Twee maaiers nemen nooit dezelfde tegel.
+      const tegels = S.dorp.wereld.wezens.filter((e) => e.maait).map((e) => `${e.maait.x},${e.maait.y}`);
+      assert.equal(new Set(tegels).size, tegels.length);
+    } finally {
+      T.optiesTerug();
+    }
+  }
+});

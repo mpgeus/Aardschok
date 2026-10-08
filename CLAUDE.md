@@ -815,8 +815,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.haalSchovenBinnen`; het werk is `haalBinnen` in `js/veldwerk.js`); een tegel is zwad, hokken of stoppels
   (`T.akkerTegelStadium`). **De dagloners** (Marcel: "Dagloners is een goed idee", en "mensen in het dorp"): elke nacht
   kiest het dorp wie morgen helpt (`T.kiesDagloners` in `js/veldwerk.js`, `p.dagloner`): wie niet op een boerderij woont
-  en geen werk heeft (`T.kanWerken` in `js/bewoners.js`), bij de dichtste boerderij met de oogst op het veld, tot
-  `daglonersPerBoerderij`; de spelregel "Dagloners". Het vangnet op 1 herfstmaand haalt ook de schoven binnen, en `T.graanOpHetVeld` telt mee voor
+  en geen werk heeft (`T.kanWerken` in `js/bewoners.js`), bij de dichtste boerderij met graan te maaien of schoven op het
+  veld, tot `daglonersPerBoerderij`. Ze maaien het graan van die boerderij (`akkersVanDagloner` in `T.werkOogstBij`; twee
+  maaiers nemen nooit dezelfde tegel), en ligt er meer zwad dan `zwadGrens`, dan binden en dragen ze eerst; de spelregel
+  "Dagloners". Het vangnet op 1 herfstmaand haalt ook de schoven binnen, en `T.graanOpHetVeld` telt mee voor
   de winter. In de winter dorst de boer na het sprokkelen in de deur van zijn schuur (`dors`, alleen beeld). De getallen
   in `T.SCHOVEN_INSTELLINGEN`.
 - `js/veldwerk.js`: **de boeren aan het werk** (vraag 111, 5 okt; Marcel: "Ze moeten zaaien en op het veld bezig

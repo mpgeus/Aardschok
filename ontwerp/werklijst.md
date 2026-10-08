@@ -6912,7 +6912,10 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     "Dagloners"), in dezelfde figuren als de boerin. Gemeten op land 5 (de oogst van hooimaand tot herfstmaand): op dag 50
     ligt er nog 111 graan op het veld in plaats van 236, en is er 563 binnen in plaats van 435; aan het eind is het
     hetzelfde (704). Wat opviel: het gezin houdt het binden vaak bij, en de dagloners praten dan; het maaien is wat
-    langzaam gaat, en dat doet alleen de boer.
+    langzaam gaat, en dat doet alleen de boer. **Marcel (8 okt): "Ja dagloners mogen maaien."** Gebouwd: een dagloner
+    maait het graan van zijn boerderij, en bindt eerst als er meer dan vier tegels zwad liggen (`zwadGrens`). Op land 5
+    is alles op dag 50 gemaaid en binnen (714), zonder het vangnet; alleen maaien zonder die grens gaf 474 op dag 50,
+    omdat het binden dan bleef liggen.
     **Bezig in sessie `ccr-77327776-rqjldz`** (8 okt): de dagloners (Marcel: "Dagloners is een goed idee", "mensen in het
     dorp", en "We beginnen met de dagloners"): wie in de oogst geen werk heeft, helpt de boeren binden en dragen.
 

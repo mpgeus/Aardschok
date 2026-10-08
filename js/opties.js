@@ -222,11 +222,13 @@
     },
     // Marcel, 8 okt (werklijst vraag 140): "Dagloners is een goed idee", en "mensen in het dorp".
     {
-      id: 'dagloners', naam: 'Dagloners', standaard: 'aan',
-      uitleg: 'Of wie in het dorp geen werk heeft, in de oogst de boeren helpt binden en dragen.',
+      id: 'dagloners', naam: 'Dagloners', standaard: 'maaien',
+      uitleg: 'Of wie in het dorp geen werk heeft, in de oogst de boeren helpt maaien, binden en dragen.',
       keuzes: [
-        { id: 'aan', naam: 'Wie geen werk heeft', zet: { 'SCHOVEN_INSTELLINGEN.dagloners': true },
-          uitleg: 'Ligt de oogst op het veld, dan helpt wie geen werk heeft de dichtste boerderij, tot drie per boerderij.' },
+        { id: 'maaien', naam: 'Maaien, binden en dragen', zet: { 'SCHOVEN_INSTELLINGEN.dagloners': true, 'SCHOVEN_INSTELLINGEN.daglonersMaaien': true },
+          uitleg: 'Is de oogst rijp, dan helpt wie geen werk heeft de dichtste boerderij, tot drie per boerderij: eerst maaien, dan binden en dragen.' },
+        { id: 'binden', naam: 'Binden en dragen', zet: { 'SCHOVEN_INSTELLINGEN.dagloners': true, 'SCHOVEN_INSTELLINGEN.daglonersMaaien': false },
+          uitleg: 'De boer maait alleen; wie geen werk heeft, helpt binden en de schoven naar de schuur dragen.' },
         { id: 'uit', naam: 'Alleen het gezin', zet: { 'SCHOVEN_INSTELLINGEN.dagloners': false },
           uitleg: 'Alleen de boer, zijn boerin en de grote kinderen halen de oogst binnen. Zoals voor 8 okt.' },
       ],

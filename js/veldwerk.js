@@ -651,6 +651,7 @@
     if (!p || !p.huis || p.weg) return null;
     // Een dagloner helpt de boerderij die hem nam (T.kiesDagloners hieronder), zolang hij geen werk heeft.
     if (p.huis.soort !== 'boerderij') {
+      if (e.maait || e.oogstDoel) return null; // hij maait (T.werkOogstBij, js/akkers.js)
       const g = !p.werk && T.SCHOVEN_INSTELLINGEN.dagloners && p.dagloner;
       const boer = g && D.gebouwen.includes(g) ? boerVanHuis(D, g) : null;
       if (!boer || (!(e.vracht > 0) && !boer.werkAkkers.some((a) => a.schoven && a.schoven.size))) return null;
@@ -682,10 +683,11 @@
     if (!IN.dagloners || !D.wereld) return;
     const d = T.datumVanDag(dag);
     const rijp = T.akkerStadium(d.maand, d.dagVanMaand) === 'rijp';
+    // Werk is er waar schoven op het veld liggen, of graan te maaien staat (als ze ook maaien).
     const boerderijen = (D.gebouwen || []).filter((g) => {
       if (g.soort !== 'boerderij' || !g.klaar) return false;
       const boer = boerVanHuis(D, g);
-      return boer && boer.werkAkkers.some((a) => (a.schoven && a.schoven.size) || (rijp && T.bestemmingVan(a) === 'akker'));
+      return boer && boer.werkAkkers.some((a) => (a.schoven && a.schoven.size) || (rijp && IN.daglonersMaaien && T.teMaaien(a).length));
     });
     if (!boerderijen.length) return;
     const plaats = new Map(boerderijen.map((g) => [g, IN.daglonersPerBoerderij]));
