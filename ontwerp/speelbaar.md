@@ -153,6 +153,26 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 8 okt: de jager die echt jaagt (werklijst, vraag 116, stap 3a, j1, j2 en k)
+
+Op `ccr-77327776-rqjldz` op `68c83a2` (de jager schiet klein wild, de helft van zijn vlees, en herten), naast dezelfde
+speeltest op de stand ervoor (`efd129a`, de jager maakt zijn vlees uit het niets). `npm run speeltest -- bouwer sluw
+--maker --jaren 4`.
+
+| Speler, land | Jagers (voor → nu) | Graan geoogst per jaar, voor | nu | Hoe het eindigde, voor | nu |
+|---|---|---|---|---|---|
+| bouwer 1 (62707) | 13 → 3 | 612, 869, 962, 1046 | 612, 205, 32 | gewonnen | ambt kwijt in jaar 3 |
+| bouwer 2 (73425) | 14 → 4 | 606, 767, 1248, 1257 | 606, 408, 135, 25 | gewonnen | vier jaar uit, 37 mensen |
+| bouwer 3 (72022) | 15 → 2 | | | gewonnen | ambt kwijt in jaar 2 |
+| sluw 1 (62707) | 14 → 5 | | | gewonnen | vier jaar uit, 152 mensen, net niet |
+| sluw 2, sluw 3 | 7 en 6 → 1 en 2 | | | niet, en gevallen (rover) | gevallen (rovers) |
+
+**Wat het zegt:** het dorp van vóór 3a at bijna alleen vlees uit het niets: de bouwer zette er 13 tot 15 jagers neer,
+en vanaf het tweede jaar at het dorp geen graan meer. Met een jager die echt jaagt (en geen nieuwe waar geen hert is),
+komt het eten weer uit het graan, en dan eet het dorp in de eerste winter het zaaigraan op: de oogst zakt van 612 naar 205
+en 32, en het dorp gaat dood. Het spel was dus in balans op jagers uit het niets; Marcels "het dorp moet gevarieerd eten"
+(j3) is daarmee de echte opgave, niet de jager.
+
 ## De speeltest van 7 okt: de wolven, stap 2a en 2b (werklijst, vraag 116)
 
 Gespeeld in de zevenendertigste sessie, op `ccr-f6ba5992-1e77dw` op `2551cfb`: de beesten in het bos met het leven in het
