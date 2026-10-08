@@ -1039,6 +1039,18 @@
             ...(G.trektWeg ? { trektWeg: true } : {}),
           };
         }),
+        // De jagers (stap 3a): waar hij op jaagt, wat hij schoot, en of hij herten vindt.
+        jagers: D.gebouwen.filter((g) => g.soort === 'jager' && g.klaar).map((g) => {
+          T.wildVanJager(D, g);
+          return {
+            hut: `${g.x},${g.y}`,
+            jaagt: g.wild === undefined ? 'zijn vlees komt uit het niets (geen beesten)' : `${g.wild ? `op ${g.wild.soort === 'wolf' ? 'de roedel' : 'de herten'} bij ${g.wild.x},${g.wild.y}` : 'geen groep'}${g.zonderHerten ? ', en hij vindt geen hert: alleen klein wild' : ''}`,
+            vlees: `${(g.gejaagd || 0).toFixed(1)} van ${T.BEESTEN_INSTELLINGEN.jager.perDier} voor het volgende hert`,
+            schoot: g.gevangen || {},
+            handen: g.handen,
+          };
+        }),
+        jagerBijDeWolven: T.jagerBijDeWolven(D),
       };
     },
     // Het bos (js/bos.js; werklijst vraag 115): per houthakker zijn boom (en of die in het bos staat, dan plant hij er een

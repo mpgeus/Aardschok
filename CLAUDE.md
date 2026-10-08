@@ -427,7 +427,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   tekent `js/tekenen.js` (`T.paaltjesVan`, `T.sprites.paaltje`). **Een erf mag op struiken en bomen** (vraag 110, e, 6
   okt): wat te rooien is (`T.ontginWerkOp` in `js/bos.js`) houdt het niet tegen (`T.rooiTekst` voor de muis), ook niet in
   het looppad om de hut buiten het erf; het gezin dat het neemt, rooit het erf met dat looppad zelf (`T.kavelVanErf`), en
-  zolang wacht de hut, nog niet op de kaart (`js/bos.js`). Een erf in het bos van de heer kost zijn gunst.
+  zolang wacht de hut, nog niet op de kaart (`js/bos.js`). Een erf in het bos van de heer kost zijn gunst. **Een erf houdt
+  plaats voor een put** (vraag 117, 2d): het komt niet waar zijn hut straks geen put kan halen, of waar het een ander huis
+  de laatste plek voor een put afneemt; waar nog een put kan komen, op open grond of na het rooien, zegt `T.kringGrond`
+  (`js/wensen.js`, met `T.kanHierKomen` in `js/verzoeken.js`), één keer per stand van het dorp. Een hut op een erf telt
+  daarbij met zijn hut en het huis dat hij wordt (`T.kringVoetenVan`), en het dorp zet een put voor hem waar hij die
+  allebei haalt (`T.kringTeller` met `straks`, in `T.plekVoor`).
 - `js/bos.js`: **het bos: omhakken, rooien, planten en groeien** (vraag 110, e, met 115, 6 okt; Marcel: "A ja B ja C ja D
   zo"), met de getallen in `T.BOS_INSTELLINGEN`. Wat te rooien is, zegt `T.ontginWerkOp` ('hakken' voor een boom,
   'rooien' voor een stronk, een struik, een boompje of een jonge boom); een boom om met `T.hakBoom` (het hout naar de
@@ -478,7 +483,27 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `wolvenNamenSchaap`: dan doen de jacht, `T.jaagOpDeWolven`, en het hek, `T.hekOmDeSchapen`, echt iets), een mens
   (`bijt`: gewond, `p.gewond`, of dood), of de schout zonder licht (een gevecht); bij zijn lantaarn blijft hij aan de rand
   van het licht (`randVanHetLicht`). De status "Wolven" (`T.wolvenBijHetDorp`, in `T.OORZAKEN`) en de raad. De spelregel
-  "Beesten" (aan, zonder doden of uit); de getallen in `T.BEESTEN_INSTELLINGEN`. Wat je ertegen doet (stap 3) komt nog.
+  "Beesten" (aan, zonder doden of uit); de getallen in `T.BEESTEN_INSTELLINGEN`. **De jager** (stap 3a): de helft van zijn vlees
+  is klein wild, de rest komt uit de herten in zijn bereik (`T.wildVanJager`, `g.wild`; `T.watDeJagerSchiet` en
+  `T.jagerJaagde` vanuit `T.tikGebouwenDag`), twee per groepje laat hij staan, en een roedel van meer dan drie maakt hij
+  kleiner; vindt hij geen hert (`g.zonderHerten`, `T.jagersZonderHerten`), dan vraagt het dorp geen nieuwe jager en de heer
+  van hem geen vlees. Zijn poppetje loert in het bos (`jaag` in `js/veldwerk.js`). **Het hol** (`zetHol`, `T.holVan`):
+  elke roedel heeft er een op de kaart, naast zijn thuis, dat meegaat als hij verhuist (`gereedschap/pixelart/hol.cjs`).
+  **De jacht te voet** (stap 3b): "Een jacht" in het voorval (`doe.jacht`, `T.beginJacht`, `D.beesten.jacht`) roept de
+  militie op (`T.roepOp`, `T.laatGaan`, `T.militieVan` in `js/rovers.js`), het hol ligt in goud (`T.holVanDeJacht`), bij
+  de roedel is het een gevecht (`T.naJacht` vanuit `T.eindeGevecht`), en na twee dagen gaan de mannen zonder je. **Om hulp
+  roepen** (3c, `G.aanval`, `e.roeptOmHulp`): wie de wolven aanvallen, roept, de mannen die het horen komen (`moetNaar`
+  met `hulp`), een buur jaagt ze weg, de schout vecht, en na een kwartier bijten ze. **Het hek** (3d,
+  `T.hekOmDeSchapen`): latten om de meent, met hekjes.
+- `js/graanschuur.js`: **de graanschuur en de wachters bij het zaaigraan** (vraag 132, 8 okt; Marcel: "bij honger grijpen
+  mensen alles aan. Je moet mensen inzetten om het warenhuis te beschermen", en "Ja, er moet een graanschuur komen"): het
+  zaaigraan ligt in de graanschuur (`T.GEBOUWEN.graanschuur`, `T.graanschuurVan`; het dorp vraagt er een zodra er
+  zaaigraan apart ligt, `T.watTeBouwen`); komt de honger eraan (`T.zaaigraanInGevaar`, vanuit `T.eetVandaag`), dan zoekt
+  een boer je (het voorval `zaaigraanHonger`), en met `doe.bewaak` staan er wachters bij de schuur (`T.bewaakZaaigraan`:
+  een per twintig mensen, minstens twee, `T.wachtersNodig`; `p.wacht`, ze werken niet, en `moetNaar` met `wacht`), die
+  zoveel beschermen als er staan (`T.zaaigraanBeschermd`). Honger kost dan elke dag vertrouwen, en bij het zaaien gaan ze
+  naar huis (`T.tikGraanschuurDag`). De spelregel "Zaaigraan" (bewaken, pas bij nood, als ander graan); de getallen in
+  `T.GRAANSCHUUR_INSTELLINGEN`.
 - `js/bouwstijl.js`: **de bouwstijl van een land** (vraag 114, stap 2, 4 okt): elk land van de maker bouwt in één stijl
   (`w.stijl`, uit het nummer van het land, `T.stijlVoorLand`; het ontworpen gehucht heeft er geen en bouwt zoals altijd),
   met per soort een paar vormen, elk met de deur naar elke kant. De huizenbouwer noemt dat een stand; in het spel heet het
@@ -527,7 +552,13 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   aan de winter, wat de huizen missen aan de wensen (`T.watDeHuizenMissen`, vóór het doel; vraag 87), en wat je mist voor
   wat het doel vraagt aan de treden (`T.doelGebouwen`), met waar het vandaan komt. Na de laatste trede telt hij tot de
   maat van de winst (`T.mensenVoorDeWinst` in `js/einde.js`), en is die gehaald (`T.maatGehaald`), dan zegt hij dat je
-  een vrij erf weghaalt (vraag 102, c). Uit te zetten in de spelregels ("Raad").
+  een vrij erf weghaalt (vraag 102, c). Haalt het eten de winter niet, dan zegt hij wat helpt (`T.watHelptAanEten`, vraag
+  133, b: ontginnen, een visser per dertig mensen, een jager als er herten zijn, een graanschuur, meer weide, zaaigraan
+  kopen), en vraagt het dorp het gebouw dat hij noemt. Na een voorjaar met honger maakt een boer zelf een veld weide
+  (`weideErbij` in `T.boerenKiezenVelden`, `D.behoeften.voorjaarsHonger`). Vanaf de herfst zegt hij of vis en vlees de
+  winter halen, als de beek dichtligt (`T.visEnVleesVoorDeWinter` in `js/behoeften.js`, `T.visEnVleesRaad`; vraag 132,
+  B): hoeveel zout er bij moet (de marskramer heeft er in de herfst het meest), en een visser of jager als er dan te
+  weinig ligt. Wie eet, eet eerst wat ongezouten is. Uit te zetten in de spelregels ("Raad").
 - `js/wensen.js`: **de wensen van de mensen, per stand** (stap 2 van vraag 79, vraag 80 en 85, 1 okt; zoals in Anno
   1602): elk huis met mensen heeft een stand naar zijn soort (`T.standVan`: een hut keuters, een huis dorpelingen, een
   stenen huis ambachtslieden, een boerderij boeren; het huis van de schout en de herberg geen), en elke stand wil wat de
@@ -818,7 +849,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   ernaar, `T.winterInZicht`, voor de raad, het rapport en de groei: haalt het hem niet, dan komt er geen gezin,
   `T.watDeWinterNietHaalt`, de spelregel "Groei"; het hout dat de mensen elke dag
   sprokkelen, `T.sprokkelHout`, zo'n 40% van wat de winter vraagt, zodat een houthakker nodig blijft; een huis dat
-  doorgroeit; zout dat vis en vlees goed houdt),
+  doorgroeit; zout dat vis en vlees goed houdt; vis en vlees vullen ook een maag, `T.eetVandaag`, de spelregels "Vlees" en
+  "Vis"),
   `js/handel.js` (de marskramer: drie bezoeken per jaar, prijzen per bezoek, `T.kanKopen` en
   `T.kanVerkopen`; in de lente ook zaaigraan, dat de boeren nazaaien tot 1 bloeimaand, en in een dorp laken (vraag 99), `T.zaaiNa` in `js/akkers.js`, waar
   ook staat hoeveel zaaigraan ze van de oogst tot het zaaien achterhouden, `T.zaaigraanApart`: het dorp eet het pas bij nood; hij staat op de plek `"marskramer"` uit het betekenisbestand), `js/heer.js`
@@ -983,6 +1015,11 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   toevoegen voor we bij een speelbaar product komen." Een nieuw idee, ook een goed idee van Claude,
   gaat naar `ontwerp/opmerkingen.md` of achteraan de werklijst, niet in de stap die loopt. Wie iets
   nieuws wil beginnen, vraagt eerst: brengt dit een speelbaar product dichterbij?
+- **Niets erbij zonder overleg** (Marcel, 8 okt: "Er blijven steeds dingen bijkomen zo. ... We moeten stoppen met het
+  ene op te lossen met iets anders", en "geen erbij zonder overleg"): wat een speeltest scheef laat zien, los je eerst op
+  met een getal uit de werkbank, niet met een nieuwe regel, een nieuw gebouw of een nieuwe grondstof. Iets nieuws komt er
+  alleen als Marcel het kiest, als eigen punt achteraan de werklijst, en een grondstof alleen met iets dat hem gebruikt.
+  Op 7 en 8 okt groeide vraag 116 en 133 zo uit tot een graanschuur, wachters, advies, weides, vissers, meer graan en zout.
 
 In een gevecht heeft de schout levenspunten, net als een vijand. Wie valt, is dood (Marcel, 29 sep, vraag 55:
 "mensen kunnen sterven"): valt de schout, dan is het spel uit. Wie het overleeft, geneest na een nacht.
@@ -1106,7 +1143,8 @@ wil (thuis, aan de rand, of weg van iemand), zijn thuis en zijn plekken aan de r
 herten hij ving, en wanneer de groep jongen kreeg; `('hier')` zet de schout tien tegels van de dichtste groep, om ze te
 bekijken, `('opnieuw')` legt de groepen opnieuw, `('jongen')` geeft elke groep nu jongen (en wie groot wordt, splitst),
 `('jacht')` laat elke roedel nu jagen, `('honger')` geeft elke roedel zoveel honger dat hij in het donker naar het dorp
-komt (met `Spel.debug.uur(21)`), en `('schaap')` laat de eerste roedel nu een schaap nemen.
+komt (met `Spel.debug.uur(21)`), en `('schaap')` laat de eerste roedel nu een schaap nemen. Onder `jagers` staat per jager waar hij op jaagt, wat hij
+schoot en of hij herten vindt.
 `Spel.debug.gril()` zegt welke gril op je antwoord wacht, met de keuzes en wat ze kosten; `('jacht')` laat die nu komen.
 `Spel.debug.bazen()` zegt de gunst van de heer en het vertrouwen van het dorp, waarom ze het laatst veranderden en of je
 gewaarschuwd bent; `('gunst', 15)` zet de gunst op 15 (met de brief als hij onder 20 komt), `('vertrouwen', 0)` jaagt je

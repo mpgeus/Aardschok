@@ -117,14 +117,15 @@
 
   // Wie in het wachthuis werkt, en wie van de heervaart terugkwam (js/heervaart.js; Marcel, 29 sep, vraag 60, B: ook
   // zonder wachthuis), met zijn poppetje. Wie nog weg is, of nog onderweg naar huis, vecht niet mee.
-  const militieVan = (D) =>
+  T.militieVan = (D) =>
     (D.bewoners ? D.bewoners.mensen : [])
       .filter((p) => ((p.werk && p.werk.soort === 'wachthuis') || p.veteraan) && !p.weg && !p.komt && p.wezen && !p.wezen.dood)
       .map((p) => p.wezen);
   const opgeroepen = (D) => (D.wereld ? D.wereld.wezens.filter((e) => e.opgeroepen && !e.dood) : []);
 
   // Bij een aanval komt hij naar de schout: hij vecht aan jouw kant, met wat een wachter kan (T.WEZENS.wachter) of een
-  // veteraan (T.WEZENS.veteraan), en met het leven dat hij nog heeft.
+  // veteraan (T.WEZENS.veteraan), en met het leven dat hij nog heeft. Ook voor de jacht op de wolven (js/beesten.js).
+  T.roepOp = roepOp;
   function roepOp(e) {
     const s = T.WEZENS[e.bewoner && e.bewoner.veteraan ? 'veteraan' : 'wachter'];
     e.opgeroepen = true;
@@ -140,14 +141,15 @@
     e.initiatief = s.initiatief;
   }
 
-  // Na de aanval gaat hij weer naar huis of aan het werk (T.dagAnker, js/dag.js).
+  // Na de aanval gaat hij weer naar huis of aan het werk (T.dagAnker, js/dag.js). Ook na de jacht (js/beesten.js).
+  T.laatGaan = function (e) {
+    e.opgeroepen = false;
+    e.gewapend = false;
+    e.kant = 'neutraal';
+    if (!e.onderweg) e.pad = [];
+  };
   function laatGaan(D) {
-    for (const e of opgeroepen(D)) {
-      e.opgeroepen = false;
-      e.gewapend = false;
-      e.kant = 'neutraal';
-      if (!e.onderweg) e.pad = [];
-    }
+    for (const e of opgeroepen(D)) T.laatGaan(e);
   }
 
   // Wie er meevecht als het gevecht begint (T.beginGevecht, js/gevecht.js): de mannen die met de schout meeliepen
@@ -259,7 +261,7 @@
     A.sinds = uurNu(D);
     R.laatsteAanval = A.dag; // de raad zegt dan een tijd lang wat een wachthuis doet (js/raad.js)
     // Is de schout weg (op reis, js/land.js), dan roept niemand de militie bij hem: de rovers hebben vrij spel.
-    const militie = T.schoutIsWeg(D) ? [] : militieVan(D);
+    const militie = T.schoutIsWeg(D) ? [] : T.militieVan(D);
     for (const e of militie) roepOp(e);
     // Wie een wapen heeft (js/ondernemers.js), slaat harder.
     const gewapend = T.bewapen(D, militie);

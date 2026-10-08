@@ -94,7 +94,8 @@
     // Zout (Marcel, 24 sep 2026; spel.md, "Handel"): vis en vlees bederven, tenzij ze gezouten zijn.
     // Eén zout houdt zoveel vis of vlees goed (zoutHoudtGoed); van wat het zout niet dekt, bederft
     // elke dag een deel (bederfPerDag). Wie gezouten vis eet, eet het zout mee op. Zout komt van de
-    // marskramer (js/handel.js).
+    // marskramer (js/handel.js). Wie eet, eet eerst wat ongezouten is (8 okt, vraag 132, B): tot dan at elke vis die een
+    // huis at, ook een verse in de zomer, zijn zout mee, en was het zout op voordat de winter kwam.
     bederfelijk: ['vis', 'vlees'],
     zoutHoudtGoed: 10,
     bederfPerDag: 0.1,
@@ -106,6 +107,10 @@
     // optie in de spelregels: vult een maag, of alleen tevredenheid (zoals tot 25 sep).
     vleesIsEten: true,
     vleesAlsGraan: 1,
+    // Vis net zo (Marcel, 8 okt: "Vis mag een maag vullen, zoals vlees"): tot dan at het dorp bij honger alleen vlees, en
+    // bedierf de vis die de huizen niet aten (in de speeltest vingen vier vissers 8 vis per dag, voor 2,2 die de huizen
+    // aten). De spelregel "Vis"; een vis vult zoveel als visAlsGraan hieronder.
+    visIsEten: true,
     // Wat een huis aan brood, vis en vlees krijgt voor zijn wensen (js/wensen.js, T.gebruikGoederen), eet het: zoveel
     // graan vult één brood of één vis (Marcel, 2 okt, werklijst vraag 92, a: "A ja"), en het vlees zoveel als hierboven.
     // Daarvoor kwam het brood bovenop wat een ambachtsman at, en maalde de molen er graan voor dat het dorp niet had: in de
@@ -157,11 +162,11 @@
     const v = D.voorraad || {};
 
     // Wat er vandaag te eten is: de melk van vandaag (js/vee.js, T.tikVeeDag), het graan, de kaas, en
-    // het vlees als dat een maag vult (T.vleesAlsEten). Tot 28 sep telde het vlees hier niet, terwijl
+    // het vlees als dat een maag vult (T.vleesEnVisAlsEten). Tot 28 sep telde het vlees hier niet, terwijl
     // het dorp het wel at (T.eetVandaag): met alleen vlees in de schuur stierven er in de winter
     // mensen van de honger.
     const voedselBenodigd = bevolking * T.etenPerMens(D);
-    const voedsel = ((D.vee && D.vee.melk) || 0) + (v.graan || 0) + (v.kaas || 0) + T.vleesAlsEten(D);
+    const voedsel = ((D.vee && D.vee.melk) || 0) + (v.graan || 0) + (v.kaas || 0) + T.vleesEnVisAlsEten(D);
     const voedselDekking = voedselBenodigd > 0 ? Math.min(1, voedsel / voedselBenodigd) : 1;
     const extraSoorten = ['groente', 'vis', 'vlees'].filter((wat) => (v[wat] || 0) >= IN.extraVoedselDrempel);
     const voedselFactor = voedselDekking * (0.5 + 0.5 * (extraSoorten.length / 3));
@@ -239,12 +244,17 @@
   // een huis laten doorgroeien. Los van elkaar, zodat T.tikBehoeftenDag zelf leest als de lijst
   // hierboven.
 
-  // Wat vandaag van vis en vlees gegeten is, neemt zijn zout mee; van wat daarna nog ongezouten
-  // ligt, bederft een deel. Naar rato verdeeld over vis en vlees.
+  // Wat vandaag van vis en vlees gegeten is, neemt zijn zout mee, voor zover het gezouten was: eerst is wat ongezouten lag
+  // gegeten (vraag 132, B). Van wat daarna nog ongezouten ligt, bederft een deel. Naar rato verdeeld over vis en vlees.
   function pasBederfToe(D, gegeten) {
     const IN = T.BEHOEFTEN_INSTELLINGEN;
     const v = D.voorraad;
-    if (gegeten > 0 && (v.zout || 0) > 0) T.wijzigVoorraad(D, 'zout', -Math.min(v.zout, gegeten / IN.zoutHoudtGoed));
+    if (gegeten > 0 && (v.zout || 0) > 0) {
+      const ervoor = T.zoutDekking(D).totaal + gegeten;
+      const ongezouten = Math.max(0, ervoor - v.zout * IN.zoutHoudtGoed);
+      const gezouten = Math.max(0, gegeten - ongezouten);
+      if (gezouten > 0) T.wijzigVoorraad(D, 'zout', -Math.min(v.zout, gezouten / IN.zoutHoudtGoed));
+    }
     const d = T.zoutDekking(D);
     if (d.onbeschermd <= 0) return;
     for (const wat of IN.bederfelijk) {
@@ -569,7 +579,8 @@
     const naam = T.GEBOUWEN[g.soort].naam;
     const mensen = ((D.bewoners && D.bewoners.mensen) || []).filter((p) => p.huis === g);
     const p = mensen.find((m) => !m.hoofd) || mensen[0];
-    return p ? `de ${naam} van ${T.naamVanBewoner(p)}` : `een ${naam}`;
+    const lidwoord = /huis$/.test(naam) ? 'het' : 'de'; // het huis, het stenen huis; de hut, de boerderij
+    return p ? `${lidwoord} ${naam} van ${T.naamVanBewoner(p)}` : `een ${naam}`;
   };
 
   // Waar de huizen nog heen kunnen groeien (werklijst vraag 130, d; Marcel, 6 okt: "Eens alle 3"): per huis dat kan
@@ -789,30 +800,49 @@
     const v = D.voorraad;
     const melkVandaag = (D.vee && D.vee.melk) || 0;
     const melk = Math.min(nodig, melkVandaag);
-    const perVlees = IN.vleesIsEten ? IN.vleesAlsGraan || 0 : 0;
-    const vleesNu = perVlees > 0 ? v.vlees || 0 : 0;
-    const d = vleesNu > 0 ? T.zoutDekking(D) : null;
-    const ongezouten = d && d.totaal > 0 ? vleesNu * (d.onbeschermd / d.totaal) : vleesNu;
-    const vers = perVlees > 0 ? Math.max(0, Math.min((nodig - melk) / perVlees, ongezouten)) : 0;
+    // Vlees en vis (als ze een maag vullen: vleesIsEten, visIsEten): wat het zout niet goed houdt, eerst, want dat bederft
+    // toch; wat gezouten is, pas na het graan en de kaas. Het zout dekt vis en vlees samen (T.zoutDekking), dus van elk
+    // hetzelfde deel.
+    const per = { vlees: IN.vleesIsEten ? IN.vleesAlsGraan || 0 : 0, vis: IN.visIsEten ? IN.visAlsGraan || 0 : 0 };
+    const soorten = ['vlees', 'vis'].filter((wat) => per[wat] > 0 && (v[wat] || 0) > 0);
+    const d = soorten.length ? T.zoutDekking(D) : null;
+    const deelOngezouten = d && d.totaal > 0 ? d.onbeschermd / d.totaal : 1;
+    const vers = { vlees: 0, vis: 0 };
+    const gezouten = { vlees: 0, vis: 0 };
+    let open = nodig - melk;
+    for (const wat of soorten) {
+      vers[wat] = Math.max(0, Math.min(open / per[wat], v[wat] * deelOngezouten));
+      open -= vers[wat] * per[wat];
+    }
     // Het zaaigraan eet het dorp pas bij nood (T.zaaigraanApart, js/akkers.js; werklijst vraag 81): eerst het andere
-    // graan, dan de kaas en het gezouten vlees, en pas dan het zaaigraan, liever dan dat er mensen sterven.
+    // graan, dan de kaas en het gezouten vlees en de gezouten vis, en pas dan het zaaigraan, liever dan dat er mensen
+    // sterven. Wat er bij de graanschuur bewaakt wordt, pakt het niet (T.zaaigraanBeschermd, js/graanschuur.js; vraag 132).
     const apart = Math.min(v.graan || 0, T.zaaigraanApart(D, dag));
-    const graan = Math.max(0, Math.min(nodig - melk - vers * perVlees, (v.graan || 0) - apart));
-    const kaas = Math.max(0, Math.min(nodig - melk - vers * perVlees - graan, v.kaas || 0));
-    const rest = nodig - melk - vers * perVlees - graan - kaas;
-    const gezouten = perVlees > 0 ? Math.max(0, Math.min(rest / perVlees, vleesNu - vers)) : 0;
-    const zaaigraan = Math.max(0, Math.min(rest - gezouten * perVlees, apart));
-    const vlees = vers + gezouten;
+    const graan = Math.max(0, Math.min(open, (v.graan || 0) - apart));
+    const kaas = Math.max(0, Math.min(open - graan, v.kaas || 0));
+    let rest = open - graan - kaas;
+    for (const wat of soorten) {
+      gezouten[wat] = Math.max(0, Math.min(rest / per[wat], v[wat] - vers[wat]));
+      rest -= gezouten[wat] * per[wat];
+    }
+    const vrij = apart * (1 - T.zaaigraanBeschermd(D));
+    const zaaigraan = Math.max(0, Math.min(rest, vrij));
+    // Komt de honger aan het zaaigraan, dan zoekt een boer je (js/graanschuur.js).
+    if (rest > 0 && apart > 0) T.zaaigraanInGevaar(D, dag);
+    const vlees = vers.vlees + gezouten.vlees;
+    const vis = vers.vis + gezouten.vis;
     if (graan + zaaigraan > 0) T.wijzigVoorraad(D, 'graan', -(graan + zaaigraan));
     zegHetZaaigraan(D, zaaigraan, apart);
     if (kaas > 0) T.wijzigVoorraad(D, 'kaas', -kaas);
     if (vlees > 0) T.wijzigVoorraad(D, 'vlees', -vlees);
-    // Wie gezouten vlees eet, eet het zout mee op, net als in pasBederfToe hieronder.
-    if (gezouten > 0 && (v.zout || 0) > 0) T.wijzigVoorraad(D, 'zout', -Math.min(v.zout, gezouten / IN.zoutHoudtGoed));
+    if (vis > 0) T.wijzigVoorraad(D, 'vis', -vis);
+    // Wie gezouten vlees of vis eet, eet het zout mee op, net als in pasBederfToe hieronder.
+    const zoutGegeten = gezouten.vlees + gezouten.vis;
+    if (zoutGegeten > 0 && (v.zout || 0) > 0) T.wijzigVoorraad(D, 'zout', -Math.min(v.zout, zoutGegeten / IN.zoutHoudtGoed));
     const kaasErbij = (melkVandaag - melk) * (T.VEE_INSTELLINGEN ? T.VEE_INSTELLINGEN.melkNaarKaas : 0);
     if (kaasErbij > 0) T.wijzigVoorraad(D, 'kaas', kaasErbij);
     if (D.vee) D.vee.melk = 0;
-    return { nodig, melk, vlees, graan: graan + zaaigraan, zaaigraan, kaas, kaasErbij, tekort: Math.max(0, rest - gezouten * perVlees - zaaigraan) };
+    return { nodig, melk, vlees, vis, graan: graan + zaaigraan, zaaigraan, kaas, kaasErbij, tekort: Math.max(0, rest - zaaigraan) };
   };
 
   // Eet het dorp van het zaaigraan, dan zegt het dat één keer per winter, en schrijft het het op voor het rapport
@@ -838,11 +868,12 @@
     return IN[ALS_GRAAN[soort]] || 0;
   };
 
-  // Hoeveel het vlees in de voorraad het dorp nog voedt, in graan (0 als vlees geen eten is): voor
-  // het venster van de heer (js/heer.js, T.heerVooruitzicht).
-  T.vleesAlsEten = function (D) {
+  // Hoeveel het vlees en de vis in de voorraad het dorp nog voeden, in graan (wat geen eten is, telt niet): voor het
+  // venster van de heer (js/heer.js, T.heerVooruitzicht) en of het eten de winter haalt.
+  T.vleesEnVisAlsEten = function (D) {
     const IN = T.BEHOEFTEN_INSTELLINGEN;
-    return IN.vleesIsEten ? ((D.voorraad && D.voorraad.vlees) || 0) * (IN.vleesAlsGraan || 0) : 0;
+    const v = D.voorraad || {};
+    return (IN.vleesIsEten ? (v.vlees || 0) * (IN.vleesAlsGraan || 0) : 0) + (IN.visIsEten ? (v.vis || 0) * (IN.visAlsGraan || 0) : 0);
   };
 
   // ---------------------------------------------------------------------------------------------
@@ -929,12 +960,43 @@
     // Het zaaigraan telt niet mee: dat eet het dorp pas bij nood (T.zaaigraanApart, js/akkers.js).
     const graan = Math.max(0, (v.graan || 0) - T.zaaigraanApart(D, van));
     const r = T.haaltDeWinter({
-      voorraad: graan + (v.kaas || 0) + T.vleesAlsEten(D),
+      voorraad: graan + (v.kaas || 0) + T.vleesEnVisAlsEten(D),
       voorWinter: melkVoor - eet * tot,
       perWinterdag: eet - melkIn,
       winter: duur,
     });
     return Object.assign(r, { tot, eet });
+  };
+
+  // Of vis en vlees de winter halen voor de huizen die ze willen (vraag 132, B; Marcel, 8 okt: "A en B samen"). In de
+  // winter ligt de beek dicht (T.GEBOUWEN.visser.stilIn), dus wat de huizen dan eten, ligt er al, en gezouten, want
+  // ongezouten bederft het (bederfPerDag). Vanaf `dag`, zolang de winter in zicht is en nog niet begon; null als geen huis
+  // vis of vlees wil. Geeft { nodig (wat de huizen in de winter willen), ligt (vis en vlees nu), dan (wat er ligt als de
+  // winter begint: met wat de vissers vangen, min wat de huizen eten), gezouten
+  // (wat het zout nu goed houdt), zout (hoeveel zout er nog bij moet voor wat er dan ligt, tot wat nodig is), tekort (wat
+  // er dan nog mist), tot (dagen tot de winter), winter (zijn duur) }.
+  T.visEnVleesVoorDeWinter = function (D, dag) {
+    const IN = T.BEHOEFTEN_INSTELLINGEN;
+    if (!T.winterInZicht(dag)) return null;
+    const { tot, duur } = T.periodeVanaf(dag, isWinter);
+    if (tot <= 0) return null;
+    const st = D.behoeften && D.behoeften.standen;
+    let perDag = 0;
+    for (const s of Object.keys(st || {})) {
+      if (T.wensenVanStand(s).includes('vleesOfVis')) perDag += st[s].mensen * T.WENSEN_INSTELLINGEN.perMens.vleesOfVis;
+    }
+    if (perDag <= 0) return null;
+    // Wat de vissers op een dag vangen. Wat de jagers schieten, telt niet mee: in de speeltest van 8 okt rekende het dorp
+    // met vijf jagers op genoeg vlees voor de winter, kocht het geen zout, en was de vis na twee weken winter op.
+    let vis = 0;
+    for (const g of D.gebouwen || []) if (g.klaar && g.soort === 'visser') vis += T.GEBOUWEN.visser.maakt.uit.vis;
+    const v = D.voorraad || {};
+    const ligt = IN.bederfelijk.reduce((n, wat) => n + (v[wat] || 0), 0);
+    const nodig = perDag * duur;
+    const dan = Math.max(0, ligt + (vis - perDag) * tot);
+    const gezouten = Math.min(ligt, (v.zout || 0) * IN.zoutHoudtGoed);
+    const zout = Math.max(0, Math.ceil(Math.min(dan, nodig) / IN.zoutHoudtGoed - (v.zout || 0) - 1e-9));
+    return { nodig, ligt, dan, gezouten, zout, tekort: Math.max(0, nodig - dan), tot, winter: duur };
   };
 
   // Wat de winter niet haalt, nu hij in zicht is (T.winterInZicht): ['hout'], ['eten'], allebei, of niets (ook als de

@@ -489,6 +489,7 @@
       ctx.drawImage(voor.canvas, voor.vx, voor.vy, voor.canvas.width / g.k, voor.canvas.height / g.k);
     }
     tekenOntginRand(ctx, S);
+    tekenJachtRand(ctx, S);
     ctx.restore();
 
     // De nacht valt over de wereld, maar niet over de zwevende teksten: die komen erna, met dezelfde
@@ -1520,6 +1521,24 @@
     }
   }
 
+  // Het hol waar de jacht op de wolven heen gaat (js/beesten.js; werklijst vraag 116, stap 3b): zolang de jacht loopt, een
+  // ruit van vijf bij vijf tegels in goud om het hol, bovenop het bos, zodat je hem tussen de bomen vindt.
+  const JACHT_RAND = 2;
+  function tekenJachtRand(ctx, S) {
+    const hol = T.holVanDeJacht && T.holVanDeJacht(T.dorpHier(S)); // gereedschap/wereld.html laadt de beesten niet
+    if (!hol) return;
+    const r = JACHT_RAND + 0.5;
+    const hoeken = [[-r, -r], [r, -r], [r, r], [-r, r]].map(([dx, dy]) => opGrond(hol.x + dx, hol.y + dy));
+    ctx.beginPath();
+    hoeken.forEach((p, i) => (i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)));
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(226, 182, 74, 0.16)';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(240, 200, 96, 0.9)';
+    ctx.lineWidth = 2 / S.zoom;
+    ctx.stroke();
+  }
+
   // De plek van een bouwverzoek (js/verzoeken.js; werklijst vraag 103): zolang iemand je erom vraagt, ligt de voet van
   // wat hij wil bouwen er in goud, met de kring erbij als het een put of een kapel is. Zo kun je gaan kijken waar het
   // komt voor je ja zegt.
@@ -2187,6 +2206,18 @@
       T.blok(ctx, p.x, p.y, 0.16, 0.16, 16, '#5d8a34', { helder, basis: 140 });
       return;
     }
+    if (v.soort === 'hol') {
+      // Het hol van een roedel wolven (js/beesten.js): een kuil onder een omgevallen boom, met botten ervoor. Zonder kunst:
+      // een donkere kuil met een omgevallen stam erachter.
+      const hol = metSprites() && T.sprites.hol();
+      if (hol) {
+        T.sprites.teken(ctx, hol, p.x, p.y, helder);
+        return;
+      }
+      T.blok(ctx, p.x, p.y, 0.3, 0.3, 2, '#1c1410', { helder });
+      T.blok(ctx, p.x, p.y, 0.5, 0.1, 10, '#5e4a36', { helder, basis: 2 });
+      return;
+    }
     if (v.soort === 'kraam') {
       // Een kraam van de markt op het plein (js/markt.js; werklijst vraag 110, d): een toonbank met een gestreepte luifel,
       // naar het midden van het plein. In aanbouw bleker, zoals een gebouw zonder bouwfasen. Zonder kunst: een toonbank
@@ -2441,6 +2472,8 @@
     if (e.alarm > 0) roep(ctx, '!', cx, top - 14 - Math.abs(Math.sin(e.alarm * 9)) * 4, '#ffd24a');
     // Wie de schout zoekt met een voorval (js/voorvallen.js): een uitroepteken dat zacht op en neer gaat.
     else if (e.zoektSchout && !e.binnen) roep(ctx, '!', cx, top - 12 - Math.abs(Math.sin(S.tijd * 3)) * 3, '#f3e2a4');
+    // Wie de wolven aanvallen, roept om hulp (js/beesten.js): een rood uitroepteken dat sneller springt.
+    else if (e.roeptOmHulp) roep(ctx, '!', cx, top - 12 - Math.abs(Math.sin(S.tijd * 8)) * 4, '#ff6a50');
   }
 
   // Het teken bij de deur van een huis dat iets mist (2c, werklijst vraag 100; js/wensen.js, T.tekenVanHuis): een

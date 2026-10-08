@@ -1114,12 +1114,30 @@
         },
       },
     },
+    zaaigraanHonger: {
+      naam: '{wie}',
+      start: 'begin',
+      // De honger komt aan het zaaigraan in de graanschuur (js/graanschuur.js; werklijst vraag 132; Marcel, 8 okt: "bij
+      // honger grijpen mensen alles aan. Je moet mensen inzetten om het warenhuis te beschermen").
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Schout, de mensen hebben honger. Ze praten over de graanschuur. Eten ze het zaaigraan nu op, dan blijven de akkers in de lente leeg.' },
+          ],
+          keuzes: [
+            { zeg: 'Zet mannen bij de graanschuur. Het zaaigraan blijft liggen.', sluit: true, doe: { bewaak: 1, vertrouwen: -3 } },
+            { zeg: 'Geef ze de helft, en bewaak de rest.', sluit: true, doe: { bewaak: 0.5, vertrouwen: -1 } },
+            { zeg: 'Laat ze eten. Honger is erger.', sluit: true, doe: { tevreden: 2 } },
+          ],
+        },
+      },
+    },
     wolven: {
       naam: '{wie}',
       start: 'begin',
       // Met beesten in het bos (js/beesten.js; werklijst vraag 116, stap 2b) namen de wolven het schaap echt, en komt dit
-      // de ochtend erna: dan doet de jacht wat ze zegt (de roedel verliest wolven), en het hek ook. Zonder beesten komt het
-      // zomaar, en zegt het antwoord wat het kost, zoals voor 7 okt.
+      // de ochtend erna: dan is de jacht een jacht te voet, met de mannen naar de roedel (stap 3b), en doet het hek wat het
+      // zegt. Zonder beesten komt het zomaar, en zegt het antwoord wat het kost, zoals voor 7 okt.
       situaties: [
         { naam: 'De wolven namen een schaap', als: { vlag: 'wolvenNamenSchaap' } },
         { naam: 'Zonder beesten in het bos', als: { nietVlag: 'wolvenNamenSchaap' } },
@@ -1130,7 +1148,7 @@
             { zeg: 'Wolven, schout! Vannacht bij de schapen. Ze hebben er een meegenomen, en ze komen terug. Wolven komen altijd terug.' },
           ],
           keuzes: [
-            { zeg: 'Een jacht. {ander} weet waar ze zitten.', sluit: true, als: { vlag: 'wolvenNamenSchaap' }, doe: { tevreden: 2, sterfkans: 15, wolven: -2 } },
+            { zeg: 'Een jacht. {ander} weet waar ze zitten.', sluit: true, als: { vlag: 'wolvenNamenSchaap' }, doe: { tevreden: 2, jacht: true } },
             { zeg: 'Een hoger hek om de schapen.', sluit: true, als: { vlag: 'wolvenNamenSchaap' }, doe: { hout: -12, hek: true } },
             { zeg: 'Het was maar één schaap.', sluit: true, als: { vlag: 'wolvenNamenSchaap' } },
             { zeg: 'Een jacht. {ander} weet waar ze zitten.', sluit: true, als: { nietVlag: 'wolvenNamenSchaap' }, doe: { tevreden: 2, sterfkans: 15, schaap: -1 } },

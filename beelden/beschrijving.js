@@ -4135,6 +4135,17 @@
       "ton leeg"
      ]
     }
+   },
+   "hol": {
+    "bestand": "hol.png",
+    "cel": [
+     76,
+     62
+    ],
+    "anker": [
+     38,
+     42
+    ]
    }
   };
 })(globalThis.Spel = globalThis.Spel || {});
