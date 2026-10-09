@@ -4365,6 +4365,182 @@
      ]
     }
    }
+  },
+  "boer-u0": {
+   "naam": "boer-u0",
+   "cel": [
+    56,
+    94
+   ],
+   "anker": [
+    28,
+    80
+   ],
+   "snelheid": 1.5,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "boer-u0-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true,
+     "cel": [
+      36,
+      82
+     ],
+     "anker": [
+      18,
+      77
+     ]
+    },
+    "lopen": {
+     "bestand": "boer-u0-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1.5,
+     "stap": 0.6,
+     "cel": [
+      50,
+      88
+     ],
+     "anker": [
+      25,
+      77
+     ]
+    }
+   }
+  },
+  "zaaier-u0": {
+   "naam": "zaaier-u0",
+   "cel": [
+    116,
+    112
+   ],
+   "anker": [
+    58,
+    81
+   ],
+   "snelheid": 1.5,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "zaaier-u0-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true,
+     "cel": [
+      40,
+      82
+     ],
+     "anker": [
+      20,
+      77
+     ]
+    },
+    "lopen": {
+     "bestand": "zaaier-u0-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1.5,
+     "stap": 0.6,
+     "cel": [
+      50,
+      88
+     ],
+     "anker": [
+      25,
+      77
+     ]
+    },
+    "zaaien": {
+     "bestand": "zaaier-u0-zaaien.png",
+     "beelden": 12,
+     "fps": 8,
+     "herhaal": true,
+     "cel": [
+      110,
+      106
+     ],
+     "anker": [
+      55,
+      78
+     ]
+    }
+   }
+  },
+  "meisje-u0": {
+   "naam": "meisje-u0",
+   "cel": [
+    42,
+    68
+   ],
+   "anker": [
+    21,
+    56
+   ],
+   "snelheid": 1.25,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "meisje-u0-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true,
+     "cel": [
+      30,
+      56
+     ],
+     "anker": [
+      15,
+      53
+     ]
+    },
+    "lopen": {
+     "bestand": "meisje-u0-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 1.25,
+     "stap": 0.5,
+     "cel": [
+      36,
+      61
+     ],
+     "anker": [
+      18,
+      52
+     ]
+    }
+   }
   }
  },
  "muren": {
@@ -4710,5 +4886,129 @@
    "leeg"
   ],
   "varianten": 3
+ },
+ "uiterlijken": {
+  "boer": [
+   "donker",
+   "blond",
+   "zwart",
+   "rood",
+   "bruin",
+   "kastanje",
+   "blond",
+   "donker",
+   "lichtblond",
+   "donkerblond",
+   "zwart",
+   "peper",
+   "rood",
+   "bruin",
+   "kastanje",
+   "donkerblond",
+   "donker",
+   "lichtblond",
+   "zwart",
+   "peper",
+   "bruin",
+   "rood",
+   "blond",
+   "kastanje"
+  ],
+  "boerin": [
+   "bruin",
+   "blond",
+   "donker",
+   "zwart",
+   "kastanje",
+   "rood",
+   "bruin",
+   "blond",
+   "lichtblond",
+   "donkerblond",
+   "zwart",
+   "kastanje",
+   "peper",
+   "rood",
+   "donker",
+   "bruin",
+   "blond",
+   "donkerblond",
+   "lichtblond",
+   "zwart",
+   "kastanje",
+   "donker",
+   "peper",
+   "bruin"
+  ],
+  "jongen": [
+   "kastanje",
+   "blond",
+   "zwart",
+   "rood",
+   "bruin",
+   "lichtblond",
+   "donker",
+   "donkerblond",
+   "kastanje",
+   "blond",
+   "zwart",
+   "rood"
+  ],
+  "meisje": [
+   "blond",
+   "bruin",
+   "zwart",
+   "rood",
+   "kastanje",
+   "lichtblond",
+   "donker",
+   "donkerblond",
+   "blond",
+   "bruin",
+   "rood",
+   "zwart"
+  ],
+  "kleuter": [
+   "blond",
+   "bruin",
+   "rood",
+   "zwart",
+   "lichtblond",
+   "kastanje",
+   "donkerblond",
+   "donker",
+   "blond",
+   "bruin",
+   "rood",
+   "lichtblond"
+  ],
+  "oudeman": [
+   "grijs",
+   "grijs",
+   "peper",
+   "grijs",
+   "grijs",
+   "peper",
+   "grijs",
+   "grijs",
+   "peper",
+   "grijs",
+   "grijs",
+   "peper"
+  ],
+  "oudevrouw": [
+   "grijs",
+   "grijs",
+   "peper",
+   "grijs",
+   "grijs",
+   "peper",
+   "grijs",
+   "grijs",
+   "peper",
+   "grijs",
+   "grijs",
+   "peper"
+  ]
  }
 }

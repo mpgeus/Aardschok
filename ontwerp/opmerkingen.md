@@ -9,6 +9,9 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **De ouden dragen kennis over** (9 okt, Marcel bij vraag 145, ouder worden: "Ouderen dragen mogelijk kennis over? Eerst
+  alleen het beeld"): een oude die met een jonge werkt, maakt hem beter in zijn werk, of een dorp dat zijn ouden verliest,
+  verliest wat zij wisten. Nu doet ouder worden alleen wat de leeftijd al deed.
 - **Een brand die overslaat** (9 okt, bij vraag 144, 3): nu brandt er alleen het huis van wie het betreft. Bij groot
   brandgevaar zou het vuur kunnen overslaan op een huis ernaast als het niet geblust wordt. Dat is iets erbij, dus eerst
   Marcels keuze. Ook: wie in een brandend huis is, en of de koorts een eigen beeld krijgt (iemand die hoest, een

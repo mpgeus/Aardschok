@@ -400,6 +400,75 @@
     return zetGezin(D, hoofd, anderen, r);
   }
 
+  // Een kind van moeder, net geboren (T.bewonersVolgen met reden 'geboorte', vanuit js/leven.js, dat zijn geboortedag
+  // zet): een kleuter in haar gezin en haar huis, met haar haar of dat van de vader (p.haar, voor het uiterlijk), en een poppetje bij de deur.
+  function geboren(D, moeder) {
+    const geslacht = T.vastLot(D, D.bewoners.volgende, 4300) < 0.5 ? 'man' : 'vrouw';
+    const hoofd = moeder.hoofd || moeder;
+    const vader = hoofd !== moeder ? hoofd : D.bewoners.mensen.find((x) => x.hoofd === moeder && x.geslacht === 'man' && x.leeftijd === 'volwassen');
+    const p = nieuweBewoner(D, { naam: kiesNaam(D, geslacht, worp(D)), geslacht, leeftijd: 'kleuter', band: geslacht === 'man' ? 'zoon' : 'dochter', hoofd, gezin: moeder.gezin, huis: moeder.huis });
+    const ouder = vader && T.vastLot(D, p.id, 4301) < 0.5 ? vader : moeder;
+    if (ouder.haar) p.haar = ouder.haar;
+    zetPlekken(D, p);
+    maakPoppetje(D, p);
+    return p;
+  }
+
+  // ---------------------------------------------------------------------------------------------
+  // Hoe iemand eruitziet (vraag 145; gereedschap/pixelart/uiterlijk.cjs)
+  // ---------------------------------------------------------------------------------------------
+
+  // Bij welk lijf van de uiterlijken het vel van een leeftijd hoort (T.LEEFTIJDEN).
+  T.UITERLIJK_LIJF = { boer: 'boer', boerin: 'boerin', jongen: 'jongen', meisje: 'meisje', kleuter: 'kleuter', oudeman: 'oudeman', 'boerin-grijsaard': 'oudevrouw' };
+  const OUDE_LIJVEN = ['oudeman', 'oudevrouw'];
+  // Het uiterlijk van een bewoner bij zijn leeftijd (p.uiterlijk: het nummer in T.BEELDEN.uiterlijken[lijf], waar per
+  // uiterlijk zijn haar staat). Zijn trek is zijn haar (p.haar): een kind krijgt dat van een ouder, en wie een fase verder
+  // gaat, houdt het, tot hij oud en grijs is. Verder het uiterlijk dat in het dorp het minst voorkomt, en niet dat van
+  // iemand uit zijn gezin of van een buur. Zonder uiterlijken (geen beelden, of een toets) blijft het null.
+  T.kiesUiterlijk = function (D, p) {
+    const e = p.wezen;
+    const lijf = e && T.UITERLIJK_LIJF[e.vel];
+    const haren = lijf && T.BEELDEN && T.BEELDEN.uiterlijken && T.BEELDEN.uiterlijken[lijf];
+    if (!haren || !haren.length) return null;
+    if (!p.haar && (p.band === 'zoon' || p.band === 'dochter')) {
+      const ouders = D.bewoners.mensen.filter((x) => x.gezin === p.gezin && x !== p && x.haar && (x === p.hoofd || x.hoofd === p.hoofd) && x.leeftijd !== 'kind' && x.leeftijd !== 'kleuter');
+      if (ouders.length) p.haar = ouders[Math.floor(T.vastLot(D, p.id, 4401) * ouders.length)].haar;
+    }
+    const oud = OUDE_LIJVEN.includes(lijf);
+    const w = D.bewoners.wereld;
+    const deurVan = (x) => (w && x.huis ? T.deurVan(w, x.huis) : null);
+    const mijnDeur = deurVan(p);
+    const score = haren.map((haar, nr) => {
+      let s = T.vastLot(D, p.id * 64 + nr, 4400);
+      if (p.haar && !oud && haar !== p.haar) s += 50;
+      for (const x of D.bewoners.mensen) {
+        if (x === p || x.uiterlijk !== nr || !x.wezen || T.UITERLIJK_LIJF[x.wezen.vel] !== lijf) continue;
+        s += 10;
+        if (x.gezin === p.gezin) s += 100;
+        else {
+          const d = mijnDeur && deurVan(x);
+          if (d && T.afstand(d, mijnDeur) < 15) s += 30;
+        }
+      }
+      return s;
+    });
+    const nr = score.indexOf(Math.min(...score));
+    if (!p.haar && !oud) p.haar = haren[nr];
+    return nr;
+  };
+
+  // Wie een fase verder is (js/leven.js): zijn poppetje krijgt het vel en de snelheid van zijn nieuwe leeftijd.
+  T.poppetjeNaarLeeftijd = function (D, p) {
+    const e = p.wezen;
+    const L = T.LEEFTIJDEN[p.leeftijd];
+    if (!e || !L || e.soort !== 'bewoner') return;
+    e.vel = L[p.geslacht] || L.man;
+    e.snelheid = IN()[L.snelheid];
+    p.uiterlijk = T.kiesUiterlijk(D, p);
+  };
+  // Hoeveel plaats er in huis g nog is.
+  T.plaatsInHuis = (D, g) => ((T.GEBOUWEN[g.soort] && T.GEBOUWEN[g.soort].woonruimte) || 0) - inHetHuis(D, g);
+
   // Het poppetje van een bewoner, bij zijn deur, of waar hij het gehucht in komt (`bij`: de weg); wie
   // er al staat, schuift een tegel op. De schout en de boeren hebben er al een.
   function maakPoppetje(D, p, bij) {
@@ -433,6 +502,7 @@
     e.bewoner = p;
     p.wezen = e;
     w.wezens.push(e);
+    if (p.uiterlijk == null) p.uiterlijk = T.kiesUiterlijk(D, p);
     return e;
   }
 
@@ -753,6 +823,8 @@
   // voor het dagboek (js/ochtendrapport.js), of '' zonder bewoners.
   T.bewonersVolgen = function (D, verschil, reden, waarom, wie) {
     if (!D.bewoners || reden === 'begin') return '';
+    // Een kind dat geboren wordt (js/leven.js): in het gezin van zijn moeder (`wie`), niet als een nieuw gezin.
+    if (verschil > 0 && reden === 'geboorte' && wie) return wieTekst(D, wie.slice(0, verschil).map((moeder) => geboren(D, moeder)));
     if (verschil > 0) return wieTekst(D, komenErBij(D, verschil, true));
     if (verschil < 0) {
       // Gaat het om bepaalde mensen (een wachter die sneuvelt, js/rovers.js), dan zij; anders wie het eerst gaat.

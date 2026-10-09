@@ -9,6 +9,7 @@
 //   node gereedschap/pixelart/naar-spel.cjs --alleen hol
 //   node gereedschap/pixelart/naar-spel.cjs --alleen marktkraam
 //   node gereedschap/pixelart/naar-spel.cjs --alleen tekens
+//   node gereedschap/pixelart/naar-spel.cjs --uiterlijken      (de uiterlijken die klaarstaan, vraag 145)
 //
 // Met --alleen werkt het alleen de genoemde figuren bij: het leest de bestaande
 // beelden/beschrijving.json, zet die figuren erin (erbij, of in de plaats van wat er stond),
@@ -41,6 +42,8 @@ const Wijnrank = require('./wijnrank.cjs');
 const Marktkraam = require('./marktkraam.cjs');
 const Papieren = require('./papieren.cjs');
 const I = require('./inpakken.cjs');
+const UI = require('./uiterlijk.cjs');
+const UA = require('./uiterlijk-anim.cjs');
 
 const UIT = path.join(__dirname, 'uit');
 const BEELDEN = path.join(__dirname, '..', '..', 'beelden');
@@ -200,7 +203,13 @@ function wijnrank() {
   return Wijnrank.beschrijving('wijnrank.png');
 }
 
-const LOSSE_VELLEN = { schandpaal, paaltje, meiboom, hol, wijnrank, marktkraam, tekens };
+// Het haar van elk uiterlijk per lijf (vraag 145; uiterlijk.cjs): geen vel, maar wat js/bewoners.js (T.kiesUiterlijk)
+// nodig heeft om een kind het haar van een ouder te geven, en om te weten hoeveel uiterlijken er zijn.
+function uiterlijken() {
+  return Object.fromEntries(Object.entries(UI.UITERLIJKEN).map(([lijf, lijst]) => [lijf, lijst.map((o) => o.kleur)]));
+}
+
+const LOSSE_VELLEN = { schandpaal, paaltje, meiboom, hol, wijnrank, marktkraam, tekens, uiterlijken };
 
 // ---------------------------------------------------------------- kopiëren
 
@@ -327,6 +336,11 @@ const FIGUURLIJST = {
   hert1: { map: ['wild', 'animaties'], houdingen: ['grazen', 'staan', 'lopen', 'rennen', 'liggen'], bron: 'wild-anim.cjs hert1' },
   hert2: { map: ['wild', 'animaties'], houdingen: ['grazen', 'staan', 'lopen', 'rennen', 'liggen'], bron: 'wild-anim.cjs hert2' },
 };
+// De uiterlijken (vraag 145; uiterlijk-anim.cjs): boer-u7, zaaier-u7, ... Wie nog niet gerenderd is, slaat een volledige
+// ronde over (uiterlijk: true); het spel draagt dan het gewone vel.
+for (const f of UA.uiterlijkFiguren()) {
+  FIGUURLIJST[f.naam] = { map: ['uiterlijk', 'animaties'], houdingen: Object.keys(f.houdingen), bron: `uiterlijk-anim.cjs ${f.naam}`, uiterlijk: true };
+}
 
 // Een figuurvel op schijf laten krimpen tot wat er in al zijn cellen samen staat (inpakken.cjs,
 // krimpRaster; werklijst vraag 114, 2a): de cel van een houding was zo ruim als een zwaard in de lucht
@@ -344,6 +358,7 @@ function figuur(naam, opzet) {
   const map = path.join(UIT, ...(opzet.map || ['animaties']));
   const bron = path.join(map, `${naam}.json`);
   if (!fs.existsSync(bron)) {
+    if (opzet.uiterlijk && !ALLEEN) return null;
     console.error(`ontbreekt: ${naam}.json — draai eerst ${opzet.bron ? `node gereedschap/pixelart/${opzet.bron}` : 'npm run pixelart:animaties'}`);
     process.exitCode = 1;
     return null;
@@ -394,6 +409,8 @@ function schrijfBeschrijving(beschrijving) {
 
 // --alleen a,b,c (of --alleen=a,b,c): alleen deze figuren of losse vellen bijwerken, zie bovenaan
 function alleenGevraagd() {
+  // --uiterlijken: de lijst met het haar, en alle uiterlijken die in uit/ klaarstaan
+  if (process.argv.includes('--uiterlijken')) return ['uiterlijken', ...UA.uiterlijkFiguren().map((f) => f.naam).filter((n) => fs.existsSync(path.join(UA.UIT, `${n}.json`)))];
   const i = process.argv.findIndex((a) => a === '--alleen' || a.startsWith('--alleen='));
   if (i < 0) return null;
   const a = process.argv[i];

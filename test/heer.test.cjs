@@ -632,7 +632,7 @@ test('de schandpaal heeft kunst: leeg, bezet en het halsijzer, en een nek voor e
   // halsijzer zoekt de nek van het vel dat getekend wordt (T.sprites.nekHoogte). Die komen uit
   // KARAKTERS in gereedschap/pixelart/karakters.cjs en worden vanzelf gemeten.
   for (const naam of Object.keys(T.BEELDEN.figuren)) {
-    if (!/^(boer|boerin)-/.test(naam)) continue;
+    if (!/^(boer|boerin)-/.test(naam) || /-u\d+$/.test(naam)) continue; // een uiterlijk heeft de nek van zijn lijf
     assert.ok(Number.isFinite(t.nek[naam]), `de nek van het vel ${naam} is niet gemeten: naar-spel.cjs --alleen schandpaal`);
   }
   // Alle achttien (ronde 1 en 2): elk karakter op elk lijf dat erbij kan. En de meting klopt: een
