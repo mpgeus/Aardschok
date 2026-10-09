@@ -14,9 +14,10 @@
 <title>{naam}: het spel in het kort</title>
 <script src="../../js/naam.js"></script>
 <style>
-  @font-face { font-family: 'Jacquarda Bastarda 9'; src: url('../../letters/jacquarda-bastarda-9.woff2') format('woff2'); }
-  @font-face { font-family: 'IM Fell English'; src: url('../../letters/imfell-english.woff2') format('woff2'); }
-  @font-face { font-family: 'IM Fell English'; font-style: italic; src: url('../../letters/imfell-english-cursief.woff2') format('woff2'); }
+  /* De letters van het spel (stijl.css, vraag 146). */
+  @font-face { font-family: 'Grenze'; font-weight: 100 900; src: url('../../letters/grenze.woff2') format('woff2'); }
+  @font-face { font-family: 'Alegreya'; font-weight: 400 900; src: url('../../letters/alegreya.woff2') format('woff2'); }
+  @font-face { font-family: 'Alegreya'; font-style: italic; font-weight: 400 900; src: url('../../letters/alegreya-cursief.woff2') format('woff2'); }
 
   :root {
     --inkt: #2c1d12;
@@ -25,8 +26,8 @@
     --lijn: #b9a37f;
     --goud: #a8801f;
     --perkament: #f7f0e1;
-    --boek: 'IM Fell English', Georgia, serif;
-    --gotisch: 'Jacquarda Bastarda 9', 'IM Fell English', Georgia, serif;
+    --boek: 'Alegreya', Georgia, serif;
+    --gotisch: 'Grenze', 'Alegreya', Georgia, serif;
   }
 
   @page {

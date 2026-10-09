@@ -277,4 +277,97 @@
       $('overlay').classList.add('verborgen');
     },
   };
+
+  // ── Eén manier om een venster te openen en te sluiten (vraag 146, b2) ──
+  // Een venster meldt zich één keer aan: T.ui.meldVenster(naam, { el, knop, toets, typt, open, sluit }). Zijn eigen open
+  // en sluit (T.ui.openWetten, ...) doen wat alleen dat venster doet, en roepen voor de rest T.ui.openVenster en
+  // T.ui.sluitVenster aan: openen sluit eerst het venster dat open is en de brief, legt een gebouw in de hand weg, zet
+  // S.modus op de naam van het venster, houdt de tijd stil onder die naam (js/tijd.js) en zet zijn knop aan; sluiten doet
+  // het omgekeerde. Er is dus altijd hooguit één venster open (T.ui.vensterOpen), en geen venster hoeft de andere te
+  // kennen. De brief, een gesprek, het menu en de kaart van het land zijn hier geen venster: die hebben hun eigen gang.
+  const VENSTERS = {};
+
+  T.ui.meldVenster = function (naam, v) {
+    VENSTERS[naam] = v;
+  };
+
+  T.ui.vensterOpen = function () {
+    for (const naam in VENSTERS) if (!$(VENSTERS[naam].el).classList.contains('verborgen')) return naam;
+    return null;
+  };
+
+  // Wat er open is, dicht, met zijn eigen sluit. Geeft false als het niet dicht wil (de heer bij de schandpaal: daar moet
+  // je kiezen).
+  T.ui.sluitOpenVenster = function (S) {
+    const nu = T.ui.vensterOpen();
+    if (!nu) return true;
+    VENSTERS[nu].sluit(S);
+    return T.ui.vensterOpen() !== nu;
+  };
+
+  // Geeft false als het venster dat open is, niet dicht wil; dan opent het nieuwe niet.
+  T.ui.openVenster = function (S, naam) {
+    if (T.ui.vensterOpen() !== naam && !T.ui.sluitOpenVenster(S)) return false;
+    if (T.ui.briefOpen()) T.ui.sluitBrief(S);
+    S.modus = naam;
+    S.bouwSoort = null;
+    S.bouwMenuOpen = false;
+    T.ui.toonBouwmenu(S);
+    T.ui.verbergTooltip();
+    T.houdTijdStil(S, naam);
+    const v = VENSTERS[naam];
+    $(v.el).classList.remove('verborgen');
+    if (v.knop) $(v.knop).classList.add('actief');
+    return true;
+  };
+
+  T.ui.sluitVenster = function (S, naam) {
+    const v = VENSTERS[naam];
+    $(v.el).classList.add('verborgen');
+    if (v.knop) $(v.knop).classList.remove('actief');
+    if (S.modus === naam) S.modus = 'verkennen';
+    T.laatTijdGaan(S, naam);
+  };
+
+  // Een knop in de balk, of de toets van een venster bij het rondlopen: open is dicht, dicht is open (en wat er open was,
+  // gaat dicht). Alleen bij het rondlopen gaat er een open, niet midden in een gesprek of een gevecht.
+  T.ui.wisselVenster = function (S, naam) {
+    const v = VENSTERS[naam];
+    if (T.ui.vensterOpen() === naam) {
+      v.sluit(S);
+      return;
+    }
+    if (T.ui.sluitOpenVenster(S) && S.modus === 'verkennen') v.open(S);
+  };
+
+  T.ui.vensterMetToets = function (toets) {
+    const k = (toets || '').toLowerCase();
+    for (const naam in VENSTERS) if (VENSTERS[naam].toets === k) return naam;
+    return null;
+  };
+
+  // Een toets terwijl er een venster open is (js/main.js). Esc sluit het. Heeft het een toets en typ je er niet in (in de
+  // spelregels typ je namen), dan sluit zijn eigen toets het ook, en gaat de toets van een ander venster of B (het
+  // bouwmenu) er meteen heen: dan sluit het hier en geeft het false, zodat js/main.js het andere opent. Verder ligt alles
+  // stil. Geeft true als de toets op is.
+  T.ui.toetsBijVenster = function (S, ev) {
+    const naam = T.ui.vensterOpen();
+    if (!naam) return false;
+    const v = VENSTERS[naam];
+    const k = (ev.key || '').toLowerCase();
+    if (k === 'escape') {
+      v.sluit(S);
+      return true;
+    }
+    if (!v.toets || v.typt) return true;
+    if (k === v.toets) {
+      v.sluit(S);
+      return true;
+    }
+    if (k === 'b' || T.ui.vensterMetToets(k)) {
+      v.sluit(S);
+      return false;
+    }
+    return true;
+  };
 })(globalThis.Spel = globalThis.Spel || {});

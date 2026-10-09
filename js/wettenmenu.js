@@ -69,27 +69,18 @@
     box.scrollTop = waar;
   }
 
-  T.ui.wettenOpen = () => !$('wetten').classList.contains('verborgen');
-
+  // Openen en sluiten zoals elk venster (js/ui.js, T.ui.openVenster).
   T.ui.openWetten = function (S) {
-    S.modus = 'wetten';
-    S.bouwSoort = null;
-    S.bouwMenuOpen = false;
-    T.ui.toonBouwmenu(S);
-    if (T.ui.briefOpen()) T.ui.sluitBrief(S);
-    T.ui.verbergTooltip();
-    T.houdTijdStil(S, 'wetten');
-    $('wetten').classList.remove('verborgen');
-    toon(S);
-    $('wetten-knop').classList.add('actief');
+    if (T.ui.openVenster(S, 'wetten')) toon(S);
   };
 
   T.ui.sluitWetten = function (S) {
-    $('wetten').classList.add('verborgen');
-    $('wetten-knop').classList.remove('actief');
-    if (S.modus === 'wetten') S.modus = 'verkennen';
-    T.laatTijdGaan(S, 'wetten');
+    T.ui.sluitVenster(S, 'wetten');
   };
+
+  T.ui.meldVenster('wetten', {
+    el: 'wetten', knop: 'wetten-knop', toets: 'w', open: (S) => T.ui.openWetten(S), sluit: (S) => T.ui.sluitWetten(S),
+  });
 
   $('wetten').addEventListener('click', (ev) => {
     const b = ev.target.closest('button');
@@ -108,16 +99,6 @@
 
   $('wetten-knop').addEventListener('click', (ev) => {
     ev.currentTarget.blur();
-    const S = T.S;
-    if (!S) return;
-    if (T.ui.wettenOpen()) {
-      T.ui.sluitWetten(S);
-      return;
-    }
-    // Van de spelregels, de velden of de raadsman meteen naar de wetten, zonder eerst het ene venster dicht te hoeven doen.
-    if (T.ui.spelregelsOpen()) T.ui.sluitSpelregels(S);
-    if (T.ui.veldenOpen()) T.ui.sluitVelden(S);
-    if (T.ui.raadsmanOpen()) T.ui.sluitRaadsman(S);
-    if (S.modus === 'verkennen') T.ui.openWetten(S);
+    if (T.S) T.ui.wisselVenster(T.S, 'wetten');
   });
 })(globalThis.Spel = globalThis.Spel || {});

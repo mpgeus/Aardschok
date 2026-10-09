@@ -73,27 +73,18 @@
     box.scrollTop = waar;
   }
 
-  T.ui.raadsmanOpen = () => !$('raadsman').classList.contains('verborgen');
-
+  // Openen en sluiten zoals elk venster (js/ui.js, T.ui.openVenster).
   T.ui.openRaadsman = function (S) {
-    S.modus = 'raadsman';
-    S.bouwSoort = null;
-    S.bouwMenuOpen = false;
-    T.ui.toonBouwmenu(S);
-    if (T.ui.briefOpen()) T.ui.sluitBrief(S);
-    T.ui.verbergTooltip();
-    T.houdTijdStil(S, 'raadsman');
-    $('raadsman').classList.remove('verborgen');
-    toon(S);
-    $('raadsman-knop').classList.add('actief');
+    if (T.ui.openVenster(S, 'raadsman')) toon(S);
   };
 
   T.ui.sluitRaadsman = function (S) {
-    $('raadsman').classList.add('verborgen');
-    $('raadsman-knop').classList.remove('actief');
-    if (S.modus === 'raadsman') S.modus = 'verkennen';
-    T.laatTijdGaan(S, 'raadsman');
+    T.ui.sluitVenster(S, 'raadsman');
   };
+
+  T.ui.meldVenster('raadsman', {
+    el: 'raadsman', knop: 'raadsman-knop', toets: 'r', open: (S) => T.ui.openRaadsman(S), sluit: (S) => T.ui.sluitRaadsman(S),
+  });
 
   $('raadsman').addEventListener('click', (ev) => {
     const b = ev.target.closest('button');
@@ -113,16 +104,6 @@
 
   $('raadsman-knop').addEventListener('click', (ev) => {
     ev.currentTarget.blur();
-    const S = T.S;
-    if (!S) return;
-    if (T.ui.raadsmanOpen()) {
-      T.ui.sluitRaadsman(S);
-      return;
-    }
-    // Van de spelregels, de velden of de wetten meteen hierheen, zonder eerst het ene venster dicht te hoeven doen.
-    if (T.ui.spelregelsOpen()) T.ui.sluitSpelregels(S);
-    if (T.ui.veldenOpen()) T.ui.sluitVelden(S);
-    if (T.ui.wettenOpen()) T.ui.sluitWetten(S);
-    if (S.modus === 'verkennen') T.ui.openRaadsman(S);
+    if (T.S) T.ui.wisselVenster(T.S, 'raadsman');
   });
 })(globalThis.Spel = globalThis.Spel || {});

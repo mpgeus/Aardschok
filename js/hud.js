@@ -549,11 +549,9 @@
     ev.currentTarget.blur();
     const S = T.S;
     if (!S) return;
-    // Bouwen en de velden (of de wetten, js/wettenmenu.js) tegelijk kan niet: bouwen richt de muis op de
-    // kaart, en die ligt stil zolang zo'n venster open is.
-    if (T.ui.veldenOpen && T.ui.veldenOpen()) T.ui.sluitVelden(S);
-    if (T.ui.wettenOpen && T.ui.wettenOpen()) T.ui.sluitWetten(S);
-    if (T.ui.raadsmanOpen && T.ui.raadsmanOpen()) T.ui.sluitRaadsman(S);
+    // Bouwen en een venster tegelijk kan niet: bouwen richt de muis op de kaart, en die ligt stil zolang er een venster
+    // open is (js/ui.js).
+    if (!T.ui.sluitOpenVenster(S)) return;
     if (S.bouwSoort || S.bouwMenuOpen) {
       S.bouwSoort = null;
       S.bouwMenuOpen = false;
@@ -634,22 +632,17 @@
     const S = T.S;
     if (D !== S.dorp) return; // een ander dorp zegt het niet tegen jou (js/dorp.js; vraag 71, C)
     if (!T.kanHandelen || !T.kanHandelen(S.dorp)) return;
-    S.modus = 'handel';
-    S.bouwSoort = null;
-    S.bouwMenuOpen = false;
-    T.ui.toonBouwmenu(S);
-    // Zolang je handelt, staat de tijd stil (js/tijd.js); bij het sluiten loopt hij weer zoals je koos.
-    T.houdTijdStil(S, 'handel');
-    toonHandel(S);
+    // Zolang je handelt, staat de tijd stil (js/ui.js, T.ui.openVenster); bij het sluiten loopt hij weer zoals je koos.
+    if (T.ui.openVenster(S, 'handel')) toonHandel(S);
   };
 
   T.ui.sluitHandel = function (D) {
     const S = T.S;
     if (D !== S.dorp) return; // een ander dorp zegt het niet tegen jou (js/dorp.js; vraag 71, C)
-    $('handel').classList.add('verborgen');
-    if (S.modus === 'handel') S.modus = 'verkennen';
-    T.laatTijdGaan(S, 'handel');
+    T.ui.sluitVenster(S, 'handel');
   };
+
+  T.ui.meldVenster('handel', { el: 'handel', open: (S) => T.ui.openHandel(S.dorp), sluit: (S) => T.ui.sluitHandel(S.dorp) });
 
   $('handel').addEventListener('click', (ev) => {
     const b = ev.target.closest('button');
@@ -790,13 +783,8 @@
   T.ui.openHeer = function (S) {
     const b = S.dorp.heer && S.dorp.heer.bezoek;
     if (!T.heerWacht(S.dorp) && !(b && b.schandpaal)) return;
-    S.modus = 'heer';
-    S.bouwSoort = null;
-    S.bouwMenuOpen = false;
-    T.ui.toonBouwmenu(S);
-    if (T.ui.briefOpen()) T.ui.sluitBrief(S);
+    if (!T.ui.openVenster(S, 'heer')) return;
     geef = null;
-    T.houdTijdStil(S, 'heer');
     toonHeer(S);
   };
 
@@ -805,12 +793,12 @@
   T.ui.sluitHeer = function (S) {
     const b = S.dorp.heer && S.dorp.heer.bezoek;
     if (b && b.schandpaal) return;
-    $('heer').classList.add('verborgen');
-    if (S.modus === 'heer') S.modus = 'verkennen';
+    T.ui.sluitVenster(S, 'heer');
     geef = null;
-    T.laatTijdGaan(S, 'heer');
     T.ui.werkBriefKnopBij(S);
   };
+
+  T.ui.meldVenster('heer', { el: 'heer', open: (S) => T.ui.openHeer(S), sluit: (S) => T.ui.sluitHeer(S) });
 
   $('heer').addEventListener('input', (ev) => {
     const r = ev.target.closest('input[type="range"]');
@@ -1012,8 +1000,6 @@
     box.classList.remove('verborgen');
   }
 
-  T.ui.slachtenOpen = () => !$('slachten').classList.contains('verborgen');
-
   T.ui.openSlachten = function (D) {
     const S = T.S;
     if (D !== S.dorp) return; // een ander dorp zegt het niet tegen jou (js/dorp.js; vraag 71, C)
@@ -1024,25 +1010,18 @@
       if (S.dorp.vee) S.dorp.vee.slachtVraag = false;
       return;
     }
-    if (T.ui.veldenOpen()) T.ui.sluitVelden(S);
-    if (T.ui.briefOpen()) T.ui.sluitBrief(S);
-    S.modus = 'slachten';
-    S.bouwSoort = null;
-    S.bouwMenuOpen = false;
-    T.ui.toonBouwmenu(S);
-    T.ui.verbergTooltip();
+    if (!T.ui.openVenster(S, 'slachten')) return;
     slacht = null;
-    T.houdTijdStil(S, 'slachten');
     toonSlachten(S);
   };
 
   T.ui.sluitSlachten = function (S) {
-    $('slachten').classList.add('verborgen');
-    if (S.modus === 'slachten') S.modus = 'verkennen';
+    T.ui.sluitVenster(S, 'slachten');
     if (S.dorp.vee) S.dorp.vee.slachtVraag = false;
     slacht = null;
-    T.laatTijdGaan(S, 'slachten');
   };
+
+  T.ui.meldVenster('slachten', { el: 'slachten', open: (S) => T.ui.openSlachten(S.dorp), sluit: (S) => T.ui.sluitSlachten(S) });
 
   $('slachten').addEventListener('input', (ev) => {
     const r = ev.target.closest('input[type="range"]');
@@ -1156,28 +1135,19 @@
   }
 
 
-  T.ui.verstoppenOpen = () => !$('verstoppen').classList.contains('verborgen');
-
   T.ui.openVerstoppen = function (S, g) {
     if (!T.verstopPlekVan || !T.verstopPlekVan(S.dorp, g)) return;
-    if (T.ui.veldenOpen()) T.ui.sluitVelden(S);
-    if (T.ui.briefOpen()) T.ui.sluitBrief(S);
-    S.modus = 'verstoppen';
-    S.bouwSoort = null;
-    S.bouwMenuOpen = false;
-    T.ui.toonBouwmenu(S);
-    T.ui.verbergTooltip();
+    if (!T.ui.openVenster(S, 'verstoppen')) return;
     verstopGebouw = g;
-    T.houdTijdStil(S, 'verstoppen');
     toonVerstoppen(S);
   };
 
   T.ui.sluitVerstoppen = function (S) {
-    $('verstoppen').classList.add('verborgen');
-    if (S.modus === 'verstoppen') S.modus = 'verkennen';
+    T.ui.sluitVenster(S, 'verstoppen');
     verstopGebouw = null;
-    T.laatTijdGaan(S, 'verstoppen');
   };
+
+  T.ui.meldVenster('verstoppen', { el: 'verstoppen', open: () => {}, sluit: (S) => T.ui.sluitVerstoppen(S) });
 
   $('verstoppen').addEventListener('click', (ev) => {
     const b = ev.target.closest('button');
@@ -1383,28 +1353,18 @@
     box.scrollTop = waar;
   }
 
-  T.ui.veldenOpen = () => !$('velden').classList.contains('verborgen');
-
   T.ui.openVelden = function (S) {
     if (!S.wereld || !S.wereld.akkers || !T.kanBestemming) return;
-    S.modus = 'velden';
-    S.bouwSoort = null;
-    S.bouwMenuOpen = false;
-    T.ui.toonBouwmenu(S);
-    if (T.ui.briefOpen()) T.ui.sluitBrief(S);
-    T.ui.verbergTooltip();
-    T.houdTijdStil(S, 'velden');
-    $('velden').classList.remove('verborgen');
-    toonVelden(S);
-    $('velden-knop').classList.add('actief');
+    if (T.ui.openVenster(S, 'velden')) toonVelden(S);
   };
 
   T.ui.sluitVelden = function (S) {
-    $('velden').classList.add('verborgen');
-    $('velden-knop').classList.remove('actief');
-    if (S.modus === 'velden') S.modus = 'verkennen';
-    T.laatTijdGaan(S, 'velden');
+    T.ui.sluitVenster(S, 'velden');
   };
+
+  T.ui.meldVenster('velden', {
+    el: 'velden', knop: 'velden-knop', toets: 'v', open: (S) => T.ui.openVelden(S), sluit: (S) => T.ui.sluitVelden(S),
+  });
 
   $('velden').addEventListener('click', (ev) => {
     const b = ev.target.closest('button');
@@ -1436,18 +1396,7 @@
 
   $('velden-knop').addEventListener('click', (ev) => {
     ev.currentTarget.blur();
-    const S = T.S;
-    if (!S) return;
-    if (T.ui.veldenOpen()) {
-      T.ui.sluitVelden(S);
-      return;
-    }
-    // Van de spelregels (of de wetten, of de raadsman) meteen naar de velden, zonder eerst het ene venster dicht te
-    // hoeven doen.
-    if (T.ui.spelregelsOpen()) T.ui.sluitSpelregels(S);
-    if (T.ui.wettenOpen()) T.ui.sluitWetten(S);
-    if (T.ui.raadsmanOpen()) T.ui.sluitRaadsman(S);
-    if (S.modus === 'verkennen') T.ui.openVelden(S);
+    if (T.S) T.ui.wisselVenster(T.S, 'velden');
   });
 
   // ── De spelregels (js/opties.js; spel.md, "Instelbaar") ──
@@ -1519,42 +1468,26 @@
     box.scrollTop = waar;
   }
 
-  T.ui.spelregelsOpen = () => !$('spelregels').classList.contains('verborgen');
-
   T.ui.openSpelregels = function (S) {
-    S.modus = 'spelregels';
-    S.bouwSoort = null;
-    S.bouwMenuOpen = false;
-    T.ui.toonBouwmenu(S);
-    if (T.ui.briefOpen()) T.ui.sluitBrief(S);
-    T.houdTijdStil(S, 'spelregels');
-    $('spelregels').classList.remove('verborgen');
-    toonSpelregels();
-    $('spelregels-knop').classList.add('actief');
+    if (T.ui.openVenster(S, 'spelregels')) toonSpelregels();
   };
 
   T.ui.sluitSpelregels = function (S) {
-    $('spelregels').classList.add('verborgen');
-    $('spelregels-knop').classList.remove('actief');
-    if (S.modus === 'spelregels') S.modus = 'verkennen';
-    T.laatTijdGaan(S, 'spelregels');
+    T.ui.sluitVenster(S, 'spelregels');
     // Wat een regel verandert, kan de balk raken (de snelheid van een dag, wat de heer vraagt).
     T.ui.toonVoorraad(S.dorp);
     T.ui.toonKalender(S);
   };
 
+  // In de spelregels typ je namen, dus daar sluit alleen Esc (typt).
+  T.ui.meldVenster('spelregels', {
+    el: 'spelregels', knop: 'spelregels-knop', toets: 'o', typt: true,
+    open: (S) => T.ui.openSpelregels(S), sluit: (S) => T.ui.sluitSpelregels(S),
+  });
+
   $('spelregels-knop').addEventListener('click', (ev) => {
     ev.currentTarget.blur();
-    const S = T.S;
-    if (!S) return;
-    if (T.ui.spelregelsOpen()) {
-      T.ui.sluitSpelregels(S);
-      return;
-    }
-    if (T.ui.veldenOpen()) T.ui.sluitVelden(S);
-    if (T.ui.wettenOpen()) T.ui.sluitWetten(S);
-    if (T.ui.raadsmanOpen()) T.ui.sluitRaadsman(S);
-    if (S.modus === 'verkennen') T.ui.openSpelregels(S);
+    if (T.S) T.ui.wisselVenster(T.S, 'spelregels');
   });
 
   // Eén getal van de werkbank bijwerken zonder het hele venster opnieuw te tekenen: anders valt

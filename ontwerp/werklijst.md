@@ -31,7 +31,9 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
 
 **Daarna, in deze volgorde:**
 0. Een fatsoenlijke ui (vraag 146; Marcel, 9 okt: "nu is het echt een zooitje met al die menutjes met letters"): de
-   schrijftafel van vraag 98 over het hele scherm, eerst een plaat om te kiezen. **Bezig in sessie `main` (1306efdd).**
+   plaat (a) is goed, elk venster is papier met leesbare letters (b1), en er is één manier van openen en sluiten (b2).
+   **Nu c, de tafel, in een nieuwe sessie** (wat er moet, staat bij vraag 146), dan d en e.
+   **Bezig in sessie `main` (desktop)** (9 okt): vraag 146, c, de tafel onderin.
 1. Een proefversie voor Marcels 4K-scherm en een eerste tester (33d; `npm run proefversie`, ook `-- --windows`), met de
    graanzak erin. De laatste is van 3 okt (`36c713e`), zonder de verzoeken, de twee bazen, het ontginnen, de markt, de
    wolven, het eiland, WebGL en de graanzak.
@@ -7213,7 +7215,56 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     **Marcel (9 okt):** de tafel over de hele breedte onderin (rekenboek links, de papieren in het midden, de zandloper en
     de twee bazen rechts; bovenaan alleen het doel met de raad en de datum); de toetsen blijven werken, maar staan niet
     meer op de knoppen (de muis zegt ze op het ding); en de ui gaat vóór de proefversie voor een tester.
-    **Bezig in sessie `main` (1306efdd)** (9 okt): a, de plaat van het hele scherm.
+    **De plaat (a, 9 okt):** "De schrijftafel van de schout" (https://claude.ai/artifact/1Q4hbWrE8kS9MFQC36vpaU): het
+    spel op 1920×1080 met de tafel, waarop je de dingen aanwijst en opent. Links het rekenboek (de voorraad, en het dorp
+    met de kas, de mensen, de tevredenheid en de argwaan); in het midden het bouwplan (B), de kaart van de velden (V), het
+    wetboek (W), de bel van de raadsman (R), de brief van de heer (licht op als hij wacht), het rapport, de zaak en de
+    inktpot van de bode; rechts de lantaarn (sluipen, S), de kaars (slapen, Z), de zandloper met een lat voor de
+    snelheden, het zegel van de heer en de hoed van het dorp. Linksboven het doel met de raad, met de statussen eronder;
+    rechtsboven de datum, met het lipje Menu ernaast (Spelregels in het menu); de berichten boven het rekenboek. Open
+    voor Marcel: de indeling, de dingen (de bel, de kaars, de lantaarn, de inktpot), de hoogte van de tafel (150 op
+    1080), en of de datum rechtsboven blijft.
+    **Marcel (9 okt), op de plaat: "Ik denk wat meer HD de UI", en "lettertype ook, te lastig te lezen".** Dus: de pixel
+    art van de ui op ware pixels (een pixel van de kunst op een pixel van het scherm op 1080, twee op 4K), met twee keer
+    zoveel detail, licht van linksboven en een gekleurde omlijning, zoals de kunst van het spel; ook het hout, het papier
+    (`beelden/papier.png` op 8 in plaats van 16) en de spijker. En leesbaardere letters dan Jacquarda Bastarda 9 en IM
+    Fell English (vraag 98): op de plaat (versie 2) te kiezen tussen Grenze voor de koppen met Alegreya voor de tekst, of
+    alleen Alegreya (Alegreya SC voor de koppen), met de oude ernaast. Wat Marcel kiest, gaat ook naar het briefje bij
+    een huis.
+    **Marcel (9 okt), op versie 2: "Ja dit ziet er goed uit voor nu!"** Dus wat op de plaat stond: Grenze voor de koppen
+    met Alegreya voor de tekst, de datum rechtsboven, deze dingen op tafel, en een tafel van 150 op 1080.
+    **Plan voor b (9 okt):** b1, het uiterlijk: elk venster wordt papier (het vel op ware pixels, inkt, de nieuwe letters),
+    door in de vensters de kleuren van `stijl.css` op inkt te zetten, zodat hun eigen opmaak meegaat; wat een vaste kleur
+    voor donker glas heeft, gaat om. De letters komen in `letters/` (het spel laadt niets van buiten), met hun licentie.
+    b2, één manier van openen en sluiten: nu heeft elk venster zijn eigen open en sluit, en sluit het zelf de andere die
+    het kent (`js/hud.js`: "als de velden open zijn, sluit de velden"). Straks meldt een venster zich één keer aan
+    (`js/ui.js`), en openen sluit wat er open is, houdt de tijd stil onder zijn naam, en `Esc` sluit het bovenste.
+    **b1 gebouwd (9 okt):** elk venster is papier (de brieven, het rapport, de heer, het slachten, verstoppen, de
+    velden, de wetten, de raadsman, het bouwmenu, de marskramer, de spelregels, het menu, een gesprek, het eindscherm,
+    terug van reis), op ware pixels, met de letters Grenze en Alegreya overal, ook in de balk (`letters/`; de oude zijn
+    weg, ook uit de samenvatting, die bij de volgende `npm run samenvatting` de nieuwe krijgt). Hoe: in `stijl.css` is
+    elke vaste kleur een kleurnaam geworden (`--goud`, `--inkt`, `--op-goud`, met `color-mix`), en het blok onderaan
+    zet in een venster de kleurnamen op inkt, dus de eigen opmaak van elk venster gaat mee. De marskramer lag onder de
+    balk (geen laag); nu niet meer. Nog geen papier: de kaart van het land (`opmerkingen.md`).
+    **b2 gebouwd (9 okt):** één manier van openen en sluiten (`js/ui.js`): een venster meldt zich aan met
+    `T.ui.meldVenster(naam, { el, knop, toets, typt, open, sluit })`, en zijn eigen open en sluit doen alleen nog wat
+    alleen dat venster doet; de rest (wat open is dicht, de brief weg, de modus, de tijd stil, de knop aan) doen
+    `T.ui.openVenster` en `T.ui.sluitVenster`. Er is hooguit één venster open (`T.ui.vensterOpen()`), geen venster
+    kent de andere meer, de knoppen in de balk zijn `T.ui.wisselVenster`, en het toetsenblok in `js/main.js` is van zes
+    takken één regel (`T.ui.toetsBijVenster`). Zo gaan de dingen op tafel (c) straks ook: één naam per ding. De
+    vragen `wettenOpen`, `veldenOpen`, ... zijn weg (ook uit de speeltest). Nagelopen in de browser: de toetsen, de
+    knoppen, overspringen, `Esc`, de brief, de marskramer, het slachten, het bouwmenu en het menu; de tijd loopt na
+    het sluiten weer op de snelheid die je koos.
+    **Voor c, de tafel (overdracht, 9 okt):** de schets van elk ding staat in de plaat (lees hem met het gereedschap
+    Artifact, `read`, op de link hierboven): `bord()` tekent een ding op twee keer de maat met licht en een gekleurde
+    omlijning, `TEKENING` heeft elk ding, `tafel()` het hout, en de opmaak van het rekenboek, de lat en de briefjes staat
+    in de `<style>`. In het spel wordt het pixel art uit code zoals de rest: een script in `gereedschap/pixelart/` (zoals
+    `papieren.cjs`) dat de dingen en het hout naar `beelden/` schrijft, en het spel tekent ze als html over het beeld
+    (`index.html`, `js/hud.js`), op ware pixels, op 4K twee keer zo groot. Elk ding hangt met zijn naam aan zijn venster
+    (`T.ui.wisselVenster(S, 'wetten')`); de brief, het rapport, de zaak en de bode liggen er alleen als ze er zijn (nu de
+    knoppen `#brief-knop`, `#bode-knop`, `#zaak-knop`, die `js/brieven.js` en `js/hud.js` tonen). De toets staat op het
+    briefje bij de muis, niet op het ding. De balk bovenaan (`#kalenderbalk`, `#voorraadbalk`, `#balk-knoppen`) gaat
+    erin op; het doel en de datum worden in d briefjes.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

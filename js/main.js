@@ -620,53 +620,11 @@
       wisselMeter();
       return;
     }
-    // Bij de marskramer (js/hud.js, het handelsvenster) ligt de rest stil; Esc sluit het venster.
-    if (S.modus === 'handel') {
-      if (ev.key === 'Escape') T.ui.sluitHandel(S.dorp);
-      return;
-    }
-    // Bij de heer net zo (js/hud.js, betalen op Sint-Maarten; bij de schandpaal moet je kiezen),
-    // en als je je ambt kwijt bent, is het spel uit.
-    if (S.modus === 'heer') {
-      if (ev.key === 'Escape') T.ui.sluitHeer(S);
-      return;
-    }
-    // Het slachten (js/hud.js): de tijd staat stil, en Esc is niemand slachten.
-    if (S.modus === 'slachten') {
-      if (ev.key === 'Escape') T.ui.sluitSlachten(S);
-      return;
-    }
-    // Verstoppen (js/hud.js, in een kelder of de kapel): net zo; Esc sluit.
-    if (S.modus === 'verstoppen') {
-      if (ev.key === 'Escape') T.ui.sluitVerstoppen(S);
-      return;
-    }
+    // Een venster (js/ui.js; de marskramer, de heer, het slachten, verstoppen, de spelregels, de velden, de wetten, de
+    // raadsman): zolang het open is, ligt de rest stil. Esc sluit het, en de toets van een ander venster of B gaat er
+    // meteen heen (hieronder); wat precies, zegt T.ui.toetsBijVenster.
+    if (T.ui.toetsBijVenster(S, ev)) return;
     if (S.modus === 'einde') return;
-    // De spelregels (js/hud.js): daar typ je ook namen, dus alleen Esc doet iets.
-    if (S.modus === 'spelregels') {
-      if (ev.key === 'Escape') T.ui.sluitSpelregels(S);
-      return;
-    }
-    // Het veldenvenster (js/hud.js): net als bij de spelregels staat de tijd stil en ligt de rest
-    // stil. Esc of V sluit het; B, O en W sluiten het ook en gaan dan meteen door naar het bouwmenu,
-    // de spelregels of de wetten, hieronder.
-    if (S.modus === 'velden') {
-      const k = (ev.key || '').toLowerCase();
-      if (k === 'escape' || k === 'v' || k === 'b' || k === 'o' || k === 'w' || k === 'r') T.ui.sluitVelden(S);
-      if (k !== 'b' && k !== 'o' && k !== 'w' && k !== 'r') return;
-    }
-    // Het menu Wetten (js/wettenmenu.js) net zo: Esc of W sluit het, en B, O, V en R gaan meteen door.
-    if (S.modus === 'wetten') {
-      const k = (ev.key || '').toLowerCase();
-      if (k === 'escape' || k === 'w' || k === 'b' || k === 'o' || k === 'v' || k === 'r') T.ui.sluitWetten(S);
-      if (k !== 'b' && k !== 'o' && k !== 'v' && k !== 'r') return;
-    }
-    // Het venster Raadsman (js/raadsmanvenster.js) net zo: Esc of R sluit het, en B, O, V en W gaan meteen door.
-    if (S.modus === 'raadsman') {
-      const k = (ev.key || '').toLowerCase();
-      if (k === 'escape' || k === 'r' || k === 'b' || k === 'o' || k === 'v' || k === 'w') T.ui.sluitRaadsman(S);
-      if (k !== 'b' && k !== 'o' && k !== 'v' && k !== 'w') return;
-    }
     // De kaart van het land (js/landkaart.js): Esc is terug het gehucht in, als je nog thuis bent; op reis of in een
     // andere provincie kies je op de kaart waar je heen gaat.
     if (S.modus === 'land') {
@@ -700,28 +658,15 @@
       schuifOverzicht(SCHUIF[ev.key][0] * OVERZICHT.stap, SCHUIF[ev.key][1] * OVERZICHT.stap);
       return;
     }
-    // B: het bouwmenu (js/hud.js), alleen in het nieuwe spel en alleen bij het rondlopen — botst
-    // nergens mee (CLAUDE.md, "Toetsen"). Nog eens B, Esc of rechtsklik legt een gebouw weer weg.
-    // O: de spelregels (js/hud.js, js/opties.js), net als B alleen bij het rondlopen.
-    if (T.NIEUWE_HUD && S.modus === 'verkennen' && (ev.key === 'o' || ev.key === 'O')) {
-      T.ui.openSpelregels(S);
+    // O, V, W en R: de spelregels, de velden, de wetten en je raadsman (de toets staat bij het venster, js/ui.js),
+    // alleen in het nieuwe spel en alleen bij het rondlopen.
+    const venster = T.NIEUWE_HUD && S.modus === 'verkennen' && T.ui.vensterMetToets(ev.key);
+    if (venster) {
+      T.ui.wisselVenster(S, venster);
       return;
     }
-    // V: de velden (js/hud.js; wat elk veld is en volgend jaar wordt), ook alleen bij het rondlopen.
-    if (T.NIEUWE_HUD && S.modus === 'verkennen' && (ev.key === 'v' || ev.key === 'V') && S.wereld.akkers) {
-      T.ui.openVelden(S);
-      return;
-    }
-    // W: de wetten (js/wettenmenu.js), ook alleen bij het rondlopen.
-    if (T.NIEUWE_HUD && S.modus === 'verkennen' && (ev.key === 'w' || ev.key === 'W')) {
-      T.ui.openWetten(S);
-      return;
-    }
-    // R: je raadsman (js/raadsmanvenster.js), ook alleen bij het rondlopen.
-    if (T.NIEUWE_HUD && S.modus === 'verkennen' && (ev.key === 'r' || ev.key === 'R')) {
-      T.ui.openRaadsman(S);
-      return;
-    }
+    // B: het bouwmenu (js/hud.js), net zo — botst nergens mee (CLAUDE.md, "Toetsen"). Nog eens B, Esc of rechtsklik
+    // legt een gebouw weer weg.
     if (T.NIEUWE_HUD && S.modus === 'verkennen' && (ev.key === 'b' || ev.key === 'B')) {
       if (S.bouwSoort || S.bouwMenuOpen) {
         S.bouwSoort = null;
@@ -1801,7 +1746,7 @@
     slachten() {
       if (!T.ui.openSlachten) return 'Het slachtvenster is er alleen in het gehucht.';
       T.ui.openSlachten(S.dorp);
-      return T.ui.slachtenOpen() ? 'open' : 'Er is geen vee om te slachten.';
+      return T.ui.vensterOpen() === 'slachten' ? 'open' : 'Er is geen vee om te slachten.';
     },
     // Vee neerzetten om naar te kijken (js/vee.js): Spel.debug.vee('koe', 4) zet vier koeien op de
     // weide met de meeste plaats (een schaap op de heide, als die er is), elk op een vrije tegel en
