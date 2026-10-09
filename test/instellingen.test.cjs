@@ -48,8 +48,8 @@ test('de bladzijde kent elk instellingenblok, de spelregels en de gebouwen', () 
 test('een getal schrijven verandert alleen dat getal, en het commentaar blijft staan', () => {
   const tekst = bronnen['js/akkers.js'];
   const nieuw = I.zet(tekst, 'SCHOVEN_INSTELLINGEN', ['zwadGrens'], 6);
-  const voor = tekst.split('\n');
-  const na = nieuw.split('\n');
+  const voor = tekst.split(/\r?\n/);
+  const na = nieuw.split(/\r?\n/);
   assert.equal(na.length, voor.length);
   const anders = voor.map((r, i) => (r !== na[i] ? i : -1)).filter((i) => i >= 0);
   assert.equal(anders.length, 1);
@@ -65,6 +65,24 @@ test('een getal schrijven verandert alleen dat getal, en het commentaar blijft s
   const r = model.spelregels.find((x) => x.id === 'dagloners');
   const opties = I.zet(bronnen['js/opties.js'], 'OPTIES', r.pad, 'binden');
   assert.equal(I.model({ 'js/opties.js': opties }).spelregels.find((x) => x.id === 'dagloners').standaard, 'binden');
+});
+
+// Met git core.autocrlf=true staan de bestanden op Windows met \r\n in de werkmap, in de cloud met \n: de bladzijde leest
+// beide hetzelfde, en een getal schrijven laat de regeleinden van het bestand staan.
+test('een bestand met \\r\\n leest hetzelfde als met \\n, en schrijven houdt zijn regeleinden', () => {
+  const lf = {};
+  const crlf = {};
+  for (const [bestand, tekst] of Object.entries(bronnen)) {
+    lf[bestand] = tekst.replace(/\r\n/g, '\n');
+    crlf[bestand] = lf[bestand].replace(/\n/g, '\r\n');
+  }
+  assert.deepEqual(I.model(crlf), I.model(lf));
+  for (const tekst of [lf['js/akkers.js'], crlf['js/akkers.js']]) {
+    const nieuw = I.zet(tekst, 'SCHOVEN_INSTELLINGEN', ['zwadGrens'], 6);
+    assert.equal(nieuw.split('\r\n').length, tekst.split('\r\n').length);
+    assert.equal(nieuw.split('\n').length, tekst.split('\n').length);
+    assert.equal(I.knoopOp(I.leesBlok(nieuw, 'SCHOVEN_INSTELLINGEN').waarde, ['zwadGrens']).waarde, 6);
+  }
 });
 
 test('wat geen gewoon getal is, of wat niet past, schrijft het niet', () => {
