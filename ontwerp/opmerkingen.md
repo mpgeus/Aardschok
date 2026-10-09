@@ -9,6 +9,23 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **De bode in het donker** (9 okt, bij vraag 143; Marcel: "in de winterperiode of in het donker misschien ook
+  bescherming mee?"): alleen de winter telt nu. De bode vertrekt meteen, ook 's avonds, en zonder begeleider haalt hij
+  het alleen in de winter soms niet (`winterKwijt` in `T.BODE_INSTELLINGEN`). Gevaar in het donker kan een getal worden
+  (een kans als hij na zonsondergang vertrekt), of de bode wacht tot de ochtend. Met de wolven (vraag 116) zou een roedel
+  met honger hem ook echt kunnen vinden; dat is iets erbij, dus eerst Marcels keuze.
+
+- **De marskramer op bestelling slaat een vaste ronde over** (9 okt, bij vraag 143): `T.tikHandelDag` laat de gewone
+  marskramer niet komen zolang er een op het plein staat, dus valt zijn vaste bezoek binnen de vijf dagen dat de
+  bestelde er is, dan komt dat bezoek dat jaar niet. Andersom wacht de bode een dag als de gewone er nog is. Op te lossen
+  door de vaste ronde te laten wachten tot de bestelde weg is, of door de bestelde dan meteen de gewone waar erbij te
+  laten nemen.
+
+- **Wat er nog open is bij het weer** (9 okt, bij vraag 77, stap 2; `spel.md`, "Het weer"): sneeuw op de grond en de
+  daken (nieuwe kunst); regen bij het zaaien (vraag 82, b en c: op een natte dag zaait niemand); de marskramer die na een
+  droog jaar meer graan meeneemt; ziekte en brand als status; en een bode naar anderen (het buurdorp, de heer, de
+  koning) zoals die naar de marskramer.
+
 - **Niemand bouwt een wijnboerderij** (8 okt, bij vraag 136): in de speeltest vraagt geen dorp er een, want de wens drank
   is met bier al gehaald, en de bouwer volgt wat de raad zegt. Wil de wijn in het spel meetellen, dan kan het met een
   getal (de heer die meer wijn vraagt) of met een wens van een hogere stand naar wijn; dat laatste is iets erbij, dus eerst

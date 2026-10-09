@@ -10,14 +10,14 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## Nu en daarna (8 okt)
+## Nu en daarna (9 okt)
 
 Marcel, 8 okt: "snel, duidelijk en low cost". Elke sessie werkt dit blok bij aan het eind; wat af is, gaat eruit.
 
-**Loopt** (het teken "Bezig in sessie" staat bij het punt zelf): de bode naar de marskramer (vraag 143). Het weer en de
-statussen met niveaus (vraag 77, stap 2) staan in `main`. De dagloners (vraag 140: wie geen werk heeft, maait, bindt en draagt in de oogst) staan in `main`.
-Vraag 141, de economie binnen het dorp, is op 9 okt helemaal teruggedraaid (Marcel: "Ik denk dat we die economie terug
-moeten draaien", en "Alles van vraag 141").
+**Loopt** (het teken "Bezig in sessie" staat bij het punt zelf): niets. De bode naar de marskramer (vraag 143), het weer
+en de statussen met niveaus (vraag 77, stap 2) en de dagloners (vraag 140) staan in `main`; wat bij de bode en het weer
+nog open is, staat in `opmerkingen.md`. Vraag 141, de economie binnen het dorp, is op 9 okt helemaal teruggedraaid
+(Marcel: "Ik denk dat we die economie terug moeten draaien", en "Alles van vraag 141").
 
 **Wacht op Marcel:**
 - Vraag 142, de bladzijde met alle getallen (`gereedschap/instellingen.html`): stap 1 en 2 staan in `main`; stap 3 (een
@@ -7033,10 +7033,10 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     als er een status speelt (honger, droogte, kou, ...); ook in de winter, maar langer onderweg en duurder; je vraagt in
     de brief om goederen, en soms heeft hij iets niet; de bode krijgt loon en de waren kosten anderhalf keer zoveel; in
     de winter misschien een begeleider mee ter bescherming; en het weer gaat nu naar `main`, dit erna.
-    **Bezig in sessie `ccr-77327776-rqjldz`** (9 okt): de bode naar de marskramer.
     **Gebouwd (9 okt):** `js/bode.js`, de knop Bode bij honger, kou of droogte, de brief aan de marskramer bij je huis
     (graan, zout, hout, ijzer), de bode met loon, in de winter een begeleider, en de marskramer op bestelling, duurder en
-    soms zonder iets (`spel.md`, "De bode naar de marskramer"). Bescherming in het donker is nog open.
+    soms zonder iets (`spel.md`, "De bode naar de marskramer"). Bescherming in het donker en de vaste ronde die wegvalt
+    staan in `opmerkingen.md`.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
