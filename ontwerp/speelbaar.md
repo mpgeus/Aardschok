@@ -153,6 +153,21 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 9 okt: het weer en de droogte (werklijst, vraag 77, stap 2)
+
+Op `dcdc365` (ccr-77327776-rqjldz), de bouwer drie jaar op het eiland, zaad 1 tot 3, met het weer en met de spelregel op
+"Altijd zon" (`--regel weer=uit`). Zaad 2 en 3 spelen letter voor letter hetzelfde: in hun drie jaar was er geen droogte,
+en regen alleen doet niets aan de regels. Zaad 1 had in het tweede jaar een zware droogte: de oogst bracht 579 graan,
+zonder weer 967 (40% minder). Dat liep door: de heer kreeg minder, de gunst raakte op, en in het derde jaar was de
+bouwer op Sint-Maarten zijn ambt kwijt (96 mensen; zonder weer 101, en hij bleef). De bouwer van de speeltest doet niets
+tegen de droogte (hij houdt geen graan apart en koopt niets bij).
+
+| zaad | mensen (weer / altijd zon) | oogst jaar 2 | afloop |
+| --- | --- | --- | --- |
+| 1 | 96 / 101 | 579 / 967 | met weer het ambt kwijt in jaar 3 |
+| 2 | 109 / 109 | gelijk | gelijk |
+| 3 | 108 / 108 | gelijk | gelijk |
+
 ## De speeltest van 8 okt, laat in de nacht: het graan pas binnen in de schuur (werklijst, vraag 140)
 
 Op `432d644` (branch `ccr-77327776-rqjldz`), `npm run speeltest -- bouwer sluw --maker --jaren 4`. Sinds de vorige speeltest
