@@ -30,6 +30,8 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
   speeltest met een set getallen, naast de vorige) wacht.
 
 **Daarna, in deze volgorde:**
+0. Een fatsoenlijke ui (vraag 146; Marcel, 9 okt: "nu is het echt een zooitje met al die menutjes met letters"): de
+   schrijftafel van vraag 98 over het hele scherm, eerst een plaat om te kiezen. **Bezig in sessie `main` (1306efdd).**
 1. Een proefversie voor Marcels 4K-scherm en een eerste tester (33d; `npm run proefversie`, ook `-- --windows`), met de
    graanzak erin. De laatste is van 3 okt (`36c713e`), zonder de verzoeken, de twee bazen, het ontginnen, de markt, de
    wolven, het eiland, WebGL en de graanzak.
@@ -7184,6 +7186,27 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     een gezin met een moeder en een vader krijgt soms een kind, als er plaats is in het huis. De schout en de mensen met een
     naam (de boeren, de herbergierster) worden niet ouder, want aan hen hangt het spel.
     **Bezig in sessie `ccr-77327776-rqjldz`** (9 okt): vraag 145, 1 en 3.
+
+146. **Een fatsoenlijke ui** (Marcel, 9 okt: "Ik denk dat het nu ook tijd is om een fatsoenlijke UI te maken; nu is het
+    echt een zooitje met al die menutjes met letters."). De richting ligt sinds 3 okt vast (vraag 98, C, de schrijftafel:
+    onderin de tafel van de schout met het rekenboek, de papieren als dingen op tafel; de letters in `letters/`;
+    `commercieel.md`, "De sfeer en de ui"), maar alleen het briefje bij een huis is zo gebouwd. Wat er nu is (9 okt, op
+    1280×720): linksboven de snelheid, de datum, het doel en de raad; bovenaan de voorraad, de bevolking, de tevredenheid
+    en de twee bazen; rechtsboven zes knoppen met een letter (Bouwen, Velden, Wetten, Raadsman, Spelregels, Menu), waar er
+    tot vier bij komen (Brief, Bode, De zaak, Slapen); rechts een blok met alle toetsen; en twaalf vensters, elk in een
+    eigen opmaak, op donker glas in de letter van de browser.
+    **Plan van Claude (9 okt):** a. eerst een plaat van het hele scherm, over een echte schermafdruk, om te kiezen vóór er
+    gebouwd wordt; b. één papier voor elk venster (één opmaak, één manier van openen en sluiten, de letters van de
+    schrijftafel), zodat een nieuw venster vanzelf goed is; c. de tafel onderin: het rekenboek (de voorraad), de
+    zandloper (de tijd), de kroon en de hoed (de twee bazen), en de papieren als dingen op tafel in plaats van knoppen met
+    een letter (een brief die wacht, ligt erbij); d. bovenaan alleen het doel met de raad en de datum, het blok met
+    toetsen weg (de toets zegt de muis op het ding), Spelregels in het menu (`Esc`); e. de fotomodus (één toets haalt alles
+    weg). Klaar als: het spel op 1280×720 en op 4K niets meer in browserletters toont, elk venster papier is, en geen
+    knop meer een letter draagt.
+    **Marcel (9 okt):** de tafel over de hele breedte onderin (rekenboek links, de papieren in het midden, de zandloper en
+    de twee bazen rechts; bovenaan alleen het doel met de raad en de datum); de toetsen blijven werken, maar staan niet
+    meer op de knoppen (de muis zegt ze op het ding); en de ui gaat vóór de proefversie voor een tester.
+    **Bezig in sessie `main` (1306efdd)** (9 okt): a, de plaat van het hele scherm.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
