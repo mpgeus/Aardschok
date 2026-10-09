@@ -1,47 +1,59 @@
-// De ruïnes van afgebrande huizen (js/brand.js; werklijst vraag 144, 3; Marcel, 9 okt: "Huis moet afgebrokkeld zijn.
-// Echt kapot. Structureel ingestort etc"). Elk huis van de huizenbouwer (huizen.cjs, HUIZEN) krijgt zijn eigen ruïne,
-// uit het huis zelf gesneden (renderHuisRuine in huizen.cjs): de muren gebroken, het dak weg op een paar spanten na,
-// gevallen balken, as en puin, alles verkoold.
+// De fasen van het afbranden van een huis (js/brand.js; werklijst vraag 144, 3; Marcel, 9 okt: "Huis moet afgebrokkeld
+// zijn. Echt kapot. Structureel ingestort etc", "Moet wel handgetekend lijken", "Ja ik wil balken zien, losse stenen,
+// plukjes zwart geblakerd riet van het dak", en "Ik wil natuurlijk ook verschillende fasen van afbranden / kapot"). Elk
+// huis van de huizenbouwer (huizen.cjs, HUIZEN) krijgt ze, uit het huis zelf gesneden (renderHuisRuine in huizen.cjs):
+// geschroeid, het dak valt, ingestort, opgeruimd (BRANDFASEN).
 //
-//   node gereedschap/pixelart/ruines.cjs proef [tekening ...]   een proefplaat: het huis en zijn ruïne naast elkaar, in
-//                                                                gereedschap/pixelart/uit/ruines/proef.png (niet in git)
+//   node gereedschap/pixelart/ruines.cjs proef [tekening ...]   een proefplaat: per huis het huis en zijn fasen naast
+//                                                                elkaar, in gereedschap/pixelart/uit/ruines/proef.png
+//                                                                (niet in git); elk huis in een eigen proces
 //
 // (Alle tekeningen voor het spel komen er pas na de proefplaat, als Marcel hem goed vindt.)
 const fs = require('fs');
 const path = require('path');
+const { spawn } = require('child_process');
 const K = require('./kern.cjs');
 const HZ = require('./huizen.cjs');
 
 const UIT = path.join(__dirname, 'uit', 'ruines');
 const PROEF = ['wit-hut1-riet-z', 'wit-huis1-riet-z', 'wit-steen1-leien-z', 'boerderij1'];
+const RAND = 16;
 
+// Eén huis: het huis en zijn fasen op een rij, met de ankers op één lijn, als <tekening>.png.
+function rij(naam) {
+  const t0 = Date.now();
+  const heel = HZ.renderHuis(HZ.HUIZEN[naam]);
+  const fasen = HZ.BRANDFASEN.map((f) => HZ.renderHuisRuine(naam, f));
+  const platen = [{ plaat: heel.plaat, ax: heel.anker[0], ay: heel.anker[1] }, ...fasen.map((r) => ({ plaat: r.plaat, ax: r.ankerX, ay: r.ankerY }))];
+  const boven = Math.max(...platen.map((p) => p.ay));
+  const onder = Math.max(...platen.map((p) => p.plaat.h - p.ay));
+  const vel = new K.Plaat(platen.reduce((n, p) => n + p.plaat.b + RAND, RAND), boven + onder);
+  let x = RAND;
+  for (const p of platen) {
+    vel.plak(p.plaat, x, boven - p.ay);
+    x += p.plaat.b + RAND;
+  }
+  fs.writeFileSync(path.join(UIT, `${naam}.png`), K.png(vel, 1, '#4a5a3a'));
+  console.log(`  ${naam.padEnd(22)} ${((Date.now() - t0) / 1000).toFixed(1)} s`);
+}
+
+// De proefplaat: elk huis in een eigen proces, dan de rijen onder elkaar (met Python's PIL niet nodig: een kleine
+// PNG-lezer is er niet, dus de rijen staan als losse bestanden naast proef.html).
 function proef(namen) {
   fs.mkdirSync(UIT, { recursive: true });
-  const rijen = [];
+  let klaar = 0;
   for (const naam of namen) {
-    const t0 = Date.now();
-    const heel = HZ.renderHuis(HZ.HUIZEN[naam]);
-    const ruine = HZ.renderHuisRuine(naam);
-    console.log(`  ${naam.padEnd(22)} ${((Date.now() - t0) / 1000).toFixed(1)} s`);
-    rijen.push({ naam, heel, ruine });
+    const p = spawn(process.execPath, [__filename, 'rij', naam], { stdio: 'inherit' });
+    p.on('exit', () => {
+      if (++klaar < namen.length) return;
+      const html = `<!doctype html><meta charset="utf-8"><body style="background:#4a5a3a;margin:0">${namen.map((n) => `<img src="${n}.png" style="display:block;image-rendering:pixelated">`).join('')}`;
+      fs.writeFileSync(path.join(UIT, 'proef.html'), html);
+      console.log(`  ${path.join(UIT, 'proef.html')}`);
+    });
   }
-  // Naast elkaar, met de ankers op één lijn: links het huis, rechts zijn ruïne.
-  const RAND = 16;
-  const breed = Math.max(...rijen.map((r) => r.heel.plaat.b + r.ruine.cb)) + RAND * 3;
-  const hoog = rijen.reduce((n, r) => n + Math.max(r.heel.plaat.h, r.ruine.ch) + RAND, RAND);
-  const vel = new K.Plaat(breed, hoog);
-  let y = RAND;
-  for (const r of rijen) {
-    const boven = Math.max(r.heel.anker[1], r.ruine.ankerY);
-    vel.plak(r.heel.plaat, RAND, y + boven - r.heel.anker[1]);
-    vel.plak(r.ruine.plaat, RAND * 2 + r.heel.plaat.b, y + boven - r.ruine.ankerY);
-    y += Math.max(r.heel.plaat.h, r.ruine.ch) + RAND;
-  }
-  const bestand = path.join(UIT, 'proef.png');
-  fs.writeFileSync(bestand, K.png(vel, 1, '#4a5a3a'));
-  console.log(`  ${bestand}`);
 }
 
 const args = process.argv.slice(2);
-if (args[0] === 'proef') proef(args.length > 1 ? args.slice(1) : PROEF);
+if (args[0] === 'rij') rij(args[1]);
+else if (args[0] === 'proef') proef(args.length > 1 ? args.slice(1) : PROEF);
 else console.log('Gebruik: node gereedschap/pixelart/ruines.cjs proef [tekening ...]');

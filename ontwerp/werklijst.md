@@ -7090,6 +7090,15 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     in `huizen.cjs`): de muren in trapjes gebroken, met gaten tot de grond, het dak weg, gevallen balken en planken, as
     en puin, het hout houtskool met zijn nerf, steen en leem beroet in strepen. Wacht op Marcel; daarna alle 559
     tekeningen (zo'n twee uur op de achtergrond) en in het spel in plaats van de verkoolde bouwfase.
+    **Marcel (9 okt), op de proefplaat:** "Ja ik wil balken zien, losse stenen, plukjes zwart geblakerd riet van het dak."
+    "Nee dit is te ai, ik moet iets natuurlijker hebben iets 'echts'." Dus opnieuw, zoals een echt afgebrand huis: de
+    hoeken staan het hoogst en de muur ertussen is ingezakt, met puin tegen de voet; echte verkoolde balken kriskras en
+    stompen van de spanten; losse stenen, ook buiten; plukken zwart riet. En: "Ik wil natuurlijk ook verschillende fasen
+    van afbranden / kapot. Art maakt of breekt een spel." Dus fasen, zoals de bouwfasen maar omgekeerd: geschroeid (het
+    dak zwart en de eerste gaten), het dak valt (gaten, de verkoolde latten, de muren beroet), ingestort, en opgeruimd (de
+    muren laag, het puin op hopen, de balken op een stapel), en dan het herbouwen. **Tweede proefplaat (9 okt):**
+    `node gereedschap/pixelart/ruines.cjs proef` (BRANDFASEN in `huizen.cjs`): de hoeken staan het hoogst, puinbergen,
+    losse stenen, balken kriskras, plukken zwart riet, en de vier fasen; wacht op Marcel.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
