@@ -116,6 +116,7 @@
       if (!g.wie && g.verschil > 0) return `Er ${een ? 'kwam één mens' : `kwamen ${n} mensen`} bij.`;
       if (!g.wie) return `Het dorp verloor ${een ? 'één mens' : `${n} mensen`}${g.waarom ? `: ${g.waarom}` : ''}.`;
       const komma = g.wie.includes(',') ? ',' : '';
+      if (g.verschil > 0 && g.reden === 'geboorte') return `Geboren: ${g.wie}.`; // js/leven.js
       if (g.verschil > 0) return `Nieuw in het dorp: ${g.wie}.`;
       if (g.reden === 'vertrek') return `${T.hoofdletter(g.wie)}${komma} ${een ? 'trok' : 'trokken'} weg: ${g.waarom || 'niemand weet waarom'}.`;
       if (g.waarom) return `${g.waarom}: ${g.wie}${komma} ${stierf(een)} gestorven.`;

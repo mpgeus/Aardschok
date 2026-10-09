@@ -705,11 +705,23 @@
   // gehucht rond op het vel van de boer en de boerin. Zie ontwerp/werklijst.md, fase B2b. Een boer
   // met een karakter draagt dat karakter op zijn lijf (boer-zanger), als dat vel er al is. Een dier
   // (js/vee.js) heeft geen vel onder zijn soort, maar een per kleur: `vel` is koe0, koe1 of koe2.
+  // Een bewoner met een uiterlijk (vraag 145; T.kiesUiterlijk in js/bewoners.js) draagt het vel van dat uiterlijk
+  // (boer-u7, meisje-u3), als het er is; anders het vel van zijn leeftijd.
   function eigenFiguur(e) {
     const alsDorpeling = e.soort === 'dorpeling' || e.soort === 'schout';
     const naam = alsDorpeling ? dorpelingVel(e.zaad || 0) : S.figuurNaam(e.soort);
-    return !S.figuurGegevens(naam) && e.vel ? S.velMetKarakter(e.vel, e.karakter) : naam;
+    if (S.figuurGegevens(naam) || !e.vel) return naam;
+    const eigen = S.figuurVanUiterlijk(e, T.UITERLIJK_LIJF[e.vel]);
+    return eigen || S.velMetKarakter(e.vel, e.karakter);
   }
+  // Het vel van het uiterlijk van een bewoner, met deze naam ervoor (een lijf als boer, of een werk als zaaier), of
+  // null als hij geen uiterlijk heeft of dat vel er niet is.
+  S.figuurVanUiterlijk = (e, voor) => {
+    const p = e.bewoner;
+    if (!voor || !p || p.uiterlijk == null) return null;
+    const naam = `${voor}-u${p.uiterlijk}`;
+    return S.figuurGegevens(naam) ? naam : null;
+  };
   // En wat hij nu draagt: een boer die aan het maaien is (T.werkOogstBij, js/akkers.js) leent
   // zolang het vel van de maaier in plaats van zijn eigen boer/boerin-vel — maar alleen als dat vel
   // er ook echt is, anders blijft hij gewoon zichzelf staan (geen kunst mist dan nooit iemand helemaal).
@@ -749,7 +761,12 @@
   };
   // Een vrouw: een boerin (vel `boerin`), of een bewoner die een vrouw is (js/bewoners.js, e.bewoner).
   const isVrouw = (e) => e.vel === 'boerin' || !!(e.bewoner && e.bewoner.geslacht === 'vrouw');
-  const werkVelVan = (e, naam) => (isVrouw(e) && S.figuurGegevens(VAN_EEN_VROUW[naam]) ? VAN_EEN_VROUW[naam] : naam);
+  // Wie een uiterlijk heeft en volwassen is, werkt in dat uiterlijk (zaaier-u7; vraag 145), als dat vel er is.
+  const werkVelVan = (e, naam) => {
+    const gewoon = isVrouw(e) && S.figuurGegevens(VAN_EEN_VROUW[naam]) ? VAN_EEN_VROUW[naam] : naam;
+    const volwassen = e.bewoner && e.bewoner.leeftijd === 'volwassen';
+    return (volwassen && S.figuurVanUiterlijk(e, gewoon)) || gewoon;
+  };
   // Het vel waarmee deze boer of boerin maait (ook voor test/vellen.test.cjs).
   S.maaierVan = (e) => werkVelVan(e, 'maaier');
   function werkFiguur(e) {

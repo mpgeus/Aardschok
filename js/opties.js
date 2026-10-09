@@ -269,6 +269,16 @@
       ],
     },
     {
+      id: 'ouderWorden', naam: 'Ouder worden', standaard: 'aan',
+      uitleg: 'Of de mensen ouder worden, kinderen krijgen en van ouderdom sterven.',
+      keuzes: [
+        { id: 'aan', naam: 'Ja', zet: { 'LEVEN_INSTELLINGEN.aan': true },
+          uitleg: 'Een kleuter wordt een kind, een kind groeit op, en wie oud is, sterft na een paar jaar. Een gezin krijgt soms een kind, als er plaats is in het huis.' },
+        { id: 'uit', naam: 'Nee', zet: { 'LEVEN_INSTELLINGEN.aan': false },
+          uitleg: 'Iedereen blijft zo oud als hij kwam, en kinderen komen alleen met een nieuw gezin. Zoals voor 9 okt.' },
+      ],
+    },
+    {
       id: 'koorts', naam: 'Koorts', standaard: 'aan',
       uitleg: 'Of de koorts een tijd rondgaat, of alleen een kans op een dode is.',
       keuzes: [
@@ -747,6 +757,7 @@
     { naam: 'De bode', blok: 'BODE_INSTELLINGEN' },
     { naam: 'De brand', blok: 'BRAND_INSTELLINGEN' },
     { naam: 'De koorts', blok: 'KOORTS_INSTELLINGEN' },
+    { naam: 'Ouder worden', blok: 'LEVEN_INSTELLINGEN' },
     { naam: 'Het licht', blok: 'LICHT_INSTELLINGEN' },
     { naam: 'Gebouwen en bevolking', blok: 'GEBOUWEN_INSTELLINGEN' },
     { naam: 'De bewoners', blok: 'BEWONERS_INSTELLINGEN' },
