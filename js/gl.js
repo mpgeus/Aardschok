@@ -230,6 +230,11 @@
     if (!t) {
       t = { tex: nieuweTextuur(), b, h, versie };
       texturen.set(bron, t);
+    } else if (aantal && rijTextuur === t.tex) {
+      // Staat hij nog in de rij, dan die eerst: anders tekent alles in de rij wat er nu op komt. Een doek dat per beeld
+      // vaker opnieuw beschreven wordt (het kijkgat, één per wie achter een huis staat) liet zo op elke plek het laatste
+      // zien (Marcel, 9 okt: "art overlapt en klopt niet meer").
+      legRijAf();
     }
     gl.bindTexture(gl.TEXTURE_2D, t.tex);
     try {
