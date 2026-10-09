@@ -1003,4 +1003,6 @@ niets past, wijkt de zwakke grond voor strand (naast de zee) of gras. Golven die
   of niets). Wat er nog niet is: het verweren (vlekken, mos, steen door het pleister), dakranden die krullen, het
   afdakje boven de deur, de schaduw in de hoeken, en het stukje grond met spullen bij het huis. **Voorstel:** één
   vakwerkhuis van twee lagen met alle zes, als proefplaat; dan pas de regels voor alle tekeningen, in één ronde met de
-  bouwfasen, de brandfasen en de sneeuw. Open: sprookjesachtig of sober (de voorbeelden hebben allebei).
+  bouwfasen, de brandfasen en de sneeuw. **Marcel (9 okt): "De huizen moeten een goede balans zijn tussen
+  'sprookjesachtig' en 'echt'; het blijft een game uiteindelijk, dus het mag ook wel een beetje 'mooi' en 'leuk' zijn."**
+  Dus: het materiaal echt en verweerd (3, 6), de vorm met karakter en een beetje overdreven (1, 2), en het geheel uitnodigend.
