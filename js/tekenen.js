@@ -605,6 +605,7 @@
     if (gebakken) tekenStukken(ctx, bosVoorBij(S, g, zicht), zicht);
     tekenOntginRand(ctx, S);
     tekenJachtRand(ctx, S);
+    tekenSchoorsteenRook(ctx, S);
     tekenRook(ctx, S);
     ctx.restore();
 
@@ -2455,6 +2456,43 @@
         const a = (b.brandt ? 0.55 : 0.32) * (1 - leeftijd) * Math.min(1, leeftijd * 5);
         const grijs = Math.round(44 + 60 * leeftijd);
         ctx.fillStyle = `rgba(${grijs}, ${grijs - 3}, ${grijs - 6}, ${a.toFixed(3)})`;
+        ctx.fillRect(Math.round(x - m / 2), Math.round(y - m / 2), m, m);
+      }
+    }
+  }
+
+  // De rook uit de schoorsteen van een huis waar iemand thuis is (T.rookUitHuizen, js/kleinleven.js; vraag 145, 3), vóór
+  // de nacht: pluimpjes die opstijgen, groter en doorzichtiger worden en met de wind meedrijven. Uit de top van de
+  // schoorsteen, zoals de tekening zegt (`schoorsteen` in tegels.js, vanaf de hoek van de tekening, net als de ramen), of
+  // bij een hut, die er geen heeft, dun en breed uit de nok (`nok`). Een tekening zonder die plek rookt niet: liever geen
+  // rook dan rook uit een muur.
+  function tekenSchoorsteenRook(ctx, S) {
+    const D = T.dorpHier(S);
+    if (!D || !metSprites()) return;
+    const B = T.KLEIN_LEVEN_INSTELLINGEN.rookBeeld;
+    const t = S.tijd || 0;
+    for (const r of T.rookUitHuizen(D)) {
+      const g = r.g;
+      const opz = g.tekening && T.opzoekTegelNaam(g.tekening);
+      const eig = opz && opz.eig;
+      const plek = eig && (eig.schoorsteen || eig.nok);
+      if (!plek) continue;
+      const nok = !eig.schoorsteen;
+      const hoek = opGrond(g.x, g.y);
+      const bron = { x: hoek.x + plek[0], y: hoek.y + plek[1] };
+      const voet = T.voetVanGebouw(g);
+      const breed = nok ? (voet.b + voet.h) * 6 : 4;
+      const n = Math.round(B.pluimen * r.dik);
+      const zaad = g.x * 31 + g.y * 17;
+      for (let i = 0; i < n; i++) {
+        const k = zaad + i;
+        const leeftijd = (t * (0.1 + 0.05 * beeldLot(k, 91)) + beeldLot(k, 92)) % 1;
+        const x = bron.x + (beeldLot(k, 93) - 0.5) * breed + leeftijd ** 1.6 * B.wind + Math.sin(t * 0.8 + k) * 3 * leeftijd;
+        const y = bron.y - leeftijd * B.hoog * (nok ? 0.6 : 1);
+        const m = Math.round(B.klein + (B.groot - B.klein) * leeftijd);
+        const a = B.dicht * r.dik * (1 - leeftijd) * Math.min(1, leeftijd * 6);
+        const c = Math.round(205 - 40 * leeftijd);
+        ctx.fillStyle = `rgba(${c}, ${c}, ${c + 4}, ${a.toFixed(3)})`;
         ctx.fillRect(Math.round(x - m / 2), Math.round(y - m / 2), m, m);
       }
     }

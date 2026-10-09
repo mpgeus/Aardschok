@@ -486,8 +486,36 @@ function renderHuis(spec) {
     deur: m.deur,
     deurVer: m.deurVer,
     ramen: ramenVan(B, W, xa, ya, anker),
+    ...rookVan(W, draai, m),
     ms: Date.now() - t0,
   };
+}
+
+// Waar de rook uit een huis komt (vraag 145, 3: rook uit de schoorsteen als er iemand thuis is): de top van zijn
+// schoorsteen, op het dak of tegen de gevel, of bij een hut, die er geen heeft, het midden van zijn nok, waar de rook
+// door het riet trekt. In pixels vanaf het anker van het spel, zoals de ramen (de achterste voethoek plus 16): { schoorsteen:
+// [x, y] } of { nok: [x, y] }. Uit de vorm van het huis gerekend, zonder te renderen; de schoorsteen leunt een paar pixels,
+// en dat telt hier niet. Een gebouw uit delen (de kapel) heeft er geen.
+function rookVan(W, draai = 0, m = meetHuis(W, draai)) {
+  const H = W.H;
+  if (W.delen || !H) return null;
+  let punt = null;
+  let soort = 'schoorsteen';
+  const S = H.schoorsteen;
+  const GS = H.gevelSchoorsteen;
+  if (S) punt = [...S.V.wereld(S.a, S.q), S.V.nokZ(S.a) + H.dik + S.hoog + 5];
+  else if (GS) punt = [...GS.V.wereld(GS.V.ha - 5 + GS.d1 / 2, GS.qC), GS.zTop + 5];
+  else {
+    const V = H.vleugels[0];
+    punt = [...V.wereld(0, 0), V.nokZ(0) + H.dik];
+    soort = 'nok';
+  }
+  const p = draai ? Tr.draaiNaar(draai, punt) : punt;
+  const X = m.hoek[0] * TEGEL;
+  const Y = m.hoek[1] * TEGEL;
+  const sx = p[0] * EX[0] + p[1] * EX[1] + p[2] * EX[2] - (X * EX[0] + Y * EX[1]);
+  const sy = p[0] * EY[0] + p[1] * EY[1] + p[2] * EY[2] - (X * EY[0] + Y * EY[1]) - 16;
+  return { [soort]: [Math.round(sx), Math.round(sy)] };
 }
 
 // De ramen die je ziet (27 sep, werklijst vraag 39: 's avonds branden de ramen van de herberg, en je
@@ -1764,7 +1792,7 @@ function renderNieuw(namen, draden) {
   });
 }
 
-module.exports = { HUIZEN, STIJLEN, TORENS, grootGebouw, VORMEN, huttenVan, STANDEN, stijlNaam, FASEN, BRANDFASEN, RUINE, brandfaseVanHuis, renderHuis, renderHuizen, renderHuisFasen, renderHuisRuine, meetHuis };
+module.exports = { HUIZEN, STIJLEN, TORENS, grootGebouw, VORMEN, huttenVan, STANDEN, stijlNaam, FASEN, BRANDFASEN, RUINE, brandfaseVanHuis, renderHuis, renderHuizen, renderHuisFasen, renderHuisRuine, meetHuis, rookVan, wereldVan };
 
 // node gereedschap/pixelart/huizen.cjs [naam ...]: de huizen los op een proefplaat, met hun voet
 // (een ruit) en de tegel voor hun deur (een punt), om te zien of die kloppen. Naar

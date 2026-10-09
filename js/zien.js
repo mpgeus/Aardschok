@@ -99,6 +99,13 @@
   // nog gebouwd wordt, heeft nog geen ramen.
   function huizenLicht(D, deel) {
     if ((deel !== 'avond' && deel !== 'ochtend') || !D.bewoners) return [];
+    return T.huizenMetIemandThuis(D).map(({ g, deur }) => ({ x: deur.x, y: deur.y, straal: IN().huisStraal, sterkte: IN().huisSterkte, ramenVan: g, schimmen: 0, soort: 'huis' }));
+  }
+
+  // De huizen waar iemand thuis is, binnen of op zijn erf: [{ g, deur }]. Niet de herberg, niet wat nog gebouwd wordt of
+  // brandt. Voor het licht in de ramen (hierboven) en de rook uit de schoorsteen (js/tekenen.js; vraag 145, 3).
+  T.huizenMetIemandThuis = function (D) {
+    if (!D.bewoners) return [];
     const w = D.wereld;
     const herbergen = new Set(T.herbergenVan(D));
     const straal = T.DAG_INSTELLINGEN.erfStraal + 2;
@@ -117,10 +124,10 @@
         : T.afstand({ x: e.tx, y: e.ty }, deur) <= straal;
       if (!thuis) continue;
       huis.aan = true;
-      uit.push({ x: deur.x, y: deur.y, straal: IN().huisStraal, sterkte: IN().huisSterkte, ramenVan: g, schimmen: 0, soort: 'huis' });
+      uit.push({ g, deur });
     }
     return uit;
-  }
+  };
 
   // Hoe ver je iemand ziet die op deze tegel staat: naar het licht van de dag, en verder als hij in het
   // licht van een lantaarn of de herberg staat.
