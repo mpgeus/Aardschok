@@ -36,8 +36,6 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
 0b. Engels en een vertaaltool (vraag 147; Marcel, 9 okt): de basis nu, naast de ui; het omzetten van alle tekst na de
    ui en vóór de proefversie. Stap 1 (de basis, de tool, het menu als proef) staat in `main` (9 okt); stap 2, het
    omzetten, na de ui.
-   **Bezig in sessie `vertalen`** (10 okt): de vertaaltool leesbaar, rustig en duidelijk (Marcel: "Slecht te lezen,
-   Rommelig, Onduidelijk wat te doen").
 0c. Meer variatie in het groen, de bomen en de versiering (vraag 148; Marcel, 9 okt: alles ja, "Mag ernaast"), naast
    de ui: eerst de bomen (vormen, nieuwe soorten, de seizoenen met vruchten), dan het groen eronder, dan de spullen bij de
    huizen; de sneeuw op de bomen en de huizen (144, 4b, Marcel: "ja") in dezelfde ronde. **Bezig in sessie `main`
@@ -7345,6 +7343,18 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     markeert, zodat wat ongemarkeerd blijft, nog niet om is. Wat de speeltest aan tekst leest, krijgt `?taal=nl`. Het
     grootste werk: de gesprekken (4.800 woorden), de spelregels (4.600), de balk en de tafel. Later (stap 4): de tool
     ook in het spel onder het menu, en een map `talen/` naast het spel in Electron (`verpakken.md`).
+    **De vertaaltool opnieuw (10 okt; Marcel, over de eerste: "Slecht te lezen, Rommelig, Onduidelijk wat te doen"):**
+    licht papier met inkt en grote letters, met een eigen opmaak (die van het spel maakt de bladzijde donker en tekst
+    onselecteerbaar); bovenaan alleen je taal, hoe ver je bent en de knoppen (op onze server Save, anders Download
+    vooraan); drie stappen voor wie begint (weg te klikken); tabbladen Te doen, Problemen, Af en Alles; per zin een
+    kaartje, met de `{woorden}` als knopjes die je in je vertaling zet, de fout in gewone woorden, en de uitleg van een
+    meervoud alleen bij een zin die telt; een nieuwe taal in een klein formulier. Links staan de delen van het spel in
+    woorden (`GEBIEDEN` in `gereedschap/vertalen/pagina.js`), zodra er meer dan één is: stap 2 zet daar elk bestand bij
+    dat omgaat.
+    **Ook (10 okt):** de wereldkaart (`gereedschap/wereld.html`) tekende geen huizen en mensen meer, en de grond in
+    steeds kleinere kopieën: `js/tekenen.js` vroeg de kalender en `js/sprites.js` sinds vraag 145 het uiterlijk van
+    een bewoner, die het gereedschap allebei niet heeft. Gerepareerd; het gereedschap zet nu elk beeld de stand van
+    het doek opnieuw en zegt een fout in de statusregel.
 
 148. **Meer variatie in het groen, de bomen en de versiering van het dorp** (Marcel, 9 okt: "Ik wil meer variatie in de
     vegetatie, ook bomen en versieringen van het dorp"; besloten 9 okt).

@@ -1,14 +1,15 @@
 // De vertaaltool (gereedschap/vertalen.html, vraag 147; Marcel, 9 okt: "Ook moeten we een translate tool hebben.
-// Mochten we leden uit de community krijgen die een vertaling willen maken.").
+// Mochten we leden uit de community krijgen die een vertaling willen maken."; 10 okt, over de eerste: "Slecht te
+// lezen, Rommelig, Onduidelijk wat te doen").
 //
-// Links de bestanden van het spel, rechts per Engelse zin (taal/bron.js) wat hij in jouw taal is. Wat je typt, bewaart
-// de browser meteen, dus er gaat niets verloren:
-//   - een taal die in taal/ staat (het Nederlands): je wijzigingen apart (T.KLAD_SLEUTEL), tot Opslaan ze op onze server
+// Bovenaan je taal, hoe ver je bent, en wat je ermee doet; daaronder drie stappen voor wie begint, de tabbladen (te
+// doen, problemen, af, alles) en per Engelse zin (taal/bron.js) een kaartje met je vertaling. De {woorden} die het
+// spel invult, staan als knopjes onder de zin: een klik zet ze in je vertaling. Wat je typt, bewaart de browser meteen:
+//   - een taal die in taal/ staat (het Nederlands): je wijzigingen apart (T.KLAD_SLEUTEL), tot Save ze op onze server
 //     in taal/<code>.js schrijft;
-//   - een eigen taal (Nieuwe taal, of een bestand dat iemand deelde): helemaal in de browser (T.EIGEN_TALEN_SLEUTEL), en
-//     het spel in dezelfde browser kent hem meteen (js/taal.js), ook zonder server.
+//   - een eigen taal (+ New language, of een bestand dat iemand stuurde): helemaal in de browser
+//     (T.EIGEN_TALEN_SLEUTEL), en het spel in dezelfde browser kent hem meteen (js/taal.js), ook zonder server.
 // Download geeft het bestand om te delen; Open leest het weer in, als gegevens (T.leesTaalBestand), nooit als code.
-//
 // Wat er mis is aan een vertaling, zegt T.keurVertaling (dezelfde als in test/taal.test.cjs); een zin die in de code
 // veranderde, laat zijn oude vertaling achter, en de tool biedt die aan bij de zin die er het meest op lijkt.
 (function (T) {
@@ -19,7 +20,14 @@
   const BRON = T.TAAL_BRON || [];
   const BRONSET = new Set(BRON.map((z) => z.t));
   const OP_SERVER = /^https?:$/.test(location.protocol) && /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
-  const PER_KEER = 250; // zoveel rijen tegelijk; Meer toont de rest
+  const PER_KEER = 200; // zoveel kaartjes tegelijk; Show more toont de rest
+  const NIEUW = '__nieuw';
+
+  // Waar een bestand in het spel is, in woorden voor een vertaler; stap 2 van vraag 147 zet er elk bestand bij dat omgaat.
+  const GEBIEDEN = {
+    'js/menu.js': 'Title screen and menu',
+  };
+  const gebiedVan = (f) => GEBIEDEN[f] || f.replace(/^js\//, '').replace(/\.js$/, '');
 
   // ── De browser ──
 
@@ -40,6 +48,7 @@
       return false;
     }
   };
+  const EIGEN = `${T.OPSLAG_SLEUTEL}.vertalen`;
 
   // ── De talen ──
 
@@ -66,11 +75,7 @@
       basis = {};
       werk = eigen ? { code, naam: eigen.naam, locale: eigen.locale, zinnen: { ...eigen.zinnen } } : null;
     }
-    try {
-      localStorage.setItem(`${T.OPSLAG_SLEUTEL}.vertalen.taal`, code);
-    } catch (e) {
-      // dan kiest de tool de volgende keer opnieuw
-    }
+    schrijf(`${EIGEN}.taal`, code);
   }
 
   // Wat er veranderde ten opzichte van taal/<code>.js (null: weggehaald).
@@ -90,7 +95,6 @@
       alle[werk.code] = { code: werk.code, naam: werk.naam, locale: werk.locale, zinnen: werk.zinnen };
       schrijf(T.EIGEN_TALEN_SLEUTEL, alle);
     }
-    toonStand();
   }
 
   // ── Hoe een zin ervoor staat ──
@@ -98,6 +102,11 @@
   const vertaling = (t) => werk.zinnen[t] || '';
   const foutenVan = (t) => T.keurVertaling(t, vertaling(t), werk.locale);
   const staatVan = (t) => (!vertaling(t) ? 'ontbreekt' : foutenVan(t).length ? 'fout' : 'af');
+  const telling = () => {
+    const n = { ontbreekt: 0, fout: 0, af: 0, alles: BRON.length };
+    for (const z of BRON) n[staatVan(z.t)]++;
+    return n;
+  };
 
   // De zinnen die niet meer in het spel staan (de code veranderde), met hun vertaling.
   const over = () => Object.keys(werk.zinnen).filter((k) => !BRONSET.has(k));
@@ -125,37 +134,61 @@
     return beste;
   }
 
+  // De stukken tussen { en } op het bovenste niveau van een zin: '{plek}', '{n|# person|# people}'.
+  function blokkenIn(tekst) {
+    const uit = [];
+    let diep = 0;
+    let begin = -1;
+    for (let i = 0; i < tekst.length; i++) {
+      if (tekst[i] === '{' && diep++ === 0) begin = i;
+      else if (tekst[i] === '}' && diep > 0 && --diep === 0) uit.push(tekst.slice(begin, i + 1));
+    }
+    return [...new Set(uit)];
+  }
+  const naamVanBlok = (b) => b.slice(1, -1).split('|')[0].trim();
+  const vormenVan = (b) => b.slice(1, -1).split('|').slice(1);
+  const isKeuze = (b) => vormenVan(b).some((v) => /^[^#\s{][^:]*:/.test(v));
+  // Of het woord in de vertaling staat: {plek}, of {n| voor een meervoud.
+  const staatErin = (b, tekst) => new RegExp(`\\{\\s*${naamVanBlok(b).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*[|}]`).test(tekst);
+
   // ── Het scherm ──
 
-  let bestand = null; // het bestand links, of null: alle
+  let filter = 'ontbreekt';
+  let gebied = null; // het deel van het spel links, of null: alles
   let getoond = PER_KEER;
 
   function melding(tekst) {
-    $('vt-stand').innerHTML = `<span class="vt-let">${esc(tekst)}</span>`;
+    const el = $('vt-melding');
+    el.textContent = tekst;
+    el.classList.add('vt-aan');
     clearTimeout(melding.klok);
-    melding.klok = setTimeout(toonStand, 6000);
+    melding.klok = setTimeout(() => el.classList.remove('vt-aan'), 6000);
   }
 
-  function toonStand() {
+  function toonKop() {
+    const knoppen = ['vt-download', 'vt-spelen'].map($);
+    for (const k of knoppen) k.disabled = !werk;
+    $('vt-opslaan').hidden = !OP_SERVER || !werk;
+    // Op onze server is opslaan in het spel het hoofdwerk; elders het bestand dat je deelt.
+    $('vt-download').classList.toggle('vt-hoofd', !OP_SERVER);
     if (!werk) {
-      $('vt-stand').textContent = 'Choose a language, or start a new one.';
+      $('vt-telling').textContent = 'No language chosen yet';
+      $('vt-balk-vol').style.width = '0';
+      $('vt-bewaard').textContent = '';
       return;
     }
-    const af = BRON.filter((z) => staatVan(z.t) === 'af').length;
-    const fout = BRON.filter((z) => staatVan(z.t) === 'fout').length;
-    const vormen = T.meervoudsVormen(werk.locale);
-    const delen = [
-      `<strong>${esc(werk.naam)}</strong> (${esc(werk.code)}): ${af} of ${BRON.length} sentences translated (${BRON.length ? Math.floor((100 * af) / BRON.length) : 100}%)`,
-      fout ? `<span class="vt-let">${fout} with a problem</span>` : '',
-      `plural forms in ${esc(werk.locale)}: ${vormen.join(', ')}; write {n|${vormen.map((v) => `form for ${v}`).join('|')}}, with # for the number`,
-    ];
+    const n = telling();
+    const pct = BRON.length ? Math.floor((100 * n.af) / BRON.length) : 100;
+    $('vt-telling').textContent = `${n.af} of ${BRON.length} sentences translated (${pct}%)`;
+    $('vt-balk-vol').style.width = `${pct}%`;
     if (isBestandsTaal(werk.code)) {
-      const n = Object.keys(wijzigingen()).length;
-      delen.push(n ? `<span class="vt-let">${n} change${n === 1 ? '' : 's'} not yet in taal/${esc(werk.code)}.js</span>` : `same as taal/${esc(werk.code)}.js`);
+      const w = Object.keys(wijzigingen()).length;
+      $('vt-bewaard').textContent = w
+        ? `${w} change${w === 1 ? '' : 's'} kept in this browser, not yet in the game${OP_SERVER ? ': press Save' : ''}`
+        : 'Everything is in the game';
     } else {
-      delen.push('kept in this browser; download the file to share it');
+      $('vt-bewaard').textContent = 'Kept in this browser as you type · download the file to share it';
     }
-    $('vt-stand').innerHTML = delen.filter(Boolean).join(' · ');
   }
 
   function toonTalen() {
@@ -163,89 +196,157 @@
     const talen = T.talen().filter((t) => t.code !== T.BRONTAAL.code);
     // ook een eigen taal die na het laden van de bladzijde kwam
     for (const e of Object.values(T.eigenTalen())) if (!talen.some((t) => t.code === e.code)) talen.push({ ...e, eigen: true });
-    keuze.innerHTML = talen
-      .map((t) => `<option value="${esc(t.code)}"${werk && werk.code === t.code ? ' selected' : ''}>${esc(t.naam)} (${esc(t.code)})${t.eigen ? ' · in this browser' : ''}</option>`)
-      .join('');
+    keuze.innerHTML =
+      (werk ? '' : '<option value="" selected disabled>Choose…</option>') +
+      talen
+        .map((t) => `<option value="${esc(t.code)}"${werk && werk.code === t.code ? ' selected' : ''}>${esc(t.naam)} (${esc(t.code)})${t.eigen ? ' · in this browser' : ''}</option>`)
+        .join('') +
+      `<option value="${NIEUW}">+ New language…</option>`;
   }
 
+  function toonTabs() {
+    const n = werk ? telling() : { ontbreekt: 0, fout: 0, af: 0, alles: BRON.length };
+    for (const tab of document.querySelectorAll('.vt-tab')) {
+      const f = tab.dataset.filter;
+      tab.querySelector('b').textContent = n[f];
+      tab.classList.toggle('vt-hier', f === filter);
+      tab.classList.toggle('vt-rood', f === 'fout' && n.fout > 0);
+    }
+  }
+
+  // Links de delen van het spel, als het er meer dan één zijn.
   function toonLijst() {
-    const bestanden = [];
-    for (const z of BRON) for (const w of z.waar) if (!bestanden.includes(w)) bestanden.push(w);
-    const mist = (zinnen) => zinnen.filter((z) => staatVan(z.t) !== 'af').length;
-    const regel = (naam, label, zinnen) => {
-      const m = mist(zinnen);
-      return `<a data-bestand="${esc(naam)}" class="${bestand === naam ? 'vt-hier' : ''}">${esc(label)} <span class="${m ? '' : 'vt-klaar'}">${m ? `${m} to do` : '✓'}</span></a>`;
-    };
-    let html = regel('', 'All sentences', BRON);
-    for (const b of bestanden) html += regel(b, b.replace(/^js\//, ''), BRON.filter((z) => z.waar.includes(b)));
-    const weg = over();
-    if (weg.length) html += `<a data-bestand="(over)" class="${bestand === '(over)' ? 'vt-hier' : ''}">No longer in the game <span>${weg.length}</span></a>`;
-    $('vt-lijst').innerHTML = html;
+    const gebieden = [];
+    for (const z of BRON) for (const w of z.waar) if (!gebieden.includes(w)) gebieden.push(w);
+    const weg = werk ? over() : [];
+    const lijst = $('vt-lijst');
+    lijst.hidden = gebieden.length < 2 && !weg.length;
+    if (lijst.hidden) return;
+    const open = (zinnen) => (werk ? zinnen.filter((z) => staatVan(z.t) !== 'af').length : zinnen.length);
+    const regel = (sleutel, label, n) =>
+      `<a data-gebied="${esc(sleutel)}" class="${(gebied || '') === sleutel ? 'vt-hier' : ''}">${esc(label)} <span>${n ? `${n} to do` : '✓'}</span></a>`;
+    lijst.innerHTML =
+      '<h3>Where in the game</h3>' +
+      regel('', 'Everything', open(BRON)) +
+      gebieden.map((g) => regel(g, gebiedVan(g), open(BRON.filter((z) => z.waar.includes(g))))).join('') +
+      (weg.length ? `<a data-gebied="(over)" class="${gebied === '(over)' ? 'vt-hier' : ''}">No longer in the game <span>${weg.length}</span></a>` : '');
   }
 
-  // De Engelse zin, met wat tussen { en } staat in een andere kleur.
+  // De Engelse zin, met wat tussen { en } staat als een woord van het spel.
   const toonBron = (t) => esc(t).replace(/\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}/g, (m) => `<span class="vt-woord">${m}</span>`);
 
-  function rij(z) {
-    const staat = staatVan(z.t);
-    const fout = staat === 'fout' ? foutenVan(z.t) : [];
-    const voorstel = staat === 'ontbreekt' ? voorstelVoor(z.t) : null;
+  // Onder je vertaling: de woorden die erin moeten, wat er mis is, en hoe een meervoud of een keuze gaat.
+  function hulpVan(z) {
+    const tekst = vertaling(z.t);
+    const blokken = blokkenIn(z.t);
+    let html = '';
+    if (blokken.length) {
+      html +=
+        `<div class="vt-hulp">The game fills in: ` +
+        blokken
+          .map((b) => {
+            const label = vormenVan(b).length ? `{${naamVanBlok(b)}|…}` : b;
+            return `<button type="button" class="vt-chip${staatErin(b, tekst) ? ' vt-erin' : ''}" data-voeg="${esc(b)}" title="Put ${esc(b)} in your translation">${esc(label)}</button>`;
+          })
+          .join('') +
+        `</div>`;
+    }
+    for (const b of blokken.filter((b) => vormenVan(b).length)) {
+      const naam = naamVanBlok(b);
+      if (isKeuze(b)) {
+        html += `<p class="vt-meervoud"><span class="vt-woord">{${esc(naam)}|…}</span> picks a word: keep what stands before each colon, and translate what follows it.</p>`;
+      } else {
+        const vormen = T.meervoudsVormen(werk.locale);
+        html +=
+          `<p class="vt-meervoud"><span class="vt-woord">{${esc(naam)}|…}</span> is a number. ${esc(werk.naam)} writes it in ${vormen.length} form${vormen.length === 1 ? '' : 's'} ` +
+          `(${vormen.join(', ')}): <span class="vt-woord">{${esc(naam)}|${vormen.map((v) => `form for ${v}`).join('|')}}</span>, with # for the number.</p>`;
+      }
+    }
+    const fout = tekst ? foutenVan(z.t) : [];
+    for (const f of fout) html += `<p class="vt-melding-fout">${esc(f)}</p>`;
+    const voorstel = !tekst ? voorstelVoor(z.t) : null;
+    if (voorstel) {
+      html +=
+        `<div class="vt-voorstel">This English sentence changed. You translated an earlier version:<br>` +
+        `“${esc(voorstel.k)}” → <b>“${esc(werk.zinnen[voorstel.k])}”</b><br>` +
+        `<button type="button" class="vt-knop vt-klein" data-neem="${esc(voorstel.k)}">Use it, and adjust</button></div>`;
+    }
+    return html;
+  }
+
+  function zin(z) {
+    const waar = z.waar.map(gebiedVan).join(', ');
     return (
-      `<div class="vt-rij${staat === 'ontbreekt' ? ' vt-mist' : ''}" data-t="${esc(z.t)}">` +
-      `<div class="vt-bron">${toonBron(z.t)}<span class="vt-waar">${esc(z.waar.join(', '))}</span></div>` +
-      `<textarea rows="${Math.max(1, Math.ceil(z.t.length / 60))}" spellcheck="true" lang="${esc(werk.code)}">${esc(vertaling(z.t))}</textarea>` +
-      (fout.length ? `<div class="vt-fout">${esc(fout.join('; '))}</div>` : '') +
-      (voorstel
-        ? `<div class="vt-voorstel">The source changed. Earlier: “${esc(voorstel.k)}” → “${esc(werk.zinnen[voorstel.k])}”` +
-          `<button type="button" data-neem="${esc(voorstel.k)}">Use and adjust</button></div>`
-        : '') +
-      `</div>`
+      `<article class="vt-zin vt-${staatVan(z.t) === 'ontbreekt' ? 'mist' : staatVan(z.t)}" data-t="${esc(z.t)}">` +
+      `<div><p class="vt-engels">${toonBron(z.t)}</p><p class="vt-waar">${esc(waar)}</p></div>` +
+      `<div><textarea rows="1" spellcheck="true" lang="${esc(werk.code)}" placeholder="Your translation" aria-label="Translation">${esc(vertaling(z.t))}</textarea>` +
+      `<div class="vt-onder">${hulpVan(z)}</div></div>` +
+      `</article>`
     );
   }
+
+  const groei = (vak) => {
+    vak.style.height = 'auto';
+    vak.style.height = `${vak.scrollHeight + 2}px`;
+  };
 
   function toonInhoud() {
     const doos = $('vt-inhoud');
     if (!werk) {
-      doos.innerHTML = '<p class="vt-uitleg">No language yet. Choose “New language…” to start one.</p>';
+      doos.innerHTML = '<p class="vt-leeg">Choose your language at the top, or start a new one.</p>';
       return;
     }
-    if (bestand === '(over)') {
+    if (gebied === '(over)') {
       doos.innerHTML =
-        `<h2 class="vt-deel">No longer in the game</h2><p class="vt-uitleg">These sentences changed or were removed from the game. ` +
-        `Where a new sentence looks like one of them, its row offers the old translation. Forget them when they are no longer of use.</p>` +
+        `<p class="vt-waar">These sentences changed or left the game. Where a new sentence looks like one of them, its card offers the old translation. Forget them when they are of no more use.</p>` +
         over()
-          .map((k) => `<div class="vt-rij"><div class="vt-bron">${toonBron(k)}</div><div>${esc(werk.zinnen[k])} <button type="button" data-vergeet="${esc(k)}">Forget</button></div></div>`)
+          .map(
+            (k) =>
+              `<article class="vt-zin"><div><p class="vt-engels">${toonBron(k)}</p></div>` +
+              `<div class="vt-vergeet"><span>${esc(werk.zinnen[k])}</span><button type="button" class="vt-knop vt-klein" data-vergeet="${esc(k)}">Forget</button></div></article>`,
+          )
           .join('');
       return;
     }
     const zoek = $('vt-zoek').value.trim().toLowerCase();
-    const filter = $('vt-filter').value;
     const zinnen = BRON.filter(
       (z) =>
-        (!bestand || z.waar.includes(bestand)) &&
+        (!gebied || z.waar.includes(gebied)) &&
         (filter === 'alles' || staatVan(z.t) === filter) &&
         (!zoek || z.t.toLowerCase().includes(zoek) || vertaling(z.t).toLowerCase().includes(zoek)),
     );
+    const leeg = { ontbreekt: 'Nothing left to translate here. Well done!', fout: 'No problems.', af: 'Nothing translated here yet.', alles: 'No sentences.' };
     doos.innerHTML =
-      (zinnen.length ? zinnen.slice(0, getoond).map(rij).join('') : '<p class="vt-uitleg">Nothing here.</p>') +
-      (zinnen.length > getoond ? `<button type="button" class="vt-meer" data-meer>Show ${Math.min(PER_KEER, zinnen.length - getoond)} more (of ${zinnen.length - getoond})</button>` : '');
+      (zinnen.length ? zinnen.slice(0, getoond).map(zin).join('') : `<p class="vt-leeg">${zoek ? 'Nothing matches your search.' : leeg[filter]}</p>`) +
+      (zinnen.length > getoond ? `<button type="button" class="vt-knop vt-meer" data-meer>Show ${Math.min(PER_KEER, zinnen.length - getoond)} more (${zinnen.length - getoond} left)</button>` : '');
+    for (const vak of doos.querySelectorAll('textarea')) groei(vak);
+  }
+
+  function toonUitleg() {
+    $('vt-uitleg').hidden = !!lees(`${EIGEN}.uitlegGezien`) && !!werk;
+    $('vt-stap3').innerHTML = OP_SERVER
+      ? '<b>Save</b> writes your language into the game (taal/). <b>Play in this language</b> shows it in the game right away.'
+      : '<b>Download file</b> and send it to us. <b>Play in this language</b> shows your translation in the game right away, in this browser.';
   }
 
   function toonAlles() {
     toonTalen();
+    toonKop();
+    toonTabs();
     toonLijst();
     toonInhoud();
-    toonStand();
-    $('vt-opslaan').classList.toggle('verborgen', !OP_SERVER || !werk);
+    toonUitleg();
   }
 
-  // Na het typen alleen deze rij en de stand opnieuw, zodat de cursor blijft staan.
-  function werkRijBij(el) {
+  // Na het typen alleen dit kaartje, de kop en de tellers, zodat de cursor blijft staan (en een vertaalde zin pas bij
+  // een ander tabblad uit Te doen gaat).
+  function werkZinBij(el) {
     const t = el.dataset.t;
     const staat = staatVan(t);
-    el.classList.toggle('vt-mist', staat === 'ontbreekt');
-    for (const oud of el.querySelectorAll('.vt-fout, .vt-voorstel')) oud.remove();
-    if (staat === 'fout') el.insertAdjacentHTML('beforeend', `<div class="vt-fout">${esc(foutenVan(t).join('; '))}</div>`);
+    el.className = `vt-zin vt-${staat === 'ontbreekt' ? 'mist' : staat}`;
+    el.querySelector('.vt-onder').innerHTML = hulpVan(BRON.find((z) => z.t === t));
+    toonKop();
+    toonTabs();
   }
 
   // ── Wat je doet ──
@@ -254,16 +355,24 @@
   $('vt-inhoud').addEventListener('input', (ev) => {
     const vak = ev.target.closest('textarea');
     if (!vak || !werk) return;
-    const el = vak.closest('.vt-rij');
-    const t = el.dataset.t;
-    if (vak.value === '') delete werk.zinnen[t];
-    else werk.zinnen[t] = vak.value;
-    werkRijBij(el);
+    const el = vak.closest('.vt-zin');
+    if (vak.value === '') delete werk.zinnen[el.dataset.t];
+    else werk.zinnen[el.dataset.t] = vak.value;
+    groei(vak);
+    werkZinBij(el);
     clearTimeout(wachten);
     wachten = setTimeout(() => {
       bewaarLokaal();
       toonLijst();
     }, 300);
+  });
+  // Ctrl+Enter: naar de volgende zin.
+  $('vt-inhoud').addEventListener('keydown', (ev) => {
+    if (ev.key !== 'Enter' || !(ev.ctrlKey || ev.metaKey) || !ev.target.closest('textarea')) return;
+    ev.preventDefault();
+    const vakken = [...$('vt-inhoud').querySelectorAll('textarea')];
+    const volgende = vakken[vakken.indexOf(ev.target) + 1];
+    if (volgende) volgende.focus();
   });
 
   $('vt-inhoud').addEventListener('click', (ev) => {
@@ -273,14 +382,27 @@
       getoond += PER_KEER;
       return toonInhoud();
     }
+    const el = b.closest('.vt-zin');
+    if (b.dataset.voeg) {
+      // Het woord waar de cursor staat, of achteraan.
+      const vak = el.querySelector('textarea');
+      const begin = document.activeElement === vak ? vak.selectionStart : vak.value.length;
+      const eind = document.activeElement === vak ? vak.selectionEnd : vak.value.length;
+      vak.focus();
+      vak.setRangeText(b.dataset.voeg, begin, eind, 'end');
+      vak.dispatchEvent(new Event('input', { bubbles: true }));
+      return;
+    }
     if (b.dataset.neem) {
-      const el = b.closest('.vt-rij');
       werk.zinnen[el.dataset.t] = werk.zinnen[b.dataset.neem];
       delete werk.zinnen[b.dataset.neem];
       bewaarLokaal();
-      toonAlles();
-      const vak = $('vt-inhoud').querySelector(`.vt-rij[data-t="${CSS.escape(el.dataset.t)}"] textarea`);
-      if (vak) vak.focus();
+      const vak = el.querySelector('textarea');
+      vak.value = werk.zinnen[el.dataset.t];
+      groei(vak);
+      werkZinBij(el);
+      toonLijst();
+      vak.focus();
       return;
     }
     if (b.dataset.vergeet) {
@@ -289,37 +411,64 @@
       toonAlles();
     }
   });
+  // Een knopje met een woord neemt de cursor niet uit het vak.
+  $('vt-inhoud').addEventListener('mousedown', (ev) => {
+    if (ev.target.closest('.vt-chip')) ev.preventDefault();
+  });
 
   $('vt-lijst').addEventListener('click', (ev) => {
-    const a = ev.target.closest('a[data-bestand]');
+    const a = ev.target.closest('a[data-gebied]');
     if (!a) return;
-    bestand = a.dataset.bestand || null;
+    gebied = a.dataset.gebied || null;
     getoond = PER_KEER;
     toonLijst();
     toonInhoud();
     $('vt-inhoud').scrollTop = 0;
   });
 
-  $('vt-taal').addEventListener('change', (ev) => {
-    laadTaal(ev.target.value);
+  document.querySelector('.vt-tabs').addEventListener('click', (ev) => {
+    const tab = ev.target.closest('.vt-tab');
+    if (!tab) return;
+    filter = tab.dataset.filter;
+    if (gebied === '(over)') gebied = null;
     getoond = PER_KEER;
-    toonAlles();
+    toonTabs();
+    toonLijst();
+    toonInhoud();
   });
   $('vt-zoek').addEventListener('input', () => {
     getoond = PER_KEER;
     toonInhoud();
   });
-  $('vt-filter').addEventListener('change', () => {
+
+  // De eerste tab: wat er te doen is, en anders alles.
+  const kiesBeginTab = () => {
+    filter = werk && telling().ontbreekt ? 'ontbreekt' : 'alles';
+  };
+
+  $('vt-taal').addEventListener('change', (ev) => {
+    if (ev.target.value === NIEUW) {
+      toonTalen(); // de keuze terug op de taal van nu
+      $('vt-nieuw').hidden = false;
+      $('vt-nieuw-naam').focus();
+      return;
+    }
+    laadTaal(ev.target.value);
+    gebied = null;
     getoond = PER_KEER;
-    toonInhoud();
+    kiesBeginTab();
+    toonAlles();
   });
 
-  $('vt-nieuw').addEventListener('click', () => {
-    const code = (prompt('Language code, such as de, fr, pt-BR or zh-Hans:') || '').trim();
-    if (!code) return;
-    if (!T.isTaalCode(code) || code === T.BRONTAAL.code) return melding(`“${code}” is not a language code we can use.`);
-    if (isBestandsTaal(code) || T.eigenTalen()[code]) return melding(`There is already a language ${code}; choose it in the list.`);
-    const naam = (prompt('The name of the language, in that language (Deutsch, Français, …):') || '').trim() || code;
+  $('vt-nieuw-weg').addEventListener('click', () => {
+    $('vt-nieuw').hidden = true;
+  });
+  $('vt-nieuw').addEventListener('submit', (ev) => {
+    ev.preventDefault();
+    const code = $('vt-nieuw-code').value.trim();
+    const naam = $('vt-nieuw-naam').value.trim() || code;
+    if (!T.isTaalCode(code) || code === T.BRONTAAL.code) return melding(`“${code}” is not a language code we can use. Try de, fr, es or pt-BR.`);
+    if (isBestandsTaal(code) || T.eigenTalen()[code]) return melding(`There already is a language ${code}: choose it at the top.`);
     let locale = code;
     try {
       // de → de-DE (voor het meervoud en de datum); een code met een streek of schrift (pt-BR, zh-Hans) blijft zoals hij is
@@ -332,7 +481,19 @@
     basis = {};
     bewaarLokaal();
     laadTaal(code);
+    $('vt-nieuw').hidden = true;
+    $('vt-nieuw').reset();
+    filter = 'ontbreekt';
+    gebied = null;
     toonAlles();
+    melding(`${naam} is ready. Start with the first sentence below.`);
+    const eerste = $('vt-inhoud').querySelector('textarea');
+    if (eerste) eerste.focus();
+  });
+
+  $('vt-uitleg-weg').addEventListener('click', () => {
+    schrijf(`${EIGEN}.uitlegGezien`, true);
+    $('vt-uitleg').hidden = true;
   });
 
   $('vt-download').addEventListener('click', () => {
@@ -343,8 +504,10 @@
     a.download = `${werk.code}.js`;
     a.click();
     setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    melding(`Downloaded ${werk.code}.js. Send it to us, or open it here again later with Open file.`);
   });
 
+  $('vt-open-knop').addEventListener('click', () => $('vt-open').click());
   $('vt-open').addEventListener('change', async (ev) => {
     const f = ev.target.files[0];
     ev.target.value = '';
@@ -367,6 +530,7 @@
     }
     bewaarLokaal();
     laadTaal(def.code);
+    kiesBeginTab();
     toonAlles();
     melding(`Opened ${f.name}: ${Object.keys(def.zinnen).length} sentences.`);
   });
@@ -382,10 +546,10 @@
         T.TALEN[werk.code].zinnen = { ...werk.zinnen };
         schrijf(T.KLAD_SLEUTEL(werk.code), null);
       }
-      toonStand();
+      toonKop();
       melding(
         uit.nieuw
-          ? `Saved ${uit.bestand}. New language: add <script src="${uit.bestand}"></script> to index.html and gereedschap/vertalen.html, after taal/nl.js.`
+          ? `Saved ${uit.bestand}. A new language: add <script src="${uit.bestand}"></script> to index.html and gereedschap/vertalen.html, after taal/nl.js.`
           : `Saved ${uit.bestand}.`,
       );
     } catch (e) {
@@ -402,16 +566,11 @@
 
   // ── Begin ──
 
-  const eerder = (() => {
-    try {
-      return localStorage.getItem(`${T.OPSLAG_SLEUTEL}.vertalen.taal`);
-    } catch (e) {
-      return null;
-    }
-  })();
+  const eerder = lees(`${EIGEN}.taal`);
   const talen = T.talen().filter((t) => t.code !== T.BRONTAAL.code);
-  const begin = talen.find((t) => t.code === eerder) || talen[0];
+  const begin = talen.find((t) => t.code === eerder) || null;
   if (begin) laadTaal(begin.code);
-  if (!BRON.length) melding('taal/bron.js is empty: run npm run teksten first.');
+  kiesBeginTab();
   toonAlles();
+  if (!BRON.length) melding('taal/bron.js is empty: run npm run teksten first.');
 })(globalThis.Spel);

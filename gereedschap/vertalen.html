@@ -6,37 +6,71 @@
   <title>{naam} · translate</title>
   <!-- De vertaaltool (vraag 147): voor wie uit de community een taal maakt, dus in het Engels. Hij werkt ook los
        geopend (file://) en zonder onze server: de zinnen komen uit taal/bron.js (npm run teksten), de talen uit
-       taal/*.js, en wat je vertaalt, bewaart de browser; met onze server schrijft Opslaan meteen taal/<code>.js. -->
+       taal/*.js, en wat je vertaalt, bewaart de browser; met onze server schrijft Save meteen taal/<code>.js. -->
   <script src="../js/naam.js"></script>
   <script src="../js/taal.js"></script>
   <script src="../taal/nl.js"></script>
   <script src="../taal/bron.js"></script>
-  <link rel="stylesheet" href="../stijl.css">
   <link rel="stylesheet" href="vertalen/vertalen.css">
 </head>
 <body>
   <header class="vt-kop">
-    <div class="vt-titel"><a href="index.html">tools</a> › <strong>Translate</strong></div>
-    <label>Language <select id="vt-taal"></select></label>
-    <button id="vt-nieuw" type="button">New language…</button>
-    <input id="vt-zoek" type="search" placeholder="Search the source or your translation…" autocomplete="off">
-    <select id="vt-filter">
-      <option value="alles">All sentences</option>
-      <option value="ontbreekt">Not translated yet</option>
-      <option value="fout">Has a problem</option>
-      <option value="af">Translated</option>
-    </select>
-    <span class="vt-ruimte"></span>
-    <button id="vt-opslaan" type="button" class="verborgen" title="Write the language file in taal/ (only on the development server)">Save to taal/</button>
-    <button id="vt-download" type="button" title="Save the language as a file, to share it">Download file</button>
-    <label class="vt-knop" title="Open a language file someone shared">Open file…<input id="vt-open" type="file" accept=".js,.json" hidden></label>
-    <button id="vt-spelen" type="button" title="Open the game in this language, with what you translated so far">Play in this language</button>
+    <div class="vt-merk">
+      <a href="index.html">← tools</a>
+      <h1>Translate <span data-spelnaam></span></h1>
+    </div>
+    <div class="vt-taalkeuze">
+      <label for="vt-taal">Your language</label>
+      <select id="vt-taal"></select>
+    </div>
+    <div class="vt-voortgang">
+      <small id="vt-telling"></small>
+      <div class="vt-balk"><span id="vt-balk-vol"></span></div>
+    </div>
+    <div class="vt-acties">
+      <div class="vt-rij">
+        <button id="vt-opslaan" type="button" class="vt-knop vt-hoofd" hidden>Save to the game</button>
+        <button id="vt-download" type="button" class="vt-knop vt-hoofd">Download file</button>
+        <button id="vt-spelen" type="button" class="vt-knop">Play in this language</button>
+        <button id="vt-open-knop" type="button" class="vt-knop" title="Open a language file someone sent you">Open file…</button>
+        <input id="vt-open" type="file" accept=".js,.json" hidden>
+      </div>
+      <small id="vt-bewaard"></small>
+    </div>
   </header>
-  <div id="vt-stand" class="vt-stand"></div>
+
+  <section id="vt-uitleg" class="vt-uitleg" hidden>
+    <ol>
+      <li><b>Choose your language</b> above, or pick “+ New language…” to start one.</li>
+      <li><b>Translate each sentence.</b> Words in braces, like <code>{plek}</code>, are filled in by the game: keep them,
+        where they belong in your language. Click one under a sentence to put it in.</li>
+      <li id="vt-stap3"></li>
+    </ol>
+    <button id="vt-uitleg-weg" type="button" class="vt-knop vt-klein">Got it</button>
+  </section>
+
+  <form id="vt-nieuw" class="vt-nieuw" hidden>
+    <h2>A new language</h2>
+    <label>Name, in that language<input id="vt-nieuw-naam" placeholder="Deutsch" required></label>
+    <label>Language code<input id="vt-nieuw-code" placeholder="de" size="8" required></label>
+    <button type="submit" class="vt-knop vt-hoofd">Start translating</button>
+    <button type="button" id="vt-nieuw-weg" class="vt-knop">Cancel</button>
+    <p>The code is the short name of the language: de, fr, es, pl, pt-BR, zh-Hans. Your work stays in this browser until
+      you download it.</p>
+  </form>
+
+  <nav class="vt-tabs" aria-label="Which sentences">
+    <button type="button" class="vt-tab" data-filter="ontbreekt">To do <b></b></button>
+    <button type="button" class="vt-tab" data-filter="fout">Problems <b></b></button>
+    <button type="button" class="vt-tab" data-filter="af">Done <b></b></button>
+    <button type="button" class="vt-tab" data-filter="alles">All <b></b></button>
+    <input id="vt-zoek" type="search" placeholder="Search the English or your translation" autocomplete="off">
+  </nav>
   <div class="vt-raam">
-    <nav id="vt-lijst" class="vt-lijst"></nav>
+    <aside id="vt-lijst" class="vt-lijst" hidden></aside>
     <main id="vt-inhoud" class="vt-inhoud"></main>
   </div>
+  <div id="vt-melding" class="vt-melding" role="status" aria-live="polite"></div>
   <script src="vertalen/pagina.js"></script>
 </body>
 </html>

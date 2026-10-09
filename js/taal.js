@@ -255,15 +255,20 @@
     const b = T.namenIn(vertaling);
     const mist = [...a].filter((n) => !b.has(n));
     const teVeel = [...b].filter((n) => !a.has(n));
-    if (mist.length) fout.push(`missing ${mist.map((n) => `{${n}}`).join(', ')}`);
-    if (teVeel.length) fout.push(`unknown ${teVeel.map((n) => `{${n}}`).join(', ')} (the game does not fill it in)`);
-    if (tagsIn(bron).join() !== tagsIn(vertaling).join()) fout.push('the html tags differ from the source');
+    const lijst = (namen) => namen.map((n) => `{${n}}`).join(', ');
+    if (mist.length) fout.push(`Put ${lijst(mist)} back in: the game fills ${mist.length === 1 ? 'it' : 'them'} in here.`);
+    if (teVeel.length) {
+      const een = teVeel.length === 1;
+      fout.push(`${lijst(teVeel)} ${een ? 'is' : 'are'} not in the English sentence, so the game cannot fill ${een ? 'it' : 'them'} in.`);
+    }
+    if (tagsIn(bron).join() !== tagsIn(vertaling).join()) fout.push('Keep the same markup as the English sentence (the parts between < and >).');
     const aantal = T.meervoudsVormen(locale).length;
     vervangBlokken(vertaling, (binnen) => {
       const delen = splits(binnen);
       const vormen = delen.slice(1);
       if (vormen.length && !vormen.some((v) => v.indexOf(':') > 0 && !/^\s*#/.test(v)) && vormen.length !== aantal) {
-        fout.push(`{${delen[0].trim()}|…} has ${vormen.length} forms; this language has ${aantal} (${T.meervoudsVormen(locale).join(', ')})`);
+        const vormenTaal = T.meervoudsVormen(locale).join(', ');
+        fout.push(`{${delen[0].trim()}|…} has ${vormen.length} form${vormen.length === 1 ? '' : 's'}, but this language needs ${aantal}: ${vormenTaal}.`);
       }
       return '';
     });

@@ -40,10 +40,10 @@ test('de toetsen spelen in het Nederlands, en een zin zonder vertaling is Engels
 
 test('wat er mis is aan een vertaling', () => {
   assert.deepEqual(T.keurVertaling('Overwrite {plek}?', '{plek} overschrijven?', 'nl-NL'), []);
-  assert.match(T.keurVertaling('Overwrite {plek}?', 'Overschrijven?', 'nl-NL').join(), /missing \{plek\}/);
-  assert.match(T.keurVertaling('Overwrite?', '{plek} overschrijven?', 'nl-NL').join(), /unknown \{plek\}/);
-  assert.match(T.keurVertaling('<b>Gold</b>', 'Goud', 'nl-NL').join(), /html/);
-  assert.match(T.keurVertaling('{n|# man|# men}', '{n|# mens}', 'nl-NL').join(), /has 1 forms; this language has 2/);
+  assert.match(T.keurVertaling('Overwrite {plek}?', 'Overschrijven?', 'nl-NL').join(), /Put \{plek\} back in/);
+  assert.match(T.keurVertaling('Overwrite?', '{plek} overschrijven?', 'nl-NL').join(), /\{plek\} is not in the English sentence/);
+  assert.match(T.keurVertaling('<b>Gold</b>', 'Goud', 'nl-NL').join(), /markup/);
+  assert.match(T.keurVertaling('{n|# man|# men}', '{n|# mens}', 'nl-NL').join(), /has 1 form, but this language needs 2: one, other/);
   assert.deepEqual(T.keurVertaling('{g|man:he|vrouw:she}', '{g|man:hij|vrouw:zij}', 'nl-NL'), [], 'een keuze is geen meervoud');
 });
 
