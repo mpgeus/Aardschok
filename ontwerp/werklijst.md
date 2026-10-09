@@ -14,13 +14,16 @@ groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
 Marcel, 8 okt: "snel, duidelijk en low cost". Elke sessie werkt dit blok bij aan het eind; wat af is, gaat eruit.
 
-**Loopt** (het teken "Bezig in sessie" staat bij het punt zelf): de onderschepte bode (vraag 143), dan wat er bij het
-weer open is (vraag 144). De bode naar de marskramer (vraag 143), het weer
-en de statussen met niveaus (vraag 77, stap 2) en de dagloners (vraag 140) staan in `main`; wat bij de bode en het weer
-nog open is, staat in `opmerkingen.md`. Vraag 141, de economie binnen het dorp, is op 9 okt helemaal teruggedraaid
+**Loopt** (het teken "Bezig in sessie" staat bij het punt zelf): de fasen van het afbranden van een huis (vraag 144, 3,
+de kunst: elk materiaal op zijn eigen manier, de schoorsteen, een fase ertussen), daarna de sneeuw op de daken als Marcel
+ja zegt. De bode met de hinderlaag en de lantaarns (vraag 143), het weer, de statussen, niet zaaien in de regen, de
+brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `main`. Vraag 141, de economie binnen het dorp, is op 9 okt helemaal teruggedraaid
 (Marcel: "Ik denk dat we die economie terug moeten draaien", en "Alles van vraag 141").
 
 **Wacht op Marcel:**
+- Sneeuw op de daken (vraag 144, 4b): mag de render van een sneeuwmasker per huis, en ook de bomen?
+- Uit `opmerkingen.md`: een brand die overslaat op het huis ernaast, een eigen beeld voor de koorts (ziekbed, hoesten),
+  en wie wijn wil (de wijnboerderij die niemand bouwt).
 - Vraag 142, de bladzijde met alle getallen (`gereedschap/instellingen.html`): stap 1 en 2 staan in `main`; stap 3 (een
   speeltest met een set getallen, naast de vorige) wacht.
 
@@ -7100,7 +7103,13 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     `node gereedschap/pixelart/ruines.cjs proef` (BRANDFASEN in `huizen.cjs`): de hoeken staan het hoogst, puinbergen,
     losse stenen, balken kriskras, plukken zwart riet, en de vier fasen. **Marcel (9 okt):** "Ik wil dat mensen denken:
     wow, wat een detail alles heeft zn eigen art. Zo uitgebreid. Zo mooi, zo leuk om te zien" (de maatstaf, nu in
-    `beeld.md`). Claude legt voor wat er voor die maatstaf nog bij moet; wacht op Marcel.
+    `beeld.md`). **Plan van Claude (9 okt):** 1. elk materiaal brandt op zijn eigen manier (steen blijft staan met
+    roetpluimen boven de ramen; lei en pannen breken en liggen in scherven; vakwerk brandt tot een zwart geraamte; hout
+    brandt bijna weg); 2. de stenen schoorsteen blijft als enige overeind, van de haard tot boven; 3. wat er in het huis
+    was (bedframe, tafel, ketel, ladder); 4. wat er buiten hangt (een luik aan een scharnier, een deur uit zijn hengsels,
+    glasscherven, de gevallen bloembak); 5. een fase ertussen (het dak naar binnen gestort, de muren zwart overeind,
+    smeulend); 6. elk huis valt anders in. Eerst 1, 2 en 5, dan 4 en 6, dan 3; alle tekeningen pas aan het eind.
+    **Marcel (9 okt): "ja dat is goed."**
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
