@@ -288,8 +288,12 @@ function wolf(o = {}) {
   const mat = [];
   // romp: plukken die naar achteren groeien, een donkere streep over de ruggengraat, lichte
   // keel en buik
+  // (vraag 145, 3: o.hond maakt er een hond van: een vacht in zijn kleur, gewone ogen, de bek dicht, flaporen en een
+  // krulstaart; klein.cjs zet hem kleiner. Zonder o.hond is het de wolf, geen pixel anders.)
+  const hond = o.hond || null;
+  const vk = hond ? hond.vacht : { ramp: 'vacht' };
   mat[M.vacht] = {
-    ramp: 'vacht',
+    ramp: vk.ramp,
     lo: 0.5,
     hi: 6.7,
     patroon: (x, y, z, nx, ny, nz, stap) => {
@@ -303,7 +307,7 @@ function wolf(o = {}) {
   // poten: plukken die naar beneden groeien, iets lichter naar de voeten, de binnenkant van de
   // dijen licht
   mat[M.poot] = {
-    ramp: 'vacht',
+    ramp: vk.ramp,
     lo: 0.7,
     hi: 6.2,
     patroon: (x, y, z, nx, ny, nz, stap) => {
@@ -314,7 +318,7 @@ function wolf(o = {}) {
   };
   // pluimstaart met een zwarte punt
   mat[M.staart] = {
-    ramp: 'vacht',
+    ramp: vk.ramp,
     lo: 0.6,
     hi: 6.4,
     patroon: (x, y, z, nx, ny, nz, stap) => {
@@ -325,7 +329,7 @@ function wolf(o = {}) {
   };
   // kop: donker voorhoofd en neusrug, lichte wangen en lippen, boze wenkbrauwen
   mat[M.kop] = {
-    ramp: 'vacht',
+    ramp: vk.ramp,
     lo: 0.9,
     hi: 6.2,
     patroon: (x, y, z, nx, ny, nz, stap) => {
@@ -337,16 +341,16 @@ function wolf(o = {}) {
       if (wang || lip) return licht(stap, [0.9, 6.2]);
       const bx = Math.abs(dx) - 2.6;
       const bz = dz - 2.9 + bx * 0.5;
-      if (ny > 0.15 && Math.abs(bx) < 1.7 && Math.abs(bz) < 0.65) return -2;
+      if (!hond && ny > 0.15 && Math.abs(bx) < 1.7 && Math.abs(bz) < 0.65) return -2;
       return nz > 0.4 ? -0.5 : 0;
     },
   };
   mat[M.neus] = { ramp: 'inkt', lo: 0.3, hi: 2.4, glans: 1.4, rand: 0.4 };
-  mat[M.oog] = { ramp: 'goud', gloei: (x, y, z, kijk) => 5 + 1.6 * kijk, detail: true };
+  mat[M.oog] = hond ? { ramp: 'inkt', lo: 0.4, hi: 2.2, detail: true, rand: 0 } : { ramp: 'goud', gloei: (x, y, z, kijk) => 5 + 1.6 * kijk, detail: true };
   mat[M.bek] = { ramp: 'rood', lo: 0.2, hi: 1.4, rand: 0, schaduw: false };
   mat[M.tand] = { ramp: 'bot', lo: 4.6, hi: 7.2, detail: true, rand: 0.5 };
   mat[M.oor] = {
-    ramp: 'vacht',
+    ramp: vk.ramp,
     lo: 0.8,
     hi: 5.6,
     patroon: (x, y, z, nx, ny, nz) => (ny > 0.4 ? -1.5 : 0),
@@ -374,7 +378,8 @@ function wolf(o = {}) {
   delen.push(L(ellips([0, -16, 31.4], [7.2, 8, 6.8], M.vacht, D.lijf, 4)));
   // nek (beweegt met de kop mee), en een kraag met opgezette nekharen
   delen.push(Kp(kegel([0, 13, 33], [0, 23.5, 35.5], 6.6, 5.2, M.vacht, D.lijf, 4)));
-  delen.push(L(ruig(ellips([0, 15.5, 33.5], [9.2, 7, 8.2], M.vacht, D.lijf, 3), [0.5, 0.3, 0.42], 5, 1.3)));
+  if (hond) delen.push(L(ellips([0, 15.5, 33.5], [8.4, 6.6, 7.6], M.vacht, D.lijf, 3)));
+  else delen.push(L(ruig(ellips([0, 15.5, 33.5], [9.2, 7, 8.2], M.vacht, D.lijf, 3), [0.5, 0.3, 0.42], 5, 1.3)));
 
   // --- kop
   delen.push(Kp(ellips(H, [5.8 * KS, 6.2 * KS, 5.2 * KS], M.kop, D.kop, 3)));
@@ -383,13 +388,18 @@ function wolf(o = {}) {
   delen.push(Kp(kegel(k(0, 3.5, -1.7), k(0, 13, -3.3), 3.3 * KS, 2.1 * KS, M.kop, D.kop, 1.8)));
   delen.push(Kp(bol(k(0, 13.4, -2.7), 1.5 * KS, M.neus, D.kop, 0.6)));
   delen.push(vast(kegel(k(0, 3.5, -4.9), k(0, 11.2, -6.9), 2.6 * KS, 1.4 * KS, M.kop, D.bek, 1), T.kaak));
-  delen.push(vast(ellips(k(0, 8, -4.9), [1.8 * KS, 3.8 * KS, 1.4 * KS], M.bek, D.bek), T.bek));
+  if (!hond) delen.push(vast(ellips(k(0, 8, -4.9), [1.8 * KS, 3.8 * KS, 1.4 * KS], M.bek, D.bek), T.bek));
   for (const s of [-1, 1]) {
-    delen.push(Kp(kegel(k(s * 1.5, 11.2, -4.3), k(s * 1.5, 11.7, -6.9), 0.95, 0.25, M.tand, D.bek)));
-    delen.push(vast(kegel(k(s * 1.2, 10, -6.8), k(s * 1.2, 10.4, -4.8), 0.75, 0.2, M.tand, D.bek), T.kaak));
+    if (!hond) {
+      delen.push(Kp(kegel(k(s * 1.5, 11.2, -4.3), k(s * 1.5, 11.7, -6.9), 0.95, 0.25, M.tand, D.bek)));
+      delen.push(vast(kegel(k(s * 1.2, 10, -6.8), k(s * 1.2, 10.4, -4.8), 0.75, 0.2, M.tand, D.bek), T.kaak));
+    }
     delen.push(Kp(bol(k(s * 2.7, 4.5, 1.6), 1.2, M.oog, D.kop)));
     // oren: rechtop en iets naar voren, plat van voren naar achteren
-    const oor = platteKegel(k(s * 3.3, -1.2, 3.7), k(s * 4.7, 0.4, 12.4), 3 * KS, 0.4, [0, 1, 0], 0.55, M.oor, s < 0 ? D.oorL : D.oorR, 1);
+    // een hond met flaporen: van de kruin opzij en omlaag langs de kop
+    const oor = hond && hond.oren === 'hang'
+      ? platteKegel(k(s * 3.6, -0.8, 3.4), k(s * 6.2, 1, -3.4), 3.2 * KS, 0.9, [1, 0, 0], 0.6, M.oor, s < 0 ? D.oorL : D.oorR, 1)
+      : platteKegel(k(s * 3.3, -1.2, 3.7), k(s * 4.7, 0.4, 12.4), 3 * KS, 0.4, [0, 1, 0], 0.55, M.oor, s < 0 ? D.oorL : D.oorR, 1);
     delen.push(vast(oor, s < 0 ? T.oorL : T.oorR));
   }
 
@@ -429,9 +439,14 @@ function wolf(o = {}) {
   }
 
   // --- pluimstaart, stijf naar achteren en iets opzij, zodat hij ook van achteren te zien is
-  const dik = (t) => 2.2 + 2 * Math.sin(Math.PI * Math.min(1, t * 1.1)) - 0.8 * t;
-  for (const p of bochtProfiel([0, -22, 32.5], [0.8, -33, 32.5], [3, -43, 26], dik, 7, M.staart, D.staart, 1.4)) {
-    delen.push(vast(ruig(p, [0.5, 0.5, 0.5], 13, 0.9), T.staart));
+  // (een hond: een staart die omhoog krult, over de rug)
+  if (hond && hond.staart === 'krul') {
+    for (const p of bochtProfiel([0, -21, 33], [0.4, -31, 44], [1.6, -22, 47], (t) => 2.4 - 1.2 * t, 6, M.staart, D.staart, 1.2)) delen.push(vast(p, T.staart));
+  } else {
+    const dik = (t) => 2.2 + 2 * Math.sin(Math.PI * Math.min(1, t * 1.1)) - 0.8 * t;
+    for (const p of bochtProfiel([0, -22, 32.5], [0.8, -33, 32.5], [3, -43, 26], dik, 7, M.staart, D.staart, 1.4)) {
+      delen.push(vast(ruig(p, [0.5, 0.5, 0.5], 13, 0.9), T.staart));
+    }
   }
 
   if (!P) return model(delen, mat, { midden: [0, 0, 25], straal: 48 });
