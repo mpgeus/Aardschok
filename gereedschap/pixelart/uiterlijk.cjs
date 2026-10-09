@@ -446,6 +446,87 @@ UITERLIJKEN.boerin = [
   vrouw({ kleur: 'bruin', hoofd: 'geen', kapsel: 'vlechten', jurk: 'groen', schort: 'wit', buidel: -8.8, mouw: 'op' }),
 ];
 
+// De kinderen en de ouden: twaalf elk (vraag 145; Marcel: "Hoeveel variatie is nodig?"; zie de werklijst). De jongen
+// (jongen() in dorpelingen2.cjs): een pet of niet (en dan een kapsel), het houten zwaard maar bij een paar, de linkerhand
+// in de zij of hangend. Het meisje (meisje()): de kat maar bij een paar, twee vlechten, los of een staart, een strik in
+// een kleur. De kleuter (kleuter()): het trekpaardje bij een paar. De ouden zijn de boer en de boerin met het lijf van
+// de oudste (KARAKTERS.grijsaard in karakters.cjs: krom, een stok), grijs of peper-en-zout, in gedekte kleuren.
+const jongen = (o) => ({ ...o, haar: HAAR[o.kleur], hemd: STOF[o.hemd], broek: STOF[o.broek], petStof: o.pet && STOF[o.pet], pet: !!o.pet, zwaard: !!o.zwaard });
+const meisje = (o) => ({ ...o, haar: HAAR[o.kleur], jurk: STOF[o.jurk], bloes: STOF[o.bloes || 'wit'], strik: STOF[o.strik || 'rood'], kat: !!o.kat });
+const kleuter = (o) => ({ ...o, haar: HAAR[o.kleur], kiel: STOF[o.kiel], schoen: o.schoen === 'leer' ? SCHOEN.leer : STOF[o.schoen || 'rood'], paard: !!o.paard });
+UITERLIJKEN.jongen = [
+  jongen({ kleur: 'kastanje', hemd: 'groen', broek: 'bruin', pet: 'grijs', zwaard: true }),
+  jongen({ kleur: 'blond', hemd: 'linnen', broek: 'bruin', kapsel: 'kort', links: 'hangt' }),
+  jongen({ kleur: 'zwart', hemd: 'blauw', broek: 'grijs', pet: 'bruin' }),
+  jongen({ kleur: 'rood', hemd: 'oker', broek: 'donker', kapsel: 'krul', zwaard: true }),
+  jongen({ kleur: 'bruin', hemd: 'rood', broek: 'bruin', kapsel: 'pony', links: 'hangt' }),
+  jongen({ kleur: 'lichtblond', hemd: 'grijs', broek: 'bruin', pet: 'blauw', links: 'hangt' }),
+  jongen({ kleur: 'donker', hemd: 'linnen', broek: 'grijs', kapsel: 'halflang' }),
+  jongen({ kleur: 'donkerblond', hemd: 'groen', broek: 'donker', pet: 'rood', zwaard: true, links: 'hangt' }),
+  jongen({ kleur: 'kastanje', hemd: 'blauw', broek: 'bruin', kapsel: 'krulkort', links: 'hangt' }),
+  jongen({ kleur: 'blond', hemd: 'bruin', broek: 'grijs', kapsel: 'pony' }),
+  jongen({ kleur: 'zwart', hemd: 'terracotta', broek: 'bruin', pet: 'grijs', links: 'hangt' }),
+  jongen({ kleur: 'rood', hemd: 'lichtblauw', broek: 'donker', kapsel: 'kort' }),
+];
+UITERLIJKEN.meisje = [
+  meisje({ kleur: 'blond', jurk: 'terracotta', kat: true }),
+  meisje({ kleur: 'bruin', jurk: 'blauw', kapsel: 'los', strik: 'wit' }),
+  meisje({ kleur: 'zwart', jurk: 'groen', strik: 'oker' }),
+  meisje({ kleur: 'rood', jurk: 'linnen', bloes: 'linnen', kapsel: 'staart', strik: 'groen' }),
+  meisje({ kleur: 'kastanje', jurk: 'rood', kat: true }),
+  meisje({ kleur: 'lichtblond', jurk: 'lichtblauw', kapsel: 'los', strik: 'blauw' }),
+  meisje({ kleur: 'donker', jurk: 'oker', strik: 'rood' }),
+  meisje({ kleur: 'donkerblond', jurk: 'grijs', kapsel: 'staart', strik: 'rood' }),
+  meisje({ kleur: 'blond', jurk: 'groen', kapsel: 'los', strik: 'wit', kat: true }),
+  meisje({ kleur: 'bruin', jurk: 'bruin', bloes: 'linnen', strik: 'blauw' }),
+  meisje({ kleur: 'rood', jurk: 'blauw', strik: 'wit' }),
+  meisje({ kleur: 'zwart', jurk: 'terracotta', kapsel: 'staart', strik: 'oker' }),
+];
+UITERLIJKEN.kleuter = [
+  kleuter({ kleur: 'blond', kiel: 'oker', paard: true }),
+  kleuter({ kleur: 'bruin', kiel: 'blauw', schoen: 'leer' }),
+  kleuter({ kleur: 'rood', kiel: 'groen', schoen: 'bruin' }),
+  kleuter({ kleur: 'zwart', kiel: 'linnen', schoen: 'rood', paard: true }),
+  kleuter({ kleur: 'lichtblond', kiel: 'rood', schoen: 'leer' }),
+  kleuter({ kleur: 'kastanje', kiel: 'lichtblauw', schoen: 'bruin' }),
+  kleuter({ kleur: 'donkerblond', kiel: 'grijs', schoen: 'rood', paard: true }),
+  kleuter({ kleur: 'donker', kiel: 'terracotta', schoen: 'leer' }),
+  kleuter({ kleur: 'blond', kiel: 'groen', schoen: 'rood' }),
+  kleuter({ kleur: 'bruin', kiel: 'oker', schoen: 'bruin', paard: true }),
+  kleuter({ kleur: 'rood', kiel: 'blauw', schoen: 'rood' }),
+  kleuter({ kleur: 'lichtblond', kiel: 'linnen', schoen: 'leer' }),
+];
+// De ouden: het lijf van de oudste (krom; met links 'stok' een stok), en verder als de man en de vrouw hierboven.
+const oud = (krom) => ({ krom, kraag: 'geen' });
+UITERLIJKEN.oudeman = [
+  man({ ...oud(13), kleur: 'grijs', hoed: 'bloot', baard: 'vol', kiel: 'grijs', broek: 'bruin', schoen: 'klomp', links: 'stok' }),
+  man({ ...oud(9), kleur: 'grijs', hoed: 'wol', muts: STOF.bruin, kapsel: 'kort', baard: 'snor', kiel: 'bruin', broek: 'donker', schoen: 'leer', neusMaat: 1.3 }),
+  man({ ...oud(11), kleur: 'peper', hoed: 'geen', kapsel: 'kaal', baard: 'kort', kiel: 'linnen', broek: 'grijs', schoen: 'klomp', links: 'stok' }),
+  man({ ...oud(7), kleur: 'grijs', hoed: 'vilt', kapsel: 'halflang', baard: 'vol', kiel: 'donker', broek: 'bruin', schoen: 'leer', vest: 'bruin' }),
+  man({ ...oud(12), kleur: 'grijs', hoed: 'stro', kapsel: 'kort', baard: 'stoppels', kiel: 'blauw', broek: 'bruin', schoen: 'klomp', links: 'stok' }),
+  man({ ...oud(10), kleur: 'peper', hoed: 'geen', kapsel: 'lang', baard: 'vol', kiel: 'groen', broek: 'donker', schoen: 'donkereKlomp', wenkbrauw: 1.5 }),
+  man({ ...oud(14), kleur: 'grijs', hoed: 'kap', kapsel: 'kort', baard: 'sik', kiel: 'grijs', broek: 'donker', schoen: 'leer', links: 'stok' }),
+  man({ ...oud(8), kleur: 'grijs', hoed: 'geen', kapsel: 'kaal', baard: 'snor', kiel: 'oker', broek: 'bruin', schoen: 'klomp', neusMaat: 1.25, buidel: -8.6 }),
+  man({ ...oud(12), kleur: 'peper', hoed: 'wol', muts: STOF.grijs, kapsel: 'halflang', baard: 'kort', kiel: 'bruin', broek: 'grijs', schoen: 'klomp', links: 'stok' }),
+  man({ ...oud(9), kleur: 'grijs', hoed: 'bloot', baard: 'snor', kiel: 'linnen', broek: 'donker', schoen: 'leer', vest: 'donker' }),
+  man({ ...oud(13), kleur: 'grijs', hoed: 'vilt', kapsel: 'kort', baard: 'vol', kiel: 'blauw', broek: 'bruin', schoen: 'klomp', links: 'stok' }),
+  man({ ...oud(10), kleur: 'peper', hoed: 'geen', kapsel: 'krulkort', baard: 'stoppels', kiel: 'rood', broek: 'donker', schoen: 'klomp' }),
+];
+UITERLIJKEN.oudevrouw = [
+  vrouw({ ...oud(12), kleur: 'grijs', hoofd: 'nekdoek', doek: 'donker', jurk: 'grijs', schort: 'linnen', links: 'stok', slapen: true }),
+  vrouw({ ...oud(9), kleur: 'grijs', hoofd: 'doek', doek: 'wit', jurk: 'bruin', schort: 'wit' }),
+  vrouw({ ...oud(11), kleur: 'peper', hoofd: 'geen', kapsel: 'knot', jurk: 'donker', schort: 'grijs', links: 'stok', omslagdoek: 'bruin' }),
+  vrouw({ ...oud(8), kleur: 'grijs', hoofd: 'nekdoek', doek: 'blauw', jurk: 'linnen', schort: 'grijs', slapen: true }),
+  vrouw({ ...oud(13), kleur: 'grijs', hoofd: 'doek', doek: 'linnen', jurk: 'groen', schort: 'linnen', links: 'stok' }),
+  vrouw({ ...oud(10), kleur: 'peper', hoofd: 'geen', kapsel: 'kroon', jurk: 'blauw', schort: 'wit', omslagdoek: 'grijs' }),
+  vrouw({ ...oud(12), kleur: 'grijs', hoofd: 'nekdoek', doek: 'rood', jurk: 'bruin', links: 'stok', slapen: true }),
+  vrouw({ ...oud(9), kleur: 'grijs', hoofd: 'geen', kapsel: 'hogeknot', jurk: 'grijs', schort: 'blauw', lijfje: 'donker' }),
+  vrouw({ ...oud(11), kleur: 'peper', hoofd: 'doek', doek: 'grijs', jurk: 'terracotta', schort: 'linnen', links: 'stok' }),
+  vrouw({ ...oud(8), kleur: 'grijs', hoofd: 'geen', kapsel: 'knot', jurk: 'linnen', schort: 'grijs', omslagdoek: 'groen' }),
+  vrouw({ ...oud(13), kleur: 'grijs', hoofd: 'nekdoek', doek: 'linnen', jurk: 'donker', schort: 'wit', links: 'stok', slapen: true }),
+  vrouw({ ...oud(10), kleur: 'peper', hoofd: 'doek', doek: 'oker', jurk: 'grijs', schort: 'wit', buidel: -8.8 }),
+];
+
 module.exports = { HAAR, STOF, SCHOEN, UITERLIJKEN, versleten, modderig, vest, schoudertas, mes, rijglijf, kapselMan, krullen, krans, snor, sik, stoppels, wolmuts, kapselVrouw, vlechtje };
 
 // ---------------------------------------------------------------- de proefplaat
@@ -458,21 +539,23 @@ if (require.main === module && process.argv[2] === 'proef') {
   const { boerin } = require('./dorpelingen2.cjs');
   const UIT = path.join(__dirname, 'uit', 'uiterlijk');
   fs.mkdirSync(UIT, { recursive: true });
-  const bouw = { boer, boerin };
+  const { jongen: Jongen, meisje: Meisje, kleuter: Kleuter } = require('./dorpelingen2.cjs');
+  const bouw = { boer, boerin, jongen: Jongen, meisje: Meisje, kleuter: Kleuter, oudeman: boer, oudevrouw: boerin };
   const { geschaald } = require('./figuren.cjs');
   // Elk lijf in twee rijen van twaalf, staand in ZO. Met `hd` erachter op dubbele resolutie (het model twee keer zo
   // groot, geschaald in figuren.cjs), om te zien wat dat oplevert.
-  const S = process.argv[3] === 'hd' ? 2 : 1;
+  const S = process.argv[3] === 'hd' ? 2 : 1; // (een derde: welke lijven, met komma's)
   const KOL = 56 * S;
   const BOVEN = 20 * S;
   const HOOG = 100 * S;
   const rijen = [];
-  for (const lijf of ['boer', 'boerin']) {
+  const lijven = process.argv[4] ? process.argv[4].split(',') : ['boer', 'boerin', 'jongen', 'meisje', 'kleuter', 'oudeman', 'oudevrouw'];
+  for (const lijf of lijven) {
     const platen = UITERLIJKEN[lijf].map((o) => {
       const m = bouw[lijf]({ houding: 'staan', fase: 0 }, o);
       return K.losRenderen(S > 1 ? geschaald(m, S) : m, { b: 112 * S, h: 124 * S, anker: [56 * S, 110 * S], richting: 'ZO' });
     });
-    rijen.push(platen.slice(0, 12), platen.slice(12));
+    for (let i = 0; i < platen.length; i += 12) rijen.push(platen.slice(i, i + 12));
   }
   const vel = new K.Plaat(KOL * 12 + 8, HOOG * rijen.length);
   rijen.forEach((rij, r) => rij.forEach((p, i) => vel.plak(p.uitsnede(28 * S, BOVEN, KOL, HOOG), 4 + i * KOL, r * HOOG)));

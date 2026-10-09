@@ -188,20 +188,20 @@ const JONGEN_FPS = 10;
 // bretels, een korte broek met blote knieën, en een houten zwaard dat hij heldhaftig omhoog steekt.
 // De andere vuist in de zij, net als de grote mensen.
 // stand: zie smid() (dorpelingen.cjs). Kinderen lopen in een vlugger maatje dan volwassenen.
-function jongen(stand = null) {
+function jongen(stand = null, o = {}) {
   const M = { huid: 0, hemd: 1, broek: 2, sok: 3, laars: 4, haar: 5, oog: 6, pet: 7, hout: 8, touw: 9, mond: 10, bretel: 11 };
   const D = { benen: 1, lijf: 2, bretels: 3, armL: 4, armR: 5, handL: 6, handR: 7, hoofd: 8, pet: 9, zwaard: 10 };
   const H = [0, 2.4, 51];
   const maat = [6.9, 6.6, 7.1];
   const mat = [];
   mat[M.huid] = { ramp: 'huid', lo: 1.8, hi: 6.6, schaduwKracht: 0.7, patroon: blosjes(3.7, H[2] - 2.6, H[1] + 3, 1.8, 6.6) };
-  mat[M.hemd] = { ramp: 'blad', lo: 1.4, hi: 6.2 };
-  mat[M.broek] = { ramp: 'aarde', lo: 0.8, hi: 4.8 };
+  mat[M.hemd] = o.hemd || { ramp: 'blad', lo: 1.4, hi: 6.2 };
+  mat[M.broek] = o.broek || { ramp: 'aarde', lo: 0.8, hi: 4.8 };
   mat[M.sok] = { ramp: 'pleister', lo: 1.4, hi: 5, patroon: (x, y, z) => (Math.sin(z * 3.2) > 0.6 ? -0.6 : 0) };
   mat[M.laars] = { ramp: 'leer', lo: 0.6, hi: 4.8 };
-  mat[M.haar] = { ramp: 'hout', lo: 0.8, hi: 4.8, patroon: (x, y, z) => (Math.sin(x * 2.4 + z * 1.1) > 0.55 ? 0.7 : 0) };
+  mat[M.haar] = o.haar || { ramp: 'hout', lo: 0.8, hi: 4.8, patroon: (x, y, z) => (Math.sin(x * 2.4 + z * 1.1) > 0.55 ? 0.7 : 0) };
   mat[M.oog] = OOG;
-  mat[M.pet] = { ramp: 'vacht', lo: 1.3, hi: 5.2, patroon: (x, y, z) => (Math.sin((x + y) * 0.9) > 0.75 ? -0.5 : 0) };
+  mat[M.pet] = { ramp: 'vacht', lo: 1.3, hi: 5.2, ...o.petStof, patroon: (x, y, z) => (Math.sin((x + y) * 0.9) > 0.75 ? -0.5 : 0) };
   mat[M.hout] = { ramp: 'hout', lo: 2.4, hi: 6.6 };
   mat[M.touw] = { ramp: 'leer', lo: 1, hi: 4 };
   mat[M.mond] = MOND;
@@ -260,17 +260,21 @@ function jongen(stand = null) {
   // --- armen: korte mouwen. Rechts steekt hij het zwaard omhoog, links de vuist in de zij. Het
   // zwaard houdt hij vast (niet op de grond, net als de hamer van de smid), dus het zwaait mee
   // met de rechterarm.
+  // (vraag 145: zonder zwaard hangt de rechterarm, en met links 'hangt' ook de linker)
   const kind = { mouw: M.hemd, huid: M.huid, r: [2.5, 2.1, 1.7], tot: 0.55, hand: [1.9, 2, 2.2] };
-  const hand = [9.6, 2.8, 43.6];
-  const richting = eenheid([0.16, 0.1, 1]);
-  const kruisHout = plus(hand, maal(richting, 2.8));
-  delen.push(capsule(plus(hand, maal(richting, -2.6)), kruisHout, 0.85, M.hout, D.zwaard));
-  delen.push(capsule(plus(kruisHout, [-2.4, 2.2, 1]), plus(kruisHout, [2.4, -2.2, -1]), 0.75, M.hout, D.zwaard));
-  delen.push(kegel(kruisHout, plus(kruisHout, maal(richting, 13)), 1.1, 0.85, M.hout, D.zwaard));
-  delen.push(ring(kruisHout, richting, 1.2, 0.5, M.touw, D.zwaard));
-  arm(delen, [7.8, 0.3, 36.5], [12, 1, 38.6], hand, { ...kind, dArm: D.armR, dHand: D.handR });
+  if (o.zwaard !== false) {
+    const hand = [9.6, 2.8, 43.6];
+    const richting = eenheid([0.16, 0.1, 1]);
+    const kruisHout = plus(hand, maal(richting, 2.8));
+    delen.push(capsule(plus(hand, maal(richting, -2.6)), kruisHout, 0.85, M.hout, D.zwaard));
+    delen.push(capsule(plus(kruisHout, [-2.4, 2.2, 1]), plus(kruisHout, [2.4, -2.2, -1]), 0.75, M.hout, D.zwaard));
+    delen.push(kegel(kruisHout, plus(kruisHout, maal(richting, 13)), 1.1, 0.85, M.hout, D.zwaard));
+    delen.push(ring(kruisHout, richting, 1.2, 0.5, M.touw, D.zwaard));
+    arm(delen, [7.8, 0.3, 36.5], [12, 1, 38.6], hand, { ...kind, dArm: D.armR, dHand: D.handR });
+  } else arm(delen, [7.8, 0.3, 36.5], [10.4, 0.6, 29.8], [9.4, 1.8, 23.6], { ...kind, dArm: D.armR, dHand: D.handR });
   bot(Bn.Barm[1]);
-  arm(delen, [-7.8, 0.3, 36.5], [-11.4, -1.4, 31], [-8.4, 1.4, 27.4], { ...kind, dArm: D.armL, dHand: D.handL });
+  if (o.links === 'hangt') arm(delen, [-7.8, 0.3, 36.5], [-10.4, 0.6, 29.8], [-9.4, 1.8, 23.6], { ...kind, dArm: D.armL, dHand: D.handL });
+  else arm(delen, [-7.8, 0.3, 36.5], [-11.4, -1.4, 31], [-8.4, 1.4, 27.4], { ...kind, dArm: D.armL, dHand: D.handL });
   bot(Bn.Barm[0]);
 
   // --- hoofd: rond, grote lage ogen, een brede grijns; bruin haar onder de pet uit
@@ -280,23 +284,26 @@ function jongen(stand = null) {
   for (const s of [-1, 1]) delen.push(ellips(plus(H, [s * 2.6, oy + 0.1, 2.2]), [1.6, 0.7, 0.6], M.haar, D.hoofd, 0.4));
   delen.push(ellips(plus(H, [0, -1.8, 0.8]), [7.2, 6.3, 6.8], M.haar, D.hoofd, 1));
   for (const x of [-3.6, -1.4, 1.2, 3.4]) delen.push(bol(plus(H, [x, 5.4, 4.6 - Math.abs(x) * 0.2]), 1.5, M.haar, D.hoofd, 0.6));
-  // de pet: te groot, zakt scheef naar links over het oor
-  const pet = [
-    ellips(plus(H, [0, -0.4, 5.2]), [8.8, 9.2, 3.1], M.pet, D.pet, 1),
-    bol(plus(H, [0, -0.4, 8.2]), 0.9, M.pet, D.pet, 0.4),
-    {
-      f: (x, y, z) => {
-        const dx = x - H[0];
-        const dy = y - (H[1] + 7.6);
-        const dz = z - (H[2] + 4.9) - 0.12 * dy;
-        return sdf.ellipsoide(dx, dy, dz, 5.8, 3.8, 0.75) * 0.85;
+  if (o.kapsel) UI.kapselMan(delen, H, maat, M.haar, D.hoofd, o.kapsel); // vraag 145
+  // de pet: te groot, zakt scheef naar links over het oor (o.pet false: geen)
+  if (o.pet !== false) {
+    const pet = [
+      ellips(plus(H, [0, -0.4, 5.2]), [8.8, 9.2, 3.1], M.pet, D.pet, 1),
+      bol(plus(H, [0, -0.4, 8.2]), 0.9, M.pet, D.pet, 0.4),
+      {
+        f: (x, y, z) => {
+          const dx = x - H[0];
+          const dy = y - (H[1] + 7.6);
+          const dz = z - (H[2] + 4.9) - 0.12 * dy;
+          return sdf.ellipsoide(dx, dy, dz, 5.8, 3.8, 0.75) * 0.85;
+        },
+        g: [H[0], H[1] + 7.6, H[2] + 4.9, 7],
+        m: M.pet,
+        deel: D.pet,
       },
-      g: [H[0], H[1] + 7.6, H[2] + 4.9, 7],
-      m: M.pet,
-      deel: D.pet,
-    },
-  ];
-  delen.push(...draaiDelen(pet, [0, 1, 0], -13, plus(H, [0, 0, 1])));
+    ];
+    delen.push(...draaiDelen(pet, [0, 1, 0], -13, plus(H, [0, 0, 1])));
+  }
   bot(Bn.Bnek);
 
   return model(delen, mat, hg ? HH.omvat(delen, 2) : { midden: [0, 2, 32], straal: 40 });
@@ -311,18 +318,18 @@ const MEISJE_FPS = 10;
 // Het meisje: blonde vlechten die opzij uitsteken, met rode strikjes, een oranje jurk met een wit
 // kraagje en pofmouwtjes, en in haar armen een zwarte kat met gele ogen.
 // stand: zie smid() (dorpelingen.cjs).
-function meisje(stand = null) {
+function meisje(stand = null, o = {}) {
   const M = { huid: 0, jurk: 1, bloes: 2, kous: 3, schoen: 4, haar: 5, oog: 6, strik: 7, kat: 8, katoog: 9, mond: 10 };
   const D = { benen: 1, rok: 2, lijf: 3, kraag: 4, armL: 5, armR: 6, handL: 7, handR: 8, hoofd: 9, haar: 10, kat: 11 };
   const H = [0, 2.6, 49];
   const maat = [6.7, 6.5, 6.9];
   const mat = [];
   mat[M.huid] = { ramp: 'huid', lo: 1.9, hi: 6.7, schaduwKracht: 0.7, patroon: blosjes(3.6, H[2] - 2.6, H[1] + 3, 1.9, 6.7) };
-  mat[M.jurk] = { ramp: 'herfst', lo: 1.2, hi: 5.8 };
-  mat[M.bloes] = { ramp: 'pleister', lo: 2.4, hi: 6.4 };
+  mat[M.jurk] = o.jurk || { ramp: 'herfst', lo: 1.2, hi: 5.8 };
+  mat[M.bloes] = o.bloes || { ramp: 'pleister', lo: 2.4, hi: 6.4 };
   mat[M.kous] = { ramp: 'pleister', lo: 2, hi: 6 };
   mat[M.schoen] = { ramp: 'vacht', lo: 0.2, hi: 2.6, glans: 1.2 };
-  mat[M.haar] = {
+  mat[M.haar] = o.haar || {
     ramp: 'stro',
     lo: 2,
     hi: 6.2,
@@ -333,7 +340,7 @@ function meisje(stand = null) {
     },
   };
   mat[M.oog] = OOG;
-  mat[M.strik] = { ramp: 'rood', lo: 3, hi: 7 };
+  mat[M.strik] = o.strik || { ramp: 'rood', lo: 3, hi: 7 };
   mat[M.kat] = { ramp: 'vacht', lo: 0.2, hi: 2.5, glans: 0.9, glansMacht: 14 };
   mat[M.katoog] = { ramp: 'goud', lo: 4, hi: 6.4, detail: true, schaduw: false, rand: 0 };
   mat[M.mond] = MOND;
@@ -392,28 +399,31 @@ function meisje(stand = null) {
     deel: D.kraag,
   });
 
-  // --- de kat, dwars voor haar borst, de kop rechts (van haar uit), de staart hangt links
-  const kop = [4.6, 10.4, 35.6];
-  delen.push(ellips([0.2, 8.8, 32.6], [5, 3, 3.1], M.kat, D.kat, 0));
-  delen.push(bol(kop, 2.6, M.kat, D.kat, 1));
-  for (const s of [-1, 1]) {
-    delen.push(kegel(plus(kop, [s * 1.3, -0.3, 1.6]), plus(kop, [s * 1.8, -0.5, 3.9]), 0.95, 0.2, M.kat, D.kat, 0.5));
-    delen.push(bol(plus(kop, [s * 1, 2.2, 0.3]), 0.55, M.katoog, D.kat));
+  // --- de kat, dwars voor haar borst, de kop rechts (van haar uit), de staart hangt links (vraag 145: niet elk meisje heeft een kat, o.kat false)
+  if (o.kat !== false) {
+    const kop = [4.6, 10.4, 35.6];
+    delen.push(ellips([0.2, 8.8, 32.6], [5, 3, 3.1], M.kat, D.kat, 0));
+    delen.push(bol(kop, 2.6, M.kat, D.kat, 1));
+    for (const s of [-1, 1]) {
+      delen.push(kegel(plus(kop, [s * 1.3, -0.3, 1.6]), plus(kop, [s * 1.8, -0.5, 3.9]), 0.95, 0.2, M.kat, D.kat, 0.5));
+      delen.push(bol(plus(kop, [s * 1, 2.2, 0.3]), 0.55, M.katoog, D.kat));
+    }
+    delen.push(bol(plus(kop, [0, 2.3, -0.9]), 1.2, M.kat, D.kat, 0.8));
+    for (const x of [2, 3.6]) delen.push(bol([x, 10.8, 30.2], 1, M.kat, D.kat, 0.6));
+    delen.push(...bochtKegel([-4.4, 8.2, 31.8], [-7.4, 9.4, 29.2], [-6.8, 11.4, 25.4], 1, 0.6, 4, M.kat, D.kat, 0.4));
+    // ze draagt de kat met twee handen tegen zich aan: hij beweegt dus mee met de romp (Bn.Bromp),
+    // niet met één arm apart.
+    bot(Bn.Bromp);
   }
-  delen.push(bol(plus(kop, [0, 2.3, -0.9]), 1.2, M.kat, D.kat, 0.8));
-  for (const x of [2, 3.6]) delen.push(bol([x, 10.8, 30.2], 1, M.kat, D.kat, 0.6));
-  delen.push(...bochtKegel([-4.4, 8.2, 31.8], [-7.4, 9.4, 29.2], [-6.8, 11.4, 25.4], 1, 0.6, 4, M.kat, D.kat, 0.4));
-  // ze draagt de kat met twee handen tegen zich aan: hij beweegt dus mee met de romp (Bn.Bromp),
-  // niet met één arm apart.
-  bot(Bn.Bromp);
 
   // --- armen: pofmouwtjes; ze houdt de kat met twee handen vast
   const kind = { mouw: M.bloes, huid: M.huid, r: [2.4, 2, 1.6], tot: 0.45, hand: [1.8, 1.9, 2.1] };
+  const kat = o.kat !== false; // zonder kat hangen haar armen
   delen.push(bol([7.4, 0.3, 37.4], 2.9, M.bloes, D.armR, 1));
-  arm(delen, [7.4, 0.3, 37.2], [9, 3.4, 31.2], [4, 8.8, 29.8], { ...kind, dArm: D.armR, dHand: D.handR });
+  arm(delen, [7.4, 0.3, 37.2], kat ? [9, 3.4, 31.2] : [9.4, 0.6, 31], kat ? [4, 8.8, 29.8] : [8.6, 1.8, 25.4], { ...kind, dArm: D.armR, dHand: D.handR });
   bot(Bn.Barm[1]);
   delen.push(bol([-7.4, 0.3, 37.4], 2.9, M.bloes, D.armL, 1));
-  arm(delen, [-7.4, 0.3, 37.2], [-8.8, 3, 31.4], [-4.6, 9.4, 32.4], { ...kind, dArm: D.armL, dHand: D.handL });
+  arm(delen, [-7.4, 0.3, 37.2], kat ? [-8.8, 3, 31.4] : [-9.4, 0.6, 31], kat ? [-4.6, 9.4, 32.4] : [-8.6, 1.8, 25.4], { ...kind, dArm: D.armL, dHand: D.handL });
   bot(Bn.Barm[0]);
 
   // --- hoofd: pony, een scheiding, en twee vlechten die opzij uitsteken
@@ -434,7 +444,14 @@ function meisje(stand = null) {
     deel: D.haar,
     k: 0.6,
   });
-  for (const s of [-1, 1]) {
+  // (vraag 145: kapsel 'los' of 'staart' in plaats van de twee vlechten)
+  if (o.kapsel === 'los') {
+    delen.push(ellips(plus(H, [0, -3.6, -4.6]), [maat[0] + 0.4, 3.6, 8], M.haar, D.haar, 1.2));
+    for (const s of [-1, 1]) delen.push(ellips(plus(H, [s * (maat[0] - 0.3), -0.8, -3.8]), [1.9, 3, 5.6], M.haar, D.haar, 1));
+  } else if (o.kapsel === 'staart') {
+    delen.push(bol(plus(H, [0, -6.6, 1.6]), 1.6, M.strik, D.haar, 0.6));
+    delen.push(kegel(plus(H, [0, -7.4, 1]), plus(H, [0.6, -9.6, -8.6]), 2.1, 1, M.haar, D.haar, 0.8));
+  } else for (const s of [-1, 1]) {
     const eind = vlecht(delen, plus(H, [s * 5.8, -1.4, -1.6]), plus(H, [s * 10.8, -1, -2.6]), plus(H, [s * 10.6, 0.2, -9.6]), 1.6, 1.15, 9, M.haar, D.haar);
     delen.push(bol(eind, 0.9, M.strik, D.haar));
     delen.push(ellips(plus(eind, [s * 1.4, 0.4, 0.5]), [1.4, 1.1, 0.9], M.strik, D.haar, 0.3));
@@ -457,7 +474,7 @@ const KLEUTER_FPS = 10;
 // kraagje, rode schoentjes, één krulletje. Aan een touwtje trekt hij een houten paardje op
 // rode wieltjes; met de andere hand houdt hij verlegen zijn kieltje vast.
 // stand: zie smid() (dorpelingen.cjs). Hij is klein en loopt trager dan de andere kinderen.
-function kleuter(stand = null) {
+function kleuter(stand = null, o = {}) {
   const M = { huid: 0, kiel: 1, kraag: 2, schoen: 3, haar: 4, oog: 5, paard: 6, manen: 7, rood: 8, mond: 9, plank: 10, touw: 11 };
   const D = { benen: 1, lijf: 2, kraag: 3, armL: 4, armR: 5, handL: 6, handR: 7, hoofd: 8, haar: 9, paard: 10, wiel: 11, touw: 12 };
   const H = [0, 2.2, 45];
@@ -468,11 +485,12 @@ function kleuter(stand = null) {
     ramp: 'stro',
     lo: 2.2,
     hi: 6.4,
+    ...o.kiel,
     patroon: (x, y, z) => (z < 12.8 ? { ramp: 'pleister', stap: Math.sin(Math.atan2(y, x) * 14) > 0 ? 5 : 4 } : 0),
   };
   mat[M.kraag] = { ramp: 'pleister', lo: 2.6, hi: 6.4 };
-  mat[M.schoen] = { ramp: 'rood', lo: 1.6, hi: 5.8, glans: 1 };
-  mat[M.haar] = { ramp: 'stro', lo: 3, hi: 6.6 };
+  mat[M.schoen] = o.schoen || { ramp: 'rood', lo: 1.6, hi: 5.8, glans: 1 };
+  mat[M.haar] = o.haar || { ramp: 'stro', lo: 3, hi: 6.6 };
   mat[M.oog] = OOG;
   mat[M.paard] = { ramp: 'hout', lo: 2.2, hi: 6.4 };
   mat[M.manen] = { ramp: 'schors', lo: 0.6, hi: 3.4 };
@@ -536,66 +554,70 @@ function kleuter(stand = null) {
   // voren, zodat je het van de meeste kanten als paardje ziet. Het staat vast op de grond (net
   // als de hooivork van de boer en de wandelstok van de dorpsoudste), dus het paardje en het
   // touwtje zwaaien niet mee met zijn lijf of arm — anders zou het over de grond gaan zweven.
-  const P = [14.6, 9.4, 0];
-  const u = eenheid([1, 0.35, 0]); // de richting van de kop
-  const b = [-u[1], u[0], 0]; // naar links van het paardje
-  const op = (a, bb, z) => [P[0] + u[0] * a + b[0] * bb, P[1] + u[1] * a + b[1] * bb, z];
-  delen.push({
-    f: (x, y, z) => {
-      const dx = x - P[0];
-      const dy = y - P[1];
-      return sdf.doos(dx * u[0] + dy * u[1], dx * b[0] + dy * b[1], z - 2.7, 5.4, 1.9, 0.55, 0.4);
-    },
-    g: [P[0], P[1], 2.7, 6.5],
-    m: M.plank,
-    deel: D.paard,
-  });
-  for (const sa of [-1, 1]) {
-    for (const sb of [-1, 1]) {
-      delen.push(schijf(op(sa * 3.7, sb * 2.3, 1.8), b, 1.7, 0.45, M.rood, D.wiel));
-      delen.push(kegel(op(sa * 3.2, sb * 1.1, 3.1), op(sa * 3.3, sb * 1.1, 8.2), 0.85, 0.8, M.paard, D.paard, 0.6));
-    }
-  }
-  delen.push({
-    f: (x, y, z) => {
-      const dx = x - P[0];
-      const dy = y - P[1];
-      return sdf.ellipsoide(dx * u[0] + dy * u[1], dx * b[0] + dy * b[1], z - 9.6, 4.8, 2.2, 2.6);
-    },
-    g: [P[0], P[1], 9.6, 5.5],
-    m: M.paard,
-    deel: D.paard,
-    k: 0.8,
-  });
-  delen.push(kegel(op(3.4, 0, 10.6), op(5, 0, 14.4), 1.7, 1.35, M.paard, D.paard, 1));
-  const kop = op(6.3, 0, 15);
-  delen.push({
-    f: (x, y, z) => {
-      const dx = x - kop[0];
-      const dy = y - kop[1];
-      const a = dx * u[0] + dy * u[1];
-      return sdf.ellipsoide(a, dx * b[0] + dy * b[1], z - kop[2] + 0.35 * a, 2.7, 1.35, 1.45);
-    },
-    g: [kop[0], kop[1], kop[2], 3.2],
-    m: M.paard,
-    deel: D.paard,
-    k: 0.8,
-  });
-  for (const sb of [-1, 1]) {
-    delen.push(kegel(op(5.2, sb * 0.6, 16), op(5, sb * 0.7, 17.9), 0.55, 0.2, M.paard, D.paard, 0.3));
-    delen.push(bol(op(6.6, sb * 1.25, 15.4), 0.4, M.manen, D.paard));
-  }
-  delen.push(capsule(op(3.1, 0, 12.2), op(4.7, 0, 16.2), 0.8, M.manen, D.paard));
-  delen.push(kegel(op(-4.5, 0, 10.4), op(-6, 0, 6.8), 0.9, 0.5, M.manen, D.paard, 0.4));
-  delen.push(ellips(op(-0.2, 0, 11.8), [2.1, 2.1, 0.7], M.rood, D.paard, 0.4));
-  // het touwtje, van zijn hand naar de hals van het paardje
+  // (vraag 145: niet elke kleuter heeft een paardje, o.paard false; dan hangt zijn arm)
   const hand = [10.4, 6.8, 21.4];
-  delen.push(capsule(hand, op(5.4, 0, 13.2), 0.32, M.touw, D.touw));
-  bot(null);
+  if (o.paard !== false) {
+    const P = [14.6, 9.4, 0];
+    const u = eenheid([1, 0.35, 0]); // de richting van de kop
+    const b = [-u[1], u[0], 0]; // naar links van het paardje
+    const op = (a, bb, z) => [P[0] + u[0] * a + b[0] * bb, P[1] + u[1] * a + b[1] * bb, z];
+    delen.push({
+      f: (x, y, z) => {
+        const dx = x - P[0];
+        const dy = y - P[1];
+        return sdf.doos(dx * u[0] + dy * u[1], dx * b[0] + dy * b[1], z - 2.7, 5.4, 1.9, 0.55, 0.4);
+      },
+      g: [P[0], P[1], 2.7, 6.5],
+      m: M.plank,
+      deel: D.paard,
+    });
+    for (const sa of [-1, 1]) {
+      for (const sb of [-1, 1]) {
+        delen.push(schijf(op(sa * 3.7, sb * 2.3, 1.8), b, 1.7, 0.45, M.rood, D.wiel));
+        delen.push(kegel(op(sa * 3.2, sb * 1.1, 3.1), op(sa * 3.3, sb * 1.1, 8.2), 0.85, 0.8, M.paard, D.paard, 0.6));
+      }
+    }
+    delen.push({
+      f: (x, y, z) => {
+        const dx = x - P[0];
+        const dy = y - P[1];
+        return sdf.ellipsoide(dx * u[0] + dy * u[1], dx * b[0] + dy * b[1], z - 9.6, 4.8, 2.2, 2.6);
+      },
+      g: [P[0], P[1], 9.6, 5.5],
+      m: M.paard,
+      deel: D.paard,
+      k: 0.8,
+    });
+    delen.push(kegel(op(3.4, 0, 10.6), op(5, 0, 14.4), 1.7, 1.35, M.paard, D.paard, 1));
+    const kop = op(6.3, 0, 15);
+    delen.push({
+      f: (x, y, z) => {
+        const dx = x - kop[0];
+        const dy = y - kop[1];
+        const a = dx * u[0] + dy * u[1];
+        return sdf.ellipsoide(a, dx * b[0] + dy * b[1], z - kop[2] + 0.35 * a, 2.7, 1.35, 1.45);
+      },
+      g: [kop[0], kop[1], kop[2], 3.2],
+      m: M.paard,
+      deel: D.paard,
+      k: 0.8,
+    });
+    for (const sb of [-1, 1]) {
+      delen.push(kegel(op(5.2, sb * 0.6, 16), op(5, sb * 0.7, 17.9), 0.55, 0.2, M.paard, D.paard, 0.3));
+      delen.push(bol(op(6.6, sb * 1.25, 15.4), 0.4, M.manen, D.paard));
+    }
+    delen.push(capsule(op(3.1, 0, 12.2), op(4.7, 0, 16.2), 0.8, M.manen, D.paard));
+    delen.push(kegel(op(-4.5, 0, 10.4), op(-6, 0, 6.8), 0.9, 0.5, M.manen, D.paard, 0.4));
+    delen.push(ellips(op(-0.2, 0, 11.8), [2.1, 2.1, 0.7], M.rood, D.paard, 0.4));
+    // het touwtje, van zijn hand naar de hals van het paardje
+    delen.push(capsule(hand, op(5.4, 0, 13.2), 0.32, M.touw, D.touw));
+    bot(null);
+  }
 
   // --- armpjes: pofmouwtjes. Rechts het touwtje, links verlegen aan het kieltje.
   const kind = { mouw: M.kiel, huid: M.huid, r: [2.6, 2.3, 1.9], tot: 0.6, hand: [1.9, 2, 2.1] };
-  arm(delen, [6.6, 0.5, 31.6], [9.6, 2.6, 26], hand, { ...kind, dArm: D.armR, dHand: D.handR });
+  if (o.paard !== false) arm(delen, [6.6, 0.5, 31.6], [9.6, 2.6, 26], hand, { ...kind, dArm: D.armR, dHand: D.handR });
+  else arm(delen, [6.6, 0.5, 31.6], [8.6, 0.8, 26], [7.8, 2, 21], { ...kind, dArm: D.armR, dHand: D.handR });
   bot(Bn.Barm[1]);
   arm(delen, [-6.6, 0.5, 31.6], [-8.8, 2.2, 25], [-7.4, 5.4, 19.8], { ...kind, dArm: D.armL, dHand: D.handL });
   bot(Bn.Barm[0]);
