@@ -689,10 +689,7 @@
     const schapen = T.veeVan(D).filter((e) => e.dier === 'schaap' && volwassen(e, dag));
     const wol = schapen.length * IN().wolPerSchaap;
     if (wol > 0 && D.voorraad && T.wijzigVoorraad) {
-      // De wol is van de huizen van de herders (js/geld.js, vraag 141), of zonder herder van de kas.
-      const herders = [];
-      for (const g of kooienVan(D)) for (const h of T.makersVan(D, g)) if (!herders.includes(h)) herders.push(h);
-      T.legInPakhuis(D, 'wol', wol, herders);
+      T.wijzigVoorraad(D, 'wol', wol);
       T.zeg(D, `Het is ${T.MAANDEN[T.datumVanDag(dag).maand].naam}: ${schapen.length} ${schapen.length === 1 ? 'schaap is' : 'schapen zijn'} geschoren. Dat geeft ${wol} wol.`, 'goed');
     }
     return wol;

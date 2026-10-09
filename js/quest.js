@@ -143,8 +143,6 @@
     if (als.questAf && !T.questAf(S, als.questAf)) return false;
     // Goud telt uit de voorraad als die er is (js/voorraad.js), net als T.geefGoud hierboven.
     if (als.goud != null && ((D.voorraad ? D.voorraad.goud : D.goud) || 0) < als.goud) return false;
-    // Wat de schout uit eigen zak betaalt (js/geld.js): zijn beurs, of zonder beurzen de kas.
-    if (als.beurs != null && !T.kanUitBeurs(D, als.beurs)) return false;
     return true;
   };
 

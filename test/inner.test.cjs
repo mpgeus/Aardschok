@@ -6,9 +6,6 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
-// De oude toetsen van het omkopen spelen met alles uit de kas (de spelregel "Geld", js/geld.js); dat het omkopen uit
-// je eigen beurs gaat, toetst test/geld.test.cjs.
-T.zetOptie('geld', 'dorp');
 const IN = T.INNER_INSTELLINGEN;
 const HEER = T.HEER_INSTELLINGEN;
 

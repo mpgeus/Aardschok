@@ -118,8 +118,7 @@ test('ja: de kapel komt er, het dorp betaalt, en wie het vroeg is er de meester'
   assert.deepEqual([kapel.x, kapel.y, kapel.klaar], [x, y, false], 'op zijn plek, in aanbouw');
   assert.equal(kapel.meester, wie);
   assert.equal(D.voorraad.hout, hout - 10);
-  // De kas betaalt de kapel, en het hout aan wie het hakte (js/geld.js): hooguit de prijs van tien hout erbij.
-  assert.ok(D.voorraad.goud <= goud - 8 + 1e-9 && D.voorraad.goud >= goud - 8 - 10 * T.prijsVan('hout') - 1e-9, `${D.voorraad.goud}`);
+  assert.equal(D.voorraad.goud, goud - 8);
   assert.equal(D.verzoeken.ja, 1);
   assert.ok(berichten.includes(`${T.naamVanBewoner(wie)} begint aan de kapel.`), berichten.join(' | '));
   assert.ok(!lopend(D), 'het verzoek is af');
@@ -218,8 +217,7 @@ test('een oproep (stap 2): wat erop staat, vraagt iemand als eerste, ook wat nie
   const goud = D.voorraad.goud;
   zeg(S, 0);
   assert.ok(D.gebouwen.some((g) => g.soort === 'steengroeve' && g.meester === L.wie));
-  // En het hout aan wie het hakte (js/geld.js).
-  assert.ok(D.voorraad.goud <= goud - 9 + 1e-9 && D.voorraad.goud >= goud - 9 - 12 * T.prijsVan('hout') - 1e-9, 'wat de steengroeve kost, en de premie');
+  assert.equal(D.voorraad.goud, goud - 4 - 5, 'wat de steengroeve kost, en de premie');
   assert.equal(T.oproepVoor(D, 'steengroeve'), null, 'de oproep hangt er niet meer');
 });
 

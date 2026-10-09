@@ -209,20 +209,6 @@
           uitleg: 'Het dorp eet vlees erbij voor de afwisseling, maar tegen de honger helpt het niet.' },
       ],
     },
-    // Marcel, 8 okt (werklijst vraag 141): "schout heeft losse beurs en beheert de dorpskas", "Loon voor de schout", en
-    // "Omkopen uit eigen zak" (js/geld.js).
-    {
-      id: 'geld', naam: 'Geld', standaard: 'huizen',
-      uitleg: 'Wie een eigen beurs heeft: elk huis en de schout, alleen de schout, of niemand.',
-      keuzes: [
-        { id: 'huizen', naam: 'Een beurs per huis', zet: { 'GELD_INSTELLINGEN.beurzen': true, 'GELD_INSTELLINGEN.huizen': true },
-          uitleg: 'Elk huis koopt zijn eten, zijn brandhout en wat het wil uit het pakhuis, en wie het maakte, krijgt het geld. De kas koopt wat het dorp gebruikt, en de belasting is een tiende van wat de huizen verdienen. Je krijgt loon, en omkopen gaat uit eigen zak.' },
-        { id: 'beurzen', naam: 'Alleen de schout', zet: { 'GELD_INSTELLINGEN.beurzen': true, 'GELD_INSTELLINGEN.huizen': false },
-          uitleg: 'Je krijgt elke maand loon uit de kas, en wie je omkoopt, betaal je uit eigen zak; de huizen hebben geen geld. Zoals op 8 okt.' },
-        { id: 'dorp', naam: 'Alles uit de kas', zet: { 'GELD_INSTELLINGEN.beurzen': false, 'GELD_INSTELLINGEN.huizen': false },
-          uitleg: 'Er is alleen het goud van het dorp; je krijgt geen loon, en ook het omkopen gaat uit de kas. Zoals voor 8 okt.' },
-      ],
-    },
     // Marcel, 8 okt (werklijst vraag 132): "Vis mag een maag vullen, zoals vlees".
     {
       id: 'vis', naam: 'Vis', standaard: 'eten',
@@ -754,7 +740,6 @@
     { naam: 'Het vee', blok: 'VEE_INSTELLINGEN' },
     { naam: 'De doorkijk', blok: 'DOORKIJK_INSTELLINGEN' },
     { naam: 'Het zichtveld', blok: 'ZIEN_INSTELLINGEN' },
-    { naam: 'Het geld', blok: 'GELD_INSTELLINGEN' },
   ];
 
   // ---------------------------------------------------------------------------------------------

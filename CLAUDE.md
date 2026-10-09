@@ -689,30 +689,6 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`T.zaakAnker`, voor `T.dagAnker`), en komt de schout bij het midden (`T.schoutBijDeZitting`), dan begint ze. Een vonnis
   is `doe.zaak` (`T.zaakGevolg`): de zaak is af, het vervolg wacht (`T.ZAAK_INSTELLINGEN.vervolg`), en een zak die nergens
   staat, leest de inner op Sint-Maarten voor (`T.heerLeestHetBoek`, vanuit `T.heerStaatErOp`). De spelregel "De zaak".
-- `js/geld.js`: **het geld** (vraag 141, stap 1, 8 okt; Marcel: "schout heeft losse beurs en beheert de dorpskas",
-  "Loon voor de schout", "Omkopen uit eigen zak"): het goud van het dorp (`D.voorraad.goud`) is de kas, in de code één
-  getal in goud, op het scherm in goud, zilver en koper (`T.muntenVan`, `T.muntTekst`; 1 goud = 10 zilver = 100 koper).
-  De schout heeft een eigen beurs (`D.geld.beurs`, `T.beursVan`, `T.wijzigBeurs`, `T.betaalUitBeurs`; in de balk naast de
-  kas), met zijn loon uit de kas op de eerste van de maand (`T.tikGeldDag`, vanuit `T.tikGebouwenDag`); omkopen
-  (`T.koopInnerOm`) gaat eruit, en een gesprek vraagt het met `als: { beurs: 5 }`. **Een beurs per huis** (stap 2, 9 okt;
-  Marcel: "ja dat is akkoord"): de voorraad blijft het pakhuis, maar het onthoudt van wie wat is (`D.geld.van`, per goed
-  een Map van gebouw of `'kas'` naar hoeveel; `T.boekPakhuis` vanuit `T.wijzigVoorraad`, dat een `eigenaar` mee kan
-  krijgen). Wat een werkplaats maakt, is van de huizen van wie er werkt (`T.makersVan`, `T.legInPakhuis` in
-  `T.tikGebouwenDag`), het graan van de boerderij als het in de schuur ligt (`T.haalSchovenBinnen` met de schuur,
-  `T.schuurVan`), de wijn van de wijnboerderij, de wol van de herders, het sprokkelhout van de huizen zonder werk
-  (`T.sprokkelaars`); de rest van de kas. **Wie neemt, betaalt de eigenaars** tegen een vaste prijs in koper (`prijzen`,
-  `T.prijsVan`; `T.neemEnBetaal`, `T.betaalGenomen`, eerst wat van hemzelf is): een huis zijn wensen (`T.gebruikGoederen`),
-  de huizen samen hun eten en brandhout naar hun monden (`T.eetVandaag`, het stoken in js/behoeften.js; `T.wieBetaalt`,
-  het huis van de schout uit zijn beurs, `T.betalerVan`), een werkplaats wat hij omzet, en de kas wat het dorp gebruikt
-  (`T.kasNeemt`: de bouw, de heer, het gereedschap dat slijt, en wat je de marskramer verkoopt). Wat een huis koopt, kiest
-  `T.berekenWensen` (js/wensen.js) uit zijn beurs (`g.beurs`, `T.huisBeurs`): eerst zijn eten, in de winter zijn brandhout,
-  dan zijn wensen; wat het niet kan betalen, mist het (`g.wensen.teArm`), en wie zijn eten of hout niet kan betalen, lijdt
-  in zijn huis (`etenDeel`, `brandDeel`; `etenDekking`, `houtDekking` en `arm` in `T.berekenTevredenheid`, en de winter
-  neemt eerst wie in zo'n huis woont). Wat een huis krijgt, telt als verdiend (`g.verdiend`, per maand; `verdiendVorige`
-  voor het briefje); de belasting is daar een tiende van (`tiende`, in `T.tikWettenDag`), en met een markt gaat er
-  marktgeld naar de kas. De spelregel "Geld": een beurs per huis, alleen de schout (zoals op 8 okt), of alles uit de kas
-  (zoals ervoor); de getallen in `T.GELD_INSTELLINGEN`. Het arme gezin dat je opzoekt en het loon van de dagloner komen
-  hierna.
 - `js/markt.js`: **de markt op het plein, die meegroeit** (vraag 110, d, en vraag 127, 6 okt; Marcel: "Grotere stad =
   grotere markt"): met de spelregel "De markt" op "Op het plein" (`T.MARKT_INSTELLINGEN.opHetPlein`) komt een markt niet
   als gebouw van 6 bij 6, maar als een marktblok op het plein: twee rijen kramen tegenover elkaar met een looppad

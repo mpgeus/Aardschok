@@ -350,9 +350,11 @@
   T.koopInnerOm = function (D, goud) {
     const I = D.inner;
     const b = I && I.bezoek;
-    // Uit eigen zak (js/geld.js, de beurs van de schout; Marcel, 8 okt: "Omkopen uit eigen zak"), of zonder beurzen uit de kas.
-    if (!b || b.weg || !(goud > 0) || !T.betaalUitBeurs(D, goud)) return { kan: false, korting: T.innerKorting(D), gehoord: false };
+    const heeft = (D.voorraad ? D.voorraad.goud : D.goud) || 0;
+    if (!b || b.weg || !(goud > 0) || heeft < goud) return { kan: false, korting: T.innerKorting(D), gehoord: false };
     const o = IN().omkopen;
+    if (D.voorraad) T.wijzigVoorraad(D, 'goud', -goud);
+    else D.goud = heeft - goud;
     I.geschenken = (I.geschenken || 0) + goud;
     I.aantalGeschenken = (I.aantalGeschenken || 0) + 1;
     const korting = T.innerKorting(D);

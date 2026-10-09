@@ -42,14 +42,13 @@
 //   nietQuest: 'bakker'        — waar als die quest nog niet begonnen is
 //   questAf: 'bakker'          — waar als die quest af is
 //   goud: 10                   — waar als je er minstens tien hebt
-//   beurs: 10                  — waar als er minstens tien in je eigen beurs zit (js/geld.js; zonder beurzen: de kas)
 //
 // Een gevolg (doe) mag hebben: zetVlag en/of wisVlag (één naam, of een lijstje), geef en/of neem
 // (een voorwerp in je tas of eruit), goud: 20 of goud: -15, en quest: 'bakker' met fase: 'zoeken'
 // of weg: 'marskramer' (quest zonder allebei begint hem). Zie js/quests.js voor de quests zelf.
 // En handel: true opent het handelsvenster van de marskramer (js/handel.js, js/hud.js), en
 // heer: true het venster waarin je de heer betaalt op Sint-Maarten (js/heer.js, js/hud.js).
-// omkopen: 10 geeft de inner tien goud uit je eigen beurs, voor minder op zijn rapport (js/inner.js, T.koopInnerOm).
+// omkopen: 10 geeft de inner tien goud, voor minder op zijn rapport (js/inner.js, T.koopInnerOm).
 //
 // Een voorval (js/voorvallen.js) is een gesprek dat de ander begint, onder dezelfde naam als in T.VOORVALLEN. Zijn
 // naam is '{wie}': wie het je komt zeggen. Een antwoord mag daar ook hebben: graan: -20 (of hout, bier, ijzer, ...),
@@ -173,9 +172,9 @@
       situaties: [
         { naam: 'Oogstmaand: hij komt tellen', als: { vlag: 'innerOpBezoek' } },
         { naam: 'Hij komt onverwacht terug', als: { vlag: ['innerOpBezoek', 'innerOnverwacht'] } },
-        { naam: 'Hij komt tellen, en je hebt goud', als: { vlag: 'innerOpBezoek', beurs: 20 } },
-        { naam: 'Hij heeft genoeg gepraat', als: { vlag: ['innerOpBezoek', 'innerUitgepraat'], beurs: 20 } },
-        { naam: 'Omgekocht tot de helft', als: { vlag: ['innerOpBezoek', 'innerOmgekochtVol'], beurs: 20 } },
+        { naam: 'Hij komt tellen, en je hebt goud', als: { vlag: 'innerOpBezoek', goud: 20 } },
+        { naam: 'Hij heeft genoeg gepraat', als: { vlag: ['innerOpBezoek', 'innerUitgepraat'], goud: 20 } },
+        { naam: 'Omgekocht tot de helft', als: { vlag: ['innerOpBezoek', 'innerOmgekochtVol'], goud: 20 } },
         { naam: 'Zijn rapport is af', als: { vlag: ['innerOpBezoek', 'innerGeteld'] } },
       ],
       // Afleiden en omkopen (werklijst punt 4, stuk 2; vraag 42, Marcel, 27 sep): zolang je met hem
@@ -195,7 +194,7 @@
             { zeg: 'Loop maar met me mee. Ik laat u alles zien.', als: { nietVlag: 'innerGeteld' }, sluit: true },
             { zeg: 'Wat telt u precies?', als: { nietVlag: ['innerUitgepraat', 'innerGeteld'] }, naar: 'wat' },
             { zeg: 'Hoe gaat het op het kasteel?', als: { nietVlag: ['innerUitgepraat', 'innerGeteld'] }, naar: 'kasteel' },
-            { zeg: 'Ik heb iets voor u, voor de moeite.', als: { beurs: 5, nietVlag: ['innerOmgekochtVol', 'innerGeteld'] }, naar: 'geschenk' },
+            { zeg: 'Ik heb iets voor u, voor de moeite.', als: { goud: 5, nietVlag: ['innerOmgekochtVol', 'innerGeteld'] }, naar: 'geschenk' },
             { zeg: 'Tel maar raak.', als: { nietVlag: 'innerGeteld' }, sluit: true },
             { zeg: 'Goede reis.', als: { vlag: 'innerGeteld' }, sluit: true },
           ],
@@ -231,9 +230,9 @@
             { zeg: 'Iets voor mij? Schout, ik ben de inner van Zijne Genade. Wat ik zie, schrijf ik op. Al zie ik niet alles even goed. Mijn ogen zijn niet meer wat ze waren, zeker niet als er iets in mijn hand ligt.' },
           ],
           keuzes: [
-            { zeg: 'Vijf goud, voor uw ogen.', als: { beurs: 5 }, doe: { omkopen: 5 }, naar: 'bedankt' },
-            { zeg: 'Tien goud.', als: { beurs: 10 }, doe: { omkopen: 10 }, naar: 'bedankt' },
-            { zeg: 'Twintig goud.', als: { beurs: 20 }, doe: { omkopen: 20 }, naar: 'bedankt' },
+            { zeg: 'Vijf goud, voor uw ogen.', als: { goud: 5 }, doe: { omkopen: 5 }, naar: 'bedankt' },
+            { zeg: 'Tien goud.', als: { goud: 10 }, doe: { omkopen: 10 }, naar: 'bedankt' },
+            { zeg: 'Twintig goud.', als: { goud: 20 }, doe: { omkopen: 20 }, naar: 'bedankt' },
             { zeg: 'Laat maar.', naar: 'welkom' },
           ],
         },

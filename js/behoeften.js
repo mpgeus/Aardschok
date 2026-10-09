@@ -203,7 +203,7 @@
     // zijn stand wil, en het dorp het gemiddelde, naar mensen. De afwisseling van groente, vis en vlees ging daarin op
     // (vlees of vis voor de dorpelingen), net als de kerk (een kapel in de buurt). Zonder (de spelregel "Wensen" op het
     // dorp als geheel, of een dorp zonder bewoners) rekent het zoals vóór 1 okt.
-    const wensen = T.WENSEN_INSTELLINGEN.perHuis ? T.berekenWensen(D, dag, { eten: voedselDekking, brandhout: brandhoutFactor, erbij, winter: inWinter }) : null;
+    const wensen = T.WENSEN_INSTELLINGEN.perHuis ? T.berekenWensen(D, dag, { eten: voedselDekking, brandhout: brandhoutFactor, erbij }) : null;
     const tevredenheid = wensen
       ? wensen.tevredenheid
       : Math.min(1, Math.max(0, IN.gewichtEten * voedselFactor + IN.gewichtBrandhout * brandhoutFactor + IN.gewichtKerk * kerkFactor + erbij));
@@ -220,29 +220,9 @@
       if (T.herbergDroog(D)) mist.push('bier');
     }
 
-    // Met een beurs per huis (js/geld.js, vraag 141) eet en stookt een huis wat het kon kopen: wie het niet kon betalen,
-    // lijdt honger of kou in zijn huis (Marcel, 8 okt: "1. B"). `etenDekking` en `houtDekking` zijn dan wat het dorp
-    // gemiddeld echt eet en stookt (T.eetVandaag, de winter), en `arm` de huizen die te weinig konden kopen.
-    let eetDeel = 1;
-    let stookDeel = 1;
-    const arm = [];
-    if (wensen && T.metHuisbeurzen() && bevolking > 0) {
-      let minderMonden = 0;
-      let minderHuishoudens = 0;
-      for (const h of wensen.huizen) {
-        minderMonden += h.mensen * (1 - h.etenDeel);
-        minderHuishoudens += Math.ceil(h.mensen / T.GEBOUWEN_INSTELLINGEN.gezinGrootte) * (1 - h.brandDeel);
-        if (h.etenDeel < 1 - 1e-9 || h.brandDeel < 1 - 1e-9) arm.push(h.g);
-      }
-      eetDeel = Math.max(0, 1 - minderMonden / bevolking);
-      if (huishoudens > 0) stookDeel = Math.max(0, 1 - minderHuishoudens / huishoudens);
-    }
-    const etenDekking = voedselDekking * eetDeel;
-    const houtDekking = brandhoutDekking * stookDeel;
-
     return {
       tevredenheid, mist, last: heer.waarom.concat(wetten.last, voorvallen.last), blij: wetten.blij.concat(voorvallen.blij), inWinter,
-      voedselDekking, etenDekking, houtDekking, eetDeel, stookDeel, arm, extraSoorten: wensen ? [] : extraSoorten, voedselFactor: wensen ? voedselDekking : voedselFactor,
+      voedselDekking, extraSoorten: wensen ? [] : extraSoorten, voedselFactor: wensen ? voedselDekking : voedselFactor,
       brandhoutDekking, brandhoutBenodigd, brandhoutVoorraad, brandhoutFactor,
       huishoudens, heeftKerk, kerkFactor, gezelligheid, wensen,
     };
@@ -283,15 +263,13 @@
     }
   }
 
-  // Met een beurs per huis stookt elk huis wat het kocht, en betaalt het wie het hout hakte of raapte (js/geld.js).
   function pasBrandhoutToe(D, b) {
     if (!b.inWinter || b.brandhoutBenodigd <= 0) return;
-    const stokers = T.metHuisbeurzen() ? T.wieBetaalt(D, (g, n) => Math.ceil(n / T.GEBOUWEN_INSTELLINGEN.gezinGrootte) * T.deelVanHuis(g, 'brandDeel'), b.huishoudens * b.stookDeel) : null;
-    const nodig = Math.min(b.brandhoutBenodigd * b.stookDeel, b.brandhoutVoorraad);
+    const nodig = Math.min(b.brandhoutBenodigd, b.brandhoutVoorraad);
     const uitTurf = Math.min(nodig, D.voorraad.turf || 0);
-    if (uitTurf > 0) T.neemEnBetaal(D, 'turf', uitTurf, stokers || 'kas');
+    if (uitTurf > 0) T.wijzigVoorraad(D, 'turf', -uitTurf);
     const uitHout = Math.min(nodig - uitTurf, D.voorraad.hout || 0);
-    if (uitHout > 0) T.neemEnBetaal(D, 'hout', uitHout, stokers || 'kas');
+    if (uitHout > 0) T.wijzigVoorraad(D, 'hout', -uitHout);
   }
 
   // In de winter kost een tekort aan brandhout of eten mensen; met de optie hongerBuitenWinter
@@ -303,30 +281,21 @@
       D.behoeften.winterVerliesRest = 0; // een nieuwe winter begint weer vers
       return;
     }
-    // Met een beurs per huis telt wat het dorp echt at en stookte: ook wie het niet kon betalen, lijdt (js/geld.js).
-    const tekort = b.inWinter ? 1 - Math.min(b.houtDekking, b.etenDekking) : 1 - b.etenDekking;
+    const tekort = b.inWinter ? 1 - Math.min(b.brandhoutDekking, b.voedselDekking) : 1 - b.voedselDekking;
     if (tekort <= 0 || D.bevolking <= 0) return;
     D.behoeften.winterVerliesRest += D.bevolking * tekort * IN.winterVerliesFactor;
     const verlies = Math.floor(D.behoeften.winterVerliesRest);
     if (verlies <= 0) return;
     D.behoeften.winterVerliesRest -= verlies;
     // Waaraan (Marcel, 27 sep, vraag 44): tot 28 sep zei het bericht alleen "De winter is hard".
-    const koud = b.inWinter && b.houtDekking < 1;
-    const honger = b.etenDekking < 1;
-    // Was er genoeg, maar konden sommige huizen het niet betalen, dan is het de armoede, en zijn zij het eerst.
-    const armoede = b.arm && b.arm.length && b.voedselDekking >= 1 && (!b.inWinter || b.brandhoutDekking >= 1);
-    const wat = armoede ? (koud && honger ? 'De winter is hard voor wie geen geld heeft voor eten en hout' : koud ? 'De kou is hard voor wie geen geld heeft voor hout' : 'De honger is hard voor wie geen geld heeft voor eten')
-      : koud && honger ? 'De winter is hard, want het hout en het eten zijn op'
+    const koud = b.inWinter && b.brandhoutDekking < 1;
+    const honger = b.voedselDekking < 1;
+    const wat = koud && honger ? 'De winter is hard, want het hout en het eten zijn op'
       : koud ? 'De kou is hard, want het hout is op'
       : 'De honger is hard, want het eten is op';
-    let wie;
-    if (b.arm && b.arm.length && D.bewoners) {
-      const lijst = T.wieGaatEerst(D, 'winter');
-      wie = lijst.filter((p) => b.arm.includes(p.huis)).concat(lijst.filter((p) => !b.arm.includes(p.huis)));
-    }
     // Met bewoners zegt het bericht wie het zijn (T.bewonersVolgen, js/bewoners.js); zonder (een toets
     // met een eigen, kleine wereld) alleen hoeveel.
-    T.wijzigBevolking(D, -verlies, 'winter', wat, wie);
+    T.wijzigBevolking(D, -verlies, 'winter', wat);
     if (!D.bewoners) {
       T.zeg(D, verlies === 1 ? `${wat}: het dorp verliest een dorpeling.` : `${wat}: het dorp verliest ${verlies} dorpelingen.`, 'gevaar');
     }
@@ -344,7 +313,7 @@
     const IN = T.BEHOEFTEN_INSTELLINGEN;
     if (dag <= 0 || dag % T.GEBOUWEN_INSTELLINGEN.gezinDagen !== 0) return;
     if (D.bevolking <= 0) return;
-    const honger = IN.hongerBuitenWinter === 'wegtrekken' && !b.inWinter && b.etenDekking < 1;
+    const honger = IN.hongerBuitenWinter === 'wegtrekken' && !b.inWinter && b.voedselDekking < 1;
     const ontevreden = b.wensen ? b.wensen.huizen.filter((h) => h.tevredenheid < IN.vertrekDrempel) : null;
     if (!honger && (ontevreden ? !ontevreden.length : b.tevredenheid >= IN.vertrekDrempel)) return;
     let verlies = Math.min(D.bevolking, T.GEBOUWEN_INSTELLINGEN.gezinGrootte);
@@ -825,22 +794,9 @@
   // Geeft ook `vlees`: wat er van het vlees gegeten is (in vlees, niet in graan). Wat de huizen vandaag al aten aan brood,
   // vis en vlees van hun wensen (`alGegeten`, in graan; T.gebruikGoederen in js/wensen.js, vraag 92, a), hoeft het dorp
   // niet meer te eten.
-  //
-  // Met een beurs per huis (js/geld.js, vraag 141) eet een huis wat het kon kopen (`etenDeel` op het huis, T.berekenWensen),
-  // en betalen de huizen samen wie het graan, de kaas, het vlees en de vis had, elk naar zijn monden.
   T.eetVandaag = function (D, dag = D.kalender ? Math.floor(D.kalender.dag) : 0, alGegeten = 0) {
     const IN = T.BEHOEFTEN_INSTELLINGEN;
-    const bevolking = D.bevolking || 0;
-    let monden = bevolking;
-    let eters = null;
-    if (T.metHuisbeurzen() && D.bewoners) {
-      let minder = 0;
-      for (const g of D.gebouwen || []) if (g.wensen && g.wensen.mensen) minder += g.wensen.mensen * (1 - T.deelVanHuis(g, 'etenDeel'));
-      monden = Math.max(0, bevolking - minder);
-      eters = T.wieBetaalt(D, (g, n) => n * T.deelVanHuis(g, 'etenDeel'), bevolking);
-    }
-    const neem = (wat, n) => (eters ? T.neemEnBetaal(D, wat, n, eters) : T.wijzigVoorraad(D, wat, -n));
-    const nodig = Math.max(0, monden * T.etenPerMens(D) - alGegeten);
+    const nodig = Math.max(0, (D.bevolking || 0) * T.etenPerMens(D) - alGegeten);
     const v = D.voorraad;
     const melkVandaag = (D.vee && D.vee.melk) || 0;
     const melk = Math.min(nodig, melkVandaag);
@@ -875,14 +831,14 @@
     if (rest > 0 && apart > 0) T.zaaigraanInGevaar(D, dag);
     const vlees = vers.vlees + gezouten.vlees;
     const vis = vers.vis + gezouten.vis;
-    if (graan + zaaigraan > 0) neem('graan', graan + zaaigraan);
+    if (graan + zaaigraan > 0) T.wijzigVoorraad(D, 'graan', -(graan + zaaigraan));
     zegHetZaaigraan(D, zaaigraan, apart);
-    if (kaas > 0) neem('kaas', kaas);
-    if (vlees > 0) neem('vlees', vlees);
-    if (vis > 0) neem('vis', vis);
+    if (kaas > 0) T.wijzigVoorraad(D, 'kaas', -kaas);
+    if (vlees > 0) T.wijzigVoorraad(D, 'vlees', -vlees);
+    if (vis > 0) T.wijzigVoorraad(D, 'vis', -vis);
     // Wie gezouten vlees of vis eet, eet het zout mee op, net als in pasBederfToe hieronder.
     const zoutGegeten = gezouten.vlees + gezouten.vis;
-    if (zoutGegeten > 0 && (v.zout || 0) > 0) neem('zout', Math.min(v.zout, zoutGegeten / IN.zoutHoudtGoed));
+    if (zoutGegeten > 0 && (v.zout || 0) > 0) T.wijzigVoorraad(D, 'zout', -Math.min(v.zout, zoutGegeten / IN.zoutHoudtGoed));
     const kaasErbij = (melkVandaag - melk) * (T.VEE_INSTELLINGEN ? T.VEE_INSTELLINGEN.melkNaarKaas : 0);
     if (kaasErbij > 0) T.wijzigVoorraad(D, 'kaas', kaasErbij);
     if (D.vee) D.vee.melk = 0;
@@ -1147,10 +1103,8 @@
 
     pasBederfToe(D, bederfelijkGegeten);
     pasBrandhoutToe(D, b);
-    // Het dode hout van vandaag, voor de winter: van de huizen waar iemand zonder werk woont, die het raapt (js/geld.js;
-    // Marcel, 9 okt).
-    const sprokkel = T.sprokkelHout(D);
-    if (sprokkel > 0) T.legInPakhuis(D, 'hout', sprokkel, T.sprokkelaars(D));
+    const sprokkel = T.sprokkelHout(D); // het dode hout van vandaag, voor de winter
+    if (sprokkel > 0) T.wijzigVoorraad(D, 'hout', sprokkel);
     pasWinterVerliesToe(D, b);
     pasVertrekToe(D, b, dag);
     if (b.wensen) pasStrengToe(D, b.wensen);

@@ -251,9 +251,8 @@
     const k = T.kanVerkopen(D, wat, pakken);
     if (!k.kan) return k;
     const m = D.marskramer;
-    // Het goud komt in de kas, en de kas betaalt wie het maakte (js/geld.js, vraag 141).
+    T.wijzigVoorraad(D, wat, -k.stuks);
     T.wijzigVoorraad(D, 'goud', k.opbrengst);
-    T.neemEnBetaal(D, wat, k.stuks, 'kas');
     m.beurs -= k.opbrengst;
     m.plaats -= pakken;
     T.boekMarskramer(D).ontvangen += k.opbrengst;
