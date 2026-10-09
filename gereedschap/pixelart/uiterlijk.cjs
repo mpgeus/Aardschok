@@ -208,29 +208,6 @@ function wolmuts(delen, H, [rx, ry], m, d, zij = 1) {
   delen.push(ellips(plus(H, [2.6 * zij, -2.6, 10.2]), [3.2, 3, 2.6], m, d, 1.2));
 }
 
-// Een deel groter maken om een punt (om, in wereldmaten) met factor k: de vorm, de grensbol, en de weg terug voor het
-// patroon, zodat een patroon niet mee uitrekt. Voor een groter hoofd en grotere handen (hoofdMaat, handMaat): op deze
-// maat van pixels zie je een gezicht en een hand pas als ze wat groter zijn dan in het echt, zoals in een tekening.
-function vergroot(deel, om, k) {
-  const terug = (x, y, z) => [om[0] + (x - om[0]) / k, om[1] + (y - om[1]) / k, om[2] + (z - om[2]) / k];
-  const f0 = deel.f;
-  return {
-    ...deel,
-    f: (x, y, z) => f0(...terug(x, y, z)) * k,
-    terug: deel.terug ? (x, y, z) => deel.terug(...terug(x, y, z)) : terug,
-    ...(deel.g ? { g: [om[0] + (deel.g[0] - om[0]) * k, om[1] + (deel.g[1] - om[1]) * k, om[2] + (deel.g[2] - om[2]) * k, deel.g[3] * k] } : {}),
-  };
-}
-// Alle delen vanaf i om om vergroten (het hoofd: alles wat na het lijf komt), en de handen om hun eigen midden.
-function vergrootHoofd(delen, i, om, k) {
-  if (k && k !== 1) for (let j = i; j < delen.length; j++) delen[j] = vergroot(delen[j], om, k);
-}
-function vergrootHanden(delen, handen, k) {
-  if (!k || k === 1) return;
-  for (let j = 0; j < delen.length; j++) if (handen.includes(delen[j].deel) && delen[j].g) delen[j] = vergroot(delen[j], delen[j].g.slice(0, 3), k);
-}
-const OOGWIT = { ramp: 'pleister', lo: 4.6, hi: 6.6, detail: true, rand: 0, schaduw: false };
-
 // ---------------------------------------------------------------- wat ze aan en bij zich hebben
 
 // Een vest over de kiel of het hemd: een schil om het lijf (lijf = de afstand tot het bovenlijf) van z0 tot z1, voorop
@@ -378,66 +355,98 @@ function vlechtje(delen, p0, p1, p2, m, d, r0 = 2, r1 = 1.1, n = 8) {
 // De boer, voor alle mannen van het dorp (T.LEEFTIJDEN in js/bewoners.js). Geen hooivork: die is van de boer zelf.
 // hoed: 'stro', 'vilt', 'wol' (met muts: de kleur), 'kap' (de kaproen) of 'geen'; kapsel: zie kapselMan, of 'kaal';
 // baard: 'vol', 'kort', 'snor', 'sik', 'stoppels' of niets; kraag: 'geen' of de halsdoek (halsdoek: de kleur); neusMaat: een maat (1 is die van de boer); wenkbrauw: een maat.
-const man = (o) => ({ links: 'hangt', strootje: false, ...o, haar: HAAR[o.kleur], kiel: geplooid(STOF[o.kiel]), broek: STOF[o.broek], klomp: SCHOEN[o.schoen] });
+// En wat hij aan en bij zich heeft (meer detail, Marcel: "ik was meer op zoek naar meer detail in de figuurtjes"): vest
+// en tas (een stof), riem, buidel (op x aan de riem), mes (op x), lappen en vuil op de kiel (zie versleten), knie (vuile
+// knieën), modder (aan de schoenen), mouw ('op': opgestroopt).
+const man = (o) => ({
+  links: 'hangt',
+  strootje: false,
+  ...o,
+  haar: HAAR[o.kleur],
+  kiel: versleten(STOF[o.kiel], { lappen: o.lappen, vuil: o.vuil }),
+  broek: o.knie ? versleten(STOF[o.broek], { plooi: 0, knie: true }) : STOF[o.broek],
+  klomp: o.modder ? modderig(SCHOEN[o.schoen]) : SCHOEN[o.schoen],
+  vest: o.vest && STOF[o.vest],
+  tas: o.tas && STOF[o.tas],
+  riem: o.riem || o.buidel != null || o.mes != null,
+  buidel: o.buidel != null,
+  buidelX: o.buidel,
+});
 const UITERLIJKEN = {
   boer: [
-    man({ kleur: 'donker', hoed: 'stro', kapsel: 'kort', baard: 'snor', kiel: 'blauw', broek: 'bruin', schoen: 'klomp' }),
-    man({ kleur: 'blond', hoed: 'geen', kapsel: 'lang', baard: 'kort', kraag: 'geen', kiel: 'linnen', broek: 'donker', schoen: 'leer', neusMaat: 0.85 }),
-    man({ kleur: 'zwart', hoed: 'wol', muts: STOF.rood, halsdoek: STOF.linnen, kapsel: 'kort', baard: 'stoppels', kiel: 'bruin', broek: 'grijs', schoen: 'klomp', wenkbrauw: 1.4 }),
-    man({ kleur: 'rood', hoed: 'geen', kapsel: 'krul', baard: 'vol', kraag: 'geen', kiel: 'groen', broek: 'bruin', schoen: 'donkereKlomp', neusMaat: 1.15 }),
+    man({ kleur: 'donker', hoed: 'stro', kapsel: 'kort', baard: 'snor', kiel: 'blauw', broek: 'bruin', schoen: 'klomp', vest: 'bruin', buidel: -8.6, mes: 8, modder: true, knie: true }),
+    man({ kleur: 'blond', hoed: 'geen', kapsel: 'lang', baard: 'kort', kraag: 'geen', kiel: 'linnen', broek: 'donker', schoen: 'leer', neusMaat: 0.85, tas: 'bruin', lappen: [[-3.5, 44, 1, 'bruin']], vuil: 30 }),
+    man({ kleur: 'zwart', hoed: 'wol', muts: STOF.rood, halsdoek: STOF.linnen, kapsel: 'kort', baard: 'stoppels', kiel: 'bruin', broek: 'grijs', schoen: 'klomp', wenkbrauw: 1.4, vest: 'donker', mes: -7.5 }),
+    man({ kleur: 'rood', hoed: 'geen', kapsel: 'krul', baard: 'vol', kraag: 'geen', kiel: 'groen', broek: 'bruin', schoen: 'donkereKlomp', neusMaat: 1.15, lappen: [[4, 50, 1, 'bruin'], [-3, 36, 1, 'oker']], vuil: 32, modder: true, mouw: 'op' }),
     man({ kleur: 'bruin', hoed: 'vilt', halsdoek: STOF.donker, kapsel: 'staart', baard: 'sik', kiel: 'grijs', broek: 'bruin', schoen: 'leer', neusMaat: 1.3 }),
-    man({ kleur: 'kastanje', hoed: 'geen', kapsel: 'kaal', baard: 'vol', kraag: 'geen', kiel: 'oker', broek: 'donker', schoen: 'klomp', neusMaat: 1.35, wenkbrauw: 1.5, links: 'zij' }),
+    man({ kleur: 'kastanje', hoed: 'geen', kapsel: 'kaal', baard: 'vol', kraag: 'geen', kiel: 'oker', broek: 'donker', schoen: 'klomp', neusMaat: 1.35, wenkbrauw: 1.5, links: 'zij', buidel: 8.6, tas: 'groen' }),
     man({ kleur: 'blond', hoed: 'wol', muts: STOF.groen, halsdoek: STOF.oker, kapsel: 'lang', kiel: 'rood', broek: 'bruin', schoen: 'klomp', neusMaat: 0.9 }),
     man({ kleur: 'donker', hoed: 'stro', kapsel: 'lang', baard: 'kort', halsdoek: STOF.wit, kiel: 'lichtblauw', broek: 'grijs', schoen: 'donkereKlomp', neusMaat: 1.1 }),
     man({ kleur: 'lichtblond', hoed: 'geen', kapsel: 'pony', kraag: 'geen', kiel: 'bruin', broek: 'donker', schoen: 'klomp', neusMaat: 0.9 }),
-    man({ kleur: 'donkerblond', hoed: 'geen', kapsel: 'opzij', baard: 'snor', kiel: 'blauw', broek: 'grijs', schoen: 'leer' }),
-    man({ kleur: 'zwart', hoed: 'geen', kapsel: 'halflang', baard: 'vol', kraag: 'geen', kiel: 'linnen', broek: 'bruin', schoen: 'klomp', wenkbrauw: 1.3 }),
+    man({ kleur: 'donkerblond', hoed: 'geen', kapsel: 'opzij', baard: 'snor', kiel: 'blauw', broek: 'grijs', schoen: 'leer', vest: 'rood', mes: 8 }),
+    man({ kleur: 'zwart', hoed: 'geen', kapsel: 'halflang', baard: 'vol', kraag: 'geen', kiel: 'linnen', broek: 'bruin', schoen: 'klomp', wenkbrauw: 1.3, mouw: 'op', vuil: 30 }),
     man({ kleur: 'peper', hoed: 'geen', kapsel: 'kaal', baard: 'snor', halsdoek: STOF.blauw, kiel: 'grijs', broek: 'donker', schoen: 'klomp', neusMaat: 1.2 }),
-    man({ kleur: 'rood', hoed: 'stro', kapsel: 'kort', baard: 'stoppels', halsdoek: STOF.groen, kiel: 'oker', broek: 'bruin', schoen: 'klomp' }),
+    man({ kleur: 'rood', hoed: 'stro', kapsel: 'kort', baard: 'stoppels', halsdoek: STOF.groen, kiel: 'oker', broek: 'bruin', schoen: 'klomp', buidel: -8.6, modder: true }),
     man({ kleur: 'bruin', hoed: 'geen', kapsel: 'krulkort', kraag: 'geen', kiel: 'rood', broek: 'grijs', schoen: 'donkereKlomp', neusMaat: 1.05 }),
-    man({ kleur: 'kastanje', hoed: 'wol', muts: STOF.blauw, kapsel: 'halflang', baard: 'sik', halsdoek: STOF.linnen, kiel: 'groen', broek: 'donker', schoen: 'leer' }),
+    man({ kleur: 'kastanje', hoed: 'wol', muts: STOF.blauw, kapsel: 'halflang', baard: 'sik', halsdoek: STOF.linnen, kiel: 'groen', broek: 'donker', schoen: 'leer', vest: 'bruin' }),
     man({ kleur: 'donkerblond', hoed: 'geen', kapsel: 'kuif', halsdoek: STOF.linnen, kiel: 'terracotta', broek: 'bruin', schoen: 'klomp', neusMaat: 0.95 }),
-    man({ kleur: 'donker', hoed: 'vilt', kapsel: 'kort', baard: 'vol', kraag: 'geen', kiel: 'blauw', broek: 'bruin', schoen: 'leer' }),
+    man({ kleur: 'donker', hoed: 'vilt', kapsel: 'kort', baard: 'vol', kraag: 'geen', kiel: 'blauw', broek: 'bruin', schoen: 'leer', tas: 'grijs', mes: 8 }),
     man({ kleur: 'lichtblond', hoed: 'stro', kapsel: 'pony', baard: 'snor', kiel: 'grijs', broek: 'bruin', schoen: 'klomp', neusMaat: 1.1 }),
-    man({ kleur: 'zwart', hoed: 'geen', kapsel: 'krul', baard: 'kort', kiel: 'oker', broek: 'grijs', schoen: 'klomp' }),
-    man({ kleur: 'peper', hoed: 'wol', muts: STOF.grijs, kapsel: 'kort', baard: 'vol', halsdoek: STOF.rood, kiel: 'bruin', broek: 'donker', schoen: 'klomp', wenkbrauw: 1.4 }),
+    man({ kleur: 'zwart', hoed: 'geen', kapsel: 'krul', baard: 'kort', kiel: 'oker', broek: 'grijs', schoen: 'klomp', lappen: [[3, 46, 1, 'linnen']], modder: true, knie: true }),
+    man({ kleur: 'peper', hoed: 'wol', muts: STOF.grijs, kapsel: 'kort', baard: 'vol', halsdoek: STOF.rood, kiel: 'bruin', broek: 'donker', schoen: 'klomp', wenkbrauw: 1.4, vest: 'groen', buidel: -8.6 }),
     man({ kleur: 'bruin', hoed: 'geen', kapsel: 'staart', baard: 'stoppels', kraag: 'geen', kiel: 'lichtblauw', broek: 'bruin', schoen: 'klomp', neusMaat: 1.25 }),
-    man({ kleur: 'rood', hoed: 'vilt', kapsel: 'halflang', halsdoek: STOF.donker, kiel: 'linnen', broek: 'grijs', schoen: 'leer' }),
+    man({ kleur: 'rood', hoed: 'vilt', kapsel: 'halflang', halsdoek: STOF.donker, kiel: 'linnen', broek: 'grijs', schoen: 'leer', tas: 'bruin' }),
     man({ kleur: 'blond', hoed: 'geen', kapsel: 'opzij', baard: 'sik', halsdoek: STOF.oker, kiel: 'groen', broek: 'bruin', schoen: 'klomp', wenkbrauw: 1.3 }),
-    man({ kleur: 'kastanje', hoed: 'stro', kapsel: 'lang', baard: 'vol', kraag: 'geen', kiel: 'rood', broek: 'donker', schoen: 'donkereKlomp', links: 'zij' }),
+    man({ kleur: 'kastanje', hoed: 'stro', kapsel: 'lang', baard: 'vol', kraag: 'geen', kiel: 'rood', broek: 'donker', schoen: 'donkereKlomp', links: 'zij', mes: -8, vuil: 30, mouw: 'op' }),
   ],
 };
 // De boerin, voor alle vrouwen. hoofd: 'doek' (onder de kin geknoopt; met doek: de kleur), 'nekdoek' (in de nek) of
 // 'geen'; kapsel: zie kapselVrouw.
-const vrouw = (o) => ({ mand: false, links: 'hangt', rechts: 'hangt', ...o, haar: HAAR[o.kleur], jurk: STOF[o.jurk], schort: o.schort ? geplooid(STOF[o.schort], 1.1) : false, doek: o.doek && STOF[o.doek] });
+// En: lijfje (een rijglijf, de stof), omslagdoek (de stof), riem, buidel en mes zoals bij de man, lappen en vuil op de
+// jurk, mouw ('op').
+const vrouw = (o) => ({
+  mand: false,
+  links: 'hangt',
+  rechts: 'hangt',
+  ...o,
+  haar: HAAR[o.kleur],
+  jurk: o.lappen || o.vuil ? versleten(STOF[o.jurk], { plooi: 0, lappen: o.lappen, vuil: o.vuil }) : STOF[o.jurk],
+  schort: o.schort ? geplooid(STOF[o.schort], 1.1) : false,
+  doek: o.doek && STOF[o.doek],
+  lijfje: o.lijfje && STOF[o.lijfje],
+  omslagdoek: o.omslagdoek && STOF[o.omslagdoek],
+  riem: o.riem || o.buidel != null || o.mes != null,
+  buidel: o.buidel != null,
+  buidelX: o.buidel,
+});
 UITERLIJKEN.boerin = [
   vrouw({ kleur: 'bruin', hoofd: 'doek', doek: 'wit', jurk: 'terracotta', schort: 'blauw', mand: true, links: undefined, rechts: undefined }),
-  vrouw({ kleur: 'blond', hoofd: 'geen', kapsel: 'vlecht', jurk: 'blauw', schort: 'wit', neusMaat: 0.9 }),
-  vrouw({ kleur: 'donker', hoofd: 'nekdoek', doek: 'rood', jurk: 'groen', schort: 'linnen' }),
-  vrouw({ kleur: 'zwart', hoofd: 'geen', kapsel: 'knot', jurk: 'bruin', neusMaat: 1.15, rechts: 'zij' }),
+  vrouw({ kleur: 'blond', hoofd: 'geen', kapsel: 'vlecht', jurk: 'blauw', schort: 'wit', neusMaat: 0.9, lijfje: 'donker', buidel: -8.8 }),
+  vrouw({ kleur: 'donker', hoofd: 'nekdoek', doek: 'rood', jurk: 'groen', schort: 'linnen', omslagdoek: 'grijs' }),
+  vrouw({ kleur: 'zwart', hoofd: 'geen', kapsel: 'knot', jurk: 'bruin', neusMaat: 1.15, rechts: 'zij', lijfje: 'rood', vuil: 8, lappen: [[3, 20, 1, 'grijs']] }),
   vrouw({ kleur: 'kastanje', hoofd: 'doek', doek: 'oker', jurk: 'grijs', schort: 'wit' }),
-  vrouw({ kleur: 'rood', hoofd: 'geen', kapsel: 'los', jurk: 'linnen', schort: 'groen', neusMaat: 0.85 }),
+  vrouw({ kleur: 'rood', hoofd: 'geen', kapsel: 'los', jurk: 'linnen', schort: 'groen', neusMaat: 0.85, omslagdoek: 'bruin', mes: 8 }),
   vrouw({ kleur: 'bruin', hoofd: 'geen', kapsel: 'kort', jurk: 'rood', schort: 'grijs', neusMaat: 1.2 }),
   vrouw({ kleur: 'blond', hoofd: 'geen', kapsel: 'vlechten', jurk: 'lichtblauw', schort: 'linnen' }),
-  vrouw({ kleur: 'lichtblond', hoofd: 'geen', kapsel: 'kroon', jurk: 'groen', schort: 'wit' }),
+  vrouw({ kleur: 'lichtblond', hoofd: 'geen', kapsel: 'kroon', jurk: 'groen', schort: 'wit', lijfje: 'bruin', mouw: 'op' }),
   vrouw({ kleur: 'donkerblond', hoofd: 'nekdoek', doek: 'blauw', jurk: 'terracotta', schort: 'linnen' }),
-  vrouw({ kleur: 'zwart', hoofd: 'geen', kapsel: 'staart', jurk: 'oker', schort: 'donker' }),
+  vrouw({ kleur: 'zwart', hoofd: 'geen', kapsel: 'staart', jurk: 'oker', schort: 'donker', omslagdoek: 'groen' }),
   vrouw({ kleur: 'kastanje', hoofd: 'geen', kapsel: 'krul', jurk: 'blauw', schort: 'linnen', neusMaat: 1.1 }),
   vrouw({ kleur: 'peper', hoofd: 'doek', doek: 'wit', jurk: 'donker', schort: 'grijs', neusMaat: 1.15 }),
-  vrouw({ kleur: 'rood', hoofd: 'geen', kapsel: 'hogeknot', jurk: 'grijs', schort: 'wit' }),
+  vrouw({ kleur: 'rood', hoofd: 'geen', kapsel: 'hogeknot', jurk: 'grijs', schort: 'wit', buidel: 8.8, vuil: 9 }),
   vrouw({ kleur: 'donker', hoofd: 'geen', kapsel: 'band', doek: 'groen', jurk: 'linnen' }),
-  vrouw({ kleur: 'bruin', hoofd: 'doek', doek: 'lichtblauw', jurk: 'bruin', schort: 'wit' }),
+  vrouw({ kleur: 'bruin', hoofd: 'doek', doek: 'lichtblauw', jurk: 'bruin', schort: 'wit', lijfje: 'blauw' }),
   vrouw({ kleur: 'blond', hoofd: 'nekdoek', doek: 'groen', jurk: 'rood', schort: 'linnen' }),
-  vrouw({ kleur: 'donkerblond', hoofd: 'geen', kapsel: 'vlecht', jurk: 'grijs', schort: 'blauw' }),
+  vrouw({ kleur: 'donkerblond', hoofd: 'geen', kapsel: 'vlecht', jurk: 'grijs', schort: 'blauw', mes: -8, vuil: 9 }),
   vrouw({ kleur: 'lichtblond', hoofd: 'geen', kapsel: 'band', doek: 'rood', jurk: 'blauw', neusMaat: 0.9 }),
-  vrouw({ kleur: 'zwart', hoofd: 'doek', doek: 'linnen', jurk: 'groen', schort: 'donker' }),
-  vrouw({ kleur: 'kastanje', hoofd: 'geen', kapsel: 'kroon', jurk: 'terracotta', schort: 'linnen' }),
+  vrouw({ kleur: 'zwart', hoofd: 'doek', doek: 'linnen', jurk: 'groen', schort: 'donker', omslagdoek: 'rood' }),
+  vrouw({ kleur: 'kastanje', hoofd: 'geen', kapsel: 'kroon', jurk: 'terracotta', schort: 'linnen', lijfje: 'groen' }),
   vrouw({ kleur: 'donker', hoofd: 'geen', kapsel: 'knot', jurk: 'lichtblauw', schort: 'wit', mand: true, links: undefined, rechts: undefined }),
   vrouw({ kleur: 'peper', hoofd: 'nekdoek', doek: 'donker', jurk: 'oker', schort: 'grijs', neusMaat: 1.2 }),
-  vrouw({ kleur: 'bruin', hoofd: 'geen', kapsel: 'vlechten', jurk: 'groen', schort: 'wit' }),
+  vrouw({ kleur: 'bruin', hoofd: 'geen', kapsel: 'vlechten', jurk: 'groen', schort: 'wit', buidel: -8.8, mouw: 'op' }),
 ];
 
-module.exports = { HAAR, STOF, SCHOEN, UITERLIJKEN, vergroot, vergrootHoofd, vergrootHanden, OOGWIT, versleten, modderig, vest, schoudertas, mes, rijglijf, kapselMan, krullen, krans, snor, sik, stoppels, wolmuts, kapselVrouw, vlechtje };
+module.exports = { HAAR, STOF, SCHOEN, UITERLIJKEN, versleten, modderig, vest, schoudertas, mes, rijglijf, kapselMan, krullen, krans, snor, sik, stoppels, wolmuts, kapselVrouw, vlechtje };
 
 // ---------------------------------------------------------------- de proefplaat
 
@@ -473,10 +482,10 @@ if (require.main === module && process.argv[2] === 'proef') {
   console.log(path.join(UIT, `${naam}-groot.png`));
 }
 
-// De proef met meer detail (node gereedschap/pixelart/uiterlijk.cjs detail): zes mannen en zes vrouwen in drie rijen.
-// Boven zoals ze zijn, in het midden met wat ze aan en bij zich hebben (een vest, een riem met buidel en mes, een tas,
-// lappen, vuil, modder, een rijglijf, een omslagdoek), onder daarbij een groter hoofd en grotere handen, oogwit en een
-// mond.
+// De proef met meer detail (node gereedschap/pixelart/uiterlijk.cjs detail): zes mannen en zes vrouwen in twee rijen.
+// Boven zoals ze waren, onder met wat ze aan en bij zich hebben (een vest, een riem met buidel en mes, een tas, lappen,
+// vuil, modder, een rijglijf, een omslagdoek). Een groter hoofd en grotere handen met oogwit zijn geprobeerd en
+// afgewezen (Marcel, 9 okt: "de grotere hoofden met het oogwit zien er raar uit, dat moeten we niet willen").
 if (require.main === module && process.argv[2] === 'detail') {
   const fs = require('fs');
   const path = require('path');
@@ -503,12 +512,10 @@ if (require.main === module && process.argv[2] === 'detail') {
     [V[8], { lijfje: STOF.bruin, mouw: 'op' }],
     [V[13], { riem: true, buidel: true, buidelX: 8.8, jurk: versleten(STOF.grijs, { plooi: 0, vuil: 9 }) }],
   ];
-  const groot = { hoofdMaat: 1.15, handMaat: 1.4, oogWit: true, mond: true };
   const rijen = [];
   for (const [bouw, lijst] of [[boer, mannen], [boerin, vrouwen]]) {
     rijen.push(lijst.map(([o]) => bouw({ houding: 'staan', fase: 0 }, o)));
     rijen.push(lijst.map(([o, x]) => bouw({ houding: 'staan', fase: 0 }, { ...o, ...x })));
-    rijen.push(lijst.map(([o, x]) => bouw({ houding: 'staan', fase: 0 }, { ...o, ...x, ...groot })));
   }
   const KOL = 56;
   const HOOG = 100;

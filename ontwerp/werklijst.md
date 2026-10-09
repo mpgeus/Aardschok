@@ -7156,6 +7156,18 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     en vrouwen, en schoenen; 2 echte opnames (CC0, of CC-BY met de namen in de aftiteling; nooit "niet commercieel"), via
     een sleutel van freesound in de omgeving (`FREESOUND_KEY`) en de sites open in het netwerk, in een nieuwe sessie; 3
     alle vijf.
+    **Proefplaat van 1 (9 okt):** acht mannen en acht vrouwen. **Marcel: "Ja, dit lijkt goed te gaan. Hoeveel variatie
+    is nodig? Kunnen we iedereen uniek maken?"**, en "misschien wat meer soorten haar?". Claude: A, 24 vaste uiterlijken
+    per volwassen lijf (12 per kind en oude), slim verdeeld (wie komt, krijgt het uiterlijk dat het minst voorkomt, en
+    niet dat van een buur of gezinslid), zodat het geheugen begrensd blijft; of B, een aankleedpop in lagen, echt uniek,
+    maar een flink stuk techniek (later, als A niet genoeg is). Erbij: meer kapsels en haarkleuren. Op "kunnen we ze
+    higher def maken?" een proef op dubbele resolutie; **Marcel: "ok, maar ik was meer op zoek naar meer detail in de
+    figuurtjes"**, en "duidelijkere handen, gezicht etc. valt dat wel onder meer pixels?". Claude: grotendeels wel; op
+    dezelfde pixels kan meer detail (een vest, een tas, een riem met buidel en mes, een rijglijf, een omslagdoek, lappen,
+    vuil, modder), en een groter hoofd met oogwit. **Marcel: "de grotere hoofden met het oogwit zien er raar uit, dat
+    moeten we niet willen."** Dus: het detail wel, het grotere hoofd niet; echte gezichten horen bij portretten in de
+    gesprekken (`beeld.md`, Open; nog niet gekozen). 24 per lijf staan nu op de proefplaat
+    (`gereedschap/pixelart/uiterlijk.cjs proef`); daarna de kinderen, de ouden, de werkpoppetjes en het spel.
     **Bezig in sessie `ccr-77327776-rqjldz`** (9 okt): vraag 145, 1 en 3.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)

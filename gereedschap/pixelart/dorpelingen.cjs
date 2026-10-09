@@ -139,8 +139,6 @@ function schedel(delen, H, M, D, o = {}) {
   for (const s of [-1, 1]) {
     delen.push(ellips(plus(H, [s * (rx - 0.1), 0.4, -0.4]), [1.4 * oor, 2.1 * oor, 2.8 * oor], M.huid, D.hoofd, 0.6));
     delen.push(bol(plus(H, [s * ox, oy, oz]), o.oogR || 0.9, M.oog, D.hoofd));
-    // (vraag 145: het wit van het oog, net achter de pupil en breder, zodat je ziet waar iemand kijkt)
-    if (o.oogWit != null) delen.push(ellips(plus(H, [s * (ox + 0.25), oy - 0.3, oz]), [1.55, 0.7, 1.05], o.oogWit, D.hoofd, 0.3));
   }
   return oy;
 }
@@ -877,9 +875,7 @@ function boer(stand = null, o = {}) {
   }
 
   // --- hoofd: lang gezicht, grote neus, flaporen; bruin haar onder de hoed uit
-  const iHoofd = delen.length;
-  const oy = schedel(delen, H, M, D, { maat: [6.7, 6.7, 7.8], oog: [2.6, 0.8], oor: 1, oogWit: o.oogWit ? KAR.materiaal(ctx, 'oogwit', UI.OOGWIT) : null });
-  if (o.mond) glimlach(delen, H, [6.7, 6.7, 7.8], KAR.materiaal(ctx, 'mond', KAR.MOND), D.hoofd, 1.5, -5.2);
+  const oy = schedel(delen, H, M, D, { maat: [6.7, 6.7, 7.8], oog: [2.6, 0.8], oor: 1 });
   delen.push(ellips(plus(H, [0, 6.9, -1.4]), [1.7, 2.4, 2.6], M.huid, D.hoofd, 1));
   // (de drinker: een dikke knol van een neus, en rood, zie rodeNeus hierboven)
   if (o.neus === 'rood') delen.push(bol(plus(H, [0, 8.5, -3]), 2.35, M.huid, D.hoofd, 1));
@@ -940,9 +936,7 @@ function boer(stand = null, o = {}) {
   else if (o.baard === 'kort') KAR.baard(delen, H, [6.7, 6.7, 7.8], M.haar, D.hoofd, 3.5);
   else if (o.baard === 'snor') UI.snor(delen, H, [6.7, 6.7, 7.8], M.haar, D.hoofd);
   else if (o.baard === 'sik') UI.sik(delen, H, [6.7, 6.7, 7.8], M.haar, D.hoofd);
-  UI.vergrootHoofd(delen, iHoofd, [0, 1, 60.5], o.hoofdMaat);
   bot(Bn.Bnek);
-  UI.vergrootHanden(delen, [D.handL, D.handR], o.handMaat);
 
   return model(delen, mat, hg ? HH.omvat(delen, 2) : { midden: [0, 2, 43], straal: 50 });
 }
