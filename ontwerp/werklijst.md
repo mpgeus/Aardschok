@@ -14,8 +14,8 @@ groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
 Marcel, 8 okt: "snel, duidelijk en low cost". Elke sessie werkt dit blok bij aan het eind; wat af is, gaat eruit.
 
-**Loopt** (het teken "Bezig in sessie" staat bij het punt zelf): stap 2 van de slice, de statussen met niveaus en het
-weer (vraag 77, stap 2, en punt 4 hieronder). De dagloners (vraag 140: wie geen werk heeft, maait, bindt en draagt in de oogst) staan in `main`.
+**Loopt** (het teken "Bezig in sessie" staat bij het punt zelf): de bode naar de marskramer (vraag 143). Het weer en de
+statussen met niveaus (vraag 77, stap 2) staan in `main`. De dagloners (vraag 140: wie geen werk heeft, maait, bindt en draagt in de oogst) staan in `main`.
 Vraag 141, de economie binnen het dorp, is op 9 okt helemaal teruggedraaid (Marcel: "Ik denk dat we die economie terug
 moeten draaien", en "Alles van vraag 141").
 
@@ -30,8 +30,7 @@ moeten draaien", en "Alles van vraag 141").
 2. Marcel speelt de graanzak (`Spel.debug.zaak('nu')`) en kiest of c, d en e van vraag 128 komen (en vraag 134).
 3. Bijstellen na de tester, eerst met een getal uit de werkbank; met de speeltest van vier jaar ook de wolven en de
    schapen opnieuw meten (vraag 117, 2c, b).
-4. Stap 2 van de slice: toestanden in niveaus (droogte, ernstige droogte) en het weer (vraag 77 en 82). Loopt.
-5. Later: het hele eiland met de mist (vraag 117, stap 3) en doorgroeien zonder vaste maat (vraag 137), plunderen
+4. Later: het hele eiland met de mist (vraag 117, stap 3) en doorgroeien zonder vaste maat (vraag 137), plunderen
    (vraag 138), het buurdorp (vraag 72).
 
 ## De stand (8 okt 2026): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt en het spel laadt alleen wat er staat (vraag 114, 2a, stap 1 en 1b); sinds de eenendertigste sessie bouwt elk land van de maker in een bouwstijl, met het dak van zijn trede en de deur naar de weg (vraag 114, stap 2a: de stijl wit), en tekent het spel met WebGL, gebouwd in een eigen sessie naast de huizen (vraag 123); sinds de tweeëndertigste sessie bouwt de huizenbouwer elk huis van vier kanten en tekent hij het een kwartslag gedraaid, en staat wit zo in het spel, met alle bouwfasen (vraag 124, B, en G); sinds de drieëndertigste sessie werken de boeren overdag op hun land, naar het seizoen en in het vel van hun werk, een boerin in dat van een vrouw (vraag 111, stap 1 en 2), en vraagt een boer heide te ontginnen als het graan tekortkomt (vraag 107, stap 1); sinds de vierendertigste sessie wijst hij een stuk heide en een stuk bos aan, en kies jij: de heide tegen het vertrouwen, het bos gemeld tegen de gunst, of stiekem (vraag 107, stap 2), met de hakker en zijn bijl; sinds de vijfendertigste sessie is de speeltest van vier jaar gespeeld (vraag 107, stap 3): ontginnen lost het graan op, maar geen dorp wint, want de grond om te bouwen is op, en de markt komt er nooit (vraag 110: f, het erf dat vastzat, is gerepareerd; e komt met de houthakker); sinds de zesendertigste sessie staat de markt met vier kramen op het plein (vraag 110, d), en hebben de stenen huizen op elk land hun markt; en sinds de tweede sessie daarnaast bouwt elk land in een van vier stijlen, wit, oker, planken of roze, elk met eigen huizen en boerderijen en alle bouwfasen (vraag 114, 2b); dan de herberg, de kapel en de woontoren (stap 3); sinds de sessie van de heer mogen erven en werkplaatsen op bomen en struiken, die wie er komt zelf rooit, en hakt de houthakker de bomen om zijn schuur om en plant hij er twee terug, zodat het bos om hem blijft (vraag 110, e, 115 en 129; in de speeltest van vier jaar komen de dorpen van de bouwer tot 126 à 129 mensen; en sinds vraag 130 rooit een hut die niet kan doorgroeien eerst wat in de weg staat, en wint er weer een dorp, op 73425; sinds de zevenendertigste sessie kapt het gezin daarbij ook zijn eigen appelboom, zegt de raad het als een huis dat alles heeft niet kan groeien, en komt een erf niet waar het een huis elke vorm afneemt (vraag 130, a2, c2 en d); sinds vraag 131 zijn wapens niet meer verboden, en winnen drie van de zes spellen van de speeltest); sinds vraag 116, stap 1, lopen er roedels wolven en groepjes herten in het bos, met rode ogen in het donker, en sinds 2a jagen de wolven in de winter op de herten, komen er in de lente jongen, en verhuist wie zijn bos kwijt is; sinds 2b komen ze met honger in het donker naar het dorp (een schaap, of wie alleen loopt), houdt licht ze weg, en rent wie werkt en ze ziet naar huis; dan wat je ertegen doet (vraag 116, stap 3), de hoogteverschillen (vraag 121: sinds stap 1, in `main` op 7 okt, een landschap dat overal doorloopt, uit het nummer van het land, met een richel en akkers die meebollen, achter de spelregel "Hoogte", standaard vlak; sinds stap 2 loopt niemand door een rotswand, wordt niet op steile grond gebouwd, houdt een heuvel het zicht tegen en dekt hij af wat erachter staat; het draaien van de camera, vraag 124, is geparkeerd); dan de kaartenmaker voor het eiland van 2500 bij 2500 (vraag 117: sinds 8 okt maakt hij uit één nummer het eiland, en sinds stap 2a begint elk nieuw spel erop, met je gehucht als een dorp dat er al was; sinds 2b loopt het eiland om je land door, en met heuvels is het land dat van het eiland; 2c, de speeltest, is gespeeld; sinds 2d houdt een erf plaats voor een put, en haalt een put voor een hut ook het huis dat de hut wordt; dan de kern); dan de proef van vraag 128 (de verdwenen graanzak, met een eerste zitting); sinds 8 okt eet het dorp gevarieerd (vis en vlees vullen een maag, met zout voor de winter, vraag 132), is er een wijnboerderij met een wijngaard waar het gezin in wijnmaand plukt (vraag 136), telt het graan pas als het in de schuur is, en maaien, binden en dragen dagloners mee (vraag 140), en staan alle getallen, spelregels en gebouwen op één bladzijde die meteen in de code schrijft (vraag 142, stap 1 en 2); de beurs per huis (vraag 141) is gebouwd, gespeeld en op 9 okt weer teruggedraaid
@@ -2799,7 +2798,6 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     groeiseizoen, en de akkers geven minder; je ziet het aankomen in de balk. **Marcel (9 okt): "1. Beiden 2. Ook in
     beeld 3. Ja kleine beekjes ook, goed idee!"** Dus: A en B in één keer; het weer ook in beeld (regen en sneeuw
     getekend); en bij droogte vallen de kleine beekjes droog, zodat een visser aan een beek minder vangt.
-    **Bezig in sessie `ccr-77327776-rqjldz`** (9 okt): stap 2, de statussen met niveaus en het weer.
     **Gebouwd (9 okt), stap 2:** `js/weer.js` (het weer per dag uit het nummer, droogte en ernstige droogte, wat dat de
     oogst kost, de beekjes die droogvallen en de visser), de statussen met niveaus in `T.OORZAKEN` met kaartjes naast het
     doel en het rapport dat erger en minder zegt, en het weer in beeld (regen, sneeuw, het licht, de droge beek); de
@@ -7026,8 +7024,16 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     moeilijke periode?", en: "soort van brief sturen met een bode"; open, eerst overleg). Bij de droogte koos Marcel A:
     hij blijft zo hard (een zware droogte kostte op zaad 1 40% van de oogst, en daarna het ambt). Daarbij: de schout kan
     een brief schrijven en met een bode naar de marskramer sturen, zodat die buiten zijn drie vaste bezoeken komt, als
-    het dorp het nodig heeft. Wat het plan wordt (wanneer het mag, wat je vraagt, wat het kost), staat hieronder als
-    het er is.
+    het dorp het nodig heeft.
+    **Plan van Claude (9 okt):** je schrijft bij je huis een brief, een dorpeling zonder werk brengt hem, en na een paar
+    dagen staat de marskramer op het plein, met wat je vroeg, duurder dan anders; de bode krijgt een paar zilver.
+    Vragen: wanneer het mag, of ook in de winter, wat je vraagt, wat het kost, en wanneer bouwen. **Marcel (9 okt): "1.
+    Alleen bij een status 2. Ja vind ik goed idee. 3. Ja, je vraagt om goederen, enkele keer heeft hij iets niet. 4. Ja
+    voor nu maar mee beginnen; in de winterperiode of in het donker misschien ook bescherming mee? 5. Mag nu."** Dus: alleen
+    als er een status speelt (honger, droogte, kou, ...); ook in de winter, maar langer onderweg en duurder; je vraagt in
+    de brief om goederen, en soms heeft hij iets niet; de bode krijgt loon en de waren kosten anderhalf keer zoveel; in
+    de winter misschien een begeleider mee ter bescherming; en het weer gaat nu naar `main`, dit erna.
+    **Bezig in sessie `ccr-77327776-rqjldz`** (9 okt): de bode naar de marskramer.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
