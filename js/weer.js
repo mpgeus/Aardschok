@@ -118,7 +118,12 @@
     W.vandaag = valt ? (datum.seizoen === 'winter' ? 'sneeuw' : 'regen') : lot(zaad, dag, 2) < IN().wolkenKans ? 'wolken' : 'zon';
     W.droog = valt ? 0 : (W.droog || 0) + 1;
     // Op 1 lentemaand begint het jaar van de akkers opnieuw: wat de droogte vorig jaar kostte, telt niet meer.
-    if (T.MAANDEN[datum.maand].naam === 'lentemaand' && datum.dagVanMaand === 1) W.verlies = 0;
+    // Een nieuw jaar: wat de droogte vorig jaar nam, onthoudt het dorp (de marskramer neemt dan meer zaaigraan mee,
+    // js/handel.js).
+    if (T.MAANDEN[datum.maand].naam === 'lentemaand' && datum.dagVanMaand === 1) {
+      W.vorigJaar = W.verlies || 0;
+      W.verlies = 0;
+    }
     if (inGroeiseizoen(dag)) W.tekort = valt ? Math.max(0, W.tekort - IN().regenMaaktGoed) : W.tekort + 1;
     else W.tekort = valt ? 0 : Math.max(0, W.tekort - 1);
     const niveau = T.droogteNiveau(D);

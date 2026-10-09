@@ -174,7 +174,8 @@
     if (basis === 'rijp' || T.isHooitijd(datum)) return null;
     const klaar = (e.veldwerk && e.veldwerk.klaar) || {};
     const heeft = (soort) => tegelsVan(D, e, soort).length > 0;
-    if (basis === 'geploegd' && klaar.zaaien !== datum.jaar && heeft('zaaien')) return 'zaaien';
+    // Op een natte dag zaait niemand (js/akkers.js, VELDEN_INSTELLINGEN.nietInDeRegen).
+    if (basis === 'geploegd' && klaar.zaaien !== datum.jaar && heeft('zaaien') && !(T.VELDEN_INSTELLINGEN.nietInDeRegen && T.isNat(D))) return 'zaaien';
     // Ontgint hij heide (js/ontginnen.js), dan gaat dat voor het andere werk van het seizoen.
     if (heeft('ontginnen')) return 'ontginnen';
     if (basis === 'geploegd' || basis === 'kiemend' || basis === 'groen') return heeft('wieden') ? 'wieden' : null;

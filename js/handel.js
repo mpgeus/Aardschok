@@ -51,7 +51,9 @@
       // In de herfst niet meer duurder (Marcel, 8 okt: "Zout mag dan wel goedkoper"): de eerlijke bouwer kon het vlak voor
       // Sint-Maarten niet betalen.
       zout: { heeft: [15, 15, 40], prijs: [1, 1, 1] },
-      graan: { naam: 'zaaigraan', per: 10, heeft: [10, 0, 0], prijs: [5, 5, 5] },
+      // Na een droog jaar (js/weer.js; werklijst vraag 144, 2; Marcel, 9 okt: "je moet kunnen herstellen") neemt hij in de
+      // lente meer mee: zoveel pakken erbij als `naDroogte` maal wat de droogte vorig jaar van de oogst nam.
+      graan: { naam: 'zaaigraan', per: 10, heeft: [10, 0, 0], prijs: [5, 5, 5], naDroogte: 30 },
       laken: { per: 4, heeft: [0, 3, 3], prijs: [6, 6, 7], trede: 'dorp' },
     },
     // Wat hij koopt: per pak van zoveel stuks, voor zoveel goud, per bezoek (lente, zomer,
@@ -107,7 +109,9 @@
   function heeftBijBezoek(D, wat, i) {
     const waar = IN().verkoopt[wat];
     if (waar.trede && !T.tredeMinstens(D, waar.trede)) return 0;
-    return Array.isArray(waar.heeft) ? waar.heeft[i] || 0 : waar.heeft;
+    const n = Array.isArray(waar.heeft) ? waar.heeft[i] || 0 : waar.heeft;
+    const droog = (D.weer && D.weer.vorigJaar) || 0;
+    return n > 0 && waar.naDroogte && droog > 0 ? n + Math.ceil(droog * waar.naDroogte - 1e-9) : n;
   }
   // Wat hij bij dit bezoek te koop heeft (voor het venster, js/hud.js): wat hij die ronde meebracht, ook als het op is.
   // Komt hij op bestelling (de bode, js/bode.js), dan alleen wat hij bij zich heeft van wat je vroeg.
@@ -177,9 +181,10 @@
       weg: false, // true zodra hij vertrekt: dan handelt hij niet meer, hij loopt naar de weg
       wezen: null, staat: false, // zijn poppetje, en of hij al op het plein staat
       aankomst: {
-        tekst: i === IN().bezoeken.length - 1
+        tekst: (i === IN().bezoeken.length - 1
           ? 'De marskramer komt over de weg: zijn laatste ronde vóór de winter.'
-          : 'De marskramer komt over de weg. Hij blijft een paar dagen op het plein.',
+          : 'De marskramer komt over de weg. Hij blijft een paar dagen op het plein.') +
+          (heeft.graan > (IN().verkoopt.graan.heeft[i] || 0) ? ' Na het droge jaar heeft hij extra zaaigraan bij zich.' : ''),
         soort: 'goed',
       },
     };

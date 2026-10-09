@@ -12,6 +12,8 @@ T.ui = new Proxy({}, { get: () => () => undefined });
 // Het ontworpen gehucht, met een vast zaad, op `dag` (0 is 1 lentemaand, zeven uur 's ochtends is 7/24 erbij). Niemand
 // komt de schout zoeken met een voorval: dat haalt een boer van zijn land, en dat hoort niet bij deze toetsen.
 function gehucht(dag) {
+  // Deze toetsen gaan niet over het weer: er wordt gezaaid op 1 lentemaand, ook als het die dag regent (vraag 144, 1).
+  T.VELDEN_INSTELLINGEN.nietInDeRegen = false;
   const echt = console.warn;
   const toeval = Math.random;
   let n = 11;

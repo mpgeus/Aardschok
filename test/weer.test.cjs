@@ -193,3 +193,62 @@ test('met de spelregel "Het weer" op "Altijd zon" is er geen weer, en op "Zonder
     T.optiesTerug();
   }
 });
+
+test('regent het op de dag van het zaaien, dan zaaien de boeren de eerste droge dag; tot dan blijft het zaaigraan apart', () => {
+  const echt = console.warn;
+  console.warn = () => {};
+  const S = { kalender: T.nieuweKalender() };
+  try {
+    assert.ok(T.beginOpKaart(S, 'gehucht'));
+  } finally {
+    console.warn = echt;
+  }
+  T.S = S;
+  const D = S.dorp;
+  const w = D.wereld;
+  T.zetVoorraad(D, 'graan', 400);
+  const zaaidag = dagVan('lentemaand', 1, 1);
+  S.kalender.dag = zaaidag;
+  D.weer = { vandaag: 'regen', droog: 0, tekort: 0, verlies: 0 };
+  const graan = D.voorraad.graan;
+  T.tikAkkersDag(D, zaaidag);
+  assert.ok(w.zaaienNaRegen, 'het zaaien wacht');
+  assert.equal(D.voorraad.graan, graan, 'nog geen zaaigraan de grond in');
+  const akker = w.akkers.find((a) => T.bestemmingVan(a) === 'akker');
+  assert.equal(akker.ongezaaid.size, akker.b * akker.h, 'alles nog ongezaaid');
+  assert.ok(T.zaaigraanApart(D, zaaidag) > 0, 'het zaaigraan blijft apart');
+  // Nog een natte dag, en dan droog.
+  T.tikAkkersDag(D, zaaidag + 1);
+  assert.ok(w.zaaienNaRegen);
+  D.weer.vandaag = 'wolken';
+  T.tikAkkersDag(D, zaaidag + 2);
+  assert.ok(!w.zaaienNaRegen, 'gezaaid');
+  assert.ok(D.voorraad.graan < graan, 'het zaaigraan ging de grond in');
+  assert.equal(akker.ongezaaid.size, 0, 'de akker is gezaaid');
+  assert.equal(T.zaaigraanApart(D, zaaidag + 2), 0);
+});
+
+test('na een droog jaar neemt de marskramer in de lente meer zaaigraan mee', () => {
+  const echt = console.warn;
+  console.warn = () => {};
+  const S = { kalender: T.nieuweKalender() };
+  try {
+    assert.ok(T.beginOpKaart(S, 'gehucht'));
+  } finally {
+    console.warn = echt;
+  }
+  T.S = S;
+  const D = S.dorp;
+  const gewoon = T.HANDEL_INSTELLINGEN.verkoopt.graan.heeft[0];
+  D.weer = { vandaag: 'zon', droog: 0, tekort: 0, verlies: 0.4 };
+  T.tikWeerDag(D, dagVan('lentemaand', 1, 1));
+  assert.equal(D.weer.vorigJaar, 0.4);
+  assert.equal(D.weer.verlies, 0);
+  T.marskramerKomt(D, 0, dagVan('grasmaand', 5, 1));
+  assert.equal(D.marskramer.heeft.graan, gewoon + Math.ceil(0.4 * T.HANDEL_INSTELLINGEN.verkoopt.graan.naDroogte));
+  assert.match(D.marskramer.aankomst.tekst, /extra zaaigraan/);
+  // In de zomer heeft hij geen graan, ook niet na droogte.
+  D.marskramer = null;
+  T.marskramerKomt(D, 1, dagVan('hooimaand', 5, 1));
+  assert.equal(D.marskramer.heeft.graan, 0);
+});

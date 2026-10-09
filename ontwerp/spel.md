@@ -558,6 +558,12 @@ vangt niets; een visser die ook groot water heeft, vangt naar wat er over is. Re
 lentemaand telt het verlies opnieuw. Met de getallen van nu (200 jaren uit 40 nummers) is er in twee van de vijf jaren een
 tijd droogte, in één van de twaalf ernstige droogte, en kost het de oogst gemiddeld een twintigste.
 
+Op een natte dag zaait niemand: regent het op 1 lentemaand, dan zaaien de boeren de eerste droge dag (het graan groeit
+gewoon mee, en het zaaigraan blijft tot dan apart), en nazaaien doen ze ook niet in de regen. Regent het de hele lente,
+dan blijven de akkers dat jaar ongezaaid. Na een droog jaar neemt de marskramer in de lente meer zaaigraan mee: dertig
+pakken maal wat de droogte van de oogst nam (een droogte van 40% geeft twaalf pakken erbij), zodat een dorp zich kan
+herstellen.
+
 De statussen: wat een tijd duurt, is een status met een naam en twee niveaus: honger en hongersnood (minder dan een half
 rantsoen), kou en strenge kou (het brandhout is op), vol en overvol, onvrede en onrust, wolven, en droogte en ernstige
 droogte. Zolang er een speelt, staat er een kaartje naast het doel linksboven (rood als het erger is), met op de muis wat
@@ -568,8 +574,8 @@ De spelregel "Het weer": met droogte, zonder droogte (alleen te zien), of altijd
 in één keer, het weer ook in beeld, en bij droogte de beekjes droog, zodat de visser minder vangt. Eerder (4 okt, "A"):
 het beeld van het weer samen met zijn regels, de kleur van het weer op de lichtkaart.
 
-**Open:** sneeuw op de grond en de daken (nieuwe kunst); regen bij het zaaien (vraag 82, b en c: op een natte dag zaait
-niemand); de marskramer die na een droog jaar graan verkoopt; ziekte en brand als status.
+**Open** (vraag 144; Marcel, 9 okt: "Ja heel goed, dit moeten we pakken"): sneeuw op de grond en daarna op de daken;
+ziekte en brand als status, met vuur en een afgebrand huis dat weer opgebouwd wordt.
 
 ## De bode naar de marskramer (Marcel, 9 okt 2026; werklijst vraag 143)
 

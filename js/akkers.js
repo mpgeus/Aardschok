@@ -55,6 +55,10 @@
   // Alle getallen van de velden in één blok (ook in de werkbank van de spelregels, js/opties.js).
   // Een eerste gok, uit het voorstel dat Marcel op 25 sep koos.
   T.VELDEN_INSTELLINGEN = {
+    // Op een natte dag zaait niemand (werklijst vraag 144, 1; Marcel, 9 okt: "Akkoord"): regent het op 1 lentemaand
+    // (T.isNat, js/weer.js), dan zaaien de boeren de eerste droge dag, zonder verlies; ook nazaaien doen ze niet in de
+    // regen. Tot dan blijft het zaaigraan apart (T.zaaigraanApart).
+    nietInDeRegen: true,
     // Een weide erbij (werklijst vraag 132; Marcel, 8 okt: "1 en 2 allebei, vee en meer vissers"): had het dorp dit jaar
     // zoveel dagen honger tussen 1 lentemaand en de oogst, en is er geen hooi voor nog een koe, dan maakt een boer na de
     // oogst een van zijn velden weide (T.boerenKiezenVelden): de koeien geven juist in het voorjaar melk.
@@ -911,7 +915,8 @@
     if (!T.VELDEN_INSTELLINGEN.zaaigraanApart || !w || !w.akkers) return 0;
     const d = T.datumVanDag(dag);
     const nu = dagInJaar(d.maand, d.dagVanMaand);
-    if (nu < stadiumBegin('gemaaid') && nu >= stadiumBegin('geploegd')) return 0; // van het zaaien tot de oogst
+    // Van het zaaien tot de oogst niet, behalve als het zaaien op een droge dag wacht.
+    if (!w.zaaienNaRegen && nu < stadiumBegin('gemaaid') && nu >= stadiumBegin('geploegd')) return 0;
     let nodig = 0;
     for (const veld of w.akkers) if (T.planVan(veld) === 'akker') nodig += veld.b * veld.h * zaaigraanPerTegel(w, veld);
     return nodig;
@@ -970,17 +975,27 @@
   // en tekent als kale grond (T.akkerTegelStadium). Het ongezaaide stuk is het verste stuk van elke
   // akker, want T.akkerTegels telt vanaf zijn hoek. Alleen wat dit jaar akker is, wordt gezaaid en
   // kost zaaigraan: een weide of braak niet (25 sep). Geeft { tegels, gezaaid, ongezaaid, graan }.
-  T.zaaiAkkers = function (D) {
+  // Met `nat` (het regent op 1 lentemaand) begint het jaar wel, maar blijft alles nog ongezaaid tot de eerste droge dag
+  // (w.zaaienNaRegen; T.tikAkkersDag zaait dan met T.zaaiAkkers(D, false, true)).
+  T.zaaiAkkers = function (D, nat = false, naRegen = false) {
     const w = D.wereld;
     if (!w || !w.akkers || !w.akkers.length) return null;
     // Een nieuw jaar, voor elk veld: de oogst, het hooi en wat de rovers vertrapten zijn vergeten.
     for (const a of w.akkers) {
       a.ongezaaid = new Set();
+      if (naRegen) continue;
       if (a.geoogst) a.geoogst.clear();
       if (a.gehooid) a.gehooid.clear();
       if (a.vertrapt) a.vertrapt.clear();
     }
+    delete w.zaaienNaRegen;
     const akkers = w.akkers.filter(isAkker);
+    if (nat) {
+      for (const a of akkers) for (const t of T.akkerTegels(a)) a.ongezaaid.add(sleutel(t.x, t.y));
+      w.zaaienNaRegen = true;
+      if (akkers.length) T.zeg(D, 'Het regent: de boeren zaaien de eerste droge dag.');
+      return { tegels: 0, gezaaid: 0, ongezaaid: 0, graan: 0, nat: true };
+    }
     const per = akkers.map((a) => zaaigraanPerTegel(w, a));
     const maat = akkers.map((a) => a.b * a.h);
     const totaal = maat.reduce((n, m) => n + m, 0);
@@ -1035,10 +1050,17 @@
     if (!w || !w.akkers || !w.akkers.length) return;
     const d = T.datumVanDag(dag);
     const nu = dagInJaar(d.maand, d.dagVanMaand);
+    const nat = T.VELDEN_INSTELLINGEN.nietInDeRegen && T.isNat(D); // het weer van vandaag (js/weer.js)
     if (dag >= T.DAGEN_PER_JAAR && nu === stadiumBegin('geploegd')) {
       T.wisselVelden(D);
-      T.zaaiAkkers(D);
-    } else if (T.isNazaaitijd(dag)) {
+      T.zaaiAkkers(D, nat);
+    } else if (w.zaaienNaRegen && T.isNazaaitijd(dag)) {
+      if (!nat) T.zaaiAkkers(D, false, true); // de eerste droge dag
+    } else if (w.zaaienNaRegen) {
+      // De hele lente nat: wat niet gezaaid is, groeit dit jaar niet meer.
+      delete w.zaaienNaRegen;
+      T.zeg(D, 'Het heeft de hele lente geregend: de akkers blijven dit jaar ongezaaid.', 'gevaar');
+    } else if (T.isNazaaitijd(dag) && !nat) {
       T.zaaiNa(D); // wat niet gezaaid kon worden, zodra er graan is (hierboven)
     }
     T.tikSchovenDag(D);

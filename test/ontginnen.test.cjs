@@ -14,6 +14,8 @@ T.ui = new Proxy({}, { get: (_, naam) => (naam === 'bericht' ? (t) => berichten.
 
 // Het ontworpen gehucht, met een vast zaad, op `dag` (40: 11 grasmaand, zeven uur 's ochtends).
 function gehucht(dag = 40 + 7 / 24) {
+  // Deze toetsen gaan niet over het weer: er wordt gezaaid op 1 lentemaand, ook als het die dag regent (vraag 144, 1).
+  T.VELDEN_INSTELLINGEN.nietInDeRegen = false;
   const echt = console.warn;
   const toeval = Math.random;
   let n = 11;

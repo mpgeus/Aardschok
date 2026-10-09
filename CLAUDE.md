@@ -537,7 +537,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   vangt naar wat er van zijn water over is (`T.visserWater`, `T.waaromVistHijNiet` in `T.tikGebouwenDag`). Het beeld in
   `js/tekenen.js`: de kleur van het licht maal die van het weer (`tint` in `tekenNacht`, zonder videokaart een waas), regen
   en sneeuw als vlakjes over het beeld op de klok van het scherm (`tekenNeerslag`), en de droge beek als zandpad in de
-  grond (`T.hoekenDroog`, zoals een paadje) met barsten en keien (`tekenDrogeBeek`). Het weer van vandaag staat bij de
+  grond (`T.hoekenDroog`, zoals een paadje) met barsten en keien (`tekenDrogeBeek`). Op een natte dag zaait niemand
+  (`nietInDeRegen` in `T.VELDEN_INSTELLINGEN`, js/akkers.js: `w.zaaienNaRegen`, en het veldwerk), en na een droog jaar
+  (`D.weer.vorigJaar`) neemt de marskramer in de lente meer zaaigraan mee (`naDroogte` in js/handel.js). Het weer van vandaag staat bij de
   datum (`T.ui.toonKalender`). De spelregel "Het weer" (met droogte, zonder, of altijd zon); de getallen in
   `T.WEER_INSTELLINGEN`.
 - `js/bode.js`: **de bode naar de marskramer** (vraag 143, 9 okt; Marcel: "soort van brief sturen met een bode", en "1.
