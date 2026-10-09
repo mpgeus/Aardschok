@@ -9,6 +9,7 @@
 //   node gereedschap/pixelart/naar-spel.cjs --alleen hol
 //   node gereedschap/pixelart/naar-spel.cjs --alleen marktkraam
 //   node gereedschap/pixelart/naar-spel.cjs --alleen tekens
+//   node gereedschap/pixelart/naar-spel.cjs --alleen tafel
 //   node gereedschap/pixelart/naar-spel.cjs --uiterlijken      (de uiterlijken die klaarstaan, vraag 145)
 //
 // Met --alleen werkt het alleen de genoemde figuren bij: het leest de bestaande
@@ -18,7 +19,7 @@
 // in git staat: in een verse kopie is het (bijna) leeg, en zonder --alleen bouwt dit script de
 // beschrijving opnieuw op uit wat daar staat — dan verdwijnen alle andere figuren uit het spel.
 // Een los vel dat hier zelf gerenderd wordt en niets uit uit/ nodig heeft (LOSSE_VELLEN: de
-// schandpaal, het paaltje, de meiboom, het wolvenhol, de wijnrank, de marktkraam en de tekens met het papier) kan ook met --alleen: dan wordt alleen dat vel gerenderd en alleen zijn
+// schandpaal, het paaltje, de meiboom, het wolvenhol, de wijnrank, de marktkraam, de tekens met het papier en de tafel) kan ook met --alleen: dan wordt alleen dat vel gerenderd en alleen zijn
 // ingang gezet.
 //
 // Twee soorten werk:
@@ -41,6 +42,7 @@ const Hol = require('./hol.cjs');
 const Wijnrank = require('./wijnrank.cjs');
 const Marktkraam = require('./marktkraam.cjs');
 const Papieren = require('./papieren.cjs');
+const Tafel = require('./tafel.cjs');
 const I = require('./inpakken.cjs');
 const UI = require('./uiterlijk.cjs');
 const UA = require('./uiterlijk-anim.cjs');
@@ -209,7 +211,13 @@ function uiterlijken() {
   return Object.fromEntries(Object.entries(UI.UITERLIJKEN).map(([lijf, lijst]) => [lijf, lijst.map((o) => o.kleur)]));
 }
 
-const LOSSE_VELLEN = { schandpaal, paaltje, meiboom, hol, wijnrank, marktkraam, tekens, uiterlijken };
+// De tafel van de schout onderin (tafel.cjs; werklijst vraag 146, c): het hout en de dingen erop, elk een eigen bestand in
+// beelden/tafel/, voor js/tafel.js en stijl.css. In de beschrijving alleen wat er staat.
+function tafel() {
+  return Tafel.schrijfNaar(path.join(BEELDEN, 'tafel'));
+}
+
+const LOSSE_VELLEN = { schandpaal, paaltje, meiboom, hol, wijnrank, marktkraam, tekens, tafel, uiterlijken };
 
 // ---------------------------------------------------------------- kopiëren
 
@@ -336,6 +344,10 @@ const FIGUURLIJST = {
   hert1: { map: ['wild', 'animaties'], houdingen: ['grazen', 'staan', 'lopen', 'rennen', 'liggen'], bron: 'wild-anim.cjs hert1' },
   hert2: { map: ['wild', 'animaties'], houdingen: ['grazen', 'staan', 'lopen', 'rennen', 'liggen'], bron: 'wild-anim.cjs hert2' },
 };
+// Het kleine leven (vraag 145, 3; klein-anim.cjs): de kippen en de honden, alleen beeld (js/kleinleven.js).
+for (const f of require('./klein-anim.cjs').FIGUREN) {
+  FIGUURLIJST[f.naam] = { map: ['klein', 'animaties'], houdingen: Object.keys(f.houdingen), bron: `klein-anim.cjs ${f.naam}` };
+}
 // De uiterlijken (vraag 145; uiterlijk-anim.cjs): boer-u7, zaaier-u7, ... Wie nog niet gerenderd is, slaat een volledige
 // ronde over (uiterlijk: true); het spel draagt dan het gewone vel.
 for (const f of UA.uiterlijkFiguren()) {

@@ -1,9 +1,10 @@
-// Het scherm van het gehuchtspel: de kalender (dag, seizoen, jaar) en de voorraad (goud, graan,
-// wol, hout) -- in de stijl en de plek van js/ui.js, maar in een eigen bestand, want het hoort
-// bij het nieuwe spel en niet bij De laatste klim. Sinds de kaarten van het oude spel weg zijn
+// Het scherm van het gehuchtspel: de kalender (dag, seizoen, jaar), de statussen, en de vensters (het bouwmenu, de
+// marskramer, de heer, ...) -- in de stijl en de plek van js/ui.js, maar in een eigen bestand, want het hoort bij het
+// nieuwe spel en niet bij De laatste klim. De voorraad, de twee bazen en de knoppen liggen sinds vraag 146, c op de
+// tafel onderin (js/tafel.js). Sinds de kaarten van het oude spel weg zijn
 // (25 sep, ontwerp/werklijst.md punt 7c) staat het altijd aan; T.NIEUWE_HUD blijft bestaan omdat
-// een paar plekken er nog naar vragen. Het oude scherm linksboven (sluipen, goud en spullen) staat
-// nog in index.html, maar verborgen: sluipen en de spullen hebben in dit scherm nog geen plek.
+// een paar plekken er nog naar vragen. Het oude scherm linksboven (goud en spullen) staat nog in index.html, maar
+// verborgen: de spullen hebben in dit scherm nog geen plek.
 (function (T) {
   'use strict';
 
@@ -12,204 +13,6 @@
 
   const $ = (id) => document.getElementById(id);
 
-  // Dezelfde tekenstijl als de spullen in js/ui.js (ICONEN): kleine, met de hand getekende
-  // pictogrammen in de kleuren van stijl.css, in plaats van nieuwe pixel art -- er staat toch
-  // geen goud, graan, wol of hout tussen de cellen van beelden/voorwerpen.png (js/sprites.js).
-  const GOUD_ICOON =
-    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
-    '<ellipse cx="12" cy="17" rx="7" ry="2.6" fill="#c9972f" stroke="#e2b64a" stroke-width="1.1"/>' +
-    '<ellipse cx="12" cy="13.5" rx="7" ry="2.6" fill="#d9a83c" stroke="#e2b64a" stroke-width="1.1"/>' +
-    '<ellipse cx="12" cy="10" rx="7" ry="2.6" fill="#e2b64a" stroke="#f0cc72" stroke-width="1.1"/>' +
-    '</svg>';
-  const GRAAN_ICOON =
-    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
-    '<path d="M12 21V9M12 9L6.5 4M12 9l5.5-5M12 9L8.5 3M12 9l3.5-6" stroke="#c9972f" stroke-width="1.3" stroke-linecap="round" fill="none"/>' +
-    '<circle cx="6.5" cy="4" r="1.15" fill="#e2b64a"/><circle cx="17.5" cy="4" r="1.15" fill="#e2b64a"/><circle cx="12" cy="2.6" r="1.15" fill="#e2b64a"/>' +
-    '<path d="M8.5 14.5h7" stroke="#8a5a2c" stroke-width="1.8" stroke-linecap="round"/>' +
-    '</svg>';
-  const WOL_ICOON =
-    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
-    '<path d="M6 14a3.4 3.4 0 0 1 .3-6.7 4 4 0 0 1 7.6-1.6 3.6 3.6 0 0 1 5 3.4 3.3 3.3 0 0 1-1 6.4H7.5A3 3 0 0 1 6 14z" fill="#e9e2d2" stroke="#c9bfa4" stroke-width="1.1"/>' +
-    '</svg>';
-  const HOUT_ICOON =
-    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
-    '<circle cx="8" cy="14.5" r="4.3" fill="#8a5a2c" stroke="#c89a5a" stroke-width="1.2"/>' +
-    '<circle cx="16" cy="14.5" r="4.3" fill="#7d4f27" stroke="#c89a5a" stroke-width="1.2"/>' +
-    '<circle cx="8" cy="14.5" r="1.6" fill="none" stroke="#c89a5a" stroke-width="0.9"/>' +
-    '<circle cx="16" cy="14.5" r="1.6" fill="none" stroke="#c89a5a" stroke-width="0.9"/>' +
-    '</svg>';
-  // Wat de marskramer brengt en de smidse ervan maakt (js/handel.js; spel.md, "Handel"): een staaf
-  // ijzer, een zakje zout, en een hamer.
-  const IJZER_ICOON =
-    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
-    '<path d="M4 15.5l4-5h12l-4 5z" fill="#8f949a" stroke="#c3c7cc" stroke-width="1.1" stroke-linejoin="round"/>' +
-    '<path d="M4 15.5h12v2.6H4z" fill="#6c7176" stroke="#c3c7cc" stroke-width="1.1" stroke-linejoin="round"/>' +
-    '<path d="M16 15.5l4-5v2.6l-4 5z" fill="#5a5f64" stroke="#c3c7cc" stroke-width="1.1" stroke-linejoin="round"/>' +
-    '</svg>';
-  const ZOUT_ICOON =
-    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
-    '<path d="M8.5 7.5c-1.8 2.2-3 5.2-3 8 0 2.6 2.9 4 6.5 4s6.5-1.4 6.5-4c0-2.8-1.2-5.8-3-8z" fill="#cdb48a" stroke="#e6d3ad" stroke-width="1.1"/>' +
-    '<path d="M8.2 7.5c1.2-.9 2.4-1.3 3.8-1.3s2.6.4 3.8 1.3M9.5 5.2l2.5 1 2.5-1" fill="none" stroke="#8a6a3c" stroke-width="1.3" stroke-linecap="round"/>' +
-    '<circle cx="10" cy="14" r="1" fill="#f4efe6"/><circle cx="13.5" cy="12.5" r="1" fill="#f4efe6"/><circle cx="12.5" cy="16" r="1" fill="#f4efe6"/>' +
-    '</svg>';
-  const GEREEDSCHAP_ICOON =
-    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
-    '<path d="M11 10.5l8.5 8.5" stroke="#8a5a2c" stroke-width="2.4" stroke-linecap="round"/>' +
-    '<path d="M4.5 8.5l5-5 2.2 2.2-1.5 1.5 2.6 2.6-2.2 2.2-2.6-2.6-1.3 1.3z" fill="#8f949a" stroke="#c3c7cc" stroke-width="1.1" stroke-linejoin="round"/>' +
-    '</svg>';
-  // Van de wapenmaker (js/ondernemers.js): een zwaard, schuin, met een houten gevest.
-  const WAPENS_ICOON =
-    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
-    '<path d="M18.5 4.5l1 1-9.6 9.6-1-1z" fill="#c3c7cc" stroke="#8f949a" stroke-width="1" stroke-linejoin="round"/>' +
-    '<path d="M6.8 13.2l4 4" stroke="#8a5a2c" stroke-width="2.2" stroke-linecap="round"/>' +
-    '<path d="M7.3 17.7l-2.6 2.6" stroke="#8a5a2c" stroke-width="2.2" stroke-linecap="round"/>' +
-    '</svg>';
-  // Van de melk die het dorp niet dezelfde dag drinkt (js/behoeften.js, T.eetVandaag): een punt
-  // kaas, met de korst aan de dikke kant en twee gaatjes in het snijvlak.
-  const KAAS_ICOON =
-    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
-    '<path d="M3 12l12 3 6-6z" fill="#f0cc72" stroke="#f5dc93" stroke-width="1.1" stroke-linejoin="round"/>' +
-    '<path d="M3 12l12 3v5L3 17z" fill="#e2b64a" stroke="#f0cc72" stroke-width="1.1" stroke-linejoin="round"/>' +
-    '<path d="M15 15l6-6v5l-6 6z" fill="#c9972f" stroke="#e2b64a" stroke-width="1.1" stroke-linejoin="round"/>' +
-    '<circle cx="7.4" cy="15.3" r="1" fill="#c9972f"/><circle cx="11.4" cy="17.3" r="1.15" fill="#c9972f"/>' +
-    '</svg>';
-  // Het vee in de winter (js/vee.js; spel.md, "Marcel koos voor stap 2"): een hooiopper zoals hij
-  // op de weide te drogen staat, een mesthoop uit de schaapskooi, een stuk vlees aan het bot, en een
-  // gespannen huid.
-  const HOOI_ICOON =
-    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
-    '<path d="M3.5 19.5c0-6.5 3.8-11.5 8.5-11.5s8.5 5 8.5 11.5z" fill="#c8b457" stroke="#e0cf7a" stroke-width="1.1" stroke-linejoin="round"/>' +
-    '<path d="M8 19c.4-3.5 1.6-6.5 3-8.3M12.5 19c0-3.4.4-6.3 1.2-8.2M16.5 19c-.2-2.8-1-5.2-2-7" fill="none" stroke="#9c8a3a" stroke-width="1" stroke-linecap="round"/>' +
-    '<path d="M12 8V3.5" stroke="#8a5a2c" stroke-width="1.5" stroke-linecap="round"/>' +
-    '</svg>';
-  const MEST_ICOON =
-    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
-    '<path d="M2.5 19.5c1.6-4.3 5.2-7 9.5-7s7.9 2.7 9.5 7z" fill="#6b4a2a" stroke="#8a6a44" stroke-width="1.1" stroke-linejoin="round"/>' +
-    '<path d="M7 17l2-1.2M13 16.6l2.2.6M10.5 18.6l1.8-.5" stroke="#c8b457" stroke-width="1" stroke-linecap="round"/>' +
-    '<path d="M9 10.5c-1-1.2 1-2 0-3.2M13 10c-1-1.2 1-2 0-3.2" fill="none" stroke="#9a8f80" stroke-width="1" stroke-linecap="round"/>' +
-    '</svg>';
-  const VLEES_ICOON =
-    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
-    '<path d="M8.6 13.2c-2.8-3-2-7.3 1.4-8.7 3.5-1.5 8.2.6 9.3 4.1 1 3.3-1.6 6.4-5.1 6.8-2.2.2-4.1-.6-5.6-2.2z" fill="#b8483a" stroke="#d9776a" stroke-width="1.1" stroke-linejoin="round"/>' +
-    '<path d="M13 9.5c1.5-.6 3-.2 3.8.8" fill="none" stroke="#efe6d6" stroke-width="1" stroke-linecap="round"/>' +
-    '<path d="M8.8 14.2l-4 4" stroke="#efe6d6" stroke-width="2.3" stroke-linecap="round"/>' +
-    '<circle cx="4.2" cy="17.6" r="1.4" fill="#efe6d6"/><circle cx="5.9" cy="19.6" r="1.4" fill="#efe6d6"/>' +
-    '</svg>';
-  const HUIDEN_ICOON =
-    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
-    '<path d="M5 4.5c2.3 1.2 4.5 1.2 7 0s4.7-1.2 7 0c-1.2 3.2-1.2 6.3 0 9.3s1.2 4 0 5.7c-2.3-1.2-4.5-1.2-7 0s-4.7 1.2-7 0c1.2-2.2 1.2-4.4 0-7.2s-1.2-5.4 0-7.8z" fill="#a0784a" stroke="#c89a5a" stroke-width="1.1" stroke-linejoin="round"/>' +
-    '<circle cx="10" cy="10" r="1.3" fill="#7d5a34"/><circle cx="14.5" cy="13.5" r="1.1" fill="#7d5a34"/><circle cx="11" cy="15.5" r="0.9" fill="#7d5a34"/>' +
-    '</svg>';
-  // De herberg (js/herberg.js): een aarden kan, met schuim, zoals de herbergierster hem tapt.
-  const BIER_ICOON =
-    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
-    '<path d="M5.5 8.5h10v11c0 .8-.7 1.5-1.5 1.5H7c-.8 0-1.5-.7-1.5-1.5z" fill="#c9972f" stroke="#e2b64a" stroke-width="1.1" stroke-linejoin="round"/>' +
-    '<path d="M15.5 11h2.2c1 0 1.8.8 1.8 1.8v2.4c0 1-.8 1.8-1.8 1.8h-2.2" fill="none" stroke="#e2b64a" stroke-width="1.5"/>' +
-    '<path d="M5 8.8c-.9-1.8.4-3.8 2.3-3.5.6-1.4 2.5-1.8 3.6-.8 1-1 2.9-.7 3.4.7 1.8-.2 2.8 1.9 1.7 3.6z" fill="#f5eedc" stroke="#e6dcc3" stroke-width="1" stroke-linejoin="round"/>' +
-    '<path d="M8.5 12v6M12.5 12v6" stroke="#9c7424" stroke-width="1.1" stroke-linecap="round"/>' +
-    '</svg>';
-  // De wijnboerderij (werklijst vraag 136): een kruik met een tros druiven ervoor.
-  const WIJN_ICOON =
-    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
-    '<path d="M9 3.5h5v3c2.4 1.2 3.8 3.6 3.8 6.6 0 4.1-2.8 7.4-6.3 7.4s-6.3-3.3-6.3-7.4c0-3 1.4-5.4 3.8-6.6z" fill="#7a2e3b" stroke="#a2495a" stroke-width="1.1" stroke-linejoin="round"/>' +
-    '<path d="M8.6 3.5h5.8" stroke="#c9a46a" stroke-width="1.6" stroke-linecap="round"/>' +
-    '<circle cx="8.2" cy="15.2" r="1.6" fill="#4b2f6b"/><circle cx="10.6" cy="15.6" r="1.6" fill="#55367a"/><circle cx="9.3" cy="17.8" r="1.6" fill="#4b2f6b"/>' +
-    '<path d="M9.4 13.4c.4-1 1.2-1.6 2.2-1.8" fill="none" stroke="#6f8f3a" stroke-width="1.1" stroke-linecap="round"/>' +
-    '</svg>';
-  const GRONDSTOF_ICOON = {
-    goud: GOUD_ICOON, graan: GRAAN_ICOON, wol: WOL_ICOON, hout: HOUT_ICOON,
-    ijzer: IJZER_ICOON, zout: ZOUT_ICOON, gereedschap: GEREEDSCHAP_ICOON, kaas: KAAS_ICOON,
-    hooi: HOOI_ICOON, mest: MEST_ICOON, vlees: VLEES_ICOON, huiden: HUIDEN_ICOON, bier: BIER_ICOON, wijn: WIJN_ICOON,
-    wapens: WAPENS_ICOON,
-  };
-  const GRONDSTOF_UITLEG = {
-    goud: 'Goud. Wat de heer het liefst ziet.',
-    graan: 'Graan. Van de akkers: eten, zaaigoed, en pacht op Sint-Maarten.',
-    wol: 'Wol. Van de schapen op de meent.',
-    hout: 'Hout. Uit het bos van de heer.',
-    ijzer: 'IJzer. Van de marskramer; de smidse maakt er gereedschap van.',
-    zout: 'Zout. Van de marskramer: het houdt vis en vlees goed.',
-    gereedschap: 'Gereedschap. Van de smidse: wie het heeft, werkt harder. Het slijt.',
-    kaas: 'Kaas. Van de melk die het dorp niet dezelfde dag drinkt: kaas houdt goed, en wordt pas gegeten als het graan op is.',
-    hooi: 'Hooi. In hooimaand van de weides gemaaid: het vee eet het van slachtmaand tot en met lentemaand.',
-    mest: 'Mest. Uit de schaapskooi: leg hem in het veldenvenster (V) op een akker, dan wordt die vruchtbaarder.',
-    vlees: 'Vlees. Van het slachten: het vult een maag. Wat je niet zout, bederft, dus dat eet het dorp eerst op; gezouten vlees bewaart het tot het graan op is.',
-    huiden: 'Huiden. Van het slachten.',
-    bier: 'Bier. De herbergierster brouwt het van graan, en wie \'s avonds in de herberg zit, drinkt het. Wie er deze week was, is tevredener.',
-    wapens: 'Wapens. Van de wapenmaker: wie van de militie er een heeft, slaat harder als de rovers komen.',
-    wijn: 'Wijn. Van de wijnboerderij, geplukt in wijnmaand: drank, zoals bier, en het bederft niet.',
-  };
-  // Deze staan pas in de balk als het dorp ze eens gehad heeft (S.gehad, js/voorraad.js): in het
-  // begin blijft de balk kort. Kaas, hooi, vlees en bier staan naast het graan, want het is allemaal
-  // eten en drinken, voor mens of dier; de rest achteraan.
-  const BALK_LATER = ['kaas', 'hooi', 'vlees', 'bier', 'wijn', 'ijzer', 'zout', 'gereedschap', 'wapens', 'mest', 'huiden'];
-  const NAAST_GRAAN = ['kaas', 'hooi', 'vlees', 'bier', 'wijn'];
-  const BALK = T.GRONDSTOFFEN.flatMap((wat) => (wat === 'graan' ? ['graan', ...NAAST_GRAAN] : [wat]))
-    .concat(BALK_LATER.filter((wat) => !NAAST_GRAAN.includes(wat)));
-  // Het aantal mensen, en hoeveel woonruimte er is (js/gebouwen.js): dezelfde stijl als een
-  // grondstof, maar met "/" in plaats van een los getal, dus geen eigen icoon uit GRONDSTOF_ICOON.
-  const BEVOLKING_ICOON =
-    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
-    '<circle cx="9" cy="7" r="3" fill="#c9972f"/><path d="M3 19c0-3.3 2.7-6 6-6s6 2.7 6 6" fill="none" stroke="#c9972f" stroke-width="1.6" stroke-linecap="round"/>' +
-    '<circle cx="17" cy="8.5" r="2.4" fill="#e2b64a"/><path d="M13.3 19c.3-2.7 2.2-4.8 4.7-4.8 2.6 0 4.7 2.3 5 5" fill="none" stroke="#e2b64a" stroke-width="1.4" stroke-linecap="round"/>' +
-    '</svg>';
-  // De argwaan van de inner (js/inner.js): een oog, in dezelfde stijl.
-  const ARGWAAN_ICOON =
-    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
-    '<path d="M2.5 12c2.4-4 5.7-6 9.5-6s7.1 2 9.5 6c-2.4 4-5.7 6-9.5 6s-7.1-2-9.5-6z" fill="none" stroke="#e2b64a" stroke-width="1.5" stroke-linejoin="round"/>' +
-    '<circle cx="12" cy="12" r="3.2" fill="#c9972f"/><circle cx="12" cy="12" r="1.2" fill="#1b1510"/>' +
-    '</svg>';
-  // De tevredenheid van het dorp (js/behoeften.js): een gezichtje, in dezelfde stijl als hierboven.
-  const TEVREDENHEID_ICOON =
-    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
-    '<circle cx="12" cy="12" r="8.6" fill="none" stroke="#e2b64a" stroke-width="1.5"/>' +
-    '<circle cx="8.7" cy="10.2" r="1.1" fill="#e2b64a"/><circle cx="15.3" cy="10.2" r="1.1" fill="#e2b64a"/>' +
-    '<path d="M8 14.6c1.1 1.3 2.5 1.9 4 1.9s2.9-.6 4-1.9" fill="none" stroke="#e2b64a" stroke-width="1.4" stroke-linecap="round"/>' +
-    '</svg>';
-
-  // De twee bazen (js/bazen.js; werklijst vraag 106, d): de heer met zijn kroon, en het dorp met een kap, elk met een
-  // mond die meebeweegt met hoe hij erbij staat (T.bazenStemming: blij, tevreden, ontevreden, boos).
-  const MOND = {
-    blij: '<path d="M8.6 15.4c1 1.3 2.1 1.9 3.4 1.9s2.4-.6 3.4-1.9" fill="none" stroke="#e2b64a" stroke-width="1.4" stroke-linecap="round"/>',
-    tevreden: '<path d="M9.2 16.1c.9.5 1.8.8 2.8.8s1.9-.3 2.8-.8" fill="none" stroke="#e2b64a" stroke-width="1.4" stroke-linecap="round"/>',
-    ontevreden: '<path d="M9.3 16.6h5.4" fill="none" stroke="#e2b64a" stroke-width="1.4" stroke-linecap="round"/>',
-    boos: '<path d="M9 17.4c.9-1.1 1.9-1.6 3-1.6s2.1.5 3 1.6" fill="none" stroke="#c0503a" stroke-width="1.5" stroke-linecap="round"/>' +
-      '<path d="M8.4 11.2l2.3.9M15.6 11.2l-2.3.9" stroke="#c0503a" stroke-width="1.3" stroke-linecap="round"/>',
-  };
-  function gezicht(stemming, heer) {
-    const rand = stemming === 'boos' ? '#c0503a' : '#e2b64a';
-    // De heer: een kroon met drie punten; het dorp: een boerenhoed met een rand.
-    const hoofd = heer
-      ? '<path d="M6.6 9.4L5.6 3.2l3.3 2.6L12 1.6l3.1 4.2 3.3-2.6-1 6.2z" fill="#e2b64a" stroke="#c9972f" stroke-width=".7" stroke-linejoin="round"/>'
-      : '<path d="M7.6 8.6c.3-3.2 2-4.9 4.4-4.9s4.1 1.7 4.4 4.9" fill="#9c7424"/><path d="M4.2 8.8h15.6" stroke="#9c7424" stroke-width="1.9" stroke-linecap="round"/>';
-    return '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
-      `<circle cx="12" cy="14.6" r="6.6" fill="none" stroke="${rand}" stroke-width="1.5"/>` +
-      '<circle cx="9.6" cy="13.4" r=".95" fill="#e2b64a"/><circle cx="14.4" cy="13.4" r=".95" fill="#e2b64a"/>' +
-      MOND[stemming] + hoofd + '</svg>';
-  }
-
-  // De voorraadbalk wordt één keer gemaakt; daarna verandert alleen het getal per grondstof, en
-  // het getal bij de mensen.
-  function bouwVoorraadbalk(box) {
-    box.innerHTML = BALK.map(
-      (wat) =>
-        `<div class="grondstof${BALK_LATER.includes(wat) ? ' verborgen' : ''}" data-wat="${wat}" title="${GRONDSTOF_UITLEG[wat]}">` +
-        `<span class="icoon">${GRONDSTOF_ICOON[wat]}</span><span class="aantal">0</span><span class="verstopt"></span></div>`,
-    ).join('') +
-      `<div class="grondstof" data-wat="bevolking" title="Mensen in het dorp, en hoeveel er wonen kunnen (js/gebouwen.js: elk huis geeft woonruimte).">` +
-      `<span class="icoon">${BEVOLKING_ICOON}</span><span class="aantal">0/0</span></div>` +
-      `<div class="grondstof" data-wat="tevredenheid" title="Tevredenheid.">` +
-      `<span class="icoon">${TEVREDENHEID_ICOON}</span><span class="aantal">100%</span></div>` +
-      `<div class="grondstof verborgen" data-wat="gunst" title="De gunst van de heer.">` +
-      `<span class="icoon">${gezicht('tevreden', true)}</span><span class="aantal">50</span></div>` +
-      `<div class="grondstof verborgen" data-wat="vertrouwen" title="Het vertrouwen van het dorp in jou.">` +
-      `<span class="icoon">${gezicht('tevreden', false)}</span><span class="aantal">50</span></div>` +
-      `<div class="grondstof verborgen" data-wat="argwaan" title="De argwaan van de inner.">` +
-      `<span class="icoon">${ARGWAAN_ICOON}</span><span class="aantal">0%</span></div>`;
-  }
-
-  // De twee bazen (js/bazen.js): de gunst van de heer en het vertrouwen van het dorp, met een gezicht dat zegt hoe ze
-  // erbij staan, en bij de muis waarom. Zonder de spelregel "Twee bazen" staan ze niet in de balk.
   // De statussen (js/voorvallen.js, T.statussenVan; werklijst vraag 77, stap 2): een kaartje per status zolang hij
   // duurt, naast het doel linksboven, rood als het erger is (hongersnood, strenge kou, ...). Op hover: wat er is, sinds
   // wanneer, en wat helpt.
@@ -237,30 +40,6 @@
     }
   };
 
-  T.ui.toonBazen = function (D) {
-    const S = T.S;
-    if (!S || D !== S.dorp) return; // een ander dorp zegt het niet tegen jou (js/dorp.js; vraag 71, C)
-    const box = $('voorraadbalk');
-    if (!box) return;
-    if (!box.children.length) bouwVoorraadbalk(box);
-    const nu = T.bazenNu(D);
-    for (const welk of ['gunst', 'vertrouwen']) {
-      const cel = box.querySelector(`[data-wat="${welk}"]`);
-      if (!cel) continue;
-      cel.classList.toggle('verborgen', !nu);
-      if (!nu) continue;
-      const n = Math.round(nu[welk]);
-      const stemming = T.bazenStemming(n);
-      if (cel.dataset.stemming !== stemming) {
-        cel.querySelector('.icoon').innerHTML = gezicht(stemming, welk === 'gunst');
-        cel.dataset.stemming = stemming;
-      }
-      cel.querySelector('.aantal').textContent = String(n);
-      cel.classList.toggle('hoog', stemming === 'boos');
-      cel.title = T.bazenTekst(D, welk);
-    }
-  };
-
   T.ui = T.ui || {};
 
   // De datum, en eronder het seizoen met het uur en het deel van de dag ("Lente · half acht,
@@ -278,181 +57,8 @@
     const seizoenEl = $('kalender-seizoen');
     seizoenEl.textContent = T.hoofdletter(d.seizoen) + weer + ' · ' + uur + (d.sintMaarten ? ' · Sint-Maarten: de heer int' : '');
     seizoenEl.title = W ? (W.droog > 0 ? `Het heeft ${W.droog === 1 ? 'sinds gisteren' : `al ${T.telwoord(W.droog)} dagen`} niet geregend.` : 'Het regent vandaag.') : '';
-    for (const b of document.querySelectorAll('#kalender-knoppen button')) {
-      b.classList.toggle('actief', Number(b.dataset.snelheid) === T.snelheidNu(S));
-    }
     T.ui.werkBriefKnopBij(S);
-    werkSlaapKnopBij(S);
-  };
-
-  // Slapen kan 's avonds en 's nachts, bij je eigen huis (js/dag.js, T.magSlapen). De knop staat er
-  // alleen dan; wie slaapt, ziet hem niet (hij wordt vanzelf wakker, of door een klik of een toets).
-  function werkSlaapKnopBij(S) {
-    const knop = $('slaap-knop');
-    if (knop) knop.classList.toggle('verborgen', !T.magSlapen(S));
-  }
-  T.ui.werkSlaapKnopBij = werkSlaapKnopBij;
-
-  T.ui.toonVoorraad = function (D) {
-    const S = T.S;
-    if (D !== S.dorp) return; // een ander dorp zegt het niet tegen jou (js/dorp.js; vraag 71, C)
-    const box = $('voorraadbalk');
-    if (!box.children.length) bouwVoorraadbalk(box);
-    for (const wat of BALK) {
-      const cel = box.querySelector(`[data-wat="${wat}"]`);
-      cel.querySelector('.aantal').textContent = Math.floor(S.dorp.voorraad[wat] || 0);
-      if (BALK_LATER.includes(wat)) cel.classList.toggle('verborgen', !(S.dorp.gehad && S.dorp.gehad[wat]));
-    }
-    // De twee bazen (js/bazen.js) staan in dezelfde balk, ook meteen bij een nieuw of geladen spel.
-    T.ui.toonBazen(D);
-    // Wat er verstopt ligt (js/verstoppen.js), klein naast het graan en het goud, en bij de muis
-    // waar: het dorp eet het niet, en de inner telt het niet.
-    if (T.verstoptTotaal) {
-      const v = T.verstoptTotaal(S.dorp);
-      const plekken = T.verstopPlekken(S.dorp).filter((p) => p.gebouw.verstopt && (p.gebouw.verstopt.graan >= 1 || p.gebouw.verstopt.goud >= 1));
-      const waar = plekken.map((p) => `${T.inhoudTekst(p.gebouw.verstopt)} in ${p.naam}`);
-      for (const wat of ['graan', 'goud']) {
-        const cel = box.querySelector(`[data-wat="${wat}"]`);
-        const n = Math.floor(v[wat]);
-        cel.querySelector('.verstopt').textContent = n >= 1 ? `+${n}` : '';
-        cel.title = GRONDSTOF_UITLEG[wat] + (waar.length ? ` Verstopt: ${waar.join('; ')}. Dat eet het dorp niet, en de inner telt het niet.` : '');
-      }
-      // Het zaaigraan dat de boeren achterhouden (js/akkers.js, T.zaaigraanApart): bij de muis, bij het graan.
-      const zaai = Math.min(Math.floor(S.dorp.voorraad.graan || 0), Math.ceil(T.zaaigraanApart(S.dorp, Math.floor(S.kalender.dag))));
-      if (zaai > 0) box.querySelector('[data-wat="graan"]').title += ` Daarvan is ${zaai} zaaigraan voor de lente: dat eet het dorp pas als er niets anders meer is.`;
-    }
-    // Wat zout en gereedschap nu doen, bij de muis: hoeveel vis en vlees het zout goed houdt, en
-    // hoeveel handen het gereedschap dekt (js/behoeften.js, js/gebouwen.js).
-    if (T.zoutDekking) {
-      const d = T.zoutDekking(S.dorp);
-      box.querySelector('[data-wat="zout"]').title = d.totaal >= 1
-        ? `Zout. Eén zout houdt ${T.BEHOEFTEN_INSTELLINGEN.zoutHoudtGoed} vis of vlees goed; de rest bederft. Nu gezouten: ${Math.floor(d.gezouten)} van de ${Math.floor(d.totaal)}.`
-        : GRONDSTOF_UITLEG.zout;
-    }
-    if (T.gereedschapDekking) {
-      const d = T.gereedschapDekking(S.dorp);
-      box.querySelector('[data-wat="gereedschap"]').title = d.handen
-        ? `Gereedschap. Genoeg voor ${Math.min(d.handen, Math.floor(d.heeft))} van de ${d.handen} handen aan het werk: er wordt ${Math.round((d.factor - 1) * 100)}% harder gewerkt. Het slijt.`
-        : GRONDSTOF_UITLEG.gereedschap;
-    }
-    // Bij de kaas: voor hoeveel dagen eten hij is, en hoeveel melk de koeien nu geven (js/vee.js,
-    // T.melkVanDag), want daar komt hij van. Beide in graan gerekend, zoals het dorp ze eet.
-    const perMens = T.etenPerMens(S.dorp);
-    if (perMens > 0) {
-      const perDag = (S.dorp.bevolking || 0) * perMens;
-      const kaas = S.dorp.voorraad.kaas || 0;
-      const dagen = perDag > 0 ? Math.floor(kaas / perDag) : 0;
-      const voor = kaas >= 1 && perDag > 0 ? ` Genoeg voor ${dagen} dag${dagen === 1 ? '' : 'en'} eten.` : '';
-      const melkNu = T.melkVanDag && S.kalender ? T.melkVanDag(S.dorp, Math.floor(S.kalender.dag)) : 0;
-      const mensen = Math.round(melkNu / perMens);
-      const melk = mensen > 0 ? ` De koeien geven nu elke dag melk voor ${mensen} mensen; wat het dorp niet drinkt, wordt kaas.` : '';
-      box.querySelector('[data-wat="kaas"]').title = GRONDSTOF_UITLEG.kaas + voor + melk;
-    }
-    // Bij het hooi: hoe lang het de kudde van nu voedt (js/vee.js, T.hooiPerWinterdag), en hoeveel
-    // winter er nog is. Buiten de winter telt ook het hooi dat nog op de weides staat
-    // (js/akkers.js, T.verwachtHooi). Haalt het de winter niet, dan staat het getal in het rood.
-    if (T.hooiPerWinterdag && S.kalender) {
-      const cel = box.querySelector('[data-wat="hooi"]');
-      const dag = Math.floor(S.kalender.dag);
-      const perDag = T.hooiPerWinterdag(S.dorp, dag);
-      const winterNu = T.isVeeWinter(dag);
-      const nogTeMaaien = winterNu ? 0 : T.verwachtHooi(S.dorp);
-      const hooi = (S.dorp.voorraad.hooi || 0) + nogTeMaaien;
-      const winter = T.winterDagen(dag);
-      const dagen = perDag > 0 ? Math.floor(hooi / perDag) : Infinity;
-      const perDagTekst = Math.round(perDag * 10) / 10;
-      let over = '';
-      if (perDag > 0) {
-        const erbij = nogTeMaaien >= 1 ? `, met wat er nog op de weides staat (zo'n ${Math.round(nogTeMaaien)})` : '';
-        over = winterNu
-          ? ` De kudde eet ${perDagTekst} per dag: genoeg voor ${dagen} dag${dagen === 1 ? '' : 'en'}, en de winter duurt nog ${winter} dagen.`
-          : ` De kudde van nu eet ${perDagTekst} per winterdag${erbij}: genoeg voor ${Math.min(dagen, winter)} van de ${winter} dagen winter.`;
-      }
-      cel.title = GRONDSTOF_UITLEG.hooi + over;
-      cel.classList.toggle('laag', dagen < winter);
-    }
-    // Bij het hout: voor hoeveel van de winterdagen het genoeg is, met wat er nu per dag bijkomt
-    // (js/behoeften.js, T.houtVoorDeWinter). Haalt het de winter niet, dan staat het getal in het rood
-    // (Marcel, 27 sep, vraag 44).
-    if (S.kalender && S.dorp.bevolking > 0) {
-      const cel = box.querySelector('[data-wat="hout"]');
-      const v = T.houtVoorDeWinter(S.dorp, Math.floor(S.kalender.dag));
-      const perDag = (x) => String(Math.round(x * 100) / 100).replace('.', ',');
-      const erbij = v.erbij > 0.005 ? `, en er komt ${perDag(v.erbij)} per dag bij` : '';
-      const genoeg = v.tot > 0
-        ? (v.haalt ? 'genoeg voor de hele winter' : `genoeg voor ${v.dagen} van de ${v.winter} dagen winter`)
-        : (v.haalt ? 'genoeg voor de rest van de winter' : `genoeg voor ${v.dagen} dag${v.dagen === 1 ? '' : 'en'}, en de winter duurt nog ${v.winter} dagen`);
-      const stookt = v.tot > 0 ? 'In de winter stookt het dorp' : 'Het dorp stookt';
-      cel.title = `${GRONDSTOF_UITLEG.hout} ${stookt} er ${perDag(v.stook)} per dag van${erbij}: ${genoeg}.`;
-      cel.classList.toggle('laag', !v.haalt);
-    }
-  };
-
-  // Het aantal mensen en de woonruimte (js/gebouwen.js, T.werkGebouwenBij): een eigen functie,
-  // want die twee veranderen niet via T.wijzigVoorraad en dus niet vanzelf mee met toonVoorraad.
-  T.ui.toonBevolking = function (D) {
-    const S = T.S;
-    if (D !== S.dorp) return; // een ander dorp zegt het niet tegen jou (js/dorp.js; vraag 71, C)
-    const box = $('voorraadbalk');
-    if (!box.children.length) bouwVoorraadbalk(box);
-    const el = box.querySelector('[data-wat="bevolking"] .aantal');
-    if (el) el.textContent = `${Math.floor(S.dorp.bevolking)}/${Math.floor(S.dorp.woonruimte)}`;
-  };
-
-  // De tevredenheid (js/behoeften.js, T.tikBehoeftenDag) en, op hover, wat het dorp mist — dezelfde
-  // vraag als T.ui.toonBevolking hierboven, met een eigen functie om dezelfde reden: tevredenheid
-  // verandert niet via T.wijzigVoorraad.
-  T.ui.toonTevredenheid = function (D) {
-    const S = T.S;
-    if (D !== S.dorp) return; // een ander dorp zegt het niet tegen jou (js/dorp.js; vraag 71, C)
-    const box = $('voorraadbalk');
-    if (!box.children.length) bouwVoorraadbalk(box);
-    T.ui.toonBazen(D); // de twee bazen staan ernaast (js/bazen.js)
-    const cel = box.querySelector('[data-wat="tevredenheid"]');
-    if (!cel || !S.dorp.behoeften) return;
-    const pct = Math.round(S.dorp.behoeften.tevredenheid * 100);
-    cel.querySelector('.aantal').textContent = `${pct}%`;
-    cel.classList.toggle('laag', S.dorp.behoeften.tevredenheid < T.BEHOEFTEN_INSTELLINGEN.vertrekDrempel);
-    const last = S.dorp.behoeften.last && S.dorp.behoeften.last.length ? ` Het heeft last van ${S.dorp.behoeften.last.join(' en ')}.` : '';
-    const blij = S.dorp.behoeften.blij && S.dorp.behoeften.blij.length ? ` Het is blij met ${S.dorp.behoeften.blij.join(' en ')}.` : '';
-    // Met de wensen per huis (js/wensen.js): hoe tevreden elke stand is, en in hoeveel huizen iets gemist wordt.
-    const st = S.dorp.behoeften.standen;
-    const perStand = st ? ` ${T.hoofdletter(Object.keys(T.STANDEN).filter((s) => st[s]).map((s) => `${T.STANDEN[s].naam} ${Math.round(st[s].tevredenheid * 100)}%`).join(', '))}.` : '';
-    const gemist = S.dorp.behoeften.gemist || [];
-    const mist = S.dorp.behoeften.mist.map((m) => {
-      const g = gemist.find((x) => x.naam === m);
-      return g ? `${m} (${g.huizen === 1 ? 'één huis' : `${g.huizen} huizen`})` : m;
-    });
-    cel.title = mist.length
-      ? `Tevredenheid: ${pct}%.${perStand} Het dorp mist: ${mist.join(', ')}.${last}${blij}`
-      : `Tevredenheid: ${pct}%.${perStand} Het dorp heeft wat het nodig heeft.${last}${blij}`;
-  };
-
-  // De argwaan van de inner (js/inner.js), en op hover waarom en wat ze doet. Pas in de balk als hij
-  // er eens geweest is, of als er argwaan is: in het begin blijft de balk kort.
-  T.ui.toonArgwaan = function (D) {
-    const S = T.S;
-    if (D !== S.dorp) return; // een ander dorp zegt het niet tegen jou (js/dorp.js; vraag 71, C)
-    const box = $('voorraadbalk');
-    if (!box.children.length) bouwVoorraadbalk(box);
-    const cel = box.querySelector('[data-wat="argwaan"]');
-    const I = S.dorp.inner;
-    const IN = T.INNER_INSTELLINGEN;
-    if (!cel || !IN) return;
-    const zichtbaar = !!(I && (I.argwaan > 0 || I.rapport || I.bezoek));
-    cel.classList.toggle('verborgen', !zichtbaar);
-    if (!zichtbaar) return;
-    const pct = (x) => `${Math.round(x * 100)}%`;
-    cel.querySelector('.aantal').textContent = pct(I.argwaan);
-    cel.classList.toggle('hoog', I.argwaan >= IN.doorzoekenVanaf);
-    const waarom = I.waarom.length ? ` Waarom: ${I.waarom.join('; ')}.` : '';
-    const nu = I.argwaan > 0 && IN.toeslag > 0 ? ` Nu vraagt de heer ${pct(I.argwaan * IN.toeslag)} meer.` : '';
-    // Wat je hem dit jaar gaf (js/inner.js, T.koopInnerOm), en wat hij daarom minder opschrijft.
-    const geschenk = I.geschenken > 0 ? ` Je gaf hem dit jaar ${I.geschenken} goud: hij schrijft ${pct(T.innerKorting(S.dorp))} minder op.` : '';
-    cel.title =
-      `Argwaan van de inner: ${pct(I.argwaan)}.${waarom}${nu}${geschenk} ` +
-      `Vanaf ${pct(IN.terugkomenVanaf)} komt hij onverwacht terug, vanaf ${pct(IN.doorzoekenVanaf)} doorzoeken de soldaten op Sint-Maarten het dorp, ` +
-      `en vanaf ${pct(IN.rapportTeltNietVanaf)} gelooft de heer zijn rapport niet meer en vraagt hij naar alles. Na Sint-Maarten zakt ze.`;
+    T.ui.werkTafelBij(S); // de lat van de snelheden, de kaars en de lantaarn (js/tafel.js)
   };
 
   // Het bouwmenu: de soorten van de huidige trede, met hun kosten en wat ze doen (ontwerp/spel.md,
@@ -1560,9 +1166,22 @@
     T.zetSnelheid(T.S, Number(b.dataset.snelheid));
   });
 
+  // De tijd stil, of weer op de snelheid van ervoor: P, en de zandloper op tafel (js/tafel.js).
+  T.ui.wisselPauze = function (S) {
+    const k = S.kalender;
+    if (S.slaap) T.wordWakker(S);
+    T.zetSnelheid(S, k.snelheid > 0 ? 0 : k.laatsteSnelheid || 1);
+  };
+
+  // Slapen tot de ochtend, of wakker worden: Z, en de kaars op tafel (js/tafel.js).
+  T.ui.wisselSlapen = function (S) {
+    if (S.slaap) T.wordWakker(S);
+    else T.gaSlapen(S);
+  };
+
   $('slaap-knop').addEventListener('click', (ev) => {
     ev.currentTarget.blur();
-    if (T.S && T.gaSlapen) T.gaSlapen(T.S);
+    if (T.S && T.S.kalender) T.ui.wisselSlapen(T.S);
   });
 
   // P, Z, - en = botsen nergens mee: de spatie en 1-4 zijn van het gevecht (CLAUDE.md). Z is slapen
@@ -1574,12 +1193,9 @@
     if (ev.target && (ev.target.tagName === 'INPUT' || ev.target.tagName === 'TEXTAREA')) return;
     if (T.S.modus === 'spelregels' || T.S.modus === 'velden') return;
     if (ev.key === 'p' || ev.key === 'P') {
-      const k = T.S.kalender;
-      if (T.S.slaap && T.wordWakker) T.wordWakker(T.S);
-      T.zetSnelheid(T.S, k.snelheid > 0 ? 0 : k.laatsteSnelheid || 1);
-    } else if ((ev.key === 'z' || ev.key === 'Z') && T.gaSlapen) {
-      if (T.S.slaap) T.wordWakker(T.S);
-      else T.gaSlapen(T.S);
+      T.ui.wisselPauze(T.S);
+    } else if (ev.key === 'z' || ev.key === 'Z') {
+      T.ui.wisselSlapen(T.S);
     } else if (ev.key === '-' || ev.key === '_') {
       stapSnelheid(-1);
     } else if (ev.key === '=' || ev.key === '+') {

@@ -23,7 +23,6 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
 **Wacht op Marcel:**
 - Een feest op het plein vol kijkgaten (`opmerkingen.md`, "Het beeld"): zo laten, op een feest alleen wie ertoe doet, of
   het plein uit? De fout in de kijkgaten en het haperen bij slepen zijn op 9 okt opgelost.
-- Sneeuw op de daken (vraag 144, 4b): mag de render van een sneeuwmasker per huis, en ook de bomen?
 - Uit `opmerkingen.md`: een brand die overslaat op het huis ernaast, een eigen beeld voor de koorts (ziekbed, hoesten),
   en wie wijn wil (de wijnboerderij die niemand bouwt).
 - Vraag 142, de bladzijde met alle getallen (`gereedschap/instellingen.html`): stap 1 en 2 staan in `main`; stap 3 (een
@@ -31,12 +30,16 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
 
 **Daarna, in deze volgorde:**
 0. Een fatsoenlijke ui (vraag 146; Marcel, 9 okt: "nu is het echt een zooitje met al die menutjes met letters"): de
-   plaat (a) is goed, elk venster is papier met leesbare letters (b1), en er is één manier van openen en sluiten (b2).
-   **Nu c, de tafel, in een nieuwe sessie** (wat er moet, staat bij vraag 146), dan d en e.
-   **Bezig in sessie `main` (desktop)** (9 okt): vraag 146, c, de tafel onderin.
+   plaat (a) is goed, elk venster is papier met leesbare letters (b1), er is één manier van openen en sluiten (b2), en
+   de tafel ligt onderin (c, 9 okt; een gesprek staat sinds dan midden boven de tafel). **Nu d** (bovenaan alleen het
+   doel met de raad en de datum als briefjes, het blok met toetsen weg, Spelregels in het menu), dan e (de fotomodus).
 0b. Engels en een vertaaltool (vraag 147; Marcel, 9 okt): de basis nu, naast de ui; het omzetten van alle tekst na de
-   ui en vóór de proefversie. Stap 1 (de basis, de tool, het menu als proef) is gebouwd op branch `vertalen` en wacht
-   op Marcel om in `main` te komen; stap 2, het omzetten, na de ui.
+   ui en vóór de proefversie. Stap 1 (de basis, de tool, het menu als proef) staat in `main` (9 okt); stap 2, het
+   omzetten, na de ui.
+0c. Meer variatie in het groen, de bomen en de versiering (vraag 148; Marcel, 9 okt: alles ja, "Mag ernaast"), naast
+   de ui: eerst de bomen (vormen, nieuwe soorten, de seizoenen met vruchten), dan het groen eronder, dan de spullen bij de
+   huizen; de sneeuw op de bomen en de huizen (144, 4b, Marcel: "ja") in dezelfde ronde. **Bezig in sessie `main`
+   (desktop, groen)** (9 okt): stap 1, de proefplaat van de bomen.
 1. Een proefversie voor Marcels 4K-scherm en een eerste tester (33d; `npm run proefversie`, ook `-- --windows`), met de
    graanzak erin. De laatste is van 3 okt (`36c713e`), zonder de verzoeken, de twee bazen, het ontginnen, de markt, de
    wolven, het eiland, WebGL en de graanzak.
@@ -7092,6 +7095,9 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     legt daar de sneeuw over, net zo dik als op de grond. Dat zijn 559 tekeningen, zo'n drie uur rekenen op de
     achtergrond (weinig verbruik), en enkele MB erbij. Vragen: mag die render, en ook de bomen (kale takken en sneeuw
     erop) of alleen de huizen?
+    **Marcel (9 okt), bij vraag 148: "Sneeuw moet ook nog op bomen, huizen etc."** Dus ja: de huizen, de bomen en wat
+    verder buiten staat. De bomen krijgen hun kale takken en hun sneeuw met de seizoenen van vraag 148; de daken in de
+    ronde van de huizen (de render van het masker, zoals hierboven).
     **Marcel (9 okt), op wat er gebouwd is:** "Vergeet niet dat alles onze eigen kaart is. Het wordt 1 aaneengesloten
     stuk." "De groep neemt in het donker ook lantaarns mee natuurlijk." "Huis moet afgebrokkeld zijn. Echt kapot.
     Structureel ingestort etc." Dus: de hinderlaag van de bode altijd op de kaart (buiten beeld alleen als het niet anders
@@ -7197,6 +7203,17 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     alle uiterlijken renderen op de achtergrond (`uiterlijk-anim.cjs`, zo'n drie uur), daarna `naar-spel.cjs --uiterlijken`.
     **Marcel (9 okt): "vergeet ook niet het water wat mag bewegen 'stromen' etc"**: bij 3 erbij, als zesde: beken die
     stromen (rimpels en glinsters die met de stroom meegaan) en vijvers en meren die glinsteren.
+    **Gebouwd (9 okt):** het water stroomt en glinstert, kinderen spelen tikkertje (niet op een akker, niet in de regen),
+    en de kip en de hond als tekening (`gereedschap/pixelart/klein.cjs`). Claude vroeg of de honden steviger moesten
+    (ze lijken op de wolf) en hoeveel er komen. **Marcel (9 okt): "1. Ja die zijn goed voor nu. 2. her en der 1 bij een
+    huis."** Dus: de honden zoals ze zijn, en een hond bij een deel van de huizen, niet bij elk.
+    **Gebouwd (9 okt):** de kippen en de honden in het spel, alleen beeld (`T.kippenOp` en `T.hondenVan` in
+    `js/kleinleven.js`, getekend in `kleinLevenInLijst` in `js/tekenen.js`): vier kippen op het erf van elke boerderij
+    waar iemand woont (soms een haan), die scharrelen en pikken en 's nachts binnen zijn, en een hond bij 30% van de
+    gezinnen, die zijn baas volgt, bij de deur ligt als die binnen is, en blaft naar een vreemde (de marskramer, een
+    rover, een wolf). En de was aan de lijn (`T.wasVan`): bij een op de drie huizen per dag, onder het werk en niet als
+    het nat is, twee palen en een touw met drie tot vijf stukken (hemd, laken, broek, doek) die wapperen. Daarmee zijn
+    alle vijf van 3 er, en het water.
     **Bezig in sessie `ccr-77327776-rqjldz`** (9 okt): vraag 145, 1 en 3.
 
 146. **Een fatsoenlijke ui** (Marcel, 9 okt: "Ik denk dat het nu ook tijd is om een fatsoenlijke UI te maken; nu is het
@@ -7268,6 +7285,24 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     knoppen `#brief-knop`, `#bode-knop`, `#zaak-knop`, die `js/brieven.js` en `js/hud.js` tonen). De toets staat op het
     briefje bij de muis, niet op het ding. De balk bovenaan (`#kalenderbalk`, `#voorraadbalk`, `#balk-knoppen`) gaat
     erin op; het doel en de datum worden in d briefjes.
+    **c gebouwd (9 okt):** de tafel ligt onderin over de hele breedte, zoals op de plaat (`js/tafel.js`). De kunst komt
+    uit `gereedschap/pixelart/tafel.cjs` (`naar-spel.cjs --alleen tafel`, naar `beelden/tafel/`): het hout (2048 breed,
+    links en rechts naadloos) en vijftien tekeningen, de schetsen van de plaat op twee keer de maat, belicht en omlijnd.
+    Links het rekenboek (de voorraad, en het dorp: de kas, de mensen, de tevredenheid en de argwaan; meer dan zes
+    goederen, dan zonder namen); in het midden het bouwplan, de velden, het wetboek en de bel, en de brief van de heer, het
+    rapport (nu een eigen ding naast de brief), de zaak en de inktpot alleen zolang ze er zijn (de brief en het rapport
+    lichten op); rechts de lantaarn (sluipen, gloeit als hij in het donker brandt), de kaars (slapen: brandt als het kan,
+    en wekt je ook), de zandloper (P) met de lat, en het zegel en de hoed met hun getal. Elk ding houdt het id van de knop
+    die het was, dus wat ze opent, veranderde niet; P en de zandloper delen `T.ui.wisselPauze`, Z en de kaars
+    `T.ui.wisselSlapen`. Bij de muis een briefje met de naam, wat het nu zegt (de uitleg van de getallen uit de balk, die
+    nu geen browserletters meer zijn) en de toets. De schaal: een pixel van de kunst op een hele schermpixel (1080 één,
+    4K twee, ook bij 150% van Windows); past hij niet in de breedte (onder 1080, of een smal venster), dan kleiner.
+    De berichten staan boven het rekenboek; de actiebalk van een gevecht, het overzicht, de meter en "Opgeslagen" boven
+    de tafel. Marcel, terwijl het gebouwd werd: "die popup moet misschien wat meer midden op het scherm staan": een
+    gesprek staat nu midden boven de tafel. Nog niet: de actiepunten als muntjes op tafel (de plaat, vraag 5), en het
+    rekenboek is nog opmaak in css zoals op de plaat, geen pixel art. Nagelopen in de browser (1280×720 op 150%, en een
+    smal hoog venster): elk ding opent en sluit zijn venster, de lat, de zandloper, sluipen, de brief en het rapport, de
+    bode in een droogte, en het briefje boven elk ding en boven het boek; `npm test` 1152/1152.
 
 147. **Engels, en een vertaaltool voor de community** (Marcel, 9 okt: "We moeten alles naar het Engels halen. Ook moeten
     we een translate tool hebben. Mochten we leden uit de community krijgen die een vertaling willen maken."). Op 1 okt
@@ -7291,7 +7326,7 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     (Electron) leest talen uit een map `talen/` naast het spel. Klaar als: het spel in het Engels en het Nederlands
     speelt zonder één zin in de andere taal, `npm test` dat bewaakt, en iemand zonder onze code met de tool een taal kan
     maken en in het spel zien.
-    **Stap 1 gebouwd (9 okt, branch `vertalen`):** `js/taal.js` (`T.t`, het meervoud en de keuze, de taalkeuze, een taal als
+    **Stap 1 gebouwd (9 okt, in `main`):** `js/taal.js` (`T.t`, het meervoud en de keuze, de taalkeuze, een taal als
     gegevens), `taal/nl.js`, `npm run teksten` (`gereedschap/teksten.cjs`, dat `taal/bron.js` schrijft), de vertaaltool
     (`gereedschap/vertalen.html`, in het Engels; met onze server schrijft Opslaan `taal/<code>.js`, zonder bewaart de
     browser het en kent het spel in dezelfde browser de taal meteen; Download en Open voor een bestand om te delen), een
@@ -7308,6 +7343,51 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     markeert, zodat wat ongemarkeerd blijft, nog niet om is. Wat de speeltest aan tekst leest, krijgt `?taal=nl`. Het
     grootste werk: de gesprekken (4.800 woorden), de spelregels (4.600), de balk en de tafel. Later (stap 4): de tool
     ook in het spel onder het menu, en een map `talen/` naast het spel in Electron (`verpakken.md`).
+
+148. **Meer variatie in het groen, de bomen en de versiering van het dorp** (Marcel, 9 okt: "Ik wil meer variatie in de
+    vegetatie, ook bomen en versieringen van het dorp"; besloten 9 okt).
+    **Wat er nu is:** elke soort heeft één tekening, dus elke eik is dezelfde eik (`tegels/bomen.png`: eik, herfsteik,
+    den, berk, dode boom, wilg, appelboom, het boompje en drie jonge bomen; `tegels/begroeiing.png`: struik,
+    bessenstruik, varen, graspol, hoog gras, bloemen, paddenstoelen, stronk, rots en steentje). De bomen veranderen niet
+    met het jaar (de herfsteik staat alleen in de rand van het bos). Getekend, maar nergens neergezet: de hekken van
+    tenen en van latten met hun hoeken en hekjes, de houtstapel, het schuurtje en de waslijn (`tegels/tuin.png`,
+    `tegels/erf.png`). De maker zet bij elk huis een appelboom of een eik, bij een boerderij een stukje tuin of een
+    regenton, en een bankje bij een lantaarn; een huis dat er in het spel bij komt, krijgt niets.
+    **Wat er al over gaat:** vraag 109, e (het erf: een moestuin, een regenton, een hek van tenen; nooit beantwoord),
+    vraag 145, 3 (klein leven: de was aan de lijn en de kippen; bezig in een andere sessie), punt 5 van de huizen naar
+    Marcels voorbeelden (`beeld.md`, Open: "een eigen stukje grond met spullen"), en vraag 144, 4b (sneeuw op de bomen).
+    **Voorstel, alleen beeld:** geen regel verandert, en wat in de weg kan staan, komt alleen waar niemand loopt.
+    - **a, elke boom anders.** Per soort vier tot zes tekeningen (groot en klein, scheef, een andere kroon, een gespleten
+      stam); welke, zegt de tegel (een vaste hasj), zodat er in het spel niets verandert en een bewaard spel past. Erbij
+      een paar soorten die bij het land passen: de beuk en de linde (het bos, het plein, de kapel), de populier (hoog en
+      smal, langs de weg), de els en de knotwilg (aan de beek en het water), en de meidoorn en de hazelaar als struik.
+      Wat een boom is voor de houthakker en het ontginnen, staat op één plek (`T.NATUUR.bos`), dus een nieuwe soort telt
+      meteen mee.
+    - **b, de bomen in het jaar.** Lente: bloesem in de appel en de meidoorn, fris groen; zomer: vol; herfst: geel, oranje
+      en rood, met blad op de grond; winter: kaal loofhout, de den groen (de sneeuw erop met 144, 4b). De heide bloeit
+      paars in de nazomer, en de bloemen staan in de lente en de zomer. De browser laadt alleen het seizoen van nu.
+    - **c, het groen eronder.** De struiken, varens en graspollen in varianten, en wat er nog niet is: klaprozen en
+      korenbloemen langs de akkers, brandnetels achter de huizen, brem en distels op de heide, lisdodde en waterlelies
+      aan het water, braam aan de bosrand. Plat, behalve de struiken: het ligt in de buffer van de grond en kost niets
+      aan tekenen.
+    - **d, de versiering van het dorp, die meegroeit.** Eerst wat al getekend is (de hekken om de moestuinen en de
+      weides, de houtstapel, het schuurtje), dan nieuw: tonnen, kratten, een kar en een kruiwagen, een hooiberg en een
+      mesthoop bij de boerderij, bijenkorven, bloembakken, een wegkruis op de kruising, een drinkbak bij de put. Naar de
+      stand van het huis: een hut een houtstapel en een ton, een huis een bankje en een tuintje, een stenen huis
+      bloembakken en een hek van latten, een boerderij een hooiberg, een mesthoop en een kar. Ook een huis dat in het
+      spel komt of doorgroeit, krijgt het, en een huis dat alles heeft, ziet er rijker uit; zo ziet een dorp dat groeit
+      er ook anders uit.
+    **In stappen:** 1. a, met eerst een proefplaat (een eik in zes vormen en vier seizoenen, en de nieuwe soorten); 2. b;
+    3. c; 4. d, samen met punt 5 van de huizen, en vraag 109, e, gaat erin op.
+    **Vragen:** a tot en met d zo, en deze nieuwe soorten? Met de bomen eerst? Een hek om een weide of een tuin verandert
+    wie waar loopt (en dus de speeltest): mag dat, of komt versiering alleen tegen de muur van een huis? En waar in de rij:
+    naast de ui (het is tekenwerk, dat apart kan), of erna?
+    **Marcel (9 okt): "a. Ja goed idee b. Ja vegetatie en bomen met seizoenen mee. Ook vruchten etc. c. Ja dat kleedt het
+    aan d. Goed idee, het gaat dan wat echter worden."** Op de vragen: **"1. Ja dat is prima 2. Ja is goed 3. Ja prima 4.
+    Mag ernaast."** En: **"Sneeuw moet ook nog op bomen, huizen etc."** Dus a tot en met d zoals voorgesteld, met deze
+    nieuwe soorten; de seizoenen ook in het groen eronder, met vruchten (appels, bramen en bessen, hazelnoten, eikels en
+    beukennootjes, rode besjes in de meidoorn); de bomen eerst; een hek om een weide of tuin mag (de speeltest speelt dan
+    opnieuw); naast de ui (0c in **Nu en daarna**); en de sneeuw op de bomen en de huizen hoort erbij (144, 4b).
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

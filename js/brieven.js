@@ -264,26 +264,20 @@
     return komtNog ? ` De marskramer komt op ${bezoek.dag} ${bezoek.maand}: dan kun je nog verkopen voor zijn goud.` : '';
   }
 
-  // Welke brief op je wacht, voor de knop Brief: een rapport dat je nog niet las eerst (het geldt maar voor vandaag), dan
-  // de heervaart (daar hoort een dag bij), dan de schatting.
-  const wachtend = (S) => (T.rapportKlaar(S.dorp) ? 'rapport'
-    : S.dorp.heervaart && S.dorp.heervaart.vraag ? 'heervaart'
+  // Welke brief van de heer op je wacht: de heervaart (daar hoort een dag bij), dan een gril, dan de schatting.
+  const briefVanDeHeer = (S) => (S.dorp.heervaart && S.dorp.heervaart.vraag ? 'heervaart'
     : T.grilNu(S.dorp) ? 'gril'
     : S.dorp.heer && S.dorp.heer.brief ? 'schatting' : null);
+  // Wat er op je wacht: een rapport dat je nog niet las eerst (het geldt maar voor vandaag), dan de brief van de heer.
+  const wachtend = (S) => (T.rapportKlaar(S.dorp) ? 'rapport' : briefVanDeHeer(S));
 
-  // De knop Brief naast Bouwen: alleen zolang er een brief op je wacht. Is dat het rapport, dan heet hij Rapport.
+  // De papieren op tafel (js/tafel.js; vraag 146, c) liggen er alleen zolang ze er zijn: de brief van de heer en het
+  // rapport zolang ze op je wachten (en dan lichten ze op, stijl.css), de zaak zolang je uitzoekt wie de zak graan nam
+  // (js/zaak.js), en de inktpot van de bode in een moeilijke tijd, zolang er niemand onderweg is (js/bode.js).
   T.ui.werkBriefKnopBij = function (S) {
-    const soort = wachtend(S);
-    const knop = $('brief-knop');
-    knop.classList.toggle('verborgen', !soort);
-    const tekst = soort === 'rapport' ? 'Rapport' : 'Brief';
-    if (knop.textContent !== tekst) {
-      knop.textContent = tekst;
-      knop.title = soort === 'rapport' ? 'Het rapport van je raadsman, dat je nog niet las' : 'Een brief van de heer die op je antwoord wacht';
-    }
-    // De knop De zaak: zolang je uitzoekt wie de zak graan nam (js/zaak.js).
+    $('brief-knop').classList.toggle('verborgen', !briefVanDeHeer(S));
+    $('rapport-knop').classList.toggle('verborgen', !T.rapportKlaar(S.dorp));
     $('zaak-knop').classList.toggle('verborgen', !T.zaakOnderzoek(S.dorp));
-    // De knop Bode: in een moeilijke tijd, zolang er niemand onderweg is (js/bode.js).
     $('bode-knop').classList.toggle('verborgen', !(S.dorp.kalender && T.kanBodeSturen(S.dorp).zichtbaar));
   };
 
@@ -383,6 +377,13 @@
     ev.currentTarget.blur();
     if (!T.S) return;
     if (T.ui.briefOpen()) T.ui.sluitBrief(T.S);
-    else T.ui.toonBrief(T.S.dorp);
+    else T.ui.toonBrief(T.S.dorp, briefVanDeHeer(T.S));
+  });
+
+  $('rapport-knop').addEventListener('click', (ev) => {
+    ev.currentTarget.blur();
+    if (!T.S) return;
+    if (open === 'rapport') T.ui.sluitBrief(T.S);
+    else T.ui.toonBrief(T.S.dorp, 'rapport');
   });
 })(globalThis.Spel = globalThis.Spel || {});

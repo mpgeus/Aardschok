@@ -224,7 +224,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.werkOogstBij(S, D, dt)`, en een gesprek `T.doeGevolg(S, D, doe)` (je tas en je quests van het spel, de vlaggen en
   het goud van het dorp). De balk en de vensters gaan over je eigen dorp (`S.dorp`, vraag 71, C); wat getekend,
   aangeklikt of gevochten wordt, over het dorp dat er ligt (`T.dorpHier(S)`, of geen). Een venster dat een dorp zelf
-  opent (`T.ui.toonBrief(D, ...)`, `T.ui.openSlachten(D)`, de balk met `T.ui.toonVoorraad(D)`), komt alleen voor je
+  opent (`T.ui.toonBrief(D, ...)`, `T.ui.openSlachten(D)`, het rekenboek met `T.ui.toonVoorraad(D)`), komt alleen voor je
   eigen dorp. `T.nieuwDorp` maakt een dorp op een kaart (vanuit `T.beginOpKaart`), en `T.schoutIsWeg(D)` zegt of zijn
   schout niet op de kaart van het dorp staat. Het gereedschap, dat niet speelt, is zijn eigen dorp (`S.dorp = S`).
   **Elk dorp leeft** (vraag 71, A): `T.werkDorpBij(S, D, dt, dtWereld)` doet elk beeld alles van een dorp (js/main.js,
@@ -396,7 +396,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   b2: een venster meldt zich aan met `T.ui.meldVenster`, zijn open en sluit roepen `T.ui.openVenster` en `T.ui.sluitVenster`,
   en er is hooguit één open, `T.ui.vensterOpen()`; **elk venster is papier**: een nieuw venster komt in de
   rij onderaan `stijl.css`, en zijn opmaak gebruikt de kleurnamen `--inkt`, `--gedempt`, `--goud`, `--rand`, nooit een vaste
-  kleur; de letters zijn Grenze, `--kop`, en Alegreya, `--boek`, in `letters/`), `js/tekenen.js`, `js/main.js`
+  kleur; de letters zijn Grenze, `--kop`, en Alegreya, `--boek`, in `letters/`), `js/tafel.js` (**de tafel van de schout**
+  onderin, vraag 146, c: het rekenboek met de voorraad en het dorp, en de dingen die een venster openen, elk met het id
+  van de knop die het was; wat een ding is en zijn toets staan op het briefje bij de muis, `#wenk`, niet op het ding; de
+  kunst uit `gereedschap/pixelart/tafel.cjs`, op ware pixels: één pixel van de kunst op een hele schermpixel, 1080 één,
+  4K twee, `pasSchaal`, en wat erboven ligt rekent met `--tafel-zoom`), `js/tekenen.js`, `js/main.js`
   (spellus, invoer, zoom, camera). **Het overzicht** (vraag 108, a): `Tab` tilt de camera van de schout af en zoomt uit
   (`T.wisselOverzicht`, `S.overzicht`, alleen scherm); slepen of de pijltjes schuiven, het wiel zoomt, en wat je klikt,
   doet de schout nog altijd. `Tab`, een klik op de schout of een gevecht brengt je terug. Op een groot scherm tekent het spel op een hele deling ervan, minstens
@@ -762,6 +766,24 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   enkele keer sterft iemand (`sterft` per leeftijd), en wie het had, krijgt het deze keer niet weer (`D.koorts.gehad`).
   De status `koorts` in `T.OORZAKEN` (`T.koortsNiveau`: Koorts, en Epidemie als een tiende ziek is). De spelregel
   "Koorts"; de getallen in `T.KOORTS_INSTELLINGEN`.
+- `js/leven.js`: **ouder worden, geboren worden en sterven** (vraag 145, 9 okt; Marcel: "mensen moeten ook ouder kunnen
+  worden", en "1. C 2. Ja 3. Ja"): elke bewoner heeft een geboortedag (`p.geboren`; wie er al was, krijgt er een in zijn
+  fase), elke fase duurt vaste jaren (`fasen`), en elke nacht (`T.tikLevenDag`, na `T.tikKoortsDag`) gaat wie zijn fase
+  uit is een verder (`T.poppetjeNaarLeeftijd` in `js/bewoners.js`, met een nieuw uiterlijk), sterft een oude van
+  ouderdom, en krijgt een gezin met plaats soms een kind (`T.plaatsInHuis`). De schout en wie een naam heeft (`p.wie`)
+  worden niet ouder (`T.wordtOuder`). **Het uiterlijk** (vraag 145, 1): elke bewoner draagt een van de 24 uiterlijken van
+  zijn lijf (12 voor een kind of een oude; `p.uiterlijk`, `T.kiesUiterlijk`: het minst gebruikte, niet als de buren, een
+  kind met het haar van zijn ouders), ook in zijn werk (`boer-u7`, `zaaier-u7`; `T.UITERLIJK_LIJF`, en in js/sprites.js
+  `figuurVanUiterlijk`); de uiterlijken staan in `gereedschap/pixelart/uiterlijk.cjs`, de vellen komen uit
+  `uiterlijk-anim.cjs`. De spelregel "Ouder worden"; de getallen in `T.LEVEN_INSTELLINGEN`.
+- `js/kleinleven.js`: **het kleine leven** (vraag 145, 3; Marcel: "het voelt gewoon wat 'saai' in het dorp"): alleen
+  beeld, niets ervan in `Spel.S`: rook uit de schoorsteen van wie thuis is (`T.rookUitHuizen`; het punt per tekening is
+  `schoorsteen` of `nok` in `tegels.js`, uit `rookVan` in `huizen.cjs`), water dat stroomt of glinstert (`T.waterOp`),
+  kinderen die tikkertje spelen (`T.speel`, vanuit `T.dwaal`), kippen op het erf van een boerderij (`T.kippenOp`), een
+  hond bij een deel van de gezinnen die zijn baas volgt en blaft naar vreemden (`T.hondenVan`, `T.vreemdeBij`), en de
+  was aan de lijn (`T.wasVan`). `js/tekenen.js` tekent het (`kleinLevenInLijst`, `tekenWaterLeven`,
+  `tekenSchoorsteenRook`); de kip en de hond komen uit `gereedschap/pixelart/klein.cjs`. De spelregel "Klein leven"; de
+  getallen in `T.KLEIN_LEVEN_INSTELLINGEN`.
 - `js/zaak.js`: **de verdwenen graanzak** (vraag 128, 8 okt; Marcel: "akkoord, bouwen maar"): de proef voor informatie,
   de zitting en gevolgen, één keer per spel in de eerste herfst (`T.tikZaakDag`, vóór `T.tikVoorvallenDag`). Wat er echt
   gebeurde, staat in `D.zaak` (de dader, het zieke kind, de schuur, de aanklager, de verkeerde verdachte, de buur, het
@@ -1001,7 +1023,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   één plek, zoals `T.GEBOUWEN`; een keuze zet alleen waarden in de instellingenblokken, zodat elk
   getal één plek houdt; de namen; en `T.WERKBANK` met alle getallen, die vóór een keuze gaan. Het
   komt ná alle regels en gesprekken, want het neemt hun waarden als standaard, en het gereedschap
-  laadt het bewust niet), `js/hud.js` (de balk, het bouwmenu onder
+  laadt het bewust niet), `js/hud.js` (de kalender, het bouwmenu onder
   `B`, het veldenvenster onder `V`, het handelsvenster en het betalen aan de heer), en `js/brieven.js`: **de
   brieven van de heer op één plek** (vraag 60, het eerste stuk van hud.js splitsen): de benoeming waarmee een nieuw
   spel begint, de schatting op 1 wijnmaand, de heervaart, en een brief bij elke trede (het dorp, marktrecht), elk een

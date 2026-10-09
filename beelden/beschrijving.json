@@ -4366,6 +4366,482 @@
     }
    }
   },
+  "kip0": {
+   "naam": "kip0",
+   "cel": [
+    34,
+    36
+   ],
+   "anker": [
+    17,
+    25
+   ],
+   "snelheid": 0.8,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "kip0-staan.png",
+     "beelden": 6,
+     "fps": 5,
+     "herhaal": true,
+     "cel": [
+      20,
+      25
+     ],
+     "anker": [
+      10,
+      22
+     ]
+    },
+    "lopen": {
+     "bestand": "kip0-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 0.8,
+     "stap": 0.32,
+     "cel": [
+      20,
+      25
+     ],
+     "anker": [
+      10,
+      22
+     ]
+    },
+    "pikken": {
+     "bestand": "kip0-pikken.png",
+     "beelden": 8,
+     "fps": 8,
+     "herhaal": true,
+     "cel": [
+      28,
+      30
+     ],
+     "anker": [
+      14,
+      22
+     ]
+    }
+   }
+  },
+  "kip1": {
+   "naam": "kip1",
+   "cel": [
+    34,
+    36
+   ],
+   "anker": [
+    17,
+    25
+   ],
+   "snelheid": 0.8,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "kip1-staan.png",
+     "beelden": 6,
+     "fps": 5,
+     "herhaal": true,
+     "cel": [
+      20,
+      25
+     ],
+     "anker": [
+      10,
+      22
+     ]
+    },
+    "lopen": {
+     "bestand": "kip1-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 0.8,
+     "stap": 0.32,
+     "cel": [
+      20,
+      25
+     ],
+     "anker": [
+      10,
+      22
+     ]
+    },
+    "pikken": {
+     "bestand": "kip1-pikken.png",
+     "beelden": 8,
+     "fps": 8,
+     "herhaal": true,
+     "cel": [
+      28,
+      30
+     ],
+     "anker": [
+      14,
+      22
+     ]
+    }
+   }
+  },
+  "kip2": {
+   "naam": "kip2",
+   "cel": [
+    34,
+    36
+   ],
+   "anker": [
+    17,
+    25
+   ],
+   "snelheid": 0.8,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "kip2-staan.png",
+     "beelden": 6,
+     "fps": 5,
+     "herhaal": true,
+     "cel": [
+      20,
+      25
+     ],
+     "anker": [
+      10,
+      22
+     ]
+    },
+    "lopen": {
+     "bestand": "kip2-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 0.8,
+     "stap": 0.32,
+     "cel": [
+      20,
+      25
+     ],
+     "anker": [
+      10,
+      22
+     ]
+    },
+    "pikken": {
+     "bestand": "kip2-pikken.png",
+     "beelden": 8,
+     "fps": 8,
+     "herhaal": true,
+     "cel": [
+      28,
+      30
+     ],
+     "anker": [
+      14,
+      22
+     ]
+    }
+   }
+  },
+  "kip3": {
+   "naam": "kip3",
+   "cel": [
+    36,
+    39
+   ],
+   "anker": [
+    18,
+    27
+   ],
+   "snelheid": 0.8,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "kip3-staan.png",
+     "beelden": 6,
+     "fps": 5,
+     "herhaal": true,
+     "cel": [
+      30,
+      27
+     ],
+     "anker": [
+      15,
+      24
+     ]
+    },
+    "lopen": {
+     "bestand": "kip3-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 0.8,
+     "stap": 0.32,
+     "cel": [
+      30,
+      27
+     ],
+     "anker": [
+      15,
+      24
+     ]
+    },
+    "pikken": {
+     "bestand": "kip3-pikken.png",
+     "beelden": 8,
+     "fps": 8,
+     "herhaal": true,
+     "cel": [
+      28,
+      32
+     ],
+     "anker": [
+      14,
+      23
+     ]
+    }
+   }
+  },
+  "hond0": {
+   "naam": "hond0",
+   "cel": [
+    86,
+    62
+   ],
+   "anker": [
+    43,
+    46
+   ],
+   "snelheid": 2.52,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "hond0-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true,
+     "cel": [
+      64,
+      48
+     ],
+     "anker": [
+      32,
+      40
+     ]
+    },
+    "lopen": {
+     "bestand": "hond0-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 2.52,
+     "stap": 1.008,
+     "cel": [
+      64,
+      50
+     ],
+     "anker": [
+      32,
+      39
+     ]
+    },
+    "blaffen": {
+     "bestand": "hond0-blaffen.png",
+     "beelden": 6,
+     "fps": 12,
+     "herhaal": true,
+     "cel": [
+      80,
+      56
+     ],
+     "anker": [
+      40,
+      43
+     ]
+    }
+   }
+  },
+  "hond1": {
+   "naam": "hond1",
+   "cel": [
+    86,
+    62
+   ],
+   "anker": [
+    43,
+    46
+   ],
+   "snelheid": 2.52,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "hond1-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true,
+     "cel": [
+      64,
+      48
+     ],
+     "anker": [
+      32,
+      40
+     ]
+    },
+    "lopen": {
+     "bestand": "hond1-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 2.52,
+     "stap": 1.008,
+     "cel": [
+      64,
+      50
+     ],
+     "anker": [
+      32,
+      39
+     ]
+    },
+    "blaffen": {
+     "bestand": "hond1-blaffen.png",
+     "beelden": 6,
+     "fps": 12,
+     "herhaal": true,
+     "cel": [
+      80,
+      56
+     ],
+     "anker": [
+      40,
+      43
+     ]
+    }
+   }
+  },
+  "hond2": {
+   "naam": "hond2",
+   "cel": [
+    86,
+    62
+   ],
+   "anker": [
+    43,
+    46
+   ],
+   "snelheid": 2.52,
+   "richtingen": [
+    "Z",
+    "ZW",
+    "W",
+    "NW",
+    "N",
+    "NO",
+    "O",
+    "ZO"
+   ],
+   "houdingen": {
+    "staan": {
+     "bestand": "hond2-staan.png",
+     "beelden": 4,
+     "fps": 4,
+     "herhaal": true,
+     "cel": [
+      64,
+      48
+     ],
+     "anker": [
+      32,
+      40
+     ]
+    },
+    "lopen": {
+     "bestand": "hond2-lopen.png",
+     "beelden": 8,
+     "fps": 10,
+     "herhaal": true,
+     "snelheid": 2.52,
+     "stap": 1.008,
+     "cel": [
+      64,
+      50
+     ],
+     "anker": [
+      32,
+      39
+     ]
+    },
+    "blaffen": {
+     "bestand": "hond2-blaffen.png",
+     "beelden": 6,
+     "fps": 12,
+     "herhaal": true,
+     "cel": [
+      80,
+      56
+     ],
+     "anker": [
+      40,
+      43
+     ]
+    }
+   }
+  },
   "boer-u0": {
    "naam": "boer-u0",
    "cel": [
@@ -5010,5 +5486,74 @@
    "grijs",
    "peper"
   ]
+ },
+ "tafel": {
+  "map": "tafel/",
+  "hout": [
+   2048,
+   150
+  ],
+  "dingen": {
+   "bouwen": [
+    100,
+    68
+   ],
+   "velden": [
+    92,
+    68
+   ],
+   "wetten": [
+    84,
+    68
+   ],
+   "raadsman": [
+    56,
+    68
+   ],
+   "brief": [
+    84,
+    60
+   ],
+   "rapport": [
+    92,
+    44
+   ],
+   "zaak": [
+    84,
+    68
+   ],
+   "bode": [
+    56,
+    76
+   ],
+   "lantaarn-aan": [
+    52,
+    76
+   ],
+   "lantaarn-uit": [
+    52,
+    76
+   ],
+   "kaars-aan": [
+    40,
+    72
+   ],
+   "kaars-uit": [
+    40,
+    72
+   ],
+   "zandloper": [
+    56,
+    80
+   ],
+   "gunst": [
+    64,
+    64
+   ],
+   "vertrouwen": [
+    64,
+    64
+   ]
+  }
  }
 }
