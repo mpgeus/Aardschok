@@ -1012,3 +1012,9 @@ niets past, wijkt de zwakke grond voor strand (naast de zee) of gras. Golven die
   de populier, de els, de knotwilg, de meidoorn en de hazelaar), de bomen in het jaar (bloesem, herfstkleuren, kaal in de
   winter), meer groen eronder, en spullen bij de huizen naar hun stand, die met het dorp meegroeien. Het stukje grond
   met spullen bij het huis (punt 5 hierboven) gaat daarin op.
+- **De spar (10 okt 2026; werklijst, vraag 148).** Marcel: "kunnen we de dennenboom beter maken?", met een pixel-art spar
+  en een plaat van tien sparren als voorbeeld (niet in git): "dit is een spar". Wat ze delen: een volle, gesloten kegel van
+  bijna vlakke takken, laag op laag, met de punten als stekels in de rand; per tak een lichte bovenkant en een donkere
+  band eronder, en naaldstreepjes; frisse kleuren, blauwgroen, groen of olijf, elke boom een andere; de stam zichtbaar
+  onder de kegel. Onze den was een stapel gladde rokken, donker en overal even groen. Nu een spar uit losse takken per
+  krans (`sparTak` en `den` in `bomen.cjs`), en de grove den erbij voor de heide.

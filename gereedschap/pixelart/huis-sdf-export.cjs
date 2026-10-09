@@ -1375,4 +1375,4 @@ if (isMainThread && require.main === module) {
   if (!['vormen', 'materiaal', 'uitbouwen', 'ladder', 'afwisseling', 'verhouding', 'steen', 'stijl', 'rondom', 'groot', 'groot2', 'groot3'].includes(wat)) log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`);
 }
 
-module.exports = { paneelNu, paneelProef, paneelHuis, paneelSamen, paneelTuin, paneelTuintje, paneelZes, kaderVan, grondZon };
+module.exports = { paneelNu, paneelProef, paneelHuis, paneelSamen, paneelTuin, paneelTuintje, paneelZes, kaderVan, grondZon, schrijf };

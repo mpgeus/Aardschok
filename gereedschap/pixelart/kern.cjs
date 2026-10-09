@@ -99,6 +99,13 @@ const BASIS = {
   aarde: [['#1e140e', '#34241a', '#4c3626', '#664a34', '#806044', '#9a7856', '#b4926c'], 7],
   // olijfgroen voor de huid van de kobold: groen, maar warmer dan gras, zodat hij niet wegvalt
   olijf: [['#1b1a0e', '#2e2b14', '#45401c', '#5e5624', '#7a6e2e', '#96883c', '#b2a24e'], 7],
+  // het groen in het jaar (werklijst vraag 148, b): jong lenteblad, geler en lichter dan blad, en bloesem, wit met een
+  // blos, in de schaduw grijsroze
+  lente: [['#141e0c', '#22340f', '#345014', '#4a6e18', '#64901e', '#84b02a', '#a8cc44', '#d0e47a'], 8],
+  bloesem: [['#3e2632', '#6a4652', '#966c78', '#c094a0', '#e0bcc4', '#f4dce0', '#fff6f4'], 7],
+  // de spar (Marcel, 10 okt, met voorbeelden: "dit is een spar"): blauwgroen en frisser dan 'den', met een lichte top
+  // voor het licht op de takken
+  spar: [['#081614', '#0e2422', '#163630', '#1e4c42', '#286456', '#357e6a', '#4a9a80', '#6cb89a'], 8],
 };
 
 const RAMPEN = {};

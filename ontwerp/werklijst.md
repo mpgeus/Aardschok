@@ -7414,6 +7414,22 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     nieuwe soorten; de seizoenen ook in het groen eronder, met vruchten (appels, bramen en bessen, hazelnoten, eikels en
     beukennootjes, rode besjes in de meidoorn); de bomen eerst; een hek om een weide of tuin mag (de speeltest speelt dan
     opnieuw); naast de ui (0c in **Nu en daarna**); en de sneeuw op de bomen en de huizen hoort erbij (144, 4b).
+    **Proefplaat van stap 1 (10 okt):** `node gereedschap/pixelart/groen-proef.cjs` (in `uit/groen/proef.png`, niet in
+    git). In `bomen.cjs`: de eik in vijf vormen erbij (`EIK_VORMEN`: breed, hoog, scheef, twee stammen, oud met een holte
+    en een dode tak); elke loofboom kent `o.seizoen` (de lente: jong blad of bloesem, de herfst: geel, oranje en rood met
+    blad op de grond, de winter: kaal, met dezelfde takken naar dezelfde klompen, `kaleKroon`), de appel met bloesem,
+    groene en rijpe appels; sneeuw om elk model heen (`sneeuw`: wat naar boven kijkt is wit); de nieuwe soorten beuk,
+    linde, els, populier, knotwilg, meidoorn (bloesem, rode besjes) en hazelaar (katjes, nootjes). Zonder seizoen of vorm
+    tekent elke oude boom pixel voor pixel als vroeger. Een kale winterboom kost zo'n anderhalve minuut renderen.
+    **Marcel (10 okt): "we hebben ook een kerstboom nodig :)"**: een spar met appels, strosterren, kaarsjes en een ster
+    (`kerstboom`). Waar en wanneer hij in het spel staat (zoals de meiboom, een feest op het plein in de winter, met de
+    kaarsjes als licht), is nog een vraag aan Marcel.
+    **Marcel (10 okt): "kunnen we de dennenboom beter maken?"**, met voorbeelden ("dit is een spar", `beeld.md`, "De spar"):
+    de den is nu een spar uit losse, bijna vlakke takken per krans (`sparTak`), een volle kegel met de punten als stekels,
+    naaldstreepjes, een lichte bovenkant en punt en een donkere onderkant, de stam eronder, en elke spar een eigen groen
+    (`SPAR_KLEUREN`, met de ramp `spar`). Erbij: de grove den (`groveDen`), de den van de heide, met een oranje stam en
+    een platte kroon van plukken. De vergelijking: `uit/groen/dennen.png`. Open: de sneeuw op een spar is te dik (hij
+    wordt helemaal wit).
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
