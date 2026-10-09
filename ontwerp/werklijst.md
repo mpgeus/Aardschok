@@ -23,7 +23,6 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
 **Wacht op Marcel:**
 - Een feest op het plein vol kijkgaten (`opmerkingen.md`, "Het beeld"): zo laten, op een feest alleen wie ertoe doet, of
   het plein uit? De fout in de kijkgaten en het haperen bij slepen zijn op 9 okt opgelost.
-- Sneeuw op de daken (vraag 144, 4b): mag de render van een sneeuwmasker per huis, en ook de bomen?
 - Uit `opmerkingen.md`: een brand die overslaat op het huis ernaast, een eigen beeld voor de koorts (ziekbed, hoesten),
   en wie wijn wil (de wijnboerderij die niemand bouwt).
 - Vraag 142, de bladzijde met alle getallen (`gereedschap/instellingen.html`): stap 1 en 2 staan in `main`; stap 3 (een
@@ -36,6 +35,10 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
    doel met de raad en de datum als briefjes, het blok met toetsen weg, Spelregels in het menu), dan e (de fotomodus).
 0b. Engels en een vertaaltool (vraag 147; Marcel, 9 okt): de basis nu, naast de ui; het omzetten van alle tekst na de
    ui en vóór de proefversie. **Bezig in sessie `vertalen`** (9 okt): stap 1, de basis en de tool.
+0c. Meer variatie in het groen, de bomen en de versiering (vraag 148; Marcel, 9 okt: alles ja, "Mag ernaast"), naast
+   de ui: eerst de bomen (vormen, nieuwe soorten, de seizoenen met vruchten), dan het groen eronder, dan de spullen bij de
+   huizen; de sneeuw op de bomen en de huizen (144, 4b, Marcel: "ja") in dezelfde ronde. **Bezig in sessie `main`
+   (desktop, groen)** (9 okt): stap 1, de proefplaat van de bomen.
 1. Een proefversie voor Marcels 4K-scherm en een eerste tester (33d; `npm run proefversie`, ook `-- --windows`), met de
    graanzak erin. De laatste is van 3 okt (`36c713e`), zonder de verzoeken, de twee bazen, het ontginnen, de markt, de
    wolven, het eiland, WebGL en de graanzak.
@@ -7091,6 +7094,9 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     legt daar de sneeuw over, net zo dik als op de grond. Dat zijn 559 tekeningen, zo'n drie uur rekenen op de
     achtergrond (weinig verbruik), en enkele MB erbij. Vragen: mag die render, en ook de bomen (kale takken en sneeuw
     erop) of alleen de huizen?
+    **Marcel (9 okt), bij vraag 148: "Sneeuw moet ook nog op bomen, huizen etc."** Dus ja: de huizen, de bomen en wat
+    verder buiten staat. De bomen krijgen hun kale takken en hun sneeuw met de seizoenen van vraag 148; de daken in de
+    ronde van de huizen (de render van het masker, zoals hierboven).
     **Marcel (9 okt), op wat er gebouwd is:** "Vergeet niet dat alles onze eigen kaart is. Het wordt 1 aaneengesloten
     stuk." "De groep neemt in het donker ook lantaarns mee natuurlijk." "Huis moet afgebrokkeld zijn. Echt kapot.
     Structureel ingestort etc." Dus: de hinderlaag van de bode altijd op de kaart (buiten beeld alleen als het niet anders
@@ -7318,7 +7324,7 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     speelt zonder één zin in de andere taal, `npm test` dat bewaakt, en iemand zonder onze code met de tool een taal kan
     maken en in het spel zien.
 148. **Meer variatie in het groen, de bomen en de versiering van het dorp** (Marcel, 9 okt: "Ik wil meer variatie in de
-    vegetatie, ook bomen en versieringen van het dorp"; open).
+    vegetatie, ook bomen en versieringen van het dorp"; besloten 9 okt).
     **Wat er nu is:** elke soort heeft één tekening, dus elke eik is dezelfde eik (`tegels/bomen.png`: eik, herfsteik,
     den, berk, dode boom, wilg, appelboom, het boompje en drie jonge bomen; `tegels/begroeiing.png`: struik,
     bessenstruik, varen, graspol, hoog gras, bloemen, paddenstoelen, stronk, rots en steentje). De bomen veranderen niet
@@ -7355,6 +7361,12 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     **Vragen:** a tot en met d zo, en deze nieuwe soorten? Met de bomen eerst? Een hek om een weide of een tuin verandert
     wie waar loopt (en dus de speeltest): mag dat, of komt versiering alleen tegen de muur van een huis? En waar in de rij:
     naast de ui (het is tekenwerk, dat apart kan), of erna?
+    **Marcel (9 okt): "a. Ja goed idee b. Ja vegetatie en bomen met seizoenen mee. Ook vruchten etc. c. Ja dat kleedt het
+    aan d. Goed idee, het gaat dan wat echter worden."** Op de vragen: **"1. Ja dat is prima 2. Ja is goed 3. Ja prima 4.
+    Mag ernaast."** En: **"Sneeuw moet ook nog op bomen, huizen etc."** Dus a tot en met d zoals voorgesteld, met deze
+    nieuwe soorten; de seizoenen ook in het groen eronder, met vruchten (appels, bramen en bessen, hazelnoten, eikels en
+    beukennootjes, rode besjes in de meidoorn); de bomen eerst; een hek om een weide of tuin mag (de speeltest speelt dan
+    opnieuw); naast de ui (0c in **Nu en daarna**); en de sneeuw op de bomen en de huizen hoort erbij (144, 4b).
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
