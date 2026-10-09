@@ -820,6 +820,8 @@ function bouwLosVel(veldNaam, items, notitie) {
       doos: [it.anker[0], it.anker[1] + 16, it.plaat.b - it.anker[0], it.plaat.h - it.anker[1] - 16],
       // de ramen die je ziet, alleen bij een huis (huizen.cjs, ramenVan): 's avonds branden ze
       ...(it.ramen ? { ramen: it.ramen } : {}),
+      ...(it.schoorsteen ? { schoorsteen: it.schoorsteen } : {}),
+      ...(it.nok ? { nok: it.nok } : {}),
       // bij een huis van een bouwstijl: welke stijl, vorm, soort, dak, steen en stand (huizen.cjs, STIJLEN)
       ...(it.stijl ? { stijl: it.stijl } : {}),
     } : { naam: null, vast: false })),
@@ -842,7 +844,7 @@ async function bouwHuizenVel() {
   if (nodig > capaciteit) throw new Error(`huizen: ${nodig} vakken nodig, maar de vaste capaciteit is ${capaciteit} — verhoog VELCONFIG.huizen.capaciteit`);
   const t0 = Date.now();
   const lijst = await HZ.renderHuizen();
-  const items = lijst.map((r) => ({ naam: r.naam, vast: true, plaat: r.plaat, anker: r.anker, beslaat: r.voet, deur: r.deur, ramen: r.ramen, stijl: HZ.HUIZEN[r.naam].stijl }));
+  const items = lijst.map((r) => ({ naam: r.naam, vast: true, plaat: r.plaat, anker: r.anker, beslaat: r.voet, deur: r.deur, ramen: r.ramen, schoorsteen: r.schoorsteen, nok: r.nok, stijl: HZ.HUIZEN[r.naam].stijl }));
   console.log(`  huizen: ${lijst.length} in ${((Date.now() - t0) / 1000).toFixed(1)} s`);
   // Een huis van een bouwstijl moet zijn deur hebben aan de kant die zijn stand zegt (huizen.cjs, STANDEN): het spel
   // kiest er de stand mee die zijn deur naar de weg keert.
@@ -1122,8 +1124,9 @@ if (wil('kust')) padGrondVel('kust', KUST_CAPACITEIT);
     // (grond) of op tileoffset zonder verdere correctie (voetpunt: het model hangt al op het midden
     // van zijn tegel, dat is geen achterste hoek en heeft dus ook geen +16 nodig, zie bouwModelVel).
     // per lokaal tegel-id (0, 1, 2, …, zoals in de .tsx) dezelfde eigenschappen als daar.
-    // En bij een huis de ramen die je ziet (huizen.cjs, ramenVan) en zijn bouwstijl (STIJLEN): alleen in dit bestand, niet in de .tsx.
-    const eigenschappen = (t) => ({ naam: t.naam, vast: t.vast, beslaat: t.beslaat || null, groep: t.groep || null, staat: t.staat || null, deur: t.deur || null, doos: t.doos || null, ...(t.ramen ? { ramen: t.ramen } : {}), ...(t.stijl ? { stijl: t.stijl } : {}) });
+    // En bij een huis de ramen die je ziet (huizen.cjs, ramenVan), zijn bouwstijl (STIJLEN) en waar zijn rook uitkomt (rookVan:
+    // schoorsteen of nok, vraag 145, 3): alleen in dit bestand, niet in de .tsx.
+    const eigenschappen = (t) => ({ naam: t.naam, vast: t.vast, beslaat: t.beslaat || null, groep: t.groep || null, staat: t.staat || null, deur: t.deur || null, doos: t.doos || null, ...(t.ramen ? { ramen: t.ramen } : {}), ...(t.stijl ? { stijl: t.stijl } : {}), ...(t.schoorsteen ? { schoorsteen: t.schoorsteen } : {}), ...(t.nok ? { nok: t.nok } : {}) });
     // Een ingepakt vel (schrijfVel) zegt per tegel waar hij staat: `cel` [x, y, b, h] op het vel, en `anker`, het punt
     // in die cel dat op het midden van de tegel komt. Een raster (de grond) zegt het één keer voor het hele vel.
     // Een vel per tekening (PER_TEKENING) heeft geen vel van zichzelf: elke tegel zegt ook in welk bestand hij staat.

@@ -465,6 +465,7 @@
 
     const g = werkGrondBij(S, zicht, inBeeld, dpr);
     tekenStukken(ctx, g, zicht);
+    tekenWaterLeven(ctx, S, w, vak);
     const gebakken = bosGebakken(S);
     tekenWeides(ctx, S, vak);
     tekenRaster(ctx, S);
@@ -605,6 +606,7 @@
     if (gebakken) tekenStukken(ctx, bosVoorBij(S, g, zicht), zicht);
     tekenOntginRand(ctx, S);
     tekenJachtRand(ctx, S);
+    tekenSchoorsteenRook(ctx, S);
     tekenRook(ctx, S);
     ctx.restore();
 
@@ -2455,6 +2457,87 @@
         const a = (b.brandt ? 0.55 : 0.32) * (1 - leeftijd) * Math.min(1, leeftijd * 5);
         const grijs = Math.round(44 + 60 * leeftijd);
         ctx.fillStyle = `rgba(${grijs}, ${grijs - 3}, ${grijs - 6}, ${a.toFixed(3)})`;
+        ctx.fillRect(Math.round(x - m / 2), Math.round(y - m / 2), m, m);
+      }
+    }
+  }
+
+  // Het water dat leeft (T.waterOp, js/kleinleven.js; vraag 145, 3), op de grond, vóór alles wat erop staat: een beek
+  // stroomt, met lichte rimpels die met de stroom meegaan en aan de randen van een tegel weer opkomen; stil water glinstert
+  // hier en daar even. Een beek die droog staat (js/weer.js), stroomt niet.
+  function tekenWaterLeven(ctx, S, w, vak) {
+    if (!T.KLEIN_LEVEN_INSTELLINGEN.aan || !w.buiten || !metSprites()) return;
+    const B = T.KLEIN_LEVEN_INSTELLINGEN.water;
+    const D = T.dorpHier(S);
+    const t = S.tijd || 0;
+    for (let y = Math.max(0, vak.y0); y <= Math.min(w.h - 1, vak.y1); y++) {
+      for (let x = Math.max(0, vak.x0); x <= Math.min(w.b - 1, vak.x1); x++) {
+        const s = T.waterOp(w, x, y);
+        if (!s) continue;
+        const k = y * 977 + x;
+        if (s.stil) {
+          // een glinstering die opkomt en weer gaat, op een vaste plek per tegel
+          for (let i = 0; i < Math.ceil(B.glinster * 2); i++) {
+            const fel = Math.max(0, Math.sin(t * B.knipper * 6.283 + beeldLot(k + i, 61) * 40)) ** 6;
+            if (fel < 0.05 || beeldLot(k + i, 62) > B.glinster) continue;
+            const p = opGrond(x - 0.5 + beeldLot(k + i, 63), y - 0.5 + beeldLot(k + i, 64));
+            ctx.fillStyle = `rgba(230, 244, 255, ${(0.75 * fel).toFixed(3)})`;
+            ctx.fillRect(Math.round(p.x) - 2, Math.round(p.y), 5, 1);
+            ctx.fillRect(Math.round(p.x), Math.round(p.y) - 1, 1, 3);
+          }
+          continue;
+        }
+        if (D && T.staatDroog(D, x, y)) continue;
+        // rimpels die met de stroom meedrijven: elke rimpel een eigen dwarsplek, en zijn plek langs de stroom schuift
+        for (let i = 0; i < B.rimpels; i++) {
+          const langs = (t * B.snel + beeldLot(k + i, 65)) % 1;
+          const dwars = 0.2 + 0.6 * beeldLot(k + i, 66);
+          const u = s.dx ? (s.dx > 0 ? langs : 1 - langs) : dwars;
+          const v = s.dy ? (s.dy > 0 ? langs : 1 - langs) : dwars;
+          const p = opGrond(x - 0.5 + u, y - 0.5 + v);
+          const a = 0.5 * Math.sin(langs * Math.PI); // komt op en vervaagt binnen de tegel
+          ctx.fillStyle = `rgba(214, 236, 250, ${a.toFixed(3)})`;
+          // een streepje dwars op de stroom: op het scherm schuin, zoals de tegel ligt
+          const lang = 5;
+          const sx = s.dx ? -1 : 1;
+          for (let j = -lang / 2; j < lang / 2; j++) ctx.fillRect(Math.round(p.x + j * 2 * sx * 0.5), Math.round(p.y + j * 0.5), 2, 1);
+        }
+      }
+    }
+  }
+
+  // De rook uit de schoorsteen van een huis waar iemand thuis is (T.rookUitHuizen, js/kleinleven.js; vraag 145, 3), vóór
+  // de nacht: pluimpjes die opstijgen, groter en doorzichtiger worden en met de wind meedrijven. Uit de top van de
+  // schoorsteen, zoals de tekening zegt (`schoorsteen` in tegels.js, vanaf de hoek van de tekening, net als de ramen), of
+  // bij een hut, die er geen heeft, dun en breed uit de nok (`nok`). Een tekening zonder die plek rookt niet: liever geen
+  // rook dan rook uit een muur.
+  function tekenSchoorsteenRook(ctx, S) {
+    const D = T.dorpHier(S);
+    if (!D || !metSprites()) return;
+    const B = T.KLEIN_LEVEN_INSTELLINGEN.rookBeeld;
+    const t = S.tijd || 0;
+    for (const r of T.rookUitHuizen(D)) {
+      const g = r.g;
+      const opz = g.tekening && T.opzoekTegelNaam(g.tekening);
+      const eig = opz && opz.eig;
+      const plek = eig && (eig.schoorsteen || eig.nok);
+      if (!plek) continue;
+      const nok = !eig.schoorsteen;
+      const hoek = opGrond(g.x, g.y);
+      const bron = { x: hoek.x + plek[0], y: hoek.y + plek[1] };
+      const voet = T.voetVanGebouw(g);
+      const breed = nok ? (voet.b + voet.h) * 6 : 4;
+      const n = Math.round(B.pluimen * r.dik);
+      const zaad = g.x * 31 + g.y * 17;
+      for (let i = 0; i < n; i++) {
+        const k = zaad + i;
+        const leeftijd = (t * (0.1 + 0.05 * beeldLot(k, 91)) + beeldLot(k, 92)) % 1;
+        const x = bron.x + (beeldLot(k, 93) - 0.5) * breed + leeftijd ** 1.6 * B.wind + Math.sin(t * 0.8 + k) * 3 * leeftijd;
+        const y = bron.y - leeftijd * B.hoog * (nok ? 0.6 : 1);
+        const m = Math.round(B.klein + (B.groot - B.klein) * leeftijd);
+        const a = B.dicht * r.dik * (1 - leeftijd) * Math.min(1, leeftijd * 6);
+        const c = Math.round(205 - 40 * leeftijd);
+        ctx.fillStyle = `rgba(${c}, ${c}, ${c + 4}, ${a.toFixed(3)})`;
         ctx.fillRect(Math.round(x - m / 2), Math.round(y - m / 2), m, m);
       }
     }

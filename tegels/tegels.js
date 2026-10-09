@@ -9896,6 +9896,10 @@
         ]
        ]
       ],
+      "nok": [
+       16,
+       -211
+      ],
       "bestand": "tegels/huizen/hut1.png",
       "cel": [
        0,
@@ -10004,6 +10008,10 @@
          43
         ]
        ]
+      ],
+      "nok": [
+       -16,
+       -205
       ],
       "bestand": "tegels/huizen/hut2.png",
       "cel": [
@@ -10208,6 +10216,10 @@
         ]
        ]
       ],
+      "nok": [
+       32,
+       -203
+      ],
       "bestand": "tegels/huizen/hut3.png",
       "cel": [
        0,
@@ -10276,6 +10288,10 @@
          109
         ]
        ]
+      ],
+      "nok": [
+       -32,
+       -198
       ],
       "bestand": "tegels/huizen/hut4.png",
       "cel": [
@@ -10537,6 +10553,10 @@
          102
         ]
        ]
+      ],
+      "schoorsteen": [
+       -35,
+       -312
       ],
       "bestand": "tegels/huizen/huis1.png",
       "cel": [
@@ -10879,6 +10899,10 @@
         ]
        ]
       ],
+      "schoorsteen": [
+       -57,
+       -324
+      ],
       "bestand": "tegels/huizen/huis2.png",
       "cel": [
        0,
@@ -11013,6 +11037,10 @@
          141
         ]
        ]
+      ],
+      "schoorsteen": [
+       32,
+       -261
       ],
       "bestand": "tegels/huizen/huis3.png",
       "cel": [
@@ -11317,6 +11345,10 @@
         ]
        ]
       ],
+      "schoorsteen": [
+       -9,
+       -188
+      ],
       "bestand": "tegels/huizen/huis4.png",
       "cel": [
        0,
@@ -11608,6 +11640,10 @@
         ]
        ]
       ],
+      "schoorsteen": [
+       85,
+       -272
+      ],
       "bestand": "tegels/huizen/huis5.png",
       "cel": [
        0,
@@ -11798,6 +11834,10 @@
          141
         ]
        ]
+      ],
+      "schoorsteen": [
+       67,
+       -302
       ],
       "bestand": "tegels/huizen/huis6.png",
       "cel": [
@@ -12065,6 +12105,10 @@
          152
         ]
        ]
+      ],
+      "schoorsteen": [
+       92,
+       -262
       ],
       "bestand": "tegels/huizen/boerderij1.png",
       "cel": [
@@ -12414,6 +12458,10 @@
          193
         ]
        ]
+      ],
+      "schoorsteen": [
+       27,
+       -174
       ],
       "bestand": "tegels/huizen/boerderij2.png",
       "cel": [
@@ -12914,6 +12962,10 @@
         ]
        ]
       ],
+      "schoorsteen": [
+       -84,
+       -311
+      ],
       "bestand": "tegels/huizen/boerderij3.png",
       "cel": [
        0,
@@ -13261,6 +13313,10 @@
         ]
        ]
       ],
+      "schoorsteen": [
+       -10,
+       -298
+      ],
       "bestand": "tegels/huizen/boerderij4.png",
       "cel": [
        0,
@@ -13353,6 +13409,10 @@
          119
         ]
        ]
+      ],
+      "schoorsteen": [
+       -114,
+       -183
       ],
       "bestand": "tegels/huizen/boerderij5.png",
       "cel": [
@@ -13784,6 +13844,10 @@
          88
         ]
        ]
+      ],
+      "schoorsteen": [
+       69,
+       -414
       ],
       "bestand": "tegels/huizen/schoutshuis.png",
       "cel": [
@@ -14272,6 +14336,10 @@
         ]
        ]
       ],
+      "schoorsteen": [
+       -75,
+       -191
+      ],
       "bestand": "tegels/huizen/herberg1.png",
       "cel": [
        0,
@@ -14488,6 +14556,10 @@
         ]
        ]
       ],
+      "schoorsteen": [
+       -35,
+       -312
+      ],
       "bestand": "tegels/huizen/steen1.png",
       "cel": [
        0,
@@ -14693,6 +14765,10 @@
         ]
        ]
       ],
+      "schoorsteen": [
+       -57,
+       -324
+      ],
       "bestand": "tegels/huizen/steen2.png",
       "cel": [
        0,
@@ -14809,6 +14885,10 @@
          141
         ]
        ]
+      ],
+      "schoorsteen": [
+       32,
+       -261
       ],
       "bestand": "tegels/huizen/steen3.png",
       "cel": [
@@ -14983,6 +15063,10 @@
         ]
        ]
       ],
+      "schoorsteen": [
+       -9,
+       -188
+      ],
       "bestand": "tegels/huizen/steen4.png",
       "cel": [
        0,
@@ -15152,6 +15236,10 @@
         ]
        ]
       ],
+      "schoorsteen": [
+       85,
+       -272
+      ],
       "bestand": "tegels/huizen/steen5.png",
       "cel": [
        0,
@@ -15232,6 +15320,10 @@
          151
         ]
        ]
+      ],
+      "schoorsteen": [
+       67,
+       -302
       ],
       "bestand": "tegels/huizen/steen6.png",
       "cel": [
@@ -15364,6 +15456,10 @@
         "roze"
        ]
       },
+      "nok": [
+       16,
+       -211
+      ],
       "bestand": "tegels/huizen/wit-hut1-riet-z.png",
       "cel": [
        0,
@@ -15481,6 +15577,10 @@
         "roze"
        ]
       },
+      "nok": [
+       -48,
+       -195
+      ],
       "bestand": "tegels/huizen/wit-hut1-riet-o.png",
       "cel": [
        0,
@@ -15682,6 +15782,10 @@
         "roze"
        ]
       },
+      "nok": [
+       48,
+       -195
+      ],
       "bestand": "tegels/huizen/wit-hut1-riet-n.png",
       "cel": [
        0,
@@ -15869,6 +15973,10 @@
         "roze"
        ]
       },
+      "nok": [
+       -16,
+       -211
+      ],
       "bestand": "tegels/huizen/wit-hut1-riet-w.png",
       "cel": [
        0,
@@ -16026,6 +16134,10 @@
         "roze"
        ]
       },
+      "nok": [
+       32,
+       -203
+      ],
       "bestand": "tegels/huizen/wit-hut3-riet-z.png",
       "cel": [
        0,
@@ -16185,6 +16297,10 @@
         "roze"
        ]
       },
+      "nok": [
+       -32,
+       -203
+      ],
       "bestand": "tegels/huizen/wit-hut3-riet-o.png",
       "cel": [
        0,
@@ -16376,6 +16492,10 @@
         "roze"
        ]
       },
+      "nok": [
+       32,
+       -203
+      ],
       "bestand": "tegels/huizen/wit-hut3-riet-n.png",
       "cel": [
        0,
@@ -16565,6 +16685,10 @@
         "roze"
        ]
       },
+      "nok": [
+       -32,
+       -203
+      ],
       "bestand": "tegels/huizen/wit-hut3-riet-w.png",
       "cel": [
        0,
@@ -16694,6 +16818,10 @@
         "roze"
        ]
       },
+      "nok": [
+       32,
+       -198
+      ],
       "bestand": "tegels/huizen/wit-hut4-riet-z.png",
       "cel": [
        0,
@@ -16849,6 +16977,10 @@
         "roze"
        ]
       },
+      "nok": [
+       -32,
+       -198
+      ],
       "bestand": "tegels/huizen/wit-hut4-riet-o.png",
       "cel": [
        0,
@@ -17054,6 +17186,10 @@
         "roze"
        ]
       },
+      "nok": [
+       -32,
+       -166
+      ],
       "bestand": "tegels/huizen/wit-hut4-riet-n.png",
       "cel": [
        0,
@@ -17245,6 +17381,10 @@
         "roze"
        ]
       },
+      "nok": [
+       32,
+       -166
+      ],
       "bestand": "tegels/huizen/wit-hut4-riet-w.png",
       "cel": [
        0,
@@ -17510,6 +17650,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       -35,
+       -312
+      ],
       "bestand": "tegels/huizen/wit-huis1-riet-z.png",
       "cel": [
        0,
@@ -17785,6 +17929,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -69,
+       -260
+      ],
       "bestand": "tegels/huizen/wit-huis1-riet-o.png",
       "cel": [
        0,
@@ -18060,6 +18208,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       99,
+       -275
+      ],
       "bestand": "tegels/huizen/wit-huis1-riet-n.png",
       "cel": [
        0,
@@ -18339,6 +18491,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       5,
+       -327
+      ],
       "bestand": "tegels/huizen/wit-huis1-riet-w.png",
       "cel": [
        0,
@@ -18602,6 +18758,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       -35,
+       -294
+      ],
       "bestand": "tegels/huizen/wit-huis1-leien-z.png",
       "cel": [
        0,
@@ -18879,6 +19039,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -69,
+       -241
+      ],
       "bestand": "tegels/huizen/wit-huis1-leien-o.png",
       "cel": [
        0,
@@ -19150,6 +19314,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       99,
+       -256
+      ],
       "bestand": "tegels/huizen/wit-huis1-leien-n.png",
       "cel": [
        0,
@@ -19423,6 +19591,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       5,
+       -309
+      ],
       "bestand": "tegels/huizen/wit-huis1-leien-w.png",
       "cel": [
        0,
@@ -19620,6 +19792,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       -35,
+       -255
+      ],
       "bestand": "tegels/huizen/wit-huis1-pannen-z.png",
       "cel": [
        0,
@@ -19819,6 +19995,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -69,
+       -203
+      ],
       "bestand": "tegels/huizen/wit-huis1-pannen-o.png",
       "cel": [
        0,
@@ -20012,6 +20192,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       99,
+       -218
+      ],
       "bestand": "tegels/huizen/wit-huis1-pannen-n.png",
       "cel": [
        0,
@@ -20213,6 +20397,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       5,
+       -270
+      ],
       "bestand": "tegels/huizen/wit-huis1-pannen-w.png",
       "cel": [
        0,
@@ -20408,6 +20596,10 @@
        "steen": "veldsteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       -35,
+       -294
+      ],
       "bestand": "tegels/huizen/wit-steen1-leien-z.png",
       "cel": [
        0,
@@ -20563,6 +20755,10 @@
        "steen": "veldsteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       -69,
+       -241
+      ],
       "bestand": "tegels/huizen/wit-steen1-leien-o.png",
       "cel": [
        0,
@@ -20704,6 +20900,10 @@
        "steen": "veldsteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       99,
+       -256
+      ],
       "bestand": "tegels/huizen/wit-steen1-leien-n.png",
       "cel": [
        0,
@@ -20857,6 +21057,10 @@
        "steen": "veldsteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       5,
+       -309
+      ],
       "bestand": "tegels/huizen/wit-steen1-leien-w.png",
       "cel": [
        0,
@@ -21024,6 +21228,10 @@
        "steen": "veldsteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       -35,
+       -255
+      ],
       "bestand": "tegels/huizen/wit-steen1-pannen-z.png",
       "cel": [
        0,
@@ -21157,6 +21365,10 @@
        "steen": "veldsteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       -69,
+       -203
+      ],
       "bestand": "tegels/huizen/wit-steen1-pannen-o.png",
       "cel": [
        0,
@@ -21282,6 +21494,10 @@
        "steen": "veldsteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       99,
+       -218
+      ],
       "bestand": "tegels/huizen/wit-steen1-pannen-n.png",
       "cel": [
        0,
@@ -21417,6 +21633,10 @@
        "steen": "veldsteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       5,
+       -270
+      ],
       "bestand": "tegels/huizen/wit-steen1-pannen-w.png",
       "cel": [
        0,
@@ -21584,6 +21804,10 @@
        "steen": "baksteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       -35,
+       -255
+      ],
       "bestand": "tegels/huizen/wit-steen1-baksteen-z.png",
       "cel": [
        0,
@@ -21717,6 +21941,10 @@
        "steen": "baksteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       -69,
+       -203
+      ],
       "bestand": "tegels/huizen/wit-steen1-baksteen-o.png",
       "cel": [
        0,
@@ -21842,6 +22070,10 @@
        "steen": "baksteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       99,
+       -218
+      ],
       "bestand": "tegels/huizen/wit-steen1-baksteen-n.png",
       "cel": [
        0,
@@ -21977,6 +22209,10 @@
        "steen": "baksteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       5,
+       -270
+      ],
       "bestand": "tegels/huizen/wit-steen1-baksteen-w.png",
       "cel": [
        0,
@@ -22196,6 +22432,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       32,
+       -261
+      ],
       "bestand": "tegels/huizen/wit-huis3-riet-z.png",
       "cel": [
        0,
@@ -22327,6 +22567,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -55,
+       -249
+      ],
       "bestand": "tegels/huizen/wit-huis3-riet-o.png",
       "cel": [
        0,
@@ -22604,6 +22848,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       32,
+       -238
+      ],
       "bestand": "tegels/huizen/wit-huis3-riet-n.png",
       "cel": [
        0,
@@ -22969,6 +23217,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -9,
+       -250
+      ],
       "bestand": "tegels/huizen/wit-huis3-riet-w.png",
       "cel": [
        0,
@@ -23106,6 +23358,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       32,
+       -240
+      ],
       "bestand": "tegels/huizen/wit-huis3-leien-z.png",
       "cel": [
        0,
@@ -23239,6 +23495,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -55,
+       -229
+      ],
       "bestand": "tegels/huizen/wit-huis3-leien-o.png",
       "cel": [
        0,
@@ -23514,6 +23774,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       32,
+       -217
+      ],
       "bestand": "tegels/huizen/wit-huis3-leien-n.png",
       "cel": [
        0,
@@ -23803,6 +24067,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -9,
+       -229
+      ],
       "bestand": "tegels/huizen/wit-huis3-leien-w.png",
       "cel": [
        0,
@@ -23948,6 +24216,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       32,
+       -208
+      ],
       "bestand": "tegels/huizen/wit-huis3-pannen-z.png",
       "cel": [
        0,
@@ -24083,6 +24355,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -55,
+       -197
+      ],
       "bestand": "tegels/huizen/wit-huis3-pannen-o.png",
       "cel": [
        0,
@@ -24364,6 +24640,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       32,
+       -186
+      ],
       "bestand": "tegels/huizen/wit-huis3-pannen-n.png",
       "cel": [
        0,
@@ -24651,6 +24931,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -9,
+       -197
+      ],
       "bestand": "tegels/huizen/wit-huis3-pannen-w.png",
       "cel": [
        0,
@@ -24762,6 +25046,10 @@
        "steen": "veldsteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       32,
+       -240
+      ],
       "bestand": "tegels/huizen/wit-steen3-leien-z.png",
       "cel": [
        0,
@@ -24873,6 +25161,10 @@
        "steen": "veldsteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       -23,
+       -245
+      ],
       "bestand": "tegels/huizen/wit-steen3-leien-o.png",
       "cel": [
        0,
@@ -25088,6 +25380,10 @@
        "steen": "veldsteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       0,
+       -233
+      ],
       "bestand": "tegels/huizen/wit-steen3-leien-n.png",
       "cel": [
        0,
@@ -25329,6 +25625,10 @@
        "steen": "veldsteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -9,
+       -229
+      ],
       "bestand": "tegels/huizen/wit-steen3-leien-w.png",
       "cel": [
        0,
@@ -25428,6 +25728,10 @@
        "steen": "veldsteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       32,
+       -208
+      ],
       "bestand": "tegels/huizen/wit-steen3-pannen-z.png",
       "cel": [
        0,
@@ -25545,6 +25849,10 @@
        "steen": "veldsteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       -23,
+       -213
+      ],
       "bestand": "tegels/huizen/wit-steen3-pannen-o.png",
       "cel": [
        0,
@@ -25764,6 +26072,10 @@
        "steen": "veldsteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       0,
+       -202
+      ],
       "bestand": "tegels/huizen/wit-steen3-pannen-n.png",
       "cel": [
        0,
@@ -25989,6 +26301,10 @@
        "steen": "veldsteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -9,
+       -197
+      ],
       "bestand": "tegels/huizen/wit-steen3-pannen-w.png",
       "cel": [
        0,
@@ -26088,6 +26404,10 @@
        "steen": "baksteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       32,
+       -208
+      ],
       "bestand": "tegels/huizen/wit-steen3-baksteen-z.png",
       "cel": [
        0,
@@ -26205,6 +26525,10 @@
        "steen": "baksteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       -23,
+       -213
+      ],
       "bestand": "tegels/huizen/wit-steen3-baksteen-o.png",
       "cel": [
        0,
@@ -26424,6 +26748,10 @@
        "steen": "baksteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       0,
+       -202
+      ],
       "bestand": "tegels/huizen/wit-steen3-baksteen-n.png",
       "cel": [
        0,
@@ -26649,6 +26977,10 @@
        "steen": "baksteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -9,
+       -197
+      ],
       "bestand": "tegels/huizen/wit-steen3-baksteen-w.png",
       "cel": [
        0,
@@ -26816,6 +27148,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       -67,
+       -302
+      ],
       "bestand": "tegels/huizen/wit-huis6-riet-z.png",
       "cel": [
        0,
@@ -27043,6 +27379,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -154,
+       -192
+      ],
       "bestand": "tegels/huizen/wit-huis6-riet-o.png",
       "cel": [
        0,
@@ -27320,6 +27660,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       99,
+       -164
+      ],
       "bestand": "tegels/huizen/wit-huis6-riet-n.png",
       "cel": [
        0,
@@ -27593,6 +27937,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       122,
+       -274
+      ],
       "bestand": "tegels/huizen/wit-huis6-riet-w.png",
       "cel": [
        0,
@@ -27762,6 +28110,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       -66,
+       -281
+      ],
       "bestand": "tegels/huizen/wit-huis6-leien-z.png",
       "cel": [
        0,
@@ -27983,6 +28335,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -154,
+       -172
+      ],
       "bestand": "tegels/huizen/wit-huis6-leien-o.png",
       "cel": [
        0,
@@ -28264,6 +28620,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       98,
+       -144
+      ],
       "bestand": "tegels/huizen/wit-huis6-leien-n.png",
       "cel": [
        0,
@@ -28535,6 +28895,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       122,
+       -254
+      ],
       "bestand": "tegels/huizen/wit-huis6-leien-w.png",
       "cel": [
        0,
@@ -28696,6 +29060,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       -66,
+       -250
+      ],
       "bestand": "tegels/huizen/wit-huis6-pannen-z.png",
       "cel": [
        0,
@@ -28919,6 +29287,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -154,
+       -140
+      ],
       "bestand": "tegels/huizen/wit-huis6-pannen-o.png",
       "cel": [
        0,
@@ -29198,6 +29570,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       98,
+       -112
+      ],
       "bestand": "tegels/huizen/wit-huis6-pannen-n.png",
       "cel": [
        0,
@@ -29471,6 +29847,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       122,
+       -222
+      ],
       "bestand": "tegels/huizen/wit-huis6-pannen-w.png",
       "cel": [
        0,
@@ -29548,6 +29928,10 @@
        "steen": "veldsteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       -66,
+       -281
+      ],
       "bestand": "tegels/huizen/wit-steen6-leien-z.png",
       "cel": [
        0,
@@ -29635,6 +30019,10 @@
        "steen": "veldsteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       -154,
+       -172
+      ],
       "bestand": "tegels/huizen/wit-steen6-leien-o.png",
       "cel": [
        0,
@@ -29870,6 +30258,10 @@
        "steen": "veldsteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       98,
+       -144
+      ],
       "bestand": "tegels/huizen/wit-steen6-leien-n.png",
       "cel": [
        0,
@@ -30093,6 +30485,10 @@
        "steen": "veldsteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       122,
+       -254
+      ],
       "bestand": "tegels/huizen/wit-steen6-leien-w.png",
       "cel": [
        0,
@@ -30170,6 +30566,10 @@
        "steen": "veldsteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       -66,
+       -250
+      ],
       "bestand": "tegels/huizen/wit-steen6-pannen-z.png",
       "cel": [
        0,
@@ -30255,6 +30655,10 @@
        "steen": "veldsteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       -154,
+       -140
+      ],
       "bestand": "tegels/huizen/wit-steen6-pannen-o.png",
       "cel": [
        0,
@@ -30500,6 +30904,10 @@
        "steen": "veldsteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       98,
+       -112
+      ],
       "bestand": "tegels/huizen/wit-steen6-pannen-n.png",
       "cel": [
        0,
@@ -30737,6 +31145,10 @@
        "steen": "veldsteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       122,
+       -222
+      ],
       "bestand": "tegels/huizen/wit-steen6-pannen-w.png",
       "cel": [
        0,
@@ -30814,6 +31226,10 @@
        "steen": "baksteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       -66,
+       -250
+      ],
       "bestand": "tegels/huizen/wit-steen6-baksteen-z.png",
       "cel": [
        0,
@@ -30899,6 +31315,10 @@
        "steen": "baksteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       -154,
+       -140
+      ],
       "bestand": "tegels/huizen/wit-steen6-baksteen-o.png",
       "cel": [
        0,
@@ -31144,6 +31564,10 @@
        "steen": "baksteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       98,
+       -112
+      ],
       "bestand": "tegels/huizen/wit-steen6-baksteen-n.png",
       "cel": [
        0,
@@ -31381,6 +31805,10 @@
        "steen": "baksteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       122,
+       -222
+      ],
       "bestand": "tegels/huizen/wit-steen6-baksteen-w.png",
       "cel": [
        0,
@@ -31666,6 +32094,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       -92,
+       -262
+      ],
       "bestand": "tegels/huizen/wit-boerderij1-riet-z.png",
       "cel": [
        0,
@@ -32007,6 +32439,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -54,
+       -189
+      ],
       "bestand": "tegels/huizen/wit-boerderij1-riet-o.png",
       "cel": [
        0,
@@ -32354,6 +32790,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       156,
+       -240
+      ],
       "bestand": "tegels/huizen/wit-boerderij1-riet-n.png",
       "cel": [
        0,
@@ -32577,6 +33017,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -10,
+       -313
+      ],
       "bestand": "tegels/huizen/wit-boerderij1-riet-w.png",
       "cel": [
        0,
@@ -32862,6 +33306,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       -91,
+       -242
+      ],
       "bestand": "tegels/huizen/wit-boerderij1-leien-z.png",
       "cel": [
        0,
@@ -33195,6 +33643,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -53,
+       -169
+      ],
       "bestand": "tegels/huizen/wit-boerderij1-leien-o.png",
       "cel": [
        0,
@@ -33536,6 +33988,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       155,
+       -220
+      ],
       "bestand": "tegels/huizen/wit-boerderij1-leien-n.png",
       "cel": [
        0,
@@ -33777,6 +34233,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -11,
+       -293
+      ],
       "bestand": "tegels/huizen/wit-boerderij1-leien-w.png",
       "cel": [
        0,
@@ -34064,6 +34524,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       -91,
+       -207
+      ],
       "bestand": "tegels/huizen/wit-boerderij1-pannen-z.png",
       "cel": [
        0,
@@ -34321,6 +34785,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -53,
+       -134
+      ],
       "bestand": "tegels/huizen/wit-boerderij1-pannen-o.png",
       "cel": [
        0,
@@ -34584,6 +35052,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       155,
+       -185
+      ],
       "bestand": "tegels/huizen/wit-boerderij1-pannen-n.png",
       "cel": [
        0,
@@ -34827,6 +35299,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -11,
+       -258
+      ],
       "bestand": "tegels/huizen/wit-boerderij1-pannen-w.png",
       "cel": [
        0,
@@ -35096,6 +35572,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       10,
+       -298
+      ],
       "bestand": "tegels/huizen/wit-boerderij4-riet-z.png",
       "cel": [
        0,
@@ -35365,6 +35845,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -20,
+       -294
+      ],
       "bestand": "tegels/huizen/wit-boerderij4-riet-o.png",
       "cel": [
        0,
@@ -35706,6 +36190,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       54,
+       -311
+      ],
       "bestand": "tegels/huizen/wit-boerderij4-riet-n.png",
       "cel": [
        0,
@@ -36035,6 +36523,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -44,
+       -315
+      ],
       "bestand": "tegels/huizen/wit-boerderij4-riet-w.png",
       "cel": [
        0,
@@ -36306,6 +36798,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       10,
+       -281
+      ],
       "bestand": "tegels/huizen/wit-boerderij4-leien-z.png",
       "cel": [
        0,
@@ -36573,6 +37069,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -20,
+       -276
+      ],
       "bestand": "tegels/huizen/wit-boerderij4-leien-o.png",
       "cel": [
        0,
@@ -36918,6 +37418,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       54,
+       -293
+      ],
       "bestand": "tegels/huizen/wit-boerderij4-leien-n.png",
       "cel": [
        0,
@@ -37249,6 +37753,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -44,
+       -298
+      ],
       "bestand": "tegels/huizen/wit-boerderij4-leien-w.png",
       "cel": [
        0,
@@ -37452,6 +37960,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       10,
+       -238
+      ],
       "bestand": "tegels/huizen/wit-boerderij4-pannen-z.png",
       "cel": [
        0,
@@ -37645,6 +38157,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -20,
+       -233
+      ],
       "bestand": "tegels/huizen/wit-boerderij4-pannen-o.png",
       "cel": [
        0,
@@ -37912,6 +38428,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       54,
+       -250
+      ],
       "bestand": "tegels/huizen/wit-boerderij4-pannen-n.png",
       "cel": [
        0,
@@ -38169,6 +38689,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -44,
+       -255
+      ],
       "bestand": "tegels/huizen/wit-boerderij4-pannen-w.png",
       "cel": [
        0,
@@ -38604,6 +39128,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       57,
+       -324
+      ],
       "bestand": "tegels/huizen/oker-huis2-riet-z.png",
       "cel": [
        0,
@@ -39011,6 +39539,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       28,
+       -367
+      ],
       "bestand": "tegels/huizen/oker-huis2-riet-o.png",
       "cel": [
        0,
@@ -39372,6 +39904,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       7,
+       -384
+      ],
       "bestand": "tegels/huizen/oker-huis2-riet-n.png",
       "cel": [
        0,
@@ -39749,6 +40285,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -92,
+       -342
+      ],
       "bestand": "tegels/huizen/oker-huis2-riet-w.png",
       "cel": [
        0,
@@ -40178,6 +40718,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       57,
+       -306
+      ],
       "bestand": "tegels/huizen/oker-huis2-leien-z.png",
       "cel": [
        0,
@@ -40633,6 +41177,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       28,
+       -348
+      ],
       "bestand": "tegels/huizen/oker-huis2-leien-o.png",
       "cel": [
        0,
@@ -40996,6 +41544,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       7,
+       -365
+      ],
       "bestand": "tegels/huizen/oker-huis2-leien-n.png",
       "cel": [
        0,
@@ -41375,6 +41927,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -92,
+       -323
+      ],
       "bestand": "tegels/huizen/oker-huis2-leien-w.png",
       "cel": [
        0,
@@ -41734,6 +42290,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       57,
+       -268
+      ],
       "bestand": "tegels/huizen/oker-huis2-pannen-z.png",
       "cel": [
        0,
@@ -42111,6 +42671,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       28,
+       -310
+      ],
       "bestand": "tegels/huizen/oker-huis2-pannen-o.png",
       "cel": [
        0,
@@ -42398,6 +42962,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       7,
+       -327
+      ],
       "bestand": "tegels/huizen/oker-huis2-pannen-n.png",
       "cel": [
        0,
@@ -42707,6 +43275,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -92,
+       -285
+      ],
       "bestand": "tegels/huizen/oker-huis2-pannen-w.png",
       "cel": [
        0,
@@ -42970,6 +43542,10 @@
        "steen": "zandsteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       57,
+       -306
+      ],
       "bestand": "tegels/huizen/oker-steen2-leien-z.png",
       "cel": [
        0,
@@ -43193,6 +43769,10 @@
        "steen": "zandsteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       28,
+       -348
+      ],
       "bestand": "tegels/huizen/oker-steen2-leien-o.png",
       "cel": [
        0,
@@ -43366,6 +43946,10 @@
        "steen": "zandsteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       7,
+       -365
+      ],
       "bestand": "tegels/huizen/oker-steen2-leien-n.png",
       "cel": [
        0,
@@ -43581,6 +44165,10 @@
        "steen": "zandsteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -92,
+       -323
+      ],
       "bestand": "tegels/huizen/oker-steen2-leien-w.png",
       "cel": [
        0,
@@ -43818,6 +44406,10 @@
        "steen": "zandsteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       57,
+       -268
+      ],
       "bestand": "tegels/huizen/oker-steen2-pannen-z.png",
       "cel": [
        0,
@@ -44023,6 +44615,10 @@
        "steen": "zandsteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       28,
+       -310
+      ],
       "bestand": "tegels/huizen/oker-steen2-pannen-o.png",
       "cel": [
        0,
@@ -44178,6 +44774,10 @@
        "steen": "zandsteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       7,
+       -327
+      ],
       "bestand": "tegels/huizen/oker-steen2-pannen-n.png",
       "cel": [
        0,
@@ -44369,6 +44969,10 @@
        "steen": "zandsteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -92,
+       -285
+      ],
       "bestand": "tegels/huizen/oker-steen2-pannen-w.png",
       "cel": [
        0,
@@ -44606,6 +45210,10 @@
        "steen": "baksteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       57,
+       -268
+      ],
       "bestand": "tegels/huizen/oker-steen2-baksteen-z.png",
       "cel": [
        0,
@@ -44811,6 +45419,10 @@
        "steen": "baksteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       28,
+       -310
+      ],
       "bestand": "tegels/huizen/oker-steen2-baksteen-o.png",
       "cel": [
        0,
@@ -44966,6 +45578,10 @@
        "steen": "baksteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       7,
+       -327
+      ],
       "bestand": "tegels/huizen/oker-steen2-baksteen-n.png",
       "cel": [
        0,
@@ -45157,6 +45773,10 @@
        "steen": "baksteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -92,
+       -285
+      ],
       "bestand": "tegels/huizen/oker-steen2-baksteen-w.png",
       "cel": [
        0,
@@ -45462,6 +46082,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       -9,
+       -188
+      ],
       "bestand": "tegels/huizen/oker-huis4-riet-z.png",
       "cel": [
        0,
@@ -45747,6 +46371,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       129,
+       -248
+      ],
       "bestand": "tegels/huizen/oker-huis4-riet-o.png",
       "cel": [
        0,
@@ -46004,6 +46632,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       9,
+       -317
+      ],
       "bestand": "tegels/huizen/oker-huis4-riet-n.png",
       "cel": [
        0,
@@ -46397,6 +47029,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -129,
+       -257
+      ],
       "bestand": "tegels/huizen/oker-huis4-riet-w.png",
       "cel": [
        0,
@@ -46634,6 +47270,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       -10,
+       -168
+      ],
       "bestand": "tegels/huizen/oker-huis4-leien-z.png",
       "cel": [
        0,
@@ -46925,6 +47565,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       128,
+       -227
+      ],
       "bestand": "tegels/huizen/oker-huis4-leien-o.png",
       "cel": [
        0,
@@ -47188,6 +47832,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       10,
+       -296
+      ],
       "bestand": "tegels/huizen/oker-huis4-leien-n.png",
       "cel": [
        0,
@@ -47523,6 +48171,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -128,
+       -237
+      ],
       "bestand": "tegels/huizen/oker-huis4-leien-w.png",
       "cel": [
        0,
@@ -47756,6 +48408,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       -10,
+       -134
+      ],
       "bestand": "tegels/huizen/oker-huis4-pannen-z.png",
       "cel": [
        0,
@@ -48049,6 +48705,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       128,
+       -193
+      ],
       "bestand": "tegels/huizen/oker-huis4-pannen-o.png",
       "cel": [
        0,
@@ -48302,6 +48962,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       10,
+       -262
+      ],
       "bestand": "tegels/huizen/oker-huis4-pannen-n.png",
       "cel": [
        0,
@@ -48647,6 +49311,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -128,
+       -203
+      ],
       "bestand": "tegels/huizen/oker-huis4-pannen-w.png",
       "cel": [
        0,
@@ -48814,6 +49482,10 @@
        "steen": "zandsteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       -10,
+       -168
+      ],
       "bestand": "tegels/huizen/oker-steen4-leien-z.png",
       "cel": [
        0,
@@ -49031,6 +49703,10 @@
        "steen": "zandsteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       128,
+       -227
+      ],
       "bestand": "tegels/huizen/oker-steen4-leien-o.png",
       "cel": [
        0,
@@ -49206,6 +49882,10 @@
        "steen": "zandsteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       10,
+       -296
+      ],
       "bestand": "tegels/huizen/oker-steen4-leien-n.png",
       "cel": [
        0,
@@ -49381,6 +50061,10 @@
        "steen": "zandsteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -128,
+       -237
+      ],
       "bestand": "tegels/huizen/oker-steen4-leien-w.png",
       "cel": [
        0,
@@ -49546,6 +50230,10 @@
        "steen": "zandsteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       -10,
+       -134
+      ],
       "bestand": "tegels/huizen/oker-steen4-pannen-z.png",
       "cel": [
        0,
@@ -49767,6 +50455,10 @@
        "steen": "zandsteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       128,
+       -193
+      ],
       "bestand": "tegels/huizen/oker-steen4-pannen-o.png",
       "cel": [
        0,
@@ -49948,6 +50640,10 @@
        "steen": "zandsteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       10,
+       -262
+      ],
       "bestand": "tegels/huizen/oker-steen4-pannen-n.png",
       "cel": [
        0,
@@ -50123,6 +50819,10 @@
        "steen": "zandsteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -128,
+       -203
+      ],
       "bestand": "tegels/huizen/oker-steen4-pannen-w.png",
       "cel": [
        0,
@@ -50288,6 +50988,10 @@
        "steen": "baksteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       -10,
+       -134
+      ],
       "bestand": "tegels/huizen/oker-steen4-baksteen-z.png",
       "cel": [
        0,
@@ -50509,6 +51213,10 @@
        "steen": "baksteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       128,
+       -193
+      ],
       "bestand": "tegels/huizen/oker-steen4-baksteen-o.png",
       "cel": [
        0,
@@ -50690,6 +51398,10 @@
        "steen": "baksteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       10,
+       -262
+      ],
       "bestand": "tegels/huizen/oker-steen4-baksteen-n.png",
       "cel": [
        0,
@@ -50865,6 +51577,10 @@
        "steen": "baksteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -128,
+       -203
+      ],
       "bestand": "tegels/huizen/oker-steen4-baksteen-w.png",
       "cel": [
        0,
@@ -51158,6 +51874,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       85,
+       -272
+      ],
       "bestand": "tegels/huizen/oker-huis5-riet-z.png",
       "cel": [
        0,
@@ -51459,6 +52179,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       83,
+       -356
+      ],
       "bestand": "tegels/huizen/oker-huis5-riet-o.png",
       "cel": [
        0,
@@ -51748,6 +52472,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       -21,
+       -387
+      ],
       "bestand": "tegels/huizen/oker-huis5-riet-n.png",
       "cel": [
        0,
@@ -52061,6 +52789,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -147,
+       -303
+      ],
       "bestand": "tegels/huizen/oker-huis5-riet-w.png",
       "cel": [
        0,
@@ -52386,6 +53118,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       85,
+       -236
+      ],
       "bestand": "tegels/huizen/oker-huis5-leien-z.png",
       "cel": [
        0,
@@ -52729,6 +53465,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       83,
+       -320
+      ],
       "bestand": "tegels/huizen/oker-huis5-leien-o.png",
       "cel": [
        0,
@@ -53014,6 +53754,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       -21,
+       -351
+      ],
       "bestand": "tegels/huizen/oker-huis5-leien-n.png",
       "cel": [
        0,
@@ -53315,6 +54059,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -147,
+       -267
+      ],
       "bestand": "tegels/huizen/oker-huis5-leien-w.png",
       "cel": [
        0,
@@ -53636,6 +54384,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       85,
+       -209
+      ],
       "bestand": "tegels/huizen/oker-huis5-pannen-z.png",
       "cel": [
        0,
@@ -53985,6 +54737,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       83,
+       -293
+      ],
       "bestand": "tegels/huizen/oker-huis5-pannen-o.png",
       "cel": [
        0,
@@ -54276,6 +55032,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       -21,
+       -324
+      ],
       "bestand": "tegels/huizen/oker-huis5-pannen-n.png",
       "cel": [
        0,
@@ -54579,6 +55339,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -147,
+       -240
+      ],
       "bestand": "tegels/huizen/oker-huis5-pannen-w.png",
       "cel": [
        0,
@@ -54784,6 +55548,10 @@
        "steen": "zandsteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       85,
+       -236
+      ],
       "bestand": "tegels/huizen/oker-steen5-leien-z.png",
       "cel": [
        0,
@@ -55007,6 +55775,10 @@
        "steen": "zandsteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       83,
+       -320
+      ],
       "bestand": "tegels/huizen/oker-steen5-leien-o.png",
       "cel": [
        0,
@@ -55210,6 +55982,10 @@
        "steen": "zandsteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       -21,
+       -351
+      ],
       "bestand": "tegels/huizen/oker-steen5-leien-n.png",
       "cel": [
        0,
@@ -55431,6 +56207,10 @@
        "steen": "zandsteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -147,
+       -267
+      ],
       "bestand": "tegels/huizen/oker-steen5-leien-w.png",
       "cel": [
        0,
@@ -55634,6 +56414,10 @@
        "steen": "zandsteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       85,
+       -209
+      ],
       "bestand": "tegels/huizen/oker-steen5-pannen-z.png",
       "cel": [
        0,
@@ -55853,6 +56637,10 @@
        "steen": "zandsteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       83,
+       -293
+      ],
       "bestand": "tegels/huizen/oker-steen5-pannen-o.png",
       "cel": [
        0,
@@ -56070,6 +56858,10 @@
        "steen": "zandsteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       -21,
+       -324
+      ],
       "bestand": "tegels/huizen/oker-steen5-pannen-n.png",
       "cel": [
        0,
@@ -56301,6 +57093,10 @@
        "steen": "zandsteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -147,
+       -240
+      ],
       "bestand": "tegels/huizen/oker-steen5-pannen-w.png",
       "cel": [
        0,
@@ -56504,6 +57300,10 @@
        "steen": "baksteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       85,
+       -209
+      ],
       "bestand": "tegels/huizen/oker-steen5-baksteen-z.png",
       "cel": [
        0,
@@ -56723,6 +57523,10 @@
        "steen": "baksteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       83,
+       -293
+      ],
       "bestand": "tegels/huizen/oker-steen5-baksteen-o.png",
       "cel": [
        0,
@@ -56940,6 +57744,10 @@
        "steen": "baksteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       -21,
+       -324
+      ],
       "bestand": "tegels/huizen/oker-steen5-baksteen-n.png",
       "cel": [
        0,
@@ -57171,6 +57979,10 @@
        "steen": "baksteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -147,
+       -240
+      ],
       "bestand": "tegels/huizen/oker-steen5-baksteen-w.png",
       "cel": [
        0,
@@ -57430,6 +58242,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       172,
+       -187
+      ],
       "bestand": "tegels/huizen/oker-boerderij6-riet-z.png",
       "cel": [
        0,
@@ -57575,6 +58391,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       40,
+       -293
+      ],
       "bestand": "tegels/huizen/oker-boerderij6-riet-o.png",
       "cel": [
        0,
@@ -57846,6 +58666,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       -108,
+       -259
+      ],
       "bestand": "tegels/huizen/oker-boerderij6-riet-n.png",
       "cel": [
        0,
@@ -58137,6 +58961,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -104,
+       -153
+      ],
       "bestand": "tegels/huizen/oker-boerderij6-riet-w.png",
       "cel": [
        0,
@@ -58398,6 +59226,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       171,
+       -167
+      ],
       "bestand": "tegels/huizen/oker-boerderij6-leien-z.png",
       "cel": [
        0,
@@ -58547,6 +59379,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       39,
+       -272
+      ],
       "bestand": "tegels/huizen/oker-boerderij6-leien-o.png",
       "cel": [
        0,
@@ -58814,6 +59650,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       -107,
+       -237
+      ],
       "bestand": "tegels/huizen/oker-boerderij6-leien-n.png",
       "cel": [
        0,
@@ -59103,6 +59943,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -103,
+       -133
+      ],
       "bestand": "tegels/huizen/oker-boerderij6-leien-w.png",
       "cel": [
        0,
@@ -59360,6 +60204,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       171,
+       -136
+      ],
       "bestand": "tegels/huizen/oker-boerderij6-pannen-z.png",
       "cel": [
        0,
@@ -59535,6 +60383,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       39,
+       -241
+      ],
       "bestand": "tegels/huizen/oker-boerderij6-pannen-o.png",
       "cel": [
        0,
@@ -59800,6 +60652,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       -107,
+       -206
+      ],
       "bestand": "tegels/huizen/oker-boerderij6-pannen-n.png",
       "cel": [
        0,
@@ -60089,6 +60945,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -103,
+       -102
+      ],
       "bestand": "tegels/huizen/oker-boerderij6-pannen-w.png",
       "cel": [
        0,
@@ -60568,6 +61428,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       3,
+       -330
+      ],
       "bestand": "tegels/huizen/oker-boerderij7-riet-z.png",
       "cel": [
        0,
@@ -61043,6 +61907,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -52,
+       -305
+      ],
       "bestand": "tegels/huizen/oker-boerderij7-riet-o.png",
       "cel": [
        0,
@@ -61536,6 +62404,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       93,
+       -326
+      ],
       "bestand": "tegels/huizen/oker-boerderij7-riet-n.png",
       "cel": [
        0,
@@ -62005,6 +62877,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -44,
+       -350
+      ],
       "bestand": "tegels/huizen/oker-boerderij7-riet-w.png",
       "cel": [
        0,
@@ -62552,6 +63428,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       3,
+       -311
+      ],
       "bestand": "tegels/huizen/oker-boerderij7-leien-z.png",
       "cel": [
        0,
@@ -63071,6 +63951,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -52,
+       -286
+      ],
       "bestand": "tegels/huizen/oker-boerderij7-leien-o.png",
       "cel": [
        0,
@@ -63562,6 +64446,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       93,
+       -307
+      ],
       "bestand": "tegels/huizen/oker-boerderij7-leien-n.png",
       "cel": [
        0,
@@ -64031,6 +64919,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -44,
+       -331
+      ],
       "bestand": "tegels/huizen/oker-boerderij7-leien-w.png",
       "cel": [
        0,
@@ -64516,6 +65408,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       3,
+       -273
+      ],
       "bestand": "tegels/huizen/oker-boerderij7-pannen-z.png",
       "cel": [
        0,
@@ -64959,6 +65855,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -52,
+       -249
+      ],
       "bestand": "tegels/huizen/oker-boerderij7-pannen-o.png",
       "cel": [
        0,
@@ -65388,6 +66288,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       93,
+       -269
+      ],
       "bestand": "tegels/huizen/oker-boerderij7-pannen-n.png",
       "cel": [
        0,
@@ -65793,6 +66697,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -44,
+       -293
+      ],
       "bestand": "tegels/huizen/oker-boerderij7-pannen-w.png",
       "cel": [
        0,
@@ -65900,6 +66808,10 @@
        "steen": null,
        "stand": "z"
       },
+      "nok": [
+       16,
+       -175
+      ],
       "bestand": "tegels/huizen/planken-hut1-spanen-z.png",
       "cel": [
        0,
@@ -66017,6 +66929,10 @@
        "steen": null,
        "stand": "o"
       },
+      "nok": [
+       -48,
+       -159
+      ],
       "bestand": "tegels/huizen/planken-hut1-spanen-o.png",
       "cel": [
        0,
@@ -66216,6 +67132,10 @@
        "steen": null,
        "stand": "n"
       },
+      "nok": [
+       48,
+       -159
+      ],
       "bestand": "tegels/huizen/planken-hut1-spanen-n.png",
       "cel": [
        0,
@@ -66409,6 +67329,10 @@
        "steen": null,
        "stand": "w"
       },
+      "nok": [
+       -16,
+       -175
+      ],
       "bestand": "tegels/huizen/planken-hut1-spanen-w.png",
       "cel": [
        0,
@@ -66600,6 +67524,10 @@
        "steen": null,
        "stand": "z"
       },
+      "nok": [
+       32,
+       -168
+      ],
       "bestand": "tegels/huizen/planken-hut3-spanen-z.png",
       "cel": [
        0,
@@ -66793,6 +67721,10 @@
        "steen": null,
        "stand": "o"
       },
+      "nok": [
+       -32,
+       -168
+      ],
       "bestand": "tegels/huizen/planken-hut3-spanen-o.png",
       "cel": [
        0,
@@ -66982,6 +67914,10 @@
        "steen": null,
        "stand": "n"
       },
+      "nok": [
+       32,
+       -168
+      ],
       "bestand": "tegels/huizen/planken-hut3-spanen-n.png",
       "cel": [
        0,
@@ -67161,6 +68097,10 @@
        "steen": null,
        "stand": "w"
       },
+      "nok": [
+       -32,
+       -168
+      ],
       "bestand": "tegels/huizen/planken-hut3-spanen-w.png",
       "cel": [
        0,
@@ -67308,6 +68248,10 @@
        "steen": null,
        "stand": "z"
       },
+      "nok": [
+       32,
+       -162
+      ],
       "bestand": "tegels/huizen/planken-hut4-spanen-z.png",
       "cel": [
        0,
@@ -67503,6 +68447,10 @@
        "steen": null,
        "stand": "o"
       },
+      "nok": [
+       -32,
+       -162
+      ],
       "bestand": "tegels/huizen/planken-hut4-spanen-o.png",
       "cel": [
        0,
@@ -67702,6 +68650,10 @@
        "steen": null,
        "stand": "n"
       },
+      "nok": [
+       -32,
+       -130
+      ],
       "bestand": "tegels/huizen/planken-hut4-spanen-n.png",
       "cel": [
        0,
@@ -67893,6 +68845,10 @@
        "steen": null,
        "stand": "w"
       },
+      "nok": [
+       32,
+       -130
+      ],
       "bestand": "tegels/huizen/planken-hut4-spanen-w.png",
       "cel": [
        0,
@@ -68396,6 +69352,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       117,
+       -354
+      ],
       "bestand": "tegels/huizen/planken-huis7-spanen-z.png",
       "cel": [
        0,
@@ -68813,6 +69773,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       13,
+       -419
+      ],
       "bestand": "tegels/huizen/planken-huis7-spanen-o.png",
       "cel": [
        0,
@@ -69308,6 +70272,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       -53,
+       -399
+      ],
       "bestand": "tegels/huizen/planken-huis7-spanen-n.png",
       "cel": [
        0,
@@ -69867,6 +70835,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -77,
+       -334
+      ],
       "bestand": "tegels/huizen/planken-huis7-spanen-w.png",
       "cel": [
        0,
@@ -70358,6 +71330,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       117,
+       -372
+      ],
       "bestand": "tegels/huizen/planken-huis7-leien-z.png",
       "cel": [
        0,
@@ -70849,6 +71825,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       13,
+       -438
+      ],
       "bestand": "tegels/huizen/planken-huis7-leien-o.png",
       "cel": [
        0,
@@ -71418,6 +72398,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       -53,
+       -417
+      ],
       "bestand": "tegels/huizen/planken-huis7-leien-n.png",
       "cel": [
        0,
@@ -71975,6 +72959,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -77,
+       -352
+      ],
       "bestand": "tegels/huizen/planken-huis7-leien-w.png",
       "cel": [
        0,
@@ -72396,6 +73384,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       117,
+       -333
+      ],
       "bestand": "tegels/huizen/planken-huis7-pannen-z.png",
       "cel": [
        0,
@@ -72799,6 +73791,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       13,
+       -398
+      ],
       "bestand": "tegels/huizen/planken-huis7-pannen-o.png",
       "cel": [
        0,
@@ -73290,6 +74286,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       -53,
+       -378
+      ],
       "bestand": "tegels/huizen/planken-huis7-pannen-n.png",
       "cel": [
        0,
@@ -73761,6 +74761,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -77,
+       -313
+      ],
       "bestand": "tegels/huizen/planken-huis7-pannen-w.png",
       "cel": [
        0,
@@ -74170,6 +75174,10 @@
        "steen": "veldsteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       117,
+       -372
+      ],
       "bestand": "tegels/huizen/planken-steen7-leien-z.png",
       "cel": [
        0,
@@ -74557,6 +75565,10 @@
        "steen": "veldsteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       13,
+       -438
+      ],
       "bestand": "tegels/huizen/planken-steen7-leien-o.png",
       "cel": [
        0,
@@ -75060,6 +76072,10 @@
        "steen": "veldsteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       -53,
+       -417
+      ],
       "bestand": "tegels/huizen/planken-steen7-leien-n.png",
       "cel": [
        0,
@@ -75555,6 +76571,10 @@
        "steen": "veldsteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -77,
+       -352
+      ],
       "bestand": "tegels/huizen/planken-steen7-leien-w.png",
       "cel": [
        0,
@@ -75892,6 +76912,10 @@
        "steen": "veldsteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       117,
+       -333
+      ],
       "bestand": "tegels/huizen/planken-steen7-pannen-z.png",
       "cel": [
        0,
@@ -76205,6 +77229,10 @@
        "steen": "veldsteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       13,
+       -398
+      ],
       "bestand": "tegels/huizen/planken-steen7-pannen-o.png",
       "cel": [
        0,
@@ -76626,6 +77654,10 @@
        "steen": "veldsteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       -53,
+       -378
+      ],
       "bestand": "tegels/huizen/planken-steen7-pannen-n.png",
       "cel": [
        0,
@@ -77045,6 +78077,10 @@
        "steen": "veldsteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -77,
+       -313
+      ],
       "bestand": "tegels/huizen/planken-steen7-pannen-w.png",
       "cel": [
        0,
@@ -77382,6 +78418,10 @@
        "steen": "baksteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       117,
+       -333
+      ],
       "bestand": "tegels/huizen/planken-steen7-baksteen-z.png",
       "cel": [
        0,
@@ -77695,6 +78735,10 @@
        "steen": "baksteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       13,
+       -398
+      ],
       "bestand": "tegels/huizen/planken-steen7-baksteen-o.png",
       "cel": [
        0,
@@ -78116,6 +79160,10 @@
        "steen": "baksteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       -53,
+       -378
+      ],
       "bestand": "tegels/huizen/planken-steen7-baksteen-n.png",
       "cel": [
        0,
@@ -78535,6 +79583,10 @@
        "steen": "baksteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -77,
+       -313
+      ],
       "bestand": "tegels/huizen/planken-steen7-baksteen-w.png",
       "cel": [
        0,
@@ -78696,6 +79748,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       -110,
+       -340
+      ],
       "bestand": "tegels/huizen/planken-huis8-spanen-z.png",
       "cel": [
        0,
@@ -79065,6 +80121,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -105,
+       -233
+      ],
       "bestand": "tegels/huizen/planken-huis8-spanen-o.png",
       "cel": [
        0,
@@ -79590,6 +80650,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       174,
+       -268
+      ],
       "bestand": "tegels/huizen/planken-huis8-spanen-n.png",
       "cel": [
        0,
@@ -79933,6 +80997,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       41,
+       -375
+      ],
       "bestand": "tegels/huizen/planken-huis8-spanen-w.png",
       "cel": [
        0,
@@ -80094,6 +81162,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       -110,
+       -360
+      ],
       "bestand": "tegels/huizen/planken-huis8-leien-z.png",
       "cel": [
        0,
@@ -80463,6 +81535,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -105,
+       -253
+      ],
       "bestand": "tegels/huizen/planken-huis8-leien-o.png",
       "cel": [
        0,
@@ -81050,6 +82126,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       174,
+       -288
+      ],
       "bestand": "tegels/huizen/planken-huis8-leien-n.png",
       "cel": [
        0,
@@ -81463,6 +82543,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       41,
+       -395
+      ],
       "bestand": "tegels/huizen/planken-huis8-leien-w.png",
       "cel": [
        0,
@@ -81624,6 +82708,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       -110,
+       -317
+      ],
       "bestand": "tegels/huizen/planken-huis8-pannen-z.png",
       "cel": [
        0,
@@ -81987,6 +83075,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -105,
+       -210
+      ],
       "bestand": "tegels/huizen/planken-huis8-pannen-o.png",
       "cel": [
        0,
@@ -82512,6 +83604,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       174,
+       -244
+      ],
       "bestand": "tegels/huizen/planken-huis8-pannen-n.png",
       "cel": [
        0,
@@ -82853,6 +83949,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       41,
+       -352
+      ],
       "bestand": "tegels/huizen/planken-huis8-pannen-w.png",
       "cel": [
        0,
@@ -82946,6 +84046,10 @@
        "steen": "veldsteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       -110,
+       -360
+      ],
       "bestand": "tegels/huizen/planken-steen8-leien-z.png",
       "cel": [
        0,
@@ -83187,6 +84291,10 @@
        "steen": "veldsteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       -105,
+       -253
+      ],
       "bestand": "tegels/huizen/planken-steen8-leien-o.png",
       "cel": [
        0,
@@ -83546,6 +84654,10 @@
        "steen": "veldsteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       174,
+       -288
+      ],
       "bestand": "tegels/huizen/planken-steen8-leien-n.png",
       "cel": [
        0,
@@ -83767,6 +84879,10 @@
        "steen": "veldsteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       41,
+       -395
+      ],
       "bestand": "tegels/huizen/planken-steen8-leien-w.png",
       "cel": [
        0,
@@ -83858,6 +84974,10 @@
        "steen": "veldsteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       -110,
+       -317
+      ],
       "bestand": "tegels/huizen/planken-steen8-pannen-z.png",
       "cel": [
        0,
@@ -84103,6 +85223,10 @@
        "steen": "veldsteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       -105,
+       -210
+      ],
       "bestand": "tegels/huizen/planken-steen8-pannen-o.png",
       "cel": [
        0,
@@ -84430,6 +85554,10 @@
        "steen": "veldsteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       174,
+       -244
+      ],
       "bestand": "tegels/huizen/planken-steen8-pannen-n.png",
       "cel": [
        0,
@@ -84633,6 +85761,10 @@
        "steen": "veldsteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       41,
+       -352
+      ],
       "bestand": "tegels/huizen/planken-steen8-pannen-w.png",
       "cel": [
        0,
@@ -84724,6 +85856,10 @@
        "steen": "baksteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       -110,
+       -317
+      ],
       "bestand": "tegels/huizen/planken-steen8-baksteen-z.png",
       "cel": [
        0,
@@ -84969,6 +86105,10 @@
        "steen": "baksteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       -105,
+       -210
+      ],
       "bestand": "tegels/huizen/planken-steen8-baksteen-o.png",
       "cel": [
        0,
@@ -85296,6 +86436,10 @@
        "steen": "baksteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       174,
+       -244
+      ],
       "bestand": "tegels/huizen/planken-steen8-baksteen-n.png",
       "cel": [
        0,
@@ -85499,6 +86643,10 @@
        "steen": "baksteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       41,
+       -352
+      ],
       "bestand": "tegels/huizen/planken-steen8-baksteen-w.png",
       "cel": [
        0,
@@ -85700,6 +86848,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       27,
+       -224
+      ],
       "bestand": "tegels/huizen/planken-huis9-spanen-z.png",
       "cel": [
        0,
@@ -85921,6 +87073,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -64,
+       -206
+      ],
       "bestand": "tegels/huizen/planken-huis9-spanen-o.png",
       "cel": [
        0,
@@ -86200,6 +87356,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       37,
+       -192
+      ],
       "bestand": "tegels/huizen/planken-huis9-spanen-n.png",
       "cel": [
        0,
@@ -86467,6 +87627,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       0,
+       -210
+      ],
       "bestand": "tegels/huizen/planken-huis9-spanen-w.png",
       "cel": [
        0,
@@ -86664,6 +87828,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       27,
+       -240
+      ],
       "bestand": "tegels/huizen/planken-huis9-leien-z.png",
       "cel": [
        0,
@@ -86885,6 +88053,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -64,
+       -222
+      ],
       "bestand": "tegels/huizen/planken-huis9-leien-o.png",
       "cel": [
        0,
@@ -87164,6 +88336,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       37,
+       -208
+      ],
       "bestand": "tegels/huizen/planken-huis9-leien-n.png",
       "cel": [
        0,
@@ -87431,6 +88607,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       0,
+       -227
+      ],
       "bestand": "tegels/huizen/planken-huis9-leien-w.png",
       "cel": [
        0,
@@ -87636,6 +88816,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       27,
+       -205
+      ],
       "bestand": "tegels/huizen/planken-huis9-pannen-z.png",
       "cel": [
        0,
@@ -87857,6 +89041,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -64,
+       -187
+      ],
       "bestand": "tegels/huizen/planken-huis9-pannen-o.png",
       "cel": [
        0,
@@ -88136,6 +89324,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       37,
+       -173
+      ],
       "bestand": "tegels/huizen/planken-huis9-pannen-n.png",
       "cel": [
        0,
@@ -88407,6 +89599,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       0,
+       -191
+      ],
       "bestand": "tegels/huizen/planken-huis9-pannen-w.png",
       "cel": [
        0,
@@ -88494,6 +89690,10 @@
        "steen": "veldsteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       27,
+       -240
+      ],
       "bestand": "tegels/huizen/planken-steen9-leien-z.png",
       "cel": [
        0,
@@ -88671,6 +89871,10 @@
        "steen": "veldsteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       -32,
+       -238
+      ],
       "bestand": "tegels/huizen/planken-steen9-leien-o.png",
       "cel": [
        0,
@@ -88918,6 +90122,10 @@
        "steen": "veldsteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       5,
+       -224
+      ],
       "bestand": "tegels/huizen/planken-steen9-leien-n.png",
       "cel": [
        0,
@@ -89075,6 +90283,10 @@
        "steen": "veldsteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       0,
+       -227
+      ],
       "bestand": "tegels/huizen/planken-steen9-leien-w.png",
       "cel": [
        0,
@@ -89162,6 +90374,10 @@
        "steen": "veldsteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       27,
+       -205
+      ],
       "bestand": "tegels/huizen/planken-steen9-pannen-z.png",
       "cel": [
        0,
@@ -89329,6 +90545,10 @@
        "steen": "veldsteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       -32,
+       -203
+      ],
       "bestand": "tegels/huizen/planken-steen9-pannen-o.png",
       "cel": [
        0,
@@ -89556,6 +90776,10 @@
        "steen": "veldsteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       5,
+       -189
+      ],
       "bestand": "tegels/huizen/planken-steen9-pannen-n.png",
       "cel": [
        0,
@@ -89713,6 +90937,10 @@
        "steen": "veldsteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       0,
+       -191
+      ],
       "bestand": "tegels/huizen/planken-steen9-pannen-w.png",
       "cel": [
        0,
@@ -89800,6 +91028,10 @@
        "steen": "baksteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       27,
+       -205
+      ],
       "bestand": "tegels/huizen/planken-steen9-baksteen-z.png",
       "cel": [
        0,
@@ -89967,6 +91199,10 @@
        "steen": "baksteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       -32,
+       -203
+      ],
       "bestand": "tegels/huizen/planken-steen9-baksteen-o.png",
       "cel": [
        0,
@@ -90194,6 +91430,10 @@
        "steen": "baksteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       5,
+       -189
+      ],
       "bestand": "tegels/huizen/planken-steen9-baksteen-n.png",
       "cel": [
        0,
@@ -90351,6 +91591,10 @@
        "steen": "baksteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       0,
+       -191
+      ],
       "bestand": "tegels/huizen/planken-steen9-baksteen-w.png",
       "cel": [
        0,
@@ -90626,6 +91870,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       26,
+       -139
+      ],
       "bestand": "tegels/huizen/planken-boerderij2-spanen-z.png",
       "cel": [
        0,
@@ -90917,6 +92165,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       130,
+       -217
+      ],
       "bestand": "tegels/huizen/planken-boerderij2-spanen-o.png",
       "cel": [
        0,
@@ -91184,6 +92436,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       6,
+       -285
+      ],
       "bestand": "tegels/huizen/planken-boerderij2-spanen-n.png",
       "cel": [
        0,
@@ -91523,6 +92779,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -162,
+       -207
+      ],
       "bestand": "tegels/huizen/planken-boerderij2-spanen-w.png",
       "cel": [
        0,
@@ -91802,6 +93062,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       26,
+       -156
+      ],
       "bestand": "tegels/huizen/planken-boerderij2-leien-z.png",
       "cel": [
        0,
@@ -92091,6 +93355,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       130,
+       -234
+      ],
       "bestand": "tegels/huizen/planken-boerderij2-leien-o.png",
       "cel": [
        0,
@@ -92362,6 +93630,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       6,
+       -302
+      ],
       "bestand": "tegels/huizen/planken-boerderij2-leien-n.png",
       "cel": [
        0,
@@ -92703,6 +93975,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -162,
+       -223
+      ],
       "bestand": "tegels/huizen/planken-boerderij2-leien-w.png",
       "cel": [
        0,
@@ -92976,6 +94252,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       26,
+       -119
+      ],
       "bestand": "tegels/huizen/planken-boerderij2-pannen-z.png",
       "cel": [
        0,
@@ -93265,6 +94545,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       130,
+       -198
+      ],
       "bestand": "tegels/huizen/planken-boerderij2-pannen-o.png",
       "cel": [
        0,
@@ -93528,6 +94812,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       6,
+       -265
+      ],
       "bestand": "tegels/huizen/planken-boerderij2-pannen-n.png",
       "cel": [
        0,
@@ -93861,6 +95149,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -162,
+       -187
+      ],
       "bestand": "tegels/huizen/planken-boerderij2-pannen-w.png",
       "cel": [
        0,
@@ -93966,6 +95258,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       114,
+       -183
+      ],
       "bestand": "tegels/huizen/planken-boerderij5-spanen-z.png",
       "cel": [
        0,
@@ -94073,6 +95369,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       13,
+       -247
+      ],
       "bestand": "tegels/huizen/planken-boerderij5-spanen-o.png",
       "cel": [
        0,
@@ -94176,6 +95476,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       -18,
+       -244
+      ],
       "bestand": "tegels/huizen/planken-boerderij5-spanen-n.png",
       "cel": [
        0,
@@ -94279,6 +95583,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -109,
+       -181
+      ],
       "bestand": "tegels/huizen/planken-boerderij5-spanen-w.png",
       "cel": [
        0,
@@ -94384,6 +95692,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       114,
+       -198
+      ],
       "bestand": "tegels/huizen/planken-boerderij5-leien-z.png",
       "cel": [
        0,
@@ -94491,6 +95803,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       13,
+       -261
+      ],
       "bestand": "tegels/huizen/planken-boerderij5-leien-o.png",
       "cel": [
        0,
@@ -94594,6 +95910,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       -18,
+       -258
+      ],
       "bestand": "tegels/huizen/planken-boerderij5-leien-n.png",
       "cel": [
        0,
@@ -94695,6 +96015,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -109,
+       -195
+      ],
       "bestand": "tegels/huizen/planken-boerderij5-leien-w.png",
       "cel": [
        0,
@@ -94798,6 +96122,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       114,
+       -167
+      ],
       "bestand": "tegels/huizen/planken-boerderij5-pannen-z.png",
       "cel": [
        0,
@@ -94903,6 +96231,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       13,
+       -230
+      ],
       "bestand": "tegels/huizen/planken-boerderij5-pannen-o.png",
       "cel": [
        0,
@@ -95006,6 +96338,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       -18,
+       -228
+      ],
       "bestand": "tegels/huizen/planken-boerderij5-pannen-n.png",
       "cel": [
        0,
@@ -95109,6 +96445,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -109,
+       -164
+      ],
       "bestand": "tegels/huizen/planken-boerderij5-pannen-w.png",
       "cel": [
        0,
@@ -95594,6 +96934,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       -8,
+       -423
+      ],
       "bestand": "tegels/huizen/roze-huis10-riet-z.png",
       "cel": [
        0,
@@ -96099,6 +97443,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -36,
+       -401
+      ],
       "bestand": "tegels/huizen/roze-huis10-riet-o.png",
       "cel": [
        0,
@@ -96528,6 +97876,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       72,
+       -419
+      ],
       "bestand": "tegels/huizen/roze-huis10-riet-n.png",
       "cel": [
        0,
@@ -96975,6 +98327,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -28,
+       -441
+      ],
       "bestand": "tegels/huizen/roze-huis10-riet-w.png",
       "cel": [
        0,
@@ -97392,6 +98748,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       -8,
+       -403
+      ],
       "bestand": "tegels/huizen/roze-huis10-leien-z.png",
       "cel": [
        0,
@@ -97889,6 +99249,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -36,
+       -381
+      ],
       "bestand": "tegels/huizen/roze-huis10-leien-o.png",
       "cel": [
        0,
@@ -98316,6 +99680,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       72,
+       -399
+      ],
       "bestand": "tegels/huizen/roze-huis10-leien-n.png",
       "cel": [
        0,
@@ -98689,6 +100057,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -28,
+       -421
+      ],
       "bestand": "tegels/huizen/roze-huis10-leien-w.png",
       "cel": [
        0,
@@ -99102,6 +100474,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       -8,
+       -370
+      ],
       "bestand": "tegels/huizen/roze-huis10-pannen-z.png",
       "cel": [
        0,
@@ -99525,6 +100901,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -36,
+       -347
+      ],
       "bestand": "tegels/huizen/roze-huis10-pannen-o.png",
       "cel": [
        0,
@@ -99874,6 +101254,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       72,
+       -366
+      ],
       "bestand": "tegels/huizen/roze-huis10-pannen-n.png",
       "cel": [
        0,
@@ -100253,6 +101637,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -28,
+       -388
+      ],
       "bestand": "tegels/huizen/roze-huis10-pannen-w.png",
       "cel": [
        0,
@@ -100646,6 +102034,10 @@
        "steen": "zandsteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       -8,
+       -403
+      ],
       "bestand": "tegels/huizen/roze-steen10-leien-z.png",
       "cel": [
        0,
@@ -101081,6 +102473,10 @@
        "steen": "zandsteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       -36,
+       -381
+      ],
       "bestand": "tegels/huizen/roze-steen10-leien-o.png",
       "cel": [
        0,
@@ -101442,6 +102838,10 @@
        "steen": "zandsteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       72,
+       -399
+      ],
       "bestand": "tegels/huizen/roze-steen10-leien-n.png",
       "cel": [
        0,
@@ -101779,6 +103179,10 @@
        "steen": "zandsteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -28,
+       -421
+      ],
       "bestand": "tegels/huizen/roze-steen10-leien-w.png",
       "cel": [
        0,
@@ -102172,6 +103576,10 @@
        "steen": "zandsteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       -8,
+       -370
+      ],
       "bestand": "tegels/huizen/roze-steen10-pannen-z.png",
       "cel": [
        0,
@@ -102531,6 +103939,10 @@
        "steen": "zandsteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       -36,
+       -347
+      ],
       "bestand": "tegels/huizen/roze-steen10-pannen-o.png",
       "cel": [
        0,
@@ -102820,6 +104232,10 @@
        "steen": "zandsteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       72,
+       -366
+      ],
       "bestand": "tegels/huizen/roze-steen10-pannen-n.png",
       "cel": [
        0,
@@ -103155,6 +104571,10 @@
        "steen": "zandsteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -28,
+       -388
+      ],
       "bestand": "tegels/huizen/roze-steen10-pannen-w.png",
       "cel": [
        0,
@@ -103548,6 +104968,10 @@
        "steen": "baksteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       -8,
+       -370
+      ],
       "bestand": "tegels/huizen/roze-steen10-baksteen-z.png",
       "cel": [
        0,
@@ -103907,6 +105331,10 @@
        "steen": "baksteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       -36,
+       -347
+      ],
       "bestand": "tegels/huizen/roze-steen10-baksteen-o.png",
       "cel": [
        0,
@@ -104196,6 +105624,10 @@
        "steen": "baksteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       72,
+       -366
+      ],
       "bestand": "tegels/huizen/roze-steen10-baksteen-n.png",
       "cel": [
        0,
@@ -104531,6 +105963,10 @@
        "steen": "baksteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -28,
+       -388
+      ],
       "bestand": "tegels/huizen/roze-steen10-baksteen-w.png",
       "cel": [
        0,
@@ -104852,6 +106288,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       -10,
+       -291
+      ],
       "bestand": "tegels/huizen/roze-huis11-riet-z.png",
       "cel": [
        0,
@@ -105173,6 +106613,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -36,
+       -268
+      ],
       "bestand": "tegels/huizen/roze-huis11-riet-o.png",
       "cel": [
        0,
@@ -105526,6 +106970,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       74,
+       -288
+      ],
       "bestand": "tegels/huizen/roze-huis11-riet-n.png",
       "cel": [
        0,
@@ -105867,6 +107315,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -28,
+       -310
+      ],
       "bestand": "tegels/huizen/roze-huis11-riet-w.png",
       "cel": [
        0,
@@ -106188,6 +107640,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       -10,
+       -273
+      ],
       "bestand": "tegels/huizen/roze-huis11-leien-z.png",
       "cel": [
        0,
@@ -106519,6 +107975,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -36,
+       -251
+      ],
       "bestand": "tegels/huizen/roze-huis11-leien-o.png",
       "cel": [
        0,
@@ -106864,6 +108324,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       74,
+       -270
+      ],
       "bestand": "tegels/huizen/roze-huis11-leien-n.png",
       "cel": [
        0,
@@ -107199,6 +108663,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -28,
+       -292
+      ],
       "bestand": "tegels/huizen/roze-huis11-leien-w.png",
       "cel": [
        0,
@@ -107454,6 +108922,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       -10,
+       -232
+      ],
       "bestand": "tegels/huizen/roze-huis11-pannen-z.png",
       "cel": [
        0,
@@ -107705,6 +109177,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -36,
+       -209
+      ],
       "bestand": "tegels/huizen/roze-huis11-pannen-o.png",
       "cel": [
        0,
@@ -107962,6 +109438,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       74,
+       -229
+      ],
       "bestand": "tegels/huizen/roze-huis11-pannen-n.png",
       "cel": [
        0,
@@ -108227,6 +109707,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -28,
+       -251
+      ],
       "bestand": "tegels/huizen/roze-huis11-pannen-w.png",
       "cel": [
        0,
@@ -108428,6 +109912,10 @@
        "steen": "zandsteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       -10,
+       -273
+      ],
       "bestand": "tegels/huizen/roze-steen11-leien-z.png",
       "cel": [
        0,
@@ -108599,6 +110087,10 @@
        "steen": "zandsteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       -36,
+       -251
+      ],
       "bestand": "tegels/huizen/roze-steen11-leien-o.png",
       "cel": [
        0,
@@ -108866,6 +110358,10 @@
        "steen": "zandsteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       74,
+       -270
+      ],
       "bestand": "tegels/huizen/roze-steen11-leien-n.png",
       "cel": [
        0,
@@ -109143,6 +110639,10 @@
        "steen": "zandsteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -28,
+       -292
+      ],
       "bestand": "tegels/huizen/roze-steen11-leien-w.png",
       "cel": [
        0,
@@ -109332,6 +110832,10 @@
        "steen": "zandsteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       -10,
+       -232
+      ],
       "bestand": "tegels/huizen/roze-steen11-pannen-z.png",
       "cel": [
        0,
@@ -109483,6 +110987,10 @@
        "steen": "zandsteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       -36,
+       -209
+      ],
       "bestand": "tegels/huizen/roze-steen11-pannen-o.png",
       "cel": [
        0,
@@ -109724,6 +111232,10 @@
        "steen": "zandsteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       74,
+       -229
+      ],
       "bestand": "tegels/huizen/roze-steen11-pannen-n.png",
       "cel": [
        0,
@@ -109975,6 +111487,10 @@
        "steen": "zandsteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -28,
+       -251
+      ],
       "bestand": "tegels/huizen/roze-steen11-pannen-w.png",
       "cel": [
        0,
@@ -110164,6 +111680,10 @@
        "steen": "baksteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       -10,
+       -232
+      ],
       "bestand": "tegels/huizen/roze-steen11-baksteen-z.png",
       "cel": [
        0,
@@ -110315,6 +111835,10 @@
        "steen": "baksteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       -36,
+       -209
+      ],
       "bestand": "tegels/huizen/roze-steen11-baksteen-o.png",
       "cel": [
        0,
@@ -110556,6 +112080,10 @@
        "steen": "baksteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       74,
+       -229
+      ],
       "bestand": "tegels/huizen/roze-steen11-baksteen-n.png",
       "cel": [
        0,
@@ -110807,6 +112335,10 @@
        "steen": "baksteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -28,
+       -251
+      ],
       "bestand": "tegels/huizen/roze-steen11-baksteen-w.png",
       "cel": [
        0,
@@ -111362,6 +112894,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       38,
+       -226
+      ],
       "bestand": "tegels/huizen/roze-huis12-riet-z.png",
       "cel": [
        0,
@@ -111901,6 +113437,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       142,
+       -316
+      ],
       "bestand": "tegels/huizen/roze-huis12-riet-o.png",
       "cel": [
        0,
@@ -112398,6 +113938,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       -6,
+       -384
+      ],
       "bestand": "tegels/huizen/roze-huis12-riet-n.png",
       "cel": [
        0,
@@ -113001,6 +114545,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -174,
+       -294
+      ],
       "bestand": "tegels/huizen/roze-huis12-riet-w.png",
       "cel": [
        0,
@@ -113560,6 +115108,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       37,
+       -207
+      ],
       "bestand": "tegels/huizen/roze-huis12-leien-z.png",
       "cel": [
        0,
@@ -114073,6 +115625,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       141,
+       -296
+      ],
       "bestand": "tegels/huizen/roze-huis12-leien-o.png",
       "cel": [
        0,
@@ -114572,6 +116128,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       -5,
+       -364
+      ],
       "bestand": "tegels/huizen/roze-huis12-leien-n.png",
       "cel": [
        0,
@@ -115171,6 +116731,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -173,
+       -275
+      ],
       "bestand": "tegels/huizen/roze-huis12-leien-w.png",
       "cel": [
        0,
@@ -115660,6 +117224,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       37,
+       -171
+      ],
       "bestand": "tegels/huizen/roze-huis12-pannen-z.png",
       "cel": [
        0,
@@ -116119,6 +117687,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       141,
+       -260
+      ],
       "bestand": "tegels/huizen/roze-huis12-pannen-o.png",
       "cel": [
        0,
@@ -116530,6 +118102,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       -5,
+       -328
+      ],
       "bestand": "tegels/huizen/roze-huis12-pannen-n.png",
       "cel": [
        0,
@@ -117059,6 +118635,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -173,
+       -239
+      ],
       "bestand": "tegels/huizen/roze-huis12-pannen-w.png",
       "cel": [
        0,
@@ -117360,6 +118940,10 @@
        "steen": "zandsteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       37,
+       -207
+      ],
       "bestand": "tegels/huizen/roze-steen12-leien-z.png",
       "cel": [
        0,
@@ -117681,6 +119265,10 @@
        "steen": "zandsteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       141,
+       -296
+      ],
       "bestand": "tegels/huizen/roze-steen12-leien-o.png",
       "cel": [
        0,
@@ -117878,6 +119466,10 @@
        "steen": "zandsteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       -5,
+       -364
+      ],
       "bestand": "tegels/huizen/roze-steen12-leien-n.png",
       "cel": [
        0,
@@ -118113,6 +119705,10 @@
        "steen": "zandsteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -173,
+       -275
+      ],
       "bestand": "tegels/huizen/roze-steen12-leien-w.png",
       "cel": [
        0,
@@ -118390,6 +119986,10 @@
        "steen": "zandsteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       37,
+       -171
+      ],
       "bestand": "tegels/huizen/roze-steen12-pannen-z.png",
       "cel": [
        0,
@@ -118699,6 +120299,10 @@
        "steen": "zandsteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       141,
+       -260
+      ],
       "bestand": "tegels/huizen/roze-steen12-pannen-o.png",
       "cel": [
        0,
@@ -118870,6 +120474,10 @@
        "steen": "zandsteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       -5,
+       -328
+      ],
       "bestand": "tegels/huizen/roze-steen12-pannen-n.png",
       "cel": [
        0,
@@ -119085,6 +120693,10 @@
        "steen": "zandsteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -173,
+       -239
+      ],
       "bestand": "tegels/huizen/roze-steen12-pannen-w.png",
       "cel": [
        0,
@@ -119362,6 +120974,10 @@
        "steen": "baksteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       37,
+       -171
+      ],
       "bestand": "tegels/huizen/roze-steen12-baksteen-z.png",
       "cel": [
        0,
@@ -119671,6 +121287,10 @@
        "steen": "baksteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       141,
+       -260
+      ],
       "bestand": "tegels/huizen/roze-steen12-baksteen-o.png",
       "cel": [
        0,
@@ -119842,6 +121462,10 @@
        "steen": "baksteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       -5,
+       -328
+      ],
       "bestand": "tegels/huizen/roze-steen12-baksteen-n.png",
       "cel": [
        0,
@@ -120057,6 +121681,10 @@
        "steen": "baksteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -173,
+       -239
+      ],
       "bestand": "tegels/huizen/roze-steen12-baksteen-w.png",
       "cel": [
        0,
@@ -120398,6 +122026,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       23,
+       -210
+      ],
       "bestand": "tegels/huizen/roze-boerderij8-riet-z.png",
       "cel": [
        0,
@@ -120655,6 +122287,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       48,
+       -246
+      ],
       "bestand": "tegels/huizen/roze-boerderij8-riet-o.png",
       "cel": [
        0,
@@ -120862,6 +122498,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       41,
+       -290
+      ],
       "bestand": "tegels/huizen/roze-boerderij8-riet-n.png",
       "cel": [
        0,
@@ -121167,6 +122807,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -112,
+       -254
+      ],
       "bestand": "tegels/huizen/roze-boerderij8-riet-w.png",
       "cel": [
        0,
@@ -121430,6 +123074,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       22,
+       -190
+      ],
       "bestand": "tegels/huizen/roze-boerderij8-leien-z.png",
       "cel": [
        0,
@@ -121689,6 +123337,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       47,
+       -225
+      ],
       "bestand": "tegels/huizen/roze-boerderij8-leien-o.png",
       "cel": [
        0,
@@ -121930,6 +123582,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       42,
+       -269
+      ],
       "bestand": "tegels/huizen/roze-boerderij8-leien-n.png",
       "cel": [
        0,
@@ -122159,6 +123815,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -111,
+       -234
+      ],
       "bestand": "tegels/huizen/roze-boerderij8-leien-w.png",
       "cel": [
        0,
@@ -122426,6 +124086,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       22,
+       -157
+      ],
       "bestand": "tegels/huizen/roze-boerderij8-pannen-z.png",
       "cel": [
        0,
@@ -122685,6 +124349,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       47,
+       -192
+      ],
       "bestand": "tegels/huizen/roze-boerderij8-pannen-o.png",
       "cel": [
        0,
@@ -122918,6 +124586,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       42,
+       -236
+      ],
       "bestand": "tegels/huizen/roze-boerderij8-pannen-n.png",
       "cel": [
        0,
@@ -123149,6 +124821,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -111,
+       -202
+      ],
       "bestand": "tegels/huizen/roze-boerderij8-pannen-w.png",
       "cel": [
        0,
@@ -123648,6 +125324,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       87,
+       -302
+      ],
       "bestand": "tegels/huizen/roze-boerderij9-riet-z.png",
       "cel": [
        0,
@@ -124175,6 +125855,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -1,
+       -345
+      ],
       "bestand": "tegels/huizen/roze-boerderij9-riet-o.png",
       "cel": [
        0,
@@ -124656,6 +126340,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       41,
+       -365
+      ],
       "bestand": "tegels/huizen/roze-boerderij9-riet-n.png",
       "cel": [
        0,
@@ -125147,6 +126835,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -127,
+       -322
+      ],
       "bestand": "tegels/huizen/roze-boerderij9-riet-w.png",
       "cel": [
        0,
@@ -125686,6 +127378,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       87,
+       -284
+      ],
       "bestand": "tegels/huizen/roze-boerderij9-leien-z.png",
       "cel": [
        0,
@@ -126245,6 +127941,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -1,
+       -328
+      ],
       "bestand": "tegels/huizen/roze-boerderij9-leien-o.png",
       "cel": [
        0,
@@ -126660,6 +128360,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       41,
+       -347
+      ],
       "bestand": "tegels/huizen/roze-boerderij9-leien-n.png",
       "cel": [
        0,
@@ -127071,6 +128775,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -127,
+       -304
+      ],
       "bestand": "tegels/huizen/roze-boerderij9-leien-w.png",
       "cel": [
        0,
@@ -127626,6 +129334,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       87,
+       -243
+      ],
       "bestand": "tegels/huizen/roze-boerderij9-pannen-z.png",
       "cel": [
        0,
@@ -128181,6 +129893,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -1,
+       -286
+      ],
       "bestand": "tegels/huizen/roze-boerderij9-pannen-o.png",
       "cel": [
        0,
@@ -128600,6 +130316,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       41,
+       -306
+      ],
       "bestand": "tegels/huizen/roze-boerderij9-pannen-n.png",
       "cel": [
        0,
@@ -129009,6 +130729,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -127,
+       -263
+      ],
       "bestand": "tegels/huizen/roze-boerderij9-pannen-w.png",
       "cel": [
        0,
@@ -129532,6 +131256,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       75,
+       -191
+      ],
       "bestand": "tegels/huizen/wit-herberg1-riet-z.png",
       "cel": [
        0,
@@ -130025,6 +131753,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       114,
+       -285
+      ],
       "bestand": "tegels/huizen/wit-herberg1-riet-o.png",
       "cel": [
        0,
@@ -130520,6 +132252,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       21,
+       -353
+      ],
       "bestand": "tegels/huizen/wit-herberg1-riet-n.png",
       "cel": [
        0,
@@ -131147,6 +132883,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -210,
+       -258
+      ],
       "bestand": "tegels/huizen/wit-herberg1-riet-w.png",
       "cel": [
        0,
@@ -131824,6 +133564,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       -13,
+       -423
+      ],
       "bestand": "tegels/huizen/wit-herberg2-leien-z.png",
       "cel": [
        0,
@@ -132539,6 +134283,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -167,
+       -333
+      ],
       "bestand": "tegels/huizen/wit-herberg2-leien-o.png",
       "cel": [
        0,
@@ -133246,6 +134994,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       205,
+       -352
+      ],
       "bestand": "tegels/huizen/wit-herberg2-leien-n.png",
       "cel": [
        0,
@@ -133987,6 +135739,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -25,
+       -442
+      ],
       "bestand": "tegels/huizen/wit-herberg2-leien-w.png",
       "cel": [
        0,
@@ -134672,6 +136428,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       -13,
+       -380
+      ],
       "bestand": "tegels/huizen/wit-herberg2-pannen-z.png",
       "cel": [
        0,
@@ -135393,6 +137153,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -167,
+       -290
+      ],
       "bestand": "tegels/huizen/wit-herberg2-pannen-o.png",
       "cel": [
        0,
@@ -136102,6 +137866,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       205,
+       -309
+      ],
       "bestand": "tegels/huizen/wit-herberg2-pannen-n.png",
       "cel": [
        0,
@@ -136841,6 +138609,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -25,
+       -399
+      ],
       "bestand": "tegels/huizen/wit-herberg2-pannen-w.png",
       "cel": [
        0,
@@ -139222,6 +140994,10 @@
        "steen": "veldsteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       -37,
+       -407
+      ],
       "bestand": "tegels/huizen/wit-woontoren-pannen-z.png",
       "cel": [
        0,
@@ -139457,6 +141233,10 @@
        "steen": "veldsteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       1,
+       -389
+      ],
       "bestand": "tegels/huizen/wit-woontoren-pannen-o.png",
       "cel": [
        0,
@@ -139736,6 +141516,10 @@
        "steen": "veldsteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       37,
+       -408
+      ],
       "bestand": "tegels/huizen/wit-woontoren-pannen-n.png",
       "cel": [
        0,
@@ -140083,6 +141867,10 @@
        "steen": "veldsteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -1,
+       -426
+      ],
       "bestand": "tegels/huizen/wit-woontoren-pannen-w.png",
       "cel": [
        0,
@@ -140420,6 +142208,10 @@
        "steen": "baksteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       -37,
+       -407
+      ],
       "bestand": "tegels/huizen/wit-woontoren-baksteen-z.png",
       "cel": [
        0,
@@ -140655,6 +142447,10 @@
        "steen": "baksteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       1,
+       -389
+      ],
       "bestand": "tegels/huizen/wit-woontoren-baksteen-o.png",
       "cel": [
        0,
@@ -140934,6 +142730,10 @@
        "steen": "baksteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       37,
+       -408
+      ],
       "bestand": "tegels/huizen/wit-woontoren-baksteen-n.png",
       "cel": [
        0,
@@ -141281,6 +143081,10 @@
        "steen": "baksteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -1,
+       -426
+      ],
       "bestand": "tegels/huizen/wit-woontoren-baksteen-w.png",
       "cel": [
        0,
@@ -141736,6 +143540,10 @@
        "steen": "veldsteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       69,
+       -414
+      ],
       "bestand": "tegels/huizen/wit-schoutshuis-riet-z.png",
       "cel": [
        0,
@@ -142153,6 +143961,10 @@
        "steen": "veldsteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       31,
+       -464
+      ],
       "bestand": "tegels/huizen/wit-schoutshuis-riet-o.png",
       "cel": [
        0,
@@ -142658,6 +144470,10 @@
        "steen": "veldsteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       -5,
+       -477
+      ],
       "bestand": "tegels/huizen/wit-schoutshuis-riet-n.png",
       "cel": [
        0,
@@ -143195,6 +145011,10 @@
        "steen": "veldsteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -95,
+       -427
+      ],
       "bestand": "tegels/huizen/wit-schoutshuis-riet-w.png",
       "cel": [
        0,
@@ -143682,6 +145502,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       75,
+       -191
+      ],
       "bestand": "tegels/huizen/oker-herberg1-riet-z.png",
       "cel": [
        0,
@@ -144175,6 +145999,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       114,
+       -285
+      ],
       "bestand": "tegels/huizen/oker-herberg1-riet-o.png",
       "cel": [
        0,
@@ -144670,6 +146498,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       21,
+       -353
+      ],
       "bestand": "tegels/huizen/oker-herberg1-riet-n.png",
       "cel": [
        0,
@@ -145297,6 +147129,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -210,
+       -258
+      ],
       "bestand": "tegels/huizen/oker-herberg1-riet-w.png",
       "cel": [
        0,
@@ -145974,6 +147810,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       -13,
+       -423
+      ],
       "bestand": "tegels/huizen/oker-herberg2-leien-z.png",
       "cel": [
        0,
@@ -146689,6 +148529,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -167,
+       -333
+      ],
       "bestand": "tegels/huizen/oker-herberg2-leien-o.png",
       "cel": [
        0,
@@ -147396,6 +149240,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       205,
+       -352
+      ],
       "bestand": "tegels/huizen/oker-herberg2-leien-n.png",
       "cel": [
        0,
@@ -148137,6 +149985,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -25,
+       -442
+      ],
       "bestand": "tegels/huizen/oker-herberg2-leien-w.png",
       "cel": [
        0,
@@ -148822,6 +150674,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       -13,
+       -380
+      ],
       "bestand": "tegels/huizen/oker-herberg2-pannen-z.png",
       "cel": [
        0,
@@ -149543,6 +151399,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -167,
+       -290
+      ],
       "bestand": "tegels/huizen/oker-herberg2-pannen-o.png",
       "cel": [
        0,
@@ -150252,6 +152112,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       205,
+       -309
+      ],
       "bestand": "tegels/huizen/oker-herberg2-pannen-n.png",
       "cel": [
        0,
@@ -150991,6 +152855,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -25,
+       -399
+      ],
       "bestand": "tegels/huizen/oker-herberg2-pannen-w.png",
       "cel": [
        0,
@@ -153372,6 +155240,10 @@
        "steen": "zandsteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       -37,
+       -407
+      ],
       "bestand": "tegels/huizen/oker-woontoren-pannen-z.png",
       "cel": [
        0,
@@ -153607,6 +155479,10 @@
        "steen": "zandsteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       1,
+       -389
+      ],
       "bestand": "tegels/huizen/oker-woontoren-pannen-o.png",
       "cel": [
        0,
@@ -153886,6 +155762,10 @@
        "steen": "zandsteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       37,
+       -408
+      ],
       "bestand": "tegels/huizen/oker-woontoren-pannen-n.png",
       "cel": [
        0,
@@ -154233,6 +156113,10 @@
        "steen": "zandsteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -1,
+       -426
+      ],
       "bestand": "tegels/huizen/oker-woontoren-pannen-w.png",
       "cel": [
        0,
@@ -154570,6 +156454,10 @@
        "steen": "baksteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       -37,
+       -407
+      ],
       "bestand": "tegels/huizen/oker-woontoren-baksteen-z.png",
       "cel": [
        0,
@@ -154805,6 +156693,10 @@
        "steen": "baksteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       1,
+       -389
+      ],
       "bestand": "tegels/huizen/oker-woontoren-baksteen-o.png",
       "cel": [
        0,
@@ -155084,6 +156976,10 @@
        "steen": "baksteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       37,
+       -408
+      ],
       "bestand": "tegels/huizen/oker-woontoren-baksteen-n.png",
       "cel": [
        0,
@@ -155431,6 +157327,10 @@
        "steen": "baksteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -1,
+       -426
+      ],
       "bestand": "tegels/huizen/oker-woontoren-baksteen-w.png",
       "cel": [
        0,
@@ -155886,6 +157786,10 @@
        "steen": "zandsteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       69,
+       -414
+      ],
       "bestand": "tegels/huizen/oker-schoutshuis-riet-z.png",
       "cel": [
        0,
@@ -156303,6 +158207,10 @@
        "steen": "zandsteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       31,
+       -464
+      ],
       "bestand": "tegels/huizen/oker-schoutshuis-riet-o.png",
       "cel": [
        0,
@@ -156808,6 +158716,10 @@
        "steen": "zandsteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       -5,
+       -477
+      ],
       "bestand": "tegels/huizen/oker-schoutshuis-riet-n.png",
       "cel": [
        0,
@@ -157345,6 +159257,10 @@
        "steen": "zandsteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -95,
+       -427
+      ],
       "bestand": "tegels/huizen/oker-schoutshuis-riet-w.png",
       "cel": [
        0,
@@ -157762,6 +159678,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       74,
+       -156
+      ],
       "bestand": "tegels/huizen/planken-herberg1-spanen-z.png",
       "cel": [
        0,
@@ -158181,6 +160101,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       113,
+       -249
+      ],
       "bestand": "tegels/huizen/planken-herberg1-spanen-o.png",
       "cel": [
        0,
@@ -158626,6 +160550,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       22,
+       -316
+      ],
       "bestand": "tegels/huizen/planken-herberg1-spanen-n.png",
       "cel": [
        0,
@@ -159213,6 +161141,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -209,
+       -223
+      ],
       "bestand": "tegels/huizen/planken-herberg1-spanen-w.png",
       "cel": [
        0,
@@ -159890,6 +161822,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       -13,
+       -423
+      ],
       "bestand": "tegels/huizen/planken-herberg2-leien-z.png",
       "cel": [
        0,
@@ -160605,6 +162541,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -167,
+       -333
+      ],
       "bestand": "tegels/huizen/planken-herberg2-leien-o.png",
       "cel": [
        0,
@@ -161312,6 +163252,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       205,
+       -352
+      ],
       "bestand": "tegels/huizen/planken-herberg2-leien-n.png",
       "cel": [
        0,
@@ -162051,6 +163995,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -25,
+       -442
+      ],
       "bestand": "tegels/huizen/planken-herberg2-leien-w.png",
       "cel": [
        0,
@@ -162734,6 +164682,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       -13,
+       -380
+      ],
       "bestand": "tegels/huizen/planken-herberg2-pannen-z.png",
       "cel": [
        0,
@@ -163455,6 +165407,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -167,
+       -290
+      ],
       "bestand": "tegels/huizen/planken-herberg2-pannen-o.png",
       "cel": [
        0,
@@ -164164,6 +166120,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       205,
+       -309
+      ],
       "bestand": "tegels/huizen/planken-herberg2-pannen-n.png",
       "cel": [
        0,
@@ -164903,6 +166863,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -25,
+       -399
+      ],
       "bestand": "tegels/huizen/planken-herberg2-pannen-w.png",
       "cel": [
        0,
@@ -165988,6 +167952,10 @@
        "steen": "veldsteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       -37,
+       -407
+      ],
       "bestand": "tegels/huizen/planken-woontoren-pannen-z.png",
       "cel": [
        0,
@@ -166223,6 +168191,10 @@
        "steen": "veldsteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       1,
+       -389
+      ],
       "bestand": "tegels/huizen/planken-woontoren-pannen-o.png",
       "cel": [
        0,
@@ -166502,6 +168474,10 @@
        "steen": "veldsteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       37,
+       -408
+      ],
       "bestand": "tegels/huizen/planken-woontoren-pannen-n.png",
       "cel": [
        0,
@@ -166849,6 +168825,10 @@
        "steen": "veldsteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -1,
+       -426
+      ],
       "bestand": "tegels/huizen/planken-woontoren-pannen-w.png",
       "cel": [
        0,
@@ -167186,6 +169166,10 @@
        "steen": "baksteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       -37,
+       -407
+      ],
       "bestand": "tegels/huizen/planken-woontoren-baksteen-z.png",
       "cel": [
        0,
@@ -167421,6 +169405,10 @@
        "steen": "baksteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       1,
+       -389
+      ],
       "bestand": "tegels/huizen/planken-woontoren-baksteen-o.png",
       "cel": [
        0,
@@ -167700,6 +169688,10 @@
        "steen": "baksteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       37,
+       -408
+      ],
       "bestand": "tegels/huizen/planken-woontoren-baksteen-n.png",
       "cel": [
        0,
@@ -168047,6 +170039,10 @@
        "steen": "baksteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -1,
+       -426
+      ],
       "bestand": "tegels/huizen/planken-woontoren-baksteen-w.png",
       "cel": [
        0,
@@ -168508,6 +170504,10 @@
        "steen": "veldsteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       69,
+       -377
+      ],
       "bestand": "tegels/huizen/planken-schoutshuis-spanen-z.png",
       "cel": [
        0,
@@ -168927,6 +170927,10 @@
        "steen": "veldsteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       31,
+       -427
+      ],
       "bestand": "tegels/huizen/planken-schoutshuis-spanen-o.png",
       "cel": [
        0,
@@ -169456,6 +171460,10 @@
        "steen": "veldsteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       -5,
+       -439
+      ],
       "bestand": "tegels/huizen/planken-schoutshuis-spanen-n.png",
       "cel": [
        0,
@@ -169993,6 +172001,10 @@
        "steen": "veldsteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -95,
+       -389
+      ],
       "bestand": "tegels/huizen/planken-schoutshuis-spanen-w.png",
       "cel": [
        0,
@@ -170480,6 +172492,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       75,
+       -191
+      ],
       "bestand": "tegels/huizen/roze-herberg1-riet-z.png",
       "cel": [
        0,
@@ -170973,6 +172989,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       114,
+       -285
+      ],
       "bestand": "tegels/huizen/roze-herberg1-riet-o.png",
       "cel": [
        0,
@@ -171468,6 +173488,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       21,
+       -353
+      ],
       "bestand": "tegels/huizen/roze-herberg1-riet-n.png",
       "cel": [
        0,
@@ -172095,6 +174119,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -210,
+       -258
+      ],
       "bestand": "tegels/huizen/roze-herberg1-riet-w.png",
       "cel": [
        0,
@@ -172772,6 +174800,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       -13,
+       -423
+      ],
       "bestand": "tegels/huizen/roze-herberg2-leien-z.png",
       "cel": [
        0,
@@ -173487,6 +175519,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -167,
+       -333
+      ],
       "bestand": "tegels/huizen/roze-herberg2-leien-o.png",
       "cel": [
        0,
@@ -174194,6 +176230,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       205,
+       -352
+      ],
       "bestand": "tegels/huizen/roze-herberg2-leien-n.png",
       "cel": [
        0,
@@ -174935,6 +176975,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -25,
+       -442
+      ],
       "bestand": "tegels/huizen/roze-herberg2-leien-w.png",
       "cel": [
        0,
@@ -175620,6 +177664,10 @@
        "steen": null,
        "stand": "z"
       },
+      "schoorsteen": [
+       -13,
+       -380
+      ],
       "bestand": "tegels/huizen/roze-herberg2-pannen-z.png",
       "cel": [
        0,
@@ -176341,6 +178389,10 @@
        "steen": null,
        "stand": "o"
       },
+      "schoorsteen": [
+       -167,
+       -290
+      ],
       "bestand": "tegels/huizen/roze-herberg2-pannen-o.png",
       "cel": [
        0,
@@ -177050,6 +179102,10 @@
        "steen": null,
        "stand": "n"
       },
+      "schoorsteen": [
+       205,
+       -309
+      ],
       "bestand": "tegels/huizen/roze-herberg2-pannen-n.png",
       "cel": [
        0,
@@ -177789,6 +179845,10 @@
        "steen": null,
        "stand": "w"
       },
+      "schoorsteen": [
+       -25,
+       -399
+      ],
       "bestand": "tegels/huizen/roze-herberg2-pannen-w.png",
       "cel": [
        0,
@@ -180170,6 +182230,10 @@
        "steen": "zandsteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       -37,
+       -407
+      ],
       "bestand": "tegels/huizen/roze-woontoren-pannen-z.png",
       "cel": [
        0,
@@ -180405,6 +182469,10 @@
        "steen": "zandsteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       1,
+       -389
+      ],
       "bestand": "tegels/huizen/roze-woontoren-pannen-o.png",
       "cel": [
        0,
@@ -180684,6 +182752,10 @@
        "steen": "zandsteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       37,
+       -408
+      ],
       "bestand": "tegels/huizen/roze-woontoren-pannen-n.png",
       "cel": [
        0,
@@ -181031,6 +183103,10 @@
        "steen": "zandsteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -1,
+       -426
+      ],
       "bestand": "tegels/huizen/roze-woontoren-pannen-w.png",
       "cel": [
        0,
@@ -181368,6 +183444,10 @@
        "steen": "baksteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       -37,
+       -407
+      ],
       "bestand": "tegels/huizen/roze-woontoren-baksteen-z.png",
       "cel": [
        0,
@@ -181603,6 +183683,10 @@
        "steen": "baksteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       1,
+       -389
+      ],
       "bestand": "tegels/huizen/roze-woontoren-baksteen-o.png",
       "cel": [
        0,
@@ -181882,6 +183966,10 @@
        "steen": "baksteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       37,
+       -408
+      ],
       "bestand": "tegels/huizen/roze-woontoren-baksteen-n.png",
       "cel": [
        0,
@@ -182229,6 +184317,10 @@
        "steen": "baksteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -1,
+       -426
+      ],
       "bestand": "tegels/huizen/roze-woontoren-baksteen-w.png",
       "cel": [
        0,
@@ -182684,6 +184776,10 @@
        "steen": "zandsteen",
        "stand": "z"
       },
+      "schoorsteen": [
+       69,
+       -414
+      ],
       "bestand": "tegels/huizen/roze-schoutshuis-riet-z.png",
       "cel": [
        0,
@@ -183101,6 +185197,10 @@
        "steen": "zandsteen",
        "stand": "o"
       },
+      "schoorsteen": [
+       31,
+       -464
+      ],
       "bestand": "tegels/huizen/roze-schoutshuis-riet-o.png",
       "cel": [
        0,
@@ -183606,6 +185706,10 @@
        "steen": "zandsteen",
        "stand": "n"
       },
+      "schoorsteen": [
+       -5,
+       -477
+      ],
       "bestand": "tegels/huizen/roze-schoutshuis-riet-n.png",
       "cel": [
        0,
@@ -184143,6 +186247,10 @@
        "steen": "zandsteen",
        "stand": "w"
       },
+      "schoorsteen": [
+       -95,
+       -427
+      ],
       "bestand": "tegels/huizen/roze-schoutshuis-riet-w.png",
       "cel": [
        0,
