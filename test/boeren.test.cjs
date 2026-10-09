@@ -163,6 +163,7 @@ test('de vijf van de vaste verdeling hebben hun vel, en dat loopt zoals hun lijf
   }
   // Elk vel van een karakter zit op een lijf dat bij dat karakter kan: een weduwe is een boerin.
   for (const naam of Object.keys(F)) {
+    if (/-u\d+$/.test(naam)) continue; // een uiterlijk (vraag 145), geen karakter
     const [, lijf, karakter] = /^(boer|boerin)-(.+)$/.exec(naam) || [];
     if (!lijf) continue;
     assert.ok(T.KARAKTERS[karakter], `${naam}: er is geen karakter ${karakter}`);
@@ -190,7 +191,7 @@ test('alle achttien vellen: elk karakter op elk lijf dat erbij kan, en het loopt
     }
   }
   assert.equal(vellen.length, 18);
-  assert.equal(Object.keys(F).filter((n) => /^(boer|boerin)-/.test(n)).length, 18);
+  assert.equal(Object.keys(F).filter((n) => /^(boer|boerin)-/.test(n) && !/-u\d+$/.test(n)).length, 18);
 });
 
 // ---------------------------------------------------------------------------------------------
