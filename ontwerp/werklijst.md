@@ -14,8 +14,7 @@ groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
 Marcel, 8 okt: "snel, duidelijk en low cost". Elke sessie werkt dit blok bij aan het eind; wat af is, gaat eruit.
 
-**Loopt** (het teken "Bezig in sessie" staat bij het punt zelf): vraag 141, de beurs per huis, stap 1. De dagloners (vraag 140: wie geen werk heeft,
-maait, bindt en draagt in de oogst) staan in `main`.
+**Loopt:** niets. De dagloners (vraag 140: wie geen werk heeft, maait, bindt en draagt in de oogst) staan in `main`.
 
 **Wacht op Marcel:**
 - Vraag 142, de bladzijde met alle getallen (`gereedschap/instellingen.html`): stap 1 en 2 staan in `main`; stap 3 (een
@@ -6954,8 +6953,6 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     uit zijn beurs wat het nodig heeft en wil; omkopen gaat uit eigen zak, en je kunt er anderen mee helpen; de boer kiest
     hoe hij zijn dagloner betaalt en wat hij van zijn oogst verkoopt; een huis betaalt voor alles, ook zijn eten; en de
     munten zijn 1 goud = 10 zilver = 100 koper.
-    **Bezig in sessie `ccr-77327776-rqjldz`** (8 okt): stap 1, de munten, de beurs van de schout en zijn loon, en omkopen
-    uit eigen zak.
 
 142. **Een gereedschap voor alle getallen** (Marcel, 8 okt: "Ik wil straks wel een tool waarin we al deze parameters kunnen
     instellen."; open). Er is de werkbank in de spelregels (`T.WERKBANK` in `js/opties.js`: elk getal uit de blokken
