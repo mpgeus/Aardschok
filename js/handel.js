@@ -208,7 +208,7 @@
     m.weg = true;
     T.zetVlag(D, 'marskramerVertrekt');
     if (T.ui && T.ui.sluitHandel) T.ui.sluitHandel(D); // staat het venster open (js/hud.js), dan gaat het dicht
-    T.zeg(D, `De marskramer trekt verder. Hij komt terug in ${T.volgendeMarskramer(dag)}.`);
+    T.zeg(D, m.daarna != null ? 'De marskramer trekt verder. Zijn vaste ronde komt meteen hierna.' : `De marskramer trekt verder. Hij komt terug in ${T.volgendeMarskramer(dag)}.`);
     if (!m.wezen) haalWeg(D);
   }
 
@@ -226,6 +226,7 @@
       for (const b of IN().bezoeken) T.wisVlag(D, b.vlag);
       T.wisVlag(D, 'marskramerBode');
     }
+    if (m.daarna != null) D.marskramerDaarna = m.daarna;
     D.marskramer = null;
   }
 
@@ -236,9 +237,14 @@
     const m = D.marskramer;
     // Zolang hij nog over de weg aan komt lopen, telt zijn tijd niet: zie blijftDagen.
     if (m && !m.weg && (!m.wezen || m.staat) && dag >= m.gaatOp) vertrek(D, dag);
+    // Valt zijn vaste ronde op een dag dat hij op bestelling er nog is (de bode, js/bode.js), dan wacht die ronde tot hij
+    // weg is, en komt hij dan meteen (Marcel, 9 okt: "optie 1").
+    const i = T.marskramerBegintOp(dag);
+    if (i != null && D.marskramer && D.marskramer.bestelling) D.marskramer.daarna = i;
     if (!D.marskramer) {
-      const i = T.marskramerBegintOp(dag);
-      if (i != null) T.marskramerKomt(D, i, dag);
+      const j = i != null ? i : D.marskramerDaarna;
+      delete D.marskramerDaarna;
+      if (j != null) T.marskramerKomt(D, j, dag);
     }
   };
 

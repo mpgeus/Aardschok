@@ -7037,6 +7037,16 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     (graan, zout, hout, ijzer), de bode met loon, in de winter een begeleider, en de marskramer op bestelling, duurder en
     soms zonder iets (`spel.md`, "De bode naar de marskramer"). Bescherming in het donker en de vaste ronde die wegvalt
     staan in `opmerkingen.md`.
+    **Marcel (9 okt, daarna), op de open punten:** "1. De bode moet "onderschept" kunnen worden. dat maakt het spannend.
+    Je moet wel bescherming mee kunnen sturen. 2. optie 1". Dus: onderweg kan de bode onderschept worden, en je kunt
+    mannen meesturen om hem te beschermen (het plan staat hieronder als het er is); en valt de vaste ronde van de
+    marskramer op een dag dat hij op bestelling er nog is, dan wacht die ronde tot hij weg is. **Gebouwd (9 okt):** dat
+    wachten (`m.daarna`, `D.marskramerDaarna` in `T.tikHandelDag`).
+
+144. **Wat er nog open is bij het weer** (Marcel, 9 okt: "Ja heel goed, dit moeten we pakken", op de lijst uit
+    `opmerkingen.md`): sneeuw op de grond en de daken; op een natte dag zaait niemand (vraag 82, b en c); de marskramer
+    die na een droog jaar meer graan meeneemt; ziekte en brand als status; en een bode naar anderen (het buurdorp, de
+    heer, de koning) zoals die naar de marskramer. Het plan en de volgorde komen van Claude, en Marcel kiest.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

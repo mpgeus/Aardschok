@@ -145,3 +145,24 @@ test('met de spelregel "De bode" op Nee kan het niet', () => {
     T.zetOptie('wieBouwt', 'jij');
   }
 });
+
+test('valt de vaste ronde op een dag dat hij op bestelling er nog is, dan komt die ronde na hem (Marcel: "optie 1")', () => {
+  const nietBijZich = B.nietBijZich;
+  B.nietBijZich = 0;
+  try {
+    const begin = dagVan('hooimaand', 3);
+    const S = gehucht(begin);
+    const D = S.dorp;
+    T.marskramerOpBestelling(D, { graan: 2 }, begin, false);
+    assert.ok(D.marskramer.bestelling);
+    let dag = begin + 1;
+    for (; D.marskramer && D.marskramer.bestelling; dag++) T.tikHandelDag(D, dag);
+    const m = D.marskramer;
+    assert.ok(m && !m.bestelling, 'zijn vaste ronde is er, op de dag dat de bestelde ging');
+    assert.equal(m.bezoek, 1, 'de ronde van de zomer');
+    assert.ok(dag - 1 > dagVan('hooimaand', 5), 'later dan anders');
+    assert.equal(D.marskramerDaarna, undefined);
+  } finally {
+    B.nietBijZich = nietBijZich;
+  }
+});
