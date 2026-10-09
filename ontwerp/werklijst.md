@@ -7120,7 +7120,11 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     golft als stof), alles is gloednieuw, het dak werpt geen schaduw op de muur, er staat niets om het huis, en huizen van
     een soort lijken op elkaar. Voorstel: eerst één huis tot het fantastisch is, dan pas alle tekeningen; **de render van
     de ruïnes wacht daarom** (een ruïne is uit het huis gesneden), zodat de huizen, de bouwfasen, de brandfasen en de
-    sneeuw straks in één ronde gaan. Marcel zoekt voorbeelden van huizen die hij mooi vindt.
+    sneeuw straks in één ronde gaan. Marcel zoekt voorbeelden van huizen die hij mooi vindt. **Marcel (9 okt) bracht
+    twee platen "Medieval Buildings" (door een tekenaar met AI gemaakt; alleen als voorbeeld, niet in git):** vakwerk en
+    steen met diepe, steile pannendaken, overstekken, dakkapellen, torentjes, scheve lijnen, verweerd pleister met steen
+    erdoor, een stenen voet, warm licht met diepe schaduw onder het dak, en tonnen, kratten, lantaarns en planten om het
+    huis.
 
 145. **Het dorp leeft** (Marcel, 9 okt, na het spelen: "het voelt gewoon wat 'saai' in het dorp"). Claude zag op de
     eerste dag: iedereen is een kloon (één poppetje per leeftijd en geslacht: vier dezelfde meisjes op één scherm), de
