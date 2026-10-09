@@ -14,9 +14,9 @@ groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
 Marcel, 8 okt: "snel, duidelijk en low cost". Elke sessie werkt dit blok bij aan het eind; wat af is, gaat eruit.
 
-**Loopt** (het teken "Bezig in sessie" staat bij het punt zelf): de fasen van het afbranden van een huis (vraag 144, 3,
-de kunst: elk materiaal op zijn eigen manier, de schoorsteen, een fase ertussen), daarna de sneeuw op de daken als Marcel
-ja zegt. De bode met de hinderlaag en de lantaarns (vraag 143), het weer, de statussen, niet zaaien in de regen, de
+**Loopt** (het teken "Bezig in sessie" staat bij het punt zelf): het dorp leeft (vraag 145: elk mens anders, geluid,
+klein leven). De fasen van het afbranden (vraag 144, 3) zijn af op de proefplaat; alle tekeningen wachten tot de huizen
+zelf beter zijn (Marcel zoekt voorbeelden), en gaan dan in één ronde met de sneeuw op de daken. De bode met de hinderlaag en de lantaarns (vraag 143), het weer, de statussen, niet zaaien in de regen, de
 brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `main`. Vraag 141, de economie binnen het dorp, is op 9 okt helemaal teruggedraaid
 (Marcel: "Ik denk dat we die economie terug moeten draaien", en "Alles van vraag 141").
 
@@ -7060,7 +7060,6 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     de mannen van de heer (de brief weg, argwaan en gunst); tot drie mannen mee, met het gevaar in de brief; afgeslagen of
     beroofd, en wie sneuvelt of gewond is; de helft van de keren een hinderlaag bij de uitgang op je kaart, met een gevecht
     in beurten als je erbij komt (`spel.md`, "De bode naar de marskramer").
-    **Bezig in sessie `ccr-77327776-rqjldz`** (9 okt): vraag 144.
 
 144. **Wat er nog open is bij het weer** (Marcel, 9 okt: "Ja heel goed, dit moeten we pakken", op de lijst uit
     `opmerkingen.md`): sneeuw op de grond en de daken; op een natte dag zaait niemand (vraag 82, b en c); de marskramer
@@ -7114,7 +7113,36 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     **Marcel (9 okt): "ja dat is goed."** **Proefplaat met 1, 2 en 5 (9 okt):** steen blijft staan met roetpluimen en een
     zwarte binnenkant, vakwerk wordt een zwart geraamte met het leem ertussenuit, planken branden tot stompen, lei en
     pannen worden zwart en liggen in scherven, de stenen schoorsteen staat van de grond, en de fase binnengestort (zes in
-    totaal, met het hele huis). Wacht op Marcel; dan 4 en 6, dan 3.
+    totaal, met het hele huis). **Marcel (9 okt): "dit is prima."** **Gebouwd op de proefplaat (9 okt):** 4 (een luik
+    scheef aan zijn scharnier of op de grond, de deur uit zijn hengsels, de bloembak onder het raam, glasscherven), 6 (een
+    tweede variant van ingestort) en 3 (een verkoold bedframe, een omgevallen tafel, een ladder, een ijzeren ketel). Wacht
+    op Marcel; daarna alle tekeningen renderen (zo'n vijf uur op de achtergrond) en het in het spel zetten.
+    **Marcel (9 okt): "De huizen voelen op dit moment nog niet fantastisch. Weet je wat ik net zei over de art?"** Claude
+    zag: het materiaal leest als een patroon (geel golvend riet, steen als raster met losse gekleurde blokjes, lei die
+    golft als stof), alles is gloednieuw, het dak werpt geen schaduw op de muur, er staat niets om het huis, en huizen van
+    een soort lijken op elkaar. Voorstel: eerst één huis tot het fantastisch is, dan pas alle tekeningen; **de render van
+    de ruïnes wacht daarom** (een ruïne is uit het huis gesneden), zodat de huizen, de bouwfasen, de brandfasen en de
+    sneeuw straks in één ronde gaan. Marcel zoekt voorbeelden van huizen die hij mooi vindt. **Marcel (9 okt) bracht
+    twee platen "Medieval Buildings" (door een tekenaar met AI gemaakt; alleen als voorbeeld, niet in git):** vakwerk en
+    steen met diepe, steile pannendaken, overstekken, dakkapellen, torentjes, scheve lijnen, verweerd pleister met steen
+    erdoor, een stenen voet, warm licht met diepe schaduw onder het dak, en tonnen, kratten, lantaarns en planten om het
+    huis.
+    **En nog twee (9 okt):** een plaat "Isometric Medieval Village" (ook AI): sober en echt, grijsbruin riet met mos,
+    veldsteen, oud hout, en om elk huis een eigen stuk grond (keien, vertrapte aarde, gras, een karrenwiel, kratten,
+    tonnen, een houtstapel); en een stuk van een dorp met een burcht in de stijl van Stronghold: aardse kleuren, niet fel,
+    vakwerk, luifels, bloembakken, en een duidelijke schaduw.
+    **En vier losse huizen (9 okt, AI en stockplaatjes, alleen als voorbeeld):** vakwerk van twee lagen op een stenen voet,
+    met meer gevels en dakkapellen, een nok en dakranden die doorzakken en krullen, grove pannen die elk anders liggen,
+    een afdakje boven de deur, een trap en een balkon, twee schoorstenen, en elk huis op een eigen stukje grond (keien met
+    een rand, gras, tonnen, een bankje, potten en struiken).
+
+145. **Het dorp leeft** (Marcel, 9 okt, na het spelen: "het voelt gewoon wat 'saai' in het dorp"). Claude zag op de
+    eerste dag: iedereen is een kloon (één poppetje per leeftijd en geslacht: vier dezelfde meisjes op één scherm), de
+    meesten staan stil, er is geen geluid, en er is geen klein leven (rook, kippen, een hond, spelende kinderen, was); en
+    als schout heb je in het begin weinig te doen. Voorstel, van veel effect voor weinig werk: 1. elk mens ziet er anders
+    uit, 2. geluid, 3. klein leven, 4. het eerste uur iets te doen, 5. de huizen met de "wow". **Marcel (9 okt): "laten we
+    beginnen met 1 tot 3; daarna praten we verder."**
+    **Bezig in sessie `ccr-77327776-rqjldz`** (9 okt): vraag 145, eerst het plan.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

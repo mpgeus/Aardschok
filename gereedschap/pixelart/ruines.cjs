@@ -23,7 +23,8 @@ const RAND = 16;
 function rij(naam) {
   const t0 = Date.now();
   const heel = HZ.renderHuis(HZ.HUIZEN[naam]);
-  const fasen = HZ.BRANDFASEN.map((f) => HZ.renderHuisRuine(naam, f));
+  // de fasen, en van ingestort een tweede variant (elk huis valt anders in)
+  const fasen = [...HZ.BRANDFASEN.map((f) => HZ.renderHuisRuine(naam, f)), HZ.renderHuisRuine(naam, 'ingestort', 1)];
   const platen = [{ plaat: heel.plaat, ax: heel.anker[0], ay: heel.anker[1] }, ...fasen.map((r) => ({ plaat: r.plaat, ax: r.ankerX, ay: r.ankerY }))];
   const boven = Math.max(...platen.map((p) => p.ay));
   const onder = Math.max(...platen.map((p) => p.plaat.h - p.ay));

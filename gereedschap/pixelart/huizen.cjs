@@ -899,8 +899,8 @@ const MUURSOORTEN = {
 };
 const SKELET = { hoek: 0.9, midden: [0.25, 0.8], binnen: 0.95 };
 const STEEN_MUUR = new Set(['veldsteen', 'kalk']);
-// Wat niet tot houtskool brandt: steen, leem en pleister, en de pannen ('dak') en leien van een dak.
-const ALS_STEEN = /steen|pleister|leem|aarde|zand|ijzer|^dak$|rood/;
+// Wat niet tot houtskool brandt: steen, leem en pleister, en de pannen ('dak') en leien (veldsteen) van een dak.
+const ALS_STEEN = /steen|pleister|leem|aarde|zand|ijzer|^dak$/;
 // Boven een raam van een stenen muur een zwarte pluim, waar de vlammen naar buiten sloegen: smal onderaan, breder en
 // vager naar boven. `pluimen`: per raam [x, y, z van de bovenkant, halve breedte].
 const ROETPLUIM = 70;
@@ -1007,6 +1007,138 @@ function balkVorm(A, B, b, h, m, deel) {
   };
 }
 
+// Naar buiten, vanaf een punt op of bij een muur: de richting loodrecht op de dichtste muur van zijn vleugel.
+function naarBuiten(H, x, y) {
+  let best = null;
+  for (const V of H.vleugels) {
+    const [a, q] = V.lok(x, y);
+    const dA = V.ha - Math.abs(a);
+    const dQ = V.hq - Math.abs(q);
+    const d = Math.min(dA, dQ);
+    if (best && d >= best.d) continue;
+    const [ox, oy] = V.wereld(0, 0);
+    const [ax, ay] = dQ < dA ? V.wereld(0, Math.sign(q) || 1) : V.wereld(Math.sign(a) || 1, 0);
+    const l = Math.hypot(ax - ox, ay - oy) || 1;
+    best = { d, n: [(ax - ox) / l, (ay - oy) / l] };
+  }
+  return best ? best.n : [0, 1];
+}
+
+// Wat er aan de buitenkant van het huis hing, na de brand (vraag 144, 3, punt 4; Marcel: "wow, wat een detail"): een
+// luik dat aan zijn bovenste scharnier scheef hangt, of voor het huis op de grond ligt als zijn muur er niet meer is; de
+// deur die uit zijn hengsels viel en voor de deur ligt; de bloembak die onder het raam ligt, met zwarte planten; en
+// glasscherven onder elk raam. `o`: { staat(x, y, z): staat de muur daar nog, grond(x, y): hoe hoog de grond daar is (het
+// puin), luikBlijft, luikHangt: de kans dat een luik blijft hangen zoals het hing, of scheef, deur, bak: of die vallen,
+// scherven: hoeveel per raam }.
+function watBuitenHing(W, N, zaad, o) {
+  const H = W.H;
+  const r = (a, b = 0) => K.rnd(zaad, a, b);
+  const delen = (naam) => W.groepen.filter((g) => g.naam === naam);
+  N.mat.scherf = { ramp: 'pet', lo: 2.4, hi: 6.4, rand: 1.2 };
+  const L = N.groep('luiken');
+  let i = 0;
+  for (const g of delen('luiken')) {
+    for (const p of g.delen) {
+      i++;
+      if (!p.luik || o.luiken === false) continue; // opgeruimd: de luiken zijn weg
+      const { lok, lw, hv } = p.luik;
+      const [cx, cy, cz] = p.g;
+      const lot = r(i, 200);
+      // de muur moet er ruim boven nog staan, en aan beide kanten, anders hangt het in de lucht
+      const [tnx, tny] = naarBuiten(H, cx, cy);
+      const staat = [-1, 0, 1].every((z) => o.staat(cx - tny * z * lw, cy + tnx * z * lw, cz + hv + 12));
+      if (staat && lot < o.luikBlijft) {
+        Tr.voeg(L, { ...p });
+      } else if (staat && lot < o.luikBlijft + o.luikHangt) {
+        // scheef aan zijn bovenste scharnier: in zijn eigen vlak gedraaid om de bovenhoek aan de kant van het raam
+        const th = 0.45 + 0.65 * r(i, 201);
+        const c = Math.cos(th);
+        const sn = Math.sin(th);
+        Tr.voeg(L, {
+          ...p,
+          f: (x, y, z) => {
+            const [l, v, n] = lok(x, y, z);
+            const dv = v - hv;
+            return sdf.doos(l * c - dv * sn - lw / 2, l * sn + dv * c + hv, n, lw / 2, hv, 1.1, 0.4);
+          },
+          g: [cx, cy, cz, Math.hypot(lw, hv) * 2 + 5],
+        });
+      } else {
+        // gevallen: plat voor de muur, een beetje scheef
+        const [nx, ny] = naarBuiten(H, cx, cy);
+        const uit = 6 + 10 * r(i, 202);
+        const mx = cx + nx * uit;
+        const my = cy + ny * uit;
+        const draai = (r(i, 203) - 0.5) * 1.2;
+        const tx = -ny * Math.cos(draai) + nx * Math.sin(draai);
+        const ty = nx * Math.cos(draai) + ny * Math.sin(draai);
+        const z = o.grond(mx, my) + 1.2;
+        Tr.voeg(L, balkVorm([mx - tx * hv, my - ty * hv, z], [mx + tx * hv, my + ty * hv, z + (r(i, 204) - 0.5) * 3], lw / 2, 1.1, 'kool', p.deel));
+      }
+    }
+  }
+  if (o.deur) {
+    const DG = N.groep('deur');
+    for (const g of delen('deur')) {
+      for (const p of g.delen) {
+        if (!p.g) continue;
+        const [cx, cy] = p.g;
+        const [nx, ny] = naarBuiten(H, cx, cy);
+        const hh = p.hh || 30;
+        const hb = p.hb || 14;
+        // uit zijn hengsels: hij ligt voor de deur, met de bovenkant naar buiten, wat scheef
+        const draai = (r(cx | 0, 210) - 0.5) * 0.7;
+        const ux = nx * Math.cos(draai) - ny * Math.sin(draai);
+        const uy = ny * Math.cos(draai) + nx * Math.sin(draai);
+        const ax = cx + nx * 5;
+        const ay = cy + ny * 5;
+        const z = o.grond(ax + ux * hh, ay + uy * hh) + 1.5;
+        Tr.voeg(DG, balkVorm([ax, ay, z + 2.5], [ax + ux * hh * 2, ay + uy * hh * 2, z], hb, 1.5, 'kool', p.deel));
+      }
+    }
+  }
+  if (o.bak) {
+    for (const g of delen('bloembak')) {
+      const G = N.groep('bloembak');
+      const zs = g.delen.map((p) => (p.g ? p.g[2] - (p.g[3] || 0) : p.grens ? p.grens[3] : 0));
+      const zmin = Math.min(...zs);
+      const c = g.delen.find((p) => p.g) || g.delen[0];
+      const [cx, cy] = c.g || c.grens;
+      const [nx, ny] = naarBuiten(H, cx, cy);
+      const ox = nx * 9;
+      const oy = ny * 9;
+      const dz = zmin - o.grond(cx + ox, cy + oy) - 1;
+      for (const p of g.delen) {
+        const q = { ...p, f: (x, y, z) => p.f(x - ox, y - oy, z + dz) };
+        if (p.g) q.g = [p.g[0] + ox, p.g[1] + oy, p.g[2] - dz, p.g[3]];
+        if (p.grens) q.grens = [p.grens[0] + ox, p.grens[1] + oy, p.grens[2], p.grens[3] - dz, p.grens[4] - dz];
+        Tr.voeg(G, q);
+      }
+    }
+  }
+  if (o.scherven) {
+    const SG = N.groep('glasscherven');
+    let k = 0;
+    for (const g of delen('glas')) {
+      for (const p of g.delen) {
+        if (!p.g || !p.op) continue;
+        const [cx, cy] = p.g;
+        const [nx, ny] = naarBuiten(H, cx, cy);
+        for (let j = 0; j < o.scherven; j++, k++) {
+          const uit = 3 + 14 * r(k, 220);
+          const opzij = (r(k, 221) - 0.5) * p.op.hb * 2.4;
+          const x = cx + nx * uit - ny * opzij;
+          const y = cy + ny * uit + nx * opzij;
+          const yaw = r(k, 222) * Math.PI;
+          const lang = 1 + r(k, 223) * 1.6;
+          const z = o.grond(x, y) + 0.5;
+          Tr.voeg(SG, balkVorm([x - Math.cos(yaw) * lang, y - Math.sin(yaw) * lang, z], [x + Math.cos(yaw) * lang, y + Math.sin(yaw) * lang, z + (r(k, 224) - 0.5)], 0.9 + r(k, 225) * 0.8, 0.35, 'scherf', 1003));
+        }
+      }
+    }
+  }
+}
+
 function ruineVanHuis(W, zaad, soort = 'ingestort') {
   const opgeruimd = soort === 'opgeruimd';
   const binnen = soort === 'binnengestort';
@@ -1099,11 +1231,14 @@ function ruineVanHuis(W, zaad, soort = 'ingestort') {
   const STEIL = 1.5 + zTop * (1 / RUINE.hoekBreed + 0.9 * 1.6 / RUINE.golf) + RUINE.kartel / 8;
   const boven = (x, y, z, skelet) => (z - breuk(x, y, skelet)) / STEIL;
   const MUREN = new Set([...BIJ_DE_MUREN].filter((n) => n !== 'glas' && n !== 'deur'));
-  const GERAAMTE = new Set(['stijlen', 'liggers', 'aanbouwstijlen']);
+  // alleen wat staat (de stijlen) blijft hoger; een ligger erop zou in de lucht hangen waar de stijl eronder weg is
+  const GERAAMTE = new Set(['stijlen', 'aanbouwstijlen']);
   neem((n) => MUREN.has(n) || n === 'plint' || n === 'gevelschoorsteen', (p, naam) => {
     if (naam === 'romp' && p.deel === 1) return { ...p, f: (x, y, z) => Math.max(p.f(x, y, z), -p.f(x, y, FASE.schilZ) - FASE.schil, boven(x, y, z)) };
     if (naam === 'gevelschoorsteen') return { ...p, f: (x, y, z) => Math.max(p.f(x, y, z), z - (zTop + 10)) }; // de stenen schoorsteen staat nog
     const skelet = GERAAMTE.has(naam);
+    // een kozijn blijft alleen waar de muur er ruim omheen staat, anders hangt het in de lucht
+    if (naam === 'ramen') return { ...p, f: (x, y, z) => Math.max(p.f(x, y, z), (z - breuk(x, y) + 16) / STEIL) };
     return { ...p, f: (x, y, z) => Math.max(p.f(x, y, z), boven(x, y, z, skelet)) };
   });
   // De stenen schoorsteen blijft overeind: van de haard op de grond tot boven, waar hij op het dak stond, zwart van het
@@ -1278,6 +1413,50 @@ function ruineVanHuis(W, zaad, soort = 'ingestort') {
       Tr.voeg(balken, balkVorm([ax, ay, az], [bx, by, az + L * Math.sin(helling)], 3, 2.6, 'kool', 999));
     }
   }
+  // Wat er in het huis was (punt 3; Marcel: "wow, wat een detail"): een verkoold bedframe, een omgevallen tafel, een ladder
+  // die op de grond ligt, en een ijzeren ketel die het vuur doorstond. Opgeruimd staat alleen de ketel er nog.
+  N.mat.ketel = { ramp: 'ijzer', lo: 0.5, hi: 3.4, rand: 0.8, patroon: (C) => (K.hash(C.px >> 1, C.py >> 1, 31) % 6 === 0 ? { ramp: 'herfst', stap: 1 + C.stap * 0.3 } : 0) };
+  const raad = N.groep('huisraad');
+  const V0 = H.vleugels[0];
+  const SOORTEN = ['bed', 'tafel', 'ladder', 'ketel'];
+  const huisraad = opgeruimd ? ['ketel'] : SOORTEN.filter((_, i) => r(i, 120) < 0.8 || i === 3);
+  huisraad.forEach((soort, i) => {
+    k++;
+    const a0 = (r(k, 121) * 2 - 1) * Math.max(10, V0.ha - 30);
+    const q0 = (r(k, 122) * 2 - 1) * Math.max(10, V0.hq - 30);
+    const [x0, y0] = V0.wereld(a0, q0);
+    const z0 = hoogteOp(x0, y0) - 1;
+    const yaw = r(k, 123) * Math.PI * 2;
+    const c = Math.cos(yaw);
+    const sn = Math.sin(yaw);
+    const P = (du, dv, dz) => [x0 + du * c - dv * sn, y0 + du * sn + dv * c, z0 + dz];
+    const balk = (A, B, b, h, m = 'kool') => Tr.voeg(raad, balkVorm(P(...A), P(...B), b, h, m, 1004 + i));
+    if (soort === 'bed') {
+      // het frame: vier stijlen (een afgebroken), de lange en korte zijden, en een paar planken
+      for (const [du, dv, h] of [[-24, -13, 18], [24, -13, 12], [-24, 13, 18], [24, 13, 6]]) balk([du, dv, 0], [du, dv, h], 2.4, 2.4);
+      for (const dv of [-13, 13]) balk([-24, dv, 8], [24, dv, 8 - (dv > 0 ? 4 : 0)], 2, 2.8);
+      for (const du of [-24, 24]) balk([du, -13, 8], [du, 13, 8], 2, 2.8);
+      for (let j = -18; j <= 18; j += 9) if (r(k, 124 + j) < 0.6) balk([j, -12, 6], [j + 2, 12, 5], 3, 0.8);
+    } else if (soort === 'tafel') {
+      // omgevallen: het blad op zijn kant, de poten steken opzij
+      balk([0, -10, 1], [0, 10, 1], 2, 16);
+      for (const dv of [-8, 8]) for (const dz of [-12, 12]) balk([1, dv, 1 + (dz + 16) * 0.5], [16, dv, 1 + (dz + 16) * 0.5], 1.3, 1.3);
+    } else if (soort === 'ladder') {
+      // op de grond, schuin: twee bomen met sporten
+      for (const dv of [-6, 6]) balk([-32, dv, 1.5], [32, dv, 3], 1.4, 1.4);
+      for (let du = -26; du <= 26; du += 10) if (r(k, 130 + du) < 0.75) balk([du, -6, 2.5], [du, 6, 2.5], 1, 1);
+    } else {
+      // de ketel: rond, met een rand en een hengsel dat omvalt
+      Tr.voeg(raad, {
+        f: (x, y, z) => Math.max(sdf.ellipsoide(x - x0, y - y0, z - z0 - 7, 8, 8, 7.5), z - z0 - 11, -sdf.ellipsoide(x - x0, y - y0, z - z0 - 8, 6.6, 6.6, 6)),
+        grens: [x0, y0, 10, z0 - 1, z0 + 13],
+        m: 'ketel',
+        deel: 1008,
+      });
+      balk([-8, 0, 11], [0, 0, 16], 0.6, 0.6, 'ketel');
+      balk([0, 0, 16], [8, 0, 11], 0.6, 0.6, 'ketel');
+    }
+  });
   // Een dak van leien of pannen brandt niet: het breekt, en de scherven liggen rond het huis, op het puin en binnen.
   if (H.dak === 'leien' || H.dak === 'pannen') {
     const scherven = N.groep('scherven');
@@ -1328,6 +1507,17 @@ function ruineVanHuis(W, zaad, soort = 'ingestort') {
       deel: 995,
     });
   }
+  // Wat er buiten hing: in de ruïne meest gevallen, binnengestort nog vaak scheef; opgeruimd is het weg, op wat glas na.
+  watBuitenHing(W, N, zaad, {
+    staat: (x, y, z) => z < breuk(x, y) - 4,
+    grond: (x, y) => hoogteOp(x, y) - 1,
+    luiken: !opgeruimd,
+    luikBlijft: opgeruimd ? 0 : binnen ? 0.25 : 0.1,
+    luikHangt: opgeruimd ? 0 : binnen ? 0.45 : 0.3,
+    deur: !opgeruimd,
+    bak: !opgeruimd,
+    scherven: opgeruimd ? 1 : 5,
+  });
   return N;
 }
 
@@ -1393,7 +1583,7 @@ function schroeiVanHuis(W, zaad, fase) {
   N.H = H;
   // Alles van het huis, behalve dat het dak gaten heeft (waar de vlek het laagst is), met een zachte rand.
   const dakDeel = W.groepen.filter((g) => HET_DAK.has(g.naam)).flatMap((g) => g.delen)[0];
-  for (const g of W.groepen.filter((g) => g.delen.length)) {
+  for (const g of W.groepen.filter((g) => g.delen.length && !(fase === 'dakvalt' && g.naam === 'luiken'))) {
     const G = N.groep(g.naam);
     const dak = HET_DAK.has(g.naam) || g.naam === 'nok' || g.naam === 'windveer';
     for (const p of g.delen) {
@@ -1425,6 +1615,8 @@ function schroeiVanHuis(W, zaad, fase) {
       });
     }
   }
+  // Als het dak valt, springen de ruiten en hangt een enkel luik scheef (de muren staan nog).
+  if (fase === 'dakvalt') watBuitenHing(W, N, zaad, { staat: () => true, grond: () => 0, luikBlijft: 0.65, luikHangt: 0.35, deur: false, bak: false, scherven: 3 });
   return N;
 }
 
@@ -1434,13 +1626,14 @@ function brandfaseVanHuis(W, zaad, fase) {
 
 // Een fase van het afbranden van een huis voor ruines.cjs: één cel, met het anker op de achterste hoek van de voet (zoals
 // renderHuisFasen).
-function renderHuisRuine(naam, fase = 'ingestort') {
+// `variant`: een ander zaad, zodat twee dezelfde huizen niet hetzelfde instorten (punt 6).
+function renderHuisRuine(naam, fase = 'ingestort', variant = 0) {
   const spec = HUIZEN[naam];
   const draai = spec.draai || 0;
   const W = wereldVan(spec);
   const H = W.H;
   const m = meetHuis(W, draai);
-  const zaad = (spec.zaad || 1) * 31 + 7;
+  const zaad = (spec.zaad || 1) * 31 + 7 + variant * 1009;
   const N = spec.delen
     ? HS.samen(spec.delen.map((d) => ({ W: brandfaseVanHuis(HS.huis(d.spec.zaad, d.spec), zaad + d.plek[0], fase), plek: d.plek })))
     : brandfaseVanHuis(W, zaad, fase);
