@@ -7232,7 +7232,14 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     b2, één manier van openen en sluiten: nu heeft elk venster zijn eigen open en sluit, en sluit het zelf de andere die
     het kent (`js/hud.js`: "als de velden open zijn, sluit de velden"). Straks meldt een venster zich één keer aan
     (`js/ui.js`), en openen sluit wat er open is, houdt de tijd stil onder zijn naam, en `Esc` sluit het bovenste.
-    **Bezig in sessie `main` (1306efdd)** (9 okt): a is af, de keuzes op de plaat wachten op Marcel; dan b.
+    **b1 gebouwd (9 okt):** elk venster is papier (de brieven, het rapport, de heer, het slachten, verstoppen, de
+    velden, de wetten, de raadsman, het bouwmenu, de marskramer, de spelregels, het menu, een gesprek, het eindscherm,
+    terug van reis), op ware pixels, met de letters Grenze en Alegreya overal, ook in de balk (`letters/`; de oude zijn
+    weg, ook uit de samenvatting, die bij de volgende `npm run samenvatting` de nieuwe krijgt). Hoe: in `stijl.css` is
+    elke vaste kleur een kleurnaam geworden (`--goud`, `--inkt`, `--op-goud`, met `color-mix`), en het blok onderaan
+    zet in een venster de kleurnamen op inkt, dus de eigen opmaak van elk venster gaat mee. De marskramer lag onder de
+    balk (geen laag); nu niet meer. Nog geen papier: de kaart van het land (`opmerkingen.md`).
+    **Bezig in sessie `main` (1306efdd)** (9 okt): b2, één manier van openen en sluiten.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

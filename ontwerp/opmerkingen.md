@@ -9,6 +9,9 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **De kaart van het land is nog geen papier** (9 okt, vraag 146, b1): elk venster werd papier, behalve `#land`: die
+  tekent zijn kaart (SVG) in licht op donker, met namen in `--inkt` en een donkere rand (`stijl.css`, `--land-*`). Op
+  papier moeten die kleuren om. Achter de spelregel "Land", die standaard uit staat; mee te nemen als het land weer speelt.
 - **De ouden dragen kennis over** (9 okt, Marcel bij vraag 145, ouder worden: "Ouderen dragen mogelijk kennis over? Eerst
   alleen het beeld"): een oude die met een jonge werkt, maakt hem beter in zijn werk, of een dorp dat zijn ouden verliest,
   verliest wat zij wisten. Nu doet ouder worden alleen wat de leeftijd al deed.

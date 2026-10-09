@@ -1,8 +1,10 @@
-/* De letters van de schrijftafel (werklijst vraag 98, C; Marcel, 3 okt: "98 C"): gotisch voor koppen, oud drukwerk voor
-   tekst. Ze staan in letters/, met hun licentie (OFL), zodat het spel ze ook zonder internet heeft. */
-@font-face { font-family: 'Jacquarda Bastarda 9'; src: url('letters/jacquarda-bastarda-9.woff2') format('woff2'); font-display: swap; }
-@font-face { font-family: 'IM Fell English'; src: url('letters/imfell-english.woff2') format('woff2'); font-display: swap; }
-@font-face { font-family: 'IM Fell English'; font-style: italic; src: url('letters/imfell-english-cursief.woff2') format('woff2'); font-display: swap; }
+/* De letters van de schrijftafel (vraag 146; Marcel, 9 okt: de gotische pixelletter en het oude drukwerk van vraag 98
+   waren "te lastig te lezen"): Grenze, half gewoon en half gotisch, voor de koppen, en Alegreya voor de tekst, overal,
+   ook in de balk. Allebei variabel (één bestand voor elke dikte), in letters/ met hun licentie (OFL), zodat het spel ze
+   ook zonder internet heeft. */
+@font-face { font-family: 'Grenze'; font-weight: 100 900; src: url('letters/grenze.woff2') format('woff2'); font-display: swap; }
+@font-face { font-family: 'Alegreya'; font-weight: 400 900; src: url('letters/alegreya.woff2') format('woff2'); font-display: swap; }
+@font-face { font-family: 'Alegreya'; font-style: italic; font-weight: 400 900; src: url('letters/alegreya-cursief.woff2') format('woff2'); font-display: swap; }
 
 :root {
   --inkt: #efe6d2;
@@ -10,17 +12,17 @@
   --paneel: rgba(22, 18, 14, 0.86);
   --rand: rgba(239, 230, 210, 0.14);
   --goud: #e2b64a;
+  --op-goud: #1b1510; /* de letter op iets dat gekozen is (de achtergrond in --goud) */
   --rood: #e0604f;
   --groen: #86c46f;
-  --kop: Georgia, 'Times New Roman', serif;
+  --kop: 'Grenze', 'Alegreya', Georgia, serif;
   /* Papier (vraag 98, C): inkt op perkament. */
   --papier-inkt: #2c1d12;
   --papier-grijs: #5a4430;
   --papier-rood: #7a2022;
   --papier-groen: #3e5624;
   --papier-lijn: #9a8260;
-  --boek: 'IM Fell English', Georgia, serif;
-  --gotisch: 'Jacquarda Bastarda 9', 'IM Fell English', Georgia, serif;
+  --boek: 'Alegreya', Georgia, serif;
 }
 
 * { box-sizing: border-box; }
@@ -32,7 +34,10 @@ body {
   overflow: hidden;
   background: #0c0b0a;
   color: var(--inkt);
-  font: 14px/1.45 system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font: 14px/1.45 var(--boek);
+  /* Alegreya heeft kleinere kleine letters dan de letter van de browser die er stond: zo houdt elke maat in dit bestand
+     ongeveer de grootte die hij had. */
+  font-size-adjust: 0.5;
   user-select: none;
 }
 
@@ -69,7 +74,7 @@ kbd {
   padding: 0 5px;
   border: 1px solid var(--rand);
   border-radius: 4px;
-  font: 11px/1.6 system-ui, sans-serif;
+  font: 11px/1.6 var(--boek);
   color: var(--gedempt);
   text-align: center;
 }
@@ -82,12 +87,12 @@ kbd {
   gap: 6px;
   align-items: center;
   padding: 8px 12px;
-  font: 13px system-ui, sans-serif;
+  font: 13px var(--boek);
   color: var(--gedempt);
   cursor: pointer;
 }
 #sluip-knop:hover { color: var(--inkt); }
-#sluip-knop.aan { color: var(--inkt); border-color: rgba(226, 182, 74, 0.6); background: rgba(40, 32, 18, 0.9); }
+#sluip-knop.aan { color: var(--inkt); border-color: color-mix(in srgb, var(--goud) 60%, transparent); background: rgba(40, 32, 18, 0.9); }
 .in-gevecht #sluip-knop { opacity: 0.35; pointer-events: none; }
 /* Goud: naast sluipen, in dezelfde maat als een vakje van de inventaris. Het komt pas in
    beeld als je ooit goud had (js/ui.js, toonGoud). */
@@ -97,10 +102,10 @@ kbd {
   gap: 6px;
   height: 44px;
   padding: 0 12px;
-  font: 15px/1 var(--kop), system-ui, sans-serif;
+  font: 15px/1 var(--kop), var(--boek);
   color: var(--inkt);
 }
-#goud .munt { color: #e2b64a; font-size: 13px; }
+#goud .munt { color: var(--goud); font-size: 13px; }
 
 #inventaris .item {
   width: 44px;
@@ -108,7 +113,7 @@ kbd {
   display: grid;
   place-items: center;
   background: var(--paneel);
-  border: 1px solid rgba(226, 182, 74, 0.5);
+  border: 1px solid color-mix(in srgb, var(--goud) 50%, transparent);
   border-radius: 10px;
 }
 
@@ -145,7 +150,7 @@ kbd {
   left: 50%;
   top: 20%;
   transform: translateX(-50%);
-  font: italic 30px var(--kop);
+  font: italic 30px var(--boek);
   color: var(--inkt);
   text-shadow: 0 2px 14px rgba(0, 0, 0, 0.85);
   opacity: 0;
@@ -178,7 +183,7 @@ kbd {
 .chip small { font-size: 11px; opacity: 0.8; }
 .chip.speler { color: #b9d0f5; }
 .chip.monster { color: #f0b3a8; }
-.chip.aan { border-color: var(--goud); color: var(--inkt); background: rgba(226, 182, 74, 0.12); }
+.chip.aan { border-color: var(--goud); color: var(--inkt); background: color-mix(in srgb, var(--goud) 12%, transparent); }
 .ronde { padding: 0 6px 0 10px; font: 12px var(--kop); color: var(--gedempt); border-left: 1px solid var(--rand); }
 
 /* Onderaan: in een gevecht schuiven de actiepunten en de knoppen in beeld, net als het raster
@@ -215,9 +220,9 @@ kbd {
 }
 #ap { display: flex; gap: 5px; align-items: center; min-height: 14px; }
 .ap-label { font: 12px var(--kop); color: var(--gedempt); margin-right: 4px; }
-.pip { width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(239, 230, 210, 0.25); transition: background 0.15s; }
+.pip { width: 14px; height: 14px; border-radius: 50%; border: 1px solid color-mix(in srgb, var(--inkt) 25%, transparent); transition: background 0.15s; }
 .pip.vol { background: var(--goud); border-color: var(--goud); }
-.pip.kost { background: rgba(226, 182, 74, 0.32); }
+.pip.kost { background: color-mix(in srgb, var(--goud) 32%, transparent); }
 .pip.tekort { background: var(--rood); border-color: var(--rood); }
 #knoppen { display: flex; gap: 6px; }
 #knoppen button {
@@ -225,15 +230,15 @@ kbd {
   gap: 6px;
   align-items: center;
   padding: 6px 10px;
-  font: 13px system-ui, sans-serif;
+  font: 13px var(--boek);
   color: var(--inkt);
-  background: rgba(255, 255, 255, 0.04);
+  background: color-mix(in srgb, var(--inkt) 4%, transparent);
   border: 1px solid var(--rand);
   border-radius: 7px;
   cursor: pointer;
 }
-#knoppen button:hover:not(:disabled) { background: rgba(255, 255, 255, 0.09); }
-#knoppen button.gekozen { border-color: var(--goud); background: rgba(226, 182, 74, 0.14); }
+#knoppen button:hover:not(:disabled) { background: color-mix(in srgb, var(--inkt) 9%, transparent); }
+#knoppen button.gekozen { border-color: var(--goud); background: color-mix(in srgb, var(--goud) 14%, transparent); }
 #knoppen button:disabled { opacity: 0.45; cursor: default; }
 #knoppen .kost { font-size: 11px; color: var(--goud); }
 
@@ -277,7 +282,7 @@ kbd {
   white-space: nowrap;
   pointer-events: none;
 }
-#tooltip.fout { color: #f3b1a5; border-color: rgba(224, 96, 79, 0.5); }
+#tooltip.fout { color: #f3b1a5; border-color: color-mix(in srgb, var(--rood) 50%, transparent); }
 
 /* Gesprek */
 #dialoog {
@@ -293,25 +298,25 @@ kbd {
 }
 #dialoog-naam { font: 17px var(--kop); color: var(--goud); }
 /* Wie een boer is en wat hij kan (js/boeren.js), onder zijn naam. */
-#dialoog-wie { font: italic 12.5px var(--kop); color: var(--gedempt); margin-top: 1px; }
+#dialoog-wie { font: italic 12.5px var(--boek); color: var(--gedempt); margin-top: 1px; }
 #dialoog-tekst { margin: 6px 0 12px; font-size: 15px; line-height: 1.55; }
 #dialoog-keuzes { display: flex; flex-direction: column; gap: 5px; }
 #dialoog-keuzes button {
   padding: 7px 10px;
   text-align: left;
-  font: 14px system-ui, sans-serif;
+  font: 14px var(--boek);
   color: var(--inkt);
-  background: rgba(255, 255, 255, 0.04);
+  background: color-mix(in srgb, var(--inkt) 4%, transparent);
   border: 1px solid var(--rand);
   border-radius: 7px;
   cursor: pointer;
 }
-#dialoog-keuzes button:hover { background: rgba(255, 255, 255, 0.09); border-color: rgba(226, 182, 74, 0.5); }
+#dialoog-keuzes button:hover { background: color-mix(in srgb, var(--inkt) 9%, transparent); border-color: color-mix(in srgb, var(--goud) 50%, transparent); }
 #dialoog-keuzes kbd { margin-right: 8px; }
 /* Wat een antwoord kost of oplevert (een voorval, js/voorvallen.js), onder het antwoord. */
 #dialoog-keuzes .dialoog-prijs { display: block; margin: 2px 0 0 26px; font-size: 12.5px; color: var(--gedempt); }
 #dialoog-keuzes button:disabled { opacity: 0.5; cursor: default; }
-#dialoog-keuzes button:disabled:hover { background: rgba(255, 255, 255, 0.04); border-color: var(--rand); }
+#dialoog-keuzes button:disabled:hover { background: color-mix(in srgb, var(--inkt) 4%, transparent); border-color: var(--rand); }
 #dialoog-portret {
   display: none;
   grid-row: 1 / span 3;
@@ -339,8 +344,8 @@ kbd {
 #overlay-knop {
   margin-top: 10px;
   padding: 9px 22px;
-  font: 15px system-ui, sans-serif;
-  color: #1b1510;
+  font: 15px var(--boek);
+  color: var(--op-goud);
   background: var(--goud);
   border: 0;
   border-radius: 8px;
@@ -351,14 +356,14 @@ kbd {
 #overlay-knop2 {
   margin: 10px 0 0 8px;
   padding: 8px 18px;
-  font: 15px system-ui, sans-serif;
+  font: 15px var(--boek);
   color: var(--goud);
   background: transparent;
   border: 1px solid var(--goud);
   border-radius: 8px;
   cursor: pointer;
 }
-#overlay-knop2:hover { background: rgba(226, 182, 74, 0.12); }
+#overlay-knop2:hover { background: color-mix(in srgb, var(--goud) 12%, transparent); }
 
 /* De uitleg rechtsboven */
 #hulp,
@@ -396,15 +401,15 @@ kbd {
 #kalender-knoppen { display: flex; gap: 4px; margin-bottom: 7px; }
 #kalender-knoppen button {
   padding: 3px 8px;
-  font: 12px system-ui, sans-serif;
+  font: 12px var(--boek);
   color: var(--gedempt);
-  background: rgba(255, 255, 255, 0.04);
+  background: color-mix(in srgb, var(--inkt) 4%, transparent);
   border: 1px solid var(--rand);
   border-radius: 5px;
   cursor: pointer;
 }
-#kalender-knoppen button:hover { color: var(--inkt); background: rgba(255, 255, 255, 0.09); }
-#kalender-knoppen button.actief { color: #1b1510; background: var(--goud); border-color: var(--goud); }
+#kalender-knoppen button:hover { color: var(--inkt); background: color-mix(in srgb, var(--inkt) 9%, transparent); }
+#kalender-knoppen button.actief { color: var(--op-goud); background: var(--goud); border-color: var(--goud); }
 #kalender-knoppen kbd { color: inherit; border-color: currentColor; opacity: 0.7; }
 #kalender-datum { font: 17px var(--kop); color: var(--inkt); }
 #kalender-datum.sint-maarten { color: var(--goud); }
@@ -414,13 +419,13 @@ kbd {
 /* De statussen (js/hud.js, T.ui.toonStatussen; werklijst vraag 77, stap 2): naast het doel linksboven (#opdracht, 260
    breed op 16), een kaartje per status zolang hij duurt; rood als het erger is. */
 .nieuwe-hud #hud-gehucht > #statussen { position: fixed; left: 292px; top: 128px; display: flex; flex-wrap: wrap; gap: 6px; max-width: calc(100vw - 600px); }
-#statussen .status { padding: 4px 10px 5px; font: 13px var(--kop), system-ui, sans-serif; color: var(--inkt); cursor: help; border-left: 3px solid var(--goud); }
+#statussen .status { padding: 4px 10px 5px; font: 13px var(--kop), var(--boek); color: var(--inkt); cursor: help; border-left: 3px solid var(--goud); }
 #statussen .status.erger { border-left-color: var(--rood); color: var(--rood); }
 body.bouwmenu-open #statussen { visibility: hidden; }
 #voorraadbalk .grondstof { display: flex; align-items: center; gap: 5px; }
 #voorraadbalk .grondstof .icoon { display: flex; width: 22px; height: 22px; }
-#voorraadbalk .grondstof .aantal { font: 15px var(--kop), system-ui, sans-serif; color: var(--inkt); min-width: 1.4em; }
-#voorraadbalk .grondstof .verstopt { font: 11px system-ui, sans-serif; color: var(--gedempt); margin-left: -2px; }
+#voorraadbalk .grondstof .aantal { font: 15px var(--kop), var(--boek); color: var(--inkt); min-width: 1.4em; }
+#voorraadbalk .grondstof .verstopt { font: 11px var(--boek); color: var(--gedempt); margin-left: -2px; }
 #voorraadbalk .grondstof .verstopt:empty { display: none; }
 /* Het scheidingslijntje voor de mensen, los van de vier grondstoffen ervoor. */
 #voorraadbalk .grondstof[data-wat="bevolking"] { padding-left: 13px; border-left: 1px solid var(--rand); }
@@ -446,12 +451,12 @@ body.bouwmenu-open #statussen { visibility: hidden; }
   gap: 6px;
   height: 44px;
   padding: 0 14px;
-  font: 13px system-ui, sans-serif;
+  font: 13px var(--boek);
   color: var(--gedempt);
   cursor: pointer;
 }
 #bouwmenu-knop:hover { color: var(--inkt); }
-#bouwmenu-knop.actief { color: #1b1510; background: var(--goud); border-color: var(--goud); }
+#bouwmenu-knop.actief { color: var(--op-goud); background: var(--goud); border-color: var(--goud); }
 #bouwmenu-knop.actief kbd { color: inherit; border-color: currentColor; opacity: 0.7; }
 #bouwmenu {
   position: fixed;
@@ -471,12 +476,12 @@ body.bouwmenu-open #statussen { visibility: hidden; }
   padding: 7px 9px;
   margin-bottom: 4px;
   text-align: left;
-  background: rgba(255, 255, 255, 0.03);
+  background: color-mix(in srgb, var(--inkt) 3%, transparent);
   border: 1px solid var(--rand);
   border-radius: 6px;
   cursor: pointer;
 }
-#bouwmenu button:hover { background: rgba(255, 255, 255, 0.09); border-color: rgba(226, 182, 74, 0.5); }
+#bouwmenu button:hover { background: color-mix(in srgb, var(--inkt) 9%, transparent); border-color: color-mix(in srgb, var(--goud) 50%, transparent); }
 #bouwmenu button:last-child { margin-bottom: 0; }
 #bouwmenu .bouw-naam { font: 14px var(--kop); color: var(--inkt); }
 #bouwmenu .bouw-kosten { font-size: 11px; color: var(--goud); }
@@ -485,7 +490,7 @@ body.bouwmenu-open #statussen { visibility: hidden; }
 #bouwmenu .bouw-leeg { font-size: 12px; color: var(--gedempt); }
 /* De oproepen (js/hud.js, js/verzoeken.js): een kop erboven, en wat al op het plein hangt, in goud. */
 #bouwmenu .kop.bouw-oproepen { margin-top: 12px; }
-#bouwmenu button.hangt { border-color: rgba(226, 182, 74, 0.7); background: rgba(226, 182, 74, 0.1); }
+#bouwmenu button.hangt { border-color: color-mix(in srgb, var(--goud) 70%, transparent); background: color-mix(in srgb, var(--goud) 10%, transparent); }
 /* Het doel linksboven (#opdracht) ligt op de plek van het bouwmenu: zolang dat open is, staat het er niet (js/hud.js). */
 body.bouwmenu-open #opdracht { visibility: hidden; }
 
@@ -500,10 +505,11 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
   max-height: calc(100vh - 140px);
   overflow-y: auto;
   padding: 12px 16px 12px;
+  z-index: 5;
 }
 #handel .handel-kop { display: flex; align-items: baseline; gap: 10px; }
 #handel .handel-titel { font: 19px var(--kop); color: var(--inkt); }
-#handel .handel-wanneer { font: italic 13px var(--kop); color: var(--gedempt); }
+#handel .handel-wanneer { font: italic 13px var(--boek); color: var(--gedempt); }
 #handel .handel-sluit {
   margin-left: auto;
   background: none;
@@ -524,12 +530,12 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
   gap: 10px;
   padding: 6px 9px;
   margin-bottom: 4px;
-  background: rgba(255, 255, 255, 0.03);
+  background: color-mix(in srgb, var(--inkt) 3%, transparent);
   border: 1px solid var(--rand);
   border-radius: 6px;
 }
 :is(#handel, #verstoppen) .handel-naam { font: 14px var(--kop); color: var(--inkt); }
-:is(#handel, #verstoppen) .handel-naam small, :is(#handel, #verstoppen) .handel-prijs small { display: block; font: 11px system-ui, sans-serif; color: var(--gedempt); }
+:is(#handel, #verstoppen) .handel-naam small, :is(#handel, #verstoppen) .handel-prijs small { display: block; font: 11px var(--boek); color: var(--gedempt); }
 :is(#handel, #verstoppen) .handel-prijs { font-size: 12px; color: var(--goud); }
 #handel .handel-merk { display: block; color: var(--inkt); }
 #handel .handel-merk.duur::before { content: '▲ '; }
@@ -537,15 +543,15 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
 :is(#handel, #verstoppen) .handel-knoppen { display: flex; gap: 4px; }
 :is(#handel, #verstoppen) .handel-knoppen button {
   padding: 4px 8px;
-  font: 12px system-ui, sans-serif;
+  font: 12px var(--boek);
   color: var(--inkt);
-  background: rgba(255, 255, 255, 0.05);
+  background: color-mix(in srgb, var(--inkt) 5%, transparent);
   border: 1px solid var(--rand);
   border-radius: 5px;
   cursor: pointer;
   white-space: nowrap;
 }
-:is(#handel, #verstoppen) .handel-knoppen button:hover:not(:disabled) { background: rgba(226, 182, 74, 0.16); border-color: rgba(226, 182, 74, 0.6); }
+:is(#handel, #verstoppen) .handel-knoppen button:hover:not(:disabled) { background: color-mix(in srgb, var(--goud) 16%, transparent); border-color: color-mix(in srgb, var(--goud) 60%, transparent); }
 :is(#handel, #verstoppen) .handel-knoppen button:disabled { opacity: 0.35; cursor: default; }
 #handel .handel-leeg { font-size: 12px; color: var(--gedempt); margin: 2px 0; }
 #handel .handel-voet { margin: 10px 0 0; font-size: 11px; color: var(--gedempt); }
@@ -585,7 +591,7 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
 }
 .venster-kop { display: flex; align-items: baseline; gap: 10px; }
 .venster-titel { font: 19px var(--kop); color: var(--inkt); }
-.venster-wanneer { font: italic 13px var(--kop); color: var(--gedempt); }
+.venster-wanneer { font: italic 13px var(--boek); color: var(--gedempt); }
 .venster-sluit {
   margin-left: auto;
   background: none;
@@ -601,12 +607,9 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
 
 #brief .brief-tekst {
   margin: 10px 0 8px;
-  padding: 10px 14px;
-  font: italic 14px/1.55 var(--kop);
+  padding: 0 4px;
+  font: italic 15px/1.55 var(--boek);
   color: var(--inkt);
-  background: rgba(226, 182, 74, 0.06);
-  border: 1px solid rgba(226, 182, 74, 0.22);
-  border-radius: 6px;
 }
 #brief .brief-tekst p { margin: 0 0 8px; }
 #brief .brief-lijst { margin: 0 0 8px; padding-left: 18px; font-style: normal; }
@@ -616,11 +619,7 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
 #brief .brief-groet { text-align: right; margin-bottom: 0; }
 /* Het rapport van de raadsman (js/ochtendrapport.js): in zijn hand, niet in die van de heer. */
 #brief[data-soort="rapport"] .brief-tekst,
-#brief[data-soort="jaarverslag"] .brief-tekst {
-  font-style: normal;
-  background: rgba(255, 255, 255, 0.03);
-  border-color: var(--rand);
-}
+#brief[data-soort="jaarverslag"] .brief-tekst { font-style: normal; }
 
 :is(#heer, #slachten) .heer-rij {
   display: grid;
@@ -629,35 +628,35 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
   gap: 10px;
   padding: 6px 9px;
   margin-bottom: 4px;
-  background: rgba(255, 255, 255, 0.03);
+  background: color-mix(in srgb, var(--inkt) 3%, transparent);
   border: 1px solid var(--rand);
   border-radius: 6px;
 }
 :is(#heer, #slachten) .heer-naam { font: 14px var(--kop); color: var(--inkt); }
-:is(#heer, #slachten) .heer-naam small { display: block; font: 11px system-ui, sans-serif; color: var(--gedempt); }
+:is(#heer, #slachten) .heer-naam small { display: block; font: 11px var(--boek); color: var(--gedempt); }
 :is(#heer, #slachten) .heer-naam small.heer-waarom { font-style: italic; opacity: 0.85; }
 :is(#heer, #slachten) input[type='range'] { width: 100%; accent-color: var(--goud); }
 :is(#heer, #slachten) .heer-geef { text-align: right; font: 15px var(--kop); color: var(--goud); }
 :is(#heer, #slachten) .heer-samen { margin-top: 10px; }
 :is(#heer, #slachten) .heer-deel { margin: 0 0 6px; padding: 7px 10px; font-size: 13px; border-radius: 6px; border: 1px solid var(--rand); }
-:is(#heer, #slachten) .heer-deel.goed { border-color: rgba(134, 196, 111, 0.5); }
-:is(#heer, #slachten) .heer-deel.boete { border-color: rgba(226, 182, 74, 0.6); }
-:is(#heer, #slachten) .heer-deel.zwaar { border-color: rgba(224, 96, 79, 0.7); color: #f1c3bb; }
+:is(#heer, #slachten) .heer-deel.goed { border-color: color-mix(in srgb, var(--groen) 50%, transparent); }
+:is(#heer, #slachten) .heer-deel.boete { border-color: color-mix(in srgb, var(--goud) 60%, transparent); }
+:is(#heer, #slachten) .heer-deel.zwaar { border-color: color-mix(in srgb, var(--rood) 70%, transparent); color: #f1c3bb; }
 :is(#heer, #slachten) .heer-vooruit { margin: 0 0 8px; font-size: 12.5px; color: var(--gedempt); }
 :is(#heer, #slachten, #brief) .heer-knoppen { display: flex; gap: 6px; justify-content: flex-end; }
 :is(#heer, #slachten, #brief) .heer-knoppen button,
 #heer .paal-keuze {
   padding: 5px 10px;
-  font: 13px system-ui, sans-serif;
+  font: 13px var(--boek);
   color: var(--inkt);
-  background: rgba(255, 255, 255, 0.05);
+  background: color-mix(in srgb, var(--inkt) 5%, transparent);
   border: 1px solid var(--rand);
   border-radius: 6px;
   cursor: pointer;
 }
-:is(#heer, #slachten, #brief) .heer-knoppen .heer-geef-knop { color: #1b1510; background: var(--goud); border-color: var(--goud); }
+:is(#heer, #slachten, #brief) .heer-knoppen .heer-geef-knop { color: var(--op-goud); background: var(--goud); border-color: var(--goud); }
 :is(#heer, #slachten, #brief) .heer-knoppen button:hover:not(:disabled),
-#heer .paal-keuze:hover { background: rgba(226, 182, 74, 0.16); border-color: rgba(226, 182, 74, 0.6); }
+#heer .paal-keuze:hover { background: color-mix(in srgb, var(--goud) 16%, transparent); border-color: color-mix(in srgb, var(--goud) 60%, transparent); }
 :is(#heer, #slachten, #brief) .heer-knoppen .heer-geef-knop:hover:not(:disabled) { background: var(--goud); filter: brightness(1.08); }
 :is(#heer, #slachten) .heer-knoppen button:disabled { opacity: 0.35; cursor: default; }
 #heer .paal-keuze { display: flex; flex-direction: column; gap: 1px; width: 100%; margin-bottom: 5px; text-align: left; }
@@ -687,7 +686,7 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
   gap: 6px;
   height: 44px;
   padding: 0 14px;
-  font: 13px system-ui, sans-serif;
+  font: 13px var(--boek);
   color: var(--gedempt);
   cursor: pointer;
 }
@@ -700,7 +699,7 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
 #menu-knop.actief,
 #velden-knop.actief,
 #wetten-knop.actief,
-#raadsman-knop.actief { color: #1b1510; background: var(--goud); border-color: var(--goud); }
+#raadsman-knop.actief { color: var(--op-goud); background: var(--goud); border-color: var(--goud); }
 #spelregels-knop.actief kbd,
 #velden-knop.actief kbd,
 #wetten-knop.actief kbd,
@@ -718,39 +717,39 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
   user-select: text;
 }
 #spelregels .kop { font: 12px var(--kop); color: var(--gedempt); letter-spacing: 0.04em; margin: 14px 0 6px; text-transform: uppercase; }
-#spelregels .regel { padding: 8px 10px; margin-bottom: 6px; background: rgba(255, 255, 255, 0.03); border: 1px solid var(--rand); border-radius: 6px; }
+#spelregels .regel { padding: 8px 10px; margin-bottom: 6px; background: color-mix(in srgb, var(--inkt) 3%, transparent); border: 1px solid var(--rand); border-radius: 6px; }
 #spelregels .regel-naam { font: 15px var(--kop); color: var(--inkt); }
-#spelregels .regel-naam small { display: block; font: 12px system-ui, sans-serif; color: var(--gedempt); }
+#spelregels .regel-naam small { display: block; font: 12px var(--boek); color: var(--gedempt); }
 #spelregels .regel-keuzes { display: flex; flex-wrap: wrap; gap: 6px; margin: 7px 0 4px; }
 #spelregels .regel-keuze,
 #spelregels .regels-voet button {
   padding: 5px 10px;
-  font: 13px system-ui, sans-serif;
+  font: 13px var(--boek);
   color: var(--inkt);
-  background: rgba(255, 255, 255, 0.05);
+  background: color-mix(in srgb, var(--inkt) 5%, transparent);
   border: 1px solid var(--rand);
   border-radius: 6px;
   cursor: pointer;
 }
 #spelregels .regel-keuze small { margin-left: 6px; font-size: 10.5px; opacity: 0.7; }
 #spelregels .regel-keuze:hover,
-#spelregels .regels-voet button:hover { background: rgba(226, 182, 74, 0.16); border-color: rgba(226, 182, 74, 0.6); }
-#spelregels .regel-keuze.gekozen { color: #1b1510; background: var(--goud); border-color: var(--goud); }
+#spelregels .regels-voet button:hover { background: color-mix(in srgb, var(--goud) 16%, transparent); border-color: color-mix(in srgb, var(--goud) 60%, transparent); }
+#spelregels .regel-keuze.gekozen { color: var(--op-goud); background: var(--goud); border-color: var(--goud); }
 #spelregels .regel-uitleg { margin: 2px 0 0; font-size: 12.5px; color: var(--gedempt); }
 #spelregels .namen { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; }
 #spelregels .naam-rij { display: flex; flex-direction: column; gap: 2px; font-size: 11.5px; color: var(--gedempt); }
 #spelregels input[type='text'],
 #spelregels input[type='number'] {
   padding: 4px 7px;
-  font: 13px system-ui, sans-serif;
+  font: 13px var(--boek);
   color: var(--inkt);
   background: rgba(0, 0, 0, 0.3);
   border: 1px solid var(--rand);
   border-radius: 5px;
 }
 #spelregels input[type='text']:focus,
-#spelregels input[type='number']:focus { outline: none; border-color: rgba(226, 182, 74, 0.7); }
-#spelregels .werk-deel { margin-bottom: 6px; border: 1px solid var(--rand); border-radius: 6px; background: rgba(255, 255, 255, 0.02); }
+#spelregels input[type='number']:focus { outline: none; border-color: color-mix(in srgb, var(--goud) 70%, transparent); }
+#spelregels .werk-deel { margin-bottom: 6px; border: 1px solid var(--rand); border-radius: 6px; background: color-mix(in srgb, var(--inkt) 2%, transparent); }
 #spelregels .werk-deel summary { padding: 6px 10px; font: 14px var(--kop); color: var(--inkt); cursor: pointer; }
 #spelregels .werk-rij {
   display: grid;
@@ -759,7 +758,7 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
   gap: 8px;
   padding: 3px 10px;
 }
-#spelregels .werk-rij:nth-child(even) { background: rgba(255, 255, 255, 0.025); }
+#spelregels .werk-rij:nth-child(even) { background: color-mix(in srgb, var(--inkt) 2.5%, transparent); }
 #spelregels .werk-rij.eigen .werk-naam { color: var(--goud); }
 #spelregels .werk-naam { font-size: 12.5px; color: var(--inkt); }
 #spelregels .werk-naam small { display: block; font-size: 10.5px; color: var(--gedempt); font-style: italic; }
@@ -797,7 +796,7 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
   align-items: center;
   padding: 5px 10px;
   margin-bottom: 4px;
-  background: rgba(255, 255, 255, 0.03);
+  background: color-mix(in srgb, var(--inkt) 3%, transparent);
   border: 1px solid var(--rand);
   border-left: 3px solid transparent;
   border-radius: 6px;
@@ -814,10 +813,10 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
   text-transform: uppercase;
 }
 #velden .veld-naam { font: 15px var(--kop); color: var(--inkt); }
-#velden .veld-rij small { font: 11.5px system-ui, sans-serif; color: var(--gedempt); line-height: 1.35; }
+#velden .veld-rij small { font: 11.5px var(--boek); color: var(--gedempt); line-height: 1.35; }
 #velden .veld-rij small.zorg { color: var(--rood); }
 #velden .veld-vrucht { display: flex; align-items: center; gap: 6px; }
-#velden .veld-balk { flex: 1; height: 6px; background: rgba(255, 255, 255, 0.08); border-radius: 3px; overflow: hidden; }
+#velden .veld-balk { flex: 1; height: 6px; background: color-mix(in srgb, var(--inkt) 8%, transparent); border-radius: 3px; overflow: hidden; }
 #velden .veld-balk i { display: block; height: 100%; background: var(--goud); }
 #velden .veld-bestemming { font: 14px var(--kop); }
 #velden .veld-bestemming.akker { color: var(--goud); }
@@ -826,15 +825,15 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
 #velden .veld-keuzes { display: flex; gap: 4px; }
 #velden .veld-keuze {
   padding: 4px 9px;
-  font: 12.5px system-ui, sans-serif;
+  font: 12.5px var(--boek);
   color: var(--inkt);
-  background: rgba(255, 255, 255, 0.05);
+  background: color-mix(in srgb, var(--inkt) 5%, transparent);
   border: 1px solid var(--rand);
   border-radius: 6px;
   cursor: pointer;
 }
-#velden .veld-keuze:hover:not(:disabled):not(.gekozen) { background: rgba(226, 182, 74, 0.16); border-color: rgba(226, 182, 74, 0.6); }
-#velden .veld-keuze.gekozen { color: #1b1510; background: var(--goud); border-color: var(--goud); cursor: default; }
+#velden .veld-keuze:hover:not(:disabled):not(.gekozen) { background: color-mix(in srgb, var(--goud) 16%, transparent); border-color: color-mix(in srgb, var(--goud) 60%, transparent); }
+#velden .veld-keuze.gekozen { color: var(--op-goud); background: var(--goud); border-color: var(--goud); cursor: default; }
 #velden .veld-keuze:disabled { opacity: 0.35; cursor: default; }
 /* De mest (js/akkers.js, T.zetMest) is geen vierde bestemming maar een knop die aan en uit gaat: iets
    apart, en aan in de kleur van de mesthoop in de balk. */
@@ -870,7 +869,7 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
 #wetten .wet {
   padding: 8px 12px;
   margin-bottom: 6px;
-  background: rgba(255, 255, 255, 0.03);
+  background: color-mix(in srgb, var(--inkt) 3%, transparent);
   border: 1px solid var(--rand);
   border-left: 3px solid transparent;
   border-radius: 6px;
@@ -881,15 +880,15 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
 #wetten .wet-knoppen { display: flex; gap: 4px; }
 #wetten .wet-knop {
   padding: 4px 10px;
-  font: 12.5px system-ui, sans-serif;
+  font: 12.5px var(--boek);
   color: var(--inkt);
-  background: rgba(255, 255, 255, 0.05);
+  background: color-mix(in srgb, var(--inkt) 5%, transparent);
   border: 1px solid var(--rand);
   border-radius: 6px;
   cursor: pointer;
 }
-#wetten .wet-knop:hover:not(.gekozen) { background: rgba(226, 182, 74, 0.16); border-color: rgba(226, 182, 74, 0.6); }
-#wetten .wet-knop.gekozen { color: #1b1510; background: var(--goud); border-color: var(--goud); cursor: default; }
+#wetten .wet-knop:hover:not(.gekozen) { background: color-mix(in srgb, var(--goud) 16%, transparent); border-color: color-mix(in srgb, var(--goud) 60%, transparent); }
+#wetten .wet-knop.gekozen { color: var(--op-goud); background: var(--goud); border-color: var(--goud); cursor: default; }
 #wetten .wet-knop.aan { color: var(--gedempt); }
 #wetten .wet-uitleg { margin: 3px 0 4px; font-size: 13px; color: var(--gedempt); }
 #wetten .wet-uitleg b { color: var(--goud); font-weight: normal; }
@@ -917,7 +916,7 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
 #raadsman .rs-kaart {
   padding: 8px 12px;
   margin-bottom: 6px;
-  background: rgba(255, 255, 255, 0.03);
+  background: color-mix(in srgb, var(--inkt) 3%, transparent);
   border: 1px solid var(--rand);
   border-left: 3px solid transparent;
   border-radius: 6px;
@@ -927,16 +926,16 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
 #raadsman .rs-naam { font: 16px var(--kop); color: var(--inkt); }
 #raadsman .rs-knop {
   padding: 4px 10px;
-  font: 12.5px system-ui, sans-serif;
+  font: 12.5px var(--boek);
   color: var(--inkt);
-  background: rgba(255, 255, 255, 0.05);
+  background: color-mix(in srgb, var(--inkt) 5%, transparent);
   border: 1px solid var(--rand);
   border-radius: 6px;
   cursor: pointer;
 }
-#raadsman button.rs-knop:hover { background: rgba(226, 182, 74, 0.16); border-color: rgba(226, 182, 74, 0.6); }
-#raadsman .rs-knop.gekozen { color: #1b1510; background: var(--goud); border-color: var(--goud); cursor: default; }
-#raadsman .rs-wie { margin: 3px 0 2px; font: italic 13px var(--kop); color: var(--gedempt); }
+#raadsman button.rs-knop:hover { background: color-mix(in srgb, var(--goud) 16%, transparent); border-color: color-mix(in srgb, var(--goud) 60%, transparent); }
+#raadsman .rs-knop.gekozen { color: var(--op-goud); background: var(--goud); border-color: var(--goud); cursor: default; }
+#raadsman .rs-wie { margin: 3px 0 2px; font: italic 13px var(--boek); color: var(--gedempt); }
 #raadsman .rs-neiging { margin: 2px 0; font-size: 13px; color: var(--inkt); }
 #raadsman .rs-kan { margin: 2px 0 0; padding: 0; list-style: none; font-size: 12.5px; line-height: 1.45; }
 #raadsman .rs-kan span { color: var(--gedempt); }
@@ -949,7 +948,7 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
 
 /* Verstoppen (js/hud.js, T.ui.openVerstoppen; js/verstoppen.js): in de stijl van de marskramer. Wie
    er woont en wat dat betekent, staat cursief boven de rijen. */
-#verstoppen .verstop-bewoner { margin: 0 0 8px; font: italic 13px var(--kop); color: var(--inkt); }
+#verstoppen .verstop-bewoner { margin: 0 0 8px; font: italic 13px var(--boek); color: var(--inkt); }
 /* Wie je nu ziet (js/zien.js, T.kijkersTekst); kijkt er iemand, dan in het rood. */
 #verstoppen .verstop-kijkers { margin: -4px 0 10px; font-size: 13px; color: var(--groen); }
 #verstoppen .verstop-kijkers.gezien { color: var(--rood); font-weight: bold; }
@@ -998,9 +997,9 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
   border-radius: 8px;
   cursor: pointer;
 }
-.menu-knop small { font: 12px system-ui, sans-serif; color: var(--gedempt); }
-.menu-knop:hover:not(:disabled) { border-color: rgba(226, 182, 74, 0.7); background: rgba(40, 32, 22, 0.92); }
-.menu-knop.hoofd { border-color: rgba(226, 182, 74, 0.6); }
+.menu-knop small { font: 12px var(--boek); color: var(--gedempt); }
+.menu-knop:hover:not(:disabled) { border-color: color-mix(in srgb, var(--goud) 70%, transparent); background: rgba(40, 32, 22, 0.92); }
+.menu-knop.hoofd { border-color: color-mix(in srgb, var(--goud) 60%, transparent); }
 .menu-knop.hoofd span { color: var(--goud); }
 .menu-knop:disabled { opacity: 0.55; cursor: default; }
 .menu-kop { margin: 2px 0 2px; font: 12px var(--kop); color: var(--gedempt); letter-spacing: 0.04em; text-transform: uppercase; }
@@ -1011,7 +1010,7 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
   font: 20px var(--kop);
   color: var(--goud);
   background: var(--paneel);
-  border: 1px solid rgba(226, 182, 74, 0.6);
+  border: 1px solid color-mix(in srgb, var(--goud) 60%, transparent);
   border-radius: 8px;
   outline: none;
 }
@@ -1031,7 +1030,7 @@ body.titelscherm :is(#hud-gehucht, #hulp-gehucht, #berichten, #plek, #opdracht, 
   right: 16px;
   bottom: 16px;
   padding: 4px 10px;
-  font: italic 13px var(--kop);
+  font: italic 13px var(--boek);
   color: var(--gedempt);
   background: rgba(22, 18, 14, 0.6);
   border-radius: 6px;
@@ -1081,9 +1080,9 @@ body.titelscherm :is(#hud-gehucht, #hulp-gehucht, #berichten, #plek, #opdracht, 
 #land .venster-staat b { color: var(--inkt); font-weight: normal; }
 #land-kaart { display: block; width: 100%; height: auto; max-height: calc(100vh - 290px); margin: 2px 0 6px; }
 #land .land-klik { cursor: pointer; }
-#land .land-klik:hover { fill: rgba(226, 182, 74, 0.08); }
+#land .land-klik:hover { fill: color-mix(in srgb, var(--goud) 8%, transparent); }
 #land .land-naam { font: bold 20px var(--kop); fill: var(--inkt); stroke: #140f0b; stroke-width: 4.5px; paint-order: stroke; stroke-linejoin: round; pointer-events: none; }
-#land .land-dagen { font: bold 13px system-ui, sans-serif; fill: var(--inkt); stroke: #140f0b; stroke-width: 4px; paint-order: stroke; stroke-linejoin: round; pointer-events: none; }
+#land .land-dagen { font: bold 13px var(--boek); fill: var(--inkt); stroke: #140f0b; stroke-width: 4px; paint-order: stroke; stroke-linejoin: round; pointer-events: none; }
 #land .land-vraag { font: 40px var(--kop); fill: #4a4236; pointer-events: none; }
 #land .land-keuze { margin: 0; min-height: 30px; font-size: 13.5px; color: var(--inkt); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 #land .land-keuze b { font: 15px var(--kop); font-weight: normal; }
@@ -1091,7 +1090,7 @@ body.titelscherm :is(#hud-gehucht, #hulp-gehucht, #berichten, #plek, #opdracht, 
 .land-knop {
   padding: 4px 12px;
   font: 13px var(--kop);
-  color: #1b1510;
+  color: var(--op-goud);
   background: var(--goud);
   border: 1px solid var(--goud);
   border-radius: 6px;
@@ -1112,22 +1111,22 @@ body.titelscherm :is(#hud-gehucht, #hulp-gehucht, #berichten, #plek, #opdracht, 
 }
 #terug .terug-lijst { margin: 0; padding: 0; list-style: none; font-size: 13px; line-height: 1.5; }
 #terug .terug-lijst li { padding: 3px 0; border-top: 1px solid var(--rand); }
-#terug .terug-lijst li span { color: var(--gedempt); font: italic 12px var(--kop); margin-right: 4px; }
+#terug .terug-lijst li span { color: var(--gedempt); font: italic 12px var(--boek); margin-right: 4px; }
 #terug .terug-lijst li.gevaar { color: #f0a594; }
 
 /* Het briefje bij een huis (js/huisbriefje.js; werklijst vraag 100, 2c, in de stijl van vraag 98, C): een papiertje aan
    een spijker, met wie er woont, wat het huis wil en wat helpt. Het papier en de spijker zijn pixel art
-   (gereedschap/pixelart/papieren.cjs), twee keer zo groot. */
+   (gereedschap/pixelart/papieren.cjs), op ware pixels, zoals elk venster (vraag 146). */
 #huisbriefje {
   position: fixed;
   z-index: 40;
   width: 290px;
   pointer-events: none;
   border-style: solid;
-  border-width: 16px;
-  border-image: url('beelden/papier.png') 8 fill / 16px round;
+  border-width: 8px;
+  border-image: url('beelden/papier.png') 8 fill / 8px round;
   image-rendering: pixelated;
-  padding: 4px 8px 6px;
+  padding: 10px 14px 12px;
   color: var(--papier-inkt);
   font: 16px/1.3 var(--boek);
   display: flex;
@@ -1138,14 +1137,14 @@ body.titelscherm :is(#hud-gehucht, #hulp-gehucht, #berichten, #plek, #opdracht, 
   content: '';
   position: absolute;
   left: 50%;
-  top: -12px;
-  width: 16px;
-  height: 16px;
-  margin-left: -8px;
-  background: url('beelden/spijker.png') 0 0 / 16px 16px;
+  top: -5px;
+  width: 8px;
+  height: 8px;
+  margin-left: -4px;
+  background: url('beelden/spijker.png') 0 0 / 8px 8px;
   image-rendering: pixelated;
 }
-#huisbriefje .briefje-kop { font: 26px/1 var(--gotisch); }
+#huisbriefje .briefje-kop { font: 26px/1 var(--kop); }
 #huisbriefje .briefje-stand { font-style: italic; color: var(--papier-grijs); font-size: 15px; }
 #huisbriefje .briefje-wensen { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px 12px; margin: 2px 0; }
 #huisbriefje .ja { color: var(--papier-groen); }
@@ -1166,3 +1165,47 @@ body.titelscherm :is(#hud-gehucht, #hulp-gehucht, #berichten, #plek, #opdracht, 
   pointer-events: none;
   z-index: 30;
 }
+
+/* Elk venster is papier (vraag 146, b1; Marcel, 9 okt: "wat meer HD de UI", en de schrijftafel van vraag 98): het vel van
+   het spel (beelden/papier.png) op ware pixels, met inkt in plaats van licht. In een venster staan de kleurnamen op inkt,
+   dus zijn eigen opmaak gaat vanzelf mee; een nieuw venster komt erbij in deze rij. De kaart van het land (#land) nog
+   niet: die tekent in licht op donker (ontwerp/opmerkingen.md). */
+#bouwmenu,
+#handel,
+#brief,
+#heer,
+#slachten,
+#verstoppen,
+#velden,
+#wetten,
+#raadsman,
+#terug,
+#spelregels,
+#dialoog,
+#overlay .kaart,
+.menu-venster {
+  --inkt: var(--papier-inkt);
+  --gedempt: var(--papier-grijs);
+  --goud: var(--papier-rood);
+  --op-goud: #f6e8c4;
+  --rand: color-mix(in srgb, var(--papier-inkt) 26%, transparent);
+  --rood: var(--papier-rood);
+  --groen: var(--papier-groen);
+  --paneel: color-mix(in srgb, var(--papier-inkt) 4%, transparent);
+  color: var(--inkt);
+  background: none;
+  border-style: solid;
+  border-width: 8px;
+  border-color: transparent;
+  border-image: url('beelden/papier.png') 8 fill / 8px round;
+  border-radius: 0;
+  box-shadow: 4px 6px 0 rgba(10, 6, 2, 0.35);
+  image-rendering: pixelated;
+  scrollbar-color: color-mix(in srgb, var(--papier-inkt) 35%, transparent) transparent;
+}
+#velden .veld-bestemming.akker { color: #85601a; }
+#velden .veld-bestemming.braak { color: #7a5228; }
+#velden .veld-balk { background: color-mix(in srgb, var(--papier-inkt) 12%, transparent); }
+#velden .veld-balk i { background: var(--papier-groen); }
+#velden .veld-mest.gekozen { color: var(--op-goud); }
+#terug .terug-lijst li.gevaar { color: var(--rood); }

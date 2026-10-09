@@ -392,7 +392,7 @@ een stand, en elke stand wil iets.
   wat helpt ("Vlees of vis: bouw een visser of een jager [B]", zoals de raad het zegt) en hoe ver het is met doorgroeien
   (`T.huisToestand` in `js/wensen.js`). Een klik blijft verstoppen in de kelder. Met een **erf** in de hand zegt de muis
   welke put en kapel een huis daar zou halen (`T.erfKringTekst`). Het briefje is het eerste in de letters van de
-  schrijftafel (`letters/`: Jacquarda Bastarda 9 en IM Fell English, met hun licentie); de rest van de ui volgt later.
+  schrijftafel (`letters/`, met hun licentie; sinds 9 okt Grenze en Alegreya, vraag 146, want de eerste letters waren "te lastig te lezen"); de rest van de ui is vraag 146.
 - **2e, het eind en het jaar in het kort** (3 okt, vijfentwintigste sessie; werklijst vraag 101, Marcel: "101 ja";
   `js/einde.js`). **Winnen:** elke nacht kijkt het dorp of elk huis met mensen alles heeft wat zijn stand wil, in de
   hoogste stand (stenen huizen; de boerderijen staan ernaast), met minstens 100 mensen (`T.iedereenGelukkig`). Dan loopt

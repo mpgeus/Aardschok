@@ -376,7 +376,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`T.zetQuest`, `T.neemWeg`, `T.werkQuestsBij`), goud (`T.geefGoud`), de haken waarmee een
   gesprek erop let (`T.questVoorwaarde`, `T.questGevolg`), voorwerpen die aan een quest hangen,
   en `T.keurQuests`, dat de toets van drie antwoorden nakijkt.
-- `js/dialoog.js`, `js/ui.js` (alle html over het beeld), `js/tekenen.js`, `js/main.js`
+- `js/dialoog.js`, `js/ui.js` (alle html over het beeld; **elk venster is papier**, vraag 146: een nieuw venster komt in de
+  rij onderaan `stijl.css`, en zijn opmaak gebruikt de kleurnamen `--inkt`, `--gedempt`, `--goud`, `--rand`, nooit een vaste
+  kleur; de letters zijn Grenze, `--kop`, en Alegreya, `--boek`, in `letters/`), `js/tekenen.js`, `js/main.js`
   (spellus, invoer, zoom, camera). **Het overzicht** (vraag 108, a): `Tab` tilt de camera van de schout af en zoomt uit
   (`T.wisselOverzicht`, `S.overzicht`, alleen scherm); slepen of de pijltjes schuiven, het wiel zoomt, en wat je klikt,
   doet de schout nog altijd. `Tab`, een klik op de schout of een gevecht brengt je terug. Op een groot scherm tekent het spel op een hele deling ervan, minstens
