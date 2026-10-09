@@ -524,3 +524,34 @@ if (require.main === module && process.argv[2] === 'detail') {
   fs.writeFileSync(path.join(UIT, 'detail-4x.png'), K.png(vel, 4, '#5e6a44'));
   console.log(path.join(UIT, 'detail-4x.png'));
 }
+
+// De proef aan het werk (node gereedschap/pixelart/uiterlijk.cjs werk): vier mannen en vier vrouwen, elk in het werk van
+// een rij (maaien, zaaien, wieden, binden, hakken), zodat je ziet dat wie werkt dezelfde blijft.
+if (require.main === module && process.argv[2] === 'werk') {
+  const fs = require('fs');
+  const path = require('path');
+  const K = require('./kern.cjs');
+  const W = require('./werkfiguren.cjs');
+  const UIT = path.join(__dirname, 'uit', 'uiterlijk');
+  fs.mkdirSync(UIT, { recursive: true });
+  const werk = [
+    ['maaierWerk', 'maaister', 'maaien'],
+    ['zaaier', 'zaaister', 'zaaien'],
+    ['wieder', 'wiedster', 'wieden'],
+    ['binder', 'binster', 'binden'],
+    ['hakker', 'hakster', 'hakken'],
+  ];
+  const mannen = [0, 3, 9, 16].map((i) => UITERLIJKEN.boer[i]);
+  const vrouwen = [1, 3, 8, 13].map((i) => UITERLIJKEN.boerin[i]);
+  const KOL = 110;
+  const HOOG = 120;
+  const vel = new K.Plaat(KOL * 8 + 8, HOOG * werk.length);
+  werk.forEach(([man, vrouw, houding], r) => {
+    [...mannen.map((o) => [man, o]), ...vrouwen.map((o) => [vrouw, o])].forEach(([naam, o], i) => {
+      const m = W.metUiterlijk(o, () => W[naam]({ houding, fase: 0.3 }));
+      vel.plak(K.losRenderen(m, { b: 260, h: 240, anker: [130, 180], richting: 'ZO' }).uitsnede(75, 80, KOL, HOOG), 4 + i * KOL, r * HOOG);
+    });
+  });
+  fs.writeFileSync(path.join(UIT, 'werk-3x.png'), K.png(vel, 3, '#5e6a44'));
+  console.log(path.join(UIT, 'werk-3x.png'));
+}

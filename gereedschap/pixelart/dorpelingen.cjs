@@ -771,13 +771,7 @@ function boer(stand = null, o = {}) {
     KAR.bontBanen(delen, ctx, kiel, 37, 57, [1.4, 5]);
     KAR.bontZoom(delen, ctx, kiel, 24.6);
   }
-  // (vraag 145: een vest over de kiel, een tas over de schouder, een mes aan de riem; uiterlijk.cjs)
-  const kielAfstand = o.vest || o.tas ? bouwSdf([romp(kiel, 24, 58, M.kiel, D.kiel, 2), ellips([0, 0.4, 57], [10.4, 6.8, 4.4], M.kiel, D.kiel, 2.5)]) : null;
-  if (o.vest) UI.vest(delen, kielAfstand, 33, 59.5, KAR.materiaal(ctx, 'vest', o.vest), D.kiel);
-  const band = o.riem ? KAR.riem(delen, ctx, kiel, 38) : null;
-  const buidel = band && o.buidel ? KAR.buidel(delen, ctx, band, o.buidelX ?? -5.6) : null;
-  if (band && o.mes) UI.mes(delen, band, o.mes, KAR.materiaal(ctx, 'schede', UI.SCHOEN.leer), KAR.materiaal(ctx, 'heft', { ramp: 'hout', lo: 1.6, hi: 5 }), D.kiel);
-  if (o.tas) UI.schoudertas(delen, kielAfstand, [-6.4, 0, 61], [9.4, 0, 33.5], KAR.materiaal(ctx, 'tasband', { ramp: 'leer', lo: 0.8, hi: 3.4 }), KAR.materiaal(ctx, 'tas', o.tas), D.kiel);
+  const { buidel } = overDeKiel(delen, ctx, kiel, o);
   // de luit: de kast rechtsonder op de rug, de hals langs het linkeroor omhoog
   if (o.luit) KAR.luit(delen, ctx, { voet: [5.5, -6.4, 37.5], top: [-11, -9.8, 75], vorm: kiel, z0: 24, z1: 58, schouder: [7.4, 0, 58.6], heup: [-9.6, 0, 31] });
   // de roddelaar: een bonte omslagdoek, voorop net naast het midden geknoopt
@@ -874,7 +868,33 @@ function boer(stand = null, o = {}) {
     bot(Bn.Bromp);
   }
 
-  // --- hoofd: lang gezicht, grote neus, flaporen; bruin haar onder de hoed uit
+  // --- hoofd: lang gezicht, grote neus, flaporen; bruin haar onder de hoed uit (hoofdVanDeBoer, hieronder)
+  hoofdVanDeBoer(delen, ctx, H, o, bovenlijf);
+  bot(Bn.Bnek);
+
+  return model(delen, mat, hg ? HH.omvat(delen, 2) : { midden: [0, 2, 43], straal: 50 });
+}
+
+// Wat de boer over zijn kiel draagt (kiel = het profiel van de kiel): een riem met een buidel en een mes, en (vraag 145,
+// uiterlijk.cjs) een vest en een tas over de schouder. Ook voor de werkfiguren (werkBoer). Geeft de riem en de bovenkant
+// van de buidel terug (voor een hand die erop rust).
+function overDeKiel(delen, ctx, kiel, o = {}) {
+  const { M, D } = ctx;
+  const kielAfstand = o.vest || o.tas ? bouwSdf([romp(kiel, 24, 58, M.kiel, D.kiel, 2), ellips([0, 0.4, 57], [10.4, 6.8, 4.4], M.kiel, D.kiel, 2.5)]) : null;
+  if (o.vest) UI.vest(delen, kielAfstand, 33, 59.5, KAR.materiaal(ctx, 'vest', o.vest), D.kiel);
+  const band = o.riem ? KAR.riem(delen, ctx, kiel, 38) : null;
+  const buidel = band && o.buidel ? KAR.buidel(delen, ctx, band, o.buidelX ?? -5.6) : null;
+  if (band && o.mes) UI.mes(delen, band, o.mes, KAR.materiaal(ctx, 'schede', UI.SCHOEN.leer), KAR.materiaal(ctx, 'heft', { ramp: 'hout', lo: 1.6, hi: 5 }), D.kiel);
+  if (o.tas) UI.schoudertas(delen, kielAfstand, [-6.4, 0, 61], [9.4, 0, 33.5], KAR.materiaal(ctx, 'tasband', { ramp: 'leer', lo: 0.8, hi: 3.4 }), KAR.materiaal(ctx, 'tas', o.tas), D.kiel);
+  return { band, buidel };
+}
+
+// Het hoofd van de boer, met wat zijn karakter (karakters.cjs) en zijn uiterlijk (uiterlijk.cjs, vraag 145) erop zetten: het
+// gezicht, het haar, de hoed en de baard. Ook de werkfiguren (werkfiguren.cjs, werkBoer) bouwen hun hoofd hiermee, zodat
+// wie aan het werk is, dezelfde man blijft. ctx: { M, D, mat } van het lijf; bovenlijf: de afstand tot het bovenlijf (voor
+// de kap met zijn schoudermanteltje), of null.
+function hoofdVanDeBoer(delen, ctx, H, o = {}, bovenlijf = null) {
+  const { M, D } = ctx;
   const oy = schedel(delen, H, M, D, { maat: [6.7, 6.7, 7.8], oog: [2.6, 0.8], oor: 1 });
   delen.push(ellips(plus(H, [0, 6.9, -1.4]), [1.7, 2.4, 2.6], M.huid, D.hoofd, 1));
   // (de drinker: een dikke knol van een neus, en rood, zie rodeNeus hierboven)
@@ -936,9 +956,6 @@ function boer(stand = null, o = {}) {
   else if (o.baard === 'kort') KAR.baard(delen, H, [6.7, 6.7, 7.8], M.haar, D.hoofd, 3.5);
   else if (o.baard === 'snor') UI.snor(delen, H, [6.7, 6.7, 7.8], M.haar, D.hoofd);
   else if (o.baard === 'sik') UI.sik(delen, H, [6.7, 6.7, 7.8], M.haar, D.hoofd);
-  bot(Bn.Bnek);
-
-  return model(delen, mat, hg ? HH.omvat(delen, 2) : { midden: [0, 2, 43], straal: 50 });
 }
 
 const DORPSOUDSTE_SNELHEID = 1;
@@ -1115,7 +1132,7 @@ const DORPELINGEN = [
 ];
 
 module.exports = {
-  smid, herbergierster, boer, dorpsoudste, DORPELINGEN, profiel, grensbol, romp, schil, klokrok, blokGedraaid, schedel, glimlach,
+  smid, herbergierster, boer, hoofdVanDeBoer, overDeKiel, dorpsoudste, DORPELINGEN, profiel, grensbol, romp, schil, klokrok, blokGedraaid, schedel, glimlach,
   rustDorpeling, houdingDorpeling, bottenDorpeling, knieTussen, beenPunten, voetBot, SMID_SNELHEID, SMID_FPS,
   HERBERGIERSTER_SNELHEID, HERBERGIERSTER_FPS, BOER_SNELHEID, BOER_FPS, DORPSOUDSTE_SNELHEID, DORPSOUDSTE_FPS,
 };

@@ -971,7 +971,18 @@ function boerin(stand = null, o = {}) {
     }
   }
 
-  // --- hoofd: rond gezicht in een witte doek, een pluk haar voorop, de knoop onder de kin
+  // --- hoofd: rond gezicht in een witte doek, een pluk haar voorop, de knoop onder de kin (hoofdVanDeBoerin, hieronder)
+  hoofdVanDeBoerin(delen, ctx, H, maat, o);
+  bot(Bn.Bnek);
+
+  return model(delen, mat, hg ? HH.omvat(delen, 2) : { midden: [0, 3, 38], straal: 46 });
+}
+
+// Het hoofd van de boerin, met wat haar karakter (karakters.cjs) en haar uiterlijk (uiterlijk.cjs, vraag 145) erop zetten:
+// het gezicht, het haar, de doek of het kapsel. Ook de werkfiguren (werkfiguren.cjs, werkBoerin) bouwen hun hoofd hiermee.
+// ctx: { M, D, mat } van het lijf.
+function hoofdVanDeBoerin(delen, ctx, H, maat, o = {}) {
+  const { M, D } = ctx;
   const oy = schedel(delen, H, M, D, { maat, oog: [2.6, 0.6], oor: 0.8 });
   // (de drinker: een dikke, rode knol van een neus, zie rodeNeus hierboven)
   if (o.neus === 'rood') delen.push(bol(plus(H, [0, 7.3, -1.9]), 2.2, M.huid, D.hoofd, 1));
@@ -1008,9 +1019,6 @@ function boerin(stand = null, o = {}) {
     vlecht(delen, plus(H, [4.6, -2.2, -3.2]), plus(H, [9.4, 1.2, -10.4]), plus(H, [7.6, 5.4, -19.6]), 1.9, 1.1, 8, M.haar, D.hoofd, [0, 1, 0]);
     KAR.bonteMuts(delen, ctx, H, maat, { zij: -1 });
   } else if (hoofd === 'geen') UI.kapselVrouw(delen, H, maat, M.haar, D.hoofd, o.kapsel || 'knot', M.doek); // vraag 145
-  bot(Bn.Bnek);
-
-  return model(delen, mat, hg ? HH.omvat(delen, 2) : { midden: [0, 3, 38], straal: 46 });
 }
 
 // ---------------------------------------------------------------- de bruidegom
@@ -1484,6 +1492,7 @@ const PORTRET_ZO = {
 const ALLE_DORPELINGEN = [...DORPELINGEN.map((d) => ({ ...d, ...PORTRET_ZO[d.naam] })), ...DORPELINGEN2];
 
 module.exports = {
+  hoofdVanDeBoerin,
   jongen,
   meisje,
   kleuter,

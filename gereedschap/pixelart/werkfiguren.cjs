@@ -41,16 +41,19 @@
 // Wegschrijven: node gereedschap/pixelart/werkfiguren-anim.cjs [zaaier wieder sprokkelaar hakker zaaister wiedster
 // sprokkelaarster maaister hakster].
 'use strict';
-const { sdf, klem, mix, rnd } = require('./kern.cjs');
+const { sdf, bouwSdf, klem, mix, rnd } = require('./kern.cjs');
 const { model, kegel, capsule, bol, ellips, bochtKegel, plus } = require('./figuren.cjs');
 const { ring } = require('./figuren2.cjs');
 const HH = require('./houding.cjs');
 const KAR = require('./karakters.cjs');
+const UI = require('./uiterlijk.cjs'); // het uiterlijk van wie het werk doet (vraag 145)
 const {
   profiel, schedel, romp, schil, glimlach, bottenDorpeling, beenPunten, voetBot, knieTussen, houdingDorpeling,
   rustDorpeling, BOER_SNELHEID, BOER_FPS,
+  hoofdVanDeBoer,
+  overDeKiel,
 } = require('./dorpelingen.cjs');
-const { arm: mouwArm, blosjes, hoofddoek, haarKap, middelband, mand: rietMand, rietPatroon, BOERIN_SNELHEID, BOERIN_FPS } = require('./dorpelingen2.cjs');
+const { arm: mouwArm, blosjes, hoofddoek, haarKap, middelband, hoofdVanDeBoerin, mand: rietMand, rietPatroon, BOERIN_SNELHEID, BOERIN_FPS } = require('./dorpelingen2.cjs');
 const { zeisDelen, zeisInDeHanden, houdingMaaier, MAAIER_BEELDEN, MAAIER_FPS } = require('./maaier.cjs');
 
 // hetzelfde oogmateriaal als dorpelingen.cjs en maaier.cjs (daar niet geëxporteerd, dus hier één regel gelijk)
@@ -225,6 +228,20 @@ const IJZER = { ramp: 'ijzer', lo: 1.8, hi: 6.2, glans: 1.2, detail: true };
 
 // ---------------------------------------------------------------- het lijf van de boer
 
+// Het uiterlijk van wie het werk doet (vraag 145; uiterlijk.cjs): de opties van boer() of boerin() voor zijn kleren, zijn
+// haar, zijn hoofd en wat hij bij zich heeft, zodat wie aan het werk gaat, dezelfde man of vrouw blijft. Het geldt zolang
+// metUiterlijk(o, maak) loopt (het renderen is één doorgaande stap): zo hoeft niet elke werkfiguur het door te geven.
+let UITERLIJK = {};
+function metUiterlijk(o, maak) {
+  const oud = UITERLIJK;
+  UITERLIJK = o || {};
+  try {
+    return maak();
+  } finally {
+    UITERLIJK = oud;
+  }
+}
+
 // De gewone boer, zoals boer() en maaier() hem bouwen: benen met knieën en klompen, de kiel met de rode halsdoek, en
 // het hoofd met strootje en strohoed, in de houding hg (de vorm van houdingDorpeling). bouw(ctx) zet ertussen wat
 // deze figuur anders heeft: wat hij op zijn romp draagt, zijn armen en zijn gereedschap. Het zet elk stuk zelf op zijn
@@ -235,10 +252,12 @@ function werkBoer(hg, bouw) {
   const D = { benen: 1, kiel: 2, armL: 3, armR: 4, handL: 5, handR: 6, hoofd: 7, hoed: 8, doek: 9 };
   const mat = [];
   mat[M.huid] = { ramp: 'huid', lo: 1.9, hi: 6.4, schaduwKracht: 0.85 };
-  mat[M.kiel] = { ramp: 'pet', lo: 1.4, hi: 6.2, patroon: (x, y, z) => (Math.sin(x * 1.3 + 0.4) > 0.82 && z < 50 ? -0.7 : 0) };
-  mat[M.broek] = { ramp: 'aarde', lo: 0.8, hi: 4.6 };
-  mat[M.klomp] = { ramp: 'zand', lo: 3, hi: 7.4 };
-  mat[M.haar] = { ramp: 'schors', lo: 0.8, hi: 4.4 };
+  const o = UITERLIJK;
+  mat[M.kiel] = o.kiel || { ramp: 'pet', lo: 1.4, hi: 6.2, patroon: (x, y, z) => (Math.sin(x * 1.3 + 0.4) > 0.82 && z < 50 ? -0.7 : 0) };
+  mat[M.broek] = o.broek || { ramp: 'aarde', lo: 0.8, hi: 4.6 };
+  mat[M.klomp] = o.klomp || { ramp: 'zand', lo: 3, hi: 7.4 };
+  mat[M.haar] = o.haar || { ramp: 'schors', lo: 0.8, hi: 4.4 };
+  if (o.baard === 'stoppels') mat[M.huid].patroon = UI.stoppels(H, [6.7, 6.7, 7.8]);
   mat[M.oog] = OOG;
   mat[M.stro] = {
     ramp: 'stro',
@@ -251,7 +270,7 @@ function werkBoer(hg, bouw) {
     },
   };
   mat[M.lint] = { ramp: 'schors', lo: 0.6, hi: 3 };
-  mat[M.doek] = { ramp: 'rood', lo: 2, hi: 6.4 };
+  mat[M.doek] = o.halsdoek || { ramp: 'rood', lo: 2, hi: 6.4 };
   mat[M.hout] = HOUT;
   mat[M.ijzer] = IJZER;
   mat[M.strootje] = { ramp: 'stro', lo: 4.2, hi: 6.6 };
@@ -290,45 +309,24 @@ function werkBoer(hg, bouw) {
   };
   delen.push(romp(kiel, 24, 58, M.kiel, D.kiel, 2));
   delen.push(ellips([0, 0.4, 57], [10.4, 6.8, 4.4], M.kiel, D.kiel, 2.5));
-  delen.push({
-    f: (x, y, z) => Math.max(Math.abs(sdf.ellipsoide(x, y - 1.4, z - 60.4, 5.8, 5.4, 3)) - 0.9, Math.abs(z - 60.4) - 1.8),
-    g: [0, 1.4, 60.4, 8],
-    m: M.doek,
-    deel: D.doek,
-  });
-  delen.push(bol([0.6, 7, 59.4], 1.6, M.doek, D.doek, 0.6));
-  delen.push(kegel([0.6, 7.2, 58.8], [1.4, 8.4, 54.6], 1.8, 0.7, M.doek, D.doek));
+  if ((o.kraag || 'doek') === 'doek') {
+    delen.push({
+      f: (x, y, z) => Math.max(Math.abs(sdf.ellipsoide(x, y - 1.4, z - 60.4, 5.8, 5.4, 3)) - 0.9, Math.abs(z - 60.4) - 1.8),
+      g: [0, 1.4, 60.4, 8],
+      m: M.doek,
+      deel: D.doek,
+    });
+    delen.push(bol([0.6, 7, 59.4], 1.6, M.doek, D.doek, 0.6));
+    delen.push(kegel([0.6, 7.2, 58.8], [1.4, 8.4, 54.6], 1.8, 0.7, M.doek, D.doek));
+  }
+  overDeKiel(delen, ctx, kiel, o); // een vest, een riem met buidel en mes, een tas (vraag 145)
   bot(Bn.Bromp);
 
   bouw(ctx);
   bot(null);
 
-  // --- hoofd: lang gezicht, strootje, strohoed (zelfde als boer() en maaier())
-  const oy = schedel(delen, H, M, D, { maat: [6.7, 6.7, 7.8], oog: [2.6, 0.8], oor: 1 });
-  delen.push(ellips(plus(H, [0, 6.9, -1.4]), [1.7, 2.4, 2.6], M.huid, D.hoofd, 1));
-  delen.push(bol(plus(H, [0, 8.2, -2.8]), 1.7, M.huid, D.hoofd, 1));
-  for (const s of [-1, 1]) delen.push(ellips(plus(H, [s * 2.7, oy + 0.1, 2.6]), [2.1, 1, 0.9], M.haar, D.hoofd, 0.4));
-  delen.push(ellips(plus(H, [0, -2, 0.4]), [7.1, 6.1, 6.8], M.haar, D.hoofd, 1));
-  delen.push(capsule(plus(H, [1.4, 5.8, -4.3]), plus(H, [8.6, 8.4, -0.8]), 0.5, M.strootje, D.hoofd));
-  const rand = plus(H, [0, -1.2, 6.6]);
-  delen.push({
-    f: (x, y, z) => {
-      const dx = x - rand[0];
-      const dy = y - rand[1];
-      const dz = z - rand[2] + 0.01 * (dx * dx + dy * dy) - 0.17 * dy;
-      return sdf.ellipsoide(dx, dy, dz, 13.4, 12.8, 1) * 0.75;
-    },
-    g: [rand[0], rand[1], rand[2], 15],
-    m: M.stro,
-    deel: D.hoed,
-  });
-  delen.push({
-    f: (x, y, z) => sdf.cilinder(x - rand[0], y - rand[1] - 0.4, z - rand[2], 6.3, 0, 6.2) - 0.6,
-    g: [rand[0], rand[1], rand[2] + 3.5, 9],
-    m: (x, y, z) => (z < rand[2] + 2.4 ? M.lint : M.stro),
-    deel: D.hoed,
-    k: 1,
-  });
+  // --- hoofd: lang gezicht, strootje, strohoed, of het hoofd van zijn uiterlijk (hoofdVanDeBoer in dorpelingen.cjs)
+  hoofdVanDeBoer(delen, ctx, H, o);
   bot(Bn.Bnek);
 
   return model(delen, mat, HH.omvat(delen, 2));
@@ -392,10 +390,11 @@ function werkBoerin(hg, bouw) {
   const D = { rok: 1, lijf: 2, schort: 3, armL: 4, armR: 5, handL: 6, handR: 7, hoofd: 8, doek: 9 };
   const mat = [];
   mat[M.huid] = { ramp: 'huid', lo: 1.8, hi: 6.6, schaduwKracht: 0.7, patroon: blosjes(3.7, HB[2] - 2.6, HB[1] + 3, 1.8, 6.6, 1.1) };
-  mat[M.jurk] = { ramp: 'dak', lo: 1, hi: 5.6 };
-  mat[M.schort] = { ramp: 'pet', lo: 1.2, hi: 5.4, patroon: (x) => (Math.sin(x * 1.1 + 0.6) > 0.8 ? -0.6 : 0) };
-  mat[M.doek] = { ramp: 'pleister', lo: 2.2, hi: 6.4, patroon: (x, y, z) => (Math.sin(x * 1.2 - z * 0.8) > 0.8 ? -0.6 : 0) };
-  mat[M.haar] = { ramp: 'aarde', lo: 1, hi: 4.6 };
+  const o = UITERLIJK;
+  mat[M.jurk] = o.jurk || { ramp: 'dak', lo: 1, hi: 5.6 };
+  mat[M.schort] = o.schort || { ramp: 'pet', lo: 1.2, hi: 5.4, patroon: (x) => (Math.sin(x * 1.1 + 0.6) > 0.8 ? -0.6 : 0) };
+  mat[M.doek] = o.doek || { ramp: 'pleister', lo: 2.2, hi: 6.4, patroon: (x, y, z) => (Math.sin(x * 1.2 - z * 0.8) > 0.8 ? -0.6 : 0) };
+  mat[M.haar] = o.haar || { ramp: 'aarde', lo: 1, hi: 4.6 };
   mat[M.oog] = OOG;
   mat[M.mond] = KAR.MOND;
   mat[M.hout] = HOUT;
@@ -422,29 +421,25 @@ function werkBoerin(hg, bouw) {
   // --- de rok en het schort erop
   const rok = rokProfiel(hg);
   delen.push(rokDeel(rok, M.jurk, D.rok));
-  delen.push(schil(rok.vorm, { los: 1.2, d: 0.6, breed: (z) => mix(9.4, 7.4, z / rok.top), z0: (5 * rok.top) / 37, z1: rok.top - 0.5 }, M.schort, D.schort));
+  if (o.schort !== false) delen.push(schil(rok.vorm, { los: 1.2, d: 0.6, breed: (z) => mix(9.4, 7.4, z / rok.top), z0: (5 * rok.top) / 37, z1: rok.top - 0.5 }, M.schort, D.schort));
   bot(HH.beweging({ dp: [hg.rokZwaai, 0, 0] }));
-  // --- het bovenlijf, de boezem en de schouders, en de schortband om haar middel
-  delen.push(romp(LIJF_BOERIN, 30, 56, M.jurk, D.lijf, 2));
-  delen.push(ellips([0, 4, 48.5], [9, 5.6, 4.4], M.jurk, D.lijf, 2.5));
-  delen.push(ellips([0, 0.4, 55], [10.8, 7, 4.2], M.jurk, D.lijf, 2.5));
-  middelband(delen, LIJF_BOERIN, 36.4, M.schort, D.schort);
+  // --- het bovenlijf, de boezem en de schouders (in een rijglijf als haar uiterlijk er een heeft), en de schortband
+  const mLijf = o.lijfje ? KAR.materiaal(ctx, 'lijfje', UI.rijglijf(o.lijfje, UI.STOF.linnen)) : M.jurk;
+  const bovenlijf = [romp(LIJF_BOERIN, 30, 56, mLijf, D.lijf, 2), ellips([0, 4, 48.5], [9, 5.6, 4.4], mLijf, D.lijf, 2.5), ellips([0, 0.4, 55], [10.8, 7, 4.2], mLijf, D.lijf, 2.5)];
+  delen.push(...bovenlijf);
+  if (o.schort !== false) middelband(delen, LIJF_BOERIN, 36.4, M.schort, D.schort);
+  // wat ze erover draagt (vraag 145): een omslagdoek, een riem met een buidel en een mes, zoals boerin()
+  if (o.omslagdoek) KAR.omslagdoek(delen, ctx, bouwSdf(bovenlijf), { zNek: 59.6, zZij: 48.5, zPunt: 39.5, knoop: [0.8, 11.4, 47.6], stof: o.omslagdoek });
+  const band = o.riem ? KAR.riem(delen, ctx, LIJF_BOERIN, 37.6) : null;
+  if (band && o.buidel) KAR.buidel(delen, ctx, band, o.buidelX ?? -5.8);
+  if (band && o.mes) UI.mes(delen, band, o.mes, KAR.materiaal(ctx, 'schede', UI.SCHOEN.leer), KAR.materiaal(ctx, 'heft', { ramp: 'hout', lo: 1.6, hi: 5 }), D.lijf);
   bot(Bn.Bromp);
 
   bouw(ctx);
   bot(null);
 
-  // --- hoofd: rond gezicht in een witte doek, een pluk haar voorop, de knoop onder de kin (zelfde als boerin())
-  const oy = schedel(delen, HB, M, D, { maat, oog: [2.6, 0.6], oor: 0.8 });
-  delen.push(bol(plus(HB, [0, 6.9, -1.4]), 1.6, M.huid, D.hoofd, 1));
-  glimlach(delen, HB, maat, M.mond, D.hoofd, 1.3, -4);
-  for (const s of [-1, 1]) delen.push(ellips(plus(HB, [s * 2.7, oy + 0.1, 2.8]), [2, 0.8, 0.7], M.haar, D.hoofd, 0.4));
-  delen.push(haarKap(HB, maat, M.haar, D.hoofd, [4.6, 4.2]));
-  delen.push(hoofddoek(HB, maat, 'kin', M.doek, D.doek, { los: 1.3 }));
-  const knoop = plus(HB, [0, 5.2, -8.2]);
-  delen.push(bol(knoop, 1.5, M.doek, D.doek, 0.6));
-  delen.push(kegel(plus(HB, [0, -7.2, -3.6]), plus(HB, [0, -8.4, -10.6]), 3.4, 0.6, M.doek, D.doek, 1));
-  for (const s of [-1, 1]) delen.push(kegel(plus(knoop, [s * 0.5, 0.3, -0.6]), plus(knoop, [s * 1.8, 1.4, -4.6]), 1.1, 0.5, M.doek, D.doek, 0.4));
+  // --- hoofd: rond gezicht in een witte doek, of het hoofd van haar uiterlijk (hoofdVanDeBoerin in dorpelingen2.cjs)
+  hoofdVanDeBoerin(delen, ctx, HB, maat, o);
   bot(Bn.Bnek);
 
   return model(delen, mat, HH.omvat(delen, 2));
@@ -1351,6 +1346,22 @@ function maaister(stand) {
   });
 }
 
+// De maaier met een uiterlijk (vraag 145): de maaier zelf staat in maaier.cjs, met zijn eigen lijf; met een uiterlijk
+// maait hij hier, op het lijf van werkBoer (dat van boer() en maaier()), met dezelfde zeis en slag als de maaister.
+function maaierWerk(stand) {
+  const fase = (stand && stand.fase) || 0;
+  return werkBoer(houdingMaaier(fase), (ctx) => {
+    const { Bn, bot, M } = ctx;
+    const { P, zijAs } = zeisInDeHanden(fase);
+    const zeisHout = KAR.materiaal(ctx, 'zeishout', { ramp: 'hout', lo: 1.6, hi: 6 });
+    const steel = KAR.deel(ctx, 'steel');
+    ctx.delen.push(...zeisDelen(P, zijAs, { hout: zeisHout, ijzer: M.ijzer }, { steel, handvat: steel, blad: KAR.deel(ctx, 'blad') }));
+    arm(ctx, 1, BOER.SCHOUDERS[1], P.greepBoven);
+    arm(ctx, 0, BOER.SCHOUDERS[0], P.greepOnder);
+    bot(Bn.Bromp);
+  });
+}
+
 // ---------------------------------------------------------------- de oogst: plukken, binden, dragen en dorsen
 
 // Vier werkfiguren erbij, voor de wijnoogst en de graanoogst (werklijst vraag 136 en 140; Marcel, 8 okt: "Dat je de boeren
@@ -1788,7 +1799,7 @@ module.exports = {
   zaaier, wieder, sprokkelaar, zaaister, wiedster, sprokkelaarster, maaister, hakker, hakster,
   plukker, binder, drager, dorser, plukster, binster, draagster, dorster,
   houdingPlukken, houdingBinden, houdingDorsen, vlegelInDeHanden, schoof, vlegel, PLUKKEN, BINDEN, DORSEN, VLEGEL, SCHOOF,
-  werkBoer, werkBoerin, arm, hand, hangendeArm, langsSleutels, stapsgewijs, schoffel, schoffelTussen, takkenbos, bijl,
+  werkBoer, werkBoerin, metUiterlijk, maaierWerk, arm, hand, hangendeArm, langsSleutels, stapsgewijs, schoffel, schoffelTussen, takkenbos, bijl,
   houdingZaaien, houdingWieden, houdingRapen, houdingHakken, bijlInDeHanden, rapenHand, rapenSchouder, naarLijf,
   ZAAIEN, WIEDEN, RAPEN, RAPEN_BOERIN, HAKKEN, BIJL, GREEP_BOVEN, GREEP_ONDER, GREEP_LINKS, SCHOUDERS, HANGT,
 };
