@@ -383,6 +383,8 @@
       // Kijkt hij om zich heen en staat er een bekende die ook vrij is, dan blijven ze staan voor een praatje (js/praatje.js;
       // het gereedschap laadt het niet).
       if (T.zoekPraatje && T.zoekPraatje(S, w, D, m, deel)) continue;
+      // Een kind dat vrij is, speelt soms met een ander kind: ze rennen om elkaar heen (js/kleinleven.js).
+      if (T.speel(S, w, D, m, deel)) continue;
       const thuisNu = dagAnker || T.wandelAnker(m, basis) || m.thuis;
       // Ligt hij nu buiten die straal — een boer wiens huis niet naast zijn akker staat, bij het
       // begin van het groeiseizoen — dan is geen van de vier buurtegels ooit dichtbij genoeg, en
