@@ -69,8 +69,12 @@
     // zoveel keer zo vaak als hij niet speelt. Allebei 1: zoals vóór 30 sep, uit de lucht.
     metOorzaak: 3,
     zonderOorzaak: 0.25,
-    // Onder deze tevredenheid is het dorp ontevreden (de oorzaak onvrede).
+    // Onder deze tevredenheid is het dorp ontevreden (de oorzaak onvrede), en onder onrust is het onrustig (het tweede
+    // niveau, werklijst vraag 77, stap 2).
     onvrede: 0.5,
+    onrust: 0.35,
+    // Is er vandaag minder dan dit deel van het eten dat het dorp nodig heeft, dan is het hongersnood.
+    hongersnood: 0.5,
   };
   const IN = () => T.VOORVALLEN_INSTELLINGEN;
 
@@ -268,34 +272,84 @@
   // geeft waarom, het stuk zin na "want", of '' als er niets bij hoeft; null als hij niet speelt). Voor het rapport van
   // de raadsman (js/ochtendrapport.js; werklijst vraag 76) ook hoe je zegt dat hij blijft (nog) en dat hij over is
   // (voorbij).
+  //
+  // Sinds 9 okt (werklijst vraag 77, stap 2; de richtlijn van 1 okt: "Iets wat begint en eindigt. Mogelijk in
+  // verschillende niveaus") is een oorzaak een status: `naam` voor de balk, en `erger` het tweede niveau, met zijn eigen
+  // naam, kop en `speelt` (dat alleen gevraagd wordt als het eerste niveau speelt). `helpt` zegt wat helpt, voor het
+  // kaartje in de balk (js/hud.js).
   T.OORZAKEN = {
     honger: {
+      naam: 'Honger',
       kop: 'Er is honger',
       nog: 'Er is nog steeds honger',
       voorbij: 'De honger is voorbij',
       speelt: (D) => (T.standVanWet(D, 'rantsoen') === 'krap' ? 'het rantsoen is krap' : mist(D, 'eten') ? 'er is niet genoeg eten' : null),
+      erger: {
+        naam: 'Hongersnood',
+        kop: 'Er is hongersnood',
+        minder: 'De hongersnood is voorbij, maar er is nog honger',
+        speelt: (D) => (D.behoeften && D.behoeften.voedselDekking < IN().hongersnood ? 'er is nog geen half rantsoen te eten' : null),
+      },
+      helpt: (D) => {
+        const h = T.watHelptAanEten(D);
+        return h.length ? T.opsomming(h.map((x) => x.zin)) : 'meer eten: meer akkers, vee, een visser of een jager';
+      },
     },
     kou: {
+      naam: 'Kou',
       kop: 'Het is koud in de huizen',
       nog: 'Het is nog steeds koud in de huizen',
       voorbij: 'Het is niet koud meer in de huizen',
       speelt: (D, dag) => (!inWinter(dag) || !mist(D, 'brandhout voor de winter') ? null : brandhout(D) < 1 ? 'het brandhout is op' : 'het hout haalt de winter niet'),
+      erger: {
+        naam: 'Strenge kou',
+        kop: 'Het vriest in de huizen',
+        minder: 'Het vriest niet meer in de huizen, maar het is er nog koud',
+        speelt: (D) => (brandhout(D) < 1 ? 'het brandhout is op' : null),
+      },
+      helpt: () => 'brandhout: een houthakker, turf, of hout van de marskramer',
     },
     vol: {
+      naam: 'Vol',
       kop: 'De huizen zitten vol',
       nog: 'De huizen zitten nog steeds vol',
       voorbij: 'Er is weer plaats in de huizen',
       speelt: (D) => ((D.bevolking || 0) > 0 && D.bevolking >= T.telWoonruimte(D) ? '' : null),
+      erger: {
+        naam: 'Overvol',
+        kop: 'De huizen zitten overvol',
+        minder: 'De huizen zitten niet meer overvol, maar wel vol',
+        speelt: (D) => ((D.bevolking || 0) > T.telWoonruimte(D) ? 'er wonen meer mensen dan er plaats is' : null),
+      },
+      helpt: () => 'woonruimte: wijs een erf aan, of laat een huis doorgroeien',
     },
     // De wolven (js/beesten.js; werklijst vraag 116, stap 2b): de laatste dagen kwamen ze bij het dorp (wie werkte, zag
     // ze; ze namen een schaap; ze vielen iemand aan).
     wolven: {
+      naam: 'Wolven',
       kop: 'Er zijn wolven bij het dorp',
       nog: 'Er zijn nog steeds wolven bij het dorp',
       voorbij: 'De wolven blijven weer in het bos',
       speelt: (D, dag) => (T.wolvenBijHetDorp ? T.wolvenBijHetDorp(D, dag) : null), // wereld.html laadt de beesten niet
+      helpt: () => 'een jacht op de wolven, een hek om de schapen, en licht in het donker',
+    },
+    // De droogte (js/weer.js; Marcel, 9 okt): lang geen regen in het groeiseizoen.
+    droogte: {
+      naam: 'Droogte',
+      kop: 'Het is droog',
+      nog: 'Het is nog steeds droog',
+      voorbij: 'De droogte is voorbij',
+      speelt: (D) => (T.droogteNiveau(D) >= 1 ? droogteWaarom(D) : null),
+      erger: {
+        naam: 'Ernstige droogte',
+        kop: 'Het is ernstig droog',
+        minder: 'Het is niet meer ernstig droog, maar wel nog droog',
+        speelt: (D) => (T.droogteNiveau(D) >= 2 ? droogteWaarom(D) : null),
+      },
+      helpt: (D) => `regen; tot dan kost het de oogst (nu ${Math.round((1 - T.droogteFactor(D)) * 100)}% minder), en de beekjes staan droog. Houd graan apart voor de winter, of koop het van de marskramer`,
     },
     onvrede: {
+      naam: 'Onvrede',
       kop: 'Het dorp is ontevreden',
       nog: 'Het dorp is nog steeds ontevreden',
       voorbij: 'Het dorp is niet ontevreden meer',
@@ -305,15 +359,34 @@
         if (b.last && b.last.length) return `het heeft last van ${b.last.join(' en ')}`;
         return b.mist && b.mist.length ? `het mist ${b.mist.join(' en ')}` : '';
       },
+      erger: {
+        naam: 'Onrust',
+        kop: 'Er is onrust in het dorp',
+        minder: 'De onrust is voorbij, maar het dorp is nog ontevreden',
+        speelt: (D) => (D.behoeften && D.behoeften.tevredenheid < IN().onrust ? 'het is er heel ontevreden' : null),
+      },
+      helpt: (D) => {
+        const b = D.behoeften;
+        return b && b.mist && b.mist.length ? `wat het mist: ${b.mist.join(', ')}` : 'wat het dorp mist (de raad zegt het)';
+      },
     },
   };
+  function droogteWaarom(D) {
+    const W = T.weerVan(D);
+    return W && W.droog >= 3 ? `het heeft al ${T.telwoord(W.droog)} dagen niet geregend` : 'er valt te weinig regen';
+  }
 
   // Speelt oorzaak `o` nu? Dan { id, zin, waarom }, met de zin die het bericht erbij zegt: "Er is honger, want het
   // rantsoen is krap." Anders null.
+  // Met `niveau` (1, of 2 als het erger is: hongersnood, strenge kou, ...) en de `naam` van dat niveau, voor de balk.
   function oorzaakNu(D, o, dag) {
     const O = T.OORZAKEN[o];
     const waarom = O.speelt(D, dag);
-    return waarom == null ? null : { id: o, zin: `${O.kop}${waarom ? `, want ${waarom}` : ''}.`, waarom };
+    if (waarom == null) return null;
+    const erger = O.erger ? O.erger.speelt(D, dag) : null;
+    const N = erger != null ? O.erger : O;
+    const w = erger != null ? erger : waarom;
+    return { id: o, niveau: erger != null ? 2 : 1, naam: N.naam, zin: `${N.kop}${w ? `, want ${w}` : ''}.`, waarom: w };
   }
 
   // Welke oorzaak van dit voorval nu speelt: de eerste die speelt, in de volgorde van het voorval, als { id, zin }, of
@@ -330,6 +403,28 @@
   // Welke oorzaken er nu spelen, in de volgorde van T.OORZAKEN, als [{ id, zin }]: voor het rapport van de raadsman
   // (js/ochtendrapport.js) en Spel.debug.voorval().
   T.oorzakenNu = (D, dag) => Object.keys(T.OORZAKEN).map((o) => oorzaakNu(D, o, dag)).filter(Boolean);
+
+  // De statussen van het dorp (werklijst vraag 77, stap 2; de richtlijn van 1 okt: "Iets wat begint en eindigt"): wat er
+  // nu speelt, met sinds wanneer en op welk niveau (`D.statussen`, elke nacht, vóór het rapport), voor de kaartjes in de
+  // balk (js/hud.js). Zo is te zien hoe lang iets al duurt, ook als je het rapport niet las.
+  T.tikStatussenDag = function (D, dag) {
+    const oud = D.statussen || {};
+    const nieuw = {};
+    for (const o of T.oorzakenNu(D, dag)) {
+      const m = oud[o.id];
+      nieuw[o.id] = { sinds: m ? m.sinds : dag, niveau: o.niveau };
+    }
+    D.statussen = nieuw;
+    if (T.ui && T.ui.toonStatussen) T.ui.toonStatussen(D);
+  };
+  // Wat er nu speelt, als [{ id, niveau, naam, zin, sinds, helpt }]: de oorzaken van vandaag, met sinds wanneer.
+  T.statussenVan = function (D, dag = D.kalender ? Math.floor(D.kalender.dag) : 0) {
+    const st = D.statussen || {};
+    return T.oorzakenNu(D, dag).map((o) => {
+      const O = T.OORZAKEN[o.id];
+      return Object.assign(o, { sinds: st[o.id] ? st[o.id].sinds : dag, helpt: O.helpt ? O.helpt(D) : '' });
+    });
+  };
 
   // ---------------------------------------------------------------------------------------------
   // Welk voorval, en wanneer

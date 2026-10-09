@@ -186,14 +186,24 @@
   function oorzaakRegels(D, dag, oud, nieuw) {
     const uit = [];
     const nu = T.oorzakenNu(D, dag);
+    // Met niveaus (werklijst vraag 77, stap 2): wordt het erger (honger wordt hongersnood), dan zegt hij het meteen, en
+    // wordt het minder ook.
     for (const o of nu) {
       const m = oud[o.id];
+      const was = m ? m.niveau || 1 : 0;
       if (!m) {
         uit.push(o.zin);
-        nieuw[o.id] = { sinds: dag, gezegd: dag };
+        nieuw[o.id] = { sinds: dag, gezegd: dag, niveau: o.niveau };
+      } else if (o.niveau > was) {
+        uit.push(o.zin);
+        nieuw[o.id] = { sinds: m.sinds, gezegd: dag, niveau: o.niveau };
+      } else if (o.niveau < was) {
+        uit.push(`${T.OORZAKEN[o.id].erger.minder}.`);
+        nieuw[o.id] = { sinds: m.sinds, gezegd: dag, niveau: o.niveau };
       } else if (nogEens(dag, m)) {
-        uit.push(`${T.OORZAKEN[o.id].nog}, al ${T.telwoord(dag - m.sinds)} dagen${o.waarom ? `: ${o.waarom}` : ''}.`);
-        nieuw[o.id] = { sinds: m.sinds, gezegd: dag };
+        const nog = o.niveau === 2 ? `Nog steeds ${o.naam.toLowerCase()}` : T.OORZAKEN[o.id].nog;
+        uit.push(`${nog}, al ${T.telwoord(dag - m.sinds)} dagen${o.waarom ? `: ${o.waarom}` : ''}.`);
+        nieuw[o.id] = { sinds: m.sinds, gezegd: dag, niveau: o.niveau };
       } else nieuw[o.id] = m;
     }
     for (const id of Object.keys(oud)) if (!nu.some((o) => o.id === id)) uit.push(`${T.OORZAKEN[id].voorbij}.`);

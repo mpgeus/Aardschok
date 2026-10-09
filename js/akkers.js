@@ -507,7 +507,8 @@
   // veld, maal wat zijn boer kan (groene vingers of slordig). Het maaien (T.werkOogstBij), het
   // vangnet (T.haalOogstBinnen) en de inner die schat wat er staat (js/inner.js, zonder boer) vragen
   // het allemaal hier, zodat het nergens anders uitkomt.
-  T.oogstPerTegel = (veld, boer) => T.GRAAN_PER_TEGEL * T.vruchtbaarheidVan(veld) * factor(boer, 'opbrengst');
+  // Met het dorp (`D`) telt ook wat de droogte dit jaar kostte (js/weer.js, T.droogteFactor).
+  T.oogstPerTegel = (veld, boer, D) => T.GRAAN_PER_TEGEL * T.vruchtbaarheidVan(veld) * factor(boer, 'opbrengst') * (D ? T.droogteFactor(D) : 1);
 
   // De tegels van een akker die nog te maaien zijn: gezaaid, en nog niet gemaaid. Een weide of
   // braak heeft er geen.
@@ -698,7 +699,7 @@
             a.geoogst.add(sleutel(e.maait.x, e.maait.y));
             // Het zwad blijft liggen tot het gebonden, gedroogd en binnen is (vraag 140).
             if (!a.schoven) a.schoven = new Map();
-            a.schoven.set(sleutel(e.maait.x, e.maait.y), { graan: T.oogstPerTegel(a, boerVan(w, a) || e), gebonden: null });
+            a.schoven.set(sleutel(e.maait.x, e.maait.y), { graan: T.oogstPerTegel(a, boerVan(w, a) || e, D), gebonden: null });
           }
           e.maait = null;
           e.oogstDoel = null;
@@ -775,7 +776,7 @@
       for (const t of onbeslistTegels(akker)) {
         akker.geoogst.add(sleutel(t.x, t.y));
         tegels++;
-        graan += T.oogstPerTegel(akker, boer); // vruchtbaar of uitgeput, groene vingers of slordig
+        graan += T.oogstPerTegel(akker, boer, D); // vruchtbaar of uitgeput, groene vingers of slordig
       }
       // En wat er nog als zwad of in hokken op het veld staat (vraag 140): dat gaat nu ook de schuur in.
       if (akker.schoven) {

@@ -233,6 +233,19 @@
           uitleg: 'Alleen de boer, zijn boerin en de grote kinderen halen de oogst binnen. Zoals voor 8 okt.' },
       ],
     },
+    // Marcel, 9 okt (werklijst vraag 77, stap 2): "1. Beiden 2. Ook in beeld 3. Ja kleine beekjes ook, goed idee!".
+    {
+      id: 'weer', naam: 'Het weer', standaard: 'aan',
+      uitleg: 'Of het regent, sneeuwt en droog is, en of droogte de oogst en de beekjes kost.',
+      keuzes: [
+        { id: 'aan', naam: 'Met droogte', zet: { 'WEER_INSTELLINGEN.aan': true, 'WEER_INSTELLINGEN.droogte': true },
+          uitleg: 'Elke dag zon, wolken, regen of sneeuw. Valt er in het groeiseizoen lang geen regen, dan is het droogte: de akkers geven minder en de kleine beekjes vallen droog.' },
+        { id: 'zonder', naam: 'Zonder droogte', zet: { 'WEER_INSTELLINGEN.aan': true, 'WEER_INSTELLINGEN.droogte': false },
+          uitleg: 'Het weer is er en je ziet het, maar het kost de oogst en de beekjes niets.' },
+        { id: 'uit', naam: 'Altijd zon', zet: { 'WEER_INSTELLINGEN.aan': false },
+          uitleg: 'Geen weer: elke dag is als de vorige. Zoals voor 9 okt.' },
+      ],
+    },
     // Stap 2 van de inner, de verstopplekken (Marcel, 25 sep; spel.md, "Marcel koos voor stap 2").
     {
       id: 'sporen', naam: 'Sporen', standaard: 'alles',
@@ -698,6 +711,7 @@
       },
     },
     { naam: 'De dag', blok: 'DAG_INSTELLINGEN' },
+    { naam: 'Het weer', blok: 'WEER_INSTELLINGEN' },
     { naam: 'Het licht', blok: 'LICHT_INSTELLINGEN' },
     { naam: 'Gebouwen en bevolking', blok: 'GEBOUWEN_INSTELLINGEN' },
     { naam: 'De bewoners', blok: 'BEWONERS_INSTELLINGEN' },

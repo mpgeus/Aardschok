@@ -449,7 +449,7 @@ test('een oorzaak speelt als het dorp hem heeft, en zegt waarom', () => {
   assert.equal(T.oorzaakVan(D, 'diefstal', ZOMER), null, 'zonder honger komt een diefstal uit de lucht');
 
   T.zetWet(D, 'rantsoen', 'krap');
-  assert.deepEqual(T.oorzaakVan(D, 'diefstal', ZOMER), { id: 'honger', zin: 'Er is honger, want het rantsoen is krap.', waarom: 'het rantsoen is krap' });
+  assert.deepEqual(T.oorzaakVan(D, 'diefstal', ZOMER), { id: 'honger', niveau: 1, naam: 'Honger', zin: 'Er is honger, want het rantsoen is krap.', waarom: 'het rantsoen is krap' });
   T.zetWet(D, 'rantsoen', 'gewoon');
   D.behoeften.mist = ['eten'];
   assert.equal(T.oorzaakVan(D, 'stroper', ZOMER).zin, 'Er is honger, want er is niet genoeg eten.');
@@ -461,11 +461,13 @@ test('een oorzaak speelt als het dorp hem heeft, en zegt waarom', () => {
   D.voorraad.turf = 0;
   assert.equal(T.oorzaakVan(D, 'ziekte', WINTER).zin, 'Het is koud in de huizen, want het hout haalt de winter niet.');
   D.voorraad.hout = 0;
-  assert.equal(T.oorzaakVan(D, 'ziekte', WINTER).zin, 'Het is koud in de huizen, want het brandhout is op.');
+  // Is het brandhout op, dan is het erger: strenge kou (werklijst vraag 77, stap 2).
+  assert.equal(T.oorzaakVan(D, 'ziekte', WINTER).zin, 'Het vriest in de huizen, want het brandhout is op.');
+  assert.equal(T.oorzaakVan(D, 'ziekte', WINTER).niveau, 2);
   D.behoeften.mist = [];
 
   D.bevolking = T.telWoonruimte(D);
-  assert.deepEqual(T.oorzaakVan(D, 'brand', ZOMER), { id: 'vol', zin: 'De huizen zitten vol.', waarom: '' });
+  assert.deepEqual(T.oorzaakVan(D, 'brand', ZOMER), { id: 'vol', niveau: 1, naam: 'Vol', zin: 'De huizen zitten vol.', waarom: '' });
   assert.equal(T.oorzaakVan(D, 'ziekte', ZOMER).id, 'vol', 'de koorts komt van kou, of van een vol dorp');
   D.bevolking -= 4;
 

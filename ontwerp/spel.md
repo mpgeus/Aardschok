@@ -546,6 +546,31 @@ veranderde. Ze beginnen op 50.
   weigert, is binnen dat jaar zijn ambt kwijt (na de waarschuwing). `Spel.debug.gril('jacht')`.
 - **Nog niet:** de speeltest (stap 3).
 
+## Het weer, en de statussen met niveaus (Marcel, 9 okt 2026; werklijst vraag 77, stap 2, en vraag 82, c)
+
+**Zo werkt het nu** (9 okt; `js/weer.js`, `T.OORZAKEN` in `js/voorvallen.js`): elke dag is het zon, bewolkt, regen of (in
+de winter) sneeuw, uit het nummer van het land: hetzelfde spel heeft hetzelfde weer. Wie nat begint, blijft vaker nat, en
+elk jaar is wat droger of natter. Het weer staat bij de datum, en is te zien: regen als strepen, sneeuw als vlokjes, en
+het licht grijzer als het regent. Valt er in het groeiseizoen (grasmaand tot oogstmaand) lang geen regen, dan is het
+droogte, en erger ernstige droogte: elke dag kost de oogst van dat jaar een procent (ernstig twee), tot hooguit de helft,
+en de kleine beekjes en vijvers vallen droog (een bedding van leem met barsten en keien). Een visser aan een droge beek
+vangt niets; een visser die ook groot water heeft, vangt naar wat er over is. Regen maakt het tekort goed, en op 1
+lentemaand telt het verlies opnieuw. Met de getallen van nu (200 jaren uit 40 nummers) is er in twee van de vijf jaren een
+tijd droogte, in één van de twaalf ernstige droogte, en kost het de oogst gemiddeld een twintigste.
+
+De statussen: wat een tijd duurt, is een status met een naam en twee niveaus: honger en hongersnood (minder dan een half
+rantsoen), kou en strenge kou (het brandhout is op), vol en overvol, onvrede en onrust, wolven, en droogte en ernstige
+droogte. Zolang er een speelt, staat er een kaartje naast het doel linksboven (rood als het erger is), met op de muis wat
+er is, sinds wanneer en wat helpt. Het rapport van de raadsman zegt het begin, of het erger of minder wordt, en het eind.
+De spelregel "Het weer": met droogte, zonder droogte (alleen te zien), of altijd zon.
+
+**Besloten** (Marcel, 9 okt: "1. Beiden 2. Ook in beeld 3. Ja kleine beekjes ook, goed idee!"): de statussen en het weer
+in één keer, het weer ook in beeld, en bij droogte de beekjes droog, zodat de visser minder vangt. Eerder (4 okt, "A"):
+het beeld van het weer samen met zijn regels, de kleur van het weer op de lichtkaart.
+
+**Open:** sneeuw op de grond en de daken (nieuwe kunst); regen bij het zaaien (vraag 82, b en c: op een natte dag zaait
+niemand); de marskramer die na een droog jaar graan verkoopt; ziekte en brand als status.
+
 ## De markt op het plein, die meegroeit (Marcel, 5 en 6 okt 2026; werklijst vraag 110, d, en vraag 127)
 
 **Zo werkt het nu** (6 okt, zesendertigste sessie; `js/markt.js`; Marcel: "Voor nu a1, b tot e ja" bij 110, d, en "A ja, B

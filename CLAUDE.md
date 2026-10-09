@@ -526,6 +526,20 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   elke nacht `T.tikWijngaardDag`; zolang werkt het nergens anders) rank voor rank met een mand (`pluk` in
   `js/veldwerk.js`, `e.mand`, de plukker of plukster), en pas als de mand in het huis is, is de wijn binnen
   (`T.wijnBinnen`, `wijnPerRank`). De getallen in `T.WIJNGAARD_INSTELLINGEN`.
+- `js/weer.js`: **het weer** (vraag 77, stap 2, en 82, c, 9 okt; Marcel: "1. Beiden 2. Ook in beeld 3. Ja kleine beekjes
+  ook, goed idee!"): elke nacht als eerste (`T.tikWeerDag`, vanuit `T.tikGebouwenDag`) het weer van de dag die begint, in
+  `D.weer` (`vandaag`: zon, wolken, regen of sneeuw; `droog`, de dagen zonder regen; `tekort`, het watertekort; `verlies`),
+  uit het nummer van het land en de dag (een eigen lot, geen `Math.random`), met het weer van gisteren erbij (wie nat
+  begint, blijft vaker nat) en een jaar dat wat droger of natter is (`T.natVanJaar`). Telt het tekort in het groeiseizoen
+  op tot `droogteVanaf`, dan is het droogte, tot `ernstigVanaf` ernstige droogte (`T.droogteNiveau`): elke dag kost de
+  oogst van dat jaar een deel (`T.droogteFactor` in `T.oogstPerTegel`, js/akkers.js, tot 1 lentemaand), en de beekjes
+  vallen droog (`T.isBeek`: water dat nergens `meerBreed` tegels breed is, per kaart één keer; `T.staatDroog`): een visser
+  vangt naar wat er van zijn water over is (`T.visserWater`, `T.waaromVistHijNiet` in `T.tikGebouwenDag`). Het beeld in
+  `js/tekenen.js`: de kleur van het licht maal die van het weer (`tint` in `tekenNacht`, zonder videokaart een waas), regen
+  en sneeuw als vlakjes over het beeld op de klok van het scherm (`tekenNeerslag`), en de droge beek als zandpad in de
+  grond (`T.hoekenDroog`, zoals een paadje) met barsten en keien (`tekenDrogeBeek`). Het weer van vandaag staat bij de
+  datum (`T.ui.toonKalender`). De spelregel "Het weer" (met droogte, zonder, of altijd zon); de getallen in
+  `T.WEER_INSTELLINGEN`.
 - `js/bouwstijl.js`: **de bouwstijl van een land** (vraag 114, stap 2, 4 okt): elk land van de maker bouwt in één stijl
   (`w.stijl`, uit het nummer van het land, `T.stijlVoorLand`; het ontworpen gehucht heeft er geen en bouwt zoals altijd),
   met per soort een paar vormen, elk met de deur naar elke kant. De huizenbouwer noemt dat een stand; in het spel heet het
@@ -669,7 +683,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `sterfkans`, `gezin` (`T.gezinKomt` in `js/gebouwen.js`, dezelfde als de groei), het vee (`T.verliesVee`), en
   `voorval` (een vervolg, later, over dezelfde mensen). Wie je niet sprak, gaat na twee dagen voorbij; ben je weg (een
   ander gebied), dan beslist je raadsman (vraag 68, B). De spelregel "Voorvallen", de getallen in
-  `T.VOORVALLEN_INSTELLINGEN`.
+  `T.VOORVALLEN_INSTELLINGEN`. **De statussen** (vraag 77, stap 2, 9 okt): een oorzaak uit `T.OORZAKEN` is een status met
+  een `naam` en een tweede niveau (`erger`: hongersnood, strenge kou, overvol, onrust, ernstige droogte), en `helpt` zegt
+  wat helpt; `T.oorzakenNu` geeft `niveau` en `naam` mee. Elke nacht onthoudt het dorp sinds wanneer (`T.tikStatussenDag`,
+  `D.statussen`), voor de kaartjes naast het doel linksboven (`T.statussenVan`, `T.ui.toonStatussen` in js/hud.js,
+  `#statussen`); het rapport zegt het begin, erger, minder (`erger.minder`) en het eind (js/ochtendrapport.js).
 - `js/feesten.js`: **de feesten** (vraag 97, 3 okt; Marcel: het oogstfeest "Ja, een hele dag vrij", en "De meiboom"): een
   antwoord met `feest: 'dag'` of `'avond'` (`T.zetFeest`, vanuit `T.voorvalGevolg`) laat het dorp het voorval vieren op
   het plein: een hele dag, en dan werkt niemand (`T.vrijeDag`: de werkplaatsen in `T.tikGebouwenDag` en het maaien in
@@ -1188,6 +1206,10 @@ schoot en of hij herten vindt.
 gewaarschuwd bent; `('gunst', 15)` zet de gunst op 15 (met de brief als hij onder 20 komt), `('vertrouwen', 0)` jaagt je
 weg als je al gewaarschuwd was. De oude toetsen van de heer en het verstoppen spelen met "Alleen de heer"
 (`T.zetOptie('tweeBazen', 'uit')`); die van de twee bazen staan in `test/bazen.test.cjs`.
+`Spel.debug.weer()` zegt het weer van vandaag, hoe lang het droog is, het watertekort, de droogte en wat die de oogst
+kost, hoe nat het jaar is, de beekjes en per visser hoeveel van zijn water er is; `('regen')` zet het weer van vandaag
+(`'zon'`, `'wolken'`, `'regen'`, `'sneeuw'`), `('droogte')` maakt het nu droog, `('ernstig')` ernstig droog, `('nat')` maakt
+er een eind aan.
 `Spel.debug.wensen()` zegt per huis met mensen zijn stand, wie er woont, hoe tevreden het is en wat het wil, met ✓ of ✗,
 hoe het met doorgroeien staat (wat het gezin rooit, of waarom het niet groeit), en daarboven het dorp per stand en wat er
 gemist wordt; `('dorpelingen')` laat alleen die stand zien.

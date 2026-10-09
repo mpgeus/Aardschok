@@ -411,6 +411,12 @@ kbd {
 #kalender-seizoen { font-size: 12px; color: var(--gedempt); margin-top: 1px; }
 
 #voorraadbalk { display: flex; gap: 13px; padding: 0 14px; height: 44px; align-items: center; }
+/* De statussen (js/hud.js, T.ui.toonStatussen; werklijst vraag 77, stap 2): naast het doel linksboven (#opdracht, 260
+   breed op 16), een kaartje per status zolang hij duurt; rood als het erger is. */
+.nieuwe-hud #hud-gehucht > #statussen { position: fixed; left: 292px; top: 128px; display: flex; flex-wrap: wrap; gap: 6px; max-width: calc(100vw - 600px); }
+#statussen .status { padding: 4px 10px 5px; font: 13px var(--kop), system-ui, sans-serif; color: var(--inkt); cursor: help; border-left: 3px solid var(--goud); }
+#statussen .status.erger { border-left-color: var(--rood); color: var(--rood); }
+body.bouwmenu-open #statussen { visibility: hidden; }
 #voorraadbalk .grondstof { display: flex; align-items: center; gap: 5px; }
 #voorraadbalk .grondstof .icoon { display: flex; width: 22px; height: 22px; }
 #voorraadbalk .grondstof .aantal { font: 15px var(--kop), system-ui, sans-serif; color: var(--inkt); min-width: 1.4em; }
@@ -1017,7 +1023,7 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
 .menu-melding { margin: 0 0 4px; font-size: 13px; color: var(--goud); }
 #menu.titel .menu-kop, #menu.titel .menu-vraag, #menu.titel .menu-melding { text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8); }
 /* Zolang het titelscherm er ligt, is er nog geen spel om over te zeggen. */
-body.titelscherm :is(#hud-gehucht, #hulp-gehucht, #berichten, #plek, #opdracht) { visibility: hidden; }
+body.titelscherm :is(#hud-gehucht, #hulp-gehucht, #berichten, #plek, #opdracht, #statussen) { visibility: hidden; }
 
 /* Vanzelf opgeslagen (js/menu.js, T.ui.opgeslagen): één woord rechtsonder, dat weer wegvaagt. */
 #opgeslagen {

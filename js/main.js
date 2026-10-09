@@ -1605,6 +1605,33 @@
         herbergen: T.herbergenVan(D).map((g) => `${g.x},${g.y}${g.meester ? ` (${T.naamVanBewoner(g.meester)})` : ''}${g.weigert && S.kalender.dag < g.weigert.tot ? `: ${g.weigert.waarom}, tot ${T.datumVanDag(g.weigert.tot).tekst}` : ''}`),
       };
     },
+    // Het weer (js/weer.js; werklijst vraag 77, stap 2): het weer van vandaag, hoe lang het droog is, het watertekort, de
+    // droogte en wat die de oogst kost, de beekjes en de vissers. Spel.debug.weer('regen') zet het weer van vandaag
+    // ('zon', 'wolken', 'regen' of 'sneeuw'), ('droogte') maakt het nu droog, ('ernstig') ernstig droog, ('nat') maakt er
+    // een eind aan.
+    weer(wat) {
+      const D = S.dorp;
+      if (!T.WEER_INSTELLINGEN.aan) return 'De spelregel "Het weer" staat op "Altijd zon".';
+      if (!D.weer) T.tikWeerDag(D, Math.floor(S.kalender.dag));
+      const W = D.weer;
+      const I = T.WEER_INSTELLINGEN;
+      if (T.WEER_NAMEN[wat]) W.vandaag = wat;
+      if (wat === 'droogte' || wat === 'ernstig' || wat === 'nat') {
+        W.tekort = wat === 'droogte' ? I.droogteVanaf : wat === 'ernstig' ? I.ernstigVanaf : 0;
+        W.droog = wat === 'nat' ? 0 : Math.max(W.droog, W.tekort);
+        if (wat === 'nat') W.vandaag = 'regen';
+        W.beekDroog = T.droogteNiveau(D) > 0;
+      }
+      T.tikStatussenDag(D, Math.floor(S.kalender.dag));
+      T.ui.toonKalender(S);
+      return {
+        vandaag: T.WEER_NAMEN[W.vandaag], droog: `${W.droog} ${W.droog === 1 ? 'dag' : 'dagen'} geen regen`, tekort: `${W.tekort} (droogte vanaf ${I.droogteVanaf}, ernstig vanaf ${I.ernstigVanaf})`,
+        droogte: ['geen', 'droogte', 'ernstige droogte'][T.droogteNiveau(D)], oogst: `${Math.round((1 - T.droogteFactor(D)) * 100)}% minder dit jaar`,
+        nat: `dit jaar ${Math.round(T.natVanJaar(D, Math.floor(S.kalender.dag)) * 100)}% van de gewone regen`,
+        beekjes: `${T.beekTegels(D.wereld).length} tegels${W.beekDroog ? ', droog' : ''}`,
+        vissers: D.gebouwen.filter((g) => g.soort === 'visser').map((g) => `${g.x},${g.y}: ${Math.round(T.visserWater(D, g) * 100)}% van zijn water`),
+      };
+    },
     // De twee bazen (js/bazen.js; werklijst vraag 106): de gunst van de heer en het vertrouwen van het dorp, hoe ze erbij
     // staan, waarom, en of je al gewaarschuwd bent. Spel.debug.bazen('gunst', 15) zet de gunst op 15 (met de
     // waarschuwing als hij onder de grens komt), ('vertrouwen', 0) jaagt je weg als je al gewaarschuwd was.

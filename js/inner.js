@@ -290,7 +290,7 @@
     const basis = T.akkerStadium(datum.maand, datum.dagVanMaand);
     for (const akker of (D.wereld && D.wereld.akkers) || []) {
       const isAkker = T.bestemmingVan(akker) === 'akker';
-      const perTegel = T.oogstPerTegel(akker);
+      const perTegel = T.oogstPerTegel(akker, null, D);
       for (const t of T.akkerTegels(akker)) {
         const k = sleutel(t.x, t.y);
         if (!tegelsGezien.has(k)) continue;

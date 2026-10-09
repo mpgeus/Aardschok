@@ -476,3 +476,22 @@ test('wie er doorgroeide: "De hut van ... is een huis geworden", in wat er gebeu
   const R = nacht(S, dag + 1);
   assert.ok(R.regels.includes(`De hut van ${wie} is een huis geworden: ze horen nu bij de dorpelingen.`), R.regels.join(' | '));
 });
+
+// Met niveaus (werklijst vraag 77, stap 2): wordt het erger, dan zegt hij het meteen, en wordt het minder ook.
+test('een status die erger wordt of minder, zegt hij meteen: droogte, ernstige droogte, en weer droogte', () => {
+  const S = gehucht();
+  const D = S.dorp;
+  metRaadsman(S);
+  const I = T.WEER_INSTELLINGEN;
+  const begin = dagVan('zomermaand', 1);
+  gelezenNacht(S, begin);
+  D.weer = { vandaag: 'zon', droog: I.droogteVanaf, tekort: I.droogteVanaf, verlies: 0 };
+  assert.ok(gelezenNacht(S, begin + 1).regels.some((r) => /^Het is droog, want het heeft al .* dagen niet geregend\.$/.test(r)));
+  assert.ok(!gelezenNacht(S, begin + 2).regels.some((r) => /droog/.test(r)), 'zolang het zo blijft, niet elke dag');
+  D.weer.tekort = I.ernstigVanaf;
+  assert.ok(gelezenNacht(S, begin + 3).regels.some((r) => /^Het is ernstig droog, want/.test(r)));
+  D.weer.tekort = I.droogteVanaf;
+  assert.ok(gelezenNacht(S, begin + 4).regels.includes('Het is niet meer ernstig droog, maar wel nog droog.'));
+  D.weer.tekort = 0;
+  assert.ok(gelezenNacht(S, begin + 5).regels.includes('De droogte is voorbij.'));
+});

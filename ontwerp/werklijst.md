@@ -2800,6 +2800,10 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     beeld 3. Ja kleine beekjes ook, goed idee!"** Dus: A en B in één keer; het weer ook in beeld (regen en sneeuw
     getekend); en bij droogte vallen de kleine beekjes droog, zodat een visser aan een beek minder vangt.
     **Bezig in sessie `ccr-77327776-rqjldz`** (9 okt): stap 2, de statussen met niveaus en het weer.
+    **Gebouwd (9 okt), stap 2:** `js/weer.js` (het weer per dag uit het nummer, droogte en ernstige droogte, wat dat de
+    oogst kost, de beekjes die droogvallen en de visser), de statussen met niveaus in `T.OORZAKEN` met kaartjes naast het
+    doel en het rapport dat erger en minder zegt, en het weer in beeld (regen, sneeuw, het licht, de droge beek); de
+    spelregel "Het weer" (`spel.md`, "Het weer, en de statussen met niveaus").
 78. **Stap 1 van de slice, de cyclus: het plan** (Claude, 1 okt, eenentwintigste sessie; vraag 77, a en d; wacht op
     Marcel). **Wat er nu is:** één trede, van gehucht tot dorp bij 50 mensen met een kapel en een smidse, die op elk
     moment valt. De bouwer van de speeltest haalt hem op 1 herfstmaand van het eerste jaar, vóór de heer en de winter,

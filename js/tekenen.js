@@ -145,7 +145,10 @@
   function grondSleutel(S) {
     const w = S.wereld;
     const g = S.gevecht ? S.gevecht.kamers.size : -1;
-    return `${w.gebied}|${w.huidigeKamer}|${w.bekend.size}|${g}|${metSprites() ? 1 : 0}|${Math.round(S.zoom * 100)}|${padVersie(S)}|${platVan(w).versie}`;
+    // De droge beekjes (js/weer.js) liggen in de grond: vallen ze droog of komen ze terug, dan opnieuw.
+    const D = T.dorpHier(S);
+    const beek = D && D.weer && D.weer.beekDroog ? 1 : 0;
+    return `${w.gebied}|${w.huidigeKamer}|${w.bekend.size}|${g}|${metSprites() ? 1 : 0}|${Math.round(S.zoom * 100)}|${padVersie(S)}|${platVan(w).versie}|${beek}`;
   }
 
   // Wat plat op de grond groeit (een graspol, bloemen, een varen, paddenstoelen, een kleine steen, een rij kool; vraag
@@ -254,6 +257,7 @@
     const vak = tegelsIn(S.wereld, { x0: g.vx, y0: g.vy, x1: g.vx + b, y1: g.vy + h });
     if (S.wereld.buiten) tekenBuitenGrond(c, S, g);
     tekenVloeren(c, S, inBeeld, vak);
+    if (S.wereld.buiten) tekenDrogeBeek(c, S, vak);
     if (S.wereld.buiten) tekenPlatIn(c, S, vak);
     if (bosGebakken(S)) for (const v of bosrandIn(S, g)) if (bosAchter(S.wereld, v)) tekenGebakkenBoom(c, v);
     S.bosVoor = null; // het bos ervóór hoort bij deze grond: het wordt opnieuw gelegd (bosVoorBij)
@@ -495,6 +499,7 @@
     // De nacht valt over de wereld, maar niet over de zwevende teksten: die komen erna, met dezelfde
     // camera als hierboven. Ertussen gaan de ramen aan.
     tekenNacht(ctx, S, bw, bh);
+    tekenNeerslag(ctx, S, bw, bh);
     ctx.save();
     ctx.translate(Math.round(bw / 2), Math.round(bh / 2));
     ctx.scale(S.zoom, S.zoom);
@@ -586,15 +591,25 @@
   // gespeeld"), met de lantaarn van de schout als gloed erbij.
   function tekenNacht(ctx, S, bw, bh) {
     if (!S.kalender || !T.lichtVan || (T.debug && T.debug.geenNacht)) return;
+    // Het weer (js/weer.js; vraag 82, c, en Marcel, 4 okt: "A"): de kleur van het uur maal die van het weer, grijzer als
+    // het regent of bewolkt is.
+    const weer = weerHier(S);
+    const tint = weer ? T.WEER_INSTELLINGEN.beeld.tint[weer] : null;
     if (ctx.tekenLichtkaart) {
-      // Het weer (vraag 82, c; Marcel, 4 okt) zet hier straks zijn kleur in: de kleur van het uur maal die van het weer.
-      ctx.tekenLichtkaart(T.lichtKleurVan(S.kalender.dag), lichtenInBeeld(S, bw, bh));
+      const k = T.lichtKleurVan(S.kalender.dag);
+      ctx.tekenLichtkaart(tint ? k.map((v, i) => v * tint[i]) : k, lichtenInBeeld(S, bw, bh));
       return;
     }
     ctx.save();
     // Alleen over wat er getekend is: waar een raam brandt, zit nog een gat in het doek (ponsRamen
     // hieronder), en daar valt de nacht niet in. Op de rest is dit hetzelfde als gewoon eroverheen.
     ctx.globalCompositeOperation = 'source-atop';
+    // Zonder videokaart is het weer een grijze waas over de wereld.
+    const waas = weer ? T.WEER_INSTELLINGEN.beeld.waas[weer] : 0;
+    if (waas > 0) {
+      ctx.fillStyle = `rgba(48, 56, 72, ${waas})`;
+      ctx.fillRect(0, 0, bw, bh);
+    }
     tekenNachtLagen(ctx, S, bw, bh);
     ctx.restore();
   }
@@ -687,6 +702,78 @@
       gloed.addColorStop(1, 'rgba(255, 186, 104, 0)');
       ctx.fillStyle = gloed;
       ctx.fillRect(lx - r, ly - r, 2 * r, 2 * r);
+    }
+  }
+
+  // Het weer hier (js/weer.js): 'zon', 'wolken', 'regen' of 'sneeuw', of null binnen, in het gereedschap of zonder weer.
+  function weerHier(S) {
+    if (!S.wereld || !S.wereld.buiten || (T.debug && T.debug.geenNacht)) return null;
+    const W = T.weerVan(T.dorpHier(S));
+    return W ? W.vandaag : null;
+  }
+
+  // Een getal van 0 tot 1 uit twee getallen, alleen voor het beeld (de regen en de beek; geen regel).
+  const beeldLot = (a, b) => {
+    const s = Math.sin(a * 12.9898 + b * 78.233) * 43758.5453;
+    return s - Math.floor(s);
+  };
+
+  // Regen en sneeuw (Marcel, 9 okt: "Ook in beeld"): strepen en vlokjes over het hele beeld, op de klok van het scherm
+  // (S.tijd), zodat het op 30× niet harder regent. Elke druppel heeft een vaste plek uit zijn nummer, en valt door het
+  // beeld; de wind trekt ze een beetje schuin. Vlakken, geen lijnen: dat tekent de videokaart zelf (js/gl.js).
+  function tekenNeerslag(ctx, S, bw, bh) {
+    const weer = weerHier(S);
+    if (weer !== 'regen' && weer !== 'sneeuw') return;
+    const B = T.WEER_INSTELLINGEN.beeld;
+    const regen = weer === 'regen';
+    const n = Math.min(B.hooguit, Math.round(((bw * bh) / 10000) * (regen ? B.druppels : B.vlokken)));
+    const t = S.tijd || 0;
+    const lengte = regen ? B.druppelLengte : 0;
+    const H = bh + lengte + 8;
+    const W = bw + 40;
+    ctx.save();
+    ctx.fillStyle = regen ? B.regenKleur : B.sneeuwKleur;
+    for (let i = 0; i < n; i++) {
+      const snel = (regen ? B.valRegen : B.valSneeuw) * (0.75 + 0.5 * beeldLot(i, 3));
+      const y = ((beeldLot(i, 2) * H + t * snel) % H) - lengte;
+      const opzij = regen ? t * snel * B.wind : t * B.windSneeuw + Math.sin(t * 0.9 + i) * 10;
+      const x = ((((beeldLot(i, 1) * W + opzij) % W) + W) % W) - 20;
+      if (regen) ctx.fillRect(x, y, 1.5, lengte * (0.7 + 0.6 * beeldLot(i, 4)));
+      else {
+        const m = beeldLot(i, 5) < 0.35 ? 4 : 3;
+        ctx.fillRect(x, y, m, m);
+      }
+    }
+    ctx.restore();
+  }
+
+  // De droge beekjes (js/weer.js, T.staatDroog; Marcel, 9 okt: "Ja kleine beekjes ook"): de bedding zelf is zandpad
+  // (T.hoekenDroog, in tekenVloeren), en hier komen er barsten en keien op, in de buffer van de grond, zodat je ziet dat
+  // het een droge beek is en geen pad.
+  function tekenDrogeBeek(c, S, vak) {
+    const D = T.dorpHier(S);
+    if (!D || !D.weer || !D.weer.beekDroog) return;
+    const B = T.WEER_INSTELLINGEN.beeld;
+    for (const t of T.beekTegels(S.wereld)) {
+      if (!inVak(vak, t.x, t.y) || !T.staatDroog(D, t.x, t.y)) continue;
+      const p = opGrond(t.x, t.y);
+      // Barsten en keien, op vaste plekken in het midden van de tegel (niet op de rand, waar het gras begint).
+      for (let i = 0; i < 9; i++) {
+        const u = (beeldLot(t.x * 7 + i, t.y * 3) - 0.5) * 0.7;
+        const v = (beeldLot(t.x * 5 + i, t.y * 11) - 0.5) * 0.7;
+        const x = p.x + (u - v) * 64;
+        const y = p.y + (u + v) * 32;
+        if (i < 6) {
+          // Een barst: een paar pixels schuin, langs de tegel.
+          c.fillStyle = B.barstKleur;
+          const l = 4 + Math.round(beeldLot(i, t.x) * 6);
+          const op = beeldLot(t.y, i) < 0.5 ? 1 : -1;
+          for (let s = 0; s < l; s += 2) c.fillRect(Math.round(x + s), Math.round(y + (op * s) / 2), 2, 1);
+        } else {
+          c.fillStyle = B.keiKleur;
+          c.fillRect(Math.round(x), Math.round(y), 3, 2);
+        }
+      }
     }
   }
 
@@ -1097,6 +1184,7 @@
     const sp = metSprites();
     const buiten = !!w.buiten;
     const paden = buiten ? zandVan(S) : null;
+    const droog = paden && paden.D.weer && paden.D.weer.beekDroog ? paden.D : null;
     const hoog = T.heeftHoogte(w);
     for (const [x, y] of tegelVolgorde(vak, hoog)) {
       {
@@ -1130,7 +1218,9 @@
         if (dof <= 0) continue;
         if (dof < 1) ctx.globalAlpha = dof;
         // Een paadje (js/paden.js) maakt de hoeken die gras waren zand, met de tegel uit hetzelfde vel die die hoeken heeft.
-        const metPad = paden && g ? T.hoekenMetPaden(paden.D, paden.zand, x, y, T.sprites.grondHoeken(g.vel, g.id)) : null;
+        let metPad = paden && g ? T.hoekenMetPaden(paden.D, paden.zand, x, y, T.sprites.grondHoeken(g.vel, g.id)) : null;
+        // Een droge beek (js/weer.js) maakt de hoeken die water waren zandpad: een bedding, met het gras eromheen.
+        if (droog && g) metPad = T.hoekenDroog(droog, x, y, metPad || T.sprites.grondHoeken(g.vel, g.id)) || metPad;
         if (metPad && !sp && metPad.every((soort) => soort === 'zandpad')) hex = BUITENKLEUR.zandpad[(x + y) % 2];
         const deel = sp && ((metPad && T.sprites.grondMetHoeken(g.vel, metPad, x, y)) || (g ? T.sprites.buiten(g.vel, g.id) : !buiten && T.sprites.tegel(vloerSoort(w, x, y), x, y)));
         if (deel) {

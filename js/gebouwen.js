@@ -1211,6 +1211,9 @@
   // dag aan) zodat hij ook in een toets in één keer op een vaste dag te proberen is.
   T.tikGebouwenDag = function (D, dag) {
     const IN = T.GEBOUWEN_INSTELLINGEN;
+    // Het weer van de dag die begint (js/weer.js): regen of zon, en of het droogte is. Als eerste, want de oogst, de
+    // visser en de balk vragen ernaar.
+    T.tikWeerDag(D, dag);
     // 0. De akkers (js/akkers.js): zaaien op 1 lentemaand, en het vangnet na de oogsttijd. Als
     // eerste: de boeren zaaien 's morgens, en daarna eet het dorp van wat er over is.
     T.tikOntginnenDag(D, dag); // een stuk heide waarvan de maand om is, is ontgonnen (js/ontginnen.js)
@@ -1338,7 +1341,8 @@
         continue;
       }
       // Wie in dit seizoen stilligt, of een houthakker die binnen zijn bereik geen boom meer vindt (js/bos.js).
-      const stil = T.stilOp(soort, dag, seizoen) || T.waaromHaktHijNiet(D, g);
+      // En een visser aan een beek die in de droogte droogvalt (js/weer.js).
+      const stil = T.stilOp(soort, dag, seizoen) || T.waaromHaktHijNiet(D, g) || T.waaromVistHijNiet(D, g);
       if (stil) {
         g.stilWant = stil;
         if (!wasStil && T.ui && T.ui.bericht && !soort.alleenIn) T.zeg(D, `${T.hoofdletter(soort.naam)} staat stil: ${stil}.`);
@@ -1350,7 +1354,8 @@
       const metUren = soort.handen > 0 && T.werkUrenVan && T.BEWONERS_INSTELLINGEN && T.BEWONERS_INSTELLINGEN.werkInUren;
       g.uren = metUren ? T.werkUrenVan(D, g, dag) : null;
       const bezet = g.uren ? (g.uren.nodig > 0 ? g.uren.gewerkt / g.uren.nodig : 0) : g.handen / soort.handen;
-      let factor = soort.handen > 0 ? bezet * werkFactor * gereedschap.factor : werkFactor;
+      // Een visser vangt in de droogte naar wat er van zijn water over is (js/weer.js).
+      let factor = (soort.handen > 0 ? bezet * werkFactor * gereedschap.factor : werkFactor) * T.visserWater(D, g);
       if (factor <= 0) continue;
       // Wat hij nodig heeft, bepaalt hoeveel hij kan: een smidse zonder ijzer staat stil, met ijzer
       // voor een halve dag werkt hij een halve dag. Tot 24 sep maakte hij toch gereedschap, uit
@@ -1417,6 +1422,7 @@
     T.tikPadenDag(D);
     // 10. Als laatste het rapport (js/ochtendrapport.js): de raadsman schrijft op wat er gebeurde en hoe het gaat, en
     // brengt het je morgenvroeg; het dagboek begint opnieuw.
+    T.tikStatussenDag(D, dag); // wat er speelt, en sinds wanneer, voor de balk (js/voorvallen.js)
     T.tikOchtendrapportDag(D, dag);
     if (T.ui && T.ui.toonBevolking) T.ui.toonBevolking(D);
   };

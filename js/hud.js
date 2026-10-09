@@ -210,6 +210,33 @@
 
   // De twee bazen (js/bazen.js): de gunst van de heer en het vertrouwen van het dorp, met een gezicht dat zegt hoe ze
   // erbij staan, en bij de muis waarom. Zonder de spelregel "Twee bazen" staan ze niet in de balk.
+  // De statussen (js/voorvallen.js, T.statussenVan; werklijst vraag 77, stap 2): een kaartje per status zolang hij
+  // duurt, naast het doel linksboven, rood als het erger is (hongersnood, strenge kou, ...). Op hover: wat er is, sinds
+  // wanneer, en wat helpt.
+  T.ui.toonStatussen = function (D) {
+    const S = T.S;
+    if (!S || D !== S.dorp) return; // een ander dorp zegt het niet tegen jou (js/dorp.js; vraag 71, C)
+    const box = $('statussen');
+    if (!box) return;
+    const dag = Math.floor(S.kalender.dag);
+    const lijst = T.statussenVan(D, dag);
+    const sleutel = lijst.map((s) => `${s.id}${s.niveau}${s.sinds}`).join(',');
+    box.classList.toggle('verborgen', !lijst.length);
+    if (box.dataset.sleutel === sleutel) return;
+    box.dataset.sleutel = sleutel;
+    box.innerHTML = '';
+    for (const s of lijst) {
+      const el = document.createElement('div');
+      el.className = `paneel status${s.niveau === 2 ? ' erger' : ''}`;
+      el.dataset.status = s.id;
+      el.textContent = s.naam;
+      const duur = dag - s.sinds;
+      const sinds = duur < 1 ? 'sinds vandaag' : duur === 1 ? 'sinds gisteren' : `al ${T.telwoord(duur)} dagen, sinds ${T.datumVanDag(s.sinds).tekst}`;
+      el.title = `${s.zin} (${sinds}.)${s.helpt ? ` Wat helpt: ${s.helpt}.` : ''}`;
+      box.appendChild(el);
+    }
+  };
+
   T.ui.toonBazen = function (D) {
     const S = T.S;
     if (!S || D !== S.dorp) return; // een ander dorp zegt het niet tegen jou (js/dorp.js; vraag 71, C)
@@ -245,7 +272,12 @@
     datumEl.textContent = d.tekst;
     datumEl.classList.toggle('sint-maarten', d.sintMaarten);
     const uur = T.uurTekst(S.kalender.dag) + ', ' + T.dagdeelVan(S.kalender.dag);
-    $('kalender-seizoen').textContent = T.hoofdletter(d.seizoen) + ' · ' + uur + (d.sintMaarten ? ' · Sint-Maarten: de heer int' : '');
+    // Het weer van vandaag (js/weer.js), tussen het seizoen en het uur; op hover hoe lang het al droog is.
+    const W = S.dorp && T.weerVan(S.dorp);
+    const weer = W ? ' · ' + T.WEER_NAMEN[W.vandaag] : '';
+    const seizoenEl = $('kalender-seizoen');
+    seizoenEl.textContent = T.hoofdletter(d.seizoen) + weer + ' · ' + uur + (d.sintMaarten ? ' · Sint-Maarten: de heer int' : '');
+    seizoenEl.title = W ? (W.droog > 0 ? `Het heeft ${W.droog === 1 ? 'sinds gisteren' : `al ${T.telwoord(W.droog)} dagen`} niet geregend.` : 'Het regent vandaag.') : '';
     for (const b of document.querySelectorAll('#kalender-knoppen button')) {
       b.classList.toggle('actief', Number(b.dataset.snelheid) === T.snelheidNu(S));
     }

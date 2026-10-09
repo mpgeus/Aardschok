@@ -55,6 +55,7 @@
       // De balk is die van je eigen dorp (js/dorp.js): met het spel zelf (S) bleef hij leeg tot er iets veranderde.
       if (this.toonVoorraad && S.dorp) this.toonVoorraad(S.dorp);
       if (this.toonBevolking && S.dorp) this.toonBevolking(S.dorp);
+      if (this.toonStatussen && S.dorp && S.dorp.kalender) this.toonStatussen(S.dorp); // honger, droogte, ... (js/hud.js)
     },
 
     // Het overzicht (js/main.js, Tab; werklijst vraag 108, a): het label bovenin zegt hoe je kijkt en hoe je terugkomt.

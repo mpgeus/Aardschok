@@ -1079,6 +1079,7 @@
     const IN = T.BEHOEFTEN_INSTELLINGEN;
     const b = T.berekenTevredenheid(D, dag);
     D.behoeften.tevredenheid = b.tevredenheid;
+    D.behoeften.voedselDekking = b.voedselDekking; // voor de status hongersnood (T.OORZAKEN, js/voorvallen.js)
     D.behoeften.mist = b.mist;
     D.behoeften.last = b.last;
     D.behoeften.blij = b.blij;
