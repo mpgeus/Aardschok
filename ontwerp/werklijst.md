@@ -7081,6 +7081,11 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     legt daar de sneeuw over, net zo dik als op de grond. Dat zijn 559 tekeningen, zo'n drie uur rekenen op de
     achtergrond (weinig verbruik), en enkele MB erbij. Vragen: mag die render, en ook de bomen (kale takken en sneeuw
     erop) of alleen de huizen?
+    **Marcel (9 okt), op wat er gebouwd is:** "Vergeet niet dat alles onze eigen kaart is. Het wordt 1 aaneengesloten
+    stuk." "De groep neemt in het donker ook lantaarns mee natuurlijk." "Huis moet afgebrokkeld zijn. Echt kapot.
+    Structureel ingestort etc." Dus: de hinderlaag van de bode altijd op de kaart (buiten beeld alleen als het niet anders
+    kan), de bode en wie meegaat dragen in het donker een lantaarn (beide gebouwd, 9 okt), en de ruïne wordt een echt
+    ingestort huis in plaats van een zwart geraamte: met de huizenbouwer, eerst een proefplaat.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

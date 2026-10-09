@@ -556,11 +556,13 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`heer`: de brief weg, argwaan en gunst) of de rovers (`T.bodeGevaar`: hun bende, de winter, het donker; `onderschept` in
   `D.bode`). Tegen de rovers vechten wie meegaan (`T.bodeKracht`, `T.bodeSlaatAf`: een veteraan dubbel, wapens), en hoe het
   afloopt, zegt `T.bodeOnderweg` (afgeslagen of beroofd, wie sneuvelt, wie gewond is, `p.gewond`, en een rover van de bende
-  die valt). Soms gebeurt het op je eigen kaart (`opDeKaart`): de aanval met soort 'hinderlaag' in js/rovers.js
+  die valt). Het gebeurt op je eigen kaart (Marcel: "alles onze eigen kaart"; alleen buiten beeld als er al rovers
+  zijn): de aanval met soort 'hinderlaag' in js/rovers.js
   (`R.aanval`, `D.bode.hinderlaag`): bij de uitgang houden ze hem aan (`e.aangehouden`, in `T.dagAnker`), wie meegaat vecht
   aan jouw kant (`T.roepOp`), en de militie komt; komt de schout, dan is het een gevecht in beurten (`T.naGevecht`:
   `T.bodeWegVrij`), anders loopt het na `hinderlaag.uren` af (`T.bodeAangehouden`). Elke nacht (`T.tikBodeDag`, na
-  `T.tikHandelDag`): zijn ze er, dan komt de marskramer op bestelling (`T.marskramerOpBestelling` in js/handel.js:
+  `T.tikHandelDag`): in het donker dragen ze een lantaarn (`T.bodeLicht`, in `T.lichtBronnen`). Zijn ze er, dan komt de
+  marskramer op bestelling (`T.marskramerOpBestelling` in js/handel.js:
   `m.bestelling` met de prijzen, maal `prijsMaal`, soms iets niet of de helft; de vlag `marskramerBode` voor zijn gesprek;
   valt zijn vaste ronde ertussen, dan komt die erna, `m.daarna`), en de bode is terug (`T.komtTerug`). Het handelsvenster
   en `T.kanKopen` lezen wat hij nu verkoopt via `T.verkooptNu` en `T.waarVanDeMarskramer`. De spelregel "De bode"; de

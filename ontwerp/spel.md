@@ -610,9 +610,12 @@ op de zeventien keer, met een bende van vier een op de vier), in de winter en in
 en hoe vaak ze de rovers afslaan met de mannen die je meestuurt: de bode telt half, een man een, een veteraan twee, en met
 een wapen voor elke man anderhalf keer zoveel. Slaan ze ze af, dan gaat de bode verder, maar een man kan gewond raken of
 sneuvelen, en soms valt er een rover van de bende. Lukt het niet, dan nemen ze alles: geen marskramer, en wie meeging is
-gewond of dood, de bode ook. De helft van de keren gebeurt het op je eigen kaart: bij de uitgang van het dorp houden de
-rovers ze aan, een bericht roept je, en de militie komt naar je toe. Kom je erbij, dan is het een gevecht in beurten, met
-wie meeging aan jouw kant; kom je niet, dan loopt het na anderhalf uur af zoals onderweg. De mannen van de heer houden hem
+gewond of dood, de bode ook. Het gebeurt op je eigen kaart (Marcel: "Vergeet niet dat alles onze eigen kaart is. Het
+wordt 1 aaneengesloten stuk"): bij de uitgang van het dorp houden de rovers ze aan, een bericht roept je, en de militie
+komt naar je toe. Kom je erbij, dan is het een gevecht in beurten, met wie meeging aan jouw kant; kom je niet, dan loopt
+het na anderhalf uur af. Alleen als dat niet kan (er zijn al rovers op de kaart), gebeurt het buiten beeld. In het donker
+dragen de bode en wie meegaat een lantaarn. Als het hele eiland begaanbaar is (vraag 117, stap 3), kan de hinderlaag
+overal langs de weg liggen. De mannen van de heer houden hem
 ook soms aan, vaker als de inner argwaan heeft: ze nemen je brief mee, en nu weet de heer dat je goud hebt om te kopen
 (argwaan en gunst). Met hen vecht niemand.
 

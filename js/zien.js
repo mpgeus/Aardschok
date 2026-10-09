@@ -61,7 +61,8 @@
   T.lichtBronnen = function (D) {
     const w = D.wereld;
     const herberg = T.herbergLicht(D).map((b) => ({ ...b, soort: 'herberg' }));
-    const schout = schoutLicht(D);
+    // De schout, en in het donker de bode en wie meegaat (js/bode.js), met een lantaarn.
+    const schout = schoutLicht(D).concat(T.bodeLicht(D));
     if (!w || !D.kalender || !T.dagdeelVan) return herberg.concat(schout);
     const deel = T.dagdeelVan(D.kalender.dag, T.isOogstDag(D.kalender.dag));
     const huizen = huizenLicht(D, deel);

@@ -17,7 +17,8 @@
 // de heer dat je goud hebt om te kopen). Je stuurt tot drie weerbare mannen mee: tegen de rovers vechten ze, een
 // veteraan telt dubbel en wapens helpen, en wie vecht, kan gewond raken of sneuvelen, de bode ook. Wie hem onderschept,
 // valt vast bij het vertrekken (T.stuurBode, `D.bode.onderschept`); hoe het afloopt, als de dag van terugkomen er is
-// (T.bodeOnderweg). Wat er onderweg is, staat in `D.bode`; elke nacht kijkt T.tikBodeDag of ze er zijn. De spelregel
+// (T.bodeOnderweg), op je eigen kaart bij de uitgang (de hinderlaag, js/rovers.js), of, als dat niet kan, buiten beeld. In
+// het donker dragen ze lantaarns (T.bodeLicht, voor js/zien.js). Wat er onderweg is, staat in `D.bode`; elke nacht kijkt T.tikBodeDag of ze er zijn. De spelregel
 // "De bode"; de getallen in T.BODE_INSTELLINGEN.
 (function (T) {
   'use strict';
@@ -41,10 +42,10 @@
     // `perRover` per man van hun bende, maal `winter` in de winter en `donker` als hij in het donker vertrekt, en hooguit
     // `hooguit`. Ze zijn dan met `aanvallers` man, of met hun bende als die groter is.
     rovers: { basis: 0.06, perRover: 0.05, winter: 1.6, donker: 1.6, hooguit: 0.8, aanvallers: 2 },
-    // Zo vaak houden de rovers hem aan op je eigen kaart, bij de uitgang (de hinderlaag, js/rovers.js), als hij nog op de
-    // kaart is: vanaf `afstand` tegels van de uitgang komen ze, en na `uren` uur, als de schout niet kwam, loopt het af
-    // zoals onderweg. Anders gebeurt het buiten beeld, en hoor je het als hij terug is.
-    opDeKaart: 0.5,
+    // De rovers houden hem aan op je eigen kaart, bij de uitgang (de hinderlaag, js/rovers.js; Marcel, 9 okt: "Vergeet niet
+    // dat alles onze eigen kaart is. Het wordt 1 aaneengesloten stuk"): vanaf `afstand` tegels van de uitgang komen ze, en
+    // na `uren` uur, als de schout niet kwam, loopt het af. Alleen als dat niet kan (hij is de kaart al af, of er zijn al
+    // rovers op de kaart), gebeurt het buiten beeld, en hoor je het als hij terug is.
     hinderlaag: { afstand: 10, uren: 1.5 },
     // De mannen van de heer: de kans is `basis` plus `perArgwaan` maal de argwaan van de inner (0 tot 1). Ze nemen de
     // brief mee; de argwaan gaat omhoog en de gunst omlaag. Met hen vecht niemand: weerstand tegen de heer is het ergste.
@@ -180,7 +181,7 @@
     D.bode = { verstuurd: D.kalender.dag, komt: dag + k.dagen, winter: k.winter, wie, bestelling: vraag, onderschept };
     // Op je eigen kaart: de rovers wachten hem op bij de uitgang (js/rovers.js), als er niet al rovers op de kaart zijn.
     const R = D.rovers || (D.rovers = T.nieuweRovers());
-    if (onderschept === 'rovers' && bode.wezen && T.wegInEnUit(D.wereld) && !R.aanval && T.vastLot(D, uur, 1435) < IN().opDeKaart) {
+    if (onderschept === 'rovers' && bode.wezen && T.wegInEnUit(D.wereld) && !R.aanval) {
       D.bode.hinderlaag = true;
       R.aanval = { soort: 'hinderlaag', dag, fase: 'wacht' };
     }
@@ -197,6 +198,19 @@
     const B = D.bode;
     if (!B || B.wie.length < 2 || !e.bewoner || !B.wie.includes(e.bewoner)) return false;
     return B.wie.some((p) => p.wezen && p.wezen !== e && !p.wezen.dood && D.wereld.wezens.includes(p.wezen) && T.afstand(e.vertrekt, { x: p.wezen.tx, y: p.wezen.ty }) > 2);
+  };
+
+  // In het donker dragen de bode en wie meegaat een lantaarn (Marcel, 9 okt: "De groep neemt in het donker ook lantaarns mee
+  // natuurlijk"): zoals de schout (T.draagtLantaarn, js/zien.js), met hetzelfde licht.
+  T.bodeLicht = function (D) {
+    const B = D.bode;
+    if (!B || !D.kalender || !D.wereld) return [];
+    const L = T.ZIEN_INSTELLINGEN.lantaarn;
+    if (T.lichtVan(D.kalender.dag).nacht < L.vanaf) return [];
+    return B.wie
+      .map((p) => p.wezen)
+      .filter((e) => e && !e.dood && !e.binnen && D.wereld.wezens.includes(e))
+      .map((e) => ({ x: e.x, y: e.y, straal: L.straal, sterkte: L.sterkte, soort: 'schout' }));
   };
 
   // Gewond: een paar dagen in bed (de wolven doen het net zo, js/beesten.js, dat ze ook weer beter maakt).

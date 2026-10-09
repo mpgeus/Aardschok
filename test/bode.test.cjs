@@ -119,6 +119,15 @@ function metGevaar(rovers, heer, doe) {
   }
 }
 
+// Er zijn al rovers op de kaart: dan houden ze de bode buiten beeld aan. Geeft een functie die ze weer weghaalt.
+function alRoversOpDeKaart(D) {
+  D.rovers = D.rovers || T.nieuweRovers();
+  D.rovers.aanval = { soort: 'wild', dag: 0, fase: 'wacht' };
+  return () => {
+    D.rovers.aanval = null;
+  };
+}
+
 test('in de winter duurt het langer en kost het meer', () => {
   metGevaar(0, 0, () => {
     const dag = dagVan('louwmaand', 5);
@@ -146,9 +155,12 @@ test('rovers onderscheppen de bode: zonder mannen erbij is alles weg, en hij is 
     B.kracht.bode = 0; // alleen kan hij ze niet afslaan
     try {
       const mensen = D.bevolking;
+      const klaar = alRoversOpDeKaart(D);
       const r = T.stuurBode(D, { graan: 2 });
+      klaar();
       assert.ok(r.kan, r.reden);
       assert.equal(D.bode.onderschept, 'rovers');
+      assert.ok(!D.bode.hinderlaag, 'buiten beeld');
       T.tikBodeDag(D, r.komt);
       assert.ok(!D.marskramer, 'geen marskramer');
       assert.equal(D.bode, null);
@@ -178,7 +190,9 @@ test('met mannen erbij slaan ze de rovers af: de marskramer komt, en er kan er e
       assert.ok(weerbaar >= 3, `${weerbaar} weerbare mannen`);
       assert.match(T.bodeGevaarTekst(D, 2), /slaan ze de rovers in \d+ van de 100 keer af/);
       const goud = D.voorraad.goud;
+      const klaar = alRoversOpDeKaart(D);
       const r = T.stuurBode(D, { graan: 2 }, 2);
+      klaar();
       assert.ok(r.kan, r.reden);
       assert.equal(r.begeleiders.length, 2);
       assert.ok(Math.abs(D.voorraad.goud - (goud - 3 * B.loon)) < 1e-9, 'drie lonen');
@@ -260,78 +274,66 @@ test('valt de vaste ronde op een dag dat hij op bestelling er nog is, dan komt d
 });
 
 test('de hinderlaag op je kaart: bij de uitgang houden de rovers hem aan, en komt de schout niet, dan loopt het af', () => {
-  const opDeKaart = B.opDeKaart;
-  B.opDeKaart = 1;
-  try {
-    metGevaar(1, 0, () => {
-      const dag = dagVan('zomermaand', 5);
-      const S = gehucht(dag + 0.5);
-      const D = S.dorp;
-      T.zetWet(D, 'rantsoen', 'krap');
-      const r = T.stuurBode(D, { graan: 2 }, 1);
-      assert.ok(r.kan, r.reden);
-      assert.ok(D.bode.hinderlaag, 'op de kaart');
-      assert.equal(D.rovers.aanval.soort, 'hinderlaag');
-      const bode = r.bode.wezen;
-      assert.ok(bode, 'de bode loopt op de kaart');
-      // Ver van de uitgang wachten ze nog.
-      T.werkRoversBij(S, D);
-      const uitgang = T.wegInEnUit(D.wereld);
-      if (T.afstand(uitgang, { x: bode.tx, y: bode.ty }) > B.hinderlaag.afstand) assert.equal(D.rovers.aanval.fase, 'wacht');
-      // Bij de uitgang staan ze er.
-      for (const e of [bode, r.begeleiders[0].wezen]) {
-        e.pad = [];
-        e.onderweg = null;
-        e.tx = e.x = uitgang.x;
-        e.ty = e.y = uitgang.y - 3;
-      }
-      T.werkRoversBij(S, D);
-      const A = D.rovers.aanval;
-      assert.equal(A.fase, 'roven');
-      assert.ok(A.rovers.length >= B.rovers.aanvallers, 'de rovers staan op de kaart');
-      assert.ok(bode.aangehouden, 'de bode staat stil');
-      assert.ok(r.begeleiders[0].wezen.opgeroepen, 'wie meegaat, vecht aan jouw kant');
-      assert.deepEqual(T.dagAnker(D, bode), { x: bode.aangehouden.x, y: bode.aangehouden.y, straal: 0 });
-      // De tijd is om, en de schout kwam niet: het lot beslist.
-      S.kalender.dag += (B.hinderlaag.uren + 0.1) / 24;
-      T.werkRoversBij(S, D);
-      assert.equal(D.rovers.aanval && D.rovers.aanval.fase, 'weg', 'ze gaan weg');
-      assert.ok(!bode.aangehouden);
-      assert.ok(!D.bode || !D.bode.onderschept, 'beroofd (geen bode meer) of afgeslagen (de weg is vrij)');
-      if (D.bode) assert.match(D.bode.aanval, /sloegen ze af/);
-    });
-  } finally {
-    B.opDeKaart = opDeKaart;
-  }
+  metGevaar(1, 0, () => {
+    const dag = dagVan('zomermaand', 5);
+    const S = gehucht(dag + 0.5);
+    const D = S.dorp;
+    T.zetWet(D, 'rantsoen', 'krap');
+    const r = T.stuurBode(D, { graan: 2 }, 1);
+    assert.ok(r.kan, r.reden);
+    assert.ok(D.bode.hinderlaag, 'op de kaart');
+    assert.equal(D.rovers.aanval.soort, 'hinderlaag');
+    const bode = r.bode.wezen;
+    assert.ok(bode, 'de bode loopt op de kaart');
+    // Ver van de uitgang wachten ze nog.
+    T.werkRoversBij(S, D);
+    const uitgang = T.wegInEnUit(D.wereld);
+    if (T.afstand(uitgang, { x: bode.tx, y: bode.ty }) > B.hinderlaag.afstand) assert.equal(D.rovers.aanval.fase, 'wacht');
+    // Bij de uitgang staan ze er.
+    for (const e of [bode, r.begeleiders[0].wezen]) {
+      e.pad = [];
+      e.onderweg = null;
+      e.tx = e.x = uitgang.x;
+      e.ty = e.y = uitgang.y - 3;
+    }
+    T.werkRoversBij(S, D);
+    const A = D.rovers.aanval;
+    assert.equal(A.fase, 'roven');
+    assert.ok(A.rovers.length >= B.rovers.aanvallers, 'de rovers staan op de kaart');
+    assert.ok(bode.aangehouden, 'de bode staat stil');
+    assert.ok(r.begeleiders[0].wezen.opgeroepen, 'wie meegaat, vecht aan jouw kant');
+    assert.deepEqual(T.dagAnker(D, bode), { x: bode.aangehouden.x, y: bode.aangehouden.y, straal: 0 });
+    // De tijd is om, en de schout kwam niet: het lot beslist.
+    S.kalender.dag += (B.hinderlaag.uren + 0.1) / 24;
+    T.werkRoversBij(S, D);
+    assert.equal(D.rovers.aanval && D.rovers.aanval.fase, 'weg', 'ze gaan weg');
+    assert.ok(!bode.aangehouden);
+    assert.ok(!D.bode || !D.bode.onderschept, 'beroofd (geen bode meer) of afgeslagen (de weg is vrij)');
+    if (D.bode) assert.match(D.bode.aanval, /sloegen ze af/);
+  });
 });
 
 test('de schout verslaat de rovers van de hinderlaag: de bode gaat verder', () => {
-  const opDeKaart = B.opDeKaart;
-  B.opDeKaart = 1;
-  try {
-    metGevaar(1, 0, () => {
-      const dag = dagVan('zomermaand', 5);
-      const S = gehucht(dag + 0.5);
-      const D = S.dorp;
-      T.zetWet(D, 'rantsoen', 'krap');
-      const r = T.stuurBode(D, { graan: 2 });
-      const bode = r.bode.wezen;
-      const uitgang = T.wegInEnUit(D.wereld);
-      bode.pad = [];
-      bode.onderweg = null;
-      bode.tx = bode.x = uitgang.x;
-      bode.ty = bode.y = uitgang.y - 3;
-      T.werkRoversBij(S, D);
-      const A = D.rovers.aanval;
-      for (const e of A.rovers) e.dood = true; // het gevecht in beurten
-      T.naGevecht(D);
-      assert.equal(D.rovers.aanval, null);
-      assert.ok(D.bode && !D.bode.onderschept && !D.bode.hinderlaag);
-      assert.ok(!bode.aangehouden);
-      T.tikBodeDag(D, D.bode.komt);
-      assert.ok(D.marskramer && D.marskramer.bestelling, 'de marskramer komt');
-    });
-  } finally {
-    B.opDeKaart = opDeKaart;
-  }
+  metGevaar(1, 0, () => {
+    const dag = dagVan('zomermaand', 5);
+    const S = gehucht(dag + 0.5);
+    const D = S.dorp;
+    T.zetWet(D, 'rantsoen', 'krap');
+    const r = T.stuurBode(D, { graan: 2 });
+    const bode = r.bode.wezen;
+    const uitgang = T.wegInEnUit(D.wereld);
+    bode.pad = [];
+    bode.onderweg = null;
+    bode.tx = bode.x = uitgang.x;
+    bode.ty = bode.y = uitgang.y - 3;
+    T.werkRoversBij(S, D);
+    const A = D.rovers.aanval;
+    for (const e of A.rovers) e.dood = true; // het gevecht in beurten
+    T.naGevecht(D);
+    assert.equal(D.rovers.aanval, null);
+    assert.ok(D.bode && !D.bode.onderschept && !D.bode.hinderlaag);
+    assert.ok(!bode.aangehouden);
+    T.tikBodeDag(D, D.bode.komt);
+    assert.ok(D.marskramer && D.marskramer.bestelling, 'de marskramer komt');
+  });
 });
