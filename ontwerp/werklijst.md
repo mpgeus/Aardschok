@@ -14,7 +14,8 @@ groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
 Marcel, 8 okt: "snel, duidelijk en low cost". Elke sessie werkt dit blok bij aan het eind; wat af is, gaat eruit.
 
-**Loopt** (het teken "Bezig in sessie" staat bij het punt zelf): niets. De bode naar de marskramer (vraag 143), het weer
+**Loopt** (het teken "Bezig in sessie" staat bij het punt zelf): de onderschepte bode (vraag 143), dan wat er bij het
+weer open is (vraag 144). De bode naar de marskramer (vraag 143), het weer
 en de statussen met niveaus (vraag 77, stap 2) en de dagloners (vraag 140) staan in `main`; wat bij de bode en het weer
 nog open is, staat in `opmerkingen.md`. Vraag 141, de economie binnen het dorp, is op 9 okt helemaal teruggedraaid
 (Marcel: "Ik denk dat we die economie terug moeten draaien", en "Alles van vraag 141").
@@ -7042,11 +7043,30 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     mannen meesturen om hem te beschermen (het plan staat hieronder als het er is); en valt de vaste ronde van de
     marskramer op een dag dat hij op bestelling er nog is, dan wacht die ronde tot hij weg is. **Gebouwd (9 okt):** dat
     wachten (`m.daarna`, `D.marskramerDaarna` in `T.tikHandelDag`).
+    **Plan van Claude (9 okt):** de rovers uit het bos onderscheppen hem (vaker naarmate hun bende groter is), in de
+    winter en in het donker vaker; je stuurt 0 tot 3 weerbare mannen mee, een veteraan telt dubbel, wapens helpen; gaat
+    het mis, dan zijn de brief en het loon weg en komt de bode beroofd en gewond terug, en met genoeg mannen slaan ze de
+    rovers soms af. Vragen: hoe je het ziet (1: hij komt terug en vertelt het; 2: de rovers liggen op je eigen kaart bij
+    de weg, en het wordt een gevecht in beurten), of ook de mannen van de heer hem onderscheppen (dan leest de heer je
+    brief), en of een begeleider mag sneuvelen. **Marcel (9 okt): "A. 1 en 2. Beiden zijn een goede aanvulling. B. Ja, dat
+    maakt het leuk C. Zeker, iedereen kan dood."** Dus: allebei (eerst het bericht, dan de hinderlaag op je kaart), ook
+    de mannen van de heer, en iedereen kan sneuvelen, de bode ook.
+    **Bezig in sessie `ccr-77327776-rqjldz`** (9 okt): de onderschepte bode, dan vraag 144.
 
 144. **Wat er nog open is bij het weer** (Marcel, 9 okt: "Ja heel goed, dit moeten we pakken", op de lijst uit
     `opmerkingen.md`): sneeuw op de grond en de daken; op een natte dag zaait niemand (vraag 82, b en c); de marskramer
     die na een droog jaar meer graan meeneemt; ziekte en brand als status; en een bode naar anderen (het buurdorp, de
-    heer, de koning) zoals die naar de marskramer. Het plan en de volgorde komen van Claude, en Marcel kiest.
+    heer, de koning) zoals die naar de marskramer.
+    **Plan van Claude (9 okt), van klein naar groot:** 1. regent het op de dag van het zaaien, dan zaaien ze de eerste
+    droge dag (nu zonder verlies); 2. na een droog jaar neemt de marskramer in de lente meer zaaigraan mee; 3. ziekte als
+    status (koorts, erger een epidemie), en brand als status "brandgevaar" (in de droogte, erger in een vol dorp), zodat
+    de brand die er al is vaker komt; 4. sneeuw op de grond, en daarna op de daken; 5. een bode naar de heer nu, de rest
+    later. **Marcel (9 okt): "1. Akkoord 2. Prima, je moet kunnen herstellen 3. Ziekte en brand als status is ook goed. We
+    hebben dan nog wel vuur nodig en huizen die 'afgefikt' zijn als art. Dan kunnen ze weer worden opgebouwd. 4. Ja beiden
+    goed. 5. We gaan dat later inderdaad toevoegen naar andere buurdorpen. Ik denk dat we altijd ai dorpen hebben en
+    misschien uiteindelijk ook menselijke spelers."** Dus 1 tot 4 zoals voorgesteld, met bij 3 vuur en een afgebrand huis
+    als kunst, dat weer opgebouwd wordt; 5 komt later, met de buurdorpen (er zijn altijd dorpen met een AI, en misschien
+    later mensen).
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
