@@ -6959,6 +6959,17 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     **Gebouwd (8 okt), stap 1:** `js/geld.js`: de kas in goud, zilver en koper in de balk, de beurs van de schout ernaast,
     zijn loon uit de kas (1 goud op de eerste van de maand, in het rapport), en de inner omkopen uit eigen zak; de
     spelregel "Geld" ("Alles uit de kas": zoals ervoor). Volgende: stap 2, een beurs per huis, kopen en verdienen.
+    Voor stap 2 vroeg Claude wat er gebeurt met wie zijn eten niet kan betalen (A schuld, B honger per huis, C bedeling uit
+    de kas), en hoe je iemand helpt (een arm gezin komt je opzoeken, of een knop op het briefje). **Marcel (8 okt): "1. B
+    2. Dat is prima"**: wie zijn eten niet kan betalen, eet minder en lijdt honger in dat huis; en een arm gezin komt je
+    opzoeken, zoals een voorval, en je geeft of weigert uit je beurs.
+    **Wat Claude bij het narekenen zag (9 okt), wacht op Marcel:** geld moet rondgaan. De huizen betalen elkaar voor wat ze
+    kopen, en de kas krijgt de belasting en het marktgeld; maar de kas geeft alleen uit aan de heer, de marskramer en de
+    bouw, en dat geld verlaat het dorp. Zonder meer hebben de huizen na een paar maanden niets. Daarom: de kas koopt van de
+    makers wat het dorp gebruikt (de bouwstof, wat de heer krijgt, wat je aan de marskramer verkoopt). Verder: met de
+    belasting van nu (5 koper per mens per maand) is de belasting zwaarder dan eten en drank samen; voorstel: een tiende
+    van wat een huis verdient. En wie geen werk heeft, verdient niets en lijdt honger (B); voorstel: het sprokkelhout is
+    van wie het raapt, de huizen zonder werk, en dat verkopen ze aan het dorp.
 
 142. **Een gereedschap voor alle getallen** (Marcel, 8 okt: "Ik wil straks wel een tool waarin we al deze parameters kunnen
     instellen."; open). Er is de werkbank in de spelregels (`T.WERKBANK` in `js/opties.js`: elk getal uit de blokken
