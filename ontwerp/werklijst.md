@@ -14,7 +14,8 @@ groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
 Marcel, 8 okt: "snel, duidelijk en low cost". Elke sessie werkt dit blok bij aan het eind; wat af is, gaat eruit.
 
-**Loopt:** niets. De dagloners (vraag 140: wie geen werk heeft, maait, bindt en draagt in de oogst) staan in `main`.
+**Loopt** (het teken "Bezig in sessie" staat bij het punt zelf): stap 2 van de slice, de statussen met niveaus en het
+weer (vraag 77, stap 2, en punt 4 hieronder). De dagloners (vraag 140: wie geen werk heeft, maait, bindt en draagt in de oogst) staan in `main`.
 Vraag 141, de economie binnen het dorp, is op 9 okt helemaal teruggedraaid (Marcel: "Ik denk dat we die economie terug
 moeten draaien", en "Alles van vraag 141").
 
@@ -29,7 +30,7 @@ moeten draaien", en "Alles van vraag 141").
 2. Marcel speelt de graanzak (`Spel.debug.zaak('nu')`) en kiest of c, d en e van vraag 128 komen (en vraag 134).
 3. Bijstellen na de tester, eerst met een getal uit de werkbank; met de speeltest van vier jaar ook de wolven en de
    schapen opnieuw meten (vraag 117, 2c, b).
-4. Stap 2 van de slice: toestanden in niveaus (droogte, ernstige droogte) en het weer (vraag 77 en 82).
+4. Stap 2 van de slice: toestanden in niveaus (droogte, ernstige droogte) en het weer (vraag 77 en 82). Loopt.
 5. Later: het hele eiland met de mist (vraag 117, stap 3) en doorgroeien zonder vaste maat (vraag 137), plunderen
    (vraag 138), het buurdorp (vraag 72).
 
@@ -2791,6 +2792,14 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     - **c, uiteindelijk een ambtenaar voor elke tak van het bestuur,** om je te steunen; de marktmeester, de
       wachtmeester en de rentmeester eerst.
     - **d, deze volgorde,** te beginnen met stap 1, de cyclus.
+    **Stap 2, het plan (Claude, 9 okt):** A, de statussen met niveaus van wat er al is (honger en hongersnood, kou en
+    strenge kou, vol en overvol, onvrede en onrust, wolven), elk een kaartje in de balk zolang hij duurt (sinds wanneer,
+    waarom, wat helpt), en het rapport zegt het begin, erger, minder en het eind; B, het weer (elke dag zon, regen of
+    sneeuw uit het nummer van het spel), met droogte en ernstige droogte als eerste crisis: lang geen regen in het
+    groeiseizoen, en de akkers geven minder; je ziet het aankomen in de balk. **Marcel (9 okt): "1. Beiden 2. Ook in
+    beeld 3. Ja kleine beekjes ook, goed idee!"** Dus: A en B in één keer; het weer ook in beeld (regen en sneeuw
+    getekend); en bij droogte vallen de kleine beekjes droog, zodat een visser aan een beek minder vangt.
+    **Bezig in sessie `ccr-77327776-rqjldz`** (9 okt): stap 2, de statussen met niveaus en het weer.
 78. **Stap 1 van de slice, de cyclus: het plan** (Claude, 1 okt, eenentwintigste sessie; vraag 77, a en d; wacht op
     Marcel). **Wat er nu is:** één trede, van gehucht tot dorp bij 50 mensen met een kapel en een smidse, die op elk
     moment valt. De bouwer van de speeltest haalt hem op 1 herfstmaand van het eerste jaar, vóór de heer en de winter,
