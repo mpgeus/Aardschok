@@ -7112,7 +7112,7 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     **Marcel (9 okt): "ja dat is goed."** **Proefplaat met 1, 2 en 5 (9 okt):** steen blijft staan met roetpluimen en een
     zwarte binnenkant, vakwerk wordt een zwart geraamte met het leem ertussenuit, planken branden tot stompen, lei en
     pannen worden zwart en liggen in scherven, de stenen schoorsteen staat van de grond, en de fase binnengestort (zes in
-    totaal, met het hele huis). Wacht op Marcel; dan 4 en 6, dan 3.
+    totaal, met het hele huis). **Marcel (9 okt): "dit is prima."** Nu 4 (wat er buiten hangt), dan 6, dan 3.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
