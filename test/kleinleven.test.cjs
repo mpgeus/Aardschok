@@ -65,3 +65,21 @@ test('elk huis weet waar zijn rook uitkomt: de schoorsteen, of bij een hut de no
     assert.ok(plek[1] < 0 && -plek[1] < t.cel[3], `${t.naam}: ${plek}`);
   }
 });
+
+test('het water: een beek stroomt langs zijn lengte, en wat geen beek is, ligt stil', () => {
+  const S = gehucht();
+  const w = S.dorp.wereld;
+  let water = 0;
+  for (let y = 0; y < w.h; y++) {
+    for (let x = 0; x < w.b; x++) {
+      const isWater = !!(w.grond[y] && w.grond[y][x] && w.grond[y][x].naam === 'water');
+      const s = T.waterOp(w, x, y);
+      assert.equal(!!s, isWater, `${x},${y}`);
+      if (!s) continue;
+      water++;
+      if (T.isBeek(w, x, y)) assert.equal(Math.abs(s.dx) + Math.abs(s.dy), 1, `de beek op ${x},${y} stroomt één kant op`);
+      else assert.ok(s.stil, `${x},${y} ligt stil`);
+    }
+  }
+  assert.ok(water > 0, 'het gehucht heeft water');
+});

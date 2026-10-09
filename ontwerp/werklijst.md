@@ -7185,6 +7185,13 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     uit is een verder (zijn poppetje krijgt het vel en de snelheid van zijn leeftijd); wie oud is, sterft na zijn jaren;
     een gezin met een moeder en een vader krijgt soms een kind, als er plaats is in het huis. De schout en de mensen met een
     naam (de boeren, de herbergierster) worden niet ouder, want aan hen hangt het spel.
+    **Gebouwd (9 okt):** ouder worden, geboren worden en sterven (`js/leven.js`, de spelregel "Ouder worden"); het
+    uiterlijk in het spel (`T.kiesUiterlijk`: het minst gebruikte, niet dat van het gezin of een buur, een kind met het
+    haar van een ouder, en wie ouder wordt houdt zijn haar); de rook uit de schoorsteen van wie thuis is (`js/kleinleven.js`,
+    de spelregel "Klein leven"; waar de schoorsteen zit, rekent `rookpunten.cjs` uit de vorm van elk huis). De vellen van
+    alle uiterlijken renderen op de achtergrond (`uiterlijk-anim.cjs`, zo'n drie uur), daarna `naar-spel.cjs --uiterlijken`.
+    **Marcel (9 okt): "vergeet ook niet het water wat mag bewegen 'stromen' etc"**: bij 3 erbij, als zesde: beken die
+    stromen (rimpels en glinsters die met de stroom meegaan) en vijvers en meren die glinsteren.
     **Bezig in sessie `ccr-77327776-rqjldz`** (9 okt): vraag 145, 1 en 3.
 
 146. **Een fatsoenlijke ui** (Marcel, 9 okt: "Ik denk dat het nu ook tijd is om een fatsoenlijke UI te maken; nu is het
