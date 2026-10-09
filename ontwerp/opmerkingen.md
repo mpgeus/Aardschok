@@ -713,6 +713,12 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het beeld
 
+- **De proefversie past niet meer op itch.io** (9 okt, bij `npm run proefversie -- --windows` op 0279f91): het spel is
+  1433 bestanden en 127 MB (op 29 sep 189 bestanden, 11 MB). Bijna alles is `tegels/huizen` (559) en `tegels/bouwfasen`
+  (545), samen 118 MB. itch.io neemt hooguit 1000 bestanden (`verpakken.md`), dus de zip voor de browser gaat er zo niet
+  op; de Windows-versie (264 MB) heeft daar geen last van. Een uitweg: de losse plaatjes per huis samen op een paar
+  vellen. En het laden: een tester haalt die 118 MB de eerste keer van itch.io, niet van zijn schijf.
+
 - **De markt in ons beeld** (6 okt, zesendertigste sessie; vraag 127): vanuit onze kijkhoek ligt een groot deel van het
   plein achter de daken van de huizen ervoor; met een harde regel (geen kraam achter een dak) bleef er op vijf van de 33
   landen geen blok over. Nu wint het blok met de meeste zichtbare tegels. Een zeil van achteren gezien leest als een
