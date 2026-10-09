@@ -118,3 +118,65 @@ test('twee kinderen die vrij zijn, gaan soms samen spelen, rennen om de plek, en
     T.KLEIN_LEVEN_INSTELLINGEN.spelen.kans = kans;
   }
 });
+
+test('de kippen scharrelen op het erf van een boerderij waar iemand woont, en niet op een akker; \'s nachts zijn ze binnen', () => {
+  const S = gehucht();
+  const D = S.dorp;
+  const w = S.wereld;
+  D.kalender.dag = opUur(40, 11);
+  const K = T.KLEIN_LEVEN_INSTELLINGEN.kippen;
+  const kippen = T.kippenOp(D, w, 100);
+  const boerderijen = D.gebouwen.filter((g) => g.soort === 'boerderij' && D.bewoners.mensen.some((p) => p.huis === g));
+  assert.ok(boerderijen.length > 0);
+  assert.equal(kippen.length, boerderijen.length * K.perBoerderij);
+  for (const k of kippen) {
+    assert.ok(/^kip[0-3]$/.test(k.naam) && ['lopen', 'pikken', 'staan'].includes(k.houding));
+    assert.ok(!T.veldOp(w, Math.round(k.x), Math.round(k.y)), 'niet op een akker of weide');
+    const bij = boerderijen.some((g) => {
+      const deur = T.deurVan(w, g);
+      return Math.abs(k.x - deur.x) <= K.straal && Math.abs(k.y - deur.y) <= K.straal;
+    });
+    assert.ok(bij, 'bij de deur van een boerderij');
+  }
+  // dezelfde tijd, hetzelfde beeld; een tijd later lopen ze ergens anders
+  assert.deepEqual(T.kippenOp(D, w, 100), kippen);
+  assert.notDeepEqual(T.kippenOp(D, w, 140), kippen);
+  D.kalender.dag = opUur(40, 1);
+  assert.equal(T.kippenOp(D, w, 100).length, 0);
+});
+
+test('een hond hier en daar: bij een gezin met een baas op de kaart, uit het lot, en hij blaft naar een vreemde', () => {
+  const S = gehucht();
+  const D = S.dorp;
+  const w = S.wereld;
+  const kans = T.KLEIN_LEVEN_INSTELLINGEN.honden.kans;
+  T.KLEIN_LEVEN_INSTELLINGEN.honden.kans = 1;
+  try {
+    const alle = T.hondenVan(D, w);
+    const gezinnen = new Set(D.bewoners.mensen.filter((p) => p.wezen && !p.schout).map((p) => p.gezin));
+    assert.ok(alle.length > 0 && alle.length <= gezinnen.size);
+    for (const h of alle) {
+      assert.ok(/^hond[0-2]$/.test(h.naam) && w.wezens.includes(h.baas));
+      assert.ok(!h.baas.schout && h.baas !== S.schout);
+    }
+  } finally {
+    T.KLEIN_LEVEN_INSTELLINGEN.honden.kans = kans;
+  }
+  const sommige = T.hondenVan(D, w);
+  assert.ok(sommige.length < new Set(D.bewoners.mensen.map((p) => p.gezin)).size, 'niet elk gezin');
+  assert.deepEqual(T.hondenVan(D, w).map((h) => h.gezin), sommige.map((h) => h.gezin));
+  // een vreemde: de marskramer naast de hond
+  const e = D.bewoners.mensen.find((p) => p.wezen).wezen;
+  assert.equal(T.vreemdeBij(w, e.x, e.y, 5), null);
+  const vreemde = { x: e.x + 2, y: e.y, wie: 'marskramer' };
+  w.wezens.push(vreemde);
+  assert.equal(T.vreemdeBij(w, e.x, e.y, 5), vreemde);
+  w.wezens.pop();
+  T.zetOptie('kleinLeven', 'uit');
+  try {
+    assert.equal(T.hondenVan(D, w).length, 0);
+    assert.equal(T.kippenOp(D, w, 100).length, 0);
+  } finally {
+    T.zetOptie('kleinLeven', 'aan');
+  }
+});
