@@ -981,3 +981,26 @@ niets past, wijkt de zwakke grond voor strand (naast de zee) of gras. Golven die
 
 - **Bewegende omgeving:** vlammen, water, en de stofjes in de zonnebundel. De wind staat hierboven.
 - **Portretten** van dorpelingen voor de gesprekken. (De effecten van spreuken zijn er sinds 21 sep 2026, zie `spreuken.md`.)
+- **De huizen naar Marcels voorbeelden (9 okt 2026; werklijst, bij vraag 144).** Marcel: "De huizen voelen op dit moment
+  nog niet fantastisch", met acht voorbeelden (platen "Medieval Buildings" en "Isometric Medieval Village", een dorp in de
+  stijl van Stronghold, en vier losse vakwerkhuizen; met AI gemaakt of van een stockbureau, dus alleen als voorbeeld en
+  niet in git). Wat ze delen, en wat we eruit nemen:
+  1. **Een silhouet met karakter:** hoog en smal, twee lagen met een overstek, een steil dak dat de helft van het huis
+     is, meer gevels en dakkapellen, een afdakje boven de deur, een buitentrap of balkon, een of twee schoorstenen.
+  2. **Niets is recht:** een nok die doorzakt, dakranden die krullen en golven, grove pannen die elk anders liggen,
+     balken die niet recht zijn.
+  3. **Verweerd materiaal:** gevlekt pleister met de steen erdoor, mos op het dak, riet dat grijsbruin is en niet geel,
+     oud hout; een stenen voet onder het vakwerk.
+  4. **Diepte in het licht:** diepe schaduw onder het dak en het overstek, donker in de hoeken, en het huis staat
+     zwaar op de grond.
+  5. **Een eigen stukje grond met spullen:** keien of vertrapte aarde voor de deur, gras en struiken tegen de voet,
+     tonnen, kratten, een bankje, potten, een houtstapel, een karrenwiel, een lantaarn.
+  6. **Aardse kleuren:** room, bruin, terracotta, grijze steen en dof groen, niets fel.
+  **Wat Claude zag:** veel hiervan kan de huizenbouwer al (`huis-sdf.cjs`: `scheef`, het pak riet, twee lagen die
+  overkragen, dakkapellen, een aanbouw, een erker, een balkon, een buitentrap, een gevelschoorsteen, een schoor; en dit
+  bestand zei het al op 20 en 21 sep: "Niets is waterpas", "Het dak is het gebouw", "Dingen die uitsteken"), maar de
+  huizen van het spel gebruiken het zuinig (`HUIZEN` in `huizen.cjs`: bijna alles één laag, en `uit` meestal één ding
+  of niets). Wat er nog niet is: het verweren (vlekken, mos, steen door het pleister), dakranden die krullen, het
+  afdakje boven de deur, de schaduw in de hoeken, en het stukje grond met spullen bij het huis. **Voorstel:** één
+  vakwerkhuis van twee lagen met alle zes, als proefplaat; dan pas de regels voor alle tekeningen, in één ronde met de
+  bouwfasen, de brandfasen en de sneeuw. Open: sprookjesachtig of sober (de voorbeelden hebben allebei).
