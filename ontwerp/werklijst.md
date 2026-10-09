@@ -7129,6 +7129,10 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     veldsteen, oud hout, en om elk huis een eigen stuk grond (keien, vertrapte aarde, gras, een karrenwiel, kratten,
     tonnen, een houtstapel); en een stuk van een dorp met een burcht in de stijl van Stronghold: aardse kleuren, niet fel,
     vakwerk, luifels, bloembakken, en een duidelijke schaduw.
+    **En vier losse huizen (9 okt, AI en stockplaatjes, alleen als voorbeeld):** vakwerk van twee lagen op een stenen voet,
+    met meer gevels en dakkapellen, een nok en dakranden die doorzakken en krullen, grove pannen die elk anders liggen,
+    een afdakje boven de deur, een trap en een balkon, twee schoorstenen, en elk huis op een eigen stukje grond (keien met
+    een rand, gras, tonnen, een bankje, potten en struiken).
 
 145. **Het dorp leeft** (Marcel, 9 okt, na het spelen: "het voelt gewoon wat 'saai' in het dorp"). Claude zag op de
     eerste dag: iedereen is een kloon (één poppetje per leeftijd en geslacht: vier dezelfde meisjes op één scherm), de
