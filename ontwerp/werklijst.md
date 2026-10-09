@@ -7142,7 +7142,21 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     als schout heb je in het begin weinig te doen. Voorstel, van veel effect voor weinig werk: 1. elk mens ziet er anders
     uit, 2. geluid, 3. klein leven, 4. het eerste uur iets te doen, 5. de huizen met de "wow". **Marcel (9 okt): "laten we
     beginnen met 1 tot 3; daarna praten we verder."**
-    **Bezig in sessie `ccr-77327776-rqjldz`** (9 okt): vraag 145, eerst het plan.
+    **Plan van Claude (9 okt):** 1. elk mens krijgt uit zijn zaad een uiterlijk (de kleur van zijn kleren, zijn haar, een
+    hoofddeksel), het gezin lijkt op elkaar (de kinderen het haar van een ouder), en aan het werk draagt hij dezelfde
+    kleren; acht uiterlijken per leeftijd en geslacht, eerst een proefplaat. 2. geluid dat aan zijn plek hangt (harder bij
+    de schout) en met de tijd meegaat (vogels op een lenteochtend, krekels in een zomernacht, wind in de winter,
+    geroezemoes bij de herberg), met een spelregel voor het volume; vanuit de cloud kan Claude geen geluiden halen
+    (freesound.org, opengameart.org, kenney.nl, pixabay.com en sonniss.com zijn dicht), dus A: echte opnames, of B: in
+    code. 3. klein leven, alleen beeld: rook uit de schoorsteen als er iemand thuis is, kippen bij de boerderijen, een
+    hond die meeloopt en blaft naar vreemden, kinderen die spelen, was aan de lijn.
+    **Marcel (9 okt): "1. Kleren, haar, niet iedereen heeft een hoofddeksel. Ook verschillende gezichten, baard etc. Lang
+    haar, kort haar mannen en vrouwen. Schoenen eventueel. 2. Echte opnames, vertel me wat ik moet doen stap voor stap. 3.
+    Ja, dat zijn kleine details die het echt levend maken."** Dus: 1 met gezichten, baarden, lang en kort haar bij mannen
+    en vrouwen, en schoenen; 2 echte opnames (CC0, of CC-BY met de namen in de aftiteling; nooit "niet commercieel"), via
+    een sleutel van freesound in de omgeving (`FREESOUND_KEY`) en de sites open in het netwerk, in een nieuwe sessie; 3
+    alle vijf.
+    **Bezig in sessie `ccr-77327776-rqjldz`** (9 okt): vraag 145, 1 en 3.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
