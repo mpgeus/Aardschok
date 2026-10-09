@@ -344,6 +344,10 @@ const FIGUURLIJST = {
   hert1: { map: ['wild', 'animaties'], houdingen: ['grazen', 'staan', 'lopen', 'rennen', 'liggen'], bron: 'wild-anim.cjs hert1' },
   hert2: { map: ['wild', 'animaties'], houdingen: ['grazen', 'staan', 'lopen', 'rennen', 'liggen'], bron: 'wild-anim.cjs hert2' },
 };
+// Het kleine leven (vraag 145, 3; klein-anim.cjs): de kippen en de honden, alleen beeld (js/kleinleven.js).
+for (const f of require('./klein-anim.cjs').FIGUREN) {
+  FIGUURLIJST[f.naam] = { map: ['klein', 'animaties'], houdingen: Object.keys(f.houdingen), bron: `klein-anim.cjs ${f.naam}` };
+}
 // De uiterlijken (vraag 145; uiterlijk-anim.cjs): boer-u7, zaaier-u7, ... Wie nog niet gerenderd is, slaat een volledige
 // ronde over (uiterlijk: true); het spel draagt dan het gewone vel.
 for (const f of UA.uiterlijkFiguren()) {

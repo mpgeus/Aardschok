@@ -7196,6 +7196,15 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     alle uiterlijken renderen op de achtergrond (`uiterlijk-anim.cjs`, zo'n drie uur), daarna `naar-spel.cjs --uiterlijken`.
     **Marcel (9 okt): "vergeet ook niet het water wat mag bewegen 'stromen' etc"**: bij 3 erbij, als zesde: beken die
     stromen (rimpels en glinsters die met de stroom meegaan) en vijvers en meren die glinsteren.
+    **Gebouwd (9 okt):** het water stroomt en glinstert, kinderen spelen tikkertje (niet op een akker, niet in de regen),
+    en de kip en de hond als tekening (`gereedschap/pixelart/klein.cjs`). Claude vroeg of de honden steviger moesten
+    (ze lijken op de wolf) en hoeveel er komen. **Marcel (9 okt): "1. Ja die zijn goed voor nu. 2. her en der 1 bij een
+    huis."** Dus: de honden zoals ze zijn, en een hond bij een deel van de huizen, niet bij elk.
+    **Gebouwd (9 okt):** de kippen en de honden in het spel, alleen beeld (`T.kippenOp` en `T.hondenVan` in
+    `js/kleinleven.js`, getekend in `kleinLevenInLijst` in `js/tekenen.js`): vier kippen op het erf van elke boerderij
+    waar iemand woont (soms een haan), die scharrelen en pikken en 's nachts binnen zijn, en een hond bij 30% van de
+    gezinnen, die zijn baas volgt, bij de deur ligt als die binnen is, en blaft naar een vreemde (de marskramer, een
+    rover, een wolf). Nog te doen bij 3: de was aan de lijn.
     **Bezig in sessie `ccr-77327776-rqjldz`** (9 okt): vraag 145, 1 en 3.
 
 146. **Een fatsoenlijke ui** (Marcel, 9 okt: "Ik denk dat het nu ook tijd is om een fatsoenlijke UI te maken; nu is het

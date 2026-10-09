@@ -593,6 +593,7 @@
       lijst.push({ d: e.x + e.y, l: e.dood ? 1.5 : 2, punt: { x: e.tx, y: e.ty }, f: () => tekenWezen(ctx, S, e) });
       if (e === aanDePaal) lijst.push({ d: e.x + e.y, l: 2.5, punt: { x: e.tx, y: e.ty }, f: () => tekenHalsijzer(ctx, e) });
     }
+    kleinLevenInLijst(ctx, S, w, D, vak, lijst);
     heuvelsErvoor(ctx, S, vak, lijst, g); // een heuvel voor iemand dekt hem af (js/hoogte.js; vraag 121, stap 2)
     // Ramen die branden: meteen na hun gebouw gaat er een gat in het doek waar ze zitten, dat na de
     // nacht licht wordt (brandendeRamen, hieronder).
@@ -2953,6 +2954,83 @@
       y: d ? e.y + (d.y - 0.5 - e.y) * erin : e.y,
       alpha: 1 - erin,
     };
+  }
+
+  // Het kleine leven (vraag 145, 3; js/kleinleven.js): de kippen op het erf van een boerderij en de honden bij hun baas,
+  // in de tekenlijst zoals een wezen. Alleen beeld: waar ze zijn, komt uit de tijd en het lot (de kippen), of loopt hier
+  // achter de baas aan (de honden, in `honden`, niet in Spel.S: na het laden staat een hond weer naast zijn baas).
+  const honden = new WeakMap();
+  let hondenTijd = 0;
+  function kleinLevenInLijst(ctx, S, w, D, vak, lijst) {
+    if (!D || !metSprites() || !w.buiten) return;
+    for (const k of T.kippenOp(D, w, S.wereldTijd)) {
+      const tx = Math.round(k.x);
+      const ty = Math.round(k.y);
+      if (!inVak(vak, tx, ty) || !T.isZichtbaar(w, tx, ty)) continue;
+      const f = T.sprites.figuurGegevens(k.naam);
+      const h = f && f.houdingen[k.houding];
+      if (!h) continue;
+      const fase = k.houding === 'lopen' ? k.afgelegd / (2 * (h.stap || 0.3)) : (k.tijd * h.fps) / h.beelden;
+      const deel = T.sprites.figuur(k.naam, k.houding, T.sprites.richtingVan(k.dx, k.dy), fase);
+      if (deel) lijst.push({ d: k.x + k.y, l: 2, punt: { x: tx, y: ty }, f: () => tekenKlein(ctx, deel, k.x, k.y, 5) });
+    }
+    // De honden: een stap achter hun baas aan, op de klok van de wereld; is de baas binnen, dan ligt de hond bij de deur.
+    const H = T.KLEIN_LEVEN_INSTELLINGEN.honden;
+    const dt = Math.max(0, Math.min(0.25, S.wereldTijd - hondenTijd));
+    hondenTijd = S.wereldTijd;
+    for (const hd of T.hondenVan(D, w)) {
+      const e = hd.baas;
+      const deur = e.binnen && hd.huis ? T.deurVan(w, hd.huis) : null;
+      const doel = deur ? { x: deur.x + 0.6, y: deur.y + 0.4 } : { x: e.x, y: e.y };
+      let st = honden.get(e);
+      if (!st || Math.hypot(st.x - doel.x, st.y - doel.y) > 10) {
+        // Hij begint naast zijn baas (niet onder hem), aan een kant uit het lot van het gezin.
+        const a = T.vastLot(D, hd.gezin, 5303) * Math.PI * 2;
+        const r = deur ? 0 : H.achter;
+        honden.set(e, (st = { x: doel.x + Math.cos(a) * r, y: doel.y + Math.sin(a) * r, afgelegd: 0, dx: -Math.cos(a), dy: -Math.sin(a), tijd: 0 }));
+      }
+      const afstand = Math.hypot(doel.x - st.x, doel.y - st.y);
+      const blijf = deur ? 0 : H.achter;
+      const vreemde = !deur && T.vreemdeBij(w, st.x, st.y, H.blaffen);
+      let houding = 'staan';
+      if (vreemde) {
+        houding = 'blaffen';
+        st.dx = vreemde.x - st.x;
+        st.dy = vreemde.y - st.y;
+      } else if (afstand > blijf + 0.15) {
+        // Hoe verder achter, hoe harder hij loopt, tot hij een draf heeft.
+        const v = Math.min(3.5, 1 + (afstand - blijf) * 1.8);
+        const stap = Math.min(afstand - blijf, v * dt);
+        st.dx = (doel.x - st.x) / afstand;
+        st.dy = (doel.y - st.y) / afstand;
+        st.x += st.dx * stap;
+        st.y += st.dy * stap;
+        st.afgelegd += stap;
+        houding = 'lopen';
+      }
+      if (houding !== st.houding) st.tijd = 0;
+      st.houding = houding;
+      st.tijd += dt;
+      const tx = Math.round(st.x);
+      const ty = Math.round(st.y);
+      if (!inVak(vak, tx, ty) || !T.isZichtbaar(w, tx, ty)) continue;
+      const f = T.sprites.figuurGegevens(hd.naam);
+      const h = f && f.houdingen[houding];
+      if (!h) continue;
+      const fase = houding === 'lopen' ? st.afgelegd / (2 * (h.stap || 1)) : (st.tijd * h.fps) / h.beelden;
+      const deel = T.sprites.figuur(hd.naam, houding, T.sprites.richtingVan(st.dx, st.dy), fase);
+      const x = st.x;
+      const y = st.y;
+      if (deel) lijst.push({ d: x + y, l: 2, punt: { x: tx, y: ty }, f: () => tekenKlein(ctx, deel, x, y, 10) });
+    }
+  }
+  function tekenKlein(ctx, deel, x, y, schaduw) {
+    const p = opGrond(x, y);
+    ctx.fillStyle = 'rgba(0,0,0,0.28)';
+    ctx.beginPath();
+    ctx.ellipse(p.x, p.y, schaduw, schaduw / 2, 0, 0, Math.PI * 2);
+    ctx.fill();
+    T.sprites.teken(ctx, deel, p.x, p.y);
   }
 
   T.tekenWezen = tekenWezen; // ook voor het kijkgat (js/doorkijk.js)
