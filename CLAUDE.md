@@ -539,7 +539,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   en sneeuw als vlakjes over het beeld op de klok van het scherm (`tekenNeerslag`), en de droge beek als zandpad in de
   grond (`T.hoekenDroog`, zoals een paadje) met barsten en keien (`tekenDrogeBeek`). Op een natte dag zaait niemand
   (`nietInDeRegen` in `T.VELDEN_INSTELLINGEN`, js/akkers.js: `w.zaaienNaRegen`, en het veldwerk), en na een droog jaar
-  (`D.weer.vorigJaar`) neemt de marskramer in de lente meer zaaigraan mee (`naDroogte` in js/handel.js). Het weer van vandaag staat bij de
+  (`D.weer.vorigJaar`) neemt de marskramer in de lente meer zaaigraan mee (`naDroogte` in js/handel.js). Sneeuw blijft
+  liggen (`D.weer.sneeuw`, 0 tot 1, `sneeuwLaag`), en `js/tekenen.js` legt hem per tegel op de grond, de weides en de kale
+  akkers (`tekenSneeuwOp`, in de buffer van de grond: plukjes die dichter worden, `sneeuwDrempel` en `sneeuwRuis`). Het weer van vandaag staat bij de
   datum (`T.ui.toonKalender`). De spelregel "Het weer" (met droogte, zonder, of altijd zon); de getallen in
   `T.WEER_INSTELLINGEN`.
 - `js/bode.js`: **de bode naar de marskramer** (vraag 143, 9 okt; Marcel: "soort van brief sturen met een bode", en "1.
@@ -1249,7 +1251,7 @@ weg als je al gewaarschuwd was. De oude toetsen van de heer en het verstoppen sp
 (`T.zetOptie('tweeBazen', 'uit')`); die van de twee bazen staan in `test/bazen.test.cjs`.
 `Spel.debug.weer()` zegt het weer van vandaag, hoe lang het droog is, het watertekort, de droogte en wat die de oogst
 kost, hoe nat het jaar is, de beekjes en per visser hoeveel van zijn water er is; `('regen')` zet het weer van vandaag
-(`'zon'`, `'wolken'`, `'regen'`, `'sneeuw'`), `('droogte')` maakt het nu droog, `('ernstig')` ernstig droog, `('nat')` maakt
+(`'zon'`, `'wolken'`, `'regen'`, `'sneeuw'`; `('sneeuw', 0.3)` met zoveel sneeuw op de grond), `('droogte')` maakt het nu droog, `('ernstig')` ernstig droog, `('nat')` maakt
 er een eind aan.
 `Spel.debug.bode()` zegt of je nu een bode kunt sturen en waarom niet, wie er onderweg is en wanneer de marskramer komt,
 het gevaar onderweg, wie hem onderschept en hoe het afloopt, en wat hij op bestelling bij zich heeft; `('stuur', { graan:

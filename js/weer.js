@@ -40,6 +40,9 @@
     // Wat een dag droogte de oogst van dat jaar kost (een deel ervan), en hoeveel hooguit.
     verliesPerDag: { droogte: 0.01, ernstig: 0.02 },
     verliesHooguit: 0.5,
+    // Sneeuw op de grond (vraag 144, 4; Marcel, 9 okt: "Ja beiden goed"): een dag sneeuw legt er zoveel bij (1 is helemaal
+    // wit), en elke dag zonder smelt er zoveel weg: in de winter weinig, daarbuiten snel.
+    sneeuwLaag: { erbij: 0.35, smeltWinter: 0.05, smelt: 0.4 },
     // Een stuk water is een beekje (of een vijver) als het nergens zoveel tegels breed is (T.isBeek): de beek met het
     // bruggetje in het gehucht valt droog, een meer, een brede rivier en de zee niet.
     meerBreed: 7,
@@ -117,6 +120,9 @@
     W.dag = dag;
     W.vandaag = valt ? (datum.seizoen === 'winter' ? 'sneeuw' : 'regen') : lot(zaad, dag, 2) < IN().wolkenKans ? 'wolken' : 'zon';
     W.droog = valt ? 0 : (W.droog || 0) + 1;
+    // Hoeveel sneeuw er ligt (js/tekenen.js legt hem op de grond).
+    const L = IN().sneeuwLaag;
+    W.sneeuw = W.vandaag === 'sneeuw' ? Math.min(1, (W.sneeuw || 0) + L.erbij) : Math.max(0, (W.sneeuw || 0) - (datum.seizoen === 'winter' ? L.smeltWinter : L.smelt));
     // Op 1 lentemaand begint het jaar van de akkers opnieuw: wat de droogte vorig jaar kostte, telt niet meer.
     // Een nieuw jaar: wat de droogte vorig jaar nam, onthoudt het dorp (de marskramer neemt dan meer zaaigraan mee,
     // js/handel.js).

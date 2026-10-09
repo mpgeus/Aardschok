@@ -1609,13 +1609,14 @@
     // droogte en wat die de oogst kost, de beekjes en de vissers. Spel.debug.weer('regen') zet het weer van vandaag
     // ('zon', 'wolken', 'regen' of 'sneeuw'), ('droogte') maakt het nu droog, ('ernstig') ernstig droog, ('nat') maakt er
     // een eind aan.
-    weer(wat) {
+    weer(wat, laag) {
       const D = S.dorp;
       if (!T.WEER_INSTELLINGEN.aan) return 'De spelregel "Het weer" staat op "Altijd zon".';
       if (!D.weer) T.tikWeerDag(D, Math.floor(S.kalender.dag));
       const W = D.weer;
       const I = T.WEER_INSTELLINGEN;
       if (T.WEER_NAMEN[wat]) W.vandaag = wat;
+      if (wat === 'sneeuw') W.sneeuw = Math.max(W.sneeuw || 0, typeof laag === 'number' ? laag : 0.8);
       if (wat === 'droogte' || wat === 'ernstig' || wat === 'nat') {
         W.tekort = wat === 'droogte' ? I.droogteVanaf : wat === 'ernstig' ? I.ernstigVanaf : 0;
         W.droog = wat === 'nat' ? 0 : Math.max(W.droog, W.tekort);
@@ -1629,6 +1630,7 @@
         droogte: ['geen', 'droogte', 'ernstige droogte'][T.droogteNiveau(D)], oogst: `${Math.round((1 - T.droogteFactor(D)) * 100)}% minder dit jaar`,
         nat: `dit jaar ${Math.round(T.natVanJaar(D, Math.floor(S.kalender.dag)) * 100)}% van de gewone regen`,
         beekjes: `${T.beekTegels(D.wereld).length} tegels${W.beekDroog ? ', droog' : ''}`,
+        sneeuw: `${Math.round((W.sneeuw || 0) * 100)}% van de grond wit`,
         vissers: D.gebouwen.filter((g) => g.soort === 'visser').map((g) => `${g.x},${g.y}: ${Math.round(T.visserWater(D, g) * 100)}% van zijn water`),
       };
     },

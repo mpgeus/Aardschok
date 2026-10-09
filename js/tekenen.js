@@ -149,7 +149,7 @@
     // De droge beekjes (js/weer.js) liggen in de grond: vallen ze droog of komen ze terug, dan opnieuw.
     const D = T.dorpHier(S);
     const beek = D && D.weer && D.weer.beekDroog ? 1 : 0;
-    return `${w.gebied}|${w.huidigeKamer}|${w.bekend.size}|${g}|${metSprites() ? 1 : 0}|${Math.round(S.zoom * 100)}|${padVersie(S)}|${platVan(w).versie}|${beek}`;
+    return `${w.gebied}|${w.huidigeKamer}|${w.bekend.size}|${g}|${metSprites() ? 1 : 0}|${Math.round(S.zoom * 100)}|${padVersie(S)}|${platVan(w).versie}|${beek}|${sneeuwStap(S)}`;
   }
 
   // Wat plat op de grond groeit (een graspol, bloemen, een varen, paddenstoelen, een kleine steen, een rij kool; vraag
@@ -435,7 +435,11 @@
               lijst.push({ d: x + y, l: 2.5, punt: { x, y }, zonderSchaduw: true, f: () => tekenGraan(ctx, w, voor, x, y, p) });
             } else {
               const deel = T.sprites.graanTegel(stadium, variant);
-              lijst.push({ d: x + y, l: 1, punt: { x, y }, zonderSchaduw: true, f: () => tekenGraan(ctx, w, deel, x, y, p) });
+              const sneeuw = sneeuwLaag(S); // op een kale akker blijft de sneeuw liggen
+              lijst.push({ d: x + y, l: 1, punt: { x, y }, zonderSchaduw: true, f: () => {
+                tekenGraan(ctx, w, deel, x, y, p);
+                if (sneeuw) tekenSneeuwOp(ctx, w, x, y, sneeuw, null);
+              } });
             }
           }
         }
@@ -750,6 +754,96 @@
     ctx.restore();
   }
 
+  // Sneeuw op de grond (js/weer.js, D.weer.sneeuw; vraag 144, 4): per tegel, op het vlak van de tegel, een sneeuwlaag uit
+  // blokjes van twee pixels, die dichter wordt naarmate er meer ligt: eerst plukjes, dan helemaal wit. Elk blokje heeft
+  // een vaste drempel (sneeuwDrempel: zachte ruis die over de tegel heen doorloopt, plus wat toeval), dus elk niveau bevat
+  // het vorige, en tegels met een ander niveau lopen in elkaar over. Hoeveel er op een tegel ligt, verloopt zacht over
+  // het land (sneeuwRuis); op een paadje minder, en op water niets.
+  const SNEEUW_STAPPEN = 16;
+  const sneeuwTegels = [];
+  // De ruis is periodiek over de tegel (in tegelcoördinaten u, v van 0 tot 1, op een rooster van vier), zodat hij aan de
+  // rand van de ene tegel verdergaat in de volgende.
+  function sneeuwDrempel(x, y) {
+    const sx = (x + 1 - 32) / 32;
+    const sy = (y + 1 - 16) / 16;
+    const u = (((sx + sy) / 2 + 0.5) % 1 + 1) % 1;
+    const v = (((sy - sx) / 2 + 0.5) % 1 + 1) % 1;
+    const N = 4;
+    const gu = Math.floor(u * N);
+    const gv = Math.floor(v * N);
+    const fu = u * N - gu;
+    const fv = v * N - gv;
+    const zacht = (t) => t * t * (3 - 2 * t);
+    const r = (a, b) => beeldLot(((a % N) + N) % N + 101, ((b % N) + N) % N + 211);
+    const boven = r(gu, gv) + (r(gu + 1, gv) - r(gu, gv)) * zacht(fu);
+    const onder = r(gu, gv + 1) + (r(gu + 1, gv + 1) - r(gu, gv + 1)) * zacht(fu);
+    const ruis = boven + (onder - boven) * zacht(fv);
+    return 0.62 * ruis + 0.38 * beeldLot(x >> 1, (y >> 1) + 57);
+  }
+  function sneeuwTegel(stap) {
+    if (sneeuwTegels[stap]) return sneeuwTegels[stap];
+    const c = document.createElement('canvas');
+    c.width = 64;
+    c.height = 32;
+    const k = c.getContext('2d');
+    const beeld = k.createImageData(64, 32);
+    for (let y = 0; y < 32; y++) {
+      for (let x = 0; x < 64; x++) {
+        if (Math.abs(x + 0.5 - 32) / 32 + Math.abs(y + 0.5 - 16) / 16 > 1) continue;
+        const bx = x >> 1;
+        const by = y >> 1;
+        if (sneeuwDrempel(bx << 1, by << 1) * SNEEUW_STAPPEN >= stap) continue;
+        // twee tinten wit, en hier en daar een blauwige schaduw, op vaste plekken
+        const schaduw = beeldLot(bx * 3 + (by % 7), by * 5 + (bx % 5)) < 0.18;
+        const i = (y * 64 + x) * 4;
+        beeld.data[i] = schaduw ? 214 : 240;
+        beeld.data[i + 1] = schaduw ? 224 : 244;
+        beeld.data[i + 2] = schaduw ? 238 : 250;
+        beeld.data[i + 3] = 255;
+      }
+    }
+    k.putImageData(beeld, 0, 0);
+    c.versie = 1; // eens getekend, blijft hij zo (js/gl.js)
+    return (sneeuwTegels[stap] = c);
+  }
+  // Hoeveel sneeuw er hier ligt, van 0 tot 1, of 0 zonder dorp of weer.
+  function sneeuwLaag(S) {
+    const D = T.dorpHier(S);
+    return (D && D.weer && T.WEER_INSTELLINGEN.aan && D.weer.sneeuw) || 0;
+  }
+  const sneeuwStap = (S) => Math.round(sneeuwLaag(S) * SNEEUW_STAPPEN);
+  // Zacht verlopend over het land: waar de wind hem neerlegt en waar niet (waardenruis over vakken van zes tegels).
+  function sneeuwRuis(x, y) {
+    const gx = Math.floor(x / 6);
+    const gy = Math.floor(y / 6);
+    const fx = x / 6 - gx;
+    const fy = y / 6 - gy;
+    const r = (a, b) => beeldLot(a * 13 + 7, b * 29 + 3);
+    const boven = r(gx, gy) * (1 - fx) + r(gx + 1, gy) * fx;
+    const onder = r(gx, gy + 1) * (1 - fx) + r(gx + 1, gy + 1) * fx;
+    return boven * (1 - fy) + onder * fy;
+  }
+  // De sneeuw op één tegel (vanuit tekenVloeren en tekenBuitenGrond): `hoeken` zijn de soorten op zijn vier hoeken.
+  function tekenSneeuwOp(c, w, x, y, laag, hoeken) {
+    if (laag <= 0 || !metSprites()) return;
+    const water = hoeken ? hoeken.filter((h) => T.isWaterGrond(h)).length : 0;
+    if (water >= 2) return;
+    const pad = hoeken ? hoeken.filter((h) => h === 'zandpad').length / 4 : 0;
+    const dek = Math.max(0, Math.min(1, laag * 1.15 + (sneeuwRuis(x, y) - 0.5) * 0.6)) * (1 - 0.45 * pad) * (water ? 0.6 : 1);
+    const stap = Math.round(dek * SNEEUW_STAPPEN);
+    if (stap <= 0) return;
+    const tegel = sneeuwTegel(stap);
+    if (T.heeftHoogte(w)) {
+      c.save();
+      opTegelVlak(c, w, x, y);
+      c.drawImage(tegel, -32, -16);
+      c.restore();
+    } else {
+      const m = T.naarScherm(x, y);
+      c.drawImage(tegel, Math.round(m.x) - 32, Math.round(m.y) - 16);
+    }
+  }
+
   // De droge beekjes (js/weer.js, T.staatDroog; Marcel, 9 okt: "Ja kleine beekjes ook"): de bedding zelf is zandpad
   // (T.hoekenDroog, in tekenVloeren), en hier komen er barsten en keien op, in de buffer van de grond, zodat je ziet dat
   // het een droge beek is en geen pad.
@@ -909,6 +1003,7 @@
     if (!weides.length) return;
     const sp = metSprites();
     const paden = zandVan(S);
+    const sneeuw = sneeuwLaag(S);
     const opWeide = (x, y) => weides.some((v) => x >= v.x && x < v.x + v.b && y >= v.y && y < v.y + v.h);
     const HOEK = [[0, 0], [1, 0], [1, 1], [0, 1]]; // noord, oost, zuid, west, vanaf (x, y)
     const gehad = new Set();
@@ -945,6 +1040,7 @@
           // gewoon gras, en daarbuiten blijft hij zoals de kaart hem legde.
           if (!deel && zelf) deel = T.sprites.grasTegel(x, y);
           if (deel) T.sprites.teken(ctx, deel, p.x, p.y, 1);
+          if (deel && sneeuw) tekenSneeuwOp(ctx, w, x, y, sneeuw, null); // ook op de weide (de grond eronder heeft hem al)
         }
       }
     }
@@ -1159,6 +1255,7 @@
     if (!metSprites() || !w.grond) return;
     const vel = (w.grond[0] && w.grond[0][0] && w.grond[0][0].vel) || 'rand';
     const zaad = bosrandZaad(w) + 7;
+    const sneeuw = sneeuwLaag(S);
     const vak = tegelsIn(w, { x0: g.vx, y0: g.vy, x1: g.vx + g.b, y1: g.vy + g.h }, BUITENGROND_DIEP);
     for (let y = vak.y0; y <= vak.y1; y++) {
       for (let x = vak.x0; x <= vak.x1; x++) {
@@ -1178,6 +1275,7 @@
         // het landschap loopt door buiten de kaart (vraag 121)
         if (T.heeftHoogte(w)) tekenGrondMetLicht(c, w, gedimd, x, y);
         else T.sprites.teken(c, gedimd, p.x, p.y, 1);
+        tekenSneeuwOp(c, w, x, y, sneeuw, hoeken);
       }
     }
   }
@@ -1189,6 +1287,7 @@
     const paden = buiten ? zandVan(S) : null;
     const droog = paden && paden.D.weer && paden.D.weer.beekDroog ? paden.D : null;
     const hoog = T.heeftHoogte(w);
+    const sneeuw = buiten ? sneeuwLaag(S) : 0;
     for (const [x, y] of tegelVolgorde(vak, hoog)) {
       {
         const t = T.tegel(w, x, y);
@@ -1231,6 +1330,7 @@
             tekenGrondMetLicht(ctx, w, deel, x, y);
             tekenWanden(ctx, w, x, y);
           } else T.sprites.teken(ctx, deel, p.x, p.y, helder);
+          if (sneeuw && g) tekenSneeuwOp(ctx, w, x, y, sneeuw, metPad || T.sprites.grondHoeken(g.vel, g.id) || (g.naam ? [g.naam, g.naam, g.naam, g.naam] : null));
           if (dof < 1) ctx.globalAlpha = 1;
           continue;
         }

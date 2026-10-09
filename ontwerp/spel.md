@@ -588,7 +588,11 @@ put schoonmaken (minder dan de helft zo vaak), bier in plaats van water, of bidd
 keer sterft er iemand, de ouden en de kinderen vaker; wie het had, krijgt het deze keer niet weer. Zolang er iemand ziek
 is, is het de status Koorts, en Epidemie als een tiende van het dorp ziek is. De spelregels "Brand" en "Koorts".
 
-**Open** (vraag 144; Marcel, 9 okt: "Ja heel goed, dit moeten we pakken"): sneeuw op de grond en daarna op de daken. En
+Sneeuw blijft liggen: elke sneeuwdag legt er een derde bij, in de winter smelt er elke dag een twintigste af, en
+daarbuiten snel. Op de grond, de weides en de kale akkers ligt hij eerst in plukjes, en daarna helemaal wit; op een paadje
+minder, en op water niet.
+
+**Open** (vraag 144; Marcel, 9 okt: "Ja heel goed, dit moeten we pakken"): sneeuw op de daken. En
 wat Claude erbij zag: een brand die overslaat op het huis ernaast (bij groot brandgevaar), staat in `opmerkingen.md`.
 
 ## De bode naar de marskramer (Marcel, 9 okt 2026; werklijst vraag 143)

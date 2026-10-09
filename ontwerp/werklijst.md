@@ -7074,7 +7074,7 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     **Gebouwd (9 okt):** 1. op een natte dag zaait niemand (de eerste droge dag, zonder verlies); 2. na een droog jaar
     neemt de marskramer in de lente meer zaaigraan mee (`spel.md`, "Het weer"); 3. de koorts als status (Koorts en
     Epidemie, die rondgaat) en de brand: brandgevaar in de droogte, een huis dat echt brandt (vuur, rook, licht), een
-    zwarte ruïne, en het gezin dat het weer opbouwt.
+    zwarte ruïne, en het gezin dat het weer opbouwt; 4a. sneeuw die blijft liggen, op de grond.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

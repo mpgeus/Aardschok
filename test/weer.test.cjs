@@ -252,3 +252,31 @@ test('na een droog jaar neemt de marskramer in de lente meer zaaigraan mee', () 
   T.marskramerKomt(D, 1, dagVan('hooimaand', 5, 1));
   assert.equal(D.marskramer.heeft.graan, 0);
 });
+
+test('sneeuw blijft liggen: elke sneeuwdag meer, in de winter smelt hij langzaam, daarna snel', () => {
+  const IN = T.WEER_INSTELLINGEN; // vers: T.optiesTerug in een toets hierboven zette nieuwe blokken neer
+  const L = IN.sneeuwLaag;
+  const D = { lot: { zaad: 4 }, wereld: {}, weer: { vandaag: 'sneeuw', droog: 0, tekort: 0, verlies: 0 } };
+  const regen = IN.regenKans;
+  IN.regenKans = { lente: 0, zomer: 0, herfst: 0, winter: 1 };
+  const nat = IN.blijftNat;
+  IN.blijftNat = 1;
+  try {
+    const winter = dagVan('louwmaand', 2);
+    T.tikWeerDag(D, winter);
+    assert.equal(D.weer.vandaag, 'sneeuw');
+    assert.equal(D.weer.sneeuw, L.erbij);
+    T.tikWeerDag(D, winter + 1);
+    T.tikWeerDag(D, winter + 2);
+    assert.equal(D.weer.sneeuw, 1, 'hooguit helemaal wit');
+    IN.regenKans = { lente: 0, zomer: 0, herfst: 0, winter: 0 };
+    IN.blijftNat = 0;
+    T.tikWeerDag(D, winter + 3);
+    assert.ok(Math.abs(D.weer.sneeuw - (1 - L.smeltWinter)) < 1e-9, 'in de winter smelt hij langzaam');
+    T.tikWeerDag(D, dagVan('lentemaand', 1, 0));
+    assert.ok(Math.abs(D.weer.sneeuw - (1 - L.smeltWinter - L.smelt)) < 1e-9, 'daarna snel');
+  } finally {
+    IN.regenKans = regen;
+    IN.blijftNat = nat;
+  }
+});
