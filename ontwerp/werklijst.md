@@ -33,6 +33,7 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
 0. Een fatsoenlijke ui (vraag 146; Marcel, 9 okt: "nu is het echt een zooitje met al die menutjes met letters"): de
    plaat (a) is goed, elk venster is papier met leesbare letters (b1), en er is één manier van openen en sluiten (b2).
    **Nu c, de tafel, in een nieuwe sessie** (wat er moet, staat bij vraag 146), dan d en e.
+   **Bezig in sessie `main` (desktop)** (9 okt): vraag 146, c, de tafel onderin.
 1. Een proefversie voor Marcels 4K-scherm en een eerste tester (33d; `npm run proefversie`, ook `-- --windows`), met de
    graanzak erin. De laatste is van 3 okt (`36c713e`), zonder de verzoeken, de twee bazen, het ontginnen, de markt, de
    wolven, het eiland, WebGL en de graanzak.
