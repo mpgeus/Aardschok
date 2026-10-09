@@ -20,6 +20,11 @@
     // rimpels per tegel die met de stroom meegaan (snel: tegels per seconde), en stil water (een vijver, een meer)
     // glinstert hier en daar (glinster: hoeveel per tegel, en hoe vaak per seconde er een opkomt).
     water: { rimpels: 3, snel: 0.35, glinster: 0.5, knipper: 0.6 },
+    // Kinderen die spelen: een kind (of een kleuter) dat vrij is en een ander kind treft binnen `afstand` tegels, begint
+    // met deze kans een spelletje (bij elke stap van het dwalen), tot `groep` kinderen; ze rennen dan om elkaar heen,
+    // binnen `straal` tegels van waar het begon, `duur` uur (van, tot), en daarna `rust` uur niet weer. Niet in de regen,
+    // en niet op een akker of een weide.
+    spelen: { afstand: 4, kans: 0.25, groep: 5, straal: 2, duur: [0.4, 1.2], rust: 1.5 },
   };
   const IN = () => T.KLEIN_LEVEN_INSTELLINGEN;
 
@@ -58,6 +63,67 @@
     }
     k.tegels.set(sleutel, uit);
     return uit;
+  };
+
+  // ── Kinderen die spelen ──
+  // Wie in het spel staat, zegt het poppetje zelf, zoals bij een praatje (js/praatje.js): e.spel is het spelletje, een
+  // ding dat ze delen, met de plek waar het begon en tot wanneer (een dag van de kalender). Het staat in S.
+
+  // Kan dit kind nu spelen? Een kind of een kleuter, overdag, zonder werk, en niet in de regen.
+  T.kanSpelen = function (S, D, e, deel) {
+    if (e.dood || e.binnen || e.maait || e.werkt || e.opgeroepen || e.zoektSchout || e.moetNaar || e.vertrekt || e.praatje) return false;
+    if (deel !== 'ochtend' && deel !== 'werk' && deel !== 'schaft') return false;
+    if (S.gevecht && D.wereld === S.wereld) return false;
+    const p = e.bewoner;
+    if (!p || p.komt || p.weg || p.werk || p.ziek || (p.leeftijd !== 'kind' && p.leeftijd !== 'kleuter')) return false;
+    if (T.helpAnker(D, e)) return false;
+    const weer = T.weerVan(D);
+    return !(weer && weer.vandaag === 'regen');
+  };
+
+  // Bij een stap van het dwalen (T.dwaal, js/verkennen.js): wie speelt, rent naar een andere tegel bij de plek van het
+  // spel; wie vrij is en een ander kind treft, begint er soms een. Geeft true als het kind nu speelt.
+  T.speel = function (S, w, D, e, deel) {
+    if (!IN().aan || !e.bewoner || !D || !D.kalender) return false;
+    const P = IN().spelen;
+    const dag = D.kalender.dag;
+    const sp = e.spel;
+    // een vast lot (geen Math.random): per kind en per minuut van het spel
+    const minuut = Math.floor(dag * 24 * 60);
+    const lot = (kanaal) => T.vastLot(D, minuut * 97 + (e.bewoner.id || 0), kanaal);
+    if (sp && (dag >= sp.tot || !T.kanSpelen(S, D, e, deel))) {
+      delete e.spel;
+      e.speeldTot = dag + P.rust / 24;
+      return false;
+    }
+    if (!sp) {
+      if (e.speeldTot > dag || !T.kanSpelen(S, D, e, deel)) return false;
+      const ander = w.wezens.find((x) => x !== e && x.bewoner && T.afstand({ x: x.tx, y: x.ty }, { x: e.tx, y: e.ty }) <= P.afstand && (x.spel ? x.spel.wie < P.groep : !(x.speeldTot > dag) && T.kanSpelen(S, D, x, deel)));
+      // niet op een akker of een weide: daar groeit wat, en daar wordt gewerkt
+      if (!ander || T.veldOp(w, e.tx, e.ty) || lot(5101) >= P.kans) return false;
+      if (ander.spel) {
+        e.spel = ander.spel;
+        e.spel.wie++;
+      } else {
+        const duur = P.duur[0] + lot(5102) * (P.duur[1] - P.duur[0]);
+        e.spel = ander.spel = { plek: { x: Math.round((e.tx + ander.tx) / 2), y: Math.round((e.ty + ander.ty) / 2) }, tot: dag + duur / 24, wie: 2 };
+      }
+    }
+    // rennen: een tegel bij de plek van het spel, een andere dan waar hij staat
+    const pl = e.spel.plek;
+    const r = P.straal;
+    const vrij = [];
+    for (let y = pl.y - r; y <= pl.y + r; y++) {
+      for (let x = pl.x - r; x <= pl.x + r; x++) {
+        if ((x !== e.tx || y !== e.ty) && !T.veldOp(w, x, y) && T.isBegaanbaar(w, x, y, { wezensBlokkeren: true })) vrij.push({ x, y });
+      }
+    }
+    if (!vrij.length) return true;
+    const doel = vrij[Math.floor(lot(5103) * vrij.length)];
+    const pad = T.zoekRoute(w, { x: e.tx, y: e.ty }, doel);
+    if (pad && pad.length && pad.length <= 2 * r + 2) T.geefRoute(e, pad, doel);
+    e.dwaalTijd = 0.1 + lot(5104) * 0.4;
+    return true;
   };
 
   // Welke huizen roken, en hoe dik: [{ g, deur, dik }] (dik van 0 tot 1).

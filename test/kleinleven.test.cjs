@@ -83,3 +83,38 @@ test('het water: een beek stroomt langs zijn lengte, en wat geen beek is, ligt s
   }
   assert.ok(water > 0, 'het gehucht heeft water');
 });
+
+test('twee kinderen die vrij zijn, gaan soms samen spelen, rennen om de plek, en houden op als het om is', () => {
+  const S = gehucht();
+  const D = S.dorp;
+  const w = D.wereld;
+  D.kalender.dag = opUur(10, 10);
+  D.weer = { vandaag: 'zon', droog: 0, tekort: 0, verlies: 0 };
+  const kinderen = w.wezens.filter((e) => e.bewoner && (e.bewoner.leeftijd === 'kind' || e.bewoner.leeftijd === 'kleuter') && !e.bewoner.werk && T.kanSpelen(S, D, e, 'werk'));
+  assert.ok(kinderen.length >= 2, 'er zijn twee vrije kinderen');
+  const [a, b] = kinderen;
+  // naast elkaar op een open plek
+  b.x = b.tx = a.tx + 1;
+  b.y = b.ty = a.ty;
+  const kans = T.KLEIN_LEVEN_INSTELLINGEN.spelen.kans;
+  T.KLEIN_LEVEN_INSTELLINGEN.spelen.kans = 1;
+  try {
+    assert.ok(T.speel(S, w, D, a, 'werk'), 'ze beginnen');
+    assert.ok(a.spel && a.spel === b.spel, 'ze delen het spel');
+    assert.ok(T.speel(S, w, D, b, 'werk'));
+    const pl = a.spel.plek;
+    for (const e of [a, b]) if (e.padDoel) assert.ok(Math.abs(e.padDoel.x - pl.x) <= T.KLEIN_LEVEN_INSTELLINGEN.spelen.straal && Math.abs(e.padDoel.y - pl.y) <= T.KLEIN_LEVEN_INSTELLINGEN.spelen.straal);
+    // in de regen niet
+    D.weer.vandaag = 'regen';
+    assert.equal(T.speel(S, w, D, a, 'werk'), false);
+    assert.equal(a.spel, undefined);
+    D.weer.vandaag = 'zon';
+    // het is om
+    D.kalender.dag = b.spel.tot + 0.01;
+    assert.equal(T.speel(S, w, D, b, 'werk'), false);
+    assert.equal(b.spel, undefined);
+    assert.ok(b.speeldTot > D.kalender.dag, 'en dan even niet');
+  } finally {
+    T.KLEIN_LEVEN_INSTELLINGEN.spelen.kans = kans;
+  }
+});
