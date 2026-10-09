@@ -7075,6 +7075,12 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     neemt de marskramer in de lente meer zaaigraan mee (`spel.md`, "Het weer"); 3. de koorts als status (Koorts en
     Epidemie, die rondgaat) en de brand: brandgevaar in de droogte, een huis dat echt brandt (vuur, rook, licht), een
     zwarte ruïne, en het gezin dat het weer opbouwt; 4a. sneeuw die blijft liggen, op de grond.
+    **Plan van Claude voor 4b, de daken (9 okt):** het spel weet niet welke pixels van een huis dak zijn. De huizenbouwer
+    weet het wel (het materiaal en de richting van elk vlak). Voorstel: hij rendert elk huis nog een keer, en schrijft
+    per tekening een klein masker van wat naar boven kijkt (dak, en de bovenkant van een muur of schoorsteen); het spel
+    legt daar de sneeuw over, net zo dik als op de grond. Dat zijn 559 tekeningen, zo'n drie uur rekenen op de
+    achtergrond (weinig verbruik), en enkele MB erbij. Vragen: mag die render, en ook de bomen (kale takken en sneeuw
+    erop) of alleen de huizen?
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
