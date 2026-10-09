@@ -31,9 +31,16 @@
       else if (!t.teken) groei = `Nog ${nog} ${nog === 1 ? 'dag' : 'dagen'} alles, dan wordt het een ${t.groei.wordt}${Object.keys(t.groei.kosten).length ? ` (${kosten(t.groei.kosten)})` : ''}.`;
       else groei = `Heeft het ${t.groei.nodig} dagen alles, dan wordt het een ${t.groei.wordt}.`;
     }
+    // De beurs van het huis (js/geld.js): wat erin zit, wat het vorige maand verdiende, en wat het niet kon betalen.
+    let geld = '';
+    if (t.geld) {
+      geld = `In de beurs ${T.muntTekst(t.geld.beurs)}` + (t.geld.verdiend > 0 ? `, vorige maand ${T.muntTekst(t.geld.verdiend)} verdiend` : '') + '.';
+      if (t.geld.teArm.length) geld += ` Te arm voor ${T.opsomming(t.geld.teArm)}.`;
+    }
     return (
       `<div class="briefje-kop">${kop}</div>` +
       `<div class="briefje-stand">${stand}</div>` +
+      (geld ? `<div class="briefje-groei">${geld}</div>` : '') +
       `<div class="briefje-wensen">${wensen}</div>` +
       helpt +
       (t.nadraagt ? `<div class="briefje-groei">${t.nadraagt}</div>` : '') +

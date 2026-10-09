@@ -132,7 +132,10 @@ test('er woont een gezin van boeren, en de heer wil er wijn voor', () => {
   }
 });
 
-test('wijn is drank: wie bier wil, neemt wijn als er geen bier is', () => {
+test('wijn is drank: wie bier wil, neemt wijn als er geen bier is', (t) => {
+  // Het dorp als geheel; per huis, met een beurs, staat in test/geld.test.cjs.
+  T.zetOptie('geld', 'beurzen');
+  t.after(() => T.optiesTerug());
   assert.deepEqual(T.WENSEN.bier.goed, ['bier', 'wijn']);
   assert.equal(T.WENSEN.bier.naam, 'drank');
   const D = { voorraad: T.nieuweVoorraad() };

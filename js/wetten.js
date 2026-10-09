@@ -151,6 +151,15 @@
     const W = D.wetten;
     if (T.wetFactor(D, 'hout') > 1 && (D.gebouwen || []).some((g) => g.werkte > 0 && T.GEBOUWEN[g.soort].bos)) W.gekapt = true;
     const perMens = T.wetSom(D, 'goud');
+    // Met een beurs per huis (js/geld.js, vraag 141) is de belasting een tiende van wat elk huis die maand verdiende
+    // (Marcel, 9 okt: "ja dat is akkoord"): wat de wet per mens vraagt, naar verhouding van belastingIJk.
+    if (perMens > 0 && T.datumVanDag(dag).dagVanMaand === 1 && T.metHuisbeurzen()) {
+      const deel = T.GELD_INSTELLINGEN.tiende * (perMens / T.GELD_INSTELLINGEN.belastingIJk);
+      let samen = 0;
+      for (const g of D.gebouwen || []) if (g.verdiend > 0) samen += T.betaal(D, g, 'kas', g.verdiend * deel);
+      if (samen > 0) T.zeg(D, `De belasting bracht ${T.muntTekst(samen)} op.`, 'goed');
+      return;
+    }
     if (perMens > 0 && T.datumVanDag(dag).dagVanMaand === 1) {
       // Een hogere stand betaalt meer (js/wensen.js, T.belastbaar; werklijst vraag 80, C).
       W.belastingRest += T.belastbaar(D) * perMens;
@@ -189,7 +198,10 @@
       const heeft = (D.gebouwen || []).some((g) => T.GEBOUWEN[g.soort].bos);
       regels.push({ goed: d.hout > 1, tekst: `een houthakker hakt ${keer(d.hout)} hout${heeft ? '' : ' (er is nog geen houthakker)'}` });
     }
-    if (d.goud) regels.push({ goed: true, tekst: `elke maand ${getal(T.belastbaar(D) * d.goud)} goud in de kist` });
+    if (d.goud && T.metHuisbeurzen()) {
+      const deel = T.GELD_INSTELLINGEN.tiende * (d.goud / T.GELD_INSTELLINGEN.belastingIJk);
+      regels.push({ goed: true, tekst: `elke maand ${getal(deel * 100)} procent van wat de huizen verdienen in de kas` });
+    } else if (d.goud) regels.push({ goed: true, tekst: `elke maand ${getal(T.belastbaar(D) * d.goud)} goud in de kist` });
     if (d.tevreden) {
       const pct = Math.round(Math.abs(d.tevreden) * 100);
       regels.push({ goed: d.tevreden > 0, tekst: d.tevreden > 0 ? `${pct}% tevredener` : `${pct}% minder tevreden` });

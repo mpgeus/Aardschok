@@ -169,7 +169,7 @@ test('wat hij kapt en inplant, blijft bos: na vier jaar hakt hij minstens zoveel
     T.GEBOUWEN_INSTELLINGEN.gezinDagen = gezinDagen;
     T.houthakkerHakte = hakte;
   }
-}));
+}, { geld: 'beurzen' }));
 
 test('een stronk staat niet in de weg: wie een boom omhakte, loopt verder het bos in', () => zo(() => {
   const S = gehucht();

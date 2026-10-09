@@ -574,7 +574,7 @@
     const deur = T.deurVan(w, g);
     const hier = { x: e.tx, y: e.ty };
     const binnen = () => {
-      T.wijnBinnen(D, e.mand || 0);
+      T.wijnBinnen(D, e.mand || 0, g);
       e.mand = 0;
       e.draagt = null;
     };
@@ -716,7 +716,7 @@
     const deur = T.deurVan(w, o.schuur);
     const hier = { x: e.tx, y: e.ty };
     const inDeSchuur = () => {
-      T.haalSchovenBinnen(D, e.vracht || 0);
+      T.haalSchovenBinnen(D, e.vracht || 0, o.schuur);
       e.vracht = 0;
       e.draagt = null;
     };

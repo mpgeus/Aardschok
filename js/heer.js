@@ -382,7 +382,10 @@
     const h = D.heer;
     const b = h.bezoek;
     const g = T.gevolgVanBetaling(D, geef);
-    for (const wat in g.neemt) if (g.neemt[wat] > 0) T.wijzigVoorraad(D, wat, -g.neemt[wat]);
+    // Wat hij neemt, betaalt de kas aan wie het maakte (js/geld.js, vraag 141).
+    const neemt = {};
+    for (const wat in g.neemt) if (g.neemt[wat] > 0) neemt[wat] = g.neemt[wat];
+    T.kasNeemt(D, neemt);
     // De oude schuld zat in wat hij vroeg; wat er nu openstaat, met de boete, is de nieuwe.
     h.schuld = g.schuld;
     h.tekort = g.tekort;

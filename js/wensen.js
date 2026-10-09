@@ -200,6 +200,11 @@
     if (!huizen.length) return null;
 
     const goederen = deelGoederen(D, perStand);
+    // Met een beurs per huis (js/geld.js, vraag 141) koopt elk huis zijn deel, zoveel als het kan betalen: eerst zijn eten,
+    // dan in de winter zijn brandhout, dan zijn wensen in de volgorde van zijn stand. Wat het zelf maakte (de boer zijn
+    // graan), kost het niets. Wat het niet kan betalen, mist het (`teArm`); wie zijn eten niet kan betalen, lijdt honger
+    // in zijn huis (`etenDeel`, js/behoeften.js; Marcel, 8 okt: "1. B").
+    const geld = T.metHuisbeurzen();
     const plekken = {};
     const plekkenVan = (soort) => plekken[soort] || (plekken[soort] = T.plekkenVan(D, soort));
     const standen = {};
@@ -211,13 +216,43 @@
       h.heeft = {};
       let rest = 0;
       let n = 0;
+      let beurs = geld ? T.huisBeurs(h.g) : 0;
+      // Koop `nodig` stuks van deze goederen, en geef welk deel ervan dit huis krijgt: wat van hemzelf is, eerst.
+      const koop = (nodig, goed) => {
+        if (!geld || !(nodig > 0)) return 1;
+        const eigen = Math.min(nodig, goed.reduce((s, wat) => s + (T.eigenaarsVan(D, wat).get(h.g) || 0), 0));
+        const kosten = (nodig - eigen) * T.prijsVan(goed[0]);
+        if (kosten <= beurs + 1e-12) {
+          beurs -= kosten;
+          return 1;
+        }
+        const deel = kosten > 0 ? beurs / kosten : 1;
+        beurs = 0;
+        return (eigen + (nodig - eigen) * deel) / nodig;
+      };
+      h.teArm = [];
+      h.koopt = {};
+      h.etenDeel = 1;
+      h.brandDeel = 1;
       for (const id of T.wensenVanStand(h.stand)) {
         const wens = T.WENSEN[id];
         let heeft;
-        if (id === 'eten') heeft = basis.eten;
-        else if (id === 'brandhout') heeft = basis.brandhout;
-        else if (wens.goed) heeft = goederen[id][h.stand].dekking;
-        else heeft = plekkenVan(wens.plek).some((r) => T.inDeKring(voet, r, IN().kring[wens.plek])) ? 1 : 0;
+        if (id === 'eten') {
+          h.etenDeel = koop(h.mensen * T.etenPerMens(D) * basis.eten, ['graan']);
+          heeft = basis.eten * h.etenDeel;
+        } else if (id === 'brandhout') {
+          const huishoudens = Math.ceil(h.mensen / T.GEBOUWEN_INSTELLINGEN.gezinGrootte);
+          if (basis.winter) h.brandDeel = koop(huishoudens * T.BEHOEFTEN_INSTELLINGEN.brandhoutPerHuishoudenPerDag * basis.brandhout, ['turf', 'hout']);
+          heeft = basis.brandhout * h.brandDeel;
+        } else if (wens.goed) {
+          heeft = goederen[id][h.stand].dekking;
+          const nodig = h.mensen * (IN().perMens[id] || 0) * heeft;
+          const deel = koop(nodig, wens.goed);
+          heeft *= deel;
+          if (geld) h.koopt[id] = nodig * deel;
+          if (deel < 1 - 1e-9) h.teArm.push(id);
+        } else heeft = plekkenVan(wens.plek).some((r) => T.inDeKring(voet, r, IN().kring[wens.plek])) ? 1 : 0;
+        if ((id === 'eten' && h.etenDeel < 1 - 1e-9) || (id === 'brandhout' && h.brandDeel < 1 - 1e-9)) h.teArm.push(id);
         h.heeft[id] = heeft;
         if (!BASIS.includes(id)) {
           const w = IN().blijheid[id] != null ? IN().blijheid[id] : 1;
@@ -231,7 +266,9 @@
         }
       }
       h.alles = Object.values(h.heeft).every(gedekt);
-      const deel = IN().gewichtEten * basis.eten + IN().gewichtBrandhout * basis.brandhout + IN().gewichtRest * (n ? rest / n : 1);
+      const eten = h.heeft.eten != null ? h.heeft.eten : basis.eten;
+      const brandhout = h.heeft.brandhout != null ? h.heeft.brandhout : basis.brandhout;
+      const deel = IN().gewichtEten * eten + IN().gewichtBrandhout * brandhout + IN().gewichtRest * (n ? rest / n : 1);
       // Wat dit huis je nadraagt: een ondernemer die nee hoorde, of ja (js/ondernemers.js).
       h.tevredenheid = Math.min(1, Math.max(0, deel + basis.erbij + T.huisStemming(h.g, dag)));
       const st = standen[h.stand] || (standen[h.stand] = { mensen: 0, huizen: 0, alles: 0, tevredenheid: 0 });
@@ -644,7 +681,9 @@
       const wens = T.WENSEN[id];
       const heeft = gedekt(w.heeft[id] != null ? w.heeft[id] : 1);
       let helpt = null;
-      if (!heeft && !BASIS.includes(id)) {
+      // Wat er wel is, maar wat het huis niet kan betalen (js/geld.js): dan helpt geen gebouw, maar geld.
+      if (!heeft && (w.teArm || []).includes(id)) helpt = 'het huis heeft er het geld niet voor';
+      else if (!heeft && !BASIS.includes(id)) {
         const h = hulpVoorWens(D, wens);
         const binnen = wens.plek && IN().kring[wens.plek] ? ` binnen ${IN().kring[wens.plek]} tegels` : '';
         helpt = h.tekst || (T.VERZOEKEN_INSTELLINGEN.mensen ? `een${binnen} zou helpen` : `bouw er een${binnen} [B]`);
@@ -658,6 +697,8 @@
       wie: ((D.bewoners && D.bewoners.mensen) || []).filter((p) => p.huis === g).map(T.naamVanBewoner),
       wensen,
       teken: T.tekenVanHuis(g),
+      // De beurs van het huis, wat het vorige maand verdiende en wat het niet kon betalen (js/geld.js, vraag 141).
+      geld: T.metHuisbeurzen() ? { beurs: T.huisBeurs(g), verdiend: g.verdiendVorige || 0, teArm: (w.teArm || []).map((id) => T.WENSEN[id].naam) } : null,
       // Wat het huis je nadraagt: een ondernemer die nee of ja hoorde (js/ondernemers.js).
       nadraagt: T.huisNadraagtTekst(g, D.kalender ? D.kalender.dag : 0),
       // Hoe ver het is met doorgroeien, en waarom het niet groeit terwijl het alles heeft (het gezin rooit eerst, of er
@@ -675,6 +716,22 @@
   T.gebruikGoederen = function (D, wensen) {
     let bederfelijk = 0;
     let gegeten = 0;
+    // Met een beurs per huis koopt elk huis wat het kon betalen (T.berekenWensen), en betaalt het wie het maakte.
+    if (T.metHuisbeurzen()) {
+      for (const h of wensen.huizen) {
+        for (const id of Object.keys(h.koopt || {})) {
+          let nodig = h.koopt[id];
+          for (const soort of T.WENSEN[id].goed) {
+            if (!(nodig > 1e-12)) break;
+            const neem = T.neemEnBetaal(D, soort, Math.min(nodig, Math.max(0, D.voorraad[soort] || 0)), h.g);
+            nodig -= neem;
+            if (T.BEHOEFTEN_INSTELLINGEN.bederfelijk.includes(soort)) bederfelijk += neem;
+            gegeten += neem * T.voedtAlsGraan(soort);
+          }
+        }
+      }
+      return { bederfelijk, gegeten };
+    }
     for (const id of Object.keys(wensen.goederen)) {
       let nodig = Object.values(wensen.goederen[id]).reduce((n, s) => n + s.krijgt, 0);
       for (const soort of T.WENSEN[id].goed) {
@@ -706,7 +763,14 @@
     const bij = new Map(((wensen && wensen.huizen) || []).map((h) => [h.g, h]));
     for (const g of D.gebouwen || []) {
       const h = bij.get(g);
-      if (h) g.wensen = { stand: h.stand, mensen: h.mensen, heeft: h.heeft, alles: h.alles, tevredenheid: h.tevredenheid };
+      if (h) {
+        g.wensen = { stand: h.stand, mensen: h.mensen, heeft: h.heeft, alles: h.alles, tevredenheid: h.tevredenheid };
+        // Met een beurs per huis: wat het niet kon betalen, en welk deel van zijn eten en brandhout het kocht
+        // (T.eetVandaag en het stoken, js/behoeften.js).
+        if (h.teArm && h.teArm.length) g.wensen.teArm = h.teArm;
+        if (h.etenDeel != null && h.etenDeel < 1) g.wensen.etenDeel = h.etenDeel;
+        if (h.brandDeel != null && h.brandDeel < 1) g.wensen.brandDeel = h.brandDeel;
+      }
       else if (g.wensen) delete g.wensen;
     }
   };

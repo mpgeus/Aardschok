@@ -126,7 +126,10 @@ test('houtkap zonder houthakker kost niets: dan is er niet gekapt', () => {
   assert.equal(T.houtkapBoete(S.dorp), 0);
 });
 
-test('de belasting: op de eerste van de maand goud in de kist, en wat geen heel goud is, gaat mee', () => {
+test('de belasting zonder beurzen per huis: op de eerste van de maand goud in de kist, en wat geen heel goud is, gaat mee', (t) => {
+  // Met een beurs per huis is de belasting een tiende van wat de huizen verdienen (test/geld.test.cjs).
+  T.zetOptie('geld', 'beurzen');
+  t.after(() => T.optiesTerug());
   const S = gehucht();
   S.dorp.bevolking = 26;
   const voor = tevreden(S).tevredenheid;
@@ -166,7 +169,13 @@ test('wat een wet doet, in woorden, met de getallen van nu: eerst wat goed is, d
   assert.deepEqual(T.watDeWetDoet(S.dorp, 'rantsoen', 'gewoon'), [], 'gewoon doet niets');
   assert.equal(T.watDeWetDoet(S.dorp, 'vreemden', 'aangenomen')[0].tekst, 'twee keer zo vaak een nieuw gezin: om de 10 dagen in plaats van 20');
   assert.match(T.watDeWetDoet(S.dorp, 'houtkap', 'aangenomen')[0].tekst, /twee keer zoveel hout \(er is nog geen houthakker\)/);
-  assert.equal(T.watDeWetDoet(S.dorp, 'belasting', 'aangenomen')[0].tekst, 'elke maand 1,3 goud in de kist');
+  assert.equal(T.watDeWetDoet(S.dorp, 'belasting', 'aangenomen')[0].tekst, 'elke maand 10 procent van wat de huizen verdienen in de kas');
+  T.zetOptie('geld', 'beurzen');
+  try {
+    assert.equal(T.watDeWetDoet(S.dorp, 'belasting', 'aangenomen')[0].tekst, 'elke maand 1,3 goud in de kist');
+  } finally {
+    T.optiesTerug();
+  }
 });
 
 test('de wetten gaan mee in een bewaard spel', () => {

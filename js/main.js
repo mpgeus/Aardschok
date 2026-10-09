@@ -1605,6 +1605,27 @@
         herbergen: T.herbergenVan(D).map((g) => `${g.x},${g.y}${g.meester ? ` (${T.naamVanBewoner(g.meester)})` : ''}${g.weigert && S.kalender.dag < g.weigert.tot ? `: ${g.weigert.waarom}, tot ${T.datumVanDag(g.weigert.tot).tekst}` : ''}`),
       };
     },
+    // Het geld (js/geld.js; werklijst vraag 141): de kas, de beurs van de schout, en per huis zijn beurs, wat het vorige
+    // maand verdiende en wat het niet kon betalen; daaronder van wie wat in het pakhuis ligt. Spel.debug.geld(5) geeft
+    // elk huis 5 goud in zijn beurs.
+    geld(geef) {
+      const D = S.dorp;
+      const mt = (g) => T.muntTekst(g, true);
+      if (typeof geef === 'number') for (const g of D.gebouwen) if (g.wensen || g.beurs != null) g.beurs = geef;
+      const wie = (g) => {
+        const p = (D.bewoners ? D.bewoners.mensen : []).find((m) => m.huis === g);
+        return `${T.GEBOUWEN[g.soort].naam}${p ? ` van ${T.naamVanBewoner(p)}` : ''} (${g.x},${g.y})`;
+      };
+      const huizen = D.gebouwen.filter((g) => g.wensen || g.beurs != null).map((g) => ({
+        huis: wie(g), stand: T.standVan(g), beurs: mt(T.huisBeurs(g)), dezeMaand: mt(g.verdiend || 0), vorigeMaand: mt(g.verdiendVorige || 0),
+        teArm: (g.wensen && g.wensen.teArm) || [],
+      }));
+      const pakhuis = {};
+      for (const wat of Object.keys((D.geld && D.geld.van) || {})) {
+        pakhuis[wat] = [...T.eigenaarsVan(D, wat)].map(([w, n]) => `${w === 'kas' ? 'kas' : wie(w)}: ${Math.round(n * 10) / 10}`);
+      }
+      return { spelregel: T.optieKeuze('geld'), kas: mt(T.kasVan(D)), schout: mt(T.beursVan(D)), huizen, pakhuis };
+    },
     // De twee bazen (js/bazen.js; werklijst vraag 106): de gunst van de heer en het vertrouwen van het dorp, hoe ze erbij
     // staan, waarom, en of je al gewaarschuwd bent. Spel.debug.bazen('gunst', 15) zet de gunst op 15 (met de
     // waarschuwing als hij onder de grens komt), ('vertrouwen', 0) jaagt je weg als je al gewaarschuwd was.

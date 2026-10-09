@@ -11,9 +11,14 @@
   };
 
   // delta mag negatief zijn (uitgeven, verkopen, opeten); de voorraad zakt nooit onder nul.
-  T.wijzigVoorraad = function (D, wat, delta) {
+  // Met `eigenaar` (een gebouw waar een gezin woont, of 'kas') zegt het van wie wat erbij komt, of van wie het eerst afgaat
+  // (js/geld.js, T.boekPakhuis: een beurs per huis, vraag 141); zonder is wat erbij komt van de kas, en gaat wat eraf gaat
+  // er bij iedereen naar verhouding af.
+  T.wijzigVoorraad = function (D, wat, delta, eigenaar) {
     const v = D.voorraad;
-    v[wat] = Math.max(0, (v[wat] || 0) + delta);
+    const voor = v[wat] || 0;
+    v[wat] = Math.max(0, voor + delta);
+    T.boekPakhuis(D, wat, v[wat] - voor, eigenaar, voor);
     // Wat je ooit gehad hebt: de balk (js/hud.js) laat ijzer, zout en gereedschap pas zien als ze er
     // eens geweest zijn, en daarna altijd, zodat hij niet heen en weer springt.
     if (v[wat] > 0) (D.gehad || (D.gehad = {}))[wat] = true;

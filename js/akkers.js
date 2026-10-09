@@ -768,33 +768,41 @@
     if (!w || !w.akkers) return 0;
     let tegels = 0;
     let graan = 0;
+    // Van wie het graan is (js/geld.js, vraag 141): de boerderij waar het de schuur in gaat.
+    const perSchuur = new Map();
+    const telBij = (schuur, n) => perSchuur.set(schuur, (perSchuur.get(schuur) || 0) + n);
     for (const akker of w.akkers) {
       const boer = boerVan(w, akker);
       if (!boer) continue;
+      const schuur = T.schuurVan(D, boer);
+      let hier = 0;
       if (!akker.geoogst) akker.geoogst = new Set();
       for (const t of onbeslistTegels(akker)) {
         akker.geoogst.add(sleutel(t.x, t.y));
         tegels++;
-        graan += T.oogstPerTegel(akker, boer); // vruchtbaar of uitgeput, groene vingers of slordig
+        hier += T.oogstPerTegel(akker, boer); // vruchtbaar of uitgeput, groene vingers of slordig
       }
       // En wat er nog als zwad of in hokken op het veld staat (vraag 140): dat gaat nu ook de schuur in.
       if (akker.schoven) {
         for (const s of akker.schoven.values()) {
-          graan += s.graan;
+          hier += s.graan;
           tegels++;
         }
         akker.schoven.clear();
       }
+      graan += hier;
+      telBij(schuur, hier);
     }
     // Wat ze nog droegen, is ook binnen.
     for (const e of w.wezens || []) {
       if (!(e.vracht > 0)) continue;
       graan += e.vracht;
+      telBij(T.schuurVan(D, e), e.vracht);
       e.vracht = 0;
       if (e.draagt === 'schoof') e.draagt = null;
     }
     if (tegels && D.voorraad && T.wijzigVoorraad) {
-      T.wijzigVoorraad(D, 'graan', graan);
+      for (const [schuur, n] of perSchuur) if (n > 0) T.wijzigVoorraad(D, 'graan', n, schuur || undefined);
       T.telOogstInJaarboek(D, graan);
       T.zeg(D, `De boeren halen de rest van de oogst binnen: ${Math.round(graan)} graan.`, 'goed');
     }
@@ -826,11 +834,18 @@
     }
     return graan;
   };
-  // Het graan is in de schuur: in de voorraad, en in het jaarboek (js/einde.js).
-  T.haalSchovenBinnen = function (D, graan) {
+  // Het graan is in de schuur: in de voorraad, en in het jaarboek (js/einde.js). Het is van de boerderij van de schuur
+  // (`schuur`, js/geld.js), of zonder van de kas.
+  T.haalSchovenBinnen = function (D, graan, schuur) {
     if (!(graan > 0)) return;
-    T.wijzigVoorraad(D, 'graan', graan);
+    T.wijzigVoorraad(D, 'graan', graan, schuur || undefined);
     T.telOogstInJaarboek(D, graan);
+  };
+  // De boerderij waar wie draagt of maait zijn graan heen brengt: zijn eigen, of die waar hij dagloner is (vraag 140).
+  // Zonder bewoners (een toets met een kale wereld) geen.
+  T.schuurVan = function (D, e) {
+    const p = D.bewoners && e ? T.bewonerVan(D, e) : null;
+    return (p && (p.dagloner || p.huis)) || null;
   };
   // Hoeveel graan er nog op het veld staat, als zwad, in hokken of op iemands schouder: het komt binnen, dus het dorp
   // rekent ermee als het kijkt of het eten de winter haalt (T.etenVoorDeWinter, js/behoeften.js).
@@ -845,7 +860,7 @@
   T.tikSchovenDag = function (D) {
     for (const e of (D.wereld && D.wereld.wezens) || []) {
       if (!(e.vracht > 0)) continue;
-      T.haalSchovenBinnen(D, e.vracht);
+      T.haalSchovenBinnen(D, e.vracht, T.schuurVan(D, e));
       e.vracht = 0;
       if (e.draagt === 'schoof') e.draagt = null;
     }

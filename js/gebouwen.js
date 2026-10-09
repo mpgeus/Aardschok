@@ -577,8 +577,9 @@
     return true;
   };
 
+  // De kas betaalt wie het hout en de steen maakte (js/geld.js, T.kasNeemt; vraag 141).
   T.betaalKosten = function (D, kosten) {
-    for (const wat in kosten) T.wijzigVoorraad(D, wat, -kosten[wat]);
+    T.kasNeemt(D, kosten);
   };
 
   // Het seizoen van een dag (js/tijd.js), of null zonder dag: dan ligt er ook niets stil vanwege het
@@ -1384,10 +1385,14 @@
       }
       g.werkte = factor;
       if (factor <= 0) continue;
-      if (soort.maakt.in) for (const wat in soort.maakt.in) T.wijzigVoorraad(D, wat, -soort.maakt.in[wat] * factor);
+      // Met een beurs per huis (js/geld.js, vraag 141) kopen de huizen van wie er werkt wat de werkplaats omzet, en is wat
+      // hij maakt van hen; zonder (of zonder bewoners) van de kas.
+      const makers = T.makersVan(D, g);
+      const betalers = makers.map((h) => ({ wie: h, deel: 1 / makers.length }));
+      if (soort.maakt.in) for (const wat in soort.maakt.in) T.neemEnBetaal(D, wat, soort.maakt.in[wat] * factor, betalers);
       // De jager schiet klein wild, en herten als er een is dat hij mag nemen (js/beesten.js).
       const uit = T.watDeJagerSchiet(D, g, T.maaktUit(D, soort));
-      if (uit) for (const wat in uit) T.wijzigVoorraad(D, wat, uit[wat] * factor);
+      if (uit) for (const wat in uit) T.legInPakhuis(D, wat, uit[wat] * factor, makers);
       // Het hout van de houthakker kwam uit zijn boom: is die om, dan staat er een stronk, en hakt hij morgen de volgende
       // (js/bos.js).
       if (uit && uit.hout) T.houthakkerHakte(D, g, uit.hout * factor);
@@ -1400,7 +1405,7 @@
     let aanHetWerk = 0;
     for (const g of D.gebouwen) if (g.werkte > 0 && g.handen > 0) aanHetWerk += g.handen;
     const slijt = Math.min(D.voorraad.gereedschap || 0, aanHetWerk) / IN.gereedschapSlijtDagen;
-    if (slijt > 0) T.wijzigVoorraad(D, 'gereedschap', -slijt);
+    if (slijt > 0) T.neemEnBetaal(D, 'gereedschap', slijt, 'kas'); // wat het dorp gebruikt, betaalt de kas (js/geld.js)
     // De ondernemers (js/ondernemers.js): wat een huis nadroeg, slijt.
     T.tikOndernemersDag(D, dag);
     // 7. De wetten (js/wetten.js): wie vandaag in het bos van de heer hakte, en de belasting op de eerste van de maand.
