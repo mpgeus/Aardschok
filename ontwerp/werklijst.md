@@ -2804,6 +2804,9 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     oogst kost, de beekjes die droogvallen en de visser), de statussen met niveaus in `T.OORZAKEN` met kaartjes naast het
     doel en het rapport dat erger en minder zegt, en het weer in beeld (regen, sneeuw, het licht, de droge beek); de
     spelregel "Het weer" (`spel.md`, "Het weer, en de statussen met niveaus").
+    **De speeltest (9 okt):** op zaad 1 een zware droogte in het tweede jaar, 40% minder oogst, en in het derde jaar het
+    ambt kwijt; zaad 2 en 3 zonder droogte (`speelbaar.md`). **Marcel (9 okt): "A"**: zo hard laten. En de bode naar de
+    marskramer, vraag 143.
 78. **Stap 1 van de slice, de cyclus: het plan** (Claude, 1 okt, eenentwintigste sessie; vraag 77, a en d; wacht op
     Marcel). **Wat er nu is:** één trede, van gehucht tot dorp bij 50 mensen met een kapel en een smidse, die op elk
     moment valt. De bouwer van de speeltest haalt hem op 1 herfstmaand van het eerste jaar, vóór de heer en de winter,
@@ -7017,6 +7020,14 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     van een spelregel het in het spel anders zet). Opslaan schrijft meteen in het bestand (`/gereedschap/api/instelling`
     in `server.cjs`, alleen dat ene getal, met een `.bak`), en Toetsen draaien zegt welke toetsen het oude getal nog
     verwachten. Stap 3 (een speeltest met een set getallen, naast de vorige) komt hierna.
+
+143. **Een bode naar de marskramer in een moeilijke tijd** (Marcel, 9 okt, na de speeltest van het weer: "A; misschien
+    kunnen we de Schout de mogelijkheid geven om een beroep te doen om een extra marskramer om in te kunnen kopen in een
+    moeilijke periode?", en: "soort van brief sturen met een bode"; open, eerst overleg). Bij de droogte koos Marcel A:
+    hij blijft zo hard (een zware droogte kostte op zaad 1 40% van de oogst, en daarna het ambt). Daarbij: de schout kan
+    een brief schrijven en met een bode naar de marskramer sturen, zodat die buiten zijn drie vaste bezoeken komt, als
+    het dorp het nodig heeft. Wat het plan wordt (wanneer het mag, wat je vraagt, wat het kost), staat hieronder als
+    het er is.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
