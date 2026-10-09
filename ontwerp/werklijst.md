@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## Nu en daarna (9 okt)
+## Nu en daarna (10 okt)
 
 Marcel, 8 okt: "snel, duidelijk en low cost". Elke sessie werkt dit blok bij aan het eind; wat af is, gaat eruit.
 
@@ -27,13 +27,15 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
   en wie wijn wil (de wijnboerderij die niemand bouwt).
 - Vraag 142, de bladzijde met alle getallen (`gereedschap/instellingen.html`): stap 1 en 2 staan in `main`; stap 3 (een
   speeltest met een set getallen, naast de vorige) wacht.
+- Vraag 146, d: met het toetsenblok weg staat `Tab` (het overzicht) nergens meer, behalve in het label als je er al bent.
+  Voorstel: de raad zegt het de eerste dag, na de zin over de tijd ("Met [Tab] kijk je over je dorp"). Of laten zo?
 
 **Daarna, in deze volgorde:**
 0. Een fatsoenlijke ui (vraag 146; Marcel, 9 okt: "nu is het echt een zooitje met al die menutjes met letters"): de
    plaat (a) is goed, elk venster is papier met leesbare letters (b1), er is één manier van openen en sluiten (b2), en
-   de tafel ligt onderin (c, 9 okt; een gesprek staat sinds dan midden boven de tafel). **Nu d** (bovenaan alleen het
-   doel met de raad en de datum als briefjes, het blok met toetsen weg, Spelregels in het menu), dan e (de fotomodus).
-   **Bezig in sessie `main` (desktop, ui)** (10 okt): d.
+   de tafel ligt onderin (c, 9 okt; een gesprek staat sinds dan midden boven de tafel), en bovenaan liggen alleen nog
+   briefjes (d, 10 okt: het doel met de raad, de datum, het lipje Menu; het blok met toetsen is weg). **Nu e** (de
+   fotomodus).
 0b. Engels en een vertaaltool (vraag 147; Marcel, 9 okt): de basis nu, naast de ui; het omzetten van alle tekst na de
    ui en vóór de proefversie. Stap 1 (de basis, de tool, het menu als proef) staat in `main` (9 okt); stap 2, het
    omzetten, na de ui.
@@ -7304,6 +7306,17 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     rekenboek is nog opmaak in css zoals op de plaat, geen pixel art. Nagelopen in de browser (1280×720 op 150%, en een
     smal hoog venster): elk ding opent en sluit zijn venster, de lat, de zandloper, sluipen, de brief en het rapport, de
     bode in een droogte, en het briefje boven elk ding en boven het boek; `npm test` 1152/1152.
+    **d gebouwd (10 okt):** bovenaan liggen alleen briefjes, op papier en op ware pixels zoals de tafel (`--tafel-zoom`):
+    linksboven het doel (`#opdracht`, `T.ui.opdracht`) met de kop, hoe ver het is als een rode streep (`deel` bij
+    `T.tredeDoel` en `T.eindDoel`), en de raad, met de statussen eronder als briefjes (de naam in rood en hoe lang al);
+    rechtsboven de datum met het seizoen, het weer en het uur, en het lipje Menu ernaast. Het blok met toetsen is weg, en
+    de knop Spelregels ook (ze staan in het menu, en `O` werkt nog). Wat een browser-tooltip was (hoe lang het droog is,
+    wat een status is en wat helpt), zegt nu het briefje bij de muis, dat ook bovenaan werkt (eronder). De rechtsklik die
+    een gebouw weer weglegt, staat op het briefje van het bouwplan. Het bouwplan opent linksboven, op de plek van het doel.
+    Opgeruimd: de oude opmaak van de knoppen Velden, Wetten en Raadsman, die nog voor `.ding` ging (44 pixels hoog, en goud
+    als hun venster open was). Nagelopen in de browser (1024×768 en 1920×1080 op 150%): de briefjes, de streep, de
+    statussen, het briefje bij de muis onder het lipje, de datum en een status, het menu met een klik en met `Esc`, `O`, en
+    het bouwplan; `npm test` 1167/1167.
 
 147. **Engels, en een vertaaltool voor de community** (Marcel, 9 okt: "We moeten alles naar het Engels halen. Ook moeten
     we een translate tool hebben. Mochten we leden uit de community krijgen die een vertaling willen maken."). Op 1 okt

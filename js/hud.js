@@ -28,14 +28,17 @@
     if (box.dataset.sleutel === sleutel) return;
     box.dataset.sleutel = sleutel;
     box.innerHTML = '';
+    // Een briefje per status: de naam en hoe lang al; wat het is en wat helpt, zegt het briefje bij de muis (js/tafel.js).
     for (const s of lijst) {
       const el = document.createElement('div');
-      el.className = `paneel status${s.niveau === 2 ? ' erger' : ''}`;
+      el.className = `briefje status${s.niveau === 2 ? ' erger' : ''}`;
       el.dataset.status = s.id;
-      el.textContent = s.naam;
       const duur = dag - s.sinds;
+      const kort = duur < 1 ? 'sinds vandaag' : duur === 1 ? 'sinds gisteren' : `al ${T.telwoord(duur)} dagen`;
       const sinds = duur < 1 ? 'sinds vandaag' : duur === 1 ? 'sinds gisteren' : `al ${T.telwoord(duur)} dagen, sinds ${T.datumVanDag(s.sinds).tekst}`;
-      el.title = `${s.zin} (${sinds}.)${s.helpt ? ` Wat helpt: ${s.helpt}.` : ''}`;
+      el.innerHTML = `<b>${s.naam}</b>${kort}`;
+      el.dataset.naam = s.naam;
+      el.dataset.uitleg = `${s.zin} (${sinds}.)${s.helpt ? ` Wat helpt: ${s.helpt}.` : ''}`;
       box.appendChild(el);
     }
   };
@@ -52,11 +55,10 @@
     datumEl.classList.toggle('sint-maarten', d.sintMaarten);
     const uur = T.uurTekst(S.kalender.dag) + ', ' + T.dagdeelVan(S.kalender.dag);
     // Het weer van vandaag (js/weer.js), tussen het seizoen en het uur; op hover hoe lang het al droog is.
+    // Hoe lang het al droog is, zegt het briefje bij de muis (js/tafel.js, de datum).
     const W = S.dorp && T.weerVan(S.dorp);
     const weer = W ? ' · ' + T.WEER_NAMEN[W.vandaag] : '';
-    const seizoenEl = $('kalender-seizoen');
-    seizoenEl.textContent = T.hoofdletter(d.seizoen) + weer + ' · ' + uur + (d.sintMaarten ? ' · Sint-Maarten: de heer int' : '');
-    seizoenEl.title = W ? (W.droog > 0 ? `Het heeft ${W.droog === 1 ? 'sinds gisteren' : `al ${T.telwoord(W.droog)} dagen`} niet geregend.` : 'Het regent vandaag.') : '';
+    $('kalender-seizoen').textContent = T.hoofdletter(d.seizoen) + weer + ' · ' + uur + (d.sintMaarten ? ' · Sint-Maarten: de heer int' : '');
     T.ui.werkBriefKnopBij(S);
     T.ui.werkTafelBij(S); // de lat van de snelheden, de kaars en de lantaarn (js/tafel.js)
   };
@@ -1085,15 +1087,11 @@
     T.ui.toonKalender(S);
   };
 
-  // In de spelregels typ je namen, dus daar sluit alleen Esc (typt).
+  // In de spelregels typ je namen, dus daar sluit alleen Esc (typt). Ze staan in het menu (Esc; vraag 146, d), en de
+  // toets O werkt nog.
   T.ui.meldVenster('spelregels', {
-    el: 'spelregels', knop: 'spelregels-knop', toets: 'o', typt: true,
+    el: 'spelregels', toets: 'o', typt: true,
     open: (S) => T.ui.openSpelregels(S), sluit: (S) => T.ui.sluitSpelregels(S),
-  });
-
-  $('spelregels-knop').addEventListener('click', (ev) => {
-    ev.currentTarget.blur();
-    if (T.S) T.ui.wisselVenster(T.S, 'spelregels');
   });
 
   // Eén getal van de werkbank bijwerken zonder het hele venster opnieuw te tekenen: anders valt

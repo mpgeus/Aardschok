@@ -400,7 +400,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   onderin, vraag 146, c: het rekenboek met de voorraad en het dorp, en de dingen die een venster openen, elk met het id
   van de knop die het was; wat een ding is en zijn toets staan op het briefje bij de muis, `#wenk`, niet op het ding; de
   kunst uit `gereedschap/pixelart/tafel.cjs`, op ware pixels: één pixel van de kunst op een hele schermpixel, 1080 één,
-  4K twee, `pasSchaal`, en wat erboven ligt rekent met `--tafel-zoom`), `js/tekenen.js`, `js/main.js`
+  4K twee, `pasSchaal`, en wat erboven ligt rekent met `--tafel-zoom`; bovenaan liggen alleen briefjes, vraag 146, d: het
+  doel met de raad en de statussen linksboven, de datum en het lipje Menu rechtsboven, en het briefje bij de muis werkt
+  daar ook), `js/tekenen.js`, `js/main.js`
   (spellus, invoer, zoom, camera). **Het overzicht** (vraag 108, a): `Tab` tilt de camera van de schout af en zoomt uit
   (`T.wisselOverzicht`, `S.overzicht`, alleen scherm); slepen of de pijltjes schuiven, het wiel zoomt, en wat je klikt,
   doet de schout nog altijd. `Tab`, een klik op de schout of een gevecht brengt je terug. Op een groot scherm tekent het spel op een hele deling ervan, minstens

@@ -107,28 +107,71 @@ kbd {
 
 /* Het nieuwe scherm voor het gehuchtspel (js/hud.js): altijd aan (T.NIEUWE_HUD zet de klasse
    .nieuwe-hud op body). De panelen van het oude spel (sluipen, goud en spullen linksboven, en de
-   oude uitleg rechtsboven) gaan dan weg, en de kalender en de voorraad linksboven komen ervoor in
-   de plaats. De actiebalk onderaan
-   blijft: die schuift in beeld als er gevochten wordt, ook in het gehucht. */
-#hud-gehucht,
-#hulp-gehucht { display: none; }
-.nieuwe-hud #hud-gehucht { position: fixed; left: 16px; right: 16px; top: 16px; display: flex; gap: 10px; align-items: flex-start; pointer-events: none; }
-.nieuwe-hud #hud-gehucht > * { pointer-events: auto; }
-/* De knoppen rechts van de voorraad. Met Wetten erbij (29 sep) paste de rij op 1280 pixels breed niet meer (Menu
-   viel eraf, en stak er daarvoor al half af): dan gaan ze naar een tweede regel, rechts van de voorraad, niet onder
-   de kalender. Tussen de knoppen klik je gewoon op de kaart. */
-.nieuwe-hud #hud-gehucht > #balk-knoppen { display: flex; flex-wrap: wrap; gap: 10px; flex: 1; min-width: 0; pointer-events: none; }
-#balk-knoppen > * { pointer-events: auto; }
-/* Op een smaller scherm eerst zonder de toetsletters (ze staan ook in de uitleg rechts en bij de muis) en met
-   minder ruimte, zodat de rij past: een tweede regel komt onder een venster in het midden terecht. */
-@media (max-width: 1500px) {
-  .nieuwe-hud #hud-gehucht > #balk-knoppen { gap: 8px; }
-  .nieuwe-hud #balk-knoppen > button { padding: 0 9px; }
-  .nieuwe-hud #balk-knoppen kbd { display: none; }
+   oude uitleg rechtsboven) gaan dan weg. De actiebalk onderaan blijft: die schuift in beeld als er gevochten wordt, ook in
+   het gehucht.
+   Bovenaan liggen alleen briefjes (vraag 146, d; de plaat "De schrijftafel van de schout"): linksboven het doel met de
+   raad (#opdracht, js/ui.js) en de statussen eronder, rechtsboven de datum met het lipje Menu ernaast. Ze schalen mee met
+   de tafel (--tafel-zoom, js/tafel.js), dus alle maten zijn pixels van de kunst: een pixel van het papier is een hele
+   pixel van het scherm. */
+#hud-gehucht { display: none; }
+.nieuwe-hud #hud-gehucht { display: block; }
+#linksboven,
+#rechtsboven { position: fixed; top: 0; zoom: var(--tafel-zoom, 1); display: flex; align-items: flex-start; pointer-events: none; }
+#linksboven { left: 0; padding: 26px 0 0 26px; flex-direction: column; gap: 12px; }
+#rechtsboven { right: 0; padding: 26px 26px 0 0; gap: 14px; }
+#rechtsboven > * { pointer-events: auto; }
+
+/* Een briefje: het vel van het spel (beelden/papier.png) op ware pixels, met inkt, zoals het briefje bij de muis. */
+.briefje {
+  position: relative;
+  border-style: solid;
+  border-width: 8px;
+  border-image: url('beelden/papier.png') 8 fill / 8px round;
+  image-rendering: pixelated;
+  color: var(--papier-inkt);
+  font: 19px/1.3 var(--boek);
+  filter: drop-shadow(3px 4px 0 rgba(10, 6, 2, 0.35));
 }
-/* De uitleg rechts onder de rij bovenin, niet ernaast: met de knop Velden erbij (en straks meer in
-   de balk: kaas, ijzer, zout) liep die rij op 1280 pixels breed al onder de uitleg door. */
-.nieuwe-hud #hulp-gehucht { display: block; top: 118px; }
+.briefje kbd { font: 16px var(--boek); color: var(--papier-inkt); background: none; border: 1px solid var(--papier-grijs); border-bottom-width: 2px; padding: 0 5px; border-radius: 2px; }
+/* De spijker waaraan het hangt (beelden/spijker.png), zoals bij het briefje van een huis. */
+:is(#opdracht, #kalenderbalk)::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -5px;
+  width: 8px;
+  height: 8px;
+  margin-left: -4px;
+  background: url('beelden/spijker.png') 0 0 / 8px 8px;
+  image-rendering: pixelated;
+}
+
+/* Het doel, linksboven: de kop, hoe ver het is (met een streep), en de raad (js/raad.js) eronder. */
+#opdracht { width: 440px; padding: 10px 18px 14px; display: flex; flex-direction: column; gap: 3px; }
+#opdracht .doel-kop { font: 27px/1.1 var(--kop); }
+#opdracht .doel-stand { font-style: italic; color: var(--papier-grijs); }
+#opdracht .doel-streep { height: 7px; border: 1px solid var(--papier-grijs); margin: 3px 0 4px; }
+#opdracht .doel-streep i { display: block; height: 100%; background: var(--papier-rood); }
+#opdracht .doel-raad { border-top: 1px dotted var(--papier-lijn); padding-top: 5px; font-size: 18px; }
+#opdracht .doel-stand + .doel-raad { margin-top: 4px; }
+
+/* De statussen (js/hud.js, T.ui.toonStatussen; werklijst vraag 77, stap 2): onder het doel, een briefje per status
+   zolang hij duurt, met de naam in rood en hoe lang al; wat het is en wat helpt, zegt het briefje bij de muis. */
+#statussen { display: flex; flex-wrap: wrap; gap: 10px; max-width: 460px; }
+#statussen .status { padding: 8px 16px 10px; font-size: 17px; pointer-events: auto; cursor: help; }
+#statussen .status b { display: block; font: 18px/1.2 var(--kop); font-weight: normal; color: var(--papier-rood); }
+#statussen .status.erger { color: var(--papier-rood); }
+body.bouwmenu-open #statussen { visibility: hidden; }
+
+/* De datum, rechtsboven, met het lipje Menu ernaast (Esc; de spelregels staan in het menu). */
+#kalenderbalk { width: 300px; padding: 10px 18px 14px; text-align: right; }
+#kalender-datum { font: 27px/1.1 var(--kop); }
+#kalender-datum.sint-maarten { color: var(--papier-rood); }
+#kalender-seizoen { font-style: italic; color: var(--papier-grijs); font-size: 18px; }
+#menu-knop { margin-top: 4px; padding: 8px 16px 10px; font: 27px/1.1 var(--kop); background: none; cursor: pointer; transition: transform 0.12s; }
+#menu-knop:hover,
+#menu-knop:focus-visible { transform: translateY(2px); }
+#menu-knop.actief { color: var(--papier-rood); }
 .nieuwe-hud #hud,
 .nieuwe-hud #hulp { display: none; }
 
@@ -476,9 +519,8 @@ div.ding { cursor: default; }
 }
 #overlay-knop2:hover { background: color-mix(in srgb, var(--goud) 12%, transparent); }
 
-/* De uitleg rechtsboven */
-#hulp,
-#hulp-gehucht {
+/* De uitleg rechtsboven (het oude spel) */
+#hulp {
   position: fixed;
   right: 16px;
   top: 16px;
@@ -507,27 +549,14 @@ div.ding { cursor: default; }
   pointer-events: none;
 }
 
-/* De kalender, linksboven. */
-#kalenderbalk { padding: 8px 12px 9px; min-width: 210px; }
-#kalender-datum { font: 17px var(--kop); color: var(--inkt); }
-#kalender-datum.sint-maarten { color: var(--goud); }
-#kalender-seizoen { font-size: 12px; color: var(--gedempt); margin-top: 1px; }
-
-/* De statussen (js/hud.js, T.ui.toonStatussen; werklijst vraag 77, stap 2): naast het doel linksboven (#opdracht, 260
-   breed op 16), een kaartje per status zolang hij duurt; rood als het erger is. */
-.nieuwe-hud #hud-gehucht > #statussen { position: fixed; left: 292px; top: 128px; display: flex; flex-wrap: wrap; gap: 6px; max-width: calc(100vw - 600px); }
-#statussen .status { padding: 4px 10px 5px; font: 13px var(--kop), var(--boek); color: var(--inkt); cursor: help; border-left: 3px solid var(--goud); }
-#statussen .status.erger { border-left-color: var(--rood); color: var(--rood); }
-body.bouwmenu-open #statussen { visibility: hidden; }
-
-/* Het bouwmenu (js/hud.js, js/gebouwen.js): het paneel met de soorten van de huidige trede, onder de kalender; het
-   bouwplan op tafel opent het (js/tafel.js). */
+/* Het bouwmenu (js/hud.js, js/gebouwen.js): het paneel met de soorten van de huidige trede, linksboven op de plek van
+   het doel; het bouwplan op tafel opent het (js/tafel.js). */
 #bouwmenu {
   position: fixed;
   left: 16px;
-  top: 112px;
+  top: 16px;
   width: 300px;
-  max-height: calc(100vh - 130px - var(--tafel-zoom, 1) * 228px); /* tot boven het rekenboek op de tafel */
+  max-height: calc(100vh - 34px - var(--tafel-zoom, 1) * 228px); /* tot boven het rekenboek op de tafel */
   overflow-y: auto;
   padding: 10px 12px 12px;
 }
@@ -555,7 +584,7 @@ body.bouwmenu-open #statussen { visibility: hidden; }
 /* De oproepen (js/hud.js, js/verzoeken.js): een kop erboven, en wat al op het plein hangt, in goud. */
 #bouwmenu .kop.bouw-oproepen { margin-top: 12px; }
 #bouwmenu button.hangt { border-color: color-mix(in srgb, var(--goud) 70%, transparent); background: color-mix(in srgb, var(--goud) 10%, transparent); }
-/* Het doel linksboven (#opdracht) ligt op de plek van het bouwmenu: zolang dat open is, staat het er niet (js/hud.js). */
+/* Het doel linksboven (#opdracht) ligt onder het bouwmenu: zolang dat open is, staat het er niet (js/hud.js). */
 body.bouwmenu-open #opdracht { visibility: hidden; }
 
 /* Handelen met de marskramer (js/hud.js, T.ui.openHandel): in het midden, zoals je bij zijn
@@ -726,36 +755,8 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
   :is(#heer, #slachten) .heer-rij input[type='range'] { grid-column: 1 / -1; grid-row: 2; }
 }
 
-/* De spelregels (js/hud.js, T.ui.openSpelregels; js/opties.js): de knop naast Bouwen, en het
-   venster met de keuzes, de namen en de werkbank. */
-#spelregels-knop,
-#menu-knop,
-#velden-knop,
-#wetten-knop,
-#raadsman-knop {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  height: 44px;
-  padding: 0 14px;
-  font: 13px var(--boek);
-  color: var(--gedempt);
-  cursor: pointer;
-}
-#spelregels-knop:hover,
-#menu-knop:hover,
-#velden-knop:hover,
-#wetten-knop:hover,
-#raadsman-knop:hover { color: var(--inkt); }
-#spelregels-knop.actief,
-#menu-knop.actief,
-#velden-knop.actief,
-#wetten-knop.actief,
-#raadsman-knop.actief { color: var(--op-goud); background: var(--goud); border-color: var(--goud); }
-#spelregels-knop.actief kbd,
-#velden-knop.actief kbd,
-#wetten-knop.actief kbd,
-#raadsman-knop.actief kbd { color: inherit; border-color: currentColor; opacity: 0.7; }
+/* De spelregels (js/hud.js, T.ui.openSpelregels; js/opties.js), in het menu: het venster met de keuzes, de namen en de
+   werkbank. */
 #spelregels {
   position: fixed;
   left: 50%;
@@ -1074,7 +1075,7 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
 .menu-melding { margin: 0 0 4px; font-size: 13px; color: var(--goud); }
 #menu.titel .menu-kop, #menu.titel .menu-vraag, #menu.titel .menu-melding { text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8); }
 /* Zolang het titelscherm er ligt, is er nog geen spel om over te zeggen. */
-body.titelscherm :is(#hud-gehucht, #hulp-gehucht, #berichten, #plek, #opdracht, #statussen, #tafel) { visibility: hidden; }
+body.titelscherm :is(#hud-gehucht, #berichten, #plek, #tafel) { visibility: hidden; }
 
 /* Vanzelf opgeslagen (js/menu.js, T.ui.opgeslagen): één woord rechtsonder, boven de tafel, dat weer wegvaagt. */
 #opgeslagen {

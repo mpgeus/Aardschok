@@ -19,18 +19,21 @@
   </div>
 
   <!-- Het scherm van het gehuchtspel (js/hud.js): altijd aan (T.NIEUWE_HUD), en dan gaan de
-       panelen hierboven weg (stijl.css, .nieuwe-hud). -->
+       panelen hierboven weg (stijl.css, .nieuwe-hud). Bovenaan alleen briefjes (vraag 146, d): linksboven het doel met de
+       raad (#opdracht, js/ui.js) en de statussen eronder, rechtsboven de datum met het lipje Menu ernaast. De spelregels
+       staan in het menu. -->
   <div id="hud-gehucht">
-    <div id="kalenderbalk" class="paneel">
-      <div id="kalender-datum"></div>
-      <div id="kalender-seizoen"></div>
+    <div id="linksboven">
+      <div id="opdracht" class="briefje verborgen"></div>
+      <!-- De statussen (js/hud.js, T.ui.toonStatussen): honger, droogte, ... zolang ze duren, onder het doel. -->
+      <div id="statussen" class="verborgen"></div>
     </div>
-    <!-- De statussen (js/hud.js, T.ui.toonStatussen): honger, droogte, ... zolang ze duren, naast het doel linksboven. -->
-    <div id="statussen" class="verborgen"></div>
-    <!-- De knoppen die nog niet op tafel liggen: de spelregels en het menu (vraag 146, d). -->
-    <div id="balk-knoppen">
-    <button id="spelregels-knop" class="paneel" title="Spelregels: wat je zelf instelt (O)"><kbd>O</kbd> Spelregels</button>
-    <button id="menu-knop" class="paneel" title="Het menu: opslaan, laden, en terug naar het titelscherm (Esc)"><kbd>Esc</kbd> Menu</button>
+    <div id="rechtsboven">
+      <button id="menu-knop" class="briefje" data-ding="menu">Menu</button>
+      <div id="kalenderbalk" class="briefje" data-ding="datum">
+        <div id="kalender-datum"></div>
+        <div id="kalender-seizoen"></div>
+      </div>
     </div>
   </div>
 
@@ -159,17 +162,6 @@
 
   <div id="overzicht-label" class="verborgen">
     Overzicht · slepen of pijltjes om te kijken · wiel: verder of dichterbij · <kbd>Tab</kbd> of een klik op de schout: terug
-  </div>
-
-  <div id="hulp-gehucht">
-    Klik om te lopen, te praten of iets te gebruiken.<br>
-    Kalender: <kbd>P</kbd> pauze/hervat · <kbd>-</kbd> <kbd>=</kbd> trager/sneller · <kbd>Z</kbd> slapen, bij je huis<br>
-    <kbd>B</kbd> bouwen · <kbd>Esc</kbd> of rechtsklik legt een gebouw weer weg<br>
-    <kbd>Tab</kbd> overzicht: over je dorp kijken, en terug naar de schout<br>
-    <kbd>V</kbd> velden: akker, weide of braak<br>
-    <kbd>W</kbd> wetten: aannemen en afschaffen<br>
-    <kbd>O</kbd> spelregels: wat je zelf instelt<br>
-    <kbd>Esc</kbd> menu: opslaan en laden
   </div>
 
   <!-- Gewone scripts, geen modules: zo werkt het spel ook als je index.html los opent.

@@ -69,9 +69,9 @@
     return Math.max(0, eis.mensen - geteld(D, eis).n);
   };
 
-  // Hoe het ervoor staat met de volgende trede: { kop, tekst, klaar, trede }, of null als er niets te halen is.
-  // `tekst` is voor het vak linksboven: "12 van 20 dorpelingen", of met de oude eis "43 van 50 mensen · een kapel ✓ ·
-  // nog geen smidse".
+  // Hoe het ervoor staat met de volgende trede: { kop, tekst, deel, klaar, trede }, of null als er niets te halen is.
+  // `tekst` is voor het briefje linksboven: "12 van 20 dorpelingen", of met de oude eis "43 van 50 mensen · een kapel ✓ ·
+  // nog geen smidse"; `deel` is hoe ver de mensen zijn (0 tot 1), voor de streep eronder (js/ui.js).
   T.tredeDoel = function (D) {
     const trede = T.volgendeTrede(D);
     if (!trede || !heeftTreden(D)) return null;
@@ -93,7 +93,8 @@
     // De kop draagt de naam van je dorp, als het er een heeft: "Heikant · naar een dorp".
     const naam = T.dorpsnaam(D);
     const doel = NAMEN[trede].doel;
-    return { kop: naam ? `${naam} · naar ${doel}` : `Naar ${doel}`, tekst: delen.join(' · '), klaar, trede };
+    const deel = Math.min(1, n / eis.mensen);
+    return { kop: naam ? `${naam} · naar ${doel}` : `Naar ${doel}`, tekst: delen.join(' · '), deel, klaar, trede };
   };
 
   // Welke gebouwen het doel nog vraagt en die er nog niet staan, ook niet in aanbouw: voor de raad (js/raad.js), die

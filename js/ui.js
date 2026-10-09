@@ -16,23 +16,9 @@
     '</svg>';
   const ICONEN = [['sleutel', 'IJzeren sleutel', SLEUTEL_ICOON]];
 
-  // De opdracht van dit moment (een quest), linksboven. Het element staat
-  // niet in index.html maar wordt hier gemaakt, zoals het portret in js/dialoog.js, en de opmaak
-  // staat erbij. Alleen als de tekst verandert, wordt hij aangeraakt.
-  let opdrachtEl = null;
+  // Het doel van dit moment (een quest, of de volgende trede), linksboven, als briefje (#opdracht; vraag 146, d). Alleen
+  // als de tekst verandert, wordt het aangeraakt.
   let vorigeOpdracht = null;
-  function opdrachtVak() {
-    if (opdrachtEl) return opdrachtEl;
-    opdrachtEl = document.createElement('div');
-    opdrachtEl.id = 'opdracht';
-    opdrachtEl.className = 'paneel verborgen';
-    Object.assign(opdrachtEl.style, {
-      position: 'fixed', left: '16px', top: '128px', width: '260px', padding: '8px 12px 9px',
-      fontSize: '13px', lineHeight: '1.5', pointerEvents: 'none',
-    });
-    document.body.appendChild(opdrachtEl);
-    return opdrachtEl;
-  }
 
   T.ui = {
     reset(S) {
@@ -69,20 +55,22 @@
         .join('');
     },
 
-    // Wat er nu van je gevraagd wordt; null laat het vak verdwijnen. `tekst` mag <kbd> bevatten.
-    // De kop zegt wie het vraagt: de naam van de quest. Daaronder de raad (js/raad.js), met een
-    // toets tussen haken ([B]) als toets.
-    opdracht(tekst, kop, raad) {
-      const nu = tekst || raad ? `${kop || 'Te doen'}|${tekst || ''}|${raad || ''}` : null;
+    // Wat er nu van je gevraagd wordt; null laat het briefje verdwijnen. `tekst` mag <kbd> bevatten.
+    // De kop zegt wie het vraagt: de naam van de quest, of je dorp en de trede. `deel` (0 tot 1) is hoe ver het is, als
+    // een streep. Daaronder de raad (js/raad.js), met een toets tussen haken ([B]) als toets.
+    opdracht(tekst, kop, raad, deel) {
+      const streep = deel == null ? null : Math.round(Math.max(0, Math.min(1, deel)) * 100);
+      const nu = tekst || raad ? `${kop || 'Te doen'}|${tekst || ''}|${raad || ''}|${streep}` : null;
       if (nu === vorigeOpdracht) return;
       vorigeOpdracht = nu;
-      const el = opdrachtVak();
+      const el = $('opdracht');
       el.classList.toggle('verborgen', !nu);
       if (nu) {
         el.innerHTML =
-          `<div style="font: 12px var(--kop); color: var(--gedempt); letter-spacing: 0.04em">${kop || 'Te doen'}</div>` +
-          (tekst ? `<div>${tekst}</div>` : '') +
-          (raad ? `<div class="raad" style="${tekst ? 'margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--rand); ' : ''}color: var(--goud)">${raad.replace(/\[([^\]]+)\]/g, '<kbd>$1</kbd>')}</div>` : '');
+          `<div class="doel-kop">${kop || 'Te doen'}</div>` +
+          (tekst ? `<div class="doel-stand">${tekst}</div>` : '') +
+          (streep != null ? `<div class="doel-streep"><i style="width: ${streep}%"></i></div>` : '') +
+          (raad ? `<div class="doel-raad">${raad.replace(/\[([^\]]+)\]/g, '<kbd>$1</kbd>')}</div>` : '');
       }
     },
 

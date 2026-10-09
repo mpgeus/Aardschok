@@ -75,18 +75,21 @@
       : '; de teller staat stil: maak het vandaag goed, of hij begint opnieuw';
   }
 
-  // Het doel linksboven (js/main.js) als er geen trede meer te halen is: { kop, tekst }, of null zolang er nog een trede
-  // komt, of als hier niet gewonnen kan worden (een kaart zonder plein: geen gehucht).
+  // Het doel linksboven (js/main.js) als er geen trede meer te halen is: { kop, tekst, deel }, of null zolang er nog een
+  // trede komt, of als hier niet gewonnen kan worden (een kaart zonder plein: geen gehucht). `deel` (0 tot 1) is de streep
+  // onder de tekst (js/ui.js).
   T.eindDoel = function (D) {
     if (T.volgendeTrede(D) || !(D.wereld && D.wereld.plein)) return null;
     const naam = T.dorpsnaam(D);
     const kop = `${naam ? `${naam} · ` : ''}iedereen een jaar gelukkig`;
     const E = D.eind || {};
-    if (E.gewonnen) return { kop, tekst: `gewonnen op ${T.datumVanDag(E.gewonnen.dag).tekst}`, klaar: true };
-    if ((D.bevolking || 0) < IN().minstensMensen) return { kop, tekst: `${D.bevolking || 0} van ${IN().minstensMensen} mensen` };
-    if (E.dagen > 0) return { kop, tekst: `${E.dagen} van ${IN().dagen} dagen${stil(E)}` };
+    if (E.gewonnen) return { kop, tekst: `gewonnen op ${T.datumVanDag(E.gewonnen.dag).tekst}`, deel: 1, klaar: true };
+    const mensen = D.bevolking || 0;
+    if (mensen < IN().minstensMensen) return { kop, tekst: `${mensen} van ${IN().minstensMensen} mensen`, deel: mensen / IN().minstensMensen };
+    if (E.dagen > 0) return { kop, tekst: `${E.dagen} van ${IN().dagen} dagen${stil(E)}`, deel: Math.min(1, E.dagen / IN().dagen) };
     const huizen = woningen(D);
-    return { kop, tekst: `${huizen.filter(gelukkig).length} van ${huizen.length} huizen zijn super gelukkig` };
+    const n = huizen.filter(gelukkig).length;
+    return { kop, tekst: `${n} van ${huizen.length} huizen zijn super gelukkig`, deel: huizen.length ? n / huizen.length : 0 };
   };
 
   // ---------------------------------------------------------------------------------------------

@@ -233,7 +233,7 @@ test('het doel linksboven: pas na de laatste trede, en dan wat er nog tussen jou
   assert.equal(T.eindDoel(D), null, 'zolang er een trede te halen is, is dat het doel');
   while (T.volgendeTrede(D)) D.trede = T.volgendeTrede(D);
   T.zetDorpsnaam(D, 'Kleiwerd');
-  assert.deepEqual(T.eindDoel(D), { kop: 'Kleiwerd · iedereen een jaar gelukkig', tekst: `${D.bevolking} van 100 mensen` });
+  assert.deepEqual(T.eindDoel(D), { kop: 'Kleiwerd · iedereen een jaar gelukkig', tekst: `${D.bevolking} van 100 mensen`, deel: D.bevolking / 100 });
   allesGelukkig(D);
   woningen(D)[0].wensen.alles = false;
   const n = woningen(D).length;

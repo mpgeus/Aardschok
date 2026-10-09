@@ -472,7 +472,7 @@
       raadNu = T.raadNu(S.dorp);
       raadOp = S.tijd;
     }
-    T.ui.opdracht(doelNu && doelNu.tekst, doelNu && doelNu.kop, raadNu && raadNu.tekst);
+    T.ui.opdracht(doelNu && doelNu.tekst, doelNu && doelNu.kop, raadNu && raadNu.tekst, doelNu && doelNu.deel);
     // Ook op reis (js/land.js, de kaart van het land) gaat het dorp zijn gang: er wordt gemaaid en gedwaald.
     if (S.modus === 'verkennen' || S.modus === 'land') {
       // Vóór T.laatDwalen: wie hier een pad krijgt, aan het maaien slaat (T.werkOogstBij, js/akkers.js) of op zijn land

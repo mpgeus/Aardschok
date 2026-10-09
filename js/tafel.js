@@ -385,7 +385,8 @@
     rekenboek: { naam: 'Het rekenboek', uitleg: () => 'Wat er ligt en hoe het dorp ervoor staat. Wijs een getal aan voor wat het zegt.' },
     bouwen: {
       naam: 'Het bouwplan',
-      uitleg: () => (T.VERZOEKEN_INSTELLINGEN.mensen ? 'Een erf aanwijzen, en een oproep op het plein hangen.' : 'Bouwen: kies wat, en wijs aan waar.'),
+      uitleg: () => (T.VERZOEKEN_INSTELLINGEN.mensen ? 'Een erf aanwijzen, en een oproep op het plein hangen.' : 'Bouwen: kies wat, en wijs aan waar.')
+        + ' Een rechtsklik legt wat je in de hand hebt weer weg.',
       toets: 'B',
     },
     velden: { naam: 'De velden', uitleg: () => 'Wat elk veld is, wie het koos, en wat het volgend jaar wordt.', toets: 'V' },
@@ -422,6 +423,16 @@
     },
     gunst: { naam: 'Het zegel van de heer', uitleg: (S) => T.bazenTekst(S.dorp, 'gunst') },
     vertrouwen: { naam: 'De hoed van het dorp', uitleg: (S) => T.bazenTekst(S.dorp, 'vertrouwen') },
+    // Bovenaan (vraag 146, d): het lipje Menu en de datum, met het weer.
+    menu: { naam: 'Het menu', uitleg: () => 'Opslaan, laden, de spelregels, en terug naar het titelscherm.', toets: 'Esc, en O voor de spelregels' },
+    datum: {
+      naam: 'Vandaag',
+      uitleg: (S) => {
+        const W = S.dorp && T.weerVan(S.dorp);
+        if (!W) return '';
+        return W.droog > 0 ? `Het heeft ${W.droog === 1 ? 'sinds gisteren' : `al ${T.telwoord(W.droog)} dagen`} niet geregend.` : 'Het regent vandaag.';
+      },
+    },
   };
 
   // Wat met de tijd verandert: de lat (de snelheid van nu), de kaars (brandt als je kunt slapen of slaapt), en de
@@ -464,7 +475,8 @@
 
   // ── Het briefje bij de muis ──
   // Op papier boven het ding dat de muis aanwijst: zijn naam, wat het nu zegt, en de toets. Bij een getal uit het
-  // rekenboek staat het boven het boek. Het briefje hoort bij de tafel (#wenk in #tafel), dus het schaalt mee.
+  // rekenboek staat het boven het boek, en bij een briefje bovenaan (het menu, de datum, een status; vraag 146, d) eronder.
+  // Het briefje hoort bij de tafel (#wenk in #tafel), dus het schaalt mee.
   function wenkVan(el) {
     const S = T.S;
     const d = DINGEN[el.dataset.ding];
@@ -488,7 +500,10 @@
     const breed = box.offsetWidth;
     const midden = inBoek ? (r.left - t.left) / zoom + breed / 2 : ((r.left + r.right) / 2 - t.left) / zoom;
     box.style.left = `${Math.max(8, Math.min(tafel.offsetWidth - breed - 8, midden - breed / 2))}px`;
-    box.style.bottom = `${tafel.offsetHeight - (r.top - t.top) / zoom + 10}px`;
+    const onder = !tafel.contains(el);
+    box.style.bottom = onder
+      ? `${tafel.offsetHeight - (r.bottom - t.top) / zoom - 10 - box.offsetHeight}px`
+      : `${tafel.offsetHeight - (r.top - t.top) / zoom + 10}px`;
   }
 
   function verbergWenk() {
@@ -497,18 +512,20 @@
 
   // "P, en - en +" wordt "of de toets P, en - en +", met elke toets in een toetsje.
   function toetsTekst(toets) {
-    return 'of de toets ' + toets.replace(/(^|[ ,])([A-Z]|-|\+)(?=$|[ ,])/g, (_, voor, k) => `${voor}<kbd>${k}</kbd>`);
+    return 'of de toets ' + toets.replace(/(^|[ ,])([A-Z]|Esc|-|\+)(?=$|[ ,])/g, (_, voor, k) => `${voor}<kbd>${k}</kbd>`);
   }
 
-  const AANWIJSBAAR = '[data-ding], #rekenboek .post, #kalender-knoppen button';
-  $('tafel').addEventListener('mouseover', (ev) => {
-    const el = ev.target.closest(AANWIJSBAAR);
-    if (el) toonWenk(el);
-  });
-  $('tafel').addEventListener('mouseout', (ev) => {
-    const el = ev.target.closest(AANWIJSBAAR);
-    if (el && !el.contains(ev.relatedTarget)) verbergWenk();
-  });
+  const AANWIJSBAAR = '[data-ding], #rekenboek .post, #kalender-knoppen button, #statussen .status';
+  for (const plek of [$('tafel'), $('hud-gehucht')]) {
+    plek.addEventListener('mouseover', (ev) => {
+      const el = ev.target.closest(AANWIJSBAAR);
+      if (el) toonWenk(el);
+    });
+    plek.addEventListener('mouseout', (ev) => {
+      const el = ev.target.closest(AANWIJSBAAR);
+      if (el && !el.contains(ev.relatedTarget)) verbergWenk();
+    });
+  }
   // Een klik verandert wat het ding zegt (de lantaarn, de kaars): het briefje zegt het meteen.
   $('tafel').addEventListener('click', (ev) => {
     const el = ev.target.closest(AANWIJSBAAR);
