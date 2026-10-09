@@ -260,6 +260,11 @@ papieren als dingen op tafel, en bij een huis een briefje aan een spijker; de le
 Fell English (tekst), meegeleverd in `letters/`. Het eerste stuk is het briefje bij een huis (2c, vraag 100); de rest van
 de ui volgt later, met de Steam-pagina in januari.
 
+**De rest van de ui (Marcel, 9 okt, vraag 146):** "Ik denk dat het nu ook tijd is om een fatsoenlijke UI te maken; nu is
+het echt een zooitje met al die menutjes met letters." Gekozen: de tafel over de hele breedte onderin, de toetsen blijven
+maar staan niet meer op de knoppen, en de ui gaat vóór de proefversie. De plaat van het hele scherm: "De schrijftafel van
+de schout" (https://claude.ai/artifact/1Q4hbWrE8kS9MFQC36vpaU). Het plan staat in de werklijst.
+
 **Later: dorpsfeesten** (Marcel, 1 okt: "Later wil ik ook dorpsfeesten die passen bij het seizoen, hier wil ik het hele
 dorp wat mee doet etc. Ook een bruiloft wordt groots gevierd. Er zijn veel soorten feesten die we kunnen gebruiken
 hiervoor. Voor nu een notitie later pas bouwen."). Een feest is ook sfeer om te laten zien: het hele dorp op één plek,

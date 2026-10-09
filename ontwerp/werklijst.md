@@ -21,6 +21,8 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
 (Marcel: "Ik denk dat we die economie terug moeten draaien", en "Alles van vraag 141").
 
 **Wacht op Marcel:**
+- De plaat van de ui (vraag 146, a): "De schrijftafel van de schout" (https://claude.ai/artifact/1Q4hbWrE8kS9MFQC36vpaU);
+  klopt de indeling, kloppen de dingen op tafel, en is de tafel hoog genoeg? Dan b, één papier voor elk venster.
 - Een feest op het plein vol kijkgaten (`opmerkingen.md`, "Het beeld"): zo laten, op een feest alleen wie ertoe doet, of
   het plein uit? De fout in de kijkgaten en het haperen bij slepen zijn op 9 okt opgelost.
 - Sneeuw op de daken (vraag 144, 4b): mag de render van een sneeuwmasker per huis, en ook de bomen?
@@ -7197,7 +7199,23 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     **Marcel (9 okt):** de tafel over de hele breedte onderin (rekenboek links, de papieren in het midden, de zandloper en
     de twee bazen rechts; bovenaan alleen het doel met de raad en de datum); de toetsen blijven werken, maar staan niet
     meer op de knoppen (de muis zegt ze op het ding); en de ui gaat vóór de proefversie voor een tester.
-    **Bezig in sessie `main` (1306efdd)** (9 okt): a, de plaat van het hele scherm.
+    **De plaat (a, 9 okt):** "De schrijftafel van de schout" (https://claude.ai/artifact/1Q4hbWrE8kS9MFQC36vpaU): het
+    spel op 1920×1080 met de tafel, waarop je de dingen aanwijst en opent. Links het rekenboek (de voorraad, en het dorp
+    met de kas, de mensen, de tevredenheid en de argwaan); in het midden het bouwplan (B), de kaart van de velden (V), het
+    wetboek (W), de bel van de raadsman (R), de brief van de heer (licht op als hij wacht), het rapport, de zaak en de
+    inktpot van de bode; rechts de lantaarn (sluipen, S), de kaars (slapen, Z), de zandloper met een lat voor de
+    snelheden, het zegel van de heer en de hoed van het dorp. Linksboven het doel met de raad, met de statussen eronder;
+    rechtsboven de datum, met het lipje Menu ernaast (Spelregels in het menu); de berichten boven het rekenboek. Open
+    voor Marcel: de indeling, de dingen (de bel, de kaars, de lantaarn, de inktpot), de hoogte van de tafel (150 op
+    1080), en of de datum rechtsboven blijft.
+    **Marcel (9 okt), op de plaat: "Ik denk wat meer HD de UI", en "lettertype ook, te lastig te lezen".** Dus: de pixel
+    art van de ui op ware pixels (een pixel van de kunst op een pixel van het scherm op 1080, twee op 4K), met twee keer
+    zoveel detail, licht van linksboven en een gekleurde omlijning, zoals de kunst van het spel; ook het hout, het papier
+    (`beelden/papier.png` op 8 in plaats van 16) en de spijker. En leesbaardere letters dan Jacquarda Bastarda 9 en IM
+    Fell English (vraag 98): op de plaat (versie 2) te kiezen tussen Grenze voor de koppen met Alegreya voor de tekst, of
+    alleen Alegreya (Alegreya SC voor de koppen), met de oude ernaast. Wat Marcel kiest, gaat ook naar het briefje bij
+    een huis.
+    **Bezig in sessie `main` (1306efdd)** (9 okt): a is af, de keuzes op de plaat wachten op Marcel; dan b.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
