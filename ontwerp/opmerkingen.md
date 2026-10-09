@@ -9,6 +9,11 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Een brand die overslaat** (9 okt, bij vraag 144, 3): nu brandt er alleen het huis van wie het betreft. Bij groot
+  brandgevaar zou het vuur kunnen overslaan op een huis ernaast als het niet geblust wordt. Dat is iets erbij, dus eerst
+  Marcels keuze. Ook: wie in een brandend huis is, en of de koorts een eigen beeld krijgt (iemand die hoest, een
+  ziekbed), staat nog niet.
+
 - **Een huis zonder kapel, en nergens plek voor een kapel** (8 okt, de sessie van de kaartenmaker; vraag 117, 2d): de put
   zonder plek is opgelost (een erf houdt plaats voor een put, en een put voor een hut op een erf haalt ook het huis dat de
   hut wordt), maar met de kapel kan hetzelfde: op het eiland van 62707 (`main` met de grote gebouwen) vond een huis

@@ -718,6 +718,24 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`T.feestLicht`, in `T.lichtBronnen`), en niemand gaat naar de herberg (`T.feestAvond`). De meiboom komt op een vaste dag
   (`op` in `T.VOORVALLEN`, 30 grasmaand) en staat een maand op het plein (een voorwerp, `gereedschap/pixelart/meiboom.cjs`).
   De spelregel "Feesten"; de getallen in `T.FEESTEN_INSTELLINGEN`.
+- `js/brand.js`: **de brand** (vraag 144, 3, 9 okt; Marcel: "Ziekte en brand als status is ook goed. We hebben dan nog
+  wel vuur nodig en huizen die 'afgefikt' zijn als art. Dan kunnen ze weer worden opgebouwd"): brandgevaar is een status
+  (`T.brandgevaarNiveau`: in de droogte, groot in een ernstige droogte of een vol dorp; `brandgevaar` in `T.OORZAKEN`), en
+  het voorval `brand` komt dan vaker. Begint het (`L.vanaf`, `T.werkBrandBij` vanuit `T.werkDorpBij`), dan brandt het huis
+  van wie het betreft echt (`g.brand`, op het voorwerp `v.brand`, `L.brandHuis`); met de emmers (`doe.blus`, `T.blusBrand`)
+  is het `blusUren` na het antwoord uit en blijft het meestal staan (`T.redKans`); laat je het branden (`doe.brand`
+  'laat', `T.laatBranden`), dan is het `blusUren` later puin, en doet niemand iets, na `brandUren`. Het gezin woont
+  bij de buren, en na `puinDagen` bouwt het zijn huis weer op met hout (`T.tikBrandDag`, `T.herbouwHout`), in de
+  bouwfasen zoals een huis dat doorgroeit (`v.inAanbouw` met `vanFase`). Het beeld in `js/tekenen.js`: vuurtongen over
+  het dak, vonken en een gloed (`tekenVuur`, na de nacht), rook (`tekenRook`), licht (`T.brandLicht` in
+  `T.lichtBronnen`), en de ruïne: de bouwfase `puinFase` van zijn tekening, verkoold (`puinVan`) en een paar dagen
+  smeulend (`T.smeult`, sintels). De spelregel "Brand"; de getallen in `T.BRAND_INSTELLINGEN`.
+- `js/koorts.js`: **de koorts** (vraag 144, 3): het voorval `ziekte` is het begin (`T.tikKoortsDag`): wie het betreft en
+  zijn gezin zijn ziek (`p.ziek`, de dag dat hij beter is, en `p.thuisTot`: in bed), elke nacht steekt een zieke soms een
+  ander aan (`besmet`, maal `vol` en `kou`, maal wat je antwoordde: `doe.koorts` in procenten, `T.koortsMaatregel`), een
+  enkele keer sterft iemand (`sterft` per leeftijd), en wie het had, krijgt het deze keer niet weer (`D.koorts.gehad`).
+  De status `koorts` in `T.OORZAKEN` (`T.koortsNiveau`: Koorts, en Epidemie als een tiende ziek is). De spelregel
+  "Koorts"; de getallen in `T.KOORTS_INSTELLINGEN`.
 - `js/zaak.js`: **de verdwenen graanzak** (vraag 128, 8 okt; Marcel: "akkoord, bouwen maar"): de proef voor informatie,
   de zitting en gevolgen, één keer per spel in de eerste herfst (`T.tikZaakDag`, vóór `T.tikVoorvallenDag`). Wat er echt
   gebeurde, staat in `D.zaak` (de dader, het zieke kind, de schuur, de aanklager, de verkeerde verdachte, de buur, het
@@ -1251,6 +1269,10 @@ eiland ligt, wat voor plek het is en waar de uitgang is.
 `Spel.debug.voorval()` zegt welk voorval er loopt, welke vervolgen nog komen, welke voorvallen er nu kunnen (met hoe
 zwaar ze wegen) en welke oorzaken er spelen;
 `('brand')` laat er nu een beginnen, over mensen die erbij passen, en wie het zegt, zoekt je meteen.
+`Spel.debug.brand()` zegt het brandgevaar, de kans dat de emmers een huis redden, en welke huizen branden, in puin liggen of
+op hout wachten; `('nu')` laat de brand nu beginnen, `('puin')` laat wat brandt nu afbranden, `('herbouw')` laat het puin
+nu weer opbouwen. `Spel.debug.koorts()` zegt wie er ziek is en tot wanneer, en hoeveel het hadden; `('nu')` laat de koorts
+nu beginnen.
 `Spel.debug.zaak()` zegt hoe de graanzak ervoor staat: wie het nam en wie verdacht wordt, het spoor, wat je weet, de
 zitting en hoe het afliep; `('nu')` laat de zak nu verdwijnen (de boer zoekt je meteen), `('zitting')` maakt vandaag de
 dag van de zitting (met `Spel.debug.uur(13)` staan ze er), `('boek')` laat de inner het boek nu voorlezen.

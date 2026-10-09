@@ -50,6 +50,7 @@
       huis: { r: 255, g: 192, b: 112 },
       feest: { r: 255, g: 158, b: 76 },
       schout: { r: 255, g: 196, b: 120 },
+      brand: { r: 255, g: 128, b: 48 },
     },
     // Een vlam flakkert: zoveel van zijn sterkte op en neer, zo snel; een raam half zo veel.
     flakkeren: 0.14,
@@ -494,6 +495,7 @@
     }
     tekenOntginRand(ctx, S);
     tekenJachtRand(ctx, S);
+    tekenRook(ctx, S);
     ctx.restore();
 
     // De nacht valt over de wereld, maar niet over de zwevende teksten: die komen erna, met dezelfde
@@ -506,6 +508,7 @@
     ctx.translate(-Math.round(S.camera.x), -Math.round(S.camera.y));
     for (const r of ramen) vulRamen(ctx, S, r);
     tekenOgen(ctx, S);
+    tekenVuur(ctx, S);
     tekenHuisTekens(ctx, S);
     tekenOogjes(ctx, S);
     tekenWolkjes(ctx, S);
@@ -660,7 +663,7 @@
       const fase = ((Math.sin(b.x * 12.9898 + b.y * 78.233) * 43758.5453) % 1) * Math.PI * 2;
       const t = S.tijd * L.flakkerSnelheid;
       const golf = 0.6 * Math.sin(t * 7.1 + fase) + 0.4 * Math.sin(t * 12.7 + fase * 2.3);
-      const flakker = b.soort === 'ogen' ? 0 : b.soort === 'huis' ? L.flakkeren / 2 : L.flakkeren;
+      const flakker = b.soort === 'ogen' ? 0 : b.soort === 'huis' ? L.flakkeren / 2 : b.soort === 'brand' ? L.flakkeren * 3 : L.flakkeren;
       const n = b.sterkte * L.kracht * nacht * (1 + flakker * golf);
       uit.push({ x, y, rx, ry, k: [(kleur.r / 255) * n, (kleur.g / 255) * n, (kleur.b / 255) * n] });
     }
@@ -2172,6 +2175,138 @@
     return gebakken;
   }
 
+  // De ruïne van een afgebrand huis (js/brand.js; vraag 144, 3; Marcel: "huizen die 'afgefikt' zijn als art"): de bouwfase
+  // van zijn tekening zonder dak (puinFase, de balken), zwart geblakerd; een tekening zonder bouwfasen wordt zelf zwart.
+  // Eén keer gebakken per tekening, zoals bosrandGedimd hierboven.
+  const verkoold = new Map();
+  function puinVan(v) {
+    if (typeof document === 'undefined') return null;
+    const fase = v.tekeningNaam && T.sprites.bouwfase(v.tekeningNaam, T.BRAND_INSTELLINGEN.puinFase);
+    // Heeft hij bouwfasen, maar is hun vel nog niet geladen (js/sprites.js), dan nog even het huis zelf.
+    if (!fase && v.tekeningNaam && T.BOUWFASEN && T.BOUWFASEN.fasen[v.tekeningNaam]) return null;
+    const stuk = fase || T.sprites.buiten(v.vel, v.id);
+    if (!stuk) return null;
+    const sleutel = fase ? `fase:${v.tekeningNaam}` : `huis:${v.vel}:${v.id}`;
+    const bestaand = verkoold.get(sleutel);
+    if (bestaand) return bestaand;
+    const c = document.createElement('canvas');
+    c.width = stuk.b;
+    c.height = stuk.h;
+    const cx = c.getContext('2d');
+    cx.imageSmoothingEnabled = false;
+    cx.drawImage(stuk.beeld, stuk.sx, stuk.sy, stuk.b, stuk.h, 0, 0, stuk.b, stuk.h);
+    cx.globalCompositeOperation = 'source-atop';
+    cx.fillStyle = T.BRAND_INSTELLINGEN.beeld.verkool;
+    cx.fillRect(0, 0, stuk.b, stuk.h);
+    // Hier en daar as: grijze vlekjes, op vaste plekken.
+    cx.fillStyle = 'rgba(120, 112, 104, 0.55)';
+    for (let i = 0; i < (stuk.b * stuk.h) / 900; i++) cx.fillRect(Math.floor(beeldLot(i, 61) * stuk.b), Math.floor(beeldLot(i, 62) * stuk.h), 2, 2);
+    c.versie = 1; // eens getekend, blijft hij zo (js/gl.js)
+    const gebakken = { beeld: c, sx: 0, sy: 0, b: stuk.b, h: stuk.h, ax: stuk.ax, ay: stuk.ay };
+    verkoold.set(sleutel, gebakken);
+    return gebakken;
+  }
+
+  // Waar een huis dat brandt of smeult op het scherm staat: het midden van zijn voet, hoe breed (pixels), en hoe hoog zijn
+  // dak (het anker van zijn tekening).
+  function brandPlekken(S) {
+    const D = T.dorpHier(S);
+    if (!D || !D.gebouwen) return [];
+    const uit = [];
+    for (const g of T.brandendeHuizen(D)) {
+      const v = g.voorwerp;
+      if (!v || !T.smeult(D, g)) continue;
+      const voet = T.voetVanGebouw(g);
+      const p = opGrond(voet.x + voet.b / 2 - 0.5, voet.y + voet.h / 2 - 0.5);
+      const stuk = metSprites() && T.sprites.buiten(v.vel, v.id);
+      const hoog = stuk ? Math.min(stuk.ay, 180) : 70;
+      uit.push({ g, p, voet, breed: (voet.b + voet.h) * 15, hoog: g.brand.fase === 'brandt' ? hoog : hoog * 0.45, brandt: g.brand.fase === 'brandt' });
+    }
+    return uit;
+  }
+
+  // De rook van wat brandt en smeult, vóór de nacht (dus 's nachts donker): dikke grijze wolken die opstijgen, groter en
+  // lichter worden en met de wind meedrijven, uit vierkanten zoals de regen, zodat de videokaart ze zelf tekent.
+  function tekenRook(ctx, S) {
+    const B = T.BRAND_INSTELLINGEN.beeld;
+    const t = S.tijd || 0;
+    for (const b of brandPlekken(S)) {
+      const n = b.brandt ? B.rook : Math.round(B.rook / 4);
+      for (let i = 0; i < n; i++) {
+        const leeftijd = (t * (0.07 + 0.04 * beeldLot(i, 71)) + beeldLot(i, 72)) % 1;
+        const x = b.p.x + (beeldLot(i, 73) - 0.5) * b.breed * 0.5 + leeftijd * leeftijd * 140 + Math.sin(t * 0.7 + i) * 6;
+        const y = b.p.y - b.hoog * 0.7 - leeftijd * B.rookHoog;
+        const m = Math.round((b.brandt ? 16 : 8) + leeftijd * (b.brandt ? 46 : 22));
+        const a = (b.brandt ? 0.55 : 0.32) * (1 - leeftijd) * Math.min(1, leeftijd * 5);
+        const grijs = Math.round(44 + 60 * leeftijd);
+        ctx.fillStyle = `rgba(${grijs}, ${grijs - 3}, ${grijs - 6}, ${a.toFixed(3)})`;
+        ctx.fillRect(Math.round(x - m / 2), Math.round(y - m / 2), m, m);
+      }
+    }
+  }
+
+  // De vlammen, ná de nacht (een vuur is ook in het donker fel): een gloed over het huis, tongen van vuur over het dak die
+  // op en neer gaan (geel aan de voet, oranje, rode punten), en vonken die opstijgen; op het puin dat nog smeult, sintels.
+  // Alles uit vierkanten, in pixels zoals de rest van het beeld.
+  const VUUR = [[255, 244, 170], [255, 214, 90], [255, 158, 40], [236, 96, 24], [178, 44, 18]];
+  function tekenVuur(ctx, S) {
+    const B = T.BRAND_INSTELLINGEN.beeld;
+    const t = S.tijd || 0;
+    for (const b of brandPlekken(S)) {
+      if (!b.brandt) {
+        for (let i = 0; i < B.sintels; i++) {
+          const gloed = 0.5 + 0.5 * Math.sin(t * (2 + beeldLot(i, 81) * 3) + i);
+          ctx.fillStyle = `rgba(255, ${Math.round(90 + 60 * gloed)}, 30, ${(0.35 + 0.5 * gloed).toFixed(3)})`;
+          const x = b.p.x + (beeldLot(i, 82) - 0.5) * b.breed * 0.8;
+          const y = b.p.y - beeldLot(i, 83) * b.hoog;
+          ctx.fillRect(Math.round(x), Math.round(y), 4, 3);
+        }
+        continue;
+      }
+      const midden = b.p.y - b.hoog * 0.6;
+      const r = b.breed * 0.75;
+      const gloed = ctx.createRadialGradient(b.p.x, midden, 0, b.p.x, midden, r);
+      gloed.addColorStop(0, `rgba(255, 140, 50, ${(0.42 + 0.08 * Math.sin(t * 9)).toFixed(3)})`);
+      gloed.addColorStop(0.6, 'rgba(255, 110, 40, 0.16)');
+      gloed.addColorStop(1, 'rgba(255, 90, 30, 0)');
+      ctx.fillStyle = gloed;
+      ctx.fillRect(b.p.x - r, midden - r, r * 2, r * 2);
+      // De tongen: elk een stapel vierkanten, onderaan breed, naar boven smaller, die flakkert in hoogte en opzij, op vaste
+      // plekken over het hele dak: een punt op de voet van het huis, zo hoog als het dak daar is (het hoogst in het midden).
+      const px = 4;
+      const tongen = Math.max(B.tongen, Math.min(24, Math.round((b.voet.b * b.voet.h) / 3)));
+      for (let k = 0; k < tongen; k++) {
+        const fx = 0.15 + 0.7 * beeldLot(k, 98);
+        const fy = 0.15 + 0.7 * beeldLot(k, 99);
+        const q = opGrond(b.voet.x + fx * b.voet.b - 0.5, b.voet.y + fy * b.voet.h - 0.5);
+        const midden = 1 - Math.max(Math.abs(fx - 0.5), Math.abs(fy - 0.5)) * 2;
+        const voetX = q.x;
+        const voetY = q.y - b.hoog * (0.35 + 0.45 * midden);
+        const hoog = B.vlamHoog * (0.45 + 0.35 * beeldLot(k, 95) + 0.2 * Math.sin(t * (5 + k) + k * 1.7));
+        for (let y = 0; y < hoog; y += px) {
+          const f = y / hoog;
+          const breed = Math.round((1 - f) * (14 + 10 * beeldLot(k, 96)) / px) * px;
+          if (breed < px) break;
+          const opzij = Math.sin(t * 7 + k + f * 4) * 6 * f;
+          const c = VUUR[Math.min(VUUR.length - 1, Math.floor(f * VUUR.length + 0.5 * beeldLot(k * 31 + y, 97)))];
+          ctx.fillStyle = `rgba(${c[0]}, ${c[1]}, ${c[2]}, ${(0.92 - 0.35 * f).toFixed(3)})`;
+          ctx.fillRect(Math.round((voetX + opzij - breed / 2) / px) * px, Math.round((voetY - y) / px) * px, breed, px);
+        }
+      }
+      // De vonken.
+      for (let i = 0; i < B.vlammen; i++) {
+        const leeftijd = (t * (0.9 + 0.8 * beeldLot(i, 91)) + beeldLot(i, 92)) % 1;
+        const u = beeldLot(i, 93) - 0.5;
+        const x = b.p.x + u * b.breed * 0.6 * (1 - 0.3 * leeftijd) + Math.sin(t * 6 + i) * 5 * leeftijd;
+        const y = b.p.y - b.hoog * (0.35 + 0.45 * beeldLot(i, 94)) - leeftijd * B.vlamHoog * 1.4;
+        const m = Math.max(2, Math.round(7 * (1 - leeftijd)));
+        const c = VUUR[Math.min(VUUR.length - 1, Math.floor(leeftijd * VUUR.length))];
+        ctx.fillStyle = `rgba(${c[0]}, ${c[1]}, ${c[2]}, ${(0.95 * (1 - leeftijd * 0.7)).toFixed(3)})`;
+        ctx.fillRect(Math.round(x - m / 2), Math.round(y - m / 2), m, m);
+      }
+    }
+  }
+
   // Tekent één boom of struik van de bosrand: hetzelfde plaatje en dezelfde windbuiging als
   // gewone buitenversiering (tekenVoorwerp hieronder), maar met bosrandHelder in plaats van
   // randDof — dat laatste is voor het verbleken van bestaande kaartversiering vlak bij háár eigen
@@ -2229,11 +2364,13 @@
       // tweede tekening voor nodig te hebben.
       const fase = v.inAanbouw && v.tekeningNaam && T.bouwFaseIndex && metSprites() && T.sprites.bouwfase
         && T.sprites.bouwfase(v.tekeningNaam, T.bouwFaseIndex(S.kalender ? S.kalender.dag : 0, v.klaarOp, v.bouwtijd, v.vanFase || 0));
+      // Afgebrand (js/brand.js): de ruïne, een bouwfase zonder dak, verkoold.
+      const puin = v.brand === 'puin' && metSprites() ? puinVan(v) : null;
       const alpha = dof * (v.inAanbouw && !fase ? 0.45 : 1);
       if (alpha <= 0.02) return;
       if (alpha < 1) ctx.globalAlpha = alpha;
       const plaatjes = metSprites() && T.sprites.buitenAan;
-      let stuk = fase || (plaatjes && T.sprites.buiten(v.vel, v.id, windVoorInstantie(S, v)));
+      let stuk = puin || fase || (plaatjes && T.sprites.buiten(v.vel, v.id, windVoorInstantie(S, v)));
       // Een huis of een gebouw heeft een eigen bestand, dat pas laadt als hij op de kaart staat (js/sprites.js; vraag
       // 114, stap 1). Laadt het nog, dan wat er daarnet stond (een huis dat net doorgroeide), en anders niets: een vlak
       // alleen als het plaatje echt ontbreekt.

@@ -123,7 +123,7 @@
       if (g.reden === 'gesneuveld') return `${T.hoofdletter(g.wie)}${komma} ${een ? 'sneuvelde' : 'sneuvelden'} voor de heer.`;
       return `${T.hoofdletter(g.wie)}${komma} ${stierf(een)} gestorven.`;
     }
-    if (g.soort === 'boeren' || g.soort === 'feest' || g.soort === 'bode') return g.tekst;
+    if (g.soort === 'boeren' || g.soort === 'feest' || g.soort === 'bode' || g.soort === 'brand') return g.tekst;
     // Wat hij besliste toen je weg was: "ik", tenzij het een raadsman van eerder was. Wat hij zei, sluit de zin zelf
     // af, zoals in zijn bericht (js/raadsman.js).
     if (g.soort === 'besluit') return `Over ${g.titel} besliste ${g.door === door ? 'ik' : g.door}: "${g.antwoord}"${g.prijs ? ` (${g.prijs})` : ''}`;

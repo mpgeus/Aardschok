@@ -165,6 +165,9 @@
     for (const soort of Object.keys(T.VEE)) n += (t.waren || 0) * (doe[soort] || 0);
     if (doe.verban) n += t.verban || 0;
     n -= ((t.dood || 0) * (doe.sterfkans || 0)) / 10;
+    // De koorts (js/koorts.js): hoe vaker ze overgaat, hoe meer kans op doden; ongeveer een vijfde van een sterfkans.
+    if (doe.koorts != null) n -= ((t.dood || 0) * doe.koorts * 0.2) / 10;
+    if (doe.brand === 'laat') n -= t.waren || 0; // een huis dat afbrandt, moet weer opgebouwd worden
     n += (t.gezin || 0) * (doe.gezin || 0);
     return n;
   }

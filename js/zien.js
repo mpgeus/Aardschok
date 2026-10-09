@@ -65,7 +65,8 @@
     if (!w || !D.kalender || !T.dagdeelVan) return herberg.concat(schout);
     const deel = T.dagdeelVan(D.kalender.dag, T.isOogstDag(D.kalender.dag));
     const huizen = huizenLicht(D, deel);
-    if (deel !== 'avond') return herberg.concat(huizen, schout);
+    const brand = T.brandLicht(D); // wat brandt, geeft ook overdag licht (js/brand.js)
+    if (deel !== 'avond') return herberg.concat(huizen, brand, schout);
     // De lantaarn naast de deur van de herberg is het licht van de herberg al.
     const vanDeHerberg = (v) => herberg.some((h) => T.afstand(h, v) <= 1);
     const lantaarns = w.voorwerpen
@@ -73,7 +74,7 @@
       .map((v) => ({ x: v.x, y: v.y, straal: IN().lantaarnStraal, sterkte: IN().lantaarnSterkte, soort: 'lantaarn' }));
     // En op een feest het licht op het plein (js/feesten.js).
     const feest = T.feestLicht(D).map((b) => ({ ...b, soort: 'feest' }));
-    return herberg.concat(lantaarns, feest, huizen, schout);
+    return herberg.concat(lantaarns, feest, huizen, brand, schout);
   };
 
   // Draagt de schout van dit dorp nu een brandende lantaarn? Buiten, op de kaart van zijn dorp, als het donker genoeg
@@ -105,7 +106,7 @@
     for (const p of D.bewoners.mensen) {
       const g = p.huis;
       const e = p.wezen;
-      if (!g || g.klaar === false || herbergen.has(g) || p.weg || !e || e.dood) continue;
+      if (!g || g.klaar === false || herbergen.has(g) || p.weg || !e || e.dood || (g.voorwerp && g.voorwerp.brand)) continue;
       if (deuren.has(g) && deuren.get(g).aan) continue;
       if (!deuren.has(g)) deuren.set(g, { deur: T.deurVan(w, g), aan: false });
       const huis = deuren.get(g);

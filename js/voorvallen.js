@@ -149,7 +149,7 @@
     weduweDak: { soort: 'verzoek', titel: 'het dak van de weduwe', als: { seizoen: ['herfst', 'winter'] }, wie: { karakter: 'weduwe' } },
     // Rampen: iets doen kost iets, niets doen ook.
     brand: {
-      soort: 'ramp', titel: 'de brand', winter: 3, oorzaak: 'vol', roep: 'Brand! {wie} komt je halen.',
+      soort: 'ramp', titel: 'de brand', winter: 3, oorzaak: ['vol', 'brandgevaar'], roep: 'Brand! {wie} komt je halen.',
       wie: { leeftijd: ['jong', 'volwassen'] }, ander: { boer: false },
     },
     ziekte: { soort: 'ramp', titel: 'de koorts', winter: 2, oorzaak: ['kou', 'vol'], sterft: 'De koorts', wie: { geslacht: 'vrouw' } },
@@ -347,6 +347,36 @@
         speelt: (D) => (T.droogteNiveau(D) >= 2 ? droogteWaarom(D) : null),
       },
       helpt: (D) => `regen; tot dan kost het de oogst (nu ${Math.round((1 - T.droogteFactor(D)) * 100)}% minder), en de beekjes staan droog. Houd graan apart voor de winter, of koop het van de marskramer`,
+    },
+    // De koorts (js/koorts.js; vraag 144, 3): zolang er iemand ziek is.
+    koorts: {
+      naam: 'Koorts',
+      kop: 'Er is koorts in het dorp',
+      nog: 'Er is nog steeds koorts in het dorp',
+      voorbij: 'De koorts is voorbij',
+      speelt: (D) => (T.koortsNiveau(D) >= 1 ? T.koortsWaarom(D) : null),
+      erger: {
+        naam: 'Epidemie',
+        kop: 'De koorts is een epidemie',
+        minder: 'Het is geen epidemie meer, maar er is nog koorts',
+        speelt: (D) => (T.koortsNiveau(D) >= 2 ? T.koortsWaarom(D) : null),
+      },
+      helpt: () => 'een schone put, bier in plaats van water, en minder mensen op elkaar (een vol dorp en de kou maken het erger)',
+    },
+    // Brandgevaar (js/brand.js; vraag 144, 3): in de droogte vat een dak makkelijk vlam.
+    brandgevaar: {
+      naam: 'Brandgevaar',
+      kop: 'Er is brandgevaar',
+      nog: 'Er is nog steeds brandgevaar',
+      voorbij: 'Het brandgevaar is voorbij',
+      speelt: (D, dag) => (T.brandgevaarNiveau(D, dag) >= 1 ? 'het is droog, en een rieten dak vat zo vlam' : null),
+      erger: {
+        naam: 'Groot brandgevaar',
+        kop: 'Er is groot brandgevaar',
+        minder: 'Het brandgevaar is niet groot meer, maar wel nog',
+        speelt: (D, dag) => (T.brandgevaarNiveau(D, dag) >= 2 ? (T.droogteNiveau(D) >= 2 ? 'het is ernstig droog' : 'het is droog, en de huizen zitten vol') : null),
+      },
+      helpt: () => 'regen; tot dan hout in de voorraad, om te blussen en weer op te bouwen, en een dorp dat niet te vol is',
     },
     onvrede: {
       naam: 'Onvrede',
@@ -767,6 +797,10 @@
       const wie = L.ander && kanHetBetreffen(D, L.ander) ? [L.ander] : undefined;
       T.wijzigBevolking(D, -1, 'ziekte', v.sterft || T.hoofdletter(v.titel), wie);
     }
+    // De brand (js/brand.js): met de emmers; en de koorts (js/koorts.js): wat je doet, maakt dat ze zich minder verspreidt.
+    if (doe.blus) T.blusBrand(D);
+    if (doe.brand === 'laat') T.laatBranden(D);
+    if (doe.koorts != null) T.koortsMaatregel(D, doe.koorts);
     // Een feest (js/feesten.js): het dorp viert dit voorval op het plein, morgen de hele dag of 's avonds.
     if (doe.feest && L.id) T.zetFeest(D, L.id, doe.feest, D.kalender ? D.kalender.dag : dag);
     // Een bouwverzoek (js/verzoeken.js): ja, en het gebouw komt er; nee, en hij onthoudt het.
@@ -836,6 +870,9 @@
       if (!T.plaatsVoorEenGezin(D) && uit.kan) Object.assign(uit, { kan: false, waarom: 'er is geen plaats: wijs een erf aan (B)' });
     }
     if (doe.sterfkans) delen.push(`${doe.sterfkans}% kans op een dode`);
+    if (doe.blus) delen.push(`de buren blussen: ${Math.round(T.redKans(D) * 100)} van de 100 keer blijft het huis staan`);
+    if (doe.brand === 'laat') delen.push('het huis brandt af, en het gezin bouwt het weer op');
+    if (doe.koorts != null) delen.push(doe.koorts >= 100 ? 'de koorts gaat zijn gang' : `de koorts gaat ${doe.koorts <= 50 ? 'half zo' : 'wat minder'} vaak over`);
     if (doe.wolven < 0) delen.push(`${T.telwoord(-doe.wolven)} wolven minder`);
     if (doe.bewaak && T.wachtersNodig) delen.push(`${T.telwoord(T.wachtersNodig(D))} mannen bij de graanschuur tot het zaaien${doe.bewaak < 1 ? ', de helft voor het dorp' : ''}; elke hongerdag kost vertrouwen`);
     if (doe.jacht) delen.push(`de mannen gaan met je mee naar de wolven (${T.telwoord(T.BEESTEN_INSTELLINGEN.jacht.dagen)} dagen)`);

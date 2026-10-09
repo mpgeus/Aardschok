@@ -574,8 +574,22 @@ De spelregel "Het weer": met droogte, zonder droogte (alleen te zien), of altijd
 in één keer, het weer ook in beeld, en bij droogte de beekjes droog, zodat de visser minder vangt. Eerder (4 okt, "A"):
 het beeld van het weer samen met zijn regels, de kleur van het weer op de lichtkaart.
 
-**Open** (vraag 144; Marcel, 9 okt: "Ja heel goed, dit moeten we pakken"): sneeuw op de grond en daarna op de daken;
-ziekte en brand als status, met vuur en een afgebrand huis dat weer opgebouwd wordt.
+De brand (`js/brand.js`): in de droogte is er brandgevaar, en groot brandgevaar in een ernstige droogte of een droogte
+in een vol dorp; dan komt de brand vaker. Als iemand je komt halen, staat het huis echt in brand: vuurtongen over het dak,
+vonken, rook en een gloed die 's nachts de buurt verlicht. Met de emmers is het een uur na je antwoord uit, en blijft het huis 65
+van de 100 keer staan (bij brandgevaar minder); laat je het branden, dan is het een uur later afgebrand, en doet niemand
+iets, na zes uur. Wat afbrandt, is een zwarte ruïne met
+verkoolde balken zonder dak, die twee dagen smeult. Het gezin woont zolang bij de buren, en na drie dagen bouwt het zijn
+huis weer op, met de helft van het hout dat het kostte, in de bouwfasen; zonder hout wacht het.
+
+De koorts (`js/koorts.js`): begint met het voorval, bij wie het betreft en zijn gezin. Wie ziek is, ligt een week in bed
+en werkt niet, en steekt elke nacht soms een ander aan, vaker in een vol dorp en in de kou. Wat je antwoordde, telt: de
+put schoonmaken (minder dan de helft zo vaak), bier in plaats van water, of bidden (dan gaat ze haar gang). Een enkele
+keer sterft er iemand, de ouden en de kinderen vaker; wie het had, krijgt het deze keer niet weer. Zolang er iemand ziek
+is, is het de status Koorts, en Epidemie als een tiende van het dorp ziek is. De spelregels "Brand" en "Koorts".
+
+**Open** (vraag 144; Marcel, 9 okt: "Ja heel goed, dit moeten we pakken"): sneeuw op de grond en daarna op de daken. En
+wat Claude erbij zag: een brand die overslaat op het huis ernaast (bij groot brandgevaar), staat in `opmerkingen.md`.
 
 ## De bode naar de marskramer (Marcel, 9 okt 2026; werklijst vraag 143)
 

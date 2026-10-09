@@ -1654,6 +1654,50 @@
         marskramer: D.marskramer ? (D.marskramer.bestelling ? { op: 'bestelling', heeft: D.marskramer.heeft, prijzen: D.marskramer.bestelling } : 'op zijn ronde') : null,
       };
     },
+    // De brand (js/brand.js; werklijst vraag 144, 3): het brandgevaar, en welke huizen branden, in puin liggen of op hout
+    // wachten. Spel.debug.brand('nu') laat de brand nu beginnen (zoals Spel.debug.voorval('brand')), ('puin') laat wat
+    // brandt nu afbranden, ('herbouw') laat wat in puin ligt nu weer opbouwen (als er hout is).
+    brand(wat) {
+      const D = S.dorp;
+      if (wat === 'nu') {
+        const r = this.voorval('brand');
+        if (typeof r === 'string') return r;
+        T.werkBrandBij(S, D);
+      }
+      for (const g of T.brandendeHuizen(D)) {
+        if (wat === 'puin' && g.brand.fase === 'brandt') g.brand.sinds -= T.BRAND_INSTELLINGEN.brandUren / 24 + 0.01;
+        if (wat === 'puin') g.brand.antwoord = null;
+        if (wat === 'herbouw' && g.brand.fase === 'puin') g.brand.sinds -= T.BRAND_INSTELLINGEN.puinDagen + 1;
+      }
+      if (wat === 'puin') T.werkBrandBij(S, D);
+      if (wat === 'herbouw') T.tikBrandDag(D, Math.floor(S.kalender.dag));
+      const niveau = T.brandgevaarNiveau(D);
+      return {
+        gevaar: ['geen', 'brandgevaar', 'groot brandgevaar'][niveau],
+        redKans: `${Math.round(T.redKans(D) * 100)} van de 100`,
+        huizen: T.brandendeHuizen(D).map((g) => ({
+          huis: `${g.soort} op ${g.x},${g.y}`, fase: g.brand.fase, sinds: T.uurTekst(g.brand.sinds), antwoord: g.brand.antwoord || null,
+          wachtOpHout: !!g.brand.wacht, hout: T.herbouwHout(g),
+        })),
+      };
+    },
+    // De koorts (js/koorts.js; werklijst vraag 144, 3): wie er ziek is en tot wanneer, wie het had, en hoe snel ze overgaat.
+    // Spel.debug.koorts('nu') laat de koorts nu beginnen (het voorval, en de nacht erna).
+    koorts(wat) {
+      const D = S.dorp;
+      if (wat === 'nu') {
+        const r = this.voorval('ziekte');
+        if (typeof r === 'string') return r;
+        T.tikKoortsDag(D, Math.floor(S.kalender.dag));
+      }
+      const K = D.koorts;
+      return K
+        ? {
+          niveau: ['geen', 'koorts', 'epidemie'][T.koortsNiveau(D)], sinds: T.datumVanDag(K.sinds).tekst, maat: K.maat,
+          ziek: T.zieken(D).map((p) => `${T.naamVanBewoner(p)} (${p.leeftijd}), tot ${T.datumVanDag(p.ziek).tekst}`), gehad: K.gehad.length,
+        }
+        : 'Er is geen koorts.';
+    },
     // De twee bazen (js/bazen.js; werklijst vraag 106): de gunst van de heer en het vertrouwen van het dorp, hoe ze erbij
     // staan, waarom, en of je al gewaarschuwd bent. Spel.debug.bazen('gunst', 15) zet de gunst op 15 (met de
     // waarschuwing als hij onder de grens komt), ('vertrouwen', 0) jaagt je weg als je al gewaarschuwd was.

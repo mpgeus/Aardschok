@@ -1248,6 +1248,9 @@
     // Vóór de voorvallen de graanzak (js/zaak.js): één keer, in de eerste herfst, en de zitting erover.
     T.tikZaakDag(D, dag);
     T.tikVoorvallenDag(D, dag);
+    // Een huis dat afbrandde, bouwt het gezin weer op (js/brand.js); en de koorts gaat rond, of is voorbij (js/koorts.js).
+    T.tikBrandDag(D, dag);
+    T.tikKoortsDag(D, dag);
     // En de feesten (js/feesten.js): begint er vandaag een, dan zegt het dorp het en staat de meiboom er; op een hele
     // feestdag werkt niemand (stap 6 hieronder).
     T.tikFeestenDag(D, dag);

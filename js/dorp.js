@@ -91,6 +91,7 @@
     T.werkInnerBij(S, D); // en de inner in oogstmaand: hij loopt zijn ronde, of met de schout mee (js/inner.js)
     T.werkBewonersBij(D); // een nieuw gezin komt over de weg, wie wegtrekt gaat (js/bewoners.js)
     T.werkRoversBij(S, D); // rovers komen naar een akker, roven en gaan weer; de militie loopt met je mee (js/rovers.js)
+    T.werkBrandBij(S, D); // de brand van een voorval: het huis brandt, tot het uit is of afgebrand (js/brand.js)
     T.werkVoorvallenBij(S, D); // wie je zoekt met een voorval, loopt naar je toe en spreekt je aan (js/voorvallen.js)
     T.werkZaakBij(S, D); // staat de schout bij het spoor van de graanzak, dan ziet hij het (js/zaak.js)
     T.werkOchtendrapportBij(S, D); // 's ochtends geeft je raadsman je zijn rapport (js/ochtendrapport.js)

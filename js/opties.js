@@ -257,6 +257,27 @@
           uitleg: 'De marskramer komt alleen op zijn drie vaste rondes. Zoals voor 9 okt.' },
       ],
     },
+    // Marcel, 9 okt (werklijst vraag 144, 3): "Ziekte en brand als status is ook goed".
+    {
+      id: 'brand', naam: 'Brand', standaard: 'aan',
+      uitleg: 'Of de brand echt een huis laat afbranden, en of er brandgevaar is in de droogte.',
+      keuzes: [
+        { id: 'aan', naam: 'Ja', zet: { 'BRAND_INSTELLINGEN.aan': true },
+          uitleg: 'Het huis brandt; met de emmers blijft het meestal staan, anders brandt het af en bouwt het gezin het weer op. In de droogte is er brandgevaar, en brandt het vaker.' },
+        { id: 'uit', naam: 'Nee', zet: { 'BRAND_INSTELLINGEN.aan': false },
+          uitleg: 'De brand is alleen een vraag met een prijs, en er is geen brandgevaar. Zoals voor 9 okt.' },
+      ],
+    },
+    {
+      id: 'koorts', naam: 'Koorts', standaard: 'aan',
+      uitleg: 'Of de koorts een tijd rondgaat, of alleen een kans op een dode is.',
+      keuzes: [
+        { id: 'aan', naam: 'Ja', zet: { 'KOORTS_INSTELLINGEN.aan': true },
+          uitleg: 'Wie ziek is, ligt een week in bed en steekt soms een ander aan, vaker in de kou en in een vol dorp; een enkele keer sterft iemand. Wat je doet, maakt dat ze minder overgaat.' },
+        { id: 'uit', naam: 'Nee', zet: { 'KOORTS_INSTELLINGEN.aan': false },
+          uitleg: 'Het voorval kost alleen wat het kost, en er wordt niemand ziek.' },
+      ],
+    },
     // Stap 2 van de inner, de verstopplekken (Marcel, 25 sep; spel.md, "Marcel koos voor stap 2").
     {
       id: 'sporen', naam: 'Sporen', standaard: 'alles',
@@ -724,6 +745,8 @@
     { naam: 'De dag', blok: 'DAG_INSTELLINGEN' },
     { naam: 'Het weer', blok: 'WEER_INSTELLINGEN' },
     { naam: 'De bode', blok: 'BODE_INSTELLINGEN' },
+    { naam: 'De brand', blok: 'BRAND_INSTELLINGEN' },
+    { naam: 'De koorts', blok: 'KOORTS_INSTELLINGEN' },
     { naam: 'Het licht', blok: 'LICHT_INSTELLINGEN' },
     { naam: 'Gebouwen en bevolking', blok: 'GEBOUWEN_INSTELLINGEN' },
     { naam: 'De bewoners', blok: 'BEWONERS_INSTELLINGEN' },
