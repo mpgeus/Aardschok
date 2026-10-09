@@ -1633,11 +1633,13 @@
       };
     },
     // De bode naar de marskramer (js/bode.js; werklijst vraag 143): of het kan en waarom niet, wie er onderweg is en wanneer
-    // de marskramer komt. Spel.debug.bode('stuur', { graan: 3 }) stuurt hem nu (true erachter: met een begeleider),
-    // ('nu') laat hem met de marskramer nu aankomen, ('open') opent de brief.
+    // de marskramer komt, het gevaar onderweg en wie hem onderschept. Spel.debug.bode('stuur', { graan: 3 }, 2) stuurt hem
+    // nu (met twee mannen erbij), ('nu') laat ze nu aankomen, ('open') opent de brief, ('rovers') of ('heer') laat wie
+    // onderweg is nu onderscheppen.
     bode(wat, bestelling, mee) {
       const D = S.dorp;
-      if (wat === 'stuur') T.stuurBode(D, bestelling || { graan: 3 }, !!mee);
+      if (wat === 'stuur') T.stuurBode(D, bestelling || { graan: 3 }, mee || 0);
+      if ((wat === 'rovers' || wat === 'heer') && D.bode) D.bode.onderschept = wat;
       if (wat === 'nu' && D.bode) {
         D.bode.komt = Math.floor(S.kalender.dag);
         T.tikBodeDag(D, Math.floor(S.kalender.dag));
@@ -1647,7 +1649,8 @@
       const B = D.bode;
       return {
         kan: k.kan, reden: k.reden || null, status: k.status ? k.status.naam : null, winter: k.winter,
-        onderweg: B ? { wie: B.wie.map(T.naamVanBewoner), komt: T.datumVanDag(B.komt).tekst, bestelling: B.bestelling, haaltHetNiet: B.kwijt } : null,
+        gevaar: T.bodeGevaarTekst(D, 0),
+        onderweg: B ? { wie: B.wie.map(T.naamVanBewoner), komt: T.datumVanDag(B.komt).tekst, bestelling: B.bestelling, onderschept: B.onderschept, afloop: B.onderschept === 'rovers' ? ((o) => ({ afgeslagen: o.afgeslagen, dood: o.dood.map(T.naamVanBewoner), gewond: o.gewond.map(T.naamVanBewoner), roverDood: o.roverDood }))(T.bodeOnderweg(D, B)) : null } : null,
         marskramer: D.marskramer ? (D.marskramer.bestelling ? { op: 'bestelling', heeft: D.marskramer.heeft, prijzen: D.marskramer.bestelling } : 'op zijn ronde') : null,
       };
     },

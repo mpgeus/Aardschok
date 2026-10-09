@@ -278,6 +278,84 @@
     T.bezoekerKomtAan(D, { meteen: true, aankomst: { tekst: `Rovers! ${wie}, op weg naar ${akker}.${hulp}`, soort: 'gevaar', naarGewoon: true } });
   }
 
+  // De hinderlaag (de bode naar de marskramer, js/bode.js; werklijst vraag 143; Marcel, 9 okt: "De bode moet "onderschept"
+  // kunnen worden. dat maakt het spannend"): komt de bode dicht bij de uitgang, dan staan de rovers er, en houden ze hem en
+  // wie meegaat aan (e.aangehouden: ze staan stil, T.dagAnker). Wie meegaat, vecht aan jouw kant, en de militie komt naar
+  // de schout. Komt de schout erbij, dan is het een gevecht in beurten; anders loopt het na een tijd af zoals onderweg
+  // (T.bodeAangehouden). Is de bode niet meer op de kaart, dan gebeurt het buiten beeld.
+  const bodeWezens = (D) => (D.bode ? D.bode.wie.map((p) => p.wezen).filter((e) => e && !e.dood && D.wereld.wezens.includes(e)) : []);
+  function laatDeBodeGaan(D, wezens = bodeWezens(D)) {
+    for (const e of wezens) {
+      delete e.aangehouden;
+      if (e.opgeroepen) T.laatGaan(e);
+    }
+    if (D.bode) D.bode.hinderlaag = false;
+  }
+  function beginHinderlaag(D, A) {
+    const w = D.wereld;
+    const R = D.rovers;
+    const B = D.bode;
+    const wezens = bodeWezens(D);
+    const bode = B && B.hinderlaag && B.wie[0] && B.wie[0].wezen;
+    const uitgang = T.wegInEnUit(w);
+    if (!bode || !wezens.includes(bode) || !uitgang) {
+      // Hij is de kaart al af: dan gebeurt het onderweg.
+      if (B) B.hinderlaag = false;
+      R.aanval = null;
+      return;
+    }
+    if (T.afstand(uitgang, { x: bode.tx, y: bode.ty }) > T.BODE_INSTELLINGEN.hinderlaag.afstand) return;
+    A.ingang = uitgang;
+    const aantal = Math.max(T.BODE_INSTELLINGEN.rovers.aanvallers, R.bende.length);
+    const leden = R.bende.length ? R.bende.slice() : Array.from({ length: aantal }, (_, i) => ({ vel: wildVel(D, A.dag, i) }));
+    A.rovers = [];
+    for (const lid of leden) {
+      const e = maakRover(D, lid, plekBij(w, uitgang));
+      w.wezens.push(e);
+      A.rovers.push(e);
+    }
+    A.fase = 'roven';
+    A.sinds = uurNu(D);
+    A.roofTot = uurNu(D) + T.BODE_INSTELLINGEN.hinderlaag.uren;
+    R.laatsteAanval = A.dag;
+    for (const e of wezens) {
+      e.aangehouden = { x: e.tx, y: e.ty };
+      if (!e.onderweg) e.pad = [];
+    }
+    // Wie meegaat, vecht aan jouw kant (de bode zelf niet), en blijft bij hem.
+    const mee = wezens.filter((e) => e !== bode);
+    for (const e of mee) roepOp(e);
+    const militie = T.schoutIsWeg(D) ? [] : T.militieVan(D).filter((e) => !mee.includes(e));
+    for (const e of militie) roepOp(e);
+    T.bewapen(D, [...mee, ...militie]);
+    const naam = T.naamVanBewoner(B.wie[0]);
+    const wie = R.bende.length ? `${T.opsomming(leden.map((l) => l.naam))}, ${leden.length === 1 ? 'die wegtrok' : 'die wegtrokken'}` : `${T.hoofdletter(T.telwoord(leden.length))} rovers`;
+    const hulp = militie.length ? ' De militie komt naar je toe.' : '';
+    T.bezoekerKomtAan(D, { meteen: true, aankomst: { tekst: `Rovers op de weg! ${wie} houden ${naam} aan bij de uitgang van het dorp. Ga erheen, of ze nemen alles.${hulp}`, soort: 'gevaar', naarGewoon: true } });
+  }
+  function werkHinderlaagBij(D, A, levend) {
+    const B = D.bode;
+    const wezens = bodeWezens(D);
+    if (A.fase === 'roven') {
+      if (!B || !wezens.length) {
+        A.fase = 'weg';
+        A.sinds = uurNu(D);
+        return;
+      }
+      // Ze staan om hem heen.
+      const bode = wezens[0];
+      for (const e of levend) if (!e.pad.length && !e.onderweg && T.afstand({ x: e.tx, y: e.ty }, { x: bode.tx, y: bode.ty }) > 1.5) stuur(D, e, { x: bode.tx, y: bode.ty });
+      if (uurNu(D) < A.roofTot) return;
+      T.bodeAangehouden(D, A.rovers);
+      laatDeBodeGaan(D, wezens);
+      A.fase = 'weg';
+      A.sinds = uurNu(D);
+      for (const e of levend) e.pad = [];
+      return true;
+    }
+    return false;
+  }
+
   // Wilde rovers zien eruit als gewone mensen van buiten: mannen en vrouwen, jong en volwassen.
   function wildVel(D, dag, i) {
     const leeftijd = lot(D, dag, 20 + i) < 0.7 ? 'volwassen' : 'jong';
@@ -325,17 +403,20 @@
     const w = D.wereld;
     if (A.fase === 'wacht') {
       if (S.modus !== 'verkennen') return;
+      if (A.soort === 'hinderlaag') return beginHinderlaag(D, A);
       if (!A.meteen && T.uurVanDag(D.kalender.dag) < IN().uur) return;
       begin(D, A);
       return;
     }
-    // De militie loopt met de schout mee (zoals de inner, js/inner.js).
-    for (const e of opgeroepen(D)) if (!e.onderweg) T.loopNaastDeSchout(D, e);
+    // De militie loopt met de schout mee (zoals de inner, js/inner.js); wie bij de bode is, blijft daar.
+    for (const e of opgeroepen(D)) if (!e.onderweg && !e.aangehouden) T.loopNaastDeSchout(D, e);
     const levend = A.rovers.filter((e) => !e.dood && w.wezens.includes(e));
     if (!levend.length) {
+      if (A.soort === 'hinderlaag') laatDeBodeGaan(D);
       eind(D);
       return;
     }
+    if (A.soort === 'hinderlaag' && A.fase === 'roven') return werkHinderlaagBij(D, A, levend);
     const veld = w.akkers[A.veld];
     if (A.fase === 'komen') {
       for (const e of levend) if (!e.pad.length && !e.onderweg && !opVeld(veld, e)) stuur(D, e, { x: veld.x + Math.floor(veld.b / 2), y: veld.y + Math.floor(veld.h / 2) });
@@ -374,7 +455,11 @@
     const A = D.rovers && D.rovers.aanval;
     if (!A || !A.rovers) return;
     if (A.rovers.every((e) => e.dood)) {
-      T.zeg(D, 'De rovers zijn verslagen.', 'goed');
+      if (A.soort === 'hinderlaag') {
+        T.bodeWegVrij(D);
+        laatDeBodeGaan(D);
+        T.zeg(D, D.bode ? 'De rovers zijn verslagen. De bode gaat verder.' : 'De rovers zijn verslagen.', 'goed');
+      } else T.zeg(D, 'De rovers zijn verslagen.', 'goed');
       eind(D);
     }
   };

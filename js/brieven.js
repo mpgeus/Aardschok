@@ -203,8 +203,8 @@
       };
     },
     // De brief aan de marskramer (js/bode.js; werklijst vraag 143; Marcel, 9 okt: "soort van brief sturen met een bode"):
-    // jouw papier, bij je huis, in een moeilijke tijd. Je schrijft wat hij moet brengen, en een dorpeling brengt hem; in
-    // de winter kan er een weerbare man mee.
+    // jouw papier, bij je huis, in een moeilijke tijd. Je schrijft wat hij moet brengen, en een dorpeling brengt hem; tot
+    // drie weerbare mannen kunnen mee, tegen de rovers onderweg (het gevaar staat eronder, T.bodeGevaarTekst).
     bode: (S) => {
       const D = S.dorp;
       const k = T.kanBodeSturen(D);
@@ -216,14 +216,18 @@
         return `<p class="bode-rij"><label>${T.hoofdletter(wat)}: <input type="number" min="0" max="${W.hooguit}" step="1" value="0" data-wat="${wat}"> ` +
           `pak${W.hooguit === 1 ? '' : 'ken'} van ${W.per}</label> <small>(${prijs} goud per pak, tot ${W.hooguit})</small></p>`;
       });
-      const mee = k.winter ? '<p class="bode-rij"><label><input type="checkbox" data-mee="1"> Een weerbare man gaat mee, ter bescherming in de sneeuw en tegen de wolven.</label></p>' : '';
+      const kunnen = Math.min(B.meeHooguit, T.bodeBegeleiders(D, B.meeHooguit).length);
+      const mee = kunnen
+        ? `<p class="bode-rij"><label>Mee ter bescherming: <input type="number" min="0" max="${kunnen}" step="1" value="0" data-mee="1"> weerbare ${kunnen === 1 ? 'man' : 'mannen'}</label> <small>(tot ${kunnen}, elk ${Math.round(B.loon * 10)} zilver)</small></p>`
+        : '';
+      const gevaar = k.kan ? `<p class="bode-gevaar"><small>${veilig(T.bodeGevaarTekst(D, 0))}</small></p>` : '';
       const waarom = !k.kan ? k.reden : !bijHuis ? 'Je schrijft de brief bij je huis.' : '';
       const tijd = `Hij kan er over ${T.telwoord(k.dagen)} dagen zijn${k.winter ? ', want het is winter: de wegen zijn slecht, en hij vraagt het dubbele' : `, en hij vraagt ${k.maal === 1.5 ? 'anderhalf keer' : `${k.maal} keer`} wat hij anders vraagt`}.`;
       return {
         titel: 'Een brief aan de marskramer',
         wanneer: vandaag(S),
         aan: 'Aan de marskramer, waar hij ook is,',
-        tekst: `<p>${veilig(k.status ? k.status.zin : '')} Kom naar ${veilig(T.dorpsnaam(D) || 'ons dorp')}, en breng mee:</p>${rijen.join('')}${mee}`,
+        tekst: `<p>${veilig(k.status ? k.status.zin : '')} Kom naar ${veilig(T.dorpsnaam(D) || 'ons dorp')}, en breng mee:</p>${rijen.join('')}${mee}${gevaar}`,
         groet: `Uw schout`,
         staat: `<p class="venster-staat">${waarom ? veilig(waarom) : `${tijd} De bode krijgt ${Math.round(B.loon * 10)} zilver uit de kas.`}</p>`,
         knoppen: [
@@ -337,7 +341,7 @@
       const box = $('brief');
       const bestelling = {};
       for (const inp of box.querySelectorAll('input[data-wat]')) bestelling[inp.dataset.wat] = Number(inp.value) || 0;
-      const mee = !!(box.querySelector('input[data-mee]') || {}).checked;
+      const mee = Number((box.querySelector('input[data-mee]') || {}).value) || 0;
       const r = T.stuurBode(S.dorp, bestelling, mee);
       if (!r.kan) {
         const staat = box.querySelector('.venster-staat');
@@ -355,6 +359,12 @@
     }
   });
 
+  // In de brief aan de marskramer: wie meegaat, verandert het gevaar eronder.
+  $('brief').addEventListener('input', (ev) => {
+    if (open !== 'bode' || !ev.target.matches('input[data-mee]')) return;
+    const regel = $('brief').querySelector('.bode-gevaar small');
+    if (regel) regel.textContent = T.bodeGevaarTekst(T.S.dorp, Number(ev.target.value) || 0);
+  });
   $('zaak-knop').addEventListener('click', (ev) => {
     ev.currentTarget.blur();
     if (!T.S) return;

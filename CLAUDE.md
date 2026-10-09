@@ -544,14 +544,23 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   Alleen bij een status ... 3. Ja, je vraagt om goederen, enkele keer heeft hij iets niet ... in de winterperiode ...
   misschien ook bescherming mee?"): speelt er een status uit `statussen` (honger, kou, droogte; `T.statusVoorDeBode`), dan
   staat de knop Bode in de balk (`#bode-knop`, `T.kanBodeSturen` met `zichtbaar`), en bij je huis schrijf je de brief (het
-  papier `bode` in js/brieven.js: per goed uit `waren` hoeveel pakken, in de winter een begeleider). `T.stuurBode`: loon
-  uit de kas, wie geen werk heeft brengt hem (met een weerbare man erbij, `T.weerbareMannen`), allebei de weg op
-  (`T.stuurWeg`, `waarom` 'bode'), in `D.bode`; in de winter zonder begeleider haalt hij het soms niet (`winterKwijt`, een
-  vast lot uit het nummer van het land, `T.vastLot` in js/weer.js). Elke nacht (`T.tikBodeDag`, na `T.tikHandelDag`): zijn
-  ze er, dan komt de marskramer op bestelling (`T.marskramerOpBestelling` in js/handel.js: `m.bestelling` met de prijzen,
-  maal `prijsMaal`, soms iets niet of de helft; de vlag `marskramerBode` voor zijn gesprek), en de bode is terug
-  (`T.komtTerug`). Het handelsvenster en `T.kanKopen` lezen wat hij nu verkoopt via `T.verkooptNu` en
-  `T.waarVanDeMarskramer`. De spelregel "De bode"; de getallen in `T.BODE_INSTELLINGEN`.
+  papier `bode` in js/brieven.js: per goed uit `waren` hoeveel pakken, en tot drie weerbare mannen mee, met het gevaar
+  eronder, `T.bodeGevaarTekst`). `T.stuurBode`: loon uit de kas, wie geen werk heeft brengt hem (`T.bodeBegeleiders` uit
+  `T.weerbareMannen`), samen de weg op (`T.stuurWeg`, `waarom` 'bode'; bij de uitgang wachten ze op elkaar,
+  `T.wachtOpDeAnderen`), in `D.bode`. **Onderschept** (Marcel: "De bode moet "onderschept" kunnen worden", en "iedereen
+  kan dood"): bij het vertrekken valt een vast lot (`T.vastLot` in js/weer.js) of de mannen van de heer hem aanhouden
+  (`heer`: de brief weg, argwaan en gunst) of de rovers (`T.bodeGevaar`: hun bende, de winter, het donker; `onderschept` in
+  `D.bode`). Tegen de rovers vechten wie meegaan (`T.bodeKracht`, `T.bodeSlaatAf`: een veteraan dubbel, wapens), en hoe het
+  afloopt, zegt `T.bodeOnderweg` (afgeslagen of beroofd, wie sneuvelt, wie gewond is, `p.gewond`, en een rover van de bende
+  die valt). Soms gebeurt het op je eigen kaart (`opDeKaart`): de aanval met soort 'hinderlaag' in js/rovers.js
+  (`R.aanval`, `D.bode.hinderlaag`): bij de uitgang houden ze hem aan (`e.aangehouden`, in `T.dagAnker`), wie meegaat vecht
+  aan jouw kant (`T.roepOp`), en de militie komt; komt de schout, dan is het een gevecht in beurten (`T.naGevecht`:
+  `T.bodeWegVrij`), anders loopt het na `hinderlaag.uren` af (`T.bodeAangehouden`). Elke nacht (`T.tikBodeDag`, na
+  `T.tikHandelDag`): zijn ze er, dan komt de marskramer op bestelling (`T.marskramerOpBestelling` in js/handel.js:
+  `m.bestelling` met de prijzen, maal `prijsMaal`, soms iets niet of de helft; de vlag `marskramerBode` voor zijn gesprek;
+  valt zijn vaste ronde ertussen, dan komt die erna, `m.daarna`), en de bode is terug (`T.komtTerug`). Het handelsvenster
+  en `T.kanKopen` lezen wat hij nu verkoopt via `T.verkooptNu` en `T.waarVanDeMarskramer`. De spelregel "De bode"; de
+  getallen in `T.BODE_INSTELLINGEN`.
 - `js/bouwstijl.js`: **de bouwstijl van een land** (vraag 114, stap 2, 4 okt): elk land van de maker bouwt in één stijl
   (`w.stijl`, uit het nummer van het land, `T.stijlVoorLand`; het ontworpen gehucht heeft er geen en bouwt zoals altijd),
   met per soort een paar vormen, elk met de deur naar elke kant. De huizenbouwer noemt dat een stand; in het spel heet het
@@ -1223,8 +1232,9 @@ kost, hoe nat het jaar is, de beekjes en per visser hoeveel van zijn water er is
 (`'zon'`, `'wolken'`, `'regen'`, `'sneeuw'`), `('droogte')` maakt het nu droog, `('ernstig')` ernstig droog, `('nat')` maakt
 er een eind aan.
 `Spel.debug.bode()` zegt of je nu een bode kunt sturen en waarom niet, wie er onderweg is en wanneer de marskramer komt,
-en wat hij op bestelling bij zich heeft; `('stuur', { graan: 3 })` stuurt hem nu (`true` erachter: met een begeleider),
-`('nu')` laat hem nu aankomen, `('open')` opent de brief.
+het gevaar onderweg, wie hem onderschept en hoe het afloopt, en wat hij op bestelling bij zich heeft; `('stuur', { graan:
+3 }, 2)` stuurt hem nu (met twee mannen erbij), `('rovers')` of `('heer')` laat wie onderweg is onderscheppen, `('nu')`
+laat ze nu aankomen, `('open')` opent de brief.
 `Spel.debug.wensen()` zegt per huis met mensen zijn stand, wie er woont, hoe tevreden het is en wat het wil, met ✓ of ✗,
 hoe het met doorgroeien staat (wat het gezin rooit, of waarom het niet groeit), en daarboven het dorp per stand en wat er
 gemist wordt; `('dorpelingen')` laat alleen die stand zien.

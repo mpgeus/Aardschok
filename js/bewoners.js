@@ -615,6 +615,8 @@
     }
     for (const e of B.vertrekken.slice()) {
       if (e.onderweg || T.afstand(e.vertrekt, { x: e.tx, y: e.ty }) > 1) continue;
+      // De bode en wie meegaat, vertrekken samen (js/bode.js).
+      if (T.wachtOpDeAnderen(D, e)) continue;
       B.vertrekken.splice(B.vertrekken.indexOf(e), 1);
       if (w.wezens.includes(e)) w.wezens.splice(w.wezens.indexOf(e), 1);
       // Wie een tijd weg is (T.stuurWeg), krijgt een nieuw poppetje als hij terugkomt (T.komtTerug).

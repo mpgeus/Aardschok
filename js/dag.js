@@ -230,6 +230,8 @@
     if (rapport) return rapport;
     const p = e.bewoner;
     if (!p && !e.werkAkkers) return null;
+    // Wie rovers op de weg aanhouden (de bode, js/bode.js, en de hinderlaag in js/rovers.js), staat stil.
+    if (e.aangehouden) return { x: e.aangehouden.x, y: e.aangehouden.y, straal: 0 };
     // Wie de wolven zag of beten, blijft thuis (T.blijftThuis, js/bewoners.js; js/beesten.js). gereedschap/wereld.html
     // laadt de bewoners niet.
     if (T.blijftThuis && T.blijftThuis(p || T.bewonerVan(D, e), D.kalender.dag)) return { x: e.thuis.x, y: e.thuis.y, straal: 0, binnen: true };

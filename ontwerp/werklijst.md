@@ -7051,7 +7051,11 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     brief), en of een begeleider mag sneuvelen. **Marcel (9 okt): "A. 1 en 2. Beiden zijn een goede aanvulling. B. Ja, dat
     maakt het leuk C. Zeker, iedereen kan dood."** Dus: allebei (eerst het bericht, dan de hinderlaag op je kaart), ook
     de mannen van de heer, en iedereen kan sneuvelen, de bode ook.
-    **Bezig in sessie `ccr-77327776-rqjldz`** (9 okt): de onderschepte bode, dan vraag 144.
+    **Gebouwd (9 okt):** de bode onderschept: de rovers (vaker met een grotere bende, in de winter en in het donker) en
+    de mannen van de heer (de brief weg, argwaan en gunst); tot drie mannen mee, met het gevaar in de brief; afgeslagen of
+    beroofd, en wie sneuvelt of gewond is; de helft van de keren een hinderlaag bij de uitgang op je kaart, met een gevecht
+    in beurten als je erbij komt (`spel.md`, "De bode naar de marskramer").
+    **Bezig in sessie `ccr-77327776-rqjldz`** (9 okt): vraag 144.
 
 144. **Wat er nog open is bij het weer** (Marcel, 9 okt: "Ja heel goed, dit moeten we pakken", op de lijst uit
     `opmerkingen.md`): sneeuw op de grond en de daken; op een natte dag zaait niemand (vraag 82, b en c); de marskramer

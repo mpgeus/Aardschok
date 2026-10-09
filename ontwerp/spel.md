@@ -575,19 +575,33 @@ niemand); de marskramer die na een droog jaar graan verkoopt; ziekte en brand al
 
 **Zo werkt het nu** (9 okt; `js/bode.js`): speelt er honger, kou of droogte, dan staat de knop Bode in de balk. Bij je huis
 schrijf je een brief aan de marskramer: hoeveel pakken graan, zout, hout en ijzer hij moet brengen. Een dorpeling zonder
-werk brengt hem en krijgt 3 zilver uit de kas; in de winter kan er een weerbare man mee, ter bescherming. Na zes dagen (in
-de winter tien) staat de marskramer op het plein, buiten zijn vaste rondes, vijf dagen lang, met wat je vroeg: soms heeft
-hij iets niet, of maar de helft. Hij vraagt anderhalf keer zijn gewone prijs, in de winter het dubbele. In de winter zonder
-begeleider haalt de bode het een op de drie keer niet (de sneeuw, de wolven), en komt hij terug zonder marskramer. Wat je
-bij hem koopt, vertelt hij de inner, zoals altijd. De spelregel "De bode".
+werk brengt hem en krijgt 3 zilver uit de kas; tot drie weerbare mannen kunnen mee, elk ook voor 3 zilver. Na zes dagen
+(in de winter tien) staat de marskramer op het plein, buiten zijn vaste rondes, vijf dagen lang, met wat je vroeg: soms
+heeft hij iets niet, of maar de helft. Hij vraagt anderhalf keer zijn gewone prijs, in de winter het dubbele. Valt zijn
+vaste ronde in die dagen, dan komt die meteen erna. Wat je bij hem koopt, vertelt hij de inner, zoals altijd. De spelregel
+"De bode".
+
+Onderweg kan hij onderschept worden. De rovers uit het bos doen het vaker naarmate hun bende groter is (zonder bende een
+op de zeventien keer, met een bende van vier een op de vier), in de winter en in het donker vaker. De brief zegt het gevaar,
+en hoe vaak ze de rovers afslaan met de mannen die je meestuurt: de bode telt half, een man een, een veteraan twee, en met
+een wapen voor elke man anderhalf keer zoveel. Slaan ze ze af, dan gaat de bode verder, maar een man kan gewond raken of
+sneuvelen, en soms valt er een rover van de bende. Lukt het niet, dan nemen ze alles: geen marskramer, en wie meeging is
+gewond of dood, de bode ook. De helft van de keren gebeurt het op je eigen kaart: bij de uitgang van het dorp houden de
+rovers ze aan, een bericht roept je, en de militie komt naar je toe. Kom je erbij, dan is het een gevecht in beurten, met
+wie meeging aan jouw kant; kom je niet, dan loopt het na anderhalf uur af zoals onderweg. De mannen van de heer houden hem
+ook soms aan, vaker als de inner argwaan heeft: ze nemen je brief mee, en nu weet de heer dat je goud hebt om te kopen
+(argwaan en gunst). Met hen vecht niemand.
 
 **Besloten** (Marcel, 9 okt: "A; misschien kunnen we de Schout de mogelijkheid geven om een beroep te doen om een extra
 marskramer om in te kunnen kopen in een moeilijke periode?", "soort van brief sturen met een bode", en "1. Alleen bij een
 status 2. Ja vind ik goed idee. 3. Ja, je vraagt om goederen, enkele keer heeft hij iets niet. 4. Ja voor nu maar mee
-beginnen; in de winterperiode of in het donker misschien ook bescherming mee? 5. Mag nu.").
+beginnen; in de winterperiode of in het donker misschien ook bescherming mee? 5. Mag nu."). Daarna: "1. De bode moet
+"onderschept" kunnen worden. dat maakt het spannend. Je moet wel bescherming mee kunnen sturen. 2. optie 1" (de vaste
+ronde wacht), en op het plan: "A. 1 en 2. Beiden zijn een goede aanvulling. B. Ja, dat maakt het leuk C. Zeker, iedereen
+kan dood" (onderweg en op je kaart, ook de mannen van de heer, en iedereen kan sneuvelen).
 
-**Open:** of de bode ook in het donker gevaar loopt (nu vertrekt hij meteen, en telt alleen de winter); een bode naar
-anderen (het buurdorp, de heer, de koning) op dezelfde manier.
+**Open:** een bode naar anderen (het buurdorp, de heer, de koning) op dezelfde manier; dat komt met de buurdorpen (vraag
+144: "We gaan dat later inderdaad toevoegen naar andere buurdorpen").
 
 ## De markt op het plein, die meegroeit (Marcel, 5 en 6 okt 2026; werklijst vraag 110, d, en vraag 127)
 
