@@ -31,9 +31,9 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
 
 **Daarna, in deze volgorde:**
 0. Een fatsoenlijke ui (vraag 146; Marcel, 9 okt: "nu is het echt een zooitje met al die menutjes met letters"): de
-   plaat (a) is goed, elk venster is papier met leesbare letters (b1), en er is één manier van openen en sluiten (b2).
-   **Nu c, de tafel, in een nieuwe sessie** (wat er moet, staat bij vraag 146), dan d en e.
-   **Bezig in sessie `main` (desktop)** (9 okt): vraag 146, c, de tafel onderin.
+   plaat (a) is goed, elk venster is papier met leesbare letters (b1), er is één manier van openen en sluiten (b2), en
+   de tafel ligt onderin (c, 9 okt; een gesprek staat sinds dan midden boven de tafel). **Nu d** (bovenaan alleen het
+   doel met de raad en de datum als briefjes, het blok met toetsen weg, Spelregels in het menu), dan e (de fotomodus).
 1. Een proefversie voor Marcels 4K-scherm en een eerste tester (33d; `npm run proefversie`, ook `-- --windows`), met de
    graanzak erin. De laatste is van 3 okt (`36c713e`), zonder de verzoeken, de twee bazen, het ontginnen, de markt, de
    wolven, het eiland, WebGL en de graanzak.
@@ -7265,6 +7265,24 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     knoppen `#brief-knop`, `#bode-knop`, `#zaak-knop`, die `js/brieven.js` en `js/hud.js` tonen). De toets staat op het
     briefje bij de muis, niet op het ding. De balk bovenaan (`#kalenderbalk`, `#voorraadbalk`, `#balk-knoppen`) gaat
     erin op; het doel en de datum worden in d briefjes.
+    **c gebouwd (9 okt):** de tafel ligt onderin over de hele breedte, zoals op de plaat (`js/tafel.js`). De kunst komt
+    uit `gereedschap/pixelart/tafel.cjs` (`naar-spel.cjs --alleen tafel`, naar `beelden/tafel/`): het hout (2048 breed,
+    links en rechts naadloos) en vijftien tekeningen, de schetsen van de plaat op twee keer de maat, belicht en omlijnd.
+    Links het rekenboek (de voorraad, en het dorp: de kas, de mensen, de tevredenheid en de argwaan; meer dan zes
+    goederen, dan zonder namen); in het midden het bouwplan, de velden, het wetboek en de bel, en de brief van de heer, het
+    rapport (nu een eigen ding naast de brief), de zaak en de inktpot alleen zolang ze er zijn (de brief en het rapport
+    lichten op); rechts de lantaarn (sluipen, gloeit als hij in het donker brandt), de kaars (slapen: brandt als het kan,
+    en wekt je ook), de zandloper (P) met de lat, en het zegel en de hoed met hun getal. Elk ding houdt het id van de knop
+    die het was, dus wat ze opent, veranderde niet; P en de zandloper delen `T.ui.wisselPauze`, Z en de kaars
+    `T.ui.wisselSlapen`. Bij de muis een briefje met de naam, wat het nu zegt (de uitleg van de getallen uit de balk, die
+    nu geen browserletters meer zijn) en de toets. De schaal: een pixel van de kunst op een hele schermpixel (1080 één,
+    4K twee, ook bij 150% van Windows); past hij niet in de breedte (onder 1080, of een smal venster), dan kleiner.
+    De berichten staan boven het rekenboek; de actiebalk van een gevecht, het overzicht, de meter en "Opgeslagen" boven
+    de tafel. Marcel, terwijl het gebouwd werd: "die popup moet misschien wat meer midden op het scherm staan": een
+    gesprek staat nu midden boven de tafel. Nog niet: de actiepunten als muntjes op tafel (de plaat, vraag 5), en het
+    rekenboek is nog opmaak in css zoals op de plaat, geen pixel art. Nagelopen in de browser (1280×720 op 150%, en een
+    smal hoog venster): elk ding opent en sluit zijn venster, de lat, de zandloper, sluipen, de brief en het rapport, de
+    bode in een droogte, en het briefje boven elk ding en boven het boek; `npm test` 1152/1152.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

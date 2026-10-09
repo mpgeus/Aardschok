@@ -63,10 +63,6 @@
       $('overzicht-label').classList.toggle('verborgen', !S.overzicht);
     },
 
-    toonSluipen(aan) {
-      $('sluip-knop').classList.toggle('aan', aan);
-    },
-
     toonInventaris(S) {
       $('inventaris').innerHTML = ICONEN.filter(([id]) => S.inventaris.has(id))
         .map(([, titel, icoon]) => `<div class="item" title="${titel}">${icoon}</div>`)

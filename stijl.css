@@ -79,21 +79,9 @@ kbd {
   text-align: center;
 }
 
-/* Sluipen en spullen, linksboven (het scherm van het oude spel; het gehucht heeft er zijn eigen
-   balk, #hud-gehucht). */
+/* Goud en spullen, linksboven (het scherm van het oude spel; het gehucht heeft er zijn eigen
+   balk, #hud-gehucht, en de tafel, #tafel). */
 #hud { position: fixed; left: 16px; top: 16px; display: flex; gap: 10px; align-items: flex-start; }
-#sluip-knop {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-  padding: 8px 12px;
-  font: 13px var(--boek);
-  color: var(--gedempt);
-  cursor: pointer;
-}
-#sluip-knop:hover { color: var(--inkt); }
-#sluip-knop.aan { color: var(--inkt); border-color: color-mix(in srgb, var(--goud) 60%, transparent); background: rgba(40, 32, 18, 0.9); }
-.in-gevecht #sluip-knop { opacity: 0.35; pointer-events: none; }
 /* Goud: naast sluipen, in dezelfde maat als een vakje van de inventaris. Het komt pas in
    beeld als je ooit goud had (js/ui.js, toonGoud). */
 #goud {
@@ -186,13 +174,14 @@ kbd {
 .chip.aan { border-color: var(--goud); color: var(--inkt); background: color-mix(in srgb, var(--goud) 12%, transparent); }
 .ronde { padding: 0 6px 0 10px; font: 12px var(--kop); color: var(--gedempt); border-left: 1px solid var(--rand); }
 
-/* Onderaan: in een gevecht schuiven de actiepunten en de knoppen in beeld, net als het raster
+/* Onderaan, boven de tafel: in een gevecht schuiven de actiepunten en de knoppen in beeld, net als het raster
    op de vloer. De balken vangen de muis, de
    ruimte ertussen niet: daar kijk je gewoon de kamer in. */
 #onder {
   position: fixed;
   left: 50%;
-  bottom: 16px;
+  bottom: calc(var(--tafel-zoom, 1) * 150px + 16px);
+  z-index: 4;
   transform: translateX(-50%);
   display: flex;
   flex-direction: column;
@@ -242,11 +231,11 @@ kbd {
 #knoppen button:disabled { opacity: 0.45; cursor: default; }
 #knoppen .kost { font-size: 11px; color: var(--goud); }
 
-/* Berichten, linksonder */
+/* Berichten, linksonder, boven het rekenboek op de tafel (js/tafel.js; het boek steekt 62 pixels boven de tafel uit). */
 #berichten {
   position: fixed;
-  left: 16px;
-  bottom: 16px;
+  left: calc(var(--tafel-zoom, 1) * 26px);
+  bottom: calc(var(--tafel-zoom, 1) * 228px);
   width: min(420px, 40vw);
   display: flex;
   flex-direction: column;
@@ -270,6 +259,124 @@ kbd {
   100% { opacity: 0.3; }
 }
 
+/* De tafel van de schout, onderin over de hele breedte (js/tafel.js; werklijst vraag 146, c, de plaat "De schrijftafel
+   van de schout"): eiken planken (beelden/tafel/hout.png, uit gereedschap/pixelart/tafel.cjs), links het rekenboek, in
+   het midden de dingen die een venster openen, rechts de lantaarn, de kaars, de zandloper met de lat en de twee bazen.
+   Alle maten zijn pixels van de kunst: js/tafel.js zet de zoom (een pixel van de kunst op een hele pixel van het scherm),
+   de breedte en de hoogte (150). Wat boven de tafel ligt, rekent met --tafel-zoom. */
+#tafel {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 46px;
+  padding: 0 22px 0 26px;
+  background: url('beelden/tafel/hout.png') 0 0 repeat-x;
+  box-shadow: 0 -6px 0 rgba(12, 7, 3, 0.45), 0 -2px 0 rgba(12, 7, 3, 0.6);
+  image-rendering: pixelated;
+  font-size-adjust: none;
+}
+#tafel img { display: block; image-rendering: pixelated; }
+
+/* Het rekenboek: twee bladzijden gelinieerd, in een leren band, dat boven de tafel uitsteekt. Past de voorraad niet in
+   één kolom, dan gaan de namen eraf (.kort; js/tafel.js), en zegt het briefje bij de muis wat het is. */
+#rekenboek {
+  flex: none;
+  align-self: flex-end;
+  display: flex;
+  height: 200px;
+  margin-bottom: 12px;
+  padding: 9px;
+  background: #5a2a1c;
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 2px #3a170e, inset 0 0 0 4px #7a3a24, 5px 7px 0 rgba(12, 7, 3, 0.45);
+}
+#rekenboek .blad {
+  min-width: 170px;
+  padding: 8px 14px 6px 22px;
+  color: var(--papier-inkt);
+  font: 18px/23px var(--boek);
+  background:
+    linear-gradient(90deg, transparent 13px, rgba(122, 32, 34, 0.45) 13px, rgba(122, 32, 34, 0.45) 14px, transparent 14px),
+    repeating-linear-gradient(180deg, transparent 0 22px, rgba(90, 68, 48, 0.22) 22px 23px),
+    #e7d5a6;
+}
+#rekenboek .blad.links { box-shadow: inset -14px 0 14px -10px rgba(60, 30, 10, 0.55); }
+#rekenboek .blad.rechts { box-shadow: inset 14px 0 14px -10px rgba(60, 30, 10, 0.55); }
+#rekenboek h3 { margin: 0 0 1px; font: 18px/23px var(--kop); font-weight: normal; }
+#rekenboek .posten { display: grid; grid-template-rows: repeat(6, 23px); grid-auto-flow: column; grid-auto-columns: max-content; column-gap: 16px; }
+#rekenboek .post { display: grid; grid-template-columns: 22px 1fr auto auto; align-items: center; gap: 6px; height: 23px; cursor: default; }
+#rekenboek .blad.kort .post { grid-template-columns: 22px auto auto; }
+#rekenboek .blad.kort .naam { display: none; }
+#rekenboek .icoon { display: flex; }
+#rekenboek .icoon svg { width: 20px; height: 20px; filter: grayscale(1) brightness(0.28) sepia(0.9); }
+#rekenboek .aantal { text-align: right; font-variant-numeric: lining-nums tabular-nums; }
+#rekenboek .verstopt { font-size: 14px; color: var(--papier-grijs); margin-left: -3px; }
+#rekenboek .verstopt:empty { display: none; }
+/* Rood: de tevredenheid onder de vertrekdrempel, hooi en hout die de winter niet halen, de argwaan vanaf de drempel
+   waarop de soldaten gaan zoeken (js/tafel.js). */
+#rekenboek .post.laag .aantal,
+#rekenboek .post.hoog .aantal { color: var(--papier-rood); }
+
+/* De dingen op tafel: een tekening op ware pixels met haar schaduw, die even opkomt als de muis erop staat. */
+.tafel-rij { display: flex; align-items: center; }
+#tafel-midden { gap: 16px; }
+#tafel-rechts { gap: 12px; margin-left: auto; }
+.ding { position: relative; display: grid; justify-items: center; gap: 2px; margin: 0; padding: 0; background: none; border: 0; color: #ecdcb8; font: 20px var(--boek); cursor: pointer; }
+div.ding { cursor: default; }
+.ding img { filter: drop-shadow(3px 4px 0 rgba(12, 7, 3, 0.5)); transition: transform 0.12s; }
+.ding:hover img,
+.ding:focus-visible img { transform: translateY(-4px); }
+.ding:focus-visible { outline: 2px dashed var(--goud); outline-offset: 4px; }
+/* Een venster dat open is, en de lantaarn die in het donker brandt, gloeien; wat op je wacht (een brief, het rapport),
+   licht op en uit. */
+.ding.actief img,
+#sluip-knop.brandt img { filter: drop-shadow(4px 5px 0 rgba(12, 7, 3, 0.5)) drop-shadow(0 0 12px rgba(255, 200, 90, 0.75)); }
+.ding.wacht img { animation: gloed 1.8s ease-in-out infinite; }
+@keyframes gloed {
+  0%, 100% { filter: drop-shadow(4px 5px 0 rgba(12, 7, 3, 0.5)) drop-shadow(0 0 0 rgba(255, 214, 120, 0)); }
+  50% { filter: drop-shadow(4px 5px 0 rgba(12, 7, 3, 0.5)) drop-shadow(0 0 10px rgba(255, 214, 120, 0.95)); }
+}
+.ding.uit img { opacity: 0.55; }
+.ding .getal { font: 500 24px/1 var(--boek); text-shadow: 0 2px 0 #1a0e06; font-variant-numeric: lining-nums tabular-nums; }
+.ding.hoog .getal { color: #ff9a80; }
+.in-gevecht #sluip-knop { opacity: 0.35; pointer-events: none; }
+@media (prefers-reduced-motion: reduce) {
+  .ding.wacht img { animation: none; filter: drop-shadow(4px 5px 0 rgba(12, 7, 3, 0.5)) drop-shadow(0 0 8px rgba(255, 214, 120, 0.9)); }
+  .ding img { transition: none; }
+}
+
+/* De zandloper met de snelheden, ingebrand in een lat, en een rood stipje was boven de snelheid van nu. */
+#snelheid { display: flex; align-items: center; gap: 8px; }
+#kalender-knoppen { display: flex; gap: 2px; padding: 6px 8px; background: #3a2414; border-radius: 2px; box-shadow: inset 0 2px 0 #24150b, inset 0 -1px 0 #5a3a22, 3px 4px 0 rgba(12, 7, 3, 0.45); }
+#kalender-knoppen button { position: relative; padding: 4px 5px 3px; font: 19px/1 var(--boek); color: #c9b48c; background: none; border: 0; cursor: pointer; }
+#kalender-knoppen button:hover,
+#kalender-knoppen button.actief { color: #fff0c8; }
+#kalender-knoppen button.actief::after { content: ''; position: absolute; left: 50%; top: -9px; width: 8px; height: 8px; margin-left: -4px; background: #a3302a; box-shadow: inset -2px -2px 0 #6a1a14, 0 2px 0 rgba(0, 0, 0, 0.4); }
+#kalender-knoppen button:focus-visible { outline: 2px dashed var(--goud); }
+
+/* Het briefje bij de muis: wat een ding is, wat het nu zegt, en de toets (js/tafel.js), op papier boven het ding. */
+#wenk {
+  position: absolute;
+  z-index: 20;
+  width: 300px;
+  padding: 8px 16px 12px;
+  pointer-events: none;
+  border-style: solid;
+  border-width: 8px;
+  border-image: url('beelden/papier.png') 8 fill / 8px round;
+  image-rendering: pixelated;
+  color: var(--papier-inkt);
+  font: 19px/1.3 var(--boek);
+  filter: drop-shadow(3px 4px 0 rgba(10, 6, 2, 0.4));
+}
+#wenk .wenk-naam { font: 27px/1.1 var(--kop); }
+#wenk .wenk-uitleg { font-size: 18px; }
+#wenk .wenk-toets { margin-top: 4px; font-style: italic; color: var(--papier-grijs); font-size: 17px; }
+#wenk kbd { font: 16px var(--boek); font-style: normal; color: var(--papier-inkt); background: none; border: 1px solid var(--papier-grijs); border-bottom-width: 2px; padding: 0 5px; border-radius: 2px; }
+
 /* De uitleg bij de muis */
 #tooltip {
   position: fixed;
@@ -285,14 +392,18 @@ kbd {
 #tooltip.fout { color: #f3b1a5; border-color: color-mix(in srgb, var(--rood) 50%, transparent); }
 
 /* Gesprek */
+/* Een gesprek: midden in wat er boven de tafel van het beeld over is, zoals de andere papieren (Marcel, 9 okt: "die popup
+   moet misschien wat meer midden op het scherm staan"). */
 #dialoog {
   position: fixed;
   left: 50%;
-  bottom: 24px;
+  top: calc((100vh - var(--tafel-zoom, 1) * 150px) / 2);
   z-index: 6;
   width: min(620px, calc(100vw - 32px));
+  max-height: calc(100vh - var(--tafel-zoom, 1) * 150px - 32px);
+  overflow-y: auto;
   padding: 16px 18px;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   display: grid;
   grid-template-columns: 1fr;
 }
@@ -381,11 +492,11 @@ kbd {
   text-align: right;
 }
 
-/* Het overzicht (Tab, js/main.js; werklijst vraag 108, a): onderaan in het midden, zodat het de balk niet raakt. */
+/* Het overzicht (Tab, js/main.js; werklijst vraag 108, a): onderaan in het midden, boven de tafel. */
 #overzicht-label {
   position: fixed;
   left: 50%;
-  bottom: 18px;
+  bottom: calc(var(--tafel-zoom, 1) * 150px + 18px);
   transform: translateX(-50%);
   padding: 6px 14px;
   font-size: 12px;
@@ -396,74 +507,27 @@ kbd {
   pointer-events: none;
 }
 
-/* De kalender en de voorraad, linksboven. */
+/* De kalender, linksboven. */
 #kalenderbalk { padding: 8px 12px 9px; min-width: 210px; }
-#kalender-knoppen { display: flex; gap: 4px; margin-bottom: 7px; }
-#kalender-knoppen button {
-  padding: 3px 8px;
-  font: 12px var(--boek);
-  color: var(--gedempt);
-  background: color-mix(in srgb, var(--inkt) 4%, transparent);
-  border: 1px solid var(--rand);
-  border-radius: 5px;
-  cursor: pointer;
-}
-#kalender-knoppen button:hover { color: var(--inkt); background: color-mix(in srgb, var(--inkt) 9%, transparent); }
-#kalender-knoppen button.actief { color: var(--op-goud); background: var(--goud); border-color: var(--goud); }
-#kalender-knoppen kbd { color: inherit; border-color: currentColor; opacity: 0.7; }
 #kalender-datum { font: 17px var(--kop); color: var(--inkt); }
 #kalender-datum.sint-maarten { color: var(--goud); }
 #kalender-seizoen { font-size: 12px; color: var(--gedempt); margin-top: 1px; }
 
-#voorraadbalk { display: flex; gap: 13px; padding: 0 14px; height: 44px; align-items: center; }
 /* De statussen (js/hud.js, T.ui.toonStatussen; werklijst vraag 77, stap 2): naast het doel linksboven (#opdracht, 260
    breed op 16), een kaartje per status zolang hij duurt; rood als het erger is. */
 .nieuwe-hud #hud-gehucht > #statussen { position: fixed; left: 292px; top: 128px; display: flex; flex-wrap: wrap; gap: 6px; max-width: calc(100vw - 600px); }
 #statussen .status { padding: 4px 10px 5px; font: 13px var(--kop), var(--boek); color: var(--inkt); cursor: help; border-left: 3px solid var(--goud); }
 #statussen .status.erger { border-left-color: var(--rood); color: var(--rood); }
 body.bouwmenu-open #statussen { visibility: hidden; }
-#voorraadbalk .grondstof { display: flex; align-items: center; gap: 5px; }
-#voorraadbalk .grondstof .icoon { display: flex; width: 22px; height: 22px; }
-#voorraadbalk .grondstof .aantal { font: 15px var(--kop), var(--boek); color: var(--inkt); min-width: 1.4em; }
-#voorraadbalk .grondstof .verstopt { font: 11px var(--boek); color: var(--gedempt); margin-left: -2px; }
-#voorraadbalk .grondstof .verstopt:empty { display: none; }
-/* Het scheidingslijntje voor de mensen, los van de vier grondstoffen ervoor. */
-#voorraadbalk .grondstof[data-wat="bevolking"] { padding-left: 13px; border-left: 1px solid var(--rand); }
-/* De tevredenheid (js/behoeften.js), met haar eigen lijntje, en rood als het dorp wegtrekt
-   (T.BEHOEFTEN_INSTELLINGEN.vertrekDrempel). */
-#voorraadbalk .grondstof[data-wat="tevredenheid"] { padding-left: 13px; border-left: 1px solid var(--rand); }
-#voorraadbalk .grondstof[data-wat="tevredenheid"].laag .aantal { color: var(--rood); }
-/* Het hooi (js/vee.js), rood als het de kudde van nu niet de winter door helpt; het hout
-   (js/behoeften.js) als het het dorp niet de winter door helpt. */
-#voorraadbalk .grondstof[data-wat="hooi"].laag .aantal,
-#voorraadbalk .grondstof[data-wat="hout"].laag .aantal { color: var(--rood); }
-/* De argwaan van de inner (js/inner.js): rood vanaf de drempel waarop de soldaten gaan zoeken. */
-#voorraadbalk .grondstof[data-wat="argwaan"] { padding-left: 13px; border-left: 1px solid var(--rand); }
-#voorraadbalk .grondstof[data-wat="argwaan"].hoog .aantal { color: var(--rood); }
-#voorraadbalk .grondstof[data-wat="gunst"].hoog .aantal,
-#voorraadbalk .grondstof[data-wat="vertrouwen"].hoog .aantal { color: var(--rood); }
 
-/* Het bouwmenu (js/hud.js, js/gebouwen.js): de knop in dezelfde rij als de kalender en de
-   voorraad, en het paneel met de soorten van de huidige trede eronder. */
-#bouwmenu-knop {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  height: 44px;
-  padding: 0 14px;
-  font: 13px var(--boek);
-  color: var(--gedempt);
-  cursor: pointer;
-}
-#bouwmenu-knop:hover { color: var(--inkt); }
-#bouwmenu-knop.actief { color: var(--op-goud); background: var(--goud); border-color: var(--goud); }
-#bouwmenu-knop.actief kbd { color: inherit; border-color: currentColor; opacity: 0.7; }
+/* Het bouwmenu (js/hud.js, js/gebouwen.js): het paneel met de soorten van de huidige trede, onder de kalender; het
+   bouwplan op tafel opent het (js/tafel.js). */
 #bouwmenu {
   position: fixed;
   left: 16px;
   top: 112px;
   width: 300px;
-  max-height: calc(100vh - 130px);
+  max-height: calc(100vh - 130px - var(--tafel-zoom, 1) * 228px); /* tot boven het rekenboek op de tafel */
   overflow-y: auto;
   padding: 10px 12px 12px;
 }
@@ -563,18 +627,6 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
 /* De heer (js/hud.js, T.ui.toonBrief en T.ui.openHeer; js/heer.js): zijn brief en het betalen op
    Sint-Maarten, in het midden en in de stijl van het venster van de marskramer. De brief zelf staat
    in de letter van een brief (cursief, de kopletter), de rest is gewone speltekst. */
-#brief-knop,
-#zaak-knop {
-  display: flex;
-  align-items: center;
-  height: 44px;
-  padding: 0 14px;
-  font: 13px var(--kop);
-  color: var(--goud);
-  cursor: pointer;
-}
-#brief-knop:hover,
-#zaak-knop:hover { color: var(--inkt); }
 #brief,
 #heer,
 #slachten,
@@ -1022,13 +1074,13 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
 .menu-melding { margin: 0 0 4px; font-size: 13px; color: var(--goud); }
 #menu.titel .menu-kop, #menu.titel .menu-vraag, #menu.titel .menu-melding { text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8); }
 /* Zolang het titelscherm er ligt, is er nog geen spel om over te zeggen. */
-body.titelscherm :is(#hud-gehucht, #hulp-gehucht, #berichten, #plek, #opdracht, #statussen) { visibility: hidden; }
+body.titelscherm :is(#hud-gehucht, #hulp-gehucht, #berichten, #plek, #opdracht, #statussen, #tafel) { visibility: hidden; }
 
-/* Vanzelf opgeslagen (js/menu.js, T.ui.opgeslagen): één woord rechtsonder, dat weer wegvaagt. */
+/* Vanzelf opgeslagen (js/menu.js, T.ui.opgeslagen): één woord rechtsonder, boven de tafel, dat weer wegvaagt. */
 #opgeslagen {
   position: fixed;
   right: 16px;
-  bottom: 16px;
+  bottom: calc(var(--tafel-zoom, 1) * 150px + 12px);
   padding: 4px 10px;
   font: italic 13px var(--boek);
   color: var(--gedempt);
@@ -1154,11 +1206,11 @@ body.titelscherm :is(#hud-gehucht, #hulp-gehucht, #berichten, #plek, #opdracht, 
 #huisbriefje .briefje-groei { font-style: italic; color: var(--papier-grijs); }
 #huisbriefje kbd { color: var(--papier-inkt); border-color: var(--papier-inkt); background: none; }
 
-/* De meter (F2, js/main.js): rechtsonder, klein, en de muis gaat erdoorheen. */
+/* De meter (F2, js/main.js): rechtsonder boven de tafel, klein, en de muis gaat erdoorheen. */
 #meter {
   position: fixed;
   right: 16px;
-  bottom: 16px;
+  bottom: calc(var(--tafel-zoom, 1) * 150px + 16px);
   padding: 6px 10px;
   font-size: 12px;
   font-variant-numeric: tabular-nums;
