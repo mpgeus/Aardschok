@@ -14,7 +14,8 @@ groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
 Marcel, 8 okt: "snel, duidelijk en low cost". Elke sessie werkt dit blok bij aan het eind; wat af is, gaat eruit.
 
-**Loopt:** niets. De dagloners (vraag 140: wie geen werk heeft, maait, bindt en draagt in de oogst) staan in `main`.
+**Loopt** (het teken "Bezig in sessie" staat bij het punt zelf): stap 2 van de slice, de statussen met niveaus en het
+weer (vraag 77, stap 2). De dagloners (vraag 140: wie geen werk heeft, maait, bindt en draagt in de oogst) staan in `main`.
 
 **Wacht op Marcel:**
 - Vraag 142, de bladzijde met alle getallen (`gereedschap/instellingen.html`): stap 1 en 2 staan in `main`; stap 3 (een
@@ -2791,6 +2792,7 @@ met "Werklijst doorzetten"; Claude nam dat als ja op het voorstel. Zeg het als h
     - **c, uiteindelijk een ambtenaar voor elke tak van het bestuur,** om je te steunen; de marktmeester, de
       wachtmeester en de rentmeester eerst.
     - **d, deze volgorde,** te beginnen met stap 1, de cyclus.
+    **Bezig in sessie `ccr-77327776-rqjldz`** (9 okt): stap 2, de statussen met niveaus en het weer.
 78. **Stap 1 van de slice, de cyclus: het plan** (Claude, 1 okt, eenentwintigste sessie; vraag 77, a en d; wacht op
     Marcel). **Wat er nu is:** één trede, van gehucht tot dorp bij 50 mensen met een kapel en een smidse, die op elk
     moment valt. De bouwer van de speeltest haalt hem op 1 herfstmaand van het eerste jaar, vóór de heer en de winter,
