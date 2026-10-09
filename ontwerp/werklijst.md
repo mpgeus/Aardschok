@@ -7174,6 +7174,15 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     **Marcel (9 okt), vóór het renderen: "Ik wil toch nog een nuance aanbrengen, mensen moeten ook ouder kunnen
     worden..."** Er is nu geen ouder worden en geen geboorte: een leeftijd ligt vast, en kinderen komen alleen met een
     nieuw gezin. Vragen aan Marcel (tempo, sterven van ouderdom, geboortes, wat het in het spel doet); het renderen wacht.
+    **Marcel (9 okt): "1. C 2. Ja 3. Ja 4. Ouderen dragen mogelijk kennis over? Eerst alleen het beeld. in de middeleeuwen
+    werden ze toch niet zo oud..."** Dus: elke fase een vaste duur (kleuter, kind, jong, volwassen, oud), wie oud is sterft
+    na een paar jaar, er worden kinderen geboren, en het werk volgt de leeftijd zoals nu (`T.LEEFTIJDEN`), zonder nieuwe
+    regel; de kennis van de ouden staat in `opmerkingen.md`. Een mens houdt zijn trekken (zijn haar, dat grijs wordt) als
+    hij een fase verder gaat. Als spelregel ("Ouder worden").
+    **Plan van Claude (9 okt):** `js/leven.js`: wie in het dorp woont, heeft een geboortedag; elke nacht gaat wie zijn fase
+    uit is een verder (zijn poppetje krijgt het vel en de snelheid van zijn leeftijd); wie oud is, sterft na zijn jaren;
+    een gezin met een moeder en een vader krijgt soms een kind, als er plaats is in het huis. De schout en de mensen met een
+    naam (de boeren, de herbergierster) worden niet ouder, want aan hen hangt het spel.
     **Bezig in sessie `ccr-77327776-rqjldz`** (9 okt): vraag 145, 1 en 3.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
