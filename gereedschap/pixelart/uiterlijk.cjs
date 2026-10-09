@@ -1,7 +1,7 @@
 // Elk mens ziet er anders uit (werklijst vraag 145, 1; Marcel, 9 okt: "het voelt gewoon wat 'saai' in het dorp", en
 // "Kleren, haar, niet iedereen heeft een hoofddeksel. Ook verschillende gezichten, baard etc. Lang haar, kort haar
 // mannen en vrouwen. Schoenen eventueel"). Tot nu toe had elke leeftijd één poppetje per geslacht: twintig mensen
-// voelden als vier. Hier staan de uiterlijken: per lijf acht, elk een andere kleur kleren (een verf die er toen was:
+// voelden als vier. Hier staan de uiterlijken: per lijf 24, elk een andere kleur kleren (een verf die er toen was:
 // ongeverfd linnen, blauw van wede, rood van meekrap, geel en oker van wouw, groen, bruin, grijs), ander haar (blond,
 // bruin, kastanje, zwart, rood), een kapsel (kort, lang, krullen, een staart, kaal; bij een vrouw een knot, een vlecht,
 // twee vlechten, los of kort), een baard of niet, een hoofddeksel of niet, en een ander gezicht (neus, wenkbrauwen).
@@ -12,8 +12,8 @@
 // van een ouder kan krijgen (js/bewoners.js). De hulpjes hieronder bouwen wat er nieuw is aan een hoofd; ze leunen
 // alleen op de bouwstenen (kern, figuren, figuren2), zoals karakters.cjs.
 //
-//   node gereedschap/pixelart/uiterlijk.cjs proef     de proefplaat: alle uiterlijken staand, in ZO en Z, op 1× en 3×,
-//                                                      in gereedschap/pixelart/uit/uiterlijk/
+//   node gereedschap/pixelart/uiterlijk.cjs proef [hd]   de proefplaat: alle uiterlijken staand in ZO, in
+//                                                       gereedschap/pixelart/uit/uiterlijk/ (hd: op dubbele resolutie)
 // Lokale assen zoals overal: x naar rechts van de figuur, y naar voren, z omhoog; de voeten op z = 0.
 'use strict';
 const { sdf } = require('./kern.cjs');
@@ -22,7 +22,7 @@ const { kegel, bol, ellips, plus } = require('./figuren.cjs');
 // ---------------------------------------------------------------- de kleuren
 
 // Haar, als materiaal, met lokken erin (een lichtere streep, schuin over het hoofd) en een scheiding bovenop (bij een volwassene).
-// Grijs is voor de ouden.
+// Peper en zout is grijzend; grijs is voor de ouden.
 const lokken = (x, y, z) => (Math.abs(x) < 0.45 && z > 71 && y > -2 ? -1.2 : Math.sin(x * 2.1 + z * 0.7 + y * 0.4) > 0.62 ? 0.7 : 0);
 const HAAR_KLEUR = {
   blond: { ramp: 'stro', lo: 2, hi: 6 },
@@ -31,6 +31,9 @@ const HAAR_KLEUR = {
   kastanje: { ramp: 'hout', lo: 1, hi: 4.4 },
   zwart: { ramp: 'vacht', lo: 0.3, hi: 2.6 },
   rood: { ramp: 'herfst', lo: 1.2, hi: 5 },
+  lichtblond: { ramp: 'perkament', lo: 2.4, hi: 5.4 },
+  donkerblond: { ramp: 'zand', lo: 2.6, hi: 6 },
+  peper: { ramp: 'vacht', lo: 2.2, hi: 6.4 },
   grijs: { ramp: 'baard', lo: 1.6, hi: 5.6 },
 };
 const HAAR = Object.fromEntries(Object.entries(HAAR_KLEUR).map(([k, v]) => [k, { ...v, patroon: lokken }]));
@@ -62,7 +65,9 @@ const SCHOEN = {
 // ---------------------------------------------------------------- het hoofd
 
 // Het haar van een man, bovenop de kap die boer() altijd legt (achter op het hoofd). soort: 'kort' (een korte pony),
-// 'lang' (tot op de schouders), 'krul' (krullen over het hele hoofd), 'staart' (lang, achter bijeengebonden). Onder een
+// 'lang' (tot op de schouders), 'halflang' (tot de kaak), 'krul' (krullen over het hele hoofd), 'krulkort' (kleine
+// krullen), 'staart' (lang, achter bijeengebonden), 'pony' (het kommetje: recht afgeknipt boven de wenkbrauwen en rondom),
+// 'opzij' (met een scheiding opzij gekamd), 'kuif' (een pluk die voorop overeind staat). Onder een
 // hoed blijft alleen zichtbaar wat eronder uitkomt. maat = de stralen van het hoofd.
 function kapselMan(delen, H, [rx, ry, rz], m, d, soort) {
   if (soort === 'kort') delen.push(ellips(plus(H, [0.4, ry * 0.5, rz * 0.62]), [rx * 0.78, 2.6, 1.7], m, d, 0.8));
@@ -79,18 +84,51 @@ function kapselMan(delen, H, [rx, ry, rz], m, d, soort) {
   if (soort === 'staart') {
     delen.push(kegel(plus(H, [0, -6.4, -2.2]), plus(H, [0.6, -8.6, -12.4]), 2.1, 1, m, d, 0.8));
   }
-  if (soort === 'krul') {
-    // krullen: bolletjes over de kruin en achter, op een vast patroon
-    for (let i = 0; i < 26; i++) {
-      const a = i * 2.39996; // de gulden hoek, zodat ze gelijk verdeeld liggen
-      const h = 1 - (i + 0.5) / 26;
-      const z = 0.25 + h * 0.75;
-      const r = Math.sqrt(1 - z * z);
-      const dx = Math.cos(a) * r;
-      const dy = Math.sin(a) * r;
-      if (dy > 0.55 && z < 0.75) continue; // het gezicht blijft vrij
-      delen.push(bol(plus(H, [dx * (rx + 0.3), dy * (ry + 0.3) - 1, z * (rz + 0.2)]), 2.1, m, d, 0.6));
-    }
+  if (soort === 'krul') krullen(delen, H, [rx, ry, rz], m, d, 26, 2.1, 0.25);
+  if (soort === 'krulkort') krullen(delen, H, [rx, ry, rz], m, d, 34, 1.5, 0.35);
+  if (soort === 'halflang') {
+    delen.push(ellips(plus(H, [0, -1.4, 1.6]), [rx + 0.5, ry - 0.4, rz - 0.6], m, d, 1));
+    delen.push(ellips(plus(H, [0, -3.4, -2.2]), [rx + 0.4, 3.6, 5.2], m, d, 1.2));
+    for (const s of [-1, 1]) delen.push(ellips(plus(H, [s * (rx - 0.2), -1, -2.8]), [1.9, 3.3, 4.4], m, d, 1));
+  }
+  if (soort === 'pony') {
+    // een kom over het hoofd, recht afgeknipt: voorop boven de wenkbrauwen, achter in de nek
+    delen.push({
+      f: (x, y, z) => {
+        const dx = x - H[0];
+        const dy = y - H[1];
+        const dz = z - H[2];
+        const e = sdf.ellipsoide(dx, dy + 0.3, dz - 0.6, rx + 0.75, ry + 0.65, rz + 0.3);
+        return Math.max(e, 0.3 + 0.47 * dy - dz);
+      },
+      g: [H[0], H[1], H[2] + 0.6, rx + 3],
+      m,
+      deel: d,
+      k: 0.6,
+    });
+  }
+  if (soort === 'opzij') {
+    // de scheiding links, het haar in een golf naar rechts over het voorhoofd
+    delen.push(ellips(plus(H, [1.6, ry * 0.42, rz * 0.66]), [4.4, 2.8, 1.9], m, d, 0.8));
+    delen.push(ellips(plus(H, [-3.4, ry * 0.15, rz * 0.8]), [2.6, 3.2, 1.5], m, d, 0.8));
+  }
+  if (soort === 'kuif') {
+    delen.push(ellips(plus(H, [0.4, ry * 0.5, rz * 0.62]), [rx * 0.7, 2.4, 1.6], m, d, 0.8));
+    delen.push(kegel(plus(H, [0.2, ry * 0.5, rz * 0.7]), plus(H, [1.2, ry * 0.75, rz + 3.4]), 2.4, 0.8, m, d, 0.8));
+  }
+}
+
+// Krullen: n bolletjes van straal r over de kruin en achter, op een vast patroon (de gulden hoek, zodat ze gelijk
+// verdeeld liggen); het gezicht blijft vrij. laag: hoe ver ze achter en opzij omlaag komen (0 tot 1).
+function krullen(delen, H, [rx, ry, rz], m, d, n, r, laag) {
+  for (let i = 0; i < n; i++) {
+    const a = i * 2.39996;
+    const z = laag + (1 - (i + 0.5) / n) * (1 - laag);
+    const ring = Math.sqrt(1 - z * z);
+    const dx = Math.cos(a) * ring;
+    const dy = Math.sin(a) * ring;
+    if (dy > 0.55 && z < 0.75) continue;
+    delen.push(bol(plus(H, [dx * (rx + 0.3), dy * (ry + 0.3) - 1, z * (rz + 0.2)]), r, m, d, 0.6));
   }
 }
 
@@ -144,8 +182,9 @@ function wolmuts(delen, H, [rx, ry], m, d, zij = 1) {
 
 // Het haar van een vrouw zonder doek, bovenop de haarkap die boerin() altijd legt. soort: 'knot' (achter op het hoofd),
 // 'vlecht' (één, over de rug), 'vlechten' (twee, over de schouders naar voren), 'los' (lang, over de rug en de schouders),
-// 'kort' (tot de kaak).
-function kapselVrouw(delen, H, [rx, ry, rz], m, d, soort) {
+// 'kort' (tot de kaak), 'kroon' (een vlecht om het hoofd), 'staart', 'krul' (krullen tot op de schouders), 'hogeknot'
+// (bovenop), 'band' (los, met een haarband in de kleur van band).
+function kapselVrouw(delen, H, [rx, ry, rz], m, d, soort, band = m) {
   // de kruin: het haar over het hoofd, met de haargrens hoog op het voorhoofd en achter de slapen langs
   delen.push({
     f: (x, y, z) => {
@@ -169,6 +208,42 @@ function kapselVrouw(delen, H, [rx, ry, rz], m, d, soort) {
   if (soort === 'los') {
     delen.push(ellips(plus(H, [0, -4, -6]), [rx + 0.6, 4, 10.4], m, d, 1.2));
     for (const s of [-1, 1]) delen.push(ellips(plus(H, [s * (rx - 0.2), -0.6, -5.4]), [2.1, 3.4, 7.6], m, d, 1));
+  }
+  if (soort === 'hogeknot') delen.push(bol(plus(H, [0, -3.6, 7.6]), 3.3, m, d, 1));
+  if (soort === 'staart') {
+    delen.push(bol(plus(H, [0, -6.8, 2.6]), 2.2, m, d, 0.8));
+    delen.push(kegel(plus(H, [0, -8, 2]), plus(H, [0.8, -10.6, -9.6]), 2.4, 1.1, m, d, 0.8));
+  }
+  if (soort === 'kroon') {
+    // een vlecht om het hoofd, net boven de oren, in schakels die om en om op en neer liggen
+    for (let i = 0; i < 18; i++) {
+      const a = (i / 18) * Math.PI * 2;
+      delen.push(bol(plus(H, [Math.cos(a) * (rx + 0.3), Math.sin(a) * (ry + 0.3) - 0.8, 2.4 + (i % 2 ? 0.5 : -0.3) - 1.6 * Math.max(0, Math.sin(a))]), 1.7, m, d, 0.5));
+    }
+  }
+  if (soort === 'krul') {
+    krullen(delen, H, [rx, ry, rz], m, d, 30, 2, 0.1);
+    for (const [x, y, z] of [[-5.6, -3, -6], [5.4, -3.4, -6.4], [-3, -5.4, -8], [2.6, -5.8, -8.6], [0, -5.4, -4.6], [-6.4, -0.6, -3.4], [6.2, -1, -3.8]]) delen.push(bol(plus(H, [x, y, z]), 2.2, m, d, 0.6));
+  }
+  if (soort === 'band') {
+    delen.push(ellips(plus(H, [0, -4, -6]), [rx + 0.6, 4, 10.4], m, d, 1.2));
+    for (const s of [-1, 1]) delen.push(ellips(plus(H, [s * (rx - 0.2), -0.6, -5.4]), [2.1, 3.4, 7.6], m, d, 1));
+    // de band: van het voorhoofd schuin naar achter over het haar
+    const c = plus(H, [0, -0.6, 2.4]);
+    const a = rx + 1;
+    const b = ry + 0.9;
+    delen.push({
+      f: (x, y, z) => {
+        const dx = x - c[0];
+        const dy = y - c[1];
+        const dz = z - c[2] - 0.32 * dy;
+        const q = (Math.hypot(dx / a, dy / b) - 1) * Math.min(a, b);
+        return Math.hypot(q, dz / 1.4) - 0.75;
+      },
+      g: [c[0], c[1], c[2], Math.max(a, b) + 3],
+      m: band,
+      deel: d,
+    });
   }
   if (soort === 'kort') {
     delen.push(ellips(plus(H, [0, -2.4, -1.2]), [rx + 0.9, ry - 1, rz - 0.6], m, d, 1));
@@ -201,9 +276,25 @@ const UITERLIJKEN = {
     man({ kleur: 'zwart', hoed: 'wol', muts: STOF.rood, halsdoek: STOF.linnen, kapsel: 'kort', baard: 'stoppels', kiel: 'bruin', broek: 'grijs', schoen: 'klomp', wenkbrauw: 1.4 }),
     man({ kleur: 'rood', hoed: 'geen', kapsel: 'krul', baard: 'vol', kraag: 'geen', kiel: 'groen', broek: 'bruin', schoen: 'donkereKlomp', neusMaat: 1.15 }),
     man({ kleur: 'bruin', hoed: 'vilt', halsdoek: STOF.donker, kapsel: 'staart', baard: 'sik', kiel: 'grijs', broek: 'bruin', schoen: 'leer', neusMaat: 1.3 }),
-    man({ kleur: 'kastanje', hoed: 'geen', kapsel: 'kaal', kraag: 'geen', baard: 'vol', kiel: 'oker', broek: 'donker', schoen: 'klomp', neusMaat: 1.35, wenkbrauw: 1.5, links: 'zij' }),
+    man({ kleur: 'kastanje', hoed: 'geen', kapsel: 'kaal', baard: 'vol', kraag: 'geen', kiel: 'oker', broek: 'donker', schoen: 'klomp', neusMaat: 1.35, wenkbrauw: 1.5, links: 'zij' }),
     man({ kleur: 'blond', hoed: 'wol', muts: STOF.groen, halsdoek: STOF.oker, kapsel: 'lang', kiel: 'rood', broek: 'bruin', schoen: 'klomp', neusMaat: 0.9 }),
     man({ kleur: 'donker', hoed: 'stro', kapsel: 'lang', baard: 'kort', halsdoek: STOF.wit, kiel: 'lichtblauw', broek: 'grijs', schoen: 'donkereKlomp', neusMaat: 1.1 }),
+    man({ kleur: 'lichtblond', hoed: 'geen', kapsel: 'pony', kraag: 'geen', kiel: 'bruin', broek: 'donker', schoen: 'klomp', neusMaat: 0.9 }),
+    man({ kleur: 'donkerblond', hoed: 'geen', kapsel: 'opzij', baard: 'snor', kiel: 'blauw', broek: 'grijs', schoen: 'leer' }),
+    man({ kleur: 'zwart', hoed: 'geen', kapsel: 'halflang', baard: 'vol', kraag: 'geen', kiel: 'linnen', broek: 'bruin', schoen: 'klomp', wenkbrauw: 1.3 }),
+    man({ kleur: 'peper', hoed: 'geen', kapsel: 'kaal', baard: 'snor', halsdoek: STOF.blauw, kiel: 'grijs', broek: 'donker', schoen: 'klomp', neusMaat: 1.2 }),
+    man({ kleur: 'rood', hoed: 'stro', kapsel: 'kort', baard: 'stoppels', halsdoek: STOF.groen, kiel: 'oker', broek: 'bruin', schoen: 'klomp' }),
+    man({ kleur: 'bruin', hoed: 'geen', kapsel: 'krulkort', kraag: 'geen', kiel: 'rood', broek: 'grijs', schoen: 'donkereKlomp', neusMaat: 1.05 }),
+    man({ kleur: 'kastanje', hoed: 'wol', muts: STOF.blauw, kapsel: 'halflang', baard: 'sik', halsdoek: STOF.linnen, kiel: 'groen', broek: 'donker', schoen: 'leer' }),
+    man({ kleur: 'donkerblond', hoed: 'geen', kapsel: 'kuif', halsdoek: STOF.linnen, kiel: 'terracotta', broek: 'bruin', schoen: 'klomp', neusMaat: 0.95 }),
+    man({ kleur: 'donker', hoed: 'vilt', kapsel: 'kort', baard: 'vol', kraag: 'geen', kiel: 'blauw', broek: 'bruin', schoen: 'leer' }),
+    man({ kleur: 'lichtblond', hoed: 'stro', kapsel: 'pony', baard: 'snor', kiel: 'grijs', broek: 'bruin', schoen: 'klomp', neusMaat: 1.1 }),
+    man({ kleur: 'zwart', hoed: 'geen', kapsel: 'krul', baard: 'kort', kiel: 'oker', broek: 'grijs', schoen: 'klomp' }),
+    man({ kleur: 'peper', hoed: 'wol', muts: STOF.grijs, kapsel: 'kort', baard: 'vol', halsdoek: STOF.rood, kiel: 'bruin', broek: 'donker', schoen: 'klomp', wenkbrauw: 1.4 }),
+    man({ kleur: 'bruin', hoed: 'geen', kapsel: 'staart', baard: 'stoppels', kraag: 'geen', kiel: 'lichtblauw', broek: 'bruin', schoen: 'klomp', neusMaat: 1.25 }),
+    man({ kleur: 'rood', hoed: 'vilt', kapsel: 'halflang', halsdoek: STOF.donker, kiel: 'linnen', broek: 'grijs', schoen: 'leer' }),
+    man({ kleur: 'blond', hoed: 'geen', kapsel: 'opzij', baard: 'sik', halsdoek: STOF.oker, kiel: 'groen', broek: 'bruin', schoen: 'klomp', wenkbrauw: 1.3 }),
+    man({ kleur: 'kastanje', hoed: 'stro', kapsel: 'lang', baard: 'vol', kraag: 'geen', kiel: 'rood', broek: 'donker', schoen: 'donkereKlomp', links: 'zij' }),
   ],
 };
 // De boerin, voor alle vrouwen. hoofd: 'doek' (onder de kin geknoopt; met doek: de kleur), 'nekdoek' (in de nek) of
@@ -218,9 +309,25 @@ UITERLIJKEN.boerin = [
   vrouw({ kleur: 'rood', hoofd: 'geen', kapsel: 'los', jurk: 'linnen', schort: 'groen', neusMaat: 0.85 }),
   vrouw({ kleur: 'bruin', hoofd: 'geen', kapsel: 'kort', jurk: 'rood', schort: 'grijs', neusMaat: 1.2 }),
   vrouw({ kleur: 'blond', hoofd: 'geen', kapsel: 'vlechten', jurk: 'lichtblauw', schort: 'linnen' }),
+  vrouw({ kleur: 'lichtblond', hoofd: 'geen', kapsel: 'kroon', jurk: 'groen', schort: 'wit' }),
+  vrouw({ kleur: 'donkerblond', hoofd: 'nekdoek', doek: 'blauw', jurk: 'terracotta', schort: 'linnen' }),
+  vrouw({ kleur: 'zwart', hoofd: 'geen', kapsel: 'staart', jurk: 'oker', schort: 'donker' }),
+  vrouw({ kleur: 'kastanje', hoofd: 'geen', kapsel: 'krul', jurk: 'blauw', schort: 'linnen', neusMaat: 1.1 }),
+  vrouw({ kleur: 'peper', hoofd: 'doek', doek: 'wit', jurk: 'donker', schort: 'grijs', neusMaat: 1.15 }),
+  vrouw({ kleur: 'rood', hoofd: 'geen', kapsel: 'hogeknot', jurk: 'grijs', schort: 'wit' }),
+  vrouw({ kleur: 'donker', hoofd: 'geen', kapsel: 'band', doek: 'groen', jurk: 'linnen' }),
+  vrouw({ kleur: 'bruin', hoofd: 'doek', doek: 'lichtblauw', jurk: 'bruin', schort: 'wit' }),
+  vrouw({ kleur: 'blond', hoofd: 'nekdoek', doek: 'groen', jurk: 'rood', schort: 'linnen' }),
+  vrouw({ kleur: 'donkerblond', hoofd: 'geen', kapsel: 'vlecht', jurk: 'grijs', schort: 'blauw' }),
+  vrouw({ kleur: 'lichtblond', hoofd: 'geen', kapsel: 'band', doek: 'rood', jurk: 'blauw', neusMaat: 0.9 }),
+  vrouw({ kleur: 'zwart', hoofd: 'doek', doek: 'linnen', jurk: 'groen', schort: 'donker' }),
+  vrouw({ kleur: 'kastanje', hoofd: 'geen', kapsel: 'kroon', jurk: 'terracotta', schort: 'linnen' }),
+  vrouw({ kleur: 'donker', hoofd: 'geen', kapsel: 'knot', jurk: 'lichtblauw', schort: 'wit', mand: true, links: undefined, rechts: undefined }),
+  vrouw({ kleur: 'peper', hoofd: 'nekdoek', doek: 'donker', jurk: 'oker', schort: 'grijs', neusMaat: 1.2 }),
+  vrouw({ kleur: 'bruin', hoofd: 'geen', kapsel: 'vlechten', jurk: 'groen', schort: 'wit' }),
 ];
 
-module.exports = { HAAR, STOF, SCHOEN, UITERLIJKEN, kapselMan, krans, snor, sik, stoppels, wolmuts, kapselVrouw, vlechtje };
+module.exports = { HAAR, STOF, SCHOEN, UITERLIJKEN, kapselMan, krullen, krans, snor, sik, stoppels, wolmuts, kapselVrouw, vlechtje };
 
 // ---------------------------------------------------------------- de proefplaat
 
@@ -233,20 +340,25 @@ if (require.main === module && process.argv[2] === 'proef') {
   const UIT = path.join(__dirname, 'uit', 'uiterlijk');
   fs.mkdirSync(UIT, { recursive: true });
   const bouw = { boer, boerin };
-  const CEL = [112, 124];
+  const { geschaald } = require('./figuren.cjs');
+  // Elk lijf in twee rijen van twaalf, staand in ZO. Met `hd` erachter op dubbele resolutie (het model twee keer zo
+  // groot, geschaald in figuren.cjs), om te zien wat dat oplevert.
+  const S = process.argv[3] === 'hd' ? 2 : 1;
+  const KOL = 56 * S;
+  const BOVEN = 20 * S;
+  const HOOG = 100 * S;
   const rijen = [];
   for (const lijf of ['boer', 'boerin']) {
-    for (const kant of ['ZO', 'Z']) {
-      rijen.push(UITERLIJKEN[lijf].map((o) => K.losRenderen(bouw[lijf]({ houding: 'staan', fase: 0 }, o), { b: CEL[0], h: CEL[1], anker: [56, 110], richting: kant })));
-    }
+    const platen = UITERLIJKEN[lijf].map((o) => {
+      const m = bouw[lijf]({ houding: 'staan', fase: 0 }, o);
+      return K.losRenderen(S > 1 ? geschaald(m, S) : m, { b: 112 * S, h: 124 * S, anker: [56 * S, 110 * S], richting: 'ZO' });
+    });
+    rijen.push(platen.slice(0, 12), platen.slice(12));
   }
-  // elke cel bijsnijden tot wat erin staat, met een vaste breedte per kolom
-  const KOL = 56;
-  const BOVEN = 20;
-  const HOOG = 100;
-  const vel = new K.Plaat(KOL * 8 + 8, HOOG * rijen.length);
-  rijen.forEach((rij, r) => rij.forEach((p, i) => vel.plak(p.uitsnede(28, BOVEN, KOL, HOOG), 4 + i * KOL, r * HOOG)));
-  fs.writeFileSync(path.join(UIT, 'proef-1x.png'), K.png(vel, 1, '#5e6a44'));
-  fs.writeFileSync(path.join(UIT, 'proef-3x.png'), K.png(vel, 3, '#5e6a44'));
-  console.log(path.join(UIT, 'proef-3x.png'));
+  const vel = new K.Plaat(KOL * 12 + 8, HOOG * rijen.length);
+  rijen.forEach((rij, r) => rij.forEach((p, i) => vel.plak(p.uitsnede(28 * S, BOVEN, KOL, HOOG), 4 + i * KOL, r * HOOG)));
+  const naam = S > 1 ? 'proef-hd' : 'proef';
+  fs.writeFileSync(path.join(UIT, `${naam}-1x.png`), K.png(vel, 1, '#5e6a44'));
+  fs.writeFileSync(path.join(UIT, `${naam}-groot.png`), K.png(vel, 4 / S, '#5e6a44'));
+  console.log(path.join(UIT, `${naam}-groot.png`));
 }

@@ -1006,7 +1006,7 @@ function boerin(stand = null, o = {}) {
     // de bonte muts op het blote haar, en een vlecht die over de rechterschouder naar voren valt
     vlecht(delen, plus(H, [4.6, -2.2, -3.2]), plus(H, [9.4, 1.2, -10.4]), plus(H, [7.6, 5.4, -19.6]), 1.9, 1.1, 8, M.haar, D.hoofd, [0, 1, 0]);
     KAR.bonteMuts(delen, ctx, H, maat, { zij: -1 });
-  } else if (hoofd === 'geen') UI.kapselVrouw(delen, H, maat, M.haar, D.hoofd, o.kapsel || 'knot'); // vraag 145
+  } else if (hoofd === 'geen') UI.kapselVrouw(delen, H, maat, M.haar, D.hoofd, o.kapsel || 'knot', M.doek); // vraag 145
   bot(Bn.Bnek);
 
   return model(delen, mat, hg ? HH.omvat(delen, 2) : { midden: [0, 3, 38], straal: 46 });
