@@ -6973,6 +6973,10 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     **Marcel (9 okt): "ja dat is akkoord"** (alle drie). Stap 2 in één keer: de beurs per huis, kopen en verdienen, de kas
     die van de makers koopt, de belasting als tiende, het sprokkelhout, de honger per huis en het marktgeld; dan de
     speeltest. Het arme gezin dat je opzoekt en het loon van de dagloner komen daarna.
+    **Gebouwd (9 okt), stap 2** (`aa1b4c6`, op de branch): het pakhuis onthoudt van wie wat is, wie neemt betaalt wie het
+    had (een huis zijn eten, brandhout en wensen, een werkplaats wat hij omzet, de kas de bouw, de heer, het gereedschap en
+    wat je de marskramer verkoopt), te arm en honger per huis, de tiende, het marktgeld, het sprokkelhout van de huizen
+    zonder werk, en de spelregel "Geld" met drie keuzes (`spel.md`, "Geld in het dorp").
 
 142. **Een gereedschap voor alle getallen** (Marcel, 8 okt: "Ik wil straks wel een tool waarin we al deze parameters kunnen
     instellen."; open). Er is de werkbank in de spelregels (`T.WERKBANK` in `js/opties.js`: elk getal uit de blokken
