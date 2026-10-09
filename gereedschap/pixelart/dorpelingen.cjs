@@ -9,6 +9,7 @@ const { model, kegel, capsule, bol, ellips, bochtKegel, plus, naarRamp } = requi
 const { ring, eenheid, langs } = require('./figuren2.cjs');
 const HH = require('./houding.cjs');
 const KAR = require('./karakters.cjs'); // wat een karakter op het lijf van de boer draagt
+const UI = require('./uiterlijk.cjs'); // het uiterlijk van een bewoner (vraag 145)
 
 // ---------------------------------------------------------------- hulpjes
 
@@ -682,9 +683,10 @@ function boer(stand = null, o = {}) {
   if (o.rood) mat[M.huid].patroon = KAR.roodGezicht(H, [1.9, 6.4]);
   if (o.neus === 'rood') mat[M.huid].patroon = KAR.rodeNeus(plus(H, [0, 8.4, -2.6]), 3.3, [1.9, 6.4], mat[M.huid].patroon);
   mat[M.kiel] = o.kiel || { ramp: 'pet', lo: 1.4, hi: 6.2, patroon: (x, y, z) => (Math.sin(x * 1.3 + 0.4) > 0.82 && z < 50 ? -0.7 : 0) };
-  mat[M.broek] = { ramp: 'aarde', lo: 0.8, hi: 4.6 };
+  mat[M.broek] = o.broek || { ramp: 'aarde', lo: 0.8, hi: 4.6 };
   mat[M.klomp] = o.klomp || { ramp: 'zand', lo: 3, hi: 7.4 };
   mat[M.haar] = o.haar || { ramp: 'schors', lo: 0.8, hi: 4.4 };
+  if (o.baard === 'stoppels') mat[M.huid].patroon = UI.stoppels(H, [6.7, 6.7, 7.8], mat[M.huid].patroon);
   mat[M.oog] = OOG;
   mat[M.stro] = {
     ramp: 'stro',
@@ -698,7 +700,7 @@ function boer(stand = null, o = {}) {
     },
   };
   mat[M.lint] = { ramp: 'schors', lo: 0.6, hi: 3 };
-  mat[M.doek] = { ramp: 'rood', lo: 2, hi: 6.4 };
+  mat[M.doek] = o.halsdoek || { ramp: 'rood', lo: 2, hi: 6.4 };
   mat[M.hout] = { ramp: 'hout', lo: 1.6, hi: 6 };
   mat[M.ijzer] = { ramp: 'ijzer', lo: 1.8, hi: 6.2, glans: 1.2, detail: true };
   mat[M.strootje] = { ramp: 'stro', lo: 4.2, hi: 6.6 };
@@ -872,12 +874,18 @@ function boer(stand = null, o = {}) {
   delen.push(ellips(plus(H, [0, 6.9, -1.4]), [1.7, 2.4, 2.6], M.huid, D.hoofd, 1));
   // (de drinker: een dikke knol van een neus, en rood, zie rodeNeus hierboven)
   if (o.neus === 'rood') delen.push(bol(plus(H, [0, 8.5, -3]), 2.35, M.huid, D.hoofd, 1));
-  else delen.push(bol(plus(H, [0, 8.2, -2.8]), 1.7, M.huid, D.hoofd, 1));
+  else delen.push(bol(plus(H, [0, 8.2 + 0.6 * ((o.neusMaat || 1) - 1), -2.8]), 1.7 * (o.neusMaat || 1), M.huid, D.hoofd, 1));
   if (o.boos) {
     KAR.bozeWenkbrauwen(delen, H, [2.6, 0.8], oy, M.haar, D.hoofd);
     KAR.bozeMond(delen, H, [6.7, 6.7, 7.8], KAR.materiaal(ctx, 'mond', KAR.MOND), D.hoofd, 1.6, -5.5);
-  } else for (const s of [-1, 1]) delen.push(ellips(plus(H, [s * 2.7, oy + 0.1, 2.6]), [2.1, 1, 0.9], M.haar, D.hoofd, 0.4));
-  delen.push(ellips(plus(H, [0, -2, 0.4]), [7.1, 6.1, 6.8], M.haar, D.hoofd, 1));
+  } else {
+    const w = o.wenkbrauw || 1;
+    for (const s of [-1, 1]) delen.push(ellips(plus(H, [s * 2.7, oy + 0.1, 2.6]), [2.1, 1 * w, 0.9 * w], M.haar, D.hoofd, 0.4));
+  }
+  // (vraag 145: een kapsel, of kaal met een krans; zie uiterlijk.cjs)
+  if (o.kapsel === 'kaal') UI.krans(delen, H, M.haar, D.hoofd);
+  else delen.push(ellips(plus(H, [0, -2, 0.4]), [7.1, 6.1, 6.8], M.haar, D.hoofd, 1));
+  if (o.kapsel && o.kapsel !== 'kaal') UI.kapselMan(delen, H, [6.7, 6.7, 7.8], M.haar, D.hoofd, o.kapsel);
   // strootje in de rechtermondhoek
   if (o.strootje !== false) delen.push(capsule(plus(H, [1.4, 5.8, -4.3]), plus(H, [8.6, 8.4, -0.8]), 0.5, M.strootje, D.hoofd));
   const hoed = o.hoed || 'stro';
@@ -910,7 +918,8 @@ function boer(stand = null, o = {}) {
     }
   } else if (hoed === 'muts') KAR.bonteMuts(delen, ctx, H, [6.7, 6.7], { zij: -1 });
   else if (hoed === 'vilt') KAR.vilthoed(delen, ctx, H);
-  else if (hoed === 'geen') KAR.piekhaar(delen, H, M.haar, D.hoofd);
+  else if (hoed === 'wol') UI.wolmuts(delen, H, [6.7, 6.7], KAR.materiaal(ctx, 'muts', o.muts || UI.STOF.rood), KAR.deel(ctx, 'muts'), -1);
+  else if (hoed === 'geen' && !o.kapsel) KAR.piekhaar(delen, H, M.haar, D.hoofd);
   else if (hoed === 'kap') KAR.kaproen(delen, ctx, H, [6.7, 6.7, 7.8], bovenlijf);
   else if (hoed === 'vreemd') KAR.baret(delen, ctx, H, [6.7, 6.7, 7.8]);
   else if (hoed === 'bloot') {
@@ -918,7 +927,10 @@ function boer(stand = null, o = {}) {
     delen.push(ellips(plus(H, [-6.4, -1.3, 1.8]), [1.9, 3.3, 2.7], M.haar, D.hoofd, 0.8));
     delen.push(ellips(plus(H, [6.3, -1.6, 1.5]), [1.8, 3.4, 2.5], M.haar, D.hoofd, 0.8));
   }
-  if (o.baard) KAR.baard(delen, H, [6.7, 6.7, 7.8], M.haar, D.hoofd, 12);
+  if (o.baard === true || o.baard === 'vol') KAR.baard(delen, H, [6.7, 6.7, 7.8], M.haar, D.hoofd, 12);
+  else if (o.baard === 'kort') KAR.baard(delen, H, [6.7, 6.7, 7.8], M.haar, D.hoofd, 3.5);
+  else if (o.baard === 'snor') UI.snor(delen, H, [6.7, 6.7, 7.8], M.haar, D.hoofd);
+  else if (o.baard === 'sik') UI.sik(delen, H, [6.7, 6.7, 7.8], M.haar, D.hoofd);
   bot(Bn.Bnek);
 
   return model(delen, mat, hg ? HH.omvat(delen, 2) : { midden: [0, 2, 43], straal: 50 });
