@@ -7215,6 +7215,14 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     Fell English (vraag 98): op de plaat (versie 2) te kiezen tussen Grenze voor de koppen met Alegreya voor de tekst, of
     alleen Alegreya (Alegreya SC voor de koppen), met de oude ernaast. Wat Marcel kiest, gaat ook naar het briefje bij
     een huis.
+    **Marcel (9 okt), op versie 2: "Ja dit ziet er goed uit voor nu!"** Dus wat op de plaat stond: Grenze voor de koppen
+    met Alegreya voor de tekst, de datum rechtsboven, deze dingen op tafel, en een tafel van 150 op 1080.
+    **Plan voor b (9 okt):** b1, het uiterlijk: elk venster wordt papier (het vel op ware pixels, inkt, de nieuwe letters),
+    door in de vensters de kleuren van `stijl.css` op inkt te zetten, zodat hun eigen opmaak meegaat; wat een vaste kleur
+    voor donker glas heeft, gaat om. De letters komen in `letters/` (het spel laadt niets van buiten), met hun licentie.
+    b2, één manier van openen en sluiten: nu heeft elk venster zijn eigen open en sluit, en sluit het zelf de andere die
+    het kent (`js/hud.js`: "als de velden open zijn, sluit de velden"). Straks meldt een venster zich één keer aan
+    (`js/ui.js`), en openen sluit wat er open is, houdt de tijd stil onder zijn naam, en `Esc` sluit het bovenste.
     **Bezig in sessie `main` (1306efdd)** (9 okt): a is af, de keuzes op de plaat wachten op Marcel; dan b.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
