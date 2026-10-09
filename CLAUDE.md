@@ -750,6 +750,24 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   enkele keer sterft iemand (`sterft` per leeftijd), en wie het had, krijgt het deze keer niet weer (`D.koorts.gehad`).
   De status `koorts` in `T.OORZAKEN` (`T.koortsNiveau`: Koorts, en Epidemie als een tiende ziek is). De spelregel
   "Koorts"; de getallen in `T.KOORTS_INSTELLINGEN`.
+- `js/leven.js`: **ouder worden, geboren worden en sterven** (vraag 145, 9 okt; Marcel: "mensen moeten ook ouder kunnen
+  worden", en "1. C 2. Ja 3. Ja"): elke bewoner heeft een geboortedag (`p.geboren`; wie er al was, krijgt er een in zijn
+  fase), elke fase duurt vaste jaren (`fasen`), en elke nacht (`T.tikLevenDag`, na `T.tikKoortsDag`) gaat wie zijn fase
+  uit is een verder (`T.poppetjeNaarLeeftijd` in `js/bewoners.js`, met een nieuw uiterlijk), sterft een oude van
+  ouderdom, en krijgt een gezin met plaats soms een kind (`T.plaatsInHuis`). De schout en wie een naam heeft (`p.wie`)
+  worden niet ouder (`T.wordtOuder`). **Het uiterlijk** (vraag 145, 1): elke bewoner draagt een van de 24 uiterlijken van
+  zijn lijf (12 voor een kind of een oude; `p.uiterlijk`, `T.kiesUiterlijk`: het minst gebruikte, niet als de buren, een
+  kind met het haar van zijn ouders), ook in zijn werk (`boer-u7`, `zaaier-u7`; `T.UITERLIJK_LIJF`, en in js/sprites.js
+  `figuurVanUiterlijk`); de uiterlijken staan in `gereedschap/pixelart/uiterlijk.cjs`, de vellen komen uit
+  `uiterlijk-anim.cjs`. De spelregel "Ouder worden"; de getallen in `T.LEVEN_INSTELLINGEN`.
+- `js/kleinleven.js`: **het kleine leven** (vraag 145, 3; Marcel: "het voelt gewoon wat 'saai' in het dorp"): alleen
+  beeld, niets ervan in `Spel.S`: rook uit de schoorsteen van wie thuis is (`T.rookUitHuizen`; het punt per tekening is
+  `schoorsteen` of `nok` in `tegels.js`, uit `rookVan` in `huizen.cjs`), water dat stroomt of glinstert (`T.waterOp`),
+  kinderen die tikkertje spelen (`T.speel`, vanuit `T.dwaal`), kippen op het erf van een boerderij (`T.kippenOp`), een
+  hond bij een deel van de gezinnen die zijn baas volgt en blaft naar vreemden (`T.hondenVan`, `T.vreemdeBij`), en de
+  was aan de lijn (`T.wasVan`). `js/tekenen.js` tekent het (`kleinLevenInLijst`, `tekenWaterLeven`,
+  `tekenSchoorsteenRook`); de kip en de hond komen uit `gereedschap/pixelart/klein.cjs`. De spelregel "Klein leven"; de
+  getallen in `T.KLEIN_LEVEN_INSTELLINGEN`.
 - `js/zaak.js`: **de verdwenen graanzak** (vraag 128, 8 okt; Marcel: "akkoord, bouwen maar"): de proef voor informatie,
   de zitting en gevolgen, één keer per spel in de eerste herfst (`T.tikZaakDag`, vóór `T.tikVoorvallenDag`). Wat er echt
   gebeurde, staat in `D.zaak` (de dader, het zieke kind, de schuur, de aanklager, de verkeerde verdachte, de buur, het

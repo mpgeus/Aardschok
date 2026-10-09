@@ -7204,7 +7204,9 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     `js/kleinleven.js`, getekend in `kleinLevenInLijst` in `js/tekenen.js`): vier kippen op het erf van elke boerderij
     waar iemand woont (soms een haan), die scharrelen en pikken en 's nachts binnen zijn, en een hond bij 30% van de
     gezinnen, die zijn baas volgt, bij de deur ligt als die binnen is, en blaft naar een vreemde (de marskramer, een
-    rover, een wolf). Nog te doen bij 3: de was aan de lijn.
+    rover, een wolf). En de was aan de lijn (`T.wasVan`): bij een op de drie huizen per dag, onder het werk en niet als
+    het nat is, twee palen en een touw met drie tot vijf stukken (hemd, laken, broek, doek) die wapperen. Daarmee zijn
+    alle vijf van 3 er, en het water.
     **Bezig in sessie `ccr-77327776-rqjldz`** (9 okt): vraag 145, 1 en 3.
 
 146. **Een fatsoenlijke ui** (Marcel, 9 okt: "Ik denk dat het nu ook tijd is om een fatsoenlijke UI te maken; nu is het

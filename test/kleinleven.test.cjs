@@ -180,3 +180,39 @@ test('een hond hier en daar: bij een gezin met een baas op de kaart, uit het lot
     T.zetOptie('kleinLeven', 'aan');
   }
 });
+
+test('de was hangt overdag aan een lijn bij een deel van de huizen, op vrije grond, en niet in de regen of \'s nachts', () => {
+  const S = gehucht();
+  const D = S.dorp;
+  const w = S.wereld;
+  const W = T.KLEIN_LEVEN_INSTELLINGEN.was;
+  D.kalender.dag = opUur(40, 11);
+  const kans = W.kans;
+  W.kans = 1;
+  try {
+    const alle = T.wasVan(D, w);
+    assert.ok(alle.length > 0, 'er hangt was');
+    for (const l of alle) {
+      assert.ok(T.GEBOUWEN[l.g.soort].woonruimte);
+      assert.equal(Math.abs(l.tot.x - l.van.x) + Math.abs(l.tot.y - l.van.y), W.lang, 'een rechte lijn van zijn lengte');
+      const dx = Math.sign(l.tot.x - l.van.x);
+      const dy = Math.sign(l.tot.y - l.van.y);
+      for (let t = 0; t <= W.lang; t++) {
+        const x = l.van.x + dx * t;
+        const y = l.van.y + dy * t;
+        assert.ok(T.isBegaanbaar(w, x, y) && !T.veldOp(w, x, y) && !T.voorwerpOp(w, x, y) && !T.isAangelegdPaadje(D, x, y));
+      }
+      assert.ok(l.stukken.length >= W.stukken[0] && l.stukken.length <= W.stukken[1]);
+    }
+  } finally {
+    W.kans = kans;
+  }
+  const vandaag = T.wasVan(D, w).map((l) => l.g);
+  assert.ok(vandaag.length < D.gebouwen.length, 'niet bij elk huis');
+  assert.deepEqual(T.wasVan(D, w).map((l) => l.g), vandaag, 'dezelfde dag, dezelfde was');
+  D.kalender.dag = opUur(40, 1);
+  assert.equal(T.wasVan(D, w).length, 0, 's nachts niet');
+  D.kalender.dag = opUur(40, 11);
+  D.weer = { ...(D.weer || {}), vandaag: 'regen' };
+  if (T.isNat(D)) assert.equal(T.wasVan(D, w).length, 0, 'niet in de regen');
+});

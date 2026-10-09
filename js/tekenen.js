@@ -2974,6 +2974,12 @@
       const deel = T.sprites.figuur(k.naam, k.houding, T.sprites.richtingVan(k.dx, k.dy), fase);
       if (deel) lijst.push({ d: k.x + k.y, l: 2, punt: { x: tx, y: ty }, f: () => tekenKlein(ctx, deel, k.x, k.y, 5) });
     }
+    for (const l of T.wasVan(D, w)) {
+      const mx = (l.van.x + l.tot.x) / 2;
+      const my = (l.van.y + l.tot.y) / 2;
+      if (!inVak(vak, Math.round(mx), Math.round(my)) || !T.isZichtbaar(w, Math.round(mx), Math.round(my))) continue;
+      lijst.push({ d: mx + my, l: 1, punt: { x: Math.round(mx), y: Math.round(my) }, f: () => tekenWas(ctx, S, l) });
+    }
     // De honden: een stap achter hun baas aan, op de klok van de wereld; is de baas binnen, dan ligt de hond bij de deur.
     const H = T.KLEIN_LEVEN_INSTELLINGEN.honden;
     const dt = Math.max(0, Math.min(0.25, S.wereldTijd - hondenTijd));
@@ -3024,6 +3030,61 @@
       if (deel) lijst.push({ d: x + y, l: 2, punt: { x: tx, y: ty }, f: () => tekenKlein(ctx, deel, x, y, 10) });
     }
   }
+  // De was aan de lijn: twee palen, een touw dat doorhangt, en de stukken eraan, kolom voor kolom op hele pixels (zoals
+  // de pixel art), die wapperen: elk stuk golft in zijn eigen ritme op de klok van het scherm.
+  const WAS_MAAT = { hemd: [17, 19], laken: [22, 26], broek: [14, 24], doek: [12, 13] };
+  const PAAL = 50;
+  function tekenWas(ctx, S, l) {
+    const a = opGrond(l.van.x, l.van.y);
+    const b = opGrond(l.tot.x, l.tot.y);
+    const kleur = (k, f) => `rgb(${Math.round(k[0] * f)},${Math.round(k[1] * f)},${Math.round(k[2] * f)})`;
+    const paal = (p) => {
+      ctx.fillStyle = 'rgb(84,58,36)';
+      ctx.fillRect(Math.round(p.x) - 1, Math.round(p.y) - PAAL - 2, 2, PAAL + 2);
+      ctx.fillStyle = 'rgb(128,92,58)';
+      ctx.fillRect(Math.round(p.x) - 1, Math.round(p.y) - PAAL - 2, 1, PAAL + 2);
+    };
+    paal(a);
+    const n = Math.max(1, Math.round(Math.abs(b.x - a.x)));
+    const touw = (t) => a.y - PAAL + (b.y - a.y) * t + 5 * 4 * t * (1 - t);
+    ctx.fillStyle = 'rgb(52,44,36)';
+    for (let i = 0; i <= n; i++) {
+      const t = i / n;
+      ctx.fillRect(Math.round(a.x + (b.x - a.x) * t), Math.round(touw(t)), 1, 1);
+    }
+    const ruimte = n / l.stukken.length - 2;
+    for (const st of l.stukken) {
+      const [b0, h0] = WAS_MAAT[st.soort];
+      const breed = Math.max(4, Math.min(b0, Math.floor(ruimte)));
+      const midden = Math.round(st.op * n);
+      for (let c = 0; c < breed; c++) {
+        const u = c / (breed - 1);
+        const i = midden - Math.floor(breed / 2) + c;
+        const t = i / n;
+        const x = Math.round(a.x + (b.x - a.x) * t);
+        const y = Math.round(touw(t));
+        let h = h0;
+        if (st.soort === 'hemd' && (u < 0.25 || u > 0.75)) h = Math.round(h0 * 0.55); // de mouwen
+        if (st.soort === 'broek' && Math.abs(u - 0.5) < 0.12) h = Math.round(h0 * 0.35); // tussen de pijpen
+        h += Math.round(1.3 * Math.sin(S.tijd * 3.1 + st.zaad + u * 4));
+        const rand = c === 0 || c === breed - 1 ? 0.7 : 1; // een donkere rand, zoals om de pixel art
+        const licht = rand * (0.88 + 0.12 * Math.sin(S.tijd * 2.3 + st.zaad * 1.7 + u * 6)) * (1.08 - 0.14 * u);
+        ctx.fillStyle = kleur(st.kleur, licht);
+        ctx.fillRect(x, y + 1, 1, h);
+        ctx.fillStyle = kleur(st.kleur, licht * 0.72); // de omslag over het touw en de zoom
+        ctx.fillRect(x, y, 1, 1);
+        ctx.fillRect(x, y + h, 1, 1);
+      }
+      // de knijpers
+      ctx.fillStyle = 'rgb(112,84,52)';
+      for (const c of [0, breed - 1]) {
+        const t = (midden - Math.floor(breed / 2) + c) / n;
+        ctx.fillRect(Math.round(a.x + (b.x - a.x) * t), Math.round(touw(t)) - 1, 2, 3);
+      }
+    }
+    paal(b);
+  }
+
   function tekenKlein(ctx, deel, x, y, schaduw) {
     const p = opGrond(x, y);
     ctx.fillStyle = 'rgba(0,0,0,0.28)';

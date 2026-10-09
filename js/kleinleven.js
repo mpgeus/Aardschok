@@ -32,6 +32,9 @@
     // De honden (Marcel: "her en der 1 bij een huis"): een gezin heeft met deze kans een hond, die zijn baas volgt op
     // `achter` tegels, en blaft naar een vreemde die binnen `blaffen` tegels komt.
     honden: { kans: 0.3, achter: 1.3, blaffen: 5 },
+    // De was aan de lijn: een huis met mensen hangt met deze kans per dag de was op, onder het werk (niet in de regen of
+    // de sneeuw), aan een lijn van `lang` tegels, binnen `straal` tegels van de deur, en van `stukken` (van, tot) stuks.
+    was: { kans: 0.35, lang: 3, straal: 4, stukken: [3, 5] },
   };
   const IN = () => T.KLEIN_LEVEN_INSTELLINGEN;
 
@@ -222,6 +225,79 @@
       if (vreemd && Math.hypot(e.x - x, e.y - y) <= r) return e;
     }
     return null;
+  };
+
+  // ── De was aan de lijn ──
+
+  // Waar de lijn van een huis komt: { van, tot } (twee tegels, `lang` uit elkaar langs x of y), op vrije grond bij de
+  // deur (geen akker, geen paadje, geen water, niets dat er staat, niet tegen het huis en niet voor de deur), of null.
+  // Per kaart één keer.
+  const lijnen = new WeakMap();
+  function lijnVan(D, w, g) {
+    const versie = T.kaartVersie(w);
+    let k = lijnen.get(w);
+    if (!k || k.versie !== versie) lijnen.set(w, (k = { versie, huizen: new Map() }));
+    if (k.huizen.has(g)) return k.huizen.get(g);
+    const W = IN().was;
+    const deur = T.deurVan(w, g);
+    const voet = T.voetVanGebouw(g);
+    const paadje = w === D.wereld ? (x, y) => T.isAangelegdPaadje(D, x, y) : () => false;
+    const vrij = (x, y) =>
+      T.isBegaanbaar(w, x, y) && !T.veldOp(w, x, y) && !T.waterOp(w, x, y) && !T.voorwerpOp(w, x, y) && !paadje(x, y) &&
+      !T.opHetPlein(w, x, y) && Math.max(Math.abs(x - deur.x), Math.abs(y - deur.y)) > 1 &&
+      !(x >= voet.x - 1 && x <= voet.x + voet.b && y >= voet.y - 1 && y <= voet.y + voet.h);
+    let beste = null;
+    for (let y = deur.y - W.straal; y <= deur.y + W.straal; y++) {
+      for (let x = deur.x - W.straal; x <= deur.x + W.straal; x++) {
+        for (const [dx, dy] of [[1, 0], [0, 1]]) {
+          let ok = true;
+          for (let t = 0; t <= W.lang && ok; t++) ok = vrij(x + dx * t, y + dy * t);
+          if (!ok) continue;
+          const mx = x + (dx * W.lang) / 2;
+          const my = y + (dy * W.lang) / 2;
+          const score = Math.abs(Math.hypot(mx - deur.x, my - deur.y) - 3) + T.vastLot(D, x * 977 + y * 31 + dx, 5401);
+          if (!beste || score < beste.score) beste = { score, van: { x, y }, tot: { x: x + dx * W.lang, y: y + dy * W.lang } };
+        }
+      }
+    }
+    const lijn = beste && { van: beste.van, tot: beste.tot };
+    k.huizen.set(g, lijn);
+    return lijn;
+  }
+
+  // De kleuren van de was: linnen, gebleekt, blauw, rood, oker, groen en grijs (rgb).
+  const WAS_KLEUREN = [[226, 218, 196], [240, 236, 222], [214, 204, 178], [96, 122, 160], [156, 74, 58], [196, 156, 82], [112, 130, 88], [150, 146, 136]];
+  const WAS_SOORTEN = ['hemd', 'laken', 'broek', 'doek', 'hemd', 'doek'];
+
+  // De was die nu hangt: [{ g, van, tot, stukken: [{ soort, kleur, op (0 tot 1 langs de lijn), zaad }] }].
+  T.wasVan = function (D, w) {
+    if (!IN().aan || !D || !D.bewoners || !D.kalender || !w) return [];
+    const deel = T.dagdeelVan(D.kalender.dag);
+    if ((deel !== 'werk' && deel !== 'schaft') || T.isNat(D)) return [];
+    const W = IN().was;
+    const dag = Math.floor(D.kalender.dag);
+    const uit = [];
+    for (const g of D.gebouwen || []) {
+      const soort = T.GEBOUWEN[g.soort];
+      if (!soort || !soort.woonruimte || g.klaar === false || g.brand || !D.bewoners.mensen.some((p) => p.huis === g)) continue;
+      const zaad = g.x * 131 + g.y * 7;
+      if (T.vastLot(D, dag * 7919 + zaad, 5402) >= W.kans) continue;
+      const lijn = lijnVan(D, w, g);
+      if (!lijn) continue;
+      const lot = (i, kanaal) => T.vastLot(D, (dag * 7919 + zaad) * 16 + i, kanaal);
+      const n = W.stukken[0] + Math.floor(lot(0, 5403) * (W.stukken[1] - W.stukken[0] + 1));
+      const stukken = [];
+      for (let i = 0; i < n; i++) {
+        stukken.push({
+          soort: WAS_SOORTEN[Math.floor(lot(i, 5404) * WAS_SOORTEN.length)],
+          kleur: WAS_KLEUREN[Math.floor(lot(i, 5405) * WAS_KLEUREN.length)],
+          op: (i + 0.5) / n,
+          zaad: zaad + i,
+        });
+      }
+      uit.push({ g, van: lijn.van, tot: lijn.tot, stukken });
+    }
+    return uit;
   };
 
   // Welke huizen roken, en hoe dik: [{ g, deur, dik }] (dik van 0 tot 1).
