@@ -34,6 +34,8 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
    plaat (a) is goed, elk venster is papier met leesbare letters (b1), er is één manier van openen en sluiten (b2), en
    de tafel ligt onderin (c, 9 okt; een gesprek staat sinds dan midden boven de tafel). **Nu d** (bovenaan alleen het
    doel met de raad en de datum als briefjes, het blok met toetsen weg, Spelregels in het menu), dan e (de fotomodus).
+0b. Engels en een vertaaltool (vraag 147; Marcel, 9 okt): de basis nu, naast de ui; het omzetten van alle tekst na de
+   ui en vóór de proefversie. **Bezig in sessie `vertalen`** (9 okt): stap 1, de basis en de tool.
 1. Een proefversie voor Marcels 4K-scherm en een eerste tester (33d; `npm run proefversie`, ook `-- --windows`), met de
    graanzak erin. De laatste is van 3 okt (`36c713e`), zonder de verzoeken, de twee bazen, het ontginnen, de markt, de
    wolven, het eiland, WebGL en de graanzak.
@@ -7283,6 +7285,29 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     rekenboek is nog opmaak in css zoals op de plaat, geen pixel art. Nagelopen in de browser (1280×720 op 150%, en een
     smal hoog venster): elk ding opent en sluit zijn venster, de lat, de zandloper, sluipen, de brief en het rapport, de
     bode in een droogte, en het briefje boven elk ding en boven het boek; `npm test` 1152/1152.
+
+147. **Engels, en een vertaaltool voor de community** (Marcel, 9 okt: "We moeten alles naar het Engels halen. Ook moeten
+    we een translate tool hebben. Mochten we leden uit de community krijgen die een vertaling willen maken."). Op 1 okt
+    was Engels als hoofdtaal al besloten (vraag 83, b), voor januari 2027; nu eerder. Er zijn zo'n 2.900 zinnen (26.000
+    woorden) in 86 bestanden, plus losse woorden (gebouwen, maanden); het meeste in de gesprekken, de spelregels, de
+    balk en de tafel.
+    **Marcel (9 okt), op vier vragen:** (a) alles wat de speler ziet; de code, het commentaar en `ontwerp/` blijven
+    Nederlands. (b) De brontaal wordt Engels: de zinnen in de code worden Engels, en Nederlands is een taalbestand zoals
+    elk ander (Engels is dan altijd heel, en een vertaler werkt rechtstreeks uit het Engels; Marcel speelt in het
+    Nederlands met de taalkeuze). (c) De basis nu, het omzetten na de ui (vraag 146), zodat het niet botst met de tafel,
+    en vóór de proefversie. (d) De schout heet in het Engels *reeve* (de eerste brief legt het woord uit).
+    **Plan:** 1. de basis: één manier om tekst te tonen (`T.t('… {wie} …', { wie })`), de bronzin is de sleutel, een
+    taal is een gewoon scriptbestand (`taal/nl.js`, werkt vanaf `file://`), meervoud en hij/zij als vormen in de zin,
+    de taalkeuze in het menu, en toetsen (elke zin heeft zijn vertaling met dezelfde `{woorden}`; geen tekst buiten
+    `T.t`); als proef het titelscherm en het menu. 2. het omzetten, bestand voor bestand; wat nu uit stukjes geplakt wordt
+    (`naam + ' heeft geen ' + wat`), wordt een hele zin, want in een andere taal staan de woorden anders. 3. Claude
+    vertaalt (het Nederlands van nu wordt `taal/nl.js`); Marcel leest steekproeven voor de toon. 4. de vertaaltool:
+    één bladzijde (`gereedschap/vertalen.html`, later ook in het spel onder het menu), links de bron, rechts je taal,
+    per zin waar hij staat en welke `{woorden}` erin moeten, wat ontbreekt en wat verouderd is, en meteen zien in het
+    spel; met onze server schrijft ze `taal/xx.js`, zonder bewaart ze een bestand dat een speler deelt, en het spel
+    (Electron) leest talen uit een map `talen/` naast het spel. Klaar als: het spel in het Engels en het Nederlands
+    speelt zonder één zin in de andere taal, `npm test` dat bewaakt, en iemand zonder onze code met de tool een taal kan
+    maken en in het spel zien.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
