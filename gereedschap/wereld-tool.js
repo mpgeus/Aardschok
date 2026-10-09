@@ -799,8 +799,9 @@
 
   // ---------------------------------------------------------------- camera en muis
 
+  let dpr = 1;
   function formaat() {
-    const dpr = Math.max(1, Math.floor(window.devicePixelRatio || 1));
+    dpr = Math.max(1, Math.floor(window.devicePixelRatio || 1));
     const vak = canvas.parentElement.getBoundingClientRect();
     bw = Math.max(200, Math.round(vak.width));
     bh = Math.max(200, Math.round(vak.height));
@@ -1405,10 +1406,24 @@
     S.wind = T.windWaarde(S.tijd);
     const vak = canvas.parentElement.getBoundingClientRect();
     if (Math.round(vak.width) !== bw || Math.round(vak.height) !== bh) formaat();
-    if (S.zoom >= MIN_BEELD) T.tekenScene(ctx, S, bw, bh);
-    else tekenPlattegrond();
-    tekenLagen();
+    // Elk beeld de stand van het doek opnieuw, zoals het spel (js/main.js): loopt het tekenen ergens vast, dan blijft
+    // er anders een verschoven en verkleind doek achter, dat elk beeld kleiner wordt (zo ging het tot 10 okt, toen js/
+    // tekenen.js twee dingen vroeg die het gereedschap niet laadt). En de fout in de statusregel, één keer.
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    try {
+      if (S.zoom >= MIN_BEELD) T.tekenScene(ctx, S, bw, bh);
+      else tekenPlattegrond();
+      tekenLagen();
+      tekenFout = null;
+    } catch (e) {
+      if (tekenFout !== e.message) {
+        tekenFout = e.message;
+        status(`Het tekenen loopt vast: ${e.message}`);
+        console.error(e);
+      }
+    }
   }
+  let tekenFout = null;
 
   // ---------------------------------------------------------------- opstarten
 

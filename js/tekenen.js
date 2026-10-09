@@ -519,8 +519,9 @@
     // lagere/hogere `l`: eerst de achterlaag (l 1, vóór een wezen l 2), dan via de gewone
     // sortering het wezen zelf, dan de voorlaag (l 2,5) erover — zo lijkt een boer tot zijn
     // middel in het graan te staan. De andere drie stadia zijn plat genoeg voor één laag. Zonder
-    // sprites blijft een akker gewoon de kale zandgrond die er al ligt.
-    if (w.akkers && w.akkers.length && metSprites()) {
+    // sprites blijft een akker gewoon de kale zandgrond die er al ligt, en zonder kalender ook (het gereedschap,
+    // gereedschap/wereld.html, speelt niet en heeft er geen).
+    if (w.akkers && w.akkers.length && metSprites() && S.kalender) {
       const datum = T.datumVanDag(S.kalender.dag);
       const basis = T.akkerStadium(datum.maand, datum.dagVanMaand);
       const varianten = T.sprites.graanVarianten();
