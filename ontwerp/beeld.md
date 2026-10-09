@@ -1006,3 +1006,9 @@ niets past, wijkt de zwakke grond voor strand (naast de zee) of gras. Golven die
   bouwfasen, de brandfasen en de sneeuw. **Marcel (9 okt): "De huizen moeten een goede balans zijn tussen
   'sprookjesachtig' en 'echt'; het blijft een game uiteindelijk, dus het mag ook wel een beetje 'mooi' en 'leuk' zijn."**
   Dus: het materiaal echt en verweerd (3, 6), de vorm met karakter en een beetje overdreven (1, 2), en het geheel uitnodigend.
+- **Meer variatie in het groen, de bomen en de versiering (9 okt 2026; werklijst, vraag 148).** Marcel: "Ik wil meer
+  variatie in de vegetatie, ook bomen en versieringen van het dorp." Nu heeft elke soort één tekening en verandert het
+  groen niet met het jaar. Het voorstel staat bij vraag 148: elke boom anders (vormen per soort, en de beuk, de linde,
+  de populier, de els, de knotwilg, de meidoorn en de hazelaar), de bomen in het jaar (bloesem, herfstkleuren, kaal in de
+  winter), meer groen eronder, en spullen bij de huizen naar hun stand, die met het dorp meegroeien. Het stukje grond
+  met spullen bij het huis (punt 5 hierboven) gaat daarin op.

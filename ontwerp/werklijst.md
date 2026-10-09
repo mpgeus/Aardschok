@@ -23,7 +23,6 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
 **Wacht op Marcel:**
 - Een feest op het plein vol kijkgaten (`opmerkingen.md`, "Het beeld"): zo laten, op een feest alleen wie ertoe doet, of
   het plein uit? De fout in de kijkgaten en het haperen bij slepen zijn op 9 okt opgelost.
-- Sneeuw op de daken (vraag 144, 4b): mag de render van een sneeuwmasker per huis, en ook de bomen?
 - Uit `opmerkingen.md`: een brand die overslaat op het huis ernaast, een eigen beeld voor de koorts (ziekbed, hoesten),
   en wie wijn wil (de wijnboerderij die niemand bouwt).
 - Vraag 142, de bladzijde met alle getallen (`gereedschap/instellingen.html`): stap 1 en 2 staan in `main`; stap 3 (een
@@ -36,6 +35,10 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
    doel met de raad en de datum als briefjes, het blok met toetsen weg, Spelregels in het menu), dan e (de fotomodus).
 0b. Engels en een vertaaltool (vraag 147; Marcel, 9 okt): de basis nu, naast de ui; het omzetten van alle tekst na de
    ui en vóór de proefversie. **Bezig in sessie `vertalen`** (9 okt): stap 1, de basis en de tool.
+0c. Meer variatie in het groen, de bomen en de versiering (vraag 148; Marcel, 9 okt: alles ja, "Mag ernaast"), naast
+   de ui: eerst de bomen (vormen, nieuwe soorten, de seizoenen met vruchten), dan het groen eronder, dan de spullen bij de
+   huizen; de sneeuw op de bomen en de huizen (144, 4b, Marcel: "ja") in dezelfde ronde. **Bezig in sessie `main`
+   (desktop, groen)** (9 okt): stap 1, de proefplaat van de bomen.
 1. Een proefversie voor Marcels 4K-scherm en een eerste tester (33d; `npm run proefversie`, ook `-- --windows`), met de
    graanzak erin. De laatste is van 3 okt (`36c713e`), zonder de verzoeken, de twee bazen, het ontginnen, de markt, de
    wolven, het eiland, WebGL en de graanzak.
@@ -7091,6 +7094,9 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     legt daar de sneeuw over, net zo dik als op de grond. Dat zijn 559 tekeningen, zo'n drie uur rekenen op de
     achtergrond (weinig verbruik), en enkele MB erbij. Vragen: mag die render, en ook de bomen (kale takken en sneeuw
     erop) of alleen de huizen?
+    **Marcel (9 okt), bij vraag 148: "Sneeuw moet ook nog op bomen, huizen etc."** Dus ja: de huizen, de bomen en wat
+    verder buiten staat. De bomen krijgen hun kale takken en hun sneeuw met de seizoenen van vraag 148; de daken in de
+    ronde van de huizen (de render van het masker, zoals hierboven).
     **Marcel (9 okt), op wat er gebouwd is:** "Vergeet niet dat alles onze eigen kaart is. Het wordt 1 aaneengesloten
     stuk." "De groep neemt in het donker ook lantaarns mee natuurlijk." "Huis moet afgebrokkeld zijn. Echt kapot.
     Structureel ingestort etc." Dus: de hinderlaag van de bode altijd op de kaart (buiten beeld alleen als het niet anders
@@ -7319,6 +7325,50 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     (Electron) leest talen uit een map `talen/` naast het spel. Klaar als: het spel in het Engels en het Nederlands
     speelt zonder één zin in de andere taal, `npm test` dat bewaakt, en iemand zonder onze code met de tool een taal kan
     maken en in het spel zien.
+148. **Meer variatie in het groen, de bomen en de versiering van het dorp** (Marcel, 9 okt: "Ik wil meer variatie in de
+    vegetatie, ook bomen en versieringen van het dorp"; besloten 9 okt).
+    **Wat er nu is:** elke soort heeft één tekening, dus elke eik is dezelfde eik (`tegels/bomen.png`: eik, herfsteik,
+    den, berk, dode boom, wilg, appelboom, het boompje en drie jonge bomen; `tegels/begroeiing.png`: struik,
+    bessenstruik, varen, graspol, hoog gras, bloemen, paddenstoelen, stronk, rots en steentje). De bomen veranderen niet
+    met het jaar (de herfsteik staat alleen in de rand van het bos). Getekend, maar nergens neergezet: de hekken van
+    tenen en van latten met hun hoeken en hekjes, de houtstapel, het schuurtje en de waslijn (`tegels/tuin.png`,
+    `tegels/erf.png`). De maker zet bij elk huis een appelboom of een eik, bij een boerderij een stukje tuin of een
+    regenton, en een bankje bij een lantaarn; een huis dat er in het spel bij komt, krijgt niets.
+    **Wat er al over gaat:** vraag 109, e (het erf: een moestuin, een regenton, een hek van tenen; nooit beantwoord),
+    vraag 145, 3 (klein leven: de was aan de lijn en de kippen; bezig in een andere sessie), punt 5 van de huizen naar
+    Marcels voorbeelden (`beeld.md`, Open: "een eigen stukje grond met spullen"), en vraag 144, 4b (sneeuw op de bomen).
+    **Voorstel, alleen beeld:** geen regel verandert, en wat in de weg kan staan, komt alleen waar niemand loopt.
+    - **a, elke boom anders.** Per soort vier tot zes tekeningen (groot en klein, scheef, een andere kroon, een gespleten
+      stam); welke, zegt de tegel (een vaste hasj), zodat er in het spel niets verandert en een bewaard spel past. Erbij
+      een paar soorten die bij het land passen: de beuk en de linde (het bos, het plein, de kapel), de populier (hoog en
+      smal, langs de weg), de els en de knotwilg (aan de beek en het water), en de meidoorn en de hazelaar als struik.
+      Wat een boom is voor de houthakker en het ontginnen, staat op één plek (`T.NATUUR.bos`), dus een nieuwe soort telt
+      meteen mee.
+    - **b, de bomen in het jaar.** Lente: bloesem in de appel en de meidoorn, fris groen; zomer: vol; herfst: geel, oranje
+      en rood, met blad op de grond; winter: kaal loofhout, de den groen (de sneeuw erop met 144, 4b). De heide bloeit
+      paars in de nazomer, en de bloemen staan in de lente en de zomer. De browser laadt alleen het seizoen van nu.
+    - **c, het groen eronder.** De struiken, varens en graspollen in varianten, en wat er nog niet is: klaprozen en
+      korenbloemen langs de akkers, brandnetels achter de huizen, brem en distels op de heide, lisdodde en waterlelies
+      aan het water, braam aan de bosrand. Plat, behalve de struiken: het ligt in de buffer van de grond en kost niets
+      aan tekenen.
+    - **d, de versiering van het dorp, die meegroeit.** Eerst wat al getekend is (de hekken om de moestuinen en de
+      weides, de houtstapel, het schuurtje), dan nieuw: tonnen, kratten, een kar en een kruiwagen, een hooiberg en een
+      mesthoop bij de boerderij, bijenkorven, bloembakken, een wegkruis op de kruising, een drinkbak bij de put. Naar de
+      stand van het huis: een hut een houtstapel en een ton, een huis een bankje en een tuintje, een stenen huis
+      bloembakken en een hek van latten, een boerderij een hooiberg, een mesthoop en een kar. Ook een huis dat in het
+      spel komt of doorgroeit, krijgt het, en een huis dat alles heeft, ziet er rijker uit; zo ziet een dorp dat groeit
+      er ook anders uit.
+    **In stappen:** 1. a, met eerst een proefplaat (een eik in zes vormen en vier seizoenen, en de nieuwe soorten); 2. b;
+    3. c; 4. d, samen met punt 5 van de huizen, en vraag 109, e, gaat erin op.
+    **Vragen:** a tot en met d zo, en deze nieuwe soorten? Met de bomen eerst? Een hek om een weide of een tuin verandert
+    wie waar loopt (en dus de speeltest): mag dat, of komt versiering alleen tegen de muur van een huis? En waar in de rij:
+    naast de ui (het is tekenwerk, dat apart kan), of erna?
+    **Marcel (9 okt): "a. Ja goed idee b. Ja vegetatie en bomen met seizoenen mee. Ook vruchten etc. c. Ja dat kleedt het
+    aan d. Goed idee, het gaat dan wat echter worden."** Op de vragen: **"1. Ja dat is prima 2. Ja is goed 3. Ja prima 4.
+    Mag ernaast."** En: **"Sneeuw moet ook nog op bomen, huizen etc."** Dus a tot en met d zoals voorgesteld, met deze
+    nieuwe soorten; de seizoenen ook in het groen eronder, met vruchten (appels, bramen en bessen, hazelnoten, eikels en
+    beukennootjes, rode besjes in de meidoorn); de bomen eerst; een hek om een weide of tuin mag (de speeltest speelt dan
+    opnieuw); naast de ui (0c in **Nu en daarna**); en de sneeuw op de bomen en de huizen hoort erbij (144, 4b).
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
