@@ -21,8 +21,6 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
 (Marcel: "Ik denk dat we die economie terug moeten draaien", en "Alles van vraag 141").
 
 **Wacht op Marcel:**
-- De plaat van de ui (vraag 146, a): "De schrijftafel van de schout" (https://claude.ai/artifact/1Q4hbWrE8kS9MFQC36vpaU);
-  klopt de indeling, kloppen de dingen op tafel, en is de tafel hoog genoeg? Dan b, één papier voor elk venster.
 - Een feest op het plein vol kijkgaten (`opmerkingen.md`, "Het beeld"): zo laten, op een feest alleen wie ertoe doet, of
   het plein uit? De fout in de kijkgaten en het haperen bij slepen zijn op 9 okt opgelost.
 - Sneeuw op de daken (vraag 144, 4b): mag de render van een sneeuwmasker per huis, en ook de bomen?
@@ -33,7 +31,8 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
 
 **Daarna, in deze volgorde:**
 0. Een fatsoenlijke ui (vraag 146; Marcel, 9 okt: "nu is het echt een zooitje met al die menutjes met letters"): de
-   schrijftafel van vraag 98 over het hele scherm, eerst een plaat om te kiezen. **Bezig in sessie `main` (1306efdd).**
+   plaat (a) is goed, elk venster is papier met leesbare letters (b1), en er is één manier van openen en sluiten (b2).
+   **Nu c, de tafel, in een nieuwe sessie** (wat er moet, staat bij vraag 146), dan d en e.
 1. Een proefversie voor Marcels 4K-scherm en een eerste tester (33d; `npm run proefversie`, ook `-- --windows`), met de
    graanzak erin. De laatste is van 3 okt (`36c713e`), zonder de verzoeken, de twee bazen, het ontginnen, de markt, de
    wolven, het eiland, WebGL en de graanzak.
@@ -7248,7 +7247,16 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     vragen `wettenOpen`, `veldenOpen`, ... zijn weg (ook uit de speeltest). Nagelopen in de browser: de toetsen, de
     knoppen, overspringen, `Esc`, de brief, de marskramer, het slachten, het bouwmenu en het menu; de tijd loopt na
     het sluiten weer op de snelheid die je koos.
-    **Bezig in sessie `main` (1306efdd)** (9 okt): c, de tafel.
+    **Voor c, de tafel (overdracht, 9 okt):** de schets van elk ding staat in de plaat (lees hem met het gereedschap
+    Artifact, `read`, op de link hierboven): `bord()` tekent een ding op twee keer de maat met licht en een gekleurde
+    omlijning, `TEKENING` heeft elk ding, `tafel()` het hout, en de opmaak van het rekenboek, de lat en de briefjes staat
+    in de `<style>`. In het spel wordt het pixel art uit code zoals de rest: een script in `gereedschap/pixelart/` (zoals
+    `papieren.cjs`) dat de dingen en het hout naar `beelden/` schrijft, en het spel tekent ze als html over het beeld
+    (`index.html`, `js/hud.js`), op ware pixels, op 4K twee keer zo groot. Elk ding hangt met zijn naam aan zijn venster
+    (`T.ui.wisselVenster(S, 'wetten')`); de brief, het rapport, de zaak en de bode liggen er alleen als ze er zijn (nu de
+    knoppen `#brief-knop`, `#bode-knop`, `#zaak-knop`, die `js/brieven.js` en `js/hud.js` tonen). De toets staat op het
+    briefje bij de muis, niet op het ding. De balk bovenaan (`#kalenderbalk`, `#voorraadbalk`, `#balk-knoppen`) gaat
+    erin op; het doel en de datum worden in d briefjes.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
