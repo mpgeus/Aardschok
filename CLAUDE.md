@@ -381,8 +381,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`T.wisselOverzicht`, `S.overzicht`, alleen scherm); slepen of de pijltjes schuiven, het wiel zoomt, en wat je klikt,
   doet de schout nog altijd. `Tab`, een klik op de schout of een gevecht brengt je terug. Op een groot scherm tekent het spel op een hele deling ervan, minstens
   1920×1080 (de tussenbuffer, `formaat`, vraag 123): op 4K 1920×1080 maal twee; wat er getekend wordt, zegt `T.tekenMaat()`,
-  en de muis rekent om in `naarVlak`. Ver uitgezoomd bewaart
-  `js/tekenen.js` de grond op de maat van het scherm, en het bos om de kaart heen in een buffer (`bosGebakken`). **De
+  en de muis rekent om in `naarVlak`. De grond ligt in stukken van 512 pixels die aan de wereld vastzitten
+  (`werkStukkenBij` in `js/tekenen.js`, 9 okt): wat in beeld komt, wordt getekend, en slepen tekent alleen de stukken aan
+  de rand; wie de grond wil (het kijkgat), vraagt `T.tekenGrondStukken`. Ver uitgezoomd liggen ze op de maat van het
+  scherm, en het bos om de kaart heen ook in stukken (`bosGebakken`). **De
   meter** (`F2`): beelden per seconde, en wat de regels en het tekenen per beeld kosten.
 - `js/gl.js`: **tekenen met de videokaart** (vraag 123): een eigen kleine laag op WebGL die zich voordoet als het 2D-doek,
   zodat `js/tekenen.js` er hetzelfde op tekent. Plaatjes, vlakken, bolle vormen en ronde verlopen tekent de kaart zelf;

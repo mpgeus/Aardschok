@@ -97,10 +97,15 @@ async function meet(browser, scherm) {
     r.alles = await page.evaluate(([z, u]) => Meet.teken(z, 30, true, { uur: u }), [sc.zoom, sc.uur]);
     r.alleenRekenen = await page.evaluate(([z, u]) => Meet.teken(z, 30, false, { uur: u, klein: true }), [sc.zoom, sc.uur]);
     r.zonderNacht = await page.evaluate(([z, u]) => { Spel.debug.geenNacht = true; const x = Meet.teken(z, 30, true, { uur: u }); Spel.debug.geenNacht = false; return x; }, [sc.zoom, sc.uur]);
-    // de grond alleen: zijn buffer over het hele scherm, met een pixel teruggelezen
+    // de grond alleen: zijn stukken op hun plek, met een pixel teruggelezen
     r.grondAlleen = await page.evaluate(() => {
-      const c = document.getElementById('scherm').getContext('2d'); const g = Spel.S.grond; const t = [];
-      for (let i = 0; i < 30; i++) { const a = performance.now(); c.save(); c.imageSmoothingEnabled = false; c.drawImage(g.canvas, 0, 0, Spel.tekenMaat().b, Spel.tekenMaat().h); c.restore(); c.getImageData(0, 0, 1, 1); t.push(performance.now() - a); }
+      const c = document.getElementById('scherm').getContext('2d'); const S = Spel.S; const m = Spel.tekenMaat(); const t = [];
+      for (let i = 0; i < 30; i++) {
+        const a = performance.now();
+        c.save(); c.imageSmoothingEnabled = false;
+        c.translate(Math.round(m.b / 2), Math.round(m.h / 2)); c.scale(S.zoom, S.zoom); c.translate(-Math.round(S.camera.x), -Math.round(S.camera.y));
+        Spel.tekenGrondStukken(c, S); c.restore(); c.getImageData(0, 0, 1, 1); t.push(performance.now() - a);
+      }
       t.sort((a, b) => a - b); return t[15];
     });
     // hoeveel opdrachten aan het doek per beeld

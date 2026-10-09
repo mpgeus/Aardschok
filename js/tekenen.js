@@ -107,13 +107,13 @@
   // `marge` (in tegels) rekt de grens op waarop dat vak wordt afgeknipt: 0 (de gewone vloeren en
   // voorwerpen, die niet voorbij de kaart bestaan) knipt precies op de kaart, zoals altijd; de
   // bosrand hieronder telt zelf zoveel ringen mee als hij diep is.
-  function tegelsIn(w, r, marge) {
+  function tegelsIn(w, r, marge, rand = MARGE) {
     const m = marge || 0;
     const hoeken = [
-      [r.x0 - MARGE.links, r.y0 - MARGE.boven],
-      [r.x1 + MARGE.rechts, r.y0 - MARGE.boven],
-      [r.x0 - MARGE.links, r.y1 + MARGE.onder],
-      [r.x1 + MARGE.rechts, r.y1 + MARGE.onder],
+      [r.x0 - rand.links, r.y0 - rand.boven],
+      [r.x1 + rand.rechts, r.y0 - rand.boven],
+      [r.x0 - rand.links, r.y1 + rand.onder],
+      [r.x1 + rand.rechts, r.y1 + rand.onder],
     ];
     let x0 = Infinity;
     let y0 = Infinity;
@@ -138,10 +138,27 @@
   // ---------------------------------------------------------------- de grond, één keer getekend
   //
   // De grond verandert alleen als de camera verschuift of als er iets zichtbaar wordt; de rest van
-  // het beeld verandert elk beeld. Dus tekenen we de grond naar een eigen vlak dat een stuk ruimer
-  // is dan het venster, en plakken die er daarna in één keer op. Pas als de camera buiten die rand
-  // komt (of als er iets anders verandert), wordt hij opnieuw getekend.
-  const BUFFERRAND = 192; // hoeveel ruimer dan het venster, in vlak-pixels
+  // het beeld verandert elk beeld. Dus tekenen we de grond één keer, en plakken hem er daarna elk beeld in één keer op.
+  //
+  // In stukken (Marcel, 9 okt: "Als je sleept op het beeld, dan zakt hij naar 20fps"): vierkanten van STUK pixels van
+  // de buffer, die aan de wereld vastzitten. Wat in beeld komt, wordt getekend; wat ver uit beeld raakt, gaat terug in
+  // een voorraad doeken. Tot 9 okt was het één buffer, 192 vlak-pixels ruimer dan het venster, en kwam de camera
+  // daarbuiten, dan ging hij helemaal opnieuw: ver uitgezoomd 60 à 80 ms (de hele grond van het scherm, en dan als één
+  // groot plaatje naar de videokaart), en slepend elke paar beelden. Nu tekent het slepen alleen de stukken aan de rand,
+  // en gaan alleen die naar de videokaart. De pixels van alle stukken liggen op één raster, dus twee stukken sluiten
+  // precies op elkaar aan, ook als een stuk op een halve pixel van het scherm begint: de videokaart tekent een pixel van
+  // het ene of van het andere, en Chrome tekent een recht geplaatst plaatje zonder zachte rand. (Een pixel overlap gaf
+  // in de half doorzichtige grond aan de rand van het land een donker kruis op elke hoek.)
+  const STUK = 512;
+  // Ver uitgezoomd (minder dan een pixel per vlak-pixel) valt tussen twee verkleinde grondtegels hier en daar een pixel
+  // die geen van beide raakt, en hoeveel, hangt af van waar het raster van de stukken valt: zoveel pixel verschoven vielen
+  // er op eiland 5 het minst (2569 op 0,35, de oude buffer 2100 tot 2800, en zonder verschuiving 4400). Van dichtbij
+  // niet: dan ligt de grond pixel voor pixel zoals in de oude buffer.
+  const faseVan = (k) => (k < 1 ? 0.75 : 0);
+  // Wat er op een tegel in de grond ligt, steekt zo ver buiten zijn midden uit (vlak-pixels, met de hoogte apart: zie
+  // tegelsVoorStuk): een grondtegel, iets plats. Een stuk tekent de tegels die zo dichtbij liggen; de bomen van de
+  // bosrand steken verder uit, en krijgen MARGE.
+  const GRONDRAND = { links: 48, rechts: 48, boven: 48, onder: 64 };
 
   function grondSleutel(S) {
     const w = S.wereld;
@@ -183,7 +200,7 @@
     const paden = zandVan(S);
     const bv = paden ? w.tegels[0].length + 1 : 0; // de hoekpunten, zoals T.zandHoeken ze legt
     const opPaadje = (x, y) => paden && (paden.zand[y * bv + x] || paden.zand[y * bv + x + 1] || paden.zand[(y + 1) * bv + x] || paden.zand[(y + 1) * bv + x + 1]);
-    const lijst = platVan(w).lijst.filter((v) => v.x >= vak.x0 && v.x <= vak.x1 && v.y >= vak.y0 && v.y <= vak.y1 && !opPaadje(v.x, v.y));
+    const lijst = platVan(w).lijst.filter((v) => inVak(vak, v.x, v.y) && vak.binnen(v.x, v.y) && !opPaadje(v.x, v.y));
     lijst.sort((a, b) => a.x + a.y - (b.x + b.y) || a.y - b.y);
     for (const v of lijst) {
       const p = opGrond(v.x, v.y);
@@ -220,61 +237,158 @@
   // De pixels per vlakte-pixel van de buffers: 1 van dichtbij, minder ver uitgezoomd.
   const bufferSchaal = (S, dpr) => (S.zoom < BAK_ZOOM ? Math.min(1, S.zoom * dpr) : 1);
 
-  function nieuweBuffer(buf, b, h, k) {
-    const pb = Math.ceil(b * k);
-    const ph = Math.ceil(h * k);
-    // Een buffer die opnieuw getekend wordt, krijgt een nieuwe versie: dan stuurt js/gl.js hem opnieuw naar de kaart.
-    if (buf.canvas) buf.canvas.versie = (buf.canvas.versie || 0) + 1;
-    if (!buf.canvas || buf.canvas.width !== pb || buf.canvas.height !== ph) {
-      buf.canvas = document.createElement('canvas');
-      buf.canvas.versie = 1;
-      buf.canvas.width = pb;
-      buf.canvas.height = ph;
-      buf.ctx = buf.canvas.getContext('2d');
+  // De grootste en de kleinste hoogte van het land om de kaart (js/hoogte.js), voor wat een stuk van de grond moet
+  // tekenen: een tegel ligt zoveel hoger op het scherm dan zijn plek op de vlakte. Eén keer per hoogte.
+  const HOOGSTE = new WeakMap();
+  function hoogsteVan(w) {
+    if (!T.heeftHoogte(w)) return { hoog: 0, laag: 0 };
+    const hg = w.hoogte;
+    const was = HOOGSTE.get(hg);
+    if (was && was.versie === (hg.versie || 0)) return was;
+    let hoog = 0;
+    let laag = 0;
+    const d = BOSRAND_DIEP + 1;
+    for (let y = -d; y <= w.h + d; y++) {
+      for (let x = -d; x <= w.b + d; x++) {
+        const h = T.hoekHoogte(w, x, y, 0);
+        hoog = Math.max(hoog, h);
+        laag = Math.min(laag, h);
+      }
     }
-    buf.b = b;
-    buf.h = h;
-    buf.k = k;
+    const uit = { versie: hg.versie || 0, hoog, laag };
+    HOOGSTE.set(hg, uit);
+    return uit;
   }
 
-  function werkGrondBij(S, bw, bh, zicht, inBeeld, dpr) {
-    if (!S.grond) S.grond = { canvas: null, ctx: null, vx: 0, vy: 0, b: 0, h: 0, k: 1, sleutel: '' };
-    const g = S.grond;
-    const b = Math.ceil(bw / S.zoom) + BUFFERRAND * 2;
-    const h = Math.ceil(bh / S.zoom) + BUFFERRAND * 2;
+  // De tegels die in rechthoek r van de vlakte iets tekenen, als wat erop ligt zo ver (`rand`, zoals MARGE) buiten zijn
+  // midden uitsteekt: het vak eromheen (tegelsIn, met de hoogte erbij), en `binnen(x, y)` per tegel, op waar hij echt
+  // getekend wordt. Het vak van een kleine rechthoek staat in de ruit van het raster scheef; zonder `binnen` tekende
+  // elk stuk van de grond twee keer zoveel tegels als erin vallen.
+  function tegelsVoorStuk(w, r, rand, diep) {
+    const { hoog, laag } = hoogsteVan(w);
+    const vak = tegelsIn(w, { x0: r.x0, y0: r.y0 + laag, x1: r.x1, y1: r.y1 + hoog }, diep, rand);
+    const heuvels = T.heeftHoogte(w);
+    vak.binnen = (x, y) => {
+      const p = T.naarScherm(x, y);
+      if (p.x < r.x0 - rand.links || p.x > r.x1 + rand.rechts) return false;
+      if (!heuvels) return p.y >= r.y0 - rand.boven && p.y <= r.y1 + rand.onder;
+      // Met hoogte: van zijn hoogste hoek tot onder aan zijn wanden, die naar de hoeken van de tegels ten zuiden en oosten
+      // lopen (T.wandenVan); een tegel aan een richel hangt zo een eind onder zijn midden.
+      let hoogst = -Infinity;
+      let laagst = Infinity;
+      for (const [i, j] of [[0, 0], [1, 0], [0, 1]]) {
+        for (const h of T.hoekHoogten(w, x + i, y + j)) {
+          if (h > hoogst) hoogst = h;
+          if (h < laagst) laagst = h;
+        }
+      }
+      return p.y - hoogst <= r.y1 + rand.onder && p.y - laagst >= r.y0 - rand.boven;
+    };
+    return vak;
+  }
+
+  // Een buffer in stukken (de grond, en ver uitgezoomd het bos ervóór): { k, fase, sleutel, stukken, vrij }, met k de
+  // pixels per vlak-pixel (de pixel van de buffer op vlak-pixel v is v maal k plus fase). Met een andere sleutel of schaal begint hij opnieuw. Dan legt hij elk stuk dat rechthoek r (de
+  // vlakte) raakt en er nog niet is, met teken(c, rechthoek van het stuk) op een doek met de stand van dat stuk, en wat
+  // meer dan een stuk buiten r ligt, gaat terug in de voorraad doeken. teken zegt of het iets tekende: een leeg stuk
+  // houdt geen doek.
+  const VOORRAAD = 16; // zoveel lege doeken bewaart een buffer hooguit (elk een megabyte)
+  function werkStukkenBij(buf, sleutel, k, r, teken) {
+    if (buf.sleutel !== sleutel || buf.k !== k) {
+      for (const s of buf.stukken.values()) if (s.canvas) buf.vrij.push(s.canvas);
+      buf.stukken.clear();
+      buf.sleutel = sleutel;
+      buf.k = k;
+      buf.fase = faseVan(k);
+    }
+    const f = buf.fase;
+    const i0 = Math.floor((r.x0 * k + f) / STUK);
+    const i1 = Math.floor((r.x1 * k + f) / STUK);
+    const j0 = Math.floor((r.y0 * k + f) / STUK);
+    const j1 = Math.floor((r.y1 * k + f) / STUK);
+    for (const [sl, s] of buf.stukken) {
+      if (s.i >= i0 - 1 && s.i <= i1 + 1 && s.j >= j0 - 1 && s.j <= j1 + 1) continue;
+      if (s.canvas) buf.vrij.push(s.canvas);
+      buf.stukken.delete(sl);
+    }
+    for (let j = j0; j <= j1; j++) {
+      for (let i = i0; i <= i1; i++) {
+        const sl = i + ',' + j;
+        if (buf.stukken.has(sl)) continue;
+        const canvas = stukDoek(buf);
+        const c = canvas.getContext('2d');
+        c.setTransform(k, 0, 0, k, f - i * STUK, f - j * STUK);
+        c.imageSmoothingEnabled = false;
+        const iets = teken(c, { x0: (i * STUK - f) / k, y0: (j * STUK - f) / k, x1: ((i + 1) * STUK - f) / k, y1: ((j + 1) * STUK - f) / k });
+        if (!iets) buf.vrij.push(canvas);
+        buf.stukken.set(sl, { i, j, canvas: iets ? canvas : null });
+      }
+    }
+    if (buf.vrij.length > VOORRAAD) buf.vrij.length = VOORRAAD;
+  }
+  // Een leeg doek voor een stuk, uit de voorraad als er een is. Een doek dat opnieuw beschreven wordt, krijgt een nieuwe
+  // versie: dan stuurt js/gl.js het opnieuw naar de kaart.
+  function stukDoek(buf) {
+    const oud = buf.vrij.pop();
+    if (oud) {
+      oud.versie = (oud.versie || 0) + 1;
+      const c = oud.getContext('2d');
+      c.setTransform(1, 0, 0, 1, 0, 0);
+      c.clearRect(0, 0, oud.width, oud.height);
+      return oud;
+    }
+    const nieuw = document.createElement('canvas');
+    nieuw.width = STUK;
+    nieuw.height = STUK;
+    nieuw.versie = 1;
+    return nieuw;
+  }
+  // De stukken van buffer buf die rechthoek r van de vlakte raken (zonder r: alle), op hun plek, in de stand van ctx.
+  function tekenStukken(ctx, buf, r) {
+    if (!buf) return;
+    const m = STUK / buf.k;
+    for (const s of buf.stukken.values()) {
+      if (!s.canvas) continue;
+      const x = (s.i * STUK - buf.fase) / buf.k;
+      const y = (s.j * STUK - buf.fase) / buf.k;
+      if (r && (x > r.x1 || y > r.y1 || x + m < r.x0 || y + m < r.y0)) continue;
+      ctx.drawImage(s.canvas, x, y, m, m);
+    }
+  }
+  // Voor het kijkgat (js/doorkijk.js) en het meten: de grond die rechthoek r raakt.
+  T.tekenGrondStukken = (ctx, S, r) => tekenStukken(ctx, S.grond, r);
+
+  function werkGrondBij(S, zicht, inBeeld, dpr) {
+    if (!S.grond) S.grond = { k: 1, fase: 0, sleutel: '', stukken: new Map(), vrij: [] };
     const k = bufferSchaal(S, dpr);
-    const past = g.canvas && g.b === b && g.h === h && g.k === k && zicht.x0 >= g.vx && zicht.y0 >= g.vy && zicht.x1 <= g.vx + b && zicht.y1 <= g.vy + h;
-    const sleutel = grondSleutel(S) + '|' + k;
-    if (past && sleutel === g.sleutel) return g;
-    nieuweBuffer(g, b, h, k);
-    g.vx = Math.round((zicht.x0 + zicht.x1) / 2 - b / 2);
-    g.vy = Math.round((zicht.y0 + zicht.y1) / 2 - h / 2);
-    g.sleutel = sleutel;
-    const c = g.ctx;
-    c.setTransform(1, 0, 0, 1, 0, 0);
-    c.clearRect(0, 0, g.canvas.width, g.canvas.height);
-    c.setTransform(k, 0, 0, k, -g.vx * k, -g.vy * k);
-    c.imageSmoothingEnabled = false;
-    const vak = tegelsIn(S.wereld, { x0: g.vx, y0: g.vy, x1: g.vx + b, y1: g.vy + h });
-    if (S.wereld.buiten) tekenBuitenGrond(c, S, g);
+    werkStukkenBij(S.grond, grondSleutel(S) + '|' + k, k, zicht, (c, r) => tekenGrondIn(c, S, r, inBeeld));
+    return S.grond;
+  }
+
+  // Alles wat in de buffer van de grond ligt, in rechthoek r van de vlakte.
+  function tekenGrondIn(c, S, r, inBeeld) {
+    const om = tegelsIn(S.wereld, r, BOSRAND_DIEP); // ligt er hier iets (de kaart, de grond en het bos eromheen)?
+    if (om.x0 > om.x1 || om.y0 > om.y1) return false;
+    const vak = tegelsVoorStuk(S.wereld, r, GRONDRAND);
+    if (S.wereld.buiten) tekenBuitenGrond(c, S, r);
     tekenVloeren(c, S, inBeeld, vak);
     if (S.wereld.buiten) tekenDrogeBeek(c, S, vak);
     if (S.wereld.buiten) tekenPlatIn(c, S, vak);
-    if (bosGebakken(S)) for (const v of bosrandIn(S, g)) if (bosAchter(S.wereld, v)) tekenGebakkenBoom(c, v);
-    S.bosVoor = null; // het bos ervóór hoort bij deze grond: het wordt opnieuw gelegd (bosVoorBij)
-    return g;
+    if (bosGebakken(S)) for (const v of bosrandIn(S, r)) if (bosAchter(S.wereld, v)) tekenGebakkenBoom(c, v);
+    return true;
   }
 
-  // De bosrand in het gebied van een buffer, van achter naar voor, zoals de tekenlijst hem zou zetten.
-  function bosrandIn(S, g) {
+  // De bosrand in rechthoek r van de vlakte (een stuk van een buffer), van achter naar voor, zoals de tekenlijst hem
+  // zou zetten.
+  function bosrandIn(S, r) {
     const w = S.wereld;
-    const vak = tegelsIn(w, { x0: g.vx, y0: g.vy, x1: g.vx + g.b, y1: g.vy + g.h }, BOSRAND_DIEP);
+    const vak = tegelsVoorStuk(w, r, MARGE, BOSRAND_DIEP);
     const lijst = [];
     for (let y = vak.y0; y <= vak.y1; y++) {
       for (let x = vak.x0; x <= vak.x1; x++) {
         if (x >= 0 && y >= 0 && x < w.b && y < w.h) continue;
         const v = bosrandOp(w, x, y);
-        if (v) lijst.push(v);
+        if (v && vak.binnen(x, y)) lijst.push(v);
       }
     }
     return lijst.sort((a, c) => a.x + a.y - (c.x + c.y) || a.y - c.y);
@@ -298,22 +412,19 @@
     else tekenBuitenVlak(c, v, helder);
   }
 
-  // Het bos ten zuiden en oosten van de kaart, in een buffer over hetzelfde gebied als de grond (hierboven).
-  function bosVoorBij(S, g) {
-    if (S.bosVoor && S.bosVoor.sleutel === g.sleutel && S.bosVoor.vx === g.vx && S.bosVoor.vy === g.vy) return S.bosVoor;
-    const buf = S.bosVoor && S.bosVoor.canvas ? S.bosVoor : { canvas: null, ctx: null };
-    nieuweBuffer(buf, g.b, g.h, g.k);
-    buf.vx = g.vx;
-    buf.vy = g.vy;
-    buf.sleutel = g.sleutel;
-    const c = buf.ctx;
-    c.setTransform(1, 0, 0, 1, 0, 0);
-    c.clearRect(0, 0, buf.canvas.width, buf.canvas.height);
-    c.setTransform(g.k, 0, 0, g.k, -g.vx * g.k, -g.vy * g.k);
-    c.imageSmoothingEnabled = false;
-    for (const v of bosrandIn(S, g)) if (!bosAchter(S.wereld, v)) tekenGebakkenBoom(c, v);
-    S.bosVoor = buf;
-    return buf;
+  // Het bos ten zuiden en oosten van de kaart, in stukken zoals de grond (hierboven), met dezelfde sleutel en schaal.
+  function bosVoorBij(S, g, zicht) {
+    if (!S.bosVoor) S.bosVoor = { k: 1, fase: 0, sleutel: '', stukken: new Map(), vrij: [] };
+    werkStukkenBij(S.bosVoor, g.sleutel, g.k, zicht, (c, r) => {
+      let iets = false;
+      for (const v of bosrandIn(S, r)) {
+        if (bosAchter(S.wereld, v)) continue;
+        tekenGebakkenBoom(c, v);
+        iets = true;
+      }
+      return iets;
+    });
+    return S.bosVoor;
   }
 
   // Wat er op een kaart staat met een eigen bestand (de huizen en de gebouwen, js/sprites.js; vraag 114, stap 1), en de
@@ -352,10 +463,8 @@
     const zicht = zichtVlak(S, bw, bh);
     const vak = tegelsIn(w, zicht);
 
-    const g = werkGrondBij(S, bw, bh, zicht, inBeeld, dpr);
-    // Op zijn eigen maat (de breedte van het doek gedeeld door zijn schaal), niet op g.b bij g.h: het doek is naar boven
-    // afgerond, en dan werd hij ver uitgezoomd een fractie verkleind, met een kolom pixels die wegviel (vraag 123).
-    ctx.drawImage(g.canvas, g.vx, g.vy, g.canvas.width / g.k, g.canvas.height / g.k);
+    const g = werkGrondBij(S, zicht, inBeeld, dpr);
+    tekenStukken(ctx, g, zicht);
     const gebakken = bosGebakken(S);
     tekenWeides(ctx, S, vak);
     tekenRaster(ctx, S);
@@ -493,10 +602,7 @@
       for (const r of ramen) if (isTekeningVan(item, r.g)) ponsRamen(ctx, r);
     }
     // Ver uitgezoomd: het bos ten zuiden en oosten van de kaart, uit zijn buffer (werkGrondBij hierboven).
-    if (gebakken) {
-      const voor = bosVoorBij(S, g);
-      ctx.drawImage(voor.canvas, voor.vx, voor.vy, voor.canvas.width / g.k, voor.canvas.height / g.k);
-    }
+    if (gebakken) tekenStukken(ctx, bosVoorBij(S, g, zicht), zicht);
     tekenOntginRand(ctx, S);
     tekenJachtRand(ctx, S);
     tekenRook(ctx, S);
@@ -564,25 +670,33 @@
   // Het stuk van de grondbuffer op tegel (x, y): zijn schuine vlak, en zijn wanden aan de zuid- en oostkant.
   function tekenTegelOpnieuw(ctx, w, x, y, g) {
     const h = T.hoekHoogten(w, x, y);
+    const r = { x0: Infinity, y0: Infinity, x1: -Infinity, y1: -Infinity }; // wat de knip beslaat: alleen die stukken
+    const punt = (px, py, eerste) => {
+      if (eerste) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+      r.x0 = Math.min(r.x0, px);
+      r.y0 = Math.min(r.y0, py);
+      r.x1 = Math.max(r.x1, px);
+      r.y1 = Math.max(r.y1, py);
+    };
     ctx.save();
     ctx.beginPath();
     T.HOOGTE_HOEKEN.forEach(([dx, dy], k) => {
       const p = T.naarScherm(x + dx, y + dy);
-      if (k) ctx.lineTo(p.x, p.y - h[k]);
-      else ctx.moveTo(p.x, p.y - h[k]);
+      punt(p.x, p.y - h[k], !k);
     });
     ctx.closePath();
     for (const wand of T.wandenVan(w, x, y)) {
       const s1 = T.naarScherm(wand.van[0], wand.van[1]);
       const s2 = T.naarScherm(wand.tot[0], wand.tot[1]);
-      ctx.moveTo(s1.x, s1.y - wand.boven[0]);
-      ctx.lineTo(s2.x, s2.y - wand.boven[1]);
-      ctx.lineTo(s2.x, s2.y - wand.onder[1]);
-      ctx.lineTo(s1.x, s1.y - wand.onder[0]);
+      punt(s1.x, s1.y - wand.boven[0], true);
+      punt(s2.x, s2.y - wand.boven[1]);
+      punt(s2.x, s2.y - wand.onder[1]);
+      punt(s1.x, s1.y - wand.onder[0]);
       ctx.closePath();
     }
     ctx.clip();
-    ctx.drawImage(g.canvas, g.vx, g.vy, g.canvas.width / g.k, g.canvas.height / g.k);
+    tekenStukken(ctx, g, r);
     ctx.restore();
   }
 
@@ -852,7 +966,7 @@
     if (!D || !D.weer || !D.weer.beekDroog) return;
     const B = T.WEER_INSTELLINGEN.beeld;
     for (const t of T.beekTegels(S.wereld)) {
-      if (!inVak(vak, t.x, t.y) || !T.staatDroog(D, t.x, t.y)) continue;
+      if (!inVak(vak, t.x, t.y) || !vak.binnen(t.x, t.y) || !T.staatDroog(D, t.x, t.y)) continue;
       const p = opGrond(t.x, t.y);
       // Barsten en keien, op vaste plekken in het midden van de tegel (niet op de rand, waar het gras begint).
       for (let i = 0; i < 9; i++) {
@@ -1250,16 +1364,16 @@
     if (eiland) return eiland;
     return T.sprites.grondHoekOp(w, Math.max(0, Math.min(w.b, vx)), Math.max(0, Math.min(w.h, vy))) || 'gras';
   }
-  function tekenBuitenGrond(c, S, g) {
+  function tekenBuitenGrond(c, S, r) {
     const w = S.wereld;
     if (!metSprites() || !w.grond) return;
     const vel = (w.grond[0] && w.grond[0][0] && w.grond[0][0].vel) || 'rand';
     const zaad = bosrandZaad(w) + 7;
     const sneeuw = sneeuwLaag(S);
-    const vak = tegelsIn(w, { x0: g.vx, y0: g.vy, x1: g.vx + g.b, y1: g.vy + g.h }, BUITENGROND_DIEP);
+    const vak = tegelsVoorStuk(w, r, GRONDRAND, BUITENGROND_DIEP);
     for (let y = vak.y0; y <= vak.y1; y++) {
       for (let x = vak.x0; x <= vak.x1; x++) {
-        if (x >= 0 && y >= 0 && x < w.b && y < w.h) continue;
+        if ((x >= 0 && y >= 0 && x < w.b && y < w.h) || !vak.binnen(x, y)) continue;
         const r = bosrandRing(w, x, y);
         if (r > BUITENGROND_DIEP) continue;
         const dicht = r <= BUITENGROND_VOL ? 1 : 1 - (r - BUITENGROND_VOL) / (BUITENGROND_DIEP - BUITENGROND_VOL + 1);
@@ -1289,6 +1403,7 @@
     const hoog = T.heeftHoogte(w);
     const sneeuw = buiten ? sneeuwLaag(S) : 0;
     for (const [x, y] of tegelVolgorde(vak, hoog)) {
+      if (!vak.binnen(x, y)) continue; // een stuk van de grond (tegelsVoorStuk)
       {
         const t = T.tegel(w, x, y);
         // Buiten ligt er ook gras onder een boom of een huis (die tegel heet "muur"): het

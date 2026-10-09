@@ -163,8 +163,7 @@
     bx.clearRect(0, 0, maat, maat);
     bx.imageSmoothingEnabled = false;
     bx.setTransform(1, 0, 0, 1, -ox, -oy);
-    const grond = S.grond;
-    if (grond && grond.canvas) bx.drawImage(grond.canvas, grond.vx, grond.vy);
+    T.tekenGrondStukken(bx, S, { x0: ox, y0: oy, x1: ox + maat, y1: oy + maat });
     const ver = I.kijkgatStraal + 20;
     const erin = S.wereld.wezens.filter((o) => {
       if (o.dood || (o.binnen && !T.deurStap(S, o))) return false;
