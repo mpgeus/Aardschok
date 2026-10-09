@@ -33,6 +33,7 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
    plaat (a) is goed, elk venster is papier met leesbare letters (b1), er is één manier van openen en sluiten (b2), en
    de tafel ligt onderin (c, 9 okt; een gesprek staat sinds dan midden boven de tafel). **Nu d** (bovenaan alleen het
    doel met de raad en de datum als briefjes, het blok met toetsen weg, Spelregels in het menu), dan e (de fotomodus).
+   **Bezig in sessie `main` (desktop, ui)** (10 okt): d.
 0b. Engels en een vertaaltool (vraag 147; Marcel, 9 okt): de basis nu, naast de ui; het omzetten van alle tekst na de
    ui en vóór de proefversie. Stap 1 (de basis, de tool, het menu als proef) staat in `main` (9 okt); stap 2, het
    omzetten, na de ui.
