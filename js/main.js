@@ -1632,6 +1632,25 @@
         vissers: D.gebouwen.filter((g) => g.soort === 'visser').map((g) => `${g.x},${g.y}: ${Math.round(T.visserWater(D, g) * 100)}% van zijn water`),
       };
     },
+    // De bode naar de marskramer (js/bode.js; werklijst vraag 143): of het kan en waarom niet, wie er onderweg is en wanneer
+    // de marskramer komt. Spel.debug.bode('stuur', { graan: 3 }) stuurt hem nu (true erachter: met een begeleider),
+    // ('nu') laat hem met de marskramer nu aankomen, ('open') opent de brief.
+    bode(wat, bestelling, mee) {
+      const D = S.dorp;
+      if (wat === 'stuur') T.stuurBode(D, bestelling || { graan: 3 }, !!mee);
+      if (wat === 'nu' && D.bode) {
+        D.bode.komt = Math.floor(S.kalender.dag);
+        T.tikBodeDag(D, Math.floor(S.kalender.dag));
+      }
+      if (wat === 'open') T.ui.toonBrief(D, 'bode');
+      const k = T.kanBodeSturen(D);
+      const B = D.bode;
+      return {
+        kan: k.kan, reden: k.reden || null, status: k.status ? k.status.naam : null, winter: k.winter,
+        onderweg: B ? { wie: B.wie.map(T.naamVanBewoner), komt: T.datumVanDag(B.komt).tekst, bestelling: B.bestelling, haaltHetNiet: B.kwijt } : null,
+        marskramer: D.marskramer ? (D.marskramer.bestelling ? { op: 'bestelling', heeft: D.marskramer.heeft, prijzen: D.marskramer.bestelling } : 'op zijn ronde') : null,
+      };
+    },
     // De twee bazen (js/bazen.js; werklijst vraag 106): de gunst van de heer en het vertrouwen van het dorp, hoe ze erbij
     // staan, waarom, en of je al gewaarschuwd bent. Spel.debug.bazen('gunst', 15) zet de gunst op 15 (met de
     // waarschuwing als hij onder de grens komt), ('vertrouwen', 0) jaagt je weg als je al gewaarschuwd was.

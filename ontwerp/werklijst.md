@@ -7034,6 +7034,9 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     de brief om goederen, en soms heeft hij iets niet; de bode krijgt loon en de waren kosten anderhalf keer zoveel; in
     de winter misschien een begeleider mee ter bescherming; en het weer gaat nu naar `main`, dit erna.
     **Bezig in sessie `ccr-77327776-rqjldz`** (9 okt): de bode naar de marskramer.
+    **Gebouwd (9 okt):** `js/bode.js`, de knop Bode bij honger, kou of droogte, de brief aan de marskramer bij je huis
+    (graan, zout, hout, ijzer), de bode met loon, in de winter een begeleider, en de marskramer op bestelling, duurder en
+    soms zonder iets (`spel.md`, "De bode naar de marskramer"). Bescherming in het donker is nog open.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

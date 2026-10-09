@@ -110,7 +110,60 @@
     return Array.isArray(waar.heeft) ? waar.heeft[i] || 0 : waar.heeft;
   }
   // Wat hij bij dit bezoek te koop heeft (voor het venster, js/hud.js): wat hij die ronde meebracht, ook als het op is.
-  T.verkooptNu = (D) => (D.marskramer ? Object.keys(IN().verkoopt).filter((wat) => heeftBijBezoek(D, wat, D.marskramer.bezoek) > 0) : []);
+  // Komt hij op bestelling (de bode, js/bode.js), dan alleen wat hij bij zich heeft van wat je vroeg.
+  T.verkooptNu = (D) => {
+    const m = D.marskramer;
+    if (!m) return [];
+    if (m.bestelling) return Object.keys(m.bestelling);
+    return Object.keys(IN().verkoopt).filter((wat) => heeftBijBezoek(D, wat, m.bezoek) > 0);
+  };
+  // Wat hij van een goed verkoopt, nu: { per, prijs, naam }.
+  function waarNu(m, wat) {
+    if (m.bestelling) return m.bestelling[wat] || null;
+    const waar = IN().verkoopt[wat];
+    return waar ? { per: waar.per || 1, prijs: waar.prijs[m.bezoek], naam: waar.naam } : null;
+  }
+  T.waarVanDeMarskramer = (D, wat) => (D.marskramer ? waarNu(D.marskramer, wat) : null);
+
+  // Hij komt op bestelling (de bode, js/bode.js; werklijst vraag 143): buiten zijn rondes, met wat je vroeg (`bestelling`:
+  // { goed: pakken }), soms zonder iets of met maar de helft, en duurder dan anders (in de winter nog duurder). Wat hij
+  // van jou koopt, betaalt hij zoals in het seizoen. Geeft { niet, half }: wat hij niet had, en waarvan maar de helft.
+  T.marskramerOpBestelling = function (D, bestelling, dag, winter) {
+    const B = T.BODE_INSTELLINGEN;
+    const maal = B.prijsMaal[winter ? 'winter' : 'gewoon'];
+    const bestelling2 = {};
+    const heeft = {};
+    const niet = [];
+    const half = [];
+    let k = 0;
+    for (const wat of Object.keys(bestelling)) {
+      const W = B.waren[wat];
+      const r = T.vastLot(D, dag, 200 + k++);
+      if (r < B.nietBijZich) {
+        niet.push(wat);
+        continue;
+      }
+      let n = bestelling[wat];
+      if (r < B.nietBijZich + B.halfBijZich && n > 1) {
+        n = Math.ceil(n / 2);
+        half.push(wat);
+      }
+      bestelling2[wat] = { per: W.per, prijs: Math.ceil(W.prijs * maal) };
+      heeft[wat] = n;
+    }
+    const seizoen = T.datumVanDag(dag).seizoen;
+    D.marskramer = {
+      bezoek: seizoen === 'lente' ? 0 : seizoen === 'zomer' ? 1 : 2, bestelling: bestelling2,
+      komtOp: dag, gaatOp: dag + B.blijftDagen, beurs: IN().beurs, plaats: IN().plaats, heeft,
+      weg: false, wezen: null, staat: false,
+      aankomst: { tekst: 'De marskramer komt over de weg: je bode heeft hem gevonden. Hij blijft een paar dagen op het plein.', soort: 'goed' },
+    };
+    T.zetVlag(D, 'marskramerOpBezoek');
+    T.zetVlag(D, 'marskramerBode');
+    if (!kanLopen(D)) D.marskramer.meteen = true;
+    T.bezoekerKomtAan(D, D.marskramer);
+    return { niet, half };
+  };
 
   // Hij komt: een vers bezoek met een volle mars en een volle beurs. `dag` is de dag dat hij het
   // gehucht in loopt; T.werkMarskramerBij zet de klok pas echt aan als hij op het plein staat.
@@ -171,6 +224,7 @@
       T.wisVlag(D, 'marskramerOpBezoek');
       T.wisVlag(D, 'marskramerVertrekt');
       for (const b of IN().bezoeken) T.wisVlag(D, b.vlag);
+      T.wisVlag(D, 'marskramerBode');
     }
     D.marskramer = null;
   }
@@ -201,10 +255,10 @@
   // Jij koopt `aantal` van hem: stuks (ijzer, zout), of pakken van `per` stuks (graan in de lente).
   T.kanKopen = function (D, wat, aantal) {
     const m = D.marskramer;
-    const waar = IN().verkoopt[wat];
     if (!T.kanHandelen(D)) return { kan: false, reden: 'De marskramer is er niet.' };
+    const waar = waarNu(m, wat);
     if (!waar) return { kan: false, reden: `Hij heeft geen ${wat} bij zich.` };
-    const prijs = waar.prijs[m.bezoek];
+    const prijs = waar.prijs;
     const per = waar.per || 1;
     const heeft = m.heeft[wat] || 0;
     const uit = { prijs, per, kosten: prijs * aantal, stuks: per * aantal, heeft };
@@ -262,6 +316,7 @@
   // Is dit de goedkoopste of de duurste keer van het jaar? Voor het venster: 'duur', 'goedkoop' of
   // null, voor wat hij koopt ('koopt') of verkoopt ('verkoopt'), bij het bezoek van nu.
   T.prijsVanHetJaar = function (D, wat, kant) {
+    if (kant === 'verkoopt' && D.marskramer && D.marskramer.bestelling) return 'duur'; // op bestelling, de bode (js/bode.js)
     const rij = IN()[kant][wat];
     if (!rij || !D.marskramer) return null;
     const nu = rij.prijs[D.marskramer.bezoek];

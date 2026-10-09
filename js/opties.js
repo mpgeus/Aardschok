@@ -246,6 +246,17 @@
           uitleg: 'Geen weer: elke dag is als de vorige. Zoals voor 9 okt.' },
       ],
     },
+    // Marcel, 9 okt (werklijst vraag 143): "soort van brief sturen met een bode".
+    {
+      id: 'bode', naam: 'De bode', standaard: 'aan',
+      uitleg: 'Of je in een moeilijke tijd een bode met een brief naar de marskramer kunt sturen.',
+      keuzes: [
+        { id: 'aan', naam: 'Ja', zet: { 'BODE_INSTELLINGEN.aan': true },
+          uitleg: 'Bij honger, kou of droogte schrijf je bij je huis een brief; een dorpeling brengt hem, en na een paar dagen komt de marskramer met wat je vroeg, duurder dan anders.' },
+        { id: 'uit', naam: 'Nee', zet: { 'BODE_INSTELLINGEN.aan': false },
+          uitleg: 'De marskramer komt alleen op zijn drie vaste rondes. Zoals voor 9 okt.' },
+      ],
+    },
     // Stap 2 van de inner, de verstopplekken (Marcel, 25 sep; spel.md, "Marcel koos voor stap 2").
     {
       id: 'sporen', naam: 'Sporen', standaard: 'alles',
@@ -712,6 +723,7 @@
     },
     { naam: 'De dag', blok: 'DAG_INSTELLINGEN' },
     { naam: 'Het weer', blok: 'WEER_INSTELLINGEN' },
+    { naam: 'De bode', blok: 'BODE_INSTELLINGEN' },
     { naam: 'Het licht', blok: 'LICHT_INSTELLINGEN' },
     { naam: 'Gebouwen en bevolking', blok: 'GEBOUWEN_INSTELLINGEN' },
     { naam: 'De bewoners', blok: 'BEWONERS_INSTELLINGEN' },

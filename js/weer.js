@@ -74,6 +74,8 @@
     return (h >>> 0) / 4294967296;
   }
   const zaadVan = (D) => (D.wereld && D.wereld.maker && D.wereld.maker.zaad) || (D.lot && D.lot.zaad) || 1;
+  // Ook voor andere regels die een vast lot willen uit het nummer van het land (de bode, js/bode.js).
+  T.vastLot = (D, a, b) => lot(zaadVan(D), a, b);
   const jaarVan = (dag) => Math.floor(dag / T.DAGEN_PER_JAAR);
 
   // Hoe nat dit jaar is: de kans op regen maal dit getal.

@@ -1234,6 +1234,7 @@
     T.tikBazenDag(D);
     // En de marskramer (js/handel.js): komt hij vandaag, of is zijn tijd om?
     T.tikHandelDag(D, dag);
+    T.tikBodeDag(D, dag); // de bode met de marskramer op bestelling (js/bode.js)
     // En de heer (js/heer.js): zijn brief in wijnmaand, hijzelf op Sint-Maarten, en de soldaten.
     T.tikHeerDag(D, dag);
     // En zijn heervaart (js/heervaart.js): in een dorp vraagt hij op 1 hooimaand mannen, en op 1 herfstmaand komen

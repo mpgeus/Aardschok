@@ -202,6 +202,37 @@
         voet: `<p class="venster-voet">Zolang je leest, staat de tijd stil. <kbd>Esc</kbd> sluit.</p>`,
       };
     },
+    // De brief aan de marskramer (js/bode.js; werklijst vraag 143; Marcel, 9 okt: "soort van brief sturen met een bode"):
+    // jouw papier, bij je huis, in een moeilijke tijd. Je schrijft wat hij moet brengen, en een dorpeling brengt hem; in
+    // de winter kan er een weerbare man mee.
+    bode: (S) => {
+      const D = S.dorp;
+      const k = T.kanBodeSturen(D);
+      const B = T.BODE_INSTELLINGEN;
+      const bijHuis = T.afstandTotHuis(D) <= T.DAG_INSTELLINGEN.slaapAfstand;
+      const rijen = Object.keys(B.waren).map((wat) => {
+        const W = B.waren[wat];
+        const prijs = Math.ceil(W.prijs * k.maal);
+        return `<p class="bode-rij"><label>${T.hoofdletter(wat)}: <input type="number" min="0" max="${W.hooguit}" step="1" value="0" data-wat="${wat}"> ` +
+          `pak${W.hooguit === 1 ? '' : 'ken'} van ${W.per}</label> <small>(${prijs} goud per pak, tot ${W.hooguit})</small></p>`;
+      });
+      const mee = k.winter ? '<p class="bode-rij"><label><input type="checkbox" data-mee="1"> Een weerbare man gaat mee, ter bescherming in de sneeuw en tegen de wolven.</label></p>' : '';
+      const waarom = !k.kan ? k.reden : !bijHuis ? 'Je schrijft de brief bij je huis.' : '';
+      const tijd = `Hij kan er over ${T.telwoord(k.dagen)} dagen zijn${k.winter ? ', want het is winter: de wegen zijn slecht, en hij vraagt het dubbele' : `, en hij vraagt ${k.maal === 1.5 ? 'anderhalf keer' : `${k.maal} keer`} wat hij anders vraagt`}.`;
+      return {
+        titel: 'Een brief aan de marskramer',
+        wanneer: vandaag(S),
+        aan: 'Aan de marskramer, waar hij ook is,',
+        tekst: `<p>${veilig(k.status ? k.status.zin : '')} Kom naar ${veilig(T.dorpsnaam(D) || 'ons dorp')}, en breng mee:</p>${rijen.join('')}${mee}`,
+        groet: `Uw schout`,
+        staat: `<p class="venster-staat">${waarom ? veilig(waarom) : `${tijd} De bode krijgt ${Math.round(B.loon * 10)} zilver uit de kas.`}</p>`,
+        knoppen: [
+          { actie: 'bode', tekst: 'Geef de bode de brief', hoofd: true, kan: k.kan && bijHuis },
+          { actie: 'sluit', tekst: 'Toch niet' },
+        ],
+        voet: `<p class="venster-voet">Zolang je schrijft, staat de tijd stil. <kbd>Esc</kbd> sluit.</p>`,
+      };
+    },
     // Het jaar in het kort (js/einde.js; werklijst vraag 101, e): op 1 lentemaand, in de hand van je raadsman, zoals zijn
     // rapport; zonder raadsman staat het gewoon in het jaarboek.
     jaarverslag: (S) => {
@@ -248,6 +279,8 @@
     }
     // De knop De zaak: zolang je uitzoekt wie de zak graan nam (js/zaak.js).
     $('zaak-knop').classList.toggle('verborgen', !T.zaakOnderzoek(S.dorp));
+    // De knop Bode: in een moeilijke tijd, zolang er niemand onderweg is (js/bode.js).
+    $('bode-knop').classList.toggle('verborgen', !(S.dorp.kalender && T.kanBodeSturen(S.dorp).zichtbaar));
   };
 
   // Een brief in het venster: `soort` uit BRIEVEN, of zonder soort de brief die op je wacht.
@@ -300,6 +333,19 @@
       T.ui.sluitBrief(S);
       return T.naarTitelscherm();
     }
+    if (open === 'bode' && actie === 'bode') {
+      const box = $('brief');
+      const bestelling = {};
+      for (const inp of box.querySelectorAll('input[data-wat]')) bestelling[inp.dataset.wat] = Number(inp.value) || 0;
+      const mee = !!(box.querySelector('input[data-mee]') || {}).checked;
+      const r = T.stuurBode(S.dorp, bestelling, mee);
+      if (!r.kan) {
+        const staat = box.querySelector('.venster-staat');
+        if (staat) staat.textContent = r.reden;
+        return;
+      }
+      return T.ui.sluitBrief(S);
+    }
     if (open === 'heervaart' || open === 'gril') {
       const keuzes = open === 'gril' ? T.grilKeuzes(S.dorp) : T.heervaartKeuzes(S.dorp);
       const keuze = keuzes.find((k) => k.actie === actie);
@@ -314,6 +360,13 @@
     if (!T.S) return;
     if (open === 'zaak') T.ui.sluitBrief(T.S);
     else T.ui.toonBrief(T.S.dorp, 'zaak');
+  });
+
+  $('bode-knop').addEventListener('click', (ev) => {
+    ev.currentTarget.blur();
+    if (!T.S) return;
+    if (open === 'bode') T.ui.sluitBrief(T.S);
+    else T.ui.toonBrief(T.S.dorp, 'bode');
   });
 
   $('brief-knop').addEventListener('click', (ev) => {

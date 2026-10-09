@@ -571,6 +571,24 @@ het beeld van het weer samen met zijn regels, de kleur van het weer op de lichtk
 **Open:** sneeuw op de grond en de daken (nieuwe kunst); regen bij het zaaien (vraag 82, b en c: op een natte dag zaait
 niemand); de marskramer die na een droog jaar graan verkoopt; ziekte en brand als status.
 
+## De bode naar de marskramer (Marcel, 9 okt 2026; werklijst vraag 143)
+
+**Zo werkt het nu** (9 okt; `js/bode.js`): speelt er honger, kou of droogte, dan staat de knop Bode in de balk. Bij je huis
+schrijf je een brief aan de marskramer: hoeveel pakken graan, zout, hout en ijzer hij moet brengen. Een dorpeling zonder
+werk brengt hem en krijgt 3 zilver uit de kas; in de winter kan er een weerbare man mee, ter bescherming. Na zes dagen (in
+de winter tien) staat de marskramer op het plein, buiten zijn vaste rondes, vijf dagen lang, met wat je vroeg: soms heeft
+hij iets niet, of maar de helft. Hij vraagt anderhalf keer zijn gewone prijs, in de winter het dubbele. In de winter zonder
+begeleider haalt de bode het een op de drie keer niet (de sneeuw, de wolven), en komt hij terug zonder marskramer. Wat je
+bij hem koopt, vertelt hij de inner, zoals altijd. De spelregel "De bode".
+
+**Besloten** (Marcel, 9 okt: "A; misschien kunnen we de Schout de mogelijkheid geven om een beroep te doen om een extra
+marskramer om in te kunnen kopen in een moeilijke periode?", "soort van brief sturen met een bode", en "1. Alleen bij een
+status 2. Ja vind ik goed idee. 3. Ja, je vraagt om goederen, enkele keer heeft hij iets niet. 4. Ja voor nu maar mee
+beginnen; in de winterperiode of in het donker misschien ook bescherming mee? 5. Mag nu.").
+
+**Open:** of de bode ook in het donker gevaar loopt (nu vertrekt hij meteen, en telt alleen de winter); een bode naar
+anderen (het buurdorp, de heer, de koning) op dezelfde manier.
+
 ## De markt op het plein, die meegroeit (Marcel, 5 en 6 okt 2026; werklijst vraag 110, d, en vraag 127)
 
 **Zo werkt het nu** (6 okt, zesendertigste sessie; `js/markt.js`; Marcel: "Voor nu a1, b tot e ja" bij 110, d, en "A ja, B

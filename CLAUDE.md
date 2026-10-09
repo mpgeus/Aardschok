@@ -540,6 +540,18 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   grond (`T.hoekenDroog`, zoals een paadje) met barsten en keien (`tekenDrogeBeek`). Het weer van vandaag staat bij de
   datum (`T.ui.toonKalender`). De spelregel "Het weer" (met droogte, zonder, of altijd zon); de getallen in
   `T.WEER_INSTELLINGEN`.
+- `js/bode.js`: **de bode naar de marskramer** (vraag 143, 9 okt; Marcel: "soort van brief sturen met een bode", en "1.
+  Alleen bij een status ... 3. Ja, je vraagt om goederen, enkele keer heeft hij iets niet ... in de winterperiode ...
+  misschien ook bescherming mee?"): speelt er een status uit `statussen` (honger, kou, droogte; `T.statusVoorDeBode`), dan
+  staat de knop Bode in de balk (`#bode-knop`, `T.kanBodeSturen` met `zichtbaar`), en bij je huis schrijf je de brief (het
+  papier `bode` in js/brieven.js: per goed uit `waren` hoeveel pakken, in de winter een begeleider). `T.stuurBode`: loon
+  uit de kas, wie geen werk heeft brengt hem (met een weerbare man erbij, `T.weerbareMannen`), allebei de weg op
+  (`T.stuurWeg`, `waarom` 'bode'), in `D.bode`; in de winter zonder begeleider haalt hij het soms niet (`winterKwijt`, een
+  vast lot uit het nummer van het land, `T.vastLot` in js/weer.js). Elke nacht (`T.tikBodeDag`, na `T.tikHandelDag`): zijn
+  ze er, dan komt de marskramer op bestelling (`T.marskramerOpBestelling` in js/handel.js: `m.bestelling` met de prijzen,
+  maal `prijsMaal`, soms iets niet of de helft; de vlag `marskramerBode` voor zijn gesprek), en de bode is terug
+  (`T.komtTerug`). Het handelsvenster en `T.kanKopen` lezen wat hij nu verkoopt via `T.verkooptNu` en
+  `T.waarVanDeMarskramer`. De spelregel "De bode"; de getallen in `T.BODE_INSTELLINGEN`.
 - `js/bouwstijl.js`: **de bouwstijl van een land** (vraag 114, stap 2, 4 okt): elk land van de maker bouwt in één stijl
   (`w.stijl`, uit het nummer van het land, `T.stijlVoorLand`; het ontworpen gehucht heeft er geen en bouwt zoals altijd),
   met per soort een paar vormen, elk met de deur naar elke kant. De huizenbouwer noemt dat een stand; in het spel heet het
@@ -1210,6 +1222,9 @@ weg als je al gewaarschuwd was. De oude toetsen van de heer en het verstoppen sp
 kost, hoe nat het jaar is, de beekjes en per visser hoeveel van zijn water er is; `('regen')` zet het weer van vandaag
 (`'zon'`, `'wolken'`, `'regen'`, `'sneeuw'`), `('droogte')` maakt het nu droog, `('ernstig')` ernstig droog, `('nat')` maakt
 er een eind aan.
+`Spel.debug.bode()` zegt of je nu een bode kunt sturen en waarom niet, wie er onderweg is en wanneer de marskramer komt,
+en wat hij op bestelling bij zich heeft; `('stuur', { graan: 3 })` stuurt hem nu (`true` erachter: met een begeleider),
+`('nu')` laat hem nu aankomen, `('open')` opent de brief.
 `Spel.debug.wensen()` zegt per huis met mensen zijn stand, wie er woont, hoe tevreden het is en wat het wil, met ✓ of ✗,
 hoe het met doorgroeien staat (wat het gezin rooit, of waarom het niet groeit), en daarboven het dorp per stand en wat er
 gemist wordt; `('dorpelingen')` laat alleen die stand zien.

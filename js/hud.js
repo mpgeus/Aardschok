@@ -594,7 +594,7 @@
       const k = T.kanKopen(S.dorp, wat, 1);
       const prijs = k.per > 1 ? `${k.per} voor ${k.prijs} goud` : `${k.prijs} goud per stuk`;
       return (
-        `<div class="handel-rij"><span class="handel-naam">${T.hoofdletter(H.verkoopt[wat].naam || wat)} <small>je hebt ${heb(wat)}</small></span>` +
+        `<div class="handel-rij"><span class="handel-naam">${T.hoofdletter((!m.bestelling && H.verkoopt[wat].naam) || wat)} <small>je hebt ${heb(wat)}</small></span>` +
         `<span class="handel-prijs">${prijs}<small>${prijsMerk(S, wat, 'verkoopt')}hij heeft er nog ${(m.heeft[wat] || 0) * k.per}</small></span>` +
         `<span class="handel-knoppen">${handelKnop('koop', wat, 1, `Koop ${k.per}`, k)}${handelKnop('koop', wat, 5, `Koop ${k.per * 5}`, T.kanKopen(S.dorp, wat, 5))}</span></div>`
       );
@@ -611,7 +611,8 @@
         `<span class="handel-knoppen">${handelKnop('verkoop', wat, 1, `Verkoop ${k.per}`, k)}${handelKnop('verkoop', wat, 5, `Verkoop ${k.per * 5}`, T.kanVerkopen(S.dorp, wat, 5))}</span></div>`
       );
     });
-    const maand = H.bezoeken[m.bezoek].maand;
+    // Op bestelling (de bode, js/bode.js) is het geen ronde van het seizoen.
+    const maand = m.bestelling ? 'op bestelling' : H.bezoeken[m.bezoek].maand;
     return (
       `<div class="handel-kop"><span class="handel-titel">De marskramer</span><span class="handel-wanneer">${maand}</span>` +
       `<button class="handel-sluit" data-actie="sluit" title="Sluiten (Esc)">✕</button></div>` +

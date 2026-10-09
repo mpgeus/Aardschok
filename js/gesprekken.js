@@ -64,7 +64,7 @@
   T.GESPREKKEN = {
     // De marskramer trekt van dorp tot dorp en koopt ook. In het gehucht komt hij drie keer per jaar
     // langs, en daar handel je met hem (js/handel.js; spel.md, "Handel"). De vlaggen
-    // marskramerOpBezoek, marskramerLente, -Zomer, -Herfst en marskramerVertrekt zet js/handel.js
+    // marskramerOpBezoek, marskramerLente, -Zomer, -Herfst, marskramerBode (op bestelling, js/bode.js) en marskramerVertrekt zet js/handel.js
     // zolang hij er is. (Tot 25 sep verkocht hij in het oude spel ook vuurklei voor de bakker.)
     marskramer: {
       naam: 'de marskramer',
@@ -74,11 +74,14 @@
         { naam: 'In het gehucht, hooimaand', als: { vlag: ['marskramerOpBezoek', 'marskramerZomer'] } },
         { naam: 'In het gehucht, wijnmaand', als: { vlag: ['marskramerOpBezoek', 'marskramerHerfst'] } },
         { naam: 'In het gehucht, hij vertrekt', als: { vlag: ['marskramerOpBezoek', 'marskramerVertrekt'] } },
+        { naam: 'In het gehucht, op bestelling (de bode)', als: { vlag: ['marskramerOpBezoek', 'marskramerBode'] } },
       ],
       knopen: {
         welkom: {
           tekst: [
             { als: { vlag: 'marskramerVertrekt' }, zeg: 'Mijn ezel staat al met zijn kop naar de weg, schout. Tot de volgende keer.' },
+            // Hij kwam op je brief (de bode, js/bode.js; werklijst vraag 143).
+            { als: { vlag: 'marskramerBode' }, zeg: 'U liet mij halen, schout, en ik ben gekomen. De weg was lang en mijn ezel is moe: dat ziet u terug in de prijs. Maar wat u vroeg, heb ik bij mij, of wat ervan te krijgen was.' },
             { als: { vlag: 'marskramerLente' }, zeg: 'Grasmaand, en de wegen zijn weer te begaan. Wie nu nog graan heeft, is rijk: overal is het op. Ik betaal er goed voor.' },
             { als: { vlag: 'marskramerZomer' }, zeg: 'Hooimaand. Alles staat te groeien en niemand heeft een stuiver. En wol heb ik deze week genoeg gezien: iedereen heeft net geschoren.' },
             { als: { vlag: 'marskramerHerfst' }, zeg: 'Wijnmaand, mijn laatste ronde vóór de winter. Na Sint-Maarten zijn de wegen modder, straks ligt de beek dicht, en dan ziet u mij pas in grasmaand terug. Zout voor de vis, ijzer voor de smid: nu, of pas in de lente.' },
