@@ -36,6 +36,8 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
 0b. Engels en een vertaaltool (vraag 147; Marcel, 9 okt): de basis nu, naast de ui; het omzetten van alle tekst na de
    ui en vóór de proefversie. Stap 1 (de basis, de tool, het menu als proef) staat in `main` (9 okt); stap 2, het
    omzetten, na de ui.
+   **Bezig in sessie `vertalen`** (10 okt): de vertaaltool leesbaar, rustig en duidelijk (Marcel: "Slecht te lezen,
+   Rommelig, Onduidelijk wat te doen").
 0c. Meer variatie in het groen, de bomen en de versiering (vraag 148; Marcel, 9 okt: alles ja, "Mag ernaast"), naast
    de ui: eerst de bomen (vormen, nieuwe soorten, de seizoenen met vruchten), dan het groen eronder, dan de spullen bij de
    huizen; de sneeuw op de bomen en de huizen (144, 4b, Marcel: "ja") in dezelfde ronde. **Bezig in sessie `main`
