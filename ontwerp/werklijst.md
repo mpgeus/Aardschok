@@ -6977,6 +6977,14 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     had (een huis zijn eten, brandhout en wensen, een werkplaats wat hij omzet, de kas de bouw, de heer, het gereedschap en
     wat je de marskramer verkoopt), te arm en honger per huis, de tiende, het marktgeld, het sprokkelhout van de huizen
     zonder werk, en de spelregel "Geld" met drie keuzes (`spel.md`, "Geld in het dorp").
+    **De speeltest (9 okt, `aa1b4c6`, bouwer, twee jaar, op het eiland, zaad 1 tot 3), wacht op Marcel:** met een beurs per
+    huis krimpt elk dorp (26 → 30, 24 en 16 mensen; 13, 20 en 39 doden, bijna allemaal van honger), met alleen de beurs van
+    de schout groeit het (26 → 78, 93 en 77; 0, 0 en 14 doden). Waarom (twee jaar nachten in het ontworpen gehucht): het
+    geld loopt naar de boeren en blijft daar. Iedereen koopt hun graan, maar zelf kopen ze bijna niets (hun stand wil eten,
+    brandhout en een kapel, en hun eigen graan is gratis); de boeren gingen van 11 naar 20 goud, de hutten en huizen naar 0,
+    en wie geen werk heeft, verdient alleen aan sprokkelhout, dat pas in de winter verkoopt. De kas loopt leeg aan het
+    loon van de schout (1 goud per maand), en de handel in het dorp is klein (eten kost een mens 1,5 koper per maand), dus
+    de tiende brengt bijna niets op. Voorstellen aan Marcel: zie het gesprek van 9 okt.
 
 142. **Een gereedschap voor alle getallen** (Marcel, 8 okt: "Ik wil straks wel een tool waarin we al deze parameters kunnen
     instellen."; open). Er is de werkbank in de spelregels (`T.WERKBANK` in `js/opties.js`: elk getal uit de blokken
