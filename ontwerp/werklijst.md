@@ -7168,6 +7168,12 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     moeten we niet willen."** Dus: het detail wel, het grotere hoofd niet; echte gezichten horen bij portretten in de
     gesprekken (`beeld.md`, Open; nog niet gekozen). 24 per lijf staan nu op de proefplaat
     (`gereedschap/pixelart/uiterlijk.cjs proef`); daarna de kinderen, de ouden, de werkpoppetjes en het spel.
+    **Gebouwd (9 okt), nog niet in het spel:** de kinderen en de ouden (twaalf elk), de werkfiguren in het eigen uiterlijk
+    (hetzelfde hoofd en dezelfde kleren via `hoofdVanDeBoer`, `overDeKiel` en `hoofdVanDeBoerin`; pixel voor pixel gelijk
+    zonder uiterlijk), het gedeelde wegschrijven van een vel (`figuurvel.cjs`) en `uiterlijk-anim.cjs`.
+    **Marcel (9 okt), vóór het renderen: "Ik wil toch nog een nuance aanbrengen, mensen moeten ook ouder kunnen
+    worden..."** Er is nu geen ouder worden en geen geboorte: een leeftijd ligt vast, en kinderen komen alleen met een
+    nieuw gezin. Vragen aan Marcel (tempo, sterven van ouderdom, geboortes, wat het in het spel doet); het renderen wacht.
     **Bezig in sessie `ccr-77327776-rqjldz`** (9 okt): vraag 145, 1 en 3.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
