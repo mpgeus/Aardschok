@@ -2,6 +2,12 @@
 
 ## Besloten
 
+- **De maatstaf: "wow, wat een detail"** (9 okt 2026, Marcel, bij de fasen van een afgebrand huis: "Ik wil dat mensen
+  denken: wow, wat een detail alles heeft zn eigen art. Zo uitgebreid. Zo mooi, zo leuk om te zien", en eerder: "Art
+  maakt of breekt een spel", "Moet wel handgetekend lijken", "dit is te ai, ik moet iets natuurlijker hebben iets
+  'echts'"). Elke toestand van een ding heeft zijn eigen tekening, met de details die je in het echt zou zien, en een
+  materiaal gedraagt zich als zichzelf (steen blijft staan, riet brandt, lei breekt). Wat in code gemaakt wordt, mag
+  niet naar code ruiken: geen gladde ruis of herhaalde patronen zonder reden.
 - **HD-pixel art** (19 sep 2026, Marcel: "meer high def, maar wel pixel art"). De eerste pixel art,
   met tegels van 32×16, vond hij te grof.
 - **Maten, zoals in het spel:** een tegel is 64×32, een muur 128 pixels hoog. De tovenaar is zo'n

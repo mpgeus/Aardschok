@@ -7098,7 +7098,9 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     dak zwart en de eerste gaten), het dak valt (gaten, de verkoolde latten, de muren beroet), ingestort, en opgeruimd (de
     muren laag, het puin op hopen, de balken op een stapel), en dan het herbouwen. **Tweede proefplaat (9 okt):**
     `node gereedschap/pixelart/ruines.cjs proef` (BRANDFASEN in `huizen.cjs`): de hoeken staan het hoogst, puinbergen,
-    losse stenen, balken kriskras, plukken zwart riet, en de vier fasen; wacht op Marcel.
+    losse stenen, balken kriskras, plukken zwart riet, en de vier fasen. **Marcel (9 okt):** "Ik wil dat mensen denken:
+    wow, wat een detail alles heeft zn eigen art. Zo uitgebreid. Zo mooi, zo leuk om te zien" (de maatstaf, nu in
+    `beeld.md`). Claude legt voor wat er voor die maatstaf nog bij moet; wacht op Marcel.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
