@@ -74,6 +74,10 @@ de uitverkopen en met updates. Zonder verlanglijstjes verkoopt een goed spel bij
    prima" (vraag 83, b). Hoe de schout in het Engels heet, is nog open: *reeve* is historisch precies (de man uit het
    dorp die voor de heer het werk regelde, tussen de heer en de boeren in), maar weinig spelers kennen het woord, en
    *The Reeve* is al een spel; *bailiff* is de man van de heer; *sheriff* (van *shire-reeve*) roept het Wilde Westen op.
+   **Besloten (Marcel, 9 okt, vraag 147):** de schout heet *reeve*, en de eerste brief legt het woord uit. Het Engels komt
+   nu al, niet in januari, met een vertaaltool voor wie uit de community een taal wil maken ("Mochten we leden uit de
+   community krijgen die een vertaling willen maken"). De brontaal van de spelteksten wordt Engels, Nederlands een
+   vertaling zoals elke andere; de code, het commentaar en `ontwerp/` blijven Nederlands.
 3. **Een naam vóór de Steam-pagina.** De werktitel past niet meer (vraag 8: het voorstel was *Martinmas*, met "Get rich.
    Look poor." eronder). Een naam moet je kunnen vinden, en de merkenregisters en Steam moeten hem vrij laten.
 4. **Geluid.** Het spel heeft nog geen geluid. Voor een trailer en een demo is dat het eerste dat opvalt. Muziek en
