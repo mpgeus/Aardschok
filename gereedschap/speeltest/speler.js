@@ -284,9 +284,9 @@
       if (s.kalender.dag > 1) boek.brief = { dag: heel(s.kalender.dag), datum: datum(), eis: eisKort(T.eisVanDeHeer(s.dorp)) };
       if (!klik('#brief [data-actie="sluit"]')) T.ui.sluitBrief(s);
     }
-    if (T.ui.slachtenOpen()) {
+    if (T.ui.vensterOpen() === 'slachten') {
       if (!klik('#slachten [data-actie="slacht"]')) klik('#slachten [data-actie="sluit"]');
-      if (T.ui.slachtenOpen()) T.ui.sluitSlachten(s);
+      if (T.ui.vensterOpen() === 'slachten') T.ui.sluitSlachten(s);
     }
     // Een voorval (js/voorvallen.js): wie de schout zoekt, spreekt hem aan. Elke speler leest de prijs onder de
     // antwoorden en kiest het eerste verstandige (hieronder), met de knop zoals een mens, en anders het eerste dat kan;
@@ -1160,7 +1160,7 @@
         // schout weg is (vraag 68, B), en de bouwer blijft in het dorp: de voorvallen beantwoordt hij zelf.
         klik('#raadsman-knop');
         if (!klik('#raadsman button[data-wie]')) daad('kan geen raadsman kiezen');
-        if (!klik('#raadsman [data-actie="sluit"]') && T.ui.raadsmanOpen()) T.ui.sluitRaadsman(s);
+        if (!klik('#raadsman [data-actie="sluit"]') && T.ui.vensterOpen() === 'raadsman') T.ui.sluitRaadsman(s);
         const r = T.raadsmanVan(s.dorp);
         if (r) daad(`kiest als raadsman: ${T.overRaadsmanTekst(s.dorp, r)}`);
       },

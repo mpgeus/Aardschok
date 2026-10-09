@@ -7239,7 +7239,16 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     elke vaste kleur een kleurnaam geworden (`--goud`, `--inkt`, `--op-goud`, met `color-mix`), en het blok onderaan
     zet in een venster de kleurnamen op inkt, dus de eigen opmaak van elk venster gaat mee. De marskramer lag onder de
     balk (geen laag); nu niet meer. Nog geen papier: de kaart van het land (`opmerkingen.md`).
-    **Bezig in sessie `main` (1306efdd)** (9 okt): b2, één manier van openen en sluiten.
+    **b2 gebouwd (9 okt):** één manier van openen en sluiten (`js/ui.js`): een venster meldt zich aan met
+    `T.ui.meldVenster(naam, { el, knop, toets, typt, open, sluit })`, en zijn eigen open en sluit doen alleen nog wat
+    alleen dat venster doet; de rest (wat open is dicht, de brief weg, de modus, de tijd stil, de knop aan) doen
+    `T.ui.openVenster` en `T.ui.sluitVenster`. Er is hooguit één venster open (`T.ui.vensterOpen()`), geen venster
+    kent de andere meer, de knoppen in de balk zijn `T.ui.wisselVenster`, en het toetsenblok in `js/main.js` is van zes
+    takken één regel (`T.ui.toetsBijVenster`). Zo gaan de dingen op tafel (c) straks ook: één naam per ding. De
+    vragen `wettenOpen`, `veldenOpen`, ... zijn weg (ook uit de speeltest). Nagelopen in de browser: de toetsen, de
+    knoppen, overspringen, `Esc`, de brief, de marskramer, het slachten, het bouwmenu en het menu; de tijd loopt na
+    het sluiten weer op de snelheid die je koos.
+    **Bezig in sessie `main` (1306efdd)** (9 okt): c, de tafel.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

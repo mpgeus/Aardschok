@@ -329,7 +329,7 @@
   window.addEventListener(
     'keydown',
     (ev) => {
-      if (!scherm || !T.S || T.ui.spelregelsOpen()) return;
+      if (!scherm || !T.S || T.ui.vensterOpen() === 'spelregels') return;
       ev.stopImmediatePropagation();
       if (ev.key === 'Enter' && naamVoorstel != null) {
         ev.preventDefault();
