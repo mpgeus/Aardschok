@@ -854,6 +854,204 @@ function renderHuisFasen(naam) {
   };
 }
 
+// ---------------------------------------------------------------- de ruïne
+//
+// Een afgebrand huis (js/brand.js; werklijst vraag 144, 3; Marcel, 9 okt: "Huis moet afgebrokkeld zijn. Echt kapot.
+// Structureel ingestort etc"), uit het huis zelf gesneden, zoals de bouwfasen hierboven: de muren als schil, met een
+// gebroken bovenrand (hier staat nog bijna de hele muur, daar is hij tot vlak boven de grond weg), het dak weg, balken
+// die van de muur in het huis zijn gevallen, as op de vloer en puin ertussen en ervoor. Het
+// hout is verkoold (zwart en donkerbruin), steen en leem zijn zwart beroet. Geen licht achter de ramen. Het anker is dat
+// van het huis, zodat de ruïne op zijn plek staat.
+const RUINE = {
+  laag: 0.12, // de muren staan nog tussen zoveel en zoveel van hun hoogte
+  hoog: 0.72,
+  golf: 52, // hoe lang een stuk muur ongeveer even hoog blijft (eenheden)
+  gat: 0.3, // zoveel van de muur is tot vlak boven de grond weg
+  kartel: 9, // de breuk is ruw: zoveel eenheden op en neer, over brokken van een kartel of twee
+  laagje: 7, // en hij valt in trapjes van zoveel eenheden, een laag stenen
+  balken: 6, // gevallen balken per vleugel (de helft ligt plat, als planken)
+  puin: 7, // hopen puin, langs de muren en ervoor
+};
+const ALS_STEEN = /steen|pleister|leem|aarde|zand|ijzer/;
+function verkoold(mat, zaad, zTop) {
+  const uit = {};
+  for (const [naam, m] of Object.entries(mat)) {
+    const steen = ALS_STEEN.test(m.ramp || '');
+    uit[naam] = {
+      ...m,
+      // Alles houdt zijn eigen tekening (de nerf van het hout, de stenen, het vakwerk), zodat het getekend blijft lijken.
+      // Hout is houtskool: de grijsbruine kleur van schors, donker, met zijn nerf. Steen en leem worden donkerder, en
+      // zwart beroet in strepen van boven naar beneden, waar de vlammen uit het dak sloegen.
+      patroon: (C) => {
+        const r = m.patroon ? m.patroon(C) : 0;
+        const plus = typeof r === 'number' ? r : (r && r.plus) || 0;
+        if (!steen) return { ramp: 'schors', stap: 0.25 + (C.stap + plus) * 0.32 };
+        const hoog = K.klem((C.z || 0) / zTop, 0, 1);
+        const streep = hoog > 0.25 + 0.6 * K.rnd(C.px >> 1, zaad, 3);
+        return { stap: (C.stap + plus) * (streep ? 0.3 : 0.62 - 0.25 * hoog) };
+      },
+    };
+  }
+  uit.as = { ramp: 'schors', lo: 0.6, hi: 2.4, rand: 0.4, patroon: (C) => (K.hash(C.px >> 2, C.py >> 1, 9) % 9 === 0 ? { ramp: 'steen', stap: 2.2 + C.stap * 0.3 } : 0) };
+  // een verkoolde balk: zwart, met de lengte van de nerf erin en hier en daar een barst die nog licht is
+  uit.kool = { ramp: 'schors', lo: 0.3, hi: 2.6, rand: 0.6, patroon: (C) => (K.hash(C.px >> 2, C.py, 11) % 7 === 0 ? 0.9 : K.hash(C.px, C.py >> 1, 12) % 5 === 0 ? -0.5 : 0) };
+  return uit;
+}
+
+function ruineVanHuis(W, zaad) {
+  const H = W.H;
+  const N = new Tr.Wereld();
+  N.mat = verkoold(W.mat, zaad, H.zM);
+  N.lichten = [];
+  N.H = H;
+  const groepen = W.groepen.filter((g) => g.delen.length);
+  const neem = (filter, f) => {
+    for (const g of groepen) {
+      if (!filter(g.naam)) continue;
+      const G = N.groep(g.naam);
+      for (const p of g.delen) {
+        const q = f(p, g.naam);
+        if (q) Tr.voeg(G, { ...q });
+      }
+    }
+  };
+  const zTop = H.zM;
+  const r = (a, b = 0) => K.rnd(zaad, a, b);
+  const glad1 = (t, k) => {
+    const i = Math.floor(t);
+    const f = t - i;
+    const g = f * f * (3 - 2 * f);
+    return r(i, k) + (r(i + 1, k) - r(i, k)) * g;
+  };
+  const glad2 = (x, y, k) => {
+    const i = Math.floor(x);
+    const j = Math.floor(y);
+    const fx = x - i;
+    const fy = y - j;
+    const a = r(i * 7919 + j, k) + (r((i + 1) * 7919 + j, k) - r(i * 7919 + j, k)) * fx;
+    const b = r(i * 7919 + j + 1, k) + (r((i + 1) * 7919 + j + 1, k) - r(i * 7919 + j + 1, k)) * fx;
+    return a + (b - a) * fy;
+  };
+  // Hoe hoog de muur hier nog staat: grof langs de muur (een lange golf), met gaten tot vlak boven de grond, en ruw.
+  // Een gat loopt zacht in (geen sprong): een afstandsveld met een sprong erin laat de stralen door de muur schieten.
+  const breuk = (x, y) => {
+    const t = (x + y * 1.7) / RUINE.golf;
+    const heel = RUINE.laag + (RUINE.hoog - RUINE.laag) * glad1(t, 1);
+    const g = K.klem((RUINE.gat + 0.08 - glad1(t * 0.8 + 31, 2)) / 0.16, 0, 1);
+    const h = heel + (0.06 + 0.06 * glad1(t * 3, 3) - heel) * g * g * (3 - 2 * g);
+    const z = zTop * h + (glad2(x / 18, y / 18, 4) - 0.5) * 2 * RUINE.kartel;
+    // in trapjes van een laag hoog, zoals metselwerk breekt, met hier en daar een steen die nog uitsteekt
+    const laag = RUINE.laagje;
+    return Math.floor(z / laag) * laag + (glad2(x / 6, y / 6, 13) > 0.72 ? laag : 0);
+  };
+  // De breuk als afstand, gedeeld door hoe steil hij hooguit is, zodat het veld nergens meer belooft dan het waarmaakt.
+  const STEIL = 1 + (zTop * 4) / RUINE.golf;
+  const boven = (x, y, z) => (z - breuk(x, y)) / STEIL;
+  const MUREN = new Set([...BIJ_DE_MUREN].filter((n) => n !== 'glas' && n !== 'deur'));
+  neem((n) => MUREN.has(n) || n === 'plint' || n === 'gevelschoorsteen', (p, naam) => {
+    if (naam === 'romp' && p.deel === 1) return { ...p, f: (x, y, z) => Math.max(p.f(x, y, z), -p.f(x, y, FASE.schilZ) - FASE.schil, boven(x, y, z)) };
+    if (naam === 'gevelschoorsteen') return { ...p, f: (x, y, z) => Math.max(p.f(x, y, z), z - (zTop + 10)) }; // de stenen schoorsteen staat nog
+    return { ...p, f: (x, y, z) => Math.max(p.f(x, y, z), boven(x, y, z)) };
+  });
+  // De vloer: as, binnen de muren.
+  const vloer = N.groep('as');
+  for (const V of H.vleugels) {
+    const [cx, cy] = V.wereld(0, 0);
+    Tr.voeg(vloer, {
+      f: (x, y, z) => {
+        const [a, q] = V.lok(x, y);
+        return sdf.doos(a, q, z - 1.5, V.ha - 8, V.hq - 8, 1.5 + glad2(a / 14, q / 14, 5) * 2.5, 1);
+      },
+      grens: [cx, cy, Math.hypot(V.ha, V.hq), -1, 6],
+      m: 'as',
+      deel: 994,
+    });
+  }
+  // Gevallen balken: van de bovenkant van een muur schuin het huis in.
+  const balken = N.groep('balken');
+  let k = 0;
+  for (const V of H.vleugels) {
+    for (let i = 0; i < RUINE.balken; i++, k++) {
+      const a0 = (r(k, 8) * 2 - 1) * (V.ha - 10);
+      const zij = r(k, 9) < 0.5 ? -1 : 1;
+      const plat = i % 2 === 1;
+      const [ax, ay] = V.wereld(a0, zij * (V.hq - 6));
+      const az = plat ? 3 : Math.max(6, Math.min(breuk(ax, ay) - 6, zTop * 0.45));
+      const a1 = Math.max(-(V.ha - 12), Math.min(V.ha - 12, a0 + (r(k, 10) - 0.5) * 50));
+      const [bx, by] = V.wereld(a1, -zij * (V.hq * (0.1 + 0.5 * r(k, 11))));
+      const bz = 3;
+      const dik = plat ? 2.2 : 3 + r(k, 12) * 2;
+      Tr.voeg(balken, {
+        f: (x, y, z) => sdf.capsule(x, y, z, ax, ay, az, bx, by, bz, dik),
+        grens: [(ax + bx) / 2, (ay + by) / 2, Math.hypot(ax - bx, ay - by) / 2 + dik + 2, -1, Math.max(az, bz) + dik + 2],
+        m: 'kool',
+        deel: 996,
+      });
+    }
+  }
+  return N;
+}
+
+// De ruïne van een huis voor ruines.cjs: één cel, met het anker op de achterste hoek van de voet (zoals renderHuisFasen),
+// en puin in en voor het huis.
+function renderHuisRuine(naam) {
+  const spec = HUIZEN[naam];
+  const draai = spec.draai || 0;
+  const W = wereldVan(spec);
+  const H = W.H;
+  const m = meetHuis(W, draai);
+  const zaad = (spec.zaad || 1) * 31 + 7;
+  const N = spec.delen
+    ? HS.samen(spec.delen.map((d) => ({ W: ruineVanHuis(HS.huis(d.spec.zaad, d.spec), zaad + d.plek[0]), plek: d.plek })))
+    : ruineVanHuis(W, zaad);
+  const hopen = [];
+  for (let i = 0; i < RUINE.puin; i++) {
+    const binnen = i < RUINE.puin - 2;
+    // langs de binnenkant van een muur, en twee voor het huis
+    const langs = K.rnd(zaad, i, 23) < 0.5;
+    const u = 0.15 + 0.7 * K.rnd(zaad, i, 20);
+    const v = 0.15 + 0.7 * K.rnd(zaad, i, 22);
+    const gx = m.hoek[0] + (binnen ? (langs ? u : 0.88) : 0.2 + 0.6 * K.rnd(zaad, i, 21)) * m.voet[0];
+    const gy = m.hoek[1] + (binnen ? (langs ? 0.88 : v) : 1.08) * m.voet[1];
+    hopen.push({ model: F.geschaald(VW.puin(zaad + i, 10), 1.8), gx, gy });
+  }
+  const extra = [];
+  for (const p of hopen) for (const [dx, dy, z] of [[-1.5, -1.5, 0], [1.5, 1.5, 0], [0, 0, 40]]) extra.push([(p.gx + dx) * TEGEL, (p.gy + dy) * TEGEL, z]);
+  const kd = W.delen ? HS.kaderSamen(W, draai) : HS.kaderVan(H, extra, draai);
+  const RAND = 12;
+  const b = Math.ceil(kd.b + RAND * 2);
+  const h = Math.ceil(kd.h + RAND * 2);
+  const OX = Math.round(RAND - kd.x0);
+  const OY = Math.round(RAND - kd.y0);
+  const B = new K.Beeld(b, h, OX, OY);
+  Tr.tekenWereld(B, N, { draai });
+  for (const p of hopen) D.zetModel(B, p.model, p.gx, p.gy, 'Z');
+  K.belicht(B, { omgeving: () => 0.2 });
+  K.verwarm(B, 1.8);
+  K.omlijn(B);
+  const plaat = K.Plaat.van(K.kwantiseer(B));
+  let xa = plaat.b;
+  let ya = plaat.h;
+  let xb = -1;
+  let yb = -1;
+  for (let y = 0; y < plaat.h; y++) {
+    for (let x = 0; x < plaat.b; x++) {
+      if (plaat.px[(y * plaat.b + x) * 2] < 0) continue;
+      if (x < xa) xa = x;
+      if (x > xb) xb = x;
+      if (y < ya) ya = y;
+      if (y > yb) yb = y;
+    }
+  }
+  const X = m.hoek[0] * TEGEL;
+  const Y = m.hoek[1] * TEGEL;
+  const ax = Math.round(OX + X * EX[0] + Y * EX[1]);
+  const ay = Math.round(OY + X * EY[0] + Y * EY[1]);
+  const cb = xb - xa + 1;
+  const ch = yb - ya + 1;
+  return { id: spec.gebouw, tekening: naam, cb, ch, ankerX: ax - xa, ankerY: ay - ya, beslaat: m.voet, plaat: plaat.uitsnede(xa, ya, cb, ch) };
+}
+
 // ---------------------------------------------------------------- werkers
 
 // Een huis kost zo'n halve minuut; de huizen gaan daarom tegelijk, elk in een eigen draad, net als
@@ -943,7 +1141,7 @@ function renderNieuw(namen, draden) {
   });
 }
 
-module.exports = { HUIZEN, STIJLEN, TORENS, grootGebouw, VORMEN, huttenVan, STANDEN, stijlNaam, FASEN, renderHuis, renderHuizen, renderHuisFasen, meetHuis };
+module.exports = { HUIZEN, STIJLEN, TORENS, grootGebouw, VORMEN, huttenVan, STANDEN, stijlNaam, FASEN, RUINE, renderHuis, renderHuizen, renderHuisFasen, renderHuisRuine, meetHuis };
 
 // node gereedschap/pixelart/huizen.cjs [naam ...]: de huizen los op een proefplaat, met hun voet
 // (een ruit) en de tegel voor hun deur (een punt), om te zien of die kloppen. Naar

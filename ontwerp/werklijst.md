@@ -7085,7 +7085,11 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     stuk." "De groep neemt in het donker ook lantaarns mee natuurlijk." "Huis moet afgebrokkeld zijn. Echt kapot.
     Structureel ingestort etc." Dus: de hinderlaag van de bode altijd op de kaart (buiten beeld alleen als het niet anders
     kan), de bode en wie meegaat dragen in het donker een lantaarn (beide gebouwd, 9 okt), en de ruïne wordt een echt
-    ingestort huis in plaats van een zwart geraamte: met de huizenbouwer, eerst een proefplaat.
+    ingestort huis in plaats van een zwart geraamte: met de huizenbouwer, eerst een proefplaat. En (9 okt): "Moet wel
+    handgetekend lijken zeg maar." **Proefplaat (9 okt):** `node gereedschap/pixelart/ruines.cjs proef` (renderHuisRuine
+    in `huizen.cjs`): de muren in trapjes gebroken, met gaten tot de grond, het dak weg, gevallen balken en planken, as
+    en puin, het hout houtskool met zijn nerf, steen en leem beroet in strepen. Wacht op Marcel; daarna alle 559
+    tekeningen (zo'n twee uur op de achtergrond) en in het spel in plaats van de verkoolde bouwfase.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
