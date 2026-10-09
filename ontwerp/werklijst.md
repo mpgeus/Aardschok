@@ -6970,6 +6970,9 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     belasting van nu (5 koper per mens per maand) is de belasting zwaarder dan eten en drank samen; voorstel: een tiende
     van wat een huis verdient. En wie geen werk heeft, verdient niets en lijdt honger (B); voorstel: het sprokkelhout is
     van wie het raapt, de huizen zonder werk, en dat verkopen ze aan het dorp.
+    **Marcel (9 okt): "ja dat is akkoord"** (alle drie). Stap 2 in één keer: de beurs per huis, kopen en verdienen, de kas
+    die van de makers koopt, de belasting als tiende, het sprokkelhout, de honger per huis en het marktgeld; dan de
+    speeltest. Het arme gezin dat je opzoekt en het loon van de dagloner komen daarna.
 
 142. **Een gereedschap voor alle getallen** (Marcel, 8 okt: "Ik wil straks wel een tool waarin we al deze parameters kunnen
     instellen."; open). Er is de werkbank in de spelregels (`T.WERKBANK` in `js/opties.js`: elk getal uit de blokken
