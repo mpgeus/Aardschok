@@ -868,7 +868,7 @@ function boerin(stand = null, o = {}) {
     boezem,
     schouders,
     mRok: M.jurk,
-    mLijf: M.jurk,
+    mLijf: o.lijfje ? KAR.materiaal(ctx, 'lijfje', UI.rijglijf(o.lijfje, UI.STOF.linnen)) : M.jurk,
     dRok: D.rok,
     dLijf: D.lijf,
     botRok: () => bot(Bn.Brok),
@@ -891,11 +891,12 @@ function boerin(stand = null, o = {}) {
   if (o.krom) bot(Bn.Blijf);
   if (o.bont) KAR.bontKraag(delen, ctx, [0, 0.5, 56.2], [8.8, 7], 2.5);
   const band = o.riem ? KAR.riem(delen, ctx, lijf, 37.6) : null;
-  const buidel = band && o.buidel ? KAR.buidel(delen, ctx, band, -5.8) : null;
+  const buidel = band && o.buidel ? KAR.buidel(delen, ctx, band, o.buidelX ?? -5.8) : null;
+  if (band && o.mes) UI.mes(delen, band, o.mes, KAR.materiaal(ctx, 'schede', UI.SCHOEN.leer), KAR.materiaal(ctx, 'heft', { ramp: 'hout', lo: 1.6, hi: 5 }), D.lijf);
   // de luit: de kast rechtsonder op de rug, de hals langs het linkeroor omhoog
   if (o.luit) KAR.luit(delen, ctx, { voet: [5.2, -7, 38.5], top: [-11, -10, 73], vorm: lijf, z0: 35, z1: 56, schouder: [7.6, 0, 56.6], heup: [-9.8, 0, 37.4] });
   // de roddelaar: een bonte omslagdoek, voorop net naast het midden geknoopt
-  if (o.omslagdoek) KAR.omslagdoek(delen, ctx, bovenlijf, { zNek: 59.6, zZij: 48.5, zPunt: 39.5, knoop: [0.8, 11.4, 47.6] });
+  if (o.omslagdoek) KAR.omslagdoek(delen, ctx, bovenlijf, { zNek: 59.6, zZij: 48.5, zPunt: 39.5, knoop: [0.8, 11.4, 47.6], stof: o.omslagdoek.ramp ? o.omslagdoek : null });
   // de nieuwkomer: de bundel op de rug, de banden over de schouders naar een knoop op de borst
   if (o.bundel) {
     KAR.bundel(delen, ctx, {
@@ -971,7 +972,8 @@ function boerin(stand = null, o = {}) {
   }
 
   // --- hoofd: rond gezicht in een witte doek, een pluk haar voorop, de knoop onder de kin
-  const oy = schedel(delen, H, M, D, { maat, oog: [2.6, 0.6], oor: 0.8 });
+  const iHoofd = delen.length;
+  const oy = schedel(delen, H, M, D, { maat, oog: [2.6, 0.6], oor: 0.8, oogWit: o.oogWit ? KAR.materiaal(ctx, 'oogwit', UI.OOGWIT) : null });
   // (de drinker: een dikke, rode knol van een neus, zie rodeNeus hierboven)
   if (o.neus === 'rood') delen.push(bol(plus(H, [0, 7.3, -1.9]), 2.2, M.huid, D.hoofd, 1));
   else delen.push(bol(plus(H, [0, 6.9 + 0.5 * ((o.neusMaat || 1) - 1), -1.4]), 1.6 * (o.neusMaat || 1), M.huid, D.hoofd, 1));
@@ -1007,7 +1009,9 @@ function boerin(stand = null, o = {}) {
     vlecht(delen, plus(H, [4.6, -2.2, -3.2]), plus(H, [9.4, 1.2, -10.4]), plus(H, [7.6, 5.4, -19.6]), 1.9, 1.1, 8, M.haar, D.hoofd, [0, 1, 0]);
     KAR.bonteMuts(delen, ctx, H, maat, { zij: -1 });
   } else if (hoofd === 'geen') UI.kapselVrouw(delen, H, maat, M.haar, D.hoofd, o.kapsel || 'knot', M.doek); // vraag 145
+  UI.vergrootHoofd(delen, iHoofd, [0, 1, 57.5], o.hoofdMaat);
   bot(Bn.Bnek);
+  UI.vergrootHanden(delen, [D.handL, D.handR], o.handMaat);
 
   return model(delen, mat, hg ? HH.omvat(delen, 2) : { midden: [0, 3, 38], straal: 46 });
 }

@@ -766,7 +766,7 @@ const RUIT = {
 // bij de hals), zZij, zPunt, en knoop = [x, y, z] van de knoop.
 function omslagdoek(delen, ctx, lijfAfstand, o) {
   const { zNek, zZij, zPunt, knoop } = o;
-  const mDoek = materiaal(ctx, 'omslagdoek', RUIT);
+  const mDoek = materiaal(ctx, 'omslagdoek', o.stof || RUIT); // (vraag 145: ook een doek van één kleur)
   const dDoek = deel(ctx, 'omslagdoek');
   const [kx, , kz] = knoop;
   delen.push({
