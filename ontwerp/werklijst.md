@@ -21,6 +21,8 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
 (Marcel: "Ik denk dat we die economie terug moeten draaien", en "Alles van vraag 141").
 
 **Wacht op Marcel:**
+- Een feest op het plein vol kijkgaten (`opmerkingen.md`, "Het beeld"): zo laten, op een feest alleen wie ertoe doet, of
+  het plein uit? De fout in de kijkgaten en het haperen bij slepen zijn op 9 okt opgelost.
 - Sneeuw op de daken (vraag 144, 4b): mag de render van een sneeuwmasker per huis, en ook de bomen?
 - Uit `opmerkingen.md`: een brand die overslaat op het huis ernaast, een eigen beeld voor de koorts (ziekbed, hoesten),
   en wie wijn wil (de wijnboerderij die niemand bouwt).

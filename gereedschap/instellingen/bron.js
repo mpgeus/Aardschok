@@ -16,6 +16,16 @@
   const ID_BEGIN = /[A-Za-z_$]/;
   const ID = /[A-Za-z0-9_$]/;
 
+  // Een bestand kan eindigen op \r\n of op \n (met git core.autocrlf=true staat het op Windows met \r\n in de werkmap).
+  // De lezer werkt op de tekst zoals hij is, zodat schrijven de regeleinden van het bestand laat staan; alleen wat hij als
+  // tekst teruggeeft om te tonen, krijgt \n.
+  const metN = (s) => s.replace(/\r\n?/g, '\n');
+
+  // Staat er na positie i niets meer bij de waarde: een komma, een sluitteken, het eind van de regel of commentaar?
+  function losNa(t, i) {
+    return i >= t.length || /^\s*[,}\]\r\n;]/.test(t.slice(i, i + 3)) || /^\s*\/\//.test(t.slice(i, i + 4));
+  }
+
   // Een lezer over de tekst, vanaf positie i.
   function lezer(tekst, i) {
     const L = { tekst, i };
@@ -35,7 +45,7 @@
           L.i = eind < 0 ? tekst.length : eind;
         } else if (c === '/' && tekst[L.i + 1] === '*') {
           const eind = tekst.indexOf('*/', L.i + 2);
-          commentaar.push(tekst.slice(L.i + 2, eind < 0 ? tekst.length : eind).replace(/^\s*\*\s?/gm, '').trim());
+          commentaar.push(metN(tekst.slice(L.i + 2, eind < 0 ? tekst.length : eind)).replace(/^\s*\*\s?/gm, '').trim());
           L.i = eind < 0 ? tekst.length : eind + 2;
         } else return commentaar;
       }
@@ -114,33 +124,31 @@
     const m = GETAL.exec(t.slice(L.i, L.i + 40));
     if (m) {
       L.i += m[0].length;
-      if (/^\s*[,}\]\n;]/.test(t.slice(L.i, L.i + 3)) || /^\s*\/\//.test(t.slice(L.i, L.i + 4)) || L.i >= t.length) {
-        return { soort: 'getal', waarde: Number(m[0]), begin, eind: L.i };
-      }
+      if (losNa(t, L.i)) return { soort: 'getal', waarde: Number(m[0]), begin, eind: L.i };
     }
     L.i = begin;
     for (const [woord, waarde] of [['true', true], ['false', false]]) {
       if (t.startsWith(woord, L.i) && !ID.test(t[L.i + woord.length] || '')) {
         L.i += woord.length;
-        if (/^\s*[,}\]\n;]/.test(t.slice(L.i, L.i + 3)) || /^\s*\/\//.test(t.slice(L.i, L.i + 4))) return { soort: 'waar', waarde, begin, eind: L.i };
+        if (losNa(t, L.i)) return { soort: 'waar', waarde, begin, eind: L.i };
         L.i = begin;
       }
     }
     slaUitdrukkingOver(L);
     let eind = L.i;
     while (eind > begin && /\s/.test(t[eind - 1])) eind--;
-    return { soort: 'anders', waarde: t.slice(begin, eind), begin, eind };
+    return { soort: 'anders', waarde: metN(t.slice(begin, eind)), begin, eind };
   }
 
   // Een tekst is alleen een blad als er niets achter staat ('a' + b is een uitdrukking).
   function eindVan(L, knoop) {
-    if (/^\s*[,}\]\n;]/.test(L.tekst.slice(L.i, L.i + 3)) || /^\s*\/\//.test(L.tekst.slice(L.i, L.i + 4))) {
+    if (losNa(L.tekst, L.i)) {
       knoop.eind = L.i;
       return knoop;
     }
     L.i = knoop.begin;
     slaUitdrukkingOver(L);
-    return { soort: 'anders', waarde: L.tekst.slice(knoop.begin, L.i).trim(), begin: knoop.begin, eind: L.i };
+    return { soort: 'anders', waarde: metN(L.tekst.slice(knoop.begin, L.i).trim()), begin: knoop.begin, eind: L.i };
   }
 
   function leesObject(L) {
@@ -219,7 +227,7 @@
     const m = re.exec(tekst);
     if (!m) return null;
     // Het commentaar direct boven de regel.
-    const regels = tekst.slice(0, m.index).split('\n');
+    const regels = tekst.slice(0, m.index).split(/\r?\n/);
     regels.pop();
     const uitleg = [];
     while (regels.length && /^\s*\/\//.test(regels[regels.length - 1])) uitleg.unshift(regels.pop().replace(/^\s*\/\/\s?/, '').trim());
@@ -305,7 +313,7 @@
   I.VERBORGEN = new Set(['OPSLAAN_INSTELLINGEN']);
 
   // Een knoop als gewone waarde (voor wat een spelregel zet): een blad zijn waarde, een object of lijst zijn tekst.
-  const alsWaarde = (k, tekst) => (k.soort === 'object' || k.soort === 'lijst' ? tekst.slice(k.begin, k.eind) : k.waarde);
+  const alsWaarde = (k, tekst) => (k.soort === 'object' || k.soort === 'lijst' ? metN(tekst.slice(k.begin, k.eind)) : k.waarde);
   const deel = (k, sleutel) => (k && k.delen ? (k.delen.find((d) => d.sleutel === sleutel) || {}).waarde : null);
 
   // Het overzicht uit de bestanden: `bronnen` is { 'js/akkers.js': tekst, ... }. Geeft { onderwerpen, spelregels,

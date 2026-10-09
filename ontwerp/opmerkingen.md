@@ -713,6 +713,28 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het beeld
 
+- **Een feest op het plein vol kijkgaten** (9 okt, Marcel: "art overlapt en klopt niet meer"): de fout zelf is weg (met
+  de videokaart toonde elk kijkgat wat er in het laatste stond, `js/gl.js`), maar door een huis zie je iedereen op het
+  plein (`T.DOORKIJK_INSTELLINGEN.plein`, de spelregel), en bij de meiboom staat het hele dorp daar. Achter een huis
+  aan het plein krijgt het dak dan tien, twintig gaten naast elkaar. Te kiezen: zo laten, op een feest alleen de schout
+  en wie ertoe doet, of het plein uit.
+
+- **Het beeld is opdrachten aan de videokaart** (9 okt, gemeten op 2560×1440): ver uitgezoomd zijn het zo'n 3200
+  opdrachten voor 3600 plaatjes, want bijna elk plaatje heeft een eigen vel (een vel per tekening, vraag 114) en de
+  tekenlijst gaat van achter naar voor. Dat is nu de grootste post (10 à 15 ms per beeld op 0,5). De schaduwen van de zon
+  gaan sinds 9 okt per vel (71 opdrachten); voor het beeld zelf kan dat niet, want daar telt de volgorde. Een uitweg:
+  de vellen die samen in beeld staan, in de browser op een paar grote vellen leggen.
+
+- **De wolven en een sprong terug in de tijd** (9 okt): `Spel.debug.uur(18)` op een later uur van dezelfde dag zet de
+  klok terug, en dan kan een groep beesten weer op de vlucht zijn (`G.weg` ligt na de dag) zonder plek om heen te
+  vluchten: `werkGroepBij` in `js/beesten.js` valt dan om. Alleen met het gereedschap; in een spel gaat de klok niet terug.
+
+- **De proefversie past niet meer op itch.io** (9 okt, bij `npm run proefversie -- --windows` op 0279f91): het spel is
+  1433 bestanden en 127 MB (op 29 sep 189 bestanden, 11 MB). Bijna alles is `tegels/huizen` (559) en `tegels/bouwfasen`
+  (545), samen 118 MB. itch.io neemt hooguit 1000 bestanden (`verpakken.md`), dus de zip voor de browser gaat er zo niet
+  op; de Windows-versie (264 MB) heeft daar geen last van. Een uitweg: de losse plaatjes per huis samen op een paar
+  vellen. En het laden: een tester haalt die 118 MB de eerste keer van itch.io, niet van zijn schijf.
+
 - **De markt in ons beeld** (6 okt, zesendertigste sessie; vraag 127): vanuit onze kijkhoek ligt een groot deel van het
   plein achter de daken van de huizen ervoor; met een harde regel (geen kraam achter een dak) bleef er op vijf van de 33
   landen geen blok over. Nu wint het blok met de meeste zichtbare tegels. Een zeil van achteren gezien leest als een
