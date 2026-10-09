@@ -11,7 +11,6 @@
   <canvas id="scherm"></canvas>
 
   <div id="hud">
-    <button id="sluip-knop" class="paneel" title="Sluipen: trager, maar monsters merken je pas van dichterbij op"><kbd>S</kbd> Sluipen</button>
     <div id="goud" class="paneel verborgen" title="Goud. Het koopt spullen en gunsten."><span class="munt">&#9679;</span> <span id="goud-aantal">0</span></div>
     <div id="inventaris"></div>
   </div>
@@ -20,32 +19,54 @@
        panelen hierboven weg (stijl.css, .nieuwe-hud). -->
   <div id="hud-gehucht">
     <div id="kalenderbalk" class="paneel">
-      <div id="kalender-knoppen">
-        <button data-snelheid="0" title="Pauzeer de tijd (P)"><kbd>P</kbd> Pauze</button>
-        <button data-snelheid="1" title="Gewone snelheid: een dag duurt vijf minuten">1×</button>
-        <button data-snelheid="3" title="Drie keer zo snel: een jaar duurt tien uur">3×</button>
-        <button data-snelheid="10" title="Tien keer zo snel: een jaar duurt drie uur">10×</button>
-        <button data-snelheid="30" title="Dertig keer zo snel: een jaar duurt een uur">30×</button>
-      </div>
       <div id="kalender-datum"></div>
       <div id="kalender-seizoen"></div>
     </div>
-    <div id="voorraadbalk" class="paneel"></div>
     <!-- De statussen (js/hud.js, T.ui.toonStatussen): honger, droogte, ... zolang ze duren, naast het doel linksboven. -->
     <div id="statussen" class="verborgen"></div>
-    <!-- De knoppen: past de rij niet, dan gaan ze naar een tweede regel, rechts van de voorraad (stijl.css). -->
+    <!-- De knoppen die nog niet op tafel liggen: de spelregels en het menu (vraag 146, d). -->
     <div id="balk-knoppen">
-    <button id="bouwmenu-knop" class="paneel" title="Bouwen"><kbd>B</kbd> Bouwen</button>
-    <button id="velden-knop" class="paneel" title="De velden: wat elk veld is, en wat het volgend jaar wordt (V)"><kbd>V</kbd> Velden</button>
-    <button id="wetten-knop" class="paneel" title="Wetten: aannemen en afschaffen (W)"><kbd>W</kbd> Wetten</button>
-    <button id="raadsman-knop" class="paneel" title="Je raadsman: wie beslist als je er niet bent (R)"><kbd>R</kbd> Raadsman</button>
-    <button id="brief-knop" class="paneel verborgen" title="Een brief van de heer die op je antwoord wacht">Brief</button>
-    <button id="bode-knop" class="paneel verborgen" title="Een bode met een brief naar de marskramer: in een moeilijke tijd, bij je huis">Bode</button>
-    <button id="zaak-knop" class="paneel verborgen" title="De zaak van de graanzak: wat je weet, en wanneer de zitting is">De zaak</button>
-    <button id="slaap-knop" class="paneel verborgen" title="Slapen tot de ochtend (Z): kan 's avonds en 's nachts, bij je eigen huis"><kbd>Z</kbd> Slapen</button>
     <button id="spelregels-knop" class="paneel" title="Spelregels: wat je zelf instelt (O)"><kbd>O</kbd> Spelregels</button>
     <button id="menu-knop" class="paneel" title="Het menu: opslaan, laden, en terug naar het titelscherm (Esc)"><kbd>Esc</kbd> Menu</button>
     </div>
+  </div>
+
+  <!-- De tafel van de schout, onderin over de hele breedte (js/tafel.js; werklijst vraag 146, c): links het rekenboek,
+       in het midden de dingen die een venster openen (de brief, het rapport, de zaak en de inktpot alleen zolang ze er
+       zijn), rechts de lantaarn, de kaars, de zandloper met de lat, en de twee bazen. De kunst komt uit
+       gereedschap/pixelart/tafel.cjs. Elk ding houdt het id van de knop die het was. -->
+  <div id="tafel">
+    <div id="rekenboek" data-ding="rekenboek">
+      <div class="blad links"><h3>Voorraad</h3><div class="posten"></div></div>
+      <div class="blad rechts"><h3>Het dorp</h3><div class="posten"></div></div>
+    </div>
+    <div id="tafel-midden" class="tafel-rij">
+      <button id="bouwmenu-knop" class="ding" data-ding="bouwen"><img src="beelden/tafel/bouwen.png" alt="Het bouwplan"></button>
+      <button id="velden-knop" class="ding" data-ding="velden"><img src="beelden/tafel/velden.png" alt="De velden"></button>
+      <button id="wetten-knop" class="ding" data-ding="wetten"><img src="beelden/tafel/wetten.png" alt="Het wetboek"></button>
+      <button id="raadsman-knop" class="ding" data-ding="raadsman"><img src="beelden/tafel/raadsman.png" alt="De bel van de raadsman"></button>
+      <button id="brief-knop" class="ding wacht verborgen" data-ding="brief"><img src="beelden/tafel/brief.png" alt="Een brief van de heer"></button>
+      <button id="rapport-knop" class="ding wacht verborgen" data-ding="rapport"><img src="beelden/tafel/rapport.png" alt="Het rapport"></button>
+      <button id="zaak-knop" class="ding verborgen" data-ding="zaak"><img src="beelden/tafel/zaak.png" alt="De zaak"></button>
+      <button id="bode-knop" class="ding verborgen" data-ding="bode"><img src="beelden/tafel/bode.png" alt="De inktpot van de bode"></button>
+    </div>
+    <div id="tafel-rechts" class="tafel-rij">
+      <button id="sluip-knop" class="ding" data-ding="lantaarn"><img src="beelden/tafel/lantaarn-aan.png" alt="De lantaarn"></button>
+      <button id="slaap-knop" class="ding uit" data-ding="kaars"><img src="beelden/tafel/kaars-uit.png" alt="De kaars"></button>
+      <div id="snelheid">
+        <button id="zandloper" class="ding" data-ding="zandloper"><img src="beelden/tafel/zandloper.png" alt="De zandloper"></button>
+        <div id="kalender-knoppen" role="group" aria-label="Hoe snel de tijd gaat">
+          <button data-snelheid="0" data-naam="Stil" data-uitleg="De tijd staat stil." data-toets="P">stil</button>
+          <button data-snelheid="1" data-naam="Gewoon" data-uitleg="Een dag duurt vijf minuten.">1×</button>
+          <button data-snelheid="3" data-naam="Drie keer zo snel" data-uitleg="Een jaar duurt tien uur.">3×</button>
+          <button data-snelheid="10" data-naam="Tien keer zo snel" data-uitleg="Een jaar duurt drie uur.">10×</button>
+          <button data-snelheid="30" data-naam="Dertig keer zo snel" data-uitleg="Een jaar duurt een uur.">30×</button>
+        </div>
+      </div>
+      <div class="ding verborgen" data-ding="gunst"><img src="beelden/tafel/gunst.png" alt="Het zegel van de heer"><span class="getal">50</span></div>
+      <div class="ding verborgen" data-ding="vertrouwen"><img src="beelden/tafel/vertrouwen.png" alt="De hoed van het dorp"><span class="getal">50</span></div>
+    </div>
+    <div id="wenk" class="verborgen" aria-live="polite"></div>
   </div>
 
   <!-- Het bouwmenu (js/hud.js, T.ui.toonBouwmenu): de soorten van de huidige trede, met hun
@@ -223,6 +244,7 @@
   <script src="js/anim.js"></script>
   <script src="js/ui.js"></script>
   <script src="js/hud.js"></script>
+  <script src="js/tafel.js"></script>
   <script src="js/huisbriefje.js"></script>
   <script src="js/brieven.js"></script>
   <script src="js/wettenmenu.js"></script>

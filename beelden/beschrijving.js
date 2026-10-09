@@ -5489,6 +5489,75 @@
      "grijs",
      "peper"
     ]
+   },
+   "tafel": {
+    "map": "tafel/",
+    "hout": [
+     2048,
+     150
+    ],
+    "dingen": {
+     "bouwen": [
+      100,
+      68
+     ],
+     "velden": [
+      92,
+      68
+     ],
+     "wetten": [
+      84,
+      68
+     ],
+     "raadsman": [
+      56,
+      68
+     ],
+     "brief": [
+      84,
+      60
+     ],
+     "rapport": [
+      92,
+      44
+     ],
+     "zaak": [
+      84,
+      68
+     ],
+     "bode": [
+      56,
+      76
+     ],
+     "lantaarn-aan": [
+      52,
+      76
+     ],
+     "lantaarn-uit": [
+      52,
+      76
+     ],
+     "kaars-aan": [
+      40,
+      72
+     ],
+     "kaars-uit": [
+      40,
+      72
+     ],
+     "zandloper": [
+      56,
+      80
+     ],
+     "gunst": [
+      64,
+      64
+     ],
+     "vertrouwen": [
+      64,
+      64
+     ]
+    }
    }
   };
 })(globalThis.Spel = globalThis.Spel || {});
