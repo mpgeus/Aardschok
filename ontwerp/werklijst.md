@@ -7125,6 +7125,10 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     steen met diepe, steile pannendaken, overstekken, dakkapellen, torentjes, scheve lijnen, verweerd pleister met steen
     erdoor, een stenen voet, warm licht met diepe schaduw onder het dak, en tonnen, kratten, lantaarns en planten om het
     huis.
+    **En nog twee (9 okt):** een plaat "Isometric Medieval Village" (ook AI): sober en echt, grijsbruin riet met mos,
+    veldsteen, oud hout, en om elk huis een eigen stuk grond (keien, vertrapte aarde, gras, een karrenwiel, kratten,
+    tonnen, een houtstapel); en een stuk van een dorp met een burcht in de stijl van Stronghold: aardse kleuren, niet fel,
+    vakwerk, luifels, bloembakken, en een duidelijke schaduw.
 
 145. **Het dorp leeft** (Marcel, 9 okt, na het spelen: "het voelt gewoon wat 'saai' in het dorp"). Claude zag op de
     eerste dag: iedereen is een kloon (één poppetje per leeftijd en geslacht: vier dezelfde meisjes op één scherm), de
