@@ -28,8 +28,11 @@ function scriptsVan(pagina) {
   return [...html.matchAll(/<script[^>]*\ssrc="([^"]+)"/g)].map((m) => path.join(map, m[1]).split(path.sep).join('/'));
 }
 
-// Laadt de bladzijde zonder wat alleen scherm is, en geeft de naamruimte terug.
+// Laadt de bladzijde zonder wat alleen scherm is, en geeft de naamruimte terug. De toetsen spelen in het Nederlands
+// (vraag 147, js/taal.js): zo bleef wat een toets van een tekst verwacht gelijk toen de teksten in de code Engels werden.
 function pagina(naam) {
+  globalThis.Spel = globalThis.Spel || {};
+  if (!globalThis.Spel.TAAL_GEZET) globalThis.Spel.TAAL_GEZET = 'nl';
   for (const s of scriptsVan(naam)) if (!ALLEEN_SCHERM.includes(s)) require(path.join(WORTEL, s));
   return globalThis.Spel;
 }

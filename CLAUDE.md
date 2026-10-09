@@ -17,7 +17,10 @@ Alliance 2). Dat bleef over van het spel dat het tot 23 sep was, De laatste klim
 een toren); de rest ervan ging er op 25 en 26 sep uit (werklijst, punt 7). De afspraken van dat
 spel staan in `git show 0eb8269:CLAUDE.md`.
 
-Code, commentaar en spelteksten zijn Nederlands, zoals in Marcels Planner.
+Code en commentaar zijn Nederlands, zoals in Marcels Planner. **De spelteksten worden Engels, met Nederlands als vertaling**
+(Marcel, 9 okt, vraag 147: "We moeten alles naar het Engels halen"; de schout heet *reeve*): een zin die de speler ziet, is
+`T.t('Engelse zin met {wie}', { wie })` (`js/taal.js`), met het Nederlands in `taal/nl.js`, en daarna `npm run teksten`. Wat
+nog niet om is, staat nog in het Nederlands in de code (stap 2 van vraag 147, na de ui).
 
 ## Kennis over het spel: lees alleen wat je nodig hebt
 
@@ -157,6 +160,11 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
 - `npm run maker` legt gehuchten met de maker (`js/maker.js`, `T.maakGehucht(zaad)`: elk spel een ander gehucht, vraag
   69 en 70) en tekent ze als plattegrond naast het ontworpen gehucht, in `gereedschap/maker/uit/` (niet in git);
   `-- 7 12` voor andere zaden.
+- `npm run teksten` leest elke `T.t('…')` uit `js/` en schrijft `taal/bron.js` (de lijst voor de vertaaltool), en zegt per taal
+  in `taal/` wat ontbreekt, wat over is en wat niet past (`gereedschap/teksten.cjs`; vraag 147). Draai het na elke zin die
+  erbij komt of verandert; `test/taal.test.cjs` faalt anders. **De vertaaltool** is `gereedschap/vertalen.html` (voor de
+  community, dus in het Engels, en ook zonder server: wat je vertaalt, bewaart de browser, en het spel in dezelfde browser
+  kent het); op onze server schrijft Opslaan `taal/<code>.js`.
 - `npm run pixelart` rendert alle HD-pixel art naar `gereedschap/pixelart/uit/` (niet in git).
 - `npm run pixelart:spel` zet daaruit alleen wat het spel tekent in `beelden/` (wél in git,
   want het spel heeft het nodig als het draait), met de cellen van de figuren gekrompen tot wat erin staat
@@ -229,6 +237,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `test/dorpen.test.cjs` zet twee dorpen naast elkaar (jouw gehucht en een van de maker): een jaar van het ene laat het
   andere letter voor letter ongemoeid.
 
+- `js/taal.js`: **de taal** (vraag 147, 9 okt): `T.t('Engelse zin', woorden)` geeft de zin in de taal van nu; de Engelse zin is
+  de sleutel, en een taal in `taal/` (`Spel.taal({ code, naam, locale, zinnen })`, gegevens, geen code) zegt wat hij erin is.
+  Het eerste argument is altijd een gewone tekst (geen variabele of sjabloon), zodat `npm run teksten` hem leest. In een
+  zin: `{wie}`, het meervoud `{n|# man|# men}` (de vormen van de taal, `T.meervoudsVormen`) en een keuze
+  `{g|man:he|vrouw:she}`. De taal ligt vast bij het laden (een tabel vraagt zijn zinnen dan al), dus een andere kiezen
+  (Taal op het titelscherm, `T.kiesTaal`) herlaadt; `?taal=nl` in het adres gaat voor. De toetsen spelen in het Nederlands
+  (`test/laad.cjs`). Een taal uit de community staat in de browser (`T.EIGEN_TALEN_SLEUTEL`). Wat er mis is aan een
+  vertaling, zegt `T.keurVertaling`. Omgezet zijn: `js/menu.js` (`OMGEZET` in `test/taal.test.cjs`).
 - `js/naam.js`: de naam van het spel (`T.NAAM`), op één plek, want hij verandert nog (Marcel, 28 sep); een
   titel schrijft `{naam}`. De sleutel waaronder de browser iets bewaart (`T.OPSLAG_SLEUTEL`) staat ernaast en
   verandert nooit mee. `test/naam.test.cjs` bewaakt dat de naam nergens anders staat. `T.STAND` is leeg, behalve in

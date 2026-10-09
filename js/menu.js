@@ -1,7 +1,7 @@
 // Het titelscherm en het menu (werklijst punt 3, vraag 48; Marcel, 28 sep: "Auto opslaan, maar ook zelf kunnen
 // kiezen. Er moet ook een menu komen titel scherm etc", en op het plan: "A ja B ja C ja D ja").
 //
-// Het spel opent op het titelscherm: de naam, en Verder, Nieuw spel, Laden en Spelregels. Achter het scherm
+// Het spel opent op het titelscherm: de naam, en Verder, Nieuw spel, Laden, Spelregels en Taal (vraag 147). Achter het scherm
 // wacht een nieuw spel, stil, en de camera glijdt langzaam rond het plein (js/main.js, T.titelCamera). In
 // het spel opent Esc, of de knop Menu, het menu: Verder spelen, Opslaan, Laden, Spelregels en Naar het
 // titelscherm. Allebei zetten ze de tijd stil ('titel' en 'menu'). De regels van opslaan en laden staan in
@@ -26,24 +26,30 @@
 
   // ── Hoe een bewaard spel heet ──
 
-  const naamVanPlek = (plek) => (plek === 'auto' ? 'Vanzelf bewaard' : `Plek ${plek}`);
+  const naamVanPlek = (plek) => (plek === 'auto' ? T.t('Autosave') : T.t('Slot {plek}', { plek }));
 
   // Wanneer, in echte tijd: "vandaag 21:40", "gisteren 9:12", of "27 sep 14:03".
   function wanneer(ms) {
     if (!ms) return '';
     const d = new Date(ms);
-    const tijd = d.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
+    const tijd = d.toLocaleTimeString(T.taalLocale(), { hour: '2-digit', minute: '2-digit' });
     const middernacht = (x) => new Date(x.getFullYear(), x.getMonth(), x.getDate()).getTime();
     const dagen = Math.round((middernacht(new Date()) - middernacht(d)) / 86400000);
-    if (dagen === 0) return `vandaag ${tijd}`;
-    if (dagen === 1) return `gisteren ${tijd}`;
-    return `${d.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short' })} ${tijd}`;
+    if (dagen === 0) return T.t('today {tijd}', { tijd });
+    if (dagen === 1) return T.t('yesterday {tijd}', { tijd });
+    return `${d.toLocaleDateString(T.taalLocale(), { day: 'numeric', month: 'short' })} ${tijd}`;
   }
 
   // Een bewaard spel in één regel: hoe het dorp heet, de dag in het spel, hoe laat, hoeveel mensen, en wanneer je
   // opsloeg. Een spel van vóór 29 sep heeft geen naam.
   const beschrijf = (kop) =>
-    `${kop.naam ? `${kop.naam} · ` : ''}${T.datumVanDag(kop.dag).tekst}, ${T.uurTekst(kop.dag)} · ${kop.bevolking} mensen · ${wanneer(kop.bewaardOm)}`;
+    `${kop.naam ? `${kop.naam} · ` : ''}` +
+    T.t('{datum}, {uur} · {n|# person|# people} · {wanneer}', {
+      datum: T.datumVanDag(kop.dag).tekst,
+      uur: T.uurTekst(kop.dag),
+      n: kop.bevolking,
+      wanneer: wanneer(kop.bewaardOm),
+    });
 
   // ── Wat er te zien is ──
 
@@ -59,18 +65,19 @@
     if (scherm === 'titel') {
       const nieuwste = spellen.find((s) => !s.reden);
       return (
-        (nieuwste ? knop('verder', 'Verder', { uitleg: beschrijf(nieuwste.kop), hoofd: true }) : '') +
-        knop('nieuw', 'Nieuw spel', { hoofd: !nieuwste }) +
-        (spellen.length ? knop('laden', 'Laden') : '') +
-        knop('spelregels', 'Spelregels')
+        (nieuwste ? knop('verder', T.t('Continue'), { uitleg: beschrijf(nieuwste.kop), hoofd: true }) : '') +
+        knop('nieuw', T.t('New game'), { hoofd: !nieuwste }) +
+        (spellen.length ? knop('laden', T.t('Load')) : '') +
+        knop('spelregels', T.t('Game rules')) +
+        knop('taal', T.t('Language'), { uitleg: T.TALEN[T.taalNu()].naam })
       );
     }
     return (
-      knop('verder', 'Verder spelen', { hoofd: true }) +
-      knop('opslaan', 'Opslaan', { uit: T.waaromNietOpslaan(S) }) +
-      knop('laden', 'Laden', { uit: spellen.length ? null : 'Er is nog niets bewaard.' }) +
-      knop('spelregels', 'Spelregels') +
-      knop('titel', 'Naar het titelscherm')
+      knop('verder', T.t('Resume'), { hoofd: true }) +
+      knop('opslaan', T.t('Save'), { uit: T.waaromNietOpslaan(S) }) +
+      knop('laden', T.t('Load'), { uit: spellen.length ? null : T.t('Nothing has been saved yet.') }) +
+      knop('spelregels', T.t('Game rules')) +
+      knop('titel', T.t('To the title screen'))
     );
   }
 
@@ -83,8 +90,14 @@
         .filter((plek) => plek !== 'auto')
         .map((plek) => {
           const s = spellen.find((x) => x.plek === plek);
-          return knop('bewaar', naamVanPlek(plek), { plek, uitleg: s ? (s.reden ? s.reden : beschrijf(s.kop)) : 'leeg' });
+          return knop('bewaar', naamVanPlek(plek), { plek, uitleg: s ? (s.reden ? s.reden : beschrijf(s.kop)) : T.t('empty') });
         })
+        .join('');
+    }
+    if (lijst === 'taal') {
+      // Elke taal in zijn eigen naam, want wie de taal van nu niet leest, moet de zijne toch vinden.
+      return T.talen()
+        .map((t) => knop('kiestaal', veilig(t.naam), { plek: t.code, hoofd: t.code === T.taalNu(), uitleg: t.eigen ? T.t('your own translation') : '' }))
         .join('');
     }
     return spellen.map((s) => knop('laad', naamVanPlek(s.plek), { plek: s.plek, uitleg: beschrijf(s.kop), uit: s.reden })).join('');
@@ -92,21 +105,24 @@
 
   function inhoud(S) {
     let midden;
-    if (vraag) midden = `<p class="menu-vraag">${veilig(vraag.tekst)}</p>` + knop('ja', vraag.ja, { hoofd: true }) + knop('terug', 'Terug');
+    if (vraag) midden = `<p class="menu-vraag">${veilig(vraag.tekst)}</p>` + knop('ja', vraag.ja, { hoofd: true }) + knop('terug', T.t('Back'));
     else if (naamVoorstel != null) {
       // Het land (vraag 112, a): zijn nummer, om een land dat je mooi vond opnieuw te spelen, en een ander land.
       const land = landNu(S);
       midden =
-        `<label class="menu-kop" for="dorpsnaam">Hoe heet je dorp?</label>` +
+        `<label class="menu-kop" for="dorpsnaam">${T.t('What is your village called?')}</label>` +
         `<input id="dorpsnaam" class="menu-invoer" type="text" maxlength="24" autocomplete="off" spellcheck="false" value="${veilig(naamNu != null ? naamNu : naamVoorstel)}">` +
         (land != null
-          ? `<label class="menu-kop" for="landzaad">Het land</label>` +
+          ? `<label class="menu-kop" for="landzaad">${T.t('The land')}</label>` +
             `<div class="menu-land"><input id="landzaad" class="menu-invoer" type="text" inputmode="numeric" maxlength="5" autocomplete="off" spellcheck="false" value="${land}">` +
-            `<button class="menu-knop" data-actie="anderland" title="Een ander land, uit een nieuw nummer"><span>Ander land</span></button></div>`
+            `<button class="menu-knop" data-actie="anderland" title="${T.t('Another land, from a new number')}"><span>${T.t('Other land')}</span></button></div>`
           : '') +
-        knop('begin', 'Begin', { hoofd: true }) + knop('terug', 'Terug');
+        knop('begin', T.t('Begin'), { hoofd: true }) + knop('terug', T.t('Back'));
     }
-    else if (lijst) midden = `<p class="menu-kop">${lijst === 'opslaan' ? 'Opslaan op' : 'Laden van'}</p>` + plekKnoppen() + knop('terug', 'Terug');
+    else if (lijst) {
+      const kop = { opslaan: T.t('Save to'), laden: T.t('Load from'), taal: T.t('Language') }[lijst];
+      midden = `<p class="menu-kop">${kop}</p>` + plekKnoppen() + knop('terug', T.t('Back'));
+    }
     else midden = hoofdKnoppen(S);
     const bericht = melding ? `<p class="menu-melding">${veilig(melding)}</p>` : '';
     if (scherm === 'titel') {
@@ -116,8 +132,8 @@
     const dag = S.kalender ? T.datumVanDag(S.kalender.dag).tekst : '';
     return (
       `<div class="paneel menu-venster">` +
-      `<div class="venster-kop"><span class="venster-titel">Menu</span><span class="venster-wanneer">${dag}</span>` +
-      `<button class="venster-sluit" data-actie="verder" title="Sluiten (Esc)">✕</button></div>` +
+      `<div class="venster-kop"><span class="venster-titel">${T.t('Menu')}</span><span class="venster-wanneer">${dag}</span>` +
+      `<button class="venster-sluit" data-actie="verder" title="${T.t('Close (Esc)')}">✕</button></div>` +
       `<div class="menu-knoppen">${bericht}${midden}</div></div>`
     );
   }
@@ -240,12 +256,12 @@
       return;
     }
     sluit(S);
-    T.ui.bericht(`${naamVanPlek(plek)} geladen: ${T.datumVanDag(r.kop.dag).tekst}.`, 'goed');
+    T.ui.bericht(T.t('{plek} loaded: {datum}.', { plek: naamVanPlek(plek), datum: T.datumVanDag(r.kop.dag).tekst }), 'goed');
   }
 
   function bewaar(S, plek) {
     const r = T.slaOp(S, plek);
-    melding = r.gelukt ? `Opgeslagen op ${naamVanPlek(plek).toLowerCase()}.` : r.reden;
+    melding = r.gelukt ? T.t('Saved to slot {plek}.', { plek }) : r.reden;
     lijst = null;
     toon(S);
   }
@@ -270,8 +286,8 @@
       // Wie een nieuw spel begint, overschrijft straks wat er vanzelf bewaard is; zijn eigen plekken niet.
       if (T.opgeslagenSpellen().some((s) => s.plek === 'auto')) {
         vraag = {
-          tekst: 'Een nieuw spel beginnen? Wat er vanzelf bewaard is, wordt dan overschreven. Je eigen plekken blijven.',
-          ja: 'Nieuw spel',
+          tekst: T.t('Start a new game? The autosave will be overwritten. Your own slots stay.'),
+          ja: T.t('New game'),
           doe: () => kiesNaam(S),
         };
       } else {
@@ -281,14 +297,17 @@
       return begin(S);
     } else if (actie === 'anderland') {
       naarLand(S, T.nieuwLandZaad());
-    } else if (actie === 'opslaan' || actie === 'laden') {
+    } else if (actie === 'opslaan' || actie === 'laden' || actie === 'taal') {
       lijst = actie;
+    } else if (actie === 'kiestaal') {
+      if (plek !== T.taalNu()) return T.kiesTaal(plek); // de bladzijde herlaadt (js/taal.js)
+      lijst = null;
     } else if (actie === 'spelregels') {
       return T.ui.openSpelregels(S); // over het menu heen; dicht is weer het menu
     } else if (actie === 'titel') {
       vraag = {
-        tekst: 'Naar het titelscherm? Wat je sinds het laatste opslaan deed, ben je kwijt.',
-        ja: 'Naar het titelscherm',
+        tekst: T.t('Back to the title screen? Anything since your last save will be lost.'),
+        ja: T.t('To the title screen'),
         doe: () => {
           sluit(S);
           T.naarTitelscherm();
@@ -298,14 +317,14 @@
       const s = T.opgeslagenSpellen().find((x) => x.plek === plek);
       if (!s) return bewaar(S, plek);
       vraag = {
-        tekst: `${naamVanPlek(plek)} overschrijven? Daar staat nu ${s.reden ? 'een spel dat niet meer past' : beschrijf(s.kop)}.`,
-        ja: 'Overschrijven',
+        tekst: T.t('Overwrite {plek}? It now holds {wat}.', { plek: naamVanPlek(plek), wat: s.reden ? T.t('a game that no longer fits') : beschrijf(s.kop) }),
+        ja: T.t('Overwrite'),
         doe: () => bewaar(S, plek),
       };
     } else if (actie === 'laad') {
       // Midden in een spel eerst vragen; op het titelscherm is er nog niets om kwijt te raken.
       if (scherm === 'titel') return laad(S, plek);
-      vraag = { tekst: 'Dit spel laden? Wat je sinds het laatste opslaan deed, ben je kwijt.', ja: 'Laden', doe: () => laad(S, plek) };
+      vraag = { tekst: T.t('Load this game? Anything since your last save will be lost.'), ja: T.t('Load'), doe: () => laad(S, plek) };
     }
     toon(S);
   }
@@ -351,7 +370,7 @@
     if (!r.gelukt) {
       if (fout !== r.reden) {
         fout = r.reden;
-        T.ui.bericht(`Het spel kon niet vanzelf opslaan: ${r.reden}`, 'gevaar');
+        T.ui.bericht(T.t('The game could not autosave: {reden}', { reden: r.reden }), 'gevaar');
       }
       return;
     }

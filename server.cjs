@@ -9,6 +9,8 @@ const { execFile } = require('node:child_process');
 // De naam van het spel staat op één plek (js/naam.js); de server leest hem daar, net als de toetsen.
 require('./js/naam.js');
 const NAAM = globalThis.Spel.NAAM;
+// En de taal (vraag 147): hoe een taalbestand eruitziet, voor de vertaaltool.
+require('./js/taal.js');
 
 const MAP = __dirname;
 const POORT = Number(process.env.PORT) || 8123;
@@ -150,6 +152,33 @@ function slaSchermafdrukOp(req, res, naam) {
         res.end(JSON.stringify(fout ? { ok: false, fout: fout.message } : { ok: true, bestand }));
       });
     });
+  });
+}
+
+// Een taal uit de vertaaltool (gereedschap/vertalen.html, vraag 147) bewaren als taal/<code>.js. De code moet een
+// taalcode zijn (T.isTaalCode, nooit Engels: dat is de bron), en de server schrijft het bestand zelf uit de gegevens
+// (T.leesTaalBestand en T.schrijfTaalBestand), dus er komt nooit code uit het verzoek in. Het oude ernaast als .bak.
+// Een nieuwe taal moet daarna in index.html en gereedschap/vertalen.html (test/taal.test.cjs zegt het).
+function slaTaalOp(req, res, code) {
+  const T = globalThis.Spel;
+  if (!T.isTaalCode(code) || code === T.BRONTAAL.code) return stuurJson(res, 400, { ok: false, fout: 'Ongeldige taalcode' });
+  leesLijf(req, res, (body) => {
+    let def;
+    try {
+      def = T.leesTaalBestand(body);
+    } catch (e) {
+      return stuurJson(res, 400, { ok: false, fout: e.message });
+    }
+    if (def.code !== code) return stuurJson(res, 400, { ok: false, fout: 'De code past niet bij het adres' });
+    const bestand = path.join(MAP, 'taal', code + '.js');
+    const nieuw = !fs.existsSync(bestand);
+    try {
+      if (!nieuw) fs.copyFileSync(bestand, bestand + '.bak');
+      fs.writeFileSync(bestand, T.schrijfTaalBestand(def), 'utf8');
+    } catch (e) {
+      return stuurJson(res, 500, { ok: false, fout: e.message });
+    }
+    stuurJson(res, 200, { ok: true, nieuw, bestand: 'taal/' + code + '.js' });
   });
 }
 
@@ -353,6 +382,10 @@ http
       slaBetekenisOp(req, res, pad.slice('/gereedschap/api/betekenis/'.length));
       return;
     }
+    if (req.method === 'POST' && pad.startsWith('/gereedschap/api/taal/')) {
+      slaTaalOp(req, res, pad.slice('/gereedschap/api/taal/'.length));
+      return;
+    }
     if (req.method === 'POST' && pad.startsWith('/gereedschap/api/schermafdruk/')) {
       slaSchermafdrukOp(req, res, pad.slice('/gereedschap/api/schermafdruk/'.length));
       return;
@@ -388,6 +421,7 @@ http
     console.log(`  de gesprekken  ${hier}/gereedschap/gesprekken.html`);
     console.log(`  de quests      ${hier}/gereedschap/quests.html`);
     console.log(`  de getallen    ${hier}/gereedschap/instellingen.html  alle getallen, spelregels en gebouwen`);
+    console.log(`  vertalen       ${hier}/gereedschap/vertalen.html      de spelteksten in een andere taal`);
     console.log('');
     console.log(`  alles bij elkaar: ${hier}/gereedschap/index.html`);
   });

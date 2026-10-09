@@ -35,7 +35,8 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
    **Nu c, de tafel, in een nieuwe sessie** (wat er moet, staat bij vraag 146), dan d en e.
    **Bezig in sessie `main` (desktop)** (9 okt): vraag 146, c, de tafel onderin.
 0b. Engels en een vertaaltool (vraag 147; Marcel, 9 okt): de basis nu, naast de ui; het omzetten van alle tekst na de
-   ui en vóór de proefversie. **Bezig in sessie `vertalen`** (9 okt): stap 1, de basis en de tool.
+   ui en vóór de proefversie. Stap 1 (de basis, de tool, het menu als proef) is gebouwd op branch `vertalen` en wacht
+   op Marcel om in `main` te komen; stap 2, het omzetten, na de ui.
 1. Een proefversie voor Marcels 4K-scherm en een eerste tester (33d; `npm run proefversie`, ook `-- --windows`), met de
    graanzak erin. De laatste is van 3 okt (`36c713e`), zonder de verzoeken, de twee bazen, het ontginnen, de markt, de
    wolven, het eiland, WebGL en de graanzak.
@@ -7290,6 +7291,23 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     (Electron) leest talen uit een map `talen/` naast het spel. Klaar als: het spel in het Engels en het Nederlands
     speelt zonder één zin in de andere taal, `npm test` dat bewaakt, en iemand zonder onze code met de tool een taal kan
     maken en in het spel zien.
+    **Stap 1 gebouwd (9 okt, branch `vertalen`):** `js/taal.js` (`T.t`, het meervoud en de keuze, de taalkeuze, een taal als
+    gegevens), `taal/nl.js`, `npm run teksten` (`gereedschap/teksten.cjs`, dat `taal/bron.js` schrijft), de vertaaltool
+    (`gereedschap/vertalen.html`, in het Engels; met onze server schrijft Opslaan `taal/<code>.js`, zonder bewaart de
+    browser het en kent het spel in dezelfde browser de taal meteen; Download en Open voor een bestand om te delen), een
+    adres op de server (`/gereedschap/api/taal/<code>`, dat het bestand zelf uit de gegevens schrijft), en
+    `test/taal.test.cjs`. Als proef is het titelscherm met het menu om (`js/menu.js`, 35 zinnen), met Taal op het
+    titelscherm. Nagelopen in de browser: Nederlands en Engels, een Duitse taal uit de tool in het spel, en de server die
+    een verkeerde code, Engels of code in plaats van gegevens weigert.
+    **Voor stap 2, het omzetten (na de ui):** bestand voor bestand, en elk bestand dat af is, in `OMGEZET` in
+    `test/taal.test.cjs`; de toetsen spelen in het Nederlands, dus zolang ze groen blijven, zegt het spel in het Nederlands
+    hetzelfde als ervoor. Nog te kiezen als het zover is: de tekst in `index.html` (een `data-t` op het element, dat
+    `js/taal.js` vertaalt), de gesprekken (de gespreksschrijver schrijft `js/gesprekken.js` zelf, dus de tekst daar wordt
+    misschien in de tabel gelezen in plaats van met `T.t`), en de datum (`js/tijd.js`: de maandnamen). De lezer ziet geen
+    los woord zonder hoofdletter ("leeg", de maanden): daarvoor een proef in de browser met een nep-taal die elke zin
+    markeert, zodat wat ongemarkeerd blijft, nog niet om is. Wat de speeltest aan tekst leest, krijgt `?taal=nl`. Het
+    grootste werk: de gesprekken (4.800 woorden), de spelregels (4.600), de balk en de tafel. Later (stap 4): de tool
+    ook in het spel onder het menu, en een map `talen/` naast het spel in Electron (`verpakken.md`).
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

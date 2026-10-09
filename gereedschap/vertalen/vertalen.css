@@ -1,0 +1,43 @@
+/* De vertaaltool (gereedschap/vertalen.html, vraag 147). */
+body { margin: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+.verborgen { display: none !important; }
+.vt-kop {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  padding: 10px 16px; border-bottom: 1px solid var(--rand); background: var(--paneel); font-size: 14px;
+}
+.vt-titel { font-family: var(--kop); font-size: 17px; color: var(--gedempt); }
+.vt-titel a { color: var(--gedempt); }
+.vt-titel strong { color: var(--goud); font-weight: normal; }
+#vt-zoek { flex: 1; min-width: 200px; padding: 6px 10px; font-size: 14px; }
+.vt-ruimte { flex: 0 0 4px; }
+.vt-knop { cursor: pointer; padding: 4px 10px; border: 1px solid var(--rand); border-radius: 4px; }
+.vt-knop:hover { border-color: var(--goud); }
+.vt-stand { padding: 6px 16px; font-size: 13px; color: var(--gedempt); border-bottom: 1px solid var(--rand); }
+.vt-stand strong { color: var(--inkt); font-weight: normal; }
+.vt-stand .vt-let { color: var(--goud); }
+
+.vt-raam { flex: 1; display: flex; min-height: 0; }
+.vt-lijst { width: 240px; overflow-y: auto; border-right: 1px solid var(--rand); padding: 8px 0; font-size: 13.5px; }
+.vt-lijst a { display: flex; justify-content: space-between; gap: 8px; padding: 4px 16px; color: var(--inkt); text-decoration: none; cursor: pointer; }
+.vt-lijst a:hover, .vt-lijst a.vt-hier { background: rgba(226, 182, 74, 0.12); color: var(--goud); }
+.vt-lijst a span { color: var(--gedempt); font-size: 12px; }
+.vt-lijst a span.vt-klaar { color: var(--groen); }
+
+.vt-inhoud { flex: 1; overflow-y: auto; padding: 8px 24px 80px; }
+.vt-rij {
+  display: grid; grid-template-columns: minmax(220px, 1fr) minmax(260px, 1.2fr); gap: 4px 20px; align-items: start;
+  padding: 10px 8px; border-bottom: 1px solid var(--rand);
+}
+.vt-rij.vt-mist { background: rgba(226, 182, 74, 0.05); }
+.vt-bron { font-size: 15px; color: var(--inkt); white-space: pre-wrap; word-break: break-word; }
+.vt-woord { color: var(--goud); font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 13px; }
+.vt-waar { display: block; margin-top: 3px; font-size: 12px; color: var(--gedempt); }
+.vt-rij textarea {
+  width: 100%; box-sizing: border-box; min-height: 2.2em; resize: vertical; font: inherit; font-size: 15px; padding: 4px 6px;
+}
+.vt-fout { grid-column: 2; font-size: 12.5px; color: var(--rood); }
+.vt-voorstel { grid-column: 2; font-size: 12.5px; color: var(--gedempt); }
+.vt-voorstel button { font-size: 12px; margin-left: 6px; }
+.vt-meer { margin: 16px 8px; }
+.vt-deel { font-family: var(--kop); font-weight: normal; color: var(--goud); font-size: 19px; margin: 18px 0 4px; }
+.vt-uitleg { font-size: 13px; color: var(--gedempt); max-width: 900px; margin: 4px 0 10px; }

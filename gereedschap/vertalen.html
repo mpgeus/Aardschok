@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{naam} · translate</title>
+  <!-- De vertaaltool (vraag 147): voor wie uit de community een taal maakt, dus in het Engels. Hij werkt ook los
+       geopend (file://) en zonder onze server: de zinnen komen uit taal/bron.js (npm run teksten), de talen uit
+       taal/*.js, en wat je vertaalt, bewaart de browser; met onze server schrijft Opslaan meteen taal/<code>.js. -->
+  <script src="../js/naam.js"></script>
+  <script src="../js/taal.js"></script>
+  <script src="../taal/nl.js"></script>
+  <script src="../taal/bron.js"></script>
+  <link rel="stylesheet" href="../stijl.css">
+  <link rel="stylesheet" href="vertalen/vertalen.css">
+</head>
+<body>
+  <header class="vt-kop">
+    <div class="vt-titel"><a href="index.html">tools</a> › <strong>Translate</strong></div>
+    <label>Language <select id="vt-taal"></select></label>
+    <button id="vt-nieuw" type="button">New language…</button>
+    <input id="vt-zoek" type="search" placeholder="Search the source or your translation…" autocomplete="off">
+    <select id="vt-filter">
+      <option value="alles">All sentences</option>
+      <option value="ontbreekt">Not translated yet</option>
+      <option value="fout">Has a problem</option>
+      <option value="af">Translated</option>
+    </select>
+    <span class="vt-ruimte"></span>
+    <button id="vt-opslaan" type="button" class="verborgen" title="Write the language file in taal/ (only on the development server)">Save to taal/</button>
+    <button id="vt-download" type="button" title="Save the language as a file, to share it">Download file</button>
+    <label class="vt-knop" title="Open a language file someone shared">Open file…<input id="vt-open" type="file" accept=".js,.json" hidden></label>
+    <button id="vt-spelen" type="button" title="Open the game in this language, with what you translated so far">Play in this language</button>
+  </header>
+  <div id="vt-stand" class="vt-stand"></div>
+  <div class="vt-raam">
+    <nav id="vt-lijst" class="vt-lijst"></nav>
+    <main id="vt-inhoud" class="vt-inhoud"></main>
+  </div>
+  <script src="vertalen/pagina.js"></script>
+</body>
+</html>
