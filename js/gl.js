@@ -399,6 +399,31 @@
     Object.assign(masker, { b: doek.width, h: doek.height });
     return masker;
   }
+  // De silhouetten worden samen één vlak op het masker, dus de volgorde doet er niet toe: ze gaan per textuur in één
+  // opdracht (legSchaduwenAf), niet in de volgorde van de tekenlijst, waarin bijna elk plaatje een andere textuur heeft
+  // (een vel per tekening, js/sprites.js). Zo kostten de schaduwen evenveel opdrachten als het hele beeld (Marcel, 9 okt:
+  // "performance op fullscreen is ook ondermaats").
+  const schaduwRijen = new Map(); // textuur → [x, y, u, v, r, g, b, a, ...] per hoek
+  function schaduwVierhoek(tex, p, uv, al) {
+    let rij = schaduwRijen.get(tex);
+    if (!rij) schaduwRijen.set(tex, (rij = []));
+    for (const [i, u, v] of [[0, 0, 1], [2, 2, 1], [4, 0, 3], [2, 2, 1], [6, 2, 3], [4, 0, 3]]) rij.push(p[i], p[i + 1], uv[u], uv[v], 0, 0, 0, al);
+  }
+  function legSchaduwenAf() {
+    legRijAf();
+    const per = Math.floor(hoeken.length / (6 * PER_HOEK)) * 6 * PER_HOEK; // zoveel getallen past er in één keer in de rij
+    for (const [tex, rij] of schaduwRijen) {
+      for (let i = 0; i < rij.length; i += per) {
+        const stuk = rij.slice(i, i + per);
+        hoeken.set(stuk);
+        aantal = stuk.length / PER_HOEK;
+        rijTextuur = tex;
+        rijMeng = 'source-over';
+        legRijAf();
+      }
+    }
+    schaduwRijen.clear();
+  }
   // Een vlak over het hele doek met een programma dat zijn kleur uit de plek op het scherm haalt.
   function overHetDoek(prog) {
     const w = doek.width;
@@ -622,8 +647,14 @@
           p.push(m[0] * gx + m[2] * gy + m[4], m[1] * gx + m[3] * gy + m[5]);
         }
         const al = this.st.alpha;
-        plekVoor(t.tex, 'source-over', 6);
-        vierhoek(p, [sx / t.b, sy / t.h, (sx + sw) / t.b, (sy + sh) / t.h], [0, 0, 0, al]);
+        const uv = [sx / t.b, sy / t.h, (sx + sw) / t.b, (sy + sh) / t.h];
+        // Een doek zonder versie wordt per keer opnieuw beschreven (textuurVan): dat meteen, de rest per textuur.
+        const blijft = typeof HTMLCanvasElement === 'undefined' || !(bron instanceof HTMLCanvasElement) || bron.versie !== undefined;
+        if (blijft) schaduwVierhoek(t.tex, p, uv, al);
+        else {
+          plekVoor(t.tex, 'source-over', 6);
+          vierhoek(p, uv, [0, 0, 0, al]);
+        }
         return;
       }
       if (this.snel()) {
@@ -841,7 +872,7 @@
       this.schaduw = { sx, sy };
     }
     eindSchaduw(dekking, kleur) {
-      legRijAf();
+      legSchaduwenAf();
       this.schaduw = null;
       gl.bindFramebuffer(gl.FRAMEBUFFER, null);
       gl.useProgram(schaduwProg.p);
