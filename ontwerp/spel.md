@@ -580,20 +580,24 @@ vonken, rook en een gloed die 's nachts de buurt verlicht. Met de emmers is het 
 van de 100 keer staan (bij brandgevaar minder); laat je het branden, dan is het een uur later afgebrand, en doet niemand
 iets, na zes uur. Wat afbrandt, is een zwarte ruïne met
 verkoolde balken zonder dak, die twee dagen smeult. Het gezin woont zolang bij de buren, en na drie dagen bouwt het zijn
-huis weer op, met de helft van het hout dat het kostte, in de bouwfasen; zonder hout wacht het.
+huis weer op, met de helft van het hout dat het kostte, in de bouwfasen; zonder hout wacht het. Bij groot brandgevaar, en
+als niemand blust, slaat het vuur de helft van de keren over op het dichtste huis binnen vijf tegels, als het eerste
+afbrandt; dat huis brandt ook af en wordt ook weer opgebouwd, en slaat zelf niet verder over (10 okt; Marcel: "Ja, zo").
 
 De koorts (`js/koorts.js`): begint met het voorval, bij wie het betreft en zijn gezin. Wie ziek is, ligt een week in bed
 en werkt niet, en steekt elke nacht soms een ander aan, vaker in een vol dorp en in de kou. Wat je antwoordde, telt: de
 put schoonmaken (minder dan de helft zo vaak), bier in plaats van water, of bidden (dan gaat ze haar gang). Een enkele
 keer sterft er iemand, de ouden en de kinderen vaker; wie het had, krijgt het deze keer niet weer. Zolang er iemand ziek
-is, is het de status Koorts, en Epidemie als een tiende van het dorp ziek is. De spelregels "Brand" en "Koorts".
+is, is het de status Koorts, en Epidemie als een tiende van het dorp ziek is. Naast de deur van een huis met een zieke
+staat een pestbos, een bos stro aan een paal, zolang er iemand ziek is (10 okt; alleen beeld). De spelregels "Brand" en
+"Koorts".
 
 Sneeuw blijft liggen: elke sneeuwdag legt er een derde bij, in de winter smelt er elke dag een twintigste af, en
 daarbuiten snel. Op de grond, de weides en de kale akkers ligt hij eerst in plukjes, en daarna helemaal wit; op een paadje
 minder, en op water niet.
 
-**Open** (vraag 144; Marcel, 9 okt: "Ja heel goed, dit moeten we pakken"): sneeuw op de daken. En
-wat Claude erbij zag: een brand die overslaat op het huis ernaast (bij groot brandgevaar), staat in `opmerkingen.md`.
+**Open** (vraag 144; Marcel, 9 okt: "Ja heel goed, dit moeten we pakken"): sneeuw op de daken. Wie er in een brandend
+huis is, en of de koorts verder een eigen beeld krijgt (iemand die hoest, een ziekbed), staat in `opmerkingen.md`.
 
 ## De bode naar de marskramer (Marcel, 9 okt 2026; werklijst vraag 143)
 

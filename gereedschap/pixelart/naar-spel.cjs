@@ -7,6 +7,7 @@
 //   node gereedschap/pixelart/naar-spel.cjs --alleen paaltje
 //   node gereedschap/pixelart/naar-spel.cjs --alleen meiboom
 //   node gereedschap/pixelart/naar-spel.cjs --alleen kerstboom
+//   node gereedschap/pixelart/naar-spel.cjs --alleen pestbos
 //   node gereedschap/pixelart/naar-spel.cjs --alleen hol
 //   node gereedschap/pixelart/naar-spel.cjs --alleen marktkraam
 //   node gereedschap/pixelart/naar-spel.cjs --alleen tekens
@@ -20,7 +21,7 @@
 // in git staat: in een verse kopie is het (bijna) leeg, en zonder --alleen bouwt dit script de
 // beschrijving opnieuw op uit wat daar staat — dan verdwijnen alle andere figuren uit het spel.
 // Een los vel dat hier zelf gerenderd wordt en niets uit uit/ nodig heeft (LOSSE_VELLEN: de
-// schandpaal, het paaltje, de meiboom, de kerstboom, het wolvenhol, de wijnrank, de marktkraam, de tekens met het papier en de tafel) kan ook met --alleen: dan wordt alleen dat vel gerenderd en alleen zijn
+// schandpaal, het paaltje, de meiboom, de kerstboom, de pestbos, het wolvenhol, de wijnrank, de marktkraam, de tekens met het papier en de tafel) kan ook met --alleen: dan wordt alleen dat vel gerenderd en alleen zijn
 // ingang gezet.
 //
 // Twee soorten werk:
@@ -40,6 +41,7 @@ const Schandpaal = require('./schandpaal.cjs');
 const Paaltje = require('./paaltje.cjs');
 const Meiboom = require('./meiboom.cjs');
 const Bomen = require('./bomen.cjs');
+const Pestbos = require('./pestbos.cjs');
 const Hol = require('./hol.cjs');
 const Wijnrank = require('./wijnrank.cjs');
 const Marktkraam = require('./marktkraam.cjs');
@@ -203,6 +205,15 @@ function kerstboom() {
   return { bestand: 'kerstboom.png', cel: [cel.b, cel.h], anker: [AX - x0, AY - y0] };
 }
 
+// ---------------------------------------------------------------- de pestbos
+//
+// Eén tekening: de bos stro aan een paal naast de deur van een huis met een zieke (pestbos.cjs; js/koorts.js, vraag 144,
+// 3). js/sprites.js zoekt hem op met S.pestbos() en legt zijn anker op de tegel.
+function pestbos() {
+  schrijf('pestbos.png', Pestbos.vel());
+  return Pestbos.beschrijving('pestbos.png');
+}
+
 // ---------------------------------------------------------------- het wolvenhol
 //
 // Eén tekening: het hol van een roedel wolven, een kuil onder een omgevallen boom met botten ervoor (hol.cjs,
@@ -255,7 +266,7 @@ function tafel() {
   return Tafel.schrijfNaar(path.join(BEELDEN, 'tafel'));
 }
 
-const LOSSE_VELLEN = { schandpaal, paaltje, meiboom, kerstboom, hol, wijnrank, marktkraam, tekens, tafel, uiterlijken };
+const LOSSE_VELLEN = { schandpaal, paaltje, meiboom, kerstboom, pestbos, hol, wijnrank, marktkraam, tekens, tafel, uiterlijken };
 
 // ---------------------------------------------------------------- kopiëren
 

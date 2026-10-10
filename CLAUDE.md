@@ -768,12 +768,15 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   bouwfasen zoals een huis dat doorgroeit (`v.inAanbouw` met `vanFase`). Het beeld in `js/tekenen.js`: vuurtongen over
   het dak, vonken en een gloed (`tekenVuur`, na de nacht), rook (`tekenRook`), licht (`T.brandLicht` in
   `T.lichtBronnen`), en de ruïne: de bouwfase `puinFase` van zijn tekening, verkoold (`puinVan`) en een paar dagen
-  smeulend (`T.smeult`, sintels). De spelregel "Brand"; de getallen in `T.BRAND_INSTELLINGEN`.
+  smeulend (`T.smeult`, sintels). Bij groot brandgevaar, als niemand blust, slaat het vuur soms over op het dichtste huis
+  ernaast als het eerste afbrandt (`T.slaatOver`, `overslaan`; één keer, `g.brand.overgeslagen`). De spelregel "Brand";
+  de getallen in `T.BRAND_INSTELLINGEN`.
 - `js/koorts.js`: **de koorts** (vraag 144, 3): het voorval `ziekte` is het begin (`T.tikKoortsDag`): wie het betreft en
   zijn gezin zijn ziek (`p.ziek`, de dag dat hij beter is, en `p.thuisTot`: in bed), elke nacht steekt een zieke soms een
   ander aan (`besmet`, maal `vol` en `kou`, maal wat je antwoordde: `doe.koorts` in procenten, `T.koortsMaatregel`), een
   enkele keer sterft iemand (`sterft` per leeftijd), en wie het had, krijgt het deze keer niet weer (`D.koorts.gehad`).
-  De status `koorts` in `T.OORZAKEN` (`T.koortsNiveau`: Koorts, en Epidemie als een tiende ziek is). De spelregel
+  De status `koorts` in `T.OORZAKEN` (`T.koortsNiveau`: Koorts, en Epidemie als een tiende ziek is). Naast de deur van
+  een huis met een zieke staat de pestbos (`T.pestbossen`, alleen beeld; `gereedschap/pixelart/pestbos.cjs`). De spelregel
   "Koorts"; de getallen in `T.KOORTS_INSTELLINGEN`.
 - `js/leven.js`: **ouder worden, geboren worden en sterven** (vraag 145, 9 okt; Marcel: "mensen moeten ook ouder kunnen
   worden", en "1. C 2. Ja 3. Ja"): elke bewoner heeft een geboortedag (`p.geboren`; wie er al was, krijgt er een in zijn

@@ -38441,6 +38441,17 @@
      59,
      273
     ]
+   },
+   "pestbos": {
+    "bestand": "pestbos.png",
+    "cel": [
+     28,
+     62
+    ],
+    "anker": [
+     14,
+     54
+    ]
    }
   };
 })(globalThis.Spel = globalThis.Spel || {});

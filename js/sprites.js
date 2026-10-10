@@ -72,6 +72,7 @@
       if (gegevens.paaltje) vellen.push(gegevens.paaltje.bestand);
       if (gegevens.meiboom) vellen.push(gegevens.meiboom.bestand);
       if (gegevens.kerstboom) vellen.push(gegevens.kerstboom.bestand);
+      if (gegevens.pestbos) vellen.push(gegevens.pestbos.bestand);
       if (gegevens.hol) vellen.push(gegevens.hol.bestand);
       if (gegevens.wijnrank) vellen.push(gegevens.wijnrank.bestand);
       // De kramen en de manden van de markt laden pas als er een getekend wordt (S.kraam, S.mand): zo'n 24 MB.
@@ -496,6 +497,14 @@
   S.kerstboom = function () {
     if (!gegevens || !gegevens.kerstboom) return null;
     const t = gegevens.kerstboom;
+    return stuk(MAP + t.bestand, 0, 0, t.cel[0], t.cel[1], t.anker);
+  };
+
+  // De pestbos naast de deur van een huis met een zieke (js/koorts.js, gereedschap/pixelart/pestbos.cjs): één tekening,
+  // zoals het paaltje. Null als het vel er niet is.
+  S.pestbos = function () {
+    if (!gegevens || !gegevens.pestbos) return null;
+    const t = gegevens.pestbos;
     return stuk(MAP + t.bestand, 0, 0, t.cel[0], t.cel[1], t.anker);
   };
 

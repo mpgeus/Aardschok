@@ -3003,6 +3003,14 @@
       if (!inVak(vak, Math.round(mx), Math.round(my)) || !T.isZichtbaar(w, Math.round(mx), Math.round(my))) continue;
       lijst.push({ d: mx + my, l: 1, punt: { x: Math.round(mx), y: Math.round(my) }, f: () => tekenWas(ctx, S, l) });
     }
+    // De pestbos (js/koorts.js): een bos stro aan een paal naast de deur van een huis met een zieke.
+    const bos = T.sprites.pestbos();
+    for (const b of bos ? T.pestbossen(D, w) : []) {
+      const tx = Math.round(b.x);
+      const ty = Math.round(b.y);
+      if (!inVak(vak, tx, ty) || !T.isZichtbaar(w, tx, ty)) continue;
+      lijst.push({ d: b.x + b.y, l: 1, punt: { x: tx, y: ty }, f: () => tekenKlein(ctx, bos, b.x, b.y, 4) });
+    }
     // De honden: een stap achter hun baas aan, op de klok van de wereld; is de baas binnen, dan ligt de hond bij de deur.
     const H = T.KLEIN_LEVEN_INSTELLINGEN.honden;
     const dt = Math.max(0, Math.min(0.25, S.wereldTijd - hondenTijd));
