@@ -17,6 +17,7 @@ Marcels voorbeelden", en voor de mensen onder "De mensen naar Marcels voorbeelde
 | `mensen-lowpoly-meisje.jpg` | Marcel, 10 okt, bij vraag 150: "deze verhoudingen zijn mooi" (dreamstime, een stockbureau) | Een meisje in isometrisch beeld, in vlakken: lang golvend haar, een blauwe jas met witte biezen over een gestreepte rok, laarzen. Een groot hoofd met grote ogen. Zo'n vier hoofden. |
 | `mensen-pixel-strijder.png` | Marcel, 10 okt, bij vraag 150: "kun je hier wat mee" (herkomst onbekend, waarschijnlijk AI) | Een strijder in isometrische pixel art op een stuk vloer: een baard, een kap om de hals, een harnas, riemen met gespen, laarzen met bont, een zwaard. Zo'n 130 pixels hoog. |
 | `mensen-pixel-ridder.png` | Marcel, 10 okt, bij vraag 150 (herkomst onbekend) | Een ridder in pixel art, van opzij: een helm met een pluim, een bronzen harnas, een rood wapenkleed, een groot zwaard. |
+| `mensen-soldaat-48.png` | Marcel, 10 okt, bij vraag 150: "het zijn voorbeelden van de stijl" (herkomst onbekend) | Een soldaat in maliën en helm van vijf kanten, met de hand gezet: 46 pixels hoog in een vak van 48 bij 48, een zwarte rand, licht van linksboven, per kleur drie tinten in vlakken. Anderhalf keer vergroot zo hoog als onze mensen (73). |
 
 De acht voorbeelden van 9 okt (twee platen "Medieval Buildings", "Isometric Medieval Village", een dorp in de stijl van
 Stronghold en vier losse vakwerkhuizen) staan hier nog niet: ze waren in een latere sessie niet meer te vinden.

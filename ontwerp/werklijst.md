@@ -7623,7 +7623,14 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     geheugen en het renderen. Claude had eerder moeten zeggen dat mensen uit een 3D-model van bollen en kegels voor
     kleine figuren een plafond hebben. Voorstel: de mensen laten tekenen, door een pixeltekenaar of met een AI-gereedschap
     voor pixelfiguren in acht richtingen (PixelLab, nog te proberen); de code doet de rest (inlezen, kleuren per
-    uiterlijk, kleren naar stand). **Wacht op Marcel.**
+    uiterlijk, kleren naar stand).
+    **Marcel (10 okt), met een soldaatje van 48 bij 48 (`mensen-soldaat-48.png`): "het zijn voorbeelden van de stijl;
+    kunnen we deze groter maken en als voorbeeld gebruiken voor normale poppetjes?"** Onze mensen zijn 73 pixels hoog (een
+    vak van 34 bij 77; op een gewoon scherm tekent het spel ze op zoom 2, dus 146 schermpixels). De soldaat is 46 hoog;
+    anderhalf keer vergroot is hij even groot, en op zoom 2 is elke pixel dan drie schermpixels, dus scherp. Een eerste
+    dorpeling met de hand, pixel voor pixel in die stijl (in de kladmap van de sessie): scherp en leesbaar, maar nog
+    eenvoudig naast de soldaat. **Wacht op Marcel:** verder met de hand (eerst één echt goede van voren), of een tekenaar
+    of een AI-gereedschap met deze soldaat als voorbeeld.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
