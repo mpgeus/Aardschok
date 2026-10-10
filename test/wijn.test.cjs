@@ -120,6 +120,20 @@ test('in wijnmaand plukt het gezin dat er woont, en de wijn is er pas als de man
   }
 });
 
+test('buiten wijnmaand ligt de wijnboerderij stil, en dat zegt de nacht op het gebouw', () => {
+  const { S, D, g } = gehucht();
+  try {
+    S.kalender.dag = dagIn('zomermaand');
+    T.tikGebouwenDag(D, Math.floor(S.kalender.dag));
+    assert.equal(g.stilWant, T.GEBOUWEN.wijnboerderij.alleenIn.waarom);
+    S.kalender.dag = dagIn('wijnmaand');
+    T.tikGebouwenDag(D, Math.floor(S.kalender.dag));
+    assert.equal(g.stilWant, null, 'in wijnmaand plukt ze');
+  } finally {
+    T.optiesTerug();
+  }
+});
+
 test('er woont een gezin van boeren, en de heer wil er wijn voor', () => {
   const { D, g } = gehucht();
   try {

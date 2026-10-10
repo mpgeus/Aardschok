@@ -1335,7 +1335,13 @@
       g.werkte = 0;
       g.stilWant = null;
       g.uren = null;
-      if (!g.klaar || !soort.maakt) continue;
+      if (!g.klaar) continue;
+      // Wie niets per dag maakt, maar in zijn maanden oogst (de wijnboerderij, `alleenIn`), ligt daarbuiten stil; dan zegt
+      // de raad dat (T.watDeHuizenMissen), en niet dat hij te weinig maakt.
+      if (!soort.maakt) {
+        if (soort.alleenIn) g.stilWant = T.stilOp(soort, dag, seizoen);
+        continue;
+      }
       // Wie er werkt en het een tijd weigert (de herbergierster die boos is om een tweede herberg, js/ondernemers.js),
       // maakt tot dan niets.
       if (g.weigert && dag < g.weigert.tot) {
