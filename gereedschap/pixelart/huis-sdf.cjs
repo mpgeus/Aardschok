@@ -65,7 +65,8 @@
 //   uit        false (geen), of { kapellen: 2, aanbouw: true, erker: true, balkon: true,
 //              trap: true, gevelschoorsteen: true, luiken: 'den', bakken: 2 }
 //              Alleen op vraag (het voorbeeldhuis, vraag 144): afdak: true, een afdakje van planken boven de
-//              voordeur; gevelschoorsteen: 'ook', de schoorsteen op de gevel naast die op het dak.
+//              voordeur (niet onder een balkon: dat is zijn afdak); gevelschoorsteen: 'ook', de schoorsteen op de
+//              gevel naast die op het dak; balkon: 'schoren', een balkon zonder palen van de grond af.
 //
 // De losse tuinstukken staan in tuin-sdf.cjs, en delen het hout met dit bestand.
 //
@@ -3387,6 +3388,19 @@ function afdakVan(H) {
     H.uitbouw.afdak = false;
     return;
   }
+  // staat er een balkon boven de deur, dan is dat zijn afdak
+  const Bk = H.balkon;
+  if (Bk && Bk.P.V === d.P.V && Bk.P.zijde === d.P.zijde && Bk.P.kant === d.P.kant) {
+    const [ax, ay] = Bk.P.pos(0, 0, 0);
+    const [bx, by] = Bk.P.pos(1, 0, 0);
+    const langs = ([x, y]) => (x - ax) * (bx - ax) + (y - ay) * (by - ay);
+    const [l0, l1] = [langs(Bk.P.pos(Bk.u0, 0, 0)), langs(Bk.P.pos(Bk.u1, 0, 0))].sort((p, q) => p - q);
+    const ld = langs(d.P.pos(d.u, 0, 0));
+    if (ld > l0 - 10 && ld < l1 + 10) {
+      H.uitbouw.afdak = false;
+      return;
+    }
+  }
   const { sp } = H;
   const R = (k) => H.r(4900 + k);
   const P = d.P;
@@ -3989,10 +4003,17 @@ function bouwUitbouwen(W, H, T) {
     const nPaal = Math.max(2, Math.round((u1 - u0) / (sp ? 70 : 62)) + 1);
     const hL = sp ? 40 : 34;
     const palen = [];
+    // balkon 'schoren' (het voorbeeldhuis, vraag 144): geen palen van de grond af, maar elke paal staat op de buitenbalk,
+    // en een schoor uit de muur eronder draagt hem
+    const opSchoren = H.uitbouw.balkon === 'schoren';
     for (let i = 0; i < nPaal; i++) {
       const u = u0 + 3 + ((u1 - u0 - 6) * i) / (nPaal - 1);
-      hout(g, balk(P.pos(u, -4, nR), P.pos(u + wiebel(2.5), hF + hL + 3, nR + wiebel(1.2)), sp ? 3 : 2.5, sp ? 3 : 2.5, N, 0.6), k++, 40 + i, H.rs(5140 + i) * 0.5);
+      hout(g, balk(P.pos(u, opSchoren ? hF - 9 : -4, nR), P.pos(u + wiebel(2.5), hF + hL + 3, nR + wiebel(1.2)), sp ? 3 : 2.5, sp ? 3 : 2.5, N, 0.6), k++, 40 + i, H.rs(5140 + i) * 0.5);
       palen.push(u);
+      if (opSchoren) {
+        hout(g, balk(P.pos(u, hF - (sp ? 50 : 44), -(H.kraag || 0) - 1), P.pos(u, hF - 8, nR - 3), sp ? 2.2 : 1.9, sp ? 2.2 : 1.9, N, 0.5), k++, 50 + i, H.rs(5150 + i) * 0.5);
+        continue;
+      }
       const sr = sp ? 22 : 18;
       if (i > 0) hout(g, balk(P.pos(u - 2, hF - 34, nR), P.pos(u - sr, hF - 7, nR), 1.7, 1.7, N, 0.4), k++, 50 + i);
       if (i < nPaal - 1) hout(g, balk(P.pos(u + 2, hF - 34, nR), P.pos(u + sr, hF - 7, nR), 1.7, 1.7, N, 0.4), k++, 60 + i);

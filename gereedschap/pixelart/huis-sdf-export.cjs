@@ -1282,6 +1282,8 @@ const VOORBEELD_STAPPEN = [
   ['A verweren', { verweer: true }],
   ['B diepte', { verweer: true, diepte: true }],
   ['C vorm', { verweer: true, diepte: true }, VOORBEELD_VORM],
+  ['C met balkon op palen', { verweer: true, diepte: true }, { ...VOORBEELD_VORM, uit: { ...VOORBEELD_VORM.uit, balkon: true } }],
+  ['C met balkon op schoren', { verweer: true, diepte: true }, { ...VOORBEELD_VORM, uit: { ...VOORBEELD_VORM.uit, balkon: 'schoren' } }],
 ];
 async function voorbeeld(dak, alleen) {
   const spec = (knoppen, extra) => ({ ...VOORBEELD, ...(extra || {}), ...(dak ? { dak } : {}), knoppen });
