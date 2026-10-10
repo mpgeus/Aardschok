@@ -184,6 +184,65 @@ test('de meiboom komt op 30 grasmaand, niet geloot; zeg je ja, dan staat hij op 
   assert.ok(T.isBegaanbaar(S.wereld, boom.x, boom.y));
 });
 
+// Marcel, 10 okt: "we hebben ook een kerstboom nodig :)", en voor het feest "Feestavond" (werklijst vraag 148).
+test('de kerstboom komt op 20 wintermaand; met ja staat hij meteen, tot en met 6 louwmaand, en op kerstavond viert het dorp', () => {
+  const S = gehucht();
+  const D = S.dorp;
+  const dag = dagVan('wintermaand', 20);
+  assert.equal(T.gewichtVanVoorval(D, 'kerstboom', dag), 0, 'hij wordt niet geloot');
+  D.voorvallen.volgende = dag + 100; // geen geloot voorval in de weg
+  T.tikVoorvallenDag(D, dag - 1);
+  assert.equal(D.voorvallen.lopend, null, 'op 19 wintermaand nog niet');
+  T.tikVoorvallenDag(D, dag);
+  assert.equal(D.voorvallen.lopend && D.voorvallen.lopend.id, 'kerstboom', 'op 20 wintermaand wel');
+  T.zetVoorraad(D, 'hout', 20);
+  assert.equal(T.prijsVanKeuze(D, antwoord('kerstboom', 0).doe).tekst, '−2 hout, tevredenheid +4%, feest op kerstavond');
+  S.kalender.dag = bijUur(dag, 11);
+  T.doeGevolg(S, D, antwoord('kerstboom', 0).doe);
+  T.voorvalBeantwoord(D, 'kerstboom');
+  assert.equal(D.voorraad.hout, 18);
+  const boom = S.wereld.voorwerpen.find((v) => v.soort === 'kerstboom');
+  assert.ok(boom, 'hij staat er meteen');
+  assert.ok(T.opHetPlein(S.wereld, boom.x, boom.y), 'op het plein');
+  assert.ok(!T.isBegaanbaar(S.wereld, boom.x, boom.y), 'je loopt er niet doorheen');
+  const f = D.feesten.komt;
+  assert.equal(f.dag, dagVan('wintermaand', 24), 'het feest is op kerstavond');
+  assert.equal(f.heel, false, 'een avond: overdag wordt er gewerkt');
+
+  // 's Avonds branden de kaarsjes, al voor kerstavond.
+  S.kalender.dag = bijUur(dag, 19);
+  const kaarsjes = (l) => l.soort === 'feest' && l.x === boom.x && l.y === boom.y;
+  assert.ok(T.lichtBronnen(D).some(kaarsjes), 'de kaarsjes branden');
+  S.kalender.dag = bijUur(dag + 1, 11);
+  assert.ok(!T.lichtBronnen(D).some(kaarsjes), 'overdag niet');
+
+  // Op kerstavond staat het dorp om de boom, en gaat niemand naar de herberg.
+  T.tikFeestenDag(D, f.dag);
+  assert.deepEqual(f.midden, { x: boom.x, y: boom.y }, 'de boom is het midden van het feest');
+  assert.ok(T.feestAvond(D, f.dag));
+  assert.equal(S.wereld.voorwerpen.filter((v) => v.soort === 'kerstboom').length, 1, 'er komt geen tweede boom');
+
+  // Tot en met 6 louwmaand.
+  const laatste = dagVan('louwmaand', 6);
+  assert.ok(laatste > f.dag);
+  T.tikFeestenDag(D, laatste);
+  assert.ok(S.wereld.voorwerpen.includes(boom), 'op 6 louwmaand staat hij er nog');
+  T.tikFeestenDag(D, laatste + 1);
+  assert.ok(!S.wereld.voorwerpen.some((v) => v.soort === 'kerstboom'), 'en dan gaat hij weg');
+  assert.equal(D.feesten.boom, null);
+  assert.equal(D.feesten.gevierd.at(-1).id, 'kerstboom');
+});
+
+test('de kerstboom die laat komt: na kerstavond viert het dorp vanavond, en de boom blijft tot 6 louwmaand', () => {
+  const S = gehucht();
+  const D = S.dorp;
+  const dag = dagVan('wintermaand', 25);
+  S.kalender.dag = bijUur(dag, 11);
+  const f = T.zetFeest(D, 'kerstboom', 'avond', S.kalender.dag);
+  assert.equal(f.dag, dag, 'vanavond, niet volgend jaar');
+  assert.equal(D.feesten.boom.tot, dagVan('louwmaand', 6) + 1);
+});
+
 test('op een hele feestdag maait niemand', () => {
   const S = gehucht();
   const D = S.dorp;

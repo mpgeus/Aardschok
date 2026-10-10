@@ -31,7 +31,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | De markt op het plein | gebouwd (6 okt; vraag 110, d, en 127, stap 1 en 2): een marktblok van twee rijen kramen met manden op het plein, voor 8 hout en 6 goud, dat meegroeit met het dorp (een kraam per 15 mensen, daarna langs de weg), met kramen vol of leeg naar wat het dorp heeft; de maker legt een groter plein; de kooplui, de boodschappen en de marktdag nog niet | vraag 110, d; 127 |
 | De verzoeken | stap 1 tot en met 3 gebouwd (3 okt): wat het dorp mist, komt een inwoner je vragen, met de plek die hij koos en wat het kost; ja of nee, en ben je weg, dan beslist je raadsman; in het bouwmenu alleen nog het erf en oproepen met een premie (de spelregel "Wie bouwt"); de speeltest speelt zo; en uit eigen wil: een ondernemer die wapens wil maken (sinds 7 okt niet meer verboden, vraag 131) of een tweede herberg beginnen, met wat ja en nee aan gevolgen hebben (vraag 104); sinds 6 okt rooit wie een werkplaats vraagt zijn plek eerst, als er geen open grond meer is (vraag 110, e) | vraag 103, 104, 110 |
 | Twee bazen | stap 1 en 2 gebouwd (3 okt; Marcel: "106 a b c d ja"): de gunst van de heer en het vertrouwen van het dorp in de balk, met een waarschuwing onder 20 en op 0 weg (ontslagen of weggejaagd); betrapt op verstoppen is de laatste waarschuwing; elke maand een gril van de heer in een brief, die zijn gunst tegen het dorp weegt | vraag 106 |
-| Dorpsfeesten | gebouwd (3 okt): het oogstfeest en de meiboom; zeg je ja, dan viert het hele dorp het op het plein, een hele dag (en niemand werkt) of een avond, met licht en de meiboom in pixel art; de rest (meer feesten, een grote bruiloft) later | vraag 84, 97 |
+| Dorpsfeesten | gebouwd (3 okt): het oogstfeest en de meiboom, en sinds 10 okt de kerstboom; zeg je ja, dan viert het hele dorp het op het plein, een hele dag (en niemand werkt) of een avond, met licht en de meiboom in pixel art; de rest (meer feesten, een grote bruiloft) later | vraag 84, 97 |
 | Besloten | het spel zelf (23 sep); geldt nog | |
 | Hoe het zou kunnen spelen | voorstel; de kern ervan werd de richting | 8 tot 16 |
 | De wetten (in "Keuren en politiek") | gebouwd (29 sep): een menu zoals Democracy 3 onder W, met rantsoen, vreemden welkom, houtkap en belasting | vraag 54 |
@@ -1221,6 +1221,11 @@ viert het hele dorp het op het plein.
   kroon, een krans met bloemen en linten in vier kleuren), en hij blijft dertig dagen staan. Geen bier: in de lente is er
   bijna geen (een speeltest van 3 okt had er 7). Het spel begint op 1 lentemaand, dus dit is het eerste feest dat een
   speler ziet.
+- **De kerstboom** (10 okt; Marcel: "we hebben ook een kerstboom nodig :)", en voor het feest "Feestavond"): elk jaar op
+  20 wintermaand komen de jongeren het vragen. "Zet hem maar op." (−2 hout) zet hem meteen op het plein (een spar met
+  appels, strosterren, kaarsjes en een ster, uit `kerstboom` in `gereedschap/pixelart/bomen.cjs`), tot en met 6
+  louwmaand; elke avond branden zijn kaarsjes (`T.feestLicht`), en op kerstavond (24 wintermaand) viert het dorp de avond
+  om de boom. Komt het ja na kerstavond, dan vanavond. De datums en het licht in `T.FEESTEN_INSTELLINGEN.kerstboom`.
 - **Op het feest** staat het hele dorp rond het midden van het plein, elk op zijn eigen plek in een kring van vijf
   tegels, de kinderen wat ruimer; de herbergierster tapt naast het midden. 's Avonds brandt er licht op het plein
   (`T.feestLicht`, zoals de lantaarns), en niemand gaat die avond naar de herberg. De schout kan erbij gaan staan; dat

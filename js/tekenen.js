@@ -2749,6 +2749,18 @@
       T.blok(ctx, p.x, p.y, 0.16, 0.16, 16, '#5d8a34', { helder, basis: 140 });
       return;
     }
+    if (v.soort === 'kerstboom') {
+      // De kerstboom (js/feesten.js): een spar met appels, strosterren, kaarsjes en een ster. Zonder kunst: een groene
+      // kegel van drie blokken.
+      const boom = metSprites() && T.sprites.kerstboom();
+      if (boom) {
+        T.sprites.teken(ctx, boom, p.x, p.y, helder);
+        return;
+      }
+      T.blok(ctx, p.x, p.y, 0.06, 0.06, 20, '#5a3a22', { helder });
+      [[0.4, 20], [0.3, 60], [0.18, 100]].forEach(([r, basis]) => T.blok(ctx, p.x, p.y, r, r, 50, '#2f5a2a', { helder, basis }));
+      return;
+    }
     if (v.soort === 'hol') {
       // Het hol van een roedel wolven (js/beesten.js): een kuil onder een omgevallen boom, met botten ervoor. Zonder kunst:
       // een donkere kuil met een omgevallen stam erachter.

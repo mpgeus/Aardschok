@@ -754,7 +754,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.werkOogstBij`), of een avond. Wie er is, staat rond het midden (`T.feestAnker`, voor `T.dagAnker`), er brandt licht
   (`T.feestLicht`, in `T.lichtBronnen`), en niemand gaat naar de herberg (`T.feestAvond`). De meiboom komt op een vaste dag
   (`op` in `T.VOORVALLEN`, 30 grasmaand) en staat een maand op het plein (een voorwerp, `gereedschap/pixelart/meiboom.cjs`).
-  De spelregel "Feesten"; de getallen in `T.FEESTEN_INSTELLINGEN`.
+  De kerstboom (10 okt) komt op 20 wintermaand, staat met ja meteen tot en met 6 louwmaand, met kaarsjes als licht, en het
+  dorp viert kerstavond: een feest met een eigen datum (`vast` in `T.FEESTEN`); de boom van een feest staat in `D.feesten.boom`
+  (`soort`). De spelregel "Feesten"; de getallen in `T.FEESTEN_INSTELLINGEN`.
 - `js/brand.js`: **de brand** (vraag 144, 3, 9 okt; Marcel: "Ziekte en brand als status is ook goed. We hebben dan nog
   wel vuur nodig en huizen die 'afgefikt' zijn als art. Dan kunnen ze weer worden opgebouwd"): brandgevaar is een status
   (`T.brandgevaarNiveau`: in de droogte, groot in een ernstige droogte of een vol dorp; `brandgevaar` in `T.OORZAKEN`), en
@@ -1277,8 +1279,9 @@ staat; `(3)` laat nu drie wilde rovers komen, `('bende')` de bende.
 `Spel.debug.heervaart()` zegt wat de heer vraagt, wie er weg is en tot wanneer, en wie veteraan is; `('vraag')` laat
 hem nu mannen vragen (ook in een gehucht), `('terug')` laat ze nu terugkomen.
 `Spel.debug.raad()` zegt welke raad er onder het doel staat en welke er nu allemaal gelden.
-`Spel.debug.feest()` zegt welk feest er komt of nu is, waar het dorp staat en de meiboom; `('meiboom')` laat het vandaag
-beginnen, de hele dag (`('oogstfeest', 'avond')` alleen vanavond); zet er het uur bij met `Spel.debug.uur(11)` of `(20)`.
+`Spel.debug.feest()` zegt welk feest er komt of nu is, waar het dorp staat en de boom op het plein (de meiboom of de
+kerstboom); `('meiboom')` laat het vandaag beginnen, de hele dag (`('oogstfeest', 'avond')` alleen vanavond, `('kerstboom')`
+zet de kerstboom); zet er het uur bij met `Spel.debug.uur(11)` of `(20)`.
 `Spel.debug.einde()` zegt hoe ver het is met winnen (het doel, de dagen op rij, het jaarboek); `('winst')` zet de teller
 op één dag ervoor, `('gewonnen')` wint nu (het feest, en het eindscherm 's avonds of bij het feest), `('jaarverslag')`
 toont het jaar in het kort nu.

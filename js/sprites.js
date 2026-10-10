@@ -71,6 +71,7 @@
       if (gegevens.schandpaal) vellen.push(gegevens.schandpaal.bestand);
       if (gegevens.paaltje) vellen.push(gegevens.paaltje.bestand);
       if (gegevens.meiboom) vellen.push(gegevens.meiboom.bestand);
+      if (gegevens.kerstboom) vellen.push(gegevens.kerstboom.bestand);
       if (gegevens.hol) vellen.push(gegevens.hol.bestand);
       if (gegevens.wijnrank) vellen.push(gegevens.wijnrank.bestand);
       // De kramen en de manden van de markt laden pas als er een getekend wordt (S.kraam, S.mand): zo'n 24 MB.
@@ -487,6 +488,14 @@
   S.meiboom = function () {
     if (!gegevens || !gegevens.meiboom) return null;
     const t = gegevens.meiboom;
+    return stuk(MAP + t.bestand, 0, 0, t.cel[0], t.cel[1], t.anker);
+  };
+
+  // De kerstboom op het plein (js/feesten.js; gereedschap/pixelart/naar-spel.cjs, uit `kerstboom` in bomen.cjs): één
+  // tekening, zoals de meiboom. Null als het vel er niet is.
+  S.kerstboom = function () {
+    if (!gegevens || !gegevens.kerstboom) return null;
+    const t = gegevens.kerstboom;
     return stuk(MAP + t.bestand, 0, 0, t.cel[0], t.cel[1], t.anker);
   };
 
