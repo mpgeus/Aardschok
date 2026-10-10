@@ -104,3 +104,18 @@ test('wat er gespeeld werd, zegt de vergelijking erbij als het niet hetzelfde wa
   assert.equal(V.verschil(3, 3), '');
   assert.equal(V.verschil(3, 1), '-2');
 });
+
+test('een getal dat de standaard van een spelregel overschrijft, doet in het spel niets, en dat zegt de vergelijking', () => {
+  // De spelregel "Treden" zet in zijn standaard heel TREDEN_INSTELLINGEN.dorp, dus ook dorp.mensen.
+  const w = waarden['TREDEN_INSTELLINGEN.dorp.mensen'];
+  assert.deepEqual(w.spelregel, { optie: 'Treden', waarde: w.waarde });
+  const bestand = Object.keys(bronnen).find((b) => I.blokkenIn(bronnen[b]).includes('TREDEN_INSTELLINGEN'));
+  const anders = { ...bronnen, [bestand]: I.zet(bronnen[bestand], 'TREDEN_INSTELLINGEN', ['dorp', 'mensen'], w.waarde - 8) };
+  const [verschil] = V.andereWaarden(waarden, V.waardenVan(anders));
+  assert.deepEqual(verschil.nietInHetSpel, { optie: 'Treden', waarde: w.waarde });
+  assert.match(V.alsNiet(verschil), /doet in het spel niets: de standaard van de spelregel "Treden" zet het op \d+/);
+  // Een getal dat geen spelregel zet, doet wel iets.
+  const schoven = Object.keys(bronnen).find((b) => I.blokkenIn(bronnen[b]).includes('SCHOVEN_INSTELLINGEN'));
+  const ander = { ...bronnen, [schoven]: I.zet(bronnen[schoven], 'SCHOVEN_INSTELLINGEN', ['droogDagen'], 99) };
+  assert.equal(V.andereWaarden(waarden, V.waardenVan(ander))[0].nietInHetSpel, null);
+});

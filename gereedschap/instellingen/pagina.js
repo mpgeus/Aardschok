@@ -144,9 +144,10 @@
       const r = maak('div');
       r.append('De spelregel ', maak('b', null, optie), ' zet dit: ');
       r.append(zetten.map((z) => `${z.keuze} → ${toon(z.waarde)}${z.standaard ? ' (standaard)' : ''}`).join('; '));
+      if (zetten.some((z) => z.viaObject)) r.append(` (hij zet heel ${zetten.find((z) => z.viaObject).viaObject})`);
       el.appendChild(r);
       const std = zetten.find((z) => z.standaard);
-      if (std && std.waarde !== blad.waarde && typeof std.waarde !== 'string') {
+      if (std && !std.heel && std.waarde !== blad.waarde) {
         el.appendChild(maak('div', 'in-fout', `Let op: in het spel geldt ${toon(std.waarde)}, want de standaard van "${optie}" zet het zo. Verander daarvoor de spelregel.`));
       }
     }
@@ -164,6 +165,7 @@
     const k = sleutel(blad.blok, blad.pad);
     const r = { el, sleutel: k, zoek: '' };
     const opNieuw = () => el.classList.toggle('in-anders', veranderd.has(k));
+    opNieuw();
     el.append(n, veldVoor(blad, opNieuw), uitleg);
     const regels = regelsVoor(blad);
     if (regels) uitleg.appendChild(regels);

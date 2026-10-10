@@ -20,8 +20,11 @@
   const SPELERS = [['bouwer', 'de bouwer'], ['sluw', 'de sluwe bouwer'], ['braaf', 'braaf'], ['lui30', 'lui, 30% weg'], ['lui60', 'lui, 60% weg'], ['slim', 'slim, 60% weg']];
   const MEER_JAREN = new Set(['bouwer', 'sluw']); // de rest speelt één jaar (speler.js)
   const LANDEN = [['eiland', 'op het eiland'], ['maker', 'op gehuchten van de maker'], ['ontworpen', 'op het ontworpen gehucht']];
-  // Snel (Marcel, 10 okt): de bouwer, zaad 1, twee jaar, op het eiland. Een jaar kost anderhalf tot vier minuten.
+  // Snel (Marcel, 10 okt): de bouwer, zaad 1, twee jaar, op het eiland.
   const SNEL = { spelers: ['bouwer'], zaden: '1', jaren: 2, land: 'eiland' };
+  // Hoeveel minuten een jaar kost, van tot: op het eiland zo'n vijf (10 okt: twee jaar van de bouwer 590 s), op een
+  // kleiner land anderhalf tot vier.
+  const MINUTEN_PER_JAAR = { eiland: [3, 6], maker: [1.5, 4], ontworpen: [1.5, 4] };
   const TEGELIJK = 3; // zoveel spellen speelt speeltest.cjs tegelijk
 
   let stand = null; // het laatste antwoord van de server
@@ -50,7 +53,8 @@
     const spellen = keuze.spelers.length * zaden;
     const jaren = keuze.spelers.reduce((n, id) => n + (MEER_JAREN.has(id) ? keuze.jaren : 1), 0) * zaden;
     const tegelijk = Math.min(TEGELIJK, spellen) || 1;
-    return `${spellen} ${spellen === 1 ? 'spel' : 'spellen'}, zo'n ${Math.ceil((jaren * 1.5) / tegelijk)} à ${Math.ceil((jaren * 4) / tegelijk)} minuten`;
+    const [van, tot] = MINUTEN_PER_JAAR[keuze.land];
+    return `${spellen} ${spellen === 1 ? 'spel' : 'spellen'}, zo'n ${Math.ceil((jaren * van) / tegelijk)} à ${Math.ceil((jaren * tot) / tegelijk)} minuten`;
   }
 
   function bouwKeuze(el) {
@@ -274,6 +278,9 @@
         return tr;
       });
       el.appendChild(tabel(['waarde', v.tegen, v.naam], rijen));
+      for (const w of v.waarden) {
+        if (w.nietInHetSpel) el.appendChild(maak('p', 'in-fout', `${w.naam} doet in het spel niets: de standaard van de spelregel "${w.nietInHetSpel.optie}" zet het op ${toon(w.nietInHetSpel.waarde)}. Verander daarvoor de spelregel.`));
+      }
       const knop = maak('button', null, `Zet terug zoals bij ${v.tegen}`);
       const melding = maak('span', 'in-gedempt');
       knop.disabled = !!(stand.nu && stand.nu.loopt);
@@ -285,7 +292,7 @@
 
     el.appendChild(maak('h4', null, 'Per spel'));
     for (const s of v.spellen) {
-      const rijen = s.maten.map((m) => {
+      const rijen = s.maten.filter((m) => m.voor != null || m.na != null).map((m) => {
         const tr = maak('tr');
         const d = s.gespeeldTegen ? verschil(m.voor, m.na) : '';
         if (d) tr.className = 'st-anders';

@@ -29,12 +29,15 @@ function leesBronnen(wortel = WORTEL) {
 
 // Alle waarden van de bladzijde met getallen: { sleutel: { blok, pad, soort, waarde, naam } }, in de volgorde van de
 // bladzijde (de spelregels, de gebouwen, de onderwerpen). Een spelregel heet naar zijn id, niet naar zijn plek in de lijst,
-// zodat een spelregel erbij niet elke spelregel erna "anders" maakt.
+// zodat een spelregel erbij niet elke spelregel erna "anders" maakt. Zet de standaard van een spelregel een waarde (ook via
+// het object eromheen), dan staat dat erbij (`spelregel`: { optie, waarde }): in het spel geldt dan die.
 function waardenVan(bronnen) {
   const m = I.model(bronnen);
   const uit = {};
   const zet = (sleutel, b, naam) => {
     uit[sleutel] = { blok: b.blok, pad: b.pad, soort: b.soort, waarde: b.waarde, naam };
+    const std = (b.spelregels || []).find((z) => z.standaard && !z.heel);
+    if (std) uit[sleutel].spelregel = { optie: std.optie, waarde: std.waarde };
   };
   for (const r of m.spelregels) zet(`OPTIES:${r.id}`, { blok: r.blok, pad: r.pad, soort: 'keuze', waarde: r.standaard }, `De spelregel "${r.naam || r.id}"`);
   for (const g of m.gebouwen) for (const b of g.bladen) zet([b.blok, ...b.pad].join('.'), b, `${g.naam}: ${b.pad.slice(1).join(' › ')}`);
@@ -53,9 +56,15 @@ function andereWaarden(voor, na) {
     const b = na[k];
     if (a && b && JSON.stringify(a.waarde) === JSON.stringify(b.waarde)) continue;
     const x = b || a;
-    uit.push({ sleutel: k, naam: x.naam, blok: x.blok, pad: x.pad, soort: x.soort, voor: a ? a.waarde : null, na: b ? b.waarde : null });
+    uit.push({ sleutel: k, naam: x.naam, blok: x.blok, pad: x.pad, soort: x.soort, voor: a ? a.waarde : null, na: b ? b.waarde : null, nietInHetSpel: nietInHetSpel(b) });
   }
   return uit;
+}
+
+// Doet deze waarde in het spel niets, omdat de standaard van een spelregel hem anders zet? Dan zegt het welke en waarop.
+function nietInHetSpel(w) {
+  if (!w || !w.spelregel || JSON.stringify(w.spelregel.waarde) === JSON.stringify(w.waarde)) return null;
+  return w.spelregel;
 }
 
 const som = (lijst, f) => (lijst || []).reduce((n, x) => n + ((x && f(x)) || 0), 0);
@@ -180,6 +189,8 @@ const toon = (w) => (w == null ? '' : typeof w === 'boolean' ? (w ? 'ja' : 'nee'
 const cel = (w) => toon(w).replace(/\|/g, '\\|').replace(/\n/g, ' ');
 const verschil = (a, b) => (typeof a === 'number' && typeof b === 'number' ? (b === a ? '' : `${b > a ? '+' : ''}${b - a}`) : toon(a) === toon(b) ? '' : 'anders');
 
+const alsNiet = (w) => `${w.naam} doet in het spel niets: de standaard van de spelregel "${w.nietInHetSpel.optie}" zet het op ${toon(w.nietInHetSpel.waarde)}. Verander daarvoor de spelregel.`;
+
 // De vergelijking als tekst, voor uit/<naam>/vergelijking.md en de opdrachtregel.
 function alsTekst(v) {
   const uit = [`# ${v.naam} naast ${v.tegen}`, ''];
@@ -194,16 +205,18 @@ function alsTekst(v) {
     uit.push(`| waarde | ${v.tegen} | ${v.naam} |`, '| --- | --- | --- |');
     for (const w of v.waarden) uit.push(`| ${cel(w.naam)} (${cel([w.blok, ...w.pad].join('.'))}) | ${w.voor == null ? '(niet)' : cel(w.voor)} | ${w.na == null ? '(niet)' : cel(w.na)} |`);
     uit.push('');
+    for (const w of v.waarden) if (w.nietInHetSpel) uit.push(`- ${alsNiet(w)}`);
+    if (v.waarden.some((w) => w.nietInHetSpel)) uit.push('');
   }
   uit.push('## Per spel', '');
   for (const s of v.spellen) {
     uit.push(`### ${s.naam}`, '');
     if (!s.gespeeldTegen) uit.push(`${v.tegen} speelde dit spel niet.`, '');
     uit.push(`| | ${v.tegen} | ${v.naam} | verschil |`, '| --- | --- | --- | --- |');
-    for (const m of s.maten) uit.push(`| ${m.naam} | ${cel(m.voor)} | ${cel(m.na)} | ${s.gespeeldTegen ? verschil(m.voor, m.na) : ''} |`);
+    for (const m of s.maten) if (m.voor != null || m.na != null) uit.push(`| ${m.naam} | ${cel(m.voor)} | ${cel(m.na)} | ${s.gespeeldTegen ? verschil(m.voor, m.na) : ''} |`);
     uit.push('');
   }
   return uit.join('\n');
 }
 
-module.exports = { GOEDE_NAAM, UIT, leesBronnen, waardenVan, andereWaarden, matenVan, MATEN, opdrachtTekst, leesSpeeltest, speeltestsIn, vergelijk, alsTekst, verschil };
+module.exports = { alsNiet, GOEDE_NAAM, UIT, leesBronnen, waardenVan, andereWaarden, matenVan, MATEN, opdrachtTekst, leesSpeeltest, speeltestsIn, vergelijk, alsTekst, verschil };
