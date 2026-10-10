@@ -1074,6 +1074,33 @@ niets past, wijkt de zwakke grond voor strand (naast de zee) of gras. Golven die
   sterker. **Voor de ronde van alle tekeningen:** hoe ruig een dak is, hangt af van de trede (het gehucht ruig en
   praktisch, een dorp netter), en hoe verweerd het is, van hoe lang het huis er staat (een maat, `knoppen.verweer`; welke
   tekening een huis van een zekere leeftijd krijgt, is dan een vraag voor het spel).
+  **Het oude dak** (10 okt): hetzelfde huis met `verweer: 1` is alleen een render, de maat bestond al. Wat opviel: het mos
+  ligt als platte, felgroene vlekken op het riet, als stickers; echt mos op riet is donkerder en zit in de schaduw onder
+  de lagen. Dat komt na het stenen huis (Marcel: "Na het stenen huis").
+  **Het stenen huis onder pannen** (10 okt, naar `voorbeelden/huis-vakwerk-op-steen.jpg`): de vorm kan de huizenbouwer al
+  (een T met de dwarsgevel voorop, `wand: 'veldsteen'` met twee lagen is steen onder en vakwerk boven, `dak: 'pannen'`);
+  het verschil is het materiaal. Vier stappen, elk een knop die uit staat, op de plaat `huis-sdf-export.cjs voorbeeld
+  steen`: **G** veldsteen (grote, ronde stenen van zo'n twintig pixels, warm grijs, met lichte voegen, in plaats van nette
+  blokken), **H** grove pannen, **I** een rondboogdeur met een boog van gehakte steen (alleen in een stenen muur), **J**
+  klimop tegen de schoorsteen en een hoek, zoveel als het huis verweerd is. Marcel koos: **ronde pannen** (beverstaarten
+  zoals in zijn voorbeeld, elk iets anders, met een rij halfronde nokpannen; niet de golfpannen van nu, die van ver een
+  streepjespatroon zijn), en **netter dan de rieten hut** (rechtere rijen, jonger verweerd): pannen komen in het spel met
+  marktrecht, en bouwen wordt beter naarmate de stad groeit.
+  **Gebouwd (10 okt), op de plaat `voorbeeld steen`** (`uit/proefhuis/voorbeeld-steen.png`: het huis met A tot F, dan elke
+  stap erbij; verweer 0,15): **G** `knoppen.rond` (`veldkeiPatroon`): ronde stenen in rijen die elk anders verspringen,
+  elk middelpunt wat van zijn plek en een grote steen ruimer (Voronoi met gewichten), een lichte voeg met een zakje kalk
+  waar drie stenen samenkomen, en elke steen bol (licht boven en links, een donkere lijn eronder); geen hoekstenen, want
+  de hoek is ook een ronde steen; de schoorsteen houdt zijn blokken. **H** `knoppen.bever` (`DUN.bever`, `beverPlek`,
+  `beverPatroon`): platte pannen met een ronde staart, rijen die een halve pan verspringen, tussen twee staarten de pan
+  eronder in hun schaduw, elke pan het dikst aan zijn staart (het reliëf) en daar het lichtst; netjes: de banen verlopen
+  een derde van de holle pannen, en de rijen golven een derde. **I** `boogdeur: true`: de voordeur in een muur van
+  veldsteen met een ronde boog (de boog boven de hoogte van de deur), en een ring van gehakte zandsteen eromheen, de
+  boogstenen als een waaier, de stijlen in blokken (`boogPatroon`). **J** `uit.klimop: true` (`klimop`, `klimopPixel`):
+  een zuil om een as die van de grond opgroeit, langs de schoorsteen op de gevel en op de hoek van de eerste vleugel, zo
+  hoog als het huis verweerd is; de blaadjes zoals de klimop van de toren. Alles staat uit, en een huis zonder deze
+  knoppen is byte voor byte zoals ervoor. **Open:** de ring van de boog is in zijn stijlen een rechte band (in het
+  voorbeeld steken de stenen om en om de muur in); de klimop is bij een jong huis bescheiden; en het mos op het oude riet
+  (hierboven).
 - **Meer variatie in het groen, de bomen en de versiering (9 okt 2026; werklijst, vraag 148).** Marcel: "Ik wil meer
   variatie in de vegetatie, ook bomen en versieringen van het dorp." Nu heeft elke soort één tekening en verandert het
   groen niet met het jaar. Het voorstel staat bij vraag 148: elke boom anders (vormen per soort, en de beuk, de linde,
