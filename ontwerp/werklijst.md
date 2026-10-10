@@ -26,8 +26,8 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
 - Het geluid (vraag 145, 2): de sleutel `FREESOUND_KEY` in de omgeving en de domeinen van Freesound erbij, zoals
   beschreven bij vraag 145; dan maakt een nieuwe sessie het.
 - Vraag 145 laten zien: is het dorp nu minder "saai"? En daarna het voorbeeldhuis naar de voorbeelden (`beeld.md`).
-- Een feest op het plein vol kijkgaten (`opmerkingen.md`, "Het beeld"): zo laten, op een feest alleen wie ertoe doet, of
-  het plein uit? De fout in de kijkgaten en het haperen bij slepen zijn op 9 okt opgelost.
+- Een feest op het plein vol kijkgaten (`opmerkingen.md`, "Het beeld"): **Marcel (10 okt): "Ja akkoord"**, op een feest
+  alleen wie ertoe doet. **Bezig in sessie `ccr-a1a4ef49-0815cc`** (10 okt).
 - Uit `opmerkingen.md`: een brand die overslaat op het huis ernaast, een eigen beeld voor de koorts (ziekbed, hoesten),
   en wie wijn wil (de wijnboerderij die niemand bouwt).
 - Vraag 142, de bladzijde met alle getallen (`gereedschap/instellingen.html`): stap 1 en 2 staan in `main`; stap 3 (een
