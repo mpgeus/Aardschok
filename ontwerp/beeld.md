@@ -1006,6 +1006,17 @@ niets past, wijkt de zwakke grond voor strand (naast de zee) of gras. Golven die
   bouwfasen, de brandfasen en de sneeuw. **Marcel (9 okt): "De huizen moeten een goede balans zijn tussen
   'sprookjesachtig' en 'echt'; het blijft een game uiteindelijk, dus het mag ook wel een beetje 'mooi' en 'leuk' zijn."**
   Dus: het materiaal echt en verweerd (3, 6), de vorm met karakter en een beetje overdreven (1, 2), en het geheel uitnodigend.
+  **Het voorbeeldhuis (10 okt; Marcel: "1 riet, 2 akkoord"):** een vakwerkhuis van twee lagen onder riet (riet, omdat
+  een speler en elk plaatje op Steam eerst het gehucht zien), in vier stappen, elk een knop in de huizenbouwer, zodat
+  het straks voor alle huizen werkt: A verweren, B diepte, C vorm, D het stukje grond (alleen op de plaat; in het spel
+  is dat vraag 148). De plaat: `node gereedschap/pixelart/huis-sdf-export.cjs voorbeeld` (`uit/proefhuis/voorbeeld.png`).
+  **A, verweren** (`knoppen.verweer`, `verweer` en `VERWEER` in `huis-sdf.cjs`; staat uit tot de ronde van alle
+  tekeningen): het riet op de grijsbruine ramp `riet` in plaats van het gele `stro`, met mos in korrels die naar de
+  goot en de schaduw toe dichter worden, en de lap een tint lichter in plaats van goud (Marcel: "Dit ziet er raar uit",
+  over de gouden lap); het pleister minder wit, met vochtvlekken, vuil boven de plint, en hier en daar afgevallen met de
+  baksteen erdoor; het hout op `houtOud`, half naar het grijs van schors; de plint nat aan de voet en met mos; een
+  schoorsteen zwart van het roet naar zijn top, in strepen; mos op een dun dak. Alles uit de plek in de wereld, dus in
+  elke stand op dezelfde plek.
 - **Meer variatie in het groen, de bomen en de versiering (9 okt 2026; werklijst, vraag 148).** Marcel: "Ik wil meer
   variatie in de vegetatie, ook bomen en versieringen van het dorp." Nu heeft elke soort één tekening en verandert het
   groen niet met het jaar. Het voorstel staat bij vraag 148: elke boom anders (vormen per soort, en de beuk, de linde,

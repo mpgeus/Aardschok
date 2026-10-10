@@ -15,6 +15,7 @@
 //   node gereedschap/pixelart/huis-sdf-export.cjs steen        uit/proefhuis/steen.png (de steen van de torens)
 //   node gereedschap/pixelart/huis-sdf-export.cjs rondom       uit/proefhuis/rondom.png (vraag 124, B: de draaibare huizen)
 //   node gereedschap/pixelart/huis-sdf-export.cjs groot [stijl]  uit/proefhuis/groot.png (vraag 114, stap 3: de grote gebouwen)
+//   node gereedschap/pixelart/huis-sdf-export.cjs voorbeeld [dak] uit/proefhuis/voorbeeld.png (vraag 144: het voorbeeldhuis)
 //
 // uitbouwen.png (ronde 3): de uitbouwen elk op een huis, de losse tuinstukken (tuin-sdf.cjs) naast
 // elkaar met een tuintje daaruit, en zes huizen met willekeurige zaden, los van elkaar. De platen
@@ -1267,6 +1268,25 @@ async function rijenBeeld(RIJEN) {
   return plaat;
 }
 
+// voorbeeld.png (vraag 144, het voorbeeldhuis; ontwerp/beeld.md, "De huizen naar Marcels voorbeelden"; Marcel, 10 okt:
+// "1 riet, 2 akkoord"): één vakwerkhuis van twee lagen onder riet, zoals de huizenbouwer het nu maakt en met elke stap
+// erbij (A verweren, B diepte, C vorm, D het stukje grond), op ware grootte; voorbeeld-x2.png is dezelfde plaat twee keer
+// vergroot. Met een dak erachter (node huis-sdf-export.cjs voorbeeld pannen) hetzelfde huis onder dat dak.
+const VOORBEELD = { vorm: 'rechthoek', lagen: 2, zaad: 7, nok: 'x', wand: 'vakwerk', dak: 'riet', uit: { kapellen: 2, aanbouw: true, trap: true, gevelschoorsteen: true, luiken: 'den', bakken: 2 } };
+const VOORBEELD_STAPPEN = [
+  ['nu', {}],
+  ['A verweren', { verweer: true }],
+];
+async function voorbeeld(dak) {
+  const spec = (knoppen) => ({ ...VOORBEELD, ...(dak ? { dak } : {}), knoppen });
+  const rij = { naam: `het voorbeeldhuis${dak ? ` onder ${dak}` : ''}`, panelen: VOORBEELD_STAPPEN.map(([naam, kn]) => [naam, { spec: spec(kn) }]) };
+  const plaat = await rijenBeeld([rij]);
+  const naam = `voorbeeld${dak ? `-${dak}` : ''}`;
+  fs.writeFileSync(path.join(UIT, `${naam}.png`), K.png(plaat, 1, '#0e0a14'));
+  fs.writeFileSync(path.join(UIT, `${naam}-x2.png`), K.png(plaat, 2, '#0e0a14'));
+  log(`${naam}.png  ${plaat.b}×${plaat.h}`);
+}
+
 // De vijf bouwfasen van een huis van het vel (huizen.cjs) naast elkaar, op één anker.
 function paneelFasen(naam) {
   const t0 = Date.now();
@@ -1334,6 +1354,8 @@ if (isMainThread && require.main === module) {
     rijenPlaat(rijen, `groot${alleen ? `-${alleen}` : ''}.png`).then(() => log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`));
   } else if (wat === 'rondom') {
     rondom().then(() => log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`));
+  } else if (wat === 'voorbeeld') {
+    voorbeeld(process.argv[3]).then(() => log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`));
   } else if (wat === 'stijl') {
     // node huis-sdf-export.cjs stijl wit: een bouwstijl van het spel (huizen.cjs, STIJLEN)
     const stijl = process.argv[3] || 'wit';
@@ -1372,7 +1394,7 @@ if (isMainThread && require.main === module) {
     vergelijk();
     if (wat === 'knoppen') knoppen();
   }
-  if (!['vormen', 'materiaal', 'uitbouwen', 'ladder', 'afwisseling', 'verhouding', 'steen', 'stijl', 'rondom', 'groot', 'groot2', 'groot3'].includes(wat)) log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`);
+  if (!['vormen', 'materiaal', 'uitbouwen', 'ladder', 'afwisseling', 'verhouding', 'steen', 'stijl', 'rondom', 'groot', 'groot2', 'groot3', 'voorbeeld'].includes(wat)) log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`);
 }
 
 module.exports = { paneelNu, paneelProef, paneelHuis, paneelSamen, paneelTuin, paneelTuintje, paneelZes, kaderVan, grondZon, schrijf };

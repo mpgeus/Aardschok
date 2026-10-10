@@ -125,7 +125,7 @@
 const K = require('./kern.cjs');
 require('./dorp.cjs'); // meldt de veldsteen-ramp aan bij kern.cjs
 const T = require('./toren.cjs');
-const { TEGEL, PXH, RAMP, RAMP_LEN, hash, rnd, ruis2, klem, glad, mix, sdf } = K;
+const { TEGEL, PXH, RAMP, RAMP_LEN, hash, rnd, ruis2, ruis3, klem, glad, mix, sdf } = K;
 const { Wereld, voeg } = T;
 const { E, GRAAD, balk, stok, steenOp, steenStap } = T.hulp;
 const SQ = Math.SQRT1_2;
@@ -185,6 +185,8 @@ for (const [naam, hexen] of [
   ['baksteen', ['#24120e', '#3e1e16', '#5c2c1e', '#7a3c28', '#985034', '#b06642', '#c67e54', '#d89a6c']],
   // zandsteen (Marcel, 4 okt: "Dit was eigenlijk natuurstenen blokken"): geelgrijs, warm in de zon
   ['zandsteen', ['#262018', '#3e3426', '#5a4c36', '#786848', '#94845c', '#ae9e72', '#c6b88c', '#dcd0a8']],
+  // oud hout (het verweren, vraag 144): het warme eiken half naar het grijs van schors, even veel stappen als 'hout'
+  ['houtOud', ['#1b1213', '#2f1e1c', '#463024', '#5f442e', '#7a5a3c', '#96744e', '#b08e62', '#c6a87c']],
 ]) {
   if (K.RAMP[naam] !== undefined) continue;
   K.RAMPEN[naam] = hexen;
@@ -397,7 +399,8 @@ function meng(a, b) {
 }
 
 function knoppenVan(zaad, o) {
-  const kn = { scheef: true, pak: true, speelgoed: true, ...(o.knoppen || {}) };
+  // verweer staat nog uit: het voorbeeldhuis (vraag 144) zet hem aan, tot de ronde van alle tekeningen
+  const kn = { scheef: true, pak: true, speelgoed: true, verweer: false, ...(o.knoppen || {}) };
   const r = (k) => rnd(zaad * 7919 + 101, k);
   const rs = (k) => r(k) * 2 - 1;
   const kz = (k) => meng(zaad, k);
@@ -4054,6 +4057,7 @@ function bouwUitbouwen(W, H, T) {
         return z > GS.zTop + 3 && Math.abs(a) < hd - 2.8 && Math.abs(q) < hw - 2.8 ? 'donker' : 'schoorsteen';
       },
       deel: 880,
+      top: GS.zTop, // voor het roet (verweer)
     });
   }
 
@@ -4141,6 +4145,127 @@ function bouwUitbouwen(W, H, T) {
       });
     }
   }
+}
+
+// ---------------------------------------------------------------- ronde 5: het verweren
+
+// Het verweren (o.knoppen.verweer; vraag 144, het voorbeeldhuis; ontwerp/beeld.md, "De huizen naar Marcels
+// voorbeelden", 3 en 6): het riet grijsbruin met mos in plukken, meer in de schaduw en naar de goot toe; het
+// pleister met vochtvlekken, vuil boven de plint, en hier en daar afgevallen, met de baksteen erdoor; het hout grijzer; de
+// plint nat aan de voet en met mos; een schoorsteen zwart van het roet; mos op een dun dak. Het wikkelt alleen de patronen en kiest de rampen, dus zonder de
+// knop blijft elke tekening pixel voor pixel dezelfde. Alles hangt aan de plek in de wereld (C.x, C.y, C.z), niet aan
+// de pixel, zodat een huis in elke stand op dezelfde plek verweerd is.
+const VERWEER = {
+  mos: 0.68, // vanaf hoeveel mos (mosOp) er mos groeit op het riet; hoger is minder
+  mosDak: 0.72, // en op een dun dak
+  mosPlint: 0.74, // en op de plint
+  af: 0.78, // vanaf hoeveel (ruis van 0 tot 1) het pleister afgevallen is
+  vocht: 1.1, // hoeveel stappen een vochtvlek het pleister donkerder maakt
+  grauw: 0.5, // hoeveel stappen het pleister in het geheel minder wit is
+  spat: 45, // tot hoe hoog boven de plint het opspattende water het pleister vuil maakt (px)
+  riet: 0.3, // hoeveel stappen het riet in de zon minder licht wordt
+  roet: 60, // hoe ver onder de top van een schoorsteen het roet komt (px), in strepen
+};
+const omRamp = (s, van, naar) => (s * (RAMP_LEN[RAMP[naar]] - 1)) / (RAMP_LEN[RAMP[van]] - 1);
+// hoeveel mos er op een plek groeit (0 tot zo'n 1,2): plukken uit twee lagen ruis, meer waar weinig licht komt
+function mosOp(H, C) {
+  const { x, y, z } = C;
+  const grof = ruis3(x * 0.028, y * 0.028, z * 0.028, H.zaad + 601);
+  const fijn = ruis3(x * 0.12, y * 0.12, z * 0.12, H.zaad + 607);
+  return grof * 0.75 + fijn * 0.25 + (1 - C.licht) * 0.25;
+}
+// de rand van een pluk rafelt: over een strook boven de drempel groeit hij steeds dichter, in korreltjes van twee pixels
+const mosHier = (H, C, m, drempel) => m > drempel && (m - drempel) * 12 > (hash(C.px >> 1, C.py >> 1, H.zaad + 609) % 100) / 100;
+// mos, donkerder dan wat eronder ligt (s, in de stappen van ramp), de pluk in het midden wat bol, met korrels
+function mos(H, C, s, ramp, m, drempel) {
+  const bol = klem((m - drempel) * 6, 0, 1) * 0.5;
+  const k = hash(C.px >> 1, C.py, H.zaad + 613) % 7;
+  return { ramp: 'mos', stap: omRamp(s, ramp, 'mos') * 0.66 + bol + (k === 0 ? 0.6 : k === 1 ? -0.5 : 0) };
+}
+
+function verweer(W, H) {
+  const wikkel = (naam, f) => {
+    const m = W.mat[naam];
+    if (m) W.mat[naam] = { ...m, patroon: f(m.patroon || (() => 0), m) };
+  };
+  // het riet: grijsbruin, met mos; een lap is vers riet, nog goud
+  if (W.mat.riet) Object.assign(W.mat.riet, { ramp: 'riet', hi: W.mat.riet.hi - VERWEER.riet });
+  if (!H.dun && W.mat.nok) W.mat.nok.ramp = 'riet';
+  wikkel('riet', (f) => (C) => {
+    const r = f(C);
+    // een lap is een seizoen jonger: dezelfde ramp, een tint lichter, en geen goud (Marcel, 10 okt: "Dit ziet er raar
+    // uit", over een gouden lap op het grijze dak)
+    if (r && typeof r === 'object') return { plus: (r.plus || 0) + (r.ramp ? 0.3 : 0) - 0.2 };
+    // de donkere zoom onder elke laag blijft: het mos groeit op de laag, niet eroverheen
+    if (r < -1.3) return r;
+    // meer naar de goot toe, waar het water langer blijft staan
+    const m = mosOp(H, C) + klem(1 - (C.z - (H.voetZ ?? 0)) / E(140), 0, 1) * 0.12;
+    return mosHier(H, C, m, VERWEER.mos) ? mos(H, C, C.stap + r * 0.7, 'riet', m, VERWEER.mos) : r;
+  });
+  // het pleister
+  wikkel('pleister', (f, M) => (C) => {
+    const r = f(C);
+    if (typeof r !== 'number') return r;
+    const { x, y, z } = C;
+    const hp = z * PXH;
+    // onderaan de muur valt het meest af
+    const laag = klem(1 - (hp - H.hS) / 120, 0, 1) * 0.2;
+    const afOp = (zz) => ruis3(x * 0.035, y * 0.035, zz * 0.045, H.zaad + 617) + laag;
+    const af = afOp(z);
+    if (af > VERWEER.af) {
+      // de baksteen erdoor, wat dieper dan het pleister: onder de rand ervan een schaduw
+      const stap = C.stap;
+      C.stap = omRamp(stap, M.ramp, 'baksteen');
+      const st = baksteenPatroon(H, C);
+      C.stap = stap;
+      const onderRand = afOp(z + E(3)) <= VERWEER.af;
+      return { ramp: st.ramp || 'baksteen', stap: st.stap - 0.6 - (onderRand ? 1.5 : 0) };
+    }
+    let s = r - VERWEER.grauw;
+    // de dikke rand van het pleister om het gat
+    if (af > VERWEER.af - 0.015) s += 0.6;
+    // vochtvlekken, groot en zacht
+    s -= glad(0.45, 0.85, ruis3(x * 0.018, y * 0.018, z * 0.025, H.zaad + 619)) * VERWEER.vocht;
+    // opspattend water boven de plint, met een rafelige bovenrand
+    const boven = hp - H.hS + (ruis2(x * 0.3 + y * 0.3, 0, H.zaad + 621) - 0.5) * 14;
+    if (boven < VERWEER.spat) s -= Math.pow(1 - klem(boven / VERWEER.spat, 0, 1), 1.5) * 0.9;
+    return s;
+  });
+  // de plint en de voet van een schoorsteen: nat aan de voet, en mos tussen de onderste stenen; een schoorsteen zwart
+  // van het roet naar zijn top
+  const voet = (f, M) => (C) => {
+    const r = f(C);
+    if (!r || typeof r !== 'object' || r.stap === undefined) return r;
+    const hp = C.z * PXH;
+    let s = r.stap;
+    if (C.deel.top !== undefined) {
+      // in strepen naar beneden: waar het regenwater het roet meeneemt, loopt het verder door
+      const streep = ruis2((C.x - C.y) * 0.35, 0, H.zaad + 623);
+      const t = klem(1 - (C.deel.top - C.z) / E(VERWEER.roet * (0.6 + streep)), 0, 1);
+      s -= t * (s - 0.3) * 0.85;
+    }
+    if (hp > 50) return { ...r, stap: s };
+    if (hp < 12) s -= (1 - hp / 12) * 1.1;
+    const m = mosOp(H, C) + (1 - hp / 50) * 0.2 - 0.1;
+    if (C.nz < 0.5 && mosHier(H, C, m, VERWEER.mosPlint)) return mos(H, C, s, r.ramp || M.ramp, m, VERWEER.mosPlint);
+    return { ...r, stap: s };
+  };
+  wikkel('steen', voet);
+  wikkel('schoorsteen', voet);
+  // een dun dak: mos in plukken, alleen bovenop
+  for (const naam of Object.keys(W.mat)) {
+    if (!((naam === 'dak' && H.dun) || naam.startsWith('dak_'))) continue;
+    wikkel(naam, (f, M) => (C) => {
+      const r = f(C);
+      if (C.nz < 0.3) return r;
+      const m = mosOp(H, C);
+      if (!mosHier(H, C, m, VERWEER.mosDak)) return r;
+      const s = typeof r === 'number' ? C.stap + r : r.stap ?? C.stap + (r.plus || 0);
+      return mos(H, C, s, (r && r.ramp) || M.ramp, m, VERWEER.mosDak);
+    });
+  }
+  // het hout: grijzer
+  for (const m of Object.values(W.mat)) if (m.ramp === 'hout') m.ramp = 'houtOud';
 }
 
 // ---------------------------------------------------------------- het huis
@@ -4403,6 +4528,7 @@ function huis(zaad = 1, o = {}) {
         return z > z1 + 3 && Math.max(Math.abs(xs), Math.abs(ys)) < S.s - 2.8 ? 'donker' : 'schoorsteen';
       },
       deel: 4,
+      top: z1, // voor het roet (verweer)
     });
   }
 
@@ -5057,6 +5183,7 @@ function huis(zaad = 1, o = {}) {
       hh,
     });
   });
+  if (H.kn.verweer) verweer(W, H);
   return W;
 }
 
