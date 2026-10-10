@@ -27,9 +27,10 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
   beschreven bij vraag 145; dan maakt een nieuwe sessie het.
 - Vraag 145 laten zien: is het dorp nu minder "saai"? En daarna het voorbeeldhuis naar de voorbeelden (`beeld.md`).
 - Een feest op het plein vol kijkgaten (`opmerkingen.md`, "Het beeld"): **Marcel (10 okt): "Ja akkoord"**, op een feest
-  alleen wie ertoe doet. **Bezig in sessie `ccr-a1a4ef49-0815cc`** (10 okt).
-- Uit `opmerkingen.md`: een brand die overslaat op het huis ernaast, een eigen beeld voor de koorts (ziekbed, hoesten),
-  en wie wijn wil (de wijnboerderij die niemand bouwt).
+  alleen wie ertoe doet. **Af in sessie `ccr-a1a4ef49-0815cc`** (10 okt), nog niet in `main`.
+- Wie wijn wil (vraag 136; Marcel, 10 okt: "Inwoners willen wijn en bier", en "B1, 0,02 is goed": de dorpelingen bier,
+  de ambachtslieden er wijn bij). **Bezig in sessie `ccr-a1a4ef49-0815cc`** (10 okt).
+- Uit `opmerkingen.md`: een brand die overslaat op het huis ernaast, en een eigen beeld voor de koorts (ziekbed, hoesten).
 - Vraag 142, de bladzijde met alle getallen (`gereedschap/instellingen.html`): stap 1 en 2 staan in `main`; stap 3 (een
   speeltest met een set getallen, naast de vorige) wacht.
 
