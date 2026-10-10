@@ -341,12 +341,12 @@
   //
   // Hoeveel een soort meebeweegt (in bronpixels, aan de bovenkant van het beeld): 0 is niets
   // (een schuur, een muur, een rots), hoger buigt verder mee. Een boom een beetje, een doek
-  // veel; wat hier niet in staat, staat stil.
+  // veel; wat hier niet in staat, staat stil. Een boom of een struik zegt het zelf (`wind` in T.BOMEN, js/wereld.js).
   const WIND_GEWICHT = {
-    eik: 4, herfstEik: 4, den: 3, berk: 5, wilg: 6, appelboom: 4, dodeBoom: 1,
-    struik: 3, bessenStruik: 3, varen: 4, grasPol: 4, hoogGras: 5, bloemen: 4,
+    varen: 4, grasPol: 4, hoogGras: 5, bloemen: 4,
     waslijn: 10,
   };
+  const windGewicht = (naam) => WIND_GEWICHT[naam] || (T.BOMEN[naam] && T.BOMEN[naam].wind) || 0;
   const WIND_STANDEN = 5; // een handvol standen: sterk terug .. stil .. sterk mee
   const WIND_PLAK = 4; // hoogte van een plak in bronpixels, alleen bij het bakken
 
@@ -392,6 +392,42 @@
     };
   };
 
+  // Welke tekening een voorwerp op de kaart krijgt (vraag 148, a: "elke boom anders"): een boom heeft op zijn vel meer
+  // tekeningen, met de naam van zijn soort en een `vorm` (gereedschap/pixelart/naar-tiled.cjs), en welke het wordt, zegt
+  // zijn tegel. Zo verandert er in het spel niets (een voorwerp heeft het nummer van de eerste, v.id), en past een
+  // bewaard spel. Wat maar één tekening heeft, houdt de zijne.
+  const VORMEN = new Map(); // per vel: het nummer van de eerste tekening van een soort -> alle nummers
+  function vormenVan(velNaam, id) {
+    const v = T.TEGELS && T.TEGELS[velNaam];
+    if (!v) return null;
+    let per = VORMEN.get(v);
+    if (!per) {
+      per = new Map();
+      const eerste = new Map();
+      v.tiles.forEach((t, i) => {
+        if (!t || !t.naam) return;
+        if (!t.vorm) {
+          if (!eerste.has(t.naam)) eerste.set(t.naam, i);
+          return;
+        }
+        const e = eerste.get(t.naam);
+        if (e == null) return;
+        if (!per.has(e)) per.set(e, [e]);
+        per.get(e).push(i);
+      });
+      VORMEN.set(v, per);
+    }
+    return per.get(id) || null;
+  }
+  S.tekeningVan = function (v) {
+    const vormen = v.vel != null && vormenVan(v.vel, v.id);
+    if (!vormen) return v.id;
+    // goed gemengd, anders staan buren in een patroon
+    let h = (Math.imul(v.x | 0, 374761393) + Math.imul(v.y | 0, 668265263)) | 0;
+    h = Math.imul(h ^ (h >>> 13), 1274126177);
+    return vormen[((h ^ (h >>> 16)) >>> 0) % vormen.length];
+  };
+
   // `wind`, als meegegeven, is de windwaarde voor dít voorwerp (-1..1, T.windWaarde in
   // js/main.js). Weegt de soort niets mee (of wordt geen windwaarde meegegeven), dan gewoon het
   // stilstaande beeld — precies zoals voorheen. Een tekening met een eigen bestand (een huis, een
@@ -403,7 +439,7 @@
     const plek = bestand && S.celVan(velNaam, id);
     if (!plek || (eigen && !laadAlsNodig(eigen))) return null;
     const [x, y, b, h] = plek.cel;
-    const gewicht = wind != null && WIND_GEWICHT[v.tiles[id].naam];
+    const gewicht = wind != null && windGewicht(v.tiles[id].naam);
     if (!gewicht) return onthoud(`buiten,${velNaam},${id}`, () => stuk(bestand, x, y, b, h, plek.anker));
     const midden = (WIND_STANDEN - 1) / 2;
     const w = Math.max(-1, Math.min(1, wind));

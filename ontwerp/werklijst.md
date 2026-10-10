@@ -60,9 +60,9 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
    met Marcel.
 0c. Meer variatie in het groen, de bomen en de versiering (vraag 148; Marcel, 9 okt: alles ja, "Mag ernaast"), naast
    de ui: eerst de bomen (vormen, nieuwe soorten, de seizoenen met vruchten), dan het groen eronder, dan de spullen bij de
-   huizen; de sneeuw op de bomen en de huizen (144, 4b, Marcel: "ja") in dezelfde ronde. **Bezig in sessie `main`
-   (desktop, groen)** (10 okt): stap 1 in het spel (de sneeuw op de spar dunner, de vormen en de nieuwe soorten op de
-   kaart, vast per tegel), dan stap 2 (de seizoenen).
+   huizen; de sneeuw op de bomen en de huizen (144, 4b, Marcel: "ja") in dezelfde ronde. Stap 1 staat in het spel (10
+   okt, avond): elke boom een van zijn vormen, de nieuwe soorten op de kaart, de spar dunner onder de sneeuw. **Bezig in
+   sessie `main` (desktop, groen)** (10 okt): stap 2, de seizoenen, als Marcel het plan goedvindt.
 1. Een proefversie voor Marcels 4K-scherm en een eerste tester (33d; `npm run proefversie`, ook `-- --windows`), met de
    graanzak erin. De laatste is van 3 okt (`36c713e`), zonder de verzoeken, de twee bazen, het ontginnen, de markt, de
    wolven, het eiland, WebGL en de graanzak.
@@ -7530,6 +7530,18 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     met ja staat hij meteen op het plein tot en met 6 louwmaand, met kaarsjes als licht, en op kerstavond viert het dorp
     de avond (`js/feesten.js`, `beelden/kerstboom.png` uit `naar-spel.cjs --alleen kerstboom`). De boom is de spar van nu:
     wordt de spar in stap 1 nog anders, dan opnieuw renderen.
+    **Stap 1 in het spel (10 okt, avond):** het vel van de bomen heeft nu 54 tekeningen (was 11): de eik in zijn zes
+    vormen, de den (de spar van nu), de berk, de appelboom en de beuk in vier, de rest in drie, en de nieuwe soorten (beuk,
+    linde, els, populier, knotwilg, grove den, en meidoorn en hazelaar als struik; `BOOM_VORMEN` in `naar-tiled.cjs`).
+    Welke vorm een boom krijgt, zegt zijn tegel bij het tekenen (`T.sprites.tekeningVan`), dus geen regel verandert en een
+    bewaard spel past. Alle soorten staan op één plek (`T.BOMEN` in `js/wereld.js`): wat bos is, wat je rooit, wat de
+    houthakker inplant, de wind en de bosrand lezen het daar, zodat een nieuwe soort overal meetelt (eerst stonden ze in
+    acht lijstjes). De maker legt de nieuwe soorten met een vaste keus per tegel, zonder zijn lot te raken (`ANDERE_BOMEN`
+    in `js/maker.js`): op het plein een linde, aan het water een knotwilg of een els, op de heide een grove den, in het bos
+    een beuk en een hazelaar, langs de weg een populier, in de wei een meidoorn; verder ligt elk land zoals het lag. Een
+    kaart leest een tegelnummer nu zoals Tiled (`js/kaart.js`), zodat een vel kan groeien zonder over het vel erna te
+    vallen. De sneeuw op een spar is dunner (`sneeuwDikte` 0,25), zodat hij niet meer helemaal wit wordt. Het vel is in de
+    browser zo'n 7 MB. **Open:** een populier staat er nog weinig (de losse bomen houden afstand van de weg).
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

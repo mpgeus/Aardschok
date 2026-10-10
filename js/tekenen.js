@@ -176,7 +176,7 @@
   const PLAT_HOOG = 24;
   function isPlat(v) {
     const vel = v.vel && T.TEGELS && T.TEGELS[v.vel];
-    const t = vel && vel.tiles[v.id];
+    const t = vel && vel.tiles[T.sprites.tekeningVan(v)];
     return !!(t && !t.vast && !t.beslaat && t.doos && t.doos[1] <= PLAT_HOOG);
   }
   // Per wereld de platte voorwerpen, opnieuw gezocht als de kaart veranderde (T.kaartVersie, js/wereld.js); `versie` gaat
@@ -205,7 +205,7 @@
     for (const v of lijst) {
       const p = opGrond(v.x, v.y);
       const dof = randDof(w, v.x, v.y);
-      const stuk = metSprites() && T.sprites.buitenAan && T.sprites.buiten(v.vel, v.id, 0);
+      const stuk = metSprites() && T.sprites.buitenAan && T.sprites.buiten(v.vel, T.sprites.tekeningVan(v), 0);
       if (!stuk || dof <= 0.02) continue;
       if (dof < 1) c.globalAlpha = dof;
       T.sprites.teken(c, stuk, p.x, p.y, 1);
@@ -407,7 +407,7 @@
   function tekenGebakkenBoom(c, v) {
     const p = opGrond(v.x, v.y);
     const helder = bosrandHelder(v.r);
-    const ruw = metSprites() && T.sprites.buitenAan && T.sprites.buiten(v.vel, v.id, 0);
+    const ruw = metSprites() && T.sprites.buitenAan && T.sprites.buiten(v.vel, T.sprites.tekeningVan(v), 0);
     if (ruw) T.sprites.teken(c, bosrandGedimd(ruw, helder), p.x, p.y, 1);
     else tekenBuitenVlak(c, v, helder);
   }
@@ -1317,14 +1317,13 @@
   const RAND_BOS = new WeakMap();
   const RANDBOS_DIEP = 6; // zo diep kijkt hij de kaart in
   const RANDBOS_BREED = 2; // en zoveel tegels opzij, om het glad te houden
-  const BOMEN_VOOR_DE_RAND = new Set(['eik', 'herfstEik', 'den', 'berk', 'wilg', 'dodeBoom']);
   function randBos(w) {
     let rb = RAND_BOS.get(w);
     if (rb) return rb;
     const b = w.b;
     const h = w.h;
     const boom = new Uint8Array(b * h);
-    for (const v of w.voorwerpen || []) if (BOMEN_VOOR_DE_RAND.has(v.soort) && v.x >= 0 && v.y >= 0 && v.x < b && v.y < h) boom[v.y * b + v.x] = 1;
+    for (const v of w.voorwerpen || []) if (T.isBosBoom(v.soort) && v.x >= 0 && v.y >= 0 && v.x < b && v.y < h) boom[v.y * b + v.x] = 1;
     const deel = (x0, y0, x1, y1) => {
       let n = 0;
       let t = 0;
@@ -2186,11 +2185,9 @@
 
   // Wat buiten op de grond staat en geen eigen tekening met vlakken heeft: een boom is een stam
   // met een kruin, een gebouw een blok zo groot als zijn voet. Genoeg om te zien waar je niet
-  // langs kunt, en om met Spel.debug.vlakken te kunnen vergelijken.
+  // langs kunt, en om met Spel.debug.vlakken te kunnen vergelijken. Een boom of een struik zegt het zelf (`vlak` in
+  // T.BOMEN, js/wereld.js).
   const BUITENVLAK = {
-    eik: ['#4a7030', 46, 0.30], herfstEik: ['#a9632a', 46, 0.30], den: ['#2f5734', 54, 0.26],
-    berk: ['#6f9a45', 40, 0.22], dodeBoom: ['#6b5a44', 44, 0.20], wilg: ['#5d7f3c', 42, 0.32],
-    appelboom: ['#4f7a33', 38, 0.30], struik: ['#3d6329', 18, 0.30], bessenStruik: ['#3a5f2c', 16, 0.30],
     varen: ['#476b2c', 10, 0.26], grasPol: ['#4e7430', 8, 0.22], hoogGras: ['#577d33', 14, 0.22],
     bloemen: ['#6d8a3c', 8, 0.24], paddenstoelen: ['#9a7250', 6, 0.16], boomstronk: ['#6a5238', 12, 0.26],
     rots: ['#77736c', 20, 0.30], kleineRots: ['#7d7973', 10, 0.20],
@@ -2199,7 +2196,7 @@
   function tekenBuitenVlak(ctx, v, helder) {
     const p = opGrond(v.x, v.y);
     const b = v.beslaat || [1, 1];
-    const vorm = BUITENVLAK[v.soort];
+    const vorm = BUITENVLAK[v.soort] || (T.BOMEN[v.soort] && T.BOMEN[v.soort].vlak);
     if (vorm) {
       const [hex, hoog, breed] = vorm;
       if (hoog > 24) T.blok(ctx, p.x, p.y, 0.08, 0.08, hoog * 0.55, '#5a4632', { helder }); // stam
@@ -2255,7 +2252,7 @@
   //   dim-techniek als een kamer waar je niet bent), nooit de doorzichtigheid. Voorbij de diepte
   //   waar de dichtheid nul wordt, tekent deze code niets meer: de donkere achtergrond die
   //   T.tekenScene daar al neerzet, is dan zelf het bos, dus het houdt nergens hard op.
-  const BOSRAND_SOORTEN = ['eik', 'herfstEik', 'den', 'berk', 'wilg', 'appelboom', 'dodeBoom', 'struik', 'bessenStruik'];
+  const BOSRAND_SOORTEN = Object.keys(T.BOMEN).filter((s) => T.BOMEN[s].rand); // `rand` in T.BOMEN, js/wereld.js
   // herfstEik is de oranje-rode herfstvariant van de eik (gereedschap/pixelart/bomen.cjs); in het
   // gehucht staat de kalender op lente (js/tijd.js, S.kalender), dus daar hoort geen herfstboom te
   // staan (Marcel, 23 sep 2026). Seizoenen die bomen écht laten verkleuren komen later; dit is de
@@ -2271,7 +2268,9 @@
   // op naam opgezocht in T.TEGELS, niet op een vast nummer. De pixel-art-gereedschap maakt die
   // vellen opnieuw aan (npm run pixelart), en dan kan de volgorde erin verschuiven. Twee lijsten
   // (met en zonder herfstvarianten), want welke van de twee een gebied krijgt hangt af van het
-  // gebied zelf (zie bosrandOp hieronder) en dat kan per wereld verschillen.
+  // gebied zelf (zie bosrandOp hieronder) en dat kan per wereld verschillen. Eén per soort: welke
+  // vorm een boom krijgt, zegt zijn tegel (T.sprites.tekeningVan), zodat een soort met zes vormen
+  // niet zes keer zo vaak staat.
   const bosrandVellenPerSoort = {};
   function bosrandVellenOpbouwen(metHerfst) {
     const r = [];
@@ -2279,7 +2278,7 @@
       const vel = T.TEGELS && T.TEGELS[velNaam];
       if (!vel) continue;
       vel.tiles.forEach((tegel, id) => {
-        if (!tegel || !BOSRAND_SOORTEN.includes(tegel.naam)) return;
+        if (!tegel || tegel.vorm || !BOSRAND_SOORTEN.includes(tegel.naam)) return;
         if (!metHerfst && HERFST_SOORTEN.includes(tegel.naam)) return;
         r.push({ vel: velNaam, id, soort: tegel.naam });
       });
@@ -2634,7 +2633,7 @@
     const p = opGrond(v.x, v.y);
     if (zicht < 1) ctx.globalAlpha = zicht;
     const helder = bosrandHelder(v.r);
-    const ruw = metSprites() && T.sprites.buitenAan && T.sprites.buiten(v.vel, v.id, windVoorInstantie(S, v));
+    const ruw = metSprites() && T.sprites.buitenAan && T.sprites.buiten(v.vel, T.sprites.tekeningVan(v), windVoorInstantie(S, v));
     // Het donkerder maken zit al in het plaatje (bosrandGedimd); T.sprites.teken hoeft dus geen
     // ctx.filter meer aan te zetten, vandaar de 1 hier.
     if (ruw) T.sprites.teken(ctx, bosrandGedimd(ruw, helder), p.x, p.y, 1);
@@ -2680,7 +2679,7 @@
       if (alpha <= 0.02) return;
       if (alpha < 1) ctx.globalAlpha = alpha;
       const plaatjes = metSprites() && T.sprites.buitenAan;
-      let stuk = puin || fase || (plaatjes && T.sprites.buiten(v.vel, v.id, windVoorInstantie(S, v)));
+      let stuk = puin || fase || (plaatjes && T.sprites.buiten(v.vel, T.sprites.tekeningVan(v), windVoorInstantie(S, v)));
       // Een huis of een gebouw heeft een eigen bestand, dat pas laadt als hij op de kaart staat (js/sprites.js; vraag
       // 114, stap 1). Laadt het nog, dan wat er daarnet stond (een huis dat net doorgroeide), en anders niets: een vlak
       // alleen als het plaatje echt ontbreekt.

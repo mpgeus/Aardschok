@@ -98,29 +98,27 @@
   }
 
   // Voor deze ene kaart: elk tileset-blok (firstgid, veelnaam, en het vel uit T.TEGELS zelf). Een
-  // gid hoort bij een vel als hij binnen firstgid .. firstgid + aantal_tegels - 1 valt — niet
-  // zomaar "de eerste met firstgid <= gid", want dat gaat mis zodra vellen niet precies achter
-  // elkaar liggen (bijvoorbeeld na npm run tiled, als een vel meer of minder tegels heeft
-  // gekregen dan toen de kaart voor het laatst in Tiled openstond).
+  // gid hoort bij het vel met de grootste firstgid die er niet boven ligt, zoals Tiled hem leest, en
+  // alleen als hij binnen dat vel valt (firstgid .. firstgid + aantal_tegels - 1): zo klopt het ook
+  // als vellen niet precies achter elkaar liggen, na npm run tiled. Kreeg een vel minder tegels, dan
+  // valt een gid erachter nergens; kreeg het er meer (de bomen met hun vormen, vraag 148), dan valt
+  // een gid van het vel erna niet in de nieuwe tegels.
   function bouwOpzoeker(kaart) {
     const sets = (kaart.tilesets || []).map((t) => {
       const naam = velNaam(t.source || t.name || '');
       const vel = T.TEGELS && T.TEGELS[naam];
       return { naam, firstgid: t.firstgid || 1, aantal: vel ? vel.tiles.length : t.tilecount || 0, vel };
-    });
+    }).sort((a, b) => b.firstgid - a.firstgid);
     // Geeft { vel, id, eig } terug: uit welk vel de tegel komt, welke hij daar is, en wat erover
     // in de .tsx stond. Het spel heeft vel en id nodig om hem te kunnen tekenen (js/sprites.js).
     return function (gid) {
       const g = zonderVlag(gid);
       if (!g) return null;
-      for (const s of sets) {
-        const lokaal = g - s.firstgid;
-        if (s.vel && lokaal >= 0 && lokaal < s.aantal) {
-          const eig = s.vel.tiles[lokaal];
-          return eig ? { vel: s.naam, id: lokaal, eig } : null;
-        }
-      }
-      return null;
+      const s = sets.find((s) => s.firstgid <= g);
+      const lokaal = s ? g - s.firstgid : -1;
+      if (!s || !s.vel || lokaal >= s.aantal) return null;
+      const eig = s.vel.tiles[lokaal];
+      return eig ? { vel: s.naam, id: lokaal, eig } : null;
     };
   }
 

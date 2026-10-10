@@ -759,9 +759,9 @@
   // Een houthakker hoort bij het bos, een steengroeve bij de rotsen, een visser en een rietsnijder aan het water (`bij` in
   // T.GEBOUWEN). Op een land van de maker ligt dat elk spel ergens anders (js/maker.js), zodat elk land
   // een andere puzzel is. Wat telt, zegt T.NATUUR per soort: een voorwerp op de tegel, of de grond zelf.
-  const BOMEN = new Set(['eik', 'herfstEik', 'den', 'berk', 'wilg', 'dodeBoom']);
   T.NATUUR = {
-    bos: { naam: 'het bos', meervoud: 'bomen', telt: (w, x, y, v) => !!v && BOMEN.has(v.soort) },
+    // een boom van het bos (T.BOMEN, js/wereld.js)
+    bos: { naam: 'het bos', meervoud: 'bomen', telt: (w, x, y, v) => !!v && T.isBosBoom(v.soort) },
     rotsen: { naam: 'de rotsen', meervoud: 'rotsen', telt: (w, x, y, v) => !!v && v.soort === 'rots' },
     // het water van een beek, een meer of een rivier, en de zee (tegels/kust.png): een visser vist er ook
     water: { naam: 'het water', meervoud: 'tegels water', telt: (w, x, y) => !!(w.grond && w.grond[y] && w.grond[y][x] && T.isWaterGrond(w.grond[y][x].naam)) },

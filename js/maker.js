@@ -269,6 +269,28 @@
     return toeval() < 0.03 ? 'dodeBoom' : BOSBOMEN[Math.floor(toeval() * BOSBOMEN.length)];
   }
 
+  // De nieuwe soorten (vraag 148, a; Marcel, 9 okt: "Ja goed idee"): waar de maker een eik, een den, een wilg of een
+  // struik legt, maakt een vaste keus per tegel (`hash`) er soms een soort van die bij de plek past, zonder het lot te
+  // raken, zodat hij verder legt wat hij legde: op het plein een linde, aan het water een knotwilg of een els, op de heide
+  // en het zand een grove den, in het bos een beuk en een hazelaar, langs de weg een populier, en in de wei een meidoorn.
+  // Per plek, per soort: [andere soort, kans].
+  const ANDERE_BOMEN = {
+    plein: { eik: [['linde', 0.5]] },
+    water: { wilg: [['knotwilg', 0.5], ['els', 0.3]], eik: [['els', 0.4]], berk: [['els', 0.4]] },
+    heide: { den: [['groveDen', 0.8]], eik: [['groveDen', 0.3]], berk: [['groveDen', 0.3]] },
+    bos: { eik: [['beuk', 0.35], ['linde', 0.05]], struik: [['hazelaar', 0.3]] },
+    weg: { eik: [['populier', 0.6]], berk: [['populier', 0.4]] },
+    wei: { eik: [['beuk', 0.15], ['linde', 0.15]], struik: [['meidoorn', 0.25], ['hazelaar', 0.1]] },
+  };
+  function andereBoom(soort, x, y, waar) {
+    let k = hash(x, y, 821);
+    for (const [ander, kans] of (ANDERE_BOMEN[waar] || {})[soort] || []) if ((k -= kans) < 0) return ander;
+    return soort;
+  }
+  const KAN_ANDERS = new Set(Object.values(ANDERE_BOMEN).flatMap(Object.keys));
+  // Wat voor plek een streek van het eiland is, voor ANDERE_BOMEN.
+  const PLEK_VAN_STREEK = { woud: 'bos', kampen: 'bos', heide: 'heide', zand: 'heide', duinen: 'heide', broek: 'water', veen: 'water' };
+
   // Eén poging: een plan, of null met de reden waarom het niet deugde. Met `land` (T.landVanEiland, js/eiland.js) legt
   // hij het gehucht op het land van het eiland: zie bij elke stap "Op het eiland".
   function leg(zaad, poging, land) {
@@ -1225,8 +1247,16 @@
       deuren.add(sleutel(h.deur.x + h.kant.x, h.deur.y + h.kant.y));
     }
     const vrijVoor = (x, y) => binnen(x, y) && !bezet.has(sleutel(x, y)) && !deuren.has(sleutel(x, y));
+    // wat voor plek dit is, voor de nieuwe soorten (andereBoom)
+    const plekVoorBoom = (x, y) =>
+      op(x, y) === PLEIN ? 'plein'
+        : raakt(x, y, 1, 1, 1, [WATER]) ? 'water'
+          : land && PLEK_VAN_STREEK[land.streek(x, y)] === 'heide' ? 'heide'
+            : op(x, y) === BOS ? 'bos'
+              : raakt(x, y, 1, 1, 4, [WEG]) ? 'weg'
+                : 'wei';
     const leg1 = (naam, x, y) => {
-      voorwerpen.push({ naam, x, y });
+      voorwerpen.push({ naam: KAN_ANDERS.has(naam) ? andereBoom(naam, x, y, plekVoorBoom(x, y)) : naam, x, y });
       bezet.add(sleutel(x, y));
     };
     for (const v of voorwerpen) bezet.add(sleutel(v.x, v.y));
@@ -1509,10 +1539,9 @@
     // het water, en wat graspollen op het erf en de hei. Alleen op vrije grond.
     {
       const G = I.groei;
-      const BOMEN = ['eik', 'den', 'berk', 'wilg', 'appelboom', 'dodeBoom'];
       const onderBoom = new Uint8Array(B * H);
       for (const v of voorwerpen) {
-        if (!BOMEN.includes(v.naam)) continue;
+        if (!T.BOMEN[v.naam] || T.BOMEN[v.naam].struik) continue;
         for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) if (binnen(v.x + dx, v.y + dy)) onderBoom[(v.y + dy) * B + v.x + dx] = 1;
       }
       const bloemRuis = ruis(9);
@@ -1614,9 +1643,10 @@
     };
     for (const a of plan.akkers) if (!vakVan(a).some(([x, y]) => kom(x, y))) return `${a.akker} is niet te bereiken`;
     if (!vakVan(plan.meent).some(([x, y]) => kom(x, y))) return 'de meent is niet te bereiken';
-    // Het plein: niets erop dan de put, de eiken, de bank en een lantaarn, en genoeg ervan in beeld.
+    // Het plein: niets erop dan de put, de eiken, de bank en een lantaarn, en genoeg ervan in beeld. Een eik kan ook een
+    // linde zijn, of aan de rand een andere soort die een eik werd (ANDERE_BOMEN).
     const opPlein = (x, y) => T.binnenRand(plan.plein, x + 0.5, y + 0.5);
-    const magOpPlein = ['put', 'eik', 'bank', 'lantaarn'];
+    const magOpPlein = ['put', 'bank', 'lantaarn', 'eik', ...Object.values(ANDERE_BOMEN).flatMap((p) => (p.eik || []).map(([s]) => s))];
     for (const v of plan.voorwerpen) if (!magOpPlein.includes(v.naam) && opPlein(v.x, v.y)) return `er staat een ${v.naam} op het plein`;
     for (const h of plan.huizen) for (const [x, y] of vakVan(h)) if (opPlein(x, y)) return `de ${h.rol} staat op het plein`;
     for (const a of plan.akkers) for (const [x, y] of vakVan(a)) if (opPlein(x, y)) return `${a.akker} ligt op het plein`;
@@ -1973,7 +2003,7 @@
         const t = (y + D) * nb + x + D;
         const s = T.EILAND_STREKEN[tegels.streek[t]];
         let k = 0;
-        if (tegels.boom[t]) ding[t] = boomOpEiland(s, () => hash(x, y, 801 + k++));
+        if (tegels.boom[t]) ding[t] = andereBoom(boomOpEiland(s, () => hash(x, y, 801 + k++)), x, y, PLEK_VAN_STREEK[s] || 'wei');
         else if (s === 'rots') {
           const lot = hash(x, y, 811);
           ding[t] = lot < 0.3 ? 'rots' : lot < 0.55 ? 'kleineRots' : null;

@@ -102,18 +102,15 @@ function opzoekerVoor(kaart, tegelsJson) {
   const sets = (kaart.tilesets || []).map((t) => {
     const vel = tegelsJson[velNaamVan(t.source)];
     return { firstgid: t.firstgid || 1, aantal: vel ? vel.tiles.length : 0, vel };
-  });
+  }).sort((a, b) => b.firstgid - a.firstgid);
   return (gid) => {
     const g = gid & 0x1fffffff; // spiegel/draai-vlaggen (Tiled) wegdoen
     if (!g) return null;
-    for (const s of sets) {
-      const lokaal = g - s.firstgid;
-      if (s.vel && lokaal >= 0 && lokaal < s.aantal) {
-        const eig = s.vel.tiles[lokaal];
-        return eig ? eig.naam : null;
-      }
-    }
-    return null;
+    const s = sets.find((s) => s.firstgid <= g);
+    const lokaal = s ? g - s.firstgid : -1;
+    if (!s || !s.vel || lokaal >= s.aantal) return null;
+    const eig = s.vel.tiles[lokaal];
+    return eig ? eig.naam : null;
   };
 }
 function namenUit(kaart, tegelsJson) {

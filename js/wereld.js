@@ -65,6 +65,34 @@
     boomstronk: { blokkeert: false, zichtDicht: false },
   };
 
+  // De bomen en de struiken, op één plek (vraag 148, a: met een nieuwe soort hier telt hij overal mee). Een boom zonder
+  // meer is een boom van het bos (T.NATUUR.bos, js/gebouwen.js): hij telt voor het bos, de houthakker hakt hem om, en de
+  // bosrand om de kaart volgt hem (js/tekenen.js). `eigen`: een boom van iemand (de appelboom, T.isEigenBoom in
+  // js/bos.js); `struik`: wat je rooit (js/bos.js). `wordt`: wat een boompje dat de houthakker op zijn plek plant wordt,
+  // en `jong`: hoe het er als jonge boom uitziet (zonder: een eik). `wind`: hoe ver zijn kruin meebuigt (js/sprites.js),
+  // `vlak`: zijn kleur, hoogte en breedte zonder kunst (js/tekenen.js), `rand`: hij staat ook in het bos om de kaart.
+  T.BOMEN = {
+    eik: { wordt: 'eik', jong: 'jongeEik', wind: 4, vlak: ['#4a7030', 46, 0.3], rand: true },
+    herfstEik: { wordt: 'herfstEik', jong: 'jongeEik', wind: 4, vlak: ['#a9632a', 46, 0.3], rand: true },
+    den: { wordt: 'den', jong: 'jongeDen', wind: 3, vlak: ['#2f5734', 54, 0.26], rand: true },
+    berk: { wordt: 'berk', jong: 'jongeBerk', wind: 5, vlak: ['#6f9a45', 40, 0.22], rand: true },
+    wilg: { wind: 6, vlak: ['#5d7f3c', 42, 0.32], rand: true },
+    dodeBoom: { wind: 1, vlak: ['#6b5a44', 44, 0.2], rand: true },
+    beuk: { wordt: 'beuk', jong: 'jongeEik', wind: 4, vlak: ['#4f7a2e', 50, 0.32], rand: true },
+    linde: { wordt: 'linde', jong: 'jongeEik', wind: 4, vlak: ['#5b8536', 48, 0.32] },
+    els: { wordt: 'els', jong: 'jongeBerk', wind: 5, vlak: ['#3f6630', 40, 0.24] },
+    populier: { wind: 6, vlak: ['#58843a', 62, 0.16] },
+    knotwilg: { wind: 3, vlak: ['#62813f', 30, 0.26] },
+    groveDen: { wordt: 'groveDen', jong: 'jongeDen', wind: 3, vlak: ['#3c5e38', 50, 0.26] },
+    appelboom: { eigen: true, wind: 4, vlak: ['#4f7a33', 38, 0.3], rand: true },
+    struik: { struik: true, wind: 3, vlak: ['#3d6329', 18, 0.3], rand: true },
+    bessenStruik: { struik: true, wind: 3, vlak: ['#3a5f2c', 16, 0.3], rand: true },
+    meidoorn: { struik: true, wind: 3, vlak: ['#4b6e2c', 26, 0.3] },
+    hazelaar: { struik: true, wind: 3, vlak: ['#557a32', 28, 0.3] },
+  };
+  // Een boom van het bos (geen struik, niet van iemand), op zijn soort.
+  T.isBosBoom = (soort) => !!T.BOMEN[soort] && !T.BOMEN[soort].struik && !T.BOMEN[soort].eigen;
+
   // Hoe snel de schout loopt, in tegels per seconde: wat vlotter dan een dorpeling (1,2 tot 1,5),
   // zodat rondlopen niet sleept. Zijn loopbeeld telt de afgelegde weg (js/sprites.js), dus zijn
   // voeten glijden bij geen enkele snelheid.

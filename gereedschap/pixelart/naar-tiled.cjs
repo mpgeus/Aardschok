@@ -76,7 +76,7 @@ function veilig(naam, f) {
 // RAND_CAPACITEIT en padGrondVel() verderop.
 const VELCONFIG = {
   grond: { capaciteit: 160, kolommen: 4 }, // nu 58 (3 grondsoorten × 19 + water): vijf soorten erbij kan
-  bomen: { capaciteit: 32, kolommen: 8 }, // nu 11 in 16 vakken (het boompje en de jonge bomen kwamen er op 6 okt bij): zestien erbij kan
+  bomen: { capaciteit: 80, kolommen: 8 }, // nu 54 in 64 vakken: de vormen en de nieuwe soorten (vraag 148, a), en daarvoor 11 in 16 (het boompje en de jonge bomen, 6 okt). Groter maken kan: een kaart leest een gid zoals Tiled (js/kaart.js), dus wat erbij komt, valt niet over het vel erna
   begroeiing: { capaciteit: 40, kolommen: 8 }, // nu 10: dertig planten erbij kan
   gebouwen: { capaciteit: 96, kolommen: 8 }, // nu 27, en daar kwamen er vandaag al twaalf van: een heel dorp moet erin passen
   toren: { capaciteit: 8, kolommen: 4 }, // nu 1 (er is er maar één); een beetje lucht is vrijwel gratis
@@ -358,16 +358,18 @@ function renderModel(model, cb, ch, ankerY) {
   return p;
 }
 
-// naam: de sleutel in Bm (bomen.cjs), zaad: welk exemplaar (1 = het eerste).
+// lijst: de sleutels in Bm (bomen.cjs), elk het eerste exemplaar (zaad 1); of { key, naam, zaad, o, vorm }: een andere
+// vorm van een soort (BOOM_VORMEN), met de naam van de soort en `vorm` erbij.
 function bouwModelVel(veldNaam, lijst, vastVan) {
   const { capaciteit, kolommen } = VELCONFIG[veldNaam];
   const RAND_ONDER = 26; // ruimte onder het ankerpunt, voor schaduw/anti-aliasing (zie bosgebied-proef.cjs)
   const gevonden = [];
-  for (const naam of lijst) {
-    const gelukt = veilig(naam, () => {
-      const model = Bm[naam](1);
+  for (const ding of lijst) {
+    const { key, naam, zaad = 1, o = {}, vorm } = typeof ding === 'string' ? { key: ding, naam: ding } : ding;
+    const gelukt = veilig(key, () => {
+      const model = Bm[naam](zaad, o);
       const { b, h } = meetModel(model);
-      return { naam, model, b, h };
+      return { key, naam, vorm, model, b, h };
     });
     if (gelukt) gevonden.push(gelukt);
   }
@@ -378,8 +380,8 @@ function bouwModelVel(veldNaam, lijst, vastVan) {
   const ankerY = ch - RAND_ONDER;
   const items = [];
   for (const it of gevonden) {
-    const p = veilig(it.naam, () => renderModel(it.model, cb, ch, ankerY));
-    if (p) items.push({ key: it.naam, naam: it.naam, vast: vastVan(it.naam), doos: krapDoos(p, ankerX, ankerY), plaat: p });
+    const p = veilig(it.key, () => renderModel(it.model, cb, ch, ankerY));
+    if (p) items.push({ key: it.key, naam: it.naam, vorm: it.vorm, vast: vastVan(it.naam), doos: krapDoos(p, ankerX, ankerY), plaat: p });
   }
   if (!items.length) return null;
   const geordend = vasteVolgordeEnCapaciteit(veldNaam, items, capaciteit, kolommen);
@@ -393,7 +395,7 @@ function bouwModelVel(veldNaam, lijst, vastVan) {
     // deze correctie: Tiled schuift het plaatje cb/2−ankerX opzij en ch−ankerY omlaag terug.
     tileoffset: [Math.round(cb / 2) - ankerX, ch - ankerY],
     objectalignment: true,
-    tiles: geordend.map((it) => (it ? { naam: it.naam, vast: it.vast, doos: it.doos || null } : { naam: null, vast: false })),
+    tiles: geordend.map((it) => (it ? { naam: it.naam, vast: it.vast, doos: it.doos || null, ...(it.vorm ? { vorm: it.vorm } : {}) } : { naam: null, vast: false })),
   };
   schrijfVel(vel, beschrijving);
   console.log(`${velVerslag(beschrijving)}  (${items.length} echte tegels van ${capaciteit})`);
@@ -403,6 +405,34 @@ function bouwModelVel(veldNaam, lijst, vastVan) {
 // Achteraan het boompje dat de houthakker plant en de jonge bomen waar het in een jaar of twee via
 // groeit (vraag 115, f).
 const BOMEN = ['eik', 'herfstEik', 'den', 'berk', 'dodeBoom', 'wilg', 'appelboom', 'boompje', 'jongeEik', 'jongeDen', 'jongeBerk'];
+// Elke boom anders (vraag 148, a; Marcel, 9 okt: "Ja goed idee"): per soort zijn vormen, de eerste is de tekening van
+// altijd (zaad 1, in BOMEN), de andere een ander zaad, en bij de eik een vorm (EIK_VORMEN in bomen.cjs). Ze heten
+// "<soort>.<n>" en hebben de naam van hun soort, met `vorm: n`; welke een boom op de kaart krijgt, zegt zijn tegel
+// (T.sprites.tekeningVan, js/sprites.js). Met de nieuwe soorten: de beuk, de linde, de els, de populier, de knotwilg, de
+// grove den, en de meidoorn en de hazelaar, die struiken zijn (T.BOMEN, js/wereld.js).
+const zaden = (n) => Array.from({ length: n }, (_, i) => ({ zaad: i + 1 }));
+const BOOM_VORMEN = {
+  eik: [{}, { zaad: 2, o: { vorm: 'breed' } }, { zaad: 3, o: { vorm: 'hoog' } }, { zaad: 4, o: { vorm: 'scheef' } }, { zaad: 5, o: { vorm: 'tweestam' } }, { zaad: 6, o: { vorm: 'oud' } }],
+  den: zaden(4),
+  berk: zaden(4),
+  dodeBoom: zaden(3),
+  wilg: zaden(3),
+  appelboom: zaden(4),
+  beuk: zaden(4),
+  linde: zaden(3),
+  els: zaden(3),
+  populier: zaden(3),
+  knotwilg: zaden(3),
+  groveDen: zaden(3),
+  meidoorn: zaden(3),
+  hazelaar: zaden(3),
+};
+const BOMEN_MET_VORMEN = [
+  ...BOMEN,
+  ...Object.entries(BOOM_VORMEN).flatMap(([naam, vormen]) =>
+    vormen.map((v, i) => (i === 0 ? (BOMEN.includes(naam) ? null : naam) : { key: `${naam}.${i + 1}`, naam, zaad: v.zaad || 1, o: v.o || {}, vorm: i + 1 })).filter(Boolean),
+  ),
+];
 // een boom staat altijd in de weg, ook een jonge; langs een boompje dat net geplant is, loop je
 const BOMEN_VAST = (naam) => naam !== 'boompje';
 
@@ -1101,7 +1131,7 @@ if (wil('kust')) padGrondVel('kust', KUST_CAPACITEIT);
     wil('grond') && bouwGrondVel(),
     wil('rand') && leesVelUitTsx('rand'),
     wil('kust') && leesVelUitTsx('kust'),
-    wil('bomen') && bouwModelVel('bomen', BOMEN, BOMEN_VAST),
+    wil('bomen') && bouwModelVel('bomen', BOMEN_MET_VORMEN, BOMEN_VAST),
     wil('begroeiing') && bouwModelVel('begroeiing', BEGROEIING, (n) => !!BEGROEIING_VAST[n]),
     wil('gebouwen') && bouwGebouwenVel(),
     // Het vel van de toren (tegels/toren.png) ging op 25 sep weg met het oude spel: geen kaart
@@ -1126,7 +1156,7 @@ if (wil('kust')) padGrondVel('kust', KUST_CAPACITEIT);
     // per lokaal tegel-id (0, 1, 2, …, zoals in de .tsx) dezelfde eigenschappen als daar.
     // En bij een huis de ramen die je ziet (huizen.cjs, ramenVan), zijn bouwstijl (STIJLEN) en waar zijn rook uitkomt (rookVan:
     // schoorsteen of nok, vraag 145, 3): alleen in dit bestand, niet in de .tsx.
-    const eigenschappen = (t) => ({ naam: t.naam, vast: t.vast, beslaat: t.beslaat || null, groep: t.groep || null, staat: t.staat || null, deur: t.deur || null, doos: t.doos || null, ...(t.ramen ? { ramen: t.ramen } : {}), ...(t.stijl ? { stijl: t.stijl } : {}), ...(t.schoorsteen ? { schoorsteen: t.schoorsteen } : {}), ...(t.nok ? { nok: t.nok } : {}) });
+    const eigenschappen = (t) => ({ naam: t.naam, vast: t.vast, beslaat: t.beslaat || null, groep: t.groep || null, staat: t.staat || null, deur: t.deur || null, doos: t.doos || null, ...(t.vorm ? { vorm: t.vorm } : {}), ...(t.ramen ? { ramen: t.ramen } : {}), ...(t.stijl ? { stijl: t.stijl } : {}), ...(t.schoorsteen ? { schoorsteen: t.schoorsteen } : {}), ...(t.nok ? { nok: t.nok } : {}) });
     // Een ingepakt vel (schrijfVel) zegt per tegel waar hij staat: `cel` [x, y, b, h] op het vel, en `anker`, het punt
     // in die cel dat op het midden van de tegel komt. Een raster (de grond) zegt het één keer voor het hele vel.
     // Een vel per tekening (PER_TEKENING) heeft geen vel van zichzelf: elke tegel zegt ook in welk bestand hij staat.
