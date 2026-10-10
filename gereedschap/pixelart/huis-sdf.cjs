@@ -38,6 +38,11 @@
 //
 // huis(zaad, { knoppen: { pak: false } }) zet er één uit, om te zien wat hij doet.
 //
+// En vier van het voorbeeldhuis (vraag 144; ontwerp/beeld.md, "De huizen naar Marcels voorbeelden"), die nog uit staan
+// tot de ronde van alle tekeningen: verweer (A), diepte (B), en grof (E): grotere vormen met minder ruis, zodat een huis
+// ook uitgezoomd leest (Marcels voorbeeld van 10 okt: een steen zo'n twintig pixels, een pan vijftien): bredere bossen
+// riet, pleister zonder spikkels, grotere en warmere stenen met licht en schaduw per steen, en mos in grotere plukken.
+//
 // Ronde 2, het materiaal. Zonder opgave kiest het zaad, met de verhoudingen uit ontwerp/beeld.md
 // ("Vooral hout en stro"): riet op zo'n twee derde, leien en spanen op een paar, rode pannen als
 // uitzondering, en een wand die bij het dak past (zie DAKEN en WANDEN).
@@ -244,8 +249,10 @@ function laag(d, n, n0, n1) {
 // warm, van de rest één op de elf koel, zodat de muur gemengd oogt in plaats van egaal grijs. Op
 // een hele muur van steen is één op de elf blauw te veel (de veldsteen-les in beeld.md): daar één
 // op de drieëntwintig.
-function steenKleur(st, heel = false) {
+function steenKleur(st, heel = false, grof = false) {
   if (st.pb < 1 || st.pr < 1) return null;
+  // grof: warm, zonder blauw (Marcels voorbeeld van 10 okt: warm grijs en beige)
+  if (grof) return st.id % 4 === 0 ? 'bot' : null;
   if (st.id % 7 === 0) return 'bot';
   if (st.id % (heel ? 23 : 11) === 0) return 'pet';
   return null;
@@ -404,8 +411,8 @@ function meng(a, b) {
 }
 
 function knoppenVan(zaad, o) {
-  // verweer en diepte staan nog uit: het voorbeeldhuis (vraag 144) zet ze aan, tot de ronde van alle tekeningen
-  const kn = { scheef: true, pak: true, speelgoed: true, verweer: false, diepte: false, ...(o.knoppen || {}) };
+  // verweer, diepte en grof staan nog uit: het voorbeeldhuis (vraag 144) zet ze aan, tot de ronde van alle tekeningen
+  const kn = { scheef: true, pak: true, speelgoed: true, verweer: false, diepte: false, grof: false, ...(o.knoppen || {}) };
   const r = (k) => rnd(zaad * 7919 + 101, k);
   const rs = (k) => r(k) * 2 - 1;
   const kz = (k) => meng(zaad, k);
@@ -2026,10 +2033,12 @@ function rietPatroon(H, C) {
   const f = fase - k;
   // halmen: vaste kolommen langs de nok (een kolom is op het scherm één pixel breed); in de lap
   // langer en rechter, want het riet is nog niet verweerd
-  const kol = Math.floor(P.a / 1.414 + 0.4 * Math.sin(P.sE * 0.07 + k));
+  // grof: bossen van zo'n drie pixels breed en langer, in plaats van losse halmen
+  const gb = H.kn.grof ? 2.6 : 1;
+  const kol = Math.floor(P.a / (1.414 * gb) + 0.4 * Math.sin(P.sE * 0.07 + k));
   const zk = H.zaad + V.i * 31;
   const spring = hash(kol, 0, zk + 2) % 11;
-  const stukL = inLap ? 7 + (hash(kol, 1, zk + 23) % 7) : 4 + (hash(kol, 1, zk) % 6);
+  const stukL = (inLap ? 7 + (hash(kol, 1, zk + 23) % 7) : 4 + (hash(kol, 1, zk) % 6)) * (H.kn.grof ? 1.8 : 1);
   const stuk = Math.floor((P.sE + spring) / stukL);
   const halm = hash(kol, stuk, zk + (inLap ? 17 : 1)) % 12;
   let s = inLap ? (halm < 2 ? -0.9 : halm > 8 ? 1 : 0) : halm < 3 ? -1.4 : halm > 8 ? 1.1 : 0;
@@ -2100,8 +2109,8 @@ function steenPatroon(H, C, maat) {
   }
   const Hp = z * PXH + H.sch * (1.6 * Math.sin(U * 0.043 + H.zaad) + U * 0.012);
   const st = steenOp(U, Hp, 1, 1, zaad, maat[0], maat[1], maat[2]);
-  const s = steenStap(st, C.stap, C.px, C.py, { voeg: 2.6, zaad: H.zaad });
-  const kl = steenKleur(st, H.hoekStenen);
+  const s = steenStap(st, C.stap, C.px, C.py, { voeg: 2.6, zaad: H.zaad, grof: H.kn.grof });
+  const kl = steenKleur(st, H.hoekStenen, H.kn.grof);
   if (kl) return { ramp: kl, stap: (s * (RAMP_LEN[RAMP[kl]] - 1)) / (RAMP_LEN[RAMP.veldsteen] - 1) };
   return { stap: s };
 }
@@ -2156,9 +2165,11 @@ function zandsteenPatroon(H, C) {
 
 // pleister: vlekkerig, en onderaan wat vuiler
 function pleisterPatroon(H, C) {
-  const n = ruis2(C.px * 0.16, C.py * 0.16, H.zaad + 7);
+  // grof: grote, zachte vlekken en geen spikkels
+  const f = H.kn.grof ? 0.06 : 0.16;
+  const n = ruis2(C.px * f, C.py * f, H.zaad + 7);
   let s = n > 0.7 ? -0.6 : n < 0.22 ? 0.4 : 0;
-  if (hash(C.px, C.py, H.zaad + 8) % 31 === 0) s -= 0.8;
+  if (!H.kn.grof && hash(C.px, C.py, H.zaad + 8) % 31 === 0) s -= 0.8;
   return s;
 }
 
@@ -4250,11 +4261,14 @@ function mosOp(H, C) {
   return grof * 0.75 + fijn * 0.25 + (1 - C.licht) * 0.25;
 }
 // de rand van een pluk rafelt: over een strook boven de drempel groeit hij steeds dichter, in korreltjes van twee pixels
-const mosHier = (H, C, m, drempel) => m > drempel && (m - drempel) * 12 > (hash(C.px >> 1, C.py >> 1, H.zaad + 609) % 100) / 100;
+const mosHier = (H, C, m, drempel) => {
+  const k = H.kn.grof ? 2 : 1; // grof: korrels van vier pixels
+  return m > drempel && (m - drempel) * 12 > (hash(C.px >> k, C.py >> k, H.zaad + 609) % 100) / 100;
+};
 // mos, donkerder dan wat eronder ligt (s, in de stappen van ramp), de pluk in het midden wat bol, met korrels
 function mos(H, C, s, ramp, m, drempel) {
   const bol = klem((m - drempel) * 6, 0, 1) * 0.5;
-  const k = hash(C.px >> 1, C.py, H.zaad + 613) % 7;
+  const k = hash(C.px >> (H.kn.grof ? 2 : 1), C.py >> (H.kn.grof ? 1 : 0), H.zaad + 613) % 7;
   return { ramp: 'mos', stap: omRamp(s, ramp, 'mos') * 0.66 + bol + (k === 0 ? 0.6 : k === 1 ? -0.5 : 0) };
 }
 
@@ -4384,10 +4398,10 @@ function huis(zaad = 1, o = {}) {
       ? { ramp: 'baksteen', lo: sp ? 0.7 : 1.4, hi: sp ? 6.9 : 6.2, schaduwKracht: diepe, patroon: metRand(H, (C) => baksteenPatroon(H, C)) }
       : H.steenSoort === 'zandsteen'
       ? { ramp: 'zandsteen', lo: sp ? 0.8 : 1.5, hi: sp ? 7 : 6.4, schaduwKracht: diepe, patroon: metRand(H, (C) => zandsteenPatroon(H, C)) }
-      : { ramp: 'veldsteen', lo: sp ? 0.8 : 1.6, hi: sp ? 7.8 : 7, schaduwKracht: diepe, patroon: metRand(H, (C) => steenPatroon(H, C, sp ? [13, 22, 16] : [9, 13, 9])) },
+      : { ramp: 'veldsteen', lo: sp ? 0.8 : 1.6, hi: sp ? 7.8 : 7, schaduwKracht: diepe, patroon: metRand(H, (C) => steenPatroon(H, C, H.kn.grof ? [19, 32, 22] : sp ? [13, 22, 16] : [9, 13, 9])) },
     schoorsteen: H.schoorsteenSoort === 'leem'
       ? { ramp: 'perkament', lo: sp ? 0.9 : 1.3, hi: sp ? 5.2 : 4.8, schaduwKracht: diepe, patroon: (C) => schouwPatroon(H, C) }
-      : { ramp: 'veldsteen', lo: 1, hi: sp ? 7.6 : 7, schaduwKracht: diepe, patroon: (C) => steenPatroon(H, C, sp ? [9, 14, 8] : [7, 10, 6]) },
+      : { ramp: 'veldsteen', lo: 1, hi: sp ? 7.6 : 7, schaduwKracht: diepe, patroon: (C) => steenPatroon(H, C, H.kn.grof ? [13, 21, 12] : sp ? [9, 14, 8] : [7, 10, 6]) },
     drempel: { ramp: 'veldsteen', lo: 1.4, hi: 7, schaduwKracht: diepe },
     pleister: { ramp: KALK[H.kalk] || 'pleister', lo: sp ? 0.7 : 1.5, hi: sp ? 6.2 : 5.8, schaduwKracht: diepe, patroon: metRand(H, (C) => pleisterPatroon(H, C)) },
     hout: { ramp: H.hout, lo: 0.5, hi: houtHi, schaduwKracht: diepe, patroon: metRand(H, (C) => balkPatroon(C, false)) },

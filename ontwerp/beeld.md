@@ -1047,6 +1047,12 @@ niets past, wijkt de zwakke grond voor strand (naast de zee) of gras. Golven die
   jaarringen naar voren) en `tonnen` (twee dichte tonnen en een krat van latten); met het bankje dat er al was. De plaat
   zet ze om de voordeur (`stukjeGrond` in `huis-sdf-export.cjs`, met `HS.samen`). Ze staan in `GRONDSTUKKEN`, nog niet op
   het vel van het spel (`STUKKEN`, `tegels/tuin.png`): dat is vraag 148, d.
+  **E, grover** (`knoppen.grof`; Marcel, 10 okt, na zijn voorbeeld: "Ja, begin met E op het riethuis"): grotere
+  vormen met minder ruis, omdat een huis meestal uitgezoomd te zien is en fijne ruis dan een vlek wordt: het riet in
+  bossen van zo'n drie pixels breed en langer (`rietPatroon`), het pleister in grote zachte vlekken zonder spikkels
+  (`pleisterPatroon`), de stenen van de plint en de schoorsteen groter en warm, zonder blauw, met een brede lichte rand
+  boven en links en een brede schaduw onder en rechts, en geen spikkels (`steenStap` met `grof` in toren.cjs), en het mos
+  in korrels van vier pixels.
 - **Meer variatie in het groen, de bomen en de versiering (9 okt 2026; werklijst, vraag 148).** Marcel: "Ik wil meer
   variatie in de vegetatie, ook bomen en versieringen van het dorp." Nu heeft elke soort één tekening en verandert het
   groen niet met het jaar. Het voorstel staat bij vraag 148: elke boom anders (vormen per soort, en de beuk, de linde,

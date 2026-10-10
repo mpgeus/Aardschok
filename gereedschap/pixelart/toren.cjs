@@ -743,6 +743,18 @@ function steenOp(U, H, mU, mH, zaad, hoog = 12, lang, spreiding) {
 function steenStap(st, basis, px, py, o = {}) {
   if (st.pb < 1 || st.pr < 1) return basis - (o.voeg ?? 2.4);
   const h = st.id;
+  if (o.grof) {
+    // grof (het voorbeeldhuis, vraag 144, E): elke steen een eigen toon, een brede lichte rand boven en links en een brede
+    // schaduw onder en rechts, zodat hij bol leest; geen spikkels per pixel
+    let g = basis + ((h % 7) - 3) * 0.28;
+    if (st.pt <= 2) g += 1.1;
+    else if (st.pt <= 4) g += 0.45;
+    if (st.pl <= 2) g += 0.5;
+    if (st.pb < 2.5) g -= 1.1;
+    else if (st.pb < 4.5) g -= 0.45;
+    if (st.pr < 2.5) g -= 0.9;
+    return g;
+  }
   let s = basis + (h % 100 < 15 ? -0.9 : h % 100 < 21 ? 0.8 : 0) + (h % 100 < 3 ? -1 : 0);
   if (o.vlak) s = basis + (h % 100 < 20 ? -0.5 : h % 100 < 30 ? 0.5 : 0);
   if (st.pt <= 1) s += 1;
