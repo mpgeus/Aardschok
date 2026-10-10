@@ -25,19 +25,28 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
 **Wacht op Marcel:**
 - Het geluid (vraag 145, 2): de sleutel `FREESOUND_KEY` in de omgeving en de domeinen van Freesound erbij, zoals
   beschreven bij vraag 145; dan maakt een nieuwe sessie het.
-- Vraag 145 laten zien: is het dorp nu minder "saai"? En daarna het voorbeeldhuis naar de voorbeelden (`beeld.md`).
-- Wie wijn wil (vraag 136; Marcel, 10 okt: "Inwoners willen wijn en bier. Afwisseling", en "B1, 0,02 is goed"):
-  gebouwd op branch `ccr-a1a4ef49-0815cc`, nog niet in `main`. De speeltest (`speelbaar.md`, 10 okt): het dorp vraagt
-  zelf om een wijnboerderij, maar de volgende pas als de wijn al op is; zonder wijn won één van de zes, met wijn geen.
-  Marcel (10 okt): "Laten we vooruitkijken doen": gebouwd (`T.wijnNaDePluk`); in de speeltest wint er weer één van
-  de zes (`speelbaar.md`). Wat nu een winst tegenhield: een wijnboerderij ver weg zonder kapel (`opmerkingen.md`).
+- Vraag 145 laten zien: is het dorp nu minder "saai"?
+- Het voorbeeldhuis naar de voorbeelden (vraag 144; `beeld.md`, "De huizen naar Marcels voorbeelden"; de plaat:
+  `node gereedschap/pixelart/huis-sdf-export.cjs voorbeeld`): een vakwerkhuis van twee lagen onder riet, in stappen A tot
+  F, in `main` (10 okt): A verweren (een maat, 0 tot 1), B diepte, C vorm (steiler dak, afdakje, balkon op schoren, twee
+  schoorstenen), D het stukje grond (keien, houtstapel, tonnen; alleen op de plaat), E grover en contrast, F ruig riet
+  (Marcel: "rossiger, rauwer, prikkeliger, rieteriger", "niet te geel"). Alles staat achter knoppen die uit staan, dus het
+  spel is nog niet veranderd. Marcels voorbeelden staan in `ontwerp/voorbeelden/` (twee van 10 okt; de acht van 9 okt
+  stuurt hij nog). **Wacht op Marcel**, met als volgende stappen: hetzelfde huis als oud dak (verweer 1); het stenen huis
+  onder pannen zoals zijn eerste voorbeeld; dan de ronde van alle tekeningen, waarin hoe ruig van de trede afhangt en hoe
+  verweerd van de leeftijd.
+- Wie wijn wil (vraag 136; Marcel, 10 okt: "Inwoners willen wijn en bier. Afwisseling", "B1, 0,02 is goed", en "Laten
+  we vooruitkijken doen"): in `main` (10 okt), met het vooruitkijken naar de pluk (`T.wijnNaDePluk`); in de speeltest
+  wint er één van de zes, zoals zonder wijn (`speelbaar.md`). Open: een wijnboerderij ver weg zonder kapel hield een winst
+  tegen (`opmerkingen.md`, bij de kapel). Voorstel van Claude: een wijnboerderij komt alleen waar haar gezin een kapel
+  haalt, zoals een erf; of de regel van 2d (plaats houden) ook voor de kapel.
 - Uit `opmerkingen.md`: een brand die overslaat op het huis ernaast, een eigen beeld voor de koorts (ziekbed, hoesten),
   en waar de kerstboom komt (vraag 148). Voorstellen van Claude (10 okt): overslaan alleen bij groot brandgevaar als
   niemand blust, op hooguit één buurhuis; een bos stro aan de deur van een huis met zieken (de pestbos); de kerstboom
-  zoals de meiboom, van 20 wintermaand tot 6 louwmaand, met een feestavond op 24 wintermaand. En vraag 142, stap 3: met
-  punt 3 hieronder, na de tester.
+  zoals de meiboom, van 20 wintermaand tot 6 louwmaand, met een feestavond op 24 wintermaand.
 - Vraag 142, de bladzijde met alle getallen (`gereedschap/instellingen.html`): stap 1 en 2 staan in `main`; stap 3 (een
-  speeltest met een set getallen, naast de vorige) wacht.
+  speeltest met een set getallen, naast de vorige) wacht. **Bezig in sessie `ccr-ce895b2d-mmzlcq`** (10 okt): het plan
+  voor stap 3, met Marcel.
 
 **Daarna, in deze volgorde:**
 0b. Engels en een vertaaltool (vraag 147; Marcel, 9 okt): de basis nu, naast de ui; het omzetten van alle tekst na de
@@ -7711,6 +7720,11 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
   `T.feestOp`), en wie je zoekt met een voorval zie je altijd. In de spelregel "Wie je door een huis heen ziet" is het
   oude een derde keuze ("Het plein, ook op een feest"). Bij de meiboom had één huis aan het plein 23 kijkgaten, nu één
   (de schout). `npm test` 1168/1168.
+- 10 okt 2026 — **Wijn naast bier, en vooruitkijken naar de pluk** (vraag 136; Marcel: "Inwoners willen wijn en bier.
+  Afwisseling", "B1, 0,02 is goed", en "Laten we vooruitkijken doen"). De wens bier neemt alleen bier, de ambachtslieden
+  willen er wijn bij (0,02 per mens per dag); het dorp vraagt zelf om een wijnboerderij (de raad noemde nooit een gebouw
+  dat stilligt), en kijkt vooruit (`T.wijnNaDePluk`): wat er bij de pluk ligt plus de pluk moet een jaar halen. De
+  speeltest van vier jaar: één van de zes wint, zoals zonder wijn (`speelbaar.md`). `npm test` 1172/1172.
 
 - 8 okt 2026 — **Vraag 142, stap 1 en 2: de bladzijde met alle getallen** (Marcel: "een bladzijde met duidelijk overzicht
   van alles", "1. Ja dan 2. Gelijk veranderen 3. Prima"). `gereedschap/instellingen.html` met `npm start`: elk getal, elke

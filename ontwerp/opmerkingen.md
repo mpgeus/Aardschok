@@ -837,6 +837,13 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Voorstellen van Claude die nog niet gekozen zijn
 
+- **Verweren per stand** (10 okt, bij het voorbeeldhuis, vraag 144): een hut van keuters verweerder dan het stenen huis
+  van ambachtslieden, zodat het huis zelf zegt wie er woont, zonder briefje. Kan met de knop `verweer` als getal in plaats
+  van aan of uit. Niet gekozen.
+- **Het huis donker op de grond** (10 okt, bij stap B van het voorbeeldhuis): de tekening maakt de voet van de muren
+  donker, maar de grond om het huis legt het spel (`tekenZonneschaduw` in `js/tekenen.js`), en die wordt niet donkerder
+  vlak bij de muur. Een smalle, zachte schaduw rond de voet van elk gebouw zou het huis zwaarder op de grond zetten. Niet
+  gekozen.
 - **De heer kijkt op Sint-Maarten zelf rond vanaf het plein** (24 sep, gebouwd). Wat hij ziet en niet
   in het rapport van de inner staat, komt alsnog op de rekening en kost argwaan. Te keuren; uit te
   zetten met "heer zicht" op 0 in de werkbank.

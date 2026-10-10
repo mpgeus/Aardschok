@@ -521,8 +521,19 @@ function tekenWereld(B, W, o = {}) {
           a += (h - f(x + nx * h, y + ny * h, z + nz * h)) / (1 << s);
         }
         ao = klem(1 - a * 0.5, 0.35, 1);
+        if (W.diepte) {
+          // De diepte (W.diepte, vraag 144, het voorbeeldhuis, B): ook verder weg kijken, zodat een hoek onder het
+          // overstek, de muur onder de dakrand en de naad tussen een aanbouw en het huis donker worden; en wat laag staat,
+          // krijgt minder licht van de hemel, zodat het huis op de grond staat. Zonder W.diepte blijft alles zoals het was.
+          const Dp = W.diepte;
+          let a2 = 0;
+          for (const [h, w] of Dp.stappen) a2 += (w * Math.max(0, h - f(x + nx * h, y + ny * h, z + nz * h))) / h;
+          const laag = 1 - klem((z * PXH) / Dp.grondH, 0, 1);
+          ao = Math.min(ao, klem(1 - a2 * Dp.ao, Dp.min, 1)) * (1 - Dp.grond * laag * laag);
+        }
         const rim = Math.pow(1 - Math.max(0, kijk), 2.5) * Math.max(0, nx * RL[0] + ny * RL[1] + nz * RL[2]);
-        const b = (0.24 + 0.76 * licht) * (0.45 + 0.55 * ao);
+        const vloer = W.diepte ? W.diepte.vloer : 0.45; // het licht in de diepste hoek
+        const b = (0.24 + 0.76 * licht) * (vloer + (1 - vloer) * ao);
         stap = mat.lo + (mat.hi - mat.lo) * b + rim * (mat.rand ?? 1.4);
         if (mat.glans) {
           const hx = L0 - V0;
@@ -732,6 +743,18 @@ function steenOp(U, H, mU, mH, zaad, hoog = 12, lang, spreiding) {
 function steenStap(st, basis, px, py, o = {}) {
   if (st.pb < 1 || st.pr < 1) return basis - (o.voeg ?? 2.4);
   const h = st.id;
+  if (o.grof) {
+    // grof (het voorbeeldhuis, vraag 144, E): elke steen een eigen toon, een brede lichte rand boven en links en een brede
+    // schaduw onder en rechts, zodat hij bol leest; geen spikkels per pixel
+    let g = basis + ((h % 7) - 3) * 0.28;
+    if (st.pt <= 2) g += 1.1;
+    else if (st.pt <= 4) g += 0.45;
+    if (st.pl <= 2) g += 0.5;
+    if (st.pb < 2.5) g -= 1.1;
+    else if (st.pb < 4.5) g -= 0.45;
+    if (st.pr < 2.5) g -= 0.9;
+    return g;
+  }
   let s = basis + (h % 100 < 15 ? -0.9 : h % 100 < 21 ? 0.8 : 0) + (h % 100 < 3 ? -1 : 0);
   if (o.vlak) s = basis + (h % 100 < 20 ? -0.5 : h % 100 < 30 ? 0.5 : 0);
   if (st.pt <= 1) s += 1;

@@ -15,6 +15,7 @@
 //   node gereedschap/pixelart/huis-sdf-export.cjs steen        uit/proefhuis/steen.png (de steen van de torens)
 //   node gereedschap/pixelart/huis-sdf-export.cjs rondom       uit/proefhuis/rondom.png (vraag 124, B: de draaibare huizen)
 //   node gereedschap/pixelart/huis-sdf-export.cjs groot [stijl]  uit/proefhuis/groot.png (vraag 114, stap 3: de grote gebouwen)
+//   node gereedschap/pixelart/huis-sdf-export.cjs voorbeeld [dak] uit/proefhuis/voorbeeld.png (vraag 144: het voorbeeldhuis)
 //
 // uitbouwen.png (ronde 3): de uitbouwen elk op een huis, de losse tuinstukken (tuin-sdf.cjs) naast
 // elkaar met een tuintje daaruit, en zes huizen met willekeurige zaden, los van elkaar. De platen
@@ -209,7 +210,14 @@ function paneelHuis(spec, o = {}) {
 // staat voor de deur van het deel o.deurVan (standaard het eerste).
 // o.draai: het geheel zoveel kwartslagen gedraaid (een stand; vraag 114, stap 3). Een deel met erfmuur in zijn opgave is
 // een muur om een erf (HS.erfmuur).
-const wereldVan = (spec) => (spec.erfmuur ? HS.erfmuur(spec.zaad, spec) : HS.huis(spec.zaad, spec));
+const wereldVan = (spec) => (spec.tuin ? tuinWereld(spec) : spec.erfmuur ? HS.erfmuur(spec.zaad, spec) : HS.huis(spec.zaad, spec));
+// een tuinstuk (tuin-sdf.cjs) als deel voor samen(): één tegel, en zo hoog als een mens, voor het kader
+function tuinWereld(spec) {
+  const W = require('./tuin-sdf.cjs').tuinstuk(spec.tuin, spec.zaad || 1);
+  const h = K.TEGEL / 2;
+  W.H = { ...W.H, vleugels: [], uitPunten: [[-h, -h, 0], [h, -h, 0], [-h, h, 0], [h, h, 0], [0, 0, 70]] };
+  return W;
+}
 const samenVan = (delen) => HS.samen(delen.map((d) => ({ W: wereldVan(d.spec), plek: d.plek })));
 function paneelSamen(delen, o = {}) {
   const t0 = Date.now();
@@ -1267,6 +1275,61 @@ async function rijenBeeld(RIJEN) {
   return plaat;
 }
 
+// voorbeeld.png (vraag 144, het voorbeeldhuis; ontwerp/beeld.md, "De huizen naar Marcels voorbeelden"; Marcel, 10 okt:
+// "1 riet, 2 akkoord"): één vakwerkhuis van twee lagen onder riet, zoals de huizenbouwer het nu maakt en met elke stap
+// erbij (A verweren, B diepte, C vorm, D het stukje grond), op ware grootte; voorbeeld-x2.png is dezelfde plaat twee keer
+// vergroot. Met een dak erachter (node huis-sdf-export.cjs voorbeeld pannen) hetzelfde huis onder dat dak.
+const VOORBEELD = { vorm: 'rechthoek', lagen: 2, zaad: 7, nok: 'x', wand: 'vakwerk', dak: 'riet', uit: { kapellen: 2, aanbouw: true, trap: true, gevelschoorsteen: true, luiken: 'den', bakken: 2 } };
+// D, het stukje grond: voor de voordeur een stoepje van keien (twee tegels), ernaast tonnen met een krat, een bankje en
+// een houtstapel (tuin-sdf.cjs), elk op een eigen tegel zoals ze straks in het spel staan (vraag 148, d).
+function stukjeGrond(spec) {
+  const H = HS.maten(spec.zaad, spec);
+  const d = H.deur;
+  const [ax, ay] = d.P.pos(d.u, 0, 0);
+  const [bx, by] = d.P.pos(d.u + 10, 0, 0);
+  const l = Math.hypot(bx - ax, by - ay);
+  const langs = [(bx - ax) / l, (by - ay) / l];
+  const N = [d.P.N[0], d.P.N[1]];
+  const as = Math.abs(langs[0]) > Math.abs(langs[1]) ? 'x' : 'y';
+  const [dx, dy] = HS.voorDeDeur(H, 0);
+  const op = (a, n) => [dx + langs[0] * a + N[0] * n, dy + langs[1] * a + N[1] * n];
+  return [
+    { spec },
+    { spec: { tuin: 'keien', zaad: 3 }, plek: op(0, 0.62) },
+    { spec: { tuin: 'keien', zaad: 8 }, plek: op(0.1, 1.55) },
+    { spec: { tuin: 'tonnen', zaad: 4 }, plek: op(1.45, 0.58) },
+    { spec: { tuin: `bankje-${as}`, zaad: 5 }, plek: op(-1.5, 0.6) },
+    { spec: { tuin: `houtstapel-${as}`, zaad: 6 }, plek: op(-2.75, 0.56) },
+  ];
+}
+
+// C, de vorm: een steiler dak, de aanbouw eruit, een balkon op schoren (Marcel: "3"), een afdakje boven de deur als die
+// niet onder het balkon zit, en de gevelschoorsteen naast die op het dak. Een balkon op palen leek een steiger en
+// verstopte de deur; een dakkapel in het riet is gemaakt voor anderhalve laag, en tilde bij twee lagen de dakrand te ver
+// op.
+const VOORBEELD_VORM = { helling: 58, uit: { afdak: true, balkon: 'schoren', gevelschoorsteen: 'ook', luiken: 'den', bakken: 2 } };
+const VOORBEELD_STAPPEN = [
+  ['nu', {}],
+  ['A verweren', { verweer: true }],
+  ['B diepte', { verweer: true, diepte: true }],
+  ['C vorm', { verweer: true, diepte: true }, VOORBEELD_VORM],
+  ['D stukje grond', { verweer: true, diepte: true }, VOORBEELD_VORM, stukjeGrond],
+  ['E grover', { verweer: true, diepte: true, grof: true, contrast: true }, VOORBEELD_VORM, stukjeGrond],
+  // F (Marcel, 10 okt, bij een voorbeeld: "rossiger, rauwer, prikkeliger, en wat rieteriger"): een jong dak van ruig riet
+  ['F ruig riet', { verweer: 0.3, diepte: true, grof: true, contrast: true, ruig: true }, VOORBEELD_VORM, stukjeGrond],
+];
+async function voorbeeld(dak, alleen) {
+  const spec = (knoppen, extra) => ({ ...VOORBEELD, ...(extra || {}), ...(dak ? { dak } : {}), knoppen });
+  const stappen = VOORBEELD_STAPPEN.filter(([naam]) => !alleen || alleen.split(',').some((a) => naam.startsWith(a)));
+  const paneel = ([, kn, extra, delen]) => (delen ? { delen: delen(spec(kn, extra)) } : { spec: spec(kn, extra) });
+  const rij = { naam: `het voorbeeldhuis${dak ? ` onder ${dak}` : ''}`, panelen: stappen.map((s) => [s[0], paneel(s)]) };
+  const plaat = await rijenBeeld([rij]);
+  const naam = `voorbeeld${dak ? `-${dak}` : ''}`;
+  fs.writeFileSync(path.join(UIT, `${naam}.png`), K.png(plaat, 1, '#0e0a14'));
+  fs.writeFileSync(path.join(UIT, `${naam}-x2.png`), K.png(plaat, 2, '#0e0a14'));
+  log(`${naam}.png  ${plaat.b}×${plaat.h}`);
+}
+
 // De vijf bouwfasen van een huis van het vel (huizen.cjs) naast elkaar, op één anker.
 function paneelFasen(naam) {
   const t0 = Date.now();
@@ -1334,6 +1397,9 @@ if (isMainThread && require.main === module) {
     rijenPlaat(rijen, `groot${alleen ? `-${alleen}` : ''}.png`).then(() => log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`));
   } else if (wat === 'rondom') {
     rondom().then(() => log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`));
+  } else if (wat === 'voorbeeld') {
+    // node huis-sdf-export.cjs voorbeeld [dak] [B,C]: alleen die stappen, om sneller te kijken
+    voorbeeld(process.argv[3] === '-' ? null : process.argv[3], process.argv[4]).then(() => log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`));
   } else if (wat === 'stijl') {
     // node huis-sdf-export.cjs stijl wit: een bouwstijl van het spel (huizen.cjs, STIJLEN)
     const stijl = process.argv[3] || 'wit';
@@ -1372,7 +1438,7 @@ if (isMainThread && require.main === module) {
     vergelijk();
     if (wat === 'knoppen') knoppen();
   }
-  if (!['vormen', 'materiaal', 'uitbouwen', 'ladder', 'afwisseling', 'verhouding', 'steen', 'stijl', 'rondom', 'groot', 'groot2', 'groot3'].includes(wat)) log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`);
+  if (!['vormen', 'materiaal', 'uitbouwen', 'ladder', 'afwisseling', 'verhouding', 'steen', 'stijl', 'rondom', 'groot', 'groot2', 'groot3', 'voorbeeld'].includes(wat)) log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`);
 }
 
 module.exports = { paneelNu, paneelProef, paneelHuis, paneelSamen, paneelTuin, paneelTuintje, paneelZes, kaderVan, grondZon, schrijf };

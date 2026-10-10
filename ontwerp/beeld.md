@@ -1008,6 +1008,72 @@ niets past, wijkt de zwakke grond voor strand (naast de zee) of gras. Golven die
   bouwfasen, de brandfasen en de sneeuw. **Marcel (9 okt): "De huizen moeten een goede balans zijn tussen
   'sprookjesachtig' en 'echt'; het blijft een game uiteindelijk, dus het mag ook wel een beetje 'mooi' en 'leuk' zijn."**
   Dus: het materiaal echt en verweerd (3, 6), de vorm met karakter en een beetje overdreven (1, 2), en het geheel uitnodigend.
+  **Het voorbeeldhuis (10 okt; Marcel: "1 riet, 2 akkoord"):** een vakwerkhuis van twee lagen onder riet (riet, omdat
+  een speler en elk plaatje op Steam eerst het gehucht zien), in vier stappen, elk een knop in de huizenbouwer, zodat
+  het straks voor alle huizen werkt: A verweren, B diepte, C vorm, D het stukje grond (alleen op de plaat; in het spel
+  is dat vraag 148). Marcels voorbeelden zelf staan niet in git en waren deze sessie niet meer te vinden; Marcel stuurt
+  ze opnieuw, en dan komen ze in `ontwerp/voorbeelden/` (Marcel, 10 okt: "zet ze in git"). De plaat: `node gereedschap/pixelart/huis-sdf-export.cjs voorbeeld` (`uit/proefhuis/voorbeeld.png`).
+  **A, verweren** (`knoppen.verweer`, `verweer` en `VERWEER` in `huis-sdf.cjs`; staat uit tot de ronde van alle
+  tekeningen): het riet op de grijsbruine ramp `riet` in plaats van het gele `stro`, met mos in korrels die naar de
+  goot en de schaduw toe dichter worden, en de lap een tint lichter in plaats van goud (Marcel: "Dit ziet er raar uit",
+  over de gouden lap); het pleister minder wit, met vochtvlekken, vuil boven de plint, en hier en daar afgevallen met de
+  baksteen erdoor; het hout op `houtOud`, half naar het grijs van schors; de plint nat aan de voet en met mos; een
+  schoorsteen zwart van het roet naar zijn top, in strepen; mos op een dun dak. Alles uit de plek in de wereld, dus in
+  elke stand op dezelfde plek.
+  **B, diepte** (`knoppen.diepte`, `diepte` en `DIEPTE` in `huis-sdf.cjs`, `W.diepte` in `tekenWereld`, toren.cjs; staat
+  ook uit): de tekenaar kijkt verder weg (tot 26 eenheden) naar wat het licht van de hemel afdekt, en een hoek kan dieper
+  donker worden, zodat de muur onder de dakrand, de balkkoppen onder het overstek en de naad tussen aanbouw en huis in de
+  schaduw liggen; de voet van de muren mist licht, de schaduw van de zon is donkerder, en de baan onder de dakrand ook.
+  Het kost een paar procent rendertijd. De schaduw op de grond om het huis legt het spel, niet de tekening
+  (`opmerkingen.md`).
+  **C, vorm** (keuzes in de opgave, het zaad kiest ze niet, dus de huizen die er zijn blijven gelijk): `helling` (het
+  voorbeeldhuis 58 graden in plaats van 51, zodat het dak de helft van het huis is), `uit.afdak` (een afdakje van
+  planken op twee sporen met schoren boven de voordeur, `afdakVan`) en `uit.gevelschoorsteen: 'ook'` (twee
+  schoorstenen). De aanbouw is eraf: die bezette de voorkant van het dak. Het balkon (Marcel: "Ik vind het balkon wel
+  mooi") stond op palen van de grond af, wat op een steiger leek en de deur verstopte; nu kan het ook op schoren uit de
+  muur (`uit.balkon: 'schoren'`), en staat het boven de deur, dan is het zijn afdak. Marcel koos het balkon op schoren
+  ("3").
+  Geprobeerd en weer weggelaten: een dakkapel in het riet (de bult is gemaakt voor anderhalve laag;
+  bij twee lagen tilde hij de dakrand te ver op en werd zijn raam een spleet). Een dakkapel past beter op het huis
+  onder pannen, waar de huizenbouwer er een echte voor heeft (`kapellenVan`).
+  **Een voorbeeld in git (10 okt, na D):** `ontwerp/voorbeelden/huis-vakwerk-op-steen.jpg` (`voorbeelden/README.md`).
+  Wat het laat zien: beneden grote veldstenen met lichte voegen en een rondboogdeur met een boog van gehakte steen,
+  vakwerk alleen boven; een steil dak van grove, ronde oranje pannen met een dwarsgevel aan de voorkant en een stenen
+  kruisbloem op de top; klimop tegen de schoorsteen, struiken tegen de voet, een lantaarn bij de deur; een plein van
+  keien met een trap en een muurtje. **Het grootste verschil met ons huis is de maat van de vormen:** een steen is er
+  zo'n twintig pixels, een pan vijftien, met weinig ruis, zodat alles in één oogopslag leest; ons riet en ons pleister
+  zijn fijn gespikkeld en lezen druk.
+  **D, het stukje grond** (alleen op de plaat): nieuwe tuinstukken in `tuin-sdf.cjs`, elk op één tegel zoals de hekken
+  en de regenton, zodat vraag 148, d, ze in het spel kan neerzetten: `keien` (een stoep van keien in de aarde met een
+  rafelige rand; voor de deur twee tegels), `houtstapel-x`/`-y` (brandhout tegen een muur, de kopse kanten met
+  jaarringen naar voren) en `tonnen` (twee dichte tonnen en een krat van latten); met het bankje dat er al was. De plaat
+  zet ze om de voordeur (`stukjeGrond` in `huis-sdf-export.cjs`, met `HS.samen`). Ze staan in `GRONDSTUKKEN`, nog niet op
+  het vel van het spel (`STUKKEN`, `tegels/tuin.png`): dat is vraag 148, d.
+  **E, grover** (`knoppen.grof`; Marcel, 10 okt, na zijn voorbeeld: "Ja, begin met E op het riethuis"): grotere
+  vormen met minder ruis, omdat een huis meestal uitgezoomd te zien is en fijne ruis dan een vlek wordt: het riet in
+  bossen van zo'n drie pixels breed en langer (`rietPatroon`), het pleister in grote zachte vlekken zonder spikkels
+  (`pleisterPatroon`), de stenen van de plint en de schoorsteen groter en warm, zonder blauw, met een brede lichte rand
+  boven en links en een brede schaduw onder en rechts, en geen spikkels (`steenStap` met `grof` in toren.cjs), en het mos
+  in korrels van vier pixels. Daarna (Marcel: "Allebei", op nog grover en de kleuren uit elkaar): het riet in minder en
+  dikkere lagen (`laagL` maal 1,5, het trapje `laagH` ruim twee keer zo hoog, een dikkere zoom en een sterker verloop),
+  en een knop `contrast`: het pleister lichter en warm (de ramp `pleisterWarm`), het houtwerk donkerder (`CONTRAST`).
+  **F, ruig riet** (`knoppen.ruig`; Marcel, 10 okt, bij `voorbeelden/rieten-huisje.jpg`: "dit riet vind ik leuker staan",
+  en "rossiger, rauwer, prikkeliger, en wat rieteriger"): lange, dunne, rechte stengels in rechte, dikke lagen (zo'n zes
+  op een dakvlak), en onder elke laag de punten van de stengels die licht vangen en over een donkere, rafelige schaduw
+  hangen (`ruigRiet`); aan de goot steekt elke bos een eind uit, zodat de onderrand van het dak pluizig is
+  (`gootSprieten`), en aan de gevel elke rij (`dakVeld`); geen lap; de ramp `rietRos` (goud met een rode gloed). **Het
+  verweren is nu een maat** (`knoppen.verweer`, 0 tot 1, true is 1): een jong dak (0,3) houdt zijn kleur en heeft
+  nauwelijks mos, vlekken of gaten; vanaf 0,5 wordt het riet grijsbruin en het hout grijs. Zo kan een dorp jonge en oude
+  daken naast elkaar hebben (voorstel; het voorbeeldhuis is jong).
+  **Marcel (10 okt) daarop:** "Ja, maar niet te geel. Het moet wel oke zijn. Het gaat me ... niet om de kleur, maar meer
+  de vorm en textuur van het riet. Verweren over tijd vind ik logisch, dat maakt het echt"; "Ik kan mij voorstellen dat
+  het destijds niet perfect hoefde te zijn, maar meer praktisch. Naarmate een stad zich ontwikkelt, wordt dat beter door
+  technologie"; en "golven en ongelijkheid mogen er wel in blijven, maar ik wil graag het sprieterige zien". Dus:
+  `rietRos` is warm stro geworden, tussen het gele `stro` en het grijsbruine `riet`; de lagen golven weer; de nok is
+  ruig (stengels dwars over de worst, en plukken die aan zijn onderkant over het dak hangen) en de gevelrand rafelt
+  sterker. **Voor de ronde van alle tekeningen:** hoe ruig een dak is, hangt af van de trede (het gehucht ruig en
+  praktisch, een dorp netter), en hoe verweerd het is, van hoe lang het huis er staat (een maat, `knoppen.verweer`; welke
+  tekening een huis van een zekere leeftijd krijgt, is dan een vraag voor het spel).
 - **Meer variatie in het groen, de bomen en de versiering (9 okt 2026; werklijst, vraag 148).** Marcel: "Ik wil meer
   variatie in de vegetatie, ook bomen en versieringen van het dorp." Nu heeft elke soort één tekening en verandert het
   groen niet met het jaar. Het voorstel staat bij vraag 148: elke boom anders (vormen per soort, en de beuk, de linde,
