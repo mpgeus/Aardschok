@@ -20,7 +20,9 @@ ouder worden, geboren worden en sterven) en het kleine leven (rook, water, spele
 staan in `main`; het geluid wacht op Marcel (hieronder). De fasen van het afbranden (vraag 144, 3) zijn af op de proefplaat; alle tekeningen wachten tot de huizen
 zelf beter zijn (Marcel zoekt voorbeelden), en gaan dan in één ronde met de sneeuw op de daken. De bode met de hinderlaag en de lantaarns (vraag 143), het weer, de statussen, niet zaaien in de regen, de
 brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `main`. Vraag 141, de economie binnen het dorp, is op 9 okt helemaal teruggedraaid
-(Marcel: "Ik denk dat we die economie terug moeten draaien", en "Alles van vraag 141").
+(Marcel: "Ik denk dat we die economie terug moeten draaien", en "Alles van vraag 141"). Kleren naar stand (vraag 149)
+staat in `main` (10 okt): arm in een hut, deftig in een stenen huis met laken; de kinderen en de ouden later. De mensen
+mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voor onze poppetjes. de rest kan weg").
 
 **Wacht op Marcel:**
 - Het geluid (vraag 145, 2): de sleutel `FREESOUND_KEY` in de omgeving en de domeinen van Freesound erbij, zoals
@@ -38,7 +40,8 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
   een rondboogdeur met een boog van zandsteen, J klimop, en warmer (`beeld.md`; Marcel: "Goed zo"), in `main` (10 okt).
   Het mos op het oude riet groeit nu in de schaduw onder de lagen, in strepen langs de stengels (Marcel: "Meer mos"), in
   `main` (10 okt). **Wacht op Marcel:** de ronde van alle tekeningen, waarin hoe ruig van de trede afhangt en hoe verweerd
-  van de leeftijd (en de acht voorbeelden van 9 okt, als hij ze nog stuurt).
+  van de leeftijd (en de acht voorbeelden van 9 okt, als hij ze nog stuurt). **Bezig in sessie `main` (desktop,
+  huizen)** (10 okt; Marcel: "pak het de huizen op"): de ronde van alle tekeningen met de knoppen aan, eerst het plan.
 - **In `main` (10 okt, avond; Marcel koos ze), om te bekijken:**
   - Wijn haalt kapel (vraag 136): een gebouw met een gezin (de wijnboerderij) komt alleen waar het zijn kapel haalt, of
     waar er nog een kan komen, zoals een erf (`T.waaromGeenKringPlek`). In de speeltest winnen nu twee van de zes (was
@@ -7542,6 +7545,109 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     kaart leest een tegelnummer nu zoals Tiled (`js/kaart.js`), zodat een vel kan groeien zonder over het vel erna te
     vallen. De sneeuw op een spar is dunner (`sneeuwDikte` 0,25), zodat hij niet meer helemaal wit wordt. Het vel is in de
     browser zo'n 7 MB. **Open:** een populier staat er nog weinig (de losse bomen houden afstand van de weg).
+149. **Kleren naar stand** (Marcel, 10 okt: "Hogere niveau sociale mensen moeten duurdere kleren krijgen").
+    **Wat er nu is:** 24 uiterlijken per volwassen lijf en 12 per kind en per oude (vraag 145,
+    `gereedschap/pixelart/uiterlijk.cjs`), allemaal boerenkleren: een kiel, klompen, lappen en vuil, in gedempte verf.
+    Welk uiterlijk iemand krijgt (`T.kiesUiterlijk`), hangt niet af van zijn stand. De stand hoort bij het huis
+    (`T.standVan`): een hut keuters, een huis dorpelingen, een stenen huis of woontoren ambachtslieden, een boerderij boeren.
+    **Wat toen duur was:** diepe kleur (scharlaken, diep blauw, en zwart het duurst), fijne wol, een lange jas of tabberd
+    tot de knie in plaats van een kiel, gebleekt wit linnen (een kraag of een muts), leer aan de voeten in plaats van
+    hout, bont aan de kraag, en geen lappen of vuil. Goedkoop: ongeverfd linnen, het bruin en grijs van het schaap, en
+    lappen. De delen bestaan al: de koopman draagt een nette jas met bont (`karakters.cjs`), en leren schoenen, een vest,
+    een riem met een buidel en een vilten hoed heeft de boer al.
+    **Voorstel van Claude (10 okt), nog niets gebouwd:**
+    a. Het gezicht blijft, de kleren gaan met de stand mee: elk uiterlijk krijgt een deftige versie met hetzelfde hoofd
+       (haar, kapsel, baard, neus) in fijne kleren. Groeit een huis door tot een stenen huis, dan staat dezelfde Jan er in
+       een rode jas: op straat zie je het dorp rijker worden (ook goed voor de beelden op Steam). Het spel leidt het af
+       uit het huis, dus er komt niets bij in `Spel.S`.
+    b. Twee trappen (alleen deftig erbij) of drie (de keuters in de hut armer dan nu: ongeverfd, lappen, blote voeten).
+    c. Aan het werk werkkleren: wie maait of bindt, draagt zijn gewone uiterlijk; de deftige kleren alleen staand en
+       lopend. Dan zijn het twee vellen per deftige versie in plaats van vijf (48 volwassenen: 96 figuren, zo'n 35
+       minuten renderen; met drie trappen het dubbele).
+    d. Eerst de volwassenen; de kinderen en de ouden in een tweede ronde.
+    e. Een idee erbij: de deftige kleren pas als het huis zijn laken krijgt (een wens van de ambachtslieden). Dan zie je
+       op straat wat er mist.
+    De stappen: eerst een proefplaat met zes mannen en zes vrouwen in hun trappen naast elkaar, dan alles renderen, dan
+    in het spel (`figuurVanUiterlijk` in `js/sprites.js` vraagt de stand van het huis).
+    **Marcel (10 okt): "a ja, b drie, c ja, d ja, e ja".** Dus: hetzelfde gezicht in de kleren van zijn stand, in drie
+    trappen (arm in de hut, zoals nu in een huis en op de boerderij, deftig in een stenen huis of woontoren, maar dat pas
+    als het huis zijn laken krijgt), aan het werk de gewone kleren, en eerst de volwassenen.
+    **Stap 1, de proefplaat (10 okt):** `node gereedschap/pixelart/uiterlijk.cjs kleren` (`kleren()` in `uiterlijk.cjs`;
+    hoe het eruitziet, staat in `beeld.md`, "Kleren naar stand"). Erbij gekomen: een jas tot onder de knie voor een
+    deftige man (`jas: 'lang'` in `boer()`), en donker marterbont (`bontKleur`), want licht bont op scharlaken werd een
+    kerstman. De bestaande figuren blijven pixel voor pixel gelijk. **Marcel (10 okt), bij de plaat: "1 armer, 2 alle, 3
+    ja"**: arm kreeg een gerafelde zoom (`rafelZoom`), meer lappen, geen halsdoek en (een vrouw) geen schort; alle deftige
+    mannen de lange jas; alle deftige vrouwen bont.
+    **Stap 2 en 3 (10 okt):** de 96 vellen (`boer-u7-arm`, `boerin-u3-deftig`, staand en lopend; `uiterlijk-anim.cjs`), en
+    in het spel `T.klerenVan` (`js/bewoners.js`: hut arm, stenen huis of woontoren deftig als `g.wensen.heeft.laken` vol
+    is, de rest gewoon; alleen volwassenen) en `T.sprites.inKleren` (`js/sprites.js`: alleen het eigen vel, niet het
+    werk). De spelregel "Kleren" (met laken, zonder, of iedereen gewoon); `Spel.debug.kleren()`; `test/kleren.test.cjs`.
+    Bij het begin loopt niemand arm (in de hutten wonen ouden); de keuters komen met de gezinnen op de erven.
+    **Open:** de kinderen en de ouden (d, een tweede ronde). In `main` (10 okt; Marcel: "zet het in main").
+150. **De mensen mooier** (Marcel, 10 okt, bij vraag 149: "We moeten de mensen zoizo een beetje upgraden, want zien er
+    niet geweldig uit").
+    **Wat Claude zag (10 okt), in het spel naast de huizen en de bomen:** 1. ze zijn zachter dan de wereld: de huizen, de
+    bomen en de put hebben hard licht van linksboven, een duidelijke lichte en donkere kant, felle accenten en een donkere
+    lijn; de mensen zijn bijna overal middentoon, met modderige kleuren, en een groene kiel verdwijnt in het gras (het licht
+    in `kern.cjs`: `(0,24 + 0,76 × licht)` met omgevingsschaduw maakt alles zacht); 2. de vorm: een groot rond hoofd zonder
+    nek, een lijf als een buis, armen als worstjes die recht hangen, en een vrouw als een pion (de klokrok); 3. iedereen is
+    even groot en even breed en staat even recht; 4. het gezicht is twee stipjes en een neus, op ware grootte een vlek (het
+    grotere hoofd met oogwit wees Marcel op 9 okt af).
+    **Voorstel van Claude:** een proefplaat met vier mannen en vier vrouwen naast een huis en een boom op het gras, op ware
+    grootte: zoals nu, met het licht en het contrast van de wereld, met een betere vorm erbij, en met lichaamsbouw
+    (lang, kort, tenger, stevig) en houdingen in rust. Het licht geldt voor alle figuren tegelijk en kost het minst; dan
+    alles in één keer opnieuw renderen (zo'n 640 vellen, uren). Dezelfde stap als "grover en contrast" van het voorbeeldhuis
+    (vraag 144), zodat de mensen en de huizen niet uit elkaar groeien.
+    **Marcel (10 okt): "1 ja, 2 ik zoek voorbeelden, 3 voor de proefversie"**, met vier voorbeelden (`ontwerp/voorbeelden/`,
+    `mensen-*.jpg`): "De plaatjes demonstreren een verscheidenheid aan mensen. Het is niet perse de stijl. Ik wil wel
+    vasthouden aan de pixel art. Maar ik heb meer afwisseling nodig." Wat Claude eruit haalt: `beeld.md`, "De mensen naar
+    Marcels voorbeelden" (bouw, lagen, hoofd, spullen, kleur, verhoudingen). Het plan, in proefplaten: 1. licht en kleur
+    (alle figuren tegelijk); 2. het lijf: de verhoudingen (vijf hoofden zoals nu, of zes) en vier à vijf bouwen; 3. lagen,
+    hoofden en spullen; 4. houdingen in rust. Dan alles één keer renderen, ook de werkfiguren met hun bouw.
+    **Marcel (10 okt), bij een afdruk uit het spel: "Deze zien er niet uit"** (drie hoofden omcirkeld), en **"gebruik mijn
+    voorbeelden?"**. Wat Claude vond: de camera kijkt van boven, dus je ziet vooral de kruin; het hoofd zakt zonder nek in de
+    kraag, en het gezicht kijkt naar de grond. Lichtblond was bijna wit en las als een kaal hoofd (nu `stro`), de vlecht van
+    de kroon lag voorop over de ogen (hersteld), en een donkere doek liet het gezicht wegvallen. Het hardere licht
+    (`o.licht` in `kern.cjs`) bleek weinig te doen; de winst zit in het hoofd en de kleren.
+    **Proefplaat 1 (10 okt):** `node gereedschap/pixelart/uiterlijk.cjs lagen`: een nek en het gezicht 15 graden naar de
+    camera (`nek`, `opkijk` in `boer()` en `boerin()`), en lagen naar de voorbeelden (`schoudermantel` met een neergeslagen
+    kap, `kapOmDeHals`, `metLaarzen`, `metOnderkleed`, een strakke witte kap met `doekLos` en `doekGezicht`), alles als
+    optie: zonder blijft elk vel pixel voor pixel gelijk. De vellen in `beelden/` zijn nog de oude; lichtblond en de kroon
+    komen er pas in met het opnieuw renderen.
+    **Marcel (10 okt), bij plaat 1: "Zoals ik al zei, ik vind de poppetjes gewoon niet echt mooi zoals ze nu zijn."** Dus
+    geen lapwerk op het lijf van nu (een nek, lagen), maar een nieuw lijf: de verhoudingen, de vormen en hoe het getekend
+    wordt. Claude vraagt welke richting Marcel mooi vindt, en legt de keuze voor tussen een nieuw lijf in code en een
+    tekenaar voor de basis.
+    **Marcel (10 okt), met twee voorbeelden (`mensen-lowpoly-man.jpg`, `mensen-lowpoly-meisje.jpg`): "deze verhoudingen zijn
+    mooi. Maar laten we A eens proberen"** (een nieuw lijf in code). Wat ze mooi maakt, is niet de lengte (ze zijn even
+    gedrongen als de onze, vier à vijf hoofden), maar: vlakken in plaats van klei (low-poly, elk vlak één kleur, scherpe
+    overgangen), duidelijke kleurvlakken per kledingstuk met randen en manchetten, en een gezicht dat iets zegt (ogen met
+    wit, wenkbrauwen, een baard in vlakken; op 9 okt vond Marcel een groter hoofd met oogwit raar, dus met en zonder
+    proberen).
+    **A geprobeerd (10 okt):** facetten en twee tinten in de renderer deden op deze maat weinig; een nieuw lijf naar de
+    voorbeelden (`mens.cjs`, niet in git) vond Marcel "een abomenatie". Bij twee nieuwe voorbeelden in pixel art
+    (`mensen-pixel-*.png`) vroeg hij of alles groter beter wordt: nee, zijn strijder verkleind tot onze maat ziet er nog
+    goed uit, dus het zit in hoe ze getekend zijn, niet in de pixels; en alles groter kost vier keer de pixels, het
+    geheugen en het renderen. Claude had eerder moeten zeggen dat mensen uit een 3D-model van bollen en kegels voor
+    kleine figuren een plafond hebben. Voorstel: de mensen laten tekenen, door een pixeltekenaar of met een AI-gereedschap
+    voor pixelfiguren in acht richtingen (PixelLab, nog te proberen); de code doet de rest (inlezen, kleuren per
+    uiterlijk, kleren naar stand).
+    **Marcel (10 okt), met een soldaatje van 48 bij 48 (`mensen-soldaat-48.png`): "het zijn voorbeelden van de stijl;
+    kunnen we deze groter maken en als voorbeeld gebruiken voor normale poppetjes?"** Onze mensen zijn 73 pixels hoog (een
+    vak van 34 bij 77; op een gewoon scherm tekent het spel ze op zoom 2, dus 146 schermpixels). De soldaat is 46 hoog;
+    anderhalf keer vergroot is hij even groot, en op zoom 2 is elke pixel dan drie schermpixels, dus scherp. Een eerste
+    dorpeling met de hand, pixel voor pixel in die stijl (in de kladmap van de sessie): scherp en leesbaar, maar nog
+    eenvoudig naast de soldaat. Daarna een man met een kap van vijf kanten (`mensen-kap-64.png`), en een tweede poging met
+    de hand, in 2D (vlakken, licht van linksboven, een zwarte rand): scherp, maar een blok naast de voorbeelden; van acht
+    kanten en in elke stap even goed haalt Claude dat niveau niet betrouwbaar. **Voorstel:** laten tekenen (een
+    pixeltekenaar, of Marcel met een AI-gereedschap voor pixelfiguren), met deze voorbeelden als stijl; Claude schrijft de
+    opdracht en maakt het inlezen.
+    **Marcel (10 okt): "ok we houden het even bij de kleding voor onze poppetjes. de rest kan weg".** Dus geparkeerd: de
+    code van proefplaat 1 is teruggedraaid (de nek en het opkijken, de lagen, het licht in `kern.cjs`, en ook het blonde
+    haar en de kroon, zodat de code weer past bij de vellen in `beelden/`), en het nieuwe lijf en de proeven met de hand
+    kwamen nooit in git. Wat blijft: wat we leerden (hierboven en in `beeld.md`, "De mensen naar Marcels voorbeelden") en
+    de voorbeelden in `ontwerp/voorbeelden/` (`mensen-*`), voor als we de mensen laten tekenen. Lichtblond dat als een
+    kaal hoofd leest en de vlecht van de kroon over de ogen staan in `opmerkingen.md`.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
@@ -7760,6 +7866,13 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 10 okt 2026 — **Vraag 149: kleren naar stand** (Marcel: "Hogere niveau sociale mensen moeten duurdere kleren krijgen",
+  "a ja, b drie, c ja, d ja, e ja", en bij de plaat "1 armer, 2 alle, 3 ja"). Hetzelfde gezicht in de kleren van de stand
+  van zijn huis: arm in een hut (vaal, lappen, een gerafelde zoom, blote voeten), gewoon in een huis of boerderij, deftig
+  in een stenen huis of woontoren als het huis zijn laken krijgt (diepe verf, een jas tot onder de knie of bont, leer, een
+  buidel). Alleen de volwassenen, staand en lopend; aan het werk de gewone kleren. `kleren()` in `uiterlijk.cjs`, 96
+  vellen (`boer-u7-arm`, `boerin-u3-deftig`), `T.klerenVan` en `T.sprites.inKleren`, de spelregel "Kleren",
+  `Spel.debug.kleren()`, `test/kleren.test.cjs`.
 - 10 okt 2026 — **Vraag 142, stap 3: de speeltest naast de vorige** (Marcel: een set getallen probeer je in de code, met
   een knop om terug te zetten; snel als standaard; de bladzijde op zijn eigen computer). Op de opdrachtregel `--naam` en
   `--tegen`, en op `gereedschap/instellingen.html` bovenaan: Start, de vergelijking (welke waarden anders waren, en per

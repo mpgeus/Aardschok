@@ -724,6 +724,10 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   hoogte zou een stap tegen een helling op meer tijd kunnen kosten, en eraf minder. Niet gebouwd, om niet te blijven
   toevoegen: lopen kent nu alleen "kan wel" of "kan niet" (een wand). Als het land groter wordt (het eiland) en een tocht
   over de bergrug ertoe doet, kan het een gewicht in A* worden (een stap omhoog kost meer), met de looptijd erbij.
+- **Een toets die soms faalt** (10 okt, bij vraag 149): "een gezin wacht op de winter: haalt het hout of het eten hem
+  niet, dan komt er niemand (vraag 59, B)" in `test/erven.test.cjs` faalde één keer in `npm test`, en slaagde daarna los
+  drie keer en in de hele reeks nog eens. Iets in die toets hangt dus van de volgorde of de tijd af; nalopen voordat het
+  een push tegenhoudt.
 
 ## Het beeld
 
@@ -836,6 +840,11 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   dorpeling staat. Waarschijnlijk de doorkijk (`js/doorkijk.js`) voor de wolven en de herten van vraag 116, die daar
   diep in het bos rusten. Nog niet nagelopen.
 
+- **Twee uiterlijken die niet goed lezen** (10 okt, bij vraag 150; Marcel omcirkelde ze: "Deze zien er niet uit"):
+  lichtblond haar (`HAAR.lichtblond` in `uiterlijk.cjs`, de ramp perkament) is bijna wit en leest als een kaal hoofd, en
+  de vlecht van het kapsel 'kroon' (`kapselVrouw`) zakt voorop en ligt over de ogen (de `- 1.6 * Math.max(0, sin)` moet
+  een `+` zijn). Een herstel stond even in de code en ging met vraag 150 weer weg; het vraagt dat de vellen met dat haar
+  en die kroon opnieuw gerenderd worden (ook in hun werk en in andere kleren).
 ## Voorstellen van Claude die nog niet gekozen zijn
 
 - **Verweren per stand** (10 okt, bij het voorbeeldhuis, vraag 144): een hut van keuters verweerder dan het stenen huis

@@ -498,7 +498,7 @@
     if (!t) return 0;
     const l = e.beeldStand && e.beeldStand.laatste;
     const naam = (l && l.naam) || e.vel || S.figuurNaam(e.soort);
-    const lijf = naam.replace(/-u\d+$/, ''); // een uiterlijk (boer-u7, vraag 145) heeft de nek van zijn lijf
+    const lijf = naam.replace(/-u\d+(-arm|-deftig)?$/, ''); // een uiterlijk (boer-u7, vraag 145; ook in andere kleren, boer-u7-deftig, vraag 149) heeft de nek van zijn lijf
     return t.nek[naam] != null ? t.nek[naam] : t.nek[lijf] != null ? t.nek[lijf] : t.nek.standaard;
   };
 
@@ -767,9 +767,15 @@
     const naam = alsDorpeling ? dorpelingVel(e.zaad || 0) : S.figuurNaam(e.soort);
     if (S.figuurGegevens(naam) || !e.vel) return naam;
     // Alleen een bewoner heeft een uiterlijk; het gereedschap (gereedschap/wereld.html) laadt js/bewoners.js niet.
-    const eigen = e.bewoner ? S.figuurVanUiterlijk(e, T.UITERLIJK_LIJF[e.vel]) : null;
+    const eigen = e.bewoner ? S.inKleren(e, S.figuurVanUiterlijk(e, T.UITERLIJK_LIJF[e.vel])) : null;
     return eigen || S.velMetKarakter(e.vel, e.karakter);
   }
+  // Het vel van een uiterlijk in de kleren van zijn stand (vraag 149; T.klerenVan in js/bewoners.js): boer-u7-arm of
+  // boerin-u3-deftig, als dat vel er is; anders zijn gewone. Alleen staand en lopend: het werk gaat in de gewone kleren.
+  S.inKleren = (e, naam) => {
+    const trap = naam ? T.klerenVan(e.bewoner) : 'gewoon';
+    return trap !== 'gewoon' && S.figuurGegevens(`${naam}-${trap}`) ? `${naam}-${trap}` : naam;
+  };
   // Het vel van het uiterlijk van een bewoner, met deze naam ervoor (een lijf als boer, of een werk als zaaier), of
   // null als hij geen uiterlijk heeft of dat vel er niet is.
   S.figuurVanUiterlijk = (e, voor) => {

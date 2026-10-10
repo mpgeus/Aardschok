@@ -832,6 +832,64 @@ man (Marcel: "a ja"), daarna die van de vrouw en de betere houdingen ("b ja c nu
 hurken (van voren zag je eerst alleen de hoed), de schoffel kreeg een blad (hij leek een hamertje), en de hand vingers
 (het was een peddel). Wat nog beter kan, staat in `opmerkingen.md`, "Het beeld".
 
+## Kleren naar stand (10 okt 2026, werklijst vraag 149)
+
+Marcel: "Hogere niveau sociale mensen moeten duurdere kleren krijgen", en "a ja, b drie, c ja, d ja, e ja". Het gezicht
+van een uiterlijk blijft (haar, kapsel, baard, neus, wenkbrauwen), de kleren gaan met de stand van zijn huis mee, in drie
+trappen (`kleren()` in `gereedschap/pixelart/uiterlijk.cjs`; de proefplaat is `node gereedschap/pixelart/uiterlijk.cjs
+kleren`, in `uit/uiterlijk/`):
+- **arm** (de keuters in de hut): zijn eigen kleur, maar vaal (van wede, meekrap en wouw na veel wassen) of ongeverfd,
+  met lappen, een gerafelde zoom (`rafel`, `rafelZoom`) en een vuile zoom, om en om blote voeten of klompen met modder;
+  een wollen muts in plaats van vilt; geen halsdoek, geen vest, geen buidel; een vrouw zonder schort en zonder rijglijf,
+  om en om met opgestroopte mouwen (Marcel, na de eerste plaat: "1 armer");
+- **gewoon** (de dorpelingen en de boeren): de uiterlijken zoals ze zijn (vraag 145);
+- **deftig** (de ambachtslieden): zijn kleur diep en vol (blauw wordt diepblauw, rood scharlaken, grijs en linnen
+  zwart), fijne wol zonder lappen, leren schoenen, een buidel aan de riem, vilt in plaats van stro; een man in een jas
+  tot onder de knie (`jas: 'lang'` in `boer()`, wijd uitlopend zodat de benen erin stappen), om en om met donker
+  marterbont aan kraag, zoom en polsen, of een kraag van gebleekt linnen (Marcel: "2 alle", de lange jas); een vrouw met
+  marterbont en zonder schort ("3 ja"), en een witte doek. Het bont is donker (`bontKleur`): licht bont op scharlaken
+  met een groene muts was een kerstman.
+
+Aan het werk draagt iedereen zijn gewone kleren (de werkfiguren van vraag 145). De deftige kleren komen pas als het huis
+zijn laken krijgt (e; `T.klerenVan` in `js/bewoners.js`, de spelregel "Kleren"). De vellen: `boer-u7-arm`,
+`boerin-u3-deftig`, staand en lopend (`uiterlijk-anim.cjs`). De kinderen en de ouden houden voorlopig hun gewone kleren.
+
+## De mensen naar Marcels voorbeelden (10 okt 2026, werklijst vraag 150)
+
+Marcel: "We moeten de mensen zoizo een beetje upgraden, want zien er niet geweldig uit", en bij vier voorbeelden (in
+`ontwerp/voorbeelden/`, `mensen-*.jpg`): "De plaatjes demonstreren een verscheidenheid aan mensen. Het is niet perse de
+stijl. Ik wil wel vasthouden aan de pixel art. Maar ik heb meer afwisseling nodig." Wat de voorbeelden laten zien, en
+wat onze mensen nu hebben:
+- **lichaamsbouw:** groot en klein, dik en dun, krom en recht, breed en smal (vooral de schurken); bij ons heeft iedereen
+  hetzelfde lijf;
+- **een silhouet uit lagen:** een mantel met een kap, een schoudermanteltje, een overkleed over een onderkleed, een lange
+  jas, een pij; bij ons een kiel met een broek, of een jurk met een schort;
+- **het hoofd:** een witte linnen kap, een kaproen, een vilthoed, een muts, een kale kop; bij ons al een deel;
+- **spullen en riemen:** een tas aan de riem, een riem schuin over de borst, een mes, een boek in de hand, laarzen met een
+  omslag; bij ons een riem met buidel en mes, een tas;
+- **kleur:** elke figuur een eigen combinatie, met contrast tussen de lagen (een groene jurk over een bruin onderkleed,
+  een bruine mantel erover); bij ons liggen kiel en broek dicht bij elkaar, en is alles gedempt;
+- **verhoudingen:** de boogschutter, de schurken en de vrouw zijn slanker, met langere benen en een kleiner hoofd (zo'n
+  zes à zeven hoofden); het spritevel is gedrongen (drie). De onze zijn er zo'n vijf.
+Wat Claude zag bij drie hoofden die Marcel omcirkelde ("Deze zien er niet uit"): de camera kijkt van boven, dus je ziet
+vooral de kruin; zonder nek zakt het hoofd in de kraag, en het gezicht kijkt naar de grond. Een tekenaar draait het gezicht
+daarom wat naar de camera: proefplaat 1 deed dat met een nek en het gezicht 15 graden omhoog, met de lagen uit de
+voorbeelden (teruggedraaid, zie onder).
+Afwisseling kost geen vellen erbij: elk van de 24 uiterlijken krijgt zijn eigen bouw, lagen, hoofd en spullen.
+Marcel bij proefplaat 1: "ik vind de poppetjes gewoon niet echt mooi zoals ze nu zijn", en daarna met twee voorbeelden in
+low-poly (`mensen-lowpoly-*.jpg`): "deze verhoudingen zijn mooi. Maar laten we A eens proberen" (een nieuw lijf in code,
+geen tekenaar). Wat die twee mooi maakt: vlakken in plaats van klei (elk vlak één kleur, scherpe overgangen), kleurvlakken
+per kledingstuk met randen en manchetten, en een gezicht dat iets zegt; gedrongen zijn ze net als de onze. Wat wel
+kost: de werkfiguren (`werkfiguren.cjs`) lenen het hoofd en de kiel, maar hebben hun eigen lijf; een andere bouw moet daar
+ook in, anders verandert iemand van postuur als hij gaat maaien.
+Daarna, bij Marcels voorbeelden in pixel art (`mensen-pixel-*`, `mensen-soldaat-48.png`, `mensen-kap-64.png`): het ligt
+niet aan de maat (zijn strijder verkleind tot onze 73 pixels ziet er nog goed uit), maar aan het tekenen; een poppetje
+moet gezet worden, niet uit een 3D-model gerekend, en met de hand haalde Claude dat niveau niet. **Geparkeerd** (Marcel,
+10 okt: "ok we houden het even bij de kleding voor onze poppetjes. de rest kan weg"): de code is teruggedraaid; als de
+mensen ooit getekend worden, door een tekenaar of met een AI-gereedschap, zijn dit de voorbeelden: 48 pixels hoog, in het
+spel anderhalf keer vergroot (op zoom 2 drie schermpixels per pixel), een zwarte rand, licht van linksboven, drie à vier
+tinten per kleur.
+
 ## Het vee: een koe en een schaap (Marcel, 25 sep 2026)
 
 Voor de weides met vee (`spel.md`, "Weides met koeien en schapen"). Marcel koos: eerst de dieren

@@ -656,8 +656,9 @@ function kleuter(stand = null, o = {}) {
 // wordt gebouwd — anders zitten rok en lijf in dezelfde bot()-groep en zwaait de rok niet breder
 // mee dan de romp (zie de uitleg bovenaan dorpelingen.cjs, "Rok").
 function vrouwenlijf(delen, o) {
-  const { rokTop = 38, rokRx = [15, 10.2], rokRy = [13, 8.2], lijf, boezem, schouders, mRok, mLijf, dRok, dLijf, plooi = 1, botRok = null } = o;
-  delen.push(klokrok(rokTop, rokRx, rokRy, () => 0.8, mRok, dRok, plooi));
+  const { rokTop = 38, rokRx = [15, 10.2], rokRy = [13, 8.2], lijf, boezem, schouders, mRok, mLijf, dRok, dLijf, plooi = 1, botRok = null, rafel = 0 } = o;
+  const rok = klokrok(rokTop, rokRx, rokRy, () => 0.8, mRok, dRok, plooi);
+  delen.push(rafel ? UI.rafelZoom(rok, 0, rafel) : rok); // (rafel: een gerafelde zoom zo hoog, vraag 149)
   if (botRok) botRok();
   delen.push(romp(lijf, lijf.z0, lijf.z1, mLijf, dLijf, 2));
   if (boezem) delen.push(ellips(boezem[0], boezem[1], mLijf, dLijf, 2.5));
@@ -894,6 +895,7 @@ function boerin(stand = null, o = {}) {
     dRok: D.rok,
     dLijf: D.lijf,
     botRok: () => bot(Bn.Brok),
+    rafel: o.rafel ? 2.6 : 0,
   });
   // krom: het bovenlijf buigt voorover (Bromp), het schort blijft bij de rok staan (Blijf)
   if (o.krom) bot(Bn.Bromp);
@@ -996,6 +998,8 @@ function boerin(stand = null, o = {}) {
   // --- hoofd: rond gezicht in een witte doek, een pluk haar voorop, de knoop onder de kin (hoofdVanDeBoerin, hieronder)
   hoofdVanDeBoerin(delen, ctx, H, maat, o);
   bot(Bn.Bnek);
+  // (vraag 149: bontKleur, een andere kleur bont, zoals het donkere marterbont van een deftige vrouw)
+  if (o.bontKleur && M.bont != null) mat[M.bont] = { ...KAR.BONT, ...o.bontKleur };
 
   return model(delen, mat, hg ? HH.omvat(delen, 2) : { midden: [0, 3, 38], straal: 46 });
 }

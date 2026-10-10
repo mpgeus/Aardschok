@@ -804,7 +804,13 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   zijn lijf (12 voor een kind of een oude; `p.uiterlijk`, `T.kiesUiterlijk`: het minst gebruikte, niet als de buren, een
   kind met het haar van zijn ouders), ook in zijn werk (`boer-u7`, `zaaier-u7`; `T.UITERLIJK_LIJF`, en in js/sprites.js
   `figuurVanUiterlijk`); de uiterlijken staan in `gereedschap/pixelart/uiterlijk.cjs`, de vellen komen uit
-  `uiterlijk-anim.cjs`. De spelregel "Ouder worden"; de getallen in `T.LEVEN_INSTELLINGEN`.
+  `uiterlijk-anim.cjs`. De spelregel "Ouder worden"; de getallen in `T.LEVEN_INSTELLINGEN`. **De kleren naar stand**
+  (vraag 149, 10 okt; Marcel: "Hogere niveau sociale mensen moeten duurdere kleren krijgen"): het gezicht blijft, de
+  kleren zijn die van de stand van het huis (`T.klerenVan` in `js/bewoners.js`): arm in een hut (vaal, lappen, een
+  gerafelde zoom, blote voeten), gewoon in een huis of boerderij, deftig in een stenen huis of woontoren als het huis
+  zijn laken krijgt (diepe verf, leer, een buidel, bont, en een man in een jas tot onder de knie); alleen de
+  volwassenen, staand en lopend (`boer-u7-arm`, `boerin-u3-deftig`, `T.sprites.inKleren`), want aan het werk dragen ze
+  hun gewone kleren. Alleen beeld. Uit `kleren()` in `uiterlijk.cjs`; de spelregel "Kleren".
 - `js/kleinleven.js`: **het kleine leven** (vraag 145, 3; Marcel: "het voelt gewoon wat 'saai' in het dorp"): alleen
   beeld, niets ervan in `Spel.S`: rook uit de schoorsteen van wie thuis is (`T.rookUitHuizen`; het punt per tekening is
   `schoorsteen` of `nok` in `tegels.js`, uit `rookVan` in `huizen.cjs`), water dat stroomt of glinstert (`T.waterOp`),
@@ -1351,6 +1357,8 @@ zwaar ze wegen) en welke oorzaken er spelen;
 op hout wachten; `('nu')` laat de brand nu beginnen, `('puin')` laat wat brandt nu afbranden, `('herbouw')` laat het puin
 nu weer opbouwen. `Spel.debug.koorts()` zegt wie er ziek is en tot wanneer, en hoeveel het hadden; `('nu')` laat de koorts
 nu beginnen.
+`Spel.debug.kleren()` zegt hoeveel volwassenen arm, gewoon en deftig lopen, en per volwassene zijn kleren, zijn huis (met
+hoeveel laken het kreeg) en welk vel hij draagt (vraag 149).
 `Spel.debug.zaak()` zegt hoe de graanzak ervoor staat: wie het nam en wie verdacht wordt, het spoor, wat je weet, de
 zitting en hoe het afliep; `('nu')` laat de zak nu verdwijnen (de boer zoekt je meteen), `('zitting')` maakt vandaag de
 dag van de zitting (met `Spel.debug.uur(13)` staan ze er), `('boek')` laat de inner het boek nu voorlezen.
