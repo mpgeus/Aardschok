@@ -160,3 +160,47 @@ test('de ambachtslieden willen wijn naast hun bier, en wijn telt niet als bier',
   T.gebruikGoederen(D, { goederen: { bier: { dorpelingen: { krijgt: 3 } }, wijn: { ambachtslieden: { krijgt: 2 } } } });
   assert.equal(D.voorraad.wijn, 8, 'twee wijn gedronken, en geen wijn in plaats van bier');
 });
+
+// Marcel, 10 okt: "Laten we vooruitkijken doen". Wat er na de pluk ligt, moet het jaar halen, zoals het hout de winter.
+test('vooruitkijken: wat er bij de pluk ligt plus de pluk moet een jaar halen', () => {
+  const huis = { soort: 'stenenHuis', x: 10, y: 10, voet: { b: 4, h: 4 }, klaar: true };
+  const boerderij = { soort: 'wijnboerderij', x: 30, y: 10, voet: { b: 10, h: 8 }, klaar: false };
+  const D = { gebouwen: [huis, boerderij], bewoners: { mensen: [] }, voorraad: T.nieuweVoorraad(), wereld: { voorwerpen: [] } };
+  const mensen = (n) => (D.bewoners.mensen = Array.from({ length: n }, () => ({ huis })));
+  const IN = T.WIJNGAARD_INSTELLINGEN;
+  const ranken = Math.ceil(IN.stuk.h / IN.rijOm) * IN.stuk.b;
+  const pluk = ranken * IN.wijnPerRank - T.GEBOUWEN.wijnboerderij.heer.wijn;
+  const dag = dagIn('hooimaand', 1);
+  mensen(20);
+  let v = T.wijnNaDePluk(D, dag);
+  assert.equal(v.tot, 90, 'van 1 hooimaand tot 1 wijnmaand');
+  assert.equal(v.pluk, pluk, 'een wijnboerderij zonder ranken op de kaart plukt er zoveel als ze straks heeft, min de heer');
+  assert.ok(v.haalt, `twintig ambachtslieden drinken ${20 * 0.02} per dag, en ${pluk} haalt het jaar`);
+  mensen(50);
+  v = T.wijnNaDePluk(D, dag);
+  assert.ok(!v.haalt && v.dagen === pluk, 'vijftig drinken een per dag: de pluk haalt het jaar niet');
+  T.zetVoorraad(D, 'wijn', 90);
+  assert.ok(!T.wijnNaDePluk(D, dag).haalt, 'wat ze tot de pluk drinken, komt uit wat er nu ligt');
+  T.zetVoorraad(D, 'wijn', 90 + T.DAGEN_PER_JAAR - pluk);
+  assert.ok(T.wijnNaDePluk(D, dag).haalt, 'wat er bij de pluk nog ligt, telt mee');
+  mensen(0);
+  assert.ok(T.wijnNaDePluk(D, dag).haalt, 'wie geen wijn wil, drinkt niets');
+});
+
+test('haalt de wijn het jaar na de pluk niet, dan vraagt het dorp nu een wijnboerderij erbij', () => {
+  const { S, D } = gehucht();
+  const echt = T.wijnNaDePluk;
+  try {
+    D.trede = 'dorp';
+    S.kalender.dag = dagIn('hooimaand', 1);
+    T.wijnNaDePluk = () => ({ haalt: true, dagen: 360, winter: 360 });
+    assert.ok(!T.watTeBouwen(D).some((x) => x.soort === 'wijnboerderij'), 'haalt het, dan niet');
+    T.wijnNaDePluk = () => ({ haalt: false, dagen: 200, winter: 360 });
+    const x = T.watTeBouwen(D).find((y) => y.soort === 'wijnboerderij');
+    assert.ok(x, 'haalt het niet, dan nu, ook al staat er een');
+    assert.match(x.waarom, /200 van de 360 dagen/);
+  } finally {
+    T.wijnNaDePluk = echt;
+    T.optiesTerug();
+  }
+});

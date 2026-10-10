@@ -556,7 +556,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `gereedschap/pixelart/wijnrank.cjs`). In wijnmaand (`alleenIn`, `T.isPluktijd`) plukt het gezin dat er woont (`g.plukt`,
   elke nacht `T.tikWijngaardDag`; zolang werkt het nergens anders) rank voor rank met een mand (`pluk` in
   `js/veldwerk.js`, `e.mand`, de plukker of plukster), en pas als de mand in het huis is, is de wijn binnen
-  (`T.wijnBinnen`, `wijnPerRank`). De getallen in `T.WIJNGAARD_INSTELLINGEN`.
+  (`T.wijnBinnen`, `wijnPerRank`). Het dorp kijkt vooruit (`T.wijnNaDePluk`, met `T.haaltDeWinter`): haalt wat er bij de
+  pluk nog ligt plus de pluk het jaar niet, dan vraagt het nu een wijnboerderij erbij (`T.watTeBouwen`). De getallen in
+  `T.WIJNGAARD_INSTELLINGEN`.
 - `js/weer.js`: **het weer** (vraag 77, stap 2, en 82, c, 9 okt; Marcel: "1. Beiden 2. Ook in beeld 3. Ja kleine beekjes
   ook, goed idee!"): elke nacht als eerste (`T.tikWeerDag`, vanuit `T.tikGebouwenDag`) het weer van de dag die begint, in
   `D.weer` (`vandaag`: zon, wolken, regen of sneeuw; `droog`, de dagen zonder regen; `tekort`, het watertekort; `verlies`),

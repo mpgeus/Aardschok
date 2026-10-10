@@ -515,8 +515,10 @@
     if (zonderHanden) return { kan: false, bouw: null, tekst: waaromTeWeinig(zonderHanden) };
     // Wat er bij kan. Wat in dit seizoen stilligt (een visser in de winter), helpt nu niet. Wat alleen in zijn maanden oogst
     // (de wijnboerderij, `alleenIn`), helpt ook daarbuiten, zolang er geen staat: zijn oogst moet er dan zijn. Staat er
-    // een, dan wacht het dorp op zijn maanden (vraag 136; tot 10 okt vroeg het dorp er daarom nooit een).
-    const helpt = (s) => T.magGebouwd(D, s) && (!stil(s) || (!!T.GEBOUWEN[s].alleenIn && !staan.some((g) => g.soort === s)));
+    // een, dan zegt het vooruitkijken of er meer bij moeten (T.wijnNaDePluk in js/wijngaard.js, in T.watTeBouwen), want wat
+    // de huizen nu missen, maakt een nieuwe pas bij de volgende pluk goed (vraag 136; tot 10 okt vroeg het dorp er nooit
+    // een, en daarna pas als de wijn al op was).
+    const helpt = (s) => T.magGebouwd(D, s) && (T.GEBOUWEN[s].alleenIn ? !staan.some((g) => g.soort === s) : !stil(s));
     const helpen = soorten.filter(helpt);
     if (helpen.length) {
       const er = helpen.find((s) => staan.some((g) => g.soort === s));

@@ -440,6 +440,10 @@
       const bouw = T.watHelptAanEten(D).find((h) => h.bouw);
       if (bouw) erbij(bouw.bouw, `Het eten haalt ${haalt(T.etenVoorDeWinter(D, D.kalender.dag))} van de winter.`, 'winter');
     }
+    // De wijn (js/wijngaard.js; werklijst vraag 136): haalt wat er na de pluk ligt het jaar niet, dan nu een wijnboerderij
+    // erbij, zodat ze er voor de pluk staat. Daarvoor vroeg het dorp er pas een als de wijn al op was.
+    const wijn = T.wijnNaDePluk(D, D.kalender.dag);
+    if (!wijn.haalt) erbij('wijnboerderij', `Wat de wijnboerderijen in wijnmaand plukken, haalt het jaar niet: ${haalt(wijn)}.`, 'wijn');
     const vis = T.visEnVleesRaad(D);
     const visBouw = vis && vis.hulp.find((h) => h.bouw);
     if (visBouw) erbij(visBouw.bouw, `De huizen willen in de winter meer vis of vlees dan er dan ligt.`, 'winter');

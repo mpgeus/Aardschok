@@ -29,7 +29,7 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
 - Wie wijn wil (vraag 136; Marcel, 10 okt: "Inwoners willen wijn en bier. Afwisseling", en "B1, 0,02 is goed"):
   gebouwd op branch `ccr-a1a4ef49-0815cc`, nog niet in `main`. De speeltest (`speelbaar.md`, 10 okt): het dorp vraagt
   zelf om een wijnboerderij, maar de volgende pas als de wijn al op is; zonder wijn won één van de zes, met wijn geen.
-  Voorstel van Claude, wacht op Marcel: het dorp kijkt vooruit, zoals bij het hout en het eten voor de winter.
+  Marcel (10 okt): "Laten we vooruitkijken doen": gebouwd (`T.wijnNaDePluk`), de speeltest speelt opnieuw.
 - Uit `opmerkingen.md`: een brand die overslaat op het huis ernaast, een eigen beeld voor de koorts (ziekbed, hoesten),
   en waar de kerstboom komt (vraag 148). Voorstellen van Claude (10 okt): overslaan alleen bij groot brandgevaar als
   niemand blust, op hooguit één buurhuis; een bos stro aan de deur van een huis met zieken (de pestbos); de kerstboom
@@ -6932,6 +6932,11 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     hout en het eten voor de winter (`T.haaltDeWinter` in `js/behoeften.js`): haalt de wijn die er ligt de volgende pluk
     niet, met wat de ambachtslieden per dag drinken, dan vraagt het nu een wijnboerderij erbij, zodat ze er voor
     wijnmaand staat. Of alleen een getal: meer wijn per rank (15 naar 25, 500 per jaar), zodat er minder nodig zijn.
+    **Marcel (10 okt): "Laten we vooruitkijken doen."** **Gebouwd:** `T.wijnNaDePluk` (`js/wijngaard.js`): wat er bij de
+    eerstvolgende pluk nog ligt (wat er nu ligt, min wat de huizen tot dan drinken), plus wat de wijnboerderijen dan
+    plukken, min de wijn voor de heer, moet een jaar halen (`T.haaltDeWinter`, de regel van het hout en het eten); haalt
+    het dat niet, dan vraagt het dorp nu een wijnboerderij erbij (`T.watTeBouwen` in `js/raad.js`). Wat de huizen nu
+    missen, vraagt er alleen nog een als er geen staat (`watHelpt` in `js/wensen.js`).
 137. **Doorgroeien zonder vaste maat** (Marcel, 8 okt: "We moeten ook stoppen met het dorp een vaste maat geven. Als alles
     straks 1 eiland is, is het logisch dat je gewoon door kunt groeien naar buiten."; open). Hoort bij het eiland (vraag
     117). Er zijn twee vaste maten: het land van de maker (100 bij 100, met bos tot de rand), en de maat van de winst (vanaf
