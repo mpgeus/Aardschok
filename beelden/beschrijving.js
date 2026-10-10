@@ -37892,6 +37892,5190 @@
        ]
       }
      }
+    },
+    "boer-u0-arm": {
+     "naam": "boer-u0-arm",
+     "cel": [
+      56,
+      94
+     ],
+     "anker": [
+      28,
+      80
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u0-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        82
+       ],
+       "anker": [
+        18,
+        77
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u0-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        88
+       ],
+       "anker": [
+        25,
+        77
+       ]
+      }
+     }
+    },
+    "boer-u1-arm": {
+     "naam": "boer-u1-arm",
+     "cel": [
+      56,
+      88
+     ],
+     "anker": [
+      28,
+      74
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u1-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        76
+       ],
+       "anker": [
+        18,
+        71
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u1-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        81
+       ],
+       "anker": [
+        25,
+        70
+       ]
+      }
+     }
+    },
+    "boer-u2-arm": {
+     "naam": "boer-u2-arm",
+     "cel": [
+      56,
+      91
+     ],
+     "anker": [
+      28,
+      77
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u2-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        79
+       ],
+       "anker": [
+        18,
+        74
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u2-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        85
+       ],
+       "anker": [
+        25,
+        74
+       ]
+      }
+     }
+    },
+    "boer-u3-arm": {
+     "naam": "boer-u3-arm",
+     "cel": [
+      56,
+      89
+     ],
+     "anker": [
+      28,
+      75
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u3-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        34,
+        77
+       ],
+       "anker": [
+        17,
+        72
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u3-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        83
+       ],
+       "anker": [
+        25,
+        72
+       ]
+      }
+     }
+    },
+    "boer-u4-arm": {
+     "naam": "boer-u4-arm",
+     "cel": [
+      56,
+      91
+     ],
+     "anker": [
+      28,
+      77
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u4-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        79
+       ],
+       "anker": [
+        18,
+        74
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u4-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        85
+       ],
+       "anker": [
+        25,
+        74
+       ]
+      }
+     }
+    },
+    "boer-u5-arm": {
+     "naam": "boer-u5-arm",
+     "cel": [
+      56,
+      87
+     ],
+     "anker": [
+      28,
+      73
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u5-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        44,
+        75
+       ],
+       "anker": [
+        22,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u5-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        81
+       ],
+       "anker": [
+        25,
+        70
+       ]
+      }
+     }
+    },
+    "boer-u6-arm": {
+     "naam": "boer-u6-arm",
+     "cel": [
+      56,
+      91
+     ],
+     "anker": [
+      28,
+      77
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u6-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        79
+       ],
+       "anker": [
+        18,
+        74
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u6-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        85
+       ],
+       "anker": [
+        25,
+        74
+       ]
+      }
+     }
+    },
+    "boer-u7-arm": {
+     "naam": "boer-u7-arm",
+     "cel": [
+      56,
+      94
+     ],
+     "anker": [
+      28,
+      80
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u7-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        82
+       ],
+       "anker": [
+        18,
+        77
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u7-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        88
+       ],
+       "anker": [
+        25,
+        77
+       ]
+      }
+     }
+    },
+    "boer-u8-arm": {
+     "naam": "boer-u8-arm",
+     "cel": [
+      56,
+      88
+     ],
+     "anker": [
+      28,
+      74
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u8-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        76
+       ],
+       "anker": [
+        18,
+        71
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u8-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        82
+       ],
+       "anker": [
+        25,
+        71
+       ]
+      }
+     }
+    },
+    "boer-u9-arm": {
+     "naam": "boer-u9-arm",
+     "cel": [
+      56,
+      88
+     ],
+     "anker": [
+      28,
+      74
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u9-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        76
+       ],
+       "anker": [
+        18,
+        71
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u9-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        82
+       ],
+       "anker": [
+        25,
+        71
+       ]
+      }
+     }
+    },
+    "boer-u10-arm": {
+     "naam": "boer-u10-arm",
+     "cel": [
+      56,
+      88
+     ],
+     "anker": [
+      28,
+      74
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u10-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        34,
+        76
+       ],
+       "anker": [
+        17,
+        71
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u10-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        81
+       ],
+       "anker": [
+        25,
+        70
+       ]
+      }
+     }
+    },
+    "boer-u11-arm": {
+     "naam": "boer-u11-arm",
+     "cel": [
+      56,
+      87
+     ],
+     "anker": [
+      28,
+      73
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u11-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        75
+       ],
+       "anker": [
+        18,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u11-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        81
+       ],
+       "anker": [
+        25,
+        70
+       ]
+      }
+     }
+    },
+    "boer-u12-arm": {
+     "naam": "boer-u12-arm",
+     "cel": [
+      56,
+      94
+     ],
+     "anker": [
+      28,
+      80
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u12-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        82
+       ],
+       "anker": [
+        18,
+        77
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u12-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        88
+       ],
+       "anker": [
+        25,
+        77
+       ]
+      }
+     }
+    },
+    "boer-u13-arm": {
+     "naam": "boer-u13-arm",
+     "cel": [
+      56,
+      88
+     ],
+     "anker": [
+      28,
+      74
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u13-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        76
+       ],
+       "anker": [
+        18,
+        71
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u13-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        82
+       ],
+       "anker": [
+        25,
+        71
+       ]
+      }
+     }
+    },
+    "boer-u14-arm": {
+     "naam": "boer-u14-arm",
+     "cel": [
+      56,
+      91
+     ],
+     "anker": [
+      28,
+      77
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u14-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        79
+       ],
+       "anker": [
+        18,
+        74
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u14-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        85
+       ],
+       "anker": [
+        25,
+        74
+       ]
+      }
+     }
+    },
+    "boer-u15-arm": {
+     "naam": "boer-u15-arm",
+     "cel": [
+      56,
+      93
+     ],
+     "anker": [
+      28,
+      79
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u15-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        81
+       ],
+       "anker": [
+        18,
+        76
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u15-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        86
+       ],
+       "anker": [
+        25,
+        75
+       ]
+      }
+     }
+    },
+    "boer-u16-arm": {
+     "naam": "boer-u16-arm",
+     "cel": [
+      56,
+      91
+     ],
+     "anker": [
+      28,
+      77
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u16-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        79
+       ],
+       "anker": [
+        18,
+        74
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u16-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        85
+       ],
+       "anker": [
+        25,
+        74
+       ]
+      }
+     }
+    },
+    "boer-u17-arm": {
+     "naam": "boer-u17-arm",
+     "cel": [
+      56,
+      94
+     ],
+     "anker": [
+      28,
+      80
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u17-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        82
+       ],
+       "anker": [
+        18,
+        77
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u17-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        88
+       ],
+       "anker": [
+        25,
+        77
+       ]
+      }
+     }
+    },
+    "boer-u18-arm": {
+     "naam": "boer-u18-arm",
+     "cel": [
+      56,
+      89
+     ],
+     "anker": [
+      28,
+      75
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u18-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        77
+       ],
+       "anker": [
+        18,
+        72
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u18-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        83
+       ],
+       "anker": [
+        25,
+        72
+       ]
+      }
+     }
+    },
+    "boer-u19-arm": {
+     "naam": "boer-u19-arm",
+     "cel": [
+      56,
+      91
+     ],
+     "anker": [
+      28,
+      77
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u19-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        79
+       ],
+       "anker": [
+        18,
+        74
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u19-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        85
+       ],
+       "anker": [
+        25,
+        74
+       ]
+      }
+     }
+    },
+    "boer-u20-arm": {
+     "naam": "boer-u20-arm",
+     "cel": [
+      56,
+      88
+     ],
+     "anker": [
+      28,
+      74
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u20-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        76
+       ],
+       "anker": [
+        18,
+        71
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u20-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        81
+       ],
+       "anker": [
+        25,
+        70
+       ]
+      }
+     }
+    },
+    "boer-u21-arm": {
+     "naam": "boer-u21-arm",
+     "cel": [
+      56,
+      91
+     ],
+     "anker": [
+      28,
+      77
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u21-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        79
+       ],
+       "anker": [
+        18,
+        74
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u21-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        85
+       ],
+       "anker": [
+        25,
+        74
+       ]
+      }
+     }
+    },
+    "boer-u22-arm": {
+     "naam": "boer-u22-arm",
+     "cel": [
+      56,
+      88
+     ],
+     "anker": [
+      28,
+      74
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u22-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        76
+       ],
+       "anker": [
+        18,
+        71
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u22-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        82
+       ],
+       "anker": [
+        25,
+        71
+       ]
+      }
+     }
+    },
+    "boer-u23-arm": {
+     "naam": "boer-u23-arm",
+     "cel": [
+      56,
+      94
+     ],
+     "anker": [
+      28,
+      80
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u23-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        44,
+        82
+       ],
+       "anker": [
+        22,
+        77
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u23-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        88
+       ],
+       "anker": [
+        25,
+        77
+       ]
+      }
+     }
+    },
+    "boer-u0-deftig": {
+     "naam": "boer-u0-deftig",
+     "cel": [
+      56,
+      94
+     ],
+     "anker": [
+      28,
+      80
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u0-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        82
+       ],
+       "anker": [
+        18,
+        77
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u0-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        88
+       ],
+       "anker": [
+        25,
+        77
+       ]
+      }
+     }
+    },
+    "boer-u1-deftig": {
+     "naam": "boer-u1-deftig",
+     "cel": [
+      56,
+      88
+     ],
+     "anker": [
+      28,
+      74
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u1-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        76
+       ],
+       "anker": [
+        18,
+        71
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u1-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        81
+       ],
+       "anker": [
+        25,
+        70
+       ]
+      }
+     }
+    },
+    "boer-u2-deftig": {
+     "naam": "boer-u2-deftig",
+     "cel": [
+      56,
+      91
+     ],
+     "anker": [
+      28,
+      77
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u2-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        79
+       ],
+       "anker": [
+        18,
+        74
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u2-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        85
+       ],
+       "anker": [
+        25,
+        74
+       ]
+      }
+     }
+    },
+    "boer-u3-deftig": {
+     "naam": "boer-u3-deftig",
+     "cel": [
+      56,
+      89
+     ],
+     "anker": [
+      28,
+      75
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u3-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        77
+       ],
+       "anker": [
+        18,
+        72
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u3-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        83
+       ],
+       "anker": [
+        25,
+        72
+       ]
+      }
+     }
+    },
+    "boer-u4-deftig": {
+     "naam": "boer-u4-deftig",
+     "cel": [
+      56,
+      94
+     ],
+     "anker": [
+      28,
+      80
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u4-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        82
+       ],
+       "anker": [
+        18,
+        77
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u4-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        88
+       ],
+       "anker": [
+        25,
+        77
+       ]
+      }
+     }
+    },
+    "boer-u5-deftig": {
+     "naam": "boer-u5-deftig",
+     "cel": [
+      56,
+      87
+     ],
+     "anker": [
+      28,
+      73
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u5-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        44,
+        75
+       ],
+       "anker": [
+        22,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u5-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        81
+       ],
+       "anker": [
+        25,
+        70
+       ]
+      }
+     }
+    },
+    "boer-u6-deftig": {
+     "naam": "boer-u6-deftig",
+     "cel": [
+      56,
+      91
+     ],
+     "anker": [
+      28,
+      77
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u6-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        79
+       ],
+       "anker": [
+        18,
+        74
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u6-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        85
+       ],
+       "anker": [
+        25,
+        74
+       ]
+      }
+     }
+    },
+    "boer-u7-deftig": {
+     "naam": "boer-u7-deftig",
+     "cel": [
+      56,
+      94
+     ],
+     "anker": [
+      28,
+      80
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u7-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        82
+       ],
+       "anker": [
+        18,
+        77
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u7-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        88
+       ],
+       "anker": [
+        25,
+        77
+       ]
+      }
+     }
+    },
+    "boer-u8-deftig": {
+     "naam": "boer-u8-deftig",
+     "cel": [
+      56,
+      88
+     ],
+     "anker": [
+      28,
+      74
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u8-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        76
+       ],
+       "anker": [
+        18,
+        71
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u8-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        82
+       ],
+       "anker": [
+        25,
+        71
+       ]
+      }
+     }
+    },
+    "boer-u9-deftig": {
+     "naam": "boer-u9-deftig",
+     "cel": [
+      56,
+      88
+     ],
+     "anker": [
+      28,
+      74
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u9-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        76
+       ],
+       "anker": [
+        18,
+        71
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u9-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        82
+       ],
+       "anker": [
+        25,
+        71
+       ]
+      }
+     }
+    },
+    "boer-u10-deftig": {
+     "naam": "boer-u10-deftig",
+     "cel": [
+      56,
+      88
+     ],
+     "anker": [
+      28,
+      74
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u10-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        76
+       ],
+       "anker": [
+        18,
+        71
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u10-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        81
+       ],
+       "anker": [
+        25,
+        70
+       ]
+      }
+     }
+    },
+    "boer-u11-deftig": {
+     "naam": "boer-u11-deftig",
+     "cel": [
+      56,
+      87
+     ],
+     "anker": [
+      28,
+      73
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u11-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        75
+       ],
+       "anker": [
+        18,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u11-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        81
+       ],
+       "anker": [
+        25,
+        70
+       ]
+      }
+     }
+    },
+    "boer-u12-deftig": {
+     "naam": "boer-u12-deftig",
+     "cel": [
+      56,
+      94
+     ],
+     "anker": [
+      28,
+      80
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u12-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        82
+       ],
+       "anker": [
+        18,
+        77
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u12-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        88
+       ],
+       "anker": [
+        25,
+        77
+       ]
+      }
+     }
+    },
+    "boer-u13-deftig": {
+     "naam": "boer-u13-deftig",
+     "cel": [
+      56,
+      88
+     ],
+     "anker": [
+      28,
+      74
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u13-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        76
+       ],
+       "anker": [
+        18,
+        71
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u13-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        82
+       ],
+       "anker": [
+        25,
+        71
+       ]
+      }
+     }
+    },
+    "boer-u14-deftig": {
+     "naam": "boer-u14-deftig",
+     "cel": [
+      56,
+      91
+     ],
+     "anker": [
+      28,
+      77
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u14-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        79
+       ],
+       "anker": [
+        18,
+        74
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u14-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        85
+       ],
+       "anker": [
+        25,
+        74
+       ]
+      }
+     }
+    },
+    "boer-u15-deftig": {
+     "naam": "boer-u15-deftig",
+     "cel": [
+      56,
+      93
+     ],
+     "anker": [
+      28,
+      79
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u15-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        81
+       ],
+       "anker": [
+        18,
+        76
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u15-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        86
+       ],
+       "anker": [
+        25,
+        75
+       ]
+      }
+     }
+    },
+    "boer-u16-deftig": {
+     "naam": "boer-u16-deftig",
+     "cel": [
+      56,
+      94
+     ],
+     "anker": [
+      28,
+      80
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u16-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        82
+       ],
+       "anker": [
+        18,
+        77
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u16-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        88
+       ],
+       "anker": [
+        25,
+        77
+       ]
+      }
+     }
+    },
+    "boer-u17-deftig": {
+     "naam": "boer-u17-deftig",
+     "cel": [
+      56,
+      94
+     ],
+     "anker": [
+      28,
+      80
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u17-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        82
+       ],
+       "anker": [
+        18,
+        77
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u17-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        88
+       ],
+       "anker": [
+        25,
+        77
+       ]
+      }
+     }
+    },
+    "boer-u18-deftig": {
+     "naam": "boer-u18-deftig",
+     "cel": [
+      56,
+      89
+     ],
+     "anker": [
+      28,
+      75
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u18-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        77
+       ],
+       "anker": [
+        18,
+        72
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u18-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        83
+       ],
+       "anker": [
+        25,
+        72
+       ]
+      }
+     }
+    },
+    "boer-u19-deftig": {
+     "naam": "boer-u19-deftig",
+     "cel": [
+      56,
+      91
+     ],
+     "anker": [
+      28,
+      77
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u19-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        79
+       ],
+       "anker": [
+        18,
+        74
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u19-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        85
+       ],
+       "anker": [
+        25,
+        74
+       ]
+      }
+     }
+    },
+    "boer-u20-deftig": {
+     "naam": "boer-u20-deftig",
+     "cel": [
+      56,
+      88
+     ],
+     "anker": [
+      28,
+      74
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u20-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        76
+       ],
+       "anker": [
+        18,
+        71
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u20-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        81
+       ],
+       "anker": [
+        25,
+        70
+       ]
+      }
+     }
+    },
+    "boer-u21-deftig": {
+     "naam": "boer-u21-deftig",
+     "cel": [
+      56,
+      94
+     ],
+     "anker": [
+      28,
+      80
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u21-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        82
+       ],
+       "anker": [
+        18,
+        77
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u21-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        88
+       ],
+       "anker": [
+        25,
+        77
+       ]
+      }
+     }
+    },
+    "boer-u22-deftig": {
+     "naam": "boer-u22-deftig",
+     "cel": [
+      56,
+      88
+     ],
+     "anker": [
+      28,
+      74
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u22-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        76
+       ],
+       "anker": [
+        18,
+        71
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u22-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        82
+       ],
+       "anker": [
+        25,
+        71
+       ]
+      }
+     }
+    },
+    "boer-u23-deftig": {
+     "naam": "boer-u23-deftig",
+     "cel": [
+      56,
+      94
+     ],
+     "anker": [
+      28,
+      80
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boer-u23-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        44,
+        82
+       ],
+       "anker": [
+        22,
+        77
+       ]
+      },
+      "lopen": {
+       "bestand": "boer-u23-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        88
+       ],
+       "anker": [
+        25,
+        77
+       ]
+      }
+     }
+    },
+    "boerin-u0-arm": {
+     "naam": "boerin-u0-arm",
+     "cel": [
+      48,
+      87
+     ],
+     "anker": [
+      24,
+      73
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u0-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        38,
+        79
+       ],
+       "anker": [
+        19,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u0-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        42,
+        81
+       ],
+       "anker": [
+        21,
+        70
+       ]
+      }
+     }
+    },
+    "boerin-u1-arm": {
+     "naam": "boerin-u1-arm",
+     "cel": [
+      48,
+      86
+     ],
+     "anker": [
+      24,
+      72
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u1-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        34,
+        78
+       ],
+       "anker": [
+        17,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u1-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        42,
+        79
+       ],
+       "anker": [
+        21,
+        68
+       ]
+      }
+     }
+    },
+    "boerin-u2-arm": {
+     "naam": "boerin-u2-arm",
+     "cel": [
+      48,
+      87
+     ],
+     "anker": [
+      24,
+      73
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u2-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        79
+       ],
+       "anker": [
+        18,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u2-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        42,
+        81
+       ],
+       "anker": [
+        21,
+        70
+       ]
+      }
+     }
+    },
+    "boerin-u3-arm": {
+     "naam": "boerin-u3-arm",
+     "cel": [
+      50,
+      86
+     ],
+     "anker": [
+      25,
+      72
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u3-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        44,
+        78
+       ],
+       "anker": [
+        22,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u3-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        44,
+        79
+       ],
+       "anker": [
+        22,
+        68
+       ]
+      }
+     }
+    },
+    "boerin-u4-arm": {
+     "naam": "boerin-u4-arm",
+     "cel": [
+      48,
+      87
+     ],
+     "anker": [
+      24,
+      73
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u4-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        79
+       ],
+       "anker": [
+        18,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u4-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        42,
+        81
+       ],
+       "anker": [
+        21,
+        70
+       ]
+      }
+     }
+    },
+    "boerin-u5-arm": {
+     "naam": "boerin-u5-arm",
+     "cel": [
+      48,
+      86
+     ],
+     "anker": [
+      24,
+      72
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u5-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        34,
+        78
+       ],
+       "anker": [
+        17,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u5-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        42,
+        79
+       ],
+       "anker": [
+        21,
+        68
+       ]
+      }
+     }
+    },
+    "boerin-u6-arm": {
+     "naam": "boerin-u6-arm",
+     "cel": [
+      48,
+      86
+     ],
+     "anker": [
+      24,
+      72
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u6-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        78
+       ],
+       "anker": [
+        18,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u6-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        42,
+        79
+       ],
+       "anker": [
+        21,
+        68
+       ]
+      }
+     }
+    },
+    "boerin-u7-arm": {
+     "naam": "boerin-u7-arm",
+     "cel": [
+      48,
+      86
+     ],
+     "anker": [
+      24,
+      72
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u7-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        34,
+        78
+       ],
+       "anker": [
+        17,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u7-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        42,
+        79
+       ],
+       "anker": [
+        21,
+        68
+       ]
+      }
+     }
+    },
+    "boerin-u8-arm": {
+     "naam": "boerin-u8-arm",
+     "cel": [
+      48,
+      86
+     ],
+     "anker": [
+      24,
+      72
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u8-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        78
+       ],
+       "anker": [
+        18,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u8-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        42,
+        79
+       ],
+       "anker": [
+        21,
+        68
+       ]
+      }
+     }
+    },
+    "boerin-u9-arm": {
+     "naam": "boerin-u9-arm",
+     "cel": [
+      48,
+      87
+     ],
+     "anker": [
+      24,
+      73
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u9-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        34,
+        79
+       ],
+       "anker": [
+        17,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u9-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        42,
+        81
+       ],
+       "anker": [
+        21,
+        70
+       ]
+      }
+     }
+    },
+    "boerin-u10-arm": {
+     "naam": "boerin-u10-arm",
+     "cel": [
+      48,
+      86
+     ],
+     "anker": [
+      24,
+      72
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u10-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        78
+       ],
+       "anker": [
+        18,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u10-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        42,
+        79
+       ],
+       "anker": [
+        21,
+        68
+       ]
+      }
+     }
+    },
+    "boerin-u11-arm": {
+     "naam": "boerin-u11-arm",
+     "cel": [
+      48,
+      86
+     ],
+     "anker": [
+      24,
+      72
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u11-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        34,
+        78
+       ],
+       "anker": [
+        17,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u11-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        42,
+        80
+       ],
+       "anker": [
+        21,
+        69
+       ]
+      }
+     }
+    },
+    "boerin-u12-arm": {
+     "naam": "boerin-u12-arm",
+     "cel": [
+      48,
+      87
+     ],
+     "anker": [
+      24,
+      73
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u12-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        79
+       ],
+       "anker": [
+        18,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u12-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        42,
+        81
+       ],
+       "anker": [
+        21,
+        70
+       ]
+      }
+     }
+    },
+    "boerin-u13-arm": {
+     "naam": "boerin-u13-arm",
+     "cel": [
+      48,
+      86
+     ],
+     "anker": [
+      24,
+      72
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u13-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        34,
+        78
+       ],
+       "anker": [
+        17,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u13-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        42,
+        79
+       ],
+       "anker": [
+        21,
+        68
+       ]
+      }
+     }
+    },
+    "boerin-u14-arm": {
+     "naam": "boerin-u14-arm",
+     "cel": [
+      48,
+      87
+     ],
+     "anker": [
+      24,
+      73
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u14-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        79
+       ],
+       "anker": [
+        18,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u14-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        42,
+        80
+       ],
+       "anker": [
+        21,
+        69
+       ]
+      }
+     }
+    },
+    "boerin-u15-arm": {
+     "naam": "boerin-u15-arm",
+     "cel": [
+      48,
+      87
+     ],
+     "anker": [
+      24,
+      73
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u15-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        34,
+        79
+       ],
+       "anker": [
+        17,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u15-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        42,
+        81
+       ],
+       "anker": [
+        21,
+        70
+       ]
+      }
+     }
+    },
+    "boerin-u16-arm": {
+     "naam": "boerin-u16-arm",
+     "cel": [
+      48,
+      87
+     ],
+     "anker": [
+      24,
+      73
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u16-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        79
+       ],
+       "anker": [
+        18,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u16-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        42,
+        81
+       ],
+       "anker": [
+        21,
+        70
+       ]
+      }
+     }
+    },
+    "boerin-u17-arm": {
+     "naam": "boerin-u17-arm",
+     "cel": [
+      48,
+      86
+     ],
+     "anker": [
+      24,
+      72
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u17-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        34,
+        78
+       ],
+       "anker": [
+        17,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u17-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        42,
+        79
+       ],
+       "anker": [
+        21,
+        68
+       ]
+      }
+     }
+    },
+    "boerin-u18-arm": {
+     "naam": "boerin-u18-arm",
+     "cel": [
+      48,
+      87
+     ],
+     "anker": [
+      24,
+      73
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u18-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        79
+       ],
+       "anker": [
+        18,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u18-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        42,
+        80
+       ],
+       "anker": [
+        21,
+        69
+       ]
+      }
+     }
+    },
+    "boerin-u19-arm": {
+     "naam": "boerin-u19-arm",
+     "cel": [
+      48,
+      87
+     ],
+     "anker": [
+      24,
+      73
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u19-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        34,
+        79
+       ],
+       "anker": [
+        17,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u19-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        42,
+        81
+       ],
+       "anker": [
+        21,
+        70
+       ]
+      }
+     }
+    },
+    "boerin-u20-arm": {
+     "naam": "boerin-u20-arm",
+     "cel": [
+      48,
+      86
+     ],
+     "anker": [
+      24,
+      72
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u20-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        78
+       ],
+       "anker": [
+        18,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u20-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        42,
+        79
+       ],
+       "anker": [
+        21,
+        68
+       ]
+      }
+     }
+    },
+    "boerin-u21-arm": {
+     "naam": "boerin-u21-arm",
+     "cel": [
+      48,
+      86
+     ],
+     "anker": [
+      24,
+      72
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u21-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        38,
+        78
+       ],
+       "anker": [
+        19,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u21-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        42,
+        79
+       ],
+       "anker": [
+        21,
+        68
+       ]
+      }
+     }
+    },
+    "boerin-u22-arm": {
+     "naam": "boerin-u22-arm",
+     "cel": [
+      48,
+      87
+     ],
+     "anker": [
+      24,
+      73
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u22-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        79
+       ],
+       "anker": [
+        18,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u22-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        42,
+        81
+       ],
+       "anker": [
+        21,
+        70
+       ]
+      }
+     }
+    },
+    "boerin-u23-arm": {
+     "naam": "boerin-u23-arm",
+     "cel": [
+      48,
+      86
+     ],
+     "anker": [
+      24,
+      72
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u23-arm-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        36,
+        78
+       ],
+       "anker": [
+        18,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u23-arm-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        42,
+        79
+       ],
+       "anker": [
+        21,
+        68
+       ]
+      }
+     }
+    },
+    "boerin-u0-deftig": {
+     "naam": "boerin-u0-deftig",
+     "cel": [
+      50,
+      87
+     ],
+     "anker": [
+      25,
+      73
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u0-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        38,
+        79
+       ],
+       "anker": [
+        19,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u0-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        44,
+        81
+       ],
+       "anker": [
+        22,
+        70
+       ]
+      }
+     }
+    },
+    "boerin-u1-deftig": {
+     "naam": "boerin-u1-deftig",
+     "cel": [
+      50,
+      86
+     ],
+     "anker": [
+      25,
+      72
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u1-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        34,
+        78
+       ],
+       "anker": [
+        17,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u1-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        44,
+        79
+       ],
+       "anker": [
+        22,
+        68
+       ]
+      }
+     }
+    },
+    "boerin-u2-deftig": {
+     "naam": "boerin-u2-deftig",
+     "cel": [
+      50,
+      87
+     ],
+     "anker": [
+      25,
+      73
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u2-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        34,
+        79
+       ],
+       "anker": [
+        17,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u2-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        44,
+        81
+       ],
+       "anker": [
+        22,
+        70
+       ]
+      }
+     }
+    },
+    "boerin-u3-deftig": {
+     "naam": "boerin-u3-deftig",
+     "cel": [
+      50,
+      86
+     ],
+     "anker": [
+      25,
+      72
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u3-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        44,
+        78
+       ],
+       "anker": [
+        22,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u3-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        44,
+        79
+       ],
+       "anker": [
+        22,
+        68
+       ]
+      }
+     }
+    },
+    "boerin-u4-deftig": {
+     "naam": "boerin-u4-deftig",
+     "cel": [
+      50,
+      87
+     ],
+     "anker": [
+      25,
+      73
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u4-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        34,
+        79
+       ],
+       "anker": [
+        17,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u4-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        44,
+        81
+       ],
+       "anker": [
+        22,
+        70
+       ]
+      }
+     }
+    },
+    "boerin-u5-deftig": {
+     "naam": "boerin-u5-deftig",
+     "cel": [
+      50,
+      86
+     ],
+     "anker": [
+      25,
+      72
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u5-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        34,
+        78
+       ],
+       "anker": [
+        17,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u5-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        44,
+        79
+       ],
+       "anker": [
+        22,
+        68
+       ]
+      }
+     }
+    },
+    "boerin-u6-deftig": {
+     "naam": "boerin-u6-deftig",
+     "cel": [
+      50,
+      86
+     ],
+     "anker": [
+      25,
+      72
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u6-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        34,
+        78
+       ],
+       "anker": [
+        17,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u6-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        44,
+        79
+       ],
+       "anker": [
+        22,
+        68
+       ]
+      }
+     }
+    },
+    "boerin-u7-deftig": {
+     "naam": "boerin-u7-deftig",
+     "cel": [
+      50,
+      86
+     ],
+     "anker": [
+      25,
+      72
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u7-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        34,
+        78
+       ],
+       "anker": [
+        17,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u7-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        44,
+        79
+       ],
+       "anker": [
+        22,
+        68
+       ]
+      }
+     }
+    },
+    "boerin-u8-deftig": {
+     "naam": "boerin-u8-deftig",
+     "cel": [
+      50,
+      86
+     ],
+     "anker": [
+      25,
+      72
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u8-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        34,
+        78
+       ],
+       "anker": [
+        17,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u8-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        44,
+        79
+       ],
+       "anker": [
+        22,
+        68
+       ]
+      }
+     }
+    },
+    "boerin-u9-deftig": {
+     "naam": "boerin-u9-deftig",
+     "cel": [
+      50,
+      87
+     ],
+     "anker": [
+      25,
+      73
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u9-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        34,
+        79
+       ],
+       "anker": [
+        17,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u9-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        44,
+        81
+       ],
+       "anker": [
+        22,
+        70
+       ]
+      }
+     }
+    },
+    "boerin-u10-deftig": {
+     "naam": "boerin-u10-deftig",
+     "cel": [
+      50,
+      86
+     ],
+     "anker": [
+      25,
+      72
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u10-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        34,
+        78
+       ],
+       "anker": [
+        17,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u10-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        44,
+        79
+       ],
+       "anker": [
+        22,
+        68
+       ]
+      }
+     }
+    },
+    "boerin-u11-deftig": {
+     "naam": "boerin-u11-deftig",
+     "cel": [
+      50,
+      86
+     ],
+     "anker": [
+      25,
+      72
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u11-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        34,
+        78
+       ],
+       "anker": [
+        17,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u11-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        44,
+        80
+       ],
+       "anker": [
+        22,
+        69
+       ]
+      }
+     }
+    },
+    "boerin-u12-deftig": {
+     "naam": "boerin-u12-deftig",
+     "cel": [
+      50,
+      87
+     ],
+     "anker": [
+      25,
+      73
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u12-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        34,
+        79
+       ],
+       "anker": [
+        17,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u12-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        44,
+        81
+       ],
+       "anker": [
+        22,
+        70
+       ]
+      }
+     }
+    },
+    "boerin-u13-deftig": {
+     "naam": "boerin-u13-deftig",
+     "cel": [
+      50,
+      86
+     ],
+     "anker": [
+      25,
+      72
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u13-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        34,
+        78
+       ],
+       "anker": [
+        17,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u13-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        44,
+        79
+       ],
+       "anker": [
+        22,
+        68
+       ]
+      }
+     }
+    },
+    "boerin-u14-deftig": {
+     "naam": "boerin-u14-deftig",
+     "cel": [
+      50,
+      87
+     ],
+     "anker": [
+      25,
+      73
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u14-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        34,
+        79
+       ],
+       "anker": [
+        17,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u14-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        44,
+        80
+       ],
+       "anker": [
+        22,
+        69
+       ]
+      }
+     }
+    },
+    "boerin-u15-deftig": {
+     "naam": "boerin-u15-deftig",
+     "cel": [
+      50,
+      87
+     ],
+     "anker": [
+      25,
+      73
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u15-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        34,
+        79
+       ],
+       "anker": [
+        17,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u15-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        44,
+        81
+       ],
+       "anker": [
+        22,
+        70
+       ]
+      }
+     }
+    },
+    "boerin-u16-deftig": {
+     "naam": "boerin-u16-deftig",
+     "cel": [
+      50,
+      87
+     ],
+     "anker": [
+      25,
+      73
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u16-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        34,
+        79
+       ],
+       "anker": [
+        17,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u16-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        44,
+        81
+       ],
+       "anker": [
+        22,
+        70
+       ]
+      }
+     }
+    },
+    "boerin-u17-deftig": {
+     "naam": "boerin-u17-deftig",
+     "cel": [
+      50,
+      86
+     ],
+     "anker": [
+      25,
+      72
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u17-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        34,
+        78
+       ],
+       "anker": [
+        17,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u17-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        44,
+        79
+       ],
+       "anker": [
+        22,
+        68
+       ]
+      }
+     }
+    },
+    "boerin-u18-deftig": {
+     "naam": "boerin-u18-deftig",
+     "cel": [
+      50,
+      87
+     ],
+     "anker": [
+      25,
+      73
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u18-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        34,
+        79
+       ],
+       "anker": [
+        17,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u18-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        44,
+        80
+       ],
+       "anker": [
+        22,
+        69
+       ]
+      }
+     }
+    },
+    "boerin-u19-deftig": {
+     "naam": "boerin-u19-deftig",
+     "cel": [
+      50,
+      87
+     ],
+     "anker": [
+      25,
+      73
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u19-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        34,
+        79
+       ],
+       "anker": [
+        17,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u19-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        44,
+        81
+       ],
+       "anker": [
+        22,
+        70
+       ]
+      }
+     }
+    },
+    "boerin-u20-deftig": {
+     "naam": "boerin-u20-deftig",
+     "cel": [
+      50,
+      86
+     ],
+     "anker": [
+      25,
+      72
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u20-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        34,
+        78
+       ],
+       "anker": [
+        17,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u20-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        44,
+        79
+       ],
+       "anker": [
+        22,
+        68
+       ]
+      }
+     }
+    },
+    "boerin-u21-deftig": {
+     "naam": "boerin-u21-deftig",
+     "cel": [
+      50,
+      86
+     ],
+     "anker": [
+      25,
+      72
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u21-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        38,
+        78
+       ],
+       "anker": [
+        19,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u21-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        44,
+        79
+       ],
+       "anker": [
+        22,
+        68
+       ]
+      }
+     }
+    },
+    "boerin-u22-deftig": {
+     "naam": "boerin-u22-deftig",
+     "cel": [
+      50,
+      87
+     ],
+     "anker": [
+      25,
+      73
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u22-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        34,
+        79
+       ],
+       "anker": [
+        17,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u22-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        44,
+        81
+       ],
+       "anker": [
+        22,
+        70
+       ]
+      }
+     }
+    },
+    "boerin-u23-deftig": {
+     "naam": "boerin-u23-deftig",
+     "cel": [
+      50,
+      86
+     ],
+     "anker": [
+      25,
+      72
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "boerin-u23-deftig-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        34,
+        78
+       ],
+       "anker": [
+        17,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "boerin-u23-deftig-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        44,
+        79
+       ],
+       "anker": [
+        22,
+        68
+       ]
+      }
+     }
     }
    },
    "muren": {

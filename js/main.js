@@ -1749,6 +1749,22 @@
         }
         : 'Er is geen koorts.';
     },
+    // De kleren naar stand (T.klerenVan in js/bewoners.js; werklijst vraag 149): hoeveel volwassenen arm, gewoon en
+    // deftig lopen, en per volwassene wat hij draagt, in welk huis, of dat huis zijn laken krijgt, en welk vel hij draagt.
+    kleren() {
+      const D = S.dorp;
+      const tel = { arm: 0, gewoon: 0, deftig: 0 };
+      const mensen = D.bewoners.mensen.filter((p) => p.leeftijd === 'volwassen').map((p) => {
+        const kleren = T.klerenVan(p);
+        tel[kleren]++;
+        const laken = p.huis && p.huis.wensen && p.huis.wensen.heeft && p.huis.wensen.heeft.laken;
+        const huis = p.huis ? `${p.huis.soort}${laken != null ? `, laken ${Math.round(laken * 100)}%` : ''}` : 'geen huis';
+        return `${T.naamVanBewoner(p)}: ${kleren} (${huis})${p.wezen ? `, vel ${T.sprites.houding(S, p.wezen)?.naam}` : ''}`;
+      });
+      const IN = T.BEWONERS_INSTELLINGEN;
+      const regel = !IN.klerenNaarStand ? 'iedereen gewoon' : IN.lakenVoorDeftig ? 'naar stand, deftig met laken' : 'naar stand';
+      return { regel, ...tel, mensen };
+    },
     // De twee bazen (js/bazen.js; werklijst vraag 106): de gunst van de heer en het vertrouwen van het dorp, hoe ze erbij
     // staan, waarom, en of je al gewaarschuwd bent. Spel.debug.bazen('gunst', 15) zet de gunst op 15 (met de
     // waarschuwing als hij onder de grens komt), ('vertrouwen', 0) jaagt je weg als je al gewaarschuwd was.

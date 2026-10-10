@@ -279,6 +279,18 @@
       ],
     },
     {
+      id: 'kleren', naam: 'Kleren', standaard: 'laken',
+      uitleg: 'Wie hoger staat, draagt duurdere kleren: in een hut arm en versleten, in een stenen huis deftig. Alleen beeld.',
+      keuzes: [
+        { id: 'laken', naam: 'Naar stand, deftig met laken', zet: { 'BEWONERS_INSTELLINGEN.klerenNaarStand': true, 'BEWONERS_INSTELLINGEN.lakenVoorDeftig': true },
+          uitleg: 'Een stenen huis loopt pas deftig als het zijn laken krijgt: op straat zie je wat er mist.' },
+        { id: 'stand', naam: 'Naar stand', zet: { 'BEWONERS_INSTELLINGEN.klerenNaarStand': true, 'BEWONERS_INSTELLINGEN.lakenVoorDeftig': false },
+          uitleg: 'Wie in een stenen huis woont, loopt deftig, met of zonder laken.' },
+        { id: 'uit', naam: 'Iedereen gewoon', zet: { 'BEWONERS_INSTELLINGEN.klerenNaarStand': false },
+          uitleg: 'Iedereen in de kleren van een dorpeling, zoals voor 10 okt.' },
+      ],
+    },
+    {
       id: 'kleinLeven', naam: 'Klein leven', standaard: 'aan',
       uitleg: 'Rook uit de schoorstenen, kippen, een hond, spelende kinderen en was aan de lijn. Alleen beeld.',
       keuzes: [

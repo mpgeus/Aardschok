@@ -970,6 +970,7 @@ function stok(delen, ctx, punt, hand) {
 
 module.exports = {
   KARAKTERS,
+  BONT,
   materiaal,
   deel,
   roodGezicht,
