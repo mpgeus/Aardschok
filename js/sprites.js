@@ -568,6 +568,37 @@
     return onthoud(`bouwfase,${tekeningNaam},${i}`, () => stuk(pad, f.x, f.y, f.b, f.h, f.anker));
   };
 
+  // ---------------------------------------------------------------- sneeuw op de daken (tegels/daksneeuw/<naam>.png, daksneeuw.js)
+  //
+  // De sneeuw op een huis van de huizenbouwer (vraag 144, 4b): drie lagen per jonge tekening, een beetje, half en dik
+  // (gereedschap/pixelart/huizen.cjs, schrijfDaksneeuw), op een eigen vel dat pas laadt als er sneeuw ligt. Tot het er is,
+  // of zonder sneeuw voor deze tekening, geeft dit null. Het anker is dat van het huis: js/tekenen.js legt hem erover.
+  S.daksneeuw = function (naam, laag) {
+    const g = T.DAKSNEEUW && naam && T.DAKSNEEUW.lagen[naam];
+    const c = g && g.lagen[laag];
+    if (!c) return null;
+    const pad = TEGELMAP + g.bestand;
+    if (!laadAlsNodig(pad)) return null;
+    return onthoud(`daksneeuw,${naam},${laag}`, () => stuk(pad, c.x, c.y, c.b, c.h, c.anker));
+  };
+
+  // ---------------------------------------------------------------- brandfasen (tegels/brandfasen/<naam>.png, brandfasen.js)
+  //
+  // Een huis dat brandt of afbrandde (js/brand.js, T.brandfaseVan; vraag 144, 3): de fasen uit het huis zelf gesneden
+  // (gereedschap/pixelart/ruines.cjs spel), op een eigen vel dat pas laadt als het brandt; van ingestort twee varianten,
+  // en welke een huis krijgt, zegt `variant` (zijn plek). Tot het vel er is, of voor een huis zonder fasen, null.
+  S.brandfase = function (naam, fase, variant = 0) {
+    const g = T.BRANDFASEN && naam && T.BRANDFASEN.fasen[naam];
+    if (!g) return null;
+    const welk = fase === 'ingestort' && variant % 2 ? 'ingestort2' : fase;
+    const i = g.fasen.findIndex((f) => f && f.naam === welk);
+    if (i < 0) return null;
+    const pad = TEGELMAP + g.bestand;
+    if (!laadAlsNodig(pad)) return null;
+    const f = g.fasen[i];
+    return onthoud(`brandfase,${naam},${i}`, () => stuk(pad, f.x, f.y, f.b, f.h, f.anker));
+  };
+
   // ---------------------------------------------------------------- gras op een weide
   //
   // Een weide (js/akkers.js, bestemming 'weide') ligt op de kale akkergrond van de kaart; het spel

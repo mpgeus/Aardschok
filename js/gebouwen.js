@@ -91,6 +91,9 @@
     // helft werkt de helft harder. Een stuk in gebruik gaat zoveel dagen mee en is dan versleten.
     gereedschapBonus: 0.25,
     gereedschapSlijtDagen: 180,
+    // Een huis van de huizenbouwer is jong als het gebouwd wordt, en na zoveel dagen oud (vraag 144; Marcel, 10 okt:
+    // "meteen jong en oud"): twee jaar. Wat er bij het begin al stond, is oud (T.tikVerwerenDag).
+    oudNaDagen: 720,
     // Een werkplaats die iets omzet (maakt.in: de molen graan tot meel, de timmerman hout tot planken), maakt tot er
     // zoveel ligt van wat hij maakt (Marcel, 2 okt, werklijst vraag 91, b: "b ja"). Daarvoor maalde een molen elke dag
     // graan tot meel, ook als niemand brood wilde: ruim 880 graan per jaar. Wie iets uit het land haalt (de houthakker,
@@ -992,6 +995,54 @@
     return Math.max(vanaf, Math.min(AANTAL_BOUWFASEN - 1, vanaf + Math.floor(voortgang * (AANTAL_BOUWFASEN - vanaf))));
   };
 
+  // Jong en oud (vraag 144, de ronde van alle tekeningen; ontwerp/beeld.md; Marcel, 10 okt: "meteen jong en oud"): elk huis
+  // van de huizenbouwer staat twee keer op het vel huizen, jong en verweerd ("<naam>-oud", huizen.cjs), met dezelfde vorm,
+  // voet en deur. Alleen het voorwerp wisselt van tekening (v.id), want alleen het beeld verandert: het gebouw houdt zijn
+  // jonge tekening (g.tekening, v.tekeningNaam), zodat de stijl, de deur, de bouwfasen en het doorgroeien er niets van
+  // merken. Wat gebouwd wordt, doorgroeit of na een brand herrijst, is jong vanaf de dag dat het af is (v.gebouwdOp), en
+  // oud na oudNaDagen; wat er bij het begin al stond (geen gebouwdOp), is meteen oud.
+  const OUD = '-oud';
+  let huizenOpNaam = null;
+  function huisOpNaam(naam) {
+    const vel = T.TEGELS && T.TEGELS.huizen;
+    if (!vel) return null;
+    if (!huizenOpNaam || huizenOpNaam.vel !== vel) {
+      huizenOpNaam = { vel, ids: new Map() };
+      vel.tiles.forEach((t, id) => t && t.naam && huizenOpNaam.ids.set(t.naam, id));
+    }
+    const id = huizenOpNaam.ids.get(naam);
+    return id === undefined ? null : id;
+  }
+  // de naam van de jonge tekening van een voorwerp op het vel huizen, of null
+  const jongeNaam = (v) => {
+    const t = v && v.vel === 'huizen' && T.TEGELS && T.TEGELS.huizen && T.TEGELS.huizen.tiles[v.id];
+    return t && t.naam ? t.naam.replace(/-oud$/, '') : null;
+  };
+  T.jongeTekeningVan = jongeNaam;
+  T.isOudHuis = (v) => {
+    const t = v && v.vel === 'huizen' && T.TEGELS && T.TEGELS.huizen && T.TEGELS.huizen.tiles[v.id];
+    return !!(t && t.naam && t.naam.endsWith(OUD));
+  };
+  T.maakOud = function (v) {
+    const naam = jongeNaam(v);
+    const id = naam && huisOpNaam(naam + OUD);
+    if (id != null) v.id = id;
+  };
+  T.maakJong = function (v, dag) {
+    const naam = jongeNaam(v);
+    const id = naam && huisOpNaam(naam);
+    if (id != null) v.id = id;
+    v.gebouwdOp = Math.floor(dag);
+  };
+  // Elke nacht: wie oud genoeg is, of geen dag heeft waarop hij af was, draagt zijn oude tekening.
+  T.tikVerwerenDag = function (D, dag) {
+    for (const g of D.gebouwen) {
+      const v = g.voorwerp;
+      if (!v || v.vel !== 'huizen' || !g.klaar || v.inAanbouw || T.isOudHuis(v)) continue;
+      if (v.gebouwdOp == null || dag - v.gebouwdOp >= T.GEBOUWEN_INSTELLINGEN.oudNaDagen) T.maakOud(v);
+    }
+  };
+
   // Het voorwerp in S.wereld zetten (zo tekent js/tekenen.js hem mee, op precies dezelfde manier
   // als een gebouw dat in Tiled staat, CLAUDE.md "Testen in de browser": "via de gewone weg
   // waarop het spel gebouwen tekent") en zijn voet vast maken. Nog in aanbouw? Dan staat hij er al
@@ -1019,6 +1070,8 @@
       // (g.tekening null) blijft tekeningNaam ook null: gewoon geen fases, net als voorheen.
       tekeningNaam: tekening ? tekening.split('/').pop() : null,
       klaarOp: instantie.klaarOp, bouwtijd: g.bouwtijd,
+      // jong (T.maakJong): wanneer hij af is, of vandaag als hij er al staat
+      gebouwdOp: Math.floor(instantie.klaarOp != null ? instantie.klaarOp : D.kalender ? D.kalender.dag : 0),
     };
     // Wat er laag groeit of ligt (een varen, bloemen, een kool; js/maker.js), maakt plaats: het gebouw komt erop. Wat
     // in de weg staat (een boom, een struik), hield het bouwen al tegen (T.waaromPastHetNiet).
@@ -1112,6 +1165,8 @@
       const naam = d.tekening ? d.tekening.split('/').pop() : null;
       const voorwerp = (naam && (w.voorwerpen || []).find((v) => v.soort === naam && v.x === d.x && v.y === d.y)) || null;
       D.gebouwen.push({ soort: d.soort, x: d.x, y: d.y, voet: { b: d.b || 1, h: d.h || 1 }, tekening: d.tekening || null, klaar: true, klaarOp: 0, handen: 0, voorwerp, huis: d.huis || null, bewoners: d.bewoners || null });
+      // wat er bij het begin al stond, is oud (T.maakOud hierboven)
+      if (voorwerp) T.maakOud(voorwerp);
       woonruimte += g.woonruimte || 0;
     }
     // De boeren die je ziet lopen, wonen al in hun huis. Wie er verder woont, zet T.zetBeginBewoners
@@ -1296,12 +1351,16 @@
       if (!g.klaar && g.klaarOp != null && dag >= g.klaarOp) {
         g.klaar = true;
         if (g.voorwerp) g.voorwerp.inAanbouw = false;
+        if (g.voorwerp) T.maakJong(g.voorwerp, dag);
         for (const k of g.kramen || []) k.inAanbouw = false; // de markt op het plein (js/markt.js)
       } else if (g.klaar && g.voorwerp && g.voorwerp.inAanbouw && g.voorwerp.klaarOp != null && dag >= g.voorwerp.klaarOp) {
-        // een huis dat doorgroeide (js/behoeften.js, groeiGebouw), is opgerezen
+        // een huis dat doorgroeide (js/behoeften.js, groeiGebouw) of na een brand herrees (js/brand.js), is opgerezen
         g.voorwerp.inAanbouw = false;
+        T.maakJong(g.voorwerp, dag);
       }
     }
+    // En wat oud genoeg is, draagt zijn oude tekening (hierboven, bij T.maakOud).
+    T.tikVerwerenDag(D, dag);
     // De markt op het plein groeit mee met het dorp, en zijn kramen liggen vol of leeg (js/markt.js).
     T.tikMarktDag(D);
     // 2. Woonruimte (T.telWoonruimte hieronder).

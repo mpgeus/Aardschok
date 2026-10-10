@@ -2436,6 +2436,17 @@
     return gebakken;
   }
 
+  // Wat een huis laat zien dat brandt of afbrandde (vraag 144, 3): de fase van het afbranden van zijn tekening
+  // (T.brandfaseVan, js/brand.js; T.sprites.brandfase), met de variant van ingestort naar zijn plek; zonder fasen (een
+  // gebouw dat niet van de huizenbouwer is) afgebrand de ruïne van vroeger (puinVan), en brandend het huis zelf (null).
+  function brandBeeldVan(S, v) {
+    const D = T.dorpHier(S);
+    const g = D && D.gebouwen && D.gebouwen.find((x) => x.voorwerp === v);
+    const fase = g && T.brandfaseVan(D, g);
+    if (fase && v.tekeningNaam && T.BRANDFASEN && T.BRANDFASEN.fasen[v.tekeningNaam]) return T.sprites.brandfase(v.tekeningNaam, fase, g.x + g.y);
+    return v.brand === 'puin' ? puinVan(v) : null;
+  }
+
   // Waar een huis dat brandt of smeult op het scherm staat: het midden van zijn voet, hoe breed (pixels), en hoe hoog zijn
   // dak (het anker van zijn tekening).
   function brandPlekken(S) {
@@ -2674,8 +2685,8 @@
       // tweede tekening voor nodig te hebben.
       const fase = v.inAanbouw && v.tekeningNaam && T.bouwFaseIndex && metSprites() && T.sprites.bouwfase
         && T.sprites.bouwfase(v.tekeningNaam, T.bouwFaseIndex(S.kalender ? S.kalender.dag : 0, v.klaarOp, v.bouwtijd, v.vanFase || 0));
-      // Afgebrand (js/brand.js): de ruïne, een bouwfase zonder dak, verkoold.
-      const puin = v.brand === 'puin' && metSprites() ? puinVan(v) : null;
+      // Wat brandt of afbrandde (js/brand.js): de fase van het afbranden (brandBeeldVan hieronder).
+      const puin = v.brand && metSprites() ? brandBeeldVan(S, v) : null;
       const alpha = dof * (v.inAanbouw && !fase ? 0.45 : 1);
       if (alpha <= 0.02) return;
       if (alpha < 1) ctx.globalAlpha = alpha;
@@ -2691,6 +2702,12 @@
       if (raster) T.tekenGerasterd(ctx, stuk, p.x, p.y, helder, doorkijk);
       else if (stuk) T.sprites.teken(ctx, stuk, p.x, p.y, helder);
       else if (!wacht) tekenBuitenVlak(ctx, v, helder);
+      // De sneeuw op het dak (vraag 144, 4b): de laag die bij de sneeuw op de grond past, over het huis heen; niet op wat
+      // brandt of in aanbouw is. Een oud huis draagt de sneeuw van zijn jonge tekening (dezelfde vorm).
+      const dakSneeuw = stuk && !puin && !fase && !v.brand && v.vel === 'huizen' ? T.dakSneeuwLaag(sneeuwLaag(S)) : -1;
+      const sneeuwStuk = dakSneeuw >= 0 && T.sprites.daksneeuw(T.jongeTekeningVan(v), dakSneeuw);
+      if (sneeuwStuk && raster) T.tekenGerasterd(ctx, sneeuwStuk, p.x, p.y, helder, doorkijk);
+      else if (sneeuwStuk) T.sprites.teken(ctx, sneeuwStuk, p.x, p.y, helder);
       if (alpha < 1) ctx.globalAlpha = 1;
       if (!raster && doorkijk > 0.02 && v.kijkgat) for (const e of v.kijkgat) T.tekenKijkgat(ctx, S, e, doorkijk, v);
       return;

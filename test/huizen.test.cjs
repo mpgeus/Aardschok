@@ -26,6 +26,11 @@ test('elke opgave ligt vast, ook de uitbouwen', () => {
   // neer als een huis (js/maker.js).
   const groot = ['kapel', 'woontoren', 'schout'];
   for (const [naam, o] of Object.entries(HUIZEN)) {
+    // een oude tekening (vraag 144) is zijn jonge, met andere knoppen (test/verweren.test.cjs)
+    if (o.jong) {
+      assert.ok(HUIZEN[o.jong], `${naam}: geen jonge`);
+      continue;
+    }
     if (o.stijl && groot.includes(o.stijl.soort)) {
       for (const d of o.delen || [{ spec: o }]) assert.ok(Number.isInteger(d.spec.zaad) && d.spec.lagen, `${naam}: een deel ligt niet vast`);
       continue;

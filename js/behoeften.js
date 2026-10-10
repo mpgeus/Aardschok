@@ -395,6 +395,8 @@
     instantie.voorwerp.id = opz ? opz.id : null;
     instantie.voorwerp.beslaat = [nieuweVoet.b, nieuweVoet.h];
     instantie.voorwerp.tekeningNaam = tekening ? tekening.split('/').pop() : null;
+    // een nieuw huis is jong (T.maakJong, js/gebouwen.js)
+    instantie.voorwerp.gebouwdOp = Math.floor(D.kalender.dag);
     for (let dy = 0; dy < nieuweVoet.h; dy++) {
       for (let dx = 0; dx < nieuweVoet.b; dx++) {
         const yy = instantie.y + dy;

@@ -74,6 +74,12 @@
 //                                                        net zo, maar alleen die soorten of tekeningen: zo
 //                                                        gaat een stijl in delen, want een taak op de
 //                                                        achtergrond stopt na twee uur
+//   node gereedschap/pixelart/bouwfasen.cjs --opnieuw wit oker
+//                                                        die opnieuw, ook als ze er al zijn, en de rest blijft
+//                                                        staan: een naam, een soort, een stijl (alles wat met
+//                                                        "wit-" begint), of "huizen" (alle huizen van de
+//                                                        huizenbouwer); na een verandering aan de huizen (vraag 144,
+//                                                        de ronde van alle tekeningen), in delen
 //
 // Uitvoer:
 //   gereedschap/pixelart/uit/bouwfasen/<tekening>.png   per gebouw, de vijf fases naast elkaar
@@ -727,13 +733,16 @@ async function main() {
   const GEVRAAGD = process.argv.slice(2).filter((a) => !a.startsWith('-'));
   // --erbij: alleen de gebouwen die nog geen fasen hebben in tegels/bouwfasen.json (een nieuwe bouwstijl, vraag 114),
   // en de rest blijft staan. Zonder: alles opnieuw, zoals na een verandering aan de bouwer.
-  const bestaand = process.argv.includes('--erbij') ? JSON.parse(fs.readFileSync(path.join(TEGELS, 'bouwfasen.json'), 'utf8')).fasen : null;
+  // --opnieuw: die opnieuw, ook als ze er al zijn, en de rest blijft staan (zie bovenaan).
+  const opnieuw = process.argv.includes('--opnieuw');
+  const bestaand = process.argv.includes('--erbij') || opnieuw ? JSON.parse(fs.readFileSync(path.join(TEGELS, 'bouwfasen.json'), 'utf8')).fasen : null;
+  const gevraagd = (b) => GEVRAAGD.some((g) => g === b.id || g === b.tekening || (opnieuw && (b.tekening.startsWith(`${g}-`) || (g === 'huizen' && b.huis))));
   const indices = BUILDINGEN
     .map((b, i) => i)
-    .filter((i) => !GEVRAAGD.length || GEVRAAGD.includes(BUILDINGEN[i].id) || GEVRAAGD.includes(BUILDINGEN[i].tekening))
-    .filter((i) => !bestaand || !bestaand[BUILDINGEN[i].tekening]);
+    .filter((i) => !GEVRAAGD.length || gevraagd(BUILDINGEN[i]))
+    .filter((i) => opnieuw || !bestaand || !bestaand[BUILDINGEN[i].tekening]);
   if (!indices.length) { console.error(bestaand ? 'alle gebouwen hebben al fasen' : `geen gebouw gevonden voor: ${GEVRAAGD.join(' ')}`); process.exit(1); }
-  const draden = Math.max(1, Math.min(6, os.cpus().length - 1, indices.length));
+  const draden = Math.max(1, Math.min(8, os.cpus().length - 1, indices.length));
   console.log(`bouwfasen: ${indices.length} gebouw(en), ${draden} draad/draden`);
   const t0 = Date.now();
   const resultaten = await renderAlleGebouwen(indices, draden);

@@ -43,6 +43,8 @@
     // Sneeuw op de grond (vraag 144, 4; Marcel, 9 okt: "Ja beiden goed"): een dag sneeuw legt er zoveel bij (1 is helemaal
     // wit), en elke dag zonder smelt er zoveel weg: in de winter weinig, daarbuiten snel.
     sneeuwLaag: { erbij: 0.35, smeltWinter: 0.05, smelt: 0.4 },
+    // De sneeuw op de daken (vraag 144, 4b): vanaf zoveel sneeuw op de grond een beetje, half en dik (T.dakSneeuwLaag).
+    dakSneeuw: [0.15, 0.45, 0.75],
     // Een stuk water is een beekje (of een vijver) als het nergens zoveel tegels breed is (T.isBeek): de beek met het
     // bruggetje in het gehucht valt droog, een meer, een brede rivier en de zee niet.
     meerBreed: 7,
@@ -147,6 +149,16 @@
 
   // Hoe het weer heet, voor de balk en het rapport.
   T.WEER_NAMEN = { zon: 'zon', wolken: 'bewolkt', regen: 'regen', sneeuw: 'sneeuw' };
+
+  // Welke laag sneeuw er op de daken ligt bij zoveel op de grond (0 tot 1): 0, 1 of 2 (een beetje, half, dik), of -1
+  // als er geen ligt. js/tekenen.js legt die laag over elk huis van de huizenbouwer (T.sprites.daksneeuw).
+  T.dakSneeuwLaag = function (sneeuw) {
+    let laag = -1;
+    IN().dakSneeuw.forEach((vanaf, i) => {
+      if (sneeuw >= vanaf) laag = i;
+    });
+    return laag;
+  };
 
   // De beekjes: per kaart één keer, niet in Spel.S (de kaart onthoudt het tot hij verandert, T.kaartVersie). Een stuk
   // water dat aan elkaar zit, is een beekje (of een vijver) als het nergens meerBreed tegels breed is: geen tegel met

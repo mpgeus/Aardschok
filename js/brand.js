@@ -41,6 +41,10 @@
     // Het beeld (js/tekenen.js): zoveel vlammen en rookwolkjes per huis, hoe hoog ze komen (pixels op zoom 1), de kleur
     // waarmee de ruïne verkoold is, en hoeveel gloeiende sintels er in het puin liggen zolang het smeult.
     beeld: { tongen: 9, vlammen: 150, vlamHoog: 120, rook: 70, rookHoog: 320, verkool: 'rgba(20, 14, 10, 0.76)', sintels: 18 },
+    // De fasen van het afbranden (vraag 144, 3; T.brandfaseVan): zolang het brandt, vanaf zoveel van de brandtijd
+    // geschroeid en het dak dat valt; afgebrand zoveel dagen binnengestort (het smeult nog), dan ingestort, en de laatste
+    // zoveel dagen voor het opbouwen opgeruimd (ook zolang het op hout wacht).
+    fasen: { geschroeid: 0.35, dakvalt: 0.7, binnengestort: 1, opgeruimd: 1 },
   };
   const IN = () => T.BRAND_INSTELLINGEN;
   const dagNu = (D) => (D.kalender ? D.kalender.dag : 0);
@@ -198,5 +202,24 @@
   };
 
   // Smeult het puin nog (voor de rook in js/tekenen.js)?
+  // Welke fase van het afbranden een huis nu laat zien (vraag 144, 3; gereedschap/pixelart/ruines.cjs, de tekeningen):
+  // zolang het brandt eerst het huis zelf (null), dan geschroeid en het dak dat valt, naar hoe ver de brand is (tot het
+  // uit is, of tot brandUren); afgebrand binnengestort, ingestort, en opgeruimd voor het weer opgebouwd wordt. Alleen
+  // het beeld: de regels kijken naar g.brand.fase.
+  T.brandfaseVan = function (D, g) {
+    const B = g.brand;
+    if (!B) return null;
+    const F = IN().fasen;
+    const nu = dagNu(D);
+    if (B.fase === 'brandt') {
+      const tot = B.antwoord ? B.op + IN().blusUren / 24 : B.sinds + IN().brandUren / 24;
+      const deel = (nu - B.sinds) / Math.max(1 / 24, tot - B.sinds);
+      return deel >= F.dakvalt ? 'dakvalt' : deel >= F.geschroeid ? 'geschroeid' : null;
+    }
+    const t = nu - B.sinds;
+    if (t < F.binnengestort) return 'binnengestort';
+    return B.wacht || t >= IN().puinDagen - F.opgeruimd ? 'opgeruimd' : 'ingestort';
+  };
+
   T.smeult = (D, g) => !!(g.brand && (g.brand.fase === 'brandt' || dagNu(D) < g.brand.sinds + IN().rookDagen));
 })(globalThis.Spel = globalThis.Spel || {});
