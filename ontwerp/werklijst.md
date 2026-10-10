@@ -23,6 +23,8 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
 (Marcel: "Ik denk dat we die economie terug moeten draaien", en "Alles van vraag 141").
 
 **Wacht op Marcel:**
+- Kleren naar stand (vraag 149; Marcel, 10 okt: "Hogere niveau sociale mensen moeten duurdere kleren krijgen"): het
+  voorstel staat bij het punt, met a tot e. **Bezig in sessie `ccr-5cd874f7-wpwkhq`** (10 okt): het plan, met Marcel.
 - Het geluid (vraag 145, 2): de sleutel `FREESOUND_KEY` in de omgeving en de domeinen van Freesound erbij, zoals
   beschreven bij vraag 145; dan maakt een nieuwe sessie het.
 - Vraag 145 laten zien: is het dorp nu minder "saai"?
@@ -7519,6 +7521,31 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     (`SPAR_KLEUREN`, met de ramp `spar`). Erbij: de grove den (`groveDen`), de den van de heide, met een oranje stam en
     een platte kroon van plukken. De vergelijking: `uit/groen/dennen.png`. Open: de sneeuw op een spar is te dik (hij
     wordt helemaal wit).
+149. **Kleren naar stand** (Marcel, 10 okt: "Hogere niveau sociale mensen moeten duurdere kleren krijgen").
+    **Wat er nu is:** 24 uiterlijken per volwassen lijf en 12 per kind en per oude (vraag 145,
+    `gereedschap/pixelart/uiterlijk.cjs`), allemaal boerenkleren: een kiel, klompen, lappen en vuil, in gedempte verf.
+    Welk uiterlijk iemand krijgt (`T.kiesUiterlijk`), hangt niet af van zijn stand. De stand hoort bij het huis
+    (`T.standVan`): een hut keuters, een huis dorpelingen, een stenen huis of woontoren ambachtslieden, een boerderij boeren.
+    **Wat toen duur was:** diepe kleur (scharlaken, diep blauw, en zwart het duurst), fijne wol, een lange jas of tabberd
+    tot de knie in plaats van een kiel, gebleekt wit linnen (een kraag of een muts), leer aan de voeten in plaats van
+    hout, bont aan de kraag, en geen lappen of vuil. Goedkoop: ongeverfd linnen, het bruin en grijs van het schaap, en
+    lappen. De delen bestaan al: de koopman draagt een nette jas met bont (`karakters.cjs`), en leren schoenen, een vest,
+    een riem met een buidel en een vilten hoed heeft de boer al.
+    **Voorstel van Claude (10 okt), nog niets gebouwd:**
+    a. Het gezicht blijft, de kleren gaan met de stand mee: elk uiterlijk krijgt een deftige versie met hetzelfde hoofd
+       (haar, kapsel, baard, neus) in fijne kleren. Groeit een huis door tot een stenen huis, dan staat dezelfde Jan er in
+       een rode jas: op straat zie je het dorp rijker worden (ook goed voor de beelden op Steam). Het spel leidt het af
+       uit het huis, dus er komt niets bij in `Spel.S`.
+    b. Twee trappen (alleen deftig erbij) of drie (de keuters in de hut armer dan nu: ongeverfd, lappen, blote voeten).
+    c. Aan het werk werkkleren: wie maait of bindt, draagt zijn gewone uiterlijk; de deftige kleren alleen staand en
+       lopend. Dan zijn het twee vellen per deftige versie in plaats van vijf (48 volwassenen: 96 figuren, zo'n 35
+       minuten renderen; met drie trappen het dubbele).
+    d. Eerst de volwassenen; de kinderen en de ouden in een tweede ronde.
+    e. Een idee erbij: de deftige kleren pas als het huis zijn laken krijgt (een wens van de ambachtslieden). Dan zie je
+       op straat wat er mist.
+    De stappen: eerst een proefplaat met zes mannen en zes vrouwen in hun trappen naast elkaar, dan alles renderen, dan
+    in het spel (`figuurVanUiterlijk` in `js/sprites.js` vraagt de stand van het huis). **Wacht op Marcel** (a tot e).
+    **Bezig in sessie `ccr-5cd874f7-wpwkhq`** (10 okt): het plan, met Marcel.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
