@@ -7056,6 +7056,16 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     met een knop die de veranderde getallen terugzet zoals ze bij de vorige waren, niet als proefset ernaast; de knop staat
     standaard op **snel** (de bouwer, zaad 1, twee jaar, op het eiland; de rest is te kiezen); en hij gebruikt de bladzijde
     **op zijn eigen computer** (daar moet Playwright bij, en de bladzijde zegt het als het ontbreekt).
+    **Gebouwd (10 okt), stap 3:** `npm run speeltest -- bouwer --naam voor`, dan `--naam na --tegen voor`: in `uit/<naam>/`
+    staan `set.json` (de opdracht en de stand), `waarden.json` (alle waarden van de bladzijde) en per spel de uitslag, en
+    `vergelijking.md` zet ze naast elkaar (`gereedschap/speeltest/vergelijk.cjs`, getoetst zonder browser). Op de bladzijde
+    staat de speeltest bovenaan (`gereedschap/instellingen/speeltest.js`): kiezen (standaard snel), Start, hoe ver hij is,
+    Stop, en de vergelijking met de laatste die hetzelfde speelde, met elk veranderd getal als link naar zijn rij en de knop
+    Zet terug zoals bij de vorige (eerst met de vraag welke waarden). Zolang hij loopt, slaat de server geen getal op.
+    **De proef** (de bouwer, zaad 1, twee jaar op het eiland, 590 s per spel): het dorp bij 12 in plaats van 20, gezet,
+    gespeeld en teruggezet op de bladzijde, liep precies hetzelfde af, want de standaard van de spelregel "Treden" zet heel
+    `TREDEN_INSTELLINGEN.dorp`; de bladzijde zei dat alleen bij een spelregel die precies dat getal zet. Nu zegt de rij het
+    ook bij een getal in zo'n object, en de vergelijking "doet in het spel niets".
 
 143. **Een bode naar de marskramer in een moeilijke tijd** (Marcel, 9 okt, na de speeltest van het weer: "A; misschien
     kunnen we de Schout de mogelijkheid geven om een beroep te doen om een extra marskramer om in te kunnen kopen in een
@@ -7692,6 +7702,12 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 10 okt 2026 — **Vraag 142, stap 3: de speeltest naast de vorige** (Marcel: een set getallen probeer je in de code, met
+  een knop om terug te zetten; snel als standaard; de bladzijde op zijn eigen computer). Op de opdrachtregel `--naam` en
+  `--tegen`, en op `gereedschap/instellingen.html` bovenaan: Start, de vergelijking (welke waarden anders waren, en per
+  spel wat er anders afliep) en Zet terug. De eerste proef vond dat een getal dat de standaard van een spelregel via het
+  object eromheen zet (het dorp bij 20), op de bladzijde niets doet zonder dat ze het zei; nu zegt ze het. `npm test`
+  1174/1174.
 - 8 okt 2026 — **Vraag 142, stap 1 en 2: de bladzijde met alle getallen** (Marcel: "een bladzijde met duidelijk overzicht
   van alles", "1. Ja dan 2. Gelijk veranderen 3. Prima"). `gereedschap/instellingen.html` met `npm start`: elk getal, elke
   spelregel en elk gebouw (1659 waarden), met de uitleg uit het commentaar in de code en wat de spelregels erop zetten;
