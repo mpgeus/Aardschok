@@ -112,3 +112,12 @@ test('elk getal in elk bestand kan zichzelf terugschrijven zonder dat er iets an
     }
   }
 });
+
+test('zet een spelregel een heel object, dan zegt de rij van elk getal erin het ook (vraag 142, stap 3)', () => {
+  const blad = model.onderwerpen.flatMap((o) => o.bladen).find((b) => b.blok === 'TREDEN_INSTELLINGEN' && b.pad.join('.') === 'dorp.mensen');
+  const std = blad.spelregels.find((z) => z.standaard);
+  assert.ok(std, 'de standaard van "Treden" staat bij dorp.mensen');
+  assert.equal(std.viaObject, 'TREDEN_INSTELLINGEN.dorp');
+  assert.equal(std.waarde, T.leesPad('TREDEN_INSTELLINGEN.dorp.mensen'), 'wat de spelregel zet, is wat het spel heeft');
+  assert.ok(blad.spelregels.some((z) => !z.standaard && z.waarde === 50), 'en de proef van 28 sep zet het op 50');
+});

@@ -18,10 +18,9 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 - **De ouden dragen kennis over** (9 okt, Marcel bij vraag 145, ouder worden: "Ouderen dragen mogelijk kennis over? Eerst
   alleen het beeld"): een oude die met een jonge werkt, maakt hem beter in zijn werk, of een dorp dat zijn ouden verliest,
   verliest wat zij wisten. Nu doet ouder worden alleen wat de leeftijd al deed.
-- **Een brand die overslaat** (9 okt, bij vraag 144, 3): nu brandt er alleen het huis van wie het betreft. Bij groot
-  brandgevaar zou het vuur kunnen overslaan op een huis ernaast als het niet geblust wordt. Dat is iets erbij, dus eerst
-  Marcels keuze. Ook: wie in een brandend huis is, en of de koorts een eigen beeld krijgt (iemand die hoest, een
-  ziekbed), staat nog niet.
+- **Wie er in een brandend huis is, en de koorts in beeld** (9 okt, bij vraag 144, 3): het overslaan en de pestbos zijn
+  er sinds 10 okt (Marcel: "Ja, zo"). Nog niet: wie er in een brandend huis is, en of de koorts verder een eigen beeld
+  krijgt (iemand die hoest, een ziekbed).
 
 - **Een huis zonder kapel, en nergens plek voor een kapel** (8 okt, de sessie van de kaartenmaker; vraag 117, 2d): de put
   zonder plek is opgelost (een erf houdt plaats voor een put, en een put voor een hut op een erf haalt ook het huis dat de
@@ -33,7 +32,9 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   **Ook een wijnboerderij** (10 okt, de speeltest van de wijn, `speelbaar.md`): haar gezin is van de stand boeren en wil
   een kapel binnen 40 tegels, en een wijnboerderij is groot (10 bij 8), dus komt ze vaak ver weg. Op sluw 2 stond de
   vierde zo een jaar zonder kapel, en hield ze de winst tegen. Te kiezen: een wijnboerderij komt alleen waar haar gezin
-  een kapel haalt (zoals een erf, `T.plekVoor`), of de regel van 2d ook voor de kapel.
+  een kapel haalt (zoals een erf, `T.plekVoor`), of de regel van 2d ook voor de kapel. **Gekozen en gebouwd** (10 okt,
+  avond; Marcel: "Wijn haalt kapel"): elk gebouw met een gezin kijkt nu wat een erf nakijkt (`T.waaromGeenKringPlek`), en
+  sluw 2 wint weer. Nog open: een werkplaats of een kraam die de laatste plek neemt.
 
 - **De gunst na Sint-Maarten, en de gril in wintermaand** (8 okt, de sessie van de kaartenmaker; vraag 117, 2d): bij de
   bouwer van de speeltest staat de gunst van de heer na Sint-Maarten bijna elk jaar op 5, de laagste stand vóór 0 (eerst

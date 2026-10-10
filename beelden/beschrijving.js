@@ -38430,6 +38430,28 @@
       64
      ]
     }
+   },
+   "kerstboom": {
+    "bestand": "kerstboom.png",
+    "cel": [
+     133,
+     282
+    ],
+    "anker": [
+     59,
+     273
+    ]
+   },
+   "pestbos": {
+    "bestand": "pestbos.png",
+    "cel": [
+     28,
+     62
+    ],
+    "anker": [
+     14,
+     54
+    ]
    }
   };
 })(globalThis.Spel = globalThis.Spel || {});

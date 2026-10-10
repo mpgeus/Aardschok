@@ -324,7 +324,7 @@
     const wens = Object.keys(T.WENSEN).find((id) => T.WENSEN[id].plek === soort);
     const straal = IN().kring[soort];
     if (!wens || !straal) return null;
-    let sleutel = `${T.kaartVersie(D.wereld)}:${Math.floor((D.kalender && D.kalender.dag) || 0)}:${(D.gebouwen || []).length}`;
+    let sleutel = `${straal}:${T.kaartVersie(D.wereld)}:${Math.floor((D.kalender && D.kalender.dag) || 0)}:${(D.gebouwen || []).length}`;
     for (const e of D.erven || []) sleutel += `:${e.x},${e.y}${e.hut ? 'h' : ''}`;
     let perSoort = KRINGGROND.get(D);
     if (!perSoort) KRINGGROND.set(D, (perSoort = {}));
@@ -357,6 +357,34 @@
     const grond = { straal, wens, er, zonder, get plekken() { return plekkenNu(); } };
     perSoort[soort] = { sleutel, grond };
     return grond;
+  };
+
+  // Komt hier iets waar een gezin gaat wonen, haalt dat gezin dan straks elke plek met een kring die het wil (een put, een
+  // kapel), en neemt het geen ander huis de laatste plek ervoor af? Voor een erf (T.waaromPastErfNiet, js/erven.js;
+  // werklijst vraag 117, 2d) en een gebouw met een gezin (T.waaromPastHetNiet, js/gebouwen.js: de wijnboerderij, vraag
+  // 136; Marcel, 10 okt: "Wijn haalt kapel"). `nieuw` zegt wat er komt, elk als rechthoek { x, y, b, h }: `grond`, wat
+  // het neemt (daar komt geen put of kapel meer); `vast`, waar het looppad van een put of kapel niet over kan (de plek van
+  // het huis op een erf, de hele voet van een wijnboerderij, want haar ranken staan in de weg); `huis`, waar het gezin
+  // woont, voor de kring. Verder `wil(wens)`: wil het die, nu of straks (T.wilStraks); `wie(wens)`: hoe het in de zin
+  // heet ("De hut op dit erf"); en `dit`: wat de plek neemt ("dit erf"). Geeft de reden, of null.
+  T.waaromGeenKringPlek = function (D, nieuw) {
+    const { grond, vast, huis, wil, wie, dit } = nieuw;
+    for (const soort of Object.keys(IN().kring)) {
+      const k = T.kringGrond(D, soort);
+      if (!k) continue;
+      const naam = T.GEBOUWEN[soort].naam;
+      const n = T.GEBOUWEN_INSTELLINGEN.looppad;
+      const raakt = (a, c) => a.x < c.x + c.b && c.x < a.x + a.b && a.y < c.y + c.h && c.y < a.y + a.h;
+      const blijft = (q) => !raakt(q, grond) && !raakt({ x: q.x - n, y: q.y - n, b: q.b + 2 * n, h: q.h + 2 * n }, vast);
+      // ver weg komt een plek er niet bij: dat scheelt de wortel
+      const dichtBij = (q) => Math.abs(q.x - huis.x) <= k.straal + huis.b + q.b && Math.abs(q.y - huis.y) <= k.straal + huis.h + q.h;
+      const haalt = (q) => dichtBij(q) && T.inDeKring(huis, q, k.straal);
+      if (wil(k.wens) && !k.er.some(haalt) && !k.plekken.some((q) => haalt(q) && blijft(q))) {
+        return `${wie(k.wens)} kan straks geen ${naam} halen: er staat er geen binnen ${k.straal} tegels, en er is geen plek meer voor een.`;
+      }
+      for (const h of k.zonder) if (h.plekken.length && h.plekken.every((q) => !blijft(q))) return `Dan kan ${h.wie} straks geen ${naam} meer krijgen: ${dit} neemt de laatste plek ervoor.`;
+    }
+    return null;
   };
 
   // Elke plek op de kaart waar een gebouw van deze soort met voet `voet` kan komen (T.kanHierKomen). Eerst per tegel of

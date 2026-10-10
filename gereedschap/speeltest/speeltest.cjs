@@ -27,11 +27,17 @@
 //   npm run speeltest -- --getal VOORVALLEN_INSTELLINGEN.metOorzaak=1
 //                                              of met een getal uit de werkbank; allebei zo vaak als je wilt, zoals
 //                                              de browser ze onthoudt als een speler ze kiest
+//   npm run speeltest -- bouwer --naam voor    bewaart deze speeltest in uit/voor/, met de stand en alle waarden van de
+//                                              bladzijde met getallen (vraag 142, stap 3); verander dan getallen, en
+//   npm run speeltest -- bouwer --naam na --tegen voor
+//                                              zet hem naast de vorige: welke waarden anders waren, en per spel wat er
+//                                              anders afliep (uit/na/vergelijking.md; vergelijk.cjs). Met --samenvatting
+//                                              maakt het de vergelijking opnieuw zonder te spelen
 //
 // De spelers staan in speler.js (die draait in de bladzijde, naast het spel). Wat er per jaar gebeurde,
 // komt in gereedschap/speeltest/uit/<speler>-<zaad>.json, en een tabel in uit/samenvatting.md (niet in
 // git; met --maker <speler>-<zaad>-maker.json en samenvatting-maker.md, met --eiland -eiland, en met --regel of --getal
-// -regels achter de naam). Het spel gebruikt de standaard spelregels, behalve met --maker, --eiland, --regel en --getal:
+// -regels achter de naam; met --naam in uit/<naam>/). Het spel gebruikt de standaard spelregels, behalve met --maker, --eiland, --regel en --getal:
 // een nieuwe browser onthoudt niets.
 //
 // Nodig: Playwright met Chromium (in de cloud staat het klaar; thuis `npm i -g playwright` en
@@ -39,6 +45,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { execSync } = require('node:child_process');
+const V = require('./vergelijk.cjs');
 
 const WORTEL = path.join(__dirname, '..', '..');
 const UIT = path.join(__dirname, 'uit');
@@ -68,6 +75,14 @@ function leesOpdracht(argv) {
     else if (a === '--maker') o.maker = true;
     else if (a === '--eiland') o.eiland = true;
     else if (a === '--samenvatting') o.samenvatting = true;
+    else if (a === '--naam' || a === '--tegen') {
+      const naam = argv[++i] || '';
+      if (!V.GOEDE_NAAM.test(naam)) {
+        console.error(`${a} wil een naam van letters, cijfers en streepjes, zoals ${a} voor.`);
+        process.exit(1);
+      }
+      o[a.slice(2)] = naam;
+    }
     else if (a === '--regel' || a === '--getal') {
       const [naam, waarde] = String(argv[++i] || '').split('=');
       if (!naam || waarde == null || waarde === '') {
@@ -86,11 +101,19 @@ function leesOpdracht(argv) {
       for (let z = van; z <= (tot || van); z++) o.zaden.push(z);
     } else if (SPELERS.includes(a)) o.spelers.push(a);
     else {
-      console.error(`Onbekend: ${a}. Spelers: ${SPELERS.join(', ')}; en --zaad n, --zaden van-tot, --jaren n, --tegelijk n, --opslaan [dag], --maker, --eiland, --samenvatting, --regel naam=keuze of --getal pad=waarde.`);
+      console.error(`Onbekend: ${a}. Spelers: ${SPELERS.join(', ')}; en --zaad n, --zaden van-tot, --jaren n, --tegelijk n, --opslaan [dag], --maker, --eiland, --samenvatting, --regel naam=keuze, --getal pad=waarde, --naam naam of --tegen naam.`);
       process.exit(1);
     }
   }
   if (!o.spelers.length) o.spelers = SPELERS;
+  if (o.tegen && !o.naam) {
+    console.error('--tegen vergelijkt met een speeltest met een naam, dus deze krijgt er ook een: --naam na --tegen voor.');
+    process.exit(1);
+  }
+  if (o.tegen && o.tegen === o.naam) {
+    console.error('--naam en --tegen zijn dezelfde; kies een nieuwe naam voor deze speeltest.');
+    process.exit(1);
+  }
   // De spelregels zoals de browser ze onthoudt (js/opties.js, onder aardschok.spelregels). Het gehucht altijd: zonder
   // --maker of --eiland het ontworpen gehucht, ook nu een nieuw spel het eiland maakt (vraag 117), zodat een speeltest te
   // vergelijken blijft met de speeltests ervoor; met --maker de landen van de maker zonder het eiland. `proef`: het spel
@@ -164,24 +187,53 @@ async function main() {
     (vies ? ', met wijzigingen in het spel die nog niet gecommit zijn' : '');
   const op = stand + (o.eiland ? ', op het eiland' : o.maker ? ', op gehuchten van de maker' : '') + (o.anders.length ? `, met ${o.anders.join(', ')}` : '');
   const achter = (o.eiland ? '-eiland' : o.maker ? '-maker' : '') + (o.anders.length ? '-regels' : '');
+  // Met een naam komt alles in uit/<naam>/, met set.json (wat er gespeeld werd, op welke stand) en waarden.json (alle
+  // waarden van de bladzijde met getallen zoals ze bij het begin in de code stonden; vergelijk.cjs). Zo staat de vorige
+  // ernaast.
+  const map = o.naam ? path.join(UIT, o.naam) : UIT;
+  const setBestand = path.join(map, 'set.json');
+  const vergelijkMet = () => {
+    if (!o.tegen) return;
+    const tegen = V.leesSpeeltest(o.tegen, UIT);
+    if (!tegen) {
+      console.log(`\nNiet te vergelijken: er is geen speeltest ${o.tegen} in ${path.relative(WORTEL, UIT)}.`);
+      return;
+    }
+    const v = V.vergelijk(tegen, V.leesSpeeltest(o.naam, UIT));
+    fs.writeFileSync(path.join(map, 'vergelijking.json'), JSON.stringify(v, null, 1));
+    const tekst = V.alsTekst(v);
+    fs.writeFileSync(path.join(map, 'vergelijking.md'), tekst);
+    console.log('\n' + tekst);
+  };
   // Niet spelen, maar de samenvatting opnieuw maken uit wat er al in uit/ ligt, voor deze spelers en zaden (met dezelfde
   // --maker, --regel en --getal). Een taak op de achtergrond stopt na twee uur, dus een speeltest van vier jaar gaat in
   // meer taken (werklijst, vraag 107, stap 3); zo geven ze samen één tabel.
   if (o.samenvatting) {
     const uitslagen = [];
     for (const speler of o.spelers) for (const zaad of o.zaden) {
-      const bestand = path.join(UIT, `${speler}-${zaad}${achter}.json`);
+      const bestand = path.join(map, `${speler}-${zaad}${achter}.json`);
       if (fs.existsSync(bestand)) uitslagen.push(JSON.parse(fs.readFileSync(bestand, 'utf8')));
       else console.log(`Niet gevonden: ${path.relative(WORTEL, bestand)}`);
     }
     const standen = [...new Set(uitslagen.map((u) => u.stand).filter(Boolean))];
     const tabel = require('./samenvatting.cjs').maak(uitslagen, standen.join('; ') || op);
-    fs.writeFileSync(path.join(UIT, `samenvatting${achter}.md`), tabel);
+    fs.writeFileSync(path.join(map, `samenvatting${achter}.md`), tabel);
     console.log('\n' + tabel);
+    vergelijkMet();
     return;
   }
   console.log(`De speeltest speelt op ${op}.`);
-  fs.mkdirSync(UIT, { recursive: true });
+  fs.mkdirSync(map, { recursive: true });
+  const set = o.naam ? {
+    naam: o.naam, wanneer: new Date().toISOString(), stand: op, klaar: false,
+    opdracht: { spelers: o.spelers, zaden: o.zaden, jaren: o.jaren, land: o.eiland ? 'eiland' : o.maker ? 'maker' : 'ontworpen', regels: o.regels, getallen: o.getallen },
+  } : null;
+  if (set) {
+    // Een vorige speeltest met dezelfde naam gaat weg, zodat er geen spel van de vorige keer tussen blijft liggen.
+    for (const f of fs.readdirSync(map)) if (f.endsWith('.json') || f.endsWith('.md')) fs.unlinkSync(path.join(map, f));
+    fs.writeFileSync(path.join(map, 'waarden.json'), JSON.stringify(V.waardenVan(V.leesBronnen(WORTEL))));
+    fs.writeFileSync(setBestand, JSON.stringify(set, null, 1));
+  }
   const { chromium } = laadPlaywright();
   const browser = await chromium.launch();
   if (o.opslaan != null) {
@@ -199,7 +251,7 @@ async function main() {
       const u = await speelJaar(browser, speler, zaad, null, o.spelregels, o.jaren);
       u.stand = op;
       uitslagen.push(u);
-      fs.writeFileSync(path.join(UIT, `${speler}-${zaad}${achter}.json`), JSON.stringify(u, null, 1));
+      fs.writeFileSync(path.join(map, `${speler}-${zaad}${achter}.json`), JSON.stringify(u, null, 1));
       const kort = u.mislukt ? `MISLUKT: ${u.mislukt}` : `${u.eind ? u.eind.tekst : ''}`;
       console.log(`${speler}, zaad ${zaad}: ${u.duurSeconden} s, ${u.fouten.length} fouten. ${kort}`);
     }
@@ -207,8 +259,10 @@ async function main() {
   await Promise.all(Array.from({ length: Math.min(o.tegelijk, rij.length) }, werker));
   await browser.close();
   const tabel = require('./samenvatting.cjs').maak(uitslagen, op);
-  fs.writeFileSync(path.join(UIT, `samenvatting${achter}.md`), tabel);
+  fs.writeFileSync(path.join(map, `samenvatting${achter}.md`), tabel);
   console.log('\n' + tabel);
+  if (set) fs.writeFileSync(setBestand, JSON.stringify({ ...set, klaar: true }, null, 1));
+  vergelijkMet();
 }
 
 // Waar twee bewaarde spellen verschillen: het pad en de twee waarden, hoogstens twintig.

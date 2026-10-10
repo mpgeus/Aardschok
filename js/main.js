@@ -1562,9 +1562,10 @@
       }));
       return { deur: `${deur.x},${deur.y}`, bier: Math.floor(S.dorp.voorraad.bier || 0), apartVoorDeHuizen: T.bierApart(S.dorp), vanavond, gisteravond: S.dorp.herberg && S.dorp.herberg.gisteravond, tekst: T.gebouwToestand(S.dorp, g) };
     },
-    // De feesten (js/feesten.js): welk feest er komt of nu is, waar het dorp staat, de meiboom, en wat er gevierd werd.
-    // Spel.debug.feest('oogstfeest') laat het vandaag beginnen, de hele dag; ('meiboom', 'avond') alleen vanavond. Zet
-    // er de tijd bij met Spel.debug.uur(10) (overdag) of (20) (de avond).
+    // De feesten (js/feesten.js): welk feest er komt of nu is, waar het dorp staat, de boom op het plein (de meiboom of de
+    // kerstboom), en wat er gevierd werd. Spel.debug.feest('oogstfeest') laat het vandaag beginnen, de hele dag;
+    // ('meiboom', 'avond') alleen vanavond, en ('kerstboom') zet de kerstboom en viert vanavond kerstavond. Zet er de tijd
+    // bij met Spel.debug.uur(10) (overdag) of (20) (de avond).
     feest(id, hoe) {
       const D = S.dorp;
       if (id) {
@@ -1581,7 +1582,7 @@
       const naam = (x) => T.FEESTEN[x.id].naam;
       return {
         komt: f ? { feest: naam(f), op: T.datumVanDag(f.dag).tekst, heel: f.heel, midden: f.midden && `${f.midden.x},${f.midden.y}`, nu: !!T.feestOp(D, S.kalender.dag) } : null,
-        meiboom: F.boom ? { staat: `${F.boom.x},${F.boom.y}`, tot: T.datumVanDag(F.boom.tot).tekst } : null,
+        boom: F.boom ? { soort: F.boom.soort || 'meiboom', staat: `${F.boom.x},${F.boom.y}`, tot: T.datumVanDag(F.boom.tot).tekst } : null,
         gevierd: F.gevierd.map((g) => `${naam(g)}, ${T.datumVanDag(g.dag).tekst}${g.heel ? ', de hele dag' : ', de avond'}`),
         vrij: T.vrijeDag(D, S.kalender.dag),
       };

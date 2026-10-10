@@ -107,7 +107,11 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
     (alleen dat getal, met een `.bak` ernaast), en de knop Toetsen draaien draait `npm test`. De lezer staat in
     `gereedschap/instellingen/bron.js` (zonder scherm, `test/instellingen.test.cjs`); hij voert niets uit, dus wat geen
     gewoon getal is (een som, `maandIdx(...)`), toont hij maar verandert hij niet. Verandert Marcel er iets, dan staat het
-    als een gewone wijziging in de werkmap: commit het, en pas een toets die het oude getal verwacht aan.
+    als een gewone wijziging in de werkmap: commit het, en pas een toets die het oude getal verwacht aan. Bovenaan staat
+    **de speeltest** (stap 3, `gereedschap/instellingen/speeltest.js`; Marcel: een set getallen probeer je in de code):
+    Start speelt `npm run speeltest` met een naam (standaard snel: de bouwer, zaad 1, twee jaar, op het eiland) en zet hem
+    naast de vorige: welke waarden anders waren, met een link naar hun rij, en per spel wat er anders afliep; een knop zet
+    de waarden terug zoals ze bij de vorige waren. Zolang hij loopt, slaat de server geen getal op.
 - `npm test` draait `node --test`: de toetsen in `test/`, de regels zonder scherm. Een toets laadt het
   spel zoals het draait, met `require('./laad.cjs').spel()`: de scripts uit `index.html`, in die
   volgorde, zonder wat alleen scherm is (`test/laad.cjs`). Een toets van het gereedschap laadt wat
@@ -134,6 +138,9 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   een getal uit de werkbank anders (allebei zo vaak als je wilt; de uitslag krijgt `-regels` achter zijn naam). Een
   taak op de achtergrond stopt na twee uur, dus een grote speeltest gaat in meer taken; `--samenvatting` speelt dan
   niet, maar maakt de samenvatting opnieuw uit wat er al in `uit/` ligt, zodat de taken samen één tabel geven.
+  **Naast de vorige** (vraag 142, stap 3): `--naam voor` bewaart de speeltest in `uit/voor/`, met alle waarden van de
+  bladzijde met getallen, en `--naam na --tegen voor` zet hem ernaast in `uit/na/vergelijking.md`: welke waarden anders
+  waren, en per spel wat er anders afliep (`gereedschap/speeltest/vergelijk.cjs`).
 - `npm run proefversie` maakt de zip voor een tester (itch.io, `ontwerp/verpakken.md`) in `gereedschap/proefversie/uit/`
   (niet in git): `index.html` bovenin en alleen wat het spel laadt, met de stand (datum, commit) klein op het
   titelscherm (`T.STAND`). Commit eerst. Met `-- --windows` is het het spel in Electron voor Windows, zoals straks op Steam
@@ -754,7 +761,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.werkOogstBij`), of een avond. Wie er is, staat rond het midden (`T.feestAnker`, voor `T.dagAnker`), er brandt licht
   (`T.feestLicht`, in `T.lichtBronnen`), en niemand gaat naar de herberg (`T.feestAvond`). De meiboom komt op een vaste dag
   (`op` in `T.VOORVALLEN`, 30 grasmaand) en staat een maand op het plein (een voorwerp, `gereedschap/pixelart/meiboom.cjs`).
-  De spelregel "Feesten"; de getallen in `T.FEESTEN_INSTELLINGEN`.
+  De kerstboom (10 okt) komt op 20 wintermaand, staat met ja meteen tot en met 6 louwmaand, met kaarsjes als licht, en het
+  dorp viert kerstavond: een feest met een eigen datum (`vast` in `T.FEESTEN`); de boom van een feest staat in `D.feesten.boom`
+  (`soort`). De spelregel "Feesten"; de getallen in `T.FEESTEN_INSTELLINGEN`.
 - `js/brand.js`: **de brand** (vraag 144, 3, 9 okt; Marcel: "Ziekte en brand als status is ook goed. We hebben dan nog
   wel vuur nodig en huizen die 'afgefikt' zijn als art. Dan kunnen ze weer worden opgebouwd"): brandgevaar is een status
   (`T.brandgevaarNiveau`: in de droogte, groot in een ernstige droogte of een vol dorp; `brandgevaar` in `T.OORZAKEN`), en
@@ -766,12 +775,15 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   bouwfasen zoals een huis dat doorgroeit (`v.inAanbouw` met `vanFase`). Het beeld in `js/tekenen.js`: vuurtongen over
   het dak, vonken en een gloed (`tekenVuur`, na de nacht), rook (`tekenRook`), licht (`T.brandLicht` in
   `T.lichtBronnen`), en de ruïne: de bouwfase `puinFase` van zijn tekening, verkoold (`puinVan`) en een paar dagen
-  smeulend (`T.smeult`, sintels). De spelregel "Brand"; de getallen in `T.BRAND_INSTELLINGEN`.
+  smeulend (`T.smeult`, sintels). Bij groot brandgevaar, als niemand blust, slaat het vuur soms over op het dichtste huis
+  ernaast als het eerste afbrandt (`T.slaatOver`, `overslaan`; één keer, `g.brand.overgeslagen`). De spelregel "Brand";
+  de getallen in `T.BRAND_INSTELLINGEN`.
 - `js/koorts.js`: **de koorts** (vraag 144, 3): het voorval `ziekte` is het begin (`T.tikKoortsDag`): wie het betreft en
   zijn gezin zijn ziek (`p.ziek`, de dag dat hij beter is, en `p.thuisTot`: in bed), elke nacht steekt een zieke soms een
   ander aan (`besmet`, maal `vol` en `kou`, maal wat je antwoordde: `doe.koorts` in procenten, `T.koortsMaatregel`), een
   enkele keer sterft iemand (`sterft` per leeftijd), en wie het had, krijgt het deze keer niet weer (`D.koorts.gehad`).
-  De status `koorts` in `T.OORZAKEN` (`T.koortsNiveau`: Koorts, en Epidemie als een tiende ziek is). De spelregel
+  De status `koorts` in `T.OORZAKEN` (`T.koortsNiveau`: Koorts, en Epidemie als een tiende ziek is). Naast de deur van
+  een huis met een zieke staat de pestbos (`T.pestbossen`, alleen beeld; `gereedschap/pixelart/pestbos.cjs`). De spelregel
   "Koorts"; de getallen in `T.KOORTS_INSTELLINGEN`.
 - `js/leven.js`: **ouder worden, geboren worden en sterven** (vraag 145, 9 okt; Marcel: "mensen moeten ook ouder kunnen
   worden", en "1. C 2. Ja 3. Ja"): elke bewoner heeft een geboortedag (`p.geboren`; wie er al was, krijgt er een in zijn
@@ -1277,8 +1289,9 @@ staat; `(3)` laat nu drie wilde rovers komen, `('bende')` de bende.
 `Spel.debug.heervaart()` zegt wat de heer vraagt, wie er weg is en tot wanneer, en wie veteraan is; `('vraag')` laat
 hem nu mannen vragen (ook in een gehucht), `('terug')` laat ze nu terugkomen.
 `Spel.debug.raad()` zegt welke raad er onder het doel staat en welke er nu allemaal gelden.
-`Spel.debug.feest()` zegt welk feest er komt of nu is, waar het dorp staat en de meiboom; `('meiboom')` laat het vandaag
-beginnen, de hele dag (`('oogstfeest', 'avond')` alleen vanavond); zet er het uur bij met `Spel.debug.uur(11)` of `(20)`.
+`Spel.debug.feest()` zegt welk feest er komt of nu is, waar het dorp staat en de boom op het plein (de meiboom of de
+kerstboom); `('meiboom')` laat het vandaag beginnen, de hele dag (`('oogstfeest', 'avond')` alleen vanavond, `('kerstboom')`
+zet de kerstboom); zet er het uur bij met `Spel.debug.uur(11)` of `(20)`.
 `Spel.debug.einde()` zegt hoe ver het is met winnen (het doel, de dagen op rij, het jaarboek); `('winst')` zet de teller
 op één dag ervoor, `('gewonnen')` wint nu (het feest, en het eindscherm 's avonds of bij het feest), `('jaarverslag')`
 toont het jaar in het kort nu.

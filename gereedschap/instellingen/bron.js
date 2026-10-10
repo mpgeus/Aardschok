@@ -345,7 +345,18 @@
           const zet = {};
           for (const z of (deel(k, 'zet') || {}).delen || []) {
             zet[z.sleutel] = alsWaarde(z.waarde, bronnen[waar.OPTIES]);
-            (zetten[z.sleutel] = zetten[z.sleutel] || []).push({ optie: tekst('naam') || id.waarde, keuze: knaam && knaam.waarde, waarde: zet[z.sleutel], standaard: kid && kid.waarde === standaard });
+            const wie = { optie: tekst('naam') || id.waarde, keuze: knaam && knaam.waarde, standaard: kid && kid.waarde === standaard };
+            const heel = z.waarde.soort === 'object' || z.waarde.soort === 'lijst';
+            (zetten[z.sleutel] = zetten[z.sleutel] || []).push({ ...wie, waarde: zet[z.sleutel], heel });
+            // Zet hij een heel object (TREDEN_INSTELLINGEN.dorp), dan zet hij ook elk getal erin: dat zegt de rij van dat
+            // getal erbij, anders lijkt het getal in het bestand te gelden terwijl de spelregel het overschrijft (vraag
+            // 142, stap 3: zo deed het dorp bij 12 in de speeltest niets).
+            if (heel) {
+              for (const b of I.bladen(z.waarde)) {
+                const pad = [z.sleutel, ...b.pad].join('.');
+                (zetten[pad] = zetten[pad] || []).push({ ...wie, waarde: b.waarde, viaObject: z.sleutel });
+              }
+            }
           }
           keuzes.push({ id: kid && kid.waarde, naam: knaam && knaam.waarde, uitleg: kuitleg && kuitleg.waarde, zet });
         }

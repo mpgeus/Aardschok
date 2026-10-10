@@ -40,6 +40,27 @@
     return n >= Math.max(IN().epidemieMinstens, IN().epidemie * (D.bevolking || 0)) ? 2 : 1;
   };
 
+  // De pestbos (Marcel, 10 okt: "Ja, zo"; alleen beeld, niets in Spel.S): een bos stro aan een paal naast de deur van elk
+  // huis met een zieke, zolang er iemand ziek is (gereedschap/pixelart/pestbos.cjs; js/tekenen.js tekent hem). Hij staat
+  // op een tegel naast de deur, langs de muur, waar niets staat; is die er niet, dan op de deurtegel, iets opzij. Geeft
+  // [{ g, x, y }].
+  T.pestbossen = function (D, w) {
+    if (!IN().aan || !w) return [];
+    const huizen = new Set(T.zieken(D).map((p) => p.huis).filter((g) => g && g.klaar !== false && !g.brand));
+    const uit = [];
+    for (const g of huizen) {
+      const deur = T.deurVan(w, g);
+      const v = T.voetVanGebouw(g);
+      const inVoet = (x, y) => x >= v.x && x < v.x + v.b && y >= v.y && y < v.y + v.h;
+      const tegenDeMuur = (x, y) => !inVoet(x, y) && x >= v.x - 1 && x <= v.x + v.b && y >= v.y - 1 && y <= v.y + v.h;
+      const naast = [[1, 0], [-1, 0], [0, 1], [0, -1]]
+        .map(([dx, dy]) => ({ x: deur.x + dx, y: deur.y + dy }))
+        .find((t) => tegenDeMuur(t.x, t.y) && T.isBegaanbaar(w, t.x, t.y) && !T.voorwerpOp(w, t.x, t.y));
+      uit.push(naast ? { g, x: naast.x, y: naast.y } : { g, x: deur.x + 0.4, y: deur.y });
+    }
+    return uit;
+  };
+
   function wordtZiek(D, p, dag) {
     const K = D.koorts;
     const [van, tot] = IN().ziekDagen;

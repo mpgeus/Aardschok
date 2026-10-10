@@ -39,20 +39,19 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
   mos op het oude riet (donkerder, in de schaduw onder de lagen; Marcel: "Na het stenen huis"); dan de ronde van alle
   tekeningen, waarin hoe ruig van de trede afhangt en hoe verweerd van de leeftijd. **Bezig in sessie
   `ccr-7ab52064-46a7de`** (10 okt): G tot J gebouwd, wacht op Marcel.
-- Wie wijn wil (vraag 136; Marcel, 10 okt: "Inwoners willen wijn en bier. Afwisseling", "B1, 0,02 is goed", en "Laten
-  we vooruitkijken doen"): in `main` (10 okt), met het vooruitkijken naar de pluk (`T.wijnNaDePluk`); in de speeltest
-  wint er één van de zes, zoals zonder wijn (`speelbaar.md`). Open: een wijnboerderij ver weg zonder kapel hield een winst
-  tegen (`opmerkingen.md`, bij de kapel). Voorstel van Claude: een wijnboerderij komt alleen waar haar gezin een kapel
-  haalt, zoals een erf; of de regel van 2d (plaats houden) ook voor de kapel. **Marcel (10 okt) koos het: "Wijn haalt
-  kapel".** **Bezig in sessie `ccr-ff71f25d-flpbkd`** (10 okt): het plan, met Marcel.
-- Uit `opmerkingen.md`: een brand die overslaat op het huis ernaast, een eigen beeld voor de koorts (ziekbed, hoesten),
-  en waar de kerstboom komt (vraag 148). Voorstellen van Claude (10 okt): overslaan alleen bij groot brandgevaar als
-  niemand blust, op hooguit één buurhuis; een bos stro aan de deur van een huis met zieken (de pestbos); de kerstboom
-  zoals de meiboom, van 20 wintermaand tot 6 louwmaand, met een feestavond op 24 wintermaand. **Marcel (10 okt) koos de
-  kerstboom en de brand die overslaat met de pestbos**, na de wijn. **Bezig in sessie `ccr-ff71f25d-flpbkd`** (10 okt).
-- Vraag 142, de bladzijde met alle getallen (`gereedschap/instellingen.html`): stap 1 en 2 staan in `main`; stap 3 (een
-  speeltest met een set getallen, naast de vorige) wacht. **Bezig in sessie `ccr-ce895b2d-mmzlcq`** (10 okt): het plan
-  voor stap 3, met Marcel.
+- **In `main` (10 okt, avond; Marcel koos ze), om te bekijken:**
+  - Wijn haalt kapel (vraag 136): een gebouw met een gezin (de wijnboerderij) komt alleen waar het zijn kapel haalt, of
+    waar er nog een kan komen, zoals een erf (`T.waaromGeenKringPlek`). In de speeltest winnen nu twee van de zes (was
+    één): sluw 2 wint weer (`speelbaar.md`).
+  - De kerstboom (vraag 148): op 20 wintermaand vragen de jongeren het; met ja staat hij meteen op het plein, tot en met 6
+    louwmaand, zijn kaarsjes branden 's avonds, en op kerstavond viert het dorp de avond om de boom.
+    `Spel.debug.feest('kerstboom')` met `Spel.debug.uur(19)`.
+  - De brand slaat over (vraag 144): bij groot brandgevaar, als niemand blust, de helft van de keren op het dichtste huis
+    binnen vijf tegels, één keer. En de pestbos: een bos stro aan een paal naast de deur van een huis met een zieke
+    (`Spel.debug.koorts('nu')`); op ware grootte klein, dus groter of feller als hij beter moet opvallen.
+- Vraag 142, de bladzijde met alle getallen (`gereedschap/instellingen.html`): stap 3, de speeltest naast de vorige,
+  staat in `main` (10 okt). Marcel probeert hem op zijn computer (met `npm start`; Playwright erbij, `npm i -g
+  playwright` en `npx playwright install chromium`).
 
 **Daarna, in deze volgorde:**
 0b. Engels en een vertaaltool (vraag 147; Marcel, 9 okt): de basis nu, naast de ui; het omzetten van alle tekst na de
@@ -72,7 +71,7 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
 4. Later: het hele eiland met de mist (vraag 117, stap 3) en doorgroeien zonder vaste maat (vraag 137), plunderen
    (vraag 138), het buurdorp (vraag 72).
 
-## De stand (8 okt 2026): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt en het spel laadt alleen wat er staat (vraag 114, 2a, stap 1 en 1b); sinds de eenendertigste sessie bouwt elk land van de maker in een bouwstijl, met het dak van zijn trede en de deur naar de weg (vraag 114, stap 2a: de stijl wit), en tekent het spel met WebGL, gebouwd in een eigen sessie naast de huizen (vraag 123); sinds de tweeëndertigste sessie bouwt de huizenbouwer elk huis van vier kanten en tekent hij het een kwartslag gedraaid, en staat wit zo in het spel, met alle bouwfasen (vraag 124, B, en G); sinds de drieëndertigste sessie werken de boeren overdag op hun land, naar het seizoen en in het vel van hun werk, een boerin in dat van een vrouw (vraag 111, stap 1 en 2), en vraagt een boer heide te ontginnen als het graan tekortkomt (vraag 107, stap 1); sinds de vierendertigste sessie wijst hij een stuk heide en een stuk bos aan, en kies jij: de heide tegen het vertrouwen, het bos gemeld tegen de gunst, of stiekem (vraag 107, stap 2), met de hakker en zijn bijl; sinds de vijfendertigste sessie is de speeltest van vier jaar gespeeld (vraag 107, stap 3): ontginnen lost het graan op, maar geen dorp wint, want de grond om te bouwen is op, en de markt komt er nooit (vraag 110: f, het erf dat vastzat, is gerepareerd; e komt met de houthakker); sinds de zesendertigste sessie staat de markt met vier kramen op het plein (vraag 110, d), en hebben de stenen huizen op elk land hun markt; en sinds de tweede sessie daarnaast bouwt elk land in een van vier stijlen, wit, oker, planken of roze, elk met eigen huizen en boerderijen en alle bouwfasen (vraag 114, 2b); dan de herberg, de kapel en de woontoren (stap 3); sinds de sessie van de heer mogen erven en werkplaatsen op bomen en struiken, die wie er komt zelf rooit, en hakt de houthakker de bomen om zijn schuur om en plant hij er twee terug, zodat het bos om hem blijft (vraag 110, e, 115 en 129; in de speeltest van vier jaar komen de dorpen van de bouwer tot 126 à 129 mensen; en sinds vraag 130 rooit een hut die niet kan doorgroeien eerst wat in de weg staat, en wint er weer een dorp, op 73425; sinds de zevenendertigste sessie kapt het gezin daarbij ook zijn eigen appelboom, zegt de raad het als een huis dat alles heeft niet kan groeien, en komt een erf niet waar het een huis elke vorm afneemt (vraag 130, a2, c2 en d); sinds vraag 131 zijn wapens niet meer verboden, en winnen drie van de zes spellen van de speeltest); sinds vraag 116, stap 1, lopen er roedels wolven en groepjes herten in het bos, met rode ogen in het donker, en sinds 2a jagen de wolven in de winter op de herten, komen er in de lente jongen, en verhuist wie zijn bos kwijt is; sinds 2b komen ze met honger in het donker naar het dorp (een schaap, of wie alleen loopt), houdt licht ze weg, en rent wie werkt en ze ziet naar huis; dan wat je ertegen doet (vraag 116, stap 3), de hoogteverschillen (vraag 121: sinds stap 1, in `main` op 7 okt, een landschap dat overal doorloopt, uit het nummer van het land, met een richel en akkers die meebollen, achter de spelregel "Hoogte", standaard vlak; sinds stap 2 loopt niemand door een rotswand, wordt niet op steile grond gebouwd, houdt een heuvel het zicht tegen en dekt hij af wat erachter staat; het draaien van de camera, vraag 124, is geparkeerd); dan de kaartenmaker voor het eiland van 2500 bij 2500 (vraag 117: sinds 8 okt maakt hij uit één nummer het eiland, en sinds stap 2a begint elk nieuw spel erop, met je gehucht als een dorp dat er al was; sinds 2b loopt het eiland om je land door, en met heuvels is het land dat van het eiland; 2c, de speeltest, is gespeeld; sinds 2d houdt een erf plaats voor een put, en haalt een put voor een hut ook het huis dat de hut wordt; dan de kern); dan de proef van vraag 128 (de verdwenen graanzak, met een eerste zitting); sinds 8 okt eet het dorp gevarieerd (vis en vlees vullen een maag, met zout voor de winter, vraag 132), is er een wijnboerderij met een wijngaard waar het gezin in wijnmaand plukt (vraag 136), telt het graan pas als het in de schuur is, en maaien, binden en dragen dagloners mee (vraag 140), en staan alle getallen, spelregels en gebouwen op één bladzijde die meteen in de code schrijft (vraag 142, stap 1 en 2); de beurs per huis (vraag 141) is gebouwd, gespeeld en op 9 okt weer teruggedraaid
+## De stand (8 okt 2026): eerst een kleine speelbare demo, één gehucht dat je wint door iedereen een jaar lang super gelukkig te maken; de snelheid gaat voor alles (vraag 113); elk spel een ander, wijder land met natuur (vraag 112, stap 1), het lopen (vraag 119) en het praatje (vraag 120) zijn gebouwd; de vellen zijn ingepakt en het spel laadt alleen wat er staat (vraag 114, 2a, stap 1 en 1b); sinds de eenendertigste sessie bouwt elk land van de maker in een bouwstijl, met het dak van zijn trede en de deur naar de weg (vraag 114, stap 2a: de stijl wit), en tekent het spel met WebGL, gebouwd in een eigen sessie naast de huizen (vraag 123); sinds de tweeëndertigste sessie bouwt de huizenbouwer elk huis van vier kanten en tekent hij het een kwartslag gedraaid, en staat wit zo in het spel, met alle bouwfasen (vraag 124, B, en G); sinds de drieëndertigste sessie werken de boeren overdag op hun land, naar het seizoen en in het vel van hun werk, een boerin in dat van een vrouw (vraag 111, stap 1 en 2), en vraagt een boer heide te ontginnen als het graan tekortkomt (vraag 107, stap 1); sinds de vierendertigste sessie wijst hij een stuk heide en een stuk bos aan, en kies jij: de heide tegen het vertrouwen, het bos gemeld tegen de gunst, of stiekem (vraag 107, stap 2), met de hakker en zijn bijl; sinds de vijfendertigste sessie is de speeltest van vier jaar gespeeld (vraag 107, stap 3): ontginnen lost het graan op, maar geen dorp wint, want de grond om te bouwen is op, en de markt komt er nooit (vraag 110: f, het erf dat vastzat, is gerepareerd; e komt met de houthakker); sinds de zesendertigste sessie staat de markt met vier kramen op het plein (vraag 110, d), en hebben de stenen huizen op elk land hun markt; en sinds de tweede sessie daarnaast bouwt elk land in een van vier stijlen, wit, oker, planken of roze, elk met eigen huizen en boerderijen en alle bouwfasen (vraag 114, 2b); dan de herberg, de kapel en de woontoren (stap 3); sinds de sessie van de heer mogen erven en werkplaatsen op bomen en struiken, die wie er komt zelf rooit, en hakt de houthakker de bomen om zijn schuur om en plant hij er twee terug, zodat het bos om hem blijft (vraag 110, e, 115 en 129; in de speeltest van vier jaar komen de dorpen van de bouwer tot 126 à 129 mensen; en sinds vraag 130 rooit een hut die niet kan doorgroeien eerst wat in de weg staat, en wint er weer een dorp, op 73425; sinds de zevenendertigste sessie kapt het gezin daarbij ook zijn eigen appelboom, zegt de raad het als een huis dat alles heeft niet kan groeien, en komt een erf niet waar het een huis elke vorm afneemt (vraag 130, a2, c2 en d); sinds vraag 131 zijn wapens niet meer verboden, en winnen drie van de zes spellen van de speeltest); sinds vraag 116, stap 1, lopen er roedels wolven en groepjes herten in het bos, met rode ogen in het donker, en sinds 2a jagen de wolven in de winter op de herten, komen er in de lente jongen, en verhuist wie zijn bos kwijt is; sinds 2b komen ze met honger in het donker naar het dorp (een schaap, of wie alleen loopt), houdt licht ze weg, en rent wie werkt en ze ziet naar huis; dan wat je ertegen doet (vraag 116, stap 3), de hoogteverschillen (vraag 121: sinds stap 1, in `main` op 7 okt, een landschap dat overal doorloopt, uit het nummer van het land, met een richel en akkers die meebollen, achter de spelregel "Hoogte", standaard vlak; sinds stap 2 loopt niemand door een rotswand, wordt niet op steile grond gebouwd, houdt een heuvel het zicht tegen en dekt hij af wat erachter staat; het draaien van de camera, vraag 124, is geparkeerd); dan de kaartenmaker voor het eiland van 2500 bij 2500 (vraag 117: sinds 8 okt maakt hij uit één nummer het eiland, en sinds stap 2a begint elk nieuw spel erop, met je gehucht als een dorp dat er al was; sinds 2b loopt het eiland om je land door, en met heuvels is het land dat van het eiland; 2c, de speeltest, is gespeeld; sinds 2d houdt een erf plaats voor een put, en haalt een put voor een hut ook het huis dat de hut wordt; dan de kern); dan de proef van vraag 128 (de verdwenen graanzak, met een eerste zitting); sinds 8 okt eet het dorp gevarieerd (vis en vlees vullen een maag, met zout voor de winter, vraag 132), is er een wijnboerderij met een wijngaard waar het gezin in wijnmaand plukt (vraag 136), telt het graan pas als het in de schuur is, en maaien, binden en dragen dagloners mee (vraag 140), en staan alle getallen, spelregels en gebouwen op één bladzijde die meteen in de code schrijft, met een speeltest die een set getallen naast de vorige zet (vraag 142, stap 1 tot 3); de beurs per huis (vraag 141) is gebouwd, gespeeld en op 9 okt weer teruggedraaid; sinds de avond van 10 okt komt een wijnboerderij alleen waar haar gezin een kapel haalt, en winnen twee van de zes spellen, staat er met kerst een kerstboom op het plein, slaat een brand bij groot brandgevaar soms over, en hangt er een pestbos bij zieken
 
 **Het spel** (sinds 23 sep): je bent de schout van een gehucht onder een heer die alleen geld ziet. Het hart is het
 gehucht besturen terwijl het groeit, terwijl de heer eraan trekt; rijk worden en arm lijken blijft de druk van boven.
@@ -6953,6 +6952,10 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     plukken, min de wijn voor de heer, moet een jaar halen (`T.haaltDeWinter`, de regel van het hout en het eten); haalt
     het dat niet, dan vraagt het dorp nu een wijnboerderij erbij (`T.watTeBouwen` in `js/raad.js`). Wat de huizen nu
     missen, vraagt er alleen nog een als er geen staat (`watHelpt` in `js/wensen.js`).
+    **Marcel (10 okt, avond): "Wijn haalt kapel".** **Gebouwd:** een gebouw met een gezin komt alleen waar het zijn kapel
+    (en put) haalt, of waar er nog een kan komen, en neemt geen ander huis de laatste plek af: dezelfde vraag als een erf
+    (`T.waaromGeenKringPlek` in `js/wensen.js`, vanuit `T.waaromPastHetNiet`). In de speeltest winnen er twee van de zes,
+    sluw 2 weer (`speelbaar.md`).
 137. **Doorgroeien zonder vaste maat** (Marcel, 8 okt: "We moeten ook stoppen met het dorp een vaste maat geven. Als alles
     straks 1 eiland is, is het logisch dat je gewoon door kunt groeien naar buiten."; open). Hoort bij het eiland (vraag
     117). Er zijn twee vaste maten: het land van de maker (100 bij 100, met bos tot de rand), en de maat van de winst (vanaf
@@ -7084,6 +7087,25 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     van een spelregel het in het spel anders zet). Opslaan schrijft meteen in het bestand (`/gereedschap/api/instelling`
     in `server.cjs`, alleen dat ene getal, met een `.bak`), en Toetsen draaien zegt welke toetsen het oude getal nog
     verwachten. Stap 3 (een speeltest met een set getallen, naast de vorige) komt hierna.
+    **Stap 3, het plan (10 okt, sessie `ccr-ce895b2d-mmzlcq`):** op de opdrachtregel zoals `npm run schermen`
+    (`npm run speeltest -- bouwer --naam voor`, dan `--naam na --tegen voor`): elke speeltest bewaart in `uit/<naam>/` zijn
+    uitslag, de commit en alle waarden van de bladzijde, en de vergelijking zet per spel (hetzelfde zaad) de twee naast
+    elkaar, met erboven de getallen die tussen de twee anders waren; en op de bladzijde een blok Speeltest: kiezen, Start,
+    zien hoe ver hij is, en de vergelijking met de vorige, met de getallen als link naar hun rij. Zolang hij loopt, wordt er
+    niets opgeslagen. **Marcel (10 okt):** een set getallen probeer je **in de code** (zoals stap 2, "Gelijk veranderen"),
+    met een knop die de veranderde getallen terugzet zoals ze bij de vorige waren, niet als proefset ernaast; de knop staat
+    standaard op **snel** (de bouwer, zaad 1, twee jaar, op het eiland; de rest is te kiezen); en hij gebruikt de bladzijde
+    **op zijn eigen computer** (daar moet Playwright bij, en de bladzijde zegt het als het ontbreekt).
+    **Gebouwd (10 okt), stap 3:** `npm run speeltest -- bouwer --naam voor`, dan `--naam na --tegen voor`: in `uit/<naam>/`
+    staan `set.json` (de opdracht en de stand), `waarden.json` (alle waarden van de bladzijde) en per spel de uitslag, en
+    `vergelijking.md` zet ze naast elkaar (`gereedschap/speeltest/vergelijk.cjs`, getoetst zonder browser). Op de bladzijde
+    staat de speeltest bovenaan (`gereedschap/instellingen/speeltest.js`): kiezen (standaard snel), Start, hoe ver hij is,
+    Stop, en de vergelijking met de laatste die hetzelfde speelde, met elk veranderd getal als link naar zijn rij en de knop
+    Zet terug zoals bij de vorige (eerst met de vraag welke waarden). Zolang hij loopt, slaat de server geen getal op.
+    **De proef** (de bouwer, zaad 1, twee jaar op het eiland, 590 s per spel): het dorp bij 12 in plaats van 20, gezet,
+    gespeeld en teruggezet op de bladzijde, liep precies hetzelfde af, want de standaard van de spelregel "Treden" zet heel
+    `TREDEN_INSTELLINGEN.dorp`; de bladzijde zei dat alleen bij een spelregel die precies dat getal zet. Nu zegt de rij het
+    ook bij een getal in zo'n object, en de vergelijking "doet in het spel niets".
 
 143. **Een bode naar de marskramer in een moeilijke tijd** (Marcel, 9 okt, na de speeltest van het weer: "A; misschien
     kunnen we de Schout de mogelijkheid geven om een beroep te doen om een extra marskramer om in te kunnen kopen in een
@@ -7503,6 +7525,10 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     (`SPAR_KLEUREN`, met de ramp `spar`). Erbij: de grove den (`groveDen`), de den van de heide, met een oranje stam en
     een platte kroon van plukken. De vergelijking: `uit/groen/dennen.png`. Open: de sneeuw op een spar is te dik (hij
     wordt helemaal wit).
+    **De kerstboom in het spel (10 okt, avond; Marcel: "Feestavond"):** een voorval op 20 wintermaand, zoals de meiboom;
+    met ja staat hij meteen op het plein tot en met 6 louwmaand, met kaarsjes als licht, en op kerstavond viert het dorp
+    de avond (`js/feesten.js`, `beelden/kerstboom.png` uit `naar-spel.cjs --alleen kerstboom`). De boom is de spar van nu:
+    wordt de spar in stap 1 nog anders, dan opnieuw renderen.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
@@ -7721,6 +7747,12 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 10 okt 2026 — **Vraag 142, stap 3: de speeltest naast de vorige** (Marcel: een set getallen probeer je in de code, met
+  een knop om terug te zetten; snel als standaard; de bladzijde op zijn eigen computer). Op de opdrachtregel `--naam` en
+  `--tegen`, en op `gereedschap/instellingen.html` bovenaan: Start, de vergelijking (welke waarden anders waren, en per
+  spel wat er anders afliep) en Zet terug. De eerste proef vond dat een getal dat de standaard van een spelregel via het
+  object eromheen zet (het dorp bij 20), op de bladzijde niets doet zonder dat ze het zei; nu zegt ze het. `npm test`
+  1174/1174.
 - 10 okt 2026 — **Het feest vol kijkgaten** (Marcel: "Ja akkoord", op een feest alleen wie ertoe doet). Op een feest telt
   het plein niet meer mee voor wie je door een huis heen ziet (`pleinOpEenFeest` in `T.DOORKIJK_INSTELLINGEN`, met
   `T.feestOp`), en wie je zoekt met een voorval zie je altijd. In de spelregel "Wie je door een huis heen ziet" is het

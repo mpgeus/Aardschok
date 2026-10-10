@@ -10,12 +10,16 @@
 //
 // Welke feesten er zijn, staat in T.FEESTEN; wanneer ze komen, bij de voorvallen (js/voorvallen.js, soort 'feest'): het
 // oogstfeest na de oogst, en de meiboom op 30 grasmaand, een vaste dag (op), zodat hij morgen, op 1 bloeimaand, staat.
+// De kerstboom (Marcel, 10 okt: "we hebben ook een kerstboom nodig :)", en voor het feest "Feestavond") komt op 20
+// wintermaand: zeg je ja, dan staat hij meteen op het plein, tot en met 6 louwmaand, met kaarsjes die 's avonds branden
+// (T.feestLicht), en het dorp viert kerstavond (een feest met een eigen datum, `vast`).
 // Met de spelregel "Feesten" op "Alleen de stemming" is een feest wat het vóór 3 okt was: een gesprek en een stemming.
 //
 // D.feesten:
 //   komt     het feest dat komt of nu is: { id, dag, heel, midden, begonnen }, of null. heel: de hele dag (anders de
 //            avond); midden: waar het dorp zich verzamelt, gezet als het feest begint (T.feestBegint)
-//   boom     de meiboom die op het plein staat: { x, y, tot }, of null
+//   boom     de boom die op het plein staat, de meiboom of de kerstboom: { soort, x, y, tot }, of null (zonder soort:
+//            de meiboom, van vóór de kerstboom)
 //   gevierd  de feesten die er waren: [{ id, dag, heel }], de laatste tien
 (function (T) {
   'use strict';
@@ -32,6 +36,9 @@
     lichtSterkte: 0.6,
     // Zoveel dagen blijft de meiboom staan.
     meiboomDagen: 30,
+    // De kerstboom: op welke dag het dorp de avond viert, tot en met welke dag hij staat, en het licht van zijn kaarsjes
+    // 's avonds (tegels, en 0 tot 1), zolang hij staat.
+    kerstboom: { avond: { maand: 'wintermaand', dag: 24 }, tot: { maand: 'louwmaand', dag: 6 }, kaarsStraal: 3, kaarsSterkte: 0.45 },
   };
   const IN = () => T.FEESTEN_INSTELLINGEN;
 
@@ -39,6 +46,8 @@
   T.FEESTEN = {
     oogstfeest: { naam: 'het oogstfeest' },
     meiboom: { naam: 'de meiboom', voorwerp: 'meiboom' },
+    // `vast`: de datums staan in T.FEESTEN_INSTELLINGEN onder deze naam, en de boom staat meteen.
+    kerstboom: { naam: 'kerstavond', voorwerp: 'kerstboom', vast: 'kerstboom' },
     // Gewonnen: een jaar lang had iedereen alles (js/einde.js, vraag 101, c).
     stad: { naam: 'het grote feest' },
   };
@@ -91,17 +100,32 @@
 
   // Er komt een feest (een antwoord met feest: 'dag' of 'avond', js/voorvallen.js): een hele dag, de dag na `nu`, of een
   // avond, vanavond nog als er nog een uur van de avond over is. Is het vandaag, dan begint het meteen (T.feestBegint).
-  // Geeft het feest, of null als de spelregel zegt dat het dorp niet viert.
+  // Een feest met een eigen datum (`vast`: kerstavond) is op die dag, als die binnen tien dagen komt, en anders zoals
+  // elk feest; zijn boom staat meteen, tot en met zijn laatste dag. Geeft het feest, of null als de spelregel zegt dat het
+  // dorp niet viert.
   T.zetFeest = function (D, id, hoe, nu) {
-    if (!IN().vieren || !T.FEESTEN[id]) return null;
+    const soort = T.FEESTEN[id];
+    if (!IN().vieren || !soort) return null;
     const heel = hoe === 'dag';
     const vandaag = Math.floor(nu);
-    const dag = !heel && T.uurVanDag(nu) < T.dagindeling(nu).slapen - 1 ? vandaag : vandaag + 1;
+    const vast = soort.vast && IN()[soort.vast];
+    const opDag = vast && komendeDag(vandaag, vast.avond, 10);
+    const dag = opDag != null ? opDag : !heel && T.uurVanDag(nu) < T.dagindeling(nu).slapen - 1 ? vandaag : vandaag + 1;
     const F = feestenVan(D);
     F.komt = { id, dag, heel, midden: null, begonnen: false };
+    const midden = vast && D.wereld && middenVan(D.wereld);
+    if (midden) zetBoom(D, soort.voorwerp, midden, komendeDag(vandaag, vast.tot, T.DAGEN_PER_JAAR) + 1);
     if (dag === vandaag) T.feestBegint(D, F.komt, true);
     return F.komt;
   };
+
+  // De eerste dag vanaf `vandaag` (die meegeteld) met deze datum ({ maand, dag }), als die binnen `binnen` dagen valt;
+  // anders null.
+  function komendeDag(vandaag, datum, binnen) {
+    const op = T.MAANDEN.findIndex((m) => m.naam === datum.maand) * T.DAGEN_PER_MAAND + datum.dag - 1;
+    const verschil = (op - T.dagVanJaar(vandaag) + T.DAGEN_PER_JAAR) % T.DAGEN_PER_JAAR;
+    return verschil <= binnen ? vandaag + verschil : null;
+  }
 
   // Een feest dat vandaag begint en de hele dag duurt: de winst (js/einde.js), die 's nachts vaststaat. Het dorp zegt het
   // zelf (T.tikEindeDag). Null als de spelregel zegt dat het dorp niet viert.
@@ -114,33 +138,40 @@
   };
 
   // Een feest begint (zijn dag is er, of het is vanavond): het dorp kiest zijn midden, zet er neer wat erbij hoort (de
-  // meiboom), en zegt het, tenzij het antwoord het al zei (stil).
+  // meiboom), en zegt het, tenzij het antwoord het al zei (stil). Staat zijn boom er al (de kerstboom), dan is die het
+  // midden.
   T.feestBegint = function (D, f, stil) {
     const F = feestenVan(D);
     const w = D.wereld;
     const soort = T.FEESTEN[f.id];
+    const boom = soort.voorwerp && F.boom && boomSoort(F.boom) === soort.voorwerp ? F.boom : null;
     f.begonnen = true;
-    f.midden = w ? middenVan(w) : null;
-    if (soort.voorwerp === 'meiboom' && f.midden) {
-      haalBoomWeg(D);
-      T.zetVoorwerp(w, { soort: 'meiboom', x: f.midden.x, y: f.midden.y });
-      F.boom = { x: f.midden.x, y: f.midden.y, tot: f.dag + IN().meiboomDagen };
-    }
+    f.midden = boom ? { x: boom.x, y: boom.y } : w ? middenVan(w) : null;
+    if (soort.voorwerp && !boom && f.midden) zetBoom(D, soort.voorwerp, f.midden, f.dag + IN().meiboomDagen);
     if (stil) return;
     T.zeg(D, f.heel ? `Vandaag viert het dorp ${soort.naam} op het plein. Er wordt niet gewerkt.` : `Vanavond viert het dorp ${soort.naam} op het plein.`);
   };
+
+  // De boom van een feest (de meiboom, de kerstboom) op het plein, op `midden`, tot de dag `tot`; een boom die er nog
+  // stond, gaat weg.
+  function zetBoom(D, soort, midden, tot) {
+    haalBoomWeg(D);
+    T.zetVoorwerp(D.wereld, { soort, x: midden.x, y: midden.y });
+    feestenVan(D).boom = { soort, x: midden.x, y: midden.y, tot };
+  }
+  const boomSoort = (boom) => boom.soort || 'meiboom';
 
   function haalBoomWeg(D) {
     const F = D.feesten;
     const w = D.wereld;
     if (!F || !F.boom) return;
-    const v = w && w.voorwerpen.find((x) => x.soort === 'meiboom' && x.x === F.boom.x && x.y === F.boom.y);
+    const v = w && w.voorwerpen.find((x) => x.soort === boomSoort(F.boom) && x.x === F.boom.x && x.y === F.boom.y);
     if (v) T.haalVoorwerpWeg(w, v);
     F.boom = null;
   }
 
   // Elke dag (T.tikGebouwenDag, js/gebouwen.js): een feest van gisteren is gevierd (het dagboek schrijft het op, voor het
-  // rapport); een meiboom die zijn dagen stond, gaat weg; en begint vandaag een feest, dan begint het.
+  // rapport); een boom die zijn dagen stond, gaat weg; en begint vandaag een feest, dan begint het.
   T.tikFeestenDag = function (D, dag) {
     const F = D.feesten;
     if (!F) return;
@@ -201,17 +232,24 @@
     return { x: t.x, y: t.y, straal: p.leeftijd === 'kind' ? 2 : 1 };
   };
 
-  // Het licht van een feest (T.lichtBronnen, js/zien.js): rond het midden, zolang het feest duurt. Een lijst, leeg als er
-  // geen feest is; de gloed tekent js/tekenen.js alleen 's avonds.
+  // Het licht van een feest (T.lichtBronnen, js/zien.js): rond het midden, zolang het feest duurt, en de kaarsjes van de
+  // kerstboom zolang hij staat. Een lijst, leeg als er geen feest is en geen kerstboom; T.lichtBronnen vraagt het alleen
+  // 's avonds.
   T.feestLicht = function (D) {
+    const licht = [];
+    const boom = D.feesten && D.feesten.boom;
+    if (boom && boomSoort(boom) === 'kerstboom') licht.push({ x: boom.x, y: boom.y, straal: IN().kerstboom.kaarsStraal, sterkte: IN().kerstboom.kaarsSterkte });
     const f = D.kalender && T.feestOp(D, D.kalender.dag);
-    if (!f || !f.midden) return [];
-    return [{ x: f.midden.x, y: f.midden.y, straal: IN().lichtStraal, sterkte: IN().lichtSterkte }];
+    if (f && f.midden) licht.push({ x: f.midden.x, y: f.midden.y, straal: IN().lichtStraal, sterkte: IN().lichtSterkte });
+    return licht;
   };
 
   // Wat een feest in een antwoord kost, voor het venster (T.prijsVanKeuze, js/voorvallen.js): '' als het dorp niet viert.
-  T.feestPrijs = function (hoe) {
+  // Met het voorval (`id`): een feest met een eigen datum zegt die.
+  T.feestPrijs = function (hoe, id) {
     if (!IN().vieren) return '';
+    const soort = T.FEESTEN[id];
+    if (soort && soort.vast) return `feest op ${soort.naam}`;
     return hoe === 'dag' ? 'morgen werkt niemand' : "'s avonds feest op het plein";
   };
 })(globalThis.Spel = globalThis.Spel || {});

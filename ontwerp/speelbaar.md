@@ -153,6 +153,25 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 10 okt, avond: wijn haalt kapel (werklijst, vraag 136)
+
+`npm run speeltest -- bouwer sluw --jaren 4 --eiland --tegelijk 3`, op `877bdda` (branch `ccr-ff71f25d-flpbkd`), in een
+losse `git worktree`. Een gebouw met een gezin (de wijnboerderij) komt nu alleen waar het zijn kapel haalt, of waar er
+nog een kan komen, zoals een erf (Marcel: "Wijn haalt kapel"; `T.waaromGeenKringPlek`).
+
+| spel | dagen dat alle huizen alles hadden, per jaar (met vooruitkijken / en wijn haalt kapel) | afloop nu |
+| --- | --- | --- |
+| bouwer 1 | 0, 0, 0, 0 / 0, 0, 0, 0 | vier jaar uit; de gunst op 0 aan het eind (de heer), zoals ervoor |
+| bouwer 2 | 0, 145, 360, 235 / 0, 138, 360, 240 | **gewonnen** op 15 zomermaand van jaar 4 |
+| bouwer 3 | 56, 0 / 56, 0 | weggejaagd in jaar 2, zoals ervoor |
+| sluw 1 | 0, 88, 187, 158 / 0, 88, 187, 158 | vier jaar uit; de reeks brak één keer op wijn (196 dagen), zoals ervoor |
+| sluw 2 | 0, 110, 359, 1 / 0, 110, 355, 226 | **gewonnen** op 23 zomermaand van jaar 4 (was: vier jaar uit, een wijnboerderij zonder kapel) |
+| sluw 3 | 56 / 56 | ambt kwijt in jaar 1, zoals ervoor |
+
+Twee van de zes winnen (was één). Sluw 2 speelt tot zijn vierde jaar letter voor letter als ervoor, en daar komt zijn
+vierde wijnboerderij nu waar haar gezin een kapel haalt, en houdt ze de winst niet meer tegen. Wat "wil een kapel binnen
+40 tegels" nog in de maandlijsten zegt, zijn huizen voordat het dorp zijn kapel bouwt, zoals ervoor.
+
 ## De speeltest van 10 okt: wijn naast bier (werklijst, vraag 136, B1)
 
 `npm run speeltest -- bouwer sluw --jaren 4 --eiland --tegelijk 2`, met wijn op `004d07b` en zonder op `a8a69ea` (allebei

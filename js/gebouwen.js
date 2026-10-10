@@ -725,8 +725,33 @@
     if (natuur) return natuur;
     const n = T.GEBOUWEN_INSTELLINGEN.looppad;
     if (!T.looppadOm(D, { x, y, b: voet.b, h: voet.h }, n, kavel)) return `Er moet een looppad omheen: ${n === 1 ? 'een tegel' : `${T.telwoord(n)} tegels`} vrij, zonder gebouw of boom.`;
-    return T.waaromNietOpIemand(D, { x, y, b: voet.b, h: voet.h }, undefined, wieErStaat);
+    return T.waaromNietOpIemand(D, { x, y, b: voet.b, h: voet.h }, undefined, wieErStaat) || zonderKringPlek(D, soort, { x, y, b: voet.b, h: voet.h }, tekening);
   };
+
+  // Een gebouw waar een gezin woont (een wijnboerderij; met de spelregel "Huizen" ook een huis dat jij zet) komt alleen
+  // waar dat gezin straks zijn put en kapel haalt, en niet waar het een ander huis de laatste plek ervoor afneemt, zoals
+  // een erf (T.waaromGeenKringPlek, js/wensen.js; werklijst vraag 136; Marcel, 10 okt: "Wijn haalt kapel"): in de
+  // speeltest kwam een wijnboerderij ver van het dorp, en wilde haar gezin een jaar lang een kapel die nergens kon komen,
+  // zodat het dorp niet won. Bij de wijnboerderij woont het gezin in het huis in de hoek van de voet (alleenHetHuis), en
+  // daar meet ook de kring van haar wensen vanaf (T.voetVanGebouw).
+  function zonderKringPlek(D, soort, r, tekening) {
+    const G = T.GEBOUWEN[soort];
+    if (!G.woonruimte || !T.standVan({ soort })) return null;
+    const vast = alleenHetHuis(soort, tekening || T.volgendeTekening(D, soort));
+    const huis = vast ? { x: r.x, y: r.y, b: vast.b, h: vast.h } : r;
+    return T.waaromGeenKringPlek(D, {
+      grond: r, vast: r, huis, wil: (wens) => T.wilStraks({ soort }, wens),
+      wie: () => `Een ${G.naam} hier`, dit: `een ${G.naam} hier`,
+    });
+  }
+
+  // Wat er van de voet vaststaat, als dat niet de hele voet is: bij de wijnboerderij alleen het huis (de tekening), want
+  // de rest is de wijngaard (js/wijngaard.js). { b, h }, of null.
+  function alleenHetHuis(soort, tekening) {
+    const opz = T.GEBOUWEN[soort].wijngaard && tekening && T.opzoekTegelNaam(tekening);
+    const eig = opz && opz.eig && opz.eig.beslaat;
+    return eig ? { b: eig[0], h: eig[1] } : null;
+  }
 
   // ---------------------------------------------------------------------------------------------
   // Wat er ligt, doet ertoe (werklijst vraag 112, c; Marcel, 3 okt: "Her en der wat foliage, bomen, stenen, water")
@@ -981,8 +1006,7 @@
     const opz = tekening && T.opzoekTegelNaam(tekening);
     const heleVoet = instantie.voet || T.gebouwVoet(instantie.soort, tekening) || { b: 1, h: 1 };
     // Bij de wijnboerderij is alleen het huis vast: de rest van de voet is de wijngaard (js/wijngaard.js).
-    const eig = g.wijngaard && opz && opz.eig && opz.eig.beslaat;
-    const voet = eig ? { b: eig[0], h: eig[1] } : heleVoet;
+    const voet = alleenHetHuis(instantie.soort, tekening) || heleVoet;
     const naam = 'gebouw:' + instantie.soort;
     T.registreerGebouwSoort(naam);
     const v = {
