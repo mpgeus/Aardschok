@@ -873,8 +873,8 @@ wat onze mensen nu hebben:
   zes à zeven hoofden); het spritevel is gedrongen (drie). De onze zijn er zo'n vijf.
 Wat Claude zag bij drie hoofden die Marcel omcirkelde ("Deze zien er niet uit"): de camera kijkt van boven, dus je ziet
 vooral de kruin; zonder nek zakt het hoofd in de kraag, en het gezicht kijkt naar de grond. Een tekenaar draait het gezicht
-daarom wat naar de camera: proefplaat 1 doet dat met `nek` en `opkijk` (15 graden), met de lagen uit de voorbeelden
-(`uiterlijk.cjs lagen`).
+daarom wat naar de camera: proefplaat 1 deed dat met een nek en het gezicht 15 graden omhoog, met de lagen uit de
+voorbeelden (teruggedraaid, zie onder).
 Afwisseling kost geen vellen erbij: elk van de 24 uiterlijken krijgt zijn eigen bouw, lagen, hoofd en spullen.
 Marcel bij proefplaat 1: "ik vind de poppetjes gewoon niet echt mooi zoals ze nu zijn", en daarna met twee voorbeelden in
 low-poly (`mensen-lowpoly-*.jpg`): "deze verhoudingen zijn mooi. Maar laten we A eens proberen" (een nieuw lijf in code,
@@ -882,6 +882,13 @@ geen tekenaar). Wat die twee mooi maakt: vlakken in plaats van klei (elk vlak é
 per kledingstuk met randen en manchetten, en een gezicht dat iets zegt; gedrongen zijn ze net als de onze. Wat wel
 kost: de werkfiguren (`werkfiguren.cjs`) lenen het hoofd en de kiel, maar hebben hun eigen lijf; een andere bouw moet daar
 ook in, anders verandert iemand van postuur als hij gaat maaien.
+Daarna, bij Marcels voorbeelden in pixel art (`mensen-pixel-*`, `mensen-soldaat-48.png`, `mensen-kap-64.png`): het ligt
+niet aan de maat (zijn strijder verkleind tot onze 73 pixels ziet er nog goed uit), maar aan het tekenen; een poppetje
+moet gezet worden, niet uit een 3D-model gerekend, en met de hand haalde Claude dat niveau niet. **Geparkeerd** (Marcel,
+10 okt: "ok we houden het even bij de kleding voor onze poppetjes. de rest kan weg"): de code is teruggedraaid; als de
+mensen ooit getekend worden, door een tekenaar of met een AI-gereedschap, zijn dit de voorbeelden: 48 pixels hoog, in het
+spel anderhalf keer vergroot (op zoom 2 drie schermpixels per pixel), een zwarte rand, licht van linksboven, drie à vier
+tinten per kleur.
 
 ## Het vee: een koe en een schaap (Marcel, 25 sep 2026)
 

@@ -31,7 +31,7 @@ const HAAR_KLEUR = {
   kastanje: { ramp: 'hout', lo: 1, hi: 4.4 },
   zwart: { ramp: 'vacht', lo: 0.3, hi: 2.6 },
   rood: { ramp: 'herfst', lo: 1.2, hi: 5 },
-  lichtblond: { ramp: 'stro', lo: 2.8, hi: 6.6 }, // (vraag 150: was perkament, bijna wit, en las als een kaal hoofd)
+  lichtblond: { ramp: 'perkament', lo: 2.4, hi: 5.4 },
   donkerblond: { ramp: 'zand', lo: 2.6, hi: 6 },
   peper: { ramp: 'vacht', lo: 2.2, hi: 6.4 },
   grijs: { ramp: 'baard', lo: 1.6, hi: 5.6 },
@@ -332,11 +332,10 @@ function kapselVrouw(delen, H, [rx, ry, rz], m, d, soort, band = m) {
     delen.push(kegel(plus(H, [0, -8, 2]), plus(H, [0.8, -10.6, -9.6]), 2.4, 1.1, m, d, 0.8));
   }
   if (soort === 'kroon') {
-    // een vlecht om het hoofd, in schakels die om en om op en neer liggen: achter net boven de oren, voorop hoog op het
-    // voorhoofd langs de haargrens (vraag 150: hij zakte voorop, en lag zo over de ogen)
+    // een vlecht om het hoofd, net boven de oren, in schakels die om en om op en neer liggen
     for (let i = 0; i < 18; i++) {
       const a = (i / 18) * Math.PI * 2;
-      delen.push(bol(plus(H, [Math.cos(a) * (rx + 0.3), Math.sin(a) * (ry + 0.3) - 0.8, 2.4 + (i % 2 ? 0.5 : -0.3) + 2.6 * Math.max(0, Math.sin(a))]), 1.7, m, d, 0.5));
+      delen.push(bol(plus(H, [Math.cos(a) * (rx + 0.3), Math.sin(a) * (ry + 0.3) - 0.8, 2.4 + (i % 2 ? 0.5 : -0.3) - 1.6 * Math.max(0, Math.sin(a))]), 1.7, m, d, 0.5));
     }
   }
   if (soort === 'krul') {
@@ -395,9 +394,7 @@ const man = (o) => ({
   ...o,
   haar: HAAR[o.kleur],
   kiel: versleten(STOF[o.kiel], { lappen: o.lappen, vuil: o.vuil }),
-  broek: ((b) => (o.laars ? metLaarzen(b) : b))(o.knie ? versleten(STOF[o.broek], { plooi: 0, knie: true }) : STOF[o.broek]),
-  mantel: o.mantel && STOF[o.mantel], // (vraag 150: de lagen)
-  kapHals: o.kapHals && STOF[o.kapHals],
+  broek: o.knie ? versleten(STOF[o.broek], { plooi: 0, knie: true }) : STOF[o.broek],
   klomp: o.modder ? modderig(SCHOEN[o.schoen]) : SCHOEN[o.schoen],
   vest: o.vest && STOF[o.vest],
   tas: o.tas && STOF[o.tas],
@@ -443,8 +440,7 @@ const vrouw = (o) => ({
   rechts: 'hangt',
   ...o,
   haar: HAAR[o.kleur],
-  jurk: ((j) => (o.onderkleed ? metOnderkleed(j, STOF[o.onderkleed]) : j))(o.lappen || o.vuil ? versleten(STOF[o.jurk], { plooi: 0, lappen: o.lappen, vuil: o.vuil }) : STOF[o.jurk]),
-  mantel: o.mantel && STOF[o.mantel], // (vraag 150: de lagen)
+  jurk: o.lappen || o.vuil ? versleten(STOF[o.jurk], { plooi: 0, lappen: o.lappen, vuil: o.vuil }) : STOF[o.jurk],
   schort: o.schort ? geplooid(STOF[o.schort], 1.1) : false,
   doek: o.doek && STOF[o.doek],
   lijfje: o.lijfje && STOF[o.lijfje],
@@ -668,69 +664,7 @@ UITERLIJKEN.oudevrouw = [
   vrouw({ ...oud(10), kleur: 'peper', hoofd: 'doek', doek: 'oker', jurk: 'grijs', schort: 'wit', buidel: -8.8 }),
 ];
 
-// ---------------------------------------------------------------- lagen naar Marcels voorbeelden (vraag 150)
-
-// Marcel, 10 okt: "Ik wil wel vasthouden aan de pixel art. Maar ik heb meer afwisseling nodig", met voorbeelden in
-// ontwerp/voorbeelden/ (mensen-*.jpg). Hier de stukken die een silhouet in lagen geven; boer() en boerin() zetten ze op.
-
-// Een schoudermantel met een neergeslagen kap (de vrouw in de mantel): een schil om het bovenlijf, van de hals over de
-// schouders tot zOnder, met een golvende zoom en voorop open in een V die naar onderen wijder wordt; achter in de nek
-// ligt de kap als een slappe rol. lijfAfstand = de afstand tot het bovenlijf; nek = waar de kap ligt.
-function schoudermantel(delen, lijfAfstand, { zNek, zOnder, nek }, m, d) {
-  delen.push({
-    f: (x, y, z) => {
-      const schil = Math.abs(lijfAfstand(x, y, z) - 1.7) - 0.9;
-      const onder = zOnder + 0.7 * Math.sin(x * 0.55 + y * 0.35);
-      const boven = zNek - 0.3 * Math.max(0, y);
-      const opening = Math.max(1.5 - y, Math.abs(x) - (2 + (zNek - z) * 0.32));
-      return Math.max(schil, onder - z, z - boven, -opening) * 0.85;
-    },
-    g: [0, 0, (zNek + zOnder) / 2, Math.hypot(16, (zNek - zOnder) / 2) + 2],
-    m,
-    deel: d,
-  });
-  delen.push(ellips(nek, [5.4, 3.2, 3.1], m, d, 1.6));
-  delen.push(ellips(plus(nek, [0, -1.6, -3.4]), [3.6, 2.4, 3.4], m, d, 1.4)); // de punt van de kap, die over de rug valt
-}
-
-// Een kap om de hals (de man in voorbeeld 1): een dikke rol stof om de hals en over de schouders, voorop dicht, met een
-// slip die op de borst valt. c = het midden van de rol, [a, b] zijn stralen, r de dikte.
-function kapOmDeHals(delen, c, [a, b], r, m, d) {
-  delen.push({
-    f: (x, y, z) => {
-      const dx = x - c[0];
-      const dy = y - c[1];
-      const dz = z - c[2] + 0.28 * Math.max(0, dy);
-      const q = (Math.hypot(dx / a, dy / b) - 1) * Math.min(a, b);
-      return (Math.hypot(q, dz / 0.8) - r) * 0.8;
-    },
-    g: [c[0], c[1], c[2], Math.max(a, b) + r + 2],
-    m,
-    deel: d,
-  });
-  delen.push(kegel(plus(c, [0.6, b + 0.6, -2.2]), plus(c, [1.2, b + 1.6, -9]), 3, 1.1, m, d, 1));
-}
-
-// Laarzen (de man in voorbeeld 1): de broek onder de knie van leer, met een lichtere omslag erboven.
-const metLaarzen = (broek, leer = SCHOEN.leer) => ({
-  ...broek,
-  patroon: (x, y, z, nx, ny, nz, stap) => {
-    if (z < 12.4) return naarRamp(leer.ramp, stap, [broek.lo, broek.hi], [leer.lo, leer.hi]);
-    if (z < 14.6) return naarRamp(leer.ramp, stap, [broek.lo, broek.hi], [leer.lo + 0.9, leer.hi + 0.9]);
-    return broek.patroon ? broek.patroon(x, y, z, nx, ny, nz, stap) : 0;
-  },
-});
-
-// Een onderkleed (de vrouw in de mantel): onder de zoom van de jurk een band in een andere kleur.
-const metOnderkleed = (jurk, onder) => ({
-  ...jurk,
-  patroon: (x, y, z, nx, ny, nz, stap) => {
-    if (z < 5.2 + 0.6 * Math.sin(x * 0.9 + y * 0.7)) return naarRamp(onder.ramp, stap, [jurk.lo, jurk.hi], [onder.lo, onder.hi]);
-    return jurk.patroon ? jurk.patroon(x, y, z, nx, ny, nz, stap) : 0;
-  },
-});
-
-module.exports = { man, vrouw, schoudermantel, kapOmDeHals, metLaarzen, metOnderkleed, HAAR, STOF, SCHOEN, UITERLIJKEN, MANNEN, VROUWEN, kleren, uiterlijkIn, versleten, modderig, rafelZoom, vest, schoudertas, mes, rijglijf, kapselMan, krullen, krans, snor, sik, stoppels, wolmuts, kapselVrouw, vlechtje };
+module.exports = { HAAR, STOF, SCHOEN, UITERLIJKEN, MANNEN, VROUWEN, kleren, uiterlijkIn, versleten, modderig, rafelZoom, vest, schoudertas, mes, rijglijf, kapselMan, krullen, krans, snor, sik, stoppels, wolmuts, kapselVrouw, vlechtje };
 
 // ---------------------------------------------------------------- de proefplaat
 
@@ -866,42 +800,4 @@ if (require.main === module && process.argv[2] === 'kleren') {
   fs.writeFileSync(path.join(UIT, 'kleren-4x.png'), K.png(vel, 4, '#5e6a44'));
   fs.writeFileSync(path.join(UIT, 'kleren-1x.png'), K.png(vel, 1, '#5e6a44'));
   console.log(path.join(UIT, 'kleren-4x.png'));
-}
-
-// De proef naar Marcels voorbeelden (node gereedschap/pixelart/uiterlijk.cjs lagen; vraag 150): vier figuren zoals nu en
-// nieuw, met een nek en het gezicht wat naar de camera (nek, opkijk), en kleren in lagen: de man van voorbeeld 1 (een kap
-// om de hals, een schuine tas, laarzen), een man in een schoudermantel, de vrouw in de mantel van voorbeeld 4 (een witte
-// kap, een bruine mantel met kap, een onderkleed, een buidel) en een vrouw met een onderkleed; ZO, ZW, NO en lopend.
-const VOORBEELD = {
-  hoofd: { nek: 3, opkijk: 15 },
-  huif: { hoofd: 'doek', doek: 'wit', doekLos: 0.45, doekGezicht: 1.22 },
-};
-const VOORBEELDEN = [
-  ['boer', 9, { kapHals: 'bruin', tas: 'bruin', laars: true, schoen: 'leer', buidel: -8.6, vest: undefined, kraag: 'geen' }],
-  ['boer', 3, { mantel: 'bruin', laars: true, schoen: 'leer', kraag: 'geen', lappen: undefined, vuil: undefined, modder: undefined, mouw: undefined }],
-  ['boerin', 2, { ...VOORBEELD.huif, jurk: 'groen', onderkleed: 'bruin', mantel: 'bruin', schort: undefined, omslagdoek: undefined, buidel: -8.8, mes: 8 }],
-  ['boerin', 8, { onderkleed: 'rood', schort: undefined, mouw: undefined, buidel: 8.8 }],
-];
-if (require.main === module && process.argv[2] === 'lagen') {
-  const fs = require('fs');
-  const path = require('path');
-  const K = require('./kern.cjs');
-  const BOUW = { boer: require('./dorpelingen.cjs').boer, boerin: require('./dorpelingen2.cjs').boerin };
-  const UIT = path.join(__dirname, 'uit', 'uiterlijk');
-  fs.mkdirSync(UIT, { recursive: true });
-  const KOL = 56;
-  const HOOG = 100;
-  const kol = [['staan', 0, 'ZO'], ['staan', 0, 'ZW'], ['staan', 0, 'NO'], ['lopen', 0.25, 'ZO']];
-  const vel = new K.Plaat(KOL * 8 + 16, HOOG * VOORBEELDEN.length);
-  VOORBEELDEN.forEach(([lijf, nr, nieuw], r) => {
-    const ruw = (lijf === 'boer' ? MANNEN : VROUWEN)[nr];
-    const opties = [UITERLIJKEN[lijf][nr], (lijf === 'boer' ? man : vrouw)({ ...ruw, ...VOORBEELD.hoofd, ...nieuw })];
-    opties.forEach((o, v) => kol.forEach(([houding, fase, kant], i) => {
-      const p = K.losRenderen(BOUW[lijf]({ houding, fase }, o), { b: 112, h: 124, anker: [56, 110], richting: kant }).uitsnede(28, 20, KOL, HOOG);
-      vel.plak(p, 4 + v * (KOL * 4 + 8) + i * KOL, r * HOOG);
-    }));
-  });
-  fs.writeFileSync(path.join(UIT, 'lagen-3x.png'), K.png(vel, 3, '#5e6a44'));
-  fs.writeFileSync(path.join(UIT, 'lagen-1x.png'), K.png(vel, 1, '#5e6a44'));
-  console.log(path.join(UIT, 'lagen-3x.png'));
 }

@@ -71,7 +71,7 @@ function rokVan(z0, z1, rx, ry, cy, m, deel, plooi = 1) {
 // onder de kin door, het gezicht vrij in een ovaal. soort 'nek': over kruin en achterhoofd, het
 // voorhoofd, het gezicht en de oren vrij; de knoop zit dan in de nek (die maakt de figuur zelf).
 function hoofddoek(H, [rx, ry, rz], soort, m, deel, o = {}) {
-  const { los = 1.1, dikte = 0.75, voorhoofd = 4, gezicht = 1 } = o; // gezicht: hoe ruim de opening om het gezicht (vraag 150)
+  const { los = 1.1, dikte = 0.75, voorhoofd = 4 } = o;
   const a = rx + los;
   const b = ry + los;
   const c = rz + los;
@@ -82,7 +82,7 @@ function hoofddoek(H, [rx, ry, rz], soort, m, deel, o = {}) {
       const dz = z - H[2];
       const doek = Math.abs(sdf.ellipsoide(dx, dy, dz, a, b, c)) - dikte;
       if (soort === 'kin') {
-        const ovaal = Math.max(Math.hypot(dx / (rx * 0.74 * gezicht), (dz + 0.3) / (rz * 0.8 * gezicht)) - 1, 1 - dy);
+        const ovaal = Math.max(Math.hypot(dx / (rx * 0.74), (dz + 0.3) / (rz * 0.8)) - 1, 1 - dy);
         return Math.max(doek, -ovaal * 2.5);
       }
       const zOnder = voorhoofd - (ry - dy) * 0.62;
@@ -832,7 +832,7 @@ const BOERIN_FPS = 10;
 function boerin(stand = null, o = {}) {
   const M = { huid: 0, jurk: 1, schort: 2, doek: 3, haar: 4, oog: 5, riet: 6, ei: 7, mond: 8, bruinEi: 9 };
   const D = { rok: 1, lijf: 2, schort: 3, armL: 4, armR: 5, handL: 6, handR: 7, hoofd: 8, doek: 9, mand: 10, ei: 11 };
-  const H = [0, 3.4, 66.5 + (o.nek || 0)]; // (vraag 150: o.nek, een nek van zoveel)
+  const H = [0, 3.4, 66.5];
   const maat = [7, 6.8, 7.3];
   const mandC = [0, 13.4, 33.8];
   const mat = [];
@@ -863,7 +863,6 @@ function boerin(stand = null, o = {}) {
     schouders: [[-10.6, 0.4, 53.6], [10.6, 0.4, 53.6]],
     krom: o.krom,
     nekKrom: o.krom ? o.krom * 0.75 : 0,
-    opkijk: o.opkijk,
   });
 
   // (de drinker, buik: het lijf en de bovenkant van de rok om een dikke buik)
@@ -901,7 +900,7 @@ function boerin(stand = null, o = {}) {
   // krom: het bovenlijf buigt voorover (Bromp), het schort blijft bij de rok staan (Blijf)
   if (o.krom) bot(Bn.Bromp);
   // de afstand tot het bovenlijf, voor een omslagdoek
-  const bovenlijf = o.omslagdoek || o.mantel ? bouwSdf([romp(lijf, lijf.z0, lijf.z1, M.jurk, D.lijf, 2), ellips(...boezem, M.jurk, D.lijf, 2.5), ellips(...schouders, M.jurk, D.lijf, 2.5)]) : null;
+  const bovenlijf = o.omslagdoek ? bouwSdf([romp(lijf, lijf.z0, lijf.z1, M.jurk, D.lijf, 2), ellips(...boezem, M.jurk, D.lijf, 2.5), ellips(...schouders, M.jurk, D.lijf, 2.5)]) : null;
   if (o.bef) {
     // een wit schort dat bijna tot de zoom komt, met een borststuk over de boezem
     const boezem = (z) => 4 + 5.6 * Math.sqrt(Math.max(0, 1 - ((z - 48.5) / 4.4) ** 2));
@@ -922,8 +921,6 @@ function boerin(stand = null, o = {}) {
   if (o.luit) KAR.luit(delen, ctx, { voet: [5.2, -7, 38.5], top: [-11, -10, 73], vorm: lijf, z0: 35, z1: 56, schouder: [7.6, 0, 56.6], heup: [-9.8, 0, 37.4] });
   // de roddelaar: een bonte omslagdoek, voorop net naast het midden geknoopt
   if (o.omslagdoek) KAR.omslagdoek(delen, ctx, bovenlijf, { zNek: 59.6, zZij: 48.5, zPunt: 39.5, knoop: [0.8, 11.4, 47.6], stof: o.omslagdoek.ramp ? o.omslagdoek : null });
-  // (vraag 150: een schoudermantel met een neergeslagen kap; uiterlijk.cjs)
-  if (o.mantel) UI.schoudermantel(delen, bovenlijf, { zNek: 59.2, zOnder: 41.5, nek: [0, -5, 58.8] }, KAR.materiaal(ctx, 'mantel', o.mantel), KAR.deel(ctx, 'mantel'));
   // de nieuwkomer: de bundel op de rug, de banden over de schouders naar een knoop op de borst
   if (o.bundel) {
     KAR.bundel(delen, ctx, {
@@ -999,7 +996,6 @@ function boerin(stand = null, o = {}) {
   }
 
   // --- hoofd: rond gezicht in een witte doek, een pluk haar voorop, de knoop onder de kin (hoofdVanDeBoerin, hieronder)
-  if (o.nek) delen.push(kegel([0, 1, 54], plus(H, [0, -0.4, -5.4]), 3, 2.6, M.huid, D.hoofd, 1)); // (vraag 150: de nek)
   hoofdVanDeBoerin(delen, ctx, H, maat, o);
   bot(Bn.Bnek);
   // (vraag 149: bontKleur, een andere kleur bont, zoals het donkere marterbont van een deftige vrouw)
@@ -1027,7 +1023,7 @@ function hoofdVanDeBoerin(delen, ctx, H, maat, o = {}) {
   delen.push(haarKap(H, maat, M.haar, D.hoofd, [4.6, 4.2]));
   const hoofd = o.hoofd || 'doek';
   if (hoofd === 'doek' || hoofd === 'kap') {
-    delen.push(hoofddoek(H, maat, 'kin', M.doek, D.doek, { los: o.doekLos ?? 1.3, gezicht: o.doekGezicht ?? 1 })); // (vraag 150: strakker, met meer gezicht)
+    delen.push(hoofddoek(H, maat, 'kin', M.doek, D.doek, { los: 1.3 }));
     const knoop = plus(H, [0, 5.2, -8.2]);
     delen.push(bol(knoop, 1.5, M.doek, D.doek, 0.6));
     // de punt van de doek hangt achter in de nek

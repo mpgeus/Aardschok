@@ -840,6 +840,11 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   dorpeling staat. Waarschijnlijk de doorkijk (`js/doorkijk.js`) voor de wolven en de herten van vraag 116, die daar
   diep in het bos rusten. Nog niet nagelopen.
 
+- **Twee uiterlijken die niet goed lezen** (10 okt, bij vraag 150; Marcel omcirkelde ze: "Deze zien er niet uit"):
+  lichtblond haar (`HAAR.lichtblond` in `uiterlijk.cjs`, de ramp perkament) is bijna wit en leest als een kaal hoofd, en
+  de vlecht van het kapsel 'kroon' (`kapselVrouw`) zakt voorop en ligt over de ogen (de `- 1.6 * Math.max(0, sin)` moet
+  een `+` zijn). Een herstel stond even in de code en ging met vraag 150 weer weg; het vraagt dat de vellen met dat haar
+  en die kroon opnieuw gerenderd worden (ook in hun werk en in andere kleren).
 ## Voorstellen van Claude die nog niet gekozen zijn
 
 - **Verweren per stand** (10 okt, bij het voorbeeldhuis, vraag 144): een hut van keuters verweerder dan het stenen huis

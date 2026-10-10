@@ -23,8 +23,6 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
 (Marcel: "Ik denk dat we die economie terug moeten draaien", en "Alles van vraag 141").
 
 **Wacht op Marcel:**
-- De mensen mooier (vraag 150; Marcel, 10 okt: "zien er niet geweldig uit", en "Ik wil wel vasthouden aan de pixel art.
-  Maar ik heb meer afwisseling nodig"): Marcel zoekt nog voorbeelden; het plan staat bij het punt, en bij "Daarna" als 0d.
 - Kleren naar stand (vraag 149; Marcel, 10 okt: "Hogere niveau sociale mensen moeten duurdere kleren krijgen"): het
   voorstel staat bij het punt; Marcel koos a tot e (10 okt), drie trappen, en bij de plaat "1 armer, 2 alle, 3 ja". In het
   spel op de sessiebranch; de kinderen en de ouden komen in een tweede ronde. **Bezig in sessie `ccr-5cd874f7-wpwkhq`** (10
@@ -69,8 +67,6 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
    huizen; de sneeuw op de bomen en de huizen (144, 4b, Marcel: "ja") in dezelfde ronde. **Bezig in sessie `main`
    (desktop, groen)** (10 okt): stap 1 in het spel (de sneeuw op de spar dunner, de vormen en de nieuwe soorten op de
    kaart, vast per tegel), dan stap 2 (de seizoenen).
-0d. De mensen mooier en afwisselender (vraag 150; Marcel, 10 okt: "voor de proefversie"): ze laten tekenen in de stijl
-   van Marcels soldaat (met de hand, een tekenaar of een AI-gereedschap; wacht op Marcel), dan inlezen en alles opnieuw.
 1. Een proefversie voor Marcels 4K-scherm en een eerste tester (33d; `npm run proefversie`, ook `-- --windows`), met de
    graanzak erin. De laatste is van 3 okt (`36c713e`), zonder de verzoeken, de twee bazen, het ontginnen, de markt, de
    wolven, het eiland, WebGL en de graanzak.
@@ -7634,7 +7630,13 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     de hand, in 2D (vlakken, licht van linksboven, een zwarte rand): scherp, maar een blok naast de voorbeelden; van acht
     kanten en in elke stap even goed haalt Claude dat niveau niet betrouwbaar. **Voorstel:** laten tekenen (een
     pixeltekenaar, of Marcel met een AI-gereedschap voor pixelfiguren), met deze voorbeelden als stijl; Claude schrijft de
-    opdracht en maakt het inlezen. **Wacht op Marcel.**
+    opdracht en maakt het inlezen.
+    **Marcel (10 okt): "ok we houden het even bij de kleding voor onze poppetjes. de rest kan weg".** Dus geparkeerd: de
+    code van proefplaat 1 is teruggedraaid (de nek en het opkijken, de lagen, het licht in `kern.cjs`, en ook het blonde
+    haar en de kroon, zodat de code weer past bij de vellen in `beelden/`), en het nieuwe lijf en de proeven met de hand
+    kwamen nooit in git. Wat blijft: wat we leerden (hierboven en in `beeld.md`, "De mensen naar Marcels voorbeelden") en
+    de voorbeelden in `ontwerp/voorbeelden/` (`mensen-*`), voor als we de mensen laten tekenen. Lichtblond dat als een
+    kaal hoofd leest en de vlecht van de kroon over de ogen staan in `opmerkingen.md`.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
