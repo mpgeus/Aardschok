@@ -552,13 +552,15 @@ gelden.
   het moet elk beeld kunnen. De overgang loopt in een paar tienden van een seconde op en af,
   anders klappert het.
   **Zo werkt het nu** (26 sep, zevende sessie; `js/doorkijk.js`): wie je hoort te zien, zie je door
-  een boom of een huis heen. Dat zijn de schout, wie je spreekt, wie vecht of je net ontdekte, en de
-  bezoekers (de heer, de marskramer, de inner en de soldaten); door een huis heen ook iedereen op het
-  plein (`T.zichtbaarDoor`). Hoe je erdoorheen kijkt, is een keuze in de spelregels ("Door een huis
+  een boom of een huis heen. Dat zijn de schout, wie je spreekt, wie vecht of je net ontdekte, wie je zoekt met een
+  voorval, en de bezoekers (de heer, de marskramer, de inner en de soldaten); door een huis heen ook iedereen op het
+  plein (`T.zichtbaarDoor`), behalve op een feest (sinds 10 okt; Marcel: "Ja akkoord"): dan staat het hele dorp er, en
+  kreeg het dak van een huis ervoor twintig gaten naast elkaar (`pleinOpEenFeest`). Hoe je erdoorheen kijkt, is een keuze in de spelregels ("Door een huis
   heen kijken"): het **kijkvenster** (de standaard), een zacht rond venster rond wie erachter staat,
   waarin de grond achter het huis en wie daar staat opnieuw getekend worden (`T.tekenKijkgat`); of het
   **raster**, waarin het hele huis of de hele boom om de andere pixel opengaat (`T.tekenGerasterd`).
-  Of het plein meetelt, is de tweede keuze ("Wie je door een huis heen ziet"). Een boom van de bosrand
+  Of het plein meetelt, is de tweede keuze ("Wie je door een huis heen ziet": ook het plein, behalve op een feest, de
+  standaard; het plein, ook op een feest; of alleen wie ertoe doet). Een boom van de bosrand
   valt helemaal weg. Een gebouw vervaagt nooit als geheel, want een half doorzichtig rieten dak werd
   een geelgroen spook (Marcel, 23 sep). Tot 26 sep kwam in het venster alleen de schout zelf terug, met
   het dak eromheen, en dan leek hij óp het dak te staan (Marcel: "In al je plaatjes staan er mensen op

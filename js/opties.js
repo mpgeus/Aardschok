@@ -364,10 +364,13 @@
     },
     {
       id: 'doorkijkPlein', naam: 'Wie je door een huis heen ziet', standaard: 'ookHetPlein',
-      uitleg: 'Altijd de schout, wie je spreekt, wie vecht, en de heer, de marskramer, de inner en de soldaten.',
+      uitleg: 'Altijd de schout, wie je spreekt, wie je zoekt, wie vecht, en de heer, de marskramer, de inner en de soldaten.',
       keuzes: [
-        { id: 'ookHetPlein', naam: 'Ook het plein', zet: { 'DOORKIJK_INSTELLINGEN.plein': true },
-          uitleg: 'Ook iedereen die op het plein staat, zodat je het plein altijd ziet. Door een boom heen niet, anders zitten de eiken vol gaten zolang de kinderen spelen.' },
+        // De standaard houdt zijn naam (Marcel, 10 okt: op een feest niet), zodat een browser die hem onthield, meegaat.
+        { id: 'ookHetPlein', naam: 'Ook het plein', zet: { 'DOORKIJK_INSTELLINGEN.plein': true, 'DOORKIJK_INSTELLINGEN.pleinOpEenFeest': false },
+          uitleg: 'Ook iedereen die op het plein staat, zodat je het plein ziet, behalve op een feest: dan staat het hele dorp er, en zat een dak ervoor vol gaten. Door een boom heen niet, anders zitten de eiken vol gaten zolang de kinderen spelen.' },
+        { id: 'ookOpEenFeest', naam: 'Het plein, ook op een feest', zet: { 'DOORKIJK_INSTELLINGEN.plein': true, 'DOORKIJK_INSTELLINGEN.pleinOpEenFeest': true },
+          uitleg: 'Iedereen op het plein, altijd, zoals vóór 10 okt 2026: op een feest krijgt een dak ervoor een gat voor elk van hen.' },
         { id: 'wieErToeDoet', naam: 'Alleen wie ertoe doet', zet: { 'DOORKIJK_INSTELLINGEN.plein': false },
           uitleg: 'Wie op het plein speelt, verdwijnt achter een huis, net als overal in het dorp.' },
       ],
