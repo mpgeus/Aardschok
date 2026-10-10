@@ -198,8 +198,9 @@ for (const [naam, hexen] of [
   ['zandsteen', ['#262018', '#3e3426', '#5a4c36', '#786848', '#94845c', '#ae9e72', '#c6b88c', '#dcd0a8']],
   // oud hout (het verweren, vraag 144): het warme eiken half naar het grijs van schors, even veel stappen als 'hout'
   ['houtOud', ['#1b1213', '#2f1e1c', '#463024', '#5f442e', '#7a5a3c', '#96744e', '#b08e62', '#c6a87c']],
-  // ruig riet (vraag 144; Marcel, 10 okt: "rossiger"): goud met een rode gloed, even veel stappen als 'stro'
-  ['rietRos', ['#2a180a', '#4e2c12', '#7c481a', '#a86c28', '#cc8e3a', '#e6b052', '#f6d282']],
+  // ruig riet (vraag 144; Marcel, 10 okt: "rossiger", en daarna "niet te geel. Het moet wel oke zijn"): warm stro, tussen
+  // het gele 'stro' en het grijsbruine 'riet' in, even veel stappen
+  ['rietRos', ['#281a0e', '#463018', '#6a4a26', '#8e6634', '#ae8446', '#c8a05c', '#dcbc7e']],
   // warm pleister (het contrast, vraag 144, E): room in plaats van gebroken wit, even veel stappen als 'pleister'
   ['pleisterWarm', ['#4e4034', '#76644e', '#9e8a6a', '#c4b08a', '#e0d0aa', '#f2e6c8', '#fcf6e4']],
 ]) {
@@ -1042,9 +1043,7 @@ function dakVleugel(H, V) {
   // lagen riet: een zaagtand van de voet naar de nok, die niet recht loopt
   const lgF1 = R(19) * 6.3;
   const lgF2 = R(20) * 6.3;
-  // ruig riet: rechte lagen, met nog maar een zweem van een golf
-  const lgA = H.kn.ruig ? 0.35 : 1;
-  V.laagGolf = (a) => sch * lgA * (1.6 * Math.sin(a * 0.043 + lgF1) + 0.9 * Math.sin(a * 0.12 + lgF2));
+  V.laagGolf = (a) => sch * (1.6 * Math.sin(a * 0.043 + lgF1) + 0.9 * Math.sin(a * 0.12 + lgF2));
   // de banen pannen lopen niet recht naar de nok, ze verlopen een pixel of twee
   const pnF = R(40) * 6.3;
   const pnS = RS(41) * 0.012;
@@ -1868,7 +1867,7 @@ function dakVeld(H) {
       const dx = x - V.cx;
       const dy = y - V.cy;
       // ruig: elke rij stengels steekt een eind buiten de gevel uit
-      const spriet = ruig ? (hash(Math.floor(P.hE / 2.3), G.e > 0 ? 1 : 2, H.zaad + 53) % 7) * 0.9 : 0;
+      const spriet = ruig ? (hash(Math.floor(P.hE / 2), G.e > 0 ? 1 : 2, H.zaad + 53) % 9) * 1.3 : 0;
       const bq = G.e * (dx * V.Ax + dy * V.Ay) - (V.XR - rr) - spriet;
       const a = d + rr;
       if (bq <= Math.min(a, 0)) continue; // de snede verandert hier niets
@@ -2128,6 +2127,14 @@ function ruigRiet(H, P, V) {
 function nokPatroon(H, C) {
   const V = C.deel.V;
   const a = (C.x - V.cx) * V.Ax + (C.y - V.cy) * V.Ay;
+  if (H.kn.ruig) {
+    // ruig: dunne stengels dwars over de worst, een binding om de zoveel, en de punten onderaan in het licht
+    const band = (((a + 400 + H.zaad * 7) % 58) + 58) % 58;
+    if (band < 2.2) return -1.6;
+    const kol = Math.floor(a / 1.25);
+    const h = hash(kol, Math.floor(C.z / 9), H.zaad + 3 + V.i * 31) % 10;
+    return (h < 2 ? -1 : h > 7 ? 0.9 : 0) + (C.nz < -0.1 ? 0.8 : 0);
+  }
   const band = (((a + 400 + H.zaad * 7) % 46) + 46) % 46;
   if (band < 2) return -1.4;
   const kol = Math.floor(a / 1.414);
@@ -4624,9 +4631,14 @@ function huis(zaad = 1, o = {}) {
             rr *= 0.7 + 0.3 * g;
             zc -= (1 - g) * (H.dun ? 6 : 16);
           }
+          // ruig riet: langs de onderkant van de worst hangen plukken stengels over het dak, elke bos even lang als hij wil
+          if (H.kn.ruig && !H.dun && z < zc + rr * 0.3) {
+            const spriet = (hash(Math.floor(a / 2.2), Math.abs(q) > 0 ? Math.sign(q) + 1 : 1, H.zaad + 57) % 8) * 0.9;
+            return (Math.hypot(a - ac, q, z - zc) - rr - spriet * klem((zc + rr * 0.3 - z) / rr, 0, 1)) * 0.6;
+          }
           return Math.hypot(a - ac, q, z - zc) - rr;
         },
-        grens: [mx, my, (a1 - a0) / 2 + H.worstR + 4, zMin - 12, V.zN + H.dik + H.worstR + 8],
+        grens: [mx, my, (a1 - a0) / 2 + H.worstR + 12, zMin - 12, V.zN + H.dik + H.worstR + 8],
         m: 'nok',
         deel: 3 + V.i * 100,
         V,

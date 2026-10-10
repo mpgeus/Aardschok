@@ -1063,6 +1063,15 @@ niets past, wijkt de zwakke grond voor strand (naast de zee) of gras. Golven die
   verweren is nu een maat** (`knoppen.verweer`, 0 tot 1, true is 1): een jong dak (0,3) houdt zijn kleur en heeft
   nauwelijks mos, vlekken of gaten; vanaf 0,5 wordt het riet grijsbruin en het hout grijs. Zo kan een dorp jonge en oude
   daken naast elkaar hebben (voorstel; het voorbeeldhuis is jong).
+  **Marcel (10 okt) daarop:** "Ja, maar niet te geel. Het moet wel oke zijn. Het gaat me ... niet om de kleur, maar meer
+  de vorm en textuur van het riet. Verweren over tijd vind ik logisch, dat maakt het echt"; "Ik kan mij voorstellen dat
+  het destijds niet perfect hoefde te zijn, maar meer praktisch. Naarmate een stad zich ontwikkelt, wordt dat beter door
+  technologie"; en "golven en ongelijkheid mogen er wel in blijven, maar ik wil graag het sprieterige zien". Dus:
+  `rietRos` is warm stro geworden, tussen het gele `stro` en het grijsbruine `riet`; de lagen golven weer; de nok is
+  ruig (stengels dwars over de worst, en plukken die aan zijn onderkant over het dak hangen) en de gevelrand rafelt
+  sterker. **Voor de ronde van alle tekeningen:** hoe ruig een dak is, hangt af van de trede (het gehucht ruig en
+  praktisch, een dorp netter), en hoe verweerd het is, van hoe lang het huis er staat (een maat, `knoppen.verweer`; welke
+  tekening een huis van een zekere leeftijd krijgt, is dan een vraag voor het spel).
 - **Meer variatie in het groen, de bomen en de versiering (9 okt 2026; werklijst, vraag 148).** Marcel: "Ik wil meer
   variatie in de vegetatie, ook bomen en versieringen van het dorp." Nu heeft elke soort één tekening en verandert het
   groen niet met het jaar. Het voorstel staat bij vraag 148: elke boom anders (vormen per soort, en de beuk, de linde,
