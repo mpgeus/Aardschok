@@ -32,7 +32,9 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   **Ook een wijnboerderij** (10 okt, de speeltest van de wijn, `speelbaar.md`): haar gezin is van de stand boeren en wil
   een kapel binnen 40 tegels, en een wijnboerderij is groot (10 bij 8), dus komt ze vaak ver weg. Op sluw 2 stond de
   vierde zo een jaar zonder kapel, en hield ze de winst tegen. Te kiezen: een wijnboerderij komt alleen waar haar gezin
-  een kapel haalt (zoals een erf, `T.plekVoor`), of de regel van 2d ook voor de kapel.
+  een kapel haalt (zoals een erf, `T.plekVoor`), of de regel van 2d ook voor de kapel. **Gekozen en gebouwd** (10 okt,
+  avond; Marcel: "Wijn haalt kapel"): elk gebouw met een gezin kijkt nu wat een erf nakijkt (`T.waaromGeenKringPlek`), en
+  sluw 2 wint weer. Nog open: een werkplaats of een kraam die de laatste plek neemt.
 
 - **De gunst na Sint-Maarten, en de gril in wintermaand** (8 okt, de sessie van de kaartenmaker; vraag 117, 2d): bij de
   bouwer van de speeltest staat de gunst van de heer na Sint-Maarten bijna elk jaar op 5, de laagste stand vóór 0 (eerst
