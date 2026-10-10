@@ -34,7 +34,8 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
   spel is nog niet veranderd. Marcels voorbeelden staan in `ontwerp/voorbeelden/` (twee van 10 okt; de acht van 9 okt
   stuurt hij nog). **Wacht op Marcel**, met als volgende stappen: hetzelfde huis als oud dak (verweer 1); het stenen huis
   onder pannen zoals zijn eerste voorbeeld; dan de ronde van alle tekeningen, waarin hoe ruig van de trede afhangt en hoe
-  verweerd van de leeftijd.
+  verweerd van de leeftijd. **Bezig in sessie `ccr-7ab52064-46a7de`** (10 okt): de volgende stap, eerst het plan met
+  Marcel.
 - Wie wijn wil (vraag 136; Marcel, 10 okt: "Inwoners willen wijn en bier. Afwisseling", "B1, 0,02 is goed", en "Laten
   we vooruitkijken doen"): in `main` (10 okt), met het vooruitkijken naar de pluk (`T.wijnNaDePluk`); in de speeltest
   wint er één van de zes, zoals zonder wijn (`speelbaar.md`). Open: een wijnboerderij ver weg zonder kapel hield een winst
