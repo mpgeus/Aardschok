@@ -36,9 +36,9 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
   het vakwerk op steen; Marcel, 10 okt: ronde pannen, en netter dan de rieten hut) staat op de plaat `huis-sdf-export.cjs
   voorbeeld steen`, in vier stappen achter knoppen die uit staan: G ronde veldstenen met lichte voegen, H ronde pannen, I
   een rondboogdeur met een boog van zandsteen, J klimop, en warmer (`beeld.md`; Marcel: "Goed zo"), in `main` (10 okt).
-  Nu: het mos op het oude riet (donkerder, in de schaduw onder de lagen; Marcel: "Na het stenen huis"); dan de ronde van
-  alle tekeningen, waarin hoe ruig van de trede afhangt en hoe verweerd van de leeftijd. **Bezig in sessie
-  `ccr-7ab52064-46a7de`** (10 okt): het mos op het oude riet.
+  Het mos op het oude riet groeit nu in de schaduw onder de lagen, in strepen langs de stengels (Marcel: "Meer mos"), in
+  `main` (10 okt). **Wacht op Marcel:** de ronde van alle tekeningen, waarin hoe ruig van de trede afhangt en hoe verweerd
+  van de leeftijd (en de acht voorbeelden van 9 okt, als hij ze nog stuurt).
 - **In `main` (10 okt, avond; Marcel koos ze), om te bekijken:**
   - Wijn haalt kapel (vraag 136): een gebouw met een gezin (de wijnboerderij) komt alleen waar het zijn kapel haalt, of
     waar er nog een kan komen, zoals een erf (`T.waaromGeenKringPlek`). In de speeltest winnen nu twee van de zes (was
