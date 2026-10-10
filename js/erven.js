@@ -149,31 +149,12 @@
   // het eiland van 73425 zo dicht tegen elkaar dat een huis in het midden twee jaar lang geen put kon krijgen, en het dorp
   // dus nooit won; op 62707 vond een huis zo zestien maanden geen plek voor een kapel. Waar er nog een kan komen, zegt
   // T.kringGrond (js/wensen.js); na dit erf kan hij er nog als hij niet op het erf komt, en zijn looppad het huis erop
-  // niet raakt. Geeft de reden, of null.
+  // niet raakt (T.waaromGeenKringPlek, dezelfde vraag als voor een wijnboerderij). Geeft de reden, of null.
   function zonderPlek(D, erf) {
-    for (const soort of Object.keys(T.WENSEN_INSTELLINGEN.kring)) {
-      const reden = zonderPlekVoor(D, erf, soort);
-      if (reden) return reden;
-    }
-    return null;
-  }
-  function zonderPlekVoor(D, erf, soort) {
-    const k = T.kringGrond(D, soort);
-    if (!k) return null;
-    const naam = T.GEBOUWEN[soort].naam;
-    const n = T.GEBOUWEN_INSTELLINGEN.looppad;
+    const wil = (wens) => T.wilStraks({ soort: 'hut', erf: true }, wens);
+    const wie = (wens) => (T.wilStraks({ soort: 'hut' }, wens) ? 'De hut' : 'Het huis') + ' op dit erf';
     const huis = T.huisPlekVan(erf) || erf;
-    const raakt = (a, c) => a.x < c.x + c.b && c.x < a.x + a.b && a.y < c.y + c.h && c.y < a.y + a.h;
-    const blijft = (q) => !raakt(q, erf) && !raakt({ x: q.x - n, y: q.y - n, b: q.b + 2 * n, h: q.h + 2 * n }, huis);
-    // ver weg komt een plek er niet bij: dat scheelt de wortel
-    const dichtBij = (q) => Math.abs(q.x - huis.x) <= k.straal + huis.b + q.b && Math.abs(q.y - huis.y) <= k.straal + huis.h + q.h;
-    const haalt = (q) => dichtBij(q) && T.inDeKring(huis, q, k.straal);
-    if (T.wilStraks({ soort: 'hut', erf: true }, k.wens) && !k.er.some(haalt) && !k.plekken.some((q) => haalt(q) && blijft(q))) {
-      const wie = T.wilStraks({ soort: 'hut' }, k.wens) ? 'De hut' : 'Het huis';
-      return `${wie} op dit erf kan straks geen ${naam} halen: er staat er geen binnen ${k.straal} tegels, en er is geen plek meer voor een.`;
-    }
-    for (const h of k.zonder) if (h.plekken.length && h.plekken.every((q) => !blijft(q))) return `Dan kan ${h.wie} straks geen ${naam} meer krijgen: dit erf neemt de laatste plek ervoor.`;
-    return null;
+    return T.waaromGeenKringPlek(D, { grond: erf, vast: huis, huis, wil, wie, dit: 'dit erf' });
   }
 
   // Ligt (x, y) op de plek van het huis van een erf (erf.plan)? Een gebouw blijft er met zijn looppad vandaan, ook als
