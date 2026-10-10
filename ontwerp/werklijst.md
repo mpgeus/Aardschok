@@ -27,8 +27,12 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
   beschreven bij vraag 145; dan maakt een nieuwe sessie het.
 - Vraag 145 laten zien: is het dorp nu minder "saai"?
 - Het voorbeeldhuis naar de voorbeelden (`beeld.md`; Marcel, 10 okt: "1 riet, 2 akkoord"): een vakwerkhuis van twee lagen
-  onder riet, op een proefplaat, in vier stappen met elk een knop in de huizenbouwer: A verweren, B diepte, C vorm, D het
-  stukje grond (alleen op de plaat). **Bezig in sessie `ccr-cdb09a13-k2mnps`** (10 okt): stap A.
+  onder riet, op een proefplaat (`huis-sdf-export.cjs voorbeeld`), in vier stappen: A verweren, B diepte (twee knoppen
+  in de huizenbouwer, nog uit), C vorm (een steiler dak, een afdakje, een balkon op schoren, twee schoorstenen) en D het
+  stukje grond (keien, een houtstapel, tonnen; alleen op de plaat). **Af in sessie `ccr-cdb09a13-k2mnps`** (10 okt), nog
+  niet in `main`. Wacht op Marcel: is het huis zo "fantastisch"? Dan hetzelfde huis onder pannen (met een echte
+  dakkapel) als controle, en daarna de ronde van alle tekeningen. Marcels voorbeelden zelf moeten nog in git
+  (`ontwerp/voorbeelden/`; Marcel: "zet ze in git"): ze waren deze sessie niet meer te vinden, dus hij stuurt ze opnieuw.
 - Een feest op het plein vol kijkgaten (`opmerkingen.md`, "Het beeld"): **Marcel (10 okt): "Ja akkoord"**, op een feest
   alleen wie ertoe doet. **Af in sessie `ccr-a1a4ef49-0815cc`** (10 okt), nog niet in `main`.
 - Wie wijn wil (vraag 136; Marcel, 10 okt: "Inwoners willen wijn en bier", en "B1, 0,02 is goed": de dorpelingen bier,

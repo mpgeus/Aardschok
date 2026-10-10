@@ -15,6 +15,12 @@
 //   bankje-x, bankje-y        een bank van planken op twee stompen
 //   regenton                  een ton met hoepels, vol water
 //
+// Het stukje grond om een huis (vraag 144, het voorbeeldhuis, D; Marcels voorbeelden: "keien met een rand, gras, tonnen,
+// een bankje, een houtstapel"; in het spel vraag 148, d):
+//   keien                     een stoep van ronde keien voor een deur, half in de aarde, met een rafelige rand
+//   houtstapel-x, -y          blokken brandhout tegen een muur (de muur achter de tegel), de kopse kanten naar voren
+//   tonnen                    twee dichte tonnen en een krat
+//
 // Twee soorten hek (Marcel, 22 sep 2026): het eerste hek (ronde 3) was een dicht staketsel van
 // planken, en las op ware grootte als een palissade om een fort. 'tenen' (gevlochten wilgentenen
 // tussen paaltjes) en 'lat' (een paar latten op palen) zijn allebei laag en open — ruim de knie
@@ -94,6 +100,38 @@ function stompPatroon(C) {
   return groef > 0.7 ? -0.9 : groef < -0.85 ? 0.5 : 0;
 }
 
+// een blok brandhout: de kopse kant licht en vers, met jaarringen en een barst; de zijkant schors
+function blokPatroon(C) {
+  const b = C.deel.blok;
+  if (!b) return 0;
+  const [ax, ay, cx, cy, cz] = b;
+  // hoe recht kijkt dit stuk naar de as van het blok (een kopse kant)?
+  if (Math.abs(C.nx * ax + C.ny * ay) > 0.6) {
+    const dx = C.x - cx;
+    const dy = C.y - cy;
+    const dz = C.z - cz;
+    const langs = dx * ax + dy * ay;
+    const rr = Math.hypot(dx - langs * ax, dy - langs * ay, dz);
+    const ring = Math.floor(rr / 1.3) % 2 ? -0.5 : 0;
+    const barst = Math.abs(Math.atan2(dz, dx * ay - dy * ax) - b[5]) < 0.12 ? -1.6 : 0;
+    return { ramp: 'hout', stap: C.stap + 1.2 + ring + barst + (rr > b[6] - 1.2 ? -0.9 : 0) };
+  }
+  const groef = Math.sin((C.x * ay - C.y * ax) * 0.9 + C.z * 1.1 + b[5] * 7);
+  return groef > 0.75 ? -0.9 : groef < -0.85 ? 0.5 : 0;
+}
+// een krat van latten: om de zoveel een kier, en de hoekstijlen donkerder
+function kratPatroon(C) {
+  const p = C.deel;
+  if (!p.lok) return 0;
+  const [u, w] = p.lok(C.x, C.y, C.z);
+  const hz = C.z - p.z0;
+  if (C.nz > 0.6) return Math.floor((C.x + C.y) / 4.2) % 2 ? -0.4 : 0.2;
+  // de hoekstijlen: op een zijkant waar de andere kant ook bijna op zijn rand is
+  if (Math.abs(u) > p.L / 2 - 2 && Math.abs(w) > p.hw - 2) return -0.6;
+  if (hz % 5.2 < 1) return -1.6;
+  return HS.balkPatroon(C, true);
+}
+
 function tuinMaterialen(W, H) {
   const sp = H.sp;
   const houtHi = (sp ? 6.6 : 5.8) - (H.hout === 'schors' ? 0.8 : 0);
@@ -112,6 +150,9 @@ function tuinMaterialen(W, H) {
   W.mat.prei = { ramp: 'den', lo: 2, hi: 6.8, schaduwKracht: 0.45, patroon: bladPatroon };
   W.mat.salie = { ramp: 'olijf', lo: 1.8, hi: 6.6, schaduwKracht: 0.45, patroon: bladPatroon };
   W.mat.wit = { ramp: 'perkament', lo: 2.4, hi: 6.4, schaduwKracht: 0.5 };
+  W.mat.blok = { ramp: 'schors', lo: 0.9, hi: 5.6, schaduwKracht: zacht, patroon: blokPatroon };
+  W.mat.krat = { ramp: H.hout, lo: 0.7, hi: houtHi, schaduwKracht: zacht, patroon: kratPatroon };
+  W.mat.kei = { ramp: 'veldsteen', lo: 1.2, hi: 7, schaduwKracht: zacht, patroon: (C) => (hash(C.px, C.py, 45) % 7 === 0 ? -0.7 : hash(C.px, C.py, 46) % 9 === 0 ? 0.5 : 0) };
   for (const kl of ['rood', 'goud', 'magie', 'baard', 'herfst', 'gewaad']) {
     W.mat['bloem_' + kl] = { ramp: kl, lo: 2.4, hi: 6.8, schaduwKracht: 0.55, patroon: (C) => (hash(C.px, C.py, 43) % 4 === 0 ? 0.8 : 0) };
   }
@@ -498,6 +539,77 @@ function regenton(W, H) {
   }
 }
 
+// ---------------------------------------------------------------- het stukje grond om een huis
+
+// Een stoep van keien voor een deur: aarde, plat, met een rafelige rand waar het gras begint, en daarin ronde keien,
+// elk een fractie anders gedraaid en hoog, het dichtst bij de deur (de -y-kant van de tegel, waar het huis staat).
+function keien(W, H) {
+  const g = W.groep('keien');
+  const rand = (x, y) => HALF - 4 + (ruis2(x * 0.16, y * 0.16, H.zaad + 21) - 0.5) * 10;
+  voeg(g, { f: (x, y, z) => Math.max(Math.abs(z + 0.3) - 0.9, Math.max(Math.abs(x), Math.abs(y)) - rand(x, y)) * 0.8, g: [0, 0, 0, HALF * 1.5], m: 'aarde', deel: 1 });
+  let deel = 2;
+  const stap = 6.4;
+  for (let i = -6; i <= 6; i++) {
+    for (let j = -6; j <= 6; j++) {
+      const k = (i + 7) * 31 + j;
+      const x = i * stap + (j % 2 ? stap / 2 : 0) + H.rs(1400 + k) * 1.4;
+      const y = j * stap * 0.92 + H.rs(1600 + k) * 1.2;
+      // naar de rand toe dunner: daar zijn ze weggezakt of weggeraakt
+      const marge = rand(x, y) - Math.max(Math.abs(x), Math.abs(y));
+      if (marge < 2.5 || (marge < 7 && H.r(1800 + k) < 0.45)) continue;
+      const h = [2.7 + 0.7 * H.r(2000 + k), 2.3 + 0.6 * H.r(2200 + k), 1.3 + 0.5 * H.r(2400 + k)];
+      voeg(g, { ...T.hulp.blokDeel([x, y, 0.2], h, H.r(2600 + k) * 90, H.sch * H.rs(2800 + k) * 6, H.r(3000 + k) * 360, 1.3), m: 'kei', deel: deel++ });
+    }
+  }
+}
+
+// Brandhout tegen een muur: blokken in rijen, de kopse kanten naar voren, elke rij een halve stap verschoven, en de
+// bovenste rij niet vol.
+function houtstapel(W, H, langs) {
+  const g = W.groep('houtstapel');
+  const P = (u, v, z) => (langs === 'x' ? [u, v, z] : [v, u, z]);
+  const as = langs === 'x' ? [0, 1] : [1, 0];
+  const v0 = -HALF + 3;
+  const lang = 15;
+  let deel = 1;
+  for (let rij = 0; rij < 4; rij++) {
+    const n = rij === 3 ? 3 : 5;
+    for (let i = 0; i < n; i++) {
+      const k = rij * 10 + i;
+      const r = 4 + 0.9 * H.r(3200 + k);
+      const u = -16 + i * 8 + (rij % 2 ? 4 : 0) + H.rs(3300 + k) * 0.8 + (rij === 3 ? 4 : 0);
+      const z = 4.3 + rij * 7.4 + H.rs(3400 + k) * 0.5;
+      const v = v0 + lang / 2 + H.rs(3500 + k) * 1.6;
+      const a = P(u, v - lang / 2, z);
+      const b = P(u, v + lang / 2, z);
+      voeg(g, { ...T.hulp.stok(a, b, r), m: 'blok', deel: deel++, blok: [as[0], as[1], ...P(u, v, z), H.r(3600 + k) * 3 - 1.5, r] });
+    }
+  }
+}
+
+// Twee tonnen, dicht, de een wat groter, en een krat ernaast.
+function tonnen(W, H) {
+  const g = W.groep('tonnen');
+  const ton = (cx, cy, hoog, r0, deel, zaad) => {
+    const bol = r0 * 0.12;
+    const straal = (z) => r0 + bol * Math.sin(Math.PI * klem(z / hoog, 0, 1));
+    voeg(g, { f: (x, y, z) => Math.max(Math.hypot(x - cx, y - cy) - straal(z), -z, z - hoog) * 0.95, g: [cx, cy, hoog / 2, Math.hypot(r0 + bol, hoog / 2) + 2], m: 'ton', deel, ton: [cx, cy, 14] });
+    [0.15, 0.85].forEach((t, i) => {
+      const z = hoog * t;
+      voeg(g, { f: (x, y, zz) => sdf.torus(x - cx, y - cy, zz - z, straal(z) + 0.2, 1), g: [cx, cy, z, r0 + bol + 3], m: 'ijzer', deel: deel + 1 + i });
+    });
+  };
+  ton(-8 + H.rs(3700) * 1.5, -9 + H.rs(3701), M * 0.72, 11.5, 1, 1);
+  ton(8 + H.rs(3702) * 1.5, -12 + H.rs(3703), M * 0.6, 10, 4, 2);
+  // de krat: een doos van latten, voor de tonnen, een tikje gedraaid
+  const kh = 9;
+  const d = H.rs(3704) * 12 * GRAAD;
+  const c = [4 + H.rs(3705) * 2, 9, kh];
+  const a = [c[0] - 9 * Math.cos(d), c[1] - 9 * Math.sin(d), kh];
+  const b = [c[0] + 9 * Math.cos(d), c[1] + 9 * Math.sin(d), kh];
+  voeg(g, { ...balk(a, b, 8, kh, [0, 0, 1], 0.6), m: 'krat', deel: 8, zaad: 7, z0: 0, hw: 8 });
+}
+
 // ---------------------------------------------------------------- de stukken
 
 // Elke richting bestaat één keer per soort hek (HEK_SOORTEN): hek-tenen-x, hek-lat-x, enz. Zo
@@ -531,6 +643,9 @@ const STUKKEN = [
   'bankje-y',
   'regenton',
 ];
+// Het stukje grond om een huis (het voorbeeldhuis, vraag 144, D): tuinstuk() kent ze, maar ze staan nog niet op het vel
+// van het spel (tegels/tuin.png, STUKKEN hierboven): dat doet vraag 148, d, met wat vast is en wat niet (keien niet).
+const GRONDSTUKKEN = ['keien', 'houtstapel-x', 'houtstapel-y', 'tonnen'];
 
 // Het hout van een tuin is meestal grijs verweerd; het zaad kiest, zoals bij de huizen.
 function knoppen(zaad) {
@@ -554,8 +669,11 @@ function tuinstuk(naam, zaad = 1) {
   else if (naam === 'bloemen-x' || naam === 'bloemen-y') bloemen(W, H, naam.slice(-1));
   else if (naam === 'bankje-x' || naam === 'bankje-y') bankje(W, H, naam.slice(-1));
   else if (naam === 'regenton') regenton(W, H);
-  else throw new Error(`onbekend tuinstuk: ${naam} (kies uit ${STUKKEN.join(', ')})`);
+  else if (naam === 'keien') keien(W, H);
+  else if (naam === 'houtstapel-x' || naam === 'houtstapel-y') houtstapel(W, H, naam.slice(-1));
+  else if (naam === 'tonnen') tonnen(W, H);
+  else throw new Error(`onbekend tuinstuk: ${naam} (kies uit ${[...STUKKEN, ...GRONDSTUKKEN].join(', ')})`);
   return W;
 }
 
-module.exports = { tuinstuk, STUKKEN, HEKKEN, HEK_SOORTEN, REGELS, HALF, HEK_HOOG };
+module.exports = { tuinstuk, STUKKEN, GRONDSTUKKEN, HEKKEN, HEK_SOORTEN, REGELS, HALF, HEK_HOOG };

@@ -1029,10 +1029,17 @@ niets past, wijkt de zwakke grond voor strand (naast de zee) of gras. Golven die
   planken op twee sporen met schoren boven de voordeur, `afdakVan`) en `uit.gevelschoorsteen: 'ook'` (twee
   schoorstenen). De aanbouw is eraf: die bezette de voorkant van het dak. Het balkon (Marcel: "Ik vind het balkon wel
   mooi") stond op palen van de grond af, wat op een steiger leek en de deur verstopte; nu kan het ook op schoren uit de
-  muur (`uit.balkon: 'schoren'`), en staat het boven de deur, dan is het zijn afdak. Op de plaat allebei, om te kiezen.
+  muur (`uit.balkon: 'schoren'`), en staat het boven de deur, dan is het zijn afdak. Marcel koos het balkon op schoren
+  ("3").
   Geprobeerd en weer weggelaten: een dakkapel in het riet (de bult is gemaakt voor anderhalve laag;
   bij twee lagen tilde hij de dakrand te ver op en werd zijn raam een spleet). Een dakkapel past beter op het huis
   onder pannen, waar de huizenbouwer er een echte voor heeft (`kapellenVan`).
+  **D, het stukje grond** (alleen op de plaat): nieuwe tuinstukken in `tuin-sdf.cjs`, elk op één tegel zoals de hekken
+  en de regenton, zodat vraag 148, d, ze in het spel kan neerzetten: `keien` (een stoep van keien in de aarde met een
+  rafelige rand; voor de deur twee tegels), `houtstapel-x`/`-y` (brandhout tegen een muur, de kopse kanten met
+  jaarringen naar voren) en `tonnen` (twee dichte tonnen en een krat van latten); met het bankje dat er al was. De plaat
+  zet ze om de voordeur (`stukjeGrond` in `huis-sdf-export.cjs`, met `HS.samen`). Ze staan in `GRONDSTUKKEN`, nog niet op
+  het vel van het spel (`STUKKEN`, `tegels/tuin.png`): dat is vraag 148, d.
 - **Meer variatie in het groen, de bomen en de versiering (9 okt 2026; werklijst, vraag 148).** Marcel: "Ik wil meer
   variatie in de vegetatie, ook bomen en versieringen van het dorp." Nu heeft elke soort één tekening en verandert het
   groen niet met het jaar. Het voorstel staat bij vraag 148: elke boom anders (vormen per soort, en de beuk, de linde,
