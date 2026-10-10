@@ -5,7 +5,7 @@
 const http = require('node:http');
 const fs = require('node:fs');
 const path = require('node:path');
-const { execFile } = require('node:child_process');
+const { execFile, spawn } = require('node:child_process');
 // De naam van het spel staat op één plek (js/naam.js); de server leest hem daar, net als de toetsen.
 require('./js/naam.js');
 const NAAM = globalThis.Spel.NAAM;
@@ -205,6 +205,42 @@ function instellingenModel(res) {
     stuurJson(res, 500, { fout: e.message });
   }
 }
+// Eén waarde in zijn bestand zetten: { blok, pad, waarde, was }. Geeft { code, antwoord }: 200 met { ok, bestand, waarde },
+// of een fout die zegt waarom niet. Zolang er een speeltest loopt, niet: die speelt elk spel met wat er bij zijn begin stond.
+function zetWaarde(v) {
+  if (speeltest && speeltest.loopt) return { code: 409, antwoord: { fout: 'Er loopt een speeltest; veranderen kan weer als hij klaar is (of stop hem)' } };
+  const bronnen = leesSpelbestanden();
+  const bestand = Object.keys(bronnen).find((b) => INSTELLINGEN.blokkenIn(bronnen[b]).includes(v.blok));
+  if (!bestand || INSTELLINGEN.VERBORGEN.has(v.blok)) return { code: 404, antwoord: { fout: `T.${v.blok} staat in geen bestand in js/` } };
+  const tekst = bronnen[bestand];
+  const k = INSTELLINGEN.knoopOp(INSTELLINGEN.leesBlok(tekst, v.blok).waarde, v.pad);
+  // Stond er intussen iets anders (een andere bladzijde, of een sessie die het bestand veranderde)? Dan niet.
+  if (!k || ('was' in v && k.waarde !== v.was)) {
+    return { code: 409, antwoord: { fout: `${v.blok}.${v.pad.join('.')} is intussen veranderd; ververs de bladzijde`, nu: k && k.waarde } };
+  }
+  // Een spelregel krijgt alleen een standaard die een van zijn keuzes is.
+  if (v.blok === 'OPTIES') {
+    const regel = INSTELLINGEN.model({ [bestand]: tekst }).spelregels.find((r) => r.pad[0] === v.pad[0]);
+    if (!regel || v.pad[1] !== 'standaard' || !regel.keuzes.some((kz) => kz.id === v.waarde)) {
+      return { code: 400, antwoord: { fout: 'Bij een spelregel verander je alleen de standaard, en dan naar een van zijn keuzes' } };
+    }
+  }
+  let nieuw;
+  try {
+    nieuw = INSTELLINGEN.zet(tekst, v.blok, v.pad, v.waarde);
+  } catch (e) {
+    return { code: 400, antwoord: { fout: e.message } };
+  }
+  try {
+    const doel = path.join(MAP, bestand);
+    fs.writeFileSync(doel + '.bak', tekst, 'utf8');
+    fs.writeFileSync(doel, nieuw, 'utf8');
+  } catch (e) {
+    return { code: 500, antwoord: { fout: 'Schrijven mislukt: ' + e.message } };
+  }
+  const nu = INSTELLINGEN.knoopOp(INSTELLINGEN.leesBlok(nieuw, v.blok).waarde, v.pad);
+  return { code: 200, antwoord: { ok: true, bestand, waarde: nu.waarde } };
+}
 function zetInstelling(req, res) {
   leesLijf(req, res, (body) => {
     let v;
@@ -215,44 +251,135 @@ function zetInstelling(req, res) {
       stuurJson(res, 400, { fout: 'Onleesbaar: ' + e.message });
       return;
     }
-    const bronnen = leesSpelbestanden();
-    const bestand = Object.keys(bronnen).find((b) => INSTELLINGEN.blokkenIn(bronnen[b]).includes(v.blok));
-    if (!bestand || INSTELLINGEN.VERBORGEN.has(v.blok)) {
-      stuurJson(res, 404, { fout: `T.${v.blok} staat in geen bestand in js/` });
-      return;
-    }
-    const tekst = bronnen[bestand];
-    const k = INSTELLINGEN.knoopOp(INSTELLINGEN.leesBlok(tekst, v.blok).waarde, v.pad);
-    // Stond er intussen iets anders (een andere bladzijde, of een sessie die het bestand veranderde)? Dan niet.
-    if (!k || ('was' in v && k.waarde !== v.was)) {
-      stuurJson(res, 409, { fout: `${v.blok}.${v.pad.join('.')} is intussen veranderd; ververs de bladzijde`, nu: k && k.waarde });
-      return;
-    }
-    // Een spelregel krijgt alleen een standaard die een van zijn keuzes is.
-    if (v.blok === 'OPTIES') {
-      const regel = INSTELLINGEN.model({ [bestand]: tekst }).spelregels.find((r) => r.pad[0] === v.pad[0]);
-      if (!regel || v.pad[1] !== 'standaard' || !regel.keuzes.some((kz) => kz.id === v.waarde)) {
-        stuurJson(res, 400, { fout: 'Bij een spelregel verander je alleen de standaard, en dan naar een van zijn keuzes' });
-        return;
-      }
-    }
-    let nieuw;
+    const { code, antwoord } = zetWaarde(v);
+    stuurJson(res, code, antwoord);
+  });
+}
+
+// De speeltest vanaf de bladzijde met getallen (vraag 142, stap 3; Marcel, 10 okt: een set getallen probeer je in de code,
+// en de speeltest zet hem naast de vorige). Er loopt er hooguit één: `npm run speeltest` met een naam en de vorige als
+// --tegen (gereedschap/speeltest/speeltest.cjs, de vergelijking in vergelijk.cjs). Wat de bladzijde meegeeft, wordt hier
+// nagekeken en tot opdrachten gemaakt; niets uit het verzoek komt ongezien op de opdrachtregel.
+const VERGELIJK = require('./gereedschap/speeltest/vergelijk.cjs');
+const SPEELTEST_SPELERS = ['braaf', 'lui30', 'lui60', 'slim', 'bouwer', 'sluw'];
+const SPEELTEST_LANDEN = { eiland: ['--eiland'], maker: ['--maker'], ontworpen: [] };
+let speeltest = null; // { naam, tegen, totaal, begin, loopt, regels, code, kind }
+
+function speeltestStand(res) {
+  const s = speeltest;
+  const sets = VERGELIJK.speeltestsIn();
+  // De laatste vergelijking: van wat nu loopt of net klaar is, anders van de nieuwste speeltest die er een heeft.
+  const met = (s && s.naam) || (sets.find((x) => x.vergelijking) || {}).naam;
+  let vergelijking = null;
+  if (met) {
     try {
-      nieuw = INSTELLINGEN.zet(tekst, v.blok, v.pad, v.waarde);
+      vergelijking = JSON.parse(fs.readFileSync(path.join(VERGELIJK.UIT, met, 'vergelijking.json'), 'utf8'));
+    } catch {
+      vergelijking = null;
+    }
+  }
+  stuurJson(res, 200, {
+    nu: s ? { naam: s.naam, tegen: s.tegen, totaal: s.totaal, begin: s.begin, loopt: s.loopt, code: s.code,
+      klaar: s.regels.filter((r) => /^\w+, zaad \d+: /.test(r)).length, regels: s.regels.slice(-40) } : null,
+    sets, vergelijking,
+  });
+}
+
+function startSpeeltest(req, res) {
+  leesLijf(req, res, (body) => {
+    if (speeltest && speeltest.loopt) {
+      stuurJson(res, 409, { fout: 'Er loopt al een speeltest' });
+      return;
+    }
+    let v;
+    try {
+      v = JSON.parse(body);
+      if (!Array.isArray(v.spelers) || !v.spelers.length || !v.spelers.every((x) => SPEELTEST_SPELERS.includes(x))) throw new Error('kies een of meer spelers');
+      if (!/^\d{1,3}(-\d{1,3})?$/.test(String(v.zaden))) throw new Error('zaden: een getal, of van-tot zoals 1-3');
+      if (v.jaren != null && !(Number.isInteger(v.jaren) && v.jaren >= 1 && v.jaren <= 10)) throw new Error('jaren: 1 tot 10');
+      if (!SPEELTEST_LANDEN[v.land]) throw new Error('land: eiland, maker of ontworpen');
+      if (v.tegen != null && !VERGELIJK.leesSpeeltest(v.tegen)) throw new Error(`er is geen speeltest ${v.tegen}`);
     } catch (e) {
       stuurJson(res, 400, { fout: e.message });
       return;
     }
+    // De naam is wanneer hij begon: 2026-10-10-1432, en bestaat die al, met een letter erachter.
+    const d = new Date();
+    const twee = (n) => String(n).padStart(2, '0');
+    let naam = `${d.getFullYear()}-${twee(d.getMonth() + 1)}-${twee(d.getDate())}-${twee(d.getHours())}${twee(d.getMinutes())}`;
+    for (let i = 0; fs.existsSync(path.join(VERGELIJK.UIT, naam)); i++) naam = naam.replace(/-[a-z]$/, '') + '-' + 'abcdefghijklmnopqrstuvwxyz'[i];
+    const [van, tot] = String(v.zaden).split('-').map(Number);
+    const opdracht = [path.join(MAP, 'gereedschap', 'speeltest', 'speeltest.cjs'), ...v.spelers,
+      ...(tot ? ['--zaden', `${van}-${tot}`] : ['--zaad', String(van)]), ...(v.jaren ? ['--jaren', String(v.jaren)] : []),
+      ...SPEELTEST_LANDEN[v.land], '--naam', naam, ...(v.tegen ? ['--tegen', v.tegen] : [])];
+    const kind = spawn(process.execPath, opdracht, { cwd: MAP });
+    const s = (speeltest = { naam, tegen: v.tegen || null, totaal: v.spelers.length * ((tot || van) - van + 1), begin: Date.now(), loopt: true, regels: [], code: null, kind });
+    let rest = '';
+    const lees = (stuk) => {
+      rest += stuk;
+      const regels = rest.split(/\r?\n/);
+      rest = regels.pop();
+      s.regels.push(...regels.filter((r) => r.trim()));
+      if (s.regels.length > 400) s.regels.splice(0, s.regels.length - 400);
+    };
+    kind.stdout.setEncoding('utf8');
+    kind.stderr.setEncoding('utf8');
+    kind.stdout.on('data', lees);
+    kind.stderr.on('data', lees);
+    kind.on('error', (e) => s.regels.push('Starten mislukt: ' + e.message));
+    kind.on('close', (code) => {
+      if (rest.trim()) s.regels.push(rest);
+      s.loopt = false;
+      s.code = code;
+      s.kind = null;
+    });
+    stuurJson(res, 200, { ok: true, naam });
+  });
+}
+
+function stopSpeeltest(res) {
+  if (speeltest && speeltest.loopt && speeltest.kind) {
+    speeltest.regels.push('Gestopt vanaf de bladzijde.');
+    speeltest.kind.kill();
+  }
+  stuurJson(res, 200, { ok: true });
+}
+
+// Zet de waarden die nu anders zijn dan bij een speeltest terug zoals ze toen waren (Marcel, 10 okt: "In de code", met een
+// knop om terug te zetten). Elke waarde gaat zoals een verandering op de bladzijde (zetWaarde), met de .bak ernaast; wat
+// niet terug kan (een som, of een waarde die er toen niet was), zegt het antwoord. Met `proef` zegt het alleen wat het zou
+// terugzetten, voor de vraag of je het zeker weet.
+function zetTerug(req, res) {
+  leesLijf(req, res, (body) => {
+    let naar;
+    let proef = false;
     try {
-      const doel = path.join(MAP, bestand);
-      fs.writeFileSync(doel + '.bak', tekst, 'utf8');
-      fs.writeFileSync(doel, nieuw, 'utf8');
+      const v = JSON.parse(body);
+      proef = !!v.proef;
+      naar = VERGELIJK.leesSpeeltest(v.naar);
+      if (!naar) throw new Error('geen speeltest om naar terug te gaan');
     } catch (e) {
-      stuurJson(res, 500, { fout: 'Schrijven mislukt: ' + e.message });
+      stuurJson(res, 400, { fout: e.message });
       return;
     }
-    const nu = INSTELLINGEN.knoopOp(INSTELLINGEN.leesBlok(nieuw, v.blok).waarde, v.pad);
-    stuurJson(res, 200, { ok: true, bestand, waarde: nu.waarde });
+    const anders = VERGELIJK.andereWaarden(naar.set.waarden || {}, VERGELIJK.waardenVan(leesSpelbestanden()));
+    if (proef) {
+      stuurJson(res, 200, { ok: true, anders: anders.map((w) => ({ naam: w.naam, voor: w.voor, na: w.na })) });
+      return;
+    }
+    const terug = [];
+    const niet = [];
+    for (const w of anders) {
+      if (w.voor == null || w.na == null || !['getal', 'waar', 'tekst', 'keuze'].includes(w.soort)) {
+        niet.push({ naam: w.naam, waarom: w.voor == null ? 'was er toen niet' : w.na == null ? 'is er nu niet' : 'geen gewoon getal' });
+        continue;
+      }
+      // Het pad is dat van nu (andereWaarden neemt het van de tweede), ook als een spelregel intussen verschoof.
+      const { code, antwoord } = zetWaarde({ blok: w.blok, pad: w.pad, waarde: w.voor, was: w.na });
+      if (code === 200) terug.push({ naam: w.naam, waarde: w.voor, bestand: antwoord.bestand });
+      else niet.push({ naam: w.naam, waarom: antwoord.fout });
+    }
+    stuurJson(res, 200, { ok: true, terug, niet });
   });
 }
 // De toetsen draaien (npm test), na een verandering: geeft { klaar, geslaagd, mislukt, namen } van wat mislukte.
@@ -366,6 +493,22 @@ http
       zetInstelling(req, res);
       return;
     }
+    if (req.method === 'GET' && pad === '/gereedschap/api/speeltest') {
+      speeltestStand(res);
+      return;
+    }
+    if (req.method === 'POST' && pad === '/gereedschap/api/speeltest') {
+      startSpeeltest(req, res);
+      return;
+    }
+    if (req.method === 'POST' && pad === '/gereedschap/api/speeltest/stop') {
+      stopSpeeltest(res);
+      return;
+    }
+    if (req.method === 'POST' && pad === '/gereedschap/api/terugzetten') {
+      zetTerug(req, res);
+      return;
+    }
     if (req.method === 'POST' && pad === '/gereedschap/api/toetsen') {
       draaiToetsen(res);
       return;
@@ -420,7 +563,7 @@ http
     console.log(`  de wereld      ${hier}/gereedschap/wereld.html      kaarten, mensen, quests, controle`);
     console.log(`  de gesprekken  ${hier}/gereedschap/gesprekken.html`);
     console.log(`  de quests      ${hier}/gereedschap/quests.html`);
-    console.log(`  de getallen    ${hier}/gereedschap/instellingen.html  alle getallen, spelregels en gebouwen`);
+    console.log(`  de getallen    ${hier}/gereedschap/instellingen.html  alle getallen, spelregels en gebouwen, met de speeltest`);
     console.log(`  vertalen       ${hier}/gereedschap/vertalen.html      de spelteksten in een andere taal`);
     console.log('');
     console.log(`  alles bij elkaar: ${hier}/gereedschap/index.html`);

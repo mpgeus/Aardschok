@@ -49,3 +49,29 @@ body { margin: 0; height: 100vh; display: flex; flex-direction: column; overflow
 details.in-gebouw > summary { cursor: pointer; font-family: var(--kop); font-size: 16px; padding: 6px 0; color: var(--inkt); }
 details.in-gebouw > summary span { color: var(--gedempt); font-size: 13px; }
 .in-verborgen { display: none !important; }
+.in-rij.in-licht { animation: in-licht 1.6s ease-out; }
+@keyframes in-licht { from { background: rgba(226, 182, 74, 0.35); } to { background: transparent; } }
+
+/* De speeltest bovenaan (vraag 142, stap 3; gereedschap/instellingen/speeltest.js). */
+.in-speeltest { margin: 18px 0 28px; padding-bottom: 14px; border-bottom: 1px solid var(--rand); }
+.in-speeltest > h2 { font-family: var(--kop); font-weight: normal; color: var(--goud); margin: 0 0 2px; font-size: 21px; }
+.in-speeltest h3 { font-family: var(--kop); font-weight: normal; color: var(--inkt); font-size: 18px; margin: 16px 0 2px; }
+.in-speeltest h4 { font-family: var(--kop); font-weight: normal; color: var(--goud); font-size: 15px; margin: 14px 0 4px; }
+.in-speeltest h5 { font-family: var(--kop); font-weight: normal; color: var(--inkt); font-size: 14px; margin: 10px 0 4px; }
+.st-keuze { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: flex-end; }
+.st-wie { display: flex; flex-wrap: wrap; gap: 4px 12px; max-width: 420px; font-size: 13px; }
+.st-veld { display: flex; flex-direction: column; gap: 2px; font-size: 12px; color: var(--gedempt); }
+.st-veld input, .st-veld select { font-size: 14px; padding: 3px 6px; }
+.st-veld input[type="number"] { width: 60px; }
+.st-start { font-weight: bold; }
+.st-duur { margin-top: 6px; }
+.st-regels { max-height: 260px; overflow: auto; font-size: 12px; white-space: pre-wrap; color: var(--gedempt); }
+.st-tabel { border-collapse: collapse; font-size: 13px; margin: 2px 0 6px; }
+.st-tabel th, .st-tabel td { border-bottom: 1px solid var(--rand); padding: 3px 10px; text-align: left; vertical-align: top; }
+.st-tabel th { color: var(--gedempt); font-weight: normal; }
+.st-tabel a { color: var(--goud); }
+.st-tabel tr.st-anders td { color: var(--inkt); font-weight: bold; }
+.st-tabel tr:not(.st-anders) td { color: var(--gedempt); }
+.st-spel { display: inline-block; vertical-align: top; margin-right: 24px; }
+.st-wie label, .in-alleen { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+.st-wie input[type="checkbox"], .in-alleen input[type="checkbox"] { width: auto; margin: 0; }
