@@ -85,10 +85,10 @@
   // (T.sprites.celVan). Dit gaat op de voettegel en de maat van het beeld, niet op pixels: genoeg
   // om te weten of er iemand achter kan staan.
   function voorwerpDoos(w, v) {
-    const vel = T.TEGELS && T.TEGELS[v.vel];
-    const id = T.sprites.tekeningVan(v);
-    const tegel = vel && vel.tiles[id];
-    const plek = T.sprites.celVan(v.vel, id);
+    const t = T.sprites.tekeningVan(v);
+    const vel = T.TEGELS && T.TEGELS[t.vel];
+    const tegel = vel && vel.tiles[t.id];
+    const plek = T.sprites.celVan(t.vel, t.id);
     if (!plek) return null;
     const a = plek.anker;
     const d = (tegel && tegel.doos) || [a[0], a[1], plek.cel[2] - a[0], plek.cel[3] - a[1]];

@@ -184,7 +184,7 @@ function schrijfTsx(vel) {
 const RASTER = new Set(['grond']);
 // De wind buigt een plant naar hoe hoog een pixel in zijn cel staat (js/sprites.js, bakWindStand). Op deze vellen houdt
 // elke tekening daarom de hoogte van zijn cel, en snijden we alleen links en rechts bij: dan buigt hij als voorheen.
-const MET_WIND = new Set(['bomen', 'begroeiing', 'erf']);
+const MET_WIND = new Set(['bomen', 'bomen-lente', 'bomen-herfst', 'bomen-winter', 'bomen-sneeuw', 'begroeiing', 'erf']);
 // Een vel per tekening (werklijst vraag 114, stap 1; Marcel, 4 okt: "A ja B ja"): op deze vellen staan veel grote
 // tekeningen, waarvan er maar een paar tegelijk op een kaart staan (bij het begin 10 van de 23 huizen en 1 van de 27
 // gebouwen). Elke tekening krijgt een eigen bestand in tegels/<vel>/, strak gesneden zoals op een ingepakt vel, en het
@@ -352,22 +352,25 @@ function meetModel(model) {
   const h = Math.ceil(model.straal * 1.7 + 40);
   return { b, h };
 }
-function renderModel(model, cb, ch, ankerY) {
+function renderModel(model, cb, ch, ankerY, rampen) {
   const p = K.losRenderen(model, { b: cb, h: ch, anker: [Math.round(cb / 2), ankerY], richting: 'Z' });
-  Bm.ontspikkel(p);
+  Bm.ontspikkel(p, rampen);
   return p;
 }
 
 // lijst: de sleutels in Bm (bomen.cjs), elk het eerste exemplaar (zaad 1); of { key, naam, zaad, o, vorm }: een andere
-// vorm van een soort (BOOM_VORMEN), met de naam van de soort en `vorm` erbij.
-function bouwModelVel(veldNaam, lijst, vastVan) {
-  const { capaciteit, kolommen } = VELCONFIG[veldNaam];
+// vorm van een soort (BOOM_VORMEN), met de naam van de soort en `vorm` erbij. Met `seizoen` (een vel van de bomen in het
+// jaar, bouwSeizoenVel): elk in dat seizoen, en met sneeuw erop als het seizoen 'sneeuw' is; de tegels staan dan in de
+// volgorde van het vel van de bomen, zonder eigen volgorde.
+function bouwModelVel(veldNaam, lijst, vastVan, { seizoen } = {}) {
+  const { capaciteit, kolommen } = VELCONFIG[seizoen ? 'bomen' : veldNaam];
   const RAND_ONDER = 26; // ruimte onder het ankerpunt, voor schaduw/anti-aliasing (zie bosgebied-proef.cjs)
   const gevonden = [];
   for (const ding of lijst) {
     const { key, naam, zaad = 1, o = {}, vorm } = typeof ding === 'string' ? { key: ding, naam: ding } : ding;
     const gelukt = veilig(key, () => {
-      const model = Bm[naam](zaad, o);
+      let model = Bm[naam](zaad, seizoen && seizoen !== 'sneeuw' ? { ...o, seizoen } : seizoen === 'sneeuw' && LOOF.has(naam) ? { ...o, seizoen: 'winter' } : o);
+      if (seizoen === 'sneeuw') model = Bm.sneeuw(model, { zaad });
       const { b, h } = meetModel(model);
       return { key, naam, vorm, model, b, h };
     });
@@ -380,11 +383,11 @@ function bouwModelVel(veldNaam, lijst, vastVan) {
   const ankerY = ch - RAND_ONDER;
   const items = [];
   for (const it of gevonden) {
-    const p = veilig(it.key, () => renderModel(it.model, cb, ch, ankerY));
+    const p = veilig(it.key, () => renderModel(it.model, cb, ch, ankerY, seizoen ? SEIZOEN_RAMPEN : undefined));
     if (p) items.push({ key: it.key, naam: it.naam, vorm: it.vorm, vast: vastVan(it.naam), doos: krapDoos(p, ankerX, ankerY), plaat: p });
   }
   if (!items.length) return null;
-  const geordend = vasteVolgordeEnCapaciteit(veldNaam, items, capaciteit, kolommen);
+  const geordend = seizoen ? inDeVolgordeVanDeBomen(items, capaciteit) : vasteVolgordeEnCapaciteit(veldNaam, items, capaciteit, kolommen);
   const rijen = Math.ceil(capaciteit / kolommen);
   const vel = new K.Plaat(cb * kolommen, ch * rijen);
   geordend.forEach((it, i) => { if (it) vel.plak(it.plaat, (i % kolommen) * cb, Math.floor(i / kolommen) * ch); });
@@ -396,6 +399,7 @@ function bouwModelVel(veldNaam, lijst, vastVan) {
     tileoffset: [Math.round(cb / 2) - ankerX, ch - ankerY],
     objectalignment: true,
     tiles: geordend.map((it) => (it ? { naam: it.naam, vast: it.vast, doos: it.doos || null, ...(it.vorm ? { vorm: it.vorm } : {}) } : { naam: null, vast: false })),
+    ...(seizoen ? { seizoen, van: 'bomen' } : {}),
   };
   schrijfVel(vel, beschrijving);
   console.log(`${velVerslag(beschrijving)}  (${items.length} echte tegels van ${capaciteit})`);
@@ -435,6 +439,32 @@ const BOMEN_MET_VORMEN = [
 ];
 // een boom staat altijd in de weg, ook een jonge; langs een boompje dat net geplant is, loop je
 const BOMEN_VAST = (naam) => naam !== 'boompje';
+
+// De bomen in het jaar (vraag 148, stap 2; Marcel, 9 okt: "Ja vegetatie en bomen met seizoenen mee. Ook vruchten etc.", en
+// "Sneeuw moet ook nog op bomen"): per seizoen een vel, bomen-lente, bomen-herfst, bomen-winter en bomen-sneeuw, met elke
+// tekening op hetzelfde nummer als in het vel van de bomen (de zomer). Een loofboom heeft alle vier (jong blad en bloesem,
+// geel en rood met blad op de grond, kaal, en kaal met sneeuw); een den en een dode boom alleen de sneeuw; wat in een
+// seizoen niet anders is, staat er niet op, en het spel tekent dan die van de zomer (T.sprites.tekeningVan). Het spel laadt
+// zo'n vel pas als zijn seizoen er is (`seizoen` in tegels.json). Een kale boom kost zo'n anderhalve minuut: de winter en
+// de sneeuw elk ruim een uur, dus elk in een eigen taak (`npm run tiled bomen-winter`).
+const SEIZOENEN = ['lente', 'herfst', 'winter', 'sneeuw'];
+const LOOF = new Set(['eik', 'beuk', 'linde', 'els', 'populier', 'knotwilg', 'wilg', 'berk', 'appelboom', 'meidoorn', 'hazelaar', 'jongeEik', 'jongeBerk']);
+const ALTIJD_GROEN = new Set(['den', 'jongeDen', 'groveDen', 'dodeBoom']);
+const SEIZOEN_RAMPEN = ['blad', 'den', 'herfst', 'gras', 'mos', 'goud', 'riet', 'lente', 'bloesem', 'stro'];
+function bouwSeizoenVel(seizoen) {
+  const lijst = BOMEN_MET_VORMEN.filter((d) => {
+    const naam = typeof d === 'string' ? d : d.naam;
+    return LOOF.has(naam) || (seizoen === 'sneeuw' && ALTIJD_GROEN.has(naam));
+  });
+  return bouwModelVel(`bomen-${seizoen}`, lijst, BOMEN_VAST, { seizoen });
+}
+// Elke tekening op het nummer van zijn sleutel in het vel van de bomen (tegels/bomen.volgorde.json), de rest leeg.
+function inDeVolgordeVanDeBomen(items, capaciteit) {
+  const volgorde = JSON.parse(fs.readFileSync(path.join(TEGELS, 'bomen.volgorde.json'), 'utf8'));
+  const bijSleutel = new Map(items.map((it) => [it.key, it]));
+  for (const it of items) if (!volgorde.includes(it.key)) throw new Error(`${it.key} staat niet op het vel van de bomen: eerst npm run tiled bomen`);
+  return Array.from({ length: Math.max(capaciteit, volgorde.length) }, (_, i) => (volgorde[i] != null && bijSleutel.get(volgorde[i])) || null);
+}
 
 // Bm.BEGROEIING komt uit bomen.cjs zelf (zie module.exports daar): zo blijft dit script kloppen
 // als daar later iets bij komt of verandert, zonder dat hier iets hoeft mee te veranderen.
@@ -1132,6 +1162,7 @@ if (wil('kust')) padGrondVel('kust', KUST_CAPACITEIT);
     wil('rand') && leesVelUitTsx('rand'),
     wil('kust') && leesVelUitTsx('kust'),
     wil('bomen') && bouwModelVel('bomen', BOMEN_MET_VORMEN, BOMEN_VAST),
+    ...SEIZOENEN.map((s) => wil(`bomen-${s}`) && bouwSeizoenVel(s)),
     wil('begroeiing') && bouwModelVel('begroeiing', BEGROEIING, (n) => !!BEGROEIING_VAST[n]),
     wil('gebouwen') && bouwGebouwenVel(),
     // Het vel van de toren (tegels/toren.png) ging op 25 sep weg met het oude spel: geen kaart
@@ -1175,6 +1206,8 @@ if (wil('kust')) padGrondVel('kust', KUST_CAPACITEIT);
       breedte: v.breedte,
       hoogte: v.hoogte,
       ingepakt: true,
+      // een vel van de bomen in het jaar: het spel laadt het pas in zijn seizoen (js/sprites.js)
+      ...(v.seizoen ? { seizoen: v.seizoen, van: v.van } : {}),
       tiles: v.tiles.map((t) => ({ ...eigenschappen(t), ...(t.cel ? { cel: t.cel, anker: t.anker } : {}) })),
     } : {
       tsx: `tegels/${v.naam}.tsx`,

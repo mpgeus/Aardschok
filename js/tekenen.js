@@ -166,7 +166,9 @@
     // De droge beekjes (js/weer.js) liggen in de grond: vallen ze droog of komen ze terug, dan opnieuw.
     const D = T.dorpHier(S);
     const beek = D && D.weer && D.weer.beekDroog ? 1 : 0;
-    return `${w.gebied}|${w.huidigeKamer}|${w.bekend.size}|${g}|${metSprites() ? 1 : 0}|${Math.round(S.zoom * 100)}|${padVersie(S)}|${platVan(w).versie}|${beek}|${sneeuwStap(S)}`;
+    // Ver uitgezoomd ligt het bos om de kaart erin (bosGebakken): met een ander seizoen van de bomen ook opnieuw.
+    const bomen = metSprites() ? T.sprites.seizoenVanDeBomen() : '';
+    return `${w.gebied}|${w.huidigeKamer}|${w.bekend.size}|${g}|${metSprites() ? 1 : 0}|${Math.round(S.zoom * 100)}|${padVersie(S)}|${platVan(w).versie}|${beek}|${sneeuwStap(S)}|${bomen}`;
   }
 
   // Wat plat op de grond groeit (een graspol, bloemen, een varen, paddenstoelen, een kleine steen, een rij kool; vraag
@@ -176,7 +178,7 @@
   const PLAT_HOOG = 24;
   function isPlat(v) {
     const vel = v.vel && T.TEGELS && T.TEGELS[v.vel];
-    const t = vel && vel.tiles[T.sprites.tekeningVan(v)];
+    const t = vel && vel.tiles[T.sprites.tekeningVan(v, true).id];
     return !!(t && !t.vast && !t.beslaat && t.doos && t.doos[1] <= PLAT_HOOG);
   }
   // Per wereld de platte voorwerpen, opnieuw gezocht als de kaart veranderde (T.kaartVersie, js/wereld.js); `versie` gaat
@@ -205,7 +207,7 @@
     for (const v of lijst) {
       const p = opGrond(v.x, v.y);
       const dof = randDof(w, v.x, v.y);
-      const stuk = metSprites() && T.sprites.buitenAan && T.sprites.buiten(v.vel, T.sprites.tekeningVan(v), 0);
+      const stuk = metSprites() && T.sprites.buitenAan && T.sprites.buitenVan(v, 0);
       if (!stuk || dof <= 0.02) continue;
       if (dof < 1) c.globalAlpha = dof;
       T.sprites.teken(c, stuk, p.x, p.y, 1);
@@ -407,7 +409,7 @@
   function tekenGebakkenBoom(c, v) {
     const p = opGrond(v.x, v.y);
     const helder = bosrandHelder(v.r);
-    const ruw = metSprites() && T.sprites.buitenAan && T.sprites.buiten(v.vel, T.sprites.tekeningVan(v), 0);
+    const ruw = metSprites() && T.sprites.buitenAan && T.sprites.buitenVan(v, 0);
     if (ruw) T.sprites.teken(c, bosrandGedimd(ruw, helder), p.x, p.y, 1);
     else tekenBuitenVlak(c, v, helder);
   }
@@ -443,6 +445,9 @@
     kaartNu = w;
     zoomNu = S.zoom;
     if (metSprites()) laadWatErStaat(w);
+    // het seizoen van de bomen (vraag 148, stap 2): T.sprites tekent elke boom dan in zijn seizoen; gereedschap/wereld.html
+    // laadt js/bos.js niet, en tekent ze in de zomer. Spel.debug.bomen = 'herfst' laat ze zien in een seizoen naar keus.
+    if (metSprites()) T.sprites.zetSeizoen((T.debug && T.debug.bomen) || (T.boomSeizoen ? T.boomSeizoen(S) : 'zomer'));
     const dpr = ctx.getTransform().a || 1; // pixels per css-pixel (js/main.js, formaat)
     // Het dorp dat hier ligt (js/dorp.js), of geen: een ander gebied, of het gereedschap.
     const D = T.dorpHier(S);
@@ -2252,13 +2257,9 @@
   //   dim-techniek als een kamer waar je niet bent), nooit de doorzichtigheid. Voorbij de diepte
   //   waar de dichtheid nul wordt, tekent deze code niets meer: de donkere achtergrond die
   //   T.tekenScene daar al neerzet, is dan zelf het bos, dus het houdt nergens hard op.
-  const BOSRAND_SOORTEN = Object.keys(T.BOMEN).filter((s) => T.BOMEN[s].rand); // `rand` in T.BOMEN, js/wereld.js
-  // herfstEik is de oranje-rode herfstvariant van de eik (gereedschap/pixelart/bomen.cjs); in het
-  // gehucht staat de kalender op lente (js/tijd.js, S.kalender), dus daar hoort geen herfstboom te
-  // staan (Marcel, 23 sep 2026). Seizoenen die bomen écht laten verkleuren komen later; dit is de
-  // plek waar dat dan aan S.kalender.seizoen moet gaan hangen in plaats van aan de gebiedsnaam.
-  const HERFST_SOORTEN = ['herfstEik'];
-  const BOSRAND_GEBIEDEN_ZONDER_HERFST = ['gehucht'];
+  // Welke soorten er staan, zegt `rand` in T.BOMEN (js/wereld.js). De herfsteik staat er sinds 10 okt niet meer bij: de
+  // bomen kleuren nu zelf in de herfst (T.boomSeizoen, js/bos.js; vraag 148, stap 2).
+  const BOSRAND_SOORTEN = Object.keys(T.BOMEN).filter((s) => T.BOMEN[s].rand);
   const BOSRAND_DICHT = 2; // ringen die helemaal vol staan, vlak tegen de kaart aan
   const BOSRAND_DIEP = 16; // ringen waarna er niets meer bij komt
   const BOSRAND_HELDER_MIN = 0.32;
@@ -2266,20 +2267,17 @@
 
   // Welke (vel, id)-paren in tegels/bomen.png en tegels/begroeiing.png een boom of struik zijn:
   // op naam opgezocht in T.TEGELS, niet op een vast nummer. De pixel-art-gereedschap maakt die
-  // vellen opnieuw aan (npm run pixelart), en dan kan de volgorde erin verschuiven. Twee lijsten
-  // (met en zonder herfstvarianten), want welke van de twee een gebied krijgt hangt af van het
-  // gebied zelf (zie bosrandOp hieronder) en dat kan per wereld verschillen. Eén per soort: welke
+  // vellen opnieuw aan (npm run pixelart), en dan kan de volgorde erin verschuiven. Eén per soort: welke
   // vorm een boom krijgt, zegt zijn tegel (T.sprites.tekeningVan), zodat een soort met zes vormen
   // niet zes keer zo vaak staat.
-  const bosrandVellenPerSoort = {};
-  function bosrandVellenOpbouwen(metHerfst) {
+  let bosrandVellen = null;
+  function bosrandVellenOpbouwen() {
     const r = [];
     for (const velNaam of ['bomen', 'begroeiing']) {
       const vel = T.TEGELS && T.TEGELS[velNaam];
       if (!vel) continue;
       vel.tiles.forEach((tegel, id) => {
         if (!tegel || tegel.vorm || !BOSRAND_SOORTEN.includes(tegel.naam)) return;
-        if (!metHerfst && HERFST_SOORTEN.includes(tegel.naam)) return;
         r.push({ vel: velNaam, id, soort: tegel.naam });
       });
     }
@@ -2358,10 +2356,7 @@
         }
       } else if (hasj(x, y, zaad) < bosrandDichtheid(r) * Math.max(BOSRAND_OPEN, bosBuiten(w, x, y))) {
         // alleen aan de kant van het bos; in het open land erbuiten hier en daar een boom (Marcel, 4 okt)
-        const metHerfst = !BOSRAND_GEBIEDEN_ZONDER_HERFST.includes(w.gebied);
-        const soort = metHerfst ? 'met' : 'zonder';
-        if (!bosrandVellenPerSoort[soort]) bosrandVellenPerSoort[soort] = bosrandVellenOpbouwen(metHerfst);
-        const bosrandVellen = bosrandVellenPerSoort[soort];
+        if (!bosrandVellen) bosrandVellen = bosrandVellenOpbouwen();
         if (bosrandVellen.length) {
           const keuze = bosrandVellen[Math.floor(hasj(x, y, zaad + 1) * bosrandVellen.length)];
           v = { soort: keuze.soort, vel: keuze.vel, id: keuze.id, x, y, beslaat: [1, 1], r, bosrand: true };
@@ -2633,7 +2628,7 @@
     const p = opGrond(v.x, v.y);
     if (zicht < 1) ctx.globalAlpha = zicht;
     const helder = bosrandHelder(v.r);
-    const ruw = metSprites() && T.sprites.buitenAan && T.sprites.buiten(v.vel, T.sprites.tekeningVan(v), windVoorInstantie(S, v));
+    const ruw = metSprites() && T.sprites.buitenAan && T.sprites.buitenVan(v, windVoorInstantie(S, v));
     // Het donkerder maken zit al in het plaatje (bosrandGedimd); T.sprites.teken hoeft dus geen
     // ctx.filter meer aan te zetten, vandaar de 1 hier.
     if (ruw) T.sprites.teken(ctx, bosrandGedimd(ruw, helder), p.x, p.y, 1);
@@ -2679,7 +2674,7 @@
       if (alpha <= 0.02) return;
       if (alpha < 1) ctx.globalAlpha = alpha;
       const plaatjes = metSprites() && T.sprites.buitenAan;
-      let stuk = puin || fase || (plaatjes && T.sprites.buiten(v.vel, T.sprites.tekeningVan(v), windVoorInstantie(S, v)));
+      let stuk = puin || fase || (plaatjes && T.sprites.buitenVan(v, windVoorInstantie(S, v)));
       // Een huis of een gebouw heeft een eigen bestand, dat pas laadt als hij op de kaart staat (js/sprites.js; vraag
       // 114, stap 1). Laadt het nog, dan wat er daarnet stond (een huis dat net doorgroeide), en anders niets: een vlak
       // alleen als het plaatje echt ontbreekt.

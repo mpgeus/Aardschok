@@ -373,7 +373,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.sprites.teken` legt het anker van de cel op het midden van de tegel. **Elke boom anders** (vraag 148, a): een soort
   heeft op het vel meer tekeningen met zijn naam en een `vorm` (`BOOM_VORMEN` in `naar-tiled.cjs`), en welke een boom
   krijgt, zegt zijn tegel (`T.sprites.tekeningVan(v)`, een vaste hasj; `v.id` blijft de eerste, dus een bewaard spel past).
-  Wat een voorwerp tekent, vraagt het daaraan, niet aan `v.id`. De maker legt de nieuwe soorten met een vaste keus per
+  Wat een voorwerp tekent, vraagt het daaraan (`{ vel, id }`, of `T.sprites.buitenVan(v, wind)`), niet aan `v.id`. **De
+  bomen in het jaar** (stap 2): per seizoen een vel met dezelfde nummers (`bomen-lente`, `-herfst`, `-winter`, `-sneeuw`,
+  met `seizoen` in `tegels.js`), dat pas laadt in zijn seizoen (`T.sprites.zetSeizoen`, elk beeld uit `T.boomSeizoen(S)`
+  in `js/bos.js`: per maand `bomenInHetJaar`, en sneeuw op de takken vanaf `sneeuwOpDeBomen`; de spelregel "De bomen in
+  het jaar"); tot het er is, en wat in een seizoen niet anders is, staat in de zomer. Een kale boom rendert zo'n
+  anderhalve minuut, dus `npm run tiled bomen-winter` en `bomen-sneeuw` elk ruim een uur, in een eigen taak. De maker legt de nieuwe soorten met een vaste keus per
   tegel (`ANDERE_BOMEN` in `js/maker.js`), zonder zijn lot te raken. Een kaart leest een gid zoals Tiled (`js/kaart.js`),
   dus een vel mag groeien. Laadt alles met
   `Image`, nooit `getImageData`: anders werkt `file://` niet meer. **De vellen zijn ingepakt**
@@ -1339,6 +1344,8 @@ gemist wordt; `('dorpelingen')` laat alleen die stand zien.
 `Spel.debug.hoogte()` zegt of de kaart hoogte heeft, waar het hoogste punt is, de richel en zijn helling, en hoe hoog de
 schout staat; `(5)` begint een nieuw spel op land 5 met heuvels (de spelregel "Hoogte" op "Heuvels"), `('top')` zet de
 schout op het hoogste punt.
+`Spel.debug.bomen = 'herfst'` laat de bomen zien in een seizoen naar keus (`'lente'`, `'zomer'`, `'winter'`, `'sneeuw'`;
+`null` weer dat van de kalender), zonder door het jaar te springen.
 `Spel.debug.gehucht()` zegt of dit het ontworpen gehucht is of een van de maker, en uit welk zaad; `(3)` begint nu een
 nieuw spel op het gehucht van zaad 3 (zonder brief), zoals op de pagina "Gehuchten van de maker": het land van de maker
 zonder het eiland, waarop de vaste schermafdrukken, de tekenmeting en de samenvatting spelen.

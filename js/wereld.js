@@ -73,7 +73,7 @@
   // `vlak`: zijn kleur, hoogte en breedte zonder kunst (js/tekenen.js), `rand`: hij staat ook in het bos om de kaart.
   T.BOMEN = {
     eik: { wordt: 'eik', jong: 'jongeEik', wind: 4, vlak: ['#4a7030', 46, 0.3], rand: true },
-    herfstEik: { wordt: 'herfstEik', jong: 'jongeEik', wind: 4, vlak: ['#a9632a', 46, 0.3], rand: true },
+    herfstEik: { wordt: 'herfstEik', jong: 'jongeEik', wind: 4, vlak: ['#a9632a', 46, 0.3] },
     den: { wordt: 'den', jong: 'jongeDen', wind: 3, vlak: ['#2f5734', 54, 0.26], rand: true },
     berk: { wordt: 'berk', jong: 'jongeBerk', wind: 5, vlak: ['#6f9a45', 40, 0.22], rand: true },
     wilg: { wind: 6, vlak: ['#5d7f3c', 42, 0.32], rand: true },

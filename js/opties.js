@@ -508,6 +508,18 @@
           uitleg: 'De houthakker maakt zijn hout zonder een boom om te hakken, en het bos blijft zoals het is. Zoals voor 6 okt.' },
       ],
     },
+    // De bomen in het jaar (werklijst vraag 148, stap 2; Marcel, 9 okt: "Ja vegetatie en bomen met seizoenen mee. Ook
+    // vruchten etc."; js/bos.js).
+    {
+      id: 'bomenInHetJaar', naam: 'De bomen in het jaar', standaard: 'mee',
+      uitleg: 'Of de bomen meegaan met de seizoenen.',
+      keuzes: [
+        { id: 'mee', naam: 'Met de seizoenen', zet: { 'BOS_INSTELLINGEN.seizoenen': true },
+          uitleg: 'In de lente jong blad en bloesem, in de zomer vol, in de herfst geel, oranje en rood met blad op de grond, en in de winter kaal. Ligt er sneeuw, dan ligt die ook op de takken en de dennen. De appels zijn in de herfst rijp.' },
+        { id: 'zomer', naam: 'Altijd zomer', zet: { 'BOS_INSTELLINGEN.seizoenen': false },
+          uitleg: 'De bomen staan het hele jaar in hun zomergroen, zoals voor 10 okt.' },
+      ],
+    },
     // Een praatje (werklijst vraag 120; Marcel, 4 okt: "Het dorp moet echt levendig en realistisch aanvoelen", en "geen
     // praatjes forceren. Alleen als mensen een reden hebben en elkaar toevallig tegenkomen"; js/praatje.js).
     {

@@ -98,7 +98,8 @@ const overlapt = (a, b) => a[0] < b[0] + b[2] && b[0] < a[0] + a[2] && a[1] < b[
 
 test('elk ingepakt vel in tegels/: elke tegel met een naam op zijn vel, geen twee op elkaar, niet te groot', () => {
   const ingepakt = Object.entries(T.TEGELS).filter(([, v]) => v.ingepakt && !v.perTekening);
-  assert.deepEqual(ingepakt.map(([n]) => n).sort(), ['begroeiing', 'bomen', 'erf', 'tuin']);
+  // met de bomen in het jaar (vraag 148, stap 2): een vel per seizoen
+  assert.deepEqual(ingepakt.map(([n]) => n).sort(), ['begroeiing', 'bomen', 'bomen-herfst', 'bomen-lente', 'bomen-sneeuw', 'bomen-winter', 'erf', 'tuin']);
   for (const [naam, vel] of ingepakt) {
     const { b, h } = maatVan(path.join(WORTEL, vel.bestand));
     assert.equal(b, vel.breedte, `${naam}: de breedte in tegels.js`);

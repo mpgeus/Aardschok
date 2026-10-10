@@ -194045,6 +194045,5674 @@
       "doos": null
      }
     ]
+   },
+   "bomen-lente": {
+    "tsx": "tegels/bomen-lente.tsx",
+    "bestand": "tegels/bomen-lente.png",
+    "breedte": 1023,
+    "hoogte": 1936,
+    "ingepakt": true,
+    "seizoen": "lente",
+    "van": "bomen",
+    "tiles": [
+     {
+      "naam": "eik",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       96,
+       211,
+       84,
+       14
+      ],
+      "cel": [
+       366,
+       323,
+       180,
+       321
+      ],
+      "anker": [
+       96,
+       295
+      ]
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": "berk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       64,
+       239,
+       67,
+       6
+      ],
+      "cel": [
+       0,
+       1292,
+       131,
+       321
+      ],
+      "anker": [
+       64,
+       295
+      ]
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": "wilg",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       88,
+       205,
+       93,
+       23
+      ],
+      "cel": [
+       0,
+       323,
+       181,
+       321
+      ],
+      "anker": [
+       88,
+       295
+      ]
+     },
+     {
+      "naam": "appelboom",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       80,
+       166,
+       80,
+       9
+      ],
+      "cel": [
+       520,
+       646,
+       160,
+       321
+      ],
+      "anker": [
+       80,
+       295
+      ]
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": "jongeEik",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       53,
+       122,
+       48,
+       6
+      ],
+      "cel": [
+       108,
+       1615,
+       101,
+       321
+      ],
+      "anker": [
+       53,
+       295
+      ]
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": "jongeBerk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       43,
+       141,
+       40,
+       4
+      ],
+      "cel": [
+       508,
+       1615,
+       83,
+       321
+      ],
+      "anker": [
+       43,
+       295
+      ]
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": "eik",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       104,
+       194,
+       111,
+       15
+      ],
+      "vorm": 2,
+      "cel": [
+       0,
+       0,
+       215,
+       321
+      ],
+      "anker": [
+       104,
+       295
+      ]
+     },
+     {
+      "naam": "eik",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       81,
+       232,
+       76,
+       13
+      ],
+      "vorm": 3,
+      "cel": [
+       843,
+       646,
+       157,
+       321
+      ],
+      "anker": [
+       81,
+       295
+      ]
+     },
+     {
+      "naam": "eik",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       74,
+       204,
+       107,
+       14
+      ],
+      "vorm": 4,
+      "cel": [
+       183,
+       323,
+       181,
+       321
+      ],
+      "anker": [
+       74,
+       295
+      ]
+     },
+     {
+      "naam": "eik",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       124,
+       225,
+       67,
+       15
+      ],
+      "vorm": 5,
+      "cel": [
+       811,
+       0,
+       191,
+       321
+      ],
+      "anker": [
+       124,
+       295
+      ]
+     },
+     {
+      "naam": "eik",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       98,
+       195,
+       81,
+       17
+      ],
+      "vorm": 6,
+      "cel": [
+       730,
+       323,
+       179,
+       321
+      ],
+      "anker": [
+       98,
+       295
+      ]
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": "berk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       61,
+       235,
+       68,
+       6
+      ],
+      "vorm": 2,
+      "cel": [
+       133,
+       1292,
+       129,
+       321
+      ],
+      "anker": [
+       61,
+       295
+      ]
+     },
+     {
+      "naam": "berk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       55,
+       239,
+       70,
+       7
+      ],
+      "vorm": 3,
+      "cel": [
+       652,
+       1292,
+       125,
+       321
+      ],
+      "anker": [
+       55,
+       295
+      ]
+     },
+     {
+      "naam": "berk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       61,
+       236,
+       66,
+       8
+      ],
+      "vorm": 4,
+      "cel": [
+       394,
+       1292,
+       127,
+       321
+      ],
+      "anker": [
+       61,
+       295
+      ]
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": "wilg",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       87,
+       206,
+       93,
+       20
+      ],
+      "vorm": 2,
+      "cel": [
+       548,
+       323,
+       180,
+       321
+      ],
+      "anker": [
+       87,
+       295
+      ]
+     },
+     {
+      "naam": "wilg",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       84,
+       204,
+       90,
+       22
+      ],
+      "vorm": 3,
+      "cel": [
+       181,
+       646,
+       174,
+       321
+      ],
+      "anker": [
+       84,
+       295
+      ]
+     },
+     {
+      "naam": "appelboom",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       81,
+       168,
+       80,
+       9
+      ],
+      "vorm": 2,
+      "cel": [
+       357,
+       646,
+       161,
+       321
+      ],
+      "anker": [
+       81,
+       295
+      ]
+     },
+     {
+      "naam": "appelboom",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       78,
+       167,
+       69,
+       9
+      ],
+      "vorm": 3,
+      "cel": [
+       154,
+       969,
+       147,
+       321
+      ],
+      "anker": [
+       78,
+       295
+      ]
+     },
+     {
+      "naam": "appelboom",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       78,
+       170,
+       81,
+       10
+      ],
+      "vorm": 4,
+      "cel": [
+       682,
+       646,
+       159,
+       321
+      ],
+      "anker": [
+       78,
+       295
+      ]
+     },
+     {
+      "naam": "beuk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       94,
+       219,
+       105,
+       12
+      ],
+      "cel": [
+       217,
+       0,
+       199,
+       321
+      ],
+      "anker": [
+       94,
+       295
+      ]
+     },
+     {
+      "naam": "beuk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       99,
+       239,
+       97,
+       12
+      ],
+      "vorm": 2,
+      "cel": [
+       418,
+       0,
+       196,
+       321
+      ],
+      "anker": [
+       99,
+       295
+      ]
+     },
+     {
+      "naam": "beuk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       93,
+       226,
+       86,
+       12
+      ],
+      "vorm": 3,
+      "cel": [
+       0,
+       646,
+       179,
+       321
+      ],
+      "anker": [
+       93,
+       295
+      ]
+     },
+     {
+      "naam": "beuk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       97,
+       232,
+       96,
+       13
+      ],
+      "vorm": 4,
+      "cel": [
+       616,
+       0,
+       193,
+       321
+      ],
+      "anker": [
+       97,
+       295
+      ]
+     },
+     {
+      "naam": "linde",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       67,
+       254,
+       74,
+       12
+      ],
+      "cel": [
+       596,
+       969,
+       141,
+       321
+      ],
+      "anker": [
+       67,
+       295
+      ]
+     },
+     {
+      "naam": "linde",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       61,
+       237,
+       80,
+       12
+      ],
+      "vorm": 2,
+      "cel": [
+       739,
+       969,
+       141,
+       321
+      ],
+      "anker": [
+       61,
+       295
+      ]
+     },
+     {
+      "naam": "linde",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       66,
+       263,
+       80,
+       12
+      ],
+      "vorm": 3,
+      "cel": [
+       303,
+       969,
+       146,
+       321
+      ],
+      "anker": [
+       66,
+       295
+      ]
+     },
+     {
+      "naam": "els",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       71,
+       195,
+       57,
+       11
+      ],
+      "cel": [
+       264,
+       1292,
+       128,
+       321
+      ],
+      "anker": [
+       71,
+       295
+      ]
+     },
+     {
+      "naam": "els",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       68,
+       215,
+       59,
+       12
+      ],
+      "vorm": 2,
+      "cel": [
+       523,
+       1292,
+       127,
+       321
+      ],
+      "anker": [
+       68,
+       295
+      ]
+     },
+     {
+      "naam": "els",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       60,
+       214,
+       59,
+       12
+      ],
+      "vorm": 3,
+      "cel": [
+       779,
+       1292,
+       119,
+       321
+      ],
+      "anker": [
+       60,
+       295
+      ]
+     },
+     {
+      "naam": "populier",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       37,
+       251,
+       36,
+       10
+      ],
+      "cel": [
+       678,
+       1615,
+       73,
+       321
+      ],
+      "anker": [
+       37,
+       295
+      ]
+     },
+     {
+      "naam": "populier",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       36,
+       236,
+       37,
+       10
+      ],
+      "vorm": 2,
+      "cel": [
+       753,
+       1615,
+       73,
+       321
+      ],
+      "anker": [
+       36,
+       295
+      ]
+     },
+     {
+      "naam": "populier",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       35,
+       249,
+       37,
+       10
+      ],
+      "vorm": 3,
+      "cel": [
+       828,
+       1615,
+       72,
+       321
+      ],
+      "anker": [
+       35,
+       295
+      ]
+     },
+     {
+      "naam": "knotwilg",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       54,
+       157,
+       39,
+       10
+      ],
+      "cel": [
+       413,
+       1615,
+       93,
+       321
+      ],
+      "anker": [
+       54,
+       295
+      ]
+     },
+     {
+      "naam": "knotwilg",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       42,
+       160,
+       41,
+       10
+      ],
+      "vorm": 2,
+      "cel": [
+       593,
+       1615,
+       83,
+       321
+      ],
+      "anker": [
+       42,
+       295
+      ]
+     },
+     {
+      "naam": "knotwilg",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       52,
+       145,
+       47,
+       10
+      ],
+      "vorm": 3,
+      "cel": [
+       211,
+       1615,
+       99,
+       321
+      ],
+      "anker": [
+       52,
+       295
+      ]
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": "meidoorn",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       55,
+       102,
+       51,
+       3
+      ],
+      "cel": [
+       900,
+       1292,
+       106,
+       321
+      ],
+      "anker": [
+       55,
+       295
+      ]
+     },
+     {
+      "naam": "meidoorn",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       53,
+       104,
+       53,
+       4
+      ],
+      "vorm": 2,
+      "cel": [
+       0,
+       1615,
+       106,
+       321
+      ],
+      "anker": [
+       53,
+       295
+      ]
+     },
+     {
+      "naam": "meidoorn",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       52,
+       103,
+       47,
+       5
+      ],
+      "vorm": 3,
+      "cel": [
+       312,
+       1615,
+       99,
+       321
+      ],
+      "anker": [
+       52,
+       295
+      ]
+     },
+     {
+      "naam": "hazelaar",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       69,
+       126,
+       74,
+       4
+      ],
+      "cel": [
+       451,
+       969,
+       143,
+       321
+      ],
+      "anker": [
+       69,
+       295
+      ]
+     },
+     {
+      "naam": "hazelaar",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       74,
+       128,
+       78,
+       4
+      ],
+      "vorm": 2,
+      "cel": [
+       0,
+       969,
+       152,
+       321
+      ],
+      "anker": [
+       74,
+       295
+      ]
+     },
+     {
+      "naam": "hazelaar",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       69,
+       124,
+       72,
+       4
+      ],
+      "vorm": 3,
+      "cel": [
+       882,
+       969,
+       141,
+       321
+      ],
+      "anker": [
+       69,
+       295
+      ]
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     }
+    ]
+   },
+   "bomen-herfst": {
+    "tsx": "tegels/bomen-herfst.tsx",
+    "bestand": "tegels/bomen-herfst.png",
+    "breedte": 1977,
+    "hoogte": 1042,
+    "ingepakt": true,
+    "seizoen": "herfst",
+    "van": "bomen",
+    "tiles": [
+     {
+      "naam": "eik",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       96,
+       211,
+       84,
+       26
+      ],
+      "cel": [
+       1370,
+       0,
+       180,
+       346
+      ],
+      "anker": [
+       96,
+       320
+      ]
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": "berk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       64,
+       239,
+       67,
+       6
+      ],
+      "cel": [
+       1585,
+       348,
+       131,
+       346
+      ],
+      "anker": [
+       64,
+       320
+      ]
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": "wilg",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       88,
+       205,
+       93,
+       23
+      ],
+      "cel": [
+       1004,
+       0,
+       181,
+       346
+      ],
+      "anker": [
+       88,
+       320
+      ]
+     },
+     {
+      "naam": "appelboom",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       80,
+       166,
+       80,
+       19
+      ],
+      "cel": [
+       520,
+       348,
+       160,
+       346
+      ],
+      "anker": [
+       80,
+       320
+      ]
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": "jongeEik",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       53,
+       122,
+       48,
+       26
+      ],
+      "cel": [
+       1293,
+       696,
+       101,
+       346
+      ],
+      "anker": [
+       53,
+       320
+      ]
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": "jongeBerk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       43,
+       141,
+       40,
+       4
+      ],
+      "cel": [
+       1599,
+       696,
+       83,
+       346
+      ],
+      "anker": [
+       43,
+       320
+      ]
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": "eik",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       104,
+       194,
+       111,
+       21
+      ],
+      "vorm": 2,
+      "cel": [
+       0,
+       0,
+       215,
+       346
+      ],
+      "anker": [
+       104,
+       320
+      ]
+     },
+     {
+      "naam": "eik",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       81,
+       232,
+       76,
+       16
+      ],
+      "vorm": 3,
+      "cel": [
+       843,
+       348,
+       157,
+       346
+      ],
+      "anker": [
+       81,
+       320
+      ]
+     },
+     {
+      "naam": "eik",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       74,
+       204,
+       107,
+       26
+      ],
+      "vorm": 4,
+      "cel": [
+       1187,
+       0,
+       181,
+       346
+      ],
+      "anker": [
+       74,
+       320
+      ]
+     },
+     {
+      "naam": "eik",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       124,
+       225,
+       67,
+       18
+      ],
+      "vorm": 5,
+      "cel": [
+       811,
+       0,
+       191,
+       346
+      ],
+      "anker": [
+       124,
+       320
+      ]
+     },
+     {
+      "naam": "eik",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       98,
+       195,
+       81,
+       26
+      ],
+      "vorm": 6,
+      "cel": [
+       1734,
+       0,
+       179,
+       346
+      ],
+      "anker": [
+       98,
+       320
+      ]
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": "berk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       61,
+       235,
+       68,
+       6
+      ],
+      "vorm": 2,
+      "cel": [
+       1718,
+       348,
+       129,
+       346
+      ],
+      "anker": [
+       61,
+       320
+      ]
+     },
+     {
+      "naam": "berk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       55,
+       239,
+       70,
+       7
+      ],
+      "vorm": 3,
+      "cel": [
+       258,
+       696,
+       125,
+       346
+      ],
+      "anker": [
+       55,
+       320
+      ]
+     },
+     {
+      "naam": "berk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       61,
+       236,
+       66,
+       8
+      ],
+      "vorm": 4,
+      "cel": [
+       0,
+       696,
+       127,
+       346
+      ],
+      "anker": [
+       61,
+       320
+      ]
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": "wilg",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       87,
+       206,
+       93,
+       20
+      ],
+      "vorm": 2,
+      "cel": [
+       1552,
+       0,
+       180,
+       346
+      ],
+      "anker": [
+       87,
+       320
+      ]
+     },
+     {
+      "naam": "wilg",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       84,
+       204,
+       90,
+       22
+      ],
+      "vorm": 3,
+      "cel": [
+       181,
+       348,
+       174,
+       346
+      ],
+      "anker": [
+       84,
+       320
+      ]
+     },
+     {
+      "naam": "appelboom",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       81,
+       168,
+       80,
+       23
+      ],
+      "vorm": 2,
+      "cel": [
+       357,
+       348,
+       161,
+       346
+      ],
+      "anker": [
+       81,
+       320
+      ]
+     },
+     {
+      "naam": "appelboom",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       78,
+       167,
+       69,
+       26
+      ],
+      "vorm": 3,
+      "cel": [
+       1002,
+       348,
+       147,
+       346
+      ],
+      "anker": [
+       78,
+       320
+      ]
+     },
+     {
+      "naam": "appelboom",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       78,
+       170,
+       81,
+       24
+      ],
+      "vorm": 4,
+      "cel": [
+       682,
+       348,
+       159,
+       346
+      ],
+      "anker": [
+       78,
+       320
+      ]
+     },
+     {
+      "naam": "beuk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       94,
+       219,
+       105,
+       26
+      ],
+      "cel": [
+       217,
+       0,
+       199,
+       346
+      ],
+      "anker": [
+       94,
+       320
+      ]
+     },
+     {
+      "naam": "beuk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       99,
+       239,
+       97,
+       22
+      ],
+      "vorm": 2,
+      "cel": [
+       418,
+       0,
+       196,
+       346
+      ],
+      "anker": [
+       99,
+       320
+      ]
+     },
+     {
+      "naam": "beuk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       93,
+       226,
+       86,
+       16
+      ],
+      "vorm": 3,
+      "cel": [
+       0,
+       348,
+       179,
+       346
+      ],
+      "anker": [
+       93,
+       320
+      ]
+     },
+     {
+      "naam": "beuk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       97,
+       232,
+       96,
+       26
+      ],
+      "vorm": 4,
+      "cel": [
+       616,
+       0,
+       193,
+       346
+      ],
+      "anker": [
+       97,
+       320
+      ]
+     },
+     {
+      "naam": "linde",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       67,
+       254,
+       74,
+       21
+      ],
+      "cel": [
+       1299,
+       348,
+       141,
+       346
+      ],
+      "anker": [
+       67,
+       320
+      ]
+     },
+     {
+      "naam": "linde",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       61,
+       237,
+       80,
+       17
+      ],
+      "vorm": 2,
+      "cel": [
+       1442,
+       348,
+       141,
+       346
+      ],
+      "anker": [
+       61,
+       320
+      ]
+     },
+     {
+      "naam": "linde",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       66,
+       263,
+       80,
+       15
+      ],
+      "vorm": 3,
+      "cel": [
+       1151,
+       348,
+       146,
+       346
+      ],
+      "anker": [
+       66,
+       320
+      ]
+     },
+     {
+      "naam": "els",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       71,
+       195,
+       57,
+       20
+      ],
+      "cel": [
+       1849,
+       348,
+       128,
+       346
+      ],
+      "anker": [
+       71,
+       320
+      ]
+     },
+     {
+      "naam": "els",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       68,
+       215,
+       59,
+       16
+      ],
+      "vorm": 2,
+      "cel": [
+       129,
+       696,
+       127,
+       346
+      ],
+      "anker": [
+       68,
+       320
+      ]
+     },
+     {
+      "naam": "els",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       60,
+       214,
+       59,
+       13
+      ],
+      "vorm": 3,
+      "cel": [
+       507,
+       696,
+       119,
+       346
+      ],
+      "anker": [
+       60,
+       320
+      ]
+     },
+     {
+      "naam": "populier",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       37,
+       251,
+       36,
+       10
+      ],
+      "cel": [
+       1684,
+       696,
+       73,
+       346
+      ],
+      "anker": [
+       37,
+       320
+      ]
+     },
+     {
+      "naam": "populier",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       36,
+       236,
+       37,
+       10
+      ],
+      "vorm": 2,
+      "cel": [
+       1759,
+       696,
+       73,
+       346
+      ],
+      "anker": [
+       36,
+       320
+      ]
+     },
+     {
+      "naam": "populier",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       35,
+       249,
+       37,
+       10
+      ],
+      "vorm": 3,
+      "cel": [
+       1834,
+       696,
+       72,
+       346
+      ],
+      "anker": [
+       35,
+       320
+      ]
+     },
+     {
+      "naam": "knotwilg",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       54,
+       157,
+       51,
+       10
+      ],
+      "cel": [
+       1081,
+       696,
+       105,
+       346
+      ],
+      "anker": [
+       54,
+       320
+      ]
+     },
+     {
+      "naam": "knotwilg",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       48,
+       160,
+       55,
+       10
+      ],
+      "vorm": 2,
+      "cel": [
+       1188,
+       696,
+       103,
+       346
+      ],
+      "anker": [
+       48,
+       320
+      ]
+     },
+     {
+      "naam": "knotwilg",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       52,
+       145,
+       48,
+       10
+      ],
+      "vorm": 3,
+      "cel": [
+       1396,
+       696,
+       100,
+       346
+      ],
+      "anker": [
+       52,
+       320
+      ]
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": "meidoorn",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       55,
+       102,
+       51,
+       3
+      ],
+      "cel": [
+       865,
+       696,
+       106,
+       346
+      ],
+      "anker": [
+       55,
+       320
+      ]
+     },
+     {
+      "naam": "meidoorn",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       53,
+       104,
+       53,
+       4
+      ],
+      "vorm": 2,
+      "cel": [
+       973,
+       696,
+       106,
+       346
+      ],
+      "anker": [
+       53,
+       320
+      ]
+     },
+     {
+      "naam": "meidoorn",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       52,
+       103,
+       47,
+       5
+      ],
+      "vorm": 3,
+      "cel": [
+       1498,
+       696,
+       99,
+       346
+      ],
+      "anker": [
+       52,
+       320
+      ]
+     },
+     {
+      "naam": "hazelaar",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       61,
+       113,
+       58,
+       4
+      ],
+      "cel": [
+       628,
+       696,
+       119,
+       346
+      ],
+      "anker": [
+       61,
+       320
+      ]
+     },
+     {
+      "naam": "hazelaar",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       60,
+       116,
+       60,
+       4
+      ],
+      "vorm": 2,
+      "cel": [
+       385,
+       696,
+       120,
+       346
+      ],
+      "anker": [
+       60,
+       320
+      ]
+     },
+     {
+      "naam": "hazelaar",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       57,
+       113,
+       57,
+       4
+      ],
+      "vorm": 3,
+      "cel": [
+       749,
+       696,
+       114,
+       346
+      ],
+      "anker": [
+       57,
+       320
+      ]
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     }
+    ]
+   },
+   "bomen-winter": {
+    "tsx": "tegels/bomen-winter.tsx",
+    "bestand": "tegels/bomen-winter.png",
+    "breedte": 1973,
+    "hoogte": 1358,
+    "ingepakt": true,
+    "seizoen": "winter",
+    "van": "bomen",
+    "tiles": [
+     {
+      "naam": "eik",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       108,
+       238,
+       111,
+       14
+      ],
+      "cel": [
+       0,
+       340,
+       219,
+       338
+      ],
+      "anker": [
+       108,
+       312
+      ]
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": "berk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       73,
+       250,
+       79,
+       6
+      ],
+      "cel": [
+       655,
+       680,
+       152,
+       338
+      ],
+      "anker": [
+       73,
+       312
+      ]
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": "wilg",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       81,
+       197,
+       87,
+       23
+      ],
+      "cel": [
+       0,
+       680,
+       168,
+       338
+      ],
+      "anker": [
+       81,
+       312
+      ]
+     },
+     {
+      "naam": "appelboom",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       93,
+       190,
+       96,
+       9
+      ],
+      "cel": [
+       842,
+       340,
+       189,
+       338
+      ],
+      "anker": [
+       93,
+       312
+      ]
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": "jongeEik",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       64,
+       139,
+       48,
+       6
+      ],
+      "cel": [
+       375,
+       1020,
+       112,
+       338
+      ],
+      "anker": [
+       64,
+       312
+      ]
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": "jongeBerk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       50,
+       149,
+       49,
+       4
+      ],
+      "cel": [
+       600,
+       1020,
+       99,
+       338
+      ],
+      "anker": [
+       50,
+       312
+      ]
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": "eik",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       132,
+       232,
+       140,
+       15
+      ],
+      "vorm": 2,
+      "cel": [
+       0,
+       0,
+       272,
+       338
+      ],
+      "anker": [
+       132,
+       312
+      ]
+     },
+     {
+      "naam": "eik",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       103,
+       253,
+       107,
+       13
+      ],
+      "vorm": 3,
+      "cel": [
+       437,
+       340,
+       210,
+       338
+      ],
+      "anker": [
+       103,
+       312
+      ]
+     },
+     {
+      "naam": "eik",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       87,
+       235,
+       127,
+       14
+      ],
+      "vorm": 4,
+      "cel": [
+       221,
+       340,
+       214,
+       338
+      ],
+      "anker": [
+       87,
+       312
+      ]
+     },
+     {
+      "naam": "eik",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       145,
+       267,
+       100,
+       15
+      ],
+      "vorm": 5,
+      "cel": [
+       527,
+       0,
+       245,
+       338
+      ],
+      "anker": [
+       145,
+       312
+      ]
+     },
+     {
+      "naam": "eik",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       117,
+       228,
+       107,
+       17
+      ],
+      "vorm": 6,
+      "cel": [
+       1246,
+       0,
+       224,
+       338
+      ],
+      "anker": [
+       117,
+       312
+      ]
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": "berk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       72,
+       246,
+       86,
+       6
+      ],
+      "vorm": 2,
+      "cel": [
+       340,
+       680,
+       158,
+       338
+      ],
+      "anker": [
+       72,
+       312
+      ]
+     },
+     {
+      "naam": "berk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       63,
+       248,
+       82,
+       7
+      ],
+      "vorm": 3,
+      "cel": [
+       1112,
+       680,
+       145,
+       338
+      ],
+      "anker": [
+       63,
+       312
+      ]
+     },
+     {
+      "naam": "berk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       73,
+       249,
+       72,
+       8
+      ],
+      "vorm": 4,
+      "cel": [
+       1259,
+       680,
+       145,
+       338
+      ],
+      "anker": [
+       73,
+       312
+      ]
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": "wilg",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       84,
+       199,
+       85,
+       19
+      ],
+      "vorm": 2,
+      "cel": [
+       1756,
+       340,
+       169,
+       338
+      ],
+      "anker": [
+       84,
+       312
+      ]
+     },
+     {
+      "naam": "wilg",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       82,
+       195,
+       86,
+       22
+      ],
+      "vorm": 3,
+      "cel": [
+       170,
+       680,
+       168,
+       338
+      ],
+      "anker": [
+       82,
+       312
+      ]
+     },
+     {
+      "naam": "appelboom",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       107,
+       186,
+       113,
+       9
+      ],
+      "vorm": 2,
+      "cel": [
+       1696,
+       0,
+       220,
+       338
+      ],
+      "anker": [
+       107,
+       312
+      ]
+     },
+     {
+      "naam": "appelboom",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       97,
+       184,
+       94,
+       9
+      ],
+      "vorm": 3,
+      "cel": [
+       649,
+       340,
+       191,
+       338
+      ],
+      "anker": [
+       97,
+       312
+      ]
+     },
+     {
+      "naam": "appelboom",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       88,
+       195,
+       93,
+       10
+      ],
+      "vorm": 4,
+      "cel": [
+       1222,
+       340,
+       181,
+       338
+      ],
+      "anker": [
+       88,
+       312
+      ]
+     },
+     {
+      "naam": "beuk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       106,
+       245,
+       131,
+       12
+      ],
+      "cel": [
+       774,
+       0,
+       237,
+       338
+      ],
+      "anker": [
+       106,
+       312
+      ]
+     },
+     {
+      "naam": "beuk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       125,
+       263,
+       126,
+       12
+      ],
+      "vorm": 2,
+      "cel": [
+       274,
+       0,
+       251,
+       338
+      ],
+      "anker": [
+       125,
+       312
+      ]
+     },
+     {
+      "naam": "beuk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       111,
+       248,
+       111,
+       12
+      ],
+      "vorm": 3,
+      "cel": [
+       1472,
+       0,
+       222,
+       338
+      ],
+      "anker": [
+       111,
+       312
+      ]
+     },
+     {
+      "naam": "beuk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       112,
+       261,
+       119,
+       13
+      ],
+      "vorm": 4,
+      "cel": [
+       1013,
+       0,
+       231,
+       338
+      ],
+      "anker": [
+       112,
+       312
+      ]
+     },
+     {
+      "naam": "linde",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       81,
+       273,
+       91,
+       12
+      ],
+      "cel": [
+       1582,
+       340,
+       172,
+       338
+      ],
+      "anker": [
+       81,
+       312
+      ]
+     },
+     {
+      "naam": "linde",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       78,
+       254,
+       97,
+       12
+      ],
+      "vorm": 2,
+      "cel": [
+       1405,
+       340,
+       175,
+       338
+      ],
+      "anker": [
+       78,
+       312
+      ]
+     },
+     {
+      "naam": "linde",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       88,
+       280,
+       99,
+       12
+      ],
+      "vorm": 3,
+      "cel": [
+       1033,
+       340,
+       187,
+       338
+      ],
+      "anker": [
+       88,
+       312
+      ]
+     },
+     {
+      "naam": "els",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       75,
+       214,
+       72,
+       11
+      ],
+      "cel": [
+       963,
+       680,
+       147,
+       338
+      ],
+      "anker": [
+       75,
+       312
+      ]
+     },
+     {
+      "naam": "els",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       80,
+       235,
+       73,
+       12
+      ],
+      "vorm": 2,
+      "cel": [
+       500,
+       680,
+       153,
+       338
+      ],
+      "anker": [
+       80,
+       312
+      ]
+     },
+     {
+      "naam": "els",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       71,
+       230,
+       65,
+       12
+      ],
+      "vorm": 3,
+      "cel": [
+       1837,
+       680,
+       136,
+       338
+      ],
+      "anker": [
+       71,
+       312
+      ]
+     },
+     {
+      "naam": "populier",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       47,
+       251,
+       42,
+       10
+      ],
+      "cel": [
+       799,
+       1020,
+       89,
+       338
+      ],
+      "anker": [
+       47,
+       312
+      ]
+     },
+     {
+      "naam": "populier",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       47,
+       236,
+       42,
+       10
+      ],
+      "vorm": 2,
+      "cel": [
+       890,
+       1020,
+       89,
+       338
+      ],
+      "anker": [
+       47,
+       312
+      ]
+     },
+     {
+      "naam": "populier",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       48,
+       249,
+       40,
+       10
+      ],
+      "vorm": 3,
+      "cel": [
+       981,
+       1020,
+       88,
+       338
+      ],
+      "anker": [
+       48,
+       312
+      ]
+     },
+     {
+      "naam": "knotwilg",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       64,
+       176,
+       45,
+       10
+      ],
+      "cel": [
+       489,
+       1020,
+       109,
+       338
+      ],
+      "anker": [
+       64,
+       312
+      ]
+     },
+     {
+      "naam": "knotwilg",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       48,
+       179,
+       48,
+       10
+      ],
+      "vorm": 2,
+      "cel": [
+       701,
+       1020,
+       96,
+       338
+      ],
+      "anker": [
+       48,
+       312
+      ]
+     },
+     {
+      "naam": "knotwilg",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       61,
+       162,
+       54,
+       10
+      ],
+      "vorm": 3,
+      "cel": [
+       258,
+       1020,
+       115,
+       338
+      ],
+      "anker": [
+       61,
+       312
+      ]
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": "meidoorn",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       63,
+       117,
+       64,
+       3
+      ],
+      "cel": [
+       0,
+       1020,
+       127,
+       338
+      ],
+      "anker": [
+       63,
+       312
+      ]
+     },
+     {
+      "naam": "meidoorn",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       69,
+       115,
+       72,
+       4
+      ],
+      "vorm": 2,
+      "cel": [
+       1551,
+       680,
+       141,
+       338
+      ],
+      "anker": [
+       69,
+       312
+      ]
+     },
+     {
+      "naam": "meidoorn",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       64,
+       113,
+       63,
+       5
+      ],
+      "vorm": 3,
+      "cel": [
+       129,
+       1020,
+       127,
+       338
+      ],
+      "anker": [
+       64,
+       312
+      ]
+     },
+     {
+      "naam": "hazelaar",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       69,
+       126,
+       74,
+       4
+      ],
+      "cel": [
+       1406,
+       680,
+       143,
+       338
+      ],
+      "anker": [
+       69,
+       312
+      ]
+     },
+     {
+      "naam": "hazelaar",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       74,
+       128,
+       78,
+       4
+      ],
+      "vorm": 2,
+      "cel": [
+       809,
+       680,
+       152,
+       338
+      ],
+      "anker": [
+       74,
+       312
+      ]
+     },
+     {
+      "naam": "hazelaar",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       69,
+       124,
+       72,
+       4
+      ],
+      "vorm": 3,
+      "cel": [
+       1694,
+       680,
+       141,
+       338
+      ],
+      "anker": [
+       69,
+       312
+      ]
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     }
+    ]
+   },
+   "bomen-sneeuw": {
+    "tsx": "tegels/bomen-sneeuw.tsx",
+    "bestand": "tegels/bomen-sneeuw.png",
+    "breedte": 2045,
+    "hoogte": 1703,
+    "ingepakt": true,
+    "seizoen": "sneeuw",
+    "van": "bomen",
+    "tiles": [
+     {
+      "naam": "eik",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       108,
+       238,
+       111,
+       14
+      ],
+      "cel": [
+       0,
+       341,
+       219,
+       339
+      ],
+      "anker": [
+       108,
+       313
+      ]
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": "den",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       58,
+       257,
+       73,
+       8
+      ],
+      "cel": [
+       831,
+       1023,
+       131,
+       339
+      ],
+      "anker": [
+       58,
+       313
+      ]
+     },
+     {
+      "naam": "berk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       73,
+       250,
+       79,
+       6
+      ],
+      "cel": [
+       811,
+       682,
+       152,
+       339
+      ],
+      "anker": [
+       73,
+       313
+      ]
+     },
+     {
+      "naam": "dodeBoom",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       73,
+       175,
+       81,
+       14
+      ],
+      "cel": [
+       500,
+       682,
+       154,
+       339
+      ],
+      "anker": [
+       73,
+       313
+      ]
+     },
+     {
+      "naam": "wilg",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       81,
+       197,
+       87,
+       23
+      ],
+      "cel": [
+       0,
+       682,
+       168,
+       339
+      ],
+      "anker": [
+       81,
+       313
+      ]
+     },
+     {
+      "naam": "appelboom",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       93,
+       190,
+       96,
+       9
+      ],
+      "cel": [
+       842,
+       341,
+       189,
+       339
+      ],
+      "anker": [
+       93,
+       313
+      ]
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": "jongeEik",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       64,
+       139,
+       48,
+       6
+      ],
+      "cel": [
+       1721,
+       1023,
+       112,
+       339
+      ],
+      "anker": [
+       64,
+       313
+      ]
+     },
+     {
+      "naam": "jongeDen",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       32,
+       154,
+       39,
+       6
+      ],
+      "cel": [
+       370,
+       1364,
+       71,
+       339
+      ],
+      "anker": [
+       32,
+       313
+      ]
+     },
+     {
+      "naam": "jongeBerk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       50,
+       149,
+       49,
+       4
+      ],
+      "cel": [
+       1946,
+       1023,
+       99,
+       339
+      ],
+      "anker": [
+       50,
+       313
+      ]
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": "eik",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       132,
+       232,
+       140,
+       15
+      ],
+      "vorm": 2,
+      "cel": [
+       0,
+       0,
+       272,
+       339
+      ],
+      "anker": [
+       132,
+       313
+      ]
+     },
+     {
+      "naam": "eik",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       103,
+       253,
+       107,
+       13
+      ],
+      "vorm": 3,
+      "cel": [
+       437,
+       341,
+       210,
+       339
+      ],
+      "anker": [
+       103,
+       313
+      ]
+     },
+     {
+      "naam": "eik",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       87,
+       235,
+       127,
+       14
+      ],
+      "vorm": 4,
+      "cel": [
+       221,
+       341,
+       214,
+       339
+      ],
+      "anker": [
+       87,
+       313
+      ]
+     },
+     {
+      "naam": "eik",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       145,
+       267,
+       100,
+       15
+      ],
+      "vorm": 5,
+      "cel": [
+       527,
+       0,
+       245,
+       339
+      ],
+      "anker": [
+       145,
+       313
+      ]
+     },
+     {
+      "naam": "eik",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       117,
+       228,
+       107,
+       17
+      ],
+      "vorm": 6,
+      "cel": [
+       1246,
+       0,
+       224,
+       339
+      ],
+      "anker": [
+       117,
+       313
+      ]
+     },
+     {
+      "naam": "den",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       71,
+       276,
+       63,
+       8
+      ],
+      "vorm": 2,
+      "cel": [
+       560,
+       1023,
+       134,
+       339
+      ],
+      "anker": [
+       71,
+       313
+      ]
+     },
+     {
+      "naam": "den",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       71,
+       262,
+       62,
+       9
+      ],
+      "vorm": 3,
+      "cel": [
+       696,
+       1023,
+       133,
+       339
+      ],
+      "anker": [
+       71,
+       313
+      ]
+     },
+     {
+      "naam": "den",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       64,
+       266,
+       72,
+       9
+      ],
+      "vorm": 4,
+      "cel": [
+       284,
+       1023,
+       136,
+       339
+      ],
+      "anker": [
+       64,
+       313
+      ]
+     },
+     {
+      "naam": "berk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       72,
+       246,
+       86,
+       6
+      ],
+      "vorm": 2,
+      "cel": [
+       340,
+       682,
+       158,
+       339
+      ],
+      "anker": [
+       72,
+       313
+      ]
+     },
+     {
+      "naam": "berk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       63,
+       248,
+       82,
+       7
+      ],
+      "vorm": 3,
+      "cel": [
+       1268,
+       682,
+       145,
+       339
+      ],
+      "anker": [
+       63,
+       313
+      ]
+     },
+     {
+      "naam": "berk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       73,
+       249,
+       72,
+       8
+      ],
+      "vorm": 4,
+      "cel": [
+       1415,
+       682,
+       145,
+       339
+      ],
+      "anker": [
+       73,
+       313
+      ]
+     },
+     {
+      "naam": "dodeBoom",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       59,
+       190,
+       80,
+       15
+      ],
+      "vorm": 2,
+      "cel": [
+       143,
+       1023,
+       139,
+       339
+      ],
+      "anker": [
+       59,
+       313
+      ]
+     },
+     {
+      "naam": "dodeBoom",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       69,
+       177,
+       56,
+       15
+      ],
+      "vorm": 3,
+      "cel": [
+       1354,
+       1023,
+       125,
+       339
+      ],
+      "anker": [
+       69,
+       313
+      ]
+     },
+     {
+      "naam": "wilg",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       84,
+       199,
+       85,
+       19
+      ],
+      "vorm": 2,
+      "cel": [
+       1756,
+       341,
+       169,
+       339
+      ],
+      "anker": [
+       84,
+       313
+      ]
+     },
+     {
+      "naam": "wilg",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       82,
+       195,
+       86,
+       22
+      ],
+      "vorm": 3,
+      "cel": [
+       170,
+       682,
+       168,
+       339
+      ],
+      "anker": [
+       82,
+       313
+      ]
+     },
+     {
+      "naam": "appelboom",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       107,
+       186,
+       113,
+       9
+      ],
+      "vorm": 2,
+      "cel": [
+       1696,
+       0,
+       220,
+       339
+      ],
+      "anker": [
+       107,
+       313
+      ]
+     },
+     {
+      "naam": "appelboom",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       97,
+       184,
+       94,
+       9
+      ],
+      "vorm": 3,
+      "cel": [
+       649,
+       341,
+       191,
+       339
+      ],
+      "anker": [
+       97,
+       313
+      ]
+     },
+     {
+      "naam": "appelboom",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       88,
+       195,
+       93,
+       10
+      ],
+      "vorm": 4,
+      "cel": [
+       1222,
+       341,
+       181,
+       339
+      ],
+      "anker": [
+       88,
+       313
+      ]
+     },
+     {
+      "naam": "beuk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       106,
+       245,
+       131,
+       12
+      ],
+      "cel": [
+       774,
+       0,
+       237,
+       339
+      ],
+      "anker": [
+       106,
+       313
+      ]
+     },
+     {
+      "naam": "beuk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       125,
+       263,
+       126,
+       12
+      ],
+      "vorm": 2,
+      "cel": [
+       274,
+       0,
+       251,
+       339
+      ],
+      "anker": [
+       125,
+       313
+      ]
+     },
+     {
+      "naam": "beuk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       111,
+       248,
+       111,
+       12
+      ],
+      "vorm": 3,
+      "cel": [
+       1472,
+       0,
+       222,
+       339
+      ],
+      "anker": [
+       111,
+       313
+      ]
+     },
+     {
+      "naam": "beuk",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       112,
+       261,
+       119,
+       13
+      ],
+      "vorm": 4,
+      "cel": [
+       1013,
+       0,
+       231,
+       339
+      ],
+      "anker": [
+       112,
+       313
+      ]
+     },
+     {
+      "naam": "linde",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       81,
+       273,
+       91,
+       12
+      ],
+      "cel": [
+       1582,
+       341,
+       172,
+       339
+      ],
+      "anker": [
+       81,
+       313
+      ]
+     },
+     {
+      "naam": "linde",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       78,
+       254,
+       97,
+       12
+      ],
+      "vorm": 2,
+      "cel": [
+       1405,
+       341,
+       175,
+       339
+      ],
+      "anker": [
+       78,
+       313
+      ]
+     },
+     {
+      "naam": "linde",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       88,
+       280,
+       99,
+       12
+      ],
+      "vorm": 3,
+      "cel": [
+       1033,
+       341,
+       187,
+       339
+      ],
+      "anker": [
+       88,
+       313
+      ]
+     },
+     {
+      "naam": "els",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       75,
+       214,
+       72,
+       11
+      ],
+      "cel": [
+       1119,
+       682,
+       147,
+       339
+      ],
+      "anker": [
+       75,
+       313
+      ]
+     },
+     {
+      "naam": "els",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       80,
+       235,
+       73,
+       12
+      ],
+      "vorm": 2,
+      "cel": [
+       656,
+       682,
+       153,
+       339
+      ],
+      "anker": [
+       80,
+       313
+      ]
+     },
+     {
+      "naam": "els",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       71,
+       230,
+       65,
+       12
+      ],
+      "vorm": 3,
+      "cel": [
+       422,
+       1023,
+       136,
+       339
+      ],
+      "anker": [
+       71,
+       313
+      ]
+     },
+     {
+      "naam": "populier",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       47,
+       251,
+       42,
+       10
+      ],
+      "cel": [
+       98,
+       1364,
+       89,
+       339
+      ],
+      "anker": [
+       47,
+       313
+      ]
+     },
+     {
+      "naam": "populier",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       47,
+       236,
+       42,
+       10
+      ],
+      "vorm": 2,
+      "cel": [
+       189,
+       1364,
+       89,
+       339
+      ],
+      "anker": [
+       47,
+       313
+      ]
+     },
+     {
+      "naam": "populier",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       48,
+       249,
+       40,
+       10
+      ],
+      "vorm": 3,
+      "cel": [
+       280,
+       1364,
+       88,
+       339
+      ],
+      "anker": [
+       48,
+       313
+      ]
+     },
+     {
+      "naam": "knotwilg",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       64,
+       176,
+       45,
+       10
+      ],
+      "cel": [
+       1835,
+       1023,
+       109,
+       339
+      ],
+      "anker": [
+       64,
+       313
+      ]
+     },
+     {
+      "naam": "knotwilg",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       48,
+       179,
+       48,
+       10
+      ],
+      "vorm": 2,
+      "cel": [
+       0,
+       1364,
+       96,
+       339
+      ],
+      "anker": [
+       48,
+       313
+      ]
+     },
+     {
+      "naam": "knotwilg",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       61,
+       162,
+       54,
+       10
+      ],
+      "vorm": 3,
+      "cel": [
+       1604,
+       1023,
+       115,
+       339
+      ],
+      "anker": [
+       61,
+       313
+      ]
+     },
+     {
+      "naam": "groveDen",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       57,
+       230,
+       64,
+       10
+      ],
+      "cel": [
+       1481,
+       1023,
+       121,
+       339
+      ],
+      "anker": [
+       57,
+       313
+      ]
+     },
+     {
+      "naam": "groveDen",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       54,
+       258,
+       76,
+       11
+      ],
+      "vorm": 2,
+      "cel": [
+       964,
+       1023,
+       130,
+       339
+      ],
+      "anker": [
+       54,
+       313
+      ]
+     },
+     {
+      "naam": "groveDen",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       76,
+       213,
+       66,
+       11
+      ],
+      "vorm": 3,
+      "cel": [
+       1707,
+       682,
+       142,
+       339
+      ],
+      "anker": [
+       76,
+       313
+      ]
+     },
+     {
+      "naam": "meidoorn",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       63,
+       117,
+       64,
+       3
+      ],
+      "cel": [
+       1096,
+       1023,
+       127,
+       339
+      ],
+      "anker": [
+       63,
+       313
+      ]
+     },
+     {
+      "naam": "meidoorn",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       69,
+       115,
+       72,
+       4
+      ],
+      "vorm": 2,
+      "cel": [
+       1851,
+       682,
+       141,
+       339
+      ],
+      "anker": [
+       69,
+       313
+      ]
+     },
+     {
+      "naam": "meidoorn",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       64,
+       113,
+       63,
+       5
+      ],
+      "vorm": 3,
+      "cel": [
+       1225,
+       1023,
+       127,
+       339
+      ],
+      "anker": [
+       64,
+       313
+      ]
+     },
+     {
+      "naam": "hazelaar",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       69,
+       126,
+       74,
+       4
+      ],
+      "cel": [
+       1562,
+       682,
+       143,
+       339
+      ],
+      "anker": [
+       69,
+       313
+      ]
+     },
+     {
+      "naam": "hazelaar",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       74,
+       128,
+       78,
+       4
+      ],
+      "vorm": 2,
+      "cel": [
+       965,
+       682,
+       152,
+       339
+      ],
+      "anker": [
+       74,
+       313
+      ]
+     },
+     {
+      "naam": "hazelaar",
+      "vast": true,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": [
+       69,
+       124,
+       72,
+       4
+      ],
+      "vorm": 3,
+      "cel": [
+       0,
+       1023,
+       141,
+       339
+      ],
+      "anker": [
+       69,
+       313
+      ]
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     },
+     {
+      "naam": null,
+      "vast": false,
+      "beslaat": null,
+      "groep": null,
+      "staat": null,
+      "deur": null,
+      "doos": null
+     }
+    ]
    }
   };
 })(globalThis.Spel = globalThis.Spel || {});

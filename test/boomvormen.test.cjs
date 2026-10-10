@@ -16,16 +16,16 @@ test('elke boom en struik uit T.BOMEN heeft een tekening, en een boom een vorm p
   const gezien = new Set();
   for (let y = 0; y < 20; y++) {
     for (let x = 0; x < 20; x++) {
-      const t = T.sprites.tekeningVan({ vel: 'bomen', id, x, y, soort: 'eik' });
+      const t = T.sprites.tekeningVan({ vel: 'bomen', id, x, y, soort: 'eik' }).id;
       assert.equal(vel.tiles[t].naam, 'eik');
       gezien.add(t);
     }
   }
   assert.equal(gezien.size, 6);
   // dezelfde tegel, dezelfde tekening; en wat maar één tekening heeft (het boompje), houdt de zijne
-  assert.equal(T.sprites.tekeningVan({ vel: 'bomen', id, x: 7, y: 3 }), T.sprites.tekeningVan({ vel: 'bomen', id, x: 7, y: 3 }));
+  assert.deepEqual(T.sprites.tekeningVan({ vel: 'bomen', id, x: 7, y: 3 }), T.sprites.tekeningVan({ vel: 'bomen', id, x: 7, y: 3 }));
   const boompje = eersteVan('boompje');
-  assert.equal(T.sprites.tekeningVan({ vel: 'bomen', id: boompje, x: 7, y: 3 }), boompje);
+  assert.equal(T.sprites.tekeningVan({ vel: 'bomen', id: boompje, x: 7, y: 3 }).id, boompje);
 });
 
 test('een nieuwe soort telt mee: een beuk is bos, een meidoorn rooi je, een appelboom is van iemand', () => {
@@ -69,4 +69,52 @@ test('een kaart leest een gid zoals Tiled: een vel dat groeide, valt niet over h
   const begroeid = w.voorwerpen.filter((v) => v.vel === 'begroeiing');
   assert.ok(begroeid.length > 0, 'de begroeiing van het gehucht komt nog uit het vel van de begroeiing');
   for (const v of w.voorwerpen.filter((v) => v.vel === 'bomen')) assert.ok(!vel.tiles[v.id].vorm, `${v.soort} op (${v.x}, ${v.y}) is een vorm, geen eerste tekening`);
+});
+
+// De bomen in het jaar (vraag 148, stap 2; Marcel, 9 okt: "Ja vegetatie en bomen met seizoenen mee", en "Sneeuw moet ook
+// nog op bomen"): per maand een seizoen, en sneeuw op de takken als er sneeuw ligt in de winter; per seizoen een vel met
+// dezelfde nummers als het vel van de bomen.
+test('de bomen staan in het seizoen van de maand, en in de winter met sneeuw als die ligt', () => {
+  const dagIn = (maand) => (maand - T.TIJD_START_MAAND) * T.DAGEN_PER_MAAND + 10;
+  const D = { weer: { sneeuw: 0 } };
+  const S = { kalender: { dag: 0 }, dorp: D, dorpen: [D] };
+  const echt = T.dorpHier;
+  T.dorpHier = () => D;
+  try {
+    const seizoen = (maand) => ((S.kalender.dag = dagIn(maand)), T.boomSeizoen(S));
+    assert.equal(seizoen(2), 'lente'); // lentemaand: een spel begint niet kaal
+    assert.equal(seizoen(6), 'zomer');
+    assert.equal(seizoen(9), 'herfst');
+    assert.equal(seizoen(11), 'winter');
+    D.weer.sneeuw = 0.5;
+    assert.equal(seizoen(11), 'sneeuw');
+    assert.equal(seizoen(2), 'lente'); // sneeuw in de lente blijft op de grond
+    T.zetOptie('bomenInHetJaar', 'zomer');
+    assert.equal(seizoen(11), 'zomer');
+    T.zetOptie('bomenInHetJaar', 'mee');
+    assert.equal(T.boomSeizoen({}), 'zomer'); // zonder kalender (het gereedschap)
+  } finally {
+    T.dorpHier = echt;
+  }
+});
+
+test('een vel per seizoen heeft elke tekening op het nummer van de zomer, en een spar alleen met sneeuw', () => {
+  for (const seizoen of ['lente', 'herfst', 'winter', 'sneeuw']) {
+    const s = T.TEGELS[`bomen-${seizoen}`];
+    assert.ok(s, `geen vel bomen-${seizoen} (npm run tiled bomen-${seizoen})`);
+    assert.equal(s.seizoen, seizoen);
+    s.tiles.forEach((t, i) => {
+      if (!t || !t.cel) return;
+      assert.equal(t.naam, vel.tiles[i].naam, `${seizoen} ${i}`);
+      assert.equal(t.vorm, vel.tiles[i].vorm, `${seizoen} ${i}`);
+    });
+    const heeft = (naam) => s.tiles.some((t) => t && t.cel && t.naam === naam);
+    assert.ok(heeft('eik') && heeft('beuk') && heeft('meidoorn'), seizoen);
+    assert.equal(heeft('den'), seizoen === 'sneeuw', seizoen);
+  }
+  // in Node laadt geen plaatje, dus blijft een boom in de zomer: een vel dat er nog niet is, laat geen gat
+  T.sprites.zetSeizoen('herfst');
+  const id = eersteVan('eik');
+  assert.equal(T.sprites.tekeningVan({ vel: 'bomen', id, x: 3, y: 4 }).vel, 'bomen');
+  T.sprites.zetSeizoen('zomer');
 });

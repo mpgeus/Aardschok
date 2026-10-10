@@ -61,8 +61,9 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
 0c. Meer variatie in het groen, de bomen en de versiering (vraag 148; Marcel, 9 okt: alles ja, "Mag ernaast"), naast
    de ui: eerst de bomen (vormen, nieuwe soorten, de seizoenen met vruchten), dan het groen eronder, dan de spullen bij de
    huizen; de sneeuw op de bomen en de huizen (144, 4b, Marcel: "ja") in dezelfde ronde. Stap 1 staat in het spel (10
-   okt, avond): elke boom een van zijn vormen, de nieuwe soorten op de kaart, de spar dunner onder de sneeuw. **Bezig in
-   sessie `main` (desktop, groen)** (10 okt): stap 2, de seizoenen, als Marcel het plan goedvindt.
+   okt, avond): elke boom een van zijn vormen, de nieuwe soorten op de kaart, de spar dunner onder de sneeuw; en stap 2
+   (Marcel: "Ja, doe stap 2 met de sneeuw erbij"): de bomen in het jaar, met sneeuw op de takken. **Bezig in sessie
+   `main` (desktop, groen)** (10 okt): stap 2 afmaken (de winter en de sneeuw renderen); daarna stap 3, het groen eronder.
 1. Een proefversie voor Marcels 4K-scherm en een eerste tester (33d; `npm run proefversie`, ook `-- --windows`), met de
    graanzak erin. De laatste is van 3 okt (`36c713e`), zonder de verzoeken, de twee bazen, het ontginnen, de markt, de
    wolven, het eiland, WebGL en de graanzak.
@@ -7542,6 +7543,16 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     kaart leest een tegelnummer nu zoals Tiled (`js/kaart.js`), zodat een vel kan groeien zonder over het vel erna te
     vallen. De sneeuw op een spar is dunner (`sneeuwDikte` 0,25), zodat hij niet meer helemaal wit wordt. Het vel is in de
     browser zo'n 7 MB. **Open:** een populier staat er nog weinig (de losse bomen houden afstand van de weg).
+    **Stap 2, de bomen in het jaar (10 okt, nacht; Marcel: "Ja, doe stap 2 met de sneeuw erbij"):** per seizoen een vel
+    met elke tekening op het nummer van de zomer (`bomen-lente`, `bomen-herfst`, `bomen-winter`, `bomen-sneeuw`;
+    `bouwSeizoenVel` in `naar-tiled.cjs`): een loofboom in alle vier (jong blad en bloesem, geel en rood met blad op de
+    grond en rijpe appels, kaal, kaal met sneeuw), een den en een dode boom alleen met sneeuw. Het spel laadt zo'n vel pas
+    in zijn seizoen (`T.sprites.zetSeizoen`), en tot het er is, staan de bomen in de zomer. Het seizoen zegt
+    `T.boomSeizoen(S)` (`js/bos.js`): per maand (`bomenInHetJaar`; lentemaand is al lente, want daar begint een spel), en
+    in de winter met sneeuw op de takken als er minstens `sneeuwOpDeBomen` op de grond ligt. De spelregel "De bomen in het
+    jaar" (met de seizoenen, of altijd zomer). De herfsteik staat niet meer in het bos om de kaart: de bomen kleuren nu
+    zelf. Kijken: `Spel.debug.bomen = 'herfst'`. Nog niet: de heide die paars bloeit en de bloemen per seizoen (bij stap
+    3, het groen eronder).
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

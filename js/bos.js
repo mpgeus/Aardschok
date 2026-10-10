@@ -75,6 +75,15 @@
     // Het poppetje van de houthakker (js/veldwerk.js), in uren: zo lang hakt hij aan een stuk, dan brengt hij een bundel
     // naar zijn schuur.
     hakUren: 2,
+    // De bomen in het jaar (vraag 148, stap 2; de spelregel "De bomen in het jaar"): of ze meegaan met de seizoenen, en in
+    // welk seizoen ze staan, per maand van louwmaand tot wintermaand. Lente is jong blad en bloesem, herfst geel, oranje en
+    // rood met blad op de grond, winter kaal. Lentemaand is al lente, want daar begint een spel: anders stond het dorp kaal
+    // als je begint.
+    seizoenen: true,
+    bomenInHetJaar: ['winter', 'winter', 'lente', 'lente', 'lente', 'zomer', 'zomer', 'zomer', 'zomer', 'herfst', 'herfst', 'winter'],
+    // In de winter dragen de bomen sneeuw (ook de dennen) als er zoveel sneeuw op de grond ligt (0 tot 1, D.weer.sneeuw in
+    // js/weer.js).
+    sneeuwOpDeBomen: 0.3,
   };
   const IN = () => T.BOS_INSTELLINGEN;
 
@@ -395,6 +404,19 @@
   // Wat een boompje wordt: dezelfde boom als die er stond (`wordt` in T.BOMEN). Een wilg of een dode boom wordt een eik (er
   // is geen jonge wilg).
   const WORDT = (soort) => (T.BOMEN[soort] && T.BOMEN[soort].wordt) || 'eik';
+
+  // Het seizoen waarin de bomen hier staan (vraag 148, stap 2; Marcel, 9 okt: "Ja vegetatie en bomen met seizoenen mee", en
+  // "Sneeuw moet ook nog op bomen"): 'lente', 'zomer', 'herfst', 'winter', of 'sneeuw' (winter met sneeuw op de takken),
+  // naar de maand en de sneeuw van het dorp dat hier ligt. Alleen beeld: js/tekenen.js geeft het aan T.sprites, die dan de
+  // tekening van dat seizoen neemt. Zonder kalender (het gereedschap) zomer.
+  T.boomSeizoen = function (S) {
+    const I = IN();
+    if (!I.seizoenen || !S.kalender) return 'zomer';
+    const seizoen = I.bomenInHetJaar[T.datumVanDag(S.kalender.dag).maand];
+    const D = T.dorpHier(S);
+    const sneeuw = (D && D.weer && T.WEER_INSTELLINGEN.aan && D.weer.sneeuw) || 0;
+    return seizoen === 'winter' && sneeuw >= I.sneeuwOpDeBomen ? 'sneeuw' : seizoen;
+  };
 
   // Een vast lot uit een plek en een dag, tussen 0 en 1: geen toeval, zodat hetzelfde spel hetzelfde bos geeft.
   const lot = (x, y, dag) => ((((x * 73856093) ^ (y * 19349663) ^ (dag * 83492791)) >>> 0) % 1000) / 1000;
