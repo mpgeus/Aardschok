@@ -724,6 +724,10 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   hoogte zou een stap tegen een helling op meer tijd kunnen kosten, en eraf minder. Niet gebouwd, om niet te blijven
   toevoegen: lopen kent nu alleen "kan wel" of "kan niet" (een wand). Als het land groter wordt (het eiland) en een tocht
   over de bergrug ertoe doet, kan het een gewicht in A* worden (een stap omhoog kost meer), met de looptijd erbij.
+- **Een toets die soms faalt** (10 okt, bij vraag 149): "een gezin wacht op de winter: haalt het hout of het eten hem
+  niet, dan komt er niemand (vraag 59, B)" in `test/erven.test.cjs` faalde één keer in `npm test`, en slaagde daarna los
+  drie keer en in de hele reeks nog eens. Iets in die toets hangt dus van de volgorde of de tijd af; nalopen voordat het
+  een push tegenhoudt.
 
 ## Het beeld
 
