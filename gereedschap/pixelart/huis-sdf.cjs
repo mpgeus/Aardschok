@@ -39,9 +39,10 @@
 // huis(zaad, { knoppen: { pak: false } }) zet er één uit, om te zien wat hij doet.
 //
 // En vier van het voorbeeldhuis (vraag 144; ontwerp/beeld.md, "De huizen naar Marcels voorbeelden"), die nog uit staan
-// tot de ronde van alle tekeningen: verweer (A), diepte (B), en grof (E): grotere vormen met minder ruis, zodat een huis
-// ook uitgezoomd leest (Marcels voorbeeld van 10 okt: een steen zo'n twintig pixels, een pan vijftien): bredere bossen
-// riet, pleister zonder spikkels, grotere en warmere stenen met licht en schaduw per steen, en mos in grotere plukken.
+// tot de ronde van alle tekeningen: verweer (A), diepte (B), grof (E): grotere vormen met minder ruis, zodat een huis ook
+// uitgezoomd leest (Marcels voorbeeld van 10 okt: een steen zo'n twintig pixels, een pan vijftien): bredere bossen riet
+// in minder, dikkere lagen, pleister zonder spikkels, grotere en warmere stenen met licht en schaduw per steen, en mos in
+// grotere plukken; en contrast (E): het pleister lichter en warmer, het houtwerk donkerder.
 //
 // Ronde 2, het materiaal. Zonder opgave kiest het zaad, met de verhoudingen uit ontwerp/beeld.md
 // ("Vooral hout en stro"): riet op zo'n twee derde, leien en spanen op een paar, rode pannen als
@@ -197,6 +198,8 @@ for (const [naam, hexen] of [
   ['zandsteen', ['#262018', '#3e3426', '#5a4c36', '#786848', '#94845c', '#ae9e72', '#c6b88c', '#dcd0a8']],
   // oud hout (het verweren, vraag 144): het warme eiken half naar het grijs van schors, even veel stappen als 'hout'
   ['houtOud', ['#1b1213', '#2f1e1c', '#463024', '#5f442e', '#7a5a3c', '#96744e', '#b08e62', '#c6a87c']],
+  // warm pleister (het contrast, vraag 144, E): room in plaats van gebroken wit, even veel stappen als 'pleister'
+  ['pleisterWarm', ['#4e4034', '#76644e', '#9e8a6a', '#c4b08a', '#e0d0aa', '#f2e6c8', '#fcf6e4']],
 ]) {
   if (K.RAMP[naam] !== undefined) continue;
   K.RAMPEN[naam] = hexen;
@@ -412,7 +415,7 @@ function meng(a, b) {
 
 function knoppenVan(zaad, o) {
   // verweer, diepte en grof staan nog uit: het voorbeeldhuis (vraag 144) zet ze aan, tot de ronde van alle tekeningen
-  const kn = { scheef: true, pak: true, speelgoed: true, verweer: false, diepte: false, grof: false, ...(o.knoppen || {}) };
+  const kn = { scheef: true, pak: true, speelgoed: true, verweer: false, diepte: false, grof: false, contrast: false, ...(o.knoppen || {}) };
   const r = (k) => rnd(zaad * 7919 + 101, k);
   const rs = (k) => r(k) * 2 - 1;
   const kz = (k) => meng(zaad, k);
@@ -524,8 +527,9 @@ function maten(zaad = 1, o = {}) {
     H.ovg = pak ? 20 : 12; // overstek aan de gevel
     H.kopR = pak ? 8 : 1;
     H.helling = ((o.helling ?? HELLING) + sch * rs(34) * 3) * GRAAD;
-    H.laagL = sp ? 30 : 20;
-    H.laagH = pak ? 1.6 : 0;
+    // grof (vraag 144, E): minder en dikkere lagen, met een hoger trapje, zodat het dak uit een paar grote golven bestaat
+    H.laagL = (sp ? 30 : 20) * (H.kn.grof ? 1.5 : 1);
+    H.laagH = pak ? (H.kn.grof ? 3.4 : 1.6) : 0;
     H.worstR = pak ? 18 : 0;
     // de kil en de schild: hoe rond (in eenheden dwars op het dak), en tot hoe ver van de knoop
     // dat afneemt (bij de knoop zelf lopen de nokken in elkaar en moet het scherp blijven)
@@ -2041,14 +2045,17 @@ function rietPatroon(H, C) {
   const stukL = (inLap ? 7 + (hash(kol, 1, zk + 23) % 7) : 4 + (hash(kol, 1, zk) % 6)) * (H.kn.grof ? 1.8 : 1);
   const stuk = Math.floor((P.sE + spring) / stukL);
   const halm = hash(kol, stuk, zk + (inLap ? 17 : 1)) % 12;
-  let s = inLap ? (halm < 2 ? -0.9 : halm > 8 ? 1 : 0) : halm < 3 ? -1.4 : halm > 8 ? 1.1 : 0;
+  // grof: de bossen onderling rustiger, en het verloop over de laag sterker
+  const gr = H.kn.grof;
+  let s = inLap ? (halm < 2 ? -0.9 : halm > 8 ? 1 : 0) : halm < 3 ? (gr ? -0.9 : -1.4) : halm > 8 ? (gr ? 0.8 : 1.1) : 0;
   if (H.laagH) {
     // onderaan elke laag een donkere zoom, rafelig: elke halm houdt ergens anders op
     const fu = f * H.laagL;
     const eind = (hash(kol, k, zk + 9) % 6) * 0.9;
-    if (fu < 1.6 + eind * 0.5) s = -2.4;
-    else if (fu < 1.6 + eind) s = -1.6;
-    else s += -0.8 + 1.5 * klem((fu - 1.6) / (H.laagL - 1.6), 0, 1);
+    const zoom = gr ? 2.8 : 1.6;
+    if (fu < zoom + eind * 0.5) s = gr ? -2.8 : -2.4;
+    else if (fu < zoom + eind) s = gr ? -1.9 : -1.6;
+    else s += gr ? -1.2 + 2.3 * Math.pow(klem((fu - zoom) / (H.laagL - zoom), 0, 1), 0.8) : -0.8 + 1.5 * klem((fu - 1.6) / (H.laagL - 1.6), 0, 1);
   } else {
     // zonder pak: de lagen van rietPixel, alleen als tekening
     if (f < 0.1) s = -2;
@@ -4379,6 +4386,26 @@ function diepte(W, H) {
   for (const m of Object.values(W.mat)) if (m.schaduwKracht !== undefined) m.schaduwKracht *= DIEPTE.zon;
 }
 
+// ---------------------------------------------------------------- ronde 5: het contrast
+
+// Het contrast (o.knoppen.contrast; vraag 144, het voorbeeldhuis, E; Marcels voorbeeld van 10 okt): de materialen staan
+// van elkaar af, zodat een huis in één oogopslag leest: het pleister lichter en warmer (de ramp 'pleisterWarm'), de
+// balken, kozijnen, luiken en deuren donkerder. Na het verweren, dat het pleister grauwer maakt.
+const CONTRAST = {
+  pleister: 0.55, // zoveel stappen lichter
+  hout: 0.9, // zoveel stappen donkerder aan de lichte kant (hi), en een vijfde daarvan aan de donkere (lo)
+};
+const HOUTWERK = ['hout', 'kozijn', 'windveer', 'luik', 'deur', 'plank', 'blok'];
+function contrast(W, H) {
+  const P = W.mat.pleister;
+  if (P && P.ramp === 'pleister') P.ramp = 'pleisterWarm';
+  if (P) Object.assign(P, { lo: P.lo + CONTRAST.pleister, hi: P.hi + CONTRAST.pleister });
+  for (const naam of HOUTWERK) {
+    const m = W.mat[naam];
+    if (m) Object.assign(m, { lo: Math.max(0, m.lo - CONTRAST.hout / 5), hi: m.hi - CONTRAST.hout });
+  }
+}
+
 // ---------------------------------------------------------------- het huis
 
 function huis(zaad = 1, o = {}) {
@@ -5296,6 +5323,7 @@ function huis(zaad = 1, o = {}) {
   });
   if (H.kn.verweer) verweer(W, H);
   if (H.kn.diepte) diepte(W, H);
+  if (H.kn.contrast) contrast(W, H);
   return W;
 }
 

@@ -1052,7 +1052,9 @@ niets past, wijkt de zwakke grond voor strand (naast de zee) of gras. Golven die
   bossen van zo'n drie pixels breed en langer (`rietPatroon`), het pleister in grote zachte vlekken zonder spikkels
   (`pleisterPatroon`), de stenen van de plint en de schoorsteen groter en warm, zonder blauw, met een brede lichte rand
   boven en links en een brede schaduw onder en rechts, en geen spikkels (`steenStap` met `grof` in toren.cjs), en het mos
-  in korrels van vier pixels.
+  in korrels van vier pixels. Daarna (Marcel: "Allebei", op nog grover en de kleuren uit elkaar): het riet in minder en
+  dikkere lagen (`laagL` maal 1,5, het trapje `laagH` ruim twee keer zo hoog, een dikkere zoom en een sterker verloop),
+  en een knop `contrast`: het pleister lichter en warm (de ramp `pleisterWarm`), het houtwerk donkerder (`CONTRAST`).
 - **Meer variatie in het groen, de bomen en de versiering (9 okt 2026; werklijst, vraag 148).** Marcel: "Ik wil meer
   variatie in de vegetatie, ook bomen en versieringen van het dorp." Nu heeft elke soort één tekening en verandert het
   groen niet met het jaar. Het voorstel staat bij vraag 148: elke boom anders (vormen per soort, en de beuk, de linde,
