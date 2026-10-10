@@ -24,8 +24,9 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
 
 **Wacht op Marcel:**
 - Kleren naar stand (vraag 149; Marcel, 10 okt: "Hogere niveau sociale mensen moeten duurdere kleren krijgen"): het
-  voorstel staat bij het punt; Marcel koos a tot e (10 okt), drie trappen. De proefplaat is er en wacht op Marcel.
-  **Bezig in sessie `ccr-5cd874f7-wpwkhq`** (10 okt).
+  voorstel staat bij het punt; Marcel koos a tot e (10 okt), drie trappen, en bij de plaat "1 armer, 2 alle, 3 ja". In het
+  spel op de sessiebranch; de kinderen en de ouden komen in een tweede ronde. **Bezig in sessie `ccr-5cd874f7-wpwkhq`** (10
+  okt).
 - Het geluid (vraag 145, 2): de sleutel `FREESOUND_KEY` in de omgeving en de domeinen van Freesound erbij, zoals
   beschreven bij vraag 145; dan maakt een nieuwe sessie het.
 - Vraag 145 laten zien: is het dorp nu minder "saai"?
@@ -7552,9 +7553,15 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     **Stap 1, de proefplaat (10 okt):** `node gereedschap/pixelart/uiterlijk.cjs kleren` (`kleren()` in `uiterlijk.cjs`;
     hoe het eruitziet, staat in `beeld.md`, "Kleren naar stand"). Erbij gekomen: een jas tot onder de knie voor een
     deftige man (`jas: 'lang'` in `boer()`), en donker marterbont (`bontKleur`), want licht bont op scharlaken werd een
-    kerstman. De bestaande figuren blijven pixel voor pixel gelijk. **Wacht op Marcel:** de plaat; arm en gewoon liggen
-    nog dicht bij elkaar. Daarna stap 2, renderen (48 deftig en 48 arm, elk staan en lopen), en stap 3, het spel.
-    **Bezig in sessie `ccr-5cd874f7-wpwkhq`** (10 okt).
+    kerstman. De bestaande figuren blijven pixel voor pixel gelijk. **Marcel (10 okt), bij de plaat: "1 armer, 2 alle, 3
+    ja"**: arm kreeg een gerafelde zoom (`rafelZoom`), meer lappen, geen halsdoek en (een vrouw) geen schort; alle deftige
+    mannen de lange jas; alle deftige vrouwen bont.
+    **Stap 2 en 3 (10 okt):** de 96 vellen (`boer-u7-arm`, `boerin-u3-deftig`, staand en lopend; `uiterlijk-anim.cjs`), en
+    in het spel `T.klerenVan` (`js/bewoners.js`: hut arm, stenen huis of woontoren deftig als `g.wensen.heeft.laken` vol
+    is, de rest gewoon; alleen volwassenen) en `T.sprites.inKleren` (`js/sprites.js`: alleen het eigen vel, niet het
+    werk). De spelregel "Kleren" (met laken, zonder, of iedereen gewoon); `Spel.debug.kleren()`; `test/kleren.test.cjs`.
+    Bij het begin loopt niemand arm (in de hutten wonen ouden); de keuters komen met de gezinnen op de erven.
+    **Open:** de kinderen en de ouden (d, een tweede ronde).
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

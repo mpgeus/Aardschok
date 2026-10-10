@@ -106,6 +106,19 @@ const SCHOEN = {
 };
 // Met modder eraan: de onderkant donker, in spatten.
 const modderig = (schoen) => ({ ...schoen, patroon: (x, y, z) => (z < 3.2 && Math.sin(x * 3.3 + y * 2.1) + Math.sin(y * 2.9 - x * 1.7) > -0.4 ? -1.4 : 0) });
+// Een gerafelde zoom (vraag 149, wie arm is): de onderkant van een deel (een kiel, een rok) in tanden rondom, tot `diep`
+// boven z0.
+function rafelZoom(deel, z0, diep = 2.4) {
+  const f = deel.f;
+  return {
+    ...deel,
+    f: (x, y, z) => {
+      const a = Math.atan2(x, y);
+      const tand = diep * (0.6 * Math.max(0, Math.sin(a * 9 + 0.7)) + 0.4 * Math.max(0, Math.sin(a * 23 + 2.1)));
+      return Math.max(f(x, y, z), z0 + tand - z);
+    },
+  };
+}
 
 // ---------------------------------------------------------------- het hoofd
 
@@ -486,7 +499,9 @@ const naamVanStof = (stof) => Object.keys(STOF).find((k) => STOF[k] === stof);
 const andersDan = (niet, i = 0) => ARME_KLEUREN.filter((k) => k !== niet)[i % 2];
 
 // De opties van uiterlijk `nr` van `lijf` ('boer' of 'boerin', ruw: zoals in MANNEN en VROUWEN) in de kleren van `trap`.
-// Om en om (nr even of oneven) krijgt een deftige bont of gebleekt linnen, en loopt een arme op blote voeten of op klompen.
+// Om en om (nr even of oneven) krijgt een deftige man bont of gebleekt linnen, en loopt een arme man op blote voeten of op
+// klompen. Een arme draagt een gerafelde zoom en lappen, een arme vrouw geen schort (Marcel, 10 okt: "1 armer"); een
+// deftige vrouw draagt bont (Marcel: "3 ja").
 function kleren(o, trap, nr, lijf) {
   if (trap === 'gewoon') return o;
   const arm = trap === 'arm';
@@ -505,14 +520,15 @@ function kleren(o, trap, nr, lijf) {
         schoen: even ? 'bloot' : o.schoen === 'leer' ? 'klomp' : o.schoen,
         hoed: o.hoed === 'vilt' ? 'wol' : o.hoed,
         muts: o.hoed === 'vilt' ? STOF.vaalgrijs : verfStof(o.muts),
-        kraag: o.halsdoek ? o.kraag : 'geen',
-        halsdoek: verfStof(o.halsdoek),
+        kraag: 'geen',
+        halsdoek: undefined,
         vest: undefined,
         tas: o.tas && verf(o.tas),
         buidel: undefined,
         riem: undefined,
-        lappen: (o.lappen || [[3.5, 46, 1], [-3, 37, 1]]).map(([x, z, kant], i) => [x, z, kant, andersDan(kiel, i)]),
-        vuil: 34,
+        lappen: [[3.5, 46, 1], [-3, 37, 1], [-4.5, 50, -1], [2.5, 30, 1]].map(([x, z, kant], i) => [x, z, kant, andersDan(kiel, i)]),
+        vuil: 38,
+        rafel: true,
         knie: true,
         modder: true,
       };
@@ -536,18 +552,18 @@ function kleren(o, trap, nr, lijf) {
   }
   const jurk = verf(o.jurk);
   if (arm) {
-    const schort = verf(o.schort) || 'ongeverfd';
     return {
       ...o,
       jurk,
-      schort: schort === jurk ? andersDan(jurk) : schort,
+      schort: false,
       doek: verf(o.doek),
       lijfje: undefined,
       omslagdoek: verf(o.omslagdoek),
       buidel: undefined,
       riem: undefined,
-      lappen: (o.lappen || [[3, 20, 1], [-3.4, 28, 1]]).map(([x, z, kant], i) => [x, z, kant, andersDan(jurk, i)]),
-      vuil: 14,
+      lappen: [[3, 20, 1], [-3.4, 28, 1], [4.2, 12, 1], [-2, 24, -1], [3, 46, 1]].map(([x, z, kant], i) => [x, z, kant, andersDan(jurk, i)]),
+      vuil: 18,
+      rafel: true,
       mouw: even ? 'op' : o.mouw,
     };
   }
@@ -557,9 +573,9 @@ function kleren(o, trap, nr, lijf) {
     jurk,
     lijfje: verf(o.lijfje),
     doek: o.doek && 'wit',
-    omslagdoek: even ? undefined : verf(o.omslagdoek),
-    schort: even ? false : 'wit',
-    bont: even,
+    omslagdoek: undefined,
+    schort: false,
+    bont: true,
     bontKleur: MARTER,
     buidel: o.buidel ?? (o.mes > 0 ? -8.8 : 8.8),
   };
@@ -648,7 +664,7 @@ UITERLIJKEN.oudevrouw = [
   vrouw({ ...oud(10), kleur: 'peper', hoofd: 'doek', doek: 'oker', jurk: 'grijs', schort: 'wit', buidel: -8.8 }),
 ];
 
-module.exports = { HAAR, STOF, SCHOEN, UITERLIJKEN, MANNEN, VROUWEN, kleren, uiterlijkIn, versleten, modderig, vest, schoudertas, mes, rijglijf, kapselMan, krullen, krans, snor, sik, stoppels, wolmuts, kapselVrouw, vlechtje };
+module.exports = { HAAR, STOF, SCHOEN, UITERLIJKEN, MANNEN, VROUWEN, kleren, uiterlijkIn, versleten, modderig, rafelZoom, vest, schoudertas, mes, rijglijf, kapselMan, krullen, krans, snor, sik, stoppels, wolmuts, kapselVrouw, vlechtje };
 
 // ---------------------------------------------------------------- de proefplaat
 

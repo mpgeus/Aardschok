@@ -759,7 +759,7 @@ function boer(stand = null, o = {}) {
         ry: profiel([[24, 8.4], [30, 7.6], [38, 6.8], [46, 7], [52, 7.2], [58, 6.4]]),
         cy: profiel([[24, 0.8], [40, 0.8], [58, 0.5]]),
       };
-  delen.push(romp(kiel, zKiel, 58, M.kiel, D.kiel, 2));
+  delen.push(o.rafel ? UI.rafelZoom(romp(kiel, zKiel, 58, M.kiel, D.kiel, 2), zKiel) : romp(kiel, zKiel, 58, M.kiel, D.kiel, 2)); // (rafel: vraag 149, wie arm is)
   delen.push(ellips([0, 0.4, 57], [10.4, 6.8, 4.4], M.kiel, D.kiel, 2.5));
   // de afstand tot het bovenlijf, voor wat eromheen ligt (een omslagdoek, een manteltje)
   const bovenlijf = o.omslagdoek || o.hoed === 'kap' ? bouwSdf([romp(kiel, zKiel, 58, M.kiel, D.kiel, 2), ellips([0, 0.4, 57], [10.4, 6.8, 4.4], M.kiel, D.kiel, 2.5)]) : null;

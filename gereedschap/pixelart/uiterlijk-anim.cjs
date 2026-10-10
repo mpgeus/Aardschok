@@ -4,7 +4,8 @@
 // werk gaat dezelfde blijft. Een figuur heet als zijn gewone vel met -u en het nummer van het uiterlijk erachter:
 // boer-u7, zaaier-u7, boerin-u3, zaaister-u3, meisje-u5, oudeman-u2, oudevrouw-u9. Het spel kiest ze in js/sprites.js
 // (T.sprites.figuurVanUiterlijk), het uiterlijk van een bewoner in js/bewoners.js (T.kiesUiterlijk). De ouden werken in
-// het gewone werkvel.
+// het gewone werkvel. De man en de vrouw ook in de kleren van een andere stand (vraag 149; kleren() in uiterlijk.cjs),
+// alleen staand en lopend, want aan het werk dragen ze hun gewone kleren: boer-u7-arm, boerin-u3-deftig.
 //
 //   node gereedschap/pixelart/uiterlijk-anim.cjs                 alles (honderden figuren; een taak op de achtergrond
 //                                                                 stopt na twee uur, dus in delen, zie --deel)
@@ -37,6 +38,7 @@ const LIJVEN = {
   oudevrouw: { bouw: boerin, snelheid: BOERIN_SNELHEID },
 };
 const GEWOON = { staan: { beelden: 4, fps: 4 }, lopen: { beelden: 8, fps: 10 } }; // zoals dorpelingen-anim.cjs
+const TRAPPEN = ['arm', 'deftig']; // de kleren naar stand naast de gewone (vraag 149)
 
 // Alle figuren: { naam, houdingen, maak(stand), snelheid }. Ook voor naar-spel.cjs.
 function uiterlijkFiguren() {
@@ -54,6 +56,14 @@ function uiterlijkFiguren() {
         });
       }
     });
+  }
+  for (const lijf of ['boer', 'boerin']) {
+    const L = LIJVEN[lijf];
+    for (const trap of TRAPPEN) {
+      UI.UITERLIJKEN[lijf].forEach((o, nr) => {
+        lijst.push({ naam: `${lijf}-u${nr}-${trap}`, houdingen: GEWOON, maak: (stand) => L.bouw(stand, UI.uiterlijkIn(lijf, nr, trap)), snelheid: L.snelheid });
+      });
+    }
   }
   return lijst;
 }
