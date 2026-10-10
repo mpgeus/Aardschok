@@ -7615,8 +7615,15 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     gedrongen als de onze, vier à vijf hoofden), maar: vlakken in plaats van klei (low-poly, elk vlak één kleur, scherpe
     overgangen), duidelijke kleurvlakken per kledingstuk met randen en manchetten, en een gezicht dat iets zegt (ogen met
     wit, wenkbrauwen, een baard in vlakken; op 9 okt vond Marcel een groter hoofd met oogwit raar, dus met en zonder
-    proberen). **Bezig in sessie `ccr-5cd874f7-wpwkhq`** (10 okt): A, eerst de facetten in `kern.cjs`, dan één nieuwe man
-    en vrouw op een proefplaat.
+    proberen).
+    **A geprobeerd (10 okt):** facetten en twee tinten in de renderer deden op deze maat weinig; een nieuw lijf naar de
+    voorbeelden (`mens.cjs`, niet in git) vond Marcel "een abomenatie". Bij twee nieuwe voorbeelden in pixel art
+    (`mensen-pixel-*.png`) vroeg hij of alles groter beter wordt: nee, zijn strijder verkleind tot onze maat ziet er nog
+    goed uit, dus het zit in hoe ze getekend zijn, niet in de pixels; en alles groter kost vier keer de pixels, het
+    geheugen en het renderen. Claude had eerder moeten zeggen dat mensen uit een 3D-model van bollen en kegels voor
+    kleine figuren een plafond hebben. Voorstel: de mensen laten tekenen, door een pixeltekenaar of met een AI-gereedschap
+    voor pixelfiguren in acht richtingen (PixelLab, nog te proberen); de code doet de rest (inlezen, kleuren per
+    uiterlijk, kleren naar stand). **Wacht op Marcel.**
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
