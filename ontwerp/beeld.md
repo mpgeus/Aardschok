@@ -1024,6 +1024,13 @@ niets past, wijkt de zwakke grond voor strand (naast de zee) of gras. Golven die
   schaduw liggen; de voet van de muren mist licht, de schaduw van de zon is donkerder, en de baan onder de dakrand ook.
   Het kost een paar procent rendertijd. De schaduw op de grond om het huis legt het spel, niet de tekening
   (`opmerkingen.md`).
+  **C, vorm** (keuzes in de opgave, het zaad kiest ze niet, dus de huizen die er zijn blijven gelijk): `helling` (het
+  voorbeeldhuis 58 graden in plaats van 51, zodat het dak de helft van het huis is), `uit.afdak` (een afdakje van
+  planken op twee sporen met schoren boven de voordeur, `afdakVan`) en `uit.gevelschoorsteen: 'ook'` (twee
+  schoorstenen). De aanbouw is eraf: die bezette de voorkant van het dak. Geprobeerd en weer weggelaten: een balkon op
+  palen (leek een steiger en verstopte de deur), en een dakkapel in het riet (de bult is gemaakt voor anderhalve laag;
+  bij twee lagen tilde hij de dakrand te ver op en werd zijn raam een spleet). Een dakkapel past beter op het huis
+  onder pannen, waar de huizenbouwer er een echte voor heeft (`kapellenVan`).
 - **Meer variatie in het groen, de bomen en de versiering (9 okt 2026; werklijst, vraag 148).** Marcel: "Ik wil meer
   variatie in de vegetatie, ook bomen en versieringen van het dorp." Nu heeft elke soort één tekening en verandert het
   groen niet met het jaar. Het voorstel staat bij vraag 148: elke boom anders (vormen per soort, en de beuk, de linde,

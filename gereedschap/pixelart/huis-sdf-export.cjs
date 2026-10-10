@@ -1273,14 +1273,20 @@ async function rijenBeeld(RIJEN) {
 // erbij (A verweren, B diepte, C vorm, D het stukje grond), op ware grootte; voorbeeld-x2.png is dezelfde plaat twee keer
 // vergroot. Met een dak erachter (node huis-sdf-export.cjs voorbeeld pannen) hetzelfde huis onder dat dak.
 const VOORBEELD = { vorm: 'rechthoek', lagen: 2, zaad: 7, nok: 'x', wand: 'vakwerk', dak: 'riet', uit: { kapellen: 2, aanbouw: true, trap: true, gevelschoorsteen: true, luiken: 'den', bakken: 2 } };
+// C, de vorm: een steiler dak, de aanbouw eruit, een afdakje boven de deur, en de gevelschoorsteen naast die op het dak.
+// Een balkon op palen leek een steiger en verstopte de deur; een dakkapel in het riet is gemaakt voor anderhalve laag, en
+// tilde bij twee lagen de dakrand te ver op.
+const VOORBEELD_VORM = { helling: 58, uit: { afdak: true, gevelschoorsteen: 'ook', luiken: 'den', bakken: 2 } };
 const VOORBEELD_STAPPEN = [
   ['nu', {}],
   ['A verweren', { verweer: true }],
   ['B diepte', { verweer: true, diepte: true }],
+  ['C vorm', { verweer: true, diepte: true }, VOORBEELD_VORM],
 ];
-async function voorbeeld(dak) {
-  const spec = (knoppen) => ({ ...VOORBEELD, ...(dak ? { dak } : {}), knoppen });
-  const rij = { naam: `het voorbeeldhuis${dak ? ` onder ${dak}` : ''}`, panelen: VOORBEELD_STAPPEN.map(([naam, kn]) => [naam, { spec: spec(kn) }]) };
+async function voorbeeld(dak, alleen) {
+  const spec = (knoppen, extra) => ({ ...VOORBEELD, ...(extra || {}), ...(dak ? { dak } : {}), knoppen });
+  const stappen = VOORBEELD_STAPPEN.filter(([naam]) => !alleen || alleen.split(',').some((a) => naam.startsWith(a)));
+  const rij = { naam: `het voorbeeldhuis${dak ? ` onder ${dak}` : ''}`, panelen: stappen.map(([naam, kn, extra]) => [naam, { spec: spec(kn, extra) }]) };
   const plaat = await rijenBeeld([rij]);
   const naam = `voorbeeld${dak ? `-${dak}` : ''}`;
   fs.writeFileSync(path.join(UIT, `${naam}.png`), K.png(plaat, 1, '#0e0a14'));
@@ -1356,7 +1362,8 @@ if (isMainThread && require.main === module) {
   } else if (wat === 'rondom') {
     rondom().then(() => log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`));
   } else if (wat === 'voorbeeld') {
-    voorbeeld(process.argv[3]).then(() => log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`));
+    // node huis-sdf-export.cjs voorbeeld [dak] [B,C]: alleen die stappen, om sneller te kijken
+    voorbeeld(process.argv[3] === '-' ? null : process.argv[3], process.argv[4]).then(() => log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`));
   } else if (wat === 'stijl') {
     // node huis-sdf-export.cjs stijl wit: een bouwstijl van het spel (huizen.cjs, STIJLEN)
     const stijl = process.argv[3] || 'wit';

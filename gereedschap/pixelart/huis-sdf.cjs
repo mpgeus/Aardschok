@@ -17,6 +17,8 @@
 //              af); een T krijgt b2, p2 (hoever de dwarsvleugel uitsteekt), xT en voor.
 //   lagen      1; 1.5 (een hogere muur met een zolderbalk, en een zolder in de kap); of 2 (een
 //              bovenverdieping die op balkkoppen overkraagt, het vakwerkhuis bij uitstek).
+//   helling    hoe steil het dak is, in graden (standaard 51 voor riet; een dun dak het zijne). Het voorbeeldhuis
+//              (vraag 144) neemt een steiler dak, zodat het dak de helft van het huis is.
 //   nok        'x' of 'y': waar de nok van de hoofdvleugel heen loopt. 'y' spiegelt het hele
 //              huis in de diagonaal (x en y wisselen). Spiegelen en niet draaien: zo komt het
 //              licht nog steeds van linksboven.
@@ -62,6 +64,8 @@
 //
 //   uit        false (geen), of { kapellen: 2, aanbouw: true, erker: true, balkon: true,
 //              trap: true, gevelschoorsteen: true, luiken: 'den', bakken: 2 }
+//              Alleen op vraag (het voorbeeldhuis, vraag 144): afdak: true, een afdakje van planken boven de
+//              voordeur; gevelschoorsteen: 'ook', de schoorsteen op de gevel naast die op het dak.
 //
 // De losse tuinstukken staan in tuin-sdf.cjs, en delen het hout met dit bestand.
 //
@@ -496,7 +500,7 @@ function maten(zaad = 1, o = {}) {
     H.ov = 20;
     H.ovg = 13;
     H.kopR = 1;
-    H.helling = (H.D.helling + sch * rs(34) * 3) * GRAAD;
+    H.helling = ((o.helling ?? H.D.helling) + sch * rs(34) * 3) * GRAAD;
     H.laagL = H.D.rij;
     H.laagH = 0;
     H.worstR = H.D.nokR;
@@ -511,7 +515,7 @@ function maten(zaad = 1, o = {}) {
     H.ov = 22; // overstek aan de goot
     H.ovg = pak ? 20 : 12; // overstek aan de gevel
     H.kopR = pak ? 8 : 1;
-    H.helling = (HELLING + sch * rs(34) * 3) * GRAAD;
+    H.helling = ((o.helling ?? HELLING) + sch * rs(34) * 3) * GRAAD;
     H.laagL = sp ? 30 : 20;
     H.laagH = pak ? 1.6 : 0;
     H.worstR = pak ? 18 : 0;
@@ -630,6 +634,7 @@ function maten(zaad = 1, o = {}) {
   zichtVanStukken(H);
   uitbouwenOpDeMuren(H);
   verdeel(H);
+  afdakVan(H);
   verdeelUitbouwen(H);
   luikenEnBakken(H);
   if (H.deurKant === 'achter') H.achterDeur = achterDeurVan(H);
@@ -2888,7 +2893,7 @@ function kalkOfSteen(H, x, y, z, anders) {
 // Het dak van het huis zelf rekent nog steeds op één of twee vleugels; een uitbouw is een eigen
 // deel in de wereld, en snijdt zijn muren onder zijn eigen dak af (U.onder).
 
-const UIT_LEEG = { kapellen: 0, aanbouw: false, erker: false, balkon: false, trap: false, gevelschoorsteen: false, luiken: null, bakken: 0 };
+const UIT_LEEG = { kapellen: 0, aanbouw: false, erker: false, balkon: false, trap: false, gevelschoorsteen: false, afdak: false, luiken: null, bakken: 0 };
 function geenUitbouw() {
   return { ...UIT_LEEG };
 }
@@ -3372,6 +3377,29 @@ function alsDeurPast(H, P, bezet) {
   return false;
 }
 
+// Een afdakje boven de voordeur (o.uit.afdak; vraag 144, het voorbeeldhuis, C: "een afdakje boven de deur"): planken
+// die schuin van de muur af lopen, op twee sporen met elk een schoor, wat breder dan de deur. Alleen als het gevraagd
+// wordt: het zaad kiest het niet, dus de huizen die er zijn, blijven zoals ze zijn.
+function afdakVan(H) {
+  if (!H.uitbouw.afdak) return;
+  const d = H.deur;
+  if (!d || H.deurKant === 'achter') {
+    H.uitbouw.afdak = false;
+    return;
+  }
+  const { sp } = H;
+  const R = (k) => H.r(4900 + k);
+  const P = d.P;
+  const b = d.b + (sp ? 30 : 24);
+  let hT = d.h0 + d.h + (sp ? 22 : 18);
+  // onder de balkkoppen van de overkraging
+  if (H.lagen === 2 && P.s === 0) hT = Math.min(hT, H.h1 - 10);
+  const n = (sp ? 30 : 26) + 4 * R(1);
+  const val = (sp ? 14 : 12) + 3 * R(2);
+  H.afdak = { P, u: d.u, b, hT, n, val };
+  for (const du of [-b / 2, b / 2]) H.uitPunten.push([...P.pos(d.u + du, hT - val, n), E(hT)]);
+}
+
 function uitbouwenOpDeMuren(H) {
   gevelSchoorsteenVan(H);
   trapVan(H);
@@ -3426,7 +3454,8 @@ function gevelSchoorsteenVan(H) {
   C.la = sch * (0.03 + 0.04 * R(5)) * (R(6) < 0.5 ? -1 : 1); // leunt langs de gevel
   C.ln = sch * (0.015 + 0.02 * R(7)); // en een fractie van de muur af
   H.gevelSchoorsteen = C;
-  H.schoorsteen = null;
+  // 'ook': naast die op het dakschild (het voorbeeldhuis, vraag 144: "een of twee schoorstenen"), anders in zijn plaats
+  if (H.uitbouw.gevelschoorsteen !== 'ook') H.schoorsteen = null;
   // de ramen blijven er vandaan, op elke verdieping
   for (const P of H.stukken) {
     if (P.U || P.V !== V || P.zijde !== 'a') continue;
@@ -3982,6 +4011,31 @@ function bouwUitbouwen(W, H, T) {
       hout(g2, balk(P.pos(u + w, hF + 5, nR), P.pos(u - w, hF + hL - 1, nR), sp ? 1.3 : 1.1, sp ? 1.3 : 1.1, N, 0.3), k++, u * 0.37);
     }
     for (const u of [u0, u1]) for (let n = 7; n < nR - 3; n += sb / SQ) hout(g2, balk(P.pos(u, hF + 5, n), P.pos(u, hF + hL - 1, n + wiebel(0.6)), 1.1, 1.1, N, 0.3), k++, n * 0.51);
+  }
+
+  // --- het afdakje boven de voordeur: twee sporen uit de muur met elk een schoor, en daarop planken die van de muur af
+  // lopen, elk een fractie anders
+  const Af = H.afdak;
+  if (Af) {
+    const g = W.groep('afdak');
+    const { P, u, b, hT, n, val } = Af;
+    const N = [P.N[0], P.N[1], 0];
+    let k = 1701; // eigen nummers voor de delen, los van de galerij en de trap
+    for (const kant of [-1, 1]) {
+      const us = u + kant * (b / 2 - 4);
+      hout(g, balk(P.pos(us, hT - 3, -2), P.pos(us + wiebel(1), hT - val - 3 + wiebel(1), n - 1), sp ? 2.2 : 1.9, E(sp ? 6 : 5) / 2, [0, 0, 1], 0.4), k++, 3.1 + kant, H.rs(5160 + kant) * 0.5);
+      hout(g, balk(P.pos(us, hT - (sp ? 34 : 30), -1), P.pos(us, hT - val * 0.55 - 4, n * 0.6), 1.6, 1.6, N, 0.4), k++, 4.7 + kant);
+    }
+    // de planken liggen tegen elkaar, elk een tint anders; alleen hun onderkant loopt een fractie ongelijk
+    const nP = Math.max(4, Math.round((b + 6) / (sp ? 11 : 10)));
+    const pb = (b + 6) / nP;
+    for (let i = 0; i < nP; i++) {
+      const ui = u - (b + 6) / 2 + (i + 0.5) * pb;
+      // één deel, zodat de omlijning er geen lijn tussen trekt; u langs de muur is maal SQ, de breedte van een balk niet
+      hout(g, balk(P.pos(ui, hT + 1, -1), P.pos(ui, hT + 1 - val + wiebel(0.6), n + 2 + wiebel(1.2)), pb / SQ / 2 + 0.3, 1.3, [0, 0, 1], 0.3), 1700, 20 + i * 2.3, H.rs(5170 + i) * 0.35);
+    }
+    // een plank langs de voorkant
+    hout(g, balk(P.pos(u - (b + 6) / 2 - 1, hT - val - 1.5, n + 1), P.pos(u + (b + 6) / 2 + 1, hT - val - 1.5 + wiebel(1), n + 1), 1.1, E(sp ? 7 : 6) / 2, [0, 0, 1], 0.3), k++, 9.9);
   }
 
   // --- de buitentrap: blokken steen van de grond af, een houten leuning, en tralies voor het keldergat
