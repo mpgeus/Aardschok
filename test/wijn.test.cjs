@@ -204,3 +204,26 @@ test('haalt de wijn het jaar na de pluk niet, dan vraagt het dorp nu een wijnboe
     T.optiesTerug();
   }
 });
+
+// Marcel, 10 okt: "Wijn haalt kapel". In de speeltest van de wijn kwam een wijnboerderij ver van het dorp, en wilde haar
+// gezin (boeren) een jaar lang een kapel die nergens kon komen, zodat het dorp niet won. Nu kijkt ze wat een erf nakijkt
+// (T.waaromGeenKringPlek, js/wensen.js).
+test('een wijnboerderij komt alleen waar haar gezin een kapel haalt, of waar er nog een kan komen', () => {
+  const { D } = gehucht();
+  const echt = T.WENSEN_INSTELLINGEN.kring.kapel;
+  try {
+    const deur = T.deurVan(D.wereld, D.gebouwen.find((g) => g.huis === 'schout'));
+    const plek = T.plekVoor(D, 'wijnboerderij', deur);
+    assert.ok(plek, 'met plaats voor een kapel komt er een tweede');
+    assert.equal(T.waaromPastHetNiet(D, 'wijnboerderij', plek.x, plek.y), null);
+    // Een kring zo klein dat er bij geen huis een kapel kan komen: dan komt ze nergens.
+    T.WENSEN_INSTELLINGEN.kring.kapel = 2;
+    assert.match(T.waaromPastHetNiet(D, 'wijnboerderij', plek.x, plek.y), /^Een wijnboerderij hier kan straks geen kapel halen/);
+    assert.equal(T.plekVoor(D, 'wijnboerderij', deur), null);
+    // Een werkplaats zonder gezin kijkt er niet naar.
+    assert.equal(T.standVan({ soort: 'brouwerij' }), null);
+  } finally {
+    T.WENSEN_INSTELLINGEN.kring.kapel = echt;
+    T.optiesTerug();
+  }
+});

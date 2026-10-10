@@ -45,6 +45,9 @@
     schandpaal: { blokkeert: true, zichtDicht: false, naam: 'de schandpaal' },
     // De meiboom op het plein: de jongeren zetten hem op 1 bloeimaand, en hij blijft een maand staan (js/feesten.js).
     meiboom: { blokkeert: true, zichtDicht: false, naam: 'de meiboom' },
+    // De kerstboom op het plein: van 20 wintermaand tot en met 6 louwmaand, met kaarsjes die 's avonds branden
+    // (js/feesten.js).
+    kerstboom: { blokkeert: true, zichtDicht: false, naam: 'de kerstboom' },
     // Het hol van een roedel wolven, op een tegel naast zijn thuis diep in het bos (js/beesten.js, T.zetHol): een kuil onder een
     // omgevallen boom. Je loopt er niet overheen, maar langs.
     hol: { blokkeert: true, zichtDicht: false, naam: 'een wolvenhol' },

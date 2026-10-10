@@ -2749,6 +2749,18 @@
       T.blok(ctx, p.x, p.y, 0.16, 0.16, 16, '#5d8a34', { helder, basis: 140 });
       return;
     }
+    if (v.soort === 'kerstboom') {
+      // De kerstboom (js/feesten.js): een spar met appels, strosterren, kaarsjes en een ster. Zonder kunst: een groene
+      // kegel van drie blokken.
+      const boom = metSprites() && T.sprites.kerstboom();
+      if (boom) {
+        T.sprites.teken(ctx, boom, p.x, p.y, helder);
+        return;
+      }
+      T.blok(ctx, p.x, p.y, 0.06, 0.06, 20, '#5a3a22', { helder });
+      [[0.4, 20], [0.3, 60], [0.18, 100]].forEach(([r, basis]) => T.blok(ctx, p.x, p.y, r, r, 50, '#2f5a2a', { helder, basis }));
+      return;
+    }
     if (v.soort === 'hol') {
       // Het hol van een roedel wolven (js/beesten.js): een kuil onder een omgevallen boom, met botten ervoor. Zonder kunst:
       // een donkere kuil met een omgevallen stam erachter.
@@ -2990,6 +3002,14 @@
       const my = (l.van.y + l.tot.y) / 2;
       if (!inVak(vak, Math.round(mx), Math.round(my)) || !T.isZichtbaar(w, Math.round(mx), Math.round(my))) continue;
       lijst.push({ d: mx + my, l: 1, punt: { x: Math.round(mx), y: Math.round(my) }, f: () => tekenWas(ctx, S, l) });
+    }
+    // De pestbos (js/koorts.js): een bos stro aan een paal naast de deur van een huis met een zieke.
+    const bos = T.sprites.pestbos();
+    for (const b of bos ? T.pestbossen(D, w) : []) {
+      const tx = Math.round(b.x);
+      const ty = Math.round(b.y);
+      if (!inVak(vak, tx, ty) || !T.isZichtbaar(w, tx, ty)) continue;
+      lijst.push({ d: b.x + b.y, l: 1, punt: { x: tx, y: ty }, f: () => tekenKlein(ctx, bos, b.x, b.y, 4) });
     }
     // De honden: een stap achter hun baas aan, op de klok van de wereld; is de baas binnen, dan ligt de hond bij de deur.
     const H = T.KLEIN_LEVEN_INSTELLINGEN.honden;

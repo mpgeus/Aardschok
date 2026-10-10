@@ -6,6 +6,8 @@
 //   node gereedschap/pixelart/naar-spel.cjs --alleen schandpaal
 //   node gereedschap/pixelart/naar-spel.cjs --alleen paaltje
 //   node gereedschap/pixelart/naar-spel.cjs --alleen meiboom
+//   node gereedschap/pixelart/naar-spel.cjs --alleen kerstboom
+//   node gereedschap/pixelart/naar-spel.cjs --alleen pestbos
 //   node gereedschap/pixelart/naar-spel.cjs --alleen hol
 //   node gereedschap/pixelart/naar-spel.cjs --alleen marktkraam
 //   node gereedschap/pixelart/naar-spel.cjs --alleen tekens
@@ -19,7 +21,7 @@
 // in git staat: in een verse kopie is het (bijna) leeg, en zonder --alleen bouwt dit script de
 // beschrijving opnieuw op uit wat daar staat — dan verdwijnen alle andere figuren uit het spel.
 // Een los vel dat hier zelf gerenderd wordt en niets uit uit/ nodig heeft (LOSSE_VELLEN: de
-// schandpaal, het paaltje, de meiboom, het wolvenhol, de wijnrank, de marktkraam, de tekens met het papier en de tafel) kan ook met --alleen: dan wordt alleen dat vel gerenderd en alleen zijn
+// schandpaal, het paaltje, de meiboom, de kerstboom, de pestbos, het wolvenhol, de wijnrank, de marktkraam, de tekens met het papier en de tafel) kan ook met --alleen: dan wordt alleen dat vel gerenderd en alleen zijn
 // ingang gezet.
 //
 // Twee soorten werk:
@@ -38,6 +40,8 @@ const Graan = require('./graan-vel.cjs');
 const Schandpaal = require('./schandpaal.cjs');
 const Paaltje = require('./paaltje.cjs');
 const Meiboom = require('./meiboom.cjs');
+const Bomen = require('./bomen.cjs');
+const Pestbos = require('./pestbos.cjs');
 const Hol = require('./hol.cjs');
 const Wijnrank = require('./wijnrank.cjs');
 const Marktkraam = require('./marktkraam.cjs');
@@ -165,6 +169,51 @@ function meiboom() {
   return Meiboom.beschrijving('meiboom.png');
 }
 
+// ---------------------------------------------------------------- de kerstboom
+//
+// Eén tekening: de kerstboom op het plein, van 20 wintermaand tot 6 louwmaand (bomen.cjs, `kerstboom`: een spar met
+// appels, strosterren, kaarsjes en een ster; js/feesten.js, werklijst vraag 148). Gerenderd zoals de bomen van het spel
+// (export-bomen.cjs), en dan bijgesneden tot wat erin staat. js/sprites.js zoekt hem op met S.kerstboom() en legt zijn
+// anker op de tegel. Zo'n minuut renderen.
+function kerstboom() {
+  const [B, H, AX, AY] = [288, 372, 144, 342];
+  const p = K.losRenderen(Bomen.kerstboom(1), { b: B, h: H, anker: [AX, AY], richting: 'Z' });
+  Bomen.ontspikkel(p, ['den']);
+  let [x0, x1, y0, y1] = [B, -1, H, -1];
+  for (let y = 0; y < H; y++) {
+    for (let x = 0; x < B; x++) {
+      if (!p.lees(x, y)) continue;
+      x0 = Math.min(x0, x);
+      x1 = Math.max(x1, x);
+      y0 = Math.min(y0, y);
+      y1 = Math.max(y1, y);
+    }
+  }
+  // een pixel rand, en het anker blijft binnen de cel
+  x0 = Math.max(0, x0 - 1);
+  y0 = Math.max(0, y0 - 1);
+  x1 = Math.min(B - 1, x1 + 1);
+  y1 = Math.min(H - 1, Math.max(y1, AY) + 1);
+  const cel = new K.Plaat(x1 - x0 + 1, y1 - y0 + 1);
+  for (let y = y0; y <= y1; y++) {
+    for (let x = x0; x <= x1; x++) {
+      const k = p.lees(x, y);
+      if (k) cel.zet(x - x0, y - y0, k[0], k[1]);
+    }
+  }
+  schrijf('kerstboom.png', cel);
+  return { bestand: 'kerstboom.png', cel: [cel.b, cel.h], anker: [AX - x0, AY - y0] };
+}
+
+// ---------------------------------------------------------------- de pestbos
+//
+// Eén tekening: de bos stro aan een paal naast de deur van een huis met een zieke (pestbos.cjs; js/koorts.js, vraag 144,
+// 3). js/sprites.js zoekt hem op met S.pestbos() en legt zijn anker op de tegel.
+function pestbos() {
+  schrijf('pestbos.png', Pestbos.vel());
+  return Pestbos.beschrijving('pestbos.png');
+}
+
 // ---------------------------------------------------------------- het wolvenhol
 //
 // Eén tekening: het hol van een roedel wolven, een kuil onder een omgevallen boom met botten ervoor (hol.cjs,
@@ -217,7 +266,7 @@ function tafel() {
   return Tafel.schrijfNaar(path.join(BEELDEN, 'tafel'));
 }
 
-const LOSSE_VELLEN = { schandpaal, paaltje, meiboom, hol, wijnrank, marktkraam, tekens, tafel, uiterlijken };
+const LOSSE_VELLEN = { schandpaal, paaltje, meiboom, kerstboom, pestbos, hol, wijnrank, marktkraam, tekens, tafel, uiterlijken };
 
 // ---------------------------------------------------------------- kopiëren
 

@@ -131,6 +131,60 @@ test('met de emmers is het vuur na een uur uit, en blijft het huis meestal staan
   }
 });
 
+// Marcel, 10 okt: "Ja, zo": bij groot brandgevaar, als niemand blust, slaat het vuur soms over op één huis ernaast.
+test('bij groot brandgevaar slaat het vuur over op het huis ernaast als niemand blust, en dat huis niet verder', () => {
+  const O = { ...T.BRAND_INSTELLINGEN.overslaan };
+  T.BRAND_INSTELLINGEN.overslaan.kans = 1;
+  T.BRAND_INSTELLINGEN.overslaan.afstand = 60; // op het ontworpen gehucht: er is altijd een huis
+  try {
+    const dag = dagVan('zomermaand', 5);
+    const brand = (droogte, antwoord) => {
+      const S = gehucht(dag);
+      const D = S.dorp;
+      D.weer = { vandaag: 'zon', droog: 30, tekort: droogte, verlies: 0 };
+      const L = voorval(D, 'brand', dag);
+      S.kalender.dag = L.vanaf;
+      T.werkBrandBij(S, D);
+      if (antwoord) T.voorvalGevolg(D, antwoord);
+      S.kalender.dag += (T.BRAND_INSTELLINGEN.brandUren + 0.1) / 24;
+      T.werkBrandBij(S, D);
+      return { S, D, g: L.brandHuis, branden: T.brandendeHuizen(D).filter((h) => h.brand.fase === 'brandt') };
+    };
+    const W = T.WEER_INSTELLINGEN;
+    // Groot brandgevaar, en niemand deed iets: het dichtste huis vat vlam.
+    const { S, D, g, branden } = brand(W.ernstigVanaf);
+    assert.equal(T.brandgevaarNiveau(D), 2);
+    assert.equal(g.brand.fase, 'puin');
+    assert.equal(branden.length, 1, 'één buurhuis brandt');
+    const buur = branden[0];
+    assert.ok(buur.brand.overgeslagen);
+    assert.ok(T.standVan(buur), 'een woonhuis');
+    const afstand = (a, b) => Math.max(0, b.x - (a.x + a.b), a.x - (b.x + b.b), b.y - (a.y + a.h), a.y - (b.y + b.h));
+    const voet = T.voetVanGebouw(g);
+    for (const h of D.gebouwen) if (h !== g && h !== buur && T.standVan(h) && h.klaar) assert.ok(afstand(voet, T.voetVanGebouw(h)) >= afstand(voet, T.voetVanGebouw(buur)), 'het dichtste');
+    // Het buurhuis brandt af en slaat niet verder over.
+    S.kalender.dag += (T.BRAND_INSTELLINGEN.brandUren + 0.1) / 24;
+    T.werkBrandBij(S, D);
+    assert.equal(buur.brand.fase, 'puin');
+    assert.equal(T.brandendeHuizen(D).filter((h) => h.brand.fase === 'brandt').length, 0, 'niet verder');
+
+    // Gewoon brandgevaar: niet.
+    assert.equal(brand(W.droogteVanaf).branden.length, 0, 'alleen bij groot brandgevaar');
+    // Met de emmers, ook als ze het huis niet redden: niet.
+    const red = T.BRAND_INSTELLINGEN.redKans;
+    T.BRAND_INSTELLINGEN.redKans = 0;
+    try {
+      const b = brand(W.ernstigVanaf, { blus: true });
+      assert.equal(b.g.brand.fase, 'puin');
+      assert.equal(b.branden.length, 0, 'wie blust, houdt het vuur bij het huis');
+    } finally {
+      T.BRAND_INSTELLINGEN.redKans = red;
+    }
+  } finally {
+    Object.assign(T.BRAND_INSTELLINGEN.overslaan, O);
+  }
+});
+
 test('de koorts: wie het zegt en zijn gezin zijn ziek, ze steekt aan, en is na een tijd voorbij', () => {
   const K = T.KOORTS_INSTELLINGEN;
   const besmet = K.besmet;
@@ -159,6 +213,28 @@ test('de koorts: wie het zegt en zijn gezin zijn ziek, ze steekt aan, en is na e
   } finally {
     K.besmet = besmet;
   }
+});
+
+// Marcel, 10 okt: "Ja, zo": een bos stro naast de deur van een huis met een zieke (alleen beeld).
+test('de pestbos: naast de deur van elk huis met een zieke, tegen de muur, zolang er iemand ziek is', () => {
+  const dag = dagVan('louwmaand', 5);
+  const S = gehucht(dag);
+  const D = S.dorp;
+  assert.deepEqual(T.pestbossen(D, S.wereld), [], 'zonder koorts geen');
+  const L = voorval(D, 'ziekte', dag);
+  T.tikKoortsDag(D, dag);
+  const bossen = T.pestbossen(D, S.wereld);
+  const huizen = new Set(T.zieken(D).map((p) => p.huis));
+  assert.equal(bossen.length, huizen.size, 'één per huis met een zieke');
+  assert.ok(bossen.some((b) => b.g === L.ander.huis));
+  for (const b of bossen) {
+    const deur = T.deurVan(S.wereld, b.g);
+    assert.ok(Math.abs(b.x - deur.x) + Math.abs(b.y - deur.y) <= 1, 'naast de deur');
+    const v = T.voetVanGebouw(b.g);
+    assert.ok(!(b.x >= v.x && b.x < v.x + v.b && b.y >= v.y && b.y < v.y + v.h), 'niet in het huis');
+  }
+  for (const p of D.bewoners.mensen) delete p.ziek;
+  assert.deepEqual(T.pestbossen(D, S.wereld), [], 'beter: weg');
 });
 
 test('een schone put maakt dat de koorts minder overgaat, en het venster zegt het vooraf', () => {

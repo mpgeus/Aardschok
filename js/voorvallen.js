@@ -196,6 +196,13 @@
       soort: 'feest', titel: 'de meiboom', woorden: { blij: 'de meiboom', last: 'de meiboom die er niet kwam' },
       op: { maand: 'grasmaand', dag: 30 }, pauze: 300, wie: [{ leeftijd: 'jong' }, {}],
     },
+    // De kerstboom (werklijst vraag 148; Marcel, 10 okt: "we hebben ook een kerstboom nodig :)", en "Feestavond"): elk jaar
+    // op 20 wintermaand; met ja staat hij meteen op het plein, tot en met 6 louwmaand, en op kerstavond viert het dorp
+    // (js/feesten.js).
+    kerstboom: {
+      soort: 'feest', titel: 'de kerstboom', woorden: { blij: 'de kerstboom', last: 'de kerstboom die er niet kwam' },
+      op: { maand: 'wintermaand', dag: 20 }, pauze: 300, wie: [{ leeftijd: 'jong' }, {}],
+    },
     // De grillen van de heer (een idee van 23 sep): wat zijn bode kwam zeggen.
     standbeeld: { soort: 'heer', titel: 'het standbeeld', pauze: 360, wie: [{ werk: 'herberg' }, {}] },
     jacht: { soort: 'heer', titel: 'de jacht van de heer', als: { maanden: ['herfstmaand', 'wijnmaand'] }, pauze: 360 },
@@ -879,7 +886,7 @@
     if (doe.hek) delen.push('een hek om de schapen');
     // De graanzak (js/zaak.js): wat een vonnis verder doet.
     if (doe.zaak && T.zaakPrijs) delen.push(...T.zaakPrijs(D, doe.zaak));
-    if (doe.feest && T.feestPrijs(doe.feest)) delen.push(T.feestPrijs(doe.feest));
+    if (doe.feest && T.feestPrijs(doe.feest, L.id)) delen.push(T.feestPrijs(doe.feest, L.id));
     // Een ondernemer (js/ondernemers.js): nee, en hij neemt het je kwalijk of trekt weg; en wat de herbergierster ervan
     // vindt.
     if (L.bouw && L.bouw.eigen) delen.push(...T.eigenPrijs(D, L, doe));

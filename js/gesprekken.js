@@ -1414,6 +1414,21 @@
         },
       },
     },
+    kerstboom: {
+      naam: '{wie}',
+      start: 'begin',
+      knopen: {
+        begin: {
+          tekst: [
+            { zeg: 'Schout, over vier dagen is het kerstavond. In het bos staat een spar die precies goed is. Mogen we hem op het plein zetten, met appels en strosterren erin en kaarsjes erop? Dan zingen we er op kerstavond omheen.' },
+          ],
+          keuzes: [
+            { zeg: 'Zet hem maar op. Op kerstavond zing ik mee.', sluit: true, doe: { hout: -2, tevreden: 4, feest: 'avond' } },
+            { zeg: 'Een boom is hout, en het bos is van de heer.', sluit: true, doe: { tevreden: -3 } },
+          ],
+        },
+      },
+    },
     standbeeld: {
       naam: '{wie}',
       start: 'begin',
