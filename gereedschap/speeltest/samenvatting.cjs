@@ -392,3 +392,5 @@ function hetGraanboek(goed) {
 }
 
 exports.maten = maten;
+exports.NAMEN = NAMEN;
+exports.BASIS = BASIS;

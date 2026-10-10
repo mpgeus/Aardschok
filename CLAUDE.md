@@ -107,7 +107,11 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
     (alleen dat getal, met een `.bak` ernaast), en de knop Toetsen draaien draait `npm test`. De lezer staat in
     `gereedschap/instellingen/bron.js` (zonder scherm, `test/instellingen.test.cjs`); hij voert niets uit, dus wat geen
     gewoon getal is (een som, `maandIdx(...)`), toont hij maar verandert hij niet. Verandert Marcel er iets, dan staat het
-    als een gewone wijziging in de werkmap: commit het, en pas een toets die het oude getal verwacht aan.
+    als een gewone wijziging in de werkmap: commit het, en pas een toets die het oude getal verwacht aan. Bovenaan staat
+    **de speeltest** (stap 3, `gereedschap/instellingen/speeltest.js`; Marcel: een set getallen probeer je in de code):
+    Start speelt `npm run speeltest` met een naam (standaard snel: de bouwer, zaad 1, twee jaar, op het eiland) en zet hem
+    naast de vorige: welke waarden anders waren, met een link naar hun rij, en per spel wat er anders afliep; een knop zet
+    de waarden terug zoals ze bij de vorige waren. Zolang hij loopt, slaat de server geen getal op.
 - `npm test` draait `node --test`: de toetsen in `test/`, de regels zonder scherm. Een toets laadt het
   spel zoals het draait, met `require('./laad.cjs').spel()`: de scripts uit `index.html`, in die
   volgorde, zonder wat alleen scherm is (`test/laad.cjs`). Een toets van het gereedschap laadt wat
@@ -134,6 +138,9 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   een getal uit de werkbank anders (allebei zo vaak als je wilt; de uitslag krijgt `-regels` achter zijn naam). Een
   taak op de achtergrond stopt na twee uur, dus een grote speeltest gaat in meer taken; `--samenvatting` speelt dan
   niet, maar maakt de samenvatting opnieuw uit wat er al in `uit/` ligt, zodat de taken samen één tabel geven.
+  **Naast de vorige** (vraag 142, stap 3): `--naam voor` bewaart de speeltest in `uit/voor/`, met alle waarden van de
+  bladzijde met getallen, en `--naam na --tegen voor` zet hem ernaast in `uit/na/vergelijking.md`: welke waarden anders
+  waren, en per spel wat er anders afliep (`gereedschap/speeltest/vergelijk.cjs`).
 - `npm run proefversie` maakt de zip voor een tester (itch.io, `ontwerp/verpakken.md`) in `gereedschap/proefversie/uit/`
   (niet in git): `index.html` bovenin en alleen wat het spel laadt, met de stand (datum, commit) klein op het
   titelscherm (`T.STAND`). Commit eerst. Met `-- --windows` is het het spel in Electron voor Windows, zoals straks op Steam

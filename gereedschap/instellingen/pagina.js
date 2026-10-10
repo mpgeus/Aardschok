@@ -2,7 +2,8 @@
 // en "Gelijk veranderen"). Het overzicht komt van de server (/gereedschap/api/instellingen), die het uit de bestanden in
 // js/ leest met gereedschap/instellingen/bron.js; wat je verandert, schrijft de server meteen in dat bestand
 // (/gereedschap/api/instelling), en de toetsen draaien kan erna (/gereedschap/api/toetsen). Alleen scherm: de regels
-// staan in bron.js en de server.
+// staan in bron.js en de server. De speeltest bovenaan staat in speeltest.js, en vraagt hier naar een rij
+// (Spel.instellingenPagina).
 (function () {
   'use strict';
 
@@ -143,9 +144,10 @@
       const r = maak('div');
       r.append('De spelregel ', maak('b', null, optie), ' zet dit: ');
       r.append(zetten.map((z) => `${z.keuze} → ${toon(z.waarde)}${z.standaard ? ' (standaard)' : ''}`).join('; '));
+      if (zetten.some((z) => z.viaObject)) r.append(` (hij zet heel ${zetten.find((z) => z.viaObject).viaObject})`);
       el.appendChild(r);
       const std = zetten.find((z) => z.standaard);
-      if (std && std.waarde !== blad.waarde && typeof std.waarde !== 'string') {
+      if (std && !std.heel && std.waarde !== blad.waarde) {
         el.appendChild(maak('div', 'in-fout', `Let op: in het spel geldt ${toon(std.waarde)}, want de standaard van "${optie}" zet het zo. Verander daarvoor de spelregel.`));
       }
     }
@@ -163,6 +165,7 @@
     const k = sleutel(blad.blok, blad.pad);
     const r = { el, sleutel: k, zoek: '' };
     const opNieuw = () => el.classList.toggle('in-anders', veranderd.has(k));
+    opNieuw();
     el.append(n, veldVoor(blad, opNieuw), uitleg);
     const regels = regelsVoor(blad);
     if (regels) uitleg.appendChild(regels);
@@ -186,7 +189,7 @@
 
   function bouw() {
     rijen.length = 0;
-    const inhoud = $('in-inhoud');
+    const inhoud = $('in-delen');
     const lijst = $('in-lijst');
     inhoud.replaceChildren();
     lijst.replaceChildren();
@@ -199,6 +202,10 @@
       return a;
     };
     const delen = [];
+    const st = maak('a', null, 'Speeltest');
+    st.href = '#in-speeltest';
+    st.appendChild(maak('span'));
+    lijst.appendChild(st);
 
     // De spelregels: de standaard van elke spelregel, met zijn keuzes.
     const sr = deel('in-spelregels', 'Spelregels', 'js/opties.js', 'Wat een nieuw spel kiest als niemand iets anders koos. Een spelregel zet getallen hieronder; wie de standaard verandert, verandert het spel voor iedereen.');
@@ -309,6 +316,34 @@
     }
   }
 
+  // Naar de rij van een waarde: het zoeken eraf, zijn gebouw open, en even oplichten.
+  function naarRij(blok, pad) {
+    const r = rijen.find((x) => x.sleutel === sleutel(blok, pad));
+    if (!r) return false;
+    if (r.el.classList.contains('in-verborgen')) {
+      $('in-zoek').value = '';
+      $('in-veranderd').checked = false;
+      filter();
+    }
+    if (r.gebouw) r.gebouw.open = true;
+    r.el.scrollIntoView({ block: 'center' });
+    r.el.classList.remove('in-licht');
+    void r.el.offsetWidth;
+    r.el.classList.add('in-licht');
+    return true;
+  }
+
+  // Opnieuw lezen wat er in de code staat (na het terugzetten door de speeltest), met wat er veranderde erbij gemarkeerd.
+  async function herlaad(veranderdErbij = []) {
+    for (const [blok, pad] of veranderdErbij) veranderd.add(sleutel(blok, pad));
+    model = await laad();
+    bouw();
+    $('in-toetsen-uit').textContent = 'Er is iets veranderd: draai de toetsen.';
+  }
+
+  globalThis.Spel = globalThis.Spel || {};
+  globalThis.Spel.instellingenPagina = { naarRij, herlaad };
+
   $('in-zoek').addEventListener('input', filter);
   $('in-veranderd').addEventListener('change', filter);
   $('in-toetsen').addEventListener('click', toetsen);
@@ -318,6 +353,6 @@
       bouw();
     })
     .catch((e) => {
-      $('in-inhoud').replaceChildren(maak('p', 'in-fout', 'Het overzicht laadt niet: ' + e.message + ' (draait npm start?)'));
+      $('in-delen').replaceChildren(maak('p', 'in-fout', 'Het overzicht laadt niet: ' + e.message + ' (draait npm start?)'));
     });
 })();
