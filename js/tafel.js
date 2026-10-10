@@ -139,7 +139,7 @@
     huiden: 'Huiden. Van het slachten.',
     bier: 'Bier. De herbergierster brouwt het van graan, en wie \'s avonds in de herberg zit, drinkt het. Wie er deze week was, is tevredener.',
     wapens: 'Wapens. Van de wapenmaker: wie van de militie er een heeft, slaat harder als de rovers komen.',
-    wijn: 'Wijn. Van de wijnboerderij, geplukt in wijnmaand: drank, zoals bier, en het bederft niet.',
+    wijn: 'Wijn. Van de wijnboerderij, geplukt in wijnmaand: de ambachtslieden willen het naast hun bier, en het bederft niet.',
   };
   // Deze staan pas in het rekenboek als het dorp ze eens gehad heeft (S.gehad, js/voorraad.js): in het
   // begin blijft het kort. Kaas, hooi, vlees en bier staan naast het graan, want het is allemaal

@@ -1,6 +1,6 @@
 // De wijnboerderij (werklijst vraag 136; Marcel, 8 okt: "Ik wil z.s.m. aan een wijnboerderij", en "Wijn wordt drank, zoals
-// bier. Mensen dronken geen water"): een boerderij met een gezin en wijngaarden, de pluk in wijnmaand, wijn als drank, en
-// de heer wil er wijn voor.
+// bier. Mensen dronken geen water"): een boerderij met een gezin en wijngaarden, de pluk in wijnmaand, wijn als wens van
+// de ambachtslieden (10 okt), en de heer wil er wijn voor.
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
@@ -132,13 +132,17 @@ test('er woont een gezin van boeren, en de heer wil er wijn voor', () => {
   }
 });
 
-test('wijn is drank: wie bier wil, neemt wijn als er geen bier is', () => {
-  assert.deepEqual(T.WENSEN.bier.goed, ['bier', 'wijn']);
-  assert.equal(T.WENSEN.bier.naam, 'drank');
+// Marcel, 10 okt: "Inwoners willen wijn en bier. Afwisseling. Je kunt niet leven op 1 ding", en "B1, 0,02 is goed".
+test('de ambachtslieden willen wijn naast hun bier, en wijn telt niet als bier', () => {
+  assert.deepEqual(T.WENSEN.bier.goed, ['bier']);
+  assert.deepEqual(T.WENSEN.wijn.goed, ['wijn']);
+  assert.ok(!T.wensenVanStand('dorpelingen').includes('wijn'), 'de dorpelingen willen bier');
+  assert.ok(T.wensenVanStand('ambachtslieden').includes('bier') && T.wensenVanStand('ambachtslieden').includes('wijn'));
+  assert.ok(T.maaktGoed('wijnboerderij', 'wijn'), 'de wijnboerderij maakt hem, dus de raad en de verzoeken noemen haar');
+  assert.equal(T.WENSEN_INSTELLINGEN.perMens.wijn, 0.02);
   const D = { voorraad: T.nieuweVoorraad() };
   T.zetVoorraad(D, 'bier', 0);
   T.zetVoorraad(D, 'wijn', 10);
-  const wensen = { goederen: { bier: { dorpelingen: { krijgt: 3 } } } };
-  T.gebruikGoederen(D, wensen);
-  assert.equal(D.voorraad.wijn, 7, 'drie wijn gedronken');
+  T.gebruikGoederen(D, { goederen: { bier: { dorpelingen: { krijgt: 3 } }, wijn: { ambachtslieden: { krijgt: 2 } } } });
+  assert.equal(D.voorraad.wijn, 8, 'twee wijn gedronken, en geen wijn in plaats van bier');
 });

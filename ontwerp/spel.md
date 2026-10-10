@@ -1785,6 +1785,10 @@ Nog open na deel 1 (vragen van Claude):
   Mensen dronken geen water", en "Ja zo bouwen"): een wijnboerderij is een boerderij met een gezin van boeren, en haar
   velden zijn wijngaarden. Ze komt in een dorp, en plukt in wijnmaand: dan maakt ze 10 wijn per dag met twee handen, de
   rest van het jaar niets. Wijn bederft niet. De wens die bier heette, heet nu drank, en neemt bier of wijn, bier eerst.
+  **Sinds 10 okt twee wensen** (Marcel: "Inwoners willen wijn en bier. Afwisseling. Je kunt niet leven op 1 ding", en
+  "B1, 0,02 is goed"): de wens heet weer bier en neemt alleen bier, en de ambachtslieden willen er wijn bij (0,02 per mens
+  per dag, bier 0,05: één wijnboerderij is genoeg voor zo'n 40 ambachtslieden). Zo vraagt het dorp er zelf om, zoals om
+  elk gebouw dat maakt wat de huizen missen; daarvoor vroeg het voor drank altijd een herberg, en bouwde niemand er een.
   De heer wil voor een wijnboerderij 10 wijn. Geen vaten (de kuiper blijft zonder nut, vraag 135); wijngaarden op de
   zonkant van een heuvel misschien later.
   **Sinds later op 8 okt** (Marcel: "Dat je de boeren ziet plukken, volle en lege ranken", en "Alles telt pas als het
