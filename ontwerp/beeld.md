@@ -1009,7 +1009,8 @@ niets past, wijkt de zwakke grond voor strand (naast de zee) of gras. Golven die
   **Het voorbeeldhuis (10 okt; Marcel: "1 riet, 2 akkoord"):** een vakwerkhuis van twee lagen onder riet (riet, omdat
   een speler en elk plaatje op Steam eerst het gehucht zien), in vier stappen, elk een knop in de huizenbouwer, zodat
   het straks voor alle huizen werkt: A verweren, B diepte, C vorm, D het stukje grond (alleen op de plaat; in het spel
-  is dat vraag 148). De plaat: `node gereedschap/pixelart/huis-sdf-export.cjs voorbeeld` (`uit/proefhuis/voorbeeld.png`).
+  is dat vraag 148). Marcels voorbeelden zelf staan niet in git en waren deze sessie niet meer te vinden; Marcel stuurt
+  ze opnieuw, en dan komen ze in `ontwerp/voorbeelden/` (Marcel, 10 okt: "zet ze in git"). De plaat: `node gereedschap/pixelart/huis-sdf-export.cjs voorbeeld` (`uit/proefhuis/voorbeeld.png`).
   **A, verweren** (`knoppen.verweer`, `verweer` en `VERWEER` in `huis-sdf.cjs`; staat uit tot de ronde van alle
   tekeningen): het riet op de grijsbruine ramp `riet` in plaats van het gele `stro`, met mos in korrels die naar de
   goot en de schaduw toe dichter worden, en de lap een tint lichter in plaats van goud (Marcel: "Dit ziet er raar uit",
@@ -1017,6 +1018,12 @@ niets past, wijkt de zwakke grond voor strand (naast de zee) of gras. Golven die
   baksteen erdoor; het hout op `houtOud`, half naar het grijs van schors; de plint nat aan de voet en met mos; een
   schoorsteen zwart van het roet naar zijn top, in strepen; mos op een dun dak. Alles uit de plek in de wereld, dus in
   elke stand op dezelfde plek.
+  **B, diepte** (`knoppen.diepte`, `diepte` en `DIEPTE` in `huis-sdf.cjs`, `W.diepte` in `tekenWereld`, toren.cjs; staat
+  ook uit): de tekenaar kijkt verder weg (tot 26 eenheden) naar wat het licht van de hemel afdekt, en een hoek kan dieper
+  donker worden, zodat de muur onder de dakrand, de balkkoppen onder het overstek en de naad tussen aanbouw en huis in de
+  schaduw liggen; de voet van de muren mist licht, de schaduw van de zon is donkerder, en de baan onder de dakrand ook.
+  Het kost een paar procent rendertijd. De schaduw op de grond om het huis legt het spel, niet de tekening
+  (`opmerkingen.md`).
 - **Meer variatie in het groen, de bomen en de versiering (9 okt 2026; werklijst, vraag 148).** Marcel: "Ik wil meer
   variatie in de vegetatie, ook bomen en versieringen van het dorp." Nu heeft elke soort één tekening en verandert het
   groen niet met het jaar. Het voorstel staat bij vraag 148: elke boom anders (vormen per soort, en de beuk, de linde,

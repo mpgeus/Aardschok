@@ -1276,6 +1276,7 @@ const VOORBEELD = { vorm: 'rechthoek', lagen: 2, zaad: 7, nok: 'x', wand: 'vakwe
 const VOORBEELD_STAPPEN = [
   ['nu', {}],
   ['A verweren', { verweer: true }],
+  ['B diepte', { verweer: true, diepte: true }],
 ];
 async function voorbeeld(dak) {
   const spec = (knoppen) => ({ ...VOORBEELD, ...(dak ? { dak } : {}), knoppen });

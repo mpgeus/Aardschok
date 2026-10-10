@@ -399,8 +399,8 @@ function meng(a, b) {
 }
 
 function knoppenVan(zaad, o) {
-  // verweer staat nog uit: het voorbeeldhuis (vraag 144) zet hem aan, tot de ronde van alle tekeningen
-  const kn = { scheef: true, pak: true, speelgoed: true, verweer: false, ...(o.knoppen || {}) };
+  // verweer en diepte staan nog uit: het voorbeeldhuis (vraag 144) zet ze aan, tot de ronde van alle tekeningen
+  const kn = { scheef: true, pak: true, speelgoed: true, verweer: false, diepte: false, ...(o.knoppen || {}) };
   const r = (k) => rnd(zaad * 7919 + 101, k);
   const rs = (k) => r(k) * 2 - 1;
   const kz = (k) => meng(zaad, k);
@@ -1975,7 +1975,7 @@ function randSchaduw(H, C) {
       d = Math.max(d, H.sp ? baan(zLijn - z, E(7), E(12)) : baan(zLijn - z, 0, E(9)));
     }
   }
-  return d * (H.sp ? 2.6 : 1);
+  return d * (H.sp ? 2.6 : 1) * (H.kn.diepte ? DIEPTE.rand : 1);
 }
 // een patroon voor een muur of wat erop zit, met die schaduw eronder
 function metRand(H, f) {
@@ -4268,6 +4268,28 @@ function verweer(W, H) {
   for (const m of Object.values(W.mat)) if (m.ramp === 'hout') m.ramp = 'houtOud';
 }
 
+// ---------------------------------------------------------------- ronde 5: de diepte
+
+// De diepte (o.knoppen.diepte; vraag 144, het voorbeeldhuis, B; ontwerp/beeld.md, "De huizen naar Marcels voorbeelden",
+// 4: "diepe schaduw onder het dak en het overstek, donker in de hoeken, en het huis staat zwaar op de grond"): de
+// tekenaar kijkt verder weg naar wat het licht van de hemel afdekt (W.diepte in tekenWereld, toren.cjs), de schaduw van
+// de zon is donkerder, en de baan onder de dakrand en het overstek ook (randSchaduw). De schaduw op de grond legt het
+// spel zelf, niet de tekening.
+const DIEPTE = {
+  stappen: [[6, 0.45], [14, 0.35], [26, 0.2]], // hoe ver (eenheden) en hoe zwaar de tekenaar kijkt wat er afdekt
+  ao: 1.6, // hoe sterk dat telt
+  min: 0.1, // hoe donker een hoek op zijn donkerst wordt (van 0 tot 1)
+  vloer: 0.3, // het licht dat er in de donkerste hoek nog is (zonder diepte 0,45)
+  grond: 0.5, // hoeveel licht een muur aan de voet mist
+  grondH: 50, // tot hoe hoog boven de grond (px)
+  zon: 0.6, // de schaduw van de zon maal dit (lager is donkerder)
+  rand: 2, // de baan onder de dakrand en het overstek maal dit
+};
+function diepte(W, H) {
+  W.diepte = DIEPTE;
+  for (const m of Object.values(W.mat)) if (m.schaduwKracht !== undefined) m.schaduwKracht *= DIEPTE.zon;
+}
+
 // ---------------------------------------------------------------- het huis
 
 function huis(zaad = 1, o = {}) {
@@ -5184,6 +5206,7 @@ function huis(zaad = 1, o = {}) {
     });
   });
   if (H.kn.verweer) verweer(W, H);
+  if (H.kn.diepte) diepte(W, H);
   return W;
 }
 
@@ -5304,6 +5327,7 @@ function kaderVan(H, extra = [], draai = 0) {
 function samen(delen) {
   const W = new Wereld();
   W.H = delen[0].W.H;
+  W.diepte = delen.map((d) => d.W.diepte).find(Boolean);
   W.delen = [];
   delen.forEach(({ W: Wd, plek = [0, 0] }, i) => {
     const dx = plek[0] * TEGEL;
