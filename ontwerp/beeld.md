@@ -1098,7 +1098,10 @@ niets past, wijkt de zwakke grond voor strand (naast de zee) of gras. Golven die
   boogstenen als een waaier, de stijlen in blokken (`boogPatroon`). **J** `uit.klimop: true` (`klimop`, `klimopPixel`):
   een zuil om een as die van de grond opgroeit, langs de schoorsteen op de gevel en op de hoek van de eerste vleugel, zo
   hoog als het huis verweerd is; de blaadjes zoals de klimop van de toren. Alles staat uit, en een huis zonder deze
-  knoppen is byte voor byte zoals ervoor. **Open:** de ring van de boog is in zijn stijlen een rechte band (in het
+  knoppen is byte voor byte zoals ervoor. **Warmer** (Marcel, 10 okt, bij de plaat: "Het ziet er goed uit, maar misschien
+  wel iets warmer?"): de ronde veldsteen (en de schoorsteen erbij) in warm grijs en beige (`veldsteenWarm`) in plaats van
+  het koele grijs van de oude veldsteen, en de ronde pannen dieper oranje met een gouden glans (`panWarm`), met de
+  lichtste tint alleen als glans, zodat de zonkant oranje blijft en niet geel wordt. **Open:** de ring van de boog is in zijn stijlen een rechte band (in het
   voorbeeld steken de stenen om en om de muur in); de klimop is bij een jong huis bescheiden; en het mos op het oude riet
   (hierboven).
 - **Meer variatie in het groen, de bomen en de versiering (9 okt 2026; werklijst, vraag 148).** Marcel: "Ik wil meer

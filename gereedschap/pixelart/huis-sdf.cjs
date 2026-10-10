@@ -176,7 +176,7 @@ const DUN = {
   pannen: { rij: 12.5, pan: 15.5, stoot: 1.6, golf: 0.7, helling: 46, ramp: 'dak', nokR: 6.8, nokL: 23 },
   // H, ronde pannen (o.knoppen.bever, het stenen huis van vraag 144): beverstaarten, groter en netter dan de holle pannen;
   // staart: hoe diep de ronde staart onder de rij hangt (deel van een rij), drift: hoeveel de banen verlopen
-  bever: { rij: 18, pan: 26, stoot: 1.9, golf: 0.25, helling: 46, ramp: 'dak', nokR: 6.8, nokL: 23, bever: true, staart: 0.42, drift: 0.35 },
+  bever: { rij: 18, pan: 26, stoot: 1.9, golf: 0.25, helling: 46, ramp: 'panWarm', nokR: 6.8, nokL: 23, bever: true, staart: 0.42, drift: 0.35 },
 };
 // Een dun dak van pannen is van ronde pannen als de knop bever aan staat.
 const dunVan = (H, dak) => (dak === 'pannen' && H.kn.bever ? DUN.bever : DUN[dak]);
@@ -215,6 +215,10 @@ for (const [naam, hexen] of [
   ['rietRos', ['#281a0e', '#463018', '#6a4a26', '#8e6634', '#ae8446', '#c8a05c', '#dcbc7e']],
   // warm pleister (het contrast, vraag 144, E): room in plaats van gebroken wit, even veel stappen als 'pleister'
   ['pleisterWarm', ['#4e4034', '#76644e', '#9e8a6a', '#c4b08a', '#e0d0aa', '#f2e6c8', '#fcf6e4']],
+  // het stenen huis (vraag 144; Marcel, 10 okt: "misschien wel iets warmer"): de ronde veldsteen van G in warm grijs en
+  // beige, even veel stappen als 'veldsteen', en de ronde pannen van H dieper oranje met een gouden glans, als 'dak'
+  ['veldsteenWarm', ['#221e1a', '#36302a', '#4c443b', '#635a4e', '#7b7162', '#958a78', '#afa48f', '#c8bea8', '#e0d8c4']],
+  ['panWarm', ['#2a120a', '#4a2012', '#70321a', '#985024', '#bc6e30', '#d88e44', '#eeb060']],
 ]) {
   if (K.RAMP[naam] !== undefined) continue;
   K.RAMPEN[naam] = hexen;
@@ -4743,8 +4747,10 @@ function huis(zaad = 1, o = {}) {
     // het dak: pannen rood, leien grijs (niet blauw: zie de veldsteen in beeld.md), spanen hout
     const ramp = H.D.ramp || H.dakHout;
     const lichter = H.dak === 'leien' ? 0.6 : 0;
-    W.mat.dak = { ramp, lo: 0.6 + lichter, hi: (sp ? 6.2 : 5.8) + lichter, schaduwKracht: sp ? 0.25 : 0.4, patroon: (C) => dakPatroon(H, C) };
-    W.mat.nok = { ramp, lo: 0.5 + lichter, hi: (sp ? 6 : 5.6) + lichter, schaduwKracht: diepe, patroon: (C) => (H.dak === 'spanen' ? balkPatroon(C, true) : nokDunPatroon(H, C)) };
+    // de ronde pannen (H) worden in de zon niet geel: hun lichtste tint is de glans
+    const glans = H.D.bever ? 0.7 : 0;
+    W.mat.dak = { ramp, lo: 0.6 + lichter, hi: (sp ? 6.2 : 5.8) + lichter - glans, schaduwKracht: sp ? 0.25 : 0.4, patroon: (C) => dakPatroon(H, C) };
+    W.mat.nok = { ramp, lo: 0.5 + lichter, hi: (sp ? 6 : 5.6) + lichter - glans, schaduwKracht: diepe, patroon: (C) => (H.dak === 'spanen' ? balkPatroon(C, true) : nokDunPatroon(H, C)) };
   }
   if (H.plat) W.mat.dakvloer = { ramp: 'veldsteen', lo: 1.2, hi: 6.4, schaduwKracht: diepe, patroon: (C) => vloerPatroon(H, C) };
   // de galmborden in de galmgaten van een kerktoren: schuine planken, om en om in licht en schaduw
@@ -5642,6 +5648,8 @@ function huis(zaad = 1, o = {}) {
   if (H.kn.diepte) diepte(W, H);
   if (H.kn.contrast) contrast(W, H);
   if (H.uitbouw && H.uitbouw.klimop) klimop(W, H);
+  // G: de ronde veldsteen is warm grijs, en de schoorsteen erbij
+  if (H.kn.rond) for (const naam of ['steen', 'schoorsteen']) if (W.mat[naam] && W.mat[naam].ramp === 'veldsteen') W.mat[naam].ramp = 'veldsteenWarm';
   return W;
 }
 
