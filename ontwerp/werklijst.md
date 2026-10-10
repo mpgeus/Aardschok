@@ -7047,6 +7047,15 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     van een spelregel het in het spel anders zet). Opslaan schrijft meteen in het bestand (`/gereedschap/api/instelling`
     in `server.cjs`, alleen dat ene getal, met een `.bak`), en Toetsen draaien zegt welke toetsen het oude getal nog
     verwachten. Stap 3 (een speeltest met een set getallen, naast de vorige) komt hierna.
+    **Stap 3, het plan (10 okt, sessie `ccr-ce895b2d-mmzlcq`):** op de opdrachtregel zoals `npm run schermen`
+    (`npm run speeltest -- bouwer --naam voor`, dan `--naam na --tegen voor`): elke speeltest bewaart in `uit/<naam>/` zijn
+    uitslag, de commit en alle waarden van de bladzijde, en de vergelijking zet per spel (hetzelfde zaad) de twee naast
+    elkaar, met erboven de getallen die tussen de twee anders waren; en op de bladzijde een blok Speeltest: kiezen, Start,
+    zien hoe ver hij is, en de vergelijking met de vorige, met de getallen als link naar hun rij. Zolang hij loopt, wordt er
+    niets opgeslagen. **Marcel (10 okt):** een set getallen probeer je **in de code** (zoals stap 2, "Gelijk veranderen"),
+    met een knop die de veranderde getallen terugzet zoals ze bij de vorige waren, niet als proefset ernaast; de knop staat
+    standaard op **snel** (de bouwer, zaad 1, twee jaar, op het eiland; de rest is te kiezen); en hij gebruikt de bladzijde
+    **op zijn eigen computer** (daar moet Playwright bij, en de bladzijde zegt het als het ontbreekt).
 
 143. **Een bode naar de marskramer in een moeilijke tijd** (Marcel, 9 okt, na de speeltest van het weer: "A; misschien
     kunnen we de Schout de mogelijkheid geven om een beroep te doen om een extra marskramer om in te kunnen kopen in een
