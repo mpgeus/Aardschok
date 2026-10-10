@@ -16,6 +16,7 @@
 //   node gereedschap/pixelart/huis-sdf-export.cjs rondom       uit/proefhuis/rondom.png (vraag 124, B: de draaibare huizen)
 //   node gereedschap/pixelart/huis-sdf-export.cjs groot [stijl]  uit/proefhuis/groot.png (vraag 114, stap 3: de grote gebouwen)
 //   node gereedschap/pixelart/huis-sdf-export.cjs voorbeeld [dak] uit/proefhuis/voorbeeld.png (vraag 144: het voorbeeldhuis)
+//   node gereedschap/pixelart/huis-sdf-export.cjs voorbeeld steen  uit/proefhuis/voorbeeld-steen.png (het stenen huis)
 //
 // uitbouwen.png (ronde 3): de uitbouwen elk op een huis, de losse tuinstukken (tuin-sdf.cjs) naast
 // elkaar met een tuintje daaruit, en zes huizen met willekeurige zaden, los van elkaar. De platen
@@ -1330,6 +1331,29 @@ async function voorbeeld(dak, alleen) {
   log(`${naam}.png  ${plaat.b}×${plaat.h}`);
 }
 
+// voorbeeld-steen.png (vraag 144, het stenen huis onder pannen; ontwerp/beeld.md; Marcels voorbeeld
+// voorbeelden/huis-vakwerk-op-steen.jpg): een huis in een T met de dwarsgevel voorop, steen onder en vakwerk boven, onder
+// pannen, zoals de huizenbouwer het maakte met A tot F aan, en met elke stap erbij: G ronde veldstenen, H ronde pannen, I
+// een rondboogdeur, J klimop en het stukje grond. Netter dan de rieten hut (Marcel, 10 okt: "Netter"): jonger verweerd.
+const VOORBEELD_STEEN = { vorm: 'T', voor: true, lagen: 2, zaad: 7, nok: 'x', wand: 'veldsteen', dak: 'pannen', helling: 58, uit: { gevelschoorsteen: 'ook', luiken: 'den', bakken: 2 } };
+const STEEN_KNOPPEN = { verweer: 0.15, diepte: true, grof: true, contrast: true };
+const VOORBEELD_STEEN_STAPPEN = [
+  ['nu', STEEN_KNOPPEN],
+  ['G veldsteen', { ...STEEN_KNOPPEN, rond: true }],
+  ['H ronde pannen', { ...STEEN_KNOPPEN, rond: true, bever: true }],
+  ['I rondboogdeur', { ...STEEN_KNOPPEN, rond: true, bever: true }, { boogdeur: true }],
+  ['J klimop', { ...STEEN_KNOPPEN, rond: true, bever: true }, { boogdeur: true, uit: { ...VOORBEELD_STEEN.uit, klimop: true } }, stukjeGrond],
+];
+async function voorbeeldSteen(alleen) {
+  const spec = (knoppen, extra) => ({ ...VOORBEELD_STEEN, ...(extra || {}), knoppen });
+  const stappen = VOORBEELD_STEEN_STAPPEN.filter(([naam]) => !alleen || alleen.split(',').some((a) => naam.startsWith(a)));
+  const paneel = ([, kn, extra, delen]) => (delen ? { delen: delen(spec(kn, extra)) } : { spec: spec(kn, extra) });
+  const plaat = await rijenBeeld([{ naam: 'het stenen huis onder pannen', panelen: stappen.map((s) => [s[0], paneel(s)]) }]);
+  fs.writeFileSync(path.join(UIT, 'voorbeeld-steen.png'), K.png(plaat, 1, '#0e0a14'));
+  fs.writeFileSync(path.join(UIT, 'voorbeeld-steen-x2.png'), K.png(plaat, 2, '#0e0a14'));
+  log(`voorbeeld-steen.png  ${plaat.b}×${plaat.h}`);
+}
+
 // De vijf bouwfasen van een huis van het vel (huizen.cjs) naast elkaar, op één anker.
 function paneelFasen(naam) {
   const t0 = Date.now();
@@ -1398,8 +1422,11 @@ if (isMainThread && require.main === module) {
   } else if (wat === 'rondom') {
     rondom().then(() => log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`));
   } else if (wat === 'voorbeeld') {
-    // node huis-sdf-export.cjs voorbeeld [dak] [B,C]: alleen die stappen, om sneller te kijken
-    voorbeeld(process.argv[3] === '-' ? null : process.argv[3], process.argv[4]).then(() => log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`));
+    // node huis-sdf-export.cjs voorbeeld [dak] [B,C]: alleen die stappen, om sneller te kijken; voorbeeld steen [G,H]: het
+    // stenen huis
+    const klaar = () => log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`);
+    if (process.argv[3] === 'steen') voorbeeldSteen(process.argv[4]).then(klaar);
+    else voorbeeld(process.argv[3] === '-' ? null : process.argv[3], process.argv[4]).then(klaar);
   } else if (wat === 'stijl') {
     // node huis-sdf-export.cjs stijl wit: een bouwstijl van het spel (huizen.cjs, STIJLEN)
     const stijl = process.argv[3] || 'wit';
