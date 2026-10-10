@@ -1055,6 +1055,14 @@ niets past, wijkt de zwakke grond voor strand (naast de zee) of gras. Golven die
   in korrels van vier pixels. Daarna (Marcel: "Allebei", op nog grover en de kleuren uit elkaar): het riet in minder en
   dikkere lagen (`laagL` maal 1,5, het trapje `laagH` ruim twee keer zo hoog, een dikkere zoom en een sterker verloop),
   en een knop `contrast`: het pleister lichter en warm (de ramp `pleisterWarm`), het houtwerk donkerder (`CONTRAST`).
+  **F, ruig riet** (`knoppen.ruig`; Marcel, 10 okt, bij `voorbeelden/rieten-huisje.jpg`: "dit riet vind ik leuker staan",
+  en "rossiger, rauwer, prikkeliger, en wat rieteriger"): lange, dunne, rechte stengels in rechte, dikke lagen (zo'n zes
+  op een dakvlak), en onder elke laag de punten van de stengels die licht vangen en over een donkere, rafelige schaduw
+  hangen (`ruigRiet`); aan de goot steekt elke bos een eind uit, zodat de onderrand van het dak pluizig is
+  (`gootSprieten`), en aan de gevel elke rij (`dakVeld`); geen lap; de ramp `rietRos` (goud met een rode gloed). **Het
+  verweren is nu een maat** (`knoppen.verweer`, 0 tot 1, true is 1): een jong dak (0,3) houdt zijn kleur en heeft
+  nauwelijks mos, vlekken of gaten; vanaf 0,5 wordt het riet grijsbruin en het hout grijs. Zo kan een dorp jonge en oude
+  daken naast elkaar hebben (voorstel; het voorbeeldhuis is jong).
 - **Meer variatie in het groen, de bomen en de versiering (9 okt 2026; werklijst, vraag 148).** Marcel: "Ik wil meer
   variatie in de vegetatie, ook bomen en versieringen van het dorp." Nu heeft elke soort één tekening en verandert het
   groen niet met het jaar. Het voorstel staat bij vraag 148: elke boom anders (vormen per soort, en de beuk, de linde,

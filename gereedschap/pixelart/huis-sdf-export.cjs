@@ -1315,6 +1315,8 @@ const VOORBEELD_STAPPEN = [
   ['C vorm', { verweer: true, diepte: true }, VOORBEELD_VORM],
   ['D stukje grond', { verweer: true, diepte: true }, VOORBEELD_VORM, stukjeGrond],
   ['E grover', { verweer: true, diepte: true, grof: true, contrast: true }, VOORBEELD_VORM, stukjeGrond],
+  // F (Marcel, 10 okt, bij een voorbeeld: "rossiger, rauwer, prikkeliger, en wat rieteriger"): een jong dak van ruig riet
+  ['F ruig riet', { verweer: 0.3, diepte: true, grof: true, contrast: true, ruig: true }, VOORBEELD_VORM, stukjeGrond],
 ];
 async function voorbeeld(dak, alleen) {
   const spec = (knoppen, extra) => ({ ...VOORBEELD, ...(extra || {}), ...(dak ? { dak } : {}), knoppen });
