@@ -1178,6 +1178,18 @@ niets past, wijkt de zwakke grond voor strand (naast de zee) of gras. Golven die
   en baksteen houden hun blokken); leien krijgen geen eigen stap (open). Hoe verweerd, naar de trede van het dak: riet en
   spanen (het gehucht) jong 0,3 en oud 0,9, een oude hut 1; leien (een dorp) jong 0,15 en oud 0,6; pannen en baksteen
   (marktrecht) jong 0,1 en oud 0,5.
+  **Gebouwd (10 en 11 okt):** de knoppen per tekening (`inDeRonde` in `huizen.cjs`) en de proefplaat `huis-sdf-export.cjs
+  ronde wit` (Marcel kreeg hem). **Jong en oud in het spel:** wat er bij het begin al stond, is oud; wat gebouwd wordt,
+  doorgroeit of na een brand herrijst, is jong en na twee jaar oud (`oudNaDagen`). **De sneeuw op de daken** komt uit
+  dezelfde render als het huis: wat naar boven kijkt (de normaal van elke pixel), met een rafelige grens uit ruis, wit uit
+  de ramp 'baard' zo licht als het materiaal eronder, in drie lagen (een beetje: plekken op het dak; half; dik: het hele
+  dak, behalve de onderkant van de lagen riet), elk een eigen plaatje over het huis; het spel kiest de laag naar de sneeuw
+  op de grond. Een oud huis draagt de sneeuw van zijn jonge (dezelfde vorm). **De brandfasen in het spel:** terwijl het
+  brandt eerst het huis, dan geschroeid en het dak dat valt; afgebrand binnengestort, ingestort (twee varianten) en
+  opgeruimd; de verkoolde bouwfase alleen nog voor wat niet van de huizenbouwer is. **Open:** de toren van de kapel is
+  boven de eerste band bruin in plaats van in de kalk van de stijl (in het spel nu grijs; het zit in de kalk van de toren
+  zelf, niet in de ronde veldsteen); het pleister van de kapel laat bij een jong huis al rode baksteen zien, waar het steen
+  zou moeten zijn; tussen jong en oud is bij leien en pannen weinig verschil.
 - **Meer variatie in het groen, de bomen en de versiering (9 okt 2026; werklijst, vraag 148).** Marcel: "Ik wil meer
   variatie in de vegetatie, ook bomen en versieringen van het dorp." Nu heeft elke soort één tekening en verandert het
   groen niet met het jaar. Het voorstel staat bij vraag 148: elke boom anders (vormen per soort, en de beuk, de linde,

@@ -581,7 +581,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`nietInDeRegen` in `T.VELDEN_INSTELLINGEN`, js/akkers.js: `w.zaaienNaRegen`, en het veldwerk), en na een droog jaar
   (`D.weer.vorigJaar`) neemt de marskramer in de lente meer zaaigraan mee (`naDroogte` in js/handel.js). Sneeuw blijft
   liggen (`D.weer.sneeuw`, 0 tot 1, `sneeuwLaag`), en `js/tekenen.js` legt hem per tegel op de grond, de weides en de kale
-  akkers (`tekenSneeuwOp`, in de buffer van de grond: plukjes die dichter worden, `sneeuwDrempel` en `sneeuwRuis`). Het weer van vandaag staat bij de
+  akkers (`tekenSneeuwOp`, in de buffer van de grond: plukjes die dichter worden, `sneeuwDrempel` en `sneeuwRuis`); op de daken
+  van de huizen de laag die erbij past (`T.dakSneeuwLaag`, `dakSneeuw`: een beetje, half of dik, uit dezelfde render als het
+  huis, `tegels/daksneeuw/`, `T.sprites.daksneeuw`; vraag 144, 4b). Het weer van vandaag staat bij de
   datum (`T.ui.toonKalender`). De spelregel "Het weer" (met droogte, zonder, of altijd zon); de getallen in
   `T.WEER_INSTELLINGEN`.
 - `js/bode.js`: **de bode naar de marskramer** (vraag 143, 9 okt; Marcel: "soort van brief sturen met een bode", en "1.
@@ -774,8 +776,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   bij de buren, en na `puinDagen` bouwt het zijn huis weer op met hout (`T.tikBrandDag`, `T.herbouwHout`), in de
   bouwfasen zoals een huis dat doorgroeit (`v.inAanbouw` met `vanFase`). Het beeld in `js/tekenen.js`: vuurtongen over
   het dak, vonken en een gloed (`tekenVuur`, na de nacht), rook (`tekenRook`), licht (`T.brandLicht` in
-  `T.lichtBronnen`), en de ruïne: de bouwfase `puinFase` van zijn tekening, verkoold (`puinVan`) en een paar dagen
-  smeulend (`T.smeult`, sintels). Bij groot brandgevaar, als niemand blust, slaat het vuur soms over op het dichtste huis
+  `T.lichtBronnen`), en de fasen van het afbranden (`T.brandfaseVan`, vraag 144: terwijl het brandt geschroeid en het dak
+  dat valt, dan binnengestort, ingestort en opgeruimd; uit het huis zelf gesneden, `node gereedschap/pixelart/ruines.cjs
+  spel`, `tegels/brandfasen/`, `T.sprites.brandfase`; zonder fasen de verkoolde bouwfase `puinFase`, `puinVan`), een paar
+  dagen smeulend (`T.smeult`, sintels). Bij groot brandgevaar, als niemand blust, slaat het vuur soms over op het dichtste huis
   ernaast als het eerste afbrandt (`T.slaatOver`, `overslaan`; één keer, `g.brand.overgeslagen`). De spelregel "Brand";
   de getallen in `T.BRAND_INSTELLINGEN`.
 - `js/koorts.js`: **de koorts** (vraag 144, 3): het voorval `ziekte` is het begin (`T.tikKoortsDag`): wie het betreft en
@@ -1008,7 +1012,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   boeren, slapen tot de ochtend, en bezoekers die overdag komen, `T.bezoekerKomtAan`),
   `js/voorraad.js` (`D.voorraad`; alles verandert via
   `T.wijzigVoorraad`), `js/gebouwen.js` (`T.GEBOUWEN`: 45
-  soorten op één plek, zoals `T.MENSEN`; bevolking, woonruimte, handen, productie per dag,
+  soorten op één plek, zoals `T.MENSEN`; elk huis van de huizenbouwer jong en oud, vraag 144: wat er bij het begin al
+  stond, is oud, wat gebouwd wordt, is jong en na `oudNaDagen` oud, en alleen het voorwerp wisselt van tekening, `T.maakOud`,
+  `T.tikVerwerenDag`; bevolking, woonruimte, handen, productie per dag,
   `T.plaatsGebouw`, bouwfases via `T.bouwFaseIndex`; niet op iemand en niet op een deur, `T.waaromNietOpIemand`, vraag 88, en altijd met drie tegels looppad rondom, `T.looppadOm` (Marcel, 3 okt); een gebouw maakt alleen wat zijn grondstof
   toelaat, wie iets omzet maakt tot er genoeg ligt, `T.maaktTot`, en gereedschap laat harder werken; wie stilligt, zegt
   `T.stilOp`: in een seizoen, `stilIn`, of buiten zijn maanden, `alleenIn`, zoals de wijnboerderij, die alleen in wijnmaand
@@ -1078,7 +1084,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   de achtergrond stopt na twee uur). **Een stand is hetzelfde huis, een kwartslag gedraaid** (vraag 124, B): een huis van een stijl is gebouwd met elke
   muur ingevuld (`rondom` in `huis-sdf.cjs`), en de tekenaar draait de camera en de zon eromheen (`tekenWereld` met
   `o.draai` in `toren.cjs`), zodat de zon linksboven blijft en elke steen van elke kant op zijn plek ligt; zonder draai
-  tekent hij pixel voor pixel als vroeger. De proefplaat: `huis-sdf-export.cjs rondom`.
+  tekent hij pixel voor pixel als vroeger. De proefplaat: `huis-sdf-export.cjs rondom`. **De knoppen van het voorbeeldhuis op
+  elke tekening** (vraag 144, de ronde van alle tekeningen, 10 okt): `inDeRonde` in `huizen.cjs` zet ze naar het dak en de
+  soort, en elke tekening heeft een oude naast zich (`<naam>-oud`, `OUD`) en de sneeuw op zijn dak in drie lagen
+  (`sneeuwVan`, `schrijfDaksneeuw`); de proefplaat: `huis-sdf-export.cjs ronde wit`. De bouwfasen opnieuw in delen:
+  `bouwfasen.cjs --opnieuw wit` (een stijl, een naam, of `huizen`).
   Elk vel gaat ingepakt naar het spel (`inpakken.cjs`): een raster kost de browser elke lege pixel, en een
   vel groter dan 8192 pixels laadt niet elke videokaart. Een leeg vak in een vel kost dus niets meer.
 - Het spel tekent met sprites zodra `beelden/` er is, en anders met vlakken. Wat de kunst niet

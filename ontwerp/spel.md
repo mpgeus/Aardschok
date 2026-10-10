@@ -578,8 +578,9 @@ De brand (`js/brand.js`): in de droogte is er brandgevaar, en groot brandgevaar 
 in een vol dorp; dan komt de brand vaker. Als iemand je komt halen, staat het huis echt in brand: vuurtongen over het dak,
 vonken, rook en een gloed die 's nachts de buurt verlicht. Met de emmers is het een uur na je antwoord uit, en blijft het huis 65
 van de 100 keer staan (bij brandgevaar minder); laat je het branden, dan is het een uur later afgebrand, en doet niemand
-iets, na zes uur. Wat afbrandt, is een zwarte ruïne met
-verkoolde balken zonder dak, die twee dagen smeult. Het gezin woont zolang bij de buren, en na drie dagen bouwt het zijn
+iets, na zes uur. Terwijl het brandt, zie je het afbranden (vraag 144, de ronde van alle tekeningen, 11 okt): het dak
+schroeit en valt; afgebrand ligt het binnengestort, dan ingestort, en de laatste dag voor het opbouwen opgeruimd. Het
+smeult twee dagen. Het gezin woont zolang bij de buren, en na drie dagen bouwt het zijn
 huis weer op, met de helft van het hout dat het kostte, in de bouwfasen; zonder hout wacht het. Bij groot brandgevaar, en
 als niemand blust, slaat het vuur de helft van de keren over op het dichtste huis binnen vijf tegels, als het eerste
 afbrandt; dat huis brandt ook af en wordt ook weer opgebouwd, en slaat zelf niet verder over (10 okt; Marcel: "Ja, zo").
