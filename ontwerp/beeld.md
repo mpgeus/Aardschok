@@ -854,6 +854,27 @@ Aan het werk draagt iedereen zijn gewone kleren (de werkfiguren van vraag 145). 
 zijn laken krijgt (e; `T.klerenVan` in `js/bewoners.js`, de spelregel "Kleren"). De vellen: `boer-u7-arm`,
 `boerin-u3-deftig`, staand en lopend (`uiterlijk-anim.cjs`). De kinderen en de ouden houden voorlopig hun gewone kleren.
 
+## De mensen naar Marcels voorbeelden (10 okt 2026, werklijst vraag 150)
+
+Marcel: "We moeten de mensen zoizo een beetje upgraden, want zien er niet geweldig uit", en bij vier voorbeelden (in
+`ontwerp/voorbeelden/`, `mensen-*.jpg`): "De plaatjes demonstreren een verscheidenheid aan mensen. Het is niet perse de
+stijl. Ik wil wel vasthouden aan de pixel art. Maar ik heb meer afwisseling nodig." Wat de voorbeelden laten zien, en
+wat onze mensen nu hebben:
+- **lichaamsbouw:** groot en klein, dik en dun, krom en recht, breed en smal (vooral de schurken); bij ons heeft iedereen
+  hetzelfde lijf;
+- **een silhouet uit lagen:** een mantel met een kap, een schoudermanteltje, een overkleed over een onderkleed, een lange
+  jas, een pij; bij ons een kiel met een broek, of een jurk met een schort;
+- **het hoofd:** een witte linnen kap, een kaproen, een vilthoed, een muts, een kale kop; bij ons al een deel;
+- **spullen en riemen:** een tas aan de riem, een riem schuin over de borst, een mes, een boek in de hand, laarzen met een
+  omslag; bij ons een riem met buidel en mes, een tas;
+- **kleur:** elke figuur een eigen combinatie, met contrast tussen de lagen (een groene jurk over een bruin onderkleed,
+  een bruine mantel erover); bij ons liggen kiel en broek dicht bij elkaar, en is alles gedempt;
+- **verhoudingen:** de boogschutter, de schurken en de vrouw zijn slanker, met langere benen en een kleiner hoofd (zo'n
+  zes à zeven hoofden); het spritevel is gedrongen (drie). De onze zijn er zo'n vijf.
+Afwisseling kost geen vellen erbij: elk van de 24 uiterlijken krijgt zijn eigen bouw, lagen, hoofd en spullen. Wat wel
+kost: de werkfiguren (`werkfiguren.cjs`) lenen het hoofd en de kiel, maar hebben hun eigen lijf; een andere bouw moet daar
+ook in, anders verandert iemand van postuur als hij gaat maaien.
+
 ## Het vee: een koe en een schaap (Marcel, 25 sep 2026)
 
 Voor de weides met vee (`spel.md`, "Weides met koeien en schapen"). Marcel koos: eerst de dieren

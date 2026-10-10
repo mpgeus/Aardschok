@@ -23,8 +23,8 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
 (Marcel: "Ik denk dat we die economie terug moeten draaien", en "Alles van vraag 141").
 
 **Wacht op Marcel:**
-- De mensen mooier (vraag 150; Marcel, 10 okt: "zien er niet geweldig uit"): wat Claude zag en een voorstel staan bij
-  het punt; wacht op Marcel.
+- De mensen mooier (vraag 150; Marcel, 10 okt: "zien er niet geweldig uit", en "Ik wil wel vasthouden aan de pixel art.
+  Maar ik heb meer afwisseling nodig"): Marcel zoekt nog voorbeelden; het plan staat bij het punt, en bij "Daarna" als 0d.
 - Kleren naar stand (vraag 149; Marcel, 10 okt: "Hogere niveau sociale mensen moeten duurdere kleren krijgen"): het
   voorstel staat bij het punt; Marcel koos a tot e (10 okt), drie trappen, en bij de plaat "1 armer, 2 alle, 3 ja". In het
   spel op de sessiebranch; de kinderen en de ouden komen in een tweede ronde. **Bezig in sessie `ccr-5cd874f7-wpwkhq`** (10
@@ -66,6 +66,8 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
    de ui: eerst de bomen (vormen, nieuwe soorten, de seizoenen met vruchten), dan het groen eronder, dan de spullen bij de
    huizen; de sneeuw op de bomen en de huizen (144, 4b, Marcel: "ja") in dezelfde ronde. **Bezig in sessie `main`
    (desktop, groen)** (9 okt): stap 1, de proefplaat van de bomen.
+0d. De mensen mooier en afwisselender (vraag 150; Marcel, 10 okt: "voor de proefversie"): de proefplaten 1 tot 4, dan
+   alles opnieuw renderen.
 1. Een proefversie voor Marcels 4K-scherm en een eerste tester (33d; `npm run proefversie`, ook `-- --windows`), met de
    graanzak erin. De laatste is van 3 okt (`36c713e`), zonder de verzoeken, de twee bazen, het ontginnen, de markt, de
    wolven, het eiland, WebGL en de graanzak.
@@ -7577,8 +7579,13 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     grootte: zoals nu, met het licht en het contrast van de wereld, met een betere vorm erbij, en met lichaamsbouw
     (lang, kort, tenger, stevig) en houdingen in rust. Het licht geldt voor alle figuren tegelijk en kost het minst; dan
     alles in één keer opnieuw renderen (zo'n 640 vellen, uren). Dezelfde stap als "grover en contrast" van het voorbeeldhuis
-    (vraag 144), zodat de mensen en de huizen niet uit elkaar groeien. **Wacht op Marcel** (wat stoort het meest, en heeft
-    hij voorbeelden, zoals bij de huizen).
+    (vraag 144), zodat de mensen en de huizen niet uit elkaar groeien.
+    **Marcel (10 okt): "1 ja, 2 ik zoek voorbeelden, 3 voor de proefversie"**, met vier voorbeelden (`ontwerp/voorbeelden/`,
+    `mensen-*.jpg`): "De plaatjes demonstreren een verscheidenheid aan mensen. Het is niet perse de stijl. Ik wil wel
+    vasthouden aan de pixel art. Maar ik heb meer afwisseling nodig." Wat Claude eruit haalt: `beeld.md`, "De mensen naar
+    Marcels voorbeelden" (bouw, lagen, hoofd, spullen, kleur, verhoudingen). Het plan, in proefplaten: 1. licht en kleur
+    (alle figuren tegelijk); 2. het lijf: de verhoudingen (vijf hoofden zoals nu, of zes) en vier à vijf bouwen; 3. lagen,
+    hoofden en spullen; 4. houdingen in rust. Dan alles één keer renderen, ook de werkfiguren met hun bouw.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
