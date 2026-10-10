@@ -14,13 +14,17 @@ groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
 Marcel, 8 okt: "snel, duidelijk en low cost". Elke sessie werkt dit blok bij aan het eind; wat af is, gaat eruit.
 
-**Loopt** (het teken "Bezig in sessie" staat bij het punt zelf): het dorp leeft (vraag 145: elk mens anders, geluid,
-klein leven). De fasen van het afbranden (vraag 144, 3) zijn af op de proefplaat; alle tekeningen wachten tot de huizen
+**Loopt** (het teken "Bezig in sessie" staat bij het punt zelf): het dorp leeft (vraag 145): elk mens anders (ook
+ouder worden, geboren worden en sterven) en het kleine leven (rook, water, spelende kinderen, kippen, honden, de was)
+staan in `main`; het geluid wacht op Marcel (hieronder). De fasen van het afbranden (vraag 144, 3) zijn af op de proefplaat; alle tekeningen wachten tot de huizen
 zelf beter zijn (Marcel zoekt voorbeelden), en gaan dan in één ronde met de sneeuw op de daken. De bode met de hinderlaag en de lantaarns (vraag 143), het weer, de statussen, niet zaaien in de regen, de
 brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `main`. Vraag 141, de economie binnen het dorp, is op 9 okt helemaal teruggedraaid
 (Marcel: "Ik denk dat we die economie terug moeten draaien", en "Alles van vraag 141").
 
 **Wacht op Marcel:**
+- Het geluid (vraag 145, 2): de sleutel `FREESOUND_KEY` in de omgeving en de domeinen van Freesound erbij, zoals
+  beschreven bij vraag 145; dan maakt een nieuwe sessie het.
+- Vraag 145 laten zien: is het dorp nu minder "saai"? En daarna het voorbeeldhuis naar de voorbeelden (`beeld.md`).
 - Een feest op het plein vol kijkgaten (`opmerkingen.md`, "Het beeld"): zo laten, op een feest alleen wie ertoe doet, of
   het plein uit? De fout in de kijkgaten en het haperen bij slepen zijn op 9 okt opgelost.
 - Uit `opmerkingen.md`: een brand die overslaat op het huis ernaast, een eigen beeld voor de koorts (ziekbed, hoesten),
@@ -7217,7 +7221,10 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     rover, een wolf). En de was aan de lijn (`T.wasVan`): bij een op de drie huizen per dag, onder het werk en niet als
     het nat is, twee palen en een touw met drie tot vijf stukken (hemd, laken, broek, doek) die wapperen. Daarmee zijn
     alle vijf van 3 er, en het water.
-    **Bezig in sessie `ccr-77327776-rqjldz`** (9 okt): vraag 145, 1 en 3.
+    **Gebouwd (10 okt):** 1 helemaal: alle 540 figuren zijn gerenderd (108 uiterlijken staand en lopend, en die van de
+    mannen en vrouwen in elk werk) en staan in het spel; elke bewoner draagt zijn eigen uiterlijk, ook aan het werk. De
+    figuren in `beelden/figuren` gingen van zo'n 6 naar 56 MB; een figuur laadt pas als zijn mens op de kaart staat.
+    Van 145 wacht nu alleen 2, het geluid: Marcel zet eerst de sleutel (`FREESOUND_KEY`) en de domeinen klaar.
 
 146. **Een fatsoenlijke ui** (Marcel, 9 okt: "Ik denk dat het nu ook tijd is om een fatsoenlijke UI te maken; nu is het
     echt een zooitje met al die menutjes met letters."). De richting ligt sinds 3 okt vast (vraag 98, C, de schrijftafel:

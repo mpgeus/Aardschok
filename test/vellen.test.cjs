@@ -77,7 +77,7 @@ test('een kaart laadt precies de huizen, gebouwen en figuren die erop staan, elk
   const op = tekeningenOp(S.wereld);
   const { namen, vellen } = figurenOp(S);
   assert.ok(op.size >= 8, `${op.size} tekeningen op het ontworpen gehucht`);
-  assert.ok(namen.has('maaier') && namen.has('boer') && !namen.has('kobold'), [...namen].join(' '));
+  assert.ok(namen.has('maaier') && [...namen].some((n) => /^boer-u\d+$/.test(n)) && !namen.has('kobold'), [...namen].join(' ')); // een bewoner draagt zijn uiterlijk (vraag 145)
   const voor = gevraagd.length;
   T.sprites.laadWatErStaat(S.wereld);
   T.sprites.laadWatErStaat(S.wereld); // wat al onderweg is, vraagt het niet nog eens
