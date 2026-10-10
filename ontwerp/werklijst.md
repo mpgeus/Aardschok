@@ -14,7 +14,8 @@ groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
 Marcel, 8 okt: "snel, duidelijk en low cost". Elke sessie werkt dit blok bij aan het eind; wat af is, gaat eruit.
 
-**Loopt** (het teken "Bezig in sessie" staat bij het punt zelf): het dorp leeft (vraag 145): elk mens anders (ook
+**Loopt** (het teken "Bezig in sessie" staat bij het punt zelf): de ui is af (vraag 146, a tot e, 10 okt, met de
+fotomodus onder `H`; de kaart van het land, het label van het overzicht en waar `Tab` staat, in `opmerkingen.md`). Het dorp leeft (vraag 145): elk mens anders (ook
 ouder worden, geboren worden en sterven) en het kleine leven (rook, water, spelende kinderen, kippen, honden, de was)
 staan in `main`; het geluid wacht op Marcel (hieronder). De fasen van het afbranden (vraag 144, 3) zijn af op de proefplaat; alle tekeningen wachten tot de huizen
 zelf beter zijn (Marcel zoekt voorbeelden), en gaan dan in één ronde met de sneeuw op de daken. De bode met de hinderlaag en de lantaarns (vraag 143), het weer, de statussen, niet zaaien in de regen, de
@@ -31,19 +32,11 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
   en wie wijn wil (de wijnboerderij die niemand bouwt).
 - Vraag 142, de bladzijde met alle getallen (`gereedschap/instellingen.html`): stap 1 en 2 staan in `main`; stap 3 (een
   speeltest met een set getallen, naast de vorige) wacht.
-- Vraag 146, d: met het toetsenblok weg staat `Tab` (het overzicht) nergens meer, behalve in het label als je er al bent.
-  Voorstel: de raad zegt het de eerste dag, na de zin over de tijd ("Met [Tab] kijk je over je dorp"). Of laten zo?
 
 **Daarna, in deze volgorde:**
-0. Een fatsoenlijke ui (vraag 146; Marcel, 9 okt: "nu is het echt een zooitje met al die menutjes met letters"): de
-   plaat (a) is goed, elk venster is papier met leesbare letters (b1), er is één manier van openen en sluiten (b2), en
-   de tafel ligt onderin (c, 9 okt; een gesprek staat sinds dan midden boven de tafel), en bovenaan liggen alleen nog
-   briefjes (d, 10 okt: het doel met de raad, de datum, het lipje Menu; het blok met toetsen is weg), en er is een
-   fotomodus (e, 10 okt: `H`, of Fotomodus in het menu; `Enter` bewaart een plaatje). Nog na te lopen tegen "klaar als":
-   de kaart van het land is nog geen papier, en het label van het overzicht (`Tab`) is nog Nederlands in de html.
 0b. Engels en een vertaaltool (vraag 147; Marcel, 9 okt): de basis nu, naast de ui; het omzetten van alle tekst na de
-   ui en vóór de proefversie. Stap 1 (de basis, de tool, het menu als proef) staat in `main` (9 okt); stap 2, het
-   omzetten, na de ui.
+   ui en vóór de proefversie. Stap 1 (de basis, de tool, het menu als proef) staat in `main` (9 okt); **nu stap 2**, het
+   omzetten, want de ui is af (10 okt).
 0c. Meer variatie in het groen, de bomen en de versiering (vraag 148; Marcel, 9 okt: alles ja, "Mag ernaast"), naast
    de ui: eerst de bomen (vormen, nieuwe soorten, de seizoenen met vruchten), dan het groen eronder, dan de spullen bij de
    huizen; de sneeuw op de bomen en de huizen (144, 4b, Marcel: "ja") in dezelfde ronde. **Bezig in sessie `main`
@@ -7345,6 +7338,8 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     `gereedschap/proefversie/maak.cjs`). Nagelopen in de browser (1600×900, en 1920×1080 op 200%: het plaatje is
     3840×2160): aan en uit met H, Esc en het menu, inzoomen tot 3,3 en uit tot 0,35, een klik laat de schout staan,
     Tab-H-H blijft in het overzicht, en een voorval haalt je eruit; `npm test` 1167/1167.
+    **Af (10 okt; Marcel: "Ja, zet het in main, rest in opmerkingen").** Wat er tegen "klaar als" nog openstond (de kaart
+    van het land als papier, het label van het overzicht, waar `Tab` staat), staat in `opmerkingen.md`.
 
 147. **Engels, en een vertaaltool voor de community** (Marcel, 9 okt: "We moeten alles naar het Engels halen. Ook moeten
     we een translate tool hebben. Mochten we leden uit de community krijgen die een vertaling willen maken."). Op 1 okt

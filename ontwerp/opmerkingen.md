@@ -12,6 +12,12 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 - **De kaart van het land is nog geen papier** (9 okt, vraag 146, b1): elk venster werd papier, behalve `#land`: die
   tekent zijn kaart (SVG) in licht op donker, met namen in `--inkt` en een donkere rand (`stijl.css`, `--land-*`). Op
   papier moeten die kleuren om. Achter de spelregel "Land", die standaard uit staat; mee te nemen als het land weer speelt.
+- **Het label van het overzicht** (10 okt, na vraag 146; Marcel: "rest in opmerkingen"): `#overzicht-label` (`Tab`) is
+  nog donker glas met een Nederlandse zin in `index.html`, het enige wat er van de ui nog zo bij ligt. Wordt een briefje
+  zoals `#foto-wenk` (een zin uit `T.t`), of papier zoals de briefjes bovenaan.
+- **Waar staat `Tab`?** (10 okt, vraag 146, d): met het toetsenblok weg staat het overzicht nergens meer, behalve in het
+  label als je er al bent. Voorstel: de raad zegt het de eerste dag, na de zin over de tijd ("Met [Tab] kijk je over je
+  dorp"). Of laten zo; Marcel koos nog niet.
 - **De ouden dragen kennis over** (9 okt, Marcel bij vraag 145, ouder worden: "Ouderen dragen mogelijk kennis over? Eerst
   alleen het beeld"): een oude die met een jonge werkt, maakt hem beter in zijn werk, of een dorp dat zijn ouden verliest,
   verliest wat zij wisten. Nu doet ouder worden alleen wat de leeftijd al deed.
