@@ -4537,7 +4537,7 @@ function bouwUitbouwen(W, H, T) {
 // knop blijft elke tekening pixel voor pixel dezelfde. Alles hangt aan de plek in de wereld (C.x, C.y, C.z), niet aan
 // de pixel, zodat een huis in elke stand op dezelfde plek verweerd is.
 const VERWEER = {
-  mos: 0.68, // vanaf hoeveel mos (mosOp) er mos groeit op het riet; hoger is minder
+  mos: 0.58, // vanaf hoeveel mos (mosOp) er mos groeit op het riet; hoger is minder
   mosDak: 0.72, // en op een dun dak
   mosPlint: 0.74, // en op de plint
   af: 0.78, // vanaf hoeveel (ruis van 0 tot 1) het pleister afgevallen is
@@ -4567,6 +4567,32 @@ function mos(H, C, s, ramp, m, drempel) {
   return { ramp: 'mos', stap: omRamp(s, ramp, 'mos') * 0.66 + bol + (k === 0 ? 0.6 : k === 1 ? -0.5 : 0) };
 }
 
+// Mos op het riet (Marcel, 10 okt, na het oude dak: platte, felgroene vlekken als stickers; "Na het stenen huis"): het
+// groeit in de schaduw onder de punten van de laag erboven, waar het vocht blijft, en loopt van daar in strepen langs de
+// stengels naar beneden, in plukken (mosOp) en meer naar de goot toe; donker olijfgroen, met korrels langs de stengels en
+// het riet eromheen vochtig en wat donkerder; de schaduw onder de punten wordt in een pluk donkergroen. r is wat het riet
+// er zelf zegt (in stappen boven C.stap), ramp de ramp van het riet.
+function mosOpRiet(H, C, r, ramp, drempel) {
+  const P = C.deel.plek ? C.deel.plek(C.x, C.y, C.z) : dakPlek(H, C.x, C.y, C.z);
+  const V = P.V;
+  // hoe ver onder de punten van de laag erboven, langs de helling: 0 is in hun schaduw
+  const fase = (P.hE + V.laagGolf(P.a)) / H.laagL;
+  const onder = (1 - (fase - Math.floor(fase))) * H.laagL;
+  const inSchaduw = klem(1 - onder / (H.laagL * 0.55), 0, 1);
+  const streep = ruis2(P.a * 0.16, P.hE * 0.03, H.zaad + 631);
+  const goot = klem(1 - (C.z - (H.voetZ ?? 0)) / E(140), 0, 1) * 0.12;
+  const m = mosOp(H, C) * 0.7 + streep * 0.3 + inSchaduw * 0.3 + goot - 0.12;
+  if (m <= drempel) return r;
+  // korrels langs de stengels, dichter naar het midden van een pluk
+  const kol = Math.floor(P.a / 1.25);
+  const dicht = (m - drempel) * 9;
+  if (dicht < (hash(kol, Math.floor(P.hE / 2.2), H.zaad + 609) % 100) / 100) return r - 0.4 * klem(dicht * 2, 0, 1);
+  if (r < -1.3) return { ramp: 'mos', stap: 0.4 };
+  const bol = klem((m - drempel) * 5, 0, 1) * 0.4;
+  const k = hash(kol, Math.floor(P.hE / 3), H.zaad + 613) % 7;
+  return { ramp: 'mos', stap: klem(omRamp(C.stap + r * 0.7, ramp, 'mos') * 0.5 + bol + (k === 0 ? 0.5 : k === 1 ? -0.4 : 0), 0.3, 3.4) };
+}
+
 function verweer(W, H) {
   // hoeveel (true is 1): een nieuw dak en een nieuw huis (0,3) hebben nauwelijks mos en vlekken, een oud (1) veel
   const v = H.kn.verweer === true ? 1 : klem(Number(H.kn.verweer) || 0, 0, 1);
@@ -4584,12 +4610,7 @@ function verweer(W, H) {
     // een lap is een seizoen jonger: dezelfde ramp, een tint lichter, en geen goud (Marcel, 10 okt: "Dit ziet er raar
     // uit", over een gouden lap op het grijze dak)
     if (r && typeof r === 'object') return { plus: (r.plus || 0) + (r.ramp ? 0.3 : 0) - 0.2 };
-    // de donkere zoom onder elke laag blijft: het mos groeit op de laag, niet eroverheen
-    if (r < -1.3) return r;
-    // meer naar de goot toe, waar het water langer blijft staan
-    const m = mosOp(H, C) + klem(1 - (C.z - (H.voetZ ?? 0)) / E(140), 0, 1) * 0.12;
-    const drempel = VERWEER.mos + minder * 0.6;
-    return mosHier(H, C, m, drempel) ? mos(H, C, C.stap + r * 0.7, W.mat.riet.ramp, m, drempel) : r;
+    return mosOpRiet(H, C, r, W.mat.riet.ramp, VERWEER.mos + minder * 0.6);
   });
   // het pleister
   wikkel('pleister', (f, M) => (C) => {
