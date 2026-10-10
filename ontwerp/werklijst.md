@@ -39,11 +39,13 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
   we vooruitkijken doen"): in `main` (10 okt), met het vooruitkijken naar de pluk (`T.wijnNaDePluk`); in de speeltest
   wint er één van de zes, zoals zonder wijn (`speelbaar.md`). Open: een wijnboerderij ver weg zonder kapel hield een winst
   tegen (`opmerkingen.md`, bij de kapel). Voorstel van Claude: een wijnboerderij komt alleen waar haar gezin een kapel
-  haalt, zoals een erf; of de regel van 2d (plaats houden) ook voor de kapel.
+  haalt, zoals een erf; of de regel van 2d (plaats houden) ook voor de kapel. **Marcel (10 okt) koos het: "Wijn haalt
+  kapel".** **Bezig in sessie `ccr-ff71f25d-flpbkd`** (10 okt): het plan, met Marcel.
 - Uit `opmerkingen.md`: een brand die overslaat op het huis ernaast, een eigen beeld voor de koorts (ziekbed, hoesten),
   en waar de kerstboom komt (vraag 148). Voorstellen van Claude (10 okt): overslaan alleen bij groot brandgevaar als
   niemand blust, op hooguit één buurhuis; een bos stro aan de deur van een huis met zieken (de pestbos); de kerstboom
-  zoals de meiboom, van 20 wintermaand tot 6 louwmaand, met een feestavond op 24 wintermaand.
+  zoals de meiboom, van 20 wintermaand tot 6 louwmaand, met een feestavond op 24 wintermaand. **Marcel (10 okt) koos de
+  kerstboom en de brand die overslaat met de pestbos**, na de wijn. **Bezig in sessie `ccr-ff71f25d-flpbkd`** (10 okt).
 - Vraag 142, de bladzijde met alle getallen (`gereedschap/instellingen.html`): stap 1 en 2 staan in `main`; stap 3 (een
   speeltest met een set getallen, naast de vorige) wacht. **Bezig in sessie `ccr-ce895b2d-mmzlcq`** (10 okt): het plan
   voor stap 3, met Marcel.
