@@ -739,8 +739,16 @@ function boer(stand = null, o = {}) {
     bot(voetBot(hg, i, [s * 4.4, 2.2, 0]));
   }
   // --- kiel: los en wijd, tot halverwege de dij; schouders erop. (De drinker, buik: de kiel spant
-  // om een buik die ver naar voren en wat naar opzij komt.)
-  const kiel = o.buik
+  // om een buik die ver naar voren en wat naar opzij komt. Een deftige man, jas 'lang' (vraag 149): een jas tot onder de
+  // knie, die naar onderen wijd uitloopt, zodat de benen erin kunnen stappen.)
+  const zKiel = o.jas === 'lang' ? 15 : 24;
+  const kiel = o.jas === 'lang'
+    ? {
+        rx: profiel([[15, 13.2], [19, 12.2], [24, 11.2], [30, 10.2], [38, 9.4], [46, 9.8], [52, 10.4], [58, 10]]),
+        ry: profiel([[15, 13.4], [19, 11.6], [24, 9.6], [30, 7.8], [38, 6.8], [46, 7], [52, 7.2], [58, 6.4]]),
+        cy: profiel([[15, 1.6], [19, 1.4], [24, 1], [30, 0.8], [40, 0.8], [58, 0.5]]),
+      }
+    : o.buik
     ? {
         rx: profiel([[24, 11.4], [30, 12], [36, 12.7], [42, 12.5], [48, 11.2], [53, 10.5], [58, 10]]),
         ry: profiel([[24, 8.8], [30, 9.8], [36, 10.8], [42, 10.6], [48, 8.6], [53, 7.3], [58, 6.4]]),
@@ -751,10 +759,10 @@ function boer(stand = null, o = {}) {
         ry: profiel([[24, 8.4], [30, 7.6], [38, 6.8], [46, 7], [52, 7.2], [58, 6.4]]),
         cy: profiel([[24, 0.8], [40, 0.8], [58, 0.5]]),
       };
-  delen.push(romp(kiel, 24, 58, M.kiel, D.kiel, 2));
+  delen.push(romp(kiel, zKiel, 58, M.kiel, D.kiel, 2));
   delen.push(ellips([0, 0.4, 57], [10.4, 6.8, 4.4], M.kiel, D.kiel, 2.5));
   // de afstand tot het bovenlijf, voor wat eromheen ligt (een omslagdoek, een manteltje)
-  const bovenlijf = o.omslagdoek || o.hoed === 'kap' ? bouwSdf([romp(kiel, 24, 58, M.kiel, D.kiel, 2), ellips([0, 0.4, 57], [10.4, 6.8, 4.4], M.kiel, D.kiel, 2.5)]) : null;
+  const bovenlijf = o.omslagdoek || o.hoed === 'kap' ? bouwSdf([romp(kiel, zKiel, 58, M.kiel, D.kiel, 2), ellips([0, 0.4, 57], [10.4, 6.8, 4.4], M.kiel, D.kiel, 2.5)]) : null;
   if ((o.kraag || 'doek') === 'doek') {
     // rode halsdoek met een knoop en een puntje voorop
     delen.push({
@@ -769,7 +777,7 @@ function boer(stand = null, o = {}) {
     // een jas met bont: een rol om de hals, banen langs de sluiting en een zoom onderaan
     KAR.bontKraag(delen, ctx, [0, 0.2, 59.6], [8, 6.6], 2.6);
     KAR.bontBanen(delen, ctx, kiel, 37, 57, [1.4, 5]);
-    KAR.bontZoom(delen, ctx, kiel, 24.6);
+    KAR.bontZoom(delen, ctx, kiel, zKiel + 0.6);
   }
   const { buidel } = overDeKiel(delen, ctx, kiel, o);
   // de luit: de kast rechtsonder op de rug, de hals langs het linkeroor omhoog
@@ -871,6 +879,8 @@ function boer(stand = null, o = {}) {
   // --- hoofd: lang gezicht, grote neus, flaporen; bruin haar onder de hoed uit (hoofdVanDeBoer, hieronder)
   hoofdVanDeBoer(delen, ctx, H, o, bovenlijf);
   bot(Bn.Bnek);
+  // (vraag 149: bontKleur, een andere kleur bont, zoals het donkere marterbont van een deftige man)
+  if (o.bontKleur && M.bont != null) mat[M.bont] = { ...KAR.BONT, ...o.bontKleur };
 
   return model(delen, mat, hg ? HH.omvat(delen, 2) : { midden: [0, 2, 43], straal: 50 });
 }

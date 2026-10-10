@@ -996,6 +996,8 @@ function boerin(stand = null, o = {}) {
   // --- hoofd: rond gezicht in een witte doek, een pluk haar voorop, de knoop onder de kin (hoofdVanDeBoerin, hieronder)
   hoofdVanDeBoerin(delen, ctx, H, maat, o);
   bot(Bn.Bnek);
+  // (vraag 149: bontKleur, een andere kleur bont, zoals het donkere marterbont van een deftige vrouw)
+  if (o.bontKleur && M.bont != null) mat[M.bont] = { ...KAR.BONT, ...o.bontKleur };
 
   return model(delen, mat, hg ? HH.omvat(delen, 2) : { midden: [0, 3, 38], straal: 46 });
 }

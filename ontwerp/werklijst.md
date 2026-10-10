@@ -24,7 +24,8 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
 
 **Wacht op Marcel:**
 - Kleren naar stand (vraag 149; Marcel, 10 okt: "Hogere niveau sociale mensen moeten duurdere kleren krijgen"): het
-  voorstel staat bij het punt, met a tot e. **Bezig in sessie `ccr-5cd874f7-wpwkhq`** (10 okt): het plan, met Marcel.
+  voorstel staat bij het punt; Marcel koos a tot e (10 okt), drie trappen. De proefplaat is er en wacht op Marcel.
+  **Bezig in sessie `ccr-5cd874f7-wpwkhq`** (10 okt).
 - Het geluid (vraag 145, 2): de sleutel `FREESOUND_KEY` in de omgeving en de domeinen van Freesound erbij, zoals
   beschreven bij vraag 145; dan maakt een nieuwe sessie het.
 - Vraag 145 laten zien: is het dorp nu minder "saai"?
@@ -7544,8 +7545,16 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     e. Een idee erbij: de deftige kleren pas als het huis zijn laken krijgt (een wens van de ambachtslieden). Dan zie je
        op straat wat er mist.
     De stappen: eerst een proefplaat met zes mannen en zes vrouwen in hun trappen naast elkaar, dan alles renderen, dan
-    in het spel (`figuurVanUiterlijk` in `js/sprites.js` vraagt de stand van het huis). **Wacht op Marcel** (a tot e).
-    **Bezig in sessie `ccr-5cd874f7-wpwkhq`** (10 okt): het plan, met Marcel.
+    in het spel (`figuurVanUiterlijk` in `js/sprites.js` vraagt de stand van het huis).
+    **Marcel (10 okt): "a ja, b drie, c ja, d ja, e ja".** Dus: hetzelfde gezicht in de kleren van zijn stand, in drie
+    trappen (arm in de hut, zoals nu in een huis en op de boerderij, deftig in een stenen huis of woontoren, maar dat pas
+    als het huis zijn laken krijgt), aan het werk de gewone kleren, en eerst de volwassenen.
+    **Stap 1, de proefplaat (10 okt):** `node gereedschap/pixelart/uiterlijk.cjs kleren` (`kleren()` in `uiterlijk.cjs`;
+    hoe het eruitziet, staat in `beeld.md`, "Kleren naar stand"). Erbij gekomen: een jas tot onder de knie voor een
+    deftige man (`jas: 'lang'` in `boer()`), en donker marterbont (`bontKleur`), want licht bont op scharlaken werd een
+    kerstman. De bestaande figuren blijven pixel voor pixel gelijk. **Wacht op Marcel:** de plaat; arm en gewoon liggen
+    nog dicht bij elkaar. Daarna stap 2, renderen (48 deftig en 48 arm, elk staan en lopen), en stap 3, het spel.
+    **Bezig in sessie `ccr-5cd874f7-wpwkhq`** (10 okt).
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

@@ -832,6 +832,26 @@ man (Marcel: "a ja"), daarna die van de vrouw en de betere houdingen ("b ja c nu
 hurken (van voren zag je eerst alleen de hoed), de schoffel kreeg een blad (hij leek een hamertje), en de hand vingers
 (het was een peddel). Wat nog beter kan, staat in `opmerkingen.md`, "Het beeld".
 
+## Kleren naar stand (10 okt 2026, werklijst vraag 149)
+
+Marcel: "Hogere niveau sociale mensen moeten duurdere kleren krijgen", en "a ja, b drie, c ja, d ja, e ja". Het gezicht
+van een uiterlijk blijft (haar, kapsel, baard, neus, wenkbrauwen), de kleren gaan met de stand van zijn huis mee, in drie
+trappen (`kleren()` in `gereedschap/pixelart/uiterlijk.cjs`; de proefplaat is `node gereedschap/pixelart/uiterlijk.cjs
+kleren`, in `uit/uiterlijk/`):
+- **arm** (de keuters in de hut): zijn eigen kleur, maar vaal (van wede, meekrap en wouw na veel wassen) of ongeverfd,
+  met lappen en een vuile zoom, om en om blote voeten of klompen met modder; een wollen muts in plaats van vilt; geen
+  vest, geen buidel; een vrouw zonder rijglijf, om en om met opgestroopte mouwen;
+- **gewoon** (de dorpelingen en de boeren): de uiterlijken zoals ze zijn (vraag 145);
+- **deftig** (de ambachtslieden): zijn kleur diep en vol (blauw wordt diepblauw, rood scharlaken, grijs en linnen
+  zwart), fijne wol zonder lappen, leren schoenen, een buidel aan de riem, vilt in plaats van stro; een man in een jas
+  tot onder de knie (`jas: 'lang'` in `boer()`, wijd uitlopend zodat de benen erin stappen), om en om met donker
+  marterbont aan kraag, zoom en polsen, of een kraag van gebleekt linnen; een vrouw om en om met marterbont of een wit
+  schort, en een witte doek. Het bont is donker (`bontKleur`): licht bont op scharlaken met een groene muts was een
+  kerstman.
+
+Aan het werk draagt iedereen zijn gewone kleren (de werkfiguren van vraag 145). De deftige kleren komen pas als het huis
+zijn laken krijgt (e).
+
 ## Het vee: een koe en een schaap (Marcel, 25 sep 2026)
 
 Voor de weides met vee (`spel.md`, "Weides met koeien en schapen"). Marcel koos: eerst de dieren
