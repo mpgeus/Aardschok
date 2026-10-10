@@ -41,7 +41,8 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
   de ambachtslieden er wijn bij). **Bezig in sessie `ccr-a1a4ef49-0815cc`** (10 okt).
 - Uit `opmerkingen.md`: een brand die overslaat op het huis ernaast, en een eigen beeld voor de koorts (ziekbed, hoesten).
 - Vraag 142, de bladzijde met alle getallen (`gereedschap/instellingen.html`): stap 1 en 2 staan in `main`; stap 3 (een
-  speeltest met een set getallen, naast de vorige) wacht.
+  speeltest met een set getallen, naast de vorige) wacht. **Bezig in sessie `ccr-ce895b2d-mmzlcq`** (10 okt): het plan
+  voor stap 3, met Marcel.
 
 **Daarna, in deze volgorde:**
 0b. Engels en een vertaaltool (vraag 147; Marcel, 9 okt): de basis nu, naast de ui; het omzetten van alle tekst na de
