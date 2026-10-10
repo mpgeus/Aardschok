@@ -29,7 +29,8 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
 - Wie wijn wil (vraag 136; Marcel, 10 okt: "Inwoners willen wijn en bier. Afwisseling", en "B1, 0,02 is goed"):
   gebouwd op branch `ccr-a1a4ef49-0815cc`, nog niet in `main`. De speeltest (`speelbaar.md`, 10 okt): het dorp vraagt
   zelf om een wijnboerderij, maar de volgende pas als de wijn al op is; zonder wijn won één van de zes, met wijn geen.
-  Marcel (10 okt): "Laten we vooruitkijken doen": gebouwd (`T.wijnNaDePluk`), de speeltest speelt opnieuw.
+  Marcel (10 okt): "Laten we vooruitkijken doen": gebouwd (`T.wijnNaDePluk`); in de speeltest wint er weer één van
+  de zes (`speelbaar.md`). Wat nu een winst tegenhield: een wijnboerderij ver weg zonder kapel (`opmerkingen.md`).
 - Uit `opmerkingen.md`: een brand die overslaat op het huis ernaast, een eigen beeld voor de koorts (ziekbed, hoesten),
   en waar de kerstboom komt (vraag 148). Voorstellen van Claude (10 okt): overslaan alleen bij groot brandgevaar als
   niemand blust, op hooguit één buurhuis; een bos stro aan de deur van een huis met zieken (de pestbos); de kerstboom

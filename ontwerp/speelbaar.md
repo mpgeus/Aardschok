@@ -176,6 +176,24 @@ wijnmaand plukt (daarbuiten wacht het, `watHelpt` in `js/wensen.js`), dus als de
 miste sluw 2 in zijn vierde jaar weer wijn (354 → 164 dagen), en won niet. De wijn brak één keer een reeks (sluw 1, 47
 dagen); de andere breuken waren vlees of vis en een hut, zoals ervoor. Zonder wijn won één van de zes, met wijn geen.
 
+**Met vooruitkijken** (Marcel: "Laten we vooruitkijken doen"; `T.wijnNaDePluk`, op `6260183`, drie tegelijk): wat er bij
+de pluk ligt plus de pluk moet een jaar halen, anders vraagt het dorp nu een wijnboerderij erbij.
+
+| spel | dagen dat alle huizen alles hadden (zonder wijn / met wijn / met vooruitkijken) | afloop met vooruitkijken |
+| --- | --- | --- |
+| bouwer 1 | 0, 0, 0, 0 / 0, 0, 0, 0 / 0, 0, 0, 0 | ambt kwijt in jaar 4 (de schuld bij de heer) |
+| bouwer 2 | 0, 166, 354, 349 / 0, 144, 228, 351 / 0, 145, 360, 235 | **gewonnen** op 16 hooimaand van jaar 4 |
+| bouwer 3 | 56, 0, 9 / 56, 0 / 56, 0 | weggejaagd in jaar 2 |
+| sluw 1 | 0, 0, 0, 0 / 0, 69, 174, 67 / 0, 88, 187, 158 | vier jaar uit, 152 mensen; de reeks brak één keer op wijn (196 dagen) |
+| sluw 2 | 0, 253, 294, 354 / 0, 113, 228, 164 / 0, 110, 359, 1 | vier jaar uit: een wijnboerderij zonder kapel |
+| sluw 3 | 56 / 56 / 56 | ambt kwijt in jaar 1, alle drie |
+
+Het jaar na de eerste pluk is weer vol (bouwer 2: 360, sluw 2: 359, was 228), en één van de zes wint weer. Wat nu de
+winst van sluw 2 tegenhield: zijn vierde wijnboerderij staat ver van het dorp, en haar gezin (boeren) wil een kapel binnen
+40 tegels; het dorp wil er een bouwen, maar vindt nergens plek ("Een wijnboerderij wil een kapel binnen 40 tegels", een
+jaar lang). Dat is de opmerking "Een huis zonder kapel, en nergens plek voor een kapel" (8 okt), nu door een
+wijnboerderij. Er komen nog steeds wijnboerderijen op 2 wijnmaand: dan haalt de pluk alleen het jaar niet meer.
+
 ## De speeltest van 9 okt: het weer en de droogte (werklijst, vraag 77, stap 2)
 
 Op `dcdc365` (ccr-77327776-rqjldz), de bouwer drie jaar op het eiland, zaad 1 tot 3, met het weer en met de spelregel op

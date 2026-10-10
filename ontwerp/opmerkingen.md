@@ -30,6 +30,10 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   `T.kringGrond` werkt al per soort, dus de regel van 2d kan ook voor de kapel gelden (een erf in `T.waaromPastErfNiet`
   vraagt het dan voor de put en de kapel). Nog niet bekeken: wat er daar de laatste plek nam. Ook kan wat er verder
   gebouwd wordt (een werkplaats, een kraam) de laatste plek nemen; de regel geldt alleen voor erven en de put zelf.
+  **Ook een wijnboerderij** (10 okt, de speeltest van de wijn, `speelbaar.md`): haar gezin is van de stand boeren en wil
+  een kapel binnen 40 tegels, en een wijnboerderij is groot (10 bij 8), dus komt ze vaak ver weg. Op sluw 2 stond de
+  vierde zo een jaar zonder kapel, en hield ze de winst tegen. Te kiezen: een wijnboerderij komt alleen waar haar gezin
+  een kapel haalt (zoals een erf, `T.plekVoor`), of de regel van 2d ook voor de kapel.
 
 - **De gunst na Sint-Maarten, en de gril in wintermaand** (8 okt, de sessie van de kaartenmaker; vraag 117, 2d): bij de
   bouwer van de speeltest staat de gunst van de heer na Sint-Maarten bijna elk jaar op 5, de laagste stand vóór 0 (eerst
