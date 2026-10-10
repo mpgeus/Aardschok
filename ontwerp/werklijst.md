@@ -7630,8 +7630,11 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     vak van 34 bij 77; op een gewoon scherm tekent het spel ze op zoom 2, dus 146 schermpixels). De soldaat is 46 hoog;
     anderhalf keer vergroot is hij even groot, en op zoom 2 is elke pixel dan drie schermpixels, dus scherp. Een eerste
     dorpeling met de hand, pixel voor pixel in die stijl (in de kladmap van de sessie): scherp en leesbaar, maar nog
-    eenvoudig naast de soldaat. **Wacht op Marcel:** verder met de hand (eerst één echt goede van voren), of een tekenaar
-    of een AI-gereedschap met deze soldaat als voorbeeld.
+    eenvoudig naast de soldaat. Daarna een man met een kap van vijf kanten (`mensen-kap-64.png`), en een tweede poging met
+    de hand, in 2D (vlakken, licht van linksboven, een zwarte rand): scherp, maar een blok naast de voorbeelden; van acht
+    kanten en in elke stap even goed haalt Claude dat niveau niet betrouwbaar. **Voorstel:** laten tekenen (een
+    pixeltekenaar, of Marcel met een AI-gereedschap voor pixelfiguren), met deze voorbeelden als stijl; Claude schrijft de
+    opdracht en maakt het inlezen. **Wacht op Marcel.**
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

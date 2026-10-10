@@ -18,6 +18,7 @@ Marcels voorbeelden", en voor de mensen onder "De mensen naar Marcels voorbeelde
 | `mensen-pixel-strijder.png` | Marcel, 10 okt, bij vraag 150: "kun je hier wat mee" (herkomst onbekend, waarschijnlijk AI) | Een strijder in isometrische pixel art op een stuk vloer: een baard, een kap om de hals, een harnas, riemen met gespen, laarzen met bont, een zwaard. Zo'n 130 pixels hoog. |
 | `mensen-pixel-ridder.png` | Marcel, 10 okt, bij vraag 150 (herkomst onbekend) | Een ridder in pixel art, van opzij: een helm met een pluim, een bronzen harnas, een rood wapenkleed, een groot zwaard. |
 | `mensen-soldaat-48.png` | Marcel, 10 okt, bij vraag 150: "het zijn voorbeelden van de stijl" (herkomst onbekend) | Een soldaat in maliën en helm van vijf kanten, met de hand gezet: 46 pixels hoog in een vak van 48 bij 48, een zwarte rand, licht van linksboven, per kleur drie tinten in vlakken. Anderhalf keer vergroot zo hoog als onze mensen (73). |
+| `mensen-kap-64.png` | Marcel, 10 okt, bij vraag 150 (herkomst onbekend) | Een man met een kap, schouderstukken, riemen met tassen en een kort zwaard, van vijf kanten (schuin van achteren, van voren, twee keer schuin van voren, opzij), met de hand gezet in een vak van 64 bij 64 (zo'n 60 pixels hoog). Hij laat zien hoe een gezicht in de schaduw van een kap van elke kant leest. |
 
 De acht voorbeelden van 9 okt (twee platen "Medieval Buildings", "Isometric Medieval Village", een dorp in de stijl van
 Stronghold en vier losse vakwerkhuizen) staan hier nog niet: ze waren in een latere sessie niet meer te vinden.
