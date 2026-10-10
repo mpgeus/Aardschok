@@ -469,9 +469,9 @@ function kaleKroon(delen, m, vork, klompen, C, zaad, o = {}) {
 // Sneeuw (vraag 144, 4b; Marcel, 9 okt: "Sneeuw moet ook nog op bomen, huizen etc."): wat naar boven kijkt, is wit, met
 // een rafelige grens uit ruis. Om de materialen van een heel model heen, zodat elk deel sneeuw draagt waar het boven ligt:
 // de takken, de lagen van een den, de knot van een knotwilg, de bulten van een struik. o.dikte: hoe ver de sneeuw van
-// boven naar de zijkant reikt (0 tot 1). Geeft het model terug.
+// boven naar de zijkant reikt (0 tot 1); zonder: die van het model (mdl.sneeuwDikte), of 0,45. Geeft het model terug.
 function sneeuw(mdl, o = {}) {
-  const grens = 1 - (o.dikte ?? 0.45);
+  const grens = 1 - (o.dikte ?? mdl.sneeuwDikte ?? 0.45);
   const zaad = o.zaad ?? 5;
   for (const m of mdl.mat) {
     if (!m || m.gloei) continue;
@@ -741,7 +741,8 @@ function den(zaad = 1, o = {}) {
   const mt = loof(mat, groen, zaad * 100 + 50, { klomp: [[top[0], top[1], H - 14 * J.hoog], [8 * J.breed, 8 * J.breed, 16 * J.hoog]], kroon: [kroonC, kroonS], lo: 2, hi: 4.2, vorm: 2, diep: 0, toetsen: naald, plus: 0.4 });
   delen.push(bultig((x, y, z) => sdf.rondeKegel(x, y, z, top[0], top[1], H - 34 * J.hoog, top[0], top[1], H + 6 * J.hoog, 7 * J.breed, 1.2), [top[0], top[1], H - 14 * J.hoog, 22 * J.hoog], 4, mt, deel, zaad * 100 + 50, { plat: 1.3 }));
   delen.push(onderGrond);
-  return model(delen, mat, omhul(delen));
+  // de takken van een spar liggen bijna vlak, dus bij 0,45 werd hij helemaal wit (10 okt): sneeuw alleen bovenop
+  return Object.assign(model(delen, mat, omhul(delen)), { sneeuwDikte: 0.25 });
 }
 
 // De grove den, de den van de heide en het zand: een hoge, iets kromme stam, onderaan grijsbruin en naar boven oranje,
@@ -1448,7 +1449,7 @@ function kerstboom(zaad = 1, o = {}) {
   delen.push(bundel(punten, M.ster, 7, 1.5));
   delen.push(tak([[0, 0, top - 4], S], [1.4, 1.2], 0, 1, 0));
   delen.push(onderGrond);
-  return model(delen, mat, omhul(delen));
+  return Object.assign(model(delen, mat, omhul(delen)), { sneeuwDikte: d.sneeuwDikte });
 }
 
 // ---------------------------------------------------------------- begroeiing

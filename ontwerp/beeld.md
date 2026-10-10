@@ -1119,4 +1119,6 @@ niets past, wijkt de zwakke grond voor strand (naast de zee) of gras. Golven die
   bijna vlakke takken, laag op laag, met de punten als stekels in de rand; per tak een lichte bovenkant en een donkere
   band eronder, en naaldstreepjes; frisse kleuren, blauwgroen, groen of olijf, elke boom een andere; de stam zichtbaar
   onder de kegel. Onze den was een stapel gladde rokken, donker en overal even groen. Nu een spar uit losse takken per
-  krans (`sparTak` en `den` in `bomen.cjs`), en de grove den erbij voor de heide.
+  krans (`sparTak` en `den` in `bomen.cjs`), en de grove den erbij voor de heide. Met sneeuw werd hij helemaal wit, want
+  elke tak ligt bijna vlak; sinds 10 okt draagt een spar (en de kerstboom) dunner sneeuw (`sneeuwDikte` 0,25 op het
+  model, de rest 0,45), zodat het groen onder elke witte tak blijft.
