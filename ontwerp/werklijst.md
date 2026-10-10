@@ -23,6 +23,8 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
 (Marcel: "Ik denk dat we die economie terug moeten draaien", en "Alles van vraag 141").
 
 **Wacht op Marcel:**
+- De mensen mooier (vraag 150; Marcel, 10 okt: "zien er niet geweldig uit"): wat Claude zag en een voorstel staan bij
+  het punt; wacht op Marcel.
 - Kleren naar stand (vraag 149; Marcel, 10 okt: "Hogere niveau sociale mensen moeten duurdere kleren krijgen"): het
   voorstel staat bij het punt; Marcel koos a tot e (10 okt), drie trappen, en bij de plaat "1 armer, 2 alle, 3 ja". In het
   spel op de sessiebranch; de kinderen en de ouden komen in een tweede ronde. **Bezig in sessie `ccr-5cd874f7-wpwkhq`** (10
@@ -7562,6 +7564,21 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     werk). De spelregel "Kleren" (met laken, zonder, of iedereen gewoon); `Spel.debug.kleren()`; `test/kleren.test.cjs`.
     Bij het begin loopt niemand arm (in de hutten wonen ouden); de keuters komen met de gezinnen op de erven.
     **Open:** de kinderen en de ouden (d, een tweede ronde).
+150. **De mensen mooier** (Marcel, 10 okt, bij vraag 149: "We moeten de mensen zoizo een beetje upgraden, want zien er
+    niet geweldig uit").
+    **Wat Claude zag (10 okt), in het spel naast de huizen en de bomen:** 1. ze zijn zachter dan de wereld: de huizen, de
+    bomen en de put hebben hard licht van linksboven, een duidelijke lichte en donkere kant, felle accenten en een donkere
+    lijn; de mensen zijn bijna overal middentoon, met modderige kleuren, en een groene kiel verdwijnt in het gras (het licht
+    in `kern.cjs`: `(0,24 + 0,76 × licht)` met omgevingsschaduw maakt alles zacht); 2. de vorm: een groot rond hoofd zonder
+    nek, een lijf als een buis, armen als worstjes die recht hangen, en een vrouw als een pion (de klokrok); 3. iedereen is
+    even groot en even breed en staat even recht; 4. het gezicht is twee stipjes en een neus, op ware grootte een vlek (het
+    grotere hoofd met oogwit wees Marcel op 9 okt af).
+    **Voorstel van Claude:** een proefplaat met vier mannen en vier vrouwen naast een huis en een boom op het gras, op ware
+    grootte: zoals nu, met het licht en het contrast van de wereld, met een betere vorm erbij, en met lichaamsbouw
+    (lang, kort, tenger, stevig) en houdingen in rust. Het licht geldt voor alle figuren tegelijk en kost het minst; dan
+    alles in één keer opnieuw renderen (zo'n 640 vellen, uren). Dezelfde stap als "grover en contrast" van het voorbeeldhuis
+    (vraag 144), zodat de mensen en de huizen niet uit elkaar groeien. **Wacht op Marcel** (wat stoort het meest, en heeft
+    hij voorbeelden, zoals bij de huizen).
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
