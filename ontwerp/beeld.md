@@ -1034,6 +1034,13 @@ niets past, wijkt de zwakke grond voor strand (naast de zee) of gras. Golven die
   Geprobeerd en weer weggelaten: een dakkapel in het riet (de bult is gemaakt voor anderhalve laag;
   bij twee lagen tilde hij de dakrand te ver op en werd zijn raam een spleet). Een dakkapel past beter op het huis
   onder pannen, waar de huizenbouwer er een echte voor heeft (`kapellenVan`).
+  **Een voorbeeld in git (10 okt, na D):** `ontwerp/voorbeelden/huis-vakwerk-op-steen.jpg` (`voorbeelden/README.md`).
+  Wat het laat zien: beneden grote veldstenen met lichte voegen en een rondboogdeur met een boog van gehakte steen,
+  vakwerk alleen boven; een steil dak van grove, ronde oranje pannen met een dwarsgevel aan de voorkant en een stenen
+  kruisbloem op de top; klimop tegen de schoorsteen, struiken tegen de voet, een lantaarn bij de deur; een plein van
+  keien met een trap en een muurtje. **Het grootste verschil met ons huis is de maat van de vormen:** een steen is er
+  zo'n twintig pixels, een pan vijftien, met weinig ruis, zodat alles in één oogopslag leest; ons riet en ons pleister
+  zijn fijn gespikkeld en lezen druk.
   **D, het stukje grond** (alleen op de plaat): nieuwe tuinstukken in `tuin-sdf.cjs`, elk op één tegel zoals de hekken
   en de regenton, zodat vraag 148, d, ze in het spel kan neerzetten: `keien` (een stoep van keien in de aarde met een
   rafelige rand; voor de deur twee tegels), `houtstapel-x`/`-y` (brandhout tegen een muur, de kopse kanten met
