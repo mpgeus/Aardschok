@@ -61,7 +61,8 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
 0c. Meer variatie in het groen, de bomen en de versiering (vraag 148; Marcel, 9 okt: alles ja, "Mag ernaast"), naast
    de ui: eerst de bomen (vormen, nieuwe soorten, de seizoenen met vruchten), dan het groen eronder, dan de spullen bij de
    huizen; de sneeuw op de bomen en de huizen (144, 4b, Marcel: "ja") in dezelfde ronde. **Bezig in sessie `main`
-   (desktop, groen)** (9 okt): stap 1, de proefplaat van de bomen.
+   (desktop, groen)** (10 okt): stap 1 in het spel (de sneeuw op de spar dunner, de vormen en de nieuwe soorten op de
+   kaart, vast per tegel), dan stap 2 (de seizoenen).
 1. Een proefversie voor Marcels 4K-scherm en een eerste tester (33d; `npm run proefversie`, ook `-- --windows`), met de
    graanzak erin. De laatste is van 3 okt (`36c713e`), zonder de verzoeken, de twee bazen, het ontginnen, de markt, de
    wolven, het eiland, WebGL en de graanzak.
