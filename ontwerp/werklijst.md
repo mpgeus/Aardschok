@@ -26,8 +26,10 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
 - Het geluid (vraag 145, 2): de sleutel `FREESOUND_KEY` in de omgeving en de domeinen van Freesound erbij, zoals
   beschreven bij vraag 145; dan maakt een nieuwe sessie het.
 - Vraag 145 laten zien: is het dorp nu minder "saai"? En daarna het voorbeeldhuis naar de voorbeelden (`beeld.md`).
-- Wie wijn wil (vraag 136; Marcel, 10 okt: "Inwoners willen wijn en bier. Afwisseling. Je kunt niet leven op 1 ding"):
-  het plan staat bij vraag 136, en wacht op Marcels keuze.
+- Wie wijn wil (vraag 136; Marcel, 10 okt: "Inwoners willen wijn en bier. Afwisseling", en "B1, 0,02 is goed"):
+  gebouwd op branch `ccr-a1a4ef49-0815cc`, nog niet in `main`. De speeltest (`speelbaar.md`, 10 okt): het dorp vraagt
+  zelf om een wijnboerderij, maar de volgende pas als de wijn al op is; zonder wijn won één van de zes, met wijn geen.
+  Voorstel van Claude, wacht op Marcel: het dorp kijkt vooruit, zoals bij het hout en het eten voor de winter.
 - Uit `opmerkingen.md`: een brand die overslaat op het huis ernaast, een eigen beeld voor de koorts (ziekbed, hoesten),
   en waar de kerstboom komt (vraag 148). Voorstellen van Claude (10 okt): overslaan alleen bij groot brandgevaar als
   niemand blust, op hooguit één buurhuis; een bos stro aan de deur van een huis met zieken (de pestbos); de kerstboom
@@ -6919,6 +6921,17 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     is dan genoeg voor zo'n 40 ambachtslieden, met 0,05 voor 16. Of B2: iedereen die drank wil, wil allebei; maar in het
     gehucht is er nog geen wijnboerderij (die komt met het dorp), dus dan mist elk huis iets tot het dorp. Daarna de
     speeltest opnieuw, want winnen vraagt dan wijn.
+    **Marcel (10 okt): "B1, 0,02 is goed."** **Gebouwd (10 okt, branch `ccr-a1a4ef49-0815cc`):** de wens `bier` neemt
+    alleen bier, de wens `wijn` is van de ambachtslieden (`perMens.wijn` 0,02). Onderweg gevonden: de raad noemde nooit
+    een gebouw dat nu stilligt, en een wijnboerderij ligt buiten wijnmaand stil, dus vroeg het dorp er nooit een. Nu helpt
+    wat alleen in zijn maanden oogst (`alleenIn`) ook daarbuiten, zolang er geen staat; staat er een, dan wacht het dorp
+    op wijnmaand (`watHelpt` in `js/wensen.js`), en zegt de nacht op het gebouw dat het stilligt. `npm test` 1170/1170.
+    **De speeltest** (`speelbaar.md`, 10 okt): elk dorp bouwt er een tot drie, maar de volgende komt te laat: het dorp
+    vraagt er pas een als de eerste in wijnmaand plukt, als de wijn al op is, en die wordt na de pluk gebouwd; zonder wijn
+    won één van de zes, met wijn geen. **Voorstel van Claude (wacht op Marcel):** het dorp kijkt vooruit, zoals bij het
+    hout en het eten voor de winter (`T.haaltDeWinter` in `js/behoeften.js`): haalt de wijn die er ligt de volgende pluk
+    niet, met wat de ambachtslieden per dag drinken, dan vraagt het nu een wijnboerderij erbij, zodat ze er voor
+    wijnmaand staat. Of alleen een getal: meer wijn per rank (15 naar 25, 500 per jaar), zodat er minder nodig zijn.
 137. **Doorgroeien zonder vaste maat** (Marcel, 8 okt: "We moeten ook stoppen met het dorp een vaste maat geven. Als alles
     straks 1 eiland is, is het logisch dat je gewoon door kunt groeien naar buiten."; open). Hoort bij het eiland (vraag
     117). Er zijn twee vaste maten: het land van de maker (100 bij 100, met bos tot de rand), en de maat van de winst (vanaf
