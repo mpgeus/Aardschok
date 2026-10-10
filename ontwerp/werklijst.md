@@ -7605,7 +7605,11 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     camera (`nek`, `opkijk` in `boer()` en `boerin()`), en lagen naar de voorbeelden (`schoudermantel` met een neergeslagen
     kap, `kapOmDeHals`, `metLaarzen`, `metOnderkleed`, een strakke witte kap met `doekLos` en `doekGezicht`), alles als
     optie: zonder blijft elk vel pixel voor pixel gelijk. De vellen in `beelden/` zijn nog de oude; lichtblond en de kroon
-    komen er pas in met het opnieuw renderen. **Wacht op Marcel**; daarna plaat 2, de bouw (lang, kort, dik, dun, krom).
+    komen er pas in met het opnieuw renderen.
+    **Marcel (10 okt), bij plaat 1: "Zoals ik al zei, ik vind de poppetjes gewoon niet echt mooi zoals ze nu zijn."** Dus
+    geen lapwerk op het lijf van nu (een nek, lagen), maar een nieuw lijf: de verhoudingen, de vormen en hoe het getekend
+    wordt. Claude vraagt welke richting Marcel mooi vindt, en legt de keuze voor tussen een nieuw lijf in code en een
+    tekenaar voor de basis. **Wacht op Marcel.**
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
