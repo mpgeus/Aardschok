@@ -460,7 +460,7 @@
     if (!t) return 0;
     const l = e.beeldStand && e.beeldStand.laatste;
     const naam = (l && l.naam) || e.vel || S.figuurNaam(e.soort);
-    const lijf = naam.replace(/-u\d+$/, ''); // een uiterlijk (boer-u7, vraag 145) heeft de nek van zijn lijf
+    const lijf = naam.replace(/-u\d+(-arm|-deftig)?$/, ''); // een uiterlijk (boer-u7, vraag 145; ook in andere kleren, boer-u7-deftig, vraag 149) heeft de nek van zijn lijf
     return t.nek[naam] != null ? t.nek[naam] : t.nek[lijf] != null ? t.nek[lijf] : t.nek.standaard;
   };
 
