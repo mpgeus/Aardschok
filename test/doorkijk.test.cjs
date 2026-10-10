@@ -93,3 +93,31 @@ test('wie vóór het huis staat, laat het dicht; wie erachter staat, laat het in
   T.werkDoorkijkBij(S, t, [huis]);
   assert.equal(huis.doorkijk, 0);
 });
+
+// Op een feest staat het hele dorp op het plein, en kreeg het dak van een huis ervoor een gat voor elk van hen (Marcel,
+// 10 okt: "Ja akkoord", op een feest alleen wie ertoe doet). Wie je zoekt met een voorval, zie je altijd.
+test('op een feest telt het plein niet mee, wie je zoekt met een voorval wel', () => {
+  const echt = console.warn;
+  console.warn = () => {};
+  const S = { kalender: T.nieuweKalender() };
+  try {
+    assert.ok(T.beginOpKaart(S, 'gehucht'));
+  } finally {
+    console.warn = echt;
+  }
+  const dag = Math.floor(S.kalender.dag) + 1;
+  S.kalender.dag = dag + 11 / 24;
+  const kind = T.maakDorpeling(3, 40, 38);
+  assert.ok(T.opHetPlein(S.wereld, kind.tx, kind.ty));
+  assert.equal(T.zichtbaarDoor(S, kind), 'huis', 'op een gewone dag het plein, door een huis heen');
+  assert.ok(T.vierVandaag(S.dorp, 'meiboom', dag));
+  assert.ok(T.feestOp(S.dorp, S.kalender.dag), 'om elf uur is het feest');
+  assert.equal(T.zichtbaarDoor(S, kind), null, 'op een feest verdwijnt wie op het plein staat achter een huis');
+  kind.zoektSchout = true;
+  assert.equal(T.zichtbaarDoor(S, kind), 'alles', 'wie je zoekt, zie je wel');
+  kind.zoektSchout = false;
+  T.zetOptie('doorkijkPlein', 'ookOpEenFeest');
+  assert.equal(T.zichtbaarDoor(S, kind), 'huis', 'de spelregel kan het plein ook op een feest laten zien');
+  T.zetOptie('doorkijkPlein', 'ookHetPlein');
+  assert.equal(T.zichtbaarDoor(S, kind), null);
+});

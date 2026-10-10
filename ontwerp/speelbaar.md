@@ -153,6 +153,47 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 10 okt: wijn naast bier (werklijst, vraag 136, B1)
+
+`npm run speeltest -- bouwer sluw --jaren 4 --eiland --tegelijk 2`, met wijn op `004d07b` en zonder op `a8a69ea` (allebei
+branch `ccr-a1a4ef49-0815cc`), tegelijk gespeeld. De ambachtslieden willen wijn naast hun bier (0,02 per mens per dag), en
+het dorp vraagt nu zelf om een wijnboerderij: elk spel bouwde er een tot drie. Hetzelfde zaad speelt niet letter voor
+letter hetzelfde (de verzoeken komen op wisselende dagen), dus één spel per zaad zegt weinig; het jaar waarin de wijn komt,
+zegt meer.
+
+| spel | dagen dat alle huizen alles hadden, per jaar (zonder / met wijn) | mensen aan het eind | wijnboerderijen | afloop (zonder / met) |
+| --- | --- | --- | --- | --- |
+| bouwer 1 | 0, 0, 0, 0 / 0, 0, 0, 0 | 132 / 108 | 2 | vier jaar uit / ambt kwijt in jaar 4 (de schuld bij de heer, in allebei) |
+| bouwer 2 | 0, 166, 354, 349 / 0, 144, 228, 351 | 121 / 118 | 2 | vier jaar uit / vier jaar uit |
+| bouwer 3 | 56, 0, 9 / 56, 0 | 108 / 81 | 1 | ambt kwijt in jaar 3 / weggejaagd in jaar 2 |
+| sluw 1 | 0, 0, 0, 0 / 0, 69, 174, 67 | 133 / 139 | 3 | vier jaar uit / ambt kwijt in jaar 4 (de heer vroeg 30 wijn en meer) |
+| sluw 2 | 0, 253, 294, 354 / 0, 113, 228, 164 | 120 / 136 | 3 | **gewonnen** / vier jaar uit, teller 177 |
+| sluw 3 | 56 / 56 | 53 / 53 | 1 | ambt kwijt in jaar 1, allebei |
+
+Wat het laat zien: de wijn kost dagen in het jaar dat het dorp hem gaat willen (sluw 2: 253 → 113, bouwer 2: 354 → 228),
+want tot de eerste pluk is er geen. En de volgende wijnboerderij komt te laat: het dorp vraagt er pas een als de eerste in
+wijnmaand plukt (daarbuiten wacht het, `watHelpt` in `js/wensen.js`), dus als de wijn al op is, en die wordt gebouwd na de pluk. Zo
+miste sluw 2 in zijn vierde jaar weer wijn (354 → 164 dagen), en won niet. De wijn brak één keer een reeks (sluw 1, 47
+dagen); de andere breuken waren vlees of vis en een hut, zoals ervoor. Zonder wijn won één van de zes, met wijn geen.
+
+**Met vooruitkijken** (Marcel: "Laten we vooruitkijken doen"; `T.wijnNaDePluk`, op `6260183`, drie tegelijk): wat er bij
+de pluk ligt plus de pluk moet een jaar halen, anders vraagt het dorp nu een wijnboerderij erbij.
+
+| spel | dagen dat alle huizen alles hadden (zonder wijn / met wijn / met vooruitkijken) | afloop met vooruitkijken |
+| --- | --- | --- |
+| bouwer 1 | 0, 0, 0, 0 / 0, 0, 0, 0 / 0, 0, 0, 0 | ambt kwijt in jaar 4 (de schuld bij de heer) |
+| bouwer 2 | 0, 166, 354, 349 / 0, 144, 228, 351 / 0, 145, 360, 235 | **gewonnen** op 16 hooimaand van jaar 4 |
+| bouwer 3 | 56, 0, 9 / 56, 0 / 56, 0 | weggejaagd in jaar 2 |
+| sluw 1 | 0, 0, 0, 0 / 0, 69, 174, 67 / 0, 88, 187, 158 | vier jaar uit, 152 mensen; de reeks brak één keer op wijn (196 dagen) |
+| sluw 2 | 0, 253, 294, 354 / 0, 113, 228, 164 / 0, 110, 359, 1 | vier jaar uit: een wijnboerderij zonder kapel |
+| sluw 3 | 56 / 56 / 56 | ambt kwijt in jaar 1, alle drie |
+
+Het jaar na de eerste pluk is weer vol (bouwer 2: 360, sluw 2: 359, was 228), en één van de zes wint weer. Wat nu de
+winst van sluw 2 tegenhield: zijn vierde wijnboerderij staat ver van het dorp, en haar gezin (boeren) wil een kapel binnen
+40 tegels; het dorp wil er een bouwen, maar vindt nergens plek ("Een wijnboerderij wil een kapel binnen 40 tegels", een
+jaar lang). Dat is de opmerking "Een huis zonder kapel, en nergens plek voor een kapel" (8 okt), nu door een
+wijnboerderij. Er komen nog steeds wijnboerderijen op 2 wijnmaand: dan haalt de pluk alleen het jaar niet meer.
+
 ## De speeltest van 9 okt: het weer en de droogte (werklijst, vraag 77, stap 2)
 
 Op `dcdc365` (ccr-77327776-rqjldz), de bouwer drie jaar op het eiland, zaad 1 tot 3, met het weer en met de spelregel op

@@ -110,6 +110,39 @@
     }
   };
 
+  // Haalt de wijn het jaar na de pluk? (werklijst vraag 136; Marcel, 10 okt: "Laten we vooruitkijken doen".) Zoals het
+  // hout de winter (T.houtVoorDeWinter, js/behoeften.js), met dezelfde regel (T.haaltDeWinter): wat er bij de eerstvolgende
+  // pluk nog ligt, plus wat de wijnboerderijen dan plukken, min wat de heer ervoor wil, tegen wat de huizen die wijn
+  // willen per dag drinken, een jaar lang. Wat ze tot de pluk drinken, komt uit wat er nu ligt; dat maakt geen nieuwe
+  // wijnboerderij meer goed. Haalt het het jaar niet, dan vraagt het dorp nu een wijnboerderij erbij (T.watTeBouwen,
+  // js/raad.js), zodat ze er voor de pluk staat. Geeft wat T.haaltDeWinter geeft, met `tot` (de dagen tot de pluk), `pluk`
+  // en `drinken` (per dag).
+  T.wijnNaDePluk = function (D, dag) {
+    const soort = T.GEBOUWEN.wijnboerderij;
+    const { tot } = T.periodeVanaf(dag, (d) => !T.stilOp(soort, d));
+    const drinken = wijnDrinkers(D) * (T.WENSEN_INSTELLINGEN.perMens.wijn || 0);
+    const pluktijd = Math.floor(dag) + tot;
+    let pluk = 0;
+    for (const g of D.gebouwen || []) {
+      if (g.soort !== 'wijnboerderij') continue;
+      // Een wijnboerderij die nog niet op de kaart staat, heeft nog geen ranken: dan zoveel als er straks staan.
+      const ranken = T.rankenVan(D, g).length ? T.volleRanken(D, g, pluktijd).length : rankenPerWijngaard();
+      pluk += ranken * IN().wijnPerRank - ((soort.heer && soort.heer.wijn) || 0);
+    }
+    const over = Math.max(0, ((D.voorraad && D.voorraad.wijn) || 0) - drinken * tot);
+    const v = T.haaltDeWinter({ voorraad: over + pluk, perWinterdag: drinken, winter: T.DAGEN_PER_JAAR });
+    return Object.assign(v, { tot, pluk, drinken });
+  };
+
+  // Wie wijn wil: de mensen van de laagste stand die het wil, en van de standen erboven (T.mensenVanStand, js/wensen.js).
+  function wijnDrinkers(D) {
+    const stand = Object.keys(T.STANDEN).find((s) => !T.STANDEN[s].los && T.wensenVanStand(s).includes('wijn'));
+    return stand ? T.mensenVanStand(D, stand) : 0;
+  }
+
+  // Zoveel ranken zet T.zetRanken op een leeg stuk.
+  const rankenPerWijngaard = () => Math.ceil(IN().stuk.h / IN().rijOm) * IN().stuk.b;
+
   // Wie plukt er bij deze wijnboerderij: wie er woont en zou kunnen werken (js/bewoners.js, T.LEEFTIJDEN).
   T.plukkersVan = (D, g) => ((D.bewoners && D.bewoners.mensen) || []).filter((p) => p.huis === g && p.wezen && !p.weg && T.LEEFTIJDEN[p.leeftijd] && T.LEEFTIJDEN[p.leeftijd].werkt != null);
 })(globalThis.Spel = globalThis.Spel || {});

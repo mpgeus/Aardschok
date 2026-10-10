@@ -283,9 +283,10 @@
     // De wijnboerderij (werklijst vraag 136; Marcel, 8 okt: "Ik wil z.s.m. aan een wijnboerderij", "Wijn wordt drank,
     // zoals bier. Mensen dronken geen water", en voor de wijngaard "Dat je de boeren ziet plukken, volle en lege ranken"):
     // een huis met een gezin van boeren, en ernaast een wijngaard (`wijngaard`: binnen de voet van 10 bij 8 staat alleen het
-    // huis vast; de ranken staan erin als voorwerpen, js/wijngaard.js). Wijn is drank, zoals bier (de wens `bier` in
-    // js/wensen.js neemt allebei). Hij maakt niets per dag: in wijnmaand (`alleenIn`, T.stilOp) plukt het gezin de ranken,
-    // en de wijn is er pas als de mand in het huis is (`oogst`: wat hij binnenhaalt, T.maaktGoed). De heer wil er wijn voor.
+    // huis vast; de ranken staan erin als voorwerpen, js/wijngaard.js). De ambachtslieden willen wijn naast hun bier (de
+    // wens `wijn` in js/wensen.js; Marcel, 10 okt). Hij maakt niets per dag: in wijnmaand (`alleenIn`, T.stilOp) plukt
+    // het gezin de ranken, en de wijn is er pas als de mand in het huis is (`oogst`: wat hij binnenhaalt, T.maaktGoed).
+    // De heer wil er wijn voor.
     wijnboerderij: {
       naam: 'wijnboerderij', meervoud: 'wijnboerderijen', trede: 'dorp', voet: { b: 10, h: 8 }, kosten: { hout: 18, goud: 8 },
       heer: { wijn: 10 }, bouwtijd: 5, handen: 0, woonruimte: 4, maakt: null, oogst: 'wijn', wijngaard: true,
@@ -1334,7 +1335,13 @@
       g.werkte = 0;
       g.stilWant = null;
       g.uren = null;
-      if (!g.klaar || !soort.maakt) continue;
+      if (!g.klaar) continue;
+      // Wie niets per dag maakt, maar in zijn maanden oogst (de wijnboerderij, `alleenIn`), ligt daarbuiten stil; dan zegt
+      // de raad dat (T.watDeHuizenMissen), en niet dat hij te weinig maakt.
+      if (!soort.maakt) {
+        if (soort.alleenIn) g.stilWant = T.stilOp(soort, dag, seizoen);
+        continue;
+      }
       // Wie er werkt en het een tijd weigert (de herbergierster die boos is om een tweede herberg, js/ondernemers.js),
       // maakt tot dan niets.
       if (g.weigert && dag < g.weigert.tot) {

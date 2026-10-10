@@ -26,6 +26,9 @@
     manier: 'venster',
     // Zie je door een huis heen ook iedereen die op het plein staat (T.zichtbaarDoor)? Ook een keuze.
     plein: true,
+    // En op een feest (T.feestOp, js/feesten.js)? Dan staat het hele dorp op het plein, en kreeg het dak van een huis
+    // ervoor tien, twintig gaten naast elkaar (Marcel, 10 okt: "Ja akkoord", op een feest alleen wie ertoe doet).
+    pleinOpEenFeest: false,
     tijd: 0.18, // seconden om op en af te lopen, zodat het niet klappert
     hoogGenoeg: 40, // hoger dan dit boven zijn voet: dan kan er iemand achter verdwijnen
     // Het kijkgat is een zachte cirkel rond wie erachter staat. kijkgatOmhoog tilt het midden van die
@@ -41,8 +44,9 @@
   // 'huis' (alleen door een huis heen) of null (dan verdwijnt hij erachter, zoals je verwacht).
   // De schout altijd. Verder wie ertoe doet: wat meevecht, wat je net ontdekt heeft (het
   // uitroepteken), wie je aanspreekt, en de bezoekers, die voor jou komen (de heer, de marskramer, de
-  // inner, de soldaten: `bezoeker` in js/mensen.js). En door een huis ook iedereen op het plein, want
-  // het plein is het hart van het dorp (Marcel, 26 sep, vraag 34; een keuze in de spelregels). Door een
+  // inner, de soldaten: `bezoeker` in js/mensen.js), en wie je zoekt met een voorval (het uitroepteken boven zijn hoofd).
+  // En door een huis ook iedereen op het plein, want het plein is het hart van het dorp (Marcel, 26 sep, vraag 34; een
+  // keuze in de spelregels), behalve op een feest: dan staat het hele dorp er (`pleinOpEenFeest`). Door een
   // boom niet: dan zaten de vijf eiken op het plein vol gaten zolang de kinderen er spelen. Een wolf die
   // in zijn eentje achter een huis rondscharrelt, maakt het huis niet doorzichtig — dan sta je ervoor
   // en zie je hem wegvallen zonder te weten waarom.
@@ -54,11 +58,19 @@
     if (S.gevecht && S.gevecht.volgorde.includes(e)) return 'alles';
     if (S.overgang && S.overgang.aanleiding === e) return 'alles';
     if (S.spreektMet === e) return 'alles';
+    if (e.zoektSchout) return 'alles';
     const mens = e.wie && T.MENSEN && T.MENSEN[e.wie];
     if (mens && mens.bezoeker) return 'alles';
-    if (T.DOORKIJK_INSTELLINGEN.plein && T.opHetPlein(S.wereld, e.tx, e.ty)) return 'huis';
+    const I = T.DOORKIJK_INSTELLINGEN;
+    if (I.plein && T.opHetPlein(S.wereld, e.tx, e.ty) && (I.pleinOpEenFeest || !feestHier(S))) return 'huis';
     return null;
   };
+
+  // Viert het dorp dat hier ligt nu feest? De wereldkaart (gereedschap/wereld.html) laadt de feesten niet.
+  function feestHier(S) {
+    const D = T.dorpHier(S);
+    return !!(D && D.kalender && T.feestOp && T.feestOp(D, D.kalender.dag));
+  }
 
   // De doos die een wezen op het scherm inneemt, ruim genomen: zijn lijf plus wat lucht.
   function wezenDoos(w, e) {

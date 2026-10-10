@@ -34,7 +34,9 @@
     // volle kooi (20 schapen) dekt er nu zo'n 33. Brood 0,01 (Marcel, 3 okt, werklijst vraag 95, a; was 0,03): een brood
     // kost een graan, en met 0,03 kostte het brood van één stenen huis 86 graan per jaar, zodat de akkers na het zaaigraan
     // er hooguit vier voedden; nu tien à elf. Wel moet er druk blijven om genoeg eten ("Het mag niet te makkelijk").
-    perMens: { bier: 0.05, vleesOfVis: 0.02, brood: 0.01, laken: 0.005 },
+    // Wijn 0,02 (Marcel, 10 okt: "0,02 is goed"): één wijnboerderij plukt 300 wijn per jaar, en de heer wil er 10, dus dat
+    // is genoeg voor zo'n 40 ambachtslieden.
+    perMens: { bier: 0.05, vleesOfVis: 0.02, brood: 0.01, laken: 0.005, wijn: 0.02 },
     // Hoe zwaar een wens weegt in hoe blij een huis is (de rest, hierboven), naast de andere: 1, behalve brood (Marcel,
     // 2 okt, werklijst vraag 92, a: "brood is wel minder lekker en levert minder blijheid op"). Een huis zonder brood
     // is dus blijer dan een huis zonder laken; alles hebben, en dus super gelukkig zijn, vraagt het brood wel.
@@ -69,9 +71,11 @@
     eten: { naam: 'eten' },
     brandhout: { naam: 'brandhout' },
     put: { naam: 'een put', plek: 'put' },
-    // Drank: bier of wijn (Marcel, 8 okt: "Wijn wordt drank, zoals bier. Mensen dronken geen water"; werklijst vraag 136).
-    // De id blijft `bier`, zodat een bewaard spel en de herberg (T.bierApart) hem houden.
-    bier: { naam: 'drank', goed: ['bier', 'wijn'] },
+    // Bier, en voor de ambachtslieden wijn erbij (werklijst vraag 136; Marcel, 10 okt: "Inwoners willen wijn en bier.
+    // Afwisseling. Je kunt niet leven op 1 ding", en "B1"): twee wensen, dus wijn telt niet als bier. Van 8 tot 10 okt was
+    // het één wens, drank, die bier of wijn nam; toen vroeg het dorp nooit om een wijnboerderij.
+    bier: { naam: 'bier', goed: ['bier'] },
+    wijn: { naam: 'wijn', goed: ['wijn'] },
     vleesOfVis: { naam: 'vlees of vis', goed: ['vis', 'vlees'] },
     kapel: { naam: 'een kapel', plek: 'kapel' },
     herberg: { naam: 'de herberg', plek: 'herberg' },
@@ -86,7 +90,7 @@
   T.STANDEN = {
     keuters: { naam: 'keuters', huis: 'hut', wil: ['eten', 'brandhout', 'put'] },
     dorpelingen: { naam: 'dorpelingen', huis: 'huis', wil: ['bier', 'vleesOfVis', 'kapel', 'herberg'] },
-    ambachtslieden: { naam: 'ambachtslieden', huis: 'stenenHuis', ook: ['woontoren'], wil: ['brood', 'laken', 'markt'] },
+    ambachtslieden: { naam: 'ambachtslieden', huis: 'stenenHuis', ook: ['woontoren'], wil: ['brood', 'laken', 'wijn', 'markt'] },
     boeren: { naam: 'boeren', huis: 'boerderij', ook: ['wijnboerderij'], los: true, wil: ['eten', 'brandhout', 'kapel'] },
   };
 
@@ -509,7 +513,13 @@
     }
     const zonderHanden = werken.find((g) => T.GEBOUWEN[g.soort].handen > (g.handen || 0));
     if (zonderHanden) return { kan: false, bouw: null, tekst: waaromTeWeinig(zonderHanden) };
-    const helpen = soorten.filter((s) => T.magGebouwd(D, s) && !stil(s));
+    // Wat er bij kan. Wat in dit seizoen stilligt (een visser in de winter), helpt nu niet. Wat alleen in zijn maanden oogst
+    // (de wijnboerderij, `alleenIn`), helpt ook daarbuiten, zolang er geen staat: zijn oogst moet er dan zijn. Staat er
+    // een, dan zegt het vooruitkijken of er meer bij moeten (T.wijnNaDePluk in js/wijngaard.js, in T.watTeBouwen), want wat
+    // de huizen nu missen, maakt een nieuwe pas bij de volgende pluk goed (vraag 136; tot 10 okt vroeg het dorp er nooit
+    // een, en daarna pas als de wijn al op was).
+    const helpt = (s) => T.magGebouwd(D, s) && (T.GEBOUWEN[s].alleenIn ? !staan.some((g) => g.soort === s) : !stil(s));
+    const helpen = soorten.filter(helpt);
     if (helpen.length) {
       const er = helpen.find((s) => staan.some((g) => g.soort === s));
       if (er) return { kan: true, bouw: er, tekst: helptZin(`een ${naamVan(er)}`, true) };

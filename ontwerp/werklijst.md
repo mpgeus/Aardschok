@@ -35,14 +35,20 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
   stuurt hij nog). **Wacht op Marcel**, met als volgende stappen: hetzelfde huis als oud dak (verweer 1); het stenen huis
   onder pannen zoals zijn eerste voorbeeld; dan de ronde van alle tekeningen, waarin hoe ruig van de trede afhangt en hoe
   verweerd van de leeftijd.
-- Een feest op het plein vol kijkgaten (`opmerkingen.md`, "Het beeld"): **Marcel (10 okt): "Ja akkoord"**, op een feest
-  alleen wie ertoe doet. **Af in sessie `ccr-a1a4ef49-0815cc`** (10 okt), nog niet in `main`.
-- Wie wijn wil (vraag 136; Marcel, 10 okt: "Inwoners willen wijn en bier", en "B1, 0,02 is goed": de dorpelingen bier,
-  de ambachtslieden er wijn bij). **Bezig in sessie `ccr-a1a4ef49-0815cc`** (10 okt).
-- Uit `opmerkingen.md`: een brand die overslaat op het huis ernaast, en een eigen beeld voor de koorts (ziekbed, hoesten).
-- Vraag 142, de bladzijde met alle getallen (`gereedschap/instellingen.html`): stap 3, de speeltest naast de vorige, is
-  **af in sessie `ccr-ce895b2d-mmzlcq`** (10 okt), nog niet in `main`. Daarna: Marcel probeert hem op zijn computer
-  (met `npm start`; Playwright erbij, `npm i -g playwright` en `npx playwright install chromium`).
+- Wie wijn wil (vraag 136; Marcel, 10 okt: "Inwoners willen wijn en bier. Afwisseling", "B1, 0,02 is goed", en "Laten
+  we vooruitkijken doen"): in `main` (10 okt), met het vooruitkijken naar de pluk (`T.wijnNaDePluk`); in de speeltest
+  wint er één van de zes, zoals zonder wijn (`speelbaar.md`). Open: een wijnboerderij ver weg zonder kapel hield een winst
+  tegen (`opmerkingen.md`, bij de kapel). Voorstel van Claude: een wijnboerderij komt alleen waar haar gezin een kapel
+  haalt, zoals een erf; of de regel van 2d (plaats houden) ook voor de kapel. **Marcel (10 okt) koos het: "Wijn haalt
+  kapel".** **Bezig in sessie `ccr-ff71f25d-flpbkd`** (10 okt): het plan, met Marcel.
+- Uit `opmerkingen.md`: een brand die overslaat op het huis ernaast, een eigen beeld voor de koorts (ziekbed, hoesten),
+  en waar de kerstboom komt (vraag 148). Voorstellen van Claude (10 okt): overslaan alleen bij groot brandgevaar als
+  niemand blust, op hooguit één buurhuis; een bos stro aan de deur van een huis met zieken (de pestbos); de kerstboom
+  zoals de meiboom, van 20 wintermaand tot 6 louwmaand, met een feestavond op 24 wintermaand. **Marcel (10 okt) koos de
+  kerstboom en de brand die overslaat met de pestbos**, na de wijn. **Bezig in sessie `ccr-ff71f25d-flpbkd`** (10 okt).
+- Vraag 142, de bladzijde met alle getallen (`gereedschap/instellingen.html`): stap 3, de speeltest naast de vorige,
+  staat in `main` (10 okt). Marcel probeert hem op zijn computer (met `npm start`; Playwright erbij, `npm i -g
+  playwright` en `npx playwright install chromium`).
 
 **Daarna, in deze volgorde:**
 0b. Engels en een vertaaltool (vraag 147; Marcel, 9 okt): de basis nu, naast de ui; het omzetten van alle tekst na de
@@ -6916,6 +6922,33 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     met een mand als poppetje; E, later misschien snoeien in de winter. **Marcel: "Ja dat lijkt mij in orde."**
     **Gebouwd (8 okt):** `js/wijngaard.js`, het wijnhuis, de ranken in vier standen en de plukker en plukster; in de
     browser gezien: drie plukkers in de wijngaard, de geplukte rijen geel. In de speeltest bouwt nog geen speler er een.
+    **Wie wijn wil (10 okt):** het dorp vraagt nooit om een wijnboerderij, want de wens drank neemt bier of wijn, en voor
+    drank vraagt het een herberg; alleen een oproep op het plein bouwt er een. Voorstel van Claude: mist het dorp drank
+    en heeft de herberg geen graan, dan vraagt het een wijnboerderij (wijn kost geen graan). **Marcel (10 okt):
+    "Inwoners willen wijn en bier. Afwisseling. Je kunt niet leven op 1 ding."** Dus geen vervanger, maar allebei.
+    Plan van Claude (wacht op Marcel): B1, de hogere stand wil allebei: de dorpelingen bier (de wens drank wordt weer
+    bier), de ambachtslieden er wijn bij, als eigen wens, zoals in Anno; de wijnboerderij komt met het dorp, de
+    ambachtslieden erna, dus de volgorde past, en de raad en de verzoeken vragen hem dan vanzelf (`T.watDeHuizenMissen`
+    kent wie wijn maakt). Wijn 0,02 per mens per dag (bier 0,05): één wijnboerderij (300 wijn per jaar, 10 voor de heer)
+    is dan genoeg voor zo'n 40 ambachtslieden, met 0,05 voor 16. Of B2: iedereen die drank wil, wil allebei; maar in het
+    gehucht is er nog geen wijnboerderij (die komt met het dorp), dus dan mist elk huis iets tot het dorp. Daarna de
+    speeltest opnieuw, want winnen vraagt dan wijn.
+    **Marcel (10 okt): "B1, 0,02 is goed."** **Gebouwd (10 okt, branch `ccr-a1a4ef49-0815cc`):** de wens `bier` neemt
+    alleen bier, de wens `wijn` is van de ambachtslieden (`perMens.wijn` 0,02). Onderweg gevonden: de raad noemde nooit
+    een gebouw dat nu stilligt, en een wijnboerderij ligt buiten wijnmaand stil, dus vroeg het dorp er nooit een. Nu helpt
+    wat alleen in zijn maanden oogst (`alleenIn`) ook daarbuiten, zolang er geen staat; staat er een, dan wacht het dorp
+    op wijnmaand (`watHelpt` in `js/wensen.js`), en zegt de nacht op het gebouw dat het stilligt. `npm test` 1170/1170.
+    **De speeltest** (`speelbaar.md`, 10 okt): elk dorp bouwt er een tot drie, maar de volgende komt te laat: het dorp
+    vraagt er pas een als de eerste in wijnmaand plukt, als de wijn al op is, en die wordt na de pluk gebouwd; zonder wijn
+    won één van de zes, met wijn geen. **Voorstel van Claude (wacht op Marcel):** het dorp kijkt vooruit, zoals bij het
+    hout en het eten voor de winter (`T.haaltDeWinter` in `js/behoeften.js`): haalt de wijn die er ligt de volgende pluk
+    niet, met wat de ambachtslieden per dag drinken, dan vraagt het nu een wijnboerderij erbij, zodat ze er voor
+    wijnmaand staat. Of alleen een getal: meer wijn per rank (15 naar 25, 500 per jaar), zodat er minder nodig zijn.
+    **Marcel (10 okt): "Laten we vooruitkijken doen."** **Gebouwd:** `T.wijnNaDePluk` (`js/wijngaard.js`): wat er bij de
+    eerstvolgende pluk nog ligt (wat er nu ligt, min wat de huizen tot dan drinken), plus wat de wijnboerderijen dan
+    plukken, min de wijn voor de heer, moet een jaar halen (`T.haaltDeWinter`, de regel van het hout en het eten); haalt
+    het dat niet, dan vraagt het dorp nu een wijnboerderij erbij (`T.watTeBouwen` in `js/raad.js`). Wat de huizen nu
+    missen, vraagt er alleen nog een als er geen staat (`watHelpt` in `js/wensen.js`).
 137. **Doorgroeien zonder vaste maat** (Marcel, 8 okt: "We moeten ook stoppen met het dorp een vaste maat geven. Als alles
     straks 1 eiland is, is het logisch dat je gewoon door kunt groeien naar buiten."; open). Hoort bij het eiland (vraag
     117). Er zijn twee vaste maten: het land van de maker (100 bij 100, met bos tot de rand), en de maat van de winst (vanaf
@@ -7371,6 +7404,7 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     Tab-H-H blijft in het overzicht, en een voorval haalt je eruit; `npm test` 1167/1167.
     **Af (10 okt; Marcel: "Ja, zet het in main, rest in opmerkingen").** Wat er tegen "klaar als" nog openstond (de kaart
     van het land als papier, het label van het overzicht, waar `Tab` staat), staat in `opmerkingen.md`.
+    **Waar `Tab` staat (10 okt; Marcel: "Tab is er gewoon, het hoeft nergens te staan"):** nergens; uit de opmerkingen.
 
 147. **Engels, en een vertaaltool voor de community** (Marcel, 9 okt: "We moeten alles naar het Engels halen. Ook moeten
     we een translate tool hebben. Mochten we leden uit de community krijgen die een vertaling willen maken."). Op 1 okt
@@ -7708,6 +7742,17 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
   spel wat er anders afliep) en Zet terug. De eerste proef vond dat een getal dat de standaard van een spelregel via het
   object eromheen zet (het dorp bij 20), op de bladzijde niets doet zonder dat ze het zei; nu zegt ze het. `npm test`
   1174/1174.
+- 10 okt 2026 — **Het feest vol kijkgaten** (Marcel: "Ja akkoord", op een feest alleen wie ertoe doet). Op een feest telt
+  het plein niet meer mee voor wie je door een huis heen ziet (`pleinOpEenFeest` in `T.DOORKIJK_INSTELLINGEN`, met
+  `T.feestOp`), en wie je zoekt met een voorval zie je altijd. In de spelregel "Wie je door een huis heen ziet" is het
+  oude een derde keuze ("Het plein, ook op een feest"). Bij de meiboom had één huis aan het plein 23 kijkgaten, nu één
+  (de schout). `npm test` 1168/1168.
+- 10 okt 2026 — **Wijn naast bier, en vooruitkijken naar de pluk** (vraag 136; Marcel: "Inwoners willen wijn en bier.
+  Afwisseling", "B1, 0,02 is goed", en "Laten we vooruitkijken doen"). De wens bier neemt alleen bier, de ambachtslieden
+  willen er wijn bij (0,02 per mens per dag); het dorp vraagt zelf om een wijnboerderij (de raad noemde nooit een gebouw
+  dat stilligt), en kijkt vooruit (`T.wijnNaDePluk`): wat er bij de pluk ligt plus de pluk moet een jaar halen. De
+  speeltest van vier jaar: één van de zes wint, zoals zonder wijn (`speelbaar.md`). `npm test` 1172/1172.
+
 - 8 okt 2026 — **Vraag 142, stap 1 en 2: de bladzijde met alle getallen** (Marcel: "een bladzijde met duidelijk overzicht
   van alles", "1. Ja dan 2. Gelijk veranderen 3. Prima"). `gereedschap/instellingen.html` met `npm start`: elk getal, elke
   spelregel en elk gebouw (1659 waarden), met de uitleg uit het commentaar in de code en wat de spelregels erop zetten;

@@ -45,7 +45,7 @@ const huisVan = (w, g) => w.huizen.find((h) => h.g === g);
 test('een stand wil wat de stand eronder wil, en meer; de boeren staan ernaast', () => {
   assert.deepEqual(T.wensenVanStand('keuters'), ['eten', 'brandhout', 'put']);
   assert.deepEqual(T.wensenVanStand('dorpelingen'), ['eten', 'brandhout', 'put', 'bier', 'vleesOfVis', 'kapel', 'herberg']);
-  assert.deepEqual(T.wensenVanStand('ambachtslieden'), ['eten', 'brandhout', 'put', 'bier', 'vleesOfVis', 'kapel', 'herberg', 'brood', 'laken', 'markt']);
+  assert.deepEqual(T.wensenVanStand('ambachtslieden'), ['eten', 'brandhout', 'put', 'bier', 'vleesOfVis', 'kapel', 'herberg', 'brood', 'laken', 'wijn', 'markt']);
   assert.deepEqual(T.wensenVanStand('boeren'), ['eten', 'brandhout', 'kapel'], 'de herberg niet, voor nu (vraag 85, b)');
   for (const s of Object.keys(T.STANDEN)) {
     for (const w of T.wensenVanStand(s)) assert.ok(T.WENSEN[w], `${s} wil ${w}, en dat bestaat`);
@@ -495,7 +495,7 @@ test('de keten van het bier: heeft de herberg geen graan, dan zegt het dat, en v
   T.onthoudWensen(D, T.berekenWensen(D, ZOMERDAG, alles));
   zetHuis(D, 'herberg', 30, 10, 0, { handen: 1, tekort: 'graan', werkte: 0 });
   const x = vind(D, 'bier');
-  assert.equal(x.tekst, 'Een huis wil drank: de herberg heeft geen graan, en graan komt van de akkers.');
+  assert.equal(x.tekst, 'Een huis wil bier: de herberg heeft geen graan, en graan komt van de akkers.');
   assert.deepEqual([x.kan, x.bouw], [false, null]);
 });
 
@@ -659,4 +659,22 @@ test('2c: met een erf in de hand zegt de muis welke put en kapel een huis daar z
   // Een kapel in aanbouw telt mee: daar komt hij.
   D.gebouwen.push({ soort: 'kapel', x: put.x + 3, y: put.y + 3, voet: { b: 4, h: 4 }, klaar: false });
   assert.match(T.erfKringTekst(D, bij), /een kapel binnen/);
+});
+
+// De wijn (werklijst vraag 136; Marcel, 10 okt: "Inwoners willen wijn en bier. Afwisseling", en "B1"): een stenen huis wil
+// wijn naast zijn bier, en in een dorp noemt het de wijnboerderij, zodat de raad en de verzoeken erom vragen.
+test('een stenen huis wil wijn, en in een dorp helpt een wijnboerderij', () => {
+  const D = Object.assign(kaalDorp(), { trede: 'dorp', kalender: T.nieuweKalender() });
+  zetHuis(D, 'stenenHuis', 10, 10, 8);
+  T.zetVoorraad(D, 'bier', 100);
+  T.onthoudWensen(D, T.berekenWensen(D, ZOMERDAG, alles));
+  const x = vind(D, 'wijn');
+  assert.ok(x, 'het huis mist wijn, ook met bier genoeg');
+  assert.deepEqual([x.kan, x.bouw], [true, 'wijnboerderij'], 'ook buiten wijnmaand, zolang er geen staat');
+  assert.ok(!vind(D, 'bier'), 'bier heeft het');
+  // Buiten wijnmaand ligt ze stil, en dat zegt de nacht op het gebouw (T.tikGebouwenDag).
+  zetHuis(D, 'wijnboerderij', 30, 10, 0, { stilWant: T.stilOp(T.GEBOUWEN.wijnboerderij, ZOMERDAG) });
+  const y = vind(D, 'wijn');
+  assert.deepEqual([y.kan, y.bouw], [false, null], 'staat er een, dan wacht het dorp op wijnmaand');
+  assert.match(y.tekst, /wijnmaand/);
 });

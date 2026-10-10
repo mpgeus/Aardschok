@@ -15,9 +15,6 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 - **Het label van het overzicht** (10 okt, na vraag 146; Marcel: "rest in opmerkingen"): `#overzicht-label` (`Tab`) is
   nog donker glas met een Nederlandse zin in `index.html`, het enige wat er van de ui nog zo bij ligt. Wordt een briefje
   zoals `#foto-wenk` (een zin uit `T.t`), of papier zoals de briefjes bovenaan.
-- **Waar staat `Tab`?** (10 okt, vraag 146, d): met het toetsenblok weg staat het overzicht nergens meer, behalve in het
-  label als je er al bent. Voorstel: de raad zegt het de eerste dag, na de zin over de tijd ("Met [Tab] kijk je over je
-  dorp"). Of laten zo; Marcel koos nog niet.
 - **De ouden dragen kennis over** (9 okt, Marcel bij vraag 145, ouder worden: "Ouderen dragen mogelijk kennis over? Eerst
   alleen het beeld"): een oude die met een jonge werkt, maakt hem beter in zijn werk, of een dorp dat zijn ouden verliest,
   verliest wat zij wisten. Nu doet ouder worden alleen wat de leeftijd al deed.
@@ -33,6 +30,10 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   `T.kringGrond` werkt al per soort, dus de regel van 2d kan ook voor de kapel gelden (een erf in `T.waaromPastErfNiet`
   vraagt het dan voor de put en de kapel). Nog niet bekeken: wat er daar de laatste plek nam. Ook kan wat er verder
   gebouwd wordt (een werkplaats, een kraam) de laatste plek nemen; de regel geldt alleen voor erven en de put zelf.
+  **Ook een wijnboerderij** (10 okt, de speeltest van de wijn, `speelbaar.md`): haar gezin is van de stand boeren en wil
+  een kapel binnen 40 tegels, en een wijnboerderij is groot (10 bij 8), dus komt ze vaak ver weg. Op sluw 2 stond de
+  vierde zo een jaar zonder kapel, en hield ze de winst tegen. Te kiezen: een wijnboerderij komt alleen waar haar gezin
+  een kapel haalt (zoals een erf, `T.plekVoor`), of de regel van 2d ook voor de kapel.
 
 - **De gunst na Sint-Maarten, en de gril in wintermaand** (8 okt, de sessie van de kaartenmaker; vraag 117, 2d): bij de
   bouwer van de speeltest staat de gunst van de heer na Sint-Maarten bijna elk jaar op 5, de laagste stand vóór 0 (eerst
@@ -724,12 +725,6 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   over de bergrug ertoe doet, kan het een gewicht in A* worden (een stap omhoog kost meer), met de looptijd erbij.
 
 ## Het beeld
-
-- **Een feest op het plein vol kijkgaten** (9 okt, Marcel: "art overlapt en klopt niet meer"): de fout zelf is weg (met
-  de videokaart toonde elk kijkgat wat er in het laatste stond, `js/gl.js`), maar door een huis zie je iedereen op het
-  plein (`T.DOORKIJK_INSTELLINGEN.plein`, de spelregel), en bij de meiboom staat het hele dorp daar. Achter een huis
-  aan het plein krijgt het dak dan tien, twintig gaten naast elkaar. Te kiezen: zo laten, op een feest alleen de schout
-  en wie ertoe doet, of het plein uit.
 
 - **Het beeld is opdrachten aan de videokaart** (9 okt, gemeten op 2560×1440): ver uitgezoomd zijn het zo'n 3200
   opdrachten voor 3600 plaatjes, want bijna elk plaatje heeft een eigen vel (een vel per tekening, vraag 114) en de
