@@ -20,13 +20,11 @@ ouder worden, geboren worden en sterven) en het kleine leven (rook, water, spele
 staan in `main`; het geluid wacht op Marcel (hieronder). De fasen van het afbranden (vraag 144, 3) zijn af op de proefplaat; alle tekeningen wachten tot de huizen
 zelf beter zijn (Marcel zoekt voorbeelden), en gaan dan in één ronde met de sneeuw op de daken. De bode met de hinderlaag en de lantaarns (vraag 143), het weer, de statussen, niet zaaien in de regen, de
 brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `main`. Vraag 141, de economie binnen het dorp, is op 9 okt helemaal teruggedraaid
-(Marcel: "Ik denk dat we die economie terug moeten draaien", en "Alles van vraag 141").
+(Marcel: "Ik denk dat we die economie terug moeten draaien", en "Alles van vraag 141"). Kleren naar stand (vraag 149)
+staat in `main` (10 okt): arm in een hut, deftig in een stenen huis met laken; de kinderen en de ouden later. De mensen
+mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voor onze poppetjes. de rest kan weg").
 
 **Wacht op Marcel:**
-- Kleren naar stand (vraag 149; Marcel, 10 okt: "Hogere niveau sociale mensen moeten duurdere kleren krijgen"): het
-  voorstel staat bij het punt; Marcel koos a tot e (10 okt), drie trappen, en bij de plaat "1 armer, 2 alle, 3 ja". In het
-  spel op de sessiebranch; de kinderen en de ouden komen in een tweede ronde. **Bezig in sessie `ccr-5cd874f7-wpwkhq`** (10
-  okt).
 - Het geluid (vraag 145, 2): de sleutel `FREESOUND_KEY` in de omgeving en de domeinen van Freesound erbij, zoals
   beschreven bij vraag 145; dan maakt een nieuwe sessie het.
 - Vraag 145 laten zien: is het dorp nu minder "saai"?
@@ -7572,7 +7570,7 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     is, de rest gewoon; alleen volwassenen) en `T.sprites.inKleren` (`js/sprites.js`: alleen het eigen vel, niet het
     werk). De spelregel "Kleren" (met laken, zonder, of iedereen gewoon); `Spel.debug.kleren()`; `test/kleren.test.cjs`.
     Bij het begin loopt niemand arm (in de hutten wonen ouden); de keuters komen met de gezinnen op de erven.
-    **Open:** de kinderen en de ouden (d, een tweede ronde).
+    **Open:** de kinderen en de ouden (d, een tweede ronde). In `main` (10 okt; Marcel: "zet het in main").
 150. **De mensen mooier** (Marcel, 10 okt, bij vraag 149: "We moeten de mensen zoizo een beetje upgraden, want zien er
     niet geweldig uit").
     **Wat Claude zag (10 okt), in het spel naast de huizen en de bomen:** 1. ze zijn zachter dan de wereld: de huizen, de
@@ -7855,6 +7853,13 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 10 okt 2026 — **Vraag 149: kleren naar stand** (Marcel: "Hogere niveau sociale mensen moeten duurdere kleren krijgen",
+  "a ja, b drie, c ja, d ja, e ja", en bij de plaat "1 armer, 2 alle, 3 ja"). Hetzelfde gezicht in de kleren van de stand
+  van zijn huis: arm in een hut (vaal, lappen, een gerafelde zoom, blote voeten), gewoon in een huis of boerderij, deftig
+  in een stenen huis of woontoren als het huis zijn laken krijgt (diepe verf, een jas tot onder de knie of bont, leer, een
+  buidel). Alleen de volwassenen, staand en lopend; aan het werk de gewone kleren. `kleren()` in `uiterlijk.cjs`, 96
+  vellen (`boer-u7-arm`, `boerin-u3-deftig`), `T.klerenVan` en `T.sprites.inKleren`, de spelregel "Kleren",
+  `Spel.debug.kleren()`, `test/kleren.test.cjs`.
 - 10 okt 2026 — **Vraag 142, stap 3: de speeltest naast de vorige** (Marcel: een set getallen probeer je in de code, met
   een knop om terug te zetten; snel als standaard; de bladzijde op zijn eigen computer). Op de opdrachtregel `--naam` en
   `--tegen`, en op `gereedschap/instellingen.html` bovenaan: Start, de vergelijking (welke waarden anders waren, en per
