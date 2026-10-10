@@ -621,7 +621,11 @@ function tekenModel(B, model, o = {}) {
         }
         ao = klem(1 - ao * 0.5, 0.35, 1);
         const rand2 = Math.pow(1 - Math.max(0, kijk), 2.5) * Math.max(0, nx * lR[0] + ny * lR[1] + nz * lR[2]);
-        const b = (0.24 + 0.76 * licht) * (0.45 + 0.55 * ao);
+        // (vraag 150: o.licht = { basis, ao, hard }, een harder licht voor de mensen: minder licht in de schaduw, minder
+        // omgevingsschaduw, en met hard een duidelijke grens tussen de lichte en de donkere kant; zonder: zoals altijd)
+        const L = o.licht;
+        if (L && L.hard) licht = mix(licht, glad(0.18, 0.42, licht), L.hard);
+        const b = L ? (L.basis + (1 - L.basis) * licht) * (1 - L.ao + L.ao * ao) : (0.24 + 0.76 * licht) * (0.45 + 0.55 * ao);
         stap = mat.lo + (mat.hi - mat.lo) * b + rand2 * (mat.rand ?? 1.4);
         if (mat.glans) {
           const hx = lL[0] - vx;

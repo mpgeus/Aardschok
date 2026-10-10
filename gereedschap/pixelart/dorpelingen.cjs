@@ -269,6 +269,7 @@ function houdingDorpeling(stand, o = {}) {
 // lijf (eerst hun eigen zwaai, dan het lijf voorover); de rok niet. Zonder krom blijft alles precies
 // zoals het was.
 function bottenDorpeling(hg, o) {
+  // (vraag 150: o.opkijk, graden dat het hoofd omhoog kijkt, naar de camera, zodat je van boven het gezicht ziet)
   const Bkrom = o.krom ? HH.beweging({ M: HH.draaiing([1, 0, 0], -o.krom), om: o.heup }) : null;
   if (!hg) {
     if (!Bkrom) return { Barm: [null, null] };
@@ -278,7 +279,7 @@ function bottenDorpeling(hg, o) {
   const draaiM = (buig, om) => HH.maalM(HH.draaiing([0, 0, 1], om), HH.draaiing([1, 0, 0], -buig));
   const Blijf = HH.beweging({ dp: [hg.zij, hg.voor, -hg.zak] });
   const buig = Bkrom ? hg.romp.buig + o.krom : hg.romp.buig;
-  const knik = Bkrom ? hg.nek.knik - (o.nekKrom || 0) : hg.nek.knik;
+  const knik = (Bkrom ? hg.nek.knik - (o.nekKrom || 0) : hg.nek.knik) - (o.opkijk || 0);
   const Bromp = HH.naElkaar(Blijf, HH.beweging({ M: draaiM(buig, hg.romp.draai), om: o.heup, dp: [0, 0, hg.romp.omhoog] }));
   const Bnek = HH.naElkaar(Bromp, HH.beweging({ M: draaiM(knik, hg.nek.draai), om: o.nek }));
   const Barm = [0, 1].map((i) => HH.naElkaar(Bkrom, HH.beweging({ as: [1, 0, 0], graden: hg.arm[i].hoek, om: o.schouders[i] })));
@@ -676,7 +677,7 @@ const BOER_FPS = 10;
 function boer(stand = null, o = {}) {
   const M = { huid: 0, kiel: 1, broek: 2, klomp: 3, haar: 4, oog: 5, stro: 6, lint: 7, doek: 8, hout: 9, ijzer: 10, strootje: 11 };
   const D = { benen: 1, kiel: 2, armL: 3, armR: 4, handL: 5, handR: 6, hoofd: 7, hoed: 8, doek: 9, vork: 10 };
-  const H = [0, 4, 68.5];
+  const H = [0, 4, 68.5 + (o.nek || 0)]; // (vraag 150: o.nek, een nek van zoveel)
   const mat = [];
   const ctx = { M, D, mat }; // voor de hulpjes van de karakters
   mat[M.huid] = { ramp: 'huid', lo: 1.9, hi: 6.4, schaduwKracht: 0.85 };
@@ -718,6 +719,7 @@ function boer(stand = null, o = {}) {
     schouders: [[-10, 0.3, 56], [10, 0.3, 56]],
     krom: o.krom,
     nekKrom: o.krom ? o.krom * 0.75 : 0,
+    opkijk: o.opkijk,
   });
 
   // --- benen en klompen: elk been buigt bij de knie (beenPunten, zie de uitleg bovenaan dit
@@ -762,7 +764,7 @@ function boer(stand = null, o = {}) {
   delen.push(o.rafel ? UI.rafelZoom(romp(kiel, zKiel, 58, M.kiel, D.kiel, 2), zKiel) : romp(kiel, zKiel, 58, M.kiel, D.kiel, 2)); // (rafel: vraag 149, wie arm is)
   delen.push(ellips([0, 0.4, 57], [10.4, 6.8, 4.4], M.kiel, D.kiel, 2.5));
   // de afstand tot het bovenlijf, voor wat eromheen ligt (een omslagdoek, een manteltje)
-  const bovenlijf = o.omslagdoek || o.hoed === 'kap' ? bouwSdf([romp(kiel, zKiel, 58, M.kiel, D.kiel, 2), ellips([0, 0.4, 57], [10.4, 6.8, 4.4], M.kiel, D.kiel, 2.5)]) : null;
+  const bovenlijf = o.omslagdoek || o.hoed === 'kap' || o.mantel ? bouwSdf([romp(kiel, zKiel, 58, M.kiel, D.kiel, 2), ellips([0, 0.4, 57], [10.4, 6.8, 4.4], M.kiel, D.kiel, 2.5)]) : null;
   if ((o.kraag || 'doek') === 'doek') {
     // rode halsdoek met een knoop en een puntje voorop
     delen.push({
@@ -784,6 +786,9 @@ function boer(stand = null, o = {}) {
   if (o.luit) KAR.luit(delen, ctx, { voet: [5.5, -6.4, 37.5], top: [-11, -9.8, 75], vorm: kiel, z0: 24, z1: 58, schouder: [7.4, 0, 58.6], heup: [-9.6, 0, 31] });
   // de roddelaar: een bonte omslagdoek, voorop net naast het midden geknoopt
   if (o.omslagdoek) KAR.omslagdoek(delen, ctx, bovenlijf, { zNek: 61.6, zZij: 50.5, zPunt: 40.5, knoop: [0.9, 9.6, 49.6] });
+  // (vraag 150: een schoudermantel met een neergeslagen kap, en een kap om de hals; uiterlijk.cjs)
+  if (o.mantel) UI.schoudermantel(delen, bovenlijf, { zNek: 61.4, zOnder: 44.5, nek: [0, -5.4, 61] }, KAR.materiaal(ctx, 'mantel', o.mantel), KAR.deel(ctx, 'mantel'));
+  if (o.kapHals) UI.kapOmDeHals(delen, [0, 0.4, 59.6], [8.6, 7.2], 2.9, KAR.materiaal(ctx, 'kapHals', o.kapHals), KAR.deel(ctx, 'kapHals'));
   // de nieuwkomer: de bundel op de rug, de banden over de schouders naar een knoop op de borst
   if (o.bundel) {
     KAR.bundel(delen, ctx, {
@@ -877,6 +882,7 @@ function boer(stand = null, o = {}) {
   }
 
   // --- hoofd: lang gezicht, grote neus, flaporen; bruin haar onder de hoed uit (hoofdVanDeBoer, hieronder)
+  if (o.nek) delen.push(kegel([0, 1.2, 56.5], plus(H, [0, -0.4, -5.6]), 3.3, 2.9, M.huid, D.hoofd, 1)); // (vraag 150: de nek)
   hoofdVanDeBoer(delen, ctx, H, o, bovenlijf);
   bot(Bn.Bnek);
   // (vraag 149: bontKleur, een andere kleur bont, zoals het donkere marterbont van een deftige man)

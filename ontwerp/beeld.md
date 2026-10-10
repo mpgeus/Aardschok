@@ -871,6 +871,10 @@ wat onze mensen nu hebben:
   een bruine mantel erover); bij ons liggen kiel en broek dicht bij elkaar, en is alles gedempt;
 - **verhoudingen:** de boogschutter, de schurken en de vrouw zijn slanker, met langere benen en een kleiner hoofd (zo'n
   zes à zeven hoofden); het spritevel is gedrongen (drie). De onze zijn er zo'n vijf.
+Wat Claude zag bij drie hoofden die Marcel omcirkelde ("Deze zien er niet uit"): de camera kijkt van boven, dus je ziet
+vooral de kruin; zonder nek zakt het hoofd in de kraag, en het gezicht kijkt naar de grond. Een tekenaar draait het gezicht
+daarom wat naar de camera: proefplaat 1 doet dat met `nek` en `opkijk` (15 graden), met de lagen uit de voorbeelden
+(`uiterlijk.cjs lagen`).
 Afwisseling kost geen vellen erbij: elk van de 24 uiterlijken krijgt zijn eigen bouw, lagen, hoofd en spullen. Wat wel
 kost: de werkfiguren (`werkfiguren.cjs`) lenen het hoofd en de kiel, maar hebben hun eigen lijf; een andere bouw moet daar
 ook in, anders verandert iemand van postuur als hij gaat maaien.

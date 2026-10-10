@@ -7593,6 +7593,16 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     Marcels voorbeelden" (bouw, lagen, hoofd, spullen, kleur, verhoudingen). Het plan, in proefplaten: 1. licht en kleur
     (alle figuren tegelijk); 2. het lijf: de verhoudingen (vijf hoofden zoals nu, of zes) en vier à vijf bouwen; 3. lagen,
     hoofden en spullen; 4. houdingen in rust. Dan alles één keer renderen, ook de werkfiguren met hun bouw.
+    **Marcel (10 okt), bij een afdruk uit het spel: "Deze zien er niet uit"** (drie hoofden omcirkeld), en **"gebruik mijn
+    voorbeelden?"**. Wat Claude vond: de camera kijkt van boven, dus je ziet vooral de kruin; het hoofd zakt zonder nek in de
+    kraag, en het gezicht kijkt naar de grond. Lichtblond was bijna wit en las als een kaal hoofd (nu `stro`), de vlecht van
+    de kroon lag voorop over de ogen (hersteld), en een donkere doek liet het gezicht wegvallen. Het hardere licht
+    (`o.licht` in `kern.cjs`) bleek weinig te doen; de winst zit in het hoofd en de kleren.
+    **Proefplaat 1 (10 okt):** `node gereedschap/pixelart/uiterlijk.cjs lagen`: een nek en het gezicht 15 graden naar de
+    camera (`nek`, `opkijk` in `boer()` en `boerin()`), en lagen naar de voorbeelden (`schoudermantel` met een neergeslagen
+    kap, `kapOmDeHals`, `metLaarzen`, `metOnderkleed`, een strakke witte kap met `doekLos` en `doekGezicht`), alles als
+    optie: zonder blijft elk vel pixel voor pixel gelijk. De vellen in `beelden/` zijn nog de oude; lichtblond en de kroon
+    komen er pas in met het opnieuw renderen. **Wacht op Marcel**; daarna plaat 2, de bouw (lang, kort, dik, dun, krom).
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
