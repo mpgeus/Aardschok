@@ -39,7 +39,7 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
    plaat (a) is goed, elk venster is papier met leesbare letters (b1), er is één manier van openen en sluiten (b2), en
    de tafel ligt onderin (c, 9 okt; een gesprek staat sinds dan midden boven de tafel), en bovenaan liggen alleen nog
    briefjes (d, 10 okt: het doel met de raad, de datum, het lipje Menu; het blok met toetsen is weg). **Nu e** (de
-   fotomodus).
+   fotomodus). **Bezig in sessie `ccr-82eb4a54-15oebf`** (10 okt): het plan voor de fotomodus, dan bouwen.
 0b. Engels en een vertaaltool (vraag 147; Marcel, 9 okt): de basis nu, naast de ui; het omzetten van alle tekst na de
    ui en vóór de proefversie. Stap 1 (de basis, de tool, het menu als proef) staat in `main` (9 okt); stap 2, het
    omzetten, na de ui.
