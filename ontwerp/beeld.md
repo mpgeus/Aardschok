@@ -1127,7 +1127,11 @@ niets past, wijkt de zwakke grond voor strand (naast de zee) of gras. Golven die
   tekening een huis van een zekere leeftijd krijgt, is dan een vraag voor het spel).
   **Het oude dak** (10 okt): hetzelfde huis met `verweer: 1` is alleen een render, de maat bestond al. Wat opviel: het mos
   ligt als platte, felgroene vlekken op het riet, als stickers; echt mos op riet is donkerder en zit in de schaduw onder
-  de lagen. Dat komt na het stenen huis (Marcel: "Na het stenen huis").
+  de lagen. Dat komt na het stenen huis (Marcel: "Na het stenen huis"). **Gebouwd (10 okt)** (`mosOpRiet` in
+  `huis-sdf.cjs`): het mos groeit in de schaduw onder de punten van de laag erboven en loopt van daar in strepen langs de
+  stengels naar beneden, in plukken en meer naar de goot toe; donker olijfgroen, met korrels langs de stengels en het riet
+  eromheen vochtig en wat donkerder. Hoeveel: `VERWEER.mos`, op 0,58 (Marcel, 10 okt: "Meer mos"; met 0,68 minder). Een
+  jonger dak krijgt vanzelf minder (de maat van het verweren).
   **Het stenen huis onder pannen** (10 okt, naar `voorbeelden/huis-vakwerk-op-steen.jpg`): de vorm kan de huizenbouwer al
   (een T met de dwarsgevel voorop, `wand: 'veldsteen'` met twee lagen is steen onder en vakwerk boven, `dak: 'pannen'`);
   het verschil is het materiaal. Vier stappen, elk een knop die uit staat, op de plaat `huis-sdf-export.cjs voorbeeld
