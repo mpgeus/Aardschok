@@ -28,17 +28,25 @@
   // ---------------------------------------------------------------- kleuren
   const kleurDoek = typeof document !== 'undefined' ? document.createElement('canvas').getContext('2d') : null;
   const kleuren = new Map();
+  // rgb(r, g, b) en rgba(r, g, b, a) met gewone getallen: die lezen we zelf. Het water en de rook maken er elk beeld
+  // honderden met een eigen doorzichtigheid, en het 2D-doek ernaar vragen kost (vooral in Firefox).
+  const RGBA = /^rgba?\(\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\s*(?:,\s*(\d*\.?\d+)\s*)?\)$/;
+  const tot1 = (v) => Math.min(1, v);
   // Een css-kleur als [r, g, b, a], 0..1, niet voorvermenigvuldigd.
   function leesKleur(k) {
     let c = kleuren.get(k);
     if (c) return c;
-    kleurDoek.fillStyle = '#000';
-    kleurDoek.fillStyle = k;
-    const s = kleurDoek.fillStyle; // #rrggbb of rgba(r, g, b, a)
-    if (s[0] === '#') c = [parseInt(s.slice(1, 3), 16) / 255, parseInt(s.slice(3, 5), 16) / 255, parseInt(s.slice(5, 7), 16) / 255, 1];
+    const m = RGBA.exec(k);
+    if (m) c = [tot1(m[1] / 255), tot1(m[2] / 255), tot1(m[3] / 255), m[4] === undefined ? 1 : tot1(+m[4])];
     else {
-      const d = s.slice(s.indexOf('(') + 1, -1).split(',').map(Number);
-      c = [d[0] / 255, d[1] / 255, d[2] / 255, d.length > 3 ? d[3] : 1];
+      kleurDoek.fillStyle = '#000';
+      kleurDoek.fillStyle = k;
+      const s = kleurDoek.fillStyle; // #rrggbb of rgba(r, g, b, a)
+      if (s[0] === '#') c = [parseInt(s.slice(1, 3), 16) / 255, parseInt(s.slice(3, 5), 16) / 255, parseInt(s.slice(5, 7), 16) / 255, 1];
+      else {
+        const d = s.slice(s.indexOf('(') + 1, -1).split(',').map(Number);
+        c = [d[0] / 255, d[1] / 255, d[2] / 255, d.length > 3 ? d[3] : 1];
+      }
     }
     if (kleuren.size > 2000) kleuren.clear();
     kleuren.set(k, c);
@@ -191,6 +199,11 @@
     gl.vertexAttribPointer(2, 4, gl.FLOAT, false, PER_HOEK * 4, 16);
     gl.enable(gl.BLEND);
     gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+    gl.activeTexture(gl.TEXTURE0); // er is maar één textuur tegelijk, altijd op plek 0
+    vergeetStand();
+    bladen = [];
+    gebruik(beeldProg);
+    gl.uniform1i(beeldProg.u.uBeeld, 0);
     wit = nieuweTextuur();
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([255, 255, 255, 255]));
     return true;
@@ -207,9 +220,33 @@
     return info ? gl.getParameter(info.UNMASKED_RENDERER_WEBGL) : 'WebGL';
   };
 
+  // ---------------------------------------------------------------- de stand van de kaart
+  // Wat de kaart nu gebruikt (het programma, de textuur, de mengstand, de maat van het beeldprogramma). Een opdracht zet
+  // alleen wat anders is: elke aanroep aan WebGL kost, en in Firefox meer dan in Chrome (zie de bladen hieronder).
+  let nuProg = null;
+  let nuTex = null;
+  let nuMeng = null;
+  let beeldMaat = -1;
+  function gebruik(prog) {
+    if (nuProg !== prog) gl.useProgram(prog.p);
+    nuProg = prog;
+  }
+  function bind(tex) {
+    if (nuTex !== tex) gl.bindTexture(gl.TEXTURE_2D, tex);
+    nuTex = tex;
+  }
+  function zetMeng(naam) {
+    if (nuMeng !== naam) MENG[naam](gl);
+    nuMeng = naam;
+  }
+  function vergeetStand() {
+    nuProg = nuTex = nuMeng = null;
+    beeldMaat = -1;
+  }
+
   function nieuweTextuur() {
     const t = gl.createTexture();
-    gl.bindTexture(gl.TEXTURE_2D, t);
+    bind(t);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
@@ -217,7 +254,53 @@
     return t;
   }
 
-  // De textuur van een plaatje of een doek, of null als het (nog) niet kan.
+  // ---------------------------------------------------------------- de bladen
+  // Een opdracht aan de kaart tekent alles met één textuur, en ver uitgezoomd tekende het spel zo'n 3250 plaatjes per
+  // beeld uit maar 120 bronnen (de standen van de bomen in de wind, een vel per huis, per figuur), maar in de volgorde van
+  // de tekenlijst wisselde de textuur 2900 keer: bijna een opdracht per plaatje, elk met zijn stand erbij. Chrome haalde
+  // zo 35 beelden per seconde, Firefox, dat per aanroep trager is, minder en haperend (Marcel, 10 okt: "firefox,
+  // uitzoomen en snel bewegen met camera"). Nu staat wat klein is en niet meer verandert (een plaatje, of een doek met
+  // versie 1: eens getekend, blijft hij zo) naast elkaar op een paar grote texturen, de bladen, in planken van boven naar
+  // onder; plaatjes van hetzelfde blad gaan samen in één opdracht.
+  const BLAD = 4096; // de maat van een blad (kleiner als de kaart dat niet kan)
+  const BLAD_BEELD = 2048; // een plaatje dat breder of hoger is, of groter dan BLAD_PIXELS, krijgt een eigen textuur
+  const BLAD_PIXELS = 1 << 21; // (zo past het graan, 1344 bij 936, en de rand van 512 bij 2400 niet)
+  const BLAD_DOEK = 512; // een doek vanaf deze maat ook (de grond in stukken van 512, die opnieuw beschreven worden)
+  const BLADEN = 8; // zoveel bladen hooguit (elk 64 MB op de kaart); wat daarna komt, krijgt een eigen textuur
+  let bladen = []; // { tex, maat, planken: [{ x, y, h }], vrijY }
+  function opEenBlad(bron, isDoek, versie, b, h) {
+    if (bron === plak || b + 2 > Math.min(BLAD, maxTextuur) || h + 2 > Math.min(BLAD, maxTextuur)) return false;
+    if (isDoek) return versie === 1 && b < BLAD_DOEK && h < BLAD_DOEK;
+    return b <= BLAD_BEELD && h <= BLAD_BEELD && b * h <= BLAD_PIXELS;
+  }
+  // Een plek van b bij h op een blad, met een pixel lucht rondom (het blad is leeg, dus doorzichtig): een verkleind
+  // plaatje pakt zo nooit een pixel van zijn buur. Of null als alle bladen vol zijn.
+  function plekOpBlad(b, h) {
+    const pb = b + 2;
+    const ph = h + 2;
+    for (const blad of bladen) {
+      for (const p of blad.planken) {
+        if (ph <= p.h && ph * 3 >= p.h * 2 && p.x + pb <= blad.maat) {
+          p.x += pb;
+          return { blad, x: p.x - pb + 1, y: p.y + 1 };
+        }
+      }
+      if (blad.vrijY + ph <= blad.maat && pb <= blad.maat) {
+        blad.planken.push({ x: pb, y: blad.vrijY, h: ph });
+        blad.vrijY += ph;
+        return { blad, x: 1, y: blad.vrijY - ph + 1 };
+      }
+    }
+    if (bladen.length >= BLADEN) return null;
+    const maat = Math.min(BLAD, maxTextuur);
+    const blad = { tex: nieuweTextuur(), maat, planken: [], vrijY: 0 };
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, maat, maat, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+    bladen.push(blad);
+    return plekOpBlad(b, h);
+  }
+
+  // De textuur van een plaatje of een doek, of null als het (nog) niet kan: { tex, x, y, tb, th, b, h, versie }, met
+  // (x, y) waar de bron op de textuur begint en tb bij th de maat van de textuur (een blad, of alleen de bron).
   const texturen = new WeakMap();
   function textuurVan(bron) {
     const isDoek = typeof HTMLCanvasElement !== 'undefined' && bron instanceof HTMLCanvasElement;
@@ -227,8 +310,25 @@
     let t = texturen.get(bron);
     const versie = isDoek ? bron.versie : 0;
     if (t && t.b === b && t.h === h && (!isDoek || (versie !== undefined && t.versie === versie))) return t;
+    // Een doek op een blad dat toch opnieuw beschreven werd, krijgt een eigen textuur; zijn plek op het blad blijft leeg.
+    if (t && t.blad) t = null;
     if (!t) {
-      t = { tex: nieuweTextuur(), b, h, versie };
+      const plek = opEenBlad(bron, isDoek, versie, b, h) && plekOpBlad(b, h);
+      if (plek) {
+        bind(plek.blad.tex);
+        try {
+          gl.texSubImage2D(gl.TEXTURE_2D, 0, plek.x, plek.y, gl.RGBA, gl.UNSIGNED_BYTE, bron);
+        } catch (e) {
+          console.warn('Tekenen zonder de videokaart:', e.message);
+          kapot = true;
+          return null;
+        }
+        t = { tex: plek.blad.tex, blad: true, x: plek.x, y: plek.y, tb: plek.blad.maat, th: plek.blad.maat, b, h, versie };
+        texturen.set(bron, t);
+        G.telling.opgestuurd++;
+        return t;
+      }
+      t = { tex: nieuweTextuur(), x: 0, y: 0, b, h, versie };
       texturen.set(bron, t);
     } else if (aantal && rijTextuur === t.tex) {
       // Staat hij nog in de rij, dan die eerst: anders tekent alles in de rij wat er nu op komt. Een doek dat per beeld
@@ -236,7 +336,7 @@
       // zien (Marcel, 9 okt: "art overlapt en klopt niet meer").
       legRijAf();
     }
-    gl.bindTexture(gl.TEXTURE_2D, t.tex);
+    bind(t.tex);
     try {
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, bron);
     } catch (e) {
@@ -245,7 +345,7 @@
       kapot = true;
       return null;
     }
-    Object.assign(t, { b, h, versie });
+    Object.assign(t, { b, h, tb: b, th: h, versie });
     G.telling.opgestuurd++;
     return t;
   }
@@ -253,12 +353,12 @@
   // ---------------------------------------------------------------- de rij met hoeken
   function legRijAf() {
     if (!aantal) return;
-    gl.useProgram(beeldProg.p);
-    gl.uniform2f(beeldProg.u.uMaat, doek.width, doek.height);
-    gl.uniform1i(beeldProg.u.uBeeld, 0);
-    gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, rijTextuur);
-    MENG[rijMeng](gl);
+    gebruik(beeldProg);
+    const maat = doek.width * 65536 + doek.height;
+    if (beeldMaat !== maat) gl.uniform2f(beeldProg.u.uMaat, doek.width, doek.height);
+    beeldMaat = maat;
+    bind(rijTextuur);
+    zetMeng(rijMeng);
     gl.bufferData(gl.ARRAY_BUFFER, hoeken.subarray(0, aantal * PER_HOEK), gl.STREAM_DRAW);
     gl.drawArrays(gl.TRIANGLES, 0, aantal);
     G.telling.opdrachten++;
@@ -294,10 +394,52 @@
     hoek(p[6], p[7], uv[2], uv[3], k);
     hoek(p[4], p[5], uv[0], uv[3], k);
   }
+  // Een plaatje: de rechthoek (x0, y0)-(x1, y1) in stand m, met (u0, v0)-(u1, v1) op de textuur, helder h en
+  // doorzichtig al. Hetzelfde als vierhoek, maar zonder lijstjes: het gaat om duizenden per beeld.
+  function rechthoek(m, x0, y0, x1, y1, u0, v0, u1, v1, h, al) {
+    const ax = m[0] * x0 + m[2] * y0 + m[4];
+    const ay = m[1] * x0 + m[3] * y0 + m[5];
+    const bx = m[0] * x1 + m[2] * y0 + m[4];
+    const by = m[1] * x1 + m[3] * y0 + m[5];
+    const cx = m[0] * x0 + m[2] * y1 + m[4];
+    const cy = m[1] * x0 + m[3] * y1 + m[5];
+    const dx = m[0] * x1 + m[2] * y1 + m[4];
+    const dy = m[1] * x1 + m[3] * y1 + m[5];
+    hoekH(ax, ay, u0, v0, h, al);
+    hoekH(bx, by, u1, v0, h, al);
+    hoekH(cx, cy, u0, v1, h, al);
+    hoekH(bx, by, u1, v0, h, al);
+    hoekH(dx, dy, u1, v1, h, al);
+    hoekH(cx, cy, u0, v1, h, al);
+  }
+  function hoekH(x, y, u, v, h, al) {
+    const i = aantal * PER_HOEK;
+    hoeken[i] = x;
+    hoeken[i + 1] = y;
+    hoeken[i + 2] = u;
+    hoeken[i + 3] = v;
+    hoeken[i + 4] = h;
+    hoeken[i + 5] = h;
+    hoeken[i + 6] = h;
+    hoeken[i + 7] = al;
+    aantal++;
+  }
+  // Een stuk dat buiten zijn bron valt, tekent een 2D-doek niet, en op een blad zou het de buren pakken: dus alleen het
+  // stuk erbinnen, op zijn plek. [sx, sy, sw, sh, dx, dy, dw, dh], of null als er niets overblijft.
+  function binnenDeBron(t, sx, sy, sw, sh, dx, dy, dw, dh) {
+    const fx = dw / sw;
+    const fy = dh / sh;
+    const x0 = Math.max(0, sx);
+    const y0 = Math.max(0, sy);
+    const x1 = Math.min(t.b, sx + sw);
+    const y1 = Math.min(t.h, sy + sh);
+    if (!(x1 > x0 && y1 > y0)) return null;
+    return [x0, y0, x1 - x0, y1 - y0, dx + (x0 - sx) * fx, dy + (y0 - sy) * fy, (x1 - x0) * fx, (y1 - y0) * fy];
+  }
   // Een rond verloop over een vorm (hoeken als driehoeken, in pixels), met een eigen opdracht.
   function tekenVerloop(punten, v, m, alpha, meng) {
     legRijAf();
-    gl.useProgram(verloopProg.p);
+    gebruik(verloopProg);
     gl.uniform2f(verloopProg.u.uMaat, doek.width, doek.height);
     const s = Math.hypot(m[0], m[1]); // het verloop staat in de vlakte van de vorm: zijn maten gaan mee
     gl.uniform2f(verloopProg.u.uMidden, m[0] * v.x + m[2] * v.y + m[4], m[1] * v.x + m[3] * v.y + m[5]);
@@ -313,7 +455,7 @@
     });
     gl.uniform1fv(verloopProg.u.uStop, off);
     gl.uniform4fv(verloopProg.u.uKleur, kl);
-    MENG[meng](gl);
+    zetMeng(meng);
     const data = new Float32Array((punten.length / 2) * PER_HOEK);
     for (let i = 0, j = 0; i < punten.length; i += 2, j += PER_HOEK) {
       data[j] = punten[i];
@@ -333,7 +475,7 @@
     const h = Math.max(1, Math.ceil(doek.height / 2));
     if (licht && licht.b === b && licht.h === h) return licht;
     if (!licht) licht = { fb: gl.createFramebuffer(), tex: nieuweTextuur() };
-    gl.bindTexture(gl.TEXTURE_2D, licht.tex);
+    bind(licht.tex);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, b, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
@@ -352,9 +494,10 @@
     gl.clearColor(kleur[0] / 2, kleur[1] / 2, kleur[2] / 2, 1);
     gl.clear(gl.COLOR_BUFFER_BIT);
     if (plassen.length) {
-      gl.useProgram(plasProg.p);
+      gebruik(plasProg);
       gl.uniform2f(plasProg.u.uMaat, doek.width, doek.height);
       gl.blendFuncSeparate(gl.ONE, gl.ONE, gl.ZERO, gl.ONE);
+      nuMeng = null;
       const data = new Float32Array(plassen.length * 6 * PER_HOEK);
       let i = 0;
       const zet = (x, y, u, v, k) => {
@@ -376,11 +519,11 @@
     }
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     gl.viewport(0, 0, doek.width, doek.height);
-    gl.useProgram(maalProg.p);
+    gebruik(maalProg);
     gl.uniform1i(maalProg.u.uLicht, 0);
-    gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, L.tex);
+    bind(L.tex);
     gl.blendFuncSeparate(gl.DST_COLOR, gl.SRC_COLOR, gl.ZERO, gl.ONE);
+    nuMeng = null;
     overHetDoek(maalProg);
     G.telling.lampen = plassen.length;
   }
@@ -391,7 +534,7 @@
   function maskerVan() {
     if (masker && masker.b === doek.width && masker.h === doek.height) return masker;
     if (!masker) masker = { fb: gl.createFramebuffer(), tex: nieuweTextuur() };
-    gl.bindTexture(gl.TEXTURE_2D, masker.tex);
+    bind(masker.tex);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, doek.width, doek.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
     gl.bindFramebuffer(gl.FRAMEBUFFER, masker.fb);
     gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, masker.tex, 0);
@@ -477,7 +620,7 @@
     const t = textuurVan(plak);
     if (!t) return;
     plekVoor(t.tex, MENG[kladMeng] ? kladMeng : 'source-over', 6);
-    vierhoek([x0, y0, x1, y0, x0, y1, x1, y1], [0, 0, b / t.b, h / t.h], [1, 1, 1, 1]);
+    vierhoek([x0, y0, x1, y0, x0, y1, x1, y1], [0, 0, b / t.tb, h / t.th], [1, 1, 1, 1]);
     G.telling.klad++;
     G.telling.kladPixels += b * h;
   }
@@ -559,8 +702,7 @@
       return this.st.vul;
     }
     set fillStyle(v) {
-      this.st.vul = v;
-      this.k.fillStyle = v;
+      this.st.vul = v; // het kladdoek krijgt hem pas als het hem nodig heeft (opKlad): de kaart leest hem zelf
     }
     get imageSmoothingEnabled() {
       return false;
@@ -601,6 +743,7 @@
       kladMeng = meng;
       const k = this.k;
       k.globalCompositeOperation = meng === 'destination-over' ? 'destination-over' : 'source-over';
+      k.fillStyle = this.st.vul;
       f(k);
       const v = vak || [0, 0, doek.width, doek.height];
       kladVak = kladVak ? [Math.min(kladVak[0], v[0]), Math.min(kladVak[1], v[1]), Math.max(kladVak[2], v[2]), Math.max(kladVak[3], v[3])] : v.slice();
@@ -636,18 +779,25 @@
         // van de schaduw te liggen.
         const t = textuurVan(bron);
         if (!t) return;
+        if (t.blad && (sx < 0 || sy < 0 || sx + sw > t.b || sy + sh > t.h)) {
+          const r = binnenDeBron(t, sx, sy, sw, sh, dx, dy, dw, dh);
+          if (!r) return;
+          [sx, sy, sw, sh, dx, dy, dw, dh] = r;
+        }
         const m = this.st.m;
         const yb = dy + dh;
         const { sx: rx, sy: ry } = this.schaduw;
-        const p = [];
-        for (const [x, y] of [[dx, dy], [dx + dw, dy], [dx, yb], [dx + dw, yb]]) {
-          const h = yb - y;
-          const gx = x + h * rx;
-          const gy = yb + h * ry;
-          p.push(m[0] * gx + m[2] * gy + m[4], m[1] * gx + m[3] * gy + m[5]);
-        }
+        const gy = yb + dh * ry; // de bovenrand, dh boven de onderrand
+        const gx0 = dx + dh * rx;
+        const gx1 = dx + dw + dh * rx;
+        const p = [
+          m[0] * gx0 + m[2] * gy + m[4], m[1] * gx0 + m[3] * gy + m[5],
+          m[0] * gx1 + m[2] * gy + m[4], m[1] * gx1 + m[3] * gy + m[5],
+          m[0] * dx + m[2] * yb + m[4], m[1] * dx + m[3] * yb + m[5],
+          m[0] * (dx + dw) + m[2] * yb + m[4], m[1] * (dx + dw) + m[3] * yb + m[5],
+        ];
         const al = this.st.alpha;
-        const uv = [sx / t.b, sy / t.h, (sx + sw) / t.b, (sy + sh) / t.h];
+        const uv = [(t.x + sx) / t.tb, (t.y + sy) / t.th, (t.x + sx + sw) / t.tb, (t.y + sy + sh) / t.th];
         // Een doek zonder versie wordt per keer opnieuw beschreven (textuurVan): dat meteen, de rest per textuur.
         const blijft = typeof HTMLCanvasElement === 'undefined' || !(bron instanceof HTMLCanvasElement) || bron.versie !== undefined;
         if (blijft) schaduwVierhoek(t.tex, p, uv, al);
@@ -661,13 +811,15 @@
         if (kladVak) legKladAf();
         const t = textuurVan(bron);
         if (t) {
-          const m = this.st.m;
-          const p = [];
-          for (const [x, y] of [[dx, dy], [dx + dw, dy], [dx, dy + dh], [dx + dw, dy + dh]]) p.push(m[0] * x + m[2] * y + m[4], m[1] * x + m[3] * y + m[5]);
+          if (t.blad && (sx < 0 || sy < 0 || sx + sw > t.b || sy + sh > t.h)) {
+            const r = binnenDeBron(t, sx, sy, sw, sh, dx, dy, dw, dh);
+            if (!r) return;
+            [sx, sy, sw, sh, dx, dy, dw, dh] = r;
+          }
           const al = this.st.alpha;
           const h = this.st.helder * al;
           plekVoor(t.tex, this.st.meng, 6);
-          vierhoek(p, [sx / t.b, sy / t.h, (sx + sw) / t.b, (sy + sh) / t.h], [h, h, h, al]);
+          rechthoek(this.st.m, dx, dy, dx + dw, dy + dh, (t.x + sx) / t.tb, (t.y + sy) / t.th, (t.x + sx + sw) / t.tb, (t.y + sy + sh) / t.th, h, al);
           G.telling.plaatjes++;
           return;
         }
@@ -875,12 +1027,11 @@
       legSchaduwenAf();
       this.schaduw = null;
       gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-      gl.useProgram(schaduwProg.p);
+      gebruik(schaduwProg);
       gl.uniform1i(schaduwProg.u.uMasker, 0);
       gl.uniform4f(schaduwProg.u.uKleur, kleur[0] * dekking, kleur[1] * dekking, kleur[2] * dekking, dekking);
-      gl.activeTexture(gl.TEXTURE0);
-      gl.bindTexture(gl.TEXTURE_2D, maskerVan().tex);
-      MENG['source-over'](gl);
+      bind(maskerVan().tex);
+      zetMeng('source-over');
       overHetDoek(schaduwProg);
     }
     // Eén pixel teruglezen (het gereedschap van het meten): alles wat klaarstaat, eerst tekenen.

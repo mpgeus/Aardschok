@@ -433,6 +433,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   zodat `js/tekenen.js` er hetzelfde op tekent. Plaatjes, vlakken, bolle vormen en ronde verlopen tekent de kaart zelf;
   de rest gaat via een kladdoek in 2D en komt als plaatje op zijn plek (`T.gl.telling` zegt hoeveel). Een buffer die
   opnieuw getekend wordt, krijgt een nieuwe `versie` (`nieuweBuffer`), anders gaat hij niet opnieuw naar de kaart.
+  Wat klein is en niet meer verandert (een plaatje, een doek met versie 1), staat op een paar grote texturen, de bladen
+  (`plekOpBlad`), zodat een beeld in een paar tientallen opdrachten gaat, niet in een per plaatje (10 okt: Firefox haperde
+  ver uitgezoomd).
   `T.tekenBeeld()` (`js/main.js`) tekent het scherm met of zonder, naar de spelregel "Tekenen"; zonder echte videokaart
   vanzelf zonder (`ookOpDeProcessor` zet het voor de proeven hier toch aan, ook nadat het spel geladen is). Het gewone
   doek ligt erboven en vangt de muis. **Het licht** (vraag 125, A): de nacht is met de videokaart een lichtkaart op de
