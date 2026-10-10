@@ -40,7 +40,8 @@ mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voo
   een rondboogdeur met een boog van zandsteen, J klimop, en warmer (`beeld.md`; Marcel: "Goed zo"), in `main` (10 okt).
   Het mos op het oude riet groeit nu in de schaduw onder de lagen, in strepen langs de stengels (Marcel: "Meer mos"), in
   `main` (10 okt). **Wacht op Marcel:** de ronde van alle tekeningen, waarin hoe ruig van de trede afhangt en hoe verweerd
-  van de leeftijd (en de acht voorbeelden van 9 okt, als hij ze nog stuurt).
+  van de leeftijd (en de acht voorbeelden van 9 okt, als hij ze nog stuurt). **Bezig in sessie `main` (desktop,
+  huizen)** (10 okt; Marcel: "pak het de huizen op"): de ronde van alle tekeningen met de knoppen aan, eerst het plan.
 - **In `main` (10 okt, avond; Marcel koos ze), om te bekijken:**
   - Wijn haalt kapel (vraag 136): een gebouw met een gezin (de wijnboerderij) komt alleen waar het zijn kapel haalt, of
     waar er nog een kan komen, zoals een erf (`T.waaromGeenKringPlek`). In de speeltest winnen nu twee van de zes (was
