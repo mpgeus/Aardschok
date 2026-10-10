@@ -26,13 +26,15 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
 - Het geluid (vraag 145, 2): de sleutel `FREESOUND_KEY` in de omgeving en de domeinen van Freesound erbij, zoals
   beschreven bij vraag 145; dan maakt een nieuwe sessie het.
 - Vraag 145 laten zien: is het dorp nu minder "saai"?
-- Het voorbeeldhuis naar de voorbeelden (`beeld.md`; Marcel, 10 okt: "1 riet, 2 akkoord"): een vakwerkhuis van twee lagen
-  onder riet, op een proefplaat (`huis-sdf-export.cjs voorbeeld`), in vier stappen: A verweren, B diepte (twee knoppen
-  in de huizenbouwer, nog uit), C vorm (een steiler dak, een afdakje, een balkon op schoren, twee schoorstenen) en D het
-  stukje grond (keien, een houtstapel, tonnen; alleen op de plaat). **Af in sessie `ccr-cdb09a13-k2mnps`** (10 okt), nog
-  niet in `main`. Wacht op Marcel: is het huis zo "fantastisch"? Dan hetzelfde huis onder pannen (met een echte
-  dakkapel) als controle, en daarna de ronde van alle tekeningen. Marcels voorbeelden zelf moeten nog in git
-  (`ontwerp/voorbeelden/`; Marcel: "zet ze in git"): ze waren deze sessie niet meer te vinden, dus hij stuurt ze opnieuw.
+- Het voorbeeldhuis naar de voorbeelden (vraag 144; `beeld.md`, "De huizen naar Marcels voorbeelden"; de plaat:
+  `node gereedschap/pixelart/huis-sdf-export.cjs voorbeeld`): een vakwerkhuis van twee lagen onder riet, in stappen A tot
+  F, in `main` (10 okt): A verweren (een maat, 0 tot 1), B diepte, C vorm (steiler dak, afdakje, balkon op schoren, twee
+  schoorstenen), D het stukje grond (keien, houtstapel, tonnen; alleen op de plaat), E grover en contrast, F ruig riet
+  (Marcel: "rossiger, rauwer, prikkeliger, rieteriger", "niet te geel"). Alles staat achter knoppen die uit staan, dus het
+  spel is nog niet veranderd. Marcels voorbeelden staan in `ontwerp/voorbeelden/` (twee van 10 okt; de acht van 9 okt
+  stuurt hij nog). **Wacht op Marcel**, met als volgende stappen: hetzelfde huis als oud dak (verweer 1); het stenen huis
+  onder pannen zoals zijn eerste voorbeeld; dan de ronde van alle tekeningen, waarin hoe ruig van de trede afhangt en hoe
+  verweerd van de leeftijd.
 - Een feest op het plein vol kijkgaten (`opmerkingen.md`, "Het beeld"): **Marcel (10 okt): "Ja akkoord"**, op een feest
   alleen wie ertoe doet. **Af in sessie `ccr-a1a4ef49-0815cc`** (10 okt), nog niet in `main`.
 - Wie wijn wil (vraag 136; Marcel, 10 okt: "Inwoners willen wijn en bier", en "B1, 0,02 is goed": de dorpelingen bier,
