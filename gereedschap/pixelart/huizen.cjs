@@ -303,6 +303,55 @@ function stijlHuizen() {
 }
 Object.assign(HUIZEN, stijlHuizen());
 
+// ---------------------------------------------------------------- de ronde van alle tekeningen
+
+// De knoppen van het voorbeeldhuis op elke tekening, jong en oud (vraag 144; ontwerp/beeld.md, "De ronde van alle
+// tekeningen"; Marcel, 10 okt: "pak het de huizen op, alle knoppen staan nog uit die het uiterlijk veranderen", en op het
+// plan: meteen jong en oud, de vorm C, en alles in één ronde). Overal B diepte en E grover met contrast; op riet F ruig
+// (het gehucht ruig en praktisch, een dorp netter); G ronde veldsteen en H ronde pannen (die knoppen doen niets op een
+// andere steen of een ander dak). Hoe verweerd: naar de trede van het dak, jong of oud (VERWEERD), en een oude hut
+// helemaal. Een huis, een boerderij, een stenen huis en het huis van de schout krijgen het steilere dak en een afdakje
+// boven de voordeur (C); een huis met een muur van steen een rondboogdeur (I) en klimop (J). De hutten blijven laag.
+//
+// Elke tekening heeft een oude naast zich, "<naam>-oud" (OUD): dezelfde vorm, voet en deur, alleen verweerd. Het spel
+// kiest wat een huis van zijn leeftijd draagt, aan die naam (js/sprites.js); de stijl en de bouwfasen horen bij de jonge,
+// want wat gebouwd wordt, is nieuw (een oude heeft `jong`: de naam van de jonge, en geen fasen).
+const OUD = '-oud';
+// [jong, oud] per dak: riet en spanen in het gehucht, leien in een dorp, pannen met marktrecht (ook baksteen)
+const VERWEERD = { riet: [0.3, 0.9], spanen: [0.3, 0.9], leien: [0.15, 0.6], pannen: [0.1, 0.5] };
+// wie de vorm C krijgt, en hoe steil dan het dak is (het voorbeeldhuis: het dak de helft van het huis)
+const MET_VORM = new Set(['huis', 'stenenHuis', 'boerderij', 'schout']);
+const HELLING_C = 58;
+function knoppenVoor(spec, gebouw, oud) {
+  const dak = spec.dak === 'plat' ? spec.dekking || 'leien' : spec.dak;
+  const [jong, ouder] = VERWEERD[dak] || VERWEERD.leien;
+  const verweer = !oud ? jong : gebouw === 'hut' ? 1 : ouder;
+  return { verweer, diepte: true, grof: true, contrast: true, ruig: dak === 'riet', rond: true, bever: true };
+}
+function inDeRonde(spec, oud, gebouw = spec.gebouw) {
+  if (spec.delen) return { ...spec, delen: spec.delen.map((d) => (d.spec.erfmuur ? d : { ...d, spec: inDeRonde(d.spec, oud, gebouw) })) };
+  const uit = spec.uit === undefined ? undefined : { ...(spec.uit || {}) };
+  const extra = {};
+  if (MET_VORM.has(gebouw) && uit) {
+    extra.helling = HELLING_C;
+    uit.afdak = true;
+  }
+  if (spec.wand === 'veldsteen' && uit) {
+    extra.boogdeur = true;
+    uit.klimop = true;
+  }
+  return { ...spec, ...extra, ...(uit ? { uit } : {}), knoppen: knoppenVoor(spec, gebouw, oud) };
+}
+// zoals elke tekening was vóór de ronde, voor de proefplaat (huis-sdf-export.cjs ronde)
+const ZONDER_RONDE = {};
+for (const naam of Object.keys(HUIZEN)) {
+  const jong = HUIZEN[naam];
+  ZONDER_RONDE[naam] = jong;
+  const { stijl, ...zonderStijl } = jong;
+  HUIZEN[naam] = inDeRonde(jong, false);
+  HUIZEN[naam + OUD] = { ...inDeRonde(zonderStijl, true, jong.gebouw), fasen: false, jong: naam };
+}
+
 // De wereld van een opgave: een huis of een toren van de bouwer, of een gebouw uit delen ({ delen: [{ spec, plek }],
 // deurVan }: de kapel met haar toren, HS.samen; vraag 114, stap 3).
 function wereldVan(spec) {
@@ -438,6 +487,44 @@ function meetHuis(W, draai = 0, o = {}) {
 // Eén huis voor het vel: dezelfde tekenaar en hetzelfde licht als de proefplaten (paneelHuis in
 // huis-sdf-export.cjs), zonder gras en zonder grondschaduw. Een marge rond het kader voor de omlijning.
 // spec.draai: zoveel kwartslagen gedraaid (een stand van een stijl, STANDEN).
+// De sneeuw op een huis (vraag 144, 4b; Marcel, 9 okt: "Sneeuw moet ook nog op bomen, huizen etc."): wat naar boven
+// kijkt, in drie lagen (SNEEUW_LAGEN: een beetje, half en dik; hoe lager de grens, hoe meer van het dak), uit de normaal en
+// de plek van elke pixel van het huis zelf, zodat het in dezelfde render meekomt. Zoals de sneeuw op de bomen (bomen.cjs,
+// sneeuw): wit uit de ramp 'baard', zo licht als wat eronder lag, met een rafelige grens uit ruis. Een laag is een eigen
+// plaatje over het huis; het spel legt de laag die bij de sneeuw op de grond past erover (js/tekenen.js). Een steil dak
+// kijkt half naar boven (een dak van 58 graden: 0,53), dus een beetje sneeuw ligt er in plekken, en dik helemaal.
+const SNEEUW_LAGEN = [0.6, 0.44, 0.26];
+const SNEEUW_RUIS = { schaal: 0.11, kracht: 0.45, zaad: 5 };
+function sneeuwVan(B) {
+  return SNEEUW_LAGEN.map((grens) => {
+    const S = new K.Beeld(B.b, B.h, B.OX, B.OY);
+    for (let i = 0; i < B.b * B.h; i++) {
+      const r = B.ramp[i];
+      if (r < 0 || B.vlag[i] & K.VLAG.GLOEI) continue;
+      const nz = B.nrm[i * 3 + 2];
+      const q = SNEEUW_RUIS.schaal;
+      const ruw = K.ruis3(B.pos[i * 3] * q, B.pos[i * 3 + 1] * q, B.pos[i * 3 + 2] * q, SNEEUW_RUIS.zaad) - 0.5;
+      if (nz < grens + ruw * SNEEUW_RUIS.kracht) continue;
+      S.zet(i, 'baard', 2.4 + K.klem(B.stap[i] / (K.RAMP_LEN[r] - 1), 0, 1) * 4.4);
+    }
+    return S;
+  });
+}
+// Een plaatje strak gesneden, met waar het in het grotere lag; of null als er niets op staat.
+function strak(p) {
+  let [xa, ya, x1, y1] = [p.b, p.h, -1, -1];
+  for (let y = 0; y < p.h; y++) {
+    for (let x = 0; x < p.b; x++) {
+      if (p.px[(y * p.b + x) * 2] < 0) continue;
+      if (x < xa) xa = x;
+      if (x > x1) x1 = x;
+      if (y < ya) ya = y;
+      if (y > y1) y1 = y;
+    }
+  }
+  return x1 < 0 ? null : { plaat: p.uitsnede(xa, ya, x1 - xa + 1, y1 - ya + 1), dx: xa, dy: ya };
+}
+
 function renderHuis(spec) {
   const t0 = Date.now();
   const draai = spec.draai || 0;
@@ -456,6 +543,8 @@ function renderHuis(spec) {
   K.belicht(B, { omgeving: () => 0.2 });
   D.avondlicht(B, { warm: HS.WARM });
   K.verwarm(B, 1.8);
+  // de sneeuw, vóór de omlijning: die ligt om het huis, niet erop; een oude tekening draagt die van zijn jonge
+  const sneeuw = spec.jong ? null : sneeuwVan(B);
   K.omlijn(B);
   const plaat = K.Plaat.van(K.kwantiseer(B));
   // waar de achterste hoek van de voet op het scherm valt
@@ -487,6 +576,7 @@ function renderHuis(spec) {
     deurVer: m.deurVer,
     ramen: ramenVan(B, W, xa, ya, anker),
     ...rookVan(W, draai, m),
+    ...(sneeuw ? { sneeuw: sneeuw.map((S) => strak(K.Plaat.van(K.kwantiseer(S)).uitsnede(xa, ya, x1 - xa + 1, y1 - ya + 1))) } : {}),
     ms: Date.now() - t0,
   };
 }
@@ -1711,12 +1801,21 @@ if (!isMainThread && workerData === 'huizen') {
   parentPort.on('message', ({ i, naam }) => {
     try {
       const r = renderHuis(HUIZEN[naam]);
-      parentPort.postMessage({ i, naam, b: r.plaat.b, h: r.plaat.h, px: r.plaat.px, anker: r.anker, voet: r.voet, deur: r.deur, deurVer: r.deurVer, ramen: r.ramen, ms: r.ms });
+      parentPort.postMessage({ i, naam, b: r.plaat.b, h: r.plaat.h, px: r.plaat.px, anker: r.anker, voet: r.voet, deur: r.deur, deurVer: r.deurVer, ramen: r.ramen, schoorsteen: r.schoorsteen, nok: r.nok, sneeuw: sneeuwNaarLos(r.sneeuw), ms: r.ms });
     } catch (e) {
       parentPort.postMessage({ i, naam, fout: e.message });
     }
   });
 }
+
+// De lagen sneeuw als losse getallen (voor een draad en de cache), en terug.
+const sneeuwNaarLos = (lagen) => lagen && lagen.map((s) => s && { b: s.plaat.b, h: s.plaat.h, px: Array.from(s.plaat.px), dx: s.dx, dy: s.dy });
+const sneeuwUitLos = (lagen) => lagen && lagen.map((s) => {
+  if (!s) return null;
+  const plaat = new K.Plaat(s.b, s.h);
+  plaat.px = Int16Array.from(s.px);
+  return { plaat, dx: s.dx, dy: s.dy };
+});
 
 const DRADEN = () => Math.max(1, Math.min(8, os.cpus().length));
 
@@ -1745,7 +1844,7 @@ function renderHuizen(namen = Object.keys(HUIZEN), draden = DRADEN()) {
     const m = JSON.parse(fs.readFileSync(f, 'utf8'));
     const plaat = new K.Plaat(m.b, m.h);
     plaat.px = Int16Array.from(m.px);
-    bewaard.set(naam, { naam, plaat, anker: m.anker, voet: m.voet, deur: m.deur, deurVer: m.deurVer, ramen: m.ramen, ms: 0 });
+    bewaard.set(naam, { naam, plaat, anker: m.anker, voet: m.voet, deur: m.deur, deurVer: m.deurVer, ramen: m.ramen, schoorsteen: m.schoorsteen, nok: m.nok, sneeuw: sneeuwUitLos(m.sneeuw), ms: 0 });
   }
   if (bewaard.size) console.log(`  ${bewaard.size} huizen uit ${path.relative(process.cwd(), CACHE)}`);
   const nog = namen.filter((n) => !bewaard.has(n));
@@ -1777,8 +1876,8 @@ function renderNieuw(namen, draden) {
         else {
           const plaat = new K.Plaat(m.b, m.h);
           plaat.px = m.px;
-          uit[m.i] = { naam: m.naam, plaat, anker: m.anker, voet: m.voet, deur: m.deur, deurVer: m.deurVer, ramen: m.ramen, ms: m.ms };
-          fs.writeFileSync(cacheBestand(m.naam), JSON.stringify({ b: m.b, h: m.h, px: Array.from(m.px), anker: m.anker, voet: m.voet, deur: m.deur, deurVer: m.deurVer, ramen: m.ramen }));
+          uit[m.i] = { naam: m.naam, plaat, anker: m.anker, voet: m.voet, deur: m.deur, deurVer: m.deurVer, ramen: m.ramen, schoorsteen: m.schoorsteen, nok: m.nok, sneeuw: sneeuwUitLos(m.sneeuw), ms: m.ms };
+          fs.writeFileSync(cacheBestand(m.naam), JSON.stringify({ b: m.b, h: m.h, px: Array.from(m.px), anker: m.anker, voet: m.voet, deur: m.deur, deurVer: m.deurVer, ramen: m.ramen, schoorsteen: m.schoorsteen, nok: m.nok, sneeuw: m.sneeuw }));
           console.log(`  ${m.naam.padEnd(12)} ${m.b}×${m.h}  voet ${m.voet.join('×')}  deur ${m.deur} (${m.deurVer} tegel voor de muur)  ${m.ramen.length} ramen  ${(m.ms / 1000).toFixed(1)} s`);
         }
         if (++gedaan === namen.length) {
@@ -1792,7 +1891,60 @@ function renderNieuw(namen, draden) {
   });
 }
 
-module.exports = { HUIZEN, STIJLEN, TORENS, grootGebouw, VORMEN, huttenVan, STANDEN, stijlNaam, FASEN, BRANDFASEN, RUINE, brandfaseVanHuis, renderHuis, renderHuizen, renderHuisFasen, renderHuisRuine, meetHuis, rookVan, wereldVan };
+// De sneeuw op de daken voor het spel (vraag 144, 4b): per jonge tekening een eigen vel, tegels/daksneeuw/<naam>.png, met
+// zijn drie lagen (SNEEUW_LAGEN) elk strak gesneden, en tegels/daksneeuw.json + .js zoals de bouwfasen (bouwfasen.cjs,
+// schrijfSpelVel): per laag waar hij op dat vel staat en zijn anker, met dezelfde afspraak als tegels.json (de achterste
+// voethoek, 16 pixels lager). Een oude tekening draagt de sneeuw van zijn jonge: dezelfde vorm. naar-tiled.cjs schrijft
+// het na het vel huizen; lijst is wat renderHuizen gaf.
+function schrijfDaksneeuw(lijst) {
+  const I = require('./inpakken.cjs');
+  const TEGELS = path.join(__dirname, '..', '..', 'tegels');
+  const MAP = path.join(TEGELS, 'daksneeuw');
+  fs.rmSync(MAP, { recursive: true, force: true });
+  fs.mkdirSync(MAP, { recursive: true });
+  const lagen = {};
+  let pixels = 0;
+  for (const r of lijst) {
+    if (!r.sneeuw || !r.sneeuw.some(Boolean)) continue;
+    const delen = r.sneeuw.map((s) => s && { beeld: I.beeldVanPlaat(s.plaat), anker: [r.anker[0] - s.dx, r.anker[1] - s.dy + 16] });
+    const echt = delen.filter(Boolean);
+    const rij = I.leegBeeld(echt.reduce((n, d) => n + d.beeld.b, 0), Math.max(...echt.map((d) => d.beeld.h)));
+    let x = 0;
+    const cellen = delen.map((d) => {
+      if (!d) return null;
+      I.kopieer(d.beeld, [0, 0, d.beeld.b, d.beeld.h], rij, x, 0);
+      const cel = { cel: [x, 0, d.beeld.b, d.beeld.h], anker: d.anker };
+      x += d.beeld.b;
+      return cel;
+    });
+    const uit = I.pakVelIn(rij, cellen);
+    const bestand = `daksneeuw/${r.naam}.png`;
+    fs.writeFileSync(path.join(TEGELS, bestand), I.pngVanBeeld(uit.beeld));
+    pixels += uit.beeld.b * uit.beeld.h;
+    lagen[r.naam] = { bestand, lagen: uit.tegels.map((c) => c && { x: c.cel[0], y: c.cel[1], b: c.cel[2], h: c.cel[3], anker: c.anker }) };
+  }
+  const data = {
+    _lees_dit: 'De sneeuw op de daken van de huizen (gereedschap/pixelart/huizen.cjs, schrijfDaksneeuw; vraag 144, 4b) — '
+      + 'niet met de hand bijwerken. Sleutel is de naam van de jonge tekening op het vel huizen (een oude, "<naam>-oud", '
+      + 'draagt die van zijn jonge). Per tekening een eigen vel (bestand, vanaf tegels/), dat het spel pas laadt als er '
+      + 'sneeuw ligt, en drie lagen: een beetje, half en dik (null als er niets op lag). Per laag snijdt x/y/b/h de cel uit '
+      + 'dat vel, en anker is het punt in die cel dat op het anker van het huis komt (dezelfde afspraak als tegels.json).',
+    lagen,
+  };
+  const json = JSON.stringify(data, null, 1);
+  fs.writeFileSync(path.join(TEGELS, 'daksneeuw.json'), json + '\n');
+  fs.writeFileSync(
+    path.join(TEGELS, 'daksneeuw.js'),
+    '// Gemaakt door gereedschap/pixelart/huizen.cjs (schrijfDaksneeuw) — niet met de hand bijwerken.\n'
+      + '// Dezelfde inhoud als daksneeuw.json, als script, zodat file:// het ook kan lezen (zie js/sprites.js).\n'
+      + '(function (T) {\n  T.DAKSNEEUW = '
+      + json.replace(/\n/g, '\n  ')
+      + ';\n})(globalThis.Spel = globalThis.Spel || {});\n',
+  );
+  return { huizen: Object.keys(lagen).length, mb: Math.round((pixels * 4) / 1e6) };
+}
+
+module.exports = { HUIZEN, OUD, ZONDER_RONDE, SNEEUW_LAGEN, schrijfDaksneeuw, STIJLEN, TORENS, grootGebouw, VORMEN, huttenVan, STANDEN, stijlNaam, FASEN, BRANDFASEN, RUINE, brandfaseVanHuis, renderHuis, renderHuizen, renderHuisFasen, renderHuisRuine, meetHuis, rookVan, wereldVan };
 
 // node gereedschap/pixelart/huizen.cjs [naam ...]: de huizen los op een proefplaat, met hun voet
 // (een ruit) en de tegel voor hun deur (een punt), om te zien of die kloppen. Naar

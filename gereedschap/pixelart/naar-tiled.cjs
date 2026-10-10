@@ -82,7 +82,7 @@ const VELCONFIG = {
   toren: { capaciteit: 8, kolommen: 4 }, // nu 1 (er is er maar één); een beetje lucht is vrijwel gratis
   erf: { capaciteit: 24, kolommen: 8 }, // nu 7: nog een stuk of zeventien erfstukken erbij kan
   tuin: { capaciteit: 48, kolommen: 8 }, // nu 33 (tuin-sdf.cjs se STUKKEN): ruim voor een derde hek of meer groente
-  huizen: { capaciteit: 640, kolommen: 8 }, // nu 559 in 576 vakken: de 128 grote gebouwen van de stijlen erbij (vraag 114, stap 3), en daarvoor 431: de 32 van ronde 4b (23 huizen en 9 lege), de 108 van de stijl wit en de 300 van oker, planken en roze (huizen.cjs, STIJLEN; vraag 114, stap 2a en 2b). Een leeg vak kost sinds het inpakken (vraag 114, 2a) geen geheugen meer in de browser; huizen is het laatste vel in elke kaart, dus een grotere capaciteit schuift geen nummers op
+  huizen: { capaciteit: 1280, kolommen: 8 }, // nu 1118 in 1120 vakken: elke tekening jong en oud (vraag 144, de ronde van alle tekeningen; huizen.cjs, OUD), en daarvoor 559 in 576: de 128 grote gebouwen van de stijlen erbij (vraag 114, stap 3), en daarvoor 431: de 32 van ronde 4b (23 huizen en 9 lege), de 108 van de stijl wit en de 300 van oker, planken en roze (huizen.cjs, STIJLEN; vraag 114, stap 2a en 2b). Een leeg vak kost sinds het inpakken (vraag 114, 2a) geen geheugen meer in de browser; huizen is het laatste vel in elke kaart, dus een grotere capaciteit schuift geen nummers op
 };
 
 // items: [{ key, ...eigen velden zoals `plaat` }]. `key` is de identiteit die nooit meer
@@ -846,6 +846,9 @@ async function bouwHuizenVel() {
   const lijst = await HZ.renderHuizen();
   const items = lijst.map((r) => ({ naam: r.naam, vast: true, plaat: r.plaat, anker: r.anker, beslaat: r.voet, deur: r.deur, ramen: r.ramen, schoorsteen: r.schoorsteen, nok: r.nok, stijl: HZ.HUIZEN[r.naam].stijl }));
   console.log(`  huizen: ${lijst.length} in ${((Date.now() - t0) / 1000).toFixed(1)} s`);
+  // de sneeuw op de daken, uit dezelfde render (huizen.cjs, schrijfDaksneeuw; vraag 144, 4b)
+  const sn = HZ.schrijfDaksneeuw(lijst);
+  console.log(`  daksneeuw: ${sn.huizen} huizen, samen ${sn.mb} MB in de browser`);
   // Een huis van een bouwstijl moet zijn deur hebben aan de kant die zijn stand zegt (huizen.cjs, STANDEN): het spel
   // kiest er de stand mee die zijn deur naar de weg keert.
   const kantVan = ([b, d], [dx, dy]) => (dy === d ? 'z' : dx === b ? 'o' : dy === -1 ? 'n' : dx === -1 ? 'w' : '?');

@@ -1166,6 +1166,18 @@ niets past, wijkt de zwakke grond voor strand (naast de zee) of gras. Golven die
   lichtste tint alleen als glans, zodat de zonkant oranje blijft en niet geel wordt. **Open:** de ring van de boog is in zijn stijlen een rechte band (in het
   voorbeeld steken de stenen om en om de muur in); de klimop is bij een jong huis bescheiden; en het mos op het oude riet
   (hierboven).
+  **De ronde van alle tekeningen (10 okt; Marcel: "pak het de huizen op, alle knoppen staan nog uit die het uiterlijk
+  veranderen").** Gemeten: met de knoppen aan kost een huis 10 à 20 seconden (een tiende meer), de bouwfasen van een huis
+  zo'n tweeënhalve minuut, en de voet en de deur blijven gelijk. Marcel koos op het plan: **meteen jong en oud** (elke
+  tekening twee keer; een nieuw huis is jong en wordt na een paar jaar oud, wat er bij het begin al stond, is oud; de
+  bouwfasen alleen jong, want wat gebouwd wordt, is nieuw), **de vorm C** op de huizen, boerderijen en stenen huizen (het
+  steilere dak en een afdakje boven de voordeur; een tweede schoorsteen en het balkon blijven per tekening zoals ze zijn;
+  de hutten blijven laag), en **alles in één ronde**: de tekeningen, de bouwfasen, de sneeuw op de daken (vraag 144, 4b)
+  en de brandfasen (vraag 144, 3). Welke knop waar (het voorstel; eerst een proefplaat): overal B diepte en E grover met
+  contrast; op riet F ruig; op pannen H ronde pannen; op veldsteen G ronde stenen, I de rondboogdeur en J klimop (zandsteen
+  en baksteen houden hun blokken); leien krijgen geen eigen stap (open). Hoe verweerd, naar de trede van het dak: riet en
+  spanen (het gehucht) jong 0,3 en oud 0,9, een oude hut 1; leien (een dorp) jong 0,15 en oud 0,6; pannen en baksteen
+  (marktrecht) jong 0,1 en oud 0,5.
 - **Meer variatie in het groen, de bomen en de versiering (9 okt 2026; werklijst, vraag 148).** Marcel: "Ik wil meer
   variatie in de vegetatie, ook bomen en versieringen van het dorp." Nu heeft elke soort één tekening en verandert het
   groen niet met het jaar. Het voorstel staat bij vraag 148: elke boom anders (vormen per soort, en de beuk, de linde,

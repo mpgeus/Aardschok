@@ -17,6 +17,8 @@
 //   node gereedschap/pixelart/huis-sdf-export.cjs groot [stijl]  uit/proefhuis/groot.png (vraag 114, stap 3: de grote gebouwen)
 //   node gereedschap/pixelart/huis-sdf-export.cjs voorbeeld [dak] uit/proefhuis/voorbeeld.png (vraag 144: het voorbeeldhuis)
 //   node gereedschap/pixelart/huis-sdf-export.cjs voorbeeld steen  uit/proefhuis/voorbeeld-steen.png (het stenen huis)
+//   node gereedschap/pixelart/huis-sdf-export.cjs ronde [stijl] [gehucht|dorp]  uit/proefhuis/ronde-wit-gehucht.png en
+//                                                          -dorp.png (vraag 144: elke soort nu, jong en oud)
 //
 // uitbouwen.png (ronde 3): de uitbouwen elk op een huis, de losse tuinstukken (tuin-sdf.cjs) naast
 // elkaar met een tuintje daaruit, en zes huizen met willekeurige zaden, los van elkaar. De platen
@@ -1239,6 +1241,29 @@ function stijlRijen(stijl) {
 }
 
 // Een plaat met rijen panelen, elke rij op één grondlijn (verhouding.png, steen.png).
+// ronde-<stijl>-gehucht.png en ronde-<stijl>-dorp.png (vraag 144, de ronde van alle tekeningen; ontwerp/beeld.md): van
+// een stijl elke soort zoals hij nu in het spel staat, en jong en oud met de knoppen aan (huizen.cjs, inDeRonde), met de
+// deur naar zuid; het gehucht onder zijn eigen dak, en wat in een dorp en met marktrecht komt.
+function rondeRijen(stijl, welk) {
+  const HZ = require('./huizen.cjs');
+  const S = HZ.STIJLEN[stijl];
+  if (!S) throw new Error(`geen stijl "${stijl}" (huizen.cjs, STIJLEN: ${Object.keys(HZ.STIJLEN).join(', ')})`);
+  const N = (vorm, dak) => HZ.stijlNaam(stijl, vorm, dak, 'z');
+  const H = HZ.huttenVan(stijl);
+  const [h1] = S.huis;
+  const s1 = h1.replace('huis', 'steen');
+  const [b1] = S.boerderij;
+  const kapelDak = stijl === 'planken' ? 'spanen' : 'leien';
+  const lijst = welk === 'dorp'
+    ? [['huis, leien', N(h1, 'leien')], ['huis, pannen', N(h1, 'pannen')], ['stenen huis, leien', N(s1, 'leien')], ['stenen huis, pannen', N(s1, 'pannen')], ['stenen huis, baksteen', N(s1, 'baksteen')], ['herberg van een dorp', N('herberg2', 'leien')], ['kapel', N('kapel', kapelDak)], ['woontoren', N('woontoren', 'pannen')]]
+    : [['hut', HZ.stijlNaam(H.stijl, H.hut[0], HZ.STIJLEN[H.stijl].dak, 'z')], ['huis', N(h1, S.dak)], ['boerderij', N(b1, S.dak)], ['herberg van het gehucht', N('herberg1', S.dak)], ['huis van de schout', N('schoutshuis', S.dak)]];
+  const paneel = ({ gebouw, trede, fasen, jong, stijl: _, ...o }) => (o.delen ? { delen: o.delen, deurVan: o.deurVan } : { spec: o });
+  return lijst.map(([naam, n]) => ({
+    naam,
+    panelen: [['nu in het spel', paneel(HZ.ZONDER_RONDE[n])], ['jong', paneel(HZ.HUIZEN[n])], ['oud', paneel(HZ.HUIZEN[n + HZ.OUD])]],
+  }));
+}
+
 async function rijenPlaat(RIJEN, bestand) {
   const plaat = await rijenBeeld(RIJEN);
   fs.writeFileSync(path.join(UIT, bestand), K.png(plaat, 1, '#0e0a14'));
@@ -1427,6 +1452,13 @@ if (isMainThread && require.main === module) {
     const klaar = () => log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`);
     if (process.argv[3] === 'steen') voorbeeldSteen(process.argv[4]).then(klaar);
     else voorbeeld(process.argv[3] === '-' ? null : process.argv[3], process.argv[4]).then(klaar);
+  } else if (wat === 'ronde') {
+    // node huis-sdf-export.cjs ronde [stijl] [gehucht|dorp]: elke soort nu, jong en oud (vraag 144, de ronde)
+    const stijl = process.argv[3] || 'wit';
+    const welk = process.argv[4] ? [process.argv[4]] : ['gehucht', 'dorp'];
+    (async () => {
+      for (const w of welk) await rijenPlaat(rondeRijen(stijl, w), `ronde-${stijl}-${w}.png`);
+    })().then(() => log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`));
   } else if (wat === 'stijl') {
     // node huis-sdf-export.cjs stijl wit: een bouwstijl van het spel (huizen.cjs, STIJLEN)
     const stijl = process.argv[3] || 'wit';
@@ -1465,7 +1497,7 @@ if (isMainThread && require.main === module) {
     vergelijk();
     if (wat === 'knoppen') knoppen();
   }
-  if (!['vormen', 'materiaal', 'uitbouwen', 'ladder', 'afwisseling', 'verhouding', 'steen', 'stijl', 'rondom', 'groot', 'groot2', 'groot3', 'voorbeeld'].includes(wat)) log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`);
+  if (!['vormen', 'materiaal', 'uitbouwen', 'ladder', 'afwisseling', 'verhouding', 'steen', 'stijl', 'rondom', 'groot', 'groot2', 'groot3', 'voorbeeld', 'ronde'].includes(wat)) log(`totaal ${((Date.now() - t0) / 1000).toFixed(1)} s`);
 }
 
 module.exports = { paneelNu, paneelProef, paneelHuis, paneelSamen, paneelTuin, paneelTuintje, paneelZes, kaderVan, grondZon, schrijf };
