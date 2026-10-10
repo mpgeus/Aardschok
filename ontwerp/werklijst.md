@@ -7389,6 +7389,26 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     meervoud alleen bij een zin die telt; een nieuwe taal in een klein formulier. Links staan de delen van het spel in
     woorden (`GEBIEDEN` in `gereedschap/vertalen/pagina.js`), zodra er meer dan één is: stap 2 zet daar elk bestand bij
     dat omgaat.
+    **Voorstel voor stap 2 (10 okt, sessie `ccr-99e707bb-sla81d`):** gemeten zijn het 3.300 teksten, zo'n 25.000
+    woorden, in 66 bestanden (het meest in `opties.js` 5.200, `gesprekken.js` 4.800, `hud.js` 1.700 en `gebouwen.js`
+    1.500). Eerst wat alles raakt: (1) een woordenlijst Engels (`ontwerp/engels.md`), want 25.000 woorden in meer sessies
+    blijven alleen gelijk met één lijst: reeve, the lord, de inner als *bailiff*, advisor, hamlet, village en market town,
+    Martinmas, the levy, the peddler, the inn, de standen als cottars, villagers, craftsmen en farmers, the common, day
+    labourers, tribute, favour en trust, en Brits Engels (de basis zegt al `en-GB`); (2) een naam in een zin: een gebouw,
+    een wens of een mens krijgt zijn vormen als hele woorden (`a hut`, `the hut`, `huts`), zodat `een ${naam}` een zin
+    met `{een}` wordt (in het Engels *a* of *an*, in het Nederlands *de* of *het*); (3) de maanden: een naam om te tonen
+    los van de naam waar de regels op letten (`m.naam === 'lentemaand'`); (4) `data-t` in `index.html`; (5) de
+    gesprekken blijven gegevens die de gespreksschrijver schrijft, in het Engels, en `js/gesprek.js` vertaalt bij het
+    tonen (`npm run teksten` leest ze uit de tabel); (6) de proef met een nep-taal die elke zin markeert, voor wat nog
+    niet om is; (7) een controle dat elk Nederlands zinnetje dat uit de code gaat, letterlijk in `taal/nl.js` terugkomt,
+    zodat het Nederlandse spel niet verandert. Dan in delen, naar wat de speler het meest ziet: het scherm (de tafel, de
+    balk, de berichten, `index.html`), de heer (de brieven, de grillen, de inner), het dorp dat spreekt (de voorvallen,
+    de gesprekken, de raad, het rapport; daar telt de toon het meest), de regels (de gebouwen, de wensen en de rest), en
+    als laatste de spelregels. Elk deel een commit, en naar `main` na elk deel, want het raakt bijna elk bestand.
+    **Vragen aan Marcel:** de woordenlijst (de inner als *bailiff*?); de maanden (gewoon March, of de oude namen in het
+    Engels: Haymonth, Harvestmonth, Winemonth, Slaughtermonth, of Angelsaksisch); de namen van mensen en dorpen
+    (Nederlands houden: Aaltje, Heikant, of Engels); de volgorde en na elk deel naar `main`; en of de proefversie op het
+    Engels wacht (zo besloten), of eerst een in het Nederlands, want het omzetten verandert het Nederlandse spel niet.
     **Ook (10 okt):** de wereldkaart (`gereedschap/wereld.html`) tekende geen huizen en mensen meer, en de grond in
     steeds kleinere kopieën: `js/tekenen.js` vroeg de kalender en `js/sprites.js` sinds vraag 145 het uiterlijk van
     een bewoner, die het gereedschap allebei niet heeft. Gerepareerd; het gereedschap zet nu elk beeld de stand van
