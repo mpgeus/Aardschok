@@ -38,8 +38,9 @@ brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `mai
 0. Een fatsoenlijke ui (vraag 146; Marcel, 9 okt: "nu is het echt een zooitje met al die menutjes met letters"): de
    plaat (a) is goed, elk venster is papier met leesbare letters (b1), er is één manier van openen en sluiten (b2), en
    de tafel ligt onderin (c, 9 okt; een gesprek staat sinds dan midden boven de tafel), en bovenaan liggen alleen nog
-   briefjes (d, 10 okt: het doel met de raad, de datum, het lipje Menu; het blok met toetsen is weg). **Nu e** (de
-   fotomodus). **Bezig in sessie `ccr-82eb4a54-15oebf`** (10 okt): het plan voor de fotomodus, dan bouwen.
+   briefjes (d, 10 okt: het doel met de raad, de datum, het lipje Menu; het blok met toetsen is weg), en er is een
+   fotomodus (e, 10 okt: `H`, of Fotomodus in het menu; `Enter` bewaart een plaatje). Nog na te lopen tegen "klaar als":
+   de kaart van het land is nog geen papier, en het label van het overzicht (`Tab`) is nog Nederlands in de html.
 0b. Engels en een vertaaltool (vraag 147; Marcel, 9 okt): de basis nu, naast de ui; het omzetten van alle tekst na de
    ui en vóór de proefversie. Stap 1 (de basis, de tool, het menu als proef) staat in `main` (9 okt); stap 2, het
    omzetten, na de ui.
@@ -7324,6 +7325,26 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     als hun venster open was). Nagelopen in de browser (1024×768 en 1920×1080 op 150%): de briefjes, de streep, de
     statussen, het briefje bij de muis onder het lipje, de datum en een status, het menu met een klik en met `Esc`, `O`, en
     het bouwplan; `npm test` 1167/1167.
+    **Plan voor e, de fotomodus (10 okt):** één toets haalt alles van het beeld (de tafel, de briefjes, de berichten, het
+    briefje bij de muis, en op het doek de tegel onder de muis, het pad, de tekens bij de deur, de uitroeptekens, de oogjes,
+    de kringen en de zwevende tekst) en laat de camera los zoals het overzicht; een klik doet dan niets, het spel loopt
+    door (`P` zet het stil), en wat je nodig hebt (een brief, een voorval, een gevecht) haalt je eruit. **Marcel (10 okt):**
+    de toets is `H`, met een regel Fotomodus in het menu; `Enter` bewaart het beeld als PNG op de maat van het scherm (op
+    4K 3840×2160; in de browser naar Downloads, in de versie voor Windows naar de map Afbeeldingen); zoomen van 0,35 tot
+    twee keer dichterbij dan gewoon; en de wolkjes van een praatje, het kijkgat rond de schout, de lantaarn en de ogen van
+    de wolven blijven staan.
+    **e gebouwd (10 okt):** `H` zet de fotomodus aan en uit (`T.zetFoto` in `js/main.js`, `S.foto`, alleen scherm), en
+    in het menu staat Fotomodus. Hij leent de camera van het overzicht (slepen, de pijltjes, het wiel), met meer standen:
+    van twee keer de zoom van het venster tot 0,35 (`FOTO.zoom`); het wiel kiest nu de eerste stand voorbij de zoom van
+    nu, zodat het overzicht na de fotomodus gewoon verder zoomt. De html gaat weg met `body.foto` (`stijl.css`), wat ui
+    is op het doek met `S.foto` in `js/tekenen.js`. Een klik doet niets; een venster, een brief, het menu, een gesprek of
+    een gevecht haalt je eruit (`fotoKan`), en H of Esc brengt je terug bij de schout, of in het overzicht als je daar
+    was. Een briefje onderaan zegt de toetsen en vaagt weg (`#foto-wenk`); het staat niet op het plaatje. `Enter`
+    bewaart het beeld (`bewaarFoto`, met `beeldNu`, dat ook `Spel.debug.beeld` is) op de maat van het scherm, als
+    `<naam> <datum> <tijd>.png`; de versie voor Windows zet het in Afbeeldingen (`will-download` in de schil van
+    `gereedschap/proefversie/maak.cjs`). Nagelopen in de browser (1600×900, en 1920×1080 op 200%: het plaatje is
+    3840×2160): aan en uit met H, Esc en het menu, inzoomen tot 3,3 en uit tot 0,35, een klik laat de schout staan,
+    Tab-H-H blijft in het overzicht, en een voorval haalt je eruit; `npm test` 1167/1167.
 
 147. **Engels, en een vertaaltool voor de community** (Marcel, 9 okt: "We moeten alles naar het Engels halen. Ook moeten
     we een translate tool hebben. Mochten we leden uit de community krijgen die een vertaling willen maken."). Op 1 okt

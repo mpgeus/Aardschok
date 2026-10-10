@@ -77,6 +77,7 @@
       knop('opslaan', T.t('Save'), { uit: T.waaromNietOpslaan(S) }) +
       knop('laden', T.t('Load'), { uit: spellen.length ? null : T.t('Nothing has been saved yet.') }) +
       knop('spelregels', T.t('Game rules')) +
+      knop('foto', T.t('Photo mode'), { uitleg: T.t('Everything off the screen, for a picture. H in the game.') }) +
       knop('titel', T.t('To the title screen'))
     );
   }
@@ -304,6 +305,9 @@
       lijst = null;
     } else if (actie === 'spelregels') {
       return T.ui.openSpelregels(S); // over het menu heen; dicht is weer het menu
+    } else if (actie === 'foto') {
+      sluit(S);
+      return T.zetFoto(true); // de fotomodus (js/main.js, werklijst vraag 146, e)
     } else if (actie === 'titel') {
       vraag = {
         tekst: T.t('Back to the title screen? Anything since your last save will be lost.'),

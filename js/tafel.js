@@ -424,7 +424,7 @@
     gunst: { naam: 'Het zegel van de heer', uitleg: (S) => T.bazenTekst(S.dorp, 'gunst') },
     vertrouwen: { naam: 'De hoed van het dorp', uitleg: (S) => T.bazenTekst(S.dorp, 'vertrouwen') },
     // Bovenaan (vraag 146, d): het lipje Menu en de datum, met het weer.
-    menu: { naam: 'Het menu', uitleg: () => 'Opslaan, laden, de spelregels, en terug naar het titelscherm.', toets: 'Esc, en O voor de spelregels' },
+    menu: { naam: 'Het menu', uitleg: () => 'Opslaan, laden, de spelregels, de fotomodus, en terug naar het titelscherm.', toets: 'Esc; O voor de spelregels, H voor de fotomodus' },
     datum: {
       naam: 'Vandaag',
       uitleg: (S) => {

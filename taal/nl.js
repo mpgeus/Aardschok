@@ -18,6 +18,8 @@ Spel.taal({
     "Resume": "Verder spelen",
     "Save": "Opslaan",
     "Nothing has been saved yet.": "Er is nog niets bewaard.",
+    "Photo mode": "Fotomodus",
+    "Everything off the screen, for a picture. H in the game.": "Alles van het beeld, voor een plaatje. H in het spel.",
     "To the title screen": "Naar het titelscherm",
     "empty": "leeg",
     "your own translation": "je eigen vertaling",
@@ -39,6 +41,8 @@ Spel.taal({
     "a game that no longer fits": "een spel dat niet meer past",
     "Overwrite": "Overschrijven",
     "Load this game? Anything since your last save will be lost.": "Dit spel laden? Wat je sinds het laatste opslaan deed, ben je kwijt.",
-    "The game could not autosave: {reden}": "Het spel kon niet vanzelf opslaan: {reden}"
+    "The game could not autosave: {reden}": "Het spel kon niet vanzelf opslaan: {reden}",
+    "Photo mode · drag or arrows to look · wheel to zoom · [Enter] saves a picture · [H] or [Esc] to return": "Fotomodus · slepen of pijltjes om te kijken · wiel: verder of dichterbij · [Enter] bewaart een plaatje · [H] of [Esc]: terug",
+    "Picture saved: {naam}": "Plaatje bewaard: {naam}"
   }
 });

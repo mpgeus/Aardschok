@@ -405,7 +405,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   daar ook), `js/tekenen.js`, `js/main.js`
   (spellus, invoer, zoom, camera). **Het overzicht** (vraag 108, a): `Tab` tilt de camera van de schout af en zoomt uit
   (`T.wisselOverzicht`, `S.overzicht`, alleen scherm); slepen of de pijltjes schuiven, het wiel zoomt, en wat je klikt,
-  doet de schout nog altijd. `Tab`, een klik op de schout of een gevecht brengt je terug. Op een groot scherm tekent het spel op een hele deling ervan, minstens
+  doet de schout nog altijd. `Tab`, een klik op de schout of een gevecht brengt je terug. **De fotomodus** (vraag 146,
+  e): `H` (of Fotomodus in het menu) haalt alles van het beeld (`body.foto` in `stijl.css`, en wat ui is op het doek,
+  `S.foto` in `js/tekenen.js`) en laat de camera los zoals het overzicht, tot twee keer dichterbij; een klik doet niets,
+  en `Enter` bewaart het beeld als PNG op de maat van het scherm (`bewaarFoto`; in de versie voor Windows in Afbeeldingen). Op een groot scherm tekent het spel op een hele deling ervan, minstens
   1920×1080 (de tussenbuffer, `formaat`, vraag 123): op 4K 1920×1080 maal twee; wat er getekend wordt, zegt `T.tekenMaat()`,
   en de muis rekent om in `naarVlak`. De grond ligt in stukken van 512 pixels die aan de wereld vastzitten
   (`werkStukkenBij` in `js/tekenen.js`, 9 okt): wat in beeld komt, wordt getekend, en slepen tekent alleen de stukken aan

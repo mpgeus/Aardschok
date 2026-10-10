@@ -9,7 +9,7 @@ stijl speelt een grote rol denk ik." Dus de haak is niet het verstoppen alleen, 
 
 **Beantwoord (Marcel, 1 okt, vraag 83):** "1. Tijdspan is goed 2. Engels is prima 3. De nieuwe hook nogmaals checken
 tegen steam 4. Geld is beperkt. Ik gebruik jou ☺️ 5. Foto modus is ingeschakeld en goed idee voor de Steam pagina", en
-daarna: "Ik bedoelde goed idee" (de fotomodus is er nog niet; hij komt). Dus het tijdpad
+daarna: "Ik bedoelde goed idee" (de fotomodus is er sinds 10 okt: `H`, en `Enter` bewaart een plaatje; vraag 146, e). Dus het tijdpad
 hieronder geldt, Engels wordt de hoofdtaal, wat kan maakt Claude ("Weinig geld" hieronder), en er komt een fotomodus. De
 haak is nagezocht ("De haak, nagezocht tegen Steam" hieronder); welke zin het wordt, is nog open. En over de sfeer en de
 ui (vraag 84): "a ja b ja c later, met de oorlog".

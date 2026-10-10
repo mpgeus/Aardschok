@@ -194,6 +194,21 @@
     T.gl.klaar();
   };
 
+  // Het beeld zoals het nu op het scherm staat, als één 2D-doek: met de videokaart (js/gl.js) het doek van WebGL met het
+  // gewone erover. Het tekent eerst een beeld, want WebGL houdt een beeld niet vast nadat het getoond is. Voor de
+  // fotomodus (bewaarFoto) en Spel.debug.schermafdruk.
+  function beeldNu() {
+    T.tekenBeeld();
+    if (!glZichtbaar) return canvas;
+    const c = document.createElement('canvas');
+    c.width = canvas.width;
+    c.height = canvas.height;
+    const x = c.getContext('2d');
+    x.drawImage(T.gl.doek(), 0, 0);
+    x.drawImage(canvas, 0, 0);
+    return c;
+  }
+
   // Wat ligt er onder de muis? Wezens en voorwerpen steken boven hun tegel uit, dus die
   // worden eerst gezocht, van voor naar achter. Anders is het de tegel zelf.
   function zoekDoel(mx, my) {
@@ -393,7 +408,77 @@
     stap: 64, // zoveel schermpixels per druk op een pijltje
     sleepVanaf: 6, // zoveel pixels moet de muis bewegen voor het slepen is in plaats van een klik
   };
-  const zoomStanden = () => [zoomVenster, ...OVERZICHT.zoom];
+  // De fotomodus (werklijst vraag 146, e; Marcel, 1 okt: een "goed idee voor de Steam pagina", en 10 okt: `H`, met een
+  // regel in het menu, `Enter` bewaart een plaatje, en zoomen tot twee keer dichterbij). H haalt alles van het beeld: de
+  // html erover (body.foto in stijl.css) en wat op het doek ui is (S.foto in js/tekenen.js). De camera gaat los zoals in
+  // het overzicht, waarvan hij het slepen, de pijltjes en het wiel leent. Een klik doet niets, het spel loopt door (P zet
+  // het stil), en wat je nodig hebt (een venster, een brief, een gesprek, een gevecht) haalt je eruit. H of Esc brengt je
+  // terug waar je was: bij de schout, of in het overzicht. Alleen scherm: S.foto staat in T.schermVelden (js/opslaan.js).
+  const FOTO = {
+    zoom: [2, 1.5, 1, 0.75, 0.5], // maal de zoom van het venster; verder uit tot het overzicht (OVERZICHT.zoom)
+  };
+  const zoomStanden = () =>
+    S.foto
+      ? [...new Set([...FOTO.zoom.map((z) => z * zoomVenster), ...OVERZICHT.zoom])].sort((a, b) => b - a)
+      : [zoomVenster, ...OVERZICHT.zoom];
+  const fotoKan = () =>
+    S.modus === 'verkennen' && !T.ui.vensterOpen() && !T.ui.briefOpen() && !T.ui.titelOpen() && !T.ui.menuOpen() && !T.ui.terugOpen();
+  function zetFoto(aan = !S.foto) {
+    if (aan === !!S.foto || (aan && !fotoKan())) return false;
+    if (aan) {
+      S.bouwSoort = null; // een gebouw dat nog aan de muis hing, ligt weer weg, zoals bij het menu
+      S.bouwMenuOpen = false;
+      T.ui.toonBouwmenu(S);
+      S.foto = { inOverzicht: !!S.overzicht };
+      if (!S.overzicht) S.overzicht = { doel: { x: S.camera.x, y: S.camera.y }, zoom: S.zoom };
+    } else {
+      const inOverzicht = S.foto.inOverzicht;
+      S.foto = null;
+      if (!inOverzicht) wisselOverzicht(false);
+      else S.zoom = S.overzicht.zoom = Math.min(S.overzicht.zoom, zoomVenster);
+    }
+    document.body.classList.toggle('foto', aan);
+    T.ui.toonOverzicht(S);
+    if (aan) fotoWenk(T.t('Photo mode · drag or arrows to look · wheel to zoom · [Enter] saves a picture · [H] or [Esc] to return'));
+    else document.getElementById('foto-wenk').classList.remove('flits');
+    return true;
+  }
+  T.zetFoto = zetFoto;
+  // Het briefje onderaan dat even blijft staan en wegvaagt (zoals "Opgeslagen", js/menu.js). Het ligt over het doek, dus
+  // in een plaatje dat Enter bewaart, staat het niet.
+  function fotoWenk(tekst) {
+    const el = document.getElementById('foto-wenk');
+    el.innerHTML = tekst.replace(/\[([^\]]+)\]/g, '<kbd>$1</kbd>'); // [H] wordt een toets, zoals in de raad (js/ui.js)
+    el.classList.remove('flits');
+    void el.offsetWidth; // zo begint het vagen opnieuw
+    el.classList.add('flits');
+  }
+  // Het beeld als PNG, op de maat van het scherm: het spel tekent op een deling ervan (formaat), dus op 4K wordt elke
+  // getekende pixel er twee bij twee, zoals je hem ziet. In de browser gaat het naar Downloads; de versie voor Windows
+  // zet het in de map Afbeeldingen (gereedschap/proefversie/maak.cjs).
+  function bewaarFoto() {
+    const doek = beeldNu();
+    const n = Math.max(1, Math.round((cssB * (window.devicePixelRatio || 1)) / doek.width));
+    const c = document.createElement('canvas');
+    c.width = doek.width * n;
+    c.height = doek.height * n;
+    const x = c.getContext('2d');
+    x.imageSmoothingEnabled = false;
+    x.drawImage(doek, 0, 0, c.width, c.height);
+    const nu = new Date();
+    const twee = (g) => String(g).padStart(2, '0');
+    const naam =
+      `${T.NAAM} ${nu.getFullYear()}-${twee(nu.getMonth() + 1)}-${twee(nu.getDate())} ` +
+      `${twee(nu.getHours())}.${twee(nu.getMinutes())}.${twee(nu.getSeconds())}.png`;
+    c.toBlob((blob) => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = naam;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 10000);
+      fotoWenk(T.t('Picture saved: {naam}', { naam }));
+    }, 'image/png');
+  }
   function wisselOverzicht(aan = !S.overzicht) {
     if (aan && S.modus !== 'verkennen') return;
     S.overzicht = aan ? { doel: { x: S.camera.x, y: S.camera.y }, zoom: OVERZICHT.zoom[0] } : null;
@@ -408,12 +493,13 @@
     S.camera.x = S.overzicht.doel.x;
     S.camera.y = S.overzicht.doel.y;
   }
-  // Een stand verder uit (+1) of dichterbij (-1), met het wiel.
+  // Een stand verder uit (+1) of dichterbij (-1), met het wiel: de eerste stand voorbij de zoom van nu (die na de
+  // fotomodus ook een stand van de foto kan zijn).
   function zoomOverzicht(richting) {
     const z = zoomStanden();
-    const i = Math.max(0, z.indexOf(S.overzicht.zoom));
-    S.overzicht.zoom = z[Math.max(0, Math.min(z.length - 1, i + richting))];
-    S.zoom = S.overzicht.zoom;
+    const nu = S.overzicht.zoom;
+    const volgende = richting > 0 ? z.find((s) => s < nu - 1e-6) : z.filter((s) => s > nu + 1e-6).pop();
+    if (volgende != null) S.zoom = S.overzicht.zoom = volgende;
   }
   // Staat de muis op het lijf van de schout (met dezelfde maten als zoekDoel)?
   function opDeSchout(mx, my) {
@@ -491,6 +577,8 @@
     if (S.modus === 'overgang' && S.wereld.wezens.every((e) => !e.pad.length)) T.beginGevecht(S);
     const doelAlpha = S.modus === 'gevecht' ? 1 : 0;
     S.rasterAlpha += (doelAlpha - S.rasterAlpha) * Math.min(1, dt * 5);
+    // Wat je nodig hebt (een venster, een brief, een gesprek, een gevecht), haalt je uit de fotomodus.
+    if (S.foto && !fotoKan()) zetFoto(false);
     // Een gevecht begint: dan terug naar de schout, want het gevecht wil je zien.
     if (S.overzicht && (S.modus === 'overgang' || S.modus === 'gevecht')) wisselOverzicht(false);
     const doel = T.ui.titelOpen() ? titelCamera() : cameraDoel();
@@ -576,6 +664,7 @@
     const gesleept = slepen && slepen.bewogen;
     slepen = null;
     if (gesleept) return;
+    if (S.foto) return; // in de fotomodus doet een klik niets
     if (S.overzicht && opDeSchout(ev.clientX, ev.clientY)) {
       wisselOverzicht(false);
       return;
@@ -625,6 +714,15 @@
     // meteen heen (hieronder); wat precies, zegt T.ui.toetsBijVenster.
     if (T.ui.toetsBijVenster(S, ev)) return;
     if (S.modus === 'einde') return;
+    // De fotomodus (hierboven): alleen zijn eigen toetsen. H of Esc is terug, Enter bewaart een plaatje, de pijltjes
+    // kijken. De rest van het spel doet niets; P en de snelheden (js/hud.js) werken wel.
+    if (S.foto) {
+      if (ev.key === 'h' || ev.key === 'H' || ev.key === 'Escape') zetFoto(false);
+      else if (ev.key === 'Enter') bewaarFoto();
+      else if (SCHUIF[ev.key]) schuifOverzicht(SCHUIF[ev.key][0] * OVERZICHT.stap, SCHUIF[ev.key][1] * OVERZICHT.stap);
+      if (ev.key === 'Tab' || ev.key === 'Enter' || SCHUIF[ev.key]) ev.preventDefault();
+      return;
+    }
     // De kaart van het land (js/landkaart.js): Esc is terug het gehucht in, als je nog thuis bent; op reis of in een
     // andere provincie kies je op de kaart waar je heen gaat.
     if (S.modus === 'land') {
@@ -651,6 +749,11 @@
     if (ev.key === 'Tab') {
       ev.preventDefault();
       if (S.modus === 'verkennen') wisselOverzicht();
+      return;
+    }
+    // H: de fotomodus (hierboven), alleen bij het rondlopen.
+    if ((ev.key === 'h' || ev.key === 'H') && S.modus === 'verkennen') {
+      zetFoto(true);
       return;
     }
     if (S.overzicht && SCHUIF[ev.key]) {
@@ -1840,19 +1943,8 @@
       const r = await fetch('/gereedschap/api/schermafdruk/' + encodeURIComponent(naam), { method: 'POST', body: blob });
       return r.json();
     },
-    // Het beeld zoals het nu op het scherm staat, als één 2D-doek: met de videokaart (js/gl.js) het doek van WebGL met
-    // het gewone erover. Het tekent eerst een beeld, want WebGL houdt een beeld niet vast nadat het getoond is.
-    beeld() {
-      T.tekenBeeld();
-      if (!glZichtbaar) return canvas;
-      const c = document.createElement('canvas');
-      c.width = canvas.width;
-      c.height = canvas.height;
-      const x = c.getContext('2d');
-      x.drawImage(T.gl.doek(), 0, 0);
-      x.drawImage(canvas, 0, 0);
-      return c;
-    },
+    // Het beeld zoals het nu op het scherm staat, als één 2D-doek (beeldNu, hierboven bij T.tekenBeeld).
+    beeld: () => beeldNu(),
     // Wachten tot het beeld echt getekend is (het meten): de browser spaart tekenwerk op tot hij het moet laten zien.
     wacht() {
       if (glZichtbaar) T.gl.wacht();

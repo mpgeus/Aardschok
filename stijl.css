@@ -1077,6 +1077,31 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
 /* Zolang het titelscherm er ligt, is er nog geen spel om over te zeggen. */
 body.titelscherm :is(#hud-gehucht, #berichten, #plek, #tafel) { visibility: hidden; }
 
+/* De fotomodus (H, js/main.js; werklijst vraag 146, e): alles van het beeld behalve het doek (en dat van de videokaart),
+   en het briefje met de toetsen, dat onderaan in het midden even blijft staan en wegvaagt, zoals "Opgeslagen". */
+body.foto > :not(canvas, #foto-wenk) { display: none !important; }
+#foto-wenk {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  padding: 6px 14px;
+  font: italic 14px var(--boek);
+  color: var(--gedempt);
+  background: rgba(22, 18, 14, 0.72);
+  border-radius: 8px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+}
+#foto-wenk.flits { animation: foto-wenk 4s ease forwards; }
+@keyframes foto-wenk {
+  0% { opacity: 0; }
+  8% { opacity: 1; }
+  75% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
 /* Vanzelf opgeslagen (js/menu.js, T.ui.opgeslagen): één woord rechtsonder, boven de tafel, dat weer wegvaagt. */
 #opgeslagen {
   position: fixed;

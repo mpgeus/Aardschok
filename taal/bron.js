@@ -15,6 +15,8 @@ Spel.TAAL_BRON = [
   {"t":"Resume","waar":["js/menu.js"]},
   {"t":"Save","waar":["js/menu.js"]},
   {"t":"Nothing has been saved yet.","waar":["js/menu.js"]},
+  {"t":"Photo mode","waar":["js/menu.js"]},
+  {"t":"Everything off the screen, for a picture. H in the game.","waar":["js/menu.js"]},
   {"t":"To the title screen","waar":["js/menu.js"]},
   {"t":"empty","waar":["js/menu.js"]},
   {"t":"your own translation","waar":["js/menu.js"]},
@@ -37,4 +39,6 @@ Spel.TAAL_BRON = [
   {"t":"Overwrite","waar":["js/menu.js"]},
   {"t":"Load this game? Anything since your last save will be lost.","waar":["js/menu.js"]},
   {"t":"The game could not autosave: {reden}","waar":["js/menu.js"]},
+  {"t":"Photo mode · drag or arrows to look · wheel to zoom · [Enter] saves a picture · [H] or [Esc] to return","waar":["js/main.js"]},
+  {"t":"Picture saved: {naam}","waar":["js/main.js"]},
 ];

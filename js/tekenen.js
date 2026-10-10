@@ -468,11 +468,17 @@
     tekenWaterLeven(ctx, S, w, vak);
     const gebakken = bosGebakken(S);
     tekenWeides(ctx, S, vak);
-    tekenRaster(ctx, S);
-    tekenMarkeringen(ctx, S);
-    tekenBouwSpook(ctx, S);
-    tekenVerzoekPlek(ctx, S);
-    tekenSpoor(ctx, S);
+    // Wat ui is op het doek, niet in de fotomodus (js/main.js, werklijst vraag 146, e): het raster, de tegel onder de
+    // muis en het pad, een gebouw aan de muis, de plek van een verzoek, het spoor, de randen van het ontginnen en de
+    // jacht, de tekens bij de deur, de oogjes, de zwevende tekst, en boven een wezen zijn uitroepteken en levensbalk.
+    // De wolkjes, de lantaarn en de ogen van de wolven blijven: die horen bij de wereld (Marcel, 10 okt).
+    if (!S.foto) {
+      tekenRaster(ctx, S);
+      tekenMarkeringen(ctx, S);
+      tekenBouwSpook(ctx, S);
+      tekenVerzoekPlek(ctx, S);
+      tekenSpoor(ctx, S);
+    }
 
     const lijst = [];
     // Buiten zijn er geen muren: wat daar "muur" heet, is de voet van een boom of een gebouw, en
@@ -606,8 +612,10 @@
     }
     // Ver uitgezoomd: het bos ten zuiden en oosten van de kaart, uit zijn buffer (werkGrondBij hierboven).
     if (gebakken) tekenStukken(ctx, bosVoorBij(S, g, zicht), zicht);
-    tekenOntginRand(ctx, S);
-    tekenJachtRand(ctx, S);
+    if (!S.foto) {
+      tekenOntginRand(ctx, S);
+      tekenJachtRand(ctx, S);
+    }
     tekenSchoorsteenRook(ctx, S);
     tekenRook(ctx, S);
     ctx.restore();
@@ -623,10 +631,12 @@
     for (const r of ramen) vulRamen(ctx, S, r);
     tekenOgen(ctx, S);
     tekenVuur(ctx, S);
-    tekenHuisTekens(ctx, S);
-    tekenOogjes(ctx, S);
+    if (!S.foto) {
+      tekenHuisTekens(ctx, S);
+      tekenOogjes(ctx, S);
+    }
     tekenWolkjes(ctx, S);
-    tekenEffecten(ctx, S);
+    if (!S.foto) tekenEffecten(ctx, S);
     ctx.restore();
     tekenVignet(ctx, S, bw, bh);
   };
@@ -3150,6 +3160,7 @@
       ctx.fill();
     }
     ctx.restore();
+    if (S.foto) return; // de levensbalk en het uitroepteken zijn ui (tekenScene)
     // Een vijand draagt zijn levensbalk in een gevecht, of als hij geraakt is; een rover altijd (js/rovers.js): hij
     // draagt het vel van een gewone dorpeling, en zo zie je dat hij geen dorpeling is.
     if (!e.dood && e.kant === 'monster' && (S.gevecht || e.leven < e.maxLeven || e.rover)) levensbalk(ctx, cx, top - 9, e);

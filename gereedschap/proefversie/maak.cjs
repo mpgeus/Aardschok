@@ -165,8 +165,11 @@ function maakZip(lijst) {
 }
 
 // De schil: één venster, groot, zonder menubalk, met het spel erin zoals het vanaf een los bestand draait. F11 is het
-// hele scherm, Ctrl+Shift+I het gereedschap van de browser (om te zien wat er misgaat).
+// hele scherm, Ctrl+Shift+I het gereedschap van de browser (om te zien wat er misgaat). Een plaatje uit de fotomodus
+// (Enter, js/main.js) gaat zonder te vragen naar de map Afbeeldingen, in een map met de naam van het spel.
 const SCHIL = `'use strict';
+const path = require('path');
+const fs = require('fs');
 const { app, BrowserWindow, Menu } = require('electron');
 app.whenReady().then(() => {
   Menu.setApplicationMenu(null);
@@ -174,6 +177,11 @@ app.whenReady().then(() => {
   venster.maximize();
   venster.show();
   venster.loadFile('index.html');
+  venster.webContents.session.on('will-download', (e, item) => {
+    const map = path.join(app.getPath('pictures'), app.getName());
+    fs.mkdirSync(map, { recursive: true });
+    item.setSavePath(path.join(map, item.getFilename()));
+  });
   venster.webContents.on('before-input-event', (e, toets) => {
     if (toets.type !== 'keyDown') return;
     if (toets.key === 'F11') { venster.setFullScreen(!venster.isFullScreen()); e.preventDefault(); }
