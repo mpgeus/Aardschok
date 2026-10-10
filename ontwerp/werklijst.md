@@ -7609,7 +7609,14 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     **Marcel (10 okt), bij plaat 1: "Zoals ik al zei, ik vind de poppetjes gewoon niet echt mooi zoals ze nu zijn."** Dus
     geen lapwerk op het lijf van nu (een nek, lagen), maar een nieuw lijf: de verhoudingen, de vormen en hoe het getekend
     wordt. Claude vraagt welke richting Marcel mooi vindt, en legt de keuze voor tussen een nieuw lijf in code en een
-    tekenaar voor de basis. **Wacht op Marcel.**
+    tekenaar voor de basis.
+    **Marcel (10 okt), met twee voorbeelden (`mensen-lowpoly-man.jpg`, `mensen-lowpoly-meisje.jpg`): "deze verhoudingen zijn
+    mooi. Maar laten we A eens proberen"** (een nieuw lijf in code). Wat ze mooi maakt, is niet de lengte (ze zijn even
+    gedrongen als de onze, vier à vijf hoofden), maar: vlakken in plaats van klei (low-poly, elk vlak één kleur, scherpe
+    overgangen), duidelijke kleurvlakken per kledingstuk met randen en manchetten, en een gezicht dat iets zegt (ogen met
+    wit, wenkbrauwen, een baard in vlakken; op 9 okt vond Marcel een groter hoofd met oogwit raar, dus met en zonder
+    proberen). **Bezig in sessie `ccr-5cd874f7-wpwkhq`** (10 okt): A, eerst de facetten in `kern.cjs`, dan één nieuwe man
+    en vrouw op een proefplaat.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

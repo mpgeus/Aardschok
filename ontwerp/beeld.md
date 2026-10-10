@@ -875,7 +875,11 @@ Wat Claude zag bij drie hoofden die Marcel omcirkelde ("Deze zien er niet uit"):
 vooral de kruin; zonder nek zakt het hoofd in de kraag, en het gezicht kijkt naar de grond. Een tekenaar draait het gezicht
 daarom wat naar de camera: proefplaat 1 doet dat met `nek` en `opkijk` (15 graden), met de lagen uit de voorbeelden
 (`uiterlijk.cjs lagen`).
-Afwisseling kost geen vellen erbij: elk van de 24 uiterlijken krijgt zijn eigen bouw, lagen, hoofd en spullen. Wat wel
+Afwisseling kost geen vellen erbij: elk van de 24 uiterlijken krijgt zijn eigen bouw, lagen, hoofd en spullen.
+Marcel bij proefplaat 1: "ik vind de poppetjes gewoon niet echt mooi zoals ze nu zijn", en daarna met twee voorbeelden in
+low-poly (`mensen-lowpoly-*.jpg`): "deze verhoudingen zijn mooi. Maar laten we A eens proberen" (een nieuw lijf in code,
+geen tekenaar). Wat die twee mooi maakt: vlakken in plaats van klei (elk vlak één kleur, scherpe overgangen), kleurvlakken
+per kledingstuk met randen en manchetten, en een gezicht dat iets zegt; gedrongen zijn ze net als de onze. Wat wel
 kost: de werkfiguren (`werkfiguren.cjs`) lenen het hoofd en de kiel, maar hebben hun eigen lijf; een andere bouw moet daar
 ook in, anders verandert iemand van postuur als hij gaat maaien.
 
