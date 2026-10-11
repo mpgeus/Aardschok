@@ -108,9 +108,13 @@ kostte een stuk bos hem 41 tot 87 dagen, en dan mis je de eerste lente. d, geen 
 zonder karakter, gesprek of eigenschappen (Claude las het zo: de eigenschappen komen uit hetzelfde lot); het lot en de
 karakters slapen tot ronde 2 (`snoeien.md`). **Wijn wordt eten** (Marcel: "Wijn wordt ook eten. Afwisseling wordt de
 kern. Mensen worden anders minder productief"): de afwisseling is vraag 154 in de werklijst (`gameloop.md`, "Besloten").
-**Nog open, a:** twee keuzes in het bouwmenu (de boerderij en de wijnboerderij), of één boerderij waarvan het veld bepaalt
-wat hij wordt (Marcel: "of ze kiezen automatisch naar welke akker of wijngaard beschikbaar is. Dus 1 boerderij, en het
-veld bepaald").
+a, **één boerderij, en het veld bepaalt** (Marcel: "Dus 1 boerderij, en het veld bepaald", en op het voorstel "A2"): in
+het bouwmenu staat één boerderij, en ernaast leg je een akker of een wijngaard; het eerste veld bepaalt wat hij is, een
+akkerbouwer of een wijnboer, en daarna krijgt hij alleen nog velden van die soort (oogst en pluk botsen niet, maar met
+afwisseling als kern zou een gemengde boerderij de keuze weghalen). De wijngaard wordt dus een veld dat je trekt zoals de
+akker (zoals in Knights and Merchants), en de bouwers planten de ranken; de wijnboerderij gaat in het lege begin uit het
+menu. **Wijn is eten** (Marcel: "2 ja"): één schakelaar, zoals vlees en vis, zodat een wijnboer het dorp voedt; de rest
+van de afwisseling is vraag 154.
 
 ## Een nieuwe richting (Marcel, 28 sep 2026)
 

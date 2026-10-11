@@ -13,8 +13,8 @@ onderwerp, niet hier. Wie aan een punt begint, zet er "**Bezig in sessie `<branc
 **Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en
 drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **B, 1c en 1d zijn af** (11
 okt): het bouwmenu, verhuizen uit het kamp, het bouwbereik, het huis van de schout, meebouwen en bouwen in het bos.
-**Het volgende punt is B, 1e: boeren uit het niets, met de keuze akkerbouwer of wijnboer.** Ronde 2 van het snoeien
-volgt na 1f, dan het hele eiland (B2), en ronde 3 na C.
+**Het volgende punt is B, 1e: boeren uit het niets** (het plan is gekozen: `spel.md`, "Het plan voor 1e"). Ronde 2 van
+het snoeien volgt na 1f, dan het hele eiland (B2), de afwisseling (B3), en ronde 3 na C.
 
 **Wacht op Marcel:**
 - **1c en 1d bekijken:** Spelregels, "Het begin" op "Leeg", en dan Nieuw spel (of in de console
@@ -33,7 +33,7 @@ volgt na 1f, dan het hele eiland (B2), en ronde 3 na C.
 - Het geluid (vraag 145, 2): de sleutel `FREESOUND_KEY` in de omgeving en de domeinen van Freesound erbij; dan maakt een
   sessie het.
 
-**Daarna, in deze volgorde:** A, B, B2, C, D, E, F; G loopt ernaast op het tijdpad van `commercieel.md`.
+**Daarna, in deze volgorde:** A, B, B2, B3, C, D, E, F; G loopt ernaast op het tijdpad van `commercieel.md`.
 
 ## A. Opruimen (vraag 153, stap 3)
 
@@ -59,7 +59,7 @@ Het plan staat in het archief bij vraag 152; 1a (optie 1), 1b (het lege land), 1
 - **1e, boeren uit het niets:** je bouwt een boerderij en kiest akkerbouwer of wijnboer (Marcel, 11 okt: "Je kiest dan
   agrariër of wijnboer. Zoals bij Knights and Merchants"); het gezin dat erin trekt, wordt die boer, zonder karakter
   (Marcel: "De karakters zetten we even opzij"); de akkers leg jij, en de bouwers maken ze. Het plan, met wat Marcel
-  koos: `spel.md`, "Het plan voor 1e". Nog open: twee keuzes in het bouwmenu, of één boerderij en het veld bepaalt.
+  koos: `spel.md`, "Het plan voor 1e" (A2: één boerderij, en het eerste veld bepaalt; wijn is eten).
   **Bezig in sessie `ccr-fe45ba8f-v51u8s`** (11 okt): het plan, met Marcel.
 - **1f, een jaar zonder fouten:** een toets speelt een jaar vanaf een lege plek, met een speler in code die bouwt. Dan
   is "Leeg" het enige begin, en volgt ronde 2 van A.
@@ -78,8 +78,8 @@ stukken; en wat ver weg is als getallen. Eerst een plan met Marcel. Tot dan gaat
 
 Marcel, 11 okt: "Wijn wordt ook eten. Afwisseling wordt de kern. Mensen worden anders minder productief." Wie maar één
 ding eet, werkt minder; wat er al is en wat het vraagt: `gameloop.md`, "Besloten". Eerst een plan met Marcel: welke
-soorten eten tellen, hoe je afwisseling meet, en wat minder productief is. Waar in de volgorde, wacht op Marcel (voorstel
-van Claude: na B2 en vóór C, zodat C de echte economie meet).
+soorten eten tellen, hoe je afwisseling meet, en wat minder productief is. Na B2 en vóór C, zodat C de echte economie
+meet (Marcel: "3 ja").
 
 ## C. De ossenkar (vraag 152, de proef)
 
