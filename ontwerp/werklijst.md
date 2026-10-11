@@ -25,6 +25,16 @@ staat in `main` (10 okt): arm in een hut, deftig in een stenen huis met laken; d
 mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voor onze poppetjes. de rest kan weg").
 
 **Wacht op Marcel:**
+- **De richting (vraag 151, 11 okt): de economie van The Settlers met gevechten in beurten** (Marcel: "A ja, B ja, C
+  allebei"; `gameloop.md`): geen grens, geen vlaggen, bouwen binnen bereik van je stad en elke opslag, een ossenkar die
+  de grondstoffen haalt, en je bouwt alles zelf vanaf een lege plek, met een kar met wat spullen en settlers. Het plan
+  (vraag 152) en waaruit je start zijn akkoord (11 okt); **het volgende punt is vraag 152, stap 1: het lege begin.**
+- **Gameplay als kern, en het verstoppen eruit** (vraag 151, 11 okt; Marcel: "we hebben niks"): het verstoppen en heel
+  "arm lijken" gaan eruit, de heer blijft (Marcel: "alles gaat eruit"); het plan om het weg te halen heet **optie 1**,
+  en het gaat door (Marcel: "dat moet eruit")
+  (Marcel, 11 okt: "Dit noemen we optie 1. Ik vertel je straks wat we doen"). Intussen kijkt Claude rond naar vergelijkbare
+  spellen: "We hebben een goede gameloop nodig".
+  Dan welke kern (A de schout is maar één mens, B rechtspraak, C de heer als klok), en eerst het eerste uur op papier.
 - Het geluid (vraag 145, 2): de sleutel `FREESOUND_KEY` in de omgeving en de domeinen van Freesound erbij, zoals
   beschreven bij vraag 145; dan maakt een nieuwe sessie het.
 - Vraag 145 laten zien: is het dorp nu minder "saai"?
@@ -7704,6 +7714,105 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     kwamen nooit in git. Wat blijft: wat we leerden (hierboven en in `beeld.md`, "De mensen naar Marcels voorbeelden") en
     de voorbeelden in `ontwerp/voorbeelden/` (`mensen-*`), voor als we de mensen laten tekenen. Lichtblond dat als een
     kaal hoofd leest en de vlecht van de kroon over de ogen staan in `opmerkingen.md`.
+
+151. **Gameplay als kern, en het verstoppen eruit** (Marcel, 11 okt: "Ik denk dat we moeten nadenken over gameplay nu
+    als kern. Het ziet er nu leuk uit, maar we hebben niks. Het verstop mechanisme moet eruit, is gewoon te saai.").
+    Besloten: het verstoppen gaat eruit (`spel.md`, "Rijk worden en arm lijken"). **Marcel (11 okt): "Nee, alles gaat
+    eruit. De kelders etc. De heer blijft wel een element. Arm lijken ook eruit."** Dus b: de kelders, de soldaten die
+    zoeken, de inner die telt wat hij ziet, de argwaan, afleiden en omkopen, de getuigen en het stiekeme bos; de heer
+    blijft (zijn brief, Sint-Maarten, zijn straffen, zijn gunst, de grillen, de heervaart). Wat de kern wordt, is open.
+    **Wat Claude zag (11 okt):** 1. het spel speelt zichzelf: de boeren doen het seizoen, het dorp vraagt zelf wat het
+    bouwt, en de raad zegt wat je moet doen; een script dat de raad volgt (de bouwer van de speeltest) wint, en hetzelfde
+    script wordt op een ander land weggejaagd: het land beslist, niet de speler; 2. een keuze heeft geen spanning: een
+    voorval zegt vooraf wat elk antwoord kost, en meestal is er één goed; 3. er is geen boog: de druk loopt niet op naar een
+    climax, en een jaar is 30 uur op 1×, of een uur kijken op 30×; 4. het poppetje hoeft nergens heen (de toets van één uur
+    uit `concept.md` haalt het nog altijd niet). Het verstoppen was saai om dezelfde reden: één handeling, en dan een
+    dobbelsteen (de soldaten vinden het of niet) waar je niets aan doet. Maar zijn onderdelen (wie ziet wat, getuigen,
+    roddel in de herberg, zoeken in een kelder) zijn die van een speurspel: draai het om, en de schout is de zoeker.
+    **Voorstel van Claude (11 okt):** drie kernen. A, de schout is maar één mens: een probleem ontstaat op een plek en
+    wacht daar; waar je niet bent, beslist je raadsman of een ambtenaar naar zijn karakter, of wordt het erger; groeien is
+    ambtenaren krijgen (concept, principe 2 en 8). B, rechtspraak als de vaardigheid: de simulatie maakt de zaken (honger
+    geeft diefstal), jij zoekt uit wie waar was en wie wat zag, en oordeelt op de zitting (de graanzak, vraag 128, is de
+    proef; Papers, Please). C, de heer als klok: hij vraagt elk jaar meer, naar zijn karakter, Sint-Maarten is een
+    confrontatie (betalen, onderhandelen, uitstellen, weigeren), en wat je dat jaar opbouwde, is je hefboom, tot een van de
+    drie wegen van vraag 126 (de storm in Frostpunk). C als de boog, A als het ritme van de dag, B als de vaardigheid.
+    Het verstoppen: a, alleen de kelders en de soldaten die zoeken; of b, heel "arm lijken" (ook de inner die telt wat hij
+    ziet, de argwaan, afleiden en omkopen, het stiekeme bos), en de heer vraagt naar wat er is; Claude: b, want dan moet
+    de heer toch opnieuw, en dat is C; het zicht en de getuigen blijven, voor B. Eerst het eerste uur op papier, vóór er
+    iets gebouwd wordt.
+    **Optie 1** (Marcel, 11 okt: "Dit noemen we optie 1. Ik vertel je straks wat we doen"): het plan van Claude om het
+    eruit te halen. Weg: de kelders (wegzetten, terughalen, en wat de karakters van de boeren daarbij deden; de karakters
+    blijven), de soldaten die zoeken (de soldaten als straf blijven), de inner (zijn bezoek, wat hij ziet, zijn rapport,
+    afleiden, omkopen, onverwacht terug; de heer rekent op wat er is, zoals nu al als de inner niet kwam), de argwaan (wat
+    argwaan kostte, kost gunst), de getuigen en "betrapt", en het stiekeme bos (het bos alleen gemeld). Verder: de heer
+    leest het boek van de graanzak zelf voor, de slimme en de sluwe speler van de speeltest verstoppen niets meer (de sluwe
+    geeft de heer nog 90%: hij telt slecht), een oud spel laadt niet meer, en CLAUDE.md, het ontwerp en de samenvatting
+    gaan mee. Drie keuzes: a, de argwaan wordt gunst (Claude: ja); b, de inner helemaal weg (Claude) of als de man die de
+    brief brengt; c, ook "wie ziet wat" en de getuigen eruit (Claude: ja, git bewaart het).
+    **Rondkijken** (Marcel, 11 okt: "Voor nu wil ik dat je rondkijkt naar vergelijkbare spellen. We hebben een goede
+    gameloop nodig"): `ontwerp/gameloop.md`, met Papers, Please, Beholder, The Reeve, Frostpunk, Against the Storm, King of
+    Dragon Pass, Pentiment en de dorpsbouwers, wat een goede loop gemeen heeft, en wat het voor ons betekent. Marcel kent
+    Manor Lords, The Guild en Frostpunk: ons spel is het dorp van Manor Lords, met de mensen van The Guild, onder de druk
+    van Frostpunk (`gameloop.md`, "De drie die Marcel kent").
+    **Marcel (11 okt): "Ik ben eigenlijk op zoek naar de economie van the settlers met een soort turn based isometric
+    combat. Rijke gfx met details."** Wat dat is, wat we hebben en wat ontbreekt: `gameloop.md`, "De richting".
+    **Besloten (Marcel, 11 okt: "A ja, B ja, C allebei"):** A, jij bouwt van bovenaf, en de schout wordt je held (hij
+    vecht en praat); B, goederen worden over wegen gedragen, van vlag tot vlag, eerst als proef met één keten (vraag
+    152); C, vechten is verdedigen én erop uit over het eiland tot het kasteel van de heer (Jagged Alliance 2).
+    **Optie 1 gaat door (Marcel, 11 okt: "Leg nog even vast dat optie 1 doorgaat, als ik, dat moet eruit").** Met de
+    adviezen van Claude bij de drie keuzes, tenzij Marcel anders zegt: a, de argwaan wordt gunst; b, de inner gaat
+    helemaal weg; c, ook "wie ziet wat" en de getuigen eruit (git bewaart het). Wanneer: bij stap 1 van vraag 152 (het
+    plan daarvan zegt het).
+
+152. **Bezig in sessie `ccr-7423c47f-5zapx8`** (11 okt): het plan voor stap 1 (het lege begin), met optie 1, en dan
+    bouwen. **De proef: bouwen binnen bereik, en de kar** (vraag 151, B; Marcel, 11 okt: "B ja", "Denk goed na over het plan",
+    en "Ik wil geen 'grens' alles moet open zijn. Ook geen vlaggen. Misschien dat grondstoffen worden opgehaald met een kar? Dus je kunt bijvoorbeeld x tegels vanaf je stad bouwen").
+    Het eerste plan (wegen met vlaggen en dragers, zoals Settlers II) is daarmee van tafel; wat Claude erbij leerde,
+    blijft gelden: met de getallen van nu staat een weg met dragers negen tiende van de tijd stil, bouwen is de eerste
+    keten die je voelt, er moet een keuze in zitten, en de overgang moet stap voor stap.
+    **Het plan (voorstel van Claude):** achter een spelregel "De kar", standaard uit, die ook "Wie bouwt" op "Jij" zet.
+    - **Bouwen binnen bereik:** je bouwt binnen een aantal tegels van het plein, en dat groeit met de trede; je ziet het
+      als je bouwt. Geen grens, geen lijn: lopen en kijken kan overal.
+    - **De stapel en de kar:** wat een gebouw maakt, ligt in een stapel bij zijn deur (te zien: stammen, planken,
+      stenen), tot de kar het haalt; pas in de opslag telt het in de voorraad. De kar brengt ook: hout naar de
+      timmerman, en naar een bouwplaats, die pas oprijst als zijn hout er is. Een kar rijdt met een voerman (een baan);
+      hij neemt eerst wat het langst ligt of het hardst nodig is.
+    - **De keuze:** een kar is lang onderweg, dus wat ver weg ligt, kost karren. Groeien de stapels, dan zet je een tweede
+      kar in, of een opslag dichterbij. Dat lost ook het lege van het eerste plan op: één kar rijdt de hele dag.
+    - Stap 1: het bouwbereik, en jij bouwt. Stap 2: de stapels en één kar, voor hout. Stap 3: de bouwplaats en de
+      timmerman krijgen hun hout met de kar, en het knelpunt (de stapels groeien). Stap 4: meten en spelen.
+    Niet in de proef: andere waren dan hout en planken, eten met de kar, voorrang per waar, de klok.
+    **Daarna, al te zien:** de besturing (de camera los, de schout een held die je aanklikt) en de klok (een jaar is 30
+    uur op 1×; de proef laat zien op welke snelheid het goed oogt).
+    **Besloten (Marcel, 11 okt: "a ja, b ja, c ja, d ja"):** a, het bereik rond het plein en rond elke opslag (een
+    schuur verder weg geeft daar bereik, zoals een kantoor in Anno); b, de kar rijdt overal, over een weg sneller; c, een
+    ossenkar (de os alleen als plaatje); d, de eerste opslag is het huis van de schout, later een schuur.
+    **En: "We moeten ook zelf alles vanaf de start gaan bouwen"** (Marcel, 11 okt): geen gehucht dat er al was; je
+    begint op een lege plek en bouwt alles zelf. Het plan wordt daarmee (voorstel van Claude): **stap 1 is het lege
+    begin**, achter een spelregel "Het begin" (leeg, of het gehucht dat er al was, zodat de toetsen en de speeltest
+    blijven spelen tot het nieuwe begin af is): een plek op het eiland, een paar gezinnen met de ossenkar, geladen met
+    wat ze meebrachten; de kar staat op wat het plein wordt en is de opslag tot het huis van de schout staat (d), dat je
+    als eerste bouwt; tot er hutten zijn, slapen ze bij een kampvuur; jij bouwt alles, ook de hutten, de boerderij en de
+    akkers. Het eerste doel komt dan vanzelf: haal de eerste winter. Daarna stap 2 tot 4 hierboven (de stapels en de
+    kar, de bouwplaats en de timmerman, meten en spelen). **Marcel (11 okt): "Een kar met wat spullen en 'settlers'".** Wat
+    erin zit en hoeveel, wacht op Marcel. **Voorstel voor stap 1 (Claude, 11 okt):** vier gezinnen (zo'n twintig mensen) en
+    de schout, in lentemaand, op de plek van jouw dorp op het eiland; in de kar hout voor het huis van de schout en twee
+    hutten, graan tot de eerste oogst als je op tijd een boerderij zet, zaaigraan, wat gereedschap en wat goud (de
+    getallen in de werkbank). De settlers worden wat jij bouwt: zet je een houthakker, dan wordt een van hen houthakker;
+    een gezin dat een boerderij krijgt, wordt boer (met een karakter, zoals nu). Wie geen werk heeft, bouwt mee aan wat
+    jij neerzet, zoals de dagloners maaien. Het eerste jaar vraagt de heer niets (en wrijft je dat in). Het grootste werk:
+    het hele spel gaat nu uit van een gehucht dat er al is (de boeren, de herberg, de raadsman, de voorvallen); stap 1 is
+    pas af als het spel vanaf een lege plek een jaar draait zonder fouten.
+    **Waaruit je start** (Marcel: "Waaruit je start"; voorstel van Claude, 11 okt, uit de getallen van nu: een mens eet
+    0,05 graan per dag, een akkertegel vraagt 1 zaaigraan en geeft 4 graan, een huis kost 16 hout, een hut 8, een
+    houthakker 10): de kar rijdt over de weg het land in en stopt op een open plek bij bos en water, die het plein wordt.
+    Erin: de schout en vier gezinnen (een man, een vrouw, één tot drie kinderen, bij één een grootvader; zo'n twintig
+    mensen), 50 hout, 120 graan, 60 zaaigraan, 20 goud en 5 gereedschap; het oude gehucht begon met 40 hout, 20 goud,
+    60 graan, 100 hooi en 20 bier, maar met akkers die al gezaaid waren. Wat dat doet: het hout is genoeg voor het huis
+    van de schout, twee hutten en een houthakker, en de rest moet hij hakken (eerst hout of eerst een boerderij?); het
+    graan eten twintig mensen in vier maanden op, tot hooimaand, terwijl de oogst in oogstmaand komt, dus het gat vul je
+    met vissen of jagen; en het zaaigraan is voor twee akkers van dertig tegels, samen 240 graan, genoeg voor acht
+    maanden, dus de eerste winter haal je net, met vis, wild of een derde akker. Alle getallen in de werkbank. **Marcel (11 okt): "Akkoord".**
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

@@ -2,7 +2,8 @@
 
 Aardschok (werktitel, past niet meer): een spel dat Marcel en Claude samen bouwen, met als doel het
 uiteindelijk te verkopen (Steam eerst, als los programma verpakt). Een bouw- en beheerspel in
-isometrisch beeld, met politiek en avontuur erin. Je bent de schout van een dorp onder een verwarde
+isometrisch beeld, met politiek en avontuur erin; sinds 11 okt de economie van The Settlers met gevechten in beurten
+(vraag 151, `ontwerp/gameloop.md`). Je bent de schout van een dorp onder een verwarde
 heer die alleen geld ziet. Je breidt het dorp uit tot een stad en bestuurt het met wetten. **Het doel
 is de heer verstoten en verslaan** (Marcel, 5 en 6 okt, vraag 126): hij krijgt een kasteel op de kaart,
 is sterk, smeedt bonden met de andere spelers en heeft per spel een ander karakter. Veroveren en
@@ -54,6 +55,9 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   verdienen"): de markt, verlanglijstjes en Steam Next Fest, de haak (je bent geen god boven het dorp, maar de schout
   erin), de beeldstijl als troef, Engels, en een tijdpad.
   Het commerciële deel denkt mee in elke keuze; de vragen waren vraag 83 en 84 (open: welke zin de haak wordt).
+- `ontwerp/gameloop.md`: wat vergelijkbare spellen als gameloop hebben (Papers, Please, Frostpunk, Against the Storm, King of
+  Dragon Pass, Pentiment, de dorpsbouwers), wat een goede loop gemeen heeft, en wat het voor ons betekent (Marcel, 11 okt:
+  "We hebben een goede gameloop nodig"; vraag 151).
 - `ontwerp/speelbaar.md`: wat er nog ontbreekt voor een eerste speelbaar product (vraag 33), en wat er
   in een speeltest van een heel jaar gebeurde.
 - `ontwerp/beeld.md`: de beeldstijl (HD-pixel art), maten, palet, en het ontwerpcanvas.
@@ -1109,6 +1113,15 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 ## Het spel in het kort
 
 Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
+
+- **Sinds 11 okt: de economie van The Settlers, met gevechten in beurten** (Marcel: "Ik ben eigenlijk op zoek naar de
+  economie van the settlers met een soort turn based isometric combat. Rijke gfx met details", en "A ja, B ja, C
+  allebei"; vraag 151, `ontwerp/gameloop.md`): jij bouwt van bovenaf, zonder grens en zonder vlaggen ("alles moet open
+  zijn"): binnen een aantal tegels van je stad en van elke opslag, een ossenkar haalt de grondstoffen op, en je bouwt
+  alles zelf vanaf een lege plek ("We moeten ook zelf alles vanaf de start gaan bouwen"); en je vecht in beurten, om je dorp te verdedigen en om het eiland te veroveren tot het
+  kasteel van de heer, zoals in Jagged Alliance 2. De schout is je held: hij vecht en praat. Wat hieronder staat over
+  een poppetje zonder hand van bovenaf en een dorp dat zelf bouwt, is daarmee om; het verstoppen en heel "arm lijken"
+  gaan eruit. Eerst een proef met het bouwbereik en de kar (vraag 152).
 
 - Je bent de **schout**, een poppetje dat door het dorp loopt, geen hand van bovenaf. Je breidt
   het dorp uit en bestuurt het met **wetten** (eerst keuren genoemd), in een menu zoals in Democracy 3

@@ -15,6 +15,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 |---|---|---|
 | De vertical slice | besloten (Marcel, 1 okt, vraag 77): het doel is de vertical slice uit het concept: je begint als gehucht, zoals nu, en groeit naar haar maat (een kleine stad van 100 tot 200 mensen; een dorp van 50 is als doel te klein), en uiteindelijk naar een stad van mogelijk 5000 of meer ("we moeten een manier zoeken", vraag 78, E), in zes stappen te beginnen met de wensen van de mensen, zoals in Anno 1602 (vraag 78; het plan is vraag 79); statussen met niveaus; een ambtenaar voor elke tak van het bestuur; en later een scherm met de statussen en de laatst bekende inventarisatie | vraag 77, 78, 79 |
 | De wensen per stand | besloten (Marcel, 1 okt, vraag 80 en 85); 2a en 2b gebouwd (1 okt): elk huis een stand (keuters, dorpelingen, ambachtslieden, en de boeren ernaast) met wensen zoals in Anno 1602, de hoogste stand neemt eerst, een kring om de kapel, de herberg en de markt, en wie een jaar lang alles heeft, wint; 2d gebouwd (2 okt, vraag 90): de treden uit de standen, een dorp bij 20 dorpelingen en marktrecht bij 20 ambachtslieden, met de markt en de weverij al in een dorp; 2c en 2e gebouwd (3 okt, vraag 100 en 101): een teken bij de deur en een briefje bij de muis, en het eind: een jaar lang iedereen gelukkig vanaf 100 mensen is gewonnen, met het grote feest, onder 10 mensen verloren, en op 1 lentemaand het jaarverslag; sinds 6 okt rooit een huis dat niet past wat in de weg staat (ook zijn eigen appelboom), zeggen het briefje en de raad waarom een huis niet groeit, en komt een erf niet waar het een huis elke vorm afneemt (vraag 130) | vraag 79, 80, 82, 85, 90, 100, 101, 130 |
+| De economie van The Settlers, met gevechten in beurten | besloten (Marcel, 11 okt: "A ja, B ja, C allebei"), niets gebouwd: jij bouwt van bovenaf, binnen bereik van je stad, een kar haalt de grondstoffen (geen grens, geen vlaggen), en je vecht in beurten, verdedigend en op het eiland tot het kasteel; gooit "geen hand van bovenaf" en "de mensen bouwen zelf" om; eerst een proef met één keten | vraag 151, 152 |
 | Een nieuwe richting | besloten (Marcel, 28 sep): besturen en groeien worden het hart, de heer de druk van boven, en vechten begint bij je eigen dorp; sinds 29 sep: het hogere doel is al het land veroveren of met iedereen bevriend raken (Civilization), en sinds 1 okt: de hele wereld veroveren, en je mensen super gelukkig, met wensen zoals in Anno 1602, terwijl de heer geen doelen stelt maar het je moeilijk maakt (vraag 78), eenvoud boven werkelijkheid, en wetten in een menu zoals Democracy 3; sinds 30 sep: meer een management sim, met het concept als kompas (het poppetje is hoe je bestuurt, `concept.md`), de boeren die het seizoen doen, en eerst de kern; sinds 3 okt: de stad groeit door haar mensen (inwoners beginnen zelf een ambacht en vragen toestemming), en jij bepaalt de richting, want "weer een bouw spelletje" wordt te snel saai (het plan is vraag 103, open) | vraag 50, 51, 54, 73, 74, 78, 103 |
 | De heer als tegenstander | besloten (Marcel, 5 en 6 okt: "A ja B b2 en b3 C c3 D ja E ja F Ja G zo"), niets gebouwd: het eind van het spel is de heer verstoten en verslaan, met een kasteel op de kaart, bondgenoten en per spel een ander karakter; veroveren en bevriend raken zijn de weg erheen, langs drie wegen (de opstand, de koning, trouw, en dan ben jij de nieuwe heer); een bond sluit je te voet; het jaar van geluk blijft het eind van de demo en wordt in het hele spel kracht; samen spelen, met een speler als heer, na de release; niets hiervan vóór de kern | vraag 126 |
 | Informatie, de zitting en mensen die onthouden | besloten (Marcel, 6 okt: "A tot g allemaal, en de proef komt erna"); de proef, de verdwenen graanzak, is gebouwd (8 okt, `js/zaak.js`), de rest nog niet: wat er gebeurde, wat er gezegd wordt en wat jij weet; 's middags een zitting met getuigen en bewijs; het vertrouwen per groep; mensen die onthouden wat je deed; een heer die van je leert; gevolgen in ketens; eerst een proef met één keten (de verdwenen graanzak, met een eerste zitting), na het beeld dat in de werklijst staat | vraag 105, 118, 128 |
@@ -37,7 +38,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | De wetten (in "Keuren en politiek") | gebouwd (29 sep): een menu zoals Democracy 3 onder W, met rantsoen, vreemden welkom, houtkap en belasting | vraag 54 |
 | Het eerste proefje | gebouwd (23 sep); de kaart sinds 26 sep rond het plein (vierde versie) | 1 |
 | De kern voor het tweede proefje | voorstel; de heer en de inner kwamen anders, groepen en keuren wachten | 9 |
-| Rijk worden en arm lijken | de inner, de argwaan en verstoppen deel 1 gebouwd; de soldaten zoeken altijd, en de inner afleiden en omkopen (27 sep) | 4, 6 |
+| Rijk worden en arm lijken | de inner, de argwaan en verstoppen deel 1 gebouwd; de soldaten zoeken altijd, en de inner afleiden en omkopen (27 sep); sinds 11 okt besloten: dit alles gaat eruit (Marcel: "is gewoon te saai", "Arm lijken ook eruit"); de heer blijft | 4, 6, vraag 151 |
 | Het dorp: mensen, behoeften en de winter | gebouwd (23 sep); de winter zie je aankomen (28 sep); de mensen sprokkelen hout, maar niet genoeg (30 sep); een gezin wacht op de winter als het hout of het eten hem niet haalt, en het zaaigraan eet het dorp pas bij nood (1 okt), tenzij er wachters bij de graanschuur staan (8 okt) | 3, vraag 74, 79, 81, 132 |
 | Gebouwen | 45 soorten; 16 in het bouwmenu van het gehucht | 2, 14 |
 | Handel: de marskramer | gebouwd (24 sep); in de lente ook zaaigraan, en de boeren zaaien na tot 1 bloeimaand (1 okt) | 4, vraag 79 |
@@ -50,6 +51,18 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Welke gameplay er nog nodig is | het plan voor alles | 8 tot 18 |
 | Lords of the Realm 2 als voorbeeld | ideeën (25 sep), niets besloten | 8 tot 16 |
 | Open | de grote vragen | |
+
+## De economie van The Settlers, met gevechten in beurten (Marcel, 11 okt 2026; werklijst vraag 151)
+
+**Zo staat het nu** (11 okt): besloten, niets gebouwd. Marcel: "Ik ben eigenlijk op zoek naar de economie van the
+settlers met een soort turn based isometric combat. Rijke gfx met details", en op drie vragen: "A ja, B ja, C allebei".
+Jij bouwt van bovenaf, en de schout is je held, die vecht en praat; geen grens en geen vlaggen (Marcel: "alles moet open
+zijn"): je bouwt binnen een aantal tegels van je stad (en van elke opslag), en een ossenkar haalt de grondstoffen op, eerst
+als proef (vraag 152); en je bouwt alles zelf, vanaf een lege plek ("We moeten ook zelf alles vanaf de start gaan
+bouwen");
+en je vecht in beurten, om je dorp te verdedigen
+en om het eiland te veroveren tot het kasteel van de heer, zoals in Jagged Alliance 2. Het verstoppen en heel "arm
+lijken" gaan eruit ("Rijk worden en arm lijken"). Wat dat is, wat er al is en wat ontbreekt: `gameloop.md`.
 
 ## Een nieuwe richting (Marcel, 28 sep 2026)
 
@@ -1520,6 +1533,13 @@ Is rijk worden en arm lijken leuk?
 de gevolgen moeten echt groter zijn. Je wordt weg gevraagd als je niet ophoest wat ze willen hebben van je ofzo. Maar als
 de grote hook, te slap." Het verstoppen blijft in het spel, maar niet als haak; wat ervoor in de plaats kan komen (twee
 bazen die je allebei kunnen wegsturen), is werklijst vraag 106.
+
+**Marcel, 11 okt: "Het verstop mechanisme moet eruit, is gewoon te saai."** En: "Nee, alles gaat eruit. De kelders etc.
+De heer blijft wel een element. Arm lijken ook eruit." Besloten: heel "rijk worden en arm lijken" gaat eruit: de kelders,
+de soldaten die zoeken, de inner die telt wat hij ziet, de argwaan, afleiden en omkopen, de getuigen en het stiekeme bos.
+De heer blijft: zijn brief, Sint-Maarten, zijn straffen, zijn gunst, de grillen en de heervaart. Werklijst vraag 151. Het
+plan om het eruit te halen heet optie 1, en het gaat door (Marcel, 11 okt: "dat moet eruit"). Tot het eruit is,
+beschrijft "Zo werkt het nu" hieronder wat er nog in de code staat.
 
 **Zo werkt het nu** (25 sep, bijgewerkt 27 sep; `js/inner.js`, `js/verstoppen.js`, `js/heer.js`):
 - **De inner** komt op 15 oogstmaand, tien dagen vooraf aangekondigd, overdag vanaf negen uur. Sinds

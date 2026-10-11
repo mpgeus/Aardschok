@@ -17,6 +17,12 @@ ui (vraag 84): "a ja b ja c later, met de oorlog".
 Hieronder het voorstel van Claude (1 okt, eenentwintigste sessie), met wat er nagezocht is. De vragen erover staan in de
 werklijst als vraag 83 en 84.
 
+**De haak sinds 11 okt** (werklijst vraag 151, `gameloop.md`): de economie van The Settlers met gevechten in beurten,
+"The Settlers × Jagged Alliance 2". "Je bent geen god boven het dorp" is daarmee om: je bouwt van bovenaf. De markt: The
+Settlers: New Allies (2023) viel tegen omdat de economie te simpel was en het te veel om vechten draaide, en Pioneers of
+Pagonia (1.0 in december 2025) is zwak in het vechten; de economie is het hart, het gevecht in beurten wat de andere
+missen. Wat hieronder staat, is van vóór die keuze.
+
 ## Wat de markt zegt (nagezocht op 1 okt 2026)
 
 - **Middeleeuws bouwen verkoopt, maar het is druk.** Manor Lords verkocht miljoenen, Bellwright meer dan een miljoen,
