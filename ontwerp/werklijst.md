@@ -48,7 +48,7 @@ Mee in elke ronde: het commentaar in de code dat "zie CLAUDE.md" zegt (een stuk 
 ## B. Zelf bouwen vanaf niets (vraag 152, stap 1)
 
 Het plan staat in het archief bij vraag 152; 1a (optie 1) en 1b (het lege land) zijn af.
-- **1c, het kamp:** is een hut of huis af, dan verhuist er een gezin uit het kamp in; is het kamp leeg, dan gaan de
+- **1c, het kamp:** **Bezig in sessie `ccr-59cbf808-srdp3p`** (11 okt): het plan, met Marcel. Is een hut of huis af, dan verhuist er een gezin uit het kamp in; is het kamp leeg, dan gaan de
   tenten weg en blijft de kar.
 - **1d, jij bouwt alles, binnen bereik:** het bereik rond het plein en het huis van de schout, te zien als je bouwt; het
   huis van de schout één keer in het bouwmenu, de akkers bij een boerderij; wie geen werk heeft, bouwt mee.
