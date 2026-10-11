@@ -5,6 +5,37 @@ en: "Voor nu wil ik dat je rondkijkt naar vergelijkbare spellen. We hebben een g
 die spellen doen, wat een goede loop gemeen heeft, en wat dat voor ons betekent. Bovenaan staat wat besloten is, onderaan
 wat open is.
 
+## De richting: de economie van The Settlers, met gevechten in beurten (Marcel, 11 okt)
+
+**Marcel, 11 okt: "Ik ben eigenlijk op zoek naar de economie van the settlers met een soort turn based isometric combat.
+Rijke gfx met details."** Een richting, nog geen besluit over de uitwerking (de vragen staan onder "Open").
+
+**Wat de economie van The Settlers is** (Settlers II, 1996, en zijn opvolger Pioneers of Pagonia, 1.0 in december 2025,
+van dezelfde maker): jij legt de economie aan, van bovenaf: gebouwen en wegen. Elke waar wordt gedragen, van vlag tot
+vlag, door één drager per stuk weg, dus een drukke weg is een knelpunt dat je ziet. Lange ketens (hout, planken; graan,
+meel, brood; erts en kolen, ijzer, gereedschap en wapens), en een mijn werkt alleen als er eten komt. Land is de grens:
+met militaire gebouwen schuif je je grens op, naar bos, erts en water. Je kijkt naar duizenden poppetjes die hun werk
+doen (de "Wuselfaktor"), en je zoekt waar het stokt.
+
+**Waarom gevechten in beurten erbij passen** (Claude): The Settlers met de opzet van Jagged Alliance 2. In JA2 bevrijd je
+een land stad voor stad in gevechten in beurten, de mijnen betalen je mannen, en de koningin stuurt steeds sterkere
+troepen terug, tot je haar paleis bestormt. Bij ons: het eiland (vraag 117: 2500 bij 2500, acht dorpen, een stad en het
+kasteel) is de kaart van JA2, de heer is de koningin, en het eind dat Marcel op 6 okt koos (vraag 126: de heer
+verslaan, de opstand, een veroverd dorp leid je erbij) is de veldtocht. De economie van je dorp maakt je leger (eten,
+wapens, mannen), het gevecht in beurten is waar het heen gaat, en wat je wint (land, erts, een dorp) maakt de economie
+groter.
+
+**Wat we al hebben:** de gevechten in beurten op dezelfde tegels (sinds 23 sep, met de militie sinds 29 sep), ketens op
+papier (hout, planken; graan, meel, brood; graan, bier; wol, laken; erts, ijzer, gereedschap; hout en ijzer, wapens),
+mensen die naar hun werk lopen en dragen (schoven, hout, manden), de wensen per stand (de vraag naar goederen, zoals in
+Anno), het eiland, en het beeld. **Wat ontbreekt:** jij bouwt niet (de mensen vragen het, de spelregel "Wie bouwt" op
+"De mensen"; "Jij" bestaat nog), goederen gaan meteen naar één voorraad in plaats van over wegen, er zijn geen wegen die
+jij legt, en geen grens die opschuift.
+
+**Wat de markt zegt:** The Settlers: New Allies (2023, 57 bij de critici) kreeg te horen dat het de economie te simpel
+maakte en te veel om vechten draaide; Pioneers of Pagonia heeft als zwakke plek juist het vechten. Dus: de economie
+moet het hart zijn, en het gevecht wat ze oplevert; een goed gevecht is wat de andere missen.
+
 ## Besloten
 
 Nog niets over de loop. Wel (Marcel, 11 okt): heel "rijk worden en arm lijken" gaat eruit (het verstoppen, de inner die
@@ -141,6 +172,9 @@ ons spel. **Ons spel in één zin: het dorp van Manor Lords, met de mensen van T
 
 ## Open
 
+- **De richting van Marcel (11 okt):** wie bouwt (jij van bovenaf, zoals in The Settlers, en wat wordt de schout dan),
+  of de goederen echt over wegen gedragen worden, en wat het vechten is (verdedigen, veroveren op het eiland).
+
 - Welke loop het wordt (vraag 151: A de schout is maar één mens, B rechtspraak, C de heer als klok, of samen), en hoe
   lang een ronde is: een dag, een seizoen, een jaar, of een spel van een paar uur zoals Against the Storm.
 - Wanneer optie 1 (het verstoppen eruit) gebouwd wordt.
@@ -167,6 +201,10 @@ ons spel. **Ons spel in één zin: het dorp van Manor Lords, met de mensen van T
   [After Strategy](https://after-strategy.com/en/manor-lords-two-years-early-access-review-2026/)
 - Lords and Villeins: [CGMagazine](https://www.cgmagonline.com/review/game/lords-and-villeins-pc-review)
 - Norland: [Steam Deck HQ](https://steamdeckhq.com/game-reviews/norland/), [PCGamesN](https://www.pcgamesn.com/norland/gameplay)
+- The Settlers en Pioneers of Pagonia: [Giant Bomb over Settlers II](https://www.giantbomb.com/wd/3030-2081),
+  [Galaxus over de Wuselfaktor](https://www.galaxus.de/en/page/wuselfaktor-20-how-pioneers-of-pagonia-follows-in-the-footsteps-of-the-settlers-40810),
+  [TheSixthAxis over Pagonia](https://www.thesixthaxis.com/?p=446062), [OpenCritic over New Allies](https://opencritic.com/game/14336/the-settlers-new-allies),
+  [Entertainium over New Allies](https://entertainium.co/2023/02/23/the-settlers-new-allies-review/)
 - Bellwright: [TheSixthAxis](https://www.thesixthaxis.com/2026/07/07/bellwright-review/),
   [OpenCritic](https://opencritic.com/game/20911/bellwright/reviews)
 - Het genre dat laat saai wordt: [Civfanatics](https://forums.civfanatics.com/threads/the-late-game-problem-lack-of-challenge.661286)
