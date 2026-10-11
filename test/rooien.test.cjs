@@ -185,7 +185,7 @@ test('een gezin rooit zijn erf eerst: de hut wacht, nog niet op de kaart, en het
     assert.equal(D.woonruimte, T.telWoonruimte(D));
     T.wijsWerkToe(D);
     assert.ok(gezin.every((p) => !p.werk), 'wie rooit, werkt nergens');
-    assert.match(D.bewoners.komen[D.bewoners.komen.length - 1].aankomst.tekst, /Ze rooien hun erf/);
+    assert.match(D.bewoners.komen[D.bewoners.komen.length - 1].aankomst.tekst, /They clear their plot/);
     // Zolang er iets staat, blijft de hut wachten.
     T.tikRooienDag(D);
     assert.equal(hut.wachtOpRooien, true);

@@ -69,7 +69,7 @@
       const fase = faseVan(D, p, dag - p.geboren);
       if (fase === p.leeftijd) continue;
       if (fase === 'dood') {
-        T.wijzigBevolking(D, -1, 'ouderdom', 'Van ouderdom', [p]);
+        T.wijzigBevolking(D, -1, 'ouderdom', T.t('Old age'), [p]);
         anders = true;
         continue;
       }
@@ -89,7 +89,7 @@
       T.wijzigBevolking(D, 1, 'geboorte', null, [moeder]);
       const kind = D.bewoners.mensen[D.bewoners.mensen.length - 1]; // wie er net bij kwam (js/bewoners.js, geboren)
       if (kind.gezin === moeder.gezin && kind.leeftijd === 'kleuter') kind.geboren = Math.floor(dag);
-      T.zeg(D, `${T.naamVanBewoner(moeder)} heeft een kind gekregen.`, 'goed');
+      T.zeg(D, T.t('{naam} has had a child.', { naam: T.hoofdletter(T.naamVanBewoner(moeder)) }), 'goed');
       anders = true;
     }
     if (anders) T.verdeelHanden(D);

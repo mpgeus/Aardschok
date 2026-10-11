@@ -29,12 +29,12 @@
     // schout; en waar de kar stopt. Er zijn meer plekken dan gezinnen, voor als het er meer worden.
     kamp: {
       plekken: [
-        { dx: -4, dy: 0, open: 'ZO', vorm: 'tent' },
-        { dx: 0, dy: -4, open: 'ZW', vorm: 'tent-bruin' },
-        { dx: 4, dy: 1, open: 'NW', vorm: 'afdak' },
-        { dx: -1, dy: 4, open: 'NO', vorm: 'afdak' },
-        { dx: -3, dy: -3, open: 'ZO', vorm: 'tent-bruin' },
-        { dx: 3, dy: 3, open: 'NW', vorm: 'tent' },
+        { dx: -4, dy: 0, open: 'ZO', vorm: 'tent' }, // geen tekst
+        { dx: 0, dy: -4, open: 'ZW', vorm: 'tent-bruin' }, // geen tekst
+        { dx: 4, dy: 1, open: 'NW', vorm: 'afdak' }, // geen tekst
+        { dx: -1, dy: 4, open: 'NO', vorm: 'afdak' }, // geen tekst
+        { dx: -3, dy: -3, open: 'ZO', vorm: 'tent-bruin' }, // geen tekst
+        { dx: 3, dy: 3, open: 'NW', vorm: 'tent' }, // geen tekst
       ],
       kar: { dx: 5, dy: -3 },
     },
@@ -78,7 +78,7 @@
     // de kar aan de rand, waar de weg het land in komt, en de schout ernaast
     const van = T.wegInEnUit(w) || { x: w.kamp.kar.x, y: w.kamp.kar.y };
     const kar = T.maakDorpeling(0, van.x, van.y, 0, null);
-    Object.assign(kar, { soort: 'kar', naam: 'de huifkar', vel: 'huifkar', kar: true, zaad: null, snelheid: I.karSnelheid });
+    Object.assign(kar, { soort: 'kar', naam: T.t('covered wagon'), vel: 'huifkar', kar: true, zaad: null, snelheid: I.karSnelheid });
     w.wezens.push(kar);
     const dag = D.kalender ? Math.floor(D.kalender.dag) : 0;
     D.begin = { kamp: 'onderweg', kar, van: { x: van.x, y: van.y }, gezinnen: false, volgt: !D.ander, heerVrijTot: dag + I.heerVrij * T.DAGEN_PER_JAAR };
@@ -239,7 +239,7 @@
     T.verhuis(D, inHuis(D, tent), huis);
     tent.huis = null;
     huis.huis = 'schout';
-    Object.assign(D.begin.kar, { naam: 'de ossenkar', vel: 'ossenkar-leeg' });
+    Object.assign(D.begin.kar, { naam: T.t('ox cart'), vel: 'ossenkar-leeg' });
     T.zeg(D, T.t('Your house is ready: you and your family leave the tent, and the covered wagon becomes the ox cart.'));
     if (!inHuis(D, tent).length) haalTentWeg(D, tent);
   }

@@ -169,7 +169,7 @@ test('een vol dorp met een vrij erf: een gezin zet er zijn hut op, woont erin, e
   assert.equal(S.dorp.bevolking, voor + gezin.length);
   assert.equal(S.dorp.woonruimte, T.telWoonruimte(S.dorp));
   assert.ok(S.dorp.bevolking <= S.dorp.woonruimte);
-  assert.match(S.dorp.bewoners.komen[S.dorp.bewoners.komen.length - 1].aankomst.tekst, /Ze zetten een hut op hun erf/);
+  assert.match(S.dorp.bewoners.komen[S.dorp.bewoners.komen.length - 1].aankomst.tekst, /They build a hut on their plot/);
   // De hut en het huis waar hij in doorgroeit, passen allebei in het erf, met hun deur.
   binnenErf(hut, 'hut', hut.tekening);
   binnenErf(hut, 'huis', hut.wordtTekening);
