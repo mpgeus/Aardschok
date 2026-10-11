@@ -171,7 +171,7 @@
     klok: { soort: 'verzoek', titel: 'de klok voor de kapel', als: { gebouw: 'kapel' }, pauze: 360, wie: { karakter: 'vrome' } },
     // Een inwoner wil iets bouwen wat het dorp mist (js/verzoeken.js; werklijst vraag 103): wie, wat en waar zet dat
     // bestand op het voorval (L.bouw), en de woorden ervan ook.
-    bouwverzoek: { soort: 'verzoek', titel: 'een verzoek om te bouwen', zelf: true, roep: '{wie} wil {gebouw} bouwen, en zoekt je.' },
+    bouwverzoek: { soort: 'verzoek', titel: 'a request to build', zelf: true, roep: '{wie} wants to build {gebouw}, and is looking for you.' },
     // Een ondernemer wil wapens maken, uit zichzelf (js/ondernemers.js; werklijst vraag 104). Zoals het bouwverzoek, met
     // zijn eigen woorden.
     wapenverzoek: { soort: 'verzoek', titel: 'de wapens', zelf: true, roep: '{wie} wil je onder vier ogen spreken.' },
@@ -258,6 +258,7 @@
   // Waar het van komt (werklijst vraag 74, B)
   // ---------------------------------------------------------------------------------------------
 
+  // Wat het dorp mist (D.behoeften.mist, js/behoeften.js), zoals de speler het ziet: dus met dezelfde T.t-zin.
   const mist = (D, wat) => !!(D.behoeften && D.behoeften.mist && D.behoeften.mist.includes(wat));
   const brandhout = (D) => ((D.voorraad && D.voorraad.hout) || 0) + ((D.voorraad && D.voorraad.turf) || 0);
 
@@ -278,7 +279,7 @@
       kop: 'Er is honger',
       nog: 'Er is nog steeds honger',
       voorbij: 'De honger is voorbij',
-      speelt: (D) => (T.standVanWet(D, 'rantsoen') === 'krap' ? 'het rantsoen is krap' : mist(D, 'eten') ? 'er is niet genoeg eten' : null),
+      speelt: (D) => (T.standVanWet(D, 'rantsoen') === 'krap' ? 'het rantsoen is krap' : mist(D, T.t('food')) ? 'er is niet genoeg eten' : null),
       erger: {
         naam: 'Hongersnood',
         kop: 'Er is hongersnood',
@@ -295,7 +296,7 @@
       kop: 'Het is koud in de huizen',
       nog: 'Het is nog steeds koud in de huizen',
       voorbij: 'Het is niet koud meer in de huizen',
-      speelt: (D, dag) => (!inWinter(dag) || !mist(D, 'brandhout voor de winter') ? null : brandhout(D) < 1 ? 'het brandhout is op' : 'het hout haalt de winter niet'),
+      speelt: (D, dag) => (!inWinter(dag) || !mist(D, T.t('firewood for the winter')) ? null : brandhout(D) < 1 ? 'het brandhout is op' : 'het hout haalt de winter niet'),
       erger: {
         naam: 'Strenge kou',
         kop: 'Het vriest in de huizen',

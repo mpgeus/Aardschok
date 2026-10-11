@@ -174,7 +174,7 @@ test('de muis op een dier: alleen wat het is, geen gesprek en geen klik', () => 
     const e = T.maakDier(soort, 5, 5, 3);
     assert.equal(T.gesprekVan(e), null, 'er is geen gesprek "koe" of "schaap"');
     const h = T.handelingVerkennen(S, { wezen: e, x: 5, y: 5 });
-    assert.equal(h.tekst, soort === 'koe' ? 'Een koe' : 'Een schaap');
+    assert.equal(h.tekst, soort === 'koe' ? 'A cow' : 'A sheep');
     assert.equal(h.doe, undefined, 'een klik doet niets');
   }
   // en in een gevecht telt het niet mee

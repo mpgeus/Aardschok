@@ -971,7 +971,7 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Schout, {wil} {gebouw} bouwen, {plek}. {waarom} Het dorp betaalt {kosten}.' },
+            { zeg: 'Reeve, {wil} to build {gebouw}, {plek}. {waarom} The village pays {kosten}.' },
           ],
           keuzes: [
             { zeg: 'Ja, bouw maar.', sluit: true, doe: { bouw: true, tevreden: 3 } },

@@ -81,8 +81,8 @@ test('na de eerste nacht vraagt iemand namens de buurt om een kapel, met de plek
   assert.ok(T.gebouwPast(D, 'kapel', L.bouw.x, L.bouw.y), 'op een plek waar hij past');
   const voet = T.voetVanGebouw(L.wie.huis);
   assert.ok(T.inDeKring(voet, { x: L.bouw.x, y: L.bouw.y, b: T.GEBOUWEN.kapel.voet.b, h: T.GEBOUWEN.kapel.voet.h }, T.WENSEN_INSTELLINGEN.kring.kapel), 'wie het vraagt, woont in de buurt');
-  assert.match(tekstVan(D), /^Schout, de buurt wil een kapel bouwen, (bij|naast) [^.]+\. Vijf boerderijen en een huis willen een kapel binnen 40 tegels\. Het dorp betaalt 10 hout en 8 goud\.$/);
-  assert.equal(T.vulWoordenIn(D, T.VOORVALLEN.bouwverzoek.roep), `${T.naamVanBewoner(L.wie)} wil een kapel bouwen, en zoekt je.`);
+  assert.match(tekstVan(D), /^Reeve, the neighbours want to build a chapel, (by|next to) [^.]+\. Five farms and a house want a chapel within 40 tiles\. The village pays 10 wood and 8 gold\.$/);
+  assert.equal(T.vulWoordenIn(D, T.VOORVALLEN.bouwverzoek.roep), `${T.naamVanBewoner(L.wie)} wants to build a chapel, and is looking for you.`);
   assert.deepEqual(T.prijsVanKeuze(D, antwoord(0).doe), { tekst: '−10 hout, −8 goud, tevredenheid +3%', kan: true, waarom: '' });
   assert.equal(T.prijsVanKeuze(D, antwoord(1).doe).tekst, 'tevredenheid −2%');
   T.zetVoorraad(D, 'goud', 3);
@@ -195,7 +195,7 @@ test('zonder houthakker vraagt iemand die eerst, bij zijn eigen huis: elke hut e
   const L = lopend(D);
   assert.equal(L.bouw.soort, 'houthakker');
   assert.ok(!T.isBoer(L.wie.wezen), 'een werkplaats vraagt iemand die geen boer is');
-  assert.match(tekstVan(D), /^Schout, ik wil een houthakker bouwen, [^.]+\. Er hakt niemand hout, en elke hut en elk gebouw kost hout\. Het dorp betaalt 10 hout en 4 goud\.$/);
+  assert.match(tekstVan(D), /^Reeve, I want to build a woodcutter, [^.]+\. Nobody is cutting wood, and every hut and every building costs wood\. The village pays 10 wood and 4 gold\.$/);
   zeg(S, 0);
   assert.ok(!T.watTeBouwen(D).some((w) => w.soort === 'houthakker'), 'staat hij er, dan vraagt niemand er nog een');
 });
@@ -212,7 +212,7 @@ test('een oproep (stap 2): wat erop staat, vraagt iemand als eerste, ook wat nie
   assert.ok(T.beginBouwverzoek(D, 2));
   const L = lopend(D);
   assert.deepEqual([L.bouw.soort, L.bouw.premie, L.bouw.nut], ['steengroeve', 5, T.VERZOEKEN_INSTELLINGEN.nutTot], 'de oproep gaat voor de rest');
-  assert.match(tekstVan(D), /Op het plein hangt je oproep, met een premie van 5 goud\. Het dorp betaalt 12 hout en 9 goud, met de premie\.$/);
+  assert.match(tekstVan(D), /Your notice hangs on the square, with a bounty of 5 gold\. The village pays 12 wood and 9 gold, with the bounty\.$/);
   assert.equal(T.prijsVanKeuze(D, antwoord(0).doe).tekst, '−12 hout, −9 goud, tevredenheid +3%');
   const goud = D.voorraad.goud;
   zeg(S, 0);

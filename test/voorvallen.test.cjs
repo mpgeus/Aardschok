@@ -211,7 +211,7 @@ test('het venster zegt vooraf wat een antwoord kost, en wat er niet is, kun je n
   assert.equal(p.kan, false);
   assert.equal(p.waarom, 'je hebt 5 graan');
   assert.deepEqual(T.prijsVanKeuze(S.dorp, { graan: 10 }), { tekst: '+10 graan', kan: true, waarom: '' }, 'wat erbij komt, kan altijd');
-  assert.equal(T.prijsVanKeuze(S.dorp, { schaap: -2, sterfkans: 30, gunst: 5 }).tekst, '−2 schapen, gunst van de heer +5, 30% kans op een dode');
+  assert.equal(T.prijsVanKeuze(S.dorp, { schaap: -2, sterfkans: 30, gunst: 5 }).tekst, '−2 sheep, gunst van de heer +5, 30% kans op een dode');
   // Een gewoon gesprek: de marskramer opent zijn venster, en dat kost niets.
   assert.deepEqual(T.prijsVanKeuze(S.dorp, { handel: true }), { tekst: '', kan: true, waarom: '' });
 });
@@ -450,11 +450,11 @@ test('een oorzaak speelt als het dorp hem heeft, en zegt waarom', () => {
   T.zetWet(D, 'rantsoen', 'krap');
   assert.deepEqual(T.oorzaakVan(D, 'diefstal', ZOMER), { id: 'honger', niveau: 1, naam: 'Honger', zin: 'Er is honger, want het rantsoen is krap.', waarom: 'het rantsoen is krap' });
   T.zetWet(D, 'rantsoen', 'gewoon');
-  D.behoeften.mist = ['eten'];
+  D.behoeften.mist = ['food'];
   assert.equal(T.oorzaakVan(D, 'stroper', ZOMER).zin, 'Er is honger, want er is niet genoeg eten.');
   D.behoeften.mist = [];
 
-  D.behoeften.mist = ['brandhout voor de winter'];
+  D.behoeften.mist = ['firewood for the winter'];
   assert.equal(T.oorzaakVan(D, 'ziekte', ZOMER), null, 'kou is er alleen in de winter');
   D.voorraad.hout = 30;
   D.voorraad.turf = 0;

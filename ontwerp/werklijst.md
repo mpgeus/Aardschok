@@ -118,7 +118,9 @@ het graan vraagt", de schandpaal, de heervaart en de twee bazen.
   alleen wat de speler ziet, het Nederlands weg maar `T.t` blijft, gewone maanden en Engelse namen, en elk deel naar
   `main` zodra de toetsen groen zijn (`commercieel.md`, vraag 147). **Bezig in sessie `ccr-fe45ba8f-v51u8s`** (11 okt):
   het omzetten, in delen. De woorden, de toon en de hulpjes: `ontwerp/engels.md`. Af: deel 0 (het Nederlands eruit, de
-  maanden, de namen) en de namen van gebouwen, waren en natuur. De delen, elk door een agent met eigen bestanden: (1)
+  maanden, de namen), de namen van gebouwen, waren en natuur, en deel 1 en 2; van de andere delen al de zinnen bij de
+  muis op een veld of dier (`verkennen`), het bouwverzoek (`gesprekken`, `voorvallen`) en het jaarverslag (`einde`). De
+  delen, elk door een agent met eigen bestanden: (1)
   de wensen en de raad (`wensen`, `verzoeken`, `ondernemers`, `raad`, `ochtendrapport`, `treden`, `behoeften`); (2) de
   gebouwen en het land (`gebouwen`, `erven`, `herberg`, `bos`, `bouwstijl`, `wijngaard`, `akkers`, `vee`, `beesten`,
   `markt`, `paden`); (3) het scherm (`hud`, `tafel`, `ui`, `huisbriefje`, `dialoog`, `index.html`, wat de speler ziet in

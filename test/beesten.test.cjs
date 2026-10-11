@@ -169,7 +169,7 @@ test('een wolf begint geen gevecht, en wie hem aanklikt, kan hem aanvallen', () 
   Object.assign(S.schout, { x: wolf.tx + 1, y: wolf.ty, tx: wolf.tx + 1, ty: wolf.ty });
   assert.equal(T.zoekOntdekking(S), null);
   assert.match(T.handelingVerkennen(S, { wezen: wolf }).tekst, /De wolf aanvallen/);
-  assert.equal(T.handelingVerkennen(S, { wezen: hert }).tekst, 'Een hert');
+  assert.equal(T.handelingVerkennen(S, { wezen: hert }).tekst, 'A deer');
 });
 
 test('bewaren en laden houdt de groepen: hun dieren delen hun groep, en lopen verder', () => {

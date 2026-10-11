@@ -62,19 +62,19 @@ test('de muis op een veld: van wie, het vee, en hoe vruchtbaar', () => {
   const akker = veld('akker2');
   const klaas = T.boerVanVeld(S.dorp, weide).naam;
   // De schapen staan op de heide (de meent), niet op de weide.
-  assert.equal(T.veldTekst(S.dorp, weide), `Weide van ${klaas} · 3 koeien · vruchtbaar 100%`);
-  assert.equal(T.veldTekst(S.dorp, akker), `Akker van ${T.boerVanVeld(S.dorp, akker).naam} · vruchtbaar 100%`);
+  assert.equal(T.veldTekst(S.dorp, weide), `${klaas}'s meadow · 3 cows · fertility 100%`);
+  assert.equal(T.veldTekst(S.dorp, akker), `${T.boerVanVeld(S.dorp, akker).naam}'s field · fertility 100%`);
 
   // Wat het volgend jaar wordt, en wanneer.
   akker.vruchtbaarheid = 0.9;
   assert.equal(T.zetPlan(S.dorp, akker, 'braak').kan, true);
-  assert.match(T.veldTekst(S.dorp, akker), /^Akker van .* · vruchtbaar 90% · wordt braak op 1 lentemaand$/);
+  assert.match(T.veldTekst(S.dorp, akker), /^.*'s field · fertility 90% · becomes fallow on 1 March$/);
 
   // Te veel vee op te weinig weide, en een weide zonder vee of zonder boer.
   for (let i = 0; i < 5; i++) S.wereld.wezens.push(T.zetOpWeide(T.maakDier('koe', weide.x, weide.y, 50 + i), weide));
-  assert.equal(T.veldTekst(S.dorp, weide), `Weide van ${klaas} · 8 koeien (te vol) · vruchtbaar 100%`);
+  assert.equal(T.veldTekst(S.dorp, weide), `${klaas}'s meadow · 8 cows (too full) · fertility 100%`);
   const leeg = { naam: 'proef', x: 0, y: 0, b: 2, h: 2, huis: null, bestemming: 'weide', plan: 'weide', vruchtbaarheid: 1 };
-  assert.equal(T.veldTekst(S.dorp, leeg), 'Weide · nog geen vee · vruchtbaar 100%');
+  assert.equal(T.veldTekst(S.dorp, leeg), 'Meadow · no livestock yet · fertility 100%');
 });
 
 test('de muis op een veldtegel: die tekst, en een klik is gewoon erheen lopen', () => {

@@ -273,9 +273,9 @@ test('de muis en het venster zeggen dat een weide samen met het veld ernaast é�
   assert.equal(T.samenMetTekst(S.dorp, klaas), '');
   wouter.bestemming = wouter.plan = 'weide';
   const boerWouter = T.boerVanVeld(S.dorp, wouter);
-  assert.equal(T.samenMetTekst(S.dorp, klaas), `samen één weide met het veld van ${boerWouter.naam}`);
-  assert.match(T.veldTekst(S.dorp, wouter), new RegExp(`samen één weide met het veld van ${T.boerVanVeld(S.dorp, klaas).naam}`));
-  assert.equal(T.opsomming(['Nicholas', 'Jan', 'Gerard']), 'Nicholas, Jan en Gerard');
+  assert.equal(T.samenMetTekst(S.dorp, klaas), `one meadow with the field of ${boerWouter.naam}`);
+  assert.match(T.veldTekst(S.dorp, wouter), new RegExp(`one meadow with the field of ${T.boerVanVeld(S.dorp, klaas).naam}`));
+  assert.equal(T.opsomming(['Nicholas', 'Jan', 'Gerard']), 'Nicholas, Jan and Gerard');
 });
 
 // ---------------------------------------------------------------- de kooi: scheren en mest
@@ -330,7 +330,7 @@ test('de muis op de heide: wie er graast, en hoeveel de kooi bergt', () => {
   const meent = T.meentVan(S.wereld);
   assert.equal(T.meentOp(S.wereld, meent.x + 2, meent.y + 3), meent);
   assert.equal(T.meentOp(S.wereld, meent.x - 1, meent.y), null);
-  assert.equal(T.meentTekst(S.dorp, meent), `De heide, de meent van het dorp · ${IN.beginKudde.schaap} schapen · de kooi bergt er ${IN.kooiPlaats}`);
+  assert.equal(T.meentTekst(S.dorp, meent), `The heath, the village common · ${IN.beginKudde.schaap} sheep · the fold holds ${IN.kooiPlaats}`);
   const h = T.handelingVerkennen(Object.assign(S, { spreuk: null, inventaris: new Set() }), { x: meent.x + 2, y: meent.y + 3 });
   assert.equal(h.tekst, T.meentTekst(S.dorp, meent));
 });
@@ -401,5 +401,5 @@ test('de muis op een akker met mest zegt het', () => {
   assert.ok(T.beginOpKaart(S, 'gehucht'));
   const akker = S.wereld.akkers.find((a) => a.naam === 'akker2');
   T.zetMest(S.dorp, akker, true);
-  assert.match(T.veldTekst(S.dorp, akker), / · krijgt mest op 1 lentemaand$/);
+  assert.match(T.veldTekst(S.dorp, akker), / · gets dung on 1 March$/);
 });

@@ -208,7 +208,7 @@ test('het hooi zegt één keer per winter dat het op raakt, net als het hout en 
     T.ui = oud;
   }
   // Op 3 louwmaand is er nog hooi voor vijftien dagen, met die dag, en het vee eet nog 88 dagen hooi.
-  assert.deepEqual(berichten, ['Het hooi is over 15 dagen op, en de winter duurt nog 88 dagen.']);
+  assert.deepEqual(berichten, ['The hay will run out in 15 days, and the winter lasts 88 more days.']);
 });
 
 test('een winterdag in het spel: het vee eet hooi, en in de zomer niet', () => {

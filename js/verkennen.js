@@ -64,13 +64,13 @@
   // (test/velden.test.cjs).
 
   // Wanneer een plan ingaat: de dag waarop de boeren ploegen (T.AKKER_STADIA, "geploegd"), want
-  // daar valt T.wisselVelden op. "1 lentemaand", zolang niemand die tabel verschuift.
+  // daar valt T.wisselVelden op. "1 March", zolang niemand die tabel verschuift.
   T.veldWisselTekst = function () {
     const g = T.AKKER_STADIA && T.AKKER_STADIA.find((s) => s.stadium === 'geploegd');
-    return g ? `${g.dag} ${T.MAANDEN[g.maand].naam}` : '1 lentemaand';
+    return g ? `${g.dag} ${T.MAANDEN[g.maand].toon}` : T.t('1 March');
   };
 
-  // "3 koeien, 9 schapen", "1 koe", of '' zonder dieren: een lijst dieren (js/vee.js) geteld per
+  // "3 cows, 9 sheep", "1 cow", of '' zonder dieren: een lijst dieren (js/vee.js) geteld per
   // soort, in de volgorde van T.VEE.
   T.kuddeTekst = function (dieren) {
     const delen = [];
@@ -81,16 +81,16 @@
     return delen.join(', ');
   };
 
-  // De regel bij de muis op de heide (js/vee.js, de meent): "De heide, de meent van het dorp · 8
-  // schapen · de kooi bergt er 20". Het veldenvenster (js/hud.js) zegt het ook.
+  // De regel bij de muis op de heide (js/vee.js, de meent): "The heath, the village common · 8 sheep · the fold
+  // holds 20". Het veldenvenster (js/hud.js) zegt het ook.
   T.meentTekst = function (D, meent) {
     const schapen = T.dierenOp(D, meent);
     const plaats = T.kooiPlaats ? T.kooiPlaats(D) : 0;
     const kooien = plaats && T.VEE_INSTELLINGEN ? Math.round(plaats / T.VEE_INSTELLINGEN.kooiPlaats) : 0;
     return [
-      `De ${meent.naam}, de meent van het dorp`,
-      schapen.length ? T.kuddeTekst(schapen) : 'geen schapen',
-      !kooien ? 'geen schaapskooi' : kooien === 1 ? `de kooi bergt er ${plaats}` : `de ${kooien} kooien bergen er ${plaats}`,
+      T.t('The {meent}, the village common', { meent: meent.naam === 'heide' ? T.t('heath') : meent.naam }),
+      schapen.length ? T.kuddeTekst(schapen) : T.t('no sheep'),
+      !kooien ? T.t('no sheepfold') : T.t('{n|the fold holds {plaats}|the # folds hold {plaats}}', { n: kooien, plaats }),
     ].join(' · ');
   };
 
@@ -99,32 +99,40 @@
     : T.t('{lijst} and {laatste}', { lijst: namen.slice(0, -1).join(', '), laatste: namen[namen.length - 1] }));
 
   // Is deze weide samen met velden ernaast één weide (js/vee.js, T.weideGroepen)? Dan
-  // "samen één weide met het veld van Gerrit"; anders ''.
+  // "one meadow with the field of Gerard"; anders ''.
   T.samenMetTekst = function (D, veld) {
     const groep = T.weideVan ? T.weideVan(D.wereld, veld) : null;
     if (!groep || groep.velden.length < 2) return '';
     const anderen = groep.velden.filter((v) => v !== veld);
     const namen = [...new Set(anderen.map((v) => T.boerVanVeld(D, v)).filter(Boolean).map((b) => b.naam))];
-    const welke = anderen.length === 1 ? 'het veld' : `${anderen.length} velden`;
-    return `samen één weide met ${welke}${namen.length ? ` van ${T.opsomming(namen)}` : ''}`;
+    const n = anderen.length;
+    return namen.length
+      ? T.t('{n|one meadow with the field of {namen}|one meadow with # fields of {namen}}', { n, namen: T.opsomming(namen) })
+      : T.t('{n|one meadow with the field next to it|one meadow with the # fields next to it}', { n });
   };
 
-  // De regel bij de muis: "Weide van Klaas · 3 koeien, 9 schapen · vruchtbaar 90%". Staat er meer
+  // De regel bij de muis: "Nicholas's meadow · 3 cows, 9 sheep · fertility 90%". Staat er meer
   // vee op dan er plaats is, dan zegt hij dat; is de weide samen met een veld ernaast één weide, dan
   // ook dat; en wordt het veld volgend jaar iets anders, of krijgt het mest, dan ook wat en wanneer.
   T.veldTekst = function (D, veld) {
     const bestemming = T.bestemmingVan(veld);
     const boer = T.boerVanVeld(D, veld);
-    const delen = [T.hoofdletter(bestemming) + (boer ? ` van ${boer.naam}` : '')];
+    const naam = bestemming === 'akker' ? T.t('field') : T.BESTEMMING_NAAM[bestemming];
+    const delen = [boer ? T.t("{boer}'s {veld}", { boer: boer.naam, veld: naam }) : T.hoofdletter(naam)];
     const samen = bestemming === 'weide' ? T.samenMetTekst(D, veld) : '';
     if (samen) delen.push(samen);
     const dieren = T.dierenOp ? T.dierenOp(D, veld) : [];
-    if (dieren.length) delen.push(T.kuddeTekst(dieren) + (T.weideStand(D, veld).vrij < 0 ? ' (te vol)' : ''));
-    else if (bestemming === 'weide') delen.push('nog geen vee');
-    delen.push(`vruchtbaar ${Math.round(T.vruchtbaarheidVan(veld) * 100)}%`);
+    const kudde = dieren.length && T.kuddeTekst(dieren);
+    if (dieren.length) delen.push(T.weideStand(D, veld).vrij < 0 ? T.t('{kudde} (too full)', { kudde }) : kudde);
+    else if (bestemming === 'weide') delen.push(T.t('no livestock yet'));
+    delen.push(T.t('fertility {n}%', { n: Math.round(T.vruchtbaarheidVan(veld) * 100) }));
     const plan = T.planVan(veld);
-    if (plan !== bestemming) delen.push(`wordt ${plan}${veld.mest ? ', met mest,' : ''} op ${T.veldWisselTekst()}`);
-    else if (veld.mest) delen.push(`krijgt mest op ${T.veldWisselTekst()}`);
+    const datum = T.veldWisselTekst();
+    if (plan !== bestemming) {
+      delen.push(veld.mest
+        ? T.t('becomes {plan}, with dung, on {datum}', { plan: T.BESTEMMING_NAAM[plan], datum })
+        : T.t('becomes {plan} on {datum}', { plan: T.BESTEMMING_NAAM[plan], datum }));
+    } else if (veld.mest) delen.push(T.t('gets dung on {datum}', { datum }));
     return delen.join(' · ');
   };
 
@@ -139,7 +147,7 @@
       const e = doel.wezen;
       if (e.kant === 'monster') return { tekst: `De ${e.naam} aanvallen`, doe: () => T.startGevecht(S, e, true) };
       // Een dier (js/vee.js) of het wild (js/beesten.js) praat niet en doet nog niets: bij de muis staat alleen wat het is.
-      if (e.dier || e.beest) return { tekst: T.hoofdletter(`een ${e.naam}`) };
+      if (e.dier || e.beest) return { tekst: T.hoofdletter(T.eenNaam(e.naam)) };
       // De kar van het lege begin (js/begin.js) net zo.
       if (e.kar) return { tekst: T.t('The covered wagon, with everything you brought') };
       // Wie je zoekt met een voorval (js/voorvallen.js), daar praat je over het voorval, ook als hij een eigen
