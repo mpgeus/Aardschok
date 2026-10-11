@@ -9,6 +9,10 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Het lege begin na 1c** (11 okt, vraag 152, 1c): met "Wie bouwt" op "Jij" staat ook de boerderij in het bouwmenu; tot
+  1e (boeren uit het niets) trekt daar een gewoon nieuw gezin in, zodra het kamp leeg is. En het venster Spelregels laat
+  bij "Huizen" en "Wie bouwt" nog hun eigen keuze zien, terwijl "Leeg" ze op "Jij" zet; dat gaat weg in ronde 2 van het
+  snoeien, als die twee spelregels eruit gaan.
 - **De kaart van het land is nog geen papier** (9 okt, vraag 146, b1): elk venster werd papier, behalve `#land`: die
   tekent zijn kaart (SVG) in licht op donker, met namen in `--inkt` en een donkere rand (`stijl.css`, `--land-*`). Op
   papier moeten die kleuren om. Achter de spelregel "Land", die standaard uit staat; mee te nemen als het land weer speelt.
