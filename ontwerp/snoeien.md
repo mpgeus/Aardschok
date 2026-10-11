@@ -13,6 +13,12 @@ zaad, los van het eiland, maar het is wat de strategische kaart in Jagged Allian
 niet zag is donker), dus het slaapt tot F, en laat dan de dorpen en wegen van het eiland zien in plaats van eigen
 provincies.
 
+**Ronde 1 is af** (11 okt, sessie `ccr-ba1fa562-g7kz8h`): de graanzak (`fb791e8`), het oude doel (`7616cb5`), het
+ontginnen als verzoek (`09fb582`) en de drie oude keuzes (`18d086a`); netto zo'n 2.250 regels minder, waarvan 1.470 in
+`js/`. Een bewaard spel van vóór vandaag laadt niet meer (`T.OPSLAAN_INSTELLINGEN.versie` 4), en een geladen spel laat een
+voorval dat niet meer bestaat stil vallen (`T.vergeetOnbekendeVoorvallen`). Het overzicht van het spel voor een
+gamedesigner (`het-spel-in-het-kort.pdf`) beschrijft nog het oude spel; dat staat in de werklijst bij G.
+
 1. **De verdwenen graanzak** (`js/zaak.js`, 372 regels; spelregel "De zaak"): de proef voor rechtspraak, loop B van
    vraag 151, die niet gekozen is. **Weg.**
 2. **Het doel "iedereen een jaar super gelukkig"** (`js/einde.js`; spelregel "Het eind"): het doel van de oude demo.
@@ -36,7 +42,7 @@ provincies.
   gehucht", "Wie bouwt", "Huizen", "Wie de boeren zijn" en "De markt" (op het plein vanzelf, of een gebouw dat jij zet).
 - **Ronde 3, na de proef (C):** `js/voorvallen.js`, `js/raad.js`, `js/raadsman.js` en het venster, `js/ochtendrapport.js`,
   `js/wensen.js` met het huisbriefje, `js/treden.js`, `js/behoeften.js` (de groei), `js/wetten.js` met het menu,
-  `js/feesten.js`; de spelregels "Voorvallen", "Raad", "Raadsman", "Het rapport", "Wensen", "Treden", "Achteruitgaan",
+  `js/feesten.js`; de spelregels "Voorvallen", "Raad", "Raadsman", "Het rapport", "Wensen", "Achteruitgaan",
   "De herberg en de markt" en "Feesten".
 - **Bij de heer (E):** `js/heer.js`, `js/brieven.js`, `js/grillen.js`, `js/heervaart.js`, `js/bazen.js`; de spelregels
   "Waarin de heer betaald wil worden", "Hoe de heer telt", "Het goud in de kist", "Wat de heer van het graan vraagt", "De

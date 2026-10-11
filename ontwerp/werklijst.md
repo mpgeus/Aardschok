@@ -10,11 +10,11 @@ onderwerp, niet hier. Wie aan een punt begint, zet er "**Bezig in sessie `<branc
 
 ## Nu en daarna (11 okt)
 
-**Loopt:** het snoeien (A, vraag 153, stap 3). **Bezig in sessie `ccr-ba1fa562-g7kz8h`** (11 okt): de inventaris
-van ronde 1, voor Marcel om af te vinken.
+**Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en
+drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **Het volgende punt is B,
+1c: het kamp en verhuizen.** Ronde 2 van het snoeien volgt na 1f, ronde 3 na C.
 
 **Wacht op Marcel:**
-- Ronde 1 van het snoeien afvinken (A hieronder).
 - **Het doel van de demo.** CLAUDE.md zegt nog "je wint als iedereen een jaar super gelukkig is"; dat is het oude spel.
   Voorstel van Claude (11 okt): de demo is het eerste jaar: je komt met de kar, bouwt, haalt de eerste winter, en het
   eind is het eerste gevecht (de mannen van de heer of rovers), zodat een speler in Next Fest de economie, het gevecht
@@ -35,7 +35,7 @@ houden. De afspraak (vraag 153): wat om is, gaat eruit en blijft niet als spelre
 systeem: **blijft**, **slaapt** (de code blijft, er wordt niet aan gebouwd) of **weg**; Marcel vinkt af. In drie
 ronden, want een deel hangt aan het oude begin of aan de proef:
 
-1. **Ronde 1, nu:** wat al om is en nergens meer aan hangt. De lijst: `snoeien.md`.
+1. **Ronde 1 is af** (11 okt): wat al om was en nergens meer aan hing (`snoeien.md`).
 2. **Ronde 2, na 1f:** wat het oude begin draaiende houdt: de mensen die vragen wat ze bouwen (`verzoeken`,
    `ondernemers`), de erven waarop het dorp zelf bouwt (`erven`), de vaste boeren van de kaart, en de spelregels "Het
    begin", "Je gehucht", "Wie bouwt", "Huizen" en "Wie de boeren zijn".
@@ -92,11 +92,13 @@ het graan vraagt", de schandpaal, de heervaart en de twee bazen.
 - Het geluid (vraag 145, 2), zodra de sleutel er is.
 - Januari 2027: de Steam-pagina (een capsule, vijf plaatjes, een trailer van een minuut); de naam is er (Tithebreaker).
 - Juni 2027: de demo in Steam Next Fest.
+- Het spel in het kort (`het-spel-in-het-kort.pdf`, `npm run samenvatting`) beschrijft nog het oude spel: opnieuw
+  schrijven voor de nieuwe richting, als B en C er staan.
 
 ## Af (sinds 11 okt)
 
 - Optie 1: het verstoppen, de inner, de argwaan en "arm lijken" zijn eruit (vraag 151).
 - Het lege land: de huifkar rijdt een leeg stuk van het eiland in, met het kamp op het plein (vraag 152, 1b).
-- CLAUDE.md van 153 naar 19 KB (vraag 153, stap 1), en deze nieuwe werklijst (stap 2).
+- CLAUDE.md van 153 naar 19 KB (vraag 153, stap 1), deze nieuwe werklijst (stap 2), en ronde 1 van het snoeien.
 - De ronde van alle huizen (vraag 144).
 - De naam: Tithebreaker, vrij op Steam en in de merkenregisters (`commercieel.md`).
