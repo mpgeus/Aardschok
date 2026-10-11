@@ -641,14 +641,19 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   het kamp: het eerste dat past, of anders het eerste in een woning waar nog niemand woont, krap (`T.verhuisUitHetKamp`;
   het verhuizen zelf is `T.verhuis` in `js/bewoners.js`: zijn thuis en zijn plekken gaan mee, en wie binnen is, komt de
   oude deur uit). Een lege tent gaat uit `D.gebouwen` en van de kaart, met de laatste ook het kampvuur (`D.begin.kamp`
-  wordt `'weg'`); de tent van de schout blijft zijn huis tot 1d. `T.kampTenten` zijn de tenten van de gezinnen: zolang
+  wordt `'weg'`); de tent van de schout blijft zijn huis tot zijn eigen huis af is (hieronder). `T.kampTenten` zijn de tenten van de gezinnen: zolang
   er een is, zegt `T.waaromGeenGezin` `'kamp'` en komt er geen nieuw gezin. **Het bouwbereik** (1d, 11 okt): je bouwt
   binnen `bouwBereik` tegels van het plein en van elke opslag die af is (`opslag` in `T.GEBOUWEN`); `bouwBereik(D)` rekent
   per tegel de afstand uit, één keer tot er een opslag bij komt (een WeakMap op de kaart, niet in S, want het volgt uit
   de kaart en de gebouwen), `T.inBouwBereik` en `T.waaromBuitenBouwBereik` (als eerste in `T.waaromPastHetNiet`) vragen
   het, en `tekenBouwBereik` in `js/tekenen.js` tekent het als je bouwt (`T.bouwBereikVan`). Zonder `D.begin` (het oude
-  begin) ligt alles erin. Let op: `S.bereik` is iets anders, waar de schout in een gevecht deze beurt kan komen. Nog
-  niet: het huis van de schout in het bouwmenu, rooien en meebouwen (1d), boeren worden (1e).
+  begin) ligt alles erin. Let op: `S.bereik` is iets anders, waar de schout in een gevecht deze beurt kan komen. **Het
+  huis van de schout** (1d): `schout` in `T.GEBOUWEN`, met `leeg` (alleen met `D.begin`), `eenmalig` (één keer, ook in
+  aanbouw telt) en `opslag` (bereik); `nogTeBouwen` in `T.magGebouwd` en `T.plaatsGebouw` vraagt het, dus ook de oproepen
+  van het oude begin laten hem weg. Zijn tekening komt uit de bouwstijl (`schout`, net als de maker), nog zonder
+  bouwfasen. Is hij af, dan verhuist de schout met zijn gezin erin (`verhuisDeSchout`, als eerste in
+  `T.verhuisUitHetKamp`): het huis krijgt `huis: 'schout'`, de tent verliest het en gaat weg, en de kar heet de ossenkar
+  met het vel `ossenkar-leeg`. Nog niet: rooien en meebouwen (1d), boeren worden (1e).
 
 ### js/erven.js: de erven
 

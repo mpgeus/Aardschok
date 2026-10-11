@@ -6,6 +6,7 @@ Spel.TAAL_BRON = [
   {"t":"The cart is on the open ground that will be the square. The families put up their tents around the campfire.","waar":["js/begin.js"]},
   {"t":"{wie} and family leave the camp: their {gebouw} is ready, though it is cramped.","waar":["js/begin.js"]},
   {"t":"{wie} and family leave the camp: their {gebouw} is ready.","waar":["js/begin.js"]},
+  {"t":"Your house is ready: you and your family leave the tent, and the covered wagon becomes the ox cart.","waar":["js/begin.js"]},
   {"t":"Too far away: you build within {n} tiles of the square or of a store.","waar":["js/begin.js"]},
   {"t":"To Our new reeve,","waar":["js/brieven.js"]},
   {"t":"It has pleased Us to send you, with {n|# family|# families}, to a piece of Our wilderness. Make a village of it. A village brings Us money; wilderness does not.","waar":["js/brieven.js"]},

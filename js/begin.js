@@ -194,7 +194,7 @@
   // Verhuizen uit het kamp (vraag 152, 1c)
   // ---------------------------------------------------------------------------------------------
 
-  // De tenten van de gezinnen in het kamp; niet die van de schout, want die is zijn huis tot zijn eigen huis er staat (1d).
+  // De tenten van de gezinnen in het kamp; niet die van de schout, want die is zijn huis tot zijn eigen huis af is (1d).
   // Zolang er een is, komt er geen nieuw gezin over de weg (T.waaromGeenGezin, js/gebouwen.js): eerst je eigen mensen.
   T.kampTenten = (D) => (D.gebouwen || []).filter((g) => g.soort === 'tent' && g.huis !== 'schout');
 
@@ -204,6 +204,7 @@
   // zodra hij leeg is, en met de laatste tent het kampvuur; de kar blijft (Marcel, 11 okt: "Per tent").
   T.verhuisUitHetKamp = function (D) {
     if (!D.begin || D.begin.kamp !== 'op') return;
+    verhuisDeSchout(D);
     for (const g of D.gebouwen.slice()) {
       const soort = T.GEBOUWEN[g.soort];
       if (!g.klaar || !soort || !soort.woning) continue;
@@ -222,6 +223,22 @@
     }
   };
   const inHuis = (D, g) => D.bewoners.mensen.filter((p) => p.huis === g);
+
+  // Het huis van de schout (1d; `schout` in T.GEBOUWEN): is het af, dan trekt de schout er met zijn gezin in. Het is
+  // voortaan zijn huis (`huis: 'schout'`: slapen, het rapport, de bode), zijn tent gaat weg (met de laatste tent ook het
+  // kampvuur), en de huifkar is uitgeladen en wordt de ossenkar die werkt (Marcel, 11 okt: "Huifkar wordt ossenkar"; wat
+  // de ossenkar doet, komt in C). Geen gezin uit het kamp trekt erin: het is geen woning.
+  function verhuisDeSchout(D) {
+    const huis = D.gebouwen.find((g) => g.soort === 'schout' && g.klaar && g.huis !== 'schout');
+    const tent = huis && D.gebouwen.find((g) => g.soort === 'tent' && g.huis === 'schout');
+    if (!tent) return;
+    T.verhuis(D, inHuis(D, tent), huis);
+    tent.huis = null;
+    huis.huis = 'schout';
+    Object.assign(D.begin.kar, { naam: 'de ossenkar', vel: 'ossenkar-leeg' });
+    T.zeg(D, T.t('Your house is ready: you and your family leave the tent, and the covered wagon becomes the ox cart.'));
+    if (!inHuis(D, tent).length) haalTentWeg(D, tent);
+  }
 
   // Een lege tent gaat van de kaart en uit het dorp; is het de laatste, dan gaat ook het kampvuur uit.
   function haalTentWeg(D, tent) {

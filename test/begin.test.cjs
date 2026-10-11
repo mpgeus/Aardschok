@@ -121,17 +121,25 @@ test('een jaar vanaf een lege plek, zonder iets te doen: geen fout, en de heer v
 });
 
 // Zet `n` hutten neer zo dicht mogelijk bij het kampvuur (niet op het plein), zoals de speler ze met het bouwmenu neerzet.
+// Met een vaste reeks toeval, want welke tekening een hut krijgt (en dus hoe groot hij is), kiest T.volgendeTekening.
 function zetHutten(D, n, soort = 'hut') {
   const v = D.wereld.kamp.vuur;
   const hutten = [];
-  for (let r = 1; r < 30 && hutten.length < n; r++) {
-    for (let dy = -r; dy <= r && hutten.length < n; dy++) {
-      for (let dx = -r; dx <= r && hutten.length < n; dx++) {
-        if (Math.max(Math.abs(dx), Math.abs(dy)) !== r) continue;
-        const uit = T.plaatsGebouw(D, soort, v.x + dx, v.y + dy);
-        if (uit.gelukt) hutten.push(uit.instantie);
+  const toeval = Math.random;
+  let z = 7;
+  Math.random = () => (z = (z * 16807) % 2147483647) / 2147483647;
+  try {
+    for (let r = 1; r < 30 && hutten.length < n; r++) {
+      for (let dy = -r; dy <= r && hutten.length < n; dy++) {
+        for (let dx = -r; dx <= r && hutten.length < n; dx++) {
+          if (Math.max(Math.abs(dx), Math.abs(dy)) !== r) continue;
+          const uit = T.plaatsGebouw(D, soort, v.x + dx, v.y + dy);
+          if (uit.gelukt) hutten.push(uit.instantie);
+        }
       }
     }
+  } finally {
+    Math.random = toeval;
   }
   assert.equal(hutten.length, n, `er is plaats voor ${n} hutten`);
   return hutten;
@@ -270,6 +278,73 @@ test('het bouwbereik is er alleen in het lege begin', () => {
     }
     assert.equal(T.bouwBereikVan(S.dorp), null);
     assert.ok(T.inBouwBereik(S.dorp, 0, 0));
+  } finally {
+    Object.assign(T.MAKER_INSTELLINGEN, maker);
+  }
+});
+
+test('het huis van de schout: één keer in het bouwmenu, alleen in het lege begin; is het af, dan verhuist hij en wordt de huifkar de ossenkar', () => {
+  T.pasOptiesToe({ keuzes: { begin: 'leeg' } });
+  try {
+    huisVanDeSchout();
+  } finally {
+    T.pasOptiesToe({});
+  }
+});
+function huisVanDeSchout() {
+  const { S, D, w } = leegBegin();
+  dagen(S, 1, 1);
+  assert.ok(T.inBouwmenu(D, 'schout'), 'het staat in het bouwmenu');
+  const schoutTent = D.gebouwen.find((g) => g.soort === 'tent' && g.huis === 'schout');
+  const gezin = wonenIn(D, schoutTent);
+  const kampGezinnen = T.kampTenten(D).length;
+  const [huis] = zetHutten(D, 1, 'schout');
+  assert.ok(!T.inBouwmenu(D, 'schout'), 'staat het er (ook in aanbouw), dan niet meer');
+  assert.equal(T.plaatsGebouw(D, 'schout', huis.x + 20, huis.y).gelukt, false, 'en een tweede kan niet');
+  assert.equal(D.gebouwen.find((g) => g.huis === 'schout'), schoutTent, 'tot het af is, woont hij in zijn tent');
+  gezegd.length = 0;
+  dagen(S, 2, 2 + T.GEBOUWEN.schout.bouwtijd);
+  assert.ok(huis.klaar);
+  assert.equal(D.gebouwen.find((g) => g.huis === 'schout'), huis, 'nu is het zijn huis');
+  assert.deepEqual(wonenIn(D, huis), gezin, 'met zijn hele gezin, en verder niemand');
+  assert.ok(!D.gebouwen.includes(schoutTent) && !w.voorwerpen.includes(schoutTent.voorwerp), 'zijn tent is weg');
+  assert.equal(T.kampTenten(D).length, kampGezinnen, 'de gezinnen wonen nog in het kamp');
+  const deur = T.deurVan(w, huis);
+  assert.deepEqual([D.schout.thuis.x, D.schout.thuis.y], [deur.x, deur.y], 'zijn thuis is de deur van zijn huis');
+  assert.equal(D.begin.kar.vel, 'ossenkar-leeg', 'de huifkar is de ossenkar');
+  assert.ok(gezegd.some((t) => /ossenkar|ox cart/.test(t)), 'en het dorp zegt het');
+  // het is de eerste opslag: rond het huis bouw je ook, waar het plein te ver is
+  const R = T.BEGIN_INSTELLINGEN.bouwBereik;
+  const plein = T.pleinTegels(w);
+  const vanPlein = (x, y) => Math.min(...plein.map((p) => Math.hypot(p.x - x, p.y - y)));
+  const voet = T.voetVanGebouw(huis);
+  const rond = [];
+  for (let y = voet.y - R; y < voet.y + voet.h + R; y++) for (let x = voet.x - R; x < voet.x + voet.b + R; x++) {
+    if (x >= 0 && y >= 0 && x < w.b && y < w.h && vanPlein(x, y) > R + 0.5 && T.inBouwBereik(D, x, y)) rond.push({ x, y });
+  }
+  assert.ok(rond.length > 0, 'het huis geeft bereik waar het plein niet komt');
+  // bewaren en laden
+  Object.assign(S, { vlaggen: new Set() }, T.schermVelden());
+  const tekst = T.bewaarSpel(S, { nu: 0 });
+  const S2 = { kalender: T.nieuweKalender() };
+  T.zetSpel(S2, T.leesSpel(tekst));
+  assert.equal(S2.dorp.begin.kar.vel, 'ossenkar-leeg');
+  assert.equal(T.bewaarSpel(S2, { nu: 0 }), tekst);
+}
+
+test('het huis van de schout staat niet in het bouwmenu van het gehucht dat er al was', () => {
+  const maker = { ...T.MAKER_INSTELLINGEN };
+  Object.assign(T.MAKER_INSTELLINGEN, { opEiland: false, leeg: false });
+  try {
+    const S = { kalender: T.nieuweKalender(), tijd: 0, wereldTijd: 0, modus: 'verkennen', inventaris: new Set() };
+    const echt = console.warn;
+    console.warn = () => {};
+    try {
+      assert.ok(T.beginOpKaart(S, 'gehucht', 3));
+    } finally {
+      console.warn = echt;
+    }
+    assert.ok(!T.magGebouwd(S.dorp, 'schout') && !T.inBouwmenu(S.dorp, 'schout'));
   } finally {
     Object.assign(T.MAKER_INSTELLINGEN, maker);
   }

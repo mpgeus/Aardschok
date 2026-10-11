@@ -47,6 +47,9 @@
 //                                    // bouwt (js/erven.js, T.ERVEN_INSTELLINGEN.dorpBouwtZelf), zet jij
 //                                    // die niet neer, en staat hij niet in het bouwmenu (T.inBouwmenu).
 //     erf:         true,             // alleen bij "erf": bouwgrond voor een gezin, geen gebouw (js/erven.js)
+//     leeg:        true,             // alleen in het lege begin (js/begin.js, D.begin): het huis van de schout
+//     eenmalig:    true,             // staat maar één keer in het bouwmenu: is hij er (ook in aanbouw), dan niet meer
+//     opslag:      true,             // een opslag: als hij af is, bouw je ook binnen bereik van hem (T.inBouwBereik)
 //     menu:        true,             // false: niet via het bouwmenu (akker, stadsmuur, palissade —
 //                                    // die hebben een eigen manier van neerzetten, geen enkele voet)
 //     tekening:    'gebouwen/dorpshuis1',  // "vel/naam" uit tegels/, zoals T.laadKaart "tegel" leest
@@ -134,6 +137,16 @@
       // Zes huizen van vakwerk onder riet, met een schoorsteen van leem, want steen hoort pas bij een
       // dorp (Marcel, 26 sep; spel.md, "Beter bouwen"; ronde 4b van de huizenbouwer).
       tekeningen: ['huizen/huis1', 'huizen/huis2', 'huizen/huis3', 'huizen/huis4', 'huizen/huis5', 'huizen/huis6'],
+    },
+    // Het huis van de schout in het lege begin (vraag 152, 1d; Marcel, 11 okt: "c ja"): je zet het één keer neer, en tot
+    // het af is, woont hij in zijn tent. Dan trekt hij er met zijn gezin in (T.verhuisUitHetKamp, js/begin.js), wordt de
+    // huifkar de ossenkar, en is het de eerste opslag: daaromheen kun je bouwen (T.inBouwBereik). Zo groot als het huis
+    // van de schout in het gehucht dat er al was (een `huis` met `huis: 'schout'`, met plaats voor zijn gezin), en zijn
+    // tekening in de stijl van het land (`schout` in js/bouwstijl.js). Nog zonder bouwfasen: in aanbouw is hij bleek.
+    schout: {
+      naam: 'huis van de schout', trede: 'gehucht', voet: { b: 8, h: 6 }, kosten: { hout: 16, goud: 4 }, heer: { goud: 2 }, bouwtijd: 4,
+      handen: 0, woonruimte: 5, maakt: null, menu: true, leeg: true, eenmalig: true, opslag: true,
+      tekening: 'huizen/schoutshuis', beschrijving: 'jouw huis en de eerste opslag: daaromheen kun je bouwen', opmerking: '',
     },
     boerderij: {
       naam: 'boerderij', meervoud: 'boerderijen', trede: 'gehucht', voet: { b: 7, h: 8 }, kosten: { hout: 20, goud: 6 }, heer: { goud: 1 }, bouwtijd: 5,
@@ -956,8 +969,15 @@
   T.magGebouwd = function (D, soort) {
     const g = T.GEBOUWEN[soort];
     const vrij = T.GEBOUW_TREDEN.indexOf(g && g.trede) <= T.GEBOUW_TREDEN.indexOf(D.trede);
-    return !!g && vrij && g.menu !== false;
+    return !!g && vrij && g.menu !== false && nogTeBouwen(D, soort);
   };
+  // Het huis van de schout (`leeg`, `eenmalig`) mag alleen in het lege begin, en één keer: staat hij er (ook in
+  // aanbouw), dan niet meer.
+  function nogTeBouwen(D, soort) {
+    const g = T.GEBOUWEN[soort];
+    if (g.leeg && !D.begin) return false;
+    return !(g.eenmalig && (D.gebouwen || []).some((x) => x.soort === soort));
+  }
 
   // Staat deze soort nu in het bouwmenu (js/hud.js)? Wat mag (T.magGebouwd), en wat jij neerzet. Bouwt het dorp zelf
   // (js/erven.js, de spelregel "Huizen"), dan staat het erf erin en de woningen niet; anders andersom. Vragen de mensen
@@ -1104,7 +1124,7 @@
   // werklijst vraag 110, e). Dan wacht het gebouw, nog niet op de kaart, en begint het pas als dat stuk vrij is.
   T.plaatsGebouw = function (D, soort, x, y, rooien = null) {
     const g = T.GEBOUWEN[soort];
-    if (!g || g.menu === false) return { gelukt: false, reden: 'Dat kan niet via het bouwmenu.' };
+    if (!g || g.menu === false || !nogTeBouwen(D, soort)) return { gelukt: false, reden: 'Dat kan niet via het bouwmenu.' };
     // Een erf is land, geen gebouw: het krijgt geen voorwerp en maakt de grond niet vast (js/erven.js).
     if (g.erf) return T.legErfAan(D, x, y);
     // De markt op het plein: kramen, geen gebouw met een voet (js/markt.js; werklijst vraag 110, d).

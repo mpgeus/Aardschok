@@ -18,6 +18,9 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   Alleen op zaad 1, 2, 3 en 9 past er een hut binnen 15 tegels van het plein; op de andere negen nergens binnen 30. Waar
   het bos staat, staan er zo'n 35 bomen op de plek van één hut met zijn looppad (9 bij 9 tegels), en dat is 350 hout als
   je het rooit (10 per boom), en "het bos van de heer" (vanaf 10 bomen). Bouwen in het bos (rooien) hoort dus bij 1d.
+- **Het huis van de schout heeft nog geen bouwfasen** (11 okt, vraag 152, 1d): in aanbouw staat het bleek op de
+  kaart, waar een hut of huis zijn fundering, muren en steigers laat zien (`tegels/bouwfasen.json`, uit
+  `gereedschap/pixelart/bouwfasen.cjs`). Mee in een ronde van de beelden.
 - **De kaart van het land is nog geen papier** (9 okt, vraag 146, b1): elk venster werd papier, behalve `#land`: die
   tekent zijn kaart (SVG) in licht op donker, met namen in `--inkt` en een donkere rand (`stijl.css`, `--land-*`). Op
   papier moeten die kleuren om. Achter de spelregel "Land", die standaard uit staat; mee te nemen als het land weer speelt.
