@@ -29,7 +29,8 @@ mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voo
   allebei"; `gameloop.md`): geen grens, geen vlaggen, bouwen binnen bereik van je stad en elke opslag, een ossenkar die
   de grondstoffen haalt, en je bouwt alles zelf vanaf een lege plek, met een kar met wat spullen en settlers. **Optie 1
   is af** (11 okt, in `main`): het verstoppen, de inner, de argwaan en heel "arm lijken" zijn eruit. **Het volgende punt
-  is vraag 152, stap 1b: het lege land**, in een nieuwe sessie (Marcel: "daarna start ik nieuwe sessie"); het plan (1b
+  is vraag 152, stap 1b: het lege land**, in een nieuwe sessie (Marcel: "daarna start ik nieuwe sessie"). **Bezig in
+  sessie `ccr-d5126bfe-mtbvwg`** (11 okt): het plan voor 1b, met Marcel. Het plan (1b
   tot 1f), waaruit je start en de keuzes staan bij vraag 152, en het beeld is af (hieronder bij Af).
 - Het geluid (vraag 145, 2): de sleutel `FREESOUND_KEY` in de omgeving en de domeinen van Freesound erbij, zoals
   beschreven bij vraag 145; dan maakt een nieuwe sessie het.
