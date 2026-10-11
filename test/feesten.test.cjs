@@ -67,8 +67,8 @@ test('het oogstfeest en de meiboom zijn feesten, en hun antwoorden zeggen wat ze
   const S = gehucht();
   T.zetVoorraad(S.dorp, 'graan', 100);
   T.zetVoorraad(S.dorp, 'bier', 30);
-  assert.equal(T.prijsVanKeuze(S.dorp, antwoord('oogstfeest', 0).doe).tekst, '−40 graan, −15 bier, tevredenheid +8%, morgen werkt niemand');
-  assert.equal(T.prijsVanKeuze(S.dorp, antwoord('oogstfeest', 1).doe).tekst, "−15 graan, tevredenheid +3%, 's avonds feest op het plein");
+  assert.equal(T.prijsVanKeuze(S.dorp, antwoord('oogstfeest', 0).doe).tekst, '−40 graan, −15 bier, tevredenheid +8%, no one works tomorrow');
+  assert.equal(T.prijsVanKeuze(S.dorp, antwoord('oogstfeest', 1).doe).tekst, '−15 graan, tevredenheid +3%, a feast on the square in the evening');
 });
 
 test('een groot oogstfeest: morgen werkt niemand, iedereen staat op het plein, en de dag erna gaat het werk door', () => {
@@ -90,7 +90,7 @@ test('een groot oogstfeest: morgen werkt niemand, iedereen staat op het plein, e
   assert.ok(T.vrijeDag(D, HERFST + 1));
   assert.ok(f.begonnen && f.midden, 'het feest begon, met een midden');
   assert.ok(T.opHetPlein(S.wereld, f.midden.x, f.midden.y), 'het midden ligt op het plein');
-  assert.ok(berichten.some((b) => /Vandaag viert het dorp het oogstfeest op het plein\. Er wordt niet gewerkt\./.test(b)), berichten.join(' | '));
+  assert.ok(berichten.some((b) => /Today the village celebrates the harvest feast on the square\. No one works\./.test(b)), berichten.join(' | '));
   const werkplaatsen = D.gebouwen.filter((g) => g.klaar && T.GEBOUWEN[g.soort].maakt && T.GEBOUWEN[g.soort].handen > 0);
   assert.ok(werkplaatsen.length > 0, 'er is een werkplaats om te toetsen');
   for (const g of werkplaatsen) {
@@ -196,7 +196,7 @@ test('de kerstboom komt op 20 wintermaand; met ja staat hij meteen, tot en met 6
   T.tikVoorvallenDag(D, dag);
   assert.equal(D.voorvallen.lopend && D.voorvallen.lopend.id, 'kerstboom', 'op 20 wintermaand wel');
   T.zetVoorraad(D, 'hout', 20);
-  assert.equal(T.prijsVanKeuze(D, antwoord('kerstboom', 0).doe).tekst, '−2 hout, tevredenheid +4%, feest op kerstavond');
+  assert.equal(T.prijsVanKeuze(D, antwoord('kerstboom', 0).doe).tekst, '−2 hout, tevredenheid +4%, a feast on Christmas Eve');
   S.kalender.dag = bijUur(dag, 11);
   T.doeGevolg(S, D, antwoord('kerstboom', 0).doe);
   T.voorvalBeantwoord(D, 'kerstboom');

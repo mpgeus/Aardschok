@@ -29,16 +29,16 @@
     let wat;
     if (aanUit) {
       const aan = stand === 'aangenomen';
-      knoppen = `<button class="wet-knop${aan ? ' aan' : ''}" data-wet="${id}" data-stand="${aan ? 'afgeschaft' : 'aangenomen'}">${aan ? 'Afschaffen' : 'Aannemen'}</button>`;
+      knoppen = `<button class="wet-knop${aan ? ' aan' : ''}" data-wet="${id}" data-stand="${aan ? 'afgeschaft' : 'aangenomen'}">${aan ? T.t('Repeal') : T.t('Pass')}</button>`;
       wat = doet(S, id, 'aangenomen');
     } else {
       knoppen = wet.standen
-        .map((s) => `<button class="wet-knop${s === stand ? ' gekozen' : ''}" data-wet="${id}" data-stand="${s}">${T.hoofdletter(s)}</button>`)
+        .map((s) => `<button class="wet-knop${s === stand ? ' gekozen' : ''}" data-wet="${id}" data-stand="${s}">${T.hoofdletter(wet.toon[s])}</button>`)
         .join('');
-      wat = wet.standen.filter((s) => s !== wet.standaard).map((s) => doet(S, id, s, T.hoofdletter(s))).join('');
+      wat = wet.standen.filter((s) => s !== wet.standaard).map((s) => doet(S, id, s, T.hoofdletter(wet.toon[s]))).join('');
     }
     const anders = stand !== wet.standaard;
-    const staat = !anders ? '' : aanUit ? ' <b>Aangenomen.</b>' : ` <b>Nu: ${stand}.</b>`;
+    const staat = !anders ? '' : aanUit ? ` <b>${T.t('Passed.')}</b>` : ` <b>${T.t('Now: {stand}.', { stand: wet.toon[stand] })}</b>`;
     return (
       `<div class="wet${anders ? ' aangenomen' : ''}">` +
       `<div class="wet-kop"><span class="wet-naam">${veilig(wet.naam)}</span><span class="wet-knoppen">${knoppen}</span></div>` +
@@ -53,11 +53,11 @@
     const pct = Math.round((S.dorp.behoeften ? S.dorp.behoeften.tevredenheid : 1) * 100);
     const drempel = Math.round(T.BEHOEFTEN_INSTELLINGEN.groeiDrempel * 100);
     return (
-      `<div class="venster-kop"><span class="venster-titel">Wetten</span><span class="venster-wanneer">${dag}</span>` +
-      `<button class="venster-sluit" data-actie="sluit" title="Sluiten (Esc)">✕</button></div>` +
-      `<p class="venster-staat">Een wet geldt vanaf vandaag. Het dorp is nu <b>${pct}%</b> tevreden; bij ${drempel}% of meer komen er nieuwe gezinnen.</p>` +
+      `<div class="venster-kop"><span class="venster-titel">${T.t('Laws')}</span><span class="venster-wanneer">${dag}</span>` +
+      `<button class="venster-sluit" data-actie="sluit" title="${T.t('Close (Esc)')}">✕</button></div>` +
+      `<p class="venster-staat">${T.t('A law applies from today. The village is now <b>{pct}%</b> content; at {drempel}% or more, new families come.', { pct, drempel })}</p>` +
       T.wettenVanNu(S.dorp).map((id) => kaart(S, id)).join('') +
-      '<p class="venster-voet">Zolang dit open is, staat de tijd stil. <kbd>Esc</kbd> of <kbd>W</kbd> sluit.</p>'
+      `<p class="venster-voet">${T.t('While this is open, time stands still. <kbd>Esc</kbd> or <kbd>W</kbd> closes it.')}</p>`
     );
   }
 

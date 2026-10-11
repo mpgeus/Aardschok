@@ -15,12 +15,15 @@
   const $ = (id) => document.getElementById(id);
   // Een naam kan de speler zelf geven (js/opties.js, en het dorp bij Nieuw spel), dus die gaat nooit rauw in de html.
   const veilig = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
-  const opsomming = (delen) => (delen.length > 1 ? `${delen.slice(0, -1).join(', ')} en ${delen[delen.length - 1]}` : delen[0] || 'niets');
   const hebNu = (S, wat) => Math.floor((S.dorp.voorraad && S.dorp.voorraad[wat]) || 0);
   const vandaag = (S) => (S.kalender ? T.datumVanDag(S.kalender.dag).tekst : '');
-  const eisInTaal = (eis) => opsomming(eis.volgorde.map((wat) => `${eis.per[wat]} ${wat}`));
-  // "Ons gehucht Heathside", of zonder naam "dit gehucht".
-  const hetDorp = (S, wat) => (T.dorpsnaam(S.dorp) ? `Ons ${wat} ${veilig(T.dorpsnaam(S.dorp))}` : `dit ${wat}`);
+  const eisInTaal = (eis) => T.opsomming(eis.volgorde.map((wat) => T.hoeveel(eis.per[wat], wat)));
+  // "Our hamlet of Heathside", of zonder naam "this hamlet"; en zo ook het dorp.
+  const onsGehucht = (S) => (T.dorpsnaam(S.dorp) ? T.t('Our hamlet of {naam}', { naam: veilig(T.dorpsnaam(S.dorp)) }) : T.t('this hamlet'));
+  const onsDorp = (S) => (T.dorpsnaam(S.dorp) ? T.t('Our village of {naam}', { naam: veilig(T.dorpsnaam(S.dorp)) }) : T.t('this village'));
+  // Een datum zonder jaar ({ maand, dag }, met de naam van de maand uit de code): "1 September".
+  const maandToon = (naam) => (T.MAANDEN.find((m) => m.naam === naam) || { toon: naam }).toon;
+  const datumZonderJaar = (d) => `${d.dag} ${maandToon(d.maand)}`;
 
   // De benoeming van het lege begin (werklijst vraag 152; js/begin.js): de heer stuurt je met de gezinnen naar een stuk
   // van zijn wildernis, met wat er op de kar ligt, en vraagt het eerste jaar niets (T.heerLaatMetRust).
@@ -32,7 +35,7 @@
       tekst:
         `<p>${T.t('It has pleased Us to send you, with {n|# family|# families}, to a piece of Our wilderness. Make a village of it. A village brings Us money; wilderness does not.', { n: I.gezinnen })}</p>` +
         `<p>${T.t('The cart carries what We could spare: some wood, grain for the spring, seed grain, a few tools and {goud} gold. Do not expect more.', { goud: I.kar.goud })}</p>` +
-        `<p>${T.t('This year We ask nothing of you. We are generous. Next year, on St Martin\'s Day, We shall come in person to collect what is Ours.')}</p>` +
+        `<p>${T.t('This year We ask nothing of you. We are generous. Next year, at Martinmas, We shall come in person to collect what is Ours.')}</p>` +
         `<p>${T.t('Laws you may make, as many as you like. Our forest you leave alone.')}</p>`,
       knoppen: [{ actie: 'sluit', tekst: T.t('To work'), hoofd: true }],
     };
@@ -44,14 +47,14 @@
   // Het venster: een kop met de datum, de brief in de hand van de heer (aanhef, tekst, groet), en daaronder wat
   // het spel er zelf bij zegt (staat), de knoppen en een voetregel. Een knop die nu niet kan, staat er wel, maar
   // grijs; waarom zegt de staat. Wie geen brief van de heer is (het rapport), geeft zijn eigen titel en groet.
-  function venster({ titel = 'Een brief van de heer', wanneer, aan, tekst, groet, staat = '', knoppen = [], voet = '' }) {
+  function venster({ titel = T.t('A letter from the lord'), wanneer, aan, tekst, groet, staat = '', knoppen = [], voet = '' }) {
     const naam = T.naamVanDeHeer();
     const knop = (k) => `<button${k.hoofd ? ' class="heer-geef-knop"' : ''} data-actie="${k.actie}"${k.kan === false ? ' disabled' : ''}>${k.tekst}</button>`;
     return (
       `<div class="venster-kop"><span class="venster-titel">${titel}</span><span class="venster-wanneer">${wanneer}</span>` +
-      `<button class="venster-sluit" data-actie="sluit" title="Sluiten (Esc)">✕</button></div>` +
+      `<button class="venster-sluit" data-actie="sluit" title="${T.t('Close (Esc)')}">✕</button></div>` +
       `<div class="brief-tekst"><p>${aan}</p>${tekst}` +
-      `<p class="brief-groet">${groet || `Uw genadige heer${naam ? `,<br>${veilig(naam)}` : ''}`}</p></div>` +
+      `<p class="brief-groet">${groet || `${T.t('Your gracious lord')}${naam ? `,<br>${veilig(naam)}` : ''}`}</p></div>` +
       staat +
       (knoppen.length ? `<div class="heer-knoppen">${knoppen.map(knop).join('')}</div>` : '') +
       voet
@@ -65,16 +68,16 @@
     // In het lege begin (vraag 152, js/begin.js) een andere: hij stuurt je met de gezinnen naar zijn wildernis.
     benoeming: (S) => (S.dorp.begin ? benoemingInDeWildernis(S) : {
       wanneer: vandaag(S),
-      aan: 'Aan Onze nieuwe schout,',
+      aan: T.t('To Our new reeve,'),
       tekst:
-        `<p>Het heeft Ons behaagd u tot schout te benoemen over ${hetDorp(S, 'gehucht')}. Uw voorganger kon niet tellen, of juist te goed; dat weten Wij niet meer precies. Hij is nu elders.</p>` +
-        `<p>Op Sint-Maarten komen Wij persoonlijk halen wat Ons toekomt. Wat dat is, zien Wij dan zelf.</p>` +
-        `<p>Wij vertrouwen u volkomen. Wij tellen toch even na.</p>` +
+        `<p>${T.t('It has pleased Us to appoint you reeve of {dorp}. Your predecessor could not count, or counted too well; We no longer quite remember which. He is elsewhere now.', { dorp: onsGehucht(S) })}</p>` +
+        `<p>${T.t('At Martinmas We shall come in person to collect what is Ours. What that is, We shall see for Ourselves.')}</p>` +
+        `<p>${T.t('We trust you completely. We shall count it again all the same.')}</p>` +
         // Het doel van de proef (js/treden.js; Marcel, 29 sep, vraag 53, A): de heer wil groei, want hij verdient eraan.
-        `<p>Wij verwachten dat Ons gehucht een dorp wordt, met ${T.tredeEisTekst('dorp')}. Een dorp brengt Ons meer op.</p>` +
+        `<p>${T.t('We expect Our hamlet to become a village, with {eis}. A village brings Us more.', { eis: T.tredeEisTekst('dorp') })}</p>` +
         // De wetten (js/wetten.js; Marcel, 29 sep, vraag 54): het menu onder W. De houtkap in zijn bos is er een van.
-        `<p>Wetten mag u maken, zoveel u wilt. Over Ons bos gaat u niet.</p>`,
-      knoppen: [{ actie: 'sluit', tekst: 'Aan het werk', hoofd: true }],
+        `<p>${T.t('Laws you may make, as many as you like. Our forest you leave alone.')}</p>`,
+      knoppen: [{ actie: 'sluit', tekst: T.t('To work'), hoofd: true }],
     }),
 
     // In wijnmaand van het eerste jaar van het lege begin (T.heerLaatMetRust, js/begin.js): geen schatting, hij spaart je.
@@ -82,7 +85,7 @@
       wanneer: vandaag(S),
       aan: T.t('To Our reeve,'),
       tekst:
-        `<p>${T.t('St Martin\'s Day is coming, and We have decided to spare you this year. Do not thank Us.')}</p>` +
+        `<p>${T.t('Martinmas is coming, and We have decided to spare you this year. Do not thank Us.')}</p>` +
         `<p>${T.t('Next year We shall count all the more carefully.')}</p>`,
       knoppen: [{ actie: 'sluit', tekst: T.t('Thank you, my lord'), hoofd: true }],
     }),
@@ -92,18 +95,18 @@
     schatting: (S) => {
       const brief = S.dorp.heer && S.dorp.heer.brief;
       if (!brief) return null;
-      const regels = brief.eis.regels.map((r) => `<li><b>${r.aantal} ${r.wat}</b> <span>${r.waarom}</span></li>`).join('');
-      const samen = brief.eis.regels.length > 1 ? `<p class="brief-samen">Samen: ${eisInTaal(brief.eis)}.</p>` : '';
-      const nu = opsomming(brief.eis.volgorde.map((wat) => `${hebNu(S, wat)} ${wat}`));
+      const regels = brief.eis.regels.map((r) => `<li><b>${T.hoeveel(r.aantal, r.wat)}</b> <span>${r.waarom}</span></li>`).join('');
+      const samen = brief.eis.regels.length > 1 ? `<p class="brief-samen">${T.t('In all: {eis}.', { eis: eisInTaal(brief.eis) })}</p>` : '';
+      const nu = T.opsomming(brief.eis.volgorde.map((wat) => T.hoeveel(hebNu(S, wat), wat))) || T.t('nothing');
       return {
         wanneer: T.datumVanDag(brief.dag).tekst,
-        aan: 'Aan Onze trouwe schout,',
+        aan: T.t('To Our faithful reeve,'),
         tekst:
-          `<p>Het is Ons ter ore gekomen dat het u goed gaat. Dat verheugt Ons zeer, want het gaat Ons ook graag goed. Op Sint-Maarten komen Wij persoonlijk ophalen wat Ons toekomt. Naar wat Wij nu zien, is dat:</p>` +
-          `<ul class="brief-lijst">${regels || '<li>niets. Dat kan niet kloppen.</li>'}</ul>${samen}` +
-          `<p>Wat er tot Sint-Maarten bijkomt, zien Wij ook. Wie Ons tekortdoet, zal het merken, want Wij tellen zeer zorgvuldig. Bijna altijd.</p>`,
-        staat: `<p class="venster-staat">Je hebt nu ${nu}. Wat je hem aan graan geeft, kun je in de lente niet zaaien.${marskramerKomtNog(S, 'wijnmaand')}</p>`,
-        voet: `<p class="venster-voet">Zolang je leest, staat de tijd stil. <kbd>Esc</kbd> sluit; de knop Brief bovenin opent hem weer.</p>`,
+          `<p>${T.t('It has come to Our ears that you are doing well. That pleases Us greatly, for We too like to do well. At Martinmas We shall come in person to collect what is Ours. From what We see now, that is:')}</p>` +
+          `<ul class="brief-lijst">${regels || `<li>${T.t('nothing. That cannot be right.')}</li>`}</ul>${samen}` +
+          `<p>${T.t('Whatever is added before Martinmas, We shall see too. Whoever gives Us short measure will know it, for We count most carefully. Nearly always.')}</p>`,
+        staat: `<p class="venster-staat">${T.t('You now have {nu}. Whatever grain you give him, you cannot sow in spring.', { nu })}${marskramerKomtNog(S, 'wijnmaand')}</p>`,
+        voet: `<p class="venster-voet">${T.t('While you read, time stands still. <kbd>Esc</kbd> closes it; the letter on the table opens it again.')}</p>`,
       };
     },
 
@@ -118,16 +121,16 @@
       const telwoord = T.telwoord(v.mannen);
       return {
         wanneer: T.datumVanDag(v.dag).tekst,
-        aan: 'Aan Onze schout,',
+        aan: T.t('To Our reeve,'),
         tekst:
-          `<p>Wij trekken ten strijde ${veilig(v.oorlog)}.</p>` +
-          `<p>Zend Ons ${telwoord} weerbare ${v.mannen === 1 ? 'man' : 'mannen'}. Na de oogst krijgt u ze terug, op ${T.HEERVAART_INSTELLINGEN.terug.dag} ${T.HEERVAART_INSTELLINGEN.terug.maand}. De meesten.</p>` +
-          `<p>Wie liever betaalt, zendt Ons ${v.goud} goud; dan huren Wij ze zelf. Wij vragen niet waar dat goud vandaan komt. Wij onthouden het wel.</p>`,
+          `<p>${T.t('We go to war {oorlog}.', { oorlog: veilig(v.oorlog) })}</p>` +
+          `<p>${T.t('Send Us {n|one able-bodied man|{telwoord} able-bodied men}. You shall have them back after the harvest, on {datum}. Most of them.', { n: v.mannen, telwoord, datum: datumZonderJaar(T.HEERVAART_INSTELLINGEN.terug) })}</p>` +
+          `<p>${T.t('Whoever would rather pay sends Us {goud}; then We hire them Ourselves. We do not ask where that gold comes from. We do remember it.', { goud: T.hoeveel(v.goud, 'goud') })}</p>`,
         staat:
-          `<p class="venster-staat">Het spel kiest wie: ${wie || 'er is niemand die kan gaan'}. Hun werk ligt stil tot ze terug zijn, en het dorp voedt ze. ` +
-          `Van elke vier komt er gemiddeld één niet terug; wie terugkomt, heeft leren vechten. ${vrij.kan ? `Vrijkopen kost ${v.goud} van je ${hebNu(S, 'goud')} goud, en de heer vraagt zich af hoe je eraan komt.` : vrij.waarom}${marskramerKomtNog(S, 'hooimaand')}</p>`,
+          `<p class="venster-staat">${T.t('The game chooses who goes: {wie}. Their work stands still until they are back, and the village feeds them.', { wie: wie || T.t('there is no one who can go') })} ` +
+          `${T.t('On average one in four does not come back; whoever does has learnt to fight.')} ${vrij.kan ? T.t('Buying them out costs {goud} of your {heb} gold, and the lord wonders how you came by it.', { goud: v.goud, heb: hebNu(S, 'goud') }) : vrij.waarom}${marskramerKomtNog(S, 'hooimaand')}</p>`,
         knoppen: keuzes,
-        voet: `<p class="venster-voet">Kies je niet vóór ${T.datumVanDag(v.uiterlijk).tekst}, dan gaan ze. <kbd>Esc</kbd> sluit; de knop Brief bovenin opent hem weer.</p>`,
+        voet: `<p class="venster-voet">${T.t('If you have not chosen before {datum}, they go. <kbd>Esc</kbd> closes it; the letter on the table opens it again.', { datum: T.datumVanDag(v.uiterlijk).tekst })}</p>`,
       };
     },
 
@@ -136,13 +139,13 @@
     // (vraag 60, A).
     dorp: (S) => ({
       wanneer: vandaag(S),
-      aan: 'Aan Onze schout,',
+      aan: T.t('To Our reeve,'),
       tekst:
-        `<p>Wij vernemen dat ${hetDorp(S, 'gehucht')} een dorp is geworden. Gefeliciteerd. Dat kost u vanaf nu meer.</p>` +
-        (T.HEERVAART_INSTELLINGEN.aan ? `<p>Trekken Wij ten strijde, dan zendt u Ons voortaan ook mannen. Dat is een eer. Voor hen.</p>` : ''),
+        `<p>${T.t('We hear that {dorp} has become a village. Congratulations. From now on that will cost you more.', { dorp: onsGehucht(S) })}</p>` +
+        (T.HEERVAART_INSTELLINGEN.aan ? `<p>${T.t('When We go to war, you shall henceforth send Us men as well. It is an honour. For them.')}</p>` : ''),
       knoppen: [
-        { actie: 'titel', tekst: 'Naar het titelscherm' },
-        { actie: 'sluit', tekst: 'Verder als dorp', hoofd: true },
+        { actie: 'titel', tekst: T.t('To the title screen') },
+        { actie: 'sluit', tekst: T.t('Carry on as a village'), hoofd: true },
       ],
     }),
 
@@ -153,14 +156,14 @@
       if (!g) return null;
       const knoppen = T.grilKeuzes(S.dorp).map((k) => ({
         actie: k.actie, kan: k.kan, hoofd: k.hoofd,
-        tekst: `${veilig(k.tekst)}<span class="brief-prijs">${veilig(k.kan ? k.prijs || 'het kost niets' : k.waarom)}</span>`,
+        tekst: `${veilig(k.tekst)}<span class="brief-prijs">${veilig(k.kan ? k.prijs || T.t('it costs nothing') : k.waarom)}</span>`,
       }));
       return {
         wanneer: T.datumVanDag(g.dag).tekst,
-        aan: 'Aan Onze schout,',
+        aan: T.t('To Our reeve,'),
         tekst: g.tekst.map((p) => `<p>${veilig(p)}</p>`).join(''),
         knoppen,
-        voet: `<p class="venster-voet">Antwoord je niet vóór ${T.datumVanDag(g.uiterlijk).tekst}, dan neemt hij het je kwalijk. <kbd>Esc</kbd> sluit; de knop Brief bovenin opent hem weer.</p>`,
+        voet: `<p class="venster-voet">${T.t('If you have not answered before {datum}, he will hold it against you. <kbd>Esc</kbd> closes it; the letter on the table opens it again.', { datum: T.datumVanDag(g.uiterlijk).tekst })}</p>`,
       };
     },
 
@@ -170,12 +173,12 @@
       const w = S.dorp.bazen && S.dorp.bazen.brief;
       return {
         wanneer: w ? T.datumVanDag(w.dag).tekst : vandaag(S),
-        aan: 'Aan Onze schout,',
+        aan: T.t('To Our reeve,'),
         tekst:
-          `<p>${veilig((w && w.waarom) || 'Wij zijn niet tevreden over u.')}</p>` +
-          `<p>Nog één keer, schout. Wij hebben een neef die ook schout wil worden. Hij kan niet tellen, maar dat kunt u blijkbaar ook niet.</p>`,
-        staat: `<p class="venster-staat">De gunst van de heer is ${Math.round(S.dorp.bazen ? S.dorp.bazen.gunst : 0)}. Op 0 ben je je ambt kwijt.</p>`,
-        knoppen: [{ actie: 'sluit', tekst: 'Begrepen', hoofd: true }],
+          `<p>${veilig((w && w.waarom) || T.t('We are not pleased with you.'))}</p>` +
+          `<p>${T.t('Once more, reeve. We have a nephew who would like to be reeve too. He cannot count, but evidently neither can you.')}</p>`,
+        staat: `<p class="venster-staat">${T.t("The lord's favour is {n}. At 0 you lose your office.", { n: Math.round(S.dorp.bazen ? S.dorp.bazen.gunst : 0) })}</p>`,
+        knoppen: [{ actie: 'sluit', tekst: T.t('Understood'), hoofd: true }],
       };
     },
 
@@ -183,9 +186,9 @@
     // dorp voorlopig alleen woorden.
     marktrecht: (S) => ({
       wanneer: vandaag(S),
-      aan: 'Aan Onze schout,',
-      tekst: `<p>Wij vernemen dat in ${hetDorp(S, 'dorp')} gehandeld wordt. Wij verlenen u marktrecht. Dat kost u vanaf nu meer.</p>`,
-      knoppen: [{ actie: 'sluit', tekst: 'Aan het werk', hoofd: true }],
+      aan: T.t('To Our reeve,'),
+      tekst: `<p>${T.t('We hear that there is trade in {dorp}. We grant you a market charter. From now on that will cost you more.', { dorp: onsDorp(S) })}</p>`,
+      knoppen: [{ actie: 'sluit', tekst: T.t('To work'), hoofd: true }],
     }),
 
     // Het rapport van je raadsman, 's ochtends (js/ochtendrapport.js; werklijst vraag 75, 3a): wat er gebeurde, hoe het
@@ -196,18 +199,18 @@
       if (!R) return null;
       const p = T.raadsmanVan(S.dorp);
       const rekenen = p && T.vaardighedenVan(S.dorp, p).rekenen;
-      const staat = !p ? '' : rekenen === 'goed' ? 'Hij kan rekenen: zijn getallen kloppen.'
-        : rekenen === 'slecht' ? 'Hij kan niet rekenen: zijn getallen zitten er soms flink naast. Wie het zeker wil weten, gaat zelf kijken.'
-        : "Hij rekent zoals ieder ander: wat hij zegt, rondt hij af.";
+      const staat = !p ? '' : rekenen === 'goed' ? T.t('He can reckon: his figures are right.')
+        : rekenen === 'slecht' ? T.t('He cannot reckon: his figures are sometimes well off. If you want to be sure, go and look for yourself.')
+        : T.t('He reckons like anyone else: whatever he says, he rounds off.');
       return {
-        titel: `Het rapport van ${veilig(R.door)}`,
+        titel: T.t('The report from {naam}', { naam: veilig(R.door) }),
         wanneer: T.datumVanDag(R.dag).tekst,
-        aan: 'Heer schout,',
+        aan: T.t('Master reeve,'),
         tekst: R.regels.map((r) => `<p>${veilig(r)}</p>`).join(''),
-        groet: `Uw raadsman,<br>${veilig(R.door)}`,
+        groet: `${T.t('Your advisor,')}<br>${veilig(R.door)}`,
         staat: staat ? `<p class="venster-staat">${staat}</p>` : '',
-        knoppen: [{ actie: 'sluit', tekst: 'Aan het werk', hoofd: true }],
-        voet: `<p class="venster-voet">Zolang je leest, staat de tijd stil. <kbd>Esc</kbd> sluit.</p>`,
+        knoppen: [{ actie: 'sluit', tekst: T.t('To work'), hoofd: true }],
+        voet: `<p class="venster-voet">${T.t('While you read, time stands still. <kbd>Esc</kbd> closes it.')}</p>`,
       };
     },
     // De brief aan de marskramer (js/bode.js; werklijst vraag 143; Marcel, 9 okt: "soort van brief sturen met een bode"):
@@ -221,28 +224,33 @@
       const rijen = Object.keys(B.waren).map((wat) => {
         const W = B.waren[wat];
         const prijs = Math.ceil(W.prijs * k.maal);
-        return `<p class="bode-rij"><label>${T.hoofdletter(wat)}: <input type="number" min="0" max="${W.hooguit}" step="1" value="0" data-wat="${wat}"> ` +
-          `pak${W.hooguit === 1 ? '' : 'ken'} van ${W.per}</label> <small>(${prijs} goud per pak, tot ${W.hooguit})</small></p>`;
+        const veld = `<input type="number" min="0" max="${W.hooguit}" step="1" value="0" data-wat="${wat}">`;
+        return `<p class="bode-rij"><label>${T.t('{waar}: {veld} {n|pack|packs} of {per}', { waar: T.hoofdletter(T.waarNaam(wat)), veld, n: W.hooguit, per: W.per })}</label> ` +
+          `<small>${T.t('({goud} gold a pack, up to {hooguit})', { goud: prijs, hooguit: W.hooguit })}</small></p>`;
       });
       const kunnen = Math.min(B.meeHooguit, T.bodeBegeleiders(D, B.meeHooguit).length);
       const mee = kunnen
-        ? `<p class="bode-rij"><label>Mee ter bescherming: <input type="number" min="0" max="${kunnen}" step="1" value="0" data-mee="1"> weerbare ${kunnen === 1 ? 'man' : 'mannen'}</label> <small>(tot ${kunnen}, elk ${Math.round(B.loon * 10)} zilver)</small></p>`
+        ? `<p class="bode-rij"><label>${T.t('Along for protection: {veld} {n|able-bodied man|able-bodied men}', { veld: `<input type="number" min="0" max="${kunnen}" step="1" value="0" data-mee="1">`, n: kunnen })}</label> ` +
+          `<small>${T.t('(up to {n}, {zilver} silver each)', { n: kunnen, zilver: Math.round(B.loon * 10) })}</small></p>`
         : '';
       const gevaar = k.kan ? `<p class="bode-gevaar"><small>${veilig(T.bodeGevaarTekst(D, 0))}</small></p>` : '';
-      const waarom = !k.kan ? k.reden : !bijHuis ? 'Je schrijft de brief bij je huis.' : '';
-      const tijd = `Hij kan er over ${T.telwoord(k.dagen)} dagen zijn${k.winter ? ', want het is winter: de wegen zijn slecht, en hij vraagt het dubbele' : `, en hij vraagt ${k.maal === 1.5 ? 'anderhalf keer' : `${k.maal} keer`} wat hij anders vraagt`}.`;
+      const waarom = !k.kan ? k.reden : !bijHuis ? T.t('You write the letter at your house.') : '';
+      const dagen = { n: k.dagen, dagen: T.telwoord(k.dagen), maal: k.maal };
+      const tijd = k.winter ? T.t('He can be here in {n|a day|{dagen} days}, for it is winter: the roads are bad, and he asks double.', dagen)
+        : k.maal === 1.5 ? T.t('He can be here in {n|a day|{dagen} days}, and he asks half as much again as usual.', dagen)
+          : T.t('He can be here in {n|a day|{dagen} days}, and he asks {maal} times what he usually asks.', dagen);
       return {
-        titel: 'Een brief aan de marskramer',
+        titel: T.t('A letter to the peddler'),
         wanneer: vandaag(S),
-        aan: 'Aan de marskramer, waar hij ook is,',
-        tekst: `<p>${veilig(k.status ? k.status.zin : '')} Kom naar ${veilig(T.dorpsnaam(D) || 'ons dorp')}, en breng mee:</p>${rijen.join('')}${mee}${gevaar}`,
-        groet: `Uw schout`,
-        staat: `<p class="venster-staat">${waarom ? veilig(waarom) : `${tijd} De bode krijgt ${Math.round(B.loon * 10)} zilver uit de kas.`}</p>`,
+        aan: T.t('To the peddler, wherever he may be,'),
+        tekst: `<p>${veilig(k.status ? k.status.zin : '')} ${T.t('Come to {dorp}, and bring:', { dorp: veilig(T.dorpsnaam(D) || T.t('our village')) })}</p>${rijen.join('')}${mee}${gevaar}`,
+        groet: T.t('Your reeve'),
+        staat: `<p class="venster-staat">${waarom ? veilig(waarom) : `${tijd} ${T.t('The messenger gets {zilver} silver from the chest.', { zilver: Math.round(B.loon * 10) })}`}</p>`,
         knoppen: [
-          { actie: 'bode', tekst: 'Geef de bode de brief', hoofd: true, kan: k.kan && bijHuis },
-          { actie: 'sluit', tekst: 'Toch niet' },
+          { actie: 'bode', tekst: T.t('Give the messenger the letter'), hoofd: true, kan: k.kan && bijHuis },
+          { actie: 'sluit', tekst: T.t('Never mind') },
         ],
-        voet: `<p class="venster-voet">Zolang je schrijft, staat de tijd stil. <kbd>Esc</kbd> sluit.</p>`,
+        voet: `<p class="venster-voet">${T.t('While you write, time stands still. <kbd>Esc</kbd> closes it.')}</p>`,
       };
     },
     // Het jaar in het kort (js/einde.js; werklijst vraag 101, e): op 1 lentemaand, in de hand van je raadsman, zoals zijn
@@ -252,13 +260,13 @@
       if (!J) return null;
       const p = T.raadsmanVan(S.dorp);
       return {
-        titel: 'Het jaar in het kort',
+        titel: T.t('The year in brief'),
         wanneer: T.datumVanDag(J.dag).tekst,
-        aan: 'Heer schout,',
+        aan: T.t('Master reeve,'),
         tekst: J.regels.map((r) => `<p>${veilig(r)}</p>`).join(''),
-        groet: p ? `Uw raadsman,<br>${veilig(T.naamVanBewoner(p))}` : 'Opgetekend in het jaarboek',
-        knoppen: [{ actie: 'sluit', tekst: 'Een nieuw jaar', hoofd: true }],
-        voet: `<p class="venster-voet">Zolang je leest, staat de tijd stil. <kbd>Esc</kbd> sluit.</p>`,
+        groet: p ? `${T.t('Your advisor,')}<br>${veilig(T.naamVanBewoner(p))}` : T.t('Entered in the yearbook'),
+        knoppen: [{ actie: 'sluit', tekst: T.t('A new year'), hoofd: true }],
+        voet: `<p class="venster-voet">${T.t('While you read, time stands still. <kbd>Esc</kbd> closes it.')}</p>`,
       };
     },
   };
@@ -269,7 +277,7 @@
     if (!bezoek || !S.kalender) return '';
     const nu = T.datumVanDag(S.kalender.dag);
     const komtNog = T.MAANDEN[nu.maand].naam === bezoek.maand && nu.dagVanMaand < bezoek.dag;
-    return komtNog ? ` De marskramer komt op ${bezoek.dag} ${bezoek.maand}: dan kun je nog verkopen voor zijn goud.` : '';
+    return komtNog ? ` ${T.t('The peddler comes on {datum}: you can still sell to him for gold then.', { datum: datumZonderJaar(bezoek) })}` : '';
   }
 
   // Welke brief van de heer op je wacht: de heervaart (daar hoort een dag bij), dan een gril, dan de schatting.

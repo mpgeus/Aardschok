@@ -44,10 +44,10 @@
 
   // De feesten, en wat er dan op het plein komt te staan (voorwerp, T.VOORWERPEN in js/wereld.js).
   T.FEESTEN = {
-    oogstfeest: { naam: 'het oogstfeest' },
-    meiboom: { naam: 'de meiboom', voorwerp: 'meiboom' },
+    oogstfeest: { naam: T.t('the harvest feast') },
+    meiboom: { naam: T.t('the maypole'), voorwerp: 'meiboom' },
     // `vast`: de datums staan in T.FEESTEN_INSTELLINGEN onder deze naam, en de boom staat meteen.
-    kerstboom: { naam: 'kerstavond', voorwerp: 'kerstboom', vast: 'kerstboom' },
+    kerstboom: { naam: T.t('Christmas Eve'), voorwerp: 'kerstboom', vast: 'kerstboom' },
   };
 
   T.nieuweFeesten = () => ({ komt: null, boom: null, gevierd: [] });
@@ -147,7 +147,8 @@
     f.midden = boom ? { x: boom.x, y: boom.y } : w ? middenVan(w) : null;
     if (soort.voorwerp && !boom && f.midden) zetBoom(D, soort.voorwerp, f.midden, f.dag + IN().meiboomDagen);
     if (stil) return;
-    T.zeg(D, f.heel ? `Vandaag viert het dorp ${soort.naam} op het plein. Er wordt niet gewerkt.` : `Vanavond viert het dorp ${soort.naam} op het plein.`);
+    T.zeg(D, f.heel ? T.t('Today the village celebrates {feest} on the square. No one works.', { feest: soort.naam })
+      : T.t('Tonight the village celebrates {feest} on the square.', { feest: soort.naam }));
   };
 
   // De boom van een feest (de meiboom, de kerstboom) op het plein, op `midden`, tot de dag `tot`; een boom die er nog
@@ -179,7 +180,8 @@
       if (F.gevierd.length > 10) F.gevierd.shift();
       F.komt = null;
       const naam = T.FEESTEN[f.id].naam;
-      T.schrijfOp(D, 'feest', { tekst: f.heel ? `Het hele dorp vierde ${naam} op het plein; er werd niet gewerkt.` : `Het dorp vierde ${naam} op het plein, 's avonds.` });
+      T.schrijfOp(D, 'feest', { tekst: f.heel ? T.t('The whole village celebrated {feest} on the square; no one worked.', { feest: naam })
+        : T.t('The village celebrated {feest} on the square, in the evening.', { feest: naam }) });
     }
     if (F.boom && dag >= F.boom.tot) haalBoomWeg(D);
     if (F.komt && F.komt.dag === dag && !F.komt.begonnen) T.feestBegint(D, F.komt);
@@ -247,7 +249,7 @@
   T.feestPrijs = function (hoe, id) {
     if (!IN().vieren) return '';
     const soort = T.FEESTEN[id];
-    if (soort && soort.vast) return `feest op ${soort.naam}`;
-    return hoe === 'dag' ? 'morgen werkt niemand' : "'s avonds feest op het plein";
+    if (soort && soort.vast) return T.t('a feast on {feest}', { feest: soort.naam });
+    return hoe === 'dag' ? T.t('no one works tomorrow') : T.t('a feast on the square in the evening');
   };
 })(globalThis.Spel = globalThis.Spel || {});

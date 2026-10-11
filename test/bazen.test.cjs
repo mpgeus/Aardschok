@@ -50,8 +50,8 @@ test('de standaard: twee meters, die van 50 beginnen; met de spelregel uit zijn 
   const S = gehucht();
   const D = S.dorp;
   assert.deepEqual(T.bazenNu(D), { gunst: 50, vertrouwen: 50 });
-  assert.match(T.bazenTekst(D, 'gunst'), /^De gunst van de heer: 50 \(de heer is tevreden\)\..*op 0 ben je je ambt kwijt/);
-  assert.match(T.bazenTekst(D, 'vertrouwen'), /^Het vertrouwen van het dorp: 50 .*op 0 jagen ze je weg/);
+  assert.match(T.bazenTekst(D, 'gunst'), /^The lord's favour: 50 \(the lord is content\)\..*at 0 you lose your office/);
+  assert.match(T.bazenTekst(D, 'vertrouwen'), /^The village's trust: 50 .*at 0 they drive you out/);
   T.zetOptie('tweeBazen', 'uit');
   try {
     assert.equal(T.bazenNu(D), null);
@@ -71,15 +71,15 @@ test('de schatting: wat de heer krijgt, beweegt zijn gunst, en het venster zegt 
   for (const wat of Object.keys(eis.per)) T.zetVoorraad(D, wat, Math.ceil(eis.per[wat]) + 10);
   const alles = T.gevolgVanBetaling(D, { ...eis.per }, eis);
   assert.equal(alles.gunst.erbij, IN().schatting.goed);
-  assert.match(alles.tekst, /Zijn gunst: 50 → 65\./);
+  assert.match(alles.tekst, /His favour: 50 → 65\./);
   const niets = T.gevolgVanBetaling(D, {}, eis);
   assert.equal(niets.straf, 'schandpaal');
-  assert.match(niets.tekst, /Zijn gunst: 50 → 10\. Dan schrijft hij je een waarschuwing\./);
+  assert.match(niets.tekst, /His favour: 50 → 10\. Then he will write you a warning\./);
   assert.ok(!niets.ambtKwijt, 'de eerste keer niet: eerst een waarschuwing');
   T.betaalHeer(D, {});
   assert.equal(T.bazenNu(D).gunst, 10);
   assert.deepEqual(brieven, ['waarschuwing'], 'de heer schrijft een waarschuwing');
-  assert.match(D.bazen.brief.waarom, /Je betaalde te weinig/);
+  assert.match(D.bazen.brief.waarom, /You paid too little/);
   assert.ok(!D.einde);
 });
 
@@ -93,7 +93,7 @@ test('altijd eerst een waarschuwing: wie er nog geen kreeg, komt niet onder de l
   assert.ok(!D.einde);
   T.wijzigGunst(D, -10, 'nog een');
   assert.equal(D.einde && D.einde.reden, 'ambt');
-  assert.match(D.einde.waarom, /Zijn gunst is op: nog een\./);
+  assert.match(D.einde.waarom, /His favour is spent: nog een\./);
   assert.deepEqual(eindes, ['ambt']);
   // Is hij weg, dan verandert er niets meer.
   T.wijzigGunst(D, 50, 'te laat');
@@ -125,7 +125,7 @@ test('het dorp: antwoorden, de heervaart, de schandpaal, soldaten en wie sterft,
   assert.equal(v(), na + 2 * IN().doodDoorWinter, 'wie verhongerde of bevroor');
   T.wijzigBevolking(D, -1, 'vertrek', 'het dorp is niet tevreden genoeg');
   assert.equal(v(), na + 2 * IN().doodDoorWinter, 'wie wegtrekt, niet');
-  assert.match(T.bazenTekst(D, 'vertrouwen'), /-6 wie verhongerde of bevroor; -2 de diefstal; \+4 het feest/);
+  assert.match(T.bazenTekst(D, 'vertrouwen'), /-6 those who starved or froze; -2 de diefstal; \+4 het feest/);
 });
 
 test('een antwoord op een voorval telt mee, ook als je raadsman het besliste', () => {
@@ -151,7 +151,7 @@ test('het vertrouwen gaat elke dag een stukje naar hoe tevreden het dorp is', ()
   D.behoeften = { tevredenheid: 1 };
   T.tikBazenDag(D);
   assert.ok(Math.abs(T.bazenNu(D).vertrouwen - (50 + 50 / IN().volgDagen)) < 1e-9);
-  assert.match(T.bazenTekst(D, 'vertrouwen'), /naar hoe tevreden het dorp is \(100%\)/);
+  assert.match(T.bazenTekst(D, 'vertrouwen'), /towards how content the village is \(100%\)/);
   // Een dorp dat 90% tevreden is, en de soldaten van de heer: de klap slijt in een paar maanden weg (de speeltest van
   // 3 okt: zonder dit zakte het vertrouwen bij iedereen die lang genoeg speelde).
   D.behoeften = { tevredenheid: 0.9 };
@@ -160,7 +160,7 @@ test('het vertrouwen gaat elke dag een stukje naar hoe tevreden het dorp is', ()
   T.wijzigVertrouwen(D, IN().soldaten, 'de soldaten van de heer');
   for (let d = 0; d < 90; d++) T.tikBazenDag(D);
   assert.ok(T.bazenNu(D).vertrouwen > 90 + IN().soldaten / 4, 'na drie maanden is de klap grotendeels weg');
-  assert.ok(!D.einde && !berichten.some((t) => /Het dorp mort/.test(t)));
+  assert.ok(!D.einde && !berichten.some((t) => /The village grumbles/.test(t)));
 });
 
 test('een dorp dat het slecht heeft, mort vanzelf, maar jaagt je pas weg na een klap erbij', () => {
@@ -169,7 +169,7 @@ test('een dorp dat het slecht heeft, mort vanzelf, maar jaagt je pas weg na een 
   D.behoeften = { tevredenheid: 0.1 };
   for (let d = 0; d < 360; d++) T.tikBazenDag(D);
   assert.ok(T.bazenNu(D).vertrouwen > 0 && T.bazenNu(D).vertrouwen < IN().waarschuwing);
-  assert.equal(berichten.filter((t) => /Het dorp mort/.test(t)).length, 1, 'één keer');
+  assert.equal(berichten.filter((t) => /The village grumbles/.test(t)).length, 1, 'één keer');
   assert.ok(!D.einde, 'het slechte jaar alleen jaagt je niet weg');
   T.wijzigVertrouwen(D, -20, 'de honger');
   assert.equal(D.einde && D.einde.reden, 'verjaagd');
@@ -180,7 +180,7 @@ test('op 0 jaagt het dorp je weg, na een waarschuwing', () => {
   const D = S.dorp;
   T.wijzigVertrouwen(D, -60, 'een slechte maand');
   assert.equal(T.bazenNu(D).vertrouwen, IN().laatsteWaarschuwing, 'eerst de waarschuwing');
-  assert.ok(berichten.some((t) => /Het dorp mort/.test(t)));
+  assert.ok(berichten.some((t) => /The village grumbles/.test(t)));
   assert.ok(T.RADEN.find((r) => r.id === 'dorpMort').als(D), 'de raad zegt het');
   T.wijzigVertrouwen(D, -10, 'nog een');
   assert.equal(D.einde && D.einde.reden, 'verjaagd');

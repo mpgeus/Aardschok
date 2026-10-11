@@ -32,173 +32,173 @@
   // wat het kost als je niet antwoordt (`stil`).
   T.GRILLEN = {
     standbeeld: {
-      titel: 'het standbeeld',
+      titel: T.t('the statue'),
       tekst: [
-        'Het is Ons opgevallen dat uw plein leeg is. Een plein zonder Ons is maar een plein.',
-        'Zet er een standbeeld van Ons op, groot genoeg om vanaf de weg te zien, met Onze goede kant naar het zuiden. Wij hebben alleen goede kanten.',
+        T.t('It has come to Our attention that your square is empty. A square without Us is merely a square.'),
+        T.t('Put up a statue of Us there, large enough to be seen from the road, with Our good side to the south. We have only good sides.'),
       ],
       keuzes: [
-        { tekst: 'Een groot beeld, van eikenhout.', doe: { hout: -16, goud: -6, gunst: 10, vertrouwen: -3 } },
-        { tekst: 'Een bescheiden beeld. Bescheidenheid siert u.', doe: { hout: -6, gunst: 3 } },
-        { tekst: 'Het plein is te klein voor uw grootheid.', doe: { gunst: -6, vertrouwen: 2 } },
+        { tekst: T.t('A large statue, in oak.'), doe: { hout: -16, goud: -6, gunst: 10, vertrouwen: -3 } },
+        { tekst: T.t('A modest statue. Modesty becomes you.'), doe: { hout: -6, gunst: 3 } },
+        { tekst: T.t('The square is too small for your greatness.'), doe: { gunst: -6, vertrouwen: 2 } },
       ],
       stil: { gunst: -8 },
     },
     varken: {
-      titel: 'het vette varken',
+      titel: T.t('the fat pig'),
       tekst: [
-        'Wij krijgen gasten van adel, en Onze kok zegt dat de kelders leeg zijn. Dat kan niet, want Wij hebben hem gezegd dat ze vol zijn.',
-        'Zend Ons uw vetste varken. Of iets anders vets.',
+        T.t('We are expecting noble guests, and Our cook says the cellars are empty. That cannot be, for We told him they are full.'),
+        T.t('Send Us your fattest pig. Or something else that is fat.'),
       ],
       keuzes: [
-        { tekst: 'Tien vlees, het beste dat we hebben.', doe: { vlees: -10, gunst: 6, vertrouwen: -2 } },
-        { tekst: 'Twintig graan. Vet wordt het vanzelf.', doe: { graan: -20, gunst: 3 } },
-        { tekst: 'Onze varkens zijn mager, heer. Net als wij.', doe: { gunst: -5, vertrouwen: 3 } },
+        { tekst: T.t('Ten sides of meat, the best we have.'), doe: { vlees: -10, gunst: 6, vertrouwen: -2 } },
+        { tekst: T.t('Twenty sacks of grain. The fat will come by itself.'), doe: { graan: -20, gunst: 3 } },
+        { tekst: T.t('Our pigs are thin, my lord. Like us.'), doe: { gunst: -5, vertrouwen: 3 } },
       ],
       stil: { gunst: -6 },
     },
     bruiloft: {
-      titel: 'de bruiloft van zijn neef',
+      titel: T.t("his nephew's wedding"),
       tekst: [
-        'Onze neef trouwt. U kent hem niet, maar hij kent u: hij is degene die uw ambt wil.',
-        'Uw dorp schenkt het bier. Veel bier. Hij moet de bruid nog leren kennen.',
+        T.t('Our nephew is to be married. You do not know him, but he knows you: he is the one who wants your office.'),
+        T.t('Your village will provide the ale. A great deal of ale. He has yet to meet the bride.'),
       ],
       keuzes: [
-        { tekst: 'Vijftien vaten, van het beste.', doe: { bier: -15, gunst: 8, vertrouwen: -4 } },
-        { tekst: 'Acht goud, voor bier van elders.', doe: { goud: -8, gunst: 4 } },
-        { tekst: 'Het bier is op, heer.', doe: { gunst: -6 } },
+        { tekst: T.t('Fifteen barrels, of the best.'), doe: { bier: -15, gunst: 8, vertrouwen: -4 } },
+        { tekst: T.t('Eight gold, for ale from elsewhere.'), doe: { goud: -8, gunst: 4 } },
+        { tekst: T.t('The ale is all gone, my lord.'), doe: { gunst: -6 } },
       ],
       stil: { gunst: -6 },
     },
     jacht: {
-      titel: 'de jacht',
+      titel: T.t('the hunt'),
       tekst: [
-        'Wij komen jagen. Er schijnt wild te zijn in uw streek, en anders nemen Wij uw kippen.',
-        'Zorg dat de velden vrij zijn. Paarden lopen slecht om graan heen.',
+        T.t('We are coming to hunt. There is said to be game in your parts, and failing that We shall take your chickens.'),
+        T.t('See that the fields are clear. Horses are poor at going round grain.'),
       ],
       keuzes: [
-        { tekst: 'Jaag waar u wilt, heer.', doe: { graan: -15, gunst: 8, vertrouwen: -6 } },
-        { tekst: 'Op de heide is het wild het vetst.', doe: { gunst: 3, vertrouwen: -1 } },
-        { tekst: 'Het wild heeft de schurft, heer. Erg besmettelijk.', doe: { gunst: -6, vertrouwen: 2 } },
+        { tekst: T.t('Hunt wherever you please, my lord.'), doe: { graan: -15, gunst: 8, vertrouwen: -6 } },
+        { tekst: T.t('The game is fattest on the heath.'), doe: { gunst: 3, vertrouwen: -1 } },
+        { tekst: T.t('The game has the mange, my lord. Very catching.'), doe: { gunst: -6, vertrouwen: 2 } },
       ],
       stil: { gunst: -8 },
     },
     ramen: {
-      titel: 'de belasting op ramen',
+      titel: T.t('the window tax'),
       tekst: [
-        'Wij hebben bedacht dat wie door een raam kijkt, iets ziet, en wie iets ziet, kan ervoor betalen.',
-        'Voortaan kost elk raam Ons een penning. Wij beginnen nu.',
+        T.t('It has occurred to Us that whoever looks through a window sees something, and whoever sees something can pay for it.'),
+        T.t('Henceforth every window owes Us a penny. We begin now.'),
       ],
       keuzes: [
-        { tekst: 'Tien goud, voor alle ramen.', doe: { goud: -10, gunst: 5, vertrouwen: -3 } },
-        { tekst: 'We timmeren de ramen dicht.', doe: { gunst: 2, vertrouwen: -6 } },
-        { tekst: 'Voor licht betalen we niet, heer.', doe: { gunst: -8, vertrouwen: 5 } },
+        { tekst: T.t('Ten gold, for all the windows.'), doe: { goud: -10, gunst: 5, vertrouwen: -3 } },
+        { tekst: T.t('We board up the windows.'), doe: { gunst: 2, vertrouwen: -6 } },
+        { tekst: T.t('We do not pay for daylight, my lord.'), doe: { gunst: -8, vertrouwen: 5 } },
       ],
       stil: { gunst: -6 },
     },
     dichter: {
-      titel: 'de hofdichter',
+      titel: T.t('the court poet'),
       tekst: [
-        'Wij zenden u Onze hofdichter. Hij schrijft een lofdicht op Ons, en heeft daarvoor rust nodig. En eten. Een maand lang.',
+        T.t('We are sending you Our court poet. He is writing an ode to Us, and needs peace and quiet for it. And food. For a month.'),
       ],
       keuzes: [
-        { tekst: 'Hij eet bij ons, een maand.', doe: { graan: -12, gunst: 5, vertrouwen: -1 } },
-        { tekst: 'De herberg zit vol, heer. Een maand lang.', doe: { gunst: -5, vertrouwen: 2 } },
+        { tekst: T.t('He eats with us, for a month.'), doe: { graan: -12, gunst: 5, vertrouwen: -1 } },
+        { tekst: T.t('The inn is full, my lord. For a month.'), doe: { gunst: -5, vertrouwen: 2 } },
       ],
       stil: { gunst: -5 },
     },
     klok: {
-      titel: 'de klok van de bisschop',
+      titel: T.t("the bishop's bell"),
       tekst: [
-        'De bisschop wil een nieuwe klok. Wij hebben hem gezegd dat Wij betalen. Wij bedoelden u.',
+        T.t('The bishop wants a new bell. We told him that We would pay. We meant you.'),
       ],
       keuzes: [
-        { tekst: 'Twaalf goud, voor de klok.', doe: { goud: -12, gunst: 6, vertrouwen: 1 } },
-        { tekst: 'Onze kapel heeft al een klok, heer. Hij luidt niet, maar hij is er.', doe: { gunst: -5 } },
+        { tekst: T.t('Twelve gold, for the bell.'), doe: { goud: -12, gunst: 6, vertrouwen: 1 } },
+        { tekst: T.t('Our chapel already has a bell, my lord. It does not ring, but it is there.'), doe: { gunst: -5 } },
       ],
       stil: { gunst: -6 },
     },
     soldaten: {
-      titel: 'de soldaten op doortocht',
+      titel: T.t('the soldiers passing through'),
       tekst: [
-        'Onze soldaten trekken door uw dorp, op weg naar een oorlog die Wij nog moeten bedenken.',
-        'Geef ze drie nachten onderdak en eten. Ze zijn bijna nooit lastig.',
+        T.t('Our soldiers are marching through your village, on their way to a war We have yet to think of.'),
+        T.t('Give them three nights of shelter and food. They are hardly ever any trouble.'),
       ],
       keuzes: [
-        { tekst: 'Ze slapen bij de boeren, en eten met hen.', doe: { graan: -15, gunst: 8, vertrouwen: -6 } },
-        { tekst: 'Ze slapen in de herberg.', doe: { bier: -12, gunst: 4, vertrouwen: -2 } },
-        { tekst: 'Het dorp is vol, heer.', doe: { gunst: -10, vertrouwen: 3 } },
+        { tekst: T.t('They are lodged with the farmers, and eat with them.'), doe: { graan: -15, gunst: 8, vertrouwen: -6 } },
+        { tekst: T.t('They sleep at the inn.'), doe: { bier: -12, gunst: 4, vertrouwen: -2 } },
+        { tekst: T.t('The village is full, my lord.'), doe: { gunst: -10, vertrouwen: 3 } },
       ],
       stil: { gunst: -8 },
     },
     verjaardag: {
-      titel: 'zijn verjaardag',
+      titel: T.t('his birthday'),
       tekst: [
-        'Wij worden vijftig, of veertig; Onze kanselier telt na. Het hele land viert het, en uw dorp is een deel van het land.',
+        T.t('We are turning fifty, or forty; Our chancellor is checking. The whole land is celebrating, and your village is part of the land.'),
       ],
       keuzes: [
-        { tekst: 'Een feest op het plein, met bier voor iedereen.', doe: { bier: -10, gunst: 6, vertrouwen: 5 } },
-        { tekst: 'Een brief met onze gelukwensen.', doe: { gunst: 1 } },
-        { tekst: 'We waren het vergeten, heer.', doe: { gunst: -6 } },
+        { tekst: T.t('A feast on the square, with ale for everyone.'), doe: { bier: -10, gunst: 6, vertrouwen: 5 } },
+        { tekst: T.t('A letter with our good wishes.'), doe: { gunst: 1 } },
+        { tekst: T.t('We had forgotten, my lord.'), doe: { gunst: -6 } },
       ],
       stil: { gunst: -6 },
     },
     valk: {
-      titel: 'de valk',
+      titel: T.t('the falcon'),
       tekst: [
-        'Onze valk is ontsnapt. Hij is zeker bij u, want hij houdt van rijke dorpen.',
-        'Zoek hem, en breng hem terug. Levend.',
+        T.t('Our falcon has escaped. He is surely with you, for he is fond of rich villages.'),
+        T.t('Find him, and bring him back. Alive.'),
       ],
       keuzes: [
-        { tekst: 'Het hele dorp zoekt een dag lang.', doe: { gunst: 5, vertrouwen: -3 } },
-        { tekst: 'Hij is hier niet, heer.', doe: { gunst: -3 } },
-        { tekst: 'We vonden hem. Gebraden, helaas.', doe: { gunst: -10, vertrouwen: 6 } },
+        { tekst: T.t('The whole village searches for a day.'), doe: { gunst: 5, vertrouwen: -3 } },
+        { tekst: T.t('He is not here, my lord.'), doe: { gunst: -3 } },
+        { tekst: T.t('We found him. Roasted, alas.'), doe: { gunst: -10, vertrouwen: 6 } },
       ],
       stil: { gunst: -5 },
     },
     lening: {
-      titel: 'de lening',
+      titel: T.t('the loan'),
       tekst: [
-        'Het gaat Ons uitstekend, maar Wij komen tijdelijk iets tekort. Leen Ons twintig goud. Wij betalen u terug, met dank.',
+        T.t('We are doing splendidly, but for the moment We are a little short. Lend Us twenty gold. We shall pay you back, with thanks.'),
       ],
       keuzes: [
-        { tekst: 'Twintig goud, heer.', doe: { goud: -20, gunst: 10 } },
-        { tekst: 'De kist is leeg, heer.', doe: { gunst: -6 } },
+        { tekst: T.t('Twenty gold, my lord.'), doe: { goud: -20, gunst: 10 } },
+        { tekst: T.t('The chest is empty, my lord.'), doe: { gunst: -6 } },
       ],
       stil: { gunst: -6 },
     },
     weg: {
-      titel: 'de weg naar het kasteel',
+      titel: T.t('the road to the castle'),
       tekst: [
-        'De weg van uw dorp naar Ons kasteel is slecht. Daardoor komt Ons goud zo traag aan.',
-        'Leg een betere aan. Uw mannen hebben toch niets te doen.',
+        T.t('The road from your village to Our castle is poor. That is why Our gold arrives so slowly.'),
+        T.t('Build a better one. Your men have nothing to do anyway.'),
       ],
       keuzes: [
-        { tekst: 'Vijftien hout, en de mannen.', doe: { hout: -15, gunst: 8, vertrouwen: -5 } },
-        { tekst: 'Na de oogst, heer.', doe: { gunst: -4 } },
+        { tekst: T.t('Fifteen loads of wood, and the men.'), doe: { hout: -15, gunst: 8, vertrouwen: -5 } },
+        { tekst: T.t('After the harvest, my lord.'), doe: { gunst: -4 } },
       ],
       stil: { gunst: -6 },
     },
     portret: {
-      titel: 'het portret',
+      titel: T.t('the portrait'),
       tekst: [
-        'Er komt een schilder Ons portret maken, voor uw raadhuis. U heeft geen raadhuis? Dan voor uw herberg.',
+        T.t('A painter is coming to paint Our portrait, for your town hall. You have no town hall? Then for your inn.'),
       ],
       keuzes: [
-        { tekst: 'Tien goud voor de schilder.', doe: { goud: -10, gunst: 6, vertrouwen: -1 } },
-        { tekst: 'Het licht is hier slecht, heer.', doe: { gunst: -3 } },
+        { tekst: T.t('Ten gold for the painter.'), doe: { goud: -10, gunst: 6, vertrouwen: -1 } },
+        { tekst: T.t('The light is poor here, my lord.'), doe: { gunst: -3 } },
       ],
       stil: { gunst: -4 },
     },
     pest: {
-      titel: 'de pest in de streek',
+      titel: T.t('the plague in the district'),
       tekst: [
-        'Er is pest in de streek. Wij hebben er geen last van; Wij wonen hoog.',
-        'Sluit uw dorp. Niemand erin, niemand eruit, tot Wij anders zeggen.',
+        T.t('There is plague in the district. It does not trouble Us; We live up high.'),
+        T.t('Close your village. No one in, no one out, until We say otherwise.'),
       ],
       keuzes: [
-        { tekst: 'We sluiten de weg.', doe: { gunst: 5, vertrouwen: -4 } },
-        { tekst: 'We zijn gezond, heer, en de markt moet door.', doe: { gunst: -4, vertrouwen: 2 } },
+        { tekst: T.t('We close the road.'), doe: { gunst: 5, vertrouwen: -4 } },
+        { tekst: T.t('We are healthy, my lord, and the market must go on.'), doe: { gunst: -4, vertrouwen: 2 } },
       ],
       stil: { gunst: -4 },
     },
@@ -237,7 +237,7 @@
     G.geweest[id] = dag;
     G.aantal++;
     if (T.ui && T.ui.toonBrief && !D.ander) T.ui.toonBrief(D, 'gril');
-    else T.zeg(D, `Er is een brief van de heer, over ${T.GRILLEN[id].titel}.`);
+    else T.zeg(D, T.t('There is a letter from the lord about {titel}.', { titel: T.GRILLEN[id].titel }));
   };
 
   // Geen antwoord: hij neemt het je kwalijk.
@@ -246,8 +246,8 @@
     const g = T.GRILLEN[G.vraag.id];
     G.vraag = null;
     G.stil++;
-    T.zeg(D, `"Wij hoorden niets van u, schout." Je antwoordde de heer niet over ${g.titel}.`, 'gevaar');
-    pasToe(D, g.stil, `je antwoordde hem niet over ${g.titel}`);
+    T.zeg(D, T.t('"We heard nothing from you, reeve." You did not answer the lord about {titel}.', { titel: g.titel }), 'gevaar');
+    pasToe(D, g.stil, T.t('you did not answer him about {titel}', { titel: g.titel }));
   }
 
   // De gril die op je antwoord wacht, of null: { id, titel, tekst, dag, uiterlijk }.

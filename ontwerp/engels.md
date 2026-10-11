@@ -113,6 +113,33 @@ Wat elke zin nodig heeft, staat op één plek, al in het Engels:
 | ontbreken / missen | lack / be short of | "short of 6 gold" |
 | doorgroeien | grow into | "A hut has grown into a house" |
 
+## Erbij in deel 4 (de heer, de wetten, de feesten)
+
+Sint-Maarten is overal *Martinmas* (de eerste brieven zeiden nog *St Martin's Day*). Wie de heer antwoordt (een knop
+onder een gril), zegt *my lord*; de raadsman schrijft de schout aan met *Master reeve*.
+
+| Nederlands | Engels | |
+|---|---|---|
+| het ambt, je ambt kwijt, ontslaan | office, lose your office, dismiss | "You are dismissed." |
+| de boete, de schuld | a fine, what you still owed | |
+| de pacht, het hoofdgeld | the rent, poll tax | wat de heer vraagt |
+| de kist, de schuren | the chest, the barns | "a share of the 40 gold in your chest" |
+| de soldaten in huis | the lord's soldiers billeted here | |
+| aan de schandpaal | in the pillory | "You put yourself in the pillory." |
+| de straffen: boete, soldaten, schandpaal | a fine, soldiers, the pillory | `T.STRAF_TOON` (`js/heer.js`) |
+| hoe de heer of het dorp erbij staat: blij, tevreden, ontevreden, boos | pleased, content, displeased, angry | `T.bazenTekst` |
+| het dorp mort, wegjagen | the village grumbles, drive out | |
+| vrijkopen, weerbare mannen, sneuvelen | buy out, able-bodied men, fall | de heervaart |
+| Kromwijk, Oosterwolde | Crookwick, Eastwold | de oorlogen van de heer |
+| marktrecht verlenen | grant a market charter | |
+| het jaarboek | the yearbook | |
+| zilver, een pak | silver, a pack | de brief aan de marskramer |
+| de wetten: Rantsoen (krap, gewoon, ruim) | Rations (short, normal, generous) | het dorp heeft last van *the short rations* |
+| Vreemden welkom, Houtkap in het bos van de heer, Belasting | Strangers welcome, Felling in the lord's forest, Tax | |
+| aannemen, afschaffen | pass, repeal | |
+| het oogstfeest, de meiboom, kerstavond | the harvest feast, the maypole, Christmas Eve | `T.FEESTEN[x].naam` |
+| de grillen: het standbeeld, het vette varken, … | the statue, the fat pig, his nephew's wedding, the hunt, the window tax, the court poet, the bishop's bell, the soldiers passing through, his birthday, the falcon, the loan, the road to the castle, the portrait, the plague in the district | `T.GRILLEN[x].titel` |
+
 ## De maanden
 
 Gewone maanden (Marcel, 11 okt): de namen waar de regels op letten blijven in de code (`'lentemaand'`); wat de speler

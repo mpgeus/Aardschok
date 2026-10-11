@@ -35,40 +35,42 @@
   const IN = () => T.WETTEN_INSTELLINGEN;
 
   // De wetten, in de volgorde van het menu. Een wet met de standen afgeschaft en aangenomen heeft in het menu één
-  // knop (Aannemen of Afschaffen); een wet met meer standen een knop per stand. `woorden` zegt per stand hoe het
-  // dorp erover praat, bij de tevredenheid in de balk ("Het heeft last van het krappe rantsoen").
+  // knop (Pass of Repeal); een wet met meer standen een knop per stand, met de naam uit `toon` (de standen zelf zijn
+  // namen waar de regels op letten). `woorden` zegt per stand hoe het dorp erover praat, bij de tevredenheid in de balk
+  // ("It suffers from the short rations").
   T.WETTEN = {
     rantsoen: {
-      naam: 'Rantsoen',
+      naam: T.t('Rations'),
       trede: 'gehucht',
-      uitleg: 'Hoeveel ieder elke dag eet.',
+      uitleg: T.t('How much everyone eats each day.'),
       standen: ['krap', 'gewoon', 'ruim'],
+      toon: { krap: T.t('short'), gewoon: T.t('normal'), ruim: T.t('generous') },
       standaard: 'gewoon',
-      woorden: { krap: 'het krappe rantsoen', ruim: 'het ruime rantsoen' },
+      woorden: { krap: T.t('the short rations'), ruim: T.t('the generous rations') },
     },
     vreemden: {
-      naam: 'Vreemden welkom',
+      naam: T.t('Strangers welcome'),
       trede: 'gehucht',
-      uitleg: 'Wie hier wil wonen, mag komen.',
+      uitleg: T.t('Whoever wants to live here may come.'),
       standen: ['afgeschaft', 'aangenomen'],
       standaard: 'afgeschaft',
-      woorden: { aangenomen: 'de vreemden' },
+      woorden: { aangenomen: T.t('the strangers') },
     },
     houtkap: {
-      naam: 'Houtkap in het bos van de heer',
+      naam: T.t("Felling in the lord's forest"),
       trede: 'gehucht',
-      uitleg: 'De houthakker mag ook de bomen van de heer omhakken.',
+      uitleg: T.t("The woodcutter may fell the lord's trees as well."),
       standen: ['afgeschaft', 'aangenomen'],
       standaard: 'afgeschaft',
       woorden: {},
     },
     belasting: {
-      naam: 'Belasting',
+      naam: T.t('Tax'),
       trede: 'gehucht',
-      uitleg: 'Ieder betaalt elke maand een beetje aan de kist van het dorp.',
+      uitleg: T.t('Everyone pays a little into the village chest each month.'),
       standen: ['afgeschaft', 'aangenomen'],
       standaard: 'afgeschaft',
-      woorden: { aangenomen: 'de belasting' },
+      woorden: { aangenomen: T.t('the tax') },
     },
   };
 
@@ -92,13 +94,14 @@
   // dorp eet, hoe tevreden het is en wat de houthakker hakt, vragen de regels elke dag opnieuw.
   T.zetWet = function (D, id, stand) {
     const wet = T.WETTEN[id];
-    if (!wet || !wet.standen.includes(stand)) return { kan: false, reden: 'Die wet bestaat niet.' };
-    if (!T.wettenVanNu(D).includes(id)) return { kan: false, reden: `Dat mag pas als het een ${wet.trede} is.` };
+    if (!wet || !wet.standen.includes(stand)) return { kan: false, reden: T.t('That law does not exist.') };
+    // De naam van de trede (js/treden.js) vraagt een dorp; dit is er een met alleen die trede.
+    if (!T.wettenVanNu(D).includes(id)) return { kan: false, reden: T.t('That law comes with {trede}.', { trede: T.tredeNaam({ trede: wet.trede }) }) };
     if (T.standVanWet(D, id) === stand) return { kan: true };
     if (!D.wetten) D.wetten = T.nieuweWetten();
     D.wetten.standen[id] = stand;
-    if (!T.wetIsAanUit(id)) T.zeg(D, `${wet.naam}: vanaf vandaag ${stand}.`);
-    else T.zeg(D, `${wet.naam}: ${stand === 'aangenomen' ? 'aangenomen' : 'afgeschaft'}.`);
+    if (!T.wetIsAanUit(id)) T.zeg(D, T.t('{wet}: {stand} from today.', { wet: wet.naam, stand: wet.toon[stand] }));
+    else T.zeg(D, stand === 'aangenomen' ? T.t('{wet}: passed.', { wet: wet.naam }) : T.t('{wet}: repealed.', { wet: wet.naam }));
     T.tevredenheidOpnieuw(D);
     return { kan: true };
   };
@@ -158,7 +161,7 @@
       if (goud > 0) {
         W.belastingRest -= goud;
         T.wijzigVoorraad(D, 'goud', goud);
-        T.zeg(D, `De belasting bracht ${goud} goud op.`, 'goed');
+        T.zeg(D, T.t('The tax brought in {goud}.', { goud: T.hoeveel(goud, 'goud') }), 'goed');
       }
     }
   };
@@ -167,10 +170,14 @@
   // Wat een wet doet, in woorden, voor het menu (js/wettenmenu.js)
   // ---------------------------------------------------------------------------------------------
 
-  const getal = (x) => String(Math.round(x * 10) / 10).replace('.', ',');
-  const KEER = { 0.5: 'de helft', 0.75: 'driekwart', 1.25: 'een kwart meer', 1.5: 'anderhalf keer zoveel', 2: 'twee keer zoveel', 3: 'drie keer zoveel' };
-  const keer = (f) => KEER[f] || `${getal(f)} keer zoveel`;
-  const vaak = (f) => (f === 2 ? 'twee keer zo vaak' : f === 3 ? 'drie keer zo vaak' : `${getal(f)} keer zo vaak`);
+  // Een getal met hooguit één decimaal, met een punt (ontwerp/engels.md).
+  const getal = (x) => String(Math.round(x * 10) / 10);
+  const KEER = {
+    0.5: T.t('half as much'), 0.75: T.t('three quarters as much'), 1.25: T.t('a quarter more'),
+    1.5: T.t('half as much again'), 2: T.t('twice as much'), 3: T.t('three times as much'),
+  };
+  const keer = (f) => KEER[f] || T.t('{n} times as much', { n: getal(f) });
+  const vaak = (f) => (f === 2 ? T.t('twice as often') : f === 3 ? T.t('three times as often') : T.t('{n} times as often', { n: getal(f) }));
 
   // Wat een wet in een stand doet: [{ tekst, goed }], met de getallen van nu. Eerst wat goed is, dan wat het kost.
   T.watDeWetDoet = function (D, id, stand) {
@@ -179,22 +186,22 @@
     const bevolking = D.bevolking || 0;
     if (d.eten != null && d.eten !== 1) {
       const nu = bevolking * T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag;
-      regels.push({ goed: d.eten < 1, tekst: `ieder eet ${keer(d.eten)}: ${getal(nu * d.eten)} graan per dag in plaats van ${getal(nu)}` });
+      regels.push({ goed: d.eten < 1, tekst: T.t('everyone eats {keer}: {graan} a day instead of {was}', { keer: keer(d.eten), graan: T.hoeveel(getal(nu * d.eten), 'graan'), was: getal(nu) }) });
     }
     if (d.gezinnen != null && d.gezinnen !== 1) {
       const basis = T.GEBOUWEN_INSTELLINGEN.gezinDagen;
-      regels.push({ goed: d.gezinnen > 1, tekst: `${vaak(d.gezinnen)} een nieuw gezin: om de ${Math.max(1, Math.round(basis / d.gezinnen))} dagen in plaats van ${basis}` });
+      regels.push({ goed: d.gezinnen > 1, tekst: T.t('a new family {vaak}: every {n|day|# days} instead of {basis}', { vaak: vaak(d.gezinnen), n: Math.max(1, Math.round(basis / d.gezinnen)), basis }) });
     }
     if (d.hout != null && d.hout !== 1) {
       const heeft = (D.gebouwen || []).some((g) => T.GEBOUWEN[g.soort].bos);
-      regels.push({ goed: d.hout > 1, tekst: `een houthakker hakt ${keer(d.hout)} hout${heeft ? '' : ' (er is nog geen houthakker)'}` });
+      regels.push({ goed: d.hout > 1, tekst: heeft ? T.t('a woodcutter cuts {keer} wood', { keer: keer(d.hout) }) : T.t('a woodcutter cuts {keer} wood (there is no woodcutter yet)', { keer: keer(d.hout) }) });
     }
-    if (d.goud) regels.push({ goed: true, tekst: `elke maand ${getal(T.belastbaar(D) * d.goud)} goud in de kist` });
+    if (d.goud) regels.push({ goed: true, tekst: T.t('{goud} into the chest every month', { goud: T.hoeveel(getal(T.belastbaar(D) * d.goud), 'goud') }) });
     if (d.tevreden) {
       const pct = Math.round(Math.abs(d.tevreden) * 100);
-      regels.push({ goed: d.tevreden > 0, tekst: d.tevreden > 0 ? `${pct}% tevredener` : `${pct}% minder tevreden` });
+      regels.push({ goed: d.tevreden > 0, tekst: d.tevreden > 0 ? T.t('{pct}% more content', { pct }) : T.t('{pct}% less content', { pct }) });
     }
-    if (d.boete) regels.push({ goed: false, tekst: `de heer rekent op Sint-Maarten ${d.boete} goud boete, als er dat jaar gekapt is` });
+    if (d.boete) regels.push({ goed: false, tekst: T.t('at Martinmas the lord charges a fine of {goud} if there was felling that year', { goud: T.hoeveel(d.boete, 'goud') }) });
     return regels.sort((a, b) => b.goed - a.goed);
   };
 })(globalThis.Spel = globalThis.Spel || {});

@@ -30,20 +30,22 @@
     // van 0 tot 100; het was 0,5% argwaan per goud, vóór 11 okt).
     kansNietTerug: 0.25,
     gunstPerGoud: 0.5,
-    // Waarom hij ten strijde trekt: elk jaar een van deze, na "Wij trekken ten strijde". Zinnen, geen getallen,
-    // dus de werkbank laat ze met rust.
+    // Waarom hij ten strijde trekt: elk jaar een van deze, na "We go to war". Zinnen, geen getallen, dus de werkbank
+    // laat ze met rust.
     oorlogen: [
-      'tegen de heer van Kromwijk, die Ons niet groette',
-      'tegen de bisschop, om een weiland dat niemand ooit zag',
-      'tegen Onze neef, die Ons een paard schuldig is',
-      'tegen de heer van Oosterwolde, wiens hond Onze hond beet',
-      'tegen de graaf, omdat de graaf begon. Denken Wij',
+      T.t('against the lord of Crookwick, who did not greet Us'),
+      T.t('against the bishop, over a meadow nobody has ever seen'),
+      T.t('against Our nephew, who owes Us a horse'),
+      T.t('against the lord of Eastwold, whose dog bit Our dog'),
+      T.t('against the count, because the count started it. We think'),
     ],
   };
   const IN = () => T.HEERVAART_INSTELLINGEN;
 
   const dagNu = (D) => Math.floor(D.kalender ? D.kalender.dag : 0);
   const maandIdx = (naam) => T.MAANDEN.findIndex((m) => m.naam === naam);
+  // De dag dat ze terug zijn, zonder jaar: "1 September".
+  const terugTekst = () => `${IN().terug.dag} ${T.MAANDEN[maandIdx(IN().terug.maand)].toon}`;
   // Een getal 0..1, vast per spel, per dag en per vraag `n` (zoals in js/rovers.js), zodat een speeltest met
   // hetzelfde zaad hetzelfde jaar speelt.
   const lot = (D, dag, n) => T.dobbelsteen(((D.lot && D.lot.zaad) || 1) * 41 + Math.floor(dag) * 7919 + n)();
@@ -80,13 +82,15 @@
       uiterlijk: dag + IN().kiesBinnenDagen,
     };
     if (T.ui && T.ui.toonBrief) T.ui.toonBrief(D, 'heervaart');
-    else T.zeg(D, 'Er is een brief van de heer: hij vraagt mannen voor zijn oorlog.');
+    else T.zeg(D, T.t('There is a letter from the lord: he asks for men for his war.'));
     return H.vraag;
   };
 
-  // Wie er gaat, in woorden, met het werk dat stil komt te liggen: "Piet, Klaas en Jan (bij de houthakker)".
+  // Wie er gaat, in woorden, met het werk dat stil komt te liggen: "Peter, Hugh and John (at the woodcutter)".
   T.heervaartWieTekst = function (D, wie) {
-    return T.opsomming(wie.map((p) => `${T.naamVanBewoner(p)}${p.werk ? ` (bij de ${T.GEBOUWEN[p.werk.soort].naam})` : ''}`));
+    return T.opsomming(wie.map((p) => (p.werk
+      ? T.t('{naam} (at the {gebouw})', { naam: T.naamVanBewoner(p), gebouw: T.GEBOUWEN[p.werk.soort].naam })
+      : T.naamVanBewoner(p))));
   };
 
   // Wat je kunt kiezen, voor de knoppen onder de brief (js/brieven.js): { actie, tekst, kan, waarom, hoofd, doe }.
@@ -98,11 +102,11 @@
     const kan = goud >= v.goud;
     return [
       {
-        actie: 'vrijkopen', tekst: `Koop ze vrij: ${v.goud} goud`, kan,
-        waarom: kan ? '' : `Vrijkopen kost ${v.goud} goud, en je hebt er ${goud}.`,
+        actie: 'vrijkopen', tekst: T.t('Buy them out: {goud}', { goud: T.hoeveel(v.goud, 'goud') }), kan,
+        waarom: kan ? '' : T.t('Buying them out costs {goud}, and you have {heb}.', { goud: T.hoeveel(v.goud, 'goud'), heb: goud }),
         doe: () => T.koopHeervaartAf(D),
       },
-      { actie: 'stuur', tekst: v.wie.length === 1 ? 'Stuur hem' : 'Stuur ze', kan: true, hoofd: true, doe: () => T.stuurHeervaart(D, 'gestuurd') },
+      { actie: 'stuur', tekst: v.wie.length === 1 ? T.t('Send him') : T.t('Send them'), kan: true, hoofd: true, doe: () => T.stuurHeervaart(D, 'gestuurd') },
     ];
   };
 
@@ -116,18 +120,18 @@
     const wie = v.wie.filter((p) => D.bewoners && D.bewoners.mensen.includes(p) && !p.weg);
     H.laatste = { jaar: v.jaar, antwoord: hoe, mannen: wie.length };
     if (!wie.length) {
-      T.zeg(D, 'De heer vroeg mannen, maar er was niemand die kon gaan.');
+      T.zeg(D, T.t('The lord asked for men, but there was no one who could go.'));
       return wie;
     }
     T.stuurWeg(D, wie, 'heervaart');
     H.tocht = { wie, terugOp: volgende(dagNu(D), IN().terug) };
     // Twee bazen (js/bazen.js): de heer krijgt zijn mannen, of haalde ze zelf; het dorp ziet ze gaan.
     const BZ = T.BAZEN_INSTELLINGEN;
-    T.wijzigGunst(D, hoe === 'gehaald' ? BZ.heervaart.gehaald : BZ.heervaart.gestuurd, hoe === 'gehaald' ? 'je antwoordde hem niet' : 'je stuurde hem mannen');
-    T.wijzigVertrouwen(D, BZ.heervaartWeg, 'je stuurde mannen naar de oorlog');
-    const terug = `${IN().terug.dag} ${IN().terug.maand}`;
-    if (hoe === 'gehaald') T.zeg(D, `Je antwoordde de heer niet. Zijn soldaten haalden ${namen(wie)} op; terug op ${terug}.`, 'gevaar');
-    else T.zeg(D, `${T.hoofdletter(namen(wie))} ${wie.length === 1 ? 'gaat' : 'gaan'} met de heer ten strijde. Terug op ${terug}.`);
+    T.wijzigGunst(D, hoe === 'gehaald' ? BZ.heervaart.gehaald : BZ.heervaart.gestuurd, hoe === 'gehaald' ? T.t('you did not answer him') : T.t('you sent him men'));
+    T.wijzigVertrouwen(D, BZ.heervaartWeg, T.t('you sent men to war'));
+    const woorden = { wie: namen(wie), n: wie.length, terug: terugTekst() };
+    if (hoe === 'gehaald') T.zeg(D, T.t('You did not answer the lord. His soldiers came for {wie}; back on {terug}.', woorden), 'gevaar');
+    else T.zeg(D, T.t('{n|{wie} goes|{wie} go} to war with the lord. Back on {terug}.', woorden));
     return wie;
   };
 
@@ -140,10 +144,10 @@
     if (!v || ((D.voorraad && D.voorraad.goud) || 0) < v.goud) return false;
     H.vraag = null;
     T.wijzigVoorraad(D, 'goud', -v.goud);
-    T.wijzigGunst(D, T.BAZEN_INSTELLINGEN.heervaart.vrijgekocht - v.goud * IN().gunstPerGoud, 'je kocht je mannen vrij van zijn heervaart');
-    T.wijzigVertrouwen(D, T.BAZEN_INSTELLINGEN.heervaartVrij, 'je kocht de mannen vrij');
+    T.wijzigGunst(D, T.BAZEN_INSTELLINGEN.heervaart.vrijgekocht - v.goud * IN().gunstPerGoud, T.t('you bought your men out of his levy'));
+    T.wijzigVertrouwen(D, T.BAZEN_INSTELLINGEN.heervaartVrij, T.t('you bought the men out'));
     H.laatste = { jaar: v.jaar, antwoord: 'vrijgekocht', goud: v.goud };
-    T.zeg(D, `Je koopt je mannen vrij voor ${v.goud} goud. De heer vraagt zich af waar dat vandaan kwam.`);
+    T.zeg(D, T.t('You buy your men out for {goud}. The lord wonders where that came from.', { goud: T.hoeveel(v.goud, 'goud') }));
     return true;
   };
 
@@ -160,9 +164,9 @@
     const terug = [];
     wie.forEach((p, i) => (lot(D, dagNu(D), i) < IN().kansNietTerug ? dood : terug).push(p));
     const over = dood.length
-      ? ` ${T.hoofdletter(namen(dood))} ${dood.length === 1 ? 'sneuvelde' : 'sneuvelden'} voor de heer. Hij laat weten dat ${dood.length === 1 ? 'hij dapper was' : 'ze dapper waren'}.`
+      ? ` ${T.t('{n|{wie} fell for the lord. He sends word that he was brave.|{wie} fell for the lord. He sends word that they were brave.}', { n: dood.length, wie: namen(dood) })}`
       : '';
-    const tekst = terug.length ? `De mannen van de heervaart komen terug: ${namen(terug)}.${over}` : `Niemand van de heervaart komt terug.${over}`;
+    const tekst = terug.length ? `${T.t('The men of the levy come back: {wie}.', { wie: namen(terug) })}${over}` : `${T.t('None of the levy comes back.')}${over}`;
     if (dood.length) T.wijzigBevolking(D, -dood.length, 'gesneuveld', null, dood);
     for (const p of terug) p.veteraan = true;
     if (terug.length) T.komtTerug(D, terug, { tekst, soort: dood.length ? 'gevaar' : 'goed' });

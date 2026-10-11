@@ -138,7 +138,7 @@ test('vrijkopen kost het goud en een deel van de gunst van de heer; zonder genoe
   S.dorp.voorraad.goud = v.goud - 1;
   const arm = T.heervaartKeuzes(S.dorp).find((k) => k.actie === 'vrijkopen');
   assert.equal(arm.kan, false);
-  assert.match(arm.waarom, /kost \d+ goud, en je hebt er \d+/);
+  assert.match(arm.waarom, /costs \d+ gold, and you have \d+/);
   assert.equal(T.koopHeervaartAf(S.dorp), false);
 
   S.dorp.voorraad.goud = v.goud + 5;
@@ -165,7 +165,7 @@ test('wie niet kiest, stuurt ze: na een week haalt de heer ze op', () => {
   assert.equal(S.dorp.heervaart.vraag, null);
   assert.ok(S.dorp.heervaart.tocht && S.dorp.heervaart.tocht.wie.length);
   assert.equal(S.dorp.heervaart.laatste.antwoord, 'gehaald');
-  assert.ok(berichten.some((b) => /antwoordde de heer niet/.test(b)));
+  assert.ok(berichten.some((b) => /did not answer the lord/.test(b)));
 });
 
 test('op 1 herfstmaand komen ze terug als veteraan, over de weg; wie sneuvelde, is een mond minder', () => {
@@ -188,7 +188,7 @@ test('op 1 herfstmaand komen ze terug als veteraan, over de weg; wie sneuvelde, 
     }
     const komen = S.dorp.bewoners.komen.find((a) => wie.every((p) => a.mensen.includes(p)));
     assert.ok(komen, 'ze komen overdag over de weg binnen');
-    assert.match(komen.aankomst.tekst, /De mannen van de heervaart komen terug/);
+    assert.match(komen.aankomst.tekst, /The men of the levy come back/);
   });
   // Niemand terug.
   met({ kansNietTerug: 1 }, () => {
@@ -200,7 +200,7 @@ test('op 1 herfstmaand komen ze terug als veteraan, over de weg; wie sneuvelde, 
     T.tikHeervaartDag(S.dorp, HERFSTMAAND);
     assert.equal(S.dorp.bevolking, bevolking - wie.length);
     for (const p of wie) assert.ok(!S.dorp.bewoners.mensen.includes(p));
-    assert.ok(berichten.some((b) => /Niemand van de heervaart komt terug/.test(b) && /sneuvelde/.test(b)));
+    assert.ok(berichten.some((b) => /None of the levy comes back/.test(b) && /fell for the lord/.test(b)));
     assert.equal(S.dorp.heervaart.laatste.gesneuveld, wie.length);
   });
 });

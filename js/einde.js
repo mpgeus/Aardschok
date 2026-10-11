@@ -77,7 +77,7 @@
     const heer = ((D.heer && D.heer.jaren) || []).find((j) => j.jaar === jaarVan(J.begin));
     if (heer) {
       const pct = Math.floor(heer.deel * 100 + 1e-9);
-      regels.push(heer.straf ? T.t('The lord received {pct}% of what he asked for, and punished with {straf}.', { pct, straf: heer.straf })
+      regels.push(heer.straf ? T.t('The lord received {pct}% of what he asked for, and punished with {straf}.', { pct, straf: T.STRAF_TOON[heer.straf] })
         : T.t('The lord received {pct}% of what he asked for.', { pct }));
     }
     const meest = Object.entries(J.gemist).sort((a, b) => b[1] - a[1])[0];
@@ -100,7 +100,7 @@
     if (D.einde || D.ander) return;
     if ((D.bevolking || 0) < IN().minstensOver) {
       D.einde = { reden: 'leeg', dag };
-      T.zeg(D, `Er zijn nog maar ${D.bevolking || 0} mensen over. De heer streept het dorp door in zijn boek.`, 'gevaar');
+      T.zeg(D, T.t('{n|Only one person is left.|Only # people are left.} The lord strikes the village out of his book.', { n: D.bevolking || 0 }), 'gevaar');
       T.houdTijdStil(D, 'einde');
       if (T.ui && T.ui.toonEinde) T.ui.toonEinde(D);
       return;

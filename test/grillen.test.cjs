@@ -101,7 +101,7 @@ test('een antwoord kost wat het zegt, en weegt de heer tegen het dorp', () => {
   assert.equal(D.voorraad.goud, 14);
   assert.deepEqual(T.bazenNu(D), { gunst: 60, vertrouwen: 47 });
   assert.equal(T.grilNu(D), null, 'de vraag is weg');
-  assert.match(T.bazenTekst(D, 'gunst'), /\+10 het standbeeld/);
+  assert.match(T.bazenTekst(D, 'gunst'), /\+10 the statue/);
 });
 
 test('wat het dorp niet heeft, kan het niet geven', () => {
@@ -128,7 +128,7 @@ test('wie niet antwoordt, ergert hem', () => {
   tik(S, g.uiterlijk);
   assert.equal(T.grilNu(D), null);
   assert.equal(T.bazenNu(D).gunst, 50 + T.GRILLEN[g.id].stil.gunst);
-  assert.ok(berichten.some((t) => /Wij hoorden niets van u, schout/.test(t)));
+  assert.ok(berichten.some((t) => /We heard nothing from you, reeve/.test(t)));
   assert.equal(D.grillen.stil, 1);
 });
 

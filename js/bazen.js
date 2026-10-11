@@ -76,7 +76,6 @@
   const IN = () => T.BAZEN_INSTELLINGEN;
 
   const dagNu = (D) => Math.floor(D.kalender ? D.kalender.dag : 0);
-  const NAAM = { gunst: 'de gunst van de heer', vertrouwen: 'het vertrouwen van het dorp' };
 
   T.nieuweBazen = () => ({
     gunst: IN().gunstBegin, vertrouwen: IN().vertrouwenBegin,
@@ -135,26 +134,26 @@
     if (welk === 'gunst') {
       b.brief = { waarom: waaromZin(tekst), dag: dagNu(D) };
       if (T.ui && T.ui.toonBrief && !D.ander) T.ui.toonBrief(D, 'waarschuwing');
-      else T.zeg(D, `De heer schrijft je: "Nog één keer, schout."`, 'gevaar');
+      else T.zeg(D, T.t('The lord writes to you: "Once more, reeve."'), 'gevaar');
     } else {
-      T.zeg(D, 'Het dorp mort. Op het plein praten ze over je, en als je komt, zwijgen ze. Nog één tegenvaller, en ze jagen je weg.', 'gevaar');
+      T.zeg(D, T.t('The village grumbles. On the square they talk about you, and when you come, they fall silent. One more setback, and they will drive you out.'), 'gevaar');
     }
   }
   // Wat de heer in zijn brief zegt, naar wat zijn gunst het laatst deed zakken.
   function waaromZin(tekst) {
-    if (!tekst) return 'Wij zijn niet tevreden over u.';
-    return `Wij zijn niet tevreden over u. ${T.hoofdletter(tekst)}: Wij hebben het gezien.`;
+    if (!tekst) return T.t('We are not pleased with you.');
+    return T.t('We are not pleased with you. {waarom}: We have seen it.', { waarom: T.hoofdletter(tekst) });
   }
 
   // Op 0: weg. De heer ontslaat je (js/heer.js), of het dorp jaagt je weg.
   function weg(D, welk, tekst) {
     if (D.einde) return;
     if (welk === 'gunst') {
-      T.ambtKwijt(D, tekst ? `Zijn gunst is op: ${tekst}.` : 'Zijn gunst is op.');
+      T.ambtKwijt(D, tekst ? T.t('His favour is spent: {waarom}.', { waarom: tekst }) : T.t('His favour is spent.'));
       return;
     }
     D.einde = { reden: 'verjaagd', dag: dagNu(D), waarom: tekst || null };
-    T.zeg(D, 'Het dorp staat voor je deur, met fakkels. "Ga, schout." Je gaat.', 'gevaar');
+    T.zeg(D, T.t('The village stands at your door, with torches. "Go, reeve." You go.'), 'gevaar');
     if (!D.ander) T.houdTijdStil(D, 'einde');
     if (T.ui && T.ui.toonEinde) T.ui.toonEinde(D);
   }
@@ -183,8 +182,8 @@
   // Wie het dorp verlaat (T.wijzigBevolking, js/gebouwen.js): wie verhongerde of bevroor, en wie sneuvelde.
   T.vertrouwenNaBevolking = function (D, verschil, reden) {
     if (verschil >= 0) return;
-    if (reden === 'winter') T.wijzigVertrouwen(D, -verschil * IN().doodDoorWinter, 'wie verhongerde of bevroor');
-    if (reden === 'gesneuveld') T.wijzigVertrouwen(D, -verschil * IN().gesneuveld, 'wie sneuvelde');
+    if (reden === 'winter') T.wijzigVertrouwen(D, -verschil * IN().doodDoorWinter, T.t('those who starved or froze'));
+    if (reden === 'gesneuveld') T.wijzigVertrouwen(D, -verschil * IN().gesneuveld, T.t('those who fell'));
   };
 
   // ---------------------------------------------------------------------------------------------
@@ -208,20 +207,28 @@
   // Voor het scherm (js/hud.js) en de raad (js/raad.js)
   // ---------------------------------------------------------------------------------------------
 
-  // Hoe hij erbij staat, in een woord: blij, tevreden, ontevreden, boos (onder de waarschuwing).
+  // Hoe hij erbij staat, in een woord: blij, tevreden, ontevreden, boos (onder de waarschuwing). Een naam waar de regels op
+  // letten (js/tafel.js); wat de speler ziet, staat in STEMMING.
   T.bazenStemming = (n) => (n >= 70 ? 'blij' : n >= 40 ? 'tevreden' : n >= IN().waarschuwing ? 'ontevreden' : 'boos');
+  const STEMMING = { blij: T.t('pleased'), tevreden: T.t('content'), ontevreden: T.t('displeased'), boos: T.t('angry') };
 
   // Wat er bij de muis staat: het getal, hoe hij erbij staat, het laatste waarom, en wat er gebeurt onder de grens.
   T.bazenTekst = function (D, welk) {
     const b = bazenVan(D);
     const n = Math.round(b[welk]);
-    const wie = welk === 'gunst' ? 'De heer' : 'Het dorp';
+    const stemming = STEMMING[T.bazenStemming(n)];
     const recent = b.waarom[welk].slice().reverse().map((w) => `${w.n > 0 ? '+' : ''}${w.n} ${w.tekst}`).join('; ');
     const doel = vertrouwenDoel(D);
-    const grens = welk === 'gunst'
-      ? `Onder ${IN().waarschuwing} schrijft hij je een waarschuwing, op 0 ben je je ambt kwijt.`
-      : `Het gaat elke dag een stukje naar hoe tevreden het dorp is${doel == null ? '' : ` (${doel}%)`}. `
-        + `Onder ${IN().waarschuwing} mort het dorp, op 0 jagen ze je weg.`;
-    return `${T.hoofdletter(NAAM[welk])}: ${n} (${wie.toLowerCase()} is ${T.bazenStemming(n)}).${recent ? ` Het laatst: ${recent}.` : ''} ${grens}`;
+    const grens = IN().waarschuwing;
+    const kop = welk === 'gunst'
+      ? T.t("The lord's favour: {n} (the lord is {stemming}).", { n, stemming })
+      : T.t("The village's trust: {n} (the village is {stemming}).", { n, stemming });
+    const laatst = recent ? ` ${T.t('Lately: {recent}.', { recent })}` : '';
+    const onder = welk === 'gunst'
+      ? T.t('Below {grens} he writes you a warning; at 0 you lose your office.', { grens })
+      : `${doel == null ? T.t('Every day it moves a little towards how content the village is.')
+        : T.t('Every day it moves a little towards how content the village is ({doel}%).', { doel })} `
+        + T.t('Below {grens} the village grumbles; at 0 they drive you out.', { grens });
+    return `${kop}${laatst} ${onder}`;
   };
 })(globalThis.Spel = globalThis.Spel || {});

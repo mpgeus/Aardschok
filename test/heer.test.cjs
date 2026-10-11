@@ -74,8 +74,8 @@ test('hij vraagt naar wat hij ziet: pacht per akkertegel, hoofdgeld per mens, en
   // 25 zielen × 0,2 = 5, vijf boerderijen × 1 = 5, en een huis 2.
   assert.equal(eis.per.goud, 5 + 5 + 2);
   assert.deepEqual(eis.volgorde, ['graan', 'goud']);
-  assert.ok(eis.regels.some((r) => /akkertegels/.test(r.waarom)));
-  assert.ok(eis.regels.some((r) => /25 zielen/.test(r.waarom)));
+  assert.ok(eis.regels.some((r) => /tiles of field/.test(r.waarom)));
+  assert.ok(eis.regels.some((r) => /25 souls/.test(r.waarom)));
   assert.ok(eis.regels.some((r) => /5 × farm/.test(r.waarom)));
 });
 
@@ -114,7 +114,7 @@ test('hij rondt naar boven af, en wat je schuldig bleef, komt erbij', () => {
   const eis = T.eisVanDeHeer(S);
   assert.equal(eis.per.graan, 4);
   assert.equal(eis.per.goud, 9);
-  assert.ok(eis.regels.some((r) => /schuldig/.test(r.waarom)));
+  assert.ok(eis.regels.some((r) => /still owed/.test(r.waarom)));
 });
 
 test('wat iets voor hem waard is, komt uit de prijzen van de marskramer', () => {
@@ -136,7 +136,7 @@ test('alles geven: geen straf', () => {
   assert.equal(g.deel, 1);
   assert.equal(g.straf, null);
   assert.equal(g.schuld, 0);
-  assert.match(g.tekst, /alles wat hij vraagt/);
+  assert.match(g.tekst, /everything he asks for/);
 });
 
 test('hij telt slecht: tot een tiende te weinig merkt hij niet', () => {
@@ -145,7 +145,7 @@ test('hij telt slecht: tot een tiende te weinig merkt hij niet', () => {
   assert.ok(g.deel >= 0.9 && g.deel < 1, `deel ${g.deel}`);
   assert.equal(g.straf, null);
   assert.equal(g.schuld, 0);
-  assert.match(g.tekst, /telt slecht/);
+  assert.match(g.tekst, /counts badly/);
 });
 
 test('tot twee derde een boete: het tekort komt volgend jaar terug, met de helft erbij', () => {
@@ -154,7 +154,7 @@ test('tot twee derde een boete: het tekort komt volgend jaar terug, met de helft
   assert.equal(g.straf, 'boete');
   assert.ok(g.boete && !g.soldaten && !g.schandpaal);
   assert.equal(g.schuld, Math.ceil(g.tekort * (1 + IN.boete) - 1e-9));
-  assert.match(g.tekst, new RegExp(`${g.schuld} goud`));
+  assert.match(g.tekst, new RegExp(`${g.schuld} gold`));
 });
 
 test('tot de helft ook soldaten, daaronder ook de schandpaal, en dat is veel te weinig', () => {
@@ -168,7 +168,7 @@ test('tot de helft ook soldaten, daaronder ook de schandpaal, en dat is veel te 
   assert.ok(paal.boete && paal.soldaten && paal.schandpaal);
   assert.ok(paal.veelTeWeinig);
   assert.ok(!paal.ambtKwijt, 'de eerste keer kost het je ambt nog niet');
-  assert.match(paal.tekst, /nog een keer/);
+  assert.match(paal.tekst, /one more year/);
 });
 
 test('goud neemt hij altijd in de plaats van iets anders: hij ziet alleen geld', () => {
@@ -244,7 +244,7 @@ test('soldaten eten mee tot de lente, maken het dorp ontevreden, en gaan dan wee
   assert.ok(s, 'er zijn soldaten ingekwartierd');
   assert.equal(s.tot, dagVan('lentemaand', 1, 1), 'tot 1 lentemaand van het volgende jaar');
   assert.ok(T.heeftVlag(S, 'soldatenInHuis'));
-  assert.deepEqual(T.heerOntevredenheid(S, SINT_MAARTEN + 1).waarom, ['soldaten in huis']);
+  assert.deepEqual(T.heerOntevredenheid(S, SINT_MAARTEN + 1).waarom, ["the lord's soldiers billeted here"]);
   // Ze eten elk voor drie.
   T.zetVoorraad(S, 'graan', 100);
   T.tikHeerDag(S, SINT_MAARTEN + 1);
@@ -281,10 +281,10 @@ test('de schandpaal: jij wijst aan wie, en het dorp onthoudt het een tijd', () =
   // Het dorp is minder tevreden, en dat slijt weg.
   const nu = T.heerOntevredenheid(S, SINT_MAARTEN);
   assert.ok(Math.abs(nu.minder - (IN.soldatenOntevreden + T.aanzienVan(aaltje))) < 1e-9);
-  assert.ok(nu.waarom.includes('de schandpaal'));
+  assert.ok(nu.waarom.includes('the pillory'));
   const later = T.heerOntevredenheid(S, SINT_MAARTEN + IN.wrokDagen / 2);
   assert.ok(later.minder < nu.minder);
-  assert.ok(!T.heerOntevredenheid(S, SINT_MAARTEN + IN.wrokDagen).waarom.includes('de schandpaal'));
+  assert.ok(!T.heerOntevredenheid(S, SINT_MAARTEN + IN.wrokDagen).waarom.includes('the pillory'));
 });
 
 test('de schandpaal kost het dorp zoveel als wie jij kiest: de weduwe meer dan de woekeraar', () => {
@@ -311,7 +311,7 @@ test('de schout mag zichzelf aanwijzen: het dorp neemt het niet kwalijk, maar de
   T.zetAanDeSchandpaal(S, 'schout');
   assert.equal(S.heer.schuld, schuldVoor + zelf.boete);
   assert.ok(T.heeftVlag(S, 'schoutAanDeSchandpaal'));
-  assert.ok(!T.heerOntevredenheid(S, SINT_MAARTEN).waarom.includes('de schandpaal'));
+  assert.ok(!T.heerOntevredenheid(S, SINT_MAARTEN).waarom.includes('the pillory'));
 });
 
 test('twee keer achter elkaar veel te weinig, en je bent je ambt kwijt', () => {
@@ -680,8 +680,8 @@ test('een deel van het graan en het goud: hij rekent op wat er ligt, in de schur
     assert.equal(eis.per.graan, Math.ceil(100 * IN.deelVanGraan - 1e-9));
     // De 12 goud die hij altijd vraagt, en een deel van wat er in de kist ligt.
     assert.equal(eis.per.goud, 12 + Math.ceil(40 * IN.deelVanGoud - 1e-9));
-    assert.ok(eis.regels.some((r) => /graan in uw schuren/.test(r.waarom)));
-    assert.ok(eis.regels.some((r) => /goud in uw kist/.test(r.waarom)));
+    assert.ok(eis.regels.some((r) => /grain in your barns/.test(r.waarom)));
+    assert.ok(eis.regels.some((r) => /gold in your chest/.test(r.waarom)));
     assert.ok(!eis.regels.some((r) => /inner|toeslag/.test(r.waarom)), 'niets meer op naam van zijn inner');
     // Telt de kist niet, dan vraagt hij er niets voor.
     metHeerInstelling({ kist: false }, () => assert.equal(T.eisVanDeHeer(S).per.goud, 12));
@@ -703,7 +703,7 @@ test('betalen in "graan en goud": de pacht in graan, wat hij verder ziet in goud
     assert.equal(eis.per.graan, 5);
     // 20 wol × 8/15 = 10,7, naar boven 11, bij de 12 goud die hij al vroeg.
     assert.equal(eis.per.goud, 12 + 11);
-    assert.ok(eis.regels.some((r) => /in plaats van 20 wol/.test(r.waarom)));
+    assert.ok(eis.regels.some((r) => /instead of 20 wool/.test(r.waarom)));
   });
 });
 
@@ -741,7 +741,7 @@ test('steeds zwaarder: niet hoeveel telt, maar hoe vaak achter elkaar, tot je am
       // Een klein tekort is genoeg: hoeveel doet er niet toe.
       const g = T.betaalHeer(S, geefDeel(S, 0.95));
       assert.equal(g.straf, verwacht[jaar], `jaar ${jaar + 1}`);
-      assert.match(g.tekst, new RegExp(['eerste', 'tweede', 'derde'][jaar]));
+      assert.match(g.tekst, new RegExp(['first year', 'two years running', 'three years running'][jaar]));
       if (g.schandpaal) T.zetAanDeSchandpaal(S, 'boer3');
     }
     S.kalender.dag = dagVan('slachtmaand', 11, 3);

@@ -1077,7 +1077,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   veranderde (antwoorden met `doe.gunst`, de bode, de heervaart), verandert nu de gunst, en de raadsman
   weegt hem met wat de argwaan woog (`gunst` in `T.RAADSMAN_INSTELLINGEN.karakters`). Onder 20 een waarschuwing (de brief `waarschuwing` in `js/brieven.js`, en de raad), op 0 weg (`T.ambtKwijt` met waarom, of `D.einde` met reden 'verjaagd'), maar altijd eerst
   de waarschuwing. De twee gezichten in de balk:
-  `T.ui.toonBazen` (`js/hud.js`). De spelregel "Twee bazen"; de getallen in `T.BAZEN_INSTELLINGEN`.
+  `T.ui.toonBazen` (`js/hud.js`). De spelregel "Twee bazen"; de getallen in `T.BAZEN_INSTELLINGEN`. `T.bazenStemming`
+  geeft een naam waar de regels op letten (`'boos'`, `js/tafel.js`); `T.bazenTekst` zegt hem in het Engels (*angry*).
+  Zo ook de straffen van Sint-Maarten: `'boete'` in de regels, `T.STRAF_TOON` (`js/heer.js`) voor wat de speler leest.
 
 ### js/grillen.js: de grillen van de heer
 
@@ -1107,7 +1109,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   hoeveel dagen een gezin kan komen (`T.gezinDagen`) en wat een houthakker hakt (`T.maaktUit`, met `bos` op het
   gebouw) in `js/gebouwen.js`, en de boete voor de houtkap op de rekening van de heer (`T.houtkapBoete`). Wat een
   kaart in het menu zegt, komt uit dezelfde getallen (`T.watDeWetDoet`). Wat je aannam, staat in `D.wetten`; zonder
-  staat elke wet op zijn standaard, en speelt het spel zoals ervoor.
+  staat elke wet op zijn standaard, en speelt het spel zoals ervoor. De standen (`'krap'`, `'aangenomen'`) zijn namen
+  waar de regels op letten; wat de speler van een stand ziet, staat in `T.WETTEN[id].toon` (vraag 147: *short, normal,
+  generous*).
 
 ### js/raad.js: de raad onder het doel
 

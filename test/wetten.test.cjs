@@ -54,7 +54,7 @@ test('een krap rantsoen: ieder eet driekwart, en het dorp is 15% minder tevreden
   assert.ok(bijna(T.etenPerMens(S.dorp), 0.75 * T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag));
   const na = tevreden(S);
   assert.ok(bijna(voor.tevredenheid - na.tevredenheid, 0.15), `${voor.tevredenheid} → ${na.tevredenheid}`);
-  assert.ok(na.last.includes('het krappe rantsoen'), na.last.join(', '));
+  assert.ok(na.last.includes('the short rations'), na.last.join(', '));
   // Het dorp eet ook echt minder.
   const graan = S.dorp.voorraad.graan;
   const gegeten = T.eetVandaag(S.dorp);
@@ -69,7 +69,7 @@ test('een ruim rantsoen: anderhalf keer zoveel eten, en 10% tevredener', () => {
   assert.ok(bijna(T.etenPerMens(S.dorp), 1.5 * T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag));
   const na = tevreden(S);
   assert.ok(bijna(na.tevredenheid - voor.tevredenheid, erbijPerHuis(voor, 0.1)), `${voor.tevredenheid} → ${na.tevredenheid}`);
-  assert.deepEqual(na.blij, ['het ruime rantsoen']);
+  assert.deepEqual(na.blij, ['the generous rations']);
   // Terug naar gewoon: zoals ervoor.
   T.zetWet(S.dorp, 'rantsoen', 'gewoon');
   assert.ok(bijna(tevreden(S).tevredenheid, voor.tevredenheid));
@@ -84,7 +84,7 @@ test('vreemden welkom: om de 10 dagen een gezin in plaats van 20, en 5% minder t
   T.zetWet(met.dorp, 'vreemden', 'aangenomen');
   assert.equal(T.gezinDagen(met.dorp), 10);
   assert.ok(bijna(voorDeWet - tevreden(met).tevredenheid, 0.05));
-  assert.ok(tevreden(met).last.includes('de vreemden'));
+  assert.ok(tevreden(met).last.includes('the strangers'));
   // Op dag 10 komt er alleen met de wet een gezin: er is plaats, graan genoeg, en het dorp is tevreden genoeg.
   const voor = met.dorp.bevolking;
   T.tikGebouwenDag(zonder.dorp, 10);
@@ -111,11 +111,11 @@ test('houtkap: de houthakker hakt twee keer zoveel, en de heer rekent een boete,
   T.zetWet(S.dorp, 'houtkap', 'afgeschaft');
   T.tikWettenDag(S.dorp, 6);
   const eis = T.eisVanDeHeer(S.dorp);
-  assert.ok(eis.regels.some((r) => r.wat === 'goud' && r.aantal === 5 && /bomen/.test(r.waarom)), JSON.stringify(eis.regels));
+  assert.ok(eis.regels.some((r) => r.wat === 'goud' && r.aantal === 5 && /trees/.test(r.waarom)), JSON.stringify(eis.regels));
   // Na Sint-Maarten is de boete betaald.
   T.wettenNaSintMaarten(S.dorp);
   assert.equal(T.houtkapBoete(S.dorp), 0);
-  assert.ok(!T.eisVanDeHeer(S.dorp).regels.some((r) => /bomen/.test(r.waarom)));
+  assert.ok(!T.eisVanDeHeer(S.dorp).regels.some((r) => /trees/.test(r.waarom)));
 });
 
 test('houtkap zonder houthakker kost niets: dan is er niet gekapt', () => {
@@ -132,7 +132,7 @@ test('de belasting: op de eerste van de maand goud in de kist, en wat geen heel 
   const voor = tevreden(S).tevredenheid;
   T.zetWet(S.dorp, 'belasting', 'aangenomen');
   assert.ok(bijna(voor - tevreden(S).tevredenheid, 0.1));
-  assert.ok(tevreden(S).last.includes('de belasting'));
+  assert.ok(tevreden(S).last.includes('the tax'));
   // Iedereen telt hier als één; dat een hogere stand meer betaalt (T.belastbaar), toetst test/wensen.test.cjs.
   S.dorp.behoeften.standen = null;
   const goud = S.dorp.voorraad.goud;
@@ -159,14 +159,14 @@ test('wat een wet doet, in woorden, met de getallen van nu: eerst wat goed is, d
   S.dorp.bevolking = 26;
   const krap = T.watDeWetDoet(S.dorp, 'rantsoen', 'krap');
   assert.deepEqual(krap.map((r) => r.goed), [true, false]);
-  assert.equal(krap[0].tekst, 'ieder eet driekwart: 1 graan per dag in plaats van 1,3');
-  assert.equal(krap[1].tekst, '15% minder tevreden');
+  assert.equal(krap[0].tekst, 'everyone eats three quarters as much: 1 grain a day instead of 1.3');
+  assert.equal(krap[1].tekst, '15% less content');
   const ruim = T.watDeWetDoet(S.dorp, 'rantsoen', 'ruim');
-  assert.deepEqual(ruim.map((r) => r.tekst), ['10% tevredener', 'ieder eet anderhalf keer zoveel: 2 graan per dag in plaats van 1,3']);
+  assert.deepEqual(ruim.map((r) => r.tekst), ['10% more content', 'everyone eats half as much again: 2 grain a day instead of 1.3']);
   assert.deepEqual(T.watDeWetDoet(S.dorp, 'rantsoen', 'gewoon'), [], 'gewoon doet niets');
-  assert.equal(T.watDeWetDoet(S.dorp, 'vreemden', 'aangenomen')[0].tekst, 'twee keer zo vaak een nieuw gezin: om de 10 dagen in plaats van 20');
-  assert.match(T.watDeWetDoet(S.dorp, 'houtkap', 'aangenomen')[0].tekst, /twee keer zoveel hout \(er is nog geen houthakker\)/);
-  assert.equal(T.watDeWetDoet(S.dorp, 'belasting', 'aangenomen')[0].tekst, 'elke maand 1,3 goud in de kist');
+  assert.equal(T.watDeWetDoet(S.dorp, 'vreemden', 'aangenomen')[0].tekst, 'a new family twice as often: every 10 days instead of 20');
+  assert.match(T.watDeWetDoet(S.dorp, 'houtkap', 'aangenomen')[0].tekst, /twice as much wood \(there is no woodcutter yet\)/);
+  assert.equal(T.watDeWetDoet(S.dorp, 'belasting', 'aangenomen')[0].tekst, '1.3 gold into the chest every month');
 });
 
 test('de wetten gaan mee in een bewaard spel', () => {

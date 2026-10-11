@@ -87,6 +87,8 @@
 
   const IN = () => T.HEER_INSTELLINGEN;
   const STRAFFEN = ['boete', 'soldaten', 'schandpaal']; // van licht naar zwaar
+  // De straffen in woorden, voor wat de speler leest (het jaarverslag, js/einde.js).
+  T.STRAF_TOON = { boete: T.t('a fine'), soldaten: T.t('soldiers'), schandpaal: T.t('the pillory') };
 
   T.nieuweHeer = function () {
     return {
@@ -147,15 +149,15 @@
     const tegels = akkers.reduce((n, a) => n + a.b * a.h, 0);
     if (IN().graan === 'deel') {
       const graan = (D.voorraad && D.voorraad.graan) || 0;
-      tel('graan', graan * IN().deelVanGraan, `een deel van de ${Math.round(graan)} graan in uw schuren`);
+      tel('graan', graan * IN().deelVanGraan, T.t('a share of the {graan} in your barns', { graan: T.hoeveel(Math.round(graan), 'graan') }));
     } else if (tegels) {
-      tel('graan', tegels * IN().pachtPerAkkertegel, `de pacht voor ${tegels} akkertegels`);
+      tel('graan', tegels * IN().pachtPerAkkertegel, T.t('the rent for {n|# tile|# tiles} of field', { n: tegels }));
     }
-    if (D.bevolking > 0) tel('goud', D.bevolking * hoofdgeld(D), `hoofdgeld voor ${D.bevolking} zielen`);
+    if (D.bevolking > 0) tel('goud', D.bevolking * hoofdgeld(D), T.t('poll tax for {n|# soul|# souls}', { n: D.bevolking }));
     // De kist zoals hij hem telde toen hij kwam; vóór zijn komst (de brief) wat er nu in ligt.
     const b = D.heer && D.heer.bezoek;
     const kist = b && !b.weg && b.kist != null ? b.kist : (D.voorraad && D.voorraad.goud) || 0;
-    if (IN().kist && kist > 0) tel('goud', kist * IN().deelVanGoud, `een deel van de ${Math.floor(kist)} goud in uw kist`);
+    if (IN().kist && kist > 0) tel('goud', kist * IN().deelVanGoud, T.t('a share of the {goud} in your chest', { goud: T.hoeveel(Math.floor(kist), 'goud') }));
     // Per soort gebouw één regel, in de volgorde van T.GEBOUWEN.
     const aantal = {};
     for (const g of D.gebouwen || []) aantal[g.soort] = (aantal[g.soort] || 0) + 1;
@@ -169,16 +171,16 @@
       for (const wat in prijs) tel(wat, prijs[wat] * n, n === 1 ? T.eenNaam(T.GEBOUWEN[id].naam) : T.t('{n} × {gebouw}', { n, gebouw: T.GEBOUWEN[id].naam }));
     }
     const h = D.heer;
-    if (h && h.schuld > 0) tel('goud', h.schuld, 'wat u vorig jaar schuldig bleef, met de boete');
+    if (h && h.schuld > 0) tel('goud', h.schuld, T.t('what you still owed from last year, with the fine'));
     // Heeft een houthakker dit jaar in zijn bos gekapt (de wet Houtkap, js/wetten.js), dan rekent hij een boete.
     const boete = T.houtkapBoete(D);
-    if (boete > 0) tel('goud', boete, 'een boete voor de bomen die u uit Ons bos haalde');
+    if (boete > 0) tel('goud', boete, T.t('a fine for the trees you took from Our forest'));
     // Wil hij (een deel) in goud, dan rekent hij om, naar boven: de rest van de pacht, of alles.
     const wijze = IN().betalenIn;
     if (wijze === 'graanEnGoud' || wijze === 'alleenGoud') {
       for (const r of regels) {
         if (r.wat === 'goud' || (wijze === 'graanEnGoud' && r.wat === 'graan')) continue;
-        r.waarom = `${r.waarom} (in plaats van ${r.aantal} ${r.wat})`;
+        r.waarom = T.t('{waarom} (instead of {hoeveel})', { waarom: r.waarom, hoeveel: T.hoeveel(r.aantal, r.wat) });
         r.aantal = Math.max(1, Math.ceil(r.aantal * T.waardeVoorDeHeer(r.wat) - 1e-9));
         r.wat = 'goud';
       }
@@ -268,57 +270,60 @@
       boete: zwaarte >= 1, soldaten: zwaarte >= 2, schandpaal: zwaarte >= 3,
       veelTeWeinig, ambtKwijt, schuld, keer, gunst,
     };
-    if (!uit.kan) uit.reden = 'De heer is er niet.';
+    if (!uit.kan) uit.reden = T.t('The lord is not here.');
     uit.tekst = gevolgTekst(uit);
     return uit;
   };
 
-  const RANG = ['nulde', 'eerste', 'tweede', 'derde', 'vierde', 'vijfde', 'zesde', 'zevende', 'achtste', 'negende', 'tiende'];
-  const rang = (n) => RANG[n] || `${n}e`;
+  // De straf in één zin, voor gevolgTekst en gunstTekst.
+  function strafTekst(g) {
+    const goud = T.hoeveel(g.schuld, 'goud');
+    if (g.schandpaal) return T.t('A fine ({goud} more next year), two soldiers until spring, and the pillory: you choose who.', { goud });
+    if (g.soldaten) return T.t('A fine ({goud} more next year), and two soldiers who stay until spring and eat at your table.', { goud });
+    if (g.boete) return T.t('A fine: next year he adds {goud} to what he asks.', { goud });
+    if (g.deel < 1 - 1e-9) return T.t('He counts badly: he will not notice this.');
+    return T.t('He gets everything he asks for.');
+  }
 
   function gevolgTekst(g) {
     if (g.gunst) return gunstTekst(g);
     const hoeVaak = IN().telWijze === 'hoeVaak';
     const nogKeer = IN().ambtKwijtNa - g.keer;
+    const woorden = { n: g.keer, keer: T.telwoord(g.keer) };
     if (g.ambtKwijt) {
       return hoeVaak
-        ? `Te weinig, voor de ${rang(g.keer)} keer achter elkaar: dit kost je je ambt.`
-        : `Veel te weinig, voor de ${rang(g.keer)} keer achter elkaar: dit kost je je ambt.`;
+        ? T.t('Too little, {n|for the first time|{keer} years running}: this costs you your office.', woorden)
+        : T.t('Far too little, {n|for the first time|{keer} years running}: this costs you your office.', woorden);
     }
     // Hoe dicht je bij het einde zit: bij 'hoeVaak' telt elk tekort, anders alleen veel te weinig.
     let nog = '';
     if ((hoeVaak && g.keer) || g.veelTeWeinig) {
-      const wat = hoeVaak ? 'Te weinig' : 'Veel te weinig';
-      nog = nogKeer === 1 ? ` ${wat}: nog een keer zo, en je bent je ambt kwijt.` : ` ${wat}: nog ${nogKeer} keer zo, en je bent je ambt kwijt.`;
+      nog = ' ' + (hoeVaak
+        ? T.t('Too little: {n|one more year|# more years} like this, and you lose your office.', { n: nogKeer })
+        : T.t('Far too little: {n|one more year|# more years} like this, and you lose your office.', { n: nogKeer }));
     }
-    const wanneer = hoeVaak && g.keer ? `De ${rang(g.keer)} keer achter elkaar dat je tekortschiet. ` : '';
-    if (g.schandpaal) return `${wanneer}Een boete (volgend jaar ${g.schuld} goud erbij), twee soldaten tot de lente, én de schandpaal: jij wijst aan wie.${nog}`;
-    if (g.soldaten) return `${wanneer}Een boete (volgend jaar ${g.schuld} goud erbij), en twee soldaten die tot de lente blijven en meeëten.${hoeVaak ? nog : ''}`;
-    if (g.boete) return `${wanneer}Een boete: volgend jaar komt er ${g.schuld} goud bij wat hij vraagt.${hoeVaak ? nog : ''}`;
-    if (g.deel < 1 - 1e-9) return 'Hij telt slecht: dit merkt hij niet.';
-    return 'Hij krijgt alles wat hij vraagt.';
+    const wanneer = hoeVaak && g.keer ? `${T.t('{n|This is the first year you have fallen short.|You have fallen short {keer} years running.}', woorden)} ` : '';
+    if (g.schandpaal) return `${wanneer}${strafTekst(g)}${nog}`;
+    if (g.soldaten || g.boete) return `${wanneer}${strafTekst(g)}${hoeVaak ? nog : ''}`;
+    return strafTekst(g);
   }
 
   // Met twee bazen (js/bazen.js): de straf, en wat het met zijn gunst doet.
   function gunstTekst(g) {
     const voor = g.gunst.na - g.gunst.erbij;
-    if (g.ambtKwijt) return `Zijn gunst zakt naar 0: dit kost je je ambt.`;
-    const straf = g.schandpaal
-      ? `Een boete (volgend jaar ${g.schuld} goud erbij), twee soldaten tot de lente, én de schandpaal: jij wijst aan wie.`
-      : g.soldaten ? `Een boete (volgend jaar ${g.schuld} goud erbij), en twee soldaten die tot de lente blijven en meeëten.`
-        : g.boete ? `Een boete: volgend jaar komt er ${g.schuld} goud bij wat hij vraagt.`
-          : g.deel < 1 - 1e-9 ? 'Hij telt slecht: dit merkt hij niet.' : 'Hij krijgt alles wat hij vraagt.';
-    const waarschuwt = g.gunst.na < T.BAZEN_INSTELLINGEN.waarschuwing ? ' Dan schrijft hij je een waarschuwing.' : '';
-    return `${straf} Zijn gunst: ${Math.round(Math.max(0, voor))} → ${Math.round(g.gunst.na)}.${waarschuwt}`;
+    if (g.ambtKwijt) return T.t('His favour drops to 0: this costs you your office.');
+    const gunst = T.t('His favour: {voor} → {na}.', { voor: Math.round(Math.max(0, voor)), na: Math.round(g.gunst.na) });
+    const waarschuwt = g.gunst.na < T.BAZEN_INSTELLINGEN.waarschuwing ? ` ${T.t('Then he will write you a warning.')}` : '';
+    return `${strafTekst(g)} ${gunst}${waarschuwt}`;
   }
 
   // Wat de heer zegt als hij geteld heeft. Hij is de grap; zijn soldaten niet (spel.md).
   function heerZegt(g) {
-    if (g.schandpaal) return '"Veel te weinig." De heer kijkt het gehucht rond. "Iemand moet dit voelen, schout. U mag kiezen wie."';
-    if (g.soldaten) return '"Te weinig." De heer wijst twee soldaten aan. "Die blijven hier tot de lente. Ze eten wat u eet. Of wat u niet meer eet."';
-    if (g.boete) return 'De heer telt, fronst, en schrijft iets op. "Dat komt er volgend jaar bij, schout. Met de boete. De boete is het mooiste deel."';
-    if (g.deel < 1 - 1e-9) return 'De heer telt, telt nog eens, en komt twee keer ergens anders uit. "Het klopt," zegt hij.';
-    return 'De heer telt twee keer, en het komt twee keer anders uit. "Het klopt," zegt hij. "Tot volgend jaar."';
+    if (g.schandpaal) return T.t('"Far too little." The lord looks round the hamlet. "Someone must feel this, reeve. You may choose who."');
+    if (g.soldaten) return T.t('"Too little." The lord points to two soldiers. "They stay here until spring. They eat what you eat. Or what you no longer eat."');
+    if (g.boete) return T.t('The lord counts, frowns, and writes something down. "That is added next year, reeve. With the fine. The fine is the best part."');
+    if (g.deel < 1 - 1e-9) return T.t('The lord counts, counts again, and arrives at two different sums. "It tallies," he says.');
+    return T.t('The lord counts twice, and gets a different sum each time. "It tallies," he says. "Until next year."');
   }
 
   // Wat je na deze betaling overhoudt tot de volgende oogst, voor het venster: zo zie je vóór het
@@ -350,7 +355,7 @@
 
   // Betalen. Geeft het gevolg terug (T.gevolgVanBetaling), of { kan: false, reden }.
   T.betaalHeer = function (D, geef) {
-    if (!T.heerWacht(D)) return { kan: false, reden: 'De heer is er niet.' };
+    if (!T.heerWacht(D)) return { kan: false, reden: T.t('The lord is not here.') };
     const h = D.heer;
     const b = h.bezoek;
     const g = T.gevolgVanBetaling(D, geef);
@@ -364,7 +369,7 @@
     b.betaald = g;
     h.jaren.push({ jaar: T.datumVanDag(dagNu(D)).jaar, deel: g.deel, straf: g.straf });
     // Twee bazen (js/bazen.js): zijn gunst; op 0 ontslaat hij je (hieronder, of al via de meter).
-    if (g.gunst) T.wijzigGunst(D, g.gunst.erbij, g.gunst.erbij > 0 ? 'je betaalde wat hij vroeg' : 'je betaalde te weinig');
+    if (g.gunst) T.wijzigGunst(D, g.gunst.erbij, g.gunst.erbij > 0 ? T.t('you paid what he asked') : T.t('you paid too little'));
     // De boete voor de houtkap is betaald.
     T.wettenNaSintMaarten(D);
     if (T.zetVlag) {
@@ -388,17 +393,17 @@
   // wat er dan nog ontbreekt in goud. Moet er iemand aan de schandpaal, dan wijst hij zelf aan:
   // wie het dorp het meest raakt. "Het dorp denkt dat jij het zo wilde."
   T.heerNeemtZelf = function (D) {
-    if (!T.heerWacht(D)) return { kan: false, reden: 'De heer is er niet.' };
+    if (!T.heerWacht(D)) return { kan: false, reden: T.t('The lord is not here.') };
     const eis = T.eisVanDeHeer(D);
     const geef = { ...eis.per, goud: (D.voorraad && D.voorraad.goud) || 0 };
-    T.zeg(D, 'Je bent niet gekomen. De heer neemt zelf mee wat hij hebben wil.', 'gevaar');
-    T.wijzigGunst(D, T.BAZEN_INSTELLINGEN.nietGekomen, 'je kwam niet naar het plein');
+    T.zeg(D, T.t('You did not come. The lord helps himself to whatever he wants.'), 'gevaar');
+    T.wijzigGunst(D, T.BAZEN_INSTELLINGEN.nietGekomen, T.t('you did not come to the square'));
     const g = T.betaalHeer(D, geef);
     if (g.schandpaal && !D.einde) {
       const keuzes = T.schandpaalKeuzes(D).filter((k) => k.wie !== 'schout');
       const zijn = keuzes.sort((a, b) => b.kost - a.kost)[0];
       if (zijn) {
-        T.zeg(D, `De heer wees zelf aan wie er aan de schandpaal moest: ${zijn.naam}. Het dorp denkt dat jij het zo wilde.`, 'gevaar');
+        T.zeg(D, T.t('The lord chose for himself who would go in the pillory: {naam}. The village thinks you wanted it so.', { naam: zijn.naam }), 'gevaar');
         T.zetAanDeSchandpaal(D, zijn.wie);
       } else {
         D.heer.bezoek.schandpaal = false;
@@ -427,14 +432,14 @@
       }
     }
     T.zetVlag(D, 'soldatenInHuis');
-    T.wijzigVertrouwen(D, T.BAZEN_INSTELLINGEN.soldaten, 'soldaten van de heer in huis');
+    T.wijzigVertrouwen(D, T.BAZEN_INSTELLINGEN.soldaten, T.t("the lord's soldiers billeted here"));
   }
 
   function soldatenGaan(D) {
     const h = D.heer;
     const s = h.soldaten;
     T.wisVlag(D, 'soldatenInHuis');
-    T.zeg(D, 'Het is lente. De soldaten van de heer trekken weg.', 'goed');
+    T.zeg(D, T.t("It is spring. The lord's soldiers march away."), 'goed');
     if (s.wezens && s.wezens.length) {
       s.weg = true; // ze lopen nog naar de weg; T.werkHeerBij haalt ze daar weg
       for (const e of s.wezens) naarDeWeg(D, e);
@@ -459,7 +464,7 @@
     if (!IN().schoutMagZelf) return lijst;
     const h = D.heer;
     const extra = h ? Math.ceil(h.tekort * (IN().boeteZelf - IN().boete) - 1e-9) : 0;
-    lijst.push({ wie: 'schout', naam: 'Jijzelf', eigenschap: 'de schout', kost: 0, boete: Math.max(0, extra) });
+    lijst.push({ wie: 'schout', naam: T.t('Yourself'), eigenschap: T.t('the reeve'), kost: 0, boete: Math.max(0, extra) });
     return lijst;
   };
 
@@ -543,17 +548,17 @@
   T.zetAanDeSchandpaal = function (D, wie) {
     const h = D.heer;
     const b = h && h.bezoek;
-    if (!b || !b.schandpaal) return { kan: false, reden: 'Er hoeft niemand aan de schandpaal.' };
+    if (!b || !b.schandpaal) return { kan: false, reden: T.t('Nobody has to go in the pillory.') };
     const keuze = T.schandpaalKeuzes(D).find((k) => k.wie === wie);
-    if (!keuze) return { kan: false, reden: 'Die is er niet.' };
+    if (!keuze) return { kan: false, reden: T.t('That person is not here.') };
     // De eerste keer komt de paal er, en die blijft staan.
     T.zetSchandpaalNeer(D);
     if (wie === 'schout') {
       // Het dorp neemt het je niet kwalijk, maar de heer vindt het lachwekkend (Marcel, 24 sep).
       h.schuld += keuze.boete;
       T.zetVlag(D, 'schoutAanDeSchandpaal');
-      T.wijzigVertrouwen(D, T.BAZEN_INSTELLINGEN.schandpaalZelf, 'je zette jezelf aan de schandpaal');
-      T.zeg(D, `Je zet jezelf aan de schandpaal. Het dorp kijkt zwijgend toe. De heer lacht tot hij hikt, en zet er ${keuze.boete} goud bij.`, 'gevaar');
+      T.wijzigVertrouwen(D, T.BAZEN_INSTELLINGEN.schandpaalZelf, T.t('you put yourself in the pillory'));
+      T.zeg(D, T.t('You put yourself in the pillory. The village watches in silence. The lord laughs until he hiccups, and adds {goud} to your debt.', { goud: T.hoeveel(keuze.boete, 'goud') }), 'gevaar');
     } else {
       // Zijn poppetje loopt naar het plein en staat daar (T.wandelAnker, js/akkers.js, kijkt naar
       // moetNaar). Zijn dagen aan de paal tellen pas als hij er staat (T.werkHeerBij), net als bij
@@ -564,8 +569,8 @@
       h.wrok.push({ wie, dag: dagNu(D), kost: keuze.kost, staat: true, vanaf: lopen ? null : dagNu(D) });
       T.zetVlag(D, T.schandpaalVlag(e ? T.gesprekIdVan(e) : wie));
       if (e) e.moetNaar = { ...voorDePaal(D), straal: 0 };
-      T.zeg(D, `${keuze.naam} moet ${IN().schandpaalDagen} dagen aan de schandpaal op het plein. Het dorp zal het onthouden.`, 'gevaar');
-      T.wijzigVertrouwen(D, -keuze.kost * T.BAZEN_INSTELLINGEN.schandpaalPerAanzien, `${keuze.naam} aan de schandpaal`);
+      T.zeg(D, T.t('{naam} must stand in the pillory on the square for {n|# day|# days}. The village will remember it.', { naam: keuze.naam, n: IN().schandpaalDagen }), 'gevaar');
+      T.wijzigVertrouwen(D, -keuze.kost * T.BAZEN_INSTELLINGEN.schandpaalPerAanzien, T.t('{naam} in the pillory', { naam: keuze.naam }));
     }
     b.schandpaal = false;
     T.heerVertrekt(D);
@@ -581,13 +586,13 @@
     if (!h) return uit;
     if (h.soldaten && !h.soldaten.weg) {
       uit.minder += IN().soldatenOntevreden;
-      uit.waarom.push('soldaten in huis');
+      uit.waarom.push(T.t("the lord's soldiers billeted here"));
     }
     let wrok = 0;
     for (const w of h.wrok) wrok += w.kost * Math.max(0, 1 - (dag - w.dag) / IN().wrokDagen);
     if (wrok > 0) {
       uit.minder += wrok;
-      uit.waarom.push('de schandpaal');
+      uit.waarom.push(T.t('the pillory'));
     }
     return uit;
   };
@@ -598,7 +603,7 @@
   T.ambtKwijt = function (D, waarom) {
     if (D.einde) return;
     D.einde = { reden: 'ambt', dag: dagNu(D), waarom: waarom || null };
-    T.zeg(D, waarom ? '"Genoeg, schout." De heer schudt zijn hoofd. "U bent ontslagen."' : '"Twee keer, schout." De heer schudt zijn hoofd. "U bent ontslagen."', 'gevaar');
+    T.zeg(D, waarom ? T.t('"Enough, reeve." The lord shakes his head. "You are dismissed."') : T.t('"Twice, reeve." The lord shakes his head. "You are dismissed."'), 'gevaar');
     if (!D.ander) T.houdTijdStil(D, 'einde');
     if (T.ui && T.ui.toonEinde) T.ui.toonEinde(D);
   };
@@ -612,7 +617,7 @@
     h.brief = { dag, eis: T.eisVanDeHeer(D) };
     T.zetVlag(D, 'briefVanDeHeer');
     if (T.ui && T.ui.toonBrief) T.ui.toonBrief(D, 'schatting');
-    else T.zeg(D, 'Er is een brief van de heer.');
+    else T.zeg(D, T.t('There is a letter from the lord.'));
   };
 
   T.heerKomt = function (D, dag) {
@@ -622,7 +627,7 @@
     h.bezoek = {
       komtOp: dag, staat: false, wachtTot: null, betaald: null, weg: false, wezens: null, schandpaal: false,
       kist: (D.voorraad && D.voorraad.goud) || 0,
-      aankomst: { tekst: 'Sint-Maarten. De heer komt over de weg, met twee soldaten.', soort: 'gevaar', naarGewoon: true },
+      aankomst: { tekst: T.t('Martinmas. The lord comes up the road, with two soldiers.'), soort: 'gevaar', naarGewoon: true },
     };
     if (T.zetVlag) {
       T.zetVlag(D, 'heerOpBezoek');
@@ -646,7 +651,7 @@
     b.staat = true;
     b.wachtTot = dagNu(D) + IN().wachtDagen;
     T.naarGewoneSnelheid(D);
-    T.zeg(D, 'De heer staat op het plein en wacht op je.');
+    T.zeg(D, T.t('The lord stands on the square, waiting for you.'));
   };
 
   T.heerVertrekt = function (D) {
@@ -711,7 +716,7 @@
     if (d.maand === maandIdx(IN().brief.maand) && d.dagVanMaand === IN().brief.dag && !h.bezoek) {
       if (!vrij) T.stuurBrief(D, dag);
       else if (T.ui && T.ui.toonBrief) T.ui.toonBrief(D, 'gespaard');
-      else T.zeg(D, T.t('St Martin\'s Day is coming, and the lord spares you this year.'));
+      else T.zeg(D, T.t('Martinmas is coming, and the lord spares you this year.'));
     }
     if (d.sintMaarten && !h.bezoek && !vrij) T.heerKomt(D, dag);
     // Hij wacht; komt de schout niet, dan neemt hij het zelf.
