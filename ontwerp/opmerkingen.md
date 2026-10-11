@@ -13,6 +13,11 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   1e (boeren uit het niets) trekt daar een gewoon nieuw gezin in, zodra het kamp leeg is. En het venster Spelregels laat
   bij "Huizen" en "Wie bouwt" nog hun eigen keuze zien, terwijl "Leeg" ze op "Jij" zet; dat gaat weg in ronde 2 van het
   snoeien, als die twee spelregels eruit gaan.
+- **In het lege begin past op de meeste landen geen hut** (11 okt, gemeten bij het plan voor 1d, zaad 1 tot 13): het bos
+  staat vlak om het plein, een boom houdt bouwen tegen, en om een gebouw moet een looppad van drie tegels zonder boom.
+  Alleen op zaad 1, 2, 3 en 9 past er een hut binnen 15 tegels van het plein; op de andere negen nergens binnen 30. Waar
+  het bos staat, staan er zo'n 35 bomen op de plek van één hut met zijn looppad (9 bij 9 tegels), en dat is 350 hout als
+  je het rooit (10 per boom), en "het bos van de heer" (vanaf 10 bomen). Bouwen in het bos (rooien) hoort dus bij 1d.
 - **De kaart van het land is nog geen papier** (9 okt, vraag 146, b1): elk venster werd papier, behalve `#land`: die
   tekent zijn kaart (SVG) in licht op donker, met namen in `--inkt` en een donkere rand (`stijl.css`, `--land-*`). Op
   papier moeten die kleuren om. Achter de spelregel "Land", die standaard uit staat; mee te nemen als het land weer speelt.
