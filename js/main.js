@@ -971,10 +971,9 @@
       return { datum: `${datum.dagVanMaand} ${T.MAANDEN[datum.maand].naam}, ${T.uurTekst(D.kalender.dag)}`, boeren };
     },
     // Ontginnen (js/ontginnen.js; werklijst vraag 107): of het dorp graan tekortkomt, welk stuk heide en welk stuk bos
-    // elke boer zou vragen (en of de inner dat stuk bos van zijn ronde ziet), hoeveel stukken er al van de meent af gingen
-    // en wat het volgende aan vertrouwen kost, wat er nu ontgonnen wordt en hoe ver, welke akkers stiekem in het bos liggen
-    // (en of de inner ze zag, of er een spoor heen loopt), en wanneer er weer een verzoek kan komen. ('nu') laat het
-    // verzoek nu komen, ook zonder tekort.
+    // elke boer zou vragen, hoeveel stukken er al van de meent af gingen en wat het volgende aan vertrouwen kost, wat er nu
+    // ontgonnen wordt en hoe ver, en wanneer er weer een verzoek kan komen. ('nu') laat het verzoek nu komen, ook zonder
+    // tekort.
     ontginnen(wat) {
       const D = T.dorpHier(S);
       if (!D || !D.kalender) return 'Ontginnen kan alleen in een dorp.';
@@ -998,17 +997,13 @@
         graanTekort: T.graanTekort(D),
         wieZouVragen: boeren.map((e) => {
           const bos = T.bosPlekVoor(D, e);
-          return { boer: e.naam, heide: stuk(T.ontginPlekVoor(D, e)), bos: bos && `${stuk(bos)}, ${bos.bomen} bomen, ${bos.verborgen ? 'de inner ziet het niet' : 'de inner ziet het'}` };
+          return { boer: e.naam, heide: stuk(T.ontginPlekVoor(D, e)), bos: bos && `${stuk(bos)}, ${bos.bomen} bomen` };
         }),
         vanDeMeent: `${T.ontgonnenStukken(w)} stukken; het volgende kost ${T.ontginVertrouwen(D)} vertrouwen`,
         inOntginning: T.inOntginning(w).map((v) => ({
           veld: v.naam, waar: stuk(v), op: v.ontginning.op, af: `${v.ontginning.gestoken.size} van ${v.b * v.h}`,
           bomen: T.akkerTegels(v).filter((t) => T.ontginWerkOp(w, t.x, t.y) === 'hakken').length,
           klaarOp: v.ontginning.tot - dag + ' dagen',
-        })),
-        stiekem: w.akkers.filter((v) => v.stiekem).map((v) => ({
-          veld: v.naam, waar: stuk(v), sinds: v.stiekem.sinds, innerZag: v.stiekem.gezien,
-          spoor: T.spoorNaar(D, v), soldatenVinden: { elkJaar: T.vindKansVanBosAkker(D, v, false), heelDorp: T.vindKansVanBosAkker(D, v, true) },
         })),
         staat: D.ontginnen || null,
       };

@@ -478,7 +478,7 @@
       uitleg: 'Of een boer heide of bos mag komen vragen om te ontginnen als het dorp graan tekortkomt.',
       keuzes: [
         { id: 'aan', naam: 'De heide en het bos', zet: { 'ONTGINNEN_INSTELLINGEN.aan': true, 'ONTGINNEN_INSTELLINGEN.bos': true },
-          uitleg: 'Komt het dorp graan tekort, dan vraagt een boer of zijn zoon je om dertig tegels te ontginnen, zo dicht bij zijn akker als het kan: een stuk heide of een stuk bos, en jij kiest. De heide kost vertrouwen van het dorp, want de meent is van iedereen, en elk volgend stuk meer; een maand plaggen steken. Het bos is van de heer: meld je het, dan kost het zijn gunst en telt de inner het; doe je het stiekem, dan ben je betrapt als de inner of zijn soldaten het vinden. Een winter bomen hakken, en het hout is voor het dorp. In het voorjaar wordt het gezaaid.' },
+          uitleg: 'Komt het dorp graan tekort, dan vraagt een boer of zijn zoon je om dertig tegels te ontginnen, zo dicht bij zijn akker als het kan: een stuk heide of een stuk bos, en jij kiest. De heide kost vertrouwen van het dorp, want de meent is van iedereen, en elk volgend stuk meer; een maand plaggen steken. Het bos is van de heer: je meldt het, en dat kost zijn gunst. Een winter bomen hakken, en het hout is voor het dorp. In het voorjaar wordt het gezaaid.' },
         { id: 'heide', naam: 'Alleen de heide', zet: { 'ONTGINNEN_INSTELLINGEN.aan': true, 'ONTGINNEN_INSTELLINGEN.bos': false },
           uitleg: 'Een boer vraagt alleen om heide, en ja kost vertrouwen van het dorp. Zoals de eerste dag van het ontginnen (5 okt).' },
         { id: 'uit', naam: 'Uit', zet: { 'ONTGINNEN_INSTELLINGEN.aan': false, 'ONTGINNEN_INSTELLINGEN.bos': false },

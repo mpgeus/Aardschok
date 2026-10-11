@@ -184,13 +184,11 @@
   // Ontginnen (js/ontginnen.js; werklijst vraag 107): het graan dat het dorp tekortkomt, als tevredenheid (L.ontgin.nut),
   // tegen wat het kost, naar zijn karakter. De heide kost het vertrouwen van het dorp (dat weegt hij als tevredenheid, want
   // het is wat het dorp ervan vindt): het eerste stuk zegt hij ja, een volgend niet. Het bos melden kost de gunst van de
-  // heer (L.ontgin.gunst); stiekem kost niets, maar weegt hij naar hoe zwaar hij de argwaan van de heer neemt
-  // (stiekemRisico): wie de heer vreest, meldt het, en een heethoofd doet het stiekem (vraag 107, g).
+  // heer (L.ontgin.gunst).
   function ontginWaarde(p, ontgin, soort) {
     const t = IN().karakters[p.wezen.karakter] || IN().gewoon;
     const nut = (t.tevreden || 0) * (ontgin.nut || 0);
     if (soort === 'bos') return nut - (ontgin.gunst || 0);
-    if (soort === 'stiekem') return nut - (t.argwaan || 0) * T.ONTGINNEN_INSTELLINGEN.stiekemRisico;
     return (t.tevreden || 0) * ((ontgin.nut || 0) - (ontgin.vertrouwen || 0));
   }
 

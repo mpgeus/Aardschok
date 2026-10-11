@@ -5,35 +5,25 @@
 // waar, zodat elke keuze een van je twee bazen raakt (js/bazen.js):
 //   - de heide is de meent, van iedereen: het vertrouwen van het dorp zakt, en bij elk volgend stuk meer, want hoe kleiner
 //     de meent, hoe meer het dorp eraan hecht (vraag 107, f3). Een maand plaggen steken.
-//   - het bos is van de heer. Meld je het hem, dan zakt zijn gunst (hij wil erom gevraagd worden), en staat het in zijn
-//     boeken: de inner telt het, zoals elke akker. Zeg je het niemand (stiekem), dan kost het geen gunst, en zoekt de
-//     inner het niet. Maar ziet hij het toch, of vinden zijn soldaten het (die lopen elk jaar op Sint-Maarten door het bos,
-//     en vinden het vaker als er een spoor heen loopt), dan ben je betrapt (T.betrapt, js/bazen.js), en vanaf dan staat
-//     het in de boeken. Een winter werk: boom voor boom omhakken (het hout gaat naar de schuur), de stobbe
-//     eruit, en omspitten.
+//   - het bos is van de heer. Je meldt het hem, dan zakt zijn gunst (hij wil erom gevraagd worden), en staat het in zijn
+//     boeken, zoals elke akker. Stiekem ontginnen kan niet meer (11 okt, vraag 151: heel "arm lijken" ging eruit). Een
+//     winter werk: boom voor boom omhakken (het hout gaat naar de schuur), de stobbe eruit, en omspitten.
 // Hoe de boer het doet, staat in js/veldwerk.js: hij werkt er tegel voor tegel, en wat hij af heeft, is kale grond. In
 // lentemaand wordt het gezaaid, met zaaigraan zoals elke akker (T.wisselVelden en T.zaaiAkkers, js/akkers.js). De schapen
 // grazen niet op ontgonnen heide (js/vee.js).
 //
-// Waar de inner kijkt (vraag 107, stap 2; gemeten op 5 okt): "diep in het bos, waar de inner niet komt" bestaat op onze
-// kaarten bijna niet, want het bos is 4 tot 15 tegels diep, en tussen de dichtste bomen komt een boer niet. Maar de inner
-// kijkt van zijn ronde: de wegen, het plein, de akkers en om de gebouwen (js/inner.js), en van daar ziet hij bijna geen
-// bos. Dus kiest de boer het stuk bos het dichtst bij zijn akker dat de inner van zijn ronde niet ziet (T.innerZietStuk),
-// en is er zo geen, dan het dichtste, en dan zegt het venster dat de inner het ziet.
+// Het stuk bos is het dichtste bij zijn akker waar hij bij kan (T.bosPlekVoor).
 //
 // Het verzoek loopt zoals een bouwverzoek (js/verzoeken.js): wie het vraagt, zoekt je (het voorval 'ontginverzoek',
 // js/voorvallen.js, met de woorden in js/gesprekken.js), de plekken liggen zolang in goud op de grond (js/tekenen.js), en
 // ben je weg, dan beslist je raadsman (js/raadsman.js).
-//   L.ontgin        op het voorval: { heide, bos (elk { x, y, b, h } of null; het bos ook met `bomen` en `verborgen`: of
-//                   de inner het van zijn ronde niet ziet), boer (het poppetje van de boer wiens veld het wordt), nut,
+//   L.ontgin        op het voorval: { heide, bos (elk { x, y, b, h } of null; het bos ook met `bomen`), boer (het poppetje van de boer wiens veld het wordt), nut,
 //                   vertrouwen (wat de heide kost), gunst (wat het bos kost als je het de heer meldt) }, uitgerekend als hij
 //                   het vraagt, zodat het venster zegt wat je betaalt. Zolang het loopt, staan de vlaggen ontginHeide en
 //                   ontginBos (L.vlaggen), zodat het gesprek alleen de antwoorden toont die kunnen.
 //   veld.ontginning op een veld dat ontgonnen wordt: { tot (de dag dat het klaar is), op ('heide' of 'bos'), gestoken (Set
 //                   "x,y": wat af is) }
 //   veld.ontgonnen  'heide' of 'bos' op een veld dat ontgonnen werd, ook als het klaar is: zo telt het dorp de stukken
-//   veld.stiekem    { sinds, gezien (de dag dat de inner het zag, of null) } op een akker in het bos die niet in de boeken
-//                   van de heer staat
 //   D.ontginnen     { gevraagd (de dag van het laatste verzoek), klaar (de dag dat het laatste stuk klaar was), gezocht (de
 //                   dag dat er het laatst nergens een plek was) }
 // Regels zonder scherm, met toetsen (test/ontginnen.test.cjs).
@@ -67,26 +57,10 @@
     // gaan met jouw suggestie"). Zo wordt dezelfde vraag elke keer een zwaardere.
     vertrouwen: 5,
     // Het bos. Een stuk is bos als er minstens zoveel bomen op staan (ook een erf of een werkplaats in het bos van de heer,
-    // js/bos.js); en zo ver van zijn akker zoekt de boer een stuk dat de inner van zijn ronde niet ziet (verder neemt hij
-    // het dichtste). Wat een boom geeft, staat in T.BOS_INSTELLINGEN.houtPerBoom (js/bos.js).
+    // js/bos.js). Wat een boom geeft, staat in T.BOS_INSTELLINGEN.houtPerBoom (js/bos.js).
     bosBomen: 10,
-    bosZoeken: 25,
     // Wat het bos de gunst van de heer kost als je het hem meldt (vraag 107, b: hij wil erom gevraagd worden).
     gunst: 5,
-    // Wat stiekem de raadsman lijkt te kosten, maal hoe zwaar hij de argwaan van de heer weegt (js/raadsman.js, zijn
-    // karakter): zo meldt wie de heer vreest het (de grijsaard), en doet een heethoofd het stiekem (vraag 107, g).
-    stiekemRisico: 8,
-    // De argwaan van de inner als hij een akker in het bos ziet die niet in de boeken staat.
-    argwaanGezien: 0.2,
-    // De soldaten op Sint-Maarten (vraag 107, g1; Marcel, 5 okt: "1 en 3 later inderdaad"): elk jaar lopen er een paar
-    // door het bos, en die vinden een akker die niet in de boeken staat zelden (vindenInHetBos); doorzoeken ze het hele
-    // dorp (T.doorzoekDorp, js/inner.js, bij hoge argwaan), dan soms (vindenHeelDorp); en loopt er een spoor heen (vraag
-    // 107, h: het paadje verraadt hem; T.isSpoor in js/paden.js: minstens `spoor` tegels spoor binnen twee tegels van de
-    // akker), dan vaak (vindenMetSpoor). Elk stuk is een eigen kans: één stuk is een gok, zeven stukken bijna zeker betrapt.
-    vindenInHetBos: 0.1,
-    vindenHeelDorp: 0.3,
-    vindenMetSpoor: 0.7,
-    spoor: 3,
   };
   const IN = () => T.ONTGINNEN_INSTELLINGEN;
 
@@ -108,10 +82,6 @@
   // Wat het volgende stuk heide het vertrouwen van het dorp kost: vertrouwen maal het hoeveelste stuk het is. Zonder de
   // twee bazen (de spelregel, js/bazen.js) is er geen vertrouwen, en kost het niets.
   T.ontginVertrouwen = (D) => (T.bazenTellen(D) ? IN().vertrouwen * (T.ontgonnenStukken(D.wereld) + 1) : 0);
-
-  // Staat deze akker in de boeken van de heer? Niet als hij stiekem in zijn bos ontgonnen is en niemand hem vond: dan
-  // zoekt de inner hem niet (js/inner.js), en telt de heer hem niet (js/heer.js).
-  T.inDeBoeken = (veld) => !veld.stiekem;
 
   // Hoe ver twee rechthoeken van tegels uit elkaar liggen: 1 als ze elkaar raken (ook met een hoek), 0 als ze overlappen.
   function afstandTussen(a, b) {
@@ -190,8 +160,7 @@
   const isBoom = (w, x, y, v) => !!v && T.NATUUR.bos.telt(w, x, y, v);
 
   // Per kaart en per dag: welke tegels niet in een stuk bos mogen en welke een boom hebben, als optelsommen (zodat de vraag
-  // of een stuk van dertig tegels kan, één stap is, ook voor de tienduizend plekken die de boer afzoekt), en de tegels van
-  // de ronde van de inner. Plus wat er al uitgerekend is: of de inner een stuk ziet. Geen spelstaat.
+  // of een stuk van dertig tegels kan, één stap is, ook voor de tienduizend plekken die de boer afzoekt). Geen spelstaat.
   const BOSKAARTEN = new WeakMap();
   function bosKaart(D) {
     const w = D.wereld;
@@ -202,7 +171,6 @@
     const h = w.tegels.length;
     const niet = new Int32Array((b + 1) * (h + 1));
     const bomen = new Int32Array((b + 1) * (h + 1));
-    const ronde = new Uint8Array(b * h);
     const meent = (x, y) => (w.meenten || []).some((m) => opStuk(m, x, y));
     const water = (x, y) => !!(w.grond && w.grond[y] && w.grond[y][x] && T.isWaterGrond(w.grond[y][x].naam));
     // Een tegel mag in een stuk bos: geen water, geen meent, geen veld, weg, erf of lantaarn (T.waaromNietOpDezeGrond),
@@ -223,46 +191,12 @@
         bomen[(y + 1) * (b + 1) + x + 1] = bomen[y * (b + 1) + x + 1] + rijBomen;
       }
     }
-    // De ronde van de inner (js/inner.js): de wegen en het plein, de akkers die in de boeken staan (daar gaat hij heen), en
-    // twee tegels om de gebouwen (daar kijkt hij ze aan).
-    const zet = (x, y) => {
-      if (x >= 0 && y >= 0 && x < b && y < h) ronde[y * b + x] = 1;
-    };
-    for (let y = 0; y < h; y++) for (let x = 0; x < b; x++) if (T.opPad(w, x, y) || T.opHetPlein(w, x, y)) zet(x, y);
-    for (const a of w.akkers) if (T.inDeBoeken(a)) for (const t of T.akkerTegels(a)) zet(t.x, t.y);
-    for (const g of D.gebouwen || []) {
-      const v = T.voetVanGebouw(g);
-      if (v) for (let y = v.y - 2; y < v.y + v.h + 2; y++) for (let x = v.x - 2; x < v.x + v.b + 2; x++) zet(x, y);
-    }
-    const k = { nu, b, h, niet, bomen, ronde, gezien: new Map() };
+    const k = { nu, b, h, niet, bomen };
     BOSKAARTEN.set(w, k);
     return k;
   }
   // De som over een rechthoek uit een optelsom.
   const somOver = (k, s, x, y, b, h) => s[(y + h) * (k.b + 1) + x + b] - s[y * (k.b + 1) + x + b] - s[(y + h) * (k.b + 1) + x] + s[y * (k.b + 1) + x];
-
-  // Ziet de inner dit stuk van zijn ronde (bosKaart)? Van een tegel van zijn ronde, zo ver als hij kijkt
-  // (T.INNER_INSTELLINGEN.zicht), naar een tegel van het stuk, met niets ertussen (T.zietTegel, js/wereld.js), en de bomen
-  // van het stuk zelf weg: die hakt de boer om.
-  T.innerZietStuk = function (D, stuk) {
-    const w = D.wereld;
-    const k = bosKaart(D);
-    const id = `${stuk.x},${stuk.y},${stuk.b},${stuk.h}`;
-    if (k.gezien.has(id)) return k.gezien.get(id);
-    const ver = T.INNER_INSTELLINGEN.zicht;
-    const open = (x, y) => opStuk(stuk, x, y);
-    let ziet = false;
-    for (let qy = Math.max(0, stuk.y - ver); qy < Math.min(k.h, stuk.y + stuk.h + ver) && !ziet; qy++) {
-      for (let qx = Math.max(0, stuk.x - ver); qx < Math.min(k.b, stuk.x + stuk.b + ver) && !ziet; qx++) {
-        if (!k.ronde[qy * k.b + qx] || open(qx, qy)) continue;
-        for (let py = stuk.y; py < stuk.y + stuk.h && !ziet; py++) {
-          for (let px = stuk.x; px < stuk.x + stuk.b && !ziet; px++) ziet = T.zietTegel(w, { x: qx, y: qy }, { x: px, y: py }, ver, open);
-        }
-      }
-    }
-    k.gezien.set(id, ziet);
-    return ziet;
-  };
 
   // Kan de boer erbij? Recht naast een tegel van de rand van het stuk kan hij komen, vanaf zijn deur (T.kanErKomen,
   // js/wereld.js): daar hakt hij (js/veldwerk.js), en hij werkt van de rand naar binnen, dus meer hoeft niet.
@@ -288,9 +222,8 @@
   }
 
   // De plek voor een stuk bos bij de velden van deze boer (vraag 107, b): breed bij diep (of andersom), met minstens
-  // bosBomen bomen erop, waar hij bij kan; het dichtst bij zijn akker dat de inner van zijn ronde niet ziet (binnen
-  // bosZoeken tegels), en anders het dichtste. Bij gelijk de eerste, van boven naar beneden. { x, y, b, h, bomen,
-  // verborgen }, of null.
+  // bosBomen bomen erop, waar hij bij kan; het dichtst bij zijn akker. Bij gelijk de eerste, van boven naar beneden.
+  // { x, y, b, h, bomen }, of null.
   T.bosPlekVoor = function (D, boer) {
     if (!boer.werkAkkers || !boer.werkAkkers.length || !D.wereld.tegels.length) return null;
     const k = bosKaart(D);
@@ -307,14 +240,8 @@
       }
     }
     kandidaten.sort((a, c) => a.d - c.d || a.y - c.y || a.x - c.x || c.b - a.b);
-    let dichtste = null;
-    for (const s of kandidaten) {
-      if (dichtste && s.d > IN().bosZoeken) break;
-      if (!bereikbaar(D, boer, s)) continue;
-      if (!dichtste) dichtste = s;
-      if (s.d <= IN().bosZoeken && !T.innerZietStuk(D, s)) return { x: s.x, y: s.y, b: s.b, h: s.h, bomen: s.bomen, verborgen: true };
-    }
-    return dichtste && { x: dichtste.x, y: dichtste.y, b: dichtste.b, h: dichtste.h, bomen: dichtste.bomen, verborgen: false };
+    const s = kandidaten.find((c) => bereikbaar(D, boer, c));
+    return s ? { x: s.x, y: s.y, b: s.b, h: s.h, bomen: s.bomen } : null;
   };
 
   // ---------------------------------------------------------------------------------------------
@@ -366,7 +293,7 @@
   };
 
   // Wat je antwoord kost of oplevert, voor het venster (T.prijsVanKeuze, js/voorvallen.js): { delen, kan, waarom }. `soort`
-  // is 'heide', 'bos' (je meldt het de heer) of 'stiekem' (je zegt het niemand).
+  // is 'heide' of 'bos' (je meldt het de heer).
   T.ontginPrijs = function (D, L, soort) {
     const o = L.ontgin;
     if (soort === 'heide') {
@@ -375,25 +302,19 @@
     }
     if (!o.bos) return { delen: [], kan: false, waarom: 'er is geen bos' };
     const delen = [`+${o.bos.bomen * T.BOS_INSTELLINGEN.houtPerBoom} hout`];
-    if (soort === 'bos') {
-      if (o.gunst) delen.push(`gunst van de heer −${o.gunst}`);
-      delen.push('de inner telt het');
-    } else {
-      delen.push(o.bos.verborgen ? 'de inner ziet het daar niet' : 'de inner ziet het daar');
-      delen.push('vinden ze het, dan ben je betrapt');
-    }
+    if (o.gunst) delen.push(`gunst van de heer −${o.gunst}`);
     return { delen, kan: true };
   };
 
-  // Ja (doe: { ontgin: 'heide', 'bos' of 'stiekem' }, js/voorvallen.js): het stuk wordt een veld van zijn boerderij, dat
+  // Ja (doe: { ontgin: 'heide' of 'bos' }, js/voorvallen.js): het stuk wordt een veld van zijn boerderij, dat
   // nog ontgonnen wordt. Het rust tot het klaar is (braak), en wordt in lentemaand een akker (het plan, js/akkers.js). Is
   // de plek intussen niet meer vrij, dan de plek die hij nu zou kiezen. De heide kost het vertrouwen dat het venster zei
-  // (L.ontgin.vertrouwen), het bos openlijk de gunst (L.ontgin.gunst); stiekem staat het niet in de boeken.
+  // (L.ontgin.vertrouwen), het bos de gunst (L.ontgin.gunst).
   T.ontginToegestaan = function (D, L, soort = 'heide') {
     const o = L.ontgin;
     const boer = o.boer;
     const w = D.wereld;
-    const bos = soort === 'bos' || soort === 'stiekem';
+    const bos = soort === 'bos';
     const plek = bos ? (o.bos && bosVrij(D, o.bos) ? o.bos : T.bosPlekVoor(D, boer)) : o.heide && heideVrij(D, o.heide) ? o.heide : T.ontginPlekVoor(D, boer);
     if (!plek) {
       T.zeg(D, bos ? 'In het bos is geen plek meer om te ontginnen.' : 'Op de heide is geen plek meer om te ontginnen.');
@@ -407,7 +328,6 @@
       vruchtbaarheid: T.VELDEN_INSTELLINGEN.beginVruchtbaarheid, ontgonnen: bos ? 'bos' : 'heide',
       ontginning: { tot: dag + (bos ? IN().bosDagen : IN().heideDagen), op: bos ? 'bos' : 'heide', gestoken: new Set() },
     };
-    if (soort === 'stiekem') veld.stiekem = { sinds: dag, gezien: null };
     w.akkers.push(veld);
     boer.werkAkkers.push(veld);
     // Een veld waar heide of bos was: wat uit de kaart volgt (de paadjes van de deuren lopen niet over een veld, js/paden.js;
@@ -418,12 +338,9 @@
     if (!bos) {
       if (o.vertrouwen) T.wijzigVertrouwen(D, -o.vertrouwen, 'een stuk van de meent');
       T.zeg(D, `${wie} begint de heide te ontginnen: over een maand is het een akker, ${zaaien}.`, 'goed');
-    } else if (soort === 'bos') {
+    } else {
       if (o.gunst) T.wijzigGunst(D, -o.gunst, 'een stuk van zijn bos');
       T.zeg(D, `${wie} begint het bos te ontginnen. Je meldt het de heer, en hij laat weten: "Ons bos? Nu ja. Het staat in Onze boeken." Over een winter is het een akker, ${zaaien}.`, 'goed');
-    } else {
-      const zicht = plek.verborgen ? 'Van de weg en de akkers ziet niemand het.' : 'Maar de inner komt er langs.';
-      T.zeg(D, `${wie} begint het bos te ontginnen, en de heer weet van niets. ${zicht} Over een winter is het een akker, ${zaaien}.`, 'goed');
     }
     return veld;
   };
@@ -472,97 +389,6 @@
   };
 
   // ---------------------------------------------------------------------------------------------
-  // Stiekem: de inner, de heer en de soldaten
-  // ---------------------------------------------------------------------------------------------
-
-  // De inner ziet een akker in het bos die niet in de boeken staat (T.innerKijkt, js/inner.js): hij schrijft hem op (zijn
-  // tegels staan nu in zijn bezoek, dus in zijn rapport), zijn argwaan stijgt, en op Sint-Maarten weet de heer het
-  // (T.heerVindtBosAkkers).
-  T.innerZietBosAkker = function (D, veld) {
-    if (!veld.stiekem || veld.stiekem.gezien != null) return;
-    veld.stiekem.gezien = dagNu(D);
-    T.zetArgwaan(D, IN().argwaanGezien, 'hij zag een akker in het bos van de heer');
-    const boer = T.boerVanVeld(D, veld);
-    T.zeg(D, `De inner blijft staan bij het bos, en kijkt lang naar de akker${boer ? ` van ${boer.naam}` : ''} tussen de bomen. Hij schrijft.`, 'gevaar');
-  };
-
-  // Gevonden: betrapt (de laatste waarschuwing, of je ambt kwijt), en vanaf nu staat hij in de boeken.
-  function gevonden(D, veld, tekst) {
-    delete veld.stiekem;
-    T.betrapt(D, tekst);
-  }
-
-  // Op Sint-Maarten (T.heerStaatErOp, js/heer.js): een akker in zijn bos die zijn inner zag, weet de heer. Geeft wat hij
-  // vond, als woorden.
-  T.heerVindtBosAkkers = function (D) {
-    const lijst = [];
-    for (const veld of (D.wereld && D.wereld.akkers) || []) {
-      if (!veld.stiekem || veld.stiekem.gezien == null) continue;
-      const boer = T.boerVanVeld(D, veld);
-      const wat = `de akker in het bos${boer ? ` van ${boer.naam}` : ''}`;
-      gevonden(D, veld, 'zijn inner zag een akker in zijn bos');
-      T.zeg(D, `"Een akker in Ons bos, schout? Die stond niet in Onze boeken." De heer wijst naar het rapport van zijn inner: ${wat}. "Nu wel."`, 'gevaar');
-      lijst.push(wat);
-    }
-    return lijst;
-  };
-
-  // Loopt er een spoor naar deze akker (vraag 107, h)? Minstens `spoor` tegels spoor (T.isSpoor, js/paden.js: een paadje,
-  // of gras dat slijt omdat er elke dag gelopen wordt) binnen twee tegels om de akker. Zolang de boer en zijn gezin er
-  // elke dag werken (het hakken, de oogst), loopt er een; is het stil, dan groeit het dicht.
-  T.spoorNaar = function (D, veld) {
-    let n = 0;
-    for (let y = veld.y - 2; y < veld.y + veld.h + 2; y++) {
-      for (let x = veld.x - 2; x < veld.x + veld.b + 2; x++) if (!opStuk(veld, x, y) && T.isSpoor(D, x, y)) n++;
-    }
-    return n >= IN().spoor;
-  };
-
-  // Hoe vaak de soldaten deze akker vinden: als ze elk jaar door het bos lopen zelden, als ze het hele dorp doorzoeken
-  // (`heelDorp`) soms, en vaak als er een spoor heen loopt.
-  T.vindKansVanBosAkker = (D, veld, heelDorp) => {
-    if (T.spoorNaar(D, veld)) return IN().vindenMetSpoor;
-    return heelDorp ? IN().vindenHeelDorp : IN().vindenInHetBos;
-  };
-
-  // Een getal 0..1, vast per spel, per dag en per akker, zodat een toets hetzelfde uitkomt (zoals js/verstoppen.js).
-  function lot(D, veld) {
-    return T.dobbelsteen(((D.lot && D.lot.zaad) || 1) * 31 + dagNu(D) * 7919 + veld.x * 104729 + veld.y * 1299709)();
-  }
-
-  // De soldaten zoeken: elke akker in het bos die niet in de boeken staat, vinden ze onder zijn kans
-  // (T.vindKansVanBosAkker). Als ze het hele dorp doorzoeken (`heelDorp`, vanuit T.zoekVerstopt, js/verstoppen.js), of
-  // elk jaar door het bos lopen (T.doorzoekHetBos). Geeft wat ze vonden, als woorden ("de akker in het bos van Klaas").
-  // `getal(veld)` (voor een toets) geeft een getal 0..1 in plaats van het lot.
-  T.zoekBosAkkers = function (D, getal, heelDorp = true) {
-    const lijst = [];
-    for (const veld of (D.wereld && D.wereld.akkers) || []) {
-      if (!veld.stiekem) continue;
-      const r = getal ? getal(veld) : lot(D, veld);
-      const spoor = T.spoorNaar(D, veld);
-      if (r >= T.vindKansVanBosAkker(D, veld, heelDorp)) continue;
-      const boer = T.boerVanVeld(D, veld);
-      lijst.push(`${spoor ? 'langs het spoor ' : ''}de akker in het bos${boer ? ` van ${boer.naam}` : ''}`);
-      gevonden(D, veld, 'zijn soldaten vonden een akker in zijn bos');
-    }
-    if (lijst.length) T.zetArgwaan(D, IN().argwaanGezien, 'de soldaten vonden een akker in het bos');
-    return lijst;
-  };
-
-  // Elk jaar op Sint-Maarten, als zijn soldaten niet het hele dorp doorzoeken (T.heerStaatErOp, js/heer.js), lopen er een
-  // paar door het bos (vraag 107, g1): zo kost elke akker die niet in de boeken staat elk jaar een kans. Ligt er geen, dan
-  // zegt het niets. Geeft wat ze vonden.
-  T.doorzoekHetBos = function (D, getal) {
-    if (!((D.wereld && D.wereld.akkers) || []).some((v) => v.stiekem)) return [];
-    const lijst = T.zoekBosAkkers(D, getal, false);
-    const wat = lijst.length > 1 ? `${lijst.slice(0, -1).join(', ')} en ${lijst[lijst.length - 1]}` : lijst[0];
-    T.zeg(D, lijst.length
-      ? `Een paar soldaten lopen door het bos, en vinden ${wat}.`
-      : 'Een paar soldaten lopen door het bos, en komen terug met niets dan dennennaalden.', lijst.length ? 'gevaar' : '');
-    return lijst;
-  };
-
-  // ---------------------------------------------------------------------------------------------
   // De woorden van het gesprek (js/gesprekken.js, 'ontginverzoek'; T.vulWoordenIn, js/gesprek.js)
   // ---------------------------------------------------------------------------------------------
   const ontginNu = (D) => {
@@ -596,12 +422,5 @@
     if (!n) return 'het is de meent, en het dorp zal er wat van vinden';
     if (n === 1) return 'er ging al een stuk van de meent af, en het dorp zal er meer van vinden';
     return `er gingen al ${T.telwoord(n)} stukken van de meent af, en het dorp zal er nog meer van vinden`;
-  };
-  // Of de inner het ziet (T.innerZietStuk): "Van de weg en de akkers ziet niemand het, als u begrijpt wat ik bedoel.", of
-  // "En de inner komt er langs, als hij de akkers telt."
-  T.GESPREK_WOORDEN.bosZicht = (D) => {
-    const L = ontginNu(D);
-    if (L && L.ontgin.bos && L.ontgin.bos.verborgen) return 'Van de weg en de akkers ziet niemand het, als u begrijpt wat ik bedoel.';
-    return 'En de inner komt er langs, als hij de akkers telt.';
   };
 })(globalThis.Spel = globalThis.Spel || {});

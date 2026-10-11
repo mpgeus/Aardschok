@@ -150,9 +150,7 @@
     const argwaan = (I && I.argwaan) || 0;
     const INN = T.INNER_INSTELLINGEN;
     const rapport = IN().rekening === 'rapport' && I && I.rapport && !(INN && argwaan >= INN.rapportTeltNietVanaf) ? I.rapport : null;
-    // De akkers die hij kent: wat stiekem in zijn bos ontgonnen werd en niemand vond, staat niet in zijn boeken
-    // (js/ontginnen.js).
-    const akkers = ((D.wereld && D.wereld.akkers) || []).filter(T.inDeBoeken);
+    const akkers = (D.wereld && D.wereld.akkers) || [];
     if (rapport) {
       if (IN().graan === 'deel') tel('graan', rapport.graanGezien * IN().deelVanGraan, `een deel van de ${Math.round(rapport.graanGezien)} graan die Onze inner telde`);
       else if (rapport.tegels) tel('graan', rapport.tegels * IN().pachtPerAkkertegel, `de pacht voor ${rapport.tegels} akkertegels die Onze inner zag`);
@@ -676,11 +674,6 @@
     // Op het plein kijkt hij rond: wat hij ziet en niet in het rapport van zijn inner staat, komt
     // alsnog op de rekening, en dat maakt argwanend (js/inner.js). Zijn soldaten zoeken niet meer (11 okt).
     T.heerKijktRond(D);
-    // En elk jaar lopen er een paar door het bos, naar akkers die niet in zijn boeken staan (js/ontginnen.js; vraag 107,
-    // g1).
-    T.doorzoekHetBos(D);
-    // Een akker in zijn bos die zijn inner zag en die niet in zijn boeken stond: betrapt (js/ontginnen.js).
-    T.heerVindtBosAkkers(D);
     // En de inner leest hem het boek van de schuur voor: mist er een zak graan, dan ziet hij het (js/zaak.js).
     T.heerLeestHetBoek(D);
     b.wachtTot = dagNu(D) + IN().wachtDagen;

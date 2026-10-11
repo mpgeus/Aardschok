@@ -1350,15 +1350,14 @@
       knopen: {
         begin: {
           tekst: [
-            { als: { vlag: ['ontginHeide', 'ontginBos'] }, zeg: 'Schout, het dorp komt graan tekort, en ik wil land ontginnen, {stuk}. Ik kan {heide} nemen: een maand plaggen steken, maar {meent}. Of {bos}: een winter bomen hakken en stobben rooien, en het hout is voor het dorp. Maar het bos is van de heer. {bosZicht}' },
-            { als: { vlag: 'ontginBos' }, zeg: 'Schout, het dorp komt graan tekort, en de heide is op. Ik wil {bos} ontginnen, {stuk}: een winter bomen hakken en stobben rooien, en het hout is voor het dorp. Maar het bos is van de heer. {bosZicht}' },
+            { als: { vlag: ['ontginHeide', 'ontginBos'] }, zeg: 'Schout, het dorp komt graan tekort, en ik wil land ontginnen, {stuk}. Ik kan {heide} nemen: een maand plaggen steken, maar {meent}. Of {bos}: een winter bomen hakken en stobben rooien, en het hout is voor het dorp. Maar het bos is van de heer.' },
+            { als: { vlag: 'ontginBos' }, zeg: 'Schout, het dorp komt graan tekort, en de heide is op. Ik wil {bos} ontginnen, {stuk}: een winter bomen hakken en stobben rooien, en het hout is voor het dorp. Maar het bos is van de heer.' },
             { zeg: 'Schout, ik wil {heide} ontginnen, {stuk}. Het dorp komt graan tekort, en daar groeit nu niets dan hei. Een maand plaggen steken, en volgend voorjaar zaaien we er rogge. Maar {meent}.' },
           ],
           keuzes: [
             { zeg: 'Ja, ontgin het maar.', sluit: true, als: { vlag: 'ontginHeide', nietVlag: 'ontginBos' }, doe: { ontgin: 'heide' } },
             { zeg: 'De heide.', sluit: true, als: { vlag: ['ontginHeide', 'ontginBos'] }, doe: { ontgin: 'heide' } },
             { zeg: 'Het bos. Ik meld het de heer.', sluit: true, als: { vlag: 'ontginBos' }, doe: { ontgin: 'bos' } },
-            { zeg: 'Het bos. De heer hoeft het niet te weten.', sluit: true, als: { vlag: 'ontginBos' }, doe: { ontgin: 'stiekem' } },
             { zeg: 'Nee, de heide is van iedereen.', sluit: true, als: { nietVlag: 'ontginBos' } },
             { zeg: 'Nee, nu niet.', sluit: true, als: { vlag: 'ontginBos' } },
           ],

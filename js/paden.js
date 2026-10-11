@@ -171,9 +171,8 @@
   };
 
   // Loopt hier een spoor: een paadje, of gras dat slijt waar elke dag gelopen wordt (gemiddeld blijftPad stappen per dag of
-  // meer, ook voor het een paadje is dat je ziet)? Zo volgen de soldaten een boer naar zijn akker in het bos (werklijst
-  // vraag 107, h; js/ontginnen.js): één gezin maakt er zo'n twee à drie stappen per dag (gemeten op 5 okt), en een
-  // paadje vraagt er wordtPad.
+  // meer, ook voor het een paadje is dat je ziet)? Het hek om de schapen laat er een hekje open (js/beesten.js): één gezin
+  // maakt er zo'n twee à drie stappen per dag (gemeten op 5 okt), en een paadje vraagt er wordtPad.
   T.isSpoor = function (D, x, y) {
     const w = D.wereld;
     if (T.isPaadje(D, x, y)) return true;

@@ -813,7 +813,7 @@
     // Een bouwverzoek (js/verzoeken.js): ja, en het gebouw komt er; nee, en hij onthoudt het.
     if (doe.bouw && L.bouw) T.verzoekToegestaan(D, L);
     if (doe.weiger && L.bouw) T.verzoekGeweigerd(D, L);
-    // Ontginnen (js/ontginnen.js): ja, de heide of het bos (gemeld of stiekem), en het wordt een veld van zijn boerderij.
+    // Ontginnen (js/ontginnen.js): ja, de heide of het bos, en het wordt een veld van zijn boerderij.
     if (doe.ontgin && L.ontgin) T.ontginToegestaan(D, L, doe.ontgin === true ? 'heide' : doe.ontgin);
     // De wolven (js/beesten.js): een jacht te voet naar de roedel die het schaap nam (doe.jacht; stap 3b), of meteen wolven
     // minder (doe.wolven), en een hek houdt ze bij de schapen weg. gereedschap/wereld.html laadt de beesten niet.
@@ -864,7 +864,7 @@
     if (doe.bouw && L.bouw && L.bouw.bos && T.BAZEN_INSTELLINGEN.aan) delen.push(`gunst van de heer −${T.ONTGINNEN_INSTELLINGEN.gunst}`);
     if (doe.vertrouwen && T.BAZEN_INSTELLINGEN.aan) delen.push(`vertrouwen van het dorp ${teken(doe.vertrouwen)}${Math.abs(doe.vertrouwen)}`);
     // Ontginnen (js/ontginnen.js): de heide kost vertrouwen, meer naarmate de meent kleiner wordt; het bos de gunst van de
-    // heer, of stiekem het risico; en wat er niet meer is, kan niet.
+    // heer; en wat er niet meer is, kan niet.
     if (doe.ontgin && L.ontgin) {
       const p = T.ontginPrijs(D, L, doe.ontgin === true ? 'heide' : doe.ontgin);
       delen.push(...p.delen);

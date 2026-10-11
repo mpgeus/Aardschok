@@ -364,7 +364,6 @@
       const t = T.zoekOpPlek(D, p, getal ? getal(p) : null);
       if (t) gevonden.push(t);
     }
-    gevonden.push(...T.zoekBosAkkers(D, getal));
     return gevonden;
   };
 })(globalThis.Spel = globalThis.Spel || {});
