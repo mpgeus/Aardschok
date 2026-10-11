@@ -26,7 +26,9 @@ mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voo
 
 **Wacht op Marcel:**
 - **Gameplay als kern, en het verstoppen eruit** (vraag 151, 11 okt; Marcel: "we hebben niks"): het verstoppen en heel
-  "arm lijken" gaan eruit, de heer blijft (Marcel: "alles gaat eruit"); het plan om het weg te halen wacht op Marcel.
+  "arm lijken" gaan eruit, de heer blijft (Marcel: "alles gaat eruit"); het plan om het weg te halen heet **optie 1**
+  (Marcel, 11 okt: "Dit noemen we optie 1. Ik vertel je straks wat we doen"). Intussen kijkt Claude rond naar vergelijkbare
+  spellen: "We hebben een goede gameloop nodig".
   Dan welke kern (A de schout is maar één mens, B rechtspraak, C de heer als klok), en eerst het eerste uur op papier.
 - Het geluid (vraag 145, 2): de sleutel `FREESOUND_KEY` in de omgeving en de domeinen van Freesound erbij, zoals
   beschreven bij vraag 145; dan maakt een nieuwe sessie het.
@@ -7691,7 +7693,20 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     Het verstoppen: a, alleen de kelders en de soldaten die zoeken; of b, heel "arm lijken" (ook de inner die telt wat hij
     ziet, de argwaan, afleiden en omkopen, het stiekeme bos), en de heer vraagt naar wat er is; Claude: b, want dan moet
     de heer toch opnieuw, en dat is C; het zicht en de getuigen blijven, voor B. Eerst het eerste uur op papier, vóór er
-    iets gebouwd wordt. **Wacht op Marcel.**
+    iets gebouwd wordt.
+    **Optie 1** (Marcel, 11 okt: "Dit noemen we optie 1. Ik vertel je straks wat we doen"): het plan van Claude om het
+    eruit te halen. Weg: de kelders (wegzetten, terughalen, en wat de karakters van de boeren daarbij deden; de karakters
+    blijven), de soldaten die zoeken (de soldaten als straf blijven), de inner (zijn bezoek, wat hij ziet, zijn rapport,
+    afleiden, omkopen, onverwacht terug; de heer rekent op wat er is, zoals nu al als de inner niet kwam), de argwaan (wat
+    argwaan kostte, kost gunst), de getuigen en "betrapt", en het stiekeme bos (het bos alleen gemeld). Verder: de heer
+    leest het boek van de graanzak zelf voor, de slimme en de sluwe speler van de speeltest verstoppen niets meer (de sluwe
+    geeft de heer nog 90%: hij telt slecht), een oud spel laadt niet meer, en CLAUDE.md, het ontwerp en de samenvatting
+    gaan mee. Drie keuzes: a, de argwaan wordt gunst (Claude: ja); b, de inner helemaal weg (Claude) of als de man die de
+    brief brengt; c, ook "wie ziet wat" en de getuigen eruit (Claude: ja, git bewaart het).
+    **Rondkijken** (Marcel, 11 okt: "Voor nu wil ik dat je rondkijkt naar vergelijkbare spellen. We hebben een goede
+    gameloop nodig"): `ontwerp/gameloop.md`, met Papers, Please, Beholder, The Reeve, Frostpunk, Against the Storm, King of
+    Dragon Pass, Pentiment en de dorpsbouwers, wat een goede loop gemeen heeft, en wat het voor ons betekent. **Wacht op
+    Marcel.**
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

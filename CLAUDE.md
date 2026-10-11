@@ -54,6 +54,9 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   verdienen"): de markt, verlanglijstjes en Steam Next Fest, de haak (je bent geen god boven het dorp, maar de schout
   erin), de beeldstijl als troef, Engels, en een tijdpad.
   Het commerciële deel denkt mee in elke keuze; de vragen waren vraag 83 en 84 (open: welke zin de haak wordt).
+- `ontwerp/gameloop.md`: wat vergelijkbare spellen als gameloop hebben (Papers, Please, Frostpunk, Against the Storm, King of
+  Dragon Pass, Pentiment, de dorpsbouwers), wat een goede loop gemeen heeft, en wat het voor ons betekent (Marcel, 11 okt:
+  "We hebben een goede gameloop nodig"; vraag 151).
 - `ontwerp/speelbaar.md`: wat er nog ontbreekt voor een eerste speelbaar product (vraag 33), en wat er
   in een speeltest van een heel jaar gebeurde.
 - `ontwerp/beeld.md`: de beeldstijl (HD-pixel art), maten, palet, en het ontwerpcanvas.
