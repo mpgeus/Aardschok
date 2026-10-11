@@ -3,8 +3,9 @@
 // twee keer, uit dezelfde modellen en in hetzelfde licht. Links zoals het spel het nu krijgt, pixel art (vaste kleuren,
 // harde randen, een omlijning), twee keer vergroot zoals op 1080p. Rechts voorgerenderd, zoals Knights and Merchants en
 // Anno 1602 hun beelden maakten: vier keer zo fijn gerekend en dan verkleind tot dezelfde maat, de kleuren zonder trappen
-// en zonder omlijning. Alleen de grond is rechts anders gemaakt: die van het spel is getekend op het rooster van de
-// pixels, dus rechts gras en aarde uit de wereld zelf, en geen graspollen.
+// en zonder omlijning. Vier keer zo fijn is zestien keer het gewone beeld, elk een fractie van een pixel verschoven, in
+// elkaar gevlochten; zo blijft de renderer wat hij is. Alleen de grond is rechts anders gemaakt: die van het spel is
+// getekend op het rooster van de pixels, dus rechts gras en aarde uit de wereld zelf, en geen graspollen.
 //   node gereedschap/pixelart/stijlproef.cjs           beide, in uit/stijlproef/ (zo'n tien minuten op vier kernen)
 //   node gereedschap/pixelart/stijlproef.cjs pixel     alleen de pixel art
 //   node gereedschap/pixelart/stijlproef.cjs voor 2    alleen voorgerenderd, twee keer zo fijn (sneller, harde randen)
@@ -13,12 +14,6 @@ const os = require('os');
 const path = require('path');
 const { Worker, isMainThread, parentPort, workerData } = require('worker_threads');
 const K = require('./kern.cjs');
-
-// Voorgerenderd rekent het beeld FIJN keer zo fijn: een pixel beslaat dan 1/FIJN van de wereld. Dat gebeurt vóór de
-// andere bestanden laden, zodat alles wat ze van de camera afleiden, ook fijner is.
-const FIJN = !isMainThread && workerData.taak === 'voor' ? workerData.S : 1;
-if (FIJN !== 1) for (const v of [K.EX, K.EY]) for (let i = 0; i < 3; i++) v[i] /= FIJN;
-
 const D = require('./dorp.cjs');
 const T = require('./toren.cjs');
 const HS = require('./huis-sdf.cjs');
@@ -31,8 +26,8 @@ const { UITERLIJKEN } = require('./uiterlijk.cjs');
 const UIT = path.join(__dirname, 'uit', 'stijlproef');
 const ACHTERGROND = '#0e0a14';
 const UITVOER = 2; // de maat van de plaat: twee keer, zoals het spel op 1080p
-// wat er staat, in tegels vanaf de voordeur: langs de gevel en ervan af
-const BOOM = { zaad: 3, plek: [-5.6, 2.2] };
+// de eik rechts van de gevel, in tegels; de mensen in tegels vanaf de voordeur: langs de gevel en ervan af
+const BOOM = { zaad: 3, tegel: [8, -4] };
 const MENSEN = [
   { model: () => boer({ houding: 'staan', fase: 0 }, UITERLIJKEN.boer[3]), plek: [0.9, 2.5], richting: 'ZW' },
   { model: () => boerin({ houding: 'staan', fase: 0 }, UITERLIJKEN.boerin[2]), plek: [-0.4, 2.9], richting: 'Z' },
@@ -59,7 +54,7 @@ function maat() {
   const { delen, op } = opzet();
   const kd = HS.kaderSamen(X.samenVan(delen));
   const punten = [[kd.x0, kd.y0], [kd.x1, kd.y1]];
-  const [bx, by] = op(BOOM.plek);
+  const [bx, by] = BOOM.tegel;
   const sx = (bx - by) * 32;
   const sy = (bx + by) * 16;
   punten.push([sx - 110, sy - 230], [sx + 110, sy + 20]);
@@ -72,34 +67,6 @@ function maat() {
   const y0 = Math.min(...punten.map((p) => p[1])) - 30;
   const y1 = Math.max(...punten.map((p) => p[1])) + 50;
   return { b: Math.ceil(x1 - x0), h: Math.ceil(y1 - y0), OX: Math.round(-x0), OY: Math.round(-y0) };
-}
-
-// Een model in de fijne camera: tekenModel neemt zijn straal als maat op het scherm, dus die groeit mee.
-const groter = (m) => (FIJN === 1 ? m : { ...m, straal: m.straal * FIJN });
-
-// Patronen die op het scherm getekend zijn (spikkels, vlekken in het pleister, de blaadjes van klimop) krijgen de pixel
-// van de gewone maat, zodat ze even groot blijven.
-function opPixelmaat(W) {
-  const gedaan = new Set();
-  for (const mat of Object.values(W.mat)) {
-    if (gedaan.has(mat)) continue;
-    gedaan.add(mat);
-    for (const [k, f] of Object.entries(mat)) {
-      if (typeof f !== 'function') continue;
-      mat[k] = function (C, ...rest) {
-        if (!C || typeof C !== 'object' || C.px === undefined) return f.call(this, C, ...rest);
-        const { px, py } = C;
-        C.px = px / FIJN;
-        C.py = py / FIJN;
-        try {
-          return f.call(this, C, ...rest);
-        } finally {
-          C.px = px;
-          C.py = py;
-        }
-      };
-    }
-  }
 }
 
 // De grond voor het voorgerenderde beeld: dezelfde kaart (gras, pad), maar uit de wereld in plaats van uit het rooster
@@ -134,25 +101,17 @@ function grondVoor(kaart) {
 function scene(B, voor) {
   const { delen, op } = opzet();
   const W = X.samenVan(delen);
-  if (voor) opPixelmaat(W);
   let kaart;
   if (voor) {
     kaart = D.grondKaart({ zaad: 5 });
     K.tekenDozen(B, [K.doos(-40, -40, 44, 44, -16, 0, grondVoor(kaart))]);
   } else kaart = X.grond(B);
-  let R = T.tekenWereld(B, W);
-  if (!R) {
-    // een strook naast het huis: zijn schaduw kan er toch op vallen, dus het veld uit één pixel in het huis
-    const W2 = X.samenVan(delen);
-    const kd = HS.kaderSamen(W2);
-    R = T.tekenWereld(new K.Beeld(1, 1, -Math.round((kd.x0 + kd.x1) / 2), -Math.round((kd.y0 + kd.y1) / 2)), W2);
-  }
+  const R = T.tekenWereld(B, W);
   B.lichten.push(...W.lichten);
-  const [bx, by] = op(BOOM.plek);
-  D.zetModel(B, groter(BO.eik(BOOM.zaad)), bx, by, 'Z');
+  D.zetModel(B, BO.eik(BOOM.zaad), ...BOOM.tegel, 'Z');
   for (const m of MENSEN) {
     const [gx, gy] = op(m.plek);
-    D.zetModel(B, groter(m.model()), gx, gy, m.richting);
+    D.zetModel(B, m.model(), gx, gy, m.richting);
   }
   if (!voor) D.grasPollen(B, kaart, { dicht: 0.8 });
   X.grondZon(B, R, { kracht: 2.6 });
@@ -234,11 +193,11 @@ if (!isMainThread) {
     const p = K.Plaat.van(K.kwantiseer(B));
     uit = { b: p.b, h: p.h, rgba: p.rgba(ACHTERGROND) };
   } else {
-    // een strook van het fijne beeld, rij ys tot ye
-    const { ys, ye } = workerData;
-    const B = new K.Beeld(L.b * FIJN, ye - ys, L.OX * FIJN, L.OY * FIJN - ys);
+    // het gewone beeld, (i + ½) / S en (j + ½) / S van een pixel verschoven: elke pixel kijkt naar dat punt erin
+    const { S, i, j } = workerData;
+    const B = new K.Beeld(L.b, L.h, L.OX + 0.5 - (i + 0.5) / S, L.OY + 0.5 - (j + 0.5) / S);
     scene(B, true);
-    uit = verklein(kleurenVoor(B), B.b, B.h, FIJN / UITVOER);
+    uit = { b: B.b, h: B.h, licht: kleurenVoor(B) };
   }
   parentPort.postMessage({ ...uit, ms: Date.now() - t0 });
 }
@@ -254,7 +213,7 @@ function rekenAlles(taken, draden) {
       w.on('error', fout);
       w.on('message', (m) => {
         // wat een werker stuurt, komt aan als Uint8Array; png wil een Buffer
-        uit[n] = { ...m, rgba: Buffer.from(m.rgba.buffer, m.rgba.byteOffset, m.rgba.byteLength) };
+        uit[n] = m.rgba ? { ...m, rgba: Buffer.from(m.rgba.buffer, m.rgba.byteOffset, m.rgba.byteLength) } : m;
         console.log(`${taken[n].naam}`.padEnd(28), `${(m.ms / 1000).toFixed(1)} s`);
         w.terminate();
         if (++gedaan === taken.length) klaar(uit);
@@ -319,12 +278,8 @@ async function main() {
   const taken = [];
   if (wat !== 'voor') taken.push({ taak: 'pixel', naam: 'pixel art', maat: L });
   if (wat !== 'pixel') {
-    // stroken van een veelvoud van S rijen; meer stroken dan kernen, want het huis zit in het midden
-    const n = 16;
-    for (let j = 0; j < n; j++) {
-      const ys = Math.round((j * L.h) / n) * S;
-      const ye = Math.round(((j + 1) * L.h) / n) * S;
-      taken.push({ taak: 'voor', naam: `voorgerenderd ${j + 1}/${n}`, maat: L, S, ys, ye });
+    for (let j = 0; j < S; j++) {
+      for (let i = 0; i < S; i++) taken.push({ taak: 'voor', naam: `voorgerenderd ${j * S + i + 1}/${S * S}`, maat: L, S, i, j });
     }
   }
   const uit = await rekenAlles(taken, os.cpus().length);
@@ -339,12 +294,21 @@ async function main() {
     fs.writeFileSync(path.join(UIT, 'pixel.png'), K.pngVanBeeld(pixel));
   }
   if (wat !== 'pixel') {
-    voor = leeg(L.b * UITVOER, L.h * UITVOER);
-    let y = 0;
-    for (const s of uit) {
-      plak(voor, s, 0, y);
-      y += s.h;
+    // de S × S beelden in elkaar gevlochten tot één S keer zo fijn, en dat verkleind tot de maat van de plaat
+    const fb = L.b * S;
+    const fijn = new Float32Array(fb * L.h * S * 4);
+    for (const { i, j } of taken.filter((t) => t.taak === 'voor')) {
+      const { licht } = uit.shift();
+      for (let y = 0; y < L.h; y++) {
+        for (let x = 0; x < L.b; x++) {
+          const q = (y * L.b + x) * 4;
+          fijn.set(licht.subarray(q, q + 4), ((y * S + j) * fb + x * S + i) * 4);
+        }
+      }
     }
+    const v = verklein(fijn, fb, L.h * S, S / UITVOER);
+    voor = leeg(v.b, v.h);
+    plak(voor, v, 0, 0);
     fs.writeFileSync(path.join(UIT, 'voorgerenderd.png'), K.pngVanBeeld(voor));
   }
   if (pixel && voor) {
