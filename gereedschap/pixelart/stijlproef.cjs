@@ -253,7 +253,8 @@ function rekenAlles(taken, draden) {
       const w = new Worker(__filename, { workerData: taken[n] });
       w.on('error', fout);
       w.on('message', (m) => {
-        uit[n] = m;
+        // wat een werker stuurt, komt aan als Uint8Array; png wil een Buffer
+        uit[n] = { ...m, rgba: Buffer.from(m.rgba.buffer, m.rgba.byteOffset, m.rgba.byteLength) };
         console.log(`${taken[n].naam}`.padEnd(28), `${(m.ms / 1000).toFixed(1)} s`);
         w.terminate();
         if (++gedaan === taken.length) klaar(uit);
