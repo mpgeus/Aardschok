@@ -1110,11 +1110,11 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
 
 - **Sinds 11 okt: de economie van The Settlers, met gevechten in beurten** (Marcel: "Ik ben eigenlijk op zoek naar de
   economie van the settlers met een soort turn based isometric combat. Rijke gfx met details", en "A ja, B ja, C
-  allebei"; vraag 151, `ontwerp/gameloop.md`): jij bouwt van bovenaf (gebouwen en wegen), goederen worden over de wegen
-  gedragen, van vlag tot vlag, en je vecht in beurten, om je dorp te verdedigen en om het eiland te veroveren tot het
+  allebei"; vraag 151, `ontwerp/gameloop.md`): jij bouwt van bovenaf, zonder grens en zonder vlaggen ("alles moet open
+  zijn"): binnen een aantal tegels van je stad, en een kar haalt de grondstoffen op; en je vecht in beurten, om je dorp te verdedigen en om het eiland te veroveren tot het
   kasteel van de heer, zoals in Jagged Alliance 2. De schout is je held: hij vecht en praat. Wat hieronder staat over
   een poppetje zonder hand van bovenaf en een dorp dat zelf bouwt, is daarmee om; het verstoppen en heel "arm lijken"
-  gaan eruit. Eerst een proef met één keten over de weg (vraag 152).
+  gaan eruit. Eerst een proef met het bouwbereik en de kar (vraag 152).
 
 - Je bent de **schout**, een poppetje dat door het dorp loopt, geen hand van bovenaf. Je breidt
   het dorp uit en bestuurt het met **wetten** (eerst keuren genoemd), in een menu zoals in Democracy 3

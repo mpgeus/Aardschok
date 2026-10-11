@@ -41,8 +41,10 @@ moet het hart zijn, en het gevecht wat ze oplevert; een goed gevecht is wat de a
 **Marcel, 11 okt: "A ja, B ja, C allebei"**, op drie vragen van Claude over de richting hierboven:
 - **A, jij bouwt, van bovenaf**, zoals in The Settlers: gebouwen en wegen leg jij aan (het overzicht onder `Tab` is er
   al). De schout wordt je held: hij vecht in de beurten en praat in het dorp.
-- **B, goederen worden over wegen gedragen**, door dragers van vlag tot vlag, en een waar telt pas als hij binnen is.
-  Eerst een proef met één keten (werklijst, vraag 152), om te zien of het in ons beeld goed voelt en snel genoeg blijft.
+- **B, goederen worden gebracht, en een waar telt pas als hij binnen is.** Eerst een proef (werklijst, vraag 152).
+  **Bijgesteld (Marcel, 11 okt): "Ik wil geen 'grens' alles moet open zijn. Ook geen vlaggen. Misschien dat grondstoffen worden opgehaald met een kar? Dus je kunt bijvoorbeeld x tegels vanaf je stad bouwen".** Dus geen grens en geen vlaggen
+  zoals in The Settlers: alles is open, je bouwt binnen een aantal tegels van je stad, en een kar haalt de grondstoffen
+  op (zoals de marktkarren in Anno 1602).
 - **C, vechten is allebei**: je dorp verdedigen, en erop uit over het eiland, tot het kasteel van de heer, zoals in
   Jagged Alliance 2.
 

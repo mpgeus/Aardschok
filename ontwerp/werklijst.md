@@ -26,8 +26,8 @@ mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voo
 
 **Wacht op Marcel:**
 - **De richting (vraag 151, 11 okt): de economie van The Settlers met gevechten in beurten** (Marcel: "A ja, B ja, C
-  allebei"; `gameloop.md`). Nu: het plan voor de proef met één keten over de weg (vraag 152), opnieuw doordacht, wacht op
-  Marcel.
+  allebei"; `gameloop.md`). Nu: het plan voor de proef (vraag 152): geen grens, geen vlaggen, bouwen binnen bereik van
+  je stad en een kar die de grondstoffen haalt (Marcel, 11 okt); de keuzes wachten op Marcel.
 - **Gameplay als kern, en het verstoppen eruit** (vraag 151, 11 okt; Marcel: "we hebben niks"): het verstoppen en heel
   "arm lijken" gaan eruit, de heer blijft (Marcel: "alles gaat eruit"); het plan om het weg te halen heet **optie 1**
   (Marcel, 11 okt: "Dit noemen we optie 1. Ik vertel je straks wat we doen"). Intussen kijkt Claude rond naar vergelijkbare
@@ -7718,38 +7718,30 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     152); C, vechten is verdedigen én erop uit over het eiland tot het kasteel van de heer (Jagged Alliance 2). Optie 1
     (het verstoppen eruit) wacht nog op Marcel.
 
-152. **De proef: één keten over de weg, zoals in The Settlers** (vraag 151, B; Marcel, 11 okt: "B ja", en bij het eerste
-    plan: "Denk goed na over het plan").
-    **Wat Claude bij het eerste plan over het hoofd zag (11 okt):** 1. *te dun*: een drager loopt zo'n 1,5 tegel per
-    seconde en een werkdag is tien uur (125 seconden bij 1×), dus op een stuk weg van vier tegels haalt hij zo'n twintig
-    keer heen en weer per dag; de houthakker maakt 2 hout per dag, dus de weg staat negen tiende van de tijd stil, en
-    zo is het hele dorp: geen Wuselfaktor; 2. *de verkeerde keten*: in The Settlers voel je eerst dat je bouwplaats op
-    planken wacht; bouwen is de eerste keten, niet de timmerman alleen; 3. *geen keuze*: een keten die alleen loopt, is
-    een filmpje; het knelpunt en wat het oplost (een vlag erbij, zodat er een drager bij komt) moeten erin; 4. *de
-    overgang*: alles in één keer over de weg breekt het hele spel.
-    **Het plan (voorstel van Claude):** achter een spelregel "Dragen", standaard uit, die ook "Wie bouwt" op "Jij"
-    zet. Eén regel voor de overgang: **wat aan een weg ligt, gaat over de weg; de rest zoals nu**, en de voorraad is wat
-    in het hoofdkwartier ligt (zoals "Alles telt pas als het binnen is", Marcel, 8 okt). **Een vracht is een stuk van
-    een eenheid** (een stam is een tiende hout, één getal per waar in de werkbank), zodat de wegen druk zijn zonder dat
-    de getallen van de economie omgaan; dat getal zegt ook hoe gauw een weg vol zit. Een drager loopt alleen op zijn
-    eigen stuk weg, zonder te zoeken, dus er kunnen er honderden zijn. Een vlag houdt hooguit acht vrachten; is de
-    volgende vol, dan wacht de drager. Een waar kiest bij het maken waar hij heen gaat: wie hem het dichtst bij (over de
-    weg) nog vraagt, anders het hoofdkwartier. Alles in `D`, als gewone gegevens, met toetsen zonder scherm.
-    - Stap 1: wegen en vlaggen (in het bouwmenu; de weg volgt de tegels, een vlag om de twee tegels of meer, een vlag
-      voor elke deur), dragers, en het hout van de houthakker naar het hoofdkwartier. Het beeld: de vlag, een stapel bij
-      de vlag, een drager met een stam.
-    - Stap 2: de bouwplaats vraagt zijn hout over de weg: wat jij neerzet, rijst pas op als het hout er is.
-    - Stap 3: de timmerman ertussen (hout, planken, de bouwplaats), en het knelpunt: een stapel die groeit bij een vlag,
-      en een vlag erbij die hem oplost.
-    - Stap 4: meten hoeveel dragers het spel op 1× en 30× aankan, en Marcel speelt het: is het leuk?
-    Niet in de proef: de grens, de militie, eten over de weg, ezels, meer pakhuizen, voorrang per waar.
-    **Daarna, en al te zien:** de besturing (de camera los van de schout, de schout een held die je aanklikt) komt direct
-    na de proef. En de klok: The Settlers speel je op 1×, en een jaar is bij ons 30 uur op 1×; de proef laat zien op welke
-    snelheid het goed oogt, en dan beslist Marcel of het jaar korter wordt (een groot stuk werk: alle dagen in de
-    getallen).
-    **Keuzes (wacht op Marcel):** a, het hoofdkwartier is het huis van de schout (Claude: ja, later een echt pakhuis);
-    b, wegen zijn gratis (Claude: ja); c, de dragers zijn bewoners zonder werk (Claude: ja, dan wordt dragen een baan, en
-    wie draagt, maait niet mee als dagloner).
+152. **De proef: bouwen binnen bereik, en de kar** (vraag 151, B; Marcel, 11 okt: "B ja", "Denk goed na over het plan",
+    en "Ik wil geen 'grens' alles moet open zijn. Ook geen vlaggen. Misschien dat grondstoffen worden opgehaald met een kar? Dus je kunt bijvoorbeeld x tegels vanaf je stad bouwen").
+    Het eerste plan (wegen met vlaggen en dragers, zoals Settlers II) is daarmee van tafel; wat Claude erbij leerde,
+    blijft gelden: met de getallen van nu staat een weg met dragers negen tiende van de tijd stil, bouwen is de eerste
+    keten die je voelt, er moet een keuze in zitten, en de overgang moet stap voor stap.
+    **Het plan (voorstel van Claude):** achter een spelregel "De kar", standaard uit, die ook "Wie bouwt" op "Jij" zet.
+    - **Bouwen binnen bereik:** je bouwt binnen een aantal tegels van het plein, en dat groeit met de trede; je ziet het
+      als je bouwt. Geen grens, geen lijn: lopen en kijken kan overal.
+    - **De stapel en de kar:** wat een gebouw maakt, ligt in een stapel bij zijn deur (te zien: stammen, planken,
+      stenen), tot de kar het haalt; pas in de opslag telt het in de voorraad. De kar brengt ook: hout naar de
+      timmerman, en naar een bouwplaats, die pas oprijst als zijn hout er is. Een kar rijdt met een voerman (een baan);
+      hij neemt eerst wat het langst ligt of het hardst nodig is.
+    - **De keuze:** een kar is lang onderweg, dus wat ver weg ligt, kost karren. Groeien de stapels, dan zet je een tweede
+      kar in, of een opslag dichterbij. Dat lost ook het lege van het eerste plan op: één kar rijdt de hele dag.
+    - Stap 1: het bouwbereik, en jij bouwt. Stap 2: de stapels en één kar, voor hout. Stap 3: de bouwplaats en de
+      timmerman krijgen hun hout met de kar, en het knelpunt (de stapels groeien). Stap 4: meten en spelen.
+    Niet in de proef: andere waren dan hout en planken, eten met de kar, voorrang per waar, de klok.
+    **Daarna, al te zien:** de besturing (de camera los, de schout een held die je aanklikt) en de klok (een jaar is 30
+    uur op 1×; de proef laat zien op welke snelheid het goed oogt).
+    **Keuzes (wacht op Marcel):** a, het bereik vanaf het plein alleen, of ook rond elke opslag (een schuur verder weg
+    geeft daar bereik; Claude: ook rond elke opslag, dan breid je uit door een schuur te zetten, zoals een kantoor in
+    Anno); b, rijdt de kar overal, maar over een weg sneller (Claude: ja, dan heeft een weg zin zonder vlaggen), of
+    alleen over wegen; c, een ossenkar (rijker beeld, de os alleen als plaatje) of een handkar (Claude: de ossenkar);
+    d, de eerste opslag is het huis van de schout (Claude: ja, later een schuur).
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
