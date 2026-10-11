@@ -7764,7 +7764,8 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     plan daarvan zegt het).
 
 152. **Bezig in sessie `ccr-7423c47f-5zapx8`** (11 okt): het plan voor stap 1 (het lege begin), met optie 1, en dan
-    bouwen. **De proef: bouwen binnen bereik, en de kar** (vraag 151, B; Marcel, 11 okt: "B ja", "Denk goed na over het plan",
+    bouwen. **Het beeld: bezig in sessie `ccr-bbbc5887-w2erwc`** (11 okt): de huifkar die de ossenkar wordt, de
+    tenten en het afdak, en het kampvuur, eerst op een proefplaat. **De proef: bouwen binnen bereik, en de kar** (vraag 151, B; Marcel, 11 okt: "B ja", "Denk goed na over het plan",
     en "Ik wil geen 'grens' alles moet open zijn. Ook geen vlaggen. Misschien dat grondstoffen worden opgehaald met een kar? Dus je kunt bijvoorbeeld x tegels vanaf je stad bouwen").
     Het eerste plan (wegen met vlaggen en dragers, zoals Settlers II) is daarmee van tafel; wat Claude erbij leerde,
     blijft gelden: met de getallen van nu staat een weg met dragers negen tiende van de tijd stil, bouwen is de eerste
