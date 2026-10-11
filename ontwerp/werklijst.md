@@ -7772,6 +7772,33 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     graan eten twintig mensen in vier maanden op, tot hooimaand, terwijl de oogst in oogstmaand komt, dus het gat vul je
     met vissen of jagen; en het zaaigraan is voor twee akkers van dertig tegels, samen 240 graan, genoeg voor acht
     maanden, dus de eerste winter haal je net, met vis, wild of een derde akker. Alle getallen in de werkbank. **Marcel (11 okt): "Akkoord".**
+    **Het plan voor stap 1 (Claude, 11 okt), uit een inventaris van wat in de code van een gehucht uitgaat:** het lege
+    begin loopt nu op vier dingen vast: de plek van de marskramer is de poort voor elke bezoeker (zonder komen de heer,
+    de inner, de marskramer en de bode nooit, en tellen de twee bazen niet; `handel.js`, `heer.js`, `bazen.js`); het
+    huis van de schout (`huis: 'schout'`) is waar je slaapt, het rapport komt en de bode vertrekt; er bestaat geen
+    bewoner zonder huis (`T.wijsWerkToe` loopt dan vast op `p.huis`), en wie er al woont, verhuist nooit naar een nieuw
+    huis; en een boer is alleen boer1 tot boer5 van de kaart, en een akker kan de speler niet leggen (`menu: false`).
+    - **1a, optie 1 eerst:** het verstoppen en heel "arm lijken" eruit, een commit per stuk; wat eruit gaat, hoeft
+      niet eerst vanaf een lege plek te werken.
+    - **1b, het lege land:** de spelregel "Het begin" (leeg, of het gehucht dat er al was): het eiland om jouw plek
+      zonder gehucht (bos, water, heide, rotsen, de weg van het eiland); een open plek bij water en bos wordt het plein,
+      met de plek van de marskramer en de uitgang waar de weg het land verlaat; de kar met wat erin zit; een nieuwe
+      benoemingsbrief (de heer stuurt je met vier gezinnen om een dorp te stichten), en het eerste jaar vraagt hij niets.
+    - **1c, het kamp:** het kamp is een gebouw bij de kar (tenten en een kampvuur) waar de gezinnen wonen tot er huizen
+      zijn, en tot het huis van de schout staat de opslag; het telt niet als plaats voor nieuwe gezinnen. Is een hut of
+      huis af, dan verhuist er een gezin uit het kamp in (nieuw: verhuizen); is het kamp leeg, dan gaan de tenten weg, en
+      de kar blijft, voor stap 2.
+    - **1d, jij bouwt alles, binnen bereik:** de spelregel zet "Wie bouwt" en "Huizen" op "Jij"; in het bouwmenu ook het
+      huis van de schout (één keer; daarna slaap je en komt het rapport) en de akker bij een boerderij; het bereik rond
+      het plein en het huis van de schout (de schuren komen in stap 2), te zien als je bouwt. Wie geen werk heeft, bouwt
+      mee: hoe meer handen, hoe sneller het oprijst.
+    - **1e, boeren uit het niets:** een gezin dat in een boerderij trekt, wordt boer, met een geloot karakter zoals nu,
+      en zijn akkers horen bij zijn huis.
+    - **1f, een jaar zonder fouten:** een toets speelt een jaar vanaf een lege plek (met een speler in code die bouwt) en
+      kijkt dat niets vastloopt.
+    Het beeld: de ossenkar (de kar uit `dorp.cjs`, de koe als os), tenten en een kampvuur. Het werk: 1a een sessie, 1b
+    tot 1f twee à drie. **Vragen (wacht op Marcel):** akkers leg jij bij een boerderij (zoals Manor Lords; Claude: ja), of
+    de boer zelf (zoals The Settlers); optie 1 eerst (Claude: ja); bouwen met handen (Claude: ja).
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
