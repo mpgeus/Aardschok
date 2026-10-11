@@ -4213,3 +4213,242 @@ en over de heervaart [Wikipedia](https://nl.wikipedia.org/wiki/Heervaart).
   naamruimte heet `Spel`, de speler `S.schout` met de soort 'schout', en zijn kant in een gevecht
   'speler' (Marcel koos het: soort en kant zijn twee dingen, en een man van de militie vecht straks
   aan jouw kant zonder de schout te zijn). Punt 7 is daarmee af.
+
+## Uit CLAUDE.md, zoals het er tot 11 okt stond (vraag 153)
+
+Op 11 okt ging CLAUDE.md van 153 KB naar onder de 20 KB (vraag 153, stap 1). De opbouw en de afspraken in de code staan
+nu in `code.md`, het gereedschap in `gereedschap.md`; wat herschreven werd (de kop, de lijst van de ontwerpbestanden, en
+"Het spel in het kort"), staat hieronder zoals het was. Het is geschiedenis: wat nu geldt, staat in CLAUDE.md.
+
+### CLAUDE.md
+
+Aardschok (werktitel, past niet meer): een spel dat Marcel en Claude samen bouwen, met als doel het
+uiteindelijk te verkopen (Steam eerst, als los programma verpakt). Een bouw- en beheerspel in
+isometrisch beeld, met politiek en avontuur erin; sinds 11 okt de economie van The Settlers met gevechten in beurten
+(vraag 151, `ontwerp/gameloop.md`). Je bent de schout van een dorp onder een verwarde
+heer die alleen geld ziet. Je breidt het dorp uit tot een stad en bestuurt het met wetten. **Het doel
+is de heer verstoten en verslaan** (Marcel, 5 en 6 okt, vraag 126): hij krijgt een kasteel op de kaart,
+is sterk, smeedt bonden met de andere spelers en heeft per spel een ander karakter. Veroveren en
+bevriend raken (zoals in Civilization, 29 sep) zijn de weg erheen, langs drie wegen: de opstand, de
+koning achter zijn rug om, of trouw, en dan word jij de nieuwe heer. Iedereen super gelukkig, het eind
+van de kern, blijft het eind van de demo. Na de release misschien samen spelen, met een speler als heer
+(`ontwerp/spel.md`, "De heer als tegenstander"). Zie "Het spel in het kort" hieronder.
+
+Het beeld is isometrisch (Mystic Towers als voorbeeld), de HD-pixel art komt uit code, en
+rondlopen gaat naadloos over in een gevecht in beurten op dezelfde tegels (Fallout, Jagged
+Alliance 2). Dat bleef over van het spel dat het tot 23 sep was, De laatste klim (een tovenaar in
+een toren); de rest ervan ging er op 25 en 26 sep uit (werklijst, punt 7). De afspraken van dat
+spel staan in `git show 0eb8269:CLAUDE.md`.
+
+Code en commentaar zijn Nederlands, zoals in Marcels Planner. **De spelteksten worden Engels, met Nederlands als vertaling**
+(Marcel, 9 okt, vraag 147: "We moeten alles naar het Engels halen"; de schout heet *reeve*): een zin die de speler ziet, is
+`T.t('Engelse zin met {wie}', { wie })` (`js/taal.js`), met het Nederlands in `taal/nl.js`, en daarna `npm run teksten`. Wat
+nog niet om is, staat nog in het Nederlands in de code (stap 2 van vraag 147, na de ui).
+
+#### Kennis over het spel: lees alleen wat je nodig hebt
+
+Dit bestand wordt elke sessie gelezen en blijft daarom kort. Het houdt de kaart, de kernregel en
+de afspraken bij. Het ontwerp staat in `ontwerp/`, één bestand per onderwerp. Bovenaan staat wat
+besloten is (met datum en waarom), onderaan wat nog open is. Lees bij een taak alleen het bestand
+dat erover gaat.
+
+Komt Marcel met een idee of besluit, schrijf het dan meteen in het juiste bestand, niet alleen in
+het gesprek; wat alleen in een gesprek staat, raakt kwijt. Laat groot zoek- en leeswerk aan een
+agent over, zodat alleen de samenvatting in het gesprek komt.
+
+- **`ontwerp/werklijst.md`: wat we doen, in welke volgorde. Begin een sessie hier.** Lees het blok
+  **Nu en daarna** bovenaan (Marcel, 8 okt: "snel, duidelijk en low cost"): wat loopt, wat op Marcel wacht, en wat
+  erna komt, in volgorde. Zeg Marcel in een paar regels waar we zijn, neem het bovenste, en begin met een plan voor
+  Marcel. Werk dat blok bij aan het eind van de sessie, en houd het kort: wat af is, gaat eruit; de geschiedenis staat
+  in de stand eronder.
+  **Wie aan een punt begint, zegt het eerst in `main`** (Marcel, 6 okt: "Ja zet erin"; op 6 okt bouwden drie sessies
+  tegelijk vraag 130, omdat elk het bovenste punt nam). Haal vlak voor je begint `main` op (`git fetch origin main`), en
+  staat er bij het punt al "**Bezig in sessie …**", neem dan een ander punt of vraag het Marcel. Anders zet je bij het
+  punt "**Bezig in sessie `<je branch>`** (datum): wat je doet", en push je dat meteen naar `main`, met de controle
+  hieronder (`git push origin HEAD:main` vanaf een commit op `main`, niet je hele branch). Weigert de controle, dan was
+  een andere sessie je voor: haal `main` binnen en kijk opnieuw. Is het werk in `main`, of stop je ermee, haal het teken
+  dan weg.
+- **`ontwerp/spel.md`: het spel.** De schout en de heer, keuren en politiek, avontuur,
+  en wat nog open is. Bovenaan staat per onderwerp de stand, en elk onderwerp begint met **Zo werkt
+  het nu**; wie iets bouwt of verandert, werkt dat blok bij (Marcel, 25 sep).
+- `ontwerp/concept.md`: het concept dat Marcel op 30 sep meebracht ("De Schout": het poppetje is de manier
+  waarop je bestuurt), en hoe het naast ons spel ligt; wat ervan besloten wordt, is vraag 73.
+- `ontwerp/commercieel.md`: hoe het spel geld gaat verdienen (Marcel, 1 okt: "Ik wil hier eigenlijk geld mee
+  verdienen"): de markt, verlanglijstjes en Steam Next Fest, de haak (je bent geen god boven het dorp, maar de schout
+  erin), de beeldstijl als troef, Engels, en een tijdpad.
+  Het commerciële deel denkt mee in elke keuze; de vragen waren vraag 83 en 84 (open: welke zin de haak wordt).
+- `ontwerp/gameloop.md`: wat vergelijkbare spellen als gameloop hebben (Papers, Please, Frostpunk, Against the Storm, King of
+  Dragon Pass, Pentiment, de dorpsbouwers), wat een goede loop gemeen heeft, en wat het voor ons betekent (Marcel, 11 okt:
+  "We hebben een goede gameloop nodig"; vraag 151).
+- `ontwerp/speelbaar.md`: wat er nog ontbreekt voor een eerste speelbaar product (vraag 33), en wat er
+  in een speeltest van een heel jaar gebeurde.
+- `ontwerp/beeld.md`: de beeldstijl (HD-pixel art), maten, palet, en het ontwerpcanvas.
+- `ontwerp/kaarten.md`: van Tiled naar het spel, en hoe hoogte gaat werken.
+- `ontwerp/wereld.md`: de plekken en mensen van het oude spel (erf, bos, dorp); het dorp en zijn
+  mensen zijn nog bruikbaar.
+- `ontwerp/verpakken.md`: van map met bestanden naar programma op Steam, en wanneer er wél een
+  bouwstap komt.
+- `ontwerp/opmerkingen.md`: wat onderweg opviel en nog niet af is, om later na te lopen (Marcel,
+  25 sep). Zie je iets, zet het erbij.
+- `ontwerp/het-spel-in-het-kort.pdf`: het spel in een paar bladzijden voor wie het niet kent (Marcel, 6 okt; voor een
+  gamedesigner), met beelden uit het spel; het hele spel als één verhaal, zonder te zeggen wat er al is. Verandert het
+  spel, werk dan de tekst bij (`gereedschap/samenvatting/samenvatting.html`) en maak hem opnieuw (`npm run samenvatting`).
+- Van het oude spel, alleen nog als bron: `ontwerp/verhaal.md` (met de vijf rondes ideeën van
+  23 sep die tot het nieuwe spel leidden), `ontwerp/toren.md` en `ontwerp/spreuken.md`.
+
+#### Zuinig werken met agents
+
+Gemeten op 20 sep 2026: de agents waren samen ruim 2,5 miljoen tekens, het gesprek zelf 284.000.
+De agents zijn dus zo'n negentig procent. Het knelpunt is de vijfuursgrens, niet de week.
+
+De duurste agent deed 84 aanroepen voor 740.000 tekens, bijna 9.000 per stap: een agent stuurt
+bij elke stap zijn hele eigen gesprek opnieuw mee, dus de kosten lopen kwadratisch op met hoe
+lang hij leeft. Daaruit volgt, van meest naar minst effect:
+
+- **Laat een agent kort leven.** Een verse agent met een korte opdracht die naar `ontwerp/`
+  wijst, is goedkoper dan dezelfde agent voor de vijfde keer terugsturen met commentaar. Alleen
+  doorgaan als hij iets weet dat nergens staat.
+- **Lees niet het hele bestand.** `dorp.cjs` en `kern.cjs` zijn duizenden regels; zoek de twintig
+  regels die je nodig hebt.
+- **Beoordeel op uitsneden.** Een plaat van 3200×1800 kost elke keer dat iemand hem bekijkt. Voor
+  "is die steen nu grijs" is 600×400 genoeg.
+- **Sonnet voor uitvoerend werk, Opus voor oordeel.**
+- **Kijk eerst of het er al is.** Een agent kreeg de opdracht dorpelingen te laten dwalen, en
+  vond het al gebouwd; hij schreef er toen toetsen omheen. Nuttig, maar een goedkope zoekopdracht
+  vooraf had dat ook laten zien.
+- **Niet meer dan twee agents tegelijk die renderen.**
+- **Een kleine precieze klus doe je zelf.** Een kleur, één functie, een regel tekst: een agent
+  kost dan meer aan opstarten dan het werk zelf.
+- **Een opdracht aan een agent verwijst naar deze paragraaf** in plaats van hem te herhalen, en
+  naar één punt uit `ontwerp/werklijst.md` plus het ene ontwerpbestand dat erbij hoort.
+- **Nooit `git stash` of `git checkout` op de werkmap** als er meer agents tegelijk werken: dat zet
+  hun werk opzij of gooit het weg. Wie wil meten hoe het vóór een wijziging was, maakt een losse
+  kopie met `git worktree add`.
+- **De werklijst blijft kort:** onder "Af" staan alleen de laatste twee weken; ouder staat in
+  `git log`.
+- **Kijk naar de meter, ook naar de week.** Op 22 sep stond de week op 70%, met nog bijna vier
+  dagen te gaan. Dat kwam na een dag met vijf agents van 300.000 tot 750.000 tokens elk. Het
+  gesprek zelf was toen 400.000 tokens groot, en dat gaat bij elke stap mee. Hard of zacht gaan
+  maakt Marcel niet uit: de week is even groot, of hij nu vandaag of vrijdag op is. Het gaat erom
+  dat er niets verloren gaat. Vraag daarom het verbruik op (`get_usage`) voordat je een zware agent
+  start, zodat hij niet halverwege tegen de grens loopt. Begin na een groot stuk werk een nieuwe
+  sessie; de werklijst draagt alles over.
+
+#### Het spel in het kort
+
+Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
+
+- **Sinds 11 okt: de economie van The Settlers, met gevechten in beurten** (Marcel: "Ik ben eigenlijk op zoek naar de
+  economie van the settlers met een soort turn based isometric combat. Rijke gfx met details", en "A ja, B ja, C
+  allebei"; vraag 151, `ontwerp/gameloop.md`): jij bouwt van bovenaf, zonder grens en zonder vlaggen ("alles moet open
+  zijn"): binnen een aantal tegels van je stad en van elke opslag, een ossenkar haalt de grondstoffen op, en je bouwt
+  alles zelf vanaf een lege plek ("We moeten ook zelf alles vanaf de start gaan bouwen"); en je vecht in beurten, om je dorp te verdedigen en om het eiland te veroveren tot het
+  kasteel van de heer, zoals in Jagged Alliance 2. De schout is je held: hij vecht en praat. Wat hieronder staat over
+  een poppetje zonder hand van bovenaf en een dorp dat zelf bouwt, is daarmee om; het verstoppen, de inner en heel "arm lijken"
+  zijn eruit (optie 1, 11 okt). Eerst een proef met het bouwbereik en de kar (vraag 152).
+
+- Je bent de **schout**, een poppetje dat door het dorp loopt, geen hand van bovenaf. Je breidt
+  het dorp uit en bestuurt het met **wetten** (eerst keuren genoemd), in een menu zoals in Democracy 3
+  (Marcel, 29 sep), en later samen met de schepenen.
+- **Meer een management sim** (Marcel, 30 sep, vraag 73): het poppetje is de manier waarop je bestuurt, en het
+  concept dat Marcel meebracht (`ontwerp/concept.md`) is het kompas: wat elders één klik is, gaat hier via een persoon,
+  een plek, een papier of een handeling. De boeren zaaien, oogsten en halen de winter zelf (sinds 30 sep: ze kiezen hun
+  velden, slachten en sprokkelen; de spelregel "Het seizoen"); jij houdt een oogje in het zeil. Een probleem heeft een
+  oorzaak die je had kunnen zien (`T.OORZAKEN`). Eerst de kern (vraag 74), dan het buurdorp.
+- **Twee bazen** (Marcel, 3 okt, vraag 106: "106 a b c d ja"): de heer en het dorp kunnen je allebei wegsturen. De
+  gunst van de heer en het vertrouwen van het dorp in jou zijn twee meters in de balk, met een waarschuwing onder een
+  grens, en op 0 ben je weg; bijna elke keuze kost aan de ene kant wat de andere wint. Het verstoppen (de kelders) ging er
+  op 11 okt uit (vraag 151).
+- **Mensen en informatie eerst** (Marcel, 6 okt, vraag 128: "A tot g allemaal, en de proef komt erna"; uit een analyse
+  van buiten: "kleiner in omvang, dieper in menselijke gevolgen"): wat je weet, komt ergens vandaan (wat er gebeurde,
+  wat er gezegd wordt, en wat jij weet), 's middags is er een zitting met getuigen en bewijs, het vertrouwen van het
+  dorp is per groep, mensen onthouden wat je deed, de heer leert van je, en een grote keuze komt later terug. Eerst een
+  proef met één keten (de verdwenen graanzak), na het beeld in de werklijst (`spel.md`, "Informatie, de zitting en
+  mensen die onthouden").
+- De **heer** is verward en ziet alleen geld. Levert het dorp te weinig, dan straft hij: in het dorp, jou zelf, met
+  hogere eisen, en met soldaten. De heer rekent op wat er is (sinds 11 okt, vraag 151, zonder inner en zonder verstoppen).
+  Wapens zijn niet verboden (Marcel, 7 okt: "Alleen weerstand tegen de heer is inacceptabel"): hij straft niet wat je hebt, maar wat je
+  tegen hem doet. Hij stelt geen doelen (Marcel, 1 okt, vraag 78, a): "de heer moet alleen betaald worden, en hij mag
+  wel eisen stellen. Maar meer om het je moeilijk te maken." Sinds 6 okt is hij ook de tegenstander: met een kasteel,
+  bondgenoten en per spel een ander karakter (vraag 126).
+- Het dorp groeit tot een stad met boeren, winkels, een markt en handel. Het zit vol **groepen**
+  met eigen belangen (de politiek) en mensen met een verhaal (het avontuur).
+- Vrij word je door **stadsrechten** te kopen of door een **opstand**, een gevecht in beurten op
+  dezelfde kaart. Dan word je burgemeester. Sinds 6 okt (vraag 126) zijn het drie wegen: de opstand (je dorp
+  verdedigen, dan het kasteel bestormen), de koning (die zet de heer af en geeft jou stadsrechten), en trouw (je
+  onderwerpt de rest voor hem en wordt zijn erfgenaam). Een bond sluit je te voet, niet in een menu.
+- **Het einddoel** (Marcel, 1 okt, vraag 78, B en C; eerder, 29 sep: "al het land veroveren of met iedereen vriendjes
+  maken. Denk aan civilisation"): "totale verovering van de wereld", en "dat mensen super gelukkig zijn en in al hun
+  wensen zijn voorzien. Denk aan eisen van mensen zoals in anno 1602". Dat zijn twee manieren om te winnen (vraag
+  79: "a twee manieren"). **Eerst een speelbare kern** ("Daarna komt oorlog etc erbij en de rest van het land
+  diplomatie trading etc"): één stad die je wint als iedereen een jaar lang super gelukkig is, met wensen per stand en
+  per huis (vraag 79 en 80), en klein: eerst drie standen op de huizen die er al zijn (vraag 82). Sinds 3 okt is dat eind
+  gebouwd (vraag 101, `js/einde.js`): een jaar lang alle huizen alles, vanaf 100 mensen, en het dorp viert het. Sinds 6
+  okt (vraag 126) is de heer het eind (Marcel: "Het doel van het spel wordt de heer verstoten en verslaan"), met
+  veroveren en bevriend raken als de weg erheen; het jaar van geluk blijft het eind van de demo, en wordt in het hele
+  spel kracht op weg naar de heer (`spel.md`, "De heer als tegenstander"). In de code verandert er nu niets.
+- **Tegenspelers** (Marcel, 29 sep, vraag 60, D): aan het begin kies je hoeveel. Het zijn dorpen met een AI, die
+  tegelijk met jou beginnen, ergens op de kaart waar je ze nog moet vinden, en zelf bouwen om de grootste te worden;
+  "intelligent genoeg om echt weerstand te bieden". Marcel koos (vraag 61 en 62): een land met provincies waar je
+  dagen reist, zoals Lords of the Realm ("Denk in dagen"); een tegenspeler met een willekeurig dorp, een eigen weg en
+  een voorsprong; een moeilijkheidsgraad; winnen is voor nu alles veroveren (sinds 6 okt de heer verslaan, met
+  veroveren als de weg erheen, vraag 126), en een veroverd dorp blijft bestaan en
+  leid je erbij; 5 of 6 spelers kan. Het land (vraag 63, besloten): een kaart met provincies waarop je reist, en per
+  provincie een kaart waar je loopt en vecht; elke tegenspeler een karakter met een voorsprong; een provincie zonder
+  karakter bestuurt zichzelf en is zwakker. Met 0 tegenspelers blijft het spel zoals nu. Je eigen dorp krijgt bij
+  Nieuw spel een naam die je zelf kiest.
+- **De raadsman** (Marcel, 29 sep, vraag 64): elk dorp heeft er een, met een karakter en gelote eigenschappen, en
+  jij kiest hem; hij voert je regels uit waar je niet bent. Sinds 30 sep (vraag 66): een van de boeren, die vanzelf de
+  voorvallen beslist als de schout weg is, en alleen dan (vraag 68, B) (`js/raadsman.js`); je kiest hem wanneer je wilt,
+  met de knop Raadsman (vraag 67, B). Sinds 1 okt brengt hij je elke ochtend een rapport, de eerste fase van de dag
+  (vraag 75, `js/ochtendrapport.js`). En "Het voelt
+  gewoon nog leeg nu": sinds 29 sep spreekt het dorp je aan, met voorvallen (vraag 65, `js/voorvallen.js`); het dorp
+  van bovenaf komt er niet (vraag 74, d).
+- **Het hart is besturen en groeien** (Marcel, 28 sep, vraag 50): knoppen met een prijs (keuren) én
+  bouwen en plannen. **Rijk worden en arm lijken** (de inner, de argwaan en het verstoppen) is er sinds 11 okt
+  uit (vraag 151); de druk van boven blijft de heer. **Vechten** begint met aanvallen op je eigen dorp (rovers, de
+  heervaart, dan een rivaal), in beurten op je eigen kaart met je militie; daarna de streek als
+  kaarten naast elkaar; tussen dorpen sinds 6 okt al vóór de vrijheid, op weg naar de heer (vraag 126; eerst
+  was het: pas na de vrijheid).
+- Toon: zwarte satire. De heer is lachwekkend, zijn straffen niet (voorstel).
+- **Geld verdienen** (Marcel, 1 okt): "we moeten echt denken aan het commerciële deel van het project. Ik wil hier
+  eigenlijk geld mee verdienen." En: "Volgens mij is ons idee dieper dan wat er op Steam staat? Ook de art stijl speelt
+  een grote rol." Wat het spel verkoopt, is het concept (je bestuurt als één mens in het dorp) en de beeldstijl; de
+  heer is de satire daarin, zonder inner en zonder verstoppen sinds 11 okt (vraag 151; `commercieel.md`). Het tijdpad
+  (vraag 83): de kern dit jaar,
+  in januari 2027 de naam, geluid, Engels en de Steam-pagina, in juni 2027 de demo in Next Fest. Er is weinig geld
+  ("Ik gebruik jou ☺️"): wat kan, maakt Claude, zoals de beelden uit code; Marcel kiest, luistert en plaatst.
+- **Een toestand is een status** (Marcel, 1 okt, als richtlijn: "Honger, droogte of een plaag, moet een status zijn",
+  en "Iets wat begint en eindigt. Mogelijk in verschillende niveaus. Ernstige droogte, en droogte bijvoorbeeld"): wat
+  een tijd duurt, heeft een begin en een eind, soms in niveaus, en is te zien zolang het duurt; een bericht of het
+  rapport zegt het als het begint, erger of minder wordt, of ophoudt, niet elke dag (vraag 76). Nu zijn dat de oorzaken
+  (`T.OORZAKEN`: honger, kou, vol, onvrede); de rest hoort bij het plan voor de vertical slice (vraag 77).
+- **Het doel is de vertical slice uit het concept** (Marcel, 1 okt: "Laten we eerst eens een speelbaar spel maken van
+  begin tot eind", en "Gebruik de slice in de pdf"): één kleine stad met 100 tot 200 mensen, markt, woonwijk,
+  ambachtswijk, raadhuis, kerk en stadspoort, dag en nacht, voedsel en economie, wacht en misdaad, 3 of 4 ambtenaren,
+  10 tot 20 mensen met echte banden, een paar bouwprojecten, 5 tot 10 soorten gebeurtenissen, en één volledig speelbare
+  bestuurlijke cyclus (`concept.md`; het plan is vraag 77). **Van gehucht tot de maat van de slice** (Marcel: "we
+  starten vanaf de slice kwa afmeting een gehucht met 50 is echt te klein", en "Nee, we starten wel als gehucht"): je
+  begint als gehucht, zoals nu, en groeit naar een kleine stad van 100 tot 200 mensen; een dorp van 50 is als doel te
+  klein. **Uiteindelijk** is het doel een stad van mogelijk 5000 of meer mensen (Marcel, 1 okt): bouw zo dat dat later
+  kan ("we moeten een manier zoeken zodat we toch 5k man kunnen hebben"; vraag 79, D: buiten beeld een vast pad, en
+  heel veel mensen als getal per huis; vraag 74: nu tot zo'n 150 vloeiend op 30×).
+  Uiteindelijk heeft elke tak van het bestuur een ambtenaar die je steunt, en komt er een scherm met de statussen en
+  de laatst bekende inventarisatie: wat je weet, is wat er het laatst geteld werd, niet wat er nu ligt.
+- **Niet te ingewikkeld** (Marcel, 29 sep): "er is geen gelijkenis met de werkelijkheid. We zijn gewoon een
+  schout die een dorp runt en land wil uitbreiden." De eenvoudige regel gaat voor de regel die klopt met vroeger.
+- **Instelbaar** (Marcel, 24 sep): waar een ontwerpvraag meer dan één goed antwoord heeft, wordt het
+  een optie in de spelregels (`js/opties.js`), en wat Marcel koos, is de standaard. Bouw een nieuwe
+  keuze dus als optie, niet als vaste regel.
+- **Eerst speelbaar** (Marcel, 26 sep): "We moeten oppassen voor functie creep. Anders blijven we
+  toevoegen voor we bij een speelbaar product komen." Een nieuw idee, ook een goed idee van Claude,
+  gaat naar `ontwerp/opmerkingen.md` of achteraan de werklijst, niet in de stap die loopt. Wie iets
+  nieuws wil beginnen, vraagt eerst: brengt dit een speelbaar product dichterbij?
+- **Niets erbij zonder overleg** (Marcel, 8 okt: "Er blijven steeds dingen bijkomen zo. ... We moeten stoppen met het
+  ene op te lossen met iets anders", en "geen erbij zonder overleg"): wat een speeltest scheef laat zien, los je eerst op
+  met een getal uit de werkbank, niet met een nieuwe regel, een nieuw gebouw of een nieuwe grondstof. Iets nieuws komt er
+  alleen als Marcel het kiest, als eigen punt achteraan de werklijst, en een grondstof alleen met iets dat hem gebruikt.
+  Op 7 en 8 okt groeide vraag 116 en 133 zo uit tot een graanschuur, wachters, advies, weides, vissers, meer graan en zout.
+
+In een gevecht heeft de schout levenspunten, net als een vijand. Wie valt, is dood (Marcel, 29 sep, vraag 55:
+"mensen kunnen sterven"): valt de schout, dan is het spel uit. Wie het overleeft, geneest na een nacht.

@@ -76,9 +76,9 @@ mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voo
 
 **Daarna, in deze volgorde:**
 0a. Opnieuw beginnen in hetzelfde huis (vraag 153; Marcel, 11 okt: "Ja, begin met stap 1, en akkoord met de afspraak"):
-   CLAUDE.md korter, een nieuwe werklijst, en een snoeironde. **Bezig in sessie `ccr-45f75896-3l3f5s`** (11 okt): stap 1,
-   CLAUDE.md van 153 KB naar zo'n 15 à 20 KB; eerst de opzet voor Marcel. Wie intussen iets in CLAUDE.md zet: gewoon
-   doen, het gaat bij het samenvoegen mee naar zijn nieuwe plek.
+   CLAUDE.md korter, een nieuwe werklijst, en een snoeironde. **Stap 1 is af** (11 okt, sessie `ccr-45f75896-3l3f5s`):
+   CLAUDE.md is 19 KB (was 153), wat een bestand doet staat in `ontwerp/code.md`, het gereedschap in
+   `ontwerp/gereedschap.md`. **Nu stap 2**, de nieuwe werklijst; dan stap 3, de snoeironde.
 0b. Engels en een vertaaltool (vraag 147; Marcel, 9 okt): de basis nu, naast de ui; het omzetten van alle tekst na de
    ui en vóór de proefversie. Stap 1 (de basis, de tool, het menu als proef) staat in `main` (9 okt); **nu stap 2**, het
    omzetten, want de ui is af (10 okt). **Bezig in sessie `ccr-99e707bb-sla81d`** (10 okt): het plan voor stap 2,
@@ -7896,6 +7896,16 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     - Stap 3: een snoeironde zoals optie 1: per systeem blijft, slaapt of weg, Marcel vinkt af.
     - **De afspraak:** wat om is, gaat eruit, en blijft niet als spelregel staan. "Instelbaar" geldt alleen nog voor een
       vraag die echt open is; een verlaten richting is geen goed antwoord meer (bij de regel van 24 sep).
+    **Stap 1 is af** (11 okt, sessie `ccr-45f75896-3l3f5s`; Marcel: "Ja doen we zo", op de opzet en de toets): CLAUDE.md
+    ging van 153 KB naar 19 KB, met de richting van 11 okt, de afspraken in het kort (de nieuwe over spelregels erbij), en
+    een inhoudsopgave van `js/` in tien onderwerpen. Wat eruit ging, staat er woord voor woord: de opbouw en de afspraken
+    met het waarom in `ontwerp/code.md` (een kop per bestand, `grep -n 'js/bos.js' ontwerp/code.md`), het draaien, het
+    testen in de browser en alle `Spel.debug` in `ontwerp/gereedschap.md`, en wat herschreven werd (de kop, de lijst van
+    de ontwerpbestanden, "Zuinig werken" en "Het spel in het kort") onderaan `ontwerp/spel.md`. Een script keek na dat
+    alle 1446 regels van de oude CLAUDE.md ergens terugstaan. `test/claude.test.cjs` houdt CLAUDE.md onder de 20 KB, en
+    kijkt dat elk bestand in `js/` in de inhoudsopgave en in `code.md` staat. **Om te weten:** commentaar in de code dat
+    "zie CLAUDE.md" zegt (een stuk of twintig), wijst nu naar `code.md` of `gereedschap.md`; dat gaat mee in stap 3. En
+    `code.md` vertelt nog het spel van vóór 11 okt; ook dat krimpt in stap 3, met de code.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
