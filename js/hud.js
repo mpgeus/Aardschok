@@ -483,30 +483,6 @@
   // De naam van je dorp, veilig in html (je typt hem zelf bij Nieuw spel), of "het dorp".
   const veiligeNaam = (D) => veilig(T.dorpsnaam(D) || 'het dorp');
 
-  // Gewonnen (js/einde.js, T.werkEindeBij; werklijst vraag 101): een jaar lang had iedereen alles. Het scherm komt over het
-  // grote feest op het plein, met het jaar tot nu toe; wie wil, speelt verder. Zolang het openstaat, staat de tijd stil.
-  T.ui.toonGewonnen = function (D) {
-    const S = T.S;
-    if (D !== S.dorp) return;
-    T.houdTijdStil(S, 'gewonnen');
-    const regels = T.jaarverslagRegels(D, D.jaarboek, Math.floor(S.kalender.dag));
-    T.ui.toonOverlay(
-      'Iedereen gelukkig',
-      `<p>Een jaar lang had iedereen in ${veiligeNaam(D)} alles wat hij wilde. Vandaag viert het hele dorp het op het plein.</p>` +
-        `<p>De heer schrijft dat het niet kan kloppen: een dorp waar iedereen tevreden is, betaalt te weinig.</p>` +
-        `<div class="einde-jaren">${regels.map((r) => `<p>${veilig(r)}</p>`).join('')}</div>`,
-      'Verder spelen',
-      () => T.laatTijdGaan(S, 'gewonnen'),
-      {
-        knop: 'Naar het titelscherm',
-        opKlik: () => {
-          T.laatTijdGaan(S, 'gewonnen');
-          T.naarTitelscherm();
-        },
-      },
-    );
-  };
-
   // ── Het slachten (js/vee.js, T.slacht; spel.md, "Marcel koos voor stap 2") ──
   // Op 1 slachtmaand opent dit vanzelf: de winter begint, en het hooi zegt hoeveel vee je houdt. Je
   // kunt het ook zelf openen, onderaan het veldenvenster. Per groep (koeien, kalveren, schapen,

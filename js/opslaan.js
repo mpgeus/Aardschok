@@ -31,6 +31,9 @@
     // g.getuigen, g.verteld, veld.stiekem en D.bazen.betraptOp bestaan niet meer.
     // 4 (11 okt): de graanzak is eruit (snoeironde, vraag 153): D.zaak bestaat niet meer, en een bewaard voorval
     // 'graanzak', 'zitting' of een vervolg ervan (D.voorvallen.lopend en .wacht) kent T.VOORVALLEN niet meer.
+    // Ook het winnen is eruit (snoeironde, punt 2): D.eind en D.jaarboek.gelukkig leest niets meer (een oud spel laadt
+    // gewoon), en het feest 'stad' (D.feesten.komt en .gevierd) kent T.FEESTEN niet meer: alleen een spel dat al gewonnen
+    // had, zou stukgaan.
     versie: 4,
     eigenPlekken: 5, // naast de ene die vanzelf gaat (vraag 48 B)
     // Op de hoogste snelheid (30×) slaat het spel niet elke ochtend vanzelf op, maar om de zoveel dagen: een dag duurt

@@ -8,7 +8,7 @@
 //   npm run speeltest -- slim                  één speler, met zaad 1, 2 en 3
 //   npm run speeltest -- bouwer                de bouwer, die twee jaar speelt (vraag 58): van gehucht tot dorp
 //   npm run speeltest -- sluw                  de sluwe bouwer (vraag 94): de bouwer, maar hij geeft de heer 90%
-//   npm run speeltest -- bouwer sluw --jaren 4 de bouwers spelen vier jaar in plaats van twee: naar de winst (vraag 102, e)
+//   npm run speeltest -- bouwer sluw --jaren 4 de bouwers spelen vier jaar in plaats van twee
 //   npm run speeltest -- --tegelijk 4          zoveel spellen tegelijk, elk in een eigen tabblad (standaard 3)
 //   npm run speeltest -- slim --zaad 7         één jaar
 //   npm run speeltest -- --zaden 1-5           andere zaden

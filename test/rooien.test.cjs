@@ -695,39 +695,6 @@ test('a2: woont er niemand meer in het huis dat zou groeien, dan is de appelboom
   });
 });
 
-test('c2: heeft een huis alles maar kan het niet groeien, dan zegt de raad het, zodra het genoeg mensen is voor de winst', () => {
-  zo(() => {
-    const gezinDagen = T.GEBOUWEN_INSTELLINGEN.gezinDagen;
-    T.GEBOUWEN_INSTELLINGEN.gezinDagen = 1e9;
-    try {
-      const S = landVanDeMaker(62710);
-      const D = S.dorp;
-      const raad = T.RADEN.find((r) => r.id === 'groeitNiet');
-      const hut = hutMetAlles(S);
-      // Een muur op alle grond waar de hut kan groeien: dan kan hij niet, ook niet na het rooien.
-      for (const h of T.groeiGrond(D).filter((h) => h.g === hut)) {
-        for (const v of h.vormen) for (const t of v) if (!T.voorwerpOp(D.wereld, t.x, t.y)) D.wereld.tegels[t.y][t.x] = 'muur';
-      }
-      T.kaartVeranderd(D.wereld);
-      assert.equal(T.groeiRooiPlan(D, hut), null);
-      let dag = 1;
-      while (dag < 40) nachtMetGenoeg(S, dag++);
-      assert.ok(hut.wensen.alles, 'hij heeft alles');
-      assert.equal(hut.soort, 'hut');
-      while (T.volgendeTrede(D)) D.trede = T.volgendeTrede(D);
-      D.bevolking = T.EINDE_INSTELLINGEN.minstensMensen - 1;
-      assert.ok(!raad.als(D), 'nog niet genoeg mensen: dan zegt de raad wat er nog komt');
-      D.bevolking = T.EINDE_INSTELLINGEN.minstensMensen;
-      assert.ok(raad.als(D));
-      assert.match(raad.tekst(D), /^Genoeg mensen voor de winst, maar de hut van \S+ kan geen huis worden: er staat \S+ \S+ waar het groter moet worden\.$/);
-      hut.wensen.alles = false;
-      assert.ok(!raad.als(D), 'een huis dat iets mist, wacht daar eerst op');
-    } finally {
-      T.GEBOUWEN_INSTELLINGEN.gezinDagen = gezinDagen;
-    }
-  });
-});
-
 test('d: geen erf waar het een huis elke vorm afneemt; wel als het nog een andere vorm kan nemen', () => {
   zo(() => {
     const S = landVanDeMaker(62710);

@@ -248,14 +248,6 @@
       if (s.dorp.jaarverslag) (boek.jaarverslagen = boek.jaarverslagen || []).push({ datum: datum(), regels: s.dorp.jaarverslag.regels.slice() });
       if (!klik('#brief [data-actie="sluit"]')) T.ui.sluitBrief(s);
     }
-    // Gewonnen (js/einde.js): het eindscherm over het feest. De speler schrijft de dag op, en speelt verder. Niet als het
-    // spel daarna uit is (je ambt kwijt, gevallen): dan staat er een ander scherm, met als knop "Naar het titelscherm", en
-    // die begon een nieuw spel onder de speler (speeltest van 6 okt, de sluwe bouwer op 62707: hij won, en werd daarna
-    // op Sint-Maarten ontslagen).
-    if (s.dorp.eind && s.dorp.eind.gewonnen && !s.dorp.einde && s.modus !== 'dood' && !document.querySelector('#overlay').classList.contains('verborgen')) {
-      boek.gewonnen = boek.gewonnen || datum();
-      klik('#overlay-knop');
-    }
     if (T.ui.briefOpen()) {
       if (s.kalender.dag > 1) boek.brief = { dag: heel(s.kalender.dag), datum: datum(), eis: eisKort(T.eisVanDeHeer(s.dorp)) };
       if (!klik('#brief [data-actie="sluit"]')) T.ui.sluitBrief(s);
@@ -759,10 +751,7 @@
         if (!houthakker && !wil.includes('houthakker') && dagNu() >= houthakkerNietVoor) wil.unshift('houthakker');
         // Steeds één erf vrij, binnen de kringen (vraag 95, b). Vragen de mensen het je (vraag 103), dan zonder op een
         // houthakker te wachten: een hut die op hout wacht, is wat de houthakker laat vragen (T.watTeBouwen, js/raad.js).
-        // Heeft het dorp de maat van de winst (vraag 102, c), dan wijst hij geen erf meer aan. Een vrij erf weghalen doet
-        // hij niet meer, want de raad zegt het niet meer (Marcel, 8 okt: "2. B"): hij speelt zoals een tester.
-        const maat = T.maatGehaald(s.dorp);
-        const erfMag = (houthakker || T.VERZOEKEN_INSTELLINGEN.mensen) && !maat;
+        const erfMag = houthakker || T.VERZOEKEN_INSTELLINGEN.mensen;
         // Een vrij erf waar geen hut meer op past, telt niet (T.bruikbareErven; vraag 110, f).
         if (erfMag && !T.bruikbareErven(s.dorp).length && dagNu() >= erfNietVoor && !bouwErf()) erfNietVoor = dagNu() + 30;
         // Bouwen wat hij wil, zodra het goud en het hout er zijn; een kapel waar hij de meeste huizen bereikt. Wat het doel
@@ -928,14 +917,13 @@
     if (d === DAG_HEER + 4) boek.naSintMaarten = tel(); // hoe rijk het dorp is als de heer weg is
     // Per jaar (vraag 94, d): op hoeveel dagen er geen bier of brood was (als er een herberg of een bakkerij staat), en
     // sinds vraag 99, d geen laken (als er ambachtslieden zijn), hoeveel
-    // huizen alles hadden (gemiddeld over de dagen), op hoeveel dagen allemaal, en op hoeveel dagen het gewonnen was zoals
-    // vraag 85 het zegt: alle woningen stenen huizen, en alle huizen alles. En de langste reeks dagen dat alle huizen alles
-    // hadden: winnen vraagt een jaar. En de druk om eten (vraag 95, Marcel: "er moet altijd druk zijn om voldoende eten"):
+    // huizen alles hadden (gemiddeld over de dagen) en op hoeveel dagen allemaal. En de langste reeks dagen dat alle huizen
+    // alles hadden. En de druk om eten (vraag 95, Marcel: "er moet altijd druk zijn om voldoende eten"):
     // op hoeveel dagen er te weinig eten was (wat de balk als honger zegt, D.behoeften.mist), het dorp zei dat het eten de
     // winter niet haalt (T.watDeWinterNietHaalt), en er geen graan meer lag boven het zaaigraan.
     const st = D().behoeften && D().behoeften.standen;
     if (!st) return;
-    const g = boek.geluk[Math.floor(d / JAAR)] || (boek.geluk[Math.floor(d / JAAR)] = { dagen: 0, alles: 0, allemaal: 0, gewonnen: 0, zonderBier: 0, zonderBrood: 0, zonderLaken: 0, honger: 0, etenWinter: 0, graanOp: 0 });
+    const g = boek.geluk[Math.floor(d / JAAR)] || (boek.geluk[Math.floor(d / JAAR)] = { dagen: 0, alles: 0, allemaal: 0, zonderBier: 0, zonderBrood: 0, zonderLaken: 0, honger: 0, etenWinter: 0, graanOp: 0 });
     const huizen = Object.values(st).reduce((n, x) => n + x.huizen, 0);
     const alles = Object.values(st).reduce((n, x) => n + x.alles, 0);
     const staat = (soort) => D().gebouwen.some((x) => x.soort === soort && x.klaar);
@@ -943,7 +931,6 @@
     g.dagen++;
     g.alles += huizen ? alles / huizen : 0;
     if (allemaal) g.allemaal++;
-    if (allemaal && !D().gebouwen.some((x) => (x.soort === 'hut' || x.soort === 'huis') && x.huis !== 'schout')) g.gewonnen++;
     if (staat('herberg') && (D().voorraad.bier || 0) < 1) g.zonderBier++;
     if (staat('bakkerij') && (D().voorraad.brood || 0) < 1) g.zonderBrood++;
     if (st.ambachtslieden && st.ambachtslieden.mensen > 0 && (D().voorraad.laken || 0) < 1) g.zonderLaken++;
@@ -952,34 +939,6 @@
     if ((D().voorraad.graan || 0) - T.zaaigraanApart(D(), d) < 1) g.graanOp++;
     boek.reeks.nu = allemaal ? boek.reeks.nu + 1 : 0;
     boek.reeks.langste = Math.max(boek.reeks.langste, boek.reeks.nu);
-    // Naar de winst (werklijst vraag 102, e): de teller van het eind (js/einde.js, D.eind) per jaar, hoeveel dagen hij
-    // stilstond (een slechte week mag), de mensen en de twee bazen aan het eind van het jaar, en wat de reeks brak als
-    // hij na minstens een maand op nul ging.
-    const E = D().eind || { dagen: 0, mis: 0 };
-    g.winBeste = Math.max(g.winBeste || 0, E.dagen);
-    g.winNu = E.dagen;
-    if (E.mis) g.stil = (g.stil || 0) + 1;
-    g.mensen = D().bevolking || 0;
-    const b = T.bazenNu(D());
-    if (b) Object.assign(g, { gunst: Math.round(b.gunst), vertrouwen: Math.round(b.vertrouwen) });
-    if (E.dagen === 0 && vorigeTeller >= 30) boek.breuken.push({ dag: d, datum: datum(d), lengte: vorigeTeller, mensen: D().bevolking || 0, gemist: watBrakDeReeks() });
-    vorigeTeller = E.dagen;
-  }
-  let vorigeTeller = 0;
-
-  // Wat de reeks brak: per wens hoeveel huizen hem als eerste misten (T.tekenVanHuis, js/wensen.js), hoeveel huizen nog
-  // niet in de hoogste stand zijn, en of er te weinig mensen waren.
-  function watBrakDeReeks() {
-    const uit = {};
-    const hoogste = Object.keys(T.STANDEN).filter((s) => !T.STANDEN[s].los).pop();
-    for (const g of D().gebouwen) {
-      if (!g.wensen || !(g.wensen.mensen > 0)) continue;
-      const mist = T.tekenVanHuis(g);
-      if (mist) uit[mist] = (uit[mist] || 0) + 1;
-      if (g.wensen.stand !== hoogste && !T.STANDEN[g.wensen.stand].los) uit[`een ${T.GEBOUWEN[g.soort].naam}`] = (uit[`een ${T.GEBOUWEN[g.soort].naam}`] || 0) + 1;
-    }
-    if ((D().bevolking || 0) < T.EINDE_INSTELLINGEN.minstensMensen) uit['te weinig mensen'] = D().bevolking || 0;
-    return uit;
   }
 
   // Luisteraars op de regels die iets doen wat telt. Ze roepen de regel zelf aan en schrijven daarna op;
@@ -1167,8 +1126,6 @@
         antwoorden: (boek.grillen || []).map((g) => `${g.datum}: ${g.id}, ${g.antwoord}`),
         laatst: { gunst: s.dorp.bazen.waarom.gunst.slice(), vertrouwen: s.dorp.bazen.waarom.vertrouwen.slice() },
       } : null,
-      // Het eind (js/einde.js): de langste reeks dagen dat iedereen alles had, en of het gewonnen is.
-      eind: s.dorp.eind ? { dagenOpRij: s.dorp.eind.dagen, beste: s.dorp.eind.beste, gewonnen: boek.gewonnen || null } : null,
       jaarverslagen: boek.jaarverslagen || [],
       gevallen: s.modus === 'dood',
       // De rovers (js/rovers.js): hoe vaak ze kwamen, hoe vaak ze verslagen werden, en wat ze meenamen.
@@ -1243,7 +1200,7 @@
         heer: null, brief: null, naSintMaarten: null, luisterFouten: [],
         heerJaren: [], dorp: null, marktrecht: null, groei: [], raad: {}, voorvallen: [],
         jaren: jaren && (SPELERS[speler].jaren || 1) > 1 ? jaren : (SPELERS[speler].jaren || 1), graan: [], geluk: [],
-        reeks: { nu: 0, langste: 0 }, breuken: [], bos: [],
+        reeks: { nu: 0, langste: 0 }, bos: [],
       };
       const s = S();
       luister();
@@ -1265,7 +1222,6 @@
       }
       T.zetSnelheid(s, 30);
       boek.spelZaad = s.dorp.lot.zaad;
-      boek.eindRegels = { ...T.EINDE_INSTELLINGEN }; // wat de winst vraagt, voor de samenvatting (vraag 102, e)
       // Op welk gehucht: het ontworpen, of een van de maker (uit het zaad van het spel; js/maker.js).
       boek.gehucht = s.gebieden.gehucht && s.gebieden.gehucht.eiland ? 'op het eiland' : s.gebieden.gehucht && s.gebieden.gehucht.maker ? 'van de maker' : 'ontworpen';
       boek.boeren = Object.fromEntries(Object.entries(s.dorp.lot.boeren).map(([id, b]) => [id, b.karakter]));

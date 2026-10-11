@@ -1512,7 +1512,7 @@
     // 8. De trede (js/treden.js): met genoeg mensen, en een kapel en een smidse klaar, wordt het gehucht een dorp.
     T.tikTredeDag(D);
     // 9. Het eind (js/einde.js): het jaarboek telt wat er vandaag in het dagboek staat (dus vóór het rapport, dat het
-    // dagboek opnieuw laat beginnen), op 1 lentemaand het jaarverslag, en of het gewonnen of verloren is.
+    // dagboek opnieuw laat beginnen), op 1 lentemaand het jaarverslag, en of het verloren is.
     T.tikEindeDag(D, dag);
     // De paadjes (js/paden.js): waar vandaag gelopen werd, slijt het gras; en een lantaarn bij wat er van het dorp klaar
     // kwam, en op een nieuwe kruising.

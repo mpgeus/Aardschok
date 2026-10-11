@@ -165,9 +165,8 @@ Het ontwerp staat in `ontwerp/spel.md` en `ontwerp/gameloop.md`; hier staat wat 
   nieuwe heer). Toon: zwarte satire; de heer is lachwekkend, zijn straffen niet.
 - **Twee bazen** (vraag 106): de gunst van de heer en het vertrouwen van het dorp kunnen je allebei wegsturen; onder een
   grens een waarschuwing, op 0 ben je weg.
-- **Eerst een speelbare demo** (vraag 78, 79 en 101): één stad die je wint als iedereen een jaar lang super gelukkig is,
-  met wensen per stand, zoals in Anno 1602, vanaf 100 mensen. Je groeit naar een kleine stad van 100 tot 200 mensen, en
-  bouwt zo dat later 5000 kan. Tegenspelers, het land met provincies en het buurdorp komen later (vraag 60 tot 63, 72).
+- **Het doel van de demo is open** (werklijst, "Wacht op Marcel"): het oude doel, een stad waar iedereen een jaar lang
+  super gelukkig is (vraag 78, 79 en 101), is op 11 okt weggehaald (snoeironde, vraag 153).
 - **Geld verdienen** (Marcel, 1 okt: "Ik wil hier eigenlijk geld mee verdienen"; `commercieel.md`): in januari 2027 de
   naam, geluid, Engels en de Steam-pagina, in juni 2027 de demo in Next Fest. Er is weinig geld ("Ik gebruik jou ☺️"):
   wat kan, maakt Claude, zoals de beelden uit code; Marcel kiest, luistert en plaatst.

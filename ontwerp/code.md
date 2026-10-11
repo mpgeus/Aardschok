@@ -721,7 +721,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   bouwfasen terwijl zijn mensen erin blijven wonen (alleen het voorwerp is `inAanbouw`, `groeiVanafFase`; G, vraag 114).
   Staat er alleen iets te rooien waar het groter wordt, dan rooit het gezin dat eerst (`T.groeiRooiPlan`,
   `T.rooiOmTeGroeien` in `js/bos.js`, `g.groeitNaRooien`), en anders zegt het briefje waarom (`T.waaromGroeitHetNiet`;
-  vraag 130), en de raad ook als het genoeg mensen is voor de winst (c2); een erf komt niet waar het een huis elke vorm
+  vraag 130; de raad die het zei, hoorde bij het winnen en is op 11 okt weggehaald); een erf komt niet waar het een huis elke vorm
   afneemt waarin het nog kan groeien (`T.groeiGrond`, in `T.waaromPastErfNiet`; d). Achteruitgaan is zacht (een
   gezin trekt alleen weg uit een huis onder de vertrekdrempel) of streng (de spelregel "Achteruitgaan"); een hogere stand
   betaalt meer belasting (`T.belastbaar`). De spelregel "Wensen" op "Het dorp als geheel" is het spel van vóór 1 okt; de
@@ -1035,9 +1035,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`[B]` wordt een toets): de eerste uit `T.RADEN` die nu geldt (`T.raadNu`). Hij vraagt het aan de regels zelf: of er
   een gezin komt aan de groei (`T.waaromGeenGezin` en `T.volgendeGezinDag` in `js/gebouwen.js`), het hout en het eten
   aan de winter, wat de huizen missen aan de wensen (`T.watDeHuizenMissen`, vóór het doel; vraag 87), en wat je mist voor
-  wat het doel vraagt aan de treden (`T.doelGebouwen`), met waar het vandaan komt. Na de laatste trede telt hij tot de
-  maat van de winst (`T.mensenVoorDeWinst` in `js/einde.js`); dat je dan een vrij erf weghaalt, zegt hij sinds 8 okt niet
-  meer (Marcel: "2. B"). Haalt het eten de winter niet, dan zegt hij wat helpt (`T.watHelptAanEten`, vraag
+  wat het doel vraagt aan de treden (`T.doelGebouwen`), met waar het vandaan komt. Na de laatste trede is er geen doel
+  meer (het winnen is op 11 okt weggehaald, `js/einde.js`), dus telt hij geen mensen meer; dat je een vrij erf weghaalt,
+  zegt hij sinds 8 okt niet meer (Marcel: "2. B"). Haalt het eten de winter niet, dan zegt hij wat helpt (`T.watHelptAanEten`, vraag
   133, b: ontginnen, een visser per dertig mensen, een jager als er herten zijn, een graanschuur, meer weide, zaaigraan
   kopen), en vraagt het dorp het gebouw dat hij noemt. Na een voorjaar met honger maakt een boer zelf een veld weide
   (`weideErbij` in `T.boerenKiezenVelden`, `D.behoeften.voorjaarsHonger`). Vanaf de herfst zegt hij of vis en vlees de
@@ -1147,14 +1147,16 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 ### js/einde.js: het eind
 
-- `js/einde.js`: **het eind en het jaar in het kort** (2e, vraag 101, 3 okt): elke nacht (`T.tikEindeDag`, vanuit
-  `T.tikGebouwenDag`) telt het dorp de dagen op rij dat iedereen super gelukkig is (`T.iedereenGelukkig`: elk huis met
-  mensen heeft alles, in de hoogste stand of ernaast, vanaf 100 mensen; `D.eind`; een slechte week zet de teller stil,
-  niet terug, de spelregel "Het eind", vraag 102, d); na 360 is het gewonnen, viert het
-  dorp het grote feest (`T.vierVandaag` in `js/feesten.js`) en komt het eindscherm (`T.werkEindeBij`,
-  `T.ui.toonGewonnen` in `js/hud.js`). Onder 10 mensen is het spel uit (`D.einde`, reden `'leeg'`). Het jaarboek
-  (`D.jaarboek`, uit het dagboek en de oogst, `T.telOogstInJaarboek`) wordt op 1 lentemaand het jaarverslag (een brief,
-  soort `'jaarverslag'`). Het doel linksboven na de laatste trede: `T.eindDoel`. De getallen in `T.EINDE_INSTELLINGEN`.
+- `js/einde.js`: **het eind en het jaar in het kort** (2e, vraag 101, 3 okt). Elke nacht (`T.tikEindeDag`, vanuit
+  `T.tikGebouwenDag`) is het spel uit onder 10 mensen (`D.einde`, reden `'leeg'`, het eindscherm in `js/hud.js`, getal
+  `T.EINDE_INSTELLINGEN.minstensOver`), en schrijft het dorp op wat er gebeurde in zijn jaarboek (`D.jaarboek`, uit het
+  dagboek en de oogst, `T.telOogstInJaarboek`), dat op 1 lentemaand het jaarverslag wordt (`T.jaarverslagRegels`; een
+  brief, soort `'jaarverslag'`, `D.jaarverslag`). **Het winnen staat er niet meer** (11 okt, snoeironde, vraag 153;
+  Marcel koos "Weg"): de teller van dagen op rij (`D.eind`), `T.iedereenGelukkig`, het doel linksboven (`T.eindDoel`),
+  het eindscherm (`T.ui.toonGewonnen`), het grote feest (`T.FEESTEN.stad`) en de spelregel "Het eind" zijn weg, en met
+  hen de raad `groeitNiet` ("Genoeg mensen voor de winst") en de tweede knop van het overlay. Het nieuwe doel van de demo
+  wacht op Marcel (werklijst). Een bewaard spel met de oude velden (`D.eind`, `D.jaarboek.gelukkig`) blijft laden: niets
+  leest ze meer (`test/einde.test.cjs`). `T.vierVandaag` (`js/feesten.js`) bleef: een toets gebruikt hem.
 
 ## Het gevecht
 

@@ -373,21 +373,18 @@ test('de wensen: wat je nu niet kunt doen, zegt de raad niet; de winter en de sp
   });
 });
 
-test('groeien en winnen: na de laatste trede telt de raad tot de maat van de winst, en over een vrij erf zegt hij niets', () => {
+test('na de laatste trede is er geen doel meer, dus telt de raad geen mensen meer, en over een vrij erf zegt hij niets', () => {
   const S = metRaadsman(opDag(gehucht(), 3.5));
   const D = S.dorp;
   const raadVan = (id) => T.RADEN.find((r) => r.id === id);
+  assert.ok(T.volgendeTrede(D), 'in het gehucht is er een trede te halen');
+  assert.ok(raadVan('gezin').als(D), 'dan zegt de raad wanneer het volgende gezin komt');
   while (T.volgendeTrede(D)) D.trede = T.volgendeTrede(D);
-  assert.ok(T.eindDoel(D), 'na de laatste trede is de winst het doel');
-  // Nog geen 100 mensen: de raad zegt wanneer het volgende gezin komt, zoals voor een trede (werklijst vraag 102, c).
-  assert.equal(T.mensenVoorDeWinst(D), T.EINDE_INSTELLINGEN.minstensMensen - D.bevolking);
-  assert.ok(raadVan('gezin').als(D));
-  assert.ok(!T.maatGehaald(D));
-  // Een vrij erf, en de maat gehaald: dat het erf weg moet, zegt de raad niet meer (Marcel, 8 okt: "2. B").
+  // Het winnen is op 11 okt weggehaald (js/einde.js): na de laatste trede vraagt niets meer om mensen.
+  assert.equal(T.tredeDoel(D), null);
+  assert.ok(!raadVan('gezin').als(D), 'er is geen doel meer: over de groei zegt hij niets');
+  // Een vrij erf weghalen zegt de raad niet (Marcel, 8 okt: "2. B").
   assert.ok(T.legErfAan(D, 48, 50).gelukt);
-  D.bevolking = T.EINDE_INSTELLINGEN.minstensMensen;
-  assert.ok(T.maatGehaald(D));
-  assert.ok(!raadVan('gezin').als(D), 'genoeg mensen: over de groei zegt hij niets meer');
   assert.ok(!raadVan('geenErf'), 'de raad over het vrije erf is weg');
   assert.doesNotMatch(T.raadNu(D) ? T.raadNu(D).tekst : '', /erf weg/);
 });

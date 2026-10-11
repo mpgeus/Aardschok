@@ -46,9 +46,9 @@
     return hakkers.length > 0 && hakkers.every(T.houthakkerZonderBoom);
   };
 
-  // Hoeveel mensen het doel nog vraagt: de volgende trede (js/treden.js), en na de laatste de maat van de winst
-  // (js/einde.js; werklijst vraag 102, c).
-  const mensenNodig = (D) => (T.volgendeTrede(D) ? T.tredeMensenNodig(D) : T.mensenVoorDeWinst(D));
+  // Hoeveel mensen het doel nog vraagt: de volgende trede (js/treden.js); na de laatste is er geen doel meer (de winst
+  // is op 11 okt weggehaald, js/einde.js).
+  const mensenNodig = (D) => (T.volgendeTrede(D) ? T.tredeMensenNodig(D) : 0);
 
   // Het hout of het eten (`voorDeWinter`: T.houtVoorDeWinter of T.etenVoorDeWinter) haalt de winter niet, en die is
   // in zicht (T.winterInZicht, js/behoeften.js: vanaf 1 herfstmaand, net als het dorp zelf), of al begonnen. Eerst de
@@ -191,17 +191,6 @@
     return null;
   }
 
-  // Een huis met mensen dat alles heeft, maar niet kan doorgroeien, ook niet als het gezin eerst rooit (vraag 130, c2):
-  // { g, waarom }, of null.
-  function huisDatNietGroeit(D) {
-    for (const g of D.gebouwen || []) {
-      if (!g.wensen || !g.wensen.mensen || !g.wensen.alles || g.groeitNaRooien) continue;
-      const waarom = T.waaromGroeitHetNiet(D, g);
-      if (waarom) return { g, waarom };
-    }
-    return null;
-  }
-
   // Het eerste wat de huizen missen waar je nu iets aan kunt doen (T.watDeHuizenMissen, js/wensen.js), van deze soort
   // ('bouwstof' of 'wens'), of null.
   const watNuHelpt = (D, soort) => T.watDeHuizenMissen(D).find((x) => x.soort === soort && x.kan) || null;
@@ -315,19 +304,6 @@
       als: (D) => T.OCHTENDRAPPORT_INSTELLINGEN.aan && T.RAADSMAN_INSTELLINGEN.aan && !T.raadsmanVan(D)
         && D.kalender.dag >= 1 && dagNu(D) < T.OCHTENDRAPPORT_INSTELLINGEN.raadTot,
       tekst: () => 'Een raadsman brengt je elke ochtend een rapport: kies er een [R].',
-    },
-    // Een vrij erf weghalen na de maat van de winst (vraag 102, c) zegt de raad niet meer (Marcel, 8 okt: "2. B"): voor een
-    // tester is dat vreemd. Een nieuw gezin in een hut zet de teller stil, en dat zie je bij het doel (js/einde.js).
-    {
-      // Een huis dat alles heeft, maar niet kan doorgroeien (werklijst vraag 130, c2; Marcel, 6 okt: "Eens alle 3"): voor de
-      // winst moet het een stenen huis worden, en zonder de raad zie je niet waarom de teller niet loopt. Waarom, zegt
-      // T.waaromGroeitHetNiet (js/behoeften.js), net als het briefje bij het huis.
-      id: 'groeitNiet',
-      als: (D) => T.maatGehaald(D) && !!huisDatNietGroeit(D),
-      tekst: (D) => {
-        const { g, waarom } = huisDatNietGroeit(D);
-        return `Genoeg mensen voor de winst, maar ${T.huisVan(D, g)} kan geen ${T.GEBOUWEN[T.GEBOUWEN[g.soort].wordt].naam} worden: ${waarom}.`;
-      },
     },
     {
       id: 'plaats',

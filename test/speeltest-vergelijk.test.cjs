@@ -42,11 +42,11 @@ test('een naam van een speeltest is een map in uit/, niets daarbuiten', () => {
 });
 
 // Een uitslag zoals speler.js hem teruggeeft, met alleen wat de vergelijking leest.
-const uitslag = (speler, zaad, mensen, gewonnen = null) => ({
+const uitslag = (speler, zaad, mensen, marktrecht = null) => ({
   speler, zaad, fouten: [],
   eind: { tekst: 'het jaar uit, tot 1 grasmaand', bevolking: mensen, tevredenheid: 0.714, graan: 120, goud: 33, hout: 40,
-    bazen: { gunst: 61, vertrouwen: 72 }, eind: { beste: 40, gewonnen } },
-  dorp: { datum: '3 hooimaand' }, marktrecht: null,
+    bazen: { gunst: 61, vertrouwen: 72 } },
+  dorp: { datum: '3 hooimaand' }, marktrecht: marktrecht && { datum: marktrecht },
   geluk: [{ allemaal: 10, honger: 2 }, { allemaal: 25, honger: 0 }],
   winter: { doden: 1, weg: 2 },
 });
@@ -76,7 +76,7 @@ test('de vergelijking zet per spel de twee naast elkaar, met wat er anders was e
     assert.deepEqual(v.spellen.map((s) => s.zaad), [1, 2], 'per zaad, in volgorde');
     const maat = (s, id) => s.maten.find((m) => m.id === id);
     assert.deepEqual([maat(v.spellen[1], 'mensen').voor, maat(v.spellen[1], 'mensen').na], [90, 95]);
-    assert.deepEqual([maat(v.spellen[1], 'gewonnen').voor, maat(v.spellen[1], 'gewonnen').na], ['niet', '5 oogstmaand']);
+    assert.deepEqual([maat(v.spellen[1], 'marktrecht').voor, maat(v.spellen[1], 'marktrecht').na], ['niet', '5 oogstmaand']);
     assert.equal(maat(v.spellen[0], 'allemaal').na, 35, 'de dagen van alle jaren samen');
     assert.equal(maat(v.spellen[0], 'tevreden').na, 71);
     assert.equal(maat(v.spellen[0], 'marktrecht').na, 'niet');
@@ -85,7 +85,7 @@ test('de vergelijking zet per spel de twee naast elkaar, met wat er anders was e
     assert.match(tekst, /^# na naast voor/);
     assert.match(tekst, /\| .*droogDagen.* \| \d+ \| 99 \|/);
     assert.match(tekst, /\| Mensen aan het eind \| 90 \| 95 \| \+5 \|/);
-    assert.match(tekst, /\| Gewonnen op \| niet \| 5 oogstmaand \| anders \|/);
+    assert.match(tekst, /\| Marktrecht op \| niet \| 5 oogstmaand \| anders \|/);
     assert.match(tekst, /\| Mensen aan het eind \| 80 \| 80 \|  \|/);
   } finally {
     fs.rmSync(uit, { recursive: true, force: true });

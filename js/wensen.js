@@ -7,7 +7,7 @@
 //
 // Elk huis heeft zo zijn eigen tevredenheid, en die van het dorp is het gemiddelde, naar mensen: T.berekenTevredenheid
 // (js/behoeften.js) vraagt het hier, zodat de groei, het werk, de voorvallen en de raad gewoon doorwerken. Een huis dat
-// alles heeft, is super gelukkig: daarvan groeit het door (vraag 80, 2b), en daarmee win je (2e).
+// alles heeft, is super gelukkig: daarvan groeit het door (vraag 80, 2b).
 //
 // Goederen: de hoogste stand neemt eerst (Marcel, vraag 85: "een hogere stand eigent zich spullen toe. Dus stel er is te
 // weinig bier, dan nemen zij het laatste"). Wat over is, gaat naar de stand eronder, en binnen een stand gelijk op.

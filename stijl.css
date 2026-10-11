@@ -502,18 +502,6 @@ div.ding { cursor: default; }
   cursor: pointer;
 }
 #overlay-knop:hover { filter: brightness(1.08); }
-/* De tweede knop (Naar het titelscherm naast Verder spelen, js/hud.js T.ui.toonGewonnen): stiller dan de eerste. */
-#overlay-knop2 {
-  margin: 10px 0 0 8px;
-  padding: 8px 18px;
-  font: 15px var(--boek);
-  color: var(--goud);
-  background: transparent;
-  border: 1px solid var(--goud);
-  border-radius: 8px;
-  cursor: pointer;
-}
-#overlay-knop2:hover { background: color-mix(in srgb, var(--goud) 12%, transparent); }
 
 /* De uitleg rechtsboven (het oude spel) */
 #hulp {

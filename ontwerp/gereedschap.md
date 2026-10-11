@@ -38,9 +38,8 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   `gereedschap/speeltest/uit/` (niet in git), met een tabel in `samenvatting.md`; wie twee jaar speelt, krijgt er een
   graanboek bij: per jaar waar het graan bleef, en hoeveel dagen er geen bier, brood of laken was. Hetzelfde zaad geeft
   hetzelfde jaar, dus na het bijstellen van een getal zie je precies wat het deed (`-- slim --zaad 2` voor
-  één jaar). Met `-- bouwer sluw --jaren 4` spelen de bouwers vier jaar, naar de winst (vraag 102, e): de samenvatting
-  krijgt dan "Naar de winst", per jaar de teller van het eind en wat de reeks brak; `--tegelijk 4` speelt vier spellen
-  tegelijk (standaard drie). Het speelt het spel zoals het draait: de speler klikt en drukt op de knoppen van de vensters
+  één jaar). Met `-- bouwer sluw --jaren 4` spelen de bouwers vier jaar (er is geen winst meer om naartoe te spelen: het
+  winnen is op 11 okt weggehaald); `--tegelijk 4` speelt vier spellen tegelijk (standaard drie). Het speelt het spel zoals het draait: de speler klikt en drukt op de knoppen van de vensters
   (`gereedschap/speeltest/speler.js`). Een jaar kost anderhalf tot vier minuten (5 okt: vier jaar op een land van de
   maker 6 à 17 minuten, met drie tegelijk); nodig is Playwright (in de
   cloud staat het klaar). Wat het vond, staat in `ontwerp/speelbaar.md`. Met `--opslaan` is het de proef met
@@ -128,9 +127,8 @@ hem nu mannen vragen (ook in een gehucht), `('terug')` laat ze nu terugkomen.
 `Spel.debug.feest()` zegt welk feest er komt of nu is, waar het dorp staat en de boom op het plein (de meiboom of de
 kerstboom); `('meiboom')` laat het vandaag beginnen, de hele dag (`('oogstfeest', 'avond')` alleen vanavond, `('kerstboom')`
 zet de kerstboom); zet er het uur bij met `Spel.debug.uur(11)` of `(20)`.
-`Spel.debug.einde()` zegt hoe ver het is met winnen (het doel, de dagen op rij, het jaarboek); `('winst')` zet de teller
-op één dag ervoor, `('gewonnen')` wint nu (het feest, en het eindscherm 's avonds of bij het feest), `('jaarverslag')`
-toont het jaar in het kort nu.
+`Spel.debug.einde()` zegt wat het jaarboek tot nu telt en wat het laatste jaarverslag zei; `('jaarverslag')` toont het jaar
+in het kort nu. (Het winnen, met `('winst')` en `('gewonnen')`, is er sinds 11 okt niet meer.)
 `Spel.debug.verzoek()` zegt wat het dorp nu zou willen bouwen en waarom, wie er nu om vraagt en waar, en waar je nee op
 zei; `('nu')` laat het eerste nu vragen, `('oproep', 'steengroeve')` hangt een oproep op (of haalt hem weg), `('jij')` of
 `('mensen')` zet de spelregel "Wie bouwt". De oude toetsen spelen
