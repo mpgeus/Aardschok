@@ -114,8 +114,10 @@ het graan vraagt", de schandpaal, de heervaart en de twee bazen.
 - Engels (vraag 147, stap 2: alle tekst omzetten). **Marcel, 11 okt: "Alles gelijk in het Engels maken. Nederlands mag
   je mee stoppen"**: nu, vóór 1f. Gemeten op 11 okt: zo'n 2.500 teksten, 22.000 woorden, het meest in `opties.js`,
   `gesprekken.js`, `hud.js` en `gebouwen.js`; 90 zinnen waren al om. Het voorstel van 10 okt (sessie
-  `ccr-99e707bb-sla81d`, `git show 828bd776`) kreeg geen antwoord; deze sessie neemt het over. **Bezig in sessie
-  `ccr-fe45ba8f-v51u8s`** (11 okt): het plan, met Marcel.
+  `ccr-99e707bb-sla81d`, `git show 828bd776`) kreeg geen antwoord; deze sessie neemt het over. Marcel koos (11 okt):
+  alleen wat de speler ziet, het Nederlands weg maar `T.t` blijft, gewone maanden en Engelse namen, en elk deel naar
+  `main` zodra de toetsen groen zijn (`commercieel.md`, vraag 147). **Bezig in sessie `ccr-fe45ba8f-v51u8s`** (11 okt):
+  het omzetten, in delen.
 - Een proefversie voor Marcels 4K-scherm en een eerste tester (`npm run proefversie`), na C.
 - Het geluid (vraag 145, 2), zodra de sleutel er is.
 - Januari 2027: de Steam-pagina (een capsule, vijf plaatjes, een trailer van een minuut); de naam is er (Tithebreaker).

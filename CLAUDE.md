@@ -8,9 +8,10 @@ beurten op dezelfde tegels (Jagged Alliance 2): eerst om je dorp te verdedigen, 
 heer. Je held is de schout: hij vecht en hij praat. **Het doel is de heer verstoten en verslaan** (vraag 126). Het beeld is
 isometrisch (Mystic Towers), de HD-pixel art komt uit code, rijk aan details.
 
-Code en commentaar zijn Nederlands, zoals in Marcels Planner. **De spelteksten zijn Engels, met Nederlands als vertaling**
-(vraag 147; de schout heet *reeve*): een zin die de speler ziet, is `T.t('Engelse zin met {wie}', { wie })` (`js/taal.js`),
-met het Nederlands in `taal/nl.js`, en daarna `npm run teksten`. Wat nog niet om is, staat nog in het Nederlands.
+Code en commentaar zijn Nederlands, zoals in Marcels Planner. **De spelteksten zijn Engels, zonder Nederlands** (vraag 147;
+Marcel, 11 okt: "Nederlands mag je mee stoppen"; de schout heet *reeve*): een zin die de speler ziet, is
+`T.t('Engelse zin met {wie}', { wie })` (`js/taal.js`), de haak voor een latere vertaling, en daarna `npm run teksten`;
+geen nieuwe zinnen in `taal/nl.js`, dat eruit gaat. Wat nog niet om is, staat nog in het Nederlands (werklijst, G).
 
 ## Waar de kennis staat: lees alleen wat je nodig hebt
 
