@@ -14,20 +14,14 @@ onderwerp, niet hier. Wie aan een punt begint, zet er "**Bezig in sessie `<branc
 drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **B, 1c en 1d zijn af** (11
 okt): het bouwmenu, verhuizen uit het kamp, het bouwbereik, het huis van de schout, meebouwen en bouwen in het bos.
 **Het volgende punt is B, 1e: boeren uit het niets, met de keuze akkerbouwer of wijnboer.** Ronde 2 van het snoeien
-volgt na 1f, ronde 3 na C.
+volgt na 1f, dan het hele eiland (B2), en ronde 3 na C.
 
 **Wacht op Marcel:**
-- **1c en 1d bekijken** (op branch `ccr-5dd998e4-j3q8e2` tot hij in `main` is): Spelregels, "Het begin" op "Leeg", en
-  dan Nieuw spel (of in de console `Spel.debug.begin('leeg', 2)`). Is het kamp op, open dan het bouwmenu (B): het
-  bouwbereik gloeit op de grond. Zet het huis van de schout neer, ook in het bos (de bouwers rooien eerst, en het hout
+- **1c en 1d bekijken:** Spelregels, "Het begin" op "Leeg", en dan Nieuw spel (of in de console
+  `Spel.debug.begin('leeg', 2)`). Is het kamp op, open dan het bouwmenu (B): het bouwbereik gloeit op de grond. Zet het huis van de schout neer, ook in het bos (de bouwers rooien eerst, en het hout
   komt in de voorraad), en een hut op open grond: wie geen werk heeft, loopt erheen en bouwt. Is de hut af, dan trekt
   er een gezin in; is het huis af, dan verhuist de schout en wordt de huifkar de ossenkar. Te kiezen in de werkbank
   ("Meebouwen"): twee werkdagen per bouwdag, vier bouwers per plaats, een kwart werkdag per boom.
-- **Wanneer het hele eiland** (Marcel, 11 okt: "de wereld moet 1 geheel worden het vlakke van 100x100 is niet hoe het
-  blijft. We hebben een heel land van 2500x2500"): het staat nu onder F (vraag 117, stap 3: het eiland in stukken uit
-  het nummer, de mist, opslaan wat veranderde, lange tochten). Voorstel van Claude (11 okt): direct na B, vóór C, want C
-  meet afstanden (de kar, een schuur verder weg geeft daar bereik), en die meet je op 100 bij 100 verkeerd. Tot dan gaat
-  niets nieuws uit van 100 bij 100 (CLAUDE.md).
 - **Het doel van de demo.** CLAUDE.md zegt nog "je wint als iedereen een jaar super gelukkig is"; dat is het oude spel.
   Voorstel van Claude (11 okt): de demo is het eerste jaar: je komt met de kar, bouwt, haalt de eerste winter, en het
   eind is het eerste gevecht (de mannen van de heer of rovers), zodat een speler in Next Fest de economie, het gevecht
@@ -39,7 +33,7 @@ volgt na 1f, ronde 3 na C.
 - Het geluid (vraag 145, 2): de sleutel `FREESOUND_KEY` in de omgeving en de domeinen van Freesound erbij; dan maakt een
   sessie het.
 
-**Daarna, in deze volgorde:** A, B, C, D, E, F; G loopt ernaast op het tijdpad van `commercieel.md`.
+**Daarna, in deze volgorde:** A, B, B2, C, D, E, F; G loopt ernaast op het tijdpad van `commercieel.md`.
 
 ## A. Opruimen (vraag 153, stap 3)
 
@@ -68,6 +62,16 @@ Het plan staat in het archief bij vraag 152; 1a (optie 1), 1b (het lege land), 1
 - **1f, een jaar zonder fouten:** een toets speelt een jaar vanaf een lege plek, met een speler in code die bouwt. Dan
   is "Leeg" het enige begin, en volgt ronde 2 van A.
 
+## B2. Het hele eiland (vraag 117, stap 3)
+
+Marcel, 11 okt: "Let op, de wereld moet 1 geheel worden het vlakke van 100x100 is niet hoe het blijft. We hebben een heel
+land van 2500x2500", en op de vraag wanneer: "A ja", dus direct na B en vóór C, want C meet afstanden (de ossenkar, een
+schuur verder weg die daar bereik geeft), en die meet je op 100 bij 100 verkeerd. Wat het vraagt (`spel.md`, "Het
+land"; `kaarten.md`, "Het eiland"; het archief bij vraag 117): het eiland in stukken uit het nummer, gemaakt aan de rand
+van de mist; opslaan wat veranderde; de mist (wat je verkende maar nu niet ziet, is grijs); lange tochten over de
+stukken; en wat ver weg is als getallen. Eerst een plan met Marcel. Tot dan gaat niets nieuws uit van 100 bij 100
+(CLAUDE.md).
+
 ## C. De ossenkar (vraag 152, de proef)
 
 Besloten (Marcel, 11 okt): bouwen binnen bereik van het plein en elke opslag, geen grens en geen vlaggen; de kar rijdt
@@ -94,7 +98,7 @@ het graan vraagt", de schandpaal, de heervaart en de twee bazen.
 
 - Verdedigen: rovers en wolven tegen je dorp en je kar, met de militie (`js/rovers.js`). Voorstel van 11 okt, nog niet
   gekozen: een wapen maakt de soldaat (een hooivork militie, een speer een speerman), en elke soldaat is een werker minder.
-- Erop uit, zoals in Jagged Alliance 2: het eiland met de mist (vraag 117, stap 3), een ander dorp, het kasteel van de heer.
+- Erop uit, zoals in Jagged Alliance 2: over het eiland (B2) naar een ander dorp, en naar het kasteel van de heer.
 
 ## G. Naar Steam (`commercieel.md`)
 

@@ -1076,7 +1076,8 @@ Dat vervangt de kaart van de provincies hieronder (die staat achter de spelregel
 zee rondom, met je dorp, het kasteel van de heer, de stad en de andere dorpen erop, en de mist over wat je nog niet
 zag. Het plan in stappen staat bij vraag 117 in de werklijst. **En (Marcel, 11 okt): "Let op, de wereld moet 1 geheel
 worden het vlakke van 100x100 is niet hoe het blijft. We hebben een heel land van 2500x2500"**: je land van 100 bij 100
-(`T.MAKER_INSTELLINGEN.b` en `h`) is een tussenstap; wanneer het hele eiland komt, staat als vraag in de werklijst.
+(`T.MAKER_INSTELLINGEN.b` en `h`) is een tussenstap, en het hele eiland komt direct na het lege begin, vóór de ossenkar
+(Marcel, 11 okt: "A ja"; werklijst, B2).
 **Marcel koos de maat: 2500 bij 2500 tegels** (4 okt), na
 de kern (eerst de huizen, dan de boeren met de houthakker en de beesten). Wat dat technisch vraagt (de kaart in stukken
 uit het nummer, opslaan wat veranderde, lange tochten met HPA\* over de stukken en de andere drie technieken die Marcel
