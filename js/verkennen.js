@@ -20,7 +20,7 @@
   function loopNaar(S, doel) {
     const pad = schoutPad(S, doel, false);
     if (!pad) {
-      T.ui.bericht('Daar kun je niet komen.');
+      T.ui.bericht(T.t('You cannot get there.'));
       return;
     }
     T.geefRoute(S.schout, pad, doel);
@@ -42,7 +42,7 @@
     }
     const pad = schoutPad(S, doel, true);
     if (!pad) {
-      T.ui.bericht('Daar kun je niet bij.');
+      T.ui.bericht(T.t('You cannot reach that.'));
       return;
     }
     T.geefRoute(schout, pad, { x: doel.x, y: doel.y, naast: true });
@@ -54,7 +54,7 @@
   // Ook naar buiten, zodat de keuring (gereedschap/keuring.js) kan zeggen dat een voorwerp
   // dat aan een quest hangt niet op te rapen is — dan ligt het er wel en doet het niets.
   const OPRAPEN = (T.OPRAPEN = {
-    sleutel: { tekst: 'De sleutel oppakken', vind: 'Je vindt de ijzeren sleutel.' },
+    sleutel: { tekst: T.t('Pick up the key'), vind: T.t('You find the iron key.') },
   });
 
   // ── Wat een veld is (js/akkers.js, "Velden"; spel.md, "Weides met koeien en schapen") ──
@@ -145,7 +145,7 @@
 
     if (doel.wezen) {
       const e = doel.wezen;
-      if (e.kant === 'monster') return { tekst: `De ${e.naam} aanvallen`, doe: () => T.startGevecht(S, e, true) };
+      if (e.kant === 'monster') return { tekst: T.t('Attack the {wie}', { wie: e.naam }), doe: () => T.startGevecht(S, e, true) };
       // Een dier (js/vee.js) of het wild (js/beesten.js) praat niet en doet nog niets: bij de muis staat alleen wat het is.
       if (e.dier || e.beest) return { tekst: T.hoofdletter(T.eenNaam(e.naam)) };
       // De kar van het lege begin (js/begin.js) net zo.
@@ -154,7 +154,7 @@
       // gesprek heeft.
       const voorval = D && T.voorvalVan(D, e);
       if (voorval) {
-        return { tekst: `Praten met ${T.naamVanBewoner(voorval.wie)} (zoekt je)`, doe: () => loopNaast(S, e, () => T.openDialoog(S, e, voorval.id)) };
+        return { tekst: T.t('Talk to {wie} (looking for you)', { wie: T.naamVanBewoner(voorval.wie) }), doe: () => loopNaast(S, e, () => T.openDialoog(S, e, voorval.id)) };
       }
       // Een bewoner (js/bewoners.js) heeft nog geen gesprek: bij de muis staat wie hij is.
       if (e.bewoner && D && T.overBewonerTekst) return { tekst: T.overBewonerTekst(D, e) };
@@ -163,7 +163,7 @@
       if (T.gesprekVan(e)) {
         // Bij een boer ook wie hij is en wat hij kan (js/boeren.js; Marcel wilde het meteen zien).
         const over = T.overBoerTekst ? T.overBoerTekst(e, true) : '';
-        return { tekst: `Praten met ${e.naam}${over ? ` (${over})` : ''}`, doe: () => loopNaast(S, e, () => T.openDialoog(S, e)) };
+        return { tekst: over ? T.t('Talk to {wie} ({over})', { wie: e.naam, over }) : T.t('Talk to {wie}', { wie: e.naam }), doe: () => loopNaast(S, e, () => T.openDialoog(S, e)) };
       }
       return null;
     }
@@ -171,7 +171,7 @@
       const v = doel.voorwerp;
       if (OPRAPEN[v.soort]) return { tekst: OPRAPEN[v.soort].tekst, doe: () => loopNaar(S, v) };
       if (v.soort === 'kist') {
-        return { tekst: 'De kist bekijken', doe: () => loopNaast(S, v, () => T.ui.bericht('Een kist vol oude rommel. Niets wat de heer zou willen.')) };
+        return { tekst: T.t('Look at the chest'), doe: () => loopNaast(S, v, () => T.ui.bericht(T.t('A chest full of old rubbish. Nothing the lord would want.'))) };
       }
     }
     // Een gebouw dat de speler neerzette (js/gebouwen.js): de muis op zijn voet zegt hoe het ermee
@@ -184,8 +184,8 @@
     }
     const d = T.deurOp(w, doel.x, doel.y);
     if (d && d.staat === 'opslot') {
-      if (S.inventaris.has('sleutel')) return { tekst: 'De deur openen met de sleutel', doe: () => loopNaast(S, d, () => ontsluit(S, d)) };
-      return { tekst: 'Op slot', fout: true, doe: () => T.ui.bericht('De deur zit op slot.') };
+      if (S.inventaris.has('sleutel')) return { tekst: T.t('Open the door with the key'), doe: () => loopNaast(S, d, () => ontsluit(S, d)) };
+      return { tekst: T.t('Locked'), fout: true, doe: () => T.ui.bericht(T.t('The door is locked.')) };
     }
     // Een open deur is gewoon een doorgang: wie erop klikt, wil erdoor. Dichtgooien kan
     // in een gevecht, met een eigen knop.
@@ -195,7 +195,7 @@
     const o = T.overgangOp(w, doel.x, doel.y);
     if (o) {
       const naam = (T.GEBIEDEN[o.naar] && T.GEBIEDEN[o.naar].naam) || o.naar;
-      return { tekst: o.tekst || `Naar ${naam.toLowerCase()}`, doe: () => loopNaar(S, { x: doel.x, y: doel.y }) };
+      return { tekst: o.tekst || T.t('To {plek}', { plek: naam.toLowerCase() }), doe: () => loopNaar(S, { x: doel.x, y: doel.y }) };
     }
     // Een veld (alleen het nieuwe spel): de muis zegt wat het is, en een klik is gewoon erheen
     // lopen, want de velden zijn groot en je moet eroverheen kunnen. Wat het volgend jaar wordt,
@@ -214,7 +214,7 @@
     S.sleutelGebruikt = true;
     T.ontdekBijDeur(S.wereld, d);
     T.ui.toonInventaris(S);
-    T.ui.bericht('De sleutel past. De zware deur zwaait open.', 'goed');
+    T.ui.bericht(T.t('The key fits. The heavy door swings open.'), 'goed');
   }
 
 
@@ -450,8 +450,8 @@
     if (S.schout) S.schout.lantaarnUit = S.sluipen;
     T.ui.toonSluipen(S.sluipen);
     const donker = S.kalender && T.lichtVan(S.kalender.dag).nacht >= T.ZIEN_INSTELLINGEN.lantaarn.vanaf;
-    if (S.sluipen) T.ui.bericht(donker ? 'Je sluipt en dooft je lantaarn: trager, en in het donker zien ze je niet.' : 'Je sluipt: trager, maar minder snel opgemerkt.');
-    else T.ui.bericht(donker ? 'Je loopt weer gewoon, met je lantaarn aan.' : 'Je loopt weer gewoon.');
+    if (S.sluipen) T.ui.bericht(donker ? T.t('You sneak and put out your lantern: slower, and in the dark they cannot see you.') : T.t('You sneak: slower, but less likely to be noticed.'));
+    else T.ui.bericht(donker ? T.t('You walk normally again, with your lantern lit.') : T.t('You walk normally again.'));
   };
 
   // Mag deze stap nog? Tijdens het rondlopen kan er intussen een monster in de weg staan.

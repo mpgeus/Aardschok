@@ -136,6 +136,16 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   vertaling, zegt `T.keurVertaling`. Omgezet zijn: `js/menu.js`, `js/gebouwen.js`, `js/erven.js`, `js/herberg.js`, `js/bos.js`,
   `js/bouwstijl.js`, `js/wijngaard.js`, `js/akkers.js`, `js/vee.js`, `js/beesten.js`, `js/markt.js` en `js/paden.js` (`OMGEZET` in
   `test/taal.test.cjs`). In `T.GEBOUWEN` staan de tekeningen en de `opmerking` voor ons, niet de speler: die regels hebben `// geen tekst`.
+- **De tekst van het scherm** (vraag 147, deel 3, 11 okt): `js/hud.js`, `js/tafel.js`, `js/ui.js`, `js/huisbriefje.js`,
+  `js/dialoog.js`, `js/verkennen.js`, `js/landkaart.js`, `js/land.js` en `js/main.js` zijn om. **`index.html` heeft zelf geen
+  tekst voor de speler meer**: een element zegt met `data-t` (tekst), `data-t-html` (tekst met toetsen) of `data-t-title` (de
+  uitleg bij de muis) welke zin erin hoort, en die staat in `PAGINA` onderaan `js/ui.js`; de tafel vult haar eigen stukken
+  (de koppen van het rekenboek, het plaatje van elk ding uit `DINGEN[...].naam`, de lat uit `SNELHEDEN`), en `document.title`
+  en `lang` komen ook uit `js/ui.js`. Een toets staat als `<kbd>` (`kbd('Esc')`, nooit in de zin), en `Spel.debug` en de
+  meldingen in de console blijven Nederlands (`// geen tekst`, `main.js` heeft er zo'n honderd). De klok in de balk is
+  `klokTekst` in `js/hud.js` ("half past seven"), met `DAGDELEN`; `T.uurTekst` in `js/dag.js` is nog Nederlands en wordt
+  nergens meer getoond. De namen van de provincies staan met een kleine letter (`T.LANDSOORTEN`: "the castle"), zodat ze in
+  een zin passen ("You are in the castle"); de kaart zet de hoofdletter.
 
 ### js/naam.js: de naam van het spel
 

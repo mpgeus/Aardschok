@@ -200,7 +200,7 @@ test('thuis: hij staat net binnen de weg, en hoort wat er gebeurde', () => {
     assert.equal(L.gemist.length, 0);
     assert.ok(L.terug.dagen >= 2);
     const regels = T.watVeranderde(L.terug);
-    assert.ok(regels.some((r) => /graan \(−5\)/.test(r)), regels.join(' / '));
+    assert.ok(regels.some((r) => /grain \(−5\)/.test(r)), regels.join(' / '));
     assert.equal(T.snelheidNu(S), 3, 'thuis loopt de tijd weer zoals je hem zette');
   });
 });

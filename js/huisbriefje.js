@@ -13,23 +13,31 @@
   let laatste = '';
 
   const toets = (tekst) => tekst.replace(/\[(\w)\]/g, '<kbd>$1</kbd>');
-  const kosten = (k) => T.opsomming(Object.keys(k).map((wat) => `${k[wat]} ${wat}`));
+  const kosten = (k) => T.opsomming(Object.keys(k).map((wat) => T.hoeveel(k[wat], wat)));
 
   function inhoud(D, g, t) {
     const soort = T.GEBOUWEN[g.soort];
     const wie = t.wie.length ? t.wie[0] : null;
-    const kop = wie ? `${T.hoofdletter(soort.naam)} van ${wie}` : T.hoofdletter(soort.naam);
-    const stand = `${T.hoofdletter(T.STANDEN[t.stand].naam)}, ${t.mensen} ${t.mensen === 1 ? 'mens' : 'mensen'}, ${Math.round(t.tevredenheid * 100)}% tevreden`;
+    const kop = T.hoofdletter(wie ? T.t("{wie}'s {gebouw}", { wie, gebouw: soort.naam }) : soort.naam);
+    const stand = T.t('{stand}, {n|# person|# people}, {procent}% content', {
+      stand: T.hoofdletter(T.STANDEN[t.stand].naam),
+      n: t.mensen,
+      procent: Math.round(t.tevredenheid * 100),
+    });
     const wensen = t.wensen.map((w) => `<span class="${w.heeft ? 'ja' : 'nee'}">${w.heeft ? '✓' : '✗'} ${w.naam}</span>`).join('');
     const eerste = t.wensen.find((w) => !w.heeft && w.helpt);
-    const helpt = eerste ? `<div class="briefje-helpt">${T.hoofdletter(eerste.naam)}: ${toets(eerste.helpt)}.</div>` : '';
+    const helpt = eerste ? `<div class="briefje-helpt">${T.t('{wens}: {helpt}.', { wens: T.hoofdletter(eerste.naam), helpt: toets(eerste.helpt) })}</div>` : '';
     let groei = '';
     if (t.groei) {
       const nog = Math.max(0, t.groei.nodig - t.groei.dagen);
-      if (t.teken === 'bouwstof') groei = `Het kan een ${t.groei.wordt} worden, maar daar is ${kosten(t.groei.kosten)} voor nodig.`;
-      else if (t.groei.waarom) groei = `Het kan een ${t.groei.wordt} worden, maar ${t.groei.waarom}.`;
-      else if (!t.teken) groei = `Nog ${nog} ${nog === 1 ? 'dag' : 'dagen'} alles, dan wordt het een ${t.groei.wordt}${Object.keys(t.groei.kosten).length ? ` (${kosten(t.groei.kosten)})` : ''}.`;
-      else groei = `Heeft het ${t.groei.nodig} dagen alles, dan wordt het een ${t.groei.wordt}.`;
+      const wordt = T.eenNaam(t.groei.wordt);
+      if (t.teken === 'bouwstof') groei = T.t('It could become {gebouw}, but that needs {kosten}.', { gebouw: wordt, kosten: kosten(t.groei.kosten) });
+      else if (t.groei.waarom) groei = T.t('It could become {gebouw}, but {waarom}.', { gebouw: wordt, waarom: t.groei.waarom });
+      else if (!t.teken) {
+        groei = Object.keys(t.groei.kosten).length
+          ? T.t('{n|# more day|# more days} with everything, then it grows into {gebouw} ({kosten}).', { n: nog, gebouw: wordt, kosten: kosten(t.groei.kosten) })
+          : T.t('{n|# more day|# more days} with everything, then it grows into {gebouw}.', { n: nog, gebouw: wordt });
+      } else groei = T.t('With everything for {n|# day|# days}, it grows into {gebouw}.', { n: t.groei.nodig, gebouw: wordt });
     }
     return (
       `<div class="briefje-kop">${kop}</div>` +

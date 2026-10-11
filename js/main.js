@@ -251,7 +251,7 @@
   // antwoord, zodat het scherm niet iets anders belooft dan de klik.
   function tipTekst(h) {
     let t = h.tekst;
-    if (h.kosten) t += ` · ${h.kosten} AP`;
+    if (h.kosten) t = T.t('{tekst} · {kosten} AP', { tekst: t, kosten: h.kosten });
     return t;
   }
 
@@ -277,7 +277,7 @@
     if (erf && !erf.hut) {
       S.bouwHover = { x, y, ok: false, weghalen: erf };
       canvas.style.cursor = 'pointer';
-      T.ui.tooltip('Klik: dit erf weer gewone grond maken.', S.muis.x, S.muis.y);
+      T.ui.tooltip(T.t('Click: turn this plot back into ordinary ground.'), S.muis.x, S.muis.y);
       S.hover = null;
       S.handeling = null;
       return;
@@ -524,7 +524,7 @@
       a.click();
       setTimeout(() => URL.revokeObjectURL(a.href), 10000);
       fotoWenk(T.t('Picture saved: {naam}', { naam }));
-    }, 'image/png');
+    }, 'image/png'); // geen tekst
   }
   function wisselOverzicht(aan = !S.overzicht) {
     if (aan && S.modus !== 'verkennen') return;
@@ -654,7 +654,7 @@
     if (!el) {
       el = document.createElement('div');
       el.id = 'meter';
-      el.className = 'paneel verborgen';
+      el.className = 'paneel verborgen'; // geen tekst
       document.body.appendChild(el);
     }
     meter = aan ? { sinds: performance.now(), beelden: 0, regels: 0, tekenen: 0, traagst: 0 } : null;
@@ -670,9 +670,14 @@
     m.tekenen += tekenen;
     const duur = performance.now() - m.sinds;
     if (duur < 1000) return;
-    const ms = (x) => (Math.round(x * 10) / 10).toLocaleString('nl-NL');
-    document.getElementById('meter').textContent =
-      `${Math.round((m.beelden * 1000) / duur)} beelden/s · regels ${ms(m.regels / m.beelden)} ms · tekenen ${ms(m.tekenen / m.beelden)} ms · traagste beeld ${ms(m.traagst)} ms · ${glZichtbaar ? 'met de videokaart' : 'zonder videokaart'}`;
+    const ms = (x) => (Math.round(x * 10) / 10).toLocaleString(T.taalLocale());
+    document.getElementById('meter').textContent = T.t('{fps} frames/s · rules {regels} ms · drawing {tekenen} ms · slowest frame {traagst} ms · {kaart}', {
+      fps: Math.round((m.beelden * 1000) / duur),
+      regels: ms(m.regels / m.beelden),
+      tekenen: ms(m.tekenen / m.beelden),
+      traagst: ms(m.traagst),
+      kaart: glZichtbaar ? T.t('with the graphics card') : T.t('without the graphics card'),
+    });
     Object.assign(m, { sinds: performance.now(), beelden: 0, regels: 0, tekenen: 0, traagst: 0 });
   }
 
@@ -731,7 +736,7 @@
         return;
       }
       if (!hover || !hover.ok) {
-        T.ui.bericht((hover && hover.reden) || 'Daar past het niet.', 'gevaar');
+        T.ui.bericht((hover && hover.reden) || T.t('It does not fit there.'), 'gevaar');
         return;
       }
       const r = T.plaatsGebouw(S.dorp, soort, hover.x, hover.y);
@@ -933,7 +938,7 @@
         spelregel: T.PADEN_INSTELLINGEN.paadjes,
         vanDeDeuren: net.filter((v) => v === 2).length,
         gesleten: P.gesleten.size,
-        meestGelopen: Object.entries(P.slijt).sort((a, c) => c[1] - a[1]).slice(0, 8).map(([k, n]) => `${tegel(Number(k))}: ${n} per dag`),
+        meestGelopen: Object.entries(P.slijt).sort((a, c) => c[1] - a[1]).slice(0, 8).map(([k, n]) => `${tegel(Number(k))}: ${n} per dag`), // geen tekst
         lantaarns: w.voorwerpen.filter((v) => v.soort === 'lantaarn').map((v) => `${v.x},${v.y}${v.vanHetDorp ? '' : ' (kaart)'}`),
       };
     },
@@ -949,7 +954,7 @@
         .filter((e) => e.padDoel && e.pad.length && !e.onderweg && e.gewacht > 0)
         .map((e) => {
           const ander = T.wezenOp(w, e.pad[0].x, e.pad[0].y, e);
-          return `${naam(e)} op ${e.tx},${e.ty} wacht ${Math.round(e.gewacht * 10) / 10} s${ander ? ` op ${naam(ander)}` : ''}`;
+          return `${naam(e)} op ${e.tx},${e.ty} wacht ${Math.round(e.gewacht * 10) / 10} s${ander ? ` op ${naam(ander)}` : ''}`; // geen tekst
         });
       return {
         onderweg: w.wezens.filter((e) => e.padDoel && e.pad.length).length,
@@ -961,7 +966,7 @@
     // waar, hoe ver hij is, hoeveel bosrand hij heeft om te sprokkelen, en wie hem helpt.
     veldwerk() {
       const D = T.dorpHier(S);
-      if (!D || !D.kalender) return 'Veldwerk is er alleen in een dorp.';
+      if (!D || !D.kalender) return 'Veldwerk is er alleen in een dorp.'; // geen tekst
       const w = S.wereld;
       const datum = T.datumVanDag(D.kalender.dag);
       const naam = (e) => {
@@ -969,14 +974,14 @@
         return p ? T.naamVanBewoner(p) : e.wie || e.soort;
       };
       const nu = (e) => {
-        if (e.maait) return `maait op ${e.maait.x},${e.maait.y}`;
+        if (e.maait) return `maait op ${e.maait.x},${e.maait.y}`; // geen tekst
         const wt = e.werkt;
-        if (wt) return `${wt.soort}${wt.tot == null ? ', op weg' : wt.rust ? ', staat even' : ''} op ${wt.x},${wt.y}`;
-        return e.draagt ? 'brengt hout naar huis' : 'niet op zijn land';
+        if (wt) return `${wt.soort}${wt.tot == null ? ', op weg' : wt.rust ? ', staat even' : ''} op ${wt.x},${wt.y}`; // geen tekst
+        return e.draagt ? 'brengt hout naar huis' : 'niet op zijn land'; // geen tekst
       };
       const boeren = w.wezens.filter((e) => !e.dood && e.werkAkkers && e.werkAkkers.length).map((e) => ({
         boer: naam(e),
-        vandaag: T.veldwerkVandaag(D, e, datum) || 'bij zijn boerderij (of de oogst)',
+        vandaag: T.veldwerkVandaag(D, e, datum) || 'bij zijn boerderij (of de oogst)', // geen tekst
         nu: nu(e),
         waar: `${e.tx},${e.ty}`,
         gedaan: e.veldwerk ? `${e.veldwerk.gedaan} tegels ${e.veldwerk.soort}` : '',
@@ -988,7 +993,7 @@
         }).map(naam).join(', '),
         // De dagloners van zijn boerderij (vraag 140), met wat ze nu doen.
         dagloners: (D.bewoners ? D.bewoners.mensen : []).filter((p) => p.dagloner && p.dagloner === (T.bewonerVan(D, e) || {}).huis && p.wezen)
-          .map((p) => `${p.naam}: ${p.wezen.draagt === 'schoof' ? 'draagt schoven naar de schuur' : nu(p.wezen)}`).join('; '),
+          .map((p) => `${p.naam}: ${p.wezen.draagt === 'schoof' ? 'draagt schoven naar de schuur' : nu(p.wezen)}`).join('; '), // geen tekst
       }));
       return { datum: `${datum.dagVanMaand} ${T.MAANDEN[datum.maand].naam}, ${T.uurTekst(D.kalender.dag)}`, boeren };
     },
@@ -1001,7 +1006,7 @@
     // Spel.debug.uur(21)). ('schaap'): de eerste roedel neemt nu het dichtste schaap, en de herder zegt het morgen.
     beesten(wat) {
       const D = T.dorpHier(S);
-      if (!D || !D.kalender) return 'De beesten zijn er alleen bij een dorp.';
+      if (!D || !D.kalender) return 'De beesten zijn er alleen bij een dorp.'; // geen tekst
       if (wat === 'opnieuw') {
         S.wereld.wezens = S.wereld.wezens.filter((e) => !e.beest);
         T.zetBeesten(D);
@@ -1040,18 +1045,18 @@
           const lt = T.tegelVan(l);
           return {
             soort: `${leden.length} ${T.BEESTEN[G.soort][leden.length === 1 ? 'naam' : 'meervoud']}`,
-            leider: `${lt.x},${lt.y}${l.pad.length ? ` (loopt, nog ${l.pad.length})` : ` (${l.rust})`}, ${T.afstand(lt, T.tegelVan(S.schout))} tegels van de schout`,
-            wil: G.weg > D.kalender.dag ? `weg van iemand, naar ${G.vluchtNaar.x},${G.vluchtNaar.y}` : G.doel === 'prooi' ? 'prooi' : T.beestenWillen(D, G),
+            leider: `${lt.x},${lt.y}${l.pad.length ? ` (loopt, nog ${l.pad.length})` : ` (${l.rust})`}, ${T.afstand(lt, T.tegelVan(S.schout))} tegels van de schout`, // geen tekst
+            wil: G.weg > D.kalender.dag ? `weg van iemand, naar ${G.vluchtNaar.x},${G.vluchtNaar.y}` : G.doel === 'prooi' ? 'prooi' : T.beestenWillen(D, G), // geen tekst
             thuis: `${G.thuis.x},${G.thuis.y}`,
             rand: G.rand.map((p) => `${p.x},${p.y}`).join(' '),
             rent: leden.some((e) => e.rent),
             ...(G.soort === 'wolf' ? {
-              honger: `${(G.honger || 0).toFixed(1)} (jaagt vanaf ${T.BEESTEN_INSTELLINGEN.honger.jagenVanaf}, stout vanaf ${T.BEESTEN_INSTELLINGEN.dreiging.stout})`,
+              honger: `${(G.honger || 0).toFixed(1)} (jaagt vanaf ${T.BEESTEN_INSTELLINGEN.honger.jagenVanaf}, stout vanaf ${T.BEESTEN_INSTELLINGEN.dreiging.stout})`, // geen tekst
               gevangen: G.gevangen || 0,
               stout: T.wolvenStout(D, G),
-              ...(G.prooi ? { prooi: `${G.prooi.soort === 'schaap' ? 'een schaap' : G.prooi.soort === 'schout' ? 'de schout' : T.naamVanBewoner(T.bewonerVan(D, G.prooi.e))}` } : {}),
+              ...(G.prooi ? { prooi: `${G.prooi.soort === 'schaap' ? 'een schaap' : G.prooi.soort === 'schout' ? 'de schout' : T.naamVanBewoner(T.bewonerVan(D, G.prooi.e))}` } : {}), // geen tekst
             } : {}),
-            jongen: G.jongenJaar ? `in ${G.jongenJaar}` : 'nog niet',
+            jongen: G.jongenJaar ? `in ${G.jongenJaar}` : 'nog niet', // geen tekst
             ...(G.trektWeg ? { trektWeg: true } : {}),
           };
         }),
@@ -1060,8 +1065,8 @@
           T.wildVanJager(D, g);
           return {
             hut: `${g.x},${g.y}`,
-            jaagt: g.wild === undefined ? 'zijn vlees komt uit het niets (geen beesten)' : `${g.wild ? `op ${g.wild.soort === 'wolf' ? 'de roedel' : 'de herten'} bij ${g.wild.x},${g.wild.y}` : 'geen groep'}${g.zonderHerten ? ', en hij vindt geen hert: alleen klein wild' : ''}`,
-            vlees: `${(g.gejaagd || 0).toFixed(1)} van ${T.BEESTEN_INSTELLINGEN.jager.perDier} voor het volgende hert`,
+            jaagt: g.wild === undefined ? 'zijn vlees komt uit het niets (geen beesten)' : `${g.wild ? `op ${g.wild.soort === 'wolf' ? 'de roedel' : 'de herten'} bij ${g.wild.x},${g.wild.y}` : 'geen groep'}${g.zonderHerten ? ', en hij vindt geen hert: alleen klein wild' : ''}`, // geen tekst
+            vlees: `${(g.gejaagd || 0).toFixed(1)} van ${T.BEESTEN_INSTELLINGEN.jager.perDier} voor het volgende hert`, // geen tekst
             schoot: g.gevangen || {},
             handen: g.handen,
           };
@@ -1076,7 +1081,7 @@
     // boom.
     bos(wat) {
       const D = T.dorpHier(S);
-      if (!D || !D.kalender) return 'Het bos is er alleen bij een dorp.';
+      if (!D || !D.kalender) return 'Het bos is er alleen bij een dorp.'; // geen tekst
       const w = S.wereld;
       const B = T.BOS_INSTELLINGEN;
       const hakkers = (D.gebouwen || []).filter((g) => g.klaar && T.GEBOUWEN[g.soort].bos);
@@ -1108,16 +1113,16 @@
           const boom = g.boom && T.voorwerpOp(w, g.boom.x, g.boom.y);
           return {
             waar: `${g.x},${g.y}`,
-            boom: g.boom ? `${boom ? boom.soort : '?'} op ${g.boom.x},${g.boom.y}${T.isBos(w, g.boom.x, g.boom.y) ? ', in het bos' : ', in de wei'}` : g.boom === null ? 'geen' : 'nog niet gekozen',
-            gehakt: `${Math.round((g.gehakt || 0) * 10) / 10} van ${B.houtPerBoom} hout`,
+            boom: g.boom ? `${boom ? boom.soort : '?'} op ${g.boom.x},${g.boom.y}${T.isBos(w, g.boom.x, g.boom.y) ? ', in het bos' : ', in de wei'}` : g.boom === null ? 'geen' : 'nog niet gekozen', // geen tekst
+            gehakt: `${Math.round((g.gehakt || 0) * 10) / 10} van ${B.houtPerBoom} hout`, // geen tekst
             stil: g.stilWant || null,
             binnenBereik: telBij(g),
-            hand: e ? `${T.naamVanBewoner(p)}: ${e.werkt ? `${e.werkt.soort}${e.werkt.tot == null ? ', op weg' : ''} op ${e.werkt.x},${e.werkt.y}` : e.draagt ? 'brengt een bundel naar de schuur' : 'niet aan het hakken'}` : 'niemand',
+            hand: e ? `${T.naamVanBewoner(p)}: ${e.werkt ? `${e.werkt.soort}${e.werkt.tot == null ? ', op weg' : ''} op ${e.werkt.x},${e.werkt.y}` : e.draagt ? 'brengt een bundel naar de schuur' : 'niet aan het hakken'}` : 'niemand', // geen tekst
           };
         }),
         boompjes: w.voorwerpen.filter((v) => v.soort === 'boompje').length,
         jongeBomen: w.voorwerpen.filter((v) => v.geplant != null && v.soort !== 'boompje').length,
-        stronken: w.voorwerpen.filter((v) => v.gehaktOp != null).map((v) => `${v.x},${v.y} vergaat op dag ${v.gehaktOp + B.stronkDagen}`).slice(0, 12),
+        stronken: w.voorwerpen.filter((v) => v.gehaktOp != null).map((v) => `${v.x},${v.y} vergaat op dag ${v.gehaktOp + B.stronkDagen}`).slice(0, 12), // geen tekst
         vandaag: dag,
       };
     },
@@ -1126,7 +1131,7 @@
     // beginnen nu een praatje (staan ze verder dan zes tegels uit elkaar, dan zegt het dat).
     praatjes(wat) {
       const D = T.dorpHier(S);
-      if (!D || !D.kalender) return 'Praatjes zijn er alleen in een dorp.';
+      if (!D || !D.kalender) return 'Praatjes zijn er alleen in een dorp.'; // geen tekst
       const w = S.wereld;
       const dag = D.kalender.dag;
       const deel = T.dagdeelVan(dag, T.isOogstDag(dag));
@@ -1145,13 +1150,13 @@
             if (!beste || a < beste.a) beste = { e, b, a };
           }
         }
-        if (!beste) return `Er staan nu geen twee vrije bekenden stil (${deel}, ${vrij.length} vrij).`;
-        if (beste.a > 6) return `De dichtste twee vrije bekenden, ${naam(beste.e)} en ${naam(beste.b)}, staan ${beste.a} tegels uit elkaar.`;
-        if (!T.beginPraatje(D, beste.e, beste.b)) return `${naam(beste.e)} kan niet bij ${naam(beste.b)} komen.`;
+        if (!beste) return `Er staan nu geen twee vrije bekenden stil (${deel}, ${vrij.length} vrij).`; // geen tekst
+        if (beste.a > 6) return `De dichtste twee vrije bekenden, ${naam(beste.e)} en ${naam(beste.b)}, staan ${beste.a} tegels uit elkaar.`; // geen tekst
+        if (!T.beginPraatje(D, beste.e, beste.b)) return `${naam(beste.e)} kan niet bij ${naam(beste.b)} komen.`; // geen tekst
       }
       const groepjes = [...T.praatjesOp(w)].map(([g, leden]) => ({
         wie: leden.map((e) => naam(e) + (T.staatErbij(e) ? '' : ' (komt)')).join(', '),
-        waar: `${g.plek.x},${g.plek.y}${T.opHetPlein(w, g.plek.x, g.plek.y) ? ' (op het plein)' : ''}`,
+        waar: `${g.plek.x},${g.plek.y}${T.opHetPlein(w, g.plek.x, g.plek.y) ? ' (op het plein)' : ''}`, // geen tekst
         tot: T.uurTekst(g.tot),
       }));
       return { deel, vrij: vrij.length, groepjes };
@@ -1159,15 +1164,15 @@
     // Wie er woont (js/bewoners.js): per bewoner wie hij is, zijn huis, zijn werk, waar hij staat en
     // waar hij nu hoort. Spel.debug.bewoners('herder') zoekt in de tekst, zodat je er één vindt.
     bewoners(zoek) {
-      if (!S.dorp.bewoners) return 'Er wonen hier geen bewoners.';
+      if (!S.dorp.bewoners) return 'Er wonen hier geen bewoners.'; // geen tekst
       const lijst = S.dorp.bewoners.mensen.map((p) => {
         const e = p.wezen;
         const a = e && T.dagAnker(S.dorp, e);
         return {
-          wie: p.schout ? 'de schout' : p.wie ? `${T.naamVanMens(p.wie)}${T.MENSEN[p.wie] && T.MENSEN[p.wie].karakter ? ' (boer)' : ''}` : T.overBewonerTekst(S.dorp, e, p),
+          wie: p.schout ? 'de schout' : p.wie ? `${T.naamVanMens(p.wie)}${T.MENSEN[p.wie] && T.MENSEN[p.wie].karakter ? ' (boer)' : ''}` : T.overBewonerTekst(S.dorp, e, p), // geen tekst
           leeftijd: p.leeftijd, huis: p.huis ? p.huis.huis || `${p.huis.soort} ${p.huis.x},${p.huis.y}` : '-',
           werk: p.werk ? `${p.werk.soort} ${p.werk.x},${p.werk.y}` : '-',
-          staat: e ? (e.binnen ? 'binnen' : `${e.tx},${e.ty}`) : p.komt ? 'onderweg hierheen' : '-',
+          staat: e ? (e.binnen ? 'binnen' : `${e.tx},${e.ty}`) : p.komt ? 'onderweg hierheen' : '-', // geen tekst
           hoort: a ? `${a.x},${a.y} (${a.binnen ? 'binnen' : 'straal ' + a.straal})` : '-',
         };
       });
@@ -1177,23 +1182,23 @@
     // (js/bewoners.js). Is het dorp vol, dan neemt het een vrij erf, zoals op een groeidag (js/erven.js).
     // Spel.debug.gezin(-4) laat er een wegtrekken, zoals als het dorp ontevreden is.
     gezin(n = 4) {
-      if (!S.dorp.bewoners) return 'Er wonen hier geen bewoners.';
+      if (!S.dorp.bewoners) return 'Er wonen hier geen bewoners.'; // geen tekst
       const plaats = n < 0 ? n : Math.max(0, Math.min(n, (S.dorp.woonruimte || 0) - S.dorp.bevolking));
       if (plaats === 0) {
         const hut = T.gezinZoektEenErf(S.dorp);
         T.ui.toonBevolking(S.dorp);
-        return hut ? `Een gezin neemt het erf op (${hut.erf.x}, ${hut.erf.y}), en komt overdag over de weg.` : 'Er is geen plaats: wijs eerst een erf aan (Spel.debug.bouw(\'erf\', x, y)).';
+        return hut ? `Een gezin neemt het erf op (${hut.erf.x}, ${hut.erf.y}), en komt overdag over de weg.` : 'Er is geen plaats: wijs eerst een erf aan (Spel.debug.bouw(\'erf\', x, y)).'; // geen tekst
       }
-      const echt = plaats < 0 ? T.wijzigBevolking(S.dorp, plaats, 'vertrek', 'het dorp is niet tevreden genoeg') : T.wijzigBevolking(S.dorp, plaats, 'groei');
+      const echt = plaats < 0 ? T.wijzigBevolking(S.dorp, plaats, 'vertrek', 'het dorp is niet tevreden genoeg') : T.wijzigBevolking(S.dorp, plaats, 'groei'); // geen tekst
       T.ui.toonBevolking(S.dorp);
-      return echt < 0 ? `${-echt} trekken weg.` : `${echt} komen over de weg, overdag vanaf ${T.DAG_INSTELLINGEN.bezoekUur} uur.`;
+      return echt < 0 ? `${-echt} trekken weg.` : `${echt} komen over de weg, overdag vanaf ${T.DAG_INSTELLINGEN.bezoekUur} uur.`; // geen tekst
     },
     // De trede (js/treden.js): hoe ver het gehucht is met een dorp worden. Spel.debug.trede('dorp') maakt er nu
     // een dorp van, met de brief van de heer, zonder dat de eis gehaald is.
     trede(naar) {
       if (naar) T.wordtTrede(S.dorp, naar);
       const doel = T.tredeDoel(S.dorp);
-      return { trede: S.dorp.trede, doel: doel ? `${doel.kop}: ${doel.tekst}` : 'geen volgende trede' };
+      return { trede: S.dorp.trede, doel: doel ? `${doel.kop}: ${doel.tekst}` : 'geen volgende trede' }; // geen tekst
     },
     // Het gehucht van de maker (js/maker.js): uit welk zaad het gehucht komt (of dat het het ontworpen gehucht is).
     // Spel.debug.gehucht(3) begint nu een nieuw spel op het gehucht van zaad 3, zoals op de pagina "Gehuchten van de
@@ -1212,9 +1217,9 @@
         }
       }
       const w = S.gebieden && S.gebieden.gehucht;
-      const stijl = w && w.stijl ? `, in de bouwstijl ${w.stijl} (js/bouwstijl.js)` : '';
-      if (w && w.eiland) return `Een gehucht op het eiland van ${w.eiland.zaad}, in ${w.eiland.dorp}${stijl} (Spel.debug.eiland()).`;
-      return w && w.maker ? `Een gehucht van de maker, uit zaad ${w.maker.zaad}${stijl}.` : 'Het ontworpen gehucht.';
+      const stijl = w && w.stijl ? `, in de bouwstijl ${w.stijl} (js/bouwstijl.js)` : ''; // geen tekst
+      if (w && w.eiland) return `Een gehucht op het eiland van ${w.eiland.zaad}, in ${w.eiland.dorp}${stijl} (Spel.debug.eiland()).`; // geen tekst
+      return w && w.maker ? `Een gehucht van de maker, uit zaad ${w.maker.zaad}${stijl}.` : 'Het ontworpen gehucht.'; // geen tekst
     },
     // Je dorp op het eiland (js/eiland.js, vraag 117, stap 2): Spel.debug.eiland(5) begint nu een nieuw spel op het eiland
     // van nummer 5, zonder brief (en zet de spelregel "Je gehucht" terug op het eiland, als een toets hem omzette);
@@ -1225,7 +1230,7 @@
         T.nieuwSpel(Number(zaad));
       }
       const w = S.gebieden && S.gebieden.gehucht;
-      if (!w || !w.eiland) return 'Dit gehucht ligt niet op het eiland (de spelregel "Je gehucht" staat niet op "Op het eiland").';
+      if (!w || !w.eiland) return 'Dit gehucht ligt niet op het eiland (de spelregel "Je gehucht" staat niet op "Op het eiland").'; // geen tekst
       const E = T.eilandVan(w.eiland.zaad);
       const dorp = E.plekken.find((p) => p.naam === w.eiland.dorp);
       return {
@@ -1247,15 +1252,15 @@
       }
       const D = S.dorp;
       const B = D && D.begin;
-      if (!B) return 'Dit spel begon in het gehucht dat er al was (de spelregel "Het begin" staat niet op "Leeg").';
+      if (!B) return 'Dit spel begon in het gehucht dat er al was (de spelregel "Het begin" staat niet op "Leeg").'; // geen tekst
       return {
         kamp: B.kamp,
         kar: { tegel: [B.kar.tx, B.kar.ty], naar: [D.wereld.kamp.kar.x, D.wereld.kamp.kar.y], nogTegels: B.kar.pad.length },
         schoutLooptMee: B.volgt,
-        gezinnenOnderweg: B.gezinnen ? D.bewoners.mensen.filter((p) => p.komt).length : 'wachten op de kar',
+        gezinnenOnderweg: B.gezinnen ? D.bewoners.mensen.filter((p) => p.komt).length : 'wachten op de kar', // geen tekst
         tenten: D.gebouwen.filter((g) => g.soort === 'tent').map((g) => {
           const wie = D.bewoners.mensen.filter((p) => p.huis === g);
-          return `${g.tent.vorm} bij (${g.tent.x}, ${g.tent.y}): ${g.huis === 'schout' ? 'de schout en zijn gezin' : wie.map((p) => p.naam).join(', ')}`;
+          return `${g.tent.vorm} bij (${g.tent.x}, ${g.tent.y}): ${g.huis === 'schout' ? 'de schout en zijn gezin' : wie.map((p) => p.naam).join(', ')}`; // geen tekst
         }),
         vuur: T.kampvuurStand(D),
         heerVraagtNiets: `tot ${T.datumVanDag(B.heerVrijTot).tekst}`,
@@ -1270,7 +1275,7 @@
         T.nieuwSpel(wat);
       }
       const w = S.wereld;
-      if (!T.heeftHoogte(w)) return 'Deze kaart is vlak (de spelregel "Hoogte" staat op "Vlak", of het is het ontworpen gehucht).';
+      if (!T.heeftHoogte(w)) return 'Deze kaart is vlak (de spelregel "Hoogte" staat op "Vlak", of het is het ontworpen gehucht).'; // geen tekst
       let top = null;
       for (let y = 0; y < w.h; y++) for (let x = 0; x < w.b; x++) {
         const h = T.hoogteOp(w, x, y);
@@ -1286,7 +1291,7 @@
     },
     // De raad onder het doel (js/raad.js): wat er nu staat, en welke raden nu allemaal gelden, in hun volgorde.
     raad() {
-      if (!(S.wereld && S.wereld.plein)) return 'Hier is geen raad: deze kaart heeft geen plein.';
+      if (!(S.wereld && S.wereld.plein)) return 'Hier is geen raad: deze kaart heeft geen plein.'; // geen tekst
       const nu = T.raadNu(S.dorp);
       return { nu: nu ? nu.tekst : 'geen', gelden: T.RADEN.filter((r) => r.als(S.dorp)).map((r) => r.id) };
     },
@@ -1296,7 +1301,7 @@
       const R = S.dorp.rovers || (S.dorp.rovers = T.nieuweRovers());
       if (wat != null && !R.aanval) {
         const bende = wat === 'bende';
-        if (bende && !R.bende.length) return 'Er is geen bende: nog niemand trok weg.';
+        if (bende && !R.bende.length) return 'Er is geen bende: nog niemand trok weg.'; // geen tekst
         R.aanval = { soort: bende ? 'bende' : 'wild', dag: Math.floor(S.kalender.dag), fase: 'wacht', aantal: bende ? 0 : Number(wat) || 3, meteen: true };
       }
       const A = R.aanval;
@@ -1330,14 +1335,14 @@
       const dag = Math.floor(S.kalender.dag);
       if (!S.dorp.voorvallen) S.dorp.voorvallen = T.nieuweVoorvallen();
       if (id) {
-        if (!T.VOORVALLEN[id]) return `Er is geen voorval "${id}". Er zijn: ${Object.keys(T.VOORVALLEN).join(', ')}.`;
+        if (!T.VOORVALLEN[id]) return `Er is geen voorval "${id}". Er zijn: ${Object.keys(T.VOORVALLEN).join(', ')}.`; // geen tekst
         const v = T.VOORVALLEN[id];
         // Ook een voorval dat de beesten zelf beginnen ('wolven', js/beesten.js); dan zonder dat de wolven echt iets namen.
         const oud = { vervolg: v.vervolg, als: v.als, pauze: v.pauze, zelf: v.zelf };
         Object.assign(v, { vervolg: false, als: undefined, pauze: 0, zelf: v.zelf === true });
         const mensen = T.voorvalKan(S.dorp, id, dag);
         Object.assign(v, oud);
-        if (!mensen) return `Voor "${id}" is er nu niemand die het kan zeggen, of over wie het kan gaan.`;
+        if (!mensen) return `Voor "${id}" is er nu niemand die het kan zeggen, of over wie het kan gaan.`; // geen tekst
         if (S.dorp.voorvallen.lopend) T.voorvalBeantwoord(S.dorp, S.dorp.voorvallen.lopend.id);
         T.beginVoorval(S.dorp, id, mensen.wie, mensen.ander, dag).vanaf = S.kalender.dag;
       }
@@ -1372,7 +1377,7 @@
       if (wat === 'open') T.openLand(S);
       if (wat === 'reis') {
         const p = zoek(waar);
-        if (!p) return `Er is geen provincie "${waar}".`;
+        if (!p) return `Er is geen provincie "${waar}".`; // geen tekst
         if (S.modus !== 'land') T.openLand(S);
         const r = T.beginReis(S, p.id);
         if (!r.kan) return r.reden;
@@ -1394,7 +1399,7 @@
     raadsman(wie) {
       if (wie) {
         const p = S.dorp.bewoners && S.dorp.bewoners.mensen.find((x) => x.wie === wie || T.naamVanBewoner(x) === wie);
-        if (!p) return `Er is geen boer "${wie}".`;
+        if (!p) return `Er is geen boer "${wie}".`; // geen tekst
         const r = T.kiesRaadsman(S.dorp, p);
         if (!r.kan) return r.reden;
       }
@@ -1412,7 +1417,7 @@
       const D = S.dorp;
       const p = T.raadsmanVan(D);
       if (wat === 'nu') {
-        if (!p) return 'Er is geen raadsman: kies er een met R, of met Spel.debug.raadsman("Alice").';
+        if (!p) return 'Er is geen raadsman: kies er een met R, of met Spel.debug.raadsman("Alice").'; // geen tekst
         T.tikOchtendrapportDag(D, Math.floor(S.kalender.dag));
         D.ochtendrapport.gebracht = true;
       }
@@ -1447,20 +1452,20 @@
     // Spel.debug.wensen('dorpelingen') laat alleen die stand zien.
     wensen(stand) {
       const b = T.berekenTevredenheid(S.dorp, Math.floor(S.kalender.dag));
-      if (!b.wensen) return `Geen wensen per huis: het dorp rekent als geheel (${Math.round(b.tevredenheid * 100)}%).`;
+      if (!b.wensen) return `Geen wensen per huis: het dorp rekent als geheel (${Math.round(b.tevredenheid * 100)}%).`; // geen tekst
       const pct = (x) => `${Math.round(x * 100)}%`;
       const wie = (g) => S.dorp.bewoners.mensen.filter((p) => p.huis === g).map((p) => p.naam || T.naamVanMens(p.wie)).join(', ');
-      const huizen = (n) => (n === 1 ? 'één huis' : `${n} huizen`);
+      const huizen = (n) => (n === 1 ? 'één huis' : `${n} huizen`); // geen tekst
       const groei = (g) => {
         if (!T.GEBOUWEN[g.soort].wordt) return null;
-        if (g.groeitNaRooien) return `het gezin rooit ${T.rooiWoordenOp(S.dorp, g.kavel)}, tot uiterlijk dag ${g.rooienTot}`;
+        if (g.groeitNaRooien) return `het gezin rooit ${T.rooiWoordenOp(S.dorp, g.kavel)}, tot uiterlijk dag ${g.rooienTot}`; // geen tekst
         const waarom = T.waaromGroeitHetNiet(S.dorp, g);
-        if (waarom) return `groeit niet: ${waarom}`;
-        return `${g.groeiDagen || 0} van ${T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen} dagen alles${T.groeiRooiPlan(S.dorp, g, false) ? ', en dan rooit het gezin eerst' : ''}`;
+        if (waarom) return `groeit niet: ${waarom}`; // geen tekst
+        return `${g.groeiDagen || 0} van ${T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen} dagen alles${T.groeiRooiPlan(S.dorp, g, false) ? ', en dan rooit het gezin eerst' : ''}`; // geen tekst
       };
       return {
         dorp: pct(b.tevredenheid),
-        standen: Object.fromEntries(Object.entries(b.wensen.standen).map(([s, x]) => [s, `${pct(x.tevredenheid)}, ${x.mensen} mensen, alles in ${x.alles} van ${huizen(x.huizen)}`])),
+        standen: Object.fromEntries(Object.entries(b.wensen.standen).map(([s, x]) => [s, `${pct(x.tevredenheid)}, ${x.mensen} mensen, alles in ${x.alles} van ${huizen(x.huizen)}`])), // geen tekst
         gemist: b.wensen.gemist.map((m) => `${m.naam}: ${huizen(m.huizen)}, ${m.mensen} mensen`),
         huizen: b.wensen.huizen.filter((h) => !stand || h.stand === stand).map((h) => ({
           huis: `${T.GEBOUWEN[h.g.soort].naam} op ${h.g.x},${h.g.y}`, stand: h.stand, wie: wie(h.g), tevreden: pct(h.tevredenheid),
@@ -1473,9 +1478,9 @@
       return (S.dorp.erven || []).map((e) => {
         const hut = e.hut;
         const wie = hut && S.dorp.bewoners ? S.dorp.bewoners.mensen.filter((p) => p.huis === hut).map((p) => p.naam) : [];
-        const vrij = T.hutPastOpErf(S.dorp, e) ? 'vrij' : 'vrij, maar er past geen hut meer op (vraag 110, f)';
-        const rooien = hut && hut.wachtOpRooien ? `het gezin rooit nog ${T.teRooienOp(S.dorp, hut.kavel).length} tegels, tot uiterlijk dag ${hut.rooienTot}` : null;
-        const staat = !hut ? vrij : rooien || (hut.wachtOpHout ? 'wacht op hout' : hut.klaar ? `een ${T.GEBOUWEN[hut.soort].naam}` : `in aanbouw, klaar op dag ${hut.klaarOp}`);
+        const vrij = T.hutPastOpErf(S.dorp, e) ? 'vrij' : 'vrij, maar er past geen hut meer op (vraag 110, f)'; // geen tekst
+        const rooien = hut && hut.wachtOpRooien ? `het gezin rooit nog ${T.teRooienOp(S.dorp, hut.kavel).length} tegels, tot uiterlijk dag ${hut.rooienTot}` : null; // geen tekst
+        const staat = !hut ? vrij : rooien || (hut.wachtOpHout ? 'wacht op hout' : hut.klaar ? `een ${T.GEBOUWEN[hut.soort].naam}` : `in aanbouw, klaar op dag ${hut.klaarOp}`); // geen tekst
         return { x: e.x, y: e.y, staat, wie: wie.join(', ') };
       });
     },
@@ -1483,7 +1488,7 @@
     // Spel.debug.herberg(30) zet eerst 30 bier in de voorraad.
     herberg(bier) {
       const g = T.herbergVan(S.dorp);
-      if (!g) return 'Hier staat geen herberg.';
+      if (!g) return 'Hier staat geen herberg.'; // geen tekst
       if (typeof bier === 'number') T.zetVoorraad(S.dorp, 'bier', bier);
       const w = S.dorp.bewoners.wereld;
       const deur = T.deurVan(w, g);
@@ -1501,8 +1506,8 @@
     feest(id, hoe) {
       const D = S.dorp;
       if (id) {
-        if (!T.FEESTEN[id]) return `Er is geen feest "${id}". Er zijn: ${Object.keys(T.FEESTEN).join(', ')}.`;
-        if (!T.FEESTEN_INSTELLINGEN.vieren) return 'De spelregel Feesten staat op "Alleen de stemming".';
+        if (!T.FEESTEN[id]) return `Er is geen feest "${id}". Er zijn: ${Object.keys(T.FEESTEN).join(', ')}.`; // geen tekst
+        if (!T.FEESTEN_INSTELLINGEN.vieren) return 'De spelregel Feesten staat op "Alleen de stemming".'; // geen tekst
         const f = T.zetFeest(D, id, hoe || 'dag', S.kalender.dag);
         if (f.dag !== Math.floor(S.kalender.dag)) {
           f.dag = Math.floor(S.kalender.dag);
@@ -1515,7 +1520,7 @@
       return {
         komt: f ? { feest: naam(f), op: T.datumVanDag(f.dag).tekst, heel: f.heel, midden: f.midden && `${f.midden.x},${f.midden.y}`, nu: !!T.feestOp(D, S.kalender.dag) } : null,
         boom: F.boom ? { soort: F.boom.soort || 'meiboom', staat: `${F.boom.x},${F.boom.y}`, tot: T.datumVanDag(F.boom.tot).tekst } : null,
-        gevierd: F.gevierd.map((g) => `${naam(g)}, ${T.datumVanDag(g.dag).tekst}${g.heel ? ', de hele dag' : ', de avond'}`),
+        gevierd: F.gevierd.map((g) => `${naam(g)}, ${T.datumVanDag(g.dag).tekst}${g.heel ? ', de hele dag' : ', de avond'}`), // geen tekst
         vrij: T.vrijeDag(D, S.kalender.dag),
       };
     },
@@ -1532,15 +1537,15 @@
         if (V.lopend) T.voorvalBeantwoord(D, V.lopend.id);
         if (D.verzoeken) D.verzoeken.volgende = 0;
         const dag = Math.floor(S.kalender.dag);
-        if (!T.beginBouwverzoek(D, dag)) return 'Er is nu niets wat iemand wil bouwen (en kan betalen).';
+        if (!T.beginBouwverzoek(D, dag)) return 'Er is nu niets wat iemand wil bouwen (en kan betalen).'; // geen tekst
         V.lopend.vanaf = S.kalender.dag;
       }
       const L = D.voorvallen && D.voorvallen.lopend;
       const R = D.verzoeken || T.nieuweVerzoeken();
       return {
-        wieBouwt: T.VERZOEKEN_INSTELLINGEN.mensen ? 'de mensen' : 'jij',
+        wieBouwt: T.VERZOEKEN_INSTELLINGEN.mensen ? 'de mensen' : 'jij', // geen tekst
         watTeBouwen: T.watTeBouwen(D).map((x) => `${x.soort}: ${x.waarom}`),
-        nu: L && L.bouw ? `${T.naamVanBewoner(L.wie)} wil een ${T.GEBOUWEN[L.bouw.soort].naam} op ${L.bouw.x},${L.bouw.y}: "${T.vulWoordenIn(D, T.GESPREKKEN[L.id].knopen.begin.tekst[0].zeg)}"` : null,
+        nu: L && L.bouw ? `${T.naamVanBewoner(L.wie)} wil een ${T.GEBOUWEN[L.bouw.soort].naam} op ${L.bouw.x},${L.bouw.y}: "${T.vulWoordenIn(D, T.GESPREKKEN[L.id].knopen.begin.tekst[0].zeg)}"` : null, // geen tekst
         volgende: R.volgende,
         oproepen: (R.oproepen || []).map((o) => `${o.soort}, sinds ${T.datumVanDag(o.dag).tekst}`),
         nee: Object.entries(R.nee).map(([s2, dag]) => `${s2} op ${T.datumVanDag(dag).tekst}`),
@@ -1559,17 +1564,17 @@
       const eerste = (wil) => mensen.find((p) => T.ondernemingVan(D, p) === wil);
       const o = T.ONDERNEMINGEN[wat];
       if (o) {
-        if (!eerste(wat)) return `Niemand in dit dorp wil dat (een ander zaad geeft andere ondernemers).`;
-        if (!T.magGebouwd(D, o.soort)) return `Een ${T.GEBOUWEN[o.soort].naam} mag pas in een ${T.GEBOUWEN[o.soort].trede}: Spel.debug.trede('${T.GEBOUWEN[o.soort].trede}').`;
+        if (!eerste(wat)) return `Niemand in dit dorp wil dat (een ander zaad geeft andere ondernemers).`; // geen tekst
+        if (!T.magGebouwd(D, o.soort)) return `Een ${T.GEBOUWEN[o.soort].naam} mag pas in een ${T.GEBOUWEN[o.soort].trede}: Spel.debug.trede('${T.GEBOUWEN[o.soort].trede}').`; // geen tekst
         if (wat === 'wapens') (D.rovers || (D.rovers = T.nieuweRovers())).laatsteAanval = dag;
-        if (!o.wil(D, dag, eerste(wat))) return 'Hij wil het nu niet (de herberg: pas vanaf T.ONDERNEMERS_INSTELLINGEN.herberg.vanaf mensen, met één herberg).';
+        if (!o.wil(D, dag, eerste(wat))) return 'Hij wil het nu niet (de herberg: pas vanaf T.ONDERNEMERS_INSTELLINGEN.herberg.vanaf mensen, met één herberg).'; // geen tekst
         const V = D.voorvallen || (D.voorvallen = T.nieuweVoorvallen());
         if (V.lopend) T.voorvalBeantwoord(D, V.lopend.id);
         if (D.verzoeken) {
           D.verzoeken.volgende = 0;
           delete D.verzoeken.nee[o.soort];
         }
-        if (!T.beginBouwverzoek(D, dag) || V.lopend.bouw.eigen !== wat) return 'Er kwam iets anders tussen, of het dorp kan het niet betalen.';
+        if (!T.beginBouwverzoek(D, dag) || V.lopend.bouw.eigen !== wat) return 'Er kwam iets anders tussen, of het dorp kan het niet betalen.'; // geen tekst
         V.lopend.vanaf = S.kalender.dag;
       }
       const E = (D.verzoeken && D.verzoeken.eigen) || {};
@@ -1578,9 +1583,9 @@
           const wil = T.ondernemingVan(D, p);
           const o = T.ONDERNEMINGEN[wil];
           const e = E[p.id];
-          const nu = !T.magGebouwd(D, o.soort) ? `pas in een ${T.GEBOUWEN[o.soort].trede}` : o.wil(D, dag, p) ? 'zou het nu vragen' : 'wil het nu niet';
-          const onthoudt = e ? `, ${e.nee}× nee${e.ja != null ? `, ja op ${T.datumVanDag(e.ja).tekst}` : ''}` : '';
-          return `${T.naamVanBewoner(p)} (${p.huis ? T.GEBOUWEN[p.huis.soort].naam : 'zonder huis'}): ${wil}, ${nu}${onthoudt}`;
+          const nu = !T.magGebouwd(D, o.soort) ? `pas in een ${T.GEBOUWEN[o.soort].trede}` : o.wil(D, dag, p) ? 'zou het nu vragen' : 'wil het nu niet'; // geen tekst
+          const onthoudt = e ? `, ${e.nee}× nee${e.ja != null ? `, ja op ${T.datumVanDag(e.ja).tekst}` : ''}` : ''; // geen tekst
+          return `${T.naamVanBewoner(p)} (${p.huis ? T.GEBOUWEN[p.huis.soort].naam : 'zonder huis'}): ${wil}, ${nu}${onthoudt}`; // geen tekst
         }),
         wapens: T.wapensInHetDorp(D),
         herbergen: T.herbergenVan(D).map((g) => `${g.x},${g.y}${g.meester ? ` (${T.naamVanBewoner(g.meester)})` : ''}${g.weigert && S.kalender.dag < g.weigert.tot ? `: ${g.weigert.waarom}, tot ${T.datumVanDag(g.weigert.tot).tekst}` : ''}`),
@@ -1592,7 +1597,7 @@
     // een eind aan.
     weer(wat, laag) {
       const D = S.dorp;
-      if (!T.WEER_INSTELLINGEN.aan) return 'De spelregel "Het weer" staat op "Altijd zon".';
+      if (!T.WEER_INSTELLINGEN.aan) return 'De spelregel "Het weer" staat op "Altijd zon".'; // geen tekst
       if (!D.weer) T.tikWeerDag(D, Math.floor(S.kalender.dag));
       const W = D.weer;
       const I = T.WEER_INSTELLINGEN;
@@ -1607,12 +1612,12 @@
       T.tikStatussenDag(D, Math.floor(S.kalender.dag));
       T.ui.toonKalender(S);
       return {
-        vandaag: T.WEER_NAMEN[W.vandaag], droog: `${W.droog} ${W.droog === 1 ? 'dag' : 'dagen'} geen regen`, tekort: `${W.tekort} (droogte vanaf ${I.droogteVanaf}, ernstig vanaf ${I.ernstigVanaf})`,
-        droogte: ['geen', 'droogte', 'ernstige droogte'][T.droogteNiveau(D)], oogst: `${Math.round((1 - T.droogteFactor(D)) * 100)}% minder dit jaar`,
-        nat: `dit jaar ${Math.round(T.natVanJaar(D, Math.floor(S.kalender.dag)) * 100)}% van de gewone regen`,
+        vandaag: T.WEER_NAMEN[W.vandaag], droog: `${W.droog} ${W.droog === 1 ? 'dag' : 'dagen'} geen regen`, tekort: `${W.tekort} (droogte vanaf ${I.droogteVanaf}, ernstig vanaf ${I.ernstigVanaf})`, // geen tekst
+        droogte: ['geen', 'droogte', 'ernstige droogte'][T.droogteNiveau(D)], oogst: `${Math.round((1 - T.droogteFactor(D)) * 100)}% minder dit jaar`, // geen tekst
+        nat: `dit jaar ${Math.round(T.natVanJaar(D, Math.floor(S.kalender.dag)) * 100)}% van de gewone regen`, // geen tekst
         beekjes: `${T.beekTegels(D.wereld).length} tegels${W.beekDroog ? ', droog' : ''}`,
-        sneeuw: `${Math.round((W.sneeuw || 0) * 100)}% van de grond wit`,
-        vissers: D.gebouwen.filter((g) => g.soort === 'visser').map((g) => `${g.x},${g.y}: ${Math.round(T.visserWater(D, g) * 100)}% van zijn water`),
+        sneeuw: `${Math.round((W.sneeuw || 0) * 100)}% van de grond wit`, // geen tekst
+        vissers: D.gebouwen.filter((g) => g.soort === 'visser').map((g) => `${g.x},${g.y}: ${Math.round(T.visserWater(D, g) * 100)}% van zijn water`), // geen tekst
       };
     },
     // De bode naar de marskramer (js/bode.js; werklijst vraag 143): of het kan en waarom niet, wie er onderweg is en wanneer
@@ -1634,7 +1639,7 @@
         kan: k.kan, reden: k.reden || null, status: k.status ? k.status.naam : null, winter: k.winter,
         gevaar: T.bodeGevaarTekst(D, 0),
         onderweg: B ? { wie: B.wie.map(T.naamVanBewoner), komt: T.datumVanDag(B.komt).tekst, bestelling: B.bestelling, onderschept: B.onderschept, afloop: B.onderschept === 'rovers' ? ((o) => ({ afgeslagen: o.afgeslagen, dood: o.dood.map(T.naamVanBewoner), gewond: o.gewond.map(T.naamVanBewoner), roverDood: o.roverDood }))(T.bodeOnderweg(D, B)) : null } : null,
-        marskramer: D.marskramer ? (D.marskramer.bestelling ? { op: 'bestelling', heeft: D.marskramer.heeft, prijzen: D.marskramer.bestelling } : 'op zijn ronde') : null,
+        marskramer: D.marskramer ? (D.marskramer.bestelling ? { op: 'bestelling', heeft: D.marskramer.heeft, prijzen: D.marskramer.bestelling } : 'op zijn ronde') : null, // geen tekst
       };
     },
     // De brand (js/brand.js; werklijst vraag 144, 3): het brandgevaar, en welke huizen branden, in puin liggen of op hout
@@ -1656,8 +1661,8 @@
       if (wat === 'herbouw') T.tikBrandDag(D, Math.floor(S.kalender.dag));
       const niveau = T.brandgevaarNiveau(D);
       return {
-        gevaar: ['geen', 'brandgevaar', 'groot brandgevaar'][niveau],
-        redKans: `${Math.round(T.redKans(D) * 100)} van de 100`,
+        gevaar: ['geen', 'brandgevaar', 'groot brandgevaar'][niveau], // geen tekst
+        redKans: `${Math.round(T.redKans(D) * 100)} van de 100`, // geen tekst
         huizen: T.brandendeHuizen(D).map((g) => ({
           huis: `${g.soort} op ${g.x},${g.y}`, fase: g.brand.fase, sinds: T.uurTekst(g.brand.sinds), antwoord: g.brand.antwoord || null,
           wachtOpHout: !!g.brand.wacht, hout: T.herbouwHout(g),
@@ -1679,7 +1684,7 @@
           niveau: ['geen', 'koorts', 'epidemie'][T.koortsNiveau(D)], sinds: T.datumVanDag(K.sinds).tekst, maat: K.maat,
           ziek: T.zieken(D).map((p) => `${T.naamVanBewoner(p)} (${p.leeftijd}), tot ${T.datumVanDag(p.ziek).tekst}`), gehad: K.gehad.length,
         }
-        : 'Er is geen koorts.';
+        : 'Er is geen koorts.'; // geen tekst
     },
     // De kleren naar stand (T.klerenVan in js/bewoners.js; werklijst vraag 149): hoeveel volwassenen arm, gewoon en
     // deftig lopen, en per volwassene wat hij draagt, in welk huis, of dat huis zijn laken krijgt, en welk vel hij draagt.
@@ -1690,11 +1695,11 @@
         const kleren = T.klerenVan(p);
         tel[kleren]++;
         const laken = p.huis && p.huis.wensen && p.huis.wensen.heeft && p.huis.wensen.heeft.laken;
-        const huis = p.huis ? `${p.huis.soort}${laken != null ? `, laken ${Math.round(laken * 100)}%` : ''}` : 'geen huis';
+        const huis = p.huis ? `${p.huis.soort}${laken != null ? `, laken ${Math.round(laken * 100)}%` : ''}` : 'geen huis'; // geen tekst
         return `${T.naamVanBewoner(p)}: ${kleren} (${huis})${p.wezen ? `, vel ${T.sprites.houding(S, p.wezen)?.naam}` : ''}`;
       });
       const IN = T.BEWONERS_INSTELLINGEN;
-      const regel = !IN.klerenNaarStand ? 'iedereen gewoon' : IN.lakenVoorDeftig ? 'naar stand, deftig met laken' : 'naar stand';
+      const regel = !IN.klerenNaarStand ? 'iedereen gewoon' : IN.lakenVoorDeftig ? 'naar stand, deftig met laken' : 'naar stand'; // geen tekst
       return { regel, ...tel, mensen };
     },
     // De twee bazen (js/bazen.js; werklijst vraag 106): de gunst van de heer en het vertrouwen van het dorp, hoe ze erbij
@@ -1703,9 +1708,9 @@
     bazen(welk, n) {
       const D = S.dorp;
       const b = T.bazenNu(D);
-      if (!b) return 'De spelregel "Twee bazen" staat uit, of hier komt geen heer.';
+      if (!b) return 'De spelregel "Twee bazen" staat uit, of hier komt geen heer.'; // geen tekst
       if ((welk === 'gunst' || welk === 'vertrouwen') && typeof n === 'number') {
-        (welk === 'gunst' ? T.wijzigGunst : T.wijzigVertrouwen)(D, n - b[welk], 'Spel.debug');
+        (welk === 'gunst' ? T.wijzigGunst : T.wijzigVertrouwen)(D, n - b[welk], 'Spel.debug'); // geen tekst
       }
       const nu = T.bazenNu(D) || b;
       return {
@@ -1721,10 +1726,10 @@
     // een gelote uit wat kan).
     gril(id) {
       const D = S.dorp;
-      if (!T.bazenTellen(D)) return 'De spelregel "Twee bazen" staat uit, of hier komt geen heer.';
+      if (!T.bazenTellen(D)) return 'De spelregel "Twee bazen" staat uit, of hier komt geen heer.'; // geen tekst
       const G = D.grillen || (D.grillen = T.nieuweGrillen());
       if (id !== undefined) {
-        if (id && !T.GRILLEN[id]) return `Die gril bestaat niet. Wel: ${Object.keys(T.GRILLEN).join(', ')}.`;
+        if (id && !T.GRILLEN[id]) return `Die gril bestaat niet. Wel: ${Object.keys(T.GRILLEN).join(', ')}.`; // geen tekst
         const dag = Math.floor(S.kalender.dag);
         const kies = id || Object.keys(T.GRILLEN)[Math.floor(Math.random() * Object.keys(T.GRILLEN).length)];
         G.vraag = { id: kies, dag, uiterlijk: dag + T.GRILLEN_INSTELLINGEN.antwoordBinnen };
@@ -1758,21 +1763,21 @@
     // zegt wat er op de plekken staat, het nieuwste bovenaan.
     opslaan(plek = '1') {
       const r = T.slaOp(S, String(plek));
-      return r.gelukt ? `Opgeslagen op plek ${plek}: ${r.kop.datum}.` : r.reden;
+      return r.gelukt ? `Opgeslagen op plek ${plek}: ${r.kop.datum}.` : r.reden; // geen tekst
     },
     laden(plek = 'auto') {
       const r = T.laadSpel(String(plek));
       if (r.gelukt && T.ui.titelOpen()) T.ui.sluitTitel(S);
-      return r.gelukt ? `Geladen: ${r.kop.datum}.` : r.reden;
+      return r.gelukt ? `Geladen: ${r.kop.datum}.` : r.reden; // geen tekst
     },
     spellen() {
       return T.opgeslagenSpellen().map((s) => `${s.plek}: ${s.kop.naam ? `${s.kop.naam}, ` : ''}${s.kop.datum || '?'}, ${s.kop.bevolking} mensen${s.reden ? ` (${s.reden})` : ''}`);
     },
     // Het slachtvenster nu openen (js/hud.js, T.ui.openSlachten), zonder op 1 slachtmaand te wachten.
     slachten() {
-      if (!T.ui.openSlachten) return 'Het slachtvenster is er alleen in het gehucht.';
+      if (!T.ui.openSlachten) return 'Het slachtvenster is er alleen in het gehucht.'; // geen tekst
       T.ui.openSlachten(S.dorp);
-      return T.ui.vensterOpen() === 'slachten' ? 'open' : 'Er is geen vee om te slachten.';
+      return T.ui.vensterOpen() === 'slachten' ? 'open' : 'Er is geen vee om te slachten.'; // geen tekst
     },
     // Vee neerzetten om naar te kijken (js/vee.js): Spel.debug.vee('koe', 4) zet vier koeien op de
     // weide met de meeste plaats (een schaap op de heide, als die er is), elk op een vrije tegel en
@@ -1782,7 +1787,7 @@
     // om naar te kijken (minder melk). Zonder weide, of zonder vrije tegel erop, rond een open plek
     // bij de schout, zoals vóór de weides.
     vee(soort = 'koe', aantal = 1) {
-      if (!T.VEE[soort]) return `Dat dier ken ik niet: ${soort}. Er is: ${Object.keys(T.VEE).join(', ')}.`;
+      if (!T.VEE[soort]) return `Dat dier ken ik niet: ${soort}. Er is: ${Object.keys(T.VEE).join(', ')}.`; // geen tekst
       const w = S.wereld;
       const h = S.schout;
       const vrij = (x, y) => T.isBegaanbaar(w, x, y, { wezensBlokkeren: true });
@@ -1816,7 +1821,7 @@
         w.wezens.push(e);
         opWeide.push(e);
       }
-      const opWeideTekst = opWeide.map((e) => `${e.naam} ${e.vel} op ${e.tx},${e.ty}, op ${e.weide.meent ? 'de heide' : `de weide ${e.weide.naam}`}`);
+      const opWeideTekst = opWeide.map((e) => `${e.naam} ${e.vel} op ${e.tx},${e.ty}, op ${e.weide.meent ? 'de heide' : `de weide ${e.weide.naam}`}`); // geen tekst
       if (opWeide.length && T.ui.toonVoorraad) T.ui.toonVoorraad(S.dorp); // de melk bij de kaas in de balk
       if (opWeide.length === aantal) return opWeideTekst;
       aantal -= opWeide.length;
@@ -1834,7 +1839,7 @@
           }
         }
       }
-      if (!midden) return opWeide.length ? opWeideTekst : 'Er is geen open stuk grond bij de schout.';
+      if (!midden) return opWeide.length ? opWeideTekst : 'Er is geen open stuk grond bij de schout.'; // geen tekst
       // De dieren eromheen, van binnen naar buiten, met een tegel ruimte tussen elk dier (ook tussen
       // dieren die er al stonden): een koe is ruim twee tegels lang.
       const dieren = w.wezens.filter((e) => e.dier && !e.dood);
@@ -1862,8 +1867,8 @@
     // spel laten zien zonder de hele afbeelding als tekst door zijn gesprek te halen.
     async schermafdruk(naam) {
       const doek = T.debug.beeld();
-      const blob = await new Promise((klaar) => doek.toBlob(klaar, 'image/png'));
-      const r = await fetch('/gereedschap/api/schermafdruk/' + encodeURIComponent(naam), { method: 'POST', body: blob });
+      const blob = await new Promise((klaar) => doek.toBlob(klaar, 'image/png')); // geen tekst
+      const r = await fetch('/gereedschap/api/schermafdruk/' + encodeURIComponent(naam), { method: 'POST', body: blob }); // geen tekst
       return r.json();
     },
     // Het beeld zoals het nu op het scherm staat, als één 2D-doek (beeldNu, hierboven bij T.tekenBeeld).
@@ -1893,10 +1898,10 @@
         const map = v.pad.slice(0, v.pad.lastIndexOf('/') + 1);
         (perMap[map] = perMap[map] || []).push(v);
       }
-      const noem = (l) => l.map((v) => `${v.pad}: ${v.b}×${v.h}, ${mb(v.mb)} MB`);
+      const noem = (l) => l.map((v) => `${v.pad}: ${v.b}×${v.h}, ${mb(v.mb)} MB`); // geen tekst
       return {
         samen: som(lijst), vellen: lijst.length, laadt: T.sprites.bezig(), mist: T.sprites.mist.slice(),
-        perMap: Object.fromEntries(Object.entries(perMap).map(([map, l]) => [map, `${som(l)} MB in ${l.length}`])),
+        perMap: Object.fromEntries(Object.entries(perMap).map(([map, l]) => [map, `${som(l)} MB in ${l.length}`])), // geen tekst
         ...(wat === 'alles' ? { alles: noem(lijst) } : { grootste: noem(lijst.slice(0, 8)) }),
       };
     },
@@ -1930,17 +1935,17 @@
         };
       }
       const q = T.QUESTS[naam];
-      if (!q) return `Die quest ken ik niet: ${naam}. Er is: ${Object.keys(T.QUESTS).join(', ') || 'nog niets'}.`;
-      if (!fase) return { nu: T.questFase(S, naam) || 'niet begonnen', weg: T.questWegVan(S, naam), fasen: Object.keys(q.fasen) };
+      if (!q) return `Die quest ken ik niet: ${naam}. Er is: ${Object.keys(T.QUESTS).join(', ') || 'nog niets'}.`; // geen tekst
+      if (!fase) return { nu: T.questFase(S, naam) || 'niet begonnen', weg: T.questWegVan(S, naam), fasen: Object.keys(q.fasen) }; // geen tekst
       if (fase === 'uit') {
         delete S.quests[naam];
         delete S.questWeg[naam];
         for (const sleutel of [...S.questBeloond]) if (sleutel.startsWith(`${naam}:`)) S.questBeloond.delete(sleutel);
         T.werkQuestVoorwerpen(S);
         T.werkGeheimenBij(S);
-        return `${q.naam}: niet begonnen. De beloning kan weer opnieuw.`;
+        return `${q.naam}: niet begonnen. De beloning kan weer opnieuw.`; // geen tekst
       }
-      if (!q.fasen[fase]) return `"${fase}" is geen fase van ${q.naam}. Er is: ${Object.keys(q.fasen).join(', ')}.`;
+      if (!q.fasen[fase]) return `"${fase}" is geen fase van ${q.naam}. Er is: ${Object.keys(q.fasen).join(', ')}.`; // geen tekst
       T.zetQuest(S, naam, fase);
       const f = q.fasen[fase];
       return { quest: q.naam, fase, doel: f.doel || null, goud: S.dorp.goud, tas: [...S.inventaris] };

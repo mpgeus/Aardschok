@@ -140,6 +140,24 @@ onder een gril), zegt *my lord*; de raadsman schrijft de schout aan met *Master 
 | het oogstfeest, de meiboom, kerstavond | the harvest feast, the maypole, Christmas Eve | `T.FEESTEN[x].naam` |
 | de grillen: het standbeeld, het vette varken, … | the statue, the fat pig, his nephew's wedding, the hunt, the window tax, the court poet, the bishop's bell, the soldiers passing through, his birthday, the falcon, the loan, the road to the castle, the portrait, the plague in the district | `T.GRILLEN[x].titel` |
 
+## Erbij in deel 3 (het scherm)
+
+| Nederlands | Engels | |
+|---|---|---|
+| het rekenboek, de kas | the ledger, the treasury | de tafel; de kas is de post voor het goud |
+| de zandloper, de lat | the hourglass, the scale | de snelheden: *pause*, 1×, 3×, 10×, 30× |
+| het wetboek, de bel, de inktpot | the lawbook, the bell, the inkwell | de dingen op tafel |
+| de spelregels, de werkbank | the game rules, the workbench | het venster op O |
+| de fotomodus | photo mode | |
+| de provincie, het land | the province, the land | de kaart van het land; een provincie heet met een kleine letter (*the castle*), de kaart zet de hoofdletter |
+| de pacht | rent | graan op Sint-Maarten (`GRONDSTOF_UITLEG.graan`) |
+| de wissel (van de velden) | the changeover | 1 March, als de boeren ploegen |
+| het slachten | the slaughter | het venster en de knop |
+| je ambt kwijt, weggejaagd | you lost your office, driven out | de schermen van het einde |
+| op bestelling | on order | de marskramer die een bode haalde |
+| een pak | a pack | wat de marskramer draagt |
+| de klok | *half past seven*, *seven o'clock* | `klokTekst` in `js/hud.js`; het deel van de dag is *night, morning, work, break, evening* |
+
 ## De maanden
 
 Gewone maanden (Marcel, 11 okt): de namen waar de regels op letten blijven in de code (`'lentemaand'`); wat de speler

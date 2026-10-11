@@ -8,9 +8,9 @@
   'use strict';
 
   const $ = (id) => document.getElementById(id);
-  const NS = 'http://www.w3.org/2000/svg';
+  const NS = 'http://www.w3.org/2000/svg'; // geen tekst
   const veilig = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
-  const dagen = (n) => (n === 1 ? '1 dag' : `${n} dagen`);
+  const dagen = (n) => T.t('{n|# day|# days}', { n });
   const naam = (S, p) => T.provincieNaam(S, p);
 
   let gekozen = null; // de provincie die je aanklikte (alleen scherm)
@@ -105,7 +105,7 @@
     const defs = maak('defs', {}, svg);
     const golf = maak('filter', { id: 'land-golf', x: '-5%', y: '-5%', width: '110%', height: '110%' }, defs);
     maak('feTurbulence', { type: 'fractalNoise', baseFrequency: 0.018, numOctaves: 2, seed: 7, result: 'ruis' }, golf);
-    maak('feDisplacementMap', { in: 'SourceGraphic', in2: 'ruis', scale: 14, xChannelSelector: 'R', yChannelSelector: 'G' }, golf);
+    maak('feDisplacementMap', { in: 'SourceGraphic', in2: 'ruis', scale: 14, xChannelSelector: 'R', yChannelSelector: 'G' }, golf); // geen tekst
     const arcering = maak('pattern', { id: 'land-arcering', width: 9, height: 9, patternUnits: 'userSpaceOnUse', patternTransform: 'rotate(35)' }, defs);
     maak('rect', { width: 9, height: 9, fill: 'var(--land-mist)' }, arcering);
     maak('line', { x1: 0, y1: 0, x2: 0, y2: 9, stroke: 'var(--land-mistlijn)', 'stroke-width': 3 }, arcering);
@@ -114,7 +114,7 @@
     for (const p of L.provincies) {
       const gezien = L.gezien.has(p.id);
       maak('path', {
-        d: pad(p.vlak), fill: gezien ? `var(--land-${p.soort})` : 'url(#land-arcering)',
+        d: pad(p.vlak), fill: gezien ? `var(--land-${p.soort})` : 'url(#land-arcering)', // geen tekst
         stroke: 'var(--land-grens)', 'stroke-width': 2.2, 'stroke-linejoin': 'round',
       }, vlakken);
     }
@@ -144,10 +144,17 @@
         continue;
       }
       TEKEN[p.soort](tekens, p.x, p.y - 8);
-      // Een lange naam ("Het kasteel van de heer") op twee regels, zodat hij niet over een weg valt.
+      // Een lange naam op twee regels, bij de spatie het dichtst bij het midden, zodat hij niet over een weg valt.
       const t = maak('text', { x: p.x, y: p.y + 26, 'text-anchor': 'middle', class: 'land-naam' }, tekens);
-      const woorden = naam(S, p);
-      const regels = woorden.length > 16 && woorden.includes(' van ') ? [woorden.slice(0, woorden.indexOf(' van ')), woorden.slice(woorden.indexOf(' van ') + 1)] : [woorden];
+      const woorden = T.hoofdletter(naam(S, p));
+      let regels = [woorden];
+      if (woorden.length > 16) {
+        let split = -1;
+        for (let i = woorden.indexOf(' '); i >= 0; i = woorden.indexOf(' ', i + 1)) {
+          if (split < 0 || Math.abs(i - woorden.length / 2) < Math.abs(split - woorden.length / 2)) split = i;
+        }
+        if (split > 0) regels = [woorden.slice(0, split), woorden.slice(split + 1)];
+      }
       regels.forEach((r, i) => {
         maak('tspan', { x: p.x, dy: i ? '1.05em' : 0 }, t).textContent = r;
       });
@@ -156,11 +163,11 @@
     // Wat je aanklikte, met een gouden rand; en daarboven de vlakken om op te klikken (onzichtbaar, zonder golf, zodat
     // je klikt waar je kijkt).
     if (gekozen && T.provincie(L, gekozen)) {
-      maak('path', { d: pad(T.provincie(L, gekozen).vlak), fill: 'none', stroke: 'var(--goud)', 'stroke-width': 3, 'stroke-linejoin': 'round', filter: 'url(#land-golf)' }, svg);
+      maak('path', { d: pad(T.provincie(L, gekozen).vlak), fill: 'none', stroke: 'var(--goud)', 'stroke-width': 3, 'stroke-linejoin': 'round', filter: 'url(#land-golf)' }, svg); // geen tekst
     }
     const klik = maak('g', {}, svg);
     for (const p of L.provincies) maak('path', { d: pad(p.vlak), fill: 'transparent', 'data-provincie': p.id, class: 'land-klik' }, klik);
-    maak('circle', { id: 'land-schout', r: 7, fill: 'var(--goud)', stroke: 'var(--land-grens)', 'stroke-width': 2, 'pointer-events': 'none' }, svg);
+    maak('circle', { id: 'land-schout', r: 7, fill: 'var(--goud)', stroke: 'var(--land-grens)', 'stroke-width': 2, 'pointer-events': 'none' }, svg); // geen tekst
   }
 
   // Waar de schout op de kaart staat: bij zijn provincie, of onderweg op de weg ernaartoe.
@@ -181,10 +188,13 @@
     if (L.reis) {
       const doel = T.provincie(L, L.reis.route[L.reis.route.length - 1]);
       const nog = Math.max(0, L.reis.aankomst - S.kalender.dag);
-      return `Onderweg naar <b>${veilig(naam(S, doel))}</b>: nog ${veilig(nog < 1 ? 'minder dan een dag' : dagen(Math.ceil(nog - 1e-9)))}. Thuis gaat alles door zonder je.`;
+      return T.t('On the road to {doel}: {nog} to go. Everything at home carries on without you.', {
+        doel: `<b>${veilig(naam(S, doel))}</b>`,
+        nog: veilig(nog < 1 ? T.t('less than a day') : dagen(Math.ceil(nog - 1e-9))),
+      });
     }
-    if (L.waar === L.thuis) return `Je staat op de weg uit <b>${veilig(naam(S, hier))}</b>. Kies een provincie om erheen te reizen, of ga terug het gehucht in.`;
-    return `Je bent in <b>${veilig(naam(S, hier))}</b>. ${veilig(T.LANDSOORTEN[hier.soort].uitleg)} Kies waar je heen gaat.`;
+    if (L.waar === L.thuis) return T.t('You are on the road out of {hier}. Choose a province to travel to, or go back home.', { hier: `<b>${veilig(naam(S, hier))}</b>` });
+    return T.t('You are in {hier}. {uitleg} Choose where to go.', { hier: `<b>${veilig(naam(S, hier))}</b>`, uitleg: veilig(T.LANDSOORTEN[hier.soort].uitleg) });
   }
 
   // Wat je aanklikte: hoe ver, en de knop om te gaan.
@@ -192,15 +202,18 @@
     const L = S.land;
     if (L.reis) return '';
     const p = gekozen && T.provincie(L, gekozen);
-    if (!p) return '<span class="land-zacht">Klik een provincie om te zien hoe ver het is.</span>';
-    const wie = L.gezien.has(p.id) ? veilig(naam(S, p)) : 'Dit land ken je nog niet';
+    if (!p) return `<span class="land-zacht">${T.t('Click a province to see how far it is.')}</span>`;
+    const wie = `<b>${L.gezien.has(p.id) ? veilig(T.hoofdletter(naam(S, p))) : T.t('You do not know this land yet')}</b>`;
     // De naam en de tekst in één stuk, de knop ernaast: de regel is een flex-rij.
-    if (p.id === L.waar) return `<span><b>${wie}</b>: hier ben je.</span>`;
+    if (p.id === L.waar) return `<span>${T.t('{wie}: you are here.', { wie })}</span>`;
     const r = T.reisNaar(S, p.id);
-    if (!r) return `<span><b>${wie}</b>: daar weet je de weg nog niet.</span>`;
-    const over = r.route.length > 1 ? `, over ${r.route.slice(0, -1).map((id) => veilig(naam(S, T.provincie(L, id)))).join(' en ')}` : '';
-    const thuis = p.id === L.thuis ? 'Naar huis' : 'Reis erheen';
-    return `<span><b>${wie}</b>: ${dagen(r.dagen)} reizen${over}.</span> <button class="land-knop" data-actie="reis" data-naar="${p.id}">${thuis}</button>`;
+    if (!r) return `<span>${T.t('{wie}: you do not know the way there yet.', { wie })}</span>`;
+    const via = T.opsomming(r.route.slice(0, -1).map((id) => veilig(naam(S, T.provincie(L, id)))));
+    const reis = r.route.length > 1
+      ? T.t('{wie}: a journey of {n|# day|# days}, by way of {via}.', { wie, n: r.dagen, via })
+      : T.t('{wie}: a journey of {n|# day|# days}.', { wie, n: r.dagen });
+    const thuis = p.id === L.thuis ? T.t('Go home') : T.t('Travel there');
+    return `<span>${reis}</span> <button class="land-knop" data-actie="reis" data-naar="${p.id}">${thuis}</button>`;
   }
 
   function venster(S) {
@@ -208,13 +221,13 @@
     const dag = S.kalender ? T.datumVanDag(S.kalender.dag).tekst : '';
     const sluit = !L.reis && L.waar === L.thuis;
     return (
-      `<div class="venster-kop"><span class="venster-titel">Het land</span><span class="venster-wanneer" id="land-datum">${dag}</span>` +
-      (sluit ? '<button class="venster-sluit" data-actie="terug" title="Terug het gehucht in (Esc)">✕</button>' : '') +
+      `<div class="venster-kop"><span class="venster-titel">${T.t('The land')}</span><span class="venster-wanneer" id="land-datum">${dag}</span>` +
+      (sluit ? `<button class="venster-sluit" data-actie="terug" title="${T.t('Back home (Esc)')}">✕</button>` : '') +
       '</div>' +
       `<p class="venster-staat" id="land-staat">${staatTekst(S)}</p>` +
-      '<svg id="land-kaart" role="img" aria-label="De kaart van het land"></svg>' +
+      `<svg id="land-kaart" role="img" aria-label="${T.t('The map of the land')}"></svg>` +
       `<p class="land-keuze" id="land-keuze">${keuzeTekst(S)}</p>` +
-      (sluit ? '<p class="venster-voet"><button class="land-knop" data-actie="terug">Terug het gehucht in</button> <kbd>Esc</kbd></p>' : '')
+      (sluit ? `<p class="venster-voet"><button class="land-knop" data-actie="terug">${T.t('Back home')}</button> <kbd>Esc</kbd></p>` : '') // geen tekst
     );
   }
 
@@ -284,13 +297,13 @@
     const box = $('terug');
     const regels = t.gemist.length
       ? '<ul class="terug-lijst">' + t.gemist.map((g) => `<li class="${veilig(g.soort)}"><span>${veilig(T.datumVanDag(g.dag).tekst)}</span> ${veilig(g.tekst)}</li>`).join('') + '</ul>'
-      : '<p class="venster-staat">Er gebeurde niets bijzonders.</p>';
+      : `<p class="venster-staat">${T.t('Nothing special happened.')}</p>`;
     box.innerHTML =
-      `<div class="venster-kop"><span class="venster-titel">Terug in ${veilig(T.provincieNaam(S, T.provincie(L, L.thuis)))}</span>` +
+      `<div class="venster-kop"><span class="venster-titel">${T.t('Back in {plek}', { plek: veilig(T.provincieNaam(S, T.provincie(L, L.thuis))) })}</span>` +
       `<span class="venster-wanneer">${T.datumVanDag(S.kalender.dag).tekst}</span></div>` +
-      `<p class="venster-staat">Je was ${dagen(t.dagen)} weg. ${veilig(T.watVeranderde(t).join(' · '))}.</p>` +
+      `<p class="venster-staat">${T.t('You were away for {dagen}. {veranderd}.', { dagen: dagen(t.dagen), veranderd: veilig(T.watVeranderde(t).join(' · ')) })}</p>` +
       regels +
-      '<p class="venster-voet"><button class="land-knop" data-actie="verder">Verder</button> <kbd>Esc</kbd></p>';
+      `<p class="venster-voet"><button class="land-knop" data-actie="verder">${T.t('Continue')}</button> <kbd>Esc</kbd></p>`; // geen tekst
     T.houdTijdStil(S, 'terug');
     box.classList.remove('verborgen');
   }

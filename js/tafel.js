@@ -124,22 +124,26 @@
     hooi: HOOI_ICOON, mest: MEST_ICOON, vlees: VLEES_ICOON, huiden: HUIDEN_ICOON, bier: BIER_ICOON, wijn: WIJN_ICOON,
     wapens: WAPENS_ICOON,
   };
+  // Een maand zoals de speler hem ziet (js/tijd.js, T.MAANDEN[i].toon), uit de naam waar de regels op letten.
+  const maandToon = (naam) => (T.MAANDEN.find((m) => m.naam === naam) || { toon: naam }).toon;
   const GRONDSTOF_UITLEG = {
-    goud: 'Goud. Wat de heer het liefst ziet.',
-    graan: 'Graan. Van de akkers: eten, zaaigoed, en pacht op Sint-Maarten.',
-    wol: 'Wol. Van de schapen op de meent.',
-    hout: 'Hout. Uit het bos van de heer.',
-    ijzer: 'IJzer. Van de marskramer; de smidse maakt er gereedschap van.',
-    zout: 'Zout. Van de marskramer: het houdt vis en vlees goed.',
-    gereedschap: 'Gereedschap. Van de smidse: wie het heeft, werkt harder. Het slijt.',
-    kaas: 'Kaas. Van de melk die het dorp niet dezelfde dag drinkt: kaas houdt goed, en wordt pas gegeten als het graan op is.',
-    hooi: 'Hooi. In hooimaand van de weides gemaaid: het vee eet het van slachtmaand tot en met lentemaand.',
-    mest: 'Mest. Uit de schaapskooi: leg hem in het veldenvenster (V) op een akker, dan wordt die vruchtbaarder.',
-    vlees: 'Vlees. Van het slachten: het vult een maag. Wat je niet zout, bederft, dus dat eet het dorp eerst op; gezouten vlees bewaart het tot het graan op is.',
-    huiden: 'Huiden. Van het slachten.',
-    bier: 'Bier. De herbergierster brouwt het van graan, en wie \'s avonds in de herberg zit, drinkt het. Wie er deze week was, is tevredener.',
-    wapens: 'Wapens. Van de wapenmaker: wie van de militie er een heeft, slaat harder als de rovers komen.',
-    wijn: 'Wijn. Van de wijnboerderij, geplukt in wijnmaand: de ambachtslieden willen het naast hun bier, en het bederft niet.',
+    goud: T.t('Gold. What the lord likes best to see.'),
+    graan: T.t('Grain. From the fields: food, seed grain, and rent at Martinmas.'),
+    wol: T.t('Wool. From the sheep on the common.'),
+    hout: T.t("Wood. From the lord's forest."),
+    ijzer: T.t('Iron. From the peddler; the smithy makes tools from it.'),
+    zout: T.t('Salt. From the peddler: it keeps fish and meat good.'),
+    gereedschap: T.t('Tools. From the smithy: whoever has them works harder. They wear out.'),
+    kaas: T.t('Cheese. From the milk the village does not drink the same day: cheese keeps well, and is only eaten when the grain runs out.'),
+    hooi: T.t('Hay. Mown from the meadows in {maaien}: the livestock eat it from {van} to {tot}.', {
+      maaien: maandToon('hooimaand'), van: maandToon('slachtmaand'), tot: maandToon('lentemaand'),
+    }),
+    mest: T.t('Dung. From the sheepfold: put it on a field in the fields window (V) and the field becomes more fertile.'),
+    vlees: T.t('Meat. From the slaughter: it fills a stomach. What you do not salt spoils, so the village eats that first; salted meat keeps until the grain runs out.'),
+    huiden: T.t('Hides. From the slaughter.'),
+    bier: T.t('Ale. The innkeeper brews it from grain, and whoever sits in the inn in the evening drinks it. Whoever was there this week is more content.'),
+    wapens: T.t('Weapons. From the weaponsmith: a militiaman who has one hits harder when the robbers come.'),
+    wijn: T.t('Wine. From the vineyard farm, picked in {maand}: the craftsmen want it alongside their ale, and it does not spoil.', { maand: maandToon('wijnmaand') }),
   };
   // Deze staan pas in het rekenboek als het dorp ze eens gehad heeft (S.gehad, js/voorraad.js): in het
   // begin blijft het kort. Kaas, hooi, vlees en bier staan naast het graan, want het is allemaal
@@ -168,11 +172,10 @@
   // Links de voorraad, rechts het dorp. Elk getal is een post met een pictogram, een naam en het getal; bij de muis staat
   // wat het is en wat het nu zegt (data-uitleg, voor het briefje). Het wordt één keer gemaakt; daarna verandert alleen
   // het getal per post.
-  const NAAM = {
-    goud: 'De kas', graan: 'Graan', kaas: 'Kaas', hooi: 'Hooi', vlees: 'Vlees', bier: 'Bier', wijn: 'Wijn', wol: 'Wol',
-    hout: 'Hout', ijzer: 'IJzer', zout: 'Zout', gereedschap: 'Gereedschap', wapens: 'Wapens', mest: 'Mest',
-    huiden: 'Huiden', bevolking: 'Mensen', tevredenheid: 'Tevreden',
-  };
+  const NAAM = { goud: T.t('Treasury'), bevolking: T.t('People'), tevredenheid: T.t('Content') };
+  for (const wat of ['graan', 'kaas', 'hooi', 'vlees', 'bier', 'wijn', 'wol', 'hout', 'ijzer', 'zout', 'gereedschap', 'wapens', 'mest', 'huiden']) {
+    NAAM[wat] = T.hoofdletter(T.waarNaam(wat));
+  }
   // Zoveel posten passen er onder elkaar op een bladzijde; staan er meer, dan gaan de namen eraf (stijl.css, .kort).
   const POSTEN_PER_KOLOM = 6;
   const post = (wat, icoon, getal, uitleg, later) =>
@@ -181,12 +184,12 @@
     `<span class="aantal">${getal}</span></div>`;
 
   function bouwRekenboek(box) {
-    box.querySelector('.blad.links .posten').innerHTML = BALK.filter((wat) => wat !== 'goud')
+    box.querySelector('.blad.links .posten').innerHTML = BALK.filter((wat) => wat !== 'goud') // geen tekst
       .map((wat) => post(wat, GRONDSTOF_ICOON[wat], 0, GRONDSTOF_UITLEG[wat], BALK_LATER.includes(wat))).join('');
-    box.querySelector('.blad.rechts .posten').innerHTML =
+    box.querySelector('.blad.rechts .posten').innerHTML = // geen tekst
       post('goud', GRONDSTOF_ICOON.goud, 0, GRONDSTOF_UITLEG.goud) +
-      post('bevolking', BEVOLKING_ICOON, '0/0', 'Mensen in het dorp, en hoeveel er wonen kunnen: elk huis geeft woonruimte.') +
-      post('tevredenheid', TEVREDENHEID_ICOON, '100%', 'Tevredenheid.');
+      post('bevolking', BEVOLKING_ICOON, '0/0', T.t('People in the village, and how many can live there: every house gives room.')) +
+      post('tevredenheid', TEVREDENHEID_ICOON, '100%', T.t('Contentment.'));
     box.dataset.gebouwd = '1';
   }
 
@@ -217,27 +220,31 @@
       if (BALK_LATER.includes(wat)) cel.classList.toggle('verborgen', !(S.dorp.gehad && S.dorp.gehad[wat]));
     }
     // Past de voorraad niet in één kolom, dan zonder namen (die staan dan op het briefje bij de muis).
-    const blad = box.querySelector('.blad.links');
-    blad.classList.toggle('kort', blad.querySelectorAll('.post:not(.verborgen)').length > POSTEN_PER_KOLOM);
+    const blad = box.querySelector('.blad.links'); // geen tekst
+    blad.classList.toggle('kort', blad.querySelectorAll('.post:not(.verborgen)').length > POSTEN_PER_KOLOM); // geen tekst
     // De twee bazen (js/bazen.js) liggen op dezelfde tafel, ook meteen bij een nieuw of geladen spel.
     T.ui.toonBazen(D);
     // Het zaaigraan dat de boeren achterhouden (js/akkers.js, T.zaaigraanApart): bij de muis, bij het graan.
     const graan = box.querySelector('[data-wat="graan"]');
     graan.dataset.uitleg = GRONDSTOF_UITLEG.graan;
     const zaai = Math.min(Math.floor(S.dorp.voorraad.graan || 0), Math.ceil(T.zaaigraanApart(S.dorp, Math.floor(S.kalender.dag))));
-    if (zaai > 0) graan.dataset.uitleg += ` Daarvan is ${zaai} zaaigraan voor de lente: dat eet het dorp pas als er niets anders meer is.`;
+    if (zaai > 0) graan.dataset.uitleg += ` ${T.t('Of that, {n} is seed grain kept for spring: the village only eats it when nothing else is left.', { n: zaai })}`;
     // Wat zout en gereedschap nu doen, bij de muis: hoeveel vis en vlees het zout goed houdt, en
     // hoeveel handen het gereedschap dekt (js/behoeften.js, js/gebouwen.js).
     if (T.zoutDekking) {
       const d = T.zoutDekking(S.dorp);
       box.querySelector('[data-wat="zout"]').dataset.uitleg = d.totaal >= 1
-        ? `Zout. Eén zout houdt ${T.BEHOEFTEN_INSTELLINGEN.zoutHoudtGoed} vis of vlees goed; de rest bederft. Nu gezouten: ${Math.floor(d.gezouten)} van de ${Math.floor(d.totaal)}.`
+        ? T.t('Salt. One measure of salt preserves {n} fish or meat; the rest spoils. Salted now: {gezouten} of the {totaal}.', {
+          n: T.BEHOEFTEN_INSTELLINGEN.zoutHoudtGoed, gezouten: Math.floor(d.gezouten), totaal: Math.floor(d.totaal),
+        })
         : GRONDSTOF_UITLEG.zout;
     }
     if (T.gereedschapDekking) {
       const d = T.gereedschapDekking(S.dorp);
       box.querySelector('[data-wat="gereedschap"]').dataset.uitleg = d.handen
-        ? `Gereedschap. Genoeg voor ${Math.min(d.handen, Math.floor(d.heeft))} van de ${d.handen} handen aan het werk: er wordt ${Math.round((d.factor - 1) * 100)}% harder gewerkt. Het slijt.`
+        ? T.t('Tools. Enough for {n} of the {handen} hands at work: work goes {procent}% faster. They wear out.', {
+          n: Math.min(d.handen, Math.floor(d.heeft)), handen: d.handen, procent: Math.round((d.factor - 1) * 100),
+        })
         : GRONDSTOF_UITLEG.gereedschap;
     }
     // Bij de kaas: voor hoeveel dagen eten hij is, en hoeveel melk de koeien nu geven (js/vee.js,
@@ -247,10 +254,10 @@
       const perDag = (S.dorp.bevolking || 0) * perMens;
       const kaas = S.dorp.voorraad.kaas || 0;
       const dagen = perDag > 0 ? Math.floor(kaas / perDag) : 0;
-      const voor = kaas >= 1 && perDag > 0 ? ` Genoeg voor ${dagen} dag${dagen === 1 ? '' : 'en'} eten.` : '';
+      const voor = kaas >= 1 && perDag > 0 ? ` ${T.t('Enough for {n|# day|# days} of food.', { n: dagen })}` : '';
       const melkNu = T.melkVanDag && S.kalender ? T.melkVanDag(S.dorp, Math.floor(S.kalender.dag)) : 0;
       const mensen = Math.round(melkNu / perMens);
-      const melk = mensen > 0 ? ` De koeien geven nu elke dag melk voor ${mensen} mensen; wat het dorp niet drinkt, wordt kaas.` : '';
+      const melk = mensen > 0 ? ` ${T.t('The cows now give milk for {n|# person|# people} every day; what the village does not drink becomes cheese.', { n: mensen })}` : '';
       box.querySelector('[data-wat="kaas"]').dataset.uitleg = GRONDSTOF_UITLEG.kaas + voor + melk;
     }
     // Bij het hooi: hoe lang het de kudde van nu voedt (js/vee.js, T.hooiPerWinterdag), en hoeveel
@@ -268,12 +275,16 @@
       const perDagTekst = Math.round(perDag * 10) / 10;
       let over = '';
       if (perDag > 0) {
-        const erbij = nogTeMaaien >= 1 ? `, met wat er nog op de weides staat (zo'n ${Math.round(nogTeMaaien)})` : '';
-        over = winterNu
-          ? ` De kudde eet ${perDagTekst} per dag: genoeg voor ${dagen} dag${dagen === 1 ? '' : 'en'}, en de winter duurt nog ${winter} dagen.`
-          : ` De kudde van nu eet ${perDagTekst} per winterdag${erbij}: genoeg voor ${Math.min(dagen, winter)} van de ${winter} dagen winter.`;
+        if (winterNu) {
+          over = T.t('The herd eats {perDag} a day: enough for {n|# day|# days}, and winter lasts another {winter|# day|# days}.', { perDag: perDagTekst, n: dagen, winter });
+        } else if (nogTeMaaien >= 1) {
+          over = T.t('The herd as it is now eats {perDag} per winter day, counting the hay still standing in the meadows (about {erbij}): enough for {n} of the {winter} days of winter.',
+            { perDag: perDagTekst, erbij: Math.round(nogTeMaaien), n: Math.min(dagen, winter), winter });
+        } else {
+          over = T.t('The herd as it is now eats {perDag} per winter day: enough for {n} of the {winter} days of winter.', { perDag: perDagTekst, n: Math.min(dagen, winter), winter });
+        }
       }
-      cel.dataset.uitleg = GRONDSTOF_UITLEG.hooi + over;
+      cel.dataset.uitleg = over ? `${GRONDSTOF_UITLEG.hooi} ${over}` : GRONDSTOF_UITLEG.hooi;
       cel.classList.toggle('laag', dagen < winter);
     }
     // Bij het hout: voor hoeveel van de winterdagen het genoeg is, met wat er nu per dag bijkomt
@@ -282,13 +293,16 @@
     if (S.kalender && S.dorp.bevolking > 0) {
       const cel = box.querySelector('[data-wat="hout"]');
       const v = T.houtVoorDeWinter(S.dorp, Math.floor(S.kalender.dag));
-      const perDag = (x) => String(Math.round(x * 100) / 100).replace('.', ',');
-      const erbij = v.erbij > 0.005 ? `, en er komt ${perDag(v.erbij)} per dag bij` : '';
+      const perDag = (x) => String(Math.round(x * 100) / 100);
+      const woorden = { stook: perDag(v.stook), erbij: perDag(v.erbij), dagen: v.dagen, winter: v.winter };
+      const erbij = v.erbij > 0.005;
+      const stookt = v.tot > 0
+        ? (erbij ? T.t('In winter the village burns {stook} a day, and {erbij} a day comes in.', woorden) : T.t('In winter the village burns {stook} a day.', woorden))
+        : (erbij ? T.t('The village burns {stook} a day, and {erbij} a day comes in.', woorden) : T.t('The village burns {stook} a day.', woorden));
       const genoeg = v.tot > 0
-        ? (v.haalt ? 'genoeg voor de hele winter' : `genoeg voor ${v.dagen} van de ${v.winter} dagen winter`)
-        : (v.haalt ? 'genoeg voor de rest van de winter' : `genoeg voor ${v.dagen} dag${v.dagen === 1 ? '' : 'en'}, en de winter duurt nog ${v.winter} dagen`);
-      const stookt = v.tot > 0 ? 'In de winter stookt het dorp' : 'Het dorp stookt';
-      cel.dataset.uitleg = `${GRONDSTOF_UITLEG.hout} ${stookt} er ${perDag(v.stook)} per dag van${erbij}: ${genoeg}.`;
+        ? (v.haalt ? T.t('That is enough for the whole winter.') : T.t('That is enough for {dagen} of the {winter} days of winter.', woorden))
+        : (v.haalt ? T.t('That is enough for the rest of the winter.') : T.t('That is enough for {dagen|# day|# days}, and winter lasts another {winter|# day|# days}.', woorden));
+      cel.dataset.uitleg = `${GRONDSTOF_UITLEG.hout} ${stookt} ${genoeg}`;
       cel.classList.toggle('laag', !v.haalt);
     }
   };
@@ -318,76 +332,107 @@
     const pct = Math.round(S.dorp.behoeften.tevredenheid * 100);
     cel.querySelector('.aantal').textContent = `${pct}%`;
     cel.classList.toggle('laag', S.dorp.behoeften.tevredenheid < T.BEHOEFTEN_INSTELLINGEN.vertrekDrempel);
-    const last = S.dorp.behoeften.last && S.dorp.behoeften.last.length ? ` Het heeft last van ${S.dorp.behoeften.last.join(' en ')}.` : '';
-    const blij = S.dorp.behoeften.blij && S.dorp.behoeften.blij.length ? ` Het is blij met ${S.dorp.behoeften.blij.join(' en ')}.` : '';
+    const last = S.dorp.behoeften.last && S.dorp.behoeften.last.length
+      ? ` ${T.t('It suffers from {last}.', { last: T.opsomming(S.dorp.behoeften.last) })}` : '';
+    const blij = S.dorp.behoeften.blij && S.dorp.behoeften.blij.length
+      ? ` ${T.t('It is pleased with {blij}.', { blij: T.opsomming(S.dorp.behoeften.blij) })}` : '';
     // Met de wensen per huis (js/wensen.js): hoe tevreden elke stand is, en in hoeveel huizen iets gemist wordt.
     const st = S.dorp.behoeften.standen;
-    const perStand = st ? ` ${T.hoofdletter(Object.keys(T.STANDEN).filter((s) => st[s]).map((s) => `${T.STANDEN[s].naam} ${Math.round(st[s].tevredenheid * 100)}%`).join(', '))}.` : '';
+    const perStand = st
+      ? ` ${T.hoofdletter(T.opsomming(Object.keys(T.STANDEN).filter((s) => st[s])
+        .map((s) => T.t('{stand} {procent}%', { stand: T.STANDEN[s].naam, procent: Math.round(st[s].tevredenheid * 100) }))))}.`
+      : '';
     const gemist = S.dorp.behoeften.gemist || [];
     const mist = S.dorp.behoeften.mist.map((m) => {
       const g = gemist.find((x) => x.naam === m);
-      return g ? `${m} (${g.huizen === 1 ? 'één huis' : `${g.huizen} huizen`})` : m;
+      return g ? T.t('{wat} ({n|# house|# houses})', { wat: m, n: g.huizen }) : m;
     });
+    const kop = T.t('Contentment: {pct}%.', { pct });
     cel.dataset.uitleg = mist.length
-      ? `Tevredenheid: ${pct}%.${perStand} Het dorp mist: ${mist.join(', ')}.${last}${blij}`
-      : `Tevredenheid: ${pct}%.${perStand} Het dorp heeft wat het nodig heeft.${last}${blij}`;
+      ? `${kop}${perStand} ${T.t('The village is short of {mist}.', { mist: T.opsomming(mist) })}${last}${blij}`
+      : `${kop}${perStand} ${T.t('The village has what it needs.')}${last}${blij}`;
   };
 
   // ── De dingen op tafel ──
   // Wat elk ding is (naam), wat het nu zegt (uitleg, uit de regels) en zijn toets, voor het briefje bij de muis. Wat een
   // ding doet als je erop klikt, doet de knop die het was (zijn id); de zandloper staat hier.
   const DINGEN = {
-    rekenboek: { naam: 'Het rekenboek', uitleg: () => 'Wat er ligt en hoe het dorp ervoor staat. Wijs een getal aan voor wat het zegt.' },
+    rekenboek: { naam: T.t('The ledger'), uitleg: () => T.t('What is on the table and how the village is doing. Point at a number to see what it says.') },
     bouwen: {
-      naam: 'Het bouwplan',
-      uitleg: () => (T.VERZOEKEN_INSTELLINGEN.mensen ? 'Een erf aanwijzen, en een oproep op het plein hangen.' : 'Bouwen: kies wat, en wijs aan waar.')
-        + ' Een rechtsklik legt wat je in de hand hebt weer weg.',
+      naam: T.t('The building plan'),
+      uitleg: () => `${T.VERZOEKEN_INSTELLINGEN.mensen ? T.t('Mark out a plot, and pin a notice on the square.') : T.t('Build: choose what, and point to where.')}`
+        + ` ${T.t('A right click puts back what you are holding.')}`,
       toets: 'B',
     },
-    velden: { naam: 'De velden', uitleg: () => 'Wat elk veld is, wie het koos, en wat het volgend jaar wordt.', toets: 'V' },
-    wetten: { naam: 'Het wetboek', uitleg: () => 'Wetten aannemen en afschaffen.', toets: 'W' },
-    raadsman: { naam: 'De bel', uitleg: () => 'Je raadsman: wie beslist als je er niet bent, en wat hij besloot.', toets: 'R' },
-    brief: { naam: 'Een brief van de heer', uitleg: () => 'Hij wacht op je antwoord.' },
-    rapport: { naam: 'Het rapport', uitleg: () => 'Van je raadsman, vanochtend. Je las het nog niet.' },
+    velden: { naam: T.t('The fields'), uitleg: () => T.t('What each field is, who chose it, and what it becomes next year.'), toets: 'V' },
+    wetten: { naam: T.t('The lawbook'), uitleg: () => T.t('Pass and repeal laws.'), toets: 'W' },
+    raadsman: { naam: T.t('The bell'), uitleg: () => T.t('Your advisor: who decides when you are away, and what was decided.'), toets: 'R' },
+    brief: { naam: T.t('A letter from the lord'), uitleg: () => T.t('It is waiting for your answer.') },
+    rapport: { naam: T.t('The morning report'), uitleg: () => T.t('From your advisor, this morning. You have not read it yet.') },
     bode: {
-      naam: 'De inktpot',
+      naam: T.t('The inkwell'),
       uitleg: (S) => {
         const k = T.kanBodeSturen(S.dorp);
-        return `Een bode naar de marskramer, in een moeilijke tijd: je schrijft wat je wilt, en wie er meegaat.${k.kan ? '' : ` ${k.reden}`}`;
+        return `${T.t('A messenger to the peddler, in hard times: you write what you want and choose who goes along.')}${k.kan ? '' : ` ${k.reden}`}`;
       },
     },
     lantaarn: {
-      naam: 'De lantaarn',
+      naam: T.t('The lantern'),
       uitleg: (S) => (S.sluipen
-        ? 'Gedoofd: je sluipt. Trager, en in het donker ziet bijna niemand je. Steek hem aan om gewoon te lopen.'
-        : 'Brandt als je buiten loopt in het donker. Doof hem om te sluipen: trager, maar je wordt later gezien.'),
+        ? T.t('Put out: you are sneaking. Slower, and in the dark hardly anyone sees you. Light it to walk normally.')
+        : T.t('Lit when you walk outside in the dark. Put it out to sneak: slower, but they notice you later.')),
       toets: 'S',
     },
     kaars: {
-      naam: 'De kaars',
-      uitleg: (S) => (S.slaap ? 'Je slaapt tot het eerste licht. Blaas hem uit om wakker te worden.'
-        : T.magSlapen(S) ? 'Slapen tot de ochtend.'
-          : 'Slapen kan \'s avonds en \'s nachts, bij je eigen huis.'),
+      naam: T.t('The candle'),
+      uitleg: (S) => (S.slaap ? T.t('You sleep until first light. Blow it out to wake up.')
+        : T.magSlapen(S) ? T.t('Sleep until morning.')
+          : T.t('You can sleep in the evening and at night, at your own house.')),
       toets: 'Z',
     },
     zandloper: {
-      naam: 'De zandloper',
-      uitleg: () => 'De tijd stilzetten, of weer laten gaan. Op de lat kies je hoe snel: op 1× duurt een dag vijf minuten.',
-      toets: 'P, en - en + voor trager en sneller',
+      naam: T.t('The hourglass'),
+      uitleg: () => T.t('Stop time, or let it run again. On the scale you choose how fast: at 1× a day lasts five minutes.'),
+      toets: T.t('P, and - and + for slower and faster'),
     },
-    gunst: { naam: 'Het zegel van de heer', uitleg: (S) => T.bazenTekst(S.dorp, 'gunst') },
-    vertrouwen: { naam: 'De hoed van het dorp', uitleg: (S) => T.bazenTekst(S.dorp, 'vertrouwen') },
+    gunst: { naam: T.t("The lord's seal"), uitleg: (S) => T.bazenTekst(S.dorp, 'gunst') },
+    vertrouwen: { naam: T.t("The village's hat"), uitleg: (S) => T.bazenTekst(S.dorp, 'vertrouwen') },
     // Bovenaan (vraag 146, d): het lipje Menu en de datum, met het weer.
-    menu: { naam: 'Het menu', uitleg: () => 'Opslaan, laden, de spelregels, de fotomodus, en terug naar het titelscherm.', toets: 'Esc; O voor de spelregels, H voor de fotomodus' },
+    menu: {
+      naam: T.t('The menu'),
+      uitleg: () => T.t('Save, load, the game rules, photo mode, and back to the title screen.'),
+      toets: T.t('Esc (O for the game rules, H for photo mode)'),
+    },
     datum: {
-      naam: 'Vandaag',
+      naam: T.t('Today'),
       uitleg: (S) => {
         const W = S.dorp && T.weerVan(S.dorp);
         if (!W) return '';
-        return W.droog > 0 ? `Het heeft ${W.droog === 1 ? 'sinds gisteren' : `al ${T.telwoord(W.droog)} dagen`} niet geregend.` : 'Het regent vandaag.';
+        if (W.droog <= 0) return T.t('It is raining today.');
+        return W.droog === 1 ? T.t('It has not rained since yesterday.') : T.t('It has not rained for {n} days.', { n: T.telwoord(W.droog) });
       },
     },
   };
+
+  // Wat in index.html geen tekst heeft (vraag 147): de koppen van het rekenboek, het plaatje van elk ding (zijn naam), en de
+  // lat van de snelheden. De tekst staat hier, zodat een vertaling erbij kan.
+  const SNELHEDEN = {
+    0: { tekst: T.t('pause'), naam: T.t('Paused'), uitleg: T.t('Time stands still.') },
+    1: { tekst: '1×', naam: T.t('Normal'), uitleg: T.t('A day lasts five minutes.') },
+    3: { tekst: '3×', naam: T.t('Three times as fast'), uitleg: T.t('A year lasts ten hours.') },
+    10: { tekst: '10×', naam: T.t('Ten times as fast'), uitleg: T.t('A year lasts three hours.') },
+    30: { tekst: '30×', naam: T.t('Thirty times as fast'), uitleg: T.t('A year lasts an hour.') },
+  };
+  $('rekenboek').querySelector('.blad.links h3').textContent = T.t('Stores'); // geen tekst
+  $('rekenboek').querySelector('.blad.rechts h3').textContent = T.t('The village'); // geen tekst
+  for (const img of document.querySelectorAll('#tafel [data-ding] img')) img.alt = DINGEN[img.parentElement.dataset.ding].naam; // geen tekst
+  $('kalender-knoppen').setAttribute('aria-label', T.t('How fast time goes'));
+  for (const b of document.querySelectorAll('#kalender-knoppen button')) {
+    const s = SNELHEDEN[b.dataset.snelheid];
+    b.textContent = s.tekst;
+    b.dataset.naam = s.naam;
+    b.dataset.uitleg = s.uitleg;
+  }
 
   // Wat met de tijd verandert: de lat (de snelheid van nu), de kaars (brandt als je kunt slapen of slaapt), en de
   // lantaarn (gloeit als hij in het donker brandt). Vanuit T.ui.toonKalender, elk half uur en als de snelheid verandert.
@@ -411,7 +456,7 @@
   // Een ding een ander plaatje geven (de lantaarn en de kaars), alleen als het anders is.
   function zetBeeld(knop, naam) {
     const img = knop.querySelector('img');
-    const src = `beelden/tafel/${naam}.png`;
+    const src = `beelden/tafel/${naam}.png`; // geen tekst
     if (img.getAttribute('src') !== src) img.setAttribute('src', src);
   }
 
@@ -464,12 +509,12 @@
     $('wenk').classList.add('verborgen');
   }
 
-  // "P, en - en +" wordt "of de toets P, en - en +", met elke toets in een toetsje.
+  // "P, and - and +" wordt "or press P, and - and +", met elke toets in een toetsje.
   function toetsTekst(toets) {
-    return 'of de toets ' + toets.replace(/(^|[ ,])([A-Z]|Esc|-|\+)(?=$|[ ,])/g, (_, voor, k) => `${voor}<kbd>${k}</kbd>`);
+    return T.t('or press {toets}', { toets: toets.replace(/(^|[ ,(])([A-Z]|Esc|-|\+)(?=$|[ ,)])/g, (_, voor, k) => `${voor}<kbd>${k}</kbd>`) });
   }
 
-  const AANWIJSBAAR = '[data-ding], #rekenboek .post, #kalender-knoppen button, #statussen .status';
+  const AANWIJSBAAR = '[data-ding], #rekenboek .post, #kalender-knoppen button, #statussen .status'; // geen tekst
   for (const plek of [$('tafel'), $('hud-gehucht')]) {
     plek.addEventListener('mouseover', (ev) => {
       const el = ev.target.closest(AANWIJSBAAR);

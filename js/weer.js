@@ -148,7 +148,7 @@
   };
 
   // Hoe het weer heet, voor de balk en het rapport.
-  T.WEER_NAMEN = { zon: 'zon', wolken: 'bewolkt', regen: 'regen', sneeuw: 'sneeuw' };
+  T.WEER_NAMEN = { zon: T.t('sunny'), wolken: T.t('cloudy'), regen: T.t('rain'), sneeuw: T.t('snow') };
 
   // Welke laag sneeuw er op de daken ligt bij zoveel op de grond (0 tot 1): 0, 1 of 2 (een beetje, half, dik), of -1
   // als er geen ligt. js/tekenen.js legt die laag over elk huis van de huizenbouwer (T.sprites.daksneeuw).

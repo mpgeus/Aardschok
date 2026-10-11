@@ -15,6 +15,15 @@ const WORTEL = path.join(__dirname, '..');
 // De bestanden waarin alle tekst al door T.t gaat. Stap 2 van vraag 147 zet ze er één voor één bij, tot het heel js/ is.
 const OMGEZET = [
   'js/menu.js',
+  'js/hud.js',
+  'js/tafel.js',
+  'js/ui.js',
+  'js/huisbriefje.js',
+  'js/dialoog.js',
+  'js/verkennen.js',
+  'js/landkaart.js',
+  'js/land.js',
+  'js/main.js',
   'js/gebouwen.js', 'js/erven.js', 'js/herberg.js', 'js/bos.js', 'js/bouwstijl.js', 'js/wijngaard.js', 'js/akkers.js', 'js/vee.js',
   'js/beesten.js', 'js/markt.js', 'js/paden.js',
   'js/wensen.js', 'js/verzoeken.js', 'js/ondernemers.js', 'js/raad.js', 'js/ochtendrapport.js', 'js/treden.js', 'js/behoeften.js',
