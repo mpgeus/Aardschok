@@ -46,7 +46,7 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   hieronder (`git push origin HEAD:main` vanaf een commit op `main`, niet je hele branch). Weigert de controle, dan was
   een andere sessie je voor: haal `main` binnen en kijk opnieuw. Is het werk in `main`, of stop je ermee, haal het teken
   dan weg.
-- **`ontwerp/spel.md`: het spel.** De schout, de heer en de inner, keuren en politiek, avontuur,
+- **`ontwerp/spel.md`: het spel.** De schout en de heer, keuren en politiek, avontuur,
   en wat nog open is. Bovenaan staat per onderwerp de stand, en elk onderwerp begint met **Zo werkt
   het nu**; wie iets bouwt of verandert, werkt dat blok bij (Marcel, 25 sep).
 - `ontwerp/concept.md`: het concept dat Marcel op 30 sep meebracht ("De Schout": het poppetje is de manier
@@ -228,11 +228,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - `js/dorp.js`: **het spel en zijn dorpen** (werklijst vraag 71, 30 sep). `S` is het spel: de kalender, het land, de
   schout van de speler (`S.schout`), waar hij is (`S.wereld`), het scherm, en de dorpen (`S.dorpen`); je eigen dorp is
   `S.dorp`. Een dorp (`D`) heeft alles van zichzelf: zijn kaart (`D.wereld`), voorraad, gebouwen, bewoners, wetten, hoe
-  de heer en de inner ertegenover staan, rovers, voorvallen, raadsman, trede, vee, de vlaggen van wat er speelt
+  de heer ertegenover staat, rovers, voorvallen, raadsman, trede, vee, de vlaggen van wat er speelt
   (`D.vlaggen`), en zijn eigen schout (`D.schout`; in jouw dorp ben jij dat). `D.kalender` is `S.kalender`.
   **Een regel over een dorp krijgt het dorp mee** (`T.tikGebouwenDag(D, dag)`, `T.wijzigVoorraad(D, ...)`); wat ook
-  het spel nodig heeft (of je vecht, praat of slaapt, de klok van het scherm), krijgt allebei: `T.werkInnerBij(S, D)`,
-  `T.werkOogstBij(S, D, dt)`, en een gesprek `T.doeGevolg(S, D, doe)` (je tas en je quests van het spel, de vlaggen en
+  het spel nodig heeft (of je vecht, praat of slaapt, de klok van het scherm), krijgt allebei: `T.werkOogstBij(S, D, dt)`,
+  en een gesprek `T.doeGevolg(S, D, doe)` (je tas en je quests van het spel, de vlaggen en
   het goud van het dorp). De balk en de vensters gaan over je eigen dorp (`S.dorp`, vraag 71, C); wat getekend,
   aangeklikt of gevochten wordt, over het dorp dat er ligt (`T.dorpHier(S)`, of geen). Een venster dat een dorp zelf
   opent (`T.ui.toonBrief(D, ...)`, `T.ui.openSlachten(D)`, het rekenboek met `T.ui.toonVoorraad(D)`), komt alleen voor je
@@ -301,6 +301,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   herberg), vraagt het dwalen een weg met `veld: true`, en die komt uit een veld: vanaf het doel ring voor ring hoeveel
   stappen elke tegel ervan af ligt, zo ver als nodig, tot de kaart verandert (`veldenOnthouden`). Een veld is alleen uit
   de kaart, dus een weg is dezelfde, hoe ver het veld ook al gegroeid was, en ook na het laden.
+  **Meelopen met de schout** (`T.loopNaastDeSchout`): wie hem volgt (een voorval dat je zoekt, de militie, de jacht)
+  loopt naast hem, en staat hij er niet, dan op een vrije tegel dicht erbij.
 - `js/praatje.js`: **een praatje** (vraag 120, 4 okt; Marcel: "Het dorp moet echt levendig en realistisch aanvoelen", en
   "geen praatjes forceren. Alleen als mensen een reden hebben en elkaar toevallig tegenkomen"): wie vrij is
   (`T.kanPraten`: 's ochtends, in de schaft, 's avonds, en overdag wie geen werk heeft) en toevallig een bekende uit een
@@ -470,7 +472,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   wordt neergezet — en een dorpeling is dat niet. Daar staan alleen de schout en de monsters.
   Er staan ook mensen in `mensen.js` zonder plek op een kaart (de smid, de herbergierster, de
   molenaar, ...): voor als het gehucht een dorp wordt. Wie over de weg komt en op geen kaart staat
-  (de heer, de inner, de marskramer), heeft `bezoeker: true`.
+  (de heer, de marskramer), heeft `bezoeker: true`.
 - `js/bewoners.js`: **wie er in het dorp woont, met wie, in welk huis, en wie waar werkt** (3b,
   stap 2; `ontwerp/spel.md`, "Mensen worden poppetjes"). Het getal in de balk (`D.bevolking`) blijft
   de waarheid; de bewoners (`D.bewoners.mensen`) volgen het, één per mond, elk met een naam, een
@@ -536,8 +538,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   langs de rand, de herten grazen er in de schemering (`T.beestenWillen`). Komt er een mens dichtbij (voor een hert ook een
   wolf), dan gaan ze weg (`G.weg`, `G.vluchtNaar`); wie sluipt, komt dichterbij. Een groep is een ding dat de dieren delen
   (`e.groep`, zoals `e.praatje`): alleen de leider zoekt een weg, de anderen lopen zijn weg af (`G.spoor`), en in
-  `T.ontwijk` ruilt de leider met wie van zijn groep in de weg staat. Een dier heeft `e.beest` (geen `e.dier`: dat is vee,
-  dat de inner telt), en `e.rust` en `e.rent` voor js/sprites.js (liggen, grazen, rennen). Een wolf begint geen gevecht
+  `T.ontwijk` ruilt de leider met wie van zijn groep in de weg staat. Een dier heeft `e.beest` (geen `e.dier`: dat is vee), en `e.rust` en `e.rent` voor js/sprites.js (liggen, grazen, rennen). Een wolf begint geen gevecht
   (`T.zoekOntdekking`), de schout kan hem aanvallen; 's nachts lichten zijn ogen rood op (`tekenOgen` in js/tekenen.js,
   met `beelden/ogen.js` uit `gereedschap/pixelart/ogen.cjs`). Het hert komt uit `gereedschap/pixelart/wild.cjs`. **Het
   leven in het bos** (stap 2a; elke nacht `T.tikBeestenDag`, vanuit `T.tikGebouwenDag` na het bos): eerst de herten, en
@@ -754,7 +755,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   iemand de schout zoeken met een vraag, een ruzie of een ramp (`T.tikVoorvallenDag`, `T.kiesVoorval`, dat loot naar
   `T.gewichtVanVoorval`: een probleem met een oorzaak uit `T.OORZAKEN`, honger, kou, vol of onvrede, komt vaker als die
   speelt en zelden als hij niet speelt, vraag 74, B; `T.oorzaakVan` zegt welke, en het bericht zegt waarom): hij krijgt een
-  uitroepteken, loopt naar je toe (`T.werkVoorvallenBij`, met `T.loopNaastDeSchout` zoals de inner; `e.zoektSchout` laat
+  uitroepteken, loopt naar je toe (`T.werkVoorvallenBij`, met `T.loopNaastDeSchout`; `e.zoektSchout` laat
   het dagritme, het dwalen en het maaien hem met rust) en spreekt je aan zodra je stilstaat (`T.ui.spreekAan`); de tijd
   staat stil tot je kiest. Wanneer en over wie staat in `T.VOORVALLEN`, de woorden onder dezelfde naam in
   `js/gesprekken.js` (naam `'{wie}'`, en `{ander}` in een zin), zodat je ze in de gespreksschrijver leest. Een antwoord
@@ -871,14 +872,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`g.stemming`, `T.huisStemming` in `T.berekenWensen`), en wat een onderneming verder doet, staat bij haar (`ja`, `nee`,
   `prijs` in `T.ONDERNEMINGEN`): de tweede herberg maakt de herbergierster boos (`g.weigert`: ze brouwt een tijd niet). De wapenmaker: wapens (`T.wapensInHetDorp`, `T.bewapen` bij een aanval,
   `T.slagSchade` in `js/gevecht.js`), en die zijn niet verboden (Marcel, 7 okt: "Het is logisch dat er wapens zijn om de
-  stad te verdedigen. Alleen weerstand tegen de heer is inacceptabel"; vraag 131): de inner en de heer laten hem met rust,
+  stad te verdedigen. Alleen weerstand tegen de heer is inacceptabel"; vraag 131): de heer laat hem met rust,
   en wat de heer niet mocht zien (`verdacht` in `T.GEBOUWEN`), is er niet meer. De getallen in `T.ONDERNEMERS_INSTELLINGEN`.
 - `js/bazen.js`: **twee bazen, de heer en het dorp** (vraag 106, 3 okt; Marcel: "106 a b c d ja"): de gunst van de heer
   en het vertrouwen van het dorp in jou (`D.bazen`, 0 tot 100), veranderd met `T.wijzigGunst(D, n, waarom)` en
   `T.wijzigVertrouwen(D, n, waarom)` vanuit de regels waar het gebeurt (de schatting via `T.gunstNaSchatting` in
   `T.gevolgVanBetaling`, de heervaart, de schandpaal, de soldaten, `T.vertrouwenNaVoorval`, `T.vertrouwenNaBevolking` in
   `T.wijzigBevolking`, en elke dag `T.tikBazenDag`: het vertrouwen gaat een stukje naar de tevredenheid, vraag 106,
-  stap 3). **De heer heeft één meter, de gunst** (11 okt, vraag 151, optie 1, deel B1): wat vroeger de argwaan van de inner
+  stap 3). **De heer heeft één meter, de gunst** (11 okt, vraag 151, optie 1, deel B1): wat vroeger de argwaan
   veranderde (antwoorden met `doe.gunst`, de bode, het boek van de zaak, de heervaart), verandert nu de gunst, en de raadsman
   weegt hem met wat de argwaan woog (`gunst` in `T.RAADSMAN_INSTELLINGEN.karakters`). Onder 20 een waarschuwing (de brief `waarschuwing` in `js/brieven.js`, en de raad), op 0 weg (`T.ambtKwijt` met waarom, of `D.einde` met reden 'verjaagd'), maar altijd eerst
   de waarschuwing. De twee gezichten in de balk:
@@ -913,7 +914,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   spel (`T.nieuwLand`, in `S.land`), wegen met hoeveel dagen reizen, en wat je zag (`gezien`; de rest is donker). Reizen:
   `T.reisNaar` (over wegen die je kent) en `T.beginReis`; `T.werkLandBij` (elk beeld) laat je aankomen of thuiskomen, en
   opent de kaart als de schout op de weg het dorp uit staat (`T.wegInEnUit`). **Wie reist, verlaat de kaart van het
-  dorp niet:** de schout gaat uit de wezens, en het dorp blijft `S.wereld`, zodat de heer, de inner, de marskramer en de
+  dorp niet:** de schout gaat uit de wezens, en het dorp blijft `S.wereld`, zodat de heer, de marskramer en de
   rovers thuis hun werk doen. Of de schout weg is, zegt `T.schoutIsWeg(D)` (`js/dorp.js`; ook een ander gebied), of hij op reis is,
   `T.opReis`; berichten (`js/ui.js`) en brieven (`js/brieven.js`) wachten dan in `S.land` (`T.bewaarVoorLater`,
   `T.briefVoorLater`), en een bezoeker zet de reis niet op 1× (`T.naarGewoneSnelheid`). Achter de spelregel "Land"
@@ -1031,11 +1032,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   schuren, de mensen, de kist zoals hij hem telde toen hij kwam, en elk gebouw) via `T.eisVanDeHeer` en
   `T.GEBOUWEN[soort].heer`, `T.gevolgVanBetaling` voor venster en knop, de straffen tot je ambt
   kwijt, de gunst na het betalen, `T.gunstNaSchatting`; zaaien en braak staan in `js/akkers.js`; sinds 11 okt, vraag 151, optie 1, deel B1, kijkt hij
-  niet meer op een rapport van zijn inner en kent hij geen argwaan, toeslag of rond kijken meer), `js/inner.js`
-  (de inner komt in oogstmaand nog kijken, tot deel B2 hem weghaalt, maar telt niets meer: geen rapport, geen argwaan,
-  geen omkopen en geen korting. Wat hij ziet, in een rechte lijn en niet door huizen, `T.innerKijkt`, bepaalt alleen waar hij
-  loopt; zijn poppetje loopt zijn eigen ronde of met de schout mee, tot zonsondergang, `T.werkInnerBij`; en wie met hem
-  praat, houdt hem op), `js/boeren.js` (wie de boeren zijn, geloot per
+  niet meer op een rapport en kent hij geen argwaan, toeslag of rond kijken meer;
+  de inner zelf ging er op 11 okt ook uit), `js/boeren.js` (wie de boeren zijn, geloot per
   spel: een karakter uit `T.KARAKTERS` in `js/mensen.js`, met een eigen gesprek onder dezelfde naam,
   en de eigenschappen maaien, opbrengst, zaaien en aanzien; de regels vragen `T.boerFactor` en
   `T.aanzienVan`, het scherm `T.overBoerTekst`), `js/vee.js` (het vee: `T.VEE` en `T.maakDier`,
@@ -1059,7 +1057,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   bouwfases uit `gereedschap/pixelart/bouwfasen.cjs` (`tegels/bouwfasen/<tekening>.png` + `bouwfasen.json`). Getallen
   om bij te stellen staan telkens bovenaan in één blok (`T.GEBOUWEN_INSTELLINGEN`,
   `T.BEHOEFTEN_INSTELLINGEN`, `T.AKKER_STADIA`, `T.GRAAN_PER_TEGEL`, `T.HANDEL_INSTELLINGEN`,
-  `T.HEER_INSTELLINGEN`, `T.INNER_INSTELLINGEN`).
+  `T.HEER_INSTELLINGEN`).
 - Wiens gesprek een wezen voert, vraag je aan `T.gesprekIdVan(e)` (`js/gesprek.js`): zijn `gesprek`
   als hij er een heeft, anders zijn soort. Zo delen honderd figuranten één soort (`dorpeling`)
   zonder alle honderd hetzelfde te zeggen.
@@ -1094,8 +1092,8 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   zijn"): binnen een aantal tegels van je stad en van elke opslag, een ossenkar haalt de grondstoffen op, en je bouwt
   alles zelf vanaf een lege plek ("We moeten ook zelf alles vanaf de start gaan bouwen"); en je vecht in beurten, om je dorp te verdedigen en om het eiland te veroveren tot het
   kasteel van de heer, zoals in Jagged Alliance 2. De schout is je held: hij vecht en praat. Wat hieronder staat over
-  een poppetje zonder hand van bovenaf en een dorp dat zelf bouwt, is daarmee om; het verstoppen en heel "arm lijken"
-  gaan eruit. Eerst een proef met het bouwbereik en de kar (vraag 152).
+  een poppetje zonder hand van bovenaf en een dorp dat zelf bouwt, is daarmee om; het verstoppen, de inner en heel "arm lijken"
+  zijn eruit (optie 1, 11 okt). Eerst een proef met het bouwbereik en de kar (vraag 152).
 
 - Je bent de **schout**, een poppetje dat door het dorp loopt, geen hand van bovenaf. Je breidt
   het dorp uit en bestuurt het met **wetten** (eerst keuren genoemd), in een menu zoals in Democracy 3
@@ -1116,9 +1114,8 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   proef met één keten (de verdwenen graanzak), na het beeld in de werklijst (`spel.md`, "Informatie, de zitting en
   mensen die onthouden").
 - De **heer** is verward en ziet alleen geld. Levert het dorp te weinig, dan straft hij: in het dorp, jou zelf, met
-  hogere eisen, en met soldaten. Zijn **inner** komt nog kijken (tot deel B2), maar wat hij ziet, doet niets meer: de heer rekent
-  op wat er is. Wapens zijn niet
-  verboden (Marcel, 7 okt: "Alleen weerstand tegen de heer is inacceptabel"): hij straft niet wat je hebt, maar wat je
+  hogere eisen, en met soldaten. De heer rekent op wat er is (sinds 11 okt, vraag 151, zonder inner en zonder verstoppen).
+  Wapens zijn niet verboden (Marcel, 7 okt: "Alleen weerstand tegen de heer is inacceptabel"): hij straft niet wat je hebt, maar wat je
   tegen hem doet. Hij stelt geen doelen (Marcel, 1 okt, vraag 78, a): "de heer moet alleen betaald worden, en hij mag
   wel eisen stellen. Maar meer om het je moeilijk te maken." Sinds 6 okt is hij ook de tegenstander: met een kasteel,
   bondgenoten en per spel een ander karakter (vraag 126).
@@ -1165,7 +1162,8 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
 - **Geld verdienen** (Marcel, 1 okt): "we moeten echt denken aan het commerciële deel van het project. Ik wil hier
   eigenlijk geld mee verdienen." En: "Volgens mij is ons idee dieper dan wat er op Steam staat? Ook de art stijl speelt
   een grote rol." Wat het spel verkoopt, is het concept (je bestuurt als één mens in het dorp) en de beeldstijl; de
-  heer, de inner en het verstoppen zijn de satire daarin (`commercieel.md`). Het tijdpad (vraag 83): de kern dit jaar,
+  heer is de satire daarin, zonder inner en zonder verstoppen sinds 11 okt (vraag 151; `commercieel.md`). Het tijdpad
+  (vraag 83): de kern dit jaar,
   in januari 2027 de naam, geluid, Engels en de Steam-pagina, in juni 2027 de demo in Next Fest. Er is weinig geld
   ("Ik gebruik jou ☺️"): wat kan, maakt Claude, zoals de beelden uit code; Marcel kiest, luistert en plaatst.
 - **Een toestand is een status** (Marcel, 1 okt, als richtlijn: "Honger, droogte of een plaag, moet een status zijn",
@@ -1222,7 +1220,7 @@ niet. `test/opslaan.test.cjs` bewaakt dat bewaren en laden hetzelfde spel geeft.
 **Geen bewakers voor regels** (27 sep, vraag 25 E): een toets laadt het hele spel, dus `T.x && T.x(...)`
 of `if (T.x)` voor een regel uit `js/` doet niets, behalve lezen alsof een deel van het spel er soms
 niet is. Ze blijven alleen waar een bladzijde een deel van het spel laadt (`gereedschap/wereld.html`
-zonder het vee, de heer en de bewoners, en de gespreksschrijver zonder de inner), op `T.ui`, en op
+zonder het vee, de heer en de bewoners), op `T.ui`, en op
 gegevens (`T.MENSEN.x && ...`).
 
 **Zo dat samen spelen later kan** (Marcel, 6 okt, vraag 126, f: na de release, met een speler als heer). Twee regels
@@ -1250,7 +1248,7 @@ Over het raster, het gevecht in beurten en de overgang ernaartoe.
   schuiven onderaan in beeld zodra een gevecht begint, ook in het gehucht.
 - Monsters openen geen deuren. Kan geen enkel monster de schout nog zien of bereiken, dan eindigt
   het gevecht ('kwijt').
-- Twee klokken (26 sep): wat in de wereld gebeurt (lopen, maaien, dwalen, het geduld van de inner),
+- Twee klokken (26 sep): wat in de wereld gebeurt (lopen, maaien, dwalen, het geduld van wie op een ander wacht),
   loopt op de tijd van de wereld, de schermtijd maal de snelheid (`dtWereld` in `js/main.js`,
   opgeteld in `S.wereldTijd`); wat alleen op het scherm beweegt (de wind, een flits, zwevende tekst),
   op `S.tijd`. Zo kost een tocht op elke snelheid even veel uren. Een gevecht loopt altijd op 1×.
@@ -1262,7 +1260,7 @@ Over het raster, het gevecht in beurten en de overgang ernaartoe.
   `T.laatTijdGaan(S, reden)` (`js/tijd.js`), met een naam per venster ('brief', 'handel', ...).
   `S.kalender.snelheid` is alleen wat de speler koos; hoe snel het nu echt gaat, zegt
   `T.snelheidNu(S)`. Een venster zet dus nooit zelf `snelheid` en onthoudt ook niets.
-- Een bezoeker (de marskramer, de heer, de inner, en wie er nog bij komt) komt aan via
+- Een bezoeker (de marskramer, de heer, en wie er nog bij komt) komt aan via
   `T.bezoekerKomtAan(S, bezoek)` (`js/dag.js`), met zijn bericht in `bezoek.aankomst`: overdag,
   het bericht één keer, en naar 1× als hij ertoe doet.
 
@@ -1284,7 +1282,6 @@ dag (zonder getal zegt het hoe laat het is; een dag duurt vijf minuten bij 1×, 
 tien keer zo ver), `Spel.debug.geenNacht = true` zet de nacht uit, `Spel.debug.bouw('huis', x, y)` bouwt,
 `Spel.debug.marskramer()` laat de marskramer nu komen (`(2)` voor zijn herfstbezoek),
 `Spel.debug.brief()` stuurt de brief van de heer nu, `Spel.debug.heer()` laat hem nu komen,
-`Spel.debug.inner()` de inner (is hij er, dan zegt het tot hoe laat hij blijft en hoe lang je hem aan de praat hield).
 `Spel.debug.vee('koe', 4)` zet vier koeien op de weide met de meeste plaats, bij de kudde: ze
 blijven binnen de weide en geven melk (`js/vee.js`); een schaap gaat naar de heide. Zonder weide rond
 een open plek bij de schout. `Spel.debug.bewoners()` zegt per bewoner wie het is, zijn huis, zijn werk,

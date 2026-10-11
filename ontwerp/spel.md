@@ -38,7 +38,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | De wetten (in "Keuren en politiek") | gebouwd (29 sep): een menu zoals Democracy 3 onder W, met rantsoen, vreemden welkom, houtkap en belasting | vraag 54 |
 | Het eerste proefje | gebouwd (23 sep); de kaart sinds 26 sep rond het plein (vierde versie) | 1 |
 | De kern voor het tweede proefje | voorstel; de heer en de inner kwamen anders, groepen en keuren wachten | 9 |
-| Rijk worden en arm lijken | de inner, de argwaan en verstoppen deel 1 gebouwd; de soldaten zoeken altijd, en de inner afleiden en omkopen (27 sep); sinds 11 okt besloten: dit alles gaat eruit (Marcel: "is gewoon te saai", "Arm lijken ook eruit"); de heer blijft | 4, 6, vraag 151 |
+| Rijk worden en arm lijken | eruit (11 okt, optie 1) | 4, 6, vraag 151 |
 | Het dorp: mensen, behoeften en de winter | gebouwd (23 sep); de winter zie je aankomen (28 sep); de mensen sprokkelen hout, maar niet genoeg (30 sep); een gezin wacht op de winter als het hout of het eten hem niet haalt, en het zaaigraan eet het dorp pas bij nood (1 okt), tenzij er wachters bij de graanschuur staan (8 okt) | 3, vraag 74, 79, 81, 132 |
 | Gebouwen | 45 soorten; 16 in het bouwmenu van het gehucht | 2, 14 |
 | Handel: de marskramer | gebouwd (24 sep); in de lente ook zaaigraan, en de boeren zaaien na tot 1 bloeimaand (1 okt) | 4, vraag 79 |
@@ -1538,10 +1538,10 @@ bazen die je allebei kunnen wegsturen), is werklijst vraag 106.
 De heer blijft wel een element. Arm lijken ook eruit." Besloten: heel "rijk worden en arm lijken" gaat eruit: de kelders,
 de soldaten die zoeken, de inner die telt wat hij ziet, de argwaan, afleiden en omkopen, de getuigen en het stiekeme bos.
 De heer blijft: zijn brief, Sint-Maarten, zijn straffen, zijn gunst, de grillen en de heervaart. Werklijst vraag 151. Het
-plan om het eruit te halen heet optie 1, en het gaat door (Marcel, 11 okt: "dat moet eruit"). Tot het eruit is,
-beschrijft "Zo werkt het nu" hieronder wat er nog in de code staat.
+plan om het eruit te halen heette optie 1 (Marcel, 11 okt: "dat moet eruit"), en is af: deel A, B1 en B2 zijn gebouwd
+(11 okt). Wat hieronder staat, is geschiedenis: het beschrijft wat er tot 11 okt in de code stond.
 
-**Zo werkt het nu** (25 sep, bijgewerkt 27 sep en 11 okt; `js/inner.js`, `js/heer.js`):
+**Zo werkt het nu** (25 sep, bijgewerkt 27 sep en 11 okt; `js/heer.js`, en `js/inner.js` tot 11 okt):
 - **Deel A van optie 1 is gebouwd (11 okt, vraag 151).** Weg zijn het verstoppen (de kelders), de soldaten die
   zoeken, de getuigen, "betrapt" en het stiekeme bos, met hun spelregels, vensters en toetsen. Elke akker staat in de
   boeken van de heer, het bos melden kost gunst, en in `js/zien.js` blijft het licht. De punten hieronder over
@@ -1552,6 +1552,11 @@ beschrijft "Zo werkt het nu" hieronder wat er nog in de code staat.
   spelregels "Waar de heer de rekening op maakt" en "Sporen", omkopen, de korting en de meter op tafel zijn weg. De inner
   komt nog in oogstmaand kijken, loopt zijn ronde en laat zich afleiden, maar telt niets meer; deel B2 haalt hem zelf weg.
   De punten hieronder over zijn rapport, argwaan en omkopen beschrijven dus wat er niet meer is.
+- **Deel B2 van optie 1 is gebouwd (11 okt, vraag 151): de inner zelf is weg.** Weg zijn `js/inner.js`, zijn bezoek op
+  15 oogstmaand met de aankondiging, zijn poppetje en zijn gesprek, het blok `INNER_INSTELLINGEN`, `Spel.debug.inner` en
+  "Vandaag komt de inner" in het rapport. Het meelopen met de schout (`T.loopNaastDeSchout`) staat nu in `js/lopen.js`. Optie 1
+  is daarmee af: "Rijk worden en arm lijken" is uit het spel, en de heer blijft. **Alles hieronder in deze sectie is
+  geschiedenis**, bewaard als bron.
 - **De inner** komt op 15 oogstmaand, tien dagen vooraf aangekondigd, overdag vanaf negen uur. Sinds
   de dag (26 sep) loopt de tijd dan door, op 1× (daarvoor stond hij stil zolang de inner er was). Hij
   kijkt 7 tegels ver in een rechte lijn; huizen en schuren houden zijn blik tegen.
