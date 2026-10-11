@@ -55,8 +55,6 @@ mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voo
 - De bomen bekijken (vraag 148, stap 1 en 2, 11 okt): elke boom een van zijn vormen, de nieuwe soorten, en de bomen in
   het jaar met sneeuw op de takken; `Spel.debug.bomen = 'herfst'` (of `'lente'`, `'winter'`, `'sneeuw'`, met
   `Spel.debug.weer('sneeuw', 0.6)` voor de grond). Lentemaand is al lente, zodat een spel niet kaal begint.
-- De proefplaat van het groen eronder (vraag 148, stap 3, 11 okt): `node gereedschap/pixelart/groen-proef.cjs onder`, in
-  `gereedschap/pixelart/uit/groen/onder.png`. Goed zo, of wat anders?
 - Vraag 142, de bladzijde met alle getallen (`gereedschap/instellingen.html`): stap 3, de speeltest naast de vorige,
   staat in `main` (10 okt). Marcel probeert hem op zijn computer (met `npm start`; Playwright erbij, `npm i -g
   playwright` en `npx playwright install chromium`).
@@ -72,7 +70,8 @@ mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voo
    okt, avond): elke boom een van zijn vormen, de nieuwe soorten op de kaart, de spar dunner onder de sneeuw; en stap 2
    (11 okt; Marcel: "Ja, doe stap 2 met de sneeuw erbij"): de bomen in het jaar, met sneeuw op de takken. **Nu stap 3**,
    het groen eronder (de struiken, varens en graspollen staan nu groen in de sneeuw), dan d, de spullen bij de huizen.
-   **Bezig in sessie `ccr-2034e30c-d2iyg5`** (11 okt): stap 3; de proefplaat staat en wacht op Marcel.
+   **Bezig in sessie `ccr-2034e30c-d2iyg5`** (11 okt): stap 3; de proefplaat is goed (Marcel: "Ja voor nu goed"), nu
+   het spel in.
 1. Een proefversie voor Marcels 4K-scherm en een eerste tester (33d; `npm run proefversie`, ook `-- --windows`), met de
    graanzak erin. De laatste is van 3 okt (`36c713e`), zonder de verzoeken, de twee bazen, het ontginnen, de markt, de
    wolven, het eiland, WebGL en de graanzak.
@@ -7578,9 +7577,10 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     winter alleen bruin blad), de stronk en de stenen alleen sneeuw; wat plat ligt, krijgt sneeuw in vlekken
     (`sneeuwVlekken`; anders werd een varen helemaal wit). De nieuwe soorten (`NIEUW_GROEN`): klaproos, korenbloem,
     brandnetel, heide, brem, distel, lisdodde, waterlelie en braam. Zonder seizoen of vorm tekent elke oude plant pixel
-    voor pixel als vroeger (nagekeken), en een plant rendert in minder dan een seconde, de sneeuw in een paar. **Wacht op
-    Marcel:** de plaat keuren; dan het spel: de vellen per seizoen, de vormen per tegel, en de maker die de nieuwe soorten
-    legt.
+    voor pixel als vroeger (nagekeken), en een plant rendert in minder dan een seconde, de sneeuw in een paar. **Marcel
+    (11 okt): "Ja voor nu goed".** Wat nog kan schuren (van Claude): de brandnetels lijken van dichtbij een donker struikje,
+    de braam lijkt in de zomer op de struik, en het hoge gras was in de zomer al droog. Dan het spel: de vellen per
+    seizoen, de vormen per tegel, en de maker die de nieuwe soorten legt.
 149. **Kleren naar stand** (Marcel, 10 okt: "Hogere niveau sociale mensen moeten duurdere kleren krijgen").
     **Wat er nu is:** 24 uiterlijken per volwassen lijf en 12 per kind en per oude (vraag 145,
     `gereedschap/pixelart/uiterlijk.cjs`), allemaal boerenkleren: een kiel, klompen, lappen en vuil, in gedempte verf.
