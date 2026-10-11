@@ -66,7 +66,7 @@ test('het graan van de heer is een keuze (punt 6), en de heer staat in de werkba
   assert.equal(T.HEER_INSTELLINGEN.graan, 'pacht');
   assert.equal(T.HEER_INSTELLINGEN.rekening, undefined, 'een keuze die in een bewaard spel stond maar niet meer bestaat, wordt overgeslagen');
   const heer = T.werkbankGetallen(T.WERKBANK.find((d) => d.blok === 'HEER_INSTELLINGEN'));
-  assert.equal(heer.find((g) => g.pad === 'HEER_INSTELLINGEN.brief.dag').label, 'brief · dag');
+  assert.equal(heer.find((g) => g.pad === 'HEER_INSTELLINGEN.brief.dag').label, 'letter · day');
   assert.equal(heer.find((g) => g.pad === 'HEER_INSTELLINGEN.pachtPerAkkertegel').waarde, bestanden.HEER_INSTELLINGEN.pachtPerAkkertegel);
   assert.ok(!heer.some((g) => g.pad === 'HEER_INSTELLINGEN.brief.maand'), 'een maand is geen getal');
 });
@@ -84,11 +84,11 @@ test('de weides: of het land uitput en of het vee groeit, zijn keuzes; Marcel ko
   assert.deepEqual(T.VEE_INSTELLINGEN, bestanden.VEE_INSTELLINGEN);
   // En hun getallen staan in de werkbank, elk met een leesbare naam; een maand is geen getal.
   const vee = T.werkbankGetallen(T.WERKBANK.find((d) => d.blok === 'VEE_INSTELLINGEN'));
-  assert.equal(vee.find((g) => g.pad === 'VEE_INSTELLINGEN.plaats.koe').label, 'plaats · koe');
+  assert.equal(vee.find((g) => g.pad === 'VEE_INSTELLINGEN.plaats.koe').label, 'room · cow');
   assert.equal(vee.find((g) => g.pad === 'VEE_INSTELLINGEN.melkVoorMensen').waarde, 5);
   assert.ok(!vee.some((g) => g.pad === 'VEE_INSTELLINGEN.melk.van'));
   const velden = T.werkbankGetallen(T.WERKBANK.find((d) => d.blok === 'VELDEN_INSTELLINGEN'));
-  assert.equal(velden.find((g) => g.pad === 'VELDEN_INSTELLINGEN.akkerPutUit').label, 'akker put uit');
+  assert.equal(velden.find((g) => g.pad === 'VELDEN_INSTELLINGEN.akkerPutUit').label, 'arable field wears out');
 });
 
 test('de doorkijk: het kijkvenster en het plein zijn de standaard, het raster is een keuze (vraag 34)', () => {
@@ -104,7 +104,7 @@ test('de doorkijk: het kijkvenster en het plein zijn de standaard, het raster is
   assert.deepEqual(T.DOORKIJK_INSTELLINGEN, bestanden.DOORKIJK_INSTELLINGEN);
   // De getallen staan in de werkbank; het raster zelf is een keuze, geen getal.
   const doorkijk = T.werkbankGetallen(T.WERKBANK.find((d) => d.blok === 'DOORKIJK_INSTELLINGEN'));
-  assert.equal(doorkijk.find((g) => g.pad === 'DOORKIJK_INSTELLINGEN.kijkgatStraal').label, 'kijkgat straal');
+  assert.equal(doorkijk.find((g) => g.pad === 'DOORKIJK_INSTELLINGEN.kijkgatStraal').label, 'peephole radius');
   assert.equal(doorkijk.find((g) => g.pad === 'DOORKIJK_INSTELLINGEN.rasterCel').waarde, 1);
   assert.ok(!doorkijk.some((g) => g.pad === 'DOORKIJK_INSTELLINGEN.manier'));
 });
@@ -119,16 +119,37 @@ test('de werkbank kent alle getallen, met een leesbare naam', () => {
   const alle = T.WERKBANK.flatMap((deel) => T.werkbankGetallen(deel));
   const pad = (p) => alle.find((g) => g.pad === p);
   assert.ok(pad('GRAAN_PER_TEGEL'));
-  assert.equal(pad('BEHOEFTEN_INSTELLINGEN.brandhoutPerHuishoudenPerDag').label, 'brandhout per huishouden per dag');
-  assert.equal(pad('HANDEL_INSTELLINGEN.koopt.graan.prijs.0').label, 'koopt · graan · prijs · lente');
-  assert.equal(pad('HANDEL_INSTELLINGEN.bezoeken.2.dag').label, 'bezoeken · herfst · dag');
-  assert.equal(pad('HEER_INSTELLINGEN.straffen.1.vanaf').label, 'straffen · boete · vanaf');
-  assert.equal(pad('HEER_INSTELLINGEN.straffen.1.vanaf').doorOptie, 'Hoe de heer telt');
-  assert.equal(pad('GRAAN_PER_TEGEL').doorOptie, 'Graan');
+  assert.equal(pad('BEHOEFTEN_INSTELLINGEN.brandhoutPerHuishoudenPerDag').label, 'firewood per household per day');
+  assert.equal(pad('HANDEL_INSTELLINGEN.koopt.graan.prijs.0').label, 'buys · grain · price · spring');
+  assert.equal(pad('HANDEL_INSTELLINGEN.bezoeken.2.dag').label, 'visits · autumn · day');
+  assert.equal(pad('HEER_INSTELLINGEN.straffen.1.vanaf').label, 'punishments · a fine · from');
+  assert.equal(pad('HEER_INSTELLINGEN.straffen.1.vanaf').doorOptie, 'How the lord counts');
+  assert.equal(pad('GRAAN_PER_TEGEL').doorOptie, 'Grain');
   assert.equal(pad('HEER_INSTELLINGEN.boete').doorOptie, null);
   for (const g of alle) assert.equal(typeof g.waarde, 'number', g.pad);
   // Geen tekst en geen ja/nee: die zijn van de keuzes.
   assert.ok(!alle.some((g) => g.pad === 'HEER_INSTELLINGEN.betalenIn'));
+});
+
+// De namen van de getallen komen uit NAAM_VAN_SLEUTEL (js/opties.js), in het Engels (vraag 147, deel 7): een sleutel die er
+// niet in staat, toont zich in woorden uit het Nederlands van de code, en dat ziet de speler.
+test('elke sleutel van elk getal in de werkbank heeft een Engelse naam', () => {
+  const alle = T.WERKBANK.flatMap((deel) => T.werkbankGetallen(deel));
+  const mist = new Set();
+  for (const g of alle) {
+    if (!g.pad.includes('_INSTELLINGEN.')) continue; // de losse getallen hebben hun eigen naam, in T.WERKBANK
+    const delen = g.pad.split('.');
+    for (let i = 1; i < delen.length; i++) {
+      if (/^\d+$/.test(delen[i])) continue;
+      const tot = delen.slice(0, i + 1).join('.');
+      if (!T.werkbankNaam(tot)) mist.add(tot);
+    }
+  }
+  assert.deepEqual([...mist], [], 'zet de sleutel in NAAM_VAN_SLEUTEL (js/opties.js), met een Engelse naam');
+  // Een naam uit woorden van een sleutel (inWoorden) heeft geen hoofdletter midden in een woord; een Engelse naam wel
+  // een hoofdletter na een spatie, maar niet zo.
+  for (const g of alle) assert.ok(!/[a-z][A-Z]/.test(g.label), `${g.pad}: ${g.label}`);
+  for (const deel of T.WERKBANK) assert.ok(/^[A-Z]/.test(deel.naam), `kop ${deel.naam}`);
 });
 
 test('wat je in de werkbank zet, gaat vóór een keuze, en is terug te zetten', () => {

@@ -315,6 +315,16 @@
   const alsWaarde = (k, tekst) => (k.soort === 'object' || k.soort === 'lijst' ? metN(tekst.slice(k.begin, k.eind)) : k.waarde);
   const deel = (k, sleutel) => (k && k.delen ? (k.delen.find((d) => d.sleutel === sleutel) || {}).waarde : null);
 
+  // De tekst van een knoop die een gewone tekst is, of een T.t('gewone tekst') (zo staan de spelteksten in de code,
+  // js/taal.js): de namen en de uitleg van de spelregels en de koppen van de werkbank. Anders null.
+  I.tekstVan = function (knoop) {
+    if (!knoop) return null;
+    if (knoop.soort === 'tekst') return knoop.waarde;
+    const m = knoop.soort === 'anders' && /^T\.t\(\s*(?:'((?:[^'\\]|\\.)*)'|"((?:[^"\\]|\\.)*)")\s*\)$/.exec(knoop.waarde);
+    if (!m) return null;
+    return (m[1] != null ? m[1] : m[2]).replace(/\\(.)/g, '$1');
+  };
+
   // Het overzicht uit de bestanden: `bronnen` is { 'js/akkers.js': tekst, ... }. Geeft { onderwerpen, spelregels,
   // gebouwen }; elk blad met { bestand, blok, pad, soort, waarde, uitleg, boven, spelregels }, zodat de bladzijde het kan
   // tonen en de server het kan schrijven.
@@ -332,7 +342,7 @@
         const o = d.waarde;
         const id = deel(o, 'id');
         if (!id || id.soort !== 'tekst') continue;
-        const tekst = (sl) => { const k = deel(o, sl); return k && k.soort === 'tekst' ? k.waarde : null; };
+        const tekst = (sl) => I.tekstVan(deel(o, sl));
         const standaard = tekst('standaard');
         const keuzes = [];
         const kz = deel(o, 'keuzes');
@@ -344,7 +354,7 @@
           const zet = {};
           for (const z of (deel(k, 'zet') || {}).delen || []) {
             zet[z.sleutel] = alsWaarde(z.waarde, bronnen[waar.OPTIES]);
-            const wie = { optie: tekst('naam') || id.waarde, keuze: knaam && knaam.waarde, standaard: kid && kid.waarde === standaard };
+            const wie = { optie: tekst('naam') || id.waarde, keuze: I.tekstVan(knaam), standaard: kid && kid.waarde === standaard };
             const heel = z.waarde.soort === 'object' || z.waarde.soort === 'lijst';
             (zetten[z.sleutel] = zetten[z.sleutel] || []).push({ ...wie, waarde: zet[z.sleutel], heel });
             // Zet hij een heel object (TREDEN_INSTELLINGEN.dorp), dan zet hij ook elk getal erin: dat zegt de rij van dat
@@ -357,7 +367,7 @@
               }
             }
           }
-          keuzes.push({ id: kid && kid.waarde, naam: knaam && knaam.waarde, uitleg: kuitleg && kuitleg.waarde, zet });
+          keuzes.push({ id: kid && kid.waarde, naam: I.tekstVan(knaam), uitleg: I.tekstVan(kuitleg), zet });
         }
         spelregels.push({ id: id.waarde, naam: tekst('naam'), uitleg: tekst('uitleg'), standaard, keuzes, voorProeven: !!(deel(o, 'voorProeven') || {}).waarde,
           bestand: waar.OPTIES, blok: 'OPTIES', pad: [d.sleutel, 'standaard'], boven: d.uitleg });
@@ -381,16 +391,16 @@
         const naam = deel(d.waarde, 'naam');
         const blok = deel(d.waarde, 'blok');
         const losse = deel(d.waarde, 'losse');
-        if (blok && blok.soort === 'tekst') voegToe(naam ? naam.waarde : blok.waarde, blok.waarde);
+        if (blok && blok.soort === 'tekst') voegToe(I.tekstVan(naam) || blok.waarde, blok.waarde);
         else if (losse && losse.delen) {
           const bladen = [];
           for (const l of losse.delen) {
             const b = lees(l.sleutel);
             if (!b) continue;
             gehad.add(l.sleutel);
-            for (const x of I.bladen(b.waarde)) bladen.push({ ...metBlad(waar[l.sleutel], l.sleutel, x), naam: l.waarde.waarde, uitleg: b.uitleg });
+            for (const x of I.bladen(b.waarde)) bladen.push({ ...metBlad(waar[l.sleutel], l.sleutel, x), naam: I.tekstVan(l.waarde), uitleg: b.uitleg });
           }
-          onderwerpen.push({ naam: naam ? naam.waarde : 'Losse getallen', bladen });
+          onderwerpen.push({ naam: I.tekstVan(naam) || 'Losse getallen', bladen });
         }
       }
     }

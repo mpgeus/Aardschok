@@ -220,6 +220,31 @@ Het gevecht schrijft kort en in de tegenwoordige tijd ("You hit the wolf: 3 dama
 | de weg de wereld in | the road into the world | de uitgang van het gehucht |
 | de klok (`T.uurTekst`) | *seven o'clock*, *half past seven* | dezelfde woorden als `klokTekst` in `js/hud.js` |
 
+## Erbij in deel 7 (de spelregels: `js/opties.js`)
+
+De naam en de uitleg van een spelregel en van elke keuze zijn `T.t('...')`, een gewone tekst zonder woorden erin (de
+bladzijde met getallen, `gereedschap/instellingen`, leest ze zo uit de tekst: `I.tekstVan`). De ids en de paden in `zet`
+blijven Nederlands. **De namen van de getallen in de werkbank** staan in `NAAM_VAN_SLEUTEL` (`js/opties.js`): per sleutel
+van een pad (`pachtPerAkkertegel`, `rovers` · `perRover`) één Engelse naam voor alle blokken; zegt een sleutel in één blok
+iets anders, dan staat hij bij `NAAM_VAN_PAD` met het hele pad. Een nieuw getal in een blok krijgt daar zijn naam
+(`test/opties.test.cjs` valt erover), en `T.werkbankNaam(pad)` geeft hem. Een label is de namen van het pad met ` · ertussen
+("firewood per household per day", "buys · grain · price · spring"); bij het marskramerbezoek en de straf staat de naam
+die de speler ziet (`toon`, `T.STRAF_TOON`). Een datum van Marcels besluiten ("Zoals voor 8 okt") is *As before 8 October*.
+
+| Nederlands | Engels | |
+|---|---|---|
+| de spelregels, de keuzes | game rules, choices | het venster op O; een knop heet kort (*Yes*, *No*, *On*, *Off*) |
+| Hoe de heer telt: slecht, precies, steeds zwaarder | How the lord counts: Badly, Exactly, Harsher each time | de uitleg zegt *short* (te weinig) in breuken: "Up to a third short, a fine" |
+| geloot, vast | drawn by lot, fixed | de boeren |
+| vult een maag, alleen tevredener | fills a stomach, only more content | vlees en vis |
+| naar stand | by standing | de kleren |
+| het kijkvenster, het raster, het kijkgat | the viewing window, the grid, the peephole | de doorkijk |
+| de videokaart | the graphics card | |
+| de schaft, het erf, de straal | the break, the plot, the radius | de namen in de werkbank |
+| de beekjes | the brooks | het weer |
+| de ondernemers (kop van de werkbank) | the tradesmen | een inwoner die een werkplaats wil beginnen |
+| de gunst per goud, de wrok, de dank | favour per gold, grudge, gratitude | de ondernemers en de heervaart |
+
 ## De maanden
 
 Gewone maanden (Marcel, 11 okt): de namen waar de regels op letten blijven in de code (`'lentemaand'`); wat de speler
