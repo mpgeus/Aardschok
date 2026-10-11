@@ -123,7 +123,7 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   vroeg of laat een bestand, en toetst de toets een ander spel dan er draait.
 - `npm run speeltest` speelt het gehucht een jaar met twee spelers in code (braaf, slim; vraag 45), en twee jaar met
   een derde, de bouwer, die van gehucht tot dorp wil en de raad volgt (vraag 58), en een vierde, de sluwe bouwer, die
-  daarbij de inner bespeelt en de heer 90% geeft (vraag 94),
+  daarbij de heer 90% geeft (vraag 94),
   elk met zaad 1 tot en met 3, in een onzichtbare browser, en zet de uitslag in
   `gereedschap/speeltest/uit/` (niet in git), met een tabel in `samenvatting.md`; wie twee jaar speelt, krijgt er een
   graanboek bij: per jaar waar het graan bleef, en hoeveel dagen er geen bier, brood of laken was. Hetzelfde zaad geeft
@@ -612,7 +612,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.weerbareMannen`), samen de weg op (`T.stuurWeg`, `waarom` 'bode'; bij de uitgang wachten ze op elkaar,
   `T.wachtOpDeAnderen`), in `D.bode`. **Onderschept** (Marcel: "De bode moet "onderschept" kunnen worden", en "iedereen
   kan dood"): bij het vertrekken valt een vast lot (`T.vastLot` in js/weer.js) of de mannen van de heer hem aanhouden
-  (`heer`: de brief weg, argwaan en gunst) of de rovers (`T.bodeGevaar`: hun bende, de winter, het donker; `onderschept` in
+  (`heer`: de brief weg en de gunst van de heer omlaag; de kans is `basis`) of de rovers (`T.bodeGevaar`: hun bende, de winter, het donker; `onderschept` in
   `D.bode`). Tegen de rovers vechten wie meegaan (`T.bodeKracht`, `T.bodeSlaatAf`: een veteraan dubbel, wapens), en hoe het
   afloopt, zegt `T.bodeOnderweg` (afgeslagen of beroofd, wie sneuvelt, wie gewond is, `p.gewond`, en een rover van de bende
   die valt). Het gebeurt op je eigen kaart (Marcel: "alles onze eigen kaart"; alleen buiten beeld als er al rovers
@@ -748,7 +748,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   tien zielen voor zijn oorlog, of goud (`T.vraagHeervaart`, `T.heervaartKeuzes` voor de knoppen onder zijn brief).
   Sturen (`T.stuurHeervaart`): wie gaat (`T.weerbareMannen` in `js/bewoners.js`), blijft bewoner, telt mee en eet,
   maar werkt nergens en loopt de weg af (`T.stuurWeg`, `p.weg`); op 1 herfstmaand komt hij terug (`T.komtTerug`), een
-  op de vier niet, en wie terugkomt, is veteraan. Vrijkopen (`T.koopHeervaartAf`) kost goud en argwaan. Wie niet
+  op de vier niet, en wie terugkomt, is veteraan. Vrijkopen (`T.koopHeervaartAf`) kost goud en gunst van de heer (`gunstPerGoud`, min wat het hem waard is). Wie niet
   kiest, stuurt ze na een week. De getallen in `T.HEERVAART_INSTELLINGEN` (in de werkbank), de spelregel "Heervaart".
 - `js/voorvallen.js`: **het dorp spreekt je aan** (vraag 65, A, 29 sep): om de paar dagen, in de winter vaker, komt
   iemand de schout zoeken met een vraag, een ruzie of een ramp (`T.tikVoorvallenDag`, `T.kiesVoorval`, dat loot naar
@@ -759,7 +759,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   staat stil tot je kiest. Wanneer en over wie staat in `T.VOORVALLEN`, de woorden onder dezelfde naam in
   `js/gesprekken.js` (naam `'{wie}'`, en `{ander}` in een zin), zodat je ze in de gespreksschrijver leest. Een antwoord
   zegt vooraf wat het kost (`T.prijsVanKeuze`, in het venster onder elk antwoord); wat het doet, staat in zijn gevolg:
-  de voorraad, `tevreden` (een stemming die wegslijt, `T.voorvalStemming` in de tevredenheid), `argwaan`, `verban`,
+  de voorraad, `tevreden` (een stemming die wegslijt, `T.voorvalStemming` in de tevredenheid), `gunst` (de gunst van de heer, `T.wijzigGunst`), `verban`,
   `sterfkans`, `gezin` (`T.gezinKomt` in `js/gebouwen.js`, dezelfde als de groei), het vee (`T.verliesVee`), en
   `voorval` (een vervolg, later, over dezelfde mensen). Wie je niet sprak, gaat na twee dagen voorbij; ben je weg (een
   ander gebied), dan beslist je raadsman (vraag 68, B). De spelregel "Voorvallen", de getallen in
@@ -833,7 +833,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   zitting is een voorval met `L.plein` (`js/voorvallen.js`): wie erbij hoort, staat 's middags op het plein
   (`T.zaakAnker`, voor `T.dagAnker`), en komt de schout bij het midden (`T.schoutBijDeZitting`), dan begint ze. Een vonnis
   is `doe.zaak` (`T.zaakGevolg`): de zaak is af, het vervolg wacht (`T.ZAAK_INSTELLINGEN.vervolg`), en een zak die nergens
-  staat, leest de inner op Sint-Maarten voor (`T.heerLeestHetBoek`, vanuit `T.heerStaatErOp`). De spelregel "De zaak".
+  staat, leest de heer zelf op Sint-Maarten in het boek van de schuur (`T.heerLeestHetBoek`, vanuit `T.heerStaatErOp`): dat
+  kost gunst, geen argwaan meer. De spelregel "De zaak".
 - `js/markt.js`: **de markt op het plein, die meegroeit** (vraag 110, d, en vraag 127, 6 okt; Marcel: "Grotere stad =
   grotere markt"): met de spelregel "De markt" op "Op het plein" (`T.MARKT_INSTELLINGEN.opHetPlein`) komt een markt niet
   als gebouw van 6 bij 6, maar als een marktblok op het plein: twee rijen kramen tegenover elkaar met een looppad
@@ -877,7 +878,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.wijzigVertrouwen(D, n, waarom)` vanuit de regels waar het gebeurt (de schatting via `T.gunstNaSchatting` in
   `T.gevolgVanBetaling`, de heervaart, de schandpaal, de soldaten, `T.vertrouwenNaVoorval`, `T.vertrouwenNaBevolking` in
   `T.wijzigBevolking`, en elke dag `T.tikBazenDag`: het vertrouwen gaat een stukje naar de tevredenheid, vraag 106,
-  stap 3). Onder 20 een waarschuwing (de brief `waarschuwing` in `js/brieven.js`, en de raad), op 0 weg (`T.ambtKwijt` met waarom, of `D.einde` met reden 'verjaagd'), maar altijd eerst
+  stap 3). **De heer heeft één meter, de gunst** (11 okt, vraag 151, optie 1, deel B1): wat vroeger de argwaan van de inner
+  veranderde (antwoorden met `doe.gunst`, de bode, het boek van de zaak, de heervaart), verandert nu de gunst, en de raadsman
+  weegt hem met wat de argwaan woog (`gunst` in `T.RAADSMAN_INSTELLINGEN.karakters`). Onder 20 een waarschuwing (de brief `waarschuwing` in `js/brieven.js`, en de raad), op 0 weg (`T.ambtKwijt` met waarom, of `D.einde` met reden 'verjaagd'), maar altijd eerst
   de waarschuwing. De twee gezichten in de balk:
   `T.ui.toonBazen` (`js/hud.js`). De spelregel "Twee bazen"; de getallen in `T.BAZEN_INSTELLINGEN`.
 - `js/grillen.js`: **elke maand een gril van de heer in een brief** (vraag 106, stap 2): `T.GRILLEN` (veertien, elk met
@@ -1024,16 +1027,15 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `js/handel.js` (de marskramer: drie bezoeken per jaar, prijzen per bezoek, `T.kanKopen` en
   `T.kanVerkopen`; in de lente ook zaaigraan, dat de boeren nazaaien tot 1 bloeimaand, en in een dorp laken (vraag 99), `T.zaaiNa` in `js/akkers.js`, waar
   ook staat hoeveel zaaigraan ze van de oogst tot het zaaien achterhouden, `T.zaaigraanApart`: het dorp eet het pas bij nood; hij staat op de plek `"marskramer"` uit het betekenisbestand), `js/heer.js`
-  (Sint-Maarten: zijn brief in wijnmaand, wat hij vraagt naar wat hij ziet via `T.eisVanDeHeer` en
+  (Sint-Maarten: zijn brief in wijnmaand, wat hij vraagt naar wat het dorp op dat moment heeft (het graan in de
+  schuren, de mensen, de kist zoals hij hem telde toen hij kwam, en elk gebouw) via `T.eisVanDeHeer` en
   `T.GEBOUWEN[soort].heer`, `T.gevolgVanBetaling` voor venster en knop, de straffen tot je ambt
-  kwijt; zaaien en braak staan in `js/akkers.js`), `js/inner.js` (de inner in oogstmaand: wat hij
-  ziet, in een rechte lijn en niet door huizen, `T.innerKijkt`; zijn rapport, `T.maakRapport`, dat
-  `T.eisVanDeHeer` als rekening neemt; de argwaan, `T.zetArgwaan`, en wat ze doet; zijn poppetje dat
-  zijn eigen ronde loopt of met de schout mee, tot zonsondergang, `T.werkInnerBij`; en `T.heerKijktRond` op
-  Sint-Maarten; sinds 25 sep telt hij ook de kist, en vertelt de marskramer hem wat hij je betaalde,
-  `T.boekMarskramer` in `js/handel.js`; sinds 27 sep kun je hem bespelen: wie met hem praat, houdt hem op,
-  en een geschenk in zijn gesprek (`doe: { omkopen: 10 }`, `T.koopInnerOm`) laat hem minder opschrijven,
-  `T.innerKorting`), `js/boeren.js` (wie de boeren zijn, geloot per
+  kwijt, de gunst na het betalen, `T.gunstNaSchatting`; zaaien en braak staan in `js/akkers.js`; sinds 11 okt, vraag 151, optie 1, deel B1, kijkt hij
+  niet meer op een rapport van zijn inner en kent hij geen argwaan, toeslag of rond kijken meer), `js/inner.js`
+  (de inner komt in oogstmaand nog kijken, tot deel B2 hem weghaalt, maar telt niets meer: geen rapport, geen argwaan,
+  geen omkopen en geen korting. Wat hij ziet, in een rechte lijn en niet door huizen, `T.innerKijkt`, bepaalt alleen waar hij
+  loopt; zijn poppetje loopt zijn eigen ronde of met de schout mee, tot zonsondergang, `T.werkInnerBij`; en wie met hem
+  praat, houdt hem op), `js/boeren.js` (wie de boeren zijn, geloot per
   spel: een karakter uit `T.KARAKTERS` in `js/mensen.js`, met een eigen gesprek onder dezelfde naam,
   en de eigenschappen maaien, opbrengst, zaaien en aanzien; de regels vragen `T.boerFactor` en
   `T.aanzienVan`, het scherm `T.overBoerTekst`), `js/vee.js` (het vee: `T.VEE` en `T.maakDier`,
@@ -1114,7 +1116,8 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   proef met één keten (de verdwenen graanzak), na het beeld in de werklijst (`spel.md`, "Informatie, de zitting en
   mensen die onthouden").
 - De **heer** is verward en ziet alleen geld. Levert het dorp te weinig, dan straft hij: in het dorp, jou zelf, met
-  hogere eisen, en met soldaten. Zijn **inner** komt kijken, en wat je opzij zet, moet uit zijn zicht. Wapens zijn niet
+  hogere eisen, en met soldaten. Zijn **inner** komt nog kijken (tot deel B2), maar wat hij ziet, doet niets meer: de heer rekent
+  op wat er is. Wapens zijn niet
   verboden (Marcel, 7 okt: "Alleen weerstand tegen de heer is inacceptabel"): hij straft niet wat je hebt, maar wat je
   tegen hem doet. Hij stelt geen doelen (Marcel, 1 okt, vraag 78, a): "de heer moet alleen betaald worden, en hij mag
   wel eisen stellen. Maar meer om het je moeilijk te maken." Sinds 6 okt is hij ook de tegenstander: met een kasteel,
@@ -1153,8 +1156,8 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   gewoon nog leeg nu": sinds 29 sep spreekt het dorp je aan, met voorvallen (vraag 65, `js/voorvallen.js`); het dorp
   van bovenaf komt er niet (vraag 74, d).
 - **Het hart is besturen en groeien** (Marcel, 28 sep, vraag 50): knoppen met een prijs (keuren) én
-  bouwen en plannen. **Rijk worden en arm lijken** (de heer, de inner en het verstoppen), eerst de
-  kern, blijft als de druk van boven. **Vechten** begint met aanvallen op je eigen dorp (rovers, de
+  bouwen en plannen. **Rijk worden en arm lijken** (de inner, de argwaan en het verstoppen) is er sinds 11 okt
+  uit (vraag 151); de druk van boven blijft de heer. **Vechten** begint met aanvallen op je eigen dorp (rovers, de
   heervaart, dan een rivaal), in beurten op je eigen kaart met je militie; daarna de streek als
   kaarten naast elkaar; tussen dorpen sinds 6 okt al vóór de vrijheid, op weg naar de heer (vraag 126; eerst
   was het: pas na de vrijheid).
@@ -1281,8 +1284,7 @@ dag (zonder getal zegt het hoe laat het is; een dag duurt vijf minuten bij 1×, 
 tien keer zo ver), `Spel.debug.geenNacht = true` zet de nacht uit, `Spel.debug.bouw('huis', x, y)` bouwt,
 `Spel.debug.marskramer()` laat de marskramer nu komen (`(2)` voor zijn herfstbezoek),
 `Spel.debug.brief()` stuurt de brief van de heer nu, `Spel.debug.heer()` laat hem nu komen,
-`Spel.debug.inner()` de inner (`(true)`: onverwacht; is hij er, dan zegt het tot hoe laat hij blijft, hoe
-lang je hem aan de praat hield en wat je hem gaf), en `Spel.debug.argwaan(0.6)` zet zijn argwaan.
+`Spel.debug.inner()` de inner (is hij er, dan zegt het tot hoe laat hij blijft en hoe lang je hem aan de praat hield).
 `Spel.debug.vee('koe', 4)` zet vier koeien op de weide met de meeste plaats, bij de kudde: ze
 blijven binnen de weide en geven melk (`js/vee.js`); een schaap gaat naar de heide. Zonder weide rond
 een open plek bij de schout. `Spel.debug.bewoners()` zegt per bewoner wie het is, zijn huis, zijn werk,
@@ -1355,7 +1357,7 @@ nu beginnen.
 hoeveel laken het kreeg) en welk vel hij draagt (vraag 149).
 `Spel.debug.zaak()` zegt hoe de graanzak ervoor staat: wie het nam en wie verdacht wordt, het spoor, wat je weet, de
 zitting en hoe het afliep; `('nu')` laat de zak nu verdwijnen (de boer zoekt je meteen), `('zitting')` maakt vandaag de
-dag van de zitting (met `Spel.debug.uur(13)` staan ze er), `('boek')` laat de inner het boek nu voorlezen.
+dag van de zitting (met `Spel.debug.uur(13)` staan ze er), `('boek')` laat de heer het boek nu lezen.
 `Spel.debug.raadsman()` zegt wie je raadsman is en wat hij kan, uit wie je kiest, en wat hij besloot; `('Aaltje')` of
 `('boer2')` maakt die boer raadsman. Ga dan met `Spel.debug.gaNaar('proef')` weg, en hij beslist het volgende voorval.
 `Spel.debug.rapport()` zegt wat er in zijn rapport staat, of hij het bracht en je het las, hoe hij rekent en wat het

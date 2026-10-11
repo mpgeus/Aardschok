@@ -1546,6 +1546,12 @@ beschrijft "Zo werkt het nu" hieronder wat er nog in de code staat.
   zoeken, de getuigen, "betrapt" en het stiekeme bos, met hun spelregels, vensters en toetsen. Elke akker staat in de
   boeken van de heer, het bos melden kost gunst, en in `js/zien.js` blijft het licht. De punten hieronder over
   verstoppen, zoeken en getuigen beschrijven dus wat er niet meer is; de inner en de argwaan staan er nog tot deel B.
+- **Deel B1 van optie 1 is gebouwd (11 okt, vraag 151).** De argwaan is weg: wat haar veranderde (antwoorden, grillen, de bode,
+  het boek van de zaak, de heervaart), verandert de gunst van de heer, en de raadsman weegt die met wat de argwaan woog. De heer
+  rekent op wat er is (het graan in de schuren, de mensen, de kist en elk gebouw), niet meer op een rapport; de toeslag, de
+  spelregels "Waar de heer de rekening op maakt" en "Sporen", omkopen, de korting en de meter op tafel zijn weg. De inner
+  komt nog in oogstmaand kijken, loopt zijn ronde en laat zich afleiden, maar telt niets meer; deel B2 haalt hem zelf weg.
+  De punten hieronder over zijn rapport, argwaan en omkopen beschrijven dus wat er niet meer is.
 - **De inner** komt op 15 oogstmaand, tien dagen vooraf aangekondigd, overdag vanaf negen uur. Sinds
   de dag (26 sep) loopt de tijd dan door, op 1× (daarvoor stond hij stil zolang de inner er was). Hij
   kijkt 7 tegels ver in een rechte lijn; huizen en schuren houden zijn blik tegen.
