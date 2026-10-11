@@ -41,7 +41,6 @@
 
   const dagNu = (D) => Math.floor(D.kalender.dag);
   const over = (n) => (n <= 1 ? 'morgen' : `over ${n} dagen`);
-  const maandIdx = (naam) => T.MAANDEN.findIndex((m) => m.naam === naam);
   const heeft = (D, soort) => (D.gebouwen || []).some((g) => g.soort === soort);
   // Staat elke houthakker stil omdat er binnen zijn bereik geen boom meer staat (T.houthakkerZonderBoom, js/bos.js)?
   const geenBoomMeer = (D) => {
@@ -61,13 +60,6 @@
       if (T.MAANDEN[d.maand].naam === komt.maand && d.dagVanMaand === komt.dag) return n;
     }
     return null;
-  }
-
-  // Van na Sint-Maarten tot 1 lentemaand, als er gezaaid wordt: de tijd waarin wat in een kelder ligt, niemand voedt.
-  function naSintMaarten(D) {
-    const d = T.datumVanDag(D.kalender.dag);
-    const sm = T.SINT_MAARTEN;
-    return (d.maand === sm.maand && d.dagVanMaand > sm.dag) || d.maand > sm.maand || d.maand < maandIdx('lentemaand');
   }
 
   // Het hout of het eten (`voorDeWinter`: T.houtVoorDeWinter of T.etenVoorDeWinter) haalt de winter niet, en die is
@@ -319,11 +311,6 @@
       id: 'geenBoom',
       als: (D) => geenBoomMeer(D),
       tekst: () => `De houthakker staat stil: er staat geen boom meer binnen ${T.telwoord(T.BOS_INSTELLINGEN.hakStraal)} tegels van zijn schuur, tot zijn boompjes bomen zijn. Zijn hand werkt zolang ergens anders.`,
-    },
-    {
-      id: 'kelders',
-      als: (D) => naSintMaarten(D) && !(D.heer && D.heer.bezoek) && T.verstoptTotaal(D).graan >= 1,
-      tekst: (D) => `In de kelders ligt nog ${Math.floor(T.verstoptTotaal(D).graan)} graan. Dat eet niemand en zaait niemand.`,
     },
     {
       // Marcel koos het zo (vraag 67, B): de raad zegt het zodra er een voorval voorbijging dat een raadsman had

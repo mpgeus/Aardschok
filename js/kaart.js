@@ -344,8 +344,8 @@
       if (p.gebouw !== undefined) {
         // Zijn tekening staat al in de .tmj (een gewoon Tiled-object, zoals een boom); dit is
         // alleen de betekenis erbij. Zie "gebouw" hierboven en T.zetBestaandeGebouwen. "huis"
-        // zegt wie er woont, zoals bij een akker: de boer met dezelfde id, of "schout" (zijn
-        // kelder, js/verstoppen.js). "bewoners" zegt bij een gewoon huis wie er bij het begin woont
+        // zegt wie er woont, zoals bij een akker: de boer met dezelfde id, of "schout".
+        // "bewoners" zegt bij een gewoon huis wie er bij het begin woont
         // ("jongGezin", "oudStel"; js/bewoners.js, T.zetBeginBewoners); zonder staat het leeg.
         // "tekening" is de tekening die er op de kaart staat ("huizen/hut1"): die weet waar zijn
         // deur is (T.deurVan, js/bewoners.js).

@@ -114,7 +114,7 @@
       uitleg: 'Het graan op zijn rekening.',
       keuzes: [
         { id: 'deel', naam: 'Een deel van wat hij telde', zet: { 'HEER_INSTELLINGEN.graan': 'deel' },
-          uitleg: 'Een deel van het graan dat de inner zag, in de schuren en nog op de velden. Wie graan wegzet voor hij komt, betaalt minder.' },
+          uitleg: 'Een deel van het graan dat de inner zag, in de schuren en nog op de velden.' },
         { id: 'pacht', naam: 'Pacht per akker', zet: { 'HEER_INSTELLINGEN.graan': 'pacht' },
           uitleg: 'Een vast deel per akkertegel die hij zag, hoe de oogst ook uitviel.' },
       ],
@@ -308,15 +308,15 @@
           uitleg: 'Het voorval kost alleen wat het kost, en er wordt niemand ziek.' },
       ],
     },
-    // Stap 2 van de inner, de verstopplekken (Marcel, 25 sep; spel.md, "Marcel koos voor stap 2").
+    // Stap 2 van de inner (Marcel, 25 sep; spel.md, "Marcel koos voor stap 2").
     {
       id: 'sporen', naam: 'Sporen', standaard: 'alles',
-      uitleg: 'Wat je verstopt, laat sporen na. Klopt een spoor niet met wat de inner telde, dan groeit zijn argwaan.',
+      uitleg: 'Klopt het graan of het goud niet met wat de inner telde, dan groeit zijn argwaan.',
       keuzes: [
         { id: 'alles', naam: 'Alles laat sporen na', zet: { 'INNER_INSTELLINGEN.sporen': 'alles' },
           uitleg: 'Het graan in de schuur tegen de velden die hij zag, en het goud in de kist tegen wat de marskramer hem vertelt dat hij je betaalde.' },
         { id: 'graan', naam: 'Alleen het graan', zet: { 'INNER_INSTELLINGEN.sporen': 'graan' },
-          uitleg: 'Alleen het graan in de schuur tegen de velden. Goud verstoppen valt niet op.' },
+          uitleg: 'Alleen het graan in de schuur tegen de velden. Het goud valt niet op.' },
       ],
     },
     {
@@ -324,19 +324,9 @@
       uitleg: 'Of de heer ook een deel wil van het goud dat de inner in de dorpskist telt.',
       keuzes: [
         { id: 'telt', naam: 'Hij wil een deel', zet: { 'HEER_INSTELLINGEN.kist': true },
-          uitleg: 'De heer ziet alleen geld. Van wat de inner in de kist telt, vraagt hij een deel: zo heeft goud verstoppen zin.' },
+          uitleg: 'De heer ziet alleen geld. Van wat de inner in de kist telt, vraagt hij een deel.' },
         { id: 'teltNiet', naam: 'De kist telt niet', zet: { 'HEER_INSTELLINGEN.kist': false },
           uitleg: 'De heer vraagt naar mensen, gebouwen en graan, niet naar wat er in de kist ligt.' },
-      ],
-    },
-    {
-      id: 'bewoners', naam: 'Wie er in een kelder woont', standaard: 'telt',
-      uitleg: 'Of het karakter van een boer uitmaakt als je iets in zijn kelder verstopt.',
-      keuzes: [
-        { id: 'telt', naam: 'Het karakter telt', zet: { 'VERSTOP_INSTELLINGEN.karakters': true },
-          uitleg: 'De roddelaar vertelt het rond, de vrome weigert, de woekeraar houdt zijn deel, en de oudste kent een oude plek.' },
-        { id: 'teltNiet', naam: 'Elke kelder is gelijk', zet: { 'VERSTOP_INSTELLINGEN.karakters': false },
-          uitleg: 'In de kelder van elke boer past evenveel, en de soldaten vinden het er even vaak.' },
       ],
     },
     // Stuk 2 van de poppetjes (Marcel, 26 sep: "Uit de looptijd"; spel.md, "Stuk 2 uitgewerkt").
@@ -533,18 +523,6 @@
           uitleg: 'Zoals aan, maar wie de wolven aanvallen, is gewond en ligt een paar dagen in bed; niemand gaat dood.' },
         { id: 'uit', naam: 'Uit', zet: { 'BEESTEN_INSTELLINGEN.aan': false },
           uitleg: 'Het bos is leeg. Zoals voor 7 okt.' },
-      ],
-    },
-    // Wie betrapt wordt op verstoppen (werklijst vraag 106, c; Marcel koos niet tussen de twee, dus de laatste
-    // waarschuwing als standaard tot hij kiest; js/bazen.js, T.betrapt).
-    {
-      id: 'betrapt', naam: 'Betrapt', standaard: 'waarschuwing',
-      uitleg: 'Wat er gebeurt als de soldaten van de heer vinden wat je verstopte (met twee bazen).',
-      keuzes: [
-        { id: 'waarschuwing', naam: 'De laatste waarschuwing', zet: { 'BAZEN_INSTELLINGEN.betrapt': 'waarschuwing' },
-          uitleg: 'Zijn gunst zakt tot 5, en hij schrijft je: nog één tegenvaller, en je bent je ambt kwijt.' },
-        { id: 'weg', naam: 'Meteen weg', zet: { 'BAZEN_INSTELLINGEN.betrapt': 'weg' },
-          uitleg: 'Wie betrapt wordt, is meteen zijn ambt kwijt. Verstoppen is dan alles of niets.' },
       ],
     },
     // Een gezin wacht op de winter (werklijst vraag 59, B; Marcel, 1 okt, vraag 78: "D dat is prima"; js/gebouwen.js,
@@ -802,7 +780,6 @@
     { naam: 'Het land', blok: 'LAND_INSTELLINGEN' },
     { naam: 'De maker', blok: 'MAKER_INSTELLINGEN' },
     { naam: 'De inner', blok: 'INNER_INSTELLINGEN' },
-    { naam: 'De verstopplekken', blok: 'VERSTOP_INSTELLINGEN' },
     { naam: 'De boeren', blok: 'BOEREN_INSTELLINGEN' },
     { naam: 'De velden', blok: 'VELDEN_INSTELLINGEN' },
     { naam: 'Het veldwerk', blok: 'VELDWERK_INSTELLINGEN' },

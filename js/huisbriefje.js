@@ -1,7 +1,7 @@
 // Het briefje bij een huis (2c, werklijst vraag 100; Marcel, 3 okt: "100 ja", in de stijl van vraag 98: "98 C", de
 // schrijftafel): staat de muis op een huis met mensen, dan hangt er naast zijn deur een papiertje aan een spijker, met wie
 // er woont, wat het huis wil (✓ en ✗) en wat helpt, en hoe ver het is met doorgroeien. Alles uit T.huisToestand
-// (js/wensen.js), zodat het zegt wat de raad zegt. Een klik blijft wat hij was: verstoppen in de kelder (js/hud.js). Het
+// (js/wensen.js), zodat het zegt wat de raad zegt. Het
 // eerste venster in de stijl van de schrijftafel; de rest van de ui volgt later (vraag 98, c).
 (function (T) {
   'use strict';

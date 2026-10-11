@@ -184,7 +184,7 @@
   const post = (wat, icoon, getal, uitleg, later) =>
     `<div class="post${later ? ' verborgen' : ''}" data-wat="${wat}" data-naam="${NAAM[wat]}" data-uitleg="${uitleg}">` +
     `<span class="icoon">${icoon}</span><span class="naam">${NAAM[wat]}</span>` +
-    `<span class="aantal">${getal}</span><span class="verstopt"></span></div>`;
+    `<span class="aantal">${getal}</span></div>`;
 
   function bouwRekenboek(box) {
     box.querySelector('.blad.links .posten').innerHTML = BALK.filter((wat) => wat !== 'goud')
@@ -228,22 +228,11 @@
     blad.classList.toggle('kort', blad.querySelectorAll('.post:not(.verborgen)').length > POSTEN_PER_KOLOM);
     // De twee bazen (js/bazen.js) liggen op dezelfde tafel, ook meteen bij een nieuw of geladen spel.
     T.ui.toonBazen(D);
-    // Wat er verstopt ligt (js/verstoppen.js), klein naast het graan en het goud, en bij de muis
-    // waar: het dorp eet het niet, en de inner telt het niet.
-    if (T.verstoptTotaal) {
-      const v = T.verstoptTotaal(S.dorp);
-      const plekken = T.verstopPlekken(S.dorp).filter((p) => p.gebouw.verstopt && (p.gebouw.verstopt.graan >= 1 || p.gebouw.verstopt.goud >= 1));
-      const waar = plekken.map((p) => `${T.inhoudTekst(p.gebouw.verstopt)} in ${p.naam}`);
-      for (const wat of ['graan', 'goud']) {
-        const cel = box.querySelector(`[data-wat="${wat}"]`);
-        const n = Math.floor(v[wat]);
-        cel.querySelector('.verstopt').textContent = n >= 1 ? `+${n}` : '';
-        cel.dataset.uitleg = GRONDSTOF_UITLEG[wat] + (waar.length ? ` Verstopt: ${waar.join('; ')}. Dat eet het dorp niet, en de inner telt het niet.` : '');
-      }
-      // Het zaaigraan dat de boeren achterhouden (js/akkers.js, T.zaaigraanApart): bij de muis, bij het graan.
-      const zaai = Math.min(Math.floor(S.dorp.voorraad.graan || 0), Math.ceil(T.zaaigraanApart(S.dorp, Math.floor(S.kalender.dag))));
-      if (zaai > 0) box.querySelector('[data-wat="graan"]').dataset.uitleg += ` Daarvan is ${zaai} zaaigraan voor de lente: dat eet het dorp pas als er niets anders meer is.`;
-    }
+    // Het zaaigraan dat de boeren achterhouden (js/akkers.js, T.zaaigraanApart): bij de muis, bij het graan.
+    const graan = box.querySelector('[data-wat="graan"]');
+    graan.dataset.uitleg = GRONDSTOF_UITLEG.graan;
+    const zaai = Math.min(Math.floor(S.dorp.voorraad.graan || 0), Math.ceil(T.zaaigraanApart(S.dorp, Math.floor(S.kalender.dag))));
+    if (zaai > 0) graan.dataset.uitleg += ` Daarvan is ${zaai} zaaigraan voor de lente: dat eet het dorp pas als er niets anders meer is.`;
     // Wat zout en gereedschap nu doen, bij de muis: hoeveel vis en vlees het zout goed houdt, en
     // hoeveel handen het gereedschap dekt (js/behoeften.js, js/gebouwen.js).
     if (T.zoutDekking) {

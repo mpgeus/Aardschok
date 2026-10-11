@@ -269,15 +269,13 @@
       },
     },
     // De herbergierster (js/herberg.js; spel.md, "Zaken waar de mensen zelf heen gaan"; Marcel koos op
-    // 27 sep dat er in de herberg gepraat wordt, vraag 38). Ze weet wie er gisteravond zat en wat er
-    // gezegd werd. herbergGasten, herbergRoddel en herbergDroog zet js/herberg.js elke nacht;
-    // {gisteravond} en {roddelaar} vult het spel in met de namen van wie er zat en van wie te veel zei.
+    // 27 sep dat er in de herberg gepraat wordt, vraag 38). Ze weet wie er gisteravond zat. herbergGasten en
+    // herbergDroog zet js/herberg.js elke nacht; {gisteravond} vult het spel in met de namen van wie er zat.
     herbergierster: {
       naam: 'de herbergierster',
       start: 'welkom',
       situaties: [
         { naam: 'Gisteravond zat er volk', als: { vlag: 'herbergGasten' } },
-        { naam: '…en de roddelaar had het over zijn kelder', als: { vlag: ['herbergGasten', 'herbergRoddel'] } },
         { naam: 'De herberg staat droog', als: { vlag: 'herbergDroog' } },
         { naam: 'De marskramer logeert hier', als: { vlag: 'marskramerOpBezoek' } },
       ],
@@ -285,7 +283,6 @@
         welkom: {
           tekst: [
             { als: { vlag: 'herbergDroog' }, zeg: 'Geen druppel voor de tap, schout. Zonder graan brouw ik niets, en wat ik nog heb, is voor de huizen. Een lege herberg hoort alles en weet niets.' },
-            { als: { vlag: 'herbergRoddel' }, zeg: 'Aan de tap gisteravond: {gisteravond}. En {roddelaar} had het weer over wat er in de kelder ligt. Hardop, schout. Wat de halve herberg weet, weet de heer met Sint-Maarten.' },
             { als: { vlag: 'herbergGasten' }, zeg: 'Aan de tap gisteravond: {gisteravond}. Het weer, de pacht, en wie er met wie. Niets wat u hoeft te weten, en alles wat ik wil weten.' },
             { zeg: 'Stil gisteravond. Niemand kwam. Dan tap ik voor mezelf, en ik ben een slechte klant.' },
           ],
@@ -955,7 +952,7 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Morgen ga ik naar de inner, schout. Om te praten. Over u, en over wat er in uw kelder ligt. Tenzij u mij iets te zeggen hebt.' },
+            { zeg: 'Morgen ga ik naar de inner, schout. Om te praten. Over u, en over alles wat ik van u weet. Tenzij u mij iets te zeggen hebt.' },
           ],
           keuzes: [
             { zeg: 'Hier, vijf goud. En nu je mond dicht.', sluit: true, doe: { goud: -5 } },

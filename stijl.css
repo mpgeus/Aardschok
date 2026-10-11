@@ -350,16 +350,14 @@ body.bouwmenu-open #statussen { visibility: hidden; }
 #rekenboek .blad.rechts { box-shadow: inset 14px 0 14px -10px rgba(60, 30, 10, 0.55); }
 #rekenboek h3 { margin: 0 0 1px; font: 18px/23px var(--kop); font-weight: normal; }
 #rekenboek .posten { display: grid; grid-template-rows: repeat(6, 23px); grid-auto-flow: column; grid-auto-columns: max-content; column-gap: 16px; }
-#rekenboek .post { display: grid; grid-template-columns: 22px 1fr auto auto; align-items: center; gap: 6px; height: 23px; cursor: default; }
-#rekenboek .blad.kort .post { grid-template-columns: 22px auto auto; }
+#rekenboek .post { display: grid; grid-template-columns: 22px 1fr auto; align-items: center; gap: 6px; height: 23px; cursor: default; }
+#rekenboek .blad.kort .post { grid-template-columns: 22px auto; }
 #rekenboek .blad.kort .naam { display: none; }
 #rekenboek .icoon { display: flex; }
 #rekenboek .icoon svg { width: 20px; height: 20px; filter: grayscale(1) brightness(0.28) sepia(0.9); }
 #rekenboek .aantal { text-align: right; font-variant-numeric: lining-nums tabular-nums; }
-#rekenboek .verstopt { font-size: 14px; color: var(--papier-grijs); margin-left: -3px; }
-#rekenboek .verstopt:empty { display: none; }
 /* Rood: de tevredenheid onder de vertrekdrempel, hooi en hout die de winter niet halen, de argwaan vanaf de drempel
-   waarop de soldaten gaan zoeken (js/tafel.js). */
+   waarop de inner onverwacht terugkomt (js/tafel.js). */
 #rekenboek .post.laag .aantal,
 #rekenboek .post.hoog .aantal { color: var(--papier-rood); }
 
@@ -616,7 +614,7 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
 #handel .handel-staat { margin: 6px 0 10px; font-size: 13px; color: var(--gedempt); }
 #handel .handel-staat b { color: var(--inkt); font-weight: normal; }
 #handel .kop { font: 12px var(--kop); color: var(--gedempt); letter-spacing: 0.04em; margin: 10px 0 4px; }
-:is(#handel, #verstoppen) .handel-rij {
+#handel .handel-rij {
   display: grid;
   grid-template-columns: 1.3fr 1fr auto;
   align-items: center;
@@ -627,14 +625,14 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
   border: 1px solid var(--rand);
   border-radius: 6px;
 }
-:is(#handel, #verstoppen) .handel-naam { font: 14px var(--kop); color: var(--inkt); }
-:is(#handel, #verstoppen) .handel-naam small, :is(#handel, #verstoppen) .handel-prijs small { display: block; font: 11px var(--boek); color: var(--gedempt); }
-:is(#handel, #verstoppen) .handel-prijs { font-size: 12px; color: var(--goud); }
+#handel .handel-naam { font: 14px var(--kop); color: var(--inkt); }
+#handel .handel-naam small, #handel .handel-prijs small { display: block; font: 11px var(--boek); color: var(--gedempt); }
+#handel .handel-prijs { font-size: 12px; color: var(--goud); }
 #handel .handel-merk { display: block; color: var(--inkt); }
 #handel .handel-merk.duur::before { content: '▲ '; }
 #handel .handel-merk.goedkoop::before { content: '▼ '; }
-:is(#handel, #verstoppen) .handel-knoppen { display: flex; gap: 4px; }
-:is(#handel, #verstoppen) .handel-knoppen button {
+#handel .handel-knoppen { display: flex; gap: 4px; }
+#handel .handel-knoppen button {
   padding: 4px 8px;
   font: 12px var(--boek);
   color: var(--inkt);
@@ -644,13 +642,13 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
   cursor: pointer;
   white-space: nowrap;
 }
-:is(#handel, #verstoppen) .handel-knoppen button:hover:not(:disabled) { background: color-mix(in srgb, var(--goud) 16%, transparent); border-color: color-mix(in srgb, var(--goud) 60%, transparent); }
-:is(#handel, #verstoppen) .handel-knoppen button:disabled { opacity: 0.35; cursor: default; }
+#handel .handel-knoppen button:hover:not(:disabled) { background: color-mix(in srgb, var(--goud) 16%, transparent); border-color: color-mix(in srgb, var(--goud) 60%, transparent); }
+#handel .handel-knoppen button:disabled { opacity: 0.35; cursor: default; }
 #handel .handel-leeg { font-size: 12px; color: var(--gedempt); margin: 2px 0; }
 #handel .handel-voet { margin: 10px 0 0; font-size: 11px; color: var(--gedempt); }
 @media (max-width: 480px) {
-  :is(#handel, #verstoppen) .handel-rij { grid-template-columns: 1fr auto; }
-  :is(#handel, #verstoppen) .handel-knoppen { grid-column: 1 / -1; }
+  #handel .handel-rij { grid-template-columns: 1fr auto; }
+  #handel .handel-knoppen { grid-column: 1 / -1; }
 }
 
 /* De heer (js/hud.js, T.ui.toonBrief en T.ui.openHeer; js/heer.js): zijn brief en het betalen op
@@ -658,8 +656,7 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
    in de letter van een brief (cursief, de kopletter), de rest is gewone speltekst. */
 #brief,
 #heer,
-#slachten,
-#verstoppen {
+#slachten {
   position: fixed;
   left: 50%;
   top: 50%;
@@ -999,17 +996,6 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
 #raadsman .rs-besluiten ul { margin: 4px 0 0; padding-left: 18px; line-height: 1.45; }
 #raadsman .rs-besluiten span { color: var(--gedempt); }
 
-/* Verstoppen (js/hud.js, T.ui.openVerstoppen; js/verstoppen.js): in de stijl van de marskramer. Wie
-   er woont en wat dat betekent, staat cursief boven de rijen. */
-#verstoppen .verstop-bewoner { margin: 0 0 8px; font: italic 13px var(--boek); color: var(--inkt); }
-#verstoppen .handel-rij { grid-template-columns: 1fr 1fr; row-gap: 6px; }
-#verstoppen .handel-knoppen { grid-column: 1 / -1; flex-wrap: wrap; justify-content: flex-end; }
-/* Op een breed scherm opzij (27 sep, werklijst punt 3): de schout staat midden in beeld, en wie om hem
-   heen kijkt. */
-@media (min-width: 1100px) {
-  #verstoppen { left: auto; right: 24px; transform: translateY(-50%); width: min(470px, calc(100vw - 32px)); }
-}
-
 /* Het titelscherm en het menu (js/menu.js, js/opslaan.js; vraag 48). Het titelscherm ligt over het gehucht,
    dat erachter blijft staan: donker boven en onder, en in het midden zie je het dorp. Het menu is een venster
    in het midden, zoals de brief. De vensters die erbovenop kunnen (de spelregels) liggen een laag hoger. */
@@ -1250,7 +1236,6 @@ body.foto > :not(canvas, #foto-wenk) { display: none !important; }
 #brief,
 #heer,
 #slachten,
-#verstoppen,
 #velden,
 #wetten,
 #raadsman,

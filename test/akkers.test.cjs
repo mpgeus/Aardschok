@@ -296,7 +296,7 @@ test('T.zaaiNa: wat niet gezaaid kon worden, zaaien de boeren na zodra er graan 
   const { S, metBoer, zonder } = tweeAkkers();
   T.tikAkkersDag(S, dagVan('lentemaand', 1, 1)); // het tweede jaar, zonder graan: niets gezaaid
   assert.equal(metBoer.ongezaaid.size + zonder.ongezaaid.size, 10);
-  // Een dag later is er graan (uit een kelder, of van de marskramer): ze zaaien na, naar rato, de hoek eerst.
+  // Een dag later is er graan (uit een schuur, of van de marskramer): ze zaaien na, naar rato, de hoek eerst.
   T.zetVoorraad(S, 'graan', 4 * T.ZAAIGRAAN_PER_TEGEL);
   T.tikAkkersDag(S, dagVan('lentemaand', 2, 1));
   assert.equal(S.voorraad.graan, 0);

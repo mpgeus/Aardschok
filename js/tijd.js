@@ -135,7 +135,7 @@
   //
   // Eén plek (Marcel, 26 sep: de code moet te begrijpen blijven). De kalender onthoudt twee dingen:
   //   - k.snelheid: wat de speler koos (de knoppen, P, - en =), met 0 voor pauze;
-  //   - k.stil: waarom de tijd nu toch stilstaat, als namen ('brief', 'handel', 'verstoppen', ...).
+  //   - k.stil: waarom de tijd nu toch stilstaat, als namen ('brief', 'handel', 'slachten', ...).
   // Zolang er een reden in k.stil staat, loopt de tijd niet (T.snelheidNu is 0); is de laatste weg,
   // dan loopt hij weer op wat de speler koos. Tot 26 sep onthield elk venster zelf hoe snel de tijd
   // liep, onder een eigen sleutel, en zette die bij het sluiten terug; twee vensters na elkaar

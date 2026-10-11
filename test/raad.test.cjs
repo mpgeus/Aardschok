@@ -218,21 +218,6 @@ test('de inner: een paar dagen vooraf, en op zijn dag zelf niet meer', () => {
   assert.notEqual(id(S), 'inner');
 });
 
-test('na Sint-Maarten: wat nog in een kelder ligt, eet niemand; ervoor zegt de raad het niet', () => {
-  const S = gehucht();
-  const boerderij = S.dorp.gebouwen.find((g) => g.soort === 'boerderij');
-  boerderij.verstopt = { graan: 30, goud: 0 };
-  T.zetVoorraad(S.dorp, 'hout', 5000); // anders gaan het hout en het eten voor de winter voor
-  T.zetVoorraad(S.dorp, 'graan', 5000);
-  opDag(S, dagVan('wijnmaand', 10) + 0.5);
-  assert.notEqual(id(S), 'kelders');
-  opDag(S, dagVan('slachtmaand', 20) + 0.5);
-  assert.equal(raad(S).tekst, 'In de kelders ligt nog 30 graan. Dat eet niemand en zaait niemand.');
-  // Zolang de heer er is (zijn soldaten zoeken), niet.
-  S.dorp.heer = Object.assign(T.nieuweHeer(), { bezoek: {} });
-  assert.notEqual(id(S), 'kelders');
-});
-
 test('na een aanval van de rovers: wat een wachthuis doet, als er geen is', () => {
   const S = opDag(gehucht(), 40.5);
   S.dorp.rovers = Object.assign(T.nieuweRovers(), { laatsteAanval: 38 });

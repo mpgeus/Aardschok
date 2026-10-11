@@ -87,10 +87,10 @@ test('hij vraagt in wat hij ziet: wol bij schapen, eieren bij kippen, hout voor 
   assert.deepEqual(eis.per, { wol: 20, eieren: 20, hout: 20 });
 });
 
-test('een hut kost niets, een verstopplek ziet hij niet, en een steiger telt al als huis', () => {
+test('een hut kost niets, en een steiger telt al als huis', () => {
   const S = maakS();
   S.wereld.akkers = [];
-  S.gebouwen.push({ soort: 'hut', klaar: true }, { soort: 'verstopplek', klaar: true });
+  S.gebouwen.push({ soort: 'hut', klaar: true });
   assert.deepEqual(T.eisVanDeHeer(S).per, {});
   S.gebouwen.push({ soort: 'huis', klaar: false });
   assert.deepEqual(T.eisVanDeHeer(S).per, { goud: 2 });

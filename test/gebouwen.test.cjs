@@ -44,7 +44,7 @@ test('elke soort in T.GEBOUWEN heeft naam, trede, kosten en bouwtijd', () => {
 
 test('alle soorten uit spel.md staan erin', () => {
   for (const id of [
-    'hut', 'huis', 'boerderij', 'akker', 'houthakker', 'schaapskooi', 'kippenhok', 'moestuin', 'put', 'verstopplek',
+    'hut', 'huis', 'boerderij', 'akker', 'houthakker', 'schaapskooi', 'kippenhok', 'moestuin', 'put',
     'smidse', 'timmerman', 'molen', 'bakkerij', 'brouwerij', 'herberg', 'kapel', 'tiendschuur',
     'markt', 'weverij', 'pakhuis', 'kuiper', 'slager', 'leerlooier', 'steenbakkerij', 'badhuis', 'gasthuis',
     'stenenHuis', 'raadhuis', 'stadsmuur',
@@ -61,8 +61,8 @@ test('T.gebouwVoet: de voet van de tekening, en zonder tekening de geschatte voe
   // De put heeft een tekening (T.GEBOUWEN.put.tekening), en de voet van die tekening telt.
   const put = T.opzoekTegelNaam(T.GEBOUWEN.put.tekening);
   assert.deepEqual(T.gebouwVoet('put'), { b: put.eig.beslaat[0], h: put.eig.beslaat[1] });
-  // De verstopplek heeft geen tekening: dan de geschatte voet uit T.GEBOUWEN.
-  assert.deepEqual(T.gebouwVoet('verstopplek'), T.GEBOUWEN.verstopplek.voet);
+  // De stadsmuur heeft geen tekening: dan de geschatte voet uit T.GEBOUWEN.
+  assert.deepEqual(T.gebouwVoet('stadsmuur'), T.GEBOUWEN.stadsmuur.voet);
 });
 
 test('T.gebouwPast: ja op lege grond, nee waar al iets vast staat', () => {
@@ -370,13 +370,12 @@ test('T.volgendeTekening: elke hut een van zijn tekeningen, nooit twee keer acht
 test('T.plaatsGebouw: tekeningNaam blijft leeg voor een soort zonder tekening', () => {
   const S = maakS();
   T.zetVoorraad(S, 'hout', 6);
-  // De verstopplek heeft bewust geen tekening (een tekening zou 'm juist verraden) — precies het
-  // geval waarvoor tekenVoorwerp (js/tekenen.js) terugvalt op gewoon bleker tot hij klaar is. Sinds
-  // 25 sep staat hij niet meer in het bouwmenu (Marcel wil geen kuil; js/verstoppen.js), dus hier
-  // een proefsoort zoals hij was.
-  assert.equal(T.GEBOUWEN.verstopplek.tekening, null);
-  assert.equal(T.plaatsGebouw(S, 'verstopplek', 2, 2).gelukt, false, 'niet meer via het bouwmenu');
-  T.GEBOUWEN.proefZonderTekening = { ...T.GEBOUWEN.verstopplek, menu: true };
+  // Een soort zonder tekening: precies het geval waarvoor tekenVoorwerp (js/tekenen.js) terugvalt op gewoon bleker tot
+  // hij klaar is. Er is er geen die in het bouwmenu staat, dus hier een proefsoort.
+  T.GEBOUWEN.proefZonderTekening = {
+    naam: 'proefsoort', trede: 'gehucht', voet: { b: 2, h: 2 }, kosten: { hout: 6 }, heer: {}, bouwtijd: 2,
+    handen: 0, woonruimte: 0, maakt: null, menu: true, tekening: null, beschrijving: 'een proef', opmerking: 'alleen voor deze toets',
+  };
   try {
     const r = T.plaatsGebouw(S, 'proefZonderTekening', 2, 2);
     assert.equal(r.gelukt, true);

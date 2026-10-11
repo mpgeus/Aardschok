@@ -709,7 +709,7 @@
       wisselMeter();
       return;
     }
-    // Een venster (js/ui.js; de marskramer, de heer, het slachten, verstoppen, de spelregels, de velden, de wetten, de
+    // Een venster (js/ui.js; de marskramer, de heer, het slachten, de spelregels, de velden, de wetten, de
     // raadsman): zolang het open is, ligt de rest stil. Esc sluit het, en de toets van een ander venster of B gaat er
     // meteen heen (hieronder); wat precies, zegt T.ui.toetsBijVenster.
     if (T.ui.toetsBijVenster(S, ev)) return;
@@ -1172,26 +1172,6 @@
         tot: T.uurTekst(g.tot),
       }));
       return { deel, vrij: vrij.length, groepjes };
-    },
-    // De verstopplekken (js/verstoppen.js): waar je iets kunt verstoppen, wat er ligt, en hoe vaak
-    // de soldaten het er vinden. Spel.debug.verstopt('boer1', 30, 5) zet 30 graan en 5 goud in
-    // de kelder van boer1 (of 'schout', of 'kapel'), zonder te lopen, als het kan.
-    verstopt(huis, graan = 0, goud = 0) {
-      if (!T.verstopPlekken) return 'Verstoppen kan alleen in het gehucht.';
-      const plekken = T.verstopPlekken(S.dorp);
-      if (huis) {
-        const p = plekken.find((q) => q.gebouw.huis === huis || q.gebouw.soort === huis);
-        if (!p) return `Geen plek bij "${huis}". Er is: ${plekken.map((q) => q.gebouw.huis || q.gebouw.soort).join(', ')}.`;
-        for (const [wat, n] of [['graan', graan], ['goud', goud]]) {
-          if (!(n > 0)) continue;
-          const r = T.verstop(S.dorp, p.gebouw, wat, n);
-          if (!r.kan) return r.reden;
-        }
-      }
-      return plekken.map((p) => ({
-        plek: p.naam, wie: p.gebouw.huis || p.gebouw.soort, karakter: p.karakter, graan: Math.floor((p.gebouw.verstopt || {}).graan || 0),
-        goud: Math.floor((p.gebouw.verstopt || {}).goud || 0), plaats: p.plaats, vinden: p.vinden, houdt: p.houdt, weigert: p.weigert,
-      }));
     },
     // Wie er woont (js/bewoners.js): per bewoner wie hij is, zijn huis, zijn werk, waar hij staat en
     // waar hij nu hoort. Spel.debug.bewoners('herder') zoekt in de tekst, zodat je er één vindt.
@@ -1762,7 +1742,6 @@
         vertrouwen: `${Math.round(nu.vertrouwen)} (${T.bazenStemming(nu.vertrouwen)})`,
         waarom: D.bazen.waarom,
         gewaarschuwd: D.bazen.gewaarschuwd,
-        betrapt: T.BAZEN_INSTELLINGEN.betrapt,
         einde: D.einde,
       };
     },

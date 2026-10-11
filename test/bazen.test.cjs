@@ -1,6 +1,6 @@
 // Twee bazen (js/bazen.js; werklijst vraag 106, Marcel, 3 okt: "106 a b c d ja"): de heer en het dorp kunnen je allebei
 // wegsturen. De gunst van de heer en het vertrouwen van het dorp, met een waarschuwing onder de grens, en op 0 ben je
-// weg; altijd eerst de waarschuwing. Betrapt op verstoppen: de laatste waarschuwing, of meteen weg.
+// weg; altijd eerst de waarschuwing.
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
@@ -110,43 +110,6 @@ test('weer boven de grens, dan kan er later een nieuwe waarschuwing komen', () =
   T.wijzigGunst(D, IN().opnieuwBoven + 10, 'het gaat beter');
   T.wijzigGunst(D, -IN().opnieuwBoven - 5, 'weer mis');
   assert.equal(brieven.length, 2);
-});
-
-test('betrapt op verstoppen: de laatste waarschuwing, en wie die al had, is weg', () => {
-  const S = gehucht();
-  const D = S.dorp;
-  T.betrapt(D);
-  assert.equal(T.bazenNu(D).gunst, IN().laatsteWaarschuwing);
-  assert.deepEqual(brieven, ['waarschuwing']);
-  assert.ok(!D.einde);
-  T.betrapt(D);
-  assert.ok(!D.einde, 'twee plekken op één dag is één keer betrapt');
-  S.kalender.dag += 1;
-  T.betrapt(D);
-  assert.equal(D.einde && D.einde.reden, 'ambt');
-});
-
-test('betrapt met de spelregel "Meteen weg": meteen je ambt kwijt', () => {
-  const S = gehucht();
-  const D = S.dorp;
-  T.zetOptie('betrapt', 'weg');
-  try {
-    T.betrapt(D);
-    assert.equal(D.einde && D.einde.reden, 'ambt');
-    assert.match(D.einde.waarom, /zijn soldaten vonden wat je verstopte/);
-  } finally {
-    T.optiesTerug();
-  }
-});
-
-test('de soldaten vinden wat je verstopte: betrapt', () => {
-  const S = gehucht();
-  const D = S.dorp;
-  const kelder = T.verstopPlekVan(D, D.gebouwen.find((g) => g.huis === 'schout'));
-  T.zetVoorraad(D, 'graan', 200);
-  T.verstop(D, kelder.gebouw, 'graan', 30);
-  assert.ok(T.zoekOpPlek(D, kelder, 0));
-  assert.equal(T.bazenNu(D).gunst, IN().laatsteWaarschuwing);
 });
 
 test('het dorp: antwoorden, de heervaart, de schandpaal, soldaten en wie sterft, bewegen het vertrouwen', () => {

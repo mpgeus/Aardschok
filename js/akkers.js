@@ -941,7 +941,7 @@
 
   // Nazaaien (werklijst vraag 79, stap 1; Marcel, 1 okt, vraag 78: "D dat is prima"): wat op 1 lentemaand niet gezaaid
   // kon worden, zaaien de boeren alsnog zodra er graan is, tot het graan groen wordt (T.AKKER_STADIA; T.tikAkkersDag
-  // onderaan). Zo komt een dorp na een slechte winter weer boven: met graan uit een kelder, of met zaaigraan van de
+  // onderaan). Zo komt een dorp na een slechte winter weer boven: met graan uit een schuur, of met zaaigraan van de
   // marskramer in grasmaand (js/handel.js). Wat later gezaaid is, groeit gewoon mee met de rest. Wat de rovers vertrapten
   // (akker.vertrapt), zaaien ze niet na: dat groeit dit jaar niet meer. Het verdeelt zoals T.zaaiAkkers, en per akker
   // gaat het dichtste stuk eerst. Geeft hoeveel tegels er gezaaid werden.

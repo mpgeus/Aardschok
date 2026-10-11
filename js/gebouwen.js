@@ -14,7 +14,7 @@
 //     kosten:      { hout: 16, goud: 4 },  // eenmalig, bij het neerzetten (later ook "steen")
 //     heer:        { goud: 2 },      // wat de heer er elk jaar op Sint-Maarten voor wil, omdat hij
 //                                    // hem ziet (js/heer.js, T.eisVanDeHeer; ook in aanbouw). {}
-//                                    // is niets: een hut oogt arm, een verstopplek ziet hij niet.
+//                                    // is niets: een hut oogt arm.
 //                                    // Hij vraagt naar wat hij ziet: wol bij schapen, eieren bij
 //                                    // kippen, hout voor zijn bos; de rest in goud. Het bouwmenu
 //                                    // laat het zien (js/hud.js).
@@ -63,8 +63,7 @@
 // Wat de tekening betreft (spel.md: "eerst met de tekeningen die er al zijn; wat nog niet
 // getekend is, krijgt voorlopig een bestaand huis"): elke "nieuw" soort hieronder leent een
 // bestaande tekening uit tegels/gebouwen.tsx (zie gereedschap/pixelart, tegels/gebouwen.volgorde.json
-// voor de volledige lijst) of blijft zonder tekening als een tekening hem juist zou verraden
-// (de verstopplek). Een akker, een stadsmuur en een palissade zijn geen los blokje van één voet en
+// voor de volledige lijst). Een akker, een stadsmuur en een palissade zijn geen los blokje van één voet en
 // gaan niet via het bouwmenu (menu: false); zie de "akker" in js/kaart.js voor hoe een strook al
 // werkt, en ontwerp/werklijst.md, "Een omheining is geen blok" voor hoe een muur later moet gaan.
 (function (T) {
@@ -194,15 +193,6 @@
       handen: 0, woonruimte: 0, maakt: null, menu: true,
       tekening: 'erf/put', beschrijving: 'water; zonder put wordt het dorp ziek',
       opmerking: 'Het effect ("zonder put wordt het dorp ziek") is nog geen regel, alleen de tekening staat er al.',
-    },
-    verstopplek: {
-      naam: 'verstopplek', trede: 'gehucht', voet: { b: 2, h: 2 }, kosten: { hout: 6 }, heer: {}, bouwtijd: 2,
-      handen: 0, woonruimte: 0, maakt: null, menu: false,
-      tekening: null, beschrijving: 'een plek in het bos die de inner niet ziet',
-      opmerking: 'Bewust zonder tekening: een verstopplek die je wél ziet staan is geen verstopplek. '
-        + 'Niet meer in het bouwmenu sinds 25 sep: Marcel wil geen kuil maar plekken die er al zijn, de '
-        + 'kelders en de kapel (js/verstoppen.js). In stap 2 wordt dit misschien de plek in het bos '
-        + '(spel.md, "Marcel koos voor stap 2").',
     },
 
     // ── Grondstoffen halen (Marcel, 23 sep: "houthakkers, steengroeve etc moeten we ook hebben";
@@ -516,8 +506,7 @@
 
   // De rechthoek die een gebouw op de kaart beslaat, { x, y, b, h }: de tekening als die er is (die
   // kan groter zijn dan de voet uit het betekenisbestand), anders zijn voet, anders de maat van zijn
-  // soort. Voor wie wil weten waar een gebouw staat: de bewoners, de inner, de verstopplekken en de
-  // soldaten. (Tot 27 sep had elk van die bestanden er een eigen kopie van.)
+  // soort. Voor wie wil weten waar een gebouw staat: de bewoners en de inner. (Tot 27 sep had elk van die bestanden er een eigen kopie van.)
   T.voetVanGebouw = function (g) {
     if (g.voorwerp && g.voorwerp.beslaat) return { x: g.x, y: g.y, b: g.voorwerp.beslaat[0], h: g.voorwerp.beslaat[1] };
     const v = g.voet || T.gebouwVoet(g.soort) || { b: 1, h: 1 };
@@ -630,7 +619,7 @@
   // Het gebouw waarvan deze tegel onder de voet ligt, of null. Ook een gebouw dat al op de kaart
   // stond (T.zetBestaandeGebouwen): dat heeft geen eigen voorwerp, maar wel een voet uit het
   // betekenisbestand. Die telden hier eerst niet mee (ze maken niets, dus ze staan ook nooit
-  // stil), maar sinds 25 sep kun je er iets in verstoppen (js/verstoppen.js).
+  // stil), maar de muis zegt wel hoe het ermee staat (js/verkennen.js).
   T.gebouwOp = function (D, x, y) {
     for (const g of D.gebouwen || []) {
       const v = g.voorwerp;
@@ -1103,9 +1092,8 @@
         continue;
       }
       // Zijn voet uit het betekenisbestand: die heeft de inner nodig om te weten wat hij ziet (js/inner.js).
-      // En wie er woont (`huis`, de boer met dezelfde id of de schout): dat telt voor zijn kelder
-      // (js/verstoppen.js). In een gewoon huis zegt `bewoners` wie er bij het begin woont
-      // (T.zetBeginBewoners, js/bewoners.js). En `tekening` weet waar de deur is (T.deurVan).
+      // En wie er woont (`huis`, de boer met dezelfde id of de schout). In een gewoon huis zegt `bewoners` wie er bij het
+      // begin woont (T.zetBeginBewoners, js/bewoners.js). En `tekening` weet waar de deur is (T.deurVan).
       // Zijn tekening staat als voorwerp op de kaart, op dezelfde plek (uit Tiled, of van de maker): die neemt hij mee, zodat
       // hij kan doorgroeien zoals een huis dat jij of een gezin bouwde (js/behoeften.js; werklijst vraag 85). Tot 1 okt
       // had hij er geen, en groeiden de woningen van het begin nooit.

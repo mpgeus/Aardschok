@@ -21,7 +21,7 @@
   // spelregels, js/opties.js). Een eerste gok.
   T.INNER_INSTELLINGEN = {
     // Hij komt midden in de oogst, als er op de velden en in de schuren iets te tellen is, en je
-    // hoort het zoveel dagen vooraf: tijd om graan weg te zetten.
+    // hoort het zoveel dagen vooraf.
     komt: { maand: 'oogstmaand', dag: 15 },
     aankondiging: 10,
     // Zo ver kijkt hij, in tegels, in een rechte lijn; huizen en schuren houden zijn blik tegen.
@@ -56,8 +56,8 @@
     // Komt hij onverwacht terug en ligt er dan veel meer graan dan de eerste keer (meer dan dit deel
     // van wat hij verwachtte), dan weet hij genoeg.
     graanErbij: 0.2,
-    // Sporen (Marcel, 25 sep: "voor alles"): wat je verstopt, laat sporen na, en klopt een spoor niet
-    // met wat hij telde, dan groeit zijn argwaan. 'alles': het graan tegen de velden en het goud
+    // Sporen (Marcel, 25 sep: "voor alles"): klopt het graan of het goud niet met wat hij telde, dan
+    // groeit zijn argwaan. 'alles': het graan tegen de velden en het goud
     // tegen wat de marskramer hem vertelt; 'graan': alleen het graan, zoals vóór 25 sep. Een optie.
     sporen: 'alles',
     // Het goud: de marskramer vertelt hem wat hij je sinds Sint-Maarten betaalde en wat jij hem
@@ -132,8 +132,7 @@
   // De voet van een gebouw: waar hij staat en hoe groot hij is (T.voetVanGebouw, js/gebouwen.js).
   const voetVan = (g) => T.voetVanGebouw(g);
 
-  // Wat hij kan zien: gebouwen met een tekening (een verstopplek heeft er geen, en die ziet hij dus
-  // niet zomaar; zie werklijst punt 6, stap 2).
+  // Wat hij kan zien: gebouwen met een tekening.
   function zichtbaarGebouw(g) {
     const soort = T.GEBOUWEN && T.GEBOUWEN[g.soort];
     return !!(soort && soort.tekening);
@@ -268,7 +267,7 @@
       woonruimte += (T.GEBOUWEN[g.soort] && T.GEBOUWEN[g.soort].woonruimte) || 0;
     }
     // Het graan: wat nog staat op de velden die hij zag (gezaaid en niet gemaaid), en wat er in de
-    // schuren ligt (wat je verstopte, ligt daar niet). Hij verwacht van elke gezaaide tegel een
+    // schuren ligt. Hij verwacht van elke gezaaide tegel een
     // volle oogst: wat die tegel geeft (T.oogstPerTegel, js/akkers.js), dus op een uitgeputte akker
     // minder, want dunner graan ziet hij ook staan. Een weide of braak is gezien land (de pacht per
     // akkertegel telt het mee, zoals een braakliggende tegel), maar daar staat geen graan.
@@ -293,8 +292,8 @@
       }
     }
     const nuGezien = staand + ((D.voorraad && D.voorraad.graan) || 0);
-    // De kist (Marcel, 25 sep: "hij telt de kist"): het goud dat er nu in ligt. Wat verstopt ligt
-    // (js/verstoppen.js), ligt er niet in, en wat je hem gaf ook niet.
+    // De kist (Marcel, 25 sep: "hij telt de kist"): het goud dat er nu in ligt. Wat je hem gaf,
+    // ligt er niet in.
     const kist = (D.voorraad && D.voorraad.goud) || 0;
     const graanGeteld = Math.max(nuGezien, (vorig && vorig.graanGeteld) || 0);
     const goudGeteld = Math.max(kist, (vorig && vorig.goudGeteld) || 0);

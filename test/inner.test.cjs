@@ -126,9 +126,9 @@ test('ziet de heer alles zelf (de optie in de spelregels), dan komt er geen inne
 // Wat hij ziet, en zijn rapport
 // ---------------------------------------------------------------------------------------------
 
-test('hij ziet wat binnen zijn zicht ligt, niet door een muur, en geen verstopplek', () => {
+test('hij ziet wat binnen zijn zicht ligt, niet door een muur, en geen gebouw zonder tekening', () => {
   const S = maakS();
-  const kelder = { soort: 'verstopplek', x: 6, y: 8, voet: { b: 2, h: 2 }, klaar: true };
+  const kelder = { soort: 'palissade', x: 6, y: 8, voet: { b: 2, h: 2 }, klaar: true };
   S.gebouwen.push(kelder);
   T.innerKomt(S, KOMT, false);
   const nieuw = T.innerKijkt(S, { x: 5, y: 10 });
@@ -137,7 +137,7 @@ test('hij ziet wat binnen zijn zicht ligt, niet door een muur, en geen verstoppl
   assert.ok(b.gebouwen.has(S.bijHetPlein));
   assert.ok(!b.gebouwen.has(S.achterDeMuur), 'achter de muur');
   assert.ok(!b.gebouwen.has(S.verWeg), 'te ver');
-  assert.ok(!b.gebouwen.has(kelder), 'een verstopplek ziet hij niet');
+  assert.ok(!b.gebouwen.has(kelder), 'een gebouw zonder tekening ziet hij niet');
   assert.equal(b.tegels.size, 4, 'de hele akker bij het plein');
   // Van de andere kant van de muur ziet hij het huis daar wel.
   T.innerKijkt(S, { x: 5, y: 16 });

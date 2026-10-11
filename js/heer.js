@@ -33,12 +33,12 @@
     rekening: 'rapport',
     // Wat hij van het graan vraagt: 'deel' (dit deel van het graan dat de inner telde: in de schuren
     // en op de velden die hij zag) of 'pacht' (pachtPerAkkertegel voor elke akkertegel). Het deel is
-    // zo gekozen dat wie niets verstopt, ongeveer betaalt wat de pacht was: de honger blijft.
+    // zo gekozen dat het ongeveer is wat de pacht was: de honger blijft.
     graan: 'deel',
     deelVanGraan: 0.15,
     // De kist (Marcel, 25 sep: "hij telt de kist"): de heer ziet alleen geld, dus hij vraagt ook dit
     // deel van het goud dat de inner in de kist telde (zonder rapport: van wat er op Sint-Maarten
-    // in ligt). Zo heeft goud verstoppen zin (js/verstoppen.js). Aan of uit is een optie.
+    // in ligt). Aan of uit is een optie.
     kist: true,
     deelVanGoud: 0.15,
     // Waarin hij betaald wil worden: 'watHijZiet' (wol voor een schaapskooi, eieren voor een
@@ -134,7 +134,7 @@
   // Wat hij vraagt: { per: { graan: 105, goud: 12, … }, regels: [{ wat, aantal, waarom }] }. De
   // regels zijn voor de brief en het venster: waarvoor hij wat vraagt. Elke regel rondt hij naar
   // boven af, en per goed is het de som van zijn regels. Een gebouw in aanbouw telt al mee: hij
-  // ziet een steiger en rekent een huis. Een verstopplek ziet hij niet (zijn prijs is niets).
+  // ziet een steiger en rekent een huis.
   // Het hoofdgeld per ziel: in een dorp zoveel keer zoveel als de trede zegt (js/treden.js; voorlopig 1).
   const hoofdgeld = (D) => IN().hoofdgeldPerMens * T.hoofdgeldFactor(D);
 
