@@ -37,7 +37,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | De wetten (in "Keuren en politiek") | gebouwd (29 sep): een menu zoals Democracy 3 onder W, met rantsoen, vreemden welkom, houtkap en belasting | vraag 54 |
 | Het eerste proefje | gebouwd (23 sep); de kaart sinds 26 sep rond het plein (vierde versie) | 1 |
 | De kern voor het tweede proefje | voorstel; de heer en de inner kwamen anders, groepen en keuren wachten | 9 |
-| Rijk worden en arm lijken | de inner, de argwaan en verstoppen deel 1 gebouwd; de soldaten zoeken altijd, en de inner afleiden en omkopen (27 sep) | 4, 6 |
+| Rijk worden en arm lijken | de inner, de argwaan en verstoppen deel 1 gebouwd; de soldaten zoeken altijd, en de inner afleiden en omkopen (27 sep); sinds 11 okt besloten: het verstoppen gaat eruit (Marcel: "is gewoon te saai"), hoe ver is open | 4, 6, vraag 151 |
 | Het dorp: mensen, behoeften en de winter | gebouwd (23 sep); de winter zie je aankomen (28 sep); de mensen sprokkelen hout, maar niet genoeg (30 sep); een gezin wacht op de winter als het hout of het eten hem niet haalt, en het zaaigraan eet het dorp pas bij nood (1 okt), tenzij er wachters bij de graanschuur staan (8 okt) | 3, vraag 74, 79, 81, 132 |
 | Gebouwen | 45 soorten; 16 in het bouwmenu van het gehucht | 2, 14 |
 | Handel: de marskramer | gebouwd (24 sep); in de lente ook zaaigraan, en de boeren zaaien na tot 1 bloeimaand (1 okt) | 4, vraag 79 |
@@ -1520,6 +1520,11 @@ Is rijk worden en arm lijken leuk?
 de gevolgen moeten echt groter zijn. Je wordt weg gevraagd als je niet ophoest wat ze willen hebben van je ofzo. Maar als
 de grote hook, te slap." Het verstoppen blijft in het spel, maar niet als haak; wat ervoor in de plaats kan komen (twee
 bazen die je allebei kunnen wegsturen), is werklijst vraag 106.
+
+**Marcel, 11 okt: "Het verstop mechanisme moet eruit, is gewoon te saai."** Besloten: het verstoppen gaat eruit. Of
+alleen de kelders en de soldaten die zoeken (a), of heel "arm lijken", met de inner die telt wat hij ziet, de argwaan,
+afleiden en omkopen en het stiekeme bos (b), is werklijst vraag 151, met wat ervoor in de plaats komt. Tot het eruit is,
+beschrijft "Zo werkt het nu" hieronder wat er nog in de code staat.
 
 **Zo werkt het nu** (25 sep, bijgewerkt 27 sep; `js/inner.js`, `js/verstoppen.js`, `js/heer.js`):
 - **De inner** komt op 15 oogstmaand, tien dagen vooraf aangekondigd, overdag vanaf negen uur. Sinds

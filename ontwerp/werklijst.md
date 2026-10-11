@@ -25,6 +25,9 @@ staat in `main` (10 okt): arm in een hut, deftig in een stenen huis met laken; d
 mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voor onze poppetjes. de rest kan weg").
 
 **Wacht op Marcel:**
+- **Gameplay als kern, en het verstoppen eruit** (vraag 151, 11 okt; Marcel: "we hebben niks"): welke kern (A de schout
+  is maar één mens, B rechtspraak, C de heer als klok), en hoe ver het verstoppen eruit gaat (a de kelders, b heel "arm
+  lijken"). Dan eerst het eerste uur op papier.
 - Het geluid (vraag 145, 2): de sleutel `FREESOUND_KEY` in de omgeving en de domeinen van Freesound erbij, zoals
   beschreven bij vraag 145; dan maakt een nieuwe sessie het.
 - Vraag 145 laten zien: is het dorp nu minder "saai"?
@@ -7663,6 +7666,29 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     kwamen nooit in git. Wat blijft: wat we leerden (hierboven en in `beeld.md`, "De mensen naar Marcels voorbeelden") en
     de voorbeelden in `ontwerp/voorbeelden/` (`mensen-*`), voor als we de mensen laten tekenen. Lichtblond dat als een
     kaal hoofd leest en de vlecht van de kroon over de ogen staan in `opmerkingen.md`.
+
+151. **Gameplay als kern, en het verstoppen eruit** (Marcel, 11 okt: "Ik denk dat we moeten nadenken over gameplay nu
+    als kern. Het ziet er nu leuk uit, maar we hebben niks. Het verstop mechanisme moet eruit, is gewoon te saai.").
+    Besloten: het verstoppen gaat eruit (`spel.md`, "Rijk worden en arm lijken"); hoe ver, en wat de kern wordt, is open.
+    **Wat Claude zag (11 okt):** 1. het spel speelt zichzelf: de boeren doen het seizoen, het dorp vraagt zelf wat het
+    bouwt, en de raad zegt wat je moet doen; een script dat de raad volgt (de bouwer van de speeltest) wint, en hetzelfde
+    script wordt op een ander land weggejaagd: het land beslist, niet de speler; 2. een keuze heeft geen spanning: een
+    voorval zegt vooraf wat elk antwoord kost, en meestal is er één goed; 3. er is geen boog: de druk loopt niet op naar een
+    climax, en een jaar is 30 uur op 1×, of een uur kijken op 30×; 4. het poppetje hoeft nergens heen (de toets van één uur
+    uit `concept.md` haalt het nog altijd niet). Het verstoppen was saai om dezelfde reden: één handeling, en dan een
+    dobbelsteen (de soldaten vinden het of niet) waar je niets aan doet. Maar zijn onderdelen (wie ziet wat, getuigen,
+    roddel in de herberg, zoeken in een kelder) zijn die van een speurspel: draai het om, en de schout is de zoeker.
+    **Voorstel van Claude (11 okt):** drie kernen. A, de schout is maar één mens: een probleem ontstaat op een plek en
+    wacht daar; waar je niet bent, beslist je raadsman of een ambtenaar naar zijn karakter, of wordt het erger; groeien is
+    ambtenaren krijgen (concept, principe 2 en 8). B, rechtspraak als de vaardigheid: de simulatie maakt de zaken (honger
+    geeft diefstal), jij zoekt uit wie waar was en wie wat zag, en oordeelt op de zitting (de graanzak, vraag 128, is de
+    proef; Papers, Please). C, de heer als klok: hij vraagt elk jaar meer, naar zijn karakter, Sint-Maarten is een
+    confrontatie (betalen, onderhandelen, uitstellen, weigeren), en wat je dat jaar opbouwde, is je hefboom, tot een van de
+    drie wegen van vraag 126 (de storm in Frostpunk). C als de boog, A als het ritme van de dag, B als de vaardigheid.
+    Het verstoppen: a, alleen de kelders en de soldaten die zoeken; of b, heel "arm lijken" (ook de inner die telt wat hij
+    ziet, de argwaan, afleiden en omkopen, het stiekeme bos), en de heer vraagt naar wat er is; Claude: b, want dan moet
+    de heer toch opnieuw, en dat is C; het zicht en de getuigen blijven, voor B. Eerst het eerste uur op papier, vóór er
+    iets gebouwd wordt. **Wacht op Marcel.**
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
