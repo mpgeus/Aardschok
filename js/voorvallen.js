@@ -12,7 +12,7 @@
 // wat elk gesprek kan (goud, een vlag):
 //   graan: -20        uit de voorraad of erbij (WAREN hieronder, via T.wijzigVoorraad); het moet er wel zijn
 //   tevreden: 5       het dorp is 5% tevredener (of minder), en dat slijt in stemmingDagen weg
-//   argwaan: 3        de inner wordt 3% argwanender (of minder: -3)
+//   gunst: -3         de gunst van de heer daalt met 3 punten (of stijgt: 3; js/bazen.js)
 //   verban: 'ander'   die moet weg ('wie' of 'ander'); wie wegtrekt, gaat het bos in en komt terug als rover
 //   sterfkans: 30     met 30% kans sterft er iemand: over wie het gaat (ander), of anders de zwakste
 //   gezin: 1          er komt een gezin bij, als er plaats is (T.gezinKomt, js/gebouwen.js)
@@ -796,7 +796,6 @@
     if (doe.tevreden && !L.bouw) T.vertrouwenNaVoorval(D, doe.tevreden, v.titel, !!L.door);
     if (doe.gunst) T.wijzigGunst(D, doe.gunst, v.titel);
     if (doe.vertrouwen) T.wijzigVertrouwen(D, doe.vertrouwen, v.titel);
-    if (doe.argwaan) T.zetArgwaan(D, doe.argwaan / 100, v.titel);
     for (let i = 0; i < (doe.gezin || 0); i++) T.gezinKomt(D);
     const verbannen = doe.verban && L[doe.verban];
     if (verbannen && kanHetBetreffen(D, verbannen)) T.wijzigBevolking(D, -1, 'vertrek', 'verbannen door de schout', [verbannen]);
@@ -857,7 +856,6 @@
       if (n < 0) delen.push(`−${-n} ${-n === 1 ? T.VEE[soort].naam : T.VEE[soort].meervoud}`);
     }
     if (doe.tevreden) delen.push(`tevredenheid ${teken(doe.tevreden)}${Math.abs(doe.tevreden)}%`);
-    if (doe.argwaan) delen.push(`argwaan ${teken(doe.argwaan)}${Math.abs(doe.argwaan)}%`);
     // Twee bazen (js/bazen.js): wat de heer en het dorp van je vinden, als de spelregel aan staat.
     if (doe.gunst && T.BAZEN_INSTELLINGEN.aan) delen.push(`gunst van de heer ${teken(doe.gunst)}${Math.abs(doe.gunst)}`);
     // Een werkplaats in het bos van de heer (js/verzoeken.js, js/bos.js; werklijst vraag 110, e): dat kost zijn gunst.

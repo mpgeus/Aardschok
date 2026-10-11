@@ -6,7 +6,7 @@
 //     werken nergens (T.stuurWeg). Van elke vier komt er gemiddeld één niet terug; wie terugkomt, is veteraan
 //     (p.veteraan): hij vecht mee als er rovers komen, ook zonder wachthuis (js/rovers.js), met het leven van
 //     T.WEZENS.veteraan.
-//   - vrijkopen: het goud, en de argwaan stijgt (js/inner.js): wie kan betalen, is niet arm.
+//   - vrijkopen: het goud, en de gunst van de heer daalt (js/bazen.js): wie kan betalen, is niet arm.
 // Wie niet kiest, stuurt ze: na een week haalt de heer ze op. De regels staan hier, zonder scherm en dus getoetst
 // (test/heervaart.test.cjs).
 (function (T) {
@@ -26,9 +26,10 @@
     // Wat hij vraagt: een man per zoveel zielen (naar boven afgerond), of zoveel goud per man.
     zielenPerMan: 10,
     goudPerMan: 3,
-    // De kans dat een man niet terugkomt, en hoeveel argwaan elk goud geeft waarmee je ze vrijkoopt.
+    // De kans dat een man niet terugkomt, en hoeveel gunst van de heer elk goud kost waarmee je ze vrijkoopt (in punten
+    // van 0 tot 100; het was 0,5% argwaan per goud, vóór 11 okt).
     kansNietTerug: 0.25,
-    argwaanPerGoud: 0.005,
+    gunstPerGoud: 0.5,
     // Waarom hij ten strijde trekt: elk jaar een van deze, na "Wij trekken ten strijde". Zinnen, geen getallen,
     // dus de werkbank laat ze met rust.
     oorlogen: [
@@ -130,15 +131,16 @@
     return wie;
   };
 
-  // Vrijkopen: het goud, en de heer vraagt zich af waar het vandaan kwam (de argwaan, js/inner.js).
+  // Vrijkopen: het goud, en de heer vraagt zich af waar het vandaan kwam (zijn gunst daalt met gunstPerGoud per goud, en
+  // stijgt met wat zijn goud hem waard is: T.BAZEN_INSTELLINGEN.heervaart.vrijgekocht). Eén verandering van de meter,
+  // zodat de waarschuwing niet afhangt van welk deel eerst kwam.
   T.koopHeervaartAf = function (D) {
     const H = heervaartVan(D);
     const v = H.vraag;
     if (!v || ((D.voorraad && D.voorraad.goud) || 0) < v.goud) return false;
     H.vraag = null;
     T.wijzigVoorraad(D, 'goud', -v.goud);
-    T.zetArgwaan(D, v.goud * IN().argwaanPerGoud, 'je kocht je mannen vrij van zijn heervaart');
-    T.wijzigGunst(D, T.BAZEN_INSTELLINGEN.heervaart.vrijgekocht, 'je betaalde voor je mannen');
+    T.wijzigGunst(D, T.BAZEN_INSTELLINGEN.heervaart.vrijgekocht - v.goud * IN().gunstPerGoud, 'je kocht je mannen vrij van zijn heervaart');
     T.wijzigVertrouwen(D, T.BAZEN_INSTELLINGEN.heervaartVrij, 'je kocht de mannen vrij');
     H.laatste = { jaar: v.jaar, antwoord: 'vrijgekocht', goud: v.goud };
     T.zeg(D, `Je koopt je mannen vrij voor ${v.goud} goud. De heer vraagt zich af waar dat vandaan kwam.`);

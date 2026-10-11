@@ -52,7 +52,7 @@
 //
 // Een voorval (js/voorvallen.js) is een gesprek dat de ander begint, onder dezelfde naam als in T.VOORVALLEN. Zijn
 // naam is '{wie}': wie het je komt zeggen. Een antwoord mag daar ook hebben: graan: -20 (of hout, bier, ijzer, ...),
-// tevreden: 5, argwaan: 3, verban: 'ander', sterfkans: 30, gezin: 1, schaap: -2, voorval: 'x' (een vervolg) en
+// tevreden: 5, gunst: -3, verban: 'ander', sterfkans: 30, gezin: 1, schaap: -2, voorval: 'x' (een vervolg) en
 // feest: 'dag' of 'avond' (het dorp viert het op het plein, js/feesten.js), blus: true of brand: 'laat' (de brand,
 // js/brand.js) en koorts: 40 (de koorts gaat zo vaak over als 40 op 100, js/koorts.js). Wat dat is, staat boven in
 // js/voorvallen.js; het venster zegt de prijs vooraf.
@@ -608,8 +608,8 @@
           ],
           keuzes: [
             { zeg: 'Dank je. Geef hem maar aan {ander}.', sluit: true, doe: { tevreden: 2 } },
-            { zeg: 'Ik neem hem aan. En die andere hazen ook.', sluit: true, doe: { vlees: 8, argwaan: 2 } },
-            { zeg: 'Uit het bos van de heer? Breng hem terug.', sluit: true, doe: { argwaan: -2 } },
+            { zeg: 'Ik neem hem aan. En die andere hazen ook.', sluit: true, doe: { vlees: 8, gunst: -2 } },
+            { zeg: 'Uit het bos van de heer? Breng hem terug.', sluit: true, doe: { gunst: 2 } },
           ],
         },
       },
@@ -907,9 +907,9 @@
             { zeg: 'Ik zag {ander} in het bos van de heer, met een haas onder zijn jas. Als de heer het hoort, zijn we allemaal de klos. Ik zeg het maar, schout.' },
           ],
           keuzes: [
-            { zeg: 'Ik geef hem aan bij de heer.', sluit: true, doe: { tevreden: -3, argwaan: -4 } },
-            { zeg: 'Hij deelt die haas met het dorp, en houdt zijn mond.', sluit: true, doe: { vlees: 3, argwaan: 2 } },
-            { zeg: 'Ik heb niets gehoord. En jij ook niet.', sluit: true, doe: { argwaan: 1 } },
+            { zeg: 'Ik geef hem aan bij de heer.', sluit: true, doe: { tevreden: -3, gunst: 4 } },
+            { zeg: 'Hij deelt die haas met het dorp, en houdt zijn mond.', sluit: true, doe: { vlees: 3, gunst: -2 } },
+            { zeg: 'Ik heb niets gehoord. En jij ook niet.', sluit: true, doe: { gunst: -1 } },
           ],
         },
       },
@@ -956,7 +956,7 @@
           ],
           keuzes: [
             { zeg: 'Hier, vijf goud. En nu je mond dicht.', sluit: true, doe: { goud: -5 } },
-            { zeg: 'Ga maar. De inner gelooft geen woekeraar.', sluit: true, doe: { argwaan: 6 } },
+            { zeg: 'Ga maar. De inner gelooft geen woekeraar.', sluit: true, doe: { gunst: -6 } },
           ],
         },
       },
@@ -1197,8 +1197,8 @@
             { zeg: 'Bij de brug staat een man met een kar vol ijzer, schout. Spotgoedkoop. Hij zegt niet waar het vandaan komt, maar er staat een wapen op. Dat van de heer.' },
           ],
           keuzes: [
-            { zeg: 'Koop het. Alles.', sluit: true, doe: { goud: -2, ijzer: 10, argwaan: 5 } },
-            { zeg: 'Laat hem vastzetten, en stuur het ijzer naar de heer.', sluit: true, doe: { tevreden: -1, argwaan: -5 } },
+            { zeg: 'Koop het. Alles.', sluit: true, doe: { goud: -2, ijzer: 10, gunst: -5 } },
+            { zeg: 'Laat hem vastzetten, en stuur het ijzer naar de heer.', sluit: true, doe: { tevreden: -1, gunst: 5 } },
             { zeg: 'Stuur hem weg.', sluit: true },
           ],
         },
@@ -1214,7 +1214,7 @@
           ],
           keuzes: [
             { zeg: 'Die zijn voor de kist van het dorp.', sluit: true, doe: { goud: 4 } },
-            { zeg: 'Een vondst is van de heer. Hij krijgt ze.', sluit: true, doe: { argwaan: -6 } },
+            { zeg: 'Een vondst is van de heer. Hij krijgt ze.', sluit: true, doe: { gunst: 6 } },
             { zeg: 'Houd ze. En zeg het tegen niemand.', sluit: true, doe: { tevreden: 1 } },
           ],
         },
@@ -1253,7 +1253,7 @@
             { zeg: 'Laat ze nooit zien wat je hebt, en laat ze altijd zien wat je niet hebt. Een lege schuur, een mager kind. De heer houdt van magere kinderen: die kosten hem niets.' },
           ],
           keuzes: [
-            { zeg: 'Dank je.', sluit: true, doe: { argwaan: -3 } },
+            { zeg: 'Dank je.', sluit: true, doe: { gunst: 3 } },
           ],
         },
       },
@@ -1385,8 +1385,8 @@
             { zeg: 'Ik heb een lied gemaakt, schout. Over de heer. Het rijmt op varken. Mag ik het vanavond zingen, in de herberg?' },
           ],
           keuzes: [
-            { zeg: 'Zing maar. Hard.', sluit: true, doe: { tevreden: 4, argwaan: 4 } },
-            { zeg: 'Zing het zachtjes. En niet het laatste couplet.', sluit: true, doe: { tevreden: 2, argwaan: 1 } },
+            { zeg: 'Zing maar. Hard.', sluit: true, doe: { tevreden: 4, gunst: -4 } },
+            { zeg: 'Zing het zachtjes. En niet het laatste couplet.', sluit: true, doe: { tevreden: 2, gunst: -1 } },
             { zeg: 'Niet zingen.', sluit: true, doe: { tevreden: -1 } },
           ],
         },
@@ -1432,9 +1432,9 @@
             { zeg: 'Er was een bode van de heer, schout. De heer wil een standbeeld van zichzelf, op ons plein, voor Pasen. Van eik, want marmer is voor de keizer, en hij is bescheiden.' },
           ],
           keuzes: [
-            { zeg: 'Dan krijgt hij een standbeeld.', sluit: true, doe: { hout: -20, tevreden: -2, argwaan: -6 } },
-            { zeg: 'Een vogelverschrikker, in een oude jas van hem.', sluit: true, doe: { hout: -3, tevreden: 3, argwaan: 3 } },
-            { zeg: 'Pasen is nog ver.', sluit: true, doe: { argwaan: 3 } },
+            { zeg: 'Dan krijgt hij een standbeeld.', sluit: true, doe: { hout: -20, tevreden: -2, gunst: 6 } },
+            { zeg: 'Een vogelverschrikker, in een oude jas van hem.', sluit: true, doe: { hout: -3, tevreden: 3, gunst: -3 } },
+            { zeg: 'Pasen is nog ver.', sluit: true, doe: { gunst: -3 } },
           ],
         },
       },
@@ -1448,9 +1448,9 @@
             { zeg: 'De bode van de heer was er, schout. De heer komt jagen, in ons bos. Het dorp levert de drijvers, en het eten. En de wijn, maar die hebben we niet.' },
           ],
           keuzes: [
-            { zeg: 'Drijvers en eten, en bier in plaats van wijn.', sluit: true, doe: { graan: -20, bier: -10, argwaan: -5 } },
-            { zeg: 'Alleen de drijvers.', sluit: true, doe: { argwaan: 2 } },
-            { zeg: 'Zeg hem dat het wild op is.', sluit: true, doe: { argwaan: 5 } },
+            { zeg: 'Drijvers en eten, en bier in plaats van wijn.', sluit: true, doe: { graan: -20, bier: -10, gunst: 5 } },
+            { zeg: 'Alleen de drijvers.', sluit: true, doe: { gunst: -2 } },
+            { zeg: 'Zeg hem dat het wild op is.', sluit: true, doe: { gunst: -5 } },
           ],
         },
       },
@@ -1466,7 +1466,7 @@
           keuzes: [
             { zeg: 'Betaal maar.', sluit: true, doe: { goud: -2 } },
             { zeg: 'Iedereen zet planken voor zijn ramen. Vandaag nog.', sluit: true, doe: { hout: -8, tevreden: -2 } },
-            { zeg: 'Laat hem tellen. Hij kan niet tellen.', sluit: true, doe: { argwaan: 4 } },
+            { zeg: 'Laat hem tellen. Hij kan niet tellen.', sluit: true, doe: { gunst: -4 } },
           ],
         },
       },

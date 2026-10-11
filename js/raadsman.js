@@ -29,23 +29,26 @@
     // uitvalt zoveel minder erg (0,5: de helft) en wat goed uitvalt zoveel beter; wie het slecht kan, andersom.
     vaardigheden: { rechtspreken: 0.5, zwijgen: 0.5, rekenen: 0.25, bouwen: 0.5, vechten: 0.5 },
     // Hoe hij kiest, naar zijn karakter (T.KARAKTERS in js/mensen.js): wat een antwoord hem waard is, per procent
-    // tevredenheid (tevreden), per procent argwaan van de inner (argwaan), per goud (goud), per tien graan, hout,
+    // tevredenheid (tevreden), per punt gunst van de heer (gunst), per goud (goud), per tien graan, hout,
     // bier, ... (waren), voor iemand het bos in (verban: plus is streng, min is mild), per tien procent kans op een
     // dode (dood), en per gezin erbij (gezin). Het antwoord dat hem het meest waard is, wint.
+    // Het gewicht van de gunst is het gewicht dat tot 11 okt de argwaan van de inner had (vraag 151, optie 1, deel B1): een
+    // antwoord dat 3% argwaan gaf, geeft nu 3 punten gunst minder, en weegt dus precies hetzelfde. Daarom is het
+    // teken omgedraaid in `waarde`: een antwoord dat gunst geeft, is hem iets waard, en een dat gunst kost, kost hem iets.
     karakters: {
-      zanger: { tevreden: 2, argwaan: 0.3, goud: 1, waren: 0.3, verban: -3, dood: 1, gezin: 1 },
-      weduwe: { tevreden: 1, argwaan: 1, goud: 2, waren: 2, verban: -4, dood: 2, gezin: 1 },
-      woekeraar: { tevreden: 0.3, argwaan: 1, goud: 4, waren: 1, verban: 2, dood: 0.5, gezin: 0 },
-      vroedvrouw: { tevreden: 1, argwaan: 1, goud: 1, waren: 1, verban: -2, dood: 4, gezin: 2 },
-      heethoofd: { tevreden: 1, argwaan: 0.3, goud: 1, waren: 0.5, verban: 5, dood: 0.5, gezin: 0 },
-      vrome: { tevreden: 1, argwaan: 1, goud: 2, waren: 1, verban: -3, dood: 0.2, gezin: 1 },
-      roddelaar: { tevreden: 1.5, argwaan: 0.3, goud: 1, waren: 1, verban: 1, dood: 1, gezin: 1 },
-      grijsaard: { tevreden: 1, argwaan: 3, goud: 1, waren: 1, verban: 0, dood: 1, gezin: 1 },
-      nieuwkomer: { tevreden: 1, argwaan: 1, goud: 1, waren: 1, verban: -4, dood: 1, gezin: 5 },
-      drinker: { tevreden: 1.5, argwaan: 0.5, goud: 1, waren: 0.3, verban: 0, dood: 1, gezin: 1 },
+      zanger: { tevreden: 2, gunst: 0.3, goud: 1, waren: 0.3, verban: -3, dood: 1, gezin: 1 },
+      weduwe: { tevreden: 1, gunst: 1, goud: 2, waren: 2, verban: -4, dood: 2, gezin: 1 },
+      woekeraar: { tevreden: 0.3, gunst: 1, goud: 4, waren: 1, verban: 2, dood: 0.5, gezin: 0 },
+      vroedvrouw: { tevreden: 1, gunst: 1, goud: 1, waren: 1, verban: -2, dood: 4, gezin: 2 },
+      heethoofd: { tevreden: 1, gunst: 0.3, goud: 1, waren: 0.5, verban: 5, dood: 0.5, gezin: 0 },
+      vrome: { tevreden: 1, gunst: 1, goud: 2, waren: 1, verban: -3, dood: 0.2, gezin: 1 },
+      roddelaar: { tevreden: 1.5, gunst: 0.3, goud: 1, waren: 1, verban: 1, dood: 1, gezin: 1 },
+      grijsaard: { tevreden: 1, gunst: 3, goud: 1, waren: 1, verban: 0, dood: 1, gezin: 1 },
+      nieuwkomer: { tevreden: 1, gunst: 1, goud: 1, waren: 1, verban: -4, dood: 1, gezin: 5 },
+      drinker: { tevreden: 1.5, gunst: 0.5, goud: 1, waren: 0.3, verban: 0, dood: 1, gezin: 1 },
     },
     // Wie geen karakter heeft (een boer zoals hij geschreven was), kiest zo.
-    gewoon: { tevreden: 1, argwaan: 1, goud: 1, waren: 1, verban: 0, dood: 1, gezin: 1 },
+    gewoon: { tevreden: 1, gunst: 1, goud: 1, waren: 1, verban: 0, dood: 1, gezin: 1 },
   };
   const IN = () => T.RAADSMAN_INSTELLINGEN;
 
@@ -53,7 +56,7 @@
   // en op welk deel van een antwoord ze werken.
   T.VAARDIGHEDEN = {
     rechtspreken: { goed: 'spreekt goed recht', slecht: 'spreekt slecht recht', waarop: 'hoe tevreden het dorp is met zijn vonnis', op: ['tevreden'] },
-    zwijgen: { goed: 'kan zwijgen', slecht: 'kan niets voor zich houden', waarop: 'wat de inner te horen krijgt', op: ['argwaan'] },
+    zwijgen: { goed: 'kan zwijgen', slecht: 'kan niets voor zich houden', waarop: 'wat de heer te horen krijgt', op: ['gunst'] },
     rekenen: { goed: 'kan rekenen', slecht: 'kan niet rekenen', waarop: 'wat het kost aan goud en waren', op: ['goud', 'graan', 'wol', 'bier', 'ijzer', 'zout', 'vlees', 'vis', 'kaas', 'hooi'] },
     bouwen: { goed: 'kan bouwen', slecht: 'heeft twee linkerhanden', waarop: 'wat het kost aan hout', op: ['hout'] },
     vechten: { goed: 'kan vechten', slecht: 'is bang', waarop: 'de kans dat er iemand sterft', op: ['sterfkans'] },
@@ -67,13 +70,13 @@
     vroedvrouw: 'zorgzaam: liever niemand dood, wat het ook kost',
     heethoofd: 'streng: wie steelt, moet het bos in',
     vrome: 'vroom: bidden helpt ook, en niemand het bos in',
-    roddelaar: 'praat graag, ook met de inner',
+    roddelaar: 'praat graag, ook met de heer',
     grijsaard: 'voorzichtig: de heer moet tevreden zijn',
     nieuwkomer: 'gastvrij: vreemdelingen zijn welkom, en niemand het bos in',
     drinker: 'gezellig: het dorp moet blij zijn, het kost wat het kost',
   };
-  // Wat goed uitvalt voor het dorp: meer tevredenheid, goud en waren; minder argwaan; en een kans op een dode nooit.
-  const goedVoorHetDorp = (wat, n) => (wat === 'argwaan' ? n < 0 : wat === 'sterfkans' ? false : n > 0);
+  // Wat goed uitvalt voor het dorp: meer tevredenheid, gunst, goud en waren; en een kans op een dode nooit.
+  const goedVoorHetDorp = (wat, n) => (wat === 'sterfkans' ? false : n > 0);
   const WAREN = T.VAARDIGHEDEN.rekenen.op.filter((w) => w !== 'goud').concat('hout');
 
   const dagNu = (D) => Math.floor(D.kalender ? D.kalender.dag : 0);
@@ -160,7 +163,7 @@
   // Wat een antwoord hem waard is, naar zijn karakter (karakters hierboven).
   function waarde(p, doe) {
     const t = IN().karakters[p.wezen.karakter] || IN().gewoon;
-    let n = (t.tevreden || 0) * (doe.tevreden || 0) - (t.argwaan || 0) * (doe.argwaan || 0) + (t.goud || 0) * (doe.goud || 0);
+    let n = (t.tevreden || 0) * (doe.tevreden || 0) + (t.gunst || 0) * (doe.gunst || 0) + (t.goud || 0) * (doe.goud || 0);
     for (const wat of WAREN) n += ((t.waren || 0) * (doe[wat] || 0)) / 10;
     for (const soort of Object.keys(T.VEE)) n += (t.waren || 0) * (doe[soort] || 0);
     if (doe.verban) n += t.verban || 0;

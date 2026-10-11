@@ -577,7 +577,7 @@
     { naam: 'ijzer', soort: 'getal', uitleg: 'ijzer erbij (of eraf, met een min)' },
     { naam: 'vlees', soort: 'getal', uitleg: 'vlees erbij (of eraf, met een min)' },
     { naam: 'tevreden', soort: 'getal', uitleg: 'het dorp is zoveel procent tevredener (of minder), en dat slijt weg' },
-    { naam: 'argwaan', soort: 'getal', uitleg: 'de inner is zoveel procent argwanender (of minder)' },
+    { naam: 'gunst', soort: 'getal', uitleg: 'de gunst van de heer is zoveel punten hoger (of lager, met een min)' },
     { naam: 'verban', soort: 'namen', uitleg: "'wie' of 'ander' moet weg (een voorval)" },
     { naam: 'sterfkans', soort: 'getal', uitleg: 'met zoveel procent kans sterft er iemand (een voorval)' },
     { naam: 'gezin', soort: 'getal', uitleg: 'er komen zoveel gezinnen bij, als er plaats is' },

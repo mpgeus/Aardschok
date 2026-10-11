@@ -182,7 +182,7 @@ test('de zitting: op haar dag staan ze op het plein, en komt de schout erbij, da
   assert.equal(aangesproken[0].id, 'zitting');
 });
 
-test('met bewijs noem je de dader; wie het verbergt, staat niet in het boek, en de inner leest het voor', () => {
+test('met bewijs noem je de dader; wie het verbergt, staat niet in het boek, en de heer leest het zelf', () => {
   const { S, D, Z } = metZaak();
   antwoord(S, 'graanzak', 'begin', 0);
   T.zaakWeet(D, 'licht');
@@ -202,15 +202,12 @@ test('met bewijs noem je de dader; wie het verbergt, staat niet in het boek, en 
   assert.ok(w, 'het vervolg wacht');
   assert.equal(w.wie, Z.dader);
   assert.equal(w.ander, Z.ziek);
-  // Op Sint-Maarten leest de inner het boek: één keer.
-  const argwaan = D.inner ? D.inner.argwaan : 0;
-  const gunst = D.bazen ? D.bazen.gunst : null;
+  // Op Sint-Maarten leest de heer het boek zelf: één keer, en het kost alleen gunst.
+  const gunst = T.bazenNu(D).gunst;
   T.heerLeestHetBoek(D);
-  assert.ok(D.inner.argwaan > argwaan);
-  if (gunst != null && T.BAZEN_INSTELLINGEN.aan) assert.ok(D.bazen.gunst < gunst);
-  const na = D.inner.argwaan;
+  assert.equal(T.bazenNu(D).gunst, gunst + T.ZAAK_INSTELLINGEN.boekGunst);
   T.heerLeestHetBoek(D);
-  assert.equal(D.inner.argwaan, na);
+  assert.equal(T.bazenNu(D).gunst, gunst + T.ZAAK_INSTELLINGEN.boekGunst, 'één keer');
 });
 
 test('wie de verdachte straft, krijgt hem later terug; wie de dader straft, ziet zijn kind', () => {

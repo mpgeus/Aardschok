@@ -28,7 +28,7 @@
   const IN = () => T.GRILLEN_INSTELLINGEN;
 
   // Wat hij kan willen. Per gril: de titel (voor de brief en het waarom bij de balk), de tekst van zijn brief, de
-  // antwoorden (`doe`: goud en waren, gunst, vertrouwen, argwaan in procenten; zoals een voorval, js/voorvallen.js), en
+  // antwoorden (`doe`: goud en waren, gunst en vertrouwen in punten; zoals een voorval, js/voorvallen.js), en
   // wat het kost als je niet antwoordt (`stil`).
   T.GRILLEN = {
     standbeeld: {
@@ -163,7 +163,7 @@
       ],
       keuzes: [
         { tekst: 'Twintig goud, heer.', doe: { goud: -20, gunst: 10 } },
-        { tekst: 'De kist is leeg, heer.', doe: { gunst: -6, argwaan: 5 } },
+        { tekst: 'De kist is leeg, heer.', doe: { gunst: -6 } },
       ],
       stil: { gunst: -6 },
     },
@@ -214,7 +214,6 @@
     for (const wat of WAREN) if (doe[wat]) T.wijzigVoorraad(D, wat, doe[wat]);
     if (doe.gunst) T.wijzigGunst(D, doe.gunst, waarom);
     if (doe.vertrouwen) T.wijzigVertrouwen(D, doe.vertrouwen, waarom);
-    if (doe.argwaan) T.zetArgwaan(D, doe.argwaan / 100, waarom);
   }
 
   // Elke dag (T.tikGebouwenDag, js/gebouwen.js, na de heervaart): wacht er een gril op je, en is zijn tijd om, dan
