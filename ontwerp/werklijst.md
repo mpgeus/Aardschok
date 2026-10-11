@@ -7705,8 +7705,9 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     brief brengt; c, ook "wie ziet wat" en de getuigen eruit (Claude: ja, git bewaart het).
     **Rondkijken** (Marcel, 11 okt: "Voor nu wil ik dat je rondkijkt naar vergelijkbare spellen. We hebben een goede
     gameloop nodig"): `ontwerp/gameloop.md`, met Papers, Please, Beholder, The Reeve, Frostpunk, Against the Storm, King of
-    Dragon Pass, Pentiment en de dorpsbouwers, wat een goede loop gemeen heeft, en wat het voor ons betekent. **Wacht op
-    Marcel.**
+    Dragon Pass, Pentiment en de dorpsbouwers, wat een goede loop gemeen heeft, en wat het voor ons betekent. Marcel kent
+    Manor Lords, The Guild en Frostpunk: ons spel is het dorp van Manor Lords, met de mensen van The Guild, onder de druk
+    van Frostpunk (`gameloop.md`, "De drie die Marcel kent"). **Wacht op Marcel.**
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

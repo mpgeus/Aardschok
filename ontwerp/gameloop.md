@@ -117,6 +117,28 @@ Een loop heeft drie lagen, en wij missen ze alle drie:
 - **De speeltest als toets van de loop:** zolang een script dat de raad volgt, wint, is er voor de speler niets te
   kiezen.
 
+## De drie die Marcel kent (11 okt)
+
+Marcel: "Ik ken manor Lords, the guild en frostpunk." Dat is onze gedeelde taal, en elk van de drie dekt een deel van
+ons spel. **Ons spel in één zin: het dorp van Manor Lords, met de mensen van The Guild, onder de druk van Frostpunk.**
+
+- **Manor Lords: het dorp.** Een dorp dat zelf groeit langs je wegen, mooi en levend. Dat hebben wij al, en de klacht
+  over Manor Lords (weinig te doen als het eenmaal draait) is die van Marcel over ons.
+- **The Guild: jij als mens in de stad.** Je bent iemand met een familie, een zaak en ambitie; er zijn ambten waarop
+  gestemd wordt, rivalen met eigen plannen, aanklachten met bewijs, en rechters die je kunt omkopen. De spanning komt
+  uit mensen, niet uit getallen. Dat missen wij helemaal: de schout heeft geen rivaal, geen ambitie, en niemand wil
+  zijn ambt.
+- **Frostpunk: de druk.** De kou en de storm als klok; wetten die je niet terugdraait; beloftes (wordt het volk
+  onrustig, dan eist een groep iets binnen een termijn, en wie belooft en het niet haalt, verliest veel); en het volk
+  kan je wegsturen. Dat hebben wij half: twee bazen en wetten, maar een wet zet je elke dag gratis weer om
+  (`T.zetWet` in `js/wetten.js`), dus aannemen is geen keuze, en er is geen klok.
+
+**Wat er klein uit te halen is** (voorstel van Claude, niets besloten):
+- uit Frostpunk: een wet staat vast tot de volgende zitting of een jaar, zodat aannemen een keuze is; en een belofte
+  als voorval: een groep eist iets voor een datum, jij belooft het of niet.
+- uit The Guild: een rivaal voor je ambt (iemand in het dorp die schout wil worden, en bij de heer en het dorp tegen je
+  werkt), en een aanklacht met bewijs op de zitting (de graanzak is de proef).
+
 ## Open
 
 - Welke loop het wordt (vraag 151: A de schout is maar één mens, B rechtspraak, C de heer als klok, of samen), en hoe
