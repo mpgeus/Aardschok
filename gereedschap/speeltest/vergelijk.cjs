@@ -87,7 +87,6 @@ const MATEN = [
   ['weg', 'Weggetrokken', (u) => u.winter && u.winter.weg],
   ['gunst', 'Gunst van de heer', (u) => u.eind && u.eind.bazen && u.eind.bazen.gunst],
   ['vertrouwen', 'Vertrouwen van het dorp', (u) => u.eind && u.eind.bazen && u.eind.bazen.vertrouwen],
-  ['argwaan', 'Argwaan van de heer (%)', (u) => u.eind && procent(u.eind.argwaan)],
   ['graan', 'Graan aan het eind', (u) => u.eind && u.eind.graan],
   ['goud', 'Goud aan het eind', (u) => u.eind && u.eind.goud],
   ['hout', 'Hout aan het eind', (u) => u.eind && u.eind.hout],

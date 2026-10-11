@@ -44,7 +44,7 @@ test('een naam van een speeltest is een map in uit/, niets daarbuiten', () => {
 // Een uitslag zoals speler.js hem teruggeeft, met alleen wat de vergelijking leest.
 const uitslag = (speler, zaad, mensen, gewonnen = null) => ({
   speler, zaad, fouten: [],
-  eind: { tekst: 'het jaar uit, tot 1 grasmaand', bevolking: mensen, tevredenheid: 0.714, graan: 120, goud: 33, hout: 40, argwaan: 0.25,
+  eind: { tekst: 'het jaar uit, tot 1 grasmaand', bevolking: mensen, tevredenheid: 0.714, graan: 120, goud: 33, hout: 40,
     bazen: { gunst: 61, vertrouwen: 72 }, eind: { beste: 40, gewonnen } },
   dorp: { datum: '3 hooimaand' }, marktrecht: null,
   geluk: [{ allemaal: 10, honger: 2 }, { allemaal: 25, honger: 0 }],

@@ -1,14 +1,13 @@
 // De speeltest (werklijst, vraag 45; Marcel, 28 sep: "A ja B ja C ja D ja"). Het spel speelt een jaar
 // zoals het draait, in een onzichtbare browser, en een speler in code doet wat een speler doet: lopen,
-// met de inner praten, en de vensters beantwoorden. Elk jaar krijgt een
+// en de vensters beantwoorden. Elk jaar krijgt een
 // vast zaad: hetzelfde zaad geeft dezelfde boeren en hetzelfde lot. Zo speel je na het bijstellen van een
 // getal hetzelfde jaar opnieuw, en zie je precies wat de wijziging deed.
 //
 //   npm run speeltest                          de vier spelers, elk met zaad 1, 2 en 3
 //   npm run speeltest -- slim                  één speler, met zaad 1, 2 en 3
 //   npm run speeltest -- bouwer                de bouwer, die twee jaar speelt (vraag 58): van gehucht tot dorp
-//   npm run speeltest -- sluw                  de sluwe bouwer (vraag 94): de bouwer, maar hij bespeelt de inner en
-//                                              geeft de heer 90%
+//   npm run speeltest -- sluw                  de sluwe bouwer (vraag 94): de bouwer, maar hij geeft de heer 90%
 //   npm run speeltest -- bouwer sluw --jaren 4 de bouwers spelen vier jaar in plaats van twee: naar de winst (vraag 102, e)
 //   npm run speeltest -- --tegelijk 4          zoveel spellen tegelijk, elk in een eigen tabblad (standaard 3)
 //   npm run speeltest -- slim --zaad 7         één jaar

@@ -1,4 +1,4 @@
-// De tabellen van de speeltest (speeltest.cjs): per jaar twee tabellen (de inner en de heer; het dorp), en per speler het gemiddelde over zijn zaden. De getallen komen uit wat speler.js per
+// De tabellen van de speeltest (speeltest.cjs): per jaar twee tabellen (de heer; het dorp), en per speler het gemiddelde over zijn zaden. De getallen komen uit wat speler.js per
 // jaar teruggeeft; wat een jaar niet heeft, blijft leeg. Daarna, voor alle spelers, van gehucht tot dorp (vraag
 // 58): wanneer het een dorp werd, en waarom er op een groeidag geen gezin kwam; en voor wie twee jaar speelt het graanboek
 // (vraag 94, d).
@@ -14,7 +14,6 @@ const EEN_JAAR = ['braaf', 'slim'];
 const getal = (x) => (x == null || Number.isNaN(x) ? '' : String(Math.round(x)));
 const pct = (x) => (x == null || Number.isNaN(x) ? '' : `${Math.round(x * 100)}%`);
 const regel = (cellen) => `| ${cellen.join(' | ')} |`;
-const som = (lijst, f) => lijst.reduce((a, x) => a + (f(x) || 0), 0);
 
 function gemiddelde(lijst, f) {
   const w = lijst.map(f).filter((x) => typeof x === 'number' && !Number.isNaN(x));
@@ -23,21 +22,12 @@ function gemiddelde(lijst, f) {
 
 // Wat een jaar oplevert, in getallen die in de tabellen en het gemiddelde terugkomen.
 function maten(u) {
-  const r = u.inner.rapport || {};
   const na = u.naSintMaarten || {};
   return {
-    innerGebouwen: typeof r.gebouwen === 'object' ? som(Object.values(r.gebouwen), (n) => n) : r.gebouwen,
-    gebouwenInHetDorp: r.gebouwenInHetDorp,
-    innerTegels: r.tegels,
-    tegelsInHetDorp: r.tegelsInHetDorp,
-    gepraat: u.inner.gepraatUren,
-    geschenk: som(u.inner.geschenken, (g) => (g.kan ? g.goud : 0)),
-    gehoord: u.inner.geschenken.some((g) => g.gehoord),
     vroegGraan: u.heer && u.heer.vroeg.graan,
     vroegGoud: u.heer && u.heer.vroeg.goud,
     deel: u.heer && u.heer.deel,
     straf: u.heer ? u.heer.straf : '',
-    argwaan: u.heer ? u.heer.argwaan : null,
     rijkGraan: na.graan || 0,
     rijkGoud: na.goud || 0,
     mensen: u.eind.bevolking,
@@ -54,15 +44,11 @@ function maten(u) {
 
 const TABELLEN = [
   {
-    kop: 'De inner en de heer',
+    kop: 'De heer',
     kolommen: [
-      ['de inner zag', (m) => `${getal(m.innerGebouwen)} van ${getal(m.gebouwenInHetDorp)} gebouwen, ${getal(m.innerTegels)} van ${getal(m.tegelsInHetDorp)} akkertegels`],
-      ['gepraat', (m) => (m.gepraat ? `${getal(m.gepraat)} uur` : '')],
-      ['geschenk', (m) => (m.geschenk ? `${m.geschenk} goud${m.gehoord ? ', de heer hoorde het' : ''}` : '')],
       ['de heer vroeg', (m) => `${getal(m.vroegGraan)} graan, ${getal(m.vroegGoud)} goud`],
       ['gegeven', (m) => pct(m.deel)],
       ['straf', (m) => m.straf],
-      ['argwaan', (m) => pct(m.argwaan)],
     ],
   },
   {
