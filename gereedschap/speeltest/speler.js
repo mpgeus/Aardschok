@@ -428,7 +428,7 @@
   function luisterNaarDeWinter() {
     for (; gelezen < boek.berichten.length; gelezen++) {
       const b = boek.berichten[gelezen];
-      if (/Het hout haalt \d+ van de \d+ dagen/.test(b.tekst)) bouw('houthakker');
+      if (/The wood lasts \d+ of the \d+ days/.test(b.tekst)) bouw('houthakker');
     }
   }
 
@@ -573,7 +573,7 @@
     // niet is: dan verkoopt hij graan, en bouwt hij hem zodra het kan).
     function luisterNaarDeWinterBouwer() {
       for (; gelezenWinter < boek.berichten.length; gelezenWinter++) {
-        if (/Het hout haalt \d+ van de \d+ dagen/.test(boek.berichten[gelezenWinter].tekst) && !wil.includes('houthakker')) wil.unshift('houthakker');
+        if (/The wood lasts \d+ of the \d+ days/.test(boek.berichten[gelezenWinter].tekst) && !wil.includes('houthakker')) wil.unshift('houthakker');
       }
     }
     // Het goud dat hij nodig heeft: voor de heer (als hij hem dit jaar nog niet betaalde), voor wat hij als eerste wil
@@ -923,7 +923,7 @@
     if (staat('herberg') && (D().voorraad.bier || 0) < 1) g.zonderBier++;
     if (staat('bakkerij') && (D().voorraad.brood || 0) < 1) g.zonderBrood++;
     if (st.ambachtslieden && st.ambachtslieden.mensen > 0 && (D().voorraad.laken || 0) < 1) g.zonderLaken++;
-    if ((D().behoeften.mist || []).includes('eten')) g.honger++;
+    if ((D().behoeften.mist || []).includes('food')) g.honger++;
     if (T.watDeWinterNietHaalt(D(), d).includes('eten')) g.etenWinter++;
     if ((D().voorraad.graan || 0) - T.zaaigraanApart(D(), d) < 1) g.graanOp++;
     boek.reeks.nu = allemaal ? boek.reeks.nu + 1 : 0;
@@ -1144,12 +1144,12 @@
       if (b.verschil > 0) w.erbij += b.verschil;
       else if (b.reden === 'winter') {
         w.doden -= b.verschil;
-        if (/hout en het eten/.test(b.waarom)) w.beide -= b.verschil;
-        else if (/hout/.test(b.waarom)) w.kou -= b.verschil;
+        if (/wood and the food/.test(b.waarom)) w.beide -= b.verschil;
+        else if (/wood/.test(b.waarom)) w.kou -= b.verschil;
         else w.honger -= b.verschil;
       } else if (b.reden !== 'gesneuveld') w.weg -= b.verschil; // wie tegen de rovers viel, trok niet weg
     }
-    w.waarschuwingen = boek.berichten.filter((b) => /winter/i.test(b.tekst) && /haalt|halen|is over|op, en de winter/.test(b.tekst)).map((b) => `${b.datum}: ${b.tekst}`);
+    w.waarschuwingen = boek.berichten.filter((b) => /winter/i.test(b.tekst) && /lasts? |will run out|has run out/.test(b.tekst)).map((b) => `${b.datum}: ${b.tekst}`);
     return w;
   }
 

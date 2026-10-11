@@ -76,7 +76,7 @@ function erfPlek(S) {
 test('de eerste dag: hoe de tijd sneller gaat en hoe je slaapt, tot je de tijd zelf sneller zet', () => {
   const S = gehucht();
   assert.equal(id(S), 'tijd');
-  assert.match(raad(S).tekst, /\[\+\] zet de tijd sneller, en \[Z\] is slapen/);
+  assert.match(raad(S).tekst, /\[\+\] speeds up time, and \[Z\] sleeps until morning/);
   S.kalender.snelheid = 3;
   assert.equal(id(S), 'gezin');
 });
@@ -84,20 +84,20 @@ test('de eerste dag: hoe de tijd sneller gaat en hoe je slaapt, tot je de tijd z
 test('niets houdt de groei tegen: wanneer het volgende gezin komt, zoals de groei het telt', () => zonderWensen(() => {
   const S = metRaadsman(opDag(gehucht(), 0.5));
   const n = T.GEBOUWEN_INSTELLINGEN.gezinDagen;
-  assert.equal(raad(S).tekst, `Het volgende gezin komt over ${n} dagen.`);
+  assert.equal(raad(S).tekst, `The next family arrives in ${n} days.`);
   opDag(S, n - 0.5);
-  assert.equal(raad(S).tekst, 'Het volgende gezin komt morgen.');
+  assert.equal(raad(S).tekst, 'The next family arrives tomorrow.');
   // Met Vreemden welkom vaker: de raad telt met de groei mee (T.volgendeGezinDag).
   opDag(S, 1.5);
   T.zetWet(S.dorp, 'vreemden', 'aangenomen');
-  assert.equal(raad(S).tekst, `Het volgende gezin komt over ${T.gezinDagen(S.dorp) - 1} dagen.`);
+  assert.equal(raad(S).tekst, `The next family arrives in ${T.gezinDagen(S.dorp) - 1} days.`);
 }));
 
 test('geen gezin: het dorp is vol, niet tevreden genoeg, of er ligt te weinig graan; vol weegt het zwaarst', () => {
   const S = metRaadsman(opDag(gehucht(), 3.5));
   T.wijzigBevolking(S.dorp, S.dorp.woonruimte - S.dorp.bevolking, 'groei');
   assert.equal(id(S), 'plaats');
-  assert.equal(raad(S).tekst, 'Er komt geen gezin: het dorp is vol. Wijs een erf aan: [B], dan Erf.');
+  assert.equal(raad(S).tekst, 'No family is coming: the village is full. Mark out a plot: [B], then Plot.');
   // Met een vrij erf is er plaats.
   const plek = erfPlek(S);
   T.plaatsGebouw(S.dorp, 'erf', plek.x, plek.y);
@@ -105,9 +105,9 @@ test('geen gezin: het dorp is vol, niet tevreden genoeg, of er ligt te weinig gr
   // Niet tevreden genoeg, en te weinig graan: dan eerst de tevredenheid, want daar is iets aan te doen.
   S.dorp.behoeften = Object.assign(T.nieuweBehoeften(), { tevredenheid: 0.4 });
   T.zetVoorraad(S.dorp, 'graan', 5);
-  assert.equal(raad(S).tekst, `Er komt geen gezin: het dorp is 40% tevreden, en een gezin wil ${Math.round(T.BEHOEFTEN_INSTELLINGEN.groeiDrempel * 100)}%.`);
+  assert.equal(raad(S).tekst, `No family is coming: the village is 40% content, and a family wants ${Math.round(T.BEHOEFTEN_INSTELLINGEN.groeiDrempel * 100)}%.`);
   S.dorp.behoeften.tevredenheid = 0.8;
-  assert.equal(raad(S).tekst, `Er komt geen gezin: er ligt minder dan ${T.GEBOUWEN_INSTELLINGEN.graanBufferVoorGroei} graan.`);
+  assert.equal(raad(S).tekst, `No family is coming: there is less than ${T.GEBOUWEN_INSTELLINGEN.graanBufferVoorGroei} grain in store.`);
 });
 
 test('is het doel voor de mensen gehaald, dan zegt de raad niets meer over de groei', () => {
@@ -130,11 +130,11 @@ test('het hout: vanaf drie maanden voor de winter, als het hem niet haalt, en da
   assert.equal(id(S), 'hout');
   const v = T.houtVoorDeWinter(S.dorp, S.kalender.dag);
   // Zolang komt er geen gezin (js/gebouwen.js, gezinWachtOpDeWinter; werklijst vraag 59, B), en dat zegt hij erbij.
-  assert.equal(raad(S).tekst, `Het hout haalt ${v.dagen} van de ${v.winter} dagen van de winter: bouw een houthakker [B]. Tot het genoeg is, komt er geen gezin.`);
+  assert.equal(raad(S).tekst, `The wood lasts ${v.dagen} of the ${v.winter} days of winter: build a woodcutter [B]. Until there is enough, no family will come.`);
   // Met de spelregel Groei op Altijd komt het gezin toch, en zegt hij dat niet.
   T.GEBOUWEN_INSTELLINGEN.gezinWachtOpDeWinter = false;
   try {
-    assert.equal(raad(S).tekst, `Het hout haalt ${v.dagen} van de ${v.winter} dagen van de winter: bouw een houthakker [B].`);
+    assert.equal(raad(S).tekst, `The wood lasts ${v.dagen} of the ${v.winter} days of winter: build a woodcutter [B].`);
   } finally {
     T.GEBOUWEN_INSTELLINGEN.gezinWachtOpDeWinter = true;
   }
@@ -152,7 +152,7 @@ test('het eten: vanaf drie maanden voor de winter, als het hem niet haalt: wat e
   const v = T.etenVoorDeWinter(S.dorp, S.kalender.dag);
   const hulp = T.watHelptAanEten(S.dorp).slice(0, 2);
   assert.ok(hulp.length, 'er is iets wat helpt');
-  assert.equal(raad(S).tekst, `Het eten haalt ${v.dagen} van de ${v.winter} dagen van de winter. Wat helpt: ${T.opsomming(hulp.map((h) => h.zin))}. Tot het genoeg is, komt er geen gezin.`);
+  assert.equal(raad(S).tekst, `The food lasts ${v.dagen} of the ${v.winter} days of winter. What helps: ${T.opsomming(hulp.map((h) => h.zin))}. Until there is enough, no family will come.`);
   // Wat er kan: op het ontworpen gehucht (zonder beesten) een jager.
   const ids = T.watHelptAanEten(S.dorp).map((h) => h.id);
   assert.ok(ids.includes('jager'), ids.join(', '));
@@ -183,8 +183,8 @@ test('vis en vlees voor de winter: zout bij de marskramer, en een voorraad voord
   assert.equal(v.zout, Math.ceil(v.nodig / T.BEHOEFTEN_INSTELLINGEN.zoutHoudtGoed));
   assert.ok(raadVis().als(D));
   const tekst = raadVis().tekst(D);
-  assert.match(tekst, new RegExp(`koop ${v.zout} zout bij de marskramer in wijnmaand`), tekst);
-  assert.doesNotMatch(tekst, /er is er dan/, 'er is genoeg');
+  assert.match(tekst, new RegExp(`buy ${v.zout} salt from the peddler in October`), tekst);
+  assert.doesNotMatch(tekst, /there will then be about/, 'er is genoeg');
   // Met genoeg zout zegt hij niets.
   T.zetVoorraad(D, 'zout', v.zout);
   assert.ok(!raadVis().als(D));
@@ -193,7 +193,7 @@ test('vis en vlees voor de winter: zout bij de marskramer, en een voorraad voord
   D.gebouwen = D.gebouwen.filter((g) => g.soort !== 'visser');
   const r = T.visEnVleesRaad(D);
   assert.ok(r && r.mist, 'er mist vis of vlees');
-  assert.match(raadVis().tekst(D), /er is er dan zo'n 0/);
+  assert.match(raadVis().tekst(D), /there will then be about 0/);
   // Na het laatste bezoek van de marskramer vóór de winter zegt hij niets meer over zout.
   T.zetVoorraad(D, 'zout', 0);
   T.zetVoorraad(D, 'vis', 1000);
@@ -208,7 +208,7 @@ test('vis en vlees voor de winter: zout bij de marskramer, en een voorraad voord
 test('na een aanval van de rovers: wat een wachthuis doet, als er geen is', () => {
   const S = opDag(gehucht(), 40.5);
   S.dorp.rovers = Object.assign(T.nieuweRovers(), { laatsteAanval: 38 });
-  assert.equal(raad(S).tekst, 'De rovers komen terug. Een wachthuis [B] geeft je twee man die meevechten.');
+  assert.equal(raad(S).tekst, 'The robbers are coming back. A watch house [B] gives you two men to fight at your side.');
   opDag(S, 38 + T.RAAD_INSTELLINGEN.roversNa + 0.5);
   assert.notEqual(id(S), 'rovers');
   opDag(S, 40.5);
@@ -219,7 +219,7 @@ test('na een aanval van de rovers: wat een wachthuis doet, als er geen is', () =
 test('ging er een voorval voorbij terwijl je weg was: kies een raadsman, tot je er een hebt', () => {
   const S = opDag(gehucht(), 40.5);
   S.dorp.voorvallen = Object.assign(T.nieuweVoorvallen(), { laatstVoorbij: 39 });
-  assert.equal(raad(S).tekst, 'Wat je mist als je weg bent, gaat voorbij: kies een raadsman [R].');
+  assert.equal(raad(S).tekst, 'What you miss while you are away passes by: choose an advisor [R].');
   opDag(S, 39 + T.RAAD_INSTELLINGEN.raadsmanNa + 0.5);
   assert.notEqual(id(S), 'raadsman', 'een tijd, en dan zegt de raad weer wat anders');
   opDag(S, 40.5);
@@ -230,7 +230,7 @@ test('ging er een voorval voorbij terwijl je weg was: kies een raadsman, tot je 
 
 test('de eerste dagen zonder raadsman: een raadsman brengt je elke ochtend een rapport, en dat gaat voor de groei', () => {
   const S = opDag(gehucht(), 1.5);
-  assert.equal(raad(S).tekst, 'Een raadsman brengt je elke ochtend een rapport: kies er een [R].');
+  assert.equal(raad(S).tekst, 'An advisor brings you a report every morning: choose one [R].');
   // De eerste dag gaat de tijd voor, en na de eerste dagen zegt de raad het niet meer.
   opDag(S, 0.5);
   S.kalender.snelheid = 1;
@@ -258,7 +258,7 @@ test('de marskramer in de herfst, en te weinig goud voor de heer: verkoop hem gr
   S.dorp.marskramer = { staat: true, weg: false, bezoek: herfst };
   const eis = Math.ceil(T.eisVanDeHeer(S.dorp).per.goud);
   assert.ok(eis > 3, `de heer vraagt ${eis} goud`);
-  assert.equal(raad(S).tekst, `De heer wil ${eis} goud, en je hebt er 3. De marskramer koopt graan, zolang hij er is.`);
+  assert.equal(raad(S).tekst, `The lord wants ${eis} gold, and you have 3. The peddler buys grain, as long as he is here.`);
   // In de lente, of met genoeg goud, niet. (Wie meer goud heeft, moet ook meer geven: de heer vraagt een deel
   // van de kist.)
   T.zetVoorraad(S.dorp, 'goud', 500);
@@ -295,22 +295,22 @@ test('bouwen: wat je mist voor wat het doel vraagt, en waar het vandaan komt (vr
   // Met te weinig goud zegt hij hoeveel je mist voor allebei samen, en waar goud vandaan komt.
   const goud = kosten('goud', ['kapel', 'smidse']) - 6;
   T.zetVoorraad(S.dorp, 'goud', goud);
-  const maand = T.volgendeMarskramer(S.kalender.dag);
-  assert.equal(raad(S).tekst, `Voor de kapel en de smidse mis je 6 goud: de marskramer koopt graan in ${maand} en belasting [W] brengt elke maand goud.`);
+  const maand = T.MAANDEN.find((m) => m.naam === T.volgendeMarskramer(S.kalender.dag)).toon;
+  assert.equal(raad(S).tekst, `For the chapel and the smithy you are short of 6 gold: the peddler buys grain in ${maand} and tax [W] brings in gold every month.`);
   // Is de belasting al aangenomen, en staat de marskramer op het plein, dan zegt hij dat.
   T.zetWet(S.dorp, 'belasting', 'aangenomen');
   S.dorp.marskramer = { staat: true, weg: false, bezoek: 0 };
-  assert.equal(raad(S).tekst, 'Voor de kapel en de smidse mis je 6 goud: de marskramer koopt graan, zolang hij er is en de belasting brengt elke maand goud.');
+  assert.equal(raad(S).tekst, 'For the chapel and the smithy you are short of 6 gold: the peddler buys grain while he is here and the tax brings in gold every month.');
   S.dorp.marskramer = null;
   // Ook te weinig hout: dan ook een houthakker.
   T.zetVoorraad(S.dorp, 'hout', 5);
-  assert.match(raad(S).tekst, new RegExp(`^Voor de kapel en de smidse mis je 6 goud en ${kosten('hout', ['kapel', 'smidse']) - 5} hout: .* en een houthakker \\[B\\] hakt hout\\.$`));
+  assert.match(raad(S).tekst, new RegExp(`^For the chapel and the smithy you are short of 6 gold and ${kosten('hout', ['kapel', 'smidse']) - 5} wood: .* and a woodcutter \\[B\\] cuts wood\\.$`));
   // Staat de kapel er (of wordt hij gebouwd), dan telt alleen de smidse nog.
   T.zetVoorraad(S.dorp, 'hout', 500);
   S.dorp.gebouwen.push({ soort: 'kapel', x: 0, y: 0, klaar: false, handen: 0 });
   assert.deepEqual(T.doelGebouwen(S.dorp), ['smidse']);
   T.zetVoorraad(S.dorp, 'goud', T.GEBOUWEN.smidse.kosten.goud - 2);
-  assert.match(raad(S).tekst, /^Voor de smidse mis je 2 goud: /);
+  assert.match(raad(S).tekst, /^For the smithy you are short of 2 gold: /);
   // Is het een dorp, dan vraagt het doel niets meer.
   S.dorp.trede = 'dorp';
   assert.deepEqual(T.doelGebouwen(S.dorp), []);
@@ -333,17 +333,17 @@ test('de wensen: na een nacht zegt de raad wat de meeste mensen missen, met de t
   assert.equal(id(S), 'gezin', 'vóór de eerste nacht weet het dorp het nog niet');
   naEenNacht(S, 40.5);
   assert.equal(id(S), 'wens');
-  assert.equal(raad(S).tekst, 'Vijf boerderijen en een huis willen een kapel binnen 40 tegels [B].');
+  assert.equal(raad(S).tekst, 'Five farms and a house want a chapel within 40 tiles [B].');
   // Kun je de kapel niet betalen, dan zegt hij erbij wat je mist en waar het vandaan komt: dat zei eerst het doel.
   T.zetVoorraad(S.dorp, 'goud', T.GEBOUWEN.kapel.kosten.goud - 6);
-  const maand = T.volgendeMarskramer(S.kalender.dag);
-  assert.equal(raad(S).tekst, `Vijf boerderijen en een huis willen een kapel binnen 40 tegels [B]. Daarvoor mis je 6 goud: de marskramer koopt graan in ${maand} en belasting [W] brengt elke maand goud.`);
+  const maand = T.MAANDEN.find((m) => m.naam === T.volgendeMarskramer(S.kalender.dag)).toon;
+  assert.equal(raad(S).tekst, `Five farms and a house want a chapel within 40 tiles [B]. For that you are short of 6 gold: the peddler buys grain in ${maand} and tax [W] brings in gold every month.`);
   // Wordt er een kapel gebouwd die ze allemaal bereikt, dan het volgende: de put van het huis.
   T.zetVoorraad(S.dorp, 'goud', 50);
   const huis = S.dorp.gebouwen.find((g) => g.bewoners === 'jongGezin');
   const r = T.voetVanGebouw(huis);
   S.dorp.gebouwen.push({ soort: 'kapel', x: r.x, y: r.y, voet: { b: 1, h: 1 }, klaar: false });
-  assert.equal(raad(S).tekst, 'Een huis wil een put binnen 12 tegels [B].');
+  assert.equal(raad(S).tekst, 'A house wants a well within 12 tiles [B].');
 });
 
 test('de wensen: een huis dat op bouwstof wacht, gaat voor; is wat helpt zelf te duur, dan zegt hij wat je mist', () => {
@@ -353,7 +353,7 @@ test('de wensen: een huis dat op bouwstof wacht, gaat voor; is wat helpt zelf te
   T.zetVoorraad(S.dorp, 'hout', 3);
   assert.equal(id(S), 'doorgroeien');
   // Een houthakker kost zelf hout, en die hakt hij nog niet: dan zegt hij niet dat een houthakker hout hakt.
-  assert.equal(raad(S).tekst, `Een hut kan een huis worden, maar er is geen 8 hout: bouw een houthakker [B]. Daarvoor mis je ${T.GEBOUWEN.houthakker.kosten.hout - 3} hout.`);
+  assert.equal(raad(S).tekst, `A hut can become a house, but the stores do not hold 8 wood: build a woodcutter [B]. For that you are short of ${T.GEBOUWEN.houthakker.kosten.hout - 3} wood.`);
 });
 
 test('de wensen: wat je nu niet kunt doen, zegt de raad niet; de winter en de spelregel gaan voor', () => {

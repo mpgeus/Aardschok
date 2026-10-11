@@ -90,6 +90,22 @@ Wat elke zin nodig heeft, staat op één plek, al in het Engels:
 | de graanschuur, de tiendschuur | the granary, the tithe barn | |
 | de honger, de kou, de droogte, de koorts | hunger, cold, drought, fever | statussen |
 
+## Erbij in deel 1 (wensen, raad, rapport)
+
+| Nederlands | Engels | |
+|---|---|---|
+| de herbergierster | the innkeeper | |
+| de oproep op het plein, de premie | the notice, the bounty | |
+| de tegel | the tile | "within 40 tiles" |
+| de zielen | souls | wat de heer telt |
+| de buurt | the neighbours | "the neighbours want a well" |
+| het bos van de heer | the lord's forest | |
+| de handen (wie werkt) | hands | "the hunter has no hands" |
+| het doel | the goal | |
+| het gezin | the family | "No family is coming" |
+| ontbreken / missen | lack / be short of | "short of 6 gold" |
+| doorgroeien | grow into | "A hut has grown into a house" |
+
 ## De maanden
 
 Gewone maanden (Marcel, 11 okt): de namen waar de regels op letten blijven in de code (`'lentemaand'`); wat de speler

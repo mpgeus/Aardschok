@@ -36,7 +36,7 @@
     bijHuis: 5,
     // Zijn rekenen (js/raadsman.js): wie niet kan rekenen, zit er tot zoveel naast (0,3: 30%), elke dag anders.
     slechtNaast: 0.3,
-    // Wie het niet bijzonder kan, rondt af op vijf ("zo'n 15"); onder tien telt hij precies.
+    // Wie het niet bijzonder kan, rondt af op vijf ("about 15"); onder tien telt hij precies.
     afrondenOp: 5,
     telTot: 10,
     // Een rapport dat je niet las, gaat op in het nieuwe: zoveel dingen die gebeurden onthoudt hij, de laatste.
@@ -96,7 +96,7 @@
       const m = kan === 'slecht' ? Math.max(0, Math.round(n * (1 + (2 * r() - 1) * IN().slechtNaast))) : n;
       if (m < IN().telTot) return { n: m, tekst: String(m) };
       const rond = Math.round(m / IN().afrondenOp) * IN().afrondenOp;
-      return { n: rond, tekst: `zo'n ${rond}` };
+      return { n: rond, tekst: T.t('about {n}', { n: rond }) };
     };
   };
 
@@ -104,34 +104,43 @@
   // Wat erin staat
   // ---------------------------------------------------------------------------------------------
 
-  const stierf = (een) => (een ? 'is' : 'zijn');
-
-  // Wat er gebeurde, als zin. Wie het zijn, staat in het dagboek zoals js/bewoners.js het zegt: "de oude Jan, vader van
-  // Klaas"; een bijstelling sluit met een komma.
+  // Wat er gebeurde, als zin. Wie het zijn, staat in het dagboek zoals js/bewoners.js het zegt: "old John, father of
+  // Nicholas"; een bijstelling sluit met een komma.
   function gebeurdTekst(g, door) {
     if (g.soort === 'mensen') {
       const n = Math.abs(g.verschil);
-      const een = n === 1;
       // Zonder bewoners (een toets met een eigen, kleine wereld) alleen hoeveel.
-      if (!g.wie && g.verschil > 0) return `Er ${een ? 'kwam één mens' : `kwamen ${n} mensen`} bij.`;
-      if (!g.wie) return `Het dorp verloor ${een ? 'één mens' : `${n} mensen`}${g.waarom ? `: ${g.waarom}` : ''}.`;
+      if (!g.wie && g.verschil > 0) return T.t('{n|One person has joined the village.|# people have joined the village.}', { n });
+      if (!g.wie) {
+        if (!g.waarom) return T.t('{n|The village lost one person.|The village lost # people.}', { n });
+        return n === 1 ? T.t('The village lost one person: {waarom}.', { waarom: g.waarom }) : T.t('The village lost {n} people: {waarom}.', { n, waarom: g.waarom });
+      }
       const komma = g.wie.includes(',') ? ',' : '';
-      if (g.verschil > 0 && g.reden === 'geboorte') return `Geboren: ${g.wie}.`; // js/leven.js
-      if (g.verschil > 0) return `Nieuw in het dorp: ${g.wie}.`;
-      if (g.reden === 'vertrek') return `${T.hoofdletter(g.wie)}${komma} ${een ? 'trok' : 'trokken'} weg: ${g.waarom || 'niemand weet waarom'}.`;
-      if (g.waarom) return `${g.waarom}: ${g.wie}${komma} ${stierf(een)} gestorven.`;
+      if (g.verschil > 0 && g.reden === 'geboorte') return T.t('Born: {wie}.', { wie: g.wie }); // js/leven.js
+      if (g.verschil > 0) return T.t('New in the village: {wie}.', { wie: g.wie });
+      const wie = T.hoofdletter(g.wie) + komma;
+      if (g.reden === 'vertrek') return T.t('{wie} left: {waarom}.', { wie, waarom: g.waarom || T.t('nobody knows why') });
+      if (g.waarom) return T.t('{waarom}: {wie} died.', { waarom: g.waarom, wie: g.wie + komma });
       // Wie in de heervaart sneuvelde (js/heervaart.js), heeft geen waarom: dat zegt de heer zelf.
-      if (g.reden === 'gesneuveld') return `${T.hoofdletter(g.wie)}${komma} ${een ? 'sneuvelde' : 'sneuvelden'} voor de heer.`;
-      return `${T.hoofdletter(g.wie)}${komma} ${stierf(een)} gestorven.`;
+      if (g.reden === 'gesneuveld') return T.t('{wie} fell for the lord.', { wie });
+      return T.t('{wie} died.', { wie });
     }
     if (g.soort === 'boeren' || g.soort === 'feest' || g.soort === 'bode' || g.soort === 'brand') return g.tekst;
     // Wat hij besliste toen je weg was: "ik", tenzij het een raadsman van eerder was. Wat hij zei, sluit de zin zelf
     // af, zoals in zijn bericht (js/raadsman.js).
-    if (g.soort === 'besluit') return `Over ${g.titel} besliste ${g.door === door ? 'ik' : g.door}: "${g.antwoord}"${g.prijs ? ` (${g.prijs})` : ''}`;
-    if (g.soort === 'voorbij') return `${T.hoofdletter(g.wie)} zocht je over ${g.titel}, en sprak je niet.`;
+    if (g.soort === 'besluit') {
+      const woorden = { titel: g.titel, door: g.door, antwoord: g.antwoord };
+      const zin = g.door === door ? T.t('On {titel}, I decided: "{antwoord}"', woorden) : T.t('On {titel}, {door} decided: "{antwoord}"', woorden);
+      return `${zin}${g.prijs ? ` (${g.prijs})` : ''}`;
+    }
+    if (g.soort === 'voorbij') return T.t('{wie} came to see you about {titel}, and did not get to speak to you.', { wie: T.hoofdletter(g.wie), titel: g.titel });
     if (g.soort === 'huis') {
-      const stand = T.STANDEN[g.stand] ? `: ${g.wie ? 'ze horen' : 'wie erin woont, hoort'} nu bij de ${T.STANDEN[g.stand].naam}` : '';
-      return `${g.wie ? `De ${g.van} van ${g.wie}` : `Een ${g.van}`} is een ${g.naar} geworden${stand}.`;
+      const naar = T.eenNaam(g.naar);
+      const kop = g.wie ? T.t('The {van} of {wie} has become {naar}', { van: g.van, wie: g.wie, naar }) : T.t('{van} has become {naar}', { van: T.eenNaam(g.van), naar });
+      const woorden = { stand: T.STANDEN[g.stand] && T.STANDEN[g.stand].naam };
+      const staart = !T.STANDEN[g.stand] ? ''
+        : g.wie ? `: ${T.t('they now belong with the {stand}', woorden)}` : `: ${T.t('whoever lives there now belongs with the {stand}', woorden)}`;
+      return `${T.hoofdletter(kop)}${staart}.`;
     }
     return null;
   }
@@ -145,9 +154,9 @@
       if (toen == null) continue;
       const verschil = Math.round(((D.voorraad && D.voorraad[wat]) || 0) - toen);
       const g = verschil ? reken(Math.abs(verschil)) : null;
-      if (g && g.n) delen.push(`${g.tekst} ${wat} ${verschil < 0 ? 'minder' : 'meer'}`);
+      if (g && g.n) delen.push((verschil < 0 ? T.t('{tekst} less {waar}', { tekst: g.tekst, waar: T.waarNaam(wat) }) : T.t('{tekst} more {waar}', { tekst: g.tekst, waar: T.waarNaam(wat) })));
     }
-    return delen.length ? `Sinds gisteren is er ${T.opsomming(delen)}.` : '';
+    return delen.length ? T.t('Since yesterday there is {lijst}.', { lijst: T.opsomming(delen) }) : '';
   }
 
   // Wat hij al zei (werklijst vraag 76): zolang het zo blijft, zegt hij het om de herhaalNa dagen nog eens. `oud` is
@@ -163,7 +172,7 @@
     if (!T.winterInZicht(dag)) return [];
     const halen = [];
     const uit = [];
-    for (const [id, wat, v] of [['hout', 'het hout', T.houtVoorDeWinter(D, dag)], ['eten', 'het eten', T.etenVoorDeWinter(D, dag)]]) {
+    for (const [id, wat, v] of [['hout', T.t('the wood'), T.houtVoorDeWinter(D, dag)], ['eten', T.t('the food'), T.etenVoorDeWinter(D, dag)]]) {
       const opDag = dag + v.tot + v.dagen; // de dag waarop het op is, of het eind van de winter
       const m = oud[id];
       if (m && m.haalt === v.haalt && Math.abs(opDag - m.opDag) < IN().winterVerschil && !nogEens(dag, m)) {
@@ -173,17 +182,22 @@
       nieuw[id] = { opDag, haalt: v.haalt, gezegd: dag };
       const g = reken(v.dagen);
       if (g.n >= v.winter) halen.push(wat);
-      else if (v.tot > 0) uit.push(`${T.hoofdletter(wat)} haalt ${g.tekst} van de ${v.winter} dagen van de winter.`);
-      else uit.push(`${T.hoofdletter(wat)} is ${g.n < 1 ? 'op' : `over ${g.tekst} ${g.n === 1 ? 'dag' : 'dagen'} op`}, en de winter duurt nog ${v.winter} dagen.`);
+      else if (v.tot > 0) uit.push(T.t('{wat} lasts {dagen} of the {winter} days of winter.', { wat: T.hoofdletter(wat), dagen: g.tekst, winter: v.winter }));
+      else if (g.n < 1) uit.push(T.t('{wat} has run out, and the winter lasts {winter} more days.', { wat: T.hoofdletter(wat), winter: v.winter }));
+      else uit.push(T.t('{wat} will run out in {tekst} {n|day|days}, and the winter lasts {winter} more days.', { wat: T.hoofdletter(wat), tekst: g.tekst, n: g.n, winter: v.winter }));
     }
     const loopt = T.dagenTotDeWinter(dag) === 0;
-    if (halen.length) uit.unshift(`${T.hoofdletter(T.opsomming(halen))} ${halen.length > 1 ? 'halen' : 'haalt'} ${loopt ? 'het eind van de winter' : 'de winter'}.`);
+    if (halen.length) {
+      const wat = T.hoofdletter(T.opsomming(halen));
+      if (halen.length > 1) uit.unshift(loopt ? T.t('{wat} last to the end of winter.', { wat }) : T.t('{wat} last the winter.', { wat }));
+      else uit.unshift(loopt ? T.t('{wat} lasts to the end of winter.', { wat }) : T.t('{wat} lasts the winter.', { wat }));
+    }
     return uit;
   }
 
-  // Wat er speelt (T.OORZAKEN, js/voorvallen.js): een oorzaak als hij begint ("Er is honger, want het rantsoen is
-  // krap."), zolang hij duurt om de herhaalNa dagen ("Er is nog steeds honger, al twaalf dagen: het rantsoen is krap."),
-  // en als hij over is ("De honger is voorbij.").
+  // Wat er speelt (T.OORZAKEN, js/voorvallen.js): een oorzaak als hij begint ("There is hunger, for the ration is
+  // short."), zolang hij duurt om de herhaalNa dagen ("There is still hunger, for twelve days now: the ration is
+  // short."), en als hij over is ("The hunger is over.").
   function oorzaakRegels(D, dag, oud, nieuw) {
     const uit = [];
     const nu = T.oorzakenNu(D, dag);
@@ -202,8 +216,9 @@
         uit.push(`${T.OORZAKEN[o.id].erger.minder}.`);
         nieuw[o.id] = { sinds: m.sinds, gezegd: dag, niveau: o.niveau };
       } else if (nogEens(dag, m)) {
-        const nog = o.niveau === 2 ? `Nog steeds ${o.naam.toLowerCase()}` : T.OORZAKEN[o.id].nog;
-        uit.push(`${nog}, al ${T.telwoord(dag - m.sinds)} dagen${o.waarom ? `: ${o.waarom}` : ''}.`);
+        const nog = o.niveau === 2 ? T.t('Still {naam}', { naam: o.naam.toLowerCase() }) : T.OORZAKEN[o.id].nog;
+        const woorden = { nog, n: dag - m.sinds, getal: T.telwoord(dag - m.sinds), waarom: o.waarom };
+        uit.push(o.waarom ? T.t('{nog}, for {n|{getal} day|{getal} days} now: {waarom}.', woorden) : T.t('{nog}, for {n|{getal} day|{getal} days} now.', woorden));
         nieuw[o.id] = { sinds: m.sinds, gezegd: dag, niveau: o.niveau };
       } else nieuw[o.id] = m;
     }
@@ -212,9 +227,9 @@
   }
 
   // Wat de huizen missen, en wat helpt (werklijst vraag 86, a, en 87), zoals de raad het zegt (T.watDeHuizenMissen,
-  // js/wensen.js), zonder de toets, en ook wat je nu niet kunt doen ("een bakkerij bouw je pas in een dorp"). Als status
+  // js/wensen.js), zonder de toets, en ook wat je nu niet kunt doen ("a bakery can only be built in a village"). Als status
   // (vraag 76, en de richtlijn van 1 okt): hij zegt het als het begint of verandert (een huis meer of minder, of wat
-  // helpt), zolang het zo blijft om de herhaalNa dagen, en als het ophoudt ("Niemand mist nog een kapel."). Hooguit
+  // helpt), zolang het zo blijft om de herhaalNa dagen, en als het ophoudt ("Nobody lacks a chapel any more."). Hooguit
   // wensenPerRapport per dag, het zwaarste eerst; wat hij niet zei, zegt hij een volgende dag. Heeft elk huis alles, dan
   // zegt hij dat één keer.
   function wensRegels(D, dag, oud, nieuw) {
@@ -233,11 +248,11 @@
     }
     for (const id of Object.keys(oud)) {
       if (id === 'alles' || lijst.some((x) => x.id === id)) continue;
-      if (T.WENSEN[id]) uit.push(`Niemand mist nog ${T.WENSEN[id].naam}.`);
+      if (T.WENSEN[id]) uit.push(T.t('Nobody lacks {wens} any more.', { wens: T.WENSEN[id].naam }));
     }
     const huizen = (D.gebouwen || []).filter((g) => g.wensen && g.wensen.mensen > 0);
     if (huizen.length && huizen.every((g) => g.wensen.alles)) {
-      if (!oud.alles) uit.push('Alle huizen hebben wat ze willen.');
+      if (!oud.alles) uit.push(T.t('All the houses have what they want.'));
       nieuw.alles = oud.alles || { gezegd: dag };
     }
     return uit;
@@ -249,8 +264,8 @@
   function watErKomt(D, dag) {
     const uit = [];
     const m = D.marskramer;
-    if (m && m.komtOp === dag && !m.weg) uit.push('Vandaag komt de marskramer.');
-    if (D.heer && D.heer.bezoek && !D.heer.bezoek.aangekomen) uit.push('Vandaag komt de heer.');
+    if (m && m.komtOp === dag && !m.weg) uit.push(T.t('The peddler comes today.'));
+    if (D.heer && D.heer.bezoek && !D.heer.bezoek.aangekomen) uit.push(T.t('The lord comes today.'));
     for (const id of RADEN_DIE_KOMEN) {
       const r = T.RADEN.find((x) => x.id === id);
       if (r.als(D)) uit.push(r.tekst(D).replace(/ ?\[[^\]]*\]/g, ''));
@@ -275,7 +290,7 @@
       .concat(oorzaakRegels(D, dag, basis.oorzaken, onthoud.oorzaken))
       .concat(wensRegels(D, dag, basis.wensen || {}, onthoud.wensen))
       .concat(watErKomt(D, dag));
-    if (!regels.length && !rest.length) regels.push(`Niets bijzonders.${gaat ? ` ${gaat}` : ''}`);
+    if (!regels.length && !rest.length) regels.push(`${T.t('Nothing special.')}${gaat ? ` ${gaat}` : ''}`);
     else regels.push(...(gaat ? [gaat] : []), ...rest);
     return { dag, door, regels, gebeurd, basis, onthoud, gebracht: false, gelezen: false };
   };

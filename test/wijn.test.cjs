@@ -196,7 +196,7 @@ test('haalt de wijn het jaar na de pluk niet, dan vraagt het dorp nu een wijnboe
     T.wijnNaDePluk = () => ({ haalt: false, dagen: 200, winter: 360 });
     const x = T.watTeBouwen(D).find((y) => y.soort === 'wijnboerderij');
     assert.ok(x, 'haalt het niet, dan nu, ook al staat er een');
-    assert.match(x.waarom, /200 van de 360 dagen/);
+    assert.match(x.waarom, /200 of the 360 days/);
   } finally {
     T.wijnNaDePluk = echt;
     T.optiesTerug();
@@ -216,7 +216,7 @@ test('een wijnboerderij komt alleen waar haar gezin een kapel haalt, of waar er 
     assert.equal(T.waaromPastHetNiet(D, 'wijnboerderij', plek.x, plek.y), null);
     // Een kring zo klein dat er bij geen huis een kapel kan komen: dan komt ze nergens.
     T.WENSEN_INSTELLINGEN.kring.kapel = 2;
-    assert.match(T.waaromPastHetNiet(D, 'wijnboerderij', plek.x, plek.y), /^Een wijnboerderij hier kan straks geen kapel halen/);
+    assert.match(T.waaromPastHetNiet(D, 'wijnboerderij', plek.x, plek.y), /will not be able to reach a chapel later: there is none within 2 tiles/);
     assert.equal(T.plekVoor(D, 'wijnboerderij', deur), null);
     // Een werkplaats zonder gezin kijkt er niet naar.
     assert.equal(T.standVan({ soort: 'brouwerij' }), null);

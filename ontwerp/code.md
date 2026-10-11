@@ -739,6 +739,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   ja (`doe.bouw`) zet het neer (`T.verzoekToegestaan`, met `g.meester`), nee (`doe.weiger`) onthoudt het (`D.verzoeken`).
   Een oproep op het plein (`T.doeOproep`, de rij Oproepen in het bouwmenu) gaat voor, met een premie bovenop de kosten.
   Wat er mag (de trede), vraag je aan `T.magGebouwd`; wat jij in het bouwmenu hebt, aan `T.inBouwmenu` (`js/gebouwen.js`).
+  Het Engels (vraag 147): de woorden voor het gesprek zijn zo gekozen dat de zin in `js/gesprekken.js` doorloopt met "to build":
+  `{wil}` is "I want" of "the neighbours want", `{gebouw}` "a weaver's" (met `T.eenNaam`), `{plek}` "next to my house", `{kosten}`
+  "14 wood and 8 gold" (`T.hoeveel`). `T.metLidwoord` (het Nederlandse de/het) is weg: een zin zet *the* of *a/an* zelf.
 
 ### js/ondernemers.js: de ondernemers
 
@@ -768,6 +771,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (js/menu.js), met een voorstel uit `T.DORPSNAMEN` (vraag 60).
 
 ### js/wensen.js en js/huisbriefje.js: de wensen per stand
+
+- **Het Engels** (vraag 147): `T.WENSEN[x].naam` en `T.STANDEN[x].naam` zijn Engelse zinnen met hun lidwoord waar de naam er een
+  nodig heeft ("a well", "bread"), en `D.behoeften.mist` (js/behoeften.js) bevat die zinnen zelf: de balk (`js/tafel.js`) toont ze,
+  en `js/voorvallen.js` vergelijkt ermee ("firewood for the winter"). `T.raaktOp(wat, ...)` neemt de naam met lidwoord ("the
+  wood", "the hay"). De zinnen met een stuk dat eraan hangt, zijn vol: `{waarom}, and {hulp}`; de toets staat als [B] in de zin.
 
 - `js/wensen.js`: **de wensen van de mensen, per stand** (stap 2 van vraag 79, vraag 80 en 85, 1 okt; zoals in Anno
   1602): elk huis met mensen heeft een stand naar zijn soort (`T.standVan`: een hut keuters, een huis dorpelingen, een

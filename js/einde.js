@@ -60,23 +60,28 @@
   T.jaarverslagRegels = function (D, J, dag) {
     const regels = [];
     const nu = D.bevolking || 0;
-    const naam = T.dorpsnaam(D) || 'het dorp';
-    const groei = nu > J.mensen ? `groeide ${naam} van ${J.mensen} naar ${nu} mensen` : nu < J.mensen ? `kromp ${naam} van ${J.mensen} naar ${nu} mensen` : `bleef ${naam} op ${nu} mensen`;
-    regels.push(`In het jaar ${jaarVan(J.begin)} ${groei}.`);
+    const woorden = { jaar: jaarVan(J.begin), naam: T.dorpsnaam(D) || T.t('the village'), van: J.mensen, naar: nu, n: nu };
+    regels.push(nu > J.mensen ? T.t('In the year {jaar} {naam} grew from {van} to {naar} people.', woorden)
+      : nu < J.mensen ? T.t('In the year {jaar} {naam} shrank from {van} to {naar} people.', woorden)
+        : T.t('In the year {jaar} {naam} stayed at {n} people.', woorden));
     const mensen = [
-      J.kwamen ? `${J.kwamen} ${J.kwamen === 1 ? 'mens kwam' : 'mensen kwamen'} erbij` : '',
-      J.stierven ? `${J.stierven} ${J.stierven === 1 ? 'stierf' : 'stierven'}` : '',
-      J.weg ? `${J.weg} ${J.weg === 1 ? 'trok' : 'trokken'} weg` : '',
+      J.kwamen ? T.t('{n|# person joined|# people joined}', { n: J.kwamen }) : '',
+      J.stierven ? T.t('{n} died', { n: J.stierven }) : '',
+      J.weg ? T.t('{n} left', { n: J.weg }) : '',
     ].filter(Boolean);
     if (mensen.length) regels.push(`${T.opsomming(mensen)}.`);
-    if (J.geoogst) regels.push(`De oogst bracht ${Math.round(J.geoogst)} graan.`);
-    if (J.doorgegroeid) regels.push(`${J.doorgegroeid === 1 ? 'Eén huis groeide' : `${T.hoofdletter(T.telwoord(J.doorgegroeid))} huizen groeiden`} door.`);
+    if (J.geoogst) regels.push(T.t('The harvest brought {graan}.', { graan: T.hoeveel(Math.round(J.geoogst), 'graan') }));
+    if (J.doorgegroeid) regels.push(T.t('{n|One house grew larger.|{getal} houses grew larger.}', { n: J.doorgegroeid, getal: T.hoofdletter(T.telwoord(J.doorgegroeid)) }));
     const feesten = ((D.feesten && D.feesten.gevierd) || []).filter((f) => f.dag >= J.begin && f.dag < dag).map((f) => T.FEESTEN[f.id].naam);
-    if (feesten.length) regels.push(`We vierden ${T.opsomming(feesten)}.`);
+    if (feesten.length) regels.push(T.t('We celebrated {feesten}.', { feesten: T.opsomming(feesten) }));
     const heer = ((D.heer && D.heer.jaren) || []).find((j) => j.jaar === jaarVan(J.begin));
-    if (heer) regels.push(`De heer kreeg ${Math.floor(heer.deel * 100 + 1e-9)}% van wat hij vroeg${heer.straf ? `, en strafte met ${heer.straf}` : ''}.`);
+    if (heer) {
+      const pct = Math.floor(heer.deel * 100 + 1e-9);
+      regels.push(heer.straf ? T.t('The lord received {pct}% of what he asked for, and punished with {straf}.', { pct, straf: heer.straf })
+        : T.t('The lord received {pct}% of what he asked for.', { pct }));
+    }
     const meest = Object.entries(J.gemist).sort((a, b) => b[1] - a[1])[0];
-    if (meest) regels.push(`Het meest gemist werd ${T.WENSEN[meest[0]] ? T.WENSEN[meest[0]].naam : meest[0]}, op ${meest[1]} dagen.`);
+    if (meest) regels.push(T.t('The most missed was {wens}, for {n|# day|# days}.', { wens: T.WENSEN[meest[0]] ? T.WENSEN[meest[0]].naam : meest[0], n: meest[1] }));
     return regels;
   };
 

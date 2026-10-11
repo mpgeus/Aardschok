@@ -329,10 +329,10 @@ test('kan de herberg niet meegroeien, dan zegt het dorp waarom, één keer', () 
     T.zeg = zeg;
   }
   assert.equal(T.vormVan(g.tekening), 'herberg1');
-  const over = gezegd.filter((t) => t.startsWith('De herberg kan niet met het dorp meegroeien'));
+  const over = gezegd.filter((t) => t.startsWith('The inn cannot grow with the village'));
   assert.equal(over.length, 1, gezegd.join(' | '));
-  assert.match(over[0], /rots/);
-  assert.match(T.waaromGroeitHetNiet(D, g), /rots/);
+  assert.match(over[0], /rock/);
+  assert.match(T.waaromGroeitHetNiet(D, g), /rock/);
 });
 
 test('een stenen huis wordt pas met marktrecht een woontoren', () => {

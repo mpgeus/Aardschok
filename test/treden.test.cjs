@@ -64,11 +64,11 @@ function berichtenVan(fn) {
 test('het doel bij het begin: hoeveel dorpelingen er zijn, van de twintig', () => {
   const S = gehucht();
   const doel = T.tredeDoel(S.dorp);
-  assert.equal(doel.kop, 'Naar een dorp');
+  assert.equal(doel.kop, 'Towards a village');
   assert.equal(doel.klaar, false);
   const n = T.mensenVanStand(S.dorp, 'dorpelingen');
   assert.ok(n > 0 && n < 20, `het gehucht begint met ${n} dorpelingen, in het ene huis dat er staat`);
-  assert.equal(doel.tekst, `${n} van 20 dorpelingen`);
+  assert.equal(doel.tekst, `${n} of 20 villagers`);
   assert.equal(T.tredeMensenNodig(S.dorp), 20 - n);
 });
 
@@ -95,17 +95,17 @@ test('bij 20 dorpelingen wordt het een dorp, en dat blijft het; dan is marktrech
     bewoond(S, 'huis', 19 - n);
     T.tikTredeDag(S.dorp);
     assert.equal(S.dorp.trede, 'gehucht', 'bij 19 nog niet');
-    assert.equal(T.tredeDoel(S.dorp).tekst, '19 van 20 dorpelingen');
+    assert.equal(T.tredeDoel(S.dorp).tekst, '19 of 20 villagers');
     bewoond(S, 'huis', 1);
-    assert.equal(T.tredeDoel(S.dorp).tekst, '20 dorpelingen ✓');
+    assert.equal(T.tredeDoel(S.dorp).tekst, '20 villagers ✓');
     T.tikTredeDag(S.dorp);
   });
   assert.equal(S.dorp.trede, 'dorp');
-  assert.ok(berichten.some((t) => /een dorp geworden/.test(t)), berichten.join(' | '));
+  assert.ok(berichten.some((t) => /has become a village/.test(t)), berichten.join(' | '));
   const doel = T.tredeDoel(S.dorp);
-  assert.equal(doel.kop, 'Naar marktrecht');
+  assert.equal(doel.kop, 'Towards a market town');
   assert.equal(doel.trede, 'marktrecht');
-  assert.equal(doel.tekst, '0 van 20 ambachtslieden');
+  assert.equal(doel.tekst, '0 of 20 craftsmen');
   // Wie wegtrekt, maakt het geen gehucht meer.
   S.dorp.bewoners.mensen = S.dorp.bewoners.mensen.filter((p) => !p.huis || p.huis.soort !== 'huis');
   T.tikTredeDag(S.dorp);
@@ -119,13 +119,13 @@ test('bij 20 ambachtslieden krijgt het dorp marktrecht; daarna is er (voorlopig)
   bewoond(S, 'stenenHuis', 8);
   T.tikTredeDag(S.dorp);
   assert.equal(S.dorp.trede, 'dorp', 'bij 16 nog niet');
-  assert.equal(T.tredeDoel(S.dorp).tekst, '16 van 20 ambachtslieden');
+  assert.equal(T.tredeDoel(S.dorp).tekst, '16 of 20 craftsmen');
   const berichten = berichtenVan(() => {
     bewoond(S, 'stenenHuis', 4);
     T.tikTredeDag(S.dorp);
   });
   assert.equal(S.dorp.trede, 'marktrecht');
-  assert.ok(berichten.some((t) => /marktrecht gekregen/.test(t)), berichten.join(' | '));
+  assert.ok(berichten.some((t) => /has become a market town/.test(t)), berichten.join(' | '));
   assert.equal(T.tredeDoel(S.dorp), null);
   assert.equal(T.tredeMensenNodig(S.dorp), 0);
   assert.equal(T.volgendeTrede(S.dorp), null, 'de stad heeft nog geen eis');
@@ -145,10 +145,10 @@ test('een trede per dag, in volgorde: wie al genoeg ambachtslieden heeft, wordt 
 test('de eis van de proef van 28 sep, in de getallen gezet: 50 mensen, met een kapel en een smidse klaar', () => {
   T.TREDEN_INSTELLINGEN.dorp = { mensen: 50, gebouwen: ['kapel', 'smidse'] };
   const S = gehucht();
-  assert.equal(T.tredeDoel(S.dorp).tekst, `${S.dorp.bevolking} van 50 mensen · nog geen kapel · nog geen smidse`);
+  assert.equal(T.tredeDoel(S.dorp).tekst, `${S.dorp.bevolking} of 50 people · no chapel yet · no smithy yet`);
   zet(S, 'kapel');
   zet(S, 'smidse', false);
-  assert.equal(T.tredeDoel(S.dorp).tekst, `${S.dorp.bevolking} van 50 mensen · een kapel ✓ · de smidse in aanbouw`);
+  assert.equal(T.tredeDoel(S.dorp).tekst, `${S.dorp.bevolking} of 50 people · a chapel ✓ · the smithy is being built`);
   S.dorp.gebouwen.pop();
   const berichten = berichtenVan(() => {
     S.dorp.bevolking = 50;
@@ -158,8 +158,8 @@ test('de eis van de proef van 28 sep, in de getallen gezet: 50 mensen, met een k
     T.tikTredeDag(S.dorp);
   });
   assert.equal(S.dorp.trede, 'dorp');
-  assert.ok(berichten.some((t) => /een dorp geworden/.test(t)), berichten.join(' | '));
-  assert.equal(T.tredeDoel(S.dorp).kop, 'Naar marktrecht', 'marktrecht blijft bij de ambachtslieden');
+  assert.ok(berichten.some((t) => /has become a village/.test(t)), berichten.join(' | '));
+  assert.equal(T.tredeDoel(S.dorp).kop, 'Towards a market town', 'marktrecht blijft bij de ambachtslieden');
   // Terug op de standaard telt het dorp weer zijn dorpelingen.
   T.optiesTerug();
   T.zetOptie('wieBouwt', 'jij');
@@ -205,13 +205,13 @@ test('op een kaart zonder plein is er geen trede te halen', () => {
 });
 
 test('de heer noemt het doel in zijn benoemingsbrief, met de getallen uit de werkbank', () => {
-  assert.equal(T.tredeEisTekst('dorp'), 'twintig zielen in huizen, niet in hutten');
+  assert.equal(T.tredeEisTekst('dorp'), 'twenty souls in houses, not in huts');
   T.zetGetal('TREDEN_INSTELLINGEN.dorp.mensen', 45);
-  assert.equal(T.tredeEisTekst('dorp'), '45 zielen in huizen, niet in hutten');
+  assert.equal(T.tredeEisTekst('dorp'), '45 souls in houses, not in huts');
   T.optiesTerug();
   T.zetOptie('wieBouwt', 'jij');
   T.TREDEN_INSTELLINGEN.dorp = { mensen: 50, gebouwen: ['kapel', 'smidse'] };
-  assert.equal(T.tredeEisTekst('dorp'), 'een kapel, een smidse en vijftig zielen');
+  assert.equal(T.tredeEisTekst('dorp'), 'a chapel, a smithy and fifty souls');
 });
 
 test('de treden in de werkbank, en bewaard met het spel', () => {
@@ -232,8 +232,8 @@ test('minstens een trede: het gehucht is geen dorp, een dorp is minstens een geh
   assert.equal(T.tredeMinstens({ trede: 'dorp' }, 'marktrecht'), false);
   assert.equal(T.tredeMinstens({ trede: 'marktrecht' }, 'dorp'), true);
   assert.equal(T.tredeMinstens({}, 'dorp'), false, 'een proefkaart heeft geen trede');
-  assert.equal(T.tredeNaam({ trede: 'marktrecht' }), 'het dorp met marktrecht', 'zo heet het bouwmenu');
-  assert.equal(T.tredeNaam({}), 'het gehucht');
+  assert.equal(T.tredeNaam({ trede: 'marktrecht' }), 'the market town', 'zo heet het bouwmenu');
+  assert.equal(T.tredeNaam({}), 'the hamlet');
 });
 
 test('de naam van je dorp (vraag 60): wat je typt, zonder spaties eromheen en niet te lang, in het doel en bewaard', () => {
@@ -242,10 +242,10 @@ test('de naam van je dorp (vraag 60): wat je typt, zonder spaties eromheen en ni
   assert.ok(T.DORPSNAMEN.includes(T.voorgesteldeDorpsnaam(12345)));
   assert.equal(T.voorgesteldeDorpsnaam(3), T.voorgesteldeDorpsnaam(3), 'hetzelfde zaad, hetzelfde voorstel');
   assert.equal(T.zetDorpsnaam(S.dorp, '   Groot   Heathside  '), 'Groot Heathside');
-  assert.equal(T.tredeDoel(S.dorp).kop, 'Groot Heathside · naar een dorp');
+  assert.equal(T.tredeDoel(S.dorp).kop, 'Groot Heathside · towards a village');
   assert.equal(T.zetDorpsnaam(S.dorp, 'x'.repeat(40)).length, 24);
   assert.equal(T.zetDorpsnaam(S.dorp, '   '), null, 'leeg is geen naam');
-  assert.equal(T.tredeDoel(S.dorp).kop, 'Naar een dorp');
+  assert.equal(T.tredeDoel(S.dorp).kop, 'Towards a village');
   T.zetDorpsnaam(S.dorp, 'Beekveld');
   const S2 = gehucht();
   const tekst = T.bewaarSpel(S, { nu: 1790000000000 });

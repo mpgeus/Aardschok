@@ -68,30 +68,30 @@
   // vlees, want vlees vult ook een maag). Een plek (`plek`) is een soort uit T.GEBOUWEN die klaar is, in de kring om het
   // huis; een put telt ook als hij op de kaart staat.
   T.WENSEN = {
-    eten: { naam: 'eten' },
-    brandhout: { naam: 'brandhout' },
-    put: { naam: 'een put', plek: 'put' },
+    eten: { naam: T.t('food') },
+    brandhout: { naam: T.t('firewood') },
+    put: { naam: T.t('a well'), plek: 'put' },
     // Bier, en voor de ambachtslieden wijn erbij (werklijst vraag 136; Marcel, 10 okt: "Inwoners willen wijn en bier.
     // Afwisseling. Je kunt niet leven op 1 ding", en "B1"): twee wensen, dus wijn telt niet als bier. Van 8 tot 10 okt was
     // het één wens, drank, die bier of wijn nam; toen vroeg het dorp nooit om een wijnboerderij.
-    bier: { naam: 'bier', goed: ['bier'] },
-    wijn: { naam: 'wijn', goed: ['wijn'] },
-    vleesOfVis: { naam: 'vlees of vis', goed: ['vis', 'vlees'] },
-    kapel: { naam: 'een kapel', plek: 'kapel' },
-    herberg: { naam: 'de herberg', plek: 'herberg' },
-    brood: { naam: 'brood', goed: ['brood'] },
-    laken: { naam: 'laken', goed: ['laken'] },
-    markt: { naam: 'een markt', plek: 'markt' },
+    bier: { naam: T.t('ale'), goed: ['bier'] },
+    wijn: { naam: T.t('wine'), goed: ['wijn'] },
+    vleesOfVis: { naam: T.t('meat or fish'), goed: ['vis', 'vlees'] },
+    kapel: { naam: T.t('a chapel'), plek: 'kapel' },
+    herberg: { naam: T.t('the inn'), plek: 'herberg' },
+    brood: { naam: T.t('bread'), goed: ['brood'] },
+    laken: { naam: T.t('cloth'), goed: ['laken'] },
+    markt: { naam: T.t('a market'), plek: 'markt' },
   };
 
   // De standen, van laag naar hoog: elke stand wil wat de stand ervoor wil, en `wil` erbij, zoals in Anno. `huis` is de
   // soort uit T.GEBOUWEN waar hij woont. De boeren staan ernaast (`los`): hun boerderij groeit niet, en ze willen alleen
   // wat hier staat (vraag 85, b: de herberg niet, "voor nu").
   T.STANDEN = {
-    keuters: { naam: 'keuters', huis: 'hut', wil: ['eten', 'brandhout', 'put'] },
-    dorpelingen: { naam: 'dorpelingen', huis: 'huis', wil: ['bier', 'vleesOfVis', 'kapel', 'herberg'] },
-    ambachtslieden: { naam: 'ambachtslieden', huis: 'stenenHuis', ook: ['woontoren'], wil: ['brood', 'laken', 'wijn', 'markt'] },
-    boeren: { naam: 'boeren', huis: 'boerderij', ook: ['wijnboerderij'], los: true, wil: ['eten', 'brandhout', 'kapel'] },
+    keuters: { naam: T.t('cottars'), huis: 'hut', wil: ['eten', 'brandhout', 'put'] },
+    dorpelingen: { naam: T.t('villagers'), huis: 'huis', wil: ['bier', 'vleesOfVis', 'kapel', 'herberg'] },
+    ambachtslieden: { naam: T.t('craftsmen'), huis: 'stenenHuis', ook: ['woontoren'], wil: ['brood', 'laken', 'wijn', 'markt'] },
+    boeren: { naam: T.t('farmers'), huis: 'boerderij', ook: ['wijnboerderij'], los: true, wil: ['eten', 'brandhout', 'kapel'] },
   };
 
   const ladder = () => Object.keys(T.STANDEN).filter((s) => !T.STANDEN[s].los);
@@ -351,7 +351,9 @@
       mist(T.kringVoetenVan(g), T.huisVan(D, g));
     }
     if (T.wilStraks({ soort: 'hut', erf: true }, wens)) {
-      const wie = T.wensenVanStand(standVanSoort('hut')).includes(wens) ? 'de hut op een ander erf' : 'het huis op een ander erf';
+      const wie = T.wensenVanStand(standVanSoort('hut')).includes(wens)
+        ? T.t('the {gebouw} on another plot', { gebouw: T.GEBOUWEN.hut.naam })
+        : T.t('the {gebouw} on another plot', { gebouw: T.GEBOUWEN.huis.naam });
       for (const e of T.vrijeErven(D)) if (e.plan) mist([T.huisPlekVan(e)], wie);
     }
     const grond = { straal, wens, er, zonder, get plekken() { return plekkenNu(); } };
@@ -372,7 +374,7 @@
     for (const soort of Object.keys(IN().kring)) {
       const k = T.kringGrond(D, soort);
       if (!k) continue;
-      const naam = T.GEBOUWEN[soort].naam;
+      const gebouw = T.eenNaam(T.GEBOUWEN[soort].naam);
       const n = T.GEBOUWEN_INSTELLINGEN.looppad;
       const raakt = (a, c) => a.x < c.x + c.b && c.x < a.x + a.b && a.y < c.y + c.h && c.y < a.y + a.h;
       const blijft = (q) => !raakt(q, grond) && !raakt({ x: q.x - n, y: q.y - n, b: q.b + 2 * n, h: q.h + 2 * n }, vast);
@@ -380,9 +382,14 @@
       const dichtBij = (q) => Math.abs(q.x - huis.x) <= k.straal + huis.b + q.b && Math.abs(q.y - huis.y) <= k.straal + huis.h + q.h;
       const haalt = (q) => dichtBij(q) && T.inDeKring(huis, q, k.straal);
       if (wil(k.wens) && !k.er.some(haalt) && !k.plekken.some((q) => haalt(q) && blijft(q))) {
-        return `${wie(k.wens)} kan straks geen ${naam} halen: er staat er geen binnen ${k.straal} tegels, en er is geen plek meer voor een.`;
+        return T.t('{wie} will not be able to reach {gebouw} later: there is none within {straal} tiles, and no room left for one.',
+          { wie: wie(k.wens), gebouw, straal: k.straal });
       }
-      for (const h of k.zonder) if (h.plekken.length && h.plekken.every((q) => !blijft(q))) return `Dan kan ${h.wie} straks geen ${naam} meer krijgen: ${dit} neemt de laatste plek ervoor.`;
+      for (const h of k.zonder) {
+        if (h.plekken.length && h.plekken.every((q) => !blijft(q))) {
+          return T.t('Then {wie} will not be able to get {gebouw} later: {dit} takes the last spot for it.', { wie: h.wie, gebouw, dit });
+        }
+      }
     }
     return null;
   };
@@ -428,19 +435,19 @@
     return plekken;
   }
 
-  // Hetzelfde in een zin, voor bij de muis: "Binnen 30 tegels: 6 huizen die een kapel willen. Ze hebben er nu geen."
+  // Hetzelfde in een zin, voor bij de muis: "Within 30 tiles: 6 houses that want a chapel. They have none now."
   T.kringTekst = function (D, soort, plek) {
     const k = T.watDeKringBereikt(D, soort, plek);
     if (!k) return null;
-    const naam = T.WENSEN[k.wens].naam;
-    if (!k.huizen) return `Binnen ${k.straal} tegels woont niemand die ${naam} wil.`;
+    const wens = T.WENSEN[k.wens].naam;
+    if (!k.huizen) return T.t('No one living within {straal} tiles wants {wens}.', { straal: k.straal, wens });
     const een = k.huizen === 1;
-    const wie = een ? `één huis dat ${naam} wil` : `${k.huizen} huizen die ${naam} willen`;
+    const wie = T.t('{n|one house that wants {wens}|# houses that want {wens}}', { n: k.huizen, wens });
     let nu;
-    if (!k.zonder) nu = een ? 'Het heeft er al een.' : 'Ze hebben er al een.';
-    else if (k.zonder === k.huizen) nu = een ? 'Het heeft er nu geen.' : 'Ze hebben er nu geen.';
-    else nu = `${k.zonder} ervan ${k.zonder === 1 ? 'heeft' : 'hebben'} er nu geen.`;
-    return `Binnen ${k.straal} tegels: ${wie}. ${nu}`;
+    if (!k.zonder) nu = een ? T.t('It already has one.') : T.t('They already have one.');
+    else if (k.zonder === k.huizen) nu = een ? T.t('It has none now.') : T.t('They have none now.');
+    else nu = T.t('{n|# of them has|# of them have} none now.', { n: k.zonder });
+    return T.t('Within {straal} tiles: {wie}. {nu}', { straal: k.straal, wie, nu });
   };
 
   // Welke plekken een huis op dit erf in zijn kring zou hebben (2c, werklijst vraag 100, c; `opmerkingen.md`, 1 okt): voor
@@ -455,12 +462,13 @@
       const straal = wens.plek && IN().kring[wens.plek];
       if (!straal) continue;
       const inBouw = (D.gebouwen || []).filter((g) => g.soort === wens.plek && !g.klaar).map((g) => T.voetVanGebouw(g));
-      if (T.plekkenVan(D, wens.plek).concat(inBouw).some((r) => T.inDeKring(erf, r, straal))) ja.push(`${wens.naam} binnen ${straal} tegels`);
-      else nee.push(`${wens.naam.replace(/^een /, 'geen ')} binnen ${straal}`);
+      if (T.plekkenVan(D, wens.plek).concat(inBouw).some((r) => T.inDeKring(erf, r, straal))) ja.push(T.t('{wens} within {straal} tiles', { wens: wens.naam, straal }));
+      else nee.push(T.t('no {wens} within {straal}', { wens: wens.naam.replace(/^an? /, ''), straal }));
     }
     if (!ja.length && !nee.length) return null;
-    const delen = [ja.length ? `heeft ${T.opsomming(ja)}` : '', nee.length ? `${ja.length ? 'maar ' : 'heeft '}${T.opsomming(nee)}` : ''];
-    return `Een huis op dit erf ${delen.filter(Boolean).join(', ')}.`;
+    if (!ja.length) return T.t('A house on this plot has {nee}.', { nee: T.opsomming(nee) });
+    if (!nee.length) return T.t('A house on this plot has {ja}.', { ja: T.opsomming(ja) });
+    return T.t('A house on this plot has {ja}, but {nee}.', { ja: T.opsomming(ja), nee: T.opsomming(nee) });
   };
 
   // ---------------------------------------------------------------------------------------------
@@ -468,32 +476,49 @@
   // ---------------------------------------------------------------------------------------------
 
   // Wanneer je een gebouw kunt bouwen dat nu nog niet in het bouwmenu staat (T.GEBOUW_TREDEN, js/gebouwen.js).
-  const PAS = { dorp: 'pas in een dorp', marktrecht: 'pas met marktrecht', stad: 'pas in een stad' };
   const naamVan = (soort) => T.GEBOUWEN[soort].naam;
-  const nogNiet = (soort) => ({ kan: false, bouw: null, tekst: `een ${naamVan(soort)} bouw je ${PAS[T.GEBOUWEN[soort].trede] || 'later'}` });
-  const of = (namen) => (namen.length < 2 ? namen.join('') : `${namen.slice(0, -1).join(', ')} of ${namen[namen.length - 1]}`);
+  function nogNiet(soort) {
+    const gebouw = T.eenNaam(naamVan(soort));
+    const trede = T.GEBOUWEN[soort].trede;
+    const tekst = trede === 'dorp' ? T.t('{gebouw} can only be built in a village', { gebouw })
+      : trede === 'marktrecht' ? T.t('{gebouw} can only be built in a market town', { gebouw })
+        : trede === 'stad' ? T.t('{gebouw} can only be built in a town', { gebouw })
+          : T.t('{gebouw} can only be built later', { gebouw });
+    return { kan: false, bouw: null, tekst };
+  }
+  const of = (namen) => (namen.length < 2 ? namen.join('')
+    : T.t('{lijst} or {laatste}', { lijst: namen.slice(0, -1).join(', '), laatste: namen[namen.length - 1] }));
 
-  // "vijf boerderijen en een huis": hoeveel huizen van elke soort, de soort met de meeste eerst.
+  // "five farms and a house": hoeveel huizen van elke soort, de soort met de meeste eerst.
   function wieTekst(perSoort) {
     return T.opsomming(Object.entries(perSoort).sort((a, b) => b[1] - a[1])
-      .map(([soort, n]) => `${T.telwoord(n)} ${n === 1 ? naamVan(soort) : T.GEBOUWEN[soort].meervoud || naamVan(soort)}`));
+      .map(([soort, n]) => (n === 1 ? T.eenNaam(naamVan(soort))
+        : T.t('{getal} {gebouw}', { getal: T.telwoord(n), gebouw: T.GEBOUWEN[soort].meervoud || naamVan(soort) }))));
   }
 
   // Waarom wat er staat niet genoeg maakt, kort, zoals de muis op het gebouw het zegt (T.gebouwToestand, js/gebouwen.js).
   function waaromTeWeinig(g) {
     const soort = T.GEBOUWEN[g.soort];
-    const de = `de ${soort.naam}`;
-    if (g.stilWant) return `${de} staat stil: ${g.stilWant}`;
-    if (soort.handen > (g.handen || 0)) return `${de} heeft ${g.handen ? 'te weinig' : 'geen'} handen`;
-    if (g.tekort) return `${de} heeft ${g.werkte > 0 ? 'te weinig' : 'geen'} ${g.tekort}`;
-    return `${de} maakt te weinig`;
+    const gebouw = soort.naam;
+    if (g.stilWant) return T.t('the {gebouw} is idle: {reden}', { gebouw, reden: g.stilWant });
+    if (soort.handen > (g.handen || 0)) {
+      return g.handen ? T.t('the {gebouw} has too few hands', { gebouw }) : T.t('the {gebouw} has no hands', { gebouw });
+    }
+    if (g.tekort) {
+      const waar = T.waarNaam(g.tekort);
+      return g.werkte > 0 ? T.t('the {gebouw} has too little {waar}', { gebouw, waar }) : T.t('the {gebouw} has no {waar}', { gebouw, waar });
+    }
+    return T.t('the {gebouw} makes too little', { gebouw });
   }
 
   // De ketens (werklijst vraag 90, D; Marcel, 2 okt: "d ja"): wat een werkplaats nodig heeft (T.GEBOUWEN[x].maakt.in), en
   // wie dat maakt. Brood komt van de bakkerij, die meel nodig heeft van de molen; laken van de weverij, met wol van de
   // schapen. Wat geen werkplaats maakt, komt van buiten het bouwmenu: daar valt niets voor te bouwen.
   const makersVan = (wat) => Object.keys(T.GEBOUWEN).filter((s) => T.maaktGoed(s, wat));
-  const VAN = { graan: 'graan komt van de akkers', wol: 'wol komt van de schapen, in zomermaand' };
+  const VAN = {
+    graan: () => T.t('grain comes from the fields'),
+    wol: () => T.t('wool comes from the sheep, in {maand}', { maand: T.MAANDEN.find((m) => m.naam === 'zomermaand').toon }),
+  };
 
   // Wat een werkplaats die je gaat bouwen nodig heeft en nergens gemaakt wordt, en wel te bouwen is: een bakkerij zonder
   // molen. Die noemt de raad er meteen bij ("bouw een bakkerij en een molen [B]"), zodat je de keten in één keer ziet.
@@ -510,10 +535,12 @@
   }
 
   // Hoe de raad zegt wat helpt: bouw het, met [B] (het bouwmenu); of, als de mensen het je vragen (js/verzoeken.js, de
-  // spelregel "Wie bouwt"; werklijst vraag 103), dat het zou helpen. `meer`: het zijn er twee (een bakkerij en een molen).
-  function helptZin(wat, nog, meer) {
-    if (!T.VERZOEKEN_INSTELLINGEN.mensen) return `${nog ? 'nog' : 'bouw'} ${wat} [B]`;
-    return `${nog ? 'nog ' : ''}${wat} ${meer ? 'zouden' : 'zou'} helpen`;
+  // spelregel "Wie bouwt"; werklijst vraag 103), dat het zou helpen. `nog`: er staat er al een, dus `wat` is de kale naam
+  // ("hunter" wordt "another hunter"); anders heeft `wat` zijn lidwoord ("a bakery and a mill"; voor twee gebouwen heeft
+  // het Engels geen ander werkwoord, dus `meer` is vervallen).
+  function helptZin(wat, nog) {
+    if (!T.VERZOEKEN_INSTELLINGEN.mensen) return nog ? T.t('another {wat} [B]', { wat }) : T.t('build {wat} [B]', { wat });
+    return nog ? T.t('another {wat} would help', { wat }) : T.t('{wat} would help', { wat });
   }
 
   // Wat helpt, uit de soorten die het maken (een visser of een jager voor vlees of vis, een houthakker voor hout): { kan,
@@ -526,7 +553,7 @@
     const seizoen = D.kalender ? T.datumVanDag(D.kalender.dag).seizoen : null;
     const staan = (D.gebouwen || []).filter((g) => soorten.includes(g.soort));
     const inBouw = staan.find((g) => !g.klaar);
-    if (inBouw) return { kan: false, bouw: null, tekst: `de ${naamVan(inBouw.soort)} wordt gebouwd` };
+    if (inBouw) return { kan: false, bouw: null, tekst: T.t('the {gebouw} is being built', { gebouw: naamVan(inBouw.soort) }) };
     const stil = (soort) => T.stilOp(T.GEBOUWEN[soort], D.kalender ? D.kalender.dag : null, seizoen);
     const werken = staan.filter((g) => !stil(g.soort));
     const zonder = werken.find((g) => g.tekort);
@@ -535,9 +562,10 @@
       const makers = makersVan(zonder.tekort);
       if (makers.length && keten < 2) {
         const h = watHelpt(D, makers, keten + 1);
-        return { kan: h.kan, bouw: h.bouw, tekst: `${waarom}, ${h.kan ? '' : 'en '}${h.tekst}` };
+        const tekst = h.kan ? T.t('{waarom}, {hulp}', { waarom, hulp: h.tekst }) : T.t('{waarom}, and {hulp}', { waarom, hulp: h.tekst });
+        return { kan: h.kan, bouw: h.bouw, tekst };
       }
-      return { kan: false, bouw: null, tekst: VAN[zonder.tekort] && !keten ? `${waarom}, en ${VAN[zonder.tekort]}` : waarom };
+      return { kan: false, bouw: null, tekst: VAN[zonder.tekort] && !keten ? T.t('{waarom}, and {reden}', { waarom, reden: VAN[zonder.tekort]() }) : waarom };
     }
     const zonderHanden = werken.find((g) => T.GEBOUWEN[g.soort].handen > (g.handen || 0));
     if (zonderHanden) return { kan: false, bouw: null, tekst: waaromTeWeinig(zonderHanden) };
@@ -550,10 +578,11 @@
     const helpen = soorten.filter(helpt);
     if (helpen.length) {
       const er = helpen.find((s) => staan.some((g) => g.soort === s));
-      if (er) return { kan: true, bouw: er, tekst: helptZin(`een ${naamVan(er)}`, true) };
+      if (er) return { kan: true, bouw: er, tekst: helptZin(naamVan(er), true) };
       const erbij = helpen.length === 1 ? ookNodig(D, helpen[0]) : [];
-      const wat = T.opsomming(helpen.length === 1 ? [helpen[0], ...erbij].map((x) => `een ${naamVan(x)}`) : [of(helpen.map((x) => `een ${naamVan(x)}`))]);
-      return { kan: true, bouw: helpen[0], ook: erbij, tekst: helptZin(wat, false, erbij.length > 0) };
+      const een = (x) => T.eenNaam(naamVan(x));
+      const wat = T.opsomming(helpen.length === 1 ? [helpen[0], ...erbij].map(een) : [of(helpen.map(een))]);
+      return { kan: true, bouw: helpen[0], ook: erbij, tekst: helptZin(wat, false) };
     }
     if (staan.length) return { kan: false, bouw: null, tekst: waaromTeWeinig(staan[0]) };
     return nogNiet(soorten[0]);
@@ -601,7 +630,11 @@
       const mist = Object.keys(kosten).filter((wat) => (D.voorraad[wat] || 0) < kosten[wat]);
       const makers = Object.keys(T.GEBOUWEN).filter((s) => T.GEBOUWEN[s].maakt && mist.some((wat) => T.GEBOUWEN[s].maakt.uit[wat]));
       const h = makers.length ? watHelpt(D, makers) : { kan: false, bouw: null, tekst: '' };
-      const zin = `${T.hoofdletter(wieTekst({ [soort]: n }))} ${n === 1 ? 'kan' : 'kunnen'} een ${naamVan(T.GEBOUWEN[soort].wordt)} worden, maar er is geen ${T.opsomming(mist.map((wat) => `${kosten[wat]} ${wat}`))}`;
+      const zin = T.t('{wie} can become {gebouw}, but the stores do not hold {lijst}', {
+        wie: T.hoofdletter(wieTekst({ [soort]: n })),
+        gebouw: T.eenNaam(naamVan(T.GEBOUWEN[soort].wordt)),
+        lijst: T.opsomming(mist.map((wat) => T.hoeveel(kosten[wat], wat))),
+      });
       uit.push({
         soort: 'bouwstof', id: `bouwstof:${soort}`, huizen: n, mensen: lijst.reduce((m, g) => m + g.wensen.mensen, 0),
         kan: h.kan, bouw: h.bouw, tekst: h.tekst ? `${zin}: ${h.tekst}.` : `${zin}.`, zin: `${zin}.`,
@@ -641,14 +674,19 @@
     }
     wensen.sort((a, b) => b.mensen - a.mensen || b.n - a.n);
     for (const w of wensen) {
-      const binnen = w.straal ? ` binnen ${w.straal} tegels` : '';
       if (!w.n) {
         // Alle huizen die het missen, wachten op een plek in aanbouw: dat zegt het rapport, en er valt niets te doen.
-        const zin = `${T.hoofdletter(T.telwoord(w.wacht))} ${w.wacht === 1 ? 'huis wacht' : 'huizen wachten'} op ${w.wens.naam}: er wordt er een gebouwd.`;
+        const woorden = { getal: T.hoofdletter(T.telwoord(w.wacht)), wens: w.wens.naam };
+        const zin = w.wacht === 1 ? T.t('{getal} house is waiting for {wens}: one is being built.', woorden)
+          : T.t('{getal} houses are waiting for {wens}: one is being built.', woorden);
         uit.push({ soort: 'wens', id: w.id, huizen: w.wacht, mensen: 0, kan: false, bouw: null, tekst: zin, zin });
         continue;
       }
-      const zin = `${T.hoofdletter(wieTekst(w.wie))} ${w.n === 1 ? 'wil' : 'willen'} ${w.wens.naam}${binnen}`;
+      const wie = T.hoofdletter(wieTekst(w.wie));
+      const wens = w.wens.naam;
+      const zin = w.straal
+        ? T.t('{n|{wie} wants {wens} within {straal} tiles|{wie} want {wens} within {straal} tiles}', { n: w.n, wie, wens, straal: w.straal })
+        : T.t('{n|{wie} wants {wens}|{wie} want {wens}}', { n: w.n, wie, wens });
       const h = hulpVoorWens(D, w.wens);
       uit.push({
         soort: 'wens', id: w.id, huizen: w.n, mensen: w.mensen, kan: h.kan, bouw: h.bouw, ook: h.ook || [],
@@ -684,8 +722,10 @@
       let helpt = null;
       if (!heeft && !BASIS.includes(id)) {
         const h = hulpVoorWens(D, wens);
-        const binnen = wens.plek && IN().kring[wens.plek] ? ` binnen ${IN().kring[wens.plek]} tegels` : '';
-        helpt = h.tekst || (T.VERZOEKEN_INSTELLINGEN.mensen ? `een${binnen} zou helpen` : `bouw er een${binnen} [B]`);
+        const straal = wens.plek && IN().kring[wens.plek];
+        if (h.tekst) helpt = h.tekst;
+        else if (T.VERZOEKEN_INSTELLINGEN.mensen) helpt = straal ? T.t('one within {straal} tiles would help', { straal }) : T.t('one would help');
+        else helpt = straal ? T.t('build one within {straal} tiles [B]', { straal }) : T.t('build one [B]');
       }
       return { id, naam: wens.naam, heeft, helpt };
     });

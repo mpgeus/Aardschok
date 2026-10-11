@@ -76,7 +76,7 @@ test('hij vraagt naar wat hij ziet: pacht per akkertegel, hoofdgeld per mens, en
   assert.deepEqual(eis.volgorde, ['graan', 'goud']);
   assert.ok(eis.regels.some((r) => /akkertegels/.test(r.waarom)));
   assert.ok(eis.regels.some((r) => /25 zielen/.test(r.waarom)));
-  assert.ok(eis.regels.some((r) => /5 × boerderij/.test(r.waarom)));
+  assert.ok(eis.regels.some((r) => /5 × farm/.test(r.waarom)));
 });
 
 test('hij vraagt in wat hij ziet: wol bij schapen, eieren bij kippen, hout voor zijn bos', () => {

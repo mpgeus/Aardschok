@@ -452,7 +452,7 @@ test('ja op een werkplaats in het bos: hij wacht, nog niet op de kaart; wie hem 
     D.voorvallen = D.voorvallen || T.nieuweVoorvallen();
     D.voorvallen.lopend = L;
     // Hij zegt waar, en wat hij er eerst rooit, in het bos van de heer; en de prijs noemt zijn gunst.
-    assert.match(T.GESPREK_WOORDEN.plek(D), /waar ik eerst .* rooi, in het bos van de heer/);
+    assert.match(T.GESPREK_WOORDEN.plek(D), /where I will first clear .*, in the lord's forest/);
     assert.match(T.prijsVanKeuze(D, { bouw: true }).tekst, new RegExp(`gunst van de heer −${T.ONTGINNEN_INSTELLINGEN.gunst}`));
     const gunst = T.bazenNu(D).gunst;
     const hout = D.voorraad.hout;
@@ -548,8 +548,8 @@ test('een hut die alles heeft maar niet past, rooit eerst wat in de weg staat, e
       assert.equal(hut.soort, 'hut', 'nog een hut');
       assert.deepEqual(hut.kavel, plan, 'het stuk dat vrij moet: de nieuwe voet');
       assert.equal(T.rooitHij(hoofd), hut, 'het hoofd van het gezin rooit');
-      assert.match(T.waaromGroeitHetNiet(D, hut), /het gezin rooit eerst/);
-      assert.match(T.huisToestand(D, hut).groei.waarom, /rooit eerst/);
+      assert.match(T.waaromGroeitHetNiet(D, hut), /the family first clears/);
+      assert.match(T.huisToestand(D, hut).groei.waarom, /first clears/);
       // Wie er staat te rooien: zijn de struiken weg, dan de volgende nacht klaar, en daarna groeit hij.
       for (const t of struiken) {
         if (T.ontginWerkOp(D.wereld, t.x, t.y) === 'hakken') T.hakBoom(D, t.x, t.y);
@@ -605,8 +605,8 @@ test('rooit niemand het, dan doen de buren de rest na een maand; staat er iets w
       while (dag2 < 60) nachtMetGenoeg(S2, dag2++);
       assert.equal(hut2.soort, 'hut');
       assert.ok(!hut2.groeitNaRooien);
-      assert.match(T.waaromGroeitHetNiet(D2, hut2), /er staat een rots waar het groter moet worden/);
-      assert.match(T.huisToestand(D2, hut2).groei.waarom, /een rots/);
+      assert.match(T.waaromGroeitHetNiet(D2, hut2), /there is a rock where it has to grow/);
+      assert.match(T.huisToestand(D2, hut2).groei.waarom, /a rock/);
       // Is het hout een dag op, dan wacht hij nog steeds op plaats, niet op hout: in de speeltest van 6 okt bleef een hut
       // die door een erf niet kon groeien, zo drie jaar "wachten op 8 hout".
       T.zetVoorraad(D2, 'hout', 0);
@@ -616,7 +616,7 @@ test('rooit niemand het, dan doen de buren de rest na een maand; staat er iets w
       T.tikGebouwenDag(D2, dag2++);
       assert.ok(!hut2.wachtOpBouwstof, 'hij wacht niet op hout');
       assert.notEqual(T.huisToestand(D2, hut2).teken, 'bouwstof');
-      assert.match(T.huisToestand(D2, hut2).groei.waarom, /een rots/);
+      assert.match(T.huisToestand(D2, hut2).groei.waarom, /a rock/);
     } finally {
       T.GEBOUWEN_INSTELLINGEN.gezinDagen = gezinDagen;
     }

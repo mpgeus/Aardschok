@@ -166,7 +166,7 @@
       const n = aantal[id];
       const prijs = T.GEBOUWEN[id].heer;
       if (!n || !prijs) continue;
-      for (const wat in prijs) tel(wat, prijs[wat] * n, n === 1 ? `een ${T.GEBOUWEN[id].naam}` : `${n} × ${T.GEBOUWEN[id].naam}`);
+      for (const wat in prijs) tel(wat, prijs[wat] * n, n === 1 ? T.eenNaam(T.GEBOUWEN[id].naam) : T.t('{n} × {gebouw}', { n, gebouw: T.GEBOUWEN[id].naam }));
     }
     const h = D.heer;
     if (h && h.schuld > 0) tel('goud', h.schuld, 'wat u vorig jaar schuldig bleef, met de boete');

@@ -94,12 +94,12 @@ test('de raad zegt wat zou helpen, zonder [B], en wie je erom vraagt', () => {
   const D = S.dorp;
   nacht(S, 1);
   const x = T.watDeHuizenMissen(D).find((w) => w.id === 'kapel');
-  assert.equal(x.tekst, 'Vijf boerderijen en een huis willen een kapel binnen 40 tegels.');
-  assert.equal(x.zin, 'Vijf boerderijen en een huis willen een kapel binnen 40 tegels.');
+  assert.equal(x.tekst, 'Five farms and a house want a chapel within 40 tiles.');
+  assert.equal(x.zin, 'Five farms and a house want a chapel within 40 tiles.');
   const wens = T.RADEN.find((r) => r.id === 'wens');
-  assert.equal(wens.tekst(D), `Vijf boerderijen en een huis willen een kapel binnen 40 tegels. ${T.naamVanBewoner(lopend(D).wie)} vraagt je erom.`);
+  assert.equal(wens.tekst(D), `Five farms and a house want a chapel within 40 tiles. ${T.naamVanBewoner(lopend(D).wie)} asks you for it.`);
   zeg(S, 1);
-  assert.equal(wens.tekst(D), 'Vijf boerderijen en een huis willen een kapel binnen 40 tegels. Je zei er nee tegen.');
+  assert.equal(wens.tekst(D), 'Five farms and a house want a chapel within 40 tiles. You said no to it.');
 });
 
 test('ja: de kapel komt er, het dorp betaalt, en wie het vroeg is er de meester', () => {
@@ -120,7 +120,7 @@ test('ja: de kapel komt er, het dorp betaalt, en wie het vroeg is er de meester'
   assert.equal(D.voorraad.hout, hout - 10);
   assert.equal(D.voorraad.goud, goud - 8);
   assert.equal(D.verzoeken.ja, 1);
-  assert.ok(berichten.includes(`${T.naamVanBewoner(wie)} begint aan de kapel.`), berichten.join(' | '));
+  assert.ok(berichten.includes(`${T.naamVanBewoner(wie)} starts building the chapel.`), berichten.join(' | '));
   assert.ok(!lopend(D), 'het verzoek is af');
   assert.ok(!T.watTeBouwen(D).some((w) => w.soort === 'kapel'), 'wat er gebouwd wordt, vraagt niemand nog eens');
 });
@@ -205,7 +205,7 @@ test('een oproep (stap 2): wat erop staat, vraagt iemand als eerste, ook wat nie
   const D = S.dorp;
   nacht(S, 1);
   T.voorvalBeantwoord(D, lopend(D).id); // het verzoek van de eerste nacht (de houthakker)
-  assert.equal(T.doeOproep(D, 'steengroeve'), 'Op het plein hangt je oproep: het dorp zoekt een steengroeve, met een premie van 5 goud.');
+  assert.equal(T.doeOproep(D, 'steengroeve'), 'Your notice hangs on the square: the village seeks a quarry, with a bounty of 5 gold.');
   assert.ok(T.oproepVoor(D, 'steengroeve'));
   assert.ok(!T.watTeBouwen(D).some((x) => x.soort === 'steengroeve'), 'niemand mist een steengroeve');
   D.verzoeken.volgende = 0;
@@ -225,9 +225,9 @@ test('nog een klik haalt een oproep weg; wat nog niet mag, kan niet; en wacht hi
   const S = gehucht();
   const D = S.dorp;
   nacht(S, 1);
-  assert.equal(T.doeOproep(D, 'weverij'), 'Een weverij mag hier nog niet.');
+  assert.equal(T.doeOproep(D, 'weverij'), 'A weaving shed cannot be built here yet.');
   T.doeOproep(D, 'wachthuis');
-  assert.equal(T.doeOproep(D, 'wachthuis'), 'Je haalt je oproep weg: het dorp zoekt geen wachthuis meer.');
+  assert.equal(T.doeOproep(D, 'wachthuis'), 'You take down your notice: the village no longer seeks a watch house.');
   assert.equal(T.oproepVoor(D, 'wachthuis'), null);
   T.doeOproep(D, 'steengroeve');
   T.zetVoorraad(D, 'goud', 2);
@@ -235,7 +235,7 @@ test('nog een klik haalt een oproep weg; wat nog niet mag, kan niet; en wacht hi
   assert.equal(raad.als(D), false, 'de eerste week niet');
   S.kalender.dag = 1 + T.RAAD_INSTELLINGEN.oproepNa + 0.5;
   assert.equal(raad.als(D), true);
-  assert.match(raad.tekst(D), /^Je oproep voor een steengroeve hangt op het plein, maar het dorp mist 7 goud: /);
+  assert.match(raad.tekst(D), /^Your notice for a quarry hangs on the square, but the village lacks 7 gold: /);
 });
 
 test('na een ja vraagt niemand hetzelfde de eerste naJa dagen weer: geen jager elke vier dagen', () => {
