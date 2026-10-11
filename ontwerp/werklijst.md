@@ -103,8 +103,9 @@ het graan vraagt", de schandpaal, de heervaart en de twee bazen.
 
 ## G. Naar Steam (`commercieel.md`)
 
-- Engels (vraag 147, stap 2: alle tekst omzetten), na ronde 1 van A, want het raakt bijna heel `js/`. **Bezig in sessie
-  `ccr-99e707bb-sla81d`** (10 okt): het plan, met Marcel.
+- Engels (vraag 147, stap 2: alle tekst omzetten). Marcel, 11 okt: "Alles gelijk in het Engels maken. Nederlands mag je
+  mee stoppen". **Bezig in sessie `ccr-fe45ba8f-v51u8s`** (11 okt): het plan, met Marcel (neemt het over van
+  `ccr-99e707bb-sla81d`, waarvan het voorstel van 10 okt geen antwoord kreeg).
 - Een proefversie voor Marcels 4K-scherm en een eerste tester (`npm run proefversie`), na C.
 - Het geluid (vraag 145, 2), zodra de sleutel er is.
 - Januari 2027: de Steam-pagina (een capsule, vijf plaatjes, een trailer van een minuut); de naam is er (Tithebreaker).
