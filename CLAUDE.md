@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Aardschok (werktitel, past niet meer): een spel dat Marcel en Claude samen bouwen, om het te verkopen (Steam eerst, als
+Tithebreaker (de werknaam sinds 11 okt, `ontwerp/commercieel.md`; de map en de opslag heten nog Aardschok): een spel dat Marcel en Claude samen bouwen, om het te verkopen (Steam eerst, als
 los programma verpakt; `ontwerp/commercieel.md`). **Sinds 11 okt de economie van The Settlers, met gevechten in beurten**
 (vraag 151, `ontwerp/gameloop.md`): je komt met een huifkar en een paar gezinnen op een lege plek op een eiland, je bouwt
 alles zelf, van bovenaf, binnen bereik van je plein en je opslag, een ossenkar haalt de grondstoffen op, en je vecht in

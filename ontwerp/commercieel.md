@@ -95,8 +95,11 @@ de uitverkopen en met updates. Zonder verlanglijstjes verkoopt een goed spel bij
    winkel van Steam zelf is vanuit de cloud niet te bereiken; geen spel heet *Tithebreaker* (ook niet op itch.io, GOG of
    Epic). Wat er dicht bij ligt: *Tilebreaker* (2022) en *Tilebreaker Next Level*, een blokkenbreker, één letter
    verschil; *Tiebreakers* (aangekondigd) en *TIME BREAKER*; *Tidebreaker* op itch.io. Marcel zocht het dezelfde dag in
-   de winkel van Steam zelf: "de naam staat nog niet in steam". Nog te doen vóór januari: de merkenregisters (EUIPO,
-   USPTO); en `T.NAAM` gaat pas om als de naam vaststaat.
+   de winkel van Steam zelf: "de naam staat nog niet in steam". En in de merkenregisters (TMview, met de EU en de
+   Benelux, en de USPTO; klasse 9 en 41): "Er staat niets in" (Marcel, 11 okt). De naam is dus vrij; vastleggen (BOIP,
+   of EUIPO voor de hele EU, zo'n 850 euro voor één klasse) hoort bij januari, met de Steam-pagina. **Sinds 11 okt staat de naam in het spel** (`T.NAAM`; Marcel: "2 ja"):
+   op het titelscherm en in het tabblad; de map, `package.json` en de opslag van de browser heten nog aardschok, zodat
+   niemand zijn spel kwijt is.
 4. **Geluid.** Het spel heeft nog geen geluid. Voor een trailer en een demo is dat het eerste dat opvalt. Muziek en
    geluiden kun je kopen (bibliotheken) of laten maken. Er is weinig geld, dus: vrije bibliotheken en code (hieronder,
    "Weinig geld").

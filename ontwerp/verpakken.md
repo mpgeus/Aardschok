@@ -235,7 +235,8 @@ kijken of de domeinnaam vrij is.
 makkelijk door het hele spel kunnen aanpassen."** De naam staat op één plek: `T.NAAM` in `js/naam.js`. Het
 tabblad van het spel en van het gereedschap, de server en de meldingen in de console lezen hem daar, en het
 titelscherm straks ook. Een andere naam is dus één regel. `test/naam.test.cjs` bewaakt dat hij nergens anders
-in het spel staat.
+in het spel staat. **Sinds 11 okt is het Tithebreaker** (Marcel; waarom, en het nazoeken in Steam en de
+merkenregisters: `commercieel.md`, "Een naam vóór de Steam-pagina").
 
 Eén ding verandert bewust niet mee: de sleutel waaronder de browser de spelregels bewaart, en straks de
 opgeslagen spellen (`T.OPSLAG_SLEUTEL`, in hetzelfde bestand, "aardschok"). Zou die meeveranderen, dan is
