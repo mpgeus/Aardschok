@@ -13,7 +13,8 @@
 //                                                                tegels/brandfasen/<tekening>.png, en tegels/brandfasen.json
 //                                                                + .js (zoals de bouwfasen). Wat er al is, blijft staan,
 //                                                                dus het kan in delen: een stijl ("wit") is alles wat met
-//                                                                "wit-" begint. Elk huis in een eigen draad
+//                                                                "wit-" begint. Elk huis in een eigen draad; met --erbij
+//                                                                alleen wat er nog niet is (na een taak die stopte)
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -164,13 +165,17 @@ function schrijfSpel(lijst) {
   );
 }
 
-async function spel(gevraagd) {
-  const namen = Object.keys(HZ.HUIZEN).filter(brandbaar).filter((n) => !gevraagd.length || gevraagd.some((g) => n === g || n.startsWith(`${g}-`)));
+// --erbij: alleen wat nog niet in brandfasen.json staat (na een taak die stopte; elk huis gaat er meteen in).
+async function spel(gevraagd, erbij = false) {
+  const jsonPad = path.join(TEGELS, 'brandfasen.json');
+  const al = erbij && fs.existsSync(jsonPad) ? JSON.parse(fs.readFileSync(jsonPad, 'utf8')).fasen : {};
+  const namen = Object.keys(HZ.HUIZEN).filter(brandbaar).filter((n) => !al[n]).filter((n) => !gevraagd.length || gevraagd.some((g) => n === g || n.startsWith(`${g}-`)));
   if (!namen.length) {
     console.log('geen huizen om te renderen');
     return;
   }
-  const draden = Math.max(1, Math.min(8, os.cpus().length - 1));
+  // alle draden op één na: een ruïne is zes renders, en alleen dit loopt
+  const draden = Math.max(1, os.cpus().length - 1);
   console.log(`brandfasen: ${namen.length} huizen, ${draden} draden`);
   const t0 = Date.now();
   await renderAlle(namen, draden);
@@ -181,7 +186,7 @@ if (isMainThread && require.main === module) {
   const args = process.argv.slice(2);
   if (args[0] === 'rij') rij(args[1]);
   else if (args[0] === 'proef') proef(args.length > 1 ? args.slice(1) : PROEF);
-  else if (args[0] === 'spel') spel(args.slice(1)).catch((e) => { console.error(e); process.exit(1); });
+  else if (args[0] === 'spel') spel(args.slice(1).filter((a) => !a.startsWith('--')), args.includes('--erbij')).catch((e) => { console.error(e); process.exit(1); });
   else console.log('Gebruik: node gereedschap/pixelart/ruines.cjs proef [tekening ...], of spel [naam of stijl ...]');
 }
 
