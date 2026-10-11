@@ -482,6 +482,7 @@
       tekenRaster(ctx, S);
       tekenMarkeringen(ctx, S);
       tekenBouwBereik(ctx, S, vak);
+      tekenRooiPlaatsen(ctx, S);
       tekenBouwSpook(ctx, S);
       tekenVerzoekPlek(ctx, S);
     }
@@ -1800,7 +1801,7 @@
   // Het bouwbereik van het lege begin (js/begin.js; vraag 152, 1d), zolang het bouwmenu open is of je bouwt: een zachte
   // gloed op de grond waar je kunt bouwen, die in de laatste twee tegels uitdooft. Geen lijn (Marcel, 11 okt: "Ik wil geen
   // 'grens'"). Per sterkte één pad, zodat het duizenden tegels in drie keer vult.
-  const BEREIK_GLOED = [0.05, 0.09, 0.13];
+  const BEREIK_GLOED = [0.07, 0.14, 0.21];
   function tekenBouwBereik(ctx, S, vak) {
     if (!(S.bouwSoort || S.bouwMenuOpen)) return;
     const B = T.bouwBereikVan(S.dorp); // bouwen doe je in je eigen dorp (het bouwmenu, js/hud.js)
@@ -1827,6 +1828,25 @@
       ctx.fillStyle = `rgba(240, 225, 170, ${a})`;
       ctx.fill(paden[i]);
     });
+  }
+
+  // Een bouwplaats van het lege begin die de bouwers nog rooien (js/bouwen.js): het gebouw staat nog niet op de kaart, dus
+  // ligt zijn voet er in goud, zoals de plek van een verzoek, zodat je ziet waar het komt.
+  function tekenRooiPlaatsen(ctx, S) {
+    const D = S.dorp;
+    if (!D || !D.begin) return;
+    ctx.fillStyle = 'rgba(226, 182, 74, 0.3)';
+    for (const g of D.gebouwen) {
+      if (!g.bouw || !g.wachtOpRooien) continue;
+      const r = T.voetVanGebouw(g);
+      for (let dy = 0; dy < r.h; dy++) {
+        for (let dx = 0; dx < r.b; dx++) {
+          const p = opGrond(r.x + dx, r.y + dy);
+          T.ruit(ctx, p.x, p.y, 0.94);
+          ctx.fill();
+        }
+      }
+    }
   }
 
   // Het gebouw dat de speler in de hand heeft (S.bouwSoort, het bouwmenu in js/hud.js): zijn hele
@@ -2648,7 +2668,7 @@
       // watermolen, put, ...) net als voorheen gewoon bleker tot hij klaar is, zonder er een
       // tweede tekening voor nodig te hebben.
       const fase = v.inAanbouw && v.tekeningNaam && T.bouwFaseIndex && metSprites() && T.sprites.bouwfase
-        && T.sprites.bouwfase(v.tekeningNaam, T.bouwFaseIndex(S.kalender ? S.kalender.dag : 0, v.klaarOp, v.bouwtijd, v.vanFase || 0));
+        && T.sprites.bouwfase(v.tekeningNaam, T.bouwFaseIndex(S.kalender ? S.kalender.dag : 0, v.klaarOp, v.bouwtijd, v.vanFase || 0, v.voortgang));
       // Wat brandt of afbrandde (js/brand.js): de fase van het afbranden (brandBeeldVan hieronder).
       const puin = v.brand && metSprites() ? brandBeeldVan(S, v) : null;
       const alpha = dof * (v.inAanbouw && !fase ? 0.45 : 1);

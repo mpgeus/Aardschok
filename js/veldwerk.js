@@ -206,6 +206,7 @@
     const p = T.bewonerVan(D, e);
     return !(p && (p.weg || p.komt || T.blijftThuis(p, D.kalender.dag)));
   }
+  T.magWerken = magWerken; // ook voor de bouwers (js/bouwen.js)
 
   // Hij houdt op (de werkdag is om, of hij moet ergens anders zijn). Was hij op weg naar een tegel, dan maakt hij alleen
   // zijn stap af, en neemt het ritme van de dag het over (T.dwaal), zoals na het maaien. Een bundel hout houdt hij: die
@@ -216,6 +217,7 @@
     if (e.pad.length && e.padDoel && e.padDoel.x === wt.x && e.padDoel.y === wt.y) e.pad = e.onderweg ? [e.pad[0]] : [];
     e.werkt = null;
   }
+  T.stopWerk = stop; // ook voor de bouwers (js/bouwen.js)
 
   // Een plag steken, een boom omhakken of een stronk rooien is meer werk dan een halve dag (IN().ontginnen, en in de
   // winter is een werkdag zes uur): houdt hij op voor hij af is (de schaft, het eind van de werkdag, iemand roept hem),

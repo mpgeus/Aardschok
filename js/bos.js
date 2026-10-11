@@ -268,6 +268,7 @@
     if (T.ontginWerkOp(D.wereld, t.x, t.y) === 'hakken') T.hakBoom(D, t.x, t.y);
     T.rooi(D, t.x, t.y);
   }
+  T.rooiTegel = rooiNu; // ook voor de bouwers van het lege begin (js/bouwen.js)
 
   // Elke dag (T.tikGebouwenDag, js/gebouwen.js, vóór de erven): een gebouw dat op het rooien wachtte en nu vrij is, komt op
   // de kaart, en is de tijd om, dan rooien de buren eerst de rest. Een hut wacht dan op hout (T.tikErvenDag, js/erven.js),
@@ -279,7 +280,8 @@
         groeiGerooid(D, g, dag);
         continue;
       }
-      if (!g.wachtOpRooien) continue;
+      // een bouwplaats van het lege begin rooien de bouwers zelf, zonder buren (js/bouwen.js)
+      if (!g.wachtOpRooien || g.bouw) continue;
       const over = T.teRooienOp(D, g.kavel);
       if (over.length && dag < g.rooienTot) continue;
       for (const t of over) rooiNu(D, t);

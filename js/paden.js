@@ -302,9 +302,10 @@
     return null;
   }
 
-  function zetLantaarn(w, plek) {
+  function zetLantaarn(D, w, plek) {
     const t = T.opzoekTegelNaam('lantaarn');
-    if (!t) return null;
+    // niet waar een gebouw komt dat nog wacht tot zijn plek gerooid is (T.bouwplaatsOp, js/gebouwen.js)
+    if (!t || T.bouwplaatsOp(D, plek.x, plek.y)) return null;
     if (!T.VOORWERPEN.lantaarn) T.VOORWERPEN.lantaarn = { blokkeert: !!t.eig.vast, zichtDicht: !!t.eig.vast };
     return T.zetVoorwerp(w, { soort: 'lantaarn', x: plek.x, y: plek.y, vel: t.vel, id: t.id, beslaat: [1, 1], vanHetDorp: true });
   }
@@ -327,7 +328,7 @@
       const deur = T.deurVan(w, g);
       if (!deur || lichten.some((l) => T.afstand(l, deur) <= 2)) continue;
       const plek = plekNaast(D, deur, net, deuren);
-      if (plek && zetLantaarn(w, plek)) lichten.push(plek);
+      if (plek && zetLantaarn(D, w, plek)) lichten.push(plek);
     }
     if (IN().paadjes === 'uit') return;
     // De herberg brandt al 's avonds (T.herbergLicht, js/herberg.js): daar komt geen lantaarn op de kruising naast.
@@ -348,7 +349,7 @@
       }
       if (kanten < 3 || !paadje || lichten.some((l) => T.afstand(l, { x, y }) < ver)) continue;
       const plek = plekNaast(D, { x, y }, net, deuren);
-      if (plek && zetLantaarn(w, plek)) lichten.push(plek);
+      if (plek && zetLantaarn(D, w, plek)) lichten.push(plek);
     }
   };
 })(globalThis.Spel = globalThis.Spel || {});

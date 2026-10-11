@@ -2,12 +2,22 @@
 // hij staat. Gemaakt door npm run teksten (gereedschap/teksten.cjs) uit de aanroepen van T.t in js/; niet met de
 // hand bewerken. De vertaaltool (gereedschap/vertalen.html) werkt met deze lijst.
 Spel.TAAL_BRON = [
+  {"t":"A {gebouw} is already coming here.","waar":["js/gebouwen.js"]},
+  {"t":"{gebouw}: the builders first clear the site ({wat}), then build it ({werk} workdays).","waar":["js/gebouwen.js"]},
+  {"t":"{gebouw}: the building site is ready ({werk} workdays, for whoever has no other work).","waar":["js/gebouwen.js"]},
   {"t":"St Martin's Day is coming, and the lord spares you this year.","waar":["js/heer.js"]},
   {"t":"The cart is on the open ground that will be the square. The families put up their tents around the campfire.","waar":["js/begin.js"]},
   {"t":"{wie} and family leave the camp: their {gebouw} is ready, though it is cramped.","waar":["js/begin.js"]},
   {"t":"{wie} and family leave the camp: their {gebouw} is ready.","waar":["js/begin.js"]},
   {"t":"Your house is ready: you and your family leave the tent, and the covered wagon becomes the ox cart.","waar":["js/begin.js"]},
   {"t":"Too far away: you build within {n} tiles of the square or of a store.","waar":["js/begin.js"]},
+  {"t":"{gebouw}: the site is cleared (+{hout} wood), and now they build.","waar":["js/bouwen.js"]},
+  {"t":"{gebouw}: the site is cleared, and now they build.","waar":["js/bouwen.js"]},
+  {"t":"{gebouw}: {n|# builder clears|# builders clear} the site first: {wat}.","waar":["js/bouwen.js"]},
+  {"t":"{gebouw}: the site still has to be cleared ({wat}), and everyone has other work.","waar":["js/bouwen.js"]},
+  {"t":"{gebouw}: {n|# builder|# builders}, {gedaan} of {werk} workdays done.","waar":["js/bouwen.js"]},
+  {"t":"{gebouw}: {gedaan} of {werk} workdays done; nobody is building, everyone has other work.","waar":["js/bouwen.js"]},
+  {"t":"{n|# workday|# workdays}","waar":["js/hud.js"]},
   {"t":"To Our new reeve,","waar":["js/brieven.js"]},
   {"t":"It has pleased Us to send you, with {n|# family|# families}, to a piece of Our wilderness. Make a village of it. A village brings Us money; wilderness does not.","waar":["js/brieven.js"]},
   {"t":"The cart carries what We could spare: some wood, grain for the spring, seed grain, a few tools and {goud} gold. Do not expect more.","waar":["js/brieven.js"]},
@@ -56,6 +66,7 @@ Spel.TAAL_BRON = [
   {"t":"Overwrite","waar":["js/menu.js"]},
   {"t":"Load this game? Anything since your last save will be lost.","waar":["js/menu.js"]},
   {"t":"The game could not autosave: {reden}","waar":["js/menu.js"]},
+  {"t":"The builders first clear {wat}.","waar":["js/main.js"]},
   {"t":"Photo mode · drag or arrows to look · wheel to zoom · [Enter] saves a picture · [H] or [Esc] to return","waar":["js/main.js"]},
   {"t":"Picture saved: {naam}","waar":["js/main.js"]},
 ];

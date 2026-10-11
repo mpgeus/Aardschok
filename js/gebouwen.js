@@ -673,6 +673,8 @@
   function toestandZin(D, g, soort) {
     const naam = T.hoofdletter(soort.naam);
     if (!g.klaar) {
+      // De mensen bouwen het zelf (js/bouwen.js): wie er bouwt, en hoe ver het is.
+      if (g.bouw) return T.bouwToestand(D, g);
       // Nog niet begonnen: de plek wordt eerst gerooid (js/bos.js), of de bouwplaats wacht op hout (js/erven.js).
       if (g.wachtOpRooien) return `${naam}: eerst wordt de plek gerooid.`;
       if (g.klaarOp == null) return `${naam}: de bouwplaats wacht op hout.`;
@@ -946,6 +948,8 @@
   // js/erven.js), niet in een wijngaard (T.wijngaardOp, js/wijngaard.js), en niet op een lantaarn. Geeft de reden, of null.
   T.waaromNietOpDezeGrond = function (D, x, y) {
     const w = D.wereld;
+    const komt = T.bouwplaatsOp(D, x, y);
+    if (komt) return T.t('A {gebouw} is already coming here.', { gebouw: T.GEBOUWEN[komt.soort].naam });
     if (T.veldOp(w, x, y)) return 'Daar ligt een veld.';
     if (T.opPad(w, x, y)) return 'Daar loopt een pad.';
     // Op zand wordt niet gebouwd (Marcel, 8 okt: "zand is geen solide basis"): het strand, de duinen en het stuifzand
@@ -960,6 +964,18 @@
     // Een lantaarn houdt niemand tegen die loopt, maar er komt geen gebouw overheen (js/paden.js).
     const v = T.voorwerpOp(w, x, y);
     if (v && v.soort === 'lantaarn') return 'Daar staat een lantaarn.';
+    return null;
+  };
+
+  // Het gebouw dat hier komt maar nog niet op de kaart staat, omdat zijn plek eerst gerooid wordt (`wachtOpRooien`: een
+  // werkplaats die een inwoner vroeg, of een bouwplaats van het lege begin, js/bouwen.js), of null. Zijn voet is nog geen
+  // muur, maar er komt niets anders.
+  T.bouwplaatsOp = function (D, x, y) {
+    for (const g of D.gebouwen || []) {
+      if (!g.wachtOpRooien || g.voorwerp || g.erf) continue;
+      const r = T.voetVanGebouw(g);
+      if (x >= r.x && x < r.x + r.b && y >= r.y && y < r.y + r.h) return g;
+    }
     return null;
   };
 
@@ -1008,8 +1024,10 @@
   // (geen S, geen scherm) en dus in een toets te vangen zonder een gebouw echt neer te zetten.
   // vanaf: de eerste fase, als een gebouw niet bij de fundering begint (een huis dat doorgroeit, vanaf de muren met
   // steigers; groeiVanafFase in js/behoeften.js): dan de bouwtijd in zoveel stukken als er fases over zijn.
+  // gedaan (van 0 tot 1): hoe ver het werk is, als de mensen het zelf bouwen (js/bouwen.js); dan telt de dag niet.
   const AANTAL_BOUWFASEN = 5;
-  T.bouwFaseIndex = function (dagNu, klaarOp, bouwtijd, vanaf = 0) {
+  T.bouwFaseIndex = function (dagNu, klaarOp, bouwtijd, vanaf = 0, gedaan = null) {
+    if (gedaan != null) return Math.max(vanaf, Math.min(AANTAL_BOUWFASEN - 1, vanaf + Math.floor(gedaan * (AANTAL_BOUWFASEN - vanaf))));
     if (klaarOp == null) return vanaf; // nog niet begonnen: een bouwplaats die op hout wacht (js/erven.js)
     if (!(bouwtijd > 0)) return AANTAL_BOUWFASEN - 1; // bouwtijd 0: meteen de laatste fase
     const voortgang = 1 - (klaarOp - dagNu) / bouwtijd;
@@ -1094,6 +1112,7 @@
       // jong (T.maakJong): wanneer hij af is, of vandaag als hij er al staat
       gebouwdOp: Math.floor(instantie.klaarOp != null ? instantie.klaarOp : D.kalender ? D.kalender.dag : 0),
     };
+    if (instantie.bouw) v.voortgang = instantie.bouw.gedaan / instantie.bouw.werk; // de mensen bouwen het zelf (js/bouwen.js)
     // Wat er laag groeit of ligt (een varen, bloemen, een kool; js/maker.js), maakt plaats: het gebouw komt erop. Wat
     // in de weg staat (een boom, een struik), hield het bouwen al tegen (T.waaromPastHetNiet).
     const eronder = (o) => o.vel && !T.VOORWERPEN[o.soort].blokkeert && o.x >= v.x && o.x < v.x + voet.b && o.y >= v.y && o.y < v.y + voet.h;
@@ -1129,7 +1148,9 @@
     if (g.erf) return T.legErfAan(D, x, y);
     // De markt op het plein: kramen, geen gebouw met een voet (js/markt.js; werklijst vraag 110, d).
     if (soort === 'markt' && T.marktOpHetPlein(D)) return T.zetMarktOpHetPlein(D);
-    const past = T.waaromPastHetNiet(D, soort, x, y, null, rooien);
+    // In het lege begin bouwen de mensen het zelf, en rooien ze eerst wat er op de plek staat (js/bouwen.js; vraag 152, 1d).
+    const kavel = rooien || T.bouwKavel(D, soort, x, y);
+    const past = T.waaromPastHetNiet(D, soort, x, y, null, kavel);
     if (past) return { gelukt: false, reden: past };
     if (!T.kanBetalen(D, g.kosten)) return { gelukt: false, reden: 'Daar is de voorraad niet groot genoeg voor.' };
     T.betaalKosten(D, g.kosten);
@@ -1138,10 +1159,19 @@
     const tekening = T.neemTekening(D, soort);
     const voet = T.gebouwVoet(soort, tekening);
     const instantie = { soort, x, y, tekening, voet, klaar: g.bouwtijd <= 0, klaarOp: dagNu + g.bouwtijd, handen: 0, voorwerp: null };
-    if (rooien && T.teRooienOp(D, rooien).length) {
+    const wat = kavel && T.rooiWoordenOp(D, kavel);
+    if (T.bouwenMetHanden(D)) T.zetBouwplaats(D, instantie, kavel);
+    else if (rooien && T.teRooienOp(D, rooien).length) {
       Object.assign(instantie, { klaar: false, klaarOp: null, wachtOpRooien: true, kavel: rooien, rooienTot: dagNu + T.BOS_INSTELLINGEN.rooiDagen });
     }
     T.bouwGebouw(D, instantie);
+    if (instantie.bouw) {
+      const gebouw = T.hoofdletter(g.naam);
+      const werk = instantie.bouw.werk;
+      return { gelukt: true, instantie, bericht: instantie.wachtOpRooien
+        ? T.t('{gebouw}: the builders first clear the site ({wat}), then build it ({werk} workdays).', { gebouw, wat, werk })
+        : T.t('{gebouw}: the building site is ready ({werk} workdays, for whoever has no other work).', { gebouw, werk }) };
+    }
     if (instantie.wachtOpRooien) return { gelukt: true, instantie, bericht: `${T.hoofdletter(g.naam)}: eerst wordt de plek gerooid.` };
     return { gelukt: true, instantie, bericht: `${T.hoofdletter(g.naam)} in aanbouw (${g.bouwtijd} dag${g.bouwtijd === 1 ? '' : 'en'}).` };
   };
@@ -1366,6 +1396,8 @@
     // stuk vrij is (js/bos.js); een hut op een erf die op hout wachtte, begint als het er nu is (js/erven.js).
     T.tikRooienDag(D);
     T.tikErvenDag(D);
+    // In het lege begin: het werk van gisteren aan de bouwplaatsen (js/bouwen.js), vóór wat er vandaag klaarkomt.
+    T.tikBouwenDag(D, dag);
     // Het bos (js/bos.js): een boompje wordt een jonge boom, een jonge boom een boom, en een oude stronk vergaat.
     T.tikBosDag(D);
     // En wat erin leeft (js/beesten.js): een groep die zijn thuis kwijt is, zoekt een nieuw of trekt weg; in de winter
@@ -1422,8 +1454,10 @@
       const waarom = T.waaromGeenGezin(D, dag);
       if (!['graan', 'tevreden', 'winter', 'kamp'].some((w) => waarom.includes(w))) T.gezinKomt(D);
     }
-    // 5. Handen: verdeeld over de werkplaatsen, en wie waar werkt (T.verdeelHanden hierboven).
+    // 5. Handen: verdeeld over de werkplaatsen, en wie waar werkt (T.verdeelHanden hierboven). Wie dan geen werk heeft,
+    // bouwt vandaag mee, in het lege begin (js/bouwen.js).
     T.verdeelHanden(D);
+    T.kiesBouwers(D);
     // 6. Productie: wat een gebouw maakt, gaat per dag naar de voorraad — naar rato van hoe bezet
     // hij is (de helft van zijn handen geeft de helft van zijn opbrengst), en van de tevredenheid
     // (js/behoeften.js: "hoe hard er gewerkt wordt"; T.BEHOEFTEN_INSTELLINGEN.werkBasis is de

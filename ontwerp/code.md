@@ -653,7 +653,26 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   van het oude begin laten hem weg. Zijn tekening komt uit de bouwstijl (`schout`, net als de maker), nog zonder
   bouwfasen. Is hij af, dan verhuist de schout met zijn gezin erin (`verhuisDeSchout`, als eerste in
   `T.verhuisUitHetKamp`): het huis krijgt `huis: 'schout'`, de tent verliest het en gaat weg, en de kar heet de ossenkar
-  met het vel `ossenkar-leeg`. Nog niet: rooien en meebouwen (1d), boeren worden (1e).
+  met het vel `ossenkar-leeg`. Rooien en meebouwen: `js/bouwen.js`, hieronder. Nog niet: boeren worden (1e).
+
+### js/bouwen.js: meebouwen
+
+- `js/bouwen.js`: **meebouwen** (vraag 152, 1d, 11 okt; Marcel: "d ja", en "a1"): in het lege begin (`T.bouwenMetHanden`,
+  `D.begin`) rijst een gebouw niet vanzelf op in zijn bouwtijd. `T.plaatsGebouw` maakt er een bouwplaats van
+  (`T.zetBouwplaats`: `g.bouw`, `klaarOp` null), met als kavel de voet en het looppad (`T.bouwKavel`, dezelfde vraag voor
+  de muis in `js/main.js` en de klik); staat daar iets, dan `wachtOpRooien`, en staat hij nog niet op de kaart
+  (`tekenRooiPlaatsen` in `js/tekenen.js` laat de voet zien; `T.tikRooienDag` in `js/bos.js` laat zo'n plaats aan de
+  bouwers, zonder buren). Elke ochtend na `T.verdeelHanden` kiest `T.kiesBouwers` wie bouwt (`p.bouwt`): wie kan werken,
+  volwassen of jong, zonder werk en geen dagloner, hooguit `perPlaats` per plaats, in de volgorde van `D.gebouwen`; net
+  als de handen zonder te vragen of het poppetje er al is. Elke nacht doet `T.tikBouwenDag` het werk van gisteren
+  (`werkAan`): eerst het rooien, tegel voor tegel (`rooiBoom`, `rooiStruik`; `T.rooiTegel` in `js/bos.js`, dus een boom
+  geeft zijn hout), dan het bouwen (`gedaan` tot `werk`, de bouwtijd keer `werkPerBouwdag`); is het af, dan `klaarOp`, en
+  zet `T.tikGebouwenDag` hem op klaar zoals elk gebouw. Overdag doet `T.werkBouwenBij` (vanuit `T.werkDorpBij`) hetzelfde
+  werk naar hoe ver de werkdag is (`g.bouw.vandaag`, dat de nacht niet nog eens doet: met of zonder beelden hetzelfde), en
+  stuurt de bouwers naar een tegel naast een boom of de voet (`e.werkt` met `bouw`, de hakker met de bijl in
+  `js/sprites.js`; `T.magWerken` en `T.stopWerk` uit `js/veldwerk.js`). De bouwfase volgt het werk (`v.voortgang`,
+  `T.bouwFaseIndex`), het briefje zegt het (`T.bouwToestand`), en het bouwmenu zegt werkdagen in plaats van dagen. De
+  getallen in `T.BOUWEN_INSTELLINGEN` (de werkbank: "Meebouwen").
 
 ### js/erven.js: de erven
 

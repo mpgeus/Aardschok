@@ -163,12 +163,14 @@
   // wat het grootst is. Of null zonder plan.
   T.huisPlekVan = (e) => (e.plan ? { x: e.x + e.plan.dx, y: e.y + e.plan.dy, b: e.plan.b, h: e.plan.h } : null);
 
+  // Net zo de voet van een gebouw dat nog wacht tot zijn plek gerooid is, en dus nog niet op de kaart staat (T.bouwplaatsOp,
+  // js/gebouwen.js).
   T.huisPlekOp = function (D, x, y, behalve) {
     for (const e of D.erven || []) {
       const p = e !== behalve && e.plan;
       if (p && x >= e.x + p.dx && x < e.x + p.dx + p.b && y >= e.y + p.dy && y < e.y + p.dy + p.h) return true;
     }
-    return false;
+    return !!T.bouwplaatsOp(D, x, y);
   };
   const planVan = (keus) => {
     if (!keus) return null;

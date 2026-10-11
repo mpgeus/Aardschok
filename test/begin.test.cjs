@@ -120,9 +120,10 @@ test('een jaar vanaf een lege plek, zonder iets te doen: geen fout, en de heer v
   assert.ok(!gezegd.some((t) => /geen plaats/.test(t)), 'zolang er een gezin in het kamp woont, wil er geen nieuw gezin komen');
 });
 
-// Zet `n` hutten neer zo dicht mogelijk bij het kampvuur (niet op het plein), zoals de speler ze met het bouwmenu neerzet.
-// Met een vaste reeks toeval, want welke tekening een hut krijgt (en dus hoe groot hij is), kiest T.volgendeTekening.
-function zetHutten(D, n, soort = 'hut') {
+// Zet `n` hutten neer zo dicht mogelijk bij het kampvuur (niet op het plein), zoals de speler ze met het bouwmenu neerzet,
+// op open grond (met `rooien` ook in het bos). Met een vaste reeks toeval, want welke tekening een hut krijgt (en dus hoe
+// groot hij is), kiest T.volgendeTekening.
+function zetHutten(D, n, soort = 'hut', rooien = false) {
   const v = D.wereld.kamp.vuur;
   const hutten = [];
   const toeval = Math.random;
@@ -133,6 +134,8 @@ function zetHutten(D, n, soort = 'hut') {
       for (let dy = -r; dy <= r && hutten.length < n; dy++) {
         for (let dx = -r; dx <= r && hutten.length < n; dx++) {
           if (Math.max(Math.abs(dx), Math.abs(dy)) !== r) continue;
+          const kavel = T.bouwKavel(D, soort, v.x + dx, v.y + dy);
+          if (!rooien && kavel && T.teRooienOp(D, kavel).length) continue;
           const uit = T.plaatsGebouw(D, soort, v.x + dx, v.y + dy);
           if (uit.gelukt) hutten.push(uit.instantie);
         }
@@ -145,6 +148,14 @@ function zetHutten(D, n, soort = 'hut') {
   return hutten;
 }
 const wonenIn = (D, g) => D.bewoners.mensen.filter((p) => p.huis === g);
+// Dagen vanaf `van` tot deze gebouwen af zijn (de mensen bouwen ze zelf, js/bouwen.js); geeft de dag waarop ze af waren.
+function totAf(S, gebouwen, van = 2, hooguit = 60) {
+  for (let dag = van; dag < van + hooguit; dag++) {
+    dagen(S, dag, dag);
+    if (gebouwen.every((g) => g.klaar)) return dag;
+  }
+  return assert.fail('de gebouwen komen niet af');
+}
 
 test('"Leeg" zet Huizen en Wie bouwt op Jij: de hut en het huis staan in het bouwmenu, en het erf niet', () => {
   try {
@@ -168,7 +179,7 @@ test('verhuizen: is een hut af, dan trekt er een gezin uit het kamp in, en gaat 
   const hutten = zetHutten(D, tenten);
   assert.ok(T.waaromGeenGezin(D).includes('kamp'), 'zolang er een gezin in het kamp woont, komt er geen nieuw gezin');
   gezegd.length = 0;
-  dagen(S, 2, 2 + T.GEBOUWEN.hut.bouwtijd);
+  totAf(S, hutten);
   for (const g of hutten) {
     assert.ok(g.klaar);
     const gezin = wonenIn(D, g);
@@ -199,7 +210,7 @@ test('verhuizen: past een gezin niet, dan gaat het heel naar een lege woning, oo
     T.GEBOUWEN.hut.woonruimte = 2;
     const [hut] = zetHutten(D, 1);
     gezegd.length = 0;
-    dagen(S, 2, 2 + T.GEBOUWEN.hut.bouwtijd);
+    totAf(S, [hut]);
     assert.equal(wonenIn(D, hut).length, 3, 'het hele gezin');
     assert.equal(T.kampTenten(D).length, T.BEGIN_INSTELLINGEN.gezinnen - 1, 'een gezin minder in het kamp');
     assert.ok(gezegd.some((t) => /krap|cramped/.test(t)), 'en het dorp zegt dat het krap is');
@@ -303,7 +314,7 @@ function huisVanDeSchout() {
   assert.equal(T.plaatsGebouw(D, 'schout', huis.x + 20, huis.y).gelukt, false, 'en een tweede kan niet');
   assert.equal(D.gebouwen.find((g) => g.huis === 'schout'), schoutTent, 'tot het af is, woont hij in zijn tent');
   gezegd.length = 0;
-  dagen(S, 2, 2 + T.GEBOUWEN.schout.bouwtijd);
+  totAf(S, [huis]);
   assert.ok(huis.klaar);
   assert.equal(D.gebouwen.find((g) => g.huis === 'schout'), huis, 'nu is het zijn huis');
   assert.deepEqual(wonenIn(D, huis), gezin, 'met zijn hele gezin, en verder niemand');
@@ -345,6 +356,129 @@ test('het huis van de schout staat niet in het bouwmenu van het gehucht dat er a
       console.warn = echt;
     }
     assert.ok(!T.magGebouwd(S.dorp, 'schout') && !T.inBouwmenu(S.dorp, 'schout'));
+  } finally {
+    Object.assign(T.MAKER_INSTELLINGEN, maker);
+  }
+});
+
+test('meebouwen: wie geen werk heeft, bouwt mee; hoe meer handen, hoe sneller, en zonder handen staat het stil', () => {
+  const { S, D } = leegBegin();
+  dagen(S, 1, 1);
+  const I = T.BOUWEN_INSTELLINGEN;
+  const [a, b, c] = zetHutten(D, 3);
+  for (const g of [a, b, c]) {
+    assert.ok(!g.klaar && g.klaarOp == null, 'een bouwplaats wacht op werk, niet op een dag');
+    assert.equal(g.bouw.werk, T.GEBOUWEN.hut.bouwtijd * I.werkPerBouwdag);
+  }
+  dagen(S, 2, 2);
+  const bouwers = (g) => D.bewoners.mensen.filter((p) => p.bouwt === g);
+  assert.equal(bouwers(a).length, I.perPlaats, 'de eerste bouwplaats krijgt er het eerst, tot perPlaats');
+  assert.equal(bouwers(b).length, I.perPlaats);
+  const vrij = D.bewoners.mensen.filter((p) => T.kanWerken(p) && !p.werk && (p.leeftijd === 'volwassen' || p.leeftijd === 'jong')).length;
+  assert.equal(bouwers(c).length, Math.min(I.perPlaats, vrij - 2 * I.perPlaats), 'de derde wat er over is');
+  assert.ok(D.bewoners.mensen.every((p) => !p.bouwt || p.leeftijd === 'volwassen' || p.leeftijd === 'jong'), 'een kind bouwt niet');
+  assert.ok(!D.bewoners.mensen.some((p) => p.schout && p.bouwt), 'de schout bouwt niet mee');
+  assert.ok(!D.bewoners.mensen.some((p) => p.werk && p.bouwt), 'wie werk heeft, bouwt niet');
+  const opC = bouwers(c).length;
+  dagen(S, 3, 3);
+  assert.ok(a.klaar && b.klaar, 'vier bouwers zetten een hut in één dag');
+  assert.equal(c.bouw.gedaan, Math.min(c.bouw.werk, opC), 'elke bouwer doet er één werkdag aan');
+  assert.equal(bouwers(c).length, Math.min(I.perPlaats, vrij), 'zijn de eerste af, dan gaan de bouwers naar de volgende');
+});
+
+test('meebouwen: zonder bouwers staat de bouwplaats stil, en het briefje zegt het', () => {
+  const { S, D } = leegBegin();
+  dagen(S, 1, 1);
+  const [hut] = zetHutten(D, 1);
+  const perPlaats = T.BOUWEN_INSTELLINGEN.perPlaats;
+  try {
+    T.BOUWEN_INSTELLINGEN.perPlaats = 0;
+    dagen(S, 2, 4);
+    assert.equal(hut.bouw.gedaan, 0);
+    assert.ok(!hut.klaar);
+    assert.match(T.gebouwToestand(D, hut), /niemand bouwt/);
+  } finally {
+    T.BOUWEN_INSTELLINGEN.perPlaats = perPlaats;
+  }
+  dagen(S, 5, 5);
+  assert.match(T.gebouwToestand(D, hut), /4 bouwers/);
+});
+
+test('rooien: in het bos rooien de bouwers eerst de plek, een boom geeft zijn hout, en dan rijst het op', () => {
+  const { S, D, w } = leegBegin();
+  dagen(S, 1, 1);
+  const I = T.BOUWEN_INSTELLINGEN;
+  // een plek in het bos, binnen het bereik
+  let hut = null;
+  for (let y = 0; y < w.h && !hut; y++) {
+    for (let x = 0; x < w.b && !hut; x++) {
+      const kavel = T.bouwKavel(D, 'hut', x, y);
+      if (!kavel || T.watTeRooien(D, kavel).bomen < 5 || T.waaromPastHetNiet(D, 'hut', x, y, null, kavel)) continue;
+      const uit = T.plaatsGebouw(D, 'hut', x, y);
+      assert.ok(uit.gelukt, uit.reden);
+      assert.match(uit.bericht, /rooien eerst/);
+      hut = uit.instantie;
+    }
+  }
+  assert.ok(hut, 'er is bos binnen het bereik');
+  assert.ok(hut.wachtOpRooien && !hut.voorwerp, 'tot de plek vrij is, staat de hut nog niet op de kaart');
+  assert.match(T.plaatsGebouw(D, 'hut', hut.x, hut.y).reden || '', /komt al een hut/, 'maar er komt niets anders op zijn plek');
+  const tegels = T.teRooienOp(D, hut.kavel);
+  const bomen = tegels.filter((t) => T.ontginWerkOp(w, t.x, t.y) === 'hakken').length;
+  const rooiWerk = bomen * I.rooiBoom + (tegels.length - bomen) * I.rooiStruik;
+  const hout = D.voorraad.hout;
+  const af = totAf(S, [hut]);
+  assert.equal(hut.bouw.hout, bomen * T.BOS_INSTELLINGEN.houtPerBoom, 'een boom geeft 10 hout, wie hem ook omhakt (a1)');
+  assert.ok(D.voorraad.hout > hout + hut.bouw.hout - 10, 'en dat ligt in de voorraad (min wat ze stookten)');
+  assert.equal(T.teRooienOp(D, hut.kavel).length, 0, 'de kavel is vrij');
+  assert.ok(hut.voorwerp && w.voorwerpen.includes(hut.voorwerp), 'en de hut staat op de kaart');
+  // vier bouwers per dag: rooien en bouwen samen
+  const dagenNodig = Math.ceil((rooiWerk + hut.bouw.werk) / I.perPlaats - 1e-9);
+  assert.ok(af - 2 >= dagenNodig - 1 && af - 2 <= dagenNodig + 1, `${af - 2} dagen, verwacht zo'n ${dagenNodig}`);
+  assert.ok(gezegd.some((t) => /gerooid|cleared/.test(t)), 'het dorp zegt dat de plek vrij is');
+});
+
+test('meebouwen: met of zonder beelden komt er hetzelfde uit', () => {
+  const spel = (beelden) => {
+    const { S, D, w } = leegBegin();
+    dagen(S, 1, 1);
+    let hut = null;
+    for (let y = 0; y < w.h && !hut; y++) {
+      for (let x = 0; x < w.b && !hut; x++) {
+        const kavel = T.bouwKavel(D, 'hut', x, y);
+        if (!kavel || T.watTeRooien(D, kavel).bomen < 5 || T.waaromPastHetNiet(D, 'hut', x, y, null, kavel)) continue;
+        hut = T.plaatsGebouw(D, 'hut', x, y).instantie;
+      }
+    }
+    for (let dag = 2; dag <= 4; dag++) {
+      dagen(S, dag, dag);
+      if (beelden) {
+        for (let u = 0; u < 24; u += 0.5) {
+          S.kalender.dag = dag + u / 24;
+          T.werkBouwenBij(S, D);
+        }
+      }
+    }
+    dagen(S, 5, 5);
+    return JSON.stringify({ bouw: hut.bouw && { ...hut.bouw, vandaag: 0 }, klaar: hut.klaar, hout: D.voorraad.hout, over: T.teRooienOp(D, hut.kavel || hut).length });
+  };
+  assert.equal(spel(true), spel(false));
+});
+
+test('in het gehucht dat er al was, rijst een gebouw vanzelf op in zijn bouwtijd', () => {
+  const maker = { ...T.MAKER_INSTELLINGEN };
+  Object.assign(T.MAKER_INSTELLINGEN, { opEiland: false, leeg: false });
+  try {
+    const S = { kalender: T.nieuweKalender(), tijd: 0, wereldTijd: 0, modus: 'verkennen', inventaris: new Set() };
+    const echt = console.warn;
+    console.warn = () => {};
+    try {
+      assert.ok(T.beginOpKaart(S, 'gehucht', 3));
+    } finally {
+      console.warn = echt;
+    }
+    assert.ok(!T.bouwenMetHanden(S.dorp));
+    assert.equal(T.bouwKavel(S.dorp, 'hut', 10, 10), null);
   } finally {
     Object.assign(T.MAKER_INSTELLINGEN, maker);
   }

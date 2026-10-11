@@ -278,8 +278,10 @@
       S.handeling = null;
       return;
     }
-    // Past hij niet, dan zegt de muis waarom (op het plein wordt niet gebouwd), net als de klik.
-    const reden = T.waaromPastHetNiet(S.dorp, S.bouwSoort, x, y);
+    // Past hij niet, dan zegt de muis waarom (op het plein wordt niet gebouwd), net als de klik. In het lege begin rooien
+    // de bouwers eerst wat er op de plek staat (js/bouwen.js): dezelfde kavel als bij de klik (T.plaatsGebouw).
+    const kavel = T.bouwKavel(S.dorp, S.bouwSoort, x, y);
+    const reden = T.waaromPastHetNiet(S.dorp, S.bouwSoort, x, y, null, kavel);
     S.bouwHover = { x, y, ok: !reden, reden };
     canvas.style.cursor = 'crosshair';
     // Een plek die een huis in de buurt wil (een put, een kapel, de herberg, een markt): wie hij hier bereikt. De kring is
@@ -289,7 +291,8 @@
     const rechthoek = voet && { x, y, b: voet.b, h: voet.h };
     const kring = voet && (T.GEBOUWEN[S.bouwSoort].erf ? T.erfKringTekst(S.dorp, rechthoek) : T.kringTekst(S.dorp, S.bouwSoort, rechthoek));
     // En op een erf: wat er eerst gerooid moet, en of het in het bos van de heer ligt (js/erven.js; vraag 110, e).
-    const rooien = voet && T.GEBOUWEN[S.bouwSoort].erf ? T.rooiTekst(S.dorp, rechthoek) : null;
+    const rooien = !voet ? null : T.GEBOUWEN[S.bouwSoort].erf ? T.rooiTekst(S.dorp, rechthoek)
+      : kavel && T.teRooienOp(S.dorp, kavel).length ? T.t('The builders first clear {wat}.', { wat: T.rooiWoordenOp(S.dorp, kavel) }) : null;
     const tekst = [kring, rooien].filter(Boolean).join(' ');
     if (reden) T.ui.tooltip(reden, S.muis.x, S.muis.y, true);
     else if (tekst) T.ui.tooltip(tekst, S.muis.x, S.muis.y);

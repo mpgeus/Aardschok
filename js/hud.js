@@ -81,7 +81,7 @@
         return (
           `<button data-soort="${id}">` +
           `<span class="bouw-naam">${T.hoofdletter(g.naam)}</span>` +
-          `<span class="bouw-kosten">${kosten} · ${g.bouwtijd} dag${g.bouwtijd === 1 ? '' : 'en'}</span>` +
+          `<span class="bouw-kosten">${kosten} · ${duur(S.dorp, id, g)}</span>` +
           `<span class="bouw-uitleg">${g.beschrijving}</span>` +
           (g.heer ? `<span class="bouw-heer">${heerTekst}</span>` : '') +
           `</button>`
@@ -89,6 +89,12 @@
       })
       .join('');
     return `<div class="kop">Bouwen — ${T.tredeNaam(S.dorp)}</div>${rijen || '<p class="bouw-leeg">Hier valt nu niets te bouwen.</p>'}${oproepRijen(S)}`;
+  }
+
+  // Hoe lang het bouwen duurt: zijn bouwtijd, of in het lege begin het werk dat de bouwers eraan hebben (js/bouwen.js).
+  function duur(D, id, g) {
+    if (T.bouwenMetHanden(D)) return T.t('{n|# workday|# workdays}', { n: T.bouwWerkVan(id) });
+    return `${g.bouwtijd} dag${g.bouwtijd === 1 ? '' : 'en'}`;
   }
 
   // De oproepen (js/verzoeken.js; werklijst vraag 103, c): vragen de mensen het je (de spelregel "Wie bouwt"), dan zet je
