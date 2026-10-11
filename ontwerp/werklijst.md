@@ -11,15 +11,18 @@ onderwerp, niet hier. Wie aan een punt begint, zet er "**Bezig in sessie `<branc
 ## Nu en daarna (11 okt)
 
 **Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en
-drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **B, 1c is af** (11 okt):
-het bouwmenu in het lege begin, en verhuizen uit het kamp. **Het volgende punt is B, 1d: het bereik, het huis van de
-schout en meebouwen.** Ronde 2 van het snoeien volgt na 1f, ronde 3 na C.
+drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **B, 1c en 1d zijn af** (11
+okt): het bouwmenu, verhuizen uit het kamp, het bouwbereik, het huis van de schout, meebouwen en bouwen in het bos.
+**Het volgende punt is B, 1e: boeren uit het niets, met de keuze akkerbouwer of wijnboer.** Ronde 2 van het snoeien
+volgt na 1f, ronde 3 na C.
 
 **Wacht op Marcel:**
-- **1c bekijken:** Spelregels, "Het begin" op "Leeg", en dan Nieuw spel (of in de console `Spel.debug.begin('leeg', 2)`;
-  op de meeste andere landen past er nog geen hut, want het bos staat om het plein: `opmerkingen.md`).
-  Is het kamp op, zet dan een hut neer met het bouwmenu (B), net naast het plein: twee dagen later trekt er een gezin in
-  en gaat zijn tent weg. Het hout in de kar (50) is genoeg voor vier hutten (32) en een houthakker (10).
+- **1c en 1d bekijken** (op branch `ccr-5dd998e4-j3q8e2` tot hij in `main` is): Spelregels, "Het begin" op "Leeg", en
+  dan Nieuw spel (of in de console `Spel.debug.begin('leeg', 2)`). Is het kamp op, open dan het bouwmenu (B): het
+  bouwbereik gloeit op de grond. Zet het huis van de schout neer, ook in het bos (de bouwers rooien eerst, en het hout
+  komt in de voorraad), en een hut op open grond: wie geen werk heeft, loopt erheen en bouwt. Is de hut af, dan trekt
+  er een gezin in; is het huis af, dan verhuist de schout en wordt de huifkar de ossenkar. Te kiezen in de werkbank
+  ("Meebouwen"): twee werkdagen per bouwdag, vier bouwers per plaats, een kwart werkdag per boom.
 - **Het doel van de demo.** CLAUDE.md zegt nog "je wint als iedereen een jaar super gelukkig is"; dat is het oude spel.
   Voorstel van Claude (11 okt): de demo is het eerste jaar: je komt met de kar, bouwt, haalt de eerste winter, en het
   eind is het eerste gevecht (de mannen van de heer of rovers), zodat een speler in Next Fest de economie, het gevecht
@@ -52,12 +55,8 @@ Mee in elke ronde: het commentaar in de code dat "zie CLAUDE.md" zegt (een stuk 
 
 ## B. Zelf bouwen vanaf niets (vraag 152, stap 1)
 
-Het plan staat in het archief bij vraag 152; 1a (optie 1), 1b (het lege land) en 1c (het kamp, met het bouwmenu) zijn
-af; hoe het nu werkt: `spel.md`, "Zo werkt het lege begin nu".
-- **1d, jij bouwt alles, binnen bereik** (besloten, Marcel, 11 okt: "a1, b ja, c ja, d ja, e ja"; het plan:
-  `spel.md`, "Het plan voor 1d"): bouwen in het bos (de bouwers rooien eerst, een boom geeft 10 hout), het bereik
-  (12 tegels van het plein en van het huis van de schout, te zien als je bouwt), het huis van de schout één keer in het
-  bouwmenu, en meebouwen (wie geen werk heeft, bouwt mee). **Bezig in sessie `ccr-5dd998e4-j3q8e2`** (11 okt): bouwt het.
+Het plan staat in het archief bij vraag 152; 1a (optie 1), 1b (het lege land), 1c (het kamp, met het bouwmenu) en 1d
+(binnen bereik, en met handen) zijn af; hoe het nu werkt: `spel.md`, "Zo werkt het lege begin nu".
 - **1e, boeren uit het niets:** je bouwt een boerderij en kiest akkerbouwer of wijnboer (Marcel, 11 okt: "Je kiest dan
   agrariër of wijnboer. Zoals bij Knights and Merchants"); het gezin dat erin trekt, wordt die boer, met een geloot
   karakter; en bij een akkerbouwer leg jij de akkers (uit 1d, e: een akker zonder boer doet niets).
@@ -104,6 +103,9 @@ het graan vraagt", de schandpaal, de heervaart en de twee bazen.
   schrijven voor de nieuwe richting, als B en C er staan.
 
 ## Af (sinds 11 okt)
+
+- Binnen bereik, en met handen (vraag 152, 1d; Marcel: "a1, b ja, c ja, d ja, e ja"): het bouwbereik van 12 tegels, het
+  huis van de schout in het bouwmenu (dan wordt de huifkar de ossenkar), meebouwen (`js/bouwen.js`) en bouwen in het bos.
 
 - Het kamp, met het bouwmenu (vraag 152, 1c; Marcel: "We willen dus een bouwmenu en zelf bouwen", "Kleinere gezinnen",
   "Per tent"): "Leeg" zet "Huizen" en "Wie bouwt" op "Jij", een gezin in de kar is een man, een vrouw en een kind, is een

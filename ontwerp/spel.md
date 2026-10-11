@@ -64,7 +64,7 @@ en je vecht in beurten, om je dorp te verdedigen
 en om het eiland te veroveren tot het kasteel van de heer, zoals in Jagged Alliance 2. Het verstoppen en heel "arm
 lijken" gaan eruit ("Rijk worden en arm lijken"). Wat dat is, wat er al is en wat ontbreekt: `gameloop.md`.
 
-**Zo werkt het lege begin nu** (11 okt, vraag 152, stap 1b en 1c; `js/begin.js`): achter de spelregel "Het begin" op "Leeg"
+**Zo werkt het lege begin nu** (11 okt, vraag 152, stap 1b, 1c en 1d; `js/begin.js`, `js/bouwen.js`): achter de spelregel "Het begin" op "Leeg"
 (standaard nog het gehucht dat er al was, tot het lege begin een jaar draait, stap 1f). De maker legt op het eiland
 geen gehucht, alleen het land: het bos, het water, de heide en de wegen van het eiland, en een open plek die het plein
 wordt, met een paar oude eiken en het bos er vlak omheen (Marcel: "Klein, bos dichtbij"). Na de benoeming (de heer
@@ -79,25 +79,19 @@ Ons niet"). **Jij bouwt** (Marcel: "We willen dus een bouwmenu en zelf bouwen"):
 "Jij", dus alles staat in het bouwmenu en jij zet het neer (het rijst nog vanzelf op in zijn bouwtijd). **Verhuizen:** is
 een hut of huis af, dan trekt er in die nacht een gezin uit het kamp in (past het niet, dan toch, krap), en zijn tent gaat
 weg (Marcel: "Per tent"); met de laatste tent gaat het kampvuur uit, en de kar blijft. Zolang er een gezin in het kamp
-woont, komt er geen nieuw gezin over de weg. Nog niet: het bereik, het huis van de schout in het bouwmenu en meebouwen
-(1d), en boeren worden (1e); zonder bouwen haalt het kamp de winter niet.
-
-**Het plan voor 1d** (voorstel van Claude, 11 okt; Marcel: "a1, b ja, c ja, d ja, e ja"). Waarom eerst het bos: op negen
-van de dertien gemeten landen past er binnen 30 tegels van het plein geen hut, want het bos staat er vlak omheen
-(`opmerkingen.md`). a, **bouwen in het bos**: je zet een gebouw ook op bomen; de bouwers rooien eerst de voet en het
-looppad, en dan rijst het op. Een boom geeft 10 hout, wie hem ook omhakt (a1, het besluit van 6 okt); dat is zo'n 350 hout
-op de plek van een hut, dus in C wordt het een stapel die de ossenkar ophaalt, en na 1f meten we of het te veel is.
-Binnen het bereik kost rooien geen gunst: de heer stuurde je naar zijn wildernis. b, **het bereik**: je bouwt binnen 12
-tegels van het plein en van het huis van de schout (later ook van elke opslag, C); te zien als je bouwt, als een zachte
-gloed op de grond, zonder lijn ("Ik wil geen 'grens'"); het groeit niet met de trede. c, **het huis van de schout** staat
-één keer in het bouwmenu (zo groot als een huis, 16 hout en 4 goud); is het af, dan verhuist de schout met zijn gezin
-erin, gaat zijn tent weg, wordt de huifkar de ossenkar, en is het de eerste opslag, met zijn eigen bereik. Geen gezin
-uit het kamp trekt erin. De 50 hout uit de kar zijn het huis, twee hutten en een houthakker. d, **meebouwen**: een
-gebouw vraagt zijn bouwtijd keer 2 werkdagen; elke bouwer doet er één per dag, en zonder bouwers staat het stil. Elke
-nacht gaat wie kan werken en geen werk heeft naar een bouwplaats (zoals de dagloners), hooguit 4 per plaats, in de
-volgorde waarin je ze neerzette; elke man in een werkplaats is dus een bouwer minder. Alleen met "Leeg". e, **de akkers
-bij een boerderij gaan naar 1e**, met de keuze van de boerderij: akkerbouwer of wijnboer (Marcel: "Zoals bij Knights and
-Merchants").
+woont, komt er geen nieuw gezin over de weg. **Binnen bereik, en met handen** (1d; Marcel: "a1, b ja, c ja, d ja, e
+ja"): je bouwt binnen 12 tegels van het plein en van elke opslag die af is; als je bouwt, ligt er een zachte gloed op de
+grond die naar de rand uitdooft, zonder lijn ("Ik wil geen 'grens'"), en daarbuiten zegt de muis "Te ver weg". Het huis
+van de schout staat één keer in het bouwmenu (16 hout en 4 goud): is het af, dan trekt de schout er met zijn gezin in,
+gaat zijn tent weg, wordt de huifkar de ossenkar, en is het de eerste opslag, met zijn eigen bereik. Een gebouw rijst niet
+vanzelf op: het vraagt zijn bouwtijd keer twee werkdagen, en wie kan werken en geen werk heeft, bouwt mee, hooguit vier
+per bouwplaats, in de volgorde waarin je ze neerzette; elke man in een werkplaats is dus een bouwer minder, en zonder
+bouwers staat het stil. Op bomen bouwen mag: de bouwers rooien eerst de voet en het looppad (een kwart werkdag per boom),
+en een boom geeft 10 hout, wie hem ook omhakt (a1: op de plek van een hut in het bos zo'n 350 hout; na 1f meten we of het
+te veel is). Tot de plek vrij is, ligt zijn voet in goud en komt er niets anders op. Waarom het bos: op negen van de
+dertien gemeten landen paste er binnen 30 tegels van het plein geen hut, want het bos staat er vlak omheen. De 50 hout
+uit de kar zijn het huis van de schout, twee hutten en een houthakker, als je op open grond bouwt. Nog niet: boeren
+worden, met de keuze akkerbouwer of wijnboer en de akkers die jij legt (1e); zonder bouwen haalt het kamp de winter niet.
 
 ## Een nieuwe richting (Marcel, 28 sep 2026)
 
