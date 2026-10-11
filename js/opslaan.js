@@ -37,7 +37,9 @@
     // Ook het ontginnen als verzoek is eruit (snoeironde, punt 4): een bewaard voorval 'ontginverzoek' (en de vlaggen
     // ontginHeide en ontginBos) kent T.VOORVALLEN niet meer, en veld.ontgonnen en D.ontginnen leest niets meer. Een veld
     // in ontginning (veld.ontginning) blijft gewoon.
-    versie: 4,
+    // 5 (11 okt): een wijnrank hoort bij zijn boerderij met `v.boerderij` in plaats van `v.wijnboerderij`, want een
+    // wijngaard is in het lege begin een veld bij een gewone boerderij (vraag 152, 1e; js/boerderij.js).
+    versie: 5,
     eigenPlekken: 5, // naast de ene die vanzelf gaat (vraag 48 B)
     // Op de hoogste snelheid (30×) slaat het spel niet elke ochtend vanzelf op, maar om de zoveel dagen: een dag duurt
     // dan tien seconden, en het opslaan kost bij 100 mensen 25 à 50 ms, een hapering die je ziet (gemeten op 3 okt).
@@ -56,6 +58,7 @@
     muis: null, // waar de muis op het doek staat (js/main.js)
     hover: null, // wat onder de muis is, en wat een klik daar zou doen
     bouwHover: null,
+    veldHoek: null, // de eerste hoek van een veld dat je trekt (js/main.js, js/boerderij.js)
     handeling: null,
     effecten: [], // wat nu beweegt: een flits, zwevende tekst
     wachters: [], // een beurt die op een beweging wacht (js/anim.js)

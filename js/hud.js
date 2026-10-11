@@ -73,6 +73,7 @@
       .map((id) => {
         const g = T.GEBOUWEN[id];
         if (g.erf) return erfRij(S, id, g);
+        if (g.veld) return veldInBouwmenu(id, g);
         const kosten = Object.entries(g.kosten).map(([wat, n]) => `${n} ${wat}`).join(', ');
         // Wat de heer er elk jaar voor wil (js/heer.js): zo weet je bij elk gebouw wat het je op
         // Sint-Maarten kost, want wat je bouwt, is wat hij ziet.
@@ -121,6 +122,18 @@
     return `<div class="kop bouw-oproepen">Oproepen — wat de mensen niet vanzelf vragen</div>${rijen}`;
   }
 
+  // De rij van een veld (de akker, de wijngaard; js/boerderij.js): hij kost niets dan werk, en je trekt hem bij een boerderij.
+  function veldInBouwmenu(id, g) {
+    const I = T.BOERDERIJ_INSTELLINGEN;
+    return (
+      `<button data-soort="${id}">` +
+      `<span class="bouw-naam">${T.hoofdletter(g.naam)}</span>` +
+      `<span class="bouw-kosten">${T.t('{min} to {max} tiles · {werk} workdays per 10 tiles', { min: I.veldMin, max: I.veldMax, werk: T.bouwWerkVan(id, { b: 10, h: 1 }) })}</span>` +
+      `<span class="bouw-uitleg">${g.beschrijving}. ${T.t('Click one corner, then the other, within {n} tiles of a farm; its first field decides what the farm grows.', { n: I.veldAfstand })}</span>` +
+      `</button>`
+    );
+  }
+
   // De rij van het erf (js/erven.js): wat het kost is niets, maar er staat bij hoeveel er vrij zijn (waar nog een hut op
   // past, T.bruikbareErven), en wat een gezin erop nodig heeft.
   function erfRij(S, id, g) {
@@ -155,6 +168,7 @@
       return;
     }
     T.S.bouwSoort = b.dataset.soort;
+    T.S.veldHoek = null; // een veld begint weer bij zijn eerste hoek (js/main.js)
     T.S.bouwMenuOpen = false;
     T.ui.toonBouwmenu(T.S);
   });

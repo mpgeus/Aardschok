@@ -36,14 +36,19 @@
     // Op de plek van een hut in het bos (9 bij 9 tegels met zijn looppad) staan zo'n 35 bomen: ruim acht werkdagen.
     rooiBoom: 0.25,
     rooiStruik: 0.1,
+    // Een veld (js/boerderij.js; vraag 152, 1e) vraagt zoveel werkdagen per tegel, na het rooien: een akker ploegen, een
+    // wijngaard planten. Een akker van 30 tegels is zo anderhalve werkdag, een wijngaard drie.
+    veldWerk: { akker: 0.05, wijngaard: 0.1 },
   };
   const IN = () => T.BOUWEN_INSTELLINGEN;
 
   // Bouwen de mensen zelf? In het lege begin (js/begin.js); in het gehucht dat er al was, rijst een gebouw vanzelf op.
   T.bouwenMetHanden = (D) => !!(D && D.begin);
 
-  // Hoeveel werkdagen het bouwen van deze soort vraagt, zonder het rooien.
-  T.bouwWerkVan = (soort) => T.GEBOUWEN[soort].bouwtijd * IN().werkPerBouwdag;
+  // Hoeveel werkdagen het bouwen van deze soort vraagt, zonder het rooien; een veld naar zijn tegels (`voet`).
+  T.bouwWerkVan = (soort, voet) => (T.isVeldSoort(soort)
+    ? Math.round(voet.b * voet.h * IN().veldWerk[soort] * 100) / 100
+    : T.GEBOUWEN[soort].bouwtijd * IN().werkPerBouwdag);
 
   // Het stuk dat de bouwers eerst rooien als dit gebouw op (x, y) komt: zijn voet met het looppad eromheen (T.kavelVan,
   // js/bos.js), of null als de mensen niet zelf bouwen. Eén vraag voor de muis (js/main.js) en de klik (T.plaatsGebouw).
@@ -57,7 +62,7 @@
   // Moet er eerst gerooid worden, dan staat het nog niet op de kaart.
   T.zetBouwplaats = function (D, instantie, kavel) {
     const rooien = !!(kavel && T.teRooienOp(D, kavel).length);
-    Object.assign(instantie, { klaar: false, klaarOp: null, bouw: { werk: T.bouwWerkVan(instantie.soort), gedaan: 0, tegoed: 0, vandaag: 0, hout: 0 } });
+    Object.assign(instantie, { klaar: false, klaarOp: null, bouw: { werk: T.bouwWerkVan(instantie.soort, instantie.voet), gedaan: 0, tegoed: 0, vandaag: 0, hout: 0 } });
     if (rooien) Object.assign(instantie, { wachtOpRooien: true, kavel });
     return instantie;
   };
@@ -87,11 +92,18 @@
       over = B.tegoed;
       B.tegoed = 0;
       g.wachtOpRooien = false;
-      T.zetOpDeKaart(D, g);
       const gebouw = T.hoofdletter(T.GEBOUWEN[g.soort].naam);
-      T.zeg(D, B.hout
-        ? T.t('{gebouw}: the site is cleared (+{hout} wood), and now they build.', { gebouw, hout: B.hout })
-        : T.t('{gebouw}: the site is cleared, and now they build.', { gebouw }));
+      // Een veld komt niet als gebouw op de kaart: het wordt land als het af is (js/boerderij.js).
+      if (T.isVeldSoort(g.soort)) {
+        T.zeg(D, B.hout
+          ? T.t('{gebouw}: the ground is cleared (+{hout} wood), and now they work it.', { gebouw, hout: B.hout })
+          : T.t('{gebouw}: the ground is cleared, and now they work it.', { gebouw }));
+      } else {
+        T.zetOpDeKaart(D, g);
+        T.zeg(D, B.hout
+          ? T.t('{gebouw}: the site is cleared (+{hout} wood), and now they build.', { gebouw, hout: B.hout })
+          : T.t('{gebouw}: the site is cleared, and now they build.', { gebouw }));
+      }
     }
     B.gedaan = Math.min(B.werk, B.gedaan + over);
     if (g.voorwerp) g.voorwerp.voortgang = B.gedaan / B.werk;

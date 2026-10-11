@@ -118,9 +118,11 @@
     broodAlsGraan: 1,
     visAlsGraan: 1,
     // Wijn vult een maag (Marcel, 11 okt, bij de boeren van 1e: "Wijn wordt ook eten. Afwisseling wordt de kern"), zodat een
-    // wijnboer het dorp voedt zoals een akkerbouwer: één wijn vult zoveel als wijnAlsGraan graan (0: geen eten). Hij
-    // bederft niet, dus het dorp eet hem na het graan en de kaas, zoals gezouten vlees. De afwisseling zelf is vraag 154.
-    wijnAlsGraan: 1,
+    // wijnboer het dorp voedt zoals een akkerbouwer: één wijn vult zoveel als wijnAlsGraan graan (0: geen eten). Zo voedt
+    // een tegel wijngaard evenveel als een tegel akker: een rank om de rij geeft 7,5 wijn per tegel (js/wijngaard.js), een
+    // akker 4 graan, min 1 zaaigraan (js/akkers.js). Hij bederft niet, dus het dorp eet hem na het graan en de kaas,
+    // zoals gezouten vlees. De afwisseling zelf is vraag 154.
+    wijnAlsGraan: 0.4,
   };
 
   // `gezegd`: wat het dorp deze winter al zei dat op raakte (het hout, het eten; zegDeWinter onderaan).

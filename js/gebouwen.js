@@ -47,11 +47,15 @@
 //                                    // bouwt (js/erven.js, T.ERVEN_INSTELLINGEN.dorpBouwtZelf), zet jij
 //                                    // die niet neer, en staat hij niet in het bouwmenu (T.inBouwmenu).
 //     erf:         true,             // alleen bij "erf": bouwgrond voor een gezin, geen gebouw (js/erven.js)
-//     leeg:        true,             // alleen in het lege begin (js/begin.js, D.begin): het huis van de schout
+//     leeg:        true,             // alleen in het lege begin (js/begin.js, D.begin): het huis van de schout,
+//                                    // de akker en de wijngaard
+//     nietLeeg:    true,             // niet in het lege begin: de wijnboerderij (daar is de wijngaard een veld)
+//     veld:        true,             // een veld dat je bij een boerderij legt, als rechthoek (js/boerderij.js): de
+//                                    // akker en de wijngaard; de bouwers maken hem, en dan is het land
 //     eenmalig:    true,             // staat maar één keer in het bouwmenu: is hij er (ook in aanbouw), dan niet meer
 //     opslag:      true,             // een opslag: als hij af is, bouw je ook binnen bereik van hem (T.inBouwBereik)
-//     menu:        true,             // false: niet via het bouwmenu (akker, stadsmuur, palissade —
-//                                    // die hebben een eigen manier van neerzetten, geen enkele voet)
+//     menu:        true,             // false: niet via het bouwmenu (stadsmuur, palissade — die hebben
+//                                    // een eigen manier van neerzetten, geen enkele voet)
 //     tekening:    'gebouwen/dorpshuis1',  // "vel/naam" uit tegels/, zoals T.laadKaart "tegel" leest
 //                                    // (js/kaart.js). null: (nog) geen tekening, zie "opmerking".
 //     tekeningen:  ['gebouwen/dorpshuis1', 'gebouwen/vakwerkhuis'],  // of meer dan één: dan krijgt
@@ -159,12 +163,22 @@
         + '(T.GRAAN_PER_TEGEL in js/akkers.js). Eerst stond hier een abstracte opbrengst, en dan '
         + 'telde het dubbel.',
     },
+    // De akker en de wijngaard: velden die je in het lege begin bij een boerderij legt, als rechthoek (vraag 152, 1e;
+    // js/boerderij.js). Geen gebouw: de bouwers rooien en ploegen of planten hem (`veldWerk` in T.BOUWEN_INSTELLINGEN,
+    // per tegel), en dan is het land. Het eerste veld van een boerderij bepaalt wat ze is (Marcel, 11 okt: "Dus 1
+    // boerderij, en het veld bepaald"). In het gehucht dat er al was, legt de kaart de akkers (js/kaart.js).
     akker: {
-      naam: 'akker', trede: 'gehucht', voet: null, kosten: { hout: 2 }, heer: {}, bouwtijd: 1,
-      handen: 0, woonruimte: 0, maakt: null, menu: false,
-      tekening: null, beschrijving: 'graan (rogge, gerst)',
-      opmerking: 'Geen los blokje maar een hele strook; gaat niet via het bouwmenu. Zie "akker" in '
-        + 'js/kaart.js en gereedschap/tiled/maak-gehucht.cjs. Het graan zelf: gereedschap/pixelart/graan.cjs.',
+      naam: 'akker', meervoud: 'akkers', trede: 'gehucht', voet: null, kosten: {}, heer: {}, bouwtijd: 0,
+      handen: 0, woonruimte: 0, maakt: null, menu: true, leeg: true, veld: true,
+      tekening: null, beschrijving: 'graan bij een boerderij: haar boer zaait en maait het',
+      opmerking: 'In het gehucht dat er al was een hele strook van de kaart: zie "akker" in js/kaart.js en '
+        + 'gereedschap/tiled/maak-gehucht.cjs. Het graan zelf: gereedschap/pixelart/graan.cjs.',
+    },
+    wijngaard: {
+      naam: 'wijngaard', meervoud: 'wijngaarden', trede: 'gehucht', voet: null, kosten: {}, heer: {}, bouwtijd: 0,
+      handen: 0, woonruimte: 0, maakt: null, menu: true, leeg: true, veld: true,
+      tekening: null, beschrijving: 'ranken bij een boerderij: haar gezin plukt de druiven in wijnmaand',
+      opmerking: 'De ranken in rijen (js/wijngaard.js, gereedschap/pixelart/wijnrank.cjs).',
     },
     houthakker: {
       naam: 'houthakker', trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 10, goud: 4 }, heer: { hout: 20 }, bouwtijd: 3,
@@ -295,7 +309,7 @@
     // De heer wil er wijn voor.
     wijnboerderij: {
       naam: 'wijnboerderij', meervoud: 'wijnboerderijen', trede: 'dorp', voet: { b: 10, h: 8 }, kosten: { hout: 18, goud: 8 },
-      heer: { wijn: 10 }, bouwtijd: 5, handen: 0, woonruimte: 4, maakt: null, oogst: 'wijn', wijngaard: true,
+      heer: { wijn: 10 }, bouwtijd: 5, handen: 0, woonruimte: 4, maakt: null, oogst: 'wijn', wijngaard: true, nietLeeg: true,
       alleenIn: { maanden: ['wijnmaand'], waarom: 'de druiven worden pas in wijnmaand geplukt' },
       // De tekening (gereedschap/pixelart/dorp2.cjs, `gebouwen/wijnhuis`): het huis met de wijntonnen bij de deur, achter in
       // de hoek van de voet; `gebouwen/wijnboerderij` is het hele plaatje met de wijngaard erin, voor de proefplaten.
@@ -972,7 +986,9 @@
   // muur, maar er komt niets anders.
   T.bouwplaatsOp = function (D, x, y) {
     for (const g of D.gebouwen || []) {
-      if (!g.wachtOpRooien || g.voorwerp || g.erf) continue;
+      // een veld dat de bouwers nog maken (js/boerderij.js), ook als ze al ploegen: het heeft geen voorwerp op de kaart
+      const veld = T.GEBOUWEN[g.soort] && T.GEBOUWEN[g.soort].veld;
+      if (!(g.wachtOpRooien || veld) || g.voorwerp || g.erf) continue;
       const r = T.voetVanGebouw(g);
       if (x >= r.x && x < r.x + r.b && y >= r.y && y < r.y + r.h) return g;
     }
@@ -988,10 +1004,13 @@
     return !!g && vrij && g.menu !== false && nogTeBouwen(D, soort);
   };
   // Het huis van de schout (`leeg`, `eenmalig`) mag alleen in het lege begin, en één keer: staat hij er (ook in
-  // aanbouw), dan niet meer.
+  // aanbouw), dan niet meer. De wijnboerderij (`nietLeeg`) daar niet: daar is de wijngaard een veld. Een veld (de akker,
+  // de wijngaard) pas als er een boerderij is die hem kan nemen (js/boerderij.js).
   function nogTeBouwen(D, soort) {
     const g = T.GEBOUWEN[soort];
     if (g.leeg && !D.begin) return false;
+    if (g.nietLeeg && D.begin) return false;
+    if (g.veld && !(D.gebouwen || []).some((x) => x.soort === 'boerderij' && (!T.veldVan(x) || T.veldVan(x) === soort))) return false;
     return !(g.eenmalig && (D.gebouwen || []).some((x) => x.soort === soort));
   }
 
@@ -1089,6 +1108,13 @@
   // heeft, zie T.bouwFaseIndex hierboven en T.sprites.bouwfase in js/sprites.js), zodat de speler
   // ziet waar hij bezig is; T.tikGebouwenDag zet dat om zodra de bouwtijd om is, op hetzelfde
   // voorwerp, dus zonder dat er ooit een tweede bij komt.
+  // Wat er laag groeit of ligt op rechthoek r (een varen, bloemen, een kool: wat niet in de weg staat), gaat weg: er komt
+  // een gebouw op, of een veld (js/boerderij.js).
+  T.ruimLaagOp = function (w, r) {
+    const eronder = (o) => o.vel && !T.VOORWERPEN[o.soort].blokkeert && o.x >= r.x && o.x < r.x + r.b && o.y >= r.y && o.y < r.y + r.h;
+    for (const o of w.voorwerpen.filter(eronder)) T.haalVoorwerpWeg(w, o);
+  };
+
   function zetGebouwVoorwerp(D, instantie) {
     const g = T.GEBOUWEN[instantie.soort];
     const w = D.wereld;
@@ -1115,8 +1141,7 @@
     if (instantie.bouw) v.voortgang = instantie.bouw.gedaan / instantie.bouw.werk; // de mensen bouwen het zelf (js/bouwen.js)
     // Wat er laag groeit of ligt (een varen, bloemen, een kool; js/maker.js), maakt plaats: het gebouw komt erop. Wat
     // in de weg staat (een boom, een struik), hield het bouwen al tegen (T.waaromPastHetNiet).
-    const eronder = (o) => o.vel && !T.VOORWERPEN[o.soort].blokkeert && o.x >= v.x && o.x < v.x + voet.b && o.y >= v.y && o.y < v.y + voet.h;
-    for (const o of w.voorwerpen.filter(eronder)) T.haalVoorwerpWeg(w, o);
+    T.ruimLaagOp(w, { x: v.x, y: v.y, b: voet.b, h: voet.h });
     T.zetVoorwerp(w, v);
     instantie.voorwerp = v;
     for (let dy = 0; dy < voet.h; dy++) {
@@ -1271,7 +1296,9 @@
       const soort = T.GEBOUWEN[g.soort];
       // Een houthakker zonder boom binnen zijn bereik wil geen handen: zijn hand werkt elders tot er weer een boom staat
       // (js/bos.js; werklijst vraag 129, e).
-      if (!g.klaar || !soort.handen || T.houthakkerZonderBoom(g)) {
+      // En een boerderij van het lege begin zonder akker (js/boerderij.js): haar boer werkt elders of bouwt mee, en plukt
+      // als ze een wijngaard heeft in wijnmaand.
+      if (!g.klaar || !soort.handen || T.houthakkerZonderBoom(g) || T.boerderijZonderAkker(D, g)) {
         g.handen = 0;
         continue;
       }
@@ -1421,6 +1448,8 @@
     // Is er een hut of huis af, dan trekt er een gezin uit het kamp van het lege begin in, vóór er een nieuw gezin kan
     // komen (js/begin.js).
     T.verhuisUitHetKamp(D);
+    // Een veld dat af is, wordt land; een lege boerderij krijgt een gezin; de boeren krijgen hun akkers (js/boerderij.js).
+    T.tikBoerderijenDag(D, dag);
     // En wat oud genoeg is, draagt zijn oude tekening (hierboven, bij T.maakOud).
     T.tikVerwerenDag(D, dag);
     // De markt op het plein groeit mee met het dorp, en zijn kramen liggen vol of leeg (js/markt.js).

@@ -1837,7 +1837,8 @@
     if (!D || !D.begin) return;
     ctx.fillStyle = 'rgba(226, 182, 74, 0.3)';
     for (const g of D.gebouwen) {
-      if (!g.bouw || !g.wachtOpRooien) continue;
+      // ook een veld dat de bouwers nog ploegen of planten (js/boerderij.js): het heeft geen tekening tot het land is
+      if (!g.bouw || !(g.wachtOpRooien || T.isVeldSoort(g.soort))) continue;
       const r = T.voetVanGebouw(g);
       for (let dy = 0; dy < r.h; dy++) {
         for (let dx = 0; dx < r.b; dx++) {
@@ -1868,8 +1869,10 @@
       }
       return;
     }
-    // De voet van de tekening die dit gebouw echt krijgt (T.volgendeTekening, js/gebouwen.js).
-    const voet = T.gebouwVoet(S.bouwSoort, T.volgendeTekening(S.dorp, S.bouwSoort));
+    // De voet van de tekening die dit gebouw echt krijgt (T.volgendeTekening, js/gebouwen.js), of de rechthoek van het veld
+    // dat je trekt (js/main.js, js/boerderij.js).
+    const veld = S.bouwHover.veld;
+    const voet = veld || T.gebouwVoet(S.bouwSoort, T.volgendeTekening(S.dorp, S.bouwSoort));
     if (!voet) return;
     ctx.fillStyle = S.bouwHover.ok ? 'rgba(134, 196, 111, 0.45)' : 'rgba(224, 96, 79, 0.45)';
     for (let dy = 0; dy < voet.h; dy++) {
@@ -1879,7 +1882,7 @@
         ctx.fill();
       }
     }
-    tekenKring(ctx, S, S.bouwSoort, { x: S.bouwHover.x, y: S.bouwHover.y, b: voet.b, h: voet.h });
+    if (!veld) tekenKring(ctx, S, S.bouwSoort, { x: S.bouwHover.x, y: S.bouwHover.y, b: voet.b, h: voet.h });
   }
 
   // Het hol waar de jacht op de wolven heen gaat (js/beesten.js; werklijst vraag 116, stap 3b): zolang de jacht loopt, een

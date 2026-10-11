@@ -558,12 +558,12 @@
     } else stop(e);
   }
 
-  // De wijnboerderij waar dit poppetje woont, als hij daar nu plukt (js/wijngaard.js): in de pluktijd, zolang er volle
+  // De boerderij met een wijngaard waar dit poppetje woont, als hij daar nu plukt (js/wijngaard.js): in de pluktijd, zolang er volle
   // ranken zijn, of als hij nog een mand naar huis moet brengen; of null. Wie te jong of te oud is om te werken, plukt niet.
   function wijngaardWaarHijPlukt(D, e, dag) {
     const p = T.bewonerVan(D, e);
     const g = p && p.huis;
-    if (!g || g.soort !== 'wijnboerderij' || p.weg || !T.LEEFTIJDEN[p.leeftijd] || T.LEEFTIJDEN[p.leeftijd].werkt == null) return null;
+    if (!g || !T.heeftWijngaard(g) || p.weg || !T.LEEFTIJDEN[p.leeftijd] || T.LEEFTIJDEN[p.leeftijd].werkt == null) return null;
     if (e.mand > 0) return g;
     return T.isPluktijd(g, dag) && T.volleRanken(D, g, dag).length ? g : null;
   }

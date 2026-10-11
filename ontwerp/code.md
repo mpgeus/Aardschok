@@ -654,7 +654,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   van het oude begin laten hem weg. Zijn tekening komt uit de bouwstijl (`schout`, net als de maker), nog zonder
   bouwfasen. Is hij af, dan verhuist de schout met zijn gezin erin (`verhuisDeSchout`, als eerste in
   `T.verhuisUitHetKamp`): het huis krijgt `huis: 'schout'`, de tent verliest het en gaat weg, en de kar heet de ossenkar
-  met het vel `ossenkar-leeg`. Rooien en meebouwen: `js/bouwen.js`, hieronder. Nog niet: boeren worden (1e).
+  met het vel `ossenkar-leeg`. Rooien en meebouwen: `js/bouwen.js`, hieronder; boeren en velden: `js/boerderij.js`.
+  `T.verhuisUitHetKamp` zet een gezin ook in een boerderij die af is (één gezin per boerderij), en zegt dat de man de
+  boer is.
 
 ### js/bouwen.js: meebouwen
 
@@ -673,7 +675,35 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   stuurt de bouwers naar een tegel naast een boom of de voet (`e.werkt` met `bouw`, de hakker met de bijl in
   `js/sprites.js`; `T.magWerken` en `T.stopWerk` uit `js/veldwerk.js`). De bouwfase volgt het werk (`v.voortgang`,
   `T.bouwFaseIndex`), het briefje zegt het (`T.bouwToestand`), en het bouwmenu zegt werkdagen in plaats van dagen. De
-  getallen in `T.BOUWEN_INSTELLINGEN` (de werkbank: "Meebouwen").
+  getallen in `T.BOUWEN_INSTELLINGEN` (de werkbank: "Meebouwen"). Een veld (js/boerderij.js) is ook een bouwplaats:
+  zijn werk is per tegel (`veldWerk`, in `T.bouwWerkVan(soort, voet)`), en na het rooien komt hij niet als gebouw op de
+  kaart (geen `T.zetOpDeKaart`).
+
+### js/boerderij.js: boeren uit het niets
+
+- `js/boerderij.js`: **boeren uit het niets** (vraag 152, 1e, 11 okt; Marcel: "A2", "Inderdaad met b2", "Ja dat is goed.
+  De bouwers pakken het op", en "De karakters zetten we even opzij"; `spel.md`, "Zo werkt het lege begin nu"). Alleen in
+  het lege begin (`D.begin`). **De boer:** een boerderij is een thuis voor één gezin (uit het kamp,
+  `T.verhuisUitHetKamp` in `js/begin.js`; is het kamp leeg, dan elke nacht een gezin uit een hut, `bemanDeBoerderijen`:
+  het gezin met de minste mensen die al werk hebben), en het hoofd van dat gezin is de boer (`T.boerVan`), zonder
+  karakter of eigenschappen (het lot van `js/boeren.js` geldt alleen voor de boeren van de kaart). Elke nacht krijgt zijn
+  poppetje de akkers van zijn boerderij (`T.werkDeBoerenBij`: `e.werkAkkers`, waar `js/akkers.js` en `js/veldwerk.js`
+  naar kijken, zoals bij de boeren van de kaart). Een boerderij zonder akker wil geen handen
+  (`T.boerderijZonderAkker`, in `T.verdeelHanden`): haar boer werkt elders of bouwt mee. **De velden:** de akker en de
+  wijngaard staan in `T.GEBOUWEN` met `veld` (en `leeg`; `T.isVeldSoort`), en in het bouwmenu zodra er een boerderij is
+  die ze kan nemen (`nogTeBouwen` in `js/gebouwen.js`). Je trekt een rechthoek met twee klikken (`werkVeldHoverBij` en
+  `klikMetVeld` in `js/main.js`, de eerste hoek in `S.veldHoek`, alleen scherm; `T.veldRechthoek`); de muis en de klik
+  vragen hetzelfde, `T.waaromPastVeldNiet`: groot genoeg en niet te groot, binnen het bouwbereik, niet op het plein, een
+  pad, een ander veld of iets vasts (wat te rooien is mag), een tegel vrij rond elk gebouw, niet te steil, en bij een
+  boerderij die hem kan nemen (`T.boerderijVoorVeld`: de dichtste binnen `veldAfstand` die nog geen veld heeft of
+  dezelfde soort verbouwt). `T.legVeld` zet een bouwplaats in `D.gebouwen` (met `boerderij`), die de bouwers rooien en
+  ploegen of planten (`js/bouwen.js`); haar eerste veld zet `g.veld` ('akker' of 'wijngaard', `T.veldVan`; de
+  wijnboerderij van het gehucht is een wijngaard). Is hij af (`T.tikBoerderijenDag`, vanuit `T.tikGebouwenDag` na het
+  kamp), dan gaat hij uit `D.gebouwen` en wordt hij land: een akker in `D.wereld.akkers` met `boerderij` en nog
+  ongezaaid (`T.zaaiNa` zaait hem in de nazaaitijd, anders in de lente), of een wijngaard in `D.wereld.wijngaarden` met
+  ranken (`T.zetRanken`, `js/wijngaard.js`); wat er laag groeide, gaat weg (`T.ruimLaagOp` in `js/gebouwen.js`). Tot
+  dan tekent `tekenRooiPlaatsen` hem in goud. De getallen in `T.BOERDERIJ_INSTELLINGEN` (de werkbank: "Boeren uit het
+  niets").
 
 ### js/erven.js: de erven
 
@@ -988,7 +1018,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `js/veldwerk.js`, `e.mand`, de plukker of plukster), en pas als de mand in het huis is, is de wijn binnen
   (`T.wijnBinnen`, `wijnPerRank`). Het dorp kijkt vooruit (`T.wijnNaDePluk`, met `T.haaltDeWinter`): haalt wat er bij de
   pluk nog ligt plus de pluk het jaar niet, dan vraagt het nu een wijnboerderij erbij (`T.watTeBouwen`). De getallen in
-  `T.WIJNGAARD_INSTELLINGEN`.
+  `T.WIJNGAARD_INSTELLINGEN`. **Sinds 11 okt (vraag 152, 1e) hoort een wijngaard bij een boerderij**: in het lege
+  begin leg je hem als veld (`js/boerderij.js`, `D.wereld.wijngaarden`), en de ranken dragen hun boerderij (`v.boerderij`;
+  tot dan `v.wijnboerderij`, opslaan versie 5). Welke boerderij er een heeft, zegt `T.heeftWijngaard` (`T.veldVan`), de
+  pluk is in de maanden van `pluk`, en `T.zetRanken` zet ze op een rechthoek (zonder: het stuk van de voet van de
+  wijnboerderij).
 
 ## Voorraad en handel
 

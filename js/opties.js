@@ -703,6 +703,7 @@
     { naam: 'De maker', blok: 'MAKER_INSTELLINGEN' },
     { naam: 'Het lege begin', blok: 'BEGIN_INSTELLINGEN' },
     { naam: 'Meebouwen', blok: 'BOUWEN_INSTELLINGEN' },
+    { naam: 'Boeren uit het niets', blok: 'BOERDERIJ_INSTELLINGEN' },
     { naam: 'De boeren', blok: 'BOEREN_INSTELLINGEN' },
     { naam: 'De velden', blok: 'VELDEN_INSTELLINGEN' },
     { naam: 'Het veldwerk', blok: 'VELDWERK_INSTELLINGEN' },

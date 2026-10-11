@@ -268,6 +268,10 @@
     const f = T.naarWereldOp(S.wereld, sx, sy);
     const x = Math.round(f.x);
     const y = Math.round(f.y);
+    if (T.isVeldSoort(S.bouwSoort)) {
+      werkVeldHoverBij(x, y);
+      return;
+    }
     // Met een erf in de hand op een vrij erf: een klik maakt het weer gewone grond (js/erven.js).
     const erf = T.GEBOUWEN[S.bouwSoort].erf ? T.erfOp(S.dorp, x, y) : null;
     if (erf && !erf.hut) {
@@ -299,6 +303,44 @@
     else T.ui.verbergTooltip();
     S.hover = null;
     S.handeling = null;
+  }
+
+  // Een veld in de hand (een akker of een wijngaard, js/boerderij.js; vraag 152, 1e): je trekt een rechthoek met twee
+  // klikken, de ene hoek en dan de andere (slepen schuift het beeld). Tot de eerste klik wijst de muis één tegel aan; daarna
+  // de rechthoek van die hoek (S.veldHoek, alleen scherm) tot de muis, met wat de klik zou zeggen (T.waaromPastVeldNiet).
+  function werkVeldHoverBij(x, y) {
+    const hoek = S.veldHoek && S.veldHoek.soort === S.bouwSoort ? S.veldHoek : null;
+    const r = hoek ? T.veldRechthoek(hoek, { x, y }) : { x, y, b: 1, h: 1 };
+    const reden = hoek ? T.waaromPastVeldNiet(S.dorp, S.bouwSoort, r) : null;
+    S.bouwHover = { x: r.x, y: r.y, ok: !reden, reden, veld: r, hoek: !!hoek };
+    canvas.style.cursor = 'crosshair';
+    const veld = T.GEBOUWEN[S.bouwSoort].naam;
+    if (reden) T.ui.tooltip(reden, S.muis.x, S.muis.y, true);
+    else if (!hoek) T.ui.tooltip(T.t('Click one corner of the {veld}, then the other.', { veld }), S.muis.x, S.muis.y);
+    else {
+      const rooien = T.teRooienOp(S.dorp, r).length ? ' ' + T.t('The builders first clear {wat}.', { wat: T.rooiWoordenOp(S.dorp, r) }) : '';
+      T.ui.tooltip(T.t('{n} tiles: click to lay the {veld} here.', { n: r.b * r.h, veld }) + rooien, S.muis.x, S.muis.y);
+    }
+    S.hover = null;
+    S.handeling = null;
+  }
+
+  // De klik met een veld in de hand: de eerste zet de ene hoek, de tweede legt het veld (T.legVeld). Past het niet, dan
+  // blijft de eerste hoek liggen, zodat je de andere kunt verzetten.
+  function klikMetVeld(soort, hover) {
+    if (!hover) return;
+    if (!hover.hoek) {
+      S.veldHoek = { soort, x: hover.x, y: hover.y };
+      return;
+    }
+    const r = T.legVeld(S.dorp, soort, hover.veld);
+    if (!r.gelukt) {
+      T.ui.bericht(r.reden, 'gevaar');
+      return;
+    }
+    T.ui.bericht(r.bericht, 'goed');
+    S.bouwSoort = null;
+    S.veldHoek = null;
   }
 
   // Het briefje bij een huis (js/huisbriefje.js; 2c, werklijst vraag 100): staat de muis op een huis met mensen in je eigen
@@ -678,6 +720,10 @@
     if (S.bouwSoort) {
       const soort = S.bouwSoort;
       const hover = S.bouwHover;
+      if (T.isVeldSoort(soort)) {
+        klikMetVeld(soort, hover);
+        return;
+      }
       if (hover && hover.weghalen) {
         const r = T.haalErfWeg(S.dorp, hover.weghalen);
         T.ui.bericht(r.gelukt ? r.bericht : r.reden, r.gelukt ? null : 'gevaar');
@@ -703,7 +749,9 @@
   });
   canvas.addEventListener('contextmenu', (ev) => {
     ev.preventDefault();
-    if (S.bouwSoort) S.bouwSoort = null;
+    // Met een veld in de hand haalt de eerste rechtsklik zijn eerste hoek weg (js/boerderij.js).
+    if (S.bouwSoort && S.veldHoek) S.veldHoek = null;
+    else if (S.bouwSoort) S.bouwSoort = null;
   });
   window.addEventListener('keydown', (ev) => {
     // F2: de meter (hierboven), altijd, ook als er een venster openstaat.
