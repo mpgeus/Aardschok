@@ -17,7 +17,7 @@
   const toon = (w) => (w == null ? '' : typeof w === 'boolean' ? (w ? 'ja' : 'nee') : typeof w === 'string' ? w : JSON.stringify(w));
   const pagina = () => globalThis.Spel && globalThis.Spel.instellingenPagina;
 
-  const SPELERS = [['bouwer', 'de bouwer'], ['sluw', 'de sluwe bouwer'], ['braaf', 'braaf'], ['lui30', 'lui, 30% weg'], ['lui60', 'lui, 60% weg'], ['slim', 'slim, 60% weg']];
+  const SPELERS = [['bouwer', 'de bouwer'], ['sluw', 'de sluwe bouwer'], ['braaf', 'braaf'], ['slim', 'slim']];
   const MEER_JAREN = new Set(['bouwer', 'sluw']); // de rest speelt één jaar (speler.js)
   const LANDEN = [['eiland', 'op het eiland'], ['maker', 'op gehuchten van de maker'], ['ontworpen', 'op het ontworpen gehucht']];
   // Snel (Marcel, 10 okt): de bouwer, zaad 1, twee jaar, op het eiland.

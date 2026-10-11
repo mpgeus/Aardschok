@@ -8,25 +8,20 @@
 // na het laden, zodat allebei vanaf daar hetzelfde lot hebben: dan moet het jaar precies zo aflopen.
 //
 // De speler doet wat een speler doet, met dezelfde klik: hij loopt erheen (T.handelingVerkennen, de klik
-// op een tegel, een gebouw of een mens) en drukt op de knoppen van het venster dat dan opengaat. Zo tellen
-// de getuigen zoals in het spel (die bepaalt het venster van de plek, js/hud.js), en ziet de inner wat hij
-// ziet waar hij echt loopt. Alleen waar een knop een gesprek opent (de heer, de marskramer) of een
-// geschenk geeft, roept hij hetzelfde gevolg aan als die keuze in het gesprek (T.doeGevolg).
+// op een tegel, een gebouw of een mens) en drukt op de knoppen van het venster dat dan opengaat. Zo ziet
+// de inner wat hij ziet waar hij echt loopt. Alleen waar een knop een gesprek opent (de heer, de
+// marskramer) of een geschenk geeft, roept hij hetzelfde gevolg aan als die keuze in het gesprek
+// (T.doeGevolg). Verstoppen en de soldaten leiden deden de spelers tot 11 okt ook; dat ging eruit (vraag 151).
 //
 // Wat er gebeurt, schrijft hij op zonder het te veranderen: een paar regels van het spel krijgen een
 // luisteraar (luister, onderaan), en elke eerste van de maand een stand.
 //
-// De vier spelers (Marcel koos ze bij vraag 45):
+// De twee spelers van vraag 45 (Marcel koos er toen vier; lui 30% en lui 60% verstopten alleen graan en goud, en
+// zijn er sinds 11 okt uit):
 //   braaf   geeft de heer alles wat hij vraagt;
-//   lui30   zet 30% van het graan en het goud weg, overdag, in de kelders die het dichtst bij zijn: de dag
-//           vóór de inner komt en op 1 slachtmaand. Hij loopt niet mee en haalt niets terug (zoals B van
-//           27 sep);
-//   lui60   hetzelfde met 60% (zoals C van 27 sep);
-//   slim    zet 60% weg, 's nachts als niemand kijkt en niet bij de roddelaar, bouwt een kapel, praat met
-//           de inner en geeft hem 10 goud, loopt met hem waar hij niets nieuws ziet, leidt de soldaten langs
-//           lege kelders, verkoopt graan als het goud voor de heer tekortschiet, betaalt de heer 90% (dan
-//           merkt hij niets), en haalt na Sint-Maarten alles terug.
-// Alle vier luisteren naar de winter: zegt het dorp dat het hout de winter niet haalt, dan bouwen ze een
+//   slim    bouwt een kapel, praat met de inner en geeft hem 10 goud, loopt met hem waar hij niets nieuws ziet,
+//           verkoopt graan als het goud voor de heer tekortschiet, en betaalt de heer 90%.
+// Beide luisteren naar de winter: zegt het dorp dat het hout de winter niet haalt, dan bouwen ze een
 // houthakker.
 //
 // En een vijfde, voor de proef "van gehucht tot dorp" (werklijst, vraag 58, A; Marcel, 29 sep: "A Ja goed idee"):
@@ -37,7 +32,7 @@
 //           dorp zegt dat het hout de winter niet haalt, verkoopt de marskramer graan als het goud tekortschiet (en
 //           houdt wat het dorp tot de lente eet, het zaaigraan en het graan van de heer), koopt in de lente zaaigraan
 //           als er akkers kaal liggen (sinds 1 okt, vraag 79), bouwt een jager als het eten de winter niet haalt
-//           (hooguit één per maand; vraag 81), en betaalt de heer alles. Hij verstopt niets en loopt de rovers niet
+//           (hooguit één per maand; vraag 81), en betaalt de heer alles. Hij loopt de rovers niet
 //           achterna. Sinds 2 okt (vraag 86, b, en 87, D) volgt hij ook de wensen, zoals de raad ze zegt
 //           (T.watDeHuizenMissen): een put of een kapel waar hij de meeste huizen zonder bereikt, een visser of een
 //           jager voor vlees of vis, en een houthakker of een steengroeve als een huis op bouwstof wacht, hooguit één
@@ -53,13 +48,10 @@
 //           heeft voor zijn volgende wens. Sinds vraag 132, B koopt hij in de herfst het zout dat vis en vlees de winter
 //           door laat komen (T.visEnVleesVoorDeWinter).
 // En een zesde (werklijst vraag 93, a, en 94; Marcel, 2 okt: "De bouwer mag alles er aan doen, totale vrijheid"):
-//   sluw    de bouwer, maar hij bedriegt de heer, elk jaar zoals de slimme speler: 60% van het graan boven het zaaigraan
-//           en van het goud weg, de inner bespelen, de soldaten langs lege kelders, de heer 90%. Het goud haalt hij terug
-//           zodra de inner weg is en niet onverwacht terug kan komen (anders na Sint-Maarten); het graan blijft verstopt,
-//           ook voor zijn eigen dorp, want dat eet het graan als eerste op, vóór de kaas en vóór de herberg en de molen
-//           hun deel nemen. Valt de herberg of de bakkerij stil, of eet het dorp van het zaaigraan, dan haalt hij 's nachts
-//           10 graan terug, en vóór 1 lentemaand wat er aan zaaigraan mist. Haalt het eten de winter niet, dan zet hij het
-//           rantsoen op krap (tot 1 grasmaand), en haalt het hout hem niet, dan neemt hij Houtkap aan.
+//   sluw    de bouwer, maar hij bespeelt de inner en geeft de heer 90% van wat hij vraagt, elk jaar zoals de slimme
+//           speler (het verstoppen van graan en goud, en de soldaten langs lege kelders leiden, deed hij tot 11 okt ook).
+//           Haalt het eten de winter niet, dan zet hij het rantsoen op krap (tot 1 grasmaand), en haalt het hout hem niet,
+//           dan neemt hij Houtkap aan.
 // Wie twee jaar speelt, krijgt een graanboek (vraag 94, d): per jaar waar het graan bleef (luister, onderaan), en per jaar
 // hoeveel dagen er geen bier of brood was en hoeveel huizen alles hadden (boekhouding).
 // Van elke speler schrijft hij op waarom er op een groeidag geen gezin kwam (T.waaromGeenGezin, js/gebouwen.js),
@@ -73,7 +65,6 @@
   const STAP = 0.25; // schermseconden per stap; op 30× ruim een half uur
   const DAG_INNER = 164; // 15 oogstmaand
   const DAG_HEER = 250; // 11 slachtmaand, Sint-Maarten
-  const DAG_SLACHT = 240; // 1 slachtmaand
 
   let boek = null; // wat er gebeurde, voor speeltest.cjs
   const bezig = {}; // welk venster de speler zelf openhoudt: dat sluit beantwoord() niet
@@ -159,11 +150,6 @@
     return false;
   }
 
-  async function wachtUren(uren) {
-    const tot = dagNu() + uren / 24;
-    await wachtTot(() => dagNu() >= tot, uren + 1, STAP);
-  }
-
   // Wat vanzelf opengaat: de brief van de heer (1 wijnmaand) en het slachten (1 slachtmaand). De brief
   // lees je en sluit je; bij het slachten neem je het voorstel van het spel (zo weinig als kan, zodat
   // het hooi de winter haalt). Een venster dat de speler niet zelf openhoudt, gaat dicht.
@@ -188,8 +174,7 @@
   ];
 
   // Een gril van de heer (js/grillen.js; werklijst vraag 106, stap 2): elke speler antwoordt naar zijn aard. De brave
-  // geeft hem wat hij wil; de bouwer ook, als het de winter niet kost (zoals bij een voorval); de luie wat het minst kost
-  // en hem nog tevreden houdt; de slimme en de sluwe wegen de heer tegen het dorp, en redden wie het dichtst bij de
+  // geeft hem wat hij wil; de bouwer ook, als het de winter niet kost (zoals bij een voorval); de slimme en de sluwe wegen de heer tegen het dorp, en redden wie het dichtst bij de
   // grens zit (js/bazen.js). Geeft de keuze (een getal), of null als er niets kan.
   function grilAntwoord(s) {
     const g = T.grilNu(s.dorp);
@@ -208,10 +193,6 @@
     if (boek.speler === 'bouwer') {
       const goed = kan.find((i) => verstandig(s, keuzes[i].prijs));
       return goed != null ? goed : beste((i) => -kost(i));
-    }
-    if (boek.speler === 'lui30' || boek.speler === 'lui60') {
-      const blij = kan.filter((i) => gunst(i) > 0);
-      return blij.length ? blij.reduce((a, i) => (kost(i) < kost(a) ? i : a), blij[0]) : beste(gunst);
     }
     if (b.gunst < 30) return beste(gunst);
     if (b.vertrouwen < 30) return beste(vertrouwen);
@@ -299,8 +280,7 @@
       // het niet, dan nee. Een gewoon voorval: het eerste verstandige antwoord.
       // Ontginnen (js/ontginnen.js; werklijst vraag 107, e en g): ja, zoals een bouwverzoek, zolang de baas die het kost
       // daarna op 30 of meer staat (de grens die de slimme ook bij een gril houdt): eerst de heide (het vertrouwen van het
-      // dorp; elk volgend stuk kost meer, f3), dan het bos, gemeld (de gunst van de heer). De sluwe bouwer doet het bos
-      // stiekem als de inner het daar niet ziet. Net zo een werkplaats die eerst in het bos van de heer rooit (js/bos.js;
+      // dorp; elk volgend stuk kost meer, f3), dan het bos, gemeld (de gunst van de heer). Net zo een werkplaats die eerst in het bos van de heer rooit (js/bos.js;
       // werklijst vraag 110, e): die kost zijn gunst. In de speeltest van 6 okt zei de bouwer op 62707 met 5 gunst nog ja
       // tegen een jager in het bos, en was hij zijn ambt kwijt.
       const verzoek = L.bouw || L.ontgin;
@@ -312,8 +292,7 @@
         return (!v || bazen.vertrouwen - Number(v[1]) >= 30) && (!g || bazen.gunst - Number(g[1]) >= 30);
       };
       const tekst = (b) => b.textContent.replace(/^\d/, '');
-      const stiekem = boek.speler === 'sluw' && knoppen.find((b) => /niet te weten/.test(tekst(b)) && /ziet het daar niet/.test(prijsVan(b)));
-      const ja = !verzoek ? null : stiekem || knoppen.find((b) => /^(Ja|De heide|Het bos\. Ik meld)/.test(tekst(b)) && magJa(b));
+      const ja = !verzoek ? null : knoppen.find((b) => /^(Ja|De heide|Het bos\. Ik meld)/.test(tekst(b)) && magJa(b));
       const knop = verzoek ? ja || knoppen.find((b) => /^Nee/.test(tekst(b))) || knoppen[0] : knoppen.find((b) => verstandig(s, prijsVan(b))) || knoppen[0];
       if (!knop) break;
       const antwoord = knop.textContent.replace(/^\d/, '');
@@ -328,7 +307,7 @@
       knop.click();
       if (ontgin && knop === ja) {
         const gelukt = s.wereld.akkers.length > akkersVoor;
-        const waar = /heide|Ja/.test(antwoord) ? 'heide' : knop === stiekem ? 'bos, stiekem' : 'bos, gemeld';
+        const waar = /heide|Ja/.test(antwoord) ? 'heide' : 'bos';
         boek.gebouwd.push({ dag: heel(dagNu()), datum: datum(), soort: `ontginning (${waar})`, gelukt, reden: gelukt ? null : 'geen plek meer', door: 'verzoek' });
         daad(`zegt ja tegen ${T.naamVanBewoner(L.wie)}: ontginnen (${waar})`);
       }
@@ -341,7 +320,6 @@
       } else if (bouw) daad(`zegt nee tegen ${T.naamVanBewoner(L.wie)}: een ${bouw}`);
     }
     if (s.modus === 'raadsman' && !bezig.raadsman) T.ui.sluitRaadsman(s);
-    if (s.modus === 'verstoppen' && !bezig.verstoppen) T.ui.sluitVerstoppen(s);
     if (s.modus === 'handel' && !bezig.handel) T.ui.sluitHandel(s.dorp);
     if (s.modus === 'heer' && !bezig.heer) T.ui.sluitHeer(s);
     if (s.modus === 'dialoog' && !bezig.praten) T.sluitDialoog(s);
@@ -397,184 +375,10 @@
     return klaar;
   }
 
-  // Een tegel naast een gebouw, buiten zijn voet: daar kun je staan zonder het gebouw aan te klikken.
-  function naastGebouw(g, van) {
-    const w = S().wereld;
-    const v = T.voetVanGebouw(g);
-    const binnen = (x, y) => x >= v.x && x < v.x + v.b && y >= v.y && y < v.y + v.h;
-    let beste = null;
-    let bij = Infinity;
-    for (let y = v.y - 1; y <= v.y + v.h; y++) {
-      for (let x = v.x - 1; x <= v.x + v.b; x++) {
-        if (binnen(x, y) || !T.isBegaanbaar(w, x, y) || T.gebouwOp(D(), x, y)) continue;
-        const a = Math.hypot(x - van.x, y - van.y);
-        if (a < bij) {
-          bij = a;
-          beste = { x, y };
-        }
-      }
-    }
-    return beste;
-  }
-
   const schoutTegel = () => T.tegelVan(S().schout);
 
-  // Hoe ver een tegel van de rand van een gebouw ligt (zoals de soldaten het meten, js/doorzoeken.js).
-  function afstandTot(g, x, y) {
-    const v = T.voetVanGebouw(g);
-    return Math.max(Math.max(v.x - x, 0, x - (v.x + v.b - 1)), Math.max(v.y - y, 0, y - (v.y + v.h - 1)));
-  }
-
-  // ── Verstoppen en terughalen, met de knoppen van het venster ──────────────────────────────────────
-  function plekken() {
-    return T.verstopPlekken(D()).map((p) => Object.assign({}, p, { ligt: p.gebouw.verstopt || { graan: 0, goud: 0 } }));
-  }
-
-  // Loop naar de plek (een klik op het gebouw) en wacht tot het venster opengaat. Lukt het niet, dan
-  // staat in `waarom` wat er aan de hand was.
-  let waarom = '';
-  async function openPlek(g) {
-    const kan = T.verstopHandeling(D(), T.verstopPlekVan(D(), g));
-    if (!kan.kan) {
-      waarom = kan.reden || kan.tekst;
-      return false;
-    }
-    bezig.verstoppen = true;
-    const v = T.voetVanGebouw(g);
-    const h = T.handelingVerkennen(S(), { x: v.x, y: v.y });
-    const voor = boek.berichten.length;
-    const kwam = await klikOp({ x: v.x, y: v.y }, 6, () => S().modus === 'verstoppen');
-    if (S().modus !== 'verstoppen') {
-      const rand = T.randVanGebouw(D(), g);
-      const nieuw = boek.berichten.slice(voor).map((b) => b.tekst).join(' / ');
-      waarom = `${h ? h.tekst : 'geen klik'}; ${kwam ? 'hij kwam aan' : 'hij kwam niet aan'} op ${JSON.stringify(schoutTegel())}, de rand is ${JSON.stringify(rand)}, modus ${S().modus}${nieuw ? `; ${nieuw}` : ''}`;
-      bezig.verstoppen = false;
-      return false;
-    }
-    return true;
-  }
-
-  function sluitPlek() {
-    if (!klik('#verstoppen [data-actie="sluit"]')) T.ui.sluitVerstoppen(S());
-    bezig.verstoppen = false;
-  }
-
-  // "Zet 10 weg" (graan) of "Zet 5 weg" (goud), zo vaak als nodig: wat een speler ook doet.
-  function zetWeg(wat, n) {
-    const stapje = wat === 'graan' ? 10 : 5;
-    let gedaan = 0;
-    for (let i = 0; i < 200 && gedaan + stapje <= n; i++) {
-      if (!klik(`#verstoppen button[data-actie="weg"][data-wat="${wat}"][data-n="${stapje}"]`)) break;
-      gedaan += stapje;
-    }
-    return gedaan;
-  }
-
-  // "Alles terug".
-  function haalAllesTerug(wat) {
-    const knoppen = [...document.querySelectorAll(`#verstoppen button[data-actie="terug"][data-wat="${wat}"]`)];
-    const alles = knoppen.sort((a, b) => Number(b.dataset.n) - Number(a.dataset.n))[0];
-    const n = alles ? Number(alles.dataset.n) : 0;
-    if (!alles || alles.disabled || !(n > 0)) return 0;
-    alles.click();
-    return n;
-  }
-
-  // Een plan uitvoeren: [{ p, graan, goud }]. Met `stil` wacht de speler tot niemand kijkt (zoals het
-  // venster zegt, T.getuigenVan), een uur per keer, hooguit `stil` keer.
-  async function voerUit(plan, stil = 0) {
-    let graan = 0;
-    let goud = 0;
-    for (const { p, graan: gr, goud: go } of plan) {
-      if (!(await openStil(p, stil))) {
-        daad(`kon niet bij ${p.naam} (${waarom})`);
-        continue;
-      }
-      const kijkers = T.getuigenVan(D(), p.gebouw).length;
-      const a = zetWeg('graan', gr);
-      const b = zetWeg('goud', go);
-      sluitPlek();
-      graan += a;
-      goud += b;
-      daad(`zet ${a} graan en ${b} goud weg bij ${p.naam}${kijkers ? `, en ${kijkers} zag het` : ''}`);
-    }
-    return { graan, goud };
-  }
-
-  // Alles terug van elke plek waar iets ligt; met `waren` alleen dat (de sluwe bouwer haalt alleen het goud op).
-  async function haalAllesOp(stil = 0, waren = ['graan', 'goud']) {
-    for (const p of plekken().filter((q) => waren.some((wat) => q.ligt[wat] > 0))) {
-      if (!(await openStil(p, stil))) {
-        daad(`kon niet bij ${p.naam} om terug te halen (${waarom})`);
-        continue;
-      }
-      const a = waren.includes('graan') ? haalAllesTerug('graan') : 0;
-      const b = waren.includes('goud') ? haalAllesTerug('goud') : 0;
-      sluitPlek();
-      daad(waren.length > 1 ? `haalt ${Math.round(a)} graan en ${Math.round(b)} goud terug bij ${p.naam}` : `haalt ${Math.round(a + b)} ${waren[0]} terug bij ${p.naam}`);
-    }
-  }
-
-  // Het venster van een plek open, en met `stil` wachten tot niemand kijkt, een uur per keer (zoals voerUit).
-  async function openStil(p, stil) {
-    let open = await openPlek(p.gebouw);
-    for (let i = 0; open && i < stil && T.getuigenVan(D(), p.gebouw).length; i++) {
-      sluitPlek();
-      await wachtUren(1);
-      open = await openPlek(p.gebouw);
-    }
-    return open;
-  }
-
-  // `n` graan terug, met "Haal 10 terug" (en wat er dan nog ligt, als het minder is), van de plekken die het dichtst bij
-  // de schout zijn (vraag 94, b: de sluwe bouwer houdt het graan verstopt en haalt het in porties terug). Geeft hoeveel.
-  async function haalGraanTerug(n, stil = 0) {
-    const van = schoutTegel();
-    const bij = (p) => T.afstand(van, T.randVanGebouw(D(), p.gebouw) || van);
-    const lijst = plekken().filter((p) => p.ligt.graan >= 1).sort((p, q) => bij(p) - bij(q));
-    let gehaald = 0;
-    for (const p of lijst) {
-      if (gehaald >= n) break;
-      if (!(await openStil(p, stil))) {
-        daad(`kon niet bij ${p.naam} om graan terug te halen (${waarom})`);
-        continue;
-      }
-      let hier = 0;
-      while (gehaald + hier < n && klik('#verstoppen button[data-actie="terug"][data-wat="graan"][data-n="10"]')) hier += 10;
-      if (gehaald + hier < n) hier += haalAllesTerug('graan');
-      sluitPlek();
-      gehaald += hier;
-      daad(`haalt ${Math.round(hier)} graan terug bij ${p.naam}`);
-    }
-    return gehaald;
-  }
-
-  // Verdeel graan en goud over plekken in deze volgorde: graan tot de kelder vol is, goud in de eerste.
-  function verdeel(lijst, graan, goud) {
-    const plan = [];
-    let restGraan = graan;
-    let restGoud = goud;
-    for (const p of lijst) {
-      if (restGraan <= 0 && restGoud <= 0) break;
-      const ruimte = Math.max(0, Math.floor((p.plaats - (p.ligt.graan || 0)) / 10) * 10);
-      const gr = Math.min(restGraan, ruimte);
-      const go = restGoud;
-      if (gr > 0 || go > 0) plan.push({ p, graan: gr, goud: go });
-      restGraan -= gr;
-      restGoud -= go;
-    }
-    return plan;
-  }
-
-  const deelVan = (wat, deel) => {
-    const stapje = wat === 'graan' ? 10 : 5;
-    return Math.floor(((D().voorraad[wat] || 0) * deel) / stapje) * stapje;
-  };
-
   // ── Bouwen ──────────────────────────────────────────────────────────────────────────────────────
-  function huisVanDeSchout() {
-    return plekken().find((p) => p.vanSchout);
-  }
+  const huisVanDeSchout = () => D().gebouwen.find((g) => g.huis === 'schout');
 
   // Waar het past, zoals een inwoner die het vraagt het kiest (T.plekVoor, js/verzoeken.js): een put of een kapel waar hij
   // de meeste huizen bereikt die er nog geen hebben (zoals een speler die met de put in de hand kijkt wat de muis zegt),
@@ -585,7 +389,7 @@
     if (T.VERZOEKEN_INSTELLINGEN.mensen) return false;
     const s = S();
     const huis = huisVanDeSchout();
-    const midden = huis ? T.deurVan(s.wereld, huis.gebouw) : schoutTegel();
+    const midden = huis ? T.deurVan(s.wereld, huis) : schoutTegel();
     const kring = T.WENSEN_INSTELLINGEN.kring[soort] != null;
     const plek = T.plekVoor(s.dorp, soort, midden);
     if (!plek) {
@@ -611,7 +415,7 @@
   function bouwErf() {
     const s = S();
     const huis = huisVanDeSchout();
-    const midden = huis ? T.deurVan(s.wereld, huis.gebouw) : schoutTegel();
+    const midden = huis ? T.deurVan(s.wereld, huis) : schoutTegel();
     const maat = T.erfMaat();
     // Een plek zonder kring (de herberg en de markt sinds vraag 96, a: één voor het hele dorp) telt overal.
     const straalVan = (soort) => (T.WENSEN_INSTELLINGEN.kring[soort] == null ? null : T.WENSEN_INSTELLINGEN.kring[soort] - 2);
@@ -792,77 +596,6 @@
     }
   }
 
-  // ── De soldaten leiden (de slimme speler) ────────────────────────────────────────────────────────
-  // Hij houdt drie plekken leeg: zijn eigen kelder (daar kijken ze het eerst), die van de roddelaar en
-  // die van de vrome (die weigert toch), en vult aan met de plekken die het dichtst bij zijn huis staan.
-  function legePlekken() {
-    const huis = huisVanDeSchout();
-    const van = huis ? T.deurVan(S().wereld, huis.gebouw) : schoutTegel();
-    const alle = plekken().filter((p) => p.gebouw.soort !== 'kapel');
-    const leeg = alle.filter((p) => p.vanSchout || p.karakter === 'roddelaar' || p.weigert);
-    const rest = alle.filter((p) => !leeg.includes(p)).sort((p, q) => T.afstand(van, T.deurVan(S().wereld, p.gebouw)) - T.afstand(van, T.deurVan(S().wereld, q.gebouw)));
-    while (leeg.length < 3 && rest.length) leeg.push(rest.shift());
-    return leeg.map((p) => p.gebouw);
-  }
-
-  // Verstoppen zoals de slimme speler: als niemand kijkt (hooguit twee uur wachten), niet waar hij de soldaten heen leidt,
-  // en eerst waar ze het minst vinden en niemand er iets van houdt; de kapel het laatst.
-  async function verstopSlim(graan, goud) {
-    const leeg = legePlekken();
-    const lijst = plekken().filter((p) => !p.weigert && !leeg.includes(p.gebouw));
-    const rang = (p) => (p.gebouw.soort === 'kapel' ? 1 : 0) + (p.houdt > 0 ? p.houdt * 5 : 0) + p.vinden;
-    lijst.sort((p, q) => rang(p) - rang(q));
-    const r = await voerUit(verdeel(lijst, graan, goud), 2);
-    boek.verstopt.push({ dag: heel(dagNu()), datum: datum(), graan: r.graan, goud: r.goud });
-  }
-
-  // Zijn de soldaten klaar met zoeken (of zoeken ze niet, of kiest de heer, of leidde de speler ze al, onder de naam
-  // `geleid`)? Dan betaalt de speler, en niet eerder, zodat het zoeken meetelt zoals het bedoeld is.
-  function zoekenKlaar(geleid) {
-    const z = D().heer && D().heer.bezoek && D().heer.bezoek.zoeken;
-    return !z || z.klaar || z.heerKiest || eenKeer.has(geleid);
-  }
-
-  // Hoeveel volle plekken een pad vlak passeert (drie tegels, want de soldaten lopen naast hem).
-  function volLangs(pad) {
-    const vol = plekken().filter((p) => p.ligt.graan > 0 || p.ligt.goud > 0);
-    return vol.filter((p) => pad.some((t) => afstandTot(p.gebouw, t.x, t.y) <= 3)).length;
-  }
-
-  async function leidDeSoldaten() {
-    const s = S();
-    const leeg = legePlekken();
-    boek.soldaten.leeg = leeg.map((g) => T.verstopPlekVan(s.dorp, g).naam);
-    // Vooraf naast de eerste lege plek staan.
-    const eerst = naastGebouw(leeg[0], schoutTegel());
-    if (eerst) await klikOp(eerst);
-    await wachtTot(() => (s.dorp.heer.bezoek && (s.dorp.heer.bezoek.zoeken || s.dorp.heer.bezoek.weg)) || boek.soldaten.hetHeleDorp, 14, STAP);
-    const z = s.dorp.heer.bezoek && s.dorp.heer.bezoek.zoeken;
-    if (!z || z.klaar || z.heerKiest) return;
-    await wachtTot(() => z.sinds != null || z.klaar, 4, STAP);
-    for (let i = 0; i < 6 && !z.klaar; i++) {
-      const nog = leeg.filter((g) => !z.gedaan.includes(g));
-      if (!nog.length) break;
-      // De volgende lege plek waar het pad het minst langs volle plekken gaat.
-      let keuze = null;
-      for (const g of nog) {
-        const doel = naastGebouw(g, schoutTegel());
-        if (!doel) continue;
-        const h = T.handelingVerkennen(s, doel);
-        if (!h || !h.doe) continue;
-        h.doe();
-        const pad = [schoutTegel(), ...s.schout.pad];
-        const vol = volLangs(pad);
-        s.schout.pad = s.schout.onderweg && s.schout.pad[0] ? [s.schout.pad[0]] : [];
-        if (!keuze || vol < keuze.vol || (vol === keuze.vol && pad.length < keuze.lengte)) keuze = { g, doel, vol, lengte: pad.length };
-      }
-      if (!keuze) break;
-      if (keuze.vol) daad(`leidt de soldaten naar ${T.verstopPlekVan(s.dorp, keuze.g).naam}, langs ${keuze.vol} volle plek(ken)`);
-      await klikOp(keuze.doel, 2);
-      await wachtTot(() => z.gedaan.includes(keuze.g) || z.klaar, 1, STAP);
-    }
-  }
-
   // ── Graan verkopen voor het goud van de heer (de slimme speler) ─────────────────────────────────
   async function verkoopVoorDeHeer() {
     const s = S();
@@ -930,27 +663,8 @@
   const eenKeer = new Set();
   const nuEenKeer = (naam) => (eenKeer.has(naam) ? false : (eenKeer.add(naam), true));
   const dagIs = (d, vanaf = 0) => Math.floor(dagNu()) === d && uurNu() >= vanaf;
-  // De heer staat op het plein en wacht ("De heer staat op het plein en wacht op je"). Wie hem eerder
-  // betaalt, op de weg, krijgt geen soldaten over de vloer (opmerkingen.md, 28 sep): dat doet geen van
-  // de spelers, zodat het zoeken meetelt zoals het bedoeld is.
+  // De heer staat op het plein en wacht ("De heer staat op het plein en wacht op je").
   const heerOpHetPlein = () => T.heerWacht(D()) && D().heer.bezoek.staat;
-
-  function lui(deel) {
-    const verstop = async () => {
-      const van = schoutTegel();
-      const lijst = plekken().filter((p) => !p.weigert).sort((p, q) => T.afstand(van, T.randVanGebouw(D(), p.gebouw)) - T.afstand(van, T.randVanGebouw(D(), q.gebouw)));
-      const r = await voerUit(verdeel(lijst, deelVan('graan', deel), deelVan('goud', deel)));
-      boek.verstopt.push({ dag: heel(dagNu()), datum: datum(), graan: r.graan, goud: r.goud });
-    };
-    return {
-      async elkeStap() {
-        luisterNaarDeWinter();
-        if (dagIs(DAG_INNER - 1, 10) && nuEenKeer('verstop1')) await verstop();
-        if (dagIs(DAG_SLACHT, 10) && nuEenKeer('verstop2')) await verstop();
-        if (heerOpHetPlein() && nuEenKeer('betaal')) await betaal(1);
-      },
-    };
-  }
 
   // Hoeveel akkertegels er op 1 lentemaand gezaaid worden, elk met T.ZAAIGRAAN_PER_TEGEL graan (js/akkers.js).
   function akkerTegels() {
@@ -1000,64 +714,21 @@
       const heer = betaald.has(jaar()) ? 0 : Math.ceil(deelVoorDeHeer * (T.eisVanDeHeer(s.dorp).per.graan || 0));
       return (s.dorp.voorraad.graan || 0) - eet * ((jaar() + 1) * JAAR - dag) - akkerTegels() * T.ZAAIGRAAN_PER_TEGEL - heer - 20;
     }
-    // De sluwe bouwer bedriegt de heer, elk jaar zoals de slimme speler, en houdt het graan verstopt voor de herberg en de
-    // molen (werklijst vraag 94, a tot en met c). `d` is de dag van het spel, `j` het jaar (0 is het eerste).
-    const inDeNacht = () => uurNu() >= 23 || uurNu() < 6;
-    const nachtNa = (d) => (Math.floor(dagNu()) === d && uurNu() >= 23) || (Math.floor(dagNu()) === d + 1 && uurNu() < 6);
-    const verstoptGraan = () => T.verstoptTotaal(D()).graan;
-    // Wil een werkplaats graan die het dorp niet meer heeft (b): de herberg met minder dan 10 bier, of de molen en de
-    // bakkerij zonder meel en met minder dan 10 brood; of eet het dorp al van het zaaigraan. Heeft het dorp zelf nog 10
-    // graan boven het zaaigraan, dan niet: dat neemt de werkplaats zelf.
-    function eenWerkplaatsWilGraan() {
-      const s = S();
-      const v = s.dorp.voorraad;
-      if ((v.graan || 0) - T.zaaigraanApart(s.dorp, Math.floor(dagNu())) >= 10) return false;
-      if (s.dorp.behoeften && s.dorp.behoeften.zaaigraanGegeten) return 'het dorp eet van het zaaigraan';
-      const staat = (soort) => s.dorp.gebouwen.some((g) => g.soort === soort && g.klaar);
-      if (staat('herberg') && (v.bier || 0) < 10) return 'de herberg heeft geen graan';
-      if (staat('molen') && staat('bakkerij') && (v.meel || 0) < 2 && (v.brood || 0) < 10) return 'de molen heeft geen graan';
-      return false;
-    }
+    // De sluwe bouwer geeft de heer 90%, elk jaar zoals de slimme speler (werklijst vraag 94). `d` is de dag van het spel,
+    // `j` het jaar (0 is het eerste).
     async function bedrieg() {
       const s = S();
       const d = Math.floor(dagNu());
       const j = jaar();
       const begin = j * JAAR; // 1 lentemaand van dit jaar
-      // a. De nacht vóór de dag vóór de inner (zoals de slimme speler, met een venster tot de ochtend): 60% van het graan
-      // boven het zaaigraan, en 60% van het goud.
-      if (nachtNa(begin + DAG_INNER - 2) && nuEenKeer(`verstop${j}`)) {
-        const vrij = (s.dorp.voorraad.graan || 0) - T.zaaigraanApart(s.dorp, d);
-        await verstopSlim(Math.max(0, Math.floor((vrij * 0.6) / 10) * 10), deelVan('goud', 0.6));
-      }
+      // a. De inner bespelen (zoals de slimme speler).
       if (dagIs(begin + DAG_INNER, 6) && nuEenKeer(`inner${j}`)) await bespeelDeInner();
-      // Het goud terug zodra de inner weg is: de heer rekent met wat de inner telde, en het goud is nodig om te bouwen.
-      // Niet als de inner onverwacht terug kan komen (zijn argwaan staat in de balk); dan na Sint-Maarten.
-      const inner = s.dorp.inner && s.dorp.inner.bezoek;
-      const innerWeg = eenKeer.has(`inner${j}`) && (!inner || inner.weg) && argwaan() < T.INNER_INSTELLINGEN.terugkomenVanaf;
-      const heerWeg = betaald.has(j) && !(s.dorp.heer && s.dorp.heer.bezoek);
-      if ((innerWeg || heerWeg) && inDeNacht() && T.verstoptTotaal(s.dorp).goud >= 1 && nuEenKeer(`goud${j}`)) await haalAllesOp(2, ['goud']);
-      // Sint-Maarten: de soldaten langs lege kelders, en dan de heer 90%.
-      if (dagIs(begin + DAG_HEER, 6) && nuEenKeer(`soldaten${j}`)) await leidDeSoldaten();
-      if (heerOpHetPlein() && zoekenKlaar(`soldaten${j}`) && nuEenKeer(`betaal${j}`)) {
+      // Sint-Maarten: de heer 90%.
+      if (heerOpHetPlein() && nuEenKeer(`betaal${j}`)) {
         await betaal(deelVoorDeHeer);
         betaald.add(j);
       }
-      // b. Het graan blijft verstopt. Wil een werkplaats graan, dan 's nachts 10 terug, één keer per nacht; niet tussen het
-      // verstoppen en Sint-Maarten, want dan telt de inner, en kan hij onverwacht terugkomen.
-      const veilig = dagNu() < begin + DAG_INNER - 2 || heerWeg;
-      const nacht = Math.floor(dagNu() + 6 / 24); // de nacht van 23 tot 6 uur telt als één
-      const reden = veilig && inDeNacht() && verstoptGraan() >= 1 && eenWerkplaatsWilGraan();
-      if (reden && nuEenKeer(`graan${nacht}`)) {
-        const n = await haalGraanTerug(10, 2);
-        daad(`(haalde ${n} graan terug, want ${reden})`);
-      }
-      // En vóór 1 lentemaand wat er aan zaaigraan mist (T.zaaigraanApart, js/akkers.js), in de laatste drie nachten.
-      const mist = T.zaaigraanApart(s.dorp, d) - (s.dorp.voorraad.graan || 0);
-      if (begin + JAAR - d <= 3 && inDeNacht() && mist > 0 && verstoptGraan() >= 1 && nuEenKeer(`zaaigraan${nacht}`)) {
-        const n = await haalGraanTerug(Math.ceil(mist / 10) * 10, 2);
-        daad(`(haalde ${n} graan terug voor het zaaigraan, dat ${Math.ceil(mist)} miste)`);
-      }
-      // c. Het rantsoen krap als het eten de winter niet haalt, en op 1 grasmaand weer gewoon; Houtkap als het hout de
+      // b. Het rantsoen krap als het eten de winter niet haalt, en op 1 grasmaand weer gewoon; Houtkap als het hout de
       // winter niet haalt. Eén keer per dag.
       if (nuEenKeer(`wetten${d}`)) {
         const haaltNiet = T.watDeWinterNietHaalt(s.dorp, d);
@@ -1232,8 +903,6 @@
         if (heerOpHetPlein() && nuEenKeer('betaal')) await betaal(1);
       },
     },
-    lui30: lui(0.3),
-    lui60: lui(0.6),
     slim: {
       async begin() {
         bouw('kapel');
@@ -1241,18 +910,10 @@
       async elkeStap() {
         const s = S();
         luisterNaarDeWinter();
-        // De nacht vóór de dag vóór de inner: 60% weg, waar niemand kijkt, niet waar hij de soldaten heen
-        // leidt. Niet de laatste nacht: vanaf middernacht van zijn dag telt het spel hem al als in het dorp,
-        // en dan sjouw je niets meer (T.verstopHandeling, js/verstoppen.js; opmerkingen.md, 28 sep).
-        if (dagIs(DAG_INNER - 2, 23) && nuEenKeer('verstop')) await verstopSlim(deelVan('graan', 0.6), deelVan('goud', 0.6));
         if (dagIs(DAG_INNER, 6) && nuEenKeer('inner')) await bespeelDeInner();
         const m = s.dorp.marskramer;
         if (m && !m.weg && m.staat && m.bezoek === 2 && nuEenKeer('handel')) await verkoopVoorDeHeer();
-        if (dagIs(DAG_HEER, 6) && nuEenKeer('soldaten')) await leidDeSoldaten();
-        if (heerOpHetPlein() && zoekenKlaar('soldaten') && nuEenKeer('betaal')) await betaal(0.9);
-        // Na Sint-Maarten, als de heer weg is: 's nachts alles terug.
-        const weg = !(s.dorp.heer && s.dorp.heer.bezoek);
-        if (dagNu() > DAG_HEER && weg && (uurNu() >= 23 || uurNu() < 3) && eenKeer.has('betaal') && nuEenKeer('terug')) await haalAllesOp(2);
+        if (heerOpHetPlein() && nuEenKeer('betaal')) await betaal(0.9);
       },
     },
   };
@@ -1324,7 +985,6 @@
 
   function tel() {
     const s = S();
-    const v = T.verstoptTotaal(s.dorp);
     const marktNu = (s) => {
       const g = s.dorp.gebouwen.find((x) => x.soort === 'markt' && x.opHetPlein);
       if (!g) return null;
@@ -1335,7 +995,6 @@
       dag: Math.floor(s.kalender.dag), datum: datum(),
       graan: Math.round(s.dorp.voorraad.graan || 0), goud: Math.round(s.dorp.voorraad.goud || 0), hout: Math.round(s.dorp.voorraad.hout || 0),
       vlees: Math.round(s.dorp.voorraad.vlees || 0), kaas: Math.round(s.dorp.voorraad.kaas || 0), hooi: Math.round(s.dorp.voorraad.hooi || 0),
-      verstopt: { graan: Math.round(v.graan), goud: Math.round(v.goud) },
       bevolking: s.dorp.bevolking,
       tevredenheid: heel(s.dorp.behoeften.tevredenheid * 100) / 100,
       // De wensen per huis (js/wensen.js; werklijst vraag 85): per stand hoe tevreden, met hoeveel mensen en hoeveel
@@ -1457,7 +1116,7 @@
       ['werkOogstBij', 'oogst'], ['haalOogstBinnen', 'oogst'], ['zaaiAkkers', 'zaaien'], ['zaaiNa', 'zaaien'],
       ['eetVandaag', 'gegeten'], ['koop', 'gekocht'], ['verkoop', 'verkocht'], ['betaalHeer', 'heer'],
       ['tikHeerDag', 'soldaten'], ['werkRoversBij', 'rovers'], ['tikRoversDag', 'rovers'], ['voorvalGevolg', 'voorvallen'],
-      ['verstop', 'verstopt'], ['haalTerug', 'teruggehaald'], ['tikGebouwenDag', 'werk'],
+      ['tikGebouwenDag', 'werk'],
     ];
     for (const [naam, waar] of BRONNEN) {
       const oud = T[naam];
@@ -1495,30 +1154,6 @@
     na('wijzigBevolking', (r, voor, S_, verschil, reden, waarom) => {
       boek.bevolking.push({ dag: heel(s.kalender.dag), datum: datum(), verschil, reden: reden || '', waarom: waarom || '' });
     });
-    const zoek = (r, voor, S_, p) => {
-      boek.soldaten.beurten.push({ dag: heel(s.kalender.dag), plek: p.naam, lag: voor, gevonden: r || null });
-    };
-    zoek.voor = (S_, p) => Object.assign({}, p.gebouw.verstopt || { graan: 0, goud: 0 });
-    na('zoekOpPlek', zoek);
-    // Stiekem ontgonnen (js/ontginnen.js; werklijst vraag 107, stap 3): elke keer dat er een akker in het bos werd gezocht
-    // die niet in de boeken staat (de soldaten in het bos of bij het hele dorp, of de heer met wat zijn inner zag): hoeveel
-    // er lagen en hoeveel ze vonden. En elke keer dat de schout betrapt werd (js/bazen.js), waarom, en de gunst daarna.
-    const stiekemeAkkers = (D_) => ((D_.wereld && D_.wereld.akkers) || []).filter((v) => v.stiekem).length;
-    const gezocht = (D_, wie, lagen, r) => {
-      if (D_ === s.dorp && lagen) boek.bosZoeken.push({ dag: heel(s.kalender.dag), datum: datum(), wie, lagen, gevonden: r.length });
-    };
-    const zoekBos = (r, lagen, D_, getal, heelDorp = true) => gezocht(D_, heelDorp ? 'het hele dorp' : 'het bos', lagen, r);
-    zoekBos.voor = stiekemeAkkers;
-    na('zoekBosAkkers', zoekBos);
-    const inner = (r, lagen, D_) => gezocht(D_, 'de inner', lagen, r);
-    inner.voor = stiekemeAkkers;
-    na('heerVindtBosAkkers', inner);
-    const betrapt = (r, voor, D_, tekst) => {
-      if (D_ !== s.dorp || !D_.bazen || D_.bazen.betraptOp === voor) return; // telde niet: al betrapt vandaag, of geen bazen
-      boek.betrapt.push({ dag: heel(s.kalender.dag), datum: datum(), tekst: tekst || 'zijn soldaten vonden wat je verstopte', gunst: Math.round(D_.bazen.gunst) });
-    };
-    betrapt.voor = (D_) => D_ && D_.bazen && D_.bazen.betraptOp;
-    na('betrapt', betrapt);
     // Het bosboek (werklijst vraag 115; stap 4 van vraag 110, e): per jaar hoeveel houthakkers er stonden en hoeveel hout
     // ze uit hun bomen haalden (js/bos.js), hoeveel bomen er omgingen en waarvoor (de houthakker, wie zijn plek rooit, wie
     // ontgint), hoeveel boompjes er geplant werden, een jonge boom werden en een boom, hoeveel dagen een houthakker
@@ -1580,14 +1215,10 @@
       b.stil += hakkers.filter((g) => g.boom === null).length;
       b.eind = bosStand(D_, hakkers);
     });
-    na('werdGezien', (r, voor, S_, D_, g, handeling, wat, n) => {
-      boek.getuigen.push({ dag: heel(s.kalender.dag), datum: datum(), plek: T.verstopPlekVan(D_, g).naam, handeling, wat, n, wie: (r && r.bericht) || '' });
-    });
     na('koopInnerOm', (r, voor, S_, goud) => {
       boek.inner.geschenken.push({ dag: heel(s.kalender.dag), goud, kan: !!(r && r.kan), gehoord: !!(r && r.gehoord) });
     });
     na('maakRapport', (r) => {
-      const v = T.verstoptTotaal(s.dorp);
       const tegels = (s.wereld.akkers || []).reduce((n, a) => n + T.akkerTegels(a).length, 0);
       boek.inner.rapport = {
         dag: heel(s.kalender.dag), datum: datum(),
@@ -1596,7 +1227,7 @@
         tegels: r.tegels, tegelsInHetDorp: tegels,
         graanGezien: Math.round(r.graanGezien), graanVerwacht: Math.round(r.graanVerwacht), goudGezien: Math.round(r.goudGezien),
         korting: r.korting,
-        werkelijk: { graan: Math.round(s.dorp.voorraad.graan || 0), goud: Math.round(s.dorp.voorraad.goud || 0), verstoptGraan: Math.round(v.graan), verstoptGoud: Math.round(v.goud) },
+        werkelijk: { graan: Math.round(s.dorp.voorraad.graan || 0), goud: Math.round(s.dorp.voorraad.goud || 0) },
       };
       boek.inner.rapporten.push(boek.inner.rapport); // wie twee jaar speelt, krijgt er twee
       boek.argwaan.naInner = argwaan();
@@ -1616,12 +1247,6 @@
     };
     betaal.voor = () => eisKort(T.eisVanDeHeer(s.dorp));
     na('betaalHeer', betaal);
-    na('beginDoorzoeken', (r) => {
-      if (r) boek.soldaten.zoeken = r; // het werk van de soldaten, dat tijdens het zoeken bijgewerkt wordt
-    });
-    na('doorzoekDorp', () => {
-      boek.soldaten.hetHeleDorp = true;
-    });
     // Van gehucht tot dorp, en tot marktrecht (js/treden.js): op welke dag, en met hoeveel mensen.
     na('wordtTrede', (r, voor, S_, trede) => {
       if (!boek[trede]) boek[trede] = { trede, dag: heel(s.kalender.dag), datum: datum(), mensen: s.dorp.bevolking };
@@ -1647,7 +1272,6 @@
 
   function eind() {
     const s = S();
-    const v = T.verstoptTotaal(s.dorp);
     let tegels = 0;
     let ongezaaid = 0;
     for (const a of s.wereld.akkers || []) {
@@ -1686,7 +1310,6 @@
       },
       akkertegels: tegels, ongezaaid,
       jaren: s.dorp.heer.jaren,
-      verstoptPerPlek: plekken().filter((p) => p.ligt.graan > 0 || p.ligt.goud > 0).map((p) => ({ plek: p.naam, graan: Math.round(p.ligt.graan), goud: Math.round(p.ligt.goud) })),
       // De ondernemers (js/ondernemers.js; vraag 104): wat ze vroegen en wat de speler zei, en wat ervan kwam.
       ondernemers: {
         vroegen: boek.voorvallen.filter((v) => v.id === 'wapenverzoek' || v.id === 'herbergverzoek')
@@ -1696,7 +1319,6 @@
         wapens: T.wapensInHetDorp(s.dorp),
         herbergen: T.herbergenVan(s.dorp).length,
       },
-      getuigenPerPlek: plekken().filter((p) => (p.gebouw.getuigen || []).length).map((p) => ({ plek: p.naam, getuigen: p.gebouw.getuigen.length, verteldDoor: p.gebouw.verteldDoor || null })),
     });
   }
 
@@ -1747,13 +1369,12 @@
         T.S.tijd = 0;
       }
       boek = {
-        speler, zaad, berichten: [], bevolking: [], daden: [], maanden: [], gebouwd: [], getuigen: [], verstopt: [],
+        speler, zaad, berichten: [], bevolking: [], daden: [], maanden: [], gebouwd: [],
         inner: { geschenken: [], gepraatUren: 0, rapport: null, rapporten: [] },
-        soldaten: { beurten: [], zoeken: null, hetHeleDorp: false, leeg: null },
         argwaan: { naInner: null, opSintMaarten: null }, heer: null, brief: null, naSintMaarten: null, luisterFouten: [],
         heerJaren: [], dorp: null, marktrecht: null, groei: [], raad: {}, voorvallen: [],
         jaren: jaren && (SPELERS[speler].jaren || 1) > 1 ? jaren : (SPELERS[speler].jaren || 1), graan: [], geluk: [],
-        reeks: { nu: 0, langste: 0 }, breuken: [], bosZoeken: [], betrapt: [], bos: [],
+        reeks: { nu: 0, langste: 0 }, breuken: [], bos: [],
       };
       const s = S();
       luister();
@@ -1801,13 +1422,6 @@
         await stap();
         await P.elkeStap();
       }
-      const z = boek.soldaten.zoeken;
-      boek.soldaten = {
-        leeg: boek.soldaten.leeg, hetHeleDorp: boek.soldaten.hetHeleDorp, beurten: boek.soldaten.beurten,
-        nodig: z ? z.nodig : null, heerKiest: z ? z.heerKiest : null, zelf: z ? z.zelf : null,
-        gedaan: z ? z.gedaan.map((g) => T.verstopPlekVan(s.dorp, g).naam) : [],
-        gevonden: boek.soldaten.beurten.filter((b) => b.gevonden).map((b) => ({ tekst: b.gevonden, graan: Math.round(b.lag.graan || 0), goud: Math.round(b.lag.goud || 0) })),
-      };
       boek.eind = eind();
       boek.winter = winter();
       // De vrije erven aan het eind, en wat er in het looppad om de plek van hun hut staat (T.looppadOm, js/gebouwen.js):

@@ -1,19 +1,19 @@
 // De speeltest (werklijst, vraag 45; Marcel, 28 sep: "A ja B ja C ja D ja"). Het spel speelt een jaar
 // zoals het draait, in een onzichtbare browser, en een speler in code doet wat een speler doet: lopen,
-// verstoppen, met de inner praten, de soldaten leiden, en de vensters beantwoorden. Elk jaar krijgt een
+// met de inner praten, en de vensters beantwoorden. Elk jaar krijgt een
 // vast zaad: hetzelfde zaad geeft dezelfde boeren en hetzelfde lot. Zo speel je na het bijstellen van een
 // getal hetzelfde jaar opnieuw, en zie je precies wat de wijziging deed.
 //
-//   npm run speeltest                          de zes spelers, elk met zaad 1, 2 en 3
+//   npm run speeltest                          de vier spelers, elk met zaad 1, 2 en 3
 //   npm run speeltest -- slim                  één speler, met zaad 1, 2 en 3
 //   npm run speeltest -- bouwer                de bouwer, die twee jaar speelt (vraag 58): van gehucht tot dorp
-//   npm run speeltest -- sluw                  de sluwe bouwer (vraag 94): de bouwer, maar hij bedriegt de heer en
-//                                              houdt het graan verstopt voor de herberg en de molen
+//   npm run speeltest -- sluw                  de sluwe bouwer (vraag 94): de bouwer, maar hij bespeelt de inner en
+//                                              geeft de heer 90%
 //   npm run speeltest -- bouwer sluw --jaren 4 de bouwers spelen vier jaar in plaats van twee: naar de winst (vraag 102, e)
 //   npm run speeltest -- --tegelijk 4          zoveel spellen tegelijk, elk in een eigen tabblad (standaard 3)
 //   npm run speeltest -- slim --zaad 7         één jaar
 //   npm run speeltest -- --zaden 1-5           andere zaden
-//   npm run speeltest -- lui60 --zaad 1 --opslaan        de proef met opslaan (vraag 48): op 1 oogstmaand
+//   npm run speeltest -- braaf --zaad 1 --opslaan        de proef met opslaan (vraag 48): op 1 oogstmaand
 //                                                        opslaan, herladen, Verder, en dan precies hetzelfde
 //                                                        jaar als zonder opslaan (--opslaan 245: een andere dag)
 //   npm run speeltest -- bouwer --maker        op een gehucht van de maker (vraag 70, C): de spelregel "Je
@@ -49,7 +49,7 @@ const V = require('./vergelijk.cjs');
 
 const WORTEL = path.join(__dirname, '..', '..');
 const UIT = path.join(__dirname, 'uit');
-const SPELERS = ['braaf', 'lui30', 'lui60', 'slim', 'bouwer', 'sluw'];
+const SPELERS = ['braaf', 'slim', 'bouwer', 'sluw'];
 const TEGELIJK = 3; // zoveel spellen tegelijk, elk in een eigen tabblad (--tegelijk)
 
 function laadPlaywright() {
