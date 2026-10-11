@@ -117,7 +117,17 @@ het graan vraagt", de schandpaal, de heervaart en de twee bazen.
   `ccr-99e707bb-sla81d`, `git show 828bd776`) kreeg geen antwoord; deze sessie neemt het over. Marcel koos (11 okt):
   alleen wat de speler ziet, het Nederlands weg maar `T.t` blijft, gewone maanden en Engelse namen, en elk deel naar
   `main` zodra de toetsen groen zijn (`commercieel.md`, vraag 147). **Bezig in sessie `ccr-fe45ba8f-v51u8s`** (11 okt):
-  het omzetten, in delen.
+  het omzetten, in delen. De woorden, de toon en de hulpjes: `ontwerp/engels.md`. Af: deel 0 (het Nederlands eruit, de
+  maanden, de namen) en de namen van gebouwen, waren en natuur. De delen, elk door een agent met eigen bestanden: (1)
+  de wensen en de raad (`wensen`, `verzoeken`, `ondernemers`, `raad`, `ochtendrapport`, `treden`, `behoeften`); (2) de
+  gebouwen en het land (`gebouwen`, `erven`, `herberg`, `bos`, `bouwstijl`, `wijngaard`, `akkers`, `vee`, `beesten`,
+  `markt`, `paden`); (3) het scherm (`hud`, `tafel`, `ui`, `huisbriefje`, `dialoog`, `index.html`, wat de speler ziet in
+  `main`, `verkennen`, `landkaart`, `land`); (4) de heer (`heer`, `brieven`, `grillen`, `heervaart`, `bazen`, `einde`,
+  `wetten`, `wettenmenu`, `feesten`); (5) het dorp dat spreekt (`gesprekken`, `gesprek`, `voorvallen`, `raadsman`,
+  `raadsmanvenster`, `quest`, `quests`, `praatje`, `mensen`, `boeren`); (6) het werk en de rest (`veldwerk`, `weer`,
+  `handel`, `bode`, `graanschuur`, `rovers`, `gevecht`, `brand`, `koorts`, `leven`, `bewoners`, `begin`, `bouwen`,
+  `boerderij`, `ontginnen`, `dorp`, `opslaan`); (7) de spelregels (`opties`). Een bestand dat helemaal om is, staat in
+  `OMGEZET` (`test/taal.test.cjs`).
 - Een proefversie voor Marcels 4K-scherm en een eerste tester (`npm run proefversie`), na C.
 - Het geluid (vraag 145, 2), zodra de sleutel er is.
 - Januari 2027: de Steam-pagina (een capsule, vijf plaatjes, een trailer van een minuut); de naam is er (Tithebreaker).
