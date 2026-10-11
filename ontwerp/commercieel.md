@@ -84,6 +84,9 @@ de uitverkopen en met updates. Zonder verlanglijstjes verkoopt een goed spel bij
    nu al, niet in januari, met een vertaaltool voor wie uit de community een taal wil maken ("Mochten we leden uit de
    community krijgen die een vertaling willen maken"). De brontaal van de spelteksten wordt Engels, Nederlands een
    vertaling zoals elke andere; de code, het commentaar en `ontwerp/` blijven Nederlands.
+   **Bijgesteld (Marcel, 11 okt): "Alles gelijk in het Engels maken. Nederlands mag je mee stoppen."** Het Engels komt
+   nu, in één keer, en het Nederlands als vertaling houdt op. Wat "alles" omvat (alleen wat de speler ziet, of ook de
+   code en `ontwerp/`), en wat er met `taal/nl.js` gebeurt: de vragen van Claude in de werklijst (G).
 3. **Een naam vóór de Steam-pagina.** De werktitel past niet meer (vraag 8: het voorstel was *Martinmas*, met "Get rich.
    Look poor." eronder). Een naam moet je kunnen vinden, en de merkenregisters en Steam moeten hem vrij laten.
    **De werknaam sinds 11 okt: *Tithebreaker*, met "Collect the tithe. Or break it." eronder** (Marcel: "1 ja"). Eén
