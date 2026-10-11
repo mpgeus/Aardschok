@@ -27,7 +27,9 @@
     // nieuw spel (T.herstelSpel). Wel: een veld dat anders gaat heten, of iets anders gaat betekenen.
     // 2 (30 sep): alles van een dorp staat bij elkaar in S.dorpen (js/dorp.js; werklijst, vraag 71). Een spel van
     // daarvoor mocht vervallen (Marcel: "oud spel mag vervallen").
-    versie: 2,
+    // 3 (11 okt): het verstoppen, de getuigen en het stiekeme bos zijn uit het spel (optie 1, vraag 151): g.verstopt,
+    // g.getuigen, g.verteld, veld.stiekem en D.bazen.betraptOp bestaan niet meer.
+    versie: 3,
     eigenPlekken: 5, // naast de ene die vanzelf gaat (vraag 48 B)
     // Op de hoogste snelheid (30×) slaat het spel niet elke ochtend vanzelf op, maar om de zoveel dagen: een dag duurt
     // dan tien seconden, en het opslaan kost bij 100 mensen 25 à 50 ms, een hapering die je ziet (gemeten op 3 okt).
