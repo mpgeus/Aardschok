@@ -85,7 +85,7 @@ test('bij zijn vertrek zegt hij wanneer hij terugkomt, gerekend vanaf zijn eigen
   } finally {
     T.ui = oudeUi;
   }
-  assert.match(berichten[berichten.length - 1], /terug in wijnmaand/);
+  assert.match(berichten[berichten.length - 1], /back in October/);
 });
 
 test('na wijnmaand komt hij pas in grasmaand terug', () => {
@@ -124,7 +124,7 @@ test('kopen kan niet zonder goud, en niet meer dan hij bij zich heeft', () => {
   S.voorraad.goud = 1;
   const arm = T.kanKopen(S, 'ijzer', 1);
   assert.equal(arm.kan, false);
-  assert.match(arm.reden, /goud/);
+  assert.match(arm.reden, /gold/);
   S.voorraad.goud = 1000;
   const teVeel = T.kanKopen(S, 'ijzer', T.HANDEL_INSTELLINGEN.verkoopt.ijzer.heeft + 1);
   assert.equal(teVeel.kan, false);
@@ -145,7 +145,7 @@ test('zaaigraan: in de lente verkoopt hij graan per pak van tien, en in de zomer
   // Meer dan hij heeft, kan niet, en dat zegt hij in graan.
   const teVeel = T.kanKopen(S, 'graan', g.heeft[0]);
   assert.equal(teVeel.kan, false);
-  assert.equal(teVeel.reden, `Hij heeft er nog maar ${(g.heeft[0] - 2) * g.per}.`);
+  assert.equal(teVeel.reden, `He has only ${(g.heeft[0] - 2) * g.per} left.`);
   // In de zomer en de herfst niet: dan staat het niet in zijn venster, en kopen kan niet.
   for (const i of [1, 2]) {
     const Z = metMarskramer(i);

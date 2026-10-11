@@ -186,7 +186,7 @@ test('de boer steekt er plaggen, tegel voor tegel; na een maand is het ontgonnen
     S.kalender.dag = veld.ontginning.tot + 0.3;
     T.tikGebouwenDag(D, veld.ontginning.tot);
     assert.equal(veld.ontginning, undefined, 'ontgonnen');
-    assert.ok(berichten.some((t) => /is ontgonnen/.test(t)), berichten.slice(-3).join(' | '));
+    assert.ok(berichten.some((t) => /has been cleared/.test(t)), berichten.slice(-3).join(' | '));
     assert.equal(T.bestemmingVan(veld), 'braak');
     // 1 lentemaand van het jaar erna: het wordt een akker, en gezaaid.
     S.kalender.dag = 360 + 0.3;
@@ -222,7 +222,7 @@ test('begint het in sprokkelmaand: op 1 lentemaand wisselt het nog niet, en is h
   assert.equal(veld.ontginning, undefined, 'ontgonnen');
   assert.equal(T.bestemmingVan(veld), 'akker', 'een akker');
   assert.equal(veld.ongezaaid.size, 0, 'nagezaaid');
-  assert.ok(berichten.some((t) => /zaaien hem na/.test(t)), berichten.slice(-3).join(' | '));
+  assert.ok(berichten.some((t) => /sow it late/.test(t)), berichten.slice(-3).join(' | '));
 });
 
 test('een veld in ontginning gaat mee in een bewaard spel, met wat al gestoken is, en blijft van zijn boerderij', () => {
@@ -278,7 +278,7 @@ test('een boom omhakken geeft hout en laat een stronk, die hij rooit; na de wint
   assert.equal(veld.ontginning, undefined, 'ontgonnen');
   for (const t of T.akkerTegels(veld)) assert.equal(T.voorwerpOp(w, t.x, t.y), null, `${t.x},${t.y} is leeg`);
   assert.ok(D.voorraad.hout >= voor + rest * T.BOS_INSTELLINGEN.houtPerBoom - 1e-9, `${rest} bomen: ${D.voorraad.hout - voor} hout`);
-  assert.ok(berichten.some((t) => /Het bos van .* is ontgonnen/.test(t)), berichten.slice(-2).join(' | '));
+  assert.ok(berichten.some((t) => /The forest of .* has been cleared/.test(t)), berichten.slice(-2).join(' | '));
 });
 
 test('de boer hakt naast de boom, met zijn gezicht ernaar; zijn boerin helpt; en het hout komt binnen', () => {

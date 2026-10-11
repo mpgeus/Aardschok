@@ -127,7 +127,7 @@ test('een beek valt in de droogte droog, een meer niet; een visser aan een beek 
   const aanDeBeek = { soort: 'visser', x: 5, y: 5, klaar: true };
   const aanBeide = { soort: 'visser', x: 8, y: 5, klaar: true };
   assert.equal(T.visserWater(D, aanDeBeek), 0);
-  assert.equal(T.waaromVistHijNiet(D, aanDeBeek), 'de beek staat droog');
+  assert.equal(T.waaromVistHijNiet(D, aanDeBeek), 'the stream has run dry');
   const deel = T.visserWater(D, aanBeide);
   assert.ok(deel > 0 && deel < 1, `${deel}: zijn meer is er nog, zijn beek niet`);
   assert.equal(T.waaromVistHijNiet(D, aanBeide), null);
@@ -246,7 +246,7 @@ test('na een droog jaar neemt de marskramer in de lente meer zaaigraan mee', () 
   assert.equal(D.weer.verlies, 0);
   T.marskramerKomt(D, 0, dagVan('grasmaand', 5, 1));
   assert.equal(D.marskramer.heeft.graan, gewoon + Math.ceil(0.4 * T.HANDEL_INSTELLINGEN.verkoopt.graan.naDroogte));
-  assert.match(D.marskramer.aankomst.tekst, /extra zaaigraan/);
+  assert.match(D.marskramer.aankomst.tekst, /extra seed grain/);
   // In de zomer heeft hij geen graan, ook niet na droogte.
   D.marskramer = null;
   T.marskramerKomt(D, 1, dagVan('hooimaand', 5, 1));

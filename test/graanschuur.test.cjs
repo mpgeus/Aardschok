@@ -131,7 +131,7 @@ test('honger terwijl het graan bewaakt wordt, kost vertrouwen; bij het zaaien ga
     while (T.zaaigraanApart(D, zaaien) > 0) zaaien++;
     luister((z) => {
       T.tikGraanschuurDag(D, zaaien, false);
-      assert.ok(z.some((t) => /de wachters bij de graanschuur gaan naar huis/.test(t)), z.join(' / '));
+      assert.ok(z.some((t) => /the guards at the granary go home/.test(t)), z.join(' / '));
     });
     assert.equal(D.zaaigraan.bewaakt, 0);
     for (const e of wachters) {

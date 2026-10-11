@@ -98,9 +98,10 @@
     Zg.bewaakt = deel;
     Zg.wachters = wie.map((p) => p.wezen);
     const tekort = T.wachtersNodig(D) - wie.length;
+    const bewaakt = T.t('{n|{wie} stands guard at the granary.|{wie} stand guard at the granary.}', { n: wie.length, wie: T.opsomming(wie.map((p) => T.naamVanBewoner(p))) });
     T.zeg(D, wie.length
-      ? `${T.opsomming(wie.map((p) => T.naamVanBewoner(p)))} ${wie.length === 1 ? 'staat' : 'staan'} bij de graanschuur.${tekort > 0 ? ` Er zijn er ${T.telwoord(tekort)} te weinig: wie honger heeft, pakt een deel.` : ''}`
-      : 'Er is niemand om de graanschuur te bewaken.');
+      ? (tekort > 0 ? `${bewaakt} ${T.t('{n|One more is needed|{aantal} more are needed}: whoever is hungry takes a share.', { n: tekort, aantal: T.telwoord(tekort) })}` : bewaakt)
+      : T.t('There is nobody to guard the granary.'));
     return wie;
   };
 
@@ -124,10 +125,10 @@
     if (!Zg || !(Zg.bewaakt > 0)) return;
     if (!T.graanschuurVan(D) || T.zaaigraanApart(D, dag) <= 0) {
       laatGaan(D);
-      if (T.zaaigraanApart(D, dag) <= 0) T.zeg(D, 'Het zaaigraan gaat de grond in: de wachters bij de graanschuur gaan naar huis.', 'goed');
+      if (T.zaaigraanApart(D, dag) <= 0) T.zeg(D, T.t('The seed grain is going into the ground: the guards at the granary go home.'), 'goed');
       return;
     }
     Zg.wachters = Zg.wachters.filter((e) => !e.dood && D.wereld.wezens.includes(e));
-    if (honger) T.wijzigVertrouwen(D, -IN().vertrouwenPerHongerdag, 'het zaaigraan wordt bewaakt terwijl het dorp honger heeft');
+    if (honger) T.wijzigVertrouwen(D, -IN().vertrouwenPerHongerdag, T.t('the seed grain is guarded while the village is hungry'));
   };
 })(globalThis.Spel = globalThis.Spel || {});

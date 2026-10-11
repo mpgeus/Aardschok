@@ -23,9 +23,9 @@
     // nodig hebt, koop je dus in wijnmaand. Zolang hij er is, staat zijn `vlag` (en
     // 'marskramerOpBezoek') aan, zodat zijn gesprek weet welk bezoek het is (js/gesprekken.js).
     bezoeken: [
-      { maand: 'grasmaand', dag: 5, naam: 'lente', vlag: 'marskramerLente' },
-      { maand: 'hooimaand', dag: 5, naam: 'zomer', vlag: 'marskramerZomer' },
-      { maand: 'wijnmaand', dag: 5, naam: 'herfst', vlag: 'marskramerHerfst' },
+      { maand: 'grasmaand', dag: 5, naam: 'lente', toon: T.t('spring'), vlag: 'marskramerLente' },
+      { maand: 'hooimaand', dag: 5, naam: 'zomer', toon: T.t('summer'), vlag: 'marskramerZomer' },
+      { maand: 'wijnmaand', dag: 5, naam: 'herfst', toon: T.t('autumn'), vlag: 'marskramerHerfst' },
     ],
     // Zo lang staat hij op het plein. De dagen tellen pas vanaf dat hij er staat: de weg in kost op
     // 3× al gauw een week, en dan zou hij in het donker weer vertrekken.
@@ -53,7 +53,7 @@
       zout: { heeft: [15, 15, 40], prijs: [1, 1, 1] },
       // Na een droog jaar (js/weer.js; werklijst vraag 144, 2; Marcel, 9 okt: "je moet kunnen herstellen") neemt hij in de
       // lente meer mee: zoveel pakken erbij als `naDroogte` maal wat de droogte vorig jaar van de oogst nam.
-      graan: { naam: 'zaaigraan', per: 10, heeft: [10, 0, 0], prijs: [5, 5, 5], naDroogte: 30 },
+      graan: { naam: T.t('seed grain'), per: 10, heeft: [10, 0, 0], prijs: [5, 5, 5], naDroogte: 30 },
       laken: { per: 4, heeft: [0, 3, 3], prijs: [6, 6, 7], trede: 'dorp' },
     },
     // Wat hij koopt: per pak van zoveel stuks, voor zoveel goud, per bezoek (lente, zomer,
@@ -73,6 +73,9 @@
   };
 
   const IN = () => T.HANDEL_INSTELLINGEN;
+  // Hoe de speler een waar noemt die hij van hem kan kopen: zijn eigen naam (zaaigraan), anders die van de waar.
+  const waarNaam = (wat) => (IN().verkoopt[wat] && IN().verkoopt[wat].naam) || T.waarNaam(wat);
+  const maandToon = (naam) => T.MAANDEN.find((m) => m.naam === naam).toon;
 
   // Waar hij kan komen: een wereld met een plek voor hem (js/kaart.js leest "marskramer" uit het
   // betekenisbestand). Zonder die plek (het oude spel, of een toets zonder wereld) gebeurt er niets.
@@ -160,7 +163,7 @@
       bezoek: seizoen === 'lente' ? 0 : seizoen === 'zomer' ? 1 : 2, bestelling: bestelling2,
       komtOp: dag, gaatOp: dag + B.blijftDagen, beurs: IN().beurs, plaats: IN().plaats, heeft,
       weg: false, wezen: null, staat: false,
-      aankomst: { tekst: 'De marskramer komt over de weg: je bode heeft hem gevonden. Hij blijft een paar dagen op het plein.', soort: 'goed' },
+      aankomst: { tekst: T.t('The peddler comes along the road: your messenger found him. He will stay a few days on the square.'), soort: 'goed' },
     };
     T.zetVlag(D, 'marskramerOpBezoek');
     T.zetVlag(D, 'marskramerBode');
@@ -182,9 +185,9 @@
       wezen: null, staat: false, // zijn poppetje, en of hij al op het plein staat
       aankomst: {
         tekst: (i === IN().bezoeken.length - 1
-          ? 'De marskramer komt over de weg: zijn laatste ronde vóór de winter.'
-          : 'De marskramer komt over de weg. Hij blijft een paar dagen op het plein.') +
-          (heeft.graan > (IN().verkoopt.graan.heeft[i] || 0) ? ' Na het droge jaar heeft hij extra zaaigraan bij zich.' : ''),
+          ? T.t('The peddler comes along the road: his last round before the winter.')
+          : T.t('The peddler comes along the road. He will stay a few days on the square.')) +
+          (heeft.graan > (IN().verkoopt.graan.heeft[i] || 0) ? ` ${T.t('After the dry year he has extra seed grain with him.')}` : ''),
         soort: 'goed',
       },
     };
@@ -213,7 +216,7 @@
     m.weg = true;
     T.zetVlag(D, 'marskramerVertrekt');
     if (T.ui && T.ui.sluitHandel) T.ui.sluitHandel(D); // staat het venster open (js/hud.js), dan gaat het dicht
-    T.zeg(D, m.daarna != null ? 'De marskramer trekt verder. Zijn vaste ronde komt meteen hierna.' : `De marskramer trekt verder. Hij komt terug in ${T.volgendeMarskramer(dag)}.`);
+    T.zeg(D, m.daarna != null ? T.t('The peddler moves on. His regular round follows straight after.') : T.t('The peddler moves on. He will be back in {maand}.', { maand: maandToon(T.volgendeMarskramer(dag)) }));
     if (!m.wezen) haalWeg(D);
   }
 
@@ -266,15 +269,15 @@
   // Jij koopt `aantal` van hem: stuks (ijzer, zout), of pakken van `per` stuks (graan in de lente).
   T.kanKopen = function (D, wat, aantal) {
     const m = D.marskramer;
-    if (!T.kanHandelen(D)) return { kan: false, reden: 'De marskramer is er niet.' };
+    if (!T.kanHandelen(D)) return { kan: false, reden: T.t('The peddler is not here.') };
     const waar = waarNu(m, wat);
-    if (!waar) return { kan: false, reden: `Hij heeft geen ${wat} bij zich.` };
+    if (!waar) return { kan: false, reden: T.t('He has no {wat} with him.', { wat: waarNaam(wat) }) };
     const prijs = waar.prijs;
     const per = waar.per || 1;
     const heeft = m.heeft[wat] || 0;
     const uit = { prijs, per, kosten: prijs * aantal, stuks: per * aantal, heeft };
-    if (aantal > heeft) return { ...uit, kan: false, reden: heeft ? `Hij heeft er nog maar ${heeft * per}.` : 'Het is op.' };
-    if ((D.voorraad.goud || 0) < prijs * aantal) return { ...uit, kan: false, reden: `Daar heb je het goud niet voor (${prijs * aantal}).` };
+    if (aantal > heeft) return { ...uit, kan: false, reden: heeft ? T.t('He has only {n} left.', { n: heeft * per }) : T.t('He has run out.') };
+    if ((D.voorraad.goud || 0) < prijs * aantal) return { ...uit, kan: false, reden: T.t('You do not have the gold for that ({kosten}).', { kosten: prijs * aantal }) };
     return { ...uit, kan: true };
   };
 
@@ -293,14 +296,14 @@
   T.kanVerkopen = function (D, wat, pakken) {
     const m = D.marskramer;
     const vraag = IN().koopt[wat];
-    if (!T.kanHandelen(D)) return { kan: false, reden: 'De marskramer is er niet.' };
-    if (!vraag) return { kan: false, reden: `${T.hoofdletter(wat)} koopt hij niet.` };
+    if (!T.kanHandelen(D)) return { kan: false, reden: T.t('The peddler is not here.') };
+    if (!vraag) return { kan: false, reden: T.t('He does not buy {wat}.', { wat: T.waarNaam(wat) }) };
     const prijs = vraag.prijs[m.bezoek];
     const hebPakken = Math.floor((D.voorraad[wat] || 0) / vraag.per + 1e-9);
     const uit = { prijs, per: vraag.per, opbrengst: prijs * pakken, stuks: vraag.per * pakken };
-    if (pakken > hebPakken) return { ...uit, kan: false, reden: `Daar heb je niet genoeg ${wat} voor (${vraag.per * pakken}).` };
-    if (pakken > m.plaats) return { ...uit, kan: false, reden: m.plaats ? `Hij kan nog maar ${m.plaats} pak${m.plaats === 1 ? '' : 'ken'} meenemen.` : 'Zijn mars is vol.' };
-    if (prijs * pakken > m.beurs) return { ...uit, kan: false, reden: m.beurs ? `Zoveel goud heeft hij niet meer (nog ${m.beurs}).` : 'Zijn beurs is leeg.' };
+    if (pakken > hebPakken) return { ...uit, kan: false, reden: T.t('You do not have enough {wat} for that ({n}).', { wat: T.waarNaam(wat), n: vraag.per * pakken }) };
+    if (pakken > m.plaats) return { ...uit, kan: false, reden: m.plaats ? T.t('He can only take {n|# more pack|# more packs}.', { n: m.plaats }) : T.t('His pack is full.') };
+    if (prijs * pakken > m.beurs) return { ...uit, kan: false, reden: m.beurs ? T.t('He does not have that much gold left (only {n}).', { n: m.beurs }) : T.t('His purse is empty.') };
     return { ...uit, kan: true };
   };
 

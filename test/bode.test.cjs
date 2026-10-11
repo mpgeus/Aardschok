@@ -188,7 +188,7 @@ test('met mannen erbij slaan ze de rovers af: de marskramer komt, en er kan er e
     try {
       const weerbaar = T.weerbareMannen(D).length;
       assert.ok(weerbaar >= 3, `${weerbaar} weerbare mannen`);
-      assert.match(T.bodeGevaarTekst(D, 2), /slaan ze de rovers in \d+ van de 100 keer af/);
+      assert.match(T.bodeGevaarTekst(D, 2), /drive the robbers off \d+ times in 100/);
       const goud = D.voorraad.goud;
       const klaar = alRoversOpDeKaart(D);
       const r = T.stuurBode(D, { graan: 2 }, 2);
@@ -306,7 +306,7 @@ test('de hinderlaag op je kaart: bij de uitgang houden de rovers hem aan, en kom
     assert.equal(D.rovers.aanval && D.rovers.aanval.fase, 'weg', 'ze gaan weg');
     assert.ok(!bode.aangehouden);
     assert.ok(!D.bode || !D.bode.onderschept, 'beroofd (geen bode meer) of afgeslagen (de weg is vrij)');
-    if (D.bode) assert.match(D.bode.aanval, /sloegen ze af/);
+    if (D.bode) assert.match(D.bode.aanval, /drove the robbers off/);
   });
 });
 
