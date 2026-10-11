@@ -57,7 +57,9 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 **Zo staat het nu** (11 okt): besloten, niets gebouwd. Marcel: "Ik ben eigenlijk op zoek naar de economie van the
 settlers met een soort turn based isometric combat. Rijke gfx met details", en op drie vragen: "A ja, B ja, C allebei".
 Jij bouwt van bovenaf, en de schout is je held, die vecht en praat; geen grens en geen vlaggen (Marcel: "alles moet open
-zijn"): je bouwt binnen een aantal tegels van je stad, en een kar haalt de grondstoffen op, eerst als proef (vraag 152);
+zijn"): je bouwt binnen een aantal tegels van je stad (en van elke opslag), en een ossenkar haalt de grondstoffen op, eerst
+als proef (vraag 152); en je bouwt alles zelf, vanaf een lege plek ("We moeten ook zelf alles vanaf de start gaan
+bouwen");
 en je vecht in beurten, om je dorp te verdedigen
 en om het eiland te veroveren tot het kasteel van de heer, zoals in Jagged Alliance 2. Het verstoppen en heel "arm
 lijken" gaan eruit ("Rijk worden en arm lijken"). Wat dat is, wat er al is en wat ontbreekt: `gameloop.md`.

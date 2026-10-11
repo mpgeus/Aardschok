@@ -44,7 +44,9 @@ moet het hart zijn, en het gevecht wat ze oplevert; een goed gevecht is wat de a
 - **B, goederen worden gebracht, en een waar telt pas als hij binnen is.** Eerst een proef (werklijst, vraag 152).
   **Bijgesteld (Marcel, 11 okt): "Ik wil geen 'grens' alles moet open zijn. Ook geen vlaggen. Misschien dat grondstoffen worden opgehaald met een kar? Dus je kunt bijvoorbeeld x tegels vanaf je stad bouwen".** Dus geen grens en geen vlaggen
   zoals in The Settlers: alles is open, je bouwt binnen een aantal tegels van je stad, en een kar haalt de grondstoffen
-  op (zoals de marktkarren in Anno 1602).
+  op (zoals de marktkarren in Anno 1602). En (Marcel, 11 okt): "a ja, b ja, c ja, d ja" (het bereik rond het plein en
+  elke opslag, de kar overal maar over een weg sneller, een ossenkar, de eerste opslag het huis van de schout), en **"We
+  moeten ook zelf alles vanaf de start gaan bouwen"**: geen gehucht dat er al was, je begint op een lege plek.
 - **C, vechten is allebei**: je dorp verdedigen, en erop uit over het eiland, tot het kasteel van de heer, zoals in
   Jagged Alliance 2.
 

@@ -27,7 +27,8 @@ mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voo
 **Wacht op Marcel:**
 - **De richting (vraag 151, 11 okt): de economie van The Settlers met gevechten in beurten** (Marcel: "A ja, B ja, C
   allebei"; `gameloop.md`). Nu: het plan voor de proef (vraag 152): geen grens, geen vlaggen, bouwen binnen bereik van
-  je stad en een kar die de grondstoffen haalt (Marcel, 11 okt); de keuzes wachten op Marcel.
+  je stad en een kar die de grondstoffen haalt, en je bouwt alles zelf vanaf de start (Marcel, 11 okt: "a ja, b ja, c ja,
+  d ja"); het plan voor het lege begin wacht op Marcel.
 - **Gameplay als kern, en het verstoppen eruit** (vraag 151, 11 okt; Marcel: "we hebben niks"): het verstoppen en heel
   "arm lijken" gaan eruit, de heer blijft (Marcel: "alles gaat eruit"); het plan om het weg te halen heet **optie 1**
   (Marcel, 11 okt: "Dit noemen we optie 1. Ik vertel je straks wat we doen"). Intussen kijkt Claude rond naar vergelijkbare
@@ -7737,11 +7738,17 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     Niet in de proef: andere waren dan hout en planken, eten met de kar, voorrang per waar, de klok.
     **Daarna, al te zien:** de besturing (de camera los, de schout een held die je aanklikt) en de klok (een jaar is 30
     uur op 1×; de proef laat zien op welke snelheid het goed oogt).
-    **Keuzes (wacht op Marcel):** a, het bereik vanaf het plein alleen, of ook rond elke opslag (een schuur verder weg
-    geeft daar bereik; Claude: ook rond elke opslag, dan breid je uit door een schuur te zetten, zoals een kantoor in
-    Anno); b, rijdt de kar overal, maar over een weg sneller (Claude: ja, dan heeft een weg zin zonder vlaggen), of
-    alleen over wegen; c, een ossenkar (rijker beeld, de os alleen als plaatje) of een handkar (Claude: de ossenkar);
-    d, de eerste opslag is het huis van de schout (Claude: ja, later een schuur).
+    **Besloten (Marcel, 11 okt: "a ja, b ja, c ja, d ja"):** a, het bereik rond het plein en rond elke opslag (een
+    schuur verder weg geeft daar bereik, zoals een kantoor in Anno); b, de kar rijdt overal, over een weg sneller; c, een
+    ossenkar (de os alleen als plaatje); d, de eerste opslag is het huis van de schout, later een schuur.
+    **En: "We moeten ook zelf alles vanaf de start gaan bouwen"** (Marcel, 11 okt): geen gehucht dat er al was; je
+    begint op een lege plek en bouwt alles zelf. Het plan wordt daarmee (voorstel van Claude): **stap 1 is het lege
+    begin**, achter een spelregel "Het begin" (leeg, of het gehucht dat er al was, zodat de toetsen en de speeltest
+    blijven spelen tot het nieuwe begin af is): een plek op het eiland, een paar gezinnen met de ossenkar, geladen met
+    wat ze meebrachten; de kar staat op wat het plein wordt en is de opslag tot het huis van de schout staat (d), dat je
+    als eerste bouwt; tot er hutten zijn, slapen ze bij een kampvuur; jij bouwt alles, ook de hutten, de boerderij en de
+    akkers. Het eerste doel komt dan vanzelf: haal de eerste winter. Daarna stap 2 tot 4 hierboven (de stapels en de
+    kar, de bouwplaats en de timmerman, meten en spelen). De keuzes van het begin wachten op Marcel.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
