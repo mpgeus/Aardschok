@@ -28,10 +28,11 @@ mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voo
 - **De richting (vraag 151, 11 okt): de economie van The Settlers met gevechten in beurten** (Marcel: "A ja, B ja, C
   allebei"; `gameloop.md`): geen grens, geen vlaggen, bouwen binnen bereik van je stad en elke opslag, een ossenkar die
   de grondstoffen haalt, en je bouwt alles zelf vanaf een lege plek, met een kar met wat spullen en settlers. **Optie 1
-  is af** (11 okt, in `main`): het verstoppen, de inner, de argwaan en heel "arm lijken" zijn eruit. **Het volgende punt
-  is vraag 152, stap 1b: het lege land**, in een nieuwe sessie (Marcel: "daarna start ik nieuwe sessie"). **Bezig in
-  sessie `ccr-d5126bfe-mtbvwg`** (11 okt): het plan voor 1b, met Marcel. Het plan (1b
-  tot 1f), waaruit je start en de keuzes staan bij vraag 152, en het beeld is af (hieronder bij Af).
+  is af** (11 okt, in `main`): het verstoppen, de inner, de argwaan en heel "arm lijken" zijn eruit. **Stap 1b, het lege
+  land, is af** (11 okt, sessie `ccr-d5126bfe-mtbvwg`): achter de spelregel "Het begin" op "Leeg" rijdt de huifkar een
+  leeg stuk van het eiland in, met de gezinnen erachter, en op het plein staat hun kamp (`Spel.debug.begin('leeg')`; om
+  te bekijken: hieronder). **Het volgende punt is 1c, verhuizen uit het kamp**, en dan 1d, zelf bouwen binnen bereik; het
+  plan (1c tot 1f) staat bij vraag 152.
 - Het geluid (vraag 145, 2): de sleutel `FREESOUND_KEY` in de omgeving en de domeinen van Freesound erbij, zoals
   beschreven bij vraag 145; dan maakt een nieuwe sessie het.
 - Vraag 145 laten zien: is het dorp nu minder "saai"?
@@ -49,6 +50,10 @@ mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voo
   `main` (10 okt). **Wacht op Marcel:** de ronde van alle tekeningen, waarin hoe ruig van de trede afhangt en hoe verweerd
   van de leeftijd (en de acht voorbeelden van 9 okt, als hij ze nog stuurt). **Bezig in sessie `main` (desktop,
   huizen)** (10 okt; Marcel: "pak het de huizen op"): de ronde van alle tekeningen met de knoppen aan, eerst het plan.
+- **Het lege begin bekijken** (vraag 152, 1b, 11 okt): Spelregels, "Het begin" op "Leeg", en dan Nieuw spel; of in de
+  console `Spel.debug.begin('leeg')` (zonder brief). Na de brief rijdt de kar in zo'n anderhalve minuut naar het plein, de
+  schout loopt ernaast (klik ergens heen en hij laat de kar gaan), en daar gaan de tenten op. Bouwen kan nog niet: zonder
+  dat haalt het kamp de winter niet.
 - **In `main` (10 okt, avond; Marcel koos ze), om te bekijken:**
   - Wijn haalt kapel (vraag 136): een gebouw met een gezin (de wijnboerderij) komt alleen waar het zijn kapel haalt, of
     waar er nog een kan komen, zoals een erf (`T.waaromGeenKringPlek`). In de speeltest winnen nu twee van de zes (was
@@ -7864,6 +7869,16 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     huifkar over de weg het land in, de gezinnen lopen erachter); de schout komt met zijn gezin (zo'n 23 monden, dus 140
     graan in de kar in plaats van 120); en een kleine open plek, met het bos er vlak omheen (zo'n 10 tegels om het plein,
     niet 16: hout dichtbij, ruimte door te rooien).
+    **1b is af** (11 okt, sessie `ccr-d5126bfe-mtbvwg`; `js/begin.js`, `test/begin.test.cjs`): de maker legt met `leeg` het
+    land zonder gehucht (het plein met twee tegels open eromheen, `leegRand`; het plein zelf is al zo'n 12 bij 7 tegels om
+    zijn midden, dus "zo'n 10 tegels om het plein" werd: het plein, en het bos er vlak achter), met een plek voor het kamp
+    en voor de marskramer; het gewone gehucht blijft byte voor byte wat het was. Een tent is een gebouw (`T.GEBOUWEN.tent`)
+    zo groot als zijn gezin (`T.woonruimteVan`), de tent van de schout is zijn huis, de kar is een wezen dat over de weg
+    rijdt (0,9 tegel per seconde, zo'n anderhalve minuut op 1×), en elke nacht staat het kamp er alsnog als de kar vastzat.
+    Een jaar zonder iets te doen loopt zonder fouten; het kamp sterft dan de winter in (24 mensen, van 200 graan), en de heer
+    vraagt niets. **Om te weten voor 1c en 1d:** nu er geen plaats is, zegt het spel elke paar dagen "Er wil een gezin komen,
+    maar er is geen plaats", de status Vol speelt vanaf de eerste dag (een tent is vol), en het doel linksboven is nog "Naar
+    een dorp" (het plan noemde "haal de eerste winter"); allemaal pas iets als je kunt bouwen.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
@@ -8082,6 +8097,12 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 11 okt 2026 — **Vraag 152, stap 1b: het lege land** (Marcel: "Rijdt nu binnen", "Met gezin", "Klein, bos dichtbij").
+  Met de spelregel "Het begin" op "Leeg" legt de maker op het eiland alleen het land met een open plek, rijdt de huifkar
+  na een nieuwe benoemingsbrief over de weg naar het plein met de schout ernaast en de gezinnen erachter, en zetten ze daar
+  het kamp op: een tent of afdak per gezin rond het kampvuur, dat 's avonds brandt. De kar brengt 50 hout, 200 graan
+  (waarvan 60 zaaigraan), 20 goud en 5 gereedschap; het eerste jaar vraagt de heer niets en schrijft hij in wijnmaand dat
+  hij je spaart. `js/begin.js`, `test/begin.test.cjs` (negen toetsen).
 - 11 okt 2026 — **Vraag 152, het beeld van het lege begin** (Marcel: "Huifkar wordt ossenkar", "Tent en afdak", "Vaal",
   en "Vellen voor het spel"). De kar komt aan als huifkar met een vale os, en wordt de ossenkar als het huis van de schout
   er is; de wielen draaien precies met de pas van de os mee (`ossenkar.cjs`, de os is de koe met `os` en `juk` in

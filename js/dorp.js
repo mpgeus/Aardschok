@@ -47,6 +47,8 @@
     // staan (js/gebouwen.js), zodat een dorp niet leeg begint.
     for (const wat in w.beginVoorraad || {}) T.zetVoorraad(D, wat, w.beginVoorraad[wat]);
     T.zetBestaandeGebouwen(D);
+    // In het lege begin (vraag 152) staat er nog niets: de kar brengt wat er is, en het kamp (js/begin.js).
+    if (w.kamp) T.zetKamp(S, D);
     // Wie de boeren zijn en wat ze kunnen, wordt bij elk nieuw dorp geloot (js/boeren.js).
     T.lootBoeren(D, o.zaad != null ? o.zaad : undefined);
     // De beginkudde op de weide(s) die de kaart noemt (js/vee.js), net als de gebouwen hierboven; ná het lot, want
@@ -84,6 +86,7 @@
   // ook, zoals js/main.js het doet voor waar je wel bent: op zijn eigen kaart, en niet getekend. `dt` is de tijd van het
   // scherm, `dtWereld` die van de wereld (js/tijd.js).
   T.werkDorpBij = function (S, D, dt, dtWereld) {
+    T.werkBeginBij(S, D); // het lege begin: de kar rijdt het land in, met de gezinnen erachter (js/begin.js)
     T.werkGebouwenBij(D); // merkt zelf een nieuwe dag op de kalenderklok (js/gebouwen.js)
     T.werkMarskramerBij(D); // zijn poppetje: over de weg binnen, naar het plein, en weer weg (js/handel.js)
     T.werkHeerBij(D); // net zo: de heer en zijn soldaten op Sint-Maarten (js/heer.js)

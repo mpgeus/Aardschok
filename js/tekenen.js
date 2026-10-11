@@ -2717,6 +2717,24 @@
       T.blok(ctx, p.x, p.y, 0.36, 0.36, 4, '#6e4622', { helder, basis: 28 });
       return;
     }
+    if (v.soort === 'tent') {
+      // Een tent of een afdak in het kamp van het lege begin (js/begin.js; werklijst vraag 152), met zijn opening naar het
+      // vuur. Zonder kunst: een blok linnen, of van takken.
+      const tent = metSprites() && T.sprites.kamp(v.vorm, v.richting);
+      if (tent) T.sprites.teken(ctx, tent, p.x, p.y, helder);
+      else T.blok(ctx, p.x, p.y, 0.4, 0.4, 24, v.vorm === 'afdak' ? '#6b4f33' : '#d8cfae', { helder });
+      return;
+    }
+    if (v.soort === 'kampvuur') {
+      // Het kampvuur in het midden van het kamp (js/begin.js): het brandt als de mensen op zijn, en smeult als ze werken of
+      // slapen (T.kampvuurStand). Zonder kunst: een kring stenen met een gloed.
+      const D = T.dorpHier(S);
+      const stand = (D && T.kampvuurStand(D)) || 'uit';
+      const vuur = metSprites() && T.sprites.kampvuur(stand, S.tijd);
+      if (vuur) T.sprites.teken(ctx, vuur, p.x, p.y, helder);
+      else T.blok(ctx, p.x, p.y, 0.3, 0.3, 4, stand === 'brandt' ? '#e0782a' : '#6f6a62', { helder });
+      return;
+    }
     if (v.soort === 'schandpaal') {
       // De schandpaal (js/heer.js): leeg, met het halsijzer open tegen de paal, of bezet, met de
       // ketting naar wie ervoor staat (T.aanDePaal); diens halsijzer komt ná hem (tekenHalsijzer).

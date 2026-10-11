@@ -22,6 +22,22 @@
   // "Ons gehucht Heikant", of zonder naam "dit gehucht".
   const hetDorp = (S, wat) => (T.dorpsnaam(S.dorp) ? `Ons ${wat} ${veilig(T.dorpsnaam(S.dorp))}` : `dit ${wat}`);
 
+  // De benoeming van het lege begin (werklijst vraag 152; js/begin.js): de heer stuurt je met de gezinnen naar een stuk
+  // van zijn wildernis, met wat er op de kar ligt, en vraagt het eerste jaar niets (T.heerLaatMetRust).
+  function benoemingInDeWildernis(S) {
+    const I = T.BEGIN_INSTELLINGEN;
+    return {
+      wanneer: vandaag(S),
+      aan: T.t('To Our new reeve,'),
+      tekst:
+        `<p>${T.t('It has pleased Us to send you, with {n|# family|# families}, to a piece of Our wilderness. Make a village of it. A village brings Us money; wilderness does not.', { n: I.gezinnen })}</p>` +
+        `<p>${T.t('The cart carries what We could spare: some wood, grain for the spring, seed grain, a few tools and {goud} gold. Do not expect more.', { goud: I.kar.goud })}</p>` +
+        `<p>${T.t('This year We ask nothing of you. We are generous. Next year, on St Martin\'s Day, We shall come in person to collect what is Ours.')}</p>` +
+        `<p>${T.t('Laws you may make, as many as you like. Our forest you leave alone.')}</p>`,
+      knoppen: [{ actie: 'sluit', tekst: T.t('To work'), hoofd: true }],
+    };
+  }
+
   // Welke brief nu open staat (alleen scherm; na het laden staat er geen open).
   let open = null;
 
@@ -46,7 +62,8 @@
     // De benoeming: de eerste brief, als een nieuw spel begint. Marcel koos hem op 25 sep in plaats van een
     // titelscherm (ontwerp/spel.md, onder Open): de tutorial van het oude spel vertelde je waarom je er was, en nu
     // doet de heer dat zelf, in dezelfde hand als zijn andere brieven.
-    benoeming: (S) => ({
+    // In het lege begin (vraag 152, js/begin.js) een andere: hij stuurt je met de gezinnen naar zijn wildernis.
+    benoeming: (S) => (S.dorp.begin ? benoemingInDeWildernis(S) : {
       wanneer: vandaag(S),
       aan: 'Aan Onze nieuwe schout,',
       tekst:
@@ -58,6 +75,16 @@
         // De wetten (js/wetten.js; Marcel, 29 sep, vraag 54): het menu onder W. De houtkap in zijn bos is er een van.
         `<p>Wetten mag u maken, zoveel u wilt. Over Ons bos gaat u niet.</p>`,
       knoppen: [{ actie: 'sluit', tekst: 'Aan het werk', hoofd: true }],
+    }),
+
+    // In wijnmaand van het eerste jaar van het lege begin (T.heerLaatMetRust, js/begin.js): geen schatting, hij spaart je.
+    gespaard: (S) => ({
+      wanneer: vandaag(S),
+      aan: T.t('To Our reeve,'),
+      tekst:
+        `<p>${T.t('St Martin\'s Day is coming, and We have decided to spare you this year. Do not thank Us.')}</p>` +
+        `<p>${T.t('Next year We shall count all the more carefully.')}</p>`,
+      knoppen: [{ actie: 'sluit', tekst: T.t('Thank you, my lord'), hoofd: true }],
     }),
 
     // De schatting op 1 wijnmaand (js/heer.js, T.stuurBrief): wat hij op Sint-Maarten komt halen. Hij wacht tot je

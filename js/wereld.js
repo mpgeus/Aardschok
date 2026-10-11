@@ -63,6 +63,10 @@
     // stronken vast: na de rand van het bos kon hij er niet meer in. Een stronk die de maker op de kaart zette, heeft een
     // muur onder zich, zoals elk vast ding uit het vel (js/kaart.js).
     boomstronk: { blokkeert: false, zichtDicht: false },
+    // Het kamp van het lege begin (js/begin.js; werklijst vraag 152): de tent of het afdak van een gezin, met de tegel erachter
+    // als voet (`voet` op het voorwerp), en het kampvuur in het midden.
+    tent: { blokkeert: true, zichtDicht: false, naam: 'een tent' },
+    kampvuur: { blokkeert: true, zichtDicht: false, naam: 'het kampvuur' },
   };
 
   // De bomen en de struiken, op één plek (vraag 148, a: met een nieuwe soort hier telt hij overal mee). Een boom zonder

@@ -43,6 +43,19 @@ Spel.taal({
     "Load this game? Anything since your last save will be lost.": "Dit spel laden? Wat je sinds het laatste opslaan deed, ben je kwijt.",
     "The game could not autosave: {reden}": "Het spel kon niet vanzelf opslaan: {reden}",
     "Photo mode · drag or arrows to look · wheel to zoom · [Enter] saves a picture · [H] or [Esc] to return": "Fotomodus · slepen of pijltjes om te kijken · wiel: verder of dichterbij · [Enter] bewaart een plaatje · [H] of [Esc]: terug",
-    "Picture saved: {naam}": "Plaatje bewaard: {naam}"
+    "Picture saved: {naam}": "Plaatje bewaard: {naam}",
+    "St Martin's Day is coming, and the lord spares you this year.": "Sint-Maarten nadert, en de heer spaart je dit jaar.",
+    "The cart is on the open ground that will be the square. The families put up their tents around the campfire.": "De kar staat op de open plek die het plein wordt. De gezinnen zetten hun tenten op rond het kampvuur.",
+    "To Our new reeve,": "Aan Onze nieuwe schout,",
+    "It has pleased Us to send you, with {n|# family|# families}, to a piece of Our wilderness. Make a village of it. A village brings Us money; wilderness does not.": "Het heeft Ons behaagd u met {n|# gezin|# gezinnen} naar een stuk van Onze wildernis te zenden. Maak er een dorp van. Een dorp brengt Ons geld op; wildernis niet.",
+    "The cart carries what We could spare: some wood, grain for the spring, seed grain, a few tools and {goud} gold. Do not expect more.": "Op de kar ligt wat Wij konden missen: wat hout, graan voor het voorjaar, zaaigraan, wat gereedschap en {goud} goud. Verwacht niet meer.",
+    "This year We ask nothing of you. We are generous. Next year, on St Martin's Day, We shall come in person to collect what is Ours.": "Dit jaar vragen Wij niets van u. Wij zijn gul. Volgend jaar komen Wij op Sint-Maarten persoonlijk halen wat Ons toekomt.",
+    "Laws you may make, as many as you like. Our forest you leave alone.": "Wetten mag u maken, zoveel u wilt. Over Ons bos gaat u niet.",
+    "To work": "Aan het werk",
+    "To Our reeve,": "Aan Onze schout,",
+    "St Martin's Day is coming, and We have decided to spare you this year. Do not thank Us.": "Sint-Maarten nadert, en Wij hebben besloten u dit jaar te sparen. Bedank Ons niet.",
+    "Next year We shall count all the more carefully.": "Volgend jaar tellen Wij des te beter.",
+    "Thank you, my lord": "Dank u, heer",
+    "The covered wagon, with everything you brought": "De huifkar, met alles wat jullie meebrachten"
   }
 });

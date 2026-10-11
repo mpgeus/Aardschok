@@ -77,7 +77,9 @@
     const g = S.gebieden && S.gebieden.gehucht;
     const gemaakt = !!(g && g.maker);
     const opEiland = !!(g && g.eiland);
-    if (S.proefje || (gemaakt === !!T.MAKER_INSTELLINGEN.eigenGehucht && opEiland === !!T.MAKER_INSTELLINGEN.opEiland)) return false;
+    const leeg = !!(g && g.kamp); // het lege begin (js/begin.js)
+    const leegGevraagd = !!(T.MAKER_INSTELLINGEN.leeg && T.MAKER_INSTELLINGEN.opEiland);
+    if (S.proefje || (gemaakt === !!T.MAKER_INSTELLINGEN.eigenGehucht && opEiland === !!T.MAKER_INSTELLINGEN.opEiland && leeg === leegGevraagd)) return false;
     T.nieuwSpel();
     return true;
   };
@@ -1222,6 +1224,31 @@
         plek: dorp ? dorp.aard : null,
         hoek: [w.eiland.x0, w.eiland.y0],
         uitgang: w.overgangen ? w.overgangen.map((o) => [o.x, o.y]) : null,
+      };
+    },
+    // Het lege begin (js/begin.js, vraag 152): Spel.debug.begin('leeg') zet de spelregel "Het begin" op "Leeg" en begint
+    // een nieuw spel op het eiland (met een nummer erbij: Spel.debug.begin('leeg', 5)), zonder brief; ('gehucht') zet hem
+    // terug. Zonder iets zegt het hoe het kamp ervoor staat: waar de kar is, wie er woont, en tot wanneer de heer niets vraagt.
+    begin(wat, zaad) {
+      if (wat === 'leeg' || wat === 'gehucht') {
+        T.zetOptie('begin', wat);
+        T.zetOptie('gehucht', 'eiland');
+        T.nieuwSpel(zaad != null ? Number(zaad) : undefined);
+      }
+      const D = S.dorp;
+      const B = D && D.begin;
+      if (!B) return 'Dit spel begon in het gehucht dat er al was (de spelregel "Het begin" staat niet op "Leeg").';
+      return {
+        kamp: B.kamp,
+        kar: { tegel: [B.kar.tx, B.kar.ty], naar: [D.wereld.kamp.kar.x, D.wereld.kamp.kar.y], nogTegels: B.kar.pad.length },
+        schoutLooptMee: B.volgt,
+        gezinnenOnderweg: B.gezinnen ? D.bewoners.mensen.filter((p) => p.komt).length : 'wachten op de kar',
+        tenten: D.gebouwen.filter((g) => g.soort === 'tent').map((g) => {
+          const wie = D.bewoners.mensen.filter((p) => p.huis === g);
+          return `${g.tent.vorm} bij (${g.tent.x}, ${g.tent.y}): ${g.huis === 'schout' ? 'de schout en zijn gezin' : wie.map((p) => p.naam).join(', ')}`;
+        }),
+        vuur: T.kampvuurStand(D),
+        heerVraagtNiets: `tot ${T.datumVanDag(B.heerVrijTot).tekst}`,
       };
     },
     // De hoogte van het land (js/hoogte.js, vraag 121): of deze kaart hoogte heeft, hoe hoog het hoogste punt is en

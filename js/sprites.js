@@ -619,6 +619,24 @@
     return stuk(MAP + m.bestand, i * m.cel[0], 0, m.cel[0], m.cel[1], m.anker);
   };
 
+  // Het kamp van het lege begin (gereedschap/pixelart/kamp.cjs; js/begin.js): de tent, de bruine tent of het afdak
+  // (`vorm`, de rijen), met zijn opening naar ZO, ZW, NW of NO (de kolommen). Null als het vel er niet is.
+  S.kamp = function (vorm, richting) {
+    const t = gegevens && gegevens.kamp;
+    if (!t || !laadAlsNodig(MAP + t.bestand)) return null;
+    const rij = Math.max(0, t.soorten.indexOf(vorm));
+    const kol = Math.max(0, t.richtingen.indexOf(richting));
+    return stuk(MAP + t.bestand, kol * t.cel[0], rij * t.cel[1], t.cel[0], t.cel[1], t.anker);
+  };
+  // Het kampvuur: het brandt (acht beelden, op `tijd` in seconden), het smeult, of het is uit; een cel per beeld, en dan
+  // een per stand.
+  S.kampvuur = function (stand, tijd) {
+    const t = gegevens && gegevens.kamp && gegevens.kamp.vuur;
+    if (!t || !laadAlsNodig(MAP + t.bestand)) return null;
+    const kol = stand === 'brandt' ? Math.floor((tijd || 0) * t.fps) % t.beelden : t.beelden + Math.max(0, t.standen.indexOf(stand) - 1);
+    return stuk(MAP + t.bestand, kol * t.cel[0], 0, t.cel[0], t.cel[1], t.anker);
+  };
+
   // ---------------------------------------------------------------- bouwfasen (tegels/bouwfasen/<tekening>.png, bouwfasen.js)
   //
   // Een gebouw in aanbouw: vijf fases tussen "net begonnen" en de afgewerkte tekening

@@ -410,6 +410,15 @@
       tekening: 'huizen/wit-woontoren-pannen-z', beschrijving: 'drie gezinnen boven elkaar, in steen',
       opmerking: 'Nog zonder bouwfasen: hij groeit in één nacht.',
     },
+    // De tent of het afdak van een gezin in het kamp van het lege begin (werklijst vraag 152; js/begin.js): niemand bouwt
+    // hem, de kar bracht hem mee. Hij is zo groot als zijn gezin (`tijdelijk`, T.woonruimteVan): een nieuw gezin vindt er
+    // geen plaats. Zijn voet en zijn deur zegt hij zelf, naar de kant van zijn opening.
+    tent: {
+      naam: 'tent', meervoud: 'tenten', trede: 'gehucht', voet: { b: 2, h: 1 }, kosten: {}, heer: {}, bouwtijd: 0,
+      handen: 0, woonruimte: 0, tijdelijk: true, maakt: null, menu: false,
+      tekening: null, beschrijving: 'een tent of een afdak in het kamp, tot er een hut is',
+      opmerking: 'Uit gereedschap/pixelart/kamp.cjs (het vel kamp): de tent van linnen, de bruine tent en het afdak, elk met zijn opening naar vier kanten.',
+    },
     raadhuis: {
       naam: 'raadhuis', trede: 'stad', voet: { b: 8, h: 6 }, kosten: { hout: 24, goud: 40 }, heer: { goud: 20 }, bouwtijd: 8,
       handen: 0, woonruimte: 0, maakt: null, menu: true,
@@ -1113,8 +1122,16 @@
   // zijn gezin al (js/erven.js). Een huis dat jij neerzet, telt pas als het klaar is.
   T.telWoonruimte = function (D) {
     let woonruimte = 0;
-    for (const g of D.gebouwen) if (g.klaar || g.erf) woonruimte += T.GEBOUWEN[g.soort].woonruimte || 0;
+    for (const g of D.gebouwen) if (g.klaar || g.erf) woonruimte += T.woonruimteVan(D, g);
     return woonruimte;
+  };
+  // Hoeveel mensen er in gebouw g kunnen wonen: wat zijn soort zegt, en in een tent van het kamp (`tijdelijk`, js/begin.js)
+  // zoveel als er wonen, zodat een nieuw gezin er geen plaats vindt.
+  T.woonruimteVan = function (D, g) {
+    const soort = T.GEBOUWEN[g.soort];
+    if (!soort) return 0;
+    if (soort.tijdelijk) return D.bewoners ? D.bewoners.mensen.filter((p) => p.huis === g).length : 0;
+    return soort.woonruimte || 0;
   };
 
   // Het getal in de balk veranderen: de enige manier, zoals T.wijzigVoorraad voor de voorraad. Het
@@ -1227,6 +1244,7 @@
     // Het weer van de dag die begint (js/weer.js): regen of zon, en of het droogte is. Als eerste, want de oogst, de
     // visser en de balk vragen ernaar.
     T.tikWeerDag(D, dag);
+    T.tikBeginDag(D); // het lege begin: staat het kamp nog niet, dan nu (js/begin.js)
     // 0. De akkers (js/akkers.js): zaaien op 1 lentemaand, en het vangnet na de oogsttijd. Als
     // eerste: de boeren zaaien 's morgens, en daarna eet het dorp van wat er over is.
     T.tikOntginnenDag(D, dag); // een stuk heide waarvan de maand om is, is ontgonnen (js/ontginnen.js)

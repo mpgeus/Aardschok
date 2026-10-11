@@ -708,8 +708,14 @@
         e.kijkt = null;
       }
     }
-    if (d.maand === maandIdx(IN().brief.maand) && d.dagVanMaand === IN().brief.dag && !h.bezoek) T.stuurBrief(D, dag);
-    if (d.sintMaarten && !h.bezoek) T.heerKomt(D, dag);
+    // Het eerste jaar van het lege begin vraagt hij niets (js/begin.js): in plaats van de schatting zegt hij dat hij je spaart.
+    const vrij = T.heerLaatMetRust(D, dag);
+    if (d.maand === maandIdx(IN().brief.maand) && d.dagVanMaand === IN().brief.dag && !h.bezoek) {
+      if (!vrij) T.stuurBrief(D, dag);
+      else if (T.ui && T.ui.toonBrief) T.ui.toonBrief(D, 'gespaard');
+      else T.zeg(D, T.t('St Martin\'s Day is coming, and the lord spares you this year.'));
+    }
+    if (d.sintMaarten && !h.bezoek && !vrij) T.heerKomt(D, dag);
     // Hij wacht; komt de schout niet, dan neemt hij het zelf.
     const b = h.bezoek;
     if (b && b.staat && !b.betaald && b.wachtTot != null && dag >= b.wachtTot) T.heerNeemtZelf(D);

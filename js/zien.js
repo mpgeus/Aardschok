@@ -39,7 +39,8 @@
     const deel = T.dagdeelVan(D.kalender.dag, T.isOogstDag(D.kalender.dag));
     const huizen = huizenLicht(D, deel);
     const brand = T.brandLicht(D); // wat brandt, geeft ook overdag licht (js/brand.js)
-    if (deel !== 'avond') return herberg.concat(huizen, brand, schout);
+    const kamp = T.kampLicht(D); // het kampvuur van het lege begin (js/begin.js)
+    if (deel !== 'avond') return herberg.concat(huizen, brand, kamp, schout);
     // De lantaarn naast de deur van de herberg is het licht van de herberg al.
     const vanDeHerberg = (v) => herberg.some((h) => T.afstand(h, v) <= 1);
     const lantaarns = w.voorwerpen
@@ -47,7 +48,7 @@
       .map((v) => ({ x: v.x, y: v.y, straal: IN().lantaarnStraal, sterkte: IN().lantaarnSterkte, soort: 'lantaarn' }));
     // En op een feest het licht op het plein (js/feesten.js).
     const feest = T.feestLicht(D).map((b) => ({ ...b, soort: 'feest' }));
-    return herberg.concat(lantaarns, feest, huizen, brand, schout);
+    return herberg.concat(lantaarns, feest, huizen, brand, kamp, schout);
   };
 
   // Draagt de schout van dit dorp nu een brandende lantaarn? Buiten, op de kaart van zijn dorp, als het donker genoeg

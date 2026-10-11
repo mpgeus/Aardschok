@@ -492,6 +492,22 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   loopt de weg af; het bericht zegt wie het zijn. Werk telt in uren (`T.werkUrenVan`, een optie): een
   werkplaats maakt naar de uren dat zijn mensen er echt zijn, min de weg van hun deur erheen. Hoe lang
   iemand ergens heen loopt, zegt `T.looptijdVan` (ook voor de herberg).
+- `js/begin.js`: **het lege begin** (vraag 152, stap 1b, 11 okt; Marcel: "We moeten ook zelf alles vanaf de start gaan
+  bouwen", en "Rijdt nu binnen"): met de spelregel "Het begin" op "Leeg" (`T.MAKER_INSTELLINGEN.leeg`, alleen op het
+  eiland; standaard nog het gehucht dat er al was, tot 1f) legt de maker geen gehucht maar alleen het land (`leeg` in
+  `js/maker.js`): het plein met `leegRand` tegels open eromheen en verder het bos van het eiland, een paar eiken, de plek
+  van de marskramer waar de weg het plein raakt, en de plek van het kamp (`w.kamp`). `T.zetKamp` (vanuit `T.nieuwDorp`):
+  de voorraad uit de kar (`T.BEGIN_INSTELLINGEN.kar`), een tent per gezin (`T.GEBOUWEN.tent`, `tijdelijk`: zo groot als
+  zijn gezin, `T.woonruimteVan` in `js/gebouwen.js`, dus geen plaats voor een nieuw gezin; zijn deur zegt hij zelf,
+  `g.deur`), die van de schout met `huis: 'schout'` (slapen, het rapport, de bode), en de huifkar als wezen (`e.kar`, het
+  vel `huifkar`) aan de rand op de weg; in elke andere tent een gezin dat meekwam (`kampGezin` in `js/bewoners.js`). Elk
+  beeld (`T.werkBeginBij`): de kar rijdt naar het plein, de gezinnen komen over de weg erachter (`p.komt`), de schout loopt
+  naast de kar tot je zelf klikt (`padDoel.metDeKar`), en is de kar er, dan gaan de tenten en het kampvuur op
+  (`T.zetKampOp`; het vangnet elke nacht, `T.tikBeginDag`). Het vuur brandt als de mensen op zijn en smeult als ze werken
+  of slapen (`T.kampvuurStand`, `T.kampLicht`; `T.sprites.kamp` en `T.sprites.kampvuur`, uit
+  `gereedschap/pixelart/kamp.cjs`). De benoeming is een andere (de wildernis, js/brieven.js), en het eerste jaar vraagt de
+  heer niets (`T.heerLaatMetRust`, `heerVrij`: geen schatting en geen grillen; in wijnmaand de brief `gespaard`). Wat het
+  dorp van het begin weet, staat in `D.begin`. Nog niet: verhuizen uit het kamp (1c), zelf bouwen (1d), boeren worden (1e).
 - `js/erven.js`: **het dorp bouwt zelf** (stap 1 van de proef, vraag 52, 28 sep): jij wijst een erf aan met het
   bouwmenu (10 bij 10 tegels, `T.ERVEN_INSTELLINGEN`; land, geen gebouw: `D.erven`), en is het dorp vol, dan
   neemt een nieuw gezin een vrij erf (`T.kiesErf`) en zet er zelf een hut op met hout uit de voorraad
@@ -1349,6 +1365,9 @@ nieuw spel op het gehucht van zaad 3 (zonder brief), zoals op de pagina "Gehucht
 zonder het eiland, waarop de vaste schermafdrukken, de tekenmeting en de samenvatting spelen.
 `Spel.debug.eiland(5)` begint nu een spel op het eiland van 5 (zonder brief); zonder nummer zegt het in welk dorp je op het
 eiland ligt, wat voor plek het is en waar de uitgang is.
+`Spel.debug.begin('leeg')` begint nu een spel met het lege begin (vraag 152; `('leeg', 5)` op het eiland van 5,
+`('gehucht')` zet de spelregel terug); zonder iets zegt het hoe het kamp ervoor staat: waar de kar is en heen gaat, of de
+schout meeloopt, wie er in welke tent woont, het vuur, en tot wanneer de heer niets vraagt.
 `Spel.debug.voorval()` zegt welk voorval er loopt, welke vervolgen nog komen, welke voorvallen er nu kunnen (met hoe
 zwaar ze wegen) en welke oorzaken er spelen;
 `('brand')` laat er nu een beginnen, over mensen die erbij passen, en wie het zegt, zoekt je meteen.

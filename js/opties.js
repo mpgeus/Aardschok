@@ -704,6 +704,19 @@
           uitleg: 'Elk nummer is een eiland, en je dorp ligt erop: aan de kust, aan een rivier, op de heide of aan de bosrand. Het water, het bos, de heide en de wegen van je land zijn die van het eiland, en de weg door je dorp gaat naar het kasteel van de heer. Het gehucht is een dorp dat er al was: wat het nodig heeft, is gerooid.' },
       ],
     },
+    // Het lege begin (werklijst vraag 152, stap 1b; Marcel, 11 okt: "We moeten ook zelf alles vanaf de start gaan bouwen";
+    // js/begin.js): een lege plek op het eiland, een kar en vier gezinnen. Standaard het gehucht dat er al was, zodat de
+    // toetsen en de speeltest blijven spelen, tot het lege begin een jaar draait (vraag 152, 1f).
+    {
+      id: 'begin', naam: 'Het begin', standaard: 'gehucht',
+      uitleg: 'Hoe een nieuw spel begint. Geldt vanaf het volgende nieuwe spel.',
+      keuzes: [
+        { id: 'gehucht', naam: 'Het gehucht dat er al was', zet: { 'MAKER_INSTELLINGEN.leeg': false },
+          uitleg: 'Je wordt schout van een gehucht met huizen, een herberg, en boerderijen met hun akkers.' },
+        { id: 'leeg', naam: 'Leeg', zet: { 'MAKER_INSTELLINGEN.leeg': true },
+          uitleg: 'Een kar met wat spullen rijdt een leeg stuk van het eiland in, met je gezin en vier gezinnen erachter. Op de open plek die het plein wordt, slapen jullie in tenten bij het kampvuur. Zelf bouwen komt nog; alleen op het eiland.' },
+      ],
+    },
   ];
 
   // De namen die je zelf geeft (js/mensen.js). De heer heeft standaard geen naam: dan heet hij
@@ -758,6 +771,7 @@
     { naam: 'Het rapport', blok: 'OCHTENDRAPPORT_INSTELLINGEN' },
     { naam: 'Het land', blok: 'LAND_INSTELLINGEN' },
     { naam: 'De maker', blok: 'MAKER_INSTELLINGEN' },
+    { naam: 'Het lege begin', blok: 'BEGIN_INSTELLINGEN' },
     { naam: 'De boeren', blok: 'BOEREN_INSTELLINGEN' },
     { naam: 'De velden', blok: 'VELDEN_INSTELLINGEN' },
     { naam: 'Het veldwerk', blok: 'VELDWERK_INSTELLINGEN' },

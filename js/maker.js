@@ -36,6 +36,11 @@
     // Op het eiland: zo ver om het midden van het plein is alles gerooid (tegels), en een bruggetje is hooguit zo lang
     // (tegels water) en kost zoveel stappen extra, zodat een weg liever om het water heen loopt.
     eilandKern: 16,
+    // In het lege begin (vraag 152, de spelregel "Het begin"; js/begin.js): legt de maker geen gehucht, maar alleen het land
+    // met een open plek die het plein wordt; zo ver om het plein is het open (tegels), en verder staat het bos van het
+    // eiland (Marcel, 11 okt: "Klein, bos dichtbij").
+    leeg: false,
+    leegRand: 2,
     eilandBrug: { lang: 7, kost: 12 },
     // Zo ver om de kaart weet de rand wat het eiland er heeft (tegels; T.randVanHetEiland): zo ver tekent js/tekenen.js
     // het bos om de kaart.
@@ -302,7 +307,7 @@
 
   // Eén poging: een plan, of null met de reden waarom het niet deugde. Met `land` (T.landVanEiland, js/eiland.js) legt
   // hij het gehucht op het land van het eiland: zie bij elke stap "Op het eiland".
-  function leg(zaad, poging, land) {
+  function leg(zaad, poging, land, leeg) {
     const I = IN();
     const B = I.b;
     const H = I.h;
@@ -857,9 +862,11 @@
     // vrij, met het hele plein ervoor. Zijn deur hoeft niet pal aan het plein: het uitgesleten zand loopt van zijn
     // deur het plein op, zoals in het ontworpen gehucht. Pal aan het plein kon alleen aan één kant, want een huis
     // staat recht in het raster en de rand van het plein ligt er schuin in.
+    // In het lege begin (vraag 152, `leeg`) staat er nog niets: geen huis van de schout, geen huizen om het plein, geen
+    // boerderijen, geen meent en geen put. Wat er wel komt, is het kamp op het plein (hieronder, bij stap 12).
     const [achterX, achterY] = randPunt(-Math.SQRT1_2, -Math.SQRT1_2);
-    let schoutHuis;
-    {
+    let schoutHuis = null;
+    if (!leeg) {
       // in de stijl van het land, met zijn deur naar welke kant ook, zolang hij naar het plein kijkt (vraag 114, stap 3)
       const kandidaten = [];
       const v = rondPlein(10);
@@ -882,10 +889,10 @@
     }
     // Het zand: het uitgesleten stuk van zijn deur het plein op. De plek van de marskramer (en van de heer op
     // Sint-Maarten) komt erop, zodra de put staat (hieronder, bij stap 12).
-    const deurS = schoutHuis.deur;
-    let zand;
-    let zandMidden;
-    {
+    const deurS = schoutHuis && schoutHuis.deur;
+    let zand = null;
+    let zandMidden = null;
+    if (schoutHuis) {
       const [mx, my] = [cx - deurS.x - 0.5, cy - deurS.y - 0.5];
       const l = Math.hypot(mx, my) || 1;
       const [lx, ly] = [mx / l, my / l]; // van de deur naar het midden van het plein
@@ -907,7 +914,7 @@
     // andere is leeg, voor het eerste gezin dat komt (js/bewoners.js, T.zetBeginBewoners). Niet elk huis staat pal aan
     // het plein: de hut in het westen van het ontworpen gehucht staat er acht tegels vanaf, met een pad.
     const voorwerpen = [];
-    {
+    if (!leeg) {
       const hutten = schud(vormenVoor(stijl, 'hut'));
       const rij = [
         { rol: 'herberg', namen: vormenVoor(stijl, 'herberg').flat(), huis: 'herbergierster', totPlein: 3 },
@@ -974,7 +981,7 @@
       }
       return v;
     };
-    {
+    if (!leeg) {
       const start = tussen(0, Math.PI * 2);
       const richtingen = [0, 1, 2, 3, 4].map((i) => start + (i * Math.PI * 2) / 5 + tussen(-0.2, 0.2));
       const verdeling = schud(I.akkers);
@@ -1079,8 +1086,8 @@
 
     // ---- 9. De meent, met de schaapskooi aan zijn noordrand ----
     // De kooi staat met zijn voorkant naar de heide, zodat de schapen vóór de kooi staan (maak-gehucht.cjs).
-    let meent;
-    {
+    let meent = null;
+    if (!leeg) {
       const t = tekening(I.tekeningen.kooi[0]);
       const opties = [];
       for (const [b, h] of I.meent) {
@@ -1183,12 +1190,15 @@
     // Het dorp was er al (Marcel, 8 okt: "C dorp dat er al was"): wat het nodig heeft, is gerooid (de kern om het plein,
     // en een tegel om alles wat er gebouwd, geakkerd of begraasd wordt), en de rest is bos waar het eiland bos is, en een
     // boom waar het eiland er een heeft (een bosje in de kampen).
+    // De kern van het dorp is gerooid: een kring om het midden van het plein, of in het lege begin alleen het plein met
+    // `leegRand` tegels eromheen (vraag 152; Marcel, 11 okt: "Klein, bos dichtbij"), zodat het bos er vlak omheen staat.
+    const inKern = (x, y) => (leeg ? totPlein(Math.floor(x), Math.floor(y)) <= I.leegRand : Math.hypot(x - cx, y - cy) < I.eilandKern);
     if (land) {
       const gebouwd = somVan([HUIS, ERF, WEG, PLEIN, AKKER, MEENT]);
       const bos = [];
       for (let y = 0; y < H; y++) {
         for (let x = 0; x < B; x++) {
-          if (op(x, y) !== VRIJ || Math.hypot(x + 0.5 - cx, y + 0.5 - cy) < I.eilandKern || gebouwd(x - 1, y - 1, 3, 3)) continue;
+          if (op(x, y) !== VRIJ || inKern(x + 0.5, y + 0.5) || gebouwd(x - 1, y - 1, 3, 3)) continue;
           const s = land.streek(x, y);
           if (s === 'woud' || s === 'broek' || land.boom(x, y)) bos.push([x, y]);
         }
@@ -1200,7 +1210,7 @@
     const inAkker = (x, y) => akkers.some((a) => x >= a.x && x < a.x + a.b && y >= a.y && y < a.y + a.h);
     const opHeide = (x, y) => {
       const m = meent;
-      if (x < m.x || x > m.x + m.b || y < m.y || y > m.y + m.h) return false;
+      if (!m || x < m.x || x > m.x + m.b || y < m.y || y > m.y + m.h) return false;
       const rand = x === m.x || x === m.x + m.b || y === m.y || y === m.y + m.h;
       return !rand || r() < 0.5;
     };
@@ -1209,7 +1219,7 @@
     // wordt niet gebouwd (T.waaromNietOpDezeGrond, js/gebouwen.js).
     const opErf = (x, y) => [[0, 0], [-1, 0], [0, -1], [-1, -1]].some(([dx, dy]) => [HUIS, ERF].includes(op(x + dx, y + dy)));
     const grondOpEiland = (x, y) => {
-      if (Math.hypot(x - cx, y - cy) < I.eilandKern) return 'g';
+      if (inKern(x, y)) return 'g';
       const l = T.grondVanStreek(land.hoek(x, y));
       return l === 's' && opErf(x, y) ? 'g' : l;
     };
@@ -1219,7 +1229,7 @@
       for (let x = 0; x <= B; x++) {
         if (nat(x, y)) rij.push(land && T.grondVanStreek(land.hoek(x, y)) === 'e' ? 'e' : 'w'); // de zee, of ander water
         else if (naastWater(x, y)) rij.push('g');
-        else if (opWeg(x, y) || inAkker(x, y) || T.binnenRand(zand, x, y)) rij.push('z');
+        else if (opWeg(x, y) || inAkker(x, y) || (zand && T.binnenRand(zand, x, y))) rij.push('z');
         else if (opHeide(x, y)) rij.push('h');
         else rij.push(land ? grondOpEiland(x, y) : 'g');
       }
@@ -1269,8 +1279,51 @@
       bezet.add(sleutel(x, y));
     };
     for (const v of voorwerpen) bezet.add(sleutel(v.x, v.y));
+    // Het lege begin (vraag 152): het kamp op het plein, waar de kar stopt (js/begin.js zet het op), en de plek van de
+    // marskramer waar de weg naar de uitgang het plein raakt. Een put of een lantaarn is er nog niet.
+    // Waar het kamp komt (T.BEGIN_INSTELLINGEN.kamp): het vuur zo dicht mogelijk bij het midden van het plein, met de tenten
+    // en de afdakken eromheen, elk met de tegel achter zich en zijn opening ervoor, en de plek van de kar, allemaal vrij
+    // op het plein. Het kamp zelf zet js/begin.js op als de kar er is.
+    const kampOpHetPlein = () => {
+      const K = T.BEGIN_INSTELLINGEN.kamp;
+      const RICHTING = { ZO: [1, 0], ZW: [0, 1], NW: [-1, 0], NO: [0, -1] };
+      const vrij = (x, y) => op(x, y) === PLEIN && vrijVoor(x, y) && opGras(x, y);
+      const kandidaten = [];
+      for (let vy = pleinVak.y0; vy <= pleinVak.y1; vy++) {
+        for (let vx = pleinVak.x0; vx <= pleinVak.x1; vx++) {
+          const plekken = K.plekken.map((p) => {
+            const [rx, ry] = RICHTING[p.open];
+            const x = vx + p.dx;
+            const y = vy + p.dy;
+            // de tegel van de tent zelf, en de tegel erachter (weg van de opening)
+            const voet = { x: Math.min(x, x - rx), y: Math.min(y, y - ry), b: rx ? 2 : 1, h: ry ? 2 : 1 };
+            return { x, y, open: p.open, vorm: p.vorm, voet, deur: { x: x + rx, y: y + ry } };
+          });
+          const kar = { x: vx + K.kar.dx, y: vy + K.kar.dy };
+          const tegels = [{ x: vx, y: vy }];
+          for (const p of plekken) {
+            for (let y = p.voet.y; y < p.voet.y + p.voet.h; y++) for (let x = p.voet.x; x < p.voet.x + p.voet.b; x++) tegels.push({ x, y });
+            tegels.push(p.deur);
+          }
+          for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) tegels.push({ x: kar.x + dx, y: kar.y + dy });
+          if (!tegels.every((t) => vrij(t.x, t.y))) continue;
+          const straal = Math.max(...tegels.map((t) => Math.hypot(t.x - vx, t.y - vy)));
+          kandidaten.push({ x: vx, y: vy, plekken, kar, straal, tegels, score: -Math.hypot(vx + 0.5 - cx, vy + 0.5 - cy) + tussen(0, 1.5) });
+        }
+      }
+      const k = besteVan(kandidaten);
+      return k ? { vuur: { x: k.x, y: k.y }, plekken: k.plekken, kar: k.kar, straal: Math.ceil(k.straal), bezet: k.tegels } : null;
+    };
+    let kamp = null;
+    if (leeg) {
+      kamp = kampOpHetPlein();
+      if (!kamp) return mis('geen plek voor het kamp op het plein');
+      for (const t of kamp.bezet) bezet.add(sleutel(t.x, t.y));
+    }
+    // Ligt (x, y) binnen `rand` tegels van het kamp?
+    const bijHetKamp = (x, y, rand) => kamp.bezet.some((t) => Math.abs(t.x - x) <= rand && Math.abs(t.y - y) <= rand);
     // De put op het zand, twee stappen voor de deur van de schout, met de lantaarn ernaast.
-    {
+    if (!leeg) {
       const px = deurS.x + schoutHuis.kant.x * 2;
       const py = deurS.y + schoutHuis.kant.y * 2;
       const vakken = [[px, py], [px + 1, py], [px, py + 1], [px + 1, py + 1]];
@@ -1285,7 +1338,22 @@
     // De plek van de marskramer, waar ook de heer op Sint-Maarten staat: op het zand, zo dicht mogelijk bij zijn
     // midden (in het ontworpen gehucht schuin naast de put, drie stappen voor de deur van de schout).
     let marskramer = null;
-    {
+    if (leeg) {
+      // op het plein, waar de weg het plein raakt, zo dicht mogelijk bij de uitgang, en niet in het kamp
+      let beste = 1e9;
+      for (let y = pleinVak.y0; y <= pleinVak.y1; y++) {
+        for (let x = pleinVak.x0; x <= pleinVak.x1; x++) {
+          if (op(x, y) !== PLEIN || !vrijVoor(x, y) || !raakt(x, y, 1, 1, 1, [WEG])) continue;
+          if (bijHetKamp(x, y, 2)) continue;
+          const d = Math.hypot(x - uitgang.x, y - uitgang.y);
+          if (d < beste) {
+            beste = d;
+            marskramer = { x, y };
+          }
+        }
+      }
+      if (!marskramer) return mis('geen plek voor de marskramer aan de weg');
+    } else {
       let beste = 1e9;
       for (let y = pleinVak.y0; y <= pleinVak.y1; y++) {
         for (let x = pleinVak.x0; x <= pleinVak.x1; x++) {
@@ -1307,7 +1375,8 @@
       const opties = [];
       for (let y = 0; y < H; y++) {
         for (let x = 0; x < B; x++) {
-          if (op(x, y) !== PLEIN || !vrijVoor(x, y) || T.binnenRand(zand, x + 0.5, y + 0.5)) continue;
+          if (op(x, y) !== PLEIN || !vrijVoor(x, y) || (zand && T.binnenRand(zand, x + 0.5, y + 0.5))) continue;
+          if (kamp && bijHetKamp(x, y, 2)) continue;
           // de voorkant van het plein (naar de camera) blijft vrij voor de markt
           if ((x + 0.5 - cx + (y + 0.5 - cy)) * Math.SQRT1_2 > I.eikenTot * pd) continue;
           let rondom = true;
@@ -1322,9 +1391,11 @@
         eiken.push([x, y]);
         leg1('eik', x, y);
       }
-      if (eiken.length < 3) return mis('te weinig plaats voor eiken op het plein');
-      const [bx, by] = eiken[0];
-      if (vrijVoor(bx + 1, by + 1) && op(bx + 1, by + 1) === PLEIN) leg1('bank', bx + 1, by + 1);
+      // (in het lege begin staat het kamp midden op het plein, en zijn er zoveel als er passen)
+      if (eiken.length < (leeg ? 0 : 3)) return mis('te weinig plaats voor eiken op het plein');
+      // (in het lege begin heeft nog niemand er een bank gezet)
+      const [bx, by] = eiken[0] || [];
+      if (!leeg && vrijVoor(bx + 1, by + 1) && op(bx + 1, by + 1) === PLEIN) leg1('bank', bx + 1, by + 1);
     }
     // Bij elk huis een appelboom, een paar stukken tuin bij de boerderijen, en een moestuin bij één.
     const TUIN = ['kruidenbed', 'kool', 'prei', 'bonen', 'regenton'];
@@ -1626,12 +1697,17 @@
     // ---- 13. Keuren ----
     const plan = {
       zaad, poging, stijl, b: B, h: H, grond, plein, zand, marskramer, uitgang, brug, huizen, akkers, meent, voorwerpen, vijvers, rotsen,
-      wegen, paden, schout: { x: deurS.x, y: deurS.y },
+      wegen, paden, schout: leeg ? { ...kamp.plekken[0].deur } : { x: deurS.x, y: deurS.y },
       landschap: { weg: as, beek: beekVooraan ? (as === 'x' ? 'west' : 'noord') : as === 'x' ? 'oost' : 'zuid', bos, uitgangBijBeek },
     };
     if (land) {
       plan.bruggen = bruggen;
       plan.eiland = { zaad: land.zaad, x0: land.x0, y0: land.y0 };
+    }
+    if (leeg) {
+      plan.leeg = true;
+      delete kamp.bezet;
+      plan.kamp = kamp;
     }
     const fout = keur(plan);
     if (fout) return mis(fout);
@@ -1691,7 +1767,9 @@
       return l;
     };
     for (const a of plan.akkers) if (!vakVan(a).some(([x, y]) => kom(x, y))) return `${a.akker} is niet te bereiken`;
-    if (!vakVan(plan.meent).some(([x, y]) => kom(x, y))) return 'de meent is niet te bereiken';
+    if (plan.meent && !vakVan(plan.meent).some(([x, y]) => kom(x, y))) return 'de meent is niet te bereiken';
+    if (plan.kamp && !plan.kamp.plekken.every((p) => kom(p.deur.x, p.deur.y))) return 'een tent in het kamp is niet te bereiken';
+    if (plan.kamp && !kom(plan.kamp.kar.x, plan.kamp.kar.y)) return 'de plek van de kar is niet te bereiken';
     // Het plein: niets erop dan de put, de eiken, de bank en een lantaarn, en genoeg ervan in beeld. Een eik kan ook een
     // linde zijn, of aan de rand een andere soort die een eik werd (ANDERE_BOMEN).
     const opPlein = (x, y) => T.binnenRand(plan.plein, x + 0.5, y + 0.5);
@@ -1703,8 +1781,8 @@
     for (let y = 0; y < H; y++) for (let x = 0; x < B; x++) if (opPlein(x, y)) pleinTegels++;
     const achterDak = achterDakVan(plan.huizen, opPlein, B, H).size;
     if (achterDak > pleinTegels * I.pleinAchterDak) return `${achterDak} tegels van het plein liggen achter een dak`;
-    // De akkers zijn samen even groot als in het ontworpen gehucht.
-    const moet = I.akkers.flat().reduce((n, a) => n + a.tegels, 0);
+    // De akkers zijn samen even groot als in het ontworpen gehucht; in het lege begin zijn er nog geen.
+    const moet = plan.leeg ? 0 : I.akkers.flat().reduce((n, a) => n + a.tegels, 0);
     const akkerTegels = plan.akkers.reduce((n, a) => n + a.b * a.h, 0);
     if (akkerTegels !== moet) return `de akkers zijn ${akkerTegels} tegels, niet ${moet}`;
     // Van elke deur van een boerderij naar de dichtstbijzijnde tegel van zijn eigen akkers, te voet.
@@ -1740,10 +1818,11 @@
 
   // Een gehucht uit dit zaad: hetzelfde zaad geeft altijd hetzelfde gehucht. Deugt de eerste poging niet, dan
   // probeert hij het opnieuw, tot T.MAKER_INSTELLINGEN.pogingen; `waarom` zegt wat er onderweg misging.
-  T.maakGehucht = function (zaad, land, pogingen = IN().pogingen) {
+  // Met `leeg` (alleen op het eiland) is het het lege land van vraag 152: het plein en de plek van het kamp, zonder gehucht.
+  T.maakGehucht = function (zaad, land, pogingen = IN().pogingen, leeg = false) {
     const waarom = [];
     for (let poging = 0; poging < pogingen; poging++) {
-      const plan = leg(zaad, poging, land);
+      const plan = leg(zaad, poging, land, !!(land && leeg));
       if (!plan.mis) {
         plan.waarom = waarom;
         return plan;
@@ -1891,10 +1970,11 @@
     for (const h of plan.huizen) dingen.push({ x: h.x, y: h.y, tegel: `${h.vel}/${h.tekening}` });
     for (const v of plan.voorwerpen) dingen.push({ x: v.x, y: v.y, tegel: opNaam(v.naam) });
     // wie er staat: de schout voor zijn deur, de boeren voor de hunne (met "huis" aan hun akkers), en de herbergierster
+    // (in het lege begin alleen de schout, bij zijn tent in het kamp; js/begin.js zet hem bij de kar aan de rand)
     const deurVan = (rol) => plan.huizen.find((h) => h.rol === rol).deur;
-    dingen.push({ ...deurVan('schout'), wezen: 'schout' });
+    dingen.push({ ...plan.schout, wezen: 'schout' });
     for (const h of plan.huizen.filter((x) => x.rol === 'boerderij')) dingen.push({ ...h.deur, wie: h.huis, straal: 3, huis: h.huis });
-    dingen.push({ ...deurVan('herberg'), wie: 'herbergierster', straal: 3, huis: 'herbergierster' });
+    if (!plan.leeg) dingen.push({ ...deurVan('herberg'), wie: 'herbergierster', straal: 3, huis: 'herbergierster' });
     // de huizen als gebouw, zodat het dorp niet leeg begint (js/gebouwen.js, T.zetBestaandeGebouwen)
     const SOORT = { schout: 'huis', herberg: 'herberg', huis: 'huis', hut: 'hut', boerderij: 'boerderij', kooi: 'schaapskooi' };
     for (const h of plan.huizen) {
@@ -1905,7 +1985,7 @@
       dingen.push(d);
     }
     for (const a of plan.akkers) dingen.push({ ...a });
-    dingen.push({ ...plan.meent });
+    if (plan.meent) dingen.push({ ...plan.meent });
     dingen.push({ ...plan.uitgang, overgang: 'wereld', tekst: 'De weg de wereld in' });
 
     const eigen = (T.BETEKENIS && T.BETEKENIS.gehucht) || {};
@@ -1914,8 +1994,9 @@
       // net als het ontworpen gehucht hangt het nog aan geen andere kaart vast (gereedschap/tiled/maak-gehucht.cjs)
       proef: true,
       uitleg: `Een gehucht van de maker (js/maker.js), uit zaad ${plan.zaad}.`,
-      beginVoorraad: { ...(eigen.beginVoorraad || {}) },
-      beginBevolking: eigen.beginBevolking,
+      // in het lege begin brengt de kar wat er is (js/begin.js)
+      beginVoorraad: plan.leeg ? {} : { ...(eigen.beginVoorraad || {}) },
+      beginBevolking: plan.leeg ? 0 : eigen.beginBevolking,
       marskramer: { ...plan.marskramer },
       plein: plan.plein.map(([x, y]) => [x, y]),
       dingen,
@@ -1933,7 +2014,7 @@
     for (const p of [...dorpen.filter((d) => d.jij), ...dorpen.filter((d) => !d.jij)]) {
       const land = T.landVanEiland(E, p, IN().b, IN().h);
       try {
-        const plan = T.maakGehucht(zaad, land, 30);
+        const plan = T.maakGehucht(zaad, land, 30, IN().leeg);
         plan.eiland.dorp = p.naam;
         return plan;
       } catch (e) {
@@ -2081,6 +2162,7 @@
     w.maker = { zaad: plan.zaad, poging: plan.poging };
     if (plan.eiland) w.eiland = plan.eiland; // waar op het eiland (js/eiland.js), voor de rand om de kaart
     if (plan.stijl) w.stijl = plan.stijl;
+    if (plan.kamp) w.kamp = plan.kamp; // het lege begin: waar het kamp komt (js/begin.js)
     if (T.HOOGTE_INSTELLINGEN.aan) w.hoogte = T.legHoogte(plan, w); // de spelregel "Hoogte" (js/hoogte.js)
     return w;
   };

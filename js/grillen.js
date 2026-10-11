@@ -220,7 +220,7 @@
   // telt het als geen antwoord. Anders, op de dag van de maand, een nieuwe: geloot uit wat er niet kort geleden was, als
   // er geen andere brief van de heer wacht en hij niet in het dorp is.
   T.tikGrillenDag = function (D, dag) {
-    if (!T.bazenTellen(D) || D.einde) return;
+    if (!T.bazenTellen(D) || D.einde || T.heerLaatMetRust(D, dag)) return;
     const G = grillenVan(D);
     if (G.vraag) {
       if (dag >= G.vraag.uiterlijk) zonderAntwoord(D);
