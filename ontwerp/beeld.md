@@ -987,8 +987,8 @@ van dat punt. Twee bestanden in `gereedschap/pixelart/`, elk met een proefplaat 
   het is uit. De tent en het afdak hebben een open kant en komen elk in vier richtingen (de opening naar ZO, ZW, NW of NO,
   langs de tegels, zoals een deur); het vuur is één tekening. Het licht en de vonken komen uit de code, zoals bij de brand.
 
-Nog open: welke kleur os (de vaal of de roodbruine), of het zeil zo vaal mag, en de vellen voor het spel (`beelden/`), als
-Marcel de platen goed vindt.
+Marcel koos de vale os (11 okt: "Vaal"): je ziet je kar meteen tussen de bruine koeien. De roodbruine blijft in
+`OS_KLEUREN`, voor een tweede kar later. Dan de vellen voor het spel (`beelden/`).
 
 ## De heide (25 sep 2026)
 
