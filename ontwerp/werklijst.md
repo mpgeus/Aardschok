@@ -26,9 +26,9 @@ mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voo
 
 **Wacht op Marcel:**
 - **De richting (vraag 151, 11 okt): de economie van The Settlers met gevechten in beurten** (Marcel: "A ja, B ja, C
-  allebei"; `gameloop.md`). Nu: het plan voor de proef (vraag 152): geen grens, geen vlaggen, bouwen binnen bereik van
-  je stad en een kar die de grondstoffen haalt, en je bouwt alles zelf vanaf de start (Marcel, 11 okt: "a ja, b ja, c ja,
-  d ja"); het plan voor het lege begin wacht op Marcel.
+  allebei"; `gameloop.md`): geen grens, geen vlaggen, bouwen binnen bereik van je stad en elke opslag, een ossenkar die
+  de grondstoffen haalt, en je bouwt alles zelf vanaf een lege plek, met een kar met wat spullen en settlers. Het plan
+  (vraag 152) en waaruit je start zijn akkoord (11 okt); **het volgende punt is vraag 152, stap 1: het lege begin.**
 - **Gameplay als kern, en het verstoppen eruit** (vraag 151, 11 okt; Marcel: "we hebben niks"): het verstoppen en heel
   "arm lijken" gaan eruit, de heer blijft (Marcel: "alles gaat eruit"); het plan om het weg te halen heet **optie 1**
   (Marcel, 11 okt: "Dit noemen we optie 1. Ik vertel je straks wat we doen"). Intussen kijkt Claude rond naar vergelijkbare
@@ -7766,7 +7766,7 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     van de schout, twee hutten en een houthakker, en de rest moet hij hakken (eerst hout of eerst een boerderij?); het
     graan eten twintig mensen in vier maanden op, tot hooimaand, terwijl de oogst in oogstmaand komt, dus het gat vul je
     met vissen of jagen; en het zaaigraan is voor twee akkers van dertig tegels, samen 240 graan, genoeg voor acht
-    maanden, dus de eerste winter haal je net, met vis, wild of een derde akker. Alle getallen in de werkbank.
+    maanden, dus de eerste winter haal je net, met vis, wild of een derde akker. Alle getallen in de werkbank. **Marcel (11 okt): "Akkoord".**
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
