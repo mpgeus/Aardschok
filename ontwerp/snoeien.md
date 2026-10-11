@@ -5,7 +5,13 @@ spelregel staan; git bewaart het. **Blijft**: hoort bij de nieuwe richting. **Sl
 aan gebouwd. **Weg**: eruit, met de toetsen en de spelregel. In drie ronden (`werklijst.md`, A): ronde 1 nu, ronde 2 na
 1f (wat het oude begin draaiende houdt), ronde 3 na de proef met de kar (wat de proef moet uitwijzen).
 
-## Ronde 1: voorstel van Claude (11 okt), Marcel vinkt af
+## Ronde 1: voorstel van Claude (11 okt), Marcel vinkte af
+
+**Marcel (11 okt): "1. Weg 2. Weg 3. Nee, dit blijft toch? Deel van het eiland. 4. Weg 5. Weg 6. voor nu houden".**
+Dus 1, 2, 4 en 5 gaan eruit; 3 en 6 blijven. Bij 3 (Claude): het land is nu een eigen kaart met provincies uit het
+zaad, los van het eiland, maar het is wat de strategische kaart in Jagged Alliance 2 is (reizen in dagen, wat je
+niet zag is donker), dus het slaapt tot F, en laat dan de dorpen en wegen van het eiland zien in plaats van eigen
+provincies.
 
 1. **De verdwenen graanzak** (`js/zaak.js`, 372 regels; spelregel "De zaak"): de proef voor rechtspraak, loop B van
    vraag 151, die niet gekozen is. **Weg.**
@@ -13,8 +19,7 @@ aan gebouwd. **Weg**: eruit, met de toetsen en de spelregel. In drie ronden (`we
    **Weg**; het jaarverslag in hetzelfde bestand blijft. Het nieuwe eind komt met het doel van de demo (wacht op Marcel),
    en dan gaat ook de regel erover in CLAUDE.md om.
 3. **Het land met provincies en reizen** (`js/landkaart.js` en het meeste van `js/land.js`; spelregel "Land",
-   standaard uit): het eiland (vraag 117) kwam ervoor in de plaats. **Weg**; de weg het dorp in en uit
-   (`T.wegInEnUit`, in zeven bestanden gebruikt) blijft.
+   standaard uit): Claude dacht dat het eiland (vraag 117) ervoor in de plaats kwam. **Blijft, slaapt tot F** (Marcel).
 4. **Ontginnen als verzoek** (`js/ontginnen.js`; spelregel "Ontginnen"): een boer vraagt een stuk heide of bos, tegen
    het vertrouwen, gemeld tegen de gunst, of stiekem. Akkers leg jij nu zelf (besloten 11 okt). **Weg**; het plaggen
    steken (heide wordt akker, te zien) slaapt tot 1d, als je een akker op heide legt.
@@ -22,7 +27,7 @@ aan gebouwd. **Weg**: eruit, met de toetsen en de spelregel. In drie ronden (`we
    uren: Een hele dag" (met de kar telt de weg juist), en "Treden: Zoals de proef van 28 sep". **Weg**; de regel blijft
    op de standaard staan, zonder keuze.
 6. **De quests** (`js/quest.js` en `js/quests.js`, met haken in `js/gesprek.js`): een raamwerk uit het oude spel, en
-   de lijst is leeg. **Slaapt** (een opdracht van een dorpeling past bij Jagged Alliance 2), of weg.
+   de lijst is leeg. **Blijft voor nu** (Marcel).
 
 ## Later
 
