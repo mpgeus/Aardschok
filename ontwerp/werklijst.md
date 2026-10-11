@@ -7851,6 +7851,19 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     Het beeld: de ossenkar (de kar uit `dorp.cjs`, de koe als os), tenten en een kampvuur. Het werk: 1a een sessie, 1b
     tot 1f twee à drie. **Besloten (Marcel, 11 okt: "1 ja, 2 ja, 3 ja"):** akkers leg jij bij een boerderij (zoals Manor Lords);
     optie 1 eerst; en bouwen met handen (wie geen werk heeft, bouwt mee, en hoe meer handen, hoe sneller).
+    **Het plan voor 1b (Claude, 11 okt), met wat Marcel koos:** het kamp schuift naar 1b, want in het spel woont iedereen
+    in een huis, ook de schout (zijn bed, het rapport, de bode), en een bewoner zonder huis loopt vast; 1c is dan het
+    verhuizen naar een hut die af is, en de tenten weg als het kamp leeg is. 1b: de spelregel "Het begin" op "Leeg" (alleen
+    op het eiland; standaard het oude begin tot 1f): het eiland om jouw plek zonder gehucht, een open plek met een paar oude
+    eiken die het plein wordt, de plek van de marskramer waar de weg het plein raakt, de uitgang; het kamp (de huifkar, twee
+    tenten, het afdak en het kampvuur) waar iedereen woont, met de voorraad uit de kar; een nieuwe benoemingsbrief, en het
+    eerste jaar geen schatting en geen grillen, alleen een brief in wijnmaand die het inwrijft. De maker krijgt een stand
+    "leeg" (dezelfde stappen voor het plein, de wegen en het bos, zonder huizen, boerderijen, meent en put). Klaar als een
+    nieuw spel op "Leeg" geen huizen heeft, iedereen in het kamp woont, en een toets er een jaar op speelt zonder fouten,
+    ook als je niets doet. **Marcel koos (11 okt):** de kar rijdt nu al binnen ("Rijdt nu binnen": na de brief rijdt de
+    huifkar over de weg het land in, de gezinnen lopen erachter); de schout komt met zijn gezin (zo'n 23 monden, dus 140
+    graan in de kar in plaats van 120); en een kleine open plek, met het bos er vlak omheen (zo'n 10 tegels om het plein,
+    niet 16: hout dichtbij, ruimte door te rooien).
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
