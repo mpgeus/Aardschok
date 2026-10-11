@@ -82,10 +82,9 @@ mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voo
    huizen; de sneeuw op de bomen en de huizen (144, 4b, Marcel: "ja") in dezelfde ronde. Stap 1 staat in het spel (10
    okt, avond): elke boom een van zijn vormen, de nieuwe soorten op de kaart, de spar dunner onder de sneeuw; en stap 2
    (11 okt; Marcel: "Ja, doe stap 2 met de sneeuw erbij"): de bomen in het jaar, met sneeuw op de takken. **Nu stap 3**,
-   het groen eronder, en dat staat in het spel (11 okt, op de branch `ccr-2034e30c-d2iyg5`): de begroeiing in vormen en
-   in het jaar, en de nieuwe soorten langs de akkers, achter de huizen, op de heide, aan het water en aan de bosrand.
-   **Nu d**, de spullen bij de huizen, samen met de ronde van de huizen (die loopt in een andere sessie).
-   **Bezig in sessie `ccr-2034e30c-d2iyg5`** (11 okt): stap 3 is af op de branch, wacht op Marcel om naar `main` te gaan.
+   het groen eronder, en dat staat in `main` (11 okt): de begroeiing in vormen en in het jaar, en de nieuwe soorten langs
+   de akkers, achter de huizen, op de heide, aan het water en aan de bosrand. **Nu d**, de spullen bij de huizen, samen
+   met de ronde van de huizen (die loopt in een andere sessie).
 1. Een proefversie voor Marcels 4K-scherm en een eerste tester (33d; `npm run proefversie`, ook `-- --windows`), met de
    graanzak erin. De laatste is van 3 okt (`36c713e`), zonder de verzoeken, de twee bazen, het ontginnen, de markt, de
    wolven, het eiland, WebGL en de graanzak.
