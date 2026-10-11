@@ -49,6 +49,13 @@ moet het hart zijn, en het gevecht wat ze oplevert; een goed gevecht is wat de a
   moeten ook zelf alles vanaf de start gaan bouwen"**: geen gehucht dat er al was, je begint op een lege plek.
 - **C, vechten is allebei**: je dorp verdedigen, en erop uit over het eiland, tot het kasteel van de heer, zoals in
   Jagged Alliance 2.
+- **Afwisseling is de kern van de economie** (Marcel, 11 okt, bij de boeren van 1e: "Wijn wordt ook eten. Afwisseling
+  wordt de kern. Mensen worden anders minder productief"; werklijst, vraag 154). Wat een dorp eet, telt in soorten:
+  wie maar één ding eet, werkt minder. Wat er al is: graan, melk, kaas, vlees en vis vullen een maag
+  (`T.eetVandaag` in `js/behoeften.js`, met `vleesIsEten` en `visIsEten`); de afwisseling maakte tot 1 okt tevredener en
+  ging toen op in de wensen per stand (`js/wensen.js`), en voor de drank zei Marcel op 10 okt al "Afwisseling. Je kunt
+  niet leven op 1 ding". Nieuw is dat het de mensen productiever maakt, niet tevredener. Een gedachte van Claude: dan
+  kan het de eenvoudige opvolger worden van de wensen per stand, die in ronde 3 van het snoeien op de proef staan.
 
 Daarmee gaan om: "geen hand van bovenaf" (30 sep, `concept.md`) en "de mensen bouwen zelf" (3 okt, vraag 103). Ook
 (Marcel, 11 okt): heel "rijk worden en arm lijken" gaat eruit (het verstoppen, de inner die

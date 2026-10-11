@@ -38,7 +38,9 @@ gamedesigner (`het-spel-in-het-kort.pdf`) beschrijft nog het oude spel; dat staa
 ## Later
 
 - **Ronde 2, na 1f:** `js/verzoeken.js` en `js/ondernemers.js` (de mensen vragen wat ze bouwen), `js/erven.js` (het
-  dorp bouwt zelf op een erf), de vaste boeren van de kaart en `kaarten/gehucht.tmj`; de spelregels "Het begin", "Je
+  dorp bouwt zelf op een erf), de vaste boeren van de kaart en `kaarten/gehucht.tmj`, het lot en de karakters van de
+  boeren (`js/boeren.js`, `T.KARAKTERS` met hun gesprekken; Marcel, 11 okt, bij 1e: "De karakters zetten we even opzij.
+  Ik weet niet of die handig zijn in de nieuwe setting"); de spelregels "Het begin", "Je
   gehucht", "Wie bouwt", "Huizen", "Wie de boeren zijn" en "De markt" (op het plein vanzelf, of een gebouw dat jij zet).
 - **Ronde 3, na de proef (C):** `js/voorvallen.js`, `js/raad.js`, `js/raadsman.js` en het venster, `js/ochtendrapport.js`,
   `js/wensen.js` met het huisbriefje, `js/treden.js`, `js/behoeften.js` (de groei), `js/wetten.js` met het menu,

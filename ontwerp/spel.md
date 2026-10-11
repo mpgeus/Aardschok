@@ -93,6 +93,25 @@ dertien gemeten landen paste er binnen 30 tegels van het plein geen hut, want he
 uit de kar zijn het huis van de schout, twee hutten en een houthakker, als je op open grond bouwt. Nog niet: boeren
 worden, met de keuze akkerbouwer of wijnboer en de akkers die jij legt (1e); zonder bouwen haalt het kamp de winter niet.
 
+**Het plan voor 1e, boeren uit het niets** (voorstel van Claude, 11 okt; Marcel: "Inderdaad met b2", "Ja dat is goed. De
+bouwers pakken het op", en "De karakters zetten we even opzij. Ik weet niet of die handig zijn in de nieuwe setting"). Een
+boer is wie er op een boerderij woont, niet meer boer1 tot boer5 van de kaart (daar hangen nu zijn karakter, zijn akkers,
+het lot en zijn gesprek aan). b, een boerderij is een woning voor één gezin: een gezin uit het kamp trekt erin zoals in
+een hut, de man wordt de boer, en zijn vrouw en kind helpen bij het zaaien en de oogst. b2, is het kamp al leeg, dan
+verhuist een gezin uit een hut naar een lege boerderij: een nieuw gezin over de weg komt niet zolang er weinig graan is, en
+dan sterf je met een lege boerderij ("de settlers worden wat jij bouwt"). c, de akker leg jij: staat er een boerderij (ook
+in aanbouw), dan trek je een rechthoek (klik de ene hoek, klik de andere; slepen schuift het beeld), binnen 8 tegels van
+zijn boerderij en binnen bereik, van 12 tot 40 tegels (de werkbank). Hij kost alleen werk: de bouwers rooien (een boom
+geeft 10 hout) en ploegen, zoals bij een gebouw, en is hij vóór 1 bloeimaand klaar, dan zaait de boer hem nog in (de
+eerste lente is 60 dagen, zo'n 5 uur op 1×). De boer ontgint niet zelf (`js/ontginnen.js`, dat slaapt): in een proef
+kostte een stuk bos hem 41 tot 87 dagen, en dan mis je de eerste lente. d, geen karakters: de nieuwe boer is gewoon,
+zonder karakter, gesprek of eigenschappen (Claude las het zo: de eigenschappen komen uit hetzelfde lot); het lot en de
+karakters slapen tot ronde 2 (`snoeien.md`). **Wijn wordt eten** (Marcel: "Wijn wordt ook eten. Afwisseling wordt de
+kern. Mensen worden anders minder productief"): de afwisseling is vraag 154 in de werklijst (`gameloop.md`, "Besloten").
+**Nog open, a:** twee keuzes in het bouwmenu (de boerderij en de wijnboerderij), of één boerderij waarvan het veld bepaalt
+wat hij wordt (Marcel: "of ze kiezen automatisch naar welke akker of wijngaard beschikbaar is. Dus 1 boerderij, en het
+veld bepaald").
+
 ## Een nieuwe richting (Marcel, 28 sep 2026)
 
 **Zo staat het nu** (28 sep tot en met 5 okt): besloten; wat er sindsdien van gebouwd is, staat bij elk onderwerp. Marcel koos op vier vragen van Claude

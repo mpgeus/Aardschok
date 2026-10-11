@@ -57,9 +57,10 @@ Mee in elke ronde: het commentaar in de code dat "zie CLAUDE.md" zegt (een stuk 
 Het plan staat in het archief bij vraag 152; 1a (optie 1), 1b (het lege land), 1c (het kamp, met het bouwmenu) en 1d
 (binnen bereik, en met handen) zijn af; hoe het nu werkt: `spel.md`, "Zo werkt het lege begin nu".
 - **1e, boeren uit het niets:** je bouwt een boerderij en kiest akkerbouwer of wijnboer (Marcel, 11 okt: "Je kiest dan
-  agrariër of wijnboer. Zoals bij Knights and Merchants"); het gezin dat erin trekt, wordt die boer, met een geloot
-  karakter; en bij een akkerbouwer leg jij de akkers (uit 1d, e: een akker zonder boer doet niets). **Bezig in sessie
-  `ccr-fe45ba8f-v51u8s`** (11 okt): het plan, met Marcel.
+  agrariër of wijnboer. Zoals bij Knights and Merchants"); het gezin dat erin trekt, wordt die boer, zonder karakter
+  (Marcel: "De karakters zetten we even opzij"); de akkers leg jij, en de bouwers maken ze. Het plan, met wat Marcel
+  koos: `spel.md`, "Het plan voor 1e". Nog open: twee keuzes in het bouwmenu, of één boerderij en het veld bepaalt.
+  **Bezig in sessie `ccr-fe45ba8f-v51u8s`** (11 okt): het plan, met Marcel.
 - **1f, een jaar zonder fouten:** een toets speelt een jaar vanaf een lege plek, met een speler in code die bouwt. Dan
   is "Leeg" het enige begin, en volgt ronde 2 van A.
 
@@ -72,6 +73,13 @@ land"; `kaarten.md`, "Het eiland"; het archief bij vraag 117): het eiland in stu
 van de mist; opslaan wat veranderde; de mist (wat je verkende maar nu niet ziet, is grijs); lange tochten over de
 stukken; en wat ver weg is als getallen. Eerst een plan met Marcel. Tot dan gaat niets nieuws uit van 100 bij 100
 (CLAUDE.md).
+
+## B3. Afwisseling (vraag 154)
+
+Marcel, 11 okt: "Wijn wordt ook eten. Afwisseling wordt de kern. Mensen worden anders minder productief." Wie maar één
+ding eet, werkt minder; wat er al is en wat het vraagt: `gameloop.md`, "Besloten". Eerst een plan met Marcel: welke
+soorten eten tellen, hoe je afwisseling meet, en wat minder productief is. Waar in de volgorde, wacht op Marcel (voorstel
+van Claude: na B2 en vóór C, zodat C de echte economie meet).
 
 ## C. De ossenkar (vraag 152, de proef)
 
