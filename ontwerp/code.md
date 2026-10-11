@@ -136,6 +136,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   vertaling, zegt `T.keurVertaling`. Omgezet zijn: `js/menu.js`, `js/gebouwen.js`, `js/erven.js`, `js/herberg.js`, `js/bos.js`,
   `js/bouwstijl.js`, `js/wijngaard.js`, `js/akkers.js`, `js/vee.js`, `js/beesten.js`, `js/markt.js` en `js/paden.js` (`OMGEZET` in
   `test/taal.test.cjs`). In `T.GEBOUWEN` staan de tekeningen en de `opmerking` voor ons, niet de speler: die regels hebben `// geen tekst`.
+- **Een zin uit de gegevens** (vraag 147, deel 5): een tabel die een bewerker terugschrijft (`T.bronBlok`), de gesprekken
+  (`T.GESPREKKEN`) en de quests (`T.QUESTS`), houdt zijn Engelse zinnen als gewone tekst, want de bewerker kent geen
+  `T.t`. Wie zo'n zin toont, vraagt hem aan `T.tGegevens(zin, woorden)` (hetzelfde als `T.t`, voor een zin die geen gewone
+  tekst in de code is): een gesprek doet dat in `T.vulWoordenIn` (`js/gesprek.js`), waar alles langs komt wat een gesprek
+  toont, en een quest in `js/quest.js`. `npm run teksten` leest die zinnen uit de tabel (`GEGEVENS` in
+  `gereedschap/teksten.cjs`: per tabel welke velden de speler ziet, en wat alleen voor de schrijver is, zoals de situaties),
+  zodat ze in `taal/bron.js` staan. Een tabel die gewone code is (`T.VOORVALLEN`, `T.OORZAKEN`, `T.KARAKTERS`), krijgt
+  gewoon `T.t`.
 
 ### js/naam.js: de naam van het spel
 
@@ -609,7 +617,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 - Een zin in een gesprek kan iets uit het spel noemen: `{woord}` vult `T.GESPREK_WOORDEN` in
   (`js/gesprek.js`), zoals `{gisteravond}` (`js/herberg.js`), en in een voorval `{wie}` en `{ander}`
-  (`js/voorvallen.js`).
+  (`js/voorvallen.js`). `T.vulWoordenIn` zet de zin eerst in de taal van nu (`T.tGegevens`, `js/taal.js`): de zinnen in
+  `js/gesprekken.js` zijn Engels en gegevens (de gespreksschrijver schrijft ze terug), dus de naam boven een gesprek, de
+  tekst van een knoop en een antwoord gaan allemaal hierlangs (`js/dialoog.js`, en de raadsman in `js/raadsman.js`).
 
 ### js/quests.js en js/quest.js: de quests
 

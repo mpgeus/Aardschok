@@ -69,8 +69,11 @@
   // Woorden die het spel invult (27 sep): {gisteravond} in een zin wordt wat
   // T.GESPREK_WOORDEN.gisteravond(D) zegt over het dorp waar het gesprek is. Zo kan een zin een naam noemen die per spel
   // anders is, zoals wie er gisteravond in de herberg zat (js/herberg.js). Een woord dat niemand kent, blijft staan.
+  // Een zin uit T.GESPREKKEN is gegevens (de gespreksschrijver schrijft hem terug), dus hij gaat eerst naar de taal van
+  // nu (T.tGegevens, js/taal.js; vraag 147), en dan komen de woorden erin. Alles wat een gesprek toont, komt hierlangs:
+  // de naam erboven, de tekst van een knoop, een antwoord (js/dialoog.js), en wat de raadsman antwoordde.
   T.GESPREK_WOORDEN = T.GESPREK_WOORDEN || {};
-  T.vulWoordenIn = (D, zin) => String(zin || '').replace(/\{(\w+)\}/g, (heel, w) => (T.GESPREK_WOORDEN[w] ? T.GESPREK_WOORDEN[w](D) : heel));
+  T.vulWoordenIn = (D, zin) => T.tGegevens(zin).replace(/\{(\w+)\}/g, (heel, w) => (T.GESPREK_WOORDEN[w] ? T.GESPREK_WOORDEN[w](D) : heel));
 
   // Eén knoop, opgelost tot wat er nu staat: de tekst die nu geldt, met de woorden ingevuld, en de
   // keuzes die nu tonen.
