@@ -644,8 +644,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   wordt `'weg'`); de tent van de schout blijft zijn huis tot zijn eigen huis af is (hieronder). `T.kampTenten` zijn de tenten van de gezinnen: zolang
   er een is, zegt `T.waaromGeenGezin` `'kamp'` en komt er geen nieuw gezin. **Het bouwbereik** (1d, 11 okt): je bouwt
   binnen `bouwBereik` tegels van het plein en van elke opslag die af is (`opslag` in `T.GEBOUWEN`); `bouwBereik(D)` rekent
-  per tegel de afstand uit, één keer tot er een opslag bij komt (een WeakMap op de kaart, niet in S, want het volgt uit
-  de kaart en de gebouwen), `T.inBouwBereik` en `T.waaromBuitenBouwBereik` (als eerste in `T.waaromPastHetNiet`) vragen
+  per tegel de afstand uit, alleen in het vak om het plein en de opslagen (`x0`, `y0`, `b`, `h`; de wereld wordt het hele
+  eiland), één keer tot er een opslag bij komt (een WeakMap op de kaart, niet in S, want het volgt uit de kaart en de
+  gebouwen), `T.inBouwBereik` en `T.waaromBuitenBouwBereik` (als eerste in `T.waaromPastHetNiet`) vragen
   het, en `tekenBouwBereik` in `js/tekenen.js` tekent het als je bouwt (`T.bouwBereikVan`). Zonder `D.begin` (het oude
   begin) ligt alles erin. Let op: `S.bereik` is iets anders, waar de schout in een gevecht deze beurt kan komen. **Het
   huis van de schout** (1d): `schout` in `T.GEBOUWEN`, met `leeg` (alleen met `D.begin`), `eenmalig` (één keer, ook in

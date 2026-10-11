@@ -1807,13 +1807,13 @@
     const B = T.bouwBereikVan(S.dorp); // bouwen doe je in je eigen dorp (het bouwmenu, js/hud.js)
     if (!B) return;
     const paden = BEREIK_GLOED.map(() => new Path2D());
-    const x0 = Math.max(0, vak.x0);
-    const y0 = Math.max(0, vak.y0);
-    const x1 = Math.min(B.b - 1, vak.x1);
-    const y1 = Math.min(B.h - 1, vak.y1);
+    const x0 = Math.max(B.x0, vak.x0);
+    const y0 = Math.max(B.y0, vak.y0);
+    const x1 = Math.min(B.x0 + B.b - 1, vak.x1);
+    const y1 = Math.min(B.y0 + B.h - 1, vak.y1);
     for (let y = y0; y <= y1; y++) {
       for (let x = x0; x <= x1; x++) {
-        const rand = B.straal - B.afstand[y * B.b + x];
+        const rand = B.straal - T.afstandInBouwBereik(B, x, y);
         if (!(rand >= 0)) continue;
         const p = opGrond(x, y);
         const pad = paden[rand < 1 ? 0 : rand < 2 ? 1 : 2];

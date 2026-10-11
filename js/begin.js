@@ -259,7 +259,8 @@
   // T.GEBOUWEN), zoals een kantoor in Anno (Marcel, 11 okt: "Ik wil geen 'grens' alles moet open zijn", en "Dus je kunt
   // bijvoorbeeld x tegels vanaf je stad bouwen"). Lopen en kijken kan overal; alleen bouwen niet. Per tegel de afstand
   // tot het dichtste plein of de dichtste opslag, één keer uitgerekend tot er een opslag bij komt (alleen beeld en regel,
-  // dus niet in S: het volgt uit de kaart en de gebouwen).
+  // dus niet in S: het volgt uit de kaart en de gebouwen). Alleen in het vak om het plein en de opslagen, niet over de
+  // hele kaart: de wereld wordt het hele eiland van 2500 bij 2500 (Marcel, 11 okt: "de wereld moet 1 geheel worden").
   const BEREIK = new WeakMap();
   function bouwBereik(D) {
     const w = D && D.begin && D.wereld;
@@ -269,36 +270,49 @@
     const sleutel = [straal, ...opslagen.map((g) => `${g.x},${g.y}`)].join(';');
     const was = BEREIK.get(w);
     if (was && was.sleutel === sleutel) return was;
-    const afstand = new Float32Array(w.b * w.h).fill(Infinity);
     const bronnen = T.pleinTegels(w).map((t) => ({ x: t.x, y: t.y }));
     for (const g of opslagen) {
       const r = T.voetVanGebouw(g);
       for (let y = r.y; y < r.y + r.h; y++) for (let x = r.x; x < r.x + r.b; x++) bronnen.push({ x, y });
     }
+    if (!bronnen.length) bronnen.push({ x: -1e6, y: -1e6 }); // geen plein: nergens bereik (het vak valt buiten de kaart)
     const R = Math.ceil(straal);
-    for (const b of bronnen) {
+    // het vak: de bronnen met de straal eromheen, binnen de kaart
+    const x0 = Math.max(0, Math.min(...bronnen.map((b) => b.x)) - R);
+    const y0 = Math.max(0, Math.min(...bronnen.map((b) => b.y)) - R);
+    const b = Math.max(0, Math.min(w.b - 1, Math.max(...bronnen.map((q) => q.x)) + R) - x0 + 1);
+    const h = Math.max(0, Math.min(w.h - 1, Math.max(...bronnen.map((q) => q.y)) + R) - y0 + 1);
+    const afstand = new Float32Array(b * h).fill(Infinity);
+    for (const q of bronnen) {
       for (let dy = -R; dy <= R; dy++) {
-        const y = b.y + dy;
-        if (y < 0 || y >= w.h) continue;
+        const y = q.y + dy - y0;
+        if (y < 0 || y >= h) continue;
         for (let dx = -R; dx <= R; dx++) {
-          const x = b.x + dx;
+          const x = q.x + dx - x0;
           const d = Math.hypot(dx, dy);
-          if (x < 0 || x >= w.b || d > straal) continue;
-          if (d < afstand[y * w.b + x]) afstand[y * w.b + x] = d;
+          if (x < 0 || x >= b || d > straal) continue;
+          if (d < afstand[y * b + x]) afstand[y * b + x] = d;
         }
       }
     }
-    const uit = { sleutel, straal, b: w.b, h: w.h, afstand };
+    const uit = { sleutel, straal, x0, y0, b, h, afstand };
     BEREIK.set(w, uit);
     return uit;
   }
-  // Voor het tekenen (js/tekenen.js): { straal, b, h, afstand } (per tegel, Infinity daarbuiten), of null zonder bereik.
+  // Voor het tekenen (js/tekenen.js): { straal, x0, y0, b, h, afstand } (per tegel van het vak vanaf x0, y0; Infinity
+  // buiten het bereik), of null zonder bereik.
   T.bouwBereikVan = bouwBereik;
+  // De afstand van deze tegel tot het plein of de dichtste opslag, of Infinity buiten het vak.
+  const afstandIn = (B, x, y) => {
+    const i = x - B.x0;
+    const j = y - B.y0;
+    return i >= 0 && j >= 0 && i < B.b && j < B.h ? B.afstand[j * B.b + i] : Infinity;
+  };
+  T.afstandInBouwBereik = afstandIn;
   // Ligt deze tegel binnen het bouwbereik? Zonder bereik (het oude begin) ligt alles erin.
   T.inBouwBereik = function (D, x, y) {
     const B = bouwBereik(D);
-    if (!B) return true;
-    return x >= 0 && y >= 0 && x < B.b && y < B.h && B.afstand[y * B.b + x] <= B.straal;
+    return !B || afstandIn(B, x, y) <= B.straal;
   };
   // Waarom er op het vak r niet gebouwd kan worden, omdat het (deels) buiten het bereik ligt, of null
   // (T.waaromPastHetNiet, js/gebouwen.js).

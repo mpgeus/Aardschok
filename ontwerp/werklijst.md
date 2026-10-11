@@ -23,6 +23,11 @@ volgt na 1f, ronde 3 na C.
   komt in de voorraad), en een hut op open grond: wie geen werk heeft, loopt erheen en bouwt. Is de hut af, dan trekt
   er een gezin in; is het huis af, dan verhuist de schout en wordt de huifkar de ossenkar. Te kiezen in de werkbank
   ("Meebouwen"): twee werkdagen per bouwdag, vier bouwers per plaats, een kwart werkdag per boom.
+- **Wanneer het hele eiland** (Marcel, 11 okt: "de wereld moet 1 geheel worden het vlakke van 100x100 is niet hoe het
+  blijft. We hebben een heel land van 2500x2500"): het staat nu onder F (vraag 117, stap 3: het eiland in stukken uit
+  het nummer, de mist, opslaan wat veranderde, lange tochten). Voorstel van Claude (11 okt): direct na B, vóór C, want C
+  meet afstanden (de kar, een schuur verder weg geeft daar bereik), en die meet je op 100 bij 100 verkeerd. Tot dan gaat
+  niets nieuws uit van 100 bij 100 (CLAUDE.md).
 - **Het doel van de demo.** CLAUDE.md zegt nog "je wint als iedereen een jaar super gelukkig is"; dat is het oude spel.
   Voorstel van Claude (11 okt): de demo is het eerste jaar: je komt met de kar, bouwt, haalt de eerste winter, en het
   eind is het eerste gevecht (de mannen van de heer of rovers), zodat een speler in Next Fest de economie, het gevecht

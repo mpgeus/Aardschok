@@ -210,6 +210,9 @@ Hoe we kiezen:
 - **Eén weg voor:** de voorraad (`T.wijzigVoorraad`), het getal in de balk (`T.wijzigBevolking(S, verschil, reden,
   waarom)`), de tijd stilzetten (`T.houdTijdStil(S, reden)` en `T.laatTijdGaan`; een venster zet nooit zelf `snelheid`),
   een bezoeker (`T.bezoekerKomtAan`), en een venster (`T.ui.openVenster`, `T.ui.sluitVenster`).
+- **De wereld is het hele eiland** (Marcel, 11 okt: "de wereld moet 1 geheel worden het vlakke van 100x100 is niet hoe
+  het blijft. We hebben een heel land van 2500x2500"): je land van 100 bij 100 is voorlopig (vraag 117, stap 3,
+  `kaarten.md`). Niets nieuws gaat uit van die maat: geen lijst of rekensom over de hele kaart, alleen over een vak.
 - **Twee klokken:** wat in de wereld gebeurt, loopt op de tijd van de wereld (`dtWereld`, `S.wereldTijd`), wat alleen op
   het scherm beweegt, op `S.tijd`. Een gevecht loopt altijd op 1×.
 - **Een bewerker schrijft alleen het blok dat hij kent** (`T.bronBlok` in `gereedschap/bronblok.js`): kop en staart van

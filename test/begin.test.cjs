@@ -259,6 +259,8 @@ test('het bouwbereik: je bouwt binnen bouwBereik tegels van het plein, en verder
   const plein = T.pleinTegels(w);
   const verst = (t) => Math.min(...plein.map((p) => Math.hypot(p.x - t.x, p.y - t.y)));
   for (const p of plein) assert.ok(T.inBouwBereik(D, p.x, p.y), 'het plein ligt erin');
+  const B = T.bouwBereikVan(D);
+  assert.ok(B.b * B.h < (w.b * w.h) / 2, 'alleen een vak om het plein, niet de hele kaart (de wereld wordt het hele eiland)');
   // een tegel op de rand, en een net erbuiten, recht naar rechts van de rechterrand van het plein
   const rechts = plein.reduce((a, p) => (p.x > a.x ? p : a));
   assert.ok(T.inBouwBereik(D, rechts.x + R, rechts.y));
