@@ -10,8 +10,8 @@
 // toetsen (test/vee.test.cjs): het vee hoort bij een weide (een veld met bestemming 'weide',
 // js/akkers.js), heeft daar plaats nodig, geeft van grasmaand tot wijnmaand melk, en werpt in
 // grasmaand jongen zolang er plaats is. Wat het dorp van de melk niet op dezelfde dag eet, wordt
-// kaas (js/behoeften.js, T.eetVandaag). Nog niet: hooi en slachten (stap 2), en de inner die de
-// kudde telt en de marskramer die vee koopt en verkoopt (stap 3).
+// kaas (js/behoeften.js, T.eetVandaag). Nog niet: hooi en slachten (stap 2), en de marskramer die vee koopt en
+// verkoopt (stap 3).
 (function (T) {
   'use strict';
 
@@ -404,7 +404,8 @@
     return e;
   };
 
-  // Een tegel op de weide waar nog niemand staat, zo dicht mogelijk bij `bij` (of het midden).
+  // Een tegel op de weide waar nog niemand staat en niets vaststaat (een brem op de meent, vraag 148), zo dicht mogelijk bij
+  // `bij` (of het midden).
   function vrijeTegel(D, veld, bij) {
     const bezet = new Set(((D.wereld && D.wereld.wezens) || []).filter((e) => !e.dood).map((e) => e.tx + ',' + e.ty));
     const doel = bij || { x: veld.x + (veld.b - 1) / 2, y: veld.y + (veld.h - 1) / 2 };
@@ -412,7 +413,7 @@
     let afstand = Infinity;
     for (let y = veld.y; y < veld.y + veld.h; y++) {
       for (let x = veld.x; x < veld.x + veld.b; x++) {
-        if (bezet.has(x + ',' + y)) continue;
+        if (bezet.has(x + ',' + y) || (D.wereld && T.isVast(D.wereld, x, y))) continue;
         const d = Math.abs(x - doel.x) + Math.abs(y - doel.y);
         if (d < afstand) {
           afstand = d;

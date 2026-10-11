@@ -81,7 +81,7 @@ test('de herten: twee hindes en een hert met een gewei dat de groep leidt', () =
   const g = groepVan(S, 'hert');
   assert.equal(leiderVan(g).vel, 'hert2');
   for (const e of g.leden) if (!e.leider) assert.ok(['hert0', 'hert1'].includes(e.vel));
-  for (const e of g.leden) assert.ok(!e.dier, 'geen vee: de inner telt ze niet, en ze grazen niet op de weide');
+  for (const e of g.leden) assert.ok(!e.dier, 'geen vee: ze grazen niet op de weide');
   assert.ok(!T.veeVan(S.dorp).some((e) => e.beest));
 });
 
@@ -160,7 +160,7 @@ test('komt er iemand dichtbij, dan gaan ze weg: de herten rennen; wie sluipt, ko
   assert.ok(T.afstand(T.tegelVan(l), plek) > voor, 'verder van de schout');
 });
 
-test('een wolf begint geen gevecht, en wie hem aanklikt, kan hem aanvallen; een hert is geen getuige', () => {
+test('een wolf begint geen gevecht, en wie hem aanklikt, kan hem aanvallen', () => {
   const S = landVanDeMaker(62707);
   T.zetBeesten(S.dorp);
   const wolf = leiderVan(groepVan(S, 'wolf'));
@@ -170,9 +170,6 @@ test('een wolf begint geen gevecht, en wie hem aanklikt, kan hem aanvallen; een 
   assert.equal(T.zoekOntdekking(S), null);
   assert.match(T.handelingVerkennen(S, { wezen: wolf }).tekst, /De wolf aanvallen/);
   assert.equal(T.handelingVerkennen(S, { wezen: hert }).tekst, 'Een hert');
-  // Een hert vlak bij de schout ziet hem iets verstoppen, maar vertelt het niemand.
-  Object.assign(S.schout, { x: hert.tx + 1, y: hert.ty, tx: hert.tx + 1, ty: hert.ty });
-  assert.ok(!T.getuigenVan(S.dorp, null).includes(hert));
 });
 
 test('bewaren en laden houdt de groepen: hun dieren delen hun groep, en lopen verder', () => {

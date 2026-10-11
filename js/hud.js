@@ -357,14 +357,6 @@
     );
   }
 
-  // Ligt er nog iets verstopt (js/verstoppen.js), dan zegt het venster dat: zolang de heer in het
-  // dorp is, kun je er niet bij, dus wie zijn goud te laat terughaalt, komt tekort.
-  function verstoptBijDeHeer(S) {
-    const v = T.verstoptTotaal(S.dorp);
-    const wat = v ? T.inhoudTekst(v) : '';
-    return wat ? `<p class="venster-staat">Er ligt nog ${wat} verstopt. Zolang de heer in het dorp is, kun je er niet bij.</p>` : '';
-  }
-
   function toonHeer(S) {
     const box = $('heer');
     const b = S.dorp.heer && S.dorp.heer.bezoek;
@@ -380,7 +372,6 @@
         `<div class="venster-kop"><span class="venster-titel">Sint-Maarten</span><span class="venster-wanneer">de heer telt</span>` +
         `<button class="venster-sluit" data-actie="sluit" title="Nog niet (Esc)">✕</button></div>` +
         `<p class="venster-staat">Hij vraagt ${eisInTaal(eis)}. Wat je hem geeft, schuif je hieronder. Goud neemt hij altijd, ook in de plaats van iets anders.</p>` +
-        verstoptBijDeHeer(S) +
         heerRijen(S, eis) +
         `<div class="heer-samen">${heerSamenvatting(S, eis)}</div>` +
         `<p class="venster-voet">Zolang je bij hem staat, staat de tijd stil. <kbd>Esc</kbd>: nog niet (hij wacht).</p>`;
@@ -655,127 +646,6 @@
       if (weg.length) T.slacht(S.dorp, weg, dagNu(S));
       T.ui.sluitSlachten(S);
     }
-  });
-
-  // ── Verstoppen (js/verstoppen.js; spel.md, "Marcel koos voor stap 2") ──
-  // In de kelder van een huis of een boerderij, of in de kapel. De schout loopt erheen
-  // (js/verkennen.js), en dan gaat dit venster open. Per goed (graan, goud) zie je wat je hebt, wat
-  // hier ligt en wat er nog past, en zet je iets weg of haal je het terug. Elke knop stelt dezelfde
-  // vraag als de regels (T.kanVerstoppen, T.kanTerughalen), dus een knop die niet kan, zegt bij de
-  // muis waarom. Zolang het open is, staat de tijd stil (T.houdTijdStil) en sluit Esc het
-  // (S.modus 'verstoppen', js/main.js).
-  let verstopGebouw = null;
-  const VERSTOP_WAAR = { graan: 'in de schuur', goud: 'in de kist' };
-
-  function verstopKnop(actie, wat, n, tekst, k) {
-    const titel = k.kan ? '' : ` title="${veilig(k.reden)}"`;
-    return `<button data-actie="${actie}" data-wat="${wat}" data-n="${n}"${k.kan ? '' : ' disabled'}${titel}>${tekst}</button>`;
-  }
-
-  function verstopRij(S, g, p, wat) {
-    const ligt = (g.verstopt && g.verstopt[wat]) || 0;
-    const stap = wat === 'graan' ? 10 : 5;
-    // Alles wat kan: bij graan de kelder vol (of wat je hebt), bij goud alles.
-    const max = T.hoeveelVerstoppen(S.dorp, g, wat);
-    const alles = max > 0 ? T.kanVerstoppen(S.dorp, g, wat, max) : T.kanVerstoppen(S.dorp, g, wat, Math.max(1, hebNu(S, wat)));
-    const vul = wat === 'graan' ? `Vul hem${max > 0 ? ` (${max})` : ''}` : `Alles weg${max > 0 ? ` (${max})` : ''}`;
-    const past = wat === 'graan' ? `er past nog ${Math.max(0, Math.floor(p.plaats - ligt))} bij` : 'past altijd, in een pot onder de vloer';
-    return (
-      `<div class="handel-rij"><span class="handel-naam">${T.hoofdletter(wat)} <small>je hebt ${hebNu(S, wat)} ${VERSTOP_WAAR[wat]}</small></span>` +
-      `<span class="handel-prijs">hier ${Math.floor(ligt)}<small>${past}</small></span>` +
-      `<span class="handel-knoppen">` +
-      verstopKnop('weg', wat, stap, `Zet ${stap} weg`, T.kanVerstoppen(S.dorp, g, wat, stap)) +
-      verstopKnop('weg', wat, max, vul, alles) +
-      verstopKnop('terug', wat, stap, `Haal ${stap} terug`, T.kanTerughalen(S.dorp, g, wat, stap)) +
-      verstopKnop('terug', wat, ligt, 'Alles terug', T.kanTerughalen(S.dorp, g, wat, ligt)) +
-      `</span></div>`
-    );
-  }
-
-  // Wie je nu ziet (js/zien.js, T.kijkersTekst): zo weet je het vóór je iets wegzet (Marcel, vraag 40,
-  // A). Kijkt er iemand, dan in het rood. Met "pas later" in de spelregels zie je het niet.
-  function verstopKijkers(S, g) {
-    if (!T.ZIEN_INSTELLINGEN.meteen) return '';
-    const t = T.kijkersTekst(S.dorp, g);
-    const iemand = T.getuigenVan(S.dorp, g).length > 0;
-    return `<p class="verstop-kijkers${iemand ? ' gezien' : ''}">${veilig(t)}</p>`;
-  }
-
-  // Wat de soldaten hier doen, en wat het kost, in één alinea.
-  function verstopRisico(p) {
-    let t = `Doorzoeken de soldaten het dorp, dan vinden ze het hier ${T.vindKansTekst(p.vinden)}.`;
-    if (p.verteldDoor) t += ` ${T.hoofdletter(p.verteldDoor)} vertelde in de herberg wat je hier deed.`;
-    if (p.vanSchout) t += ' Bij de schout kijken ze het eerst.';
-    if (p.gebouw.soort === 'kapel') t += ' Het is gewijde grond.';
-    if (p.houdt > 0 && p.wieHoudt === 'de kapelaan') t += ` De kapelaan houdt ${T.deelTekst(p.houdt)} van wat je hier neerzet.`;
-    return t;
-  }
-
-  // Wie er woont, klein naast de titel: met zijn karakter als dat telt.
-  function verstopWie(p) {
-    if (p.vanSchout) return 'de schout';
-    if (!p.bewoner) return '';
-    const k = T.VERSTOP_INSTELLINGEN.karakters && T.KARAKTERS && T.KARAKTERS[p.karakter];
-    return k ? `${p.bewoner.naam}, ${k.kort}` : p.bewoner.naam;
-  }
-
-  function toonVerstoppen(S) {
-    const g = verstopGebouw;
-    const p = g && T.verstopPlekVan(S.dorp, g);
-    if (!p) {
-      T.ui.sluitVerstoppen(S);
-      return;
-    }
-    const over = T.overKelderTekst(p);
-    const wie = verstopWie(p);
-    $('verstoppen').innerHTML =
-      `<div class="venster-kop"><span class="venster-titel">${veilig(T.hoofdletter(p.naam))}</span>` +
-      `<span class="venster-wanneer">${veilig(wie)}</span>` +
-      `<button class="venster-sluit" data-actie="sluit" title="Sluiten (Esc)">✕</button></div>` +
-      (over ? `<p class="verstop-bewoner">${veilig(over)}</p>` : '') +
-      `<p class="venster-staat">${verstopRisico(p)}</p>` +
-      verstopKijkers(S, g) +
-      verstopRij(S, g, p, 'graan') +
-      verstopRij(S, g, p, 'goud') +
-      `<p class="venster-voet">Wat hier ligt, telt de inner niet, en het dorp eet het niet tot je het terughaalt. ` +
-      `Zolang je hier staat, staat de tijd stil. <kbd>Esc</kbd> sluit.</p>`;
-    $('verstoppen').classList.remove('verborgen');
-  }
-
-
-  T.ui.openVerstoppen = function (S, g) {
-    if (!T.verstopPlekVan || !T.verstopPlekVan(S.dorp, g)) return;
-    if (!T.ui.openVenster(S, 'verstoppen')) return;
-    verstopGebouw = g;
-    toonVerstoppen(S);
-  };
-
-  T.ui.sluitVerstoppen = function (S) {
-    T.ui.sluitVenster(S, 'verstoppen');
-    verstopGebouw = null;
-  };
-
-  T.ui.meldVenster('verstoppen', { el: 'verstoppen', open: () => {}, sluit: (S) => T.ui.sluitVerstoppen(S) });
-
-  $('verstoppen').addEventListener('click', (ev) => {
-    const b = ev.target.closest('button');
-    const S = T.S;
-    if (!b || !S || !verstopGebouw) return;
-    b.blur();
-    if (b.dataset.actie === 'sluit') {
-      T.ui.sluitVerstoppen(S);
-      return;
-    }
-    const n = Number(b.dataset.n);
-    const r = b.dataset.actie === 'weg' ? T.verstop(S.dorp, verstopGebouw, b.dataset.wat, n) : T.haalTerug(S.dorp, verstopGebouw, b.dataset.wat, n);
-    if (!r.kan && T.ui.bericht) T.ui.bericht(r.reden);
-    // Wie het zag, is getuige (js/zien.js): een oogje boven zijn hoofd, en het bericht zegt wie; met "pas
-    // later" in de spelregels hoor je het pas als het rondverteld is.
-    if (r.kan && T.werdGezien) {
-      const z = T.werdGezien(S, S.dorp, verstopGebouw, b.dataset.actie, b.dataset.wat, n);
-      if (T.ZIEN_INSTELLINGEN.meteen && T.ui.bericht) T.ui.bericht(z.bericht);
-    }
-    toonVerstoppen(S);
   });
 
   // ── De velden (js/akkers.js, "Velden"; spel.md, "Weides met koeien en schapen") ──

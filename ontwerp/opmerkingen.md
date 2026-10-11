@@ -919,3 +919,13 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   van gras zandpad, en voor zandpad naast veen, broek, heide of strand is er geen tegel. Wie op het eiland door het veen
   of over het strand loopt, laat dus geen spoor zien (het spoor telt wel, `T.isSpoor`). Pas als het opvalt: een
   overgang erbij, of het spoor daar als stempel.
+
+- **Na optie 1 (11 okt, vraag 151):** de figuren van de inner (`beelden/figuren/inner-*.png`, en `inner` in
+  `naar-spel.cjs`, `dorpelingen-anim.cjs` en `heer.cjs`) staan er nog, maar niets gebruikt ze; ze laden alleen als iets
+  ze vraagt. `T.zietTegel` (`js/wereld.js`) heeft alleen nog een toets als gebruiker. En
+  `VELDWERK_INSTELLINGEN.wiedenRust` en `spittenRust` leest al een tijd niets meer.
+
+- **Het lege begin (11 okt, vraag 152, 1b):** in het kamp is geen plaats, dus zegt het spel elke paar dagen "Er wil een
+  gezin komen, maar er is geen plaats. Wijs een erf aan (B)"; de status Vol speelt vanaf de eerste dag (elke tent is vol);
+  het doel linksboven is nog "Naar een dorp" (het plan noemde "haal de eerste winter"); de brief zegt "met 4 gezinnen" in
+  cijfers. De weg van het eiland loopt soms dwars door het kamp op het plein. Allemaal voor 1c en 1d, als je kunt bouwen.

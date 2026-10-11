@@ -2,6 +2,19 @@
 // hij staat. Gemaakt door npm run teksten (gereedschap/teksten.cjs) uit de aanroepen van T.t in js/; niet met de
 // hand bewerken. De vertaaltool (gereedschap/vertalen.html) werkt met deze lijst.
 Spel.TAAL_BRON = [
+  {"t":"St Martin's Day is coming, and the lord spares you this year.","waar":["js/heer.js"]},
+  {"t":"The cart is on the open ground that will be the square. The families put up their tents around the campfire.","waar":["js/begin.js"]},
+  {"t":"To Our new reeve,","waar":["js/brieven.js"]},
+  {"t":"It has pleased Us to send you, with {n|# family|# families}, to a piece of Our wilderness. Make a village of it. A village brings Us money; wilderness does not.","waar":["js/brieven.js"]},
+  {"t":"The cart carries what We could spare: some wood, grain for the spring, seed grain, a few tools and {goud} gold. Do not expect more.","waar":["js/brieven.js"]},
+  {"t":"This year We ask nothing of you. We are generous. Next year, on St Martin's Day, We shall come in person to collect what is Ours.","waar":["js/brieven.js"]},
+  {"t":"Laws you may make, as many as you like. Our forest you leave alone.","waar":["js/brieven.js"]},
+  {"t":"To work","waar":["js/brieven.js"]},
+  {"t":"To Our reeve,","waar":["js/brieven.js"]},
+  {"t":"St Martin's Day is coming, and We have decided to spare you this year. Do not thank Us.","waar":["js/brieven.js"]},
+  {"t":"Next year We shall count all the more carefully.","waar":["js/brieven.js"]},
+  {"t":"Thank you, my lord","waar":["js/brieven.js"]},
+  {"t":"The covered wagon, with everything you brought","waar":["js/verkennen.js"]},
   {"t":"Autosave","waar":["js/menu.js"]},
   {"t":"Slot {plek}","waar":["js/menu.js"]},
   {"t":"today {tijd}","waar":["js/menu.js"]},

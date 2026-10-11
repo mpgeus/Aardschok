@@ -48,11 +48,10 @@
 // of weg: 'marskramer' (quest zonder allebei begint hem). Zie js/quests.js voor de quests zelf.
 // En handel: true opent het handelsvenster van de marskramer (js/handel.js, js/hud.js), en
 // heer: true het venster waarin je de heer betaalt op Sint-Maarten (js/heer.js, js/hud.js).
-// omkopen: 10 geeft de inner tien goud, voor minder op zijn rapport (js/inner.js, T.koopInnerOm).
 //
 // Een voorval (js/voorvallen.js) is een gesprek dat de ander begint, onder dezelfde naam als in T.VOORVALLEN. Zijn
 // naam is '{wie}': wie het je komt zeggen. Een antwoord mag daar ook hebben: graan: -20 (of hout, bier, ijzer, ...),
-// tevreden: 5, argwaan: 3, verban: 'ander', sterfkans: 30, gezin: 1, schaap: -2, voorval: 'x' (een vervolg) en
+// tevreden: 5, gunst: -3, verban: 'ander', sterfkans: 30, gezin: 1, schaap: -2, voorval: 'x' (een vervolg) en
 // feest: 'dag' of 'avond' (het dorp viert het op het plein, js/feesten.js), blus: true of brand: 'laat' (de brand,
 // js/brand.js) en koorts: 40 (de koorts gaat zo vaak over als 40 op 100, js/koorts.js). Wat dat is, staat boven in
 // js/voorvallen.js; het venster zegt de prijs vooraf.
@@ -99,7 +98,7 @@
         nieuws: {
           tekst: [
             { als: { vlag: 'marskramerLente' }, zeg: 'Uw heer heeft een spiegel van mij gekocht. Hij wilde zien hoe rijk hij eruitziet. Nu wil hij er nog een, voor de achterkant.' },
-            { als: { vlag: 'marskramerZomer' }, zeg: 'Op het kasteel tellen ze de dagen tot Sint-Maarten. Ik hoorde de inner zeggen dat uw gehucht er welvarend uitziet. Hij bedoelde het niet als compliment.' },
+            { als: { vlag: 'marskramerZomer' }, zeg: 'Op het kasteel tellen ze de dagen tot Sint-Maarten. Ik hoorde de heer zeggen dat uw gehucht er welvarend uitziet. Hij bedoelde het niet als compliment.' },
             { als: { vlag: 'marskramerHerfst' }, zeg: 'Ze zeggen dat de heer dit jaar meer wil. Dat zeggen ze elk jaar. En elk jaar klopt het.' },
             { zeg: 'Niets wat u niet al weet, schout. En wat u niet weet, weet ik ook niet. Dat is gezonder.' },
           ],
@@ -166,119 +165,14 @@
         },
       },
     },
-    // De inner (js/inner.js, ontwerp/spel.md "Rijk worden en arm lijken"): de man van de heer die in
-    // oogstmaand komt tellen. Geen grap zoals zijn heer: hij telt goed, en hij weet het. Wat hij ziet,
-    // komt in zijn rapport; wie met hem meeloopt, bepaalt wat hij ziet. innerOpBezoek en
-    // innerOnverwacht zet js/inner.js. Praten, afleiden en omkopen komen later (werklijst punt 6).
-    inner: {
-      naam: 'de inner',
-      start: 'welkom',
-      situaties: [
-        { naam: 'Oogstmaand: hij komt tellen', als: { vlag: 'innerOpBezoek' } },
-        { naam: 'Hij komt onverwacht terug', als: { vlag: ['innerOpBezoek', 'innerOnverwacht'] } },
-        { naam: 'Hij komt tellen, en je hebt goud', als: { vlag: 'innerOpBezoek', goud: 20 } },
-        { naam: 'Hij heeft genoeg gepraat', als: { vlag: ['innerOpBezoek', 'innerUitgepraat'], goud: 20 } },
-        { naam: 'Omgekocht tot de helft', als: { vlag: ['innerOpBezoek', 'innerOmgekochtVol'], goud: 20 } },
-        { naam: 'Zijn rapport is af', als: { vlag: ['innerOpBezoek', 'innerGeteld'] } },
-      ],
-      // Afleiden en omkopen (werklijst punt 4, stuk 2; vraag 42, Marcel, 27 sep): zolang je met hem
-      // praat, kijkt hij niet en loopt de dag door, tot hij genoeg gepraat heeft (innerUitgepraat). Een
-      // geschenk laat hem minder opschrijven (omkopen), tot de helft (innerOmgekochtVol). Is zijn rapport
-      // af (innerGeteld), dan verandert een praatje of een geschenk er niets meer aan. De vlaggen zet
-      // js/inner.js.
-      knopen: {
-        welkom: {
-          tekst: [
-            { als: { vlag: 'innerGeteld' }, zeg: 'Mijn rapport is af, schout. Zijne Genade leest het vanavond. Alleen de getallen: de woorden slaat hij over.' },
-            { als: { vlag: 'innerUitgepraat' }, zeg: 'Geen praatjes meer, schout: ik moet tellen, en voor donker terug zijn op het kasteel. Zeg het onderweg maar.' },
-            { als: { vlag: 'innerOnverwacht' }, zeg: 'Schout. Ik was toevallig in de buurt. Dat is niet waar: ik kwam speciaal. Zijne Genade vroeg zich af of ik wel goed geteld had. Ik tel altijd goed. Maar ik tel graag twee keer.' },
-            { zeg: 'Goedendag, schout. Ik ben de inner van Zijne Genade, en ik kom tellen: de huizen, de schuren, de velden en de kist. Wat ik zie, schrijf ik op. Wat ik opschrijf, betaalt u op Sint-Maarten.' },
-          ],
-          keuzes: [
-            { zeg: 'Loop maar met me mee. Ik laat u alles zien.', als: { nietVlag: 'innerGeteld' }, sluit: true },
-            { zeg: 'Wat telt u precies?', als: { nietVlag: ['innerUitgepraat', 'innerGeteld'] }, naar: 'wat' },
-            { zeg: 'Hoe gaat het op het kasteel?', als: { nietVlag: ['innerUitgepraat', 'innerGeteld'] }, naar: 'kasteel' },
-            { zeg: 'Ik heb iets voor u, voor de moeite.', als: { goud: 5, nietVlag: ['innerOmgekochtVol', 'innerGeteld'] }, naar: 'geschenk' },
-            { zeg: 'Tel maar raak.', als: { nietVlag: 'innerGeteld' }, sluit: true },
-            { zeg: 'Goede reis.', als: { vlag: 'innerGeteld' }, sluit: true },
-          ],
-        },
-        kasteel: {
-          tekst: [
-            { zeg: 'Zijne Genade maakt het uitstekend. Vorige week liet hij de vijver leegscheppen, omdat hij er een gouden munt in zag liggen. Het was de maan. Hij heeft de maan nu een brief gestuurd.' },
-          ],
-          keuzes: [
-            { zeg: 'Een brief aan de maan?', naar: 'maan' },
-            { zeg: 'Loop maar met me mee.', sluit: true },
-          ],
-        },
-        maan: {
-          tekst: [
-            { zeg: 'Een aanmaning. De maan staat elke nacht boven zijn land, zegt Zijne Genade, en betaalt nooit iets. Ik moest hem tellen. Eén, schreef ik op. Zijne Genade vond het weinig.' },
-          ],
-          keuzes: [
-            { zeg: 'En wat vindt u er zelf van?', naar: 'zelf' },
-            { zeg: 'Loop maar met me mee.', sluit: true },
-          ],
-        },
-        zelf: {
-          tekst: [
-            { zeg: 'Ik vind niets, schout. Ik tel. Wie iets vindt, komt in de kerker, en daar valt niets te tellen behalve de dagen. Is het al zo laat? We staan hier maar te praten.' },
-          ],
-          keuzes: [
-            { zeg: 'Loop maar met me mee.', sluit: true },
-          ],
-        },
-        geschenk: {
-          tekst: [
-            { zeg: 'Iets voor mij? Schout, ik ben de inner van Zijne Genade. Wat ik zie, schrijf ik op. Al zie ik niet alles even goed. Mijn ogen zijn niet meer wat ze waren, zeker niet als er iets in mijn hand ligt.' },
-          ],
-          keuzes: [
-            { zeg: 'Vijf goud, voor uw ogen.', als: { goud: 5 }, doe: { omkopen: 5 }, naar: 'bedankt' },
-            { zeg: 'Tien goud.', als: { goud: 10 }, doe: { omkopen: 10 }, naar: 'bedankt' },
-            { zeg: 'Twintig goud.', als: { goud: 20 }, doe: { omkopen: 20 }, naar: 'bedankt' },
-            { zeg: 'Laat maar.', naar: 'welkom' },
-          ],
-        },
-        bedankt: {
-          tekst: [
-            { als: { vlag: 'innerOmgekochtVol' }, zeg: 'Dank u, schout. Nu ben ik de helft vergeten, en meer kan ik niet vergeten: dan valt het op, en dan hangen we allebei.' },
-            { zeg: 'Dank u, schout. Merkwaardig: ik zie ineens een stuk minder dan vanochtend. De leeftijd, zeker.' },
-          ],
-          keuzes: [
-            { zeg: 'Loop maar met me mee.', sluit: true },
-          ],
-        },
-        wat: {
-          tekst: [
-            { zeg: 'Huizen, want daar wonen zielen, en zielen betalen hoofdgeld. Schuren, want daar ligt graan. Velden, want daar staat graan dat straks in de schuren ligt. En de kist, want Zijne Genade ziet graag goud. Ik weet wat een veld geeft, schout, en de marskramer vertelt me wat hij u betaalde. Ligt er minder in de schuur of in de kist dan ik weet, dan schrijf ik dat ook op.' },
-          ],
-          keuzes: [
-            { zeg: 'En wat u niet ziet?', naar: 'nietGezien' },
-            { zeg: 'Loop maar met me mee.', sluit: true },
-          ],
-        },
-        nietGezien: {
-          tekst: [
-            { zeg: 'Wat ik niet zie, tel ik niet. Dat is geen gunst, schout, dat is boekhouden. Maar ik heb goede ogen, en nog meer geduld dan Zijne Genade. Ongeveer.' },
-          ],
-          keuzes: [
-            { zeg: 'Loop maar met me mee.', sluit: true },
-          ],
-        },
-      },
-    },
     // De herbergierster (js/herberg.js; spel.md, "Zaken waar de mensen zelf heen gaan"; Marcel koos op
-    // 27 sep dat er in de herberg gepraat wordt, vraag 38). Ze weet wie er gisteravond zat en wat er
-    // gezegd werd. herbergGasten, herbergRoddel en herbergDroog zet js/herberg.js elke nacht;
-    // {gisteravond} en {roddelaar} vult het spel in met de namen van wie er zat en van wie te veel zei.
+    // 27 sep dat er in de herberg gepraat wordt, vraag 38). Ze weet wie er gisteravond zat. herbergGasten en
+    // herbergDroog zet js/herberg.js elke nacht; {gisteravond} vult het spel in met de namen van wie er zat.
     herbergierster: {
       naam: 'de herbergierster',
       start: 'welkom',
       situaties: [
         { naam: 'Gisteravond zat er volk', als: { vlag: 'herbergGasten' } },
-        { naam: '…en de roddelaar had het over zijn kelder', als: { vlag: ['herbergGasten', 'herbergRoddel'] } },
-        { naam: '…en een getuige vertelde wat hij de schout zag doen', als: { vlag: ['herbergGasten', 'herbergGetuige'] } },
         { naam: 'De herberg staat droog', als: { vlag: 'herbergDroog' } },
         { naam: 'De marskramer logeert hier', als: { vlag: 'marskramerOpBezoek' } },
       ],
@@ -286,8 +180,6 @@
         welkom: {
           tekst: [
             { als: { vlag: 'herbergDroog' }, zeg: 'Geen druppel voor de tap, schout. Zonder graan brouw ik niets, en wat ik nog heb, is voor de huizen. Een lege herberg hoort alles en weet niets.' },
-            { als: { vlag: 'herbergGetuige' }, zeg: 'Aan de tap gisteravond: {gisteravond}. En {getuige} wist te vertellen dat de schout {gezien}. Ik zeg niet dat het waar is, schout. Ik zeg dat iedereen het nu weet.' },
-            { als: { vlag: 'herbergRoddel' }, zeg: 'Aan de tap gisteravond: {gisteravond}. En {roddelaar} had het weer over wat er in de kelder ligt. Hardop, schout. Wat de halve herberg weet, weet de heer met Sint-Maarten.' },
             { als: { vlag: 'herbergGasten' }, zeg: 'Aan de tap gisteravond: {gisteravond}. Het weer, de pacht, en wie er met wie. Niets wat u hoeft te weten, en alles wat ik wil weten.' },
             { zeg: 'Stil gisteravond. Niemand kwam. Dan tap ik voor mezelf, en ik ben een slechte klant.' },
           ],
@@ -613,8 +505,8 @@
           ],
           keuzes: [
             { zeg: 'Dank je. Geef hem maar aan {ander}.', sluit: true, doe: { tevreden: 2 } },
-            { zeg: 'Ik neem hem aan. En die andere hazen ook.', sluit: true, doe: { vlees: 8, argwaan: 2 } },
-            { zeg: 'Uit het bos van de heer? Breng hem terug.', sluit: true, doe: { argwaan: -2 } },
+            { zeg: 'Ik neem hem aan. En die andere hazen ook.', sluit: true, doe: { vlees: 8, gunst: -2 } },
+            { zeg: 'Uit het bos van de heer? Breng hem terug.', sluit: true, doe: { gunst: 2 } },
           ],
         },
       },
@@ -912,9 +804,9 @@
             { zeg: 'Ik zag {ander} in het bos van de heer, met een haas onder zijn jas. Als de heer het hoort, zijn we allemaal de klos. Ik zeg het maar, schout.' },
           ],
           keuzes: [
-            { zeg: 'Ik geef hem aan bij de heer.', sluit: true, doe: { tevreden: -3, argwaan: -4 } },
-            { zeg: 'Hij deelt die haas met het dorp, en houdt zijn mond.', sluit: true, doe: { vlees: 3, argwaan: 2 } },
-            { zeg: 'Ik heb niets gehoord. En jij ook niet.', sluit: true, doe: { argwaan: 1 } },
+            { zeg: 'Ik geef hem aan bij de heer.', sluit: true, doe: { tevreden: -3, gunst: 4 } },
+            { zeg: 'Hij deelt die haas met het dorp, en houdt zijn mond.', sluit: true, doe: { vlees: 3, gunst: -2 } },
+            { zeg: 'Ik heb niets gehoord. En jij ook niet.', sluit: true, doe: { gunst: -1 } },
           ],
         },
       },
@@ -957,11 +849,11 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Morgen ga ik naar de inner, schout. Om te praten. Over u, en over wat er in uw kelder ligt. Tenzij u mij iets te zeggen hebt.' },
+            { zeg: 'Morgen ga ik naar het kasteel, schout. Om te praten. Over u, en over alles wat ik van u weet. Tenzij u mij iets te zeggen hebt.' },
           ],
           keuzes: [
             { zeg: 'Hier, vijf goud. En nu je mond dicht.', sluit: true, doe: { goud: -5 } },
-            { zeg: 'Ga maar. De inner gelooft geen woekeraar.', sluit: true, doe: { argwaan: 6 } },
+            { zeg: 'Ga maar. De heer gelooft geen woekeraar.', sluit: true, doe: { gunst: -6 } },
           ],
         },
       },
@@ -1202,8 +1094,8 @@
             { zeg: 'Bij de brug staat een man met een kar vol ijzer, schout. Spotgoedkoop. Hij zegt niet waar het vandaan komt, maar er staat een wapen op. Dat van de heer.' },
           ],
           keuzes: [
-            { zeg: 'Koop het. Alles.', sluit: true, doe: { goud: -2, ijzer: 10, argwaan: 5 } },
-            { zeg: 'Laat hem vastzetten, en stuur het ijzer naar de heer.', sluit: true, doe: { tevreden: -1, argwaan: -5 } },
+            { zeg: 'Koop het. Alles.', sluit: true, doe: { goud: -2, ijzer: 10, gunst: -5 } },
+            { zeg: 'Laat hem vastzetten, en stuur het ijzer naar de heer.', sluit: true, doe: { tevreden: -1, gunst: 5 } },
             { zeg: 'Stuur hem weg.', sluit: true },
           ],
         },
@@ -1219,7 +1111,7 @@
           ],
           keuzes: [
             { zeg: 'Die zijn voor de kist van het dorp.', sluit: true, doe: { goud: 4 } },
-            { zeg: 'Een vondst is van de heer. Hij krijgt ze.', sluit: true, doe: { argwaan: -6 } },
+            { zeg: 'Een vondst is van de heer. Hij krijgt ze.', sluit: true, doe: { gunst: 6 } },
             { zeg: 'Houd ze. En zeg het tegen niemand.', sluit: true, doe: { tevreden: 1 } },
           ],
         },
@@ -1258,7 +1150,7 @@
             { zeg: 'Laat ze nooit zien wat je hebt, en laat ze altijd zien wat je niet hebt. Een lege schuur, een mager kind. De heer houdt van magere kinderen: die kosten hem niets.' },
           ],
           keuzes: [
-            { zeg: 'Dank je.', sluit: true, doe: { argwaan: -3 } },
+            { zeg: 'Dank je.', sluit: true, doe: { gunst: 3 } },
           ],
         },
       },
@@ -1285,7 +1177,7 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'De oogst is binnen, schout! Vroeger hielden we dan een feest, met alles erop en eraan. Wat op is, kan de inner niet tellen, zei mijn vader altijd.' },
+            { zeg: 'De oogst is binnen, schout! Vroeger hielden we dan een feest, met alles erop en eraan. Wat op is, kan de heer niet tellen, zei mijn vader altijd.' },
           ],
           keuzes: [
             { zeg: 'Een groot feest.', sluit: true, doe: { graan: -40, bier: -15, tevreden: 8, feest: 'dag' } },
@@ -1352,15 +1244,14 @@
       knopen: {
         begin: {
           tekst: [
-            { als: { vlag: ['ontginHeide', 'ontginBos'] }, zeg: 'Schout, het dorp komt graan tekort, en ik wil land ontginnen, {stuk}. Ik kan {heide} nemen: een maand plaggen steken, maar {meent}. Of {bos}: een winter bomen hakken en stobben rooien, en het hout is voor het dorp. Maar het bos is van de heer. {bosZicht}' },
-            { als: { vlag: 'ontginBos' }, zeg: 'Schout, het dorp komt graan tekort, en de heide is op. Ik wil {bos} ontginnen, {stuk}: een winter bomen hakken en stobben rooien, en het hout is voor het dorp. Maar het bos is van de heer. {bosZicht}' },
+            { als: { vlag: ['ontginHeide', 'ontginBos'] }, zeg: 'Schout, het dorp komt graan tekort, en ik wil land ontginnen, {stuk}. Ik kan {heide} nemen: een maand plaggen steken, maar {meent}. Of {bos}: een winter bomen hakken en stobben rooien, en het hout is voor het dorp. Maar het bos is van de heer.' },
+            { als: { vlag: 'ontginBos' }, zeg: 'Schout, het dorp komt graan tekort, en de heide is op. Ik wil {bos} ontginnen, {stuk}: een winter bomen hakken en stobben rooien, en het hout is voor het dorp. Maar het bos is van de heer.' },
             { zeg: 'Schout, ik wil {heide} ontginnen, {stuk}. Het dorp komt graan tekort, en daar groeit nu niets dan hei. Een maand plaggen steken, en volgend voorjaar zaaien we er rogge. Maar {meent}.' },
           ],
           keuzes: [
             { zeg: 'Ja, ontgin het maar.', sluit: true, als: { vlag: 'ontginHeide', nietVlag: 'ontginBos' }, doe: { ontgin: 'heide' } },
             { zeg: 'De heide.', sluit: true, als: { vlag: ['ontginHeide', 'ontginBos'] }, doe: { ontgin: 'heide' } },
             { zeg: 'Het bos. Ik meld het de heer.', sluit: true, als: { vlag: 'ontginBos' }, doe: { ontgin: 'bos' } },
-            { zeg: 'Het bos. De heer hoeft het niet te weten.', sluit: true, als: { vlag: 'ontginBos' }, doe: { ontgin: 'stiekem' } },
             { zeg: 'Nee, de heide is van iedereen.', sluit: true, als: { nietVlag: 'ontginBos' } },
             { zeg: 'Nee, nu niet.', sluit: true, als: { vlag: 'ontginBos' } },
           ],
@@ -1391,8 +1282,8 @@
             { zeg: 'Ik heb een lied gemaakt, schout. Over de heer. Het rijmt op varken. Mag ik het vanavond zingen, in de herberg?' },
           ],
           keuzes: [
-            { zeg: 'Zing maar. Hard.', sluit: true, doe: { tevreden: 4, argwaan: 4 } },
-            { zeg: 'Zing het zachtjes. En niet het laatste couplet.', sluit: true, doe: { tevreden: 2, argwaan: 1 } },
+            { zeg: 'Zing maar. Hard.', sluit: true, doe: { tevreden: 4, gunst: -4 } },
+            { zeg: 'Zing het zachtjes. En niet het laatste couplet.', sluit: true, doe: { tevreden: 2, gunst: -1 } },
             { zeg: 'Niet zingen.', sluit: true, doe: { tevreden: -1 } },
           ],
         },
@@ -1438,9 +1329,9 @@
             { zeg: 'Er was een bode van de heer, schout. De heer wil een standbeeld van zichzelf, op ons plein, voor Pasen. Van eik, want marmer is voor de keizer, en hij is bescheiden.' },
           ],
           keuzes: [
-            { zeg: 'Dan krijgt hij een standbeeld.', sluit: true, doe: { hout: -20, tevreden: -2, argwaan: -6 } },
-            { zeg: 'Een vogelverschrikker, in een oude jas van hem.', sluit: true, doe: { hout: -3, tevreden: 3, argwaan: 3 } },
-            { zeg: 'Pasen is nog ver.', sluit: true, doe: { argwaan: 3 } },
+            { zeg: 'Dan krijgt hij een standbeeld.', sluit: true, doe: { hout: -20, tevreden: -2, gunst: 6 } },
+            { zeg: 'Een vogelverschrikker, in een oude jas van hem.', sluit: true, doe: { hout: -3, tevreden: 3, gunst: -3 } },
+            { zeg: 'Pasen is nog ver.', sluit: true, doe: { gunst: -3 } },
           ],
         },
       },
@@ -1454,9 +1345,9 @@
             { zeg: 'De bode van de heer was er, schout. De heer komt jagen, in ons bos. Het dorp levert de drijvers, en het eten. En de wijn, maar die hebben we niet.' },
           ],
           keuzes: [
-            { zeg: 'Drijvers en eten, en bier in plaats van wijn.', sluit: true, doe: { graan: -20, bier: -10, argwaan: -5 } },
-            { zeg: 'Alleen de drijvers.', sluit: true, doe: { argwaan: 2 } },
-            { zeg: 'Zeg hem dat het wild op is.', sluit: true, doe: { argwaan: 5 } },
+            { zeg: 'Drijvers en eten, en bier in plaats van wijn.', sluit: true, doe: { graan: -20, bier: -10, gunst: 5 } },
+            { zeg: 'Alleen de drijvers.', sluit: true, doe: { gunst: -2 } },
+            { zeg: 'Zeg hem dat het wild op is.', sluit: true, doe: { gunst: -5 } },
           ],
         },
       },
@@ -1472,7 +1363,7 @@
           keuzes: [
             { zeg: 'Betaal maar.', sluit: true, doe: { goud: -2 } },
             { zeg: 'Iedereen zet planken voor zijn ramen. Vandaag nog.', sluit: true, doe: { hout: -8, tevreden: -2 } },
-            { zeg: 'Laat hem tellen. Hij kan niet tellen.', sluit: true, doe: { argwaan: 4 } },
+            { zeg: 'Laat hem tellen. Hij kan niet tellen.', sluit: true, doe: { gunst: -4 } },
           ],
         },
       },

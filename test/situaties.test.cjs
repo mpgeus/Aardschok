@@ -93,7 +93,7 @@ test('een voorwaarde mag een lijstje vlaggen zijn, net als een gevolg', () => {
   assert.ok(T.voorwaardeGeldt(S, S, 'heer', { vlag: ['briefVanDeHeer', 'heerBetaald'] }), 'allebei gezet');
   assert.equal(T.voorwaardeGeldt(S, S, 'heer', { vlag: ['briefVanDeHeer', 'soldatenInHuis'] }), false, 'één ervan mist');
   assert.equal(T.voorwaardeGeldt(S, S, 'heer', { nietVlag: ['soldatenInHuis', 'briefVanDeHeer'] }), false, 'één ervan staat wél');
-  assert.ok(T.voorwaardeGeldt(S, S, 'heer', { nietVlag: ['soldatenInHuis', 'innerOpBezoek'] }), 'geen van beide');
+  assert.ok(T.voorwaardeGeldt(S, S, 'heer', { nietVlag: ['soldatenInHuis', 'marskramerOpBezoek'] }), 'geen van beide');
   // Zo kun je in een situatie met twee vlaggen een antwoord toevoegen dat er ook echt staat:
   // de schrijver zet de voorwaarde van de situatie op wat je erbij maakt.
   assert.ok(T.voorwaardeGeldt(S, S, 'heer', { heeft: [] }), 'een leeg lijstje houdt niets tegen');

@@ -9,11 +9,11 @@
 // Een aanval (S.rovers.aanval) gaat zo: tegen de avond komen ze van de rand van de kaart die het dichtst bij een
 // akker ligt, lopen erheen, roven er een paar uur, en gaan weg met graan uit de voorraad; soms maken ze de akker
 // kapot (wat erop staat, groeit dit jaar niet meer: T.vertrapAkker, js/akkers.js). Een bericht zegt het, en de tijd
-// gaat naar 1× (T.bezoekerKomtAan, js/dag.js). De mannen van het wachthuis lopen dan met de schout mee (zoals de
-// inner, T.loopNaastDeSchout), en ziet een rover de schout, dan begint het gevecht in beurten (js/gevecht.js), met
-// de hele bende en de militie die bij hem is. Wie valt, is dood: een rover is uit zijn bende, een wachter is een
-// mond minder (T.sneuvelt), en valt de schout, dan is het spel uit. Wie het overleeft, staat de volgende ochtend
-// weer met al zijn leven op (werklijst vraag 11).
+// gaat naar 1× (T.bezoekerKomtAan, js/dag.js). De mannen van het wachthuis lopen dan met de schout mee
+// (T.loopNaastDeSchout), en ziet een rover de schout, dan begint het gevecht in beurten (js/gevecht.js), met de hele
+// bende en de militie die bij hem is. Wie valt, is dood: een rover is uit zijn bende, een wachter is een mond minder
+// (T.sneuvelt), en valt de schout, dan is het spel uit. Wie het overleeft, staat de volgende ochtend weer met al zijn
+// leven op (werklijst vraag 11).
 //
 // Zonder scherm, en dus getoetst (test/rovers.test.cjs).
 (function (T) {
@@ -48,7 +48,7 @@
 
   const uurNu = (D) => (D.kalender ? D.kalender.dag * 24 : 0);
   const dagNu = (D) => Math.floor(D.kalender ? D.kalender.dag : 0);
-  // Een getal 0..1, vast per spel, per dag en per vraag `n` (zoals in js/doorzoeken.js), zodat een speeltest met
+  // Een getal 0..1, vast per spel, per dag en per vraag `n`, zodat een speeltest met
   // hetzelfde zaad hetzelfde jaar speelt.
   const lot = (D, dag, n) => T.dobbelsteen(((D.lot && D.lot.zaad) || 1) * 37 + Math.floor(dag) * 7919 + n)();
 
@@ -408,7 +408,7 @@
       begin(D, A);
       return;
     }
-    // De militie loopt met de schout mee (zoals de inner, js/inner.js); wie bij de bode is, blijft daar.
+    // De militie loopt met de schout mee (T.loopNaastDeSchout, js/lopen.js); wie bij de bode is, blijft daar.
     for (const e of opgeroepen(D)) if (!e.onderweg && !e.aangehouden) T.loopNaastDeSchout(D, e);
     const levend = A.rovers.filter((e) => !e.dood && w.wezens.includes(e));
     if (!levend.length) {

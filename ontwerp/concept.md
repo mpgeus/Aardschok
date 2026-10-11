@@ -5,6 +5,10 @@ woorden: "Wat vind je hiervan? Ik denk dat we hiermee een goede kant opgaan." Hi
 waar het ertoe doet in zijn eigen woorden, en daaronder hoe het naast ons spel ligt. Wat Marcel erover besliste, staat
 eerst.
 
+**Sinds 11 okt geldt dit kompas niet meer helemaal** (werklijst vraag 151, `gameloop.md`): Marcel koos de economie van
+The Settlers met gevechten in beurten, en jij bouwt van bovenaf ("A ja"). De regel "wat elders één klik is, gaat hier
+via een persoon" geldt dus niet meer voor bouwen; de schout blijft je held, die vecht en praat.
+
 ## Besloten (Marcel, 30 sep 2026; werklijst, vraag 73)
 
 > We zetten eerst de kern goed neer. Ik wil meer naar management sim toe. Het zaaien wordt gewoon iets wat de boeren

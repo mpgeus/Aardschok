@@ -47,9 +47,9 @@
     // na `uren` uur, als de schout niet kwam, loopt het af. Alleen als dat niet kan (hij is de kaart al af, of er zijn al
     // rovers op de kaart), gebeurt het buiten beeld, en hoor je het als hij terug is.
     hinderlaag: { afstand: 10, uren: 1.5 },
-    // De mannen van de heer: de kans is `basis` plus `perArgwaan` maal de argwaan van de inner (0 tot 1). Ze nemen de
-    // brief mee; de argwaan gaat omhoog en de gunst omlaag. Met hen vecht niemand: weerstand tegen de heer is het ergste.
-    heer: { basis: 0.04, perArgwaan: 0.2, argwaan: 0.1, gunst: 5 },
+    // De mannen van de heer: de kans is `basis` (tot 11 okt kwam er een deel van de argwaan bij). Ze nemen de
+    // brief mee en de gunst van de heer gaat omlaag. Met hen vecht niemand: weerstand tegen de heer is het ergste.
+    heer: { basis: 0.04, gunst: 5 },
     // Bescherming: hooguit zoveel mannen mee. In het gevecht telt de bode `bode`, een man 1 en een veteraan `veteraan`, en
     // met een wapen voor elke man alles maal `wapens`; de kans dat ze de rovers afslaan is hun kracht gedeeld door hun
     // kracht plus het aantal rovers.
@@ -115,8 +115,7 @@
     const R = IN().rovers;
     const H = IN().heer;
     const rovers = Math.min(R.hooguit, (R.basis + R.perRover * bende(D)) * (winter ? R.winter : 1) * (donker ? R.donker : 1));
-    const argwaan = (D.inner && D.inner.argwaan) || 0;
-    return { rovers, heer: H.basis + H.perArgwaan * argwaan, bende: bende(D), winter, donker };
+    return { rovers, heer: H.basis, bende: bende(D), winter, donker };
   };
 
   // Hoe sterk wie onderweg is, tegen de rovers: de bode, en wie meegaat.
@@ -334,7 +333,6 @@
     D.bode = null;
     const naam = T.naamVanBewoner(B.wie[0]);
     if (o.door === 'heer') {
-      T.zetArgwaan(D, IN().heer.argwaan, 'De heer las je brief aan de marskramer');
       T.wijzigGunst(D, -IN().heer.gunst, 'De heer las je brief aan de marskramer: je had goud om te kopen');
       const tekst = `${naam} is terug, zonder marskramer: de mannen van de heer hielden hem aan en namen je brief mee. Nu weet de heer dat je goud hebt om te kopen.`;
       T.komtTerug(D, B.wie, { tekst, soort: 'gevaar' });

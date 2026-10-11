@@ -19,8 +19,8 @@ test('zonder "b"/"h" op een gebouw-ding is de voet 1x1', () => {
   assert.deepEqual(w.gebouwenOpKaart[0], { soort: 'put', x: 2, y: 2, b: 1, h: 1, huis: null, bewoners: null, tekening: null });
 });
 
-// Wie er woont, zegt "huis", zoals bij een akker: de boer met dezelfde id, of de schout. Dat telt
-// voor zijn kelder (js/verstoppen.js), en het komt mee tot op het gebouw in S.gebouwen.
+// Wie er woont, zegt "huis", zoals bij een akker: de boer met dezelfde id, of de schout. Het komt
+// mee tot op het gebouw in S.gebouwen.
 test('"huis" op een gebouw-ding zegt wie er woont, tot op het gebouw zelf', () => {
   const betekenis = { dingen: [{ gebouw: 'boerderij', x: 2, y: 2, b: 2, h: 2, huis: 'boer1' }, { gebouw: 'huis', x: 6, y: 2, b: 2, h: 2, huis: 'schout' }] };
   const S = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0 };
@@ -114,6 +114,6 @@ test('T.zetBestaandeGebouwen via een echt ingelezen wereld: de vijf boerderijen 
   T.zetBestaandeGebouwen(S);
   assert.equal(S.gebouwen.length, 3);
   assert.equal(S.woonruimte, 2 * T.GEBOUWEN.boerderij.woonruimte + T.GEBOUWEN.huis.woonruimte);
-  // Met hun voet: die heeft de inner nodig om te weten of hij ze ziet (js/inner.js).
+  // Met hun voet (T.voetVanGebouw).
   assert.deepEqual(S.gebouwen[2].voet, { b: 2, h: 2 });
 });

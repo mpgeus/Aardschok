@@ -132,7 +132,7 @@ test('sturen: ze lopen de weg af, tellen mee en eten, maar werken nergens, tot 1
   for (const p of wie) assert.ok(S.dorp.bewoners.mensen.includes(p), `${p.naam} is weg, en kan dus niet wegtrekken`);
 });
 
-test('vrijkopen kost het goud, en de heer wordt argwanend; zonder genoeg goud kan het niet', () => {
+test('vrijkopen kost het goud en een deel van de gunst van de heer; zonder genoeg goud kan het niet', () => {
   const S = dorpMetBrief();
   const v = S.dorp.heervaart.vraag;
   S.dorp.voorraad.goud = v.goud - 1;
@@ -142,12 +142,14 @@ test('vrijkopen kost het goud, en de heer wordt argwanend; zonder genoeg goud ka
   assert.equal(T.koopHeervaartAf(S.dorp), false);
 
   S.dorp.voorraad.goud = v.goud + 5;
-  const argwaan = (S.dorp.inner && S.dorp.inner.argwaan) || 0;
+  const gunst = S.dorp.bazen ? S.dorp.bazen.gunst : T.BAZEN_INSTELLINGEN.gunstBegin;
   const rijk = T.heervaartKeuzes(S.dorp).find((k) => k.actie === 'vrijkopen');
   assert.equal(rijk.kan, true);
   rijk.doe(S);
   assert.equal(S.dorp.voorraad.goud, 5);
-  assert.ok(Math.abs(S.dorp.inner.argwaan - (argwaan + v.goud * T.HEERVAART_INSTELLINGEN.argwaanPerGoud)) < 1e-9);
+  const verwacht = T.BAZEN_INSTELLINGEN.heervaart.vrijgekocht - v.goud * T.HEERVAART_INSTELLINGEN.gunstPerGoud;
+  assert.ok(gunst + verwacht > 0 && gunst + verwacht < 100, 'een som die niet tegen de grenzen van de meter aan zit');
+  assert.ok(Math.abs(S.dorp.bazen.gunst - (gunst + verwacht)) < 1e-9, 'de gunst daalt met gunstPerGoud per goud en stijgt met wat zijn goud waard is');
   assert.equal(S.dorp.heervaart.vraag, null);
   assert.equal(S.dorp.heervaart.tocht, null, 'niemand gaat');
   assert.ok(S.dorp.bewoners.mensen.every((p) => !p.weg));

@@ -261,7 +261,7 @@ function zetInstelling(req, res) {
 // --tegen (gereedschap/speeltest/speeltest.cjs, de vergelijking in vergelijk.cjs). Wat de bladzijde meegeeft, wordt hier
 // nagekeken en tot opdrachten gemaakt; niets uit het verzoek komt ongezien op de opdrachtregel.
 const VERGELIJK = require('./gereedschap/speeltest/vergelijk.cjs');
-const SPEELTEST_SPELERS = ['braaf', 'lui30', 'lui60', 'slim', 'bouwer', 'sluw'];
+const SPEELTEST_SPELERS = ['braaf', 'slim', 'bouwer', 'sluw'];
 const SPEELTEST_LANDEN = { eiland: ['--eiland'], maker: ['--maker'], ontworpen: [] };
 let speeltest = null; // { naam, tegen, totaal, begin, loopt, regels, code, kind }
 

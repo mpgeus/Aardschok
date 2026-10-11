@@ -86,7 +86,8 @@
       // en de gebouwen ook niet: die hebben een bestand per tekening, dat pas komt als hij op de
       // kaart staat (S.laadWatErStaat). (Tot 25 sep laadde hier ook beelden/effecten/, de
       // spreukeffecten van het oude spel.)
-      const buiten = [...new Set(Object.values(T.TEGELS || {}).map((v) => v.bestand).filter(Boolean))];
+      // De vellen van de bomen in het jaar laden pas in hun seizoen (S.zetSeizoen).
+      const buiten = [...new Set(Object.values(T.TEGELS || {}).filter((v) => !v.seizoen).map((v) => v.bestand).filter(Boolean))];
       const [uitslag, uitBuiten] = await Promise.all([Promise.all(lijst.map(laadBeeld)), Promise.all(buiten.map(laadBeeld))]);
       S.aan = uitslag.every(Boolean);
       S.buitenAan = buiten.length > 0 && uitBuiten.every(Boolean);
@@ -341,12 +342,13 @@
   //
   // Hoeveel een soort meebeweegt (in bronpixels, aan de bovenkant van het beeld): 0 is niets
   // (een schuur, een muur, een rots), hoger buigt verder mee. Een boom een beetje, een doek
-  // veel; wat hier niet in staat, staat stil.
+  // veel; wat hier niet in staat, staat stil. Een boom of een struik zegt het zelf (`wind` in T.BOMEN, js/wereld.js).
   const WIND_GEWICHT = {
-    eik: 4, herfstEik: 4, den: 3, berk: 5, wilg: 6, appelboom: 4, dodeBoom: 1,
-    struik: 3, bessenStruik: 3, varen: 4, grasPol: 4, hoogGras: 5, bloemen: 4,
+    varen: 4, grasPol: 4, hoogGras: 5, bloemen: 4,
+    klaproos: 4, korenbloem: 4, brandnetel: 3, distel: 3, lisdodde: 5,
     waslijn: 10,
   };
+  const windGewicht = (naam) => WIND_GEWICHT[naam] || (T.BOMEN[naam] && T.BOMEN[naam].wind) || 0;
   const WIND_STANDEN = 5; // een handvol standen: sterk terug .. stil .. sterk mee
   const WIND_PLAK = 4; // hoogte van een plak in bronpixels, alleen bij het bakken
 
@@ -392,6 +394,68 @@
     };
   };
 
+  // Welke tekening een voorwerp op de kaart krijgt, als { vel, id } (vraag 148): een boom heeft op zijn vel meer
+  // tekeningen, met de naam van zijn soort en een `vorm` (gereedschap/pixelart/naar-tiled.cjs), en welke het wordt, zegt
+  // zijn tegel ("elke boom anders", a). Zo verandert er in het spel niets (een voorwerp heeft het nummer van de eerste,
+  // v.id), en past een bewaard spel. Wat maar één tekening heeft, houdt de zijne. En in een ander seizoen dan de zomer de
+  // tekening van dat seizoen (b): het vel "<vel>-<seizoen>" (bomen-herfst, ...) heeft hem op hetzelfde nummer, of niet,
+  // als hij in dat seizoen niet anders is (een spar in de herfst). Met `zomer` altijd die van de zomer (wat plat is,
+  // js/tekenen.js, mag niet van het seizoen afhangen).
+  const VORMEN = new Map(); // per vel: het nummer van de eerste tekening van een soort -> alle nummers
+  function vormenVan(velNaam, id) {
+    const v = T.TEGELS && T.TEGELS[velNaam];
+    if (!v) return null;
+    let per = VORMEN.get(v);
+    if (!per) {
+      per = new Map();
+      const eerste = new Map();
+      v.tiles.forEach((t, i) => {
+        if (!t || !t.naam) return;
+        if (!t.vorm) {
+          if (!eerste.has(t.naam)) eerste.set(t.naam, i);
+          return;
+        }
+        const e = eerste.get(t.naam);
+        if (e == null) return;
+        if (!per.has(e)) per.set(e, [e]);
+        per.get(e).push(i);
+      });
+      VORMEN.set(v, per);
+    }
+    return per.get(id) || null;
+  }
+  S.tekeningVan = function (v, zomer = false) {
+    const vormen = v.vel != null && vormenVan(v.vel, v.id);
+    let id = v.id;
+    if (vormen) {
+      // goed gemengd, anders staan buren in een patroon
+      let h = (Math.imul(v.x | 0, 374761393) + Math.imul(v.y | 0, 668265263)) | 0;
+      h = Math.imul(h ^ (h >>> 13), 1274126177);
+      id = vormen[((h ^ (h >>> 16)) >>> 0) % vormen.length];
+    }
+    if (!zomer && seizoenNu !== 'zomer') {
+      const s = T.TEGELS[`${v.vel}-${seizoenNu}`];
+      if (s && beelden.has(s.bestand) && s.tiles[id] && s.tiles[id].cel) return { vel: `${v.vel}-${seizoenNu}`, id };
+    }
+    return { vel: v.vel, id };
+  };
+
+  // Het seizoen van de bomen (T.boomSeizoen in js/bos.js; js/tekenen.js zegt het elk beeld). Het vel van een seizoen laadt
+  // pas als het seizoen er is, en tot het er is, staan ze in de zomer: zo staat er nooit een gat.
+  let seizoenNu = 'zomer';
+  S.zetSeizoen = function (seizoen) {
+    seizoenNu = seizoen;
+    for (const v of Object.values(T.TEGELS || {})) if (v.seizoen === seizoen) laadAlsNodig(v.bestand);
+  };
+  // Het seizoen waarin de bomen en het groen eronder nu echt getekend worden: dat van nu als zijn vellen er zijn (de bomen
+  // en de begroeiing), anders de zomer. Voor wat het in een buffer legt (het groen dat plat in de grond ligt, het bos om
+  // de kaart ver uitgezoomd): dat moet opnieuw als dit verandert.
+  S.seizoenVanDeBomen = () => {
+    if (seizoenNu === 'zomer' || !T.TEGELS) return 'zomer';
+    const vellen = Object.values(T.TEGELS).filter((v) => v.seizoen === seizoenNu);
+    return vellen.length && vellen.every((v) => beelden.has(v.bestand)) ? seizoenNu : 'zomer';
+  };
+
   // `wind`, als meegegeven, is de windwaarde voor dít voorwerp (-1..1, T.windWaarde in
   // js/main.js). Weegt de soort niets mee (of wordt geen windwaarde meegegeven), dan gewoon het
   // stilstaande beeld — precies zoals voorheen. Een tekening met een eigen bestand (een huis, een
@@ -403,12 +467,18 @@
     const plek = bestand && S.celVan(velNaam, id);
     if (!plek || (eigen && !laadAlsNodig(eigen))) return null;
     const [x, y, b, h] = plek.cel;
-    const gewicht = wind != null && WIND_GEWICHT[v.tiles[id].naam];
+    const gewicht = wind != null && windGewicht(v.tiles[id].naam);
     if (!gewicht) return onthoud(`buiten,${velNaam},${id}`, () => stuk(bestand, x, y, b, h, plek.anker));
     const midden = (WIND_STANDEN - 1) / 2;
     const w = Math.max(-1, Math.min(1, wind));
     const stand = Math.max(0, Math.min(WIND_STANDEN - 1, Math.round(midden + w * midden)));
     return onthoud(`buitenwind,${velNaam},${id},${stand}`, () => bakWindStand(bestand, x, y, b, h, plek.anker, gewicht, stand));
+  };
+
+  // Het plaatje van een voorwerp op de kaart, in zijn vorm en zijn seizoen (S.tekeningVan).
+  S.buitenVan = function (v, wind) {
+    const t = S.tekeningVan(v);
+    return S.buiten(t.vel, t.id, wind);
   };
 
   // Hoe hoog steekt dit ding boven zijn tegel uit? Voor het aanwijzen met de muis. Het ankerpunt
@@ -547,6 +617,24 @@
     const i = m.namen.indexOf(naam);
     if (i < 0 || !laadAlsNodig(MAP + m.bestand)) return null;
     return stuk(MAP + m.bestand, i * m.cel[0], 0, m.cel[0], m.cel[1], m.anker);
+  };
+
+  // Het kamp van het lege begin (gereedschap/pixelart/kamp.cjs; js/begin.js): de tent, de bruine tent of het afdak
+  // (`vorm`, de rijen), met zijn opening naar ZO, ZW, NW of NO (de kolommen). Null als het vel er niet is.
+  S.kamp = function (vorm, richting) {
+    const t = gegevens && gegevens.kamp;
+    if (!t || !laadAlsNodig(MAP + t.bestand)) return null;
+    const rij = Math.max(0, t.soorten.indexOf(vorm));
+    const kol = Math.max(0, t.richtingen.indexOf(richting));
+    return stuk(MAP + t.bestand, kol * t.cel[0], rij * t.cel[1], t.cel[0], t.cel[1], t.anker);
+  };
+  // Het kampvuur: het brandt (acht beelden, op `tijd` in seconden), het smeult, of het is uit; een cel per beeld, en dan
+  // een per stand.
+  S.kampvuur = function (stand, tijd) {
+    const t = gegevens && gegevens.kamp && gegevens.kamp.vuur;
+    if (!t || !laadAlsNodig(MAP + t.bestand)) return null;
+    const kol = stand === 'brandt' ? Math.floor((tijd || 0) * t.fps) % t.beelden : t.beelden + Math.max(0, t.standen.indexOf(stand) - 1);
+    return stuk(MAP + t.bestand, kol * t.cel[0], 0, t.cel[0], t.cel[1], t.anker);
   };
 
   // ---------------------------------------------------------------- bouwfasen (tegels/bouwfasen/<tekening>.png, bouwfasen.js)

@@ -28,7 +28,7 @@
     (T.sprites.aan && !T.debug.vlakken ? SPRITE_VOORWERP_HOOGTE : VOORWERP_HOOGTE)[v.soort];
 
   // Een nieuw spel: een verse wereld in het gehucht. Alles van een vorig spel gaat eerst weg, ook wat de
-  // regels er onderweg bij zetten (de heer, de inner, het slapen, het einde); alleen de zoom van het scherm
+  // regels er onderweg bij zetten (de heer, het slapen, het einde); alleen de zoom van het scherm
   // blijft. Het begint niet vanzelf: het titelscherm (js/menu.js, vraag 48) laat het erachter wachten, en
   // pas "Nieuw spel" geeft de benoemingsbrief van de heer, waarmee een spel begint sinds Marcel hem op
   // 25 sep koos (T.ui.toonBrief(S.dorp, 'benoeming'), js/brieven.js). Een proefje (?kaart=) begint meteen,
@@ -77,7 +77,9 @@
     const g = S.gebieden && S.gebieden.gehucht;
     const gemaakt = !!(g && g.maker);
     const opEiland = !!(g && g.eiland);
-    if (S.proefje || (gemaakt === !!T.MAKER_INSTELLINGEN.eigenGehucht && opEiland === !!T.MAKER_INSTELLINGEN.opEiland)) return false;
+    const leeg = !!(g && g.kamp); // het lege begin (js/begin.js)
+    const leegGevraagd = !!(T.MAKER_INSTELLINGEN.leeg && T.MAKER_INSTELLINGEN.opEiland);
+    if (S.proefje || (gemaakt === !!T.MAKER_INSTELLINGEN.eigenGehucht && opEiland === !!T.MAKER_INSTELLINGEN.opEiland && leeg === leegGevraagd)) return false;
     T.nieuwSpel();
     return true;
   };
@@ -525,7 +527,7 @@
     // De tijd van de wereld: de schermtijd maal de snelheid van de kalender (T.wereldFactor,
     // js/tijd.js). Lopen, maaien en dwalen gaan daarop, zodat een tocht of een tegel graan op elke
     // snelheid even veel uren kost; op pauze staat alles stil. S.wereldTijd telt hem op, voor wie
-    // een duur moet afwachten (het maaien, het geduld van de inner).
+    // een duur moet afwachten (het maaien, het geduld van wie wacht op een ander).
     const dtWereld = dt * T.wereldFactor(S);
     S.wereldTijd = (S.wereldTijd || 0) + dtWereld;
     // De kalender loopt op haar eigen klok, niet op S.tijd (CLAUDE.md, "Testen in de browser"):
@@ -709,7 +711,7 @@
       wisselMeter();
       return;
     }
-    // Een venster (js/ui.js; de marskramer, de heer, het slachten, verstoppen, de spelregels, de velden, de wetten, de
+    // Een venster (js/ui.js; de marskramer, de heer, het slachten, de spelregels, de velden, de wetten, de
     // raadsman): zolang het open is, ligt de rest stil. Esc sluit het, en de toets van een ander venster of B gaat er
     // meteen heen (hieronder); wat precies, zegt T.ui.toetsBijVenster.
     if (T.ui.toetsBijVenster(S, ev)) return;
@@ -867,49 +869,6 @@
       T.stuurBrief(S.dorp, Math.floor(S.kalender.dag));
       return T.eisVanDeHeer(S.dorp).per;
     },
-    // De inner nu laten komen, zonder op oogstmaand te wachten (js/inner.js): Spel.debug.inner(),
-    // of Spel.debug.inner(true) voor zijn onverwachte tweede bezoek. Is hij er al, dan zegt het
-    // wat hij zag, tot hoe laat hij blijft, hoe lang je hem aan de praat hield, wat je hem gaf, en
-    // wat er in zijn rapport staat.
-    inner(onverwacht) {
-      const I = S.dorp.inner || (S.dorp.inner = T.nieuweInner());
-      if (!I.bezoek) T.innerKomt(S.dorp, Math.floor(S.kalender.dag), !!onverwacht);
-      const b = I.bezoek;
-      b.meteen = true; // ook 's nachts: niet op het bezoekuur wachten (js/dag.js, T.bezoekerKomtAan)
-      const r = I.rapport;
-      const uur = (dag) => `${Math.floor(T.uurVanDag(dag))}:${String(Math.floor((T.uurVanDag(dag) % 1) * 60)).padStart(2, '0')}`;
-      return {
-        blijftTot: b.tot != null && isFinite(b.tot) ? uur(b.tot) : null, gepraat: Math.round(b.gepraat * 10) / 10, uitgepraat: b.uitgepraat,
-        volgt: b.volgt, weg: b.weg, gebouwen: b.gebouwen.size, tegels: b.tegels.size,
-        nogTeZien: b.weg ? 0 : T.innerNogTeZien(S.dorp).length, argwaan: I.argwaan, waarom: I.waarom.slice(),
-        geschenken: I.geschenken, korting: T.innerKorting(S.dorp), gehoord: I.gehoord,
-        rapport: r && { gebouwen: r.gebouwen, woonruimte: r.woonruimte, tegels: r.tegels, graanGezien: r.graanGezien, graanVerwacht: r.graanVerwacht, goudGezien: r.goudGezien, goudVerwacht: r.goudVerwacht, korting: r.korting },
-      };
-    },
-    // Zijn argwaan zetten (0..1), om te zien wat ze doet: Spel.debug.argwaan(0.6). Zonder getal
-    // zegt het hoe hoog ze is, en waarom.
-    argwaan(n) {
-      const I = S.dorp.inner || (S.dorp.inner = T.nieuweInner());
-      if (typeof n === 'number') {
-        I.argwaan = Math.max(0, Math.min(1, n));
-        if (T.ui.toonArgwaan) T.ui.toonArgwaan(S.dorp);
-      }
-      return { argwaan: I.argwaan, waarom: I.waarom.slice() };
-    },
-    // Wie de schout nu ziet (js/zien.js): hoe ver je hem ziet waar hij staat, wie er kijkt en hoe ver
-    // die staat, en welk licht er brandt.
-    getuigen() {
-      if (!T.getuigenVan) return 'Zien kan alleen in het gehucht.';
-      const h = T.tegelVan(S.schout);
-      return {
-        zicht: Math.round(T.zichtOp(S.dorp, h) * 10) / 10,
-        kijkers: T.getuigenVan(S.dorp, null).map((e) => {
-          const p = T.bewonerVan(S.dorp, e);
-          return { wie: p ? T.naamVanBewoner(p) : e.wie || e.soort, tegel: `${e.tx},${e.ty}`, afstand: Math.round(Math.hypot(e.tx - h.x, e.ty - h.y) * 10) / 10 };
-        }),
-        licht: T.lichtBronnen(S.dorp).map((b) => `${b.x},${b.y} (${b.straal})`),
-      };
-    },
     // De paadjes en de lantaarns (js/paden.js; werklijst vraag 108, b en d): hoeveel tegels paadje zijn (van de deuren, en
     // gesleten), waar het meest gelopen wordt, en de lantaarns. ('nacht') doet nu wat de nacht doet: slijten en
     // lantaarns zetten.
@@ -985,10 +944,9 @@
       return { datum: `${datum.dagVanMaand} ${T.MAANDEN[datum.maand].naam}, ${T.uurTekst(D.kalender.dag)}`, boeren };
     },
     // Ontginnen (js/ontginnen.js; werklijst vraag 107): of het dorp graan tekortkomt, welk stuk heide en welk stuk bos
-    // elke boer zou vragen (en of de inner dat stuk bos van zijn ronde ziet), hoeveel stukken er al van de meent af gingen
-    // en wat het volgende aan vertrouwen kost, wat er nu ontgonnen wordt en hoe ver, welke akkers stiekem in het bos liggen
-    // (en of de inner ze zag, of er een spoor heen loopt), en wanneer er weer een verzoek kan komen. ('nu') laat het
-    // verzoek nu komen, ook zonder tekort.
+    // elke boer zou vragen, hoeveel stukken er al van de meent af gingen en wat het volgende aan vertrouwen kost, wat er nu
+    // ontgonnen wordt en hoe ver, en wanneer er weer een verzoek kan komen. ('nu') laat het verzoek nu komen, ook zonder
+    // tekort.
     ontginnen(wat) {
       const D = T.dorpHier(S);
       if (!D || !D.kalender) return 'Ontginnen kan alleen in een dorp.';
@@ -1012,17 +970,13 @@
         graanTekort: T.graanTekort(D),
         wieZouVragen: boeren.map((e) => {
           const bos = T.bosPlekVoor(D, e);
-          return { boer: e.naam, heide: stuk(T.ontginPlekVoor(D, e)), bos: bos && `${stuk(bos)}, ${bos.bomen} bomen, ${bos.verborgen ? 'de inner ziet het niet' : 'de inner ziet het'}` };
+          return { boer: e.naam, heide: stuk(T.ontginPlekVoor(D, e)), bos: bos && `${stuk(bos)}, ${bos.bomen} bomen` };
         }),
         vanDeMeent: `${T.ontgonnenStukken(w)} stukken; het volgende kost ${T.ontginVertrouwen(D)} vertrouwen`,
         inOntginning: T.inOntginning(w).map((v) => ({
           veld: v.naam, waar: stuk(v), op: v.ontginning.op, af: `${v.ontginning.gestoken.size} van ${v.b * v.h}`,
           bomen: T.akkerTegels(v).filter((t) => T.ontginWerkOp(w, t.x, t.y) === 'hakken').length,
           klaarOp: v.ontginning.tot - dag + ' dagen',
-        })),
-        stiekem: w.akkers.filter((v) => v.stiekem).map((v) => ({
-          veld: v.naam, waar: stuk(v), sinds: v.stiekem.sinds, innerZag: v.stiekem.gezien,
-          spoor: T.spoorNaar(D, v), soldatenVinden: { elkJaar: T.vindKansVanBosAkker(D, v, false), heelDorp: T.vindKansVanBosAkker(D, v, true) },
         })),
         staat: D.ontginnen || null,
       };
@@ -1192,26 +1146,6 @@
       }));
       return { deel, vrij: vrij.length, groepjes };
     },
-    // De verstopplekken (js/verstoppen.js): waar je iets kunt verstoppen, wat er ligt, en hoe vaak
-    // de soldaten het er vinden. Spel.debug.verstopt('boer1', 30, 5) zet 30 graan en 5 goud in
-    // de kelder van boer1 (of 'schout', of 'kapel'), zonder te lopen, als het kan.
-    verstopt(huis, graan = 0, goud = 0) {
-      if (!T.verstopPlekken) return 'Verstoppen kan alleen in het gehucht.';
-      const plekken = T.verstopPlekken(S.dorp);
-      if (huis) {
-        const p = plekken.find((q) => q.gebouw.huis === huis || q.gebouw.soort === huis);
-        if (!p) return `Geen plek bij "${huis}". Er is: ${plekken.map((q) => q.gebouw.huis || q.gebouw.soort).join(', ')}.`;
-        for (const [wat, n] of [['graan', graan], ['goud', goud]]) {
-          if (!(n > 0)) continue;
-          const r = T.verstop(S.dorp, p.gebouw, wat, n);
-          if (!r.kan) return r.reden;
-        }
-      }
-      return plekken.map((p) => ({
-        plek: p.naam, wie: p.gebouw.huis || p.gebouw.soort, karakter: p.karakter, graan: Math.floor((p.gebouw.verstopt || {}).graan || 0),
-        goud: Math.floor((p.gebouw.verstopt || {}).goud || 0), plaats: p.plaats, vinden: p.vinden, houdt: p.houdt, weigert: p.weigert,
-      }));
-    },
     // Wie er woont (js/bewoners.js): per bewoner wie hij is, zijn huis, zijn werk, waar hij staat en
     // waar hij nu hoort. Spel.debug.bewoners('herder') zoekt in de tekst, zodat je er één vindt.
     bewoners(zoek) {
@@ -1290,6 +1224,31 @@
         plek: dorp ? dorp.aard : null,
         hoek: [w.eiland.x0, w.eiland.y0],
         uitgang: w.overgangen ? w.overgangen.map((o) => [o.x, o.y]) : null,
+      };
+    },
+    // Het lege begin (js/begin.js, vraag 152): Spel.debug.begin('leeg') zet de spelregel "Het begin" op "Leeg" en begint
+    // een nieuw spel op het eiland (met een nummer erbij: Spel.debug.begin('leeg', 5)), zonder brief; ('gehucht') zet hem
+    // terug. Zonder iets zegt het hoe het kamp ervoor staat: waar de kar is, wie er woont, en tot wanneer de heer niets vraagt.
+    begin(wat, zaad) {
+      if (wat === 'leeg' || wat === 'gehucht') {
+        T.zetOptie('begin', wat);
+        T.zetOptie('gehucht', 'eiland');
+        T.nieuwSpel(zaad != null ? Number(zaad) : undefined);
+      }
+      const D = S.dorp;
+      const B = D && D.begin;
+      if (!B) return 'Dit spel begon in het gehucht dat er al was (de spelregel "Het begin" staat niet op "Leeg").';
+      return {
+        kamp: B.kamp,
+        kar: { tegel: [B.kar.tx, B.kar.ty], naar: [D.wereld.kamp.kar.x, D.wereld.kamp.kar.y], nogTegels: B.kar.pad.length },
+        schoutLooptMee: B.volgt,
+        gezinnenOnderweg: B.gezinnen ? D.bewoners.mensen.filter((p) => p.komt).length : 'wachten op de kar',
+        tenten: D.gebouwen.filter((g) => g.soort === 'tent').map((g) => {
+          const wie = D.bewoners.mensen.filter((p) => p.huis === g);
+          return `${g.tent.vorm} bij (${g.tent.x}, ${g.tent.y}): ${g.huis === 'schout' ? 'de schout en zijn gezin' : wie.map((p) => p.naam).join(', ')}`;
+        }),
+        vuur: T.kampvuurStand(D),
+        heerVraagtNiets: `tot ${T.datumVanDag(B.heerVrijTot).tekst}`,
       };
     },
     // De hoogte van het land (js/hoogte.js, vraag 121): of deze kaart hoogte heeft, hoe hoog het hoogste punt is en
@@ -1391,7 +1350,7 @@
     },
     // De graanzak (js/zaak.js; vraag 128): wie het nam en wie verdacht wordt, de fase, het spoor, wat je weet, de zitting
     // en hoe het afliep. ('nu') laat de zak nu verdwijnen, en de boer zoekt je meteen; ('zitting') maakt vandaag de dag
-    // van de zitting (zet er het uur bij met Spel.debug.uur(13)); ('boek') laat de inner het boek nu voorlezen.
+    // van de zitting (zet er het uur bij met Spel.debug.uur(13)); ('boek') laat de heer het boek nu lezen.
     zaak(wat) {
       const D = S.dorp;
       const dag = Math.floor(S.kalender.dag);
@@ -1781,7 +1740,6 @@
         vertrouwen: `${Math.round(nu.vertrouwen)} (${T.bazenStemming(nu.vertrouwen)})`,
         waarom: D.bazen.waarom,
         gewaarschuwd: D.bazen.gewaarschuwd,
-        betrapt: T.BAZEN_INSTELLINGEN.betrapt,
         einde: D.einde,
       };
     },
@@ -1834,18 +1792,6 @@
         jaarboek: D.jaarboek,
         laatsteJaarverslag: D.jaarverslag && D.jaarverslag.regels,
       };
-    },
-    // De soldaten nu laten zoeken, zoals op Sint-Maarten: staat de heer op het plein, dan op twee of drie
-    // plekken, met de schout mee of waar de heer wijst (js/doorzoeken.js); anders, of met ('dorp'), het
-    // hele dorp in één keer (js/inner.js), en dan zegt het wat ze vonden.
-    zoeken(wat) {
-      const b = S.dorp.heer && S.dorp.heer.bezoek;
-      if (wat !== 'dorp' && b && b.staat) {
-        delete b.zoeken;
-        const z = T.beginDoorzoeken(S.dorp);
-        return z && { plekken: z.nodig, heerKiest: z.heerKiest, doelen: (z.doelen || []).map((g) => T.verstopPlekVan(S.dorp, g).naam) };
-      }
-      return T.doorzoekDorp(S.dorp);
     },
     // Opslaan en laden zonder het menu (js/opslaan.js): Spel.debug.opslaan('2') zet het spel op plek 2
     // (zonder plek: 1), Spel.debug.laden('auto') laadt wat er vanzelf bewaard is, en Spel.debug.spellen()

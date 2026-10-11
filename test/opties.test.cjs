@@ -9,8 +9,8 @@ const T = require('./laad.cjs').spel();
 
 // De blokken zoals de bestanden ze zetten, vóór opties.js er iets mee doet.
 const BLOKKEN = [
-  'GEBOUWEN_INSTELLINGEN', 'BEHOEFTEN_INSTELLINGEN', 'HANDEL_INSTELLINGEN', 'HEER_INSTELLINGEN', 'INNER_INSTELLINGEN',
-  'BOEREN_INSTELLINGEN', 'VELDEN_INSTELLINGEN', 'VEE_INSTELLINGEN', 'VERSTOP_INSTELLINGEN', 'DAG_INSTELLINGEN',
+  'GEBOUWEN_INSTELLINGEN', 'BEHOEFTEN_INSTELLINGEN', 'HANDEL_INSTELLINGEN', 'HEER_INSTELLINGEN',
+  'BOEREN_INSTELLINGEN', 'VELDEN_INSTELLINGEN', 'VEE_INSTELLINGEN', 'DAG_INSTELLINGEN',
   'BEWONERS_INSTELLINGEN', 'DOORKIJK_INSTELLINGEN', 'HERBERG_INSTELLINGEN', 'ZIEN_INSTELLINGEN',
 ];
 const LOS = ['GRAAN_PER_TEGEL', 'ZAAIGRAAN_PER_TEGEL', 'DAG_LENGTE', 'OOGST_UREN_PER_TEGEL'];
@@ -59,17 +59,16 @@ test('een keuze zet zijn waarden, en terug naar de standaard zet ze terug', () =
   assert.deepEqual(T.HEER_INSTELLINGEN, bestanden.HEER_INSTELLINGEN);
 });
 
-test('de rekening en het graan van de heer zijn keuzes (punt 6), en de inner staat in de werkbank', () => {
-  assert.equal(T.HEER_INSTELLINGEN.rekening, 'rapport', 'Marcel koos: wat de inner zag');
-  assert.equal(T.HEER_INSTELLINGEN.graan, 'deel', 'Marcel koos: een deel van wat hij telde');
-  T.pasOptiesToe({ keuzes: { rekening: 'alles', graanVoorDeHeer: 'pacht' } });
-  assert.equal(T.HEER_INSTELLINGEN.rekening, 'alles');
+test('het graan van de heer is een keuze (punt 6), en de heer staat in de werkbank', () => {
+  assert.equal(T.HEER_INSTELLINGEN.rekening, undefined, 'de heer rekent op wat er is: daar is geen keuze meer over');
+  assert.equal(T.HEER_INSTELLINGEN.graan, 'deel', 'Marcel koos: een deel van wat er ligt');
+  T.pasOptiesToe({ keuzes: { graanVoorDeHeer: 'pacht', rekening: 'alles', sporen: 'graan' } });
   assert.equal(T.HEER_INSTELLINGEN.graan, 'pacht');
-  const inner = T.werkbankGetallen(T.WERKBANK.find((d) => d.blok === 'INNER_INSTELLINGEN'));
-  assert.equal(inner.find((g) => g.pad === 'INNER_INSTELLINGEN.terugNaDagen.van').label, 'terug na dagen · van');
-  assert.equal(inner.find((g) => g.pad === 'INNER_INSTELLINGEN.praatUren').waarde, bestanden.INNER_INSTELLINGEN.praatUren);
-  assert.equal(inner.find((g) => g.pad === 'INNER_INSTELLINGEN.omkopen.gehoord').waarde, bestanden.INNER_INSTELLINGEN.omkopen.gehoord);
-  assert.ok(!inner.some((g) => g.pad === 'INNER_INSTELLINGEN.komt.maand'), 'een maand is geen getal');
+  assert.equal(T.HEER_INSTELLINGEN.rekening, undefined, 'een keuze die in een bewaard spel stond maar niet meer bestaat, wordt overgeslagen');
+  const heer = T.werkbankGetallen(T.WERKBANK.find((d) => d.blok === 'HEER_INSTELLINGEN'));
+  assert.equal(heer.find((g) => g.pad === 'HEER_INSTELLINGEN.brief.dag').label, 'brief · dag');
+  assert.equal(heer.find((g) => g.pad === 'HEER_INSTELLINGEN.pachtPerAkkertegel').waarde, bestanden.HEER_INSTELLINGEN.pachtPerAkkertegel);
+  assert.ok(!heer.some((g) => g.pad === 'HEER_INSTELLINGEN.brief.maand'), 'een maand is geen getal');
 });
 
 test('de weides: of het land uitput en of het vee groeit, zijn keuzes; Marcel koos allebei ja', () => {

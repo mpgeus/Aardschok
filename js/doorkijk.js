@@ -44,7 +44,7 @@
   // 'huis' (alleen door een huis heen) of null (dan verdwijnt hij erachter, zoals je verwacht).
   // De schout altijd. Verder wie ertoe doet: wat meevecht, wat je net ontdekt heeft (het
   // uitroepteken), wie je aanspreekt, en de bezoekers, die voor jou komen (de heer, de marskramer, de
-  // inner, de soldaten: `bezoeker` in js/mensen.js), en wie je zoekt met een voorval (het uitroepteken boven zijn hoofd).
+  // soldaten: `bezoeker` in js/mensen.js), en wie je zoekt met een voorval (het uitroepteken boven zijn hoofd).
   // En door een huis ook iedereen op het plein, want het plein is het hart van het dorp (Marcel, 26 sep, vraag 34; een
   // keuze in de spelregels), behalve op een feest: dan staat het hele dorp er (`pleinOpEenFeest`). Door een
   // boom niet: dan zaten de vijf eiken op het plein vol gaten zolang de kinderen er spelen. Een wolf die
@@ -85,9 +85,10 @@
   // (T.sprites.celVan). Dit gaat op de voettegel en de maat van het beeld, niet op pixels: genoeg
   // om te weten of er iemand achter kan staan.
   function voorwerpDoos(w, v) {
-    const vel = T.TEGELS && T.TEGELS[v.vel];
-    const tegel = vel && vel.tiles[v.id];
-    const plek = T.sprites.celVan(v.vel, v.id);
+    const t = T.sprites.tekeningVan(v);
+    const vel = T.TEGELS && T.TEGELS[t.vel];
+    const tegel = vel && vel.tiles[t.id];
+    const plek = T.sprites.celVan(t.vel, t.id);
     if (!plek) return null;
     const a = plek.anker;
     const d = (tegel && tegel.doos) || [a[0], a[1], plek.cel[2] - a[0], plek.cel[3] - a[1]];

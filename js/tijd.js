@@ -135,7 +135,7 @@
   //
   // Eén plek (Marcel, 26 sep: de code moet te begrijpen blijven). De kalender onthoudt twee dingen:
   //   - k.snelheid: wat de speler koos (de knoppen, P, - en =), met 0 voor pauze;
-  //   - k.stil: waarom de tijd nu toch stilstaat, als namen ('brief', 'handel', 'verstoppen', ...).
+  //   - k.stil: waarom de tijd nu toch stilstaat, als namen ('brief', 'handel', 'slachten', ...).
   // Zolang er een reden in k.stil staat, loopt de tijd niet (T.snelheidNu is 0); is de laatste weg,
   // dan loopt hij weer op wat de speler koos. Tot 26 sep onthield elk venster zelf hoe snel de tijd
   // liep, onder een eigen sleutel, en zette die bij het sluiten terug; twee vensters na elkaar
@@ -175,7 +175,7 @@
     return k.stil && k.stil.length ? 0 : k.snelheid || 0;
   };
 
-  // Voor wie ertoe doet als hij in een dorp komt (de heer, de inner, js/dag.js T.bezoekerKomtAan): wie sneller dan 1×
+  // Voor wie ertoe doet als hij in een dorp komt (de heer, js/dag.js T.bezoekerKomtAan): wie sneller dan 1×
   // speelt, gaat naar 1×, anders zie je hem nauwelijks komen. Alleen in je eigen dorp (js/dorp.js), en alleen als je er
   // bent: wie op reis is (js/land.js), ziet hem toch niet; die hoort het als hij terug is, en de reis gaat op zijn
   // snelheid door. De kalender van het dorp is die van het spel.

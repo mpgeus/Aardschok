@@ -11,7 +11,7 @@
 //      plein (T.zaakAnker), en komt de schout erbij, dan begint ze (het voorval zitting, met L.plein): straffen,
 //      vrijspreken, of, als je weet wie het was, hem straffen, de familie het graan geven, of het verbergen.
 //   5. Wat je koos, komt terug: een vervolg over dezelfde mensen (T.ZAAK_INSTELLINGEN.vervolg), en een zak die nergens
-//      staat, leest de inner op Sint-Maarten in het boek van de schuur (T.heerLeestHetBoek, vanuit js/heer.js).
+//      staat, leest de heer zelf op Sint-Maarten in het boek van de schuur (T.heerLeestHetBoek, vanuit js/heer.js).
 // Eén keer per spel, in de eerste herfst. De spelregel "De zaak"; de getallen hieronder. Wat een antwoord kost, staat
 // bij het antwoord in js/gesprekken.js, zoals bij elk voorval.
 (function (T) {
@@ -51,10 +51,9 @@
       verberg: { id: 'zaakDank', wie: 'dader', ander: 'ziek' },
     },
     vervolgNa: [8, 16],
-    // Bij welke uitkomsten de zak nergens in het boek van de schuur staat: dat leest de inner op Sint-Maarten, en dan
-    // groeit de argwaan (een getal van 0 tot 100, zoals argwaan in een antwoord) en daalt de gunst van de heer.
+    // Bij welke uitkomsten de zak nergens in het boek van de schuur staat: dat leest de heer zelf op Sint-Maarten, en
+    // dan daalt zijn gunst (tot 11 okt groeide ook zijn argwaan met 8).
     nietInHetBoek: ['vrij', 'gelaten', 'geen', 'verberg'],
-    boekArgwaan: 8,
     boekGunst: -3,
   };
   const IN = () => T.ZAAK_INSTELLINGEN;
@@ -146,7 +145,7 @@
   //   spoor      de hoopjes gemorst graan [{ x, y }], tot de zaak af is
   //   weet       wat je weet: [{ id, dag }] (T.ZAAK_WETEN)
   //   uitkomst   hoe het afliep ('straf', 'vrij', 'gelaten', 'geen', 'strafDader', 'geef', 'verberg')
-  //   boek       { tekort, gelezen }: een zak die nergens staat, tot de inner het boek leest
+  //   boek       { tekort, gelezen }: een zak die nergens staat, tot de heer het boek leest
   T.zaakLoopt = (D) => !!(D.zaak && D.zaak.fase !== 'af');
   T.zaakOnderzoek = (D) => !!(D.zaak && D.zaak.fase === 'onderzoek');
 
@@ -264,16 +263,15 @@
     return [];
   };
 
-  // Op Sint-Maarten (T.heerStaatErOp, js/heer.js): de inner leest de heer het boek van de schuur voor. Staat er een zak
-  // niet in, dan ziet hij het.
+  // Op Sint-Maarten (T.heerStaatErOp, js/heer.js): de heer leest het boek van de schuur zelf. Staat er een zak niet in,
+  // dan ziet hij het.
   T.heerLeestHetBoek = function (D) {
     const B = D.zaak && D.zaak.boek;
     if (!B || B.gelezen) return;
     B.gelezen = true;
     const waarom = 'in het boek van de schuur mist een zak graan';
-    T.zetArgwaan(D, IN().boekArgwaan / 100, waarom);
     T.wijzigGunst(D, IN().boekGunst, waarom);
-    T.zeg(D, 'De inner leest de heer het boek van de schuur voor. Er mist een zak graan, en die staat nergens.', 'gevaar');
+    T.zeg(D, 'De heer bladert door het boek van de schuur. Er mist een zak graan, en die staat nergens.', 'gevaar');
   };
 
   // ---------------------------------------------------------------------------------------------

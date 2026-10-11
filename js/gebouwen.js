@@ -14,7 +14,7 @@
 //     kosten:      { hout: 16, goud: 4 },  // eenmalig, bij het neerzetten (later ook "steen")
 //     heer:        { goud: 2 },      // wat de heer er elk jaar op Sint-Maarten voor wil, omdat hij
 //                                    // hem ziet (js/heer.js, T.eisVanDeHeer; ook in aanbouw). {}
-//                                    // is niets: een hut oogt arm, een verstopplek ziet hij niet.
+//                                    // is niets: een hut oogt arm.
 //                                    // Hij vraagt naar wat hij ziet: wol bij schapen, eieren bij
 //                                    // kippen, hout voor zijn bos; de rest in goud. Het bouwmenu
 //                                    // laat het zien (js/hud.js).
@@ -63,8 +63,7 @@
 // Wat de tekening betreft (spel.md: "eerst met de tekeningen die er al zijn; wat nog niet
 // getekend is, krijgt voorlopig een bestaand huis"): elke "nieuw" soort hieronder leent een
 // bestaande tekening uit tegels/gebouwen.tsx (zie gereedschap/pixelart, tegels/gebouwen.volgorde.json
-// voor de volledige lijst) of blijft zonder tekening als een tekening hem juist zou verraden
-// (de verstopplek). Een akker, een stadsmuur en een palissade zijn geen los blokje van één voet en
+// voor de volledige lijst). Een akker, een stadsmuur en een palissade zijn geen los blokje van één voet en
 // gaan niet via het bouwmenu (menu: false); zie de "akker" in js/kaart.js voor hoe een strook al
 // werkt, en ontwerp/werklijst.md, "Een omheining is geen blok" voor hoe een muur later moet gaan.
 (function (T) {
@@ -198,15 +197,6 @@
       tekening: 'erf/put', beschrijving: 'water; zonder put wordt het dorp ziek',
       opmerking: 'Het effect ("zonder put wordt het dorp ziek") is nog geen regel, alleen de tekening staat er al.',
     },
-    verstopplek: {
-      naam: 'verstopplek', trede: 'gehucht', voet: { b: 2, h: 2 }, kosten: { hout: 6 }, heer: {}, bouwtijd: 2,
-      handen: 0, woonruimte: 0, maakt: null, menu: false,
-      tekening: null, beschrijving: 'een plek in het bos die de inner niet ziet',
-      opmerking: 'Bewust zonder tekening: een verstopplek die je wél ziet staan is geen verstopplek. '
-        + 'Niet meer in het bouwmenu sinds 25 sep: Marcel wil geen kuil maar plekken die er al zijn, de '
-        + 'kelders en de kapel (js/verstoppen.js). In stap 2 wordt dit misschien de plek in het bos '
-        + '(spel.md, "Marcel koos voor stap 2").',
-    },
 
     // ── Grondstoffen halen (Marcel, 23 sep: "houthakkers, steengroeve etc moeten we ook hebben";
     //    spel.md, "Grondstoffen halen"). De houthakker staat hierboven al. ──
@@ -332,7 +322,7 @@
     tiendschuur: {
       naam: 'tiendschuur', trede: 'dorp', voet: { b: 6, h: 5 }, kosten: { hout: 14, goud: 6 }, heer: { goud: 3 }, bouwtijd: 3,
       handen: 0, woonruimte: 0, maakt: null, menu: true,
-      tekening: 'gebouwen/schuurBlokhut', beschrijving: 'van de heer: hier lever je op Sint-Maarten, en hier zit de inner',
+      tekening: 'gebouwen/schuurBlokhut', beschrijving: 'van de heer: hier lever je op Sint-Maarten',
       opmerking: 'nieuw: nog niet getekend, leent voorlopig de blokhutschuur. Sint-Maarten zelf staat '
         + 'al in T.SINT_MAARTEN (js/tijd.js); wat er dan gebeurt is het tweede proefje (werklijst.md, punt 3).',
     },
@@ -422,6 +412,15 @@
       handen: 0, woonruimte: 12, maakt: null, menu: false, woning: true,
       tekening: 'huizen/wit-woontoren-pannen-z', beschrijving: 'drie gezinnen boven elkaar, in steen',
       opmerking: 'Nog zonder bouwfasen: hij groeit in één nacht.',
+    },
+    // De tent of het afdak van een gezin in het kamp van het lege begin (werklijst vraag 152; js/begin.js): niemand bouwt
+    // hem, de kar bracht hem mee. Hij is zo groot als zijn gezin (`tijdelijk`, T.woonruimteVan): een nieuw gezin vindt er
+    // geen plaats. Zijn voet en zijn deur zegt hij zelf, naar de kant van zijn opening.
+    tent: {
+      naam: 'tent', meervoud: 'tenten', trede: 'gehucht', voet: { b: 2, h: 1 }, kosten: {}, heer: {}, bouwtijd: 0,
+      handen: 0, woonruimte: 0, tijdelijk: true, maakt: null, menu: false,
+      tekening: null, beschrijving: 'een tent of een afdak in het kamp, tot er een hut is',
+      opmerking: 'Uit gereedschap/pixelart/kamp.cjs (het vel kamp): de tent van linnen, de bruine tent en het afdak, elk met zijn opening naar vier kanten.',
     },
     raadhuis: {
       naam: 'raadhuis', trede: 'stad', voet: { b: 8, h: 6 }, kosten: { hout: 24, goud: 40 }, heer: { goud: 20 }, bouwtijd: 8,
@@ -519,8 +518,7 @@
 
   // De rechthoek die een gebouw op de kaart beslaat, { x, y, b, h }: de tekening als die er is (die
   // kan groter zijn dan de voet uit het betekenisbestand), anders zijn voet, anders de maat van zijn
-  // soort. Voor wie wil weten waar een gebouw staat: de bewoners, de inner, de verstopplekken en de
-  // soldaten. (Tot 27 sep had elk van die bestanden er een eigen kopie van.)
+  // soort. Voor wie wil weten waar een gebouw staat. (Tot 27 sep had elk bestand er een eigen kopie van.)
   T.voetVanGebouw = function (g) {
     if (g.voorwerp && g.voorwerp.beslaat) return { x: g.x, y: g.y, b: g.voorwerp.beslaat[0], h: g.voorwerp.beslaat[1] };
     const v = g.voet || T.gebouwVoet(g.soort) || { b: 1, h: 1 };
@@ -633,7 +631,7 @@
   // Het gebouw waarvan deze tegel onder de voet ligt, of null. Ook een gebouw dat al op de kaart
   // stond (T.zetBestaandeGebouwen): dat heeft geen eigen voorwerp, maar wel een voet uit het
   // betekenisbestand. Die telden hier eerst niet mee (ze maken niets, dus ze staan ook nooit
-  // stil), maar sinds 25 sep kun je er iets in verstoppen (js/verstoppen.js).
+  // stil), maar de muis zegt wel hoe het ermee staat (js/verkennen.js).
   T.gebouwOp = function (D, x, y) {
     for (const g of D.gebouwen || []) {
       const v = g.voorwerp;
@@ -762,9 +760,9 @@
   // Een houthakker hoort bij het bos, een steengroeve bij de rotsen, een visser en een rietsnijder aan het water (`bij` in
   // T.GEBOUWEN). Op een land van de maker ligt dat elk spel ergens anders (js/maker.js), zodat elk land
   // een andere puzzel is. Wat telt, zegt T.NATUUR per soort: een voorwerp op de tegel, of de grond zelf.
-  const BOMEN = new Set(['eik', 'herfstEik', 'den', 'berk', 'wilg', 'dodeBoom']);
   T.NATUUR = {
-    bos: { naam: 'het bos', meervoud: 'bomen', telt: (w, x, y, v) => !!v && BOMEN.has(v.soort) },
+    // een boom van het bos (T.BOMEN, js/wereld.js)
+    bos: { naam: 'het bos', meervoud: 'bomen', telt: (w, x, y, v) => !!v && T.isBosBoom(v.soort) },
     rotsen: { naam: 'de rotsen', meervoud: 'rotsen', telt: (w, x, y, v) => !!v && v.soort === 'rots' },
     // het water van een beek, een meer of een rivier, en de zee (tegels/kust.png): een visser vist er ook
     water: { naam: 'het water', meervoud: 'tegels water', telt: (w, x, y) => !!(w.grond && w.grond[y] && w.grond[y][x] && T.isWaterGrond(w.grond[y][x].naam)) },
@@ -1155,10 +1153,9 @@
         console.warn(`T.zetBestaandeGebouwen: onbekende soort "${d.soort}" op (${d.x}, ${d.y}), overgeslagen`);
         continue;
       }
-      // Zijn voet uit het betekenisbestand: die heeft de inner nodig om te weten wat hij ziet (js/inner.js).
-      // En wie er woont (`huis`, de boer met dezelfde id of de schout): dat telt voor zijn kelder
-      // (js/verstoppen.js). In een gewoon huis zegt `bewoners` wie er bij het begin woont
-      // (T.zetBeginBewoners, js/bewoners.js). En `tekening` weet waar de deur is (T.deurVan).
+      // Zijn voet uit het betekenisbestand (T.voetVanGebouw). En wie er woont (`huis`, de boer met dezelfde id of de
+      // schout). In een gewoon huis zegt `bewoners` wie er bij het begin woont (T.zetBeginBewoners, js/bewoners.js). En
+      // `tekening` weet waar de deur is (T.deurVan).
       // Zijn tekening staat als voorwerp op de kaart, op dezelfde plek (uit Tiled, of van de maker): die neemt hij mee, zodat
       // hij kan doorgroeien zoals een huis dat jij of een gezin bouwde (js/behoeften.js; werklijst vraag 85). Tot 1 okt
       // had hij er geen, en groeiden de woningen van het begin nooit.
@@ -1180,8 +1177,16 @@
   // zijn gezin al (js/erven.js). Een huis dat jij neerzet, telt pas als het klaar is.
   T.telWoonruimte = function (D) {
     let woonruimte = 0;
-    for (const g of D.gebouwen) if (g.klaar || g.erf) woonruimte += T.GEBOUWEN[g.soort].woonruimte || 0;
+    for (const g of D.gebouwen) if (g.klaar || g.erf) woonruimte += T.woonruimteVan(D, g);
     return woonruimte;
+  };
+  // Hoeveel mensen er in gebouw g kunnen wonen: wat zijn soort zegt, en in een tent van het kamp (`tijdelijk`, js/begin.js)
+  // zoveel als er wonen, zodat een nieuw gezin er geen plaats vindt.
+  T.woonruimteVan = function (D, g) {
+    const soort = T.GEBOUWEN[g.soort];
+    if (!soort) return 0;
+    if (soort.tijdelijk) return D.bewoners ? D.bewoners.mensen.filter((p) => p.huis === g).length : 0;
+    return soort.woonruimte || 0;
   };
 
   // Het getal in de balk veranderen: de enige manier, zoals T.wijzigVoorraad voor de voorraad. Het
@@ -1294,6 +1299,7 @@
     // Het weer van de dag die begint (js/weer.js): regen of zon, en of het droogte is. Als eerste, want de oogst, de
     // visser en de balk vragen ernaar.
     T.tikWeerDag(D, dag);
+    T.tikBeginDag(D); // het lege begin: staat het kamp nog niet, dan nu (js/begin.js)
     // 0. De akkers (js/akkers.js): zaaien op 1 lentemaand, en het vangnet na de oogsttijd. Als
     // eerste: de boeren zaaien 's morgens, en daarna eet het dorp van wat er over is.
     T.tikOntginnenDag(D, dag); // een stuk heide waarvan de maand om is, is ontgonnen (js/ontginnen.js)
@@ -1322,8 +1328,6 @@
     T.tikHeervaartDag(D, dag);
     // En zijn grillen (js/grillen.js): elke maand een brief met iets wat hij wil (met de spelregel "Twee bazen").
     T.tikGrillenDag(D, dag);
-    // En de inner (js/inner.js): hij komt in oogstmaand tellen, en soms onverwacht terug.
-    T.tikInnerDag(D, dag);
     // En de voorvallen (js/voorvallen.js): om de paar dagen komt iemand je zoeken met een vraag, een ruzie of een ramp.
     // Vóór de voorvallen de graanzak (js/zaak.js): één keer, in de eerste herfst, en de zitting erover.
     T.tikZaakDag(D, dag);

@@ -427,10 +427,6 @@
         vanFase: T.BEHOEFTEN_INSTELLINGEN.groeiVanafFase,
       });
     }
-    // Rijker ogen is niet alleen voor de speler: het is ook wat de heer straks ziet
-    // (ontwerp/werklijst.md, punt 6, "Rijk worden en arm lijken" — de argwaan van de inner stijgt
-    // als wat hij ziet niet bij het rekenboek past). Een dorp vol stenen huizen wekt dus andere
-    // verwachtingen dan een dorp vol hutten; dat is nu nog geen regel, alleen deze opmerking.
     // Wie er woont, gaat voortaan naar de deur van de nieuwe tekening (js/bewoners.js).
     T.huisVeranderd(D, instantie);
     return true;

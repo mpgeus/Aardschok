@@ -153,6 +153,20 @@ test('ben je weg als zijn tijd om is, dan beslist de raadsman, naar zijn karakte
 
 const dagNu = (S) => Math.floor(S.kalender.dag);
 
+test('de gunst van de heer weegt mee zoals de argwaan van vroeger deed: de grijsaard bouwt het standbeeld, de zanger zet een vogelverschrikker', () => {
+  // Een standbeeld: hout -20, tevreden -2, gunst +6. Een vogelverschrikker: hout -3, tevreden +3, gunst -3. Het gewicht van
+  // de gunst is dat van de argwaan van vroeger (voor de grijsaard 3, voor de zanger 0,3), met het teken omgedraaid.
+  const kies = (karakter) => {
+    const S = gehucht();
+    const L = metVoorval(S, 'standbeeld');
+    T.zetVoorraad(S.dorp, 'hout', 100);
+    const p = raadsman(S, karakter, [L.wie]);
+    return metKunde({}, () => T.raadsmanKeuze(S.dorp, p, 'standbeeld').zeg);
+  };
+  assert.match(kies('grijsaard'), /standbeeld/, '-2 + 18 - 2 tegen 3 - 9 - 0,3');
+  assert.match(kies('zanger'), /vogelverschrikker/, '-4 + 1,8 - 0,6 tegen 6 - 0,9 - 0,1');
+});
+
 test('karakters kiezen verschillend: de vrome bidt, de vroedvrouw laat de put schoonmaken', () => {
   const kies = (karakter) => {
     const S = gehucht();
@@ -178,12 +192,12 @@ test('hij kiest wat er te betalen valt', () => {
 test('wat hij kan, telt mee: goed maakt wat slecht uitvalt minder erg, slecht maakt het erger', () => {
   const S = gehucht();
   const p = boeren(S)[0];
-  const doe = { tevreden: 4, argwaan: 4, goud: -4, hout: -10, sterfkans: 20 };
+  const doe = { tevreden: 4, gunst: -4, goud: -4, hout: -10, sterfkans: 20 };
   const goed = metKunde({ rechtspreken: 'goed', zwijgen: 'goed', rekenen: 'goed', bouwen: 'goed', vechten: 'goed' }, () => T.metVaardigheden(S.dorp, p, doe));
-  assert.deepEqual(goed, { tevreden: 6, argwaan: 2, goud: -3, hout: -5, sterfkans: 10 });
+  assert.deepEqual(goed, { tevreden: 6, gunst: -2, goud: -3, hout: -5, sterfkans: 10 });
   const slecht = metKunde({ rechtspreken: 'slecht', zwijgen: 'slecht', rekenen: 'slecht', bouwen: 'slecht', vechten: 'slecht' }, () => T.metVaardigheden(S.dorp, p, doe));
-  assert.deepEqual(slecht, { tevreden: 2, argwaan: 6, goud: -5, hout: -15, sterfkans: 30 });
-  assert.deepEqual(metKunde({ zwijgen: 'slecht' }, () => T.metVaardigheden(S.dorp, p, { argwaan: -4 })), { argwaan: -2 }, 'wie niet kan zwijgen, stelt de inner ook minder gerust');
+  assert.deepEqual(slecht, { tevreden: 2, gunst: -6, goud: -5, hout: -15, sterfkans: 30 });
+  assert.deepEqual(metKunde({ zwijgen: 'slecht' }, () => T.metVaardigheden(S.dorp, p, { gunst: 4 })), { gunst: 2 }, 'wie niet kan zwijgen, stelt de heer ook minder gerust');
   assert.deepEqual(metKunde({}, () => T.metVaardigheden(S.dorp, p, doe)), doe, 'wie niets bijzonders kan, doet het zoals het staat');
 });
 

@@ -264,14 +264,61 @@
     e.gewacht = 0;
   };
 
+  // ── Met de schout meelopen: wie hem volgt (voorvallen, rovers, beesten) ──
+
+  // Een vrije tegel waar hij kan staan, zo dicht mogelijk bij (x, y), maar minstens `vanaf` ervan
+  // (een gebouw zelf is vast, en op de schout kan hij niet staan). Van de tegels even ver kiest hij
+  // die aan zijn eigen kant, zodat hij niet om de schout heen hoeft te lopen.
+  function staanBij(D, e, x, y, vanaf) {
+    const w = D.wereld;
+    for (let r = vanaf || 0; r <= 4; r++) {
+      let beste = null;
+      let bij = Infinity;
+      for (let dy = -r; dy <= r; dy++) {
+        for (let dx = -r; dx <= r; dx++) {
+          if (Math.max(Math.abs(dx), Math.abs(dy)) !== r) continue;
+          if (!T.isBegaanbaar(w, x + dx, y + dy, { wezensBlokkeren: true, wie: e })) continue;
+          const a = Math.hypot(x + dx - e.tx, y + dy - e.ty);
+          if (a < bij) {
+            bij = a;
+            beste = { x: x + dx, y: y + dy };
+          }
+        }
+      }
+      if (beste) return beste;
+    }
+    return null;
+  }
+
+  // Een weg om wat vaststaat; wie er onderweg staat, lost hij onderweg op (T.ontwijk, hieronder).
+  function loopNaar(D, e, doel) {
+    const pad = T.zoekRoute(D.wereld, { x: e.tx, y: e.ty }, doel, {});
+    if (pad && pad.length) T.geefRoute(e, pad, doel);
+    return !!(pad && pad.length);
+  }
+
+  // Wie met de schout meeloopt, loopt naast hem: staat hij er niet, of loopt de schout door, dan een
+  // nieuw pad naar een vrije tegel naast hem. `opnieuw`: in elk geval een nieuw pad (hij liep nog niet
+  // mee). Voor wie de schout volgt (js/voorvallen.js, js/rovers.js, js/beesten.js).
+  T.loopNaastDeSchout = function (D, e, opnieuw) {
+    const h = D.schout;
+    const afstand = T.afstand({ x: h.tx, y: h.ty }, { x: e.tx, y: e.ty });
+    const eind = e.pad[e.pad.length - 1];
+    if (opnieuw || (afstand > 1 && !(eind && T.afstand(eind, { x: h.tx, y: h.ty }) <= 1))) {
+      e.pad = [];
+      const naast = afstand > 1 && staanBij(D, e, h.tx, h.ty, 1);
+      if (naast) loopNaar(D, e, naast);
+    }
+  };
+
   // ── Onderweg: wie er in de weg staat ──
 
   // Mag b een stap opzij gaan voor wie langs wil? Alleen wie maar wat staat: niet de schout (dat ben jij), niet wie
-  // bezig is (maaien, op zijn land werken, een gesprek, de schout zoeken met een voorval), geen dier en geen monster, en
-  // niet in een gevecht. Wie een praatje maakt (js/praatje.js), is ook bezig, maar gaat in een smalle doorgang toch even
-  // opzij (`ookPraatje`, hieronder).
+  // bezig is (maaien, op zijn land werken, een gesprek, de schout zoeken met een voorval), geen dier, geen kar
+  // (js/begin.js) en geen monster, en niet in een gevecht. Wie een praatje maakt (js/praatje.js), is ook bezig, maar gaat
+  // in een smalle doorgang toch even opzij (`ookPraatje`, hieronder).
   T.magOpzij = (S, b, ookPraatje) =>
-    !b.dood && !b.binnen && b !== S.schout && !b.dier && !b.beest && b.kant !== 'monster' && !b.maait && !b.werkt && b !== S.spreektMet &&
+    !b.dood && !b.binnen && b !== S.schout && !b.dier && !b.beest && !b.kar && b.kant !== 'monster' && !b.maait && !b.werkt && b !== S.spreektMet &&
     !b.zoektSchout && !S.gevecht && !b.onderweg && !b.pad.length && (ookPraatje || !b.praatje);
 
   // Wat doet e, die zijn volgende tegel bezet vindt (js/anim.js)? 'wacht': hij blijft staan, en kijkt het volgende beeld

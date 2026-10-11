@@ -211,9 +211,9 @@ test('nee: zijn huis neemt het je kwalijk, en na twee keer trekt hij weg', () =>
 }));
 
 // Wapens zijn niet verboden (Marcel, 7 okt: "Het is logisch dat er wapens zijn om de stad te verdedigen. Alleen weerstand
-// tegen de heer is inacceptabel"; werklijst vraag 131). Tot dan maakte een wapenmaker de inner argwanend, en liet de heer
-// hem op Sint-Maarten verzegelen, met de wapens weg, 30 gunst eraf en 20 goud boete.
-test('de inner die een wapenmaker ziet, wordt er niet argwanend van, en de heer laat hem op Sint-Maarten staan', () => {
+// tegen de heer is inacceptabel"; werklijst vraag 131). Tot dan liet de heer een wapenmaker
+// op Sint-Maarten verzegelen, met de wapens weg, 30 gunst eraf en 20 goud boete.
+test('de heer laat een wapenmaker op Sint-Maarten staan', () => {
   const S = dorp();
   const D = S.dorp;
   const huis = D.gebouwen.find((g) => g.huis === 'schout');
@@ -221,15 +221,7 @@ test('de inner die een wapenmaker ziet, wordt er niet argwanend van, en de heer 
   const g = T.plaatsGebouw(D, 'wapenmaker', plek.x, plek.y).instantie;
   g.klaar = true;
   T.zetVoorraad(D, 'wapens', 6);
-  D.inner = T.nieuweInner();
-  T.innerKomt(D, 1, false);
-  const argwaan = D.inner.argwaan;
-  T.innerKijkt(D, { x: plek.x - 1, y: plek.y + 1 });
-  assert.ok(D.inner.bezoek.gebouwen.has(g), 'hij zag hem');
-  assert.equal(D.inner.argwaan, argwaan, 'en wordt er niet argwanend van');
-  T.innerVertrekt(D);
-  // Op Sint-Maarten, ook als zijn soldaten het hele dorp doorzoeken: de wapens blijven, en het kost niets.
-  D.inner.argwaan = T.INNER_INSTELLINGEN.doorzoekenVanaf;
+  // Op Sint-Maarten: de wapens blijven, en het kost niets.
   D.heer = T.nieuweHeer();
   D.heer.bezoek = { staat: false, weg: false, wezens: [], betaald: null };
   const gunst = T.bazenNu(D).gunst;

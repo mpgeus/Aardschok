@@ -1,10 +1,10 @@
 // Twee bazen: de heer en het dorp kunnen je allebei wegsturen (werklijst vraag 106; Marcel, 3 okt: "106 a b c d ja", na
 // "Kijk dat hele verstoppen verhaal is een beetje lame ... Of de gevolgen moeten echt groter zijn. Je wordt weg gevraagd
-// als je niet ophoest wat ze willen hebben van je ofzo").
+// als je niet ophoest wat ze willen hebben van je ofzo"). Het verstoppen zelf ging er op 11 okt uit (vraag 151).
 //
 // De haak ("De heer wil geld. Het dorp wil leven. Jij staat ertussen.") als de kern van het spel: twee meters, van 0 tot 100.
-//   gunst       wat de heer van je vindt: de schatting op Sint-Maarten, de heervaart, of je naar hem toe kwam, en wat
-//               zijn soldaten vinden (wat je verstopte).
+//   gunst       wat de heer van je vindt: de schatting op Sint-Maarten, de heervaart, of je naar hem toe kwam, en een
+//               stuk van zijn bos dat je ontgint.
 //   vertrouwen  wat het dorp van jóú vindt, niet hoe tevreden het is: je antwoorden op de voorvallen (zo zwaar als ze het
 //               dorp tevreden of ontevreden maken), wie je naar de oorlog stuurde of vrijkocht, wie je aan de
 //               schandpaal zette, wie verhongerde of bevroor, wie sneuvelde, de soldaten van de heer in huis, en wie
@@ -12,17 +12,14 @@
 //               klap in een paar maanden wegslijt.
 // Zakt een meter onder `waarschuwing`, dan krijg je een waarschuwing: de heer in een brief, of het dorp mort. Op 0 ben je
 // weg: de heer ontslaat je (T.ambtKwijt, js/heer.js), of het dorp jaagt je weg (D.einde, reden 'verjaagd'). Maar altijd
-// eerst de waarschuwing: wie er nog geen kreeg, zakt niet verder dan de laatste waarschuwing (naar, hieronder). Wie
-// betrapt wordt op verstoppen (T.zoekOpPlek, js/verstoppen.js), krijgt de laatste waarschuwing, en had hij die al, dan
-// is hij weg; met de spelregel "Betrapt" op "Meteen weg" altijd meteen.
+// eerst de waarschuwing: wie er nog geen kreeg, zakt niet verder dan de laatste waarschuwing (naar, hieronder).
 //
 // De spelregel "Twee bazen" (aan, de standaard). Uit is het spel van vóór 3 okt: geen meters, en de heer ontslaat je pas
 // na twee jaar veel te weinig (js/heer.js).
 //
 // D.bazen: { gunst, vertrouwen, waarom: { gunst: [{ dag, n, tekst }], vertrouwen: [...] } (het laatste, voor de balk),
 //            gewaarschuwd: { gunst, vertrouwen }, waarschuwingen: { gunst, vertrouwen } (hoe vaak),
-//            brief: { waarom, dag } (de brief met de waarschuwing, js/brieven.js),
-//            betraptOp (de dag dat zijn soldaten iets vonden) }
+//            brief: { waarom, dag } (de brief met de waarschuwing, js/brieven.js) }
 (function (T) {
   'use strict';
 
@@ -37,9 +34,7 @@
     // boven de grens kwam.
     waarschuwing: 20,
     opnieuwBoven: 10,
-    // De spelregel "Betrapt": wie betrapt wordt op verstoppen, krijgt de laatste waarschuwing ('waarschuwing': de gunst
-    // zakt tot `laatsteWaarschuwing`, en de volgende tegenvaller is je ambt) of is meteen weg ('weg').
-    betrapt: 'waarschuwing',
+    // Wie nog geen waarschuwing kreeg, zakt niet verder dan dit: de volgende tegenvaller is je ambt.
     laatsteWaarschuwing: 5,
     // De heer. Wat de schatting op Sint-Maarten doet, naar de straf die erbij hoort (js/heer.js): goed betaald, een boete,
     // ook soldaten, ook de schandpaal.
@@ -100,11 +95,11 @@
 
   // Een meter verandert, met waarom (voor de balk; een kleine verandering van elke dag schrijft hij niet op). Zakt hij
   // onder de grens, dan de waarschuwing; op 0 ben je weg.
-  function wijzig(D, welk, n, tekst, hard) {
+  function wijzig(D, welk, n, tekst) {
     if (!T.bazenTellen(D) || !n || D.einde) return;
     const b = bazenVan(D);
     const voor = b[welk];
-    b[welk] = naar(b, welk, voor + n, hard);
+    b[welk] = naar(b, welk, voor + n);
     if (tekst && Math.abs(n) >= 1) {
       const log = b.waarom[welk];
       log.push({ dag: dagNu(D), n: Math.round(b[welk] - voor), tekst });
@@ -115,10 +110,10 @@
   }
   // Waar een meter heen gaat: tussen 0 en 100. Wie nog geen waarschuwing kreeg, komt niet verder dan de laatste
   // waarschuwing: je ziet het aankomen (werklijst vraag 106, a: "met een duidelijke waarschuwing, en dan ben je je ambt
-  // kwijt"). `hard` (betrapt na een waarschuwing, of met de spelregel "meteen weg"): wel.
-  function naar(b, welk, n, hard) {
+  // kwijt").
+  function naar(b, welk, n) {
     const x = Math.max(0, Math.min(100, n));
-    return x <= 0 && !hard && !b.gewaarschuwd[welk] ? IN().laatsteWaarschuwing : x;
+    return x <= 0 && !b.gewaarschuwd[welk] ? IN().laatsteWaarschuwing : x;
   }
   T.wijzigGunst = (D, n, tekst) => wijzig(D, 'gunst', n, tekst);
   T.wijzigVertrouwen = (D, n, tekst) => wijzig(D, 'vertrouwen', n, tekst);
@@ -190,24 +185,6 @@
     if (verschil >= 0) return;
     if (reden === 'winter') T.wijzigVertrouwen(D, -verschil * IN().doodDoorWinter, 'wie verhongerde of bevroor');
     if (reden === 'gesneuveld') T.wijzigVertrouwen(D, -verschil * IN().gesneuveld, 'wie sneuvelde');
-  };
-
-  // Betrapt: zijn soldaten vonden wat je verstopte (js/verstoppen.js), of zijn inner of zijn soldaten een akker in zijn bos
-  // die niet in zijn boeken stond (js/ontginnen.js; `tekst` zegt wat). De laatste waarschuwing, of meteen weg.
-  // Eén keer per dag: vinden ze in één zoektocht twee plekken, dan is dat één keer betrapt.
-  T.betrapt = function (D, tekst = 'zijn soldaten vonden wat je verstopte') {
-    if (!T.bazenTellen(D) || D.einde) return;
-    const b = bazenVan(D);
-    if (b.betraptOp === dagNu(D)) return;
-    b.betraptOp = dagNu(D);
-    // Meteen weg (de spelregel), of je had je waarschuwing al: dan is dit de tegenvaller te veel.
-    if (IN().betrapt === 'weg' || b.gewaarschuwd.gunst) {
-      wijzig(D, 'gunst', -b.gunst, tekst, true);
-      return;
-    }
-    const tot = Math.min(b.gunst, IN().laatsteWaarschuwing);
-    if (tot < b.gunst) wijzig(D, 'gunst', tot - b.gunst, tekst);
-    else kijk(D, 'gunst', tekst);
   };
 
   // ---------------------------------------------------------------------------------------------

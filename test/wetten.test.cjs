@@ -6,7 +6,7 @@ const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
 
-T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {}, toonInventaris() {}, toonArgwaan() {} };
+T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {}, toonInventaris() {} };
 
 // Het echte gehucht, zoals een nieuw spel begint, stil (zoals in test/treden.test.cjs).
 function gehucht() {

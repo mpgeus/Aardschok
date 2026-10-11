@@ -243,15 +243,14 @@
     return uit;
   }
 
-  // Wat er komt: wie er vandaag komt, en de raden over de inner, de rovers en het goud voor de heer (js/raad.js),
+  // Wat er komt: wie er vandaag komt, en de raden over de rovers en het goud voor de heer (js/raad.js),
   // zonder de toets erbij.
-  const RADEN_DIE_KOMEN = ['inner', 'rovers', 'heerGoud'];
+  const RADEN_DIE_KOMEN = ['rovers', 'heerGoud'];
   function watErKomt(D, dag) {
     const uit = [];
     const m = D.marskramer;
     if (m && m.komtOp === dag && !m.weg) uit.push('Vandaag komt de marskramer.');
     if (D.heer && D.heer.bezoek && !D.heer.bezoek.aangekomen) uit.push('Vandaag komt de heer.');
-    if (D.inner && D.inner.bezoek && !D.inner.bezoek.aangekomen) uit.push('Vandaag komt de inner.');
     for (const id of RADEN_DIE_KOMEN) {
       const r = T.RADEN.find((x) => x.id === id);
       if (r.als(D)) uit.push(r.tekst(D).replace(/ ?\[[^\]]*\]/g, ''));

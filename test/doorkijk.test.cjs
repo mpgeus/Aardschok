@@ -36,10 +36,8 @@ test('wie je door een boom of een huis heen ziet: wie ertoe doet overal, het ple
   const kind = erbij(S, T.maakDorpeling(3, 40, 38));
   const buiten = erbij(S, T.maakDorpeling(4, 20, 21));
   const kramer = erbij(S, T.maakMens('marskramer', 21, 20));
-  const inner = erbij(S, T.maakMens('inner', 22, 20));
   assert.equal(T.zichtbaarDoor(S, S.schout), 'alles', 'de schout altijd');
   assert.equal(T.zichtbaarDoor(S, kramer), 'alles', 'een bezoeker ook, waar hij ook staat');
-  assert.equal(T.zichtbaarDoor(S, inner), 'alles');
   assert.equal(T.zichtbaarDoor(S, kind), 'huis', 'wie op het plein staat: alleen door een huis heen');
   assert.equal(T.zichtbaarDoor(S, buiten), null, 'wie ergens anders loopt, verdwijnt erachter');
   S.spreektMet = buiten;

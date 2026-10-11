@@ -10,7 +10,7 @@ const T = require('./laad.cjs').spel();
 // het bouwmenu zoals jij bouwt. Hoe het gaat als de mensen het vragen, staat in test/verzoeken.test.cjs.
 T.zetOptie('wieBouwt', 'jij');
 
-T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {}, toonInventaris() {}, toonArgwaan() {} };
+T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {}, toonInventaris() {} };
 
 // Het echte gehucht, zoals een nieuw spel begint, stil (zoals in test/opslaan.test.cjs).
 function gehucht() {

@@ -1218,7 +1218,7 @@
     return 'kampen';
   }
 
-  // De wegen: van het kasteel naar de stad en naar elk dorp (zijn wegen; de heer en de inner komen erover), en van elk
+  // De wegen: van het kasteel naar de stad en naar elk dorp (zijn wegen; de heer komt erover), en van elk
   // dorp naar zijn buur. Een weg zoekt de dalen en de passen, steekt een rivier over waar hij smal is, en loopt mee met
   // een weg die er al ligt. Wat samen loopt, wordt één weg: de wegen zijn lijnen tussen de kruisingen.
   function legWegen(E) {

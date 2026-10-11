@@ -22,6 +22,22 @@
   // "Ons gehucht Heikant", of zonder naam "dit gehucht".
   const hetDorp = (S, wat) => (T.dorpsnaam(S.dorp) ? `Ons ${wat} ${veilig(T.dorpsnaam(S.dorp))}` : `dit ${wat}`);
 
+  // De benoeming van het lege begin (werklijst vraag 152; js/begin.js): de heer stuurt je met de gezinnen naar een stuk
+  // van zijn wildernis, met wat er op de kar ligt, en vraagt het eerste jaar niets (T.heerLaatMetRust).
+  function benoemingInDeWildernis(S) {
+    const I = T.BEGIN_INSTELLINGEN;
+    return {
+      wanneer: vandaag(S),
+      aan: T.t('To Our new reeve,'),
+      tekst:
+        `<p>${T.t('It has pleased Us to send you, with {n|# family|# families}, to a piece of Our wilderness. Make a village of it. A village brings Us money; wilderness does not.', { n: I.gezinnen })}</p>` +
+        `<p>${T.t('The cart carries what We could spare: some wood, grain for the spring, seed grain, a few tools and {goud} gold. Do not expect more.', { goud: I.kar.goud })}</p>` +
+        `<p>${T.t('This year We ask nothing of you. We are generous. Next year, on St Martin\'s Day, We shall come in person to collect what is Ours.')}</p>` +
+        `<p>${T.t('Laws you may make, as many as you like. Our forest you leave alone.')}</p>`,
+      knoppen: [{ actie: 'sluit', tekst: T.t('To work'), hoofd: true }],
+    };
+  }
+
   // Welke brief nu open staat (alleen scherm; na het laden staat er geen open).
   let open = null;
 
@@ -46,18 +62,29 @@
     // De benoeming: de eerste brief, als een nieuw spel begint. Marcel koos hem op 25 sep in plaats van een
     // titelscherm (ontwerp/spel.md, onder Open): de tutorial van het oude spel vertelde je waarom je er was, en nu
     // doet de heer dat zelf, in dezelfde hand als zijn andere brieven.
-    benoeming: (S) => ({
+    // In het lege begin (vraag 152, js/begin.js) een andere: hij stuurt je met de gezinnen naar zijn wildernis.
+    benoeming: (S) => (S.dorp.begin ? benoemingInDeWildernis(S) : {
       wanneer: vandaag(S),
       aan: 'Aan Onze nieuwe schout,',
       tekst:
         `<p>Het heeft Ons behaagd u tot schout te benoemen over ${hetDorp(S, 'gehucht')}. Uw voorganger kon niet tellen, of juist te goed; dat weten Wij niet meer precies. Hij is nu elders.</p>` +
-        `<p>Op Sint-Maarten komen Wij persoonlijk halen wat Ons toekomt. In oogstmaand komt Onze inner kijken hoeveel dat is.</p>` +
-        `<p>Wij vertrouwen u volkomen. Onze inner telt toch even na.</p>` +
+        `<p>Op Sint-Maarten komen Wij persoonlijk halen wat Ons toekomt. Wat dat is, zien Wij dan zelf.</p>` +
+        `<p>Wij vertrouwen u volkomen. Wij tellen toch even na.</p>` +
         // Het doel van de proef (js/treden.js; Marcel, 29 sep, vraag 53, A): de heer wil groei, want hij verdient eraan.
         `<p>Wij verwachten dat Ons gehucht een dorp wordt, met ${T.tredeEisTekst('dorp')}. Een dorp brengt Ons meer op.</p>` +
         // De wetten (js/wetten.js; Marcel, 29 sep, vraag 54): het menu onder W. De houtkap in zijn bos is er een van.
         `<p>Wetten mag u maken, zoveel u wilt. Over Ons bos gaat u niet.</p>`,
       knoppen: [{ actie: 'sluit', tekst: 'Aan het werk', hoofd: true }],
+    }),
+
+    // In wijnmaand van het eerste jaar van het lege begin (T.heerLaatMetRust, js/begin.js): geen schatting, hij spaart je.
+    gespaard: (S) => ({
+      wanneer: vandaag(S),
+      aan: T.t('To Our reeve,'),
+      tekst:
+        `<p>${T.t('St Martin\'s Day is coming, and We have decided to spare you this year. Do not thank Us.')}</p>` +
+        `<p>${T.t('Next year We shall count all the more carefully.')}</p>`,
+      knoppen: [{ actie: 'sluit', tekst: T.t('Thank you, my lord'), hoofd: true }],
     }),
 
     // De schatting op 1 wijnmaand (js/heer.js, T.stuurBrief): wat hij op Sint-Maarten komt halen. Hij wacht tot je
@@ -72,7 +99,7 @@
         wanneer: T.datumVanDag(brief.dag).tekst,
         aan: 'Aan Onze trouwe schout,',
         tekst:
-          `<p>Het is Ons ter ore gekomen dat het u goed gaat. Dat verheugt Ons zeer, want het gaat Ons ook graag goed. Op Sint-Maarten komen Wij persoonlijk ophalen wat Ons toekomt. ${brief.eis.rapport ? 'Naar wat Onze inner in oogstmaand zag' : 'Naar wat Wij nu zien'}, is dat:</p>` +
+          `<p>Het is Ons ter ore gekomen dat het u goed gaat. Dat verheugt Ons zeer, want het gaat Ons ook graag goed. Op Sint-Maarten komen Wij persoonlijk ophalen wat Ons toekomt. Naar wat Wij nu zien, is dat:</p>` +
           `<ul class="brief-lijst">${regels || '<li>niets. Dat kan niet kloppen.</li>'}</ul>${samen}` +
           `<p>Wat er tot Sint-Maarten bijkomt, zien Wij ook. Wie Ons tekortdoet, zal het merken, want Wij tellen zeer zorgvuldig. Bijna altijd.</p>`,
         staat: `<p class="venster-staat">Je hebt nu ${nu}. Wat je hem aan graan geeft, kun je in de lente niet zaaien.${marskramerKomtNog(S, 'wijnmaand')}</p>`,
@@ -95,7 +122,7 @@
         tekst:
           `<p>Wij trekken ten strijde ${veilig(v.oorlog)}.</p>` +
           `<p>Zend Ons ${telwoord} weerbare ${v.mannen === 1 ? 'man' : 'mannen'}. Na de oogst krijgt u ze terug, op ${T.HEERVAART_INSTELLINGEN.terug.dag} ${T.HEERVAART_INSTELLINGEN.terug.maand}. De meesten.</p>` +
-          `<p>Wie liever betaalt, zendt Ons ${v.goud} goud; dan huren Wij ze zelf. Wij vragen niet waar dat goud vandaan komt. Onze inner wel.</p>`,
+          `<p>Wie liever betaalt, zendt Ons ${v.goud} goud; dan huren Wij ze zelf. Wij vragen niet waar dat goud vandaan komt. Wij onthouden het wel.</p>`,
         staat:
           `<p class="venster-staat">Het spel kiest wie: ${wie || 'er is niemand die kan gaan'}. Hun werk ligt stil tot ze terug zijn, en het dorp voedt ze. ` +
           `Van elke vier komt er gemiddeld één niet terug; wie terugkomt, heeft leren vechten. ${vrij.kan ? `Vrijkopen kost ${v.goud} van je ${hebNu(S, 'goud')} goud, en de heer vraagt zich af hoe je eraan komt.` : vrij.waarom}${marskramerKomtNog(S, 'hooimaand')}</p>`,

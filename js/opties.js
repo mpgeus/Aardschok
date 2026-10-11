@@ -100,23 +100,13 @@
       ],
     },
     {
-      id: 'rekening', naam: 'Waar de heer de rekening op maakt', standaard: 'inner',
-      uitleg: 'Of het uitmaakt wat zijn inner in oogstmaand zag.',
-      keuzes: [
-        { id: 'inner', naam: 'Wat de inner zag', zet: { 'HEER_INSTELLINGEN.rekening': 'rapport' },
-          uitleg: 'Zijn rapport is de rekening: wat hij niet zag, betaal je dat jaar niet. Maar klopt wat hij ziet niet, dan groeit zijn argwaan.' },
-        { id: 'alles', naam: 'Alles, zonder inner', zet: { 'HEER_INSTELLINGEN.rekening': 'alles' },
-          uitleg: 'Er komt geen inner, en de heer ziet alles zelf. Arm lijken kan dan niet.' },
-      ],
-    },
-    {
       id: 'graanVoorDeHeer', naam: 'Wat de heer van het graan vraagt', standaard: 'deel',
       uitleg: 'Het graan op zijn rekening.',
       keuzes: [
-        { id: 'deel', naam: 'Een deel van wat hij telde', zet: { 'HEER_INSTELLINGEN.graan': 'deel' },
-          uitleg: 'Een deel van het graan dat de inner zag, in de schuren en nog op de velden. Wie graan wegzet voor hij komt, betaalt minder.' },
+        { id: 'deel', naam: 'Een deel van wat er ligt', zet: { 'HEER_INSTELLINGEN.graan': 'deel' },
+          uitleg: 'Een deel van het graan dat in de schuren ligt.' },
         { id: 'pacht', naam: 'Pacht per akker', zet: { 'HEER_INSTELLINGEN.graan': 'pacht' },
-          uitleg: 'Een vast deel per akkertegel die hij zag, hoe de oogst ook uitviel.' },
+          uitleg: 'Een vast deel per akkertegel, hoe de oogst ook uitviel.' },
       ],
     },
     {
@@ -308,35 +298,14 @@
           uitleg: 'Het voorval kost alleen wat het kost, en er wordt niemand ziek.' },
       ],
     },
-    // Stap 2 van de inner, de verstopplekken (Marcel, 25 sep; spel.md, "Marcel koos voor stap 2").
-    {
-      id: 'sporen', naam: 'Sporen', standaard: 'alles',
-      uitleg: 'Wat je verstopt, laat sporen na. Klopt een spoor niet met wat de inner telde, dan groeit zijn argwaan.',
-      keuzes: [
-        { id: 'alles', naam: 'Alles laat sporen na', zet: { 'INNER_INSTELLINGEN.sporen': 'alles' },
-          uitleg: 'Het graan in de schuur tegen de velden die hij zag, en het goud in de kist tegen wat de marskramer hem vertelt dat hij je betaalde.' },
-        { id: 'graan', naam: 'Alleen het graan', zet: { 'INNER_INSTELLINGEN.sporen': 'graan' },
-          uitleg: 'Alleen het graan in de schuur tegen de velden. Goud verstoppen valt niet op.' },
-      ],
-    },
     {
       id: 'kist', naam: 'Het goud in de kist', standaard: 'telt',
-      uitleg: 'Of de heer ook een deel wil van het goud dat de inner in de dorpskist telt.',
+      uitleg: 'Of de heer ook een deel wil van het goud dat in de dorpskist ligt.',
       keuzes: [
         { id: 'telt', naam: 'Hij wil een deel', zet: { 'HEER_INSTELLINGEN.kist': true },
-          uitleg: 'De heer ziet alleen geld. Van wat de inner in de kist telt, vraagt hij een deel: zo heeft goud verstoppen zin.' },
+          uitleg: 'De heer ziet alleen geld. Van wat er in de kist ligt als hij komt, vraagt hij een deel.' },
         { id: 'teltNiet', naam: 'De kist telt niet', zet: { 'HEER_INSTELLINGEN.kist': false },
           uitleg: 'De heer vraagt naar mensen, gebouwen en graan, niet naar wat er in de kist ligt.' },
-      ],
-    },
-    {
-      id: 'bewoners', naam: 'Wie er in een kelder woont', standaard: 'telt',
-      uitleg: 'Of het karakter van een boer uitmaakt als je iets in zijn kelder verstopt.',
-      keuzes: [
-        { id: 'telt', naam: 'Het karakter telt', zet: { 'VERSTOP_INSTELLINGEN.karakters': true },
-          uitleg: 'De roddelaar vertelt het rond, de vrome weigert, de woekeraar houdt zijn deel, en de oudste kent een oude plek.' },
-        { id: 'teltNiet', naam: 'Elke kelder is gelijk', zet: { 'VERSTOP_INSTELLINGEN.karakters': false },
-          uitleg: 'In de kelder van elke boer past evenveel, en de soldaten vinden het er even vaak.' },
       ],
     },
     // Stuk 2 van de poppetjes (Marcel, 26 sep: "Uit de looptijd"; spel.md, "Stuk 2 uitgewerkt").
@@ -376,7 +345,7 @@
     },
     {
       id: 'doorkijkPlein', naam: 'Wie je door een huis heen ziet', standaard: 'ookHetPlein',
-      uitleg: 'Altijd de schout, wie je spreekt, wie je zoekt, wie vecht, en de heer, de marskramer, de inner en de soldaten.',
+      uitleg: 'Altijd de schout, wie je spreekt, wie je zoekt, wie vecht, en de heer, de marskramer en de soldaten.',
       keuzes: [
         // De standaard houdt zijn naam (Marcel, 10 okt: op een feest niet), zodat een browser die hem onthield, meegaat.
         { id: 'ookHetPlein', naam: 'Ook het plein', zet: { 'DOORKIJK_INSTELLINGEN.plein': true, 'DOORKIJK_INSTELLINGEN.pleinOpEenFeest': false },
@@ -385,18 +354,6 @@
           uitleg: 'Iedereen op het plein, altijd, zoals vóór 10 okt 2026: op een feest krijgt een dak ervoor een gat voor elk van hen.' },
         { id: 'wieErToeDoet', naam: 'Alleen wie ertoe doet', zet: { 'DOORKIJK_INSTELLINGEN.plein': false },
           uitleg: 'Wie op het plein speelt, verdwijnt achter een huis, net als overal in het dorp.' },
-      ],
-    },
-    // Het zichtveld (27 sep; werklijst punt 3, vraag 40, A: "zie je meteen dat iemand je zag, of pas
-    // later?"; js/zien.js).
-    {
-      id: 'getuigen', naam: 'Wie je ziet', standaard: 'meteen',
-      uitleg: 'Of je weet wie er kijkt als je iets wegzet of terughaalt.',
-      keuzes: [
-        { id: 'meteen', naam: 'Meteen', zet: { 'ZIEN_INSTELLINGEN.meteen': true },
-          uitleg: 'Het venster zegt wie je ziet, en wie het zag, krijgt een oogje boven zijn hoofd.' },
-        { id: 'later', naam: 'Pas later', zet: { 'ZIEN_INSTELLINGEN.meteen': false },
-          uitleg: 'Je weet niet wie er keek. Je hoort het pas als het rondverteld is: van de herbergierster, of als de soldaten het vinden.' },
       ],
     },
     // De schaduwen van de zon (Marcel, 4 okt, werklijst vraag 125, B: "B graag", en "A ja, B goed zo"; js/tekenen.js,
@@ -421,17 +378,6 @@
           uitleg: 'Het land is vlak, zoals vóór 7 okt 2026.' },
         { id: 'heuvels', naam: 'Heuvels', zet: { 'HOOGTE_INSTELLINGEN.aan': true },
           uitleg: 'Hoge heuvels in het wilde land, een zachte glooiing rond het dorp, en een richel met een rotswand bij de rotsen. Niemand loopt door een rotswand, op steile grond wordt niet gebouwd, en een heuvel houdt het zicht tegen en dekt af wat erachter staat.' },
-      ],
-    },
-    // De lantaarn van de schout (Marcel, 4 okt, werklijst vraag 125, C: "ook spel. Voegt leuke elementen toe"; js/zien.js).
-    {
-      id: 'lantaarn', naam: 'De lantaarn van de schout', standaard: 'spel',
-      uitleg: "'s Avonds en 's nachts draagt de schout buiten een lantaarn. Sluipen (S) dooft hem.",
-      keuzes: [
-        { id: 'spel', naam: 'Ook spel', zet: { 'ZIEN_INSTELLINGEN.lantaarn.zichtbaar': true },
-          uitleg: 'Met je lantaarn aan zien ze je in het donker van ver. Wie iets wil verstoppen, sluipt.' },
-        { id: 'beeld', naam: 'Alleen beeld', zet: { 'ZIEN_INSTELLINGEN.lantaarn.zichtbaar': false },
-          uitleg: 'De lantaarn geeft licht, maar wie je ziet, hangt alleen af van de lantaarns en de herberg, zoals vóór 4 okt 2026.' },
       ],
     },
     // Het dorp bouwt zelf (Marcel, 28 sep, werklijst vraag 52: "C ja"; js/erven.js).
@@ -501,7 +447,7 @@
       uitleg: 'Of een boer heide of bos mag komen vragen om te ontginnen als het dorp graan tekortkomt.',
       keuzes: [
         { id: 'aan', naam: 'De heide en het bos', zet: { 'ONTGINNEN_INSTELLINGEN.aan': true, 'ONTGINNEN_INSTELLINGEN.bos': true },
-          uitleg: 'Komt het dorp graan tekort, dan vraagt een boer of zijn zoon je om dertig tegels te ontginnen, zo dicht bij zijn akker als het kan: een stuk heide of een stuk bos, en jij kiest. De heide kost vertrouwen van het dorp, want de meent is van iedereen, en elk volgend stuk meer; een maand plaggen steken. Het bos is van de heer: meld je het, dan kost het zijn gunst en telt de inner het; doe je het stiekem, dan ben je betrapt als de inner of zijn soldaten het vinden. Een winter bomen hakken, en het hout is voor het dorp. In het voorjaar wordt het gezaaid.' },
+          uitleg: 'Komt het dorp graan tekort, dan vraagt een boer of zijn zoon je om dertig tegels te ontginnen, zo dicht bij zijn akker als het kan: een stuk heide of een stuk bos, en jij kiest. De heide kost vertrouwen van het dorp, want de meent is van iedereen, en elk volgend stuk meer; een maand plaggen steken. Het bos is van de heer: je meldt het, en dat kost zijn gunst. Een winter bomen hakken, en het hout is voor het dorp. In het voorjaar wordt het gezaaid.' },
         { id: 'heide', naam: 'Alleen de heide', zet: { 'ONTGINNEN_INSTELLINGEN.aan': true, 'ONTGINNEN_INSTELLINGEN.bos': false },
           uitleg: 'Een boer vraagt alleen om heide, en ja kost vertrouwen van het dorp. Zoals de eerste dag van het ontginnen (5 okt).' },
         { id: 'uit', naam: 'Uit', zet: { 'ONTGINNEN_INSTELLINGEN.aan': false, 'ONTGINNEN_INSTELLINGEN.bos': false },
@@ -518,6 +464,18 @@
           uitleg: 'De houthakker hakt de bomen binnen tien tegels van zijn schuur om, de dichtste eerst: elke tien hout een boom. Naast de stronk plant hij twee boompjes, die in een jaar of twee weer bomen zijn, en de stronk vergaat. Zo wordt het bos om hem heen eerst dunner en daarna jonger en dichter; met twee houthakkers of de wet Houtkap wijkt het. Staat er geen boom meer, dan staat hij stil, en werkt zijn hand elders tot er weer een boom staat. Hij komt alleen bij minstens dertig bomen binnen tien tegels.' },
         { id: 'uitHetNiets', naam: 'Hout uit het niets', zet: { 'BOS_INSTELLINGEN.houthakkerHakt': false },
           uitleg: 'De houthakker maakt zijn hout zonder een boom om te hakken, en het bos blijft zoals het is. Zoals voor 6 okt.' },
+      ],
+    },
+    // De bomen in het jaar (werklijst vraag 148, stap 2; Marcel, 9 okt: "Ja vegetatie en bomen met seizoenen mee. Ook
+    // vruchten etc."; js/bos.js).
+    {
+      id: 'bomenInHetJaar', naam: 'De bomen in het jaar', standaard: 'mee',
+      uitleg: 'Of de bomen en het groen eronder meegaan met de seizoenen.',
+      keuzes: [
+        { id: 'mee', naam: 'Met de seizoenen', zet: { 'BOS_INSTELLINGEN.seizoenen': true },
+          uitleg: 'In de lente jong blad en bloesem, in de zomer vol, in de herfst geel, oranje en rood met blad op de grond, en in de winter kaal. Ligt er sneeuw, dan ligt die ook op de takken en de dennen. De appels zijn in de herfst rijp. Het groen eronder net zo: de varens worden roestbruin, het gras strogeel, de heide bloeit paars in de zomer, en de bramen zijn rijp in de nazomer.' },
+        { id: 'zomer', naam: 'Altijd zomer', zet: { 'BOS_INSTELLINGEN.seizoenen': false },
+          uitleg: 'De bomen en het groen eronder staan het hele jaar in hun zomergroen, zoals voor 10 okt.' },
       ],
     },
     // Een praatje (werklijst vraag 120; Marcel, 4 okt: "Het dorp moet echt levendig en realistisch aanvoelen", en "geen
@@ -544,18 +502,6 @@
           uitleg: 'Zoals aan, maar wie de wolven aanvallen, is gewond en ligt een paar dagen in bed; niemand gaat dood.' },
         { id: 'uit', naam: 'Uit', zet: { 'BEESTEN_INSTELLINGEN.aan': false },
           uitleg: 'Het bos is leeg. Zoals voor 7 okt.' },
-      ],
-    },
-    // Wie betrapt wordt op verstoppen (werklijst vraag 106, c; Marcel koos niet tussen de twee, dus de laatste
-    // waarschuwing als standaard tot hij kiest; js/bazen.js, T.betrapt).
-    {
-      id: 'betrapt', naam: 'Betrapt', standaard: 'waarschuwing',
-      uitleg: 'Wat er gebeurt als de soldaten van de heer vinden wat je verstopte (met twee bazen).',
-      keuzes: [
-        { id: 'waarschuwing', naam: 'De laatste waarschuwing', zet: { 'BAZEN_INSTELLINGEN.betrapt': 'waarschuwing' },
-          uitleg: 'Zijn gunst zakt tot 5, en hij schrijft je: nog één tegenvaller, en je bent je ambt kwijt.' },
-        { id: 'weg', naam: 'Meteen weg', zet: { 'BAZEN_INSTELLINGEN.betrapt': 'weg' },
-          uitleg: 'Wie betrapt wordt, is meteen zijn ambt kwijt. Verstoppen is dan alles of niets.' },
       ],
     },
     // Een gezin wacht op de winter (werklijst vraag 59, B; Marcel, 1 okt, vraag 78: "D dat is prima"; js/gebouwen.js,
@@ -648,7 +594,7 @@
       uitleg: 'Een regel onder het doel linksboven.',
       keuzes: [
         { id: 'aan', naam: 'Aan', zet: { 'RAAD_INSTELLINGEN.aan': true },
-          uitleg: 'Onder het doel staat wat nu tussen jou en een dorp staat: waarom er geen gezin komt, of wanneer het volgende komt, het hout voor de winter, wat je mist voor de kapel en de smidse en waar het vandaan komt, de inner, de rovers. Met de toets erbij.' },
+          uitleg: 'Onder het doel staat wat nu tussen jou en een dorp staat: waarom er geen gezin komt, of wanneer het volgende komt, het hout voor de winter, wat je mist voor de kapel en de smidse en waar het vandaan komt, de rovers. Met de toets erbij.' },
         { id: 'uit', naam: 'Uit', zet: { 'RAAD_INSTELLINGEN.aan': false },
           uitleg: 'Alleen het doel. Wat het dorp je zegt, zie je in de berichten.' },
       ],
@@ -758,6 +704,19 @@
           uitleg: 'Elk nummer is een eiland, en je dorp ligt erop: aan de kust, aan een rivier, op de heide of aan de bosrand. Het water, het bos, de heide en de wegen van je land zijn die van het eiland, en de weg door je dorp gaat naar het kasteel van de heer. Het gehucht is een dorp dat er al was: wat het nodig heeft, is gerooid.' },
       ],
     },
+    // Het lege begin (werklijst vraag 152, stap 1b; Marcel, 11 okt: "We moeten ook zelf alles vanaf de start gaan bouwen";
+    // js/begin.js): een lege plek op het eiland, een kar en vier gezinnen. Standaard het gehucht dat er al was, zodat de
+    // toetsen en de speeltest blijven spelen, tot het lege begin een jaar draait (vraag 152, 1f).
+    {
+      id: 'begin', naam: 'Het begin', standaard: 'gehucht',
+      uitleg: 'Hoe een nieuw spel begint. Geldt vanaf het volgende nieuwe spel.',
+      keuzes: [
+        { id: 'gehucht', naam: 'Het gehucht dat er al was', zet: { 'MAKER_INSTELLINGEN.leeg': false },
+          uitleg: 'Je wordt schout van een gehucht met huizen, een herberg, en boerderijen met hun akkers.' },
+        { id: 'leeg', naam: 'Leeg', zet: { 'MAKER_INSTELLINGEN.leeg': true },
+          uitleg: 'Een kar met wat spullen rijdt een leeg stuk van het eiland in, met je gezin en vier gezinnen erachter. Op de open plek die het plein wordt, slapen jullie in tenten bij het kampvuur. Zelf bouwen komt nog; alleen op het eiland.' },
+      ],
+    },
   ];
 
   // De namen die je zelf geeft (js/mensen.js). De heer heeft standaard geen naam: dan heet hij
@@ -812,8 +771,7 @@
     { naam: 'Het rapport', blok: 'OCHTENDRAPPORT_INSTELLINGEN' },
     { naam: 'Het land', blok: 'LAND_INSTELLINGEN' },
     { naam: 'De maker', blok: 'MAKER_INSTELLINGEN' },
-    { naam: 'De inner', blok: 'INNER_INSTELLINGEN' },
-    { naam: 'De verstopplekken', blok: 'VERSTOP_INSTELLINGEN' },
+    { naam: 'Het lege begin', blok: 'BEGIN_INSTELLINGEN' },
     { naam: 'De boeren', blok: 'BOEREN_INSTELLINGEN' },
     { naam: 'De velden', blok: 'VELDEN_INSTELLINGEN' },
     { naam: 'Het veldwerk', blok: 'VELDWERK_INSTELLINGEN' },
@@ -823,7 +781,7 @@
     { naam: 'Het bos', blok: 'BOS_INSTELLINGEN' },
     { naam: 'Het vee', blok: 'VEE_INSTELLINGEN' },
     { naam: 'De doorkijk', blok: 'DOORKIJK_INSTELLINGEN' },
-    { naam: 'Het zichtveld', blok: 'ZIEN_INSTELLINGEN' },
+    { naam: 'Het licht in het dorp', blok: 'ZIEN_INSTELLINGEN' },
   ];
 
   // ---------------------------------------------------------------------------------------------

@@ -55,9 +55,9 @@ console.log(`  betekenis: ${metBetekenis.length ? metBetekenis.map((n) => `${n} 
 
 // ---------------------------------------------------------------- de wachter
 //
-// Dezelfde opzoeking als js/kaart.js se bouwOpzoeker: een gid hoort bij het vel waar hij binnen
-// firstgid .. firstgid + aantal_tegels − 1 valt (niet zomaar "de eerste met firstgid <= gid", zie
-// de toelichting daar), met tegels/tegels.json zoals dat NU op schijf staat.
+// Dezelfde opzoeking als js/kaart.js se bouwOpzoeker: een gid hoort bij het vel met de grootste
+// firstgid die er niet boven ligt, en alleen als hij binnen dat vel valt (zie de toelichting daar),
+// met tegels/tegels.json zoals dat NU op schijf staat.
 const TEGELS_JSON_PAD = path.join(__dirname, '..', '..', 'tegels', 'tegels.json');
 let TEGELS = null;
 try {
@@ -75,14 +75,13 @@ function bouwOpzoeker(kaart) {
     const naam = velNaamVan(t.source);
     const vel = TEGELS[naam];
     return { naam, firstgid: t.firstgid || 1, aantal: vel ? vel.tiles.length : 0, vel };
-  });
+  }).sort((a, b) => b.firstgid - a.firstgid);
   return function (gid) {
     const g = gid & 0x1fffffff; // de bovenste drie bits zijn spiegel/draai-vlaggen (Tiled)
     if (!g) return null;
-    for (const s of sets) {
-      const lokaal = g - s.firstgid;
-      if (s.vel && lokaal >= 0 && lokaal < s.aantal) return { vel: s.naam, id: lokaal, eig: s.vel.tiles[lokaal] };
-    }
+    const s = sets.find((s) => s.firstgid <= g);
+    const lokaal = s ? g - s.firstgid : -1;
+    if (s && s.vel && lokaal < s.aantal) return { vel: s.naam, id: lokaal, eig: s.vel.tiles[lokaal] };
     return null; // valt buiten elk vel
   };
 }

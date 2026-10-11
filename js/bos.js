@@ -75,6 +75,15 @@
     // Het poppetje van de houthakker (js/veldwerk.js), in uren: zo lang hakt hij aan een stuk, dan brengt hij een bundel
     // naar zijn schuur.
     hakUren: 2,
+    // De bomen in het jaar (vraag 148, stap 2; de spelregel "De bomen in het jaar"): of ze meegaan met de seizoenen, en in
+    // welk seizoen ze staan, per maand van louwmaand tot wintermaand. Lente is jong blad en bloesem, herfst geel, oranje en
+    // rood met blad op de grond, winter kaal. Lentemaand is al lente, want daar begint een spel: anders stond het dorp kaal
+    // als je begint.
+    seizoenen: true,
+    bomenInHetJaar: ['winter', 'winter', 'lente', 'lente', 'lente', 'zomer', 'zomer', 'zomer', 'zomer', 'herfst', 'herfst', 'winter'],
+    // In de winter dragen de bomen sneeuw (ook de dennen) als er zoveel sneeuw op de grond ligt (0 tot 1, D.weer.sneeuw in
+    // js/weer.js).
+    sneeuwOpDeBomen: 0.3,
   };
   const IN = () => T.BOS_INSTELLINGEN;
 
@@ -84,15 +93,16 @@
   // Wat er staat, en wat ervan weg moet
   // ---------------------------------------------------------------------------------------------
 
-  // Een boom (T.NATUUR.bos, js/gebouwen.js) hak je om; een stronk, een struik, een boompje of een jonge boom rooi je.
-  const JONG = { eik: 'jongeEik', herfstEik: 'jongeEik', den: 'jongeDen', berk: 'jongeBerk' };
+  // Een boom (T.NATUUR.bos, js/gebouwen.js) hak je om; een stronk, een struik, een boompje of een jonge boom rooi je. Welke
+  // soort wat is, en welke jonge boom bij een soort hoort, zegt T.BOMEN (js/wereld.js).
+  const JONG = (soort) => (T.BOMEN[soort] && T.BOMEN[soort].jong) || 'jongeEik';
   // Het jonge bos: wat van een boom overbleef of een boom wordt (een stronk, een boompje, een jonge boom; T.isBos).
-  const JONG_BOS = new Set(['boomstronk', 'boompje', ...Object.values(JONG)]);
-  const ROOIEN = new Set(['struik', 'bessenStruik', ...JONG_BOS]);
+  const JONG_BOS = new Set(['boomstronk', 'boompje', 'jongeEik', ...Object.values(T.BOMEN).map((b) => b.jong).filter(Boolean)]);
+  const ROOIEN = new Set([...Object.keys(T.BOMEN).filter((s) => T.BOMEN[s].struik), ...JONG_BOS]);
   const isBoom = (w, x, y, v) => !!v && T.NATUUR.bos.telt(w, x, y, v);
   // Een boom die om mag: een boom van het bos, of een appelboom die een gezin kapt voor zijn grotere huis.
   const teHakken = (w, x, y, v) => isBoom(w, x, y, v) || !!(v && v.teKappen);
-  T.isEigenBoom = (v) => !!v && v.soort === 'appelboom';
+  T.isEigenBoom = (v) => !!v && !!(T.BOMEN[v.soort] && T.BOMEN[v.soort].eigen);
 
   // Wat er op deze tegel eerst weg moet voor er gespit of gebouwd kan worden: 'hakken' (een boom), 'rooien' (een stronk,
   // een struik, een boompje of een jonge boom), of null. Voor js/veldwerk.js, dat er het werk en het figuur bij kiest.
@@ -391,8 +401,22 @@
   // Planten en groeien
   // ---------------------------------------------------------------------------------------------
 
-  // Wat een boompje wordt: dezelfde boom als die er stond. Een wilg of een dode boom wordt een eik (er is geen jonge wilg).
-  const WORDT = { eik: 'eik', herfstEik: 'herfstEik', den: 'den', berk: 'berk' };
+  // Wat een boompje wordt: dezelfde boom als die er stond (`wordt` in T.BOMEN). Een wilg of een dode boom wordt een eik (er
+  // is geen jonge wilg).
+  const WORDT = (soort) => (T.BOMEN[soort] && T.BOMEN[soort].wordt) || 'eik';
+
+  // Het seizoen waarin de bomen hier staan (vraag 148, stap 2; Marcel, 9 okt: "Ja vegetatie en bomen met seizoenen mee", en
+  // "Sneeuw moet ook nog op bomen"): 'lente', 'zomer', 'herfst', 'winter', of 'sneeuw' (winter met sneeuw op de takken),
+  // naar de maand en de sneeuw van het dorp dat hier ligt. Alleen beeld: js/tekenen.js geeft het aan T.sprites, die dan de
+  // tekening van dat seizoen neemt. Zonder kalender (het gereedschap) zomer.
+  T.boomSeizoen = function (S) {
+    const I = IN();
+    if (!I.seizoenen || !S.kalender) return 'zomer';
+    const seizoen = I.bomenInHetJaar[T.datumVanDag(S.kalender.dag).maand];
+    const D = T.dorpHier(S);
+    const sneeuw = (D && D.weer && T.WEER_INSTELLINGEN.aan && D.weer.sneeuw) || 0;
+    return seizoen === 'winter' && sneeuw >= I.sneeuwOpDeBomen ? 'sneeuw' : seizoen;
+  };
 
   // Een vast lot uit een plek en een dag, tussen 0 en 1: geen toeval, zodat hetzelfde spel hetzelfde bos geeft.
   const lot = (x, y, dag) => ((((x * 73856093) ^ (y * 19349663) ^ (dag * 83492791)) >>> 0) % 1000) / 1000;
@@ -426,7 +450,7 @@
       if (!magPlanten(D, x, y)) continue;
       const laag = T.voorwerpOp(w, x, y);
       if (laag) T.haalVoorwerpWeg(w, laag);
-      return zetNeer(w, 'boompje', x, y, { geplant: dag, wordt: WORDT[soort] || 'eik' });
+      return zetNeer(w, 'boompje', x, y, { geplant: dag, wordt: WORDT(soort) });
     }
     return null;
   }
@@ -443,7 +467,7 @@
       if (v.geplant != null) {
         const jong = v.geplant + alsBoompje(v);
         if (v.soort === 'boompje') {
-          if (dag >= jong && !T.wezenOp(w, v.x, v.y)) groei(w, v, JONG[v.wordt] || 'jongeEik', { geplant: v.geplant, wordt: v.wordt });
+          if (dag >= jong && !T.wezenOp(w, v.x, v.y)) groei(w, v, JONG(v.wordt), { geplant: v.geplant, wordt: v.wordt });
         } else if (dag >= jong + alsJongeBoom(v)) groei(w, v, v.wordt, {});
       } else if (v.gehaktOp != null && v.soort === 'boomstronk' && dag >= v.gehaktOp + IN().stronkDagen) haalWeg(w, v);
     }

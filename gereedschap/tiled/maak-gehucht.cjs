@@ -608,8 +608,7 @@ dingen.push({ ...deurVan(HERBERG), wie: 'herbergierster', straal: 3, huis: 'herb
 // De huizen zelf, als gebouw (js/gebouwen.js, T.zetBestaandeGebouwen): hun tekening staat al op
 // de kaart (hierboven, zetTegel), dit is alleen de betekenis erbij, zodat het dorp niet leeg begint.
 // De vijf boerenhuizen tellen als "boerderij", het stenen huis van de schout als "huis". "huis" zegt
-// wie er woont, net als bij een akker: de boer met dezelfde id, of de schout. Dat telt voor zijn
-// kelder (js/verstoppen.js). Bij een gewoon huis zegt "bewoners" wie er bij het begin woont.
+// wie er woont, net als bij een akker: de boer met dezelfde id, of de schout. Bij een gewoon huis zegt "bewoners" wie er bij het begin woont.
 // "tekening" zegt welke tekening er staat: die weet waar de deur is (T.deurVan).
 for (const [id, h] of Object.entries(HUIZEN)) dingen.push({ gebouw: 'boerderij', x: h.x, y: h.y, b: h.b, h: h.d, huis: id, tekening: tekeningVan(h.tegel) });
 dingen.push({ gebouw: 'huis', x: SCHOUT_HUIS.x, y: SCHOUT_HUIS.y, b: SCHOUT_HUIS.b, h: SCHOUT_HUIS.d, huis: 'schout', tekening: tekeningVan(SCHOUT_HUIS.tegel) });

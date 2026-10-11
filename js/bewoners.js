@@ -141,7 +141,7 @@
   // (e.vertrekt, S.bewoners.vertrekken).
 
   // Hoe hij heet: een boer zoals T.MENSEN (en de spelregels) het zeggen, de schout "de schout". Ook
-  // voor de herberg (js/herberg.js) en de getuigen (js/zien.js).
+  // voor de herberg (js/herberg.js).
   const naamVan = (p) => (p.schout ? 'de schout' : p.wie ? T.naamVanMens(p.wie) : p.naam);
   T.naamVanBewoner = naamVan;
   // Hoort hij bij het gezin van de schout?
@@ -218,7 +218,8 @@
   T.deurVan = function (w, g) {
     const v = voetVan(g);
     const eigen = deurVanTekening(g);
-    const voor = eigen ? { x: v.x + eigen[0], y: v.y + eigen[1] } : { x: v.x + Math.floor(v.b / 2), y: v.y + v.h };
+    // (een tent in het kamp zegt zijn deur zelf: voor zijn opening, js/begin.js)
+    const voor = g.deur ? { x: g.deur.x, y: g.deur.y } : eigen ? { x: v.x + eigen[0], y: v.y + eigen[1] } : { x: v.x + Math.floor(v.b / 2), y: v.y + v.h };
     if (!w || T.isBegaanbaar(w, voor.x, voor.y)) return voor;
     return tegelRond(w, v, voor) || voor;
   };
@@ -405,6 +406,19 @@
     return zetGezin(D, hoofd, anderen, r);
   }
 
+  // Een gezin van het lege begin (vraag 152, js/begin.js) in tent g, het `n`-de: een man, een vrouw, en een of meer
+  // kinderen (T.BEGIN_INSTELLINGEN.kinderen); bij de eerste `grootvader` gezinnen woont zijn vader erbij.
+  function kampGezin(D, g, n, r) {
+    const I = T.BEGIN_INSTELLINGEN;
+    const hoofd = nieuweBewoner(D, { naam: kiesNaam(D, 'man', r), geslacht: 'man', leeftijd: 'volwassen', gezin: D.bewoners.gezinnen++, huis: g });
+    const anderen = [partnerVan(hoofd)];
+    const kinderen = NIEUWE_KINDEREN.slice();
+    const tal = I.kinderen[0] + Math.floor(r() * (I.kinderen[1] - I.kinderen[0] + 1));
+    for (let i = 0; i < tal; i++) anderen.push(kinderen.splice(Math.floor(r() * kinderen.length), 1)[0] || ['zoon', 'kind', 'man']);
+    if (n < I.grootvader) anderen.push(['vader', 'oud', 'man']);
+    return zetGezin(D, hoofd, anderen, r);
+  }
+
   // Een kind van moeder, net geboren (T.bewonersVolgen met reden 'geboorte', vanuit js/leven.js, dat zijn geboortedag
   // zet): een kleuter in haar gezin en haar huis, met haar haar of dat van de vader (p.haar, voor het uiterlijk), en een poppetje bij de deur.
   function geboren(D, moeder) {
@@ -488,7 +502,7 @@
     p.uiterlijk = T.kiesUiterlijk(D, p);
   };
   // Hoeveel plaats er in huis g nog is.
-  T.plaatsInHuis = (D, g) => ((T.GEBOUWEN[g.soort] && T.GEBOUWEN[g.soort].woonruimte) || 0) - inHetHuis(D, g);
+  T.plaatsInHuis = (D, g) => T.woonruimteVan(D, g) - inHetHuis(D, g);
 
   // Het poppetje van een bewoner, bij zijn deur, of waar hij het gehucht in komt (`bij`: de weg); wie
   // er al staat, schuift een tegel op. De schout en de boeren hebben er al een.
@@ -542,8 +556,8 @@
   // hut op een erf die nog oprijst: daar woont zijn gezin al (js/erven.js).
   function huizenMetPlaats(D) {
     return (D.gebouwen || [])
-      .filter((g) => (g.klaar || g.erf) && T.GEBOUWEN[g.soort] && (T.GEBOUWEN[g.soort].woonruimte || 0) > 0)
-      .map((g) => ({ g, vrij: T.GEBOUWEN[g.soort].woonruimte - inHetHuis(D, g) }));
+      .filter((g) => (g.klaar || g.erf) && T.woonruimteVan(D, g) > 0)
+      .map((g) => ({ g, vrij: T.woonruimteVan(D, g) - inHetHuis(D, g) }));
   }
 
   // `n` mensen erbij, als gezin: zoveel mogelijk samen in het huis met de meeste plaats. Bij het begin
@@ -687,7 +701,7 @@
   }
 
   // Elk beeld (js/main.js, werkBij), zoals T.werkMarskramerBij in js/handel.js. Wie komt, verschijnt
-  // overdag op de weg, op dezelfde manier als de marskramer, de heer en de inner (T.bezoekerKomtAan in
+  // overdag op de weg, op dezelfde manier als de marskramer en de heer (T.bezoekerKomtAan in
   // js/dag.js, met het bericht wie het zijn), en loopt eerst naar zijn huis (p.komt, T.dagAnker). Wie
   // wegtrekt, loopt naar de uitgang (e.vertrekt, T.dagAnker) en gaat daar van de kaart.
   T.werkBewonersBij = function (D) {
@@ -789,7 +803,8 @@
     D.bewoners = { wereld: w, mensen: [], volgende: 1, gezinnen: 1, zaad, worpen: 0, komen: [], vertrekken: [] };
     const r = worp(D);
     for (const g of D.gebouwen) {
-      if (!g.klaar || !(T.GEBOUWEN[g.soort] && T.GEBOUWEN[g.soort].woonruimte > 0)) continue;
+      const soort = T.GEBOUWEN[g.soort];
+      if (!g.klaar || !(soort && (soort.woonruimte > 0 || soort.tijdelijk))) continue;
       if (g.huis === 'schout' && D.schout) {
         const schout = nieuweBewoner(D, { schout: true, geslacht: 'man', leeftijd: 'volwassen', gezin: D.bewoners.gezinnen++, huis: g, wezen: D.schout });
         zetGezin(D, schout, SCHOUTSGEZIN, r);
@@ -802,6 +817,15 @@
     // De gewone huizen, zoals de kaart zegt: eerst een oud stel, dan een jong gezin van wie er nog
     // over is. Een huis zonder "bewoners" blijft leeg, voor wie later komt.
     for (const g of D.gebouwen) if (g.klaar && g.bewoners === 'oudStel') vastGezin(D, g, OUD_STEL, r);
+    // Het lege begin (vraag 152, js/begin.js): in elke tent van het kamp een gezin dat met de kar meekwam, en het getal is
+    // zoveel als er zijn. Ze komen over de weg, achter de kar aan (T.werkBeginBij), dus nog zonder poppetje.
+    const kamp = D.gebouwen.filter((g) => g.klaar && g.bewoners === 'kamp');
+    kamp.forEach((g, n) => kampGezin(D, g, n, r));
+    if (kamp.length) {
+      T.wijzigBevolking(D, D.bewoners.mensen.length - (D.bevolking || 0), 'begin');
+      D.woonruimte = T.telWoonruimte(D);
+      for (const p of D.bewoners.mensen) if (!p.wezen) p.komt = true;
+    }
     for (const g of D.gebouwen) {
       const over = (D.bevolking || 0) - D.bewoners.mensen.length;
       if (g.klaar && g.bewoners === 'jongGezin' && over > 0) nieuwGezin(D, g, Math.min(over, T.GEBOUWEN[g.soort].woonruimte), r);
@@ -810,7 +834,7 @@
     const verschil = (D.bevolking || 0) - D.bewoners.mensen.length;
     if (verschil > 0) komenErBij(D, verschil);
     else if (verschil < 0) gaanWeg(D, wieGaat(D, 'vertrek').slice(0, -verschil), 'vertrek');
-    for (const p of D.bewoners.mensen) maakPoppetje(D, p);
+    for (const p of D.bewoners.mensen) if (!p.komt) maakPoppetje(D, p);
     T.verdeelHanden(D);
   };
 

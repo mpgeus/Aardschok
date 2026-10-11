@@ -89,7 +89,7 @@
   const LEGE_MAND = { vis: 'ton leeg', potten: 'ton leeg' };
 
   // Wat de markt kost, naar de spelregel: de kramen, of een eigen gebouw. Eén plek, zodat elke regel die
-  // T.GEBOUWEN.markt.kosten vraagt (het bouwen, het verzoek, de raad, de inner) hetzelfde hoort.
+  // T.GEBOUWEN.markt.kosten vraagt (het bouwen, het verzoek, de raad) hetzelfde hoort.
   const eigenKosten = T.GEBOUWEN.markt.kosten;
   Object.defineProperty(T.GEBOUWEN.markt, 'kosten', { enumerable: true, get: () => (IN().opHetPlein ? IN().kosten : eigenKosten) });
 

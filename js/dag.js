@@ -45,7 +45,7 @@
     slapenLaatst: 22,
     // Hoe ver een boer 's ochtends en 's avonds van zijn voordeur rondloopt: zijn erf.
     erfStraal: 2,
-    // De marskramer, de heer en de inner komen overdag, vanaf dit uur.
+    // De marskramer en de heer komen overdag, vanaf dit uur.
     bezoekUur: 9,
     // Het licht: hoe donker de nacht is (0 is licht, 1 is zwart), hoe lang de schemering duurt, en
     // hoe ver het rond de schout 's nachts minder donker is, in tegels.
@@ -265,22 +265,22 @@
     return plek.werk || plek.vrij || erf;
   };
 
-  // Komen de marskramer, de heer en de inner al? Overdag, vanaf het bezoekuur. Zonder kalender (een
+  // Komen de marskramer en de heer al? Overdag, vanaf het bezoekuur. Zonder kalender (een
   // toets) meteen.
   T.isBezoektijd = function (D) {
     if (!D || !D.kalender) return true;
     return T.uurVanDag(D.kalender.dag) >= IN().bezoekUur;
   };
 
-  // Een bezoeker komt aan: de marskramer (S.marskramer), de heer (S.heer.bezoek) of de inner
-  // (S.inner.bezoek). Eén manier voor alle drie; tot 26 sep had elk zijn eigen variant. Elk bezoek
+  // Een bezoeker komt aan: de marskramer (S.marskramer) of de heer
+  // (S.heer.bezoek). Eén manier voor beide; tot 26 sep had elk zijn eigen variant. Elk bezoek
   // draagt zijn eigen aankomst mee:
   //   bezoek.aankomst = { tekst, soort, naarGewoon }  // het bericht, en of de tijd naar 1× gaat
   //   bezoek.meteen = true                            // niet op het bezoekuur wachten: Spel.debug
   //                                                   // riep hem, of er is geen wereld om in te lopen
   // Hij komt overdag, vanaf het bezoekuur. De eerste keer dat hij er mag zijn, zegt het bericht dat
-  // hij komt, en met naarGewoon gaat de tijd naar 1× (de heer en de inner: wie sneller speelt, ziet
-  // hen anders nauwelijks komen). Geeft true zodra hij er mag zijn; zijn poppetje zet de module zelf.
+  // hij komt, en met naarGewoon gaat de tijd naar 1× (de heer: wie sneller speelt, ziet
+  // hem anders nauwelijks komen). Geeft true zodra hij er mag zijn; zijn poppetje zet de module zelf.
   T.bezoekerKomtAan = function (D, bezoek) {
     if (!bezoek) return false;
     if (bezoek.aangekomen) return true;

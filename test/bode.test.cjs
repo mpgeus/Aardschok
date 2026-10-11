@@ -110,7 +110,7 @@ function metGevaar(rovers, heer, doe) {
   const R = { ...B.rovers };
   const H = { ...B.heer };
   Object.assign(B.rovers, { basis: rovers, perRover: 0, winter: 1, donker: 1, hooguit: 1 });
-  Object.assign(B.heer, { basis: heer, perArgwaan: 0 });
+  Object.assign(B.heer, { basis: heer });
   try {
     return doe();
   } finally {
@@ -215,15 +215,12 @@ test('de mannen van de heer nemen de brief mee: geen marskramer, en de heer weet
     const S = gehucht(dag);
     const D = S.dorp;
     T.zetWet(D, 'rantsoen', 'krap');
-    D.inner = D.inner || T.nieuweInner();
-    const argwaan = D.inner.argwaan;
     const gunst = T.bazenNu(D).gunst;
     const r = T.stuurBode(D, { graan: 2 }, 1);
     assert.equal(D.bode.onderschept, 'heer');
     T.tikBodeDag(D, r.komt);
     assert.ok(!D.marskramer);
-    assert.ok(D.inner.argwaan > argwaan, 'de argwaan gaat omhoog');
-    assert.ok(T.bazenNu(D).gunst < gunst, 'de gunst omlaag');
+    assert.equal(T.bazenNu(D).gunst, gunst - B.heer.gunst, 'de gunst van de heer gaat omlaag, en niet dubbel');
     assert.ok(D.bewoners.mensen.includes(r.bode) && !r.bode.gewond, 'niemand gewond');
   });
 });

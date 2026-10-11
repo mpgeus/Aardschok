@@ -46,7 +46,7 @@
   //                   zaaien kan dus niet. planDoor: wie het koos ('boer' of 'schout'), planWaarom: waarom
   //                   de boer het koos.
   //   vruchtbaarheid  0..1: een akker geeft zijn graan maal dit getal (T.oogstPerTegel).
-  // De lijst heet nog w.akkers, zoals vóór 25 sep: de oogst, de inner en de heer kennen hem onder
+  // De lijst heet nog w.akkers, zoals vóór 25 sep: de oogst en de heer kennen hem onder
   // die naam. Een veld zonder bestemming is een akker, zoals elk veld tot 25 sep.
   // ---------------------------------------------------------------------------------------------
 
@@ -482,7 +482,7 @@
   // Twaalf uur: een boer maait zo'n tegel per werkdag. Vroeger kostte lopen dagen, nu een uur, dus
   // moest het maaien zelf langer. Een simulatie van het seizoen (26 sep, bij 1×) gaf zo rond 14
   // oogstmaand zo'n vier vijfde van het graan binnen, net als vóór de dag (80%), met wat spreiding
-  // omdat het dwalen willekeurig is. Dat telt, want op 15 oogstmaand komt de inner tellen.
+  // omdat het dwalen willekeurig is.
   T.OOGST_UREN_PER_TEGEL = 12;
   // Diezelfde duur in seconden van de wereld (een uur is T.DAG_LENGTE / 24 seconde bij 1×).
   T.oogstTegelDuur = () => (T.OOGST_UREN_PER_TEGEL * (T.DAG_LENGTE || 300)) / 24;
@@ -508,9 +508,8 @@
   const factor = (e, soort) => (e && T.boerFactor ? T.boerFactor(e, soort) : 1);
 
   // Wat één gemaaide tegel van dit veld oplevert: T.GRAAN_PER_TEGEL, maal de vruchtbaarheid van het
-  // veld, maal wat zijn boer kan (groene vingers of slordig). Het maaien (T.werkOogstBij), het
-  // vangnet (T.haalOogstBinnen) en de inner die schat wat er staat (js/inner.js, zonder boer) vragen
-  // het allemaal hier, zodat het nergens anders uitkomt.
+  // veld, maal wat zijn boer kan (groene vingers of slordig). Het maaien (T.werkOogstBij) en het
+  // vangnet (T.haalOogstBinnen) vragen het allemaal hier, zodat het nergens anders uitkomt.
   // Met het dorp (`D`) telt ook wat de droogte dit jaar kostte (js/weer.js, T.droogteFactor).
   T.oogstPerTegel = (veld, boer, D) => T.GRAAN_PER_TEGEL * T.vruchtbaarheidVan(veld) * factor(boer, 'opbrengst') * (D ? T.droogteFactor(D) : 1);
 
@@ -941,7 +940,7 @@
 
   // Nazaaien (werklijst vraag 79, stap 1; Marcel, 1 okt, vraag 78: "D dat is prima"): wat op 1 lentemaand niet gezaaid
   // kon worden, zaaien de boeren alsnog zodra er graan is, tot het graan groen wordt (T.AKKER_STADIA; T.tikAkkersDag
-  // onderaan). Zo komt een dorp na een slechte winter weer boven: met graan uit een kelder, of met zaaigraan van de
+  // onderaan). Zo komt een dorp na een slechte winter weer boven: met graan uit een schuur, of met zaaigraan van de
   // marskramer in grasmaand (js/handel.js). Wat later gezaaid is, groeit gewoon mee met de rest. Wat de rovers vertrapten
   // (akker.vertrapt), zaaien ze niet na: dat groeit dit jaar niet meer. Het verdeelt zoals T.zaaiAkkers, en per akker
   // gaat het dichtste stuk eerst. Geeft hoeveel tegels er gezaaid werden.

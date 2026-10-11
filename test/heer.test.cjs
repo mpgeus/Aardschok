@@ -10,8 +10,8 @@ const T = require('./laad.cjs').spel();
 // Het spel van vóór de twee bazen (werklijst vraag 106): de heer ontslaat je na twee keer veel te weinig. De twee bazen staan in test/bazen.test.cjs.
 T.zetOptie('tweeBazen', 'uit');
 const IN = T.HEER_INSTELLINGEN;
-// Deze toetsen rekenen met de pacht per akkertegel: vast en makkelijk na te tellen. Een deel van
-// wat de inner telde (de standaard sinds punt 6) staat in test/inner.test.cjs.
+// Deze toetsen rekenen met de pacht per akkertegel: vast en makkelijk na te tellen. Een deel van het graan
+// in de schuren (de standaard) staat in de toets "een deel van het graan en het goud" verderop.
 IN.graan = 'pacht';
 
 // De dag (vanaf het begin van het spel, 1 lentemaand) van een datum, in het eerste of een later jaar.
@@ -87,10 +87,10 @@ test('hij vraagt in wat hij ziet: wol bij schapen, eieren bij kippen, hout voor 
   assert.deepEqual(eis.per, { wol: 20, eieren: 20, hout: 20 });
 });
 
-test('een hut kost niets, een verstopplek ziet hij niet, en een steiger telt al als huis', () => {
+test('een hut kost niets, en een steiger telt al als huis', () => {
   const S = maakS();
   S.wereld.akkers = [];
-  S.gebouwen.push({ soort: 'hut', klaar: true }, { soort: 'verstopplek', klaar: true });
+  S.gebouwen.push({ soort: 'hut', klaar: true });
   assert.deepEqual(T.eisVanDeHeer(S).per, {});
   S.gebouwen.push({ soort: 'huis', klaar: false });
   assert.deepEqual(T.eisVanDeHeer(S).per, { goud: 2 });
@@ -670,6 +670,29 @@ function metHeerInstelling(zet, fn) {
     Object.assign(IN, was);
   }
 }
+
+test('een deel van het graan en het goud: hij rekent op wat er ligt, in de schuren en in de kist', () => {
+  metHeerInstelling({ graan: 'deel' }, () => {
+    const S = gehucht();
+    T.zetVoorraad(S, 'graan', 100);
+    T.zetVoorraad(S, 'goud', 40);
+    const eis = T.eisVanDeHeer(S);
+    assert.equal(eis.per.graan, Math.ceil(100 * IN.deelVanGraan - 1e-9));
+    // De 12 goud die hij altijd vraagt, en een deel van wat er in de kist ligt.
+    assert.equal(eis.per.goud, 12 + Math.ceil(40 * IN.deelVanGoud - 1e-9));
+    assert.ok(eis.regels.some((r) => /graan in uw schuren/.test(r.waarom)));
+    assert.ok(eis.regels.some((r) => /goud in uw kist/.test(r.waarom)));
+    assert.ok(!eis.regels.some((r) => /inner|toeslag/.test(r.waarom)), 'niets meer op naam van zijn inner');
+    // Telt de kist niet, dan vraagt hij er niets voor.
+    metHeerInstelling({ kist: false }, () => assert.equal(T.eisVanDeHeer(S).per.goud, 12));
+    // Toen hij kwam, telde hij de kist: wat je daarna uitgeeft, haalt zijn eis niet omlaag.
+    S.kalender.dag = SINT_MAARTEN;
+    T.heerKomt(S, SINT_MAARTEN);
+    const komt = T.eisVanDeHeer(S).per.goud;
+    T.zetVoorraad(S, 'goud', 0);
+    assert.equal(T.eisVanDeHeer(S).per.goud, komt);
+  });
+});
 
 test('betalen in "graan en goud": de pacht in graan, wat hij verder ziet in goud', () => {
   metHeerInstelling({ betalenIn: 'graanEnGoud' }, () => {

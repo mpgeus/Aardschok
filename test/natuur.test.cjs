@@ -8,7 +8,7 @@ const assert = require('node:assert/strict');
 const T = require('./laad.cjs').spel();
 // Het bouwmenu zoals jij bouwt (de spelregel "Wie bouwt"; werklijst vraag 103).
 T.zetOptie('wieBouwt', 'jij');
-T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {}, toonInventaris() {}, toonArgwaan() {} };
+T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {}, toonInventaris() {} };
 
 // Een nieuw spel, stil: het ontworpen gehucht, of met `zaad` een land van de maker.
 function spel(zaad) {

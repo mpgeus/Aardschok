@@ -8,7 +8,7 @@ const T = require('./laad.cjs').spel();
 // Wat het spel kent voor er een kaart is: zo begint een verse bladzijde (T.VOORWERPEN, js/wereld.js).
 const KENT_VERS = new Set(Object.keys(T.VOORWERPEN));
 
-T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {}, toonInventaris() {}, toonArgwaan() {} };
+T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {}, toonInventaris() {} };
 
 // Het echte gehucht, zoals een nieuw spel begint, stil en zonder venster.
 function gehucht() {

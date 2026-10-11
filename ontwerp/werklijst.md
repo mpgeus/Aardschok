@@ -10,25 +10,33 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## Nu en daarna (10 okt)
+## Nu en daarna (11 okt)
 
 Marcel, 8 okt: "snel, duidelijk en low cost". Elke sessie werkt dit blok bij aan het eind; wat af is, gaat eruit.
 
 **Loopt** (het teken "Bezig in sessie" staat bij het punt zelf): de ui is af (vraag 146, a tot e, 10 okt, met de
 fotomodus onder `H`; de kaart van het land, het label van het overzicht en waar `Tab` staat, in `opmerkingen.md`). Het dorp leeft (vraag 145): elk mens anders (ook
 ouder worden, geboren worden en sterven) en het kleine leven (rook, water, spelende kinderen, kippen, honden, de was)
-staan in `main`; het geluid wacht op Marcel (hieronder). De ronde van alle huizen (vraag 144: de knoppen aan, jong en oud, de sneeuw op de daken en de brandfasen) staat op
-branch `huizen` (hieronder). De bode met de hinderlaag en de lantaarns (vraag 143), het weer, de statussen, niet zaaien in de regen, de
+staan in `main`; het geluid wacht op Marcel (hieronder). De ronde van alle huizen (vraag 144: de knoppen aan, jong en oud, de sneeuw op de daken en de brandfasen) staat in
+`main` (11 okt; hieronder). De bode met de hinderlaag en de lantaarns (vraag 143), het weer, de statussen, niet zaaien in de regen, de
 brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `main`. Vraag 141, de economie binnen het dorp, is op 9 okt helemaal teruggedraaid
 (Marcel: "Ik denk dat we die economie terug moeten draaien", en "Alles van vraag 141"). Kleren naar stand (vraag 149)
 staat in `main` (10 okt): arm in een hut, deftig in een stenen huis met laken; de kinderen en de ouden later. De mensen
 mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voor onze poppetjes. de rest kan weg").
 
 **Wacht op Marcel:**
+- **De richting (vraag 151, 11 okt): de economie van The Settlers met gevechten in beurten** (Marcel: "A ja, B ja, C
+  allebei"; `gameloop.md`): geen grens, geen vlaggen, bouwen binnen bereik van je stad en elke opslag, een ossenkar die
+  de grondstoffen haalt, en je bouwt alles zelf vanaf een lege plek, met een kar met wat spullen en settlers. **Optie 1
+  is af** (11 okt, in `main`): het verstoppen, de inner, de argwaan en heel "arm lijken" zijn eruit. **Stap 1b, het lege
+  land, is af** (11 okt, sessie `ccr-d5126bfe-mtbvwg`): achter de spelregel "Het begin" op "Leeg" rijdt de huifkar een
+  leeg stuk van het eiland in, met de gezinnen erachter, en op het plein staat hun kamp (`Spel.debug.begin('leeg')`; om
+  te bekijken: hieronder). **Het volgende punt is 1c, verhuizen uit het kamp**, en dan 1d, zelf bouwen binnen bereik; het
+  plan (1c tot 1f) staat bij vraag 152.
 - Het geluid (vraag 145, 2): de sleutel `FREESOUND_KEY` in de omgeving en de domeinen van Freesound erbij, zoals
   beschreven bij vraag 145; dan maakt een nieuwe sessie het.
 - Vraag 145 laten zien: is het dorp nu minder "saai"?
-- **De ronde van alle huizen (vraag 144), op branch `huizen` (11 okt), om te bekijken en dan in `main`** (Marcel, 10 okt:
+- **De ronde van alle huizen (vraag 144), in `main` (11 okt), om te bekijken** (Marcel, 10 okt:
   "pak het de huizen op", en op het plan: meteen jong en oud, het steilere dak met een afdakje, alles in één ronde;
   `beeld.md`, "De ronde van alle tekeningen"). De knoppen van het voorbeeldhuis (A tot J) staan op elke tekening, naar
   het dak: ruig riet in het gehucht, ronde pannen met marktrecht, ronde veldsteen, rondboogdeur en klimop op steen. Elk
@@ -38,10 +46,11 @@ mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voo
   wit`, en in het spel `gereedschap/pixelart/uit/schermen/daksneeuw-houtland.png` en `brand-fasen.png`. **Open:** de
   toren van de kapel is boven bruin in plaats van in de kalk van de stijl; het pleister van een jonge kapel laat al rode
   baksteen zien; tussen jong en oud is bij leien en pannen weinig verschil; een oud gehucht is overal mossig (alles wat
-  er bij het begin staat, is oud). De acht voorbeelden van 9 okt stuurt Marcel nog. **Voor `main`:** de groen-sessie
-  heeft in de hoofdmap nog werk dat niet gecommit is (`naar-tiled.cjs`, `sprites.js`, `tegels.json`); na het samenvoegen
-  `npm run tiled huizen`, want `tegels.json` verandert aan beide kanten; zet eerst de cache uit de werkkopie over
-  (`.claude/worktrees/huizen/gereedschap/pixelart/uit/huizen-cache`), dan kost het een minuut in plaats van twee uur.
+  er bij het begin staat, is oud). De acht voorbeelden van 9 okt stuurt Marcel nog.
+- **Het lege begin bekijken** (vraag 152, 1b, 11 okt): Spelregels, "Het begin" op "Leeg", en dan Nieuw spel; of in de
+  console `Spel.debug.begin('leeg')` (zonder brief). Na de brief rijdt de kar in zo'n anderhalve minuut naar het plein, de
+  schout loopt ernaast (klik ergens heen en hij laat de kar gaan), en daar gaan de tenten op. Bouwen kan nog niet: zonder
+  dat haalt het kamp de winter niet.
 - **In `main` (10 okt, avond; Marcel koos ze), om te bekijken:**
   - Wijn haalt kapel (vraag 136): een gebouw met een gezin (de wijnboerderij) komt alleen waar het zijn kapel haalt, of
     waar er nog een kan komen, zoals een erf (`T.waaromGeenKringPlek`). In de speeltest winnen nu twee van de zes (was
@@ -52,22 +61,37 @@ mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voo
   - De brand slaat over (vraag 144): bij groot brandgevaar, als niemand blust, de helft van de keren op het dichtste huis
     binnen vijf tegels, één keer. En de pestbos: een bos stro aan een paal naast de deur van een huis met een zieke
     (`Spel.debug.koorts('nu')`); op ware grootte klein, dus groter of feller als hij beter moet opvallen.
+- Het groen eronder bekijken (vraag 148, stap 3, 11 okt): een nieuw spel, of `Spel.debug.gehucht(5)`, en dan
+  `Spel.debug.bomen = 'zomer'` (of `'lente'`, `'herfst'`, `'winter'`, `'sneeuw'`): de akkerranden rood en blauw, de
+  heide paars, waterlelies op de vijver, lisdodde aan de oever, brandnetels achter de huizen, bramen aan de bosrand.
+- De bomen bekijken (vraag 148, stap 1 en 2, 11 okt): elke boom een van zijn vormen, de nieuwe soorten, en de bomen in
+  het jaar met sneeuw op de takken; `Spel.debug.bomen = 'herfst'` (of `'lente'`, `'winter'`, `'sneeuw'`, met
+  `Spel.debug.weer('sneeuw', 0.6)` voor de grond). Lentemaand is al lente, zodat een spel niet kaal begint.
 - Vraag 142, de bladzijde met alle getallen (`gereedschap/instellingen.html`): stap 3, de speeltest naast de vorige,
   staat in `main` (10 okt). Marcel probeert hem op zijn computer (met `npm start`; Playwright erbij, `npm i -g
   playwright` en `npx playwright install chromium`).
 
 **Daarna, in deze volgorde:**
+0a. Opnieuw beginnen in hetzelfde huis (vraag 153; Marcel, 11 okt: "Ja, begin met stap 1, en akkoord met de afspraak"):
+   CLAUDE.md korter, een nieuwe werklijst, en een snoeironde. **Stap 1 is af** (11 okt, sessie `ccr-45f75896-3l3f5s`):
+   CLAUDE.md is 19 KB (was 153), wat een bestand doet staat in `ontwerp/code.md`, het gereedschap in
+   `ontwerp/gereedschap.md`. **Nu stap 2**, de nieuwe werklijst; dan stap 3, de snoeironde. **Bezig in sessie
+   `ccr-45f75896-3l3f5s`** (11 okt): stap 2, eerst de lijst van open punten voor Marcel om af te vinken.
 0b. Engels en een vertaaltool (vraag 147; Marcel, 9 okt): de basis nu, naast de ui; het omzetten van alle tekst na de
    ui en vóór de proefversie. Stap 1 (de basis, de tool, het menu als proef) staat in `main` (9 okt); **nu stap 2**, het
    omzetten, want de ui is af (10 okt). **Bezig in sessie `ccr-99e707bb-sla81d`** (10 okt): het plan voor stap 2,
-   met Marcel.
+   met Marcel. Claude (11 okt): pas na optie 1 (vraag 151), want allebei raken ze bijna heel `js/`.
 0c. Meer variatie in het groen, de bomen en de versiering (vraag 148; Marcel, 9 okt: alles ja, "Mag ernaast"), naast
    de ui: eerst de bomen (vormen, nieuwe soorten, de seizoenen met vruchten), dan het groen eronder, dan de spullen bij de
-   huizen; de sneeuw op de bomen en de huizen (144, 4b, Marcel: "ja") in dezelfde ronde. **Bezig in sessie `main`
-   (desktop, groen)** (10 okt): stap 1 in het spel (de sneeuw op de spar dunner, de vormen en de nieuwe soorten op de
-   kaart, vast per tegel), dan stap 2 (de seizoenen).
+   huizen; de sneeuw op de bomen en de huizen (144, 4b, Marcel: "ja") in dezelfde ronde. Stap 1 staat in het spel (10
+   okt, avond): elke boom een van zijn vormen, de nieuwe soorten op de kaart, de spar dunner onder de sneeuw; en stap 2
+   (11 okt; Marcel: "Ja, doe stap 2 met de sneeuw erbij"): de bomen in het jaar, met sneeuw op de takken. **Nu stap 3**,
+   het groen eronder, en dat staat in `main` (11 okt): de begroeiing in vormen en in het jaar, en de nieuwe soorten langs
+   de akkers, achter de huizen, op de heide, aan het water en aan de bosrand. **Nu d**, de spullen bij de huizen, samen
+   met de ronde van de huizen (die loopt in een andere sessie).
 1. Een proefversie voor Marcels 4K-scherm en een eerste tester (33d; `npm run proefversie`, ook `-- --windows`), met de
-   graanzak erin. De laatste is van 3 okt (`36c713e`), zonder de verzoeken, de twee bazen, het ontginnen, de markt, de
+   graanzak erin. Claude (11 okt): voor een tester liever na het lege begin, want anders speelt hij het oude begin, met
+   het verstoppen dat eruit gaat. De laatste is van 3 okt (`36c713e`), zonder de verzoeken, de twee bazen, het ontginnen, de markt, de
    wolven, het eiland, WebGL en de graanzak.
 2. Marcel speelt de graanzak (`Spel.debug.zaak('nu')`) en kiest of c, d en e van vraag 128 komen (en vraag 134).
 3. Bijstellen na de tester, eerst met een getal uit de werkbank; met de speeltest van vier jaar ook de wolven en de
@@ -7533,6 +7557,64 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     met ja staat hij meteen op het plein tot en met 6 louwmaand, met kaarsjes als licht, en op kerstavond viert het dorp
     de avond (`js/feesten.js`, `beelden/kerstboom.png` uit `naar-spel.cjs --alleen kerstboom`). De boom is de spar van nu:
     wordt de spar in stap 1 nog anders, dan opnieuw renderen.
+    **Stap 1 in het spel (10 okt, avond):** het vel van de bomen heeft nu 54 tekeningen (was 11): de eik in zijn zes
+    vormen, de den (de spar van nu), de berk, de appelboom en de beuk in vier, de rest in drie, en de nieuwe soorten (beuk,
+    linde, els, populier, knotwilg, grove den, en meidoorn en hazelaar als struik; `BOOM_VORMEN` in `naar-tiled.cjs`).
+    Welke vorm een boom krijgt, zegt zijn tegel bij het tekenen (`T.sprites.tekeningVan`), dus geen regel verandert en een
+    bewaard spel past. Alle soorten staan op één plek (`T.BOMEN` in `js/wereld.js`): wat bos is, wat je rooit, wat de
+    houthakker inplant, de wind en de bosrand lezen het daar, zodat een nieuwe soort overal meetelt (eerst stonden ze in
+    acht lijstjes). De maker legt de nieuwe soorten met een vaste keus per tegel, zonder zijn lot te raken (`ANDERE_BOMEN`
+    in `js/maker.js`): op het plein een linde, aan het water een knotwilg of een els, op de heide een grove den, in het bos
+    een beuk en een hazelaar, langs de weg een populier, in de wei een meidoorn; verder ligt elk land zoals het lag. Een
+    kaart leest een tegelnummer nu zoals Tiled (`js/kaart.js`), zodat een vel kan groeien zonder over het vel erna te
+    vallen. De sneeuw op een spar is dunner (`sneeuwDikte` 0,25), zodat hij niet meer helemaal wit wordt. Het vel is in de
+    browser zo'n 7 MB. **Open:** een populier staat er nog weinig (de losse bomen houden afstand van de weg).
+    **Stap 2, de bomen in het jaar (10 okt, nacht; Marcel: "Ja, doe stap 2 met de sneeuw erbij"):** per seizoen een vel
+    met elke tekening op het nummer van de zomer (`bomen-lente`, `bomen-herfst`, `bomen-winter`, `bomen-sneeuw`;
+    `bouwSeizoenVel` in `naar-tiled.cjs`): een loofboom in alle vier (jong blad en bloesem, geel en rood met blad op de
+    grond en rijpe appels, kaal, kaal met sneeuw), een den en een dode boom alleen met sneeuw. Het spel laadt zo'n vel pas
+    in zijn seizoen (`T.sprites.zetSeizoen`), en tot het er is, staan de bomen in de zomer. Het seizoen zegt
+    `T.boomSeizoen(S)` (`js/bos.js`): per maand (`bomenInHetJaar`; lentemaand is al lente, want daar begint een spel), en
+    in de winter met sneeuw op de takken als er minstens `sneeuwOpDeBomen` op de grond ligt. De spelregel "De bomen in het
+    jaar" (met de seizoenen, of altijd zomer). De herfsteik staat niet meer in het bos om de kaart: de bomen kleuren nu
+    zelf. Kijken: `Spel.debug.bomen = 'herfst'`. Nog niet: de heide die paars bloeit en de bloemen per seizoen (bij stap
+    3, het groen eronder).
+    **Stap 3, het groen eronder: het plan (11 okt; Marcel: "Akkoord. Start maar met proefplaat"):** de struiken, varens,
+    graspollen, het hoge gras, de bloemen en de paddenstoelen krijgen het jaar (lente, zomer, herfst, winter en sneeuw,
+    zoals de bomen) en elk een paar vormen, welke zegt de tegel (`T.sprites.tekeningVan`); de stronk en de rotsen alleen
+    sneeuw. Erbij de nieuwe soorten van c: klaproos en korenbloem langs de akkers, brandnetels achter de huizen, brem en
+    distels op de heide, lisdodde en waterlelies aan het water, braam aan de bosrand, met hun vruchten. **Gekozen:** de
+    seizoenen zijn dezelfde vier als die van de bomen, één wissel (`bomenInHetJaar`: de zomer is zomermaand tot
+    herfstmaand, dus de heide bloeit en de bramen zijn rijp in het vel van de zomer); en de paarse heide is een plant, een
+    plukje heide op de heide, geen grondtegel per seizoen. Eerst de proefplaat, dan het spel.
+    **Proefplaat van stap 3 (11 okt):** `node gereedschap/pixelart/groen-proef.cjs onder` (in `uit/groen/onder.png`, niet
+    in git, op 2×): per soort een rij met lente, zomer, herfst, winter en sneeuw, en zijn andere vormen, op de grond waar
+    het straks staat. In `bomen.cjs`: de struik (laag, hoog, klein), de varen (klein, groot) en het gras (dun, breed) in
+    vormen; elk kent `o.seizoen` (de struik kaal in de winter, de bessenstruik in bloei in de lente, de varen roestbruin en
+    dan dor, het gras strogeel, in de lente madeliefjes en boterbloemen, in de herfst een grote groep paddenstoelen en in de
+    winter alleen bruin blad), de stronk en de stenen alleen sneeuw; wat plat ligt, krijgt sneeuw in vlekken
+    (`sneeuwVlekken`; anders werd een varen helemaal wit). De nieuwe soorten (achteraan `BEGROEIING`): klaproos, korenbloem,
+    brandnetel, heide, brem, distel, lisdodde, waterlelie en braam. Zonder seizoen of vorm tekent elke oude plant pixel
+    voor pixel als vroeger (nagekeken), en een plant rendert in minder dan een seconde, de sneeuw in een paar. **Marcel
+    (11 okt): "Ja voor nu goed".** Wat nog kan schuren (van Claude): de brandnetels lijken van dichtbij een donker struikje,
+    de braam lijkt in de zomer op de struik, en het hoge gras was in de zomer al droog. Dan het spel: de vellen per
+    seizoen, de vormen per tegel, en de maker die de nieuwe soorten legt.
+    **Het spel in (11 okt; Marcel: "Ja akkoord"):** A, de braam en de brem staan in de weg zoals de struik, en je rooit ze
+    zoals een struik (brandnetels, lisdodde en bloemen loop je door); B, duidelijk: de akkerranden rood en blauw in de
+    zomer, de heide paars. Alleen een nieuw spel krijgt de nieuwe soorten; de seizoenen en de vormen gelden overal.
+    **Stap 3 in het spel (11 okt):** het vel van de begroeiing heeft 54 tekeningen (was 10): de struik en de bessenstruik
+    in vier vormen, de varen, het gras en het hoge gras in drie, de bloemen en de paddenstoelen in drie zaden, en de negen
+    nieuwe soorten in drie (de heide in vier; `BEGROEIING_VORMEN` in `naar-tiled.cjs`); en per seizoen een vel
+    (`begroeiing-lente`, `-herfst`, `-winter`, `-sneeuw`, alle vier in een paar minuten), dat laadt zoals dat van de bomen.
+    Wat plat in de grond ligt (het gras, de bloemen, de klaproos en de korenbloem, de heide, de waterlelie), tekent de
+    grond opnieuw als het vel van het seizoen er is (`T.sprites.seizoenVanDeBomen`, nu voor alle vellen van dat seizoen).
+    De braam en de brem zijn struiken in `T.BOMEN` (in de weg, en je rooit ze). De maker legt het groen eronder met een
+    vaste keus per tegel, na wat hij legde, zodat elk land verder ligt zoals het lag (zelfde poging, niets weg): langs de
+    akkers klaprozen en korenbloemen, achter de huizen brandnetels (drie tegels achter de kant zonder deur), op de heide
+    plukjes heide, distels en brem, aan het water lisdodde, op het water waterlelies (niet in zee) en aan de bosrand
+    bramen (`akkerrand`, `achterHuis`, `heideGroen`, `oeverGroen`, `waterGroen`, `bosrand` in
+    `T.MAKER_INSTELLINGEN.groei`). Op land 5 zo'n 260 planten erbij; op het eiland met veel heide tot 1300, bijna alle plat.
+    Toetsen: `test/groen.test.cjs`.
 149. **Kleren naar stand** (Marcel, 10 okt: "Hogere niveau sociale mensen moeten duurdere kleren krijgen").
     **Wat er nu is:** 24 uiterlijken per volwassen lijf en 12 per kind en per oude (vraag 145,
     `gereedschap/pixelart/uiterlijk.cjs`), allemaal boerenkleren: een kiel, klompen, lappen en vuil, in gedempte verf.
@@ -7636,6 +7718,192 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     kwamen nooit in git. Wat blijft: wat we leerden (hierboven en in `beeld.md`, "De mensen naar Marcels voorbeelden") en
     de voorbeelden in `ontwerp/voorbeelden/` (`mensen-*`), voor als we de mensen laten tekenen. Lichtblond dat als een
     kaal hoofd leest en de vlecht van de kroon over de ogen staan in `opmerkingen.md`.
+
+151. **Gameplay als kern, en het verstoppen eruit** (Marcel, 11 okt: "Ik denk dat we moeten nadenken over gameplay nu
+    als kern. Het ziet er nu leuk uit, maar we hebben niks. Het verstop mechanisme moet eruit, is gewoon te saai.").
+    Besloten: het verstoppen gaat eruit (`spel.md`, "Rijk worden en arm lijken"). **Marcel (11 okt): "Nee, alles gaat
+    eruit. De kelders etc. De heer blijft wel een element. Arm lijken ook eruit."** Dus b: de kelders, de soldaten die
+    zoeken, de inner die telt wat hij ziet, de argwaan, afleiden en omkopen, de getuigen en het stiekeme bos; de heer
+    blijft (zijn brief, Sint-Maarten, zijn straffen, zijn gunst, de grillen, de heervaart). Wat de kern wordt, is open.
+    **Wat Claude zag (11 okt):** 1. het spel speelt zichzelf: de boeren doen het seizoen, het dorp vraagt zelf wat het
+    bouwt, en de raad zegt wat je moet doen; een script dat de raad volgt (de bouwer van de speeltest) wint, en hetzelfde
+    script wordt op een ander land weggejaagd: het land beslist, niet de speler; 2. een keuze heeft geen spanning: een
+    voorval zegt vooraf wat elk antwoord kost, en meestal is er één goed; 3. er is geen boog: de druk loopt niet op naar een
+    climax, en een jaar is 30 uur op 1×, of een uur kijken op 30×; 4. het poppetje hoeft nergens heen (de toets van één uur
+    uit `concept.md` haalt het nog altijd niet). Het verstoppen was saai om dezelfde reden: één handeling, en dan een
+    dobbelsteen (de soldaten vinden het of niet) waar je niets aan doet. Maar zijn onderdelen (wie ziet wat, getuigen,
+    roddel in de herberg, zoeken in een kelder) zijn die van een speurspel: draai het om, en de schout is de zoeker.
+    **Voorstel van Claude (11 okt):** drie kernen. A, de schout is maar één mens: een probleem ontstaat op een plek en
+    wacht daar; waar je niet bent, beslist je raadsman of een ambtenaar naar zijn karakter, of wordt het erger; groeien is
+    ambtenaren krijgen (concept, principe 2 en 8). B, rechtspraak als de vaardigheid: de simulatie maakt de zaken (honger
+    geeft diefstal), jij zoekt uit wie waar was en wie wat zag, en oordeelt op de zitting (de graanzak, vraag 128, is de
+    proef; Papers, Please). C, de heer als klok: hij vraagt elk jaar meer, naar zijn karakter, Sint-Maarten is een
+    confrontatie (betalen, onderhandelen, uitstellen, weigeren), en wat je dat jaar opbouwde, is je hefboom, tot een van de
+    drie wegen van vraag 126 (de storm in Frostpunk). C als de boog, A als het ritme van de dag, B als de vaardigheid.
+    Het verstoppen: a, alleen de kelders en de soldaten die zoeken; of b, heel "arm lijken" (ook de inner die telt wat hij
+    ziet, de argwaan, afleiden en omkopen, het stiekeme bos), en de heer vraagt naar wat er is; Claude: b, want dan moet
+    de heer toch opnieuw, en dat is C; het zicht en de getuigen blijven, voor B. Eerst het eerste uur op papier, vóór er
+    iets gebouwd wordt.
+    **Optie 1** (Marcel, 11 okt: "Dit noemen we optie 1. Ik vertel je straks wat we doen"): het plan van Claude om het
+    eruit te halen. Weg: de kelders (wegzetten, terughalen, en wat de karakters van de boeren daarbij deden; de karakters
+    blijven), de soldaten die zoeken (de soldaten als straf blijven), de inner (zijn bezoek, wat hij ziet, zijn rapport,
+    afleiden, omkopen, onverwacht terug; de heer rekent op wat er is, zoals nu al als de inner niet kwam), de argwaan (wat
+    argwaan kostte, kost gunst), de getuigen en "betrapt", en het stiekeme bos (het bos alleen gemeld). Verder: de heer
+    leest het boek van de graanzak zelf voor, de slimme en de sluwe speler van de speeltest verstoppen niets meer (de sluwe
+    geeft de heer nog 90%: hij telt slecht), een oud spel laadt niet meer, en CLAUDE.md, het ontwerp en de samenvatting
+    gaan mee. Drie keuzes: a, de argwaan wordt gunst (Claude: ja); b, de inner helemaal weg (Claude) of als de man die de
+    brief brengt; c, ook "wie ziet wat" en de getuigen eruit (Claude: ja, git bewaart het).
+    **Rondkijken** (Marcel, 11 okt: "Voor nu wil ik dat je rondkijkt naar vergelijkbare spellen. We hebben een goede
+    gameloop nodig"): `ontwerp/gameloop.md`, met Papers, Please, Beholder, The Reeve, Frostpunk, Against the Storm, King of
+    Dragon Pass, Pentiment en de dorpsbouwers, wat een goede loop gemeen heeft, en wat het voor ons betekent. Marcel kent
+    Manor Lords, The Guild en Frostpunk: ons spel is het dorp van Manor Lords, met de mensen van The Guild, onder de druk
+    van Frostpunk (`gameloop.md`, "De drie die Marcel kent").
+    **Marcel (11 okt): "Ik ben eigenlijk op zoek naar de economie van the settlers met een soort turn based isometric
+    combat. Rijke gfx met details."** Wat dat is, wat we hebben en wat ontbreekt: `gameloop.md`, "De richting".
+    **Besloten (Marcel, 11 okt: "A ja, B ja, C allebei"):** A, jij bouwt van bovenaf, en de schout wordt je held (hij
+    vecht en praat); B, goederen worden over wegen gedragen, van vlag tot vlag, eerst als proef met één keten (vraag
+    152); C, vechten is verdedigen én erop uit over het eiland tot het kasteel van de heer (Jagged Alliance 2).
+    **Optie 1 gaat door (Marcel, 11 okt: "Leg nog even vast dat optie 1 doorgaat, als ik, dat moet eruit").** Met de
+    adviezen van Claude bij de drie keuzes, tenzij Marcel anders zegt: a, de argwaan wordt gunst; b, de inner gaat
+    helemaal weg; c, ook "wie ziet wat" en de getuigen eruit (git bewaart het). Wanneer: bij stap 1 van vraag 152 (het
+    plan daarvan zegt het). **Af (11 okt), in drie delen, elk door een agent en nagekeken:** A, de kelders, de soldaten
+    die zoeken, de getuigen, "betrapt" en het stiekeme bos (`a3e74d0`; ook de luie spelers van de speeltest, die alleen
+    verstopten, en de spelregel "De lantaarn van de schout"); B1, de argwaan wordt gunst (de raadsman weegt het even
+    zwaar), de heer rekent op wat er is, en het oog van de argwaan is van de tafel (`d4556f0`); B2, de inner zelf, en
+    het meelopen met de schout ging naar `js/lopen.js` (`955815f`). Samen ruim 5.000 regels minder; 1126 toetsen groen.
+    **Om te weten:** de heer ziet nu alles, dus zijn rekening is hoger dan toen de inner niet alles zag (in een jaar van
+    de speeltest gaf de slimme speler 43% en stond aan de schandpaal); meten na stap 1, met een getal uit de werkbank.
+    De samenvatting voor een gamedesigner (`gereedschap/samenvatting/`) vertelt nog het oude spel; herschrijven als het
+    lege begin er staat.
+
+152. **Het beeld is af** (11 okt, in een eigen sessie): de huifkar die de ossenkar wordt, de tenten en het afdak,
+    en het kampvuur. Marcel koos (11 okt): de kar komt aan als huifkar en
+    wordt de ossenkar die werkt, als het huis van de schout er is ("Huifkar wordt ossenkar"); de gezinnen slapen in een
+    tent van linnen en onder een afdak van takken met huiden ("Tent en afdak"). De proefplaten staan er
+    (`ossenkar.cjs`, `kamp.cjs`; `beeld.md`, "De ossenkar en het kamp"). Marcel koos de vale os (11 okt: "Vaal"), en de
+    vellen staan in `beelden/`: de figuren `huifkar`, `ossenkar-leeg` en `ossenkar-hout` (staan en lopen, in acht
+    richtingen), en het los vel `kamp` (de tent, de bruine tent en het afdak met de opening naar elke kant, en het vuur).
+    Het spel tekent ze met 1b en 1c (een `T.sprites` erbij, zoals `S.kraam`). **De proef: bouwen binnen bereik, en de kar** (vraag 151, B; Marcel, 11 okt: "B ja", "Denk goed na over het plan",
+    en "Ik wil geen 'grens' alles moet open zijn. Ook geen vlaggen. Misschien dat grondstoffen worden opgehaald met een kar? Dus je kunt bijvoorbeeld x tegels vanaf je stad bouwen").
+    Het eerste plan (wegen met vlaggen en dragers, zoals Settlers II) is daarmee van tafel; wat Claude erbij leerde,
+    blijft gelden: met de getallen van nu staat een weg met dragers negen tiende van de tijd stil, bouwen is de eerste
+    keten die je voelt, er moet een keuze in zitten, en de overgang moet stap voor stap.
+    **Het plan (voorstel van Claude):** achter een spelregel "De kar", standaard uit, die ook "Wie bouwt" op "Jij" zet.
+    - **Bouwen binnen bereik:** je bouwt binnen een aantal tegels van het plein, en dat groeit met de trede; je ziet het
+      als je bouwt. Geen grens, geen lijn: lopen en kijken kan overal.
+    - **De stapel en de kar:** wat een gebouw maakt, ligt in een stapel bij zijn deur (te zien: stammen, planken,
+      stenen), tot de kar het haalt; pas in de opslag telt het in de voorraad. De kar brengt ook: hout naar de
+      timmerman, en naar een bouwplaats, die pas oprijst als zijn hout er is. Een kar rijdt met een voerman (een baan);
+      hij neemt eerst wat het langst ligt of het hardst nodig is.
+    - **De keuze:** een kar is lang onderweg, dus wat ver weg ligt, kost karren. Groeien de stapels, dan zet je een tweede
+      kar in, of een opslag dichterbij. Dat lost ook het lege van het eerste plan op: één kar rijdt de hele dag.
+    - Stap 1: het bouwbereik, en jij bouwt. Stap 2: de stapels en één kar, voor hout. Stap 3: de bouwplaats en de
+      timmerman krijgen hun hout met de kar, en het knelpunt (de stapels groeien). Stap 4: meten en spelen.
+    Niet in de proef: andere waren dan hout en planken, eten met de kar, voorrang per waar, de klok.
+    **Daarna, al te zien:** de besturing (de camera los, de schout een held die je aanklikt) en de klok (een jaar is 30
+    uur op 1×; de proef laat zien op welke snelheid het goed oogt).
+    **Besloten (Marcel, 11 okt: "a ja, b ja, c ja, d ja"):** a, het bereik rond het plein en rond elke opslag (een
+    schuur verder weg geeft daar bereik, zoals een kantoor in Anno); b, de kar rijdt overal, over een weg sneller; c, een
+    ossenkar (de os alleen als plaatje); d, de eerste opslag is het huis van de schout, later een schuur.
+    **En: "We moeten ook zelf alles vanaf de start gaan bouwen"** (Marcel, 11 okt): geen gehucht dat er al was; je
+    begint op een lege plek en bouwt alles zelf. Het plan wordt daarmee (voorstel van Claude): **stap 1 is het lege
+    begin**, achter een spelregel "Het begin" (leeg, of het gehucht dat er al was, zodat de toetsen en de speeltest
+    blijven spelen tot het nieuwe begin af is): een plek op het eiland, een paar gezinnen met de ossenkar, geladen met
+    wat ze meebrachten; de kar staat op wat het plein wordt en is de opslag tot het huis van de schout staat (d), dat je
+    als eerste bouwt; tot er hutten zijn, slapen ze bij een kampvuur; jij bouwt alles, ook de hutten, de boerderij en de
+    akkers. Het eerste doel komt dan vanzelf: haal de eerste winter. Daarna stap 2 tot 4 hierboven (de stapels en de
+    kar, de bouwplaats en de timmerman, meten en spelen). **Marcel (11 okt): "Een kar met wat spullen en 'settlers'".** Wat
+    erin zit en hoeveel, wacht op Marcel. **Voorstel voor stap 1 (Claude, 11 okt):** vier gezinnen (zo'n twintig mensen) en
+    de schout, in lentemaand, op de plek van jouw dorp op het eiland; in de kar hout voor het huis van de schout en twee
+    hutten, graan tot de eerste oogst als je op tijd een boerderij zet, zaaigraan, wat gereedschap en wat goud (de
+    getallen in de werkbank). De settlers worden wat jij bouwt: zet je een houthakker, dan wordt een van hen houthakker;
+    een gezin dat een boerderij krijgt, wordt boer (met een karakter, zoals nu). Wie geen werk heeft, bouwt mee aan wat
+    jij neerzet, zoals de dagloners maaien. Het eerste jaar vraagt de heer niets (en wrijft je dat in). Het grootste werk:
+    het hele spel gaat nu uit van een gehucht dat er al is (de boeren, de herberg, de raadsman, de voorvallen); stap 1 is
+    pas af als het spel vanaf een lege plek een jaar draait zonder fouten.
+    **Waaruit je start** (Marcel: "Waaruit je start"; voorstel van Claude, 11 okt, uit de getallen van nu: een mens eet
+    0,05 graan per dag, een akkertegel vraagt 1 zaaigraan en geeft 4 graan, een huis kost 16 hout, een hut 8, een
+    houthakker 10): de kar rijdt over de weg het land in en stopt op een open plek bij bos en water, die het plein wordt.
+    Erin: de schout en vier gezinnen (een man, een vrouw, één tot drie kinderen, bij één een grootvader; zo'n twintig
+    mensen), 50 hout, 120 graan, 60 zaaigraan, 20 goud en 5 gereedschap; het oude gehucht begon met 40 hout, 20 goud,
+    60 graan, 100 hooi en 20 bier, maar met akkers die al gezaaid waren. Wat dat doet: het hout is genoeg voor het huis
+    van de schout, twee hutten en een houthakker, en de rest moet hij hakken (eerst hout of eerst een boerderij?); het
+    graan eten twintig mensen in vier maanden op, tot hooimaand, terwijl de oogst in oogstmaand komt, dus het gat vul je
+    met vissen of jagen; en het zaaigraan is voor twee akkers van dertig tegels, samen 240 graan, genoeg voor acht
+    maanden, dus de eerste winter haal je net, met vis, wild of een derde akker. Alle getallen in de werkbank. **Marcel (11 okt): "Akkoord".**
+    **Het plan voor stap 1 (Claude, 11 okt), uit een inventaris van wat in de code van een gehucht uitgaat:** het lege
+    begin loopt nu op vier dingen vast: de plek van de marskramer is de poort voor elke bezoeker (zonder komen de heer,
+    de inner, de marskramer en de bode nooit, en tellen de twee bazen niet; `handel.js`, `heer.js`, `bazen.js`); het
+    huis van de schout (`huis: 'schout'`) is waar je slaapt, het rapport komt en de bode vertrekt; er bestaat geen
+    bewoner zonder huis (`T.wijsWerkToe` loopt dan vast op `p.huis`), en wie er al woont, verhuist nooit naar een nieuw
+    huis; en een boer is alleen boer1 tot boer5 van de kaart, en een akker kan de speler niet leggen (`menu: false`).
+    - **1a, optie 1 eerst:** het verstoppen en heel "arm lijken" eruit, een commit per stuk; wat eruit gaat, hoeft
+      niet eerst vanaf een lege plek te werken.
+    - **1b, het lege land:** de spelregel "Het begin" (leeg, of het gehucht dat er al was): het eiland om jouw plek
+      zonder gehucht (bos, water, heide, rotsen, de weg van het eiland); een open plek bij water en bos wordt het plein,
+      met de plek van de marskramer en de uitgang waar de weg het land verlaat; de kar met wat erin zit; een nieuwe
+      benoemingsbrief (de heer stuurt je met vier gezinnen om een dorp te stichten), en het eerste jaar vraagt hij niets.
+    - **1c, het kamp:** het kamp is een gebouw bij de kar (tenten en een kampvuur) waar de gezinnen wonen tot er huizen
+      zijn, en tot het huis van de schout staat de opslag; het telt niet als plaats voor nieuwe gezinnen. Is een hut of
+      huis af, dan verhuist er een gezin uit het kamp in (nieuw: verhuizen); is het kamp leeg, dan gaan de tenten weg, en
+      de kar blijft, voor stap 2.
+    - **1d, jij bouwt alles, binnen bereik:** de spelregel zet "Wie bouwt" en "Huizen" op "Jij"; in het bouwmenu ook het
+      huis van de schout (één keer; daarna slaap je en komt het rapport) en de akker bij een boerderij; het bereik rond
+      het plein en het huis van de schout (de schuren komen in stap 2), te zien als je bouwt. Wie geen werk heeft, bouwt
+      mee: hoe meer handen, hoe sneller het oprijst.
+    - **1e, boeren uit het niets:** een gezin dat in een boerderij trekt, wordt boer, met een geloot karakter zoals nu,
+      en zijn akkers horen bij zijn huis.
+    - **1f, een jaar zonder fouten:** een toets speelt een jaar vanaf een lege plek (met een speler in code die bouwt) en
+      kijkt dat niets vastloopt.
+    Het beeld: de ossenkar (de kar uit `dorp.cjs`, de koe als os), tenten en een kampvuur. Het werk: 1a een sessie, 1b
+    tot 1f twee à drie. **Besloten (Marcel, 11 okt: "1 ja, 2 ja, 3 ja"):** akkers leg jij bij een boerderij (zoals Manor Lords);
+    optie 1 eerst; en bouwen met handen (wie geen werk heeft, bouwt mee, en hoe meer handen, hoe sneller).
+    **Het plan voor 1b (Claude, 11 okt), met wat Marcel koos:** het kamp schuift naar 1b, want in het spel woont iedereen
+    in een huis, ook de schout (zijn bed, het rapport, de bode), en een bewoner zonder huis loopt vast; 1c is dan het
+    verhuizen naar een hut die af is, en de tenten weg als het kamp leeg is. 1b: de spelregel "Het begin" op "Leeg" (alleen
+    op het eiland; standaard het oude begin tot 1f): het eiland om jouw plek zonder gehucht, een open plek met een paar oude
+    eiken die het plein wordt, de plek van de marskramer waar de weg het plein raakt, de uitgang; het kamp (de huifkar, twee
+    tenten, het afdak en het kampvuur) waar iedereen woont, met de voorraad uit de kar; een nieuwe benoemingsbrief, en het
+    eerste jaar geen schatting en geen grillen, alleen een brief in wijnmaand die het inwrijft. De maker krijgt een stand
+    "leeg" (dezelfde stappen voor het plein, de wegen en het bos, zonder huizen, boerderijen, meent en put). Klaar als een
+    nieuw spel op "Leeg" geen huizen heeft, iedereen in het kamp woont, en een toets er een jaar op speelt zonder fouten,
+    ook als je niets doet. **Marcel koos (11 okt):** de kar rijdt nu al binnen ("Rijdt nu binnen": na de brief rijdt de
+    huifkar over de weg het land in, de gezinnen lopen erachter); de schout komt met zijn gezin (zo'n 23 monden, dus 140
+    graan in de kar in plaats van 120); en een kleine open plek, met het bos er vlak omheen (zo'n 10 tegels om het plein,
+    niet 16: hout dichtbij, ruimte door te rooien).
+    **1b is af** (11 okt, sessie `ccr-d5126bfe-mtbvwg`; `js/begin.js`, `test/begin.test.cjs`): de maker legt met `leeg` het
+    land zonder gehucht (het plein met twee tegels open eromheen, `leegRand`; het plein zelf is al zo'n 12 bij 7 tegels om
+    zijn midden, dus "zo'n 10 tegels om het plein" werd: het plein, en het bos er vlak achter), met een plek voor het kamp
+    en voor de marskramer; het gewone gehucht blijft byte voor byte wat het was. Een tent is een gebouw (`T.GEBOUWEN.tent`)
+    zo groot als zijn gezin (`T.woonruimteVan`), de tent van de schout is zijn huis, de kar is een wezen dat over de weg
+    rijdt (0,9 tegel per seconde, zo'n anderhalve minuut op 1×), en elke nacht staat het kamp er alsnog als de kar vastzat.
+    Een jaar zonder iets te doen loopt zonder fouten; het kamp sterft dan de winter in (24 mensen, van 200 graan), en de heer
+    vraagt niets. **Om te weten voor 1c en 1d:** nu er geen plaats is, zegt het spel elke paar dagen "Er wil een gezin komen,
+    maar er is geen plaats", de status Vol speelt vanaf de eerste dag (een tent is vol), en het doel linksboven is nog "Naar
+    een dorp" (het plan noemde "haal de eerste winter"); allemaal pas iets als je kunt bouwen.
+
+153. **Opnieuw beginnen in hetzelfde huis** (Marcel, 11 okt: "Is het goedkoper om gewoon een nieuw project te starten?
+    Aangezien alles nu bijna opnieuw gaat?"). Claude mat: van de 43.800 regels in `js/` blijft zo'n 55% zoals het is (het
+    tekenen, het eiland, de kunst, lopen, het gevecht, opslaan), verandert 23% van vorm (de economie) en gaat een deel van
+    de laag "het dorp regelt zichzelf" (22%) eruit; een nieuw project is dus duurder. Wat wel zwaar is: CLAUDE.md (153 KB,
+    zo'n 40.000 tokens bij elke sessie en elke agent), oude wegen die als spelregel blijven leven, en deze werklijst (959
+    KB). **Besloten (Marcel, 11 okt: "Ja, begin met stap 1, en akkoord met de afspraak"):**
+    - Stap 1: CLAUDE.md naar zo'n 15 à 20 KB, met wat elke sessie moet weten; de rest verhuist letterlijk naar een
+      ontwerpbestand dat je leest als je het nodig hebt. Klaar als CLAUDE.md onder de 20 KB is en niets kwijt is.
+    - Stap 2: een nieuwe, korte werklijst; deze gaat naar een archief.
+    - Stap 3: een snoeironde zoals optie 1: per systeem blijft, slaapt of weg, Marcel vinkt af.
+    - **De afspraak:** wat om is, gaat eruit, en blijft niet als spelregel staan. "Instelbaar" geldt alleen nog voor een
+      vraag die echt open is; een verlaten richting is geen goed antwoord meer (bij de regel van 24 sep).
+    **Stap 1 is af** (11 okt, sessie `ccr-45f75896-3l3f5s`; Marcel: "Ja doen we zo", op de opzet en de toets): CLAUDE.md
+    ging van 153 KB naar 19 KB, met de richting van 11 okt, de afspraken in het kort (de nieuwe over spelregels erbij), en
+    een inhoudsopgave van `js/` in tien onderwerpen. Wat eruit ging, staat er woord voor woord: de opbouw en de afspraken
+    met het waarom in `ontwerp/code.md` (een kop per bestand, `grep -n 'js/bos.js' ontwerp/code.md`), het draaien, het
+    testen in de browser en alle `Spel.debug` in `ontwerp/gereedschap.md`, en wat herschreven werd (de kop, de lijst van
+    de ontwerpbestanden, "Zuinig werken" en "Het spel in het kort") onderaan `ontwerp/spel.md`. Een script keek na dat
+    alle 1446 regels van de oude CLAUDE.md ergens terugstaan. `test/claude.test.cjs` houdt CLAUDE.md onder de 20 KB, en
+    kijkt dat elk bestand in `js/` in de inhoudsopgave en in `code.md` staat. **Om te weten:** commentaar in de code dat
+    "zie CLAUDE.md" zegt (een stuk of twintig), wijst nu naar `code.md` of `gereedschap.md`; dat gaat mee in stap 3. En
+    `code.md` vertelt nog het spel van vóór 11 okt; ook dat krimpt in stap 3, met de code.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
@@ -7854,6 +8122,19 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 11 okt 2026 — **Vraag 152, stap 1b: het lege land** (Marcel: "Rijdt nu binnen", "Met gezin", "Klein, bos dichtbij").
+  Met de spelregel "Het begin" op "Leeg" legt de maker op het eiland alleen het land met een open plek, rijdt de huifkar
+  na een nieuwe benoemingsbrief over de weg naar het plein met de schout ernaast en de gezinnen erachter, en zetten ze daar
+  het kamp op: een tent of afdak per gezin rond het kampvuur, dat 's avonds brandt. De kar brengt 50 hout, 200 graan
+  (waarvan 60 zaaigraan), 20 goud en 5 gereedschap; het eerste jaar vraagt de heer niets en schrijft hij in wijnmaand dat
+  hij je spaart. `js/begin.js`, `test/begin.test.cjs` (negen toetsen).
+- 11 okt 2026 — **Vraag 152, het beeld van het lege begin** (Marcel: "Huifkar wordt ossenkar", "Tent en afdak", "Vaal",
+  en "Vellen voor het spel"). De kar komt aan als huifkar met een vale os, en wordt de ossenkar als het huis van de schout
+  er is; de wielen draaien precies met de pas van de os mee (`ossenkar.cjs`, de os is de koe met `os` en `juk` in
+  `vee.cjs`). Het kamp: een tent van linnen of bruin wol, een afdak van takken met huiden, en het kampvuur met een
+  driepoot (`kamp.cjs`). In `beelden/`: de figuren `huifkar`, `ossenkar-leeg` en `ossenkar-hout` (staan en lopen, acht
+  richtingen; `ossenkar-anim.cjs`), en het los vel `kamp`. `test/ossenkar.test.cjs`; `beeld.md`, "De ossenkar en het
+  kamp". Het spel tekent ze nog niet (1b en 1c).
 - 10 okt 2026 — **Vraag 149: kleren naar stand** (Marcel: "Hogere niveau sociale mensen moeten duurdere kleren krijgen",
   "a ja, b drie, c ja, d ja, e ja", en bij de plaat "1 armer, 2 alle, 3 ja"). Hetzelfde gezicht in de kleren van de stand
   van zijn huis: arm in een hut (vaal, lappen, een gerafelde zoom, blote voeten), gewoon in een huis of boerderij, deftig

@@ -54,7 +54,7 @@ const antwoorden = (id) => knoopVan(id).keuzes;
 
 // Wat een antwoord mag doen: wat elk gesprek kan, en wat js/voorvallen.js erbij doet (het kop-commentaar daar).
 const WAREN = ['graan', 'hout', 'wol', 'bier', 'ijzer', 'zout', 'vlees', 'vis', 'kaas', 'hooi'];
-const GEVOLGEN = new Set(['zetVlag', 'wisVlag', 'geef', 'neem', 'goud', ...WAREN, 'tevreden', 'gunst', 'vertrouwen', 'argwaan', 'verban', 'sterfkans', 'gezin', 'voorval', 'feest', 'bouw', 'weiger', 'ontgin', 'wolven', 'jacht', 'bewaak', 'hek', 'zaak', 'weet', 'blus', 'brand', 'koorts', ...Object.keys(T.VEE)]);
+const GEVOLGEN = new Set(['zetVlag', 'wisVlag', 'geef', 'neem', 'goud', ...WAREN, 'tevreden', 'gunst', 'vertrouwen', 'verban', 'sterfkans', 'gezin', 'voorval', 'feest', 'bouw', 'weiger', 'ontgin', 'wolven', 'jacht', 'bewaak', 'hek', 'zaak', 'weet', 'blus', 'brand', 'koorts', ...Object.keys(T.VEE)]);
 
 test('elk voorval heeft een gesprek onder zijn naam, en elk antwoord gaat ergens heen en doet wat het spel kent', () => {
   for (const [id, v] of Object.entries(T.VOORVALLEN)) {
@@ -212,12 +212,12 @@ test('het venster zegt vooraf wat een antwoord kost, en wat er niet is, kun je n
   assert.equal(p.kan, false);
   assert.equal(p.waarom, 'je hebt 5 graan');
   assert.deepEqual(T.prijsVanKeuze(S.dorp, { graan: 10 }), { tekst: '+10 graan', kan: true, waarom: '' }, 'wat erbij komt, kan altijd');
-  assert.equal(T.prijsVanKeuze(S.dorp, { schaap: -2, sterfkans: 30, argwaan: -5 }).tekst, '−2 schapen, argwaan −5%, 30% kans op een dode');
+  assert.equal(T.prijsVanKeuze(S.dorp, { schaap: -2, sterfkans: 30, gunst: 5 }).tekst, '−2 schapen, gunst van de heer +5, 30% kans op een dode');
   // Een gewoon gesprek: de marskramer opent zijn venster, en dat kost niets.
   assert.deepEqual(T.prijsVanKeuze(S.dorp, { handel: true }), { tekst: '', kan: true, waarom: '' });
 });
 
-test('een antwoord doet wat het zegt: de voorraad, de tevredenheid die wegslijt, en de argwaan', () => {
+test('een antwoord doet wat het zegt: de voorraad, de tevredenheid die wegslijt, en de gunst van de heer', () => {
   const S = gehucht();
   S.dorp.behoeften = T.nieuweBehoeften();
   metVoorval(S, 'bruiloft', 40);
@@ -233,9 +233,9 @@ test('een antwoord doet wat het zegt: de voorraad, de tevredenheid die wegslijt,
   assert.equal(T.voorvalStemming(S.dorp, 40 + T.VOORVALLEN_INSTELLINGEN.stemmingDagen).erbij, 0, 'en dan is het weg');
   const b = T.berekenTevredenheid(S.dorp, 40);
   assert.ok(b.blij.includes('de bruiloft'), 'de balk zegt waar het dorp blij mee is');
-  const argwaan = (S.dorp.inner && S.dorp.inner.argwaan) || 0;
-  T.doeGevolg(S, S.dorp, { argwaan: 5 });
-  assert.ok(Math.abs(S.dorp.inner.argwaan - argwaan - 0.05) < 1e-9);
+  const gunst = T.bazenNu(S.dorp).gunst;
+  T.doeGevolg(S, S.dorp, { gunst: -5 });
+  assert.equal(T.bazenNu(S.dorp).gunst, gunst - 5);
 });
 
 test('verbannen: de dief trekt weg, en gaat het bos in als rover', () => {

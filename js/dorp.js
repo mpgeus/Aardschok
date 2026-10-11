@@ -2,7 +2,7 @@
 //
 // Het spel (S, in de browser Spel.S) is: de kalender, het land, jij (de schout, S.schout), waar je bent (S.wereld),
 // wat er op het scherm is, en de dorpen (S.dorpen). Een dorp (D) heeft alles van zichzelf: zijn kaart (D.wereld), zijn
-// voorraad, gebouwen en mensen, zijn wetten, hoe de heer en de inner ertegenover staan, zijn rovers, voorvallen en
+// voorraad, gebouwen en mensen, zijn wetten, hoe de heer ertegenover staat, zijn rovers, voorvallen en
 // raadsman, zijn trede en zijn vee, en zijn eigen schout (D.schout; in jouw dorp ben jij dat, in een buurdorp later
 // een schout in code). De kalender is voor alle dorpen dezelfde: D.kalender is S.kalender.
 //
@@ -47,6 +47,8 @@
     // staan (js/gebouwen.js), zodat een dorp niet leeg begint.
     for (const wat in w.beginVoorraad || {}) T.zetVoorraad(D, wat, w.beginVoorraad[wat]);
     T.zetBestaandeGebouwen(D);
+    // In het lege begin (vraag 152) staat er nog niets: de kar brengt wat er is, en het kamp (js/begin.js).
+    if (w.kamp) T.zetKamp(S, D);
     // Wie de boeren zijn en wat ze kunnen, wordt bij elk nieuw dorp geloot (js/boeren.js).
     T.lootBoeren(D, o.zaad != null ? o.zaad : undefined);
     // De beginkudde op de weide(s) die de kaart noemt (js/vee.js), net als de gebouwen hierboven; ná het lot, want
@@ -84,11 +86,10 @@
   // ook, zoals js/main.js het doet voor waar je wel bent: op zijn eigen kaart, en niet getekend. `dt` is de tijd van het
   // scherm, `dtWereld` die van de wereld (js/tijd.js).
   T.werkDorpBij = function (S, D, dt, dtWereld) {
+    T.werkBeginBij(S, D); // het lege begin: de kar rijdt het land in, met de gezinnen erachter (js/begin.js)
     T.werkGebouwenBij(D); // merkt zelf een nieuwe dag op de kalenderklok (js/gebouwen.js)
     T.werkMarskramerBij(D); // zijn poppetje: over de weg binnen, naar het plein, en weer weg (js/handel.js)
     T.werkHeerBij(D); // net zo: de heer en zijn soldaten op Sint-Maarten (js/heer.js)
-    T.werkDoorzoekenBij(D); // zijn soldaten zoeken, met de schout mee of waar de heer wijst (js/doorzoeken.js)
-    T.werkInnerBij(S, D); // en de inner in oogstmaand: hij loopt zijn ronde, of met de schout mee (js/inner.js)
     T.werkBewonersBij(D); // een nieuw gezin komt over de weg, wie wegtrekt gaat (js/bewoners.js)
     T.werkRoversBij(S, D); // rovers komen naar een akker, roven en gaan weer; de militie loopt met je mee (js/rovers.js)
     T.werkBrandBij(S, D); // de brand van een voorval: het huis brandt, tot het uit is of afgebrand (js/brand.js)

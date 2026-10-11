@@ -1,6 +1,6 @@
 // De tafel van de schout, onderin over de hele breedte (ontwerp/werklijst.md, vraag 146, c; Marcel, 9 okt: "Ik denk dat
 // het nu ook tijd is om een fatsoenlijke UI te maken", en op de plaat "De schrijftafel van de schout": "Ja dit ziet er
-// goed uit voor nu!"). Links het rekenboek (de voorraad, en het dorp: de kas, de mensen, de tevredenheid en de argwaan);
+// goed uit voor nu!"). Links het rekenboek (de voorraad, en het dorp: de kas, de mensen en de tevredenheid);
 // in het midden de dingen die een venster openen (het bouwplan, de velden, het wetboek, de bel van de raadsman, en de
 // brief, het rapport, de zaak en de inktpot van de bode zolang ze er zijn); rechts de lantaarn (sluipen), de kaars
 // (slapen), de zandloper met de lat van de snelheden, en het zegel van de heer en de hoed van het dorp (js/bazen.js).
@@ -155,12 +155,6 @@
     '<circle cx="9" cy="7" r="3" fill="#c9972f"/><path d="M3 19c0-3.3 2.7-6 6-6s6 2.7 6 6" fill="none" stroke="#c9972f" stroke-width="1.6" stroke-linecap="round"/>' +
     '<circle cx="17" cy="8.5" r="2.4" fill="#e2b64a"/><path d="M13.3 19c.3-2.7 2.2-4.8 4.7-4.8 2.6 0 4.7 2.3 5 5" fill="none" stroke="#e2b64a" stroke-width="1.4" stroke-linecap="round"/>' +
     '</svg>';
-  // De argwaan van de inner (js/inner.js): een oog, in dezelfde stijl.
-  const ARGWAAN_ICOON =
-    '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
-    '<path d="M2.5 12c2.4-4 5.7-6 9.5-6s7.1 2 9.5 6c-2.4 4-5.7 6-9.5 6s-7.1-2-9.5-6z" fill="none" stroke="#e2b64a" stroke-width="1.5" stroke-linejoin="round"/>' +
-    '<circle cx="12" cy="12" r="3.2" fill="#c9972f"/><circle cx="12" cy="12" r="1.2" fill="#1b1510"/>' +
-    '</svg>';
   // De tevredenheid van het dorp (js/behoeften.js): een gezichtje, in dezelfde stijl als hierboven.
   const TEVREDENHEID_ICOON =
     '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
@@ -177,14 +171,14 @@
   const NAAM = {
     goud: 'De kas', graan: 'Graan', kaas: 'Kaas', hooi: 'Hooi', vlees: 'Vlees', bier: 'Bier', wijn: 'Wijn', wol: 'Wol',
     hout: 'Hout', ijzer: 'IJzer', zout: 'Zout', gereedschap: 'Gereedschap', wapens: 'Wapens', mest: 'Mest',
-    huiden: 'Huiden', bevolking: 'Mensen', tevredenheid: 'Tevreden', argwaan: 'Argwaan',
+    huiden: 'Huiden', bevolking: 'Mensen', tevredenheid: 'Tevreden',
   };
   // Zoveel posten passen er onder elkaar op een bladzijde; staan er meer, dan gaan de namen eraf (stijl.css, .kort).
   const POSTEN_PER_KOLOM = 6;
   const post = (wat, icoon, getal, uitleg, later) =>
     `<div class="post${later ? ' verborgen' : ''}" data-wat="${wat}" data-naam="${NAAM[wat]}" data-uitleg="${uitleg}">` +
     `<span class="icoon">${icoon}</span><span class="naam">${NAAM[wat]}</span>` +
-    `<span class="aantal">${getal}</span><span class="verstopt"></span></div>`;
+    `<span class="aantal">${getal}</span></div>`;
 
   function bouwRekenboek(box) {
     box.querySelector('.blad.links .posten').innerHTML = BALK.filter((wat) => wat !== 'goud')
@@ -192,8 +186,7 @@
     box.querySelector('.blad.rechts .posten').innerHTML =
       post('goud', GRONDSTOF_ICOON.goud, 0, GRONDSTOF_UITLEG.goud) +
       post('bevolking', BEVOLKING_ICOON, '0/0', 'Mensen in het dorp, en hoeveel er wonen kunnen: elk huis geeft woonruimte.') +
-      post('tevredenheid', TEVREDENHEID_ICOON, '100%', 'Tevredenheid.') +
-      post('argwaan', ARGWAAN_ICOON, '0%', 'De argwaan van de inner.', true);
+      post('tevredenheid', TEVREDENHEID_ICOON, '100%', 'Tevredenheid.');
     box.dataset.gebouwd = '1';
   }
 
@@ -228,22 +221,11 @@
     blad.classList.toggle('kort', blad.querySelectorAll('.post:not(.verborgen)').length > POSTEN_PER_KOLOM);
     // De twee bazen (js/bazen.js) liggen op dezelfde tafel, ook meteen bij een nieuw of geladen spel.
     T.ui.toonBazen(D);
-    // Wat er verstopt ligt (js/verstoppen.js), klein naast het graan en het goud, en bij de muis
-    // waar: het dorp eet het niet, en de inner telt het niet.
-    if (T.verstoptTotaal) {
-      const v = T.verstoptTotaal(S.dorp);
-      const plekken = T.verstopPlekken(S.dorp).filter((p) => p.gebouw.verstopt && (p.gebouw.verstopt.graan >= 1 || p.gebouw.verstopt.goud >= 1));
-      const waar = plekken.map((p) => `${T.inhoudTekst(p.gebouw.verstopt)} in ${p.naam}`);
-      for (const wat of ['graan', 'goud']) {
-        const cel = box.querySelector(`[data-wat="${wat}"]`);
-        const n = Math.floor(v[wat]);
-        cel.querySelector('.verstopt').textContent = n >= 1 ? `+${n}` : '';
-        cel.dataset.uitleg = GRONDSTOF_UITLEG[wat] + (waar.length ? ` Verstopt: ${waar.join('; ')}. Dat eet het dorp niet, en de inner telt het niet.` : '');
-      }
-      // Het zaaigraan dat de boeren achterhouden (js/akkers.js, T.zaaigraanApart): bij de muis, bij het graan.
-      const zaai = Math.min(Math.floor(S.dorp.voorraad.graan || 0), Math.ceil(T.zaaigraanApart(S.dorp, Math.floor(S.kalender.dag))));
-      if (zaai > 0) box.querySelector('[data-wat="graan"]').dataset.uitleg += ` Daarvan is ${zaai} zaaigraan voor de lente: dat eet het dorp pas als er niets anders meer is.`;
-    }
+    // Het zaaigraan dat de boeren achterhouden (js/akkers.js, T.zaaigraanApart): bij de muis, bij het graan.
+    const graan = box.querySelector('[data-wat="graan"]');
+    graan.dataset.uitleg = GRONDSTOF_UITLEG.graan;
+    const zaai = Math.min(Math.floor(S.dorp.voorraad.graan || 0), Math.ceil(T.zaaigraanApart(S.dorp, Math.floor(S.kalender.dag))));
+    if (zaai > 0) graan.dataset.uitleg += ` Daarvan is ${zaai} zaaigraan voor de lente: dat eet het dorp pas als er niets anders meer is.`;
     // Wat zout en gereedschap nu doen, bij de muis: hoeveel vis en vlees het zout goed houdt, en
     // hoeveel handen het gereedschap dekt (js/behoeften.js, js/gebouwen.js).
     if (T.zoutDekking) {
@@ -349,33 +331,6 @@
     cel.dataset.uitleg = mist.length
       ? `Tevredenheid: ${pct}%.${perStand} Het dorp mist: ${mist.join(', ')}.${last}${blij}`
       : `Tevredenheid: ${pct}%.${perStand} Het dorp heeft wat het nodig heeft.${last}${blij}`;
-  };
-
-  // De argwaan van de inner (js/inner.js), en op hover waarom en wat ze doet. Pas in de balk als hij
-  // er eens geweest is, of als er argwaan is: in het begin blijft het rekenboek kort.
-  T.ui.toonArgwaan = function (D) {
-    const S = T.S;
-    if (D !== S.dorp) return; // een ander dorp zegt het niet tegen jou (js/dorp.js; vraag 71, C)
-    const box = $('rekenboek');
-    if (!box.dataset.gebouwd) bouwRekenboek(box);
-    const cel = box.querySelector('[data-wat="argwaan"]');
-    const I = S.dorp.inner;
-    const IN = T.INNER_INSTELLINGEN;
-    if (!cel || !IN) return;
-    const zichtbaar = !!(I && (I.argwaan > 0 || I.rapport || I.bezoek));
-    cel.classList.toggle('verborgen', !zichtbaar);
-    if (!zichtbaar) return;
-    const pct = (x) => `${Math.round(x * 100)}%`;
-    cel.querySelector('.aantal').textContent = pct(I.argwaan);
-    cel.classList.toggle('hoog', I.argwaan >= IN.doorzoekenVanaf);
-    const waarom = I.waarom.length ? ` Waarom: ${I.waarom.join('; ')}.` : '';
-    const nu = I.argwaan > 0 && IN.toeslag > 0 ? ` Nu vraagt de heer ${pct(I.argwaan * IN.toeslag)} meer.` : '';
-    // Wat je hem dit jaar gaf (js/inner.js, T.koopInnerOm), en wat hij daarom minder opschrijft.
-    const geschenk = I.geschenken > 0 ? ` Je gaf hem dit jaar ${I.geschenken} goud: hij schrijft ${pct(T.innerKorting(S.dorp))} minder op.` : '';
-    cel.dataset.uitleg =
-      `Argwaan van de inner: ${pct(I.argwaan)}.${waarom}${nu}${geschenk} ` +
-      `Vanaf ${pct(IN.terugkomenVanaf)} komt hij onverwacht terug, vanaf ${pct(IN.doorzoekenVanaf)} doorzoeken de soldaten op Sint-Maarten het dorp, ` +
-      `en vanaf ${pct(IN.rapportTeltNietVanaf)} gelooft de heer zijn rapport niet meer en vraagt hij naar alles. Na Sint-Maarten zakt ze.`;
   };
 
   // ── De dingen op tafel ──

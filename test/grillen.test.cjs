@@ -36,7 +36,7 @@ function gehucht() {
   return S;
 }
 const IN = () => T.GRILLEN_INSTELLINGEN;
-// De eerste dag van het spel met deze datum ('grasmaand', 12), zoals in test/doorzoeken.test.cjs.
+// De eerste dag van het spel met deze datum ('grasmaand', 12).
 function dagVan(maand, d) {
   const m = T.MAANDEN.findIndex((x) => x.naam === maand);
   let dag = 0;
@@ -49,7 +49,7 @@ function tik(S, dag) {
 }
 
 test('elke gril heeft een titel, een brief, en antwoorden die de heer tegen het dorp wegen', () => {
-  const sleutels = new Set(['goud', 'graan', 'hout', 'wol', 'bier', 'ijzer', 'zout', 'vlees', 'vis', 'kaas', 'hooi', 'gunst', 'vertrouwen', 'argwaan']);
+  const sleutels = new Set(['goud', 'graan', 'hout', 'wol', 'bier', 'ijzer', 'zout', 'vlees', 'vis', 'kaas', 'hooi', 'gunst', 'vertrouwen']);
   assert.ok(Object.keys(T.GRILLEN).length >= 12, 'genoeg om twee jaar niet te herhalen');
   for (const [id, g] of Object.entries(T.GRILLEN)) {
     assert.ok(g.titel && g.tekst.length && g.keuzes.length >= 2, id);

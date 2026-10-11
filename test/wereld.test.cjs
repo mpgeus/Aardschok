@@ -197,7 +197,7 @@ test('elk gebied heeft een weg terug', () => {
     for (const o of w.overgangen) {
       if (!T.GEBIEDEN[o.naar]) {
         // Een weg die nog nergens heen leidt, mag alleen op een proefkaart: de weg de wereld in
-        // van het gehucht, waar alleen de marskramer, de heer en de inner overheen komen.
+        // van het gehucht, waar alleen de marskramer en de heer overheen komen.
         assert.ok(w.proef, `${naam}: de overgang wijst naar een gebied dat niet bestaat: ${o.naar}`);
         continue;
       }

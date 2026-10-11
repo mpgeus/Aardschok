@@ -12,7 +12,7 @@
 // wat elk gesprek kan (goud, een vlag):
 //   graan: -20        uit de voorraad of erbij (WAREN hieronder, via T.wijzigVoorraad); het moet er wel zijn
 //   tevreden: 5       het dorp is 5% tevredener (of minder), en dat slijt in stemmingDagen weg
-//   argwaan: 3        de inner wordt 3% argwanender (of minder: -3)
+//   gunst: -3         de gunst van de heer daalt met 3 punten (of stijgt: 3; js/bazen.js)
 //   verban: 'ander'   die moet weg ('wie' of 'ander'); wie wegtrekt, gaat het bos in en komt terug als rover
 //   sterfkans: 30     met 30% kans sterft er iemand: over wie het gaat (ander), of anders de zwakste
 //   gezin: 1          er komt een gezin bij, als er plaats is (T.gezinKomt, js/gebouwen.js)
@@ -168,7 +168,7 @@
     vondst: { soort: 'kans', titel: 'de vondst', wie: { leeftijd: ['kind', 'jong'] } },
     zwerver: { soort: 'kans', titel: 'de zwerver' },
     wijsheid: { soort: 'kans', titel: 'de raad van de oude', wie: { karakter: 'grijsaard' } },
-    // Feesten: graan op en een tevreden dorp, en wat op is, telt de inner niet (Lords of the Realm, idee 4).
+    // Feesten: graan op en een tevreden dorp (Lords of the Realm, idee 4).
     bruiloft: {
       soort: 'feest', titel: 'de bruiloft', woorden: { blij: 'de bruiloft', last: 'de bruiloft zonder feest' },
       wie: { leeftijd: ['volwassen', 'oud'] }, ander: { geslacht: 'man', leeftijd: 'jong' },
@@ -699,7 +699,7 @@
   };
 
   // Elk beeld (js/main.js): overdag, vanaf zijn uur, zoekt hij de schout. Hij loopt naar hem toe (T.loopNaastDeSchout,
-  // js/inner.js, zoals de inner), en staat hij naast een schout die stilstaat, dan spreekt hij hem aan. Daarna wacht
+  // js/lopen.js), en staat hij naast een schout die stilstaat, dan spreekt hij hem aan. Daarna wacht
   // hij, tot je hem aanspreekt. 's Avonds, of als de schout in een ander gebied is, gaat hij zijns weegs.
   T.werkVoorvallenBij = function (S, D) {
     const L = D.voorvallen && D.voorvallen.lopend;
@@ -796,7 +796,6 @@
     if (doe.tevreden && !L.bouw) T.vertrouwenNaVoorval(D, doe.tevreden, v.titel, !!L.door);
     if (doe.gunst) T.wijzigGunst(D, doe.gunst, v.titel);
     if (doe.vertrouwen) T.wijzigVertrouwen(D, doe.vertrouwen, v.titel);
-    if (doe.argwaan) T.zetArgwaan(D, doe.argwaan / 100, v.titel);
     for (let i = 0; i < (doe.gezin || 0); i++) T.gezinKomt(D);
     const verbannen = doe.verban && L[doe.verban];
     if (verbannen && kanHetBetreffen(D, verbannen)) T.wijzigBevolking(D, -1, 'vertrek', 'verbannen door de schout', [verbannen]);
@@ -813,7 +812,7 @@
     // Een bouwverzoek (js/verzoeken.js): ja, en het gebouw komt er; nee, en hij onthoudt het.
     if (doe.bouw && L.bouw) T.verzoekToegestaan(D, L);
     if (doe.weiger && L.bouw) T.verzoekGeweigerd(D, L);
-    // Ontginnen (js/ontginnen.js): ja, de heide of het bos (gemeld of stiekem), en het wordt een veld van zijn boerderij.
+    // Ontginnen (js/ontginnen.js): ja, de heide of het bos, en het wordt een veld van zijn boerderij.
     if (doe.ontgin && L.ontgin) T.ontginToegestaan(D, L, doe.ontgin === true ? 'heide' : doe.ontgin);
     // De wolven (js/beesten.js): een jacht te voet naar de roedel die het schaap nam (doe.jacht; stap 3b), of meteen wolven
     // minder (doe.wolven), en een hek houdt ze bij de schapen weg. gereedschap/wereld.html laadt de beesten niet.
@@ -857,14 +856,13 @@
       if (n < 0) delen.push(`−${-n} ${-n === 1 ? T.VEE[soort].naam : T.VEE[soort].meervoud}`);
     }
     if (doe.tevreden) delen.push(`tevredenheid ${teken(doe.tevreden)}${Math.abs(doe.tevreden)}%`);
-    if (doe.argwaan) delen.push(`argwaan ${teken(doe.argwaan)}${Math.abs(doe.argwaan)}%`);
     // Twee bazen (js/bazen.js): wat de heer en het dorp van je vinden, als de spelregel aan staat.
     if (doe.gunst && T.BAZEN_INSTELLINGEN.aan) delen.push(`gunst van de heer ${teken(doe.gunst)}${Math.abs(doe.gunst)}`);
     // Een werkplaats in het bos van de heer (js/verzoeken.js, js/bos.js; werklijst vraag 110, e): dat kost zijn gunst.
     if (doe.bouw && L.bouw && L.bouw.bos && T.BAZEN_INSTELLINGEN.aan) delen.push(`gunst van de heer −${T.ONTGINNEN_INSTELLINGEN.gunst}`);
     if (doe.vertrouwen && T.BAZEN_INSTELLINGEN.aan) delen.push(`vertrouwen van het dorp ${teken(doe.vertrouwen)}${Math.abs(doe.vertrouwen)}`);
     // Ontginnen (js/ontginnen.js): de heide kost vertrouwen, meer naarmate de meent kleiner wordt; het bos de gunst van de
-    // heer, of stiekem het risico; en wat er niet meer is, kan niet.
+    // heer; en wat er niet meer is, kan niet.
     if (doe.ontgin && L.ontgin) {
       const p = T.ontginPrijs(D, L, doe.ontgin === true ? 'heide' : doe.ontgin);
       delen.push(...p.delen);

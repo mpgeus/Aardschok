@@ -17,6 +17,12 @@ ui (vraag 84): "a ja b ja c later, met de oorlog".
 Hieronder het voorstel van Claude (1 okt, eenentwintigste sessie), met wat er nagezocht is. De vragen erover staan in de
 werklijst als vraag 83 en 84.
 
+**De haak sinds 11 okt** (werklijst vraag 151, `gameloop.md`): de economie van The Settlers met gevechten in beurten,
+"The Settlers × Jagged Alliance 2". "Je bent geen god boven het dorp" is daarmee om: je bouwt van bovenaf. De markt: The
+Settlers: New Allies (2023) viel tegen omdat de economie te simpel was en het te veel om vechten draaide, en Pioneers of
+Pagonia (1.0 in december 2025) is zwak in het vechten; de economie is het hart, het gevecht in beurten wat de andere
+missen. Wat hieronder staat, is van vóór die keuze.
+
 ## Wat de markt zegt (nagezocht op 1 okt 2026)
 
 - **Middeleeuws bouwen verkoopt, maar het is druk.** Manor Lords verkocht miljoenen, Bellwright meer dan een miljoen,
@@ -80,6 +86,17 @@ de uitverkopen en met updates. Zonder verlanglijstjes verkoopt een goed spel bij
    vertaling zoals elke andere; de code, het commentaar en `ontwerp/` blijven Nederlands.
 3. **Een naam vóór de Steam-pagina.** De werktitel past niet meer (vraag 8: het voorstel was *Martinmas*, met "Get rich.
    Look poor." eronder). Een naam moet je kunnen vinden, en de merkenregisters en Steam moeten hem vrij laten.
+   **De werknaam sinds 11 okt: *Tithebreaker*, met "Collect the tithe. Or break it." eronder** (Marcel: "1 ja"). Eén
+   woord, actief, en het past bij de haak: de schout int de tiende van de heer, en hij breekt haar; de zin eronder houdt
+   de weg van de trouw erbij. De andere kandidaten van die dag (*From Furrow to Fortress*, *Plowshare to Pike*, *Hamlet
+   to Throne*) vielen af: lang, "X to Fortress" bestaat al (*Ruins To Fortress*), *plowshare* wordt op twee manieren
+   gespeld, en bij *Hamlet* denkt een Engelse speler aan Shakespeare (er is al een Hamlet-spel op Steam). Pas op met
+   *Reeve* in een naam: er is al een spel *The Reeve*. **Nagezocht tegen Steam (11 okt):** via een zoekmachine, want de
+   winkel van Steam zelf is vanuit de cloud niet te bereiken; geen spel heet *Tithebreaker* (ook niet op itch.io, GOG of
+   Epic). Wat er dicht bij ligt: *Tilebreaker* (2022) en *Tilebreaker Next Level*, een blokkenbreker, één letter
+   verschil; *Tiebreakers* (aangekondigd) en *TIME BREAKER*; *Tidebreaker* op itch.io. Marcel zocht het dezelfde dag in
+   de winkel van Steam zelf: "de naam staat nog niet in steam". Nog te doen vóór januari: de merkenregisters (EUIPO,
+   USPTO); en `T.NAAM` gaat pas om als de naam vaststaat.
 4. **Geluid.** Het spel heeft nog geen geluid. Voor een trailer en een demo is dat het eerste dat opvalt. Muziek en
    geluiden kun je kopen (bibliotheken) of laten maken. Er is weinig geld, dus: vrije bibliotheken en code (hieronder,
    "Weinig geld").

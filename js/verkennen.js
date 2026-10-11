@@ -139,6 +139,8 @@
       if (e.kant === 'monster') return { tekst: `De ${e.naam} aanvallen`, doe: () => T.startGevecht(S, e, true) };
       // Een dier (js/vee.js) of het wild (js/beesten.js) praat niet en doet nog niets: bij de muis staat alleen wat het is.
       if (e.dier || e.beest) return { tekst: T.hoofdletter(`een ${e.naam}`) };
+      // De kar van het lege begin (js/begin.js) net zo.
+      if (e.kar) return { tekst: T.t('The covered wagon, with everything you brought') };
       // Wie je zoekt met een voorval (js/voorvallen.js), daar praat je over het voorval, ook als hij een eigen
       // gesprek heeft.
       const voorval = D && T.voorvalVan(D, e);
@@ -181,16 +183,6 @@
     // ijzer staat stil, en zegt dat).
     const gebouw = D && T.gebouwOp && T.gebouwOp(D, doel.x, doel.y);
     if (gebouw) {
-      // Een huis, een boerderij of de kapel: daar verstop je graan en goud (js/verstoppen.js). Je
-      // loopt erheen, en dan gaat het venster open (js/hud.js). Kan het nu niet (de vrome weigert,
-      // de inner is in het dorp), dan zegt de klik waarom.
-      const plek = T.verstopPlekVan && T.verstopPlekVan(D, gebouw);
-      if (plek && T.ui.openVerstoppen) {
-        const h = T.verstopHandeling(D, plek);
-        const rand = h.kan && T.randVanGebouw(D, gebouw);
-        if (rand) return { tekst: h.tekst, doe: () => loopNaast(S, rand, () => T.ui.openVerstoppen(S, gebouw)) };
-        return { tekst: h.tekst, doe: () => T.ui.bericht(h.reden || 'Daar kun je niet bij.') };
-      }
       const tekst = T.gebouwToestand(D, gebouw);
       return { tekst, doe: () => T.ui.bericht(tekst) };
     }
