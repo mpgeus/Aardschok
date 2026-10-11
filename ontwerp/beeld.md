@@ -1224,3 +1224,18 @@ niets past, wijkt de zwakke grond voor strand (naast de zee) of gras. Golven die
   krans (`sparTak` en `den` in `bomen.cjs`), en de grove den erbij voor de heide. Met sneeuw werd hij helemaal wit, want
   elke tak ligt bijna vlak; sinds 10 okt draagt een spar (en de kerstboom) dunner sneeuw (`sneeuwDikte` 0,25 op het
   model, de rest 0,45), zodat het groen onder elke witte tak blijft.
+- **Pixel art of voorgerenderd? (11 okt 2026)** Marcel: "Wat voor art style kun jij het makkelijkste / beste maken?", en
+  "Ja laat maar een proef zien". Claude: het best kan het bouwen uit vorm, licht en materiaal (gebouwen, grond, licht dat
+  overal klopt, honderd varianten die bij elkaar horen, elke toestand van één ding); het minst goed kan het pixels zetten
+  zoals een tekenaar, vooral bij mensen (zie "De mensen naar Marcels voorbeelden"). Knights and Merchants, Anno 1602 en de
+  latere Settlers waren geen pixel art maar voorgerenderd 3D, dus onze eigen werkwijze zonder de laatste stap (vaste
+  kleuren, harde randen, de omlijning). Het vermoeden: misschien komt het "te AI" uit die laatste stap. **De proef**
+  (`node gereedschap/pixelart/stijlproef.cjs`, zo'n elf minuten op vier kernen; `uit/stijlproef/naast.png` en
+  `deur.png`): het voorbeeldhuis van stap F met zijn stukje grond, een eik, een boer en een boerin, links zoals nu en
+  rechts voorgerenderd (vier keer zo fijn gerekend, als zestien verschoven beelden in elkaar gevlochten, dan verkleind;
+  de kleuren zonder trappen en zonder omlijning), allebei op de maat van 1080p. **Wat Claude zag:** het vermoeden klopt
+  maar half. Het huis is in beide even goed: rechts zachter, links scherper en beter leesbaar op deze maat. De mensen
+  worden rechts kleipoppetjes, ronder maar niet mooier; wat er aan ze schort, zit in het model, niet in de laatste stap.
+  De grond rechts is in haast nieuw gemaakt (die van het spel is getekend op het rooster van de pixels) en is daardoor
+  armer, met bruine vlekken: daar is het niet eerlijk vergeleken. **Wacht op Marcel:** welke stijl, of bij pixel art
+  blijven (zijn keus van 19 sep en 10 okt) en verder werken aan de mensen en de grond.
