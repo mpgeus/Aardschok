@@ -143,11 +143,14 @@ De buitenwereld, elk met een eigen exportscript (`node <bestand>-export.cjs`):
 - `ossenkar.cjs`: de ossenkar van het lege begin (werklijst vraag 152; `ontwerp/beeld.md`, "De ossenkar en het kamp"): een
   kar op twee hoge wielen met een os tussen de disselbomen (de koe uit `vee.cjs` met `os` en `juk`), als huifkar of met een
   lading (`LADINGEN`), in twee houdingen, staan en rijden, waarin de wielen precies met de pas van de os meedraaien (`WIEL`).
-  `node ossenkar.cjs` maakt de proefplaat `uit/ossenkar-proef.png` en de rijdende huifkar `uit/ossenkar-rijden.png`.
+  `node ossenkar.cjs` maakt de proefplaat `uit/ossenkar-proef.png` en de rijdende huifkar `uit/ossenkar-rijden.png`;
+  `node ossenkar-anim.cjs` de vellen voor het spel (`VELLEN`: de huifkar, en de ossenkar leeg en met hout; een vel per
+  proces gaat sneller, zo'n tien minuten elk), daarna `node naar-spel.cjs --alleen huifkar,ossenkar-leeg,ossenkar-hout`.
 - `kamp.cjs`: het kamp van het lege begin: de tent (linnen of bruin wol) en het afdak van takken en huiden, elk in vier
   richtingen, en het kampvuur (de vuurkuil uit `bosgebied.cjs` met vlammen en een driepoot met een ketel), dat brandt, smeult
   of uit is. `node kamp.cjs` maakt de proefplaat `uit/kamp-proef.png` en het bewegende vuur `uit/kampvuur.png`, en
-  `node kamp.cjs --plein` het kamp met de huifkar zoals het op het plein kan staan (`uit/kamp-plein.png`).
+  `node kamp.cjs --plein` het kamp met de huifkar zoals het op het plein kan staan (`uit/kamp-plein.png`). Naar het spel:
+  `node naar-spel.cjs --alleen kamp` (`beelden/kamp.png` en `beelden/kampvuur.png`).
 - `toren.cjs`: de toren van de oude meester in drie staten, met een eigen renderer voor zijn
   hoogte, en `toren-lagen.cjs` dat hem in lagen snijdt voor het spel.
 - `trap.cjs`: de spiraaltrap, in dezelfde drie staten als de toren (ingestort, provisorisch,

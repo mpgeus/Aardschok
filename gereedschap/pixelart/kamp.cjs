@@ -282,6 +282,47 @@ function vergroot(p, n) {
   return uit;
 }
 
+// ---------------------------------------------------------------- de vellen voor het spel
+
+// Wat er op het vel staat (naar-spel.cjs --alleen kamp): een rij per soort, een kolom per richting van de opening.
+const SOORTEN = [
+  ['tent', () => tent()],
+  ['tent-bruin', () => tent({ bruin: true, zaad: 2 })],
+  ['afdak', () => afdak()],
+];
+// Het vuur op een eigen vel: eerst de beelden van het brandende vuur, dan smeult het, dan is het uit.
+const VUUR_STANDEN = ['brandt', 'smeult', 'uit'];
+
+function vel() {
+  const uit = new K.Plaat(CEL[0] * RICHTINGEN.length, CEL[1] * SOORTEN.length);
+  SOORTEN.forEach(([, maak], rij) => {
+    const m = maak();
+    RICHTINGEN.forEach((kant, k) => uit.plak(teken(m, CEL, ANKER, kant), k * CEL[0], rij * CEL[1]));
+  });
+  return uit;
+}
+
+function vuurVel() {
+  const uit = new K.Plaat(VUUR_CEL[0] * (VUUR_BEELDEN + 2), VUUR_CEL[1]);
+  for (let i = 0; i < VUUR_BEELDEN; i++) uit.plak(teken(kampvuur({ stand: 'brandt', fase: i / VUUR_BEELDEN }), VUUR_CEL, VUUR_ANKER, 'Z'), i * VUUR_CEL[0], 0);
+  uit.plak(teken(kampvuur({ stand: 'smeult' }), VUUR_CEL, VUUR_ANKER, 'Z'), VUUR_BEELDEN * VUUR_CEL[0], 0);
+  uit.plak(teken(kampvuur({ stand: 'uit' }), VUUR_CEL, VUUR_ANKER, 'Z'), (VUUR_BEELDEN + 1) * VUUR_CEL[0], 0);
+  return uit;
+}
+
+// Wat in beelden/beschrijving.json komt: het bestand, de maat van een cel, het anker, de richtingen (de kolommen) en de
+// soorten (de rijen); en het vuur, met hoeveel beelden het brandt en hoe snel, en dan een cel per stand.
+function beschrijving(bestand, vuurBestand) {
+  return {
+    bestand,
+    cel: CEL,
+    anker: ANKER,
+    richtingen: RICHTINGEN,
+    soorten: SOORTEN.map(([naam]) => naam),
+    vuur: { bestand: vuurBestand, cel: VUUR_CEL, anker: VUUR_ANKER, beelden: VUUR_BEELDEN, fps: VUUR_FPS, standen: VUUR_STANDEN },
+  };
+}
+
 // ---------------------------------------------------------------- de proefplaat
 
 // Op ware grootte: de tent (linnen en bruin) en het afdak in de vier richtingen, het kampvuur in zijn drie standen, en
@@ -387,7 +428,7 @@ function plein() {
   console.log(`uit/kamp-plein.png (${plaat.b * 2}×${plaat.h * 2})`);
 }
 
-module.exports = { tent, afdak, kampvuur, teken, plein, RICHTINGEN, CEL, ANKER, VUUR_CEL, VUUR_ANKER, VUUR_BEELDEN, VUUR_FPS };
+module.exports = { tent, afdak, kampvuur, teken, plein, vel, vuurVel, beschrijving, SOORTEN, VUUR_STANDEN, RICHTINGEN, CEL, ANKER, VUUR_CEL, VUUR_ANKER, VUUR_BEELDEN, VUUR_FPS };
 
 if (require.main === module) {
   if (process.argv.includes('--plein')) plein();

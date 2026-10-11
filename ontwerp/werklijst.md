@@ -28,7 +28,8 @@ mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voo
 - **De richting (vraag 151, 11 okt): de economie van The Settlers met gevechten in beurten** (Marcel: "A ja, B ja, C
   allebei"; `gameloop.md`): geen grens, geen vlaggen, bouwen binnen bereik van je stad en elke opslag, een ossenkar die
   de grondstoffen haalt, en je bouwt alles zelf vanaf een lege plek, met een kar met wat spullen en settlers. Het plan
-  (vraag 152) en waaruit je start zijn akkoord (11 okt); **het volgende punt is vraag 152, stap 1: het lege begin.**
+  (vraag 152) en waaruit je start zijn akkoord (11 okt); **het volgende punt is vraag 152, stap 1: het lege begin.** Het
+  beeld ervan (de huifkar, de ossenkar, de tenten, het afdak en het kampvuur) staat in `main` (11 okt), met de vellen.
 - **Gameplay als kern, en het verstoppen eruit** (vraag 151, 11 okt; Marcel: "we hebben niks"): het verstoppen en heel
   "arm lijken" gaan eruit, de heer blijft (Marcel: "alles gaat eruit"); het plan om het weg te halen heet **optie 1**,
   en het gaat door (Marcel: "dat moet eruit")
@@ -76,7 +77,7 @@ mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voo
 0b. Engels en een vertaaltool (vraag 147; Marcel, 9 okt): de basis nu, naast de ui; het omzetten van alle tekst na de
    ui en vóór de proefversie. Stap 1 (de basis, de tool, het menu als proef) staat in `main` (9 okt); **nu stap 2**, het
    omzetten, want de ui is af (10 okt). **Bezig in sessie `ccr-99e707bb-sla81d`** (10 okt): het plan voor stap 2,
-   met Marcel.
+   met Marcel. Claude (11 okt): pas na optie 1 (vraag 151), want allebei raken ze bijna heel `js/`.
 0c. Meer variatie in het groen, de bomen en de versiering (vraag 148; Marcel, 9 okt: alles ja, "Mag ernaast"), naast
    de ui: eerst de bomen (vormen, nieuwe soorten, de seizoenen met vruchten), dan het groen eronder, dan de spullen bij de
    huizen; de sneeuw op de bomen en de huizen (144, 4b, Marcel: "ja") in dezelfde ronde. Stap 1 staat in het spel (10
@@ -86,7 +87,8 @@ mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voo
    de akkers, achter de huizen, op de heide, aan het water en aan de bosrand. **Nu d**, de spullen bij de huizen, samen
    met de ronde van de huizen (die loopt in een andere sessie).
 1. Een proefversie voor Marcels 4K-scherm en een eerste tester (33d; `npm run proefversie`, ook `-- --windows`), met de
-   graanzak erin. De laatste is van 3 okt (`36c713e`), zonder de verzoeken, de twee bazen, het ontginnen, de markt, de
+   graanzak erin. Claude (11 okt): voor een tester liever na het lege begin, want anders speelt hij het oude begin, met
+   het verstoppen dat eruit gaat. De laatste is van 3 okt (`36c713e`), zonder de verzoeken, de twee bazen, het ontginnen, de markt, de
    wolven, het eiland, WebGL en de graanzak.
 2. Marcel speelt de graanzak (`Spel.debug.zaak('nu')`) en kiest of c, d en e van vraag 128 komen (en vraag 134).
 3. Bijstellen na de tester, eerst met een getal uit de werkbank; met de speeltest van vier jaar ook de wolven en de
@@ -7764,12 +7766,14 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     plan daarvan zegt het).
 
 152. **Bezig in sessie `ccr-7423c47f-5zapx8`** (11 okt): het plan voor stap 1 (het lege begin), met optie 1, en dan
-    bouwen. **Het beeld: bezig in sessie `ccr-bbbc5887-w2erwc`** (11 okt): de huifkar die de ossenkar wordt, de
-    tenten en het afdak, en het kampvuur, eerst op een proefplaat. Marcel koos (11 okt): de kar komt aan als huifkar en
+    bouwen. **Het beeld is af** (11 okt, in een eigen sessie): de huifkar die de ossenkar wordt, de tenten en het afdak,
+    en het kampvuur. Marcel koos (11 okt): de kar komt aan als huifkar en
     wordt de ossenkar die werkt, als het huis van de schout er is ("Huifkar wordt ossenkar"); de gezinnen slapen in een
     tent van linnen en onder een afdak van takken met huiden ("Tent en afdak"). De proefplaten staan er
-    (`ossenkar.cjs`, `kamp.cjs`; `beeld.md`, "De ossenkar en het kamp"). Marcel koos de vale os (11 okt: "Vaal"), en
-    nu komen de vellen voor het spel. **De proef: bouwen binnen bereik, en de kar** (vraag 151, B; Marcel, 11 okt: "B ja", "Denk goed na over het plan",
+    (`ossenkar.cjs`, `kamp.cjs`; `beeld.md`, "De ossenkar en het kamp"). Marcel koos de vale os (11 okt: "Vaal"), en de
+    vellen staan in `beelden/`: de figuren `huifkar`, `ossenkar-leeg` en `ossenkar-hout` (staan en lopen, in acht
+    richtingen), en het los vel `kamp` (de tent, de bruine tent en het afdak met de opening naar elke kant, en het vuur).
+    Het spel tekent ze met 1b en 1c (een `T.sprites` erbij, zoals `S.kraam`). **De proef: bouwen binnen bereik, en de kar** (vraag 151, B; Marcel, 11 okt: "B ja", "Denk goed na over het plan",
     en "Ik wil geen 'grens' alles moet open zijn. Ook geen vlaggen. Misschien dat grondstoffen worden opgehaald met een kar? Dus je kunt bijvoorbeeld x tegels vanaf je stad bouwen").
     Het eerste plan (wegen met vlaggen en dragers, zoals Settlers II) is daarmee van tafel; wat Claude erbij leerde,
     blijft gelden: met de getallen van nu staat een weg met dragers negen tiende van de tijd stil, bouwen is de eerste

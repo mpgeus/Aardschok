@@ -988,7 +988,16 @@ van dat punt. Twee bestanden in `gereedschap/pixelart/`, elk met een proefplaat 
   langs de tegels, zoals een deur); het vuur is één tekening. Het licht en de vonken komen uit de code, zoals bij de brand.
 
 Marcel koos de vale os (11 okt: "Vaal"): je ziet je kar meteen tussen de bruine koeien. De roodbruine blijft in
-`OS_KLEUREN`, voor een tweede kar later. Dan de vellen voor het spel (`beelden/`).
+`OS_KLEUREN`, voor een tweede kar later.
+
+**De vellen in het spel** (11 okt; Marcel: "Vellen voor het spel"): drie figuren in `beelden/figuren/`, elk met de vale os,
+in staan en lopen (lopen is de kar die rijdt, zoals het spel het noemt als iets onderweg is, met `snelheid` 0,9 en `stap`
+0,45): `huifkar`, `ossenkar-leeg` en `ossenkar-hout` (`ossenkar-anim.cjs`, dan `naar-spel.cjs --alleen
+huifkar,ossenkar-leeg,ossenkar-hout`); de andere ladingen komen als het spel ze vraagt. En het kamp als los vel
+(`naar-spel.cjs --alleen kamp`): `beelden/kamp.png`, een rij per soort (`tent`, `tent-bruin`, `afdak`) en een kolom per
+richting van de opening, en `beelden/kampvuur.png`, acht beelden van het brandende vuur en dan een cel voor smeulen en uit;
+de beschrijving staat onder `kamp`. Het spel tekent ze nog niet: dat is 1b en 1c van vraag 152 (een `T.sprites` erbij, zoals
+`S.kraam` voor de markt). `test/ossenkar.test.cjs` kijkt na dat het wiel rolt zonder te glijden en dat de vellen kloppen.
 
 ## De heide (25 sep 2026)
 

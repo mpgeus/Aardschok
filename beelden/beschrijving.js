@@ -4369,6 +4369,174 @@
       }
      }
     },
+    "huifkar": {
+     "naam": "huifkar",
+     "lading": "huif",
+     "cel": [
+      216,
+      156
+     ],
+     "anker": [
+      108,
+      116
+     ],
+     "snelheid": 0.9,
+     "snelheidEenheid": "tegels per seconde",
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "huifkar-staan.png",
+       "beelden": 8,
+       "fps": 5,
+       "herhaal": true,
+       "cel": [
+        208,
+        149
+       ],
+       "anker": [
+        104,
+        114
+       ]
+      },
+      "lopen": {
+       "bestand": "huifkar-lopen.png",
+       "beelden": 8,
+       "fps": 8,
+       "herhaal": true,
+       "snelheid": 0.9,
+       "stap": 0.45,
+       "cel": [
+        208,
+        152
+       ],
+       "anker": [
+        104,
+        114
+       ]
+      }
+     }
+    },
+    "ossenkar-leeg": {
+     "naam": "ossenkar-leeg",
+     "lading": "leeg",
+     "cel": [
+      216,
+      156
+     ],
+     "anker": [
+      108,
+      116
+     ],
+     "snelheid": 0.9,
+     "snelheidEenheid": "tegels per seconde",
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "ossenkar-leeg-staan.png",
+       "beelden": 8,
+       "fps": 5,
+       "herhaal": true,
+       "cel": [
+        208,
+        134
+       ],
+       "anker": [
+        104,
+        99
+       ]
+      },
+      "lopen": {
+       "bestand": "ossenkar-leeg-lopen.png",
+       "beelden": 8,
+       "fps": 8,
+       "herhaal": true,
+       "snelheid": 0.9,
+       "stap": 0.45,
+       "cel": [
+        208,
+        134
+       ],
+       "anker": [
+        104,
+        96
+       ]
+      }
+     }
+    },
+    "ossenkar-hout": {
+     "naam": "ossenkar-hout",
+     "lading": "hout",
+     "cel": [
+      216,
+      156
+     ],
+     "anker": [
+      108,
+      116
+     ],
+     "snelheid": 0.9,
+     "snelheidEenheid": "tegels per seconde",
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "ossenkar-hout-staan.png",
+       "beelden": 8,
+       "fps": 5,
+       "herhaal": true,
+       "cel": [
+        212,
+        137
+       ],
+       "anker": [
+        106,
+        102
+       ]
+      },
+      "lopen": {
+       "bestand": "ossenkar-hout-lopen.png",
+       "beelden": 8,
+       "fps": 8,
+       "herhaal": true,
+       "snelheid": 0.9,
+       "stap": 0.45,
+       "cel": [
+        212,
+        140
+       ],
+       "anker": [
+        106,
+        102
+       ]
+      }
+     }
+    },
     "kip0": {
      "naam": "kip0",
      "cel": [
@@ -43636,6 +43804,46 @@
      14,
      54
     ]
+   },
+   "kamp": {
+    "bestand": "kamp.png",
+    "cel": [
+     224,
+     160
+    ],
+    "anker": [
+     112,
+     112
+    ],
+    "richtingen": [
+     "ZO",
+     "ZW",
+     "NW",
+     "NO"
+    ],
+    "soorten": [
+     "tent",
+     "tent-bruin",
+     "afdak"
+    ],
+    "vuur": {
+     "bestand": "kampvuur.png",
+     "cel": [
+      80,
+      112
+     ],
+     "anker": [
+      40,
+      88
+     ],
+     "beelden": 8,
+     "fps": 10,
+     "standen": [
+      "brandt",
+      "smeult",
+      "uit"
+     ]
+    }
    }
   };
 })(globalThis.Spel = globalThis.Spel || {});

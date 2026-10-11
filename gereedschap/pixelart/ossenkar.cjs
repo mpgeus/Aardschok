@@ -9,8 +9,9 @@
 // omhoog. Het anker (het midden van de tegel) ligt halverwege de achterkant van de kar en de snuit van de os, zodat het
 // beeld van elke kant zo klein mogelijk is.
 //
-// Twee houdingen, allebei een lus van acht beelden: staan (de os herkauwt en zwiept met zijn staart) en rijden (de os
-// loopt, en de wielen draaien precies zo hard als de kar vooruitgaat: in een rondje een kwartslag, zie WIEL).
+// Twee houdingen, allebei een lus van acht beelden: staan (de os herkauwt en zwiept met zijn staart) en lopen, zoals het
+// spel het noemt als iets onderweg is: de kar rijdt, de os loopt, en de wielen draaien precies zo hard als de kar
+// vooruitgaat (in een rondje een kwartslag, zie WIEL). De vellen voor het spel maakt ossenkar-anim.cjs.
 //
 //   node gereedschap/pixelart/ossenkar.cjs           (de proefplaat: uit/ossenkar-proef.png, en uit/ossenkar-rijden.png)
 'use strict';
@@ -29,14 +30,14 @@ const TEGEL = K.TEGEL;
 
 const HOUDINGEN = {
   staan: { beelden: 8, fps: 5, herhaal: true, os: 'staan' },
-  rijden: { beelden: 8, fps: V.LOOP_FPS.os, herhaal: true, os: 'lopen' },
+  lopen: { beelden: 8, fps: V.LOOP_FPS.os, herhaal: true, os: 'lopen' },
 };
 // De kar rijdt in het tempo van de os, in tegels per seconde.
 const SNELHEID = V.SNELHEID.os;
 
 // Het wiel: in een rondje van de os (acht beelden) rijdt de kar SNELHEID tegels, en draait het wiel een kwartslag, twee
 // spaken ver. Zo sluit de lus, en glijdt het wiel niet over de grond: de omtrek is vier keer de weg van een rondje.
-const RONDJE = (SNELHEID * TEGEL * HOUDINGEN.rijden.beelden) / HOUDINGEN.rijden.fps; // eenheden per rondje
+const RONDJE = (SNELHEID * TEGEL * HOUDINGEN.lopen.beelden) / HOUDINGEN.lopen.fps; // eenheden per rondje
 const WIEL = { r: (4 * RONDJE) / (2 * Math.PI), x: 28.5, dik: 1.6, spaken: 8, draai: Math.PI / 2 };
 
 // De bak: half zo breed en half zo lang, de bovenkant van de vloer en van de zijplanken. Een eenheid is zo'n twee
@@ -66,6 +67,13 @@ const FIG_ANKER = [56, 110];
 
 // Wat er op de kar ligt. Met het zeil zie je alleen wat er achter uit de opening steekt.
 const LADINGEN = ['huif', 'spullen', 'hout', 'stenen', 'zakken', 'leeg'];
+// De vellen voor het spel (ossenkar-anim.cjs, naar-spel.cjs), elk met de vale os (Marcel, 11 okt: "Vaal"): de huifkar van
+// het begin, en de ossenkar leeg en met stammen voor stap 2. De andere ladingen komen als het spel ze vraagt.
+const VELLEN = [
+  { naam: 'huifkar', lading: 'huif' },
+  { naam: 'ossenkar-leeg', lading: 'leeg' },
+  { naam: 'ossenkar-hout', lading: 'hout' },
+];
 
 // ---------------------------------------------------------------- materialen
 
@@ -322,7 +330,7 @@ function tekenOssenkar(B, o, kant) {
   const a = (graden * Math.PI) / 180;
   const naar = (ly) => ({ gx: (ly * Math.cos(a)) / TEGEL, gy: (ly * Math.sin(a)) / TEGEL });
   const H = HOUDINGEN[o.houding || 'staan'];
-  const hoek = o.houding === 'rijden' ? WIEL.draai * (o.fase || 0) : 0;
+  const hoek = o.houding === 'lopen' ? WIEL.draai * (o.fase || 0) : 0;
   K.tekenModel(B, kar({ lading: o.lading, hoek }), { richting: kant, ...naar(-MIDDEN) });
   K.tekenModel(B, os({ houding: o.houding, fase: o.fase, kleur: o.kleur }), { richting: kant, ...naar(OS_Y - MIDDEN) });
   return H;
@@ -376,7 +384,7 @@ function proef() {
   const rijen = [
     [man, losOs(0), losOs(1), { p: K.losRenderen(V.koe({ houding: 'staan', fase: 0.1 }), { b: 150, h: 130, anker: [75, 92], richting: 'ZO' }), ay: 92 }],
     [man, kar({ lading: 'huif' }, 'ZO'), kar({ lading: 'huif' }, 'Z'), kar({ lading: 'huif' }, 'ZW')],
-    [kar({ lading: 'huif' }, 'W'), kar({ lading: 'huif' }, 'NO'), kar({ lading: 'huif', houding: 'rijden', fase: 0.5 }, 'O')],
+    [kar({ lading: 'huif' }, 'W'), kar({ lading: 'huif' }, 'NO'), kar({ lading: 'huif', houding: 'lopen', fase: 0.5 }, 'O')],
     [kar({ lading: 'spullen' }, 'ZO'), kar({ lading: 'hout' }, 'ZO'), kar({ lading: 'stenen' }, 'ZO')],
     [kar({ lading: 'zakken' }, 'ZO'), kar({ lading: 'leeg' }, 'ZO'), kar({ lading: 'hout', kleur: 1 }, 'ZW')],
   ];
@@ -411,13 +419,13 @@ function proef() {
   console.log(`uit/ossenkar-proef.png (${plaat.b}×${plaat.h}); cel ${CEL.join('×')}, anker ${ANKER.join(',')}`);
   if (!past) console.log('LET OP: een beeld raakt de rand van zijn cel');
   // de rijdende huifkar, met de grond eronder als kleur, twee keer vergroot
-  const H = HOUDINGEN.rijden;
+  const H = HOUDINGEN.lopen;
   const beelden = [];
-  for (let i = 0; i < H.beelden; i++) beelden.push(vergroot(beeld({ lading: 'huif', houding: 'rijden', fase: i / H.beelden }, 'ZW'), 2));
+  for (let i = 0; i < H.beelden; i++) beelden.push(vergroot(beeld({ lading: 'huif', houding: 'lopen', fase: i / H.beelden }, 'ZW'), 2));
   fs.writeFileSync(path.join(uit, 'ossenkar-rijden.png'), apng(beelden, { fps: H.fps, achtergrond: '#5e6a44' }));
   console.log(`uit/ossenkar-rijden.png (${H.beelden} beelden, ${H.fps} per seconde)`);
 }
 
-module.exports = { kar, os, tekenOssenkar, beeld, HOUDINGEN, LADINGEN, SNELHEID, WIEL, BAK, HUIF, OS_Y, MIDDEN, CEL, ANKER };
+module.exports = { kar, os, tekenOssenkar, beeld, kader, HOUDINGEN, LADINGEN, VELLEN, SNELHEID, WIEL, BAK, HUIF, OS_Y, MIDDEN, CEL, ANKER };
 
 if (require.main === module) proef();
