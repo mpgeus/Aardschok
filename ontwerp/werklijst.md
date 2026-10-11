@@ -13,8 +13,9 @@ onderwerp, niet hier. Wie aan een punt begint, zet er "**Bezig in sessie `<branc
 **Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en
 drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **B, 1c tot 1e zijn af** (11
 okt): het bouwmenu, verhuizen uit het kamp, het bouwbereik, het huis van de schout, meebouwen, bouwen in het bos, en
-boeren uit het niets (de boerderij, de velden die jij legt, wijn is eten). **Het volgende punt is B, 1f: een jaar zonder
-fouten.** Ronde 2 van het snoeien volgt na 1f, dan het hele eiland (B2), de afwisseling (B3), en ronde 3 na C.
+boeren uit het niets (de boerderij, de velden die jij legt, wijn is eten). **Het spel is Engels** (11 okt, G). **Het
+volgende punt is B, 1f: een jaar zonder fouten.** Ronde 2 van het snoeien volgt na 1f, dan het hele eiland (B2), de
+afwisseling (B3), en ronde 3 na C.
 
 **Wacht op Marcel:**
 - **1c tot 1e bekijken:** Spelregels, "Het begin" op "Leeg", en dan Nieuw spel (of in de console
@@ -26,6 +27,11 @@ fouten.** Ronde 2 van het snoeien volgt na 1f, dan het hele eiland (B2), de afwi
   en een akker die vóór bloeimaand af is, wordt nog gezaaid. Te kiezen in de werkbank ("Meebouwen" en "Boeren uit het
   niets"): twee werkdagen per bouwdag, vier bouwers per plaats, een kwart werkdag per boom, een veld van 12 tot 40
   tegels binnen 8 tegels van de boerderij, en wat een tegel wijn voedt (`wijnAlsGraan`, 0,4).
+- **Het Engels lezen** (11 okt): de woorden die de agents kozen staan in `engels.md`, met per deel een tabel "Erbij in
+  deel …"; de keuzes om na te kijken: *the innkeeper*, *the moneylender*, *the tradesmen* (de ondernemers), *rent* (de
+  pacht), *the ledger* (het rekenboek), *Martinmas*, *Good day* (het afscheid van een boer), de oorlogsplaatsen Crookwick
+  en Eastwold, en de namen (Nicholas, Alice, Gerard, Kate, Walter; Heathside). Een woord veranderen is één regel in
+  `engels.md` en een zoekslag.
 - **Het doel van de demo.** CLAUDE.md zegt nog "je wint als iedereen een jaar super gelukkig is"; dat is het oude spel.
   Voorstel van Claude (11 okt): de demo is het eerste jaar: je komt met de kar, bouwt, haalt de eerste winter, en het
   eind is het eerste gevecht (de mannen van de heer of rovers), zodat een speler in Next Fest de economie, het gevecht
@@ -111,25 +117,6 @@ het graan vraagt", de schandpaal, de heervaart en de twee bazen.
 
 ## G. Naar Steam (`commercieel.md`)
 
-- Engels (vraag 147, stap 2: alle tekst omzetten). **Marcel, 11 okt: "Alles gelijk in het Engels maken. Nederlands mag
-  je mee stoppen"**: nu, vóór 1f. Gemeten op 11 okt: zo'n 2.500 teksten, 22.000 woorden, het meest in `opties.js`,
-  `gesprekken.js`, `hud.js` en `gebouwen.js`; 90 zinnen waren al om. Het voorstel van 10 okt (sessie
-  `ccr-99e707bb-sla81d`, `git show 828bd776`) kreeg geen antwoord; deze sessie neemt het over. Marcel koos (11 okt):
-  alleen wat de speler ziet, het Nederlands weg maar `T.t` blijft, gewone maanden en Engelse namen, en elk deel naar
-  `main` zodra de toetsen groen zijn (`commercieel.md`, vraag 147). **Bezig in sessie `ccr-fe45ba8f-v51u8s`** (11 okt):
-  het omzetten, in delen. De woorden, de toon en de hulpjes: `ontwerp/engels.md`. Af: deel 0 (het Nederlands eruit, de
-  maanden, de namen), de namen van gebouwen, waren en natuur, en deel 1 en 2; van de andere delen al de zinnen bij de
-  muis op een veld of dier (`verkennen`), het bouwverzoek (`gesprekken`, `voorvallen`) en het jaarverslag (`einde`). De
-  delen, elk door een agent met eigen bestanden: (1)
-  de wensen en de raad (`wensen`, `verzoeken`, `ondernemers`, `raad`, `ochtendrapport`, `treden`, `behoeften`); (2) de
-  gebouwen en het land (`gebouwen`, `erven`, `herberg`, `bos`, `bouwstijl`, `wijngaard`, `akkers`, `vee`, `beesten`,
-  `markt`, `paden`); (3) het scherm (`hud`, `tafel`, `ui`, `huisbriefje`, `dialoog`, `index.html`, wat de speler ziet in
-  `main`, `verkennen`, `landkaart`, `land`); (4) de heer (`heer`, `brieven`, `grillen`, `heervaart`, `bazen`, `einde`,
-  `wetten`, `wettenmenu`, `feesten`); (5) het dorp dat spreekt (`gesprekken`, `gesprek`, `voorvallen`, `raadsman`,
-  `raadsmanvenster`, `quest`, `quests`, `praatje`, `mensen`, `boeren`); (6) het werk en de rest (`veldwerk`, `weer`,
-  `handel`, `bode`, `graanschuur`, `rovers`, `gevecht`, `brand`, `koorts`, `leven`, `bewoners`, `begin`, `bouwen`,
-  `boerderij`, `ontginnen`, `dorp`, `opslaan`); (7) de spelregels (`opties`). Een bestand dat helemaal om is, staat in
-  `OMGEZET` (`test/taal.test.cjs`).
 - Een proefversie voor Marcels 4K-scherm en een eerste tester (`npm run proefversie`), na C.
 - Het geluid (vraag 145, 2), zodra de sleutel er is.
 - Januari 2027: de Steam-pagina (een capsule, vijf plaatjes, een trailer van een minuut); de naam is er (Tithebreaker).
@@ -138,6 +125,12 @@ het graan vraagt", de schandpaal, de heervaart en de twee bazen.
   schrijven voor de nieuwe richting, als B en C er staan.
 
 ## Af (sinds 11 okt)
+
+- Engels (vraag 147, stap 2; Marcel: "Alles gelijk in het Engels maken. Nederlands mag je mee stoppen", en op de vragen:
+  alleen wat de speler ziet, het Nederlands weg maar `T.t` blijft, gewone maanden en Engelse namen): alle spelteksten in
+  `js/` zijn Engels, zo'n 3.000 zinnen, in zeven delen door agents; `taal/nl.js` is weg, de toetsen spelen in het
+  Engels, en `test/taal.test.cjs` kijkt elk bestand na. De woorden en de toon: `engels.md`. De speeltest daarna: negen
+  spellen, nul fouten.
 
 - Boeren uit het niets (vraag 152, 1e; Marcel: "A2", "Inderdaad met b2", "Ja dat is goed. De bouwers pakken het op", "De
   karakters zetten we even opzij", "2 ja"): een gezin trekt in de boerderij en de man is boer, de akker en de wijngaard

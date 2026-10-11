@@ -12,45 +12,9 @@ const T = laad.spel();
 const teksten = require('../gereedschap/teksten.cjs');
 const WORTEL = path.join(__dirname, '..');
 
-// De bestanden waarin alle tekst al door T.t gaat. Stap 2 van vraag 147 zet ze er één voor één bij, tot het heel js/ is.
-const OMGEZET = [
-  'js/menu.js',
-  'js/hud.js',
-  'js/tafel.js',
-  'js/ui.js',
-  'js/huisbriefje.js',
-  'js/dialoog.js',
-  'js/verkennen.js',
-  'js/landkaart.js',
-  'js/land.js',
-  'js/main.js',
-  'js/gebouwen.js', 'js/erven.js', 'js/herberg.js', 'js/bos.js', 'js/bouwstijl.js', 'js/wijngaard.js', 'js/akkers.js', 'js/vee.js',
-  'js/beesten.js', 'js/markt.js', 'js/paden.js',
-  'js/begin.js', 'js/bewoners.js', 'js/bode.js', 'js/brand.js', 'js/dag.js', 'js/eiland.js', 'js/gebied.js', 'js/gevecht.js', 'js/gl.js',
-  'js/graanschuur.js', 'js/handel.js', 'js/kaart.js', 'js/koorts.js', 'js/leven.js', 'js/maker.js', 'js/naam.js', 'js/ontginnen.js',
-  'js/opslaan.js', 'js/rovers.js', 'js/sprites.js', 'js/taal.js', 'js/tekenen.js', 'js/veldwerk.js', 'js/weer.js', 'js/wereld.js',
-  'js/wensen.js', 'js/verzoeken.js', 'js/ondernemers.js', 'js/raad.js', 'js/ochtendrapport.js', 'js/treden.js', 'js/behoeften.js',
-  'js/heer.js',
-  'js/brieven.js',
-  'js/grillen.js',
-  'js/heervaart.js',
-  'js/bazen.js',
-  'js/einde.js',
-  'js/wetten.js',
-  'js/wettenmenu.js',
-  'js/feesten.js',
-  'js/gesprekken.js',
-  'js/gesprek.js',
-  'js/voorvallen.js',
-  'js/raadsman.js',
-  'js/raadsmanvenster.js',
-  'js/quest.js',
-  'js/quests.js',
-  'js/praatje.js',
-  'js/mensen.js',
-  'js/boeren.js',
-  'js/opties.js',
-];
+// Elk bestand in js/: alle tekst die de speler ziet, gaat door T.t (vraag 147, stap 2, af op 11 okt). Tot dan stond hier een
+// lijst die per deel groeide; nu kijkt de toets elk bestand na, ook een nieuw.
+const OMGEZET = fs.readdirSync(path.join(WORTEL, 'js')).filter((f) => f.endsWith('.js')).map((f) => `js/${f}`);
 
 const leesBestand = (f) => fs.readFileSync(path.join(WORTEL, f), 'utf8').split('\r\n').join('\n');
 
@@ -165,7 +129,7 @@ test('een bladzijde die regels uit js/ laadt, laadt eerst js/taal.js', () => {
   }
 });
 
-test('in een omgezet bestand staat geen tekst meer buiten T.t', () => {
+test('in geen bestand in js/ staat tekst voor de speler buiten T.t', () => {
   const los = OMGEZET.flatMap((f) => teksten.losseTeksten(f));
   assert.deepEqual(
     los.map((l) => `${l.bestand}:${l.regel} ${l.tekst}`),

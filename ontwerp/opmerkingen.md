@@ -11,6 +11,13 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 - **Het lege begin na 1c** (11 okt, vraag 152, 1c): het venster Spelregels laat bij "Huizen" en "Wie bouwt" nog hun eigen
   keuze zien, terwijl "Leeg" ze op "Jij" zet; dat gaat weg in ronde 2 van het snoeien, als die twee spelregels eruit gaan.
+- **Na het Engels, wat opviel** (11 okt, vraag 147, stap 2). Na te lopen:
+  - De uitleg van de spelregel "The levy" zegt nog dat vrijkopen de heer argwanend maakt; de argwaan is op 11 okt
+    eruit gegaan (optie 1), en vrijkopen kost nu gunst per goud. Getrouw vertaald, niet verbeterd.
+  - De situaties in `js/gesprekken.js` (bij welke stand een gesprek speelt) blijven Nederlands: alleen de schrijver ziet
+    ze. De gespreksschrijver toont ze zo.
+  - Een paar zinnen plakken nog een stukje aan (`{wie} to your side{wapens}` bij de rovers, en bij het graan): voor het
+    Engels goed, maar een vertaler ziet daar geen hele zin.
 - **Boeren uit het niets, wat opviel** (11 okt, vraag 152, 1e). Na te lopen:
   - Een wijngaard draagt al in het jaar dat hij geplant is volle trossen; echte ranken dragen pas na een paar jaar. Zo
     blijft het eenvoudig; na 1f zien we of wijn zo te makkelijk is.

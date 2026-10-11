@@ -11,7 +11,7 @@ isometrisch (Mystic Towers), de HD-pixel art komt uit code, rijk aan details.
 Code en commentaar zijn Nederlands, zoals in Marcels Planner. **De spelteksten zijn Engels, zonder Nederlands** (vraag 147;
 Marcel, 11 okt: "Nederlands mag je mee stoppen"; de schout heet *reeve*): een zin die de speler ziet, is
 `T.t('Engelse zin met {wie}', { wie })` (`js/taal.js`), de haak voor een latere vertaling, en daarna `npm run teksten`;
-geen nieuwe zinnen in `taal/nl.js`, dat eruit gaat. Wat nog niet om is, staat nog in het Nederlands (werklijst, G).
+een zin uit gegevens die een bewerker terugschrijft (de gesprekken), toont `T.tGegevens`. De woorden: `ontwerp/engels.md`.
 
 ## Waar de kennis staat: lees alleen wat je nodig hebt
 
