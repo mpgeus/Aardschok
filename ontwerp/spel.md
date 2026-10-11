@@ -82,6 +82,23 @@ weg (Marcel: "Per tent"); met de laatste tent gaat het kampvuur uit, en de kar b
 woont, komt er geen nieuw gezin over de weg. Nog niet: het bereik, het huis van de schout in het bouwmenu en meebouwen
 (1d), en boeren worden (1e); zonder bouwen haalt het kamp de winter niet.
 
+**Het plan voor 1d** (voorstel van Claude, 11 okt; Marcel: "a1, b ja, c ja, d ja, e ja"). Waarom eerst het bos: op negen
+van de dertien gemeten landen past er binnen 30 tegels van het plein geen hut, want het bos staat er vlak omheen
+(`opmerkingen.md`). a, **bouwen in het bos**: je zet een gebouw ook op bomen; de bouwers rooien eerst de voet en het
+looppad, en dan rijst het op. Een boom geeft 10 hout, wie hem ook omhakt (a1, het besluit van 6 okt); dat is zo'n 350 hout
+op de plek van een hut, dus in C wordt het een stapel die de ossenkar ophaalt, en na 1f meten we of het te veel is.
+Binnen het bereik kost rooien geen gunst: de heer stuurde je naar zijn wildernis. b, **het bereik**: je bouwt binnen 12
+tegels van het plein en van het huis van de schout (later ook van elke opslag, C); te zien als je bouwt, als een zachte
+gloed op de grond, zonder lijn ("Ik wil geen 'grens'"); het groeit niet met de trede. c, **het huis van de schout** staat
+één keer in het bouwmenu (zo groot als een huis, 16 hout en 4 goud); is het af, dan verhuist de schout met zijn gezin
+erin, gaat zijn tent weg, wordt de huifkar de ossenkar, en is het de eerste opslag, met zijn eigen bereik. Geen gezin
+uit het kamp trekt erin. De 50 hout uit de kar zijn het huis, twee hutten en een houthakker. d, **meebouwen**: een
+gebouw vraagt zijn bouwtijd keer 2 werkdagen; elke bouwer doet er één per dag, en zonder bouwers staat het stil. Elke
+nacht gaat wie kan werken en geen werk heeft naar een bouwplaats (zoals de dagloners), hooguit 4 per plaats, in de
+volgorde waarin je ze neerzette; elke man in een werkplaats is dus een bouwer minder. Alleen met "Leeg". e, **de akkers
+bij een boerderij gaan naar 1e**, met de keuze van de boerderij: akkerbouwer of wijnboer (Marcel: "Zoals bij Knights and
+Merchants").
+
 ## Een nieuwe richting (Marcel, 28 sep 2026)
 
 **Zo staat het nu** (28 sep tot en met 5 okt): besloten; wat er sindsdien van gebouwd is, staat bij elk onderwerp. Marcel koos op vier vragen van Claude
