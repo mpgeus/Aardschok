@@ -200,7 +200,9 @@ const rasterAnker = (v) => v.anker || (v.tileoffset
 
 // `vel` is het raster zoals een bouwfunctie hierboven het samenstelde, `beschrijving` wat erbij hoort (tegelB, tegelH,
 // kolommen, tiles). Na het inpakken staat in de beschrijving de maat van het ingepakte vel, en per tegel zijn cel en anker.
-function schrijfVel(vel, beschrijving) {
+// `losse` (een vel met een bestand per tekening, bouwLosVel): per tegel zijn eigen tekening al los, zodat er geen raster
+// van alle tekeningen samen nodig is.
+function schrijfVel(vel, beschrijving, losse = null) {
   beschrijving.anker = rasterAnker(beschrijving);
   const { tegelB: cb, tegelH: ch, kolommen, anker } = beschrijving;
   const tegels = beschrijving.tiles.map((t, i) => (t.naam ? { cel: [(i % kolommen) * cb, Math.floor(i / kolommen) * ch, cb, ch], anker } : null));
@@ -213,7 +215,7 @@ function schrijfVel(vel, beschrijving) {
     fs.rmSync(map, { recursive: true, force: true });
     fs.mkdirSync(map, { recursive: true });
     fs.rmSync(path.join(TEGELS, beschrijving.bestand), { force: true });
-    const los = I.snijLos(I.beeldVanPlaat(vel), tegels);
+    const los = losse || I.snijLos(I.beeldVanPlaat(vel), tegels);
     beschrijving.ingepakt = true;
     beschrijving.perTekening = true;
     beschrijving.tiles.forEach((t, i) => {
@@ -796,10 +798,16 @@ function bouwLosVel(veldNaam, items, notitie) {
   const ch = boven + onder;
   const geordend = vasteVolgordeEnCapaciteit(veldNaam, items.map((i) => ({ key: i.naam, ...i })), capaciteit, kolommen);
   const rijen = Math.ceil(capaciteit / kolommen);
-  const vel = new K.Plaat(cb * kolommen, ch * rijen);
-  geordend.forEach((it, i) => { if (it) vel.plak(it.plaat, (i % kolommen) * cb + links - it.anker[0], Math.floor(i / kolommen) * ch + boven - it.anker[1]); });
+  // Een vel met een bestand per tekening (de huizen) snijdt elke tekening los uit zijn eigen plaat, op dezelfde manier
+  // als uit het raster (I.snijLos): het raster van alle huizen samen werd met 1120 vakken zo groot (vraag 144: elk huis
+  // jong en oud) dat het niet meer klopte boven de twee GB.
+  const losse = PER_TEKENING.has(veldNaam)
+    ? geordend.map((it) => it && I.snijLos(I.beeldVanPlaat(it.plaat), [{ cel: [0, 0, it.plaat.b, it.plaat.h], anker: [it.anker[0], it.anker[1] + 16] }])[0])
+    : null;
+  const vel = losse ? null : new K.Plaat(cb * kolommen, ch * rijen);
+  if (vel) geordend.forEach((it, i) => { if (it) vel.plak(it.plaat, (i % kolommen) * cb + links - it.anker[0], Math.floor(i / kolommen) * ch + boven - it.anker[1]); });
   const beschrijving = {
-    naam: veldNaam, bestand: `${veldNaam}.png`, breedte: vel.b, hoogte: vel.h,
+    naam: veldNaam, bestand: `${veldNaam}.png`, breedte: cb * kolommen, hoogte: ch * rijen,
     tegelB: cb, tegelH: ch, aantal: geordend.length, kolommen,
     // Tiled se "bottom" zet het onderste midden van de cel op de tegel; (links, boven) is het punt
     // waarop elke tekening is opgehangen (haar achterste voethoek), dus dat corrigeren we daarheen
@@ -826,7 +834,7 @@ function bouwLosVel(veldNaam, items, notitie) {
       ...(it.stijl ? { stijl: it.stijl } : {}),
     } : { naam: null, vast: false })),
   };
-  schrijfVel(vel, beschrijving);
+  schrijfVel(vel, beschrijving, losse);
   console.log(`${velVerslag(beschrijving)}  (${items.length} echte tegels van ${capaciteit})`);
   return beschrijving;
 }

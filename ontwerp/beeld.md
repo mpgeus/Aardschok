@@ -1184,7 +1184,9 @@ niets past, wijkt de zwakke grond voor strand (naast de zee) of gras. Golven die
   dezelfde render als het huis: wat naar boven kijkt (de normaal van elke pixel), met een rafelige grens uit ruis, wit uit
   de ramp 'baard' zo licht als het materiaal eronder, in drie lagen (een beetje: plekken op het dak; half; dik: het hele
   dak, behalve de onderkant van de lagen riet), elk een eigen plaatje over het huis; het spel kiest de laag naar de sneeuw
-  op de grond. Een oud huis draagt de sneeuw van zijn jonge (dezelfde vorm). **De brandfasen in het spel:** terwijl het
+  op de grond. Alleen op het dak, de schoorsteen, het afdak en wat uitsteekt, niet op de muren: op een blokhut werd de
+  bovenkant van elke stam anders een witte streep. Een laag is zo groot als het dak, en de browser houdt alleen de laag
+  vast die er ligt (een bestand per laag). Een oud huis draagt de sneeuw van zijn jonge (dezelfde vorm). **De brandfasen in het spel:** terwijl het
   brandt eerst het huis, dan geschroeid en het dak dat valt; afgebrand binnengestort, ingestort (twee varianten) en
   opgeruimd; de verkoolde bouwfase alleen nog voor wat niet van de huizenbouwer is. **Open:** de toren van de kapel is
   boven de eerste band bruin in plaats van in de kalk van de stijl (in het spel nu grijs; het zit in de kalk van de toren

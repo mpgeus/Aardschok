@@ -86,7 +86,12 @@ test('wat er bij het begin al staat, is oud; wat je bouwt, is jong en na twee ja
   for (const g of huizen) assert.ok(!g.tekening.endsWith(HZ.OUD));
 
   T.zetVoorraad(D, 'hout', 200);
-  const r = T.plaatsGebouw(D, 'hut', 48, 50);
+  // de eerste plek waar een hut past
+  let r = null;
+  const w = D.wereld;
+  for (let y = 4; y < w.tegels.length - 4 && !(r && r.gelukt); y += 2) {
+    for (let x = 4; x < w.tegels[0].length - 4 && !(r && r.gelukt); x += 2) r = T.plaatsGebouw(D, 'hut', x, y);
+  }
   assert.ok(r.gelukt, r.reden);
   const hut = D.gebouwen[D.gebouwen.length - 1];
   let d = dag;
@@ -134,10 +139,10 @@ test('de sneeuw op de daken: de laag naar de sneeuw op de grond, en elke jonge t
   assert.equal(T.dakSneeuwLaag(1), 2);
   for (const t of tegels()) {
     if (!t || !t.naam || t.naam.endsWith(HZ.OUD)) continue;
-    const s = T.DAKSNEEUW.lagen[t.naam];
-    assert.ok(s, `${t.naam}: geen sneeuw op het dak (npm run tiled huizen)`);
-    assert.equal(s.lagen.length, HZ.SNEEUW_LAGEN.length);
-    assert.ok(s.lagen[s.lagen.length - 1], `${t.naam}: geen dikke sneeuw`);
+    const lagen = T.DAKSNEEUW.lagen[t.naam];
+    assert.ok(lagen, `${t.naam}: geen sneeuw op het dak (npm run tiled huizen)`);
+    assert.equal(lagen.length, HZ.SNEEUW_LAGEN.length);
+    assert.ok(lagen[lagen.length - 1], `${t.naam}: geen dikke sneeuw`);
   }
 });
 

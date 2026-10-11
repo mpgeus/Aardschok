@@ -571,15 +571,15 @@
   // ---------------------------------------------------------------- sneeuw op de daken (tegels/daksneeuw/<naam>.png, daksneeuw.js)
   //
   // De sneeuw op een huis van de huizenbouwer (vraag 144, 4b): drie lagen per jonge tekening, een beetje, half en dik
-  // (gereedschap/pixelart/huizen.cjs, schrijfDaksneeuw), op een eigen vel dat pas laadt als er sneeuw ligt. Tot het er is,
-  // of zonder sneeuw voor deze tekening, geeft dit null. Het anker is dat van het huis: js/tekenen.js legt hem erover.
+  // (gereedschap/pixelart/huizen.cjs, schrijfDaksneeuw), elk een eigen plaatje dat pas laadt als die laag er ligt. Tot het
+  // er is, of zonder sneeuw voor deze tekening, geeft dit null. Het anker is dat van het huis: js/tekenen.js legt hem erover.
   S.daksneeuw = function (naam, laag) {
-    const g = T.DAKSNEEUW && naam && T.DAKSNEEUW.lagen[naam];
-    const c = g && g.lagen[laag];
+    const lagen = T.DAKSNEEUW && naam && T.DAKSNEEUW.lagen[naam];
+    const c = lagen && lagen[laag];
     if (!c) return null;
-    const pad = TEGELMAP + g.bestand;
+    const pad = TEGELMAP + c.bestand;
     if (!laadAlsNodig(pad)) return null;
-    return onthoud(`daksneeuw,${naam},${laag}`, () => stuk(pad, c.x, c.y, c.b, c.h, c.anker));
+    return onthoud(`daksneeuw,${naam},${laag}`, () => stuk(pad, 0, 0, c.b, c.h, c.anker));
   };
 
   // ---------------------------------------------------------------- brandfasen (tegels/brandfasen/<naam>.png, brandfasen.js)
