@@ -475,7 +475,7 @@
     tekenWeides(ctx, S, vak);
     // Wat ui is op het doek, niet in de fotomodus (js/main.js, werklijst vraag 146, e): het raster, de tegel onder de
     // muis en het pad, een gebouw aan de muis, de plek van een verzoek, het spoor, de randen van het ontginnen en de
-    // jacht, de tekens bij de deur, de oogjes, de zwevende tekst, en boven een wezen zijn uitroepteken en levensbalk.
+    // jacht, de tekens bij de deur, de zwevende tekst, en boven een wezen zijn uitroepteken en levensbalk.
     // De wolkjes, de lantaarn en de ogen van de wolven blijven: die horen bij de wereld (Marcel, 10 okt).
     if (!S.foto) {
       tekenRaster(ctx, S);
@@ -636,10 +636,7 @@
     for (const r of ramen) vulRamen(ctx, S, r);
     tekenOgen(ctx, S);
     tekenVuur(ctx, S);
-    if (!S.foto) {
-      tekenHuisTekens(ctx, S);
-      tekenOogjes(ctx, S);
-    }
+    if (!S.foto) tekenHuisTekens(ctx, S);
     tekenWolkjes(ctx, S);
     if (!S.foto) tekenEffecten(ctx, S);
     ctx.restore();
@@ -3186,7 +3183,7 @@
   }
 
   // Het teken bij de deur van een huis dat iets mist (2c, werklijst vraag 100; js/wensen.js, T.tekenVanHuis): een
-  // papiertje aan een spijker met wat het als eerste mist. Na de nacht getekend, zoals het oogje, zodat je het ook in het
+  // papiertje aan een spijker met wat het als eerste mist. Na de nacht getekend, zodat je het ook in het
   // donker ziet. Alleen in het dorp dat hier ligt; zonder de kunst niet, en het gereedschap kent de wensen niet.
   function tekenHuisTekens(ctx, S) {
     const D = T.dorpHier(S);
@@ -3201,43 +3198,9 @@
     }
   }
 
-  // Het oogje boven een getuige (js/zien.js, T.werdGezien): hij zag je iets wegzetten of terughalen
-  // (Marcel, vraag 40, A: je ziet het meteen). Na de nacht getekend, zodat je het ook in het donker
-  // ziet, en het vervaagt in zijn laatste seconde.
-  function tekenOogjes(ctx, S) {
-    for (const e of S.wereld.wezens) {
-      const over = (e.oogje || 0) - S.tijd;
-      if (over <= 0 || e.binnen) continue;
-      const p = opGrond(e.x, e.y);
-      const hoogte = metSprites() ? T.sprites.hoogte(e.soort) : 52;
-      const cx = p.x;
-      const cy = p.y - hoogte - 16 - Math.abs(Math.sin(S.tijd * 3)) * 2;
-      ctx.save();
-      ctx.globalAlpha = Math.min(1, over);
-      ctx.lineWidth = 3;
-      ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
-      const amandel = () => {
-        ctx.beginPath();
-        ctx.moveTo(cx - 10, cy);
-        ctx.quadraticCurveTo(cx, cy - 9, cx + 10, cy);
-        ctx.quadraticCurveTo(cx, cy + 9, cx - 10, cy);
-        ctx.closePath();
-      };
-      amandel();
-      ctx.stroke();
-      ctx.fillStyle = '#f4ecd6';
-      ctx.fill();
-      ctx.fillStyle = '#3a2a1a';
-      ctx.beginPath();
-      ctx.arc(cx, cy, 3.6, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
-    }
-  }
-
   // Het wolkje boven wie een praatje maakt (js/praatje.js; werklijst vraag 120, b; Marcel, 4 okt: "120 a b c ja"): leeg,
   // met drie puntjes, om de beurt boven wie er praat, met een stilte tussen de beurten. Waar ze het over hebben, komt er
-  // later in (met de mensen aan het werk). Na de nacht getekend, zoals het oogje, zodat je het ook in het donker ziet. Wie
+  // later in (met de mensen aan het werk). Na de nacht getekend, zodat je het ook in het donker ziet. Wie
   // er praat, komt uit de klok van het scherm en het zaad van het groepje: het is geen spelstaat. Het gereedschap kent
   // de praatjes niet.
   const BEURT = 2.2; // seconden per beurt, op het scherm

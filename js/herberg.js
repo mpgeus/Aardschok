@@ -206,9 +206,8 @@
   // Elke nacht de avond verrekenen (T.tikGebouwenDag, js/gebouwen.js, aan het begin van dag `dag`): wie
   // er gisteravond was, dronk zijn bier en onthoudt dat (p.herbergDag, voor T.herbergGezelligheid).
   // En wat er gezegd werd: de roddelaar vertelde wat er in zijn kelder ligt (g.verteld op die kelder,
-  // js/verstoppen.js), en wat hij de schout zag doen (T.getuigenVertellen, js/zien.js). De
-  // herbergierster weet het de volgende dag (haar gesprek in js/gesprekken.js): de vlaggen
-  // herbergGasten, herbergRoddel, herbergGetuige en herbergDroog, en de namen in S.herberg.gisteravond.
+  // js/verstoppen.js). De herbergierster weet het de volgende dag (haar gesprek in js/gesprekken.js): de vlaggen
+  // herbergGasten, herbergRoddel en herbergDroog, en de namen in S.herberg.gisteravond.
   T.tikHerbergDag = function (D, dag) {
     if (!T.herbergVan(D) || !D.bewoners) return;
     const gisteren = Math.floor(dag) - 1;
@@ -219,14 +218,12 @@
     const bijHaar = gasten.filter((p, i) => !waar[i]);
     const roddel = gasten.find(vertelt) || null;
     const haarRoddel = roddel && bijHaar.includes(roddel) ? roddel : null;
-    const gezien = T.getuigenVertellen(D, gasten, gisteren);
     const H = D.herberg || (D.herberg = {});
-    H.gisteravond = { dag: gisteren, gasten: bijHaar.length, namen: bijHaar.map(T.naamVanBewoner), roddel: haarRoddel ? T.naamVanBewoner(haarRoddel) : null, gezien };
+    H.gisteravond = { dag: gisteren, gasten: bijHaar.length, namen: bijHaar.map(T.naamVanBewoner), roddel: haarRoddel ? T.naamVanBewoner(haarRoddel) : null };
     if (T.zetVlag) {
-      for (const v of ['herbergGasten', 'herbergRoddel', 'herbergGetuige', 'herbergDroog']) T.wisVlag(D, v);
+      for (const v of ['herbergGasten', 'herbergRoddel', 'herbergDroog']) T.wisVlag(D, v);
       if (bijHaar.length) T.zetVlag(D, 'herbergGasten');
       if (haarRoddel) T.zetVlag(D, 'herbergRoddel');
-      if (gezien.length) T.zetVlag(D, 'herbergGetuige');
       if (droog) T.zetVlag(D, 'herbergDroog');
     }
     if (roddel) roddel.huis.verteld = gisteren;

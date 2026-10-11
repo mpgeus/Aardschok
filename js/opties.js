@@ -387,18 +387,6 @@
           uitleg: 'Wie op het plein speelt, verdwijnt achter een huis, net als overal in het dorp.' },
       ],
     },
-    // Het zichtveld (27 sep; werklijst punt 3, vraag 40, A: "zie je meteen dat iemand je zag, of pas
-    // later?"; js/zien.js).
-    {
-      id: 'getuigen', naam: 'Wie je ziet', standaard: 'meteen',
-      uitleg: 'Of je weet wie er kijkt als je iets wegzet of terughaalt.',
-      keuzes: [
-        { id: 'meteen', naam: 'Meteen', zet: { 'ZIEN_INSTELLINGEN.meteen': true },
-          uitleg: 'Het venster zegt wie je ziet, en wie het zag, krijgt een oogje boven zijn hoofd.' },
-        { id: 'later', naam: 'Pas later', zet: { 'ZIEN_INSTELLINGEN.meteen': false },
-          uitleg: 'Je weet niet wie er keek. Je hoort het pas als het rondverteld is: van de herbergierster, of als de soldaten het vinden.' },
-      ],
-    },
     // De schaduwen van de zon (Marcel, 4 okt, werklijst vraag 125, B: "B graag", en "A ja, B goed zo"; js/tekenen.js,
     // js/gl.js).
     {
@@ -421,17 +409,6 @@
           uitleg: 'Het land is vlak, zoals vóór 7 okt 2026.' },
         { id: 'heuvels', naam: 'Heuvels', zet: { 'HOOGTE_INSTELLINGEN.aan': true },
           uitleg: 'Hoge heuvels in het wilde land, een zachte glooiing rond het dorp, en een richel met een rotswand bij de rotsen. Niemand loopt door een rotswand, op steile grond wordt niet gebouwd, en een heuvel houdt het zicht tegen en dekt af wat erachter staat.' },
-      ],
-    },
-    // De lantaarn van de schout (Marcel, 4 okt, werklijst vraag 125, C: "ook spel. Voegt leuke elementen toe"; js/zien.js).
-    {
-      id: 'lantaarn', naam: 'De lantaarn van de schout', standaard: 'spel',
-      uitleg: "'s Avonds en 's nachts draagt de schout buiten een lantaarn. Sluipen (S) dooft hem.",
-      keuzes: [
-        { id: 'spel', naam: 'Ook spel', zet: { 'ZIEN_INSTELLINGEN.lantaarn.zichtbaar': true },
-          uitleg: 'Met je lantaarn aan zien ze je in het donker van ver. Wie iets wil verstoppen, sluipt.' },
-        { id: 'beeld', naam: 'Alleen beeld', zet: { 'ZIEN_INSTELLINGEN.lantaarn.zichtbaar': false },
-          uitleg: 'De lantaarn geeft licht, maar wie je ziet, hangt alleen af van de lantaarns en de herberg, zoals vóór 4 okt 2026.' },
       ],
     },
     // Het dorp bouwt zelf (Marcel, 28 sep, werklijst vraag 52: "C ja"; js/erven.js).
@@ -835,7 +812,7 @@
     { naam: 'Het bos', blok: 'BOS_INSTELLINGEN' },
     { naam: 'Het vee', blok: 'VEE_INSTELLINGEN' },
     { naam: 'De doorkijk', blok: 'DOORKIJK_INSTELLINGEN' },
-    { naam: 'Het zichtveld', blok: 'ZIEN_INSTELLINGEN' },
+    { naam: 'Het licht in het dorp', blok: 'ZIEN_INSTELLINGEN' },
   ];
 
   // ---------------------------------------------------------------------------------------------

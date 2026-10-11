@@ -141,7 +141,7 @@
   // (e.vertrekt, S.bewoners.vertrekken).
 
   // Hoe hij heet: een boer zoals T.MENSEN (en de spelregels) het zeggen, de schout "de schout". Ook
-  // voor de herberg (js/herberg.js) en de getuigen (js/zien.js).
+  // voor de herberg (js/herberg.js).
   const naamVan = (p) => (p.schout ? 'de schout' : p.wie ? T.naamVanMens(p.wie) : p.naam);
   T.naamVanBewoner = naamVan;
   // Hoort hij bij het gezin van de schout?
