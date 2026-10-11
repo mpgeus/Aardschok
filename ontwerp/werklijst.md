@@ -25,9 +25,9 @@ staat in `main` (10 okt): arm in een hut, deftig in een stenen huis met laken; d
 mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voor onze poppetjes. de rest kan weg").
 
 **Wacht op Marcel:**
-- **Gameplay als kern, en het verstoppen eruit** (vraag 151, 11 okt; Marcel: "we hebben niks"): welke kern (A de schout
-  is maar één mens, B rechtspraak, C de heer als klok), en hoe ver het verstoppen eruit gaat (a de kelders, b heel "arm
-  lijken"). Dan eerst het eerste uur op papier.
+- **Gameplay als kern, en het verstoppen eruit** (vraag 151, 11 okt; Marcel: "we hebben niks"): het verstoppen en heel
+  "arm lijken" gaan eruit, de heer blijft (Marcel: "alles gaat eruit"); het plan om het weg te halen wacht op Marcel.
+  Dan welke kern (A de schout is maar één mens, B rechtspraak, C de heer als klok), en eerst het eerste uur op papier.
 - Het geluid (vraag 145, 2): de sleutel `FREESOUND_KEY` in de omgeving en de domeinen van Freesound erbij, zoals
   beschreven bij vraag 145; dan maakt een nieuwe sessie het.
 - Vraag 145 laten zien: is het dorp nu minder "saai"?
@@ -7669,7 +7669,10 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
 
 151. **Gameplay als kern, en het verstoppen eruit** (Marcel, 11 okt: "Ik denk dat we moeten nadenken over gameplay nu
     als kern. Het ziet er nu leuk uit, maar we hebben niks. Het verstop mechanisme moet eruit, is gewoon te saai.").
-    Besloten: het verstoppen gaat eruit (`spel.md`, "Rijk worden en arm lijken"); hoe ver, en wat de kern wordt, is open.
+    Besloten: het verstoppen gaat eruit (`spel.md`, "Rijk worden en arm lijken"). **Marcel (11 okt): "Nee, alles gaat
+    eruit. De kelders etc. De heer blijft wel een element. Arm lijken ook eruit."** Dus b: de kelders, de soldaten die
+    zoeken, de inner die telt wat hij ziet, de argwaan, afleiden en omkopen, de getuigen en het stiekeme bos; de heer
+    blijft (zijn brief, Sint-Maarten, zijn straffen, zijn gunst, de grillen, de heervaart). Wat de kern wordt, is open.
     **Wat Claude zag (11 okt):** 1. het spel speelt zichzelf: de boeren doen het seizoen, het dorp vraagt zelf wat het
     bouwt, en de raad zegt wat je moet doen; een script dat de raad volgt (de bouwer van de speeltest) wint, en hetzelfde
     script wordt op een ander land weggejaagd: het land beslist, niet de speler; 2. een keuze heeft geen spanning: een
