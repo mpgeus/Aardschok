@@ -45,6 +45,8 @@
 
   // Sint-Maarten, 11 slachtmaand: de dag waarop de heer komt innen (ontwerp/spel.md). Een
   // benoemde dag zoals deze is een { maand, dag } in dezelfde telling die datumVanDag teruggeeft.
+  // De seizoenen zoals de speler ze ziet; de regels letten op 'lente' (m.seizoen).
+  T.SEIZOEN_TOON = { winter: T.t('winter'), lente: T.t('spring'), zomer: T.t('summer'), herfst: T.t('autumn') };
   T.SINT_MAARTEN = { maand: T.MAANDEN.findIndex((m) => m.naam === 'slachtmaand'), dag: 11 };
 
   // Hoeveel wallklok-seconden één speeldag kost bij snelheid 1×. Tot 26 sep was dat 2,5 seconde

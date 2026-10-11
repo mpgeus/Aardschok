@@ -180,8 +180,10 @@
 
   // "ij" is in het Nederlands één letter: ijzer wordt IJzer, niet Ijzer.
   T.hoofdletter = (s) => (/^ij/.test(s) ? 'IJ' + s.slice(2) : s.charAt(0).toUpperCase() + s.slice(1));
-  // Een klein getal in woorden, voor een bericht of een brief: "drie wilde rovers", "vijf weerbare mannen".
-  const TELWOORDEN = ['geen', 'een', 'twee', 'drie', 'vier', 'vijf', 'zes', 'zeven', 'acht', 'negen', 'tien', 'elf', 'twaalf'];
+  // Een klein getal in woorden, voor een bericht of een brief: "three wild robbers", "five able-bodied men" (Engels sinds
+  // 11 okt, ontwerp/engels.md).
+  const TELWOORDEN = [T.t('no'), T.t('one'), T.t('two'), T.t('three'), T.t('four'), T.t('five'), T.t('six'), T.t('seven'),
+    T.t('eight'), T.t('nine'), T.t('ten'), T.t('eleven'), T.t('twelve')];
   T.telwoord = (n) => TELWOORDEN[n] || String(n);
   T.tegelVan = (e) => ({ x: e.tx, y: e.ty });
   // Afstand in stappen: schuin telt als één stap, net als bij het lopen.

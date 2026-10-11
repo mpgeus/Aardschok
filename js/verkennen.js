@@ -94,8 +94,9 @@
     ].join(' · ');
   };
 
-  // "Klaas", "Klaas en Gerrit", "Klaas, Jan en Gerrit".
-  T.opsomming = (namen) => (namen.length < 2 ? namen.join('') : `${namen.slice(0, -1).join(', ')} en ${namen[namen.length - 1]}`);
+  // "Nicholas", "Nicholas and Gerard", "Nicholas, John and Gerard".
+  T.opsomming = (namen) => (namen.length < 2 ? namen.join('')
+    : T.t('{lijst} and {laatste}', { lijst: namen.slice(0, -1).join(', '), laatste: namen[namen.length - 1] }));
 
   // Is deze weide samen met velden ernaast één weide (js/vee.js, T.weideGroepen)? Dan
   // "samen één weide met het veld van Gerrit"; anders ''.

@@ -23,6 +23,16 @@ zin omzet, neemt de woorden van hieronder, en wie een woord verandert, verandert
   of *an* zijn, geef de naam dan met zijn lidwoord mee: `T.t('{gebouw} is coming here.', { gebouw: T.eenNaam(naam) })`
   (`js/taal.js`: *an* voor een klinker, *a* voor de rest).
 
+## De hulpjes
+
+Wat elke zin nodig heeft, staat op één plek, al in het Engels:
+- een gebouw: `T.GEBOUWEN[soort].naam` en `.meervoud` (*hut, huts*), met *a/an* `T.eenNaam(naam)`;
+- een waar: `T.waarNaam(wat)` (*grain*) en met een aantal `T.hoeveel(n, wat)` (*3 grain, 1 tool*), `js/voorraad.js`;
+- een maand: `T.MAANDEN[i].toon` (*March*), nooit `.naam` in een zin; een seizoen: `T.SEIZOEN_TOON[seizoen]`; een datum:
+  `T.datumVanDag(dag).tekst` (*3 August 1323*), `js/tijd.js`;
+- een opsomming: `T.opsomming(namen)` (*a, b and c*, `js/verkennen.js`); een klein getal in woorden: `T.telwoord(n)` (*five*,
+  `js/wereld.js`); een hoofdletter: `T.hoofdletter`.
+
 ## De woorden
 
 | Nederlands | Engels | |
