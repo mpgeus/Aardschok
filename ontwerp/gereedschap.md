@@ -197,10 +197,7 @@ en het bier (`(30)` zet eerst 30 bier). `Spel.debug.meter()` (of `F2`) zet de me
 wachten en op wie, en hoeveel wegen en velden de kaart onthoudt (vraag 119). `Spel.debug.praatjes()` zegt wie er waar
 staat te praten en tot hoe laat, en hoeveel er vrij zijn; `('nu')` laat de twee vrije bekenden die het dichtst bij elkaar
 staan nu beginnen (vraag 120). `Spel.debug.veldwerk()` zegt per boer wat hij vandaag op zijn land doet, wat hij nu doet
-en waar, hoe ver hij is, wie hem helpt (vraag 111) en zijn dagloners (vraag 140). `Spel.debug.ontginnen()` zegt of het dorp graan tekortkomt, welk
-stuk heide elke boer zou vragen, hoeveel stukken er al af zijn en wat het volgende kost, wat er ontgonnen wordt en hoe
-ver; `('nu')` laat het verzoek nu komen, ook zonder tekort
-(vraag 107). `Spel.debug.bos()` zegt per houthakker zijn boom, hoeveel hout hij er al uit hakte, wat er binnen zijn bereik
+en waar, hoe ver hij is, wie hem helpt (vraag 111) en zijn dagloners (vraag 140). `Spel.debug.bos()` zegt per houthakker zijn boom, hoeveel hout hij er al uit hakte, wat er binnen zijn bereik
 staat (bomen, jonge bomen, boompjes, stronken), of hij stilstaat en wat zijn hand doet; `('hak')` laat elke houthakker nu
 zijn boom omhakken, `('groei')` laat elk boompje en elke jonge boom nu een maat groeien (vraag 115).
 `Spel.debug.slachten()` opent het slachtvenster nu (anders op 1

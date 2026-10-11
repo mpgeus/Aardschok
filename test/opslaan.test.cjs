@@ -380,3 +380,30 @@ test('een verse bladzijde laadt een spel met een gebouw uit het spel, op een lan
   assert.ok(T.isVast(S2.wereld, huis.x, huis.y), 'en het huis staat vast');
   assert.deepEqual(T.VOORWERPEN['gebouw:huis'], { blokkeert: true, zichtDicht: true }, 'zoals toen het gebouwd werd');
 });
+
+test('een bewaard spel met een voorval dat het spel niet meer kent (weggehaald in een snoeironde), laadt zonder fout', () => {
+  const S = gehucht();
+  const D = S.dorp;
+  const wie = D.bewoners.mensen.find((p) => p.leeftijd === 'volwassen');
+  // Een lopend voorval met een id van vroeger ('ontginverzoek', 11 okt), met zijn vlag, en een vervolg dat wacht.
+  const L = T.beginVoorval(D, Object.keys(T.VOORVALLEN)[0], wie, null, 40);
+  assert.ok(L, 'er loopt een voorval');
+  L.id = 'ontginverzoek';
+  L.vlaggen = ['ontginHeide'];
+  T.zetVlag(D, 'ontginHeide');
+  D.voorvallen.wacht.push({ id: 'graanzak', op: 50, wie, ander: null }, { id: Object.keys(T.VOORVALLEN)[0], op: 51, wie, ander: null });
+  const tekst = T.bewaarSpel(S, { nu: NU });
+  const S2 = gehucht();
+  const r = T.herstelSpel(S2, tekst);
+  assert.equal(r.gelukt, true, r.reden);
+  const V = S2.dorp.voorvallen;
+  assert.equal(V.lopend, null, 'het voorval loopt niet verder');
+  assert.ok(!T.heeftVlag(S2.dorp, 'ontginHeide'), 'en zijn vlag is weg');
+  assert.deepEqual(V.wacht.map((w) => w.id), [Object.keys(T.VOORVALLEN)[0]], 'alleen wat het spel kent, wacht nog');
+  // Een dag laten lopen geeft geen fout.
+  S2.kalender.dag = 41.3;
+  assert.doesNotThrow(() => {
+    T.tikVoorvallenDag(S2.dorp, 41);
+    T.werkVoorvallenBij(S2, S2.dorp);
+  });
+});

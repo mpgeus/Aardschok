@@ -34,6 +34,9 @@
     // Ook het winnen is eruit (snoeironde, punt 2): D.eind en D.jaarboek.gelukkig leest niets meer (een oud spel laadt
     // gewoon), en het feest 'stad' (D.feesten.komt en .gevierd) kent T.FEESTEN niet meer: alleen een spel dat al gewonnen
     // had, zou stukgaan.
+    // Ook het ontginnen als verzoek is eruit (snoeironde, punt 4): een bewaard voorval 'ontginverzoek' (en de vlaggen
+    // ontginHeide en ontginBos) kent T.VOORVALLEN niet meer, en veld.ontgonnen en D.ontginnen leest niets meer. Een veld
+    // in ontginning (veld.ontginning) blijft gewoon.
     versie: 4,
     eigenPlekken: 5, // naast de ene die vanzelf gaat (vraag 48 B)
     // Op de hoogste snelheid (30×) slaat het spel niet elke ochtend vanzelf op, maar om de zoveel dagen: een dag duurt
@@ -260,6 +263,7 @@
     for (const k of Object.keys(vers)) if (!(k in S)) S[k] = vers[k];
     Object.assign(S, T.schermVelden());
     kenDeSoorten(S);
+    for (const D of S.dorpen || []) T.vergeetOnbekendeVoorvallen(D);
   };
 
   // Wat er op de kaarten ligt, moet het spel kennen (T.VOORWERPEN). Een verse bladzijde kent alleen wat ze zelf

@@ -4,7 +4,7 @@
 //
 // De haak ("De heer wil geld. Het dorp wil leven. Jij staat ertussen.") als de kern van het spel: twee meters, van 0 tot 100.
 //   gunst       wat de heer van je vindt: de schatting op Sint-Maarten, de heervaart, of je naar hem toe kwam, en een
-//               stuk van zijn bos dat je ontgint.
+//               erf of een werkplaats in zijn bos (js/bos.js).
 //   vertrouwen  wat het dorp van jóú vindt, niet hoe tevreden het is: je antwoorden op de voorvallen (zo zwaar als ze het
 //               dorp tevreden of ontevreden maken), wie je naar de oorlog stuurde of vrijkocht, wie je aan de
 //               schandpaal zette, wie verhongerde of bevroor, wie sneuvelde, de soldaten van de heer in huis, en wie

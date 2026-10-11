@@ -1,9 +1,7 @@
-// Ontginnen (js/ontginnen.js; werklijst vraag 107; Marcel, 5 okt: "107 a b c d e ja", en voor het bos "A a2, B ok, C ja, D
-// ok, E ok, F Ja, G ok, H goed idee"): komt het dorp graan tekort, dan vraagt een boer of zijn zoon je om dertig tegels te
-// ontginnen, heide of bos. De heide kost het vertrouwen van het dorp, want de meent is van iedereen; een maand plaggen
-// steken. Het bos is van de heer: je meldt het, en dat kost zijn gunst (stiekem ontginnen kan niet meer, 11 okt, vraag
-// 151). Een winter bomen hakken, en het hout is voor het dorp. In lentemaand
-// is het een akker. De toetsen van de heide (stap 1) spelen met de spelregel "Alleen de heide", zoals het begon.
+// Het plaggen steken en het ontginnen van bos (js/ontginnen.js, js/veldwerk.js, js/akkers.js). Het verzoek van een boer om
+// te ontginnen is op 11 okt weggehaald (snoeironde, vraag 153): akkers leg jij nu zelf. Wat bleef, slaapt tot stap 1d, en
+// deze toetsen zetten daarom zelf een veld in ontginning: dertig tegels heide (een maand plaggen steken) of bos (een winter
+// bomen hakken, stobben rooien en omspitten), bij de akker van een boer. In lentemaand is het een akker.
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
@@ -34,153 +32,119 @@ function gehucht(dag = 40 + 7 / 24) {
   T.S = S;
   return S;
 }
-const lopend = (D) => D.voorvallen && D.voorvallen.lopend;
-// De antwoorden die je nu ziet (de vlaggen van het voorval, js/gesprek.js), en het antwoord dat zo begint.
-const zichtbaar = (S) => T.zichtbareKeuzes(S, S.dorp, 'ontginverzoek', T.GESPREKKEN.ontginverzoek.knopen.begin.keuzes);
-function antwoord(S, begin) {
-  const k = zichtbaar(S).find((x) => x.zeg.startsWith(begin));
-  assert.ok(k, `het antwoord "${begin}" staat er: ${zichtbaar(S).map((x) => x.zeg).join(' | ')}`);
-  return k;
-}
-function zeg(S, begin) {
-  const k = antwoord(S, begin);
-  const L = lopend(S.dorp);
-  T.doeGevolg(S, S.dorp, k.doe || {});
-  T.voorvalBeantwoord(S.dorp, L.id);
-}
-// Wat iemand zegt als hij het vraagt.
-const vraagt = (S) => T.vulWoordenIn(S.dorp, T.eersteDiePast(S, S.dorp, 'ontginverzoek', T.GESPREKKEN.ontginverzoek.knopen.begin.tekst).zeg);
-// Een toets van de heide: met de spelregel "Alleen de heide" (met het bos erbij vraagt soms een andere boer het, wie een
-// stuk bos dichterbij heeft; dat toetsen de toetsen van het bos).
-function heide(naam, fn) {
-  test(naam, () => {
-    T.zetOptie('ontginnen', 'heide');
-    try {
-      fn();
-    } finally {
-      T.optiesTerug();
-    }
-  });
-}
-// Een verzoek om te ontginnen, nu: het dorp heeft geen graan meer boven wat de groei vraagt.
-function verzoek(S) {
-  const D = S.dorp;
-  D.voorraad.graan = 0;
-  assert.ok(T.graanTekort(D), 'het dorp komt graan tekort');
-  assert.ok(T.beginOntginverzoek(D, Math.floor(S.kalender.dag)), 'er komt iemand vragen');
-  return lopend(D);
-}
-const plekVan = (L) => L.ontgin.heide;
 const opVeld = (v, x, y) => x >= v.x && x < v.x + v.b && y >= v.y && y < v.y + v.h;
+const afstand = (a, v) => Math.max(0, v.x - (a.x + a.b - 1), a.x - (v.x + v.b - 1), v.y - (a.y + a.h - 1), a.y - (v.y + v.h - 1));
+const boeren = (w) => w.wezens.filter((e) => !e.dood && e.werkAkkers && e.werkAkkers.length);
 
-heide('komt het dorp graan tekort, dan vraagt een boer of zijn zoon om het stuk heide het dichtst bij zijn akker, dertig tegels', () => {
-  const S = gehucht();
-  const D = S.dorp;
+// Een stuk van dertig tegels (zes bij vijf, of vijf bij zes) waarvan elke tegel `mag` en dat `past` (bijvoorbeeld: genoeg
+// bomen), zo dicht bij een akker van een boer als het kan; bij gelijk de eerste, van boven naar beneden. { x, y, b, h, boer }.
+function zoekStuk(S, mag, past = () => true) {
   const w = S.wereld;
-  D.voorraad.graan = 500;
-  assert.ok(!T.graanTekort(D));
-  assert.equal(T.beginOntginverzoek(D, 40), false, 'zonder tekort vraagt niemand het');
-  const L = verzoek(S);
-  assert.equal(L.id, 'ontginverzoek');
-  assert.equal(L.ontgin.bos, null, 'alleen de heide');
-  const o = { ...plekVan(L), boer: L.ontgin.boer };
-  assert.equal(o.b * o.h, 30);
-  const meent = w.meenten.find((m) => m.meent && opVeld(m, o.x, o.y));
-  assert.ok(meent, 'op de heide');
-  for (let y = o.y; y < o.y + o.h; y++) {
-    for (let x = o.x; x < o.x + o.b; x++) {
-      assert.ok(opVeld(meent, x, y) && T.isBegaanbaar(w, x, y) && !T.veldOp(w, x, y), `${x},${y} is vrije heide`);
+  let beste = null;
+  for (const boer of boeren(w)) {
+    for (const [b, h] of [[6, 5], [5, 6]]) {
+      for (let y = 0; y + h <= w.tegels.length; y++) {
+        for (let x = 0; x + b <= w.tegels[0].length; x++) {
+          const stuk = { x, y, b, h };
+          const d = Math.min(...boer.werkAkkers.map((v) => afstand(stuk, v)));
+          if (beste && d >= beste.d) continue;
+          let alles = true;
+          for (let dy = 0; dy < h && alles; dy++) for (let dx = 0; dx < b && alles; dx++) alles = mag(x + dx, y + dy);
+          if (alles && past(stuk, boer)) beste = { ...stuk, d, boer };
+        }
+      }
     }
   }
-  // Naast zijn akker als het kan, en anders zo dichtbij als het kan (vraag 107, d): op het ontworpen gehucht ligt de
-  // heide tien tegels van de dichtste akker (die van boer5), en het stuk komt in de hoek die daar het dichtst bij ligt.
-  const boer = o.boer;
-  const afstand = (a, v) => Math.max(0, v.x - (a.x + a.b - 1), a.x - (v.x + v.b - 1), v.y - (a.y + a.h - 1), a.y - (v.y + v.h - 1));
-  const naarDeHeide = (e) => Math.min(...e.werkAkkers.map((v) => afstand(meent, v)));
-  const boeren = w.wezens.filter((e) => e.werkAkkers && e.werkAkkers.length);
-  assert.equal(naarDeHeide(boer), Math.min(...boeren.map(naarDeHeide)), 'de boer met een akker het dichtst bij de heide');
-  assert.equal(Math.min(...boer.werkAkkers.map((v) => afstand(o, v))), naarDeHeide(boer), 'zo dicht bij zijn akker als de heide komt');
-  const p = T.bewonerVan(D, boer);
-  assert.ok(L.wie === p || (L.wie.huis === p.huis && L.wie.band === 'zoon'), 'de boer, of zijn zoon');
-  const tekst = vraagt(S);
-  assert.match(tekst, /heide/);
-  assert.match(tekst, /30 tegels/);
-  assert.deepEqual(zichtbaar(S).map((k) => k.zeg), ['Ja, ontgin het maar.', 'Nee, de heide is van iedereen.']);
-});
+  assert.ok(beste, 'een plek voor een stuk van dertig tegels');
+  return beste;
+}
+// Mag deze tegel in een stuk heide of bos: te belopen (of iets wat de boer opruimt), en geen veld, weg, erf, lantaarn, plein,
+// deur of paadje van een deur.
+const vrij = (S) => (x, y) => {
+  const w = S.wereld;
+  const D = S.dorp;
+  if (T.opHetPlein(w, x, y) || T.bijDeur(w, x, y) || T.isAangelegdPaadje(D, x, y) || T.waaromNietOpDezeGrond(D, x, y)) return false;
+  return T.isBegaanbaar(w, x, y) || !!T.ontginWerkOp(w, x, y);
+};
+const opMeent = (S, x, y) => S.wereld.meenten.some((m) => m.meent && opVeld(m, x, y));
+const bomenOp = (w, s) => T.akkerTegels(s).filter((t) => T.ontginWerkOp(w, t.x, t.y) === 'hakken').length;
 
-heide('ja: het wordt een veld van zijn boerderij dat nog ontgonnen wordt, de schapen grazen er niet meer, en het vertrouwen zakt', () => {
+// Kan de boer erbij? Recht naast een tegel van de rand van het stuk kan hij komen, vanaf zijn deur.
+function bereikbaar(w, boer, stuk) {
+  const van = boer.thuis || { x: boer.tx, y: boer.ty };
+  for (let y = stuk.y; y < stuk.y + stuk.h; y++) {
+    for (let x = stuk.x; x < stuk.x + stuk.b; x++) {
+      for (const [dx, dy] of [[0, 1], [1, 0], [0, -1], [-1, 0]]) {
+        const n = { x: x + dx, y: y + dy };
+        if (!opVeld(stuk, n.x, n.y) && T.isBegaanbaar(w, n.x, n.y) && T.kanErKomen(w, van, n)) return true;
+      }
+    }
+  }
+  return false;
+}
+
+// Een veld in ontginning, zoals het verzoek het maakte: van de boerderij van de boer, braak tot het klaar is, en in
+// lentemaand een akker. `soort` is 'heide' (een maand) of 'bos' (een winter, met minstens tien bomen erop).
+function ontgin(S, soort, dagen = soort === 'bos' ? 90 : 30) {
+  const D = S.dorp;
+  const w = S.wereld;
+  const mag = vrij(S);
+  const stuk = soort === 'heide'
+    ? zoekStuk(S, (x, y) => opMeent(S, x, y) && mag(x, y) && T.isBegaanbaar(w, x, y))
+    : zoekStuk(S, (x, y) => !opMeent(S, x, y) && !T.isWaterGrond((w.grond[y][x] || {}).naam) && mag(x, y),
+      (s, boer) => T.akkerTegels(s).filter((t) => T.NATUUR.bos.telt(w, t.x, t.y, T.voorwerpOp(w, t.x, t.y))).length >= T.ONTGINNEN_INSTELLINGEN.bosBomen && bereikbaar(w, boer, s));
+  const dag = Math.floor(S.kalender.dag);
+  const veld = {
+    naam: `${stuk.boer.huis}-ontgonnen-1`, x: stuk.x, y: stuk.y, b: stuk.b, h: stuk.h,
+    huis: stuk.boer.huis, bestemming: 'braak', plan: 'akker', planDoor: 'boer',
+    vruchtbaarheid: T.VELDEN_INSTELLINGEN.beginVruchtbaarheid,
+    ontginning: { tot: dag + dagen, op: soort, gestoken: new Set() },
+  };
+  w.akkers.push(veld);
+  stuk.boer.werkAkkers.push(veld);
+  T.kaartVeranderd(w);
+  return { veld, boer: stuk.boer, D };
+}
+
+test('een veld in ontginning op de heide: braak tot het klaar is, geen paadje erover, en wat nog niet gestoken is, is heide', () => {
   const S = gehucht();
   const D = S.dorp;
   const w = S.wereld;
-  const L = verzoek(S);
-  const o = { ...plekVan(L), boer: L.ontgin.boer };
-  const meent = w.meenten.find((m) => m.meent && opVeld(m, o.x, o.y));
-  const meentVoor = T.weideStand(D, meent).tegels;
-  const vertrouwen = T.bazenNu(D).vertrouwen;
-  zeg(S, 'Ja');
-  const veld = w.akkers.find((v) => v.ontginning);
-  assert.ok(veld, 'een veld in ontginning');
-  assert.deepEqual([veld.x, veld.y, veld.b, veld.h], [o.x, o.y, o.b, o.h]);
-  assert.ok(o.boer.werkAkkers.includes(veld), 'van zijn boerderij');
-  assert.equal(T.boerVanVeld(D, veld), o.boer);
+  const meentVoor = new Map(w.meenten.filter((m) => m.meent).map((m) => [m, T.weideStand(D, m).tegels]));
+  const { veld, boer } = ontgin(S, 'heide');
+  assert.deepEqual(T.inOntginning(w), [veld]);
+  assert.equal(veld.b * veld.h, 30);
+  const meent = w.meenten.find((m) => m.meent && opVeld(m, veld.x, veld.y));
+  assert.ok(meent, 'op de heide');
+  assert.ok(boer.werkAkkers.includes(veld), 'van zijn boerderij');
+  assert.equal(T.boerVanVeld(D, veld), boer);
   assert.equal(T.bestemmingVan(veld), 'braak', 'het rust tot het klaar is');
   assert.equal(T.planVan(veld), 'akker', 'en wordt in lentemaand een akker');
-  assert.equal(veld.ontginning.tot, 40 + T.ONTGINNEN_INSTELLINGEN.heideDagen, 'een maand');
-  assert.equal(T.bazenNu(D).vertrouwen, vertrouwen - 5, 'de meent is van iedereen');
-  assert.equal(T.weideStand(D, meent).tegels, meentVoor - 30, 'de meent is dertig tegels kleiner');
-  const schaap = T.veeVan(D).find((e) => e.weide === meent);
-  if (schaap) assert.ok(!T.graaslandVan(w, schaap).op(o.x, o.y), 'een schaap graast er niet meer');
   const net = T.aangelegdNet(D);
   for (const t of T.akkerTegels(veld)) assert.notEqual(net[t.x + t.y * w.tegels[0].length], 2, `geen paadje over ${t.x},${t.y}`);
-  assert.equal(T.akkerTegelStadium(veld, o.x, o.y, 'groen'), 'heide', 'wat hij nog niet stak, is heide');
-  T.steekPlag(veld, o.x, o.y);
-  assert.equal(T.akkerTegelStadium(veld, o.x, o.y, 'groen'), 'geploegd', 'wat hij stak, is kale grond');
-  assert.equal(T.beginOntginverzoek(D, 41), false, 'zolang er een stuk ontgonnen wordt, vraagt niemand een tweede');
+  assert.equal(T.akkerTegelStadium(veld, veld.x, veld.y, 'groen'), 'heide', 'wat hij nog niet stak, is heide');
+  assert.ok(!T.isGestoken(veld, veld.x, veld.y));
+  T.steekPlag(veld, veld.x, veld.y);
+  assert.ok(T.isGestoken(veld, veld.x, veld.y));
+  assert.equal(T.akkerTegelStadium(veld, veld.x, veld.y, 'groen'), 'geploegd', 'wat hij stak, is kale grond');
+  // De schapen grazen er niet meer: de meent is dertig tegels kleiner (js/vee.js).
+  assert.equal(meentVoor.get(meent) - T.weideStand(D, meent).tegels, 30);
 });
 
-heide('nee, of je sprak hem niet: pas na dertig dagen vraagt er weer iemand; met de spelregel uit vraagt niemand het', () => {
+test('plaggen steken haalt weg wat laag groeit, en laat een boom staan', () => {
   const S = gehucht();
-  const D = S.dorp;
-  verzoek(S);
-  zeg(S, 'Nee');
-  assert.ok(!S.wereld.akkers.some((v) => v.ontginning), 'geen veld');
-  assert.equal(T.beginOntginverzoek(D, 41), false);
-  assert.equal(T.beginOntginverzoek(D, 40 + T.ONTGINNEN_INSTELLINGEN.opnieuw - 1), false);
-  assert.equal(T.beginOntginverzoek(D, 40 + T.ONTGINNEN_INSTELLINGEN.opnieuw), true, 'na dertig dagen weer');
-  // Wie je niet sprak, gaat voorbij (js/voorvallen.js), en komt ook pas na dertig dagen terug, niet morgen.
-  T.voorvalBeantwoord(D, lopend(D).id);
-  assert.equal(T.beginOntginverzoek(D, 40 + T.ONTGINNEN_INSTELLINGEN.opnieuw + 1), false, 'niet de dag erna');
-  T.zetOptie('ontginnen', 'uit');
-  D.ontginnen = { gevraagd: null, klaar: null };
-  assert.equal(T.beginOntginverzoek(D, 100), false);
-});
-
-// Het stuk dat ontgonnen wordt, is klaar, en het dorp mag meteen weer vragen.
-function allesKlaar(S) {
-  for (const v of T.inOntginning(S.wereld)) delete v.ontginning;
-  S.dorp.ontginnen = { gevraagd: null, klaar: null };
-}
-
-// Vraag 107, f3 (Marcel, 5 okt: "We gaan met jouw suggestie"): hoe kleiner de meent, hoe meer het dorp eraan hecht.
-heide('elk volgend stuk kost meer vertrouwen, 5, 10, 15; het venster zegt het vooraf, en wie het vraagt ook', () => {
-  const S = gehucht();
-  const D = S.dorp;
-  const zinnen = [/het is de meent, en het dorp zal er wat van vinden/, /er ging al een stuk van de meent af/, /er gingen al twee stukken van de meent af/];
-  for (const [i, kost] of [5, 10, 15].entries()) {
-    const L = verzoek(S);
-    assert.equal(L.ontgin.vertrouwen, kost, `stuk ${i + 1}`);
-    assert.match(T.prijsVanKeuze(D, antwoord(S, 'Ja').doe).tekst, new RegExp(`vertrouwen van het dorp −${kost}$`), 'het venster zegt wat ja kost');
-    assert.equal(T.prijsVanKeuze(D, antwoord(S, 'Nee').doe).tekst, '', 'nee kost niets');
-    assert.match(vraagt(S), zinnen[i]);
-    const voor = T.bazenNu(D).vertrouwen;
-    zeg(S, 'Ja');
-    assert.equal(T.bazenNu(D).vertrouwen, voor - kost, `stuk ${i + 1} kost ${kost}`);
-    allesKlaar(S);
-  }
-  assert.equal(T.ontgonnenStukken(S.wereld), 3);
-  // Zonder de twee bazen (de spelregel) is er geen vertrouwen, en kost het niets.
-  T.zetOptie('tweeBazen', 'uit');
-  assert.equal(T.ontginVertrouwen(D), 0);
+  const w = S.wereld;
+  const { veld } = ontgin(S, 'heide');
+  const t = T.akkerTegels(veld)[0];
+  assert.ok(T.groeitLaag({ soort: 'varen' }) && T.groeitLaag({ soort: 'kleineRots' }));
+  assert.ok(!T.groeitLaag({ soort: 'eik' }) && !T.groeitLaag(null));
+  T.zetVoorwerp(w, { soort: 'grasPol', x: t.x, y: t.y });
+  assert.equal(T.voorwerpOp(w, t.x, t.y).soort, 'grasPol');
+  T.steekPlag(veld, t.x, t.y, w);
+  assert.equal(T.voorwerpOp(w, t.x, t.y), null, 'het gras is weg');
+  // Een veld dat niet (meer) ontgonnen wordt, is overal gestoken.
+  const eigen = w.akkers.find((v) => !v.ontginning);
+  assert.ok(T.isGestoken(eigen, eigen.x, eigen.y));
 });
 
 // Laat de wereld lopen zoals js/main.js, op 30×, tot het uur `tot` van dag `dag`.
@@ -201,7 +165,7 @@ function totUur(S, dag, tot) {
   }
 }
 
-heide('de boer steekt er plaggen, tegel voor tegel; na een maand is het ontgonnen, en in lentemaand een akker die gezaaid wordt', () => {
+test('de boer steekt er plaggen, tegel voor tegel; na een maand is het ontgonnen, en in lentemaand een akker die gezaaid wordt', () => {
   const toeval = Math.random;
   let n = 7;
   Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
@@ -209,11 +173,8 @@ heide('de boer steekt er plaggen, tegel voor tegel; na een maand is het ontgonne
   try {
     const S = gehucht();
     const D = S.dorp;
-    const L = verzoek(S);
-    const boer = L.ontgin.boer;
-    zeg(S, 'Ja');
+    const { veld, boer } = ontgin(S, 'heide');
     D.voorraad.graan = 600; // zodat het dorp niet hongert, en er zaaigraan is
-    const veld = S.wereld.akkers.find((v) => v.ontginning);
     totUur(S, 40, 12);
     assert.equal(boer.werkt && boer.werkt.soort, 'ontginnen', 'hij werkt op de heide');
     assert.ok(T.veldOp(S.wereld, boer.tx, boer.ty) === veld, 'op zijn nieuwe veld');
@@ -234,18 +195,17 @@ heide('de boer steekt er plaggen, tegel voor tegel; na een maand is het ontgonne
     assert.equal(T.bestemmingVan(veld), 'akker', 'een akker');
     assert.equal(T.akkerTegelStadium(veld, veld.x, veld.y, 'groen'), 'groen', 'gezaaid');
   } finally {
+    T.optiesTerug();
     Math.random = toeval;
   }
 });
 
-// Wie in de winter ja zei, wacht geen jaar: zolang het stuk ontgonnen wordt, wisselt het niet op 1 lentemaand (dan zou
+// Een stuk dat in de winter begint, wacht geen jaar: zolang het ontgonnen wordt, wisselt het niet op 1 lentemaand (dan zou
 // er op de heide gezaaid worden), en is het klaar terwijl de boeren nazaaien, dan wordt het meteen een akker.
-heide('ja in sprokkelmaand: op 1 lentemaand wisselt het nog niet, en is het in lentemaand klaar, dan zaaien de boeren het na', () => {
+test('begint het in sprokkelmaand: op 1 lentemaand wisselt het nog niet, en is het in lentemaand klaar, dan zaaien de boeren het na', () => {
   const S = gehucht(345 + 7 / 24);
   const D = S.dorp;
-  verzoek(S);
-  zeg(S, 'Ja');
-  const veld = S.wereld.akkers.find((v) => v.ontginning);
+  const { veld } = ontgin(S, 'heide');
   assert.equal(veld.ontginning.tot, 375, '15 lentemaand');
   // 1 lentemaand van het jaar erna: de velden wisselen en de boeren zaaien, maar dit stuk wordt nog ontgonnen.
   D.voorraad.graan = 600;
@@ -265,110 +225,29 @@ heide('ja in sprokkelmaand: op 1 lentemaand wisselt het nog niet, en is het in l
   assert.ok(berichten.some((t) => /zaaien hem na/.test(t)), berichten.slice(-3).join(' | '));
 });
 
-heide('ben je weg, dan zegt je raadsman ja op het eerste stuk, en op een volgend nee; en het stuk gaat mee in een bewaard spel', () => {
+test('een veld in ontginning gaat mee in een bewaard spel, met wat al gestoken is, en blijft van zijn boerderij', () => {
   const S = gehucht();
-  const D = S.dorp;
-  const L = verzoek(S);
-  const raadsman = D.bewoners.mensen.find((p) => p.wezen && T.isBoer(p.wezen) && p.wezen !== L.ontgin.boer);
-  const keus = T.raadsmanKeuze(D, raadsman, 'ontginverzoek');
-  assert.ok(keus && keus.doe.ontgin, `${raadsman.wezen.karakter} zegt: ${keus && keus.zeg}`);
-  zeg(S, 'Ja');
-  const veld = S.wereld.akkers.find((v) => v.ontginning);
-  // Een tweede stuk kost 10 vertrouwen, meer dan het hem waard is: dat laat hij aan jou.
-  const ontginning = veld.ontginning;
-  allesKlaar(S);
-  verzoek(S);
-  const tweede = T.raadsmanKeuze(D, raadsman, 'ontginverzoek');
-  assert.ok(tweede && !tweede.doe.ontgin, `een tweede stuk: ${raadsman.wezen.karakter} zegt: ${tweede && tweede.zeg}`);
-  T.voorvalBeantwoord(D, lopend(D).id);
-  veld.ontginning = ontginning;
+  const { veld, boer } = ontgin(S, 'heide');
   T.steekPlag(veld, veld.x, veld.y);
   const gelezen = T.leesSpel(T.bewaarSpel(S, { nu: 0 }));
   assert.ok(gelezen.gelukt, gelezen.reden);
   const terug = gelezen.staat.wereld.akkers.find((v) => v.naam === veld.naam);
   assert.equal(terug.ontginning.tot, veld.ontginning.tot);
   assert.ok(terug.ontginning.gestoken.has(`${veld.x},${veld.y}`));
-  const boerTerug = gelezen.staat.wereld.wezens.find((e) => e.wie === L.ontgin.boer.wie);
+  const boerTerug = gelezen.staat.wereld.wezens.find((e) => e.wie === boer.wie);
   assert.ok(boerTerug.werkAkkers.includes(terug), 'en het blijft van zijn boerderij');
 });
 
 // ---------------------------------------------------------------------------------------------
-// Het bos (vraag 107, stap 2)
+// Het bos
 // ---------------------------------------------------------------------------------------------
 
-const bomenOp = (w, s) => T.akkerTegels(s).filter((t) => T.ontginWerkOp(w, t.x, t.y) === 'hakken').length;
-
-test('a2: wie vraagt, wijst een stuk heide en een stuk bos aan, allebei in goud, en jij kiest', () => {
+test('een veld in ontginning in het bos: wat nog niet omgespit is, is bos, en daar tekent het spel wat er staat', () => {
   const S = gehucht();
-  const D = S.dorp;
   const w = S.wereld;
-  const L = verzoek(S);
-  const { heide: h, bos: b, boer } = L.ontgin;
-  assert.ok(h && b, 'allebei');
-  assert.equal(b.b * b.h, 30);
-  assert.ok(b.bomen >= T.ONTGINNEN_INSTELLINGEN.bosBomen && bomenOp(w, b) === b.bomen, `${b.bomen} bomen`);
-  for (const t of T.akkerTegels(b)) {
-    assert.ok(!T.veldOp(w, t.x, t.y) && !T.opPad(w, t.x, t.y) && !w.meenten.some((m) => opVeld(m, t.x, t.y)), `${t.x},${t.y}: geen veld, weg of meent`);
-    assert.ok(T.isBegaanbaar(w, t.x, t.y) || T.ontginWerkOp(w, t.x, t.y), `${t.x},${t.y}: vrij, of iets wat hij opruimt`);
-  }
-  // Wie vraagt, heeft van alle boeren een stuk het dichtst bij.
-  const afstand = (a, v) => Math.max(0, v.x - (a.x + a.b - 1), a.x - (v.x + v.b - 1), v.y - (a.y + a.h - 1), a.y - (v.y + v.h - 1));
-  const dichtst = (e) => Math.min(...[T.ontginPlekVoor(D, e), T.bosPlekVoor(D, e)].filter(Boolean).flatMap((s) => e.werkAkkers.map((v) => afstand(s, v))));
-  const boeren = w.wezens.filter((e) => e.werkAkkers && e.werkAkkers.length);
-  assert.equal(dichtst(boer), Math.min(...boeren.map(dichtst)));
-  // Het gesprek: beide plekken, en drie antwoorden.
-  assert.ok(T.heeftVlag(D, 'ontginHeide') && T.heeftVlag(D, 'ontginBos'), 'de vlaggen van het voorval');
-  assert.match(vraagt(S), /heide.*Of het stuk bos achter .* Maar het bos is van de heer\./);
-  assert.deepEqual(zichtbaar(S).map((k) => k.zeg), ['De heide.', 'Het bos. Ik meld het de heer.', 'Nee, nu niet.']);
-  assert.match(T.prijsVanKeuze(D, antwoord(S, 'De heide').doe).tekst, /vertrouwen van het dorp −5/);
-  assert.match(T.prijsVanKeuze(D, antwoord(S, 'Het bos. Ik meld').doe).tekst, new RegExp(`\\+${b.bomen * T.BOS_INSTELLINGEN.houtPerBoom} hout.*gunst van de heer −5`));
-  zeg(S, 'Nee');
-  assert.ok(!T.heeftVlag(D, 'ontginHeide') && !T.heeftVlag(D, 'ontginBos'), 'om: de vlaggen zijn weg');
-});
-
-test('is de heide op, dan vraagt hij alleen het bos; met de spelregel "Alleen de heide" alleen de heide', () => {
-  const S = gehucht();
-  const D = S.dorp;
-  for (const m of S.wereld.meenten) m.meent = null; // geen heide meer
-  const L = verzoek(S);
-  assert.equal(L.ontgin.heide, null);
-  assert.ok(L.ontgin.bos);
-  assert.match(vraagt(S), /de heide is op/);
-  assert.deepEqual(zichtbaar(S).map((k) => k.zeg), ['Het bos. Ik meld het de heer.', 'Nee, nu niet.']);
-  // De raadsman kiest nooit iets wat er niet staat (de heide), ook al staat het in het gesprek.
-  const raadsman = D.bewoners.mensen.find((p) => p.wezen && T.isBoer(p.wezen));
-  const keus = T.raadsmanKeuze(D, raadsman, 'ontginverzoek');
-  assert.ok(!keus || keus.doe.ontgin !== 'heide', keus && keus.zeg);
-  T.voorvalBeantwoord(D, L.id);
-  T.zetOptie('ontginnen', 'heide');
-  try {
-    D.ontginnen = { gevraagd: null, klaar: null };
-    assert.equal(T.beginOntginverzoek(D, 40), false, 'zonder heide en zonder bos vraagt niemand het');
-    assert.equal(D.ontginnen.gezocht, 40, 'en het dorp kijkt pas over dertig dagen weer');
-  } finally {
-    T.optiesTerug();
-  }
-});
-
-test('het bos, gemeld: een veld in ontginning voor een winter, en de gunst van de heer −5', () => {
-  const S = gehucht();
-  const D = S.dorp;
-  const w = S.wereld;
-  const L = verzoek(S);
-  const b = { ...L.ontgin.bos };
-  const gunst = T.bazenNu(D).gunst;
-  const vertrouwen = T.bazenNu(D).vertrouwen;
-  zeg(S, 'Het bos. Ik meld');
-  const veld = w.akkers.find((v) => v.ontginning);
-  assert.deepEqual([veld.x, veld.y, veld.b, veld.h], [b.x, b.y, b.b, b.h]);
+  const { veld } = ontgin(S, 'bos');
   assert.equal(veld.ontginning.op, 'bos');
-  assert.equal(veld.ontgonnen, 'bos');
-  assert.equal(veld.ontginning.tot, 40 + T.ONTGINNEN_INSTELLINGEN.bosDagen, 'een winter');
-  assert.equal(T.bazenNu(D).gunst, gunst - 5, 'de heer wil erom gevraagd worden');
-  assert.equal(T.bazenNu(D).vertrouwen, vertrouwen, 'het dorp vindt er niets van');
-  assert.equal(T.ontgonnenStukken(w), 0, 'van de meent ging niets af');
-  assert.ok(berichten.some((t) => /Ons bos\? Nu ja/.test(t)), berichten.slice(-2).join(' | '));
-  // Wat hij nog niet ontgon, is bos: daar tekent het spel geen akker, maar wat er staat.
+  assert.ok(bomenOp(w, veld) >= T.ONTGINNEN_INSTELLINGEN.bosBomen, 'bomen om te hakken');
   const boom = T.akkerTegels(veld).find((t) => T.ontginWerkOp(w, t.x, t.y) === 'hakken');
   assert.equal(T.akkerTegelStadium(veld, boom.x, boom.y, 'groen'), 'bos');
 });
@@ -377,9 +256,7 @@ test('een boom omhakken geeft hout en laat een stronk, die hij rooit; na de wint
   const S = gehucht();
   const D = S.dorp;
   const w = S.wereld;
-  verzoek(S);
-  zeg(S, 'Het bos. Ik meld');
-  const veld = w.akkers.find((v) => v.ontginning);
+  const { veld } = ontgin(S, 'bos');
   const boom = T.akkerTegels(veld).find((t) => T.ontginWerkOp(w, t.x, t.y) === 'hakken');
   const hout = D.voorraad.hout;
   assert.ok(T.hakBoom(D, boom.x, boom.y));
@@ -413,15 +290,11 @@ test('de boer hakt naast de boom, met zijn gezicht ernaar; zijn boerin helpt; en
     const S = gehucht();
     const D = S.dorp;
     const w = S.wereld;
-    const L = verzoek(S);
-    const boer = L.ontgin.boer;
-    zeg(S, 'Het bos. Ik meld');
+    const { veld, boer } = ontgin(S, 'bos');
     D.voorraad.graan = 600;
-    const veld = w.akkers.find((v) => v.ontginning);
     const bomen = bomenOp(w, veld);
     const hout = D.voorraad.hout;
     let gezien = null;
-    let hielp = false;
     for (let uur = 9; uur <= 17 && !gezien; uur++) {
       totUur(S, 40, uur);
       const wt = boer.werkt;
@@ -431,8 +304,7 @@ test('de boer hakt naast de boom, met zijn gezicht ernaar; zijn boerin helpt; en
     assert.equal(Math.abs(gezien.op.x - gezien.x) + Math.abs(gezien.op.y - gezien.y), 1, 'hij staat recht naast de boom');
     assert.equal(T.veldOp(w, gezien.op.x, gezien.op.y), veld, 'de boom staat op zijn nieuwe veld');
     const helpers = D.bewoners.mensen.filter((p) => p.wezen && p.wezen !== boer && T.helpAnker(D, p.wezen));
-    hielp = helpers.length > 0;
-    assert.ok(hielp, 'zijn boerin of een groot kind helpt');
+    assert.ok(helpers.length > 0, 'zijn boerin of een groot kind helpt');
     totUur(S, 42, 18);
     const nu = bomenOp(w, veld);
     assert.ok(nu < bomen, `${bomen - nu} bomen om in drie dagen`);
@@ -443,23 +315,11 @@ test('de boer hakt naast de boom, met zijn gezicht ernaar; zijn boerin helpt; en
   }
 });
 
-test('ben je weg, dan meldt een raadsman die de heer vreest het bos', () => {
-  const S = gehucht();
-  const D = S.dorp;
-  for (const m of S.wereld.meenten) m.meent = null; // alleen het bos
-  const L = verzoek(S);
-  const raadsman = D.bewoners.mensen.find((p) => p.wezen && T.isBoer(p.wezen) && p.wezen !== L.ontgin.boer);
-  raadsman.wezen.karakter = 'grijsaard';
-  assert.equal(T.raadsmanKeuze(D, raadsman, 'ontginverzoek').doe.ontgin, 'bos', 'de grijsaard meldt het');
-});
-
 test('een akker in het bos, half gehakt, gaat mee in een bewaard spel', () => {
   const S = gehucht();
   const D = S.dorp;
   const w = S.wereld;
-  verzoek(S);
-  zeg(S, 'Het bos. Ik meld');
-  const veld = w.akkers.find((v) => v.ontginning);
+  const { veld } = ontgin(S, 'bos');
   const boom = T.akkerTegels(veld).find((t) => T.ontginWerkOp(w, t.x, t.y) === 'hakken');
   T.hakBoom(D, boom.x, boom.y);
   const gelezen = T.leesSpel(T.bewaarSpel(S, { nu: 0 }));
@@ -474,9 +334,7 @@ test('een akker in het bos, half gehakt, gaat mee in een bewaard spel', () => {
 test('is het eerder af dan de maand of de winter, dan is het eerder ontgonnen', () => {
   const S = gehucht();
   const D = S.dorp;
-  verzoek(S);
-  zeg(S, 'Het bos. Ik meld');
-  const veld = S.wereld.akkers.find((v) => v.ontginning);
+  const { veld } = ontgin(S, 'bos');
   for (const t of T.akkerTegels(veld)) {
     T.hakBoom(D, t.x, t.y);
     T.rooi(D, t.x, t.y);
@@ -488,5 +346,4 @@ test('is het eerder af dan de maand of de winter, dan is het eerder ontgonnen', 
   D.gebouwenDag = 41;
   T.tikGebouwenDag(D, 42);
   assert.equal(veld.ontginning, undefined, 'af, op dag 42 in plaats van 130');
-  assert.equal(D.ontginnen.klaar, 42);
 });

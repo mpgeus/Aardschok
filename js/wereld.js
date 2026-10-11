@@ -590,7 +590,7 @@
   };
 
   // Is deze grond water? Dat van een beek, een meer of een rivier, en de zee van het eiland (tegels/kust.png; werklijst
-  // vraag 117, B van 2a). Daar vist een visser (T.NATUUR, js/gebouwen.js), en daar komt geen stuk bos (js/ontginnen.js).
+  // vraag 117, B van 2a). Daar vist een visser (T.NATUUR, js/gebouwen.js).
   T.isWaterGrond = (naam) => naam === 'water' || naam === 'zee';
 
   // Twee tegels raken elkaar als ze naast elkaar liggen, ook schuin, maar niet schuin
@@ -623,7 +623,7 @@
 
   // Zicht langs een lijn van tegelmidden naar tegelmidden (Bresenham). De begin- en
   // eindtegel tellen niet mee: wie in een deuropening staat, ziet eruit. `open(x, y)` (mag ontbreken) zegt welke tegels
-  // het zicht niet houden, wat er ook staat: een stuk bos dat ontgonnen gaat worden, zonder zijn bomen (js/ontginnen.js).
+  // het zicht niet houden, wat er ook staat.
   T.zicht = function (w, a, b, open) {
     let x = a.x;
     let y = a.y;

@@ -177,9 +177,6 @@
     wapenverzoek: { soort: 'verzoek', titel: 'de wapens', zelf: true, roep: '{wie} wil je onder vier ogen spreken.' },
     // En een ondernemer die een tweede herberg wil beginnen; de herbergierster heeft daar een mening over.
     herbergverzoek: { soort: 'verzoek', titel: 'de tweede herberg', zelf: true, roep: '{wie} wil een herberg beginnen, en zoekt je.' },
-    // Een boer wil land ontginnen, als het dorp graan tekortkomt: een stuk heide, een stuk bos, of allebei om uit te kiezen
-    // (js/ontginnen.js; werklijst vraag 107).
-    ontginverzoek: { soort: 'verzoek', titel: 'het ontginnen', zelf: true, roep: '{wie} wil land ontginnen, en zoekt je.' },
     lied: { soort: 'feest', titel: 'het lied over de heer', als: { gebouw: 'herberg' }, wie: { karakter: 'zanger' } },
     // De meiboom (werklijst vraag 97; Marcel, 3 okt: "De meiboom"): niet geloot, maar elk jaar op 30 grasmaand, zodat hij
     // op 1 bloeimaand op het plein staat (js/feesten.js). De jongeren komen het vragen.
@@ -591,8 +588,8 @@
     e.pad = e.onderweg && e.pad.length ? [e.pad[0]] : [];
   }
 
-  // Een voorval kan vlaggen zetten zolang het loopt (L.vlaggen; js/gesprek.js): welke antwoorden er kunnen, zoals bij het
-  // ontginnen (js/ontginnen.js). Als het om is, gaan ze weg.
+  // Een voorval kan vlaggen zetten zolang het loopt (L.vlaggen; js/gesprek.js): welke antwoorden er kunnen. Als het om is,
+  // gaan ze weg.
   function wisVlaggen(D, L) {
     for (const v of (L && L.vlaggen) || []) T.wisVlag(D, v);
   }
@@ -604,6 +601,15 @@
     wisVlaggen(D, L);
     D.voorvallen.lopend = null;
   }
+
+  // Een bewaard spel kan een voorval hebben dat het spel niet meer kent (T.VOORVALLEN; weggehaald in een snoeironde, zoals
+  // 'ontginverzoek' op 11 okt): dat loopt of wacht niet verder. Bij het laden (T.zetSpel, js/opslaan.js).
+  T.vergeetOnbekendeVoorvallen = function (D) {
+    const V = D.voorvallen;
+    if (!V) return;
+    if (V.lopend && !T.VOORVALLEN[V.lopend.id]) stop(D);
+    if (V.wacht) V.wacht = V.wacht.filter((w) => T.VOORVALLEN[w.id]);
+  };
 
   // Hij vond je niet, of je sprak hem niet aan: dan beslist de raadsman (js/raadsman.js). Is er geen, dan gaat het
   // voorbij, en neemt het dorp het je kwalijk.
@@ -660,9 +666,7 @@
         return;
       }
     }
-    // Wil een boer heide ontginnen omdat het graan tekortkomt (js/ontginnen.js; vraag 107), of iemand iets bouwen wat het
-    // dorp mist (js/verzoeken.js; werklijst vraag 103), dan gaat dat voor.
-    if (T.beginOntginverzoek(D, dag)) return;
+    // Wil iemand iets bouwen wat het dorp mist (js/verzoeken.js; werklijst vraag 103), dan gaat dat voor.
     if (T.beginBouwverzoek(D, dag)) return;
     if (V.volgende == null) V.volgende = IN().eersteNa;
     if (dag < V.volgende) return;
@@ -784,8 +788,6 @@
     // Een bouwverzoek (js/verzoeken.js): ja, en het gebouw komt er; nee, en hij onthoudt het.
     if (doe.bouw && L.bouw) T.verzoekToegestaan(D, L);
     if (doe.weiger && L.bouw) T.verzoekGeweigerd(D, L);
-    // Ontginnen (js/ontginnen.js): ja, de heide of het bos, en het wordt een veld van zijn boerderij.
-    if (doe.ontgin && L.ontgin) T.ontginToegestaan(D, L, doe.ontgin === true ? 'heide' : doe.ontgin);
     // De wolven (js/beesten.js): een jacht te voet naar de roedel die het schaap nam (doe.jacht; stap 3b), of meteen wolven
     // minder (doe.wolven), en een hek houdt ze bij de schapen weg. gereedschap/wereld.html laadt de beesten niet.
     if (doe.wolven < 0 && T.jaagOpDeWolven) T.jaagOpDeWolven(D, -doe.wolven);
@@ -833,13 +835,6 @@
     // Een werkplaats in het bos van de heer (js/verzoeken.js, js/bos.js; werklijst vraag 110, e): dat kost zijn gunst.
     if (doe.bouw && L.bouw && L.bouw.bos && T.BAZEN_INSTELLINGEN.aan) delen.push(`gunst van de heer −${T.ONTGINNEN_INSTELLINGEN.gunst}`);
     if (doe.vertrouwen && T.BAZEN_INSTELLINGEN.aan) delen.push(`vertrouwen van het dorp ${teken(doe.vertrouwen)}${Math.abs(doe.vertrouwen)}`);
-    // Ontginnen (js/ontginnen.js): de heide kost vertrouwen, meer naarmate de meent kleiner wordt; het bos de gunst van de
-    // heer; en wat er niet meer is, kan niet.
-    if (doe.ontgin && L.ontgin) {
-      const p = T.ontginPrijs(D, L, doe.ontgin === true ? 'heide' : doe.ontgin);
-      delen.push(...p.delen);
-      if (!p.kan && uit.kan) Object.assign(uit, { kan: false, waarom: p.waarom });
-    }
     // Wie verbannen wordt, gaat het bos in, en wie het bos in gaat, kan als rover terugkomen (js/rovers.js).
     if (doe.verban && L[doe.verban]) delen.push(`${naam(L[doe.verban])} moet het bos in`);
     if (doe.gezin) {

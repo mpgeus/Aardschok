@@ -211,7 +211,7 @@
   const isWeide = (veld) => !!veld && !veld.meent && T.bestemmingVan(veld) === 'weide';
   const tegelsVan = (veld) => veld.b * veld.h;
   const opVeld = (v, x, y) => x >= v.x && x < v.x + v.b && y >= v.y && y < v.y + v.h;
-  // Hoeveel tegels van de meent een veld werden (js/ontginnen.js): daar graast niemand meer. Voor een weide 0.
+  // Hoeveel tegels van de meent een veld werden: daar graast niemand meer. Voor een weide 0.
   const overlap = (a, b) =>
     Math.max(0, Math.min(a.x + a.b, b.x + b.b) - Math.max(a.x, b.x)) * Math.max(0, Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y));
   const ontgonnenOp = (w, m) => (m && m.meent && w ? (w.akkers || []).reduce((n, v) => n + overlap(v, m), 0) : 0);
@@ -361,7 +361,7 @@
     const groep = T.weideVan(w, plek);
     const velden = groep ? groep.velden : [plek];
     const tussen = groep ? groep.tussen : new Set();
-    // Op de meent niet waar een veld ontgonnen is (js/ontginnen.js).
+    // Op de meent niet waar een veld ligt.
     const ontgonnen = (x, y) => !!plek.meent && !!T.veldOp(w, x, y);
     return {
       velden, tussen,

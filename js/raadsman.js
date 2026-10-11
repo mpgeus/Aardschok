@@ -184,17 +184,6 @@
     return n;
   }
 
-  // Ontginnen (js/ontginnen.js; werklijst vraag 107): het graan dat het dorp tekortkomt, als tevredenheid (L.ontgin.nut),
-  // tegen wat het kost, naar zijn karakter. De heide kost het vertrouwen van het dorp (dat weegt hij als tevredenheid, want
-  // het is wat het dorp ervan vindt): het eerste stuk zegt hij ja, een volgend niet. Het bos melden kost de gunst van de
-  // heer (L.ontgin.gunst).
-  function ontginWaarde(p, ontgin, soort) {
-    const t = IN().karakters[p.wezen.karakter] || IN().gewoon;
-    const nut = (t.tevreden || 0) * (ontgin.nut || 0);
-    if (soort === 'bos') return nut - (ontgin.gunst || 0);
-    return (t.tevreden || 0) * ((ontgin.nut || 0) - (ontgin.vertrouwen || 0));
-  }
-
   // De antwoorden die hij kan geven: wat het gesprek sluit, en wat naar een knoop gaat, samen met het eerste antwoord
   // daar dat het sluit (de oude die eerst een kan bier wil). Alleen wat je zelf ook zou zien (de vlaggen van het dorp, en
   // van het voorval: js/gesprek.js), zonder je tas: hij beslist zonder jou. [{ zeg, doe }].
@@ -219,7 +208,7 @@
     for (const a of antwoordenVan(D, id)) {
       const doe = T.metVaardigheden(D, p, a.doe);
       if (!T.prijsVanKeuze(D, doe).kan) continue;
-      const w = waarde(p, doe) + (doe.bouw && L.bouw ? bouwWaarde(p, L.bouw) : 0) + (doe.ontgin && L.ontgin ? ontginWaarde(p, L.ontgin, doe.ontgin) : 0);
+      const w = waarde(p, doe) + (doe.bouw && L.bouw ? bouwWaarde(p, L.bouw) : 0);
       if (!beste || w > beste.w) beste = { zeg: a.zeg, doe, w };
     }
     return beste && { zeg: beste.zeg, doe: beste.doe };

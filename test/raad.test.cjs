@@ -153,9 +153,9 @@ test('het eten: vanaf drie maanden voor de winter, als het hem niet haalt: wat e
   const hulp = T.watHelptAanEten(S.dorp).slice(0, 2);
   assert.ok(hulp.length, 'er is iets wat helpt');
   assert.equal(raad(S).tekst, `Het eten haalt ${v.dagen} van de ${v.winter} dagen van de winter. Wat helpt: ${T.opsomming(hulp.map((h) => h.zin))}. Tot het genoeg is, komt er geen gezin.`);
-  // Wat er kan: ontginnen, en op het ontworpen gehucht (zonder beesten) een jager.
+  // Wat er kan: op het ontworpen gehucht (zonder beesten) een jager.
   const ids = T.watHelptAanEten(S.dorp).map((h) => h.id);
-  assert.ok(ids.includes('ontginnen') && ids.includes('jager'), ids.join(', '));
+  assert.ok(ids.includes('jager'), ids.join(', '));
   T.zetVoorraad(S.dorp, 'graan', 5000);
   assert.notEqual(id(S), 'eten');
 });

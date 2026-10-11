@@ -138,8 +138,8 @@ const BEELD = {
     await wachtOpPlaatjes(page);
     return { scale: 'css' };
   },
-  // Een boer die wil ontginnen: de heide (het vertrouwen van het dorp), het bos gemeld (de gunst van de heer), of
-  // stiekem (js/ontginnen.js). Wie de schout al zocht, krijgt eerst ja.
+  // Iemand die iets wil bouwen en de schout zoekt (js/verzoeken.js): elk antwoord zegt vooraf wat het kost. Wie de schout
+  // al zocht, krijgt eerst ja. (Tot 11 okt stond hier een boer die wil ontginnen, js/ontginnen.js.)
   async vraag(page) {
     await zet(page, { uur: 10.5, zoom: 1 });
     if (await page.evaluate(() => !!(Spel.S.dorp.voorvallen && Spel.S.dorp.voorvallen.lopend))) {
@@ -147,9 +147,9 @@ const BEELD = {
       await page.keyboard.press('1');
       await stap(page, 0.5);
     }
-    const ontgin = await page.evaluate(() => Spel.debug.ontginnen('nu'));
-    if (typeof ontgin === 'string') throw new Error(`geen boer die wil ontginnen: ${ontgin}`);
-    await wachtOpGesprek(page, 'de boer die wil ontginnen');
+    const verzoek = await page.evaluate(() => Spel.debug.verzoek('nu'));
+    if (typeof verzoek === 'string') throw new Error(`niemand die iets wil bouwen: ${verzoek}`);
+    await wachtOpGesprek(page, 'wie iets wil bouwen');
     await page.evaluate(() => { Spel.S.zoom = 0.75; });
     await stap(page, 1.5); // de camera komt tot stilstand
     await wachtOpPlaatjes(page);

@@ -265,21 +265,19 @@
       // Een bouwverzoek (js/verzoeken.js; werklijst vraag 103): ja als het kan, zoals de bouwer bouwde wat de raad zei,
       // ook als het hout voor de winter krap is (daar waarschuwt de raad voor, en dan vraagt iemand een houthakker); kan
       // het niet, dan nee. Een gewoon voorval: het eerste verstandige antwoord.
-      // Ontginnen (js/ontginnen.js; werklijst vraag 107, e en g): ja, zoals een bouwverzoek, zolang de baas die het kost
-      // daarna op 30 of meer staat (de grens die de slimme ook bij een gril houdt): eerst de heide (het vertrouwen van het
-      // dorp; elk volgend stuk kost meer, f3), dan het bos, gemeld (de gunst van de heer). Net zo een werkplaats die eerst in het bos van de heer rooit (js/bos.js;
-      // werklijst vraag 110, e): die kost zijn gunst. In de speeltest van 6 okt zei de bouwer op 62707 met 5 gunst nog ja
-      // tegen een jager in het bos, en was hij zijn ambt kwijt.
-      const verzoek = L.bouw || L.ontgin;
+      // Een werkplaats die eerst in het bos van de heer rooit (js/bos.js; werklijst vraag 110, e) kost zijn gunst, dus ja
+      // zolang de baas die het kost daarna op 30 of meer staat (de grens die de slimme ook bij een gril houdt). In de
+      // speeltest van 6 okt zei de bouwer op 62707 met 5 gunst nog ja tegen een jager in het bos, en was hij zijn ambt kwijt.
+      const verzoek = L.bouw;
       const magJa = (b) => {
         const bazen = T.bazenNu(s.dorp);
-        if (!(L.ontgin || (L.bouw && L.bouw.bos)) || !bazen) return true;
+        if (!(L.bouw && L.bouw.bos) || !bazen) return true;
         const v = /vertrouwen van het dorp −(\d+)/.exec(prijsVan(b));
         const g = /gunst van de heer −(\d+)/.exec(prijsVan(b));
         return (!v || bazen.vertrouwen - Number(v[1]) >= 30) && (!g || bazen.gunst - Number(g[1]) >= 30);
       };
       const tekst = (b) => b.textContent.replace(/^\d/, '');
-      const ja = !verzoek ? null : knoppen.find((b) => /^(Ja|De heide|Het bos\. Ik meld)/.test(tekst(b)) && magJa(b));
+      const ja = !verzoek ? null : knoppen.find((b) => /^Ja/.test(tekst(b)) && magJa(b));
       const knop = verzoek ? ja || knoppen.find((b) => /^Nee/.test(tekst(b))) || knoppen[0] : knoppen.find((b) => verstandig(s, prijsVan(b))) || knoppen[0];
       if (!knop) break;
       const antwoord = knop.textContent.replace(/^\d/, '');
@@ -288,16 +286,8 @@
         boek.voorvallen.push({ dag: heel(s.kalender.dag), datum: datum(), id: L.id, wie: T.naamVanBewoner(L.wie), antwoord, bouw: L.bouw ? L.bouw.soort : undefined });
       }
       const bouw = L.bouw && L.bouw.soort;
-      const ontgin = !!L.ontgin;
       const voor = s.dorp.gebouwen.length;
-      const akkersVoor = s.wereld.akkers.length;
       knop.click();
-      if (ontgin && knop === ja) {
-        const gelukt = s.wereld.akkers.length > akkersVoor;
-        const waar = /heide|Ja/.test(antwoord) ? 'heide' : 'bos';
-        boek.gebouwd.push({ dag: heel(dagNu()), datum: datum(), soort: `ontginning (${waar})`, gelukt, reden: gelukt ? null : 'geen plek meer', door: 'verzoek' });
-        daad(`zegt ja tegen ${T.naamVanBewoner(L.wie)}: ontginnen (${waar})`);
-      }
       // Een bouwverzoek (js/verzoeken.js; werklijst vraag 103): wat er zo gebouwd werd, telt als gebouwd, zoals toen de
       // speler het zelf deed.
       if (bouw && /^Ja/.test(antwoord)) {

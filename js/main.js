@@ -941,44 +941,6 @@
       }));
       return { datum: `${datum.dagVanMaand} ${T.MAANDEN[datum.maand].naam}, ${T.uurTekst(D.kalender.dag)}`, boeren };
     },
-    // Ontginnen (js/ontginnen.js; werklijst vraag 107): of het dorp graan tekortkomt, welk stuk heide en welk stuk bos
-    // elke boer zou vragen, hoeveel stukken er al van de meent af gingen en wat het volgende aan vertrouwen kost, wat er nu
-    // ontgonnen wordt en hoe ver, en wanneer er weer een verzoek kan komen. ('nu') laat het verzoek nu komen, ook zonder
-    // tekort.
-    ontginnen(wat) {
-      const D = T.dorpHier(S);
-      if (!D || !D.kalender) return 'Ontginnen kan alleen in een dorp.';
-      const w = S.wereld;
-      const dag = Math.floor(D.kalender.dag);
-      if (wat === 'nu') {
-        const echt = T.graanTekort;
-        T.graanTekort = () => true;
-        const st = D.ontginnen;
-        D.ontginnen = { gevraagd: null, klaar: null, gezocht: null };
-        try {
-          if (!T.beginOntginverzoek(D, dag)) return 'Er is geen boer met een stuk vrije heide of bos, of er loopt al een voorval.';
-        } finally {
-          T.graanTekort = echt;
-          if (st) Object.assign(D.ontginnen, st);
-        }
-      }
-      const boeren = w.wezens.filter((e) => !e.dood && e.werkAkkers && e.werkAkkers.length);
-      const stuk = (p) => p && `${p.x},${p.y} ${p.b}x${p.h}`;
-      return {
-        graanTekort: T.graanTekort(D),
-        wieZouVragen: boeren.map((e) => {
-          const bos = T.bosPlekVoor(D, e);
-          return { boer: e.naam, heide: stuk(T.ontginPlekVoor(D, e)), bos: bos && `${stuk(bos)}, ${bos.bomen} bomen` };
-        }),
-        vanDeMeent: `${T.ontgonnenStukken(w)} stukken; het volgende kost ${T.ontginVertrouwen(D)} vertrouwen`,
-        inOntginning: T.inOntginning(w).map((v) => ({
-          veld: v.naam, waar: stuk(v), op: v.ontginning.op, af: `${v.ontginning.gestoken.size} van ${v.b * v.h}`,
-          bomen: T.akkerTegels(v).filter((t) => T.ontginWerkOp(w, t.x, t.y) === 'hakken').length,
-          klaarOp: v.ontginning.tot - dag + ' dagen',
-        })),
-        staat: D.ontginnen || null,
-      };
-    },
     // De beesten in het bos (js/beesten.js; werklijst vraag 116): per groep de soort, hoeveel dieren, waar de leider is en
     // wat de groep wil (thuis, aan de rand, of weg van iemand), zijn hol en zijn plekken aan de rand, en of hij nu wegrent.
     // ('hier'): de schout staat nu tien tegels van de dichtste groep, net buiten wat ze schuw maakt, om ze te bekijken.

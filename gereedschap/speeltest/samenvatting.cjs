@@ -85,7 +85,6 @@ exports.maak = function (uitslagen, stand) {
   uit.push(...deVoorvallen(goed));
   uit.push(...deOndernemers(goed));
   uit.push(...deTweeBazen(goed));
-  uit.push(...hetOntginnen(goed));
   uit.push(...hetBos(goed));
   uit.push(...vanGehuchtTotDorp(goed));
   uit.push(...hetGraanboek(goed));
@@ -165,33 +164,6 @@ function deTweeBazen(goed) {
     const g = b.grillen ? `${b.grillen.aantal} (${b.grillen.beantwoord}, ${b.grillen.stil})` : '';
     const laatst = [...b.laatst.gunst.map((x) => `heer ${x.n > 0 ? '+' : ''}${x.n} ${x.tekst}`), ...b.laatst.vertrouwen.map((x) => `dorp ${x.n > 0 ? '+' : ''}${x.n} ${x.tekst}`)].join('; ');
     uit.push(regel([NAMEN[u.speler] || u.speler, u.zaad, `${Math.round(b.nu.gunst)} (${Math.round(b.laagst.gunst)})`, `${Math.round(b.nu.vertrouwen)} (${Math.round(b.laagst.vertrouwen)})`, String(b.waarschuwingen), weg, g, laatst]));
-  }
-  uit.push('');
-  return uit;
-}
-
-// Ontginnen (js/ontginnen.js; werklijst vraag 107, stap 3): per jaar hoe vaak een boer erom vroeg, en wat de speler koos (de
-// heide, of het bos, dat hij de heer meldt; `gebouwd` in speler.js). Stiekem ontginnen en betrapt worden zijn er sinds
-// 11 okt uit (vraag 151).
-function hetOntginnen(goed) {
-  const ONTGINNING = /^ontginning \((.+)\)$/;
-  const met = goed.filter((u) => (u.voorvallen || []).some((v) => v.id === 'ontginverzoek'));
-  if (!met.length) return [];
-  const jaar = (x) => Math.floor(x.dag / 360);
-  const uit = ['## Ontginnen', '', 'Per jaar: hoe vaak een boer vroeg om te ontginnen en wat de speler koos. Het laatste jaar is de eerste maand, tot 1 grasmaand.', ''];
-  const kop = ['speler', 'zaad', 'jaar', 'verzoeken', 'heide', 'bos'];
-  uit.push(regel(kop), regel(kop.map(() => '---')));
-  for (const u of met) {
-    const ja = (u.gebouwd || []).filter((g) => g.gelukt && ONTGINNING.test(g.soort));
-    const jaren = Math.max(u.jaren || 1, (u.graan || []).length, ...ja.map((g) => jaar(g) + 1));
-    for (let j = 0; j < jaren; j++) {
-      const stukken = (waar) => String(ja.filter((g) => jaar(g) === j && ONTGINNING.exec(g.soort)[1] === waar).length);
-      uit.push(regel([
-        NAMEN[u.speler] || u.speler, u.zaad, String(j + 1),
-        String((u.voorvallen || []).filter((v) => v.id === 'ontginverzoek' && jaar(v) === j).length),
-        stukken('heide'), stukken('bos'),
-      ]));
-    }
   }
   uit.push('');
   return uit;

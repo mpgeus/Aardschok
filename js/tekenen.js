@@ -475,7 +475,7 @@
     const gebakken = bosGebakken(S);
     tekenWeides(ctx, S, vak);
     // Wat ui is op het doek, niet in de fotomodus (js/main.js, werklijst vraag 146, e): het raster, de tegel onder de
-    // muis en het pad, een gebouw aan de muis, de plek van een verzoek, het spoor, de randen van het ontginnen en de
+    // muis en het pad, een gebouw aan de muis, de plek van een verzoek, het spoor, de rand van de
     // jacht, de tekens bij de deur, de zwevende tekst, en boven een wezen zijn uitroepteken en levensbalk.
     // De wolkjes, de lantaarn en de ogen van de wolven blijven: die horen bij de wereld (Marcel, 10 okt).
     if (!S.foto) {
@@ -618,7 +618,6 @@
     // Ver uitgezoomd: het bos ten zuiden en oosten van de kaart, uit zijn buffer (werkGrondBij hierboven).
     if (gebakken) tekenStukken(ctx, bosVoorBij(S, g, zicht), zicht);
     if (!S.foto) {
-      tekenOntginRand(ctx, S);
       tekenJachtRand(ctx, S);
     }
     tekenSchoorsteenRook(ctx, S);
@@ -1830,26 +1829,6 @@
     tekenKring(ctx, S, S.bouwSoort, { x: S.bouwHover.x, y: S.bouwHover.y, b: voet.b, h: voet.h });
   }
 
-  // De rand van land om te ontginnen (js/ontginnen.js; werklijst vraag 107), bovenop alles: in het bos staan de bomen over
-  // het goud op de grond heen (tekenVerzoekPlek), en dan zag je niet welk stuk hij bedoelt.
-  function tekenOntginRand(ctx, S) {
-    const D = T.dorpHier(S);
-    const L = D && D.voorvallen && D.voorvallen.lopend;
-    if (!L || !L.ontgin || S.bouwSoort) return;
-    for (const stuk of [L.ontgin.heide, L.ontgin.bos]) {
-      if (!stuk) continue;
-      const hoeken = [[0, 0], [stuk.b, 0], [stuk.b, stuk.h], [0, stuk.h]].map(([dx, dy]) => opGrond(stuk.x + dx - 0.5, stuk.y + dy - 0.5));
-      ctx.beginPath();
-      hoeken.forEach((p, i) => (i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)));
-      ctx.closePath();
-      ctx.fillStyle = 'rgba(226, 182, 74, 0.16)';
-      ctx.fill();
-      ctx.strokeStyle = 'rgba(240, 200, 96, 0.9)';
-      ctx.lineWidth = 2 / S.zoom;
-      ctx.stroke();
-    }
-  }
-
   // Het hol waar de jacht op de wolven heen gaat (js/beesten.js; werklijst vraag 116, stap 3b): zolang de jacht loopt, een
   // ruit van vijf bij vijf tegels in goud om het hol, bovenop het bos, zodat je hem tussen de bomen vindt.
   const JACHT_RAND = 2;
@@ -1874,21 +1853,6 @@
   function tekenVerzoekPlek(ctx, S) {
     const D = T.dorpHier(S);
     const L = D && D.voorvallen && D.voorvallen.lopend;
-    // Land om te ontginnen (js/ontginnen.js): het stuk heide en het stuk bos in goud, zonder kring.
-    if (L && L.ontgin && !S.bouwSoort) {
-      ctx.fillStyle = 'rgba(226, 182, 74, 0.42)';
-      for (const stuk of [L.ontgin.heide, L.ontgin.bos]) {
-        if (!stuk) continue;
-        for (let dy = 0; dy < stuk.h; dy++) {
-          for (let dx = 0; dx < stuk.b; dx++) {
-            const p = opGrond(stuk.x + dx, stuk.y + dy);
-            T.ruit(ctx, p.x, p.y, 0.94);
-            ctx.fill();
-          }
-        }
-      }
-      return;
-    }
     if (!L || !L.bouw || S.bouwSoort) return;
     const b = L.bouw;
     if (b.kramen) {

@@ -105,18 +105,15 @@
   const jagerHelpt = (D) => T.BEHOEFTEN_INSTELLINGEN.vleesIsEten && T.jagersZonderHerten(D) === 0;
   // Wat er helpt als het eten de winter niet haalt (Marcel, 8 okt, vraag 132, b: "ze mogen advies geven op wat te doen.
   // dit kan kopen, planten, bakken etc zijn"): wat er nu kan, in deze volgorde, elk { id, zin, bouw (de soort die het
-  // dorp dan vraagt, of geen) }. Ontginnen (meer akkers: de boeren vragen het zelf, js/ontginnen.js), een visser als er
-  // water is en het nog geen winter is, een jager als er herten zijn (jagerHelpt), een graanschuur om het zaaigraan te
-  // houden (js/graanschuur.js), en in de lente zaaigraan kopen als er te weinig is om te zaaien.
+  // dorp dan vraagt, of geen) }. Een visser als er water is en het nog geen winter is, een jager als er herten zijn
+  // (jagerHelpt), een graanschuur om het zaaigraan te houden (js/graanschuur.js), en in de lente zaaigraan kopen als er te
+  // weinig is om te zaaien.
   T.watHelptAanEten = function (D) {
     const uit = [];
     const dag = D.kalender.dag;
     const datum = T.datumVanDag(dag);
     const w = D.wereld;
     const tB = mensenBouwen() ? '' : ' [B]';
-    if (T.ONTGINNEN_INSTELLINGEN.aan && !T.inOntginning(w).length) {
-      uit.push({ id: 'ontginnen', zin: 'land ontginnen voor meer akkers (een boer komt het vragen)' });
-    }
     // Vissers: een per vissersPer mensen, zolang er water genoeg is (een per waterPerVisser tegels).
     const water = w && w.tegels && w.tegels.length ? T.natuurBij(w, 'water', { x: 0, y: 0, b: w.tegels[0].length, h: w.tegels.length }, 0) : 0;
     const visser = T.GEBOUWEN.visser;

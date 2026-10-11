@@ -159,7 +159,7 @@
     return net;
   };
 
-  // Is dit een paadje van een deur (aangelegd, niet gesleten)? Daar ontgint een boer niet (js/ontginnen.js).
+  // Is dit een paadje van een deur (aangelegd, niet gesleten)? Daar komt geen stuk bos en geen erf (js/bos.js).
   T.isAangelegdPaadje = (D, x, y) => binnen(D.wereld, x, y) && T.aangelegdNet(D)[x + y * breedte(D.wereld)] === 2;
 
   // Is dit een paadje (aangelegd, of gesleten waar gelopen wordt)? De weg van de kaart telt niet: die is er al.

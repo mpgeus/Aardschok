@@ -115,7 +115,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`T.werkOpslaanBij`; op 30× om de drie dagen, want het kost een hapering), en vijf eigen (`T.slaOp`, `T.opgeslagenSpellen`); waar het blijft, zegt één functie
   (`T.opslagPlek`: de opslag van de browser, straks een bestand). Na het laden meldt het de soorten aan van wat er op de
   kaarten ligt (`T.kenSoortVan` in `js/kaart.js`): een verse bladzijde kent alleen wat ze zelf neerzette, niet een gebouw
-  uit het spel (gevonden met de proef met opslaan, 4 okt). `js/menu.js` is het scherm erbij: het
+  uit het spel (gevonden met de proef met opslaan, 4 okt), en laat een voorval gaan dat het spel niet meer kent (een
+  weggehaald voorval, zoals `ontginverzoek`: `T.vergeetOnbekendeVoorvallen` in `js/voorvallen.js`). `js/menu.js` is het scherm erbij: het
   titelscherm, waarop het spel opent, en het menu onder `Esc`. `js/main.js` begint een nieuw spel
   (`T.nieuwSpel`, dat een vorig spel helemaal wist), laadt er een (`T.laadSpel`), en gaat terug naar het
   titelscherm (`T.naarTitelscherm`).
@@ -816,28 +817,23 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 ### js/ontginnen.js: ontginnen
 
-- `js/ontginnen.js`: **ontginnen** (vraag 107, stap 1 en 2, 5 okt; Marcel: "107 a b c d e ja", en voor het bos "A a2, B
-  ok, C ja, D ok, E ok, F Ja, G ok, H goed idee"): komt het dorp graan tekort (`T.graanTekort`), dan wijst een boer of
-  zijn zoon een stuk heide en een stuk bos aan, dertig tegels elk, en jij kiest (a2): een voorval `ontginverzoek`
-  (`T.beginOntginverzoek`, in `T.tikVoorvallenDag` vóór de bouwverzoeken), met `L.ontgin` = { heide, bos (elk { x, y, b,
-  h } of null; het bos met `bomen`), boer, nut, vertrouwen, gunst }, en zolang het loopt de vlaggen
-  `ontginHeide` en `ontginBos` (`L.vlaggen`, die js/voorvallen.js wist als het om is), zodat het gesprek alleen toont wat
-  kan. De heide: zo dicht bij zijn akker als ze komt, niet op een paadje van een deur (`T.ontginPlekVoor`,
-  `T.isAangelegdPaadje` in `js/paden.js`), en ja kost het vertrouwen van het dorp, elk stuk meer (`T.ontginVertrouwen`;
-  f3). Het bos: het stuk het dichtst bij zijn akker waar hij bij kan (`T.bosPlekVoor`); je meldt het de heer, en dat kost
-  zijn gunst (`doe.ontgin: 'bos'`); stiekem ontginnen kan niet meer (11 okt, vraag 151). Wat het kost,
-  zegt `T.ontginPrijs` (voor `T.prijsVanKeuze`). Ja (`T.ontginToegestaan(D, L, soort)`) maakt er een veld van zijn
-  boerderij van, met `veld.ontginning` = { tot, op ('heide' of 'bos'), gestoken } en `veld.ontgonnen`; een nieuw veld
-  meldt `T.kaartVeranderd`. Het werk staat in `js/veldwerk.js` (`ontgin`, `T.volgendeOntginning`): plaggen steken, en
-  in het bos van recht naast de tegel een boom omhakken (`T.hakBoom` in `js/bos.js`: 10 hout, een stronk, en de tegel
-  wordt weer vloer) en een stronk of struik rooien (`T.rooi`, `T.ontginWerkOp`), en omspitten (`T.steekPlag`, die ook wat laag groeit
-  weghaalt); een half werk onthoudt hij in `e.veldwerk.over`, en wat hij niet af heeft, is nog heide of bos
-  (`T.akkerTegelStadium`). Is het af, of is de maand of de winter om, dan is het ontgonnen, en doen zijn mensen de rest
-  (`T.tikOntginnenDag`). De plekken liggen in goud op de grond, met een rand bovenop (`tekenOntginRand` in
-  `js/tekenen.js`: in het bos staan de bomen erover). De schapen grazen
-  niet op ontgonnen heide (`T.weideStand` en `T.graaslandVan` in `js/vee.js`). Na een verzoek pas na dertig dagen een
-  nieuw (`D.ontginnen`, ook `gezocht` als er nergens een plek was). De spelregel "Ontginnen" (de heide en het bos,
-  alleen de heide, of uit); de getallen in `T.ONTGINNEN_INSTELLINGEN`.
+- `js/ontginnen.js`: **het plaggen steken en het ontginnen van bos** (vraag 107, 5 okt; **het verzoek is op 11 okt
+  weggehaald**, snoeironde vraag 153: de boer die vroeg om heide of bos, het voorval `ontginverzoek` met zijn gesprek,
+  `T.beginOntginverzoek`, `T.ontginPlekVoor`, `T.bosPlekVoor`, `T.ontginVertrouwen`, `T.ontginPrijs`,
+  `T.ontginToegestaan`, `T.graanTekort`, `T.ontgonnenStukken`, de spelregel "Ontginnen", `Spel.debug.ontginnen`, de plekken
+  in goud op de grond en het advies "land ontginnen" van de raad; git bewaart het). Wat bleef, slaapt tot stap 1d, als jij een
+  akker op heide legt: een veld met `veld.ontginning` = { tot, op ('heide' of 'bos'), gestoken } (er maakt nu niets meer zo
+  een veld; de toetsen zetten het zelf). Het werk staat in `js/veldwerk.js` (`ontgin`, `T.volgendeOntginning`): plaggen
+  steken, en in het bos van recht naast de tegel een boom omhakken (`T.hakBoom` in `js/bos.js`: 10 hout, een stronk, en de
+  tegel wordt weer vloer) en een stronk of struik rooien (`T.rooi`, `T.ontginWerkOp`), en omspitten (`T.steekPlag`, die ook
+  wat laag groeit weghaalt, `T.groeitLaag`); een half werk onthoudt hij in `e.veldwerk.over`, en wat hij niet af heeft, is
+  nog heide of bos (`T.akkerTegelStadium`, `T.isGestoken`). Is het af, of is de maand of de winter om, dan is het
+  ontgonnen, en doen zijn mensen de rest (`T.tikOntginnenDag`, vanuit `T.tikGebouwenDag`); in lentemaand wordt het een
+  akker (`js/akkers.js`). `T.inOntginning(w)` zegt welke velden dat zijn. Een veld op de meent maakt haar kleiner voor de
+  schapen (`T.weideStand` en `T.graaslandVan` in `js/vee.js`). `T.ONTGINNEN_INSTELLINGEN` heeft nog twee getallen, die het
+  bos van de heer nodig heeft: `bosBomen` (een stuk is bos bij minstens zoveel bomen: `js/bos.js`, `js/erven.js`) en `gunst`
+  (wat een erf of een werkplaats in zijn bos kost: `js/erven.js`, `js/verzoeken.js`, `js/voorvallen.js`). De toetsen
+  (`test/ontginnen.test.cjs`) zetten zelf een veld in ontginning.
 
 ### js/bos.js: het bos
 
@@ -1038,7 +1034,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   wat het doel vraagt aan de treden (`T.doelGebouwen`), met waar het vandaan komt. Na de laatste trede is er geen doel
   meer (het winnen is op 11 okt weggehaald, `js/einde.js`), dus telt hij geen mensen meer; dat je een vrij erf weghaalt,
   zegt hij sinds 8 okt niet meer (Marcel: "2. B"). Haalt het eten de winter niet, dan zegt hij wat helpt (`T.watHelptAanEten`, vraag
-  133, b: ontginnen, een visser per dertig mensen, een jager als er herten zijn, een graanschuur, meer weide, zaaigraan
+  133, b: een visser per dertig mensen, een jager als er herten zijn, een graanschuur, meer weide, zaaigraan
   kopen), en vraagt het dorp het gebouw dat hij noemt. Na een voorjaar met honger maakt een boer zelf een veld weide
   (`weideErbij` in `T.boerenKiezenVelden`, `D.behoeften.voorjaarsHonger`). Vanaf de herfst zegt hij of vis en vlees de
   winter halen, als de beek dichtligt (`T.visEnVleesVoorDeWinter` in `js/behoeften.js`, `T.visEnVleesRaad`; vraag 132,
