@@ -27,16 +27,10 @@ mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voo
 **Wacht op Marcel:**
 - **De richting (vraag 151, 11 okt): de economie van The Settlers met gevechten in beurten** (Marcel: "A ja, B ja, C
   allebei"; `gameloop.md`): geen grens, geen vlaggen, bouwen binnen bereik van je stad en elke opslag, een ossenkar die
-  de grondstoffen haalt, en je bouwt alles zelf vanaf een lege plek, met een kar met wat spullen en settlers. Het plan
-  (vraag 152) en waaruit je start zijn akkoord (11 okt); **het volgende punt is vraag 152, stap 1: het lege begin**
-  (bezig in een eigen sessie, die eerst optie 1 doet). Het beeld ervan is af (hieronder bij Af); het spel tekent het met
-  1b en 1c.
-- **Gameplay als kern, en het verstoppen eruit** (vraag 151, 11 okt; Marcel: "we hebben niks"): het verstoppen en heel
-  "arm lijken" gaan eruit, de heer blijft (Marcel: "alles gaat eruit"); het plan om het weg te halen heet **optie 1**,
-  en het gaat door (Marcel: "dat moet eruit"); **af op 11 okt** (vraag 151), op de branch `ccr-7423c47f-5zapx8`
-  (Marcel, 11 okt: "Dit noemen we optie 1. Ik vertel je straks wat we doen"). Intussen kijkt Claude rond naar vergelijkbare
-  spellen: "We hebben een goede gameloop nodig".
-  Dan welke kern (A de schout is maar één mens, B rechtspraak, C de heer als klok), en eerst het eerste uur op papier.
+  de grondstoffen haalt, en je bouwt alles zelf vanaf een lege plek, met een kar met wat spullen en settlers. **Optie 1
+  is af** (11 okt, in `main`): het verstoppen, de inner, de argwaan en heel "arm lijken" zijn eruit. **Het volgende punt
+  is vraag 152, stap 1b: het lege land**, in een nieuwe sessie (Marcel: "daarna start ik nieuwe sessie"); het plan (1b
+  tot 1f), waaruit je start en de keuzes staan bij vraag 152, en het beeld is af (hieronder bij Af).
 - Het geluid (vraag 145, 2): de sleutel `FREESOUND_KEY` in de omgeving en de domeinen van Freesound erbij, zoals
   beschreven bij vraag 145; dan maakt een nieuwe sessie het.
 - Vraag 145 laten zien: is het dorp nu minder "saai"?
@@ -7774,8 +7768,7 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     De samenvatting voor een gamedesigner (`gereedschap/samenvatting/`) vertelt nog het oude spel; herschrijven als het
     lege begin er staat.
 
-152. **Bezig in sessie `ccr-7423c47f-5zapx8`** (11 okt): het plan voor stap 1 (het lege begin), met optie 1, en dan
-    bouwen. **Het beeld is af** (11 okt, in een eigen sessie): de huifkar die de ossenkar wordt, de tenten en het afdak,
+152. **Het beeld is af** (11 okt, in een eigen sessie): de huifkar die de ossenkar wordt, de tenten en het afdak,
     en het kampvuur. Marcel koos (11 okt): de kar komt aan als huifkar en
     wordt de ossenkar die werkt, als het huis van de schout er is ("Huifkar wordt ossenkar"); de gezinnen slapen in een
     tent van linnen en onder een afdak van takken met huiden ("Tent en afdak"). De proefplaten staan er
