@@ -470,12 +470,12 @@
     // vruchten etc."; js/bos.js).
     {
       id: 'bomenInHetJaar', naam: 'De bomen in het jaar', standaard: 'mee',
-      uitleg: 'Of de bomen meegaan met de seizoenen.',
+      uitleg: 'Of de bomen en het groen eronder meegaan met de seizoenen.',
       keuzes: [
         { id: 'mee', naam: 'Met de seizoenen', zet: { 'BOS_INSTELLINGEN.seizoenen': true },
-          uitleg: 'In de lente jong blad en bloesem, in de zomer vol, in de herfst geel, oranje en rood met blad op de grond, en in de winter kaal. Ligt er sneeuw, dan ligt die ook op de takken en de dennen. De appels zijn in de herfst rijp.' },
+          uitleg: 'In de lente jong blad en bloesem, in de zomer vol, in de herfst geel, oranje en rood met blad op de grond, en in de winter kaal. Ligt er sneeuw, dan ligt die ook op de takken en de dennen. De appels zijn in de herfst rijp. Het groen eronder net zo: de varens worden roestbruin, het gras strogeel, de heide bloeit paars in de zomer, en de bramen zijn rijp in de nazomer.' },
         { id: 'zomer', naam: 'Altijd zomer', zet: { 'BOS_INSTELLINGEN.seizoenen': false },
-          uitleg: 'De bomen staan het hele jaar in hun zomergroen, zoals voor 10 okt.' },
+          uitleg: 'De bomen en het groen eronder staan het hele jaar in hun zomergroen, zoals voor 10 okt.' },
       ],
     },
     // Een praatje (werklijst vraag 120; Marcel, 4 okt: "Het dorp moet echt levendig en realistisch aanvoelen", en "geen

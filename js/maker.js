@@ -79,6 +79,15 @@
       oever: { hoogGras: 0.3 },
       erf: { grasPol: 0.012, bloemen: 0.015 },
       heide: { grasPol: 0.035, kleineRots: 0.008 },
+      // Het groen eronder (vraag 148, stap 3; Marcel, 11 okt: "duidelijk", de akkerranden rood en blauw in de zomer en de
+      // heide paars): langs de akkers, achter de huizen (drie tegels achter de kant zonder deur), op de heide, aan het
+      // water, op het water (niet in zee) en aan de bosrand. De kans per vrije tegel, met een vaste keus per tegel.
+      akkerrand: { klaproos: 0.22, korenbloem: 0.14 },
+      achterHuis: { brandnetel: 0.3 },
+      heideGroen: { heide: 0.3, distel: 0.03, brem: 0.015 },
+      oeverGroen: { lisdodde: 0.12 },
+      waterGroen: { waterlelie: 0.07 },
+      bosrand: { braam: 0.06 },
     },
     // Het plein, in halve maten langs u (in beeld naar rechts) en v (naar de camera). Het ontworpen plein is zo'n
     // 10,7 bij 6,2, en 214 tegels.
@@ -1569,6 +1578,46 @@
           else if (bijWater(x, y) && r() < G.oever.hoogGras) naam = 'hoogGras';
           else if (bloemRuis(x, y) > G.bloemen[0] && r() < G.bloemen[1]) naam = 'bloemen';
           else naam = trek(G.weide);
+          if (naam) leg1(naam, x, y);
+        }
+      }
+      // Het groen eronder (vraag 148, stap 3): met een vaste keus per tegel (hash), niet met het lot (r), zodat de maker
+      // verder legt wat hij legde. Elke plek een eigen zout.
+      const vasteKeus = (kansen, x, y, zout) => {
+        let t = hash(x, y, zout);
+        for (const naam in kansen) if ((t -= kansen[naam]) < 0) return naam;
+        return null;
+      };
+      const opMeentRand = (x, y) => x === meent.x || y === meent.y || x === meent.x + meent.b - 1 || y === meent.y + meent.h - 1;
+      const langsAkker = (x, y) => [[0, 0], [1, 0], [1, 1], [0, 1]].every(([dx, dy]) => GROEIT.has(grond[y + dy][x + dx]) || grond[y + dy][x + dx] === 'z');
+      const achterHuis = new Set();
+      for (const h of huizen) {
+        for (let d = 1; d <= 3; d++) {
+          if (h.kant.y) {
+            const y = h.kant.y > 0 ? h.y - d : h.y + h.d - 1 + d;
+            for (let x = h.x - 1; x <= h.x + h.b; x++) achterHuis.add(sleutel(x, y));
+          } else {
+            const x = h.kant.x > 0 ? h.x - d : h.x + h.b - 1 + d;
+            for (let y = h.y - 1; y <= h.y + h.d; y++) achterHuis.add(sleutel(x, y));
+          }
+        }
+      }
+      for (let y = 1; y < H - 1; y++) {
+        for (let x = 1; x < B - 1; x++) {
+          if (!vrijVoor(x, y)) continue;
+          const o = op(x, y);
+          let naam = null;
+          if (o === WATER) naam = !land || land.streek(x, y) !== 'zee' ? vasteKeus(G.waterGroen, x, y, 951) : null;
+          // niet op de rand van de meent: daar komt het hek om de schapen (T.hekOmDeSchapen, js/beesten.js), en dat blijft
+          // open waar iets ligt
+          else if (o === MEENT) naam = opMeentRand(x, y) ? null : vasteKeus(G.heideGroen, x, y, 952);
+          else if (land && o === VRIJ && land.streek(x, y) === 'heide') naam = vasteKeus(G.heideGroen, x, y, 952);
+          // langs een akker: twee hoeken liggen op de akker (zand), dus niet opGras; maar niet langs de weg of het plein
+          else if ([VRIJ, ERF].includes(o) && raakt(x, y, 1, 1, 1, [AKKER]) && !raakt(x, y, 1, 1, 1, [WEG, PLEIN]) && langsAkker(x, y)) naam = vasteKeus(G.akkerrand, x, y, 953);
+          else if (![VRIJ, BOS, ERF].includes(o) || !opGras(x, y)) continue;
+          else if (bijWater(x, y)) naam = vasteKeus(G.oeverGroen, x, y, 954);
+          else if (o === VRIJ && raakt(x, y, 1, 1, 1, [BOS])) naam = vasteKeus(G.bosrand, x, y, 955);
+          else if (achterHuis.has(sleutel(x, y))) naam = vasteKeus(G.achterHuis, x, y, 956);
           if (naam) leg1(naam, x, y);
         }
       }

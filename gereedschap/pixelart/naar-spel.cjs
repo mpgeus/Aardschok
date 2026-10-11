@@ -8,6 +8,8 @@
 //   node gereedschap/pixelart/naar-spel.cjs --alleen meiboom
 //   node gereedschap/pixelart/naar-spel.cjs --alleen kerstboom
 //   node gereedschap/pixelart/naar-spel.cjs --alleen pestbos
+//   node gereedschap/pixelart/naar-spel.cjs --alleen kamp
+//   node gereedschap/pixelart/naar-spel.cjs --alleen huifkar,ossenkar-leeg,ossenkar-hout
 //   node gereedschap/pixelart/naar-spel.cjs --alleen hol
 //   node gereedschap/pixelart/naar-spel.cjs --alleen marktkraam
 //   node gereedschap/pixelart/naar-spel.cjs --alleen tekens
@@ -21,7 +23,7 @@
 // in git staat: in een verse kopie is het (bijna) leeg, en zonder --alleen bouwt dit script de
 // beschrijving opnieuw op uit wat daar staat — dan verdwijnen alle andere figuren uit het spel.
 // Een los vel dat hier zelf gerenderd wordt en niets uit uit/ nodig heeft (LOSSE_VELLEN: de
-// schandpaal, het paaltje, de meiboom, de kerstboom, de pestbos, het wolvenhol, de wijnrank, de marktkraam, de tekens met het papier en de tafel) kan ook met --alleen: dan wordt alleen dat vel gerenderd en alleen zijn
+// schandpaal, het paaltje, de meiboom, de kerstboom, de pestbos, het kamp, het wolvenhol, de wijnrank, de marktkraam, de tekens met het papier en de tafel) kan ook met --alleen: dan wordt alleen dat vel gerenderd en alleen zijn
 // ingang gezet.
 //
 // Twee soorten werk:
@@ -42,6 +44,7 @@ const Paaltje = require('./paaltje.cjs');
 const Meiboom = require('./meiboom.cjs');
 const Bomen = require('./bomen.cjs');
 const Pestbos = require('./pestbos.cjs');
+const Kamp = require('./kamp.cjs');
 const Hol = require('./hol.cjs');
 const Wijnrank = require('./wijnrank.cjs');
 const Marktkraam = require('./marktkraam.cjs');
@@ -214,6 +217,16 @@ function pestbos() {
   return Pestbos.beschrijving('pestbos.png');
 }
 
+// ---------------------------------------------------------------- het kamp
+//
+// Het kamp van het lege begin (kamp.cjs, ontwerp/werklijst.md, vraag 152): de tent, de bruine tent en het afdak, elk met
+// de opening naar elke kant, en op een tweede vel het kampvuur (acht beelden branden, dan smeulen en uit).
+function kamp() {
+  schrijf('kamp.png', Kamp.vel());
+  schrijf('kampvuur.png', Kamp.vuurVel());
+  return Kamp.beschrijving('kamp.png', 'kampvuur.png');
+}
+
 // ---------------------------------------------------------------- het wolvenhol
 //
 // Eén tekening: het hol van een roedel wolven, een kuil onder een omgevallen boom met botten ervoor (hol.cjs,
@@ -266,7 +279,7 @@ function tafel() {
   return Tafel.schrijfNaar(path.join(BEELDEN, 'tafel'));
 }
 
-const LOSSE_VELLEN = { schandpaal, paaltje, meiboom, kerstboom, pestbos, hol, wijnrank, marktkraam, tekens, tafel, uiterlijken };
+const LOSSE_VELLEN = { schandpaal, paaltje, meiboom, kerstboom, pestbos, kamp, hol, wijnrank, marktkraam, tekens, tafel, uiterlijken };
 
 // ---------------------------------------------------------------- kopiëren
 
@@ -392,6 +405,12 @@ const FIGUURLIJST = {
   hert0: { map: ['wild', 'animaties'], houdingen: ['grazen', 'staan', 'lopen', 'rennen', 'liggen'], bron: 'wild-anim.cjs hert0' },
   hert1: { map: ['wild', 'animaties'], houdingen: ['grazen', 'staan', 'lopen', 'rennen', 'liggen'], bron: 'wild-anim.cjs hert1' },
   hert2: { map: ['wild', 'animaties'], houdingen: ['grazen', 'staan', 'lopen', 'rennen', 'liggen'], bron: 'wild-anim.cjs hert2' },
+  // De ossenkar van het lege begin (ossenkar.cjs, ontwerp/beeld.md "De ossenkar en het kamp", vraag 152): de huifkar, en
+  // de ossenkar leeg en met stammen, elk met de vale os ervoor. Lopen is de kar die rijdt: de os loopt en de wielen draaien
+  // mee, met zijn `snelheid` en `stap` in de beschrijving.
+  huifkar: { map: ['ossenkar', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'ossenkar-anim.cjs huifkar' },
+  'ossenkar-leeg': { map: ['ossenkar', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'ossenkar-anim.cjs ossenkar-leeg' },
+  'ossenkar-hout': { map: ['ossenkar', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'ossenkar-anim.cjs ossenkar-hout' },
 };
 // Het kleine leven (vraag 145, 3; klein-anim.cjs): de kippen en de honden, alleen beeld (js/kleinleven.js).
 for (const f of require('./klein-anim.cjs').FIGUREN) {

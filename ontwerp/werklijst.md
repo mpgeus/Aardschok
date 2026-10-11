@@ -28,7 +28,8 @@ mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voo
 - **De richting (vraag 151, 11 okt): de economie van The Settlers met gevechten in beurten** (Marcel: "A ja, B ja, C
   allebei"; `gameloop.md`): geen grens, geen vlaggen, bouwen binnen bereik van je stad en elke opslag, een ossenkar die
   de grondstoffen haalt, en je bouwt alles zelf vanaf een lege plek, met een kar met wat spullen en settlers. Het plan
-  (vraag 152) en waaruit je start zijn akkoord (11 okt); **het volgende punt is vraag 152, stap 1: het lege begin.**
+  (vraag 152) en waaruit je start zijn akkoord (11 okt); **het volgende punt is vraag 152, stap 1: het lege begin.** Het
+  beeld ervan (de huifkar, de ossenkar, de tenten, het afdak en het kampvuur) staat in `main` (11 okt), met de vellen.
 - **Gameplay als kern, en het verstoppen eruit** (vraag 151, 11 okt; Marcel: "we hebben niks"): het verstoppen en heel
   "arm lijken" gaan eruit, de heer blijft (Marcel: "alles gaat eruit"); het plan om het weg te halen heet **optie 1**,
   en het gaat door (Marcel: "dat moet eruit"); **af op 11 okt** (vraag 151), op de branch `ccr-7423c47f-5zapx8`
@@ -62,6 +63,9 @@ mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voo
   - De brand slaat over (vraag 144): bij groot brandgevaar, als niemand blust, de helft van de keren op het dichtste huis
     binnen vijf tegels, één keer. En de pestbos: een bos stro aan een paal naast de deur van een huis met een zieke
     (`Spel.debug.koorts('nu')`); op ware grootte klein, dus groter of feller als hij beter moet opvallen.
+- Het groen eronder bekijken (vraag 148, stap 3, 11 okt): een nieuw spel, of `Spel.debug.gehucht(5)`, en dan
+  `Spel.debug.bomen = 'zomer'` (of `'lente'`, `'herfst'`, `'winter'`, `'sneeuw'`): de akkerranden rood en blauw, de
+  heide paars, waterlelies op de vijver, lisdodde aan de oever, brandnetels achter de huizen, bramen aan de bosrand.
 - De bomen bekijken (vraag 148, stap 1 en 2, 11 okt): elke boom een van zijn vormen, de nieuwe soorten, en de bomen in
   het jaar met sneeuw op de takken; `Spel.debug.bomen = 'herfst'` (of `'lente'`, `'winter'`, `'sneeuw'`, met
   `Spel.debug.weer('sneeuw', 0.6)` voor de grond). Lentemaand is al lente, zodat een spel niet kaal begint.
@@ -73,16 +77,18 @@ mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voo
 0b. Engels en een vertaaltool (vraag 147; Marcel, 9 okt): de basis nu, naast de ui; het omzetten van alle tekst na de
    ui en vóór de proefversie. Stap 1 (de basis, de tool, het menu als proef) staat in `main` (9 okt); **nu stap 2**, het
    omzetten, want de ui is af (10 okt). **Bezig in sessie `ccr-99e707bb-sla81d`** (10 okt): het plan voor stap 2,
-   met Marcel.
+   met Marcel. Claude (11 okt): pas na optie 1 (vraag 151), want allebei raken ze bijna heel `js/`.
 0c. Meer variatie in het groen, de bomen en de versiering (vraag 148; Marcel, 9 okt: alles ja, "Mag ernaast"), naast
    de ui: eerst de bomen (vormen, nieuwe soorten, de seizoenen met vruchten), dan het groen eronder, dan de spullen bij de
    huizen; de sneeuw op de bomen en de huizen (144, 4b, Marcel: "ja") in dezelfde ronde. Stap 1 staat in het spel (10
    okt, avond): elke boom een van zijn vormen, de nieuwe soorten op de kaart, de spar dunner onder de sneeuw; en stap 2
    (11 okt; Marcel: "Ja, doe stap 2 met de sneeuw erbij"): de bomen in het jaar, met sneeuw op de takken. **Nu stap 3**,
-   het groen eronder (de struiken, varens en graspollen staan nu groen in de sneeuw), dan d, de spullen bij de huizen.
-   **Bezig in sessie `ccr-2034e30c-d2iyg5`** (11 okt): het plan voor stap 3, met Marcel.
+   het groen eronder, en dat staat in `main` (11 okt): de begroeiing in vormen en in het jaar, en de nieuwe soorten langs
+   de akkers, achter de huizen, op de heide, aan het water en aan de bosrand. **Nu d**, de spullen bij de huizen, samen
+   met de ronde van de huizen (die loopt in een andere sessie).
 1. Een proefversie voor Marcels 4K-scherm en een eerste tester (33d; `npm run proefversie`, ook `-- --windows`), met de
-   graanzak erin. De laatste is van 3 okt (`36c713e`), zonder de verzoeken, de twee bazen, het ontginnen, de markt, de
+   graanzak erin. Claude (11 okt): voor een tester liever na het lege begin, want anders speelt hij het oude begin, met
+   het verstoppen dat eruit gaat. De laatste is van 3 okt (`36c713e`), zonder de verzoeken, de twee bazen, het ontginnen, de markt, de
    wolven, het eiland, WebGL en de graanzak.
 2. Marcel speelt de graanzak (`Spel.debug.zaak('nu')`) en kiest of c, d en e van vraag 128 komen (en vraag 134).
 3. Bijstellen na de tester, eerst met een getal uit de werkbank; met de speeltest van vier jaar ook de wolven en de
@@ -7570,6 +7576,42 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     jaar" (met de seizoenen, of altijd zomer). De herfsteik staat niet meer in het bos om de kaart: de bomen kleuren nu
     zelf. Kijken: `Spel.debug.bomen = 'herfst'`. Nog niet: de heide die paars bloeit en de bloemen per seizoen (bij stap
     3, het groen eronder).
+    **Stap 3, het groen eronder: het plan (11 okt; Marcel: "Akkoord. Start maar met proefplaat"):** de struiken, varens,
+    graspollen, het hoge gras, de bloemen en de paddenstoelen krijgen het jaar (lente, zomer, herfst, winter en sneeuw,
+    zoals de bomen) en elk een paar vormen, welke zegt de tegel (`T.sprites.tekeningVan`); de stronk en de rotsen alleen
+    sneeuw. Erbij de nieuwe soorten van c: klaproos en korenbloem langs de akkers, brandnetels achter de huizen, brem en
+    distels op de heide, lisdodde en waterlelies aan het water, braam aan de bosrand, met hun vruchten. **Gekozen:** de
+    seizoenen zijn dezelfde vier als die van de bomen, één wissel (`bomenInHetJaar`: de zomer is zomermaand tot
+    herfstmaand, dus de heide bloeit en de bramen zijn rijp in het vel van de zomer); en de paarse heide is een plant, een
+    plukje heide op de heide, geen grondtegel per seizoen. Eerst de proefplaat, dan het spel.
+    **Proefplaat van stap 3 (11 okt):** `node gereedschap/pixelart/groen-proef.cjs onder` (in `uit/groen/onder.png`, niet
+    in git, op 2×): per soort een rij met lente, zomer, herfst, winter en sneeuw, en zijn andere vormen, op de grond waar
+    het straks staat. In `bomen.cjs`: de struik (laag, hoog, klein), de varen (klein, groot) en het gras (dun, breed) in
+    vormen; elk kent `o.seizoen` (de struik kaal in de winter, de bessenstruik in bloei in de lente, de varen roestbruin en
+    dan dor, het gras strogeel, in de lente madeliefjes en boterbloemen, in de herfst een grote groep paddenstoelen en in de
+    winter alleen bruin blad), de stronk en de stenen alleen sneeuw; wat plat ligt, krijgt sneeuw in vlekken
+    (`sneeuwVlekken`; anders werd een varen helemaal wit). De nieuwe soorten (achteraan `BEGROEIING`): klaproos, korenbloem,
+    brandnetel, heide, brem, distel, lisdodde, waterlelie en braam. Zonder seizoen of vorm tekent elke oude plant pixel
+    voor pixel als vroeger (nagekeken), en een plant rendert in minder dan een seconde, de sneeuw in een paar. **Marcel
+    (11 okt): "Ja voor nu goed".** Wat nog kan schuren (van Claude): de brandnetels lijken van dichtbij een donker struikje,
+    de braam lijkt in de zomer op de struik, en het hoge gras was in de zomer al droog. Dan het spel: de vellen per
+    seizoen, de vormen per tegel, en de maker die de nieuwe soorten legt.
+    **Het spel in (11 okt; Marcel: "Ja akkoord"):** A, de braam en de brem staan in de weg zoals de struik, en je rooit ze
+    zoals een struik (brandnetels, lisdodde en bloemen loop je door); B, duidelijk: de akkerranden rood en blauw in de
+    zomer, de heide paars. Alleen een nieuw spel krijgt de nieuwe soorten; de seizoenen en de vormen gelden overal.
+    **Stap 3 in het spel (11 okt):** het vel van de begroeiing heeft 54 tekeningen (was 10): de struik en de bessenstruik
+    in vier vormen, de varen, het gras en het hoge gras in drie, de bloemen en de paddenstoelen in drie zaden, en de negen
+    nieuwe soorten in drie (de heide in vier; `BEGROEIING_VORMEN` in `naar-tiled.cjs`); en per seizoen een vel
+    (`begroeiing-lente`, `-herfst`, `-winter`, `-sneeuw`, alle vier in een paar minuten), dat laadt zoals dat van de bomen.
+    Wat plat in de grond ligt (het gras, de bloemen, de klaproos en de korenbloem, de heide, de waterlelie), tekent de
+    grond opnieuw als het vel van het seizoen er is (`T.sprites.seizoenVanDeBomen`, nu voor alle vellen van dat seizoen).
+    De braam en de brem zijn struiken in `T.BOMEN` (in de weg, en je rooit ze). De maker legt het groen eronder met een
+    vaste keus per tegel, na wat hij legde, zodat elk land verder ligt zoals het lag (zelfde poging, niets weg): langs de
+    akkers klaprozen en korenbloemen, achter de huizen brandnetels (drie tegels achter de kant zonder deur), op de heide
+    plukjes heide, distels en brem, aan het water lisdodde, op het water waterlelies (niet in zee) en aan de bosrand
+    bramen (`akkerrand`, `achterHuis`, `heideGroen`, `oeverGroen`, `waterGroen`, `bosrand` in
+    `T.MAKER_INSTELLINGEN.groei`). Op land 5 zo'n 260 planten erbij; op het eiland met veel heide tot 1300, bijna alle plat.
+    Toetsen: `test/groen.test.cjs`.
 149. **Kleren naar stand** (Marcel, 10 okt: "Hogere niveau sociale mensen moeten duurdere kleren krijgen").
     **Wat er nu is:** 24 uiterlijken per volwassen lijf en 12 per kind en per oude (vraag 145,
     `gereedschap/pixelart/uiterlijk.cjs`), allemaal boerenkleren: een kiel, klompen, lappen en vuil, in gedempte verf.
@@ -7732,7 +7774,14 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     lege begin er staat.
 
 152. **Bezig in sessie `ccr-7423c47f-5zapx8`** (11 okt): het plan voor stap 1 (het lege begin), met optie 1, en dan
-    bouwen. **De proef: bouwen binnen bereik, en de kar** (vraag 151, B; Marcel, 11 okt: "B ja", "Denk goed na over het plan",
+    bouwen. **Het beeld is af** (11 okt, in een eigen sessie): de huifkar die de ossenkar wordt, de tenten en het afdak,
+    en het kampvuur. Marcel koos (11 okt): de kar komt aan als huifkar en
+    wordt de ossenkar die werkt, als het huis van de schout er is ("Huifkar wordt ossenkar"); de gezinnen slapen in een
+    tent van linnen en onder een afdak van takken met huiden ("Tent en afdak"). De proefplaten staan er
+    (`ossenkar.cjs`, `kamp.cjs`; `beeld.md`, "De ossenkar en het kamp"). Marcel koos de vale os (11 okt: "Vaal"), en de
+    vellen staan in `beelden/`: de figuren `huifkar`, `ossenkar-leeg` en `ossenkar-hout` (staan en lopen, in acht
+    richtingen), en het los vel `kamp` (de tent, de bruine tent en het afdak met de opening naar elke kant, en het vuur).
+    Het spel tekent ze met 1b en 1c (een `T.sprites` erbij, zoals `S.kraam`). **De proef: bouwen binnen bereik, en de kar** (vraag 151, B; Marcel, 11 okt: "B ja", "Denk goed na over het plan",
     en "Ik wil geen 'grens' alles moet open zijn. Ook geen vlaggen. Misschien dat grondstoffen worden opgehaald met een kar? Dus je kunt bijvoorbeeld x tegels vanaf je stad bouwen").
     Het eerste plan (wegen met vlaggen en dragers, zoals Settlers II) is daarmee van tafel; wat Claude erbij leerde,
     blijft gelden: met de getallen van nu staat een weg met dragers negen tiende van de tijd stil, bouwen is de eerste

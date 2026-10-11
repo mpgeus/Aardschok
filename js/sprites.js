@@ -345,6 +345,7 @@
   // veel; wat hier niet in staat, staat stil. Een boom of een struik zegt het zelf (`wind` in T.BOMEN, js/wereld.js).
   const WIND_GEWICHT = {
     varen: 4, grasPol: 4, hoogGras: 5, bloemen: 4,
+    klaproos: 4, korenbloem: 4, brandnetel: 3, distel: 3, lisdodde: 5,
     waslijn: 10,
   };
   const windGewicht = (naam) => WIND_GEWICHT[naam] || (T.BOMEN[naam] && T.BOMEN[naam].wind) || 0;
@@ -446,11 +447,13 @@
     seizoenNu = seizoen;
     for (const v of Object.values(T.TEGELS || {})) if (v.seizoen === seizoen) laadAlsNodig(v.bestand);
   };
-  // Het seizoen waarin de bomen nu echt getekend worden: dat van nu als zijn vel er is, anders de zomer. Voor wat de bomen
-  // in een buffer legt (het bos om de kaart, ver uitgezoomd): dat moet opnieuw als dit verandert.
+  // Het seizoen waarin de bomen en het groen eronder nu echt getekend worden: dat van nu als zijn vellen er zijn (de bomen
+  // en de begroeiing), anders de zomer. Voor wat het in een buffer legt (het groen dat plat in de grond ligt, het bos om
+  // de kaart ver uitgezoomd): dat moet opnieuw als dit verandert.
   S.seizoenVanDeBomen = () => {
-    const v = seizoenNu !== 'zomer' && T.TEGELS && T.TEGELS[`bomen-${seizoenNu}`];
-    return v && beelden.has(v.bestand) ? seizoenNu : 'zomer';
+    if (seizoenNu === 'zomer' || !T.TEGELS) return 'zomer';
+    const vellen = Object.values(T.TEGELS).filter((v) => v.seizoen === seizoenNu);
+    return vellen.length && vellen.every((v) => beelden.has(v.bestand)) ? seizoenNu : 'zomer';
   };
 
   // `wind`, als meegegeven, is de windwaarde voor dít voorwerp (-1..1, T.windWaarde in

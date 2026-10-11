@@ -166,7 +166,8 @@
     // De droge beekjes (js/weer.js) liggen in de grond: vallen ze droog of komen ze terug, dan opnieuw.
     const D = T.dorpHier(S);
     const beek = D && D.weer && D.weer.beekDroog ? 1 : 0;
-    // Ver uitgezoomd ligt het bos om de kaart erin (bosGebakken): met een ander seizoen van de bomen ook opnieuw.
+    // Het groen dat plat op de grond ligt, en ver uitgezoomd het bos om de kaart (bosGebakken), liggen erin: met een ander
+    // seizoen (de bomen en de begroeiing, vraag 148) ook opnieuw.
     const bomen = metSprites() ? T.sprites.seizoenVanDeBomen() : '';
     return `${w.gebied}|${w.huidigeKamer}|${w.bekend.size}|${g}|${metSprites() ? 1 : 0}|${Math.round(S.zoom * 100)}|${padVersie(S)}|${platVan(w).versie}|${beek}|${sneeuwStap(S)}|${bomen}`;
   }
@@ -2193,6 +2194,8 @@
     varen: ['#476b2c', 10, 0.26], grasPol: ['#4e7430', 8, 0.22], hoogGras: ['#577d33', 14, 0.22],
     bloemen: ['#6d8a3c', 8, 0.24], paddenstoelen: ['#9a7250', 6, 0.16], boomstronk: ['#6a5238', 12, 0.26],
     rots: ['#77736c', 20, 0.30], kleineRots: ['#7d7973', 10, 0.20],
+    klaproos: ['#b8402c', 10, 0.2], korenbloem: ['#4a6cb0', 10, 0.2], brandnetel: ['#3f6a2a', 14, 0.24],
+    heide: ['#7a4f8a', 6, 0.26], distel: ['#7c5a8c', 14, 0.18], lisdodde: ['#55743a', 22, 0.2], waterlelie: ['#3f6a34', 2, 0.3],
   };
 
   function tekenBuitenVlak(ctx, v, helder) {

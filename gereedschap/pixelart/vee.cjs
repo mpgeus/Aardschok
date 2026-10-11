@@ -36,14 +36,16 @@ const TEGEL = 64 / Math.SQRT2; // eenheden per tegel
 // Loopsnelheid in tegels per seconde. Moet gelijk zijn aan T.VEE.<soort>.snelheid in js/vee.js,
 // anders glijden de voeten (test/vee.test.cjs houdt ze gelijk). Een koe kuiert, een schaap
 // trippelt iets vlotter.
-const SNELHEID = { koe: 0.9, schaap: 1.1 };
+// De os trekt de ossenkar (ossenkar.cjs, vraag 152) in het tempo van een koe; de wielen van de kar zijn erop gemaakt.
+const SNELHEID = { koe: 0.9, schaap: 1.1, os: 0.9 };
 // Hoe groot het dier in het spel staat, tegen de maten waarin het hieronder gebouwd is: kleiner
 // maken kan zonder één vorm te veranderen (geschaald, figuren.cjs). De loopcyclus rekent ermee, zodat
 // een staande voet ook na het verkleinen precies met het spel meeschuift.
-const SCHAAL = { koe: 0.9, schaap: 0.9 };
+// De os is een koe op ware maat: een trekdier was groter dan een melkkoe.
+const SCHAAL = { koe: 0.9, schaap: 0.9, os: 1.0 };
 // Beelden per seconde van de loopcyclus: één rondje is één pas van elke poot. Een koe doet een
 // rondje per seconde (0,9 tegel), een schaap zet kortere, snellere stappen.
-const LOOP_FPS = { koe: 8, schaap: 12 };
+const LOOP_FPS = { koe: 8, schaap: 12, os: 8 };
 
 const HOUDINGEN = {
   grazen: { beelden: 8, fps: 5, herhaal: true },
@@ -156,6 +158,38 @@ const KOE_KLEUREN = [
   },
 ];
 
+// De os (vraag 152: de ossenkar van het lege begin): het lijf van de koe, maar zwaarder, met een spierbult op de
+// schoft, een dikke hals, lange horens en geen uier. Twee kleuren: vaal, grijswit met een donkere voorhand, zoals de
+// trekossen op oude schilderijen, en roodbruin, donkerder dan de koe.
+const OS_KLEUREN = [
+  {
+    naam: 'vaal',
+    vacht: { ramp: 'pleister', lo: 0.8, hi: 4.3 },
+    // de hals, de schoft en de schenen donkerder, en een vaal waas over de rug
+    tint: (deel, x, y, z) => {
+      if (deel === 'poot') return z < 14 ? -1.6 : z < 22 ? -0.6 : 0;
+      if (deel === 'kop') return y > 55 ? -0.8 : -0.4;
+      if (deel === 'lijf' && y > 14) return z < 40 ? -1.2 : -0.7;
+      return 0;
+    },
+    snuit: { ramp: 'vacht', lo: 0.4, hi: 2.6, glans: 1.1 },
+    uier: { ramp: 'huid', lo: 2.2, hi: 5.6 },
+    kwast: { ramp: 'vacht', lo: 0.2, hi: 2.2 },
+    oorBinnen: { ramp: 'huid', lo: 1.6, hi: 4.0 },
+    hoorn: [11, 7.5, 5],
+  },
+  {
+    naam: 'roodbruin',
+    vacht: { ramp: 'dak', lo: 0.7, hi: 5.0 },
+    tint: (deel, x, y, z) => (deel === 'poot' && z < 16 ? -0.9 : deel === 'lijf' && y > 12 && z > 42 ? -0.5 : 0),
+    snuit: { ramp: 'huid', lo: 1.2, hi: 4.4 },
+    uier: { ramp: 'huid', lo: 2.2, hi: 5.6 },
+    kwast: { ramp: 'dak', lo: 0.2, hi: 2.6 },
+    oorBinnen: { ramp: 'huid', lo: 1.6, hi: 4.0 },
+    hoorn: [9, 6.5, 4.5],
+  },
+];
+
 // ---------------------------------------------------------------- het schaap
 
 const SCHAAP = {
@@ -211,7 +245,7 @@ const SCHAAP_KLEUREN = [
   },
 ];
 
-const MATEN = { koe: KOE, schaap: SCHAAP };
+const MATEN = { koe: KOE, schaap: SCHAAP, os: KOE };
 
 // ---------------------------------------------------------------- houdingen
 
@@ -360,9 +394,16 @@ function vachtMat(kleur, deel) {
   };
 }
 
-function koeMaterialen(kleur) {
+function koeMaterialen(kleur, os) {
   const M = { lijf: 0, kop: 1, poot: 2, staart: 3, snuit: 4, oog: 5, neusgat: 6, hoorn: 7, hoef: 8, uier: 9, kwast: 10, oor: 11 };
   const mat = [];
+  if (os) {
+    // het juk van essenhout, glad gesleten waar het op de hals ligt, en de riem eronder
+    M.juk = 12;
+    M.riem = 13;
+    mat[M.juk] = { ramp: 'hout', lo: 1.4, hi: 5.6, patroon: (x, y, z) => (Math.sin(x * 0.9 + z * 0.2) > 0.75 ? -0.8 : 0) };
+    mat[M.riem] = { ramp: 'leer', lo: 1.0, hi: 4.2 };
+  }
   mat[M.lijf] = vachtMat(kleur, 'lijf');
   mat[M.kop] = vachtMat(kleur, 'kop');
   mat[M.poot] = vachtMat(kleur, 'poot');
@@ -423,11 +464,16 @@ function schaapMaterialen(kleur) {
 // ---------------------------------------------------------------- de koe bouwen
 
 // koe({ houding, fase, kleur }): kleur 0 roodbruin, 1 zwart, 2 zwartbont. Zonder houding staat ze.
+// Met `os` is het de os (OS_KLEUREN), en met `juk` draagt hij het juk van de ossenkar (ossenkar.cjs): een gebogen balk
+// over de hals vóór de schoft, met aan elke kant een pen en een riem onder de keel; de disselbomen van de kar komen aan
+// de uiteinden (JUK.eind).
 function koe(o = {}) {
-  const kleur = KOE_KLEUREN[(o.kleur || 0) % KOE_KLEUREN.length];
-  const P = houdingVan('koe', o.houding || 'staan', o.fase || 0);
+  const os = !!o.os;
+  const soort = os ? 'os' : 'koe';
+  const kleur = os ? OS_KLEUREN[(o.kleur || 0) % OS_KLEUREN.length] : KOE_KLEUREN[(o.kleur || 0) % KOE_KLEUREN.length];
+  const P = houdingVan(soort, o.houding || 'staan', o.fase || 0);
   const T = standen(P, KOE);
-  const { M, mat } = koeMaterialen(kleur);
+  const { M, mat } = koeMaterialen(kleur, os);
   const D = { lijf: 1, kop: 2, voorL: 3, voorR: 4, achterL: 5, achterR: 6, staart: 7, oorL: 8, oorR: 9, hoorn: 10 };
   const L = (d) => beweeg(d, T.lijf);
   const N = (d) => beweeg(d, T.nek);
@@ -447,15 +493,30 @@ function koe(o = {}) {
   delen.push(L(kegel([0, -30, 50.4], [0, -36.5, 50], 3.4, 2.6, M.lijf, D.lijf, 2)));
   // het borstbeen, tussen de voorpoten
   delen.push(L(ellips([0, 27, 31], [6.5, 6.5, 6], M.lijf, D.lijf, 4)));
-  // een klein uier met vier spenen: een koe van toen gaf een paar liter per dag
-  delen.push(L(ellips([0, -14.5, 25.2], [6.2, 7.2, 4.8], M.uier, D.lijf, 3)));
-  for (const sx of [-1, 1]) {
-    for (const sy of [-1, 1]) delen.push(L(kegel([sx * 2.4, -14.5 + sy * 2.6, 21.6], [sx * 2.5, -14.5 + sy * 2.8, 18.4], 1.05, 0.8, M.uier, D.lijf)));
+  if (os) {
+    // geen uier, maar een spierbult op de schoft, waar het juk tegenaan ligt
+    delen.push(L(ellips([0, 16.5, 49.5], [8.5, 10, 6.5], M.lijf, D.lijf, 4)));
+  } else {
+    // een klein uier met vier spenen: een koe van toen gaf een paar liter per dag
+    delen.push(L(ellips([0, -14.5, 25.2], [6.2, 7.2, 4.8], M.uier, D.lijf, 3)));
+    for (const sx of [-1, 1]) {
+      for (const sy of [-1, 1]) delen.push(L(kegel([sx * 2.4, -14.5 + sy * 2.6, 21.6], [sx * 2.5, -14.5 + sy * 2.8, 18.4], 1.05, 0.8, M.uier, D.lijf)));
+    }
   }
 
-  // --- hals, met de kwab eronder
-  delen.push(N(kegel([0, 22, 43.5], [0, 44, 47.5], 11, 7.6, M.lijf, D.lijf, 6)));
-  delen.push(N(platteKegel([0, 42.5, 39], [0, 25.5, 29.5], 3, 6, [1, 0, 0], 0.55, M.lijf, D.lijf, 3)));
+  // --- hals, met de kwab eronder (bij de os dikker en dieper)
+  delen.push(N(kegel([0, 22, 43.5], [0, 44, 47.5], os ? 12.5 : 11, os ? 8.4 : 7.6, M.lijf, D.lijf, 6)));
+  delen.push(N(platteKegel([0, 42.5, 39], [0, 25.5, 29.5], os ? 3.6 : 3, os ? 7.8 : 6, [1, 0, 0], 0.55, M.lijf, D.lijf, 3)));
+  if (os && o.juk) {
+    // het juk ligt op de lijn van de hals vóór de bult, en gaat met het lijf mee
+    const [yJ, zTop, zEind, xEind] = [JUK.y, JUK.top, JUK.eind[2], JUK.eind[0]];
+    for (const p of bochtProfiel([-xEind, yJ, zEind], [0, yJ, 2 * zTop - zEind], [xEind, yJ, zEind], () => 2.1, 6, M.juk, D.lijf, 0.6)) delen.push(L(p));
+    for (const s of [-1, 1]) {
+      delen.push(L(kegel([s * 12.6, yJ, zTop - 3.5], [s * 12.2, yJ, 37.5], 1.1, 0.9, M.juk, D.lijf, 0.4)));
+      delen.push(L(bol([s * xEind, yJ, zEind], 2.6, M.juk, D.lijf, 0.5)));
+    }
+    for (const p of bochtProfiel([-12.2, yJ, 37.8], [0, yJ, 28.6], [12.2, yJ, 37.8], () => 0.95, 5, M.riem, D.lijf, 0.4)) delen.push(L(p));
+  }
 
   // --- kop: een breed voorhoofd, een lang gezicht en een brede snuit
   delen.push(K(ellips([0, 49.3, 48], [6.6, 5.6, 5.8], M.kop, D.kop, 3)));
@@ -470,7 +531,7 @@ function koe(o = {}) {
     const voet = [s * 4.8, 48.9, 52];
     const punt = [s * (4.8 + hx), 48.9 + hy, 52 + hz];
     const midden = [s * (4.8 + hx * 0.85), 48.9 + hy * 0.1, 52 + hz * 0.25];
-    for (const p of bochtProfiel(voet, midden, punt, (t) => mix(2, 0.55, t), 4, M.hoorn, D.hoorn, 0.8)) delen.push(K(p));
+    for (const p of bochtProfiel(voet, midden, punt, (t) => (os ? mix(2.7, 0.65, t) : mix(2, 0.55, t)), os ? 6 : 4, M.hoorn, D.hoorn, 0.8)) delen.push(K(p));
     // oren: plat, zijwaarts onder de horens, de holte naar voren
     const oor = platteKegel(KOE.oor(s), [s * 12.6, 46.7, 47], 1.3, 2.7, [0, 1, 0.25], 0.5, M.oor, s < 0 ? D.oorL : D.oorR, 1);
     delen.push(beweeg(oor, s < 0 ? T.oorL : T.oorR));
@@ -508,8 +569,12 @@ function koe(o = {}) {
   delen.push(beweeg(ruig(ellips([0, -39.6, 15.8], [2.1, 2.1, 4.4], M.kwast, D.staart, 1), [0.5, 0.5, 0.25], 31, 0.7), T.staart2));
 
   if (P.ligt) delen.push(GROND);
-  return geschaald(model(delen, mat, omhul(delen)), SCHAAL.koe);
+  return geschaald(model(delen, mat, omhul(delen)), SCHAAL[soort]);
 }
+
+// Waar het juk van de os ligt, in de maten van de os: zijn balk op de hals (y, de top), en de uiteinden waar de
+// disselbomen van de kar vastzitten. ossenkar.cjs legt de kar eraan.
+const JUK = { y: 27, top: 58.2, eind: [19, 27, 48.5] };
 
 // De poten van een liggende koe, in de maten van het lijf (dat daarna gezakt en gekanteld wordt):
 // voor gevouwen onder de borst, met de knie vooruit op de grond en de pijp terug eronder; achter
@@ -659,6 +724,8 @@ module.exports = {
   VELLEN,
   KOE_KLEUREN,
   SCHAAP_KLEUREN,
+  OS_KLEUREN,
+  JUK,
   HOUDINGEN,
   SNELHEID,
   LOOP_FPS,
