@@ -635,15 +635,17 @@
     },
     // Het lege begin (werklijst vraag 152, stap 1b; Marcel, 11 okt: "We moeten ook zelf alles vanaf de start gaan bouwen";
     // js/begin.js): een lege plek op het eiland, een kar en vier gezinnen. Standaard het gehucht dat er al was, zodat de
-    // toetsen en de speeltest blijven spelen, tot het lege begin een jaar draait (vraag 152, 1f).
+    // toetsen en de speeltest blijven spelen, tot het lege begin een jaar draait (vraag 152, 1f). "Leeg" zet ook "Huizen"
+    // en "Wie bouwt" op "Jij" (Marcel, 11 okt: "We willen dus een bouwmenu en zelf bouwen"); het komt na die twee in deze
+    // lijst, dus het gaat voor.
     {
       id: 'begin', naam: 'Het begin', standaard: 'gehucht',
       uitleg: 'Hoe een nieuw spel begint. Geldt vanaf het volgende nieuwe spel.',
       keuzes: [
         { id: 'gehucht', naam: 'Het gehucht dat er al was', zet: { 'MAKER_INSTELLINGEN.leeg': false },
           uitleg: 'Je wordt schout van een gehucht met huizen, een herberg, en boerderijen met hun akkers.' },
-        { id: 'leeg', naam: 'Leeg', zet: { 'MAKER_INSTELLINGEN.leeg': true },
-          uitleg: 'Een kar met wat spullen rijdt een leeg stuk van het eiland in, met je gezin en vier gezinnen erachter. Op de open plek die het plein wordt, slapen jullie in tenten bij het kampvuur. Zelf bouwen komt nog; alleen op het eiland.' },
+        { id: 'leeg', naam: 'Leeg', zet: { 'MAKER_INSTELLINGEN.leeg': true, 'ERVEN_INSTELLINGEN.dorpBouwtZelf': false, 'VERZOEKEN_INSTELLINGEN.mensen': false },
+          uitleg: 'Een kar met wat spullen rijdt een leeg stuk van het eiland in, met je gezin en vier gezinnen erachter. Op de open plek die het plein wordt, slapen jullie in tenten bij het kampvuur. Jij bouwt alles uit het bouwmenu (Huizen en Wie bouwt staan dan op Jij, meteen), en is een hut of huis af, dan trekt er een gezin uit het kamp in. Alleen op het eiland.' },
       ],
     },
   ];

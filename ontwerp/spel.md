@@ -64,7 +64,7 @@ en je vecht in beurten, om je dorp te verdedigen
 en om het eiland te veroveren tot het kasteel van de heer, zoals in Jagged Alliance 2. Het verstoppen en heel "arm
 lijken" gaan eruit ("Rijk worden en arm lijken"). Wat dat is, wat er al is en wat ontbreekt: `gameloop.md`.
 
-**Zo werkt het lege begin nu** (11 okt, vraag 152, stap 1b; `js/begin.js`): achter de spelregel "Het begin" op "Leeg"
+**Zo werkt het lege begin nu** (11 okt, vraag 152, stap 1b en 1c; `js/begin.js`): achter de spelregel "Het begin" op "Leeg"
 (standaard nog het gehucht dat er al was, tot het lege begin een jaar draait, stap 1f). De maker legt op het eiland
 geen gehucht, alleen het land: het bos, het water, de heide en de wegen van het eiland, en een open plek die het plein
 wordt, met een paar oude eiken en het bos er vlak omheen (Marcel: "Klein, bos dichtbij"). Na de benoeming (de heer
@@ -72,10 +72,15 @@ stuurt je met vier gezinnen naar een stuk van zijn wildernis) rijdt de huifkar o
 ernaast tot je zelf ergens heen klikt, en de gezinnen lopen erachter (Marcel: "Rijdt nu binnen"). Op het plein zetten ze
 het kamp op: een tent of een afdak per gezin rond het kampvuur, en de kar ernaast. Daar wonen ze; de tent van de schout
 is zijn huis (slapen, het rapport). Een tent is zo groot als zijn gezin, dus er komt geen nieuw gezin bij. In de kar: 50
-hout, 140 graan, 60 zaaigraan, 20 goud en 5 gereedschap; met de schout komt zijn gezin mee (Marcel: "Met gezin"), samen
-zo'n 24 mensen. Het eerste jaar vraagt de heer niets: geen schatting en geen grillen, en in wijnmaand schrijft hij dat hij
-je spaart ("Bedank Ons niet"). Nog niet: zelf bouwen (1d), verhuizen uit het kamp naar een hut (1c), en boeren worden
-(1e); zonder bouwen haalt het kamp de winter niet.
+hout, 140 graan, 60 zaaigraan, 20 goud en 5 gereedschap; met de schout komt zijn gezin mee (Marcel: "Met gezin"), en elk
+gezin is een man, een vrouw en een kind, zodat het in een hut past (Marcel: "Kleinere gezinnen"), samen 17 mensen. Het
+eerste jaar vraagt de heer niets: geen schatting en geen grillen, en in wijnmaand schrijft hij dat hij je spaart ("Bedank
+Ons niet"). **Jij bouwt** (Marcel: "We willen dus een bouwmenu en zelf bouwen"): "Leeg" zet "Huizen" en "Wie bouwt" op
+"Jij", dus alles staat in het bouwmenu en jij zet het neer (het rijst nog vanzelf op in zijn bouwtijd). **Verhuizen:** is
+een hut of huis af, dan trekt er in die nacht een gezin uit het kamp in (past het niet, dan toch, krap), en zijn tent gaat
+weg (Marcel: "Per tent"); met de laatste tent gaat het kampvuur uit, en de kar blijft. Zolang er een gezin in het kamp
+woont, komt er geen nieuw gezin over de weg. Nog niet: het bereik, het huis van de schout in het bouwmenu en meebouwen
+(1d), en boeren worden (1e); zonder bouwen haalt het kamp de winter niet.
 
 ## Een nieuwe richting (Marcel, 28 sep 2026)
 

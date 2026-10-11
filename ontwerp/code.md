@@ -634,7 +634,16 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   of slapen (`T.kampvuurStand`, `T.kampLicht`; `T.sprites.kamp` en `T.sprites.kampvuur`, uit
   `gereedschap/pixelart/kamp.cjs`). De benoeming is een andere (de wildernis, js/brieven.js), en het eerste jaar vraagt de
   heer niets (`T.heerLaatMetRust`, `heerVrij`: geen schatting en geen grillen; in wijnmaand de brief `gespaard`). Wat het
-  dorp van het begin weet, staat in `D.begin`. Nog niet: verhuizen uit het kamp (1c), zelf bouwen (1d), boeren worden (1e).
+  dorp van het begin weet, staat in `D.begin`. **Verhuizen uit het kamp** (1c, 11 okt): de keuze "Leeg" zet ook
+  `ERVEN_INSTELLINGEN.dorpBouwtZelf` en `VERZOEKEN_INSTELLINGEN.mensen` uit (hij staat na "Huizen" en "Wie bouwt" in
+  `T.OPTIES`, dus hij gaat voor), zodat jij de hut en het huis neerzet. Elke nacht, na de gebouwen die af zijn en vóór de
+  groei (`T.tikGebouwenDag`), trekt er in elke woning (`woning` in `T.GEBOUWEN`) die af is en plaats heeft een gezin uit
+  het kamp: het eerste dat past, of anders het eerste in een woning waar nog niemand woont, krap (`T.verhuisUitHetKamp`;
+  het verhuizen zelf is `T.verhuis` in `js/bewoners.js`: zijn thuis en zijn plekken gaan mee, en wie binnen is, komt de
+  oude deur uit). Een lege tent gaat uit `D.gebouwen` en van de kaart, met de laatste ook het kampvuur (`D.begin.kamp`
+  wordt `'weg'`); de tent van de schout blijft zijn huis tot 1d. `T.kampTenten` zijn de tenten van de gezinnen: zolang
+  er een is, zegt `T.waaromGeenGezin` `'kamp'` en komt er geen nieuw gezin. Nog niet: het bereik, het huis van de schout
+  in het bouwmenu en meebouwen (1d), boeren worden (1e).
 
 ### js/erven.js: de erven
 

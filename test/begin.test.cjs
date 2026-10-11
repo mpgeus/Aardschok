@@ -62,7 +62,10 @@ test('het kamp: een tent per gezin, die van de schout is zijn huis, en er is gee
   const gezinnen = new Set(D.bewoners.mensen.map((p) => p.gezin));
   assert.equal(gezinnen.size, tenten.length, 'een gezin per tent');
   assert.equal(D.bevolking, D.bewoners.mensen.length, 'het getal is wie er is');
-  assert.ok(D.bevolking >= 20 && D.bevolking <= 26, `de schout, zijn gezin en vier gezinnen: ${D.bevolking}`);
+  for (const g of T.kampTenten(D)) {
+    assert.equal(D.bewoners.mensen.filter((p) => p.huis === g).length, 3, 'een man, een vrouw en een kind: dat past in een hut');
+  }
+  assert.ok(T.GEBOUWEN.hut.woonruimte >= 3);
   assert.equal(T.telWoonruimte(D), D.bevolking, 'een tent is zo groot als zijn gezin');
   assert.ok(!T.plaatsVoorEenGezin(D), 'een nieuw gezin vindt er geen plaats');
 });
@@ -102,6 +105,8 @@ test('staat het kamp er in de nacht nog niet (geen beelden, of de kar zat vast),
 
 test('een jaar vanaf een lege plek, zonder iets te doen: geen fout, en de heer vraagt niets', () => {
   const { S, D } = leegBegin();
+  const begin = D.bevolking;
+  gezegd.length = 0;
   let gril = false;
   brieven.length = 0;
   dagen(S, 1, T.DAGEN_PER_JAAR - 1, () => {
@@ -110,8 +115,89 @@ test('een jaar vanaf een lege plek, zonder iets te doen: geen fout, en de heer v
   });
   assert.ok(!gril, 'geen grillen het eerste jaar');
   assert.deepEqual(brieven, ['gespaard'], 'in wijnmaand schrijft hij alleen dat hij je spaart');
-  // zonder te bouwen haalt het dorp de winter niet: dat is hoe het nu is (bouwen is stap 1d)
-  assert.ok(D.bevolking < 24);
+  // zonder te bouwen haalt het dorp de winter niet
+  assert.ok(D.bevolking < begin);
+  assert.ok(!gezegd.some((t) => /geen plaats/.test(t)), 'zolang er een gezin in het kamp woont, wil er geen nieuw gezin komen');
+});
+
+// Zet `n` hutten neer zo dicht mogelijk bij het kampvuur (niet op het plein), zoals de speler ze met het bouwmenu neerzet.
+function zetHutten(D, n, soort = 'hut') {
+  const v = D.wereld.kamp.vuur;
+  const hutten = [];
+  for (let r = 1; r < 30 && hutten.length < n; r++) {
+    for (let dy = -r; dy <= r && hutten.length < n; dy++) {
+      for (let dx = -r; dx <= r && hutten.length < n; dx++) {
+        if (Math.max(Math.abs(dx), Math.abs(dy)) !== r) continue;
+        const uit = T.plaatsGebouw(D, soort, v.x + dx, v.y + dy);
+        if (uit.gelukt) hutten.push(uit.instantie);
+      }
+    }
+  }
+  assert.equal(hutten.length, n, `er is plaats voor ${n} hutten`);
+  return hutten;
+}
+const wonenIn = (D, g) => D.bewoners.mensen.filter((p) => p.huis === g);
+
+test('"Leeg" zet Huizen en Wie bouwt op Jij: de hut en het huis staan in het bouwmenu, en het erf niet', () => {
+  try {
+    T.pasOptiesToe({ keuzes: { begin: 'leeg', huizen: 'dorpBouwtZelf', wieBouwt: 'mensen' } });
+    assert.equal(T.MAKER_INSTELLINGEN.leeg, true);
+    assert.equal(T.ERVEN_INSTELLINGEN.dorpBouwtZelf, false);
+    assert.equal(T.VERZOEKEN_INSTELLINGEN.mensen, false);
+    const { D } = leegBegin();
+    assert.ok(T.inBouwmenu(D, 'hut') && T.inBouwmenu(D, 'huis') && T.inBouwmenu(D, 'houthakker'));
+    assert.ok(!T.inBouwmenu(D, 'erf'));
+  } finally {
+    T.pasOptiesToe({});
+  }
+});
+
+test('verhuizen: is een hut af, dan trekt er een gezin uit het kamp in, en gaat zijn tent weg; die van de schout blijft', () => {
+  const { S, D, w } = leegBegin();
+  dagen(S, 1, 1);
+  const begin = D.bevolking;
+  const tenten = T.kampTenten(D).length;
+  const hutten = zetHutten(D, tenten);
+  assert.ok(T.waaromGeenGezin(D).includes('kamp'), 'zolang er een gezin in het kamp woont, komt er geen nieuw gezin');
+  gezegd.length = 0;
+  dagen(S, 2, 2 + T.GEBOUWEN.hut.bouwtijd);
+  for (const g of hutten) {
+    assert.ok(g.klaar);
+    const gezin = wonenIn(D, g);
+    assert.equal(gezin.length, 3, 'in elke hut een gezin uit het kamp');
+    const deur = T.deurVan(w, g);
+    for (const p of gezin) assert.ok(!p.wezen || (p.wezen.thuis.x === deur.x && p.wezen.thuis.y === deur.y), 'zijn thuis is de deur van de hut');
+  }
+  assert.equal(gezegd.filter((t) => /leave the camp|verlaten het kamp/.test(t)).length, tenten, 'het dorp zegt wie er verhuist');
+  assert.equal(D.bevolking, begin, 'niemand erbij en niemand weg');
+  assert.equal(T.kampTenten(D).length, 0, 'de tenten van de gezinnen zijn weg');
+  assert.equal(w.voorwerpen.filter((v) => v.soort === 'tent').length, 1, 'alleen die van de schout staat er nog');
+  assert.equal(w.voorwerpen.filter((v) => v.soort === 'kampvuur').length, 1, 'en het kampvuur brandt');
+  assert.ok(w.wezens.includes(D.begin.kar), 'de kar blijft');
+  assert.ok(!T.waaromGeenGezin(D).includes('kamp'), 'nu kan er weer een gezin komen');
+  // en bewaren en laden gaat goed, zonder de tenten
+  Object.assign(S, { vlaggen: new Set() }, T.schermVelden());
+  const tekst = T.bewaarSpel(S, { nu: 0 });
+  const S2 = { kalender: T.nieuweKalender() };
+  T.zetSpel(S2, T.leesSpel(tekst));
+  assert.equal(T.bewaarSpel(S2, { nu: 0 }), tekst);
+});
+
+test('verhuizen: past een gezin niet, dan gaat het heel naar een lege woning, ook als het krap is', () => {
+  const { S, D } = leegBegin();
+  dagen(S, 1, 1);
+  const ruimte = T.GEBOUWEN.hut.woonruimte;
+  try {
+    T.GEBOUWEN.hut.woonruimte = 2;
+    const [hut] = zetHutten(D, 1);
+    gezegd.length = 0;
+    dagen(S, 2, 2 + T.GEBOUWEN.hut.bouwtijd);
+    assert.equal(wonenIn(D, hut).length, 3, 'het hele gezin');
+    assert.equal(T.kampTenten(D).length, T.BEGIN_INSTELLINGEN.gezinnen - 1, 'een gezin minder in het kamp');
+    assert.ok(gezegd.some((t) => /krap|cramped/.test(t)), 'en het dorp zegt dat het krap is');
+  } finally {
+    T.GEBOUWEN.hut.woonruimte = ruimte;
+  }
 });
 
 test('het tweede jaar vraagt hij wel', () => {

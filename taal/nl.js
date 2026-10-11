@@ -46,6 +46,8 @@ Spel.taal({
     "Picture saved: {naam}": "Plaatje bewaard: {naam}",
     "St Martin's Day is coming, and the lord spares you this year.": "Sint-Maarten nadert, en de heer spaart je dit jaar.",
     "The cart is on the open ground that will be the square. The families put up their tents around the campfire.": "De kar staat op de open plek die het plein wordt. De gezinnen zetten hun tenten op rond het kampvuur.",
+    "{wie} and family leave the camp: their {gebouw} is ready.": "{wie} en zijn gezin verlaten het kamp: hun {gebouw} is af.",
+    "{wie} and family leave the camp: their {gebouw} is ready, though it is cramped.": "{wie} en zijn gezin verlaten het kamp: hun {gebouw} is af, al is het krap.",
     "To Our new reeve,": "Aan Onze nieuwe schout,",
     "It has pleased Us to send you, with {n|# family|# families}, to a piece of Our wilderness. Make a village of it. A village brings Us money; wilderness does not.": "Het heeft Ons behaagd u met {n|# gezin|# gezinnen} naar een stuk van Onze wildernis te zenden. Maak er een dorp van. Een dorp brengt Ons geld op; wildernis niet.",
     "The cart carries what We could spare: some wood, grain for the spring, seed grain, a few tools and {goud} gold. Do not expect more.": "Op de kar ligt wat Wij konden missen: wat hout, graan voor het voorjaar, zaaigraan, wat gereedschap en {goud} goud. Verwacht niet meer.",

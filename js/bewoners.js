@@ -856,6 +856,19 @@
     }
   };
 
+  // Een gezin verhuist naar huis g (uit het kamp van het lege begin, js/begin.js): voortaan is dat zijn deur, en zijn
+  // plekken (de put, het werk) gaan mee. Wie binnen is, komt de oude deur uit en loopt naar de nieuwe (js/verkennen.js:
+  // zijn deur is niet meer die van zijn anker); wie nog onderweg is hierheen, loopt meteen naar de nieuwe.
+  T.verhuis = function (D, leden, g) {
+    const w = D.bewoners && D.bewoners.wereld;
+    const deur = w && T.deurVan(w, g);
+    for (const p of leden) {
+      p.huis = g;
+      if (p.wezen && deur) p.wezen.thuis = { x: deur.x, y: deur.y };
+      zetPlekken(D, p);
+    }
+  };
+
   // Het getal veranderde (T.wijzigBevolking, js/gebouwen.js): de bewoners gaan mee. `reden`: 'groei'
   // (een nieuw gezin, dat over de weg komt), 'winter' (wie sterft), 'vertrek' (wie wegtrekt) of 'gesneuveld'
   // (een wachter tegen de rovers, js/rovers.js; `wie` zegt dan wie). Het begin ('begin') regelt

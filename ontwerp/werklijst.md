@@ -11,10 +11,14 @@ onderwerp, niet hier. Wie aan een punt begint, zet er "**Bezig in sessie `<branc
 ## Nu en daarna (11 okt)
 
 **Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en
-drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **Het volgende punt is B,
-1c: het kamp en verhuizen.** Ronde 2 van het snoeien volgt na 1f, ronde 3 na C.
+drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **B, 1c is af** (11 okt):
+het bouwmenu in het lege begin, en verhuizen uit het kamp. **Het volgende punt is B, 1d: het bereik, het huis van de
+schout en meebouwen.** Ronde 2 van het snoeien volgt na 1f, ronde 3 na C.
 
 **Wacht op Marcel:**
+- **1c bekijken:** Spelregels, "Het begin" op "Leeg", en dan Nieuw spel (of in de console `Spel.debug.begin('leeg')`).
+  Is het kamp op, zet dan een hut neer met het bouwmenu (B), net naast het plein: twee dagen later trekt er een gezin in
+  en gaat zijn tent weg. Het hout in de kar (50) is genoeg voor vier hutten (32) en een houthakker (10).
 - **Het doel van de demo.** CLAUDE.md zegt nog "je wint als iedereen een jaar super gelukkig is"; dat is het oude spel.
   Voorstel van Claude (11 okt): de demo is het eerste jaar: je komt met de kar, bouwt, haalt de eerste winter, en het
   eind is het eerste gevecht (de mannen van de heer of rovers), zodat een speler in Next Fest de economie, het gevecht
@@ -47,11 +51,11 @@ Mee in elke ronde: het commentaar in de code dat "zie CLAUDE.md" zegt (een stuk 
 
 ## B. Zelf bouwen vanaf niets (vraag 152, stap 1)
 
-Het plan staat in het archief bij vraag 152; 1a (optie 1) en 1b (het lege land) zijn af.
-- **1c, het kamp:** **Bezig in sessie `ccr-59cbf808-srdp3p`** (11 okt): het plan, met Marcel. Is een hut of huis af, dan verhuist er een gezin uit het kamp in; is het kamp leeg, dan gaan de
-  tenten weg en blijft de kar.
+Het plan staat in het archief bij vraag 152; 1a (optie 1), 1b (het lege land) en 1c (het kamp, met het bouwmenu) zijn
+af; hoe het nu werkt: `spel.md`, "Zo werkt het lege begin nu".
 - **1d, jij bouwt alles, binnen bereik:** het bereik rond het plein en het huis van de schout, te zien als je bouwt; het
-  huis van de schout één keer in het bouwmenu, de akkers bij een boerderij; wie geen werk heeft, bouwt mee.
+  huis van de schout één keer in het bouwmenu (dan verhuist ook hij, en gaat zijn tent weg: `T.verhuis`), de akkers bij
+  een boerderij; wie geen werk heeft, bouwt mee. Het bouwmenu zelf is er sinds 1c.
 - **1e, boeren uit het niets:** een gezin dat in een boerderij trekt, wordt boer, met een geloot karakter.
 - **1f, een jaar zonder fouten:** een toets speelt een jaar vanaf een lege plek, met een speler in code die bouwt. Dan
   is "Leeg" het enige begin, en volgt ronde 2 van A.
@@ -96,6 +100,11 @@ het graan vraagt", de schandpaal, de heervaart en de twee bazen.
   schrijven voor de nieuwe richting, als B en C er staan.
 
 ## Af (sinds 11 okt)
+
+- Het kamp, met het bouwmenu (vraag 152, 1c; Marcel: "We willen dus een bouwmenu en zelf bouwen", "Kleinere gezinnen",
+  "Per tent"): "Leeg" zet "Huizen" en "Wie bouwt" op "Jij", een gezin in de kar is een man, een vrouw en een kind, is een
+  hut of huis af dan trekt er een gezin uit het kamp in en gaat zijn tent weg, en zolang er een gezin in het kamp woont,
+  komt er geen nieuw gezin over de weg.
 
 - Optie 1: het verstoppen, de inner, de argwaan en "arm lijken" zijn eruit (vraag 151).
 - Het lege land: de huifkar rijdt een leeg stuk van het eiland in, met het kamp op het plein (vraag 152, 1b).

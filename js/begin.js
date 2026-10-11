@@ -2,14 +2,15 @@
 // "Een kar met wat spullen en 'settlers'"): met de spelregel "Het begin" op "Leeg" legt de maker geen gehucht, maar alleen
 // het land van het eiland om jouw plek, met een open plek die het plein wordt (js/maker.js, `leeg`). Een kar met wat
 // spullen rijdt over de weg het land in, met de schout, zijn gezin en vier gezinnen erachter, en op het plein zetten ze
-// hun kamp op: een tent of een afdak per gezin, en het kampvuur. Daar wonen ze tot er hutten zijn.
+// hun kamp op: een tent of een afdak per gezin, en het kampvuur. Daar wonen ze tot er hutten zijn: is een hut of huis af,
+// dan trekt er een gezin uit het kamp in, en gaat zijn tent weg (stap 1c; T.verhuisUitHetKamp hieronder).
 //
 // Een tent is een gebouw met één gezin erin (`T.GEBOUWEN.tent`), zo groot als zijn gezin: hij telt niet als plaats voor
 // een nieuw gezin (T.woonruimteVan, js/gebouwen.js). De tent van de schout is zijn huis (`huis: 'schout'`): daar slaapt
 // hij, daar brengt de raadsman zijn rapport, en daar vertrekt de bode, tot zijn huis er staat.
 //
 // Wat het dorp van het lege begin weet, staat in D.begin (vanaf T.nieuwDorp, js/dorp.js): { kar: <het wezen>, kamp:
-// 'onderweg' of 'op', en hoe ver de aankomst is }.
+// 'onderweg', 'op' of 'weg' (de laatste tent is weg), en hoe ver de aankomst is }.
 (function (T) {
   'use strict';
   T.BEGIN_INSTELLINGEN = {
@@ -18,10 +19,11 @@
     // het graan.
     kar: { hout: 50, graan: 140, zaaigraan: 60, goud: 20, gereedschap: 5 },
     // Hoeveel gezinnen er met de schout meekomen, en hoe groot: een man, een vrouw en `kinderen` kinderen (van tot), en
-    // bij `grootvader` gezinnen een grootvader erbij.
+    // bij `grootvader` gezinnen een grootvader erbij. Een man, een vrouw en een kind, zodat een gezin in een hut past (plaats
+    // voor 3; Marcel, 11 okt: "Kleinere gezinnen", vraag 152, 1c; tot dan 1 tot 3 kinderen en een grootvader, 3 tot 6 mensen).
     gezinnen: 4,
-    kinderen: [1, 3],
-    grootvader: 1,
+    kinderen: [1, 1],
+    grootvader: 0,
     // Het kamp (gereedschap/pixelart/kamp.cjs, "het kamp zoals het op het plein kan staan"): waar alles staat, vanaf het
     // vuur, in tegels. Een tent of een afdak per gezin, met zijn opening naar het vuur (ZO, ZW, NW of NO), de eerste voor de
     // schout; en waar de kar stopt. Er zijn meer plekken dan gezinnen, voor als het er meer worden.
@@ -184,6 +186,50 @@
   T.tikBeginDag = function (D) {
     if (D.begin && D.begin.kamp === 'onderweg') T.zetKampOp(D);
   };
+
+  // ---------------------------------------------------------------------------------------------
+  // Verhuizen uit het kamp (vraag 152, 1c)
+  // ---------------------------------------------------------------------------------------------
+
+  // De tenten van de gezinnen in het kamp; niet die van de schout, want die is zijn huis tot zijn eigen huis er staat (1d).
+  // Zolang er een is, komt er geen nieuw gezin over de weg (T.waaromGeenGezin, js/gebouwen.js): eerst je eigen mensen.
+  T.kampTenten = (D) => (D.gebouwen || []).filter((g) => g.soort === 'tent' && g.huis !== 'schout');
+
+  // Elke nacht, als de gebouwen van vandaag af zijn en vóór er een nieuw gezin kan komen (T.tikGebouwenDag, js/gebouwen.js):
+  // in een woning die af is en plaats heeft (een hut, een huis), trekt een gezin uit het kamp, het eerste dat er past; past
+  // er geen, dan het eerste in een woning waar nog niemand woont, ook als het krap is (Marcel, 11 okt). Zijn tent gaat weg
+  // zodra hij leeg is, en met de laatste tent het kampvuur; de kar blijft (Marcel, 11 okt: "Per tent").
+  T.verhuisUitHetKamp = function (D) {
+    if (!D.begin || D.begin.kamp !== 'op') return;
+    for (const g of D.gebouwen.slice()) {
+      const soort = T.GEBOUWEN[g.soort];
+      if (!g.klaar || !soort || !soort.woning) continue;
+      const wonen = inHuis(D, g).length;
+      const vrij = T.woonruimteVan(D, g) - wonen;
+      const gezinnen = T.kampTenten(D).map((t) => inHuis(D, t)).filter((l) => l.length);
+      const gezin = gezinnen.find((l) => l.length <= vrij) || (wonen === 0 ? gezinnen[0] : null);
+      if (!gezin) continue;
+      const tent = gezin[0].huis;
+      T.verhuis(D, gezin, g);
+      const wie = (gezin.find((p) => !p.hoofd) || gezin[0]).naam;
+      T.zeg(D, gezin.length > vrij
+        ? T.t('{wie} and family leave the camp: their {gebouw} is ready, though it is cramped.', { wie, gebouw: soort.naam })
+        : T.t('{wie} and family leave the camp: their {gebouw} is ready.', { wie, gebouw: soort.naam }));
+      if (!inHuis(D, tent).length) haalTentWeg(D, tent);
+    }
+  };
+  const inHuis = (D, g) => D.bewoners.mensen.filter((p) => p.huis === g);
+
+  // Een lege tent gaat van de kaart en uit het dorp; is het de laatste, dan gaat ook het kampvuur uit.
+  function haalTentWeg(D, tent) {
+    const w = D.wereld;
+    if (tent.voorwerp) T.haalVoorwerpWeg(w, tent.voorwerp);
+    D.gebouwen.splice(D.gebouwen.indexOf(tent), 1);
+    if (D.gebouwen.some((g) => g.soort === 'tent')) return;
+    const vuur = w.voorwerpen.find((v) => v.soort === 'kampvuur');
+    if (vuur) T.haalVoorwerpWeg(w, vuur);
+    D.begin.kamp = 'weg';
+  }
 
   // Laat de heer dit dorp op dag `dag` met rust? Het eerste jaar van het lege begin (heerVrij): geen schatting en geen grillen.
   T.heerLaatMetRust = (D, dag) => !!(D.begin && dag < D.begin.heerVrijTot);

@@ -1252,8 +1252,8 @@
 
   // Waarom er nu geen gezin kan komen, als lijst: 'graan' (minder dan de buffer in de voorraad), 'tevreden' (onder
   // de drempel, js/behoeften.js), 'winter' (het hout of het eten haalt de winter niet, nu die in zicht is:
-  // gezinWachtOpDeWinter, T.watDeWinterNietHaalt in js/behoeften.js) en 'plaats' (geen huis met plaats en geen vrij erf,
-  // js/erven.js). Een lege lijst als het kan. De groei vraagt het (T.tikGebouwenDag, stap 4, met de dag die hij tikt),
+  // gezinWachtOpDeWinter, T.watDeWinterNietHaalt in js/behoeften.js), 'plaats' (geen huis met plaats en geen vrij erf,
+  // js/erven.js) en 'kamp' (er woont nog een gezin in het kamp, js/begin.js). Een lege lijst als het kan. De groei vraagt het (T.tikGebouwenDag, stap 4, met de dag die hij tikt),
   // en de raad linksboven ook (js/raad.js), zodat die zegt wat de groei doet en niet wat hij zelf denkt.
   T.waaromGeenGezin = function (D, dag = D.kalender ? Math.floor(D.kalender.dag) : 0) {
     const waarom = [];
@@ -1261,6 +1261,8 @@
     if (D.behoeften && D.behoeften.tevredenheid < T.BEHOEFTEN_INSTELLINGEN.groeiDrempel) waarom.push('tevreden');
     if (T.GEBOUWEN_INSTELLINGEN.gezinWachtOpDeWinter && T.watDeWinterNietHaalt(D, dag).length) waarom.push('winter');
     if ((D.bevolking || 0) >= T.telWoonruimte(D) && !T.kanEenErfNemen(D)) waarom.push('plaats');
+    // Woont er nog een gezin in het kamp van het lege begin, dan gaat een woning eerst naar hen (js/begin.js).
+    if (T.kampTenten(D).length) waarom.push('kamp');
     return waarom;
   };
 
@@ -1361,6 +1363,9 @@
         T.maakJong(g.voorwerp, dag);
       }
     }
+    // Is er een hut of huis af, dan trekt er een gezin uit het kamp van het lege begin in, vóór er een nieuw gezin kan
+    // komen (js/begin.js).
+    T.verhuisUitHetKamp(D);
     // En wat oud genoeg is, draagt zijn oude tekening (hierboven, bij T.maakOud).
     T.tikVerwerenDag(D, dag);
     // De markt op het plein groeit mee met het dorp, en zijn kramen liggen vol of leeg (js/markt.js).
@@ -1389,10 +1394,10 @@
     // dag getikt) blokkeert de tevredenheid niets. Een huis met
     // plaats gaat voor; is het dorp vol, dan neemt het een vrij erf en zet het er zelf een hut op, of
     // zegt het dat er geen plaats is (js/erven.js). Met de wet Vreemden welkom kan dat vaker
-    // (T.gezinDagen hierboven).
+    // (T.gezinDagen hierboven). Zolang er een gezin in het kamp van het lege begin woont, komt er niemand (js/begin.js).
     if (dag > 0 && dag % T.gezinDagen(D) === 0) {
       const waarom = T.waaromGeenGezin(D, dag);
-      if (!waarom.includes('graan') && !waarom.includes('tevreden') && !waarom.includes('winter')) T.gezinKomt(D);
+      if (!['graan', 'tevreden', 'winter', 'kamp'].some((w) => waarom.includes(w))) T.gezinKomt(D);
     }
     // 5. Handen: verdeeld over de werkplaatsen, en wie waar werkt (T.verdeelHanden hierboven).
     T.verdeelHanden(D);
