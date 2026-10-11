@@ -210,25 +210,6 @@
         voet: `<p class="venster-voet">Zolang je leest, staat de tijd stil. <kbd>Esc</kbd> sluit.</p>`,
       };
     },
-    // De zaak van de graanzak (js/zaak.js; werklijst vraag 128): je eigen papier, met wat je weet, apart wat je zelf zag,
-    // wat mensen je vertelden en wat er gezegd wordt. Onder de knop De zaak, zolang je het uitzoekt.
-    zaak: (S) => {
-      const Z = S.dorp.zaak;
-      if (!Z || Z.fase !== 'onderzoek') return null;
-      const delen = T.zaakWetenPerSoort(S.dorp).map((d) => `<p><b>${d.kop}</b></p>` +
-        (d.regels.length ? d.regels.map((r) => `<p>${veilig(r)}</p>`).join('') : '<p><i>Nog niets.</i></p>'));
-      const zitting = T.datumVanDag(Z.zitting).tekst.replace(/ \d+$/, '');
-      return {
-        titel: 'De zaak van de graanzak',
-        wanneer: vandaag(S),
-        aan: `Een zak graan uit de schuur van ${veilig(T.naamVanBewoner(Z.aanklager))}.`,
-        tekst: delen.join(''),
-        groet: `De zitting: ${zitting}, 's middags op het plein.`,
-        staat: '<p class="venster-staat">Wie je aanklikt, vraag je ernaar. Wat er gezegd wordt, is nog geen bewijs.</p>',
-        knoppen: [{ actie: 'sluit', tekst: 'Verder zoeken', hoofd: true }],
-        voet: `<p class="venster-voet">Zolang je leest, staat de tijd stil. <kbd>Esc</kbd> sluit.</p>`,
-      };
-    },
     // De brief aan de marskramer (js/bode.js; werklijst vraag 143; Marcel, 9 okt: "soort van brief sturen met een bode"):
     // jouw papier, bij je huis, in een moeilijke tijd. Je schrijft wat hij moet brengen, en een dorpeling brengt hem; tot
     // drie weerbare mannen kunnen mee, tegen de rovers onderweg (het gevaar staat eronder, T.bodeGevaarTekst).
@@ -299,12 +280,11 @@
   const wachtend = (S) => (T.rapportKlaar(S.dorp) ? 'rapport' : briefVanDeHeer(S));
 
   // De papieren op tafel (js/tafel.js; vraag 146, c) liggen er alleen zolang ze er zijn: de brief van de heer en het
-  // rapport zolang ze op je wachten (en dan lichten ze op, stijl.css), de zaak zolang je uitzoekt wie de zak graan nam
-  // (js/zaak.js), en de inktpot van de bode in een moeilijke tijd, zolang er niemand onderweg is (js/bode.js).
+  // rapport zolang ze op je wachten (en dan lichten ze op, stijl.css), en de inktpot van de bode in een moeilijke tijd,
+  // zolang er niemand onderweg is (js/bode.js).
   T.ui.werkBriefKnopBij = function (S) {
     $('brief-knop').classList.toggle('verborgen', !briefVanDeHeer(S));
     $('rapport-knop').classList.toggle('verborgen', !T.rapportKlaar(S.dorp));
-    $('zaak-knop').classList.toggle('verborgen', !T.zaakOnderzoek(S.dorp));
     $('bode-knop').classList.toggle('verborgen', !(S.dorp.kalender && T.kanBodeSturen(S.dorp).zichtbaar));
   };
 
@@ -386,13 +366,6 @@
     const regel = $('brief').querySelector('.bode-gevaar small');
     if (regel) regel.textContent = T.bodeGevaarTekst(T.S.dorp, Number(ev.target.value) || 0);
   });
-  $('zaak-knop').addEventListener('click', (ev) => {
-    ev.currentTarget.blur();
-    if (!T.S) return;
-    if (open === 'zaak') T.ui.sluitBrief(T.S);
-    else T.ui.toonBrief(T.S.dorp, 'zaak');
-  });
-
   $('bode-knop').addEventListener('click', (ev) => {
     ev.currentTarget.blur();
     if (!T.S) return;

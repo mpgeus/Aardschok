@@ -6,7 +6,7 @@
 // van het spel. De schetsen zijn die van de plaat (TEKENING daar), in eenheden van een halve pixel.
 //
 //   beelden/tafel/hout.png       2048×150, eiken planken, links en rechts naadloos (de tafel herhaalt hem)
-//   beelden/tafel/<ding>.png     elk ding: bouwen, velden, wetten, raadsman, brief, rapport, zaak, bode, zandloper,
+//   beelden/tafel/<ding>.png     elk ding: bouwen, velden, wetten, raadsman, brief, rapport, bode, zandloper,
 //                                gunst, vertrouwen, en lantaarn-aan/-uit en kaars-aan/-uit
 //
 //   node gereedschap/pixelart/tafel.cjs                          (de proefplaat: uit/tafel-proef.png)
@@ -248,14 +248,6 @@ const DINGEN = {
     P.e(40, 11, 3.5, 6, KL.perk); P.e(40, 11, 2, 4, KL.perkS); P.e(40.5, 11, 1, 2.4, KL.perkD);
     P.r(21, 4, 5, 14, KL.was); P.r(21, 4, 1, 14, KL.wasL); P.r(25, 4, 1, 14, KL.wasD);
     P.r(19, 17, 3, 4, KL.was); P.r(25, 17, 3, 3, KL.wasD);
-  }),
-  // de zaak: een stapel papieren met een touw erom
-  zaak: () => bord(42, 34, (P) => {
-    P.r(9, 3, 29, 23, KL.perkD); P.r(6, 5, 29, 23, KL.perkS); P.r(3, 7, 29, 24, KL.perk);
-    P.r(3, 30, 29, 1, KL.perkD);
-    for (let y = 11; y < 29; y += 3) P.r(6, y, y % 2 ? 19 : 23, 1, KL.inktF);
-    P.r(17, 3, 1, 28, '#8a6a3a'); P.r(3, 18, 32, 1, '#8a6a3a');
-    P.e(17.5, 18.5, 2.2, 2.2, '#6e4e26'); P.l(17, 18, 13, 23, '#8a6a3a'); P.l(18, 18, 22, 24, '#8a6a3a');
   }),
   // de bode: een inktpot met een veer
   bode: () => bord(28, 38, (P) => {

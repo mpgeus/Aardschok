@@ -2,7 +2,7 @@
 // het nu ook tijd is om een fatsoenlijke UI te maken", en op de plaat "De schrijftafel van de schout": "Ja dit ziet er
 // goed uit voor nu!"). Links het rekenboek (de voorraad, en het dorp: de kas, de mensen en de tevredenheid);
 // in het midden de dingen die een venster openen (het bouwplan, de velden, het wetboek, de bel van de raadsman, en de
-// brief, het rapport, de zaak en de inktpot van de bode zolang ze er zijn); rechts de lantaarn (sluipen), de kaars
+// brief, het rapport en de inktpot van de bode zolang ze er zijn); rechts de lantaarn (sluipen), de kaars
 // (slapen), de zandloper met de lat van de snelheden, en het zegel van de heer en de hoed van het dorp (js/bazen.js).
 // Geen ding draagt een letter: wat het is, wat het nu zegt en zijn toets staan op het briefje bij de muis (#wenk).
 //
@@ -349,7 +349,6 @@
     raadsman: { naam: 'De bel', uitleg: () => 'Je raadsman: wie beslist als je er niet bent, en wat hij besloot.', toets: 'R' },
     brief: { naam: 'Een brief van de heer', uitleg: () => 'Hij wacht op je antwoord.' },
     rapport: { naam: 'Het rapport', uitleg: () => 'Van je raadsman, vanochtend. Je las het nog niet.' },
-    zaak: { naam: 'De zaak', uitleg: () => 'Wat je weet van de graanzak, en wanneer de zitting is.' },
     bode: {
       naam: 'De inktpot',
       uitleg: (S) => {

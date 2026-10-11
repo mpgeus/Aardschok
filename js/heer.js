@@ -644,8 +644,6 @@
     const b = h.bezoek;
     if (!b || b.staat) return;
     b.staat = true;
-    // Hij leest het boek van de schuur: mist er een zak graan, dan ziet hij het (js/zaak.js).
-    T.heerLeestHetBoek(D);
     b.wachtTot = dagNu(D) + IN().wachtDagen;
     T.naarGewoneSnelheid(D);
     T.zeg(D, 'De heer staat op het plein en wacht op je.');

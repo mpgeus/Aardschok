@@ -993,7 +993,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.gevolgVanBetaling`, de heervaart, de schandpaal, de soldaten, `T.vertrouwenNaVoorval`, `T.vertrouwenNaBevolking` in
   `T.wijzigBevolking`, en elke dag `T.tikBazenDag`: het vertrouwen gaat een stukje naar de tevredenheid, vraag 106,
   stap 3). **De heer heeft één meter, de gunst** (11 okt, vraag 151, optie 1, deel B1): wat vroeger de argwaan
-  veranderde (antwoorden met `doe.gunst`, de bode, het boek van de zaak, de heervaart), verandert nu de gunst, en de raadsman
+  veranderde (antwoorden met `doe.gunst`, de bode, de heervaart), verandert nu de gunst, en de raadsman
   weegt hem met wat de argwaan woog (`gunst` in `T.RAADSMAN_INSTELLINGEN.karakters`). Onder 20 een waarschuwing (de brief `waarschuwing` in `js/brieven.js`, en de raad), op 0 weg (`T.ambtKwijt` met waarom, of `D.einde` met reden 'verjaagd'), maar altijd eerst
   de waarschuwing. De twee gezichten in de balk:
   `T.ui.toonBazen` (`js/hud.js`). De spelregel "Twee bazen"; de getallen in `T.BAZEN_INSTELLINGEN`.
@@ -1091,22 +1091,6 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   wat helpt; `T.oorzakenNu` geeft `niveau` en `naam` mee. Elke nacht onthoudt het dorp sinds wanneer (`T.tikStatussenDag`,
   `D.statussen`), voor de kaartjes naast het doel linksboven (`T.statussenVan`, `T.ui.toonStatussen` in js/hud.js,
   `#statussen`); het rapport zegt het begin, erger, minder (`erger.minder`) en het eind (js/ochtendrapport.js).
-
-### js/zaak.js: de verdwenen graanzak
-
-- `js/zaak.js`: **de verdwenen graanzak** (vraag 128, 8 okt; Marcel: "akkoord, bouwen maar"): de proef voor informatie,
-  de zitting en gevolgen, één keer per spel in de eerste herfst (`T.tikZaakDag`, vóór `T.tikVoorvallenDag`). Wat er echt
-  gebeurde, staat in `D.zaak` (de dader, het zieke kind, de schuur, de aanklager, de verkeerde verdachte, de buur, het
-  spoor; `T.mensenVoorDeZaak`); wat je weet, in `Z.weet`, elk met een soort uit `T.ZAAK_WETEN` (feit, getuige, gerucht)
-  en een vlag voor de gesprekken (`zaakBewijs` als het naar de dader wijst). De boer komt het zeggen (het voorval
-  `graanzak`); tot de zitting vraag je wie je aanklikt ernaar (`T.zaakGesprekVan` in `js/verkennen.js`, de gesprekken
-  `zaakBuur`, `zaakHerberg`, ...; `doe.weet`), en wie bij het spoor staat, ziet het (`T.werkZaakBij`; het spoor tekent
-  `tekenSpoor` in `js/tekenen.js`). Het papier "De zaak" is een soort in `js/brieven.js`, onder de knop `#zaak-knop`. De
-  zitting is een voorval met `L.plein` (`js/voorvallen.js`): wie erbij hoort, staat 's middags op het plein
-  (`T.zaakAnker`, voor `T.dagAnker`), en komt de schout bij het midden (`T.schoutBijDeZitting`), dan begint ze. Een vonnis
-  is `doe.zaak` (`T.zaakGevolg`): de zaak is af, het vervolg wacht (`T.ZAAK_INSTELLINGEN.vervolg`), en een zak die nergens
-  staat, leest de heer zelf op Sint-Maarten in het boek van de schuur (`T.heerLeestHetBoek`, vanuit `T.heerStaatErOp`): dat
-  kost gunst, geen argwaan meer. De spelregel "De zaak".
 
 ### js/feesten.js: de feesten
 

@@ -184,9 +184,6 @@ nu weer opbouwen. `Spel.debug.koorts()` zegt wie er ziek is en tot wanneer, en h
 nu beginnen.
 `Spel.debug.kleren()` zegt hoeveel volwassenen arm, gewoon en deftig lopen, en per volwassene zijn kleren, zijn huis (met
 hoeveel laken het kreeg) en welk vel hij draagt (vraag 149).
-`Spel.debug.zaak()` zegt hoe de graanzak ervoor staat: wie het nam en wie verdacht wordt, het spoor, wat je weet, de
-zitting en hoe het afliep; `('nu')` laat de zak nu verdwijnen (de boer zoekt je meteen), `('zitting')` maakt vandaag de
-dag van de zitting (met `Spel.debug.uur(13)` staan ze er), `('boek')` laat de heer het boek nu lezen.
 `Spel.debug.raadsman()` zegt wie je raadsman is en wat hij kan, uit wie je kiest, en wat hij besloot; `('Aaltje')` of
 `('boer2')` maakt die boer raadsman. Ga dan met `Spel.debug.gaNaar('proef')` weg, en hij beslist het volgende voorval.
 `Spel.debug.rapport()` zegt wat er in zijn rapport staat, of hij het bracht en je het las, hoe hij rekent en wat het
