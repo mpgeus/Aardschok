@@ -168,7 +168,7 @@ test('een wolf begint geen gevecht, en wie hem aanklikt, kan hem aanvallen', () 
   // De schout naast de wolf: een monster dat hem ziet, begint een gevecht, een wolf niet.
   Object.assign(S.schout, { x: wolf.tx + 1, y: wolf.ty, tx: wolf.tx + 1, ty: wolf.ty });
   assert.equal(T.zoekOntdekking(S), null);
-  assert.match(T.handelingVerkennen(S, { wezen: wolf }).tekst, /De wolf aanvallen/);
+  assert.match(T.handelingVerkennen(S, { wezen: wolf }).tekst, /Attack the wolf/);
   assert.equal(T.handelingVerkennen(S, { wezen: hert }).tekst, 'A deer');
 });
 

@@ -14,7 +14,7 @@
     '<circle cx="7" cy="12" r="4.2" fill="none" stroke="#e2b64a" stroke-width="2.4"/>' +
     '<path d="M11 12h10M17 12v4M20.5 12v3" stroke="#e2b64a" stroke-width="2.4" stroke-linecap="round" fill="none"/>' +
     '</svg>';
-  const ICONEN = [['sleutel', 'IJzeren sleutel', SLEUTEL_ICOON]];
+  const ICONEN = [['sleutel', T.t('Iron key'), SLEUTEL_ICOON]];
 
   // Het doel van dit moment (een quest, of de volgende trede), linksboven, als briefje (#opdracht; vraag 146, d). Alleen
   // als de tekst verandert, wordt het aangeraakt.
@@ -60,14 +60,14 @@
     // een streep. Daaronder de raad (js/raad.js), met een toets tussen haken ([B]) als toets.
     opdracht(tekst, kop, raad, deel) {
       const streep = deel == null ? null : Math.round(Math.max(0, Math.min(1, deel)) * 100);
-      const nu = tekst || raad ? `${kop || 'Te doen'}|${tekst || ''}|${raad || ''}|${streep}` : null;
+      const nu = tekst || raad ? `${kop || T.t('To do')}|${tekst || ''}|${raad || ''}|${streep}` : null;
       if (nu === vorigeOpdracht) return;
       vorigeOpdracht = nu;
       const el = $('opdracht');
       el.classList.toggle('verborgen', !nu);
       if (nu) {
         el.innerHTML =
-          `<div class="doel-kop">${kop || 'Te doen'}</div>` +
+          `<div class="doel-kop">${kop || T.t('To do')}</div>` +
           (tekst ? `<div class="doel-stand">${tekst}</div>` : '') +
           (streep != null ? `<div class="doel-streep"><i style="width: ${streep}%"></i></div>` : '') +
           (raad ? `<div class="doel-raad">${raad.replace(/\[([^\]]+)\]/g, '<kbd>$1</kbd>')}</div>` : '');
@@ -101,7 +101,7 @@
             const stand = e.leven;
             return `<div class="chip ${e.kant}${i === g.beurt ? ' aan' : ''}"><span>${T.hoofdletter(e.naam)}</span><small>${stand}</small></div>`;
           })
-          .join('') + `<div class="ronde">Ronde ${g.ronde}</div>`;
+          .join('') + `<div class="ronde">${T.t('Round {n}', { n: g.ronde })}</div>`;
     },
 
     // kosten: wat de handeling onder de muis zou kosten; die punten lichten op.
@@ -110,7 +110,7 @@
       const sleutel = [ap, max, kosten, kan].join('|');
       if (sleutel === vorigeAp) return;
       vorigeAp = sleutel;
-      let html = '<span class="ap-label">AP</span>';
+      let html = `<span class="ap-label">${T.t('AP')}</span>`;
       for (let i = 0; i < max; i++) {
         let c = 'pip';
         if (i < ap) {
@@ -124,7 +124,7 @@
     },
 
     zetKnoppen(aan, actie) {
-      for (const b of document.querySelectorAll('#knoppen button')) {
+      for (const b of document.querySelectorAll('#knoppen button')) { // geen tekst
         b.disabled = !aan;
         b.classList.toggle('gekozen', !!aan && b.dataset.actie === actie);
       }
@@ -132,7 +132,7 @@
 
     // De deurknop staat er alleen als wie aan de beurt is (de schout of een man van de militie) naast een open deur staat.
     toonDeurKnop(zichtbaar, kan) {
-      const b = document.querySelector('#knoppen button[data-actie="deur"]');
+      const b = document.querySelector('#knoppen button[data-actie="deur"]'); // geen tekst
       b.classList.toggle('verborgen', !zichtbaar);
       b.disabled = !kan;
     },
@@ -344,4 +344,28 @@
     }
     return true;
   };
+
+  // ── De tekst van index.html (vraag 147) ──
+  // De bladzijde zelf heeft geen tekst voor de speler: een element zegt met data-t (de tekst), data-t-html (tekst met
+  // toetsen erin) of data-t-title (de uitleg bij de muis) welke zin erin hoort, en die staat hier, zodat een vertaling
+  // erbij kan. De tafel vult haar eigen stukken (js/tafel.js: de koppen van het rekenboek, de plaatjes, de snelheden).
+  const kbd = (toets) => `<kbd>${toets}</kbd>`;
+  const PAGINA = {
+    menu: T.t('Menu'),
+    opgeslagen: T.t('Saved'),
+    goud: T.t('Gold. It buys goods and favours.'),
+    slaan: T.t('Strike'),
+    slaanUitleg: T.t('You strike by clicking on an enemy'),
+    deurDicht: T.t('Close door'),
+    eindeBeurt: T.t('End turn'),
+    spatie: T.t('Space'),
+    hulp: T.t('Click to walk, talk or use something. {toets}: sneak', { toets: kbd('S') }) + '<br>' +
+      T.t('In a fight: {slaan}: strike · {deur}: close door · {spatie}: end turn', { slaan: kbd('1'), deur: kbd('D'), spatie: kbd(T.t('Space')) }),
+    overzicht: T.t('Overview · drag or use the arrow keys to look · wheel: zoom out or in · {tab} or a click on the reeve: back', { tab: kbd('Tab') }),
+  };
+  document.documentElement.lang = T.taalNu();
+  document.title = T.t('{naam} · prototype', { naam: T.NAAM });
+  for (const el of document.querySelectorAll('[data-t]')) el.textContent = PAGINA[el.dataset.t]; // geen tekst
+  for (const el of document.querySelectorAll('[data-t-html]')) el.innerHTML = PAGINA[el.dataset.tHtml]; // geen tekst
+  for (const el of document.querySelectorAll('[data-t-title]')) el.title = PAGINA[el.dataset.tTitle]; // geen tekst
 })(globalThis.Spel = globalThis.Spel || {});

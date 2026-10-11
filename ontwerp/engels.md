@@ -113,6 +113,24 @@ Wat elke zin nodig heeft, staat op één plek, al in het Engels:
 | ontbreken / missen | lack / be short of | "short of 6 gold" |
 | doorgroeien | grow into | "A hut has grown into a house" |
 
+## Erbij in deel 3 (het scherm)
+
+| Nederlands | Engels | |
+|---|---|---|
+| het rekenboek, de kas | the ledger, the treasury | de tafel; de kas is de post voor het goud |
+| de zandloper, de lat | the hourglass, the scale | de snelheden: *pause*, 1×, 3×, 10×, 30× |
+| het wetboek, de bel, de inktpot | the lawbook, the bell, the inkwell | de dingen op tafel |
+| de spelregels, de werkbank | the game rules, the workbench | het venster op O |
+| de fotomodus | photo mode | |
+| de provincie, het land | the province, the land | de kaart van het land; een provincie heet met een kleine letter (*the castle*), de kaart zet de hoofdletter |
+| de pacht | rent | graan op Sint-Maarten (`GRONDSTOF_UITLEG.graan`) |
+| de wissel (van de velden) | the changeover | 1 March, als de boeren ploegen |
+| het slachten | the slaughter | het venster en de knop |
+| je ambt kwijt, weggejaagd | you lost your office, driven out | de schermen van het einde |
+| op bestelling | on order | de marskramer die een bode haalde |
+| een pak | a pack | wat de marskramer draagt |
+| de klok | *half past seven*, *seven o'clock* | `klokTekst` in `js/hud.js`; het deel van de dag is *night, morning, work, break, evening* |
+
 ## De maanden
 
 Gewone maanden (Marcel, 11 okt): de namen waar de regels op letten blijven in de code (`'lentemaand'`); wat de speler

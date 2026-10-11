@@ -30,7 +30,7 @@
   function toonPortret(id) {
     const el = portret();
     $('dialoog').classList.remove('met-portret');
-    if (id) el.src = `beelden/portretten/${id}.png`;
+    if (id) el.src = `beelden/portretten/${id}.png`; // geen tekst
     else el.removeAttribute('src');
   }
 

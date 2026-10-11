@@ -37,17 +37,18 @@
   const IN = () => T.LAND_INSTELLINGEN;
 
   // Wat voor land een provincie is: hoe hij heet, en wat je er ziet als je er bent (js/landkaart.js). Het gehucht heet
-  // naar je dorp (T.dorpsnaam), de rest naar zijn soort.
+  // naar je dorp (T.dorpsnaam), de rest naar zijn soort. De namen staan met een kleine letter ("the castle"), zodat ze in
+  // een zin passen ("You are in the castle"); op de kaart krijgen ze een hoofdletter.
   T.LANDSOORTEN = {
-    gehucht: { naam: null, uitleg: 'Je eigen gehucht.' },
-    kasteel: { naam: 'Het kasteel van de heer', uitleg: 'Hier woont de heer. Hij ontvangt geen schout die niet geroepen is.' },
-    stad: { naam: 'De stad', uitleg: 'Hier komt de marskramer vandaan. De poort blijft dicht voor een schout zonder brief.' },
-    woud: { naam: 'Het woud', uitleg: 'Bos, zover je kijkt.' },
-    heide: { naam: 'De heide', uitleg: 'Heide en wind, en verder niemand.' },
-    veen: { naam: 'Het veen', uitleg: 'Nat land. Wie hier van de weg raakt, vinden ze in het voorjaar terug.' },
-    broek: { naam: 'Het broek', uitleg: 'Elzen en water, en muggen.' },
-    zand: { naam: 'Het zand', uitleg: 'Stuifzand, waar niets wil groeien.' },
-    kampen: { naam: 'De kampen', uitleg: 'Oude akkers, lang geleden verlaten. Niemand weet waarom.' },
+    gehucht: { naam: null, uitleg: T.t('Your own hamlet.') },
+    kasteel: { naam: T.t('the castle'), uitleg: T.t('The lord lives here. He receives no reeve he has not sent for.') },
+    stad: { naam: T.t('the town'), uitleg: T.t('The peddler comes from here. The gate stays shut to a reeve without a letter.') },
+    woud: { naam: T.t('the forest'), uitleg: T.t('Woodland as far as you can see.') },
+    heide: { naam: T.t('the heath'), uitleg: T.t('Heath and wind, and nobody else.') },
+    veen: { naam: T.t('the fen'), uitleg: T.t('Wet land. Whoever strays from the road is found again in spring.') },
+    broek: { naam: T.t('the marsh'), uitleg: T.t('Alders and water, and midges.') },
+    zand: { naam: T.t('the sands'), uitleg: T.t('Drifting sand, where nothing will grow.') },
+    kampen: { naam: T.t('the old fields'), uitleg: T.t('Fields abandoned long ago. Nobody knows why.') },
   };
   // In deze volgorde krijgen de provincies na het gehucht hun soort: het kasteel en de stad altijd, dan de wildernis.
   const SOORTEN = ['kasteel', 'stad', 'woud', 'heide', 'veen', 'broek', 'zand', 'kampen'];
@@ -240,7 +241,7 @@
 
   T.provincie = (L, id) => (L ? L.provincies.find((p) => p.id === id) || null : null);
   // Het gehucht heet naar je dorp; zonder naam (een proefje) is het "Je gehucht".
-  T.provincieNaam = (S, p) => (p.soort === 'gehucht' ? T.dorpsnaam(S.dorp) || 'Je gehucht' : T.LANDSOORTEN[p.soort].naam);
+  T.provincieNaam = (S, p) => (p.soort === 'gehucht' ? T.dorpsnaam(S.dorp) || T.t('your hamlet') : T.LANDSOORTEN[p.soort].naam);
   const wegTussen = (L, a, b) => L.wegen.find((w) => (w.van === a && w.naar === b) || (w.van === b && w.naar === a)) || null;
   T.wegTussen = wegTussen;
   T.buurProvincies = (L, id) => L.wegen.filter((w) => w.van === id || w.naar === id).map((w) => (w.van === id ? w.naar : w.van));
@@ -316,9 +317,9 @@
   // Op reis naar `naar`: de schout gaat het dorp uit, en de dagen gaan snel voorbij tot hij er is.
   T.beginReis = function (S, naar) {
     const L = S.land;
-    if (!L || L.reis) return { kan: false, reden: 'Je bent al onderweg.' };
+    if (!L || L.reis) return { kan: false, reden: T.t('You are already on your way.') };
     const r = T.reisNaar(S, naar);
-    if (!r) return { kan: false, reden: naar === L.waar ? 'Daar ben je al.' : 'Daar weet je de weg nog niet.' };
+    if (!r) return { kan: false, reden: naar === L.waar ? T.t('You are already there.') : T.t('You do not know the way there yet.') };
     const dag = dagNu(S);
     L.reis = {
       route: r.route,
@@ -442,11 +443,11 @@
     const v = terug.van;
     const n = terug.nu;
     const regels = [];
-    const verschil = (a, b) => (b - a > 0 ? `+${b - a}` : b - a < 0 ? `−${a - b}` : 'gelijk');
-    regels.push(`${n.bevolking} mensen (${verschil(v.bevolking, n.bevolking)})`);
-    for (const [ding, naam] of [['graan', 'graan'], ['hout', 'hout'], ['goud', 'goud']]) regels.push(`${n[ding]} ${naam} (${verschil(v[ding], n[ding])})`);
+    const verschil = (a, b) => (b - a > 0 ? `+${b - a}` : b - a < 0 ? `−${a - b}` : T.t('no change'));
+    regels.push(T.t('{n|# person|# people} ({verschil})', { n: n.bevolking, verschil: verschil(v.bevolking, n.bevolking) }));
+    for (const ding of ['graan', 'hout', 'goud']) regels.push(T.t('{wat} ({verschil})', { wat: T.hoeveel(n[ding], ding), verschil: verschil(v[ding], n[ding]) }));
     const raad = n.doorRaadsman - v.doorRaadsman;
-    if (raad > 0) regels.push(raad === 1 ? 'je raadsman besliste een voorval' : `je raadsman besliste ${raad} voorvallen`);
+    if (raad > 0) regels.push(T.t('{n|your advisor decided an event|your advisor decided # events}', { n: raad }));
     return regels;
   };
 })(globalThis.Spel = globalThis.Spel || {});
