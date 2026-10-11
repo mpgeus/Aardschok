@@ -78,8 +78,8 @@
         return naAanval(D, dag) || heeftSmidse(D);
       },
       waarom: (D, dag) => (naAanval(D, dag)
-        ? 'Na de rovers wil niemand nog met een hooivork voor zijn akker staan.'
-        : 'De smid maakt hamers en hoefijzers, en de rovers komen terug.'),
+        ? T.t('After the robbers, nobody wants to stand at his field with only a pitchfork any more.')
+        : T.t('The smith makes hammers and horseshoes, and the robbers will be back.')),
     },
     herberg: {
       soort: 'herberg',
@@ -90,26 +90,26 @@
       },
       waarom: (D) => {
         const ver = verVanDeHerberg(D);
-        if (ver >= 3) return `${hoofdletter(T.telwoord(ver))} mensen wonen meer dan een uur van de herberg, en komen er zelden.`;
-        if (T.herbergDroog(D)) return 'De herberg is droog: de herbergierster brouwt alleen.';
-        return 'Eén herberg is te weinig voor een dorp: wie bij haar geen plaats heeft, zit thuis.';
+        if (ver >= 3) return T.t('{aantal} people live more than an hour from the inn, and seldom go there.', { aantal: hoofdletter(T.telwoord(ver)) });
+        if (T.herbergDroog(D)) return T.t('The inn has run dry: the innkeeper brews alone.');
+        return T.t('One inn is too few for a village: whoever finds no seat there stays at home.');
       },
       // Ja: de herbergierster is boos, en brouwt een tijd niet.
       ja: (D) => {
         const g = T.herbergVan(D);
         if (!g) return;
         const naam = herbergierVan(D);
-        g.weigert = { tot: dagNu(D) + IN().herberg.boosDagen, waarom: `${naam} is boos op je` };
-        T.zeg(D, `${hoofdletter(naam)} hoort het. "Een tweede herberg, schout? Dan brouw jij je bier voortaan zelf maar."`, 'gevaar');
+        g.weigert = { tot: dagNu(D) + IN().herberg.boosDagen, waarom: T.t('{naam} is angry with you', { naam }) };
+        T.zeg(D, T.t('{naam} hears of it. "A second inn, reeve? Then you can brew your own ale from now on."', { naam: hoofdletter(naam) }), 'gevaar');
       },
       // Nee: zij is je dankbaar (het vat bier staat in het antwoord, js/gesprekken.js).
       nee: (D) => {
-        if (T.herbergVan(D)) T.zeg(D, `${hoofdletter(herbergierVan(D))} hoort het, en zet een vat bier voor het dorp klaar.`, 'goed');
+        if (T.herbergVan(D)) T.zeg(D, T.t('{naam} hears of it, and sets a barrel of ale aside for the village.', { naam: hoofdletter(herbergierVan(D)) }), 'goed');
       },
       prijs: (D, L, doe) => {
         if (!T.herbergVan(D)) return [];
-        if (doe.bouw) return [`${herbergierVan(D)} is boos, en brouwt ${IN().herberg.boosDagen} dagen niet`];
-        if (doe.weiger) return [`${herbergierVan(D)} is je dankbaar`];
+        if (doe.bouw) return [T.t('{naam} is angry, and will not brew for {n|# day|# days}', { naam: herbergierVan(D), n: IN().herberg.boosDagen })];
+        if (doe.weiger) return [T.t('{naam} is grateful to you', { naam: herbergierVan(D) })];
         return [];
       },
     },
@@ -117,11 +117,11 @@
   const naAanval = (D, dag) => !!(D.rovers && D.rovers.laatsteAanval != null && dag - D.rovers.laatsteAanval <= IN().wapens.naAanval);
   const heeftSmidse = (D) => (D.gebouwen || []).some((g) => g.soort === 'smidse' && g.klaar);
 
-  // Wie de herberg van het begin houdt: wie er woont (de herbergierster), of "de herbergier".
+  // Wie de herberg van het begin houdt: wie er woont (de herbergierster), of "the innkeeper".
   function herbergierVan(D) {
     const g = T.herbergVan(D);
     const p = g && D.bewoners && D.bewoners.mensen.find((x) => x.huis === g && x.leeftijd === 'volwassen');
-    return p ? naamVan(p) : 'de herbergier';
+    return p ? naamVan(p) : T.t('the innkeeper');
   }
 
   // Hoeveel volwassenen meer dan een uur van de herberg wonen (T.looptijdVan, js/bewoners.js; dezelfde weg als
@@ -200,8 +200,10 @@
     if (doe.weiger) {
       const weg = eigenVan(D, p).nee + 1 >= IN().wegNa;
       const gezin = weg ? gezinVan(D, p) : [];
-      const zijn = p.geslacht === 'vrouw' ? 'haar' : 'zijn';
-      delen.push(!weg ? `${naamVan(p)} neemt het je kwalijk` : gezin.length > 1 ? `${naamVan(p)} trekt weg, met ${zijn} gezin` : `${naamVan(p)} trekt weg`);
+      const naam = naamVan(p);
+      if (!weg) delen.push(T.t('{naam} will hold it against you', { naam }));
+      else if (gezin.length > 1) delen.push(T.t('{naam} will leave, with {g|vrouw:her|*:his} family', { naam, g: p.geslacht }));
+      else delen.push(T.t('{naam} will leave', { naam }));
     }
     const o = T.ONDERNEMINGEN[L.bouw.eigen];
     if (o && o.prijs) delen.push(...o.prijs(D, L, doe));
@@ -219,8 +221,8 @@
     const o = T.ONDERNEMINGEN[L.bouw.eigen];
     if (E.nee >= IN().wegNa) {
       const wie = gezinVan(D, p);
-      T.wijzigBevolking(D, -wie.length, 'vertrek', `${naamVan(p)} kreeg ${T.telwoord(E.nee)} keer nee van de schout`, wie);
-      T.wijzigVertrouwen(D, T.BAZEN_INSTELLINGEN.wegGetrokken, `${naamVan(p)} trok weg`);
+      T.wijzigBevolking(D, -wie.length, 'vertrek', T.t('{naam} was turned down by the reeve {n|# time|# times}', { naam: naamVan(p), n: E.nee }), wie);
+      T.wijzigVertrouwen(D, T.BAZEN_INSTELLINGEN.wegGetrokken, T.t('{naam} left', { naam: naamVan(p) }));
     } else if (p.huis) voegStemmingToe(p.huis, -IN().wrok, dag, IN().wrokDagen, 'wrok', naamVan(p));
     if (o && o.nee) o.nee(D, L);
   };
@@ -246,7 +248,8 @@
   T.huisNadraagtTekst = function (g, dag) {
     const s = (g.stemming || []).filter((x) => dag - x.dag < x.dagen).pop();
     if (!s) return null;
-    return s.waarom === 'wrok' ? `${hoofdletter(s.wie)} neemt je je nee kwalijk.` : `${hoofdletter(s.wie)} is je dankbaar voor je ja.`;
+    const wie = hoofdletter(s.wie);
+    return s.waarom === 'wrok' ? T.t('{wie} resents your refusal.', { wie }) : T.t('{wie} is grateful that you agreed.', { wie });
   };
 
   // ---------------------------------------------------------------------------------------------

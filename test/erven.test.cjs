@@ -516,7 +516,7 @@ test('hoe dicht de erven ook liggen, elk huis houdt een plek voor een put en een
     for (let y = 0; y < w.h && !gelegd; y += 2) {
       for (let x = 0; x < w.b && !gelegd; x += 2) {
         const r = T.waaromPastErfNiet(D, x, y);
-        if (r && /put|kapel/.test(r)) redenen.push(r);
+        if (r && /well|chapel/.test(r)) redenen.push(r);
         if (!r) gelegd = T.plaatsGebouw(D, 'erf', x, y).gelukt;
       }
     }
@@ -526,16 +526,16 @@ test('hoe dicht de erven ook liggen, elk huis houdt een plek voor een put en een
     }
   }
   assert.ok(D.erven.length >= 10, `zoveel erven: ${D.erven.length}`);
-  assert.ok(redenen.some((r) => r.startsWith('Dan kan de hut op een ander erf straks geen put meer krijgen')), 'een erf dat de laatste plek nam, mocht niet');
-  assert.ok(redenen.some((r) => /geen kapel/.test(r)), 'en net zo voor de kapel');
+  assert.ok(redenen.some((r) => r.startsWith('Then the hut on another plot will not be able to get a well later')), 'een erf dat de laatste plek nam, mocht niet');
+  assert.ok(redenen.some((r) => /get a chapel later/.test(r)), 'en net zo voor de kapel');
 });
 
 test('het huis van, de hut van: het lidwoord bij wie er woont (T.huisVan)', () => {
   const S = gehucht();
   const D = S.dorp;
-  assert.match(T.huisVan(D, D.gebouwen.find((g) => g.soort === 'huis')), /^het huis van /);
-  assert.match(T.huisVan(D, D.gebouwen.find((g) => g.soort === 'hut')), /^de hut van /);
-  assert.match(T.huisVan(D, D.gebouwen.find((g) => g.soort === 'boerderij')), /^de boerderij van /);
+  assert.match(T.huisVan(D, D.gebouwen.find((g) => g.soort === 'huis')), /^the house of /);
+  assert.match(T.huisVan(D, D.gebouwen.find((g) => g.soort === 'hut')), /^the hut of /);
+  assert.match(T.huisVan(D, D.gebouwen.find((g) => g.soort === 'boerderij')), /^the farm of /);
 });
 
 // Een vol gehucht met een erf zo ver als het mag van het plein (en van de put daar), en een gezin dat er zijn hut op zet.
@@ -581,7 +581,7 @@ test('het dorp zet een put voor een hut op een erf waar hij ook het huis haalt d
   const deHut = T.huisVan(D, hut);
   // Eerst een put voor elk ander huis dat er een mist, waar hij de hut niet haalt: dan mist alleen de hut er nog een.
   for (let n = 0; n < 6; n++) {
-    const ander = T.kringGrond(D, 'put').zonder.find((h) => h.wie !== deHut && !/ander erf/.test(h.wie));
+    const ander = T.kringGrond(D, 'put').zonder.find((h) => h.wie !== deHut && !/another plot/.test(h.wie));
     if (!ander) break;
     const p = ander.plekken.find((q) => !T.inDeKring(voet, q, straal) && T.gebouwPast(D, 'put', q.x, q.y));
     assert.ok(p, `een plek voor ${ander.wie}`);
@@ -590,7 +590,7 @@ test('het dorp zet een put voor een hut op een erf waar hij ook het huis haalt d
     u.instantie.klaar = true;
     T.kaartVeranderd(S.wereld);
   }
-  assert.deepEqual(T.kringGrond(D, 'put').zonder.filter((h) => !/ander erf/.test(h.wie)).map((h) => h.wie), [deHut]);
+  assert.deepEqual(T.kringGrond(D, 'put').zonder.filter((h) => !/another plot/.test(h.wie)).map((h) => h.wie), [deHut]);
   // Een plek die de hut haalt en het huis niet: de muis telt de hut daar (zo is het nu), het dorp niet.
   let rand = null;
   for (let y = 0; y < S.wereld.tegels.length && !rand; y++) {

@@ -243,9 +243,9 @@ test('de avond wordt verrekend: het bier gaat op, en wie er was, maakt het dorp 
   const erbij = huizen.reduce((n, h) => n + h.mensen * (Math.min(1, h.tevredenheid + g) - h.tevredenheid), 0) / huizen.reduce((n, h) => n + h.mensen, 0);
   assert.ok(erbij > 0 && Math.abs(b.tevredenheid - zonder.tevredenheid - erbij) < 1e-9, 'het komt erbij');
   assert.ok(T.herbergGezelligheid(S.dorp, HERFST + 1 + IN.gezelligheidDagen + 1) === 0, 'een week later is het voorbij');
-  assert.ok(!zonder.mist.includes('bier'));
+  assert.ok(!zonder.mist.includes('ale'));
   T.zetVoorraad(S.dorp, 'bier', 0);
-  assert.ok(T.berekenTevredenheid(S.dorp, HERFST + 1).mist.includes('bier'), 'een droge herberg mist het dorp');
+  assert.ok(T.berekenTevredenheid(S.dorp, HERFST + 1).mist.includes('ale'), 'een droge herberg mist het dorp');
 });
 
 test('de herbergierster brouwt van graan, tot er genoeg bier ligt', () => {

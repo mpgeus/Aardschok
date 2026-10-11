@@ -45,13 +45,13 @@
   // (js/heervaart.js).
   T.tredeMinstens = (D, trede) => volgorde().indexOf(D.trede || 'gehucht') >= volgorde().indexOf(trede);
 
-  // Hoe een trede heet: als doel ("naar een dorp", "naar marktrecht"), en wat je dan bent ("Bouwen — het dorp met
-  // marktrecht", js/hud.js).
+  // Hoe een trede heet: als doel ("towards a village", "towards a market town"), en wat je dan bent ("Build — the
+  // village", js/hud.js). Marktrecht heet in het Engels the market town (ontwerp/engels.md).
   const NAMEN = {
-    gehucht: { doel: 'een gehucht', is: 'het gehucht' },
-    dorp: { doel: 'een dorp', is: 'het dorp' },
-    marktrecht: { doel: 'marktrecht', is: 'het dorp met marktrecht' },
-    stad: { doel: 'een stad', is: 'de stad' },
+    gehucht: { doel: T.t('a hamlet'), is: T.t('the hamlet') },
+    dorp: { doel: T.t('a village'), is: T.t('the village') },
+    marktrecht: { doel: T.t('a market town'), is: T.t('the market town') },
+    stad: { doel: T.t('a town'), is: T.t('the town') },
   };
   T.tredeNaam = (D) => NAMEN[D.trede || 'gehucht'].is;
 
@@ -59,7 +59,7 @@
   // iedereen.
   const geteld = (D, eis) => (eis.stand
     ? { n: T.mensenVanStand(D, eis.stand), wie: T.STANDEN[eis.stand].naam }
-    : { n: D.bevolking || 0, wie: 'mensen' });
+    : { n: D.bevolking || 0, wie: T.t('people') });
 
   // Hoeveel mensen de volgende trede nog vraagt, of 0 (ook als er geen trede meer te halen is): voor de raad
   // (js/raad.js), die zegt wat de groei doet zolang het doel mensen vraagt.
@@ -71,8 +71,8 @@
   };
 
   // Hoe het ervoor staat met de volgende trede: { kop, tekst, deel, klaar, trede }, of null als er niets te halen is.
-  // `tekst` is voor het briefje linksboven: "12 van 20 dorpelingen", of met de oude eis "43 van 50 mensen · een kapel ✓ ·
-  // nog geen smidse"; `deel` is hoe ver de mensen zijn (0 tot 1), voor de streep eronder (js/ui.js).
+  // `tekst` is voor het briefje linksboven: "12 of 20 villagers", of met de oude eis "43 of 50 people · a chapel ✓ ·
+  // no smithy yet"; `deel` is hoe ver de mensen zijn (0 tot 1), voor de streep eronder (js/ui.js).
   T.tredeDoel = function (D) {
     const trede = T.volgendeTrede(D);
     if (!trede || !heeftTreden(D)) return null;
@@ -80,22 +80,22 @@
     const delen = [];
     const { n, wie } = geteld(D, eis);
     const genoeg = n >= eis.mensen;
-    delen.push(genoeg ? `${eis.mensen} ${wie} ✓` : `${n} van ${eis.mensen} ${wie}`);
+    delen.push(genoeg ? `${eis.mensen} ${wie} ✓` : T.t('{n} of {max} {wie}', { n, max: eis.mensen, wie }));
     let klaar = genoeg;
     for (const soort of eis.gebouwen || []) {
-      const naam = T.GEBOUWEN[soort].naam;
+      const gebouw = T.GEBOUWEN[soort].naam;
       const lijst = (D.gebouwen || []).filter((g) => g.soort === soort);
-      if (lijst.some((g) => g.klaar)) delen.push(`een ${naam} ✓`);
+      if (lijst.some((g) => g.klaar)) delen.push(`${T.eenNaam(gebouw)} ✓`);
       else {
         klaar = false;
-        delen.push(lijst.length ? `de ${naam} in aanbouw` : `nog geen ${naam}`);
+        delen.push(lijst.length ? T.t('the {gebouw} is being built', { gebouw }) : T.t('no {gebouw} yet', { gebouw }));
       }
     }
-    // De kop draagt de naam van je dorp, als het er een heeft: "Heathside · naar een dorp".
+    // De kop draagt de naam van je dorp, als het er een heeft: "Heathside · towards a village".
     const naam = T.dorpsnaam(D);
     const doel = NAMEN[trede].doel;
     const deel = Math.min(1, n / eis.mensen);
-    return { kop: naam ? `${naam} · naar ${doel}` : `Naar ${doel}`, tekst: delen.join(' · '), deel, klaar, trede };
+    return { kop: naam ? T.t('{naam} · towards {doel}', { naam, doel }) : T.t('Towards {doel}', { doel }), tekst: delen.join(' · '), deel, klaar, trede };
   };
 
   // Welke gebouwen het doel nog vraagt en die er nog niet staan, ook niet in aanbouw: voor de raad (js/raad.js), die
@@ -114,38 +114,46 @@
 
   // Een trede gehaald: dat blijft zo. De heer schrijft (js/brieven.js, een brief per trede); zonder scherm (een toets)
   // alleen een bericht.
-  const GEHAALD = { dorp: 'Het gehucht is een dorp geworden.', marktrecht: 'Het dorp heeft marktrecht gekregen.' };
+  const GEHAALD = {
+    dorp: () => T.t('The hamlet has become a village.'),
+    marktrecht: () => T.t('The village has become a market town.'),
+  };
   T.wordtTrede = function (D, trede) {
     D.trede = trede;
     if (T.ui && T.ui.toonBrief) T.ui.toonBrief(D, trede);
-    else T.zeg(D, GEHAALD[trede] || `Het is ${NAMEN[trede].is} geworden.`, 'goed');
+    else T.zeg(D, GEHAALD[trede] ? GEHAALD[trede]() : T.t('It has become {trede}.', { trede: NAMEN[trede].is }), 'goed');
   };
 
   // Het hoofdgeld in deze trede, als factor op wat de heer per ziel vraagt (js/heer.js, T.eisVanDeHeer).
   T.hoofdgeldFactor = (D) => (T.tredeMinstens(D, 'dorp') ? IN().hoofdgeldInDorp : 1);
 
-  // Wat de heer in zijn benoemingsbrief vraagt (js/brieven.js): "twintig zielen in huizen, niet in hutten" (de huizen
-  // van de stand, en die van de stand eronder; T.STANDEN in js/wensen.js), of met de oude eis "een kapel, een smidse en
-  // vijftig zielen".
-  const TIENTALLEN = { 20: 'twintig', 30: 'dertig', 40: 'veertig', 50: 'vijftig', 60: 'zestig', 70: 'zeventig', 80: 'tachtig', 90: 'negentig', 100: 'honderd' };
+  // Wat de heer in zijn benoemingsbrief vraagt (js/brieven.js): "twenty souls in houses, not in huts" (de huizen van de
+  // stand, en die van de stand eronder; T.STANDEN in js/wensen.js), of met de oude eis "a chapel, a smithy and fifty
+  // souls".
+  const TIENTALLEN = {
+    20: T.t('twenty'), 30: T.t('thirty'), 40: T.t('forty'), 50: T.t('fifty'), 60: T.t('sixty'), 70: T.t('seventy'),
+    80: T.t('eighty'), 90: T.t('ninety'), 100: T.t('a hundred'),
+  };
   const huizenVan = (stand) => T.GEBOUWEN[T.STANDEN[stand].huis].meervoud;
   T.tredeEisTekst = function (trede) {
     const eis = IN()[trede];
-    const zielen = `${TIENTALLEN[eis.mensen] || eis.mensen} zielen`;
-    const gebouwen = (eis.gebouwen || []).map((s) => `een ${T.GEBOUWEN[s].naam}`);
+    const zielen = T.t('{aantal} souls', { aantal: TIENTALLEN[eis.mensen] || eis.mensen });
+    const gebouwen = (eis.gebouwen || []).map((s) => T.eenNaam(T.GEBOUWEN[s].naam));
     if (eis.stand) {
       const onder = T.standOnder(eis.stand);
-      const waar = `${zielen} in ${huizenVan(eis.stand)}${onder ? `, niet in ${huizenVan(onder)}` : ''}`;
-      return gebouwen.length ? `${gebouwen.join(', ')} en ${waar}` : waar;
+      const waar = onder
+        ? T.t('{zielen} in {huizen}, not in {onder}', { zielen, huizen: huizenVan(eis.stand), onder: huizenVan(onder) })
+        : T.t('{zielen} in {huizen}', { zielen, huizen: huizenVan(eis.stand) });
+      return T.opsomming([...gebouwen, waar]);
     }
-    return gebouwen.length ? `${gebouwen.join(', ')} en ${zielen}` : zielen;
+    return T.opsomming([...gebouwen, zielen]);
   };
 
   // Hoe het dorp heet (Marcel, 29 sep, werklijst vraag 60: "speler mag zelf de naam voor zijn dorp kiezen aan het
   // begin"): je kiest het bij Nieuw spel (js/menu.js), met een van deze als voorstel. Het staat in S.dorpsnaam, en
-  // de heer schrijft het in zijn brieven ("Ons gehucht Heathside"). Zonder naam (een proefkaart, of een spel van
-  // vóór 29 sep) is het "dit gehucht".
-  T.DORPSNAMEN = ['Heathside', 'Brookfield', 'Wolfden', 'Oldland', 'Millcombe', 'Oakley', 'Fieldhurst', 'Crowthorpe', 'Lindley', 'Brakeham'];
+  // de heer schrijft het in zijn brieven ("Our hamlet Heathside"). Zonder naam (een proefkaart, of een spel van
+  // vóór 29 sep) is het "this hamlet".
+  T.DORPSNAMEN = ['Heathside', 'Brookfield', 'Wolfden', 'Oldland', 'Millcombe', 'Oakley', 'Fieldhurst', 'Crowthorpe', 'Lindley', 'Brakeham']; // geen tekst: eigennamen
   const LANGSTE_NAAM = 24;
   T.dorpsnaam = (D) => (D && D.dorpsnaam) || null;
   // Een voorstel, vast bij een getal (het zaad van het spel), zodat een speeltest hetzelfde dorp krijgt.

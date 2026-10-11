@@ -217,13 +217,14 @@
     // Het brandhout mist het dorp ook als het de winter niet haalt (T.houtVoorDeWinter), niet pas als
     // het vandaag op is: dan zegt de balk het op tijd, net als het rode hout ernaast (js/hud.js).
     const mist = [];
-    if (voedselDekking < 1) mist.push('eten');
-    if (brandhoutDekking < 1 || !T.houtVoorDeWinter(D, dag).haalt) mist.push('brandhout voor de winter');
+    // Wat de speler ziet, en tegelijk waar js/voorvallen.js en de balk (js/tafel.js) op letten: dezelfde zin.
+    if (voedselDekking < 1) mist.push(T.t('food'));
+    if (brandhoutDekking < 1 || !T.houtVoorDeWinter(D, dag).haalt) mist.push(T.t('firewood for the winter'));
     if (wensen) {
       for (const m of wensen.gemist) mist.push(m.naam);
     } else {
-      if (!heeftKerk) mist.push('een kerk');
-      if (T.herbergDroog(D)) mist.push('bier');
+      if (!heeftKerk) mist.push(T.t('a church'));
+      if (T.herbergDroog(D)) mist.push(T.t('ale'));
     }
 
     return {
@@ -296,14 +297,14 @@
     // Waaraan (Marcel, 27 sep, vraag 44): tot 28 sep zei het bericht alleen "De winter is hard".
     const koud = b.inWinter && b.brandhoutDekking < 1;
     const honger = b.voedselDekking < 1;
-    const wat = koud && honger ? 'De winter is hard, want het hout en het eten zijn op'
-      : koud ? 'De kou is hard, want het hout is op'
-      : 'De honger is hard, want het eten is op';
+    const wat = koud && honger ? T.t('The winter is harsh, for the wood and the food have run out')
+      : koud ? T.t('The cold is harsh, for the wood has run out')
+      : T.t('The hunger is harsh, for the food has run out');
     // Met bewoners zegt het bericht wie het zijn (T.bewonersVolgen, js/bewoners.js); zonder (een toets
     // met een eigen, kleine wereld) alleen hoeveel.
     T.wijzigBevolking(D, -verlies, 'winter', wat);
     if (!D.bewoners) {
-      T.zeg(D, verlies === 1 ? `${wat}: het dorp verliest een dorpeling.` : `${wat}: het dorp verliest ${verlies} dorpelingen.`, 'gevaar');
+      T.zeg(D, verlies === 1 ? T.t('{wat}: the village loses one villager.', { wat }) : T.t('{wat}: the village loses {n} villagers.', { wat, n: verlies }), 'gevaar');
     }
   }
 
@@ -323,7 +324,7 @@
     const ontevreden = b.wensen ? b.wensen.huizen.filter((h) => h.tevredenheid < IN.vertrekDrempel) : null;
     if (!honger && (ontevreden ? !ontevreden.length : b.tevredenheid >= IN.vertrekDrempel)) return;
     let verlies = Math.min(D.bevolking, T.GEBOUWEN_INSTELLINGEN.gezinGrootte);
-    let waarom = honger ? 'er is geen eten' : 'het dorp is niet tevreden genoeg';
+    let waarom = honger ? T.t('there is no food') : T.t('the village is not content enough');
     let wie;
     if (ontevreden && !honger) {
       wie = T.wieGaatEerst(D, 'vertrek').filter((p) => ontevreden.some((h) => h.g === p.huis));
@@ -331,12 +332,12 @@
       if (!verlies) return;
       // Onder de drempel zakt een huis alleen zonder eten of brandhout (of door de heer of een wet): dat zegt het bericht.
       const h = ontevreden.find((x) => x.g === wie[0].huis);
-      const geen = ['eten', 'brandhout'].filter((id) => h.heeft[id] < 1 - 1e-9).map((id) => `geen ${T.WENSEN[id].naam}`);
-      waarom = geen.length ? `ze hebben ${T.opsomming(geen)}` : 'ze zijn niet tevreden genoeg';
+      const geen = ['eten', 'brandhout'].filter((id) => h.heeft[id] < 1 - 1e-9).map((id) => T.t('no {wens}', { wens: T.WENSEN[id].naam }));
+      waarom = geen.length ? T.t('they have {geen}', { geen: T.opsomming(geen) }) : T.t('they are not content enough');
     }
     // Met bewoners zegt het bericht wie het zijn en lopen ze de weg af (js/bewoners.js).
     T.wijzigBevolking(D, -verlies, 'vertrek', waarom, wie);
-    if (!D.bewoners && T.ui && T.ui.bericht) T.zeg(D, `Een gezin trekt weg: ${waarom}. (-${verlies})`, 'gevaar');
+    if (!D.bewoners && T.ui && T.ui.bericht) T.zeg(D, T.t('A family is leaving: {waarom}. (-{verlies})', { waarom, verlies }), 'gevaar');
   }
 
 
@@ -356,7 +357,7 @@
     const wie = T.wieGaatEerst(D, 'vertrek').filter((p) => p.huis === langst.g);
     const verlies = Math.min(T.GEBOUWEN_INSTELLINGEN.gezinGrootte, wie.length);
     const mist = Object.keys(langst.heeft).filter((id) => langst.heeft[id] < 1 - 1e-9).map((id) => T.WENSEN[id].naam);
-    if (verlies) T.wijzigBevolking(D, -verlies, 'vertrek', `hun huis mist al een maand ${T.opsomming(mist)}`, wie);
+    if (verlies) T.wijzigBevolking(D, -verlies, 'vertrek', T.t('their house has lacked {mist} for a month', { mist: T.opsomming(mist) }), wie);
   }
 
   // Ruilt het voorwerp van een gebouw voor zijn "wordt"-soort: dezelfde tekening-ingang als
@@ -554,7 +555,7 @@
     const soort = T.GEBOUWEN[g.soort];
     if (soort && soort.groeitMee) return g.wachtOpPlaats ? waaromGeenPlaats(D, g, g.soort) : null;
     if (!soort || !soort.wordt || !T.GEBOUWEN[soort.wordt] || !g.voorwerp) return null;
-    if (g.groeitNaRooien) return `het gezin rooit eerst ${T.rooiWoordenOp(D, g.kavel).replace(/ \(.*\)$/, '')} waar het groter wordt`;
+    if (g.groeitNaRooien) return T.t('the family first clears {wat} where it is to grow', { wat: T.rooiWoordenOp(D, g.kavel).replace(/ \(.*\)$/, '') });
     if (!((g.groeiDagen || 0) >= T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen)) return null;
     return waaromGeenPlaats(D, g, soort.wordt);
   };
@@ -566,25 +567,25 @@
     // De vorm waar het minste in de weg staat, en daarvan wat het gezin niet kan rooien.
     const beste = vormen.slice().sort((a, b) => a.inDeWeg.length - b.inDeWeg.length)[0];
     const t = beste.inDeWeg.find((x) => x.wat !== 'iemand' && !teRooien(x));
-    if (t.wat === 'erf') return 'er ligt een erf waar het groter moet worden';
-    if (t.wat === 'meegroei') return `daar groeit straks de ${T.GEBOUWEN[T.meegroeiGrondOp(D, t.x, t.y, g).soort].naam}`;
-    if (t.wat === 'deur') return 'de deur van een ander huis zit in de weg';
+    if (t.wat === 'erf') return T.t('a plot lies where it has to grow');
+    if (t.wat === 'meegroei') return T.t('the {gebouw} will grow there later', { gebouw: T.GEBOUWEN[T.meegroeiGrondOp(D, t.x, t.y, g).soort].naam });
+    if (t.wat === 'deur') return T.t('the door of another house is in the way');
     const v = T.voorwerpOp(D.wereld, t.x, t.y);
     const g2 = v && (D.gebouwen || []).find((h) => h.voorwerp === v);
-    const naam = g2 ? `een ${T.GEBOUWEN[g2.soort].naam}` : v && T.VOORWERPEN[v.soort] && T.VOORWERPEN[v.soort].naam ? T.VOORWERPEN[v.soort].naam : v ? NAMEN[v.soort] || 'iets' : 'een muur';
-    return `er staat ${naam} waar het groter moet worden`;
+    const naam = g2 ? T.eenNaam(T.GEBOUWEN[g2.soort].naam) : v && T.VOORWERPEN[v.soort] && T.VOORWERPEN[v.soort].naam ? T.VOORWERPEN[v.soort].naam
+      : v ? NAMEN[v.soort] || T.t('something') : T.t('a wall');
+    return T.t('there is {wat} where it has to grow', { wat: naam });
   }
   // Wat er van de natuur in de weg kan staan en niet te rooien is (een appelboom rooit het gezin zelf: vraag 130, a2).
-  const NAMEN = { rots: 'een rots', kleineRots: 'een rots' };
+  const NAMEN = { rots: T.t('a rock'), kleineRots: T.t('a rock') };
 
-  // "de hut van Swier" (het hoofd van het gezin dat er woont), of "een hut" als er niemand woont: voor de raad en de erven
+  // "the hut of Walter" (het hoofd van het gezin dat er woont), of "a hut" als er niemand woont: voor de raad en de erven
   // (werklijst vraag 130, c2 en d).
   T.huisVan = function (D, g) {
     const naam = T.GEBOUWEN[g.soort].naam;
     const mensen = ((D.bewoners && D.bewoners.mensen) || []).filter((p) => p.huis === g);
     const p = mensen.find((m) => !m.hoofd) || mensen[0];
-    const lidwoord = /huis$/.test(naam) ? 'het' : 'de'; // het huis, het stenen huis; de hut, de boerderij
-    return p ? `${lidwoord} ${naam} van ${T.naamVanBewoner(p)}` : `een ${naam}`;
+    return p ? T.t('the {gebouw} of {wie}', { gebouw: naam, wie: T.naamVanBewoner(p) }) : T.eenNaam(naam);
   };
 
   // Waar de huizen nog heen kunnen groeien (werklijst vraag 130, d; Marcel, 6 okt: "Eens alle 3"): per huis dat kan
@@ -660,7 +661,7 @@
     return null;
   };
 
-  const kostenTekst = (kosten) => T.opsomming(Object.keys(kosten).map((wat) => `${kosten[wat]} ${wat}`));
+  const kostenTekst = (kosten) => T.opsomming(Object.keys(kosten).map((wat) => T.hoeveel(kosten[wat], wat)));
 
   // Het dorp als geheel (de spelregel "Wensen", zoals vóór 1 okt): is het dorp huisGroeiDagen op rij tevreden genoeg,
   // dan groeit elk huis door, zonder bouwstof.
@@ -675,7 +676,7 @@
       if (!instantie.klaar || !instantie.voorwerp || !soort || !soort.wordt || !magDoorgroeien(D, soort)) continue;
       instantie.groeiDagen = tevredenGenoeg ? (instantie.groeiDagen || 0) + 1 : 0;
       if (instantie.groeiDagen >= IN.huisGroeiDagen && groeiGebouw(D, instantie, soort)) {
-        T.zeg(D, `Een ${soort.naam} is gegroeid tot een ${T.GEBOUWEN[soort.wordt].naam}.`, 'goed');
+        T.zeg(D, T.t('{van} has grown into {naar}.', { van: T.hoofdletter(T.eenNaam(soort.naam)), naar: T.eenNaam(T.GEBOUWEN[soort.wordt].naam) }), 'goed');
       }
     }
   }
@@ -696,7 +697,7 @@
       if (!nu || !T.deurKantVan(g.tekening) || nu.some((t) => T.vormVan(t) === T.vormVan(g.tekening))) continue;
       const kosten = T.WENSEN_INSTELLINGEN.bouwstof[g.soort] || {};
       if (!T.kanBetalen(D, kosten)) {
-        if (!g.wachtOpBouwstof) T.zeg(D, `De ${soort.naam} kan groeien met het dorp, maar daar is ${kostenTekst(kosten)} voor nodig.`);
+        if (!g.wachtOpBouwstof) T.zeg(D, T.t('The {gebouw} can grow with the village, but that takes {kosten}.', { gebouw: soort.naam, kosten: kostenTekst(kosten) }));
         g.wachtOpBouwstof = true;
         continue;
       }
@@ -705,15 +706,15 @@
       // het briefje zolang het duurt (T.waaromGroeitHetNiet).
       if (!groeiGebouw(D, g, soort, g.soort)) {
         const waarom = waaromGeenPlaats(D, g, g.soort);
-        if (waarom && !g.wachtOpPlaats) T.zeg(D, `De ${soort.naam} kan niet met het dorp meegroeien: ${waarom}.`);
+        if (waarom && !g.wachtOpPlaats) T.zeg(D, T.t('The {gebouw} cannot grow with the village: {waarom}.', { gebouw: soort.naam, waarom }));
         if (waarom) g.wachtOpPlaats = true;
         continue;
       }
       delete g.wachtOpBouwstof;
       delete g.wachtOpPlaats;
       T.betaalKosten(D, kosten);
-      const voor = Object.keys(kosten).length ? `, voor ${kostenTekst(kosten)}` : '';
-      T.zeg(D, `De ${soort.naam} groeit met het dorp mee${voor}.`, 'goed');
+      const woorden = { gebouw: soort.naam, kosten: kostenTekst(kosten) };
+      T.zeg(D, Object.keys(kosten).length ? T.t('The {gebouw} grows with the village, for {kosten}.', woorden) : T.t('The {gebouw} grows with the village.', woorden), 'goed');
     }
   }
 
@@ -766,7 +767,7 @@
       const nieuw = T.GEBOUWEN[soort.wordt];
       const kosten = T.WENSEN_INSTELLINGEN.bouwstof[soort.wordt] || {};
       if (!T.kanBetalen(D, kosten)) {
-        if (!g.wachtOpBouwstof) T.zeg(D, `Een ${soort.naam} kan een ${nieuw.naam} worden, maar daar is ${kostenTekst(kosten)} voor nodig.`);
+        if (!g.wachtOpBouwstof) T.zeg(D, T.t('{van} can become {naar}, but that takes {kosten}.', { van: T.hoofdletter(T.eenNaam(soort.naam)), naar: T.eenNaam(nieuw.naam), kosten: kostenTekst(kosten) }));
         g.wachtOpBouwstof = true;
         continue;
       }
@@ -778,9 +779,10 @@
       }
       if (!groeiGebouw(D, g, soort)) continue; // er stond iemand: morgen weer
       T.betaalKosten(D, kosten);
-      const voor = Object.keys(kosten).length ? `, voor ${kostenTekst(kosten)}` : '';
-      T.zeg(D, `Een ${soort.naam} is gegroeid tot een ${nieuw.naam}${voor}: wie erin woont, hoort nu bij de ${T.STANDEN[T.standVan(g)].naam}.`, 'goed');
-      // Voor het rapport van de raadsman (js/ochtendrapport.js; vraag 87): "De hut van Geert is een huis geworden".
+      const woorden = { van: T.hoofdletter(T.eenNaam(soort.naam)), naar: T.eenNaam(nieuw.naam), kosten: kostenTekst(kosten), stand: T.STANDEN[T.standVan(g)].naam };
+      T.zeg(D, Object.keys(kosten).length ? T.t('{van} has grown into {naar}, for {kosten}: whoever lives there now belongs with the {stand}.', woorden)
+        : T.t('{van} has grown into {naar}: whoever lives there now belongs with the {stand}.', woorden), 'goed');
+      // Voor het rapport van de raadsman (js/ochtendrapport.js; vraag 87): "The hut of Gerard has become a house".
       const p = ((D.bewoners && D.bewoners.mensen) || []).find((m) => m.huis === g);
       T.schrijfOp(D, 'huis', { wie: p ? p.naam : null, van: soort.naam, naar: nieuw.naam, stand: T.standVan(g) });
     }
@@ -862,9 +864,9 @@
     }
     if (gegeten <= 0 || (D.behoeften && D.behoeften.zaaigraanGegeten)) return;
     (D.behoeften || (D.behoeften = T.nieuweBehoeften())).zaaigraanGegeten = true;
-    const zin = 'De honger is groot: het dorp eet van het zaaigraan. Wat nu opgaat, kan in de lente niet de grond in.';
+    const zin = T.t('The hunger is great: the village is eating the seed grain. What is eaten now cannot go into the ground in spring.');
     T.zeg(D, zin, 'gevaar');
-    T.schrijfOp(D, 'boeren', { tekst: 'De boeren gaven van het zaaigraan, want er was niets anders meer te eten.' });
+    T.schrijfOp(D, 'boeren', { tekst: T.t('The farmers gave up some of the seed grain, for there was nothing else left to eat.') });
   }
 
   // Hoeveel graan één stuk van dit goed vult, als een huis het krijgt voor zijn wensen (T.gebruikGoederen, js/wensen.js;
@@ -904,8 +906,8 @@
   // Is de winter in zicht: binnen winterVoorafDagen, of al begonnen? Dan kijkt het dorp of het hout en het eten hem halen.
   T.winterInZicht = (dag) => T.dagenTotDeWinter(dag) <= T.BEHOEFTEN_INSTELLINGEN.winterVoorafDagen;
 
-  const dagenTekst = (n) => (n === 1 ? 'één dag' : `${n} dagen`);
-  const MAANDEN_TEKST = ['', 'een maand', 'twee maanden', 'drie maanden', 'vier maanden', 'vijf maanden', 'zes maanden'];
+  const dagenTekst = (n) => T.t('{n|one day|# days}', { n });
+  const MAANDEN_TEKST = ['', T.t('a month'), T.t('two months'), T.t('three months'), T.t('four months'), T.t('five months'), T.t('six months')];
 
   // Of een voorraad de winter haalt: één regel voor het hout en het eten van het dorp, en het hooi van
   // het vee (js/vee.js). `voorraad` ligt er nu; tot de winter komt er `voorWinter` bij (of gaat er af:
@@ -918,13 +920,13 @@
     return { dagen, winter, haalt: dagen >= winter };
   };
 
-  // Raakt het op binnen `binnen` dagen, en haalt het de winter niet? Dan de zin die het dorp zegt: "Het
-  // hout is over 12 dagen op, en de winter duurt nog 40 dagen." Anders null. Voor het hout en het eten
-  // (hieronder) en het hooi (js/vee.js); wie hem zegt, zegt hem één keer per winter.
+  // Raakt het op binnen `binnen` dagen, en haalt het de winter niet? Dan de zin die het dorp zegt: "The wood will run
+  // out in 12 days, and the winter lasts 40 more days." Anders null. Voor het hout en het eten (hieronder) en het hooi
+  // (js/vee.js); `wat` is de naam met zijn lidwoord ("the wood", "the hay"). Wie hem zegt, zegt hem één keer per winter.
   T.raaktOp = function (wat, v, binnen) {
     if (v.haalt || v.dagen > binnen) return null;
-    const op = v.dagen < 1 ? 'op' : `over ${dagenTekst(v.dagen)} op`;
-    return `${T.hoofdletter(wat)} is ${op}, en de winter duurt nog ${dagenTekst(v.winter)}.`;
+    const woorden = { wat: T.hoofdletter(wat), dagen: dagenTekst(v.dagen), rest: T.t('{n|one more day|# more days}', { n: v.winter }) };
+    return v.dagen < 1 ? T.t('{wat} has run out, and the winter lasts {rest}.', woorden) : T.t('{wat} will run out in {dagen}, and the winter lasts {rest}.', woorden);
   };
 
   // Wat de mensen per dag sprokkelen (sprokkelPerHuishoudenPerDag): hout erbij, elke dag (T.tikBehoeftenDag).
@@ -1022,34 +1024,39 @@
 
   // Wat helpt als het hout de winter niet haalt: een houthakker, of nog een.
   function houtHelpt(D) {
-    const per = T.maaktUit(D, T.GEBOUWEN.houthakker).hout;
+    const woorden = { hakker: T.GEBOUWEN.houthakker.naam, per: T.hoeveel(T.maaktUit(D, T.GEBOUWEN.houthakker).hout, 'hout') };
     return (D.gebouwen || []).some((g) => g.soort === 'houthakker')
-      ? `nog een houthakker hakt er ${per} per dag bij`
-      : `een houthakker hakt ${per} hout per dag`;
+      ? T.t('another {hakker} cuts {per} more a day', woorden)
+      : T.t('{hakker} cuts {per} a day', { ...woorden, hakker: T.eenNaam(woorden.hakker) });
   }
 
   // En als het eten de winter niet haalt: de oogst is binnen, maar een jager schiet vlees, als dat een
   // maag vult.
-  function etenHelpt() {
-    if (!T.BEHOEFTEN_INSTELLINGEN.vleesIsEten) return '';
-    return `: een jager schiet ${T.GEBOUWEN.jager.maakt.uit.vlees} vlees per dag, en vlees vult een maag`;
+  function etenHelpt(D, eten) {
+    const woorden = { dagen: eten.dagen, winter: eten.winter, jager: T.eenNaam(T.GEBOUWEN.jager.naam), vlees: T.hoeveel(T.GEBOUWEN.jager.maakt.uit.vlees, 'vlees') };
+    if (!T.BEHOEFTEN_INSTELLINGEN.vleesIsEten) return T.t('The food lasts {dagen} of the {winter} days.', woorden);
+    return T.t('The food lasts {dagen} of the {winter} days: {jager} shoots {vlees} a day, and meat fills the belly.', woorden);
   }
 
-  // Het bericht vooraf: "Over een maand is het winter. Het hout haalt 52 van de 90 dagen, ook met wat de mensen
-  // sprokkelen: een houthakker hakt 2 hout per dag. Het eten haalt de winter."
+  // Het bericht vooraf: "In a month it will be winter. The wood lasts 52 of the 90 days, even with what the people
+  // gather: a woodcutter cuts 2 wood a day. The food lasts the winter."
   function zegDeWinterVooraf(D, dag) {
     const hout = T.houtVoorDeWinter(D, dag);
     const eten = T.etenVoorDeWinter(D, dag);
-    const wanneer = hout.tot > 0 ? `Over ${MAANDEN_TEKST[hout.tot / T.DAGEN_PER_MAAND] || dagenTekst(hout.tot)} is het winter.` : 'Het is winter.';
+    const wanneer = hout.tot > 0 ? T.t('In {wanneer} it will be winter.', { wanneer: MAANDEN_TEKST[hout.tot / T.DAGEN_PER_MAAND] || dagenTekst(hout.tot) }) : T.t('It is winter.');
     const zinnen = [wanneer];
-    if (hout.haalt && eten.haalt) zinnen.push('Het hout en het eten halen de winter.');
+    if (hout.haalt && eten.haalt) zinnen.push(T.t('The wood and the food last the winter.'));
     else {
       // Sprokkelen de mensen (vraag 74, stap 2), dan zegt het dat dat niet genoeg is.
-      const ook = T.sprokkelHout(D) > 0 ? ', ook met wat de mensen sprokkelen' : '';
-      zinnen.push(hout.haalt ? 'Het hout haalt de winter.' : `Het hout haalt ${hout.dagen} van de ${hout.winter} dagen${ook}: ${houtHelpt(D)}.`);
-      zinnen.push(eten.haalt ? 'Het eten haalt de winter.' : `Het eten haalt ${eten.dagen} van de ${eten.winter} dagen${etenHelpt()}.`);
+      if (hout.haalt) zinnen.push(T.t('The wood lasts the winter.'));
+      else {
+        const woorden = { dagen: hout.dagen, winter: hout.winter, hulp: houtHelpt(D) };
+        zinnen.push(T.sprokkelHout(D) > 0 ? T.t('The wood lasts {dagen} of the {winter} days, even with what the people gather: {hulp}.', woorden)
+          : T.t('The wood lasts {dagen} of the {winter} days: {hulp}.', woorden));
+      }
+      zinnen.push(eten.haalt ? T.t('The food lasts the winter.') : etenHelpt(D, eten));
       // Een gezin wacht op de winter (js/gebouwen.js, T.waaromGeenGezin): dat zegt het dorp erbij.
-      if (T.GEBOUWEN_INSTELLINGEN.gezinWachtOpDeWinter && T.winterInZicht(dag)) zinnen.push('Tot het genoeg is, komt er geen nieuw gezin.');
+      if (T.GEBOUWEN_INSTELLINGEN.gezinWachtOpDeWinter && T.winterInZicht(dag)) zinnen.push(T.t('Until there is enough, no new family will come.'));
     }
     T.zeg(D, zinnen.join(' '), hout.haalt && eten.haalt ? 'goed' : 'gevaar');
   }
@@ -1068,11 +1075,12 @@
       return;
     }
     const gezegd = B.gezegd || (B.gezegd = {});
-    const nu = { 'het hout': T.houtVoorDeWinter(D, dag), 'het eten': T.etenVoorDeWinter(D, dag) };
-    for (const wat in nu) {
-      const tekst = !gezegd[wat] && T.raaktOp(wat, nu[wat], IN.opraakWaarschuwing);
+    // De sleutels staan in het spel (B.gezegd); wat de speler leest, is de tweede.
+    const nu = [['het hout', T.t('the wood'), T.houtVoorDeWinter(D, dag)], ['het eten', T.t('the food'), T.etenVoorDeWinter(D, dag)]]; // geen tekst: de sleutels staan in het spel
+    for (const [sleutel, wat, v] of nu) {
+      const tekst = !gezegd[sleutel] && T.raaktOp(wat, v, IN.opraakWaarschuwing);
       if (!tekst) continue;
-      gezegd[wat] = true;
+      gezegd[sleutel] = true;
       T.zeg(D, tekst, 'gevaar');
     }
   }

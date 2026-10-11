@@ -57,9 +57,8 @@
 
   const dagNu = (D) => Math.floor(D.kalender ? D.kalender.dag : 0);
   const naamVan = (soort) => T.GEBOUWEN[soort].naam;
-  const deVan = (soort) => (/huis$|hok$|hof$|^erf$|^gevang$/.test(naamVan(soort)) ? 'het' : 'de');
-  // "de wapenmaker", "het schuttershof": ook voor js/ondernemers.js.
-  T.metLidwoord = (soort) => `${deVan(soort)} ${naamVan(soort)}`;
+  // "the weaver's": de naam met zijn lidwoord, voor in een zin (het Nederlandse de/het is weg met T.metLidwoord).
+  const de = (soort) => T.t('the {gebouw}', { gebouw: naamVan(soort) });
   const heeftKring = (soort) => T.WENSEN_INSTELLINGEN.kring[soort] != null;
   const wieNaam = (p) => T.naamVanBewoner(p);
 
@@ -231,7 +230,7 @@
     const R = verzoekenVan(D);
     const bouwt = (soort) => (D.gebouwen || []).some((g) => g.soort === soort && !g.klaar);
     const oproepen = R.oproepen.filter((o) => T.magGebouwd(D, o.soort) && !bouwt(o.soort))
-      .map((o) => ({ soort: o.soort, waarom: `Op het plein hangt je oproep, met een premie van ${IN().premie} goud.`, voor: 'oproep', premie: IN().premie }));
+      .map((o) => ({ soort: o.soort, waarom: T.t('Your notice hangs on the square, with a bounty of {premie} gold.', { premie: IN().premie }), voor: 'oproep', premie: IN().premie }));
     const eigen = T.eigenVerzoeken(D, dag).filter((x) => !R.oproepen.some((o) => o.soort === x.soort));
     return oproepen.concat(eigen, T.watTeBouwen(D).filter((x) => !R.oproepen.some((o) => o.soort === x.soort)));
   }
@@ -301,9 +300,11 @@
     const past = b.rooien ? !T.waaromPastHetNiet(D, b.soort, b.x, b.y, null, b.rooien) : T.gebouwPast(D, b.soort, b.x, b.y);
     const plek = past ? b : T.plekVoor(D, b.soort, bij);
     const rooien = plek && (plek === b ? b.rooien : plek.rooien);
-    const u = plek ? T.plaatsGebouw(D, b.soort, plek.x, plek.y, rooien || null) : { gelukt: false, reden: 'er is geen plek meer' };
+    const u = plek ? T.plaatsGebouw(D, b.soort, plek.x, plek.y, rooien || null) : { gelukt: false, reden: T.t('there is no room left') };
     if (!u.gelukt) {
-      T.zeg(D, `${T.hoofdletter(wieNaam(wie))} kan ${deVan(b.soort)} ${naamVan(b.soort)} toch niet bouwen: ${u.reden.replace(/\.$/, '').toLowerCase()}.`);
+      T.zeg(D, T.t('{wie} cannot build {gebouw} after all: {reden}.', {
+        wie: T.hoofdletter(wieNaam(wie)), gebouw: de(b.soort), reden: u.reden.replace(/\.$/, '').toLowerCase(),
+      }));
       return;
     }
     u.instantie.meester = wie;
@@ -311,7 +312,7 @@
     // In het bos van de heer kost het zijn gunst (js/bos.js), zoals de prijs onder ja zei (T.prijsVanKeuze,
     // js/voorvallen.js): de plek waar hij om vroeg. Tussen de vraag en het antwoord kan er een boompje een boom zijn
     // geworden, of de plek verschoven; in de speeltest van 6 okt kostte ja zo 5 gunst die de prijs niet noemde.
-    if (b.bos) T.wijzigGunst(D, -T.ONTGINNEN_INSTELLINGEN.gunst, 'Een werkplaats in zijn bos');
+    if (b.bos) T.wijzigGunst(D, -T.ONTGINNEN_INSTELLINGEN.gunst, T.t('A workshop in his forest'));
     const R = verzoekenVan(D);
     R.ja++;
     R.laatst[b.soort] = dagNu(D);
@@ -320,8 +321,8 @@
       R.oproepen = R.oproepen.filter((o) => o.soort !== b.soort);
     }
     if (b.eigen) T.eigenToegestaan(D, L);
-    const eerst = u.instantie.wachtOpRooien ? `rooit eerst de plek voor ${deVan(b.soort)} ${naamVan(b.soort)}` : `begint aan ${deVan(b.soort)} ${naamVan(b.soort)}`;
-    T.zeg(D, `${T.hoofdletter(wieNaam(wie))} ${eerst}.`, 'goed');
+    const woorden = { wie: T.hoofdletter(wieNaam(wie)), gebouw: de(b.soort) };
+    T.zeg(D, u.instantie.wachtOpRooien ? T.t('{wie} first clears the site for {gebouw}.', woorden) : T.t('{wie} starts building {gebouw}.', woorden), 'goed');
   };
 
   // Nee (doe: { weiger: true }): het dorp onthoudt het, en vraagt het pas na naNee dagen weer. Een ondernemer onthoudt
@@ -351,11 +352,11 @@
     const R = verzoekenVan(D);
     if (R.oproepen.some((o) => o.soort === soort)) {
       R.oproepen = R.oproepen.filter((o) => o.soort !== soort);
-      return `Je haalt je oproep weg: het dorp zoekt geen ${naamVan(soort)} meer.`;
+      return T.t('You take down your notice: the village no longer seeks {gebouw}.', { gebouw: T.eenNaam(naamVan(soort)) });
     }
-    if (!T.magGebouwd(D, soort)) return `Een ${naamVan(soort)} mag hier nog niet.`;
+    if (!T.magGebouwd(D, soort)) return T.t('{gebouw} cannot be built here yet.', { gebouw: T.hoofdletter(T.eenNaam(naamVan(soort))) });
     R.oproepen.push({ soort, dag: dagNu(D) });
-    return `Op het plein hangt je oproep: het dorp zoekt een ${naamVan(soort)}, met een premie van ${IN().premie} goud.`;
+    return T.t('Your notice hangs on the square: the village seeks {gebouw}, with a bounty of {premie} gold.', { gebouw: T.eenNaam(naamVan(soort)), premie: IN().premie });
   };
 
   // De oproep voor deze soort, of null.
@@ -365,9 +366,9 @@
   // Met een spatie ervoor, of leeg.
   T.verzoekZin = function (D, soort) {
     const L = D.voorvallen && D.voorvallen.lopend;
-    if (L && L.bouw && L.bouw.soort === soort) return ` ${T.hoofdletter(wieNaam(L.wie))} vraagt je erom.`;
+    if (L && L.bouw && L.bouw.soort === soort) return ` ${T.t('{wie} asks you for it.', { wie: T.hoofdletter(wieNaam(L.wie)) })}`;
     const nee = D.verzoeken && D.verzoeken.nee[soort];
-    if (nee != null && dagNu(D) - nee < IN().naNee) return ` Je zei er nee tegen.`;
+    if (nee != null && dagNu(D) - nee < IN().naNee) return ` ${T.t('You said no to it.')}`;
     return '';
   };
 
@@ -383,11 +384,11 @@
   // Waar het komt, zoals hij het zegt: naast zijn huis, of bij het gebouw dat er het dichtst bij staat en geen woning is.
   function plekTekst(D, L) {
     const b = L.bouw;
-    if (b.kramen) return 'op het plein';
+    if (b.kramen) return T.t('on the square');
     // Geen open grond (js/bos.js): waar, en wat hij er eerst rooit.
     if (b.rooien) {
-      const wat = T.rooiWoorden(T.watTeRooien(D, b.rooien));
-      return `${plaatsTekst(D, L)}, waar ik eerst ${wat} rooi${b.bos ? ', in het bos van de heer' : ''}`;
+      const woorden = { plaats: plaatsTekst(D, L), wat: T.rooiWoorden(T.watTeRooien(D, b.rooien)) };
+      return b.bos ? T.t('{plaats}, where I will first clear {wat}, in the lord\'s forest', woorden) : T.t('{plaats}, where I will first clear {wat}', woorden);
     }
     return plaatsTekst(D, L);
   }
@@ -395,7 +396,7 @@
   function plaatsTekst(D, L) {
     const b = L.bouw;
     const deur = L.wie.huis && T.deurVan(D.wereld, L.wie.huis);
-    if (deur && Math.hypot(b.x - deur.x, b.y - deur.y) <= 8) return 'naast mijn huis';
+    if (deur && Math.hypot(b.x - deur.x, b.y - deur.y) <= 8) return T.t('next to my house');
     let beste = null;
     for (const g of D.gebouwen || []) {
       if (!g.klaar || T.standVan(g)) continue;
@@ -403,37 +404,37 @@
       const d = Math.hypot(b.x - (v.x + v.b / 2), b.y - (v.y + v.h / 2));
       if (!beste || d < beste.d) beste = { g, d };
     }
-    if (!beste) return 'aan de rand van het dorp';
-    if (beste.g.huis === 'schout') return 'bij jouw huis';
-    return `bij ${deVan(beste.g.soort)} ${naamVan(beste.g.soort)}`;
+    if (!beste) return T.t('at the edge of the village');
+    if (beste.g.huis === 'schout') return T.t('by your house');
+    return T.t('by {gebouw}', { gebouw: de(beste.g.soort) });
   }
 
   T.GESPREK_WOORDEN = T.GESPREK_WOORDEN || {};
-  // "ik wil" of, voor een put of een kapel, "de buurt wil"
+  // "I want" of, voor een put of een kapel, "the neighbours want": de zin in js/gesprekken.js gaat verder met "to build".
   T.GESPREK_WOORDEN.wil = (D) => {
     const L = bouwNu(D);
-    return L && heeftKring(L.bouw.soort) ? 'de buurt wil' : 'ik wil';
+    return L && heeftKring(L.bouw.soort) ? T.t('the neighbours want') : T.t('I want');
   };
-  // "een weverij"
+  // "a weaver's"
   T.GESPREK_WOORDEN.gebouw = (D) => {
     const L = bouwNu(D);
-    return L ? `een ${naamVan(L.bouw.soort)}` : 'iets';
+    return L ? T.eenNaam(naamVan(L.bouw.soort)) : T.t('something');
   };
-  // "naast mijn huis", "bij de herberg"
+  // "next to my house", "by the inn"
   T.GESPREK_WOORDEN.plek = (D) => {
     const L = bouwNu(D);
-    return L ? plekTekst(D, L) : 'hier';
+    return L ? plekTekst(D, L) : T.t('here');
   };
-  // wat er gemist wordt, een hele zin: "Tien stenen huizen willen laken."
+  // wat er gemist wordt, een hele zin: "Ten stone houses want cloth."
   T.GESPREK_WOORDEN.waarom = (D) => {
     const L = bouwNu(D);
     return L ? L.bouw.waarom : '';
   };
-  // "14 hout en 8 goud", of "niets"; bij een oproep met de premie erin
+  // "14 wood and 8 gold", of "nothing"; bij een oproep met de premie erin
   T.GESPREK_WOORDEN.kosten = (D) => {
     const L = bouwNu(D);
     const k = L ? T.kostenVanVerzoek(L.bouw) : {};
-    const wat = Object.keys(k).length ? T.opsomming(Object.entries(k).map(([w, n]) => `${n} ${w}`)) : 'niets';
-    return L && L.bouw.premie ? `${wat}, met de premie` : wat;
+    const wat = Object.keys(k).length ? T.opsomming(Object.entries(k).map(([w, n]) => T.hoeveel(n, w))) : T.t('nothing');
+    return L && L.bouw.premie ? T.t('{wat}, with the bounty', { wat }) : wat;
   };
 })(globalThis.Spel = globalThis.Spel || {});

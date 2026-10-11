@@ -93,12 +93,12 @@ test('het jaarboek telt het jaar, en op 1 lentemaand komt het jaarverslag', () =
   assert.deepEqual(getoond, ['toonBrief:jaarverslag']);
   const regels = D.jaarverslag.regels;
   assert.equal(D.jaarverslag.dag, lente);
-  assert.equal(regels[0], 'In het jaar 1323 groeide Kleiwerd van 26 naar 30 mensen.');
-  assert.ok(regels.includes('4 mensen kwamen erbij, 3 stierven en 1 trok weg.'), regels.join(' | '));
-  assert.ok(regels.includes('De oogst bracht 400 graan.'));
-  assert.ok(regels.includes('Eén huis groeide door.'));
-  assert.ok(regels.includes('We vierden de meiboom.'));
-  assert.ok(regels.some((r) => /^Het meest gemist werd bier, op 2 dagen\.$/.test(r)), regels.join(' | '));
+  assert.equal(regels[0], 'In the year 1323 Kleiwerd grew from 26 to 30 people.');
+  assert.ok(regels.includes('4 people joined, 3 died and 1 left.'), regels.join(' | '));
+  assert.ok(regels.includes('The harvest brought 400 grain.'));
+  assert.ok(regels.includes('One house grew larger.'));
+  assert.ok(regels.includes(`We celebrated ${T.FEESTEN.meiboom.naam}.`));
+  assert.ok(regels.some((r) => /^The most missed was ale, for 2 days\.$/.test(r)), regels.join(' | '));
   assert.ok(!regels.some((r) => /iedereen alles/.test(r)), 'het winnen is weg: ook de regel over de dagen waarop iedereen alles had');
   assert.equal(D.jaarboek.begin, lente, 'en het nieuwe jaar begint een nieuw jaarboek');
   assert.equal(D.jaarboek.kwamen, 0);

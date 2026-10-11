@@ -114,8 +114,8 @@ test('na een aanval van de rovers vraagt de wapenmaker het, in een dorp, met zij
   assert.equal(T.ondernemingVan(D, L.wie), 'wapens');
   const tekst = T.vulWoordenIn(D, T.GESPREKKEN.wapenverzoek.knopen.begin.tekst[0].zeg);
   assert.match(tekst, /ik wil wapens maken/);
-  assert.match(tekst, /Na de rovers/);
-  assert.match(tekst, /12 hout en 14 goud/);
+  assert.match(tekst, /After the robbers/);
+  assert.match(tekst, /12 wood and 14 gold/);
   assert.match(T.vulWoordenIn(D, T.VOORVALLEN.wapenverzoek.roep), /onder vier ogen/);
   // In een gehucht nog niet: de wapenmaker hoort bij het dorp.
   T.voorvalBeantwoord(D, L.id);
@@ -134,7 +134,7 @@ test('met een smidse vraagt hij het ook zonder rovers', () => allemaal(() => {
   smidse.klaar = true;
   nacht(S, 1);
   assert.equal(lopend(D) && lopend(D).id, 'wapenverzoek');
-  assert.match(lopend(D).bouw.waarom, /De smid maakt hamers/);
+  assert.match(lopend(D).bouw.waarom, /The smith makes hammers/);
 }));
 
 test('ja: de wapenmaker komt er, hij is er de meester en je dankbaar, en hij maakt wapens van hout en ijzer', () => allemaal(() => {
@@ -169,12 +169,12 @@ test('nee: zijn huis neemt het je kwalijk, en na twee keer trekt hij weg', () =>
   nacht(S, 1);
   const nee = T.GESPREKKEN.wapenverzoek.knopen.begin.keuzes[1].doe;
   const ja = T.GESPREKKEN.wapenverzoek.knopen.begin.keuzes[0].doe;
-  assert.match(T.prijsVanKeuze(D, nee).tekst, /neemt het je kwalijk/, 'het venster zegt wat nee doet');
+  assert.match(T.prijsVanKeuze(D, nee).tekst, /will hold it against you/, 'het venster zegt wat nee doet');
   assert.doesNotMatch(T.prijsVanKeuze(D, ja).tekst, /verboden|heer/, 'ja is niet verboden (vraag 131)');
   const L = zeg(S, false);
   const p = L.wie;
   assert.ok(T.huisStemming(p.huis, 2) < 0, 'zijn huis neemt het je kwalijk');
-  assert.match(T.huisNadraagtTekst(p.huis, 2), /neemt je je nee kwalijk/, 'en het briefje bij zijn huis zegt het');
+  assert.match(T.huisNadraagtTekst(p.huis, 2), /resents your refusal/, 'en het briefje bij zijn huis zegt het');
   assert.equal(D.verzoeken.eigen[p.id].nee, 1);
   assert.ok(!D.gebouwen.some((g) => g.soort === 'wapenmaker'));
   // Hij smeedt niet stiekem in zijn kelder: er valt niets te verbergen (tot 7 okt wel, vraag 131).
@@ -195,7 +195,7 @@ test('nee: zijn huis neemt het je kwalijk, en na twee keer trekt hij weg', () =>
   }
   assert.ok(tweede && tweede.wie === p, 'hij vraagt het nog eens');
   // Het venster zegt het vooraf.
-  assert.match(T.prijsVanKeuze(D, T.GESPREKKEN.wapenverzoek.knopen.begin.keuzes[1].doe).tekst, /trekt weg/);
+  assert.match(T.prijsVanKeuze(D, T.GESPREKKEN.wapenverzoek.knopen.begin.keuzes[1].doe).tekst, /will leave/);
   // Wie bij zijn gezin hoort, vooraf: wie wegtrekt, laat de banden van wie blijft opnieuw leggen (js/bewoners.js).
   const hoofd = p.hoofd || p;
   const voor = D.bewoners.mensen.slice();
@@ -207,7 +207,7 @@ test('nee: zijn huis neemt het je kwalijk, en na twee keer trekt hij weg', () =>
   assert.ok(weg.every((x) => gezin.has(x)), 'met zijn gezin, en niemand anders');
   assert.equal(D.bevolking, bevolking - weg.length);
   assert.ok(D.rovers.bende.some((l) => l.id === p.id), 'en kan als rover terugkomen');
-  assert.ok(berichten.some((t) => /twee keer nee/.test(t)));
+  assert.ok(berichten.some((t) => /turned down by the reeve 2 times/.test(t)));
 }));
 
 // Wapens zijn niet verboden (Marcel, 7 okt: "Het is logisch dat er wapens zijn om de stad te verdedigen. Alleen weerstand
@@ -309,12 +309,12 @@ test('in een dorp met één herberg wil iemand er een tweede beginnen, vanaf zov
     assert.equal(T.ondernemingVan(D, L.wie), 'herberg');
     const tekst = T.vulWoordenIn(D, T.GESPREKKEN.herbergverzoek.knopen.begin.tekst[0].zeg);
     assert.match(tekst, /ik wil een tweede herberg beginnen/);
-    assert.match(tekst, /16 hout en 12 goud/);
+    assert.match(tekst, /16 wood and 12 gold/);
     const [ja, nee] = T.GESPREKKEN.herbergverzoek.knopen.begin.keuzes.map((k) => T.prijsVanKeuze(D, k.doe).tekst);
-    assert.match(ja, /is boos, en brouwt 60 dagen niet/);
+    assert.match(ja, /is angry, and will not brew for 60 days/);
     assert.match(nee, /\+10 bier/);
-    assert.match(nee, /neemt het je kwalijk/);
-    assert.match(nee, /is je dankbaar/);
+    assert.match(nee, /will hold it against you/);
+    assert.match(nee, /is grateful to you/);
     // In een gehucht nog niet, en met twee herbergen ook niet.
     D.trede = 'gehucht';
     assert.ok(!T.eigenVerzoeken(D, 9).some((x) => x.wil === 'herberg'));
@@ -331,14 +331,14 @@ test('ja: de tweede herberg komt er, en de herbergierster brouwt een tijd niet',
   assert.ok(tweede, 'er komt een tweede herberg');
   assert.equal(tweede.meester, L.wie);
   assert.ok(eerste.weigert, 'de herbergierster is boos');
-  assert.ok(berichten.some((t) => /Een tweede herberg, schout\?/.test(t)));
+  assert.ok(berichten.some((t) => /A second inn, reeve\?/.test(t)));
   assert.ok(!T.eigenVerzoeken(D, 10).some((x) => x.wil === 'herberg'), 'met twee vraagt niemand een derde');
   // Ze brouwt niet tot haar tijd om is.
   const dag = L.dag + 1;
   T.zetVoorraad(D, 'bier', 0);
   nacht(S, dag);
   assert.equal(eerste.werkte, 0);
-  assert.match(T.gebouwToestand(D, eerste), /is boos op je/);
+  assert.match(T.gebouwToestand(D, eerste), /is angry with you/);
   nacht(S, eerste.weigert.tot);
   assert.ok(!(eerste.stilWant || '').includes('boos'), 'daarna weer wel');
 }));
@@ -350,7 +350,7 @@ test('nee: de herbergierster is je dankbaar, met een vat bier', () => metHerberg
   const bier = D.voorraad.bier;
   zeg(S, false);
   assert.equal(D.voorraad.bier, bier + 10);
-  assert.ok(berichten.some((t) => /zet een vat bier voor het dorp klaar/.test(t)));
+  assert.ok(berichten.some((t) => /sets a barrel of ale aside for the village/.test(t)));
   assert.ok(T.huisStemming(L.wie.huis, L.dag + 1) < 0, 'en wie het vroeg, neemt het je kwalijk');
   assert.ok(!T.herbergVan(D).weigert);
 }));
