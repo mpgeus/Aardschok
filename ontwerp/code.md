@@ -206,7 +206,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   één plek, zoals `T.GEBOUWEN`; een keuze zet alleen waarden in de instellingenblokken, zodat elk
   getal één plek houdt; de namen; en `T.WERKBANK` met alle getallen, die vóór een keuze gaan. Het
   komt ná alle regels en gesprekken, want het neemt hun waarden als standaard, en het gereedschap
-  laadt het bewust niet), `js/hud.js` (de kalender, het bouwmenu onder
+  laadt het bewust niet. Alles wat de speler erin leest is Engels (`T.t`, vraag 147, deel 7): de naam en de uitleg van een
+  spelregel en van een keuze, de koppen van de werkbank, en de naam van elk getal, uit `NAAM_VAN_SLEUTEL` per sleutel van
+  het pad (`NAAM_VAN_PAD` voor een sleutel die in één blok iets anders is; `T.werkbankNaam(pad)`; een getal zonder naam
+  laat `test/opties.test.cjs` rood worden). De bladzijde met getallen leest de naam en de uitleg uit de tekst van `T.t('…')`:
+  `I.tekstVan` in `gereedschap/instellingen/bron.js`), `js/hud.js` (de kalender, het bouwmenu onder
   `B`, het veldenvenster onder `V`, het handelsvenster en het betalen aan de heer), en `js/brieven.js`: **de
   brieven van de heer op één plek** (vraag 60, het eerste stuk van hud.js splitsen): de benoeming waarmee een nieuw
   spel begint, de schatting op 1 wijnmaand, de heervaart, en een brief bij elke trede (het dorp, marktrecht), elk een

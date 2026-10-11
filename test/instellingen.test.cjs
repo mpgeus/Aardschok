@@ -45,6 +45,25 @@ test('de bladzijde kent elk instellingenblok, de spelregels en de gebouwen', () 
   assert.deepEqual(model.gebouwen.map((g) => g.soort), Object.keys(T.GEBOUWEN));
 });
 
+// De namen en de uitleg van de spelregels en de koppen van de werkbank staan als T.t('Engelse tekst') in js/opties.js (vraag
+// 147, deel 7): de bladzijde leest de tekst erin, en toont niet de aanroep.
+test('de bladzijde leest de namen en de uitleg van de spelregels en de koppen van de werkbank uit T.t', () => {
+  for (const r of model.spelregels) {
+    const o = T.OPTIES.find((x) => x.id === r.id);
+    assert.equal(r.naam, o.naam, r.id);
+    assert.equal(r.uitleg, o.uitleg, r.id);
+    assert.deepEqual(r.keuzes.map((k) => [k.naam, k.uitleg]), o.keuzes.map((k) => [k.naam, k.uitleg]), r.id);
+  }
+  assert.deepEqual(model.onderwerpen.slice(0, T.WERKBANK.length).map((o) => o.naam), T.WERKBANK.map((d) => d.naam));
+  const graan = model.onderwerpen[0].bladen.find((b) => b.blok === 'GRAAN_PER_TEGEL');
+  assert.equal(graan.naam, T.WERKBANK[0].losse.GRAAN_PER_TEGEL);
+  // Een tekst met een apostrof staat tussen dubbele aanhalingstekens, en een met een backslash of een aanhaling erin ook.
+  assert.equal(I.tekstVan({ soort: 'anders', waarde: "T.t(\"the lord's whims\")" }), "the lord's whims");
+  assert.equal(I.tekstVan({ soort: 'anders', waarde: "T.t('it\\'s here')" }), "it's here");
+  assert.equal(I.tekstVan({ soort: 'anders', waarde: "T.t('een {n}', { n })" }), null, 'een zin met woorden is geen gewone tekst');
+  assert.equal(I.tekstVan({ soort: 'getal', waarde: 3 }), null);
+});
+
 test('een getal schrijven verandert alleen dat getal, en het commentaar blijft staan', () => {
   const tekst = bronnen['js/akkers.js'];
   const nieuw = I.zet(tekst, 'SCHOVEN_INSTELLINGEN', ['zwadGrens'], 6);

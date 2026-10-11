@@ -49,6 +49,7 @@ const OMGEZET = [
   'js/praatje.js',
   'js/mensen.js',
   'js/boeren.js',
+  'js/opties.js',
 ];
 
 const leesBestand = (f) => fs.readFileSync(path.join(WORTEL, f), 'utf8').split('\r\n').join('\n');
