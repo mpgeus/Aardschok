@@ -7797,8 +7797,8 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     - **1f, een jaar zonder fouten:** een toets speelt een jaar vanaf een lege plek (met een speler in code die bouwt) en
       kijkt dat niets vastloopt.
     Het beeld: de ossenkar (de kar uit `dorp.cjs`, de koe als os), tenten en een kampvuur. Het werk: 1a een sessie, 1b
-    tot 1f twee à drie. **Vragen (wacht op Marcel):** akkers leg jij bij een boerderij (zoals Manor Lords; Claude: ja), of
-    de boer zelf (zoals The Settlers); optie 1 eerst (Claude: ja); bouwen met handen (Claude: ja).
+    tot 1f twee à drie. **Besloten (Marcel, 11 okt: "1 ja, 2 ja, 3 ja"):** akkers leg jij bij een boerderij (zoals Manor Lords);
+    optie 1 eerst; en bouwen met handen (wie geen werk heeft, bouwt mee, en hoe meer handen, hoe sneller).
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
