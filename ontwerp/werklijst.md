@@ -55,6 +55,8 @@ mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voo
 - De bomen bekijken (vraag 148, stap 1 en 2, 11 okt): elke boom een van zijn vormen, de nieuwe soorten, en de bomen in
   het jaar met sneeuw op de takken; `Spel.debug.bomen = 'herfst'` (of `'lente'`, `'winter'`, `'sneeuw'`, met
   `Spel.debug.weer('sneeuw', 0.6)` voor de grond). Lentemaand is al lente, zodat een spel niet kaal begint.
+- De proefplaat van het groen eronder (vraag 148, stap 3, 11 okt): `node gereedschap/pixelart/groen-proef.cjs onder`, in
+  `gereedschap/pixelart/uit/groen/onder.png`. Goed zo, of wat anders?
 - Vraag 142, de bladzijde met alle getallen (`gereedschap/instellingen.html`): stap 3, de speeltest naast de vorige,
   staat in `main` (10 okt). Marcel probeert hem op zijn computer (met `npm start`; Playwright erbij, `npm i -g
   playwright` en `npx playwright install chromium`).
@@ -70,7 +72,7 @@ mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voo
    okt, avond): elke boom een van zijn vormen, de nieuwe soorten op de kaart, de spar dunner onder de sneeuw; en stap 2
    (11 okt; Marcel: "Ja, doe stap 2 met de sneeuw erbij"): de bomen in het jaar, met sneeuw op de takken. **Nu stap 3**,
    het groen eronder (de struiken, varens en graspollen staan nu groen in de sneeuw), dan d, de spullen bij de huizen.
-   **Bezig in sessie `ccr-2034e30c-d2iyg5`** (11 okt): het plan voor stap 3, met Marcel.
+   **Bezig in sessie `ccr-2034e30c-d2iyg5`** (11 okt): stap 3; de proefplaat staat en wacht op Marcel.
 1. Een proefversie voor Marcels 4K-scherm en een eerste tester (33d; `npm run proefversie`, ook `-- --windows`), met de
    graanzak erin. De laatste is van 3 okt (`36c713e`), zonder de verzoeken, de twee bazen, het ontginnen, de markt, de
    wolven, het eiland, WebGL en de graanzak.
@@ -7560,6 +7562,25 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     jaar" (met de seizoenen, of altijd zomer). De herfsteik staat niet meer in het bos om de kaart: de bomen kleuren nu
     zelf. Kijken: `Spel.debug.bomen = 'herfst'`. Nog niet: de heide die paars bloeit en de bloemen per seizoen (bij stap
     3, het groen eronder).
+    **Stap 3, het groen eronder: het plan (11 okt; Marcel: "Akkoord. Start maar met proefplaat"):** de struiken, varens,
+    graspollen, het hoge gras, de bloemen en de paddenstoelen krijgen het jaar (lente, zomer, herfst, winter en sneeuw,
+    zoals de bomen) en elk een paar vormen, welke zegt de tegel (`T.sprites.tekeningVan`); de stronk en de rotsen alleen
+    sneeuw. Erbij de nieuwe soorten van c: klaproos en korenbloem langs de akkers, brandnetels achter de huizen, brem en
+    distels op de heide, lisdodde en waterlelies aan het water, braam aan de bosrand, met hun vruchten. **Gekozen:** de
+    seizoenen zijn dezelfde vier als die van de bomen, één wissel (`bomenInHetJaar`: de zomer is zomermaand tot
+    herfstmaand, dus de heide bloeit en de bramen zijn rijp in het vel van de zomer); en de paarse heide is een plant, een
+    plukje heide op de heide, geen grondtegel per seizoen. Eerst de proefplaat, dan het spel.
+    **Proefplaat van stap 3 (11 okt):** `node gereedschap/pixelart/groen-proef.cjs onder` (in `uit/groen/onder.png`, niet
+    in git, op 2×): per soort een rij met lente, zomer, herfst, winter en sneeuw, en zijn andere vormen, op de grond waar
+    het straks staat. In `bomen.cjs`: de struik (laag, hoog, klein), de varen (klein, groot) en het gras (dun, breed) in
+    vormen; elk kent `o.seizoen` (de struik kaal in de winter, de bessenstruik in bloei in de lente, de varen roestbruin en
+    dan dor, het gras strogeel, in de lente madeliefjes en boterbloemen, in de herfst een grote groep paddenstoelen en in de
+    winter alleen bruin blad), de stronk en de stenen alleen sneeuw; wat plat ligt, krijgt sneeuw in vlekken
+    (`sneeuwVlekken`; anders werd een varen helemaal wit). De nieuwe soorten (`NIEUW_GROEN`): klaproos, korenbloem,
+    brandnetel, heide, brem, distel, lisdodde, waterlelie en braam. Zonder seizoen of vorm tekent elke oude plant pixel
+    voor pixel als vroeger (nagekeken), en een plant rendert in minder dan een seconde, de sneeuw in een paar. **Wacht op
+    Marcel:** de plaat keuren; dan het spel: de vellen per seizoen, de vormen per tegel, en de maker die de nieuwe soorten
+    legt.
 149. **Kleren naar stand** (Marcel, 10 okt: "Hogere niveau sociale mensen moeten duurdere kleren krijgen").
     **Wat er nu is:** 24 uiterlijken per volwassen lijf en 12 per kind en per oude (vraag 145,
     `gereedschap/pixelart/uiterlijk.cjs`), allemaal boerenkleren: een kiel, klompen, lappen en vuil, in gedempte verf.
