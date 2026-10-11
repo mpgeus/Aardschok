@@ -293,7 +293,7 @@ test('de weg het gehucht uit leidt bewust nergens heen: alleen mist, en geen fou
     T.ui = oudUi;
   }
   assert.deepEqual(fouten, []);
-  assert.deepEqual(berichten, ['Die kant op is nog niets, alleen mist.']);
+  assert.deepEqual(berichten, ['There is nothing that way yet, only mist.']);
 });
 
 // ------------------------------------------------- wat er op een tegel staat (js/wereld.js, werklijst vraag 71)

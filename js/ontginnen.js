@@ -62,13 +62,14 @@
       const bos = veld.ontginning.op === 'bos';
       delete veld.ontginning;
       const boer = T.boerVanVeld(D, veld);
-      const van = boer ? ` van ${boer.naam}` : '';
-      const wat = bos ? `Het bos${van} is ontgonnen` : `De heide${van} is ontgonnen`;
+      const wat = bos
+        ? (boer ? T.t('The forest of {boer} has been cleared', { boer: boer.naam }) : T.t('The forest has been cleared'))
+        : (boer ? T.t('The heath of {boer} has been cleared', { boer: boer.naam }) : T.t('The heath has been cleared'));
       if (T.isNazaaitijd(dag)) {
         veld.bestemming = T.planVan(veld);
         veld.ongezaaid = new Set(T.akkerTegels(veld).map((t) => sleutel(t.x, t.y)));
-        T.zeg(D, `${wat}: het is een akker, en de boeren zaaien hem na.`, 'goed');
-      } else T.zeg(D, `${wat}: in lentemaand wordt het een akker.`, 'goed');
+        T.zeg(D, T.t('{wat}: it is a field now, and the farmers sow it late.', { wat }), 'goed');
+      } else T.zeg(D, T.t('{wat}: it becomes a field in {maand}.', { wat, maand: T.MAANDEN.find((m) => m.naam === 'lentemaand').toon }), 'goed');
     }
   };
 })(globalThis.Spel = globalThis.Spel || {});

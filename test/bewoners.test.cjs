@@ -282,9 +282,9 @@ test('komen: een nieuw gezin komt overdag over de weg binnen, met een bericht op
     assert.deepEqual(T.dagAnker(S.dorp, p.wezen), erf, 'eerst naar zijn huis, ook met werk');
   }
   assert.equal(berichten.length, 1);
-  assert.match(berichten[0], /nieuw gezin over de weg/);
+  assert.match(berichten[0], /new family is coming along the road/);
   assert.ok(berichten[0].includes(gezin.find((p) => !p.hoofd).naam), 'het bericht zegt wie het zijn');
-  assert.match(T.overBewonerTekst(S.dorp, gezin[0].wezen), /nieuw in het gehucht/);
+  assert.match(T.overBewonerTekst(S.dorp, gezin[0].wezen), /new in the hamlet/);
   T.werkBewonersBij(S.dorp);
   assert.equal(berichten.length, 1, 'het bericht komt één keer');
   loopTotDat(S, () => gezin.every((p) => !p.komt), 5);
@@ -303,12 +303,12 @@ test('gaan: wie wegtrekt, telt meteen niet meer mee, gaat bij het licht, loopt d
   // 's Nachts besloten: ze gaan pas als het licht is.
   S.kalender.dag = bijUur(GROEI + 1, 23);
   const berichten = vangBerichten();
-  T.wijzigBevolking(S.dorp, -4, 'vertrek', 'het dorp is niet tevreden genoeg');
+  T.wijzigBevolking(S.dorp, -4, 'vertrek', 'the village is not content enough');
   assert.equal(inHuis(S, huis).length, 0, 'ze wonen er niet meer');
   assert.equal(mensen(S).length, S.dorp.bevolking);
   assert.equal(berichten.length, 1);
-  assert.match(berichten[0], /, trekken weg: het dorp is niet tevreden genoeg\. \(-4\)$/);
-  assert.ok(berichten[0].startsWith(`${gezin.find((p) => !p.hoofd).naam} en `), 'het gezin bij naam');
+  assert.match(berichten[0], / leave: the village is not content enough\. \(-4\)$/);
+  assert.ok(berichten[0].startsWith(`${gezin.find((p) => !p.hoofd).naam} and `), 'het gezin bij naam');
   for (const p of gezin) {
     assert.ok(S.wereld.wezens.includes(p.wezen), 'zijn poppetje is er nog');
     assert.equal(p.werk, null, 'hij werkt nergens meer');
@@ -317,7 +317,7 @@ test('gaan: wie wegtrekt, telt meteen niet meer mee, gaat bij het licht, loopt d
   S.kalender.dag = bijUur(GROEI + 2, 10);
   const uitgang = T.wegInEnUit(S.wereld);
   for (const p of gezin) assert.deepEqual(T.dagAnker(S.dorp, p.wezen), { x: uitgang.x, y: uitgang.y, straal: 1 }, 'overdag naar de uitgang');
-  assert.match(T.overBewonerTekst(S.dorp, gezin[0].wezen), /trekt weg$/);
+  assert.match(T.overBewonerTekst(S.dorp, gezin[0].wezen), /leaving$/);
   loopTotDat(S, () => !S.dorp.bewoners.vertrekken.length, 5);
   assert.ok(gezin.every((p) => !S.wereld.wezens.includes(p.wezen)), 'bij de uitgang gaan ze van de kaart');
 });
@@ -326,17 +326,17 @@ test('sterven: het bericht zegt wie het is, en wie hij voor iemand was', () => {
   const S = gehucht();
   const berichten = vangBerichten();
   const voor = mensen(S).slice();
-  T.wijzigBevolking(S.dorp, -1, 'winter', 'De winter is hard');
+  T.wijzigBevolking(S.dorp, -1, 'winter', 'The winter is harsh');
   const dood = voor.find((p) => !mensen(S).includes(p));
   assert.equal(berichten.length, 1);
-  assert.ok(berichten[0].startsWith('De winter is hard: '), berichten[0]);
-  assert.ok(berichten[0].includes(dood.naam) && berichten[0].endsWith(' is gestorven.'), berichten[0]);
-  if (dood.hoofd) assert.ok(berichten[0].includes(`${dood.band} van `), 'met wie hij voor iemand was');
-  if (dood.leeftijd === 'oud') assert.ok(berichten[0].includes(`de oude ${dood.naam}`));
-  T.wijzigBevolking(S.dorp, -2, 'winter', 'De honger is hard');
-  assert.ok(berichten[1].startsWith('De honger is hard: ') && berichten[1].endsWith(' zijn gestorven.'), berichten[1]);
-  // "de oude Geesje, moeder van Walter, en de oude Swaantje, ...": een bijstelling sluit met een komma.
-  const [eerste] = berichten[1].slice('De honger is hard: '.length).split(' en ');
+  assert.ok(berichten[0].startsWith('The winter is harsh: '), berichten[0]);
+  assert.ok(berichten[0].includes(dood.naam) && berichten[0].endsWith(' died.'), berichten[0]);
+  if (dood.hoofd) assert.ok(berichten[0].includes(' of '), 'met wie hij voor iemand was');
+  if (dood.leeftijd === 'oud') assert.ok(berichten[0].includes(`old ${dood.naam}`));
+  T.wijzigBevolking(S.dorp, -2, 'winter', 'The hunger is harsh');
+  assert.ok(berichten[1].startsWith('The hunger is harsh: ') && berichten[1].endsWith(' died.'), berichten[1]);
+  // "old Agnes, mother of Walter, and old Maud, ...": een bijstelling sluit met een komma.
+  const [eerste] = berichten[1].slice('The hunger is harsh: '.length).split(' and ');
   if (eerste.includes(',')) assert.ok(eerste.endsWith(','), berichten[1]);
   // Zonder `waarom` (het begin, een toets) geen bericht.
   T.wijzigBevolking(S.dorp, -1, 'winter');
@@ -532,12 +532,12 @@ test('bij de muis staat wie het is', () => {
   const S = gehucht();
   const herder = nieuwe(S).find((p) => p.werk && p.werk.soort === 'schaapskooi');
   const tekst = T.overBewonerTekst(S.dorp, herder.wezen);
-  assert.match(tekst, new RegExp(`^${herder.naam}(, .+)? · herder(in)?$`), 'de naam, en wat hij of zij doet');
+  assert.match(tekst, new RegExp(`^${herder.naam}(, .+)? · shepherd$`), 'de naam, en wat hij of zij doet');
   // Wie bij een boer hoort, heet naar de boer: "Geert, zoon van Nicholas".
   const bijBoer = nieuwe(S).find((p) => p.hoofd && p.hoofd.wie);
-  assert.match(T.overBewonerTekst(S.dorp, bijBoer.wezen), new RegExp(`^${bijBoer.naam}, ${bijBoer.band} van ${T.naamVanMens(bijBoer.hoofd.wie)}`));
+  assert.match(T.overBewonerTekst(S.dorp, bijBoer.wezen), new RegExp(`^${bijBoer.naam}, [a-z-]+ of ${T.naamVanMens(bijBoer.hoofd.wie)}`));
   const vrouw = nieuwe(S).find((p) => p.hoofd && p.hoofd.schout && p.band === 'vrouw');
-  assert.equal(T.overBewonerTekst(S.dorp, vrouw.wezen), `${vrouw.naam}, vrouw van de schout`);
+  assert.equal(T.overBewonerTekst(S.dorp, vrouw.wezen), `${vrouw.naam}, wife of the reeve`);
   const h = T.handelingVerkennen(S, { wezen: herder.wezen });
   assert.equal(h.tekst, tekst);
   assert.equal(T.overBewonerTekst(S.dorp, S.schout), '', 'de schout zelf niet');

@@ -246,7 +246,7 @@ test('verbannen: de dief trekt weg, en gaat het bos in als rover', () => {
   assert.equal(S.dorp.bevolking, voor - 1);
   assert.ok(!S.dorp.bewoners.mensen.includes(dief), 'hij woont hier niet meer');
   assert.ok(S.dorp.rovers.bende.some((r) => r.id === dief.id), 'hij is bij de rovers');
-  assert.ok(berichten.some((t) => t.startsWith(dief.naam) && t.includes('trekt weg: banished by the reeve')));
+  assert.ok(berichten.some((t) => t.startsWith(dief.naam) && t.includes('leaves: banished by the reeve')));
 });
 
 test('de koorts: met pech sterft er iemand; de wolven halen schapen; en een gezin komt als er plaats is', () => {

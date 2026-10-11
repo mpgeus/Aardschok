@@ -131,14 +131,13 @@
     return T.akkerStadium(d.maand, d.dagVanMaand) === 'rijp' || !!T.isHooitijd(d);
   };
 
-  // Het uur zoals je het zegt: "zeven uur", "half acht". Wat voor of na de middag is, zegt het deel
-  // van de dag dat de balk eronder zet (js/hud.js).
-  const GETALLEN = ['twaalf', 'een', 'twee', 'drie', 'vier', 'vijf', 'zes', 'zeven', 'acht', 'negen', 'tien', 'elf'];
+  // Het uur zoals je het zegt: "seven o'clock", "half past seven". Wat voor of na de middag is, zegt het deel
+  // van de dag dat de balk eronder zet (js/hud.js, klokTekst: dezelfde woorden).
   T.uurTekst = function (dag) {
     const u = T.uurVanDag(dag);
     const heel = Math.floor(u);
-    if (u - heel >= 0.5) return 'half ' + GETALLEN[(heel + 1) % 12];
-    return GETALLEN[heel % 12] + ' uur';
+    const uur = T.telwoord(heel % 12 || 12);
+    return u - heel >= 0.5 ? T.t('half past {uur}', { uur }) : T.t("{uur} o'clock", { uur });
   };
 
   // ---------------------------------------------------------------------------------------------
@@ -329,7 +328,7 @@
     }
     S.naLopen = null;
     T.zetSnelheid(S, T.SLAAP_SNELHEID);
-    bericht('Je gaat slapen. Bij het eerste licht word je wakker.');
+    bericht(T.t('You go to sleep. You wake at first light.'));
     if (T.ui && T.ui.werkSlaapKnopBij) T.ui.werkSlaapKnopBij(S);
     return true;
   };
@@ -351,7 +350,7 @@
   T.werkDagBij = function (S) {
     if (S && S.slaap && S.kalender && S.kalender.dag >= S.slaap.tot) {
       T.wordWakker(S);
-      bericht('Het is ochtend.');
+      bericht(T.t('It is morning.'));
     }
   };
 })(globalThis.Spel = globalThis.Spel || {});

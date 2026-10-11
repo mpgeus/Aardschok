@@ -11,7 +11,7 @@
 (function (T) {
   'use strict';
 
-  T.NAAM = 'Tithebreaker';
+  T.NAAM = 'Tithebreaker'; // geen tekst
   T.OPSLAG_SLEUTEL = 'aardschok';
   // Welke stand dit is. Leeg zolang het spel uit de map draait; in een proefversie (npm run proefversie,
   // gereedschap/proefversie/maak.cjs) de datum en de commit, zodat we weten waarop een tester speelde. Het titelscherm
@@ -21,7 +21,7 @@
   // Dit bestand staat in de kop van elke bladzijde, dus de titel is er al, de rest van de bladzijde nog niet.
   if (typeof document !== 'undefined') {
     document.title = document.title.replace('{naam}', T.NAAM);
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', () => { // geen tekst
       for (const el of document.querySelectorAll('[data-spelnaam]')) el.textContent = T.NAAM;
     });
   }

@@ -209,7 +209,7 @@ test('een spel uit een andere versie, of een kapot spel, wordt niet geladen, en 
   const voor = T.bewaarSpel(S2, { nu: NU });
   const r = T.herstelSpel(S2, ander);
   assert.equal(r.gelukt, false);
-  assert.match(r.reden, /andere versie/);
+  assert.match(r.reden, /another version/);
   assert.equal(T.herstelSpel(S2, '{kapot').gelukt, false);
   assert.equal(T.herstelSpel(S2, JSON.stringify({ versie: T.OPSLAAN_INSTELLINGEN.versie, staat: { a: { $r: 9 } } })).gelukt, false);
   assert.equal(T.bewaarSpel(S2, { nu: NU }), voor);
@@ -222,23 +222,23 @@ test('wanneer er opgeslagen mag worden: alleen als er niets openstaat of halverw
   assert.equal(T.waaromNietOpslaan(S), null, 'uit het menu mag het');
   T.laatTijdGaan(S, 'menu');
   T.houdTijdStil(S, 'titel');
-  assert.match(T.waaromNietOpslaan(S), /venster/, 'achter het titelscherm wacht een spel dat nog niet begon');
+  assert.match(T.waaromNietOpslaan(S), /window/, 'achter het titelscherm wacht een spel dat nog niet begon');
   T.laatTijdGaan(S, 'titel');
   T.houdTijdStil(S, 'brief');
-  assert.match(T.waaromNietOpslaan(S), /venster/);
+  assert.match(T.waaromNietOpslaan(S), /window/);
   T.laatTijdGaan(S, 'brief');
   S.modus = 'handel';
-  assert.match(T.waaromNietOpslaan(S), /venster/);
+  assert.match(T.waaromNietOpslaan(S), /window/);
   S.modus = 'gevecht';
-  assert.match(T.waaromNietOpslaan(S), /gevecht/);
+  assert.match(T.waaromNietOpslaan(S), /fight/);
   S.modus = 'einde';
-  assert.match(T.waaromNietOpslaan(S), /uit/);
+  assert.match(T.waaromNietOpslaan(S), /over/);
   S.modus = 'verkennen';
   S.wachters.push({});
-  assert.match(T.waaromNietOpslaan(S), /beweegt/);
+  assert.match(T.waaromNietOpslaan(S), /moving/);
   S.wachters.length = 0;
   S.proefje = true;
-  assert.match(T.waaromNietOpslaan(S), /proefje/, 'een proefje (?kaart=) overschrijft het spel van de speler niet');
+  assert.match(T.waaromNietOpslaan(S), /try-out/, 'een proefje (?kaart=) overschrijft het spel van de speler niet');
 });
 
 test('de plekken: vijf eigen en één die vanzelf gaat, het nieuwste bovenaan', (t) => {
@@ -265,12 +265,12 @@ test('de plekken: vijf eigen en één die vanzelf gaat, het nieuwste bovenaan', 
   assert.equal(gelezen.gelukt, true);
   T.zetSpel(S2, gelezen);
   assert.equal(S2.kalender.dag, 12.3);
-  assert.equal(T.leesVanPlek('2').reden, 'Op deze plek staat geen spel.');
+  assert.equal(T.leesVanPlek('2').reden, 'There is no game in this slot.');
 
   // Een spel uit een andere versie staat er nog, maar valt niet te laden, en telt niet als nieuwste.
   const kop = JSON.parse(opslag.getItem(`${T.OPSLAG_SLEUTEL}.spel.3.kop`));
   opslag.setItem(`${T.OPSLAG_SLEUTEL}.spel.3.kop`, JSON.stringify({ ...kop, versie: 0 }));
-  assert.match(T.opgeslagenSpellen()[0].reden, /andere versie/);
+  assert.match(T.opgeslagenSpellen()[0].reden, /another version/);
   assert.equal(T.nieuwsteSpel().plek, 'auto');
 });
 
@@ -278,10 +278,10 @@ test('is de opslag vol, of is er geen, dan zegt het dat', (t) => {
   t.after(() => T.gebruikOpslagPlek(null));
   const S = gehucht();
   T.gebruikOpslagPlek(nepOpslag({ vol: true }));
-  assert.match(T.slaOp(S, '1', NU).reden, /vol/);
+  assert.match(T.slaOp(S, '1', NU).reden, /full/);
   T.gebruikOpslagPlek(null);
   assert.equal(T.opslagPlek(), null, 'een toets heeft geen browser');
-  assert.match(T.slaOp(S, '1', NU).reden, /bewaart niets/);
+  assert.match(T.slaOp(S, '1', NU).reden, /does not keep anything/);
 });
 
 test('vanzelf opslaan op 30×: om de drie dagen, want een dag duurt dan tien seconden', (t) => {

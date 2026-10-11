@@ -108,14 +108,17 @@
         wordtZiek(D, gezond.splice(j, 1)[0], dag);
       }
       if (T.vastLot(D, dag, 3300 + p.id + i) < (IN().sterft[p.leeftijd] || IN().sterft.volwassen)) {
-        T.wijzigBevolking(D, -1, 'ziekte', 'De koorts', [p]);
+        T.wijzigBevolking(D, -1, 'ziekte', T.t('The fever'), [p]);
         return;
       }
       if (dag >= p.ziek) delete p.ziek;
     });
     if (!T.zieken(D).length) {
       const doden = K.gehad.filter((id) => !D.bewoners.mensen.some((p) => p.id === id)).length;
-      T.zeg(D, `De koorts is voorbij. ${T.hoofdletter(T.telwoord(K.gehad.length))} ${K.gehad.length === 1 ? 'was' : 'waren'} ziek${doden ? `, en ${T.telwoord(doden)} ${doden === 1 ? 'stierf' : 'stierven'}` : ''}.`, doden ? 'gevaar' : 'goed');
+      const woorden = { n: K.gehad.length, ziek: T.telwoord(K.gehad.length), m: doden, dood: T.telwoord(doden) };
+      T.zeg(D, doden
+        ? T.t('The fever is over. {n|One person was ill|{ziek} people were ill}, and {m|one died|{dood} died}.', woorden)
+        : T.t('The fever is over. {n|One person was ill|{ziek} people were ill}.', woorden), doden ? 'gevaar' : 'goed');
       D.koorts = null;
     }
   };
@@ -123,6 +126,6 @@
   // In een zin, voor de status: wie er ziek is.
   T.koortsWaarom = function (D) {
     const n = T.zieken(D).length;
-    return `${T.telwoord(n)} ${n === 1 ? 'mens ligt' : 'mensen liggen'} ziek in bed`;
+    return T.t('{n|one person is ill in bed|{aantal} people are ill in bed}', { n, aantal: T.telwoord(n) });
   };
 })(globalThis.Spel = globalThis.Spel || {});

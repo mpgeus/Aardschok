@@ -54,7 +54,7 @@
   }
 
   // ---------------------------------------------------------------- de programma's
-  const VERT = `
+  const VERT = /* // geen tekst */ `
     attribute vec2 aPlek; attribute vec2 aUv; attribute vec4 aKleur;
     uniform vec2 uMaat; varying vec2 vUv; varying vec4 vKleur; varying vec2 vPlek;
     void main() {
@@ -63,11 +63,11 @@
     }`;
   // Een plaatje maal een kleur (voorvermenigvuldigd): helderheid en doorzichtigheid in één. Een vlak is het witte
   // plaatje van één pixel maal zijn kleur.
-  const FRAG_BEELD = `
+  const FRAG_BEELD = /* // geen tekst */ `
     precision highp float; uniform sampler2D uBeeld; varying vec2 vUv; varying vec4 vKleur;
     void main() { gl_FragColor = texture2D(uBeeld, vUv) * vKleur; }`;
   // Een rond verloop zoals createRadialGradient met één middelpunt: tot vier stops, lineair ertussen.
-  const FRAG_VERLOOP = `
+  const FRAG_VERLOOP = /* // geen tekst */ `
     precision highp float; varying vec2 vPlek; varying vec4 vKleur;
     uniform vec2 uMidden; uniform float uR0; uniform float uR1; uniform int uN;
     uniform float uStop[4]; uniform vec4 uKleur[4];
@@ -84,7 +84,7 @@
     }`;
   // De lichtkaart (werklijst vraag 125, A). Een plas licht: een ellips (aUv van -1 tot 1), in het midden zijn kleur,
   // zacht naar de rand. Op de lichtkaart worden ze opgeteld, op de helft van hun waarde (zie FRAG_MAAL).
-  const FRAG_PLAS = `
+  const FRAG_PLAS = /* // geen tekst */ `
     precision highp float; varying vec2 vUv; varying vec4 vKleur;
     void main() {
       float t = 1.0 - min(dot(vUv, vUv), 1.0);
@@ -93,12 +93,12 @@
   // De wereld maal de lichtkaart. De lichtkaart staat op de helft (0,5 is "zoals de kunst is"), en de mengstand telt
   // het product twee keer (DST_COLOR, SRC_COLOR), zodat een lamp een muur tot twee keer zo licht kan maken. De
   // doorzichtigheid blijft: een gat voor een brandend raam blijft een gat, zoals met 'source-atop' (js/tekenen.js).
-  const FRAG_MAAL = `
+  const FRAG_MAAL = /* // geen tekst */ `
     precision highp float; uniform sampler2D uLicht; uniform vec2 uDoek;
     void main() { gl_FragColor = vec4(texture2D(uLicht, gl_FragCoord.xy / uDoek).rgb, 0.0); }`;
   // De schaduwen van de zon (vraag 125, B): het masker met alle silhouetten, als één vlak over de grond, in de kleur
   // van de schaduw.
-  const FRAG_SCHADUW = `
+  const FRAG_SCHADUW = /* // geen tekst */ `
     precision highp float; uniform sampler2D uMasker; uniform vec2 uDoek; uniform vec4 uKleur;
     void main() { gl_FragColor = uKleur * texture2D(uMasker, gl_FragCoord.xy / uDoek).a; }`;
 
@@ -108,14 +108,14 @@
       const s = gl.createShader(soort);
       gl.shaderSource(s, bron);
       gl.compileShader(s);
-      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error('WebGL: ' + gl.getShaderInfoLog(s));
+      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error('WebGL: ' + gl.getShaderInfoLog(s)); // geen tekst
       gl.attachShader(p, s);
     }
     gl.bindAttribLocation(p, 0, 'aPlek');
     gl.bindAttribLocation(p, 1, 'aUv');
     gl.bindAttribLocation(p, 2, 'aKleur');
     gl.linkProgram(p);
-    if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error('WebGL: ' + gl.getProgramInfoLog(p));
+    if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error('WebGL: ' + gl.getProgramInfoLog(p)); // geen tekst
     const u = {};
     const n = gl.getProgramParameter(p, gl.ACTIVE_UNIFORMS);
     for (let i = 0; i < n; i++) {
@@ -216,8 +216,8 @@
   // Wat voor kaart het is (voor de meter): de naam die de browser geeft, of 'geen'.
   G.kaart = function () {
     if (!start()) return 'geen';
-    const info = gl.getExtension('WEBGL_debug_renderer_info');
-    return info ? gl.getParameter(info.UNMASKED_RENDERER_WEBGL) : 'WebGL';
+    const info = gl.getExtension('WEBGL_debug_renderer_info'); // geen tekst
+    return info ? gl.getParameter(info.UNMASKED_RENDERER_WEBGL) : 'WebGL'; // geen tekst
   };
 
   // ---------------------------------------------------------------- de stand van de kaart
@@ -319,7 +319,7 @@
         try {
           gl.texSubImage2D(gl.TEXTURE_2D, 0, plek.x, plek.y, gl.RGBA, gl.UNSIGNED_BYTE, bron);
         } catch (e) {
-          console.warn('Tekenen zonder de videokaart:', e.message);
+          console.warn('Tekenen zonder de videokaart:', e.message); // geen tekst
           kapot = true;
           return null;
         }
@@ -341,7 +341,7 @@
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, bron);
     } catch (e) {
       // Een plaatje van een los bestand (file://) mag in sommige browsers niet naar de kaart: dan zonder.
-      console.warn('Tekenen zonder de videokaart:', e.message);
+      console.warn('Tekenen zonder de videokaart:', e.message); // geen tekst
       kapot = true;
       return null;
     }

@@ -268,7 +268,7 @@
     const wt = e.werkt;
     if (wt && wt.tot != null) {
       if (nu < wt.tot) return;
-      const rust = IN()[vw.soort + 'Rust'] || 0;
+      const rust = IN()[vw.soort + 'Rust'] || 0; // geen tekst
       if (!wt.rust && rust > 0) {
         wt.rust = true;
         wt.tot = nu + rust * uur();

@@ -71,7 +71,7 @@
   T.brandendeHuizen = (D) => (D.gebouwen || []).filter((g) => g.brand);
   const naamVan = (D, g) => {
     const p = D.bewoners && D.bewoners.mensen.find((m) => m.huis === g);
-    return p ? T.naamVanBewoner(p) : 'een gezin';
+    return p ? T.naamVanBewoner(p) : T.t('a family');
   };
 
   // Met de emmers (doe.blus in een antwoord, js/voorvallen.js), of laat je het branden (doe.brand 'laat'): vanaf nu nog
@@ -111,20 +111,20 @@
       if (B.antwoord === 'blus' && naAntwoord && T.vastLot(D, Math.floor(B.sinds * 24), 1441) < T.redKans(D)) {
         delete g.brand;
         delete g.voorwerp.brand;
-        T.zeg(D, `Het vuur is uit: het huis van ${naam} staat nog.`, 'goed');
-        T.schrijfOp(D, 'brand', { tekst: `Het huis van ${naam} brandde, maar de emmers redden het.` });
+        T.zeg(D, T.t('The fire is out: the house of {naam} is still standing.', { naam }), 'goed');
+        T.schrijfOp(D, 'brand', { tekst: T.t('The house of {naam} burned, but the buckets saved it.', { naam }) });
         continue;
       }
       if (naAntwoord || uren >= IN().brandUren) {
         const buur = !B.overgeslagen && B.antwoord !== 'blus' && T.slaatOver(D, g, B);
         g.brand = { fase: 'puin', sinds: nu };
         g.voorwerp.brand = 'puin';
-        const tekst = `Het huis van ${naam} is afgebrand. Ze wonen bij de buren tot het weer staat.`;
+        const tekst = T.t('The house of {naam} has burned down. They live with the neighbours until it stands again.', { naam });
         T.zeg(D, tekst, 'gevaar');
         T.schrijfOp(D, 'brand', { tekst });
         if (buur) {
           steekAan(buur, nu, { antwoord: B.antwoord, overgeslagen: true });
-          const over = `Het vuur slaat over op het huis van ${naamVan(D, buur)}.`;
+          const over = T.t('The fire spreads to the house of {naam}.', { naam: naamVan(D, buur) });
           T.zeg(D, over, 'gevaar');
           T.schrijfOp(D, 'brand', { tekst: over });
         }
@@ -177,7 +177,7 @@
       const hout = T.herbouwHout(g);
       const naam = naamVan(D, g);
       if ((D.voorraad.hout || 0) < hout) {
-        if (!B.wacht) T.zeg(D, `${naam} wil zijn huis weer opbouwen, maar er is geen ${hout} hout.`, 'gevaar');
+        if (!B.wacht) T.zeg(D, T.t('{naam} wants to rebuild the house, but there is not enough wood (it needs {hout}).', { naam: T.hoofdletter(naam), hout: T.hoeveel(hout, 'hout') }), 'gevaar');
         B.wacht = true;
         continue;
       }
@@ -187,7 +187,7 @@
       delete g.brand;
       delete v.brand;
       Object.assign(v, { inAanbouw: true, klaarOp: Math.floor(dag) + bouwtijd, bouwtijd, vanFase: IN().herbouwVanFase });
-      T.zeg(D, `${naam} bouwt het huis weer op, met ${hout} hout.`, 'goed');
+      T.zeg(D, T.t('{naam} rebuilds the house, using {hout}.', { naam: T.hoofdletter(naam), hout: T.hoeveel(hout, 'hout') }), 'goed');
     }
   };
 

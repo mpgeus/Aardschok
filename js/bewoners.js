@@ -65,14 +65,14 @@
   // dorp is, zolang er nog een vrije is.
   T.VOORNAMEN = {
     man: [
-      'Adam', 'Alan', 'Bartholomew', 'Edmund', 'Geoffrey', 'Gilbert', 'Godfrey', 'Hamon', 'Henry', 'Hugh',
-      'John', 'Lambert', 'Laurence', 'Martin', 'Osbert', 'Peter', 'Ralph', 'Reginald', 'Richard', 'Robert',
-      'Roger', 'Simon', 'Stephen', 'Thomas', 'Wat', 'William',
+      'Adam', 'Alan', 'Bartholomew', 'Edmund', 'Geoffrey', 'Gilbert', 'Godfrey', 'Hamon', 'Henry', 'Hugh', // geen tekst
+      'John', 'Lambert', 'Laurence', 'Martin', 'Osbert', 'Peter', 'Ralph', 'Reginald', 'Richard', 'Robert', // geen tekst
+      'Roger', 'Simon', 'Stephen', 'Thomas', 'Wat', 'William', // geen tekst
     ],
     vrouw: [
-      'Agnes', 'Amice', 'Avice', 'Beatrice', 'Cecily', 'Christina', 'Edith', 'Emma', 'Hawise', 'Isabel',
-      'Joan', 'Juliana', 'Lettice', 'Mabel', 'Margery', 'Matilda', 'Maud', 'Petronilla', 'Rose', 'Sybil',
-      'Thomasina',
+      'Agnes', 'Amice', 'Avice', 'Beatrice', 'Cecily', 'Christina', 'Edith', 'Emma', 'Hawise', 'Isabel', // geen tekst
+      'Joan', 'Juliana', 'Lettice', 'Mabel', 'Margery', 'Matilda', 'Maud', 'Petronilla', 'Rose', 'Sybil', // geen tekst
+      'Thomasina', // geen tekst
     ],
   };
 
@@ -138,7 +138,7 @@
 
   // Hoe hij heet: een boer zoals T.MENSEN (en de spelregels) het zeggen, de schout "de schout". Ook
   // voor de herberg (js/herberg.js).
-  const naamVan = (p) => (p.schout ? 'de schout' : p.wie ? T.naamVanMens(p.wie) : p.naam);
+  const naamVan = (p) => (p.schout ? T.t('the reeve') : p.wie ? T.naamVanMens(p.wie) : p.naam);
   T.naamVanBewoner = naamVan;
   // Hoort hij bij het gezin van de schout?
   const vanSchout = (p) => !!(p.schout || (p.hoofd && p.hoofd.schout));
@@ -581,8 +581,13 @@
       for (const p of leden) p.komt = true;
       // Wie een erf nam (js/erven.js), bouwt daar zelf zijn hut, en staat er nog iets op, dan rooit hij het eerst.
       const huis = leden[0].huis;
-      const erf = huis && huis.erf && !huis.klaar ? (huis.wachtOpRooien ? ' Ze rooien hun erf, en zetten dan hun hut.' : ' Ze zetten een hut op hun erf.') : '';
-      B.komen.push({ mensen: leden, aankomst: { tekst: `Er komt een nieuw gezin over de weg: ${gezinTekst(D, leden)}.${erf} (+${leden.length})` } });
+      const gezin = gezinTekst(D, leden);
+      const n = leden.length;
+      const erf = huis && huis.erf && !huis.klaar ? (huis.wachtOpRooien ? 'rooit' : 'zet') : '';
+      const tekst = erf === 'rooit' ? T.t('A new family is coming along the road: {gezin}. They clear their plot, then build their hut. (+{n})', { gezin, n })
+        : erf === 'zet' ? T.t('A new family is coming along the road: {gezin}. They build a hut on their plot. (+{n})', { gezin, n })
+        : T.t('A new family is coming along the road: {gezin}. (+{n})', { gezin, n });
+      B.komen.push({ mensen: leden, aankomst: { tekst } });
     }
     return gezinnen.flat();
   }
@@ -646,30 +651,37 @@
   // Komen en gaan: wie het zijn, en dat je ze ziet (stuk 2; ontwerp/spel.md, "Stuk 2 uitgewerkt")
   // ---------------------------------------------------------------------------------------------
 
-  const VOOR_DE_NAAM = { oud: 'de oude ', kleuter: 'de kleine ' };
+  // De band met het hoofd van het gezin, voor de speler (in de gegevens blijft hij Nederlands: 'zoon', 'vrouw').
+  const BAND = {
+    zoon: T.t('son'), dochter: T.t('daughter'), moeder: T.t('mother'), vader: T.t('father'), schoondochter: T.t('daughter-in-law'),
+    vrouw: T.t('wife'), man: T.t('husband'),
+  };
+  // Zijn naam, met "old" of "little" ervoor als hij oud of een kleuter is.
+  const naamMetLeeftijd = (p) => (p.leeftijd === 'oud' ? T.t('old {naam}', { naam: naamVan(p) })
+    : p.leeftijd === 'kleuter' ? T.t('little {naam}', { naam: naamVan(p) }) : naamVan(p));
   const hoofdletter = (t) => t.charAt(0).toUpperCase() + t.slice(1);
 
-  // Eén mens: "de oude Jan, vader van Klaas", "Geert, zoon van Klaas", "Albert, man van Grietje".
+  // Eén mens: "old John, father of Nicholas", "Gerard, son of Nicholas", "Albert, husband of Alice".
   function persoonTekst(D, p) {
-    const naam = (VOOR_DE_NAAM[p.leeftijd] || '') + naamVan(p);
-    if (p.hoofd) return `${naam}, ${p.band} van ${naamVan(p.hoofd)}`;
+    const naam = naamMetLeeftijd(p);
+    if (p.hoofd) return T.t('{naam}, {band} of {van}', { naam, band: BAND[p.band], van: naamVan(p.hoofd) });
     const partner = D.bewoners.mensen.find((x) => x.hoofd === p && (x.band === 'vrouw' || x.band === 'man'));
-    return partner ? `${naam}, ${p.geslacht === 'vrouw' ? 'vrouw' : 'man'} van ${naamVan(partner)}` : naam;
+    return partner ? T.t('{naam}, {band} of {van}', { naam, band: p.geslacht === 'vrouw' ? BAND.vrouw : BAND.man, van: naamVan(partner) }) : naam;
   }
 
-  // Een heel gezin: "Albert en Grietje, met twee kinderen", "Trijn, met drie kinderen".
+  // Een heel gezin: "Albert and Alice, with two children", "Kate, with three children".
   function gezinTekst(D, leden) {
     const hoofd = leden.find((p) => !p.hoofd) || leden[0];
     const partner = leden.find((p) => p.hoofd === hoofd && (p.band === 'vrouw' || p.band === 'man'));
     const kinderen = leden.length - 1 - (partner ? 1 : 0);
-    let t = partner ? `${naamVan(hoofd)} en ${naamVan(partner)}` : naamVan(hoofd);
-    if (kinderen === 1) t += ', met een kind';
-    else if (kinderen > 1) t += `, met ${T.telwoord(kinderen)} kinderen`;
+    const t = partner ? T.opsomming([naamVan(hoofd), naamVan(partner)]) : naamVan(hoofd);
+    if (kinderen === 1) return T.t('{gezin}, with a child', { gezin: t });
+    if (kinderen > 1) return T.t('{gezin}, with {n} children', { gezin: t, n: T.telwoord(kinderen) });
     return t;
   }
 
-  // Wie er gaat, in woorden: een heel gezin samen, de anderen één voor één. "de oude Geesje, moeder
-  // van Wouter, en de kleine Fenna, dochter van Geert": een bijstelling sluit met een komma.
+  // Wie er gaat, in woorden: een heel gezin samen, de anderen één voor één. "old Agnes, mother of Walter, and little
+  // Cecily, daughter of Gerard": een bijstelling sluit met een komma.
   function wieTekst(D, lijst) {
     const delen = [];
     const gehad = new Set();
@@ -682,18 +694,18 @@
     }
     if (delen.length < 2) return delen[0] || '';
     const laatste = delen.pop();
-    return `${delen.join(', ')}${delen[delen.length - 1].includes(',') ? ',' : ''} en ${laatste}`;
+    const rest = delen.join(', ');
+    return delen[delen.length - 1].includes(',') ? T.t('{lijst}, and {laatste}', { lijst: rest, laatste }) : T.t('{lijst} and {laatste}', { lijst: rest, laatste });
   }
 
   // Het bericht bij wie sterft of wegtrekt, met `waarom` van wie het besliste (js/behoeften.js):
-  // "De winter is hard: de oude Jan, vader van Klaas, is gestorven." en "Albert en Grietje, met twee
-  // kinderen, trekken weg: het dorp is niet tevreden genoeg. (-4)"
+  // "The winter is harsh: old John, father of Nicholas, died." en "Albert and Alice, with two
+  // children, leave: the village is not content enough. (-4)"
   function berichtOverWieGaat(D, weg, wie, reden, waarom) {
     if (!waarom || !weg.length || !T.ui || !T.ui.bericht) return;
     const komma = wie.includes(',') ? ',' : '';
-    const een = weg.length === 1;
-    if (reden === 'vertrek') T.zeg(D, `${hoofdletter(wie)}${komma} ${een ? 'trekt' : 'trekken'} weg: ${waarom}. (-${weg.length})`, 'gevaar');
-    else T.zeg(D, `${waarom}: ${wie}${komma} ${een ? 'is' : 'zijn'} gestorven.`, 'gevaar');
+    if (reden === 'vertrek') T.zeg(D, T.t('{n|{wie} leaves: {waarom}. (-#)|{wie} leave: {waarom}. (-#)}', { n: weg.length, wie: hoofdletter(wie) + komma, waarom }), 'gevaar');
+    else T.zeg(D, T.t('{waarom}: {wie} died.', { waarom, wie: wie + komma }), 'gevaar');
   }
 
   // Elk beeld (js/main.js, werkBij), zoals T.werkMarskramerBij in js/handel.js. Wie komt, verschijnt
@@ -873,7 +885,7 @@
   // (een nieuw gezin, dat over de weg komt), 'winter' (wie sterft), 'vertrek' (wie wegtrekt) of 'gesneuveld'
   // (een wachter tegen de rovers, js/rovers.js; `wie` zegt dan wie). Het begin ('begin') regelt
   // T.zetBeginBewoners zelf, zodra de boeren hun karakter hebben. Met `waarom` (js/behoeften.js: "De winter is
-  // hard") komt er een bericht dat zegt wie het zijn. Geeft wie het zijn, in woorden ("de oude Jan, vader van Klaas"),
+  // hard") komt er een bericht dat zegt wie het zijn. Geeft wie het zijn, in woorden ("old John, father of Nicholas"),
   // voor het dagboek (js/ochtendrapport.js), of '' zonder bewoners.
   T.bewonersVolgen = function (D, verschil, reden, waarom, wie) {
     if (!D.bewoners || reden === 'begin') return '';
@@ -997,25 +1009,25 @@
 
   function werkTekst(D, p) {
     const g = p.werk;
-    if (!g) return p.leeftijd === 'volwassen' && !vanSchout(p) ? 'zonder werk' : '';
+    if (!g) return p.leeftijd === 'volwassen' && !vanSchout(p) ? T.t('no work') : '';
     if (g === p.huis) return ''; // wie op zijn eigen boerderij werkt: dat spreekt vanzelf
-    if (g.soort === 'schaapskooi') return p.geslacht === 'vrouw' ? 'herderin' : 'herder';
+    if (g.soort === 'schaapskooi') return T.t('shepherd');
     if (g.soort === 'boerderij') {
       const boer = D.bewoners.mensen.find((x) => x.huis === g && x.wie);
-      if (boer) return `helpt op de boerderij van ${naamVan(boer)}`;
+      if (boer) return T.t('helps on the farm of {wie}', { wie: naamVan(boer) });
     }
-    return `werkt bij de ${T.GEBOUWEN[g.soort] ? T.GEBOUWEN[g.soort].naam : g.soort}`;
+    return T.t('works at the {gebouw}', { gebouw: T.GEBOUWEN[g.soort] ? T.GEBOUWEN[g.soort].naam : g.soort });
   }
 
-  // "Geert, zoon van Klaas · herder", "Hilje, vrouw van de schout", "Albert · zonder werk",
-  // "Albert · trekt weg". Zonder poppetje (hij is nog onderweg hierheen) met de bewoner zelf als `p`.
+  // "Gerard, son of Nicholas · shepherd", "Hilje, wife of the reeve", "Albert · no work",
+  // "Albert · leaving". Zonder poppetje (hij is nog onderweg hierheen) met de bewoner zelf als `p`.
   T.overBewonerTekst = function (D, e, p = T.bewonerVan(D, e)) {
     if (!p || p.schout || p.wie) return '';
     let wie = naamVan(p);
-    if (p.hoofd) wie += `, ${p.band} van ${naamVan(p.hoofd)}`;
-    const werk = e && e.vertrekt ? 'trekt weg'
-      : p.komt ? 'nieuw in het gehucht'
-      : T.gaatNaarDeHerberg(D, p) ? 'naar de herberg' // 's avonds (js/herberg.js)
+    if (p.hoofd) wie = T.t('{naam}, {band} of {van}', { naam: wie, band: BAND[p.band], van: naamVan(p.hoofd) });
+    const werk = e && e.vertrekt ? T.t('leaving')
+      : p.komt ? T.t('new in the hamlet')
+      : T.gaatNaarDeHerberg(D, p) ? T.t('off to the inn') // 's avonds (js/herberg.js)
       : werkTekst(D, p);
     return werk ? `${wie} · ${werk}` : wie;
   };

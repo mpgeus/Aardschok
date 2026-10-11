@@ -3241,7 +3241,7 @@
   // staat in beelden/ogen.js (T.OGEN, gemaakt door gereedschap/pixelart/ogen.cjs: twee van voren, een van opzij, geen
   // van achteren); welk beeld de wolf nu heeft, onthoudt hij zelf (e.beeldStand.laatste, js/sprites.js). Ver uitgezoomd
   // blijven ze even groot op het scherm, en af en toe knippert hij.
-  const OOG_RICHTINGEN = ['Z', 'ZW', 'W', 'NW', 'N', 'NO', 'O', 'ZO'];
+  const OOG_RICHTINGEN = ['Z', 'ZW', 'W', 'NW', 'N', 'NO', 'O', 'ZO']; // geen tekst
   function tekenOgen(ctx, S) {
     if (!S.kalender || !T.OGEN || !metSprites() || (T.debug && T.debug.geenNacht)) return;
     const sterk = Math.min(1, (T.lichtVan(S.kalender.dag).nacht - 0.35) / 0.4);
@@ -3340,7 +3340,7 @@
   }
 
   function roep(ctx, teken, cx, y, kleur) {
-    ctx.font = 'bold 24px Georgia, serif';
+    ctx.font = 'bold 24px Georgia, serif'; // geen tekst
     ctx.textAlign = 'center';
     ctx.lineWidth = 4;
     ctx.strokeStyle = 'rgba(0,0,0,0.8)';
@@ -3367,7 +3367,7 @@
       const y = p.y - 64 - f * 30;
       ctx.save();
       ctx.globalAlpha = Math.max(0, 1 - f * f);
-      ctx.font = 'bold 18px Georgia, serif';
+      ctx.font = 'bold 18px Georgia, serif'; // geen tekst
       ctx.textAlign = 'center';
       ctx.lineWidth = 4;
       ctx.strokeStyle = 'rgba(0,0,0,0.75)';

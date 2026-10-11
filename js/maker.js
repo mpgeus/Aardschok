@@ -170,7 +170,7 @@
       const kant = deur[1] >= d ? { x: 0, y: 1 } : deur[0] >= b ? { x: 1, y: 0 } : deur[0] < 0 ? { x: -1, y: 0 } : { x: 0, y: -1 };
       return { naam, vel, b, d, deur, kant };
     }
-    throw new Error(`de maker kent geen tekening "${naam}" (tegels/tegels.js)`);
+    throw new Error(`de maker kent geen tekening "${naam}" (tegels/tegels.js)`); // geen tekst
   }
 
   // Een vloeiende lijn door steunpunten (Catmull-Rom), als veel korte rechte stukjes, en de afstand van een punt
@@ -464,7 +464,7 @@
         }
       }
     }
-    if (pleinTegels < I.pleinTegels[0] || pleinTegels > I.pleinTegels[1]) return mis(`het plein is ${pleinTegels} tegels`);
+    if (pleinTegels < I.pleinTegels[0] || pleinTegels > I.pleinTegels[1]) return mis(`het plein is ${pleinTegels} tegels`); // geen tekst
     // Waar de rand van het plein ligt, gezien vanuit zijn midden in een richting (in tegels).
     const randPunt = (dx, dy) => {
       let t = 0;
@@ -665,7 +665,7 @@
         lijnen.push(vloeiend(steun));
         if (!uit || u.kasteel) uit = { x: start.x, y: start.y };
       }
-      if (!lijnen.length) return { mis: 'geen weg van het eiland naar het plein' };
+      if (!lijnen.length) return { mis: 'geen weg van het eiland naar het plein' }; // geen tekst
       return { wegen: lijnen, uitgang: uit };
     };
 
@@ -884,7 +884,7 @@
         }
       }
       const k = besteVan(kandidaten);
-      if (!k) return mis('geen plek voor het huis van de schout');
+      if (!k) return mis('geen plek voor het huis van de schout'); // geen tekst
       schoutHuis = bouw(k.t, k.x, k.y, { rol: 'schout', huis: 'schout' });
     }
     // Het zand: het uitgesleten stuk van zijn deur het plein op. De plek van de marskramer (en van de heer op
@@ -947,7 +947,7 @@
           }
         }
         const k = besteVan(kandidaten);
-        if (!k) return mis(`geen plek voor ${wie.rol === 'herberg' ? 'de herberg' : `een ${wie.rol}`}`);
+        if (!k) return mis(`geen plek voor ${wie.rol === 'herberg' ? 'de herberg' : `een ${wie.rol}`}`); // geen tekst
         const meer = { rol: wie.rol };
         if (wie.huis) meer.huis = wie.huis;
         if (wie.bewoners) meer.bewoners = wie.bewoners;
@@ -1080,7 +1080,7 @@
           gelukt = true;
           break;
         }
-        if (!gelukt) return mis(`geen plek voor de boerderij van ${id} met zijn akkers`);
+        if (!gelukt) return mis(`geen plek voor de boerderij van ${id} met zijn akkers`); // geen tekst
       }
     }
 
@@ -1109,7 +1109,7 @@
         }
       }
       const k = besteVan(opties);
-      if (!k) return mis('geen plek voor de meent met de kooi');
+      if (!k) return mis('geen plek voor de meent met de kooi'); // geen tekst
       meent = { meent: 'heide', x: k.x, y: k.y, b: k.b, h: k.h };
       for (let yy = k.y; yy < k.y + k.h; yy++) for (let xx = k.x; xx < k.x + k.b; xx++) zet(xx, yy, MEENT);
       bouw(t, k.kx, k.ky, { rol: 'kooi' });
@@ -1317,7 +1317,7 @@
     let kamp = null;
     if (leeg) {
       kamp = kampOpHetPlein();
-      if (!kamp) return mis('geen plek voor het kamp op het plein');
+      if (!kamp) return mis('geen plek voor het kamp op het plein'); // geen tekst
       for (const t of kamp.bezet) bezet.add(sleutel(t.x, t.y));
     }
     // Ligt (x, y) binnen `rand` tegels van het kamp?
@@ -1327,7 +1327,7 @@
       const px = deurS.x + schoutHuis.kant.x * 2;
       const py = deurS.y + schoutHuis.kant.y * 2;
       const vakken = [[px, py], [px + 1, py], [px, py + 1], [px + 1, py + 1]];
-      if (!vakken.every(([x, y]) => [PLEIN, ERF, VRIJ].includes(op(x, y)) && vrijVoor(x, y))) return mis('geen plek voor de put');
+      if (!vakken.every(([x, y]) => [PLEIN, ERF, VRIJ].includes(op(x, y)) && vrijVoor(x, y))) return mis('geen plek voor de put'); // geen tekst
       voorwerpen.push({ naam: 'put', x: px, y: py, b: 2, d: 2 });
       for (const [x, y] of vakken) bezet.add(sleutel(x, y));
       const lx = deurS.x + schoutHuis.kant.x + (schoutHuis.kant.y ? 1 : 0);
@@ -1352,7 +1352,7 @@
           }
         }
       }
-      if (!marskramer) return mis('geen plek voor de marskramer aan de weg');
+      if (!marskramer) return mis('geen plek voor de marskramer aan de weg'); // geen tekst
     } else {
       let beste = 1e9;
       for (let y = pleinVak.y0; y <= pleinVak.y1; y++) {
@@ -1365,7 +1365,7 @@
           }
         }
       }
-      if (!marskramer) return mis('geen plek voor de marskramer op het zand');
+      if (!marskramer) return mis('geen plek voor de marskramer op het zand'); // geen tekst
     }
     // Vier tot zes oude eiken op het plein, niet op het zand en niet vlak bij de rand, ver genoeg uit elkaar; met
     // een bank onder de eerste.
@@ -1392,7 +1392,7 @@
         leg1('eik', x, y);
       }
       // (in het lege begin staat het kamp midden op het plein, en zijn er zoveel als er passen)
-      if (eiken.length < (leeg ? 0 : 3)) return mis('te weinig plaats voor eiken op het plein');
+      if (eiken.length < (leeg ? 0 : 3)) return mis('te weinig plaats voor eiken op het plein'); // geen tekst
       // (in het lege begin heeft nog niemand er een bank gezet)
       const [bx, by] = eiken[0] || [];
       if (!leeg && vrijVoor(bx + 1, by + 1) && op(bx + 1, by + 1) === PLEIN) leg1('bank', bx + 1, by + 1);
@@ -1560,8 +1560,8 @@
         }
         houdGroeveVrij(k);
       }
-      if (!rotsen.length) return mis('geen plek voor de rotsen');
-      if (!groeven) return mis('geen plek voor de steengroeve bij de rotsen');
+      if (!rotsen.length) return mis('geen plek voor de rotsen'); // geen tekst
+      if (!groeven) return mis('geen plek voor de steengroeve bij de rotsen'); // geen tekst
       // op het eiland: de rotsen van het eiland
       if (land) {
         for (let y = 1; y < H - 1; y++) {
@@ -1740,7 +1740,7 @@
     // Hoe ver elke tegel te voet ligt van de deur van de schout.
     const afstand = new Int32Array(B * H).fill(-1);
     const start = plan.schout.y * B + plan.schout.x;
-    if (vast[start]) return 'de deur van de schout is vast';
+    if (vast[start]) return 'de deur van de schout is vast'; // geen tekst
     afstand[start] = 0;
     const rij = [start];
     for (let i = 0; i < rij.length; i++) {
@@ -1758,33 +1758,33 @@
       }
     }
     const kom = (x, y) => x >= 0 && y >= 0 && x < B && y < H && afstand[y * B + x] >= 0;
-    for (const h of plan.huizen) if (!kom(h.deur.x, h.deur.y)) return `de deur van ${h.rol === 'boerderij' ? h.huis : `de ${h.rol}`} is niet te bereiken`;
-    if (!kom(plan.uitgang.x, plan.uitgang.y)) return 'de uitgang is niet te bereiken';
-    if (!kom(plan.marskramer.x, plan.marskramer.y)) return 'de plek van de marskramer is niet te bereiken';
+    for (const h of plan.huizen) if (!kom(h.deur.x, h.deur.y)) return `de deur van ${h.rol === 'boerderij' ? h.huis : `de ${h.rol}`} is niet te bereiken`; // geen tekst
+    if (!kom(plan.uitgang.x, plan.uitgang.y)) return 'de uitgang is niet te bereiken'; // geen tekst
+    if (!kom(plan.marskramer.x, plan.marskramer.y)) return 'de plek van de marskramer is niet te bereiken'; // geen tekst
     const vakVan = (a) => {
       const l = [];
       for (let y = a.y; y < a.y + (a.h || a.d); y++) for (let x = a.x; x < a.x + a.b; x++) l.push([x, y]);
       return l;
     };
-    for (const a of plan.akkers) if (!vakVan(a).some(([x, y]) => kom(x, y))) return `${a.akker} is niet te bereiken`;
-    if (plan.meent && !vakVan(plan.meent).some(([x, y]) => kom(x, y))) return 'de meent is niet te bereiken';
-    if (plan.kamp && !plan.kamp.plekken.every((p) => kom(p.deur.x, p.deur.y))) return 'een tent in het kamp is niet te bereiken';
-    if (plan.kamp && !kom(plan.kamp.kar.x, plan.kamp.kar.y)) return 'de plek van de kar is niet te bereiken';
+    for (const a of plan.akkers) if (!vakVan(a).some(([x, y]) => kom(x, y))) return `${a.akker} is niet te bereiken`; // geen tekst
+    if (plan.meent && !vakVan(plan.meent).some(([x, y]) => kom(x, y))) return 'de meent is niet te bereiken'; // geen tekst
+    if (plan.kamp && !plan.kamp.plekken.every((p) => kom(p.deur.x, p.deur.y))) return 'een tent in het kamp is niet te bereiken'; // geen tekst
+    if (plan.kamp && !kom(plan.kamp.kar.x, plan.kamp.kar.y)) return 'de plek van de kar is niet te bereiken'; // geen tekst
     // Het plein: niets erop dan de put, de eiken, de bank en een lantaarn, en genoeg ervan in beeld. Een eik kan ook een
     // linde zijn, of aan de rand een andere soort die een eik werd (ANDERE_BOMEN).
     const opPlein = (x, y) => T.binnenRand(plan.plein, x + 0.5, y + 0.5);
     const magOpPlein = ['put', 'bank', 'lantaarn', 'eik', ...Object.values(ANDERE_BOMEN).flatMap((p) => (p.eik || []).map(([s]) => s))];
-    for (const v of plan.voorwerpen) if (!magOpPlein.includes(v.naam) && opPlein(v.x, v.y)) return `er staat een ${v.naam} op het plein`;
-    for (const h of plan.huizen) for (const [x, y] of vakVan(h)) if (opPlein(x, y)) return `de ${h.rol} staat op het plein`;
-    for (const a of plan.akkers) for (const [x, y] of vakVan(a)) if (opPlein(x, y)) return `${a.akker} ligt op het plein`;
+    for (const v of plan.voorwerpen) if (!magOpPlein.includes(v.naam) && opPlein(v.x, v.y)) return `er staat een ${v.naam} op het plein`; // geen tekst
+    for (const h of plan.huizen) for (const [x, y] of vakVan(h)) if (opPlein(x, y)) return `de ${h.rol} staat op het plein`; // geen tekst
+    for (const a of plan.akkers) for (const [x, y] of vakVan(a)) if (opPlein(x, y)) return `${a.akker} ligt op het plein`; // geen tekst
     let pleinTegels = 0;
     for (let y = 0; y < H; y++) for (let x = 0; x < B; x++) if (opPlein(x, y)) pleinTegels++;
     const achterDak = achterDakVan(plan.huizen, opPlein, B, H).size;
-    if (achterDak > pleinTegels * I.pleinAchterDak) return `${achterDak} tegels van het plein liggen achter een dak`;
+    if (achterDak > pleinTegels * I.pleinAchterDak) return `${achterDak} tegels van het plein liggen achter een dak`; // geen tekst
     // De akkers zijn samen even groot als in het ontworpen gehucht; in het lege begin zijn er nog geen.
     const moet = plan.leeg ? 0 : I.akkers.flat().reduce((n, a) => n + a.tegels, 0);
     const akkerTegels = plan.akkers.reduce((n, a) => n + a.b * a.h, 0);
-    if (akkerTegels !== moet) return `de akkers zijn ${akkerTegels} tegels, niet ${moet}`;
+    if (akkerTegels !== moet) return `de akkers zijn ${akkerTegels} tegels, niet ${moet}`; // geen tekst
     // Van elke deur van een boerderij naar de dichtstbijzijnde tegel van zijn eigen akkers, te voet.
     let deurNaarAkker = 0;
     for (const h of plan.huizen.filter((x) => x.rol === 'boerderij')) {
@@ -1809,7 +1809,7 @@
           q.push(n);
         }
       }
-      if (gevonden < 0) return `${h.huis} komt niet bij zijn akkers`;
+      if (gevonden < 0) return `${h.huis} komt niet bij zijn akkers`; // geen tekst
       deurNaarAkker += gevonden;
     }
     plan.maat = { pleinTegels, achterDak, akkerTegels, deurNaarAkker, huizen: plan.huizen.length };
@@ -1832,7 +1832,7 @@
     const tel = {};
     for (const w of waarom) tel[w] = (tel[w] || 0) + 1;
     const vaakst = Object.entries(tel).sort((a, b) => b[1] - a[1]).slice(0, 5);
-    throw new Error(`de maker kreeg met zaad ${zaad} geen gehucht dat deugt: ${vaakst.map(([w, n]) => (n > 1 ? `${w} (${n} keer)` : w)).join('; ')}`);
+    throw new Error(`de maker kreeg met zaad ${zaad} geen gehucht dat deugt: ${vaakst.map(([w, n]) => (n > 1 ? `${w} (${n} keer)` : w)).join('; ')}`); // geen tekst
   };
   // Voor de schets: hetzelfde keuren op een plan dat niet van de maker komt (het ontworpen gehucht).
   T.keurGehucht = keur;
@@ -1908,7 +1908,7 @@
   const VELLEN = ['bomen', 'begroeiing', 'gebouwen', 'erf', 'tuin', 'huizen'];
   function opNaam(naam) {
     for (const vel of VELLEN) if (T.TEGELS[vel] && T.TEGELS[vel].tiles.some((t) => t && t.naam === naam)) return `${vel}/${naam}`;
-    throw new Error(`de maker kent geen voorwerp "${naam}" (tegels/tegels.js)`);
+    throw new Error(`de maker kent geen voorwerp "${naam}" (tegels/tegels.js)`); // geen tekst
   }
 
   // Staat een voorwerp met deze naam in de weg (`vast` in tegels/tegels.js)? Een boom, een struik, een rots en de put
@@ -1939,7 +1939,7 @@
         if (new Set(hoeken).size < new Set(totTwee(soorten)).size) plan.grondNaden = (plan.grondNaden || 0) + 1;
         const kies = (lijst) => lijst[Math.floor((hash(x, y, 63) * 1e6) % lijst.length)];
         const lijst = new Set(hoeken).size === 1 ? g.vlak[hoeken[0]] : g.overgang[hoeken.join(',')];
-        if (!lijst) throw new Error(`de maker heeft geen grondtegel voor ${hoeken.join(', ')} op (${x}, ${y})`);
+        if (!lijst) throw new Error(`de maker heeft geen grondtegel voor ${hoeken.join(', ')} op (${x}, ${y})`); // geen tekst
         data[y * B + x] = kies(lijst);
       }
     }
@@ -1960,8 +1960,8 @@
       height: H,
       tilewidth: 64,
       tileheight: 32,
-      properties: (ontworpen.properties || [{ name: 'naam', type: 'string', value: 'Het gehucht' }]).map((p) => ({ ...p })),
-      tilesets: [{ firstgid: 1, source: '../tegels/rand.tsx' }, ...(data.some((gid) => gid >= KUST_GID()) ? [{ firstgid: KUST_GID(), source: '../tegels/kust.tsx' }] : [])],
+      properties: (ontworpen.properties || [{ name: 'naam', type: 'string', value: T.t('The hamlet') }]).map((p) => ({ ...p })),
+      tilesets: [{ firstgid: 1, source: '../tegels/rand.tsx' }, ...(data.some((gid) => gid >= KUST_GID()) ? [{ firstgid: KUST_GID(), source: '../tegels/kust.tsx' }] : [])], // geen tekst
       layers: [{ type: 'tilelayer', name: 'grond', width: B, height: H, data }],
     };
 
@@ -1986,14 +1986,14 @@
     }
     for (const a of plan.akkers) dingen.push({ ...a });
     if (plan.meent) dingen.push({ ...plan.meent });
-    dingen.push({ ...plan.uitgang, overgang: 'wereld', tekst: 'De weg de wereld in' });
+    dingen.push({ ...plan.uitgang, overgang: 'wereld', tekst: T.t('The road into the world') });
 
     const eigen = (T.BETEKENIS && T.BETEKENIS.gehucht) || {};
     const betekenis = {
       versie: 1,
       // net als het ontworpen gehucht hangt het nog aan geen andere kaart vast (gereedschap/tiled/maak-gehucht.cjs)
       proef: true,
-      uitleg: `Een gehucht van de maker (js/maker.js), uit zaad ${plan.zaad}.`,
+      uitleg: `Een gehucht van de maker (js/maker.js), uit zaad ${plan.zaad}.`, // geen tekst
       // in het lege begin brengt de kar wat er is (js/begin.js)
       beginVoorraad: plan.leeg ? {} : { ...(eigen.beginVoorraad || {}) },
       beginBevolking: plan.leeg ? 0 : eigen.beginBevolking,
@@ -2021,7 +2021,7 @@
         waarom.push(`${p.naam}: ${e.message}`);
       }
     }
-    throw new Error(`geen gehucht op het eiland van ${zaad}: ${waarom.join('; ')}`);
+    throw new Error(`geen gehucht op het eiland van ${zaad}: ${waarom.join('; ')}`); // geen tekst
   }
 
   // ---- Het eiland om je land (vraag 117, stap 2b) ----

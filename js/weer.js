@@ -253,5 +253,5 @@
     return alles ? (alles - beek) / alles : 1;
   };
   // Waarom een visser vandaag niets vangt, of null: zijn beek staat droog.
-  T.waaromVistHijNiet = (D, g) => (g.soort === 'visser' && T.visserWater(D, g) <= 0 ? 'de beek staat droog' : null);
+  T.waaromVistHijNiet = (D, g) => (g.soort === 'visser' && T.visserWater(D, g) <= 0 ? T.t('the stream has run dry') : null);
 })(globalThis.Spel = globalThis.Spel || {});

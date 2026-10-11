@@ -187,7 +187,7 @@
   T.sneuvelt = function (D, e) {
     e.opgeroepen = false;
     e.gesneuveld = true;
-    if (e.bewoner) T.wijzigBevolking(D, -1, 'gesneuveld', 'Het gevecht met de rovers was zwaar', [e.bewoner]);
+    if (e.bewoner) T.wijzigBevolking(D, -1, 'gesneuveld', T.t('The fight with the robbers was hard'), [e.bewoner]);
   };
 
   // Een rover valt (js/gevecht.js, sterf): kwam hij uit het gehucht, dan is hij uit de bende.
@@ -266,16 +266,17 @@
     // Wie een wapen heeft (js/ondernemers.js), slaat harder.
     const gewapend = T.bewapen(D, militie);
     const boer = T.boerVanVeld(D, w.akkers[A.veld]);
-    const akker = `de akker${boer ? ` van ${boer.naam}` : ''}`;
+    const akker = boer ? T.t('the field of {boer}', { boer: boer.naam }) : T.t('the field');
     const wie = A.soort === 'bende'
-      ? `${T.opsomming(leden.map((l) => l.naam))}, ${leden.length === 1 ? 'die wegtrok, komt' : 'die wegtrokken, komen'} terug als ${leden.length === 1 ? 'rover' : 'rovers'}`
-      : `${leden.length === 1 ? 'Een wilde rover komt' : `${T.hoofdletter(T.telwoord(leden.length))} wilde rovers komen`} de kaart op`;
+      ? T.t('{n|{namen}, who left, comes back as a robber|{namen}, who left, come back as robbers}', { n: leden.length, namen: T.opsomming(leden.map((l) => l.naam)) })
+      : T.t('{n|A wild robber turns up|{aantal} wild robbers turn up}', { n: leden.length, aantal: T.hoofdletter(T.telwoord(leden.length)) });
     // Wie er komt: de wachters, de veteranen van de heervaart, of allebei.
     const veteranen = militie.filter((e) => e.bewoner && e.bewoner.veteraan).length;
     const wachters = militie.length - veteranen;
-    const metWapens = !gewapend ? '' : gewapend === militie.length ? ', met wapens' : `, ${T.telwoord(gewapend)} met een wapen`;
-    const hulp = !militie.length ? '' : ` ${wachters && veteranen ? 'De wachters en de veteranen komen' : wachters ? 'De wachters komen' : veteranen === 1 ? 'De veteraan komt' : 'De veteranen komen'} naar je toe${metWapens}.`;
-    T.bezoekerKomtAan(D, { meteen: true, aankomst: { tekst: `Rovers! ${wie}, op weg naar ${akker}.${hulp}`, soort: 'gevaar', naarGewoon: true } });
+    const metWapens = !gewapend ? '' : gewapend === militie.length ? T.t(', armed') : T.t(', {n} of them armed', { n: T.telwoord(gewapend) });
+    const hulpWie = wachters && veteranen ? T.t('The guards and the veterans come') : wachters ? T.t('The guards come') : veteranen === 1 ? T.t('The veteran comes') : T.t('The veterans come');
+    const hulp = !militie.length ? '' : ` ${T.t('{wie} to your side{wapens}.', { wie: hulpWie, wapens: metWapens })}`;
+    T.bezoekerKomtAan(D, { meteen: true, aankomst: { tekst: T.t('Robbers are coming. {wie}, heading for {akker}.{hulp}', { wie, akker, hulp }), soort: 'gevaar', naarGewoon: true } });
   }
 
   // De hinderlaag (de bode naar de marskramer, js/bode.js; werklijst vraag 143; Marcel, 9 okt: "De bode moet "onderschept"
@@ -329,9 +330,9 @@
     for (const e of militie) roepOp(e);
     T.bewapen(D, [...mee, ...militie]);
     const naam = T.naamVanBewoner(B.wie[0]);
-    const wie = R.bende.length ? `${T.opsomming(leden.map((l) => l.naam))}, ${leden.length === 1 ? 'die wegtrok' : 'die wegtrokken'}` : `${T.hoofdletter(T.telwoord(leden.length))} rovers`;
-    const hulp = militie.length ? ' De militie komt naar je toe.' : '';
-    T.bezoekerKomtAan(D, { meteen: true, aankomst: { tekst: `Rovers op de weg! ${wie} houden ${naam} aan bij de uitgang van het dorp. Ga erheen, of ze nemen alles.${hulp}`, soort: 'gevaar', naarGewoon: true } });
+    const wie = R.bende.length ? T.t('{namen}, who left,', { namen: T.opsomming(leden.map((l) => l.naam)) }) : T.t('{aantal} robbers', { aantal: T.hoofdletter(T.telwoord(leden.length)) });
+    const hulp = militie.length ? ` ${T.t('The militia comes to your side.')}` : '';
+    T.bezoekerKomtAan(D, { meteen: true, aankomst: { tekst: T.t('Robbers on the road. {wie} {n|stops|stop} {naam} at the village exit. Go there, or they will take everything.{hulp}', { wie, n: leden.length, naam, hulp }), soort: 'gevaar', naarGewoon: true } });
   }
   function werkHinderlaagBij(D, A, levend) {
     const B = D.bode;
@@ -381,10 +382,9 @@
     if (graan > 0) T.wijzigVoorraad(D, 'graan', -graan);
     const kapot = lot(D, A.dag, 3) < IN().kansAkkerKapot ? T.vertrapAkker(veld) : 0;
     const boer = T.boerVanVeld(D, veld);
-    const delen = [];
-    if (graan > 0) delen.push(`${Math.round(graan)} graan`);
-    const buit = delen.length ? ` met ${delen.join(' en ')}` : ' met lege handen';
-    T.zeg(D, `De rovers gaan ervandoor${buit}.${kapot ? ` De akker${boer ? ` van ${boer.naam}` : ''} is vertrapt: wat erop stond, is weg.` : ''}`, 'gevaar');
+    const weg = graan > 0 ? T.t('The robbers make off with {buit}.', { buit: T.hoeveel(Math.round(graan), 'graan') }) : T.t('The robbers make off empty-handed.');
+    const vertrapt = !kapot ? '' : ` ${boer ? T.t('The field of {boer} has been trampled: whatever stood on it is gone.', { boer: boer.naam }) : T.t('The field has been trampled: whatever stood on it is gone.')}`;
+    T.zeg(D, `${weg}${vertrapt}`, 'gevaar');
     A.buit = { graan, kapot };
   }
 
@@ -458,8 +458,8 @@
       if (A.soort === 'hinderlaag') {
         T.bodeWegVrij(D);
         laatDeBodeGaan(D);
-        T.zeg(D, D.bode ? 'De rovers zijn verslagen. De bode gaat verder.' : 'De rovers zijn verslagen.', 'goed');
-      } else T.zeg(D, 'De rovers zijn verslagen.', 'goed');
+        T.zeg(D, D.bode ? T.t('The robbers are defeated. The messenger goes on.') : T.t('The robbers are defeated.'), 'goed');
+      } else T.zeg(D, T.t('The robbers are defeated.'), 'goed');
       eind(D);
     }
   };

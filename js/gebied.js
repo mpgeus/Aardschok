@@ -59,7 +59,7 @@
       // Een gebied zonder uitgang is een val: daar kom je nooit meer weg. Dat moet hoorbaar zijn
       // zodra het gebeurt, niet pas als een speler vaststaat.
       if (!w.overgangen || !w.overgangen.length) {
-        console.error(`${T.NAAM}: gebied "${naam}" heeft geen enkele overgang — je komt er niet meer uit. Zet in Tiled een object met de eigenschap "overgang" op de kaart en draai npm run kaarten.`);
+        console.error(`${T.NAAM}: gebied "${naam}" heeft geen enkele overgang — je komt er niet meer uit. Zet in Tiled een object met de eigenschap "overgang" op de kaart en draai npm run kaarten.`); // geen tekst
       }
       // En andersom: een overgang die naar een kaart wijst die niet bestaat. Ook dat hoort hier
       // al te klagen, bij het inlezen, en niet pas als een speler er per ongeluk op stapt. Behalve
@@ -67,7 +67,7 @@
       // kaart weg is (25 sep) bewust nergens heen; daar lopen alleen de marskramer en de heer
       // over (T.wegInEnUit, js/handel.js).
       for (const o of w.overgangen || []) {
-        if (!T.GEBIEDEN[o.naar] && !w.proef) ontbreekt(o.naar, `de kaart "${naam}" wijst er op (${o.x}, ${o.y}) naartoe`);
+        if (!T.GEBIEDEN[o.naar] && !w.proef) ontbreekt(o.naar, `de kaart "${naam}" wijst er op (${o.x}, ${o.y}) naartoe`); // geen tekst
       }
       S.gebieden[naam] = w;
     }
@@ -77,7 +77,7 @@
   // Eén klacht voor allebei de plekken waar het opvalt, in dezelfde bewoording: wat er ontbreekt
   // en wat Marcel eraan doet.
   function ontbreekt(naar, waar) {
-    console.error(`${T.NAAM}: overgang naar "${naar}", maar dat gebied bestaat niet (${waar}). Teken kaarten/${naar}.tmj in Tiled en draai npm run kaarten.`);
+    console.error(`${T.NAAM}: overgang naar "${naar}", maar dat gebied bestaat niet (${waar}). Teken kaarten/${naar}.tmj in Tiled en draai npm run kaarten.`); // geen tekst
   }
 
   T.overgangOp = function (w, x, y) {
@@ -119,7 +119,7 @@
     // eerst recht ernaast, dan schuin: de eerste die deugt
     for (const [dx, dy] of [[0, 1], [1, 0], [0, -1], [-1, 0], [1, 1], [-1, 1], [1, -1], [-1, -1]]) {
       if (deugt(w, o.x + dx, o.y + dy)) {
-        console.warn(`T.landingIn: "komt" bij de overgang op (${o.x}, ${o.y}) deugt niet; geland op (${o.x + dx}, ${o.y + dy})`);
+        console.warn(`T.landingIn: "komt" bij de overgang op (${o.x}, ${o.y}) deugt niet; geland op (${o.x + dx}, ${o.y + dy})`); // geen tekst
         return { x: o.x + dx, y: o.y + dy };
       }
     }
@@ -139,8 +139,8 @@
       // staat; hierboven klaagt het daar bij het inlezen ook niet over): dan alleen de mist, en geen fout in de console.
       // De speeltest telde die fout, als zijn schout de weg af liep.
       const bewust = !!(oud && oud.proef && (oud.overgangen || []).some((o) => o.naar === naar));
-      if (!bewust) ontbreekt(naar, 'je stapte er net op');
-      if (T.ui && T.ui.bericht) T.ui.bericht('Die kant op is nog niets, alleen mist.');
+      if (!bewust) ontbreekt(naar, 'je stapte er net op'); // geen tekst
+      if (T.ui && T.ui.bericht) T.ui.bericht(T.t('There is nothing that way yet, only mist.'));
       return;
     }
 
@@ -217,13 +217,13 @@
     const zaad = naam === 'gehucht' && makerZaad != null ? makerZaad : null;
     const w = T.gebied(S, naam, zaad != null ? () => T.laadGemaaktGehucht(zaad) : null);
     if (!w) {
-      console.warn(`Spel.beginOpKaart: kaart "${naam}" bestaat niet — draai npm run kaarten?`);
+      console.warn(`Spel.beginOpKaart: kaart "${naam}" bestaat niet — draai npm run kaarten?`); // geen tekst
       return false;
     }
     S.wereld = w;
     let schout = w.wezens.find((e) => e.soort === 'schout');
     if (!schout) {
-      console.warn(`Spel.beginOpKaart: geen "schout" op kaart "${naam}", hij begint op (0, 0)`);
+      console.warn(`Spel.beginOpKaart: geen "schout" op kaart "${naam}", hij begint op (0, 0)`); // geen tekst
       schout = T.maakWezen('schout', 0, 0);
       w.wezens.push(schout);
     }

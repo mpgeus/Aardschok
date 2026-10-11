@@ -137,7 +137,7 @@
       const id = vel.tiles.findIndex((t) => t && t.naam === naam);
       if (id >= 0) return { vel: v, id, eig: vel.tiles[id] };
     }
-    console.warn(`T.laadKaart: tegel "${wat}" bestaat niet in tegels/ — draai npm run tiled, of kijk de naam na`);
+    console.warn(`T.laadKaart: tegel "${wat}" bestaat niet in tegels/ — draai npm run tiled, of kijk de naam na`); // geen tekst
     return null;
   }
   // Naar buiten toe, voor wie op naam een tekening wil opzoeken zonder eerst een hele kaart te
@@ -253,7 +253,7 @@
     //     npm run tiled een vel groter maakt en een naam niet.
     function zetNeer(p, gx, gy, t, waar) {
       if (!binnenRaster(gx, gy)) {
-        console.warn(`T.laadKaart: ${waar} valt buiten de kaart (${gx}, ${gy}), overgeslagen`);
+        console.warn(`T.laadKaart: ${waar} valt buiten de kaart (${gx}, ${gy}), overgeslagen`); // geen tekst
         return;
       }
       if (p.staat !== undefined) {
@@ -276,7 +276,7 @@
         // je heen en weer tussen twee gebieden. js/gebied.js zoekt in dat geval zelf een
         // begaanbare buurtegel.
         const komt = leesTegel(p.komt);
-        if (!komt) console.warn(`T.laadKaart: overgang naar "${p.overgang}" op (${gx}, ${gy}) zonder "komt"; het spel kiest zelf een tegel ernaast`);
+        if (!komt) console.warn(`T.laadKaart: overgang naar "${p.overgang}" op (${gx}, ${gy}) zonder "komt"; het spel kiest zelf een tegel ernaast`); // geen tekst
         overgangen.push({ x: gx, y: gy, naar: p.overgang, komt, tekst: typeof p.tekst === 'string' && p.tekst ? p.tekst : null });
         return;
       }
@@ -294,7 +294,7 @@
           if (p.gesprek) e.gesprek = String(p.gesprek);
           wezens.push(e);
         } catch (e) {
-          console.warn(`T.laadKaart: onbekend wezen "${p.wezen}" op (${gx}, ${gy}), overgeslagen`);
+          console.warn(`T.laadKaart: onbekend wezen "${p.wezen}" op (${gx}, ${gy}), overgeslagen`); // geen tekst
         }
         return;
       }
@@ -309,7 +309,7 @@
           if (p.huis !== undefined) e.huis = String(p.huis);
           wezens.push(e);
         } catch (e) {
-          console.warn(`T.laadKaart: onbekende mens "${p.wie}" op (${gx}, ${gy}), overgeslagen`);
+          console.warn(`T.laadKaart: onbekende mens "${p.wie}" op (${gx}, ${gy}), overgeslagen`); // geen tekst
         }
         return;
       }
@@ -325,7 +325,7 @@
         let bestemming = p.bestemming !== undefined ? String(p.bestemming) : 'akker';
         // Een verschrijving moet opvallen, in plaats van stil een akker te worden (T.BESTEMMINGEN, js/akkers.js).
         if (!T.BESTEMMINGEN.includes(bestemming)) {
-          console.warn(`T.laadKaart: akker "${p.akker}" heeft bestemming "${bestemming}"; dat is geen ${T.BESTEMMINGEN.join(', ')}. Hij wordt een akker.`);
+          console.warn(`T.laadKaart: akker "${p.akker}" heeft bestemming "${bestemming}"; dat is geen ${T.BESTEMMINGEN.join(', ')}. Hij wordt een akker.`); // geen tekst
           bestemming = 'akker';
         }
         akkers.push({
@@ -375,7 +375,7 @@
       // kan het niet zijn — dan zou er een muur komen en gaan waar net iemand liep.
       const grendel = p.quest !== undefined && T.questGrendel(String(p.quest));
       if (grendel && eig.vast) {
-        console.warn(`T.laadKaart: "${eig.naam}" op (${gx}, ${gy}) is vast en kan dus niet aan een quest hangen`);
+        console.warn(`T.laadKaart: "${eig.naam}" op (${gx}, ${gy}) is vast en kan dus niet aan een quest hangen`); // geen tekst
       } else if (grendel) {
         v.grendel = grendel;
         questVoorwerpen.push(v);
@@ -391,7 +391,7 @@
       }
     }
     for (const ding of (betekenis && betekenis.dingen) || []) {
-      zetNeer(ding, Math.round(ding.x), Math.round(ding.y), ding.tegel ? opzoekNaam(ding.tegel) : null, `"${ding.tegel || ding.wezen || ding.overgang || ding.staat || 'ding'}" uit het betekenisbestand`);
+      zetNeer(ding, Math.round(ding.x), Math.round(ding.y), ding.tegel ? opzoekNaam(ding.tegel) : null, `"${ding.tegel || ding.wezen || ding.overgang || ding.staat || 'ding'}" uit het betekenisbestand`); // geen tekst
     }
     // Wie een "huis" draagt (een boer), krijgt de akkers met datzelfde "huis" erbij: meestal één,
     // soms twee (boer1 en boer3 hebben er twee: een strook en een blok). js/akkers.js gebruikt
@@ -418,7 +418,7 @@
     // toren met kamers die je ontdekt. T.isZichtbaar (de mist-van-oorlog) is dus voor een
     // ingelezen kaart altijd "alles gezien"; dat hoort niet bij deze opdracht (T.isBegaanbaar,
     // T.isVast en T.raakt wel, en die vragen niets aan kamers).
-    const kamerBuiten = { id: 'buiten', naam: 'Buiten', x1: 0, y1: 0, x2: b - 1, y2: h - 1, vloer: ['#3c5e1e', '#355f22'] };
+    const kamerBuiten = { id: 'buiten', naam: T.t('Outside'), x1: 0, y1: 0, x2: b - 1, y2: h - 1, vloer: ['#3c5e1e', '#355f22'] };
     // Buiten is elke tegel gelijk: één rij die elke rij aanwijst, zodat het opslaan hem één keer schrijft (vraag 112).
     const buren = ['buiten'];
     const rij = new Array(b).fill(buren);
@@ -465,8 +465,8 @@
   // ingelezen .tmj terug, nog niet T.laadKaart erover heen.
   T.haalKaart = async function (naam) {
     if (T.KAARTEN && T.KAARTEN[naam]) return T.KAARTEN[naam];
-    const r = await fetch(`kaarten/${naam}.tmj`);
-    if (!r.ok) throw new Error(`T.haalKaart: kaart "${naam}" niet gevonden`);
+    const r = await fetch(`kaarten/${naam}.tmj`); // geen tekst
+    if (!r.ok) throw new Error(`T.haalKaart: kaart "${naam}" niet gevonden`); // geen tekst
     return r.json();
   };
 })(globalThis.Spel = globalThis.Spel || {});

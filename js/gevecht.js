@@ -32,9 +32,6 @@
   };
   // Wie er aan jouw kant nog meevecht.
   T.spelers = (S) => (S.gevecht ? S.gevecht.volgorde.filter((e) => e.kant === 'speler' && !e.dood) : [S.schout]);
-  // "Je slaat" of "Jan slaat": de schout ben jij, een man van de militie heeft een naam.
-  const wie = (S, v) => (v === S.schout ? 'Je' : v.naam);
-
   // Stap 1 van de overgang: de wereld bevriest. De spellus roept beginGevecht aan zodra
   // niemand meer onderweg is.
   T.startGevecht = function (S, aanleiding, schoutBegint) {
@@ -46,7 +43,7 @@
     for (const e of S.wereld.wezens) e.pad = e.onderweg ? [e.pad[0]] : [];
     if (!schoutBegint) aanleiding.alarm = 1.3;
     T.ui.verbergTooltip();
-    T.ui.bericht(schoutBegint ? `Je valt de ${aanleiding.naam} aan!` : `De ${aanleiding.naam} ziet je!`, 'gevaar');
+    T.ui.bericht(schoutBegint ? T.t('You attack the {wezen}.', { wezen: aanleiding.naam }) : T.t('The {wezen} sees you.', { wezen: aanleiding.naam }), 'gevaar');
   };
 
   // Stap 2: iedereen staat op een tegel. Wie doet mee, in welke volgorde, op welke vloer. Eerst jouw kant
@@ -72,7 +69,7 @@
     S.gevecht = { monsters, volgorde: [schout, ...militie, ...monsters], beurt: 0, ronde: 1, kamers, teller: 0 };
     // Wie van de militie nog ver weg is, rent erheen, en vecht mee als hij er is (js/rovers.js; zie ook volgendeBeurt).
     const nog = D ? T.militieKomtErbij(S, D).onderweg : [];
-    if (nog.length) T.ui.bericht(`${T.opsomming(nog.map((e) => e.naam))} ${nog.length === 1 ? 'is' : 'zijn'} nog onderweg.`);
+    if (nog.length) T.ui.bericht(T.t('{n|{wie} is still on the way.|{wie} are still on the way.}', { n: nog.length, wie: T.opsomming(nog.map((e) => e.naam)) }));
     S.rasterTegels = rasterVoor(w, kamers, S.gevecht.volgorde);
     S.rasterStart = S.tijd;
     S.rasterVan = T.tegelVan(schout);
@@ -191,7 +188,7 @@
       const D = T.dorpHier(S);
       const { erbij } = D ? T.militieKomtErbij(S, D) : { erbij: [] };
       if (erbij.length) {
-        T.ui.bericht(`${T.opsomming(erbij.map((e) => e.naam))} ${erbij.length === 1 ? 'komt' : 'komen'} erbij.`, 'goed');
+        T.ui.bericht(T.t('{n|{wie} joins the fight.|{wie} join the fight.}', { n: erbij.length, wie: T.opsomming(erbij.map((e) => e.naam)) }), 'goed');
         S.rasterTegels = rasterVoor(S.wereld, g.kamers, g.volgorde);
       }
     }
@@ -214,7 +211,7 @@
     S.bereik = null;
     T.ui.toonGevecht(false);
     T.ui.zetKnoppen(false);
-    T.ui.bericht(reden === 'kwijt' ? 'Ze zijn je kwijt. Het wordt weer stil.' : 'Het is weer stil.', 'rust');
+    T.ui.bericht(reden === 'kwijt' ? T.t('They have lost you. It goes quiet again.') : T.t('It is quiet again.'), 'rust');
     for (const m of S.wereld.wezens) {
       if (m.kant === 'monster' && !m.dood) m.dwaalTijd = 2.5;
     }
@@ -265,18 +262,18 @@
       const m = doel.wezen;
       const p = T.tegelVan(m);
       const k = T.SLAAN.kosten;
-      if (T.raakt(w, h, p)) return { tekst: `Slaan (${T.slagSchade(v).join('–')} schade)`, kosten: k, kan: ap >= k, doe: () => slaan(S, v, m, []) };
+      if (T.raakt(w, h, p)) return { tekst: T.t('Hit ({schade} damage)', { schade: T.slagSchade(v).join('–') }), kosten: k, kan: ap >= k, doe: () => slaan(S, v, m, []) };
       const pad = padVoor(S, v, p, true);
-      if (!pad) return { tekst: 'Je kunt er niet bij', kosten: 0, kan: false };
+      if (!pad) return { tekst: T.t('You cannot reach it'), kosten: 0, kan: false };
       const totaal = pad.length + k;
-      return { tekst: 'Erheen lopen en slaan', kosten: totaal, kan: ap >= totaal, doe: () => slaan(S, v, m, pad), pad };
+      return { tekst: T.t('Walk there and hit'), kosten: totaal, kan: ap >= totaal, doe: () => slaan(S, v, m, pad), pad };
     }
 
     if (doel.x === h.x && doel.y === h.y) return null;
     if (!T.isZichtbaar(w, doel.x, doel.y) || !T.isBegaanbaar(w, doel.x, doel.y, { deurenOpenen: true, wezensBlokkeren: true, wie: v })) return null;
     const pad = padVoor(S, v, { x: doel.x, y: doel.y }, false);
     if (!pad) return null;
-    return { tekst: 'Lopen', kosten: pad.length, kan: ap >= pad.length, doe: () => lopen(S, v, pad), pad };
+    return { tekst: T.t('Walk'), kosten: pad.length, kan: ap >= pad.length, doe: () => lopen(S, v, pad), pad };
   };
 
   function bezigMet(S) {
@@ -302,7 +299,7 @@
     T.ui.toonAp(v.ap, v.maxAp, 0, true);
     await T.anim.uitval(v, T.tegelVan(m));
     const n = worp(T.slagSchade(v));
-    T.ui.bericht(`${wie(S, v)} slaat de ${m.naam}: ${n} schade.`);
+    T.ui.bericht(v === S.schout ? T.t('You hit the {wezen}: {n} damage.', { wezen: m.naam, n }) : T.t('{naam} hits the {wezen}: {n} damage.', { naam: v.naam, wezen: m.naam, n }));
     raak(S, m, n);
     await T.anim.wacht(S, 320);
     naHandeling(S);
@@ -327,7 +324,7 @@
     if (!d || v.ap < T.DEUR_SLUITEN) return;
     v.ap -= T.DEUR_SLUITEN;
     d.staat = 'dicht';
-    T.ui.bericht(v === S.schout ? 'Je gooit de deur dicht.' : `${v.naam} gooit de deur dicht.`);
+    T.ui.bericht(v === S.schout ? T.t('You slam the door shut.') : T.t('{naam} slams the door shut.', { naam: v.naam }));
     naHandeling(S);
   };
 
@@ -384,7 +381,7 @@
     e.dood = true;
     e.sterfTijd = 0;
     e.pad = [];
-    if (bericht !== false) T.ui.bericht(`De ${e.naam} is verslagen.`, 'goed');
+    if (bericht !== false) T.ui.bericht(T.t('The {wezen} is defeated.', { wezen: e.naam }), 'goed');
     const D = T.dorpHier(S);
     if (e.rover && D) T.roverVerslagen(D, e);
     const g = S.gevecht;
@@ -407,13 +404,13 @@
     S.bezig = true;
     S.gevecht = null;
     T.ui.toonGevecht(false);
-    T.ui.bericht('Je valt, en je staat niet meer op.', 'gevaar');
+    T.ui.bericht(T.t('You fall, and you do not get up again.'), 'gevaar');
     T.anim.wacht(S, 1100).then(() => {
       T.ui.toonOverlay(
-        'Gevallen',
-        '<p>Je valt, en je staat niet meer op.</p>' +
-          '<p>De heer schrijft de nieuwe schout dat die beter moet opletten: zo’n begrafenis kost ook weer geld.</p>',
-        'Naar het titelscherm', // net als wie zijn ambt kwijt is (js/hud.js, T.ui.toonEinde)
+        T.t('Fallen'),
+        `<p>${T.t('You fall, and you do not get up again.')}</p>` +
+          `<p>${T.t('The lord writes to the new reeve that he had better take care: a funeral costs money too.')}</p>`,
+        T.t('To the title screen'), // net als wie zijn ambt kwijt is (js/hud.js, T.ui.toonEinde)
         () => T.naarTitelscherm(),
       );
     });
@@ -458,7 +455,8 @@
       if (!T.raakt(w, T.tegelVan(m), T.tegelVan(doel))) break;
       await T.anim.uitval(m, T.tegelVan(doel));
       const n = worp(m.aanval.schade);
-      T.ui.bericht(doel === S.schout ? `De ${m.naam} ${m.aanval.zin}: ${n} schade.` : `De ${m.naam} ${m.aanval.zin.replace(/\bje\b/, doel.naam)}: ${n} schade.`, 'gevaar');
+      const wat = T.vulTekst(m.aanval.zin, { doel: doel === S.schout ? T.t('you') : doel.naam }, T.taalLocale());
+      T.ui.bericht(T.t('The {wezen} {wat}: {n} damage.', { wezen: m.naam, wat, n }), 'gevaar');
       raak(S, doel, n);
       await T.anim.wacht(S, 380);
     }

@@ -234,7 +234,7 @@ test('een veteraan vecht mee als er rovers komen, ook zonder wachthuis, met meer
     assert.equal(e.maxLeven, T.WEZENS.veteraan.leven);
     assert.ok(T.WEZENS.veteraan.leven > T.WEZENS.wachter.leven);
   }
-  assert.ok(berichten.some((b) => /De (veteraan komt|veteranen komen) naar je toe/.test(b)));
+  assert.ok(berichten.some((b) => /The (veteran comes|veterans come) to your side/.test(b)));
 });
 
 test('met de spelregel uit vraagt de heer geen mannen, en wie al weg was, komt toch terug', () => {

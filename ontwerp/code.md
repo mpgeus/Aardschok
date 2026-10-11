@@ -143,8 +143,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (de koppen van het rekenboek, het plaatje van elk ding uit `DINGEN[...].naam`, de lat uit `SNELHEDEN`), en `document.title`
   en `lang` komen ook uit `js/ui.js`. Een toets staat als `<kbd>` (`kbd('Esc')`, nooit in de zin), en `Spel.debug` en de
   meldingen in de console blijven Nederlands (`// geen tekst`, `main.js` heeft er zo'n honderd). De klok in de balk is
-  `klokTekst` in `js/hud.js` ("half past seven"), met `DAGDELEN`; `T.uurTekst` in `js/dag.js` is nog Nederlands en wordt
-  nergens meer getoond. De namen van de provincies staan met een kleine letter (`T.LANDSOORTEN`: "the castle"), zodat ze in
+  `klokTekst` in `js/hud.js` ("half past seven"), met `DAGDELEN`; `T.uurTekst` in `js/dag.js` zegt het nu met dezelfde
+  woorden ("seven o'clock"; `js/menu.js` toont hem bij een bewaard spel). De namen van de provincies staan met een kleine letter (`T.LANDSOORTEN`: "the castle"), zodat ze in
   een zin passen ("You are in the castle"); de kaart zet de hoofdletter.
 - **Een zin uit de gegevens** (vraag 147, deel 5): een tabel die een bewerker terugschrijft (`T.bronBlok`), de gesprekken
   (`T.GESPREKKEN`) en de quests (`T.QUESTS`), houdt zijn Engelse zinnen als gewone tekst, want de bewerker kent geen
@@ -231,7 +231,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `opHetPlein`: op het plein wordt niet gebouwd, en `T.pleinTegels`: de tegels van het plein, één keer per kaart),
   wat er op een tegel staat (`T.voorwerpOp`, uit een lijst per tegel die de kaart zelf bijhoudt, niet in `S`; een voorwerp
   zet je erbij en haal je weg met `T.zetVoorwerp` en `T.haalVoorwerpWeg`, vraag 71: dit was 85% van een speeldag),
-  en de proefkamers (`T.maakProefkamers`): drie kamers in code voor de toetsen van het gevecht.
+  en de proefkamers (`T.maakProefkamers`): drie kamers in code voor de toetsen van het gevecht. De naam van een wezen staat
+  met een kleine letter ("the wolf" in de zin, `T.t('The {wezen} sees you.')`), en wat een monster doet, is
+  `aanval.zin` met `{doel}` erin (`T.t('bites {doel}')`): `js/gevecht.js` vult *you* of de naam van de man van de militie in
+  (`T.vulTekst`), zodat een vertaler de hele zin kan bouwen.
   Elke kaart van het spel komt uit Tiled (`js/kaart.js`). De speler is `S.schout`, met soort
   'schout' en kant 'speler' (Marcel, 26 sep: een man van de militie vecht later ook aan kant
   'speler' zonder de schout te zijn); hij draagt het vel van een gewone dorpeling (`js/sprites.js`).
