@@ -11,17 +11,21 @@ onderwerp, niet hier. Wie aan een punt begint, zet er "**Bezig in sessie `<branc
 ## Nu en daarna (11 okt)
 
 **Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en
-drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **B, 1c en 1d zijn af** (11
-okt): het bouwmenu, verhuizen uit het kamp, het bouwbereik, het huis van de schout, meebouwen en bouwen in het bos.
-**Het volgende punt is B, 1e: boeren uit het niets** (het plan is gekozen: `spel.md`, "Het plan voor 1e"). Ronde 2 van
-het snoeien volgt na 1f, dan het hele eiland (B2), de afwisseling (B3), en ronde 3 na C.
+drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **B, 1c tot 1e zijn af** (11
+okt): het bouwmenu, verhuizen uit het kamp, het bouwbereik, het huis van de schout, meebouwen, bouwen in het bos, en
+boeren uit het niets (de boerderij, de velden die jij legt, wijn is eten). **Het volgende punt is B, 1f: een jaar zonder
+fouten.** Ronde 2 van het snoeien volgt na 1f, dan het hele eiland (B2), de afwisseling (B3), en ronde 3 na C.
 
 **Wacht op Marcel:**
-- **1c en 1d bekijken:** Spelregels, "Het begin" op "Leeg", en dan Nieuw spel (of in de console
+- **1c tot 1e bekijken:** Spelregels, "Het begin" op "Leeg", en dan Nieuw spel (of in de console
   `Spel.debug.begin('leeg', 2)`). Is het kamp op, open dan het bouwmenu (B): het bouwbereik gloeit op de grond. Zet het huis van de schout neer, ook in het bos (de bouwers rooien eerst, en het hout
   komt in de voorraad), en een hut op open grond: wie geen werk heeft, loopt erheen en bouwt. Is de hut af, dan trekt
-  er een gezin in; is het huis af, dan verhuist de schout en wordt de huifkar de ossenkar. Te kiezen in de werkbank
-  ("Meebouwen"): twee werkdagen per bouwdag, vier bouwers per plaats, een kwart werkdag per boom.
+  er een gezin in; is het huis af, dan verhuist de schout en wordt de huifkar de ossenkar. Zet een boerderij neer en kies
+  in het bouwmenu de akker of de wijngaard: klik de ene hoek en dan de andere, bij de boerderij (rechtsklik haalt de
+  eerste hoek weg). Het eerste veld bepaalt wat de boerderij is; is ze af, dan trekt er een gezin in en is de man boer,
+  en een akker die vóór bloeimaand af is, wordt nog gezaaid. Te kiezen in de werkbank ("Meebouwen" en "Boeren uit het
+  niets"): twee werkdagen per bouwdag, vier bouwers per plaats, een kwart werkdag per boom, een veld van 12 tot 40
+  tegels binnen 8 tegels van de boerderij, en wat een tegel wijn voedt (`wijnAlsGraan`, 0,4).
 - **Het doel van de demo.** CLAUDE.md zegt nog "je wint als iedereen een jaar super gelukkig is"; dat is het oude spel.
   Voorstel van Claude (11 okt): de demo is het eerste jaar: je komt met de kar, bouwt, haalt de eerste winter, en het
   eind is het eerste gevecht (de mannen van de heer of rovers), zodat een speler in Next Fest de economie, het gevecht
@@ -54,13 +58,9 @@ Mee in elke ronde: het commentaar in de code dat "zie CLAUDE.md" zegt (een stuk 
 
 ## B. Zelf bouwen vanaf niets (vraag 152, stap 1)
 
-Het plan staat in het archief bij vraag 152; 1a (optie 1), 1b (het lege land), 1c (het kamp, met het bouwmenu) en 1d
-(binnen bereik, en met handen) zijn af; hoe het nu werkt: `spel.md`, "Zo werkt het lege begin nu".
-- **1e, boeren uit het niets:** je bouwt een boerderij en kiest akkerbouwer of wijnboer (Marcel, 11 okt: "Je kiest dan
-  agrariër of wijnboer. Zoals bij Knights and Merchants"); het gezin dat erin trekt, wordt die boer, zonder karakter
-  (Marcel: "De karakters zetten we even opzij"); de akkers leg jij, en de bouwers maken ze. Het plan, met wat Marcel
-  koos: `spel.md`, "Het plan voor 1e" (A2: één boerderij, en het eerste veld bepaalt; wijn is eten).
-  **Bezig in sessie `ccr-fe45ba8f-v51u8s`** (11 okt): het plan, met Marcel.
+Het plan staat in het archief bij vraag 152; 1a (optie 1), 1b (het lege land), 1c (het kamp, met het bouwmenu), 1d
+(binnen bereik, en met handen) en 1e (boeren uit het niets) zijn af; hoe het nu werkt: `spel.md`, "Zo werkt het lege
+begin nu".
 - **1f, een jaar zonder fouten:** een toets speelt een jaar vanaf een lege plek, met een speler in code die bouwt. Dan
   is "Leeg" het enige begin, en volgt ronde 2 van A.
 
@@ -121,6 +121,11 @@ het graan vraagt", de schandpaal, de heervaart en de twee bazen.
   schrijven voor de nieuwe richting, als B en C er staan.
 
 ## Af (sinds 11 okt)
+
+- Boeren uit het niets (vraag 152, 1e; Marcel: "A2", "Inderdaad met b2", "Ja dat is goed. De bouwers pakken het op", "De
+  karakters zetten we even opzij", "2 ja"): een gezin trekt in de boerderij en de man is boer, de akker en de wijngaard
+  trek je zelf met twee klikken en de bouwers maken ze, het eerste veld bepaalt de boerderij, en wijn vult een maag
+  (`js/boerderij.js`).
 
 - Binnen bereik, en met handen (vraag 152, 1d; Marcel: "a1, b ja, c ja, d ja, e ja"): het bouwbereik van 12 tegels, het
   huis van de schout in het bouwmenu (dan wordt de huifkar de ossenkar), meebouwen (`js/bouwen.js`) en bouwen in het bos.

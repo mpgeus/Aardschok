@@ -9,10 +9,18 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
-- **Het lege begin na 1c** (11 okt, vraag 152, 1c): met "Wie bouwt" op "Jij" staat ook de boerderij in het bouwmenu; tot
-  1e (boeren uit het niets) trekt daar een gewoon nieuw gezin in, zodra het kamp leeg is. En het venster Spelregels laat
-  bij "Huizen" en "Wie bouwt" nog hun eigen keuze zien, terwijl "Leeg" ze op "Jij" zet; dat gaat weg in ronde 2 van het
-  snoeien, als die twee spelregels eruit gaan.
+- **Het lege begin na 1c** (11 okt, vraag 152, 1c): het venster Spelregels laat bij "Huizen" en "Wie bouwt" nog hun eigen
+  keuze zien, terwijl "Leeg" ze op "Jij" zet; dat gaat weg in ronde 2 van het snoeien, als die twee spelregels eruit gaan.
+- **Boeren uit het niets, wat opviel** (11 okt, vraag 152, 1e). Na te lopen:
+  - Een wijngaard draagt al in het jaar dat hij geplant is volle trossen; echte ranken dragen pas na een paar jaar. Zo
+    blijft het eenvoudig; na 1f zien we of wijn zo te makkelijk is.
+  - Een boerderij heeft plaats voor 4 en een gezin van het kamp is 3: een nieuw gezin over de weg kan er een mens bij
+    zetten (`komenErBij` in `js/bewoners.js` vult het huis met de meeste plaats). De boer blijft het hoofd van het eerste
+    gezin (`T.boerVan`), maar of dat goed oogt, zien we pas als er weer gezinnen komen.
+  - Wie een akker ploegt of een wijngaard plant, staat met de bijl van de bouwers (zie "Bouwen met de bijl" hieronder);
+    een ploeg of een spade zou beter zijn. Mee in een ronde van de beelden.
+  - In het bouwmenu staat de beschrijving van een gebouw nog in het Nederlands, ook naast de Engelse uitleg van een veld;
+    en "A {gebouw} is already coming here" zegt in het Engels "A akker". Mee als de spelteksten om gaan (G).
 - **Het huis van de schout heeft nog geen bouwfasen** (11 okt, vraag 152, 1d): in aanbouw staat het bleek op de
   kaart, waar een hut of huis zijn fundering, muren en steigers laat zien (`tegels/bouwfasen.json`, uit
   `gereedschap/pixelart/bouwfasen.cjs`). Mee in een ronde van de beelden.

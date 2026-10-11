@@ -64,7 +64,7 @@ en je vecht in beurten, om je dorp te verdedigen
 en om het eiland te veroveren tot het kasteel van de heer, zoals in Jagged Alliance 2. Het verstoppen en heel "arm
 lijken" gaan eruit ("Rijk worden en arm lijken"). Wat dat is, wat er al is en wat ontbreekt: `gameloop.md`.
 
-**Zo werkt het lege begin nu** (11 okt, vraag 152, stap 1b, 1c en 1d; `js/begin.js`, `js/bouwen.js`): achter de spelregel "Het begin" op "Leeg"
+**Zo werkt het lege begin nu** (11 okt, vraag 152, stap 1b tot 1e; `js/begin.js`, `js/bouwen.js`, `js/boerderij.js`): achter de spelregel "Het begin" op "Leeg"
 (standaard nog het gehucht dat er al was, tot het lege begin een jaar draait, stap 1f). De maker legt op het eiland
 geen gehucht, alleen het land: het bos, het water, de heide en de wegen van het eiland, en een open plek die het plein
 wordt, met een paar oude eiken en het bos er vlak omheen (Marcel: "Klein, bos dichtbij"). Na de benoeming (de heer
@@ -90,31 +90,29 @@ bouwers staat het stil. Op bomen bouwen mag: de bouwers rooien eerst de voet en 
 en een boom geeft 10 hout, wie hem ook omhakt (a1: op de plek van een hut in het bos zo'n 350 hout; na 1f meten we of het
 te veel is). Tot de plek vrij is, ligt zijn voet in goud en komt er niets anders op. Waarom het bos: op negen van de
 dertien gemeten landen paste er binnen 30 tegels van het plein geen hut, want het bos staat er vlak omheen. De 50 hout
-uit de kar zijn het huis van de schout, twee hutten en een houthakker, als je op open grond bouwt. Nog niet: boeren
-worden, met de keuze akkerbouwer of wijnboer en de akkers die jij legt (1e); zonder bouwen haalt het kamp de winter niet.
-
-**Het plan voor 1e, boeren uit het niets** (voorstel van Claude, 11 okt; Marcel: "Inderdaad met b2", "Ja dat is goed. De
-bouwers pakken het op", en "De karakters zetten we even opzij. Ik weet niet of die handig zijn in de nieuwe setting"). Een
-boer is wie er op een boerderij woont, niet meer boer1 tot boer5 van de kaart (daar hangen nu zijn karakter, zijn akkers,
-het lot en zijn gesprek aan). b, een boerderij is een woning voor één gezin: een gezin uit het kamp trekt erin zoals in
-een hut, de man wordt de boer, en zijn vrouw en kind helpen bij het zaaien en de oogst. b2, is het kamp al leeg, dan
-verhuist een gezin uit een hut naar een lege boerderij: een nieuw gezin over de weg komt niet zolang er weinig graan is, en
-dan sterf je met een lege boerderij ("de settlers worden wat jij bouwt"). c, de akker leg jij: staat er een boerderij (ook
-in aanbouw), dan trek je een rechthoek (klik de ene hoek, klik de andere; slepen schuift het beeld), binnen 8 tegels van
-zijn boerderij en binnen bereik, van 12 tot 40 tegels (de werkbank). Hij kost alleen werk: de bouwers rooien (een boom
-geeft 10 hout) en ploegen, zoals bij een gebouw, en is hij vóór 1 bloeimaand klaar, dan zaait de boer hem nog in (de
-eerste lente is 60 dagen, zo'n 5 uur op 1×). De boer ontgint niet zelf (`js/ontginnen.js`, dat slaapt): in een proef
-kostte een stuk bos hem 41 tot 87 dagen, en dan mis je de eerste lente. d, geen karakters: de nieuwe boer is gewoon,
-zonder karakter, gesprek of eigenschappen (Claude las het zo: de eigenschappen komen uit hetzelfde lot); het lot en de
-karakters slapen tot ronde 2 (`snoeien.md`). **Wijn wordt eten** (Marcel: "Wijn wordt ook eten. Afwisseling wordt de
-kern. Mensen worden anders minder productief"): de afwisseling is vraag 154 in de werklijst (`gameloop.md`, "Besloten").
-a, **één boerderij, en het veld bepaalt** (Marcel: "Dus 1 boerderij, en het veld bepaald", en op het voorstel "A2"): in
-het bouwmenu staat één boerderij, en ernaast leg je een akker of een wijngaard; het eerste veld bepaalt wat hij is, een
-akkerbouwer of een wijnboer, en daarna krijgt hij alleen nog velden van die soort (oogst en pluk botsen niet, maar met
-afwisseling als kern zou een gemengde boerderij de keuze weghalen). De wijngaard wordt dus een veld dat je trekt zoals de
-akker (zoals in Knights and Merchants), en de bouwers planten de ranken; de wijnboerderij gaat in het lege begin uit het
-menu. **Wijn is eten** (Marcel: "2 ja"): één schakelaar, zoals vlees en vis, zodat een wijnboer het dorp voedt; de rest
-van de afwisseling is vraag 154.
+uit de kar zijn het huis van de schout, twee hutten en een houthakker, als je op open grond bouwt. **Boeren uit het
+niets** (1e, `js/boerderij.js`; Marcel: "Je kiest dan agrariër of wijnboer. Zoals bij Knights and Merchants", en op het
+plan van Claude: "A2", "Inderdaad met b2", "Ja dat is goed. De bouwers pakken het op", "De karakters zetten we even
+opzij. Ik weet niet of die handig zijn in de nieuwe setting", en "2 ja"): een boer is wie er op een boerderij woont, niet
+een van de vijf van de kaart. Een boerderij is een thuis voor één gezin: is ze af, dan trekt er een gezin uit het kamp in
+zoals in een hut, en is het kamp al leeg, dan verhuist er een gezin uit een hut heen (het gezin met de minste mensen die
+al werk hebben), want een nieuw gezin over de weg komt niet zolang er weinig graan is, en dan sterf je met een lege
+boerderij ("de settlers worden wat jij bouwt"). De man is de boer, zonder karakter of eigenschappen (het lot en de
+karakters slapen tot ronde 2, `snoeien.md`); zijn vrouw en kind helpen bij het zaaien en de oogst. **De velden leg jij**
+("A2: 1 boerderij, en het veld bepaald"): staat er een boerderij, ook nog in aanbouw, dan staan de akker en de wijngaard
+in het bouwmenu, en trek je een rechthoek: klik de ene hoek en dan de andere (slepen schuift het beeld), binnen 8 tegels
+van de boerderij en binnen bereik, van 12 tot 40 tegels, en een tegel vrij rond elk gebouw. Het eerste veld bepaalt wat
+de boerderij is, een akkerbouwer of een wijnboer, en daarna krijgt ze alleen nog velden van die soort: oogst en pluk
+botsen niet, maar met afwisseling als kern zou een gemengde boerderij de keuze weghalen. Een veld kost alleen werk: de
+bouwers rooien het (een boom geeft 10 hout) en ploegen of planten het, een akker 0,05 werkdag per tegel en een wijngaard
+0,1; tot het af is, ligt het in goud. Een akker die vóór 1 bloeimaand af is, zaaien de boeren nog in van het graan uit
+de kar (de eerste lente is 60 dagen, zo'n 5 uur op 1×), anders in de lente erna; een wijngaard krijgt een rij ranken om
+de rij, en het gezin plukt hem in wijnmaand, zoals de wijnboerderij, die in het lege begin niet meer in het menu staat.
+De boer ontgint niet zelf (`js/ontginnen.js` slaapt): in een proef kostte een stuk bos hem 41 tot 87 dagen, en dan mis je
+de eerste lente. Een boerderij zonder akker (een wijnboer, of nog geen veld) wil geen handen: haar boer werkt elders of
+bouwt mee, en die van een wijngaard plukt in wijnmaand. **Wijn is eten** (zie "Eten", hieronder), zodat een wijnboer het
+dorp voedt; een tegel wijngaard voedt evenveel als een tegel akker. Te kiezen in de werkbank ("Boeren uit het niets" en
+"Meebouwen"). Nog niet: een jaar zonder fouten met een speler in code die bouwt (1f).
 
 ## Een nieuwe richting (Marcel, 28 sep 2026)
 
@@ -1857,8 +1855,8 @@ Nog open na deel 1 (vragen van Claude):
   eet het dorp vóór het graan, de gezouten vis na de kaas. Daarvoor at het dorp alleen de vis die de huizen wilden, en
   bedierf de rest, ook in een voorjaar met honger.
   **Sinds 11 okt vult ook wijn een maag** (Marcel, bij de boeren van 1e: "Wijn wordt ook eten. Afwisseling wordt de
-  kern"; `wijnAlsGraan` in de werkbank): het dorp eet hem na het graan en de kaas, want hij bederft niet. De afwisseling
-  zelf is vraag 154.
+  kern"; `wijnAlsGraan` in de werkbank, 0,4, zodat een tegel wijngaard evenveel voedt als een tegel akker): het dorp
+  eet hem na het graan en de kaas, want hij bederft niet. De afwisseling zelf is vraag 154.
 - **Wijn** (8 okt; werklijst vraag 136; Marcel: "Ik wil z.s.m. aan een wijnboerderij", "Wijn wordt drank, zoals bier.
   Mensen dronken geen water", en "Ja zo bouwen"): een wijnboerderij is een boerderij met een gezin van boeren, en haar
   velden zijn wijngaarden. Ze komt in een dorp, en plukt in wijnmaand: dan maakt ze 10 wijn per dag met twee handen, de
