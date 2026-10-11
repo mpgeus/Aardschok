@@ -70,6 +70,7 @@ mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voo
    okt, avond): elke boom een van zijn vormen, de nieuwe soorten op de kaart, de spar dunner onder de sneeuw; en stap 2
    (11 okt; Marcel: "Ja, doe stap 2 met de sneeuw erbij"): de bomen in het jaar, met sneeuw op de takken. **Nu stap 3**,
    het groen eronder (de struiken, varens en graspollen staan nu groen in de sneeuw), dan d, de spullen bij de huizen.
+   **Bezig in sessie `ccr-2034e30c-d2iyg5`** (11 okt): het plan voor stap 3, met Marcel.
 1. Een proefversie voor Marcels 4K-scherm en een eerste tester (33d; `npm run proefversie`, ook `-- --windows`), met de
    graanzak erin. De laatste is van 3 okt (`36c713e`), zonder de verzoeken, de twee bazen, het ontginnen, de markt, de
    wolven, het eiland, WebGL en de graanzak.
