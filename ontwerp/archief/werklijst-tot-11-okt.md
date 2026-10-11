@@ -1,3 +1,7 @@
+> **Archief.** Dit is de werklijst tot 11 okt 2026, van het spel vóór de nieuwe richting (vraag 151). De werklijst
+> is nu `ontwerp/werklijst.md`; een vraagnummer tot 153 dat elders genoemd wordt, staat hier. Werk dit bestand niet
+> meer bij.
+
 # Werklijst: wat we doen, in welke volgorde
 
 Begin een sessie hier, bij **Nu en daarna**: wat loopt, wat op Marcel wacht, en wat erna komt, in volgorde.
