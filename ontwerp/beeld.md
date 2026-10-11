@@ -955,6 +955,41 @@ Nog ruw: het rennen is een gestileerde sprong van acht beelden en geen echte gal
 één vacht (geen zomer- en winterkleed) en één gewei (geen kaal gewei of fluweel); en de oren kunnen naar voren en achteren
 draaien, maar niet apart opzij.
 
+## De ossenkar en het kamp van het lege begin (11 okt 2026, werklijst vraag 152)
+
+Voor het lege begin (`werklijst.md`, vraag 152, stap 1: je begint op een lege plek met een kar met wat spullen en een paar
+gezinnen; Marcel, 11 okt: "Huifkar wordt ossenkar", en "Tent en afdak"). Alleen de kunst; wat het spel ermee doet, is 1b en 1c
+van dat punt. Twee bestanden in `gereedschap/pixelart/`, elk met een proefplaat in `uit/`.
+
+- **De ossenkar** (`ossenkar.cjs`, `uit/ossenkar-proef.png` en de rijdende huifkar `uit/ossenkar-rijden.png`): een kar op twee
+  hoge wielen (een meter, acht spaken, een ijzeren band), een bak van 1,8 bij 0,9 meter van planken tussen rongen, en
+  disselbomen tot het juk van een os. Hij komt aan als **huifkar**: een zeil van vergeeld linnen over vijf bogen, met lappen
+  van ander goed erop, aan de uiteinden samengetrokken, en achter een opening waar een zak, een kist en een deken uit kijken;
+  achteraan hangen een ketel en een emmer. Is het huis van de schout er, dan gaat het zeil eraf en is het de **ossenkar**,
+  met spullen, stammen, stenen, zakken of leeg (`LADINGEN`).
+- **De os** is de koe uit `vee.cjs` met `os` en `juk`: op ware maat (`SCHAAL.os` 1,0; een koe staat op 0,9), zonder uier,
+  met een spierbult op de schoft, een dikke hals en lange horens, en een juk van essenhout op de hals met een pen aan elke
+  kant en een riem onder de keel. Twee kleuren (`OS_KLEUREN`): vaal, licht grijsbeige met een donkere voorhand, en
+  roodbruin, donkerder dan de koe. De gewone koe en het schaap zijn er pixel voor pixel hetzelfde door gebleven.
+- **Rijden zonder glijden:** de kar rijdt in het tempo van de os (0,9 tegel per seconde, `SNELHEID.os`), en zijn wiel is zo
+  groot gemaakt dat het in een rondje van de os (acht beelden) precies een kwartslag draait, twee spaken ver: de omtrek is
+  vier keer de weg van een rondje (`WIEL`). Zo sluit de lus en rolt het wiel over de grond.
+- **Twee houdingen**, elk een lus van acht beelden, in de acht richtingen: staan (de os herkauwt en zwiept met zijn staart)
+  en rijden. Het anker ligt halverwege de achterkant van de kar en de snuit van de os; de cel is 216×156 met het anker op
+  (108, 116), gemeten over alle richtingen (de kar met os is vier tegels lang).
+- **Het kamp** (`kamp.cjs`, `uit/kamp-proef.png`, het vuur bewegend in `uit/kampvuur.png`, en met `--plein` het kamp met de
+  huifkar zoals het op het plein kan staan, `uit/kamp-plein.png`): een **tent** van hetzelfde linnen als het zeil (of van
+  bruin wol, `bruin`), een nokentent op twee palen met de flappen opzij gebonden, scheerlijnen en haringen; een **afdak**
+  van takken op twee gaffels, met vier huiden op het dak (een koe, een geit, een schaap en een rund, elk met pootjes en
+  een rafelige rand), de zijkanten dicht met een huid (van voren zie je het steile dak bijna op de kant), en stro en een
+  deken eronder; en het **kampvuur**: de vuurkuil van de kolenbrander (`bosgebied.cjs`) met zes vlammen die op en neer gaan
+  (acht beelden, 10 per seconde) en een driepoot met een ketel aan een ketting, in drie standen: het brandt, het smeult, of
+  het is uit. De tent en het afdak hebben een open kant en komen elk in vier richtingen (de opening naar ZO, ZW, NW of NO,
+  langs de tegels, zoals een deur); het vuur is één tekening. Het licht en de vonken komen uit de code, zoals bij de brand.
+
+Nog open: welke kleur os (de vaal of de roodbruine), of het zeil zo vaal mag, en de vellen voor het spel (`beelden/`), als
+Marcel de platen goed vindt.
+
 ## De heide (25 sep 2026)
 
 Nieuwe grondsoort voor de meent, waar de schapen van het gehucht grazen (Marcel koos dit op 25 sep,
