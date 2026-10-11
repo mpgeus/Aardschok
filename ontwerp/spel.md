@@ -1856,6 +1856,9 @@ Nog open na deel 1 (vragen van Claude):
   net als vlees** (Marcel: "Vis mag een maag vullen, zoals vlees"; de spelregel "Vis"): wat het zout niet goed houdt,
   eet het dorp vóór het graan, de gezouten vis na de kaas. Daarvoor at het dorp alleen de vis die de huizen wilden, en
   bedierf de rest, ook in een voorjaar met honger.
+  **Sinds 11 okt vult ook wijn een maag** (Marcel, bij de boeren van 1e: "Wijn wordt ook eten. Afwisseling wordt de
+  kern"; `wijnAlsGraan` in de werkbank): het dorp eet hem na het graan en de kaas, want hij bederft niet. De afwisseling
+  zelf is vraag 154.
 - **Wijn** (8 okt; werklijst vraag 136; Marcel: "Ik wil z.s.m. aan een wijnboerderij", "Wijn wordt drank, zoals bier.
   Mensen dronken geen water", en "Ja zo bouwen"): een wijnboerderij is een boerderij met een gezin van boeren, en haar
   velden zijn wijngaarden. Ze komt in een dorp, en plukt in wijnmaand: dan maakt ze 10 wijn per dag met twee handen, de

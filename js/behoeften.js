@@ -117,6 +117,10 @@
     // speeltest at het dorp in de tweede winter zijn zaaigraan op.
     broodAlsGraan: 1,
     visAlsGraan: 1,
+    // Wijn vult een maag (Marcel, 11 okt, bij de boeren van 1e: "Wijn wordt ook eten. Afwisseling wordt de kern"), zodat een
+    // wijnboer het dorp voedt zoals een akkerbouwer: één wijn vult zoveel als wijnAlsGraan graan (0: geen eten). Hij
+    // bederft niet, dus het dorp eet hem na het graan en de kaas, zoals gezouten vlees. De afwisseling zelf is vraag 154.
+    wijnAlsGraan: 1,
   };
 
   // `gezegd`: wat het dorp deze winter al zei dat op raakte (het hout, het eten; zegDeWinter onderaan).
@@ -162,11 +166,11 @@
     const v = D.voorraad || {};
 
     // Wat er vandaag te eten is: de melk van vandaag (js/vee.js, T.tikVeeDag), het graan, de kaas, en
-    // het vlees als dat een maag vult (T.vleesEnVisAlsEten). Tot 28 sep telde het vlees hier niet, terwijl
+    // het vlees, de vis en de wijn als die een maag vullen (T.etenNaastGraan). Tot 28 sep telde het vlees hier niet, terwijl
     // het dorp het wel at (T.eetVandaag): met alleen vlees in de schuur stierven er in de winter
     // mensen van de honger.
     const voedselBenodigd = bevolking * T.etenPerMens(D);
-    const voedsel = ((D.vee && D.vee.melk) || 0) + (v.graan || 0) + (v.kaas || 0) + T.vleesEnVisAlsEten(D);
+    const voedsel = ((D.vee && D.vee.melk) || 0) + (v.graan || 0) + (v.kaas || 0) + T.etenNaastGraan(D);
     const voedselDekking = voedselBenodigd > 0 ? Math.min(1, voedsel / voedselBenodigd) : 1;
     const extraSoorten = ['groente', 'vis', 'vlees'].filter((wat) => (v[wat] || 0) >= IN.extraVoedselDrempel);
     const voedselFactor = voedselDekking * (0.5 + 0.5 * (extraSoorten.length / 3));
@@ -789,7 +793,8 @@
   // Geeft { nodig, melk, graan, kaas, kaasErbij, tekort }: wat er van elk gegeten is.
   // Sinds 25 sep telt ook vlees (vleesIsEten): wat het zout niet goed houdt, eet het dorp na de melk en
   // vóór het graan, want dat bederft anders toch; gezouten vlees pas als het graan en de kaas op zijn.
-  // Geeft ook `vlees`: wat er van het vlees gegeten is (in vlees, niet in graan). Wat de huizen vandaag al aten aan brood,
+  // Sinds 11 okt ook wijn (wijnAlsGraan), na het graan en de kaas. Geeft ook `vlees`, `vis` en `wijn`: wat ervan gegeten
+  // is (in stuks, niet in graan). Wat de huizen vandaag al aten aan brood,
   // vis en vlees van hun wensen (`alGegeten`, in graan; T.gebruikGoederen in js/wensen.js, vraag 92, a), hoeft het dorp
   // niet meer te eten.
   T.eetVandaag = function (D, dag = D.kalender ? Math.floor(D.kalender.dag) : 0, alGegeten = 0) {
@@ -818,7 +823,9 @@
     const apart = Math.min(v.graan || 0, T.zaaigraanApart(D, dag));
     const graan = Math.max(0, Math.min(open, (v.graan || 0) - apart));
     const kaas = Math.max(0, Math.min(open - graan, v.kaas || 0));
-    let rest = open - graan - kaas;
+    const perWijn = IN.wijnAlsGraan || 0;
+    const wijn = perWijn > 0 ? Math.max(0, Math.min((open - graan - kaas) / perWijn, v.wijn || 0)) : 0;
+    let rest = open - graan - kaas - wijn * perWijn;
     for (const wat of soorten) {
       gezouten[wat] = Math.max(0, Math.min(rest / per[wat], v[wat] - vers[wat]));
       rest -= gezouten[wat] * per[wat];
@@ -832,6 +839,7 @@
     if (graan + zaaigraan > 0) T.wijzigVoorraad(D, 'graan', -(graan + zaaigraan));
     zegHetZaaigraan(D, zaaigraan, apart);
     if (kaas > 0) T.wijzigVoorraad(D, 'kaas', -kaas);
+    if (wijn > 0) T.wijzigVoorraad(D, 'wijn', -wijn);
     if (vlees > 0) T.wijzigVoorraad(D, 'vlees', -vlees);
     if (vis > 0) T.wijzigVoorraad(D, 'vis', -vis);
     // Wie gezouten vlees of vis eet, eet het zout mee op, net als in pasBederfToe hieronder.
@@ -840,7 +848,7 @@
     const kaasErbij = (melkVandaag - melk) * (T.VEE_INSTELLINGEN ? T.VEE_INSTELLINGEN.melkNaarKaas : 0);
     if (kaasErbij > 0) T.wijzigVoorraad(D, 'kaas', kaasErbij);
     if (D.vee) D.vee.melk = 0;
-    return { nodig, melk, vlees, vis, graan: graan + zaaigraan, zaaigraan, kaas, kaasErbij, tekort: Math.max(0, rest - zaaigraan) };
+    return { nodig, melk, vlees, vis, wijn, graan: graan + zaaigraan, zaaigraan, kaas, kaasErbij, tekort: Math.max(0, rest - zaaigraan) };
   };
 
   // Eet het dorp van het zaaigraan, dan zegt het dat één keer per winter, en schrijft het het op voor het rapport
@@ -858,20 +866,21 @@
   }
 
   // Hoeveel graan één stuk van dit goed vult, als een huis het krijgt voor zijn wensen (T.gebruikGoederen, js/wensen.js;
-  // vraag 92, a): brood, vis, en vlees als vlees eten is. Wat geen eten is (bier, laken), 0.
-  const ALS_GRAAN = { brood: 'broodAlsGraan', vis: 'visAlsGraan', vlees: 'vleesAlsGraan' };
+  // vraag 92, a): brood, vis, wijn, en vlees als vlees eten is. Wat geen eten is (bier, laken), 0.
+  const ALS_GRAAN = { brood: 'broodAlsGraan', vis: 'visAlsGraan', vlees: 'vleesAlsGraan', wijn: 'wijnAlsGraan' };
   T.voedtAlsGraan = function (soort) {
     const IN = T.BEHOEFTEN_INSTELLINGEN;
     if (!ALS_GRAAN[soort] || (soort === 'vlees' && !IN.vleesIsEten)) return 0;
     return IN[ALS_GRAAN[soort]] || 0;
   };
 
-  // Hoeveel het vlees en de vis in de voorraad het dorp nog voeden, in graan (wat geen eten is, telt niet): voor het
-  // venster van de heer (js/heer.js, T.heerVooruitzicht) en of het eten de winter haalt.
-  T.vleesEnVisAlsEten = function (D) {
+  // Hoeveel het vlees, de vis en de wijn in de voorraad het dorp nog voeden, in graan (wat geen eten is, telt niet): voor
+  // het venster van de heer (js/heer.js, T.heerVooruitzicht) en of het eten de winter haalt.
+  T.etenNaastGraan = function (D) {
     const IN = T.BEHOEFTEN_INSTELLINGEN;
     const v = D.voorraad || {};
-    return (IN.vleesIsEten ? (v.vlees || 0) * (IN.vleesAlsGraan || 0) : 0) + (IN.visIsEten ? (v.vis || 0) * (IN.visAlsGraan || 0) : 0);
+    return (IN.vleesIsEten ? (v.vlees || 0) * (IN.vleesAlsGraan || 0) : 0) + (IN.visIsEten ? (v.vis || 0) * (IN.visAlsGraan || 0) : 0)
+      + (v.wijn || 0) * (IN.wijnAlsGraan || 0);
   };
 
   // ---------------------------------------------------------------------------------------------
@@ -959,7 +968,7 @@
     // Wat er nog als schoven op het veld staat, komt binnen (js/akkers.js, vraag 140).
     const graan = Math.max(0, (v.graan || 0) + T.graanOpHetVeld(D) - T.zaaigraanApart(D, van));
     const r = T.haaltDeWinter({
-      voorraad: graan + (v.kaas || 0) + T.vleesEnVisAlsEten(D),
+      voorraad: graan + (v.kaas || 0) + T.etenNaastGraan(D),
       voorWinter: melkVoor - eet * tot,
       perWinterdag: eet - melkIn,
       winter: duur,

@@ -853,3 +853,19 @@ test('het zaaigraan: van de oogst tot het zaaien achtergehouden, en pas bij nood
     T.VELDEN_INSTELLINGEN.zaaigraanApart = true;
   }
 });
+
+test('wijn vult een maag, na het graan en de kaas (Marcel, 11 okt: "Wijn wordt ook eten")', () => {
+  const S = maakS();
+  S.bevolking = 20; // samen 1 graan per dag
+  T.zetVoorraad(S, 'graan', 0.4);
+  T.zetVoorraad(S, 'kaas', 0.1);
+  T.zetVoorraad(S, 'wijn', 3);
+  const r = T.eetVandaag(S, ZOMERDAG);
+  assert.ok(bijna(r.graan, 0.4) && bijna(r.kaas, 0.1), 'eerst het graan en de kaas');
+  assert.ok(bijna(r.wijn, 0.5 / T.BEHOEFTEN_INSTELLINGEN.wijnAlsGraan), `dan de wijn: ${r.wijn}`);
+  assert.ok(bijna(r.tekort, 0), 'niemand komt tekort');
+  assert.ok(bijna(S.voorraad.wijn, 3 - r.wijn));
+  // En het dorp rekent ermee, als het kijkt of het eten de winter haalt.
+  assert.ok(bijna(T.etenNaastGraan(S), S.voorraad.wijn * T.BEHOEFTEN_INSTELLINGEN.wijnAlsGraan));
+  assert.equal(T.voedtAlsGraan('wijn'), T.BEHOEFTEN_INSTELLINGEN.wijnAlsGraan);
+});
