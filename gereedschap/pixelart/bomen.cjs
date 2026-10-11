@@ -1959,7 +1959,8 @@ function akkerbloem(soort, zaad = 1, o = {}) {
     const a = R(20 + i) * Math.PI * 2;
     const b = R(60 + i) * Math.PI * 2;
     const r = R(30 + i) * 3;
-    const h = (13 + R(40 + i) * 9) * hoog;
+    // niet hoger dan wat plat in de grond ligt (PLAT_HOOG in js/tekenen.js): zo kosten ze per beeld niets
+    const h = (11 + R(40 + i) * 7) * hoog;
     const voet = [Math.cos(b) * r, Math.sin(b) * r, 0];
     // ze waaieren uit, zodat je elke stengel ziet
     const uit = 5 + R(70 + i) * 7;
@@ -2625,9 +2626,8 @@ const jongeEik = (zaad = 1, o = {}) => eik(zaad, { ...o, jong: true });
 const jongeDen = (zaad = 1, o = {}) => den(zaad, { ...o, jong: true });
 const jongeBerk = (zaad = 1, o = {}) => berk(zaad, { ...o, jong: true });
 
-const BEGROEIING = ['struik', 'bessenStruik', 'varen', 'grasPol', 'hoogGras', 'bloemen', 'paddenstoelen', 'boomstronk', 'rots', 'kleineRots'];
-// het groen eronder dat er met vraag 148, stap 3 bij komt (nog niet in het spel: eerst de proefplaat)
-const NIEUW_GROEN = ['klaproos', 'korenbloem', 'brandnetel', 'brem', 'distel', 'lisdodde', 'waterlelie', 'braam', 'heide'];
+// het vel van de begroeiing (naar-tiled.cjs), met achteraan het groen eronder van vraag 148, stap 3
+const BEGROEIING = ['struik', 'bessenStruik', 'varen', 'grasPol', 'hoogGras', 'bloemen', 'paddenstoelen', 'boomstronk', 'rots', 'kleineRots', 'klaproos', 'korenbloem', 'brandnetel', 'heide', 'brem', 'distel', 'lisdodde', 'waterlelie', 'braam'];
 
 module.exports = {
   eik,
@@ -2677,7 +2677,6 @@ module.exports = {
   waterlelie,
   braam,
   heide,
-  NIEUW_GROEN,
   grasVloer,
   stempel,
   opStempel,

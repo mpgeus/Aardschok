@@ -378,8 +378,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   met `seizoen` in `tegels.js`), dat pas laadt in zijn seizoen (`T.sprites.zetSeizoen`, elk beeld uit `T.boomSeizoen(S)`
   in `js/bos.js`: per maand `bomenInHetJaar`, en sneeuw op de takken vanaf `sneeuwOpDeBomen`; de spelregel "De bomen in
   het jaar"); tot het er is, en wat in een seizoen niet anders is, staat in de zomer. Een kale boom rendert zo'n
-  anderhalve minuut, dus `npm run tiled bomen-winter` en `bomen-sneeuw` elk ruim een uur, in een eigen taak. De maker legt de nieuwe soorten met een vaste keus per
-  tegel (`ANDERE_BOMEN` in `js/maker.js`), zonder zijn lot te raken. Een kaart leest een gid zoals Tiled (`js/kaart.js`),
+  anderhalve minuut, dus `npm run tiled bomen-winter` en `bomen-sneeuw` elk ruim een uur, in een eigen taak. **Het groen
+  eronder net zo** (stap 3, 11 okt): de begroeiing in vormen (`BEGROEIING_VORMEN` in `naar-tiled.cjs`) en per seizoen
+  (`begroeiing-lente`, ...; alle vier in een paar minuten), met de nieuwe soorten klaproos, korenbloem, brandnetel, heide,
+  brem, distel, lisdodde, waterlelie en braam (de braam en de brem zijn struiken in `T.BOMEN`); wat plat in de grond ligt,
+  tekent de grond opnieuw als het seizoen er is (`T.sprites.seizoenVanDeBomen`). De maker legt de nieuwe soorten met een
+  vaste keus per tegel (`ANDERE_BOMEN` in `js/maker.js`, en het groen eronder langs de akkers, achter de huizen, op de
+  heide, aan en op het water en aan de bosrand: `akkerrand` en verder in `T.MAKER_INSTELLINGEN.groei`), zonder zijn lot
+  te raken. Een kaart leest een gid zoals Tiled (`js/kaart.js`),
   dus een vel mag groeien. Laadt alles met
   `Image`, nooit `getImageData`: anders werkt `file://` niet meer. **De vellen zijn ingepakt**
   (vraag 114, 2a; samen zo'n 210 MB in de browser, was 900): een vel met voorwerpen in `tegels/` zegt per tegel
@@ -1350,7 +1356,7 @@ gemist wordt; `('dorpelingen')` laat alleen die stand zien.
 `Spel.debug.hoogte()` zegt of de kaart hoogte heeft, waar het hoogste punt is, de richel en zijn helling, en hoe hoog de
 schout staat; `(5)` begint een nieuw spel op land 5 met heuvels (de spelregel "Hoogte" op "Heuvels"), `('top')` zet de
 schout op het hoogste punt.
-`Spel.debug.bomen = 'herfst'` laat de bomen zien in een seizoen naar keus (`'lente'`, `'zomer'`, `'winter'`, `'sneeuw'`;
+`Spel.debug.bomen = 'herfst'` laat de bomen en het groen eronder zien in een seizoen naar keus (`'lente'`, `'zomer'`, `'winter'`, `'sneeuw'`;
 `null` weer dat van de kalender), zonder door het jaar te springen.
 `Spel.debug.gehucht()` zegt of dit het ontworpen gehucht is of een van de maker, en uit welk zaad; `(3)` begint nu een
 nieuw spel op het gehucht van zaad 3 (zonder brief), zoals op de pagina "Gehuchten van de maker": het land van de maker

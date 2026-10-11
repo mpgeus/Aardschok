@@ -89,6 +89,10 @@
     bessenStruik: { struik: true, wind: 3, vlak: ['#3a5f2c', 16, 0.3], rand: true },
     meidoorn: { struik: true, wind: 3, vlak: ['#4b6e2c', 26, 0.3] },
     hazelaar: { struik: true, wind: 3, vlak: ['#557a32', 28, 0.3] },
+    // het groen eronder (vraag 148, stap 3; Marcel, 11 okt: de braam en de brem staan in de weg en je rooit ze zoals een
+    // struik): de braam aan de bosrand, de brem op de heide
+    braam: { struik: true, wind: 2, vlak: ['#34552a', 16, 0.32] },
+    brem: { struik: true, wind: 3, vlak: ['#4f7a2a', 18, 0.26] },
   };
   // Een boom van het bos (geen struik, niet van iemand), op zijn soort.
   T.isBosBoom = (soort) => !!T.BOMEN[soort] && !T.BOMEN[soort].struik && !T.BOMEN[soort].eigen;

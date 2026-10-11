@@ -52,6 +52,9 @@ mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voo
   - De brand slaat over (vraag 144): bij groot brandgevaar, als niemand blust, de helft van de keren op het dichtste huis
     binnen vijf tegels, één keer. En de pestbos: een bos stro aan een paal naast de deur van een huis met een zieke
     (`Spel.debug.koorts('nu')`); op ware grootte klein, dus groter of feller als hij beter moet opvallen.
+- Het groen eronder bekijken (vraag 148, stap 3, 11 okt): een nieuw spel, of `Spel.debug.gehucht(5)`, en dan
+  `Spel.debug.bomen = 'zomer'` (of `'lente'`, `'herfst'`, `'winter'`, `'sneeuw'`): de akkerranden rood en blauw, de
+  heide paars, waterlelies op de vijver, lisdodde aan de oever, brandnetels achter de huizen, bramen aan de bosrand.
 - De bomen bekijken (vraag 148, stap 1 en 2, 11 okt): elke boom een van zijn vormen, de nieuwe soorten, en de bomen in
   het jaar met sneeuw op de takken; `Spel.debug.bomen = 'herfst'` (of `'lente'`, `'winter'`, `'sneeuw'`, met
   `Spel.debug.weer('sneeuw', 0.6)` voor de grond). Lentemaand is al lente, zodat een spel niet kaal begint.
@@ -69,9 +72,10 @@ mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voo
    huizen; de sneeuw op de bomen en de huizen (144, 4b, Marcel: "ja") in dezelfde ronde. Stap 1 staat in het spel (10
    okt, avond): elke boom een van zijn vormen, de nieuwe soorten op de kaart, de spar dunner onder de sneeuw; en stap 2
    (11 okt; Marcel: "Ja, doe stap 2 met de sneeuw erbij"): de bomen in het jaar, met sneeuw op de takken. **Nu stap 3**,
-   het groen eronder (de struiken, varens en graspollen staan nu groen in de sneeuw), dan d, de spullen bij de huizen.
-   **Bezig in sessie `ccr-2034e30c-d2iyg5`** (11 okt): stap 3; de proefplaat is goed (Marcel: "Ja voor nu goed"), nu
-   het spel in.
+   het groen eronder, en dat staat in het spel (11 okt, op de branch `ccr-2034e30c-d2iyg5`): de begroeiing in vormen en
+   in het jaar, en de nieuwe soorten langs de akkers, achter de huizen, op de heide, aan het water en aan de bosrand.
+   **Nu d**, de spullen bij de huizen, samen met de ronde van de huizen (die loopt in een andere sessie).
+   **Bezig in sessie `ccr-2034e30c-d2iyg5`** (11 okt): stap 3 is af op de branch, wacht op Marcel om naar `main` te gaan.
 1. Een proefversie voor Marcels 4K-scherm en een eerste tester (33d; `npm run proefversie`, ook `-- --windows`), met de
    graanzak erin. De laatste is van 3 okt (`36c713e`), zonder de verzoeken, de twee bazen, het ontginnen, de markt, de
    wolven, het eiland, WebGL en de graanzak.
@@ -7575,12 +7579,28 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     vormen; elk kent `o.seizoen` (de struik kaal in de winter, de bessenstruik in bloei in de lente, de varen roestbruin en
     dan dor, het gras strogeel, in de lente madeliefjes en boterbloemen, in de herfst een grote groep paddenstoelen en in de
     winter alleen bruin blad), de stronk en de stenen alleen sneeuw; wat plat ligt, krijgt sneeuw in vlekken
-    (`sneeuwVlekken`; anders werd een varen helemaal wit). De nieuwe soorten (`NIEUW_GROEN`): klaproos, korenbloem,
+    (`sneeuwVlekken`; anders werd een varen helemaal wit). De nieuwe soorten (achteraan `BEGROEIING`): klaproos, korenbloem,
     brandnetel, heide, brem, distel, lisdodde, waterlelie en braam. Zonder seizoen of vorm tekent elke oude plant pixel
     voor pixel als vroeger (nagekeken), en een plant rendert in minder dan een seconde, de sneeuw in een paar. **Marcel
     (11 okt): "Ja voor nu goed".** Wat nog kan schuren (van Claude): de brandnetels lijken van dichtbij een donker struikje,
     de braam lijkt in de zomer op de struik, en het hoge gras was in de zomer al droog. Dan het spel: de vellen per
     seizoen, de vormen per tegel, en de maker die de nieuwe soorten legt.
+    **Het spel in (11 okt; Marcel: "Ja akkoord"):** A, de braam en de brem staan in de weg zoals de struik, en je rooit ze
+    zoals een struik (brandnetels, lisdodde en bloemen loop je door); B, duidelijk: de akkerranden rood en blauw in de
+    zomer, de heide paars. Alleen een nieuw spel krijgt de nieuwe soorten; de seizoenen en de vormen gelden overal.
+    **Stap 3 in het spel (11 okt):** het vel van de begroeiing heeft 54 tekeningen (was 10): de struik en de bessenstruik
+    in vier vormen, de varen, het gras en het hoge gras in drie, de bloemen en de paddenstoelen in drie zaden, en de negen
+    nieuwe soorten in drie (de heide in vier; `BEGROEIING_VORMEN` in `naar-tiled.cjs`); en per seizoen een vel
+    (`begroeiing-lente`, `-herfst`, `-winter`, `-sneeuw`, alle vier in een paar minuten), dat laadt zoals dat van de bomen.
+    Wat plat in de grond ligt (het gras, de bloemen, de klaproos en de korenbloem, de heide, de waterlelie), tekent de
+    grond opnieuw als het vel van het seizoen er is (`T.sprites.seizoenVanDeBomen`, nu voor alle vellen van dat seizoen).
+    De braam en de brem zijn struiken in `T.BOMEN` (in de weg, en je rooit ze). De maker legt het groen eronder met een
+    vaste keus per tegel, na wat hij legde, zodat elk land verder ligt zoals het lag (zelfde poging, niets weg): langs de
+    akkers klaprozen en korenbloemen, achter de huizen brandnetels (drie tegels achter de kant zonder deur), op de heide
+    plukjes heide, distels en brem, aan het water lisdodde, op het water waterlelies (niet in zee) en aan de bosrand
+    bramen (`akkerrand`, `achterHuis`, `heideGroen`, `oeverGroen`, `waterGroen`, `bosrand` in
+    `T.MAKER_INSTELLINGEN.groei`). Op land 5 zo'n 260 planten erbij; op het eiland met veel heide tot 1300, bijna alle plat.
+    Toetsen: `test/groen.test.cjs`.
 149. **Kleren naar stand** (Marcel, 10 okt: "Hogere niveau sociale mensen moeten duurdere kleren krijgen").
     **Wat er nu is:** 24 uiterlijken per volwassen lijf en 12 per kind en per oude (vraag 145,
     `gereedschap/pixelart/uiterlijk.cjs`), allemaal boerenkleren: een kiel, klompen, lappen en vuil, in gedempte verf.
