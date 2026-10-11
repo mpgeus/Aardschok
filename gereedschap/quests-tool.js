@@ -77,41 +77,42 @@
   // "Kies een vorm en je hebt een werkend geraamte" (ontwerp/verhaal.md). Elke vorm levert
   // meteen iets op dat de toets van drie antwoorden haalt: drie wegen die niet hetzelfde kosten.
   // Dat is geen versiering — het is de regel die anders pas opvalt als de quest al af is.
+  // Wat de speler ziet (naam, doel, melding) is Engels, zoals elke speltekst (vraag 147, ontwerp/engels.md).
   const VORMEN = {
     'Haal iets': () => ({
-      naam: 'Nieuwe quest', gever: '', begin: 'zoeken',
+      naam: 'New quest', gever: '', begin: 'zoeken',
       fasen: {
         zoeken: {
-          doel: 'Zoek het ding.',
+          doel: 'Find the thing.',
           wegen: {
             zelf: { kost: 'risico', naar: 'terug', klaarAls: { heeft: 'ding' } },
             kopen: { kost: 'goud', naar: 'terug', doe: { goud: -10, geef: 'ding' } },
             vragen: { kost: 'gunst', naar: 'terug', doe: { geef: 'ding' } },
           },
         },
-        terug: { doel: 'Breng het terug.', wegen: { afgeven: { kost: 'niets', naar: 'klaar', doe: { neem: 'ding' } } } },
-        klaar: { eind: true, melding: 'Het is gelukt.', beloning: { goud: 10 } },
+        terug: { doel: 'Bring it back.', wegen: { afgeven: { kost: 'niets', naar: 'klaar', doe: { neem: 'ding' } } } },
+        klaar: { eind: true, melding: 'It is done.', beloning: { goud: 10 } },
       },
     }),
     'Ruim iets op': () => ({
-      naam: 'Nieuwe quest', gever: '', begin: 'erheen',
+      naam: 'New quest', gever: '', begin: 'erheen',
       fasen: {
         erheen: {
-          doel: 'Doe iets aan wat daar zit.',
+          doel: 'Deal with what is in there.',
           wegen: {
             vechten: { kost: 'jaren', naar: 'klaar', klaarAls: { vlag: 'hetIsWeg' } },
             weglokken: { kost: 'risico', naar: 'klaar', klaarAls: { vlag: 'hetIsWeg' } },
             iemandVragen: { kost: 'goud', naar: 'klaar', doe: { goud: -10, zetVlag: 'hetIsWeg' } },
           },
         },
-        klaar: { eind: true, melding: 'Het is weg.', beloning: { goud: 15 } },
+        klaar: { eind: true, melding: 'It is gone.', beloning: { goud: 15 } },
       },
     }),
     'Maak een keuze': () => ({
-      naam: 'Nieuwe quest', gever: '', begin: 'kiezen',
+      naam: 'New quest', gever: '', begin: 'kiezen',
       fasen: {
         kiezen: {
-          doel: 'Kies wie je helpt.',
+          doel: 'Choose whom you help.',
           wegen: {
             deEen: { kost: 'gunst', naar: 'geholpenEen' },
             deAnder: { kost: 'gunst', naar: 'geholpenAnder' },

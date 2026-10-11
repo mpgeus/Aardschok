@@ -80,7 +80,8 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
 - `npm run maker` legt gehuchten met de maker (`js/maker.js`, `T.maakGehucht(zaad)`: elk spel een ander gehucht, vraag
   69 en 70) en tekent ze als plattegrond naast het ontworpen gehucht, in `gereedschap/maker/uit/` (niet in git);
   `-- 7 12` voor andere zaden.
-- `npm run teksten` leest elke `T.t('…')` uit `js/` en schrijft `taal/bron.js` (de lijst voor de vertaaltool), en zegt per taal
+- `npm run teksten` leest elke `T.t('…')` uit `js/`, en de zinnen uit de gegevens die een bewerker terugschrijft (de
+  gesprekken en de quests: `GEGEVENS` in `gereedschap/teksten.cjs`), en schrijft `taal/bron.js` (de lijst voor de vertaaltool), en zegt per taal
   in `taal/` wat ontbreekt, wat over is en wat niet past (`gereedschap/teksten.cjs`; vraag 147). Draai het na elke zin die
   erbij komt of verandert; `test/taal.test.cjs` faalt anders. **De vertaaltool** is `gereedschap/vertalen.html` (voor de
   community, dus in het Engels, en ook zonder server: wat je vertaalt, bewaart de browser, en het spel in dezelfde browser
@@ -214,6 +215,9 @@ Drie bladzijden gereedschap draaien op dezelfde server, en alle drie gebruiken z
 
 - `gereedschap/gesprekken.html` voor de gesprekken en `gereedschap/quests.html` voor de quests
   (fasen, wegen, het dorp per fase, en de controle die de toets van drie antwoorden nakijkt).
+  Wat de speler leest (een zin, een antwoord, de naam boven een gesprek, het doel en de melding van een quest), schrijf
+  je in het Engels (`ontwerp/engels.md`; vraag 147); het spel vertaalt het bij het tonen, en na het opslaan draai je
+  `npm run teksten`. De situaties zijn alleen voor de schrijver, en mogen Nederlands blijven.
   **In de gespreksschrijver kijk je door één situatie tegelijk** (22 sep): bovenin staan de
   situaties, je klikt er een, en het gesprek wordt getekend zoals het dán loopt — één zin per
   knoop, alleen de antwoorden die je dan kunt geven, ingesprongen zoals een gesprek loopt. Wat in

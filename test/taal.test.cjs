@@ -36,6 +36,16 @@ const OMGEZET = [
   'js/wetten.js',
   'js/wettenmenu.js',
   'js/feesten.js',
+  'js/gesprekken.js',
+  'js/gesprek.js',
+  'js/voorvallen.js',
+  'js/raadsman.js',
+  'js/raadsmanvenster.js',
+  'js/quest.js',
+  'js/quests.js',
+  'js/praatje.js',
+  'js/mensen.js',
+  'js/boeren.js',
 ];
 
 const leesBestand = (f) => fs.readFileSync(path.join(WORTEL, f), 'utf8').split('\r\n').join('\n');
@@ -86,6 +96,24 @@ test('elke T.t krijgt een gewone tekst mee, zodat de zin uit de code te lezen is
     [],
     "T.t('Engelse zin', { woorden }): een gewone tekst tussen aanhalingstekens, geen variabele, `sjabloon` of som",
   );
+});
+
+test('een zin uit de gegevens (een gesprek): npm run teksten leest hem, en het gesprek toont hem in de taal van nu', () => {
+  const zin = T.GESPREKKEN.marskramer.knopen.welkom.keuzes[0].zeg;
+  const { zinnen } = teksten.zoekTeksten();
+  const bron = zinnen.find((z) => z.t === zin);
+  assert.ok(bron && bron.waar.includes('js/gesprekken.js'), 'de zin staat in taal/bron.js, uit js/gesprekken.js');
+  assert.ok(zinnen.some((z) => z.t === T.GESPREKKEN.marskramer.naam), 'ook de naam boven het gesprek');
+  assert.ok(!zinnen.some((z) => z.t === T.GESPREKKEN.marskramer.situaties[0].naam), 'een situatie is voor de schrijver');
+  // Een vertaling van die zin (zoals taal/<code>.js er een zou geven) komt in het gesprek.
+  T.BRONTAAL.zinnen[zin] = 'Zeig mal, was du hast.';
+  try {
+    assert.equal(T.vulWoordenIn({ vlaggen: new Set() }, zin), 'Zeig mal, was du hast.');
+  } finally {
+    delete T.BRONTAAL.zinnen[zin];
+  }
+  assert.equal(T.tGegevens(zin), zin, 'zonder vertaling het Engels');
+  assert.equal(T.tGegevens(undefined), '');
 });
 
 test('taal/bron.js is bij', () => {

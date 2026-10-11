@@ -453,7 +453,7 @@ test('ja op een werkplaats in het bos: hij wacht, nog niet op de kaart; wie hem 
     D.voorvallen.lopend = L;
     // Hij zegt waar, en wat hij er eerst rooit, in het bos van de heer; en de prijs noemt zijn gunst.
     assert.match(T.GESPREK_WOORDEN.plek(D), /where I will first clear .*, in the lord's forest/);
-    assert.match(T.prijsVanKeuze(D, { bouw: true }).tekst, new RegExp(`gunst van de heer −${T.ONTGINNEN_INSTELLINGEN.gunst}`));
+    assert.match(T.prijsVanKeuze(D, { bouw: true }).tekst, new RegExp(`the lord's favour −${T.ONTGINNEN_INSTELLINGEN.gunst}`));
     const gunst = T.bazenNu(D).gunst;
     const hout = D.voorraad.hout;
     T.verzoekToegestaan(D, L);

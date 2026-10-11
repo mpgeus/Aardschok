@@ -52,26 +52,26 @@
     // blijven hier, voor als het gehucht een dorp wordt (werklijst punt 14). `snelheid` moet gelijk
     // zijn aan de SNELHEID-constante van zijn animatie (de dorpelingen*.cjs in gereedschap/pixelart),
     // anders gaan zijn voeten over de grond glijden.
-    smid: { naam: 'de smid', snelheid: 1.5, straal: 3 },
-    smidsvrouw: { naam: 'de smidsvrouw', snelheid: 1.45, straal: 3 },
+    smid: { naam: T.t('the smith'), snelheid: 1.5, straal: 3 },
+    smidsvrouw: { naam: T.t("the smith's wife"), snelheid: 1.45, straal: 3 },
     // Sinds 27 sep staat zij in het gehucht (kaarten/gehucht.betekenis.json): in haar herberg, alleen, en
     // ze brouwt zelf (js/herberg.js).
-    herbergierster: { naam: 'de herbergierster', snelheid: 1.4, straal: 3, geslacht: 'vrouw', gezin: [] },
-    boer: { naam: 'de boer', snelheid: 1.5, straal: 3 },
-    boerin: { naam: 'de boerin', snelheid: 1.4, straal: 3 },
-    dorpsoudste: { naam: 'de dorpsoudste', snelheid: 1, straal: 3 },
-    oudeman: { naam: 'de oude man', snelheid: 1, straal: 3 },
-    bruid: { naam: 'de bruid', snelheid: 1.3, straal: 3 },
-    bruidegom: { naam: 'de bruidegom', snelheid: 1.5, straal: 3 },
-    jongen: { naam: 'de jongen', snelheid: 1.3, straal: 3 },
-    meisje: { naam: 'het meisje', snelheid: 1.25, straal: 3 },
-    kleuter: { naam: 'de kleuter', snelheid: 0.85, straal: 3 },
+    herbergierster: { naam: T.t('the innkeeper'), snelheid: 1.4, straal: 3, geslacht: 'vrouw', gezin: [] },
+    boer: { naam: T.t('the farmer'), snelheid: 1.5, straal: 3 },
+    boerin: { naam: T.t("the farmer's wife"), snelheid: 1.4, straal: 3 },
+    dorpsoudste: { naam: T.t('the village elder'), snelheid: 1, straal: 3 },
+    oudeman: { naam: T.t('the old man'), snelheid: 1, straal: 3 },
+    bruid: { naam: T.t('the bride'), snelheid: 1.3, straal: 3 },
+    bruidegom: { naam: T.t('the groom'), snelheid: 1.5, straal: 3 },
+    jongen: { naam: T.t('the boy'), snelheid: 1.3, straal: 3 },
+    meisje: { naam: T.t('the girl'), snelheid: 1.25, straal: 3 },
+    kleuter: { naam: T.t('the toddler'), snelheid: 0.85, straal: 3 },
 
     // De marskramer loopt sinds 25 sep op zijn eigen vel, klein en krom onder zijn rek
     // (gereedschap/pixelart/dorpelingen3.cjs; ontwerp/beeld.md, "De marskramer loopt"), en dat is
     // op deze snelheid gemaakt. Hij komt over de weg en staat op geen kaart (`bezoeker`, zie de heer
     // hieronder): tot 25 sep stond hij ook in het dorp van het oude spel.
-    marskramer: { naam: 'de marskramer', snelheid: 1.4, straal: 2, bezoeker: true },
+    marskramer: { naam: T.t('the peddler'), snelheid: 1.4, straal: 2, bezoeker: true },
 
     // De heer en zijn soldaten (js/heer.js): ze komen op Sint-Maarten over de weg, en niet op een
     // kaart. Sinds 24 sep hebben ze hun eigen vellen, in rood en geel, het huis van de heer
@@ -83,16 +83,16 @@
     // Hun loopvellen (heer.cjs) zijn op deze snelheden gemaakt. Glijden doen hun voeten nooit (het
     // spel telt de pas uit de afgelegde weg, js/sprites.js), maar met een andere snelheid stappen
     // ze vlugger of trager dan bedoeld: render de vellen dan opnieuw.
-    heer: { naam: 'de heer', snelheid: 1.55, straal: 1, vel: 'heer', bezoeker: true },
-    soldaat: { naam: 'een soldaat', snelheid: 1.5, straal: 2, vel: 'soldaat', bezoeker: true },
+    heer: { naam: T.t('the lord'), snelheid: 1.55, straal: 1, vel: 'heer', bezoeker: true },
+    soldaat: { naam: T.t('a soldier'), snelheid: 1.5, straal: 2, vel: 'soldaat', bezoeker: true },
 
     // En de vaklieden die wel een haakje hebben in wereld.md maar nog geen tekening: zij zijn
     // zolang een gewone dorpeling, want die vellen bestaan al (zie de werklijst, fase B2b).
-    molenaar: { naam: 'de molenaar', zaad: 11, straal: 3 },
-    kruidenvrouw: { naam: 'de kruidenvrouw', zaad: 12, straal: 2 },
-    jager: { naam: 'de jager', zaad: 13, straal: 4 },
-    koster: { naam: 'de koster', zaad: 14, straal: 3 },
-    wachter: { naam: 'de wachter', zaad: 15, straal: 2 },
+    molenaar: { naam: T.t('the miller'), zaad: 11, straal: 3 },
+    kruidenvrouw: { naam: T.t('the herb woman'), zaad: 12, straal: 2 },
+    jager: { naam: T.t('the hunter'), zaad: 13, straal: 4 },
+    koster: { naam: T.t('the sexton'), zaad: 14, straal: 3 },
+    wachter: { naam: T.t('the watchman'), zaad: 15, straal: 2 },
 
     // De vijf boerengezinnen van het gehucht (kaarten/gehucht.betekenis.json, ontwerp/spel.md,
     // "Het eerste proefje"), elk met zijn eigen akker (`huis` op de kaart koppelt hem aan zijn
@@ -106,11 +106,11 @@
     // ze kunnen, wordt bij elk spel geloot (Marcel, 24 sep; js/boeren.js): de naam hoort bij de
     // boer, het karakter niet. Wat hier als karakter staat, is wie ze zijn als er niet geloot wordt:
     // zoals ze eerst geschreven waren.
-    boer1: { naam: 'Nicholas', vel: 'boer', geslacht: 'man', snelheid: 1.5, straal: 3, karakter: 'zanger', aanzien: 'geliefd' },
-    boer2: { naam: 'Alice', vel: 'boerin', geslacht: 'vrouw', snelheid: 1.4, straal: 3, karakter: 'weduwe' },
-    boer3: { naam: 'Gerard', vel: 'boer', geslacht: 'man', snelheid: 1.5, straal: 3, karakter: 'woekeraar' },
-    boer4: { naam: 'Kate', vel: 'boerin', geslacht: 'vrouw', snelheid: 1.4, straal: 3, karakter: 'vroedvrouw' },
-    boer5: { naam: 'Walter', vel: 'boer', geslacht: 'man', snelheid: 1.5, straal: 3, karakter: 'heethoofd' },
+    boer1: { naam: 'Nicholas', vel: 'boer', geslacht: 'man', snelheid: 1.5, straal: 3, karakter: 'zanger', aanzien: 'geliefd' }, // geen tekst: eigennamen
+    boer2: { naam: 'Alice', vel: 'boerin', geslacht: 'vrouw', snelheid: 1.4, straal: 3, karakter: 'weduwe' }, // geen tekst: eigennamen
+    boer3: { naam: 'Gerard', vel: 'boer', geslacht: 'man', snelheid: 1.5, straal: 3, karakter: 'woekeraar' }, // geen tekst: eigennamen
+    boer4: { naam: 'Kate', vel: 'boerin', geslacht: 'vrouw', snelheid: 1.4, straal: 3, karakter: 'vroedvrouw' }, // geen tekst: eigennamen
+    boer5: { naam: 'Walter', vel: 'boer', geslacht: 'man', snelheid: 1.5, straal: 3, karakter: 'heethoofd' }, // geen tekst: eigennamen
   };
 
   // De stapel karakters waaruit de boeren trekken (js/boeren.js, T.lootBoeren): wie een boer is,
@@ -120,16 +120,16 @@
   // iets van vindt (js/boeren.js, T.BOEREN_INSTELLINGEN.aanzien). De teksten zeggen
   // geen hij of zij, want dezelfde zanger kan een boer of een boerin zijn.
   T.KARAKTERS = {
-    zanger: { kort: 'zanger', lang: "zingt 's avonds in de schuur, en de hele buurt zingt mee" },
-    weduwe: { kort: 'weduwe', lang: 'weduwe, met drie kleine kinderen', geslacht: 'vrouw', aanzien: 'geliefd' },
-    woekeraar: { kort: 'woekeraar', lang: 'leent graan uit tegen woeker', aanzien: 'gehaat' },
-    vroedvrouw: { kort: 'vroedvrouw', lang: 'de vroedvrouw: de halve buurt heeft ze ter wereld geholpen', geslacht: 'vrouw', aanzien: 'geliefd' },
-    heethoofd: { kort: 'heethoofd', lang: 'een heethoofd; sloeg eens een knecht van de heer' },
-    vrome: { kort: 'vroom', lang: 'bidt drie keer per dag, en één keer voor de heer' },
-    roddelaar: { kort: 'roddelaar', lang: 'weet alles van iedereen, en vertelt het ook' },
-    grijsaard: { kort: 'de oudste', lang: 'de oudste van het gehucht; zag drie heren komen en gaan' },
-    nieuwkomer: { kort: 'nieuwkomer', lang: 'kwam vorig jaar uit het buurdorp, en niemand weet waarom' },
-    drinker: { kort: 'drinker', lang: 'drinkt meer bier dan er ooit gebrouwen werd' },
+    zanger: { kort: T.t('singer'), lang: T.t('sings in the barn in the evenings, and the whole lane sings along') },
+    weduwe: { kort: T.t('widow'), lang: T.t('widow, with three small children'), geslacht: 'vrouw', aanzien: 'geliefd' },
+    woekeraar: { kort: T.t('moneylender'), lang: T.t('lends out grain at ruinous interest'), aanzien: 'gehaat' },
+    vroedvrouw: { kort: T.t('midwife'), lang: T.t('the midwife: she brought half the lane into the world'), geslacht: 'vrouw', aanzien: 'geliefd' },
+    heethoofd: { kort: T.t('hothead'), lang: T.t("a hothead; once struck one of the lord's servants") },
+    vrome: { kort: T.t('pious'), lang: T.t('prays three times a day, and once for the lord') },
+    roddelaar: { kort: T.t('gossip'), lang: T.t('knows everything about everyone, and tells it too') },
+    grijsaard: { kort: T.t('the elder'), lang: T.t('the eldest in the hamlet; saw three lords come and go') },
+    nieuwkomer: { kort: T.t('newcomer'), lang: T.t('came from the next village last year, and nobody knows why') },
+    drinker: { kort: T.t('drinker'), lang: T.t('drinks more ale than was ever brewed') },
   };
 
   // Hoe heet deze mens? Zijn eigen naam, anders die van het wezen dat hij leent (Wim, de
@@ -153,7 +153,7 @@
   // uiterlijk (S.dorpelingVariant in js/sprites.js), en `gesprek` welke tekst hij voert.
   T.maakDorpeling = function (zaad, x, y, straal, gesprek) {
     return {
-      soort: 'dorpeling', naam: 'dorpeling', kant: 'neutraal', zaad, gesprek: gesprek || null,
+      soort: 'dorpeling', naam: T.t('villager'), kant: 'neutraal', zaad, gesprek: gesprek || null,
       x, y, tx: x, ty: y, pad: [], onderweg: false, opKlaar: null,
       leven: 0, maxLeven: 0, ap: 0, maxAp: 0, initiatief: 0, snelheid: 1.2, zicht: 0,
       // Waar hij hoort en hoe ver hij daarvandaan loopt: de smid bij de smidse, de boerin bij de
@@ -175,7 +175,7 @@
   //                    hij leent zolang het zijne nog niet getekend is.
   T.maakMens = function (id, x, y, straal) {
     const m = T.MENSEN[id];
-    if (!m) throw new Error(`onbekende mens "${id}"`);
+    if (!m) throw new Error(`onbekende mens "${id}"`); // geen tekst
     const ver = straal != null && straal > 0 ? straal : m.straal || 0;
     let e;
     if (m.wezen) {

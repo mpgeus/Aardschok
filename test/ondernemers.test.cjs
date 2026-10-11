@@ -113,10 +113,10 @@ test('na een aanval van de rovers vraagt de wapenmaker het, in een dorp, met zij
   assert.equal(L.bouw.eigen, 'wapens');
   assert.equal(T.ondernemingVan(D, L.wie), 'wapens');
   const tekst = T.vulWoordenIn(D, T.GESPREKKEN.wapenverzoek.knopen.begin.tekst[0].zeg);
-  assert.match(tekst, /ik wil wapens maken/);
+  assert.match(tekst, /I want to make weapons/);
   assert.match(tekst, /After the robbers/);
   assert.match(tekst, /12 wood and 14 gold/);
-  assert.match(T.vulWoordenIn(D, T.VOORVALLEN.wapenverzoek.roep), /onder vier ogen/);
+  assert.match(T.vulWoordenIn(D, T.VOORVALLEN.wapenverzoek.roep), /in private/);
   // In een gehucht nog niet: de wapenmaker hoort bij het dorp.
   T.voorvalBeantwoord(D, L.id);
   D.trede = 'gehucht';
@@ -170,7 +170,7 @@ test('nee: zijn huis neemt het je kwalijk, en na twee keer trekt hij weg', () =>
   const nee = T.GESPREKKEN.wapenverzoek.knopen.begin.keuzes[1].doe;
   const ja = T.GESPREKKEN.wapenverzoek.knopen.begin.keuzes[0].doe;
   assert.match(T.prijsVanKeuze(D, nee).tekst, /will hold it against you/, 'het venster zegt wat nee doet');
-  assert.doesNotMatch(T.prijsVanKeuze(D, ja).tekst, /verboden|heer/, 'ja is niet verboden (vraag 131)');
+  assert.doesNotMatch(T.prijsVanKeuze(D, ja).tekst, /forbidden|lord/, 'ja is niet verboden (vraag 131)');
   const L = zeg(S, false);
   const p = L.wie;
   assert.ok(T.huisStemming(p.huis, 2) < 0, 'zijn huis neemt het je kwalijk');
@@ -308,11 +308,11 @@ test('in een dorp met één herberg wil iemand er een tweede beginnen, vanaf zov
     assert.equal(L.bouw.eigen, 'herberg');
     assert.equal(T.ondernemingVan(D, L.wie), 'herberg');
     const tekst = T.vulWoordenIn(D, T.GESPREKKEN.herbergverzoek.knopen.begin.tekst[0].zeg);
-    assert.match(tekst, /ik wil een tweede herberg beginnen/);
+    assert.match(tekst, /I want to open a second inn/);
     assert.match(tekst, /16 wood and 12 gold/);
     const [ja, nee] = T.GESPREKKEN.herbergverzoek.knopen.begin.keuzes.map((k) => T.prijsVanKeuze(D, k.doe).tekst);
     assert.match(ja, /is angry, and will not brew for 60 days/);
-    assert.match(nee, /\+10 bier/);
+    assert.match(nee, /\+10 ale/);
     assert.match(nee, /will hold it against you/);
     assert.match(nee, /is grateful to you/);
     // In een gehucht nog niet, en met twee herbergen ook niet.

@@ -154,7 +154,7 @@ test('een naam komt overal: bij de mens, in zijn gesprek, en op zijn poppetje', 
   assert.equal(T.naamVanMens('boer2'), 'Grietje');
   // Een boer voert het gesprek van zijn karakter (js/boeren.js); dat heet zoals het karakter, en de
   // naam boven het gesprek komt van de boer zelf (js/dialoog.js).
-  assert.equal(T.GESPREKKEN.weduwe.naam, 'de weduwe');
+  assert.equal(T.GESPREKKEN.weduwe.naam, 'the widow');
   assert.equal(e.naam, 'Grietje');
   // Leeg, of alleen spaties, is de standaard.
   T.pasOptiesToe({ namen: { boer2: '   ' } }, S);

@@ -223,11 +223,19 @@
   T.vulTekst = vul;
 
   // De zin in de taal van nu, met de woorden erin.
-  T.t = function (bron, woorden) {
+  function inTaal(bron, woorden) {
     const taal = T.TALEN[T.taalNu()];
     const zin = taal.zinnen[bron];
     return vul(zin != null && zin !== '' ? zin : bron, woorden, taal.locale);
-  };
+  }
+  T.t = inTaal;
+
+  // Een zin uit de gegevens, in de taal van nu: een tabel die een bewerker terugschrijft (T.bronBlok), zoals de
+  // gesprekken (T.GESPREKKEN, js/gesprekken.js) en de quests (T.QUESTS, js/quests.js), houdt zijn Engelse zinnen als
+  // gewone tekst, want de bewerker kent geen T.t. Wie zo'n zin toont, vraagt hem hier (een gesprek: T.vulWoordenIn,
+  // js/gesprek.js); hetzelfde als T.t, alleen met een zin die geen gewone tekst in de code is. npm run teksten leest
+  // de zinnen uit die tabellen (GEGEVENS in gereedschap/teksten.cjs), zodat een vertaler ze ook ziet.
+  T.tGegevens = (zin, woorden) => (zin == null || zin === '' ? '' : inTaal(String(zin), woorden));
 
   // Een naam met zijn Engelse lidwoord ervoor: "an inn", "a hut" (ontwerp/engels.md: een zin met *a* of *an* krijgt de
   // naam zo mee, want het lidwoord hangt aan het woord). Een klinker vooraan krijgt *an*.

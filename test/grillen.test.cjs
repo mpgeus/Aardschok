@@ -93,8 +93,8 @@ test('een antwoord kost wat het zegt, en weegt de heer tegen het dorp', () => {
   T.zetVoorraad(D, 'goud', 20);
   const keuzes = T.grilKeuzes(D);
   assert.equal(keuzes.length, 3);
-  assert.match(keuzes[0].prijs, /−6 goud, −16 hout/);
-  assert.match(keuzes[0].prijs, /gunst van de heer \+10, vertrouwen van het dorp −3/);
+  assert.match(keuzes[0].prijs, /−6 gold, −16 wood/);
+  assert.match(keuzes[0].prijs, /the lord's favour \+10, the village's trust −3/);
   assert.ok(keuzes.every((k) => !k.hoofd), 'het spel kiest niet voor je');
   assert.ok(T.beantwoordGril(D, 0));
   assert.equal(D.voorraad.hout, 24);
@@ -112,7 +112,7 @@ test('wat het dorp niet heeft, kan het niet geven', () => {
   T.zetVoorraad(D, 'goud', 5);
   const [lenen, weigeren] = T.grilKeuzes(D);
   assert.equal(lenen.kan, false);
-  assert.match(lenen.waarom, /je hebt 5 goud/);
+  assert.match(lenen.waarom, /you have 5 gold/);
   assert.equal(T.beantwoordGril(D, 0), false);
   assert.ok(weigeren.kan);
   assert.ok(T.grilNu(D), 'hij wacht nog op je antwoord');

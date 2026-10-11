@@ -14,7 +14,7 @@
   function kaart(S, p, nu) {
     const e = p.wezen;
     const over = T.overBoer(e) || { kort: '', lang: '', eigenschappen: [] };
-    const eigenschappen = over.eigenschappen.filter((t) => t !== 'je raadsman');
+    const eigenschappen = over.eigenschappen.filter((t) => t !== T.t('your advisor')); // dat zegt de knop al (js/boeren.js)
     const wie = [T.hoofdletter(over.lang || over.kort || '')].concat(eigenschappen).filter(Boolean).join(' · ');
     const neiging = T.RAADSMAN_NEIGINGEN[e.karakter];
     const kan = Object.entries(T.vaardighedenVan(S.dorp, p)).map(([soort, niveau]) => {
@@ -23,14 +23,14 @@
     });
     const gekozen = p === nu;
     const knop = gekozen
-      ? '<span class="rs-knop gekozen">Je raadsman</span>'
-      : `<button class="rs-knop" data-wie="${veilig(p.wie)}">Kies ${veilig(naam(p))}</button>`;
+      ? `<span class="rs-knop gekozen">${T.t('Your advisor')}</span>`
+      : `<button class="rs-knop" data-wie="${veilig(p.wie)}">${T.t('Choose {naam}', { naam: veilig(naam(p)) })}</button>`;
     return (
       `<div class="rs-kaart${gekozen ? ' gekozen' : ''}">` +
       `<div class="rs-kop"><span class="rs-naam">${veilig(naam(p))}</span>${knop}</div>` +
       `<p class="rs-wie">${veilig(wie)}</p>` +
-      (neiging ? `<p class="rs-neiging">Beslist ${veilig(neiging)}.</p>` : '') +
-      (kan.length ? `<ul class="rs-kan">${kan.join('')}</ul>` : '<p class="rs-neiging">Kan niets bijzonders.</p>') +
+      (neiging ? `<p class="rs-neiging">${T.t('Decides {neiging}.', { neiging: veilig(neiging) })}</p>` : '') +
+      (kan.length ? `<ul class="rs-kan">${kan.join('')}</ul>` : `<p class="rs-neiging">${T.t('Has no particular skills.')}</p>`) +
       '</div>'
     );
   }
@@ -42,26 +42,33 @@
     // Wie je eerder koos (ook buiten deze drie, met Spel.debug.raadsman), staat er ook bij.
     if (nu && !kandidaten.includes(nu)) kandidaten.unshift(nu);
     // Wanneer hij beslist (werklijst vraag 68): als je weg bent, en met de spelregel ook als je niet op tijd spreekt.
-    const wanneer = T.RAADSMAN_INSTELLINGEN.nietGesproken
-      ? 'Ben je weg, of spreek je niet op tijd wie je met een voorval zoekt'
-      : 'Ben je niet in het dorp als iemand je met een voorval zoekt';
-    const staat = !T.RAADSMAN_INSTELLINGEN.aan
-      ? 'De spelregel "Raadsman" staat uit: wat je mist, gaat voorbij.'
-      : nu
-        ? `Je raadsman is <b>${veilig(naam(nu))}</b>. ${wanneer}, dan beslist ${veilig(naam(nu))}. Wie raadsman is, maait trager.`
-        : `Je hebt nog geen raadsman. ${wanneer}, dan gaat het voorbij. Kies er een uit deze boeren; wie raadsman is, maait trager.`;
+    // Vier hele zinnen, zodat een vertaler ze heel ziet.
+    const ook = T.RAADSMAN_INSTELLINGEN.nietGesproken;
+    const metNaam = { naam: nu ? veilig(naam(nu)) : '' };
+    let staat;
+    if (!T.RAADSMAN_INSTELLINGEN.aan) staat = T.t('The "Advisor" rule is off: whatever you miss, passes.');
+    else if (nu && ook) staat = T.t('Your advisor is <b>{naam}</b>. If you are away, or do not speak in time to someone who is looking for you, {naam} decides. Whoever is advisor reaps more slowly.', metNaam);
+    else if (nu) staat = T.t('Your advisor is <b>{naam}</b>. If you are not in the village when someone comes looking for you, {naam} decides. Whoever is advisor reaps more slowly.', metNaam);
+    else if (ook) staat = T.t('You have no advisor yet. If you are away, or do not speak in time to someone who is looking for you, it passes. Choose one of these farmers; whoever is advisor reaps more slowly.');
+    else staat = T.t('You have no advisor yet. If you are not in the village when someone comes looking for you, it passes. Choose one of these farmers; whoever is advisor reaps more slowly.');
     const besluiten = ((S.dorp.raadsman && S.dorp.raadsman.besluiten) || []).slice(-5).reverse();
     return (
-      `<div class="venster-kop"><span class="venster-titel">Raadsman</span><span class="venster-wanneer">${dag}</span>` +
-      `<button class="venster-sluit" data-actie="sluit" title="Sluiten (Esc)">✕</button></div>` +
+      `<div class="venster-kop"><span class="venster-titel">${T.t('Advisor')}</span><span class="venster-wanneer">${dag}</span>` +
+      `<button class="venster-sluit" data-actie="sluit" title="${T.t('Close (Esc)')}">✕</button></div>` +
       `<p class="venster-staat">${staat}</p>` +
-      (kandidaten.length ? kandidaten.map((p) => kaart(S, p, nu)).join('') : '<p class="venster-staat">Hier wonen geen boeren.</p>') +
+      (kandidaten.length ? kandidaten.map((p) => kaart(S, p, nu)).join('') : `<p class="venster-staat">${T.t('No farmers live here.')}</p>`) +
       (besluiten.length
-        ? '<div class="rs-besluiten"><div class="rs-besluiten-kop">Wat hij besloot</div><ul>' +
-          besluiten.map((b) => `<li>${veilig(T.datumVanDag(b.dag).tekst)}, ${veilig(b.door || '')} over ${veilig(T.VOORVALLEN[b.id] ? T.VOORVALLEN[b.id].titel : b.id)}: "${veilig(b.antwoord)}"${b.prijs ? ` <span>(${veilig(b.prijs)})</span>` : ''}</li>`).join('') +
+        ? `<div class="rs-besluiten"><div class="rs-besluiten-kop">${T.t('Decisions')}</div><ul>` +
+          besluiten.map((b) => {
+            const woorden = {
+              dag: veilig(T.datumVanDag(b.dag).tekst), door: veilig(b.door || ''), antwoord: veilig(b.antwoord),
+              titel: veilig(T.VOORVALLEN[b.id] ? T.VOORVALLEN[b.id].titel : b.id),
+            };
+            return `<li>${T.t('{dag}, {door} on {titel}: "{antwoord}"', woorden)}${b.prijs ? ` <span>(${veilig(b.prijs)})</span>` : ''}</li>`;
+          }).join('') +
           '</ul></div>'
         : '') +
-      '<p class="venster-voet">Zolang dit open is, staat de tijd stil. <kbd>Esc</kbd> of <kbd>R</kbd> sluit.</p>'
+      `<p class="venster-voet">${T.t('While this is open, time stands still. <kbd>Esc</kbd> or <kbd>R</kbd> closes it.')}</p>`
     );
   }
 
@@ -97,7 +104,7 @@
     }
     if (!b.dataset.wie) return;
     const p = S.dorp.bewoners && S.dorp.bewoners.mensen.find((x) => x.wie === b.dataset.wie);
-    const r = p ? T.kiesRaadsman(S.dorp, p) : { kan: false, reden: 'Die is er niet meer.' };
+    const r = p ? T.kiesRaadsman(S.dorp, p) : { kan: false, reden: T.t('That farmer is no longer here.') };
     if (!r.kan) T.ui.bericht(r.reden, 'gevaar');
     toon(S);
   });

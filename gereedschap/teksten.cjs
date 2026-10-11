@@ -1,6 +1,7 @@
 // De zinnen van het spel uit de code lezen (vraag 147): npm run teksten.
 //
-// Elke zin die de speler ziet, staat in de code als T.t('Engelse zin', ...) (js/taal.js). Dit leest ze uit alle
+// Elke zin die de speler ziet, staat in de code als T.t('Engelse zin', ...) (js/taal.js), of in een tabel met
+// gegevens die een bewerker terugschrijft (de gesprekken, de quests: GEGEVENS hieronder). Dit leest ze uit alle
 // bestanden in js/, zonder het spel te draaien, en schrijft ze naar taal/bron.js, met in welk bestand ze staan: dat
 // is de lijst waar de vertaaltool (gereedschap/vertalen.html) mee werkt, ook bij iemand zonder onze server. Daarna
 // zegt het per taal in taal/ hoeveel zinnen er ontbreken, welke over zijn (een zin die in de code veranderde of
@@ -151,6 +152,46 @@ function zinnenIn(bestand) {
   return { src, teksten, zinnen, fouten, argumenten };
 }
 
+// ── De zinnen in de gegevens ──
+//
+// Een tabel die een bewerker terugschrijft (T.bronBlok, gereedschap/bronblok.js), houdt zijn zinnen als gewone tekst,
+// niet in T.t, want de bewerker kent geen T.t; wie zo'n zin toont, vertaalt hem met T.tGegevens (js/taal.js). Hier
+// staat per tabel welke zinnen de speler ziet (zinnen), en wat alleen voor de schrijver is en dus geen speltekst
+// (schrijver: de situaties van de gespreksschrijver). Het blok wordt gelezen als gegevens, los van de rest van het
+// spel: het zijn gewone waarden, zonder code.
+const GEGEVENS = [
+  {
+    bestand: 'js/gesprekken.js',
+    blok: 'T.GESPREKKEN',
+    zinnen: (tabel) =>
+      Object.values(tabel).flatMap((g) => [
+        g.naam,
+        ...Object.values(g.knopen || {}).flatMap((k) => [...(k.tekst || []), ...(k.keuzes || [])].map((r) => r.zeg)),
+      ]),
+    schrijver: (tabel) => Object.values(tabel).flatMap((g) => (g.situaties || []).map((s) => s.naam)),
+  },
+  {
+    bestand: 'js/quests.js',
+    blok: 'T.QUESTS',
+    zinnen: (tabel) => Object.values(tabel).flatMap((q) => [q.naam, ...Object.values(q.fasen || {}).flatMap((f) => [f.doel, f.melding])]),
+    schrijver: () => [],
+  },
+];
+
+// De zinnen van de gegevens in een bestand: { zinnen, schrijver }, elk een lijst teksten (leeg voor een ander bestand).
+function gegevensIn(bestand) {
+  const g = GEGEVENS.find((x) => x.bestand === bestand);
+  if (!g) return { zinnen: [], schrijver: [] };
+  if (!globalThis.Spel || !globalThis.Spel.bronBlok) require('./bronblok.js');
+  const b = globalThis.Spel.bronBlok(fs.readFileSync(path.join(WORTEL, bestand), 'utf8'), g.blok);
+  if (!b) throw new Error(`${bestand}: geen blok ${g.blok}`);
+  const T = {};
+  new Function('T', `'use strict';\n${b.blok}`)(T);
+  const tabel = T[g.blok.slice(2)];
+  const tekst = (lijst) => lijst.filter((z) => typeof z === 'string' && z.trim() !== '');
+  return { zinnen: tekst(g.zinnen(tabel)), schrijver: tekst(g.schrijver(tabel)) };
+}
+
 // De bestanden van het spel: eerst in de volgorde van index.html, dan wat er verder in js/ staat.
 function bestanden() {
   const { scriptsVan } = require('../test/laad.cjs');
@@ -166,7 +207,7 @@ function zoekTeksten() {
   for (const bestand of bestanden()) {
     const r = zinnenIn(bestand);
     fouten.push(...r.fouten);
-    for (const t of r.zinnen) {
+    for (const t of [...r.zinnen, ...gegevensIn(bestand).zinnen]) {
       if (!perZin.has(t)) perZin.set(t, { t, waar: [] });
       const z = perZin.get(t);
       if (!z.waar.includes(bestand)) z.waar.push(bestand);
@@ -180,16 +221,19 @@ function zoekTeksten() {
 // In een bestand dat omgezet is (OMGEZET in test/taal.test.cjs), staat geen tekst voor de speler meer buiten T.t.
 // Wat telt als tekst: twee woorden of meer, of één woord met een hoofdletter (Laden, Terug), ook in een title=""; de
 // html zelf (tags, klassen) telt niet. Een sleutel van het toetsenbord met een hoofdletter (Escape) is geen tekst; en
-// wat toch geen tekst is, krijgt `// geen tekst` op zijn regel. Eén woord zonder hoofdletter ziet dit niet; dat vangt
+// wat toch geen tekst is, krijgt `// geen tekst` op zijn regel. Een zin uit de gegevens (GEGEVENS) staat al in de lijst,
+// en wat alleen voor de schrijver is, telt niet. Eén woord zonder hoofdletter ziet dit niet; dat vangt
 // de proef met de nep-taal in de browser (stap 2 van vraag 147).
 const TOETSEN = new Set(['Escape', 'Enter', 'Tab', 'Backspace', 'Delete', 'Shift', 'Control', 'Alt', 'Meta', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'PageUp', 'PageDown', 'Home', 'End']);
 
 function losseTeksten(bestand) {
   const { src, teksten, argumenten } = zinnenIn(bestand);
+  const gegevens = gegevensIn(bestand);
+  const uitGegevens = new Set([...gegevens.zinnen, ...gegevens.schrijver]);
   const regels = src.split('\n');
   const los = [];
   for (const t of teksten) {
-    if (argumenten.has(t.begin) || t.waarde === 'use strict') continue;
+    if (argumenten.has(t.begin) || t.waarde === 'use strict' || uitGegevens.has(t.waarde)) continue;
     const regel = regelVan(src, t.begin);
     if (/\/\/.*geen tekst/.test(regels[regel - 1])) continue;
     const attributen = [...t.waarde.matchAll(/\b(?:title|placeholder|alt|aria-label)="([^"\0]*)"/g)].map((m) => m[1]);
@@ -242,7 +286,7 @@ function verslagVan(taal, zinnen) {
   return { ontbreekt, over, past };
 }
 
-module.exports = { lees, zinnenIn, zoekTeksten, losseTeksten, bronBestand, talenInMap, verslagVan, BRON };
+module.exports = { lees, zinnenIn, gegevensIn, zoekTeksten, losseTeksten, bronBestand, talenInMap, verslagVan, BRON };
 
 if (require.main === module) {
   const { zinnen, fouten } = zoekTeksten();

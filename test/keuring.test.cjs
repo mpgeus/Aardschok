@@ -274,7 +274,7 @@ test('een questvoorwerp dat niet op te rapen is, loopt dood', () => {
 
 test('één mens kan niet op twee plekken staan', () => {
   const klachten = keur([UITGANG, { x: 2, y: 2, wie: 'smid' }, { x: 4, y: 2, wie: 'smid' }]);
-  assert.match(teksten(klachten), /"de smid" staat ook al op \(2, 2\)/);
+  assert.match(teksten(klachten), /"the smith" staat ook al op \(2, 2\)/);
 });
 
 test('een mens die niet in de lijst staat, wordt bij naam genoemd', () => {
@@ -292,7 +292,7 @@ test('een mens komt met zijn eigen naam en zijn eigen gesprek uit de kaart', () 
     betekenis: { dingen: [UITGANG, { x: 3, y: 2, wie: 'koster' }] },
   });
   const e = uitslag.wereld.wezens.find((e) => e.wie === 'koster');
-  assert.equal(e.naam, 'de koster');
+  assert.equal(e.naam, 'the sexton');
   assert.equal(T.gesprekIdVan(e), 'koster');
   assert.equal(e.soort, 'dorpeling', 'de koster is nog niet getekend en leent een dorpelingvel');
   assert.equal(e.dwaalt, true);

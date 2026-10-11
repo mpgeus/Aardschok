@@ -55,25 +55,26 @@
   // De vijf vaardigheden: hoe je ze ziet, goed of slecht, waar ze over gaan (voor het venster, js/raadsmanvenster.js),
   // en op welk deel van een antwoord ze werken.
   T.VAARDIGHEDEN = {
-    rechtspreken: { goed: 'spreekt goed recht', slecht: 'spreekt slecht recht', waarop: 'hoe tevreden het dorp is met zijn vonnis', op: ['tevreden'] },
-    zwijgen: { goed: 'kan zwijgen', slecht: 'kan niets voor zich houden', waarop: 'wat de heer te horen krijgt', op: ['gunst'] },
-    rekenen: { goed: 'kan rekenen', slecht: 'kan niet rekenen', waarop: 'wat het kost aan goud en waren', op: ['goud', 'graan', 'wol', 'bier', 'ijzer', 'zout', 'vlees', 'vis', 'kaas', 'hooi'] },
-    bouwen: { goed: 'kan bouwen', slecht: 'heeft twee linkerhanden', waarop: 'wat het kost aan hout', op: ['hout'] },
-    vechten: { goed: 'kan vechten', slecht: 'is bang', waarop: 'de kans dat er iemand sterft', op: ['sterfkans'] },
+    rechtspreken: { goed: T.t('judges well'), slecht: T.t('judges badly'), waarop: T.t('how content the village is with the verdict'), op: ['tevreden'] },
+    zwijgen: { goed: T.t('can hold their tongue'), slecht: T.t('cannot keep a secret'), waarop: T.t('what the lord gets to hear'), op: ['gunst'] },
+    rekenen: { goed: T.t('good with figures'), slecht: T.t('bad with figures'), waarop: T.t('what it costs in gold and goods'), op: ['goud', 'graan', 'wol', 'bier', 'ijzer', 'zout', 'vlees', 'vis', 'kaas', 'hooi'] },
+    bouwen: { goed: T.t('handy'), slecht: T.t('all thumbs'), waarop: T.t('what it costs in wood'), op: ['hout'] },
+    vechten: { goed: T.t('can fight'), slecht: T.t('timid'), waarop: T.t('the chance that someone dies'), op: ['sterfkans'] },
   };
 
-  // Hoe elk karakter beslist, in een paar woorden, voor het venster: wat de neigingen hierboven (karakters) zeggen.
+  // Hoe elk karakter beslist, in een paar woorden, voor het venster ("Decides generously: ..."): wat de neigingen
+  // hierboven (karakters) zeggen.
   T.RAADSMAN_NEIGINGEN = {
-    zanger: 'gul: een feest is nooit te groot, en de heer mag het horen',
-    weduwe: 'zuinig en mild: niemand het bos in, en een klein feest',
-    woekeraar: 'op het geld: een boete gaat in de kist',
-    vroedvrouw: 'zorgzaam: liever niemand dood, wat het ook kost',
-    heethoofd: 'streng: wie steelt, moet het bos in',
-    vrome: 'vroom: bidden helpt ook, en niemand het bos in',
-    roddelaar: 'praat graag, ook met de heer',
-    grijsaard: 'voorzichtig: de heer moet tevreden zijn',
-    nieuwkomer: 'gastvrij: vreemdelingen zijn welkom, en niemand het bos in',
-    drinker: 'gezellig: het dorp moet blij zijn, het kost wat het kost',
+    zanger: T.t('generously: a feast is never too big, and the lord may hear of it'),
+    weduwe: T.t('frugally and mildly: nobody into the forest, and a small feast'),
+    woekeraar: T.t('by the money: a fine goes into the chest'),
+    vroedvrouw: T.t('with care: better that nobody dies, whatever it costs'),
+    heethoofd: T.t('harshly: whoever steals goes into the forest'),
+    vrome: T.t('piously: prayer helps too, and nobody into the forest'),
+    roddelaar: T.t('with a loose tongue, the lord included'),
+    grijsaard: T.t('cautiously: the lord must be content'),
+    nieuwkomer: T.t('hospitably: strangers are welcome, and nobody into the forest'),
+    drinker: T.t('sociably: the village must be happy, whatever it costs'),
   };
   // Wat goed uitvalt voor het dorp: meer tevredenheid, gunst, goud en waren; en een kans op een dode nooit.
   const goedVoorHetDorp = (wat, n) => (wat === 'sterfkans' ? false : n > 0);
@@ -107,11 +108,11 @@
 
   // Een boer wordt raadsman; wie het was, is het niet meer. Geeft { kan, reden }.
   T.kiesRaadsman = function (D, p) {
-    if (!isBoer(p) || !hier(D, p)) return { kan: false, reden: 'Alleen een boer die hier is, kan raadsman worden.' };
+    if (!isBoer(p) || !hier(D, p)) return { kan: false, reden: T.t('Only a farmer who is here can become your advisor.') };
     for (const x of D.bewoners.mensen) if (x.wezen && x !== p) x.wezen.raadsman = false;
     p.wezen.raadsman = true;
     if (!D.raadsman) D.raadsman = T.nieuweRaadsman();
-    T.zeg(D, `${T.hoofdletter(naam(p))} is je raadsman. Ben je er niet, dan beslist ${naam(p)}.`);
+    T.zeg(D, T.t('{wie} is your advisor. When you are away, {naam} decides.', { wie: T.hoofdletter(naam(p)), naam: naam(p) }));
     return { kan: true };
   };
 
@@ -132,8 +133,8 @@
     return uit;
   };
 
-  // Wie hij is en wat hij kan, als één regel: "Aaltje · weduwe · geliefd · spreekt goed recht · kan niets voor zich
-  // houden". Voor het kiezen, en voor het bericht.
+  // Wie hij is en wat hij kan, als één regel: "Alice · widow · well loved · judges well · cannot keep a secret". Voor
+  // het kiezen, en voor het bericht.
   T.overRaadsmanTekst = function (D, p) {
     const over = T.overBoer(p.wezen);
     const kan = Object.entries(T.vaardighedenVan(D, p)).map(([soort, niveau]) => T.VAARDIGHEDEN[soort][niveau]);
@@ -231,7 +232,8 @@
     if (D.raadsman.besluiten.length > 20) D.raadsman.besluiten.shift();
     const titel = T.VOORVALLEN[L.id].titel;
     const waarom = L.oorzaak ? ` ${L.oorzaak.zin}` : ''; // waar het van kwam (js/voorvallen.js, T.oorzaakVan)
-    T.zeg(D, `${T.hoofdletter(naam(p))}, je raadsman, besliste over ${titel}: "${zeg}"${prijs ? ` (${prijs})` : ''}${waarom}`);
+    const zin = T.t('{wie}, your advisor, decided on {titel}: "{antwoord}"', { wie: T.hoofdletter(naam(p)), titel, antwoord: zeg });
+    T.zeg(D, `${zin}${prijs ? ` (${prijs})` : ''}${waarom}`);
     T.schrijfOp(D, 'besluit', { door: naam(p), titel, antwoord: zeg, prijs }); // voor zijn rapport (js/ochtendrapport.js)
     T.voorvalBeantwoord(D, L.id, p);
     return true;

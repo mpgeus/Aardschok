@@ -266,7 +266,7 @@ test('de schandpaal: jij wijst aan wie, en het dorp onthoudt het een tijd', () =
   const keuzes = T.schandpaalKeuzes(S);
   assert.deepEqual(keuzes.map((k) => k.wie), ['boer2', 'boer3', 'schout']);
   assert.equal(keuzes[0].naam, 'Alice');
-  assert.match(keuzes[0].eigenschap, /weduwe/);
+  assert.match(keuzes[0].eigenschap, /widow/);
   const r = T.zetAanDeSchandpaal(S, 'boer2');
   assert.equal(r.kan, true);
   // Ze voert het gesprek van haar karakter (hier het vaste: de weduwe), en dat weet het.
@@ -295,7 +295,7 @@ test('de schandpaal kost het dorp zoveel als wie jij kiest: de weduwe meer dan d
   assert.ok(T.aanzienVan(aaltje) > T.aanzienVan(gerrit));
   for (const id of ['boer1', 'boer2', 'boer3', 'boer4', 'boer5']) {
     assert.ok(T.KARAKTERS[T.MENSEN[id].karakter], `${id} heeft geen karakter`);
-    assert.notEqual(T.naamVanMens(id), 'de boer', `${id} heeft geen naam`);
+    assert.notEqual(T.naamVanMens(id), 'the farmer', `${id} heeft geen naam`);
   }
   // Wie geen boer is, kan er niet aan.
   assert.equal(T.aanzienVan(T.maakMens('marskramer', 1, 1)), null);

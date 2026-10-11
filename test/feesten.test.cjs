@@ -67,8 +67,8 @@ test('het oogstfeest en de meiboom zijn feesten, en hun antwoorden zeggen wat ze
   const S = gehucht();
   T.zetVoorraad(S.dorp, 'graan', 100);
   T.zetVoorraad(S.dorp, 'bier', 30);
-  assert.equal(T.prijsVanKeuze(S.dorp, antwoord('oogstfeest', 0).doe).tekst, '−40 graan, −15 bier, tevredenheid +8%, no one works tomorrow');
-  assert.equal(T.prijsVanKeuze(S.dorp, antwoord('oogstfeest', 1).doe).tekst, '−15 graan, tevredenheid +3%, a feast on the square in the evening');
+  assert.equal(T.prijsVanKeuze(S.dorp, antwoord('oogstfeest', 0).doe).tekst, '−40 grain, −15 ale, contentment +8%, no one works tomorrow');
+  assert.equal(T.prijsVanKeuze(S.dorp, antwoord('oogstfeest', 1).doe).tekst, '−15 grain, contentment +3%, a feast on the square in the evening');
 });
 
 test('een groot oogstfeest: morgen werkt niemand, iedereen staat op het plein, en de dag erna gaat het werk door', () => {
@@ -196,7 +196,7 @@ test('de kerstboom komt op 20 wintermaand; met ja staat hij meteen, tot en met 6
   T.tikVoorvallenDag(D, dag);
   assert.equal(D.voorvallen.lopend && D.voorvallen.lopend.id, 'kerstboom', 'op 20 wintermaand wel');
   T.zetVoorraad(D, 'hout', 20);
-  assert.equal(T.prijsVanKeuze(D, antwoord('kerstboom', 0).doe).tekst, '−2 hout, tevredenheid +4%, a feast on Christmas Eve');
+  assert.equal(T.prijsVanKeuze(D, antwoord('kerstboom', 0).doe).tekst, '−2 wood, contentment +4%, a feast on Christmas Eve');
   S.kalender.dag = bijUur(dag, 11);
   T.doeGevolg(S, D, antwoord('kerstboom', 0).doe);
   T.voorvalBeantwoord(D, 'kerstboom');
@@ -269,7 +269,7 @@ test('met de spelregel "Alleen de stemming" is een feest wat het was: een prijs 
   T.zetVoorraad(D, 'bier', 30);
   T.FEESTEN_INSTELLINGEN.vieren = false;
   try {
-    assert.equal(T.prijsVanKeuze(D, antwoord('oogstfeest', 0).doe).tekst, '−40 graan, −15 bier, tevredenheid +8%');
+    assert.equal(T.prijsVanKeuze(D, antwoord('oogstfeest', 0).doe).tekst, '−40 grain, −15 ale, contentment +8%');
     metVoorval(S, 'oogstfeest', bijUur(HERFST, 15));
     T.doeGevolg(S, D, antwoord('oogstfeest', 0).doe);
     assert.ok(!D.feesten || !D.feesten.komt, 'geen feest');
