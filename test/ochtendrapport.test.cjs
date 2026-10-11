@@ -113,7 +113,7 @@ test('wat erin staat: wie er ging en kwam, hoe het gaat sinds gisteren, en wat e
     `${T.hoofdletter(weg)}${weg.includes(',') ? ',' : ''} left: the village is not content enough.`,
     `New in the village: ${nieuw}.`,
     'Since yesterday there is 12 less grain and 3 more wood.',
-    'Er is honger, want het rantsoen is krap.',
+    'There is hunger, for the rations are short.',
   ]);
   // Daarna wat de huizen missen (vraag 87): de wet liet het dorp zijn tevredenheid opnieuw tellen, dus het weet het al.
   assert.match(R.regels[4], /want a chapel within 40 tiles\.$/);
@@ -346,13 +346,13 @@ test('een oorzaak zegt hij als hij begint, om de week zolang hij blijft, en als 
   metRaadsman(S);
   gelezenNacht(S, 10);
   assert.ok(T.zetWet(D, 'rantsoen', 'krap').kan);
-  assert.ok(gelezenNacht(S, 11).regels.includes('Er is honger, want het rantsoen is krap.'));
-  for (let d = 12; d < 18; d++) assert.ok(!gelezenNacht(S, d).regels.some((r) => /honger/.test(r)), `dag ${d}`);
+  assert.ok(gelezenNacht(S, 11).regels.includes('There is hunger, for the rations are short.'));
+  for (let d = 12; d < 18; d++) assert.ok(!gelezenNacht(S, d).regels.some((r) => /hunger/.test(r)), `dag ${d}`);
   assert.ok(gelezenNacht(S, 18).regels.some((r) => /honger|hunger/.test(r) && /, for seven days now: /.test(r)));
-  assert.ok(!gelezenNacht(S, 19).regels.some((r) => /honger/.test(r)));
+  assert.ok(!gelezenNacht(S, 19).regels.some((r) => /hunger/.test(r)));
   assert.ok(T.zetWet(D, 'rantsoen', 'gewoon').kan);
-  assert.ok(gelezenNacht(S, 20).regels.includes('De honger is voorbij.'));
-  assert.ok(!gelezenNacht(S, 21).regels.some((r) => /honger/.test(r)));
+  assert.ok(gelezenNacht(S, 20).regels.includes('The hunger is over.'));
+  assert.ok(!gelezenNacht(S, 21).regels.some((r) => /hunger/.test(r)));
 });
 
 test('las je het rapport niet, dan zegt hij het de volgende dag nog eens', () => {
@@ -361,9 +361,9 @@ test('las je het rapport niet, dan zegt hij het de volgende dag nog eens', () =>
   metRaadsman(S);
   gelezenNacht(S, 10);
   assert.ok(T.zetWet(D, 'rantsoen', 'krap').kan);
-  assert.ok(nacht(S, 11).regels.includes('Er is honger, want het rantsoen is krap.'));
-  assert.ok(gelezenNacht(S, 12).regels.includes('Er is honger, want het rantsoen is krap.'), 'niet gelezen: nog eens');
-  assert.ok(!gelezenNacht(S, 13).regels.some((r) => /honger/.test(r)));
+  assert.ok(nacht(S, 11).regels.includes('There is hunger, for the rations are short.'));
+  assert.ok(gelezenNacht(S, 12).regels.includes('There is hunger, for the rations are short.'), 'niet gelezen: nog eens');
+  assert.ok(!gelezenNacht(S, 13).regels.some((r) => /hunger/.test(r)));
 });
 
 test('de winter zegt hij als hij omslaat of flink verschuift, en anders om de week', () => {
@@ -484,12 +484,12 @@ test('een status die erger wordt of minder, zegt hij meteen: droogte, ernstige d
   const begin = dagVan('zomermaand', 1);
   gelezenNacht(S, begin);
   D.weer = { vandaag: 'zon', droog: I.droogteVanaf, tekort: I.droogteVanaf, verlies: 0 };
-  assert.ok(gelezenNacht(S, begin + 1).regels.some((r) => /^Het is droog, want het heeft al .* dagen niet geregend\.$/.test(r)));
-  assert.ok(!gelezenNacht(S, begin + 2).regels.some((r) => /droog/.test(r)), 'zolang het zo blijft, niet elke dag');
+  assert.ok(gelezenNacht(S, begin + 1).regels.some((r) => /^It is dry, for it has not rained for .* days\.$/.test(r)));
+  assert.ok(!gelezenNacht(S, begin + 2).regels.some((r) => /dry|drought/i.test(r)), 'zolang het zo blijft, niet elke dag');
   D.weer.tekort = I.ernstigVanaf;
-  assert.ok(gelezenNacht(S, begin + 3).regels.some((r) => /^Het is ernstig droog, want/.test(r)));
+  assert.ok(gelezenNacht(S, begin + 3).regels.some((r) => /^The drought is severe, for/.test(r)));
   D.weer.tekort = I.droogteVanaf;
-  assert.ok(gelezenNacht(S, begin + 4).regels.includes('Het is niet meer ernstig droog, maar wel nog droog.'));
+  assert.ok(gelezenNacht(S, begin + 4).regels.includes('The drought is no longer severe, but it is still dry.'));
   D.weer.tekort = 0;
-  assert.ok(gelezenNacht(S, begin + 5).regels.includes('De droogte is voorbij.'));
+  assert.ok(gelezenNacht(S, begin + 5).regels.includes('The drought is over.'));
 });

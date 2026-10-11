@@ -53,7 +53,7 @@ test('brandgevaar in de droogte, groot in een ernstige droogte; niet in de winte
   assert.ok(T.statussenVan(D, dag).some((s) => s.id === 'brandgevaar' && s.niveau === 1));
   D.weer.tekort = T.WEER_INSTELLINGEN.ernstigVanaf;
   assert.equal(T.brandgevaarNiveau(D, dag), 2);
-  assert.equal(T.statussenVan(D, dag).find((s) => s.id === 'brandgevaar').naam, 'Groot brandgevaar');
+  assert.equal(T.statussenVan(D, dag).find((s) => s.id === 'brandgevaar').naam, 'High fire risk');
   assert.equal(T.brandgevaarNiveau(D, dagVan('louwmaand', 5)), 0);
 });
 
@@ -117,7 +117,7 @@ test('met de emmers is het vuur na een uur uit, en blijft het huis meestal staan
     const S = gehucht(dag);
     const D = S.dorp;
     const L = voorval(D, 'brand', dag);
-    assert.match(T.prijsVanKeuze(D, { blus: true }).tekst, /100 van de 100 keer blijft het huis staan/);
+    assert.match(T.prijsVanKeuze(D, { blus: true }).tekst, /the house survives 100 times in 100/);
     T.voorvalGevolg(D, { blus: true }); // je antwoordde al voor het begon: het geldt toch
     S.kalender.dag = L.vanaf;
     T.werkBrandBij(S, D);
@@ -199,13 +199,13 @@ test('de koorts: wie het zegt en zijn gezin zijn ziek, ze steekt aan, en is na e
     assert.ok(eerst >= 1 && eerst <= K.begin, `${eerst} ziek`);
     assert.ok(L.ander.ziek, 'wie het betreft');
     assert.ok(T.blijftThuis(L.ander, dag + 1), 'in bed');
-    assert.equal(T.statussenVan(D, dag).find((s) => s.id === 'koorts').naam, 'Koorts');
+    assert.equal(T.statussenVan(D, dag).find((s) => s.id === 'koorts').naam, 'Fever');
     let meest = eerst;
     let d = dag + 1;
     for (; D.koorts && d < dag + 120; d++) {
       T.tikKoortsDag(D, d);
       meest = Math.max(meest, T.zieken(D).length);
-      if (T.koortsNiveau(D) === 2) assert.equal(T.statussenVan(D, d).find((s) => s.id === 'koorts').naam, 'Epidemie');
+      if (T.koortsNiveau(D) === 2) assert.equal(T.statussenVan(D, d).find((s) => s.id === 'koorts').naam, 'Epidemic');
     }
     assert.ok(meest > eerst, 'ze stak anderen aan');
     assert.equal(D.koorts, null, 'en is voorbij');
@@ -242,7 +242,7 @@ test('een schone put maakt dat de koorts minder overgaat, en het venster zegt he
   const S = gehucht(dag);
   const D = S.dorp;
   voorval(D, 'ziekte', dag);
-  assert.match(T.prijsVanKeuze(D, { goud: -2, koorts: 40 }).tekst, /half zo vaak/);
+  assert.match(T.prijsVanKeuze(D, { goud: -2, koorts: 40 }).tekst, /half as often/);
   T.voorvalGevolg(D, { koorts: 40 }); // je antwoordde voor de nacht: het geldt als ze begint
   T.tikKoortsDag(D, dag);
   assert.equal(D.koorts.maat, 0.4);

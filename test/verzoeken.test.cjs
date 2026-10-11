@@ -83,10 +83,10 @@ test('na de eerste nacht vraagt iemand namens de buurt om een kapel, met de plek
   assert.ok(T.inDeKring(voet, { x: L.bouw.x, y: L.bouw.y, b: T.GEBOUWEN.kapel.voet.b, h: T.GEBOUWEN.kapel.voet.h }, T.WENSEN_INSTELLINGEN.kring.kapel), 'wie het vraagt, woont in de buurt');
   assert.match(tekstVan(D), /^Reeve, the neighbours want to build a chapel, (by|next to) [^.]+\. Five farms and a house want a chapel within 40 tiles\. The village pays 10 wood and 8 gold\.$/);
   assert.equal(T.vulWoordenIn(D, T.VOORVALLEN.bouwverzoek.roep), `${T.naamVanBewoner(L.wie)} wants to build a chapel, and is looking for you.`);
-  assert.deepEqual(T.prijsVanKeuze(D, antwoord(0).doe), { tekst: '−10 hout, −8 goud, tevredenheid +3%', kan: true, waarom: '' });
-  assert.equal(T.prijsVanKeuze(D, antwoord(1).doe).tekst, 'tevredenheid −2%');
+  assert.deepEqual(T.prijsVanKeuze(D, antwoord(0).doe), { tekst: '−10 wood, −8 gold, contentment +3%', kan: true, waarom: '' });
+  assert.equal(T.prijsVanKeuze(D, antwoord(1).doe).tekst, 'contentment −2%');
   T.zetVoorraad(D, 'goud', 3);
-  assert.deepEqual(T.prijsVanKeuze(D, antwoord(0).doe), { tekst: '−10 hout, −8 goud, tevredenheid +3%', kan: false, waarom: 'je hebt 3 goud' });
+  assert.deepEqual(T.prijsVanKeuze(D, antwoord(0).doe), { tekst: '−10 wood, −8 gold, contentment +3%', kan: false, waarom: 'you have 3 gold' });
 });
 
 test('de raad zegt wat zou helpen, zonder [B], en wie je erom vraagt', () => {
@@ -168,9 +168,9 @@ test('ben je weg, dan beslist je raadsman: wat het helpt tegen wat het kost, naa
   nacht(S, 1);
   const boer = D.bewoners.mensen.find((p) => T.isBoer(p.wezen) && p !== lopend(D).wie);
   boer.wezen.karakter = 'zanger';
-  assert.equal(T.raadsmanKeuze(D, boer, 'bouwverzoek').zeg, 'Ja, bouw maar.', 'een zanger ziet het dorp graag blij');
+  assert.equal(T.raadsmanKeuze(D, boer, 'bouwverzoek').zeg, 'Yes, build it.', 'een zanger ziet het dorp graag blij');
   boer.wezen.karakter = 'woekeraar';
-  assert.equal(T.raadsmanKeuze(D, boer, 'bouwverzoek').zeg, 'Nee, nu niet.', 'een woekeraar telt het goud');
+  assert.equal(T.raadsmanKeuze(D, boer, 'bouwverzoek').zeg, 'No, not now.', 'een woekeraar telt het goud');
 });
 
 test('een verzoek en wat het dorp weigerde, worden bewaard en geladen', () => {
@@ -213,7 +213,7 @@ test('een oproep (stap 2): wat erop staat, vraagt iemand als eerste, ook wat nie
   const L = lopend(D);
   assert.deepEqual([L.bouw.soort, L.bouw.premie, L.bouw.nut], ['steengroeve', 5, T.VERZOEKEN_INSTELLINGEN.nutTot], 'de oproep gaat voor de rest');
   assert.match(tekstVan(D), /Your notice hangs on the square, with a bounty of 5 gold\. The village pays 12 wood and 9 gold, with the bounty\.$/);
-  assert.equal(T.prijsVanKeuze(D, antwoord(0).doe).tekst, '−12 hout, −9 goud, tevredenheid +3%');
+  assert.equal(T.prijsVanKeuze(D, antwoord(0).doe).tekst, '−12 wood, −9 gold, contentment +3%');
   const goud = D.voorraad.goud;
   zeg(S, 0);
   assert.ok(D.gebouwen.some((g) => g.soort === 'steengroeve' && g.meester === L.wie));

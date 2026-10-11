@@ -117,7 +117,7 @@ test('een boer wordt raadsman, de vorige niet meer, en wie het is, maait trager'
   assert.ok(T.kiesRaadsman(S.dorp, a).kan);
   assert.equal(T.raadsmanVan(S.dorp), a);
   assert.ok(Math.abs(T.boerFactor(a.wezen, 'maaien') - voor * T.RAADSMAN_INSTELLINGEN.maaien) < 1e-9, 'hij maait trager');
-  assert.ok(T.overBoer(a.wezen).eigenschappen.includes('je raadsman'), 'bij de muis staat het');
+  assert.ok(T.overBoer(a.wezen).eigenschappen.includes('your advisor'), 'bij de muis staat het');
   T.kiesRaadsman(S.dorp, b);
   assert.equal(T.raadsmanVan(S.dorp), b);
   assert.ok(!a.wezen.raadsman, 'de vorige is het niet meer');
@@ -136,9 +136,9 @@ test('ben je weg als zijn tijd om is, dan beslist de raadsman, naar zijn karakte
     weg(S, () => T.tikVoorvallenDag(S.dorp, L.tot));
     assert.equal(S.dorp.voorvallen.lopend, null, 'het voorval is af');
     assert.equal(S.dorp.voorvallen.doorRaadsman, 1);
-    assert.ok(berichten.some((t) => t.startsWith(`${T.naamVanBewoner(p)}, je raadsman, besliste over de diefstal: "`)), berichten.join(' / '));
-    assert.ok(!berichten.some((t) => /niet gesproken/.test(t)), 'het gaat niet voorbij');
-    assert.ok(!T.voorvalStemming(S.dorp, L.tot).last.includes('een schout die er niet was'));
+    assert.ok(berichten.some((t) => t.startsWith(`${T.naamVanBewoner(p)}, your advisor, decided on the theft: "`)), berichten.join(' / '));
+    assert.ok(!berichten.some((t) => /did not get to speak to you/.test(t)), 'het gaat niet voorbij');
+    assert.ok(!T.voorvalStemming(S.dorp, L.tot).last.includes('a reeve who was not there'));
     return { verbannen: !S.dorp.bewoners.mensen.includes(dief), goud: S.dorp.voorraad.goud, S, p };
   };
   const streng = uitkomst('heethoofd');
@@ -148,7 +148,7 @@ test('ben je weg als zijn tijd om is, dan beslist de raadsman, naar zijn karakte
   assert.ok(zuinig.goud > 0, 'hij legt een boete op, voor de kist');
   // In de balk heet het naar hem.
   const s = T.voorvalStemming(zuinig.S.dorp, dagNu(zuinig.S));
-  assert.ok(s.blij.includes(`wat ${T.naamVanBewoner(zuinig.p)} besliste over de diefstal`), JSON.stringify(s));
+  assert.ok(s.blij.includes(`what ${T.naamVanBewoner(zuinig.p)} decided about the theft`), JSON.stringify(s));
 });
 
 const dagNu = (S) => Math.floor(S.kalender.dag);
@@ -163,8 +163,8 @@ test('de gunst van de heer weegt mee zoals de argwaan van vroeger deed: de grijs
     const p = raadsman(S, karakter, [L.wie]);
     return metKunde({}, () => T.raadsmanKeuze(S.dorp, p, 'standbeeld').zeg);
   };
-  assert.match(kies('grijsaard'), /standbeeld/, '-2 + 18 - 2 tegen 3 - 9 - 0,3');
-  assert.match(kies('zanger'), /vogelverschrikker/, '-4 + 1,8 - 0,6 tegen 6 - 0,9 - 0,1');
+  assert.match(kies('grijsaard'), /statue/, '-2 + 18 - 2 tegen 3 - 9 - 0,3');
+  assert.match(kies('zanger'), /scarecrow/, '-4 + 1,8 - 0,6 tegen 6 - 0,9 - 0,1');
 });
 
 test('karakters kiezen verschillend: de vrome bidt, de vroedvrouw laat de put schoonmaken', () => {
@@ -176,8 +176,8 @@ test('karakters kiezen verschillend: de vrome bidt, de vroedvrouw laat de put sc
     const p = raadsman(S, karakter, [L.wie]);
     return metKunde({}, () => T.raadsmanKeuze(S.dorp, p, 'ziekte').zeg);
   };
-  assert.match(kies('vrome'), /Bidden/);
-  assert.match(kies('vroedvrouw'), /put/);
+  assert.match(kies('vrome'), /Pray/);
+  assert.match(kies('vroedvrouw'), /well/);
 });
 
 test('hij kiest wat er te betalen valt', () => {
@@ -186,7 +186,7 @@ test('hij kiest wat er te betalen valt', () => {
   T.zetVoorraad(S.dorp, 'goud', 0);
   T.zetVoorraad(S.dorp, 'bier', 0);
   const p = raadsman(S, 'vroedvrouw', [L.wie]);
-  assert.match(metKunde({}, () => T.raadsmanKeuze(S.dorp, p, 'ziekte').zeg), /Bidden/, 'zonder goud en bier blijft alleen bidden over');
+  assert.match(metKunde({}, () => T.raadsmanKeuze(S.dorp, p, 'ziekte').zeg), /Pray/, 'zonder goud en bier blijft alleen bidden over');
 });
 
 test('wat hij kan, telt mee: goed maakt wat slecht uitvalt minder erg, slecht maakt het erger', () => {
@@ -224,8 +224,8 @@ test('ben je in het dorp en spreek je hem niet op tijd, dan gaat het voorbij, oo
   T.tikVoorvallenDag(S.dorp, L.tot);
   assert.equal(S.dorp.voorvallen.lopend, null);
   assert.equal(S.dorp.voorvallen.doorRaadsman, 0, 'hij beslist niet');
-  assert.ok(berichten.some((t) => /niet gesproken/.test(t)), berichten.join(' / '));
-  assert.ok(T.voorvalStemming(S.dorp, L.tot).last.includes('een schout die geen tijd had'));
+  assert.ok(berichten.some((t) => /did not get to speak to you/.test(t)), berichten.join(' / '));
+  assert.ok(T.voorvalStemming(S.dorp, L.tot).last.includes('a reeve who had no time'));
   // Met de spelregel "Ook als je niet spreekt" wel: wie je wegstuurt, laat je aan hem over.
   try {
     T.zetOptie('raadsman', 'ook');
@@ -244,16 +244,16 @@ test('zonder raadsman, of met de spelregel uit, gaat het voorbij, ook als je weg
   const S = gehucht();
   const L = metVoorval(S, 'lening', 30);
   weg(S, () => T.tikVoorvallenDag(S.dorp, L.tot));
-  assert.ok(T.voorvalStemming(S.dorp, L.tot).last.includes('een schout die er niet was'));
+  assert.ok(T.voorvalStemming(S.dorp, L.tot).last.includes('a reeve who was not there'));
   try {
     T.zetOptie('raadsman', 'uit');
     const S2 = gehucht();
     const L2 = metVoorval(S2, 'lening', 30);
     const p = raadsman(S2, 'weduwe', [L2.wie]);
     assert.equal(T.raadsmanVan(S2.dorp), null, 'uit is er geen raadsman');
-    assert.ok(!T.overBoer(p.wezen).eigenschappen.includes('je raadsman'));
+    assert.ok(!T.overBoer(p.wezen).eigenschappen.includes('your advisor'));
     weg(S2, () => T.tikVoorvallenDag(S2.dorp, L2.tot));
-    assert.ok(T.voorvalStemming(S2.dorp, L2.tot).last.includes('een schout die er niet was'));
+    assert.ok(T.voorvalStemming(S2.dorp, L2.tot).last.includes('a reeve who was not there'));
   } finally {
     T.optiesTerug();
   }

@@ -5,7 +5,7 @@
 //
 // Vorm van één gesprek:
 //   T.GESPREKKEN.<id> = {
-//     naam: 'de heer',      // boven het gesprek
+//     naam: 'the lord',     // boven het gesprek
 //     portret: 'heer',      // bestandsnaam van het portret; weg laten als die er nog niet is
 //     start: 'welkom',      // met welke knoop het gesprek begint
 //     situaties: [...],     // alleen voor de schrijver; het spel leest ze nooit (zie hieronder)
@@ -58,6 +58,11 @@
 //
 // In een zin mag {woord} staan: dat vult het spel in (T.GESPREK_WOORDEN in js/gesprek.js), zoals
 // {gisteravond}, wie er gisteravond in de herberg zat (js/herberg.js), en in een voorval {wie} en {ander}.
+//
+// De zinnen zijn Engels (vraag 147; de woorden en de toon: ontwerp/engels.md; de speler is "reeve"), als gewone tekst
+// en niet in T.t, want de gespreksschrijver schrijft dit blok terug. Het spel vertaalt ze bij het tonen
+// (T.vulWoordenIn in js/gesprek.js, met T.tGegevens uit js/taal.js), en npm run teksten leest ze hier voor een
+// vertaler. De situaties zijn alleen voor de schrijver, en blijven Nederlands.
 (function (T) {
   'use strict';
 
@@ -67,7 +72,7 @@
     // marskramerOpBezoek, marskramerLente, -Zomer, -Herfst, marskramerBode (op bestelling, js/bode.js) en marskramerVertrekt zet js/handel.js
     // zolang hij er is. (Tot 25 sep verkocht hij in het oude spel ook vuurklei voor de bakker.)
     marskramer: {
-      naam: 'de marskramer',
+      naam: 'the peddler',
       start: 'welkom',
       situaties: [
         { naam: 'In het gehucht, grasmaand', als: { vlag: ['marskramerOpBezoek', 'marskramerLente'] } },
@@ -79,32 +84,32 @@
       knopen: {
         welkom: {
           tekst: [
-            { als: { vlag: 'marskramerVertrekt' }, zeg: 'Mijn ezel staat al met zijn kop naar de weg, schout. Tot de volgende keer.' },
+            { als: { vlag: 'marskramerVertrekt' }, zeg: 'My donkey is already facing the road, reeve. Until next time.' },
             // Hij kwam op je brief (de bode, js/bode.js; werklijst vraag 143).
-            { als: { vlag: 'marskramerBode' }, zeg: 'U liet mij halen, schout, en ik ben gekomen. De weg was lang en mijn ezel is moe: dat ziet u terug in de prijs. Maar wat u vroeg, heb ik bij mij, of wat ervan te krijgen was.' },
-            { als: { vlag: 'marskramerLente' }, zeg: 'Grasmaand, en de wegen zijn weer te begaan. Wie nu nog graan heeft, is rijk: overal is het op. Ik betaal er goed voor.' },
-            { als: { vlag: 'marskramerZomer' }, zeg: 'Hooimaand. Alles staat te groeien en niemand heeft een stuiver. En wol heb ik deze week genoeg gezien: iedereen heeft net geschoren.' },
-            { als: { vlag: 'marskramerHerfst' }, zeg: 'Wijnmaand, mijn laatste ronde vóór de winter. Na Sint-Maarten zijn de wegen modder, straks ligt de beek dicht, en dan ziet u mij pas in grasmaand terug. Zout voor de vis, ijzer voor de smid: nu, of pas in de lente.' },
-            { zeg: 'Alles wat in een kar past, en een paar dingen die er niet in passen. Kijkt u gerust.' },
+            { als: { vlag: 'marskramerBode' }, zeg: 'You sent for me, reeve, and here I am. The road was long and my donkey is tired: you will see that in the price. But what you asked for, I have with me, or as much of it as could be had.' },
+            { als: { vlag: 'marskramerLente' }, zeg: 'April, and the roads are passable again. Anyone who still has grain is rich: everywhere else it has run out. I pay well for it.' },
+            { als: { vlag: 'marskramerZomer' }, zeg: 'July. Everything is growing and nobody has a penny. And I have seen enough wool this week: everyone has just finished shearing.' },
+            { als: { vlag: 'marskramerHerfst' }, zeg: 'October, my last round before winter. After Martinmas the roads are mud, soon the brook freezes over, and then you will not see me again until April. Salt for the fish, iron for the smith: now, or not until spring.' },
+            { zeg: "Everything that fits in a cart, and a few things that don't. Look all you like." },
           ],
           keuzes: [
-            { zeg: 'Laat zien wat u bij u hebt.', sluit: true, als: { vlag: 'marskramerOpBezoek', nietVlag: 'marskramerVertrekt' }, doe: { handel: true } },
-            { zeg: 'Wat is er nieuws?', naar: 'nieuws', als: { vlag: 'marskramerOpBezoek' } },
-            { zeg: 'Een andere keer.', sluit: true },
+            { zeg: 'Show me what you have.', sluit: true, als: { vlag: 'marskramerOpBezoek', nietVlag: 'marskramerVertrekt' }, doe: { handel: true } },
+            { zeg: 'Any news?', naar: 'nieuws', als: { vlag: 'marskramerOpBezoek' } },
+            { zeg: 'Another time.', sluit: true },
           ],
         },
         // Hij komt ook op het kasteel (spel.md, "Handel", voor later): wat hij daar hoort, vertelt
         // hij hier. En omgekeerd, maar dat zegt hij niet.
         nieuws: {
           tekst: [
-            { als: { vlag: 'marskramerLente' }, zeg: 'Uw heer heeft een spiegel van mij gekocht. Hij wilde zien hoe rijk hij eruitziet. Nu wil hij er nog een, voor de achterkant.' },
-            { als: { vlag: 'marskramerZomer' }, zeg: 'Op het kasteel tellen ze de dagen tot Sint-Maarten. Ik hoorde de heer zeggen dat uw gehucht er welvarend uitziet. Hij bedoelde het niet als compliment.' },
-            { als: { vlag: 'marskramerHerfst' }, zeg: 'Ze zeggen dat de heer dit jaar meer wil. Dat zeggen ze elk jaar. En elk jaar klopt het.' },
-            { zeg: 'Niets wat u niet al weet, schout. En wat u niet weet, weet ik ook niet. Dat is gezonder.' },
+            { als: { vlag: 'marskramerLente' }, zeg: 'Your lord bought a mirror from me. He wanted to see how rich he looks. Now he wants another, for the back.' },
+            { als: { vlag: 'marskramerZomer' }, zeg: 'At the castle they are counting the days to Martinmas. I heard the lord say your hamlet looks prosperous. He did not mean it as a compliment.' },
+            { als: { vlag: 'marskramerHerfst' }, zeg: 'They say the lord wants more this year. They say that every year. And every year they are right.' },
+            { zeg: "Nothing you don't already know, reeve. And what you don't know, I don't know either. It's healthier that way." },
           ],
           keuzes: [
-            { zeg: 'Laat zien wat u bij u hebt.', sluit: true, als: { vlag: 'marskramerOpBezoek', nietVlag: 'marskramerVertrekt' }, doe: { handel: true } },
-            { zeg: 'Tot de volgende keer.', sluit: true },
+            { zeg: 'Show me what you have.', sluit: true, als: { vlag: 'marskramerOpBezoek', nietVlag: 'marskramerVertrekt' }, doe: { handel: true } },
+            { zeg: 'Until next time.', sluit: true },
           ],
         },
       },
@@ -113,7 +118,7 @@
     // Hij is de grap: verward, ijdel, en hij telt slecht; hij spreekt over zichzelf als Wij. Zijn
     // soldaten zijn geen grap. heerOpBezoek, heerSchuld, heerBetaald en heerVertrekt zet js/heer.js.
     heer: {
-      naam: 'de heer',
+      naam: 'the lord',
       start: 'welkom',
       situaties: [
         { naam: 'Sint-Maarten: hij wacht op zijn geld', als: { vlag: 'heerOpBezoek' } },
@@ -123,31 +128,31 @@
       knopen: {
         welkom: {
           tekst: [
-            { als: { vlag: 'heerBetaald' }, zeg: 'Wij hebben alles geteld. Twee keer zelfs, en het kwam er twee keer anders uit, dus het klopt vast. Tot volgend jaar, schout. Houd het gehucht netjes. En arm. Nee, rijk. Rijk is beter voor Ons.' },
-            { als: { vlag: 'heerSchuld' }, zeg: 'Schout! Wij vergeten nooit iets. Behalve wat Wij vergeten, maar dit niet: u bent Ons nog wat schuldig van vorig jaar. Met de boete erbij. De boete is het mooiste deel.' },
-            { zeg: 'Schout! Wat een... gehucht. Klein. Modderig. Het ruikt naar koe. Maar Wij zagen onderweg een nieuw dak, en een nieuw dak kost geld. Laten Wij eens kijken wat u voor Ons hebt.' },
+            { als: { vlag: 'heerBetaald' }, zeg: 'We have counted it all. Twice, in fact, and it came out different both times, so it must be right. Until next year, reeve. Keep the hamlet tidy. And poor. No, rich. Rich is better for Us.' },
+            { als: { vlag: 'heerSchuld' }, zeg: 'Reeve! We never forget anything. Except what We forget, but not this: you still owe Us from last year. With the fine on top. The fine is the best part.' },
+            { zeg: 'Reeve! What a... hamlet. Small. Muddy. It smells of cow. But on the way We saw a new roof, and a new roof costs money. Let Us see what you have for Us.' },
           ],
           keuzes: [
-            { zeg: 'Hier is wat het gehucht u verschuldigd is.', sluit: true, als: { vlag: 'heerOpBezoek', nietVlag: 'heerBetaald' }, doe: { heer: true } },
-            { zeg: 'Hoe was de reis, heer?', naar: 'reis', als: { nietVlag: 'heerBetaald' } },
-            { zeg: 'Goede reis terug, heer.', sluit: true, als: { vlag: 'heerBetaald' } },
-            { zeg: 'Een ogenblik, heer.', sluit: true, als: { nietVlag: 'heerBetaald' } },
+            { zeg: 'Here is what the hamlet owes you, my lord.', sluit: true, als: { vlag: 'heerOpBezoek', nietVlag: 'heerBetaald' }, doe: { heer: true } },
+            { zeg: 'How was the journey, my lord?', naar: 'reis', als: { nietVlag: 'heerBetaald' } },
+            { zeg: 'A safe journey home, my lord.', sluit: true, als: { vlag: 'heerBetaald' } },
+            { zeg: 'One moment, my lord.', sluit: true, als: { nietVlag: 'heerBetaald' } },
           ],
         },
         reis: {
           tekst: [
-            { zeg: 'Afschuwelijk. Uw weg zit vol gaten. Wij hebben ze laten tellen: honderdzeven. Daar zullen Wij weggeld voor moeten heffen. Om ze te laten dichten, of om ze nog eens te laten tellen. Een van de twee.' },
+            { zeg: 'Dreadful. Your road is full of holes. We had them counted: a hundred and seven. We shall have to raise a toll for that. To have them filled, or to have them counted again. One or the other.' },
           ],
           keuzes: [
-            { zeg: 'Hier is wat het gehucht u verschuldigd is.', sluit: true, als: { vlag: 'heerOpBezoek', nietVlag: 'heerBetaald' }, doe: { heer: true } },
-            { zeg: 'Een ogenblik, heer.', sluit: true },
+            { zeg: 'Here is what the hamlet owes you, my lord.', sluit: true, als: { vlag: 'heerOpBezoek', nietVlag: 'heerBetaald' }, doe: { heer: true } },
+            { zeg: 'One moment, my lord.', sluit: true },
           ],
         },
       },
     },
     // Zijn soldaten: twee, en wie te weinig geeft, houdt ze de winter over (soldatenInHuis).
     soldaat: {
-      naam: 'een soldaat',
+      naam: 'a soldier',
       start: 'welkom',
       situaties: [
         { naam: 'Met de heer mee', als: { vlag: 'heerOpBezoek' } },
@@ -156,11 +161,11 @@
       knopen: {
         welkom: {
           tekst: [
-            { als: { vlag: 'soldatenInHuis' }, zeg: 'We blijven tot de lente, zegt de heer. Wat eten we vanavond? En morgen? En de dag daarna?' },
-            { zeg: 'Wij zijn hier alleen om te tellen, schout. En om wie verkeerd telt, te helpen tellen.' },
+            { als: { vlag: 'soldatenInHuis' }, zeg: 'We stay until spring, the lord says. What are we eating tonight? And tomorrow? And the day after?' },
+            { zeg: 'We are only here to count, reeve. And to help anyone who counts wrong to count better.' },
           ],
           keuzes: [
-            { zeg: 'Tot ziens.', sluit: true },
+            { zeg: 'Good day.', sluit: true },
           ],
         },
       },
@@ -169,7 +174,7 @@
     // 27 sep dat er in de herberg gepraat wordt, vraag 38). Ze weet wie er gisteravond zat. herbergGasten en
     // herbergDroog zet js/herberg.js elke nacht; {gisteravond} vult het spel in met de namen van wie er zat.
     herbergierster: {
-      naam: 'de herbergierster',
+      naam: 'the innkeeper',
       start: 'welkom',
       situaties: [
         { naam: 'Gisteravond zat er volk', als: { vlag: 'herbergGasten' } },
@@ -179,21 +184,21 @@
       knopen: {
         welkom: {
           tekst: [
-            { als: { vlag: 'herbergDroog' }, zeg: 'Geen druppel voor de tap, schout. Zonder graan brouw ik niets, en wat ik nog heb, is voor de huizen. Een lege herberg hoort alles en weet niets.' },
-            { als: { vlag: 'herbergGasten' }, zeg: 'Aan de tap gisteravond: {gisteravond}. Het weer, de pacht, en wie er met wie. Niets wat u hoeft te weten, en alles wat ik wil weten.' },
-            { zeg: 'Stil gisteravond. Niemand kwam. Dan tap ik voor mezelf, en ik ben een slechte klant.' },
+            { als: { vlag: 'herbergDroog' }, zeg: 'Not a drop to pour, reeve. Without grain I brew nothing, and what I have left is for the houses. An empty inn hears everything and knows nothing.' },
+            { als: { vlag: 'herbergGasten' }, zeg: 'At my tables last night: {gisteravond}. The weather, the rent, and who is walking out with whom. Nothing you need to know, and everything I like to know.' },
+            { zeg: "Quiet last night. Nobody came. Then I pour for myself, and I'm a poor customer." },
           ],
           keuzes: [
-            { zeg: 'En de marskramer?', naar: 'marskramer', als: { vlag: 'marskramerOpBezoek' } },
-            { zeg: 'Houd uw oren open.', sluit: true },
+            { zeg: 'And the peddler?', naar: 'marskramer', als: { vlag: 'marskramerOpBezoek' } },
+            { zeg: 'Keep your ears open.', sluit: true },
           ],
         },
         marskramer: {
           tekst: [
-            { zeg: 'Hij slaapt boven, zolang hij op het plein staat. Hij betaalt met een lint of een spiegeltje, en praat voor drie. Wat hij op het kasteel vertelt, heeft hij hier eerst gehoord.' },
+            { zeg: 'He sleeps upstairs while his stall is on the square. He pays with a ribbon or a little mirror, and talks for three. What he tells them at the castle, he heard here first.' },
           ],
           keuzes: [
-            { zeg: 'Houd uw oren open.', sluit: true },
+            { zeg: 'Keep your ears open.', sluit: true },
           ],
         },
       },
@@ -205,7 +210,7 @@
     // schandpaal<Karakter> als jij hem aanwees (js/heer.js, T.schandpaalVlag), schoutAanDeSchandpaal
     // als je er zelf stond, en briefVanDeHeer en soldatenInHuis zolang die er zijn.
     zanger: {
-      naam: 'de zanger',
+      naam: 'the singer',
       start: 'welkom',
       situaties: [
         { naam: 'De brief van de heer is er', als: { vlag: 'briefVanDeHeer' } },
@@ -216,20 +221,20 @@
       knopen: {
         welkom: {
           tekst: [
-            { als: { vlag: 'schandpaalZanger' }, zeg: 'Drie dagen aan de paal, en niemand die zong. Ik zing ook niet meer, schout. Niet voor jou.' },
-            { als: { vlag: 'schoutAanDeSchandpaal' }, zeg: 'Je stond er zelf, aan die paal. Daar hebben we een lied over gemaakt, schout. Geen spotlied.' },
-            { als: { vlag: 'soldatenInHuis' }, zeg: 'Die twee soldaten zingen mee in de schuur. Vals. En ze eten voor zes.' },
-            { als: { vlag: 'briefVanDeHeer' }, zeg: 'Hoeveel wil hij dit jaar? Nee, zeg het maar niet. Ik zing liever nog even.' },
-            { zeg: 'Kom vanavond naar de schuur, schout. We zingen tot de lamp op is.' },
+            { als: { vlag: 'schandpaalZanger' }, zeg: "Three days in the pillory, and nobody sang. I don't sing any more either, reeve. Not for you." },
+            { als: { vlag: 'schoutAanDeSchandpaal' }, zeg: 'You stood in the pillory yourself. We made a song about it, reeve. Not a mocking one.' },
+            { als: { vlag: 'soldatenInHuis' }, zeg: 'Those two soldiers sing along in the barn. Out of tune. And they eat for six.' },
+            { als: { vlag: 'briefVanDeHeer' }, zeg: "How much does he want this year? No, don't tell me. I'd rather sing a while longer." },
+            { zeg: 'Come to the barn tonight, reeve. We sing until the lamp runs dry.' },
           ],
           keuzes: [
-            { zeg: 'Tot ziens.', sluit: true },
+            { zeg: 'Good day.', sluit: true },
           ],
         },
       },
     },
     weduwe: {
-      naam: 'de weduwe',
+      naam: 'the widow',
       start: 'welkom',
       situaties: [
         { naam: 'De brief van de heer is er', als: { vlag: 'briefVanDeHeer' } },
@@ -240,20 +245,20 @@
       knopen: {
         welkom: {
           tekst: [
-            { als: { vlag: 'schandpaalWeduwe' }, zeg: 'Mijn kinderen hebben drie dagen naar hun moeder aan de paal gekeken. Ze vragen of jij dat zo wilde. Wat moet ik ze zeggen?' },
-            { als: { vlag: 'schoutAanDeSchandpaal' }, zeg: 'Je stond er zelf, in plaats van een van ons. De kinderen hebben je brood gebracht. Dat mocht niet, dus deden ze het in het donker.' },
-            { als: { vlag: 'soldatenInHuis' }, zeg: 'Er slaapt een soldaat in mijn hooi. Hij eet wat mijn kinderen hadden moeten eten, en hij bedankt er niet eens voor.' },
-            { als: { vlag: 'briefVanDeHeer' }, zeg: 'Er is een brief van de heer, hoor ik. Ik heb drie monden te voeden, schout. Vergeet dat niet als je gaat tellen.' },
-            { zeg: 'Drie kinderen, één akker, en geen man meer. Het gaat, schout. Het moet.' },
+            { als: { vlag: 'schandpaalWeduwe' }, zeg: 'For three days my children watched their mother in the pillory. They ask whether you wanted it so. What am I to tell them?' },
+            { als: { vlag: 'schoutAanDeSchandpaal' }, zeg: 'You stood there yourself, instead of one of us. The children brought you bread. That was forbidden, so they did it in the dark.' },
+            { als: { vlag: 'soldatenInHuis' }, zeg: "There's a soldier sleeping in my hay. He eats what my children should have eaten, and he doesn't even say thank you." },
+            { als: { vlag: 'briefVanDeHeer' }, zeg: "There's a letter from the lord, I hear. I have three mouths to feed, reeve. Remember that when you start counting." },
+            { zeg: 'Three children, one field, and no husband any more. I manage, reeve. I have to.' },
           ],
           keuzes: [
-            { zeg: 'Tot ziens.', sluit: true },
+            { zeg: 'Good day.', sluit: true },
           ],
         },
       },
     },
     woekeraar: {
-      naam: 'de woekeraar',
+      naam: 'the moneylender',
       start: 'welkom',
       situaties: [
         { naam: 'De brief van de heer is er', als: { vlag: 'briefVanDeHeer' } },
@@ -264,20 +269,20 @@
       knopen: {
         welkom: {
           tekst: [
-            { als: { vlag: 'schandpaalWoekeraar' }, zeg: 'Aan de paal. Ik. De enige hier die de pacht altijd op tijd heeft. Onthoud dit, schout: wie mij schuldig is, betaalt voortaan dubbel. En iedereen hier is mij schuldig.' },
-            { als: { vlag: 'schoutAanDeSchandpaal' }, zeg: 'Je stond er zelf. Dom. Je had mij kunnen aanwijzen. Ik had het je vergeven, tegen een kleine rente.' },
-            { als: { vlag: 'soldatenInHuis' }, zeg: 'Twee soldaten, de hele winter. Ik verkoop ze graan. Aan wie anders, schout?' },
-            { als: { vlag: 'briefVanDeHeer' }, zeg: 'De brief is er. Komt het gehucht tekort, kom dan bij mij. Ik leen graag. Tegen een redelijke rente.' },
-            { zeg: 'Graan nodig, schout? Ik leen het je. Tien zakken nu, twaalf na de oogst. Dat is geen woeker, dat is rekenen.' },
+            { als: { vlag: 'schandpaalWoekeraar' }, zeg: 'In the pillory. Me. The only one here who always has the rent on time. Remember this, reeve: whoever owes me pays double from now on. And everyone here owes me.' },
+            { als: { vlag: 'schoutAanDeSchandpaal' }, zeg: 'You stood there yourself. Foolish. You could have named me. I would have forgiven you, at a modest rate of interest.' },
+            { als: { vlag: 'soldatenInHuis' }, zeg: 'Two soldiers, all winter. I sell them grain. Who else is buying, reeve?' },
+            { als: { vlag: 'briefVanDeHeer' }, zeg: 'The letter has come. If the hamlet comes up short, come to me. I like to lend. At a reasonable rate.' },
+            { zeg: "Need grain, reeve? I'll lend it to you. Ten sacks now, twelve after the harvest. That isn't usury, that's arithmetic." },
           ],
           keuzes: [
-            { zeg: 'Tot ziens.', sluit: true },
+            { zeg: 'Good day.', sluit: true },
           ],
         },
       },
     },
     vroedvrouw: {
-      naam: 'de vroedvrouw',
+      naam: 'the midwife',
       start: 'welkom',
       situaties: [
         { naam: 'De brief van de heer is er', als: { vlag: 'briefVanDeHeer' } },
@@ -288,20 +293,20 @@
       knopen: {
         welkom: {
           tekst: [
-            { als: { vlag: 'schandpaalVroedvrouw' }, zeg: 'De halve buurt heb ik ter wereld geholpen, en de halve buurt keek toe hoe ik aan de paal stond. Zij keken weg, schout. Jij niet.' },
-            { als: { vlag: 'schoutAanDeSchandpaal' }, zeg: 'Je stond er zelf. Ik heb je polsen ingesmeerd, daarna. Dat doe ik niet voor elke schout.' },
-            { als: { vlag: 'soldatenInHuis' }, zeg: 'Die soldaten blijven tot de lente, zeggen ze. Ik tel de maanden. Dat is mijn vak.' },
-            { als: { vlag: 'briefVanDeHeer' }, zeg: 'Een brief van de heer. Die man is zelf ook ooit geboren, schout. Ik weet niet wie dat op haar geweten heeft.' },
-            { zeg: 'Twee kinderen deze maand, en allebei gezond. Nog een paar jaar, en dit gehucht is een dorp.' },
+            { als: { vlag: 'schandpaalVroedvrouw' }, zeg: 'I brought half this lane into the world, and half this lane watched me stand in the pillory. They looked away, reeve. You did not.' },
+            { als: { vlag: 'schoutAanDeSchandpaal' }, zeg: "You stood there yourself. I rubbed salve on your wrists afterwards. I don't do that for every reeve." },
+            { als: { vlag: 'soldatenInHuis' }, zeg: "Those soldiers are staying until spring, they say. I'm counting the months. That's my trade." },
+            { als: { vlag: 'briefVanDeHeer' }, zeg: "A letter from the lord. That man was born once too, reeve. I don't know who has that on her conscience." },
+            { zeg: 'Two babies this month, and both healthy. A few more years, and this hamlet is a village.' },
           ],
           keuzes: [
-            { zeg: 'Tot ziens.', sluit: true },
+            { zeg: 'Good day.', sluit: true },
           ],
         },
       },
     },
     heethoofd: {
-      naam: 'het heethoofd',
+      naam: 'the hothead',
       start: 'welkom',
       situaties: [
         { naam: 'De brief van de heer is er', als: { vlag: 'briefVanDeHeer' } },
@@ -312,20 +317,20 @@
       knopen: {
         welkom: {
           tekst: [
-            { als: { vlag: 'schandpaalHeethoofd' }, zeg: 'Drie dagen aan de paal. Ik heb de gezichten onthouden, schout. Van de soldaten. En het jouwe.' },
-            { als: { vlag: 'schoutAanDeSchandpaal' }, zeg: 'Je stond er zelf, en je keek hem recht aan. Als het ooit zover komt, schout, dan sta ik naast je. Niet achter je. Naast je.' },
-            { als: { vlag: 'soldatenInHuis' }, zeg: 'Twee soldaten, met een zwaard en een grote mond. Het zwaard kan ik ze niet afpakken. Nog niet.' },
-            { als: { vlag: 'briefVanDeHeer' }, zeg: 'Een brief. Hij schrijft, wij betalen. Ooit schrijven wij hem een brief, schout.' },
-            { zeg: 'Die knecht van de heer? Die viel. Tegen mijn vuist. Dat kan gebeuren.' },
+            { als: { vlag: 'schandpaalHeethoofd' }, zeg: "Three days in the pillory. I remember the faces, reeve. The soldiers'. And yours." },
+            { als: { vlag: 'schoutAanDeSchandpaal' }, zeg: "You stood there yourself, and you looked him in the eye. If it ever comes to it, reeve, I'll stand beside you. Not behind you. Beside you." },
+            { als: { vlag: 'soldatenInHuis' }, zeg: "Two soldiers, with a sword and a big mouth. I can't take the sword off them. Not yet." },
+            { als: { vlag: 'briefVanDeHeer' }, zeg: "A letter. He writes, we pay. One day we'll write him a letter, reeve." },
+            { zeg: "That servant of the lord's? He fell. Against my fist. It happens." },
           ],
           keuzes: [
-            { zeg: 'Tot ziens.', sluit: true },
+            { zeg: 'Good day.', sluit: true },
           ],
         },
       },
     },
     vrome: {
-      naam: 'de vrome',
+      naam: 'the pious one',
       start: 'welkom',
       situaties: [
         { naam: 'De brief van de heer is er', als: { vlag: 'briefVanDeHeer' } },
@@ -336,20 +341,20 @@
       knopen: {
         welkom: {
           tekst: [
-            { als: { vlag: 'schandpaalVrome' }, zeg: 'Drie dagen aan de paal, en ik heb gebeden voor wie mij daar zette. Dat is erger dan vloeken, schout. Denk daar maar eens over na.' },
-            { als: { vlag: 'schoutAanDeSchandpaal' }, zeg: 'Je stond er zelf, als een heilige. Of als een dwaas. Bij heiligen weet je dat pas achteraf.' },
-            { als: { vlag: 'soldatenInHuis' }, zeg: 'Die soldaten vloeken aan mijn tafel. Ik bid voor ze. Hardop, zodat ze het horen.' },
-            { als: { vlag: 'briefVanDeHeer' }, zeg: 'Een brief van de heer. Ik bid elke avond voor hem, schout: dat hij krijgt wat hij verdient.' },
-            { zeg: 'God ziet alles, schout. Gelukkig is de heer niet God. Die ziet alleen geld.' },
+            { als: { vlag: 'schandpaalVrome' }, zeg: 'Three days in the pillory, and I prayed for whoever put me there. That is worse than cursing, reeve. Think about that.' },
+            { als: { vlag: 'schoutAanDeSchandpaal' }, zeg: 'You stood there yourself, like a saint. Or like a fool. With saints, you only know afterwards.' },
+            { als: { vlag: 'soldatenInHuis' }, zeg: 'Those soldiers curse at my table. I pray for them. Out loud, so they hear it.' },
+            { als: { vlag: 'briefVanDeHeer' }, zeg: 'A letter from the lord. I pray for him every night, reeve: that he gets what he deserves.' },
+            { zeg: 'God sees everything, reeve. Luckily the lord is not God. He only sees money.' },
           ],
           keuzes: [
-            { zeg: 'Tot ziens.', sluit: true },
+            { zeg: 'Good day.', sluit: true },
           ],
         },
       },
     },
     roddelaar: {
-      naam: 'de roddelaar',
+      naam: 'the gossip',
       start: 'welkom',
       situaties: [
         { naam: 'De brief van de heer is er', als: { vlag: 'briefVanDeHeer' } },
@@ -360,20 +365,20 @@
       knopen: {
         welkom: {
           tekst: [
-            { als: { vlag: 'schandpaalRoddelaar' }, zeg: 'Aan de paal! Ik! En weet je wat ik daar zag, schout? Alles. Wie lachte, wie wegkeek. Ik vergeet niets. Dat weet je.' },
-            { als: { vlag: 'schoutAanDeSchandpaal' }, zeg: 'Je stond er zelf. Het hele gehucht praat erover. Ik ook, natuurlijk. Maar ik zeg alleen goede dingen. Meestal.' },
-            { als: { vlag: 'soldatenInHuis' }, zeg: 'Die lange soldaat kijkt wel erg vaak naar ons graan. Nee, dat heb je niet van mij.' },
-            { als: { vlag: 'briefVanDeHeer' }, zeg: 'De brief is er, hè? Ik weet al wat erin staat. Iedereen weet het. Behalve jij, zo te zien.' },
-            { zeg: 'Heb je het al gehoord, schout? Nee? Dan vertel ik het je. Maar niet verder vertellen. Tenzij het iets oplevert.' },
+            { als: { vlag: 'schandpaalRoddelaar' }, zeg: 'In the pillory! Me! And do you know what I saw from there, reeve? Everything. Who laughed, who looked away. I forget nothing. You know that.' },
+            { als: { vlag: 'schoutAanDeSchandpaal' }, zeg: 'You stood there yourself. The whole hamlet is talking about it. So am I, of course. But I only say good things. Mostly.' },
+            { als: { vlag: 'soldatenInHuis' }, zeg: "That tall soldier looks at our grain rather often. No, you didn't hear that from me." },
+            { als: { vlag: 'briefVanDeHeer' }, zeg: "The letter's come, hasn't it? I already know what's in it. Everyone knows. Except you, by the look of it." },
+            { zeg: "Have you heard, reeve? No? Then I'll tell you. But don't pass it on. Unless there's something in it for you." },
           ],
           keuzes: [
-            { zeg: 'Tot ziens.', sluit: true },
+            { zeg: 'Good day.', sluit: true },
           ],
         },
       },
     },
     grijsaard: {
-      naam: 'de oudste',
+      naam: 'the elder',
       start: 'welkom',
       situaties: [
         { naam: 'De brief van de heer is er', als: { vlag: 'briefVanDeHeer' } },
@@ -384,20 +389,20 @@
       knopen: {
         welkom: {
           tekst: [
-            { als: { vlag: 'schandpaalGrijsaard' }, zeg: 'Op mijn leeftijd, aan de paal. Ik heb drie heren overleefd, schout. Ik overleef jou ook.' },
-            { als: { vlag: 'schoutAanDeSchandpaal' }, zeg: 'Je stond er zelf. Dat heb ik maar één keer eerder gezien, en die schout werd later burgemeester. Of hij werd opgehangen. Ik haal ze door elkaar.' },
-            { als: { vlag: 'soldatenInHuis' }, zeg: 'Soldaten in de winter. Onder de tweede heer ook. Toen aten ze de hond op. Houd je hond binnen, schout.' },
-            { als: { vlag: 'briefVanDeHeer' }, zeg: 'Weer een brief. De eerste heer schreef niet, die kwam gewoon. De tweede kon niet schrijven. Deze schrijft. Ik weet niet wat erger is.' },
-            { zeg: 'Drie heren heb ik zien komen en gaan, schout. Ze worden steeds dikker, en het graan steeds dunner.' },
+            { als: { vlag: 'schandpaalGrijsaard' }, zeg: "At my age, in the pillory. I have outlived three lords, reeve. I'll outlive you too." },
+            { als: { vlag: 'schoutAanDeSchandpaal' }, zeg: "You stood there yourself. I've seen that only once before, and that reeve later became mayor. Or he was hanged. I mix them up." },
+            { als: { vlag: 'soldatenInHuis' }, zeg: 'Soldiers in winter. Under the second lord too. They ate the dog that time. Keep your dog indoors, reeve.' },
+            { als: { vlag: 'briefVanDeHeer' }, zeg: "Another letter. The first lord didn't write, he just came. The second couldn't write. This one writes. I don't know which is worse." },
+            { zeg: "I've seen three lords come and go, reeve. Each one fatter than the last, and the grain thinner." },
           ],
           keuzes: [
-            { zeg: 'Tot ziens.', sluit: true },
+            { zeg: 'Good day.', sluit: true },
           ],
         },
       },
     },
     nieuwkomer: {
-      naam: 'de nieuwkomer',
+      naam: 'the newcomer',
       start: 'welkom',
       situaties: [
         { naam: 'De brief van de heer is er', als: { vlag: 'briefVanDeHeer' } },
@@ -408,20 +413,20 @@
       knopen: {
         welkom: {
           tekst: [
-            { als: { vlag: 'schandpaalNieuwkomer' }, zeg: 'Een jaar hier, en al aan de paal. In het buurdorp duurde dat langer. Nee, vraag maar niet.' },
-            { als: { vlag: 'schoutAanDeSchandpaal' }, zeg: 'Je stond er zelf. In het buurdorp deed de schout dat nooit. Daar deed de schout andere dingen. Daarom ben ik hier.' },
-            { als: { vlag: 'soldatenInHuis' }, zeg: 'Soldaten. Die ken ik. In het buurdorp kende ik er een paar. Die kennen mij ook. Hopelijk niet deze.' },
-            { als: { vlag: 'briefVanDeHeer' }, zeg: 'Een brief van de heer? Die in het buurdorp schreef ook brieven. Tot hij niet meer schreef. Nee, vraag maar niet.' },
-            { zeg: 'Waarom ik uit het buurdorp kwam? Het gras is hier groener. En daar was ik niet meer welkom. Vooral dat laatste.' },
+            { als: { vlag: 'schandpaalNieuwkomer' }, zeg: "One year here, and already in the pillory. In the next village it took longer. No, don't ask." },
+            { als: { vlag: 'schoutAanDeSchandpaal' }, zeg: "You stood there yourself. In the next village the reeve never did that. The reeve there did other things. That's why I'm here." },
+            { als: { vlag: 'soldatenInHuis' }, zeg: 'Soldiers. I know soldiers. In the next village I knew a few. They know me too. Not these ones, I hope.' },
+            { als: { vlag: 'briefVanDeHeer' }, zeg: "A letter from the lord? The one in the next village wrote letters too. Until he stopped. No, don't ask." },
+            { zeg: "Why I left the next village? The grass is greener here. And I wasn't welcome there any more. Mostly that." },
           ],
           keuzes: [
-            { zeg: 'Tot ziens.', sluit: true },
+            { zeg: 'Good day.', sluit: true },
           ],
         },
       },
     },
     drinker: {
-      naam: 'de drinker',
+      naam: 'the drinker',
       start: 'welkom',
       situaties: [
         { naam: 'De brief van de heer is er', als: { vlag: 'briefVanDeHeer' } },
@@ -432,14 +437,14 @@
       knopen: {
         welkom: {
           tekst: [
-            { als: { vlag: 'schandpaalDrinker' }, zeg: 'Drie dagen aan de paal, zonder één druppel. Weet je hoe lang drie dagen zijn zonder één druppel, schout? Ik wel.' },
-            { als: { vlag: 'schoutAanDeSchandpaal' }, zeg: 'Je stond er zelf! Daar drink ik op. Op jou, schout. En op de paal. En op de heer, dat hij erin stikt.' },
-            { als: { vlag: 'soldatenInHuis' }, zeg: 'Die soldaten drinken mijn bier. Ik weet niet wat erger is: dat ze het drinken, of dat ze het niet eens lekker vinden.' },
-            { als: { vlag: 'briefVanDeHeer' }, zeg: 'Een brief. Lees jij hem maar, schout. Ik lees alleen de bodem van mijn kroes.' },
-            { zeg: 'Ik drink niet meer dan een ander, schout. Ik drink alleen vaker.' },
+            { als: { vlag: 'schandpaalDrinker' }, zeg: 'Three days in the pillory, without a drop. Do you know how long three days are without a drop, reeve? I do.' },
+            { als: { vlag: 'schoutAanDeSchandpaal' }, zeg: "You stood there yourself! I'll drink to that. To you, reeve. And to the pillory. And to the lord, may he choke on it." },
+            { als: { vlag: 'soldatenInHuis' }, zeg: "Those soldiers drink my ale. I don't know which is worse: that they drink it, or that they don't even like it." },
+            { als: { vlag: 'briefVanDeHeer' }, zeg: 'A letter. You read it, reeve. I only read the bottom of my tankard.' },
+            { zeg: 'I drink no more than anyone else, reeve. I just drink more often.' },
           ],
           keuzes: [
-            { zeg: 'Tot ziens.', sluit: true },
+            { zeg: 'Good day.', sluit: true },
           ],
         },
       },
@@ -453,12 +458,12 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Schout, {ander} heeft twee kippen uit mijn hok gehaald. Ik zag hem gaan, met de veren nog aan zijn mouw. Wat doet u eraan?' },
+            { zeg: 'Reeve, {ander} took two hens from my coop. I saw him go, with the feathers still on his sleeve. What will you do about it?' },
           ],
           keuzes: [
-            { zeg: 'Verban hem. Wie steelt, hoort hier niet.', sluit: true, doe: { tevreden: 3, verban: 'ander' } },
-            { zeg: 'Hij betaalt ze terug, en een goud boete voor de kist.', sluit: true, doe: { goud: 1, tevreden: 2, voorval: ['diefstalWrok', 'niets'] } },
-            { zeg: 'Laat hem gaan. Het waren maar kippen.', sluit: true, doe: { tevreden: -3, voorval: ['diefstalWeer', 'diefDank'] } },
+            { zeg: "Banish him. Thieves don't belong here.", sluit: true, doe: { tevreden: 3, verban: 'ander' } },
+            { zeg: 'He pays for them, and a fine of one gold for the chest.', sluit: true, doe: { goud: 1, tevreden: 2, voorval: ['diefstalWrok', 'niets'] } },
+            { zeg: 'Let him go. They were only hens.', sluit: true, doe: { tevreden: -3, voorval: ['diefstalWeer', 'diefDank'] } },
           ],
         },
       },
@@ -469,12 +474,12 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Schout, het is weer {ander}. Nu uit de schuur van het dorp: een zak graan. Hij zegt dat hij hem gevonden heeft. In de schuur.' },
+            { zeg: "Reeve, it's {ander} again. This time from the village barn: a sack of grain. He says he found it. In the barn." },
           ],
           keuzes: [
-            { zeg: 'Nu is het genoeg. Verban hem.', sluit: true, doe: { tevreden: 4, verban: 'ander' } },
-            { zeg: 'Hij brengt het terug, en werkt een maand voor niets.', sluit: true, doe: { tevreden: 1 } },
-            { zeg: 'Hij zal wel honger hebben. Laat hem het houden.', sluit: true, doe: { graan: -10, tevreden: -4 } },
+            { zeg: "That's enough. Banish him.", sluit: true, doe: { tevreden: 4, verban: 'ander' } },
+            { zeg: 'He brings it back, and works a month for nothing.', sluit: true, doe: { tevreden: 1 } },
+            { zeg: 'He must be hungry. Let him keep it.', sluit: true, doe: { graan: -10, tevreden: -4 } },
           ],
         },
       },
@@ -485,12 +490,12 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Schout, vannacht heeft iemand de luiken van uw huis ingegooid. De buren zagen {ander} weglopen. Hij is die boete nog niet vergeten, zegt hij.' },
+            { zeg: "Reeve, last night someone smashed the shutters on your house. The neighbours saw {ander} walking off. He hasn't forgotten that fine, he says." },
           ],
           keuzes: [
-            { zeg: 'Hij betaalt de luiken, en nog een boete.', sluit: true, doe: { goud: 1, tevreden: 1, voorval: ['diefstalWrok', 'niets', 'niets'] } },
-            { zeg: 'Verban hem.', sluit: true, doe: { tevreden: 2, verban: 'ander' } },
-            { zeg: 'Laat maar. Het waren oude luiken.', sluit: true, doe: { tevreden: -1 } },
+            { zeg: 'He pays for the shutters, and another fine.', sluit: true, doe: { goud: 1, tevreden: 1, voorval: ['diefstalWrok', 'niets', 'niets'] } },
+            { zeg: 'Banish him.', sluit: true, doe: { tevreden: 2, verban: 'ander' } },
+            { zeg: 'Leave it. They were old shutters.', sluit: true, doe: { tevreden: -1 } },
           ],
         },
       },
@@ -501,12 +506,12 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Schout. Weet u nog, de kippen van {ander}? U liet me gaan. Ik heb iets voor u: een haas. Ik weet waar er meer zitten, maar dat is in het bos van de heer.' },
+            { zeg: "Reeve. Remember {ander}'s hens? You let me go. I have something for you: a hare. I know where there are more, but that's in the lord's forest." },
           ],
           keuzes: [
-            { zeg: 'Dank je. Geef hem maar aan {ander}.', sluit: true, doe: { tevreden: 2 } },
-            { zeg: 'Ik neem hem aan. En die andere hazen ook.', sluit: true, doe: { vlees: 8, gunst: -2 } },
-            { zeg: 'Uit het bos van de heer? Breng hem terug.', sluit: true, doe: { gunst: 2 } },
+            { zeg: 'Thank you. Give it to {ander}.', sluit: true, doe: { tevreden: 2 } },
+            { zeg: "I'll take it. And the other hares too.", sluit: true, doe: { vlees: 8, gunst: -2 } },
+            { zeg: "From the lord's forest? Take it back.", sluit: true, doe: { gunst: 2 } },
           ],
         },
       },
@@ -517,12 +522,12 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Kijk naar mijn oog, schout. Dat was {ander}, gisteravond in de herberg. Om niks. Nou ja, om een grap over zijn moeder. Maar het was een goeie grap.' },
+            { zeg: 'Look at my eye, reeve. That was {ander}, last night at the inn. Over nothing. Well, over a joke about his mother. But it was a good joke.' },
           ],
           keuzes: [
-            { zeg: '{ander} betaalt twee goud boete, voor de kist.', sluit: true, doe: { goud: 2, tevreden: 1 } },
-            { zeg: 'Allebei een maand geen bier.', sluit: true, doe: { bier: 5, tevreden: -1 } },
-            { zeg: 'Een grap over zijn moeder? Dan had je het verdiend.', sluit: true, doe: { tevreden: -2 } },
+            { zeg: '{ander} pays a fine of two gold, for the chest.', sluit: true, doe: { goud: 2, tevreden: 1 } },
+            { zeg: 'No ale for either of them for a month.', sluit: true, doe: { bier: 5, tevreden: -1 } },
+            { zeg: 'A joke about his mother? Then you had it coming.', sluit: true, doe: { tevreden: -2 } },
           ],
         },
       },
@@ -533,12 +538,12 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: '{ander} heeft drie voren over de grens geploegd. Mijn grens, schout. Die steen heeft mijn grootvader daar zelf gelegd. Nou ja, gerold.' },
+            { zeg: '{ander} has ploughed three furrows over the boundary. My boundary, reeve. My grandfather laid that stone there himself. Well, rolled it.' },
           ],
           keuzes: [
-            { zeg: 'De steen blijft waar hij ligt.', sluit: true, doe: { tevreden: 1, voorval: ['akkergrensWraak', 'niets'] } },
-            { zeg: 'Wie het land ploegt, mag het houden.', sluit: true, doe: { tevreden: -2 } },
-            { zeg: 'Ik laat het opmeten, met de ketting van de heer.', sluit: true, doe: { goud: -2, tevreden: 2 } },
+            { zeg: 'The stone stays where it lies.', sluit: true, doe: { tevreden: 1, voorval: ['akkergrensWraak', 'niets'] } },
+            { zeg: 'Whoever ploughs the land may keep it.', sluit: true, doe: { tevreden: -2 } },
+            { zeg: "I'll have it measured, with the lord's chain.", sluit: true, doe: { goud: -2, tevreden: 2 } },
           ],
         },
       },
@@ -549,11 +554,11 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Schout, er ligt een dode kat in mijn put. Ik zeg niet wie dat gedaan heeft. {ander}. Dat zeg ik dus niet.' },
+            { zeg: "Reeve, there's a dead cat in my well. I'm not saying who did it. {ander}. So I'm not saying." },
           ],
           keuzes: [
-            { zeg: '{ander} haalt hem eruit, en betaalt een boete.', sluit: true, doe: { goud: 1, tevreden: 1 } },
-            { zeg: 'Een dode kat. Dat kan iedereen zijn.', sluit: true, doe: { tevreden: -2 } },
+            { zeg: '{ander} fishes it out, and pays a fine.', sluit: true, doe: { goud: 1, tevreden: 1 } },
+            { zeg: 'A dead cat. It could have been anyone.', sluit: true, doe: { tevreden: -2 } },
           ],
         },
       },
@@ -564,12 +569,12 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Ik zag {ander} in het bos van de heer, met een haas onder zijn jas. Als de heer het hoort, zijn we allemaal de klos. Ik zeg het maar, schout.' },
+            { zeg: "I saw {ander} in the lord's forest, with a hare under his coat. If the lord hears of it, we all pay. I'm only saying, reeve." },
           ],
           keuzes: [
-            { zeg: 'Ik geef hem aan bij de heer.', sluit: true, doe: { tevreden: -3, gunst: 4 } },
-            { zeg: 'Hij deelt die haas met het dorp, en houdt zijn mond.', sluit: true, doe: { vlees: 3, gunst: -2 } },
-            { zeg: 'Ik heb niets gehoord. En jij ook niet.', sluit: true, doe: { gunst: -1 } },
+            { zeg: "I'll report him to the lord.", sluit: true, doe: { tevreden: -3, gunst: 4 } },
+            { zeg: 'He shares that hare with the village, and keeps his mouth shut.', sluit: true, doe: { vlees: 3, gunst: -2 } },
+            { zeg: 'I heard nothing. And neither did you.', sluit: true, doe: { gunst: -1 } },
           ],
         },
       },
@@ -580,12 +585,12 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: '{ander} is een heks, schout. Ze keek naar mijn koe, en sindsdien geeft die zure melk. Iedereen zegt het. Nou ja, ik zeg het.' },
+            { zeg: '{ander} is a witch, reeve. She looked at my cow, and since then it gives sour milk. Everyone says so. Well, I say so.' },
           ],
           keuzes: [
-            { zeg: 'Onzin. Ga naar huis.', sluit: true, doe: { tevreden: -1 } },
-            { zeg: 'Laat haar een week je koe verzorgen. Dan zien we het wel.', sluit: true, doe: { tevreden: 1 } },
-            { zeg: 'Verban haar. Voor de zekerheid.', sluit: true, doe: { tevreden: 3, verban: 'ander' } },
+            { zeg: 'Nonsense. Go home.', sluit: true, doe: { tevreden: -1 } },
+            { zeg: "Let her look after your cow for a week. Then we'll see.", sluit: true, doe: { tevreden: 1 } },
+            { zeg: 'Banish her. To be safe.', sluit: true, doe: { tevreden: 3, verban: 'ander' } },
           ],
         },
       },
@@ -596,12 +601,12 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: '{ander} wil mijn koe, voor een schuld van drie goud. Ik leende er twee. Zonder koe hebben mijn kinderen geen melk, schout.' },
+            { zeg: '{ander} wants my cow, for a debt of three gold. I borrowed two. Without the cow my children have no milk, reeve.' },
           ],
           keuzes: [
-            { zeg: 'Een schuld is een schuld.', sluit: true, doe: { tevreden: -3 } },
-            { zeg: 'Ik betaal het uit de kist.', sluit: true, doe: { goud: -3, tevreden: 3 } },
-            { zeg: 'Twee geleend, twee terug. De rest is woeker.', sluit: true, doe: { tevreden: 2, voorval: 'woekerWraak' } },
+            { zeg: 'A debt is a debt.', sluit: true, doe: { tevreden: -3 } },
+            { zeg: "I'll pay it from the chest.", sluit: true, doe: { goud: -3, tevreden: 3 } },
+            { zeg: 'Two borrowed, two paid back. The rest is usury.', sluit: true, doe: { tevreden: 2, voorval: 'woekerWraak' } },
           ],
         },
       },
@@ -612,11 +617,11 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Morgen ga ik naar het kasteel, schout. Om te praten. Over u, en over alles wat ik van u weet. Tenzij u mij iets te zeggen hebt.' },
+            { zeg: "Tomorrow I'm going to the castle, reeve. To talk. About you, and everything I know about you. Unless you have something to say to me." },
           ],
           keuzes: [
-            { zeg: 'Hier, vijf goud. En nu je mond dicht.', sluit: true, doe: { goud: -5 } },
-            { zeg: 'Ga maar. De heer gelooft geen woekeraar.', sluit: true, doe: { gunst: -6 } },
+            { zeg: 'Here, five gold. Now keep your mouth shut.', sluit: true, doe: { goud: -5 } },
+            { zeg: "Go, then. The lord won't believe a moneylender.", sluit: true, doe: { gunst: -6 } },
           ],
         },
       },
@@ -627,11 +632,11 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Schout, mijn dak lekt, en het regent hier altijd. Kunt u me drie goud lenen? Over een paar weken krijgt u het terug. Echt waar.' },
+            { zeg: "Reeve, my roof leaks, and it always rains here. Could you lend me three gold? You'll have it back in a few weeks. Truly." },
           ],
           keuzes: [
-            { zeg: 'Hier, drie goud.', sluit: true, doe: { goud: -3, voorval: ['leningTerug', 'leningTerug', 'leningUitstel'] } },
-            { zeg: 'Het goud in de kist is van de heer.', sluit: true, doe: { tevreden: -1 } },
+            { zeg: 'Here, three gold.', sluit: true, doe: { goud: -3, voorval: ['leningTerug', 'leningTerug', 'leningUitstel'] } },
+            { zeg: 'The gold in the chest belongs to the lord.', sluit: true, doe: { tevreden: -1 } },
           ],
         },
       },
@@ -642,11 +647,11 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Hier is uw goud, schout. Vier: drie van u, en één voor het wachten.' },
+            { zeg: 'Here is your gold, reeve. Four: three of yours, and one for the waiting.' },
           ],
           keuzes: [
-            { zeg: 'Dank je.', sluit: true, doe: { goud: 4 } },
-            { zeg: 'Houd die ene maar.', sluit: true, doe: { goud: 3, tevreden: 1 } },
+            { zeg: 'Thank you.', sluit: true, doe: { goud: 4 } },
+            { zeg: 'Keep the extra one.', sluit: true, doe: { goud: 3, tevreden: 1 } },
           ],
         },
       },
@@ -657,12 +662,12 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Schout, over dat goud. Het dak was duurder dan ik dacht. En het lekt nog steeds. Mag ik nog wat langer?' },
+            { zeg: 'Reeve, about that gold. The roof cost more than I thought. And it still leaks. Could I have a little longer?' },
           ],
           keuzes: [
-            { zeg: 'Nog een paar weken dan.', sluit: true, doe: { voorval: 'leningTerug' } },
-            { zeg: 'Dan werk je het af: een week hout hakken.', sluit: true, doe: { hout: 10, tevreden: -1 } },
-            { zeg: 'Laat maar zitten.', sluit: true, doe: { tevreden: 2 } },
+            { zeg: 'A few more weeks, then.', sluit: true, doe: { voorval: 'leningTerug' } },
+            { zeg: 'Then you work it off: a week of chopping wood.', sluit: true, doe: { hout: 10, tevreden: -1 } },
+            { zeg: 'Forget the debt.', sluit: true, doe: { tevreden: 2 } },
           ],
         },
       },
@@ -673,11 +678,11 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Bij de brug staat een gezin, schout. Een man, een vrouw en hun kinderen. Ze komen uit het zuiden, waar oorlog is. Ze willen hier blijven.' },
+            { zeg: "There's a family at the bridge, reeve. A man, a woman and their children. They come from the south, where there is war. They want to stay here." },
           ],
           keuzes: [
-            { zeg: 'Laat ze blijven. Er is werk genoeg.', sluit: true, doe: { graan: -10, gezin: 1 } },
-            { zeg: 'We hebben zelf niet genoeg. Stuur ze door.', sluit: true, doe: { tevreden: -1 } },
+            { zeg: "Let them stay. There's work enough.", sluit: true, doe: { graan: -10, gezin: 1 } },
+            { zeg: "We don't have enough ourselves. Send them on.", sluit: true, doe: { tevreden: -1 } },
           ],
         },
       },
@@ -688,11 +693,11 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Er is een smid uit de stad, schout. Zijn gilde wil hem niet meer: hij sloeg de gildemeester. Met een hamer. Maar zijn hoefijzers zijn de beste van de streek, en hij wil hier wonen.' },
+            { zeg: "There's a smith from the town, reeve. His guild won't have him any more: he struck the guildmaster. With a hammer. But his horseshoes are the best for miles around, and he wants to live here." },
           ],
           keuzes: [
-            { zeg: 'Welkom. Maar hier slaan we alleen op ijzer.', sluit: true, doe: { ijzer: 5, gezin: 1 } },
-            { zeg: 'Een smid die slaat? Nee.', sluit: true },
+            { zeg: 'Welcome. But here we only strike iron.', sluit: true, doe: { ijzer: 5, gezin: 1 } },
+            { zeg: 'A smith who strikes people? No.', sluit: true },
           ],
         },
       },
@@ -703,11 +708,11 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Mijn zaaigraan is beschimmeld, schout. Allemaal. Zonder zaad geen oogst. Kan het dorp me twintig graan lenen? Na de oogst krijgt u het terug.' },
+            { zeg: "My seed grain has gone mouldy, reeve. All of it. No seed, no harvest. Can the village lend me twenty grain? You'll have it back after the harvest." },
           ],
           keuzes: [
-            { zeg: 'Twintig graan.', sluit: true, doe: { graan: -20, voorval: 'zaaigraanTerug' } },
-            { zeg: 'Dan moet je het zelf maar zien te vinden.', sluit: true, doe: { tevreden: -2 } },
+            { zeg: 'Twenty grain.', sluit: true, doe: { graan: -20, voorval: 'zaaigraanTerug' } },
+            { zeg: "Then you'll have to find it yourself.", sluit: true, doe: { tevreden: -2 } },
           ],
         },
       },
@@ -718,11 +723,11 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'De oogst is binnen, schout. Hier is uw graan: dertig. Twintig, en tien omdat u ja zei.' },
+            { zeg: 'The harvest is in, reeve. Here is your grain: thirty. Twenty, and ten because you said yes.' },
           ],
           keuzes: [
-            { zeg: 'Dank je.', sluit: true, doe: { graan: 30 } },
-            { zeg: 'Twintig is genoeg.', sluit: true, doe: { graan: 20, tevreden: 1 } },
+            { zeg: 'Thank you.', sluit: true, doe: { graan: 30 } },
+            { zeg: 'Twenty is enough.', sluit: true, doe: { graan: 20, tevreden: 1 } },
           ],
         },
       },
@@ -733,11 +738,11 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Mijn dak lekt, schout, en ik heb geen man die het maakt. De buren hebben het druk, zeggen ze. Met wat, weet ik niet.' },
+            { zeg: "My roof leaks, reeve, and I have no husband to mend it. The neighbours are busy, they say. With what, I don't know." },
           ],
           keuzes: [
-            { zeg: 'Ik stuur twee mannen, met hout.', sluit: true, doe: { hout: -6, tevreden: 3 } },
-            { zeg: 'Iedereen heeft het druk.', sluit: true, doe: { tevreden: -2 } },
+            { zeg: "I'll send two men, with wood.", sluit: true, doe: { hout: -6, tevreden: 3 } },
+            { zeg: 'Everyone is busy.', sluit: true, doe: { tevreden: -2 } },
           ],
         },
       },
@@ -748,11 +753,11 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Brand, schout! Het dak van {ander} staat in brand! Het riet brandt als stro. Het is ook stro.' },
+            { zeg: "Fire, reeve! {ander}'s roof is on fire! The thatch burns like straw. It is straw." },
           ],
           keuzes: [
-            { zeg: 'Iedereen aan de emmers!', sluit: true, doe: { blus: true, tevreden: 2 } },
-            { zeg: 'Laat het branden. Dan bouwen ze maar opnieuw.', sluit: true, doe: { brand: 'laat', tevreden: -5 } },
+            { zeg: 'Everyone to the buckets!', sluit: true, doe: { blus: true, tevreden: 2 } },
+            { zeg: 'Let it burn. They can build again.', sluit: true, doe: { brand: 'laat', tevreden: -5 } },
           ],
         },
       },
@@ -763,12 +768,12 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Er is koorts in het dorp, schout. Eerst bij de buren, nu ook bij ons. De vroedvrouw zegt dat het van de put komt. Er ligt iets in. Iets doods.' },
+            { zeg: "There's fever in the village, reeve. First next door, now in our house too. The midwife says it comes from the well. There's something in it. Something dead." },
           ],
           keuzes: [
-            { zeg: 'Laat de put leeghalen en schoonmaken.', sluit: true, doe: { goud: -2, koorts: 40 } },
-            { zeg: 'Drink bier, geen water, tot het over is.', sluit: true, doe: { bier: -15, koorts: 70 } },
-            { zeg: 'Bidden. Dat helpt ook.', sluit: true, doe: { koorts: 100 } },
+            { zeg: 'Have the well emptied and cleaned.', sluit: true, doe: { goud: -2, koorts: 40 } },
+            { zeg: 'Drink ale, not water, until it passes.', sluit: true, doe: { bier: -15, koorts: 70 } },
+            { zeg: 'Pray. That helps too.', sluit: true, doe: { koorts: 100 } },
           ],
         },
       },
@@ -781,12 +786,12 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Schout, de mensen hebben honger. Ze praten over de graanschuur. Eten ze het zaaigraan nu op, dan blijven de akkers in de lente leeg.' },
+            { zeg: 'Reeve, the people are hungry. They are talking about the granary. If they eat the seed grain now, the fields stay empty in spring.' },
           ],
           keuzes: [
-            { zeg: 'Zet mannen bij de graanschuur. Het zaaigraan blijft liggen.', sluit: true, doe: { bewaak: 1, vertrouwen: -3 } },
-            { zeg: 'Geef ze de helft, en bewaak de rest.', sluit: true, doe: { bewaak: 0.5, vertrouwen: -1 } },
-            { zeg: 'Laat ze eten. Honger is erger.', sluit: true, doe: { tevreden: 2 } },
+            { zeg: 'Put men at the granary. The seed grain stays where it is.', sluit: true, doe: { bewaak: 1, vertrouwen: -3 } },
+            { zeg: 'Give them half, and guard the rest.', sluit: true, doe: { bewaak: 0.5, vertrouwen: -1 } },
+            { zeg: 'Let them eat. Hunger is worse.', sluit: true, doe: { tevreden: 2 } },
           ],
         },
       },
@@ -804,15 +809,15 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Wolven, schout! Vannacht bij de schapen. Ze hebben er een meegenomen, en ze komen terug. Wolven komen altijd terug.' },
+            { zeg: "Wolves, reeve! Last night, at the sheep. They took one, and they'll be back. Wolves always come back." },
           ],
           keuzes: [
-            { zeg: 'Een jacht. {ander} weet waar ze zitten.', sluit: true, als: { vlag: 'wolvenNamenSchaap' }, doe: { tevreden: 2, jacht: true } },
-            { zeg: 'Een hoger hek om de schapen.', sluit: true, als: { vlag: 'wolvenNamenSchaap' }, doe: { hout: -12, hek: true } },
-            { zeg: 'Het was maar één schaap.', sluit: true, als: { vlag: 'wolvenNamenSchaap' } },
-            { zeg: 'Een jacht. {ander} weet waar ze zitten.', sluit: true, als: { nietVlag: 'wolvenNamenSchaap' }, doe: { tevreden: 2, sterfkans: 15, schaap: -1 } },
-            { zeg: 'Een hoger hek om de schapen.', sluit: true, als: { nietVlag: 'wolvenNamenSchaap' }, doe: { hout: -12, schaap: -1 } },
-            { zeg: 'Het was maar één schaap.', sluit: true, als: { nietVlag: 'wolvenNamenSchaap' }, doe: { schaap: -4 } },
+            { zeg: 'A hunt. {ander} knows where they are.', sluit: true, als: { vlag: 'wolvenNamenSchaap' }, doe: { tevreden: 2, jacht: true } },
+            { zeg: 'A higher fence round the sheep.', sluit: true, als: { vlag: 'wolvenNamenSchaap' }, doe: { hout: -12, hek: true } },
+            { zeg: 'It was only one sheep.', sluit: true, als: { vlag: 'wolvenNamenSchaap' } },
+            { zeg: 'A hunt. {ander} knows where they are.', sluit: true, als: { nietVlag: 'wolvenNamenSchaap' }, doe: { tevreden: 2, sterfkans: 15, schaap: -1 } },
+            { zeg: 'A higher fence round the sheep.', sluit: true, als: { nietVlag: 'wolvenNamenSchaap' }, doe: { hout: -12, schaap: -1 } },
+            { zeg: 'It was only one sheep.', sluit: true, als: { nietVlag: 'wolvenNamenSchaap' }, doe: { schaap: -4 } },
           ],
         },
       },
@@ -823,11 +828,11 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'De storm heeft het dak van de schuur half weggeblazen, schout. Als het gaat regenen, wordt het graan nat. En het gaat regenen. Het regent hier altijd.' },
+            { zeg: 'The storm has blown half the roof off the barn, reeve. If it rains, the grain gets wet. And it will rain. It always rains here.' },
           ],
           keuzes: [
-            { zeg: 'Repareren, nu meteen.', sluit: true, doe: { hout: -10 } },
-            { zeg: 'Het houdt het nog wel even.', sluit: true, doe: { graan: -30 } },
+            { zeg: 'Repair it, right away.', sluit: true, doe: { hout: -10 } },
+            { zeg: 'It will hold for a while yet.', sluit: true, doe: { graan: -30 } },
           ],
         },
       },
@@ -838,12 +843,12 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Er zitten muizen in het graan, schout. Veel muizen. Dikke muizen. Ze kijken je aan als je binnenkomt.' },
+            { zeg: 'There are mice in the grain, reeve. Lots of mice. Fat mice. They look at you when you come in.' },
           ],
           keuzes: [
-            { zeg: 'Haal een kat. Of drie.', sluit: true, doe: { goud: -1, graan: -8 } },
-            { zeg: 'Iedereen een dag muizen vangen.', sluit: true, doe: { graan: -5, tevreden: -2 } },
-            { zeg: 'Muizen moeten ook eten.', sluit: true, doe: { graan: -25 } },
+            { zeg: 'Get a cat. Or three.', sluit: true, doe: { goud: -1, graan: -8 } },
+            { zeg: 'Everyone spends a day catching mice.', sluit: true, doe: { graan: -5, tevreden: -2 } },
+            { zeg: 'Mice have to eat too.', sluit: true, doe: { graan: -25 } },
           ],
         },
       },
@@ -854,12 +859,12 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Bij de brug staat een man met een kar vol ijzer, schout. Spotgoedkoop. Hij zegt niet waar het vandaan komt, maar er staat een wapen op. Dat van de heer.' },
+            { zeg: "There's a man at the bridge with a cart full of iron, reeve. Dirt cheap. He won't say where it comes from, but there's a coat of arms on it. The lord's." },
           ],
           keuzes: [
-            { zeg: 'Koop het. Alles.', sluit: true, doe: { goud: -2, ijzer: 10, gunst: -5 } },
-            { zeg: 'Laat hem vastzetten, en stuur het ijzer naar de heer.', sluit: true, doe: { tevreden: -1, gunst: 5 } },
-            { zeg: 'Stuur hem weg.', sluit: true },
+            { zeg: 'Buy it. All of it.', sluit: true, doe: { goud: -2, ijzer: 10, gunst: -5 } },
+            { zeg: 'Have him locked up, and send the iron to the lord.', sluit: true, doe: { tevreden: -1, gunst: 5 } },
+            { zeg: 'Send him away.', sluit: true },
           ],
         },
       },
@@ -870,12 +875,12 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Kijk, schout! Bij het graven vond ik een pot. Met munten erin. Oude munten, met een koning erop die niemand kent.' },
+            { zeg: 'Look, reeve! I was digging and found a pot. With coins in it. Old coins, with a king on them nobody knows.' },
           ],
           keuzes: [
-            { zeg: 'Die zijn voor de kist van het dorp.', sluit: true, doe: { goud: 4 } },
-            { zeg: 'Een vondst is van de heer. Hij krijgt ze.', sluit: true, doe: { gunst: 6 } },
-            { zeg: 'Houd ze. En zeg het tegen niemand.', sluit: true, doe: { tevreden: 1 } },
+            { zeg: 'Those go in the village chest.', sluit: true, doe: { goud: 4 } },
+            { zeg: 'A find belongs to the lord. He gets them.', sluit: true, doe: { gunst: 6 } },
+            { zeg: 'Keep them. And tell no one.', sluit: true, doe: { tevreden: 1 } },
           ],
         },
       },
@@ -886,11 +891,11 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Er zit een zwerver bij de put, schout. Hij wil werken voor zijn eten. Hij zegt dat hij kan houthakken. Hij zegt ook dat hij ooit ridder was.' },
+            { zeg: "There's a vagrant by the well, reeve. He wants to work for his food. He says he can chop wood. He also says he was once a knight." },
           ],
           keuzes: [
-            { zeg: 'Een week houthakken, voor brood.', sluit: true, doe: { graan: -5, hout: 15 } },
-            { zeg: 'Stuur hem door.', sluit: true },
+            { zeg: 'A week of chopping wood, for bread.', sluit: true, doe: { graan: -5, hout: 15 } },
+            { zeg: 'Send him on.', sluit: true },
           ],
         },
       },
@@ -901,19 +906,19 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Ik heb drie heren overleefd, schout. Wil je weten hoe? Geef me een kan bier, en ik vertel het je.' },
+            { zeg: "I have outlived three lords, reeve. Do you want to know how? Give me a jug of ale, and I'll tell you." },
           ],
           keuzes: [
-            { zeg: 'Een kan bier dan.', naar: 'raad', doe: { bier: -1 } },
-            { zeg: 'Een andere keer.', sluit: true },
+            { zeg: 'A jug of ale, then.', naar: 'raad', doe: { bier: -1 } },
+            { zeg: 'Another time.', sluit: true },
           ],
         },
         raad: {
           tekst: [
-            { zeg: 'Laat ze nooit zien wat je hebt, en laat ze altijd zien wat je niet hebt. Een lege schuur, een mager kind. De heer houdt van magere kinderen: die kosten hem niets.' },
+            { zeg: "Never let them see what you have, and always let them see what you don't. An empty barn, a thin child. The lord likes thin children: they cost him nothing." },
           ],
           keuzes: [
-            { zeg: 'Dank je.', sluit: true, doe: { gunst: 3 } },
+            { zeg: 'Thank you.', sluit: true, doe: { gunst: 3 } },
           ],
         },
       },
@@ -924,12 +929,12 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Schout, {ander} gaat trouwen! Met een meisje uit het buurdorp. Het hele dorp komt, als het dorp het bier betaalt. Dat is traditie. Sinds vandaag.' },
+            { zeg: "Reeve, {ander} is getting married! To a girl from the next village. The whole village will come, if the village pays for the ale. That's tradition. Since today." },
           ],
           keuzes: [
-            { zeg: 'Een feest! Bier en brood voor iedereen.', sluit: true, doe: { graan: -15, bier: -10, tevreden: 6 } },
-            { zeg: 'Een klein feest, met wat er is.', sluit: true, doe: { graan: -5, tevreden: 2 } },
-            { zeg: 'Trouwen kan ook zonder feest.', sluit: true, doe: { tevreden: -2 } },
+            { zeg: 'A feast! Ale and bread for everyone.', sluit: true, doe: { graan: -15, bier: -10, tevreden: 6 } },
+            { zeg: 'A small feast, with what there is.', sluit: true, doe: { graan: -5, tevreden: 2 } },
+            { zeg: 'You can marry without a feast.', sluit: true, doe: { tevreden: -2 } },
           ],
         },
       },
@@ -940,12 +945,12 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'De oogst is binnen, schout! Vroeger hielden we dan een feest, met alles erop en eraan. Wat op is, kan de heer niet tellen, zei mijn vader altijd.' },
+            { zeg: "The harvest is in, reeve! In the old days we held a feast then, with everything that goes with it. What's been eaten, the lord can't count, my father always said." },
           ],
           keuzes: [
-            { zeg: 'Een groot feest.', sluit: true, doe: { graan: -40, bier: -15, tevreden: 8, feest: 'dag' } },
-            { zeg: 'Een klein feest.', sluit: true, doe: { graan: -15, tevreden: 3, feest: 'avond' } },
-            { zeg: 'Geen feest. De heer telt mee.', sluit: true, doe: { tevreden: -3 } },
+            { zeg: 'A great feast.', sluit: true, doe: { graan: -40, bier: -15, tevreden: 8, feest: 'dag' } },
+            { zeg: 'A small feast.', sluit: true, doe: { graan: -15, tevreden: 3, feest: 'avond' } },
+            { zeg: 'No feast. The lord is counting too.', sluit: true, doe: { tevreden: -3 } },
           ],
         },
       },
@@ -956,11 +961,11 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Schout, onze kapel heeft geen klok. Hoe weet God dan wanneer we bidden? Voor vier goud giet de smid in de stad er een.' },
+            { zeg: 'Reeve, our chapel has no bell. How is God to know when we pray? For four gold the smith in the town will cast one.' },
           ],
           keuzes: [
-            { zeg: 'Een klok, van het beste brons.', sluit: true, doe: { goud: -4, tevreden: 4 } },
-            { zeg: 'God weet het zelf wel.', sluit: true, doe: { tevreden: -1 } },
+            { zeg: 'A bell, of the best bronze.', sluit: true, doe: { goud: -4, tevreden: 4 } },
+            { zeg: 'God will know without one.', sluit: true, doe: { tevreden: -1 } },
           ],
         },
       },
@@ -974,8 +979,8 @@
             { zeg: 'Reeve, {wil} to build {gebouw}, {plek}. {waarom} The village pays {kosten}.' },
           ],
           keuzes: [
-            { zeg: 'Ja, bouw maar.', sluit: true, doe: { bouw: true, tevreden: 3 } },
-            { zeg: 'Nee, nu niet.', sluit: true, doe: { weiger: true, tevreden: -2 } },
+            { zeg: 'Yes, build it.', sluit: true, doe: { bouw: true, tevreden: 3 } },
+            { zeg: 'No, not now.', sluit: true, doe: { weiger: true, tevreden: -2 } },
           ],
         },
       },
@@ -986,11 +991,11 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Schout, ik wil wapens maken, {plek}. {waarom} Het dorp betaalt {kosten}.' },
+            { zeg: 'Reeve, I want to make weapons, {plek}. {waarom} The village pays {kosten}.' },
           ],
           keuzes: [
-            { zeg: 'Ja, bouw maar.', sluit: true, doe: { bouw: true, tevreden: 3 } },
-            { zeg: 'Nee, nu niet.', sluit: true, doe: { weiger: true, tevreden: -2 } },
+            { zeg: 'Yes, build it.', sluit: true, doe: { bouw: true, tevreden: 3 } },
+            { zeg: 'No, not now.', sluit: true, doe: { weiger: true, tevreden: -2 } },
           ],
         },
       },
@@ -1001,11 +1006,11 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Schout, ik wil een tweede herberg beginnen, {plek}. {waarom} Het dorp betaalt {kosten}.' },
+            { zeg: 'Reeve, I want to open a second inn, {plek}. {waarom} The village pays {kosten}.' },
           ],
           keuzes: [
-            { zeg: 'Ja. Er is plaats voor twee.', sluit: true, doe: { bouw: true, tevreden: 3 } },
-            { zeg: 'Nee. Het dorp heeft een herberg.', sluit: true, doe: { weiger: true, bier: 10 } },
+            { zeg: 'Yes. There is room for two.', sluit: true, doe: { bouw: true, tevreden: 3 } },
+            { zeg: 'No. The village has an inn.', sluit: true, doe: { weiger: true, bier: 10 } },
           ],
         },
       },
@@ -1016,12 +1021,12 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Ik heb een lied gemaakt, schout. Over de heer. Het rijmt op varken. Mag ik het vanavond zingen, in de herberg?' },
+            { zeg: "I've made a song, reeve. About the lord. It rhymes with pig. May I sing it tonight, at the inn?" },
           ],
           keuzes: [
-            { zeg: 'Zing maar. Hard.', sluit: true, doe: { tevreden: 4, gunst: -4 } },
-            { zeg: 'Zing het zachtjes. En niet het laatste couplet.', sluit: true, doe: { tevreden: 2, gunst: -1 } },
-            { zeg: 'Niet zingen.', sluit: true, doe: { tevreden: -1 } },
+            { zeg: 'Sing it. Loudly.', sluit: true, doe: { tevreden: 4, gunst: -4 } },
+            { zeg: 'Sing it quietly. And not the last verse.', sluit: true, doe: { tevreden: 2, gunst: -1 } },
+            { zeg: 'No singing.', sluit: true, doe: { tevreden: -1 } },
           ],
         },
       },
@@ -1032,12 +1037,12 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Schout, morgen is het de eerste van bloeimaand. We hebben een berk uitgezocht in het bos, de rechtste die er staat. Mogen we hem op het plein zetten, met linten erin? Dan dansen we eromheen tot het donker is.' },
+            { zeg: "Reeve, tomorrow is the first of May. We've picked out a birch in the forest, the straightest there is. May we set it up on the square, with ribbons in it? Then we'll dance round it until dark." },
           ],
           keuzes: [
-            { zeg: 'Zet hem maar op. Morgen werkt niemand.', sluit: true, doe: { hout: -2, tevreden: 5, feest: 'dag' } },
-            { zeg: 'Na het werk, dan.', sluit: true, doe: { hout: -2, tevreden: 2, feest: 'avond' } },
-            { zeg: 'Een boom is hout, en het bos is van de heer.', sluit: true, doe: { tevreden: -3 } },
+            { zeg: 'Put it up. Tomorrow nobody works.', sluit: true, doe: { hout: -2, tevreden: 5, feest: 'dag' } },
+            { zeg: 'After work, then.', sluit: true, doe: { hout: -2, tevreden: 2, feest: 'avond' } },
+            { zeg: 'A tree is wood, and the forest belongs to the lord.', sluit: true, doe: { tevreden: -3 } },
           ],
         },
       },
@@ -1048,11 +1053,11 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Schout, over vier dagen is het kerstavond. In het bos staat een spar die precies goed is. Mogen we hem op het plein zetten, met appels en strosterren erin en kaarsjes erop? Dan zingen we er op kerstavond omheen.' },
+            { zeg: "Reeve, in four days it is Christmas Eve. There's a fir in the forest that is just right. May we set it up on the square, with apples and straw stars in it and candles on it? Then on Christmas Eve we'll sing round it." },
           ],
           keuzes: [
-            { zeg: 'Zet hem maar op. Op kerstavond zing ik mee.', sluit: true, doe: { hout: -2, tevreden: 4, feest: 'avond' } },
-            { zeg: 'Een boom is hout, en het bos is van de heer.', sluit: true, doe: { tevreden: -3 } },
+            { zeg: "Put it up. On Christmas Eve I'll sing along.", sluit: true, doe: { hout: -2, tevreden: 4, feest: 'avond' } },
+            { zeg: 'A tree is wood, and the forest belongs to the lord.', sluit: true, doe: { tevreden: -3 } },
           ],
         },
       },
@@ -1063,12 +1068,12 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Er was een bode van de heer, schout. De heer wil een standbeeld van zichzelf, op ons plein, voor Pasen. Van eik, want marmer is voor de keizer, en hij is bescheiden.' },
+            { zeg: 'A messenger came from the lord, reeve. The lord wants a statue of himself, on our square, by Easter. In oak, because marble is for the emperor, and he is modest.' },
           ],
           keuzes: [
-            { zeg: 'Dan krijgt hij een standbeeld.', sluit: true, doe: { hout: -20, tevreden: -2, gunst: 6 } },
-            { zeg: 'Een vogelverschrikker, in een oude jas van hem.', sluit: true, doe: { hout: -3, tevreden: 3, gunst: -3 } },
-            { zeg: 'Pasen is nog ver.', sluit: true, doe: { gunst: -3 } },
+            { zeg: 'Then he shall have a statue.', sluit: true, doe: { hout: -20, tevreden: -2, gunst: 6 } },
+            { zeg: 'A scarecrow, in one of his old coats.', sluit: true, doe: { hout: -3, tevreden: 3, gunst: -3 } },
+            { zeg: 'Easter is a long way off.', sluit: true, doe: { gunst: -3 } },
           ],
         },
       },
@@ -1079,12 +1084,12 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'De bode van de heer was er, schout. De heer komt jagen, in ons bos. Het dorp levert de drijvers, en het eten. En de wijn, maar die hebben we niet.' },
+            { zeg: "The lord's messenger was here, reeve. The lord is coming to hunt, in our forest. The village provides the beaters, and the food. And the wine, but we have none." },
           ],
           keuzes: [
-            { zeg: 'Drijvers en eten, en bier in plaats van wijn.', sluit: true, doe: { graan: -20, bier: -10, gunst: 5 } },
-            { zeg: 'Alleen de drijvers.', sluit: true, doe: { gunst: -2 } },
-            { zeg: 'Zeg hem dat het wild op is.', sluit: true, doe: { gunst: -5 } },
+            { zeg: 'Beaters and food, and ale instead of wine.', sluit: true, doe: { graan: -20, bier: -10, gunst: 5 } },
+            { zeg: 'Only the beaters.', sluit: true, doe: { gunst: -2 } },
+            { zeg: 'Tell him the game is all gone.', sluit: true, doe: { gunst: -5 } },
           ],
         },
       },
@@ -1095,12 +1100,12 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'De bode van de heer las voor, op het plein: er komt een belasting op ramen. Een stuiver per raam. Hij is nu aan het tellen.' },
+            { zeg: "The lord's messenger read it out on the square: there is to be a tax on windows. A penny a window. He is counting them now." },
           ],
           keuzes: [
-            { zeg: 'Betaal maar.', sluit: true, doe: { goud: -2 } },
-            { zeg: 'Iedereen zet planken voor zijn ramen. Vandaag nog.', sluit: true, doe: { hout: -8, tevreden: -2 } },
-            { zeg: 'Laat hem tellen. Hij kan niet tellen.', sluit: true, doe: { gunst: -4 } },
+            { zeg: 'Pay it.', sluit: true, doe: { goud: -2 } },
+            { zeg: 'Everyone boards up their windows. Today.', sluit: true, doe: { hout: -8, tevreden: -2 } },
+            { zeg: "Let him count. He can't count.", sluit: true, doe: { gunst: -4 } },
           ],
         },
       },

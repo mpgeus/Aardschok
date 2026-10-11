@@ -18,7 +18,7 @@
     // Loten (Marcel koos het), of vast: de vijf zoals ze geschreven waren (T.MENSEN[id].karakter),
     // en allemaal gewoon. Een optie in de spelregels.
     loten: true,
-    // Per eigenschap de treden: hoe je hem ziet ("gewoon" zie je niet), de kans, en wat hij doet.
+    // Per eigenschap de treden: hoe je hem ziet (naam, in T.t; "gewoon" zie je niet), de kans, en wat hij doet.
     //   maaien:    factor op hoe lang een tegel duurt (T.OOGST_UREN_PER_TEGEL): kleiner is sneller.
     //              Het vangnet haalt toch alles binnen (js/akkers.js), dus dit zegt wánneer het
     //              graan er is, niet hoeveel: het telt vooral in de hongerweken vóór de oogst.
@@ -27,24 +27,24 @@
     //   aanzien:   wat de schandpaal het dorp aan tevredenheid kost als hij er staat (js/heer.js).
     //              Sommige karakters leggen dit vast (de woekeraar is gehaat).
     maaien: [
-      { id: 'snel', naam: 'snelle maaier', kans: 0.25, factor: 0.7 },
-      { id: 'gewoon', naam: 'gewoon', kans: 0.5, factor: 1 },
-      { id: 'traag', naam: 'trage maaier', kans: 0.25, factor: 1.3 },
+      { id: 'snel', naam: T.t('fast reaper'), kans: 0.25, factor: 0.7 },
+      { id: 'gewoon', naam: T.t('ordinary'), kans: 0.5, factor: 1 },
+      { id: 'traag', naam: T.t('slow reaper'), kans: 0.25, factor: 1.3 },
     ],
     opbrengst: [
-      { id: 'groeneVingers', naam: 'groene vingers', kans: 0.25, factor: 1.15 },
-      { id: 'gewoon', naam: 'gewoon', kans: 0.5, factor: 1 },
-      { id: 'slordig', naam: 'slordig', kans: 0.25, factor: 0.85 },
+      { id: 'groeneVingers', naam: T.t('green fingers'), kans: 0.25, factor: 1.15 },
+      { id: 'gewoon', naam: T.t('ordinary'), kans: 0.5, factor: 1 },
+      { id: 'slordig', naam: T.t('careless'), kans: 0.25, factor: 0.85 },
     ],
     zaaien: [
-      { id: 'zuinig', naam: 'zuinig', kans: 0.25, factor: 0.8 },
-      { id: 'gewoon', naam: 'gewoon', kans: 0.5, factor: 1 },
-      { id: 'kwistig', naam: 'kwistig', kans: 0.25, factor: 1.2 },
+      { id: 'zuinig', naam: T.t('thrifty sower'), kans: 0.25, factor: 0.8 },
+      { id: 'gewoon', naam: T.t('ordinary'), kans: 0.5, factor: 1 },
+      { id: 'kwistig', naam: T.t('wasteful sower'), kans: 0.25, factor: 1.2 },
     ],
     aanzien: [
-      { id: 'geliefd', naam: 'geliefd', kans: 0.3, schandpaal: 0.3 },
-      { id: 'gewoon', naam: 'gewoon', kans: 0.4, schandpaal: 0.15 },
-      { id: 'gehaat', naam: 'gehaat', kans: 0.3, schandpaal: 0.05 },
+      { id: 'geliefd', naam: T.t('well loved'), kans: 0.3, schandpaal: 0.3 },
+      { id: 'gewoon', naam: T.t('ordinary'), kans: 0.4, schandpaal: 0.15 },
+      { id: 'gehaat', naam: T.t('hated'), kans: 0.3, schandpaal: 0.05 },
     ],
   };
 
@@ -154,8 +154,8 @@
   };
 
   // Wat je van hem ziet (Marcel koos: meteen, bij de muis, boven het gesprek en bij de
-  // schandpaal): { kort: 'weduwe', lang: 'weduwe, met drie kleine kinderen', eigenschappen:
-  // ['snelle maaier', 'geliefd'] }. Wat gewoon is, staat er niet bij. null voor wie geen boer is.
+  // schandpaal): { kort: 'widow', lang: 'widow, with three small children', eigenschappen:
+  // ['fast reaper', 'well loved'] }. Wat gewoon is, staat er niet bij. null voor wie geen boer is.
   T.overBoer = function (e) {
     if (!isBoer(e)) return null;
     const karakter = e.karakter || T.MENSEN[e.wie].karakter;
@@ -166,11 +166,11 @@
       const t = id && id !== 'gewoon' && trede(soort, id);
       if (t) eigenschappen.push(t.naam);
     }
-    if (e.raadsman && T.RAADSMAN_INSTELLINGEN.aan) eigenschappen.push('je raadsman');
+    if (e.raadsman && T.RAADSMAN_INSTELLINGEN.aan) eigenschappen.push(T.t('your advisor'));
     return { kort: k.kort || karakter, lang: k.lang || '', eigenschappen };
   };
 
-  // Hetzelfde, als één regel: "weduwe, met drie kleine kinderen · snelle maaier · geliefd".
+  // Hetzelfde, als één regel: "widow, with three small children · fast reaper · well loved".
   T.overBoerTekst = function (e, kort) {
     const o = T.overBoer(e);
     if (!o) return '';

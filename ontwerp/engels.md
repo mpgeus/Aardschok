@@ -140,6 +140,40 @@ onder een gril), zegt *my lord*; de raadsman schrijft de schout aan met *Master 
 | het oogstfeest, de meiboom, kerstavond | the harvest feast, the maypole, Christmas Eve | `T.FEESTEN[x].naam` |
 | de grillen: het standbeeld, het vette varken, … | the statue, the fat pig, his nephew's wedding, the hunt, the window tax, the court poet, the bishop's bell, the soldiers passing through, his birthday, the falcon, the loan, the road to the castle, the portrait, the plague in the district | `T.GRILLEN[x].titel` |
 
+## Erbij in deel 5 (het dorp dat spreekt: de gesprekken, de voorvallen, de raadsman)
+
+**Een zin uit de gegevens.** De gesprekken (`js/gesprekken.js`) en de quests (`js/quests.js`) zijn gegevens die een
+bewerker terugschrijft (`T.bronBlok`): daar staat de Engelse zin als gewone tekst, niet in `T.t`. Wie zo'n zin toont,
+vertaalt hem met `T.tGegevens(zin)` (`js/taal.js`); een gesprek doet dat in `T.vulWoordenIn` (`js/gesprek.js`), dus wat
+in de gespreksschrijver staat, is meteen goed. `npm run teksten` leest de zinnen uit die tabellen (`GEGEVENS` in
+`gereedschap/teksten.cjs`). Een zin schrijf je zoals elke andere: Engels, met `{wie}` en `{ander}` erin, en een string
+met een apostrof tussen dubbele aanhalingstekens (zo schrijft de bewerker hem ook). De situaties zijn voor de schrijver,
+en blijven Nederlands. `T.VOORVALLEN` en `T.OORZAKEN` zijn gewone code: daar staat alles in `T.t`.
+
+De stem: wie de schout aanspreekt, zegt *reeve* ("Reeve, {ander} took two hens from my coop."), de heer zegt *We, Us*
+en de schout zegt hem *my lord*; de soldaten zeggen gewoon *we*. Een uitroepteken alleen waar het Nederlands er een had
+(brand, wolven, de roddelaar). De mensen praten met *don't, I'll*, de heer en de vertelling niet. Een karakter zegt nooit
+*he* of *she* over zichzelf, behalve de weduwe en de vroedvrouw (zij zijn altijd een vrouw).
+
+| Nederlands | Engels | |
+|---|---|---|
+| het voorval, wie je zoekt | an event, someone looking for you | "{wie} is looking for you." |
+| verbannen, het bos in | banish, go into the forest | "{wie} must go into the forest" |
+| de prijs: tevredenheid, gunst, vertrouwen | contentment +3%, the lord's favour +5, the village's trust −3 | `T.prijsVanKeuze` |
+| "want" in een status | ", for" | "There is hunger, for the rations are short." |
+| de statussen: honger, kou, vol, wolven, droogte, koorts, brandgevaar, onvrede | Hunger, Cold, Full, Wolves, Drought, Fever, Fire risk, Discontent | `T.OORZAKEN[x].naam` |
+| en erger: hongersnood, strenge kou, overvol, ernstige droogte, epidemie, groot brandgevaar, onrust | Famine, Bitter cold, Overcrowded, Severe drought, Epidemic, High fire risk, Unrest | |
+| de karakters: zanger, weduwe, woekeraar, vroedvrouw, heethoofd, vrome, roddelaar, oudste, nieuwkomer, drinker | singer, widow, moneylender, midwife, hothead, pious, gossip, the elder, newcomer, drinker | `T.KARAKTERS[x].kort`; boven hun gesprek *the singer*, ... |
+| de eigenschappen: snelle en trage maaier, groene vingers, slordig, zuinig, kwistig, geliefd, gehaat, gewoon | fast reaper, slow reaper, green fingers, careless, thrifty sower, wasteful sower, well loved, hated, ordinary | `T.BOEREN_INSTELLINGEN` |
+| de vaardigheden van de raadsman | judges well/badly, can hold their tongue / cannot keep a secret, good/bad with figures, handy / all thumbs, can fight / timid | `T.VAARDIGHEDEN` |
+| hoe hij beslist | "Decides generously: ..." | `T.RAADSMAN_NEIGINGEN` |
+| de woeker, de woekeraar | usury, the moneylender | |
+| het buurdorp | the next village | |
+| de mensen: de smid, de smidsvrouw, de boerin, de dorpsoudste, de kleuter, de kruidenvrouw, de koster, de wachter | the smith, the smith's wife, the farmer's wife, the village elder, the toddler, the herb woman, the sexton, the watchman | `T.MENSEN[x].naam` |
+| de stuiver, de gilde, de drijvers | a penny, the guild, the beaters | |
+| de stroper, de zwerver, de heks, de akkergrens | the poacher, the vagrant, the witch, the field boundary | titels van voorvallen |
+| "Tot ziens." | "Good day." | het afscheid van een boer |
+
 ## De maanden
 
 Gewone maanden (Marcel, 11 okt): de namen waar de regels op letten blijven in de code (`'lentemaand'`); wat de speler

@@ -203,15 +203,15 @@ test('het venster zegt vooraf wat een antwoord kost, en wat er niet is, kun je n
   const S = gehucht();
   const L = metVoorval(S, 'diefstal');
   const [verban, boete, laatGaan] = antwoorden('diefstal').map((k) => T.prijsVanKeuze(S.dorp, k.doe));
-  assert.equal(verban.tekst, `tevredenheid +3%, ${T.naamVanBewoner(L.ander)} moet het bos in`);
-  assert.equal(boete.tekst, '+1 goud, tevredenheid +2%');
-  assert.equal(laatGaan.tekst, 'tevredenheid −3%', 'dat hij terug kan komen, zegt het niet');
+  assert.equal(verban.tekst, `contentment +3%, ${T.naamVanBewoner(L.ander)} must go into the forest`);
+  assert.equal(boete.tekst, '+1 gold, contentment +2%');
+  assert.equal(laatGaan.tekst, 'contentment −3%', 'dat hij terug kan komen, zegt het niet');
   T.zetVoorraad(S.dorp, 'graan', 5);
   const p = T.prijsVanKeuze(S.dorp, { graan: -10, tevreden: -4 });
   assert.equal(p.kan, false);
-  assert.equal(p.waarom, 'je hebt 5 graan');
-  assert.deepEqual(T.prijsVanKeuze(S.dorp, { graan: 10 }), { tekst: '+10 graan', kan: true, waarom: '' }, 'wat erbij komt, kan altijd');
-  assert.equal(T.prijsVanKeuze(S.dorp, { schaap: -2, sterfkans: 30, gunst: 5 }).tekst, '−2 sheep, gunst van de heer +5, 30% kans op een dode');
+  assert.equal(p.waarom, 'you have 5 grain');
+  assert.deepEqual(T.prijsVanKeuze(S.dorp, { graan: 10 }), { tekst: '+10 grain', kan: true, waarom: '' }, 'wat erbij komt, kan altijd');
+  assert.equal(T.prijsVanKeuze(S.dorp, { schaap: -2, sterfkans: 30, gunst: 5 }).tekst, "−2 sheep, the lord's favour +5, 30% chance of a death");
   // Een gewoon gesprek: de marskramer opent zijn venster, en dat kost niets.
   assert.deepEqual(T.prijsVanKeuze(S.dorp, { handel: true }), { tekst: '', kan: true, waarom: '' });
 });
@@ -227,11 +227,11 @@ test('een antwoord doet wat het zegt: de voorraad, de tevredenheid die wegslijt,
   assert.equal(S.dorp.voorraad.bier, 20);
   const nu = T.voorvalStemming(S.dorp, 40);
   assert.ok(Math.abs(nu.erbij - 0.06) < 1e-9, 'zes procent tevredener');
-  assert.deepEqual(nu.blij, ['de bruiloft']);
+  assert.deepEqual(nu.blij, ['the wedding']);
   assert.ok(Math.abs(T.voorvalStemming(S.dorp, 55).erbij - 0.03) < 1e-9, 'na een halve stemmingDagen nog de helft');
   assert.equal(T.voorvalStemming(S.dorp, 40 + T.VOORVALLEN_INSTELLINGEN.stemmingDagen).erbij, 0, 'en dan is het weg');
   const b = T.berekenTevredenheid(S.dorp, 40);
-  assert.ok(b.blij.includes('de bruiloft'), 'de balk zegt waar het dorp blij mee is');
+  assert.ok(b.blij.includes('the wedding'), 'de balk zegt waar het dorp blij mee is');
   const gunst = T.bazenNu(S.dorp).gunst;
   T.doeGevolg(S, S.dorp, { gunst: -5 });
   assert.equal(T.bazenNu(S.dorp).gunst, gunst - 5);
@@ -246,7 +246,7 @@ test('verbannen: de dief trekt weg, en gaat het bos in als rover', () => {
   assert.equal(S.dorp.bevolking, voor - 1);
   assert.ok(!S.dorp.bewoners.mensen.includes(dief), 'hij woont hier niet meer');
   assert.ok(S.dorp.rovers.bende.some((r) => r.id === dief.id), 'hij is bij de rovers');
-  assert.ok(berichten.some((t) => t.startsWith(dief.naam) && t.includes('trekt weg: verbannen door de schout')));
+  assert.ok(berichten.some((t) => t.startsWith(dief.naam) && t.includes('trekt weg: banished by the reeve')));
 });
 
 test('de koorts: met pech sterft er iemand; de wolven halen schapen; en een gezin komt als er plaats is', () => {
@@ -255,7 +255,7 @@ test('de koorts: met pech sterft er iemand; de wolven halen schapen; en een gezi
   const voor = S.dorp.bevolking;
   T.doeGevolg(S, S.dorp, { sterfkans: 100 });
   assert.equal(S.dorp.bevolking, voor - 1, 'bij honderd procent sterft er een');
-  assert.ok(berichten.some((t) => t.startsWith('De koorts: ')));
+  assert.ok(berichten.some((t) => t.startsWith('The fever: ')));
   T.doeGevolg(S, S.dorp, { sterfkans: 0 });
   assert.equal(S.dorp.bevolking, voor - 1);
   const schapen = () => T.veeVan(S.dorp).filter((e) => e.dier === 'schaap').length;
@@ -312,7 +312,7 @@ test('wie het zegt, zoekt de schout: hij loopt naar hem toe, spreekt hem aan, en
   S.kalender.dag = L.vanaf + 0.001;
   T.werkVoorvallenBij(S, S.dorp);
   assert.ok(e.zoektSchout, 'vanaf zijn uur zoekt hij je');
-  assert.ok(berichten.includes(`${T.naamVanBewoner(L.wie)} zoekt je.`));
+  assert.ok(berichten.includes(`${T.naamVanBewoner(L.wie)} is looking for you.`));
   assert.equal(T.dagAnker(S.dorp, e), null, 'het dagritme laat hem gaan');
   assert.equal(T.voorvalVan(S.dorp, e), L, 'wie op hem klikt, praat over het voorval');
   assert.ok(e.pad.length > 0 || T.afstand({ x: e.tx, y: e.ty }, { x: S.schout.tx, y: S.schout.ty }) <= 1, 'hij loopt naar de schout');
@@ -361,10 +361,10 @@ test('wie je niet sprak, gaat voorbij, en dat neemt het dorp je kwalijk', () => 
   assert.equal(S.dorp.voorvallen.lopend, L);
   T.tikVoorvallenDag(S.dorp, 30 + T.VOORVALLEN_INSTELLINGEN.zoektDagen);
   assert.equal(S.dorp.voorvallen.lopend, null);
-  assert.ok(berichten.includes(`${T.naamVanBewoner(L.wie)} heeft je niet gesproken, en gaat weer aan het werk.`));
+  assert.ok(berichten.includes(`${T.naamVanBewoner(L.wie)} did not get to speak to you, and goes back to work.`));
   const s = T.voorvalStemming(S.dorp, 30 + T.VOORVALLEN_INSTELLINGEN.zoektDagen);
   assert.ok(s.erbij < 0);
-  assert.deepEqual(s.last, ['een schout die geen tijd had'], 'hij was in het dorp');
+  assert.deepEqual(s.last, ['a reeve who had no time'], 'hij was in het dorp');
   assert.ok(!L.wie.wezen.zoektSchout);
   assert.equal(S.dorp.voorvallen.laatstVoorbij, undefined, 'een raadsman had hier niet beslist (vraag 68, B), dus de raad zegt niets');
 
@@ -379,7 +379,7 @@ test('wie je niet sprak, gaat voorbij, en dat neemt het dorp je kwalijk', () => 
   assert.ok(T.schoutIsWeg(S2.dorp));
   T.tikVoorvallenDag(S2.dorp, 30 + T.VOORVALLEN_INSTELLINGEN.zoektDagen);
   assert.equal(S2.dorp.voorvallen.lopend, null);
-  assert.deepEqual(T.voorvalStemming(S2.dorp, 30 + T.VOORVALLEN_INSTELLINGEN.zoektDagen).last, ['een schout die er niet was']);
+  assert.deepEqual(T.voorvalStemming(S2.dorp, 30 + T.VOORVALLEN_INSTELLINGEN.zoektDagen).last, ['a reeve who was not there']);
   assert.equal(S2.dorp.voorvallen.laatstVoorbij, 30 + T.VOORVALLEN_INSTELLINGEN.zoektDagen, 'de raad zegt dan: kies een raadsman');
 });
 
@@ -448,31 +448,31 @@ test('een oorzaak speelt als het dorp hem heeft, en zegt waarom', () => {
   assert.equal(T.oorzaakVan(D, 'diefstal', ZOMER), null, 'zonder honger komt een diefstal uit de lucht');
 
   T.zetWet(D, 'rantsoen', 'krap');
-  assert.deepEqual(T.oorzaakVan(D, 'diefstal', ZOMER), { id: 'honger', niveau: 1, naam: 'Honger', zin: 'Er is honger, want het rantsoen is krap.', waarom: 'het rantsoen is krap' });
+  assert.deepEqual(T.oorzaakVan(D, 'diefstal', ZOMER), { id: 'honger', niveau: 1, naam: 'Hunger', zin: 'There is hunger, for the rations are short.', waarom: 'the rations are short' });
   T.zetWet(D, 'rantsoen', 'gewoon');
   D.behoeften.mist = ['food'];
-  assert.equal(T.oorzaakVan(D, 'stroper', ZOMER).zin, 'Er is honger, want er is niet genoeg eten.');
+  assert.equal(T.oorzaakVan(D, 'stroper', ZOMER).zin, 'There is hunger, for there is not enough food.');
   D.behoeften.mist = [];
 
   D.behoeften.mist = ['firewood for the winter'];
   assert.equal(T.oorzaakVan(D, 'ziekte', ZOMER), null, 'kou is er alleen in de winter');
   D.voorraad.hout = 30;
   D.voorraad.turf = 0;
-  assert.equal(T.oorzaakVan(D, 'ziekte', WINTER).zin, 'Het is koud in de huizen, want het hout haalt de winter niet.');
+  assert.equal(T.oorzaakVan(D, 'ziekte', WINTER).zin, 'It is cold in the houses, for the wood will not last the winter.');
   D.voorraad.hout = 0;
   // Is het brandhout op, dan is het erger: strenge kou (werklijst vraag 77, stap 2).
-  assert.equal(T.oorzaakVan(D, 'ziekte', WINTER).zin, 'Het vriest in de huizen, want het brandhout is op.');
+  assert.equal(T.oorzaakVan(D, 'ziekte', WINTER).zin, 'It is freezing in the houses, for the firewood has run out.');
   assert.equal(T.oorzaakVan(D, 'ziekte', WINTER).niveau, 2);
   D.behoeften.mist = [];
 
   D.bevolking = T.telWoonruimte(D);
-  assert.deepEqual(T.oorzaakVan(D, 'brand', ZOMER), { id: 'vol', niveau: 1, naam: 'Vol', zin: 'De huizen zitten vol.', waarom: '' });
+  assert.deepEqual(T.oorzaakVan(D, 'brand', ZOMER), { id: 'vol', niveau: 1, naam: 'Full', zin: 'The houses are full.', waarom: '' });
   assert.equal(T.oorzaakVan(D, 'ziekte', ZOMER).id, 'vol', 'de koorts komt van kou, of van een vol dorp');
   D.bevolking -= 4;
 
   D.behoeften.tevredenheid = T.VOORVALLEN_INSTELLINGEN.onvrede - 0.1;
-  D.behoeften.last = ['de belasting'];
-  assert.equal(T.oorzaakVan(D, 'vechtpartij', ZOMER).zin, 'Het dorp is ontevreden, want het heeft last van de belasting.');
+  D.behoeften.last = ['the tax'];
+  assert.equal(T.oorzaakVan(D, 'vechtpartij', ZOMER).zin, 'The village is discontented, for it is troubled by the tax.');
   assert.equal(T.oorzaakVan(D, 'zwerver', ZOMER), null, 'een kans heeft geen oorzaak');
 });
 
@@ -517,17 +517,17 @@ test('het bericht zegt waarom, de raadsman ook, en een gesprek kan het zeggen me
   T.zetWet(D, 'rantsoen', 'krap');
   const L = metVoorval(S, 'diefstal', ZOMER);
   assert.equal(L.oorzaak.id, 'honger');
-  assert.equal(T.vulWoordenIn(D, 'Zo is het. {oorzaak}'), 'Zo is het. Er is honger, want het rantsoen is krap.');
+  assert.equal(T.vulWoordenIn(D, 'Zo is het. {oorzaak}'), 'Zo is het. There is hunger, for the rations are short.');
   berichten.length = 0;
   S.kalender.dag = L.vanaf + 0.01;
   T.werkVoorvallenBij(S, D);
-  assert.ok(berichten.some((b) => b.endsWith(' zoekt je. Er is honger, want het rantsoen is krap.')), berichten.join(' | '));
+  assert.ok(berichten.some((b) => b.endsWith(' is looking for you. There is hunger, for the rations are short.')), berichten.join(' | '));
   // Ben je er niet, dan beslist de raadsman, en zijn bericht zegt het ook.
   const boer = T.raadsmanKandidaten(D)[0];
   T.kiesRaadsman(D, boer);
   berichten.length = 0;
   assert.ok(T.raadsmanBeslist(D));
-  assert.ok(berichten.some((b) => b.includes('besliste over de diefstal') && b.endsWith('Er is honger, want het rantsoen is krap.')), berichten.join(' | '));
+  assert.ok(berichten.some((b) => b.includes('decided on the theft') && b.endsWith('There is hunger, for the rations are short.')), berichten.join(' | '));
 });
 
 test('een voorval dat uit de lucht kwam, zegt geen waarom, en een vervolg ook niet', () => {
@@ -537,7 +537,7 @@ test('een voorval dat uit de lucht kwam, zegt geen waarom, en een vervolg ook ni
   berichten.length = 0;
   S.kalender.dag = L.vanaf + 0.01;
   T.werkVoorvallenBij(S, S.dorp);
-  assert.ok(berichten.some((b) => b.endsWith(' zoekt je.')), berichten.join(' | '));
+  assert.ok(berichten.some((b) => b.endsWith(' is looking for you.')), berichten.join(' | '));
   T.zetWet(S.dorp, 'rantsoen', 'krap');
   assert.equal(T.oorzaakVan(S.dorp, 'diefstalWeer', ZOMER), null, 'een vervolg komt van het eerste voorval, niet van een oorzaak');
 });

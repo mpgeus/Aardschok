@@ -40,13 +40,15 @@
   // waar een beloning wordt uitgekeerd en een melding komt. Dezelfde fase nog eens doet niets.
   T.zetQuest = function (S, naam, fase, weg) {
     const q = T.QUESTS[naam];
-    if (!q) return console.warn(`T.zetQuest: onbekende quest "${naam}"`);
-    if (!q.fasen[fase]) return console.warn(`T.zetQuest: "${naam}" heeft geen fase "${fase}"`);
+    if (!q) return console.warn(`T.zetQuest: onbekende quest "${naam}"`); // geen tekst
+    if (!q.fasen[fase]) return console.warn(`T.zetQuest: "${naam}" heeft geen fase "${fase}"`); // geen tekst
     if (stand(S)[naam] === fase) return;
     stand(S)[naam] = fase;
     if (weg) wegen(S)[naam] = weg;
     const f = q.fasen[fase];
-    if (f.melding) zeg(f.melding);
+    // De quests zijn gegevens (js/quests.js, de questbewerker schrijft ze terug): hun zinnen gaan naar de taal van nu
+    // als ze getoond worden (T.tGegevens, js/taal.js), zoals een gesprek.
+    if (f.melding) zeg(T.tGegevens(f.melding));
     keerUit(S, naam, fase, f.beloning);
     T.werkQuestVoorwerpen(S);
     T.werkGeheimenBij(S);
@@ -71,7 +73,7 @@
     const fase = T.questFase(S, naam);
     const w = q && fase && q.fasen[fase].wegen && q.fasen[fase].wegen[wegId];
     if (!w) {
-      console.warn(`T.neemWeg: "${naam}" heeft in fase "${fase}" geen weg "${wegId}"`);
+      console.warn(`T.neemWeg: "${naam}" heeft in fase "${fase}" geen weg "${wegId}"`); // geen tekst
       return false;
     }
     if (w.doe) T.doeGevolg(S, S.dorp, w.doe);
@@ -105,7 +107,7 @@
     for (const naam of Object.keys(stand(S))) {
       const q = T.QUESTS[naam];
       const f = q && q.fasen[stand(S)[naam]];
-      if (f && f.doel) return { kop: q.naam, tekst: f.doel };
+      if (f && f.doel) return { kop: T.tGegevens(q.naam), tekst: T.tGegevens(f.doel) };
     }
     return null;
   };
@@ -222,41 +224,42 @@
   // echte wegen naar het einde, die niet allemaal hetzelfde kosten. Daar komt het gewone
   // nakijkwerk bij — een weg die nergens heen gaat, een fase waar je niet meer uit komt, een
   // einde dat onbereikbaar is — want dat is precies wat je in gegevens over het hoofd ziet.
-  // Geeft een lijst klachten; leeg betekent goed.
+  // Geeft een lijst klachten; leeg betekent goed. De klachten zijn voor ons (npm test, de questbewerker), niet voor de
+  // speler, en blijven Nederlands.
   T.keurQuests = function (quests) {
     const klachten = [];
     for (const [id, q] of Object.entries(quests || {})) {
       const fasen = q.fasen || {};
       const namen = Object.keys(fasen);
-      if (!q.naam) klachten.push(`${id}: geen naam`);
-      if (!namen.length) { klachten.push(`${id}: geen fasen`); continue; }
-      if (!fasen[q.begin]) klachten.push(`${id}: begin "${q.begin}" is geen fase`);
-      if (!namen.some((n) => fasen[n].eind)) klachten.push(`${id}: geen enkele fase heeft eind: true`);
+      if (!q.naam) klachten.push(`${id}: geen naam`); // geen tekst
+      if (!namen.length) { klachten.push(`${id}: geen fasen`); continue; } // geen tekst
+      if (!fasen[q.begin]) klachten.push(`${id}: begin "${q.begin}" is geen fase`); // geen tekst
+      if (!namen.some((n) => fasen[n].eind)) klachten.push(`${id}: geen enkele fase heeft eind: true`); // geen tekst
 
       const alle = [];
       for (const n of namen) {
         const f = fasen[n];
         const eruit = Object.entries(f.wegen || {});
-        if (!eruit.length && !f.eind) klachten.push(`${id}: uit fase "${n}" komt geen weg`);
+        if (!eruit.length && !f.eind) klachten.push(`${id}: uit fase "${n}" komt geen weg`); // geen tekst
         for (const [wid, w] of eruit) {
-          if (!fasen[w.naar]) klachten.push(`${id}: weg "${n}/${wid}" gaat naar "${w.naar}", en dat is geen fase`);
-          if (!KOSTEN.includes(w.kost)) klachten.push(`${id}: weg "${n}/${wid}" kost "${w.kost}"; dat moet een van ${KOSTEN.join(', ')} zijn`);
+          if (!fasen[w.naar]) klachten.push(`${id}: weg "${n}/${wid}" gaat naar "${w.naar}", en dat is geen fase`); // geen tekst
+          if (!KOSTEN.includes(w.kost)) klachten.push(`${id}: weg "${n}/${wid}" kost "${w.kost}"; dat moet een van ${KOSTEN.join(', ')} zijn`); // geen tekst
           alle.push(w);
         }
       }
 
       const keuzes = alle.filter((w) => w.kost !== 'niets');
       if (keuzes.length < 3) {
-        klachten.push(`${id}: ${keuzes.length} echte weg(en), en de toets van drie antwoorden vraagt er drie (ontwerp/toren.md)`);
+        klachten.push(`${id}: ${keuzes.length} echte weg(en), en de toets van drie antwoorden vraagt er drie (ontwerp/toren.md)`); // geen tekst
       }
       const soorten = new Set(keuzes.map((w) => w.kost));
       if (keuzes.length >= 3 && soorten.size < 2) {
-        klachten.push(`${id}: elke weg kost "${[...soorten][0]}"; drie keer hetzelfde is één antwoord`);
+        klachten.push(`${id}: elke weg kost "${[...soorten][0]}"; drie keer hetzelfde is één antwoord`); // geen tekst
       }
 
       const bereikt = bereikbaar(fasen, q.begin);
-      if (!namen.some((n) => fasen[n].eind && bereikt.has(n))) klachten.push(`${id}: het einde is vanaf "${q.begin}" niet te bereiken`);
-      for (const n of namen) if (!bereikt.has(n)) klachten.push(`${id}: fase "${n}" is nergens vandaan te bereiken`);
+      if (!namen.some((n) => fasen[n].eind && bereikt.has(n))) klachten.push(`${id}: het einde is vanaf "${q.begin}" niet te bereiken`); // geen tekst
+      for (const n of namen) if (!bereikt.has(n)) klachten.push(`${id}: fase "${n}" is nergens vandaan te bereiken`); // geen tekst
     }
     return klachten;
   };

@@ -436,7 +436,7 @@ test('een roedel met honger komt in het donker en neemt een schaap; de herder ze
   assert.ok(T.heeftVlag(D, 'wolvenNamenSchaap'), 'de echte antwoorden');
   assert.ok(L.vanaf > toen && T.uurVanDag(L.vanaf) >= T.VOORVALLEN_INSTELLINGEN.zoektVanaf, 'de ochtend erna');
   const status = T.oorzakenNu(D, S.kalender.dag).find((o) => o.id === 'wolven');
-  assert.ok(status && /wolven bij het dorp/.test(status.zin), 'de status Wolven');
+  assert.ok(status && /wolves near the village/.test(status.zin), 'de status Wolven');
   assert.equal(T.wolvenBijHetDorp(D, S.kalender.dag + T.BEESTEN_INSTELLINGEN.dreiging.statusDagen + 1), null, 'en die gaat over');
   // Met beesten in het bos komt het voorval niet zomaar (js/voorvallen.js).
   assert.equal(T.voorvalKan(D, 'wolven', 10 * T.DAGEN_PER_MAAND + 3), null);
@@ -835,9 +835,9 @@ test('het voorval "wolven": "Een jacht" is een jacht te voet, en het venster zeg
   const D = S.dorp;
   T.zetBeesten(D);
   D.beesten.roedel = groepVan(S, 'wolf').G;
-  const keuze = T.GESPREKKEN.wolven.knopen.begin.keuzes.find((k) => /jacht/.test(k.zeg) && k.als && k.als.vlag === 'wolvenNamenSchaap');
+  const keuze = T.GESPREKKEN.wolven.knopen.begin.keuzes.find((k) => /hunt/.test(k.zeg) && k.als && k.als.vlag === 'wolvenNamenSchaap');
   assert.ok(keuze.doe.jacht);
-  assert.match(T.prijsVanKeuze(D, keuze.doe).tekst, /de mannen gaan met je mee naar de wolven/);
+  assert.match(T.prijsVanKeuze(D, keuze.doe).tekst, /the men go with you to the wolves/);
   luister(() => T.voorvalGevolg(D, keuze.doe));
   assert.ok(D.beesten.jacht, 'de jacht loopt');
 });

@@ -341,7 +341,7 @@ const zegt = (S) => T.gesprekKnoop(S, S.dorp, 'herbergierster', 'welkom').tekst;
 
 test('de herbergierster vertelt wie er gisteravond aan de tap zat, en of het droog was', () => {
   const S = gehucht();
-  assert.match(zegt(S), /^Stil gisteravond/);
+  assert.match(zegt(S), /^Quiet last night/);
   const gasten = T.herbergGasten(S.dorp, HERFST);
   assert.ok(gasten.length > 0);
   T.tikHerbergDag(S.dorp, HERFST + 1);
@@ -352,7 +352,7 @@ test('de herbergierster vertelt wie er gisteravond aan de tap zat, en of het dro
   T.zetVoorraad(S.dorp, 'bier', 0);
   T.tikHerbergDag(S.dorp, HERFST + 2);
   assert.ok(T.heeftVlag(S.dorp, 'herbergDroog') && !T.heeftVlag(S.dorp, 'herbergGasten'), 'droog, en er kwam niemand');
-  assert.match(zegt(S), /^Geen druppel/);
+  assert.match(zegt(S), /^Not a drop/);
 });
 
 test('de marskramer zit \'s avonds in de herberg en slaapt er, en staat overdag weer bij zijn waar', () => {

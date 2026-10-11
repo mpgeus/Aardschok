@@ -84,8 +84,8 @@
 
   // De voorvallen. Per voorval:
   //   soort    'recht' (rechtspraak), 'verzoek', 'ramp', 'kans', 'feest' of 'heer' (de grillen van de heer)
-  //   titel    waar het over gaat, voor de balk: "Het is blij met je antwoord op de diefstal"
-  //   woorden  { blij, last }: wat de balk dan zegt, als het anders moet ("Het is blij met de bruiloft")
+  //   titel    waar het over gaat, voor de balk: "your answer about the theft"
+  //   woorden  { blij, last }: wat de balk dan zegt, als het anders moet ("the wedding")
   //   wie      wie het je komt zeggen; ander: over wie het gaat (zonder: niemand). Een vraag, of een lijstje vragen
   //            waarvan de eerste die iemand oplevert telt: { geslacht, leeftijd (zonder: volwassen), boer (true of
   //            false), karakter (de boer met dat karakter, js/boeren.js), werk (hij werkt in zo'n gebouw) }. In een
@@ -100,101 +100,104 @@
   //   zelf     true: wordt niet geloot; een ander deel van het spel begint het (het bouwverzoek, js/verzoeken.js).
   //            'beesten': zo zolang er beesten in het bos leven (de spelregel "Beesten"): de wolven namen dan echt een
   //            schaap (js/beesten.js); zonder beesten wordt het geloot, zoals voor 7 okt
-  //   roep     het bericht als hij je gaat zoeken (zonder: "{wie} zoekt je."), met de woorden van een gesprek (js/gesprek.js)
-  //   sterft   wie er sterft, zegt het bericht zo: "De koorts: ..." (zonder: de titel)
+  //   roep     het bericht als hij je gaat zoeken (zonder: "{wie} is looking for you."), met de woorden van een gesprek
+  //            (js/gesprek.js)
+  //   sterft   wie er sterft, zegt het bericht zo: "The fever: ..." (zonder: de titel)
+  // De titel, de woorden, de roep en sterft zijn Engelse zinnen in T.t (vraag 147): deze tabel is code, die geen
+  // bewerker terugschrijft (anders dan de gesprekken, js/gesprekken.js), dus ze zijn vertaald zodra ze er staan.
   const MAN = { geslacht: 'man', leeftijd: ['jong', 'volwassen'] };
   T.VOORVALLEN = {
     // Rechtspraak (de vierde van 23 sep, spel.md): streng houdt de orde, mild houdt vrienden, en wie je
     // veroordeelde, vergeet het niet.
     diefstal: {
-      soort: 'recht', titel: 'de diefstal', oorzaak: 'honger',
+      soort: 'recht', titel: T.t('the theft'), oorzaak: 'honger',
       wie: { geslacht: 'vrouw', leeftijd: ['volwassen', 'oud'] }, ander: { ...MAN, boer: false },
     },
-    diefstalWeer: { soort: 'recht', titel: 'de dief', vervolg: true, wie: { leeftijd: ['volwassen', 'oud'] } },
-    diefstalWrok: { soort: 'recht', titel: 'de dief', vervolg: true, wie: { leeftijd: ['volwassen', 'oud'] } },
-    diefDank: { soort: 'kans', titel: 'de dief', vervolg: true, wie: 'ander', ander: 'wie' },
+    diefstalWeer: { soort: 'recht', titel: T.t('the thief'), vervolg: true, wie: { leeftijd: ['volwassen', 'oud'] } },
+    diefstalWrok: { soort: 'recht', titel: T.t('the thief'), vervolg: true, wie: { leeftijd: ['volwassen', 'oud'] } },
+    diefDank: { soort: 'kans', titel: T.t('the thief'), vervolg: true, wie: 'ander', ander: 'wie' },
     vechtpartij: {
-      soort: 'recht', titel: 'de vechtpartij', als: { gebouw: 'herberg' }, oorzaak: 'onvrede',
+      soort: 'recht', titel: T.t('the fight'), als: { gebouw: 'herberg' }, oorzaak: 'onvrede',
       wie: MAN, ander: [{ karakter: 'heethoofd', geslacht: 'man' }, { karakter: 'drinker', geslacht: 'man' }, MAN],
     },
-    akkergrens: { soort: 'recht', titel: 'de akkergrens', wie: { boer: true }, ander: { boer: true } },
-    akkergrensWraak: { soort: 'recht', titel: 'de akkergrens', vervolg: true },
+    akkergrens: { soort: 'recht', titel: T.t('the field boundary'), wie: { boer: true }, ander: { boer: true } },
+    akkergrensWraak: { soort: 'recht', titel: T.t('the field boundary'), vervolg: true },
     stroper: {
-      soort: 'recht', titel: 'de stroper', oorzaak: 'honger',
+      soort: 'recht', titel: T.t('the poacher'), oorzaak: 'honger',
       wie: { geslacht: 'man', leeftijd: ['volwassen', 'oud'] }, ander: { ...MAN, boer: false },
     },
     heks: {
-      soort: 'recht', titel: 'de heks', woorden: { blij: 'je vonnis over de heks', last: 'je vonnis over de heks' }, pauze: 180,
+      soort: 'recht', titel: T.t('the witch'), woorden: { blij: T.t('your verdict on the witch'), last: T.t('your verdict on the witch') }, pauze: 180,
       wie: {}, ander: { geslacht: 'vrouw', leeftijd: 'oud', boer: false },
     },
-    woeker: { soort: 'recht', titel: 'de schuld bij de woekeraar', oorzaak: 'honger', wie: { boer: false }, ander: { karakter: 'woekeraar' } },
-    woekerWraak: { soort: 'recht', titel: 'de woekeraar', vervolg: true, wie: 'ander', ander: 'wie' },
+    woeker: { soort: 'recht', titel: T.t('the debt to the moneylender'), oorzaak: 'honger', wie: { boer: false }, ander: { karakter: 'woekeraar' } },
+    woekerWraak: { soort: 'recht', titel: T.t('the moneylender'), vervolg: true, wie: 'ander', ander: 'wie' },
     // Verzoeken
-    lening: { soort: 'verzoek', titel: 'de lening', oorzaak: 'honger', wie: { boer: false } },
-    leningTerug: { soort: 'verzoek', titel: 'de lening', vervolg: true },
-    leningUitstel: { soort: 'verzoek', titel: 'de lening', vervolg: true },
-    vreemdeling: { soort: 'verzoek', titel: 'de vreemdelingen', wie: { leeftijd: ['volwassen', 'oud'] } },
-    smid: { soort: 'kans', titel: 'de smid uit de stad', pauze: 360, wie: { leeftijd: ['volwassen', 'oud'] } },
-    zaaigraan: { soort: 'verzoek', titel: 'het zaaigraan', als: { maanden: ['lentemaand', 'grasmaand'] }, wie: { boer: true } },
-    zaaigraanTerug: { soort: 'verzoek', titel: 'het zaaigraan', vervolg: true, na: [120, 150] },
-    weduweDak: { soort: 'verzoek', titel: 'het dak van de weduwe', als: { seizoen: ['herfst', 'winter'] }, wie: { karakter: 'weduwe' } },
+    lening: { soort: 'verzoek', titel: T.t('the loan'), oorzaak: 'honger', wie: { boer: false } },
+    leningTerug: { soort: 'verzoek', titel: T.t('the loan'), vervolg: true },
+    leningUitstel: { soort: 'verzoek', titel: T.t('the loan'), vervolg: true },
+    vreemdeling: { soort: 'verzoek', titel: T.t('the strangers'), wie: { leeftijd: ['volwassen', 'oud'] } },
+    smid: { soort: 'kans', titel: T.t('the smith from the town'), pauze: 360, wie: { leeftijd: ['volwassen', 'oud'] } },
+    zaaigraan: { soort: 'verzoek', titel: T.t('the seed grain'), als: { maanden: ['lentemaand', 'grasmaand'] }, wie: { boer: true } },
+    zaaigraanTerug: { soort: 'verzoek', titel: T.t('the seed grain'), vervolg: true, na: [120, 150] },
+    weduweDak: { soort: 'verzoek', titel: T.t("the widow's roof"), als: { seizoen: ['herfst', 'winter'] }, wie: { karakter: 'weduwe' } },
     // Rampen: iets doen kost iets, niets doen ook.
     brand: {
-      soort: 'ramp', titel: 'de brand', winter: 3, oorzaak: ['vol', 'brandgevaar'], roep: 'Brand! {wie} komt je halen.',
+      soort: 'ramp', titel: T.t('the fire'), winter: 3, oorzaak: ['vol', 'brandgevaar'], roep: T.t('Fire! {wie} is coming to fetch you.'),
       wie: { leeftijd: ['jong', 'volwassen'] }, ander: { boer: false },
     },
-    ziekte: { soort: 'ramp', titel: 'de koorts', winter: 2, oorzaak: ['kou', 'vol'], sterft: 'De koorts', wie: { geslacht: 'vrouw' } },
+    ziekte: { soort: 'ramp', titel: T.t('the fever'), winter: 2, oorzaak: ['kou', 'vol'], sterft: T.t('The fever'), wie: { geslacht: 'vrouw' } },
     // De honger komt aan het zaaigraan in de graanschuur (js/graanschuur.js; vraag 132): een boer zoekt je.
-    zaaigraanHonger: { soort: 'ramp', titel: 'het zaaigraan', zelf: true, oorzaak: 'honger', roep: '{wie} zoekt je: het dorp wil het zaaigraan eten.', wie: [{ boer: true }, MAN] },
+    zaaigraanHonger: { soort: 'ramp', titel: T.t('the seed grain'), zelf: true, oorzaak: 'honger', roep: T.t('{wie} is looking for you: the village wants to eat the seed grain.'), wie: [{ boer: true }, MAN] },
     wolven: {
-      soort: 'ramp', titel: 'de wolven', als: { seizoen: 'winter', vee: { schaap: 3 } }, winter: 3, sterft: 'De jacht op de wolven', zelf: 'beesten', oorzaak: 'wolven',
-      roep: 'Wolven! {wie} komt je halen.', wie: [{ werk: 'schaapskooi' }, MAN], ander: MAN,
+      soort: 'ramp', titel: T.t('the wolves'), als: { seizoen: 'winter', vee: { schaap: 3 } }, winter: 3, sterft: T.t('The wolf hunt'), zelf: 'beesten', oorzaak: 'wolven',
+      roep: T.t('Wolves! {wie} is coming to fetch you.'), wie: [{ werk: 'schaapskooi' }, MAN], ander: MAN,
     },
     storm: {
-      soort: 'ramp', titel: 'de storm', als: { maanden: ['herfstmaand', 'wijnmaand', 'slachtmaand', 'sprokkelmaand'], voorraad: { graan: 40 } },
+      soort: 'ramp', titel: T.t('the storm'), als: { maanden: ['herfstmaand', 'wijnmaand', 'slachtmaand', 'sprokkelmaand'], voorraad: { graan: 40 } },
     },
-    muizen: { soort: 'ramp', titel: 'de muizen', als: { voorraad: { graan: 60 } } },
+    muizen: { soort: 'ramp', titel: T.t('the mice'), als: { voorraad: { graan: 60 } } },
     // Kansen
-    heler: { soort: 'kans', titel: 'het ijzer van de heer', wie: MAN },
-    vondst: { soort: 'kans', titel: 'de vondst', wie: { leeftijd: ['kind', 'jong'] } },
-    zwerver: { soort: 'kans', titel: 'de zwerver' },
-    wijsheid: { soort: 'kans', titel: 'de raad van de oude', wie: { karakter: 'grijsaard' } },
+    heler: { soort: 'kans', titel: T.t("the lord's iron"), wie: MAN },
+    vondst: { soort: 'kans', titel: T.t('the find'), wie: { leeftijd: ['kind', 'jong'] } },
+    zwerver: { soort: 'kans', titel: T.t('the vagrant') },
+    wijsheid: { soort: 'kans', titel: T.t("the elder's advice"), wie: { karakter: 'grijsaard' } },
     // Feesten: graan op en een tevreden dorp (Lords of the Realm, idee 4).
     bruiloft: {
-      soort: 'feest', titel: 'de bruiloft', woorden: { blij: 'de bruiloft', last: 'de bruiloft zonder feest' },
+      soort: 'feest', titel: T.t('the wedding'), woorden: { blij: T.t('the wedding'), last: T.t('the wedding without a feast') },
       wie: { leeftijd: ['volwassen', 'oud'] }, ander: { geslacht: 'man', leeftijd: 'jong' },
     },
     oogstfeest: {
-      soort: 'feest', titel: 'het oogstfeest', woorden: { blij: 'het oogstfeest', last: 'het oogstfeest dat er niet was' },
+      soort: 'feest', titel: T.t('the harvest feast'), woorden: { blij: T.t('the harvest feast'), last: T.t('the harvest feast that never was') },
       als: { maanden: ['oogstmaand', 'herfstmaand'], voorraad: { graan: 80 } }, pauze: 200, gewicht: 3, wie: { boer: true },
     },
-    klok: { soort: 'verzoek', titel: 'de klok voor de kapel', als: { gebouw: 'kapel' }, pauze: 360, wie: { karakter: 'vrome' } },
+    klok: { soort: 'verzoek', titel: T.t('a bell for the chapel'), als: { gebouw: 'kapel' }, pauze: 360, wie: { karakter: 'vrome' } },
     // Een inwoner wil iets bouwen wat het dorp mist (js/verzoeken.js; werklijst vraag 103): wie, wat en waar zet dat
     // bestand op het voorval (L.bouw), en de woorden ervan ook.
-    bouwverzoek: { soort: 'verzoek', titel: 'a request to build', zelf: true, roep: '{wie} wants to build {gebouw}, and is looking for you.' },
+    bouwverzoek: { soort: 'verzoek', titel: T.t('a request to build'), zelf: true, roep: T.t('{wie} wants to build {gebouw}, and is looking for you.') },
     // Een ondernemer wil wapens maken, uit zichzelf (js/ondernemers.js; werklijst vraag 104). Zoals het bouwverzoek, met
     // zijn eigen woorden.
-    wapenverzoek: { soort: 'verzoek', titel: 'de wapens', zelf: true, roep: '{wie} wil je onder vier ogen spreken.' },
+    wapenverzoek: { soort: 'verzoek', titel: T.t('the weapons'), zelf: true, roep: T.t('{wie} wants a word with you in private.') },
     // En een ondernemer die een tweede herberg wil beginnen; de herbergierster heeft daar een mening over.
-    herbergverzoek: { soort: 'verzoek', titel: 'de tweede herberg', zelf: true, roep: '{wie} wil een herberg beginnen, en zoekt je.' },
-    lied: { soort: 'feest', titel: 'het lied over de heer', als: { gebouw: 'herberg' }, wie: { karakter: 'zanger' } },
+    herbergverzoek: { soort: 'verzoek', titel: T.t('the second inn'), zelf: true, roep: T.t('{wie} wants to open an inn, and is looking for you.') },
+    lied: { soort: 'feest', titel: T.t('the song about the lord'), als: { gebouw: 'herberg' }, wie: { karakter: 'zanger' } },
     // De meiboom (werklijst vraag 97; Marcel, 3 okt: "De meiboom"): niet geloot, maar elk jaar op 30 grasmaand, zodat hij
     // op 1 bloeimaand op het plein staat (js/feesten.js). De jongeren komen het vragen.
     meiboom: {
-      soort: 'feest', titel: 'de meiboom', woorden: { blij: 'de meiboom', last: 'de meiboom die er niet kwam' },
+      soort: 'feest', titel: T.t('the maypole'), woorden: { blij: T.t('the maypole'), last: T.t('the maypole that never came') },
       op: { maand: 'grasmaand', dag: 30 }, pauze: 300, wie: [{ leeftijd: 'jong' }, {}],
     },
     // De kerstboom (werklijst vraag 148; Marcel, 10 okt: "we hebben ook een kerstboom nodig :)", en "Feestavond"): elk jaar
     // op 20 wintermaand; met ja staat hij meteen op het plein, tot en met 6 louwmaand, en op kerstavond viert het dorp
     // (js/feesten.js).
     kerstboom: {
-      soort: 'feest', titel: 'de kerstboom', woorden: { blij: 'de kerstboom', last: 'de kerstboom die er niet kwam' },
+      soort: 'feest', titel: T.t('the Christmas tree'), woorden: { blij: T.t('the Christmas tree'), last: T.t('the Christmas tree that never came') },
       op: { maand: 'wintermaand', dag: 20 }, pauze: 300, wie: [{ leeftijd: 'jong' }, {}],
     },
     // De grillen van de heer (een idee van 23 sep): wat zijn bode kwam zeggen.
-    standbeeld: { soort: 'heer', titel: 'het standbeeld', pauze: 360, wie: [{ werk: 'herberg' }, {}] },
-    jacht: { soort: 'heer', titel: 'de jacht van de heer', als: { maanden: ['herfstmaand', 'wijnmaand'] }, pauze: 360 },
-    ramen: { soort: 'heer', titel: 'de belasting op ramen', pauze: 360 },
+    standbeeld: { soort: 'heer', titel: T.t('the statue'), pauze: 360, wie: [{ werk: 'herberg' }, {}] },
+    jacht: { soort: 'heer', titel: T.t("the lord's hunt"), als: { maanden: ['herfstmaand', 'wijnmaand'] }, pauze: 360 },
+    ramen: { soort: 'heer', titel: T.t('the window tax'), pauze: 360 },
   };
 
   const dagNu = (D) => Math.floor(D.kalender ? D.kalender.dag : 0);
@@ -275,135 +278,135 @@
   // kaartje in de balk (js/hud.js).
   T.OORZAKEN = {
     honger: {
-      naam: 'Honger',
-      kop: 'Er is honger',
-      nog: 'Er is nog steeds honger',
-      voorbij: 'De honger is voorbij',
-      speelt: (D) => (T.standVanWet(D, 'rantsoen') === 'krap' ? 'het rantsoen is krap' : mist(D, T.t('food')) ? 'er is niet genoeg eten' : null),
+      naam: T.t('Hunger'),
+      kop: T.t('There is hunger'),
+      nog: T.t('There is still hunger'),
+      voorbij: T.t('The hunger is over'),
+      speelt: (D) => (T.standVanWet(D, 'rantsoen') === 'krap' ? T.t('the rations are short') : mist(D, T.t('food')) ? T.t('there is not enough food') : null),
       erger: {
-        naam: 'Hongersnood',
-        kop: 'Er is hongersnood',
-        minder: 'De hongersnood is voorbij, maar er is nog honger',
-        speelt: (D) => (D.behoeften && D.behoeften.voedselDekking < IN().hongersnood ? 'er is nog geen half rantsoen te eten' : null),
+        naam: T.t('Famine'),
+        kop: T.t('There is famine'),
+        minder: T.t('The famine is over, but there is still hunger'),
+        speelt: (D) => (D.behoeften && D.behoeften.voedselDekking < IN().hongersnood ? T.t('there is not even half a ration to eat') : null),
       },
       helpt: (D) => {
         const h = T.watHelptAanEten(D);
-        return h.length ? T.opsomming(h.map((x) => x.zin)) : 'meer eten: meer akkers, vee, een visser of een jager';
+        return h.length ? T.opsomming(h.map((x) => x.zin)) : T.t('more food: more fields, livestock, a fisherman or a hunter');
       },
     },
     kou: {
-      naam: 'Kou',
-      kop: 'Het is koud in de huizen',
-      nog: 'Het is nog steeds koud in de huizen',
-      voorbij: 'Het is niet koud meer in de huizen',
-      speelt: (D, dag) => (!inWinter(dag) || !mist(D, T.t('firewood for the winter')) ? null : brandhout(D) < 1 ? 'het brandhout is op' : 'het hout haalt de winter niet'),
+      naam: T.t('Cold'),
+      kop: T.t('It is cold in the houses'),
+      nog: T.t('It is still cold in the houses'),
+      voorbij: T.t('It is no longer cold in the houses'),
+      speelt: (D, dag) => (!inWinter(dag) || !mist(D, T.t('firewood for the winter')) ? null : brandhout(D) < 1 ? T.t('the firewood has run out') : T.t('the wood will not last the winter')),
       erger: {
-        naam: 'Strenge kou',
-        kop: 'Het vriest in de huizen',
-        minder: 'Het vriest niet meer in de huizen, maar het is er nog koud',
-        speelt: (D) => (brandhout(D) < 1 ? 'het brandhout is op' : null),
+        naam: T.t('Bitter cold'),
+        kop: T.t('It is freezing in the houses'),
+        minder: T.t('It is no longer freezing in the houses, but it is still cold'),
+        speelt: (D) => (brandhout(D) < 1 ? T.t('the firewood has run out') : null),
       },
-      helpt: () => 'brandhout: een houthakker, turf, of hout van de marskramer',
+      helpt: () => T.t('firewood: a woodcutter, peat, or wood from the peddler'),
     },
     vol: {
-      naam: 'Vol',
-      kop: 'De huizen zitten vol',
-      nog: 'De huizen zitten nog steeds vol',
-      voorbij: 'Er is weer plaats in de huizen',
+      naam: T.t('Full'),
+      kop: T.t('The houses are full'),
+      nog: T.t('The houses are still full'),
+      voorbij: T.t('There is room in the houses again'),
       speelt: (D) => ((D.bevolking || 0) > 0 && D.bevolking >= T.telWoonruimte(D) ? '' : null),
       erger: {
-        naam: 'Overvol',
-        kop: 'De huizen zitten overvol',
-        minder: 'De huizen zitten niet meer overvol, maar wel vol',
-        speelt: (D) => ((D.bevolking || 0) > T.telWoonruimte(D) ? 'er wonen meer mensen dan er plaats is' : null),
+        naam: T.t('Overcrowded'),
+        kop: T.t('The houses are overcrowded'),
+        minder: T.t('The houses are no longer overcrowded, but they are full'),
+        speelt: (D) => ((D.bevolking || 0) > T.telWoonruimte(D) ? T.t('more people live here than there is room for') : null),
       },
-      helpt: () => 'woonruimte: wijs een erf aan, of laat een huis doorgroeien',
+      helpt: () => T.t('room to live: mark out a plot, or let a house grow'),
     },
     // De wolven (js/beesten.js; werklijst vraag 116, stap 2b): de laatste dagen kwamen ze bij het dorp (wie werkte, zag
     // ze; ze namen een schaap; ze vielen iemand aan).
     wolven: {
-      naam: 'Wolven',
-      kop: 'Er zijn wolven bij het dorp',
-      nog: 'Er zijn nog steeds wolven bij het dorp',
-      voorbij: 'De wolven blijven weer in het bos',
+      naam: T.t('Wolves'),
+      kop: T.t('There are wolves near the village'),
+      nog: T.t('There are still wolves near the village'),
+      voorbij: T.t('The wolves keep to the forest again'),
       speelt: (D, dag) => (T.wolvenBijHetDorp ? T.wolvenBijHetDorp(D, dag) : null), // wereld.html laadt de beesten niet
-      helpt: () => 'een jacht op de wolven, een hek om de schapen, en licht in het donker',
+      helpt: () => T.t('a hunt for the wolves, a fence round the sheep, and light in the dark'),
     },
     // De droogte (js/weer.js; Marcel, 9 okt): lang geen regen in het groeiseizoen.
     droogte: {
-      naam: 'Droogte',
-      kop: 'Het is droog',
-      nog: 'Het is nog steeds droog',
-      voorbij: 'De droogte is voorbij',
+      naam: T.t('Drought'),
+      kop: T.t('It is dry'),
+      nog: T.t('It is still dry'),
+      voorbij: T.t('The drought is over'),
       speelt: (D) => (T.droogteNiveau(D) >= 1 ? droogteWaarom(D) : null),
       erger: {
-        naam: 'Ernstige droogte',
-        kop: 'Het is ernstig droog',
-        minder: 'Het is niet meer ernstig droog, maar wel nog droog',
+        naam: T.t('Severe drought'),
+        kop: T.t('The drought is severe'),
+        minder: T.t('The drought is no longer severe, but it is still dry'),
         speelt: (D) => (T.droogteNiveau(D) >= 2 ? droogteWaarom(D) : null),
       },
-      helpt: (D) => `regen; tot dan kost het de oogst (nu ${Math.round((1 - T.droogteFactor(D)) * 100)}% minder), en de beekjes staan droog. Houd graan apart voor de winter, of koop het van de marskramer`,
+      helpt: (D) => T.t('rain; until then it costs the harvest ({n}% less now), and the brooks are dry. Keep grain aside for the winter, or buy it from the peddler', { n: Math.round((1 - T.droogteFactor(D)) * 100) }),
     },
     // De koorts (js/koorts.js; vraag 144, 3): zolang er iemand ziek is.
     koorts: {
-      naam: 'Koorts',
-      kop: 'Er is koorts in het dorp',
-      nog: 'Er is nog steeds koorts in het dorp',
-      voorbij: 'De koorts is voorbij',
+      naam: T.t('Fever'),
+      kop: T.t('There is fever in the village'),
+      nog: T.t('There is still fever in the village'),
+      voorbij: T.t('The fever is over'),
       speelt: (D) => (T.koortsNiveau(D) >= 1 ? T.koortsWaarom(D) : null),
       erger: {
-        naam: 'Epidemie',
-        kop: 'De koorts is een epidemie',
-        minder: 'Het is geen epidemie meer, maar er is nog koorts',
+        naam: T.t('Epidemic'),
+        kop: T.t('The fever is an epidemic'),
+        minder: T.t('It is no longer an epidemic, but there is still fever'),
         speelt: (D) => (T.koortsNiveau(D) >= 2 ? T.koortsWaarom(D) : null),
       },
-      helpt: () => 'een schone put, bier in plaats van water, en minder mensen op elkaar (een vol dorp en de kou maken het erger)',
+      helpt: () => T.t('a clean well, ale instead of water, and fewer people crowded together (a full village and the cold make it worse)'),
     },
     // Brandgevaar (js/brand.js; vraag 144, 3): in de droogte vat een dak makkelijk vlam.
     brandgevaar: {
-      naam: 'Brandgevaar',
-      kop: 'Er is brandgevaar',
-      nog: 'Er is nog steeds brandgevaar',
-      voorbij: 'Het brandgevaar is voorbij',
-      speelt: (D, dag) => (T.brandgevaarNiveau(D, dag) >= 1 ? 'het is droog, en een rieten dak vat zo vlam' : null),
+      naam: T.t('Fire risk'),
+      kop: T.t('There is a risk of fire'),
+      nog: T.t('There is still a risk of fire'),
+      voorbij: T.t('The risk of fire is over'),
+      speelt: (D, dag) => (T.brandgevaarNiveau(D, dag) >= 1 ? T.t('it is dry, and a thatched roof catches fire easily') : null),
       erger: {
-        naam: 'Groot brandgevaar',
-        kop: 'Er is groot brandgevaar',
-        minder: 'Het brandgevaar is niet groot meer, maar wel nog',
-        speelt: (D, dag) => (T.brandgevaarNiveau(D, dag) >= 2 ? (T.droogteNiveau(D) >= 2 ? 'het is ernstig droog' : 'het is droog, en de huizen zitten vol') : null),
+        naam: T.t('High fire risk'),
+        kop: T.t('There is a high risk of fire'),
+        minder: T.t('The risk of fire is no longer high, but it is still there'),
+        speelt: (D, dag) => (T.brandgevaarNiveau(D, dag) >= 2 ? (T.droogteNiveau(D) >= 2 ? T.t('the drought is severe') : T.t('it is dry, and the houses are full')) : null),
       },
-      helpt: () => 'regen; tot dan hout in de voorraad, om te blussen en weer op te bouwen, en een dorp dat niet te vol is',
+      helpt: () => T.t('rain; until then wood in store, to put out fires and rebuild, and a village that is not too full'),
     },
     onvrede: {
-      naam: 'Onvrede',
-      kop: 'Het dorp is ontevreden',
-      nog: 'Het dorp is nog steeds ontevreden',
-      voorbij: 'Het dorp is niet ontevreden meer',
+      naam: T.t('Discontent'),
+      kop: T.t('The village is discontented'),
+      nog: T.t('The village is still discontented'),
+      voorbij: T.t('The village is no longer discontented'),
       speelt: (D) => {
         const b = D.behoeften;
         if (!b || b.tevredenheid >= IN().onvrede) return null;
-        if (b.last && b.last.length) return `het heeft last van ${b.last.join(' en ')}`;
-        return b.mist && b.mist.length ? `het mist ${b.mist.join(' en ')}` : '';
+        if (b.last && b.last.length) return T.t('it is troubled by {last}', { last: T.opsomming(b.last) });
+        return b.mist && b.mist.length ? T.t('it lacks {mist}', { mist: T.opsomming(b.mist) }) : '';
       },
       erger: {
-        naam: 'Onrust',
-        kop: 'Er is onrust in het dorp',
-        minder: 'De onrust is voorbij, maar het dorp is nog ontevreden',
-        speelt: (D) => (D.behoeften && D.behoeften.tevredenheid < IN().onrust ? 'het is er heel ontevreden' : null),
+        naam: T.t('Unrest'),
+        kop: T.t('There is unrest in the village'),
+        minder: T.t('The unrest is over, but the village is still discontented'),
+        speelt: (D) => (D.behoeften && D.behoeften.tevredenheid < IN().onrust ? T.t('it is deeply discontented') : null),
       },
       helpt: (D) => {
         const b = D.behoeften;
-        return b && b.mist && b.mist.length ? `wat het mist: ${b.mist.join(', ')}` : 'wat het dorp mist (de raad zegt het)';
+        return b && b.mist && b.mist.length ? T.t('what it lacks: {mist}', { mist: T.opsomming(b.mist) }) : T.t('what the village lacks (the advice says what)');
       },
     },
   };
   function droogteWaarom(D) {
     const W = T.weerVan(D);
-    return W && W.droog >= 3 ? `het heeft al ${T.telwoord(W.droog)} dagen niet geregend` : 'er valt te weinig regen';
+    return W && W.droog >= 3 ? T.t('it has not rained for {getal} days', { getal: T.telwoord(W.droog) }) : T.t('too little rain is falling');
   }
 
-  // Speelt oorzaak `o` nu? Dan { id, zin, waarom }, met de zin die het bericht erbij zegt: "Er is honger, want het
-  // rantsoen is krap." Anders null.
+  // Speelt oorzaak `o` nu? Dan { id, zin, waarom }, met de zin die het bericht erbij zegt: "There is hunger, for the
+  // rations are short." Anders null.
   // Met `niveau` (1, of 2 als het erger is: hongersnood, strenge kou, ...) en de `naam` van dat niveau, voor de balk.
   function oorzaakNu(D, o, dag) {
     const O = T.OORZAKEN[o];
@@ -412,7 +415,8 @@
     const erger = O.erger ? O.erger.speelt(D, dag) : null;
     const N = erger != null ? O.erger : O;
     const w = erger != null ? erger : waarom;
-    return { id: o, niveau: erger != null ? 2 : 1, naam: N.naam, zin: `${N.kop}${w ? `, want ${w}` : ''}.`, waarom: w };
+    const zin = w ? T.t('{kop}, for {waarom}.', { kop: N.kop, waarom: w }) : `${N.kop}.`;
+    return { id: o, niveau: erger != null ? 2 : 1, naam: N.naam, zin, waarom: w };
   }
 
   // Welke oorzaak van dit voorval nu speelt: de eerste die speelt, in de volgorde van het voorval, als { id, zin }, of
@@ -577,7 +581,7 @@
   function stemming(D, procent, v, dag, door) {
     const waarde = procent / 100;
     const eigen = waarde > 0 ? v.woorden && v.woorden.blij : v.woorden && v.woorden.last;
-    const woorden = eigen || (door ? `wat ${naam(door)} besliste over ${v.titel}` : `je antwoord op ${v.titel}`);
+    const woorden = eigen || (door ? T.t('what {wie} decided about {titel}', { wie: naam(door), titel: v.titel }) : T.t('your answer about {titel}', { titel: v.titel }));
     D.voorvallen.stemming.push({ waarde, dag, woorden });
     T.tevredenheidOpnieuw(D);
   }
@@ -624,10 +628,10 @@
     if (raadsmanMag && T.raadsmanBeslist(D)) return;
     const L = D.voorvallen.lopend;
     if (raadsmanMag) D.voorvallen.laatstVoorbij = Math.floor(dag);
-    T.zeg(D, `${T.hoofdletter(naam(L.wie))} heeft je niet gesproken, en gaat weer aan het werk.`);
+    T.zeg(D, T.t('{wie} did not get to speak to you, and goes back to work.', { wie: T.hoofdletter(naam(L.wie)) }));
     T.schrijfOp(D, 'voorbij', { wie: naam(L.wie), titel: T.VOORVALLEN[L.id].titel }); // voor het rapport (js/ochtendrapport.js)
-    stemming(D, IN().nietGevonden, { woorden: { last: weg ? 'een schout die er niet was' : 'een schout die geen tijd had' } }, dag);
-    T.wijzigVertrouwen(D, T.BAZEN_INSTELLINGEN.nietGevonden, weg ? 'je was er niet' : 'je had geen tijd');
+    stemming(D, IN().nietGevonden, { woorden: { last: weg ? T.t('a reeve who was not there') : T.t('a reeve who had no time') } }, dag);
+    T.wijzigVertrouwen(D, T.BAZEN_INSTELLINGEN.nietGevonden, weg ? T.t('you were not there') : T.t('you had no time'));
     stop(D);
   }
 
@@ -720,7 +724,7 @@
       e.pad = e.onderweg && e.pad.length ? [e.pad[0]] : [];
       if (!L.gemeld) {
         L.gemeld = true;
-        const roep = T.VOORVALLEN[L.id].roep || '{wie} zoekt je.';
+        const roep = T.VOORVALLEN[L.id].roep || T.t('{wie} is looking for you.');
         const waarom = L.oorzaak ? ` ${L.oorzaak.zin}` : '';
         T.zeg(D, T.hoofdletter(T.vulWoordenIn(D, roep)) + waarom, T.VOORVALLEN[L.id].soort === 'ramp' ? 'gevaar' : undefined);
       }
@@ -763,7 +767,7 @@
   T.voorvalGevolg = function (D, doe) {
     const V = D.voorvallen || (D.voorvallen = T.nieuweVoorvallen());
     const L = V.lopend || {};
-    const v = T.VOORVALLEN[L.id] || { titel: 'wat er gebeurde' };
+    const v = T.VOORVALLEN[L.id] || { titel: T.t('what happened') };
     const dag = dagNu(D);
     for (const wat of WAREN) if (doe[wat]) T.wijzigVoorraad(D, wat, doe[wat]);
     for (const soort of Object.keys(T.VEE)) if (doe[soort] < 0) T.verliesVee(D, soort, -doe[soort]);
@@ -775,7 +779,7 @@
     if (doe.vertrouwen) T.wijzigVertrouwen(D, doe.vertrouwen, v.titel);
     for (let i = 0; i < (doe.gezin || 0); i++) T.gezinKomt(D);
     const verbannen = doe.verban && L[doe.verban];
-    if (verbannen && kanHetBetreffen(D, verbannen)) T.wijzigBevolking(D, -1, 'vertrek', 'verbannen door de schout', [verbannen]);
+    if (verbannen && kanHetBetreffen(D, verbannen)) T.wijzigBevolking(D, -1, 'vertrek', T.t('banished by the reeve'), [verbannen]);
     if (doe.sterfkans && lot(D, dag, 37 + V.aantal) < doe.sterfkans / 100) {
       const wie = L.ander && kanHetBetreffen(D, L.ander) ? [L.ander] : undefined;
       T.wijzigBevolking(D, -1, 'ziekte', v.sterft || T.hoofdletter(v.titel), wie);
@@ -814,42 +818,53 @@
     const teken = (n) => (n > 0 ? '+' : '−');
     // Wat een bouwverzoek het dorp kost (js/verzoeken.js): de kosten van het gebouw, zoals T.plaatsGebouw ze betaalt.
     const kosten = doe.bouw && L.bouw ? T.kostenVanVerzoek(L.bouw) : {};
+    // Een bedrag is een teken en een hoeveelheid (T.hoeveel, js/voorraad.js): "−14 wood", "+3 gold".
+    const heeftTekst = (heeft, wat) => T.t('you have {wat}', { wat: T.hoeveel(heeft, wat) });
     for (const [wat, n] of Object.entries(kosten)) {
-      delen.push(`−${n} ${wat}`);
+      delen.push(`−${T.hoeveel(n, wat)}`);
       const heeft = Math.floor((D.voorraad && D.voorraad[wat]) || 0);
-      if (heeft < n && uit.kan) Object.assign(uit, { kan: false, waarom: `je hebt ${heeft} ${wat}` });
+      if (heeft < n && uit.kan) Object.assign(uit, { kan: false, waarom: heeftTekst(heeft, wat) });
     }
     for (const wat of ['goud', ...WAREN]) {
       const n = doe[wat] || 0;
       if (!n) continue;
-      delen.push(`${teken(n)}${Math.abs(n)} ${wat}`);
+      delen.push(`${teken(n)}${T.hoeveel(Math.abs(n), wat)}`);
       const heeft = Math.floor((D.voorraad ? D.voorraad[wat] : wat === 'goud' ? D.goud : 0) || 0);
-      if (n < 0 && heeft < -n && uit.kan) Object.assign(uit, { kan: false, waarom: `je hebt ${heeft} ${wat}` });
+      if (n < 0 && heeft < -n && uit.kan) Object.assign(uit, { kan: false, waarom: heeftTekst(heeft, wat) });
     }
     for (const soort of Object.keys(T.VEE)) {
       const n = doe[soort] || 0;
       if (n < 0) delen.push(`−${-n} ${-n === 1 ? T.VEE[soort].naam : T.VEE[soort].meervoud}`);
     }
-    if (doe.tevreden) delen.push(`tevredenheid ${teken(doe.tevreden)}${Math.abs(doe.tevreden)}%`);
+    const getal = (n) => `${teken(n)}${Math.abs(n)}`;
+    if (doe.tevreden) delen.push(T.t('contentment {getal}%', { getal: getal(doe.tevreden) }));
     // Twee bazen (js/bazen.js): wat de heer en het dorp van je vinden, als de spelregel aan staat.
-    if (doe.gunst && T.BAZEN_INSTELLINGEN.aan) delen.push(`gunst van de heer ${teken(doe.gunst)}${Math.abs(doe.gunst)}`);
+    if (doe.gunst && T.BAZEN_INSTELLINGEN.aan) delen.push(T.t("the lord's favour {getal}", { getal: getal(doe.gunst) }));
     // Een werkplaats in het bos van de heer (js/verzoeken.js, js/bos.js; werklijst vraag 110, e): dat kost zijn gunst.
-    if (doe.bouw && L.bouw && L.bouw.bos && T.BAZEN_INSTELLINGEN.aan) delen.push(`gunst van de heer −${T.ONTGINNEN_INSTELLINGEN.gunst}`);
-    if (doe.vertrouwen && T.BAZEN_INSTELLINGEN.aan) delen.push(`vertrouwen van het dorp ${teken(doe.vertrouwen)}${Math.abs(doe.vertrouwen)}`);
+    if (doe.bouw && L.bouw && L.bouw.bos && T.BAZEN_INSTELLINGEN.aan) delen.push(T.t("the lord's favour {getal}", { getal: getal(-T.ONTGINNEN_INSTELLINGEN.gunst) }));
+    if (doe.vertrouwen && T.BAZEN_INSTELLINGEN.aan) delen.push(T.t("the village's trust {getal}", { getal: getal(doe.vertrouwen) }));
     // Wie verbannen wordt, gaat het bos in, en wie het bos in gaat, kan als rover terugkomen (js/rovers.js).
-    if (doe.verban && L[doe.verban]) delen.push(`${naam(L[doe.verban])} moet het bos in`);
+    if (doe.verban && L[doe.verban]) delen.push(T.t('{wie} must go into the forest', { wie: naam(L[doe.verban]) }));
     if (doe.gezin) {
-      delen.push(doe.gezin === 1 ? 'een gezin erbij' : `${doe.gezin} gezinnen erbij`);
-      if (!T.plaatsVoorEenGezin(D) && uit.kan) Object.assign(uit, { kan: false, waarom: 'er is geen plaats: wijs een erf aan (B)' });
+      delen.push(T.t('{n|one more family|# more families}', { n: doe.gezin }));
+      if (!T.plaatsVoorEenGezin(D) && uit.kan) Object.assign(uit, { kan: false, waarom: T.t('there is no room: mark out a plot (B)') });
     }
-    if (doe.sterfkans) delen.push(`${doe.sterfkans}% kans op een dode`);
-    if (doe.blus) delen.push(`de buren blussen: ${Math.round(T.redKans(D) * 100)} van de 100 keer blijft het huis staan`);
-    if (doe.brand === 'laat') delen.push('het huis brandt af, en het gezin bouwt het weer op');
-    if (doe.koorts != null) delen.push(doe.koorts >= 100 ? 'de koorts gaat zijn gang' : `de koorts gaat ${doe.koorts <= 50 ? 'half zo' : 'wat minder'} vaak over`);
-    if (doe.wolven < 0) delen.push(`${T.telwoord(-doe.wolven)} wolven minder`);
-    if (doe.bewaak && T.wachtersNodig) delen.push(`${T.telwoord(T.wachtersNodig(D))} mannen bij de graanschuur tot het zaaien${doe.bewaak < 1 ? ', de helft voor het dorp' : ''}; elke hongerdag kost vertrouwen`);
-    if (doe.jacht) delen.push(`de mannen gaan met je mee naar de wolven (${T.telwoord(T.BEESTEN_INSTELLINGEN.jacht.dagen)} dagen)`);
-    if (doe.hek) delen.push('een hek om de schapen');
+    if (doe.sterfkans) delen.push(T.t('{n}% chance of a death', { n: doe.sterfkans }));
+    if (doe.blus) delen.push(T.t('the neighbours fight the fire: the house survives {n} times in 100', { n: Math.round(T.redKans(D) * 100) }));
+    if (doe.brand === 'laat') delen.push(T.t('the house burns down, and the family builds it again'));
+    if (doe.koorts != null) {
+      if (doe.koorts >= 100) delen.push(T.t('the fever runs its course'));
+      else delen.push(doe.koorts <= 50 ? T.t('the fever spreads half as often') : T.t('the fever spreads a little less often'));
+    }
+    if (doe.wolven < 0) delen.push(T.t('{n|one wolf fewer|{getal} fewer wolves}', { n: -doe.wolven, getal: T.telwoord(-doe.wolven) }));
+    if (doe.bewaak && T.wachtersNodig) {
+      const wachters = { n: T.wachtersNodig(D), getal: T.telwoord(T.wachtersNodig(D)) };
+      delen.push(doe.bewaak < 1
+        ? T.t('{n|{getal} man|{getal} men} at the granary until sowing, half for the village; every day of hunger costs trust', wachters)
+        : T.t('{n|{getal} man|{getal} men} at the granary until sowing; every day of hunger costs trust', wachters));
+    }
+    if (doe.jacht) delen.push(T.t('the men go with you to the wolves ({n|{getal} day|{getal} days})', { n: T.BEESTEN_INSTELLINGEN.jacht.dagen, getal: T.telwoord(T.BEESTEN_INSTELLINGEN.jacht.dagen) }));
+    if (doe.hek) delen.push(T.t('a fence round the sheep'));
     if (doe.feest && T.feestPrijs(doe.feest, L.id)) delen.push(T.feestPrijs(doe.feest, L.id));
     // Een ondernemer (js/ondernemers.js): nee, en hij neemt het je kwalijk of trekt weg; en wat de herbergierster ervan
     // vindt.
@@ -873,7 +888,7 @@
   };
 
   // Wat het spel in een zin invult (js/gesprek.js, T.vulWoordenIn): wie het je komt zeggen, over wie het gaat, en
-  // waar het van komt (een hele zin, "Er is honger, want het rantsoen is krap.", of niets als het uit de lucht kwam;
+  // waar het van komt (een hele zin, "There is hunger, for the rations are short.", of niets als het uit de lucht kwam;
   // zet hem dus aan het eind van een zin).
   T.GESPREK_WOORDEN = T.GESPREK_WOORDEN || {};
   T.GESPREK_WOORDEN.oorzaak = (D) => {
@@ -882,10 +897,10 @@
   };
   T.GESPREK_WOORDEN.wie = (D) => {
     const L = D.voorvallen && D.voorvallen.lopend;
-    return L ? naam(L.wie) : 'iemand';
+    return L ? naam(L.wie) : T.t('someone');
   };
   T.GESPREK_WOORDEN.ander = (D) => {
     const L = D.voorvallen && D.voorvallen.lopend;
-    return L && L.ander ? naam(L.ander) : 'iemand';
+    return L && L.ander ? naam(L.ander) : T.t('someone');
   };
 })(globalThis.Spel = globalThis.Spel || {});

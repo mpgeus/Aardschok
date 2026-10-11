@@ -131,8 +131,8 @@ test('wat je ziet: het karakter en wat hij kan, en wat gewoon is, staat er niet 
   const e = boer(S, 'boer1');
   e.karakter = 'zanger';
   e.eigenschappen = { maaien: 'snel', opbrengst: 'gewoon', zaaien: 'kwistig', aanzien: 'gewoon' };
-  assert.deepEqual(T.overBoer(e), { kort: 'zanger', lang: T.KARAKTERS.zanger.lang, eigenschappen: ['snelle maaier', 'kwistig'] });
-  assert.equal(T.overBoerTekst(e, true), 'zanger · snelle maaier · kwistig');
+  assert.deepEqual(T.overBoer(e), { kort: 'singer', lang: T.KARAKTERS.zanger.lang, eigenschappen: ['fast reaper', 'wasteful sower'] });
+  assert.equal(T.overBoerTekst(e, true), 'singer · fast reaper · wasteful sower');
   assert.equal(T.overBoer(T.maakMens('marskramer', 1, 1)), null);
   assert.equal(T.overBoerTekst(T.maakMens('marskramer', 1, 1)), '');
 });
