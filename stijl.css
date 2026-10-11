@@ -356,10 +356,8 @@ body.bouwmenu-open #statussen { visibility: hidden; }
 #rekenboek .icoon { display: flex; }
 #rekenboek .icoon svg { width: 20px; height: 20px; filter: grayscale(1) brightness(0.28) sepia(0.9); }
 #rekenboek .aantal { text-align: right; font-variant-numeric: lining-nums tabular-nums; }
-/* Rood: de tevredenheid onder de vertrekdrempel, hooi en hout die de winter niet halen, de argwaan vanaf de drempel
-   waarop de inner onverwacht terugkomt (js/tafel.js). */
-#rekenboek .post.laag .aantal,
-#rekenboek .post.hoog .aantal { color: var(--papier-rood); }
+/* Rood: de tevredenheid onder de vertrekdrempel, en hooi en hout die de winter niet halen (js/tafel.js). */
+#rekenboek .post.laag .aantal { color: var(--papier-rood); }
 
 /* De dingen op tafel: een tekening op ware pixels met haar schaduw, die even opkomt als de muis erop staat. */
 .tafel-rij { display: flex; align-items: center; }
