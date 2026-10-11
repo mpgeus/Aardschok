@@ -10,7 +10,7 @@ sessie meteen weet waar we zijn.
 kern: rijk worden en arm lijken), dan verhalen en besturen, dan het verzet, en pas aan het eind de
 groei naar vrijheid en de afwerking. Zie "Daarna, in deze volgorde".
 
-## Nu en daarna (10 okt)
+## Nu en daarna (11 okt)
 
 Marcel, 8 okt: "snel, duidelijk en low cost". Elke sessie werkt dit blok bij aan het eind; wat af is, gaat eruit.
 
@@ -28,8 +28,9 @@ mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voo
 - **De richting (vraag 151, 11 okt): de economie van The Settlers met gevechten in beurten** (Marcel: "A ja, B ja, C
   allebei"; `gameloop.md`): geen grens, geen vlaggen, bouwen binnen bereik van je stad en elke opslag, een ossenkar die
   de grondstoffen haalt, en je bouwt alles zelf vanaf een lege plek, met een kar met wat spullen en settlers. Het plan
-  (vraag 152) en waaruit je start zijn akkoord (11 okt); **het volgende punt is vraag 152, stap 1: het lege begin.** Het
-  beeld ervan (de huifkar, de ossenkar, de tenten, het afdak en het kampvuur) staat in `main` (11 okt), met de vellen.
+  (vraag 152) en waaruit je start zijn akkoord (11 okt); **het volgende punt is vraag 152, stap 1: het lege begin**
+  (bezig in een eigen sessie, die eerst optie 1 doet). Het beeld ervan is af (hieronder bij Af); het spel tekent het met
+  1b en 1c.
 - **Gameplay als kern, en het verstoppen eruit** (vraag 151, 11 okt; Marcel: "we hebben niks"): het verstoppen en heel
   "arm lijken" gaan eruit, de heer blijft (Marcel: "alles gaat eruit"); het plan om het weg te halen heet **optie 1**,
   en het gaat door (Marcel: "dat moet eruit")
@@ -8039,6 +8040,13 @@ al mee), en meer gewone varianten (`dorpeling2`, … in `dorpelingen-anim.cjs`).
 
 ## Af
 
+- 11 okt 2026 — **Vraag 152, het beeld van het lege begin** (Marcel: "Huifkar wordt ossenkar", "Tent en afdak", "Vaal",
+  en "Vellen voor het spel"). De kar komt aan als huifkar met een vale os, en wordt de ossenkar als het huis van de schout
+  er is; de wielen draaien precies met de pas van de os mee (`ossenkar.cjs`, de os is de koe met `os` en `juk` in
+  `vee.cjs`). Het kamp: een tent van linnen of bruin wol, een afdak van takken met huiden, en het kampvuur met een
+  driepoot (`kamp.cjs`). In `beelden/`: de figuren `huifkar`, `ossenkar-leeg` en `ossenkar-hout` (staan en lopen, acht
+  richtingen; `ossenkar-anim.cjs`), en het los vel `kamp`. `test/ossenkar.test.cjs`; `beeld.md`, "De ossenkar en het
+  kamp". Het spel tekent ze nog niet (1b en 1c).
 - 10 okt 2026 — **Vraag 149: kleren naar stand** (Marcel: "Hogere niveau sociale mensen moeten duurdere kleren krijgen",
   "a ja, b drie, c ja, d ja, e ja", en bij de plaat "1 armer, 2 alle, 3 ja"). Hetzelfde gezicht in de kleren van de stand
   van zijn huis: arm in een hut (vaal, lappen, een gerafelde zoom, blote voeten), gewoon in een huis of boerderij, deftig
