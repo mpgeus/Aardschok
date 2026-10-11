@@ -93,11 +93,11 @@ test('het deel van de dag, en in de oogst loopt het werk door tot het donker', (
 });
 
 test('het uur zoals je het zegt', () => {
-  assert.equal(T.uurTekst(bijUur(0, 7)), 'zeven uur');
-  assert.equal(T.uurTekst(bijUur(0, 7.5)), 'half acht');
-  assert.equal(T.uurTekst(bijUur(0, 12)), 'twaalf uur');
-  assert.equal(T.uurTekst(bijUur(0, 23.6)), 'half twaalf');
-  assert.equal(T.uurTekst(bijUur(0, 0)), 'twaalf uur');
+  assert.equal(T.uurTekst(bijUur(0, 7)), "seven o'clock");
+  assert.equal(T.uurTekst(bijUur(0, 7.5)), 'half past seven');
+  assert.equal(T.uurTekst(bijUur(0, 12)), "twelve o'clock");
+  assert.equal(T.uurTekst(bijUur(0, 23.6)), 'half past eleven');
+  assert.equal(T.uurTekst(bijUur(0, 0)), "twelve o'clock");
 });
 
 test('het licht: helder als de zon op is, donker in de nacht, en daartussen de schemering met een gloed', () => {
@@ -251,7 +251,7 @@ test('slapen kan \'s avonds bij je eigen huis, en bij het eerste licht word je w
   assert.equal(S.slaap, null, 'wakker');
   assert.ok(!S.schout.binnen);
   assert.equal(S.kalender.snelheid, 3, 'op de snelheid van vóór het slapen');
-  assert.ok(berichten.includes('Het is ochtend.'));
+  assert.ok(berichten.includes('It is morning.'));
 });
 
 test('een bezoeker komt op één manier: overdag, met zijn bericht één keer, en de heer zet de tijd op 1×', () => {

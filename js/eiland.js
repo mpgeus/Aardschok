@@ -1192,7 +1192,7 @@
       const j = Math.floor(r() * (i + 1));
       [namen[i], namen[j]] = [namen[j], namen[i]];
     }
-    dorpen.forEach((d, i) => (d.naam = namen[i] || 'Dorp ' + (i + 1)));
+    dorpen.forEach((d, i) => (d.naam = namen[i] || T.t('Village {n}', { n: i + 1 })));
     if (dorpen.length) dorpen[Math.floor(r() * dorpen.length)].jij = true;
     E.plekken = plekken;
   }

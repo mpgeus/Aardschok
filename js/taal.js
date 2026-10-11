@@ -31,14 +31,14 @@
 (function (T) {
   'use strict';
 
-  T.BRONTAAL = { code: 'en', naam: 'English', locale: 'en-GB', zinnen: {} };
+  T.BRONTAAL = { code: 'en', naam: 'English', locale: 'en-GB', zinnen: {} }; // geen tekst
   T.TALEN = T.TALEN || {};
   T.TALEN.en = T.BRONTAAL;
 
   const SLEUTEL = `${T.OPSLAG_SLEUTEL}.taal`;
-  T.EIGEN_TALEN_SLEUTEL = `${T.OPSLAG_SLEUTEL}.talen.eigen`;
+  T.EIGEN_TALEN_SLEUTEL = `${T.OPSLAG_SLEUTEL}.talen.eigen`; // geen tekst
   // Wat de vertaaltool nog niet in taal/ schreef, per taal; alleen het spel dat de tool opent (?klad=1) leest het.
-  T.KLAD_SLEUTEL = (code) => `${T.OPSLAG_SLEUTEL}.talen.klad.${code}`;
+  T.KLAD_SLEUTEL = (code) => `${T.OPSLAG_SLEUTEL}.talen.klad.${code}`; // geen tekst
   // Een taalcode: twee of drie letters, eventueel met een streek erachter (pt-BR, zh-Hans).
   T.isTaalCode = (code) => typeof code === 'string' && /^[a-z]{2,3}(-[A-Za-z]{2,4})?$/.test(code);
 
@@ -260,19 +260,19 @@
     const mist = [...a].filter((n) => !b.has(n));
     const teVeel = [...b].filter((n) => !a.has(n));
     const lijst = (namen) => namen.map((n) => `{${n}}`).join(', ');
-    if (mist.length) fout.push(`Put ${lijst(mist)} back in: the game fills ${mist.length === 1 ? 'it' : 'them'} in here.`);
+    if (mist.length) fout.push(`Put ${lijst(mist)} back in: the game fills ${mist.length === 1 ? 'it' : 'them'} in here.`); // geen tekst
     if (teVeel.length) {
       const een = teVeel.length === 1;
-      fout.push(`${lijst(teVeel)} ${een ? 'is' : 'are'} not in the English sentence, so the game cannot fill ${een ? 'it' : 'them'} in.`);
+      fout.push(`${lijst(teVeel)} ${een ? 'is' : 'are'} not in the English sentence, so the game cannot fill ${een ? 'it' : 'them'} in.`); // geen tekst
     }
-    if (tagsIn(bron).join() !== tagsIn(vertaling).join()) fout.push('Keep the same markup as the English sentence (the parts between < and >).');
+    if (tagsIn(bron).join() !== tagsIn(vertaling).join()) fout.push('Keep the same markup as the English sentence (the parts between < and >).'); // geen tekst
     const aantal = T.meervoudsVormen(locale).length;
     vervangBlokken(vertaling, (binnen) => {
       const delen = splits(binnen);
       const vormen = delen.slice(1);
       if (vormen.length && !vormen.some((v) => v.indexOf(':') > 0 && !/^\s*#/.test(v)) && vormen.length !== aantal) {
         const vormenTaal = T.meervoudsVormen(locale).join(', ');
-        fout.push(`{${delen[0].trim()}|…} has ${vormen.length} form${vormen.length === 1 ? '' : 's'}, but this language needs ${aantal}: ${vormenTaal}.`);
+        fout.push(`{${delen[0].trim()}|…} has ${vormen.length} form${vormen.length === 1 ? '' : 's'}, but this language needs ${aantal}: ${vormenTaal}.`); // geen tekst
       }
       return '';
     });
@@ -284,17 +284,17 @@
   T.leesTaalBestand = function (tekst) {
     const m = /Spel\.taal\(\s*([\s\S]*?)\s*\)\s*;?\s*$/.exec(tekst);
     const def = JSON.parse(m ? m[1] : tekst);
-    if (!def || !T.isTaalCode(def.code) || typeof def.zinnen !== 'object') throw new Error('not a language file');
+    if (!def || !T.isTaalCode(def.code) || typeof def.zinnen !== 'object') throw new Error('not a language file'); // geen tekst
     for (const [k, v] of Object.entries(def.zinnen)) {
-      if (typeof k !== 'string' || typeof v !== 'string') throw new Error('a sentence is not text');
+      if (typeof k !== 'string' || typeof v !== 'string') throw new Error('a sentence is not text'); // geen tekst
     }
     return { code: def.code, naam: String(def.naam || def.code), locale: String(def.locale || def.code), zinnen: def.zinnen };
   };
   T.schrijfTaalBestand = function (def) {
     const kop =
-      `// ${def.naam} (${def.code}): de vertaling van de spelteksten (vraag 147). Per Engelse zin uit het spel wat hij in\n` +
-      '// deze taal is. Gemaakt en bijgehouden met de vertaaltool (gereedschap/vertalen.html); zie js/taal.js.\n';
+      `// ${def.naam} (${def.code}): de vertaling van de spelteksten (vraag 147). Per Engelse zin uit het spel wat hij in\n` + // geen tekst
+      '// deze taal is. Gemaakt en bijgehouden met de vertaaltool (gereedschap/vertalen.html); zie js/taal.js.\n'; // geen tekst
     const inhoud = { code: def.code, naam: def.naam, locale: def.locale, zinnen: def.zinnen };
-    return `${kop}Spel.taal(${JSON.stringify(inhoud, null, 2)});\n`;
+    return `${kop}Spel.taal(${JSON.stringify(inhoud, null, 2)});\n`; // geen tekst
   };
 })(globalThis.Spel = globalThis.Spel || {});

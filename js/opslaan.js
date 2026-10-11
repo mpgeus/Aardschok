@@ -174,7 +174,7 @@
       if (k === null || typeof k !== 'object') return k;
       if (Array.isArray(k)) return k.map(lees);
       if ('$r' in k) {
-        if (!ding.has(k.$r)) throw new Error(`verwijzing naar ${k.$r} vóór het ding zelf`);
+        if (!ding.has(k.$r)) throw new Error(`verwijzing naar ${k.$r} vóór het ding zelf`); // geen tekst
         return ding.get(k.$r);
       }
       if ('$u' in k) return undefined;
@@ -251,7 +251,7 @@
     try {
       return { gelukt: true, staat: decodeer(bewaard.staat), kop: bewaard.kop };
     } catch (e) {
-      return { gelukt: false, reden: 'Dit spel is beschadigd.' };
+      return { gelukt: false, reden: T.t('This game is damaged.') };
     }
   };
 
@@ -296,10 +296,10 @@
     try {
       bewaard = JSON.parse(tekst);
     } catch (e) {
-      return { reden: 'Dit spel is beschadigd.' };
+      return { reden: T.t('This game is damaged.') };
     }
-    if (!bewaard || typeof bewaard !== 'object' || !bewaard.staat) return { reden: 'Dit spel is beschadigd.' };
-    if (bewaard.versie !== IN().versie) return { reden: `Dit spel is bewaard in een andere versie van ${T.NAAM}, en past niet meer.` };
+    if (!bewaard || typeof bewaard !== 'object' || !bewaard.staat) return { reden: T.t('This game is damaged.') };
+    if (bewaard.versie !== IN().versie) return { reden: T.t('This game was saved in another version of {naam} and no longer fits.', { naam: T.NAAM }) };
     return bewaard;
   }
 
@@ -309,13 +309,13 @@
   // halverwege is: dan klopt een bewaard spel ook weer als je het laadt. Het menu, waaruit je zelf opslaat,
   // telt niet als venster; het titelscherm wel, want daarachter wacht een spel dat nog niet begonnen is.
   T.waaromNietOpslaan = function (S) {
-    if (!S || !S.kalender || !S.wereld) return 'Er is nog geen spel.';
+    if (!S || !S.kalender || !S.wereld) return T.t('There is no game yet.');
     // Een proefje (?kaart=, js/main.js) is geen spel: het mag het spel van de speler niet overschrijven.
-    if (S.proefje) return 'Een proefje wordt niet opgeslagen.';
-    if (S.dorp.einde || S.modus === 'einde') return 'Het spel is uit.';
-    if (S.gevecht || S.overgang || S.modus === 'gevecht' || S.modus === 'overgang') return 'In een gevecht kan dat niet.';
-    if (S.modus !== 'verkennen' || (S.kalender.stil || []).some((r) => r !== 'menu')) return 'Sluit eerst het venster.';
-    if ((S.wachters && S.wachters.length) || S.naarGebied) return 'Wacht even: er beweegt nog iets.';
+    if (S.proefje) return T.t('A try-out is not saved.');
+    if (S.dorp.einde || S.modus === 'einde') return T.t('The game is over.');
+    if (S.gevecht || S.overgang || S.modus === 'gevecht' || S.modus === 'overgang') return T.t('You cannot save during a fight.');
+    if (S.modus !== 'verkennen' || (S.kalender.stil || []).some((r) => r !== 'menu')) return T.t('Close the window first.');
+    if ((S.wachters && S.wachters.length) || S.naarGebied) return T.t('Wait a moment: something is still moving.');
     return null;
   };
 
@@ -372,23 +372,23 @@
   // Het spel op deze plek zetten. Geeft { gelukt, kop } of { gelukt: false, reden }.
   let gewaarschuwd = false;
   T.slaOp = function (S, plek, nu = Date.now()) {
-    if (!T.opslagPlekken().includes(plek)) return { gelukt: false, reden: `Er is geen plek ${plek}.` };
+    if (!T.opslagPlekken().includes(plek)) return { gelukt: false, reden: T.t('There is no slot {plek}.', { plek }) };
     const waarom = T.waaromNietOpslaan(S);
     if (waarom) return { gelukt: false, reden: waarom };
     const p = T.opslagPlek();
-    if (!p) return { gelukt: false, reden: 'Deze browser bewaart niets (een privévenster?).' };
+    if (!p) return { gelukt: false, reden: T.t('This browser does not keep anything (a private window?).') };
     const overgeslagen = [];
     const { tekst, kop } = bewaar(S, plek, nu, overgeslagen);
     // Kwam er iets in S dat niet te bewaren is (een canvas, een beeld), dan zegt de console het, één keer.
     if (overgeslagen.length && !gewaarschuwd) {
       gewaarschuwd = true;
-      console.warn(`${T.NAAM}: niet bewaard, want het is geen gewoon gegeven: ${overgeslagen.slice(0, 5).join(', ')}`);
+      console.warn(`${T.NAAM}: niet bewaard, want het is geen gewoon gegeven: ${overgeslagen.slice(0, 5).join(', ')}`); // geen tekst
     }
     try {
       p.setItem(sleutel(plek), tekst);
       p.setItem(kopSleutel(plek), JSON.stringify({ versie: IN().versie, kop }));
     } catch (e) {
-      return { gelukt: false, reden: 'De opslag van de browser is vol.' };
+      return { gelukt: false, reden: T.t('The browser storage is full.') };
     }
     return { gelukt: true, kop };
   };
@@ -406,8 +406,8 @@
       } catch (e) {
         k = null;
       }
-      if (!k || !k.kop) lijst.push({ plek, kop: { plek, bewaardOm: 0 }, reden: 'Dit spel is beschadigd.' });
-      else if (k.versie !== IN().versie) lijst.push({ plek, kop: k.kop, reden: `Bewaard in een andere versie van ${T.NAAM}.` });
+      if (!k || !k.kop) lijst.push({ plek, kop: { plek, bewaardOm: 0 }, reden: T.t('This game is damaged.') });
+      else if (k.versie !== IN().versie) lijst.push({ plek, kop: k.kop, reden: T.t('Saved in another version of {naam}.', { naam: T.NAAM }) });
       else lijst.push({ plek, kop: k.kop });
     }
     return lijst.sort((a, b) => (b.kop.bewaardOm || 0) - (a.kop.bewaardOm || 0));
@@ -419,7 +419,7 @@
   // Het spel op deze plek lezen (T.leesSpel); js/main.js zet het daarna met T.zetSpel in een nieuw spel.
   T.leesVanPlek = function (plek) {
     const tekst = lees(sleutel(plek));
-    if (!tekst) return { gelukt: false, reden: 'Op deze plek staat geen spel.' };
+    if (!tekst) return { gelukt: false, reden: T.t('There is no game in this slot.') };
     return T.leesSpel(tekst);
   };
 })(globalThis.Spel = globalThis.Spel || {});

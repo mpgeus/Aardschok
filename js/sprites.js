@@ -50,7 +50,7 @@
   async function haalGegevens() {
     if (T.BEELDEN) return T.BEELDEN; // beschrijving.js, ook vanaf file://
     try {
-      const r = await fetch(MAP + 'beschrijving.json');
+      const r = await fetch(MAP + 'beschrijving.json'); // geen tekst
       if (r.ok) return await r.json();
     } catch (e) {
       /* file:// laat fetch niet toe; dan had beschrijving.js er moeten zijn */
@@ -92,7 +92,7 @@
       S.aan = uitslag.every(Boolean);
       S.buitenAan = buiten.length > 0 && uitBuiten.every(Boolean);
       if (S.aan) snijVloeren();
-      if (!S.aan || !S.buitenAan) console.warn(`${T.NAAM}: sprites ontbreken, het spel tekent daar vlakken.`, S.mist);
+      if (!S.aan || !S.buitenAan) console.warn(`${T.NAAM}: sprites ontbreken, het spel tekent daar vlakken.`, S.mist); // geen tekst
       return S.aan;
     })();
     return belofte;
