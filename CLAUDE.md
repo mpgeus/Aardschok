@@ -2,7 +2,8 @@
 
 Aardschok (werktitel, past niet meer): een spel dat Marcel en Claude samen bouwen, met als doel het
 uiteindelijk te verkopen (Steam eerst, als los programma verpakt). Een bouw- en beheerspel in
-isometrisch beeld, met politiek en avontuur erin. Je bent de schout van een dorp onder een verwarde
+isometrisch beeld, met politiek en avontuur erin; sinds 11 okt de economie van The Settlers met gevechten in beurten
+(vraag 151, `ontwerp/gameloop.md`). Je bent de schout van een dorp onder een verwarde
 heer die alleen geld ziet. Je breidt het dorp uit tot een stad en bestuurt het met wetten. **Het doel
 is de heer verstoten en verslaan** (Marcel, 5 en 6 okt, vraag 126): hij krijgt een kasteel op de kaart,
 is sterk, smeedt bonden met de andere spelers en heeft per spel een ander karakter. Veroveren en
@@ -1106,6 +1107,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 ## Het spel in het kort
 
 Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
+
+- **Sinds 11 okt: de economie van The Settlers, met gevechten in beurten** (Marcel: "Ik ben eigenlijk op zoek naar de
+  economie van the settlers met een soort turn based isometric combat. Rijke gfx met details", en "A ja, B ja, C
+  allebei"; vraag 151, `ontwerp/gameloop.md`): jij bouwt van bovenaf (gebouwen en wegen), goederen worden over de wegen
+  gedragen, van vlag tot vlag, en je vecht in beurten, om je dorp te verdedigen en om het eiland te veroveren tot het
+  kasteel van de heer, zoals in Jagged Alliance 2. De schout is je held: hij vecht en praat. Wat hieronder staat over
+  een poppetje zonder hand van bovenaf en een dorp dat zelf bouwt, is daarmee om; het verstoppen en heel "arm lijken"
+  gaan eruit. Eerst een proef met één keten over de weg (vraag 152).
 
 - Je bent de **schout**, een poppetje dat door het dorp loopt, geen hand van bovenaf. Je breidt
   het dorp uit en bestuurt het met **wetten** (eerst keuren genoemd), in een menu zoals in Democracy 3

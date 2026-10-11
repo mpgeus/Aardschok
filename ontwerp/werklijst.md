@@ -25,6 +25,8 @@ staat in `main` (10 okt): arm in een hut, deftig in een stenen huis met laken; d
 mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voor onze poppetjes. de rest kan weg").
 
 **Wacht op Marcel:**
+- **De richting (vraag 151, 11 okt): de economie van The Settlers met gevechten in beurten** (Marcel: "A ja, B ja, C
+  allebei"; `gameloop.md`). Nu: het plan voor de proef met één keten over de weg (vraag 152) wacht op Marcel.
 - **Gameplay als kern, en het verstoppen eruit** (vraag 151, 11 okt; Marcel: "we hebben niks"): het verstoppen en heel
   "arm lijken" gaan eruit, de heer blijft (Marcel: "alles gaat eruit"); het plan om het weg te halen heet **optie 1**
   (Marcel, 11 okt: "Dit noemen we optie 1. Ik vertel je straks wat we doen"). Intussen kijkt Claude rond naar vergelijkbare
@@ -7710,7 +7712,13 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     van Frostpunk (`gameloop.md`, "De drie die Marcel kent").
     **Marcel (11 okt): "Ik ben eigenlijk op zoek naar de economie van the settlers met een soort turn based isometric
     combat. Rijke gfx met details."** Wat dat is, wat we hebben en wat ontbreekt: `gameloop.md`, "De richting".
-    **Wacht op Marcel.**
+    **Besloten (Marcel, 11 okt: "A ja, B ja, C allebei"):** A, jij bouwt van bovenaf, en de schout wordt je held (hij
+    vecht en praat); B, goederen worden over wegen gedragen, van vlag tot vlag, eerst als proef met één keten (vraag
+    152); C, vechten is verdedigen én erop uit over het eiland tot het kasteel van de heer (Jagged Alliance 2). Optie 1
+    (het verstoppen eruit) wacht nog op Marcel.
+
+152. **De proef: één keten over de weg, zoals in The Settlers** (vraag 151, B; Marcel, 11 okt: "B ja"). Het plan wacht
+    op Marcel (hieronder, bij Nu en daarna).
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 

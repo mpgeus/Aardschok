@@ -38,7 +38,16 @@ moet het hart zijn, en het gevecht wat ze oplevert; een goed gevecht is wat de a
 
 ## Besloten
 
-Nog niets over de loop. Wel (Marcel, 11 okt): heel "rijk worden en arm lijken" gaat eruit (het verstoppen, de inner die
+**Marcel, 11 okt: "A ja, B ja, C allebei"**, op drie vragen van Claude over de richting hierboven:
+- **A, jij bouwt, van bovenaf**, zoals in The Settlers: gebouwen en wegen leg jij aan (het overzicht onder `Tab` is er
+  al). De schout wordt je held: hij vecht in de beurten en praat in het dorp.
+- **B, goederen worden over wegen gedragen**, door dragers van vlag tot vlag, en een waar telt pas als hij binnen is.
+  Eerst een proef met één keten (werklijst, vraag 152), om te zien of het in ons beeld goed voelt en snel genoeg blijft.
+- **C, vechten is allebei**: je dorp verdedigen, en erop uit over het eiland, tot het kasteel van de heer, zoals in
+  Jagged Alliance 2.
+
+Daarmee gaan om: "geen hand van bovenaf" (30 sep, `concept.md`) en "de mensen bouwen zelf" (3 okt, vraag 103). Ook
+(Marcel, 11 okt): heel "rijk worden en arm lijken" gaat eruit (het verstoppen, de inner die
 telt, de argwaan, de getuigen, het stiekeme bos), en de heer blijft; het plan daarvoor heet **optie 1** (werklijst, vraag
 151), en Marcel zegt nog wanneer.
 
@@ -172,8 +181,8 @@ ons spel. **Ons spel in één zin: het dorp van Manor Lords, met de mensen van T
 
 ## Open
 
-- **De richting van Marcel (11 okt):** wie bouwt (jij van bovenaf, zoals in The Settlers, en wat wordt de schout dan),
-  of de goederen echt over wegen gedragen worden, en wat het vechten is (verdedigen, veroveren op het eiland).
+- Wat er van de rest blijft (de voorvallen, de raad, de raadsman, het rapport, de wensen per stand, de wetten): na de
+  proef, als we weten wat de economie zelf vraagt.
 
 - Welke loop het wordt (vraag 151: A de schout is maar één mens, B rechtspraak, C de heer als klok, of samen), en hoe
   lang een ronde is: een dag, een seizoen, een jaar, of een spel van een paar uur zoals Against the Storm.
