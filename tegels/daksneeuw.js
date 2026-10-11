@@ -1,0 +1,16220 @@
+// Gemaakt door gereedschap/pixelart/huizen.cjs (schrijfDaksneeuw) — niet met de hand bijwerken.
+// Dezelfde inhoud als daksneeuw.json, als script, zodat file:// het ook kan lezen (zie js/sprites.js).
+(function (T) {
+  T.DAKSNEEUW = {
+   "_lees_dit": "De sneeuw op de daken van de huizen (gereedschap/pixelart/huizen.cjs, schrijfDaksneeuw; vraag 144, 4b) — niet met de hand bijwerken. Sleutel is de naam van de jonge tekening op het vel huizen (een oude, \"<naam>-oud\", draagt die van zijn jonge). Per tekening drie lagen, een beetje, half en dik (null als er niets op lag), elk een eigen plaatje (bestand, vanaf tegels/) dat het spel pas laadt als die laag er ligt; anker is het punt in dat plaatje dat op het anker van het huis komt (dezelfde afspraak als tegels.json).",
+   "lagen": {
+    "hut1": [
+     {
+      "bestand": "daksneeuw/hut1-0.png",
+      "b": 376,
+      "h": 307,
+      "anker": [
+       172,
+       279
+      ]
+     },
+     {
+      "bestand": "daksneeuw/hut1-1.png",
+      "b": 376,
+      "h": 327,
+      "anker": [
+       172,
+       279
+      ]
+     },
+     {
+      "bestand": "daksneeuw/hut1-2.png",
+      "b": 381,
+      "h": 381,
+      "anker": [
+       172,
+       279
+      ]
+     }
+    ],
+    "hut2": [
+     {
+      "bestand": "daksneeuw/hut2-0.png",
+      "b": 372,
+      "h": 289,
+      "anker": [
+       201,
+       268
+      ]
+     },
+     {
+      "bestand": "daksneeuw/hut2-1.png",
+      "b": 378,
+      "h": 289,
+      "anker": [
+       207,
+       268
+      ]
+     },
+     {
+      "bestand": "daksneeuw/hut2-2.png",
+      "b": 381,
+      "h": 289,
+      "anker": [
+       209,
+       268
+      ]
+     }
+    ],
+    "hut3": [
+     {
+      "bestand": "daksneeuw/hut3-0.png",
+      "b": 402,
+      "h": 319,
+      "anker": [
+       168,
+       276
+      ]
+     },
+     {
+      "bestand": "daksneeuw/hut3-1.png",
+      "b": 409,
+      "h": 319,
+      "anker": [
+       170,
+       276
+      ]
+     },
+     {
+      "bestand": "daksneeuw/hut3-2.png",
+      "b": 411,
+      "h": 319,
+      "anker": [
+       171,
+       276
+      ]
+     }
+    ],
+    "hut4": [
+     {
+      "bestand": "daksneeuw/hut4-0.png",
+      "b": 412,
+      "h": 341,
+      "anker": [
+       241,
+       267
+      ]
+     },
+     {
+      "bestand": "daksneeuw/hut4-1.png",
+      "b": 412,
+      "h": 341,
+      "anker": [
+       241,
+       267
+      ]
+     },
+     {
+      "bestand": "daksneeuw/hut4-2.png",
+      "b": 414,
+      "h": 341,
+      "anker": [
+       241,
+       267
+      ]
+     }
+    ],
+    "huis1": [
+     {
+      "bestand": "daksneeuw/huis1-0.png",
+      "b": 469,
+      "h": 419,
+      "anker": [
+       203,
+       378
+      ]
+     },
+     {
+      "bestand": "daksneeuw/huis1-1.png",
+      "b": 469,
+      "h": 419,
+      "anker": [
+       203,
+       378
+      ]
+     },
+     {
+      "bestand": "daksneeuw/huis1-2.png",
+      "b": 476,
+      "h": 422,
+      "anker": [
+       203,
+       378
+      ]
+     }
+    ],
+    "huis2": [
+     {
+      "bestand": "daksneeuw/huis2-0.png",
+      "b": 476,
+      "h": 455,
+      "anker": [
+       271,
+       434
+      ]
+     },
+     {
+      "bestand": "daksneeuw/huis2-1.png",
+      "b": 476,
+      "h": 455,
+      "anker": [
+       271,
+       434
+      ]
+     },
+     {
+      "bestand": "daksneeuw/huis2-2.png",
+      "b": 476,
+      "h": 455,
+      "anker": [
+       271,
+       434
+      ]
+     }
+    ],
+    "huis3": [
+     {
+      "bestand": "daksneeuw/huis3-0.png",
+      "b": 508,
+      "h": 544,
+      "anker": [
+       204,
+       347
+      ]
+     },
+     {
+      "bestand": "daksneeuw/huis3-1.png",
+      "b": 509,
+      "h": 545,
+      "anker": [
+       204,
+       347
+      ]
+     },
+     {
+      "bestand": "daksneeuw/huis3-2.png",
+      "b": 509,
+      "h": 545,
+      "anker": [
+       204,
+       347
+      ]
+     }
+    ],
+    "huis4": [
+     {
+      "bestand": "daksneeuw/huis4-0.png",
+      "b": 509,
+      "h": 471,
+      "anker": [
+       302,
+       366
+      ]
+     },
+     {
+      "bestand": "daksneeuw/huis4-1.png",
+      "b": 512,
+      "h": 471,
+      "anker": [
+       304,
+       366
+      ]
+     },
+     {
+      "bestand": "daksneeuw/huis4-2.png",
+      "b": 513,
+      "h": 471,
+      "anker": [
+       304,
+       366
+      ]
+     }
+    ],
+    "huis5": [
+     {
+      "bestand": "daksneeuw/huis5-0.png",
+      "b": 436,
+      "h": 459,
+      "anker": [
+       203,
+       411
+      ]
+     },
+     {
+      "bestand": "daksneeuw/huis5-1.png",
+      "b": 441,
+      "h": 459,
+      "anker": [
+       203,
+       411
+      ]
+     },
+     {
+      "bestand": "daksneeuw/huis5-2.png",
+      "b": 444,
+      "h": 459,
+      "anker": [
+       203,
+       411
+      ]
+     }
+    ],
+    "huis6": [
+     {
+      "bestand": "daksneeuw/huis6-0.png",
+      "b": 541,
+      "h": 447,
+      "anker": [
+       332,
+       354
+      ]
+     },
+     {
+      "bestand": "daksneeuw/huis6-1.png",
+      "b": 550,
+      "h": 447,
+      "anker": [
+       337,
+       354
+      ]
+     },
+     {
+      "bestand": "daksneeuw/huis6-2.png",
+      "b": 550,
+      "h": 447,
+      "anker": [
+       337,
+       354
+      ]
+     }
+    ],
+    "steen1": [
+     {
+      "bestand": "daksneeuw/steen1-0.png",
+      "b": 469,
+      "h": 419,
+      "anker": [
+       203,
+       378
+      ]
+     },
+     {
+      "bestand": "daksneeuw/steen1-1.png",
+      "b": 469,
+      "h": 419,
+      "anker": [
+       203,
+       378
+      ]
+     },
+     {
+      "bestand": "daksneeuw/steen1-2.png",
+      "b": 476,
+      "h": 422,
+      "anker": [
+       203,
+       378
+      ]
+     }
+    ],
+    "steen2": [
+     {
+      "bestand": "daksneeuw/steen2-0.png",
+      "b": 476,
+      "h": 455,
+      "anker": [
+       271,
+       434
+      ]
+     },
+     {
+      "bestand": "daksneeuw/steen2-1.png",
+      "b": 476,
+      "h": 455,
+      "anker": [
+       271,
+       434
+      ]
+     },
+     {
+      "bestand": "daksneeuw/steen2-2.png",
+      "b": 476,
+      "h": 455,
+      "anker": [
+       271,
+       434
+      ]
+     }
+    ],
+    "steen3": [
+     {
+      "bestand": "daksneeuw/steen3-0.png",
+      "b": 508,
+      "h": 545,
+      "anker": [
+       204,
+       347
+      ]
+     },
+     {
+      "bestand": "daksneeuw/steen3-1.png",
+      "b": 509,
+      "h": 545,
+      "anker": [
+       204,
+       347
+      ]
+     },
+     {
+      "bestand": "daksneeuw/steen3-2.png",
+      "b": 509,
+      "h": 545,
+      "anker": [
+       204,
+       347
+      ]
+     }
+    ],
+    "steen4": [
+     {
+      "bestand": "daksneeuw/steen4-0.png",
+      "b": 509,
+      "h": 471,
+      "anker": [
+       302,
+       366
+      ]
+     },
+     {
+      "bestand": "daksneeuw/steen4-1.png",
+      "b": 512,
+      "h": 471,
+      "anker": [
+       304,
+       366
+      ]
+     },
+     {
+      "bestand": "daksneeuw/steen4-2.png",
+      "b": 513,
+      "h": 471,
+      "anker": [
+       304,
+       366
+      ]
+     }
+    ],
+    "steen5": [
+     {
+      "bestand": "daksneeuw/steen5-0.png",
+      "b": 436,
+      "h": 459,
+      "anker": [
+       203,
+       411
+      ]
+     },
+     {
+      "bestand": "daksneeuw/steen5-1.png",
+      "b": 441,
+      "h": 459,
+      "anker": [
+       203,
+       411
+      ]
+     },
+     {
+      "bestand": "daksneeuw/steen5-2.png",
+      "b": 444,
+      "h": 459,
+      "anker": [
+       203,
+       411
+      ]
+     }
+    ],
+    "steen6": [
+     {
+      "bestand": "daksneeuw/steen6-0.png",
+      "b": 541,
+      "h": 447,
+      "anker": [
+       332,
+       354
+      ]
+     },
+     {
+      "bestand": "daksneeuw/steen6-1.png",
+      "b": 550,
+      "h": 447,
+      "anker": [
+       337,
+       354
+      ]
+     },
+     {
+      "bestand": "daksneeuw/steen6-2.png",
+      "b": 550,
+      "h": 447,
+      "anker": [
+       337,
+       354
+      ]
+     }
+    ],
+    "boerderij1": [
+     {
+      "bestand": "daksneeuw/boerderij1-0.png",
+      "b": 604,
+      "h": 430,
+      "anker": [
+       335,
+       335
+      ]
+     },
+     {
+      "bestand": "daksneeuw/boerderij1-1.png",
+      "b": 604,
+      "h": 430,
+      "anker": [
+       335,
+       335
+      ]
+     },
+     {
+      "bestand": "daksneeuw/boerderij1-2.png",
+      "b": 605,
+      "h": 432,
+      "anker": [
+       335,
+       335
+      ]
+     }
+    ],
+    "boerderij2": [
+     {
+      "bestand": "daksneeuw/boerderij2-0.png",
+      "b": 539,
+      "h": 449,
+      "anker": [
+       300,
+       319
+      ]
+     },
+     {
+      "bestand": "daksneeuw/boerderij2-1.png",
+      "b": 539,
+      "h": 449,
+      "anker": [
+       300,
+       319
+      ]
+     },
+     {
+      "bestand": "daksneeuw/boerderij2-2.png",
+      "b": 541,
+      "h": 450,
+      "anker": [
+       300,
+       319
+      ]
+     }
+    ],
+    "boerderij3": [
+     {
+      "bestand": "daksneeuw/boerderij3-0.png",
+      "b": 569,
+      "h": 494,
+      "anker": [
+       332,
+       459
+      ]
+     },
+     {
+      "bestand": "daksneeuw/boerderij3-1.png",
+      "b": 569,
+      "h": 496,
+      "anker": [
+       332,
+       459
+      ]
+     },
+     {
+      "bestand": "daksneeuw/boerderij3-2.png",
+      "b": 574,
+      "h": 497,
+      "anker": [
+       337,
+       459
+      ]
+     }
+    ],
+    "boerderij4": [
+     {
+      "bestand": "daksneeuw/boerderij4-0.png",
+      "b": 541,
+      "h": 470,
+      "anker": [
+       304,
+       396
+      ]
+     },
+     {
+      "bestand": "daksneeuw/boerderij4-1.png",
+      "b": 541,
+      "h": 470,
+      "anker": [
+       304,
+       396
+      ]
+     },
+     {
+      "bestand": "daksneeuw/boerderij4-2.png",
+      "b": 542,
+      "h": 472,
+      "anker": [
+       305,
+       396
+      ]
+     }
+    ],
+    "boerderij5": [
+     {
+      "bestand": "daksneeuw/boerderij5-0.png",
+      "b": 413,
+      "h": 385,
+      "anker": [
+       225,
+       308
+      ]
+     },
+     {
+      "bestand": "daksneeuw/boerderij5-1.png",
+      "b": 441,
+      "h": 386,
+      "anker": [
+       253,
+       308
+      ]
+     },
+     {
+      "bestand": "daksneeuw/boerderij5-2.png",
+      "b": 488,
+      "h": 386,
+      "anker": [
+       300,
+       308
+      ]
+     }
+    ],
+    "schoutshuis": [
+     {
+      "bestand": "daksneeuw/schoutshuis-0.png",
+      "b": 579,
+      "h": 632,
+      "anker": [
+       259,
+       553
+      ]
+     },
+     {
+      "bestand": "daksneeuw/schoutshuis-1.png",
+      "b": 581,
+      "h": 632,
+      "anker": [
+       259,
+       553
+      ]
+     },
+     {
+      "bestand": "daksneeuw/schoutshuis-2.png",
+      "b": 584,
+      "h": 632,
+      "anker": [
+       259,
+       553
+      ]
+     }
+    ],
+    "herberg1": [
+     {
+      "bestand": "daksneeuw/herberg1-0.png",
+      "b": 605,
+      "h": 423,
+      "anker": [
+       305,
+       321
+      ]
+     },
+     {
+      "bestand": "daksneeuw/herberg1-1.png",
+      "b": 605,
+      "h": 423,
+      "anker": [
+       305,
+       321
+      ]
+     },
+     {
+      "bestand": "daksneeuw/herberg1-2.png",
+      "b": 605,
+      "h": 426,
+      "anker": [
+       305,
+       321
+      ]
+     }
+    ],
+    "wit-hut1-riet-z": [
+     {
+      "bestand": "daksneeuw/wit-hut1-riet-z-0.png",
+      "b": 372,
+      "h": 321,
+      "anker": [
+       168,
+       293
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-hut1-riet-z-1.png",
+      "b": 380,
+      "h": 321,
+      "anker": [
+       176,
+       293
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-hut1-riet-z-2.png",
+      "b": 386,
+      "h": 391,
+      "anker": [
+       177,
+       293
+      ]
+     }
+    ],
+    "wit-hut1-riet-o": [
+     {
+      "bestand": "daksneeuw/wit-hut1-riet-o-0.png",
+      "b": 371,
+      "h": 311,
+      "anker": [
+       234,
+       267
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-hut1-riet-o-1.png",
+      "b": 386,
+      "h": 312,
+      "anker": [
+       241,
+       267
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-hut1-riet-o-2.png",
+      "b": 386,
+      "h": 312,
+      "anker": [
+       241,
+       267
+      ]
+     }
+    ],
+    "wit-hut1-riet-n": [
+     {
+      "bestand": "daksneeuw/wit-hut1-riet-n-0.png",
+      "b": 374,
+      "h": 311,
+      "anker": [
+       139,
+       267
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-hut1-riet-n-1.png",
+      "b": 379,
+      "h": 312,
+      "anker": [
+       144,
+       267
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-hut1-riet-n-2.png",
+      "b": 386,
+      "h": 312,
+      "anker": [
+       145,
+       267
+      ]
+     }
+    ],
+    "wit-hut1-riet-w": [
+     {
+      "bestand": "daksneeuw/wit-hut1-riet-w-0.png",
+      "b": 372,
+      "h": 321,
+      "anker": [
+       204,
+       293
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-hut1-riet-w-1.png",
+      "b": 386,
+      "h": 321,
+      "anker": [
+       209,
+       293
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-hut1-riet-w-2.png",
+      "b": 386,
+      "h": 421,
+      "anker": [
+       209,
+       293
+      ]
+     }
+    ],
+    "wit-hut3-riet-z": [
+     {
+      "bestand": "daksneeuw/wit-hut3-riet-z-0.png",
+      "b": 409,
+      "h": 334,
+      "anker": [
+       175,
+       291
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-hut3-riet-z-1.png",
+      "b": 415,
+      "h": 334,
+      "anker": [
+       176,
+       291
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-hut3-riet-z-2.png",
+      "b": 417,
+      "h": 334,
+      "anker": [
+       177,
+       291
+      ]
+     }
+    ],
+    "wit-hut3-riet-o": [
+     {
+      "bestand": "daksneeuw/wit-hut3-riet-o-0.png",
+      "b": 399,
+      "h": 324,
+      "anker": [
+       232,
+       286
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-hut3-riet-o-1.png",
+      "b": 415,
+      "h": 324,
+      "anker": [
+       241,
+       286
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-hut3-riet-o-2.png",
+      "b": 418,
+      "h": 324,
+      "anker": [
+       241,
+       286
+      ]
+     }
+    ],
+    "wit-hut3-riet-n": [
+     {
+      "bestand": "daksneeuw/wit-hut3-riet-n-0.png",
+      "b": 399,
+      "h": 324,
+      "anker": [
+       164,
+       286
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-hut3-riet-n-1.png",
+      "b": 416,
+      "h": 324,
+      "anker": [
+       176,
+       286
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-hut3-riet-n-2.png",
+      "b": 418,
+      "h": 324,
+      "anker": [
+       177,
+       286
+      ]
+     }
+    ],
+    "wit-hut3-riet-w": [
+     {
+      "bestand": "daksneeuw/wit-hut3-riet-w-0.png",
+      "b": 407,
+      "h": 334,
+      "anker": [
+       237,
+       291
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-hut3-riet-w-1.png",
+      "b": 417,
+      "h": 334,
+      "anker": [
+       240,
+       291
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-hut3-riet-w-2.png",
+      "b": 418,
+      "h": 334,
+      "anker": [
+       241,
+       291
+      ]
+     }
+    ],
+    "wit-hut4-riet-z": [
+     {
+      "bestand": "daksneeuw/wit-hut4-riet-z-0.png",
+      "b": 412,
+      "h": 357,
+      "anker": [
+       173,
+       281
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-hut4-riet-z-1.png",
+      "b": 417,
+      "h": 357,
+      "anker": [
+       176,
+       281
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-hut4-riet-z-2.png",
+      "b": 418,
+      "h": 357,
+      "anker": [
+       177,
+       281
+      ]
+     }
+    ],
+    "wit-hut4-riet-o": [
+     {
+      "bestand": "daksneeuw/wit-hut4-riet-o-0.png",
+      "b": 481,
+      "h": 291,
+      "anker": [
+       241,
+       248
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-hut4-riet-o-1.png",
+      "b": 484,
+      "h": 291,
+      "anker": [
+       241,
+       248
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-hut4-riet-o-2.png",
+      "b": 484,
+      "h": 291,
+      "anker": [
+       241,
+       248
+      ]
+     }
+    ],
+    "wit-hut4-riet-n": [
+     {
+      "bestand": "daksneeuw/wit-hut4-riet-n-0.png",
+      "b": 408,
+      "h": 365,
+      "anker": [
+       239,
+       291
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-hut4-riet-n-1.png",
+      "b": 411,
+      "h": 365,
+      "anker": [
+       241,
+       291
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-hut4-riet-n-2.png",
+      "b": 418,
+      "h": 365,
+      "anker": [
+       241,
+       291
+      ]
+     }
+    ],
+    "wit-hut4-riet-w": [
+     {
+      "bestand": "daksneeuw/wit-hut4-riet-w-0.png",
+      "b": 471,
+      "h": 311,
+      "anker": [
+       239,
+       249
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-hut4-riet-w-1.png",
+      "b": 484,
+      "h": 313,
+      "anker": [
+       242,
+       249
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-hut4-riet-w-2.png",
+      "b": 484,
+      "h": 315,
+      "anker": [
+       242,
+       249
+      ]
+     }
+    ],
+    "wit-huis1-riet-z": [
+     {
+      "bestand": "daksneeuw/wit-huis1-riet-z-0.png",
+      "b": 467,
+      "h": 434,
+      "anker": [
+       201,
+       393
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis1-riet-z-1.png",
+      "b": 475,
+      "h": 434,
+      "anker": [
+       209,
+       393
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis1-riet-z-2.png",
+      "b": 482,
+      "h": 437,
+      "anker": [
+       209,
+       393
+      ]
+     }
+    ],
+    "wit-huis1-riet-o": [
+     {
+      "bestand": "daksneeuw/wit-huis1-riet-o-0.png",
+      "b": 468,
+      "h": 461,
+      "anker": [
+       265,
+       395
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis1-riet-o-1.png",
+      "b": 475,
+      "h": 461,
+      "anker": [
+       266,
+       395
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis1-riet-o-2.png",
+      "b": 482,
+      "h": 461,
+      "anker": [
+       273,
+       395
+      ]
+     }
+    ],
+    "wit-huis1-riet-n": [
+     {
+      "bestand": "daksneeuw/wit-huis1-riet-n-0.png",
+      "b": 469,
+      "h": 438,
+      "anker": [
+       203,
+       395
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis1-riet-n-1.png",
+      "b": 473,
+      "h": 438,
+      "anker": [
+       207,
+       395
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis1-riet-n-2.png",
+      "b": 482,
+      "h": 439,
+      "anker": [
+       209,
+       395
+      ]
+     }
+    ],
+    "wit-huis1-riet-w": [
+     {
+      "bestand": "daksneeuw/wit-huis1-riet-w-0.png",
+      "b": 464,
+      "h": 434,
+      "anker": [
+       266,
+       393
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis1-riet-w-1.png",
+      "b": 475,
+      "h": 436,
+      "anker": [
+       266,
+       393
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis1-riet-w-2.png",
+      "b": 482,
+      "h": 437,
+      "anker": [
+       273,
+       393
+      ]
+     }
+    ],
+    "wit-huis1-leien-z": [
+     {
+      "bestand": "daksneeuw/wit-huis1-leien-z-0.png",
+      "b": 341,
+      "h": 383,
+      "anker": [
+       179,
+       345
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis1-leien-z-1.png",
+      "b": 429,
+      "h": 384,
+      "anker": [
+       190,
+       345
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis1-leien-z-2.png",
+      "b": 429,
+      "h": 390,
+      "anker": [
+       190,
+       345
+      ]
+     }
+    ],
+    "wit-huis1-leien-o": [
+     {
+      "bestand": "daksneeuw/wit-huis1-leien-o-0.png",
+      "b": 410,
+      "h": 413,
+      "anker": [
+       221,
+       347
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis1-leien-o-1.png",
+      "b": 427,
+      "h": 413,
+      "anker": [
+       237,
+       347
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis1-leien-o-2.png",
+      "b": 429,
+      "h": 413,
+      "anker": [
+       239,
+       347
+      ]
+     }
+    ],
+    "wit-huis1-leien-n": [
+     {
+      "bestand": "daksneeuw/wit-huis1-leien-n-0.png",
+      "b": 343,
+      "h": 388,
+      "anker": [
+       182,
+       347
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis1-leien-n-1.png",
+      "b": 427,
+      "h": 395,
+      "anker": [
+       190,
+       347
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis1-leien-n-2.png",
+      "b": 427,
+      "h": 395,
+      "anker": [
+       190,
+       347
+      ]
+     }
+    ],
+    "wit-huis1-leien-w": [
+     {
+      "bestand": "daksneeuw/wit-huis1-leien-w-0.png",
+      "b": 352,
+      "h": 385,
+      "anker": [
+       162,
+       351
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis1-leien-w-1.png",
+      "b": 429,
+      "h": 396,
+      "anker": [
+       239,
+       351
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis1-leien-w-2.png",
+      "b": 429,
+      "h": 396,
+      "anker": [
+       239,
+       351
+      ]
+     }
+    ],
+    "wit-huis1-pannen-z": [
+     {
+      "bestand": "daksneeuw/wit-huis1-pannen-z-0.png",
+      "b": 345,
+      "h": 381,
+      "anker": [
+       183,
+       345
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis1-pannen-z-1.png",
+      "b": 429,
+      "h": 383,
+      "anker": [
+       190,
+       345
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis1-pannen-z-2.png",
+      "b": 429,
+      "h": 390,
+      "anker": [
+       190,
+       345
+      ]
+     }
+    ],
+    "wit-huis1-pannen-o": [
+     {
+      "bestand": "daksneeuw/wit-huis1-pannen-o-0.png",
+      "b": 350,
+      "h": 413,
+      "anker": [
+       161,
+       347
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis1-pannen-o-1.png",
+      "b": 426,
+      "h": 413,
+      "anker": [
+       236,
+       347
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis1-pannen-o-2.png",
+      "b": 429,
+      "h": 413,
+      "anker": [
+       239,
+       347
+      ]
+     }
+    ],
+    "wit-huis1-pannen-n": [
+     {
+      "bestand": "daksneeuw/wit-huis1-pannen-n-0.png",
+      "b": 340,
+      "h": 390,
+      "anker": [
+       179,
+       347
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis1-pannen-n-1.png",
+      "b": 426,
+      "h": 395,
+      "anker": [
+       190,
+       347
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis1-pannen-n-2.png",
+      "b": 426,
+      "h": 395,
+      "anker": [
+       190,
+       347
+      ]
+     }
+    ],
+    "wit-huis1-pannen-w": [
+     {
+      "bestand": "daksneeuw/wit-huis1-pannen-w-0.png",
+      "b": 352,
+      "h": 386,
+      "anker": [
+       162,
+       351
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis1-pannen-w-1.png",
+      "b": 429,
+      "h": 396,
+      "anker": [
+       239,
+       351
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis1-pannen-w-2.png",
+      "b": 429,
+      "h": 396,
+      "anker": [
+       239,
+       351
+      ]
+     }
+    ],
+    "wit-steen1-leien-z": [
+     {
+      "bestand": "daksneeuw/wit-steen1-leien-z-0.png",
+      "b": 341,
+      "h": 383,
+      "anker": [
+       179,
+       345
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen1-leien-z-1.png",
+      "b": 429,
+      "h": 384,
+      "anker": [
+       190,
+       345
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen1-leien-z-2.png",
+      "b": 429,
+      "h": 390,
+      "anker": [
+       190,
+       345
+      ]
+     }
+    ],
+    "wit-steen1-leien-o": [
+     {
+      "bestand": "daksneeuw/wit-steen1-leien-o-0.png",
+      "b": 410,
+      "h": 413,
+      "anker": [
+       221,
+       347
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen1-leien-o-1.png",
+      "b": 427,
+      "h": 413,
+      "anker": [
+       237,
+       347
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen1-leien-o-2.png",
+      "b": 429,
+      "h": 413,
+      "anker": [
+       239,
+       347
+      ]
+     }
+    ],
+    "wit-steen1-leien-n": [
+     {
+      "bestand": "daksneeuw/wit-steen1-leien-n-0.png",
+      "b": 408,
+      "h": 388,
+      "anker": [
+       182,
+       347
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen1-leien-n-1.png",
+      "b": 427,
+      "h": 395,
+      "anker": [
+       190,
+       347
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen1-leien-n-2.png",
+      "b": 427,
+      "h": 395,
+      "anker": [
+       190,
+       347
+      ]
+     }
+    ],
+    "wit-steen1-leien-w": [
+     {
+      "bestand": "daksneeuw/wit-steen1-leien-w-0.png",
+      "b": 352,
+      "h": 385,
+      "anker": [
+       162,
+       351
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen1-leien-w-1.png",
+      "b": 429,
+      "h": 396,
+      "anker": [
+       239,
+       351
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen1-leien-w-2.png",
+      "b": 429,
+      "h": 396,
+      "anker": [
+       239,
+       351
+      ]
+     }
+    ],
+    "wit-steen1-pannen-z": [
+     {
+      "bestand": "daksneeuw/wit-steen1-pannen-z-0.png",
+      "b": 345,
+      "h": 381,
+      "anker": [
+       183,
+       345
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen1-pannen-z-1.png",
+      "b": 429,
+      "h": 383,
+      "anker": [
+       190,
+       345
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen1-pannen-z-2.png",
+      "b": 429,
+      "h": 390,
+      "anker": [
+       190,
+       345
+      ]
+     }
+    ],
+    "wit-steen1-pannen-o": [
+     {
+      "bestand": "daksneeuw/wit-steen1-pannen-o-0.png",
+      "b": 350,
+      "h": 413,
+      "anker": [
+       161,
+       347
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen1-pannen-o-1.png",
+      "b": 426,
+      "h": 413,
+      "anker": [
+       236,
+       347
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen1-pannen-o-2.png",
+      "b": 429,
+      "h": 413,
+      "anker": [
+       239,
+       347
+      ]
+     }
+    ],
+    "wit-steen1-pannen-n": [
+     {
+      "bestand": "daksneeuw/wit-steen1-pannen-n-0.png",
+      "b": 405,
+      "h": 390,
+      "anker": [
+       179,
+       347
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen1-pannen-n-1.png",
+      "b": 426,
+      "h": 395,
+      "anker": [
+       190,
+       347
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen1-pannen-n-2.png",
+      "b": 426,
+      "h": 395,
+      "anker": [
+       190,
+       347
+      ]
+     }
+    ],
+    "wit-steen1-pannen-w": [
+     {
+      "bestand": "daksneeuw/wit-steen1-pannen-w-0.png",
+      "b": 352,
+      "h": 386,
+      "anker": [
+       162,
+       351
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen1-pannen-w-1.png",
+      "b": 429,
+      "h": 396,
+      "anker": [
+       239,
+       351
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen1-pannen-w-2.png",
+      "b": 429,
+      "h": 396,
+      "anker": [
+       239,
+       351
+      ]
+     }
+    ],
+    "wit-steen1-baksteen-z": [
+     {
+      "bestand": "daksneeuw/wit-steen1-baksteen-z-0.png",
+      "b": 345,
+      "h": 381,
+      "anker": [
+       183,
+       345
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen1-baksteen-z-1.png",
+      "b": 429,
+      "h": 383,
+      "anker": [
+       190,
+       345
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen1-baksteen-z-2.png",
+      "b": 429,
+      "h": 390,
+      "anker": [
+       190,
+       345
+      ]
+     }
+    ],
+    "wit-steen1-baksteen-o": [
+     {
+      "bestand": "daksneeuw/wit-steen1-baksteen-o-0.png",
+      "b": 350,
+      "h": 413,
+      "anker": [
+       161,
+       347
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen1-baksteen-o-1.png",
+      "b": 426,
+      "h": 413,
+      "anker": [
+       236,
+       347
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen1-baksteen-o-2.png",
+      "b": 429,
+      "h": 413,
+      "anker": [
+       239,
+       347
+      ]
+     }
+    ],
+    "wit-steen1-baksteen-n": [
+     {
+      "bestand": "daksneeuw/wit-steen1-baksteen-n-0.png",
+      "b": 405,
+      "h": 390,
+      "anker": [
+       179,
+       347
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen1-baksteen-n-1.png",
+      "b": 426,
+      "h": 395,
+      "anker": [
+       190,
+       347
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen1-baksteen-n-2.png",
+      "b": 426,
+      "h": 395,
+      "anker": [
+       190,
+       347
+      ]
+     }
+    ],
+    "wit-steen1-baksteen-w": [
+     {
+      "bestand": "daksneeuw/wit-steen1-baksteen-w-0.png",
+      "b": 352,
+      "h": 386,
+      "anker": [
+       162,
+       351
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen1-baksteen-w-1.png",
+      "b": 429,
+      "h": 396,
+      "anker": [
+       239,
+       351
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen1-baksteen-w-2.png",
+      "b": 429,
+      "h": 396,
+      "anker": [
+       239,
+       351
+      ]
+     }
+    ],
+    "wit-huis3-riet-z": [
+     {
+      "bestand": "daksneeuw/wit-huis3-riet-z-0.png",
+      "b": 513,
+      "h": 561,
+      "anker": [
+       209,
+       362
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis3-riet-z-1.png",
+      "b": 514,
+      "h": 561,
+      "anker": [
+       209,
+       362
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis3-riet-z-2.png",
+      "b": 514,
+      "h": 561,
+      "anker": [
+       209,
+       362
+      ]
+     }
+    ],
+    "wit-huis3-riet-o": [
+     {
+      "bestand": "daksneeuw/wit-huis3-riet-o-0.png",
+      "b": 532,
+      "h": 497,
+      "anker": [
+       332,
+       348
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis3-riet-o-1.png",
+      "b": 537,
+      "h": 497,
+      "anker": [
+       337,
+       348
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis3-riet-o-2.png",
+      "b": 538,
+      "h": 497,
+      "anker": [
+       337,
+       348
+      ]
+     }
+    ],
+    "wit-huis3-riet-n": [
+     {
+      "bestand": "daksneeuw/wit-huis3-riet-n-0.png",
+      "b": 509,
+      "h": 428,
+      "anker": [
+       241,
+       316
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis3-riet-n-1.png",
+      "b": 514,
+      "h": 428,
+      "anker": [
+       241,
+       316
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis3-riet-n-2.png",
+      "b": 514,
+      "h": 428,
+      "anker": [
+       241,
+       316
+      ]
+     }
+    ],
+    "wit-huis3-riet-w": [
+     {
+      "bestand": "daksneeuw/wit-huis3-riet-w-0.png",
+      "b": 535,
+      "h": 442,
+      "anker": [
+       264,
+       330
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis3-riet-w-1.png",
+      "b": 538,
+      "h": 442,
+      "anker": [
+       264,
+       330
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis3-riet-w-2.png",
+      "b": 538,
+      "h": 551,
+      "anker": [
+       264,
+       330
+      ]
+     }
+    ],
+    "wit-huis3-leien-z": [
+     {
+      "bestand": "daksneeuw/wit-huis3-leien-z-0.png",
+      "b": 414,
+      "h": 513,
+      "anker": [
+       190,
+       314
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis3-leien-z-1.png",
+      "b": 453,
+      "h": 513,
+      "anker": [
+       190,
+       314
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis3-leien-z-2.png",
+      "b": 463,
+      "h": 513,
+      "anker": [
+       190,
+       314
+      ]
+     }
+    ],
+    "wit-huis3-leien-o": [
+     {
+      "bestand": "daksneeuw/wit-huis3-leien-o-0.png",
+      "b": 425,
+      "h": 450,
+      "anker": [
+       225,
+       301
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis3-leien-o-1.png",
+      "b": 501,
+      "h": 450,
+      "anker": [
+       301,
+       301
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis3-leien-o-2.png",
+      "b": 502,
+      "h": 450,
+      "anker": [
+       302,
+       301
+      ]
+     }
+    ],
+    "wit-huis3-leien-n": [
+     {
+      "bestand": "daksneeuw/wit-huis3-leien-n-0.png",
+      "b": 384,
+      "h": 371,
+      "anker": [
+       223,
+       269
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis3-leien-n-1.png",
+      "b": 449,
+      "h": 381,
+      "anker": [
+       225,
+       269
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis3-leien-n-2.png",
+      "b": 462,
+      "h": 381,
+      "anker": [
+       225,
+       269
+      ]
+     }
+    ],
+    "wit-huis3-leien-w": [
+     {
+      "bestand": "daksneeuw/wit-huis3-leien-w-0.png",
+      "b": 515,
+      "h": 394,
+      "anker": [
+       263,
+       282
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis3-leien-w-1.png",
+      "b": 517,
+      "h": 394,
+      "anker": [
+       263,
+       282
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis3-leien-w-2.png",
+      "b": 519,
+      "h": 503,
+      "anker": [
+       265,
+       282
+      ]
+     }
+    ],
+    "wit-huis3-pannen-z": [
+     {
+      "bestand": "daksneeuw/wit-huis3-pannen-z-0.png",
+      "b": 414,
+      "h": 513,
+      "anker": [
+       190,
+       314
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis3-pannen-z-1.png",
+      "b": 452,
+      "h": 513,
+      "anker": [
+       190,
+       314
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis3-pannen-z-2.png",
+      "b": 463,
+      "h": 513,
+      "anker": [
+       190,
+       314
+      ]
+     }
+    ],
+    "wit-huis3-pannen-o": [
+     {
+      "bestand": "daksneeuw/wit-huis3-pannen-o-0.png",
+      "b": 425,
+      "h": 450,
+      "anker": [
+       225,
+       301
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis3-pannen-o-1.png",
+      "b": 501,
+      "h": 450,
+      "anker": [
+       301,
+       301
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis3-pannen-o-2.png",
+      "b": 502,
+      "h": 450,
+      "anker": [
+       302,
+       301
+      ]
+     }
+    ],
+    "wit-huis3-pannen-n": [
+     {
+      "bestand": "daksneeuw/wit-huis3-pannen-n-0.png",
+      "b": 384,
+      "h": 374,
+      "anker": [
+       223,
+       269
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis3-pannen-n-1.png",
+      "b": 410,
+      "h": 381,
+      "anker": [
+       225,
+       269
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis3-pannen-n-2.png",
+      "b": 462,
+      "h": 381,
+      "anker": [
+       225,
+       269
+      ]
+     }
+    ],
+    "wit-huis3-pannen-w": [
+     {
+      "bestand": "daksneeuw/wit-huis3-pannen-w-0.png",
+      "b": 515,
+      "h": 394,
+      "anker": [
+       263,
+       282
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis3-pannen-w-1.png",
+      "b": 517,
+      "h": 394,
+      "anker": [
+       263,
+       282
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis3-pannen-w-2.png",
+      "b": 519,
+      "h": 503,
+      "anker": [
+       265,
+       282
+      ]
+     }
+    ],
+    "wit-steen3-leien-z": [
+     {
+      "bestand": "daksneeuw/wit-steen3-leien-z-0.png",
+      "b": 379,
+      "h": 511,
+      "anker": [
+       190,
+       314
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen3-leien-z-1.png",
+      "b": 453,
+      "h": 511,
+      "anker": [
+       190,
+       314
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen3-leien-z-2.png",
+      "b": 463,
+      "h": 512,
+      "anker": [
+       190,
+       314
+      ]
+     }
+    ],
+    "wit-steen3-leien-o": [
+     {
+      "bestand": "daksneeuw/wit-steen3-leien-o-0.png",
+      "b": 425,
+      "h": 448,
+      "anker": [
+       193,
+       317
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen3-leien-o-1.png",
+      "b": 501,
+      "h": 449,
+      "anker": [
+       269,
+       317
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen3-leien-o-2.png",
+      "b": 502,
+      "h": 449,
+      "anker": [
+       270,
+       317
+      ]
+     }
+    ],
+    "wit-steen3-leien-n": [
+     {
+      "bestand": "daksneeuw/wit-steen3-leien-n-0.png",
+      "b": 450,
+      "h": 371,
+      "anker": [
+       255,
+       285
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen3-leien-n-1.png",
+      "b": 454,
+      "h": 381,
+      "anker": [
+       257,
+       285
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen3-leien-n-2.png",
+      "b": 462,
+      "h": 381,
+      "anker": [
+       257,
+       285
+      ]
+     }
+    ],
+    "wit-steen3-leien-w": [
+     {
+      "bestand": "daksneeuw/wit-steen3-leien-w-0.png",
+      "b": 515,
+      "h": 392,
+      "anker": [
+       263,
+       282
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen3-leien-w-1.png",
+      "b": 517,
+      "h": 392,
+      "anker": [
+       263,
+       282
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen3-leien-w-2.png",
+      "b": 519,
+      "h": 392,
+      "anker": [
+       265,
+       282
+      ]
+     }
+    ],
+    "wit-steen3-pannen-z": [
+     {
+      "bestand": "daksneeuw/wit-steen3-pannen-z-0.png",
+      "b": 380,
+      "h": 511,
+      "anker": [
+       190,
+       314
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen3-pannen-z-1.png",
+      "b": 452,
+      "h": 511,
+      "anker": [
+       190,
+       314
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen3-pannen-z-2.png",
+      "b": 463,
+      "h": 512,
+      "anker": [
+       190,
+       314
+      ]
+     }
+    ],
+    "wit-steen3-pannen-o": [
+     {
+      "bestand": "daksneeuw/wit-steen3-pannen-o-0.png",
+      "b": 425,
+      "h": 448,
+      "anker": [
+       193,
+       317
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen3-pannen-o-1.png",
+      "b": 501,
+      "h": 449,
+      "anker": [
+       269,
+       317
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen3-pannen-o-2.png",
+      "b": 502,
+      "h": 449,
+      "anker": [
+       270,
+       317
+      ]
+     }
+    ],
+    "wit-steen3-pannen-n": [
+     {
+      "bestand": "daksneeuw/wit-steen3-pannen-n-0.png",
+      "b": 450,
+      "h": 374,
+      "anker": [
+       255,
+       285
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen3-pannen-n-1.png",
+      "b": 452,
+      "h": 381,
+      "anker": [
+       257,
+       285
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen3-pannen-n-2.png",
+      "b": 462,
+      "h": 381,
+      "anker": [
+       257,
+       285
+      ]
+     }
+    ],
+    "wit-steen3-pannen-w": [
+     {
+      "bestand": "daksneeuw/wit-steen3-pannen-w-0.png",
+      "b": 515,
+      "h": 392,
+      "anker": [
+       263,
+       282
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen3-pannen-w-1.png",
+      "b": 517,
+      "h": 392,
+      "anker": [
+       263,
+       282
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen3-pannen-w-2.png",
+      "b": 519,
+      "h": 392,
+      "anker": [
+       265,
+       282
+      ]
+     }
+    ],
+    "wit-steen3-baksteen-z": [
+     {
+      "bestand": "daksneeuw/wit-steen3-baksteen-z-0.png",
+      "b": 380,
+      "h": 511,
+      "anker": [
+       190,
+       314
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen3-baksteen-z-1.png",
+      "b": 452,
+      "h": 511,
+      "anker": [
+       190,
+       314
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen3-baksteen-z-2.png",
+      "b": 463,
+      "h": 512,
+      "anker": [
+       190,
+       314
+      ]
+     }
+    ],
+    "wit-steen3-baksteen-o": [
+     {
+      "bestand": "daksneeuw/wit-steen3-baksteen-o-0.png",
+      "b": 425,
+      "h": 448,
+      "anker": [
+       193,
+       317
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen3-baksteen-o-1.png",
+      "b": 501,
+      "h": 449,
+      "anker": [
+       269,
+       317
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen3-baksteen-o-2.png",
+      "b": 502,
+      "h": 449,
+      "anker": [
+       270,
+       317
+      ]
+     }
+    ],
+    "wit-steen3-baksteen-n": [
+     {
+      "bestand": "daksneeuw/wit-steen3-baksteen-n-0.png",
+      "b": 450,
+      "h": 374,
+      "anker": [
+       255,
+       285
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen3-baksteen-n-1.png",
+      "b": 452,
+      "h": 381,
+      "anker": [
+       257,
+       285
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen3-baksteen-n-2.png",
+      "b": 462,
+      "h": 381,
+      "anker": [
+       257,
+       285
+      ]
+     }
+    ],
+    "wit-steen3-baksteen-w": [
+     {
+      "bestand": "daksneeuw/wit-steen3-baksteen-w-0.png",
+      "b": 515,
+      "h": 392,
+      "anker": [
+       263,
+       282
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen3-baksteen-w-1.png",
+      "b": 517,
+      "h": 392,
+      "anker": [
+       263,
+       282
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen3-baksteen-w-2.png",
+      "b": 519,
+      "h": 392,
+      "anker": [
+       265,
+       282
+      ]
+     }
+    ],
+    "wit-huis6-riet-z": [
+     {
+      "bestand": "daksneeuw/wit-huis6-riet-z-0.png",
+      "b": 534,
+      "h": 480,
+      "anker": [
+       202,
+       359
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis6-riet-z-1.png",
+      "b": 543,
+      "h": 480,
+      "anker": [
+       209,
+       359
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis6-riet-z-2.png",
+      "b": 546,
+      "h": 480,
+      "anker": [
+       209,
+       359
+      ]
+     }
+    ],
+    "wit-huis6-riet-o": [
+     {
+      "bestand": "daksneeuw/wit-huis6-riet-o-0.png",
+      "b": 574,
+      "h": 459,
+      "anker": [
+       334,
+       361
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis6-riet-o-1.png",
+      "b": 581,
+      "h": 459,
+      "anker": [
+       336,
+       361
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis6-riet-o-2.png",
+      "b": 582,
+      "h": 459,
+      "anker": [
+       337,
+       361
+      ]
+     }
+    ],
+    "wit-huis6-riet-n": [
+     {
+      "bestand": "daksneeuw/wit-huis6-riet-n-0.png",
+      "b": 544,
+      "h": 441,
+      "anker": [
+       305,
+       313
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis6-riet-n-1.png",
+      "b": 545,
+      "h": 441,
+      "anker": [
+       305,
+       313
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis6-riet-n-2.png",
+      "b": 546,
+      "h": 441,
+      "anker": [
+       305,
+       313
+      ]
+     }
+    ],
+    "wit-huis6-riet-w": [
+     {
+      "bestand": "daksneeuw/wit-huis6-riet-w-0.png",
+      "b": 571,
+      "h": 457,
+      "anker": [
+       269,
+       330
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis6-riet-w-1.png",
+      "b": 582,
+      "h": 457,
+      "anker": [
+       276,
+       330
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis6-riet-w-2.png",
+      "b": 582,
+      "h": 457,
+      "anker": [
+       276,
+       330
+      ]
+     }
+    ],
+    "wit-huis6-leien-z": [
+     {
+      "bestand": "daksneeuw/wit-huis6-leien-z-0.png",
+      "b": 419,
+      "h": 443,
+      "anker": [
+       193,
+       322
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis6-leien-z-1.png",
+      "b": 484,
+      "h": 443,
+      "anker": [
+       193,
+       322
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis6-leien-z-2.png",
+      "b": 498,
+      "h": 443,
+      "anker": [
+       193,
+       322
+      ]
+     }
+    ],
+    "wit-huis6-leien-o": [
+     {
+      "bestand": "daksneeuw/wit-huis6-leien-o-0.png",
+      "b": 428,
+      "h": 411,
+      "anker": [
+       225,
+       313
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis6-leien-o-1.png",
+      "b": 510,
+      "h": 411,
+      "anker": [
+       302,
+       313
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis6-leien-o-2.png",
+      "b": 515,
+      "h": 411,
+      "anker": [
+       304,
+       313
+      ]
+     }
+    ],
+    "wit-huis6-leien-n": [
+     {
+      "bestand": "daksneeuw/wit-huis6-leien-n-0.png",
+      "b": 507,
+      "h": 392,
+      "anker": [
+       289,
+       265
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis6-leien-n-1.png",
+      "b": 509,
+      "h": 397,
+      "anker": [
+       289,
+       265
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis6-leien-n-2.png",
+      "b": 509,
+      "h": 397,
+      "anker": [
+       289,
+       265
+      ]
+     }
+    ],
+    "wit-huis6-leien-w": [
+     {
+      "bestand": "daksneeuw/wit-huis6-leien-w-0.png",
+      "b": 542,
+      "h": 426,
+      "anker": [
+       253,
+       297
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis6-leien-w-1.png",
+      "b": 548,
+      "h": 427,
+      "anker": [
+       259,
+       297
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis6-leien-w-2.png",
+      "b": 548,
+      "h": 427,
+      "anker": [
+       259,
+       297
+      ]
+     }
+    ],
+    "wit-huis6-pannen-z": [
+     {
+      "bestand": "daksneeuw/wit-huis6-pannen-z-0.png",
+      "b": 419,
+      "h": 443,
+      "anker": [
+       193,
+       322
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis6-pannen-z-1.png",
+      "b": 486,
+      "h": 443,
+      "anker": [
+       193,
+       322
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis6-pannen-z-2.png",
+      "b": 498,
+      "h": 443,
+      "anker": [
+       193,
+       322
+      ]
+     }
+    ],
+    "wit-huis6-pannen-o": [
+     {
+      "bestand": "daksneeuw/wit-huis6-pannen-o-0.png",
+      "b": 428,
+      "h": 411,
+      "anker": [
+       225,
+       313
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis6-pannen-o-1.png",
+      "b": 507,
+      "h": 411,
+      "anker": [
+       299,
+       313
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis6-pannen-o-2.png",
+      "b": 514,
+      "h": 411,
+      "anker": [
+       304,
+       313
+      ]
+     }
+    ],
+    "wit-huis6-pannen-n": [
+     {
+      "bestand": "daksneeuw/wit-huis6-pannen-n-0.png",
+      "b": 507,
+      "h": 392,
+      "anker": [
+       289,
+       265
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis6-pannen-n-1.png",
+      "b": 509,
+      "h": 397,
+      "anker": [
+       289,
+       265
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis6-pannen-n-2.png",
+      "b": 509,
+      "h": 397,
+      "anker": [
+       289,
+       265
+      ]
+     }
+    ],
+    "wit-huis6-pannen-w": [
+     {
+      "bestand": "daksneeuw/wit-huis6-pannen-w-0.png",
+      "b": 540,
+      "h": 426,
+      "anker": [
+       251,
+       297
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis6-pannen-w-1.png",
+      "b": 548,
+      "h": 427,
+      "anker": [
+       259,
+       297
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-huis6-pannen-w-2.png",
+      "b": 548,
+      "h": 427,
+      "anker": [
+       259,
+       297
+      ]
+     }
+    ],
+    "wit-steen6-leien-z": [
+     {
+      "bestand": "daksneeuw/wit-steen6-leien-z-0.png",
+      "b": 419,
+      "h": 443,
+      "anker": [
+       193,
+       322
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen6-leien-z-1.png",
+      "b": 484,
+      "h": 443,
+      "anker": [
+       193,
+       322
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen6-leien-z-2.png",
+      "b": 498,
+      "h": 443,
+      "anker": [
+       193,
+       322
+      ]
+     }
+    ],
+    "wit-steen6-leien-o": [
+     {
+      "bestand": "daksneeuw/wit-steen6-leien-o-0.png",
+      "b": 429,
+      "h": 411,
+      "anker": [
+       225,
+       313
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen6-leien-o-1.png",
+      "b": 510,
+      "h": 411,
+      "anker": [
+       302,
+       313
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen6-leien-o-2.png",
+      "b": 515,
+      "h": 412,
+      "anker": [
+       304,
+       313
+      ]
+     }
+    ],
+    "wit-steen6-leien-n": [
+     {
+      "bestand": "daksneeuw/wit-steen6-leien-n-0.png",
+      "b": 507,
+      "h": 392,
+      "anker": [
+       289,
+       265
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen6-leien-n-1.png",
+      "b": 509,
+      "h": 397,
+      "anker": [
+       289,
+       265
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen6-leien-n-2.png",
+      "b": 509,
+      "h": 397,
+      "anker": [
+       289,
+       265
+      ]
+     }
+    ],
+    "wit-steen6-leien-w": [
+     {
+      "bestand": "daksneeuw/wit-steen6-leien-w-0.png",
+      "b": 542,
+      "h": 426,
+      "anker": [
+       253,
+       297
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen6-leien-w-1.png",
+      "b": 548,
+      "h": 427,
+      "anker": [
+       259,
+       297
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen6-leien-w-2.png",
+      "b": 548,
+      "h": 427,
+      "anker": [
+       259,
+       297
+      ]
+     }
+    ],
+    "wit-steen6-pannen-z": [
+     {
+      "bestand": "daksneeuw/wit-steen6-pannen-z-0.png",
+      "b": 419,
+      "h": 443,
+      "anker": [
+       193,
+       322
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen6-pannen-z-1.png",
+      "b": 486,
+      "h": 443,
+      "anker": [
+       193,
+       322
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen6-pannen-z-2.png",
+      "b": 498,
+      "h": 443,
+      "anker": [
+       193,
+       322
+      ]
+     }
+    ],
+    "wit-steen6-pannen-o": [
+     {
+      "bestand": "daksneeuw/wit-steen6-pannen-o-0.png",
+      "b": 429,
+      "h": 411,
+      "anker": [
+       225,
+       313
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen6-pannen-o-1.png",
+      "b": 507,
+      "h": 411,
+      "anker": [
+       299,
+       313
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen6-pannen-o-2.png",
+      "b": 514,
+      "h": 412,
+      "anker": [
+       304,
+       313
+      ]
+     }
+    ],
+    "wit-steen6-pannen-n": [
+     {
+      "bestand": "daksneeuw/wit-steen6-pannen-n-0.png",
+      "b": 507,
+      "h": 392,
+      "anker": [
+       289,
+       265
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen6-pannen-n-1.png",
+      "b": 509,
+      "h": 397,
+      "anker": [
+       289,
+       265
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen6-pannen-n-2.png",
+      "b": 509,
+      "h": 397,
+      "anker": [
+       289,
+       265
+      ]
+     }
+    ],
+    "wit-steen6-pannen-w": [
+     {
+      "bestand": "daksneeuw/wit-steen6-pannen-w-0.png",
+      "b": 540,
+      "h": 426,
+      "anker": [
+       251,
+       297
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen6-pannen-w-1.png",
+      "b": 548,
+      "h": 427,
+      "anker": [
+       259,
+       297
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen6-pannen-w-2.png",
+      "b": 548,
+      "h": 427,
+      "anker": [
+       259,
+       297
+      ]
+     }
+    ],
+    "wit-steen6-baksteen-z": [
+     {
+      "bestand": "daksneeuw/wit-steen6-baksteen-z-0.png",
+      "b": 419,
+      "h": 443,
+      "anker": [
+       193,
+       322
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen6-baksteen-z-1.png",
+      "b": 486,
+      "h": 443,
+      "anker": [
+       193,
+       322
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen6-baksteen-z-2.png",
+      "b": 498,
+      "h": 443,
+      "anker": [
+       193,
+       322
+      ]
+     }
+    ],
+    "wit-steen6-baksteen-o": [
+     {
+      "bestand": "daksneeuw/wit-steen6-baksteen-o-0.png",
+      "b": 429,
+      "h": 411,
+      "anker": [
+       225,
+       313
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen6-baksteen-o-1.png",
+      "b": 507,
+      "h": 411,
+      "anker": [
+       299,
+       313
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen6-baksteen-o-2.png",
+      "b": 514,
+      "h": 412,
+      "anker": [
+       304,
+       313
+      ]
+     }
+    ],
+    "wit-steen6-baksteen-n": [
+     {
+      "bestand": "daksneeuw/wit-steen6-baksteen-n-0.png",
+      "b": 507,
+      "h": 392,
+      "anker": [
+       289,
+       265
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen6-baksteen-n-1.png",
+      "b": 509,
+      "h": 397,
+      "anker": [
+       289,
+       265
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen6-baksteen-n-2.png",
+      "b": 509,
+      "h": 397,
+      "anker": [
+       289,
+       265
+      ]
+     }
+    ],
+    "wit-steen6-baksteen-w": [
+     {
+      "bestand": "daksneeuw/wit-steen6-baksteen-w-0.png",
+      "b": 540,
+      "h": 426,
+      "anker": [
+       251,
+       297
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen6-baksteen-w-1.png",
+      "b": 548,
+      "h": 427,
+      "anker": [
+       259,
+       297
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-steen6-baksteen-w-2.png",
+      "b": 548,
+      "h": 427,
+      "anker": [
+       259,
+       297
+      ]
+     }
+    ],
+    "wit-boerderij1-riet-z": [
+     {
+      "bestand": "daksneeuw/wit-boerderij1-riet-z-0.png",
+      "b": 591,
+      "h": 449,
+      "anker": [
+       266,
+       350
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij1-riet-z-1.png",
+      "b": 602,
+      "h": 449,
+      "anker": [
+       273,
+       350
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij1-riet-z-2.png",
+      "b": 608,
+      "h": 451,
+      "anker": [
+       273,
+       350
+      ]
+     }
+    ],
+    "wit-boerderij1-riet-o": [
+     {
+      "bestand": "daksneeuw/wit-boerderij1-riet-o-0.png",
+      "b": 542,
+      "h": 499,
+      "anker": [
+       269,
+       388
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij1-riet-o-1.png",
+      "b": 542,
+      "h": 499,
+      "anker": [
+       269,
+       388
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij1-riet-o-2.png",
+      "b": 546,
+      "h": 499,
+      "anker": [
+       273,
+       388
+      ]
+     }
+    ],
+    "wit-boerderij1-riet-n": [
+     {
+      "bestand": "daksneeuw/wit-boerderij1-riet-n-0.png",
+      "b": 600,
+      "h": 419,
+      "anker": [
+       266,
+       340
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij1-riet-n-1.png",
+      "b": 601,
+      "h": 419,
+      "anker": [
+       266,
+       340
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij1-riet-n-2.png",
+      "b": 603,
+      "h": 419,
+      "anker": [
+       266,
+       340
+      ]
+     }
+    ],
+    "wit-boerderij1-riet-w": [
+     {
+      "bestand": "daksneeuw/wit-boerderij1-riet-w-0.png",
+      "b": 539,
+      "h": 487,
+      "anker": [
+       337,
+       382
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij1-riet-w-1.png",
+      "b": 546,
+      "h": 487,
+      "anker": [
+       337,
+       382
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij1-riet-w-2.png",
+      "b": 546,
+      "h": 487,
+      "anker": [
+       337,
+       382
+      ]
+     }
+    ],
+    "wit-boerderij1-leien-z": [
+     {
+      "bestand": "daksneeuw/wit-boerderij1-leien-z-0.png",
+      "b": 557,
+      "h": 410,
+      "anker": [
+       253,
+       302
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij1-leien-z-1.png",
+      "b": 566,
+      "h": 413,
+      "anker": [
+       255,
+       302
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij1-leien-z-2.png",
+      "b": 572,
+      "h": 414,
+      "anker": [
+       256,
+       302
+      ]
+     }
+    ],
+    "wit-boerderij1-leien-o": [
+     {
+      "bestand": "daksneeuw/wit-boerderij1-leien-o-0.png",
+      "b": 424,
+      "h": 441,
+      "anker": [
+       161,
+       340
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij1-leien-o-1.png",
+      "b": 498,
+      "h": 451,
+      "anker": [
+       235,
+       340
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij1-leien-o-2.png",
+      "b": 501,
+      "h": 452,
+      "anker": [
+       238,
+       340
+      ]
+     }
+    ],
+    "wit-boerderij1-leien-n": [
+     {
+      "bestand": "daksneeuw/wit-boerderij1-leien-n-0.png",
+      "b": 454,
+      "h": 373,
+      "anker": [
+       229,
+       301
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij1-leien-n-1.png",
+      "b": 524,
+      "h": 380,
+      "anker": [
+       232,
+       301
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij1-leien-n-2.png",
+      "b": 543,
+      "h": 381,
+      "anker": [
+       241,
+       301
+      ]
+     }
+    ],
+    "wit-boerderij1-leien-w": [
+     {
+      "bestand": "daksneeuw/wit-boerderij1-leien-w-0.png",
+      "b": 501,
+      "h": 429,
+      "anker": [
+       319,
+       334
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij1-leien-w-1.png",
+      "b": 513,
+      "h": 435,
+      "anker": [
+       328,
+       334
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij1-leien-w-2.png",
+      "b": 520,
+      "h": 443,
+      "anker": [
+       328,
+       334
+      ]
+     }
+    ],
+    "wit-boerderij1-pannen-z": [
+     {
+      "bestand": "daksneeuw/wit-boerderij1-pannen-z-0.png",
+      "b": 559,
+      "h": 409,
+      "anker": [
+       253,
+       302
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij1-pannen-z-1.png",
+      "b": 566,
+      "h": 413,
+      "anker": [
+       255,
+       302
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij1-pannen-z-2.png",
+      "b": 572,
+      "h": 414,
+      "anker": [
+       256,
+       302
+      ]
+     }
+    ],
+    "wit-boerderij1-pannen-o": [
+     {
+      "bestand": "daksneeuw/wit-boerderij1-pannen-o-0.png",
+      "b": 425,
+      "h": 444,
+      "anker": [
+       161,
+       340
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij1-pannen-o-1.png",
+      "b": 499,
+      "h": 451,
+      "anker": [
+       235,
+       340
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij1-pannen-o-2.png",
+      "b": 502,
+      "h": 452,
+      "anker": [
+       238,
+       340
+      ]
+     }
+    ],
+    "wit-boerderij1-pannen-n": [
+     {
+      "bestand": "daksneeuw/wit-boerderij1-pannen-n-0.png",
+      "b": 456,
+      "h": 374,
+      "anker": [
+       231,
+       302
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij1-pannen-n-1.png",
+      "b": 529,
+      "h": 381,
+      "anker": [
+       231,
+       302
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij1-pannen-n-2.png",
+      "b": 543,
+      "h": 382,
+      "anker": [
+       241,
+       302
+      ]
+     }
+    ],
+    "wit-boerderij1-pannen-w": [
+     {
+      "bestand": "daksneeuw/wit-boerderij1-pannen-w-0.png",
+      "b": 498,
+      "h": 437,
+      "anker": [
+       318,
+       334
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij1-pannen-w-1.png",
+      "b": 514,
+      "h": 437,
+      "anker": [
+       329,
+       334
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij1-pannen-w-2.png",
+      "b": 521,
+      "h": 443,
+      "anker": [
+       329,
+       334
+      ]
+     }
+    ],
+    "wit-boerderij4-riet-z": [
+     {
+      "bestand": "daksneeuw/wit-boerderij4-riet-z-0.png",
+      "b": 541,
+      "h": 485,
+      "anker": [
+       238,
+       410
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij4-riet-z-1.png",
+      "b": 545,
+      "h": 485,
+      "anker": [
+       241,
+       410
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij4-riet-z-2.png",
+      "b": 546,
+      "h": 486,
+      "anker": [
+       241,
+       410
+      ]
+     }
+    ],
+    "wit-boerderij4-riet-o": [
+     {
+      "bestand": "daksneeuw/wit-boerderij4-riet-o-0.png",
+      "b": 539,
+      "h": 494,
+      "anker": [
+       301,
+       421
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij4-riet-o-1.png",
+      "b": 542,
+      "h": 494,
+      "anker": [
+       301,
+       421
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij4-riet-o-2.png",
+      "b": 546,
+      "h": 496,
+      "anker": [
+       305,
+       421
+      ]
+     }
+    ],
+    "wit-boerderij4-riet-n": [
+     {
+      "bestand": "daksneeuw/wit-boerderij4-riet-n-0.png",
+      "b": 536,
+      "h": 492,
+      "anker": [
+       236,
+       421
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij4-riet-n-1.png",
+      "b": 541,
+      "h": 494,
+      "anker": [
+       241,
+       421
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij4-riet-n-2.png",
+      "b": 542,
+      "h": 496,
+      "anker": [
+       241,
+       421
+      ]
+     }
+    ],
+    "wit-boerderij4-riet-w": [
+     {
+      "bestand": "daksneeuw/wit-boerderij4-riet-w-0.png",
+      "b": 538,
+      "h": 484,
+      "anker": [
+       302,
+       410
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij4-riet-w-1.png",
+      "b": 543,
+      "h": 484,
+      "anker": [
+       302,
+       410
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij4-riet-w-2.png",
+      "b": 546,
+      "h": 486,
+      "anker": [
+       305,
+       410
+      ]
+     }
+    ],
+    "wit-boerderij4-leien-z": [
+     {
+      "bestand": "daksneeuw/wit-boerderij4-leien-z-0.png",
+      "b": 478,
+      "h": 438,
+      "anker": [
+       223,
+       363
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij4-leien-z-1.png",
+      "b": 488,
+      "h": 442,
+      "anker": [
+       226,
+       363
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij4-leien-z-2.png",
+      "b": 498,
+      "h": 443,
+      "anker": [
+       226,
+       363
+      ]
+     }
+    ],
+    "wit-boerderij4-leien-o": [
+     {
+      "bestand": "daksneeuw/wit-boerderij4-leien-o-0.png",
+      "b": 398,
+      "h": 443,
+      "anker": [
+       179,
+       374
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij4-leien-o-1.png",
+      "b": 489,
+      "h": 452,
+      "anker": [
+       263,
+       374
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij4-leien-o-2.png",
+      "b": 498,
+      "h": 453,
+      "anker": [
+       272,
+       374
+      ]
+     }
+    ],
+    "wit-boerderij4-leien-n": [
+     {
+      "bestand": "daksneeuw/wit-boerderij4-leien-n-0.png",
+      "b": 399,
+      "h": 443,
+      "anker": [
+       222,
+       374
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij4-leien-n-1.png",
+      "b": 458,
+      "h": 452,
+      "anker": [
+       226,
+       374
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij4-leien-n-2.png",
+      "b": 497,
+      "h": 453,
+      "anker": [
+       226,
+       374
+      ]
+     }
+    ],
+    "wit-boerderij4-leien-w": [
+     {
+      "bestand": "daksneeuw/wit-boerderij4-leien-w-0.png",
+      "b": 397,
+      "h": 436,
+      "anker": [
+       179,
+       363
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij4-leien-w-1.png",
+      "b": 498,
+      "h": 442,
+      "anker": [
+       272,
+       363
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij4-leien-w-2.png",
+      "b": 498,
+      "h": 443,
+      "anker": [
+       272,
+       363
+      ]
+     }
+    ],
+    "wit-boerderij4-pannen-z": [
+     {
+      "bestand": "daksneeuw/wit-boerderij4-pannen-z-0.png",
+      "b": 410,
+      "h": 438,
+      "anker": [
+       223,
+       363
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij4-pannen-z-1.png",
+      "b": 487,
+      "h": 442,
+      "anker": [
+       226,
+       363
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij4-pannen-z-2.png",
+      "b": 497,
+      "h": 443,
+      "anker": [
+       226,
+       363
+      ]
+     }
+    ],
+    "wit-boerderij4-pannen-o": [
+     {
+      "bestand": "daksneeuw/wit-boerderij4-pannen-o-0.png",
+      "b": 397,
+      "h": 445,
+      "anker": [
+       179,
+       374
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij4-pannen-o-1.png",
+      "b": 489,
+      "h": 452,
+      "anker": [
+       263,
+       374
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij4-pannen-o-2.png",
+      "b": 497,
+      "h": 453,
+      "anker": [
+       271,
+       374
+      ]
+     }
+    ],
+    "wit-boerderij4-pannen-n": [
+     {
+      "bestand": "daksneeuw/wit-boerderij4-pannen-n-0.png",
+      "b": 399,
+      "h": 445,
+      "anker": [
+       222,
+       374
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij4-pannen-n-1.png",
+      "b": 458,
+      "h": 452,
+      "anker": [
+       226,
+       374
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij4-pannen-n-2.png",
+      "b": 496,
+      "h": 453,
+      "anker": [
+       226,
+       374
+      ]
+     }
+    ],
+    "wit-boerderij4-pannen-w": [
+     {
+      "bestand": "daksneeuw/wit-boerderij4-pannen-w-0.png",
+      "b": 458,
+      "h": 435,
+      "anker": [
+       240,
+       363
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij4-pannen-w-1.png",
+      "b": 494,
+      "h": 442,
+      "anker": [
+       268,
+       363
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-boerderij4-pannen-w-2.png",
+      "b": 496,
+      "h": 443,
+      "anker": [
+       270,
+       363
+      ]
+     }
+    ],
+    "wit-herberg1-riet-z": [
+     {
+      "bestand": "daksneeuw/wit-herberg1-riet-z-0.png",
+      "b": 601,
+      "h": 439,
+      "anker": [
+       296,
+       337
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-herberg1-riet-z-1.png",
+      "b": 610,
+      "h": 442,
+      "anker": [
+       305,
+       337
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-herberg1-riet-z-2.png",
+      "b": 610,
+      "h": 442,
+      "anker": [
+       305,
+       337
+      ]
+     }
+    ],
+    "wit-herberg1-riet-o": [
+     {
+      "bestand": "daksneeuw/wit-herberg1-riet-o-0.png",
+      "b": 609,
+      "h": 435,
+      "anker": [
+       312,
+       337
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-herberg1-riet-o-1.png",
+      "b": 623,
+      "h": 435,
+      "anker": [
+       318,
+       337
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-herberg1-riet-o-2.png",
+      "b": 623,
+      "h": 438,
+      "anker": [
+       318,
+       337
+      ]
+     }
+    ],
+    "wit-herberg1-riet-n": [
+     {
+      "bestand": "daksneeuw/wit-herberg1-riet-n-0.png",
+      "b": 597,
+      "h": 446,
+      "anker": [
+       202,
+       385
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-herberg1-riet-n-1.png",
+      "b": 610,
+      "h": 449,
+      "anker": [
+       209,
+       385
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-herberg1-riet-n-2.png",
+      "b": 610,
+      "h": 449,
+      "anker": [
+       209,
+       385
+      ]
+     }
+    ],
+    "wit-herberg1-riet-w": [
+     {
+      "bestand": "daksneeuw/wit-herberg1-riet-w-0.png",
+      "b": 614,
+      "h": 439,
+      "anker": [
+       395,
+       385
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-herberg1-riet-w-1.png",
+      "b": 620,
+      "h": 440,
+      "anker": [
+       398,
+       385
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-herberg1-riet-w-2.png",
+      "b": 623,
+      "h": 442,
+      "anker": [
+       401,
+       385
+      ]
+     }
+    ],
+    "wit-herberg2-leien-z": [
+     {
+      "bestand": "daksneeuw/wit-herberg2-leien-z-0.png",
+      "b": 561,
+      "h": 550,
+      "anker": [
+       244,
+       474
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-herberg2-leien-z-1.png",
+      "b": 561,
+      "h": 550,
+      "anker": [
+       244,
+       474
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-herberg2-leien-z-2.png",
+      "b": 674,
+      "h": 550,
+      "anker": [
+       244,
+       474
+      ]
+     }
+    ],
+    "wit-herberg2-leien-o": [
+     {
+      "bestand": "daksneeuw/wit-herberg2-leien-o-0.png",
+      "b": 598,
+      "h": 511,
+      "anker": [
+       364,
+       474
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-herberg2-leien-o-1.png",
+      "b": 660,
+      "h": 511,
+      "anker": [
+       415,
+       474
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-herberg2-leien-o-2.png",
+      "b": 664,
+      "h": 512,
+      "anker": [
+       419,
+       474
+      ]
+     }
+    ],
+    "wit-herberg2-leien-n": [
+     {
+      "bestand": "daksneeuw/wit-herberg2-leien-n-0.png",
+      "b": 562,
+      "h": 485,
+      "anker": [
+       245,
+       474
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-herberg2-leien-n-1.png",
+      "b": 653,
+      "h": 486,
+      "anker": [
+       245,
+       474
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-herberg2-leien-n-2.png",
+      "b": 672,
+      "h": 486,
+      "anker": [
+       245,
+       474
+      ]
+     }
+    ],
+    "wit-herberg2-leien-w": [
+     {
+      "bestand": "daksneeuw/wit-herberg2-leien-w-0.png",
+      "b": 590,
+      "h": 488,
+      "anker": [
+       357,
+       474
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-herberg2-leien-w-1.png",
+      "b": 601,
+      "h": 489,
+      "anker": [
+       357,
+       474
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-herberg2-leien-w-2.png",
+      "b": 659,
+      "h": 489,
+      "anker": [
+       415,
+       474
+      ]
+     }
+    ],
+    "wit-herberg2-pannen-z": [
+     {
+      "bestand": "daksneeuw/wit-herberg2-pannen-z-0.png",
+      "b": 557,
+      "h": 506,
+      "anker": [
+       244,
+       430
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-herberg2-pannen-z-1.png",
+      "b": 673,
+      "h": 506,
+      "anker": [
+       244,
+       430
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-herberg2-pannen-z-2.png",
+      "b": 680,
+      "h": 506,
+      "anker": [
+       244,
+       430
+      ]
+     }
+    ],
+    "wit-herberg2-pannen-o": [
+     {
+      "bestand": "daksneeuw/wit-herberg2-pannen-o-0.png",
+      "b": 555,
+      "h": 466,
+      "anker": [
+       310,
+       429
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-herberg2-pannen-o-1.png",
+      "b": 640,
+      "h": 466,
+      "anker": [
+       395,
+       429
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-herberg2-pannen-o-2.png",
+      "b": 680,
+      "h": 467,
+      "anker": [
+       435,
+       429
+      ]
+     }
+    ],
+    "wit-herberg2-pannen-n": [
+     {
+      "bestand": "daksneeuw/wit-herberg2-pannen-n-0.png",
+      "b": 558,
+      "h": 439,
+      "anker": [
+       245,
+       429
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-herberg2-pannen-n-1.png",
+      "b": 618,
+      "h": 439,
+      "anker": [
+       245,
+       429
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-herberg2-pannen-n-2.png",
+      "b": 680,
+      "h": 439,
+      "anker": [
+       245,
+       429
+      ]
+     }
+    ],
+    "wit-herberg2-pannen-w": [
+     {
+      "bestand": "daksneeuw/wit-herberg2-pannen-w-0.png",
+      "b": 600,
+      "h": 443,
+      "anker": [
+       356,
+       430
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-herberg2-pannen-w-1.png",
+      "b": 673,
+      "h": 443,
+      "anker": [
+       429,
+       430
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-herberg2-pannen-w-2.png",
+      "b": 673,
+      "h": 443,
+      "anker": [
+       429,
+       430
+      ]
+     }
+    ],
+    "wit-kapel-leien-z": [
+     {
+      "bestand": "daksneeuw/wit-kapel-leien-z-0.png",
+      "b": 761,
+      "h": 779,
+      "anker": [
+       222,
+       454
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-kapel-leien-z-1.png",
+      "b": 762,
+      "h": 780,
+      "anker": [
+       222,
+       454
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-kapel-leien-z-2.png",
+      "b": 767,
+      "h": 807,
+      "anker": [
+       222,
+       454
+      ]
+     }
+    ],
+    "wit-kapel-leien-o": [
+     {
+      "bestand": "daksneeuw/wit-kapel-leien-o-0.png",
+      "b": 657,
+      "h": 767,
+      "anker": [
+       480,
+       633
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-kapel-leien-o-1.png",
+      "b": 750,
+      "h": 768,
+      "anker": [
+       571,
+       633
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-kapel-leien-o-2.png",
+      "b": 750,
+      "h": 789,
+      "anker": [
+       571,
+       633
+      ]
+     }
+    ],
+    "wit-kapel-leien-n": [
+     {
+      "bestand": "daksneeuw/wit-kapel-leien-n-0.png",
+      "b": 653,
+      "h": 728,
+      "anker": [
+       173,
+       636
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-kapel-leien-n-1.png",
+      "b": 744,
+      "h": 740,
+      "anker": [
+       173,
+       636
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-kapel-leien-n-2.png",
+      "b": 748,
+      "h": 792,
+      "anker": [
+       177,
+       636
+      ]
+     }
+    ],
+    "wit-kapel-leien-w": [
+     {
+      "bestand": "daksneeuw/wit-kapel-leien-w-0.png",
+      "b": 763,
+      "h": 713,
+      "anker": [
+       541,
+       454
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-kapel-leien-w-1.png",
+      "b": 763,
+      "h": 797,
+      "anker": [
+       541,
+       454
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-kapel-leien-w-2.png",
+      "b": 764,
+      "h": 802,
+      "anker": [
+       542,
+       454
+      ]
+     }
+    ],
+    "wit-kapel-baksteen-z": [
+     {
+      "bestand": "daksneeuw/wit-kapel-baksteen-z-0.png",
+      "b": 761,
+      "h": 779,
+      "anker": [
+       222,
+       454
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-kapel-baksteen-z-1.png",
+      "b": 762,
+      "h": 780,
+      "anker": [
+       222,
+       454
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-kapel-baksteen-z-2.png",
+      "b": 767,
+      "h": 807,
+      "anker": [
+       222,
+       454
+      ]
+     }
+    ],
+    "wit-kapel-baksteen-o": [
+     {
+      "bestand": "daksneeuw/wit-kapel-baksteen-o-0.png",
+      "b": 657,
+      "h": 767,
+      "anker": [
+       480,
+       633
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-kapel-baksteen-o-1.png",
+      "b": 750,
+      "h": 768,
+      "anker": [
+       571,
+       633
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-kapel-baksteen-o-2.png",
+      "b": 750,
+      "h": 789,
+      "anker": [
+       571,
+       633
+      ]
+     }
+    ],
+    "wit-kapel-baksteen-n": [
+     {
+      "bestand": "daksneeuw/wit-kapel-baksteen-n-0.png",
+      "b": 653,
+      "h": 728,
+      "anker": [
+       173,
+       636
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-kapel-baksteen-n-1.png",
+      "b": 744,
+      "h": 740,
+      "anker": [
+       173,
+       636
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-kapel-baksteen-n-2.png",
+      "b": 748,
+      "h": 792,
+      "anker": [
+       177,
+       636
+      ]
+     }
+    ],
+    "wit-kapel-baksteen-w": [
+     {
+      "bestand": "daksneeuw/wit-kapel-baksteen-w-0.png",
+      "b": 763,
+      "h": 713,
+      "anker": [
+       541,
+       454
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-kapel-baksteen-w-1.png",
+      "b": 763,
+      "h": 797,
+      "anker": [
+       541,
+       454
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-kapel-baksteen-w-2.png",
+      "b": 764,
+      "h": 802,
+      "anker": [
+       542,
+       454
+      ]
+     }
+    ],
+    "wit-woontoren-pannen-z": [
+     {
+      "bestand": "daksneeuw/wit-woontoren-pannen-z-0.png",
+      "b": 308,
+      "h": 312,
+      "anker": [
+       206,
+       431
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-woontoren-pannen-z-1.png",
+      "b": 313,
+      "h": 313,
+      "anker": [
+       210,
+       431
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-woontoren-pannen-z-2.png",
+      "b": 407,
+      "h": 313,
+      "anker": [
+       210,
+       431
+      ]
+     }
+    ],
+    "wit-woontoren-pannen-o": [
+     {
+      "bestand": "daksneeuw/wit-woontoren-pannen-o-0.png",
+      "b": 311,
+      "h": 306,
+      "anker": [
+       102,
+       426
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-woontoren-pannen-o-1.png",
+      "b": 399,
+      "h": 307,
+      "anker": [
+       190,
+       426
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-woontoren-pannen-o-2.png",
+      "b": 418,
+      "h": 307,
+      "anker": [
+       209,
+       426
+      ]
+     }
+    ],
+    "wit-woontoren-pannen-n": [
+     {
+      "bestand": "daksneeuw/wit-woontoren-pannen-n-0.png",
+      "b": 306,
+      "h": 303,
+      "anker": [
+       204,
+       426
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-woontoren-pannen-n-1.png",
+      "b": 418,
+      "h": 306,
+      "anker": [
+       209,
+       426
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-woontoren-pannen-n-2.png",
+      "b": 419,
+      "h": 307,
+      "anker": [
+       209,
+       426
+      ]
+     }
+    ],
+    "wit-woontoren-pannen-w": [
+     {
+      "bestand": "daksneeuw/wit-woontoren-pannen-w-0.png",
+      "b": 312,
+      "h": 322,
+      "anker": [
+       103,
+       440
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-woontoren-pannen-w-1.png",
+      "b": 393,
+      "h": 322,
+      "anker": [
+       183,
+       440
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-woontoren-pannen-w-2.png",
+      "b": 411,
+      "h": 322,
+      "anker": [
+       201,
+       440
+      ]
+     }
+    ],
+    "wit-woontoren-baksteen-z": [
+     {
+      "bestand": "daksneeuw/wit-woontoren-baksteen-z-0.png",
+      "b": 308,
+      "h": 312,
+      "anker": [
+       206,
+       431
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-woontoren-baksteen-z-1.png",
+      "b": 313,
+      "h": 313,
+      "anker": [
+       210,
+       431
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-woontoren-baksteen-z-2.png",
+      "b": 407,
+      "h": 313,
+      "anker": [
+       210,
+       431
+      ]
+     }
+    ],
+    "wit-woontoren-baksteen-o": [
+     {
+      "bestand": "daksneeuw/wit-woontoren-baksteen-o-0.png",
+      "b": 311,
+      "h": 306,
+      "anker": [
+       102,
+       426
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-woontoren-baksteen-o-1.png",
+      "b": 399,
+      "h": 307,
+      "anker": [
+       190,
+       426
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-woontoren-baksteen-o-2.png",
+      "b": 418,
+      "h": 307,
+      "anker": [
+       209,
+       426
+      ]
+     }
+    ],
+    "wit-woontoren-baksteen-n": [
+     {
+      "bestand": "daksneeuw/wit-woontoren-baksteen-n-0.png",
+      "b": 306,
+      "h": 303,
+      "anker": [
+       204,
+       426
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-woontoren-baksteen-n-1.png",
+      "b": 418,
+      "h": 306,
+      "anker": [
+       209,
+       426
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-woontoren-baksteen-n-2.png",
+      "b": 419,
+      "h": 307,
+      "anker": [
+       209,
+       426
+      ]
+     }
+    ],
+    "wit-woontoren-baksteen-w": [
+     {
+      "bestand": "daksneeuw/wit-woontoren-baksteen-w-0.png",
+      "b": 312,
+      "h": 322,
+      "anker": [
+       103,
+       440
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-woontoren-baksteen-w-1.png",
+      "b": 393,
+      "h": 322,
+      "anker": [
+       183,
+       440
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-woontoren-baksteen-w-2.png",
+      "b": 411,
+      "h": 322,
+      "anker": [
+       201,
+       440
+      ]
+     }
+    ],
+    "wit-schoutshuis-riet-z": [
+     {
+      "bestand": "daksneeuw/wit-schoutshuis-riet-z-0.png",
+      "b": 571,
+      "h": 639,
+      "anker": [
+       251,
+       568
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-schoutshuis-riet-z-1.png",
+      "b": 582,
+      "h": 639,
+      "anker": [
+       260,
+       568
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-schoutshuis-riet-z-2.png",
+      "b": 585,
+      "h": 639,
+      "anker": [
+       260,
+       568
+      ]
+     }
+    ],
+    "wit-schoutshuis-riet-o": [
+     {
+      "bestand": "daksneeuw/wit-schoutshuis-riet-o-0.png",
+      "b": 569,
+      "h": 628,
+      "anker": [
+       319,
+       558
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-schoutshuis-riet-o-1.png",
+      "b": 578,
+      "h": 628,
+      "anker": [
+       321,
+       558
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-schoutshuis-riet-o-2.png",
+      "b": 585,
+      "h": 628,
+      "anker": [
+       324,
+       558
+      ]
+     }
+    ],
+    "wit-schoutshuis-riet-n": [
+     {
+      "bestand": "daksneeuw/wit-schoutshuis-riet-n-0.png",
+      "b": 571,
+      "h": 502,
+      "anker": [
+       250,
+       558
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-schoutshuis-riet-n-1.png",
+      "b": 582,
+      "h": 502,
+      "anker": [
+       260,
+       558
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-schoutshuis-riet-n-2.png",
+      "b": 585,
+      "h": 509,
+      "anker": [
+       260,
+       558
+      ]
+     }
+    ],
+    "wit-schoutshuis-riet-w": [
+     {
+      "bestand": "daksneeuw/wit-schoutshuis-riet-w-0.png",
+      "b": 571,
+      "h": 515,
+      "anker": [
+       320,
+       568
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-schoutshuis-riet-w-1.png",
+      "b": 583,
+      "h": 519,
+      "anker": [
+       322,
+       568
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-schoutshuis-riet-w-2.png",
+      "b": 585,
+      "h": 520,
+      "anker": [
+       324,
+       568
+      ]
+     }
+    ],
+    "oker-huis2-riet-z": [
+     {
+      "bestand": "daksneeuw/oker-huis2-riet-z-0.png",
+      "b": 476,
+      "h": 468,
+      "anker": [
+       205,
+       448
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis2-riet-z-1.png",
+      "b": 480,
+      "h": 470,
+      "anker": [
+       209,
+       448
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis2-riet-z-2.png",
+      "b": 480,
+      "h": 470,
+      "anker": [
+       209,
+       448
+      ]
+     }
+    ],
+    "oker-huis2-riet-o": [
+     {
+      "bestand": "daksneeuw/oker-huis2-riet-o-0.png",
+      "b": 473,
+      "h": 519,
+      "anker": [
+       267,
+       453
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis2-riet-o-1.png",
+      "b": 476,
+      "h": 519,
+      "anker": [
+       268,
+       453
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis2-riet-o-2.png",
+      "b": 482,
+      "h": 520,
+      "anker": [
+       273,
+       453
+      ]
+     }
+    ],
+    "oker-huis2-riet-n": [
+     {
+      "bestand": "daksneeuw/oker-huis2-riet-n-0.png",
+      "b": 470,
+      "h": 443,
+      "anker": [
+       201,
+       453
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis2-riet-n-1.png",
+      "b": 478,
+      "h": 443,
+      "anker": [
+       209,
+       453
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis2-riet-n-2.png",
+      "b": 482,
+      "h": 444,
+      "anker": [
+       209,
+       453
+      ]
+     }
+    ],
+    "oker-huis2-riet-w": [
+     {
+      "bestand": "daksneeuw/oker-huis2-riet-w-0.png",
+      "b": 475,
+      "h": 437,
+      "anker": [
+       270,
+       448
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis2-riet-w-1.png",
+      "b": 479,
+      "h": 437,
+      "anker": [
+       270,
+       448
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis2-riet-w-2.png",
+      "b": 481,
+      "h": 437,
+      "anker": [
+       272,
+       448
+      ]
+     }
+    ],
+    "oker-huis2-leien-z": [
+     {
+      "bestand": "daksneeuw/oker-huis2-leien-z-0.png",
+      "b": 384,
+      "h": 422,
+      "anker": [
+       186,
+       401
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis2-leien-z-1.png",
+      "b": 429,
+      "h": 422,
+      "anker": [
+       190,
+       401
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis2-leien-z-2.png",
+      "b": 431,
+      "h": 422,
+      "anker": [
+       192,
+       401
+      ]
+     }
+    ],
+    "oker-huis2-leien-o": [
+     {
+      "bestand": "daksneeuw/oker-huis2-leien-o-0.png",
+      "b": 349,
+      "h": 470,
+      "anker": [
+       162,
+       404
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis2-leien-o-1.png",
+      "b": 431,
+      "h": 470,
+      "anker": [
+       240,
+       404
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis2-leien-o-2.png",
+      "b": 433,
+      "h": 471,
+      "anker": [
+       240,
+       404
+      ]
+     }
+    ],
+    "oker-huis2-leien-n": [
+     {
+      "bestand": "daksneeuw/oker-huis2-leien-n-0.png",
+      "b": 356,
+      "h": 395,
+      "anker": [
+       183,
+       407
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis2-leien-n-1.png",
+      "b": 427,
+      "h": 397,
+      "anker": [
+       187,
+       407
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis2-leien-n-2.png",
+      "b": 433,
+      "h": 403,
+      "anker": [
+       193,
+       407
+      ]
+     }
+    ],
+    "oker-huis2-leien-w": [
+     {
+      "bestand": "daksneeuw/oker-huis2-leien-w-0.png",
+      "b": 387,
+      "h": 386,
+      "anker": [
+       195,
+       401
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis2-leien-w-1.png",
+      "b": 431,
+      "h": 386,
+      "anker": [
+       239,
+       401
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis2-leien-w-2.png",
+      "b": 433,
+      "h": 392,
+      "anker": [
+       240,
+       401
+      ]
+     }
+    ],
+    "oker-huis2-pannen-z": [
+     {
+      "bestand": "daksneeuw/oker-huis2-pannen-z-0.png",
+      "b": 346,
+      "h": 422,
+      "anker": [
+       184,
+       401
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis2-pannen-z-1.png",
+      "b": 428,
+      "h": 422,
+      "anker": [
+       190,
+       401
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis2-pannen-z-2.png",
+      "b": 431,
+      "h": 422,
+      "anker": [
+       192,
+       401
+      ]
+     }
+    ],
+    "oker-huis2-pannen-o": [
+     {
+      "bestand": "daksneeuw/oker-huis2-pannen-o-0.png",
+      "b": 349,
+      "h": 470,
+      "anker": [
+       162,
+       404
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis2-pannen-o-1.png",
+      "b": 430,
+      "h": 470,
+      "anker": [
+       239,
+       404
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis2-pannen-o-2.png",
+      "b": 432,
+      "h": 471,
+      "anker": [
+       239,
+       404
+      ]
+     }
+    ],
+    "oker-huis2-pannen-n": [
+     {
+      "bestand": "daksneeuw/oker-huis2-pannen-n-0.png",
+      "b": 360,
+      "h": 398,
+      "anker": [
+       187,
+       407
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis2-pannen-n-1.png",
+      "b": 422,
+      "h": 398,
+      "anker": [
+       187,
+       407
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis2-pannen-n-2.png",
+      "b": 432,
+      "h": 403,
+      "anker": [
+       193,
+       407
+      ]
+     }
+    ],
+    "oker-huis2-pannen-w": [
+     {
+      "bestand": "daksneeuw/oker-huis2-pannen-w-0.png",
+      "b": 354,
+      "h": 386,
+      "anker": [
+       162,
+       401
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis2-pannen-w-1.png",
+      "b": 430,
+      "h": 386,
+      "anker": [
+       238,
+       401
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis2-pannen-w-2.png",
+      "b": 433,
+      "h": 392,
+      "anker": [
+       240,
+       401
+      ]
+     }
+    ],
+    "oker-steen2-leien-z": [
+     {
+      "bestand": "daksneeuw/oker-steen2-leien-z-0.png",
+      "b": 384,
+      "h": 421,
+      "anker": [
+       186,
+       401
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen2-leien-z-1.png",
+      "b": 429,
+      "h": 421,
+      "anker": [
+       190,
+       401
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen2-leien-z-2.png",
+      "b": 431,
+      "h": 421,
+      "anker": [
+       192,
+       401
+      ]
+     }
+    ],
+    "oker-steen2-leien-o": [
+     {
+      "bestand": "daksneeuw/oker-steen2-leien-o-0.png",
+      "b": 349,
+      "h": 470,
+      "anker": [
+       162,
+       404
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen2-leien-o-1.png",
+      "b": 431,
+      "h": 471,
+      "anker": [
+       240,
+       404
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen2-leien-o-2.png",
+      "b": 433,
+      "h": 471,
+      "anker": [
+       240,
+       404
+      ]
+     }
+    ],
+    "oker-steen2-leien-n": [
+     {
+      "bestand": "daksneeuw/oker-steen2-leien-n-0.png",
+      "b": 408,
+      "h": 395,
+      "anker": [
+       183,
+       407
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen2-leien-n-1.png",
+      "b": 427,
+      "h": 397,
+      "anker": [
+       187,
+       407
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen2-leien-n-2.png",
+      "b": 433,
+      "h": 403,
+      "anker": [
+       193,
+       407
+      ]
+     }
+    ],
+    "oker-steen2-leien-w": [
+     {
+      "bestand": "daksneeuw/oker-steen2-leien-w-0.png",
+      "b": 387,
+      "h": 386,
+      "anker": [
+       195,
+       401
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen2-leien-w-1.png",
+      "b": 431,
+      "h": 386,
+      "anker": [
+       239,
+       401
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen2-leien-w-2.png",
+      "b": 433,
+      "h": 392,
+      "anker": [
+       240,
+       401
+      ]
+     }
+    ],
+    "oker-steen2-pannen-z": [
+     {
+      "bestand": "daksneeuw/oker-steen2-pannen-z-0.png",
+      "b": 346,
+      "h": 421,
+      "anker": [
+       184,
+       401
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen2-pannen-z-1.png",
+      "b": 428,
+      "h": 421,
+      "anker": [
+       190,
+       401
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen2-pannen-z-2.png",
+      "b": 431,
+      "h": 421,
+      "anker": [
+       192,
+       401
+      ]
+     }
+    ],
+    "oker-steen2-pannen-o": [
+     {
+      "bestand": "daksneeuw/oker-steen2-pannen-o-0.png",
+      "b": 349,
+      "h": 470,
+      "anker": [
+       162,
+       404
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen2-pannen-o-1.png",
+      "b": 430,
+      "h": 471,
+      "anker": [
+       239,
+       404
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen2-pannen-o-2.png",
+      "b": 432,
+      "h": 471,
+      "anker": [
+       239,
+       404
+      ]
+     }
+    ],
+    "oker-steen2-pannen-n": [
+     {
+      "bestand": "daksneeuw/oker-steen2-pannen-n-0.png",
+      "b": 412,
+      "h": 398,
+      "anker": [
+       187,
+       407
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen2-pannen-n-1.png",
+      "b": 422,
+      "h": 398,
+      "anker": [
+       187,
+       407
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen2-pannen-n-2.png",
+      "b": 432,
+      "h": 403,
+      "anker": [
+       193,
+       407
+      ]
+     }
+    ],
+    "oker-steen2-pannen-w": [
+     {
+      "bestand": "daksneeuw/oker-steen2-pannen-w-0.png",
+      "b": 354,
+      "h": 386,
+      "anker": [
+       162,
+       401
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen2-pannen-w-1.png",
+      "b": 431,
+      "h": 386,
+      "anker": [
+       238,
+       401
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen2-pannen-w-2.png",
+      "b": 433,
+      "h": 392,
+      "anker": [
+       240,
+       401
+      ]
+     }
+    ],
+    "oker-steen2-baksteen-z": [
+     {
+      "bestand": "daksneeuw/oker-steen2-baksteen-z-0.png",
+      "b": 346,
+      "h": 421,
+      "anker": [
+       184,
+       401
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen2-baksteen-z-1.png",
+      "b": 428,
+      "h": 421,
+      "anker": [
+       190,
+       401
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen2-baksteen-z-2.png",
+      "b": 431,
+      "h": 421,
+      "anker": [
+       192,
+       401
+      ]
+     }
+    ],
+    "oker-steen2-baksteen-o": [
+     {
+      "bestand": "daksneeuw/oker-steen2-baksteen-o-0.png",
+      "b": 349,
+      "h": 470,
+      "anker": [
+       162,
+       404
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen2-baksteen-o-1.png",
+      "b": 430,
+      "h": 471,
+      "anker": [
+       239,
+       404
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen2-baksteen-o-2.png",
+      "b": 432,
+      "h": 471,
+      "anker": [
+       239,
+       404
+      ]
+     }
+    ],
+    "oker-steen2-baksteen-n": [
+     {
+      "bestand": "daksneeuw/oker-steen2-baksteen-n-0.png",
+      "b": 412,
+      "h": 398,
+      "anker": [
+       187,
+       407
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen2-baksteen-n-1.png",
+      "b": 422,
+      "h": 398,
+      "anker": [
+       187,
+       407
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen2-baksteen-n-2.png",
+      "b": 432,
+      "h": 403,
+      "anker": [
+       193,
+       407
+      ]
+     }
+    ],
+    "oker-steen2-baksteen-w": [
+     {
+      "bestand": "daksneeuw/oker-steen2-baksteen-w-0.png",
+      "b": 354,
+      "h": 386,
+      "anker": [
+       162,
+       401
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen2-baksteen-w-1.png",
+      "b": 431,
+      "h": 386,
+      "anker": [
+       238,
+       401
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen2-baksteen-w-2.png",
+      "b": 433,
+      "h": 392,
+      "anker": [
+       240,
+       401
+      ]
+     }
+    ],
+    "oker-huis4-riet-z": [
+     {
+      "bestand": "daksneeuw/oker-huis4-riet-z-0.png",
+      "b": 509,
+      "h": 485,
+      "anker": [
+       302,
+       380
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis4-riet-z-1.png",
+      "b": 512,
+      "h": 485,
+      "anker": [
+       304,
+       380
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis4-riet-z-2.png",
+      "b": 513,
+      "h": 486,
+      "anker": [
+       304,
+       380
+      ]
+     }
+    ],
+    "oker-huis4-riet-o": [
+     {
+      "bestand": "daksneeuw/oker-huis4-riet-o-0.png",
+      "b": 607,
+      "h": 416,
+      "anker": [
+       303,
+       321
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis4-riet-o-1.png",
+      "b": 614,
+      "h": 416,
+      "anker": [
+       308,
+       321
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis4-riet-o-2.png",
+      "b": 614,
+      "h": 419,
+      "anker": [
+       308,
+       321
+      ]
+     }
+    ],
+    "oker-huis4-riet-n": [
+     {
+      "bestand": "daksneeuw/oker-huis4-riet-n-0.png",
+      "b": 506,
+      "h": 483,
+      "anker": [
+       205,
+       370
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis4-riet-n-1.png",
+      "b": 513,
+      "h": 483,
+      "anker": [
+       209,
+       370
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis4-riet-n-2.png",
+      "b": 513,
+      "h": 483,
+      "anker": [
+       209,
+       370
+      ]
+     }
+    ],
+    "oker-huis4-riet-w": [
+     {
+      "bestand": "daksneeuw/oker-huis4-riet-w-0.png",
+      "b": 606,
+      "h": 386,
+      "anker": [
+       303,
+       329
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis4-riet-w-1.png",
+      "b": 609,
+      "h": 386,
+      "anker": [
+       305,
+       329
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis4-riet-w-2.png",
+      "b": 614,
+      "h": 386,
+      "anker": [
+       305,
+       329
+      ]
+     }
+    ],
+    "oker-huis4-leien-z": [
+     {
+      "bestand": "daksneeuw/oker-huis4-leien-z-0.png",
+      "b": 433,
+      "h": 441,
+      "anker": [
+       285,
+       332
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis4-leien-z-1.png",
+      "b": 459,
+      "h": 441,
+      "anker": [
+       289,
+       332
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis4-leien-z-2.png",
+      "b": 482,
+      "h": 441,
+      "anker": [
+       289,
+       332
+      ]
+     }
+    ],
+    "oker-huis4-leien-o": [
+     {
+      "bestand": "daksneeuw/oker-huis4-leien-o-0.png",
+      "b": 572,
+      "h": 377,
+      "anker": [
+       285,
+       274
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis4-leien-o-1.png",
+      "b": 581,
+      "h": 383,
+      "anker": [
+       292,
+       274
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis4-leien-o-2.png",
+      "b": 581,
+      "h": 383,
+      "anker": [
+       292,
+       274
+      ]
+     }
+    ],
+    "oker-huis4-leien-n": [
+     {
+      "bestand": "daksneeuw/oker-huis4-leien-n-0.png",
+      "b": 482,
+      "h": 444,
+      "anker": [
+       192,
+       337
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis4-leien-n-1.png",
+      "b": 483,
+      "h": 446,
+      "anker": [
+       193,
+       337
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis4-leien-n-2.png",
+      "b": 483,
+      "h": 452,
+      "anker": [
+       193,
+       337
+      ]
+     }
+    ],
+    "oker-huis4-leien-w": [
+     {
+      "bestand": "daksneeuw/oker-huis4-leien-w-0.png",
+      "b": 469,
+      "h": 349,
+      "anker": [
+       194,
+       289
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis4-leien-w-1.png",
+      "b": 549,
+      "h": 350,
+      "anker": [
+       273,
+       289
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis4-leien-w-2.png",
+      "b": 567,
+      "h": 350,
+      "anker": [
+       289,
+       289
+      ]
+     }
+    ],
+    "oker-huis4-pannen-z": [
+     {
+      "bestand": "daksneeuw/oker-huis4-pannen-z-0.png",
+      "b": 434,
+      "h": 441,
+      "anker": [
+       290,
+       332
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis4-pannen-z-1.png",
+      "b": 460,
+      "h": 441,
+      "anker": [
+       290,
+       332
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis4-pannen-z-2.png",
+      "b": 483,
+      "h": 441,
+      "anker": [
+       290,
+       332
+      ]
+     }
+    ],
+    "oker-huis4-pannen-o": [
+     {
+      "bestand": "daksneeuw/oker-huis4-pannen-o-0.png",
+      "b": 573,
+      "h": 378,
+      "anker": [
+       286,
+       274
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis4-pannen-o-1.png",
+      "b": 581,
+      "h": 383,
+      "anker": [
+       292,
+       274
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis4-pannen-o-2.png",
+      "b": 581,
+      "h": 383,
+      "anker": [
+       292,
+       274
+      ]
+     }
+    ],
+    "oker-huis4-pannen-n": [
+     {
+      "bestand": "daksneeuw/oker-huis4-pannen-n-0.png",
+      "b": 482,
+      "h": 443,
+      "anker": [
+       192,
+       337
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis4-pannen-n-1.png",
+      "b": 483,
+      "h": 446,
+      "anker": [
+       193,
+       337
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis4-pannen-n-2.png",
+      "b": 483,
+      "h": 452,
+      "anker": [
+       193,
+       337
+      ]
+     }
+    ],
+    "oker-huis4-pannen-w": [
+     {
+      "bestand": "daksneeuw/oker-huis4-pannen-w-0.png",
+      "b": 464,
+      "h": 350,
+      "anker": [
+       194,
+       290
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis4-pannen-w-1.png",
+      "b": 545,
+      "h": 351,
+      "anker": [
+       273,
+       290
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis4-pannen-w-2.png",
+      "b": 567,
+      "h": 351,
+      "anker": [
+       289,
+       290
+      ]
+     }
+    ],
+    "oker-steen4-leien-z": [
+     {
+      "bestand": "daksneeuw/oker-steen4-leien-z-0.png",
+      "b": 433,
+      "h": 441,
+      "anker": [
+       285,
+       332
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen4-leien-z-1.png",
+      "b": 459,
+      "h": 441,
+      "anker": [
+       289,
+       332
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen4-leien-z-2.png",
+      "b": 482,
+      "h": 441,
+      "anker": [
+       289,
+       332
+      ]
+     }
+    ],
+    "oker-steen4-leien-o": [
+     {
+      "bestand": "daksneeuw/oker-steen4-leien-o-0.png",
+      "b": 572,
+      "h": 377,
+      "anker": [
+       285,
+       274
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen4-leien-o-1.png",
+      "b": 581,
+      "h": 383,
+      "anker": [
+       292,
+       274
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen4-leien-o-2.png",
+      "b": 581,
+      "h": 383,
+      "anker": [
+       292,
+       274
+      ]
+     }
+    ],
+    "oker-steen4-leien-n": [
+     {
+      "bestand": "daksneeuw/oker-steen4-leien-n-0.png",
+      "b": 482,
+      "h": 444,
+      "anker": [
+       192,
+       337
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen4-leien-n-1.png",
+      "b": 483,
+      "h": 446,
+      "anker": [
+       193,
+       337
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen4-leien-n-2.png",
+      "b": 483,
+      "h": 452,
+      "anker": [
+       193,
+       337
+      ]
+     }
+    ],
+    "oker-steen4-leien-w": [
+     {
+      "bestand": "daksneeuw/oker-steen4-leien-w-0.png",
+      "b": 469,
+      "h": 349,
+      "anker": [
+       194,
+       289
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen4-leien-w-1.png",
+      "b": 549,
+      "h": 350,
+      "anker": [
+       273,
+       289
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen4-leien-w-2.png",
+      "b": 567,
+      "h": 350,
+      "anker": [
+       289,
+       289
+      ]
+     }
+    ],
+    "oker-steen4-pannen-z": [
+     {
+      "bestand": "daksneeuw/oker-steen4-pannen-z-0.png",
+      "b": 434,
+      "h": 441,
+      "anker": [
+       290,
+       332
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen4-pannen-z-1.png",
+      "b": 460,
+      "h": 441,
+      "anker": [
+       290,
+       332
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen4-pannen-z-2.png",
+      "b": 483,
+      "h": 441,
+      "anker": [
+       290,
+       332
+      ]
+     }
+    ],
+    "oker-steen4-pannen-o": [
+     {
+      "bestand": "daksneeuw/oker-steen4-pannen-o-0.png",
+      "b": 573,
+      "h": 378,
+      "anker": [
+       286,
+       274
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen4-pannen-o-1.png",
+      "b": 581,
+      "h": 383,
+      "anker": [
+       292,
+       274
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen4-pannen-o-2.png",
+      "b": 581,
+      "h": 383,
+      "anker": [
+       292,
+       274
+      ]
+     }
+    ],
+    "oker-steen4-pannen-n": [
+     {
+      "bestand": "daksneeuw/oker-steen4-pannen-n-0.png",
+      "b": 482,
+      "h": 443,
+      "anker": [
+       192,
+       337
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen4-pannen-n-1.png",
+      "b": 483,
+      "h": 446,
+      "anker": [
+       193,
+       337
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen4-pannen-n-2.png",
+      "b": 483,
+      "h": 452,
+      "anker": [
+       193,
+       337
+      ]
+     }
+    ],
+    "oker-steen4-pannen-w": [
+     {
+      "bestand": "daksneeuw/oker-steen4-pannen-w-0.png",
+      "b": 464,
+      "h": 350,
+      "anker": [
+       194,
+       290
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen4-pannen-w-1.png",
+      "b": 545,
+      "h": 351,
+      "anker": [
+       273,
+       290
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen4-pannen-w-2.png",
+      "b": 567,
+      "h": 351,
+      "anker": [
+       289,
+       290
+      ]
+     }
+    ],
+    "oker-steen4-baksteen-z": [
+     {
+      "bestand": "daksneeuw/oker-steen4-baksteen-z-0.png",
+      "b": 434,
+      "h": 441,
+      "anker": [
+       290,
+       332
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen4-baksteen-z-1.png",
+      "b": 460,
+      "h": 441,
+      "anker": [
+       290,
+       332
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen4-baksteen-z-2.png",
+      "b": 483,
+      "h": 441,
+      "anker": [
+       290,
+       332
+      ]
+     }
+    ],
+    "oker-steen4-baksteen-o": [
+     {
+      "bestand": "daksneeuw/oker-steen4-baksteen-o-0.png",
+      "b": 573,
+      "h": 378,
+      "anker": [
+       286,
+       274
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen4-baksteen-o-1.png",
+      "b": 581,
+      "h": 383,
+      "anker": [
+       292,
+       274
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen4-baksteen-o-2.png",
+      "b": 581,
+      "h": 383,
+      "anker": [
+       292,
+       274
+      ]
+     }
+    ],
+    "oker-steen4-baksteen-n": [
+     {
+      "bestand": "daksneeuw/oker-steen4-baksteen-n-0.png",
+      "b": 482,
+      "h": 443,
+      "anker": [
+       192,
+       337
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen4-baksteen-n-1.png",
+      "b": 483,
+      "h": 446,
+      "anker": [
+       193,
+       337
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen4-baksteen-n-2.png",
+      "b": 483,
+      "h": 452,
+      "anker": [
+       193,
+       337
+      ]
+     }
+    ],
+    "oker-steen4-baksteen-w": [
+     {
+      "bestand": "daksneeuw/oker-steen4-baksteen-w-0.png",
+      "b": 464,
+      "h": 350,
+      "anker": [
+       194,
+       290
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen4-baksteen-w-1.png",
+      "b": 545,
+      "h": 351,
+      "anker": [
+       273,
+       290
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen4-baksteen-w-2.png",
+      "b": 567,
+      "h": 351,
+      "anker": [
+       289,
+       290
+      ]
+     }
+    ],
+    "oker-huis5-riet-z": [
+     {
+      "bestand": "daksneeuw/oker-huis5-riet-z-0.png",
+      "b": 433,
+      "h": 475,
+      "anker": [
+       200,
+       427
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis5-riet-z-1.png",
+      "b": 447,
+      "h": 475,
+      "anker": [
+       209,
+       427
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis5-riet-z-2.png",
+      "b": 450,
+      "h": 475,
+      "anker": [
+       209,
+       427
+      ]
+     }
+    ],
+    "oker-huis5-riet-o": [
+     {
+      "bestand": "daksneeuw/oker-huis5-riet-o-0.png",
+      "b": 434,
+      "h": 450,
+      "anker": [
+       265,
+       413
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis5-riet-o-1.png",
+      "b": 450,
+      "h": 450,
+      "anker": [
+       273,
+       413
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis5-riet-o-2.png",
+      "b": 450,
+      "h": 450,
+      "anker": [
+       273,
+       413
+      ]
+     }
+    ],
+    "oker-huis5-riet-n": [
+     {
+      "bestand": "daksneeuw/oker-huis5-riet-n-0.png",
+      "b": 435,
+      "h": 421,
+      "anker": [
+       169,
+       434
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis5-riet-n-1.png",
+      "b": 447,
+      "h": 421,
+      "anker": [
+       176,
+       434
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis5-riet-n-2.png",
+      "b": 450,
+      "h": 421,
+      "anker": [
+       177,
+       434
+      ]
+     }
+    ],
+    "oker-huis5-riet-w": [
+     {
+      "bestand": "daksneeuw/oker-huis5-riet-w-0.png",
+      "b": 432,
+      "h": 395,
+      "anker": [
+       233,
+       427
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis5-riet-w-1.png",
+      "b": 450,
+      "h": 395,
+      "anker": [
+       241,
+       427
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis5-riet-w-2.png",
+      "b": 450,
+      "h": 396,
+      "anker": [
+       241,
+       427
+      ]
+     }
+    ],
+    "oker-huis5-leien-z": [
+     {
+      "bestand": "daksneeuw/oker-huis5-leien-z-0.png",
+      "b": 313,
+      "h": 427,
+      "anker": [
+       184,
+       379
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis5-leien-z-1.png",
+      "b": 384,
+      "h": 427,
+      "anker": [
+       190,
+       379
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis5-leien-z-2.png",
+      "b": 393,
+      "h": 427,
+      "anker": [
+       190,
+       379
+      ]
+     }
+    ],
+    "oker-huis5-leien-o": [
+     {
+      "bestand": "daksneeuw/oker-huis5-leien-o-0.png",
+      "b": 312,
+      "h": 395,
+      "anker": [
+       161,
+       358
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis5-leien-o-1.png",
+      "b": 318,
+      "h": 395,
+      "anker": [
+       161,
+       358
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis5-leien-o-2.png",
+      "b": 395,
+      "h": 395,
+      "anker": [
+       237,
+       358
+      ]
+     }
+    ],
+    "oker-huis5-leien-n": [
+     {
+      "bestand": "daksneeuw/oker-huis5-leien-n-0.png",
+      "b": 313,
+      "h": 366,
+      "anker": [
+       152,
+       381
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis5-leien-n-1.png",
+      "b": 385,
+      "h": 372,
+      "anker": [
+       158,
+       381
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis5-leien-n-2.png",
+      "b": 395,
+      "h": 373,
+      "anker": [
+       158,
+       381
+      ]
+     }
+    ],
+    "oker-huis5-leien-w": [
+     {
+      "bestand": "daksneeuw/oker-huis5-leien-w-0.png",
+      "b": 357,
+      "h": 348,
+      "anker": [
+       173,
+       379
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis5-leien-w-1.png",
+      "b": 385,
+      "h": 354,
+      "anker": [
+       196,
+       379
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis5-leien-w-2.png",
+      "b": 395,
+      "h": 355,
+      "anker": [
+       205,
+       379
+      ]
+     }
+    ],
+    "oker-huis5-pannen-z": [
+     {
+      "bestand": "daksneeuw/oker-huis5-pannen-z-0.png",
+      "b": 313,
+      "h": 427,
+      "anker": [
+       184,
+       379
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis5-pannen-z-1.png",
+      "b": 346,
+      "h": 427,
+      "anker": [
+       190,
+       379
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis5-pannen-z-2.png",
+      "b": 393,
+      "h": 427,
+      "anker": [
+       190,
+       379
+      ]
+     }
+    ],
+    "oker-huis5-pannen-o": [
+     {
+      "bestand": "daksneeuw/oker-huis5-pannen-o-0.png",
+      "b": 313,
+      "h": 395,
+      "anker": [
+       161,
+       358
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis5-pannen-o-1.png",
+      "b": 318,
+      "h": 395,
+      "anker": [
+       161,
+       358
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis5-pannen-o-2.png",
+      "b": 395,
+      "h": 395,
+      "anker": [
+       237,
+       358
+      ]
+     }
+    ],
+    "oker-huis5-pannen-n": [
+     {
+      "bestand": "daksneeuw/oker-huis5-pannen-n-0.png",
+      "b": 313,
+      "h": 366,
+      "anker": [
+       152,
+       381
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis5-pannen-n-1.png",
+      "b": 346,
+      "h": 372,
+      "anker": [
+       158,
+       381
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis5-pannen-n-2.png",
+      "b": 395,
+      "h": 373,
+      "anker": [
+       158,
+       381
+      ]
+     }
+    ],
+    "oker-huis5-pannen-w": [
+     {
+      "bestand": "daksneeuw/oker-huis5-pannen-w-0.png",
+      "b": 357,
+      "h": 347,
+      "anker": [
+       173,
+       379
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis5-pannen-w-1.png",
+      "b": 381,
+      "h": 354,
+      "anker": [
+       192,
+       379
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-huis5-pannen-w-2.png",
+      "b": 395,
+      "h": 355,
+      "anker": [
+       205,
+       379
+      ]
+     }
+    ],
+    "oker-steen5-leien-z": [
+     {
+      "bestand": "daksneeuw/oker-steen5-leien-z-0.png",
+      "b": 313,
+      "h": 427,
+      "anker": [
+       184,
+       379
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen5-leien-z-1.png",
+      "b": 384,
+      "h": 427,
+      "anker": [
+       190,
+       379
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen5-leien-z-2.png",
+      "b": 393,
+      "h": 427,
+      "anker": [
+       190,
+       379
+      ]
+     }
+    ],
+    "oker-steen5-leien-o": [
+     {
+      "bestand": "daksneeuw/oker-steen5-leien-o-0.png",
+      "b": 312,
+      "h": 395,
+      "anker": [
+       161,
+       358
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen5-leien-o-1.png",
+      "b": 390,
+      "h": 395,
+      "anker": [
+       233,
+       358
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen5-leien-o-2.png",
+      "b": 395,
+      "h": 395,
+      "anker": [
+       237,
+       358
+      ]
+     }
+    ],
+    "oker-steen5-leien-n": [
+     {
+      "bestand": "daksneeuw/oker-steen5-leien-n-0.png",
+      "b": 313,
+      "h": 366,
+      "anker": [
+       152,
+       381
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen5-leien-n-1.png",
+      "b": 385,
+      "h": 372,
+      "anker": [
+       158,
+       381
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen5-leien-n-2.png",
+      "b": 395,
+      "h": 373,
+      "anker": [
+       158,
+       381
+      ]
+     }
+    ],
+    "oker-steen5-leien-w": [
+     {
+      "bestand": "daksneeuw/oker-steen5-leien-w-0.png",
+      "b": 375,
+      "h": 348,
+      "anker": [
+       191,
+       379
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen5-leien-w-1.png",
+      "b": 385,
+      "h": 354,
+      "anker": [
+       196,
+       379
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen5-leien-w-2.png",
+      "b": 395,
+      "h": 355,
+      "anker": [
+       205,
+       379
+      ]
+     }
+    ],
+    "oker-steen5-pannen-z": [
+     {
+      "bestand": "daksneeuw/oker-steen5-pannen-z-0.png",
+      "b": 313,
+      "h": 427,
+      "anker": [
+       184,
+       379
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen5-pannen-z-1.png",
+      "b": 346,
+      "h": 427,
+      "anker": [
+       190,
+       379
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen5-pannen-z-2.png",
+      "b": 393,
+      "h": 427,
+      "anker": [
+       190,
+       379
+      ]
+     }
+    ],
+    "oker-steen5-pannen-o": [
+     {
+      "bestand": "daksneeuw/oker-steen5-pannen-o-0.png",
+      "b": 313,
+      "h": 395,
+      "anker": [
+       161,
+       358
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen5-pannen-o-1.png",
+      "b": 318,
+      "h": 395,
+      "anker": [
+       161,
+       358
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen5-pannen-o-2.png",
+      "b": 395,
+      "h": 395,
+      "anker": [
+       237,
+       358
+      ]
+     }
+    ],
+    "oker-steen5-pannen-n": [
+     {
+      "bestand": "daksneeuw/oker-steen5-pannen-n-0.png",
+      "b": 313,
+      "h": 366,
+      "anker": [
+       152,
+       381
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen5-pannen-n-1.png",
+      "b": 346,
+      "h": 372,
+      "anker": [
+       158,
+       381
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen5-pannen-n-2.png",
+      "b": 395,
+      "h": 373,
+      "anker": [
+       158,
+       381
+      ]
+     }
+    ],
+    "oker-steen5-pannen-w": [
+     {
+      "bestand": "daksneeuw/oker-steen5-pannen-w-0.png",
+      "b": 375,
+      "h": 347,
+      "anker": [
+       191,
+       379
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen5-pannen-w-1.png",
+      "b": 381,
+      "h": 354,
+      "anker": [
+       192,
+       379
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen5-pannen-w-2.png",
+      "b": 395,
+      "h": 355,
+      "anker": [
+       205,
+       379
+      ]
+     }
+    ],
+    "oker-steen5-baksteen-z": [
+     {
+      "bestand": "daksneeuw/oker-steen5-baksteen-z-0.png",
+      "b": 313,
+      "h": 427,
+      "anker": [
+       184,
+       379
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen5-baksteen-z-1.png",
+      "b": 346,
+      "h": 427,
+      "anker": [
+       190,
+       379
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen5-baksteen-z-2.png",
+      "b": 393,
+      "h": 427,
+      "anker": [
+       190,
+       379
+      ]
+     }
+    ],
+    "oker-steen5-baksteen-o": [
+     {
+      "bestand": "daksneeuw/oker-steen5-baksteen-o-0.png",
+      "b": 313,
+      "h": 395,
+      "anker": [
+       161,
+       358
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen5-baksteen-o-1.png",
+      "b": 318,
+      "h": 395,
+      "anker": [
+       161,
+       358
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen5-baksteen-o-2.png",
+      "b": 395,
+      "h": 395,
+      "anker": [
+       237,
+       358
+      ]
+     }
+    ],
+    "oker-steen5-baksteen-n": [
+     {
+      "bestand": "daksneeuw/oker-steen5-baksteen-n-0.png",
+      "b": 313,
+      "h": 366,
+      "anker": [
+       152,
+       381
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen5-baksteen-n-1.png",
+      "b": 346,
+      "h": 372,
+      "anker": [
+       158,
+       381
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen5-baksteen-n-2.png",
+      "b": 395,
+      "h": 373,
+      "anker": [
+       158,
+       381
+      ]
+     }
+    ],
+    "oker-steen5-baksteen-w": [
+     {
+      "bestand": "daksneeuw/oker-steen5-baksteen-w-0.png",
+      "b": 375,
+      "h": 347,
+      "anker": [
+       191,
+       379
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen5-baksteen-w-1.png",
+      "b": 381,
+      "h": 354,
+      "anker": [
+       192,
+       379
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-steen5-baksteen-w-2.png",
+      "b": 395,
+      "h": 355,
+      "anker": [
+       205,
+       379
+      ]
+     }
+    ],
+    "oker-boerderij6-riet-z": [
+     {
+      "bestand": "daksneeuw/oker-boerderij6-riet-z-0.png",
+      "b": 588,
+      "h": 461,
+      "anker": [
+       225,
+       353
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij6-riet-z-1.png",
+      "b": 596,
+      "h": 461,
+      "anker": [
+       226,
+       353
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij6-riet-z-2.png",
+      "b": 598,
+      "h": 461,
+      "anker": [
+       228,
+       353
+      ]
+     }
+    ],
+    "oker-boerderij6-riet-o": [
+     {
+      "bestand": "daksneeuw/oker-boerderij6-riet-o-0.png",
+      "b": 567,
+      "h": 486,
+      "anker": [
+       366,
+       361
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij6-riet-o-1.png",
+      "b": 578,
+      "h": 486,
+      "anker": [
+       369,
+       361
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij6-riet-o-2.png",
+      "b": 578,
+      "h": 486,
+      "anker": [
+       369,
+       361
+      ]
+     }
+    ],
+    "oker-boerderij6-riet-n": [
+     {
+      "bestand": "daksneeuw/oker-boerderij6-riet-n-0.png",
+      "b": 593,
+      "h": 460,
+      "anker": [
+       300,
+       313
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij6-riet-n-1.png",
+      "b": 598,
+      "h": 460,
+      "anker": [
+       305,
+       313
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij6-riet-n-2.png",
+      "b": 598,
+      "h": 460,
+      "anker": [
+       305,
+       313
+      ]
+     }
+    ],
+    "oker-boerderij6-riet-w": [
+     {
+      "bestand": "daksneeuw/oker-boerderij6-riet-w-0.png",
+      "b": 569,
+      "h": 449,
+      "anker": [
+       267,
+       305
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij6-riet-w-1.png",
+      "b": 572,
+      "h": 449,
+      "anker": [
+       267,
+       305
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij6-riet-w-2.png",
+      "b": 578,
+      "h": 449,
+      "anker": [
+       273,
+       305
+      ]
+     }
+    ],
+    "oker-boerderij6-leien-z": [
+     {
+      "bestand": "daksneeuw/oker-boerderij6-leien-z-0.png",
+      "b": 451,
+      "h": 414,
+      "anker": [
+       193,
+       306
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij6-leien-z-1.png",
+      "b": 527,
+      "h": 414,
+      "anker": [
+       199,
+       306
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij6-leien-z-2.png",
+      "b": 534,
+      "h": 414,
+      "anker": [
+       199,
+       306
+      ]
+     }
+    ],
+    "oker-boerderij6-leien-o": [
+     {
+      "bestand": "daksneeuw/oker-boerderij6-leien-o-0.png",
+      "b": 439,
+      "h": 438,
+      "anker": [
+       257,
+       313
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij6-leien-o-1.png",
+      "b": 517,
+      "h": 438,
+      "anker": [
+       326,
+       313
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij6-leien-o-2.png",
+      "b": 527,
+      "h": 438,
+      "anker": [
+       336,
+       313
+      ]
+     }
+    ],
+    "oker-boerderij6-leien-n": [
+     {
+      "bestand": "daksneeuw/oker-boerderij6-leien-n-0.png",
+      "b": 560,
+      "h": 420,
+      "anker": [
+       283,
+       272
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij6-leien-n-1.png",
+      "b": 564,
+      "h": 420,
+      "anker": [
+       287,
+       272
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij6-leien-n-2.png",
+      "b": 564,
+      "h": 421,
+      "anker": [
+       287,
+       272
+      ]
+     }
+    ],
+    "oker-boerderij6-leien-w": [
+     {
+      "bestand": "daksneeuw/oker-boerderij6-leien-w-0.png",
+      "b": 522,
+      "h": 401,
+      "anker": [
+       238,
+       258
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij6-leien-w-1.png",
+      "b": 527,
+      "h": 405,
+      "anker": [
+       238,
+       258
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij6-leien-w-2.png",
+      "b": 527,
+      "h": 407,
+      "anker": [
+       238,
+       258
+      ]
+     }
+    ],
+    "oker-boerderij6-pannen-z": [
+     {
+      "bestand": "daksneeuw/oker-boerderij6-pannen-z-0.png",
+      "b": 451,
+      "h": 414,
+      "anker": [
+       193,
+       306
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij6-pannen-z-1.png",
+      "b": 528,
+      "h": 414,
+      "anker": [
+       199,
+       306
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij6-pannen-z-2.png",
+      "b": 534,
+      "h": 414,
+      "anker": [
+       199,
+       306
+      ]
+     }
+    ],
+    "oker-boerderij6-pannen-o": [
+     {
+      "bestand": "daksneeuw/oker-boerderij6-pannen-o-0.png",
+      "b": 440,
+      "h": 438,
+      "anker": [
+       257,
+       313
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij6-pannen-o-1.png",
+      "b": 506,
+      "h": 438,
+      "anker": [
+       315,
+       313
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij6-pannen-o-2.png",
+      "b": 527,
+      "h": 438,
+      "anker": [
+       336,
+       313
+      ]
+     }
+    ],
+    "oker-boerderij6-pannen-n": [
+     {
+      "bestand": "daksneeuw/oker-boerderij6-pannen-n-0.png",
+      "b": 560,
+      "h": 420,
+      "anker": [
+       283,
+       272
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij6-pannen-n-1.png",
+      "b": 564,
+      "h": 420,
+      "anker": [
+       287,
+       272
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij6-pannen-n-2.png",
+      "b": 564,
+      "h": 421,
+      "anker": [
+       287,
+       272
+      ]
+     }
+    ],
+    "oker-boerderij6-pannen-w": [
+     {
+      "bestand": "daksneeuw/oker-boerderij6-pannen-w-0.png",
+      "b": 522,
+      "h": 402,
+      "anker": [
+       238,
+       258
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij6-pannen-w-1.png",
+      "b": 527,
+      "h": 405,
+      "anker": [
+       238,
+       258
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij6-pannen-w-2.png",
+      "b": 527,
+      "h": 407,
+      "anker": [
+       238,
+       258
+      ]
+     }
+    ],
+    "oker-boerderij7-riet-z": [
+     {
+      "bestand": "daksneeuw/oker-boerderij7-riet-z-0.png",
+      "b": 566,
+      "h": 513,
+      "anker": [
+       236,
+       445
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij7-riet-z-1.png",
+      "b": 577,
+      "h": 513,
+      "anker": [
+       241,
+       445
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij7-riet-z-2.png",
+      "b": 578,
+      "h": 513,
+      "anker": [
+       241,
+       445
+      ]
+     }
+    ],
+    "oker-boerderij7-riet-o": [
+     {
+      "bestand": "daksneeuw/oker-boerderij7-riet-o-0.png",
+      "b": 572,
+      "h": 529,
+      "anker": [
+       333,
+       439
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij7-riet-o-1.png",
+      "b": 574,
+      "h": 529,
+      "anker": [
+       333,
+       439
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij7-riet-o-2.png",
+      "b": 578,
+      "h": 529,
+      "anker": [
+       337,
+       439
+      ]
+     }
+    ],
+    "oker-boerderij7-riet-n": [
+     {
+      "bestand": "daksneeuw/oker-boerderij7-riet-n-0.png",
+      "b": 570,
+      "h": 481,
+      "anker": [
+       238,
+       439
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij7-riet-n-1.png",
+      "b": 577,
+      "h": 481,
+      "anker": [
+       241,
+       439
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij7-riet-n-2.png",
+      "b": 578,
+      "h": 482,
+      "anker": [
+       241,
+       439
+      ]
+     }
+    ],
+    "oker-boerderij7-riet-w": [
+     {
+      "bestand": "daksneeuw/oker-boerderij7-riet-w-0.png",
+      "b": 565,
+      "h": 483,
+      "anker": [
+       329,
+       445
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij7-riet-w-1.png",
+      "b": 574,
+      "h": 483,
+      "anker": [
+       333,
+       445
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij7-riet-w-2.png",
+      "b": 578,
+      "h": 484,
+      "anker": [
+       337,
+       445
+      ]
+     }
+    ],
+    "oker-boerderij7-leien-z": [
+     {
+      "bestand": "daksneeuw/oker-boerderij7-leien-z-0.png",
+      "b": 431,
+      "h": 466,
+      "anker": [
+       222,
+       397
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij7-leien-z-1.png",
+      "b": 524,
+      "h": 466,
+      "anker": [
+       225,
+       397
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij7-leien-z-2.png",
+      "b": 528,
+      "h": 466,
+      "anker": [
+       225,
+       397
+      ]
+     }
+    ],
+    "oker-boerderij7-leien-o": [
+     {
+      "bestand": "daksneeuw/oker-boerderij7-leien-o-0.png",
+      "b": 430,
+      "h": 480,
+      "anker": [
+       211,
+       391
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij7-leien-o-1.png",
+      "b": 523,
+      "h": 481,
+      "anker": [
+       298,
+       391
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij7-leien-o-2.png",
+      "b": 526,
+      "h": 481,
+      "anker": [
+       301,
+       391
+      ]
+     }
+    ],
+    "oker-boerderij7-leien-n": [
+     {
+      "bestand": "daksneeuw/oker-boerderij7-leien-n-0.png",
+      "b": 434,
+      "h": 436,
+      "anker": [
+       223,
+       391
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij7-leien-n-1.png",
+      "b": 526,
+      "h": 436,
+      "anker": [
+       225,
+       391
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij7-leien-n-2.png",
+      "b": 527,
+      "h": 437,
+      "anker": [
+       225,
+       391
+      ]
+     }
+    ],
+    "oker-boerderij7-leien-w": [
+     {
+      "bestand": "daksneeuw/oker-boerderij7-leien-w-0.png",
+      "b": 476,
+      "h": 440,
+      "anker": [
+       252,
+       397
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij7-leien-w-1.png",
+      "b": 528,
+      "h": 440,
+      "anker": [
+       303,
+       397
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij7-leien-w-2.png",
+      "b": 528,
+      "h": 440,
+      "anker": [
+       303,
+       397
+      ]
+     }
+    ],
+    "oker-boerderij7-pannen-z": [
+     {
+      "bestand": "daksneeuw/oker-boerderij7-pannen-z-0.png",
+      "b": 431,
+      "h": 466,
+      "anker": [
+       222,
+       397
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij7-pannen-z-1.png",
+      "b": 524,
+      "h": 466,
+      "anker": [
+       225,
+       397
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij7-pannen-z-2.png",
+      "b": 527,
+      "h": 466,
+      "anker": [
+       225,
+       397
+      ]
+     }
+    ],
+    "oker-boerderij7-pannen-o": [
+     {
+      "bestand": "daksneeuw/oker-boerderij7-pannen-o-0.png",
+      "b": 430,
+      "h": 480,
+      "anker": [
+       211,
+       391
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij7-pannen-o-1.png",
+      "b": 521,
+      "h": 481,
+      "anker": [
+       296,
+       391
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij7-pannen-o-2.png",
+      "b": 526,
+      "h": 481,
+      "anker": [
+       301,
+       391
+      ]
+     }
+    ],
+    "oker-boerderij7-pannen-n": [
+     {
+      "bestand": "daksneeuw/oker-boerderij7-pannen-n-0.png",
+      "b": 434,
+      "h": 436,
+      "anker": [
+       223,
+       391
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij7-pannen-n-1.png",
+      "b": 526,
+      "h": 436,
+      "anker": [
+       225,
+       391
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij7-pannen-n-2.png",
+      "b": 527,
+      "h": 437,
+      "anker": [
+       225,
+       391
+      ]
+     }
+    ],
+    "oker-boerderij7-pannen-w": [
+     {
+      "bestand": "daksneeuw/oker-boerderij7-pannen-w-0.png",
+      "b": 476,
+      "h": 440,
+      "anker": [
+       252,
+       397
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij7-pannen-w-1.png",
+      "b": 479,
+      "h": 440,
+      "anker": [
+       254,
+       397
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-boerderij7-pannen-w-2.png",
+      "b": 526,
+      "h": 440,
+      "anker": [
+       301,
+       397
+      ]
+     }
+    ],
+    "oker-herberg1-riet-z": [
+     {
+      "bestand": "daksneeuw/oker-herberg1-riet-z-0.png",
+      "b": 601,
+      "h": 439,
+      "anker": [
+       296,
+       337
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-herberg1-riet-z-1.png",
+      "b": 610,
+      "h": 442,
+      "anker": [
+       305,
+       337
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-herberg1-riet-z-2.png",
+      "b": 610,
+      "h": 442,
+      "anker": [
+       305,
+       337
+      ]
+     }
+    ],
+    "oker-herberg1-riet-o": [
+     {
+      "bestand": "daksneeuw/oker-herberg1-riet-o-0.png",
+      "b": 609,
+      "h": 435,
+      "anker": [
+       312,
+       337
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-herberg1-riet-o-1.png",
+      "b": 623,
+      "h": 435,
+      "anker": [
+       318,
+       337
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-herberg1-riet-o-2.png",
+      "b": 623,
+      "h": 438,
+      "anker": [
+       318,
+       337
+      ]
+     }
+    ],
+    "oker-herberg1-riet-n": [
+     {
+      "bestand": "daksneeuw/oker-herberg1-riet-n-0.png",
+      "b": 597,
+      "h": 446,
+      "anker": [
+       202,
+       385
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-herberg1-riet-n-1.png",
+      "b": 610,
+      "h": 449,
+      "anker": [
+       209,
+       385
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-herberg1-riet-n-2.png",
+      "b": 610,
+      "h": 449,
+      "anker": [
+       209,
+       385
+      ]
+     }
+    ],
+    "oker-herberg1-riet-w": [
+     {
+      "bestand": "daksneeuw/oker-herberg1-riet-w-0.png",
+      "b": 614,
+      "h": 439,
+      "anker": [
+       395,
+       385
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-herberg1-riet-w-1.png",
+      "b": 620,
+      "h": 440,
+      "anker": [
+       398,
+       385
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-herberg1-riet-w-2.png",
+      "b": 623,
+      "h": 442,
+      "anker": [
+       401,
+       385
+      ]
+     }
+    ],
+    "oker-herberg2-leien-z": [
+     {
+      "bestand": "daksneeuw/oker-herberg2-leien-z-0.png",
+      "b": 561,
+      "h": 550,
+      "anker": [
+       244,
+       474
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-herberg2-leien-z-1.png",
+      "b": 561,
+      "h": 550,
+      "anker": [
+       244,
+       474
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-herberg2-leien-z-2.png",
+      "b": 674,
+      "h": 550,
+      "anker": [
+       244,
+       474
+      ]
+     }
+    ],
+    "oker-herberg2-leien-o": [
+     {
+      "bestand": "daksneeuw/oker-herberg2-leien-o-0.png",
+      "b": 598,
+      "h": 511,
+      "anker": [
+       364,
+       474
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-herberg2-leien-o-1.png",
+      "b": 660,
+      "h": 511,
+      "anker": [
+       415,
+       474
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-herberg2-leien-o-2.png",
+      "b": 664,
+      "h": 512,
+      "anker": [
+       419,
+       474
+      ]
+     }
+    ],
+    "oker-herberg2-leien-n": [
+     {
+      "bestand": "daksneeuw/oker-herberg2-leien-n-0.png",
+      "b": 562,
+      "h": 485,
+      "anker": [
+       245,
+       474
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-herberg2-leien-n-1.png",
+      "b": 653,
+      "h": 486,
+      "anker": [
+       245,
+       474
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-herberg2-leien-n-2.png",
+      "b": 672,
+      "h": 486,
+      "anker": [
+       245,
+       474
+      ]
+     }
+    ],
+    "oker-herberg2-leien-w": [
+     {
+      "bestand": "daksneeuw/oker-herberg2-leien-w-0.png",
+      "b": 590,
+      "h": 488,
+      "anker": [
+       357,
+       474
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-herberg2-leien-w-1.png",
+      "b": 601,
+      "h": 489,
+      "anker": [
+       357,
+       474
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-herberg2-leien-w-2.png",
+      "b": 659,
+      "h": 489,
+      "anker": [
+       415,
+       474
+      ]
+     }
+    ],
+    "oker-herberg2-pannen-z": [
+     {
+      "bestand": "daksneeuw/oker-herberg2-pannen-z-0.png",
+      "b": 557,
+      "h": 506,
+      "anker": [
+       244,
+       430
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-herberg2-pannen-z-1.png",
+      "b": 673,
+      "h": 506,
+      "anker": [
+       244,
+       430
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-herberg2-pannen-z-2.png",
+      "b": 680,
+      "h": 506,
+      "anker": [
+       244,
+       430
+      ]
+     }
+    ],
+    "oker-herberg2-pannen-o": [
+     {
+      "bestand": "daksneeuw/oker-herberg2-pannen-o-0.png",
+      "b": 555,
+      "h": 466,
+      "anker": [
+       310,
+       429
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-herberg2-pannen-o-1.png",
+      "b": 640,
+      "h": 466,
+      "anker": [
+       395,
+       429
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-herberg2-pannen-o-2.png",
+      "b": 680,
+      "h": 467,
+      "anker": [
+       435,
+       429
+      ]
+     }
+    ],
+    "oker-herberg2-pannen-n": [
+     {
+      "bestand": "daksneeuw/oker-herberg2-pannen-n-0.png",
+      "b": 558,
+      "h": 439,
+      "anker": [
+       245,
+       429
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-herberg2-pannen-n-1.png",
+      "b": 618,
+      "h": 439,
+      "anker": [
+       245,
+       429
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-herberg2-pannen-n-2.png",
+      "b": 680,
+      "h": 439,
+      "anker": [
+       245,
+       429
+      ]
+     }
+    ],
+    "oker-herberg2-pannen-w": [
+     {
+      "bestand": "daksneeuw/oker-herberg2-pannen-w-0.png",
+      "b": 600,
+      "h": 443,
+      "anker": [
+       356,
+       430
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-herberg2-pannen-w-1.png",
+      "b": 673,
+      "h": 443,
+      "anker": [
+       429,
+       430
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-herberg2-pannen-w-2.png",
+      "b": 673,
+      "h": 443,
+      "anker": [
+       429,
+       430
+      ]
+     }
+    ],
+    "oker-kapel-leien-z": [
+     {
+      "bestand": "daksneeuw/oker-kapel-leien-z-0.png",
+      "b": 727,
+      "h": 1062,
+      "anker": [
+       222,
+       753
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-kapel-leien-z-1.png",
+      "b": 727,
+      "h": 1078,
+      "anker": [
+       222,
+       753
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-kapel-leien-z-2.png",
+      "b": 727,
+      "h": 1081,
+      "anker": [
+       222,
+       753
+      ]
+     }
+    ],
+    "oker-kapel-leien-o": [
+     {
+      "bestand": "daksneeuw/oker-kapel-leien-o-0.png",
+      "b": 622,
+      "h": 1062,
+      "anker": [
+       448,
+       944
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-kapel-leien-o-1.png",
+      "b": 713,
+      "h": 1062,
+      "anker": [
+       539,
+       944
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-kapel-leien-o-2.png",
+      "b": 713,
+      "h": 1069,
+      "anker": [
+       539,
+       944
+      ]
+     }
+    ],
+    "oker-kapel-leien-n": [
+     {
+      "bestand": "daksneeuw/oker-kapel-leien-n-0.png",
+      "b": 617,
+      "h": 1023,
+      "anker": [
+       169,
+       947
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-kapel-leien-n-1.png",
+      "b": 708,
+      "h": 1023,
+      "anker": [
+       169,
+       947
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-kapel-leien-n-2.png",
+      "b": 708,
+      "h": 1071,
+      "anker": [
+       169,
+       947
+      ]
+     }
+    ],
+    "oker-kapel-leien-w": [
+     {
+      "bestand": "daksneeuw/oker-kapel-leien-w-0.png",
+      "b": 732,
+      "h": 992,
+      "anker": [
+       510,
+       749
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-kapel-leien-w-1.png",
+      "b": 732,
+      "h": 1084,
+      "anker": [
+       510,
+       756
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-kapel-leien-w-2.png",
+      "b": 732,
+      "h": 1085,
+      "anker": [
+       510,
+       756
+      ]
+     }
+    ],
+    "oker-kapel-baksteen-z": [
+     {
+      "bestand": "daksneeuw/oker-kapel-baksteen-z-0.png",
+      "b": 727,
+      "h": 1062,
+      "anker": [
+       222,
+       753
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-kapel-baksteen-z-1.png",
+      "b": 727,
+      "h": 1078,
+      "anker": [
+       222,
+       753
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-kapel-baksteen-z-2.png",
+      "b": 727,
+      "h": 1081,
+      "anker": [
+       222,
+       753
+      ]
+     }
+    ],
+    "oker-kapel-baksteen-o": [
+     {
+      "bestand": "daksneeuw/oker-kapel-baksteen-o-0.png",
+      "b": 622,
+      "h": 1062,
+      "anker": [
+       448,
+       944
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-kapel-baksteen-o-1.png",
+      "b": 713,
+      "h": 1062,
+      "anker": [
+       539,
+       944
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-kapel-baksteen-o-2.png",
+      "b": 713,
+      "h": 1069,
+      "anker": [
+       539,
+       944
+      ]
+     }
+    ],
+    "oker-kapel-baksteen-n": [
+     {
+      "bestand": "daksneeuw/oker-kapel-baksteen-n-0.png",
+      "b": 617,
+      "h": 1023,
+      "anker": [
+       169,
+       947
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-kapel-baksteen-n-1.png",
+      "b": 708,
+      "h": 1023,
+      "anker": [
+       169,
+       947
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-kapel-baksteen-n-2.png",
+      "b": 708,
+      "h": 1071,
+      "anker": [
+       169,
+       947
+      ]
+     }
+    ],
+    "oker-kapel-baksteen-w": [
+     {
+      "bestand": "daksneeuw/oker-kapel-baksteen-w-0.png",
+      "b": 732,
+      "h": 992,
+      "anker": [
+       510,
+       749
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-kapel-baksteen-w-1.png",
+      "b": 732,
+      "h": 1084,
+      "anker": [
+       510,
+       756
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-kapel-baksteen-w-2.png",
+      "b": 732,
+      "h": 1085,
+      "anker": [
+       510,
+       756
+      ]
+     }
+    ],
+    "oker-woontoren-pannen-z": [
+     {
+      "bestand": "daksneeuw/oker-woontoren-pannen-z-0.png",
+      "b": 308,
+      "h": 312,
+      "anker": [
+       206,
+       431
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-woontoren-pannen-z-1.png",
+      "b": 313,
+      "h": 313,
+      "anker": [
+       210,
+       431
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-woontoren-pannen-z-2.png",
+      "b": 407,
+      "h": 313,
+      "anker": [
+       210,
+       431
+      ]
+     }
+    ],
+    "oker-woontoren-pannen-o": [
+     {
+      "bestand": "daksneeuw/oker-woontoren-pannen-o-0.png",
+      "b": 311,
+      "h": 306,
+      "anker": [
+       102,
+       426
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-woontoren-pannen-o-1.png",
+      "b": 399,
+      "h": 307,
+      "anker": [
+       190,
+       426
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-woontoren-pannen-o-2.png",
+      "b": 418,
+      "h": 307,
+      "anker": [
+       209,
+       426
+      ]
+     }
+    ],
+    "oker-woontoren-pannen-n": [
+     {
+      "bestand": "daksneeuw/oker-woontoren-pannen-n-0.png",
+      "b": 306,
+      "h": 303,
+      "anker": [
+       204,
+       426
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-woontoren-pannen-n-1.png",
+      "b": 418,
+      "h": 306,
+      "anker": [
+       209,
+       426
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-woontoren-pannen-n-2.png",
+      "b": 419,
+      "h": 307,
+      "anker": [
+       209,
+       426
+      ]
+     }
+    ],
+    "oker-woontoren-pannen-w": [
+     {
+      "bestand": "daksneeuw/oker-woontoren-pannen-w-0.png",
+      "b": 312,
+      "h": 322,
+      "anker": [
+       103,
+       440
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-woontoren-pannen-w-1.png",
+      "b": 393,
+      "h": 322,
+      "anker": [
+       183,
+       440
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-woontoren-pannen-w-2.png",
+      "b": 411,
+      "h": 322,
+      "anker": [
+       201,
+       440
+      ]
+     }
+    ],
+    "oker-woontoren-baksteen-z": [
+     {
+      "bestand": "daksneeuw/oker-woontoren-baksteen-z-0.png",
+      "b": 308,
+      "h": 312,
+      "anker": [
+       206,
+       431
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-woontoren-baksteen-z-1.png",
+      "b": 313,
+      "h": 313,
+      "anker": [
+       210,
+       431
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-woontoren-baksteen-z-2.png",
+      "b": 407,
+      "h": 313,
+      "anker": [
+       210,
+       431
+      ]
+     }
+    ],
+    "oker-woontoren-baksteen-o": [
+     {
+      "bestand": "daksneeuw/oker-woontoren-baksteen-o-0.png",
+      "b": 311,
+      "h": 306,
+      "anker": [
+       102,
+       426
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-woontoren-baksteen-o-1.png",
+      "b": 399,
+      "h": 307,
+      "anker": [
+       190,
+       426
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-woontoren-baksteen-o-2.png",
+      "b": 418,
+      "h": 307,
+      "anker": [
+       209,
+       426
+      ]
+     }
+    ],
+    "oker-woontoren-baksteen-n": [
+     {
+      "bestand": "daksneeuw/oker-woontoren-baksteen-n-0.png",
+      "b": 306,
+      "h": 303,
+      "anker": [
+       204,
+       426
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-woontoren-baksteen-n-1.png",
+      "b": 418,
+      "h": 306,
+      "anker": [
+       209,
+       426
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-woontoren-baksteen-n-2.png",
+      "b": 419,
+      "h": 307,
+      "anker": [
+       209,
+       426
+      ]
+     }
+    ],
+    "oker-woontoren-baksteen-w": [
+     {
+      "bestand": "daksneeuw/oker-woontoren-baksteen-w-0.png",
+      "b": 312,
+      "h": 322,
+      "anker": [
+       103,
+       440
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-woontoren-baksteen-w-1.png",
+      "b": 393,
+      "h": 322,
+      "anker": [
+       183,
+       440
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-woontoren-baksteen-w-2.png",
+      "b": 411,
+      "h": 322,
+      "anker": [
+       201,
+       440
+      ]
+     }
+    ],
+    "oker-schoutshuis-riet-z": [
+     {
+      "bestand": "daksneeuw/oker-schoutshuis-riet-z-0.png",
+      "b": 571,
+      "h": 639,
+      "anker": [
+       251,
+       568
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-schoutshuis-riet-z-1.png",
+      "b": 582,
+      "h": 639,
+      "anker": [
+       260,
+       568
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-schoutshuis-riet-z-2.png",
+      "b": 585,
+      "h": 639,
+      "anker": [
+       260,
+       568
+      ]
+     }
+    ],
+    "oker-schoutshuis-riet-o": [
+     {
+      "bestand": "daksneeuw/oker-schoutshuis-riet-o-0.png",
+      "b": 569,
+      "h": 628,
+      "anker": [
+       319,
+       558
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-schoutshuis-riet-o-1.png",
+      "b": 578,
+      "h": 628,
+      "anker": [
+       321,
+       558
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-schoutshuis-riet-o-2.png",
+      "b": 585,
+      "h": 628,
+      "anker": [
+       324,
+       558
+      ]
+     }
+    ],
+    "oker-schoutshuis-riet-n": [
+     {
+      "bestand": "daksneeuw/oker-schoutshuis-riet-n-0.png",
+      "b": 571,
+      "h": 502,
+      "anker": [
+       250,
+       558
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-schoutshuis-riet-n-1.png",
+      "b": 582,
+      "h": 502,
+      "anker": [
+       260,
+       558
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-schoutshuis-riet-n-2.png",
+      "b": 585,
+      "h": 509,
+      "anker": [
+       260,
+       558
+      ]
+     }
+    ],
+    "oker-schoutshuis-riet-w": [
+     {
+      "bestand": "daksneeuw/oker-schoutshuis-riet-w-0.png",
+      "b": 571,
+      "h": 515,
+      "anker": [
+       320,
+       568
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-schoutshuis-riet-w-1.png",
+      "b": 583,
+      "h": 519,
+      "anker": [
+       322,
+       568
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-schoutshuis-riet-w-2.png",
+      "b": 585,
+      "h": 520,
+      "anker": [
+       324,
+       568
+      ]
+     }
+    ],
+    "planken-hut1-spanen-z": [
+     {
+      "bestand": "daksneeuw/planken-hut1-spanen-z-0.png",
+      "b": 291,
+      "h": 269,
+      "anker": [
+       157,
+       240
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-hut1-spanen-z-1.png",
+      "b": 327,
+      "h": 269,
+      "anker": [
+       157,
+       240
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-hut1-spanen-z-2.png",
+      "b": 347,
+      "h": 338,
+      "anker": [
+       157,
+       240
+      ]
+     }
+    ],
+    "planken-hut1-spanen-o": [
+     {
+      "bestand": "daksneeuw/planken-hut1-spanen-o-0.png",
+      "b": 265,
+      "h": 256,
+      "anker": [
+       141,
+       215
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-hut1-spanen-o-1.png",
+      "b": 328,
+      "h": 261,
+      "anker": [
+       202,
+       215
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-hut1-spanen-o-2.png",
+      "b": 333,
+      "h": 261,
+      "anker": [
+       207,
+       215
+      ]
+     }
+    ],
+    "planken-hut1-spanen-n": [
+     {
+      "bestand": "daksneeuw/planken-hut1-spanen-n-0.png",
+      "b": 267,
+      "h": 260,
+      "anker": [
+       126,
+       215
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-hut1-spanen-n-1.png",
+      "b": 328,
+      "h": 261,
+      "anker": [
+       126,
+       215
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-hut1-spanen-n-2.png",
+      "b": 333,
+      "h": 261,
+      "anker": [
+       126,
+       215
+      ]
+     }
+    ],
+    "planken-hut1-spanen-w": [
+     {
+      "bestand": "daksneeuw/planken-hut1-spanen-w-0.png",
+      "b": 264,
+      "h": 268,
+      "anker": [
+       109,
+       240
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-hut1-spanen-w-1.png",
+      "b": 327,
+      "h": 269,
+      "anker": [
+       170,
+       240
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-hut1-spanen-w-2.png",
+      "b": 347,
+      "h": 368,
+      "anker": [
+       190,
+       240
+      ]
+     }
+    ],
+    "planken-hut3-spanen-z": [
+     {
+      "bestand": "daksneeuw/planken-hut3-spanen-z-0.png",
+      "b": 298,
+      "h": 273,
+      "anker": [
+       157,
+       238
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-hut3-spanen-z-1.png",
+      "b": 308,
+      "h": 281,
+      "anker": [
+       157,
+       238
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-hut3-spanen-z-2.png",
+      "b": 364,
+      "h": 281,
+      "anker": [
+       157,
+       238
+      ]
+     }
+    ],
+    "planken-hut3-spanen-o": [
+     {
+      "bestand": "daksneeuw/planken-hut3-spanen-o-0.png",
+      "b": 296,
+      "h": 271,
+      "anker": [
+       141,
+       232
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-hut3-spanen-o-1.png",
+      "b": 350,
+      "h": 271,
+      "anker": [
+       193,
+       232
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-hut3-spanen-o-2.png",
+      "b": 365,
+      "h": 271,
+      "anker": [
+       208,
+       232
+      ]
+     }
+    ],
+    "planken-hut3-spanen-n": [
+     {
+      "bestand": "daksneeuw/planken-hut3-spanen-n-0.png",
+      "b": 298,
+      "h": 268,
+      "anker": [
+       157,
+       232
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-hut3-spanen-n-1.png",
+      "b": 336,
+      "h": 271,
+      "anker": [
+       157,
+       232
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-hut3-spanen-n-2.png",
+      "b": 375,
+      "h": 271,
+      "anker": [
+       157,
+       232
+      ]
+     }
+    ],
+    "planken-hut3-spanen-w": [
+     {
+      "bestand": "daksneeuw/planken-hut3-spanen-w-0.png",
+      "b": 293,
+      "h": 281,
+      "anker": [
+       141,
+       238
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-hut3-spanen-w-1.png",
+      "b": 361,
+      "h": 281,
+      "anker": [
+       204,
+       238
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-hut3-spanen-w-2.png",
+      "b": 371,
+      "h": 281,
+      "anker": [
+       214,
+       238
+      ]
+     }
+    ],
+    "planken-hut4-spanen-z": [
+     {
+      "bestand": "daksneeuw/planken-hut4-spanen-z-0.png",
+      "b": 380,
+      "h": 306,
+      "anker": [
+       157,
+       229
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-hut4-spanen-z-1.png",
+      "b": 380,
+      "h": 307,
+      "anker": [
+       157,
+       229
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-hut4-spanen-z-2.png",
+      "b": 380,
+      "h": 307,
+      "anker": [
+       157,
+       229
+      ]
+     }
+    ],
+    "planken-hut4-spanen-o": [
+     {
+      "bestand": "daksneeuw/planken-hut4-spanen-o-0.png",
+      "b": 302,
+      "h": 247,
+      "anker": [
+       141,
+       203
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-hut4-spanen-o-1.png",
+      "b": 422,
+      "h": 247,
+      "anker": [
+       206,
+       203
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-hut4-spanen-o-2.png",
+      "b": 423,
+      "h": 247,
+      "anker": [
+       207,
+       203
+      ]
+     }
+    ],
+    "planken-hut4-spanen-n": [
+     {
+      "bestand": "daksneeuw/planken-hut4-spanen-n-0.png",
+      "b": 350,
+      "h": 314,
+      "anker": [
+       223,
+       239
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-hut4-spanen-n-1.png",
+      "b": 350,
+      "h": 315,
+      "anker": [
+       223,
+       239
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-hut4-spanen-n-2.png",
+      "b": 365,
+      "h": 315,
+      "anker": [
+       223,
+       239
+      ]
+     }
+    ],
+    "planken-hut4-spanen-w": [
+     {
+      "bestand": "daksneeuw/planken-hut4-spanen-w-0.png",
+      "b": 443,
+      "h": 270,
+      "anker": [
+       222,
+       197
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-hut4-spanen-w-1.png",
+      "b": 447,
+      "h": 270,
+      "anker": [
+       226,
+       197
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-hut4-spanen-w-2.png",
+      "b": 447,
+      "h": 271,
+      "anker": [
+       226,
+       197
+      ]
+     }
+    ],
+    "planken-huis7-spanen-z": [
+     {
+      "bestand": "daksneeuw/planken-huis7-spanen-z-0.png",
+      "b": 534,
+      "h": 575,
+      "anker": [
+       211,
+       496
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis7-spanen-z-1.png",
+      "b": 536,
+      "h": 575,
+      "anker": [
+       211,
+       496
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis7-spanen-z-2.png",
+      "b": 537,
+      "h": 576,
+      "anker": [
+       211,
+       496
+      ]
+     }
+    ],
+    "planken-huis7-spanen-o": [
+     {
+      "bestand": "daksneeuw/planken-huis7-spanen-o-0.png",
+      "b": 447,
+      "h": 591,
+      "anker": [
+       235,
+       505
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis7-spanen-o-1.png",
+      "b": 535,
+      "h": 592,
+      "anker": [
+       321,
+       505
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis7-spanen-o-2.png",
+      "b": 536,
+      "h": 592,
+      "anker": [
+       321,
+       505
+      ]
+     }
+    ],
+    "planken-huis7-spanen-n": [
+     {
+      "bestand": "daksneeuw/planken-huis7-spanen-n-0.png",
+      "b": 444,
+      "h": 452,
+      "anker": [
+       273,
+       473
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis7-spanen-n-1.png",
+      "b": 536,
+      "h": 453,
+      "anker": [
+       279,
+       473
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis7-spanen-n-2.png",
+      "b": 537,
+      "h": 453,
+      "anker": [
+       279,
+       473
+      ]
+     }
+    ],
+    "planken-huis7-spanen-w": [
+     {
+      "bestand": "daksneeuw/planken-huis7-spanen-w-0.png",
+      "b": 457,
+      "h": 442,
+      "anker": [
+       187,
+       464
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis7-spanen-w-1.png",
+      "b": 537,
+      "h": 447,
+      "anker": [
+       262,
+       464
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis7-spanen-w-2.png",
+      "b": 537,
+      "h": 448,
+      "anker": [
+       262,
+       464
+      ]
+     }
+    ],
+    "planken-huis7-leien-z": [
+     {
+      "bestand": "daksneeuw/planken-huis7-leien-z-0.png",
+      "b": 534,
+      "h": 575,
+      "anker": [
+       211,
+       496
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis7-leien-z-1.png",
+      "b": 537,
+      "h": 575,
+      "anker": [
+       211,
+       496
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis7-leien-z-2.png",
+      "b": 537,
+      "h": 576,
+      "anker": [
+       211,
+       496
+      ]
+     }
+    ],
+    "planken-huis7-leien-o": [
+     {
+      "bestand": "daksneeuw/planken-huis7-leien-o-0.png",
+      "b": 447,
+      "h": 591,
+      "anker": [
+       235,
+       505
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis7-leien-o-1.png",
+      "b": 536,
+      "h": 592,
+      "anker": [
+       322,
+       505
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis7-leien-o-2.png",
+      "b": 537,
+      "h": 592,
+      "anker": [
+       322,
+       505
+      ]
+     }
+    ],
+    "planken-huis7-leien-n": [
+     {
+      "bestand": "daksneeuw/planken-huis7-leien-n-0.png",
+      "b": 444,
+      "h": 452,
+      "anker": [
+       273,
+       473
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis7-leien-n-1.png",
+      "b": 535,
+      "h": 453,
+      "anker": [
+       279,
+       473
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis7-leien-n-2.png",
+      "b": 537,
+      "h": 453,
+      "anker": [
+       279,
+       473
+      ]
+     }
+    ],
+    "planken-huis7-leien-w": [
+     {
+      "bestand": "daksneeuw/planken-huis7-leien-w-0.png",
+      "b": 532,
+      "h": 439,
+      "anker": [
+       262,
+       464
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis7-leien-w-1.png",
+      "b": 537,
+      "h": 447,
+      "anker": [
+       262,
+       464
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis7-leien-w-2.png",
+      "b": 537,
+      "h": 448,
+      "anker": [
+       262,
+       464
+      ]
+     }
+    ],
+    "planken-huis7-pannen-z": [
+     {
+      "bestand": "daksneeuw/planken-huis7-pannen-z-0.png",
+      "b": 535,
+      "h": 575,
+      "anker": [
+       211,
+       496
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis7-pannen-z-1.png",
+      "b": 535,
+      "h": 575,
+      "anker": [
+       211,
+       496
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis7-pannen-z-2.png",
+      "b": 536,
+      "h": 576,
+      "anker": [
+       211,
+       496
+      ]
+     }
+    ],
+    "planken-huis7-pannen-o": [
+     {
+      "bestand": "daksneeuw/planken-huis7-pannen-o-0.png",
+      "b": 447,
+      "h": 591,
+      "anker": [
+       235,
+       505
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis7-pannen-o-1.png",
+      "b": 534,
+      "h": 592,
+      "anker": [
+       320,
+       505
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis7-pannen-o-2.png",
+      "b": 536,
+      "h": 592,
+      "anker": [
+       321,
+       505
+      ]
+     }
+    ],
+    "planken-huis7-pannen-n": [
+     {
+      "bestand": "daksneeuw/planken-huis7-pannen-n-0.png",
+      "b": 444,
+      "h": 452,
+      "anker": [
+       273,
+       473
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis7-pannen-n-1.png",
+      "b": 535,
+      "h": 453,
+      "anker": [
+       279,
+       473
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis7-pannen-n-2.png",
+      "b": 536,
+      "h": 453,
+      "anker": [
+       279,
+       473
+      ]
+     }
+    ],
+    "planken-huis7-pannen-w": [
+     {
+      "bestand": "daksneeuw/planken-huis7-pannen-w-0.png",
+      "b": 442,
+      "h": 441,
+      "anker": [
+       172,
+       464
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis7-pannen-w-1.png",
+      "b": 535,
+      "h": 447,
+      "anker": [
+       260,
+       464
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis7-pannen-w-2.png",
+      "b": 536,
+      "h": 448,
+      "anker": [
+       261,
+       464
+      ]
+     }
+    ],
+    "planken-steen7-leien-z": [
+     {
+      "bestand": "daksneeuw/planken-steen7-leien-z-0.png",
+      "b": 534,
+      "h": 575,
+      "anker": [
+       211,
+       496
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen7-leien-z-1.png",
+      "b": 537,
+      "h": 575,
+      "anker": [
+       211,
+       496
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen7-leien-z-2.png",
+      "b": 537,
+      "h": 576,
+      "anker": [
+       211,
+       496
+      ]
+     }
+    ],
+    "planken-steen7-leien-o": [
+     {
+      "bestand": "daksneeuw/planken-steen7-leien-o-0.png",
+      "b": 447,
+      "h": 591,
+      "anker": [
+       235,
+       505
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen7-leien-o-1.png",
+      "b": 536,
+      "h": 592,
+      "anker": [
+       322,
+       505
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen7-leien-o-2.png",
+      "b": 537,
+      "h": 592,
+      "anker": [
+       322,
+       505
+      ]
+     }
+    ],
+    "planken-steen7-leien-n": [
+     {
+      "bestand": "daksneeuw/planken-steen7-leien-n-0.png",
+      "b": 444,
+      "h": 452,
+      "anker": [
+       273,
+       473
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen7-leien-n-1.png",
+      "b": 535,
+      "h": 453,
+      "anker": [
+       279,
+       473
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen7-leien-n-2.png",
+      "b": 537,
+      "h": 453,
+      "anker": [
+       279,
+       473
+      ]
+     }
+    ],
+    "planken-steen7-leien-w": [
+     {
+      "bestand": "daksneeuw/planken-steen7-leien-w-0.png",
+      "b": 532,
+      "h": 439,
+      "anker": [
+       262,
+       464
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen7-leien-w-1.png",
+      "b": 537,
+      "h": 447,
+      "anker": [
+       262,
+       464
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen7-leien-w-2.png",
+      "b": 537,
+      "h": 448,
+      "anker": [
+       262,
+       464
+      ]
+     }
+    ],
+    "planken-steen7-pannen-z": [
+     {
+      "bestand": "daksneeuw/planken-steen7-pannen-z-0.png",
+      "b": 535,
+      "h": 575,
+      "anker": [
+       211,
+       496
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen7-pannen-z-1.png",
+      "b": 535,
+      "h": 575,
+      "anker": [
+       211,
+       496
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen7-pannen-z-2.png",
+      "b": 536,
+      "h": 576,
+      "anker": [
+       211,
+       496
+      ]
+     }
+    ],
+    "planken-steen7-pannen-o": [
+     {
+      "bestand": "daksneeuw/planken-steen7-pannen-o-0.png",
+      "b": 447,
+      "h": 591,
+      "anker": [
+       235,
+       505
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen7-pannen-o-1.png",
+      "b": 534,
+      "h": 592,
+      "anker": [
+       320,
+       505
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen7-pannen-o-2.png",
+      "b": 536,
+      "h": 592,
+      "anker": [
+       321,
+       505
+      ]
+     }
+    ],
+    "planken-steen7-pannen-n": [
+     {
+      "bestand": "daksneeuw/planken-steen7-pannen-n-0.png",
+      "b": 444,
+      "h": 452,
+      "anker": [
+       273,
+       473
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen7-pannen-n-1.png",
+      "b": 535,
+      "h": 453,
+      "anker": [
+       279,
+       473
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen7-pannen-n-2.png",
+      "b": 536,
+      "h": 453,
+      "anker": [
+       279,
+       473
+      ]
+     }
+    ],
+    "planken-steen7-pannen-w": [
+     {
+      "bestand": "daksneeuw/planken-steen7-pannen-w-0.png",
+      "b": 442,
+      "h": 441,
+      "anker": [
+       172,
+       464
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen7-pannen-w-1.png",
+      "b": 535,
+      "h": 447,
+      "anker": [
+       260,
+       464
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen7-pannen-w-2.png",
+      "b": 536,
+      "h": 448,
+      "anker": [
+       261,
+       464
+      ]
+     }
+    ],
+    "planken-steen7-baksteen-z": [
+     {
+      "bestand": "daksneeuw/planken-steen7-baksteen-z-0.png",
+      "b": 535,
+      "h": 575,
+      "anker": [
+       211,
+       496
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen7-baksteen-z-1.png",
+      "b": 535,
+      "h": 575,
+      "anker": [
+       211,
+       496
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen7-baksteen-z-2.png",
+      "b": 536,
+      "h": 576,
+      "anker": [
+       211,
+       496
+      ]
+     }
+    ],
+    "planken-steen7-baksteen-o": [
+     {
+      "bestand": "daksneeuw/planken-steen7-baksteen-o-0.png",
+      "b": 447,
+      "h": 591,
+      "anker": [
+       235,
+       505
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen7-baksteen-o-1.png",
+      "b": 534,
+      "h": 592,
+      "anker": [
+       320,
+       505
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen7-baksteen-o-2.png",
+      "b": 536,
+      "h": 592,
+      "anker": [
+       321,
+       505
+      ]
+     }
+    ],
+    "planken-steen7-baksteen-n": [
+     {
+      "bestand": "daksneeuw/planken-steen7-baksteen-n-0.png",
+      "b": 444,
+      "h": 452,
+      "anker": [
+       273,
+       473
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen7-baksteen-n-1.png",
+      "b": 535,
+      "h": 453,
+      "anker": [
+       279,
+       473
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen7-baksteen-n-2.png",
+      "b": 536,
+      "h": 453,
+      "anker": [
+       279,
+       473
+      ]
+     }
+    ],
+    "planken-steen7-baksteen-w": [
+     {
+      "bestand": "daksneeuw/planken-steen7-baksteen-w-0.png",
+      "b": 442,
+      "h": 441,
+      "anker": [
+       172,
+       464
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen7-baksteen-w-1.png",
+      "b": 535,
+      "h": 447,
+      "anker": [
+       260,
+       464
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen7-baksteen-w-2.png",
+      "b": 536,
+      "h": 448,
+      "anker": [
+       261,
+       464
+      ]
+     }
+    ],
+    "planken-huis8-spanen-z": [
+     {
+      "bestand": "daksneeuw/planken-huis8-spanen-z-0.png",
+      "b": 525,
+      "h": 617,
+      "anker": [
+       246,
+       411
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis8-spanen-z-1.png",
+      "b": 541,
+      "h": 617,
+      "anker": [
+       256,
+       411
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis8-spanen-z-2.png",
+      "b": 543,
+      "h": 617,
+      "anker": [
+       257,
+       411
+      ]
+     }
+    ],
+    "planken-huis8-spanen-o": [
+     {
+      "bestand": "daksneeuw/planken-huis8-spanen-o-0.png",
+      "b": 498,
+      "h": 508,
+      "anker": [
+       268,
+       419
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis8-spanen-o-1.png",
+      "b": 499,
+      "h": 508,
+      "anker": [
+       268,
+       419
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis8-spanen-o-2.png",
+      "b": 503,
+      "h": 508,
+      "anker": [
+       272,
+       419
+      ]
+     }
+    ],
+    "planken-huis8-spanen-n": [
+     {
+      "bestand": "daksneeuw/planken-huis8-spanen-n-0.png",
+      "b": 444,
+      "h": 399,
+      "anker": [
+       195,
+       365
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis8-spanen-n-1.png",
+      "b": 505,
+      "h": 409,
+      "anker": [
+       206,
+       365
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis8-spanen-n-2.png",
+      "b": 507,
+      "h": 410,
+      "anker": [
+       207,
+       365
+      ]
+     }
+    ],
+    "planken-huis8-spanen-w": [
+     {
+      "bestand": "daksneeuw/planken-huis8-spanen-w-0.png",
+      "b": 504,
+      "h": 599,
+      "anker": [
+       287,
+       445
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis8-spanen-w-1.png",
+      "b": 519,
+      "h": 600,
+      "anker": [
+       294,
+       445
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis8-spanen-w-2.png",
+      "b": 519,
+      "h": 600,
+      "anker": [
+       294,
+       445
+      ]
+     }
+    ],
+    "planken-huis8-leien-z": [
+     {
+      "bestand": "daksneeuw/planken-huis8-leien-z-0.png",
+      "b": 522,
+      "h": 617,
+      "anker": [
+       246,
+       411
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis8-leien-z-1.png",
+      "b": 541,
+      "h": 617,
+      "anker": [
+       256,
+       411
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis8-leien-z-2.png",
+      "b": 543,
+      "h": 617,
+      "anker": [
+       257,
+       411
+      ]
+     }
+    ],
+    "planken-huis8-leien-o": [
+     {
+      "bestand": "daksneeuw/planken-huis8-leien-o-0.png",
+      "b": 408,
+      "h": 508,
+      "anker": [
+       178,
+       419
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis8-leien-o-1.png",
+      "b": 502,
+      "h": 508,
+      "anker": [
+       269,
+       419
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis8-leien-o-2.png",
+      "b": 506,
+      "h": 508,
+      "anker": [
+       272,
+       419
+      ]
+     }
+    ],
+    "planken-huis8-leien-n": [
+     {
+      "bestand": "daksneeuw/planken-huis8-leien-n-0.png",
+      "b": 402,
+      "h": 401,
+      "anker": [
+       192,
+       367
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis8-leien-n-1.png",
+      "b": 501,
+      "h": 411,
+      "anker": [
+       202,
+       367
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis8-leien-n-2.png",
+      "b": 511,
+      "h": 412,
+      "anker": [
+       207,
+       367
+      ]
+     }
+    ],
+    "planken-huis8-leien-w": [
+     {
+      "bestand": "daksneeuw/planken-huis8-leien-w-0.png",
+      "b": 498,
+      "h": 599,
+      "anker": [
+       281,
+       445
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis8-leien-w-1.png",
+      "b": 509,
+      "h": 600,
+      "anker": [
+       284,
+       445
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis8-leien-w-2.png",
+      "b": 523,
+      "h": 600,
+      "anker": [
+       298,
+       445
+      ]
+     }
+    ],
+    "planken-huis8-pannen-z": [
+     {
+      "bestand": "daksneeuw/planken-huis8-pannen-z-0.png",
+      "b": 527,
+      "h": 617,
+      "anker": [
+       250,
+       411
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis8-pannen-z-1.png",
+      "b": 541,
+      "h": 617,
+      "anker": [
+       256,
+       411
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis8-pannen-z-2.png",
+      "b": 543,
+      "h": 617,
+      "anker": [
+       257,
+       411
+      ]
+     }
+    ],
+    "planken-huis8-pannen-o": [
+     {
+      "bestand": "daksneeuw/planken-huis8-pannen-o-0.png",
+      "b": 409,
+      "h": 508,
+      "anker": [
+       178,
+       419
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis8-pannen-o-1.png",
+      "b": 500,
+      "h": 508,
+      "anker": [
+       265,
+       419
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis8-pannen-o-2.png",
+      "b": 505,
+      "h": 508,
+      "anker": [
+       270,
+       419
+      ]
+     }
+    ],
+    "planken-huis8-pannen-n": [
+     {
+      "bestand": "daksneeuw/planken-huis8-pannen-n-0.png",
+      "b": 404,
+      "h": 407,
+      "anker": [
+       194,
+       368
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis8-pannen-n-1.png",
+      "b": 504,
+      "h": 412,
+      "anker": [
+       205,
+       368
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis8-pannen-n-2.png",
+      "b": 507,
+      "h": 413,
+      "anker": [
+       207,
+       368
+      ]
+     }
+    ],
+    "planken-huis8-pannen-w": [
+     {
+      "bestand": "daksneeuw/planken-huis8-pannen-w-0.png",
+      "b": 507,
+      "h": 599,
+      "anker": [
+       289,
+       445
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis8-pannen-w-1.png",
+      "b": 523,
+      "h": 600,
+      "anker": [
+       298,
+       445
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis8-pannen-w-2.png",
+      "b": 523,
+      "h": 600,
+      "anker": [
+       298,
+       445
+      ]
+     }
+    ],
+    "planken-steen8-leien-z": [
+     {
+      "bestand": "daksneeuw/planken-steen8-leien-z-0.png",
+      "b": 522,
+      "h": 615,
+      "anker": [
+       246,
+       411
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen8-leien-z-1.png",
+      "b": 541,
+      "h": 616,
+      "anker": [
+       256,
+       411
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen8-leien-z-2.png",
+      "b": 543,
+      "h": 616,
+      "anker": [
+       257,
+       411
+      ]
+     }
+    ],
+    "planken-steen8-leien-o": [
+     {
+      "bestand": "daksneeuw/planken-steen8-leien-o-0.png",
+      "b": 408,
+      "h": 508,
+      "anker": [
+       178,
+       419
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen8-leien-o-1.png",
+      "b": 502,
+      "h": 508,
+      "anker": [
+       269,
+       419
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen8-leien-o-2.png",
+      "b": 506,
+      "h": 508,
+      "anker": [
+       272,
+       419
+      ]
+     }
+    ],
+    "planken-steen8-leien-n": [
+     {
+      "bestand": "daksneeuw/planken-steen8-leien-n-0.png",
+      "b": 402,
+      "h": 401,
+      "anker": [
+       192,
+       367
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen8-leien-n-1.png",
+      "b": 501,
+      "h": 411,
+      "anker": [
+       202,
+       367
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen8-leien-n-2.png",
+      "b": 511,
+      "h": 412,
+      "anker": [
+       207,
+       367
+      ]
+     }
+    ],
+    "planken-steen8-leien-w": [
+     {
+      "bestand": "daksneeuw/planken-steen8-leien-w-0.png",
+      "b": 498,
+      "h": 599,
+      "anker": [
+       281,
+       445
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen8-leien-w-1.png",
+      "b": 509,
+      "h": 599,
+      "anker": [
+       284,
+       445
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen8-leien-w-2.png",
+      "b": 523,
+      "h": 600,
+      "anker": [
+       298,
+       445
+      ]
+     }
+    ],
+    "planken-steen8-pannen-z": [
+     {
+      "bestand": "daksneeuw/planken-steen8-pannen-z-0.png",
+      "b": 527,
+      "h": 615,
+      "anker": [
+       250,
+       411
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen8-pannen-z-1.png",
+      "b": 541,
+      "h": 616,
+      "anker": [
+       256,
+       411
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen8-pannen-z-2.png",
+      "b": 543,
+      "h": 616,
+      "anker": [
+       257,
+       411
+      ]
+     }
+    ],
+    "planken-steen8-pannen-o": [
+     {
+      "bestand": "daksneeuw/planken-steen8-pannen-o-0.png",
+      "b": 409,
+      "h": 508,
+      "anker": [
+       178,
+       419
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen8-pannen-o-1.png",
+      "b": 500,
+      "h": 508,
+      "anker": [
+       265,
+       419
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen8-pannen-o-2.png",
+      "b": 505,
+      "h": 508,
+      "anker": [
+       270,
+       419
+      ]
+     }
+    ],
+    "planken-steen8-pannen-n": [
+     {
+      "bestand": "daksneeuw/planken-steen8-pannen-n-0.png",
+      "b": 404,
+      "h": 407,
+      "anker": [
+       194,
+       368
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen8-pannen-n-1.png",
+      "b": 504,
+      "h": 412,
+      "anker": [
+       205,
+       368
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen8-pannen-n-2.png",
+      "b": 507,
+      "h": 413,
+      "anker": [
+       207,
+       368
+      ]
+     }
+    ],
+    "planken-steen8-pannen-w": [
+     {
+      "bestand": "daksneeuw/planken-steen8-pannen-w-0.png",
+      "b": 507,
+      "h": 599,
+      "anker": [
+       289,
+       445
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen8-pannen-w-1.png",
+      "b": 523,
+      "h": 599,
+      "anker": [
+       298,
+       445
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen8-pannen-w-2.png",
+      "b": 523,
+      "h": 600,
+      "anker": [
+       298,
+       445
+      ]
+     }
+    ],
+    "planken-steen8-baksteen-z": [
+     {
+      "bestand": "daksneeuw/planken-steen8-baksteen-z-0.png",
+      "b": 527,
+      "h": 615,
+      "anker": [
+       250,
+       411
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen8-baksteen-z-1.png",
+      "b": 541,
+      "h": 616,
+      "anker": [
+       256,
+       411
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen8-baksteen-z-2.png",
+      "b": 543,
+      "h": 616,
+      "anker": [
+       257,
+       411
+      ]
+     }
+    ],
+    "planken-steen8-baksteen-o": [
+     {
+      "bestand": "daksneeuw/planken-steen8-baksteen-o-0.png",
+      "b": 409,
+      "h": 508,
+      "anker": [
+       178,
+       419
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen8-baksteen-o-1.png",
+      "b": 500,
+      "h": 508,
+      "anker": [
+       265,
+       419
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen8-baksteen-o-2.png",
+      "b": 505,
+      "h": 508,
+      "anker": [
+       270,
+       419
+      ]
+     }
+    ],
+    "planken-steen8-baksteen-n": [
+     {
+      "bestand": "daksneeuw/planken-steen8-baksteen-n-0.png",
+      "b": 404,
+      "h": 407,
+      "anker": [
+       194,
+       368
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen8-baksteen-n-1.png",
+      "b": 504,
+      "h": 412,
+      "anker": [
+       205,
+       368
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen8-baksteen-n-2.png",
+      "b": 507,
+      "h": 413,
+      "anker": [
+       207,
+       368
+      ]
+     }
+    ],
+    "planken-steen8-baksteen-w": [
+     {
+      "bestand": "daksneeuw/planken-steen8-baksteen-w-0.png",
+      "b": 507,
+      "h": 599,
+      "anker": [
+       289,
+       445
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen8-baksteen-w-1.png",
+      "b": 523,
+      "h": 599,
+      "anker": [
+       298,
+       445
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen8-baksteen-w-2.png",
+      "b": 523,
+      "h": 600,
+      "anker": [
+       298,
+       445
+      ]
+     }
+    ],
+    "planken-huis9-spanen-z": [
+     {
+      "bestand": "daksneeuw/planken-huis9-spanen-z-0.png",
+      "b": 426,
+      "h": 527,
+      "anker": [
+       186,
+       331
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis9-spanen-z-1.png",
+      "b": 466,
+      "h": 528,
+      "anker": [
+       193,
+       331
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis9-spanen-z-2.png",
+      "b": 466,
+      "h": 528,
+      "anker": [
+       193,
+       331
+      ]
+     }
+    ],
+    "planken-huis9-spanen-o": [
+     {
+      "bestand": "daksneeuw/planken-huis9-spanen-o-0.png",
+      "b": 497,
+      "h": 475,
+      "anker": [
+       297,
+       314
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis9-spanen-o-1.png",
+      "b": 503,
+      "h": 475,
+      "anker": [
+       303,
+       314
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis9-spanen-o-2.png",
+      "b": 504,
+      "h": 476,
+      "anker": [
+       304,
+       314
+      ]
+     }
+    ],
+    "planken-huis9-spanen-n": [
+     {
+      "bestand": "daksneeuw/planken-huis9-spanen-n-0.png",
+      "b": 382,
+      "h": 388,
+      "anker": [
+       220,
+       282
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis9-spanen-n-1.png",
+      "b": 465,
+      "h": 396,
+      "anker": [
+       226,
+       282
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis9-spanen-n-2.png",
+      "b": 466,
+      "h": 396,
+      "anker": [
+       226,
+       282
+      ]
+     }
+    ],
+    "planken-huis9-spanen-w": [
+     {
+      "bestand": "daksneeuw/planken-huis9-spanen-w-0.png",
+      "b": 517,
+      "h": 409,
+      "anker": [
+       263,
+       299
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis9-spanen-w-1.png",
+      "b": 519,
+      "h": 410,
+      "anker": [
+       263,
+       299
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis9-spanen-w-2.png",
+      "b": 520,
+      "h": 520,
+      "anker": [
+       263,
+       299
+      ]
+     }
+    ],
+    "planken-huis9-leien-z": [
+     {
+      "bestand": "daksneeuw/planken-huis9-leien-z-0.png",
+      "b": 427,
+      "h": 527,
+      "anker": [
+       187,
+       331
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis9-leien-z-1.png",
+      "b": 464,
+      "h": 528,
+      "anker": [
+       193,
+       331
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis9-leien-z-2.png",
+      "b": 466,
+      "h": 528,
+      "anker": [
+       193,
+       331
+      ]
+     }
+    ],
+    "planken-huis9-leien-o": [
+     {
+      "bestand": "daksneeuw/planken-huis9-leien-o-0.png",
+      "b": 425,
+      "h": 475,
+      "anker": [
+       225,
+       314
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis9-leien-o-1.png",
+      "b": 503,
+      "h": 475,
+      "anker": [
+       303,
+       314
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis9-leien-o-2.png",
+      "b": 504,
+      "h": 476,
+      "anker": [
+       304,
+       314
+      ]
+     }
+    ],
+    "planken-huis9-leien-n": [
+     {
+      "bestand": "daksneeuw/planken-huis9-leien-n-0.png",
+      "b": 382,
+      "h": 382,
+      "anker": [
+       220,
+       282
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis9-leien-n-1.png",
+      "b": 465,
+      "h": 396,
+      "anker": [
+       226,
+       282
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis9-leien-n-2.png",
+      "b": 466,
+      "h": 396,
+      "anker": [
+       226,
+       282
+      ]
+     }
+    ],
+    "planken-huis9-leien-w": [
+     {
+      "bestand": "daksneeuw/planken-huis9-leien-w-0.png",
+      "b": 517,
+      "h": 409,
+      "anker": [
+       263,
+       299
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis9-leien-w-1.png",
+      "b": 519,
+      "h": 410,
+      "anker": [
+       263,
+       299
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis9-leien-w-2.png",
+      "b": 520,
+      "h": 520,
+      "anker": [
+       263,
+       299
+      ]
+     }
+    ],
+    "planken-huis9-pannen-z": [
+     {
+      "bestand": "daksneeuw/planken-huis9-pannen-z-0.png",
+      "b": 427,
+      "h": 527,
+      "anker": [
+       187,
+       331
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis9-pannen-z-1.png",
+      "b": 464,
+      "h": 528,
+      "anker": [
+       193,
+       331
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis9-pannen-z-2.png",
+      "b": 465,
+      "h": 528,
+      "anker": [
+       193,
+       331
+      ]
+     }
+    ],
+    "planken-huis9-pannen-o": [
+     {
+      "bestand": "daksneeuw/planken-huis9-pannen-o-0.png",
+      "b": 425,
+      "h": 475,
+      "anker": [
+       225,
+       314
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis9-pannen-o-1.png",
+      "b": 503,
+      "h": 475,
+      "anker": [
+       303,
+       314
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis9-pannen-o-2.png",
+      "b": 504,
+      "h": 476,
+      "anker": [
+       304,
+       314
+      ]
+     }
+    ],
+    "planken-huis9-pannen-n": [
+     {
+      "bestand": "daksneeuw/planken-huis9-pannen-n-0.png",
+      "b": 382,
+      "h": 390,
+      "anker": [
+       220,
+       282
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis9-pannen-n-1.png",
+      "b": 452,
+      "h": 396,
+      "anker": [
+       226,
+       282
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis9-pannen-n-2.png",
+      "b": 466,
+      "h": 396,
+      "anker": [
+       226,
+       282
+      ]
+     }
+    ],
+    "planken-huis9-pannen-w": [
+     {
+      "bestand": "daksneeuw/planken-huis9-pannen-w-0.png",
+      "b": 517,
+      "h": 409,
+      "anker": [
+       263,
+       299
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis9-pannen-w-1.png",
+      "b": 519,
+      "h": 410,
+      "anker": [
+       263,
+       299
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-huis9-pannen-w-2.png",
+      "b": 520,
+      "h": 520,
+      "anker": [
+       263,
+       299
+      ]
+     }
+    ],
+    "planken-steen9-leien-z": [
+     {
+      "bestand": "daksneeuw/planken-steen9-leien-z-0.png",
+      "b": 380,
+      "h": 528,
+      "anker": [
+       187,
+       331
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen9-leien-z-1.png",
+      "b": 464,
+      "h": 528,
+      "anker": [
+       193,
+       331
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen9-leien-z-2.png",
+      "b": 466,
+      "h": 528,
+      "anker": [
+       193,
+       331
+      ]
+     }
+    ],
+    "planken-steen9-leien-o": [
+     {
+      "bestand": "daksneeuw/planken-steen9-leien-o-0.png",
+      "b": 425,
+      "h": 474,
+      "anker": [
+       193,
+       330
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen9-leien-o-1.png",
+      "b": 503,
+      "h": 474,
+      "anker": [
+       271,
+       330
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen9-leien-o-2.png",
+      "b": 504,
+      "h": 475,
+      "anker": [
+       272,
+       330
+      ]
+     }
+    ],
+    "planken-steen9-leien-n": [
+     {
+      "bestand": "daksneeuw/planken-steen9-leien-n-0.png",
+      "b": 382,
+      "h": 382,
+      "anker": [
+       252,
+       298
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen9-leien-n-1.png",
+      "b": 465,
+      "h": 396,
+      "anker": [
+       258,
+       298
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen9-leien-n-2.png",
+      "b": 466,
+      "h": 396,
+      "anker": [
+       258,
+       298
+      ]
+     }
+    ],
+    "planken-steen9-leien-w": [
+     {
+      "bestand": "daksneeuw/planken-steen9-leien-w-0.png",
+      "b": 517,
+      "h": 411,
+      "anker": [
+       263,
+       299
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen9-leien-w-1.png",
+      "b": 519,
+      "h": 411,
+      "anker": [
+       263,
+       299
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen9-leien-w-2.png",
+      "b": 520,
+      "h": 411,
+      "anker": [
+       263,
+       299
+      ]
+     }
+    ],
+    "planken-steen9-pannen-z": [
+     {
+      "bestand": "daksneeuw/planken-steen9-pannen-z-0.png",
+      "b": 380,
+      "h": 528,
+      "anker": [
+       187,
+       331
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen9-pannen-z-1.png",
+      "b": 464,
+      "h": 528,
+      "anker": [
+       193,
+       331
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen9-pannen-z-2.png",
+      "b": 465,
+      "h": 528,
+      "anker": [
+       193,
+       331
+      ]
+     }
+    ],
+    "planken-steen9-pannen-o": [
+     {
+      "bestand": "daksneeuw/planken-steen9-pannen-o-0.png",
+      "b": 425,
+      "h": 474,
+      "anker": [
+       193,
+       330
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen9-pannen-o-1.png",
+      "b": 503,
+      "h": 474,
+      "anker": [
+       271,
+       330
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen9-pannen-o-2.png",
+      "b": 504,
+      "h": 475,
+      "anker": [
+       272,
+       330
+      ]
+     }
+    ],
+    "planken-steen9-pannen-n": [
+     {
+      "bestand": "daksneeuw/planken-steen9-pannen-n-0.png",
+      "b": 382,
+      "h": 390,
+      "anker": [
+       252,
+       298
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen9-pannen-n-1.png",
+      "b": 452,
+      "h": 396,
+      "anker": [
+       258,
+       298
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen9-pannen-n-2.png",
+      "b": 466,
+      "h": 396,
+      "anker": [
+       258,
+       298
+      ]
+     }
+    ],
+    "planken-steen9-pannen-w": [
+     {
+      "bestand": "daksneeuw/planken-steen9-pannen-w-0.png",
+      "b": 517,
+      "h": 411,
+      "anker": [
+       263,
+       299
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen9-pannen-w-1.png",
+      "b": 519,
+      "h": 411,
+      "anker": [
+       263,
+       299
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen9-pannen-w-2.png",
+      "b": 520,
+      "h": 411,
+      "anker": [
+       263,
+       299
+      ]
+     }
+    ],
+    "planken-steen9-baksteen-z": [
+     {
+      "bestand": "daksneeuw/planken-steen9-baksteen-z-0.png",
+      "b": 380,
+      "h": 528,
+      "anker": [
+       187,
+       331
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen9-baksteen-z-1.png",
+      "b": 464,
+      "h": 528,
+      "anker": [
+       193,
+       331
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen9-baksteen-z-2.png",
+      "b": 465,
+      "h": 528,
+      "anker": [
+       193,
+       331
+      ]
+     }
+    ],
+    "planken-steen9-baksteen-o": [
+     {
+      "bestand": "daksneeuw/planken-steen9-baksteen-o-0.png",
+      "b": 425,
+      "h": 474,
+      "anker": [
+       193,
+       330
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen9-baksteen-o-1.png",
+      "b": 503,
+      "h": 474,
+      "anker": [
+       271,
+       330
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen9-baksteen-o-2.png",
+      "b": 504,
+      "h": 475,
+      "anker": [
+       272,
+       330
+      ]
+     }
+    ],
+    "planken-steen9-baksteen-n": [
+     {
+      "bestand": "daksneeuw/planken-steen9-baksteen-n-0.png",
+      "b": 382,
+      "h": 390,
+      "anker": [
+       252,
+       298
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen9-baksteen-n-1.png",
+      "b": 452,
+      "h": 396,
+      "anker": [
+       258,
+       298
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen9-baksteen-n-2.png",
+      "b": 466,
+      "h": 396,
+      "anker": [
+       258,
+       298
+      ]
+     }
+    ],
+    "planken-steen9-baksteen-w": [
+     {
+      "bestand": "daksneeuw/planken-steen9-baksteen-w-0.png",
+      "b": 517,
+      "h": 411,
+      "anker": [
+       263,
+       299
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen9-baksteen-w-1.png",
+      "b": 519,
+      "h": 411,
+      "anker": [
+       263,
+       299
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-steen9-baksteen-w-2.png",
+      "b": 520,
+      "h": 411,
+      "anker": [
+       263,
+       299
+      ]
+     }
+    ],
+    "planken-boerderij2-spanen-z": [
+     {
+      "bestand": "daksneeuw/planken-boerderij2-spanen-z-0.png",
+      "b": 463,
+      "h": 415,
+      "anker": [
+       286,
+       286
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij2-spanen-z-1.png",
+      "b": 489,
+      "h": 419,
+      "anker": [
+       286,
+       286
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij2-spanen-z-2.png",
+      "b": 494,
+      "h": 421,
+      "anker": [
+       286,
+       286
+      ]
+     }
+    ],
+    "planken-boerderij2-spanen-o": [
+     {
+      "bestand": "daksneeuw/planken-boerderij2-spanen-o-0.png",
+      "b": 540,
+      "h": 411,
+      "anker": [
+       253,
+       292
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij2-spanen-o-1.png",
+      "b": 541,
+      "h": 423,
+      "anker": [
+       253,
+       292
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij2-spanen-o-2.png",
+      "b": 547,
+      "h": 423,
+      "anker": [
+       259,
+       292
+      ]
+     }
+    ],
+    "planken-boerderij2-spanen-n": [
+     {
+      "bestand": "daksneeuw/planken-boerderij2-spanen-n-0.png",
+      "b": 473,
+      "h": 436,
+      "anker": [
+       192,
+       344
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij2-spanen-n-1.png",
+      "b": 493,
+      "h": 436,
+      "anker": [
+       192,
+       344
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij2-spanen-n-2.png",
+      "b": 493,
+      "h": 441,
+      "anker": [
+       192,
+       344
+      ]
+     }
+    ],
+    "planken-boerderij2-spanen-w": [
+     {
+      "bestand": "daksneeuw/planken-boerderij2-spanen-w-0.png",
+      "b": 503,
+      "h": 418,
+      "anker": [
+       293,
+       334
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij2-spanen-w-1.png",
+      "b": 515,
+      "h": 421,
+      "anker": [
+       304,
+       334
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij2-spanen-w-2.png",
+      "b": 520,
+      "h": 421,
+      "anker": [
+       304,
+       334
+      ]
+     }
+    ],
+    "planken-boerderij2-leien-z": [
+     {
+      "bestand": "daksneeuw/planken-boerderij2-leien-z-0.png",
+      "b": 462,
+      "h": 413,
+      "anker": [
+       286,
+       286
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij2-leien-z-1.png",
+      "b": 490,
+      "h": 419,
+      "anker": [
+       286,
+       286
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij2-leien-z-2.png",
+      "b": 494,
+      "h": 421,
+      "anker": [
+       286,
+       286
+      ]
+     }
+    ],
+    "planken-boerderij2-leien-o": [
+     {
+      "bestand": "daksneeuw/planken-boerderij2-leien-o-0.png",
+      "b": 538,
+      "h": 411,
+      "anker": [
+       251,
+       292
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij2-leien-o-1.png",
+      "b": 541,
+      "h": 423,
+      "anker": [
+       253,
+       292
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij2-leien-o-2.png",
+      "b": 547,
+      "h": 423,
+      "anker": [
+       259,
+       292
+      ]
+     }
+    ],
+    "planken-boerderij2-leien-n": [
+     {
+      "bestand": "daksneeuw/planken-boerderij2-leien-n-0.png",
+      "b": 470,
+      "h": 437,
+      "anker": [
+       192,
+       344
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij2-leien-n-1.png",
+      "b": 493,
+      "h": 437,
+      "anker": [
+       192,
+       344
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij2-leien-n-2.png",
+      "b": 494,
+      "h": 441,
+      "anker": [
+       192,
+       344
+      ]
+     }
+    ],
+    "planken-boerderij2-leien-w": [
+     {
+      "bestand": "daksneeuw/planken-boerderij2-leien-w-0.png",
+      "b": 437,
+      "h": 418,
+      "anker": [
+       226,
+       334
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij2-leien-w-1.png",
+      "b": 515,
+      "h": 421,
+      "anker": [
+       304,
+       334
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij2-leien-w-2.png",
+      "b": 520,
+      "h": 421,
+      "anker": [
+       304,
+       334
+      ]
+     }
+    ],
+    "planken-boerderij2-pannen-z": [
+     {
+      "bestand": "daksneeuw/planken-boerderij2-pannen-z-0.png",
+      "b": 462,
+      "h": 414,
+      "anker": [
+       286,
+       286
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij2-pannen-z-1.png",
+      "b": 489,
+      "h": 419,
+      "anker": [
+       286,
+       286
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij2-pannen-z-2.png",
+      "b": 494,
+      "h": 421,
+      "anker": [
+       286,
+       286
+      ]
+     }
+    ],
+    "planken-boerderij2-pannen-o": [
+     {
+      "bestand": "daksneeuw/planken-boerderij2-pannen-o-0.png",
+      "b": 540,
+      "h": 416,
+      "anker": [
+       253,
+       292
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij2-pannen-o-1.png",
+      "b": 541,
+      "h": 423,
+      "anker": [
+       253,
+       292
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij2-pannen-o-2.png",
+      "b": 547,
+      "h": 423,
+      "anker": [
+       259,
+       292
+      ]
+     }
+    ],
+    "planken-boerderij2-pannen-n": [
+     {
+      "bestand": "daksneeuw/planken-boerderij2-pannen-n-0.png",
+      "b": 418,
+      "h": 431,
+      "anker": [
+       192,
+       344
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij2-pannen-n-1.png",
+      "b": 484,
+      "h": 437,
+      "anker": [
+       192,
+       344
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij2-pannen-n-2.png",
+      "b": 492,
+      "h": 441,
+      "anker": [
+       192,
+       344
+      ]
+     }
+    ],
+    "planken-boerderij2-pannen-w": [
+     {
+      "bestand": "daksneeuw/planken-boerderij2-pannen-w-0.png",
+      "b": 400,
+      "h": 418,
+      "anker": [
+       226,
+       334
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij2-pannen-w-1.png",
+      "b": 513,
+      "h": 421,
+      "anker": [
+       304,
+       334
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij2-pannen-w-2.png",
+      "b": 520,
+      "h": 421,
+      "anker": [
+       304,
+       334
+      ]
+     }
+    ],
+    "planken-boerderij5-spanen-z": [
+     {
+      "bestand": "daksneeuw/planken-boerderij5-spanen-z-0.png",
+      "b": 407,
+      "h": 382,
+      "anker": [
+       182,
+       310
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij5-spanen-z-1.png",
+      "b": 479,
+      "h": 388,
+      "anker": [
+       194,
+       310
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij5-spanen-z-2.png",
+      "b": 494,
+      "h": 388,
+      "anker": [
+       194,
+       310
+      ]
+     }
+    ],
+    "planken-boerderij5-spanen-o": [
+     {
+      "bestand": "daksneeuw/planken-boerderij5-spanen-o-0.png",
+      "b": 416,
+      "h": 385,
+      "anker": [
+       226,
+       307
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij5-spanen-o-1.png",
+      "b": 489,
+      "h": 387,
+      "anker": [
+       299,
+       307
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij5-spanen-o-2.png",
+      "b": 500,
+      "h": 387,
+      "anker": [
+       310,
+       307
+      ]
+     }
+    ],
+    "planken-boerderij5-spanen-n": [
+     {
+      "bestand": "daksneeuw/planken-boerderij5-spanen-n-0.png",
+      "b": 483,
+      "h": 390,
+      "anker": [
+       216,
+       300
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij5-spanen-n-1.png",
+      "b": 492,
+      "h": 396,
+      "anker": [
+       222,
+       300
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij5-spanen-n-2.png",
+      "b": 510,
+      "h": 396,
+      "anker": [
+       222,
+       300
+      ]
+     }
+    ],
+    "planken-boerderij5-spanen-w": [
+     {
+      "bestand": "daksneeuw/planken-boerderij5-spanen-w-0.png",
+      "b": 417,
+      "h": 387,
+      "anker": [
+       193,
+       294
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij5-spanen-w-1.png",
+      "b": 447,
+      "h": 388,
+      "anker": [
+       221,
+       294
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij5-spanen-w-2.png",
+      "b": 494,
+      "h": 388,
+      "anker": [
+       268,
+       294
+      ]
+     }
+    ],
+    "planken-boerderij5-leien-z": [
+     {
+      "bestand": "daksneeuw/planken-boerderij5-leien-z-0.png",
+      "b": 407,
+      "h": 383,
+      "anker": [
+       182,
+       310
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij5-leien-z-1.png",
+      "b": 489,
+      "h": 388,
+      "anker": [
+       194,
+       310
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij5-leien-z-2.png",
+      "b": 494,
+      "h": 388,
+      "anker": [
+       194,
+       310
+      ]
+     }
+    ],
+    "planken-boerderij5-leien-o": [
+     {
+      "bestand": "daksneeuw/planken-boerderij5-leien-o-0.png",
+      "b": 416,
+      "h": 385,
+      "anker": [
+       226,
+       307
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij5-leien-o-1.png",
+      "b": 485,
+      "h": 387,
+      "anker": [
+       295,
+       307
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij5-leien-o-2.png",
+      "b": 500,
+      "h": 387,
+      "anker": [
+       310,
+       307
+      ]
+     }
+    ],
+    "planken-boerderij5-leien-n": [
+     {
+      "bestand": "daksneeuw/planken-boerderij5-leien-n-0.png",
+      "b": 410,
+      "h": 390,
+      "anker": [
+       216,
+       300
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij5-leien-n-1.png",
+      "b": 491,
+      "h": 396,
+      "anker": [
+       222,
+       300
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij5-leien-n-2.png",
+      "b": 510,
+      "h": 396,
+      "anker": [
+       222,
+       300
+      ]
+     }
+    ],
+    "planken-boerderij5-leien-w": [
+     {
+      "bestand": "daksneeuw/planken-boerderij5-leien-w-0.png",
+      "b": 417,
+      "h": 387,
+      "anker": [
+       193,
+       294
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij5-leien-w-1.png",
+      "b": 447,
+      "h": 388,
+      "anker": [
+       221,
+       294
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij5-leien-w-2.png",
+      "b": 494,
+      "h": 388,
+      "anker": [
+       268,
+       294
+      ]
+     }
+    ],
+    "planken-boerderij5-pannen-z": [
+     {
+      "bestand": "daksneeuw/planken-boerderij5-pannen-z-0.png",
+      "b": 413,
+      "h": 383,
+      "anker": [
+       188,
+       310
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij5-pannen-z-1.png",
+      "b": 491,
+      "h": 388,
+      "anker": [
+       194,
+       310
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij5-pannen-z-2.png",
+      "b": 494,
+      "h": 388,
+      "anker": [
+       194,
+       310
+      ]
+     }
+    ],
+    "planken-boerderij5-pannen-o": [
+     {
+      "bestand": "daksneeuw/planken-boerderij5-pannen-o-0.png",
+      "b": 416,
+      "h": 385,
+      "anker": [
+       226,
+       307
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij5-pannen-o-1.png",
+      "b": 487,
+      "h": 387,
+      "anker": [
+       297,
+       307
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij5-pannen-o-2.png",
+      "b": 500,
+      "h": 387,
+      "anker": [
+       310,
+       307
+      ]
+     }
+    ],
+    "planken-boerderij5-pannen-n": [
+     {
+      "bestand": "daksneeuw/planken-boerderij5-pannen-n-0.png",
+      "b": 410,
+      "h": 390,
+      "anker": [
+       216,
+       300
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij5-pannen-n-1.png",
+      "b": 491,
+      "h": 396,
+      "anker": [
+       222,
+       300
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij5-pannen-n-2.png",
+      "b": 510,
+      "h": 396,
+      "anker": [
+       222,
+       300
+      ]
+     }
+    ],
+    "planken-boerderij5-pannen-w": [
+     {
+      "bestand": "daksneeuw/planken-boerderij5-pannen-w-0.png",
+      "b": 417,
+      "h": 387,
+      "anker": [
+       193,
+       294
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij5-pannen-w-1.png",
+      "b": 447,
+      "h": 388,
+      "anker": [
+       221,
+       294
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-boerderij5-pannen-w-2.png",
+      "b": 494,
+      "h": 388,
+      "anker": [
+       268,
+       294
+      ]
+     }
+    ],
+    "planken-herberg1-spanen-z": [
+     {
+      "bestand": "daksneeuw/planken-herberg1-spanen-z-0.png",
+      "b": 522,
+      "h": 387,
+      "anker": [
+       286,
+       284
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-herberg1-spanen-z-1.png",
+      "b": 558,
+      "h": 389,
+      "anker": [
+       286,
+       284
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-herberg1-spanen-z-2.png",
+      "b": 569,
+      "h": 390,
+      "anker": [
+       286,
+       284
+      ]
+     }
+    ],
+    "planken-herberg1-spanen-o": [
+     {
+      "bestand": "daksneeuw/planken-herberg1-spanen-o-0.png",
+      "b": 583,
+      "h": 384,
+      "anker": [
+       295,
+       284
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-herberg1-spanen-o-1.png",
+      "b": 587,
+      "h": 386,
+      "anker": [
+       299,
+       284
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-herberg1-spanen-o-2.png",
+      "b": 588,
+      "h": 386,
+      "anker": [
+       300,
+       284
+      ]
+     }
+    ],
+    "planken-herberg1-spanen-n": [
+     {
+      "bestand": "daksneeuw/planken-herberg1-spanen-n-0.png",
+      "b": 476,
+      "h": 395,
+      "anker": [
+       191,
+       332
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-herberg1-spanen-n-1.png",
+      "b": 557,
+      "h": 396,
+      "anker": [
+       192,
+       332
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-herberg1-spanen-n-2.png",
+      "b": 557,
+      "h": 396,
+      "anker": [
+       192,
+       332
+      ]
+     }
+    ],
+    "planken-herberg1-spanen-w": [
+     {
+      "bestand": "daksneeuw/planken-herberg1-spanen-w-0.png",
+      "b": 475,
+      "h": 390,
+      "anker": [
+       285,
+       332
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-herberg1-spanen-w-1.png",
+      "b": 574,
+      "h": 390,
+      "anker": [
+       379,
+       332
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-herberg1-spanen-w-2.png",
+      "b": 574,
+      "h": 390,
+      "anker": [
+       379,
+       332
+      ]
+     }
+    ],
+    "planken-herberg2-leien-z": [
+     {
+      "bestand": "daksneeuw/planken-herberg2-leien-z-0.png",
+      "b": 561,
+      "h": 550,
+      "anker": [
+       244,
+       474
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-herberg2-leien-z-1.png",
+      "b": 561,
+      "h": 550,
+      "anker": [
+       244,
+       474
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-herberg2-leien-z-2.png",
+      "b": 674,
+      "h": 550,
+      "anker": [
+       244,
+       474
+      ]
+     }
+    ],
+    "planken-herberg2-leien-o": [
+     {
+      "bestand": "daksneeuw/planken-herberg2-leien-o-0.png",
+      "b": 598,
+      "h": 511,
+      "anker": [
+       364,
+       474
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-herberg2-leien-o-1.png",
+      "b": 660,
+      "h": 511,
+      "anker": [
+       415,
+       474
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-herberg2-leien-o-2.png",
+      "b": 664,
+      "h": 512,
+      "anker": [
+       419,
+       474
+      ]
+     }
+    ],
+    "planken-herberg2-leien-n": [
+     {
+      "bestand": "daksneeuw/planken-herberg2-leien-n-0.png",
+      "b": 562,
+      "h": 485,
+      "anker": [
+       245,
+       474
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-herberg2-leien-n-1.png",
+      "b": 658,
+      "h": 486,
+      "anker": [
+       245,
+       474
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-herberg2-leien-n-2.png",
+      "b": 672,
+      "h": 486,
+      "anker": [
+       245,
+       474
+      ]
+     }
+    ],
+    "planken-herberg2-leien-w": [
+     {
+      "bestand": "daksneeuw/planken-herberg2-leien-w-0.png",
+      "b": 590,
+      "h": 488,
+      "anker": [
+       357,
+       474
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-herberg2-leien-w-1.png",
+      "b": 601,
+      "h": 489,
+      "anker": [
+       357,
+       474
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-herberg2-leien-w-2.png",
+      "b": 659,
+      "h": 489,
+      "anker": [
+       415,
+       474
+      ]
+     }
+    ],
+    "planken-herberg2-pannen-z": [
+     {
+      "bestand": "daksneeuw/planken-herberg2-pannen-z-0.png",
+      "b": 557,
+      "h": 506,
+      "anker": [
+       244,
+       430
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-herberg2-pannen-z-1.png",
+      "b": 673,
+      "h": 506,
+      "anker": [
+       244,
+       430
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-herberg2-pannen-z-2.png",
+      "b": 680,
+      "h": 506,
+      "anker": [
+       244,
+       430
+      ]
+     }
+    ],
+    "planken-herberg2-pannen-o": [
+     {
+      "bestand": "daksneeuw/planken-herberg2-pannen-o-0.png",
+      "b": 555,
+      "h": 466,
+      "anker": [
+       310,
+       429
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-herberg2-pannen-o-1.png",
+      "b": 640,
+      "h": 466,
+      "anker": [
+       395,
+       429
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-herberg2-pannen-o-2.png",
+      "b": 680,
+      "h": 467,
+      "anker": [
+       435,
+       429
+      ]
+     }
+    ],
+    "planken-herberg2-pannen-n": [
+     {
+      "bestand": "daksneeuw/planken-herberg2-pannen-n-0.png",
+      "b": 558,
+      "h": 439,
+      "anker": [
+       245,
+       429
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-herberg2-pannen-n-1.png",
+      "b": 618,
+      "h": 439,
+      "anker": [
+       245,
+       429
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-herberg2-pannen-n-2.png",
+      "b": 680,
+      "h": 439,
+      "anker": [
+       245,
+       429
+      ]
+     }
+    ],
+    "planken-herberg2-pannen-w": [
+     {
+      "bestand": "daksneeuw/planken-herberg2-pannen-w-0.png",
+      "b": 600,
+      "h": 443,
+      "anker": [
+       356,
+       430
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-herberg2-pannen-w-1.png",
+      "b": 673,
+      "h": 443,
+      "anker": [
+       429,
+       430
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-herberg2-pannen-w-2.png",
+      "b": 673,
+      "h": 443,
+      "anker": [
+       429,
+       430
+      ]
+     }
+    ],
+    "planken-kapel-spanen-z": [
+     {
+      "bestand": "daksneeuw/planken-kapel-spanen-z-0.png",
+      "b": 746,
+      "h": 1062,
+      "anker": [
+       242,
+       753
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-kapel-spanen-z-1.png",
+      "b": 747,
+      "h": 1078,
+      "anker": [
+       242,
+       753
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-kapel-spanen-z-2.png",
+      "b": 747,
+      "h": 1081,
+      "anker": [
+       242,
+       753
+      ]
+     }
+    ],
+    "planken-kapel-spanen-o": [
+     {
+      "bestand": "daksneeuw/planken-kapel-spanen-o-0.png",
+      "b": 629,
+      "h": 1062,
+      "anker": [
+       454,
+       944
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-kapel-spanen-o-1.png",
+      "b": 745,
+      "h": 1062,
+      "anker": [
+       570,
+       944
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-kapel-spanen-o-2.png",
+      "b": 745,
+      "h": 1069,
+      "anker": [
+       570,
+       944
+      ]
+     }
+    ],
+    "planken-kapel-spanen-n": [
+     {
+      "bestand": "daksneeuw/planken-kapel-spanen-n-0.png",
+      "b": 623,
+      "h": 1033,
+      "anker": [
+       169,
+       947
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-kapel-spanen-n-1.png",
+      "b": 739,
+      "h": 1033,
+      "anker": [
+       169,
+       947
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-kapel-spanen-n-2.png",
+      "b": 739,
+      "h": 1071,
+      "anker": [
+       169,
+       947
+      ]
+     }
+    ],
+    "planken-kapel-spanen-w": [
+     {
+      "bestand": "daksneeuw/planken-kapel-spanen-w-0.png",
+      "b": 747,
+      "h": 992,
+      "anker": [
+       511,
+       749
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-kapel-spanen-w-1.png",
+      "b": 753,
+      "h": 1084,
+      "anker": [
+       511,
+       756
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-kapel-spanen-w-2.png",
+      "b": 753,
+      "h": 1085,
+      "anker": [
+       511,
+       756
+      ]
+     }
+    ],
+    "planken-kapel-baksteen-z": [
+     {
+      "bestand": "daksneeuw/planken-kapel-baksteen-z-0.png",
+      "b": 746,
+      "h": 1062,
+      "anker": [
+       242,
+       753
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-kapel-baksteen-z-1.png",
+      "b": 747,
+      "h": 1078,
+      "anker": [
+       242,
+       753
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-kapel-baksteen-z-2.png",
+      "b": 747,
+      "h": 1081,
+      "anker": [
+       242,
+       753
+      ]
+     }
+    ],
+    "planken-kapel-baksteen-o": [
+     {
+      "bestand": "daksneeuw/planken-kapel-baksteen-o-0.png",
+      "b": 629,
+      "h": 1062,
+      "anker": [
+       454,
+       944
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-kapel-baksteen-o-1.png",
+      "b": 745,
+      "h": 1062,
+      "anker": [
+       570,
+       944
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-kapel-baksteen-o-2.png",
+      "b": 745,
+      "h": 1069,
+      "anker": [
+       570,
+       944
+      ]
+     }
+    ],
+    "planken-kapel-baksteen-n": [
+     {
+      "bestand": "daksneeuw/planken-kapel-baksteen-n-0.png",
+      "b": 623,
+      "h": 1033,
+      "anker": [
+       169,
+       947
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-kapel-baksteen-n-1.png",
+      "b": 739,
+      "h": 1033,
+      "anker": [
+       169,
+       947
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-kapel-baksteen-n-2.png",
+      "b": 739,
+      "h": 1071,
+      "anker": [
+       169,
+       947
+      ]
+     }
+    ],
+    "planken-kapel-baksteen-w": [
+     {
+      "bestand": "daksneeuw/planken-kapel-baksteen-w-0.png",
+      "b": 747,
+      "h": 992,
+      "anker": [
+       511,
+       749
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-kapel-baksteen-w-1.png",
+      "b": 753,
+      "h": 1084,
+      "anker": [
+       511,
+       756
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-kapel-baksteen-w-2.png",
+      "b": 753,
+      "h": 1085,
+      "anker": [
+       511,
+       756
+      ]
+     }
+    ],
+    "planken-woontoren-pannen-z": [
+     {
+      "bestand": "daksneeuw/planken-woontoren-pannen-z-0.png",
+      "b": 308,
+      "h": 312,
+      "anker": [
+       206,
+       431
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-woontoren-pannen-z-1.png",
+      "b": 313,
+      "h": 313,
+      "anker": [
+       210,
+       431
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-woontoren-pannen-z-2.png",
+      "b": 407,
+      "h": 313,
+      "anker": [
+       210,
+       431
+      ]
+     }
+    ],
+    "planken-woontoren-pannen-o": [
+     {
+      "bestand": "daksneeuw/planken-woontoren-pannen-o-0.png",
+      "b": 311,
+      "h": 306,
+      "anker": [
+       102,
+       426
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-woontoren-pannen-o-1.png",
+      "b": 399,
+      "h": 307,
+      "anker": [
+       190,
+       426
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-woontoren-pannen-o-2.png",
+      "b": 418,
+      "h": 307,
+      "anker": [
+       209,
+       426
+      ]
+     }
+    ],
+    "planken-woontoren-pannen-n": [
+     {
+      "bestand": "daksneeuw/planken-woontoren-pannen-n-0.png",
+      "b": 306,
+      "h": 303,
+      "anker": [
+       204,
+       426
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-woontoren-pannen-n-1.png",
+      "b": 418,
+      "h": 306,
+      "anker": [
+       209,
+       426
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-woontoren-pannen-n-2.png",
+      "b": 419,
+      "h": 307,
+      "anker": [
+       209,
+       426
+      ]
+     }
+    ],
+    "planken-woontoren-pannen-w": [
+     {
+      "bestand": "daksneeuw/planken-woontoren-pannen-w-0.png",
+      "b": 312,
+      "h": 322,
+      "anker": [
+       103,
+       440
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-woontoren-pannen-w-1.png",
+      "b": 393,
+      "h": 322,
+      "anker": [
+       183,
+       440
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-woontoren-pannen-w-2.png",
+      "b": 411,
+      "h": 322,
+      "anker": [
+       201,
+       440
+      ]
+     }
+    ],
+    "planken-woontoren-baksteen-z": [
+     {
+      "bestand": "daksneeuw/planken-woontoren-baksteen-z-0.png",
+      "b": 308,
+      "h": 312,
+      "anker": [
+       206,
+       431
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-woontoren-baksteen-z-1.png",
+      "b": 313,
+      "h": 313,
+      "anker": [
+       210,
+       431
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-woontoren-baksteen-z-2.png",
+      "b": 407,
+      "h": 313,
+      "anker": [
+       210,
+       431
+      ]
+     }
+    ],
+    "planken-woontoren-baksteen-o": [
+     {
+      "bestand": "daksneeuw/planken-woontoren-baksteen-o-0.png",
+      "b": 311,
+      "h": 306,
+      "anker": [
+       102,
+       426
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-woontoren-baksteen-o-1.png",
+      "b": 399,
+      "h": 307,
+      "anker": [
+       190,
+       426
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-woontoren-baksteen-o-2.png",
+      "b": 418,
+      "h": 307,
+      "anker": [
+       209,
+       426
+      ]
+     }
+    ],
+    "planken-woontoren-baksteen-n": [
+     {
+      "bestand": "daksneeuw/planken-woontoren-baksteen-n-0.png",
+      "b": 306,
+      "h": 303,
+      "anker": [
+       204,
+       426
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-woontoren-baksteen-n-1.png",
+      "b": 418,
+      "h": 306,
+      "anker": [
+       209,
+       426
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-woontoren-baksteen-n-2.png",
+      "b": 419,
+      "h": 307,
+      "anker": [
+       209,
+       426
+      ]
+     }
+    ],
+    "planken-woontoren-baksteen-w": [
+     {
+      "bestand": "daksneeuw/planken-woontoren-baksteen-w-0.png",
+      "b": 312,
+      "h": 322,
+      "anker": [
+       103,
+       440
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-woontoren-baksteen-w-1.png",
+      "b": 393,
+      "h": 322,
+      "anker": [
+       183,
+       440
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-woontoren-baksteen-w-2.png",
+      "b": 411,
+      "h": 322,
+      "anker": [
+       201,
+       440
+      ]
+     }
+    ],
+    "planken-schoutshuis-spanen-z": [
+     {
+      "bestand": "daksneeuw/planken-schoutshuis-spanen-z-0.png",
+      "b": 433,
+      "h": 593,
+      "anker": [
+       244,
+       521
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-schoutshuis-spanen-z-1.png",
+      "b": 526,
+      "h": 593,
+      "anker": [
+       244,
+       521
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-schoutshuis-spanen-z-2.png",
+      "b": 548,
+      "h": 593,
+      "anker": [
+       244,
+       521
+      ]
+     }
+    ],
+    "planken-schoutshuis-spanen-o": [
+     {
+      "bestand": "daksneeuw/planken-schoutshuis-spanen-o-0.png",
+      "b": 428,
+      "h": 582,
+      "anker": [
+       188,
+       512
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-schoutshuis-spanen-o-1.png",
+      "b": 528,
+      "h": 582,
+      "anker": [
+       286,
+       512
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-schoutshuis-spanen-o-2.png",
+      "b": 533,
+      "h": 582,
+      "anker": [
+       291,
+       512
+      ]
+     }
+    ],
+    "planken-schoutshuis-spanen-n": [
+     {
+      "bestand": "daksneeuw/planken-schoutshuis-spanen-n-0.png",
+      "b": 430,
+      "h": 458,
+      "anker": [
+       242,
+       512
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-schoutshuis-spanen-n-1.png",
+      "b": 533,
+      "h": 465,
+      "anker": [
+       242,
+       512
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-schoutshuis-spanen-n-2.png",
+      "b": 533,
+      "h": 466,
+      "anker": [
+       242,
+       512
+      ]
+     }
+    ],
+    "planken-schoutshuis-spanen-w": [
+     {
+      "bestand": "daksneeuw/planken-schoutshuis-spanen-w-0.png",
+      "b": 426,
+      "h": 467,
+      "anker": [
+       189,
+       521
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-schoutshuis-spanen-w-1.png",
+      "b": 530,
+      "h": 474,
+      "anker": [
+       286,
+       521
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-schoutshuis-spanen-w-2.png",
+      "b": 530,
+      "h": 474,
+      "anker": [
+       286,
+       521
+      ]
+     }
+    ],
+    "roze-huis10-riet-z": [
+     {
+      "bestand": "daksneeuw/roze-huis10-riet-z-0.png",
+      "b": 520,
+      "h": 547,
+      "anker": [
+       226,
+       523
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis10-riet-z-1.png",
+      "b": 525,
+      "h": 547,
+      "anker": [
+       231,
+       523
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis10-riet-z-2.png",
+      "b": 525,
+      "h": 547,
+      "anker": [
+       231,
+       523
+      ]
+     }
+    ],
+    "roze-huis10-riet-o": [
+     {
+      "bestand": "daksneeuw/roze-huis10-riet-o-0.png",
+      "b": 515,
+      "h": 578,
+      "anker": [
+       290,
+       512
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis10-riet-o-1.png",
+      "b": 524,
+      "h": 578,
+      "anker": [
+       293,
+       512
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis10-riet-o-2.png",
+      "b": 526,
+      "h": 578,
+      "anker": [
+       295,
+       512
+      ]
+     }
+    ],
+    "roze-huis10-riet-n": [
+     {
+      "bestand": "daksneeuw/roze-huis10-riet-n-0.png",
+      "b": 518,
+      "h": 429,
+      "anker": [
+       226,
+       512
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis10-riet-n-1.png",
+      "b": 524,
+      "h": 430,
+      "anker": [
+       231,
+       512
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis10-riet-n-2.png",
+      "b": 526,
+      "h": 431,
+      "anker": [
+       231,
+       512
+      ]
+     }
+    ],
+    "roze-huis10-riet-w": [
+     {
+      "bestand": "daksneeuw/roze-huis10-riet-w-0.png",
+      "b": 522,
+      "h": 433,
+      "anker": [
+       291,
+       523
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis10-riet-w-1.png",
+      "b": 526,
+      "h": 433,
+      "anker": [
+       295,
+       523
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis10-riet-w-2.png",
+      "b": 526,
+      "h": 433,
+      "anker": [
+       295,
+       523
+      ]
+     }
+    ],
+    "roze-huis10-leien-z": [
+     {
+      "bestand": "daksneeuw/roze-huis10-leien-z-0.png",
+      "b": 402,
+      "h": 499,
+      "anker": [
+       215,
+       475
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis10-leien-z-1.png",
+      "b": 477,
+      "h": 499,
+      "anker": [
+       216,
+       475
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis10-leien-z-2.png",
+      "b": 482,
+      "h": 499,
+      "anker": [
+       216,
+       475
+      ]
+     }
+    ],
+    "roze-huis10-leien-o": [
+     {
+      "bestand": "daksneeuw/roze-huis10-leien-o-0.png",
+      "b": 389,
+      "h": 531,
+      "anker": [
+       173,
+       465
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis10-leien-o-1.png",
+      "b": 467,
+      "h": 531,
+      "anker": [
+       251,
+       465
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis10-leien-o-2.png",
+      "b": 476,
+      "h": 531,
+      "anker": [
+       260,
+       465
+      ]
+     }
+    ],
+    "roze-huis10-leien-n": [
+     {
+      "bestand": "daksneeuw/roze-huis10-leien-n-0.png",
+      "b": 389,
+      "h": 379,
+      "anker": [
+       216,
+       465
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis10-leien-n-1.png",
+      "b": 476,
+      "h": 388,
+      "anker": [
+       216,
+       465
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis10-leien-n-2.png",
+      "b": 480,
+      "h": 388,
+      "anker": [
+       216,
+       465
+      ]
+     }
+    ],
+    "roze-huis10-leien-w": [
+     {
+      "bestand": "daksneeuw/roze-huis10-leien-w-0.png",
+      "b": 383,
+      "h": 391,
+      "anker": [
+       167,
+       475
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis10-leien-w-1.png",
+      "b": 474,
+      "h": 392,
+      "anker": [
+       258,
+       475
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis10-leien-w-2.png",
+      "b": 477,
+      "h": 392,
+      "anker": [
+       261,
+       475
+      ]
+     }
+    ],
+    "roze-huis10-pannen-z": [
+     {
+      "bestand": "daksneeuw/roze-huis10-pannen-z-0.png",
+      "b": 402,
+      "h": 499,
+      "anker": [
+       215,
+       475
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis10-pannen-z-1.png",
+      "b": 477,
+      "h": 499,
+      "anker": [
+       216,
+       475
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis10-pannen-z-2.png",
+      "b": 482,
+      "h": 499,
+      "anker": [
+       216,
+       475
+      ]
+     }
+    ],
+    "roze-huis10-pannen-o": [
+     {
+      "bestand": "daksneeuw/roze-huis10-pannen-o-0.png",
+      "b": 389,
+      "h": 531,
+      "anker": [
+       173,
+       465
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis10-pannen-o-1.png",
+      "b": 472,
+      "h": 531,
+      "anker": [
+       256,
+       465
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis10-pannen-o-2.png",
+      "b": 476,
+      "h": 531,
+      "anker": [
+       260,
+       465
+      ]
+     }
+    ],
+    "roze-huis10-pannen-n": [
+     {
+      "bestand": "daksneeuw/roze-huis10-pannen-n-0.png",
+      "b": 389,
+      "h": 379,
+      "anker": [
+       216,
+       465
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis10-pannen-n-1.png",
+      "b": 476,
+      "h": 388,
+      "anker": [
+       216,
+       465
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis10-pannen-n-2.png",
+      "b": 480,
+      "h": 388,
+      "anker": [
+       216,
+       465
+      ]
+     }
+    ],
+    "roze-huis10-pannen-w": [
+     {
+      "bestand": "daksneeuw/roze-huis10-pannen-w-0.png",
+      "b": 389,
+      "h": 391,
+      "anker": [
+       173,
+       475
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis10-pannen-w-1.png",
+      "b": 474,
+      "h": 392,
+      "anker": [
+       258,
+       475
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis10-pannen-w-2.png",
+      "b": 477,
+      "h": 392,
+      "anker": [
+       261,
+       475
+      ]
+     }
+    ],
+    "roze-steen10-leien-z": [
+     {
+      "bestand": "daksneeuw/roze-steen10-leien-z-0.png",
+      "b": 402,
+      "h": 499,
+      "anker": [
+       215,
+       475
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen10-leien-z-1.png",
+      "b": 477,
+      "h": 499,
+      "anker": [
+       216,
+       475
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen10-leien-z-2.png",
+      "b": 482,
+      "h": 499,
+      "anker": [
+       216,
+       475
+      ]
+     }
+    ],
+    "roze-steen10-leien-o": [
+     {
+      "bestand": "daksneeuw/roze-steen10-leien-o-0.png",
+      "b": 389,
+      "h": 531,
+      "anker": [
+       173,
+       465
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen10-leien-o-1.png",
+      "b": 467,
+      "h": 531,
+      "anker": [
+       251,
+       465
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen10-leien-o-2.png",
+      "b": 476,
+      "h": 531,
+      "anker": [
+       260,
+       465
+      ]
+     }
+    ],
+    "roze-steen10-leien-n": [
+     {
+      "bestand": "daksneeuw/roze-steen10-leien-n-0.png",
+      "b": 389,
+      "h": 379,
+      "anker": [
+       216,
+       465
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen10-leien-n-1.png",
+      "b": 476,
+      "h": 388,
+      "anker": [
+       216,
+       465
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen10-leien-n-2.png",
+      "b": 480,
+      "h": 388,
+      "anker": [
+       216,
+       465
+      ]
+     }
+    ],
+    "roze-steen10-leien-w": [
+     {
+      "bestand": "daksneeuw/roze-steen10-leien-w-0.png",
+      "b": 383,
+      "h": 391,
+      "anker": [
+       167,
+       475
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen10-leien-w-1.png",
+      "b": 474,
+      "h": 392,
+      "anker": [
+       258,
+       475
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen10-leien-w-2.png",
+      "b": 477,
+      "h": 392,
+      "anker": [
+       261,
+       475
+      ]
+     }
+    ],
+    "roze-steen10-pannen-z": [
+     {
+      "bestand": "daksneeuw/roze-steen10-pannen-z-0.png",
+      "b": 402,
+      "h": 499,
+      "anker": [
+       215,
+       475
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen10-pannen-z-1.png",
+      "b": 477,
+      "h": 499,
+      "anker": [
+       216,
+       475
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen10-pannen-z-2.png",
+      "b": 482,
+      "h": 499,
+      "anker": [
+       216,
+       475
+      ]
+     }
+    ],
+    "roze-steen10-pannen-o": [
+     {
+      "bestand": "daksneeuw/roze-steen10-pannen-o-0.png",
+      "b": 389,
+      "h": 531,
+      "anker": [
+       173,
+       465
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen10-pannen-o-1.png",
+      "b": 472,
+      "h": 531,
+      "anker": [
+       256,
+       465
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen10-pannen-o-2.png",
+      "b": 476,
+      "h": 531,
+      "anker": [
+       260,
+       465
+      ]
+     }
+    ],
+    "roze-steen10-pannen-n": [
+     {
+      "bestand": "daksneeuw/roze-steen10-pannen-n-0.png",
+      "b": 389,
+      "h": 379,
+      "anker": [
+       216,
+       465
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen10-pannen-n-1.png",
+      "b": 476,
+      "h": 388,
+      "anker": [
+       216,
+       465
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen10-pannen-n-2.png",
+      "b": 480,
+      "h": 388,
+      "anker": [
+       216,
+       465
+      ]
+     }
+    ],
+    "roze-steen10-pannen-w": [
+     {
+      "bestand": "daksneeuw/roze-steen10-pannen-w-0.png",
+      "b": 389,
+      "h": 391,
+      "anker": [
+       173,
+       475
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen10-pannen-w-1.png",
+      "b": 474,
+      "h": 392,
+      "anker": [
+       258,
+       475
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen10-pannen-w-2.png",
+      "b": 477,
+      "h": 392,
+      "anker": [
+       261,
+       475
+      ]
+     }
+    ],
+    "roze-steen10-baksteen-z": [
+     {
+      "bestand": "daksneeuw/roze-steen10-baksteen-z-0.png",
+      "b": 402,
+      "h": 499,
+      "anker": [
+       215,
+       475
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen10-baksteen-z-1.png",
+      "b": 477,
+      "h": 499,
+      "anker": [
+       216,
+       475
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen10-baksteen-z-2.png",
+      "b": 482,
+      "h": 499,
+      "anker": [
+       216,
+       475
+      ]
+     }
+    ],
+    "roze-steen10-baksteen-o": [
+     {
+      "bestand": "daksneeuw/roze-steen10-baksteen-o-0.png",
+      "b": 389,
+      "h": 531,
+      "anker": [
+       173,
+       465
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen10-baksteen-o-1.png",
+      "b": 472,
+      "h": 531,
+      "anker": [
+       256,
+       465
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen10-baksteen-o-2.png",
+      "b": 476,
+      "h": 531,
+      "anker": [
+       260,
+       465
+      ]
+     }
+    ],
+    "roze-steen10-baksteen-n": [
+     {
+      "bestand": "daksneeuw/roze-steen10-baksteen-n-0.png",
+      "b": 389,
+      "h": 379,
+      "anker": [
+       216,
+       465
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen10-baksteen-n-1.png",
+      "b": 476,
+      "h": 388,
+      "anker": [
+       216,
+       465
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen10-baksteen-n-2.png",
+      "b": 480,
+      "h": 388,
+      "anker": [
+       216,
+       465
+      ]
+     }
+    ],
+    "roze-steen10-baksteen-w": [
+     {
+      "bestand": "daksneeuw/roze-steen10-baksteen-w-0.png",
+      "b": 389,
+      "h": 391,
+      "anker": [
+       173,
+       475
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen10-baksteen-w-1.png",
+      "b": 474,
+      "h": 392,
+      "anker": [
+       258,
+       475
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen10-baksteen-w-2.png",
+      "b": 477,
+      "h": 392,
+      "anker": [
+       261,
+       475
+      ]
+     }
+    ],
+    "roze-huis11-riet-z": [
+     {
+      "bestand": "daksneeuw/roze-huis11-riet-z-0.png",
+      "b": 532,
+      "h": 557,
+      "anker": [
+       232,
+       405
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis11-riet-z-1.png",
+      "b": 542,
+      "h": 557,
+      "anker": [
+       240,
+       405
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis11-riet-z-2.png",
+      "b": 546,
+      "h": 557,
+      "anker": [
+       241,
+       405
+      ]
+     }
+    ],
+    "roze-huis11-riet-o": [
+     {
+      "bestand": "daksneeuw/roze-huis11-riet-o-0.png",
+      "b": 539,
+      "h": 473,
+      "anker": [
+       298,
+       400
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis11-riet-o-1.png",
+      "b": 542,
+      "h": 473,
+      "anker": [
+       301,
+       400
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis11-riet-o-2.png",
+      "b": 546,
+      "h": 474,
+      "anker": [
+       305,
+       400
+      ]
+     }
+    ],
+    "roze-huis11-riet-n": [
+     {
+      "bestand": "daksneeuw/roze-huis11-riet-n-0.png",
+      "b": 535,
+      "h": 473,
+      "anker": [
+       233,
+       400
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis11-riet-n-1.png",
+      "b": 535,
+      "h": 473,
+      "anker": [
+       233,
+       400
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis11-riet-n-2.png",
+      "b": 546,
+      "h": 475,
+      "anker": [
+       241,
+       400
+      ]
+     }
+    ],
+    "roze-huis11-riet-w": [
+     {
+      "bestand": "daksneeuw/roze-huis11-riet-w-0.png",
+      "b": 531,
+      "h": 558,
+      "anker": [
+       300,
+       405
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis11-riet-w-1.png",
+      "b": 541,
+      "h": 558,
+      "anker": [
+       300,
+       405
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis11-riet-w-2.png",
+      "b": 546,
+      "h": 559,
+      "anker": [
+       305,
+       405
+      ]
+     }
+    ],
+    "roze-huis11-leien-z": [
+     {
+      "bestand": "daksneeuw/roze-huis11-leien-z-0.png",
+      "b": 455,
+      "h": 510,
+      "anker": [
+       215,
+       358
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis11-leien-z-1.png",
+      "b": 481,
+      "h": 510,
+      "anker": [
+       223,
+       358
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis11-leien-z-2.png",
+      "b": 486,
+      "h": 510,
+      "anker": [
+       223,
+       358
+      ]
+     }
+    ],
+    "roze-huis11-leien-o": [
+     {
+      "bestand": "daksneeuw/roze-huis11-leien-o-0.png",
+      "b": 421,
+      "h": 426,
+      "anker": [
+       203,
+       353
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis11-leien-o-1.png",
+      "b": 491,
+      "h": 430,
+      "anker": [
+       269,
+       353
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis11-leien-o-2.png",
+      "b": 492,
+      "h": 430,
+      "anker": [
+       270,
+       353
+      ]
+     }
+    ],
+    "roze-huis11-leien-n": [
+     {
+      "bestand": "daksneeuw/roze-huis11-leien-n-0.png",
+      "b": 423,
+      "h": 423,
+      "anker": [
+       222,
+       353
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis11-leien-n-1.png",
+      "b": 485,
+      "h": 430,
+      "anker": [
+       222,
+       353
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis11-leien-n-2.png",
+      "b": 492,
+      "h": 430,
+      "anker": [
+       222,
+       353
+      ]
+     }
+    ],
+    "roze-huis11-leien-w": [
+     {
+      "bestand": "daksneeuw/roze-huis11-leien-w-0.png",
+      "b": 472,
+      "h": 511,
+      "anker": [
+       256,
+       358
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis11-leien-w-1.png",
+      "b": 489,
+      "h": 511,
+      "anker": [
+       266,
+       358
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis11-leien-w-2.png",
+      "b": 490,
+      "h": 512,
+      "anker": [
+       267,
+       358
+      ]
+     }
+    ],
+    "roze-huis11-pannen-z": [
+     {
+      "bestand": "daksneeuw/roze-huis11-pannen-z-0.png",
+      "b": 454,
+      "h": 510,
+      "anker": [
+       215,
+       358
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis11-pannen-z-1.png",
+      "b": 463,
+      "h": 510,
+      "anker": [
+       223,
+       358
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis11-pannen-z-2.png",
+      "b": 491,
+      "h": 510,
+      "anker": [
+       223,
+       358
+      ]
+     }
+    ],
+    "roze-huis11-pannen-o": [
+     {
+      "bestand": "daksneeuw/roze-huis11-pannen-o-0.png",
+      "b": 395,
+      "h": 426,
+      "anker": [
+       177,
+       353
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis11-pannen-o-1.png",
+      "b": 485,
+      "h": 430,
+      "anker": [
+       263,
+       353
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis11-pannen-o-2.png",
+      "b": 490,
+      "h": 430,
+      "anker": [
+       268,
+       353
+      ]
+     }
+    ],
+    "roze-huis11-pannen-n": [
+     {
+      "bestand": "daksneeuw/roze-huis11-pannen-n-0.png",
+      "b": 399,
+      "h": 423,
+      "anker": [
+       222,
+       353
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis11-pannen-n-1.png",
+      "b": 485,
+      "h": 430,
+      "anker": [
+       222,
+       353
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis11-pannen-n-2.png",
+      "b": 490,
+      "h": 430,
+      "anker": [
+       222,
+       353
+      ]
+     }
+    ],
+    "roze-huis11-pannen-w": [
+     {
+      "bestand": "daksneeuw/roze-huis11-pannen-w-0.png",
+      "b": 449,
+      "h": 511,
+      "anker": [
+       234,
+       358
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis11-pannen-w-1.png",
+      "b": 490,
+      "h": 511,
+      "anker": [
+       267,
+       358
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis11-pannen-w-2.png",
+      "b": 491,
+      "h": 512,
+      "anker": [
+       268,
+       358
+      ]
+     }
+    ],
+    "roze-steen11-leien-z": [
+     {
+      "bestand": "daksneeuw/roze-steen11-leien-z-0.png",
+      "b": 455,
+      "h": 510,
+      "anker": [
+       215,
+       358
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen11-leien-z-1.png",
+      "b": 485,
+      "h": 510,
+      "anker": [
+       223,
+       358
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen11-leien-z-2.png",
+      "b": 489,
+      "h": 510,
+      "anker": [
+       223,
+       358
+      ]
+     }
+    ],
+    "roze-steen11-leien-o": [
+     {
+      "bestand": "daksneeuw/roze-steen11-leien-o-0.png",
+      "b": 421,
+      "h": 426,
+      "anker": [
+       203,
+       353
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen11-leien-o-1.png",
+      "b": 491,
+      "h": 430,
+      "anker": [
+       269,
+       353
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen11-leien-o-2.png",
+      "b": 492,
+      "h": 430,
+      "anker": [
+       270,
+       353
+      ]
+     }
+    ],
+    "roze-steen11-leien-n": [
+     {
+      "bestand": "daksneeuw/roze-steen11-leien-n-0.png",
+      "b": 423,
+      "h": 423,
+      "anker": [
+       222,
+       353
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen11-leien-n-1.png",
+      "b": 485,
+      "h": 430,
+      "anker": [
+       222,
+       353
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen11-leien-n-2.png",
+      "b": 492,
+      "h": 430,
+      "anker": [
+       222,
+       353
+      ]
+     }
+    ],
+    "roze-steen11-leien-w": [
+     {
+      "bestand": "daksneeuw/roze-steen11-leien-w-0.png",
+      "b": 472,
+      "h": 512,
+      "anker": [
+       256,
+       358
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen11-leien-w-1.png",
+      "b": 489,
+      "h": 512,
+      "anker": [
+       266,
+       358
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen11-leien-w-2.png",
+      "b": 490,
+      "h": 512,
+      "anker": [
+       267,
+       358
+      ]
+     }
+    ],
+    "roze-steen11-pannen-z": [
+     {
+      "bestand": "daksneeuw/roze-steen11-pannen-z-0.png",
+      "b": 454,
+      "h": 510,
+      "anker": [
+       215,
+       358
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen11-pannen-z-1.png",
+      "b": 486,
+      "h": 510,
+      "anker": [
+       223,
+       358
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen11-pannen-z-2.png",
+      "b": 487,
+      "h": 510,
+      "anker": [
+       223,
+       358
+      ]
+     }
+    ],
+    "roze-steen11-pannen-o": [
+     {
+      "bestand": "daksneeuw/roze-steen11-pannen-o-0.png",
+      "b": 395,
+      "h": 426,
+      "anker": [
+       177,
+       353
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen11-pannen-o-1.png",
+      "b": 485,
+      "h": 430,
+      "anker": [
+       263,
+       353
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen11-pannen-o-2.png",
+      "b": 490,
+      "h": 430,
+      "anker": [
+       268,
+       353
+      ]
+     }
+    ],
+    "roze-steen11-pannen-n": [
+     {
+      "bestand": "daksneeuw/roze-steen11-pannen-n-0.png",
+      "b": 399,
+      "h": 423,
+      "anker": [
+       222,
+       353
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen11-pannen-n-1.png",
+      "b": 485,
+      "h": 430,
+      "anker": [
+       222,
+       353
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen11-pannen-n-2.png",
+      "b": 490,
+      "h": 430,
+      "anker": [
+       222,
+       353
+      ]
+     }
+    ],
+    "roze-steen11-pannen-w": [
+     {
+      "bestand": "daksneeuw/roze-steen11-pannen-w-0.png",
+      "b": 449,
+      "h": 512,
+      "anker": [
+       234,
+       358
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen11-pannen-w-1.png",
+      "b": 490,
+      "h": 512,
+      "anker": [
+       267,
+       358
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen11-pannen-w-2.png",
+      "b": 491,
+      "h": 512,
+      "anker": [
+       268,
+       358
+      ]
+     }
+    ],
+    "roze-steen11-baksteen-z": [
+     {
+      "bestand": "daksneeuw/roze-steen11-baksteen-z-0.png",
+      "b": 454,
+      "h": 510,
+      "anker": [
+       215,
+       358
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen11-baksteen-z-1.png",
+      "b": 486,
+      "h": 510,
+      "anker": [
+       223,
+       358
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen11-baksteen-z-2.png",
+      "b": 487,
+      "h": 510,
+      "anker": [
+       223,
+       358
+      ]
+     }
+    ],
+    "roze-steen11-baksteen-o": [
+     {
+      "bestand": "daksneeuw/roze-steen11-baksteen-o-0.png",
+      "b": 395,
+      "h": 426,
+      "anker": [
+       177,
+       353
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen11-baksteen-o-1.png",
+      "b": 485,
+      "h": 430,
+      "anker": [
+       263,
+       353
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen11-baksteen-o-2.png",
+      "b": 490,
+      "h": 430,
+      "anker": [
+       268,
+       353
+      ]
+     }
+    ],
+    "roze-steen11-baksteen-n": [
+     {
+      "bestand": "daksneeuw/roze-steen11-baksteen-n-0.png",
+      "b": 399,
+      "h": 423,
+      "anker": [
+       222,
+       353
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen11-baksteen-n-1.png",
+      "b": 485,
+      "h": 430,
+      "anker": [
+       222,
+       353
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen11-baksteen-n-2.png",
+      "b": 490,
+      "h": 430,
+      "anker": [
+       222,
+       353
+      ]
+     }
+    ],
+    "roze-steen11-baksteen-w": [
+     {
+      "bestand": "daksneeuw/roze-steen11-baksteen-w-0.png",
+      "b": 449,
+      "h": 512,
+      "anker": [
+       234,
+       358
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen11-baksteen-w-1.png",
+      "b": 490,
+      "h": 512,
+      "anker": [
+       267,
+       358
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen11-baksteen-w-2.png",
+      "b": 491,
+      "h": 512,
+      "anker": [
+       268,
+       358
+      ]
+     }
+    ],
+    "roze-huis12-riet-z": [
+     {
+      "bestand": "daksneeuw/roze-huis12-riet-z-0.png",
+      "b": 539,
+      "h": 502,
+      "anker": [
+       300,
+       399
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis12-riet-z-1.png",
+      "b": 543,
+      "h": 502,
+      "anker": [
+       302,
+       399
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis12-riet-z-2.png",
+      "b": 546,
+      "h": 502,
+      "anker": [
+       305,
+       399
+      ]
+     }
+    ],
+    "roze-huis12-riet-o": [
+     {
+      "bestand": "daksneeuw/roze-huis12-riet-o-0.png",
+      "b": 594,
+      "h": 508,
+      "anker": [
+       290,
+       395
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis12-riet-o-1.png",
+      "b": 597,
+      "h": 508,
+      "anker": [
+       292,
+       395
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis12-riet-o-2.png",
+      "b": 598,
+      "h": 508,
+      "anker": [
+       293,
+       395
+      ]
+     }
+    ],
+    "roze-huis12-riet-n": [
+     {
+      "bestand": "daksneeuw/roze-huis12-riet-n-0.png",
+      "b": 534,
+      "h": 489,
+      "anker": [
+       203,
+       443
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis12-riet-n-1.png",
+      "b": 545,
+      "h": 489,
+      "anker": [
+       209,
+       443
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis12-riet-n-2.png",
+      "b": 546,
+      "h": 489,
+      "anker": [
+       209,
+       443
+      ]
+     }
+    ],
+    "roze-huis12-riet-w": [
+     {
+      "bestand": "daksneeuw/roze-huis12-riet-w-0.png",
+      "b": 588,
+      "h": 463,
+      "anker": [
+       333,
+       437
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis12-riet-w-1.png",
+      "b": 590,
+      "h": 463,
+      "anker": [
+       334,
+       437
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis12-riet-w-2.png",
+      "b": 598,
+      "h": 463,
+      "anker": [
+       337,
+       437
+      ]
+     }
+    ],
+    "roze-huis12-leien-z": [
+     {
+      "bestand": "daksneeuw/roze-huis12-leien-z-0.png",
+      "b": 476,
+      "h": 454,
+      "anker": [
+       279,
+       350
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis12-leien-z-1.png",
+      "b": 489,
+      "h": 454,
+      "anker": [
+       285,
+       350
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis12-leien-z-2.png",
+      "b": 494,
+      "h": 454,
+      "anker": [
+       286,
+       350
+      ]
+     }
+    ],
+    "roze-huis12-leien-o": [
+     {
+      "bestand": "daksneeuw/roze-huis12-leien-o-0.png",
+      "b": 555,
+      "h": 460,
+      "anker": [
+       273,
+       348
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis12-leien-o-1.png",
+      "b": 562,
+      "h": 460,
+      "anker": [
+       274,
+       348
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis12-leien-o-2.png",
+      "b": 562,
+      "h": 462,
+      "anker": [
+       274,
+       348
+      ]
+     }
+    ],
+    "roze-huis12-leien-n": [
+     {
+      "bestand": "daksneeuw/roze-huis12-leien-n-0.png",
+      "b": 461,
+      "h": 452,
+      "anker": [
+       181,
+       407
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis12-leien-n-1.png",
+      "b": 492,
+      "h": 452,
+      "anker": [
+       192,
+       407
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis12-leien-n-2.png",
+      "b": 493,
+      "h": 457,
+      "anker": [
+       192,
+       407
+      ]
+     }
+    ],
+    "roze-huis12-leien-w": [
+     {
+      "bestand": "daksneeuw/roze-huis12-leien-w-0.png",
+      "b": 442,
+      "h": 408,
+      "anker": [
+       226,
+       390
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis12-leien-w-1.png",
+      "b": 529,
+      "h": 415,
+      "anker": [
+       304,
+       390
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis12-leien-w-2.png",
+      "b": 531,
+      "h": 421,
+      "anker": [
+       304,
+       390
+      ]
+     }
+    ],
+    "roze-huis12-pannen-z": [
+     {
+      "bestand": "daksneeuw/roze-huis12-pannen-z-0.png",
+      "b": 477,
+      "h": 454,
+      "anker": [
+       280,
+       350
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis12-pannen-z-1.png",
+      "b": 486,
+      "h": 454,
+      "anker": [
+       285,
+       350
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis12-pannen-z-2.png",
+      "b": 494,
+      "h": 454,
+      "anker": [
+       286,
+       350
+      ]
+     }
+    ],
+    "roze-huis12-pannen-o": [
+     {
+      "bestand": "daksneeuw/roze-huis12-pannen-o-0.png",
+      "b": 556,
+      "h": 460,
+      "anker": [
+       273,
+       348
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis12-pannen-o-1.png",
+      "b": 562,
+      "h": 460,
+      "anker": [
+       274,
+       348
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis12-pannen-o-2.png",
+      "b": 562,
+      "h": 462,
+      "anker": [
+       274,
+       348
+      ]
+     }
+    ],
+    "roze-huis12-pannen-n": [
+     {
+      "bestand": "daksneeuw/roze-huis12-pannen-n-0.png",
+      "b": 409,
+      "h": 449,
+      "anker": [
+       183,
+       407
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis12-pannen-n-1.png",
+      "b": 492,
+      "h": 452,
+      "anker": [
+       192,
+       407
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis12-pannen-n-2.png",
+      "b": 493,
+      "h": 457,
+      "anker": [
+       192,
+       407
+      ]
+     }
+    ],
+    "roze-huis12-pannen-w": [
+     {
+      "bestand": "daksneeuw/roze-huis12-pannen-w-0.png",
+      "b": 392,
+      "h": 414,
+      "anker": [
+       226,
+       390
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis12-pannen-w-1.png",
+      "b": 527,
+      "h": 415,
+      "anker": [
+       304,
+       390
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-huis12-pannen-w-2.png",
+      "b": 531,
+      "h": 421,
+      "anker": [
+       304,
+       390
+      ]
+     }
+    ],
+    "roze-steen12-leien-z": [
+     {
+      "bestand": "daksneeuw/roze-steen12-leien-z-0.png",
+      "b": 476,
+      "h": 454,
+      "anker": [
+       279,
+       350
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen12-leien-z-1.png",
+      "b": 490,
+      "h": 454,
+      "anker": [
+       285,
+       350
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen12-leien-z-2.png",
+      "b": 494,
+      "h": 454,
+      "anker": [
+       286,
+       350
+      ]
+     }
+    ],
+    "roze-steen12-leien-o": [
+     {
+      "bestand": "daksneeuw/roze-steen12-leien-o-0.png",
+      "b": 555,
+      "h": 462,
+      "anker": [
+       273,
+       348
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen12-leien-o-1.png",
+      "b": 562,
+      "h": 462,
+      "anker": [
+       274,
+       348
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen12-leien-o-2.png",
+      "b": 562,
+      "h": 462,
+      "anker": [
+       274,
+       348
+      ]
+     }
+    ],
+    "roze-steen12-leien-n": [
+     {
+      "bestand": "daksneeuw/roze-steen12-leien-n-0.png",
+      "b": 461,
+      "h": 452,
+      "anker": [
+       181,
+       407
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen12-leien-n-1.png",
+      "b": 492,
+      "h": 452,
+      "anker": [
+       192,
+       407
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen12-leien-n-2.png",
+      "b": 493,
+      "h": 457,
+      "anker": [
+       192,
+       407
+      ]
+     }
+    ],
+    "roze-steen12-leien-w": [
+     {
+      "bestand": "daksneeuw/roze-steen12-leien-w-0.png",
+      "b": 442,
+      "h": 408,
+      "anker": [
+       226,
+       390
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen12-leien-w-1.png",
+      "b": 529,
+      "h": 415,
+      "anker": [
+       304,
+       390
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen12-leien-w-2.png",
+      "b": 531,
+      "h": 421,
+      "anker": [
+       304,
+       390
+      ]
+     }
+    ],
+    "roze-steen12-pannen-z": [
+     {
+      "bestand": "daksneeuw/roze-steen12-pannen-z-0.png",
+      "b": 477,
+      "h": 454,
+      "anker": [
+       280,
+       350
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen12-pannen-z-1.png",
+      "b": 489,
+      "h": 454,
+      "anker": [
+       285,
+       350
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen12-pannen-z-2.png",
+      "b": 494,
+      "h": 454,
+      "anker": [
+       286,
+       350
+      ]
+     }
+    ],
+    "roze-steen12-pannen-o": [
+     {
+      "bestand": "daksneeuw/roze-steen12-pannen-o-0.png",
+      "b": 556,
+      "h": 462,
+      "anker": [
+       273,
+       348
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen12-pannen-o-1.png",
+      "b": 562,
+      "h": 462,
+      "anker": [
+       274,
+       348
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen12-pannen-o-2.png",
+      "b": 562,
+      "h": 462,
+      "anker": [
+       274,
+       348
+      ]
+     }
+    ],
+    "roze-steen12-pannen-n": [
+     {
+      "bestand": "daksneeuw/roze-steen12-pannen-n-0.png",
+      "b": 409,
+      "h": 449,
+      "anker": [
+       183,
+       407
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen12-pannen-n-1.png",
+      "b": 492,
+      "h": 452,
+      "anker": [
+       192,
+       407
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen12-pannen-n-2.png",
+      "b": 493,
+      "h": 457,
+      "anker": [
+       192,
+       407
+      ]
+     }
+    ],
+    "roze-steen12-pannen-w": [
+     {
+      "bestand": "daksneeuw/roze-steen12-pannen-w-0.png",
+      "b": 392,
+      "h": 414,
+      "anker": [
+       226,
+       390
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen12-pannen-w-1.png",
+      "b": 527,
+      "h": 415,
+      "anker": [
+       304,
+       390
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen12-pannen-w-2.png",
+      "b": 531,
+      "h": 421,
+      "anker": [
+       304,
+       390
+      ]
+     }
+    ],
+    "roze-steen12-baksteen-z": [
+     {
+      "bestand": "daksneeuw/roze-steen12-baksteen-z-0.png",
+      "b": 477,
+      "h": 454,
+      "anker": [
+       280,
+       350
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen12-baksteen-z-1.png",
+      "b": 489,
+      "h": 454,
+      "anker": [
+       285,
+       350
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen12-baksteen-z-2.png",
+      "b": 494,
+      "h": 454,
+      "anker": [
+       286,
+       350
+      ]
+     }
+    ],
+    "roze-steen12-baksteen-o": [
+     {
+      "bestand": "daksneeuw/roze-steen12-baksteen-o-0.png",
+      "b": 556,
+      "h": 462,
+      "anker": [
+       273,
+       348
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen12-baksteen-o-1.png",
+      "b": 562,
+      "h": 462,
+      "anker": [
+       274,
+       348
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen12-baksteen-o-2.png",
+      "b": 562,
+      "h": 462,
+      "anker": [
+       274,
+       348
+      ]
+     }
+    ],
+    "roze-steen12-baksteen-n": [
+     {
+      "bestand": "daksneeuw/roze-steen12-baksteen-n-0.png",
+      "b": 409,
+      "h": 449,
+      "anker": [
+       183,
+       407
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen12-baksteen-n-1.png",
+      "b": 492,
+      "h": 452,
+      "anker": [
+       192,
+       407
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen12-baksteen-n-2.png",
+      "b": 493,
+      "h": 457,
+      "anker": [
+       192,
+       407
+      ]
+     }
+    ],
+    "roze-steen12-baksteen-w": [
+     {
+      "bestand": "daksneeuw/roze-steen12-baksteen-w-0.png",
+      "b": 392,
+      "h": 414,
+      "anker": [
+       226,
+       390
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen12-baksteen-w-1.png",
+      "b": 527,
+      "h": 415,
+      "anker": [
+       304,
+       390
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-steen12-baksteen-w-2.png",
+      "b": 531,
+      "h": 421,
+      "anker": [
+       304,
+       390
+      ]
+     }
+    ],
+    "roze-boerderij8-riet-z": [
+     {
+      "bestand": "daksneeuw/roze-boerderij8-riet-z-0.png",
+      "b": 543,
+      "h": 484,
+      "anker": [
+       272,
+       373
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij8-riet-z-1.png",
+      "b": 544,
+      "h": 484,
+      "anker": [
+       273,
+       373
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij8-riet-z-2.png",
+      "b": 546,
+      "h": 484,
+      "anker": [
+       273,
+       373
+      ]
+     }
+    ],
+    "roze-boerderij8-riet-o": [
+     {
+      "bestand": "daksneeuw/roze-boerderij8-riet-o-0.png",
+      "b": 600,
+      "h": 433,
+      "anker": [
+       330,
+       335
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij8-riet-o-1.png",
+      "b": 604,
+      "h": 433,
+      "anker": [
+       330,
+       335
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij8-riet-o-2.png",
+      "b": 607,
+      "h": 435,
+      "anker": [
+       333,
+       335
+      ]
+     }
+    ],
+    "roze-boerderij8-riet-n": [
+     {
+      "bestand": "daksneeuw/roze-boerderij8-riet-n-0.png",
+      "b": 540,
+      "h": 474,
+      "anker": [
+       203,
+       367
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij8-riet-n-1.png",
+      "b": 546,
+      "h": 474,
+      "anker": [
+       209,
+       367
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij8-riet-n-2.png",
+      "b": 546,
+      "h": 476,
+      "anker": [
+       209,
+       367
+      ]
+     }
+    ],
+    "roze-boerderij8-riet-w": [
+     {
+      "bestand": "daksneeuw/roze-boerderij8-riet-w-0.png",
+      "b": 602,
+      "h": 406,
+      "anker": [
+       335,
+       327
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij8-riet-w-1.png",
+      "b": 602,
+      "h": 406,
+      "anker": [
+       335,
+       327
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij8-riet-w-2.png",
+      "b": 607,
+      "h": 406,
+      "anker": [
+       336,
+       327
+      ]
+     }
+    ],
+    "roze-boerderij8-leien-z": [
+     {
+      "bestand": "daksneeuw/roze-boerderij8-leien-z-0.png",
+      "b": 424,
+      "h": 432,
+      "anker": [
+       263,
+       325
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij8-leien-z-1.png",
+      "b": 504,
+      "h": 433,
+      "anker": [
+       263,
+       325
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij8-leien-z-2.png",
+      "b": 518,
+      "h": 438,
+      "anker": [
+       263,
+       325
+      ]
+     }
+    ],
+    "roze-boerderij8-leien-o": [
+     {
+      "bestand": "daksneeuw/roze-boerderij8-leien-o-0.png",
+      "b": 565,
+      "h": 398,
+      "anker": [
+       307,
+       287
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij8-leien-o-1.png",
+      "b": 574,
+      "h": 399,
+      "anker": [
+       316,
+       287
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij8-leien-o-2.png",
+      "b": 575,
+      "h": 399,
+      "anker": [
+       317,
+       287
+      ]
+     }
+    ],
+    "roze-boerderij8-leien-n": [
+     {
+      "bestand": "daksneeuw/roze-boerderij8-leien-n-0.png",
+      "b": 521,
+      "h": 419,
+      "anker": [
+       194,
+       319
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij8-leien-n-1.png",
+      "b": 522,
+      "h": 426,
+      "anker": [
+       194,
+       319
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij8-leien-n-2.png",
+      "b": 522,
+      "h": 429,
+      "anker": [
+       194,
+       319
+      ]
+     }
+    ],
+    "roze-boerderij8-leien-w": [
+     {
+      "bestand": "daksneeuw/roze-boerderij8-leien-w-0.png",
+      "b": 448,
+      "h": 362,
+      "anker": [
+       225,
+       288
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij8-leien-w-1.png",
+      "b": 540,
+      "h": 366,
+      "anker": [
+       305,
+       288
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij8-leien-w-2.png",
+      "b": 541,
+      "h": 369,
+      "anker": [
+       306,
+       288
+      ]
+     }
+    ],
+    "roze-boerderij8-pannen-z": [
+     {
+      "bestand": "daksneeuw/roze-boerderij8-pannen-z-0.png",
+      "b": 425,
+      "h": 432,
+      "anker": [
+       264,
+       325
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij8-pannen-z-1.png",
+      "b": 505,
+      "h": 433,
+      "anker": [
+       264,
+       325
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij8-pannen-z-2.png",
+      "b": 519,
+      "h": 438,
+      "anker": [
+       264,
+       325
+      ]
+     }
+    ],
+    "roze-boerderij8-pannen-o": [
+     {
+      "bestand": "daksneeuw/roze-boerderij8-pannen-o-0.png",
+      "b": 565,
+      "h": 398,
+      "anker": [
+       307,
+       287
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij8-pannen-o-1.png",
+      "b": 574,
+      "h": 399,
+      "anker": [
+       316,
+       287
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij8-pannen-o-2.png",
+      "b": 575,
+      "h": 399,
+      "anker": [
+       317,
+       287
+      ]
+     }
+    ],
+    "roze-boerderij8-pannen-n": [
+     {
+      "bestand": "daksneeuw/roze-boerderij8-pannen-n-0.png",
+      "b": 522,
+      "h": 425,
+      "anker": [
+       194,
+       319
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij8-pannen-n-1.png",
+      "b": 522,
+      "h": 426,
+      "anker": [
+       194,
+       319
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij8-pannen-n-2.png",
+      "b": 522,
+      "h": 429,
+      "anker": [
+       194,
+       319
+      ]
+     }
+    ],
+    "roze-boerderij8-pannen-w": [
+     {
+      "bestand": "daksneeuw/roze-boerderij8-pannen-w-0.png",
+      "b": 447,
+      "h": 364,
+      "anker": [
+       225,
+       289
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij8-pannen-w-1.png",
+      "b": 538,
+      "h": 367,
+      "anker": [
+       305,
+       289
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij8-pannen-w-2.png",
+      "b": 542,
+      "h": 370,
+      "anker": [
+       306,
+       289
+      ]
+     }
+    ],
+    "roze-boerderij9-riet-z": [
+     {
+      "bestand": "daksneeuw/roze-boerderij9-riet-z-0.png",
+      "b": 599,
+      "h": 544,
+      "anker": [
+       238,
+       459
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij9-riet-z-1.png",
+      "b": 602,
+      "h": 544,
+      "anker": [
+       241,
+       459
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij9-riet-z-2.png",
+      "b": 609,
+      "h": 544,
+      "anker": [
+       241,
+       459
+      ]
+     }
+    ],
+    "roze-boerderij9-riet-o": [
+     {
+      "bestand": "daksneeuw/roze-boerderij9-riet-o-0.png",
+      "b": 601,
+      "h": 549,
+      "anker": [
+       368,
+       464
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij9-riet-o-1.png",
+      "b": 609,
+      "h": 550,
+      "anker": [
+       368,
+       464
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij9-riet-o-2.png",
+      "b": 609,
+      "h": 550,
+      "anker": [
+       368,
+       464
+      ]
+     }
+    ],
+    "roze-boerderij9-riet-n": [
+     {
+      "bestand": "daksneeuw/roze-boerderij9-riet-n-0.png",
+      "b": 598,
+      "h": 517,
+      "anker": [
+       231,
+       464
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij9-riet-n-1.png",
+      "b": 608,
+      "h": 521,
+      "anker": [
+       241,
+       464
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij9-riet-n-2.png",
+      "b": 609,
+      "h": 522,
+      "anker": [
+       241,
+       464
+      ]
+     }
+    ],
+    "roze-boerderij9-riet-w": [
+     {
+      "bestand": "daksneeuw/roze-boerderij9-riet-w-0.png",
+      "b": 598,
+      "h": 510,
+      "anker": [
+       360,
+       459
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij9-riet-w-1.png",
+      "b": 602,
+      "h": 510,
+      "anker": [
+       361,
+       459
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij9-riet-w-2.png",
+      "b": 609,
+      "h": 511,
+      "anker": [
+       368,
+       459
+      ]
+     }
+    ],
+    "roze-boerderij9-leien-z": [
+     {
+      "bestand": "daksneeuw/roze-boerderij9-leien-z-0.png",
+      "b": 459,
+      "h": 496,
+      "anker": [
+       217,
+       412
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij9-leien-z-1.png",
+      "b": 555,
+      "h": 497,
+      "anker": [
+       226,
+       412
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij9-leien-z-2.png",
+      "b": 558,
+      "h": 497,
+      "anker": [
+       226,
+       412
+      ]
+     }
+    ],
+    "roze-boerderij9-leien-o": [
+     {
+      "bestand": "daksneeuw/roze-boerderij9-leien-o-0.png",
+      "b": 455,
+      "h": 501,
+      "anker": [
+       243,
+       417
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij9-leien-o-1.png",
+      "b": 543,
+      "h": 503,
+      "anker": [
+       322,
+       417
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij9-leien-o-2.png",
+      "b": 558,
+      "h": 503,
+      "anker": [
+       336,
+       417
+      ]
+     }
+    ],
+    "roze-boerderij9-leien-n": [
+     {
+      "bestand": "daksneeuw/roze-boerderij9-leien-n-0.png",
+      "b": 455,
+      "h": 471,
+      "anker": [
+       212,
+       417
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij9-leien-n-1.png",
+      "b": 558,
+      "h": 477,
+      "anker": [
+       222,
+       417
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij9-leien-n-2.png",
+      "b": 568,
+      "h": 478,
+      "anker": [
+       222,
+       417
+      ]
+     }
+    ],
+    "roze-boerderij9-leien-w": [
+     {
+      "bestand": "daksneeuw/roze-boerderij9-leien-w-0.png",
+      "b": 459,
+      "h": 454,
+      "anker": [
+       242,
+       412
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij9-leien-w-1.png",
+      "b": 478,
+      "h": 461,
+      "anker": [
+       252,
+       412
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij9-leien-w-2.png",
+      "b": 555,
+      "h": 467,
+      "anker": [
+       329,
+       412
+      ]
+     }
+    ],
+    "roze-boerderij9-pannen-z": [
+     {
+      "bestand": "daksneeuw/roze-boerderij9-pannen-z-0.png",
+      "b": 457,
+      "h": 496,
+      "anker": [
+       215,
+       412
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij9-pannen-z-1.png",
+      "b": 555,
+      "h": 497,
+      "anker": [
+       226,
+       412
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij9-pannen-z-2.png",
+      "b": 557,
+      "h": 497,
+      "anker": [
+       226,
+       412
+      ]
+     }
+    ],
+    "roze-boerderij9-pannen-o": [
+     {
+      "bestand": "daksneeuw/roze-boerderij9-pannen-o-0.png",
+      "b": 459,
+      "h": 501,
+      "anker": [
+       243,
+       417
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij9-pannen-o-1.png",
+      "b": 543,
+      "h": 503,
+      "anker": [
+       322,
+       417
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij9-pannen-o-2.png",
+      "b": 556,
+      "h": 503,
+      "anker": [
+       334,
+       417
+      ]
+     }
+    ],
+    "roze-boerderij9-pannen-n": [
+     {
+      "bestand": "daksneeuw/roze-boerderij9-pannen-n-0.png",
+      "b": 543,
+      "h": 471,
+      "anker": [
+       216,
+       417
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij9-pannen-n-1.png",
+      "b": 556,
+      "h": 477,
+      "anker": [
+       222,
+       417
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij9-pannen-n-2.png",
+      "b": 568,
+      "h": 478,
+      "anker": [
+       222,
+       417
+      ]
+     }
+    ],
+    "roze-boerderij9-pannen-w": [
+     {
+      "bestand": "daksneeuw/roze-boerderij9-pannen-w-0.png",
+      "b": 457,
+      "h": 456,
+      "anker": [
+       242,
+       412
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij9-pannen-w-1.png",
+      "b": 478,
+      "h": 461,
+      "anker": [
+       252,
+       412
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-boerderij9-pannen-w-2.png",
+      "b": 555,
+      "h": 467,
+      "anker": [
+       329,
+       412
+      ]
+     }
+    ],
+    "roze-herberg1-riet-z": [
+     {
+      "bestand": "daksneeuw/roze-herberg1-riet-z-0.png",
+      "b": 601,
+      "h": 439,
+      "anker": [
+       296,
+       337
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-herberg1-riet-z-1.png",
+      "b": 610,
+      "h": 442,
+      "anker": [
+       305,
+       337
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-herberg1-riet-z-2.png",
+      "b": 610,
+      "h": 442,
+      "anker": [
+       305,
+       337
+      ]
+     }
+    ],
+    "roze-herberg1-riet-o": [
+     {
+      "bestand": "daksneeuw/roze-herberg1-riet-o-0.png",
+      "b": 609,
+      "h": 435,
+      "anker": [
+       312,
+       337
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-herberg1-riet-o-1.png",
+      "b": 623,
+      "h": 435,
+      "anker": [
+       318,
+       337
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-herberg1-riet-o-2.png",
+      "b": 623,
+      "h": 438,
+      "anker": [
+       318,
+       337
+      ]
+     }
+    ],
+    "roze-herberg1-riet-n": [
+     {
+      "bestand": "daksneeuw/roze-herberg1-riet-n-0.png",
+      "b": 597,
+      "h": 446,
+      "anker": [
+       202,
+       385
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-herberg1-riet-n-1.png",
+      "b": 610,
+      "h": 449,
+      "anker": [
+       209,
+       385
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-herberg1-riet-n-2.png",
+      "b": 610,
+      "h": 449,
+      "anker": [
+       209,
+       385
+      ]
+     }
+    ],
+    "roze-herberg1-riet-w": [
+     {
+      "bestand": "daksneeuw/roze-herberg1-riet-w-0.png",
+      "b": 614,
+      "h": 439,
+      "anker": [
+       395,
+       385
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-herberg1-riet-w-1.png",
+      "b": 620,
+      "h": 440,
+      "anker": [
+       398,
+       385
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-herberg1-riet-w-2.png",
+      "b": 623,
+      "h": 442,
+      "anker": [
+       401,
+       385
+      ]
+     }
+    ],
+    "roze-herberg2-leien-z": [
+     {
+      "bestand": "daksneeuw/roze-herberg2-leien-z-0.png",
+      "b": 561,
+      "h": 550,
+      "anker": [
+       244,
+       474
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-herberg2-leien-z-1.png",
+      "b": 561,
+      "h": 550,
+      "anker": [
+       244,
+       474
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-herberg2-leien-z-2.png",
+      "b": 674,
+      "h": 550,
+      "anker": [
+       244,
+       474
+      ]
+     }
+    ],
+    "roze-herberg2-leien-o": [
+     {
+      "bestand": "daksneeuw/roze-herberg2-leien-o-0.png",
+      "b": 598,
+      "h": 511,
+      "anker": [
+       364,
+       474
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-herberg2-leien-o-1.png",
+      "b": 660,
+      "h": 511,
+      "anker": [
+       415,
+       474
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-herberg2-leien-o-2.png",
+      "b": 664,
+      "h": 512,
+      "anker": [
+       419,
+       474
+      ]
+     }
+    ],
+    "roze-herberg2-leien-n": [
+     {
+      "bestand": "daksneeuw/roze-herberg2-leien-n-0.png",
+      "b": 562,
+      "h": 485,
+      "anker": [
+       245,
+       474
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-herberg2-leien-n-1.png",
+      "b": 653,
+      "h": 486,
+      "anker": [
+       245,
+       474
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-herberg2-leien-n-2.png",
+      "b": 672,
+      "h": 486,
+      "anker": [
+       245,
+       474
+      ]
+     }
+    ],
+    "roze-herberg2-leien-w": [
+     {
+      "bestand": "daksneeuw/roze-herberg2-leien-w-0.png",
+      "b": 590,
+      "h": 488,
+      "anker": [
+       357,
+       474
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-herberg2-leien-w-1.png",
+      "b": 601,
+      "h": 489,
+      "anker": [
+       357,
+       474
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-herberg2-leien-w-2.png",
+      "b": 659,
+      "h": 489,
+      "anker": [
+       415,
+       474
+      ]
+     }
+    ],
+    "roze-herberg2-pannen-z": [
+     {
+      "bestand": "daksneeuw/roze-herberg2-pannen-z-0.png",
+      "b": 557,
+      "h": 506,
+      "anker": [
+       244,
+       430
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-herberg2-pannen-z-1.png",
+      "b": 673,
+      "h": 506,
+      "anker": [
+       244,
+       430
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-herberg2-pannen-z-2.png",
+      "b": 680,
+      "h": 506,
+      "anker": [
+       244,
+       430
+      ]
+     }
+    ],
+    "roze-herberg2-pannen-o": [
+     {
+      "bestand": "daksneeuw/roze-herberg2-pannen-o-0.png",
+      "b": 555,
+      "h": 466,
+      "anker": [
+       310,
+       429
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-herberg2-pannen-o-1.png",
+      "b": 640,
+      "h": 466,
+      "anker": [
+       395,
+       429
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-herberg2-pannen-o-2.png",
+      "b": 680,
+      "h": 467,
+      "anker": [
+       435,
+       429
+      ]
+     }
+    ],
+    "roze-herberg2-pannen-n": [
+     {
+      "bestand": "daksneeuw/roze-herberg2-pannen-n-0.png",
+      "b": 558,
+      "h": 439,
+      "anker": [
+       245,
+       429
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-herberg2-pannen-n-1.png",
+      "b": 618,
+      "h": 439,
+      "anker": [
+       245,
+       429
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-herberg2-pannen-n-2.png",
+      "b": 680,
+      "h": 439,
+      "anker": [
+       245,
+       429
+      ]
+     }
+    ],
+    "roze-herberg2-pannen-w": [
+     {
+      "bestand": "daksneeuw/roze-herberg2-pannen-w-0.png",
+      "b": 600,
+      "h": 443,
+      "anker": [
+       356,
+       430
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-herberg2-pannen-w-1.png",
+      "b": 673,
+      "h": 443,
+      "anker": [
+       429,
+       430
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-herberg2-pannen-w-2.png",
+      "b": 673,
+      "h": 443,
+      "anker": [
+       429,
+       430
+      ]
+     }
+    ],
+    "roze-kapel-leien-z": [
+     {
+      "bestand": "daksneeuw/roze-kapel-leien-z-0.png",
+      "b": 761,
+      "h": 779,
+      "anker": [
+       222,
+       454
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-kapel-leien-z-1.png",
+      "b": 762,
+      "h": 780,
+      "anker": [
+       222,
+       454
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-kapel-leien-z-2.png",
+      "b": 767,
+      "h": 807,
+      "anker": [
+       222,
+       454
+      ]
+     }
+    ],
+    "roze-kapel-leien-o": [
+     {
+      "bestand": "daksneeuw/roze-kapel-leien-o-0.png",
+      "b": 657,
+      "h": 767,
+      "anker": [
+       480,
+       633
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-kapel-leien-o-1.png",
+      "b": 750,
+      "h": 768,
+      "anker": [
+       571,
+       633
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-kapel-leien-o-2.png",
+      "b": 750,
+      "h": 789,
+      "anker": [
+       571,
+       633
+      ]
+     }
+    ],
+    "roze-kapel-leien-n": [
+     {
+      "bestand": "daksneeuw/roze-kapel-leien-n-0.png",
+      "b": 653,
+      "h": 728,
+      "anker": [
+       173,
+       636
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-kapel-leien-n-1.png",
+      "b": 744,
+      "h": 740,
+      "anker": [
+       173,
+       636
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-kapel-leien-n-2.png",
+      "b": 748,
+      "h": 792,
+      "anker": [
+       177,
+       636
+      ]
+     }
+    ],
+    "roze-kapel-leien-w": [
+     {
+      "bestand": "daksneeuw/roze-kapel-leien-w-0.png",
+      "b": 763,
+      "h": 713,
+      "anker": [
+       541,
+       454
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-kapel-leien-w-1.png",
+      "b": 763,
+      "h": 797,
+      "anker": [
+       541,
+       454
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-kapel-leien-w-2.png",
+      "b": 764,
+      "h": 802,
+      "anker": [
+       542,
+       454
+      ]
+     }
+    ],
+    "roze-kapel-baksteen-z": [
+     {
+      "bestand": "daksneeuw/roze-kapel-baksteen-z-0.png",
+      "b": 761,
+      "h": 779,
+      "anker": [
+       222,
+       454
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-kapel-baksteen-z-1.png",
+      "b": 762,
+      "h": 780,
+      "anker": [
+       222,
+       454
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-kapel-baksteen-z-2.png",
+      "b": 767,
+      "h": 807,
+      "anker": [
+       222,
+       454
+      ]
+     }
+    ],
+    "roze-kapel-baksteen-o": [
+     {
+      "bestand": "daksneeuw/roze-kapel-baksteen-o-0.png",
+      "b": 657,
+      "h": 767,
+      "anker": [
+       480,
+       633
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-kapel-baksteen-o-1.png",
+      "b": 750,
+      "h": 768,
+      "anker": [
+       571,
+       633
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-kapel-baksteen-o-2.png",
+      "b": 750,
+      "h": 789,
+      "anker": [
+       571,
+       633
+      ]
+     }
+    ],
+    "roze-kapel-baksteen-n": [
+     {
+      "bestand": "daksneeuw/roze-kapel-baksteen-n-0.png",
+      "b": 653,
+      "h": 728,
+      "anker": [
+       173,
+       636
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-kapel-baksteen-n-1.png",
+      "b": 744,
+      "h": 740,
+      "anker": [
+       173,
+       636
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-kapel-baksteen-n-2.png",
+      "b": 748,
+      "h": 792,
+      "anker": [
+       177,
+       636
+      ]
+     }
+    ],
+    "roze-kapel-baksteen-w": [
+     {
+      "bestand": "daksneeuw/roze-kapel-baksteen-w-0.png",
+      "b": 763,
+      "h": 713,
+      "anker": [
+       541,
+       454
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-kapel-baksteen-w-1.png",
+      "b": 763,
+      "h": 797,
+      "anker": [
+       541,
+       454
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-kapel-baksteen-w-2.png",
+      "b": 764,
+      "h": 802,
+      "anker": [
+       542,
+       454
+      ]
+     }
+    ],
+    "roze-woontoren-pannen-z": [
+     {
+      "bestand": "daksneeuw/roze-woontoren-pannen-z-0.png",
+      "b": 308,
+      "h": 312,
+      "anker": [
+       206,
+       431
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-woontoren-pannen-z-1.png",
+      "b": 313,
+      "h": 313,
+      "anker": [
+       210,
+       431
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-woontoren-pannen-z-2.png",
+      "b": 407,
+      "h": 313,
+      "anker": [
+       210,
+       431
+      ]
+     }
+    ],
+    "roze-woontoren-pannen-o": [
+     {
+      "bestand": "daksneeuw/roze-woontoren-pannen-o-0.png",
+      "b": 311,
+      "h": 306,
+      "anker": [
+       102,
+       426
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-woontoren-pannen-o-1.png",
+      "b": 399,
+      "h": 307,
+      "anker": [
+       190,
+       426
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-woontoren-pannen-o-2.png",
+      "b": 418,
+      "h": 307,
+      "anker": [
+       209,
+       426
+      ]
+     }
+    ],
+    "roze-woontoren-pannen-n": [
+     {
+      "bestand": "daksneeuw/roze-woontoren-pannen-n-0.png",
+      "b": 306,
+      "h": 303,
+      "anker": [
+       204,
+       426
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-woontoren-pannen-n-1.png",
+      "b": 418,
+      "h": 306,
+      "anker": [
+       209,
+       426
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-woontoren-pannen-n-2.png",
+      "b": 419,
+      "h": 307,
+      "anker": [
+       209,
+       426
+      ]
+     }
+    ],
+    "roze-woontoren-pannen-w": [
+     {
+      "bestand": "daksneeuw/roze-woontoren-pannen-w-0.png",
+      "b": 312,
+      "h": 322,
+      "anker": [
+       103,
+       440
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-woontoren-pannen-w-1.png",
+      "b": 393,
+      "h": 322,
+      "anker": [
+       183,
+       440
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-woontoren-pannen-w-2.png",
+      "b": 411,
+      "h": 322,
+      "anker": [
+       201,
+       440
+      ]
+     }
+    ],
+    "roze-woontoren-baksteen-z": [
+     {
+      "bestand": "daksneeuw/roze-woontoren-baksteen-z-0.png",
+      "b": 308,
+      "h": 312,
+      "anker": [
+       206,
+       431
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-woontoren-baksteen-z-1.png",
+      "b": 313,
+      "h": 313,
+      "anker": [
+       210,
+       431
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-woontoren-baksteen-z-2.png",
+      "b": 407,
+      "h": 313,
+      "anker": [
+       210,
+       431
+      ]
+     }
+    ],
+    "roze-woontoren-baksteen-o": [
+     {
+      "bestand": "daksneeuw/roze-woontoren-baksteen-o-0.png",
+      "b": 311,
+      "h": 306,
+      "anker": [
+       102,
+       426
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-woontoren-baksteen-o-1.png",
+      "b": 399,
+      "h": 307,
+      "anker": [
+       190,
+       426
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-woontoren-baksteen-o-2.png",
+      "b": 418,
+      "h": 307,
+      "anker": [
+       209,
+       426
+      ]
+     }
+    ],
+    "roze-woontoren-baksteen-n": [
+     {
+      "bestand": "daksneeuw/roze-woontoren-baksteen-n-0.png",
+      "b": 306,
+      "h": 303,
+      "anker": [
+       204,
+       426
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-woontoren-baksteen-n-1.png",
+      "b": 418,
+      "h": 306,
+      "anker": [
+       209,
+       426
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-woontoren-baksteen-n-2.png",
+      "b": 419,
+      "h": 307,
+      "anker": [
+       209,
+       426
+      ]
+     }
+    ],
+    "roze-woontoren-baksteen-w": [
+     {
+      "bestand": "daksneeuw/roze-woontoren-baksteen-w-0.png",
+      "b": 312,
+      "h": 322,
+      "anker": [
+       103,
+       440
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-woontoren-baksteen-w-1.png",
+      "b": 393,
+      "h": 322,
+      "anker": [
+       183,
+       440
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-woontoren-baksteen-w-2.png",
+      "b": 411,
+      "h": 322,
+      "anker": [
+       201,
+       440
+      ]
+     }
+    ],
+    "roze-schoutshuis-riet-z": [
+     {
+      "bestand": "daksneeuw/roze-schoutshuis-riet-z-0.png",
+      "b": 571,
+      "h": 639,
+      "anker": [
+       251,
+       568
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-schoutshuis-riet-z-1.png",
+      "b": 582,
+      "h": 639,
+      "anker": [
+       260,
+       568
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-schoutshuis-riet-z-2.png",
+      "b": 585,
+      "h": 639,
+      "anker": [
+       260,
+       568
+      ]
+     }
+    ],
+    "roze-schoutshuis-riet-o": [
+     {
+      "bestand": "daksneeuw/roze-schoutshuis-riet-o-0.png",
+      "b": 569,
+      "h": 628,
+      "anker": [
+       319,
+       558
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-schoutshuis-riet-o-1.png",
+      "b": 578,
+      "h": 628,
+      "anker": [
+       321,
+       558
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-schoutshuis-riet-o-2.png",
+      "b": 585,
+      "h": 628,
+      "anker": [
+       324,
+       558
+      ]
+     }
+    ],
+    "roze-schoutshuis-riet-n": [
+     {
+      "bestand": "daksneeuw/roze-schoutshuis-riet-n-0.png",
+      "b": 571,
+      "h": 502,
+      "anker": [
+       250,
+       558
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-schoutshuis-riet-n-1.png",
+      "b": 582,
+      "h": 502,
+      "anker": [
+       260,
+       558
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-schoutshuis-riet-n-2.png",
+      "b": 585,
+      "h": 509,
+      "anker": [
+       260,
+       558
+      ]
+     }
+    ],
+    "roze-schoutshuis-riet-w": [
+     {
+      "bestand": "daksneeuw/roze-schoutshuis-riet-w-0.png",
+      "b": 571,
+      "h": 515,
+      "anker": [
+       320,
+       568
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-schoutshuis-riet-w-1.png",
+      "b": 583,
+      "h": 519,
+      "anker": [
+       322,
+       568
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-schoutshuis-riet-w-2.png",
+      "b": 585,
+      "h": 520,
+      "anker": [
+       324,
+       568
+      ]
+     }
+    ]
+   }
+  };
+})(globalThis.Spel = globalThis.Spel || {});
