@@ -319,7 +319,7 @@
     tiendschuur: {
       naam: 'tiendschuur', trede: 'dorp', voet: { b: 6, h: 5 }, kosten: { hout: 14, goud: 6 }, heer: { goud: 3 }, bouwtijd: 3,
       handen: 0, woonruimte: 0, maakt: null, menu: true,
-      tekening: 'gebouwen/schuurBlokhut', beschrijving: 'van de heer: hier lever je op Sint-Maarten, en hier zit de inner',
+      tekening: 'gebouwen/schuurBlokhut', beschrijving: 'van de heer: hier lever je op Sint-Maarten',
       opmerking: 'nieuw: nog niet getekend, leent voorlopig de blokhutschuur. Sint-Maarten zelf staat '
         + 'al in T.SINT_MAARTEN (js/tijd.js); wat er dan gebeurt is het tweede proefje (werklijst.md, punt 3).',
     },
@@ -506,7 +506,7 @@
 
   // De rechthoek die een gebouw op de kaart beslaat, { x, y, b, h }: de tekening als die er is (die
   // kan groter zijn dan de voet uit het betekenisbestand), anders zijn voet, anders de maat van zijn
-  // soort. Voor wie wil weten waar een gebouw staat: de bewoners en de inner. (Tot 27 sep had elk van die bestanden er een eigen kopie van.)
+  // soort. Voor wie wil weten waar een gebouw staat. (Tot 27 sep had elk bestand er een eigen kopie van.)
   T.voetVanGebouw = function (g) {
     if (g.voorwerp && g.voorwerp.beslaat) return { x: g.x, y: g.y, b: g.voorwerp.beslaat[0], h: g.voorwerp.beslaat[1] };
     const v = g.voet || T.gebouwVoet(g.soort) || { b: 1, h: 1 };
@@ -1091,9 +1091,9 @@
         console.warn(`T.zetBestaandeGebouwen: onbekende soort "${d.soort}" op (${d.x}, ${d.y}), overgeslagen`);
         continue;
       }
-      // Zijn voet uit het betekenisbestand: die heeft de inner nodig om te weten wat hij ziet (js/inner.js).
-      // En wie er woont (`huis`, de boer met dezelfde id of de schout). In een gewoon huis zegt `bewoners` wie er bij het
-      // begin woont (T.zetBeginBewoners, js/bewoners.js). En `tekening` weet waar de deur is (T.deurVan).
+      // Zijn voet uit het betekenisbestand (T.voetVanGebouw). En wie er woont (`huis`, de boer met dezelfde id of de
+      // schout). In een gewoon huis zegt `bewoners` wie er bij het begin woont (T.zetBeginBewoners, js/bewoners.js). En
+      // `tekening` weet waar de deur is (T.deurVan).
       // Zijn tekening staat als voorwerp op de kaart, op dezelfde plek (uit Tiled, of van de maker): die neemt hij mee, zodat
       // hij kan doorgroeien zoals een huis dat jij of een gezin bouwde (js/behoeften.js; werklijst vraag 85). Tot 1 okt
       // had hij er geen, en groeiden de woningen van het begin nooit.
@@ -1255,8 +1255,6 @@
     T.tikHeervaartDag(D, dag);
     // En zijn grillen (js/grillen.js): elke maand een brief met iets wat hij wil (met de spelregel "Twee bazen").
     T.tikGrillenDag(D, dag);
-    // En de inner (js/inner.js): hij komt in oogstmaand kijken.
-    T.tikInnerDag(D, dag);
     // En de voorvallen (js/voorvallen.js): om de paar dagen komt iemand je zoeken met een vraag, een ruzie of een ramp.
     // Vóór de voorvallen de graanzak (js/zaak.js): één keer, in de eerste herfst, en de zitting erover.
     T.tikZaakDag(D, dag);

@@ -19,7 +19,7 @@
 //
 // De wapens: wie van de militie een wapen heeft, slaat harder (T.slagSchade, js/gevecht.js). Ze zijn niet verboden
 // (Marcel, 7 okt: "Het is logisch dat er wapens zijn om de stad te verdedigen. Alleen weerstand tegen de heer is
-// inacceptabel"; werklijst vraag 131). Tot dan verzegelde de heer de werkplaats als zijn inner hem zag, en smeedde wie nee
+// inacceptabel"; werklijst vraag 131). Tot dan verzegelde de heer de werkplaats als hij hem zag, en smeedde wie nee
 // hoorde stiekem.
 //
 // D.verzoeken.eigen: { [id van de bewoner]: { nee (hoe vaak), ja (de dag), dag (van het laatste antwoord) } }

@@ -3,7 +3,7 @@
 //
 // Jij wijst een erf aan met het bouwmenu, zoals een gebouw (T.plaatsGebouw, js/gebouwen.js): een vak dat
 // groot genoeg is voor elk huis dat er ooit komt, met de tegel voor zijn deur en plaats voor een moestuin.
-// Een erf is land, geen gebouw: het maakt de grond niet vast, en de inner en de heer zien het niet. Zolang
+// Een erf is land, geen gebouw: het maakt de grond niet vast. Zolang
 // het vrij is, staan er paaltjes op zijn hoeken (js/tekenen.js).
 //
 // Is het dorp vol (geen huis met plaats), dan neemt een nieuw gezin het vrije erf dat het dichtst bij zijn

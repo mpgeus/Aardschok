@@ -28,7 +28,7 @@
     (T.sprites.aan && !T.debug.vlakken ? SPRITE_VOORWERP_HOOGTE : VOORWERP_HOOGTE)[v.soort];
 
   // Een nieuw spel: een verse wereld in het gehucht. Alles van een vorig spel gaat eerst weg, ook wat de
-  // regels er onderweg bij zetten (de heer, de inner, het slapen, het einde); alleen de zoom van het scherm
+  // regels er onderweg bij zetten (de heer, het slapen, het einde); alleen de zoom van het scherm
   // blijft. Het begint niet vanzelf: het titelscherm (js/menu.js, vraag 48) laat het erachter wachten, en
   // pas "Nieuw spel" geeft de benoemingsbrief van de heer, waarmee een spel begint sinds Marcel hem op
   // 25 sep koos (T.ui.toonBrief(S.dorp, 'benoeming'), js/brieven.js). Een proefje (?kaart=) begint meteen,
@@ -525,7 +525,7 @@
     // De tijd van de wereld: de schermtijd maal de snelheid van de kalender (T.wereldFactor,
     // js/tijd.js). Lopen, maaien en dwalen gaan daarop, zodat een tocht of een tegel graan op elke
     // snelheid even veel uren kost; op pauze staat alles stil. S.wereldTijd telt hem op, voor wie
-    // een duur moet afwachten (het maaien, het geduld van de inner).
+    // een duur moet afwachten (het maaien, het geduld van wie wacht op een ander).
     const dtWereld = dt * T.wereldFactor(S);
     S.wereldTijd = (S.wereldTijd || 0) + dtWereld;
     // De kalender loopt op haar eigen klok, niet op S.tijd (CLAUDE.md, "Testen in de browser"):
@@ -866,20 +866,6 @@
     brief() {
       T.stuurBrief(S.dorp, Math.floor(S.kalender.dag));
       return T.eisVanDeHeer(S.dorp).per;
-    },
-    // De inner nu laten komen, zonder op oogstmaand te wachten (js/inner.js): Spel.debug.inner(). Is hij er al, dan zegt
-    // het wat hij zag, tot hoe laat hij blijft, hoe lang je hem aan de praat hield en of hij volgt.
-    inner() {
-      const I = S.dorp.inner || (S.dorp.inner = T.nieuweInner());
-      if (!I.bezoek) T.innerKomt(S.dorp, Math.floor(S.kalender.dag));
-      const b = I.bezoek;
-      b.meteen = true; // ook 's nachts: niet op het bezoekuur wachten (js/dag.js, T.bezoekerKomtAan)
-      const uur = (dag) => `${Math.floor(T.uurVanDag(dag))}:${String(Math.floor((T.uurVanDag(dag) % 1) * 60)).padStart(2, '0')}`;
-      return {
-        blijftTot: b.tot != null && isFinite(b.tot) ? uur(b.tot) : null, gepraat: Math.round(b.gepraat * 10) / 10, uitgepraat: b.uitgepraat,
-        volgt: b.volgt, weg: b.weg, gebouwen: b.gebouwen.size, tegels: b.tegels.size,
-        nogTeZien: b.weg ? 0 : T.innerNogTeZien(S.dorp).length,
-      };
     },
     // De paadjes en de lantaarns (js/paden.js; werklijst vraag 108, b en d): hoeveel tegels paadje zijn (van de deuren, en
     // gesleten), waar het meest gelopen wordt, en de lantaarns. ('nacht') doet nu wat de nacht doet: slijten en

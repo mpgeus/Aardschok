@@ -10,8 +10,8 @@
 // De speler doet wat een speler doet, met dezelfde klik: hij loopt erheen (T.handelingVerkennen, de klik
 // op een tegel, een gebouw of een mens) en drukt op de knoppen van het venster dat dan opengaat. Alleen
 // waar een knop een gesprek opent (de heer, de marskramer), roept hij hetzelfde gevolg aan als die keuze
-// in het gesprek (T.doeGevolg). Verstoppen, de soldaten leiden en de inner bespelen (praten, een geschenk,
-// met hem meelopen waar hij niets nieuws ziet) deden de spelers tot 11 okt ook; dat ging eruit (vraag 151).
+// in het gesprek (T.doeGevolg). Verstoppen en de soldaten leiden deden de spelers tot 11 okt ook; dat ging eruit, met
+// de inner (vraag 151).
 //
 // Wat er gebeurt, schrijft hij op zonder het te veranderen: een paar regels van het spel krijgen een
 // luisteraar (luister, onderaan), en elke eerste van de maand een stand.
@@ -47,8 +47,8 @@
 //           heeft voor zijn volgende wens. Sinds vraag 132, B koopt hij in de herfst het zout dat vis en vlees de winter
 //           door laat komen (T.visEnVleesVoorDeWinter).
 // En een zesde (werklijst vraag 93, a, en 94; Marcel, 2 okt: "De bouwer mag alles er aan doen, totale vrijheid"):
-//   sluw    de bouwer, maar hij geeft de heer 90% van wat hij vraagt, elk jaar zoals de slimme speler (de inner
-//           bespelen, het verstoppen van graan en goud, en de soldaten langs lege kelders leiden, deed hij tot 11 okt ook).
+//   sluw    de bouwer, maar hij geeft de heer 90% van wat hij vraagt, elk jaar zoals de slimme speler (het
+//           verstoppen van graan en goud, en de soldaten langs lege kelders leiden, deed hij tot 11 okt ook).
 //           Haalt het eten de winter niet, dan zet hij het rantsoen op krap (tot 1 grasmaand), en haalt het hout hem niet,
 //           dan neemt hij Houtkap aan.
 // Wie twee jaar speelt, krijgt een graanboek (vraag 94, d): per jaar waar het graan bleef (luister, onderaan), en per jaar
@@ -123,8 +123,7 @@
   // ── De tijd laten lopen ────────────────────────────────────────────────────────────────────────
   // Elke stap: eerst wat vanzelf openging beantwoorden (de brief, het slachten), dan de snelheid, dan
   // de tijd, en dan de boekhouding van een nieuwe dag. Tijdens het bezoek van de heer op 3× (het spel zet hem dan
-  // zelf op 1×), zodat naar hem toe lopen fijn genoeg gaat; anders op 30×. De inner, die nog komt kijken, loopt zijn
-  // eigen ronde: daar wacht de speler niet op.
+  // zelf op 1×), zodat naar hem toe lopen fijn genoeg gaat; anders op 30×.
   async function stap(sec = STAP) {
     beantwoord();
     const h = D().heer && D().heer.bezoek;

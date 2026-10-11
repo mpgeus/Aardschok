@@ -28,7 +28,7 @@
     pachtPerAkkertegel: 0.5,
     hoofdgeldPerMens: 0.2,
     // Hij rekent op wat er is (11 okt, vraag 151): het graan in de schuren, de mensen, het goud in de kist en de
-    // gebouwen, zoals ze er op dat moment staan, niet op een rapport van zijn inner (dat was tot dan de keuze
+    // gebouwen, zoals ze er op dat moment staan, niet op een rapport (dat was tot dan de keuze
     // `rekening`).
     // Wat hij van het graan vraagt: 'deel' (dit deel van het graan dat in de schuren ligt) of 'pacht'
     // (pachtPerAkkertegel voor elke akkertegel). Het deel is zo gekozen dat het ongeveer is wat de pacht was: de

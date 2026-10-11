@@ -81,7 +81,7 @@ test('de herten: twee hindes en een hert met een gewei dat de groep leidt', () =
   const g = groepVan(S, 'hert');
   assert.equal(leiderVan(g).vel, 'hert2');
   for (const e of g.leden) if (!e.leider) assert.ok(['hert0', 'hert1'].includes(e.vel));
-  for (const e of g.leden) assert.ok(!e.dier, 'geen vee: de inner telt ze niet, en ze grazen niet op de weide');
+  for (const e of g.leden) assert.ok(!e.dier, 'geen vee: ze grazen niet op de weide');
   assert.ok(!T.veeVan(S.dorp).some((e) => e.beest));
 });
 

@@ -85,9 +85,6 @@
     // ze vlugger of trager dan bedoeld: render de vellen dan opnieuw.
     heer: { naam: 'de heer', snelheid: 1.55, straal: 1, vel: 'heer', bezoeker: true },
     soldaat: { naam: 'een soldaat', snelheid: 1.5, straal: 2, vel: 'soldaat', bezoeker: true },
-    // De inner (js/inner.js): de man van de heer die in oogstmaand komt tellen. Mager en sober in
-    // het donker, met een rekenboek onder de arm; alleen zijn hozen dragen de livrei.
-    inner: { naam: 'de inner', snelheid: 1.5, straal: 1, vel: 'inner', bezoeker: true },
 
     // En de vaklieden die wel een haakje hebben in wereld.md maar nog geen tekening: zij zijn
     // zolang een gewone dorpeling, want die vellen bestaan al (zie de werklijst, fase B2b).

@@ -52,7 +52,7 @@
     },
     vervolgNa: [8, 16],
     // Bij welke uitkomsten de zak nergens in het boek van de schuur staat: dat leest de heer zelf op Sint-Maarten, en
-    // dan daalt zijn gunst (tot 11 okt las de inner het voor, en groeide ook zijn argwaan met 8).
+    // dan daalt zijn gunst (tot 11 okt groeide ook zijn argwaan met 8).
     nietInHetBoek: ['vrij', 'gelaten', 'geen', 'verberg'],
     boekGunst: -3,
   };

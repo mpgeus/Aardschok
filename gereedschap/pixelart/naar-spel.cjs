@@ -347,11 +347,11 @@ const FIGUURLIJST = {
   binster: { map: ['binster', 'animaties'], houdingen: ['staan', 'lopen', 'binden'], bron: 'werkfiguren-anim.cjs binster' }, // de binder als boerin
   draagster: { map: ['draagster', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'werkfiguren-anim.cjs draagster' }, // de drager als boerin
   dorster: { map: ['dorster', 'animaties'], houdingen: ['staan', 'lopen', 'dorsen'], bron: 'werkfiguren-anim.cjs dorster' }, // de dorser als boerin
-  // Het huis van de heer (heer.cjs, ontwerp/beeld.md): ze komen over de weg (js/heer.js,
-  // js/inner.js) en staan in T.MENSEN (js/mensen.js) onder dezelfde naam als hier.
+  // Het huis van de heer (heer.cjs, ontwerp/beeld.md): ze komen over de weg (js/heer.js)
+  // en staan in T.MENSEN (js/mensen.js) onder dezelfde naam als hier.
   heer: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs heer soldaat inner' },
   soldaat: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs heer soldaat inner' },
-  inner: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs heer soldaat inner' },
+  inner: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs heer soldaat inner' }, // sinds 11 okt niet meer in het spel (vraag 151); het vel blijft staan
   // De marskramer (dorpelingen3.cjs, ontwerp/beeld.md "De marskramer loopt"): hij komt drie keer per
   // jaar over de weg (js/handel.js) en staat in T.MENSEN onder dezelfde naam als hier.
   marskramer: { map: ['dorpelingen', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'dorpelingen-anim.cjs marskramer' },

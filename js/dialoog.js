@@ -36,8 +36,7 @@
 
   // Stilstaan, maar niet halverwege een stap: wie onderweg is, maakt zijn lopende stap af (zoals
   // bij het begin van een gevecht). Een leeg pad midden in een stap bleef hangen: de beweging
-  // (js/anim.js) kijkt alleen naar het pad, en de inner (js/inner.js) wacht tot hij niet meer
-  // onderweg is, dus die stond na een gesprek voorgoed stil.
+  // (js/anim.js) kijkt alleen naar het pad.
   const staStil = (e) => {
     e.pad = e.onderweg && e.pad[0] ? [e.pad[0]] : [];
   };
@@ -51,7 +50,7 @@
     const voorval = !!T.VOORVALLEN[wieId];
     S.modus = 'dialoog';
     // Een voorval is een keuze met een prijs: de tijd staat stil tot je kiest, zoals bij een brief. Een gewoon gesprek
-    // laat de dag doorlopen (wie de inner aan de praat houdt, houdt hem op: js/inner.js).
+    // laat de dag doorlopen.
     if (voorval) T.houdTijdStil(S, 'voorval');
     staStil(S.schout);
     // Met wie je praat, staat stil en blijft zichtbaar: hij komt door een boom of een huis heen

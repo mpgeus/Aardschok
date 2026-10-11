@@ -5,7 +5,7 @@
 // om doorheen te reizen (vraag 63, D), zonder eigen kaart. Wat je nog niet zag, is donker.
 //
 // Wie reist, verlaat de kaart van het dorp niet: de schout gaat eruit (uit de wezens van de wereld), en het dorp blijft
-// de wereld van het spel. Zo doen de heer, de inner, de marskramer en de rovers thuis hun werk zonder hem, want zij
+// de wereld van het spel. Zo doen de heer, de marskramer en de rovers thuis hun werk zonder hem, want zij
 // lopen in S.wereld. Of de schout weg is, vraag je aan T.schoutIsWeg (ook in een ander gebied); of hij op reis is of in
 // een andere provincie, aan T.opReis. Wat er thuis gebeurt terwijl hij reist, hoort hij als hij terugkomt: de berichten
 // (js/ui.js) en de brieven van de heer (js/brieven.js) wachten in S.land.

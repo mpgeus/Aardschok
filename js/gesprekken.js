@@ -98,7 +98,7 @@
         nieuws: {
           tekst: [
             { als: { vlag: 'marskramerLente' }, zeg: 'Uw heer heeft een spiegel van mij gekocht. Hij wilde zien hoe rijk hij eruitziet. Nu wil hij er nog een, voor de achterkant.' },
-            { als: { vlag: 'marskramerZomer' }, zeg: 'Op het kasteel tellen ze de dagen tot Sint-Maarten. Ik hoorde de inner zeggen dat uw gehucht er welvarend uitziet. Hij bedoelde het niet als compliment.' },
+            { als: { vlag: 'marskramerZomer' }, zeg: 'Op het kasteel tellen ze de dagen tot Sint-Maarten. Ik hoorde de heer zeggen dat uw gehucht er welvarend uitziet. Hij bedoelde het niet als compliment.' },
             { als: { vlag: 'marskramerHerfst' }, zeg: 'Ze zeggen dat de heer dit jaar meer wil. Dat zeggen ze elk jaar. En elk jaar klopt het.' },
             { zeg: 'Niets wat u niet al weet, schout. En wat u niet weet, weet ik ook niet. Dat is gezonder.' },
           ],
@@ -161,72 +161,6 @@
           ],
           keuzes: [
             { zeg: 'Tot ziens.', sluit: true },
-          ],
-        },
-      },
-    },
-    // De inner (js/inner.js, ontwerp/spel.md "Rijk worden en arm lijken"): de man van de heer die in oogstmaand komt
-    // kijken. Geen grap zoals zijn heer: hij kijkt goed, en hij weet het. Sinds 11 okt telt wat hij ziet niet meer: de heer
-    // rekent op wat er is (vraag 151, optie 1); deel B2 haalt hem en dit gesprek weg. De vlaggen innerOpBezoek,
-    // innerUitgepraat en innerKlaar zet js/inner.js.
-    inner: {
-      naam: 'de inner',
-      start: 'welkom',
-      situaties: [
-        { naam: 'Oogstmaand: hij komt kijken', als: { vlag: 'innerOpBezoek' } },
-        { naam: 'Hij heeft genoeg gepraat', als: { vlag: ['innerOpBezoek', 'innerUitgepraat'] } },
-        { naam: 'Hij is klaar met kijken', als: { vlag: ['innerOpBezoek', 'innerKlaar'] } },
-      ],
-      // Afleiden (werklijst punt 4, stuk 2; vraag 42, Marcel, 27 sep): zolang je met hem praat, kijkt hij niet en loopt de
-      // dag door, tot hij genoeg gepraat heeft (innerUitgepraat). Is hij klaar (innerKlaar), dan verandert een praatje er
-      // niets meer aan.
-      knopen: {
-        welkom: {
-          tekst: [
-            { als: { vlag: 'innerKlaar' }, zeg: 'Ik ben klaar, schout. Zijne Genade rekent zelf op Sint-Maarten, en hij rekent snel.' },
-            { als: { vlag: 'innerUitgepraat' }, zeg: 'Geen praatjes meer, schout: ik moet kijken, en voor donker terug zijn op het kasteel. Zeg het onderweg maar.' },
-            { zeg: 'Goedendag, schout. Ik ben de inner van Zijne Genade, en ik kom kijken: de huizen, de schuren, de velden. Zijne Genade rekent op Sint-Maarten zelf, maar hij wil graag weten hoe het ervoor staat.' },
-          ],
-          keuzes: [
-            { zeg: 'Loop maar met me mee. Ik laat u alles zien.', als: { nietVlag: 'innerKlaar' }, sluit: true },
-            { zeg: 'Wat bekijkt u precies?', als: { nietVlag: ['innerUitgepraat', 'innerKlaar'] }, naar: 'wat' },
-            { zeg: 'Hoe gaat het op het kasteel?', als: { nietVlag: ['innerUitgepraat', 'innerKlaar'] }, naar: 'kasteel' },
-            { zeg: 'Kijk maar raak.', als: { nietVlag: 'innerKlaar' }, sluit: true },
-            { zeg: 'Goede reis.', als: { vlag: 'innerKlaar' }, sluit: true },
-          ],
-        },
-        kasteel: {
-          tekst: [
-            { zeg: 'Zijne Genade maakt het uitstekend. Vorige week liet hij de vijver leegscheppen, omdat hij er een gouden munt in zag liggen. Het was de maan. Hij heeft de maan nu een brief gestuurd.' },
-          ],
-          keuzes: [
-            { zeg: 'Een brief aan de maan?', naar: 'maan' },
-            { zeg: 'Loop maar met me mee.', sluit: true },
-          ],
-        },
-        maan: {
-          tekst: [
-            { zeg: 'Een aanmaning. De maan staat elke nacht boven zijn land, zegt Zijne Genade, en betaalt nooit iets. Ik moest hem tellen. Eén, schreef ik op. Zijne Genade vond het weinig.' },
-          ],
-          keuzes: [
-            { zeg: 'En wat vindt u er zelf van?', naar: 'zelf' },
-            { zeg: 'Loop maar met me mee.', sluit: true },
-          ],
-        },
-        zelf: {
-          tekst: [
-            { zeg: 'Ik vind niets, schout. Ik tel. Wie iets vindt, komt in de kerker, en daar valt niets te tellen behalve de dagen. Is het al zo laat? We staan hier maar te praten.' },
-          ],
-          keuzes: [
-            { zeg: 'Loop maar met me mee.', sluit: true },
-          ],
-        },
-        wat: {
-          tekst: [
-            { zeg: 'Huizen, want daar wonen zielen, en zielen betalen hoofdgeld. Schuren, want daar ligt graan. Velden, want daar staat graan dat straks in de schuren ligt. Ik schrijf er niets over op, schout: Zijne Genade telt zelf, op Sint-Maarten, en hij telt wat er dan is.' },
-          ],
-          keuzes: [
-            { zeg: 'Loop maar met me mee.', sluit: true },
           ],
         },
       },
@@ -915,11 +849,11 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'Morgen ga ik naar de inner, schout. Om te praten. Over u, en over alles wat ik van u weet. Tenzij u mij iets te zeggen hebt.' },
+            { zeg: 'Morgen ga ik naar het kasteel, schout. Om te praten. Over u, en over alles wat ik van u weet. Tenzij u mij iets te zeggen hebt.' },
           ],
           keuzes: [
             { zeg: 'Hier, vijf goud. En nu je mond dicht.', sluit: true, doe: { goud: -5 } },
-            { zeg: 'Ga maar. De inner gelooft geen woekeraar.', sluit: true, doe: { gunst: -6 } },
+            { zeg: 'Ga maar. De heer gelooft geen woekeraar.', sluit: true, doe: { gunst: -6 } },
           ],
         },
       },
@@ -1243,7 +1177,7 @@
       knopen: {
         begin: {
           tekst: [
-            { zeg: 'De oogst is binnen, schout! Vroeger hielden we dan een feest, met alles erop en eraan. Wat op is, kan de inner niet tellen, zei mijn vader altijd.' },
+            { zeg: 'De oogst is binnen, schout! Vroeger hielden we dan een feest, met alles erop en eraan. Wat op is, kan de heer niet tellen, zei mijn vader altijd.' },
           ],
           keuzes: [
             { zeg: 'Een groot feest.', sluit: true, doe: { graan: -40, bier: -15, tevreden: 8, feest: 'dag' } },

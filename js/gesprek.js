@@ -13,7 +13,7 @@
   'use strict';
 
   // Eén verzameling vlaggen per dorp: wat er in het dorp speelt ("de heer is op bezoek", "de marskramer vertrekt"),
-  // gezet door de regels van dat dorp (js/heer.js, js/handel.js, js/inner.js, js/herberg.js) en door een antwoord.
+  // gezet door de regels van dat dorp (js/heer.js, js/handel.js, js/herberg.js) en door een antwoord.
   // Een vlag telt ook als hij een bestaand veld op het dorp is, zodat zoiets niet twee keer bijgehouden hoeft te
   // worden.
   function vlaggen(D) {

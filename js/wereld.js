@@ -639,8 +639,7 @@
   T.zichtTussen = (w, a, b, open) => (T.zicht(w, a, b, open) || T.zicht(w, b, a, open)) && !(w.hoogte && T.heuvelTussen(w, a, b));
 
   // Ziet wie op `van` staat de tegel `naar`, als hij `ver` tegels ver kijkt? Hemelsbreed (een cirkel,
-  // geen vierkant) en met niets ertussen. Zo kijkt de inner (js/inner.js);
-  // een monster kijkt nog in een vierkant (T.zoekOntdekking, js/verkennen.js). Wie hoger staat, ziet verder
+  // geen vierkant) en met niets ertussen. Een monster kijkt nog in een vierkant (T.zoekOntdekking, js/verkennen.js). Wie hoger staat, ziet verder
   // (T.verderVanBoven, js/hoogte.js; vraag 121, stap 2).
   T.zietTegel = function (w, van, naar, ver, open) {
     const dx = naar.x - van.x;

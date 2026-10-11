@@ -46,7 +46,7 @@
   //                   zaaien kan dus niet. planDoor: wie het koos ('boer' of 'schout'), planWaarom: waarom
   //                   de boer het koos.
   //   vruchtbaarheid  0..1: een akker geeft zijn graan maal dit getal (T.oogstPerTegel).
-  // De lijst heet nog w.akkers, zoals vóór 25 sep: de oogst, de inner en de heer kennen hem onder
+  // De lijst heet nog w.akkers, zoals vóór 25 sep: de oogst en de heer kennen hem onder
   // die naam. Een veld zonder bestemming is een akker, zoals elk veld tot 25 sep.
   // ---------------------------------------------------------------------------------------------
 

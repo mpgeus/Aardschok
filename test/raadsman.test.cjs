@@ -153,7 +153,7 @@ test('ben je weg als zijn tijd om is, dan beslist de raadsman, naar zijn karakte
 
 const dagNu = (S) => Math.floor(S.kalender.dag);
 
-test('de gunst van de heer weegt mee zoals de argwaan van de inner deed: de grijsaard bouwt het standbeeld, de zanger zet een vogelverschrikker', () => {
+test('de gunst van de heer weegt mee zoals de argwaan van vroeger deed: de grijsaard bouwt het standbeeld, de zanger zet een vogelverschrikker', () => {
   // Een standbeeld: hout -20, tevreden -2, gunst +6. Een vogelverschrikker: hout -3, tevreden +3, gunst -3. Het gewicht van
   // de gunst is dat van de argwaan van vroeger (voor de grijsaard 3, voor de zanger 0,3), met het teken omgedraaid.
   const kies = (karakter) => {

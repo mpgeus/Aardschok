@@ -175,7 +175,7 @@
     return k.stil && k.stil.length ? 0 : k.snelheid || 0;
   };
 
-  // Voor wie ertoe doet als hij in een dorp komt (de heer, de inner, js/dag.js T.bezoekerKomtAan): wie sneller dan 1×
+  // Voor wie ertoe doet als hij in een dorp komt (de heer, js/dag.js T.bezoekerKomtAan): wie sneller dan 1×
   // speelt, gaat naar 1×, anders zie je hem nauwelijks komen. Alleen in je eigen dorp (js/dorp.js), en alleen als je er
   // bent: wie op reis is (js/land.js), ziet hem toch niet; die hoort het als hij terug is, en de reis gaat op zijn
   // snelheid door. De kalender van het dorp is die van het spel.

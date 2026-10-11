@@ -345,7 +345,7 @@
     },
     {
       id: 'doorkijkPlein', naam: 'Wie je door een huis heen ziet', standaard: 'ookHetPlein',
-      uitleg: 'Altijd de schout, wie je spreekt, wie je zoekt, wie vecht, en de heer, de marskramer, de inner en de soldaten.',
+      uitleg: 'Altijd de schout, wie je spreekt, wie je zoekt, wie vecht, en de heer, de marskramer en de soldaten.',
       keuzes: [
         // De standaard houdt zijn naam (Marcel, 10 okt: op een feest niet), zodat een browser die hem onthield, meegaat.
         { id: 'ookHetPlein', naam: 'Ook het plein', zet: { 'DOORKIJK_INSTELLINGEN.plein': true, 'DOORKIJK_INSTELLINGEN.pleinOpEenFeest': false },
@@ -758,7 +758,6 @@
     { naam: 'Het rapport', blok: 'OCHTENDRAPPORT_INSTELLINGEN' },
     { naam: 'Het land', blok: 'LAND_INSTELLINGEN' },
     { naam: 'De maker', blok: 'MAKER_INSTELLINGEN' },
-    { naam: 'De inner', blok: 'INNER_INSTELLINGEN' },
     { naam: 'De boeren', blok: 'BOEREN_INSTELLINGEN' },
     { naam: 'De velden', blok: 'VELDEN_INSTELLINGEN' },
     { naam: 'Het veldwerk', blok: 'VELDWERK_INSTELLINGEN' },

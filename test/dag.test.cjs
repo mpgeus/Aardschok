@@ -254,7 +254,7 @@ test('slapen kan \'s avonds bij je eigen huis, en bij het eerste licht word je w
   assert.ok(berichten.includes('Het is ochtend.'));
 });
 
-test('een bezoeker komt op één manier: overdag, met zijn bericht één keer, en de heer en de inner zetten de tijd op 1×', () => {
+test('een bezoeker komt op één manier: overdag, met zijn bericht één keer, en de heer zet de tijd op 1×', () => {
   // Een los object dat als dorp dient: het is jouw dorp (geen ander dorp), en de schout staat op zijn kaart (T.naarGewoneSnelheid).
   const losDorp = (dag) => {
     const schout = {};
@@ -276,21 +276,4 @@ test('een bezoeker komt op één manier: overdag, met zijn bericht één keer, e
   assert.equal(T.bezoekerKomtAan(nacht, { meteen: true, aankomst: { tekst: 'De marskramer.', soort: 'goed' } }), true);
   assert.equal(nacht.kalender.snelheid, 10);
   assert.equal(T.bezoekerKomtAan(nacht, null), false, 'geen bezoek, niemand die komt');
-});
-
-test('de inner komt overdag: valt zijn dag \'s nachts in, dan loopt hij pas om negen uur de kaart op, en gaat de tijd naar 1×', () => {
-  const S = gehucht(bijUur(dagVan('oogstmaand', 15), 0.5), 10);
-  S.schout = S.schout || null;
-  berichten.length = 0;
-  T.innerKomt(S.dorp, Math.floor(S.kalender.dag));
-  T.werkInnerBij(S, S.dorp);
-  assert.ok(S.dorp.inner.bezoek, 'hij is op komst');
-  assert.equal(S.dorp.inner.bezoek.wezen, null, 'maar niet midden in de nacht');
-  assert.ok(!berichten.some((b) => /komt kijken/.test(b)), 'en het bericht wacht ook');
-  assert.equal(S.kalender.snelheid, 10);
-  S.kalender.dag = bijUur(S.kalender.dag, IN.bezoekUur + 0.25);
-  T.werkInnerBij(S, S.dorp);
-  assert.ok(S.dorp.inner.bezoek.wezen, 'om negen uur is hij er');
-  assert.ok(berichten.some((b) => /komt kijken/.test(b)));
-  assert.equal(S.kalender.snelheid, 1, 'wie op 10× speelde, ziet hem op 1× komen');
 });

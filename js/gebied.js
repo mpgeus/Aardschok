@@ -64,8 +64,8 @@
       // En andersom: een overgang die naar een kaart wijst die niet bestaat. Ook dat hoort hier
       // al te klagen, bij het inlezen, en niet pas als een speler er per ongeluk op stapt. Behalve
       // op een proefkaart: het gehucht is er (nog) een, en zijn weg de wereld in leidt sinds de oude
-      // kaart weg is (25 sep) bewust nergens heen; daar lopen alleen de marskramer, de heer en de
-      // inner over (T.wegInEnUit, js/handel.js).
+      // kaart weg is (25 sep) bewust nergens heen; daar lopen alleen de marskramer en de heer
+      // over (T.wegInEnUit, js/handel.js).
       for (const o of w.overgangen || []) {
         if (!T.GEBIEDEN[o.naar] && !w.proef) ontbreekt(o.naar, `de kaart "${naam}" wijst er op (${o.x}, ${o.y}) naartoe`);
       }

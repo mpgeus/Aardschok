@@ -687,7 +687,7 @@
   }
 
   // Elk beeld (js/main.js, werkBij), zoals T.werkMarskramerBij in js/handel.js. Wie komt, verschijnt
-  // overdag op de weg, op dezelfde manier als de marskramer, de heer en de inner (T.bezoekerKomtAan in
+  // overdag op de weg, op dezelfde manier als de marskramer en de heer (T.bezoekerKomtAan in
   // js/dag.js, met het bericht wie het zijn), en loopt eerst naar zijn huis (p.komt, T.dagAnker). Wie
   // wegtrekt, loopt naar de uitgang (e.vertrekt, T.dagAnker) en gaat daar van de kaart.
   T.werkBewonersBij = function (D) {

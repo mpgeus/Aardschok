@@ -10,8 +10,8 @@
 // toetsen (test/vee.test.cjs): het vee hoort bij een weide (een veld met bestemming 'weide',
 // js/akkers.js), heeft daar plaats nodig, geeft van grasmaand tot wijnmaand melk, en werpt in
 // grasmaand jongen zolang er plaats is. Wat het dorp van de melk niet op dezelfde dag eet, wordt
-// kaas (js/behoeften.js, T.eetVandaag). Nog niet: hooi en slachten (stap 2), en de inner die de
-// kudde telt en de marskramer die vee koopt en verkoopt (stap 3).
+// kaas (js/behoeften.js, T.eetVandaag). Nog niet: hooi en slachten (stap 2), en de marskramer die vee koopt en
+// verkoopt (stap 3).
 (function (T) {
   'use strict';
 

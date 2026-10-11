@@ -251,7 +251,6 @@
     const m = D.marskramer;
     if (m && m.komtOp === dag && !m.weg) uit.push('Vandaag komt de marskramer.');
     if (D.heer && D.heer.bezoek && !D.heer.bezoek.aangekomen) uit.push('Vandaag komt de heer.');
-    if (D.inner && D.inner.bezoek && !D.inner.bezoek.aangekomen) uit.push('Vandaag komt de inner.');
     for (const id of RADEN_DIE_KOMEN) {
       const r = T.RADEN.find((x) => x.id === id);
       if (r.als(D)) uit.push(r.tekst(D).replace(/ ?\[[^\]]*\]/g, ''));

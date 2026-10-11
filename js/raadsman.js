@@ -32,7 +32,7 @@
     // tevredenheid (tevreden), per punt gunst van de heer (gunst), per goud (goud), per tien graan, hout,
     // bier, ... (waren), voor iemand het bos in (verban: plus is streng, min is mild), per tien procent kans op een
     // dode (dood), en per gezin erbij (gezin). Het antwoord dat hem het meest waard is, wint.
-    // Het gewicht van de gunst is het gewicht dat tot 11 okt de argwaan van de inner had (vraag 151, optie 1, deel B1): een
+    // Het gewicht van de gunst is het gewicht dat tot 11 okt de argwaan had (vraag 151, optie 1, deel B1): een
     // antwoord dat 3% argwaan gaf, geeft nu 3 punten gunst minder, en weegt dus precies hetzelfde. Daarom is het
     // teken omgedraaid in `waarde`: een antwoord dat gunst geeft, is hem iets waard, en een dat gunst kost, kost hem iets.
     karakters: {

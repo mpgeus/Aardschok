@@ -699,7 +699,7 @@
   };
 
   // Elk beeld (js/main.js): overdag, vanaf zijn uur, zoekt hij de schout. Hij loopt naar hem toe (T.loopNaastDeSchout,
-  // js/inner.js, zoals de inner), en staat hij naast een schout die stilstaat, dan spreekt hij hem aan. Daarna wacht
+  // js/lopen.js), en staat hij naast een schout die stilstaat, dan spreekt hij hem aan. Daarna wacht
   // hij, tot je hem aanspreekt. 's Avonds, of als de schout in een ander gebied is, gaat hij zijns weegs.
   T.werkVoorvallenBij = function (S, D) {
     const L = D.voorvallen && D.voorvallen.lopend;

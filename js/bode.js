@@ -47,7 +47,7 @@
     // na `uren` uur, als de schout niet kwam, loopt het af. Alleen als dat niet kan (hij is de kaart al af, of er zijn al
     // rovers op de kaart), gebeurt het buiten beeld, en hoor je het als hij terug is.
     hinderlaag: { afstand: 10, uren: 1.5 },
-    // De mannen van de heer: de kans is `basis` (tot 11 okt kwam er een deel van de argwaan van de inner bij). Ze nemen de
+    // De mannen van de heer: de kans is `basis` (tot 11 okt kwam er een deel van de argwaan bij). Ze nemen de
     // brief mee en de gunst van de heer gaat omlaag. Met hen vecht niemand: weerstand tegen de heer is het ergste.
     heer: { basis: 0.04, gunst: 5 },
     // Bescherming: hooguit zoveel mannen mee. In het gevecht telt de bode `bode`, een man 1 en een veteraan `veteraan`, en
