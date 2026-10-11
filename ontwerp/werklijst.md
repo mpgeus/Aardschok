@@ -55,7 +55,8 @@ Het plan staat in het archief bij vraag 152; 1a (optie 1), 1b (het lege land) en
 af; hoe het nu werkt: `spel.md`, "Zo werkt het lege begin nu".
 - **1d, jij bouwt alles, binnen bereik:** het bereik rond het plein en het huis van de schout, te zien als je bouwt; het
   huis van de schout één keer in het bouwmenu (dan verhuist ook hij, en gaat zijn tent weg: `T.verhuis`), de akkers bij
-  een boerderij; wie geen werk heeft, bouwt mee. Het bouwmenu zelf is er sinds 1c.
+  een boerderij; wie geen werk heeft, bouwt mee. Het bouwmenu zelf is er sinds 1c. **Bezig in sessie
+  `ccr-5dd998e4-j3q8e2`** (11 okt): het plan, met Marcel.
 - **1e, boeren uit het niets:** een gezin dat in een boerderij trekt, wordt boer, met een geloot karakter.
 - **1f, een jaar zonder fouten:** een toets speelt een jaar vanaf een lege plek, met een speler in code die bouwt. Dan
   is "Leeg" het enige begin, en volgt ronde 2 van A.
