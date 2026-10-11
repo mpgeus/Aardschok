@@ -1,5 +1,6 @@
 // De naam van het spel, op één plek (Marcel, 28 sep: "De naam blijft aardschok voor nu. We maken later iets
 // anders. Zorg dat we dat makkelijk door het hele spel kunnen aanpassen"; ontwerp/verpakken.md, "De naam").
+// Sinds 11 okt Tithebreaker (Marcel: "2 ja"; nagezocht in Steam en de merkenregisters, ontwerp/commercieel.md).
 // Een andere naam is deze ene regel: het tabblad van het spel en van het gereedschap, de server, de meldingen
 // in de console, en straks het titelscherm, lezen hem hier. test/naam.test.cjs bewaakt dat hij nergens anders
 // staat. Een bladzijde schrijft {naam} in haar titel, en data-spelnaam op een element; dit bestand vult ze in.
@@ -10,7 +11,7 @@
 (function (T) {
   'use strict';
 
-  T.NAAM = 'Aardschok';
+  T.NAAM = 'Tithebreaker';
   T.OPSLAG_SLEUTEL = 'aardschok';
   // Welke stand dit is. Leeg zolang het spel uit de map draait; in een proefversie (npm run proefversie,
   // gereedschap/proefversie/maak.cjs) de datum en de commit, zodat we weten waarop een tester speelde. Het titelscherm

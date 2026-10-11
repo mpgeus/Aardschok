@@ -134,8 +134,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 ### js/naam.js: de naam van het spel
 
-- `js/naam.js`: de naam van het spel (`T.NAAM`), op één plek, want hij verandert nog (Marcel, 28 sep); een
-  titel schrijft `{naam}`. De sleutel waaronder de browser iets bewaart (`T.OPSLAG_SLEUTEL`) staat ernaast en
+- `js/naam.js`: de naam van het spel (`T.NAAM`, sinds 11 okt Tithebreaker), op één plek, want hij kan nog
+  veranderen (Marcel, 28 sep); een titel schrijft `{naam}`. De sleutel waaronder de browser iets bewaart (`T.OPSLAG_SLEUTEL`) staat ernaast en
   verandert nooit mee. `test/naam.test.cjs` bewaakt dat de naam nergens anders staat. `T.STAND` is leeg, behalve in
   een proefversie (`npm run proefversie` zet er de datum en de commit in).
 
