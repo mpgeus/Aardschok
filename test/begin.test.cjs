@@ -12,8 +12,8 @@ const brieven = [];
 T.ui = new Proxy({}, { get: (_, naam) => (...args) => (naam === 'bericht' ? gezegd.push(args[0]) : naam === 'toonBrief' ? brieven.push(args[1]) : undefined) });
 
 // Een nieuw spel op het eiland van `zaad`, met het lege begin, stil en met een vaste reeks toeval (zoals js/main.js het
-// begint, zonder scherm).
-function leegBegin(zaad = 3) {
+// begint, zonder scherm). Standaard zaad 2: daar is open grond voor vier hutten binnen het bouwbereik.
+function leegBegin(zaad = 2) {
   const echt = console.warn;
   const toeval = Math.random;
   const maker = { ...T.MAKER_INSTELLINGEN };
@@ -226,6 +226,50 @@ test('alleen op het eiland: zonder eiland legt de maker het gehucht dat er al wa
     const w = T.laadGemaaktGehucht(3);
     assert.ok(!w.kamp);
     assert.ok(w.gebouwenOpKaart.length > 5);
+  } finally {
+    Object.assign(T.MAKER_INSTELLINGEN, maker);
+  }
+});
+
+// ── 1d: jij bouwt alles, binnen bereik (vraag 152; Marcel, 11 okt: "a1, b ja, c ja, d ja, e ja") ──
+
+test('het bouwbereik: je bouwt binnen bouwBereik tegels van het plein, en verder niet; lopen kan overal', () => {
+  const { S, D, w } = leegBegin();
+  dagen(S, 1, 1);
+  const R = T.BEGIN_INSTELLINGEN.bouwBereik;
+  const plein = T.pleinTegels(w);
+  const verst = (t) => Math.min(...plein.map((p) => Math.hypot(p.x - t.x, p.y - t.y)));
+  for (const p of plein) assert.ok(T.inBouwBereik(D, p.x, p.y), 'het plein ligt erin');
+  // een tegel op de rand, en een net erbuiten, recht naar rechts van de rechterrand van het plein
+  const rechts = plein.reduce((a, p) => (p.x > a.x ? p : a));
+  assert.ok(T.inBouwBereik(D, rechts.x + R, rechts.y));
+  assert.ok(!T.inBouwBereik(D, rechts.x + R + 1, rechts.y) || verst({ x: rechts.x + R + 1, y: rechts.y }) <= R);
+  // ver weg zegt de regel waarom, ook als het daar verder zou passen
+  const ver = { x: rechts.x + R + 5, y: rechts.y };
+  const reden = T.waaromPastHetNiet(D, 'hut', ver.x, ver.y);
+  assert.match(reden, /Te ver weg/);
+  assert.equal(T.plaatsGebouw(D, 'hut', ver.x, ver.y).gelukt, false);
+  // dichtbij lukt het wel (zaad 2 heeft open grond bij het plein)
+  const [hut] = zetHutten(D, 1);
+  const voet = T.voetVanGebouw(hut);
+  for (let y = voet.y; y < voet.y + voet.h; y++) for (let x = voet.x; x < voet.x + voet.b; x++) assert.ok(T.inBouwBereik(D, x, y));
+  assert.ok(T.isBegaanbaar(w, ver.x, ver.y) || T.isVast(w, ver.x, ver.y), 'buiten het bereik is gewoon land');
+});
+
+test('het bouwbereik is er alleen in het lege begin', () => {
+  const maker = { ...T.MAKER_INSTELLINGEN };
+  Object.assign(T.MAKER_INSTELLINGEN, { opEiland: false, leeg: false });
+  try {
+    const S = { kalender: T.nieuweKalender(), tijd: 0, wereldTijd: 0, modus: 'verkennen', inventaris: new Set() };
+    const echt = console.warn;
+    console.warn = () => {};
+    try {
+      assert.ok(T.beginOpKaart(S, 'gehucht', 3));
+    } finally {
+      console.warn = echt;
+    }
+    assert.equal(T.bouwBereikVan(S.dorp), null);
+    assert.ok(T.inBouwBereik(S.dorp, 0, 0));
   } finally {
     Object.assign(T.MAKER_INSTELLINGEN, maker);
   }

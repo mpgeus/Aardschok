@@ -481,6 +481,7 @@
     if (!S.foto) {
       tekenRaster(ctx, S);
       tekenMarkeringen(ctx, S);
+      tekenBouwBereik(ctx, S, vak);
       tekenBouwSpook(ctx, S);
       tekenVerzoekPlek(ctx, S);
     }
@@ -1794,6 +1795,38 @@
       tekenRand(ctx, erf);
     }
     ctx.restore();
+  }
+
+  // Het bouwbereik van het lege begin (js/begin.js; vraag 152, 1d), zolang het bouwmenu open is of je bouwt: een zachte
+  // gloed op de grond waar je kunt bouwen, die in de laatste twee tegels uitdooft. Geen lijn (Marcel, 11 okt: "Ik wil geen
+  // 'grens'"). Per sterkte één pad, zodat het duizenden tegels in drie keer vult.
+  const BEREIK_GLOED = [0.05, 0.09, 0.13];
+  function tekenBouwBereik(ctx, S, vak) {
+    if (!(S.bouwSoort || S.bouwMenuOpen)) return;
+    const B = T.bouwBereikVan(S.dorp); // bouwen doe je in je eigen dorp (het bouwmenu, js/hud.js)
+    if (!B) return;
+    const paden = BEREIK_GLOED.map(() => new Path2D());
+    const x0 = Math.max(0, vak.x0);
+    const y0 = Math.max(0, vak.y0);
+    const x1 = Math.min(B.b - 1, vak.x1);
+    const y1 = Math.min(B.h - 1, vak.y1);
+    for (let y = y0; y <= y1; y++) {
+      for (let x = x0; x <= x1; x++) {
+        const rand = B.straal - B.afstand[y * B.b + x];
+        if (!(rand >= 0)) continue;
+        const p = opGrond(x, y);
+        const pad = paden[rand < 1 ? 0 : rand < 2 ? 1 : 2];
+        pad.moveTo(p.x, p.y - T.HH);
+        pad.lineTo(p.x + T.HB, p.y);
+        pad.lineTo(p.x, p.y + T.HH);
+        pad.lineTo(p.x - T.HB, p.y);
+        pad.closePath();
+      }
+    }
+    BEREIK_GLOED.forEach((a, i) => {
+      ctx.fillStyle = `rgba(240, 225, 170, ${a})`;
+      ctx.fill(paden[i]);
+    });
   }
 
   // Het gebouw dat de speler in de hand heeft (S.bouwSoort, het bouwmenu in js/hud.js): zijn hele

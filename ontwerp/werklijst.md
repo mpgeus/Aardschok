@@ -16,7 +16,7 @@ het bouwmenu in het lege begin, en verhuizen uit het kamp. **Het volgende punt i
 schout en meebouwen.** Ronde 2 van het snoeien volgt na 1f, ronde 3 na C.
 
 **Wacht op Marcel:**
-- **1c bekijken:** Spelregels, "Het begin" op "Leeg", en dan Nieuw spel (of in de console `Spel.debug.begin('leeg', 3)`;
+- **1c bekijken:** Spelregels, "Het begin" op "Leeg", en dan Nieuw spel (of in de console `Spel.debug.begin('leeg', 2)`;
   op de meeste andere landen past er nog geen hut, want het bos staat om het plein: `opmerkingen.md`).
   Is het kamp op, zet dan een hut neer met het bouwmenu (B), net naast het plein: twee dagen later trekt er een gezin in
   en gaat zijn tent weg. Het hout in de kar (50) is genoeg voor vier hutten (32) en een houthakker (10).

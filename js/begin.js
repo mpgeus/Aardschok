@@ -50,6 +50,9 @@
     // Zoveel jaar vraagt de heer niets (geen schatting op Sint-Maarten en geen grillen; js/heer.js, js/grillen.js), en
     // schrijft hij in wijnmaand dat hij je spaart (Marcel, 11 okt: "het eerste jaar vraagt de heer niets").
     heerVrij: 1,
+    // Het bouwbereik (vraag 152, 1d; Marcel, 11 okt: "b ja"): je bouwt binnen zoveel tegels van het plein en van elke
+    // opslag die af is (het huis van de schout; in C ook een schuur), gemeten van het midden van een tegel.
+    bouwBereik: 12,
   };
   const IN = () => T.BEGIN_INSTELLINGEN;
 
@@ -230,6 +233,66 @@
     if (vuur) T.haalVoorwerpWeg(w, vuur);
     D.begin.kamp = 'weg';
   }
+
+  // ---------------------------------------------------------------------------------------------
+  // Het bouwbereik (vraag 152, 1d)
+  // ---------------------------------------------------------------------------------------------
+
+  // In het lege begin bouw je binnen bouwBereik tegels van het plein en van elke opslag die af is (`opslag` in
+  // T.GEBOUWEN), zoals een kantoor in Anno (Marcel, 11 okt: "Ik wil geen 'grens' alles moet open zijn", en "Dus je kunt
+  // bijvoorbeeld x tegels vanaf je stad bouwen"). Lopen en kijken kan overal; alleen bouwen niet. Per tegel de afstand
+  // tot het dichtste plein of de dichtste opslag, één keer uitgerekend tot er een opslag bij komt (alleen beeld en regel,
+  // dus niet in S: het volgt uit de kaart en de gebouwen).
+  const BEREIK = new WeakMap();
+  function bouwBereik(D) {
+    const w = D && D.begin && D.wereld;
+    if (!w) return null;
+    const straal = IN().bouwBereik;
+    const opslagen = D.gebouwen.filter((g) => g.klaar && T.GEBOUWEN[g.soort] && T.GEBOUWEN[g.soort].opslag);
+    const sleutel = [straal, ...opslagen.map((g) => `${g.x},${g.y}`)].join(';');
+    const was = BEREIK.get(w);
+    if (was && was.sleutel === sleutel) return was;
+    const afstand = new Float32Array(w.b * w.h).fill(Infinity);
+    const bronnen = T.pleinTegels(w).map((t) => ({ x: t.x, y: t.y }));
+    for (const g of opslagen) {
+      const r = T.voetVanGebouw(g);
+      for (let y = r.y; y < r.y + r.h; y++) for (let x = r.x; x < r.x + r.b; x++) bronnen.push({ x, y });
+    }
+    const R = Math.ceil(straal);
+    for (const b of bronnen) {
+      for (let dy = -R; dy <= R; dy++) {
+        const y = b.y + dy;
+        if (y < 0 || y >= w.h) continue;
+        for (let dx = -R; dx <= R; dx++) {
+          const x = b.x + dx;
+          const d = Math.hypot(dx, dy);
+          if (x < 0 || x >= w.b || d > straal) continue;
+          if (d < afstand[y * w.b + x]) afstand[y * w.b + x] = d;
+        }
+      }
+    }
+    const uit = { sleutel, straal, b: w.b, h: w.h, afstand };
+    BEREIK.set(w, uit);
+    return uit;
+  }
+  // Voor het tekenen (js/tekenen.js): { straal, b, h, afstand } (per tegel, Infinity daarbuiten), of null zonder bereik.
+  T.bouwBereikVan = bouwBereik;
+  // Ligt deze tegel binnen het bouwbereik? Zonder bereik (het oude begin) ligt alles erin.
+  T.inBouwBereik = function (D, x, y) {
+    const B = bouwBereik(D);
+    if (!B) return true;
+    return x >= 0 && y >= 0 && x < B.b && y < B.h && B.afstand[y * B.b + x] <= B.straal;
+  };
+  // Waarom er op het vak r niet gebouwd kan worden, omdat het (deels) buiten het bereik ligt, of null
+  // (T.waaromPastHetNiet, js/gebouwen.js).
+  T.waaromBuitenBouwBereik = function (D, r) {
+    for (let y = r.y; y < r.y + r.h; y++) {
+      for (let x = r.x; x < r.x + r.b; x++) {
+        if (!T.inBouwBereik(D, x, y)) return T.t('Too far away: you build within {n} tiles of the square or of a store.', { n: IN().bouwBereik });
+      }
+    }
+    return null;
+  };
 
   // Laat de heer dit dorp op dag `dag` met rust? Het eerste jaar van het lege begin (heerVrij): geen schatting en geen grillen.
   T.heerLaatMetRust = (D, dag) => !!(D.begin && dag < D.begin.heerVrijTot);

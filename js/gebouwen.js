@@ -710,6 +710,9 @@
     const voet = T.gebouwVoet(soort, tekening || T.volgendeTekening(D, soort));
     const w = D.wereld;
     if (!voet || !w) return 'Daar past het niet.';
+    // In het lege begin bouw je binnen het bereik van het plein en je opslagen (js/begin.js; vraag 152, 1d).
+    const ver = T.waaromBuitenBouwBereik(D, { x, y, b: voet.b, h: voet.h });
+    if (ver) return ver;
     let vast = false;
     let reden = null;
     for (let dy = 0; dy < voet.h; dy++) {

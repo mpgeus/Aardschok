@@ -48,6 +48,7 @@ Spel.taal({
     "The cart is on the open ground that will be the square. The families put up their tents around the campfire.": "De kar staat op de open plek die het plein wordt. De gezinnen zetten hun tenten op rond het kampvuur.",
     "{wie} and family leave the camp: their {gebouw} is ready.": "{wie} en zijn gezin verlaten het kamp: hun {gebouw} is af.",
     "{wie} and family leave the camp: their {gebouw} is ready, though it is cramped.": "{wie} en zijn gezin verlaten het kamp: hun {gebouw} is af, al is het krap.",
+    "Too far away: you build within {n} tiles of the square or of a store.": "Te ver weg: je bouwt binnen {n} tegels van het plein of van een opslag.",
     "To Our new reeve,": "Aan Onze nieuwe schout,",
     "It has pleased Us to send you, with {n|# family|# families}, to a piece of Our wilderness. Make a village of it. A village brings Us money; wilderness does not.": "Het heeft Ons behaagd u met {n|# gezin|# gezinnen} naar een stuk van Onze wildernis te zenden. Maak er een dorp van. Een dorp brengt Ons geld op; wildernis niet.",
     "The cart carries what We could spare: some wood, grain for the spring, seed grain, a few tools and {goud} gold. Do not expect more.": "Op de kar ligt wat Wij konden missen: wat hout, graan voor het voorjaar, zaaigraan, wat gereedschap en {goud} goud. Verwacht niet meer.",
