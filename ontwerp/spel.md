@@ -1541,7 +1541,11 @@ De heer blijft: zijn brief, Sint-Maarten, zijn straffen, zijn gunst, de grillen 
 plan om het eruit te halen heet optie 1, en het gaat door (Marcel, 11 okt: "dat moet eruit"). Tot het eruit is,
 beschrijft "Zo werkt het nu" hieronder wat er nog in de code staat.
 
-**Zo werkt het nu** (25 sep, bijgewerkt 27 sep; `js/inner.js`, `js/verstoppen.js`, `js/heer.js`):
+**Zo werkt het nu** (25 sep, bijgewerkt 27 sep en 11 okt; `js/inner.js`, `js/heer.js`):
+- **Deel A van optie 1 is gebouwd (11 okt, vraag 151).** Weg zijn het verstoppen (de kelders), de soldaten die
+  zoeken, de getuigen, "betrapt" en het stiekeme bos, met hun spelregels, vensters en toetsen. Elke akker staat in de
+  boeken van de heer, het bos melden kost gunst, en in `js/zien.js` blijft het licht. De punten hieronder over
+  verstoppen, zoeken en getuigen beschrijven dus wat er niet meer is; de inner en de argwaan staan er nog tot deel B.
 - **De inner** komt op 15 oogstmaand, tien dagen vooraf aangekondigd, overdag vanaf negen uur. Sinds
   de dag (26 sep) loopt de tijd dan door, op 1× (daarvoor stond hij stil zolang de inner er was). Hij
   kijkt 7 tegels ver in een rechte lijn; huizen en schuren houden zijn blik tegen.

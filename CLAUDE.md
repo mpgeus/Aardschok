@@ -121,9 +121,9 @@ agent over, zodat alleen de samenvatting in het gesprek komt.
   volgorde, zonder wat alleen scherm is (`test/laad.cjs`). Een toets van het gereedschap laadt wat
   zijn bladzijde laadt (`.pagina('gereedschap/wereld.html')`). Nooit een eigen lijstje: dan mist er
   vroeg of laat een bestand, en toetst de toets een ander spel dan er draait.
-- `npm run speeltest` speelt het gehucht een jaar met vier spelers in code (braaf, lui 30%, lui 60%, slim;
-  vraag 45), en twee jaar met een vijfde, de bouwer, die van gehucht tot dorp wil en de raad volgt (vraag 58), en een
-  zesde, de sluwe bouwer, die daarbij de heer bedriegt en het graan verstopt houdt voor de herberg en de molen (vraag 94),
+- `npm run speeltest` speelt het gehucht een jaar met twee spelers in code (braaf, slim; vraag 45), en twee jaar met
+  een derde, de bouwer, die van gehucht tot dorp wil en de raad volgt (vraag 58), en een vierde, de sluwe bouwer, die
+  daarbij de inner bespeelt en de heer 90% geeft (vraag 94),
   elk met zaad 1 tot en met 3, in een onzichtbare browser, en zet de uitslag in
   `gereedschap/speeltest/uit/` (niet in git), met een tabel in `samenvatting.md`; wie twee jaar speelt, krijgt er een
   graanboek bij: per jaar waar het graan bleef, en hoeveel dagen er geen bier, brood of laken was. Hetzelfde zaad geeft
@@ -655,7 +655,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`js/tekenen.js`). Een lantaarn bij de deur van wat `lantaarn` heeft in `T.GEBOUWEN` (de kapel, de herberg, de markt,
   het wachthuis) en op de kruisingen (`T.zetLantaarns`; op een lantaarn bouw je niet). De ramen van een huis waar iemand
   thuis is, branden 's avonds (`T.lichtBronnen` in `js/zien.js`). De spelregel "Paadjes"; de getallen in
-  `T.PADEN_INSTELLINGEN`. Een pad loopt nog niet sneller.
+  `T.PADEN_INSTELLINGEN`. Een pad loopt nog niet sneller. `T.isSpoor`: een paadje, of gras dat slijt waar elke dag gelopen
+  wordt; het hek om de schapen laat er een hekje open (`js/beesten.js`).
 - `js/treden.js`: **van gehucht tot dorp, en tot marktrecht** (stap 2 van de proef, vraag 53, 29 sep; sinds 2 okt uit de
   standen, vraag 90): zoals in Anno 1602 wordt het gehucht een dorp bij 20 dorpelingen (wie in een huis of een stenen
   huis woont, `T.mensenVanStand` in `js/wensen.js`), en krijgt het marktrecht bij 20 ambachtslieden
@@ -726,8 +727,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   gewoon werk van het gebouw (`T.GEBOUWEN.herberg.maakt`), tot er genoeg ligt, zoals elke werkplaats die iets omzet
   (`T.maaktTot` in `js/gebouwen.js`, vraag 91, b), boven het bier dat ze apart houdt voor de huizen tot de oogst
   (`T.bierApart`, `T.dagenTotDeOogst` in `js/akkers.js`; vraag 102, b): de gasten drinken wat erboven ligt. In het gehucht
-  staat hij vanaf het begin, en de herbergierster woont er. In de herberg wordt gepraat: de roddelaar
-  vertelt er wat er in zijn kelder ligt (`g.verteld`, `js/verstoppen.js`), de herbergierster vertelt jou
+  staat hij vanaf het begin, en de herbergierster woont er. In de herberg wordt gepraat: de herbergierster vertelt jou
   wie er zat, en de marskramer logeert er (`T.logiesAnker`). 's Avonds branden de ramen van de herberg,
   met de gasten erachter als schimmen: de huizenbouwer geeft per huis door waar de ramen zitten (`ramen`
   in `tegels.json`), en `js/tekenen.js` tekent ze zo dat wat ervoor staat ze afdekt (`brandendeRamen`). Sinds vraag 104
@@ -735,12 +735,6 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (waar de herbergierster woont en de marskramer logeert), en wie 's avonds gaat, gaat naar de dichtste
   (`T.herbergVanGast`). De grote herberg, van twee lagen (`T.isDorpsVorm` in `js/bouwstijl.js`), trekt meer gasten:
   de kans dat iemand gaat, maal `groteHerberg` (vraag 133).
-- `js/doorzoeken.js`: **de soldaten doorzoeken het dorp** (werklijst punt 4, stuk 1, 27 sep): op
-  Sint-Maarten onder de grens van de argwaan op twee of drie plekken (`T.beginDoorzoeken`, vanuit
-  `T.heerStaatErOp`). Ze lopen met de schout mee (`T.loopNaastDeSchout` in `js/inner.js`, zoals de inner)
-  en doorzoeken plek voor plek wat zijn route vlak passeert (`T.zoekOpPlek` in `js/verstoppen.js`); na een
-  paar uur kiezen ze zelf, en zo vaak als zijn argwaan kiest de heer (`T.werkDoorzoekenBij`, elk beeld).
-  De rechthoek van een gebouw vraag je aan `T.voetVanGebouw` (`js/gebouwen.js`).
 - `js/rovers.js`: **de rovers en de militie** (stap 4 van de proef, vraag 55, 29 sep): wie wegtrekt, gaat het bos in en
   komt terug als rover (`D.rovers.bende`, `T.wordtRover` vanuit `js/bewoners.js`), en er komen wilde rovers van buiten
   (`T.tikRoversDag`). Een aanval (`D.rovers.aanval`, `T.werkRoversBij`): tegen de avond van de rand van de kaart
@@ -884,8 +878,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.gevolgVanBetaling`, de heervaart, de schandpaal, de soldaten, `T.vertrouwenNaVoorval`, `T.vertrouwenNaBevolking` in
   `T.wijzigBevolking`, en elke dag `T.tikBazenDag`: het vertrouwen gaat een stukje naar de tevredenheid, vraag 106,
   stap 3). Onder 20 een waarschuwing (de brief `waarschuwing` in `js/brieven.js`, en de raad), op 0 weg (`T.ambtKwijt` met waarom, of `D.einde` met reden 'verjaagd'), maar altijd eerst
-  de waarschuwing. Betrapt op verstoppen: `T.betrapt` (vanuit `T.zoekOpPlek`). De twee gezichten in de balk:
-  `T.ui.toonBazen` (`js/hud.js`). De spelregels "Twee bazen" en "Betrapt"; de getallen in `T.BAZEN_INSTELLINGEN`.
+  de waarschuwing. De twee gezichten in de balk:
+  `T.ui.toonBazen` (`js/hud.js`). De spelregel "Twee bazen"; de getallen in `T.BAZEN_INSTELLINGEN`.
 - `js/grillen.js`: **elke maand een gril van de heer in een brief** (vraag 106, stap 2): `T.GRILLEN` (veertien, elk met
   zijn brief, antwoorden met `doe` zoals een voorval, en `stil` voor wie niet antwoordt), `T.tikGrillenDag` (op de
   twaalfde, niet in wijnmaand en slachtmaand, als er geen andere brief van de heer wacht), de vraag die wacht
@@ -943,18 +937,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   rietsnijder aan het water (`bij` in `T.GEBOUWEN`, `T.natuurBij` in `js/gebouwen.js`). Wat plat op de
   grond ligt (niet vast, laag), tekent `js/tekenen.js` in de buffer van de grond (`isPlat`), en het maakt plaats voor
   een gebouw.
-- `js/zien.js`: **het zichtveld en de getuigen** (werklijst punt 3, 27 sep): wie buiten is, ziet de
-  schout als het licht het toelaat (`T.zichtOp`: overdag acht tegels, 's nachts twee, in het licht
-  verder), met niets ertussen (`T.zietTegel` in `js/wereld.js`, zoals de inner kijkt). Het licht in het
-  dorp staat op één plek (`T.lichtBronnen`: de herberg en de lantaarns op de kaart, die 's avonds
-  branden, en de lantaarn van de schout, `T.draagtLantaarn`: buiten in het donker, tot hij sluipt, vraag 125, C),
-  voor wie wat ziet én voor het licht in `js/tekenen.js`. Wie de schout iets ziet wegzetten of
-  terughalen, is getuige (`T.werdGezien`: de plek onthoudt het in `g.getuigen`, en boven zijn hoofd
-  staat een oogje); wie er woont, telt niet. Het venster van de plek zegt vooraf wie je ziet
-  (`T.kijkersTekst`). Wie het rondvertelt (de roddelaar, `T.vertelInDeHerberg` in `js/verstoppen.js`),
-  vertelt het de eerstvolgende avond in de herberg (`T.getuigenVertellen`, vanuit `T.tikHerbergDag`):
-  dan vinden de soldaten die plek makkelijker (`g.verteldDoor`), en de herbergierster vertelt het je
-  (`{getuige}`, `{gezien}`). Of je een getuige meteen ziet, is een keuze in de spelregels (`meteen`).
+- `js/zien.js`: **het licht in het dorp** (werklijst vraag 108, d, en 125, C; tot 11 okt ook het zichtveld en de
+  getuigen, vraag 151): het licht staat op één plek (`T.lichtBronnen`: de herberg en de lantaarns op de kaart, die
+  's avonds branden, de ramen van de huizen waar iemand thuis is, een feest, een brand, de bode, en de lantaarn van de
+  schout, `T.draagtLantaarn`: buiten in het donker, tot hij sluipt, vraag 125, C), voor het licht in `js/tekenen.js` en
+  voor de wolven, die aan de rand van zijn licht blijven (`js/beesten.js`); `T.huizenMetIemandThuis` zegt welke huizen
+  een raam en een schoorsteen hebben die rookt. De getallen in `T.ZIEN_INSTELLINGEN`.
 - Een zin in een gesprek kan iets uit het spel noemen: `{woord}` vult `T.GESPREK_WOORDEN` in
   (`js/gesprek.js`), zoals `{gisteravond}` (`js/herberg.js`), en in een voorval `{wie}` en `{ander}`
   (`js/voorvallen.js`).
@@ -995,19 +983,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   ok, C ja, D ok, E ok, F Ja, G ok, H goed idee"): komt het dorp graan tekort (`T.graanTekort`), dan wijst een boer of
   zijn zoon een stuk heide en een stuk bos aan, dertig tegels elk, en jij kiest (a2): een voorval `ontginverzoek`
   (`T.beginOntginverzoek`, in `T.tikVoorvallenDag` vóór de bouwverzoeken), met `L.ontgin` = { heide, bos (elk { x, y, b,
-  h } of null; het bos met `bomen` en `verborgen`), boer, nut, vertrouwen, gunst }, en zolang het loopt de vlaggen
+  h } of null; het bos met `bomen`), boer, nut, vertrouwen, gunst }, en zolang het loopt de vlaggen
   `ontginHeide` en `ontginBos` (`L.vlaggen`, die js/voorvallen.js wist als het om is), zodat het gesprek alleen toont wat
   kan. De heide: zo dicht bij zijn akker als ze komt, niet op een paadje van een deur (`T.ontginPlekVoor`,
   `T.isAangelegdPaadje` in `js/paden.js`), en ja kost het vertrouwen van het dorp, elk stuk meer (`T.ontginVertrouwen`;
-  f3). Het bos: het stuk het dichtst bij zijn akker dat de inner van zijn ronde niet ziet (`T.bosPlekVoor`,
-  `T.innerZietStuk`: van de wegen, het plein, de akkers en om de gebouwen, met `open` in `T.zietTegel`, js/wereld.js),
-  anders het dichtste; gemeld (`doe.ontgin: 'bos'`) kost het de gunst van de heer, stiekem (`'stiekem'`) staat het niet
-  in zijn boeken (`veld.stiekem`, `T.inDeBoeken`: de inner zoekt het niet, de heer telt het niet), maar ziet de inner
-  het (`T.innerZietBosAkker`, vanuit `T.innerKijkt`), dan ben je op Sint-Maarten betrapt (`T.heerVindtBosAkkers`,
-  `T.betrapt` in `js/bazen.js` met een eigen tekst), en de soldaten lopen elk jaar op Sint-Maarten door het bos
-  (`T.doorzoekHetBos` vanuit `T.heerStaatErOp`; vraag 107, g1) en vinden het zelden, doorzoeken ze het hele dorp soms
-  (`T.zoekBosAkkers` vanuit `T.zoekVerstopt`), en met een spoor erheen vaak (`T.vindKansVanBosAkker`, `T.spoorNaar`,
-  `T.isSpoor` in `js/paden.js`: gras dat slijt, ook voor het een paadje is; vraag 107, h). Wat het kost,
+  f3). Het bos: het stuk het dichtst bij zijn akker waar hij bij kan (`T.bosPlekVoor`); je meldt het de heer, en dat kost
+  zijn gunst (`doe.ontgin: 'bos'`); stiekem ontginnen kan niet meer (11 okt, vraag 151). Wat het kost,
   zegt `T.ontginPrijs` (voor `T.prijsVanKeuze`). Ja (`T.ontginToegestaan(D, L, soort)`) maakt er een veld van zijn
   boerderij van, met `veld.ontginning` = { tot, op ('heide' of 'bos'), gestoken } en `veld.ontgonnen`; een nieuw veld
   meldt `T.kaartVeranderd`. Het werk staat in `js/veldwerk.js` (`ontgin`, `T.volgendeOntginning`): plaggen steken, en
@@ -1052,10 +1033,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   Sint-Maarten; sinds 25 sep telt hij ook de kist, en vertelt de marskramer hem wat hij je betaalde,
   `T.boekMarskramer` in `js/handel.js`; sinds 27 sep kun je hem bespelen: wie met hem praat, houdt hem op,
   en een geschenk in zijn gesprek (`doe: { omkopen: 10 }`, `T.koopInnerOm`) laat hem minder opschrijven,
-  `T.innerKorting`), `js/verstoppen.js` (de verstopplekken: de kelder van een
-  huis of boerderij en de kapel, `T.verstopPlekVan`; wegzetten en terughalen, `T.verstop` en
-  `T.haalTerug`; het karakter van wie er woont, via `huis` op de boerderij, dezelfde id als op de
-  boer; en wat de soldaten vinden, `T.zoekVerstopt`), `js/boeren.js` (wie de boeren zijn, geloot per
+  `T.innerKorting`), `js/boeren.js` (wie de boeren zijn, geloot per
   spel: een karakter uit `T.KARAKTERS` in `js/mensen.js`, met een eigen gesprek onder dezelfde naam,
   en de eigenschappen maaien, opbrengst, zaaien en aanzien; de regels vragen `T.boerFactor` en
   `T.aanzienVan`, het scherm `T.overBoerTekst`), `js/vee.js` (het vee: `T.VEE` en `T.maakDier`,
@@ -1127,8 +1105,8 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   oorzaak die je had kunnen zien (`T.OORZAKEN`). Eerst de kern (vraag 74), dan het buurdorp.
 - **Twee bazen** (Marcel, 3 okt, vraag 106: "106 a b c d ja"): de heer en het dorp kunnen je allebei wegsturen. De
   gunst van de heer en het vertrouwen van het dorp in jou zijn twee meters in de balk, met een waarschuwing onder een
-  grens, en op 0 ben je weg; bijna elke keuze kost aan de ene kant wat de andere wint. Verstoppen is één kaart met echte
-  gevolgen, niet de haak (Marcel: "als de grote hook, te slap").
+  grens, en op 0 ben je weg; bijna elke keuze kost aan de ene kant wat de andere wint. Het verstoppen (de kelders) ging er
+  op 11 okt uit (vraag 151).
 - **Mensen en informatie eerst** (Marcel, 6 okt, vraag 128: "A tot g allemaal, en de proef komt erna"; uit een analyse
   van buiten: "kleiner in omvang, dieper in menselijke gevolgen"): wat je weet, komt ergens vandaan (wat er gebeurde,
   wat er gezegd wordt, en wat jij weet), 's middags is er een zitting met getuigen en bewijs, het vertrouwen van het
@@ -1305,10 +1283,6 @@ tien keer zo ver), `Spel.debug.geenNacht = true` zet de nacht uit, `Spel.debug.b
 `Spel.debug.brief()` stuurt de brief van de heer nu, `Spel.debug.heer()` laat hem nu komen,
 `Spel.debug.inner()` de inner (`(true)`: onverwacht; is hij er, dan zegt het tot hoe laat hij blijft, hoe
 lang je hem aan de praat hield en wat je hem gaf), en `Spel.debug.argwaan(0.6)` zet zijn argwaan.
-`Spel.debug.verstopt()` zegt wat er waar verstopt ligt en hoe vaak de soldaten het er vinden;
-`Spel.debug.verstopt('boer1', 30, 5)` zet 30 graan en 5 goud in die kelder (of `'schout'`, `'kapel'`),
-en `Spel.debug.zoeken()` laat de soldaten nu zoeken, zoals op Sint-Maarten: staat de heer op het plein,
-dan op twee of drie plekken met de schout mee (`('dorp')`: het hele dorp in één keer).
 `Spel.debug.vee('koe', 4)` zet vier koeien op de weide met de meeste plaats, bij de kudde: ze
 blijven binnen de weide en geven melk (`js/vee.js`); een schaap gaat naar de heide. Zonder weide rond
 een open plek bij de schout. `Spel.debug.bewoners()` zegt per bewoner wie het is, zijn huis, zijn werk,
@@ -1347,7 +1321,7 @@ schoot en of hij herten vindt.
 `Spel.debug.gril()` zegt welke gril op je antwoord wacht, met de keuzes en wat ze kosten; `('jacht')` laat die nu komen.
 `Spel.debug.bazen()` zegt de gunst van de heer en het vertrouwen van het dorp, waarom ze het laatst veranderden en of je
 gewaarschuwd bent; `('gunst', 15)` zet de gunst op 15 (met de brief als hij onder 20 komt), `('vertrouwen', 0)` jaagt je
-weg als je al gewaarschuwd was. De oude toetsen van de heer en het verstoppen spelen met "Alleen de heer"
+weg als je al gewaarschuwd was. De oude toetsen van de heer spelen met "Alleen de heer"
 (`T.zetOptie('tweeBazen', 'uit')`); die van de twee bazen staan in `test/bazen.test.cjs`.
 `Spel.debug.weer()` zegt het weer van vandaag, hoe lang het droog is, het watertekort, de droogte en wat die de oogst
 kost, hoe nat het jaar is, de beekjes en per visser hoeveel van zijn water er is; `('regen')` zet het weer van vandaag
@@ -1402,8 +1376,7 @@ stuk heide elke boer zou vragen, hoeveel stukken er al af zijn en wat het volgen
 ver; `('nu')` laat het verzoek nu komen, ook zonder tekort
 (vraag 107). `Spel.debug.bos()` zegt per houthakker zijn boom, hoeveel hout hij er al uit hakte, wat er binnen zijn bereik
 staat (bomen, jonge bomen, boompjes, stronken), of hij stilstaat en wat zijn hand doet; `('hak')` laat elke houthakker nu
-zijn boom omhakken, `('groei')` laat elk boompje en elke jonge boom nu een maat groeien (vraag 115). `Spel.debug.getuigen()` zegt hoe ver je de schout nu ziet waar
-hij staat, wie er kijkt, en welk licht er brandt.
+zijn boom omhakken, `('groei')` laat elk boompje en elke jonge boom nu een maat groeien (vraag 115).
 `Spel.debug.slachten()` opent het slachtvenster nu (anders op 1
 slachtmaand). `Spel.debug.opslaan('2')` zet het spel op plek 2, `Spel.debug.laden('auto')` laadt wat er vanzelf
 bewaard is, en `Spel.debug.spellen()` zegt wat er op de plekken staat.

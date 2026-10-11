@@ -116,8 +116,8 @@ const TEGELS = path.join(PIXELART, '..', '..', 'tegels');
 // fases hierboven niet kennen). Bewust nog NIET gedaan, en dus ook nog niet bekeken: aanbouwhuis/
 // vleugelhuis (eigen aanbouw-geometrie), kapel/watermolen/bakkerij/kruidenhut/jagershut/oudstehuis
 // (elk met een eigen bijgebouwd werktuig of object — molenrad, oven, …) en kerkhof (geen huis()).
-// moestuin/put lenen een tekening uit het ERF-vel (erf-scene.cjs, geen huis()) en akker/
-// verstopplek hebben er expres geen — geen van vieren past in dit stramien, zie de koptekst.
+// moestuin/put lenen een tekening uit het ERF-vel (erf-scene.cjs, geen huis()) en akker
+// heeft er expres geen — geen van drieën past in dit stramien, zie de koptekst.
 const BUILDINGEN = [
   // ── gehucht ──
   { id: 'hut', tekening: 'dorpKlein2', maak: () => D.dorpshuis(0, 0, 102, { maat: [5, 7], muur: 'planken', dak: 'leien', rook: false }) },
