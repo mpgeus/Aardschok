@@ -7748,7 +7748,8 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     wat ze meebrachten; de kar staat op wat het plein wordt en is de opslag tot het huis van de schout staat (d), dat je
     als eerste bouwt; tot er hutten zijn, slapen ze bij een kampvuur; jij bouwt alles, ook de hutten, de boerderij en de
     akkers. Het eerste doel komt dan vanzelf: haal de eerste winter. Daarna stap 2 tot 4 hierboven (de stapels en de
-    kar, de bouwplaats en de timmerman, meten en spelen). De keuzes van het begin wachten op Marcel.
+    kar, de bouwplaats en de timmerman, meten en spelen). **Marcel (11 okt): "Een kar met wat spullen en 'settlers'".** Wat
+    erin zit en hoeveel, wacht op Marcel (het voorstel staat in het gesprek van 11 okt, en hieronder zodra het besloten is).
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
