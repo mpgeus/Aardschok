@@ -86,6 +86,17 @@ de uitverkopen en met updates. Zonder verlanglijstjes verkoopt een goed spel bij
    vertaling zoals elke andere; de code, het commentaar en `ontwerp/` blijven Nederlands.
 3. **Een naam vóór de Steam-pagina.** De werktitel past niet meer (vraag 8: het voorstel was *Martinmas*, met "Get rich.
    Look poor." eronder). Een naam moet je kunnen vinden, en de merkenregisters en Steam moeten hem vrij laten.
+   **De werknaam sinds 11 okt: *Tithebreaker*, met "Collect the tithe. Or break it." eronder** (Marcel: "1 ja"). Eén
+   woord, actief, en het past bij de haak: de schout int de tiende van de heer, en hij breekt haar; de zin eronder houdt
+   de weg van de trouw erbij. De andere kandidaten van die dag (*From Furrow to Fortress*, *Plowshare to Pike*, *Hamlet
+   to Throne*) vielen af: lang, "X to Fortress" bestaat al (*Ruins To Fortress*), *plowshare* wordt op twee manieren
+   gespeld, en bij *Hamlet* denkt een Engelse speler aan Shakespeare (er is al een Hamlet-spel op Steam). Pas op met
+   *Reeve* in een naam: er is al een spel *The Reeve*. **Nagezocht tegen Steam (11 okt):** via een zoekmachine, want de
+   winkel van Steam zelf is vanuit de cloud niet te bereiken; geen spel heet *Tithebreaker* (ook niet op itch.io, GOG of
+   Epic). Wat er dicht bij ligt: *Tilebreaker* (2022) en *Tilebreaker Next Level*, een blokkenbreker, één letter
+   verschil; *Tiebreakers* (aangekondigd) en *TIME BREAKER*; *Tidebreaker* op itch.io. Nog te doen vóór januari: zelf in
+   de winkel van Steam zoeken (een pagina die nog niet uit is, vindt een zoekmachine niet altijd), en de merkenregisters
+   (EUIPO, USPTO); en `T.NAAM` gaat pas om als de naam vaststaat.
 4. **Geluid.** Het spel heeft nog geen geluid. Voor een trailer en een demo is dat het eerste dat opvalt. Muziek en
    geluiden kun je kopen (bibliotheken) of laten maken. Er is weinig geld, dus: vrije bibliotheken en code (hieronder,
    "Weinig geld").
