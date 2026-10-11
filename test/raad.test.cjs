@@ -205,19 +205,6 @@ test('vis en vlees voor de winter: zout bij de marskramer, en een voorraad voord
   assert.equal(T.visEnVleesVoorDeWinter(D, S.kalender.dag), null);
 });
 
-test('de inner: een paar dagen vooraf, en op zijn dag zelf niet meer', () => {
-  const S = gehucht();
-  const komt = dagVan(T.INNER_INSTELLINGEN.komt.maand, T.INNER_INSTELLINGEN.komt.dag);
-  opDag(S, komt - 2 + 0.5);
-  assert.equal(raad(S).tekst, 'De inner komt over 2 dagen. Wat hij niet ziet, telt de heer niet.');
-  opDag(S, komt - 1 + 0.5);
-  assert.match(raad(S).tekst, /^De inner komt morgen\./);
-  opDag(S, komt + 0.5);
-  assert.notEqual(id(S), 'inner');
-  opDag(S, komt - T.RAAD_INSTELLINGEN.innerVooraf - 1 + 0.5);
-  assert.notEqual(id(S), 'inner');
-});
-
 test('na een aanval van de rovers: wat een wachthuis doet, als er geen is', () => {
   const S = opDag(gehucht(), 40.5);
   S.dorp.rovers = Object.assign(T.nieuweRovers(), { laatsteAanval: 38 });

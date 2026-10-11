@@ -100,8 +100,6 @@
     if (doe.handel && T.ui && T.ui.openHandel) T.ui.openHandel(D);
     // De heer betalen op Sint-Maarten (js/heer.js): net zo, het venster staat in js/hud.js.
     if (doe.heer && S && T.ui && T.ui.openHeer) T.ui.openHeer(S);
-    // De inner een geschenk geven, voor minder op zijn rapport (js/inner.js).
-    if (doe.omkopen && T.koopInnerOm) T.koopInnerOm(D, doe.omkopen);
     // Wat een antwoord op een voorval doet (js/voorvallen.js): graan, tevreden, verban, een vervolg, ... De
     // gespreksschrijver laadt dat bestand niet.
     if (T.voorvalGevolg) T.voorvalGevolg(D, doe);

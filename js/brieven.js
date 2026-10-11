@@ -51,8 +51,8 @@
       aan: 'Aan Onze nieuwe schout,',
       tekst:
         `<p>Het heeft Ons behaagd u tot schout te benoemen over ${hetDorp(S, 'gehucht')}. Uw voorganger kon niet tellen, of juist te goed; dat weten Wij niet meer precies. Hij is nu elders.</p>` +
-        `<p>Op Sint-Maarten komen Wij persoonlijk halen wat Ons toekomt. In oogstmaand komt Onze inner kijken hoeveel dat is.</p>` +
-        `<p>Wij vertrouwen u volkomen. Onze inner telt toch even na.</p>` +
+        `<p>Op Sint-Maarten komen Wij persoonlijk halen wat Ons toekomt. Wat dat is, zien Wij dan zelf.</p>` +
+        `<p>Wij vertrouwen u volkomen. Wij tellen toch even na.</p>` +
         // Het doel van de proef (js/treden.js; Marcel, 29 sep, vraag 53, A): de heer wil groei, want hij verdient eraan.
         `<p>Wij verwachten dat Ons gehucht een dorp wordt, met ${T.tredeEisTekst('dorp')}. Een dorp brengt Ons meer op.</p>` +
         // De wetten (js/wetten.js; Marcel, 29 sep, vraag 54): het menu onder W. De houtkap in zijn bos is er een van.
@@ -72,7 +72,7 @@
         wanneer: T.datumVanDag(brief.dag).tekst,
         aan: 'Aan Onze trouwe schout,',
         tekst:
-          `<p>Het is Ons ter ore gekomen dat het u goed gaat. Dat verheugt Ons zeer, want het gaat Ons ook graag goed. Op Sint-Maarten komen Wij persoonlijk ophalen wat Ons toekomt. ${brief.eis.rapport ? 'Naar wat Onze inner in oogstmaand zag' : 'Naar wat Wij nu zien'}, is dat:</p>` +
+          `<p>Het is Ons ter ore gekomen dat het u goed gaat. Dat verheugt Ons zeer, want het gaat Ons ook graag goed. Op Sint-Maarten komen Wij persoonlijk ophalen wat Ons toekomt. Naar wat Wij nu zien, is dat:</p>` +
           `<ul class="brief-lijst">${regels || '<li>niets. Dat kan niet kloppen.</li>'}</ul>${samen}` +
           `<p>Wat er tot Sint-Maarten bijkomt, zien Wij ook. Wie Ons tekortdoet, zal het merken, want Wij tellen zeer zorgvuldig. Bijna altijd.</p>`,
         staat: `<p class="venster-staat">Je hebt nu ${nu}. Wat je hem aan graan geeft, kun je in de lente niet zaaien.${marskramerKomtNog(S, 'wijnmaand')}</p>`,
@@ -95,7 +95,7 @@
         tekst:
           `<p>Wij trekken ten strijde ${veilig(v.oorlog)}.</p>` +
           `<p>Zend Ons ${telwoord} weerbare ${v.mannen === 1 ? 'man' : 'mannen'}. Na de oogst krijgt u ze terug, op ${T.HEERVAART_INSTELLINGEN.terug.dag} ${T.HEERVAART_INSTELLINGEN.terug.maand}. De meesten.</p>` +
-          `<p>Wie liever betaalt, zendt Ons ${v.goud} goud; dan huren Wij ze zelf. Wij vragen niet waar dat goud vandaan komt. Onze inner wel.</p>`,
+          `<p>Wie liever betaalt, zendt Ons ${v.goud} goud; dan huren Wij ze zelf. Wij vragen niet waar dat goud vandaan komt. Wij onthouden het wel.</p>`,
         staat:
           `<p class="venster-staat">Het spel kiest wie: ${wie || 'er is niemand die kan gaan'}. Hun werk ligt stil tot ze terug zijn, en het dorp voedt ze. ` +
           `Van elke vier komt er gemiddeld één niet terug; wie terugkomt, heeft leren vechten. ${vrij.kan ? `Vrijkopen kost ${v.goud} van je ${hebNu(S, 'goud')} goud, en de heer vraagt zich af hoe je eraan komt.` : vrij.waarom}${marskramerKomtNog(S, 'hooimaand')}</p>`,

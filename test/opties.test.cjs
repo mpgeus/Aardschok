@@ -59,16 +59,15 @@ test('een keuze zet zijn waarden, en terug naar de standaard zet ze terug', () =
   assert.deepEqual(T.HEER_INSTELLINGEN, bestanden.HEER_INSTELLINGEN);
 });
 
-test('de rekening en het graan van de heer zijn keuzes (punt 6), en de inner staat in de werkbank', () => {
-  assert.equal(T.HEER_INSTELLINGEN.rekening, 'rapport', 'Marcel koos: wat de inner zag');
-  assert.equal(T.HEER_INSTELLINGEN.graan, 'deel', 'Marcel koos: een deel van wat hij telde');
-  T.pasOptiesToe({ keuzes: { rekening: 'alles', graanVoorDeHeer: 'pacht' } });
-  assert.equal(T.HEER_INSTELLINGEN.rekening, 'alles');
+test('het graan van de heer is een keuze (punt 6), en de inner staat in de werkbank', () => {
+  assert.equal(T.HEER_INSTELLINGEN.rekening, undefined, 'de heer rekent op wat er is: daar is geen keuze meer over');
+  assert.equal(T.HEER_INSTELLINGEN.graan, 'deel', 'Marcel koos: een deel van wat er ligt');
+  T.pasOptiesToe({ keuzes: { graanVoorDeHeer: 'pacht', rekening: 'alles', sporen: 'graan' } });
   assert.equal(T.HEER_INSTELLINGEN.graan, 'pacht');
+  assert.equal(T.HEER_INSTELLINGEN.rekening, undefined, 'een keuze die in een bewaard spel stond maar niet meer bestaat, wordt overgeslagen');
   const inner = T.werkbankGetallen(T.WERKBANK.find((d) => d.blok === 'INNER_INSTELLINGEN'));
-  assert.equal(inner.find((g) => g.pad === 'INNER_INSTELLINGEN.terugNaDagen.van').label, 'terug na dagen · van');
+  assert.equal(inner.find((g) => g.pad === 'INNER_INSTELLINGEN.komt.dag').label, 'komt · dag');
   assert.equal(inner.find((g) => g.pad === 'INNER_INSTELLINGEN.praatUren').waarde, bestanden.INNER_INSTELLINGEN.praatUren);
-  assert.equal(inner.find((g) => g.pad === 'INNER_INSTELLINGEN.omkopen.gehoord').waarde, bestanden.INNER_INSTELLINGEN.omkopen.gehoord);
   assert.ok(!inner.some((g) => g.pad === 'INNER_INSTELLINGEN.komt.maand'), 'een maand is geen getal');
 });
 

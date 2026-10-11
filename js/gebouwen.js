@@ -1255,7 +1255,7 @@
     T.tikHeervaartDag(D, dag);
     // En zijn grillen (js/grillen.js): elke maand een brief met iets wat hij wil (met de spelregel "Twee bazen").
     T.tikGrillenDag(D, dag);
-    // En de inner (js/inner.js): hij komt in oogstmaand tellen, en soms onverwacht terug.
+    // En de inner (js/inner.js): hij komt in oogstmaand kijken.
     T.tikInnerDag(D, dag);
     // En de voorvallen (js/voorvallen.js): om de paar dagen komt iemand je zoeken met een vraag, een ruzie of een ramp.
     // Vóór de voorvallen de graanzak (js/zaak.js): één keer, in de eerste herfst, en de zitting erover.

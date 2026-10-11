@@ -161,15 +161,13 @@ test('de winter: vanaf drie maanden ervoor zegt hij of het hout en het eten hem 
   assert.ok(W.regels.includes('Het eten haalt het eind van de winter.'));
 });
 
-test('wat er komt: de marskramer, de heer of de inner vandaag, en de inner een paar dagen vooraf', () => {
+test('wat er komt: de marskramer vandaag, en de raden van de rovers, zonder de toets erbij', () => {
   const S = gehucht();
   const D = S.dorp;
   metRaadsman(S);
-  const komt = dagVan(T.INNER_INSTELLINGEN.komt.maand, T.INNER_INSTELLINGEN.komt.dag);
+  const komt = dagVan('oogstmaand', 15);
   T.zetVoorraad(D, 'hout', 50000); // anders gaat het over de winter
   T.zetVoorraad(D, 'graan', 50000);
-  const R = nacht(S, komt - 2);
-  assert.ok(R.regels.includes('De inner komt over 2 dagen. Wat hij niet ziet, telt de heer niet.'), R.regels.join(' | '));
   D.marskramer = { komtOp: komt - 1, weg: false, staat: false, bezoek: 0 };
   assert.ok(nacht(S, komt - 1).regels.includes('Vandaag komt de marskramer.'));
   D.marskramer = null;

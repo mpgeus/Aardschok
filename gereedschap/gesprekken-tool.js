@@ -390,7 +390,6 @@
     weg: (v) => `via ${v}`,
     handel: () => 'opent de handel',
     heer: () => 'opent het betalen aan de heer',
-    omkopen: (v) => `geeft de inner ${v} goud`,
   };
   function doeInTaal(doe) {
     if (!doe) return '';
@@ -569,7 +568,6 @@
     { naam: 'weg', soort: 'weg', uitleg: 'los die quest zo op' },
     { naam: 'handel', soort: 'aan', uitleg: 'opent het handelsvenster van de marskramer (js/handel.js)' },
     { naam: 'heer', soort: 'aan', uitleg: 'opent het venster waarin je de heer betaalt op Sint-Maarten (js/heer.js)' },
-    { naam: 'omkopen', soort: 'getal', uitleg: 'geeft de inner zoveel goud, voor minder op zijn rapport (js/inner.js)' },
     // Wat een antwoord op een voorval doet (js/voorvallen.js, boven in dat bestand staat wat elk is).
     { naam: 'graan', soort: 'getal', uitleg: 'graan erbij (of eraf, met een min); zo ook hout, bier, ijzer, vlees, wol' },
     { naam: 'hout', soort: 'getal', uitleg: 'hout erbij (of eraf, met een min)' },

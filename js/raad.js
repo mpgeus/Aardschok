@@ -26,8 +26,6 @@
     // Vis en vlees voor de winter (T.visEnVleesVoorDeWinter; vraag 132, B): de raad zegt het als er meer dan dit deel
     // van wat de huizen in de winter willen, zal missen, of als er zout bij moet.
     visEnVleesMarge: 0.1,
-    // Zoveel dagen vóór de inner komt, zegt de raad het.
-    innerVooraf: 3,
     // Zoveel dagen na een aanval van de rovers zegt de raad wat een wachthuis doet, als er geen is.
     roversNa: 10,
     // Zoveel dagen nadat een voorval voorbijging dat een raadsman had beslist, als je er een had (js/voorvallen.js: je
@@ -51,16 +49,6 @@
   // Hoeveel mensen het doel nog vraagt: de volgende trede (js/treden.js), en na de laatste de maat van de winst
   // (js/einde.js; werklijst vraag 102, c).
   const mensenNodig = (D) => (T.volgendeTrede(D) ? T.tredeMensenNodig(D) : T.mensenVoorDeWinst(D));
-
-  // Over hoeveel dagen de inner komt (T.INNER_INSTELLINGEN.komt), als dat binnen `binnen` dagen is; anders null.
-  function innerOver(D, binnen) {
-    const komt = T.INNER_INSTELLINGEN.komt;
-    for (let n = 1; n <= binnen; n++) {
-      const d = T.datumVanDag(dagNu(D) + n);
-      if (T.MAANDEN[d.maand].naam === komt.maand && d.dagVanMaand === komt.dag) return n;
-    }
-    return null;
-  }
 
   // Het hout of het eten (`voorDeWinter`: T.houtVoorDeWinter of T.etenVoorDeWinter) haalt de winter niet, en die is
   // in zicht (T.winterInZicht, js/behoeften.js: vanaf 1 herfstmaand, net als het dorp zelf), of al begonnen. Eerst de
@@ -248,11 +236,6 @@
       id: 'dorpMort',
       als: (D) => { const b = T.bazenNu(D); return !!b && b.vertrouwen < T.BAZEN_INSTELLINGEN.waarschuwing; },
       tekst: () => 'Het dorp mort. Nog één tegenvaller, en ze jagen je weg: zeg eens ja, of geef een feest.',
-    },
-    {
-      id: 'inner',
-      als: (D) => innerOver(D, IN().innerVooraf) != null,
-      tekst: (D) => `De inner komt ${over(innerOver(D, IN().innerVooraf))}. Wat hij niet ziet, telt de heer niet.`,
     },
     {
       id: 'heerGoud',

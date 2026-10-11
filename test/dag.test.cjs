@@ -282,15 +282,15 @@ test('de inner komt overdag: valt zijn dag \'s nachts in, dan loopt hij pas om n
   const S = gehucht(bijUur(dagVan('oogstmaand', 15), 0.5), 10);
   S.schout = S.schout || null;
   berichten.length = 0;
-  T.innerKomt(S.dorp, Math.floor(S.kalender.dag), false);
+  T.innerKomt(S.dorp, Math.floor(S.kalender.dag));
   T.werkInnerBij(S, S.dorp);
   assert.ok(S.dorp.inner.bezoek, 'hij is op komst');
   assert.equal(S.dorp.inner.bezoek.wezen, null, 'maar niet midden in de nacht');
-  assert.ok(!berichten.some((b) => /komt tellen/.test(b)), 'en het bericht wacht ook');
+  assert.ok(!berichten.some((b) => /komt kijken/.test(b)), 'en het bericht wacht ook');
   assert.equal(S.kalender.snelheid, 10);
   S.kalender.dag = bijUur(S.kalender.dag, IN.bezoekUur + 0.25);
   T.werkInnerBij(S, S.dorp);
   assert.ok(S.dorp.inner.bezoek.wezen, 'om negen uur is hij er');
-  assert.ok(berichten.some((b) => /komt tellen/.test(b)));
+  assert.ok(berichten.some((b) => /komt kijken/.test(b)));
   assert.equal(S.kalender.snelheid, 1, 'wie op 10× speelde, ziet hem op 1× komen');
 });

@@ -867,34 +867,19 @@
       T.stuurBrief(S.dorp, Math.floor(S.kalender.dag));
       return T.eisVanDeHeer(S.dorp).per;
     },
-    // De inner nu laten komen, zonder op oogstmaand te wachten (js/inner.js): Spel.debug.inner(),
-    // of Spel.debug.inner(true) voor zijn onverwachte tweede bezoek. Is hij er al, dan zegt het
-    // wat hij zag, tot hoe laat hij blijft, hoe lang je hem aan de praat hield, wat je hem gaf, en
-    // wat er in zijn rapport staat.
-    inner(onverwacht) {
+    // De inner nu laten komen, zonder op oogstmaand te wachten (js/inner.js): Spel.debug.inner(). Is hij er al, dan zegt
+    // het wat hij zag, tot hoe laat hij blijft, hoe lang je hem aan de praat hield en of hij volgt.
+    inner() {
       const I = S.dorp.inner || (S.dorp.inner = T.nieuweInner());
-      if (!I.bezoek) T.innerKomt(S.dorp, Math.floor(S.kalender.dag), !!onverwacht);
+      if (!I.bezoek) T.innerKomt(S.dorp, Math.floor(S.kalender.dag));
       const b = I.bezoek;
       b.meteen = true; // ook 's nachts: niet op het bezoekuur wachten (js/dag.js, T.bezoekerKomtAan)
-      const r = I.rapport;
       const uur = (dag) => `${Math.floor(T.uurVanDag(dag))}:${String(Math.floor((T.uurVanDag(dag) % 1) * 60)).padStart(2, '0')}`;
       return {
         blijftTot: b.tot != null && isFinite(b.tot) ? uur(b.tot) : null, gepraat: Math.round(b.gepraat * 10) / 10, uitgepraat: b.uitgepraat,
         volgt: b.volgt, weg: b.weg, gebouwen: b.gebouwen.size, tegels: b.tegels.size,
-        nogTeZien: b.weg ? 0 : T.innerNogTeZien(S.dorp).length, argwaan: I.argwaan, waarom: I.waarom.slice(),
-        geschenken: I.geschenken, korting: T.innerKorting(S.dorp), gehoord: I.gehoord,
-        rapport: r && { gebouwen: r.gebouwen, woonruimte: r.woonruimte, tegels: r.tegels, graanGezien: r.graanGezien, graanVerwacht: r.graanVerwacht, goudGezien: r.goudGezien, goudVerwacht: r.goudVerwacht, korting: r.korting },
+        nogTeZien: b.weg ? 0 : T.innerNogTeZien(S.dorp).length,
       };
-    },
-    // Zijn argwaan zetten (0..1), om te zien wat ze doet: Spel.debug.argwaan(0.6). Zonder getal
-    // zegt het hoe hoog ze is, en waarom.
-    argwaan(n) {
-      const I = S.dorp.inner || (S.dorp.inner = T.nieuweInner());
-      if (typeof n === 'number') {
-        I.argwaan = Math.max(0, Math.min(1, n));
-        if (T.ui.toonArgwaan) T.ui.toonArgwaan(S.dorp);
-      }
-      return { argwaan: I.argwaan, waarom: I.waarom.slice() };
     },
     // De paadjes en de lantaarns (js/paden.js; werklijst vraag 108, b en d): hoeveel tegels paadje zijn (van de deuren, en
     // gesleten), waar het meest gelopen wordt, en de lantaarns. ('nacht') doet nu wat de nacht doet: slijten en
@@ -1352,7 +1337,7 @@
     },
     // De graanzak (js/zaak.js; vraag 128): wie het nam en wie verdacht wordt, de fase, het spoor, wat je weet, de zitting
     // en hoe het afliep. ('nu') laat de zak nu verdwijnen, en de boer zoekt je meteen; ('zitting') maakt vandaag de dag
-    // van de zitting (zet er het uur bij met Spel.debug.uur(13)); ('boek') laat de inner het boek nu voorlezen.
+    // van de zitting (zet er het uur bij met Spel.debug.uur(13)); ('boek') laat de heer het boek nu lezen.
     zaak(wat) {
       const D = S.dorp;
       const dag = Math.floor(S.kalender.dag);

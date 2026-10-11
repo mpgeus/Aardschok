@@ -243,9 +243,9 @@
     return uit;
   }
 
-  // Wat er komt: wie er vandaag komt, en de raden over de inner, de rovers en het goud voor de heer (js/raad.js),
+  // Wat er komt: wie er vandaag komt, en de raden over de rovers en het goud voor de heer (js/raad.js),
   // zonder de toets erbij.
-  const RADEN_DIE_KOMEN = ['inner', 'rovers', 'heerGoud'];
+  const RADEN_DIE_KOMEN = ['rovers', 'heerGoud'];
   function watErKomt(D, dag) {
     const uit = [];
     const m = D.marskramer;

@@ -168,7 +168,7 @@
     vondst: { soort: 'kans', titel: 'de vondst', wie: { leeftijd: ['kind', 'jong'] } },
     zwerver: { soort: 'kans', titel: 'de zwerver' },
     wijsheid: { soort: 'kans', titel: 'de raad van de oude', wie: { karakter: 'grijsaard' } },
-    // Feesten: graan op en een tevreden dorp, en wat op is, telt de inner niet (Lords of the Realm, idee 4).
+    // Feesten: graan op en een tevreden dorp (Lords of the Realm, idee 4).
     bruiloft: {
       soort: 'feest', titel: 'de bruiloft', woorden: { blij: 'de bruiloft', last: 'de bruiloft zonder feest' },
       wie: { leeftijd: ['volwassen', 'oud'] }, ander: { geslacht: 'man', leeftijd: 'jong' },

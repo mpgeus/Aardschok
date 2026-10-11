@@ -100,23 +100,13 @@
       ],
     },
     {
-      id: 'rekening', naam: 'Waar de heer de rekening op maakt', standaard: 'inner',
-      uitleg: 'Of het uitmaakt wat zijn inner in oogstmaand zag.',
-      keuzes: [
-        { id: 'inner', naam: 'Wat de inner zag', zet: { 'HEER_INSTELLINGEN.rekening': 'rapport' },
-          uitleg: 'Zijn rapport is de rekening: wat hij niet zag, betaal je dat jaar niet. Maar klopt wat hij ziet niet, dan groeit zijn argwaan.' },
-        { id: 'alles', naam: 'Alles, zonder inner', zet: { 'HEER_INSTELLINGEN.rekening': 'alles' },
-          uitleg: 'Er komt geen inner, en de heer ziet alles zelf. Arm lijken kan dan niet.' },
-      ],
-    },
-    {
       id: 'graanVoorDeHeer', naam: 'Wat de heer van het graan vraagt', standaard: 'deel',
       uitleg: 'Het graan op zijn rekening.',
       keuzes: [
-        { id: 'deel', naam: 'Een deel van wat hij telde', zet: { 'HEER_INSTELLINGEN.graan': 'deel' },
-          uitleg: 'Een deel van het graan dat de inner zag, in de schuren en nog op de velden.' },
+        { id: 'deel', naam: 'Een deel van wat er ligt', zet: { 'HEER_INSTELLINGEN.graan': 'deel' },
+          uitleg: 'Een deel van het graan dat in de schuren ligt.' },
         { id: 'pacht', naam: 'Pacht per akker', zet: { 'HEER_INSTELLINGEN.graan': 'pacht' },
-          uitleg: 'Een vast deel per akkertegel die hij zag, hoe de oogst ook uitviel.' },
+          uitleg: 'Een vast deel per akkertegel, hoe de oogst ook uitviel.' },
       ],
     },
     {
@@ -308,23 +298,12 @@
           uitleg: 'Het voorval kost alleen wat het kost, en er wordt niemand ziek.' },
       ],
     },
-    // Stap 2 van de inner (Marcel, 25 sep; spel.md, "Marcel koos voor stap 2").
-    {
-      id: 'sporen', naam: 'Sporen', standaard: 'alles',
-      uitleg: 'Klopt het graan of het goud niet met wat de inner telde, dan groeit zijn argwaan.',
-      keuzes: [
-        { id: 'alles', naam: 'Alles laat sporen na', zet: { 'INNER_INSTELLINGEN.sporen': 'alles' },
-          uitleg: 'Het graan in de schuur tegen de velden die hij zag, en het goud in de kist tegen wat de marskramer hem vertelt dat hij je betaalde.' },
-        { id: 'graan', naam: 'Alleen het graan', zet: { 'INNER_INSTELLINGEN.sporen': 'graan' },
-          uitleg: 'Alleen het graan in de schuur tegen de velden. Het goud valt niet op.' },
-      ],
-    },
     {
       id: 'kist', naam: 'Het goud in de kist', standaard: 'telt',
-      uitleg: 'Of de heer ook een deel wil van het goud dat de inner in de dorpskist telt.',
+      uitleg: 'Of de heer ook een deel wil van het goud dat in de dorpskist ligt.',
       keuzes: [
         { id: 'telt', naam: 'Hij wil een deel', zet: { 'HEER_INSTELLINGEN.kist': true },
-          uitleg: 'De heer ziet alleen geld. Van wat de inner in de kist telt, vraagt hij een deel.' },
+          uitleg: 'De heer ziet alleen geld. Van wat er in de kist ligt als hij komt, vraagt hij een deel.' },
         { id: 'teltNiet', naam: 'De kist telt niet', zet: { 'HEER_INSTELLINGEN.kist': false },
           uitleg: 'De heer vraagt naar mensen, gebouwen en graan, niet naar wat er in de kist ligt.' },
       ],
@@ -615,7 +594,7 @@
       uitleg: 'Een regel onder het doel linksboven.',
       keuzes: [
         { id: 'aan', naam: 'Aan', zet: { 'RAAD_INSTELLINGEN.aan': true },
-          uitleg: 'Onder het doel staat wat nu tussen jou en een dorp staat: waarom er geen gezin komt, of wanneer het volgende komt, het hout voor de winter, wat je mist voor de kapel en de smidse en waar het vandaan komt, de inner, de rovers. Met de toets erbij.' },
+          uitleg: 'Onder het doel staat wat nu tussen jou en een dorp staat: waarom er geen gezin komt, of wanneer het volgende komt, het hout voor de winter, wat je mist voor de kapel en de smidse en waar het vandaan komt, de rovers. Met de toets erbij.' },
         { id: 'uit', naam: 'Uit', zet: { 'RAAD_INSTELLINGEN.aan': false },
           uitleg: 'Alleen het doel. Wat het dorp je zegt, zie je in de berichten.' },
       ],

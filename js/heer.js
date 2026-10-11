@@ -27,18 +27,16 @@
     // boven af.
     pachtPerAkkertegel: 0.5,
     hoofdgeldPerMens: 0.2,
-    // Waar hij de rekening op maakt (Marcel, 24 sep; js/inner.js): 'rapport' (wat zijn inner in
-    // oogstmaand zag; wat die niet zag, betaal je dat jaar niet) of 'alles' (hij ziet alles zelf).
-    // Zonder rapport (de inner kwam niet) ziet hij alles, en bij heel hoge argwaan ook.
-    rekening: 'rapport',
-    // Wat hij van het graan vraagt: 'deel' (dit deel van het graan dat de inner telde: in de schuren
-    // en op de velden die hij zag) of 'pacht' (pachtPerAkkertegel voor elke akkertegel). Het deel is
-    // zo gekozen dat het ongeveer is wat de pacht was: de honger blijft.
+    // Hij rekent op wat er is (11 okt, vraag 151): het graan in de schuren, de mensen, het goud in de kist en de
+    // gebouwen, zoals ze er op dat moment staan, niet op een rapport van zijn inner (dat was tot dan de keuze
+    // `rekening`).
+    // Wat hij van het graan vraagt: 'deel' (dit deel van het graan dat in de schuren ligt) of 'pacht'
+    // (pachtPerAkkertegel voor elke akkertegel). Het deel is zo gekozen dat het ongeveer is wat de pacht was: de
+    // honger blijft.
     graan: 'deel',
     deelVanGraan: 0.15,
-    // De kist (Marcel, 25 sep: "hij telt de kist"): de heer ziet alleen geld, dus hij vraagt ook dit
-    // deel van het goud dat de inner in de kist telde (zonder rapport: van wat er op Sint-Maarten
-    // in ligt). Aan of uit is een optie.
+    // De kist (Marcel, 25 sep: "hij telt de kist"): de heer ziet alleen geld, dus hij vraagt ook dit deel van het goud
+    // dat er op Sint-Maarten in ligt (zoals hij het telde toen hij kwam). Aan of uit is een optie.
     kist: true,
     deelVanGoud: 0.15,
     // Waarin hij betaald wil worden: 'watHijZiet' (wol voor een schaapskooi, eieren voor een
@@ -144,40 +142,23 @@
       const n = Math.ceil(aantal - 1e-9);
       if (n > 0) regels.push({ wat, aantal: n, waarom });
     };
-    // Waar hij de rekening op maakt: het rapport van de inner (js/inner.js), tenzij hij alles zelf
-    // wil zien, er geen rapport is, of de argwaan zo hoog is dat hij het rapport niet meer gelooft.
-    const I = D.inner;
-    const argwaan = (I && I.argwaan) || 0;
-    const INN = T.INNER_INSTELLINGEN;
-    const rapport = IN().rekening === 'rapport' && I && I.rapport && !(INN && argwaan >= INN.rapportTeltNietVanaf) ? I.rapport : null;
+    // Hij rekent op wat het dorp heeft: elke akker, elke ziel, het goud in de kist en elk gebouw.
     const akkers = (D.wereld && D.wereld.akkers) || [];
-    if (rapport) {
-      if (IN().graan === 'deel') tel('graan', rapport.graanGezien * IN().deelVanGraan, `een deel van de ${Math.round(rapport.graanGezien)} graan die Onze inner telde`);
-      else if (rapport.tegels) tel('graan', rapport.tegels * IN().pachtPerAkkertegel, `de pacht voor ${rapport.tegels} akkertegels die Onze inner zag`);
-      if (rapport.woonruimte) tel('goud', rapport.woonruimte * hoofdgeld(D), `hoofdgeld voor ${rapport.woonruimte} zielen in de huizen die hij zag`);
-      if (IN().kist && rapport.goudGezien > 0) tel('goud', rapport.goudGezien * IN().deelVanGoud, `een deel van de ${Math.floor(rapport.goudGezien)} goud die Onze inner in uw kist telde`);
-    } else {
-      const tegels = akkers.reduce((n, a) => n + a.b * a.h, 0);
-      if (IN().graan === 'deel') {
-        const graan = (D.voorraad && D.voorraad.graan) || 0;
-        tel('graan', graan * IN().deelVanGraan, `een deel van de ${Math.round(graan)} graan in uw schuren`);
-      } else if (tegels) {
-        tel('graan', tegels * IN().pachtPerAkkertegel, `de pacht voor ${tegels} akkertegels`);
-      }
-      if (D.bevolking > 0) tel('goud', D.bevolking * hoofdgeld(D), `hoofdgeld voor ${D.bevolking} zielen`);
-      // De kist zoals hij hem telde toen hij kwam; vóór zijn komst (de brief) wat er nu in ligt.
-      const b = D.heer && D.heer.bezoek;
-      const kist = b && !b.weg && b.kist != null ? b.kist : (D.voorraad && D.voorraad.goud) || 0;
-      if (IN().kist && kist > 0) tel('goud', kist * IN().deelVanGoud, `een deel van de ${Math.floor(kist)} goud in uw kist`);
+    const tegels = akkers.reduce((n, a) => n + a.b * a.h, 0);
+    if (IN().graan === 'deel') {
+      const graan = (D.voorraad && D.voorraad.graan) || 0;
+      tel('graan', graan * IN().deelVanGraan, `een deel van de ${Math.round(graan)} graan in uw schuren`);
+    } else if (tegels) {
+      tel('graan', tegels * IN().pachtPerAkkertegel, `de pacht voor ${tegels} akkertegels`);
     }
-    // Wat je zijn inner toestopte en de heer hoorde (js/inner.js, T.koopInnerOm): dat telt hij als goud
-    // in je kist (Marcel, 27 sep, vraag 42).
-    const toegestopt = (I && I.gehoord) || 0;
-    if (IN().kist && toegestopt > 0) tel('goud', toegestopt * IN().deelVanGoud, `een deel van de ${toegestopt} goud die u Onze inner toestopte, want dat tellen Wij als goud in uw kist`);
-    // Per soort gebouw één regel, in de volgorde van T.GEBOUWEN: wat in het rapport staat, of alles.
+    if (D.bevolking > 0) tel('goud', D.bevolking * hoofdgeld(D), `hoofdgeld voor ${D.bevolking} zielen`);
+    // De kist zoals hij hem telde toen hij kwam; vóór zijn komst (de brief) wat er nu in ligt.
+    const b = D.heer && D.heer.bezoek;
+    const kist = b && !b.weg && b.kist != null ? b.kist : (D.voorraad && D.voorraad.goud) || 0;
+    if (IN().kist && kist > 0) tel('goud', kist * IN().deelVanGoud, `een deel van de ${Math.floor(kist)} goud in uw kist`);
+    // Per soort gebouw één regel, in de volgorde van T.GEBOUWEN.
     const aantal = {};
-    if (rapport) Object.assign(aantal, rapport.gebouwen);
-    else for (const g of D.gebouwen || []) aantal[g.soort] = (aantal[g.soort] || 0) + 1;
+    for (const g of D.gebouwen || []) aantal[g.soort] = (aantal[g.soort] || 0) + 1;
     // Van een jager die geen hert vindt dat hij mag schieten, vraagt hij geen vlees (js/beesten.js; Marcel, 7 okt, vraag
     // 116, k): die schiet alleen klein wild.
     if (aantal.jager) aantal.jager = Math.max(0, aantal.jager - T.jagersZonderHerten(D));
@@ -202,19 +183,12 @@
         r.wat = 'goud';
       }
     }
-    // De argwaan van zijn inner kost een toeslag in goud, naar rato (Marcel, 24 sep: "de heer vraagt
-    // meer"): bij volle argwaan T.INNER_INSTELLINGEN.toeslag van alles wat hij vraagt, in waarde.
-    if (argwaan > 0 && INN && INN.toeslag > 0) {
-      // Over wat hij dit jaar vraagt, niet over de oude schuld: daar zit de boete al in.
-      const waarde = regels.reduce((n, r) => n + r.aantal * T.waardeVoorDeHeer(r.wat), 0) - (h && h.schuld > 0 ? h.schuld : 0);
-      tel('goud', waarde * argwaan * INN.toeslag, 'een toeslag, want Onze inner vertrouwt u niet');
-    }
     // Per goed opgeteld; graan en goud voorop, de rest in de volgorde waarin hij ze tegenkwam.
     const per = {};
     for (const r of regels) per[r.wat] = (per[r.wat] || 0) + r.aantal;
     const volgorde = ['graan', 'goud'].filter((w) => per[w]).concat(Object.keys(per).filter((w) => w !== 'graan' && w !== 'goud'));
     regels.sort((a, b) => volgorde.indexOf(a.wat) - volgorde.indexOf(b.wat));
-    return { per, regels, volgorde, rapport: !!rapport };
+    return { per, regels, volgorde };
   };
 
   // Wat één stuk van iets voor hem waard is, in goud. Goud is goud; wat de marskramer koopt, is
@@ -391,8 +365,7 @@
     h.jaren.push({ jaar: T.datumVanDag(dagNu(D)).jaar, deel: g.deel, straf: g.straf });
     // Twee bazen (js/bazen.js): zijn gunst; op 0 ontslaat hij je (hieronder, of al via de meter).
     if (g.gunst) T.wijzigGunst(D, g.gunst.erbij, g.gunst.erbij > 0 ? 'je betaalde wat hij vroeg' : 'je betaalde te weinig');
-    // Het rapport van de inner is betaald, en zijn argwaan zakt (js/inner.js); de boete voor de houtkap ook.
-    T.innerNaSintMaarten(D);
+    // De boete voor de houtkap is betaald.
     T.wettenNaSintMaarten(D);
     if (T.zetVlag) {
       T.zetVlag(D, 'heerBetaald');
@@ -644,8 +617,8 @@
 
   T.heerKomt = function (D, dag) {
     const h = D.heer || (D.heer = T.nieuweHeer());
-    // Hij telt de kist als hij komt, en dat getal houdt hij (js/heer.js, T.eisVanDeHeer, zonder
-    // rapport): anders werd zijn eis kleiner terwijl je hem betaalde.
+    // Hij telt de kist als hij komt, en dat getal houdt hij (js/heer.js, T.eisVanDeHeer): anders werd zijn
+    // eis kleiner terwijl je hem betaalde.
     h.bezoek = {
       komtOp: dag, staat: false, wachtTot: null, betaald: null, weg: false, wezens: null, schandpaal: false,
       kist: (D.voorraad && D.voorraad.goud) || 0,
@@ -671,10 +644,7 @@
     const b = h.bezoek;
     if (!b || b.staat) return;
     b.staat = true;
-    // Op het plein kijkt hij rond: wat hij ziet en niet in het rapport van zijn inner staat, komt
-    // alsnog op de rekening, en dat maakt argwanend (js/inner.js). Zijn soldaten zoeken niet meer (11 okt).
-    T.heerKijktRond(D);
-    // En de inner leest hem het boek van de schuur voor: mist er een zak graan, dan ziet hij het (js/zaak.js).
+    // Hij leest het boek van de schuur: mist er een zak graan, dan ziet hij het (js/zaak.js).
     T.heerLeestHetBoek(D);
     b.wachtTot = dagNu(D) + IN().wachtDagen;
     T.naarGewoneSnelheid(D);
