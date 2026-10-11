@@ -17,8 +17,8 @@ Marcel, 8 okt: "snel, duidelijk en low cost". Elke sessie werkt dit blok bij aan
 **Loopt** (het teken "Bezig in sessie" staat bij het punt zelf): de ui is af (vraag 146, a tot e, 10 okt, met de
 fotomodus onder `H`; de kaart van het land, het label van het overzicht en waar `Tab` staat, in `opmerkingen.md`). Het dorp leeft (vraag 145): elk mens anders (ook
 ouder worden, geboren worden en sterven) en het kleine leven (rook, water, spelende kinderen, kippen, honden, de was)
-staan in `main`; het geluid wacht op Marcel (hieronder). De fasen van het afbranden (vraag 144, 3) zijn af op de proefplaat; alle tekeningen wachten tot de huizen
-zelf beter zijn (Marcel zoekt voorbeelden), en gaan dan in één ronde met de sneeuw op de daken. De bode met de hinderlaag en de lantaarns (vraag 143), het weer, de statussen, niet zaaien in de regen, de
+staan in `main`; het geluid wacht op Marcel (hieronder). De ronde van alle huizen (vraag 144: de knoppen aan, jong en oud, de sneeuw op de daken en de brandfasen) staat op
+branch `huizen` (hieronder). De bode met de hinderlaag en de lantaarns (vraag 143), het weer, de statussen, niet zaaien in de regen, de
 brand en de koorts als status en de sneeuw op de grond (vraag 144) staan in `main`. Vraag 141, de economie binnen het dorp, is op 9 okt helemaal teruggedraaid
 (Marcel: "Ik denk dat we die economie terug moeten draaien", en "Alles van vraag 141"). Kleren naar stand (vraag 149)
 staat in `main` (10 okt): arm in een hut, deftig in een stenen huis met laken; de kinderen en de ouden later. De mensen
@@ -28,20 +28,20 @@ mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voo
 - Het geluid (vraag 145, 2): de sleutel `FREESOUND_KEY` in de omgeving en de domeinen van Freesound erbij, zoals
   beschreven bij vraag 145; dan maakt een nieuwe sessie het.
 - Vraag 145 laten zien: is het dorp nu minder "saai"?
-- Het voorbeeldhuis naar de voorbeelden (vraag 144; `beeld.md`, "De huizen naar Marcels voorbeelden"; de plaat:
-  `node gereedschap/pixelart/huis-sdf-export.cjs voorbeeld`): een vakwerkhuis van twee lagen onder riet, in stappen A tot
-  F, in `main` (10 okt): A verweren (een maat, 0 tot 1), B diepte, C vorm (steiler dak, afdakje, balkon op schoren, twee
-  schoorstenen), D het stukje grond (keien, houtstapel, tonnen; alleen op de plaat), E grover en contrast, F ruig riet
-  (Marcel: "rossiger, rauwer, prikkeliger, rieteriger", "niet te geel"). Alles staat achter knoppen die uit staan, dus het
-  spel is nog niet veranderd. Marcels voorbeelden staan in `ontwerp/voorbeelden/` (twee van 10 okt; de acht van 9 okt
-  stuurt hij nog). Het oude dak (verweer 1) bleek alleen een render. **Het stenen huis onder pannen** (zijn voorbeeld van
-  het vakwerk op steen; Marcel, 10 okt: ronde pannen, en netter dan de rieten hut) staat op de plaat `huis-sdf-export.cjs
-  voorbeeld steen`, in vier stappen achter knoppen die uit staan: G ronde veldstenen met lichte voegen, H ronde pannen, I
-  een rondboogdeur met een boog van zandsteen, J klimop, en warmer (`beeld.md`; Marcel: "Goed zo"), in `main` (10 okt).
-  Het mos op het oude riet groeit nu in de schaduw onder de lagen, in strepen langs de stengels (Marcel: "Meer mos"), in
-  `main` (10 okt). **Wacht op Marcel:** de ronde van alle tekeningen, waarin hoe ruig van de trede afhangt en hoe verweerd
-  van de leeftijd (en de acht voorbeelden van 9 okt, als hij ze nog stuurt). **Bezig in sessie `main` (desktop,
-  huizen)** (10 okt; Marcel: "pak het de huizen op"): de ronde van alle tekeningen met de knoppen aan, eerst het plan.
+- **De ronde van alle huizen (vraag 144), op branch `huizen` (11 okt), om te bekijken en dan in `main`** (Marcel, 10 okt:
+  "pak het de huizen op", en op het plan: meteen jong en oud, het steilere dak met een afdakje, alles in één ronde;
+  `beeld.md`, "De ronde van alle tekeningen"). De knoppen van het voorbeeldhuis (A tot J) staan op elke tekening, naar
+  het dak: ruig riet in het gehucht, ronde pannen met marktrecht, ronde veldsteen, rondboogdeur en klimop op steen. Elk
+  huis is er jong en oud: wat er bij het begin al stond, is oud, wat je bouwt is jong en na twee jaar oud. In de winter
+  ligt er sneeuw op de daken (drie lagen, naar de sneeuw op de grond), en een brand laat het afbranden zien (geschroeid,
+  het dak valt, binnengestort, ingestort, opgeruimd). De bouwfasen zijn opnieuw. De platen: `huis-sdf-export.cjs ronde
+  wit`, en in het spel `gereedschap/pixelart/uit/schermen/daksneeuw-houtland.png` en `brand-fasen.png`. **Open:** de
+  toren van de kapel is boven bruin in plaats van in de kalk van de stijl; het pleister van een jonge kapel laat al rode
+  baksteen zien; tussen jong en oud is bij leien en pannen weinig verschil; een oud gehucht is overal mossig (alles wat
+  er bij het begin staat, is oud). De acht voorbeelden van 9 okt stuurt Marcel nog. **Voor `main`:** de groen-sessie
+  heeft in de hoofdmap nog werk dat niet gecommit is (`naar-tiled.cjs`, `sprites.js`, `tegels.json`); na het samenvoegen
+  `npm run tiled huizen`, want `tegels.json` verandert aan beide kanten; zet eerst de cache uit de werkkopie over
+  (`.claude/worktrees/huizen/gereedschap/pixelart/uit/huizen-cache`), dan kost het een minuut in plaats van twee uur.
 - **In `main` (10 okt, avond; Marcel koos ze), om te bekijken:**
   - Wijn haalt kapel (vraag 136): een gebouw met een gezin (de wijnboerderij) komt alleen waar het zijn kapel haalt, of
     waar er nog een kan komen, zoals een erf (`T.waaromGeenKringPlek`). In de speeltest winnen nu twee van de zes (was
