@@ -96,7 +96,7 @@ test('de bende komt terug op de dag die het zegt, tegen de avond, van de rand va
   }
   assert.ok(A.ingang.x === 0 || A.ingang.y === 0 || A.ingang.x === w.b - 1 || A.ingang.y === w.h - 1, 'aan de rand');
   assert.equal(T.bestemmingVan(w.akkers[A.veld]), 'akker', 'ze gaan naar een akker, niet naar een weide');
-  assert.ok(berichten.some((t) => /^Rovers!/.test(t) && t.includes(bende[0])), berichten.join(' | '));
+  assert.ok(berichten.some((t) => /^Robbers are coming\./.test(t) && t.includes(bende[0])), berichten.join(' | '));
   assert.equal(S.kalender.snelheid, 1, 'de tijd gaat naar 1×');
   // Een rover die valt, is uit de bende.
   T.raak(S, A.rovers[0], 100);
@@ -148,7 +148,7 @@ test('rovers die de akker halen, roven er graan en gaan weer weg', () => {
   T.werkRoversBij(S, S.dorp);
   assert.equal(A.fase, 'weg');
   assert.equal(graan - S.dorp.voorraad.graan, Math.min(graan, 2 * T.ROVERS_INSTELLINGEN.graanPerRover));
-  assert.ok(berichten.some((t) => /gaan ervandoor met \d+ graan/.test(t)), berichten.join(' | '));
+  assert.ok(berichten.some((t) => /make off with \d+ grain/.test(t)), berichten.join(' | '));
   for (const e of A.rovers) zet(e, A.ingang.x, A.ingang.y);
   T.werkRoversBij(S, S.dorp);
   assert.equal(S.dorp.rovers.aanval, null, 'ze zijn de kaart af');
@@ -209,7 +209,7 @@ test('de militie: wie in het wachthuis werkt, loopt bij een aanval met de schout
   assert.equal(T.aanDeBeurt(S), een, 'na de schout is de wachter aan de beurt');
   assert.equal(T.spelerAanDeBeurt(S), true, 'en die bestuur jij');
   const hdl = T.handelingGevecht(S, { x: een.tx, y: een.ty + 1 });
-  assert.equal(hdl.tekst, 'Lopen');
+  assert.equal(hdl.tekst, 'Walk');
   assert.equal(hdl.pad[0].x, een.tx);
 });
 
@@ -236,7 +236,7 @@ test('wie van de militie nog onderweg was, rent erheen en vecht mee zodra hij er
   T.beginGevecht(S);
   assert.ok(!S.gevecht.volgorde.includes(twee), 'hij doet nog niet mee');
   assert.ok(twee.pad.length > 0 && twee.pad.length <= twee.maxAp, `maar hij rent erheen, zo ver als zijn punten reiken (${twee.pad.length})`);
-  assert.ok(berichten.some((t) => t.includes(twee.naam) && /onderweg/.test(t)), berichten.join(' | '));
+  assert.ok(berichten.some((t) => t.includes(twee.naam) && /on the way/.test(t)), berichten.join(' | '));
   // Een paar rondes later is hij er: bij het begin van de ronde vecht hij mee, na de rest van jouw kant.
   let naast = null;
   for (const [dx, dy] of [[0, 1], [0, -1], [-1, 0], [1, 1], [-1, 1], [1, -1], [-1, -1]]) {
@@ -278,7 +278,7 @@ test('wie valt, is dood: een wachter is een mond minder, en ligt er tot de volge
   assert.equal(S.dorp.bevolking, voor - 1);
   assert.ok(!S.dorp.bewoners.mensen.includes(p), 'hij woont er niet meer');
   assert.ok(S.wereld.wezens.includes(een), 'hij ligt er nog');
-  assert.ok(berichten.some((t) => t.includes(p.naam) && /gestorven/.test(t)), berichten.join(' | '));
+  assert.ok(berichten.some((t) => t.includes(p.naam) && /died/.test(t)), berichten.join(' | '));
   S.dorp.rovers.aanval = null;
   T.tikRoversDag(S.dorp, 6);
   assert.ok(!S.wereld.wezens.includes(een), 'de volgende dag is hij begraven');
@@ -300,7 +300,7 @@ test('zijn alle rovers verslagen, dan is de aanval voorbij en gaat de militie na
   berichten.length = 0;
   T.eindeGevecht(S, 'gewonnen');
   assert.equal(S.dorp.rovers.aanval, null);
-  assert.ok(berichten.includes('De rovers zijn verslagen.'), berichten.join(' | '));
+  assert.ok(berichten.includes('The robbers are defeated.'), berichten.join(' | '));
   for (const e of mannen) {
     assert.equal(e.opgeroepen, false);
     assert.equal(e.kant, 'neutraal');

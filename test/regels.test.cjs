@@ -192,7 +192,7 @@ test('een klap kost levenspunten; op nul is een monster verslagen, en valt de sc
   assert.equal(schout.leven, 0);
   assert.equal(schout.dood, true);
   assert.equal(S.modus, 'dood', 'wie valt, speelt niet verder');
-  assert.ok(gemeld.some((t) => /valt/.test(t)), gemeld.join(' | '));
+  assert.ok(gemeld.some((t) => /You fall/.test(t)), gemeld.join(' | '));
 });
 
 test('wie sluipt, wordt pas van twee tegels dichterbij opgemerkt', () => {

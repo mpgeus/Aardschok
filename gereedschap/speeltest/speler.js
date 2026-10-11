@@ -1119,7 +1119,7 @@
       gevallen: s.modus === 'dood',
       // De rovers (js/rovers.js): hoe vaak ze kwamen, hoe vaak ze verslagen werden, en wat ze meenamen.
       rovers: {
-        kwamen: boek.berichten.filter((b) => /^Rovers!/.test(b.tekst)).length,
+        kwamen: boek.berichten.filter((b) => /^Robbers are coming\./.test(b.tekst)).length,
         verslagen: boek.berichten.filter((b) => b.tekst === 'De rovers zijn verslagen.').length,
         roofden: boek.berichten.filter((b) => /gaan ervandoor/.test(b.tekst)).map((b) => `${b.datum}: ${b.tekst}`),
         gesneuveld: boek.bevolking.filter((b) => b.reden === 'gesneuveld').length,

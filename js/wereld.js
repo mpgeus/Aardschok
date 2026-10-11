@@ -29,9 +29,9 @@
   // Een kamer is een rechthoek vloer. De muren eromheen horen er niet bij: een muur
   // scheidt twee kamers, en welke kant de voorkant is, hangt af van waar je staat.
   const KAMERS = [
-    { id: 'hal', naam: 'De hal', x1: 1, y1: 1, x2: 8, y2: 7, vloer: ['#6e5c48', '#675643'] },
-    { id: 'opslag', naam: 'De voorraadkamer', x1: 10, y1: 1, x2: 18, y2: 7, vloer: ['#5f4b37', '#584532'] },
-    { id: 'trap', naam: 'Het trappenhuis', x1: 1, y1: 9, x2: 8, y2: 14, vloer: ['#51555a', '#4b4f54'] },
+    { id: 'hal', naam: T.t('The hall'), x1: 1, y1: 1, x2: 8, y2: 7, vloer: ['#6e5c48', '#675643'] },
+    { id: 'opslag', naam: T.t('The storeroom'), x1: 10, y1: 1, x2: 18, y2: 7, vloer: ['#5f4b37', '#584532'] },
+    { id: 'trap', naam: T.t('The stairwell'), x1: 1, y1: 9, x2: 8, y2: 14, vloer: ['#51555a', '#4b4f54'] },
   ];
 
   // blokkeert: je kunt er niet op staan. zichtDicht: je kijkt er niet langs.
@@ -42,22 +42,22 @@
     sleutel: { blokkeert: false, zichtDicht: false },
     // De schandpaal van de heer op het plein: komt er de eerste keer dat hij iemand straft, en blijft
     // staan (js/heer.js, T.zetSchandpaalNeer).
-    schandpaal: { blokkeert: true, zichtDicht: false, naam: 'de schandpaal' },
+    schandpaal: { blokkeert: true, zichtDicht: false, naam: T.t('the pillory') },
     // De meiboom op het plein: de jongeren zetten hem op 1 bloeimaand, en hij blijft een maand staan (js/feesten.js).
-    meiboom: { blokkeert: true, zichtDicht: false, naam: 'de meiboom' },
+    meiboom: { blokkeert: true, zichtDicht: false, naam: T.t('the maypole') },
     // De kerstboom op het plein: van 20 wintermaand tot en met 6 louwmaand, met kaarsjes die 's avonds branden
     // (js/feesten.js).
-    kerstboom: { blokkeert: true, zichtDicht: false, naam: 'de kerstboom' },
+    kerstboom: { blokkeert: true, zichtDicht: false, naam: T.t('the Christmas tree') },
     // Het hol van een roedel wolven, op een tegel naast zijn thuis diep in het bos (js/beesten.js, T.zetHol): een kuil onder een
     // omgevallen boom. Je loopt er niet overheen, maar langs.
-    hol: { blokkeert: true, zichtDicht: false, naam: 'een wolvenhol' },
+    hol: { blokkeert: true, zichtDicht: false, naam: T.t('a wolf den') },
     // Een kraam van de markt op het plein (js/markt.js): een toonbank met een luifel. Je loopt eromheen, en ertussendoor.
-    kraam: { blokkeert: true, zichtDicht: false, naam: 'een kraam' },
+    kraam: { blokkeert: true, zichtDicht: false, naam: T.t('a stall') },
     // Een mand, kist, zak of ton naast een kraam (js/markt.js): wat niet op de toonbank past.
-    mand: { blokkeert: true, zichtDicht: false, naam: 'een mand' },
+    mand: { blokkeert: true, zichtDicht: false, naam: T.t('a basket') },
     // Een wijnrank in de wijngaard van een wijnboerderij (js/wijngaard.js): aan een paal met een draad, in een rij; je loopt
     // ertussen over het pad, en wie plukt, staat ernaast.
-    wijnrank: { blokkeert: true, zichtDicht: false, naam: 'een wijnrank' },
+    wijnrank: { blokkeert: true, zichtDicht: false, naam: T.t('a vine') },
     // Een stronk die achterblijft als een boom om is (T.velBoom, js/bos.js): je loopt tussen de stronken door, zoals in een
     // kapvlakte, en zo komt de houthakker bij de bomen erachter. In de speeltest van 6 okt zette hij zich met zijn eigen
     // stronken vast: na de rand van het bos kon hij er niet meer in. Een stronk die de maker op de kaart zette, heeft een
@@ -65,8 +65,8 @@
     boomstronk: { blokkeert: false, zichtDicht: false },
     // Het kamp van het lege begin (js/begin.js; werklijst vraag 152): de tent of het afdak van een gezin, met de tegel erachter
     // als voet (`voet` op het voorwerp), en het kampvuur in het midden.
-    tent: { blokkeert: true, zichtDicht: false, naam: 'een tent' },
-    kampvuur: { blokkeert: true, zichtDicht: false, naam: 'het kampvuur' },
+    tent: { blokkeert: true, zichtDicht: false, naam: T.t('a tent') },
+    kampvuur: { blokkeert: true, zichtDicht: false, naam: T.t('the campfire') },
   };
 
   // De bomen en de struiken, op één plek (vraag 148, a: met een nieuwe soort hier telt hij overal mee). Een boom zonder
@@ -118,26 +118,26 @@
   // Zijn kant heet 'speler' en niet 'schout' (Marcel, 26 sep): soort en kant zijn twee dingen, en
   // een man van de militie (punt 13) vecht straks aan jouw kant zonder de schout te zijn.
   const WEZENS = {
-    schout: { naam: 'jij', kant: 'speler', leven: 20, ap: 8, initiatief: 10, snelheid: T.SCHOUT_SNELHEID },
+    schout: { naam: T.t('you'), kant: 'speler', leven: 20, ap: 8, initiatief: 10, snelheid: T.SCHOUT_SNELHEID },
     // De mensen van het dorp staan niet hier maar in js/mensen.js: wie ze zijn, hoe ze heten, hoe
     // snel ze lopen en welk vel ze krijgen. Deze tabel gaat over wat een wezen ís — wat vecht,
     // wat in code wordt neergezet — en een dorpeling is dat niet. Zie
     // ontwerp/wereld.md, "Wie is wie, als het er honderd worden".
     slijm: {
-      naam: 'slijmkruiper', kant: 'monster', leven: 10, ap: 4, initiatief: 4, snelheid: 1.4, zicht: 5, dwaalt: true,
-      aanval: { kosten: 3, schade: [2, 3], zin: 'bijt je' },
+      naam: T.t('slime crawler'), kant: 'monster', leven: 10, ap: 4, initiatief: 4, snelheid: 1.4, zicht: 5, dwaalt: true,
+      aanval: { kosten: 3, schade: [2, 3], zin: T.t('bites {doel}') },
     },
     skelet: {
-      naam: 'skeletwacht', kant: 'monster', leven: 18, ap: 6, initiatief: 6, snelheid: 2.2, zicht: 5, dwaalt: false,
-      aanval: { kosten: 3, schade: [3, 5], zin: 'raakt je met zijn zwaard' },
+      naam: T.t('skeleton guard'), kant: 'monster', leven: 18, ap: 6, initiatief: 6, snelheid: 2.2, zicht: 5, dwaalt: false,
+      aanval: { kosten: 3, schade: [3, 5], zin: T.t('hits {doel} with his sword') },
     },
     // Buiten, in het bos. Hij loopt harder dan de schout en ziet verder dan wat er
     // binnen rondloopt: buiten is er ruimte, en een wolf hoort eerder op te vallen dan een
     // slijmkruiper in een kelder. Sluipen (T.SLUIP_ZICHT) scheelt dan twee tegels, en dat is
     // precies genoeg om hem te ontlopen als je hem op tijd ziet.
     wolf: {
-      naam: 'wolf', kant: 'monster', leven: 12, ap: 6, initiatief: 8, snelheid: 2.6, zicht: 6, dwaalt: true,
-      aanval: { kosten: 3, schade: [2, 4], zin: 'bijt je' },
+      naam: T.t('wolf'), kant: 'monster', leven: 12, ap: 6, initiatief: 8, snelheid: 2.6, zicht: 6, dwaalt: true,
+      aanval: { kosten: 3, schade: [2, 4], zin: T.t('bites {doel}') },
     },
     // Dieper het bos in. De sleutel is hier de naam: js/sprites.js zoekt het figuur op de soort
     // op, dus deze twee heten precies zoals hun animatievellen in beelden/figuren
@@ -147,26 +147,26 @@
     // De spin is traag maar taai en bijt gif: wie haar ziet aankomen, loopt om. De kobold loopt
     // bijna zo hard als een wolf en steekt met een speer, dus hij is juist niet te ontlopen.
     reuzenspin: {
-      naam: 'reuzenspin', kant: 'monster', leven: 14, ap: 5, initiatief: 5, snelheid: 2.0, zicht: 6, dwaalt: true,
-      aanval: { kosten: 3, schade: [3, 4], zin: 'bijt je met haar giftanden' },
+      naam: T.t('giant spider'), kant: 'monster', leven: 14, ap: 5, initiatief: 5, snelheid: 2.0, zicht: 6, dwaalt: true,
+      aanval: { kosten: 3, schade: [3, 4], zin: T.t('bites {doel} with her fangs') },
     },
     kobold: {
-      naam: 'kobold', kant: 'monster', leven: 16, ap: 6, initiatief: 7, snelheid: 2.4, zicht: 6, dwaalt: true,
-      aanval: { kosten: 3, schade: [2, 4], zin: 'steekt je met zijn speer' },
+      naam: T.t('kobold'), kant: 'monster', leven: 16, ap: 6, initiatief: 7, snelheid: 2.4, zicht: 6, dwaalt: true,
+      aanval: { kosten: 3, schade: [2, 4], zin: T.t('stabs {doel} with his spear') },
     },
     // De rovers (js/rovers.js; werklijst vraag 55, 29 sep): wie wegtrok, of wilde rovers van buiten. Ze dwalen niet
     // maar lopen waar hun aanval ze heen stuurt, en dragen het vel van gewone mensen (e.vel, zie S.houding in
     // js/sprites.js): er hoeft niets voor getekend te worden.
     rover: {
-      naam: 'rover', kant: 'monster', leven: 12, ap: 6, initiatief: 6, snelheid: 2.2, zicht: 6, dwaalt: false, vel: 'boer',
-      aanval: { kosten: 3, schade: [2, 4], zin: 'slaat je met een knuppel' },
+      naam: T.t('robber'), kant: 'monster', leven: 12, ap: 6, initiatief: 6, snelheid: 2.2, zicht: 6, dwaalt: false, vel: 'boer',
+      aanval: { kosten: 3, schade: [2, 4], zin: T.t('hits {doel} with a club') },
     },
     // Een man van de militie, uit het wachthuis: wat hij kan als hij bij een aanval naast de schout vecht
     // (js/rovers.js). Hij is een bewoner met zijn eigen poppetje; dit is alleen zijn leven en zijn punten.
-    wachter: { naam: 'wachter', kant: 'speler', leven: 16, ap: 8, initiatief: 8, snelheid: 2.4, vel: 'boer' },
+    wachter: { naam: T.t('guard'), kant: 'speler', leven: 16, ap: 8, initiatief: 8, snelheid: 2.4, vel: 'boer' },
     // Wie van de heervaart terugkwam (js/heervaart.js; Marcel, 29 sep, vraag 60, B): hij heeft leren vechten. Hij
     // vecht mee als er rovers komen, ook zonder wachthuis, en houdt meer klappen uit dan een wachter.
-    veteraan: { naam: 'veteraan', kant: 'speler', leven: 20, ap: 8, initiatief: 8, snelheid: 2.4, vel: 'boer' },
+    veteraan: { naam: T.t('veteran'), kant: 'speler', leven: 20, ap: 8, initiatief: 8, snelheid: 2.4, vel: 'boer' },
   };
 
   const sleutelVan = (x, y) => x + ',' + y;
@@ -179,7 +179,7 @@
   T.WEZENS = WEZENS;
 
   // "ij" is in het Nederlands één letter: ijzer wordt IJzer, niet Ijzer.
-  T.hoofdletter = (s) => (/^ij/.test(s) ? 'IJ' + s.slice(2) : s.charAt(0).toUpperCase() + s.slice(1));
+  T.hoofdletter = (s) => (/^ij/.test(s) ? 'IJ' + s.slice(2) : s.charAt(0).toUpperCase() + s.slice(1)); // geen tekst
   // Een klein getal in woorden, voor een bericht of een brief: "three wild robbers", "five able-bodied men" (Engels sinds
   // 11 okt, ontwerp/engels.md).
   const TELWOORDEN = [T.t('no'), T.t('one'), T.t('two'), T.t('three'), T.t('four'), T.t('five'), T.t('six'), T.t('seven'),
