@@ -58,7 +58,8 @@ Het plan staat in het archief bij vraag 152; 1a (optie 1), 1b (het lege land), 1
 (binnen bereik, en met handen) zijn af; hoe het nu werkt: `spel.md`, "Zo werkt het lege begin nu".
 - **1e, boeren uit het niets:** je bouwt een boerderij en kiest akkerbouwer of wijnboer (Marcel, 11 okt: "Je kiest dan
   agrariër of wijnboer. Zoals bij Knights and Merchants"); het gezin dat erin trekt, wordt die boer, met een geloot
-  karakter; en bij een akkerbouwer leg jij de akkers (uit 1d, e: een akker zonder boer doet niets).
+  karakter; en bij een akkerbouwer leg jij de akkers (uit 1d, e: een akker zonder boer doet niets). **Bezig in sessie
+  `ccr-fe45ba8f-v51u8s`** (11 okt): het plan, met Marcel.
 - **1f, een jaar zonder fouten:** een toets speelt een jaar vanaf een lege plek, met een speler in code die bouwt. Dan
   is "Leeg" het enige begin, en volgt ronde 2 van A.
 
