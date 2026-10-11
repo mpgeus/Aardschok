@@ -533,7 +533,8 @@ test('hoe dicht de erven ook liggen, elk huis houdt een plek voor een put en een
 test('het huis van, de hut van: het lidwoord bij wie er woont (T.huisVan)', () => {
   const S = gehucht();
   const D = S.dorp;
-  assert.match(T.huisVan(D, D.gebouwen.find((g) => g.soort === 'huis')), /^the house of /);
+  assert.match(T.huisVan(D, D.gebouwen.find((g) => g.soort === 'huis' && g.huis !== 'schout')), /^the house of /);
+  assert.match(T.huisVan(D, D.gebouwen.find((g) => g.huis === 'schout')), /^your /, 'waar de schout woont, is jouw huis');
   assert.match(T.huisVan(D, D.gebouwen.find((g) => g.soort === 'hut')), /^the hut of /);
   assert.match(T.huisVan(D, D.gebouwen.find((g) => g.soort === 'boerderij')), /^the farm of /);
 });

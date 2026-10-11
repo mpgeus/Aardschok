@@ -132,7 +132,7 @@
   };
 
   // Het uur zoals je het zegt: "seven o'clock", "half past seven". Wat voor of na de middag is, zegt het deel
-  // van de dag dat de balk eronder zet (js/hud.js, klokTekst: dezelfde woorden).
+  // van de dag dat de balk erachter zet (js/hud.js).
   T.uurTekst = function (dag) {
     const u = T.uurVanDag(dag);
     const heel = Math.floor(u);

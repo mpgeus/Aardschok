@@ -579,7 +579,7 @@ const kaart = {
   nextlayerid: 3,
   nextobjectid: volgendId,
   properties: [
-    { name: 'naam', type: 'string', value: 'Het gehucht' },
+    { name: 'naam', type: 'string', value: 'The hamlet' },
     { name: 'doof', type: 'int', value: 6 },
   ],
   tilesets: gebruikt.map((naam) => ({ firstgid: firstgid[naam], source: `../tegels/${naam}.tsx` })),
@@ -628,7 +628,7 @@ dingen.push(MEENT);
 // hieronder laat de keuring met rust dat "wereld" niet terugwijst (gereedschap/keuring.js,
 // T.keurDekking: "een aansluiting heeft twee kanten" — dat geldt pas zodra dit gehucht echt op
 // de kaart van de wereld komt te liggen).
-dingen.push({ x: UITGANG.x, y: UITGANG.y, overgang: 'wereld', tekst: 'De weg de wereld in' });
+dingen.push({ x: UITGANG.x, y: UITGANG.y, overgang: 'wereld', tekst: 'The road out into the world' });
 
 const betekenis = {
   versie: 1,

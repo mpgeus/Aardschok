@@ -83,9 +83,9 @@
   // Een verstandig antwoord: niemand het bos in (wie het bos in gaat, komt terug als rover, en deze spelers lopen de
   // rovers niet achterna), en geen graan of hout dat de winter nodig heeft.
   function verstandig(s, prijs) {
-    if (/het bos in/.test(prijs)) return false;
+    if (/must go into the forest/.test(prijs)) return false;
     for (const wat of ['graan', 'hout']) {
-      const m = new RegExp(`−(\\d+) ${wat}`).exec(prijs);
+      const m = new RegExp(`−(\\d+) ${T.waarNaam(wat)}`).exec(prijs);
       if (m && !haaltHetNog(s, wat, Number(m[1]))) return false;
     }
     return true;
@@ -149,22 +149,22 @@
   // het hooi de winter haalt). Een venster dat de speler niet zelf openhoudt, gaat dicht.
   // Welke soort regel er in een rapport staat (js/ochtendrapport.js), voor de telling hierboven.
   const RAPPORT_SOORTEN = [
-    ['stil', /^Niets bijzonders/],
-    ['nieuw', /^Nieuw in het dorp/],
-    ['gestorven', /gestorven\.$|sneuvelde/],
-    ['weg', / weg: /],
-    ['boeren', /de boeren/],
-    ['besluit', /^Over .* besliste/],
-    ['nietGesproken', /zocht je over/],
-    ['sindsGisteren', /^Sinds gisteren/],
-    ['nogSteeds', /nog steeds/],
-    ['voorbij', /voorbij\.$| meer in de huizen\.$| ontevreden meer\.$|^Er is weer plaats/],
+    ['stil', /^Nothing special/],
+    ['nieuw', /^New in the village/],
+    ['gestorven', /died\.$|fell for the lord/],
+    ['weg', / left: /],
+    ['boeren', /the farmers/i],
+    ['besluit', /^On .* decided/],
+    ['nietGesproken', /came to see you about/],
+    ['sindsGisteren', /^Since yesterday/],
+    ['nogSteeds', /^Still |, for \d+ days? now/],
+    ['voorbij', /is over\.$| any more\.$|no longer|room again/],
     ['winter', /winter/],
-    ['honger', /^Er is honger/],
-    ['kou', /^Het is koud/],
-    ['vol', /^De huizen zitten vol/],
-    ['onvrede', /^Het dorp is ontevreden/],
-    ['komt', /^Vandaag komt|^De rovers|^De heer wil/],
+    ['honger', /^There is hunger/],
+    ['kou', /^It is (cold|freezing)/],
+    ['vol', /^The houses are full/],
+    ['onvrede', /^The village is discontented/],
+    ['komt', /comes today|robber|^The lord wants/i],
   ];
 
   // Een gril van de heer (js/grillen.js; werklijst vraag 106, stap 2): elke speler antwoordt naar zijn aard. De brave
@@ -720,7 +720,7 @@
         if (dagNu() >= belastingNietVoor && T.standVanWet(s.dorp, 'belasting') !== 'aangenomen') {
           belastingNietVoor = Math.floor(dagNu()) + 1;
           const r = T.raadNu(s.dorp);
-          if (r && /belasting \[W\]/.test(r.tekst)) {
+          if (r && /tax \[W\]/.test(r.tekst)) {
             if (neemWetAan('belasting')) daad(`neemt de belasting aan, want de raad zegt: "${r.tekst}"`);
             else {
               daad('kan de belasting niet aannemen');
@@ -1130,7 +1130,7 @@
       ondernemers: {
         vroegen: boek.voorvallen.filter((v) => v.id === 'wapenverzoek' || v.id === 'herbergverzoek')
           .map((v) => `${v.datum}: ${v.wie}, ${v.id === 'wapenverzoek' ? 'wapens' : 'een tweede herberg'}: ${v.antwoord}`),
-        berichten: boek.berichten.filter((b) => /Een tweede herberg, schout|vat bier|keer nee van de schout/.test(b.tekst))
+        berichten: boek.berichten.filter((b) => /A second inn, reeve|barrel of ale|turned down by the reeve/.test(b.tekst))
           .map((b) => `${b.datum}: ${b.tekst}`),
         wapens: T.wapensInHetDorp(s.dorp),
         herbergen: T.herbergenVan(s.dorp).length,

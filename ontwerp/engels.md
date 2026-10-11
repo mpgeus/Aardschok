@@ -156,7 +156,7 @@ onder een gril), zegt *my lord*; de raadsman schrijft de schout aan met *Master 
 | je ambt kwijt, weggejaagd | you lost your office, driven out | de schermen van het einde |
 | op bestelling | on order | de marskramer die een bode haalde |
 | een pak | a pack | wat de marskramer draagt |
-| de klok | *half past seven*, *seven o'clock* | `klokTekst` in `js/hud.js`; het deel van de dag is *night, morning, work, break, evening* |
+| de klok | *half past seven*, *seven o'clock* | `T.uurTekst` in `js/dag.js`; het deel van de dag is *night, morning, work, break, evening* (`DAGDELEN` in `js/hud.js`) |
 
 ## Erbij in deel 5 (het dorp dat spreekt: de gesprekken, de voorvallen, de raadsman)
 
@@ -218,7 +218,6 @@ Het gevecht schrijft kort en in de tegenwoordige tijd ("You hit the wolf: 3 dama
 | de koorts, van ouderdom | the fever, old age | de reden bij een sterfgeval: "Old age: Henry died." |
 | een proefje, de opslag | a try-out, the browser storage | de redenen van `js/opslaan.js` |
 | de weg de wereld in | the road into the world | de uitgang van het gehucht |
-| de klok (`T.uurTekst`) | *seven o'clock*, *half past seven* | dezelfde woorden als `klokTekst` in `js/hud.js` |
 
 ## De maanden
 

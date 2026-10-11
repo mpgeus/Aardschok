@@ -143,8 +143,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (de koppen van het rekenboek, het plaatje van elk ding uit `DINGEN[...].naam`, de lat uit `SNELHEDEN`), en `document.title`
   en `lang` komen ook uit `js/ui.js`. Een toets staat als `<kbd>` (`kbd('Esc')`, nooit in de zin), en `Spel.debug` en de
   meldingen in de console blijven Nederlands (`// geen tekst`, `main.js` heeft er zo'n honderd). De klok in de balk is
-  `klokTekst` in `js/hud.js` ("half past seven"), met `DAGDELEN`; `T.uurTekst` in `js/dag.js` zegt het nu met dezelfde
-  woorden ("seven o'clock"; `js/menu.js` toont hem bij een bewaard spel). De namen van de provincies staan met een kleine letter (`T.LANDSOORTEN`: "the castle"), zodat ze in
+  `T.uurTekst` (`js/dag.js`: "seven o'clock", "half past seven"; ook bij een bewaard spel in `js/menu.js`), met het deel
+  van de dag uit `DAGDELEN` in `js/hud.js`. De namen van de provincies staan met een kleine letter (`T.LANDSOORTEN`: "the castle"), zodat ze in
   een zin passen ("You are in the castle"); de kaart zet de hoofdletter.
 - **Een zin uit de gegevens** (vraag 147, deel 5): een tabel die een bewerker terugschrijft (`T.bronBlok`), de gesprekken
   (`T.GESPREKKEN`) en de quests (`T.QUESTS`), houdt zijn Engelse zinnen als gewone tekst, want de bewerker kent geen

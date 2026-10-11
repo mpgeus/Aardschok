@@ -18,7 +18,10 @@
   function inhoud(D, g, t) {
     const soort = T.GEBOUWEN[g.soort];
     const wie = t.wie.length ? t.wie[0] : null;
-    const kop = T.hoofdletter(wie ? T.t("{wie}'s {gebouw}", { wie, gebouw: soort.naam }) : soort.naam);
+    // Het huis waar de schout woont, is het jouwe ("Your house", niet "the reeve's reeve's house").
+    const kop = g.huis === 'schout'
+      ? (g.soort === 'schout' ? T.t('Your house') : T.t('Your {gebouw}', { gebouw: soort.naam }))
+      : T.hoofdletter(wie ? T.t("{wie}'s {gebouw}", { wie, gebouw: soort.naam }) : soort.naam);
     const stand = T.t('{stand}, {n|# person|# people}, {procent}% content', {
       stand: T.hoofdletter(T.STANDEN[t.stand].naam),
       n: t.mensen,

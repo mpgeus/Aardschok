@@ -52,15 +52,8 @@
 
   T.ui = T.ui || {};
 
-  // De klok en het deel van de dag zoals de balk ze zegt ("half past seven, morning"). T.uurTekst (js/dag.js) is de
-  // Nederlandse klok; de balk gebruikt hem niet meer.
+  // De klok en het deel van de dag zoals de balk ze zegt ("half past seven, morning"): de klok is T.uurTekst (js/dag.js).
   const DAGDELEN = { nacht: T.t('night'), ochtend: T.t('morning'), werk: T.t('work'), schaft: T.t('break'), avond: T.t('evening') };
-  function klokTekst(dag) {
-    const u = T.uurVanDag(dag);
-    const heel = Math.floor(u);
-    const uur = T.telwoord(heel % 12 || 12);
-    return u - heel >= 0.5 ? T.t('half past {uur}', { uur }) : T.t("{uur} o'clock", { uur });
-  }
 
   // De datum, en eronder het seizoen met het uur en het deel van de dag ("Spring · half past seven,
   // morning"). Ververst elk half uur (T.tikKalender).
@@ -70,7 +63,7 @@
     const datumEl = $('kalender-datum');
     datumEl.textContent = d.tekst;
     datumEl.classList.toggle('sint-maarten', d.sintMaarten);
-    const uur = T.t('{klok}, {deel}', { klok: klokTekst(S.kalender.dag), deel: DAGDELEN[T.dagdeelVan(S.kalender.dag)] });
+    const uur = T.t('{klok}, {deel}', { klok: T.uurTekst(S.kalender.dag), deel: DAGDELEN[T.dagdeelVan(S.kalender.dag)] });
     // Het weer van vandaag (js/weer.js), tussen het seizoen en het uur; op hover hoe lang het al droog is.
     // Hoe lang het al droog is, zegt het briefje bij de muis (js/tafel.js, de datum).
     const W = S.dorp && T.weerVan(S.dorp);

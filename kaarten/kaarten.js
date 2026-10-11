@@ -20,7 +20,7 @@
      {
       "name": "naam",
       "type": "string",
-      "value": "Het gehucht"
+      "value": "The hamlet"
      },
      {
       "name": "doof",
@@ -10094,7 +10094,7 @@
      {
       "name": "naam",
       "type": "string",
-      "value": "Het proefbos"
+      "value": "The test wood"
      },
      {
       "name": "doof",
@@ -11034,7 +11034,7 @@
       "x": 75,
       "y": 49,
       "overgang": "wereld",
-      "tekst": "De weg de wereld in"
+      "tekst": "The road out into the world"
      }
     ]
    },

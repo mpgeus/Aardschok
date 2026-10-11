@@ -192,7 +192,7 @@
     return !herbergen.includes(p.huis) && T.herbergGasten(D, D.kalender.dag).includes(p);
   };
 
-  const opsomming = (delen) => (delen.length > 1 ? `${delen.slice(0, -1).join(', ')} en ${delen[delen.length - 1]}` : delen[0] || '');
+  const opsomming = (delen) => (delen.length ? T.opsomming(delen) : '');
 
   // Elke nacht de avond verrekenen (T.tikGebouwenDag, js/gebouwen.js, aan het begin van dag `dag`): wie
   // er gisteravond was, dronk zijn bier en onthoudt dat (p.herbergDag, voor T.herbergGezelligheid).
@@ -221,7 +221,7 @@
   // Wat de herbergierster invult in haar gesprek (js/gesprek.js, T.vulWoordenIn): wie er gisteravond
   // aan de tap zat.
   T.GESPREK_WOORDEN = T.GESPREK_WOORDEN || {};
-  T.GESPREK_WOORDEN.gisteravond = (D) => opsomming((D.herberg && D.herberg.gisteravond && D.herberg.gisteravond.namen) || []) || 'niemand';
+  T.GESPREK_WOORDEN.gisteravond = (D) => opsomming((D.herberg && D.herberg.gisteravond && D.herberg.gisteravond.namen) || []) || T.t('nobody');
 
   // Wie over de weg kwam en een paar dagen blijft, logeert in de herberg (Marcel koos het met B, vraag
   // 38): de marskramer, die tien dagen op het plein staat (js/handel.js), zit er 's avonds en slaapt er,

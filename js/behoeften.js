@@ -583,6 +583,8 @@
   // (werklijst vraag 130, c2 en d).
   T.huisVan = function (D, g) {
     const naam = T.GEBOUWEN[g.soort].naam;
+    // Waar de schout woont, is jouw huis (niet "the reeve's house of the reeve").
+    if (g.huis === 'schout') return g.soort === 'schout' ? T.t('your house') : T.t('your {gebouw}', { gebouw: naam });
     const mensen = ((D.bewoners && D.bewoners.mensen) || []).filter((p) => p.huis === g);
     const p = mensen.find((m) => !m.hoofd) || mensen[0];
     return p ? T.t('the {gebouw} of {wie}', { gebouw: naam, wie: T.naamVanBewoner(p) }) : T.eenNaam(naam);

@@ -242,8 +242,8 @@ test('elke kaart uit T.KAARTEN is vanzelf een gebied, zonder dat er iets geregis
   }
   assert.deepEqual(Object.keys(T.GEBIEDEN).sort(), Object.keys(T.KAARTEN).sort(), 'en er staat niets in code');
   // en de naam die de speler ziet komt uit de kaart zelf (de eigenschap "naam" van de map)
-  assert.equal(T.GEBIEDEN.gehucht.naam, 'Het gehucht');
-  assert.equal(T.GEBIEDEN.proefbos.naam, 'Het proefbos');
+  assert.equal(T.GEBIEDEN.gehucht.naam, 'The hamlet');
+  assert.equal(T.GEBIEDEN.proefbos.naam, 'The test wood');
 });
 
 test('een overgang naar een kaart die niet bestaat, laat de speler niet vastlopen', () => {
