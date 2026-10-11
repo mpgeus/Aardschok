@@ -95,8 +95,8 @@ test('een groot oogstfeest: morgen werkt niemand, iedereen staat op het plein, e
   assert.ok(werkplaatsen.length > 0, 'er is een werkplaats om te toetsen');
   for (const g of werkplaatsen) {
     assert.equal(g.werkte, 0, `${g.soort} werkt niet`);
-    assert.equal(g.stilWant, 'het dorp viert feest');
-    assert.match(T.gebouwToestand(D, g), /staat stil, het dorp viert feest/);
+    assert.equal(g.stilWant, 'the village is feasting');
+    assert.match(T.gebouwToestand(D, g), /idle, the village is feasting/);
   }
 
   // Overdag staat iedereen rond het midden: het hele dorp, ook de boeren; de herbergierster aan de tap.

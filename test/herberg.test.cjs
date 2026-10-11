@@ -209,7 +209,7 @@ test('\'s avonds lopen de gasten de herberg in, en bij bedtijd in het donker naa
   assert.equal(T.dagdeelVan(S.kalender.dag), 'avond');
   assert.ok(trijn.wezen.binnen && zelfde(trijn.wezen.deur, deur), 'de drinker is de herberg in');
   assert.ok(zij.wezen.binnen && zelfde(zij.wezen.deur, deur), 'de herbergierster is binnen');
-  assert.ok(T.gebouwToestand(S.dorp, T.herbergVan(S.dorp)).includes('binnen'), T.gebouwToestand(S.dorp, T.herbergVan(S.dorp)));
+  assert.ok(T.gebouwToestand(S.dorp, T.herbergVan(S.dorp)).includes('inside'), T.gebouwToestand(S.dorp, T.herbergVan(S.dorp)));
   // 's Nachts is iedereen thuis, ook wie in de herberg zat; de herbergierster woont er.
   loopTot(S, bijUur(HERFST + 1, 3));
   assert.equal(T.dagdeelVan(S.kalender.dag), 'nacht');
@@ -271,7 +271,7 @@ test('de herbergierster brouwt van graan, tot er genoeg bier ligt', () => {
   assert.equal(T.maaktTot(soort).bier, 60, 'sinds 8 okt (was 30): tot er 60 bier is, boven wat apart ligt voor de huizen');
   assert.equal(g.vol, 'bier');
   g.werkte = 0;
-  assert.match(T.gebouwToestand(S.dorp, g), /^Herberg: er ligt genoeg bier\./);
+  assert.match(T.gebouwToestand(S.dorp, g), /^Inn: there is enough ale in store\./);
 });
 
 // Bier apart voor de huizen (werklijst vraag 102, b; Marcel, 3 okt: "102 a b c d e ja"): in de speeltest van 3 okt
@@ -295,7 +295,7 @@ test('bier apart voor de huizen: de gasten drinken wat erboven ligt, en de herbe
   T.zetVoorraad(D, 'bier', apart);
   assert.equal(T.herbergGasten(D, HERFST + 1).length, 0, 'wat er ligt, is voor de huizen');
   assert.ok(T.herbergDroog(D));
-  assert.ok(T.herbergTekst(D, T.herbergVan(D)).endsWith(`; ${apart} bier, waarvan ${apart} apart voor de huizen.`));
+  assert.ok(T.herbergTekst(D, T.herbergVan(D)).endsWith(`; ${apart} ale, of which ${apart} set aside for the houses.`));
   // Wie bier maakt, maakt tot er erboven genoeg ligt.
   const tot = T.GEBOUWEN_INSTELLINGEN.werkplaatsMaaktTot;
   assert.deepEqual(T.maaktTot(T.GEBOUWEN.herberg, D), { bier: tot + apart });
@@ -306,10 +306,10 @@ test('bier apart voor de huizen: de gasten drinken wat erboven ligt, en de herbe
 test('bij de muis op de herberg: hoeveel gasten er vanavond komen, en hoeveel bier er ligt', () => {
   const S = gehucht({ dag: bijUur(HERFST, 10) });
   const tekst = T.gebouwToestand(S.dorp, T.herbergVan(S.dorp));
-  assert.match(tekst, /^Herberg: /);
-  assert.match(tekst, /Vanavond (\d+ gast(en)?|geen gasten); 100 bier\.$/);
+  assert.match(tekst, /^Inn: /);
+  assert.match(tekst, /(\d+ guests? tonight|No guests tonight); 100 ale\.$/);
   T.zetVoorraad(S.dorp, 'bier', 0);
-  assert.match(T.gebouwToestand(S.dorp, T.herbergVan(S.dorp)), /geen gasten; geen bier meer\.$/);
+  assert.match(T.gebouwToestand(S.dorp, T.herbergVan(S.dorp)), /No guests tonight; no ale left\.$/);
 });
 
 test('\'s avonds brandt de lantaarn van de herberg, en met meer gasten binnen is het licht warmer', () => {
@@ -373,7 +373,7 @@ test('de marskramer zit \'s avonds in de herberg en slaapt er, en staat overdag 
   assert.ok(m.staat && T.afstand(e.thuis, { x: e.tx, y: e.ty }) <= 1, 'overdag staat hij bij zijn waar op het plein');
   tot(bijUur(HERFST, d.slapen + 1));
   assert.ok(e.binnen && zelfde(e.deur, deur), 'hij slaapt in de herberg');
-  assert.match(T.gebouwToestand(S.dorp, T.herbergVan(S.dorp)), /de marskramer logeert hier\.$/);
+  assert.match(T.gebouwToestand(S.dorp, T.herbergVan(S.dorp)), /the peddler is lodging here\.$/);
   tot(bijUur(HERFST + 1, 12));
   assert.ok(!e.binnen && T.afstand(e.thuis, { x: e.tx, y: e.ty }) <= 1, 'de volgende ochtend staat hij er weer');
 });

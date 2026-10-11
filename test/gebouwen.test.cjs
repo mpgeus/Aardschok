@@ -85,16 +85,16 @@ test('op het plein wordt niet gebouwd, en het bouwmenu zegt waarom', () => {
   const S = maakS();
   S.wereld.plein = [[8, 8], [14, 8], [14, 14], [8, 14]];
   T.zetVoorraad(S, 'hout', 50);
-  assert.equal(T.waaromPastHetNiet(S, 'put', 10, 10), 'Op het plein wordt niet gebouwd.');
+  assert.equal(T.waaromPastHetNiet(S, 'put', 10, 10), 'Nothing is built on the square.');
   assert.equal(T.gebouwPast(S, 'put', 10, 10), false);
   assert.equal(T.gebouwPast(S, 'hut', 6, 6), false, 'een hoek van de voet op het plein is ook op het plein');
   assert.equal(T.gebouwPast(S, 'put', 3, 3), true, 'ernaast mag het');
   assert.equal(T.waaromPastHetNiet(S, 'put', 3, 3), null);
   S.wereld.tegels[3][3] = 'muur';
   T.kaartVeranderd(S.wereld);
-  assert.equal(T.waaromPastHetNiet(S, 'put', 3, 3), 'Daar past het niet.');
+  assert.equal(T.waaromPastHetNiet(S, 'put', 3, 3), 'It does not fit there.');
   const r = T.plaatsGebouw(S, 'put', 10, 10);
-  assert.deepEqual(r, { gelukt: false, reden: 'Op het plein wordt niet gebouwd.' });
+  assert.deepEqual(r, { gelukt: false, reden: 'Nothing is built on the square.' });
   assert.equal(S.voorraad.hout, 50, 'en het kost niets');
 });
 
@@ -408,7 +408,7 @@ test('een smidse zonder ijzer staat stil, en zegt dat', () => {
   for (let dag = 1; dag <= 10; dag++) T.tikGebouwenDag(S, dag);
   assert.equal(S.voorraad.gereedschap || 0, 0, 'uit niets komt geen gereedschap');
   assert.equal(S.gebouwen[0].tekort, 'ijzer');
-  assert.match(T.gebouwToestand(S, S.gebouwen[0]), /staat stil, er is geen ijzer/);
+  assert.match(T.gebouwToestand(S, S.gebouwen[0]), /idle, there is no iron/);
 });
 
 test('met ijzer voor anderhalve dag werkt de smidse anderhalve dag', () => {
@@ -443,7 +443,7 @@ test('wie iets omzet, maakt tot er genoeg ligt (vraag 91, b); wie iets uit het l
   T.tikGebouwenDag(S, 2);
   assert.ok(graan - S.voorraad.graan < 1, 'vol: hij maalt niets, en het dorp eet alleen zelf');
   assert.equal(S.gebouwen[0].werkte, 0);
-  assert.match(T.gebouwToestand(S, S.gebouwen[0]), /er ligt genoeg meel/);
+  assert.match(T.gebouwToestand(S, S.gebouwen[0]), /there is enough flour in store/);
   // Een kleiput graaft door, hoeveel klei er ook ligt.
   const H = metGebouw('kleiput');
   H.voorraad.klei = 10 * genoeg;
@@ -480,7 +480,7 @@ test('de muis op de voet van een neergezet gebouw vindt dat gebouw (T.gebouwOp)'
   assert.equal(T.gebouwOp(S, 3, 4), r.instantie);
   assert.equal(T.gebouwOp(S, 3 + b - 1, 4 + h - 1), r.instantie);
   assert.equal(T.gebouwOp(S, 3 + b, 4), null);
-  assert.match(T.gebouwToestand(S, r.instantie), /in aanbouw/);
+  assert.match(T.gebouwToestand(S, r.instantie), /under construction/);
 });
 
 test('de visser vangt niets als de beek dichtligt, en zegt dat', () => {
@@ -489,11 +489,11 @@ test('de visser vangt niets als de beek dichtligt, en zegt dat', () => {
   assert.equal(T.datumVanDag(winterdag).seizoen, 'winter');
   T.tikGebouwenDag(S, winterdag);
   assert.equal(S.voorraad.vis || 0, 0);
-  assert.match(T.gebouwToestand(S, S.gebouwen[0]), /staat stil, de beek ligt dicht/);
+  assert.match(T.gebouwToestand(S, S.gebouwen[0]), /idle, the brook is frozen over/);
   assert.equal(T.gereedschapDekking(S, 'winter').handen, 0, 'wie stilligt, gebruikt geen gereedschap');
   T.tikGebouwenDag(S, 30); // grasmaand: de beek is weer open
   assert.ok(S.voorraad.vis > 0);
-  assert.doesNotMatch(T.gebouwToestand(S, S.gebouwen[0]), /beek/);
+  assert.doesNotMatch(T.gebouwToestand(S, S.gebouwen[0]), /brook/);
 });
 
 // ---------------------------------------------------------------------------------------------
@@ -504,7 +504,7 @@ test('bouwen: niet waar iemand staat, en niet op de deur van een ander gebouw', 
   const S = maakS();
   S.wereld.wezens = [{ soort: 'dorpeling', x: 6, y: 6, tx: 6, ty: 6, pad: [] }];
   const voet = T.gebouwVoet('put');
-  assert.equal(T.waaromPastHetNiet(S, 'put', 6, 6), 'Daar staat iemand.');
+  assert.equal(T.waaromPastHetNiet(S, 'put', 6, 6), 'Someone is standing there.');
   S.wereld.wezens[0].binnen = true; // wie binnen is, staat in zijn deur, en daar komt toch niets
   assert.equal(T.waaromPastHetNiet(S, 'put', 6, 6), null);
   S.wereld.wezens = [];
@@ -512,7 +512,7 @@ test('bouwen: niet waar iemand staat, en niet op de deur van een ander gebouw', 
   const huis = { soort: 'houthakker', x: 2, y: 2, voet: { b: 4, h: 4 }, klaar: true };
   S.gebouwen.push(huis);
   const deur = T.deurVan(S.wereld, huis);
-  assert.equal(T.waaromPastHetNiet(S, 'put', deur.x, deur.y), 'Daar is een deur.');
+  assert.equal(T.waaromPastHetNiet(S, 'put', deur.x, deur.y), 'There is a door there.');
   assert.equal(T.waaromPastHetNiet(S, 'put', deur.x + voet.b + 3, deur.y), null, 'ernaast mag het');
 });
 
@@ -521,7 +521,7 @@ test('een erf laat een deur vrij', () => {
   const huis = { soort: 'houthakker', x: 2, y: 2, voet: { b: 4, h: 4 }, klaar: true };
   S.gebouwen.push(huis);
   const deur = T.deurVan(S.wereld, huis);
-  assert.equal(T.waaromPastErfNiet(S, deur.x - 2, deur.y), 'Daar is een deur.');
+  assert.equal(T.waaromPastErfNiet(S, deur.x - 2, deur.y), 'There is a door there.');
 });
 
 test('wie op een bouwplaats staat (een hut op een erf), stapt eraf en staat niet ingemetseld', () => {

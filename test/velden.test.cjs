@@ -52,8 +52,8 @@ test('T.kuddeTekst: per soort geteld, in de volgorde van T.VEE', () => {
   const koe = T.maakDier('koe', 0, 0, 1);
   const schaap = T.maakDier('schaap', 0, 0, 2);
   assert.equal(T.kuddeTekst([]), '');
-  assert.equal(T.kuddeTekst([koe]), '1 koe');
-  assert.equal(T.kuddeTekst([schaap, koe, schaap]), '1 koe, 2 schapen');
+  assert.equal(T.kuddeTekst([koe]), '1 cow');
+  assert.equal(T.kuddeTekst([schaap, koe, schaap]), '1 cow, 2 sheep');
 });
 
 test('de muis op een veld: van wie, het vee, en hoe vruchtbaar', () => {

@@ -277,7 +277,7 @@ test('een looppad: drie tegels vrij rondom elk nieuw gebouw, ook waar een inwone
     for (let y = v.y - voet.h - 2; y <= v.y + v.h + 2 && !teDicht; y++) {
       for (let x = v.x - voet.b - 2; x <= v.x + v.b + 2 && !teDicht; x++) {
         const tussen = Math.max(v.x - (x + voet.b), x - (v.x + v.b), v.y - (y + voet.h), y - (v.y + v.h));
-        if (tussen >= 1 && tussen <= 2 && /looppad omheen: drie tegels vrij/.test(T.waaromPastHetNiet(D, 'bakkerij', x, y) || '')) teDicht = { x, y };
+        if (tussen >= 1 && tussen <= 2 && /walkway all round it: 3 tiles clear/.test(T.waaromPastHetNiet(D, 'bakkerij', x, y) || '')) teDicht = { x, y };
       }
     }
   }

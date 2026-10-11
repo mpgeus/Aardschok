@@ -525,7 +525,7 @@ test('werk in uren: de werkplaats maakt naar de uren dat er gewerkt wordt, en ze
   assert.ok(u && u.onderweg > 0.5, 'zijn hand is een tijd onderweg');
   assert.ok(ver.g.werkte > 0 && ver.g.werkte < heleDag, 'en dus werkt het minder dan een hele dag');
   assert.ok(Math.abs(ver.g.werkte - heleDag * (u.gewerkt / u.nodig)) < 1e-9, 'naar de uren onderweg');
-  assert.match(T.gebouwToestand(D, ver.g), /aan het werk \(1 van 1 handen\), \d+ van de \d+ uur; \d+ uur onderweg\.$/);
+  assert.match(T.gebouwToestand(D, ver.g), /at work \(1 of 1 hands\), \d+ of \d+ hours worked; \d+ hours on the road\.$/);
 });
 
 test('bij de muis staat wie het is', () => {

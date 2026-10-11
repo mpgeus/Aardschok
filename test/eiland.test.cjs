@@ -371,7 +371,7 @@ test('de grond van het eiland: wat naast elkaar kan liggen, niet bouwen op zand,
       }
     }
     assert.ok(strand && zee, 'land 1 heeft strand en zee');
-    assert.equal(T.waaromNietOpDezeGrond(D, strand.x, strand.y), 'Op zand wordt niet gebouwd.');
+    assert.equal(T.waaromNietOpDezeGrond(D, strand.x, strand.y), 'Nothing is built on sand.');
     // het dorp was er al: geen huis op het zand
     for (const g of D.gebouwen) {
       const v = T.voetVanGebouw(g);

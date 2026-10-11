@@ -250,7 +250,7 @@ test('T.kuddeGroepen: koeien, kalveren, schapen en lammeren, elk het oudste eers
   const kalf = zet(S, weide, 'koe', 1, dag - 200);
   const lam = zet(S, weide, 'schaap', 1, dag - 150);
   const groepen = T.kuddeGroepen(S, dag);
-  assert.deepEqual(groepen.map((g) => [g.naam, g.meervoud, g.dieren.length]), [['koe', 'koeien', 2], ['kalf', 'kalveren', 1], ['lam', 'lammeren', 1]]);
+  assert.deepEqual(groepen.map((g) => [g.naam, g.meervoud, g.dieren.length]), [['cow', 'cows', 2], ['calf', 'calves', 1], ['lamb', 'lambs', 1]]);
   assert.deepEqual(groepen[0].dieren, oud);
   assert.deepEqual(groepen[1].dieren, kalf);
   assert.deepEqual(groepen[2].dieren, lam);
@@ -310,12 +310,12 @@ test('op 1 slachtmaand slachten de boeren wat het hooi niet haalt, en het berich
     assert.ok(voorstel[0].dood && T.veeVan(S).length === 2, 'de boeren slachtten wat het voorstel zei');
     assert.ok(!S.vee.slachtVraag, 'en vragen het jou niet');
     assert.ok(!gezegd.includes('venster'), 'geen venster');
-    assert.match(gezegd.join(' '), /de boeren slachten wat te veel is/);
+    assert.match(gezegd.join(' '), /the farmers slaughter the surplus/);
     // Een jaar later, met hooi genoeg: niemand hoeft weg, en het dorp zegt dat ook.
     T.zetVoorraad(S, 'hooi', 1000);
     gezegd.length = 0;
     T.tikVeeDag(S, dagVan('slachtmaand', 1, 1));
-    assert.deepEqual(gezegd, ['Het hooi haalt de winter: de boeren houden al hun vee.']);
+    assert.deepEqual(gezegd, ['The hay will last the winter: the farmers keep all their cattle.']);
     assert.equal(T.veeVan(S).length, 2);
   } finally {
     delete T.ui;

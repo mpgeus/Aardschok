@@ -13,7 +13,7 @@ const teksten = require('../gereedschap/teksten.cjs');
 const WORTEL = path.join(__dirname, '..');
 
 // De bestanden waarin alle tekst al door T.t gaat. Stap 2 van vraag 147 zet ze er één voor één bij, tot het heel js/ is.
-const OMGEZET = ['js/menu.js'];
+const OMGEZET = ['js/menu.js', 'js/gebouwen.js', 'js/erven.js', 'js/herberg.js', 'js/bos.js', 'js/bouwstijl.js', 'js/wijngaard.js', 'js/akkers.js', 'js/vee.js', 'js/beesten.js', 'js/markt.js', 'js/paden.js'];
 
 const leesBestand = (f) => fs.readFileSync(path.join(WORTEL, f), 'utf8').split('\r\n').join('\n');
 

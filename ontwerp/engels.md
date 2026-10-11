@@ -89,6 +89,13 @@ Wat elke zin nodig heeft, staat op één plek, al in het Engels:
 | de put, de kapel | the well, the chapel | |
 | de graanschuur, de tiendschuur | the granary, the tithe barn | |
 | de honger, de kou, de droogte, de koorts | hunger, cold, drought, fever | statussen |
+| het erf, het looppad | the plot, the walkway | het looppad is de vrije strook om een gebouw |
+| de handen (werkers van een gebouw) | hands | "at work (1 of 1 hands)" |
+| akker, weide, braak (wat een veld is) | arable, meadow, fallow | `T.BESTEMMING_NAAM`; een veld is *a field* |
+| de mest, een kar mest | dung, a cartload | |
+| het vee, de kudde, de koe, het schaap | livestock, the herd, cow, sheep | het schaap en de schapen zijn allebei *sheep* |
+| de roedel, de jacht, de jager | the pack, the hunt, the hunter | de wolven |
+| de kooi | the sheepfold | de schaapskooi |
 
 ## De maanden
 

@@ -198,10 +198,10 @@
   // "3 bomen en 2 struiken en stronken (+30 hout)": wat er gerooid wordt, en wat het de schuur oplevert.
   T.rooiWoorden = function (wat) {
     const delen = [];
-    if (wat.bomen) delen.push(wat.bomen === 1 ? 'één boom' : `${wat.bomen} bomen`);
-    if (wat.struiken) delen.push(wat.struiken === 1 ? 'één struik of stronk' : `${wat.struiken} struiken en stronken`);
+    if (wat.bomen) delen.push(T.t('{n|one tree|# trees}', { n: wat.bomen }));
+    if (wat.struiken) delen.push(T.t('{n|one bush or stump|# bushes and stumps}', { n: wat.struiken }));
     const hout = wat.bomen * IN().houtPerBoom;
-    return `${delen.join(' en ')}${hout ? ` (+${hout} hout)` : ''}`;
+    return hout ? T.t('{wat} (+{hout})', { wat: T.opsomming(delen), hout: T.hoeveel(hout, 'hout') }) : T.opsomming(delen);
   };
   // Net zo, maar geteld op de tegels zelf (T.teRooienOp), zodat ook een appelboom die het gezin kapt een boom is (vraag 130,
   // a2). Voor wat een huis rooit om te groeien: dat zijn een paar tegels, geen duizenden plekken.
@@ -247,8 +247,8 @@
     Object.assign(g, { groeitNaRooien: true, kavel, rooienTot: dagNu(D) + IN().rooiDagen });
     zetTeKappen(D, kavel, true); // zijn eigen appelboom kapt het gezin ook (a2)
     const p = rooierVan(D, g);
-    const wie = p && p.naam ? `Het gezin van ${p.naam}` : 'Het gezin';
-    T.zeg(D, `${wie} rooit eerst ${T.rooiWoordenOp(D, kavel)}: daar wordt hun ${T.GEBOUWEN[g.soort].naam} groter.`, 'goed');
+    const wie = p && p.naam ? T.t("{naam}'s family", { naam: p.naam }) : T.t('the family');
+    T.zeg(D, T.t('{wie} is first clearing {wat} so that their {gebouw} can grow.', { wie: T.hoofdletter(wie), wat: T.rooiWoordenOp(D, kavel), gebouw: T.GEBOUWEN[g.soort].naam }), 'goed');
   };
   // De appelbomen op het stuk r krijgen `teKappen` (aan), of zijn weer van iemand (uit).
   function zetTeKappen(D, r, aan) {
@@ -291,15 +291,19 @@
       const p = rooierVan(D, g);
       if (p && p.rooit === g) delete p.rooit;
       const naam = p && p.naam ? p.naam : null;
-      const wie = g.erf ? (naam ? `het gezin van ${naam}` : 'een nieuw gezin') : naam || 'wie het vroeg';
-      const hulp = over.length ? `De buren helpen ${wie} de rest te rooien` : `${T.hoofdletter(wie)} heeft ${g.erf ? 'zijn erf' : 'de plek'} gerooid`;
+      const wie = g.erf ? (naam ? T.t("{naam}'s family", { naam }) : T.t('a new family')) : naam || T.t('whoever asked');
       if (g.erf) {
         g.wachtOpHout = true;
-        T.zeg(D, `${hulp}, en de bouwplaats van de hut ligt er.`);
+        T.zeg(D, over.length
+          ? T.t('The neighbours help {wie} clear the rest, and the building site for the hut is ready.', { wie })
+          : T.t('{wie} has cleared its plot, and the building site for the hut is ready.', { wie: T.hoofdletter(wie) }));
       } else {
         g.klaarOp = dag + T.GEBOUWEN[g.soort].bouwtijd;
         if (g.voorwerp) g.voorwerp.klaarOp = g.klaarOp;
-        T.zeg(D, `${hulp}, en de bouw van de ${T.GEBOUWEN[g.soort].naam} begint.`);
+        const gebouw = T.GEBOUWEN[g.soort].naam;
+        T.zeg(D, over.length
+          ? T.t('The neighbours help {wie} clear the rest, and work on the {gebouw} begins.', { wie, gebouw })
+          : T.t('{wie} has cleared the spot, and work on the {gebouw} begins.', { wie: T.hoofdletter(wie), gebouw }));
       }
     }
   };
@@ -318,9 +322,11 @@
     delete g.kavel;
     delete g.rooienTot;
     if (!bewoond) return;
-    const wie = p && p.naam ? `het gezin van ${p.naam}` : 'het gezin';
-    const hulp = over.length ? `De buren helpen ${wie} de rest te rooien` : `${T.hoofdletter(wie)} heeft gerooid`;
-    T.zeg(D, `${hulp}: nu kan hun ${T.GEBOUWEN[g.soort].naam} groter worden.`);
+    const wie = p && p.naam ? T.t("{naam}'s family", { naam: p.naam }) : T.t('the family');
+    const gebouw = T.GEBOUWEN[g.soort].naam;
+    T.zeg(D, over.length
+      ? T.t('The neighbours help {wie} clear the rest: their {gebouw} can now grow.', { wie, gebouw })
+      : T.t('{wie} has finished clearing: their {gebouw} can now grow.', { wie: T.hoofdletter(wie), gebouw }));
   }
 
   // ---------------------------------------------------------------------------------------------
@@ -376,7 +382,7 @@
   // boom meer.
   T.waaromHaktHijNiet = function (D, g) {
     if (!hakt(g) || T.boomVanHouthakker(D, g)) return null;
-    return `er staat geen boom meer binnen ${T.telwoord(IN().hakStraal)} tegels van zijn schuur`;
+    return T.t('no trees are left within {n|# tile|# tiles} of the shed', { n: IN().hakStraal });
   };
 
   // Na zijn werk van vandaag (T.tikGebouwenDag): het hout dat hij maakte, kwam uit zijn boom (g.gehakt), en zijn het er

@@ -80,13 +80,13 @@
 
   // Wat naast een kraam op de grond staat, per waar, vol of leeg (gereedschap/pixelart/marktkraam.cjs, MANDEN).
   const MANDEN = {
-    groente: ['mand appels', 'mand kolen'],
-    brood: ['krat brood', 'zak'],
-    vis: ['ton graan', 'ton leeg'],
-    laken: ['krat wol', 'zak'],
-    potten: ['zak', 'ton leeg'],
+    groente: ['mand appels', 'mand kolen'], // geen tekst (de naam van een tekening)
+    brood: ['krat brood', 'zak'], // geen tekst
+    vis: ['ton graan', 'ton leeg'], // geen tekst
+    laken: ['krat wol', 'zak'], // geen tekst
+    potten: ['zak', 'ton leeg'], // geen tekst
   };
-  const LEGE_MAND = { vis: 'ton leeg', potten: 'ton leeg' };
+  const LEGE_MAND = { vis: 'ton leeg', potten: 'ton leeg' }; // geen tekst
 
   // Wat de markt kost, naar de spelregel: de kramen, of een eigen gebouw. Eén plek, zodat elke regel die
   // T.GEBOUWEN.markt.kosten vraagt (het bouwen, het verzoek, de raad) hetzelfde hoort.
@@ -100,7 +100,7 @@
   const sleutel = (x, y) => `${x},${y}`;
   // De kant waarheen een kraam kijkt, in de richtingen van het beeld (js/sprites.js, T.sprites.richtingVan): +x is ZO, +y
   // is ZW.
-  const richtingNaar = (dx, dy) => (dx > 0 ? 'ZO' : dx < 0 ? 'NW' : dy > 0 ? 'ZW' : 'NO');
+  const richtingNaar = (dx, dy) => (dx > 0 ? 'ZO' : dx < 0 ? 'NW' : dy > 0 ? 'ZW' : 'NO'); // geen tekst
 
   // Het midden van het plein: de tegel van het plein het dichtst bij zijn zwaartepunt waar je kunt staan. Daar is de
   // markt als gebouw (zijn "deur", T.deurVan), en daarvandaan rekent een kring (de spelregel "De herberg en de markt").
@@ -358,8 +358,8 @@
 
   // Waarom de markt hier niet op het plein kan, of null: er staat er al een, of de kramen passen niet.
   T.waaromGeenMarktOpHetPlein = function (D) {
-    if ((D.gebouwen || []).some((g) => g.soort === 'markt' && g.opHetPlein)) return 'Op het plein staat al een markt.';
-    if (tegelsVan(T.kraamPlekken(D)) < IN().beginTegels) return 'Op het plein is geen plaats voor de kramen.';
+    if ((D.gebouwen || []).some((g) => g.soort === 'markt' && g.opHetPlein)) return T.t('There is already a market on the square.');
+    if (tegelsVan(T.kraamPlekken(D)) < IN().beginTegels) return T.t('There is no room on the square for the stalls.');
     return null;
   };
 
@@ -372,7 +372,7 @@
 
   // Een kraam neerzetten op zijn plek, met zijn mand ernaast: vol of leeg naar de voorraad. Een lange kraam beslaat zijn
   // tegels langs de rij (`voet` voor wie erop wil staan, `beslaat` voor de tekenvolgorde). Wie er staat, stapt opzij.
-  const langsX = (richting) => richting === 'ZW' || richting === 'NO';
+  const langsX = (richting) => richting === 'ZW' || richting === 'NO'; // geen tekst
   function zetKraam(D, g, plek) {
     const w = D.wereld;
     const i = g.kramen.length;
@@ -390,7 +390,7 @@
       T.stapEraf(D, { x: plek.mand.x, y: plek.mand.y, b: 1, h: 1 });
     }
   }
-  const mandVan = (waar, nr, leeg) => (leeg ? LEGE_MAND[waar] || 'mand leeg' : MANDEN[waar][Math.floor(nr / IN().volgorde.length) % MANDEN[waar].length]);
+  const mandVan = (waar, nr, leeg) => (leeg ? LEGE_MAND[waar] || 'mand leeg' : MANDEN[waar][Math.floor(nr / IN().volgorde.length) % MANDEN[waar].length]); // geen tekst
   const bezetVan = (g) => new Set([...g.kramen, ...g.manden].flatMap((v) => {
     const f = T.voetVan(v);
     const uit = [];
@@ -405,7 +405,7 @@
     const g = T.GEBOUWEN.markt;
     const reden = T.waaromGeenMarktOpHetPlein(D);
     if (reden) return { gelukt: false, reden };
-    if (!T.kanBetalen(D, g.kosten)) return { gelukt: false, reden: 'Daar is de voorraad niet groot genoeg voor.' };
+    if (!T.kanBetalen(D, g.kosten)) return { gelukt: false, reden: T.t('The stores are not big enough for that.') };
     const blok = T.marktBlok(D);
     T.betaalKosten(D, g.kosten);
     const dag = D.kalender ? Math.floor(D.kalender.dag) : 0;
@@ -420,7 +420,7 @@
     }
     D.gebouwen.push(instantie);
     if (T.ui && T.ui.toonBevolking) T.ui.toonBevolking(D);
-    return { gelukt: true, instantie, bericht: `De kramen van de markt komen op het plein (${g.bouwtijd} dag${g.bouwtijd === 1 ? '' : 'en'}).` };
+    return { gelukt: true, instantie, bericht: T.t('The market stalls are going up on the square ({n|# day|# days}).', { n: g.bouwtijd }) };
   };
 
   // Elke nacht (T.tikGebouwenDag): wil het dorp meer toonbank, dan komt er één kraam bij, eerst in het blok, dan langs de

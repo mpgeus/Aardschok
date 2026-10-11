@@ -676,5 +676,5 @@ test('een stenen huis wil wijn, en in een dorp helpt een wijnboerderij', () => {
   zetHuis(D, 'wijnboerderij', 30, 10, 0, { stilWant: T.stilOp(T.GEBOUWEN.wijnboerderij, ZOMERDAG) });
   const y = vind(D, 'wijn');
   assert.deepEqual([y.kan, y.bouw], [false, null], 'staat er een, dan wacht het dorp op wijnmaand');
-  assert.match(y.tekst, /wijnmaand/);
+  assert.match(y.tekst, /picked in October/);
 });

@@ -95,32 +95,32 @@
   // tot een huis kan doorgroeien, voor als iemand de maat in de werkbank kleiner zette.
   T.waaromPastErfNiet = function (D, x, y) {
     const w = D.wereld;
-    if (!w) return 'Daar past het niet.';
+    if (!w) return T.t('It does not fit there.');
     const { b, h } = T.erfMaat();
     let vast = false;
     let reden = null;
     for (let dy = 0; dy < h; dy++) {
       for (let dx = 0; dx < b; dx++) {
-        if (T.opHetPlein(w, x + dx, y + dy)) return 'Op het plein wordt niet gebouwd.';
+        if (T.opHetPlein(w, x + dx, y + dy)) return T.t('Nothing is built on the square.');
         // Wat te rooien is (een boom, een stronk, een struik), houdt een erf niet tegen: dat rooit het gezin dat er komt.
         if (T.isVast(w, x + dx, y + dy) && !T.ontginWerkOp(w, x + dx, y + dy)) vast = true;
         else reden = reden || T.waaromNietOpDezeGrond(D, x + dx, y + dy);
       }
     }
-    if (vast) return 'Daar staat iets in de weg: een erf moet helemaal vrij zijn.';
+    if (vast) return T.t('Something is in the way: a plot must be completely clear.');
     if (reden) return reden;
-    if (T.teSteil(w, { x, y, b, h })) return 'Daar is het te steil voor een erf.'; // js/hoogte.js
+    if (T.teSteil(w, { x, y, b, h })) return T.t('It is too steep for a plot there.'); // js/hoogte.js
 
     // Geen deur op een erf (werklijst vraag 88, js/gebouwen.js): de hut erop zou hem dichtzetten.
-    if (T.deurOpRechthoek(D, { x, y, b, h })) return 'Daar is een deur.';
-    if (!maatPast(D, b, h)) return 'Een erf van deze maat is te klein voor een hut.';
+    if (T.deurOpRechthoek(D, { x, y, b, h })) return T.t('There is a door there.');
+    if (!maatPast(D, b, h)) return T.t('A plot this size is too small for a hut.');
     const keus = kiesTekeningen(D, { b, h }, { x, y, b, h });
     if (!keus) {
       const n = T.GEBOUWEN_INSTELLINGEN.looppad;
-      return `Hier past geen huis met een looppad van ${T.telwoord(n)} tegels rondom.`;
+      return T.t('No house fits here with a walkway {n|# tile|# tiles} wide all round it.', { n });
     }
     const groeit = groeitOpErf(D, { x, y, b, h, plan: planVan(keus) });
-    if (groeit) return `Hier groeit ${T.huisVan(D, groeit)} straks tot een ${T.GEBOUWEN[T.GEBOUWEN[groeit.soort].wordt].naam}.`;
+    if (groeit) return T.t('Here {huis} will grow into {gebouw}.', { huis: T.huisVan(D, groeit), gebouw: T.eenNaam(T.GEBOUWEN[T.GEBOUWEN[groeit.soort].wordt].naam) });
     return zonderPlek(D, { x, y, b, h, plan: planVan(keus) });
   };
 
@@ -152,9 +152,9 @@
   // niet raakt (T.waaromGeenKringPlek, dezelfde vraag als voor een wijnboerderij). Geeft de reden, of null.
   function zonderPlek(D, erf) {
     const wil = (wens) => T.wilStraks({ soort: 'hut', erf: true }, wens);
-    const wie = (wens) => (T.wilStraks({ soort: 'hut' }, wens) ? 'De hut' : 'Het huis') + ' op dit erf';
+    const wie = (wens) => (T.wilStraks({ soort: 'hut' }, wens) ? T.t('The hut on this plot') : T.t('The house on this plot'));
     const huis = T.huisPlekVan(erf) || erf;
-    return T.waaromGeenKringPlek(D, { grond: erf, vast: huis, huis, wil, wie, dit: 'dit erf' });
+    return T.waaromGeenKringPlek(D, { grond: erf, vast: huis, huis, wil, wie, dit: T.t('this plot') });
   }
 
   // Ligt (x, y) op de plek van het huis van een erf (erf.plan)? Een gebouw blijft er met zijn looppad vandaan, ook als
@@ -199,21 +199,22 @@
     // In het bos van de heer wil hij erom gevraagd worden (Marcel, 6 okt, B: "ja"), zoals bij een stuk bos dat een boer
     // ontgint; de wei kost niets.
     const bos = T.inHetBosVanDeHeer(D, erf);
-    if (bos) T.wijzigGunst(D, -T.ONTGINNEN_INSTELLINGEN.gunst, 'Een erf in zijn bos');
+    if (bos) T.wijzigGunst(D, -T.ONTGINNEN_INSTELLINGEN.gunst, T.t("A plot in the lord's forest"));
     ervenVan(D).push(erf);
     const wat = T.watTeRooien(D, T.kavelVanErf(D, erf));
-    const rooien = wat.bomen || wat.struiken ? ` Het rooit eerst ${T.rooiWoorden(wat)}.` : '';
-    return { gelukt: true, erf, bericht: `Een erf aangewezen. Een nieuw gezin zet er zelf een hut op.${rooien}${bos ? ' Het ligt in het bos van de heer.' : ''}` };
+    const rooien = wat.bomen || wat.struiken ? ' ' + T.t('The family will first clear {wat}.', { wat: T.rooiWoorden(wat) }) : '';
+    const inBos = bos ? ' ' + T.t("It lies in the lord's forest.") : '';
+    return { gelukt: true, erf, bericht: T.t('Plot marked out. A new family will put up its own hut on it.{rooien}{bos}', { rooien, bos: inBos }) };
   };
 
   // Een vrij erf weer gewone grond maken: in het bouwmenu, met het erf in de hand, klik je erop
   // (js/main.js). Een erf waar al een gezin woont, blijft.
   T.haalErfWeg = function (D, erf) {
-    if (!erf) return { gelukt: false, reden: 'Daar ligt geen erf.' };
-    if (erf.hut) return { gelukt: false, reden: 'Op dat erf woont al een gezin.' };
+    if (!erf) return { gelukt: false, reden: T.t('There is no plot there.') };
+    if (erf.hut) return { gelukt: false, reden: T.t('A family already lives on that plot.') };
     const lijst = ervenVan(D);
     lijst.splice(lijst.indexOf(erf), 1);
-    return { gelukt: true, bericht: 'Het erf is weer gewone grond.' };
+    return { gelukt: true, bericht: T.t('The plot is ordinary ground again.') };
   };
 
   // De hoeken van een vrij erf, voor de paaltjes (js/tekenen.js). Een erf met een hut heeft ze niet meer; een erf dat
@@ -235,7 +236,8 @@
     const wat = T.watTeRooien(D, T.kavelVanErf(D, r));
     if (!wat.bomen && !wat.struiken) return null;
     const bos = T.inHetBosVanDeHeer(D, r);
-    return `Het gezin dat er komt, rooit eerst ${T.rooiWoorden(wat)}.${bos ? ` Dit is het bos van de heer: hij wil erom gevraagd worden (gunst −${T.ONTGINNEN_INSTELLINGEN.gunst}).` : ''}`;
+    const eerst = T.t('The family that comes will first clear {wat}.', { wat: T.rooiWoorden(wat) });
+    return bos ? `${eerst} ${T.t("This is the lord's forest: he wants to be asked first (favour −{gunst}).", { gunst: T.ONTGINNEN_INSTELLINGEN.gunst })}` : eerst;
   };
 
   // ---------------------------------------------------------------------------------------------
@@ -442,7 +444,7 @@
   // "het gezin van Albert", of "een nieuw gezin" zolang er (in een toets) geen bewoners zijn.
   function gezinVan(D, g) {
     const p = D.bewoners && D.bewoners.mensen.find((m) => m.huis === g);
-    return p && p.naam ? `het gezin van ${p.naam}` : 'een nieuw gezin';
+    return p && p.naam ? T.t("{naam}'s family", { naam: p.naam }) : T.t('a new family');
   }
 
   // Het dorp is vol, en er wil een gezin komen (T.tikGebouwenDag, stap 4, js/gebouwen.js): het neemt een
@@ -454,8 +456,8 @@
     const hut = erf ? T.zetHutOpErf(D, erf) : null;
     if (!hut) {
       T.zeg(D, zelf
-        ? 'Er wil een gezin komen, maar er is geen plaats. Wijs een erf aan (B).'
-        : 'Er wil een gezin komen, maar er is geen plaats. Bouw een hut of een huis (B).');
+        ? T.t('A family wants to come, but there is no room. Mark out a plot (B).')
+        : T.t('A family wants to come, but there is no room. Build a hut or a house (B).'));
       return null;
     }
     D.woonruimte = T.telWoonruimte(D);
@@ -463,10 +465,10 @@
     if (hut.wachtOpRooien) {
       // Wat het gezin rooit, is zijn kavel: het erf, en het looppad om de plek van de hut, ook buiten het erf. Telde dit
       // alleen het erf, dan zei het "rooit eerst zijn erf: ." als er alleen in dat looppad iets stond (speeltest, 6 okt).
-      T.zeg(D, `${T.hoofdletter(gezinVan(D, hut))} rooit eerst zijn erf: ${T.rooiWoorden(T.watTeRooien(D, hut.kavel))}.`);
+      T.zeg(D, T.t('{gezin} is first clearing its plot: {wat}.', { gezin: T.hoofdletter(gezinVan(D, hut)), wat: T.rooiWoorden(T.watTeRooien(D, hut.kavel)) }));
     } else if (hut.wachtOpHout) {
       const hout = T.GEBOUWEN.hut.kosten.hout;
-      T.zeg(D, `${T.hoofdletter(gezinVan(D, hut))} wacht op hout voor zijn hut: daar is ${hout} hout voor nodig.`, 'gevaar');
+      T.zeg(D, T.t('{gezin} is waiting for wood for its hut: it needs {hout}.', { gezin: T.hoofdletter(gezinVan(D, hut)), hout: T.hoeveel(hout, 'hout') }), 'gevaar');
     }
     return hut;
   };
@@ -476,7 +478,7 @@
   T.tikErvenDag = function (D) {
     for (const erf of D.erven || []) {
       const hut = erf.hut;
-      if (hut && hut.wachtOpHout && begin(D, hut)) T.zeg(D, `${T.hoofdletter(gezinVan(D, hut))} begint aan zijn hut: het hout is er.`);
+      if (hut && hut.wachtOpHout && begin(D, hut)) T.zeg(D, T.t('{gezin} is starting on its hut: the wood is here.', { gezin: T.hoofdletter(gezinVan(D, hut)) }));
     }
   };
 })(globalThis.Spel = globalThis.Spel || {});

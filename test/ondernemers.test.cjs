@@ -378,5 +378,5 @@ test('met twee herbergen gaat elke gast naar de herberg die het dichtst bij zijn
     assert.ok(naar(g) <= naar(g === eerste ? tweede : eerste) + 1e-9, `${T.naamVanBewoner(p)} gaat naar de dichtste`);
   }
   // Licht en tekst per herberg.
-  assert.match(T.herbergTekst(D, tweede), /bier/);
+  assert.match(T.herbergTekst(D, tweede), /ale/);
 });

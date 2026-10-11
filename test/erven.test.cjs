@@ -84,12 +84,12 @@ test('een erf ligt op vrije grond: niet op het plein, een veld, een pad of een a
   const S = gehucht();
   const w = S.wereld;
   const plein = T.pleinVan(w);
-  assert.equal(T.waaromPastErfNiet(S.dorp, plein.x - 2, plein.y - 2), 'Op het plein wordt niet gebouwd.');
+  assert.equal(T.waaromPastErfNiet(S.dorp, plein.x - 2, plein.y - 2), 'Nothing is built on the square.');
   const a = w.akkers[0];
-  assert.equal(T.waaromNietOpDezeGrond(S.dorp, a.x + 1, a.y + 1), 'Daar ligt een veld.');
+  assert.equal(T.waaromNietOpDezeGrond(S.dorp, a.x + 1, a.y + 1), 'There is a field there.');
   const pad = padTegel(w);
   assert.ok(pad, 'het gehucht heeft een zandpad');
-  assert.equal(T.waaromNietOpDezeGrond(S.dorp, pad.x, pad.y), 'Daar loopt een pad.');
+  assert.equal(T.waaromNietOpDezeGrond(S.dorp, pad.x, pad.y), 'There is a path there.');
 
   const plek = erfPlek(S);
   assert.ok(plek, 'er is plaats voor een erf');
@@ -97,8 +97,8 @@ test('een erf ligt op vrije grond: niet op het plein, een veld, een pad of een a
   assert.equal(r.gelukt, true);
   assert.equal(S.dorp.erven.length, 1);
   assert.equal(T.erfOp(S.dorp, plek.x + 9, plek.y + 9), S.dorp.erven[0]);
-  assert.equal(T.waaromPastErfNiet(S.dorp, plek.x, plek.y), 'Daar ligt een erf.');
-  assert.equal(T.waaromNietOpDezeGrond(S.dorp, plek.x + 3, plek.y + 3), 'Daar ligt een erf.');
+  assert.equal(T.waaromPastErfNiet(S.dorp, plek.x, plek.y), 'There is a plot there.');
+  assert.equal(T.waaromNietOpDezeGrond(S.dorp, plek.x + 3, plek.y + 3), 'There is a plot there.');
 });
 
 test('een erf is land: de grond blijft begaanbaar, en er komt geen gebouw op', () => {
@@ -111,16 +111,16 @@ test('een erf is land: de grond blijft begaanbaar, en er komt geen gebouw op', (
   T.zetVoorraad(D, 'goud', 100);
   const r = T.plaatsGebouw(D, 'houthakker', 8, 8);
   assert.equal(r.gelukt, false);
-  assert.equal(r.reden, 'Daar ligt een erf.');
+  assert.equal(r.reden, 'There is a plot there.');
 });
 
 test('een gebouw komt niet meer op een akker of een pad', () => {
   const S = gehucht();
   const a = S.wereld.akkers[0];
-  assert.equal(T.waaromPastHetNiet(S.dorp, 'put', a.x + 1, a.y + 1), 'Daar ligt een veld.');
+  assert.equal(T.waaromPastHetNiet(S.dorp, 'put', a.x + 1, a.y + 1), 'There is a field there.');
   const pad = padTegel(S.wereld);
   const reden = T.waaromPastHetNiet(S.dorp, 'put', pad.x, pad.y);
-  assert.ok(reden === 'Daar loopt een pad.' || reden === 'Daar past het niet.', reden);
+  assert.ok(reden === 'There is a path there.' || reden === 'It does not fit there.', reden);
 });
 
 test('het bouwmenu: het erf als het dorp zelf bouwt, anders de hut en het huis', () => {
@@ -180,7 +180,7 @@ test('zonder vrij erf zegt een vol dorp dat er geen plaats is', () => {
   vol(S);
   const berichten = vangBerichten();
   assert.equal(T.gezinZoektEenErf(S.dorp), null);
-  assert.ok(berichten.some((t) => /geen plaats\. Wijs een erf aan/.test(t)), berichten.join(' | '));
+  assert.ok(berichten.some((t) => /no room\. Mark out a plot/.test(t)), berichten.join(' | '));
   assert.equal(S.dorp.bevolking, S.dorp.woonruimte);
 });
 
@@ -292,7 +292,7 @@ test('zonder hout wacht de bouwplaats, en hij begint zodra het hout er is', () =
   assert.equal(hut.wachtOpHout, true);
   assert.equal(hut.klaarOp, null);
   assert.equal(S.dorp.voorraad.hout, 3);
-  assert.ok(berichten.some((t) => /wacht op hout voor zijn hut/.test(t)), berichten.join(' | '));
+  assert.ok(berichten.some((t) => /is waiting for wood for its hut/.test(t)), berichten.join(' | '));
   // Een bouwplaats die niet begon, staat in zijn eerste fase, en komt niet klaar.
   assert.equal(T.bouwFaseIndex(5, hut.voorwerp.klaarOp, T.GEBOUWEN.hut.bouwtijd), 0);
   T.tikErvenDag(S.dorp);
@@ -464,7 +464,7 @@ test('een vrij erf waar geen hut meer op past, is geen plaats: een gezin neemt e
   assert.equal(T.kanEenErfNemen(D), false);
   const berichten = vangBerichten();
   assert.equal(T.gezinZoektEenErf(D), null);
-  assert.ok(berichten.some((t) => /geen plaats\. Wijs een erf aan/.test(t)), berichten.join(' | '));
+  assert.ok(berichten.some((t) => /no room\. Mark out a plot/.test(t)), berichten.join(' | '));
   // Wijs je een ander erf aan, dan neemt het gezin dat.
   const { erf: ander } = T.legErfAan(D, 35, 10);
   assert.equal(T.kanEenErfNemen(D), true);

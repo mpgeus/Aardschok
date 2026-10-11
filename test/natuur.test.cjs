@@ -56,7 +56,7 @@ test('een steengroeve bouw je alleen bij de rotsen, en het bouwmenu zegt waarom 
   const S = spel();
   const D = S.dorp;
   const waarom = T.waaromPastHetNiet(D, 'steengroeve', 52, 20);
-  assert.match(waarom, /hoort bij de rotsen: hier zijn geen rotsen in de buurt/);
+  assert.match(waarom, /has to be near the rocks: there are no rocks close by/);
   // bij de rotspartij in het noordoosten kan het
   const plek = T.plekVoor(D, 'steengroeve', { x: 60, y: 14 });
   assert.ok(plek, 'geen plek voor een steengroeve bij de rotsen');

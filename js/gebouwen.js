@@ -127,20 +127,20 @@
     hut: {
       naam: T.t('hut'), meervoud: T.t('huts'), trede: 'gehucht', voet: { b: 3, h: 3 }, kosten: { hout: 8 }, heer: {}, bouwtijd: 2,
       handen: 0, woonruimte: 3, wordt: 'huis', maakt: null, menu: true, woning: true,
-      tekening: 'huizen/hut1', beschrijving: T.t('room for a family; cheap, and poor to look at'),
+      tekening: 'huizen/hut1', beschrijving: T.t('room for a family; cheap, and poor to look at'), // geen tekst
       // Vier echte hutten van vlechtwerk en leem onder riet, laag, zonder schoorsteen (ronde 4b van de
       // huizenbouwer, gereedschap/pixelart/huizen.cjs), zodat een rij hutten niet uit één stempel komt
       // (Marcel, 26 sep: "We hebben meer afwisseling nodig in de huizen en hutten").
-      tekeningen: ['huizen/hut1', 'huizen/hut2', 'huizen/hut3', 'huizen/hut4'],
+      tekeningen: ['huizen/hut1', 'huizen/hut2', 'huizen/hut3', 'huizen/hut4'], // geen tekst
       opmerking: '',
     },
     huis: {
       naam: T.t('house'), meervoud: T.t('houses'), trede: 'gehucht', voet: { b: 6, h: 6 }, kosten: { hout: 16, goud: 4 }, heer: { goud: 2 }, bouwtijd: 4,
       handen: 0, woonruimte: 5, wordt: 'stenenHuis', maakt: null, menu: true, woning: true,
-      tekening: 'huizen/huis1', beschrijving: T.t('room for more people'), opmerking: '',
+      tekening: 'huizen/huis1', beschrijving: T.t('room for more people'), opmerking: '', // geen tekst
       // Zes huizen van vakwerk onder riet, met een schoorsteen van leem, want steen hoort pas bij een
       // dorp (Marcel, 26 sep; spel.md, "Beter bouwen"; ronde 4b van de huizenbouwer).
-      tekeningen: ['huizen/huis1', 'huizen/huis2', 'huizen/huis3', 'huizen/huis4', 'huizen/huis5', 'huizen/huis6'],
+      tekeningen: ['huizen/huis1', 'huizen/huis2', 'huizen/huis3', 'huizen/huis4', 'huizen/huis5', 'huizen/huis6'], // geen tekst
     },
     // Het huis van de schout in het lege begin (vraag 152, 1d; Marcel, 11 okt: "c ja"): je zet het één keer neer, en tot
     // het af is, woont hij in zijn tent. Dan trekt hij er met zijn gezin in (T.verhuisUitHetKamp, js/begin.js), wordt de
@@ -150,18 +150,18 @@
     schout: {
       naam: T.t('reeve\'s house'), trede: 'gehucht', voet: { b: 8, h: 6 }, kosten: { hout: 16, goud: 4 }, heer: { goud: 2 }, bouwtijd: 4,
       handen: 0, woonruimte: 5, maakt: null, menu: true, leeg: true, eenmalig: true, opslag: true,
-      tekening: 'huizen/schoutshuis', beschrijving: T.t('your house and the first store: you can build around it'), opmerking: '',
+      tekening: 'huizen/schoutshuis', beschrijving: T.t('your house and the first store: you can build around it'), opmerking: '', // geen tekst
     },
     boerderij: {
       naam: T.t('farm'), meervoud: T.t('farms'), trede: 'gehucht', voet: { b: 7, h: 8 }, kosten: { hout: 20, goud: 6 }, heer: { goud: 1 }, bouwtijd: 5,
       handen: 2, woonruimte: 4, maakt: null, menu: true,
-      tekening: 'huizen/boerderij1', beschrijving: T.t('farmers for the fields, and a barn for the harvest'),
+      tekening: 'huizen/boerderij1', beschrijving: T.t('farmers for the fields, and a barn for the harvest'), // geen tekst
       // De vijf boerderijen van het gehucht (ronde 4b): een L, een T, twee met hun deur achter, en een
       // blokhut onder spanen. Die met de deur achter staat met zijn achterkant naar je toe.
-      tekeningen: ['huizen/boerderij1', 'huizen/boerderij2', 'huizen/boerderij3', 'huizen/boerderij4', 'huizen/boerderij5'],
-      opmerking: 'Maakt zelf geen graan: dat komt binnen als de boeren een akkertegel maaien '
-        + '(T.GRAAN_PER_TEGEL in js/akkers.js). Eerst stond hier een abstracte opbrengst, en dan '
-        + 'telde het dubbel.',
+      tekeningen: ['huizen/boerderij1', 'huizen/boerderij2', 'huizen/boerderij3', 'huizen/boerderij4', 'huizen/boerderij5'], // geen tekst
+      opmerking: 'Maakt zelf geen graan: dat komt binnen als de boeren een akkertegel maaien ' // geen tekst
+        + '(T.GRAAN_PER_TEGEL in js/akkers.js). Eerst stond hier een abstracte opbrengst, en dan ' // geen tekst
+        + 'telde het dubbel.', // geen tekst
     },
     // De akker en de wijngaard: velden die je in het lege begin bij een boerderij legt, als rechthoek (vraag 152, 1e;
     // js/boerderij.js). Geen gebouw: de bouwers rooien en ploegen of planten hem (`veldWerk` in T.BOUWEN_INSTELLINGEN,
@@ -171,14 +171,14 @@
       naam: T.t('field'), meervoud: T.t('fields'), trede: 'gehucht', voet: null, kosten: {}, heer: {}, bouwtijd: 0,
       handen: 0, woonruimte: 0, maakt: null, menu: true, leeg: true, veld: true,
       tekening: null, beschrijving: T.t('grain by a farm: its farmer sows and reaps it'),
-      opmerking: 'In het gehucht dat er al was een hele strook van de kaart: zie "akker" in js/kaart.js en '
-        + 'gereedschap/tiled/maak-gehucht.cjs. Het graan zelf: gereedschap/pixelart/graan.cjs.',
+      opmerking: 'In het gehucht dat er al was een hele strook van de kaart: zie "akker" in js/kaart.js en ' // geen tekst
+        + 'gereedschap/tiled/maak-gehucht.cjs. Het graan zelf: gereedschap/pixelart/graan.cjs.', // geen tekst
     },
     wijngaard: {
       naam: T.t('vineyard'), meervoud: T.t('vineyards'), trede: 'gehucht', voet: null, kosten: {}, heer: {}, bouwtijd: 0,
       handen: 0, woonruimte: 0, maakt: null, menu: true, leeg: true, veld: true,
       tekening: null, beschrijving: T.t('vines by a farm: its family picks the grapes in October'),
-      opmerking: 'De ranken in rijen (js/wijngaard.js, gereedschap/pixelart/wijnrank.cjs).',
+      opmerking: 'De ranken in rijen (js/wijngaard.js, gereedschap/pixelart/wijnrank.cjs).', // geen tekst
     },
     houthakker: {
       naam: T.t('woodcutter'), trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 10, goud: 4 }, heer: { hout: 20 }, bouwtijd: 3,
@@ -188,7 +188,7 @@
       // (T.BOS_INSTELLINGEN.hakStraal, js/bos.js), en hij hakt 73 bomen per jaar. Tot dan 8 bomen binnen 7 tegels: dan stond
       // hij na een paar maanden stil.
       bij: { natuur: 'bos', straal: 10, minstens: 30 },
-      tekening: 'gebouwen/houtschuur', beschrijving: T.t('wood from the lord\'s forest'), opmerking: '',
+      tekening: 'gebouwen/houtschuur', beschrijving: T.t('wood from the lord\'s forest'), opmerking: '', // geen tekst
     },
     // Sinds de weides, stap 2 (25 sep 2026) maakt de kooi zelf niets: de schapen van de heide slapen
     // erin, en js/vee.js telt de mest die de herder (zijn hand) eruit haalt, en de wol als ze in
@@ -196,33 +196,33 @@
     schaapskooi: {
       naam: T.t('sheepfold'), trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 10 }, heer: { wol: 20 }, bouwtijd: 3,
       handen: 1, liefst: 'jong', woonruimte: 0, maakt: null, menu: true,
-      tekening: 'gebouwen/schuurBlokhut', beschrijving: T.t('the sheep from the heath sleep here: dung for the fields'),
-      opmerking: 'nieuw: nog niet getekend, leent voorlopig de blokhutschuur.',
+      tekening: 'gebouwen/schuurBlokhut', beschrijving: T.t('the sheep from the heath sleep here: dung for the fields'), // geen tekst
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig de blokhutschuur.', // geen tekst
     },
     graanschuur: {
       naam: T.t('granary'), trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 15 }, heer: {}, bouwtijd: 3,
       handen: 0, woonruimte: 0, maakt: null, menu: true,
-      tekening: 'gebouwen/schuurBlokhut', beschrijving: T.t('the seed grain is kept here; with guards on it, the village does not eat it in a hungry winter'),
-      opmerking: 'nieuw (vraag 132): nog niet getekend, leent voorlopig de blokhutschuur.',
+      tekening: 'gebouwen/schuurBlokhut', beschrijving: T.t('the seed grain is kept here; with guards on it, the village does not eat it in a hungry winter'), // geen tekst
+      opmerking: 'nieuw (vraag 132): nog niet getekend, leent voorlopig de blokhutschuur.', // geen tekst
     },
     kippenhok: {
       naam: T.t('henhouse'), trede: 'gehucht', voet: { b: 2, h: 2 }, kosten: { hout: 4 }, heer: { eieren: 20 }, bouwtijd: 1,
       handen: 0, woonruimte: 0, maakt: { uit: { eieren: 1 } }, menu: true,
-      tekening: 'gebouwen/kippenhok', beschrijving: T.t('eggs, and the rent hens for the lord'),
+      tekening: 'gebouwen/kippenhok', beschrijving: T.t('eggs, and the rent hens for the lord'), // geen tekst
       opmerking: '',
     },
     moestuin: {
       naam: T.t('vegetable garden'), trede: 'gehucht', voet: { b: 2, h: 2 }, kosten: { hout: 2 }, heer: {}, bouwtijd: 1,
       handen: 0, woonruimte: 0, maakt: { uit: { groente: 1 } }, menu: true,
-      tekening: 'erf/moestuin', beschrijving: T.t('vegetables by the house'), opmerking: '',
+      tekening: 'erf/moestuin', beschrijving: T.t('vegetables by the house'), opmerking: '', // geen tekst
     },
     put: {
       // Alleen hout (werklijst vraag 89, b; Marcel, 2 okt: "b ja"): een put graaf je zelf, en met 2 goud per put aten de
       // wensen van de hutten in de speeltest het goud op dat de heer en de smidse nodig hadden.
       naam: T.t('well'), trede: 'gehucht', voet: { b: 1, h: 1 }, kosten: { hout: 6 }, heer: {}, bouwtijd: 2,
       handen: 0, woonruimte: 0, maakt: null, menu: true,
-      tekening: 'erf/put', beschrijving: T.t('water; without a well the village falls ill'),
-      opmerking: 'Het effect ("zonder put wordt het dorp ziek") is nog geen regel, alleen de tekening staat er al.',
+      tekening: 'erf/put', beschrijving: T.t('water; without a well the village falls ill'), // geen tekst
+      opmerking: 'Het effect ("zonder put wordt het dorp ziek") is nog geen regel, alleen de tekening staat er al.', // geen tekst
     },
 
     // ── Grondstoffen halen (Marcel, 23 sep: "houthakkers, steengroeve etc moeten we ook hebben";
@@ -231,29 +231,29 @@
       naam: T.t('quarry'), trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 12, goud: 4 }, heer: { steen: 10 }, bouwtijd: 3,
       handen: 2, woonruimte: 0, maakt: { uit: { steen: 1 } }, menu: true,
       bij: { natuur: 'rotsen', straal: 6, minstens: 2 },
-      tekening: 'gebouwen/houtschuur', beschrijving: T.t('stone for foundations and stone houses'),
-      opmerking: 'nieuw: nog niet getekend (een groeve is een kuil met een kraan, geen huis), leent voorlopig de houtschuur.',
+      tekening: 'gebouwen/houtschuur', beschrijving: T.t('stone for foundations and stone houses'), // geen tekst
+      opmerking: 'nieuw: nog niet getekend (een groeve is een kuil met een kraan, geen huis), leent voorlopig de houtschuur.', // geen tekst
     },
     kleiput: {
       naam: T.t('clay pit'), trede: 'gehucht', voet: { b: 3, h: 3 }, kosten: { hout: 6 }, heer: { goud: 1 }, bouwtijd: 2,
       handen: 1, woonruimte: 0, maakt: { uit: { klei: 2 } }, menu: true,
-      tekening: 'erf/schuurtje', beschrijving: T.t('clay for the brickworks: bricks, the way people really built here'),
-      opmerking: 'nieuw: nog niet getekend, leent voorlopig het schuurtje.',
+      tekening: 'erf/schuurtje', beschrijving: T.t('clay for the brickworks: bricks, the way people really built here'), // geen tekst
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig het schuurtje.', // geen tekst
     },
     rietsnijder: {
       naam: T.t('reed cutter'), trede: 'gehucht', voet: { b: 3, h: 3 }, kosten: { hout: 6 }, heer: { goud: 1 }, bouwtijd: 2,
       handen: 1, woonruimte: 0, maakt: { uit: { riet: 2 } }, menu: true,
       bij: { natuur: 'water', straal: 5, minstens: 3 },
-      tekening: 'erf/schuurtje', beschrijving: T.t('reed from the brook and the marsh, for thatched roofs'),
-      opmerking: 'nieuw: nog niet getekend, leent voorlopig het schuurtje. Hoort aan het water.',
+      tekening: 'erf/schuurtje', beschrijving: T.t('reed from the brook and the marsh, for thatched roofs'), // geen tekst
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig het schuurtje. Hoort aan het water.', // geen tekst
     },
     jager: {
       naam: T.t('hunter'), trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 8 }, heer: { vlees: 5 }, bouwtijd: 2,
       handen: 1, woonruimte: 0, maakt: { uit: { vlees: 1, huiden: 1 } }, menu: true,
       // Geen `bij`: hij loopt het bos in. Met de eis van het bos (4 okt) vond de jager aan de bosrand al in de eerste
       // herfst geen plek meer, en at het dorp in de speeltest zijn zaaigraan op.
-      tekening: 'gebouwen/jagershut', beschrijving: T.t('game from the forest, and hides for the tanner'),
-      opmerking: 'Het bos is van de heer: stropen is ook een keuze.',
+      tekening: 'gebouwen/jagershut', beschrijving: T.t('game from the forest, and hides for the tanner'), // geen tekst
+      opmerking: 'Het bos is van de heer: stropen is ook een keuze.', // geen tekst
     },
     visser: {
       naam: T.t('fisherman'), trede: 'gehucht', voet: { b: 3, h: 3 }, kosten: { hout: 6 }, heer: { vis: 10 }, bouwtijd: 2,
@@ -261,16 +261,16 @@
       bij: { natuur: 'water', straal: 5, minstens: 3 },
       // Marcel, 24 sep: 's winters ligt de beek dicht, dus wie dan vis wil eten, heeft hem in de
       // herfst gezouten (spel.md, "Handel").
-      stilIn: { winter: 'de beek ligt dicht' },
-      tekening: 'erf/schuurtje', beschrijving: T.t('fish from the brook'),
-      opmerking: 'nieuw: nog niet getekend, leent voorlopig het schuurtje. Hoort aan het water.',
+      stilIn: { winter: T.t('the brook is frozen over') },
+      tekening: 'erf/schuurtje', beschrijving: T.t('fish from the brook'), // geen tekst
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig het schuurtje. Hoort aan het water.', // geen tekst
     },
     wachthuis: {
       naam: T.t('watch house'), trede: 'gehucht', voet: { b: 3, h: 3 }, kosten: { hout: 10, goud: 4 }, heer: { goud: 2 }, bouwtijd: 3,
       handen: 2, woonruimte: 0, maakt: null, menu: true, lantaarn: true,
-      tekening: 'gebouwen/dorpKlein3', beschrijving: T.t('constables and the night watch: keep order, catch thieves, enforce the bylaws, or look away'),
-      opmerking: 'nieuw (Marcel, 23 sep: "orde bewaarders, leger etc moeten een optie zijn"): nog niet getekend, '
-        + 'leent voorlopig een klein dorpshuis. De heer vindt het goed; voor wie de rakkers echt werken, is de vraag.',
+      tekening: 'gebouwen/dorpKlein3', beschrijving: T.t('constables and the night watch: keep order, catch thieves, enforce the bylaws, or look away'), // geen tekst
+      opmerking: 'nieuw (Marcel, 23 sep: "orde bewaarders, leger etc moeten een optie zijn"): nog niet getekend, ' // geen tekst
+        + 'leent voorlopig een klein dorpshuis. De heer vindt het goed; voor wie de rakkers echt werken, is de vraag.', // geen tekst
     },
 
     // Al in het gehucht (Marcel, 24 sep 2026; spel.md, "Handel"): eerst hangt hij voor zijn ijzer
@@ -278,27 +278,27 @@
     smidse: {
       naam: T.t('smithy'), trede: 'gehucht', voet: { b: 5, h: 5 }, kosten: { hout: 14, goud: 10 }, heer: { goud: 4 }, bouwtijd: 4,
       handen: 2, woonruimte: 0, maakt: { in: { ijzer: 1 }, uit: { gereedschap: 1 } },
-      menu: true, tekening: 'gebouwen/smidse', beschrijving: T.t('iron into tools; better tools, faster work'),
-      opmerking: 'Zonder ijzer staat hij stil (T.tikGebouwenDag, stap 6). IJzer komt van de marskramer, tot er een ertsgraver is.',
+      menu: true, tekening: 'gebouwen/smidse', beschrijving: T.t('iron into tools; better tools, faster work'), // geen tekst
+      opmerking: 'Zonder ijzer staat hij stil (T.tikGebouwenDag, stap 6). IJzer komt van de marskramer, tot er een ertsgraver is.', // geen tekst
     },
 
     // ── Dorp ──
     timmerman: {
       naam: T.t('carpenter'), trede: 'dorp', voet: { b: 5, h: 5 }, kosten: { hout: 12, goud: 6 }, heer: { goud: 3 }, bouwtijd: 3,
       handen: 2, woonruimte: 0, maakt: { in: { hout: 2 }, uit: { planken: 2 } },
-      menu: true, tekening: 'gebouwen/dorpshuis3', beschrijving: T.t('wood into planks and beams, needed for building'),
-      opmerking: 'nieuw: nog niet getekend, leent voorlopig een dorpshuis.',
+      menu: true, tekening: 'gebouwen/dorpshuis3', beschrijving: T.t('wood into planks and beams, needed for building'), // geen tekst
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig een dorpshuis.', // geen tekst
     },
     molen: {
       naam: T.t('mill'), trede: 'dorp', voet: { b: 6, h: 6 }, kosten: { hout: 18, goud: 10 }, heer: { goud: 5 }, bouwtijd: 5,
       handen: 1, woonruimte: 0, maakt: { in: { graan: 3 }, uit: { meel: 3 } },
-      menu: true, tekening: 'gebouwen/watermolen', beschrijving: T.t('grain into flour. The lord wants you to grind at his mill and pay for it (his banal right); a mill of your own is defiance'),
-      opmerking: 'Het banrecht zelf (de heer die erop heft) is nog geen regel.',
+      menu: true, tekening: 'gebouwen/watermolen', beschrijving: T.t('grain into flour. The lord wants you to grind at his mill and pay for it (his banal right); a mill of your own is defiance'), // geen tekst
+      opmerking: 'Het banrecht zelf (de heer die erop heft) is nog geen regel.', // geen tekst
     },
     bakkerij: {
       naam: T.t('bakery'), trede: 'dorp', voet: { b: 5, h: 5 }, kosten: { hout: 12, goud: 8 }, heer: { goud: 3 }, bouwtijd: 3,
       handen: 1, woonruimte: 0, maakt: { in: { meel: 2 }, uit: { brood: 2 } },
-      menu: true, tekening: 'gebouwen/bakkerij', beschrijving: T.t('flour into bread'), opmerking: '',
+      menu: true, tekening: 'gebouwen/bakkerij', beschrijving: T.t('flour into bread'), opmerking: '', // geen tekst
     },
     // De wijnboerderij (werklijst vraag 136; Marcel, 8 okt: "Ik wil z.s.m. aan een wijnboerderij", "Wijn wordt drank,
     // zoals bier. Mensen dronken geen water", en voor de wijngaard "Dat je de boeren ziet plukken, volle en lege ranken"):
@@ -310,17 +310,17 @@
     wijnboerderij: {
       naam: T.t('vineyard farm'), meervoud: T.t('vineyard farms'), trede: 'dorp', voet: { b: 10, h: 8 }, kosten: { hout: 18, goud: 8 },
       heer: { wijn: 10 }, bouwtijd: 5, handen: 0, woonruimte: 4, maakt: null, oogst: 'wijn', wijngaard: true, nietLeeg: true,
-      alleenIn: { maanden: ['wijnmaand'], waarom: 'de druiven worden pas in wijnmaand geplukt' },
+      alleenIn: { maanden: ['wijnmaand'], waarom: T.t('the grapes are only picked in October') },
       // De tekening (gereedschap/pixelart/dorp2.cjs, `gebouwen/wijnhuis`): het huis met de wijntonnen bij de deur, achter in
       // de hoek van de voet; `gebouwen/wijnboerderij` is het hele plaatje met de wijngaard erin, voor de proefplaten.
-      menu: true, tekening: 'gebouwen/wijnhuis', beschrijving: T.t('a farm with a vineyard: wine, picked in October'),
+      menu: true, tekening: 'gebouwen/wijnhuis', beschrijving: T.t('a farm with a vineyard: wine, picked in October'), // geen tekst
       opmerking: '',
     },
     brouwerij: {
       naam: T.t('brewery'), trede: 'dorp', voet: { b: 5, h: 5 }, kosten: { hout: 14, goud: 10 }, heer: { goud: 4 }, bouwtijd: 4,
       handen: 2, woonruimte: 0, maakt: { in: { graan: 2 }, uit: { bier: 2 } },
-      menu: true, tekening: 'gebouwen/dorpshuis5', beschrijving: T.t('barley into ale; the lord taxes it'),
-      opmerking: 'nieuw: nog niet getekend, leent voorlopig een dorpshuis. De belasting is nog geen regel.',
+      menu: true, tekening: 'gebouwen/dorpshuis5', beschrijving: T.t('barley into ale; the lord taxes it'), // geen tekst
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig een dorpshuis. De belasting is nog geen regel.', // geen tekst
     },
     herberg: {
       naam: T.t('inn'), trede: 'dorp', voet: { b: 6, h: 6 }, kosten: { hout: 16, goud: 12 }, heer: { goud: 5 }, bouwtijd: 4,
@@ -331,27 +331,27 @@
       // lagen met een uithangbord (groeitMee, js/behoeften.js; werklijst vraag 114, stap 3), en wie er een bouwt, krijgt
       // de grote (js/bouwstijl.js).
       groeitMee: true,
-      tekening: 'gebouwen/herberg', beschrijving: T.t('travellers, news and stories, ale'),
-      opmerking: 'In het gehucht staat er een vanaf het begin, met de herbergierster (kaarten/gehucht.betekenis.json), '
-        + 'in een eigen tekening van vakwerk onder riet (huizen/herberg1). Wie hem in een land zonder stijl bouwt, krijgt '
-        + 'nog de oude tekening van steen onder pannen, zonder ramen die branden. Plaatsen heeft hij niet: alleen het bier '
-        + 'houdt de gasten tegen; de grote trekt meer gasten (groteHerberg, js/herberg.js).',
+      tekening: 'gebouwen/herberg', beschrijving: T.t('travellers, news and stories, ale'), // geen tekst
+      opmerking: 'In het gehucht staat er een vanaf het begin, met de herbergierster (kaarten/gehucht.betekenis.json), ' // geen tekst
+        + 'in een eigen tekening van vakwerk onder riet (huizen/herberg1). Wie hem in een land zonder stijl bouwt, krijgt ' // geen tekst
+        + 'nog de oude tekening van steen onder pannen, zonder ramen die branden. Plaatsen heeft hij niet: alleen het bier ' // geen tekst
+        + 'houdt de gasten tegen; de grote trekt meer gasten (groteHerberg, js/herberg.js).', // geen tekst
     },
     kapel: {
       naam: T.t('chapel'), trede: 'gehucht', voet: { b: 5, h: 5 }, kosten: { hout: 10, goud: 8 }, heer: {}, bouwtijd: 4,
       handen: 1, woonruimte: 0, maakt: null, kerk: true, menu: true, lantaarn: true,
-      tekening: 'gebouwen/kapel', beschrijving: T.t('the church as a group, and contentment'),
-      opmerking: 'De tevredenheid (T.heeftKerk, js/behoeften.js, werklijst.md punt 3) is er; de kerk '
-        + 'als groep met eigen belangen komt pas met de politiek (werklijst.md, punt 9). Zijn trede '
-        + 'is "gehucht" (was "dorp"): het gehucht vraagt om een kerk (js/behoeften.js), dus moet hij daar '
-        + 'ook te bouwen zijn; een gehucht had vaak een kapelletje. Een grotere kerk komt later.',
+      tekening: 'gebouwen/kapel', beschrijving: T.t('the church as a group, and contentment'), // geen tekst
+      opmerking: 'De tevredenheid (T.heeftKerk, js/behoeften.js, werklijst.md punt 3) is er; de kerk ' // geen tekst
+        + 'als groep met eigen belangen komt pas met de politiek (werklijst.md, punt 9). Zijn trede ' // geen tekst
+        + 'is "gehucht" (was "dorp"): het gehucht vraagt om een kerk (js/behoeften.js), dus moet hij daar ' // geen tekst
+        + 'ook te bouwen zijn; een gehucht had vaak een kapelletje. Een grotere kerk komt later.', // geen tekst
     },
     tiendschuur: {
       naam: T.t('tithe barn'), trede: 'dorp', voet: { b: 6, h: 5 }, kosten: { hout: 14, goud: 6 }, heer: { goud: 3 }, bouwtijd: 3,
       handen: 0, woonruimte: 0, maakt: null, menu: true,
-      tekening: 'gebouwen/schuurBlokhut', beschrijving: T.t('the lord\'s: here you deliver at Martinmas'),
-      opmerking: 'nieuw: nog niet getekend, leent voorlopig de blokhutschuur. Sint-Maarten zelf staat '
-        + 'al in T.SINT_MAARTEN (js/tijd.js); wat er dan gebeurt is het tweede proefje (werklijst.md, punt 3).',
+      tekening: 'gebouwen/schuurBlokhut', beschrijving: T.t('the lord\'s: here you deliver at Martinmas'), // geen tekst
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig de blokhutschuur. Sint-Maarten zelf staat ' // geen tekst
+        + 'al in T.SINT_MAARTEN (js/tijd.js); wat er dan gebeurt is het tweede proefje (werklijst.md, punt 3).', // geen tekst
     },
 
     // De markt en de weverij komen een trede eerder dan het marktrecht (Marcel, 2 okt, vraag 90, B): de ambachtslieden
@@ -359,74 +359,74 @@
     markt: {
       naam: T.t('market'), trede: 'dorp', voet: { b: 6, h: 6 }, kosten: { hout: 16, goud: 14 }, heer: { goud: 10 }, bouwtijd: 4,
       handen: 1, woonruimte: 0, maakt: null, menu: true, lantaarn: true,
-      tekening: 'gebouwen/dorpGroot1', beschrijving: T.t('trade with the outside; traders come'),
-      opmerking: 'nieuw in gebouwen.tsx (de kraam bestaat als model in gereedschap/pixelart/dorp.cjs, '
-        + 'nog niet geëxporteerd); leent voorlopig een groot dorpshuis.',
+      tekening: 'gebouwen/dorpGroot1', beschrijving: T.t('trade with the outside; traders come'), // geen tekst
+      opmerking: 'nieuw in gebouwen.tsx (de kraam bestaat als model in gereedschap/pixelart/dorp.cjs, ' // geen tekst
+        + 'nog niet geëxporteerd); leent voorlopig een groot dorpshuis.', // geen tekst
     },
     weverij: {
       naam: T.t('weaving shed'), trede: 'dorp', voet: { b: 5, h: 5 }, kosten: { hout: 14, goud: 12 }, heer: { goud: 6 }, bouwtijd: 4,
       handen: 2, woonruimte: 0, maakt: { in: { wol: 2 }, uit: { laken: 2 } },
-      menu: true, tekening: 'gebouwen/dorpGroot2', beschrijving: T.t('wool into cloth, the richest trade good'),
-      opmerking: 'nieuw: nog niet getekend, leent voorlopig een groot dorpshuis.',
+      menu: true, tekening: 'gebouwen/dorpGroot2', beschrijving: T.t('wool into cloth, the richest trade good'), // geen tekst
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig een groot dorpshuis.', // geen tekst
     },
 
     // ── Marktrecht ──
     pakhuis: {
       naam: T.t('warehouse'), trede: 'marktrecht', voet: { b: 6, h: 6 }, kosten: { hout: 18, goud: 10 }, heer: { goud: 5 }, bouwtijd: 3,
       handen: 0, woonruimte: 0, maakt: null, menu: true,
-      tekening: 'gebouwen/schuurBlokhut', beschrijving: T.t('storage, and a good place to slip something in between'),
-      opmerking: 'nieuw: nog niet getekend, leent voorlopig de blokhutschuur. "Iets tussenschuiven" '
-        + '(voor de heer verbergen) is nog geen regel.',
+      tekening: 'gebouwen/schuurBlokhut', beschrijving: T.t('storage, and a good place to slip something in between'), // geen tekst
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig de blokhutschuur. "Iets tussenschuiven" ' // geen tekst
+        + '(voor de heer verbergen) is nog geen regel.', // geen tekst
     },
     kuiper: {
       naam: T.t('cooper'), trede: 'marktrecht', voet: { b: 4, h: 4 }, kosten: { hout: 10, goud: 8 }, heer: { goud: 3 }, bouwtijd: 3,
       handen: 1, woonruimte: 0, maakt: { in: { hout: 1 }, uit: { vaten: 1 } },
-      menu: true, tekening: 'gebouwen/dorpKlein1', beschrijving: T.t('barrels for ale and storage'),
-      opmerking: 'nieuw: nog niet getekend, leent voorlopig een klein dorpshuis.',
+      menu: true, tekening: 'gebouwen/dorpKlein1', beschrijving: T.t('barrels for ale and storage'), // geen tekst
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig een klein dorpshuis.', // geen tekst
     },
     slager: {
       naam: T.t('butcher'), trede: 'marktrecht', voet: { b: 4, h: 4 }, kosten: { hout: 10, goud: 8 }, heer: { goud: 3 }, bouwtijd: 3,
       handen: 1, woonruimte: 0, maakt: null, menu: true,
-      tekening: 'gebouwen/dorpKlein2', beschrijving: T.t('meat, from the livestock'),
-      opmerking: 'nieuw: nog niet getekend, leent voorlopig een klein dorpshuis. Niets levert nu nog vee aan.',
+      tekening: 'gebouwen/dorpKlein2', beschrijving: T.t('meat, from the livestock'), // geen tekst
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig een klein dorpshuis. Niets levert nu nog vee aan.', // geen tekst
     },
     leerlooier: {
       naam: T.t('tanner'), trede: 'marktrecht', voet: { b: 4, h: 4 }, kosten: { hout: 10, goud: 6 }, heer: { goud: 2 }, bouwtijd: 3,
       handen: 1, woonruimte: 0, maakt: null, menu: true,
-      tekening: 'gebouwen/dorpKlein3', beschrijving: T.t('leather — it stinks, so it belongs on the edge'),
-      opmerking: 'nieuw: nog niet getekend, leent voorlopig een klein dorpshuis. "Aan de rand" is nu '
-        + 'nog een advies, geen regel die het bouwmenu afdwingt.',
+      tekening: 'gebouwen/dorpKlein3', beschrijving: T.t('leather — it stinks, so it belongs on the edge'), // geen tekst
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig een klein dorpshuis. "Aan de rand" is nu ' // geen tekst
+        + 'nog een advies, geen regel die het bouwmenu afdwingt.', // geen tekst
     },
     steenbakkerij: {
       naam: T.t('brickworks'), trede: 'marktrecht', voet: { b: 6, h: 6 }, kosten: { hout: 20, goud: 16 }, heer: { goud: 6 }, bouwtijd: 5,
       handen: 2, woonruimte: 0, maakt: { uit: { steen: 2 } }, menu: true,
-      tekening: 'gebouwen/houtschuur', beschrijving: T.t('bricks for stone houses, which look rich'),
-      opmerking: 'nieuw: nog niet getekend, leent voorlopig de houtschuur. "steen" is de eerste '
-        + 'grondstof naast T.GRONDSTOFFEN; die vier blijven voorlopig het enige dat de voorraadbalk toont.',
+      tekening: 'gebouwen/houtschuur', beschrijving: T.t('bricks for stone houses, which look rich'), // geen tekst
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig de houtschuur. "steen" is de eerste ' // geen tekst
+        + 'grondstof naast T.GRONDSTOFFEN; die vier blijven voorlopig het enige dat de voorraadbalk toont.', // geen tekst
     },
     badhuis: {
       naam: T.t('bathhouse'), trede: 'marktrecht', voet: { b: 5, h: 5 }, kosten: { hout: 12, goud: 14 }, heer: { goud: 5 }, bouwtijd: 3,
       handen: 1, woonruimte: 0, maakt: null, menu: true,
-      tekening: 'gebouwen/oudstehuis', beschrijving: T.t('health'), opmerking: 'nieuw: nog niet getekend, leent voorlopig het huis van de dorpsoudste.',
+      tekening: 'gebouwen/oudstehuis', beschrijving: T.t('health'), opmerking: 'nieuw: nog niet getekend, leent voorlopig het huis van de dorpsoudste.', // geen tekst
     },
     gasthuis: {
       naam: T.t('hospice'), trede: 'marktrecht', voet: { b: 5, h: 5 }, kosten: { hout: 12, goud: 12 }, heer: { goud: 2 }, bouwtijd: 3,
       handen: 1, woonruimte: 0, maakt: null, menu: true,
-      tekening: 'gebouwen/oudstehuis', beschrijving: T.t('care for the poor'), opmerking: 'nieuw: nog niet getekend, leent voorlopig het huis van de dorpsoudste.',
+      tekening: 'gebouwen/oudstehuis', beschrijving: T.t('care for the poor'), opmerking: 'nieuw: nog niet getekend, leent voorlopig het huis van de dorpsoudste.', // geen tekst
     },
 
     // ── Stad ──
     stenenHuis: {
       naam: T.t('stone house'), meervoud: T.t('stone houses'), trede: 'stad', voet: { b: 7, h: 5 }, kosten: { hout: 20, goud: 30 }, heer: { goud: 6 }, bouwtijd: 6,
       handen: 0, woonruimte: 8, wordt: 'woontoren', wordtVanaf: 'marktrecht', maakt: null, menu: true, woning: true,
-      tekening: 'huizen/steen1', beschrijving: T.t('plenty of room, and rich to look at'), opmerking: '',
+      tekening: 'huizen/steen1', beschrijving: T.t('plenty of room, and rich to look at'), opmerking: '', // geen tekst
       // Het stenen broertje van elk huis, met dezelfde vorm (werklijst vraag 85, d; gereedschap/pixelart/huizen.cjs): een
       // huis dat doorgroeit, versteent op zijn eigen grond (js/behoeften.js), en je herkent het. Tot 1 okt was er één
       // stenen huis, uit de oude reeks (gebouwen/stenenHuis).
-      tekeningen: ['huizen/steen1', 'huizen/steen2', 'huizen/steen3', 'huizen/steen4', 'huizen/steen5', 'huizen/steen6'],
+      tekeningen: ['huizen/steen1', 'huizen/steen2', 'huizen/steen3', 'huizen/steen4', 'huizen/steen5', 'huizen/steen6'], // geen tekst
       broertjes: {
-        'huizen/huis1': 'huizen/steen1', 'huizen/huis2': 'huizen/steen2', 'huizen/huis3': 'huizen/steen3',
-        'huizen/huis4': 'huizen/steen4', 'huizen/huis5': 'huizen/steen5', 'huizen/huis6': 'huizen/steen6',
+        'huizen/huis1': 'huizen/steen1', 'huizen/huis2': 'huizen/steen2', 'huizen/huis3': 'huizen/steen3', // geen tekst
+        'huizen/huis4': 'huizen/steen4', 'huizen/huis5': 'huizen/steen5', 'huizen/huis6': 'huizen/steen6', // geen tekst
       },
     },
     // Een stenen huis met marktrecht groeit door tot een woontoren van vier lagen op 5 bij 5, waar drie gezinnen wonen,
@@ -438,7 +438,7 @@
       naam: T.t('tower house'), meervoud: T.t('tower houses'), trede: 'marktrecht', voet: { b: 5, h: 5 }, kosten: { hout: 10, steen: 30 }, heer: { goud: 8 }, bouwtijd: 8,
       handen: 0, woonruimte: 12, maakt: null, menu: false, woning: true,
       tekening: 'huizen/wit-woontoren-pannen-z', beschrijving: T.t('three families on top of each other, in stone'),
-      opmerking: 'Nog zonder bouwfasen: hij groeit in één nacht.',
+      opmerking: 'Nog zonder bouwfasen: hij groeit in één nacht.', // geen tekst
     },
     // De tent of het afdak van een gezin in het kamp van het lege begin (werklijst vraag 152; js/begin.js): niemand bouwt
     // hem, de kar bracht hem mee. Hij is zo groot als zijn gezin (`tijdelijk`, T.woonruimteVan): een nieuw gezin vindt er
@@ -447,20 +447,20 @@
       naam: T.t('tent'), meervoud: T.t('tents'), trede: 'gehucht', voet: { b: 2, h: 1 }, kosten: {}, heer: {}, bouwtijd: 0,
       handen: 0, woonruimte: 0, tijdelijk: true, maakt: null, menu: false,
       tekening: null, beschrijving: T.t('a tent or a lean-to in the camp, until there is a hut'),
-      opmerking: 'Uit gereedschap/pixelart/kamp.cjs (het vel kamp): de tent van linnen, de bruine tent en het afdak, elk met zijn opening naar vier kanten.',
+      opmerking: 'Uit gereedschap/pixelart/kamp.cjs (het vel kamp): de tent van linnen, de bruine tent en het afdak, elk met zijn opening naar vier kanten.', // geen tekst
     },
     raadhuis: {
       naam: T.t('town hall'), trede: 'stad', voet: { b: 8, h: 6 }, kosten: { hout: 24, goud: 40 }, heer: { goud: 20 }, bouwtijd: 8,
       handen: 0, woonruimte: 0, maakt: null, menu: true,
-      tekening: 'gebouwen/dorpGroot1', beschrijving: T.t('where the aldermen vote; the reeve becomes mayor'),
-      opmerking: 'nieuw: nog niet getekend, leent voorlopig een groot dorpshuis. De schepenen zelf komen met de politiek (werklijst.md, punt 6).',
+      tekening: 'gebouwen/dorpGroot1', beschrijving: T.t('where the aldermen vote; the reeve becomes mayor'), // geen tekst
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig een groot dorpshuis. De schepenen zelf komen met de politiek (werklijst.md, punt 6).', // geen tekst
     },
     stadsmuur: {
       naam: T.t('town wall and gate'), trede: 'stad', voet: null, kosten: { hout: 60, goud: 80 }, heer: { goud: 30 }, bouwtijd: 20,
       handen: 0, woonruimte: 0, maakt: null, menu: false,
       tekening: null, beschrijving: T.t('only allowed with a town charter; without one it is rebellion'),
-      opmerking: 'Een muur is geen los blokje van één voet; die komt met het geschilderde-omheiningen-'
-        + 'systeem (werklijst.md, "Omheiningen die je schildert"), niet via dit bouwmenu.',
+      opmerking: 'Een muur is geen los blokje van één voet; die komt met het geschilderde-omheiningen-' // geen tekst
+        + 'systeem (werklijst.md, "Omheiningen die je schildert"), niet via dit bouwmenu.', // geen tekst
     },
 
     // ── Verdediging: wapens zijn niet verboden (Marcel, 7 okt: "Het is logisch dat er wapens zijn om de stad te
@@ -468,58 +468,58 @@
     wapenmaker: {
       naam: T.t('weaponsmith'), trede: 'dorp', voet: { b: 4, h: 4 }, kosten: { hout: 12, goud: 14 }, heer: { goud: 4 }, bouwtijd: 4,
       handen: 2, woonruimte: 0, maakt: { in: { hout: 1, ijzer: 1 }, uit: { wapens: 1 } },
-      menu: true, tekening: 'gebouwen/smidse', beschrijving: T.t('iron and wood into weapons, to defend the village'),
-      opmerking: 'nieuw: nog niet getekend, leent voorlopig het vel van de smidse.',
+      menu: true, tekening: 'gebouwen/smidse', beschrijving: T.t('iron and wood into weapons, to defend the village'), // geen tekst
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig het vel van de smidse.', // geen tekst
     },
     schuttershof: {
       naam: T.t('archery butts'), trede: 'dorp', voet: { b: 6, h: 6 }, kosten: { hout: 10, goud: 10 }, heer: { goud: 3 }, bouwtijd: 3,
       handen: 0, woonruimte: 0, maakt: null, menu: true,
-      tekening: 'gebouwen/dorpKlein1', beschrijving: T.t('the militia trains here with bow and spear'),
-      opmerking: 'nieuw: nog niet getekend, leent voorlopig een klein dorpshuis.',
+      tekening: 'gebouwen/dorpKlein1', beschrijving: T.t('the militia trains here with bow and spear'), // geen tekst
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig een klein dorpshuis.', // geen tekst
     },
     palissade: {
       naam: T.t('palisade'), trede: 'dorp', voet: null, kosten: { hout: 40 }, heer: { goud: 5 }, bouwtijd: 10,
       handen: 0, woonruimte: 0, maakt: null, menu: false,
       tekening: null, beschrijving: T.t('a wall of stakes around the village, against robbers and wolves'),
-      opmerking: 'Zelfde reden als stadsmuur hierboven: geen los blokje, gaat niet via dit bouwmenu.',
+      opmerking: 'Zelfde reden als stadsmuur hierboven: geen los blokje, gaat niet via dit bouwmenu.', // geen tekst
     },
     tuighuis: {
       naam: T.t('armoury'), trede: 'dorp', voet: { b: 4, h: 4 }, kosten: { hout: 14, goud: 10 }, heer: { goud: 3 }, bouwtijd: 4,
       handen: 0, woonruimte: 0, maakt: null, menu: true,
-      tekening: 'gebouwen/schuur', beschrijving: T.t('where the militia\'s weapons are kept'),
-      opmerking: 'nieuw: nog niet getekend, leent voorlopig de schuur. Bergt wat de wapenmaker maakt.',
+      tekening: 'gebouwen/schuur', beschrijving: T.t('where the militia\'s weapons are kept'), // geen tekst
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig de schuur. Bergt wat de wapenmaker maakt.', // geen tekst
     },
     kazerne: {
       naam: T.t('barracks'), trede: 'stad', voet: { b: 6, h: 6 }, kosten: { hout: 30, steen: 30, goud: 30 }, heer: { goud: 10 }, bouwtijd: 8,
       handen: 0, woonruimte: 6, maakt: null, menu: true,
-      tekening: 'gebouwen/dorpGroot1', beschrijving: T.t('mercenaries: expensive, but they fight for the village'),
-      opmerking: 'nieuw: nog niet getekend, leent voorlopig een groot dorpshuis.',
+      tekening: 'gebouwen/dorpGroot1', beschrijving: T.t('mercenaries: expensive, but they fight for the village'), // geen tekst
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig een groot dorpshuis.', // geen tekst
     },
 
     // ── Grondstoffen en orde die pas bij het dorp komen ──
     turfsteker: {
       naam: T.t('peat cutter'), trede: 'dorp', voet: { b: 3, h: 3 }, kosten: { hout: 8 }, heer: { goud: 1 }, bouwtijd: 2,
       handen: 2, woonruimte: 0, maakt: { uit: { turf: 2 } }, menu: true,
-      tekening: 'erf/schuurtje', beschrijving: T.t('peat from the bog, to burn when the forest is gone'),
-      opmerking: 'nieuw: nog niet getekend, leent voorlopig het schuurtje.',
+      tekening: 'erf/schuurtje', beschrijving: T.t('peat from the bog, to burn when the forest is gone'), // geen tekst
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig het schuurtje.', // geen tekst
     },
     ertsgraver: {
       naam: T.t('ore digger'), trede: 'dorp', voet: { b: 4, h: 4 }, kosten: { hout: 14, goud: 8 }, heer: { goud: 4 }, bouwtijd: 4,
       handen: 2, woonruimte: 0, maakt: { uit: { ijzer: 1 } }, menu: true,
-      tekening: 'gebouwen/houtschuur', beschrijving: T.t('bog iron from the ground: iron without the peddler'),
-      opmerking: 'nieuw: nog niet getekend, leent voorlopig de houtschuur. IJzer wordt ook wapens.',
+      tekening: 'gebouwen/houtschuur', beschrijving: T.t('bog iron from the ground: iron without the peddler'), // geen tekst
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig de houtschuur. IJzer wordt ook wapens.', // geen tekst
     },
     kalkbrander: {
       naam: T.t('lime burner'), trede: 'dorp', voet: { b: 3, h: 3 }, kosten: { hout: 10, steen: 4 }, heer: { goud: 2 }, bouwtijd: 3,
       handen: 1, woonruimte: 0, maakt: { in: { hout: 1 }, uit: { kalk: 1 } }, menu: true,
-      tekening: 'erf/schuurtje', beschrijving: T.t('lime from shells, for mortar'),
-      opmerking: 'nieuw: nog niet getekend, leent voorlopig het schuurtje.',
+      tekening: 'erf/schuurtje', beschrijving: T.t('lime from shells, for mortar'), // geen tekst
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig het schuurtje.', // geen tekst
     },
     gevang: {
       naam: T.t('gaol'), trede: 'dorp', voet: { b: 3, h: 3 }, kosten: { hout: 8, steen: 10, goud: 6 }, heer: { goud: 2 }, bouwtijd: 4,
       handen: 1, woonruimte: 0, maakt: null, menu: true,
-      tekening: 'gebouwen/dorpKlein1', beschrijving: T.t('whoever the reeve convicts, sits here'),
-      opmerking: 'nieuw: nog niet getekend, leent voorlopig een klein dorpshuis. Hoort bij de rechtspraak (werklijst 10).',
+      tekening: 'gebouwen/dorpKlein1', beschrijving: T.t('whoever the reeve convicts, sits here'), // geen tekst
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig een klein dorpshuis. Hoort bij de rechtspraak (werklijst 10).', // geen tekst
     },
   };
 
@@ -690,19 +690,19 @@
       // De mensen bouwen het zelf (js/bouwen.js): wie er bouwt, en hoe ver het is.
       if (g.bouw) return T.bouwToestand(D, g);
       // Nog niet begonnen: de plek wordt eerst gerooid (js/bos.js), of de bouwplaats wacht op hout (js/erven.js).
-      if (g.wachtOpRooien) return `${naam}: eerst wordt de plek gerooid.`;
-      if (g.klaarOp == null) return `${naam}: de bouwplaats wacht op hout.`;
+      if (g.wachtOpRooien) return T.t('{naam}: the site is cleared first.', { naam });
+      if (g.klaarOp == null) return T.t('{naam}: the building site is waiting for wood.', { naam });
       const dagNu = D.kalender ? Math.floor(D.kalender.dag) : 0;
       const nog = Math.max(1, g.klaarOp - dagNu);
-      return `${naam}: in aanbouw, nog ${nog} dag${nog === 1 ? '' : 'en'}.`;
+      return T.t('{naam}: under construction, {n|# day|# days} to go.', { naam, n: nog });
     }
-    if (!soort.maakt) return `${naam}: ${soort.beschrijving}.`;
-    if (g.stilWant) return `${naam}: staat stil, ${g.stilWant}.`;
-    if (soort.handen > 0 && !g.handen) return `${naam}: staat stil, er zijn geen handen voor.`;
-    if (g.tekort && !(g.werkte > 0)) return `${naam}: staat stil, er is geen ${g.tekort}.`;
-    if (g.tekort) return `${naam}: werkt maar half, er is te weinig ${g.tekort}.`;
-    if (g.vol && !(g.werkte > 0)) return `${naam}: er ligt genoeg ${g.vol}.`;
-    const handen = soort.handen > 0 ? ` (${g.handen} van ${soort.handen} handen)` : '';
+    if (!soort.maakt) return T.t('{naam}: {beschrijving}.', { naam, beschrijving: soort.beschrijving });
+    if (g.stilWant) return T.t('{naam}: idle, {waarom}.', { naam, waarom: g.stilWant });
+    if (soort.handen > 0 && !g.handen) return T.t('{naam}: idle, there are no hands to work it.', { naam });
+    if (g.tekort && !(g.werkte > 0)) return T.t('{naam}: idle, there is no {waar}.', { naam, waar: T.waarNaam(g.tekort) });
+    if (g.tekort) return T.t('{naam}: working at half pace, there is too little {waar}.', { naam, waar: T.waarNaam(g.tekort) });
+    if (g.vol && !(g.werkte > 0)) return T.t('{naam}: there is enough {waar} in store.', { naam, waar: T.waarNaam(g.vol) });
+    const metHanden = soort.handen > 0;
     // Werk in uren (js/bewoners.js, T.werkUrenVan): hoeveel er echt gewerkt werd, en hoe lang de
     // handen onderweg waren; anders is het een straf die je niet ziet.
     // Afgerond zo dat gewerkt en onderweg samen de uren van wie er is geven, zoals je zou narekenen.
@@ -710,9 +710,12 @@
     if (u && u.onderweg >= 0.5) {
       const onderweg = Math.round(u.onderweg);
       const gewerkt = Math.round(u.gewerkt + u.onderweg) - onderweg;
-      return `${naam}: aan het werk${handen}, ${gewerkt} van de ${Math.round(u.nodig)} uur; ${onderweg} uur onderweg.`;
+      const nodig = Math.round(u.nodig);
+      return metHanden
+        ? T.t('{naam}: at work ({n} of {m} hands), {gewerkt} of {nodig} hours worked; {onderweg|# hour|# hours} on the road.', { naam, n: g.handen, m: soort.handen, gewerkt, nodig, onderweg })
+        : T.t('{naam}: at work, {gewerkt} of {nodig} hours worked; {onderweg|# hour|# hours} on the road.', { naam, gewerkt, nodig, onderweg });
     }
-    return `${naam}: aan het werk${handen}.`;
+    return metHanden ? T.t('{naam}: at work ({n} of {m} hands).', { naam, n: g.handen, m: soort.handen }) : T.t('{naam}: at work.', { naam });
   }
 
   // ---------------------------------------------------------------------------------------------
@@ -738,7 +741,7 @@
     if (soort === 'markt' && T.marktOpHetPlein(D)) return T.waaromGeenMarktOpHetPlein(D);
     const voet = T.gebouwVoet(soort, tekening || T.volgendeTekening(D, soort));
     const w = D.wereld;
-    if (!voet || !w) return 'Daar past het niet.';
+    if (!voet || !w) return T.t('It does not fit there.');
     // In het lege begin bouw je binnen het bereik van het plein en je opslagen (js/begin.js; vraag 152, 1d).
     const ver = T.waaromBuitenBouwBereik(D, { x, y, b: voet.b, h: voet.h });
     if (ver) return ver;
@@ -746,18 +749,18 @@
     let reden = null;
     for (let dy = 0; dy < voet.h; dy++) {
       for (let dx = 0; dx < voet.b; dx++) {
-        if (T.opHetPlein(w, x + dx, y + dy)) return 'Op het plein wordt niet gebouwd.';
+        if (T.opHetPlein(w, x + dx, y + dy)) return T.t('Nothing is built on the square.');
         if (T.isVast(w, x + dx, y + dy) && !(kavel && T.ontginWerkOp(w, x + dx, y + dy))) vast = true;
         else if (!vast) reden = reden || T.waaromNietOpDezeGrond(D, x + dx, y + dy);
       }
     }
-    if (vast) return 'Daar past het niet.';
+    if (vast) return T.t('It does not fit there.');
     if (reden) return reden;
-    if (T.teSteil(w, { x, y, b: voet.b, h: voet.h })) return 'Daar is het te steil om te bouwen.';
+    if (T.teSteil(w, { x, y, b: voet.b, h: voet.h })) return T.t('It is too steep to build there.');
     const natuur = T.waaromNietBijDeNatuur(D, soort, { x, y, b: voet.b, h: voet.h });
     if (natuur) return natuur;
     const n = T.GEBOUWEN_INSTELLINGEN.looppad;
-    if (!T.looppadOm(D, { x, y, b: voet.b, h: voet.h }, n, kavel)) return `Er moet een looppad omheen: ${n === 1 ? 'een tegel' : `${T.telwoord(n)} tegels`} vrij, zonder gebouw of boom.`;
+    if (!T.looppadOm(D, { x, y, b: voet.b, h: voet.h }, n, kavel)) return T.t('There must be a walkway all round it: {n|one tile|# tiles} clear, with no building or tree.', { n });
     return T.waaromNietOpIemand(D, { x, y, b: voet.b, h: voet.h }, undefined, wieErStaat) || zonderKringPlek(D, soort, { x, y, b: voet.b, h: voet.h }, tekening);
   };
 
@@ -774,7 +777,7 @@
     const huis = vast ? { x: r.x, y: r.y, b: vast.b, h: vast.h } : r;
     return T.waaromGeenKringPlek(D, {
       grond: r, vast: r, huis, wil: (wens) => T.wilStraks({ soort }, wens),
-      wie: () => `Een ${G.naam} hier`, dit: `een ${G.naam} hier`,
+      wie: () => T.t('{gebouw} here', { gebouw: T.hoofdletter(T.eenNaam(G.naam)) }), dit: T.t('{gebouw} here', { gebouw: T.eenNaam(G.naam) }),
     });
   }
 
@@ -841,7 +844,10 @@
     const n = T.natuurBij(D.wereld, bij.natuur, r, bij.straal);
     if (n >= bij.minstens) return null;
     const N = T.NATUUR[bij.natuur];
-    return `Een ${T.GEBOUWEN[soort].naam} hoort bij ${N.naam}: hier ${n ? `zijn maar ${n} ${N.meervoud}` : `zijn geen ${N.meervoud}`} in de buurt.`;
+    const gebouw = T.hoofdletter(T.eenNaam(T.GEBOUWEN[soort].naam));
+    return n
+      ? T.t('{gebouw} has to be near {natuur}: there are too few {meervoud} close by ({n}).', { gebouw, natuur: N.naam, meervoud: N.meervoud, n })
+      : T.t('{gebouw} has to be near {natuur}: there are no {meervoud} close by.', { gebouw, natuur: N.naam, meervoud: N.meervoud });
   };
 
   // Is er een looppad van `breed` tegels rondom de rechthoek r ({ x, y, b, h })? Elke tegel in die rand is te belopen
@@ -921,8 +927,8 @@
 
   // Waarom hier niets mag komen, of null: er staat iemand, of het is de deur van een gebouw.
   T.waaromNietOpIemand = function (D, r, behalve, wieErStaat = true) {
-    if (wieErStaat && T.wieStaatOp(D.wereld, r)) return 'Daar staat iemand.';
-    if (T.deurOpRechthoek(D, r, behalve)) return 'Daar is een deur.';
+    if (wieErStaat && T.wieStaatOp(D.wereld, r)) return T.t('Someone is standing there.');
+    if (T.deurOpRechthoek(D, r, behalve)) return T.t('There is a door there.');
     return null;
   };
 
@@ -964,20 +970,20 @@
     const w = D.wereld;
     const komt = T.bouwplaatsOp(D, x, y);
     if (komt) return T.t('{gebouw} is already coming here.', { gebouw: T.hoofdletter(T.eenNaam(T.GEBOUWEN[komt.soort].naam)) });
-    if (T.veldOp(w, x, y)) return 'Daar ligt een veld.';
-    if (T.opPad(w, x, y)) return 'Daar loopt een pad.';
+    if (T.veldOp(w, x, y)) return T.t('There is a field there.');
+    if (T.opPad(w, x, y)) return T.t('There is a path there.');
     // Op zand wordt niet gebouwd (Marcel, 8 okt: "zand is geen solide basis"): het strand, de duinen en het stuifzand
     // van het eiland (tegels/kust.png; werklijst vraag 117, B van 2a).
     const g = w.grond && w.grond[y] && w.grond[y][x];
-    if (g && g.naam === 'strand') return 'Op zand wordt niet gebouwd.';
-    if (T.erfOp(D, x, y)) return 'Daar ligt een erf.';
-    if (T.wijngaardOp(D, x, y)) return 'Daar ligt de wijngaard.';
+    if (g && g.naam === 'strand') return T.t('Nothing is built on sand.');
+    if (T.erfOp(D, x, y)) return T.t('There is a plot there.');
+    if (T.wijngaardOp(D, x, y)) return T.t('There is a vineyard there.');
     // Waar de herberg straks met het dorp meegroeit (T.meegroeiGrond, js/behoeften.js), blijft de grond vrij.
     const groeit = T.meegroeiGrondOp(D, x, y);
-    if (groeit) return `Hier groeit straks de ${T.GEBOUWEN[groeit.soort].naam}.`;
+    if (groeit) return T.t('The {gebouw} will grow here.', { gebouw: T.GEBOUWEN[groeit.soort].naam });
     // Een lantaarn houdt niemand tegen die loopt, maar er komt geen gebouw overheen (js/paden.js).
     const v = T.voorwerpOp(w, x, y);
-    if (v && v.soort === 'lantaarn') return 'Daar staat een lantaarn.';
+    if (v && v.soort === 'lantaarn') return T.t('There is a lantern there.');
     return null;
   };
 
@@ -1168,7 +1174,7 @@
   // werklijst vraag 110, e). Dan wacht het gebouw, nog niet op de kaart, en begint het pas als dat stuk vrij is.
   T.plaatsGebouw = function (D, soort, x, y, rooien = null) {
     const g = T.GEBOUWEN[soort];
-    if (!g || g.menu === false || !nogTeBouwen(D, soort)) return { gelukt: false, reden: 'Dat kan niet via het bouwmenu.' };
+    if (!g || g.menu === false || !nogTeBouwen(D, soort)) return { gelukt: false, reden: T.t('That cannot be built from the build menu.') };
     // Een erf is land, geen gebouw: het krijgt geen voorwerp en maakt de grond niet vast (js/erven.js).
     if (g.erf) return T.legErfAan(D, x, y);
     // De markt op het plein: kramen, geen gebouw met een voet (js/markt.js; werklijst vraag 110, d).
@@ -1177,7 +1183,7 @@
     const kavel = rooien || T.bouwKavel(D, soort, x, y);
     const past = T.waaromPastHetNiet(D, soort, x, y, null, kavel);
     if (past) return { gelukt: false, reden: past };
-    if (!T.kanBetalen(D, g.kosten)) return { gelukt: false, reden: 'Daar is de voorraad niet groot genoeg voor.' };
+    if (!T.kanBetalen(D, g.kosten)) return { gelukt: false, reden: T.t('The stores are not big enough for that.') };
     T.betaalKosten(D, g.kosten);
     const dagNu = D.kalender ? Math.floor(D.kalender.dag) : 0;
     // Zijn eigen tekening en de voet die daarbij hoort (T.volgendeTekening): een hut is niet elke hut.
@@ -1197,8 +1203,8 @@
         ? T.t('{gebouw}: the builders first clear the site ({wat}), then build it ({werk} workdays).', { gebouw, wat, werk })
         : T.t('{gebouw}: the building site is ready ({werk} workdays, for whoever has no other work).', { gebouw, werk }) };
     }
-    if (instantie.wachtOpRooien) return { gelukt: true, instantie, bericht: `${T.hoofdletter(g.naam)}: eerst wordt de plek gerooid.` };
-    return { gelukt: true, instantie, bericht: `${T.hoofdletter(g.naam)} in aanbouw (${g.bouwtijd} dag${g.bouwtijd === 1 ? '' : 'en'}).` };
+    if (instantie.wachtOpRooien) return { gelukt: true, instantie, bericht: T.t('{gebouw}: the site is cleared first.', { gebouw: T.hoofdletter(g.naam) }) };
+    return { gelukt: true, instantie, bericht: T.t('{gebouw} under construction ({n|# day|# days}).', { gebouw: T.hoofdletter(g.naam), n: g.bouwtijd }) };
   };
 
   // Een gebouw in het dorp zetten: in S.gebouwen, met zijn voorwerp op de kaart (zetGebouwVoorwerp
@@ -1228,7 +1234,7 @@
     for (const d of w.gebouwenOpKaart) {
       const g = T.GEBOUWEN[d.soort];
       if (!g) {
-        console.warn(`T.zetBestaandeGebouwen: onbekende soort "${d.soort}" op (${d.x}, ${d.y}), overgeslagen`);
+        console.warn(`T.zetBestaandeGebouwen: onbekende soort "${d.soort}" op (${d.x}, ${d.y}), overgeslagen`); // geen tekst
         continue;
       }
       // Zijn voet uit het betekenisbestand (T.voetVanGebouw). En wie er woont (`huis`, de boer met dezelfde id of de
@@ -1525,7 +1531,7 @@
         continue;
       }
       if (vrij && soort.handen > 0) {
-        g.stilWant = 'het dorp viert feest';
+        g.stilWant = T.t('the village is feasting');
         continue;
       }
       // Wie in dit seizoen stilligt, of een houthakker die binnen zijn bereik geen boom meer vindt (js/bos.js).
@@ -1533,7 +1539,7 @@
       const stil = T.stilOp(soort, dag, seizoen) || T.waaromHaktHijNiet(D, g) || T.waaromVistHijNiet(D, g);
       if (stil) {
         g.stilWant = stil;
-        if (!wasStil && T.ui && T.ui.bericht && !soort.alleenIn) T.zeg(D, `${T.hoofdletter(soort.naam)} staat stil: ${stil}.`);
+        if (!wasStil && T.ui && T.ui.bericht && !soort.alleenIn) T.zeg(D, T.t('The {naam} is idle: {waarom}.', { naam: soort.naam, waarom: stil }));
         continue;
       }
       // Werk telt in uren (js/bewoners.js, T.werkUrenVan; Marcel koos op 26 sep de looptijd): wie ver van zijn werk

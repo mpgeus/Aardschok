@@ -210,7 +210,7 @@ test('na een voorjaar met honger maakt een boer een veld weide, als het hooi gee
       assert.equal(na, voor + 1, 'een weide erbij');
       const w = anders.find((a) => a.weide);
       assert.ok(w && w.veld.planDoor === 'boer', 'een boer koos het');
-      assert.ok(gezegd.some((t) => /wordt weide/.test(t)), gezegd.join(' / '));
+      assert.ok(gezegd.some((t) => /will become meadow/.test(t)), gezegd.join(' / '));
       assert.equal(D.behoeften.voorjaarsHonger, 0, 'een nieuw jaar telt opnieuw');
     } finally {
       T.optiesTerug();

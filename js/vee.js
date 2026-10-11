@@ -116,13 +116,13 @@
   T.VEE = {
     // roodbruin, zwart en zwartbont; een koe kuiert
     koe: {
-      naam: 'koe', meervoud: 'koeien', snelheid: 0.9, straal: 4, kleuren: 3, pauze: [6, 16],
-      rust: { grazen: 0.6, liggen: 0.15, blok: 12 }, graast: 'weide', jong: 'kalf', jongen: 'kalveren',
+      naam: T.t('cow'), meervoud: T.t('cows'), snelheid: 0.9, straal: 4, kleuren: 3, pauze: [6, 16],
+      rust: { grazen: 0.6, liggen: 0.15, blok: 12 }, graast: 'weide', jong: T.t('calf'), jongen: T.t('calves'),
     },
     // vuilwit, bruin, en een met een zwarte kop; een schaap trippelt iets vlotter, en graast meer
     schaap: {
-      naam: 'schaap', meervoud: 'schapen', snelheid: 1.1, straal: 3, kleuren: 3, pauze: [4, 12],
-      rust: { grazen: 0.7, liggen: 0.1, blok: 9 }, graast: 'meent', jong: 'lam', jongen: 'lammeren',
+      naam: T.t('sheep'), meervoud: T.t('sheep'), snelheid: 1.1, straal: 3, kleuren: 3, pauze: [4, 12],
+      rust: { grazen: 0.7, liggen: 0.1, blok: 9 }, graast: 'meent', jong: T.t('lamb'), jongen: T.t('lambs'),
     },
   };
 
@@ -144,7 +144,7 @@
     return ((z % n) + n) % n;
   };
 
-  const RICHTINGEN = ['Z', 'ZW', 'W', 'NW', 'N', 'NO', 'O', 'ZO'];
+  const RICHTINGEN = ['Z', 'ZW', 'W', 'NW', 'N', 'NO', 'O', 'ZO']; // geen tekst
   const PERIODE = 6; // blokken in een periode waarin het dier al of niet een tijd gaat liggen
 
   // Wat doet een dier dat stilstaat, op tijd t (seconden: S.tijd)? Meestal grazen, soms staan te
@@ -186,7 +186,7 @@
   // hetzelfde dier, dat op dezelfde momenten gaat liggen.
   T.maakDier = function (soort, x, y, zaad) {
     const v = T.VEE[soort];
-    if (!v) throw new Error(`onbekend dier "${soort}"`);
+    if (!v) throw new Error(`onbekend dier "${soort}"`); // geen tekst
     const z = Math.floor(zaad) || 0;
     const e = T.maakDorpeling(z, x, y, v.straal, null);
     const kleur = T.dierKleur(soort, z);
@@ -228,12 +228,12 @@
     const delen = [];
     for (const [soort, v] of Object.entries(T.VEE)) {
       const n = dieren.filter((e) => (typeof e === 'string' ? e : e.dier) === soort).length;
-      if (n) delen.push(`${n} ${n === 1 ? v.naam : v.meervoud}`);
+      if (n) delen.push(T.t('{n} {dier}', { n, dier: n === 1 ? v.naam : v.meervoud }));
     }
-    if (!delen.length) return 'geen vee';
-    return delen.length === 1 ? delen[0] : `${delen.slice(0, -1).join(', ')} en ${delen[delen.length - 1]}`;
+    if (!delen.length) return T.t('no livestock');
+    return T.opsomming(delen);
   }
-  const tegelsTekst = (n) => `${n} ${n === 1 ? 'tegel' : 'tegels'}`;
+  const tegelsTekst = (n) => T.t('{n|# tile|# tiles}', { n });
 
   // Wat het spel van het vee onthoudt, naast de dieren zelf (die staan als wezens in de wereld, met
   // e.weide): de melk van vandaag, en hoeveel dieren het spel al een zaad gaf.
@@ -487,12 +487,9 @@
     const plek = verdeel(moeten, vrij, false);
     if (plek.size === moeten.length) return { past: true, reden: null, moeten, plek, vrij };
     const nodig = moeten.reduce((n, e) => n + plaatsVan(e), 0);
-    const een = moeten.length === 1;
     const reden = weides.length
-      ? `Dan is er te weinig weide: ${telKudde(moeten)} ${een ? 'moet' : 'moeten'} ergens anders grazen ` +
-        `en ${een ? 'heeft' : 'hebben'} ${tegelsTekst(nodig)} nodig, ` +
-        `en op de andere weides ${vrijVooraf === 1 ? 'is' : 'zijn'} nog ${tegelsTekst(vrijVooraf)} vrij.`
-      : `Dan is er volgend jaar geen weide meer voor ${telKudde(moeten)}. Maak eerst een ander veld weide.`;
+      ? T.t('That would leave too little meadow: {kudde} would have to graze elsewhere, needing {nodig}, and the other meadows have only {vrij} free.', { kudde: telKudde(moeten), nodig: tegelsTekst(nodig), vrij: tegelsTekst(vrijVooraf) })
+      : T.t('That would leave no meadow next year for {kudde}. Make another field a meadow first.', { kudde: telKudde(moeten) });
     return { past: false, reden, moeten, plek, vrij };
   };
 
@@ -512,9 +509,9 @@
     }
     if (teVol.size) {
       const wie = telKudde([...teVol.keys()]);
-      T.zeg(D, `Er is te weinig weide: ${wie} ${teVol.size === 1 ? 'staat' : 'staan'} te krap, en de koeien daar geven minder melk.`, 'gevaar');
+      T.zeg(D, T.t('There is too little meadow: {wie} {n|is|are} too cramped, and the cows there give less milk.', { wie, n: teVol.size }), 'gevaar');
     } else if (verhuisd.length) {
-      T.zeg(D, `Het vee gaat naar zijn nieuwe weide: ${telKudde(verhuisd)}.`);
+      T.zeg(D, T.t('The cattle move to their new meadow: {kudde}.', { kudde: telKudde(verhuisd) }));
     }
     return verhuisd;
   };
@@ -647,11 +644,13 @@
     const wat = [];
     for (const [soort, v] of Object.entries(T.VEE)) {
       const n = nieuw.filter((e) => e.dier === soort).length;
-      if (n) wat.push(`${n} ${n === 1 ? v.jong : v.jongen}`);
+      if (n) wat.push(T.t('{n} {dier}', { n, dier: n === 1 ? v.jong : v.jongen }));
     }
-    const meer = geenPlaats ? ' Meer paste er niet.' : '';
-    if (wat.length) T.zeg(D, `Het is grasmaand: er ${nieuw.length === 1 ? 'is' : 'zijn'} ${wat.join(' en ')} geboren.${meer}`, 'goed');
-    else if (geenPlaats) T.zeg(D, 'Het is grasmaand, maar er is geen plaats voor jongen: niet op de weide, of niet in de kooi.');
+    const maand = T.MAANDEN[T.datumVanDag(dag).maand].toon;
+    if (wat.length) {
+      const geboren = T.t('It is {maand}: {wat} {n|was|were} born.', { maand, wat: T.opsomming(wat), n: nieuw.length });
+      T.zeg(D, geenPlaats ? `${geboren} ${T.t('There was no room for more.')}` : geboren, 'goed');
+    } else if (geenPlaats) T.zeg(D, T.t('It is {maand}, but there is no room for the young: not in the meadow, or not in the sheepfold.', { maand }));
     return nieuw;
   };
 
@@ -691,7 +690,7 @@
     const wol = schapen.length * IN().wolPerSchaap;
     if (wol > 0 && D.voorraad && T.wijzigVoorraad) {
       T.wijzigVoorraad(D, 'wol', wol);
-      T.zeg(D, `Het is ${T.MAANDEN[T.datumVanDag(dag).maand].naam}: ${schapen.length} ${schapen.length === 1 ? 'schaap is' : 'schapen zijn'} geschoren. Dat geeft ${wol} wol.`, 'goed');
+      T.zeg(D, T.t('It is {maand}: {n|# sheep was|# sheep were} sheared. That gives {wol}.', { maand: T.MAANDEN[T.datumVanDag(dag).maand].toon, n: schapen.length, wol: T.hoeveel(wol, 'wol') }), 'goed');
     }
     return wol;
   };
@@ -745,10 +744,10 @@
     for (const soort of Object.keys(T.VEE)) {
       for (const jong of [false, true]) {
         const hier = dieren.filter((e) => e.dier === soort && !volwassen(e, dag) === jong);
-        if (hier.length) delen.push(`${hier.length === 1 ? 'een' : hier.length} ${naamVan(hier[0], dag, hier.length)}`);
+        if (hier.length) delen.push(hier.length === 1 ? T.eenNaam(naamVan(hier[0], dag, 1)) : T.t('{n} {dier}', { n: hier.length, dier: naamVan(hier[0], dag, hier.length) }));
       }
     }
-    return delen.length < 2 ? delen.join('') : `${delen.slice(0, -1).join(', ')} en ${delen[delen.length - 1]}`;
+    return T.opsomming(delen);
   }
   T.dierenTekst = dierenTekst;
 
@@ -842,7 +841,7 @@
     }
     if (D.vee) D.vee.slachtVraag = false;
     if (dieren.length) {
-      T.zeg(D, `${T.hoofdletter(dierenTekst(dieren, dag))} ${dieren.length === 1 ? 'gaat' : 'gaan'} naar de slager: ${Math.round(o.vlees)} vlees en ${o.huiden} ${o.huiden === 1 ? 'huid' : 'huiden'}.`, 'goed');
+      T.zeg(D, T.t('{dieren} {n|goes|go} to the butcher: {vlees} and {huiden}.', { dieren: T.hoofdletter(dierenTekst(dieren, dag)), n: dieren.length, vlees: T.hoeveel(Math.round(o.vlees), 'vlees'), huiden: T.hoeveel(o.huiden, 'huiden') }), 'goed');
     }
     return o;
   };
@@ -856,14 +855,14 @@
     const voorstel = T.slachtVoorstel(D, dag);
     // Wat ze deden, schrijft het dagboek op, voor het rapport van de raadsman (js/ochtendrapport.js).
     if (!voorstel.dieren.length) {
-      T.zeg(D, 'Het hooi haalt de winter: de boeren houden al hun vee.', 'goed');
-      T.schrijfOp(D, 'boeren', { tekst: 'Het hooi haalt de winter: de boeren hielden al hun vee.' });
+      T.zeg(D, T.t('The hay will last the winter: the farmers keep all their cattle.'), 'goed');
+      T.schrijfOp(D, 'boeren', { tekst: T.t('The hay will last the winter, so the farmers kept all their cattle.') });
       return { vlees: 0, huiden: 0 };
     }
-    T.zeg(D, 'Het hooi haalt de winter niet voor de hele kudde: de boeren slachten wat te veel is.');
+    T.zeg(D, T.t('The hay will not last the winter for the whole herd: the farmers slaughter the surplus.'));
     const geslacht = dierenTekst(voorstel.dieren, dag);
     const o = T.slacht(D, voorstel.dieren, dag);
-    T.schrijfOp(D, 'boeren', { tekst: `Het hooi haalt de winter niet voor de hele kudde: de boeren slachtten ${geslacht}, voor ${Math.round(o.vlees)} vlees.` });
+    T.schrijfOp(D, 'boeren', { tekst: T.t('The hay will not last the winter for the whole herd: the farmers slaughtered {geslacht}, for {vlees}.', { geslacht, vlees: T.hoeveel(Math.round(o.vlees), 'vlees') }) });
     return o;
   };
 
@@ -891,8 +890,7 @@
     if (gegeten > 0 && D.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(D, 'hooi', -gegeten);
     for (const e of gestorven) haalWeg(D, e);
     if (gestorven.length) {
-      const een = gestorven.length === 1;
-      T.zeg(D, `${T.hoofdletter(dierenTekst(gestorven, dag))} ${een ? 'is' : 'zijn'} van honger gestorven: het hooi was op.`, 'gevaar');
+      T.zeg(D, T.t('{dieren} starved: the hay ran out.', { dieren: T.hoofdletter(dierenTekst(gestorven, dag)) }), 'gevaar');
     }
     // Vooraf zeggen, één keer per winter: het hooi is binnenkort op, of nu al. Binnenkort zegt het zoals
     // het dorp het zegt van het hout en het eten (T.raaktOp, js/behoeften.js): vanaf vandaag, met
@@ -900,12 +898,12 @@
     if (gegeten < nodig - 1e-9) {
       if (!V.hongerGemeld) {
         V.hongerGemeld = true;
-        T.zeg(D, `Het hooi is op. Het vee krijgt honger, en wie ${IN().hongerDagen} dagen tekortkomt, sterft. Slacht wat je niet kunt voeren.`, 'gevaar');
+        T.zeg(D, T.t('The hay has run out. The cattle go hungry, and any animal short for {n|# day|# days} dies. Slaughter what you cannot feed.', { n: IN().hongerDagen }), 'gevaar');
       }
     } else {
       V.hongerGemeld = false;
       const v = T.haaltDeWinter({ voorraad: hooi + gegeten, perWinterdag: nodig, winter: T.winterDagen(dag) });
-      const tekst = !V.hooiGewaarschuwd && T.raaktOp('het hooi', v, IN().hooiWaarschuwing);
+      const tekst = !V.hooiGewaarschuwd && T.raaktOp(T.t('the hay'), v, IN().hooiWaarschuwing);
       if (tekst) {
         V.hooiGewaarschuwd = true;
         T.zeg(D, tekst, 'gevaar');

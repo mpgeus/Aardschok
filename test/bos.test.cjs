@@ -217,9 +217,9 @@ test('staat er binnen tien tegels geen boom meer, dan staat hij stil en zegt de 
   for (const t of bomen) T.velBoom(D, t.x, t.y);
   nacht(S, 10);
   assert.equal(g.boom, null);
-  assert.match(g.stilWant, /geen boom meer binnen tien tegels/);
+  assert.match(g.stilWant, /no trees are left within 10 tiles/);
   assert.equal(g.werkte, 0, 'geen hout uit het niets');
-  assert.match(T.gebouwToestand(D, g), /staat stil, er staat geen boom meer/);
+  assert.match(T.gebouwToestand(D, g), /idle, no trees are left/);
   const raad = T.RADEN.find((x) => x.id === 'geenBoom');
   assert.ok(raad.als(D), 'de raad zegt het');
   assert.match(raad.tekst(D), /De houthakker staat stil.*Zijn hand werkt zolang ergens anders/);
@@ -264,7 +264,7 @@ test('een houthakker komt alleen bij genoeg bos: minstens dertig bomen binnen ti
     }
   }
   assert.ok(plekken.weinig && plekken.genoeg);
-  assert.match(T.waaromNietBijDeNatuur(D, 'houthakker', plekken.weinig) || '', /bos/);
+  assert.match(T.waaromNietBijDeNatuur(D, 'houthakker', plekken.weinig) || '', /forest/);
   assert.equal(T.waaromNietBijDeNatuur(D, 'houthakker', plekken.genoeg), null);
 }));
 

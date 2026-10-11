@@ -162,11 +162,11 @@
   // hier staat alleen hoe hij loopt. Het hert (gereedschap/pixelart/wild.cjs): twee hindes (hert0, hert1) en een hert
   // met een gewei (hert2), dat de groep leidt.
   T.BEESTEN = {
-    wolf: { naam: 'wolf', meervoud: 'wolven', snelheid: 1.4, vlucht: 2.2 },
-    hert: { naam: 'hert', meervoud: 'herten', snelheid: 1.0, vlucht: 4.0, vellen: ['hert0', 'hert1'], leider: 'hert2' },
+    wolf: { naam: T.t('wolf'), meervoud: T.t('wolves'), snelheid: 1.4, vlucht: 2.2 },
+    hert: { naam: T.t('deer'), meervoud: T.t('deer'), snelheid: 1.0, vlucht: 4.0, vellen: ['hert0', 'hert1'], leider: 'hert2' },
   };
 
-  const RICHTINGEN = ['Z', 'ZW', 'W', 'NW', 'N', 'NO', 'O', 'ZO'];
+  const RICHTINGEN = ['Z', 'ZW', 'W', 'NW', 'N', 'NO', 'O', 'ZO']; // geen tekst
   const BUREN = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [-1, 1], [1, -1], [-1, -1]];
   // Waar de anderen gaan staan als de leider stilstaat: om hem heen, elk op zijn eigen plek.
   const KRING = [[1, 1], [-1, 1], [1, -1], [-1, -1], [2, 0], [0, 2], [-2, 0], [0, -2], [1, 0], [0, 1], [-1, 0], [0, -1], [2, 1], [-1, 2], [1, -2], [-2, -1], [2, 2], [-2, 2], [2, -2], [-2, -2]];
@@ -743,7 +743,7 @@
     }
     G.trektWeg = true;
     haalHolWeg(D, G);
-    T.zeg(D, `De ${T.BEESTEN[G.soort].meervoud} zijn weggetrokken: hun bos is te klein geworden.`, G.soort === 'wolf' ? 'goed' : '');
+    T.zeg(D, T.t('The {dieren} have moved away: their forest has become too small.', { dieren: T.BEESTEN[G.soort].meervoud }), G.soort === 'wolf' ? 'goed' : '');
   }
 
   // De honger van een roedel en zijn jacht (g): in de winter komt er elke nacht een dag honger bij, voor een roedel van
@@ -853,7 +853,7 @@
     }
     const nieuw = T.wolvenBijHetDorp(D, dag) == null;
     D.beesten.gezien = { dag, wat: 'gezien', wie: T.naamVanBewoner(p) };
-    if (nieuw) T.zeg(D, `${T.naamVanBewoner(p)} zag wolven bij de bosrand, en rende naar huis.`);
+    if (nieuw) T.zeg(D, T.t('{wie} saw wolves at the edge of the forest, and ran home.', { wie: T.naamVanBewoner(p) }));
   }
 
   // Wat een roedel met honger zoekt: elke halve seconde kiest hij opnieuw (kiesProoi), en daartussen houdt hij wat hij
@@ -933,7 +933,7 @@
       T.verliesDier(D, prooi.e);
       B.gezien = { dag, wat: 'schaap', wie: null };
       B.roedel = G;
-      T.zeg(D, 'De wolven hebben een schaap van de meent gehaald.', 'gevaar');
+      T.zeg(D, T.t('The wolves have taken a sheep from the common.'), 'gevaar');
       wolvenVoorval(D, dag);
     } else {
       const p = T.bewonerVan(D, prooi.e);
@@ -969,7 +969,7 @@
     G.aanval = { e, tot: (S.wereldTijd || 0) + H.uren * (T.DAG_LENGTE / 24), helpers };
     leider.pad = leider.onderweg ? [leider.pad[0]] : [];
     D.beesten.gezien = { dag: D.kalender.dag, wat: 'aanval', wie: T.naamVanBewoner(p) };
-    T.zeg(D, `${T.naamVanBewoner(p)} roept om hulp: de wolven vallen ${p.geslacht === 'vrouw' ? 'haar' : 'hem'} aan!`, 'gevaar');
+    T.zeg(D, T.t('{wie} calls for help: the wolves are attacking {g|vrouw:her|*:him}.', { wie: T.naamVanBewoner(p), g: p.geslacht }), 'gevaar');
     T.naarGewoneSnelheid(D);
   }
 
@@ -995,11 +995,11 @@
     const mensen = D.wereld.wezens.filter((m) => m !== e && (m.bewoner || m.werkAkkers) && !m.binnen && !m.dood && !m.beest && !m.dier);
     const helper = mensen.find((m) => T.afstand(T.tegelVan(m), plek) <= IN().dreiging.alleen);
     if (helper) {
-      const wie = helper === schout ? 'De schout' : T.naamVanBewoner(T.bewonerVan(D, helper)) || helper.naam;
+      const wie = helper === schout ? T.t('The reeve') : T.naamVanBewoner(T.bewonerVan(D, helper)) || helper.naam;
       eindAanval(D, G);
       G.weg = D.kalender.dag + IN().wegUren / 24;
       G.vluchtNaar = { x: G.thuis.x, y: G.thuis.y };
-      T.zeg(D, `${wie} kwam ${T.naamVanBewoner(p)} te hulp, en de wolven zijn gevlucht.`, 'goed');
+      T.zeg(D, T.t('{wie} came to help {naam}, and the wolves have fled.', { wie, naam: T.naamVanBewoner(p) }), 'goed');
       return;
     }
     if (t < A.tot) return;
@@ -1026,12 +1026,12 @@
     const naam = T.naamVanBewoner(p);
     D.beesten.gezien = { dag, wat: 'aanval', wie: naam };
     if (IN().doden && lot(G.zaad, Math.floor(dag * 24), 53) < IN().dreiging.doodKans) {
-      T.wijzigBevolking(D, -1, 'wolven', 'In het donker vielen de wolven aan', [p]);
+      T.wijzigBevolking(D, -1, 'wolven', T.t('Wolves attacked in the dark'), [p]);
       return;
     }
     p.thuisTot = Math.floor(dag) + 1 + IN().dreiging.gewondDagen;
     p.gewond = true;
-    T.zeg(D, `${naam} is in het donker door de wolven gebeten, en ligt ${T.telwoord(IN().dreiging.gewondDagen)} dagen in bed.`, 'gevaar');
+    T.zeg(D, T.t('{naam} was bitten by the wolves in the dark, and is laid up in bed for {n|# day|# days}.', { naam, n: IN().dreiging.gewondDagen }), 'gevaar');
   }
 
   // Het voorval "wolven" (js/voorvallen.js, met de vlag wolvenNamenSchaap: dan zijn de antwoorden echt): de herder, of een
@@ -1121,7 +1121,7 @@
     }
     if (wild.wolf && !(dag - (g.wolfDag ?? -Infinity) < IN().jager.wolfDagen) && neemUit(D, g, wild.wolf)) {
       g.wolfDag = dag;
-      T.zeg(D, wild.wolf.leden.length > IN().jager.hooguit ? 'De jager schoot een wolf.' : 'De jager schoot een wolf: de roedel is weer klein.', 'goed');
+      T.zeg(D, wild.wolf.leden.length > IN().jager.hooguit ? T.t('The hunter shot a wolf.') : T.t('The hunter shot a wolf: the pack is small again.'), 'goed');
     }
     T.wildVanJager(D, g);
   };
@@ -1144,7 +1144,7 @@
     if (!doel) return 0;
     const weg = doel.leden.filter((e) => !e.leider).concat(doel.leden.filter((e) => e.leider)).slice(0, n);
     D.wereld.wezens = D.wereld.wezens.filter((e) => !weg.includes(e));
-    T.zeg(D, weg.length === doel.leden.length ? 'De jacht: de roedel is er niet meer.' : `De jacht: ${T.telwoord(weg.length)} ${weg.length === 1 ? 'wolf' : 'wolven'} minder.`, 'goed');
+    T.zeg(D, weg.length === doel.leden.length ? T.t('The hunt: the pack is gone.') : T.t('The hunt: {n|one wolf|# wolves} fewer.', { n: weg.length }), 'goed');
     return weg.length;
   };
 
@@ -1165,15 +1165,15 @@
   T.beginJacht = function (D, dag) {
     const doel = roedelVoorDeJacht(D);
     if (!doel) {
-      T.zeg(D, 'De wolven zijn al weg: er is niets meer om op te jagen.');
+      T.zeg(D, T.t('The wolves have already gone: there is nothing left to hunt.'));
       return null;
     }
     const militie = T.militieVan(D);
     const mannen = (militie.length ? militie : T.weerbareMannen(D).filter((p) => p.wezen && !p.wezen.dood).slice(0, IN().jacht.mannen).map((p) => p.wezen));
     for (const e of mannen) T.roepOp(e);
     D.beesten.jacht = { roedel: doel.G, tot: dag + IN().jacht.dagen, mannen };
-    const wie = mannen.length ? `${T.opsomming(mannen.map((e) => e.naam))} ${mannen.length === 1 ? 'gaat' : 'gaan'} met je mee` : 'Er is niemand die meegaat';
-    T.zeg(D, `De jacht op de wolven: ${wie}. Hun hol ligt in het bos, in goud op de grond. Ga je niet binnen ${T.telwoord(IN().jacht.dagen)} dagen, dan gaan ze zonder je.`);
+    const wie = mannen.length ? T.t('{mannen} {n|goes|go} with you', { mannen: T.opsomming(mannen.map((e) => e.naam)), n: mannen.length }) : T.t('nobody is going with you');
+    T.zeg(D, T.t('The hunt for the wolves: {wie}. Their den lies in the forest, marked in gold on the ground. If you do not go within {n|# day|# days}, they go without you.', { wie, n: IN().jacht.dagen }));
     return D.beesten.jacht;
   };
 
@@ -1183,7 +1183,7 @@
     const J = D.beesten.jacht;
     const leden = D.wereld.wezens.filter((e) => e.groep === J.roedel && !e.dood);
     if (!leden.length || J.roedel.trektWeg) {
-      eindJacht(D, 'De jacht: de roedel is weg.');
+      eindJacht(D, T.t('The hunt: the pack has gone.'));
       return;
     }
     if (S.modus === 'gevecht' || S.modus === 'overgang' || S.modus === 'dood') return;
@@ -1211,9 +1211,9 @@
     if (mannen.length && lot(J.roedel.zaad, Math.floor(dag), 61) < IN().jacht.sterfkans / 100) {
       const e = mannen[Math.floor(lot(J.roedel.zaad, Math.floor(dag), 63) * mannen.length)];
       const p = T.bewonerVan(D, e);
-      if (p) T.wijzigBevolking(D, -1, 'wolven', 'Hij kwam niet terug van de jacht op de wolven', [p]);
+      if (p) T.wijzigBevolking(D, -1, 'wolven', T.t('He did not come back from the hunt for the wolves'), [p]);
     }
-    eindJacht(D, mannen.length ? 'De mannen gingen zonder je op jacht.' : null);
+    eindJacht(D, mannen.length ? T.t('The men went hunting without you.') : null);
   }
 
   // Na een gevecht (T.eindeGevecht, js/gevecht.js): was het de jacht, dan is hij voorbij. Wie van de roedel overbleef,
@@ -1227,7 +1227,7 @@
       J.roedel.weg = D.kalender.dag + IN().wegUren / 24;
       J.roedel.vluchtNaar = { x: J.roedel.thuis.x, y: J.roedel.thuis.y };
     }
-    eindJacht(D, !leden.length ? 'De jacht: de roedel is er niet meer.' : dood ? `De jacht: ${T.telwoord(dood)} ${dood === 1 ? 'wolf' : 'wolven'} minder, de rest is gevlucht.` : 'De jacht: de wolven zijn gevlucht.');
+    eindJacht(D, !leden.length ? T.t('The hunt: the pack is gone.') : dood ? T.t('The hunt: {n|one wolf|# wolves} fewer, and the rest have fled.', { n: dood }) : T.t('The hunt: the wolves have fled.'));
   };
 
   // De jacht is voorbij: de mannen gaan naar huis of aan het werk.
@@ -1290,7 +1290,7 @@
     const g = D.beesten && D.beesten.gezien;
     if (!IN().aan || !g || dag - g.dag > IN().dreiging.statusDagen) return null;
     if (g.wat === 'gezien') return '';
-    return T.beestenVan(D).some(({ G }) => G.soort === 'hert') ? 'ze hebben honger' : 'de herten in het bos zijn op';
+    return T.beestenVan(D).some(({ G }) => G.soort === 'hert') ? T.t('they are hungry') : T.t('the deer in the forest are all gone');
   };
 
   // ---------------------------------------------------------------------------------------------

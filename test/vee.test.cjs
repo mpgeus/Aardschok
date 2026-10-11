@@ -550,7 +550,7 @@ test('T.kanBestemming: een weide wordt pas iets anders als zijn vee ergens ander
   zet(S, oud, 'koe', 3);
   zet(S, oud, 'schaap', 8); // 28 nodig
   assert.deepEqual(T.kanBestemming(S, oud, 'akker'), {
-    kan: false, reden: 'Dan is er volgend jaar geen weide meer voor 3 koeien en 8 schapen. Maak eerst een ander veld weide.',
+    kan: false, reden: 'That would leave no meadow next year for 3 cows and 8 sheep. Make another field a meadow first.',
   });
   assert.equal(T.zetPlan(S, oud, 'braak').kan, false);
   assert.equal(oud.plan, 'weide', 'wat niet kan, verandert niets');
@@ -561,7 +561,7 @@ test('T.kanBestemming: een weide wordt pas iets anders als zijn vee ergens ander
   nieuw.b = 1;
   assert.deepEqual(T.kanBestemming(S, oud, 'akker'), {
     kan: false,
-    reden: 'Dan is er te weinig weide: 3 koeien en 8 schapen moeten ergens anders grazen en hebben 28 tegels nodig, en op de andere weides zijn nog 14 tegels vrij.',
+    reden: 'That would leave too little meadow: 3 cows and 8 sheep would have to graze elsewhere, needing 28 tiles, and the other meadows have only 14 tiles free.',
   });
   // Een akker braak laten liggen, of weer weide van maken, heeft met het vee niets te maken.
   nieuw.plan = 'akker';

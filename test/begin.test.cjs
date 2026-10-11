@@ -117,7 +117,7 @@ test('een jaar vanaf een lege plek, zonder iets te doen: geen fout, en de heer v
   assert.deepEqual(brieven, ['gespaard'], 'in wijnmaand schrijft hij alleen dat hij je spaart');
   // zonder te bouwen haalt het dorp de winter niet
   assert.ok(D.bevolking < begin);
-  assert.ok(!gezegd.some((t) => /geen plaats/.test(t)), 'zolang er een gezin in het kamp woont, wil er geen nieuw gezin komen');
+  assert.ok(!gezegd.some((t) => /no room/.test(t)), 'zolang er een gezin in het kamp woont, wil er geen nieuw gezin komen');
 });
 
 // Zet `n` hutten neer zo dicht mogelijk bij het kampvuur (niet op het plein), zoals de speler ze met het bouwmenu neerzet,

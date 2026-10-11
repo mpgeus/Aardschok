@@ -51,6 +51,8 @@
   // ---------------------------------------------------------------------------------------------
 
   T.BESTEMMINGEN = ['akker', 'weide', 'braak'];
+  // Wat de speler ziet: "A field is arable, meadow or fallow" (ontwerp/engels.md). Met een hoofdletter: T.hoofdletter.
+  T.BESTEMMING_NAAM = { akker: T.t('arable'), weide: T.t('meadow'), braak: T.t('fallow') };
 
   // Alle getallen van de velden in één blok (ook in de werkbank van de spelregels, js/opties.js).
   // Een eerste gok, uit het voorstel dat Marcel op 25 sep koos.
@@ -150,9 +152,9 @@
   // dan moet zijn vee volgend jaar ergens heen: kan dat nergens, dan niet (js/vee.js, T.plaatsVoorVee,
   // met de reden erbij). Zonder vee (of zonder js/vee.js) is er niets om op te letten.
   T.kanBestemming = function (D, veld, bestemming) {
-    if (!veld) return { kan: false, reden: 'Daar ligt geen veld.' };
-    if (!T.BESTEMMINGEN.includes(bestemming)) return { kan: false, reden: 'Een veld is akker, weide of braak.' };
-    if (T.planVan(veld) === bestemming) return { kan: false, reden: `Het wordt volgend jaar al ${bestemming}.` };
+    if (!veld) return { kan: false, reden: T.t('There is no field there.') };
+    if (!T.BESTEMMINGEN.includes(bestemming)) return { kan: false, reden: T.t('A field is arable, meadow or fallow.') };
+    if (T.planVan(veld) === bestemming) return { kan: false, reden: T.t('It will already be {bestemming} next year.', { bestemming: T.BESTEMMING_NAAM[bestemming] }) };
     if (T.planVan(veld) === 'weide' && T.plaatsVoorVee) {
       const plaats = T.plaatsVoorVee(D, (v) => (v === veld ? bestemming : T.planVan(v)));
       if (!plaats.past) return { kan: false, reden: plaats.reden };
@@ -183,10 +185,10 @@
   // braak rust. En niet als de mest vanzelf gaat, of het land niet uitput (allebei de spelregels).
   // { kan, reden }, zoals T.kanBestemming.
   T.kanMest = function (D, veld) {
-    if (!veld) return { kan: false, reden: 'Daar ligt geen veld.' };
-    if (!VIN().vruchtbaarheid) return { kan: false, reden: 'Het land put niet uit: dat staat uit in de spelregels.' };
-    if (VIN().mestVanzelf) return { kan: false, reden: 'De mest gaat vanzelf over alle akkers: zo staat het in de spelregels.' };
-    if (T.planVan(veld) !== 'akker') return { kan: false, reden: 'Mest gaat op een akker: een weide mest zichzelf, en een braak rust.' };
+    if (!veld) return { kan: false, reden: T.t('There is no field there.') };
+    if (!VIN().vruchtbaarheid) return { kan: false, reden: T.t('The land does not wear out: that is switched off in the rules.') };
+    if (VIN().mestVanzelf) return { kan: false, reden: T.t('Dung is spread over all the fields by itself: that is what the rules say.') };
+    if (T.planVan(veld) !== 'akker') return { kan: false, reden: T.t('Dung goes on arable land: a meadow fertilises itself, and fallow land rests.') };
     return { kan: true, reden: null };
   };
 
@@ -224,7 +226,7 @@
     const { velden, nodig } = T.mestPlan(D);
     let heb = (D.voorraad && D.voorraad.mest) || 0;
     if (!velden.length || heb <= 0) {
-      if (velden.length && T.ui && T.ui.bericht) T.zeg(D, 'Er was geen mest voor de akkers die je koos.', 'gevaar');
+      if (velden.length && T.ui && T.ui.bericht) T.zeg(D, T.t('There was no dung for the fields you chose.'), 'gevaar');
       return deel;
     }
     let gebruikt = 0;
@@ -245,9 +247,10 @@
     if (gebruikt > 0 && T.wijzigVoorraad) T.wijzigVoorraad(D, 'mest', -gebruikt);
     if (T.ui && T.ui.bericht) {
       const vol = velden.filter((v) => (deel.get(v) || 0) >= 1 - 1e-9).length;
+      const karren = Math.round(gebruikt);
       T.zeg(D, vol === velden.length
-        ? `De mest gaat op de akkers: ${Math.round(gebruikt)} karren, op ${velden.length === 1 ? 'één veld' : `${velden.length} velden`}.`
-        : `Er was te weinig mest: ${Math.round(gebruikt)} karren, en ${velden.length - vol} van de ${velden.length} velden kregen minder dan ze vroegen.`, vol === velden.length ? 'goed' : 'gevaar');
+        ? T.t('The dung goes on the fields: {karren|# cartload|# cartloads}, on {n|one field|# fields}.', { karren, n: velden.length })
+        : T.t('There was too little dung: {karren|# cartload|# cartloads}, and {minder} of the {n} fields got less than they asked for.', { karren, minder: velden.length - vol, n: velden.length }), vol === velden.length ? 'goed' : 'gevaar');
     }
     return deel;
   }
@@ -267,7 +270,7 @@
     const vee = T.weideVee ? T.weideVee(D) : []; // de schapen op de meent hebben geen weide nodig
     if (vee.length && !w.akkers.some((v) => T.planVan(v) === 'weide')) {
       for (const v of w.akkers) if (vee.some((e) => e.weide === v)) v.plan = 'weide';
-      T.zeg(D, 'Er zou geen weide meer zijn, maar het vee moet ergens grazen: de weide blijft weide.', 'gevaar');
+      T.zeg(D, T.t('There would be no meadow left, but the cattle must graze somewhere: the meadow stays a meadow.'), 'gevaar');
     }
     const verslag = [];
     // De mest gaat op wat volgend jaar akker is, bovenop wat het veld het afgelopen jaar deed.
@@ -313,15 +316,15 @@
       const nu = T.bestemmingVan(v);
       let plan = nu === 'braak' ? 'akker' : nu;
       let metMest = false;
-      let waarom = nu === 'braak' ? 'het land heeft gerust' : '';
+      let waarom = nu === 'braak' ? T.t('the land has rested') : '';
       if (nu === 'akker' && IN.vruchtbaarheid && T.vruchtbaarheidVan(v) - IN.akkerPutUit < IN.rustOnder - 1e-9) {
         if (!IN.mestVanzelf && mest >= T.mestVoorVeld(v)) {
           metMest = true;
           mest -= T.mestVoorVeld(v);
-          waarom = 'het land raakt uitgeput, en er is mest';
+          waarom = T.t('the land is wearing out, and there is dung');
         } else {
           plan = 'braak';
-          waarom = 'het land raakt uitgeput';
+          waarom = T.t('the land is wearing out');
         }
       }
       if (plan !== T.planVan(v) || metMest !== !!v.mest) anders.push({ veld: v, plan, mest: metMest, waarom });
@@ -335,14 +338,17 @@
     if (weide) anders.push(weide);
     if (D.behoeften) D.behoeften.voorjaarsHonger = 0; // een nieuw jaar
     if (anders.length) {
-      // "het veld van Klaas rust een jaar en dat van Aaltje krijgt mest"
-      const wat = anders.map((a, i) => {
+      // "Nicholas's field will rest for a year, and Alice's field will get dung"
+      const wat = anders.map((a) => {
         const boer = T.boerVanVeld(D, a.veld);
-        const van = boer ? `${i ? 'dat' : 'het veld'} van ${boer.naam}` : `${i ? 'een' : 'het'} veld zonder boer`;
-        return `${van} ${a.plan === 'braak' ? 'rust een jaar' : a.mest ? 'krijgt mest' : a.weide ? 'wordt weide, voor meer koeien: er was honger in het voorjaar' : `wordt weer ${a.plan}`}`;
+        const veld = boer ? T.t("{naam}'s field", { naam: boer.naam }) : T.t('a field without a farmer');
+        if (a.plan === 'braak') return T.t('{veld} will rest for a year', { veld });
+        if (a.mest) return T.t('{veld} will get dung', { veld });
+        if (a.weide) return T.t('{veld} will become meadow, for more cows: there was hunger in the spring', { veld });
+        return T.t('{veld} will be {bestemming} again', { veld, bestemming: T.BESTEMMING_NAAM[a.plan] });
       });
-      const zin = `Na de oogst kozen de boeren wat hun velden volgend jaar worden: ${T.opsomming(wat)}.`;
-      T.zeg(D, `${zin} In het veldenvenster (V) kun je het veranderen.`);
+      const zin = T.t('After the harvest the farmers chose what their fields will be next year: {wat}.', { wat: T.opsomming(wat) });
+      T.zeg(D, T.t('{zin} You can change it in the fields window (V).', { zin }));
       T.schrijfOp(D, 'boeren', { tekst: zin }); // voor het rapport van de raadsman (js/ochtendrapport.js)
     }
     return anders;
@@ -374,7 +380,7 @@
     if (i >= 0) anders.splice(i, 1);
     kies.plan = 'weide';
     kies.mest = false;
-    kies.planWaarom = 'er was honger in het voorjaar, en de koeien hadden geen hooi meer';
+    kies.planWaarom = T.t('there was hunger in the spring, and the cows had no hay left');
     return { veld: kies, plan: 'weide', mest: false, weide: true, waarom: kies.planWaarom };
   }
 
@@ -382,9 +388,10 @@
   // "Jij koos het", of '' als niemand iets koos.
   T.planTekst = function (D, veld) {
     if (!veld || !veld.planDoor) return '';
-    if (veld.planDoor === 'schout') return 'Jij koos het';
+    if (veld.planDoor === 'schout') return T.t('You chose it');
     const boer = T.boerVanVeld(D, veld);
-    return `${boer ? boer.naam : 'De boer'} koos het${veld.planWaarom ? `: ${veld.planWaarom}` : ''}`;
+    const wie = boer ? boer.naam : T.t('The farmer');
+    return veld.planWaarom ? T.t('{wie} chose it: {waarom}', { wie, waarom: veld.planWaarom }) : T.t('{wie} chose it', { wie });
   };
 
   // Welk stadium hoort van nature bij deze datum? Dit is het stadium vóórdat een boer ook maar
@@ -800,7 +807,7 @@
     if (tegels && D.voorraad && T.wijzigVoorraad) {
       T.wijzigVoorraad(D, 'graan', graan);
       T.telOogstInJaarboek(D, graan);
-      T.zeg(D, `De boeren halen de rest van de oogst binnen: ${Math.round(graan)} graan.`, 'goed');
+      T.zeg(D, T.t('The farmers bring in the rest of the harvest: {graan}.', { graan: T.hoeveel(Math.round(graan), 'graan') }), 'goed');
     }
     return tegels;
   };
@@ -876,7 +883,7 @@
     for (const e of w.wezens || []) if (e.maait && e.maait.hooi) e.maait = e.oogstDoel = null;
     if (tegels && D.voorraad && T.wijzigVoorraad) {
       T.wijzigVoorraad(D, 'hooi', hooi);
-      T.zeg(D, `De boeren halen de rest van het hooi binnen: ${Math.round(hooi)} hooi.`, 'goed');
+      T.zeg(D, T.t('The farmers bring in the rest of the hay: {hooi}.', { hooi: T.hoeveel(Math.round(hooi), 'hooi') }), 'goed');
     }
     return tegels;
   };
@@ -961,7 +968,7 @@
     if (!n) return 0;
     akkers.forEach((a, i) => open.get(a).slice(0, gezaaid[i]).forEach((t) => a.ongezaaid.delete(sleutel(t.x, t.y))));
     T.wijzigVoorraad(D, 'graan', -kost);
-    const zin = `De boeren zaaien na: ${n} akkertegel${n === 1 ? '' : 's'} erbij, voor ${Math.round(kost)} graan.`;
+    const zin = T.t('The farmers sow what was missed: {n|# more field tile|# more field tiles}, using {graan}.', { n, graan: T.hoeveel(Math.round(kost), 'graan') });
     T.zeg(D, zin, 'goed');
     T.schrijfOp(D, 'boeren', { tekst: zin }); // voor het rapport van de raadsman (js/ochtendrapport.js)
     return n;
@@ -992,7 +999,7 @@
     if (nat) {
       for (const a of akkers) for (const t of T.akkerTegels(a)) a.ongezaaid.add(sleutel(t.x, t.y));
       w.zaaienNaRegen = true;
-      if (akkers.length) T.zeg(D, 'Het regent: de boeren zaaien de eerste droge dag.');
+      if (akkers.length) T.zeg(D, T.t('It is raining: the farmers will sow on the first dry day.'));
       return { tegels: 0, gezaaid: 0, ongezaaid: 0, graan: 0, nat: true };
     }
     const per = akkers.map((a) => zaaigraanPerTegel(w, a));
@@ -1008,9 +1015,9 @@
     if (kost > 0 && D.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(D, 'graan', -kost);
     if (T.ui && T.ui.bericht && totaal > 0) {
       if (kan < totaal) {
-        T.zeg(D, `Er is zaaigraan voor ${kan} van de ${totaal} akkertegels. De rest blijft dit jaar ongezaaid.`, 'gevaar');
+        T.zeg(D, T.t('There is seed grain for {kan} of the {totaal} field tiles. The rest stays unsown this year.', { kan, totaal }), 'gevaar');
       } else {
-        T.zeg(D, `De boeren zaaien: ${Math.round(kost)} graan gaat de grond in.`);
+        T.zeg(D, T.t('The farmers sow: {graan} goes into the ground.', { graan: T.hoeveel(Math.round(kost), 'graan') }));
       }
     }
     return { tegels: totaal, gezaaid: kan, ongezaaid: totaal - kan, graan: kost };
@@ -1058,7 +1065,7 @@
     } else if (w.zaaienNaRegen) {
       // De hele lente nat: wat niet gezaaid is, groeit dit jaar niet meer.
       delete w.zaaienNaRegen;
-      T.zeg(D, 'Het heeft de hele lente geregend: de akkers blijven dit jaar ongezaaid.', 'gevaar');
+      T.zeg(D, T.t('It rained all spring: the fields stay unsown this year.'), 'gevaar');
     } else if (T.isNazaaitijd(dag) && !nat) {
       T.zaaiNa(D); // wat niet gezaaid kon worden, zodra er graan is (hierboven)
     }
@@ -1072,7 +1079,7 @@
     if (hooien() && d.dagVanMaand === 1) {
       const weides = w.akkers.some((v) => T.bestemmingVan(v) === 'weide');
       if (d.maand === hooiMaand() && weides && T.ui && T.ui.bericht) {
-        T.zeg(D, `Het is ${T.MAANDEN[d.maand].naam}: de boeren maaien eerst het hooi van de weides, en dan het graan.`);
+        T.zeg(D, T.t('It is {maand}: the farmers cut the hay of the meadows first, and then reap the grain.', { maand: T.MAANDEN[d.maand].toon }));
       }
       if (d.maand === (hooiMaand() + 1) % 12) T.haalHooiBinnen(D);
     }

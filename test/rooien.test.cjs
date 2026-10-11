@@ -126,8 +126,8 @@ test('een erf mag op bomen en struiken, niet op water; het bouwmenu zegt wat er 
     const kavel = T.kavelVanErf(S.dorp, r);
     assert.ok(kavel.x <= r.x && kavel.y <= r.y && kavel.x + kavel.b >= r.x + r.b && kavel.y + kavel.h >= r.y + r.h, 'het erf ligt erin');
     const wat = T.watTeRooien(S.dorp, kavel);
-    assert.match(T.rooiTekst(S.dorp, r), new RegExp(`rooit eerst .*\\(\\+${wat.bomen * T.BOS_INSTELLINGEN.houtPerBoom} hout\\)`));
-    assert.doesNotMatch(T.rooiTekst(S.dorp, r), /bos van de heer/);
+    assert.match(T.rooiTekst(S.dorp, r), new RegExp(`first clear .*\\(\\+${wat.bomen * T.BOS_INSTELLINGEN.houtPerBoom} wood\\)`));
+    assert.doesNotMatch(T.rooiTekst(S.dorp, r), /lord's forest/);
     // Water houdt een erf nog altijd tegen.
     const water = [];
     for (let y = 0; y < w.tegels.length; y++) for (let x = 0; x < w.tegels[0].length; x++) if (w.grond[y][x] && w.grond[y][x].naam === 'water') water.push({ x, y });
@@ -148,11 +148,11 @@ test('een erf in het bos van de heer kost zijn gunst, een erf in de wei niets', 
     assert.ok(bos, 'er is een plek in het bos');
     const r = { x: bos.x, y: bos.y, b: 10, h: 10 };
     assert.equal(T.inHetBosVanDeHeer(D, r), true);
-    assert.match(T.rooiTekst(D, r), new RegExp(`bos van de heer.*gunst −${T.ONTGINNEN_INSTELLINGEN.gunst}`));
+    assert.match(T.rooiTekst(D, r), new RegExp(`lord's forest.*favour −${T.ONTGINNEN_INSTELLINGEN.gunst}`));
     const gunst = T.bazenNu(D).gunst;
     const u = T.plaatsGebouw(D, 'erf', bos.x, bos.y);
     assert.equal(u.gelukt, true, u.reden);
-    assert.match(u.bericht, /bos van de heer/);
+    assert.match(u.bericht, /lord's forest/);
     assert.equal(T.bazenNu(D).gunst, gunst - T.ONTGINNEN_INSTELLINGEN.gunst);
     const wei = erfPlek(S, inDeWei);
     assert.equal(T.plaatsGebouw(D, 'erf', wei.x, wei.y).gelukt, true);
@@ -284,7 +284,7 @@ test('het looppad om de hut mag buiten het erf in het bos liggen: het gezin rooi
     const wat = T.watTeRooien(D, hut.kavel);
     const opHetErf = T.watTeRooien(D, erf);
     assert.ok(wat.bomen + wat.struiken > opHetErf.bomen + opHetErf.struiken, 'buiten het erf staat meer');
-    assert.ok(berichten.includes(`Het gezin van ${D.bewoners.mensen.find((p) => p.huis === hut).naam} rooit eerst zijn erf: ${T.rooiWoorden(wat)}.`), berichten.join(' | '));
+    assert.ok(berichten.includes(`${D.bewoners.mensen.find((p) => p.huis === hut).naam}'s family is first clearing its plot: ${T.rooiWoorden(wat)}.`), berichten.join(' | '));
     assert.ok(hut.kavel.x < erf.x || hut.kavel.y < erf.y || hut.kavel.x + hut.kavel.b > erf.x + erf.b || hut.kavel.y + hut.kavel.h > erf.y + erf.h, 'het stuk is groter dan het erf');
     for (const t of T.teRooienOp(D, hut.kavel)) {
       if (T.ontginWerkOp(w, t.x, t.y) === 'hakken') T.hakBoom(D, t.x, t.y);
@@ -462,7 +462,7 @@ test('ja op een werkplaats in het bos: hij wacht, nog niet op de kaart; wie hem 
     assert.equal(g.wachtOpRooien, true);
     assert.equal(g.voorwerp, null, 'nog niet op de kaart');
     assert.equal(g.klaarOp, null);
-    assert.match(T.gebouwToestand(D, g), /eerst wordt de plek gerooid/);
+    assert.match(T.gebouwToestand(D, g), /the site is cleared first/);
     assert.equal(g.meester, wie);
     assert.equal(wie.rooit, g);
     assert.equal(D.voorraad.hout, hout - T.GEBOUWEN.weverij.kosten.hout, 'de kosten gaan er meteen af, zoals bij elk verzoek');
@@ -652,7 +652,7 @@ test('a2: een appelboom is van iemand, maar staat hij waar het huis groter wordt
       assert.ok(hut.groeitNaRooien, 'het gezin rooit');
       assert.equal(appel.teKappen, true);
       assert.equal(T.ontginWerkOp(D.wereld, a.x, a.y), 'hakken', 'nu is hij een boom als elke andere');
-      assert.match(T.waaromGroeitHetNiet(D, hut), /één boom/);
+      assert.match(T.waaromGroeitHetNiet(D, hut), /one tree/);
       const hout = D.voorraad.hout;
       assert.equal(T.hakBoom(D, a.x, a.y), true);
       assert.equal(D.voorraad.hout - hout, T.BOS_INSTELLINGEN.houtPerBoom);
@@ -703,11 +703,11 @@ test('d: geen erf waar het een huis elke vorm afneemt; wel als het nog een ander
     for (let y = 0; y < S.wereld.tegels.length && !geweigerd; y++) {
       for (let x = 0; x < S.wereld.tegels[0].length && !geweigerd; x++) {
         const reden = T.waaromPastErfNiet(D, x, y);
-        if (reden && reden.startsWith('Hier groeit')) geweigerd = { x, y, reden };
+        if (reden && reden.startsWith('Here ')) geweigerd = { x, y, reden };
       }
     }
     assert.ok(geweigerd, 'naast een hut die nog moet groeien, komt geen erf');
-    assert.match(geweigerd.reden, /^Hier groeit (de hut van \S+|een hut) straks tot een huis\.$/);
+    assert.match(geweigerd.reden, /^Here .+ will grow into a house\.$/);
     assert.equal(T.legErfAan(D, geweigerd.x, geweigerd.y).gelukt, false);
     // Het ontworpen gehucht: een erf op 48, 50 neemt de hut ernaast een paar vormen af, maar niet alle. Dat mag, en de hut
     // kan daarna nog groeien.

@@ -155,7 +155,7 @@ for (const zaad of [undefined, 62707, 73425, 72022]) {
     assert.equal(T.plekkenVan(D, 'markt').length, 1);
 
     // Er komt er geen tweede.
-    assert.equal(T.waaromGeenMarktOpHetPlein(D), 'Op het plein staat al een markt.');
+    assert.equal(T.waaromGeenMarktOpHetPlein(D), 'There is already a market on the square.');
     assert.equal(T.plekVoor(D, 'markt', midden), null);
   });
 }
@@ -259,7 +259,7 @@ test('met "Een eigen gebouw" is de markt weer een gebouw met een eigen voet, en 
     const D = S.dorp;
     rijk(D);
     const midden = T.marktMidden(D.wereld);
-    assert.equal(T.waaromPastHetNiet(D, 'markt', midden.x, midden.y), 'Op het plein wordt niet gebouwd.');
+    assert.equal(T.waaromPastHetNiet(D, 'markt', midden.x, midden.y), 'Nothing is built on the square.');
     const plek = T.plekVoor(D, 'markt', midden);
     assert.ok(plek && !plek.kramen);
     assert.ok(T.plaatsGebouw(D, 'markt', plek.x, plek.y).gelukt);

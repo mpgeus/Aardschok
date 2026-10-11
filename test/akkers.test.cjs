@@ -478,8 +478,8 @@ test('met de optie "Het land blijft goed" geeft een akker altijd zijn volle graa
 test('T.kanBestemming: het plan mag het hele jaar veranderen, met een reden als het niet kan', () => {
   const { S, akker } = drieVelden();
   assert.deepEqual(T.kanBestemming(S, akker, 'weide'), { kan: true, reden: null });
-  assert.deepEqual(T.kanBestemming(S, akker, 'akker'), { kan: false, reden: 'Het wordt volgend jaar al akker.' });
-  assert.deepEqual(T.kanBestemming(S, akker, 'bos'), { kan: false, reden: 'Een veld is akker, weide of braak.' });
+  assert.deepEqual(T.kanBestemming(S, akker, 'akker'), { kan: false, reden: 'It will already be arable next year.' });
+  assert.deepEqual(T.kanBestemming(S, akker, 'bos'), { kan: false, reden: 'A field is arable, meadow or fallow.' });
   assert.equal(T.kanBestemming(S, null, 'akker').kan, false);
   // Zetten gaat langs dezelfde vraag; wat het nu is, blijft het tot 1 lentemaand.
   assert.deepEqual(T.zetPlan(S, akker, 'braak'), { kan: true, reden: null });
@@ -533,10 +533,10 @@ test('na de oogst kiezen de boeren: een uitgeputte akker rust, een braak wordt w
     delete T.ui;
   }
   assert.deepEqual([akker.plan, weide.plan, braak.plan], ['braak', 'weide', 'akker']);
-  assert.equal(T.planTekst(S, akker), 'Nicholas koos het: het land raakt uitgeput');
-  assert.equal(T.planTekst(S, braak), 'Nicholas koos het: het land heeft gerust');
-  assert.equal(T.planTekst(S, weide), 'Nicholas koos het');
-  assert.ok(gezegd.includes('Na de oogst kozen de boeren wat hun velden volgend jaar worden: het veld van Nicholas rust een jaar en dat van Nicholas wordt weer akker. In het veldenvenster (V) kun je het veranderen.'), gezegd.join(' | '));
+  assert.equal(T.planTekst(S, akker), 'Nicholas chose it: the land is wearing out');
+  assert.equal(T.planTekst(S, braak), 'Nicholas chose it: the land has rested');
+  assert.equal(T.planTekst(S, weide), 'Nicholas chose it');
+  assert.ok(gezegd.includes("After the harvest the farmers chose what their fields will be next year: Nicholas's field will rest for a year and Nicholas's field will be arable again. You can change it in the fields window (V)."), gezegd.join(' | '));
   // Op 1 lentemaand gaat het in, en begint een nieuw jaar: na de oogst kiest de boer weer.
   T.wisselVelden(S);
   assert.deepEqual([akker.bestemming, braak.bestemming], ['braak', 'akker']);
@@ -552,7 +552,7 @@ test('een akker die nog niet uitgeput raakt, blijft akker; een uitgeputte krijgt
   akker.vruchtbaarheid = 0.8;
   T.zetVoorraad(S, 'mest', T.mestVoorVeld(akker));
   T.boerenKiezenVelden(S);
-  assert.deepEqual([akker.plan, akker.mest, akker.planWaarom], ['akker', true, 'het land raakt uitgeput, en er is mest']);
+  assert.deepEqual([akker.plan, akker.mest, akker.planWaarom], ['akker', true, 'the land is wearing out, and there is dung']);
 });
 
 test('wat jij koos, laat de boer staan; met de spelregel "Het seizoen" op jij kiest alleen jij', () => {
@@ -561,7 +561,7 @@ test('wat jij koos, laat de boer staan; met de spelregel "Het seizoen" op jij ki
   assert.equal(T.zetPlan(S, braak, 'weide').kan, true);
   T.boerenKiezenVelden(S);
   assert.equal(braak.plan, 'weide', 'jouw keuze blijft');
-  assert.equal(T.planTekst(S, braak), 'Jij koos het');
+  assert.equal(T.planTekst(S, braak), 'You chose it');
   assert.equal(akker.plan, 'braak', 'de rest kiest de boer');
   const zo = drieVelden();
   zo.akker.vruchtbaarheid = 0.8;

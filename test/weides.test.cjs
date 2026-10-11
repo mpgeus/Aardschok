@@ -161,7 +161,7 @@ test('T.kanBestemming: past de kudde niet op één veld, dan wel op twee naast e
   assert.equal(T.zetPlan(S, a, 'weide').kan, true);
   const alleenA = T.kanBestemming(S, oud, 'akker');
   assert.equal(alleenA.kan, false, 'op a alleen passen er maar drie');
-  assert.match(alleenA.reden, /te weinig weide/);
+  assert.match(alleenA.reden, /too little meadow/);
   assert.equal(T.zetPlan(S, b, 'weide').kan, true);
   assert.equal(T.kanBestemming(S, oud, 'akker').kan, true, 'a en b samen hebben 24 tegels');
   // En op 1 lentemaand verhuist de kudde dan naar de nieuwe weide, elk dier naar het veld dat het
@@ -349,13 +349,13 @@ test('T.zetMest: alleen op wat volgend jaar akker is, en weer eraf als het iets 
   assert.equal(akker.mest, true);
   const r = T.zetMest(S, weide, true);
   assert.equal(r.kan, false);
-  assert.match(r.reden, /een weide mest zichzelf/);
+  assert.match(r.reden, /a meadow fertilises itself/);
   // Wordt de akker volgend jaar braak, dan gaat de mest eraf.
   assert.equal(T.zetPlan(S, akker, 'braak').kan, true);
   assert.equal(akker.mest, false);
   // En met de optie "vanzelf" kies je niet per veld.
   T.zetPlan(S, akker, 'akker');
-  metInstelling(VI, { mestVanzelf: true }, () => assert.match(T.kanMest(S, akker).reden, /vanzelf/));
+  metInstelling(VI, { mestVanzelf: true }, () => assert.match(T.kanMest(S, akker).reden, /by itself/));
 });
 
 test('op 1 lentemaand: mest maakt een akker vruchtbaarder, zodat elk jaar akker niet uitput', () => {

@@ -133,7 +133,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   Nederlands meer** (Marcel: "Nederlands mag je mee stoppen"; `taal/nl.js` is weg): het spel is Engels, en de toetsen
   spelen in het Engels (`test/laad.cjs`). De woorden en de toon staan in `ontwerp/engels.md`; een naam met *a* of *an*
   geeft `T.eenNaam`. Een taal uit de community staat in de browser (`T.EIGEN_TALEN_SLEUTEL`). Wat er mis is aan een
-  vertaling, zegt `T.keurVertaling`. Omgezet zijn: `js/menu.js` (`OMGEZET` in `test/taal.test.cjs`).
+  vertaling, zegt `T.keurVertaling`. Omgezet zijn: `js/menu.js`, `js/gebouwen.js`, `js/erven.js`, `js/herberg.js`, `js/bos.js`,
+  `js/bouwstijl.js`, `js/wijngaard.js`, `js/akkers.js`, `js/vee.js`, `js/beesten.js`, `js/markt.js` en `js/paden.js` (`OMGEZET` in
+  `test/taal.test.cjs`). In `T.GEBOUWEN` staan de tekeningen en de `opmerking` voor ons, niet de speler: die regels hebben `// geen tekst`.
 
 ### js/naam.js: de naam van het spel
 

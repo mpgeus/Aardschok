@@ -286,13 +286,15 @@
     const avond = D.kalender && T.dagdeelVan(D.kalender.dag, T.isOogstDag(D.kalender.dag)) === 'avond';
     const binnen = avond ? gasten.filter((p) => p.wezen && p.wezen.binnen).length : 0;
     const vanavond = avond
-      ? binnen ? `${binnen} ${binnen === 1 ? 'gast' : 'gasten'} binnen` : 'nog niemand binnen'
-      : `vanavond ${gasten.length ? `${gasten.length} ${gasten.length === 1 ? 'gast' : 'gasten'}` : 'geen gasten'}`;
+      ? binnen ? T.t('{n|# guest|# guests} inside', { n: binnen }) : T.t('nobody inside yet')
+      : gasten.length ? T.t('{n|# guest|# guests} tonight', { n: gasten.length }) : T.t('no guests tonight');
     const m = D.marskramer;
-    const logeert = m && m.staat && !m.weg && g === T.herbergVan(D) ? '; de marskramer logeert hier' : '';
+    const logeert = m && m.staat && !m.weg && g === T.herbergVan(D) ? T.t('; the peddler is lodging here') : '';
     const apart = Math.min(bier, T.bierApart(D));
-    const bierTekst = bier ? `${bier} bier${apart ? `, waarvan ${apart} apart voor de huizen` : ''}` : 'geen bier meer';
-    return `${vanavond}; ${bierTekst}${logeert}.`;
+    const bierTekst = bier
+      ? apart ? T.t('{bier}, of which {apart} set aside for the houses', { bier: T.hoeveel(bier, 'bier'), apart }) : T.hoeveel(bier, 'bier')
+      : T.t('no ale left');
+    return T.t('{vanavond}; {bier}{logeert}.', { vanavond, bier: bierTekst, logeert });
   };
   T.GEBOUW_ERBIJ = T.GEBOUW_ERBIJ || {};
   T.GEBOUW_ERBIJ.herberg = T.herbergTekst;

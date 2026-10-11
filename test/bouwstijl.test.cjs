@@ -280,7 +280,7 @@ test('waar de herberg straks groter wordt, komt geen gebouw en geen erf', () => 
     }
   }
   assert.ok(tegel, 'de grote herberg is groter');
-  assert.equal(T.waaromNietOpDezeGrond(D, tegel.x, tegel.y), 'Hier groeit straks de herberg.');
+  assert.equal(T.waaromNietOpDezeGrond(D, tegel.x, tegel.y), 'The inn will grow here.');
   assert.equal(T.meegroeiGrondOp(D, tegel.x, tegel.y, g), null, 'voor de herberg zelf is het zijn eigen grond');
   // en eenmaal groot, is er niets meer vrij te houden
   T.zetVoorraad(D, 'hout', 100);
