@@ -22,21 +22,22 @@
   T.DAGEN_PER_MAAND = 30;
   T.DAGEN_PER_JAAR = T.DAGEN_PER_MAAND * 12;
 
-  // De oude Nederlandse maandnamen, voor de sfeer, met de gewone naam erbij als uitleg en het
-  // seizoen waarin de speler hem voelt (de gewone vierdeling: winter is december–februari, enz.).
+  // De maanden: `naam` is de oude Nederlandse naam waar de regels op letten (m.naam === 'lentemaand'), `toon` wat de
+  // speler ziet (Marcel, 11 okt: gewone maanden in het Engels; ontwerp/engels.md), en het seizoen waarin de speler hem
+  // voelt (de gewone vierdeling: winter is december–februari, enz.).
   T.MAANDEN = [
-    { naam: 'louwmaand', gewoon: 'januari', seizoen: 'winter' },
-    { naam: 'sprokkelmaand', gewoon: 'februari', seizoen: 'winter' },
-    { naam: 'lentemaand', gewoon: 'maart', seizoen: 'lente' },
-    { naam: 'grasmaand', gewoon: 'april', seizoen: 'lente' },
-    { naam: 'bloeimaand', gewoon: 'mei', seizoen: 'lente' },
-    { naam: 'zomermaand', gewoon: 'juni', seizoen: 'zomer' },
-    { naam: 'hooimaand', gewoon: 'juli', seizoen: 'zomer' },
-    { naam: 'oogstmaand', gewoon: 'augustus', seizoen: 'zomer' },
-    { naam: 'herfstmaand', gewoon: 'september', seizoen: 'herfst' },
-    { naam: 'wijnmaand', gewoon: 'oktober', seizoen: 'herfst' },
-    { naam: 'slachtmaand', gewoon: 'november', seizoen: 'herfst' },
-    { naam: 'wintermaand', gewoon: 'december', seizoen: 'winter' },
+    { naam: 'louwmaand', toon: T.t('January'), seizoen: 'winter' },
+    { naam: 'sprokkelmaand', toon: T.t('February'), seizoen: 'winter' },
+    { naam: 'lentemaand', toon: T.t('March'), seizoen: 'lente' },
+    { naam: 'grasmaand', toon: T.t('April'), seizoen: 'lente' },
+    { naam: 'bloeimaand', toon: T.t('May'), seizoen: 'lente' },
+    { naam: 'zomermaand', toon: T.t('June'), seizoen: 'zomer' },
+    { naam: 'hooimaand', toon: T.t('July'), seizoen: 'zomer' },
+    { naam: 'oogstmaand', toon: T.t('August'), seizoen: 'zomer' },
+    { naam: 'herfstmaand', toon: T.t('September'), seizoen: 'herfst' },
+    { naam: 'wijnmaand', toon: T.t('October'), seizoen: 'herfst' },
+    { naam: 'slachtmaand', toon: T.t('November'), seizoen: 'herfst' },
+    { naam: 'wintermaand', toon: T.t('December'), seizoen: 'winter' },
   ];
   T.TIJD_START_MAAND = T.MAANDEN.findIndex((m) => m.naam === 'lentemaand');
   // Een nieuw spel begint 's ochtends, niet om middernacht in het donker.
@@ -75,7 +76,7 @@
       dagVanMaand,
       seizoen: m.seizoen,
       sintMaarten: maand === T.SINT_MAARTEN.maand && dagVanMaand === T.SINT_MAARTEN.dag,
-      tekst: `${dagVanMaand} ${m.naam} ${jaar}`,
+      tekst: `${dagVanMaand} ${m.toon} ${jaar}`,
     };
   };
 

@@ -164,7 +164,7 @@ test('de meiboom komt op 30 grasmaand, niet geloot; zeg je ja, dan staat hij op 
   T.doeGevolg(S, D, antwoord('meiboom', 0).doe);
   T.voorvalBeantwoord(D, 'meiboom');
   const f = D.feesten.komt;
-  assert.equal(T.datumVanDag(f.dag).tekst.split(' ').slice(0, 2).join(' '), '1 bloeimaand');
+  assert.equal(T.datumVanDag(f.dag).tekst.split(' ').slice(0, 2).join(' '), '1 May');
   assert.equal(D.voorraad.hout, 18);
   // De dag erna komt hij niet nog eens.
   T.tikVoorvallenDag(D, dag + 1);

@@ -1,6 +1,6 @@
 // De taal van het spel (vraag 147, js/taal.js): T.t met zijn woorden, meervoud en keuzes; dat elke zin uit de code te
-// lezen is (gereedschap/teksten.cjs), en taal/bron.js daarom bij is; dat elke taal in taal/ past op de bron, en het
-// Nederlands heel is; dat de bladzijden de taal laden vóór de regels; en dat er in een omgezet bestand geen tekst meer
+// lezen is (gereedschap/teksten.cjs), en taal/bron.js daarom bij is; dat elke taal in taal/ past op de bron; dat de
+// bladzijden de taal laden vóór de regels; en dat er in een omgezet bestand geen tekst meer
 // buiten T.t staat.
 const test = require('node:test');
 const assert = require('node:assert/strict');
@@ -27,15 +27,17 @@ test('een zin: de woorden, het meervoud en een keuze', () => {
   assert.equal(v('{n|# owca|# owce|# owiec|# owcy}', { n: 3 }, 'pl'), '3 owce', 'het Pools heeft vier vormen');
   assert.equal(v('{g|man:he|vrouw:she|*:they}', { g: 'vrouw' }), 'she');
   assert.equal(v('{g|man:he|vrouw:she|*:they}', { g: 'kind' }), 'they');
-  assert.equal(v('{n|{wie} comes|{wie} and # others come}', { n: 3, wie: 'Aaltje' }), 'Aaltje and 3 others come');
+  assert.equal(v('{n|{wie} comes|{wie} and # others come}', { n: 3, wie: 'Alice' }), 'Alice and 3 others come');
   assert.deepEqual(T.meervoudsVormen('en'), ['one', 'other']);
 });
 
-test('de toetsen spelen in het Nederlands, en een zin zonder vertaling is Engels', () => {
-  assert.equal(T.taalNu(), 'nl');
-  assert.equal(T.t('Continue'), 'Verder');
-  assert.equal(T.t('Saved to slot {plek}.', { plek: 3 }), 'Opgeslagen op plek 3.');
-  assert.equal(T.t('A sentence that nobody translated, with {x}.', { x: 1 }), 'A sentence that nobody translated, with 1.');
+test('de toetsen spelen in het Engels, de brontaal; een taal uit de community gaat over de zin heen', () => {
+  assert.equal(T.taalNu(), 'en');
+  assert.equal(T.t('Continue'), 'Continue');
+  assert.equal(T.t('Saved to slot {plek}.', { plek: 3 }), 'Saved to slot 3.');
+  assert.ok(!T.TALEN.nl, 'het Nederlands is uit het spel (Marcel, 11 okt: "Nederlands mag je mee stoppen")');
+  assert.equal(T.eenNaam('inn'), 'an inn');
+  assert.equal(T.eenNaam('hut'), 'a hut');
 });
 
 test('wat er mis is aan een vertaling', () => {
@@ -77,15 +79,6 @@ test('elke taal in taal/ past op de bron: dezelfde {namen}, dezelfde html, het m
     const { past } = teksten.verslagVan(taal, zinnen);
     assert.deepEqual(past.map((p) => `${taal.bestand}: ${p.t}: ${p.fout.join('; ')}`), []);
   }
-});
-
-test('het Nederlands is heel: elke zin vertaald, en niets over', () => {
-  const { zinnen } = teksten.zoekTeksten();
-  const nl = teksten.talenInMap().find((t) => t.code === 'nl');
-  assert.ok(nl, 'taal/nl.js ontbreekt');
-  const { ontbreekt, over } = teksten.verslagVan(nl, zinnen);
-  assert.deepEqual(ontbreekt, [], 'deze zinnen staan nog niet in taal/nl.js');
-  assert.deepEqual(over, [], 'deze zinnen staan niet meer in de code: haal ze uit taal/nl.js, of zet de nieuwe Engelse zin als sleutel');
 });
 
 test('index.html en de vertaaltool laden js/taal.js en elke taal in taal/, vóór de regels', () => {

@@ -265,7 +265,7 @@ test('de schandpaal: jij wijst aan wie, en het dorp onthoudt het een tijd', () =
   assert.ok(S.heer.bezoek && S.heer.bezoek.schandpaal, 'hij wacht op jouw keuze');
   const keuzes = T.schandpaalKeuzes(S);
   assert.deepEqual(keuzes.map((k) => k.wie), ['boer2', 'boer3', 'schout']);
-  assert.equal(keuzes[0].naam, 'Aaltje');
+  assert.equal(keuzes[0].naam, 'Alice');
   assert.match(keuzes[0].eigenschap, /weduwe/);
   const r = T.zetAanDeSchandpaal(S, 'boer2');
   assert.equal(r.kan, true);
@@ -288,7 +288,7 @@ test('de schandpaal: jij wijst aan wie, en het dorp onthoudt het een tijd', () =
 });
 
 test('de schandpaal kost het dorp zoveel als wie jij kiest: de weduwe meer dan de woekeraar', () => {
-  // Zonder lot (js/boeren.js) is iedere boer zoals hij geschreven was: Aaltje de weduwe, Gerrit de
+  // Zonder lot (js/boeren.js) is iedere boer zoals hij geschreven was: Alice de weduwe, Gerard de
   // woekeraar. Het karakter legt hier het aanzien vast: de weduwe is geliefd, de woekeraar gehaat.
   const aaltje = T.maakMens('boer2', 3, 3);
   const gerrit = T.maakMens('boer3', 4, 4);

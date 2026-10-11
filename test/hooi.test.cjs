@@ -31,7 +31,7 @@ function metInstelling(blok, waarden, fn) {
 // Een wereld van 30 bij 30 open land, met deze velden, en een boer die ze allemaal bewerkt.
 function boerMet(velden, opties) {
   const akkers = velden.map((v, i) => ({ naam: `veld${i}`, huis: 'boer1', plan: v.bestemming, vruchtbaarheid: 1, geoogst: new Set(), gehooid: new Set(), ...v }));
-  const boer = { naam: 'Klaas', tx: 12, ty: 12, x: 12, y: 12, dood: false, pad: [], werkAkkers: akkers.slice(), huis: 'boer1' };
+  const boer = { naam: 'Nicholas', tx: 12, ty: 12, x: 12, y: 12, dood: false, pad: [], werkAkkers: akkers.slice(), huis: 'boer1' };
   const S = {
     voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0, tijd: 0,
     // 1 hooimaand om tien uur 's ochtends: in de werkuren, want 's nachts maait niemand (js/dag.js).

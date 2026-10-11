@@ -91,7 +91,7 @@
         delen.push(lijst.length ? `de ${naam} in aanbouw` : `nog geen ${naam}`);
       }
     }
-    // De kop draagt de naam van je dorp, als het er een heeft: "Heikant · naar een dorp".
+    // De kop draagt de naam van je dorp, als het er een heeft: "Heathside · naar een dorp".
     const naam = T.dorpsnaam(D);
     const doel = NAMEN[trede].doel;
     const deel = Math.min(1, n / eis.mensen);
@@ -143,9 +143,9 @@
 
   // Hoe het dorp heet (Marcel, 29 sep, werklijst vraag 60: "speler mag zelf de naam voor zijn dorp kiezen aan het
   // begin"): je kiest het bij Nieuw spel (js/menu.js), met een van deze als voorstel. Het staat in S.dorpsnaam, en
-  // de heer schrijft het in zijn brieven ("Ons gehucht Heikant"). Zonder naam (een proefkaart, of een spel van
+  // de heer schrijft het in zijn brieven ("Ons gehucht Heathside"). Zonder naam (een proefkaart, of een spel van
   // vóór 29 sep) is het "dit gehucht".
-  T.DORPSNAMEN = ['Heikant', 'Beekveld', 'Wolfsdonk', 'Oudeland', 'Molenhoek', 'Eikenrode', 'Veldhoek', 'Kraaiwijk', 'Lindeloo', 'Braakhuizen'];
+  T.DORPSNAMEN = ['Heathside', 'Brookfield', 'Wolfden', 'Oldland', 'Millcombe', 'Oakley', 'Fieldhurst', 'Crowthorpe', 'Lindley', 'Brakeham'];
   const LANGSTE_NAAM = 24;
   T.dorpsnaam = (D) => (D && D.dorpsnaam) || null;
   // Een voorstel, vast bij een getal (het zaad van het spel), zodat een speeltest hetzelfde dorp krijgt.

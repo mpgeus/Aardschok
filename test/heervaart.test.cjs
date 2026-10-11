@@ -117,7 +117,7 @@ test('sturen: ze lopen de weg af, tellen mee en eten, maar werken nergens, tot 1
   assert.equal(S.dorp.heervaart.vraag, null);
   const wie = S.dorp.heervaart.tocht.wie;
   assert.equal(wie.length, v.wie.length);
-  assert.equal(T.datumVanDag(S.dorp.heervaart.tocht.terugOp).tekst.startsWith('1 herfstmaand'), true);
+  assert.equal(T.datumVanDag(S.dorp.heervaart.tocht.terugOp).tekst.startsWith('1 September'), true);
   assert.equal(S.dorp.bevolking, bevolking, 'ze tellen mee: het dorp voedt ze');
   assert.equal(T.werkendeHanden(S.dorp), handen - wie.filter((p) => T.LEEFTIJDEN[p.leeftijd].werkt != null).length);
   T.verdeelHanden(S.dorp);

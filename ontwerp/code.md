@@ -129,8 +129,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   Het eerste argument is altijd een gewone tekst (geen variabele of sjabloon), zodat `npm run teksten` hem leest. In een
   zin: `{wie}`, het meervoud `{n|# man|# men}` (de vormen van de taal, `T.meervoudsVormen`) en een keuze
   `{g|man:he|vrouw:she}`. De taal ligt vast bij het laden (een tabel vraagt zijn zinnen dan al), dus een andere kiezen
-  (Taal op het titelscherm, `T.kiesTaal`) herlaadt; `?taal=nl` in het adres gaat voor. De toetsen spelen in het Nederlands
-  (`test/laad.cjs`). Een taal uit de community staat in de browser (`T.EIGEN_TALEN_SLEUTEL`). Wat er mis is aan een
+  (Taal op het titelscherm, `T.kiesTaal`) herlaadt; `?taal=<code>` in het adres gaat voor. **Sinds 11 okt is er geen
+  Nederlands meer** (Marcel: "Nederlands mag je mee stoppen"; `taal/nl.js` is weg): het spel is Engels, en de toetsen
+  spelen in het Engels (`test/laad.cjs`). De woorden en de toon staan in `ontwerp/engels.md`; een naam met *a* of *an*
+  geeft `T.eenNaam`. Een taal uit de community staat in de browser (`T.EIGEN_TALEN_SLEUTEL`). Wat er mis is aan een
   vertaling, zegt `T.keurVertaling`. Omgezet zijn: `js/menu.js` (`OMGEZET` in `test/taal.test.cjs`).
 
 ### js/naam.js: de naam van het spel

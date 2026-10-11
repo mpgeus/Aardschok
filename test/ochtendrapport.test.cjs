@@ -16,7 +16,7 @@ T.ui = new Proxy({}, {
 T.anim = { tekst() {}, wacht: () => new Promise(() => {}), loop: () => new Promise(() => {}), uitval: () => new Promise(() => {}) };
 
 // Het echte gehucht, zoals een nieuw spel begint, stil en met een vast zaad (zoals in test/raadsman.test.cjs). Met zaad
-// 7 kan Klaas rekenen, Aaltje niet, en Trijn niets bijzonders.
+// 7 kan Nicholas rekenen, Alice niet, en Kate niets bijzonders.
 function gehucht(zaad = 7) {
   const echt = console.warn;
   const toeval = Math.random;
@@ -37,7 +37,7 @@ function gehucht(zaad = 7) {
 
 const boer = (S, naam) => S.dorp.bewoners.mensen.find((p) => T.isBoer(p.wezen) && T.naamVanBewoner(p) === naam);
 
-function metRaadsman(S, naam = 'Klaas') {
+function metRaadsman(S, naam = 'Nicholas') {
   const p = boer(S, naam);
   assert.ok(T.kiesRaadsman(S.dorp, p).kan);
   return p;
@@ -86,7 +86,7 @@ test('zonder raadsman geen rapport; met een raadsman elke nacht een, en een stil
   assert.ok(!T.rapportKlaar(D));
   metRaadsman(S);
   const R = nacht(S, 2);
-  assert.deepEqual([R.dag, R.door, R.gebracht, R.gelezen], [2, 'Klaas', false, false]);
+  assert.deepEqual([R.dag, R.door, R.gebracht, R.gelezen], [2, 'Nicholas', false, false]);
   assert.equal(R.regels.length, 1);
   assert.match(R.regels[0], /^Niets bijzonders\./);
   assert.ok(T.rapportKlaar(D), 'de knop Rapport');
@@ -98,7 +98,7 @@ test('zonder raadsman geen rapport; met een raadsman elke nacht een, en een stil
 test('wat erin staat: wie er ging en kwam, hoe het gaat sinds gisteren, en wat er speelt', () => {
   const S = gehucht();
   const D = S.dorp;
-  metRaadsman(S); // Klaas kan rekenen: zijn getallen kloppen
+  metRaadsman(S); // Nicholas kan rekenen: zijn getallen kloppen
   nacht(S, 10);
   S.kalender.dag = 10.5;
   T.wijzigVoorraad(D, 'graan', -12);
@@ -126,15 +126,15 @@ test('wat de boeren deden, wat hij besliste toen je weg was, en wie je zocht en 
   nacht(S, 20);
   S.kalender.dag = 20.5;
   T.schrijfOp(D, 'boeren', { tekst: 'Het hooi haalt de winter: de boeren hielden al hun vee.' });
-  T.schrijfOp(D, 'besluit', { door: 'Klaas', titel: 'de diefstal', antwoord: 'Laat hem het teruggeven.', prijs: '' });
-  T.schrijfOp(D, 'besluit', { door: 'Aaltje', titel: 'de brand', antwoord: 'Iedereen helpt.', prijs: '5 hout' });
-  T.schrijfOp(D, 'voorbij', { wie: 'Gerrit', titel: 'de vechtpartij' });
+  T.schrijfOp(D, 'besluit', { door: 'Nicholas', titel: 'de diefstal', antwoord: 'Laat hem het teruggeven.', prijs: '' });
+  T.schrijfOp(D, 'besluit', { door: 'Alice', titel: 'de brand', antwoord: 'Iedereen helpt.', prijs: '5 hout' });
+  T.schrijfOp(D, 'voorbij', { wie: 'Gerard', titel: 'de vechtpartij' });
   const R = nacht(S, 21);
   assert.deepEqual(R.regels.slice(0, 4), [
     'Het hooi haalt de winter: de boeren hielden al hun vee.',
     'Over de diefstal besliste ik: "Laat hem het teruggeven."',
-    'Over de brand besliste Aaltje: "Iedereen helpt." (5 hout)',
-    'Gerrit zocht je over de vechtpartij, en sprak je niet.',
+    'Over de brand besliste Alice: "Iedereen helpt." (5 hout)',
+    'Gerard zocht je over de vechtpartij, en sprak je niet.',
   ]);
 });
 
@@ -179,7 +179,7 @@ test('wat er komt: de marskramer vandaag, en de raden van de rovers, zonder de t
 test('zijn rekenen: wie kan rekenen, zegt het precies; wie het niet bijzonder kan, rondt af; wie niet kan rekenen, zit ernaast', () => {
   const S = gehucht();
   const D = S.dorp;
-  const [klaas, trijn, aaltje] = ['Klaas', 'Trijn', 'Aaltje'].map((n) => boer(S, n));
+  const [klaas, trijn, aaltje] = ['Nicholas', 'Kate', 'Alice'].map((n) => boer(S, n));
   assert.equal(T.vaardighedenVan(D, klaas).rekenen, 'goed');
   assert.equal(T.vaardighedenVan(D, trijn).rekenen, undefined);
   assert.equal(T.vaardighedenVan(D, aaltje).rekenen, 'slecht');
@@ -200,7 +200,7 @@ test('zijn rekenen: wie kan rekenen, zegt het precies; wie het niet bijzonder ka
 test('wie niet kan rekenen, zegt dat het hout de winter haalt terwijl het dat niet doet, of andersom', () => {
   const S = gehucht();
   const D = S.dorp;
-  metRaadsman(S, 'Aaltje');
+  metRaadsman(S, 'Alice');
   const herfst = dagVan('herfstmaand', 1);
   T.zetVoorraad(D, 'graan', 50000);
   let mis = 0;
@@ -213,7 +213,7 @@ test('wie niet kan rekenen, zegt dat het hout de winter haalt terwijl het dat ni
     const zegtHaalt = R.regels.some((r) => /^Het hout( en het eten)? halen? de winter\./.test(r) || r === 'Het hout haalt de winter.');
     if (zegtHaalt !== v.haalt) mis++;
   }
-  assert.ok(mis > 0, 'Aaltje zit er soms naast');
+  assert.ok(mis > 0, 'Alice zit er soms naast');
 });
 
 test('een rapport dat je niet las, gaat op in het nieuwe; een gelezen niet, en hij onthoudt niet alles', () => {
@@ -261,7 +261,7 @@ test('hij brengt het: hij vertrekt zo vroeg dat hij aan je deur staat als je ops
   om(ind.opstaan + 0.1);
   assert.deepEqual(T.dagAnker(D, e), { x: h.tx, y: h.ty, straal: 1 });
   // Wie geen raadsman is, loopt zijn eigen dag.
-  assert.equal(T.rapportAnker(D, boer(S, 'Trijn').wezen), null);
+  assert.equal(T.rapportAnker(D, boer(S, 'Kate').wezen), null);
   // Naast elkaar, en geen van beiden loopt: hij geeft het, en het papier gaat open.
   Object.assign(e, { tx: h.tx + 1, ty: h.ty, x: h.tx + 1, y: h.ty, binnen: false, pad: [] });
   S.slaap = { tot: dag + 1 };
@@ -369,7 +369,7 @@ test('las je het rapport niet, dan zegt hij het de volgende dag nog eens', () =>
 test('de winter zegt hij als hij omslaat of flink verschuift, en anders om de week', () => {
   const S = gehucht();
   const D = S.dorp;
-  metRaadsman(S); // Klaas kan rekenen
+  metRaadsman(S); // Nicholas kan rekenen
   T.zetVoorraad(D, 'graan', 50000);
   T.zetVoorraad(D, 'hout', 0);
   const herfst = dagVan('herfstmaand', 1);

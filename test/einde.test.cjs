@@ -86,7 +86,7 @@ test('het jaarboek telt het jaar, en op 1 lentemaand komt het jaarverslag', () =
   D.bevolking = 30;
 
   const lente = dagVan('lentemaand', 1, 1);
-  assert.equal(T.datumVanDag(lente).tekst, '1 lentemaand 1324');
+  assert.equal(T.datumVanDag(lente).tekst, '1 March 1324');
   nacht(lente - 1, []);
   assert.deepEqual(getoond, [], 'de dag ervoor nog niet');
   nacht(lente, []);

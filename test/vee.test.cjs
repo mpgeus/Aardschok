@@ -295,7 +295,7 @@ function metInstelling(blok, waarden, fn) {
 
 const binnen = (e, v) => e.tx >= v.x && e.tx < v.x + v.b && e.ty >= v.y && e.ty < v.y + v.h;
 
-test('de beginkudde: drie koeien op het blok van Klaas (akker6), binnen de weide, en acht schapen op de heide', () => {
+test('de beginkudde: drie koeien op het blok van Nicholas (akker6), binnen de weide, en acht schapen op de heide', () => {
   const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
   assert.ok(T.beginOpKaart(S, 'gehucht'));
   const weide = S.wereld.akkers.find((a) => a.naam === 'akker6');

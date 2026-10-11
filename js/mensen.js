@@ -106,11 +106,11 @@
     // ze kunnen, wordt bij elk spel geloot (Marcel, 24 sep; js/boeren.js): de naam hoort bij de
     // boer, het karakter niet. Wat hier als karakter staat, is wie ze zijn als er niet geloot wordt:
     // zoals ze eerst geschreven waren.
-    boer1: { naam: 'Klaas', vel: 'boer', geslacht: 'man', snelheid: 1.5, straal: 3, karakter: 'zanger', aanzien: 'geliefd' },
-    boer2: { naam: 'Aaltje', vel: 'boerin', geslacht: 'vrouw', snelheid: 1.4, straal: 3, karakter: 'weduwe' },
-    boer3: { naam: 'Gerrit', vel: 'boer', geslacht: 'man', snelheid: 1.5, straal: 3, karakter: 'woekeraar' },
-    boer4: { naam: 'Trijn', vel: 'boerin', geslacht: 'vrouw', snelheid: 1.4, straal: 3, karakter: 'vroedvrouw' },
-    boer5: { naam: 'Wouter', vel: 'boer', geslacht: 'man', snelheid: 1.5, straal: 3, karakter: 'heethoofd' },
+    boer1: { naam: 'Nicholas', vel: 'boer', geslacht: 'man', snelheid: 1.5, straal: 3, karakter: 'zanger', aanzien: 'geliefd' },
+    boer2: { naam: 'Alice', vel: 'boerin', geslacht: 'vrouw', snelheid: 1.4, straal: 3, karakter: 'weduwe' },
+    boer3: { naam: 'Gerard', vel: 'boer', geslacht: 'man', snelheid: 1.5, straal: 3, karakter: 'woekeraar' },
+    boer4: { naam: 'Kate', vel: 'boerin', geslacht: 'vrouw', snelheid: 1.4, straal: 3, karakter: 'vroedvrouw' },
+    boer5: { naam: 'Walter', vel: 'boer', geslacht: 'man', snelheid: 1.5, straal: 3, karakter: 'heethoofd' },
   };
 
   // De stapel karakters waaruit de boeren trekken (js/boeren.js, T.lootBoeren): wie een boer is,

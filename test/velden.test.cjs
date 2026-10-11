@@ -8,7 +8,7 @@ const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
 
-// Het gehucht zoals het begint: de beginkudde op het blok van Klaas (akker6).
+// Het gehucht zoals het begint: de beginkudde op het blok van Nicholas (akker6).
 function gehucht() {
   const S = { kalender: T.nieuweKalender(), tijd: 0, inventaris: new Set() }; // het spel; zijn dorp (S.dorp) komt met de kaart
   assert.ok(T.beginOpKaart(S, 'gehucht'));
@@ -92,7 +92,7 @@ test('een dier op een weide stapt alleen binnen de rechthoek, niet op een ander 
   const { S, veld } = gehucht();
   const w = S.wereld;
   for (const e of T.veeVan(S.dorp)) e.dood = true; // een lege weide om in te proeven
-  // Een smalle strook, twee bij veertien (die van Wouter): met de oude straal rond het midden kon een
+  // Een smalle strook, twee bij veertien (die van Walter): met de oude straal rond het midden kon een
   // dier maar vier tegels op; nu de hele strook.
   const strook = veld('akker5');
   strook.bestemming = strook.plan = 'weide';
@@ -155,7 +155,7 @@ test('T.wegNaarWeide: de weg naar de dichtstbijzijnde vrije tegel, of null als h
   const w = S.wereld;
   const koe = T.veeVan(S.dorp).find((e) => e.dier === 'koe');
   assert.equal(T.wegNaarWeide(w, koe), null, 'het staat al op zijn weide');
-  // De strook van Wouter, één tegel naast de weide: er staat niets tussen, dus de weg is recht.
+  // De strook van Walter, één tegel naast de weide: er staat niets tussen, dus de weg is recht.
   const strook = veld('akker5');
   T.zetOpWeide(koe, strook);
   const weg = T.wegNaarWeide(w, koe);

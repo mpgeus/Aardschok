@@ -268,7 +268,7 @@ test('het bouwbereik: je bouwt binnen bouwBereik tegels van het plein, en verder
   // ver weg zegt de regel waarom, ook als het daar verder zou passen
   const ver = { x: rechts.x + R + 5, y: rechts.y };
   const reden = T.waaromPastHetNiet(D, 'hut', ver.x, ver.y);
-  assert.match(reden, /Te ver weg/);
+  assert.match(reden, /Too far away/);
   assert.equal(T.plaatsGebouw(D, 'hut', ver.x, ver.y).gelukt, false);
   // dichtbij lukt het wel (zaad 2 heeft open grond bij het plein)
   const [hut] = zetHutten(D, 1);
@@ -398,12 +398,12 @@ test('meebouwen: zonder bouwers staat de bouwplaats stil, en het briefje zegt he
     dagen(S, 2, 4);
     assert.equal(hut.bouw.gedaan, 0);
     assert.ok(!hut.klaar);
-    assert.match(T.gebouwToestand(D, hut), /niemand bouwt/);
+    assert.match(T.gebouwToestand(D, hut), /nobody is building/);
   } finally {
     T.BOUWEN_INSTELLINGEN.perPlaats = perPlaats;
   }
   dagen(S, 5, 5);
-  assert.match(T.gebouwToestand(D, hut), /4 bouwers/);
+  assert.match(T.gebouwToestand(D, hut), /4 builders/);
 });
 
 test('rooien: in het bos rooien de bouwers eerst de plek, een boom geeft zijn hout, en dan rijst het op', () => {
@@ -418,13 +418,13 @@ test('rooien: in het bos rooien de bouwers eerst de plek, een boom geeft zijn ho
       if (!kavel || T.watTeRooien(D, kavel).bomen < 5 || T.waaromPastHetNiet(D, 'hut', x, y, null, kavel)) continue;
       const uit = T.plaatsGebouw(D, 'hut', x, y);
       assert.ok(uit.gelukt, uit.reden);
-      assert.match(uit.bericht, /rooien eerst/);
+      assert.match(uit.bericht, /first clear/);
       hut = uit.instantie;
     }
   }
   assert.ok(hut, 'er is bos binnen het bereik');
   assert.ok(hut.wachtOpRooien && !hut.voorwerp, 'tot de plek vrij is, staat de hut nog niet op de kaart');
-  assert.match(T.plaatsGebouw(D, 'hut', hut.x, hut.y).reden || '', /komt al een hut/, 'maar er komt niets anders op zijn plek');
+  assert.match(T.plaatsGebouw(D, 'hut', hut.x, hut.y).reden || '', /A hut is already coming here/, 'maar er komt niets anders op zijn plek');
   const tegels = T.teRooienOp(D, hut.kavel);
   const bomen = tegels.filter((t) => T.ontginWerkOp(w, t.x, t.y) === 'hakken').length;
   const rooiWerk = bomen * I.rooiBoom + (tegels.length - bomen) * I.rooiStruik;

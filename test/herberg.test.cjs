@@ -110,7 +110,7 @@ test('in het gehucht staat een herberg aan het plein, groter dan een boerderij, 
 // ---------------------------------------------------------------------------------------------
 
 test('wie er vanavond gaat: de drinker elke avond, de vrome nooit, en niet meer dan er bier is', () => {
-  // Trijn (boer4) woont vlak bij de herberg, Gerrit (boer3) wat verder.
+  // Kate (boer4) woont vlak bij de herberg, Gerard (boer3) wat verder.
   const S = gehucht({ karakters: { boer4: 'drinker', boer3: 'vrome' } });
   const trijn = bewoner(S, 'boer4');
   const gerrit = bewoner(S, 'boer3');

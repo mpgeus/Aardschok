@@ -335,7 +335,7 @@ test('sterven: het bericht zegt wie het is, en wie hij voor iemand was', () => {
   if (dood.leeftijd === 'oud') assert.ok(berichten[0].includes(`de oude ${dood.naam}`));
   T.wijzigBevolking(S.dorp, -2, 'winter', 'De honger is hard');
   assert.ok(berichten[1].startsWith('De honger is hard: ') && berichten[1].endsWith(' zijn gestorven.'), berichten[1]);
-  // "de oude Geesje, moeder van Wouter, en de oude Swaantje, ...": een bijstelling sluit met een komma.
+  // "de oude Geesje, moeder van Walter, en de oude Swaantje, ...": een bijstelling sluit met een komma.
   const [eerste] = berichten[1].slice('De honger is hard: '.length).split(' en ');
   if (eerste.includes(',')) assert.ok(eerste.endsWith(','), berichten[1]);
   // Zonder `waarom` (het begin, een toets) geen bericht.
@@ -533,7 +533,7 @@ test('bij de muis staat wie het is', () => {
   const herder = nieuwe(S).find((p) => p.werk && p.werk.soort === 'schaapskooi');
   const tekst = T.overBewonerTekst(S.dorp, herder.wezen);
   assert.match(tekst, new RegExp(`^${herder.naam}(, .+)? · herder(in)?$`), 'de naam, en wat hij of zij doet');
-  // Wie bij een boer hoort, heet naar de boer: "Geert, zoon van Klaas".
+  // Wie bij een boer hoort, heet naar de boer: "Geert, zoon van Nicholas".
   const bijBoer = nieuwe(S).find((p) => p.hoofd && p.hoofd.wie);
   assert.match(T.overBewonerTekst(S.dorp, bijBoer.wezen), new RegExp(`^${bijBoer.naam}, ${bijBoer.band} van ${T.naamVanMens(bijBoer.hoofd.wie)}`));
   const vrouw = nieuwe(S).find((p) => p.hoofd && p.hoofd.schout && p.band === 'vrouw');

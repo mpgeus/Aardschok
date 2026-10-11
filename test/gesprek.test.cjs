@@ -101,9 +101,9 @@ test('een gesprek loopt van knoop naar knoop, en een antwoord verandert wat er d
 });
 
 test('in een zin vult het spel woorden in, en wat niemand kent, blijft staan', () => {
-  T.GESPREK_WOORDEN.proefwoord = () => 'Klaas';
+  T.GESPREK_WOORDEN.proefwoord = () => 'Nicholas';
   try {
-    assert.equal(T.vulWoordenIn({}, 'Dag {proefwoord}, en {onbekend}.'), 'Dag Klaas, en {onbekend}.');
+    assert.equal(T.vulWoordenIn({}, 'Dag {proefwoord}, en {onbekend}.'), 'Dag Nicholas, en {onbekend}.');
   } finally {
     delete T.GESPREK_WOORDEN.proefwoord;
   }

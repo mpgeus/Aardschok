@@ -963,7 +963,7 @@
   T.waaromNietOpDezeGrond = function (D, x, y) {
     const w = D.wereld;
     const komt = T.bouwplaatsOp(D, x, y);
-    if (komt) return T.t('A {gebouw} is already coming here.', { gebouw: T.GEBOUWEN[komt.soort].naam });
+    if (komt) return T.t('{gebouw} is already coming here.', { gebouw: T.hoofdletter(T.eenNaam(T.GEBOUWEN[komt.soort].naam)) });
     if (T.veldOp(w, x, y)) return 'Daar ligt een veld.';
     if (T.opPad(w, x, y)) return 'Daar loopt een pad.';
     // Op zand wordt niet gebouwd (Marcel, 8 okt: "zand is geen solide basis"): het strand, de duinen en het stuifzand

@@ -110,7 +110,7 @@ test('alleen weides doen mee: een akker ertussen of ernaast is geen weide, en de
   assert.deepEqual(volgend.velden, [a, akker, b]);
 });
 
-test('in het gehucht: de weide van Klaas en de strook van Wouter ernaast worden samen één weide, met de strook ertussen', () => {
+test('in het gehucht: de weide van Nicholas en de strook van Walter ernaast worden samen één weide, met de strook ertussen', () => {
   const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
   assert.ok(T.beginOpKaart(S, 'gehucht'));
   const veld = (naam) => S.wereld.akkers.find((a) => a.naam === naam);
@@ -122,10 +122,10 @@ test('in het gehucht: de weide van Klaas en de strook van Wouter ernaast worden 
   assert.deepEqual(groep.velden, [wouter, klaas]);
   assert.equal(groep.tegels, 28 + 30);
   // De strook gras tussen de twee, zo lang als ze naast elkaar liggen (de weide is korter dan de
-  // strook van Wouter). Uit de akkers zelf, zodat een nieuwe indeling van het gehucht de toets niet
+  // strook van Walter). Uit de akkers zelf, zodat een nieuwe indeling van het gehucht de toets niet
   // breekt zolang ze zo naast elkaar liggen.
   const x = wouter.x + wouter.b;
-  assert.equal(klaas.x, x + 1, 'één tegel tussen de strook van Wouter en de weide van Klaas');
+  assert.equal(klaas.x, x + 1, 'één tegel tussen de strook van Walter en de weide van Nicholas');
   const strook = [];
   for (let y = klaas.y; y < klaas.y + klaas.h; y++) strook.push(`${x},${y}`);
   assert.deepEqual(sleutels(groep.tussen), strook);
@@ -275,7 +275,7 @@ test('de muis en het venster zeggen dat een weide samen met het veld ernaast é�
   const boerWouter = T.boerVanVeld(S.dorp, wouter);
   assert.equal(T.samenMetTekst(S.dorp, klaas), `samen één weide met het veld van ${boerWouter.naam}`);
   assert.match(T.veldTekst(S.dorp, wouter), new RegExp(`samen één weide met het veld van ${T.boerVanVeld(S.dorp, klaas).naam}`));
-  assert.equal(T.opsomming(['Klaas', 'Jan', 'Gerrit']), 'Klaas, Jan en Gerrit');
+  assert.equal(T.opsomming(['Nicholas', 'Jan', 'Gerard']), 'Nicholas, Jan en Gerard');
 });
 
 // ---------------------------------------------------------------- de kooi: scheren en mest

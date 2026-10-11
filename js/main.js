@@ -1412,7 +1412,7 @@
       const D = S.dorp;
       const p = T.raadsmanVan(D);
       if (wat === 'nu') {
-        if (!p) return 'Er is geen raadsman: kies er een met R, of met Spel.debug.raadsman("Aaltje").';
+        if (!p) return 'Er is geen raadsman: kies er een met R, of met Spel.debug.raadsman("Alice").';
         T.tikOchtendrapportDag(D, Math.floor(S.kalender.dag));
         D.ochtendrapport.gebracht = true;
       }

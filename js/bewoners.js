@@ -60,19 +60,19 @@
     kleuter: { man: 'kleuter', vrouw: 'kleuter', snelheid: 'snelheidKind', werkt: null },
   };
 
-  // Oude Nederlandse voornamen (een voorstel van Claude). De namen van de boeren staan in
-  // T.MENSEN en in de spelregels. Niemand krijgt een naam die al in het dorp is, zolang er nog een
-  // vrije is.
+  // Engelse voornamen uit de middeleeuwen (Marcel, 11 okt: "Engelse namen"; ontwerp/engels.md; tot dan oude
+  // Nederlandse). De namen van de boeren staan in T.MENSEN en in de spelregels. Niemand krijgt een naam die al in het
+  // dorp is, zolang er nog een vrije is.
   T.VOORNAMEN = {
     man: [
-      'Albert', 'Arend', 'Berend', 'Egbert', 'Evert', 'Folkert', 'Geert', 'Harm', 'Hendrik', 'Hidde',
-      'Jakob', 'Jan', 'Johan', 'Lambert', 'Lubbert', 'Luitjen', 'Menno', 'Otto', 'Reinder', 'Roelof',
-      'Swier', 'Tamme', 'Tijs', 'Wicher', 'Willem', 'Wolter',
+      'Adam', 'Alan', 'Bartholomew', 'Edmund', 'Geoffrey', 'Gilbert', 'Godfrey', 'Hamon', 'Henry', 'Hugh',
+      'John', 'Lambert', 'Laurence', 'Martin', 'Osbert', 'Peter', 'Ralph', 'Reginald', 'Richard', 'Robert',
+      'Roger', 'Simon', 'Stephen', 'Thomas', 'Wat', 'William',
     ],
     vrouw: [
-      'Aafke', 'Aleid', 'Anna', 'Diewer', 'Fenna', 'Froukje', 'Geertje', 'Geesje', 'Grietje', 'Hilje',
-      'Hille', 'Ida', 'Janna', 'Jeltje', 'Lammechien', 'Margje', 'Marchien', 'Mette', 'Roelfje',
-      'Swaantje', 'Tette',
+      'Agnes', 'Amice', 'Avice', 'Beatrice', 'Cecily', 'Christina', 'Edith', 'Emma', 'Hawise', 'Isabel',
+      'Joan', 'Juliana', 'Lettice', 'Mabel', 'Margery', 'Matilda', 'Maud', 'Petronilla', 'Rose', 'Sybil',
+      'Thomasina',
     ],
   };
 

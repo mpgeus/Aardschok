@@ -96,7 +96,7 @@
         { id: 'geloot', naam: 'Geloot', zet: { 'BOEREN_INSTELLINGEN.loten': true },
           uitleg: 'Bij elk nieuw spel anders: de een maait sneller dan de ander, en wie de weduwe is, weet je vooraf niet.' },
         { id: 'vast', naam: 'Vast', zet: { 'BOEREN_INSTELLINGEN.loten': false },
-          uitleg: 'Zoals ze eerst geschreven waren (Klaas zingt, Aaltje is weduwe, …), en allemaal even goed.' },
+          uitleg: 'Zoals ze eerst geschreven waren (Nicholas zingt, Alice is weduwe, …), en allemaal even goed.' },
       ],
     },
     {
@@ -626,7 +626,7 @@
         { id: 'maker', naam: 'Elk spel een ander', zet: { 'MAKER_INSTELLINGEN.eigenGehucht': true, 'MAKER_INSTELLINGEN.opEiland': false },
           uitleg: 'De maker legt elk nieuw spel een ander land, uit dezelfde delen: het plein, de schout erachter, de boerderijen bij hun akkers, de heide, de beek, het bos, vijvers en rotsen, maar elke keer anders. Bij Nieuw spel zie je het nummer van het land: een land dat je mooi vond, speel je opnieuw door dat nummer in te typen.' },
         { id: 'ontworpen', naam: 'Het ontworpen gehucht', zet: { 'MAKER_INSTELLINGEN.eigenGehucht': false, 'MAKER_INSTELLINGEN.opEiland': false },
-          uitleg: 'Elk spel hetzelfde gehucht, met de hand gelegd: het plein als hart, en Klaas, Aaltje, Gerrit, Trijn en Wouter bij hun velden.' },
+          uitleg: 'Elk spel hetzelfde gehucht, met de hand gelegd: het plein als hart, en Nicholas, Alice, Gerard, Kate en Walter bij hun velden.' },
         // Vraag 117, stap 2 (Marcel, 8 okt: "A ja B later C dorp dat er al was"): je land is het stuk van het eiland om je
         // dorp (js/eiland.js).
         { id: 'eiland', naam: 'Op het eiland', zet: { 'MAKER_INSTELLINGEN.eigenGehucht': true, 'MAKER_INSTELLINGEN.opEiland': true },

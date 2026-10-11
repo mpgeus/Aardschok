@@ -51,17 +51,17 @@ test('elke maand hoort bij een van de vier seizoenen, en de sfeervolle namen klo
   for (const m of T.MAANDEN) assert.ok(['lente', 'zomer', 'herfst', 'winter'].includes(m.seizoen));
   assert.equal(T.MAANDEN.find((m) => m.naam === 'wintermaand').seizoen, 'winter');
   assert.equal(T.MAANDEN.find((m) => m.naam === 'oogstmaand').seizoen, 'zomer');
-  assert.equal(T.MAANDEN.find((m) => m.naam === 'slachtmaand').gewoon, 'november');
+  assert.equal(T.MAANDEN.find((m) => m.naam === 'slachtmaand').toon, 'November');
 });
 
-test('de tekst leest als "3 oogstmaand 1323"', () => {
+test('de tekst leest als "3 August 1323"', () => {
   const oogstIndex = T.MAANDEN.findIndex((m) => m.naam === 'oogstmaand');
   let dag = 0;
   for (; dag < T.DAGEN_PER_JAAR; dag++) {
     const d = T.datumVanDag(dag);
     if (d.maand === oogstIndex && d.dagVanMaand === 3) break;
   }
-  assert.equal(T.datumVanDag(dag).tekst, `3 oogstmaand ${T.TIJD_START_JAAR}`);
+  assert.equal(T.datumVanDag(dag).tekst, `3 August ${T.TIJD_START_JAAR}`);
 });
 
 test('een nieuwe kalender begint op dag 0, om zeven uur, op gewone snelheid', () => {

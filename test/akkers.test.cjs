@@ -521,7 +521,7 @@ test('T.werkOogstBij: een boer die al op een ongemaaide tegel staat, begint daar
 
 test('na de oogst kiezen de boeren: een uitgeputte akker rust, een braak wordt weer akker, een weide blijft weide', () => {
   const { S, akker, weide, braak, boer } = drieVelden();
-  boer.naam = 'Klaas';
+  boer.naam = 'Nicholas';
   akker.vruchtbaarheid = 0.8; // volgend voorjaar 0,7: onder rustOnder
   const gezegd = [];
   T.ui = { bericht: (t) => gezegd.push(t) };
@@ -533,10 +533,10 @@ test('na de oogst kiezen de boeren: een uitgeputte akker rust, een braak wordt w
     delete T.ui;
   }
   assert.deepEqual([akker.plan, weide.plan, braak.plan], ['braak', 'weide', 'akker']);
-  assert.equal(T.planTekst(S, akker), 'Klaas koos het: het land raakt uitgeput');
-  assert.equal(T.planTekst(S, braak), 'Klaas koos het: het land heeft gerust');
-  assert.equal(T.planTekst(S, weide), 'Klaas koos het');
-  assert.ok(gezegd.includes('Na de oogst kozen de boeren wat hun velden volgend jaar worden: het veld van Klaas rust een jaar en dat van Klaas wordt weer akker. In het veldenvenster (V) kun je het veranderen.'), gezegd.join(' | '));
+  assert.equal(T.planTekst(S, akker), 'Nicholas koos het: het land raakt uitgeput');
+  assert.equal(T.planTekst(S, braak), 'Nicholas koos het: het land heeft gerust');
+  assert.equal(T.planTekst(S, weide), 'Nicholas koos het');
+  assert.ok(gezegd.includes('Na de oogst kozen de boeren wat hun velden volgend jaar worden: het veld van Nicholas rust een jaar en dat van Nicholas wordt weer akker. In het veldenvenster (V) kun je het veranderen.'), gezegd.join(' | '));
   // Op 1 lentemaand gaat het in, en begint een nieuw jaar: na de oogst kiest de boer weer.
   T.wisselVelden(S);
   assert.deepEqual([akker.bestemming, braak.bestemming], ['braak', 'akker']);

@@ -1,10 +1,11 @@
 // De taal van het spel (vraag 147; Marcel, 9 okt: "We moeten alles naar het Engels halen. Ook moeten we een translate
 // tool hebben. Mochten we leden uit de community krijgen die een vertaling willen maken."). Besloten: alles wat de
-// speler ziet, met Engels als brontaal; Nederlands is een vertaling zoals elke andere. De code, het commentaar en
-// ontwerp/ blijven Nederlands.
+// speler ziet, met Engels als brontaal. De code, het commentaar en ontwerp/ blijven Nederlands. Sinds 11 okt is er geen
+// Nederlands meer (Marcel: "Alles gelijk in het Engels maken. Nederlands mag je mee stoppen"): het spel is Engels, en
+// deze haak blijft voor een vertaling uit de community. De woorden en de toon: ontwerp/engels.md.
 //
 // Eén manier om tekst te tonen: T.t('Engelse zin met {wie}', { wie }). De Engelse zin in de code is zelf de sleutel;
-// een taal (taal/nl.js) zegt per zin wat hij in die taal is. Ontbreekt een zin, dan staat er het Engels. Het eerste
+// een taal (taal/<code>.js) zegt per zin wat hij in die taal is. Ontbreekt een zin, dan staat er het Engels. Het eerste
 // argument is altijd een gewone tekst tussen aanhalingstekens, nooit een variabele of een `sjabloon`: npm run teksten
 // (gereedschap/teksten.cjs) leest de zinnen zo uit de code, voor taal/bron.js en de vertaaltool
 // (gereedschap/vertalen.html), en test/taal.test.cjs bewaakt het.
@@ -23,8 +24,7 @@
 // regels.
 //
 // Welke taal: ?taal=nl in het adres, anders wat de speler koos (de browser onthoudt het), anders de taal van de
-// browser als die er is, anders Engels. De toetsen spelen in het Nederlands (test/laad.cjs zet T.TAAL_GEZET), zodat
-// wat een toets van een tekst verwacht, gelijk bleef toen de teksten Engels werden.
+// browser als die er is, anders Engels. De toetsen spelen in het Engels (test/laad.cjs zet T.TAAL_GEZET).
 //
 // Een vertaling uit de community hoeft niet in taal/ te staan: de vertaaltool bewaart hem in de browser
 // (T.EIGEN_TALEN_SLEUTEL), en dit bestand meldt hem hier aan, zodat hij in de lijst van het titelscherm staat.
@@ -228,6 +228,10 @@
     const zin = taal.zinnen[bron];
     return vul(zin != null && zin !== '' ? zin : bron, woorden, taal.locale);
   };
+
+  // Een naam met zijn Engelse lidwoord ervoor: "an inn", "a hut" (ontwerp/engels.md: een zin met *a* of *an* krijgt de
+  // naam zo mee, want het lidwoord hangt aan het woord). Een klinker vooraan krijgt *an*.
+  T.eenNaam = (naam) => `${/^[aeiou]/i.test(naam) ? 'an' : 'a'} ${naam}`;
 
   // ── Voor de vertaaltool en de toetsen ──
 

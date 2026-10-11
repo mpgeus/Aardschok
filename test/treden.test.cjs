@@ -241,8 +241,8 @@ test('de naam van je dorp (vraag 60): wat je typt, zonder spaties eromheen en ni
   assert.equal(T.dorpsnaam(S.dorp), null, 'zonder naam');
   assert.ok(T.DORPSNAMEN.includes(T.voorgesteldeDorpsnaam(12345)));
   assert.equal(T.voorgesteldeDorpsnaam(3), T.voorgesteldeDorpsnaam(3), 'hetzelfde zaad, hetzelfde voorstel');
-  assert.equal(T.zetDorpsnaam(S.dorp, '   Groot   Heikant  '), 'Groot Heikant');
-  assert.equal(T.tredeDoel(S.dorp).kop, 'Groot Heikant · naar een dorp');
+  assert.equal(T.zetDorpsnaam(S.dorp, '   Groot   Heathside  '), 'Groot Heathside');
+  assert.equal(T.tredeDoel(S.dorp).kop, 'Groot Heathside · naar een dorp');
   assert.equal(T.zetDorpsnaam(S.dorp, 'x'.repeat(40)).length, 24);
   assert.equal(T.zetDorpsnaam(S.dorp, '   '), null, 'leeg is geen naam');
   assert.equal(T.tredeDoel(S.dorp).kop, 'Naar een dorp');

@@ -19,8 +19,8 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
     gezin (`T.boerVan`), maar of dat goed oogt, zien we pas als er weer gezinnen komen.
   - Wie een akker ploegt of een wijngaard plant, staat met de bijl van de bouwers (zie "Bouwen met de bijl" hieronder);
     een ploeg of een spade zou beter zijn. Mee in een ronde van de beelden.
-  - In het bouwmenu staat de beschrijving van een gebouw nog in het Nederlands, ook naast de Engelse uitleg van een veld;
-    en "A {gebouw} is already coming here" zegt in het Engels "A akker". Mee als de spelteksten om gaan (G).
+  - In het bouwmenu staat de beschrijving van een gebouw nog in het Nederlands, ook naast de Engelse uitleg van een veld.
+    Mee als de spelteksten om gaan (G).
 - **Het huis van de schout heeft nog geen bouwfasen** (11 okt, vraag 152, 1d): in aanbouw staat het bleek op de
   kaart, waar een hut of huis zijn fundering, muren en steigers laat zien (`tegels/bouwfasen.json`, uit
   `gereedschap/pixelart/bouwfasen.cjs`). Mee in een ronde van de beelden.

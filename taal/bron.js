@@ -2,7 +2,19 @@
 // hij staat. Gemaakt door npm run teksten (gereedschap/teksten.cjs) uit de aanroepen van T.t in js/; niet met de
 // hand bewerken. De vertaaltool (gereedschap/vertalen.html) werkt met deze lijst.
 Spel.TAAL_BRON = [
-  {"t":"A {gebouw} is already coming here.","waar":["js/gebouwen.js"]},
+  {"t":"January","waar":["js/tijd.js"]},
+  {"t":"February","waar":["js/tijd.js"]},
+  {"t":"March","waar":["js/tijd.js"]},
+  {"t":"April","waar":["js/tijd.js"]},
+  {"t":"May","waar":["js/tijd.js"]},
+  {"t":"June","waar":["js/tijd.js"]},
+  {"t":"July","waar":["js/tijd.js"]},
+  {"t":"August","waar":["js/tijd.js"]},
+  {"t":"September","waar":["js/tijd.js"]},
+  {"t":"October","waar":["js/tijd.js"]},
+  {"t":"November","waar":["js/tijd.js"]},
+  {"t":"December","waar":["js/tijd.js"]},
+  {"t":"{gebouw} is already coming here.","waar":["js/gebouwen.js"]},
   {"t":"{gebouw}: the builders first clear the site ({wat}), then build it ({werk} workdays).","waar":["js/gebouwen.js"]},
   {"t":"{gebouw}: the building site is ready ({werk} workdays, for whoever has no other work).","waar":["js/gebouwen.js"]},
   {"t":"St Martin's Day is coming, and the lord spares you this year.","waar":["js/heer.js"]},

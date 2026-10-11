@@ -19,7 +19,7 @@
   const hebNu = (S, wat) => Math.floor((S.dorp.voorraad && S.dorp.voorraad[wat]) || 0);
   const vandaag = (S) => (S.kalender ? T.datumVanDag(S.kalender.dag).tekst : '');
   const eisInTaal = (eis) => opsomming(eis.volgorde.map((wat) => `${eis.per[wat]} ${wat}`));
-  // "Ons gehucht Heikant", of zonder naam "dit gehucht".
+  // "Ons gehucht Heathside", of zonder naam "dit gehucht".
   const hetDorp = (S, wat) => (T.dorpsnaam(S.dorp) ? `Ons ${wat} ${veilig(T.dorpsnaam(S.dorp))}` : `dit ${wat}`);
 
   // De benoeming van het lege begin (werklijst vraag 152; js/begin.js): de heer stuurt je met de gezinnen naar een stuk
