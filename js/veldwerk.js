@@ -430,7 +430,7 @@
   function schuurWaarHijHakt(D, e) {
     const p = bewonerVan(D, e);
     const g = p && p.werk;
-    return g && g.klaar && g.boom && T.GEBOUWEN[g.soort].bos && T.BOS_INSTELLINGEN.houthakkerHakt ? g : null;
+    return g && g.klaar && g.boom && T.GEBOUWEN[g.soort].bos ? g : null;
   }
 
   // De houthakker aan het werk (js/bos.js; vraag 115): hij hakt aan zijn boom van een tegel recht ernaast, hakUren aan een

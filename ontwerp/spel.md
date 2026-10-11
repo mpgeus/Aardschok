@@ -1191,7 +1191,7 @@ doel"):
   en kun je niet betalen wat helpt, met wat je mist en waar het vandaan komt; en dan het doel en de groei: wat je mist
   voor de gebouwen die het doel vraagt en waar het vandaan komt (sinds 1 okt, vraag 59, C: "Voor de smidse mis je 8
   goud: de marskramer koopt graan in hooimaand en belasting [W] brengt elke maand goud"; sinds 2 okt vraagt het doel
-  alleen nog gebouwen met de spelregel "Treden" op de proef van 28 sep), waarom er verder geen gezin komt (niet tevreden
+  alleen nog gebouwen met de eis van de proef van 28 sep, die sinds 11 okt geen spelregel meer is), waarom er verder geen gezin komt (niet tevreden
   genoeg; te weinig graan), of wanneer het volgende komt, zoals een stad in Civilization zegt wanneer hij groeit,
   zolang het doel nog mensen vraagt: een trede, of na de laatste de 100 mensen van de winst (sinds 3 okt).
 - **De ketens** (sinds 2 okt, werklijst vraag 90, D; Marcel: "d ja"): de raad weet wat een werkplaats nodig heeft en wie
@@ -1952,7 +1952,8 @@ winter zichtbaar te maken staat in de werklijst bij vraag 44, en werd op 28 sep 
   vraag 92 maalde de molen het op, en bleven de akkers in het derde jaar grotendeels ongezaaid.
 - **Werk telt in uren** (26 sep; "Mensen worden poppetjes", stuk 2): een gebouw maakt naar de uren
   dat zijn handen er echt zijn, en de weg van hun huis erheen gaat eraf. Bij de muis: "Houthakker:
-  aan het werk (1 van 1 handen), 10 van de 12 uur; 2 uur onderweg." Een optie in de spelregels.
+  aan het werk (1 van 1 handen), 10 van de 12 uur; 2 uur onderweg." Tot 11 okt een optie in de spelregels ("Een hele dag"
+  was de andere keuze); die is weggehaald (snoeironde, vraag 153): met de kar telt de weg juist.
 - Wat de heer ervoor vraagt, staat bij elk gebouw: een huis 2 goud, een boerderij 1, een schaapskooi
   20 wol, een hut niets.
 - De losse verstopplek staat sinds 25 sep niet meer in het bouwmenu: je verstopt in kelders en de
@@ -3328,8 +3329,8 @@ hand werkt elders. Een nieuwe houthakker vraagt het dorp pas als het hout de win
 houthakker komt alleen bij minstens dertig bomen binnen tien tegels (vraag 129, b; tot dan 8 binnen 7). Zijn poppetje
 loopt naar zijn boom, hakt er twee uur aan met de bijl, brengt een bundel naar de schuur en gaat terug; de boom valt 's
 nachts, als de regel zegt dat hij om is. Een boompje en een jonge boom rooit wie er bouwt, zonder hout; een boompje
-staat niet in de weg, een jonge boom wel. De spelregel "De houthakker" zet het terug op hout uit het niets (zoals voor 6
-okt); de getallen in de werkbank ("Het bos", `T.BOS_INSTELLINGEN`, waar nu ook het hout per boom en de dagen om te
+staat niet in de weg, een jonge boom wel. "Hout uit het niets" (zoals voor 6 okt) was tot 11 okt een keuze in de spelregels en is
+weggehaald (snoeironde, vraag 153); de getallen in de werkbank ("Het bos", `T.BOS_INSTELLINGEN`, waar nu ook het hout per boom en de dagen om te
 rooien staan). In de browser: `Spel.debug.bos()`. Wat een boom is, wat te rooien is, omhakken en rooien staan nu
 allemaal in `js/bos.js`, ook voor het ontginnen en het rooien van een erf.
 
@@ -3390,7 +3391,8 @@ punt 4 en 5; `js/bewoners.js`, `T.dagAnker` in `js/dag.js`, toetsen in `test/bew
   werkt, werkt op een boerderij, en die maakt zelf niets (de herder loopt naar de heide een half uur
   tot drie uur, meestal tweeënhalf, naar gelang van waar hij woont, maar de schaapskooi maakt niets
   per dag). Het telt zodra je een werkplaats bouwt. In de
-  spelregels: "Werk telt in uren", de weg telt (standaard) of een hand werkt een hele dag.
+  spelregels: "Werk telt in uren", de weg telt (standaard) of een hand werkt een hele dag. (Die tweede keuze is op
+  11 okt weggehaald, snoeironde vraag 153; de weg telt altijd.)
 - **Wie werkt, heeft een werkplek en gaat erheen.** Een gebouw krijgt zijn handen zoals voorheen
   (`T.verdeelHanden`), en nu zijn dat mensen (`T.wijsWerkToe`): eerst werkt een gezin op zijn eigen
   boerderij, dan krijgt een plek de vrije hand die het best past: eerst volwassenen, dan knapen,
@@ -3444,8 +3446,7 @@ veertien zijn alleen een getal.
    dat wegtrekt, loopt de weg af, en wie in de winter sterft, heeft een naam.
 5. **Werk telt in uren:** een werkplaats maakt naar de uren dat zijn mensen er echt zijn, dus wie ver
    weg woont, is langer onderweg. In het begin verandert dat niets, want de boerderijen maken zelf
-   niets (het graan komt van de akker, en dat telt al per uur). Een optie in de spelregels, standaard
-   aan.
+   niets (het graan komt van de akker, en dat telt al per uur). Tot 11 okt een optie in de spelregels; nu altijd.
 
 Het wordt gebouwd in twee stukken: eerst 1 tot en met 3, dan een schermafdruk voor Marcel, dan 4 en 5.
 
@@ -3791,9 +3792,9 @@ het dorp met "Verder als dorp" en "Naar het titelscherm", bij marktrecht "Wij ve
 wordt. Wij verlenen u marktrecht. Dat kost u vanaf nu meer." (`js/brieven.js`). Het bouwmenu toont de gebouwen van de
 trede, met die van de treden ervoor ("Bouwen — het dorp met marktrecht"). Wat een stand wil, komt een trede eerder: de
 markt en de weverij komen al in een dorp, zodat een huis dat versteent meteen wat het wil kan krijgen; marktrecht
-brengt het badhuis, het gasthuis, de steenbakkerij, het pakhuis en de ambachten. De spelregel "Treden" zet de proef
-van 28 sep terug (een dorp bij 50 mensen, met een kapel en een smidse klaar; marktrecht blijft bij de
-ambachtslieden). Het hoofdgeld in een dorp staat in de werkbank op 1 ("Dat kost u vanaf nu meer" is nog alleen
+brengt het badhuis, het gasthuis, de steenbakkerij, het pakhuis en de ambachten. De spelregel "Treden" zette de proef
+van 28 sep terug (een dorp bij 50 mensen, met een kapel en een smidse klaar; marktrecht bleef bij de
+ambachtslieden); ze is op 11 okt weggehaald (snoeironde, vraag 153). Het hoofdgeld in een dorp staat in de werkbank op 1 ("Dat kost u vanaf nu meer" is nog alleen
 woorden). Nog niet: de stad, de poorters en hun huis, de kapel die een kerk en een kathedraal wordt (Marcels idee bij
 vraag 87), de schepenen, en wat een dorp verder anders maakt.
 

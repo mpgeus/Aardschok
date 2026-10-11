@@ -39,10 +39,6 @@
     straalPut: 1,
     straalPlein: 3,
     straalHeide: 4,
-    // Werk telt in uren (stuk 2; Marcel koos op 26 sep de looptijd): een werkplaats maakt naar de uren
-    // dat zijn mensen er echt zijn, en de weg heen gaat eraf (T.werkUrenVan). Een optie in de
-    // spelregels (js/opties.js, "Werk telt in uren"); uit is een hand een hele dag, waar hij ook woont.
-    werkInUren: true,
     // Kleren naar stand (vraag 149; T.klerenVan): wie in een hut woont, draagt arme kleren, en wie in een stenen huis of
     // een woontoren woont, deftige, als zijn huis zijn laken krijgt (lakenVoorDeftig). Alleen beeld. Een optie in de
     // spelregels ("Kleren").

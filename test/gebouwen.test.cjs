@@ -8,12 +8,11 @@ const T = require('./laad.cjs').spel();
 
 // Zoals vóór 30 sep, met de spelregel "Het seizoen" op jij: niemand sprokkelt (werklijst vraag 74, stap 2). Voor de
 // toetsen die wat een werkplaats maakt precies nameten.
-// Zonder dat de boeren het seizoen doen (de spelregel "Het seizoen" op jij), en met de houthakker van voor 6 okt, die zijn
-// hout uit het niets maakt: deze toetsen gaan over wat een werkplaats maakt, en hun kaartje heeft geen bomen (wat de
-// houthakker aan bomen omhakt, toetst test/bos.test.cjs).
+// Zonder dat de boeren het seizoen doen (de spelregel "Het seizoen" op jij): deze toetsen gaan over wat een werkplaats
+// maakt. Hun kaartje heeft geen bomen, dus nemen ze geen houthakker (die staat stil zonder boom; wat hij aan bomen
+// omhakt, toetst test/bos.test.cjs) maar een kleiput.
 function alsJijHetSeizoenDoet(fn) {
   T.zetOptie('seizoen', 'jij');
-  T.zetOptie('houthakker', 'uitHetNiets');
   try {
     return fn();
   } finally {
@@ -240,12 +239,12 @@ const ongeveer = (a, b) => assert.ok(Math.abs(a - b) < 1e-9, `verwachtte ${b}, k
 
 test('T.tikGebouwenDag: volle bezetting geeft de volle opbrengst, maal hoe hard er gewerkt wordt', () => alsJijHetSeizoenDoet(() => {
   const S = maakS();
-  S.bevolking = T.GEBOUWEN.houthakker.handen;
-  S.gebouwen.push({ soort: 'houthakker', x: 0, y: 0, klaar: true, klaarOp: 0, handen: 0 });
-  T.zetVoorraad(S, 'hout', 0);
+  S.bevolking = T.GEBOUWEN.kleiput.handen;
+  S.gebouwen.push({ soort: 'kleiput', x: 0, y: 0, klaar: true, klaarOp: 0, handen: 0 });
+  T.zetVoorraad(S, 'klei', 0);
   T.tikGebouwenDag(S, 1);
   assert.ok(werkFactor(S) > 0 && werkFactor(S) < 1, 'zonder eten werkt het dorp minder hard');
-  ongeveer(S.voorraad.hout, T.GEBOUWEN.houthakker.maakt.uit.hout * werkFactor(S));
+  ongeveer(S.voorraad.klei, T.GEBOUWEN.kleiput.maakt.uit.klei * werkFactor(S));
 }));
 
 test('T.tikGebouwenDag: een gebouw met een "in" trekt dat er ook af', () => {
@@ -432,7 +431,7 @@ test('wie iets omzet, maakt tot er genoeg ligt (vraag 91, b); wie iets uit het l
   const genoeg = T.GEBOUWEN_INSTELLINGEN.werkplaatsMaaktTot;
   assert.deepEqual(T.maaktTot(T.GEBOUWEN.molen), { meel: genoeg });
   assert.deepEqual(T.maaktTot(T.GEBOUWEN.timmerman), { planken: genoeg });
-  assert.equal(T.maaktTot(T.GEBOUWEN.houthakker), null);
+  assert.equal(T.maaktTot(T.GEBOUWEN.kleiput), null);
   // Een molen maalt tot er genoeg meel ligt, en neemt dan geen graan meer: daarvoor maalde hij ruim 880 graan per jaar,
   // ook als niemand brood wilde.
   const S = metGebouw('molen');
@@ -445,21 +444,21 @@ test('wie iets omzet, maakt tot er genoeg ligt (vraag 91, b); wie iets uit het l
   assert.ok(graan - S.voorraad.graan < 1, 'vol: hij maalt niets, en het dorp eet alleen zelf');
   assert.equal(S.gebouwen[0].werkte, 0);
   assert.match(T.gebouwToestand(S, S.gebouwen[0]), /er ligt genoeg meel/);
-  // Een houthakker hakt door, hoeveel hout er ook ligt.
-  const H = metGebouw('houthakker');
-  H.voorraad.hout = 10 * genoeg;
+  // Een kleiput graaft door, hoeveel klei er ook ligt.
+  const H = metGebouw('kleiput');
+  H.voorraad.klei = 10 * genoeg;
   T.tikGebouwenDag(H, 1);
-  assert.ok(H.voorraad.hout > 10 * genoeg, 'hij hakt door');
+  assert.ok(H.voorraad.klei > 10 * genoeg, 'hij graaft door');
 }));
 
 test('gereedschap laat harder werken, en wat in gebruik is, slijt', () => alsJijHetSeizoenDoet(() => {
-  const zonder = metGebouw('houthakker');
-  const met = metGebouw('houthakker');
+  const zonder = metGebouw('kleiput');
+  const met = metGebouw('kleiput');
   met.voorraad.gereedschap = 1;
   T.tikGebouwenDag(zonder, 1);
   T.tikGebouwenDag(met, 1);
   const IN = T.GEBOUWEN_INSTELLINGEN;
-  assert.ok(Math.abs(met.voorraad.hout - zonder.voorraad.hout * (1 + IN.gereedschapBonus)) < 1e-9);
+  assert.ok(Math.abs(met.voorraad.klei - zonder.voorraad.klei * (1 + IN.gereedschapBonus)) < 1e-9);
   assert.ok(Math.abs(met.voorraad.gereedschap - (1 - 1 / IN.gereedschapSlijtDagen)) < 1e-9);
 }));
 

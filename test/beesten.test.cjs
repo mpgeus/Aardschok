@@ -586,15 +586,13 @@ test('een wolf die in een gevecht viel, ligt er de volgende ochtend niet meer', 
 // Stap 3a, de jager (Marcel, 7 okt: "Altijd een paar herten over houden. Anders krijgen we geen jonge hertjes meer")
 // ---------------------------------------------------------------------------------------------
 
-// Een jager bij het dorp, klaar, op een land van de maker met zijn beesten; jij bouwt, zonder voorvallen, en het werk telt
-// in handen (alleen de nachten tikken, dus niemand loopt naar zijn werk). `f` krijgt { S, D, g }.
+// Een jager bij het dorp, klaar, op een land van de maker met zijn beesten; jij bouwt, zonder voorvallen. `f` krijgt
+// { S, D, g }.
 function metJager(zaad, f) {
   const S = landVanDeMaker(zaad);
   const D = S.dorp;
-  const uren = T.BEWONERS_INSTELLINGEN.werkInUren;
   T.zetOptie('wieBouwt', 'jij');
   T.zetOptie('voorvallen', 'uit');
-  T.BEWONERS_INSTELLINGEN.werkInUren = false;
   try {
     T.zetBeesten(D);
     const huis = D.gebouwen.find((g) => g.huis === 'schout');
@@ -607,7 +605,6 @@ function metJager(zaad, f) {
     assert.ok(u.instantie.klaar, 'de hut staat');
     f({ S, D, g: u.instantie });
   } finally {
-    T.BEWONERS_INSTELLINGEN.werkInUren = uren;
     T.optiesTerug();
   }
 }

@@ -1051,7 +1051,6 @@
       };
       const dag = Math.floor(D.kalender.dag);
       return {
-        aan: B.houthakkerHakt,
         houthakkers: hakkers.map((g) => {
           const p = D.bewoners && D.bewoners.mensen.find((q) => q.werk === g);
           const e = p && p.wezen;

@@ -33,11 +33,11 @@ const WINTERDAG = 280;
 const ZOMERDAG = 30;
 
 // Zoals vóór 30 sep, met de spelregel "Het seizoen" op jij: niemand sprokkelt (werklijst vraag 74, stap 2). Voor de
-// toetsen die het stoken of de houthakker precies nameten; wat het sprokkelen doet, toetsen de toetsen erover. En met de
-// houthakker van voor 6 okt, die zijn hout uit het niets maakt: wat hij aan bomen omhakt, toetst test/bos.test.cjs.
+// toetsen die het stoken of de productie precies nameten; wat het sprokkelen doet, toetsen de toetsen erover. Hun kaartje
+// heeft geen bomen, dus nemen ze geen houthakker (die staat stil zonder boom; wat hij aan bomen omhakt, toetst
+// test/bos.test.cjs) maar een kleiput.
 function alsJijHetSeizoenDoet(fn) {
   T.zetOptie('seizoen', 'jij');
-  T.zetOptie('houthakker', 'uitHetNiets');
   try {
     return fn();
   } finally {
@@ -252,15 +252,15 @@ test('T.tikGebouwenDag: geen nieuw gezin op een groeidag als de tevredenheid ond
 test('T.tikGebouwenDag: productie schaalt mee met de tevredenheid (T.BEHOEFTEN_INSTELLINGEN.werkBasis)', () => alsJijHetSeizoenDoet(() => {
   const S = maakS();
   const IN = T.BEHOEFTEN_INSTELLINGEN;
-  S.bevolking = T.GEBOUWEN.houthakker.handen;
-  S.gebouwen.push({ soort: 'houthakker', x: 0, y: 0, klaar: true, klaarOp: 0, handen: 0 });
-  T.zetVoorraad(S, 'hout', 0);
+  S.bevolking = T.GEBOUWEN.kleiput.handen;
+  S.gebouwen.push({ soort: 'kleiput', x: 0, y: 0, klaar: true, klaarOp: 0, handen: 0 });
+  T.zetVoorraad(S, 'klei', 0);
   const dag = 1;
   const verwachteTevredenheid = T.berekenTevredenheid(S, dag).tevredenheid;
   const werkFactor = IN.werkBasis + (1 - IN.werkBasis) * verwachteTevredenheid;
   T.tikGebouwenDag(S, dag);
-  const verwacht = T.GEBOUWEN.houthakker.maakt.uit.hout * werkFactor;
-  assert.ok(Math.abs(S.voorraad.hout - verwacht) < 1e-9, `verwachtte ${verwacht}, kreeg ${S.voorraad.hout}`);
+  const verwacht = T.GEBOUWEN.kleiput.maakt.uit.klei * werkFactor;
+  assert.ok(Math.abs(S.voorraad.klei - verwacht) < 1e-9, `verwachtte ${verwacht}, kreeg ${S.voorraad.klei}`);
 }));
 
 // ── Een huis dat doorgroeit ──

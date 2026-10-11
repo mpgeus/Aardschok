@@ -94,7 +94,6 @@ test('een rank door het jaar: kaal, blad, vol, en leeg als hij geplukt is', () =
 test('in wijnmaand plukt het gezin dat er woont, en de wijn is er pas als de mand binnen is', () => {
   const dag = dagIn('wijnmaand', 3);
   const { S, D, g } = gehucht();
-  const uren = T.BEWONERS_INSTELLINGEN.werkInUren;
   try {
     T.zetOptie('voorvallen', 'uit');
     // Twee volwassenen van het dorp gaan in de wijnboerderij wonen.
@@ -115,7 +114,6 @@ test('in wijnmaand plukt het gezin dat er woont, en de wijn is er pas als de man
     T.tikWijngaardDag(D, dag);
     assert.equal(D.voorraad.wijn, geplukt * T.WIJNGAARD_INSTELLINGEN.wijnPerRank);
   } finally {
-    T.BEWONERS_INSTELLINGEN.werkInUren = uren;
     T.optiesTerug();
   }
 });

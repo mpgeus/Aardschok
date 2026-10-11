@@ -308,17 +308,6 @@
           uitleg: 'De heer vraagt naar mensen, gebouwen en graan, niet naar wat er in de kist ligt.' },
       ],
     },
-    // Stuk 2 van de poppetjes (Marcel, 26 sep: "Uit de looptijd"; spel.md, "Stuk 2 uitgewerkt").
-    {
-      id: 'werkUren', naam: 'Werk telt in uren', standaard: 'deWegTelt',
-      uitleg: 'Of de weg naar het werk telt: een werkplaats maakt naar de uren dat zijn mensen er echt zijn.',
-      keuzes: [
-        { id: 'deWegTelt', naam: 'De weg telt', zet: { 'BEWONERS_INSTELLINGEN.werkInUren': true },
-          uitleg: 'Wie ver van zijn werk woont, is langer onderweg: de weg heen gaat van de werkuren af. Zo doet het ertoe waar een huis staat.' },
-        { id: 'heleDag', naam: 'Een hele dag', zet: { 'BEWONERS_INSTELLINGEN.werkInUren': false },
-          uitleg: 'Een hand werkt een hele dag, waar hij ook woont.' },
-      ],
-    },
     // De doorkijk (Marcel, 26 sep, vraag 34: "Ja dit is een goede optie" en "Raster ook als keuze";
     // ontwerp/beeld.md, "Doorkijk"; js/doorkijk.js).
     {
@@ -429,18 +418,6 @@
           uitleg: 'Alleen de weg van de kaart, zoals voor 3 okt.' },
       ],
     },
-    // De houthakker (werklijst vraag 115; Marcel, 4 okt: "De houthakker hakt bomen om uiteindelijk en plant nieuwe boompjes
-    // terug", en 6 okt: "A ja B ja C ja D zo"; js/bos.js).
-    {
-      id: 'houthakker', naam: 'De houthakker', standaard: 'hakt',
-      uitleg: 'Of het hout van de houthakker uit de bomen om zijn schuur komt.',
-      keuzes: [
-        { id: 'hakt', naam: 'Hakt en plant', zet: { 'BOS_INSTELLINGEN.houthakkerHakt': true },
-          uitleg: 'De houthakker hakt de bomen binnen tien tegels van zijn schuur om, de dichtste eerst: elke tien hout een boom. Naast de stronk plant hij twee boompjes, die in een jaar of twee weer bomen zijn, en de stronk vergaat. Zo wordt het bos om hem heen eerst dunner en daarna jonger en dichter; met twee houthakkers of de wet Houtkap wijkt het. Staat er geen boom meer, dan staat hij stil, en werkt zijn hand elders tot er weer een boom staat. Hij komt alleen bij minstens dertig bomen binnen tien tegels.' },
-        { id: 'uitHetNiets', naam: 'Hout uit het niets', zet: { 'BOS_INSTELLINGEN.houthakkerHakt': false },
-          uitleg: 'De houthakker maakt zijn hout zonder een boom om te hakken, en het bos blijft zoals het is. Zoals voor 6 okt.' },
-      ],
-    },
     // De bomen in het jaar (werklijst vraag 148, stap 2; Marcel, 9 okt: "Ja vegetatie en bomen met seizoenen mee. Ook
     // vruchten etc."; js/bos.js).
     {
@@ -549,18 +526,6 @@
           uitleg: 'Zoals in Anno 1602: een huis dat iets mist, groeit niet verder en is minder tevreden. Er trekt pas een gezin weg als het huis onder de vertrekdrempel zakt, en dat gebeurt alleen als het eten of het brandhout mist.' },
         { id: 'streng', naam: 'Streng', zet: { 'WENSEN_INSTELLINGEN.achteruit': 'streng' },
           uitleg: 'Mist een huis een maand lang iets, dan trekt zijn gezin weg, hooguit één huis per dag. Een huis dat net doorgroeide, wil meteen meer: zorg dat het er is.' },
-      ],
-    },
-    // De treden (werklijst vraag 90, A; Marcel, 2 okt: "a ja"; js/treden.js). Zoals de proef is het spel van 28 sep tot
-    // 2 okt (vraag 51).
-    {
-      id: 'treden', naam: 'Treden', standaard: 'standen',
-      uitleg: 'Wanneer het gehucht een dorp wordt.',
-      keuzes: [
-        { id: 'standen', naam: 'Uit de standen', zet: { 'TREDEN_INSTELLINGEN.dorp': { stand: 'dorpelingen', mensen: 20, gebouwen: [] } },
-          uitleg: 'Zoals in Anno 1602: een dorp bij 20 dorpelingen, wie in een huis woont (of in een stenen huis). Daarna marktrecht bij 20 ambachtslieden, in een stenen huis.' },
-        { id: 'proef', naam: 'Zoals de proef van 28 sep', zet: { 'TREDEN_INSTELLINGEN.dorp': { mensen: 50, gebouwen: ['kapel', 'smidse'] } },
-          uitleg: 'Een dorp bij 50 mensen, wie het ook zijn, met een kapel en een smidse klaar. Marktrecht blijft bij 20 ambachtslieden.' },
       ],
     },
     // De raad onder het doel (Marcel, 29 sep, werklijst vraag 58: "B onder het doel"; js/raad.js).

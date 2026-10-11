@@ -1,7 +1,8 @@
 // De treden (js/treden.js; werklijst vraag 51 en 53, Marcel, 28 en 29 sep; sinds 2 okt uit de standen, vraag 90): het
-// gehucht wordt een dorp bij 20 dorpelingen, en het dorp krijgt marktrecht bij 20 ambachtslieden. De spelregel "Treden"
-// zet de oude eis terug: 50 mensen, met een kapel en een smidse die klaar zijn. Het doel staat linksboven, en daarna
-// blijft het zo, met het bouwmenu van de trede erbij.
+// gehucht wordt een dorp bij 20 dorpelingen, en het dorp krijgt marktrecht bij 20 ambachtslieden. De oude eis van de proef
+// (50 mensen, met een kapel en een smidse die klaar zijn) was tot 11 okt een spelregel "Treden" (snoeironde, vraag 153); de
+// toetsen zetten haar nog wel in de getallen, want het eisformaat kan het. Het doel staat linksboven, en daarna blijft
+// het zo, met het bouwmenu van de trede erbij.
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
@@ -141,8 +142,8 @@ test('een trede per dag, in volgorde: wie al genoeg ambachtslieden heeft, wordt 
   assert.equal(S.dorp.trede, 'marktrecht');
 });
 
-test('de spelregel "Treden" zet de proef van 28 sep terug: 50 mensen, met een kapel en een smidse klaar', () => {
-  T.zetOptie('treden', 'proef');
+test('de eis van de proef van 28 sep, in de getallen gezet: 50 mensen, met een kapel en een smidse klaar', () => {
+  T.TREDEN_INSTELLINGEN.dorp = { mensen: 50, gebouwen: ['kapel', 'smidse'] };
   const S = gehucht();
   assert.equal(T.tredeDoel(S.dorp).tekst, `${S.dorp.bevolking} van 50 mensen · nog geen kapel · nog geen smidse`);
   zet(S, 'kapel');
@@ -209,7 +210,7 @@ test('de heer noemt het doel in zijn benoemingsbrief, met de getallen uit de wer
   assert.equal(T.tredeEisTekst('dorp'), '45 zielen in huizen, niet in hutten');
   T.optiesTerug();
   T.zetOptie('wieBouwt', 'jij');
-  T.zetOptie('treden', 'proef');
+  T.TREDEN_INSTELLINGEN.dorp = { mensen: 50, gebouwen: ['kapel', 'smidse'] };
   assert.equal(T.tredeEisTekst('dorp'), 'een kapel, een smidse en vijftig zielen');
 });
 

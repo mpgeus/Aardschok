@@ -105,15 +105,36 @@ test('wat er gespeeld werd, zegt de vergelijking erbij als het niet hetzelfde wa
   assert.equal(V.verschil(3, 1), '-2');
 });
 
+// Er is nu geen spelregel meer die een heel object zet (de spelregel "Treden" was de laatste, weg op 11 okt, snoeironde vraag
+// 153), maar de bladzijde met getallen kan het nog: dus voegt deze toets er tijdelijk een toe, in de tekst van js/opties.js.
+const metObjectSpelregel = (bronnen) => {
+  const raad = '    // De raad onder het doel (Marcel, 29 sep';
+  assert.ok(bronnen['js/opties.js'].includes(raad), 'het anker in js/opties.js');
+  return {
+    ...bronnen,
+    'js/opties.js': bronnen['js/opties.js'].replace(raad, `    {
+      id: 'objectProef', naam: 'Object proef', standaard: 'standen',
+      uitleg: 'Een spelregel die een heel object zet.',
+      keuzes: [
+        { id: 'standen', naam: 'Uit de standen', zet: { 'TREDEN_INSTELLINGEN.dorp': { stand: 'dorpelingen', mensen: 20, gebouwen: [] } }, uitleg: 'Twintig.' },
+        { id: 'vijftig', naam: 'Vijftig', zet: { 'TREDEN_INSTELLINGEN.dorp': { mensen: 50, gebouwen: ['kapel', 'smidse'] } }, uitleg: 'Vijftig.' },
+      ],
+    },
+${raad}`),
+  };
+};
+
 test('een getal dat de standaard van een spelregel overschrijft, doet in het spel niets, en dat zegt de vergelijking', () => {
-  // De spelregel "Treden" zet in zijn standaard heel TREDEN_INSTELLINGEN.dorp, dus ook dorp.mensen.
-  const w = waarden['TREDEN_INSTELLINGEN.dorp.mensen'];
-  assert.deepEqual(w.spelregel, { optie: 'Treden', waarde: w.waarde });
-  const bestand = Object.keys(bronnen).find((b) => I.blokkenIn(bronnen[b]).includes('TREDEN_INSTELLINGEN'));
-  const anders = { ...bronnen, [bestand]: I.zet(bronnen[bestand], 'TREDEN_INSTELLINGEN', ['dorp', 'mensen'], w.waarde - 8) };
-  const [verschil] = V.andereWaarden(waarden, V.waardenVan(anders));
-  assert.deepEqual(verschil.nietInHetSpel, { optie: 'Treden', waarde: w.waarde });
-  assert.match(V.alsNiet(verschil), /doet in het spel niets: de standaard van de spelregel "Treden" zet het op \d+/);
+  // Een spelregel zet in zijn standaard een heel object (TREDEN_INSTELLINGEN.dorp), dus ook dorp.mensen.
+  const metObject = metObjectSpelregel(bronnen);
+  const waardenMet = V.waardenVan(metObject);
+  const w = waardenMet['TREDEN_INSTELLINGEN.dorp.mensen'];
+  assert.deepEqual(w.spelregel, { optie: 'Object proef', waarde: w.waarde });
+  const bestand = Object.keys(metObject).find((b) => I.blokkenIn(metObject[b]).includes('TREDEN_INSTELLINGEN'));
+  const anders = { ...metObject, [bestand]: I.zet(metObject[bestand], 'TREDEN_INSTELLINGEN', ['dorp', 'mensen'], w.waarde - 8) };
+  const [verschil] = V.andereWaarden(waardenMet, V.waardenVan(anders));
+  assert.deepEqual(verschil.nietInHetSpel, { optie: 'Object proef', waarde: w.waarde });
+  assert.match(V.alsNiet(verschil), /doet in het spel niets: de standaard van de spelregel "Object proef" zet het op \d+/);
   // Een getal dat geen spelregel zet, doet wel iets.
   const schoven = Object.keys(bronnen).find((b) => I.blokkenIn(bronnen[b]).includes('SCHOVEN_INSTELLINGEN'));
   const ander = { ...bronnen, [schoven]: I.zet(bronnen[schoven], 'SCHOVEN_INSTELLINGEN', ['droogDagen'], 99) };

@@ -113,11 +113,31 @@ test('elk getal in elk bestand kan zichzelf terugschrijven zonder dat er iets an
   }
 });
 
+// Er is nu geen spelregel meer die een heel object zet (de spelregel "Treden" was de laatste, weg op 11 okt, snoeironde vraag
+// 153), maar de bladzijde met getallen kan het nog: dus voegt deze toets er tijdelijk een toe, in de tekst van js/opties.js.
+const metObjectSpelregel = (bronnen) => {
+  const raad = '    // De raad onder het doel (Marcel, 29 sep';
+  assert.ok(bronnen['js/opties.js'].includes(raad), 'het anker in js/opties.js');
+  return {
+    ...bronnen,
+    'js/opties.js': bronnen['js/opties.js'].replace(raad, `    {
+      id: 'objectProef', naam: 'Object proef', standaard: 'standen',
+      uitleg: 'Een spelregel die een heel object zet.',
+      keuzes: [
+        { id: 'standen', naam: 'Uit de standen', zet: { 'TREDEN_INSTELLINGEN.dorp': { stand: 'dorpelingen', mensen: 20, gebouwen: [] } }, uitleg: 'Twintig.' },
+        { id: 'vijftig', naam: 'Vijftig', zet: { 'TREDEN_INSTELLINGEN.dorp': { mensen: 50, gebouwen: ['kapel', 'smidse'] } }, uitleg: 'Vijftig.' },
+      ],
+    },
+${raad}`),
+  };
+};
+
 test('zet een spelregel een heel object, dan zegt de rij van elk getal erin het ook (vraag 142, stap 3)', () => {
-  const blad = model.onderwerpen.flatMap((o) => o.bladen).find((b) => b.blok === 'TREDEN_INSTELLINGEN' && b.pad.join('.') === 'dorp.mensen');
+  const met = I.model(metObjectSpelregel(bronnen));
+  const blad = met.onderwerpen.flatMap((o) => o.bladen).find((b) => b.blok === 'TREDEN_INSTELLINGEN' && b.pad.join('.') === 'dorp.mensen');
   const std = blad.spelregels.find((z) => z.standaard);
-  assert.ok(std, 'de standaard van "Treden" staat bij dorp.mensen');
+  assert.ok(std, 'de standaard van de spelregel staat bij dorp.mensen');
   assert.equal(std.viaObject, 'TREDEN_INSTELLINGEN.dorp');
   assert.equal(std.waarde, T.leesPad('TREDEN_INSTELLINGEN.dorp.mensen'), 'wat de spelregel zet, is wat het spel heeft');
-  assert.ok(blad.spelregels.some((z) => !z.standaard && z.waarde === 50), 'en de proef van 28 sep zet het op 50');
+  assert.ok(blad.spelregels.some((z) => !z.standaard && z.waarde === 50), 'en de andere keuze zet het op 50');
 });

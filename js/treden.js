@@ -3,8 +3,9 @@
 // "Van dorp tot stad").
 //
 // Zoals in Anno 1602 komt een trede met de mensen van een stand (js/wensen.js): het gehucht wordt een dorp bij 20
-// dorpelingen, en het dorp krijgt marktrecht bij 20 ambachtslieden. De spelregel "Treden" zet de oude eis terug: een
-// dorp bij 50 mensen, met een kapel en een smidse klaar. Het doel staat vanaf het begin linksboven (T.tredeDoel;
+// dorpelingen, en het dorp krijgt marktrecht bij 20 ambachtslieden. (De eis van de proef van 28 sep, een dorp bij 50
+// mensen met een kapel en een smidse klaar, was tot 11 okt een spelregel "Treden"; die is weggehaald, snoeironde vraag
+// 153.) Het doel staat vanaf het begin linksboven (T.tredeDoel;
 // js/main.js zet het in het vak als er geen quest is), en de heer noemt het in zijn benoemingsbrief. Is het zover
 // (T.tikTredeDag, elke dag), dan blijft het zo, ook als er mensen wegtrekken, en schrijft de heer een brief
 // (js/brieven.js, T.ui.toonBrief(D, trede)). Een trede zet het bouwmenu van die trede open (T.inBouwmenu,
@@ -18,7 +19,7 @@
     // Wanneer een trede komt (Marcel, 2 okt, vraag 90, A): zoveel mensen van een stand, of van een stand erboven
     // (T.mensenVanStand, js/wensen.js: wie in een huis woont, is dorpeling, en in een stenen huis ambachtsman), en
     // deze gebouwen klaar. Zonder stand telt iedereen: zo was het in de proef van 28 sep (vraag 51), een dorp bij 50
-    // mensen met een kapel en een smidse, en zo zet de spelregel "Treden" het terug.
+    // mensen met een kapel en een smidse.
     dorp: { stand: 'dorpelingen', mensen: 20, gebouwen: [] },
     marktrecht: { stand: 'ambachtslieden', mensen: 20, gebouwen: [] },
     // Hoeveel keer zoveel hoofdgeld de heer per ziel vraagt als het een dorp is (js/heer.js). "Dat kost u vanaf nu

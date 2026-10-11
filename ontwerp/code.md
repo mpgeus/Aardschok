@@ -572,7 +572,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`js/dag.js`) voor iedereen; de plekken daarvoor (zijn deur, de put, zijn werk, waar hij vrij is)
   zet dit bestand. Komen en gaan zie je (`T.werkBewonersBij`, elk beeld): een nieuw gezin komt overdag
   over de weg binnen, op dezelfde manier als een bezoeker (`T.bezoekerKomtAan`), en wie wegtrekt,
-  loopt de weg af; het bericht zegt wie het zijn. Werk telt in uren (`T.werkUrenVan`, een optie): een
+  loopt de weg af; het bericht zegt wie het zijn. Werk telt in uren (`T.werkUrenVan`; tot 11 okt een optie, nu altijd): een
   werkplaats maakt naar de uren dat zijn mensen er echt zijn, min de weg van hun deur erheen. Hoe lang
   iemand ergens heen loopt, zegt `T.looptijdVan` (ook voor de herberg).
 
@@ -687,8 +687,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - `js/treden.js`: **van gehucht tot dorp, en tot marktrecht** (stap 2 van de proef, vraag 53, 29 sep; sinds 2 okt uit de
   standen, vraag 90): zoals in Anno 1602 wordt het gehucht een dorp bij 20 dorpelingen (wie in een huis of een stenen
   huis woont, `T.mensenVanStand` in `js/wensen.js`), en krijgt het marktrecht bij 20 ambachtslieden
-  (`T.TREDEN_INSTELLINGEN`, in de werkbank; de spelregel "Treden" zet de proef van 28 sep terug: 50 mensen met een kapel
-  en een smidse). De volgorde van de treden is `T.GEBOUW_TREDEN` (`js/gebouwen.js`). `T.tredeDoel` geeft het doel voor
+  (`T.TREDEN_INSTELLINGEN`, in de werkbank; de eis van de proef van 28 sep, 50 mensen met een kapel en een smidse, was tot
+  11 okt een spelregel "Treden" en is weggehaald, snoeironde vraag 153; het eisformaat kan het nog). De volgorde van de treden is `T.GEBOUW_TREDEN` (`js/gebouwen.js`). `T.tredeDoel` geeft het doel voor
   het vak linksboven (js/main.js, als er geen quest is), `T.tredeMensenNodig` hoeveel mensen het nog vraagt (voor de
   raad), `T.tikTredeDag` zet `D.trede` (en die gaat nooit terug), en de heer schrijft dan (`T.ui.toonBrief(D, trede)` in
   js/brieven.js, een brief per trede). Het bouwmenu toont deze trede en de treden ervoor (`T.inBouwmenu`; de markt en de
@@ -842,7 +842,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   'rooien' voor een stronk, een struik, een boompje of een jonge boom); een boom om met `T.hakBoom` (het hout naar de
   schuur: `houtPerBoom`, wie hem ook omhakt) of `T.velBoom` (zonder), en de rest eruit met `T.rooi`. Bos is waar minstens
   `bosBomen` bomen in de vijf bij vijf tegels staan (`T.isBos`; ook de bosrand waar de boeren sprokkelen). **De
-  houthakker** (vraag 115; de spelregel "De houthakker") maakt zijn hout zoals altijd (2 per dag, in `T.tikGebouwenDag`),
+  houthakker** (vraag 115; "Hout uit het niets" is op 11 okt weggehaald, snoeironde vraag 153) maakt zijn hout zoals altijd (2 per dag, in `T.tikGebouwenDag`),
   maar uit een boom: de dichtste binnen `hakStraal` van zijn schuur (`T.boomVanHouthakker`, `g.boom`), en elke
   `houtPerBoom` hout is die om (`T.houthakkerHakte`, `g.gehakt`): een stronk (`v.gehaktOp`, vergaat na `stronkDagen`, en
   staat niet in de weg), en stond hij in het bos, twee boompjes ernaast (`boompjesPerBoom`, `T.plantNaast`, `v.geplant`,

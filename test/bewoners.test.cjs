@@ -217,7 +217,7 @@ test('wie werk heeft, houdt het, en een nieuwe werkplaats krijgt de vrije hand d
   for (const p of mensen(S)) assert.equal(p.werk, voor.get(p), `${p.naam || p.wie} houdt zijn werk`);
   // Een houthakker bij de boerderij van boer 1.
   const plek = vrijePlek(S, { b: 1, h: 1 }, T.deurVan(S.wereld, S.dorp.gebouwen.find((x) => x.huis === 'boer1')));
-  const g = { soort: 'houthakker', x: plek.x, y: plek.y, voet: { b: 1, h: 1 }, klaar: true, klaarOp: 0, handen: 0, voorwerp: null };
+  const g = { soort: 'kleiput', x: plek.x, y: plek.y, voet: { b: 1, h: 1 }, klaar: true, klaarOp: 0, handen: 0, voorwerp: null };
   S.dorp.gebouwen.push(g);
   const vrij = mensen(S).filter((p) => !p.werk && p.leeftijd !== 'kleuter' && !vanSchout(p));
   T.verdeelHanden(S.dorp);
@@ -445,9 +445,9 @@ test('T.zoekPad met tot: het pad eindigt binnen de straal, ook als het doel zelf
 // Werk telt in uren (stuk 2; Marcel koos op 26 sep de looptijd)
 // ---------------------------------------------------------------------------------------------
 
-// Het gehucht met een houthakker zo ver mogelijk van alle huizen (op een plek die je wel kunt
-// bereiken), en wie er werkt.
-function houthakkerVerWeg(opties) {
+// Het gehucht met een kleiput zo ver mogelijk van alle huizen (op een plek die je wel kunt
+// bereiken), en wie er werkt. (Geen houthakker: die staat stil waar geen boom is, en het gaat hier om de uren.)
+function kleiputVerWeg(opties) {
   const S = gehucht(opties);
   const w = S.wereld;
   const deuren = S.dorp.gebouwen.filter((g) => T.GEBOUWEN[g.soort].woonruimte > 0).map((g) => T.deurVan(w, g));
@@ -464,15 +464,15 @@ function houthakkerVerWeg(opties) {
       }
     }
   }
-  const g = { soort: 'houthakker', x: plek.x, y: plek.y, voet: { b: 1, h: 1 }, klaar: true, klaarOp: 0, handen: 0, voorwerp: null };
+  const g = { soort: 'kleiput', x: plek.x, y: plek.y, voet: { b: 1, h: 1 }, klaar: true, klaarOp: 0, handen: 0, voorwerp: null };
   S.dorp.gebouwen.push(g);
   T.verdeelHanden(S.dorp);
   return { S, g, p: mensen(S).find((x) => x.werk === g) };
 }
 
 test('werk in uren: de weg heen is de weg die zijn poppetje loopt, met zijn eigen snelheid', () => {
-  const { S, g, p } = houthakkerVerWeg();
-  assert.ok(p, 'de houthakker heeft een hand');
+  const { S, g, p } = kleiputVerWeg();
+  assert.ok(p, 'de kleiput heeft een hand');
   const w = S.wereld;
   const deur = T.deurVan(w, p.huis);
   const doel = p.plek.werk;
@@ -506,45 +506,27 @@ test('werk in uren: de weg heen is de weg die zijn poppetje loopt, met zijn eige
   assert.equal(T.werkUrenVan(S.dorp, g, dag).gewerkt, 0);
 });
 
-test('werk in uren: de werkplaats maakt naar de uren dat er gewerkt wordt, en zegt het bij de muis; uit is een hele dag', () => {
-  // Twee keer hetzelfde gehucht (hetzelfde lot, dus dezelfde mensen), één keer met de weg die telt en
-  // één keer zonder. De houthakker staat ver weg, waar geen bos is: hij maakt zijn hout hier uit het niets, zoals voor 6
-  // okt (de spelregel "De houthakker"), want het gaat om de uren, niet om de bomen (test/bos.test.cjs).
+test('werk in uren: de werkplaats maakt naar de uren dat er gewerkt wordt, en zegt het bij de muis', () => {
   const echt = T.lootBoeren;
   T.lootBoeren = (S) => echt(S, 12345);
-  T.zetOptie('houthakker', 'uitHetNiets');
-  let met;
-  let zonder;
+  let ver;
   try {
-    met = houthakkerVerWeg();
-    zonder = houthakkerVerWeg();
+    ver = kleiputVerWeg();
   } finally {
     T.lootBoeren = echt;
   }
-  try {
-    werkInUren(met, zonder);
-  } finally {
-    T.zetOptie('houthakker', 'hakt');
-  }
+  const D = ver.S.dorp;
+  const dag = Math.floor(ver.S.kalender.dag) + 1;
+  const IN = T.BEHOEFTEN_INSTELLINGEN;
+  T.tikGebouwenDag(D, dag);
+  // Hoe hard het dorp werkt, naar de tevredenheid (js/behoeften.js): dat is wat een hele dag zou geven.
+  const heleDag = IN.werkBasis + (1 - IN.werkBasis) * D.behoeften.tevredenheid;
+  const u = ver.g.uren;
+  assert.ok(u && u.onderweg > 0.5, 'zijn hand is een tijd onderweg');
+  assert.ok(ver.g.werkte > 0 && ver.g.werkte < heleDag, 'en dus werkt het minder dan een hele dag');
+  assert.ok(Math.abs(ver.g.werkte - heleDag * (u.gewerkt / u.nodig)) < 1e-9, 'naar de uren onderweg');
+  assert.match(T.gebouwToestand(D, ver.g), /aan het werk \(1 van 1 handen\), \d+ van de \d+ uur; \d+ uur onderweg\.$/);
 });
-function werkInUren(met, zonder) {
-  assert.equal(met.p.naam, zonder.p.naam, 'hetzelfde gehucht');
-  const dag = Math.floor(met.S.kalender.dag) + 1;
-  try {
-    T.BEWONERS_INSTELLINGEN.werkInUren = false;
-    T.tikGebouwenDag(zonder.S.dorp, dag);
-  } finally {
-    T.BEWONERS_INSTELLINGEN.werkInUren = true;
-  }
-  T.tikGebouwenDag(met.S.dorp, dag);
-  assert.equal(zonder.g.uren, null);
-  const u = met.g.uren;
-  assert.ok(u && u.onderweg > 0.5);
-  assert.ok(zonder.g.werkte > 0);
-  assert.ok(Math.abs(met.g.werkte / zonder.g.werkte - u.gewerkt / u.nodig) < 1e-9, 'minder, naar de uren onderweg');
-  assert.match(T.gebouwToestand(met.S.dorp, met.g), /aan het werk \(1 van 1 handen\), \d+ van de \d+ uur; \d+ uur onderweg\.$/);
-  assert.doesNotMatch(T.gebouwToestand(zonder.S.dorp, zonder.g), /onderweg/);
-}
 
 test('bij de muis staat wie het is', () => {
   const S = gehucht();

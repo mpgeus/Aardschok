@@ -190,20 +190,6 @@ test('een stronk staat niet in de weg: wie een boom omhakte, loopt verder het bo
   assert.equal(stil, 0, 'nooit stil met bomen binnen bereik');
 }));
 
-test('hij maakt evenveel hout als de houthakker uit het niets: twee per dag, maal hoe hard er gewerkt wordt', () => {
-  const telHout = (regels) => zo(() => {
-    const S = gehucht();
-    const D = S.dorp;
-    metHouthakker(S);
-    const voor = D.voorraad.hout;
-    for (let dag = 6; dag < 26; dag++) nacht(S, dag);
-    return D.voorraad.hout - voor;
-  }, regels);
-  const hakt = telHout({ houthakker: 'hakt' });
-  const niets = telHout({ houthakker: 'uitHetNiets' });
-  assert.ok(Math.abs(hakt - niets) < 1e-6, `${hakt} tegen ${niets}`);
-});
-
 test('met de wet Houtkap hakt hij twee keer zo hard, en gaan er twee keer zoveel bomen om', () => {
   const telBomen = (houtkap) => zo(() => {
     const S = gehucht();
@@ -333,17 +319,6 @@ test('een boompje komt niet op een paadje, een veld, voor een deur of waar ieman
   const midden = { x: akker.x + Math.floor(akker.b / 2), y: akker.y + Math.floor(akker.h / 2) };
   if (akker.b >= 3 && akker.h >= 3) assert.equal(T.plantNaast(D, midden, 'eik'), null);
 }));
-
-test('met de spelregel "Hout uit het niets" hakt hij geen boom om', () => zo(() => {
-  const S = gehucht();
-  const D = S.dorp;
-  const w = D.wereld;
-  const g = metHouthakker(S);
-  const voor = bomenBij(D, g).length;
-  for (let dag = 6; dag < 30; dag++) nacht(S, dag);
-  assert.equal(bomenBij(D, g).length, voor);
-  assert.equal(g.stilWant, null);
-}, { houthakker: 'uitHetNiets' }));
 
 test('bewaren en laden houdt de boom van de houthakker, wat hij er al uit hakte, en de boompjes met hun dag', () => zo(() => {
   const S = gehucht();

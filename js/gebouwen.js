@@ -1445,11 +1445,10 @@
         if (!wasStil && T.ui && T.ui.bericht && !soort.alleenIn) T.zeg(D, `${T.hoofdletter(soort.naam)} staat stil: ${stil}.`);
         continue;
       }
-      // Werk telt in uren (js/bewoners.js, T.werkUrenVan; een optie, standaard aan): wie ver van zijn
-      // werk woont, is langer onderweg, en de werkplaats maakt naar de uren dat hij er echt is. Zonder
-      // die optie, of zonder bewoners, naar het aantal handen, zoals vroeger.
-      const metUren = soort.handen > 0 && T.werkUrenVan && T.BEWONERS_INSTELLINGEN && T.BEWONERS_INSTELLINGEN.werkInUren;
-      g.uren = metUren ? T.werkUrenVan(D, g, dag) : null;
+      // Werk telt in uren (js/bewoners.js, T.werkUrenVan; Marcel koos op 26 sep de looptijd): wie ver van zijn werk
+      // woont, is langer onderweg, en de werkplaats maakt naar de uren dat hij er echt is. Zonder bewoners (een toets
+      // met een eigen, kleine wereld), naar het aantal handen.
+      g.uren = soort.handen > 0 ? T.werkUrenVan(D, g, dag) : null;
       const bezet = g.uren ? (g.uren.nodig > 0 ? g.uren.gewerkt / g.uren.nodig : 0) : g.handen / soort.handen;
       // Een visser vangt in de droogte naar wat er van zijn water over is (js/weer.js).
       let factor = (soort.handen > 0 ? bezet * werkFactor * gereedschap.factor : werkFactor) * T.visserWater(D, g);

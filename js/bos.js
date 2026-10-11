@@ -52,9 +52,7 @@
     // (het vangnet, zoals bij het ontginnen). Een erf in de wei met een paar struiken is in een paar dagen vrij, een erf
     // vol bomen niet.
     rooiDagen: 30,
-    // Of de houthakker bomen omhakt en plant (de spelregel "De houthakker"; uit: zijn hout komt uit het niets, zoals tot 6
-    // okt), en binnen hoeveel tegels van de deur van zijn schuur.
-    houthakkerHakt: true,
+    // Binnen hoeveel tegels van de deur van zijn schuur de houthakker bomen omhakt en plant.
     hakStraal: 10,
     // Een boom staat in het bos als er in de vijf bij vijf tegels om hem heen minstens zoveel bomen staan, hijzelf
     // meegeteld; minder is een boom in de wei of tussen de huizen. Aan de rand van het bos rapen de boeren hout
@@ -327,9 +325,8 @@
   // De houthakker (vraag 115)
   // ---------------------------------------------------------------------------------------------
 
-  // Hakt dit gebouw bomen om: een houthakker (hij hakt in het bos van de heer, `bos` in T.GEBOUWEN), als de spelregel het
-  // zegt?
-  const hakt = (g) => !!(T.GEBOUWEN[g.soort] && T.GEBOUWEN[g.soort].bos) && IN().houthakkerHakt;
+  // Hakt dit gebouw bomen om: een houthakker (hij hakt in het bos van de heer, `bos` in T.GEBOUWEN)?
+  const hakt = (g) => !!(T.GEBOUWEN[g.soort] && T.GEBOUWEN[g.soort].bos);
 
   // Waar je staat om de boom op t om te hakken: een tegel recht ernaast (niet schuin: dan slaat de bijl ernaast,
   // js/veldwerk.js), te belopen, waar je vanaf `van` kunt komen; of null.
