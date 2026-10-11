@@ -76,7 +76,8 @@ mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voo
    CLAUDE.md korter, een nieuwe werklijst, en een snoeironde. **Stap 1 is af** (11 okt, sessie `ccr-45f75896-3l3f5s`):
    CLAUDE.md is 19 KB (was 153), wat een bestand doet staat in `ontwerp/code.md`, het gereedschap in
    `ontwerp/gereedschap.md`. **Nu stap 2**, de nieuwe werklijst; dan stap 3, de snoeironde. **Bezig in sessie
-   `ccr-45f75896-3l3f5s`** (11 okt): stap 2, eerst de lijst van open punten voor Marcel om af te vinken.
+   `ccr-ba1fa562-g7kz8h`** (11 okt; overgenomen van `ccr-45f75896-3l3f5s`, Marcel: "1 ja"): stap 2, een nieuwe korte
+   lijst voor de nieuwe richting (Marcel: "Vergeet wat er nu openstaat voor de oude game"), en dan stap 3, het snoeien.
 0b. Engels en een vertaaltool (vraag 147; Marcel, 9 okt): de basis nu, naast de ui; het omzetten van alle tekst na de
    ui en vóór de proefversie. Stap 1 (de basis, de tool, het menu als proef) staat in `main` (9 okt); **nu stap 2**, het
    omzetten, want de ui is af (10 okt). **Bezig in sessie `ccr-99e707bb-sla81d`** (10 okt): het plan voor stap 2,
