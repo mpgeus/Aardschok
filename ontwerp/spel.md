@@ -1537,8 +1537,9 @@ bazen die je allebei kunnen wegsturen), is werklijst vraag 106.
 **Marcel, 11 okt: "Het verstop mechanisme moet eruit, is gewoon te saai."** En: "Nee, alles gaat eruit. De kelders etc.
 De heer blijft wel een element. Arm lijken ook eruit." Besloten: heel "rijk worden en arm lijken" gaat eruit: de kelders,
 de soldaten die zoeken, de inner die telt wat hij ziet, de argwaan, afleiden en omkopen, de getuigen en het stiekeme bos.
-De heer blijft: zijn brief, Sint-Maarten, zijn straffen, zijn gunst, de grillen en de heervaart. Werklijst vraag 151. Tot
-het eruit is, beschrijft "Zo werkt het nu" hieronder wat er nog in de code staat.
+De heer blijft: zijn brief, Sint-Maarten, zijn straffen, zijn gunst, de grillen en de heervaart. Werklijst vraag 151. Het
+plan om het eruit te halen heet optie 1, en het gaat door (Marcel, 11 okt: "dat moet eruit"). Tot het eruit is,
+beschrijft "Zo werkt het nu" hieronder wat er nog in de code staat.
 
 **Zo werkt het nu** (25 sep, bijgewerkt 27 sep; `js/inner.js`, `js/verstoppen.js`, `js/heer.js`):
 - **De inner** komt op 15 oogstmaand, tien dagen vooraf aangekondigd, overdag vanaf negen uur. Sinds

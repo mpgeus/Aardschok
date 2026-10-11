@@ -30,7 +30,8 @@ mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voo
   de grondstoffen haalt, en je bouwt alles zelf vanaf een lege plek, met een kar met wat spullen en settlers. Het plan
   (vraag 152) en waaruit je start zijn akkoord (11 okt); **het volgende punt is vraag 152, stap 1: het lege begin.**
 - **Gameplay als kern, en het verstoppen eruit** (vraag 151, 11 okt; Marcel: "we hebben niks"): het verstoppen en heel
-  "arm lijken" gaan eruit, de heer blijft (Marcel: "alles gaat eruit"); het plan om het weg te halen heet **optie 1**
+  "arm lijken" gaan eruit, de heer blijft (Marcel: "alles gaat eruit"); het plan om het weg te halen heet **optie 1**,
+  en het gaat door (Marcel: "dat moet eruit")
   (Marcel, 11 okt: "Dit noemen we optie 1. Ik vertel je straks wat we doen"). Intussen kijkt Claude rond naar vergelijkbare
   spellen: "We hebben een goede gameloop nodig".
   Dan welke kern (A de schout is maar één mens, B rechtspraak, C de heer als klok), en eerst het eerste uur op papier.
@@ -7716,10 +7717,14 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     combat. Rijke gfx met details."** Wat dat is, wat we hebben en wat ontbreekt: `gameloop.md`, "De richting".
     **Besloten (Marcel, 11 okt: "A ja, B ja, C allebei"):** A, jij bouwt van bovenaf, en de schout wordt je held (hij
     vecht en praat); B, goederen worden over wegen gedragen, van vlag tot vlag, eerst als proef met één keten (vraag
-    152); C, vechten is verdedigen én erop uit over het eiland tot het kasteel van de heer (Jagged Alliance 2). Optie 1
-    (het verstoppen eruit) wacht nog op Marcel.
+    152); C, vechten is verdedigen én erop uit over het eiland tot het kasteel van de heer (Jagged Alliance 2).
+    **Optie 1 gaat door (Marcel, 11 okt: "Leg nog even vast dat optie 1 doorgaat, als ik, dat moet eruit").** Met de
+    adviezen van Claude bij de drie keuzes, tenzij Marcel anders zegt: a, de argwaan wordt gunst; b, de inner gaat
+    helemaal weg; c, ook "wie ziet wat" en de getuigen eruit (git bewaart het). Wanneer: bij stap 1 van vraag 152 (het
+    plan daarvan zegt het).
 
-152. **De proef: bouwen binnen bereik, en de kar** (vraag 151, B; Marcel, 11 okt: "B ja", "Denk goed na over het plan",
+152. **Bezig in sessie `ccr-7423c47f-5zapx8`** (11 okt): het plan voor stap 1 (het lege begin), met optie 1, en dan
+    bouwen. **De proef: bouwen binnen bereik, en de kar** (vraag 151, B; Marcel, 11 okt: "B ja", "Denk goed na over het plan",
     en "Ik wil geen 'grens' alles moet open zijn. Ook geen vlaggen. Misschien dat grondstoffen worden opgehaald met een kar? Dus je kunt bijvoorbeeld x tegels vanaf je stad bouwen").
     Het eerste plan (wegen met vlaggen en dragers, zoals Settlers II) is daarmee van tafel; wat Claude erbij leerde,
     blijft gelden: met de getallen van nu staat een weg met dragers negen tiende van de tijd stil, bouwen is de eerste
