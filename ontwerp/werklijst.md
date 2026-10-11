@@ -7757,6 +7757,16 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     jij neerzet, zoals de dagloners maaien. Het eerste jaar vraagt de heer niets (en wrijft je dat in). Het grootste werk:
     het hele spel gaat nu uit van een gehucht dat er al is (de boeren, de herberg, de raadsman, de voorvallen); stap 1 is
     pas af als het spel vanaf een lege plek een jaar draait zonder fouten.
+    **Waaruit je start** (Marcel: "Waaruit je start"; voorstel van Claude, 11 okt, uit de getallen van nu: een mens eet
+    0,05 graan per dag, een akkertegel vraagt 1 zaaigraan en geeft 4 graan, een huis kost 16 hout, een hut 8, een
+    houthakker 10): de kar rijdt over de weg het land in en stopt op een open plek bij bos en water, die het plein wordt.
+    Erin: de schout en vier gezinnen (een man, een vrouw, één tot drie kinderen, bij één een grootvader; zo'n twintig
+    mensen), 50 hout, 120 graan, 60 zaaigraan, 20 goud en 5 gereedschap; het oude gehucht begon met 40 hout, 20 goud,
+    60 graan, 100 hooi en 20 bier, maar met akkers die al gezaaid waren. Wat dat doet: het hout is genoeg voor het huis
+    van de schout, twee hutten en een houthakker, en de rest moet hij hakken (eerst hout of eerst een boerderij?); het
+    graan eten twintig mensen in vier maanden op, tot hooimaand, terwijl de oogst in oogstmaand komt, dus het gat vul je
+    met vissen of jagen; en het zaaigraan is voor twee akkers van dertig tegels, samen 240 graan, genoeg voor acht
+    maanden, dus de eerste winter haal je net, met vis, wild of een derde akker. Alle getallen in de werkbank.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
