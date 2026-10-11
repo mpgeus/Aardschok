@@ -75,6 +75,10 @@ mooier (vraag 150) is geparkeerd (Marcel: "we houden het even bij de kleding voo
   playwright` en `npx playwright install chromium`).
 
 **Daarna, in deze volgorde:**
+0a. Opnieuw beginnen in hetzelfde huis (vraag 153; Marcel, 11 okt: "Ja, begin met stap 1, en akkoord met de afspraak"):
+   CLAUDE.md korter, een nieuwe werklijst, en een snoeironde. **Bezig in sessie `ccr-45f75896-3l3f5s`** (11 okt): stap 1,
+   CLAUDE.md van 153 KB naar zo'n 15 à 20 KB; eerst de opzet voor Marcel. Wie intussen iets in CLAUDE.md zet: gewoon
+   doen, het gaat bij het samenvoegen mee naar zijn nieuwe plek.
 0b. Engels en een vertaaltool (vraag 147; Marcel, 9 okt): de basis nu, naast de ui; het omzetten van alle tekst na de
    ui en vóór de proefversie. Stap 1 (de basis, de tool, het menu als proef) staat in `main` (9 okt); **nu stap 2**, het
    omzetten, want de ui is af (10 okt). **Bezig in sessie `ccr-99e707bb-sla81d`** (10 okt): het plan voor stap 2,
@@ -7879,6 +7883,19 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     vraagt niets. **Om te weten voor 1c en 1d:** nu er geen plaats is, zegt het spel elke paar dagen "Er wil een gezin komen,
     maar er is geen plaats", de status Vol speelt vanaf de eerste dag (een tent is vol), en het doel linksboven is nog "Naar
     een dorp" (het plan noemde "haal de eerste winter"); allemaal pas iets als je kunt bouwen.
+
+153. **Opnieuw beginnen in hetzelfde huis** (Marcel, 11 okt: "Is het goedkoper om gewoon een nieuw project te starten?
+    Aangezien alles nu bijna opnieuw gaat?"). Claude mat: van de 43.800 regels in `js/` blijft zo'n 55% zoals het is (het
+    tekenen, het eiland, de kunst, lopen, het gevecht, opslaan), verandert 23% van vorm (de economie) en gaat een deel van
+    de laag "het dorp regelt zichzelf" (22%) eruit; een nieuw project is dus duurder. Wat wel zwaar is: CLAUDE.md (153 KB,
+    zo'n 40.000 tokens bij elke sessie en elke agent), oude wegen die als spelregel blijven leven, en deze werklijst (959
+    KB). **Besloten (Marcel, 11 okt: "Ja, begin met stap 1, en akkoord met de afspraak"):**
+    - Stap 1: CLAUDE.md naar zo'n 15 à 20 KB, met wat elke sessie moet weten; de rest verhuist letterlijk naar een
+      ontwerpbestand dat je leest als je het nodig hebt. Klaar als CLAUDE.md onder de 20 KB is en niets kwijt is.
+    - Stap 2: een nieuwe, korte werklijst; deze gaat naar een archief.
+    - Stap 3: een snoeironde zoals optie 1: per systeem blijft, slaapt of weg, Marcel vinkt af.
+    - **De afspraak:** wat om is, gaat eruit, en blijft niet als spelregel staan. "Instelbaar" geldt alleen nog voor een
+      vraag die echt open is; een verlaten richting is geen goed antwoord meer (bij de regel van 24 sep).
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
