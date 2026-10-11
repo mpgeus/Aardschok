@@ -7749,7 +7749,14 @@ blijft en te onderhouden / aan te passen"; de regels staan in `CLAUDE.md`, "Afsp
     als eerste bouwt; tot er hutten zijn, slapen ze bij een kampvuur; jij bouwt alles, ook de hutten, de boerderij en de
     akkers. Het eerste doel komt dan vanzelf: haal de eerste winter. Daarna stap 2 tot 4 hierboven (de stapels en de
     kar, de bouwplaats en de timmerman, meten en spelen). **Marcel (11 okt): "Een kar met wat spullen en 'settlers'".** Wat
-    erin zit en hoeveel, wacht op Marcel (het voorstel staat in het gesprek van 11 okt, en hieronder zodra het besloten is).
+    erin zit en hoeveel, wacht op Marcel. **Voorstel voor stap 1 (Claude, 11 okt):** vier gezinnen (zo'n twintig mensen) en
+    de schout, in lentemaand, op de plek van jouw dorp op het eiland; in de kar hout voor het huis van de schout en twee
+    hutten, graan tot de eerste oogst als je op tijd een boerderij zet, zaaigraan, wat gereedschap en wat goud (de
+    getallen in de werkbank). De settlers worden wat jij bouwt: zet je een houthakker, dan wordt een van hen houthakker;
+    een gezin dat een boerderij krijgt, wordt boer (met een karakter, zoals nu). Wie geen werk heeft, bouwt mee aan wat
+    jij neerzet, zoals de dagloners maaien. Het eerste jaar vraagt de heer niets (en wrijft je dat in). Het grootste werk:
+    het hele spel gaat nu uit van een gehucht dat er al is (de boeren, de herberg, de raadsman, de voorvallen); stap 1 is
+    pas af als het spel vanaf een lege plek een jaar draait zonder fouten.
 
 ## Daarna, in deze volgorde (Marcel: "Ik wil het allemaal. Welke volgorde?", 23 sep)
 
