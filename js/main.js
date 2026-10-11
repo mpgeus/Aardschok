@@ -1835,18 +1835,6 @@
         laatsteJaarverslag: D.jaarverslag && D.jaarverslag.regels,
       };
     },
-    // De soldaten nu laten zoeken, zoals op Sint-Maarten: staat de heer op het plein, dan op twee of drie
-    // plekken, met de schout mee of waar de heer wijst (js/doorzoeken.js); anders, of met ('dorp'), het
-    // hele dorp in één keer (js/inner.js), en dan zegt het wat ze vonden.
-    zoeken(wat) {
-      const b = S.dorp.heer && S.dorp.heer.bezoek;
-      if (wat !== 'dorp' && b && b.staat) {
-        delete b.zoeken;
-        const z = T.beginDoorzoeken(S.dorp);
-        return z && { plekken: z.nodig, heerKiest: z.heerKiest, doelen: (z.doelen || []).map((g) => T.verstopPlekVan(S.dorp, g).naam) };
-      }
-      return T.doorzoekDorp(S.dorp);
-    },
     // Opslaan en laden zonder het menu (js/opslaan.js): Spel.debug.opslaan('2') zet het spel op plek 2
     // (zonder plek: 1), Spel.debug.laden('auto') laadt wat er vanzelf bewaard is, en Spel.debug.spellen()
     // zegt wat er op de plekken staat, het nieuwste bovenaan.

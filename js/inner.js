@@ -7,8 +7,8 @@
 //   - zijn komen en gaan als poppetje (T.werkInnerBij): loopt de schout naast hem, dan volgt hij de
 //     schout; anders loopt hij zijn eigen ronde, langs wat hij nog niet zag, tot zonsondergang.
 // Zijn rapport is de rekening van de heer (js/heer.js, T.eisVanDeHeer): wat hij niet zag, betaal je
-// dat jaar niet. Zijn argwaan doet vier dingen: de heer vraagt meer, soldaten doorzoeken het dorp,
-// hij komt onverwacht terug, en bij heel hoge argwaan telt het rapport niet meer.
+// dat jaar niet. Zijn argwaan doet drie dingen: de heer vraagt meer, hij komt onverwacht terug,
+// en bij heel hoge argwaan telt het rapport niet meer.
 // De schout kan hem bespelen (werklijst punt 4, stuk 2; vraag 42, Marcel, 27 sep): wie met hem praat,
 // houdt hem op terwijl de dag doorloopt (afleiden), en voor een geschenk schrijft hij minder op
 // (omkopen, T.koopInnerOm), maar met een kans hoort de heer het.
@@ -68,10 +68,9 @@
     goudVerwacht: 0.6,
     goudArgwaan: 1,
     goudVanaf: 10,
-    // Wat de argwaan (0..1) doet (Marcel, 24 sep: alle vier):
+    // Wat de argwaan (0..1) doet (Marcel, 24 sep: alle vier; de soldaten die zochten zijn er sinds 11 okt uit):
     terugkomenVanaf: 0.4, // hij komt onverwacht terug, zoveel dagen na zijn bezoek:
     terugNaDagen: { van: 20, tot: 45 },
-    doorzoekenVanaf: 0.5, // op Sint-Maarten doorzoeken de soldaten het dorp
     rapportTeltNietVanaf: 0.8, // de heer vraagt toch naar alles
     toeslag: 0.5, // de heer vraagt zoveel meer bij volle argwaan, en naar rato bij minder
     // Op Sint-Maarten kijkt de heer zelf rond van het plein, zo ver (0: hij kijkt niet). Een gebouw
@@ -516,17 +515,6 @@
     if (T.ui && T.ui.toonArgwaan) T.ui.toonArgwaan(D);
   };
 
-  // Op Sint-Maarten doorzoeken de soldaten het dorp als de argwaan hoog genoeg is (Marcel, 24 sep).
-  // Plek voor plek (js/verstoppen.js, T.zoekVerstopt): wat ze vinden, is weg. Geeft wat ze vonden.
-  T.doorzoekDorp = function (D) {
-    const gevonden = T.zoekVerstopt(D);
-    const lijst = gevonden.length > 1 ? `${gevonden.slice(0, -1).join(', ')} en ${gevonden[gevonden.length - 1]}` : gevonden[0];
-    T.zeg(D, gevonden.length
-      ? `De soldaten van de heer doorzoeken het dorp, en vinden ${lijst}. Dat is weg.`
-      : 'De soldaten van de heer doorzoeken het dorp, van de schuren tot de beerput. Ze vinden niets.', 'gevaar');
-    return gevonden;
-  };
-
   // ---------------------------------------------------------------------------------------------
   // Zijn komen en gaan in de wereld: elk beeld (js/main.js, werkBij)
   // ---------------------------------------------------------------------------------------------
@@ -568,7 +556,7 @@
 
   // Wie met de schout meeloopt, loopt naast hem: staat hij er niet, of loopt de schout door, dan een
   // nieuw pad naar een vrije tegel naast hem. `opnieuw`: in elk geval een nieuw pad (hij liep nog niet
-  // mee). Voor de inner (hieronder), en voor de soldaten van de heer (js/doorzoeken.js).
+  // mee). Voor de inner (hieronder), en voor wie de schout volgt (js/voorvallen.js, js/rovers.js, js/beesten.js).
   T.loopNaastDeSchout = function (D, e, opnieuw) {
     const h = D.schout;
     const afstand = T.afstand({ x: h.tx, y: h.ty }, { x: e.tx, y: e.ty });

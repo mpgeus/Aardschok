@@ -48,7 +48,7 @@
 
   const uurNu = (D) => (D.kalender ? D.kalender.dag * 24 : 0);
   const dagNu = (D) => Math.floor(D.kalender ? D.kalender.dag : 0);
-  // Een getal 0..1, vast per spel, per dag en per vraag `n` (zoals in js/doorzoeken.js), zodat een speeltest met
+  // Een getal 0..1, vast per spel, per dag en per vraag `n`, zodat een speeltest met
   // hetzelfde zaad hetzelfde jaar speelt.
   const lot = (D, dag, n) => T.dobbelsteen(((D.lot && D.lot.zaad) || 1) * 37 + Math.floor(dag) * 7919 + n)();
 

@@ -263,27 +263,6 @@ test('de soldaten zoeken plek voor plek: wat ze vinden is weg, en elke vondst ma
   assert.deepEqual(T.verstoptTotaal(S.dorp), { graan: 0, goud: 0, plekken: 0 });
 });
 
-test('op Sint-Maarten: het doorzoeken zegt wat ze vonden, en het lot is vast per spel en per dag', () => {
-  const zoek = () => {
-    const S = gehucht();
-    S.kalender.dag = SINT_MAARTEN;
-    T.zetVoorraad(S.dorp, 'graan', 200);
-    for (const huis of ['schout', 'boer1', 'boer2', 'boer4', 'boer5']) T.verstop(S.dorp, kelderVan(S, huis), 'graan', 20);
-    S.dorp.inner = T.nieuweInner();
-    let gevonden;
-    const berichten = metBerichten(() => {
-      gevonden = T.doorzoekDorp(S.dorp);
-    });
-    return { gevonden, berichten };
-  };
-  const a = zoek();
-  const b = zoek();
-  assert.deepEqual(a.gevonden, b.gevonden, 'hetzelfde spel, dezelfde dag: hetzelfde lot');
-  assert.equal(a.berichten.length, 1);
-  if (a.gevonden.length) assert.match(a.berichten[0], /vinden .* Dat is weg\./);
-  else assert.match(a.berichten[0], /Ze vinden niets/);
-});
-
 // ---------------------------------------------------------------------------------------------
 // Erheen lopen, en wat de muis zegt
 // ---------------------------------------------------------------------------------------------

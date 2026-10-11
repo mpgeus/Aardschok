@@ -228,8 +228,8 @@ test('de inner die een wapenmaker ziet, wordt er niet argwanend van, en de heer 
   assert.ok(D.inner.bezoek.gebouwen.has(g), 'hij zag hem');
   assert.equal(D.inner.argwaan, argwaan, 'en wordt er niet argwanend van');
   T.innerVertrekt(D);
-  // Op Sint-Maarten, ook als zijn soldaten het hele dorp doorzoeken: de wapens blijven, en het kost niets.
-  D.inner.argwaan = T.INNER_INSTELLINGEN.doorzoekenVanaf;
+  // Op Sint-Maarten, ook bij veel argwaan: de wapens blijven, en het kost niets.
+  D.inner.argwaan = 0.5;
   D.heer = T.nieuweHeer();
   D.heer.bezoek = { staat: false, weg: false, wezens: [], betaald: null };
   const gunst = T.bazenNu(D).gunst;

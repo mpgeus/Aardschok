@@ -36,7 +36,7 @@ function gehucht() {
   return S;
 }
 const IN = () => T.GRILLEN_INSTELLINGEN;
-// De eerste dag van het spel met deze datum ('grasmaand', 12), zoals in test/doorzoeken.test.cjs.
+// De eerste dag van het spel met deze datum ('grasmaand', 12).
 function dagVan(maand, d) {
   const m = T.MAANDEN.findIndex((x) => x.naam === maand);
   let dag = 0;

@@ -294,17 +294,6 @@ test('op Sint-Maarten kijkt de heer rond: wat hij van het plein ziet en niet in 
   assert.deepEqual(T.heerKijktRond(S), []);
 });
 
-test('is de argwaan hoog genoeg, dan doorzoeken zijn soldaten op Sint-Maarten het dorp', () => {
-  for (const [argwaan, zoeken] of [[IN.doorzoekenVanaf - 0.01, false], [IN.doorzoekenVanaf, true]]) {
-    const S = maakS();
-    bezoekVanafHetPlein(S);
-    S.inner.argwaan = argwaan;
-    S.kalender.dag = SINT_MAARTEN;
-    const berichten = metBerichten(() => T.heerKomt(S, SINT_MAARTEN));
-    assert.equal(berichten.some((t) => /doorzoeken het dorp/.test(t)), zoeken, `argwaan ${argwaan}`);
-  }
-});
-
 test('na Sint-Maarten is zijn rapport betaald, en zakt zijn argwaan', () => {
   const S = maakS();
   bezoekVanafHetPlein(S);

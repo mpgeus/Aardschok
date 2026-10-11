@@ -367,14 +367,14 @@
     if (!zichtbaar) return;
     const pct = (x) => `${Math.round(x * 100)}%`;
     cel.querySelector('.aantal').textContent = pct(I.argwaan);
-    cel.classList.toggle('hoog', I.argwaan >= IN.doorzoekenVanaf);
+    cel.classList.toggle('hoog', I.argwaan >= IN.terugkomenVanaf);
     const waarom = I.waarom.length ? ` Waarom: ${I.waarom.join('; ')}.` : '';
     const nu = I.argwaan > 0 && IN.toeslag > 0 ? ` Nu vraagt de heer ${pct(I.argwaan * IN.toeslag)} meer.` : '';
     // Wat je hem dit jaar gaf (js/inner.js, T.koopInnerOm), en wat hij daarom minder opschrijft.
     const geschenk = I.geschenken > 0 ? ` Je gaf hem dit jaar ${I.geschenken} goud: hij schrijft ${pct(T.innerKorting(S.dorp))} minder op.` : '';
     cel.dataset.uitleg =
       `Argwaan van de inner: ${pct(I.argwaan)}.${waarom}${nu}${geschenk} ` +
-      `Vanaf ${pct(IN.terugkomenVanaf)} komt hij onverwacht terug, vanaf ${pct(IN.doorzoekenVanaf)} doorzoeken de soldaten op Sint-Maarten het dorp, ` +
+      `Vanaf ${pct(IN.terugkomenVanaf)} komt hij onverwacht terug, ` +
       `en vanaf ${pct(IN.rapportTeltNietVanaf)} gelooft de heer zijn rapport niet meer en vraagt hij naar alles. Na Sint-Maarten zakt ze.`;
   };
 

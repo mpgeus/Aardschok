@@ -92,7 +92,7 @@ if (metDelen) {
       return r;
     };
   };
-  ['werkGebouwenBij', 'werkMarskramerBij', 'werkHeerBij', 'werkDoorzoekenBij', 'werkInnerBij', 'werkBewonersBij', 'werkRoversBij',
+  ['werkGebouwenBij', 'werkMarskramerBij', 'werkHeerBij', 'werkInnerBij', 'werkBewonersBij', 'werkRoversBij',
     'werkVoorvallenBij', 'beweegWezens', 'werkOogstBij', 'laatDwalen',
     'tikAkkersDag', 'tikVeeDag', 'tikHerbergDag', 'tikBehoeftenDag', 'tikHandelDag', 'tikHeerDag', 'tikHeervaartDag', 'tikInnerDag',
     'tikVoorvallenDag', 'tikErvenDag', 'eetVandaag', 'verdeelHanden', 'wijsWerkToe', 'looptijdVan', 'tikWettenDag', 'tikRoversDag', 'tikTredeDag',

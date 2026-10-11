@@ -304,7 +304,6 @@
   I.NAMEN = {
     SCHOVEN_INSTELLINGEN: 'De oogst binnenhalen en de dagloners',
     WIJNGAARD_INSTELLINGEN: 'De wijngaard',
-    DOORZOEKEN_INSTELLINGEN: 'De soldaten zoeken',
     DORP_INSTELLINGEN: 'De dorpen',
     EILAND_INSTELLINGEN: 'Het eiland',
     HOOGTE_INSTELLINGEN: 'De hoogte van het land',

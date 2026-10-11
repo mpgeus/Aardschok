@@ -674,19 +674,11 @@
     if (!b || b.staat) return;
     b.staat = true;
     // Op het plein kijkt hij rond: wat hij ziet en niet in het rapport van zijn inner staat, komt
-    // alsnog op de rekening, en dat maakt argwanend (js/inner.js). En zijn soldaten zoeken: is de
-    // argwaan hoog genoeg, het hele dorp; anders twee of drie plekken, waar de schout ze langs leidt
-    // (js/doorzoeken.js; werklijst punt 4, vraag 41).
+    // alsnog op de rekening, en dat maakt argwanend (js/inner.js). Zijn soldaten zoeken niet meer (11 okt).
     T.heerKijktRond(D);
-    const INN = T.INNER_INSTELLINGEN;
-    const heelDorp = !!(INN && D.inner && D.inner.argwaan >= INN.doorzoekenVanaf && T.doorzoekDorp);
-    if (heelDorp) T.doorzoekDorp(D);
-    else {
-      T.beginDoorzoeken(D);
-      // En elk jaar lopen er een paar door het bos, naar akkers die niet in zijn boeken staan (js/ontginnen.js; vraag 107,
-      // g1). Doorzoeken ze het hele dorp, dan doen ze dat daar al.
-      T.doorzoekHetBos(D);
-    }
+    // En elk jaar lopen er een paar door het bos, naar akkers die niet in zijn boeken staan (js/ontginnen.js; vraag 107,
+    // g1).
+    T.doorzoekHetBos(D);
     // Een akker in zijn bos die zijn inner zag en die niet in zijn boeken stond: betrapt (js/ontginnen.js).
     T.heerVindtBosAkkers(D);
     // En de inner leest hem het boek van de schuur voor: mist er een zak graan, dan ziet hij het (js/zaak.js).
