@@ -53,20 +53,6 @@
   T.BOER_EIGENSCHAPPEN = ['maaien', 'opbrengst', 'zaaien', 'aanzien'];
   const trede = (soort, id) => (IN()[soort] || []).find((t) => t.id === id) || null;
 
-  // Een eenvoudige dobbelsteen met een zaad (mulberry32): hetzelfde zaad geeft hetzelfde lot. Ook voor
-  // wie er verder in het dorp woont (js/bewoners.js), zodat er één dobbelsteen is.
-  T.dobbelsteen = dobbelsteen;
-  function dobbelsteen(zaad) {
-    let a = zaad >>> 0;
-    return function () {
-      a = (a + 0x6d2b79f5) >>> 0;
-      let t = a;
-      t = Math.imul(t ^ (t >>> 15), t | 1);
-      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-    };
-  }
-
   // Eén trede trekken, naar de kansen.
   function trek(r, treden) {
     const som = treden.reduce((n, t) => n + Math.max(0, t.kans || 0), 0);
@@ -95,7 +81,7 @@
   // boerin), dus zij kiezen eerst uit de karakters die beide kunnen. Geen karakter twee keer.
   T.lootBoeren = function (D, zaad) {
     const z = zaad != null ? zaad : Math.floor(Math.random() * 2147483647);
-    const r = dobbelsteen(z);
+    const r = T.dobbelsteen(z);
     const ids = boerenIn(D).map((e) => e.wie).filter((id, i, a) => a.indexOf(id) === i).sort();
     ids.sort((a, b) => (T.MENSEN[a].geslacht === 'vrouw') - (T.MENSEN[b].geslacht === 'vrouw'));
     const vrij = Object.keys(T.KARAKTERS || {});

@@ -23,6 +23,20 @@
     gezegd: 20, // zoveel berichten bewaart een ander dorp (D.gezegd), voor wie later vertelt hoe het er staat
   };
 
+  // Een eenvoudige dobbelsteen met een zaad (mulberry32): hetzelfde zaad geeft hetzelfde lot. Eén dobbelsteen voor het
+  // hele spel: het eiland, de maker, de bewoners, de voorvallen, de rovers, het weer (tot ronde 2 van het snoeien, 12 okt,
+  // in js/boeren.js, dat in stap 4 weggaat).
+  T.dobbelsteen = function (zaad) {
+    let a = zaad >>> 0;
+    return function () {
+      a = (a + 0x6d2b79f5) >>> 0;
+      let t = a;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  };
+
   // Een nieuw dorp op kaart w, met zijn schout: wat er op de kaart staat (de gebouwen, de boeren, het vee), en wie er
   // verder woont. `zaad` is het lot van de boeren (js/boeren.js): hetzelfde zaad geeft hetzelfde dorp. `ander`: het is
   // niet jouw dorp (het buurdorp): het spreekt niet tegen jou.
