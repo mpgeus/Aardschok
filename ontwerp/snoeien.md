@@ -126,15 +126,15 @@ dat een karakter vroeg, vraagt een boer of een man. De spelregel "De markt" (ook
 - **3c:** het ontworpen gehucht is weg (`kaarten/gehucht.tmj`, `maak-gehucht.cjs`); je dorp is het land van de maker.
 - **5:** alleen de kolonist speelt nog in de speeltest; hij doet ook de proef met opslaan.
 
-**Open, voor Marcel:**
-- **Het dorp dat er al was** (de maker legt het nog, `T.laadGemaaktGehucht(zaad)` zonder `leeg`, en zonder eiland met
-  `opEiland` uit): geen speler begint er meer op, maar de toetsen van het buurdorp, de markt, `npm run grootte`, de
-  schermafdrukken en `Spel.debug.gehucht` spelen erop. Houden voor de andere dorpen op het eiland (F, B2), of weg (met
-  de vaste boeren boer1 tot boer5 en de herbergierster in `T.MENSEN`)?
-- **De spelregel "De markt"** (stap 4): op het plein of een eigen gebouw. Het plein van het lege begin heeft nog geen
-  plek voor de kramen, de heer en de marskramer (`w.marskramer` ontbreekt), dus daar kan de markt nu niet; de
-  markttoetsen spelen op het dorp dat er al was. Kiezen: de markt is een gebouw dat jij zet (en "op het plein" weg), of
-  het plein van het lege begin krijgt die plekken.
+**Stap 6: wat Marcel koos** (12 okt, op de twee open keuzes):
+- **Het dorp dat er al was: "Alles wordt door spelers geplaatst."** De maker legt alleen nog het land met een open plek
+  voor het plein, nooit meer huizen, boerderijen, velden of een herberg; ook niet voor de andere dorpen op het eiland
+  (F, B2): die bouwt wie ze speelt, een mens of het spel, met dezelfde handelingen (CLAUDE.md, "Zo dat samen spelen later
+  kan"). Weg: de tak `leeg` uit in de maker, de vaste boeren boer1 tot boer5 en de herbergierster in `T.MENSEN`, en de
+  toetsen en het gereedschap die erop speelden gaan naar het lege begin of het proefdorp.
+- **De markt: "Plein krijgt plaatsen."** Het plein van het lege begin krijgt vaste plekken voor de kramen, naast die van de
+  heer en de marskramer (die is er al, `w.marskramer`). Daarmee is "een eigen gebouw" geen goed antwoord meer, en gaat
+  de spelregel "De markt" weg (de afspraak van vraag 153). Het plan staat hieronder zodra Marcel het zag.
 
 **De kaart voor stap 2 tot 5** (een agent, 12 okt; regelnummers van toen, dus zoek op de naam):
 - **Verzoeken** (`js/verzoeken.js`, 440 regels; `VERZOEKEN_INSTELLINGEN.mensen`, de spelregel "Wie bouwt"): aangeroepen uit
