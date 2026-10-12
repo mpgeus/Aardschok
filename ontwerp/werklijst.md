@@ -14,9 +14,10 @@ onderwerp, niet hier. Wie aan een punt begint, zet er "**Bezig in sessie `<branc
 drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **B, 1c tot 1e zijn af** (11
 okt): het bouwmenu, verhuizen uit het kamp, het bouwbereik, het huis van de schout, meebouwen, bouwen in het bos, en
 boeren uit het niets (de boerderij, de velden die jij legt, wijn is eten). **Het spel is Engels** (11 okt, G). **B, 1f
-is af** (12 okt): de kolonist speelt het lege begin op vijf eilanden een jaar zonder fouten. **Het volgende punt is A,
-ronde 2 van het snoeien** (het plan, met wat Marcel koos, in `snoeien.md`), dan het hele eiland (B2), de afwisseling
-(B3), en ronde 3 na C.
+is af** (12 okt): de kolonist speelt het lege begin op vijf eilanden een jaar zonder fouten. **A, ronde 2, stap 1 en 2
+zijn af** (12 okt): de verzoeken, de ondernemers, de erven en het ontginnen zijn weg (de wijnboerderij blijft, vraag
+155). **Het volgende punt is A, ronde 2, stap 3** ("Leeg" is het enige begin; het plan in `snoeien.md`), dan stap 4 en
+5, het hele eiland (B2), de afwisseling (B3), en ronde 3 na C.
 
 **Wacht op Marcel:**
 - **De wijnboerderij als eigen gebouw** (vraag 155; Marcel, 12 okt: "ik wil tóch een apart wijnboerderij gebouw"):
@@ -58,11 +59,12 @@ ronden, want een deel hangt aan het oude begin of aan de proef:
 
 1. **Ronde 1 is af** (11 okt): wat al om was en nergens meer aan hing (`snoeien.md`).
 2. **Ronde 2, na 1f:** het plan, met wat Marcel koos ("III. OK", "e Mag weg, f alle vier weg, g weg, h ja wapens
-   blijven"), en de kaart van wat eraan hangt, staan in `snoeien.md`, "Ronde 2". **Stap 1 is af** (12 okt: verhuizen wat
-   blijft); **het volgende is stap 2** (**Bezig in sessie `claude/festive-cray-rovfsg`** (12 okt): eerst een plan voor Marcel, dan stap 2): de verzoeken, de ondernemers, de erven en
-   het ontginnen weg, met "Wie bouwt" en "Huizen" (de wijnboerderij blijft: vraag 155). Wat het oude begin draaiende houdt: de mensen die vragen wat ze bouwen (`verzoeken`,
-   `ondernemers`), de erven waarop het dorp zelf bouwt (`erven`), de vaste boeren van de kaart, en de spelregels "Het
-   begin", "Je gehucht", "Wie bouwt", "Huizen" en "Wie de boeren zijn".
+   blijven"), en de kaart van wat eraan hangt, staan in `snoeien.md`, "Ronde 2". **Stap 1 en 2 zijn af** (12 okt: verhuizen
+   wat blijft; de verzoeken, de ondernemers, de erven en het ontginnen weg, met "Wie bouwt" en "Huizen"; de wijnboerderij
+   blijft, vraag 155). **Het volgende is stap 3**, in een nieuwe sessie: "Leeg" is het enige begin, en de spelregels "Het
+   begin" en "Je gehucht" gaan eruit; dan stap 4 (het lot en de karakters, "De markt") en 5 (de oude spelers van de
+   speeltest). Wat het oude begin nog draaiende houdt: de vaste boeren van de kaart, en de spelregels "Het begin", "Je
+   gehucht" en "Wie de boeren zijn".
 3. **Ronde 3, na C:** wat de proef moet uitwijzen (`gameloop.md`, "Open"): de voorvallen, de raad, de raadsman, het
    rapport, de wensen per stand en de treden, de wetten, de feesten.
 
@@ -130,6 +132,11 @@ het graan vraagt", de schandpaal, de heervaart en de twee bazen.
   schrijven voor de nieuwe richting, als B en C er staan.
 
 ## Af (sinds 11 okt)
+
+- Ronde 2 van het snoeien, stap 2 (vraag 153; Marcel: "III. OK", "1 ja 2 ja 3 houden voor nu"): de verzoeken en de
+  ondernemers (met "Wie bouwt"), de erven (met "Huizen", en opslaan naar versie 6) en het ontginnen zijn weg; jij bouwt
+  alles uit het bouwmenu. Wat ervan afhing en mee ging, en wat bleef (de wapens, het vooruitkijken van de wijn):
+  `snoeien.md`, "Stap 2".
 
 - Een jaar zonder fouten (vraag 152, 1f; Marcel: "a1, b1, c1, d ja", "a ja, b uit, c ja", "I. 3, II. 16 tegels"): de
   kolonist (`gereedschap/speeltest/kolonist.js`), een speler in code die het lege begin speelt met de handelingen van het
