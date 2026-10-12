@@ -456,8 +456,16 @@ test('in het lege begin mag een woning ook waar ze later geen kapel haalt ("b ui
   }
 });
 
-test('meebouwen: met of zonder beelden komt er hetzelfde uit', () => {
+test('meebouwen: met of zonder beelden komt er hetzelfde uit', (t) => {
+  // Allebei met dezelfde reeks toeval (welke tekening de hut krijgt, wie er bouwt): sinds het bouwbereik 16 tegels is (12
+  // okt), valt de eerste plek in het bos waar dat verschil maakt, en was deze toets zonder zaad de helft van de keren rood.
+  const toeval = Math.random;
+  t.after(() => {
+    Math.random = toeval;
+  });
   const spel = (beelden) => {
+    let z = 5;
+    Math.random = () => (z = (z * 16807) % 2147483647) / 2147483647;
     const { S, D, w } = leegBegin();
     dagen(S, 1, 1);
     let hut = null;
