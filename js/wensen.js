@@ -260,7 +260,7 @@
   // kring.
   T.watDeKringBereikt = (D, soort, plek) => T.kringTeller(D, soort)(plek);
 
-  // Hetzelfde voor veel plekken na elkaar (T.plekVoor, js/verzoeken.js, vraagt het voor elke tegel van de kaart): welke
+  // Hetzelfde voor veel plekken na elkaar (T.plekVoor, js/bouwen.js, vraagt het voor elke tegel van de kaart): welke
   // huizen het willen en of ze er al een hebben, staat één keer vast, en per plek wordt alleen nog geteld. Geeft een
   // functie van de plek, of een die null geeft als deze soort geen kring heeft.
   // Met `straks` telt een hut op een erf alleen als de plek ook het huis haalt dat hij wordt (T.kringVoetenVan), en ook
@@ -313,7 +313,7 @@
   };
 
   // Waar nog een plek met een kring kan komen, en wie hem nog mist (werklijst vraag 117, 2d; Marcel, 8 okt: "A ja", en voor
-  // de kapel "Prima"): de plekken op de kaart waar er een kan komen (T.kanHierKomen, js/verzoeken.js: op open grond of na
+  // de kapel "Prima"): de plekken op de kaart waar er een kan komen (T.kanHierKomen, js/bouwen.js: op open grond of na
   // het rooien), die er al staan, en de huizen die hem willen, nu of straks, en er geen in hun kring hebben, elk met de
   // plekken die het zouden halen; ook het huis dat straks op een vrij erf komt. Geeft { straal, wens, er, plekken,
   // zonder: [{ r, wie, plekken }] }, of null zonder kring. Geen spelstaat, maar wat uit de kaart, de gebouwen en de erven volgt, dus één keer per stand van het dorp en

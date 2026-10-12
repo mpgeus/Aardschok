@@ -276,4 +276,112 @@
       ? T.t('{gebouw}: {n|# builder|# builders}, {gedaan} of {werk} workdays done.', { gebouw, n, gedaan, werk: g.bouw.werk })
       : T.t('{gebouw}: {gedaan} of {werk} workdays done; nobody is building, everyone has other work.', { gebouw, gedaan, werk: g.bouw.werk });
   };
+
+  // ---------------------------------------------------------------------------------------------
+  // Waar een gebouw komt (tot ronde 2 van het snoeien, 12 okt, in js/verzoeken.js)
+  // ---------------------------------------------------------------------------------------------
+
+  // Een plek met een kring (een put, een kapel; js/wensen.js): de kring telt de huizen die hij bereikt.
+  const heeftKring = (soort) => T.WENSEN_INSTELLINGEN.kring[soort] != null;
+
+  // Waar een gebouw van deze soort komt, zoals wie het wil bouwen het kiest: { x, y }, of null. Een plek met een kring (een
+  // put, een kapel; js/wensen.js): waar hij de meeste huizen bereikt die er nog geen hebben (T.kringTeller, een hut op een
+  // erf ook met het huis dat hij wordt: anders is hij zijn put kwijt als hij groeit; werklijst vraag 117, 2d), bij
+  // gelijk spel het dichtst bij `bij` (met `zonder`: hoeveel); bereikt hij nergens zo'n huis, dan nergens. De rest: zo
+  // dicht mogelijk bij `bij`
+  // (een deur), in ringen, op de eerste plek waar het past (T.gebouwPast). Zo zoekt de kolonist van de speeltest
+  // (gereedschap/speeltest/kolonist.js), en zo zochten de mensen die om een gebouw vroegen (js/verzoeken.js, tot ronde 2). Met een looppad rondom, zoals elk gebouw
+  // (T.GEBOUWEN_INSTELLINGEN.looppad, js/gebouwen.js; Marcel, 3 okt: "Nee ik wil 3 tegels").
+  // Tijdens het zoeken staat iedereen stil (T.iedereenStil, js/wereld.js): wie er op een tegel staat, vraagt het dan in
+  // één stap, voor elke tegel van de kaart.
+  // Een huis of boerderij van een bouwstijl keert daar zijn deur naar de weg (T.keerNaarDeWeg, js/bouwstijl.js).
+  T.plekVoor = function (D, soort, bij) {
+    T.iedereenStil(true);
+    try {
+      const plek = zoekPlek(D, soort, bij) || zoekPlekOmTeRooien(D, soort, bij);
+      if (plek) T.keerNaarDeWeg(D, soort, plek.x, plek.y);
+      return plek;
+    } finally {
+      T.iedereenStil(false);
+    }
+  };
+  function zoekPlek(D, soort, bij) {
+    const w = D.wereld;
+    // De markt op het plein (js/markt.js): het midden van het plein, met de kramen.
+    if (soort === 'markt' && T.marktOpHetPlein(D)) return T.marktPlek(D);
+    if (heeftKring(soort)) {
+      const voet = T.gebouwVoet(soort, T.volgendeTekening(D, soort)) || T.GEBOUWEN[soort].voet;
+      const kring = T.kringTeller(D, soort, true);
+      let beste = null;
+      for (let y = 0; y < w.tegels.length; y++) {
+        for (let x = 0; x < w.tegels[0].length; x++) {
+          // Eerst wat de plek bereikt (tellen), en alleen als hij beter is dan de beste tot nu toe, of hij past (duur).
+          const zonder = kring({ x, y, b: voet.b, h: voet.h }).zonder;
+          const d = Math.hypot(x - bij.x, y - bij.y);
+          if (!(zonder > 0) || (beste && (zonder < beste.zonder || (zonder === beste.zonder && d >= beste.d)))) continue;
+          if (T.gebouwPast(D, soort, x, y)) beste = { x, y, d, zonder };
+        }
+      }
+      return beste && { x: beste.x, y: beste.y, zonder: beste.zonder };
+    }
+    // Wat bij de natuur hoort (een jager bij het bos, een visser aan het water; `bij` in js/gebouwen.js), zoekt over de
+    // hele kaart: het bos kan verder liggen dan 44 tegels van wie het vraagt. Op een land van de maker van 100 bij 100
+    // vroeg zo nooit iemand om een jager, en at het dorp zijn zaaigraan op (de speeltest van 4 okt; vraag 112). Eerst de
+    // vraag of de natuur er ligt: die kost één stap (T.natuurBij), gebouwPast veel meer.
+    const g = T.GEBOUWEN[soort];
+    const natuur = g.bij ? T.gebouwVoet(soort, T.volgendeTekening(D, soort)) || g.voet : null;
+    const tot = natuur ? Math.max(45, w.tegels.length, w.tegels[0].length) : 45;
+    const probeer = (x, y) => (!natuur || !T.waaromNietBijDeNatuur(D, soort, { x, y, b: natuur.b, h: natuur.h })) && T.gebouwPast(D, soort, x, y);
+    // ring na ring om `bij`, en in elke ring van boven naar onder en van links naar rechts
+    for (let r = 3; r < tot; r++) {
+      for (let dy = -r; dy <= r; dy++) {
+        const rand = Math.abs(dy) === r;
+        for (let dx = -r; dx <= r; dx += rand ? 1 : 2 * r) {
+          if (probeer(bij.x + dx, bij.y + dy)) return { x: bij.x + dx, y: bij.y + dy };
+        }
+      }
+    }
+    return null;
+  }
+
+  // Geen open grond meer (werklijst vraag 110, e; Marcel, 6 okt: "A ja B ja"): dan een plek waar wie het vraagt eerst
+  // rooit (een boom, een stronk, een struik, onder de voet en in het looppad), met zo weinig mogelijk bomen, en dan het
+  // dichtst bij `bij`. Wat bij de natuur hoort, zoekt over de hele kaart, de rest binnen 45 tegels, zoals hierboven.
+  // Een plek met een kring (een put, een kapel) moet net als hierboven de huizen bereiken die er nog geen hebben, de
+  // meeste eerst, en zoekt dus ook over de hele kaart: in de speeltest van 6 okt kwam er anders elke maand een put bij het
+  // hart van het dorp, terwijl de hut die erom vroeg er niets aan had (op 72022 48 putten in vier jaar).
+  // Eerst wat er op elke plek te rooien staat (één stap per plek, T.watTeRooien), dan van de beste plek af of hij past.
+  // Geeft { x, y, rooien: het stuk dat eerst vrij moet }, of null.
+  function zoekPlekOmTeRooien(D, soort, bij) {
+    const w = D.wereld;
+    const g = T.GEBOUWEN[soort];
+    if (!g || g.erf || soort === 'markt') return null;
+    const voet = T.gebouwVoet(soort, T.volgendeTekening(D, soort)) || g.voet;
+    const kring = heeftKring(soort) ? T.kringTeller(D, soort, true) : null;
+    const tot = g.bij || kring ? Math.max(45, w.tegels.length, w.tegels[0].length) : 45;
+    const plekken = [];
+    for (let y = Math.max(0, bij.y - tot); y < Math.min(w.tegels.length, bij.y + tot); y++) {
+      for (let x = Math.max(0, bij.x - tot); x < Math.min(w.tegels[0].length, bij.x + tot); x++) {
+        const zonder = kring ? kring({ x, y, b: voet.b, h: voet.h }).zonder : 0;
+        if (kring && !(zonder > 0)) continue;
+        const kavel = T.kavelVan(D, x, y, voet);
+        const wat = T.watTeRooien(D, kavel);
+        if (wat.bomen || wat.struiken) plekken.push({ x, y, kavel, zonder, bomen: wat.bomen, d: Math.hypot(x - bij.x, y - bij.y) });
+      }
+    }
+    plekken.sort((a, b) => b.zonder - a.zonder || a.bomen - b.bomen || a.d - b.d);
+    const plek = plekken.find((p) => !T.waaromPastHetNiet(D, soort, p.x, p.y, null, p.kavel));
+    return plek ? { x: plek.x, y: plek.y, rooien: plek.kavel } : null;
+  }
+  T.plekOmTeRooien = zoekPlekOmTeRooien; // ook voor test/rooien.test.cjs
+
+  // Kan hier een gebouw van deze soort komen (met `voet` zijn voet), op open grond of nadat wie het vraagt er rooit, zoals
+  // hierboven? Wie er nu staat, telt niet: die is morgen weg. Voor de plekken waar nog een put kan komen (T.kringGrond,
+  // js/wensen.js).
+  T.kanHierKomen = function (D, soort, x, y, voet) {
+    if (!T.waaromPastHetNiet(D, soort, x, y, null, null, false)) return true;
+    const kavel = T.kavelVan(D, x, y, voet);
+    const wat = T.watTeRooien(D, kavel);
+    return !!(wat.bomen || wat.struiken) && !T.waaromPastHetNiet(D, soort, x, y, null, kavel, false);
+  };
 })(globalThis.Spel = globalThis.Spel || {});

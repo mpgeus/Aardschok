@@ -40,7 +40,7 @@
   const hart = (D) => D.wereld.kamp.vuur;
 
   // Een gebouw neerzetten zoals de speler het met het bouwmenu doet: waar het past, zo dicht mogelijk bij `bij`, op open
-  // grond of anders waar het minst te rooien is (T.plekVoor, js/verzoeken.js; zo zoekt de bouwer van de speeltest ook).
+  // grond of anders waar het minst te rooien is (T.plekVoor, js/bouwen.js; zo zocht de bouwer van de speeltest ook).
   function bouw(D, soort, bij, waarom) {
     if (!T.inBouwmenu(D, soort)) return { soort, gelukt: false, reden: 'niet in het bouwmenu', tekst: `wil een ${soort} bouwen (${waarom}), maar hij staat niet in het bouwmenu` };
     const kosten = T.GEBOUWEN[soort].kosten;

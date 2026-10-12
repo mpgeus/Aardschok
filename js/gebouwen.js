@@ -109,7 +109,7 @@
     // Een looppad om elk nieuw gebouw (Marcel, 3 okt: "Er moet wel altijd een looppad zijn, het liefste van 3 tegels
     // breed", met een kapel die klem stond tussen twee huizen, met struiken voor de deur; en op de vraag of één tegel
     // genoeg is: "Nee ik wil 3 tegels"): rondom moeten zoveel tegels te belopen zijn, zonder gebouw en zonder boom, ook in
-    // het bouwmenu en voor wie zelf een plek kiest voor een verzoek (T.plekVoor, js/verzoeken.js).
+    // het bouwmenu en voor wie zelf een plek kiest voor een verzoek (T.plekVoor, js/bouwen.js).
     looppad: 3,
   };
 
@@ -809,7 +809,7 @@
   };
   // Per kaart en per soort een optelsom over de tegels, opnieuw als de kaart veranderde (T.kaartVersie, js/wereld.js):
   // zo kost de vraag hoeveel er rond een plek ligt één stap, ook voor de duizenden plekken die een verzoek afzoekt
-  // (T.plekVoor, js/verzoeken.js).
+  // (T.plekVoor, js/bouwen.js).
   const NATUUR_SOMMEN = new WeakMap();
   function natuurSom(w, soort) {
     const versie = T.kaartVersie(w);

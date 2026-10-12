@@ -363,7 +363,7 @@
     return null;
   };
 
-  // Waar de markt komt, voor een verzoek (T.plekVoor, js/verzoeken.js): het midden van het plein, met de kramen erbij, of
+  // Waar de markt komt, voor een verzoek (T.plekVoor, js/bouwen.js): het midden van het plein, met de kramen erbij, of
   // null als hij er niet kan komen.
   T.marktPlek = function (D) {
     if (T.waaromGeenMarktOpHetPlein(D)) return null;

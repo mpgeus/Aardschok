@@ -709,6 +709,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   getallen in `T.BOUWEN_INSTELLINGEN` (de werkbank: "Meebouwen"). Een veld (js/boerderij.js) is ook een bouwplaats:
   zijn werk is per tegel (`veldWerk`, in `T.bouwWerkVan(soort, voet)`), en na het rooien komt hij niet als gebouw op de
   kaart (geen `T.zetOpDeKaart`).
+- **Waar een gebouw komt** (tot ronde 2 van het snoeien, 12 okt, in `js/verzoeken.js`): `T.plekVoor(D, soort, bij)` geeft
+  de plek zo dicht mogelijk bij `bij` waar het past, op open grond of anders waar het minst te rooien is (`rooien`: de
+  kavel, voor `T.plaatsGebouw`); een plek met een kring (een put, een kapel) waar hij de meeste huizen bereikt die er nog
+  geen hebben. `T.kanHierKomen` vraagt het voor één plek (de kringen van `js/wensen.js`). De kolonist van de speeltest
+  zoekt zo zijn plek.
 
 ### js/boerderij.js: boeren uit het niets
 
@@ -754,8 +759,6 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   tabellen "Het eerste jaar" (`samenvatting.cjs`): wanneer elk gebouw af was en hoe lang het werk stilstond, waarop hij
   wachtte, wanneer het kamp leeg was, wie er in de winter in een tent woont, wie na een dag nog onderweg is, welke
   werkplaats niet werkt zonder dat het spel zegt waarom; en het eten en het hout.
-- **Let op bij ronde 2 van het snoeien:** `T.plekVoor` staat in `js/verzoeken.js`, dat dan weggaat; hij moet dan mee
-  naar `js/gebouwen.js` of `js/bouwen.js`.
 
 ### js/erven.js: de erven
 
@@ -774,7 +777,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   zolang wacht de hut, nog niet op de kaart (`js/bos.js`). Een erf in het bos van de heer kost zijn gunst. **Een erf houdt
   plaats voor een put en een kapel** (vraag 117, 2d): het komt niet waar zijn huis straks geen put of kapel kan halen, of
   waar het een ander huis de laatste plek ervoor afneemt; waar er nog een kan komen, op open grond of na het rooien, zegt
-  `T.kringGrond` (`js/wensen.js`, met `T.kanHierKomen` in `js/verzoeken.js`), één keer per stand van het dorp, en de
+  `T.kringGrond` (`js/wensen.js`, met `T.kanHierKomen` in `js/bouwen.js`), één keer per stand van het dorp, en de
   plekken pas als een huis er straks geen haalt. Een hut op een erf telt daarbij met zijn hut en het huis dat hij wordt
   (`T.kringVoetenVan`), en wil wat dat huis wil (`T.wilStraks`: de kapel); het dorp zet een put of kapel voor hem waar
   hij die allebei haalt (`T.kringTeller` met `straks`, in `T.plekVoor`).
@@ -986,7 +989,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   waar nog iets te rooien staat (een boom, een stronk, een struik: `T.teRooienOp`, `T.watTeRooien`), wacht erop
   (`g.wachtOpRooien`, met `g.kavel` en `g.rooienTot`), nog niet op de kaart (`T.bouwGebouw` zet het er pas met
   `T.zetOpDeKaart` op), maar telt al mee: de hut van een gezin op zijn erf (`js/erven.js`), of een werkplaats die een
-  inwoner vroeg waar geen open grond meer was (`T.plekVoor` in `js/verzoeken.js`; `rooien` bij `T.plaatsGebouw` en
+  inwoner vroeg waar geen open grond meer was (`T.plekVoor` in `js/bouwen.js`; `rooien` bij `T.plaatsGebouw` en
   `T.waaromPastHetNiet`). Wie rooit (`T.rooitHij`: het hoofd van het gezin, of wie de werkplaats vroeg, `p.rooit`), hakt en
   rooit met de bijl zoals een boer ontgint (`T.werkVeldwerkBij` in `js/veldwerk.js`; het gezin van een erf helpt,
   `T.helpAnker`; net zo het hoofd van een huis dat wil doorgroeien, `g.groeitNaRooien`, vraag 130) en werkt zolang nergens; is het stuk vrij, dan ligt de bouwplaats er de volgende dag, en na `rooiDagen`
