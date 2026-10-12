@@ -89,8 +89,12 @@ vóór B2). **A:** een eigen gebouw "Wijnboerderij" in het bouwmenu, met de teke
 de boerderij de akker (`js/boerderij.js`). De boerderij krijgt alleen akkers, en de regel "het eerste veld bepaalt wat
 de boerderij is" vervalt: zo is er één manier om wijn te maken. Het oude gebouw met de wijngaard binnen zijn eigen voet
 (`nietLeeg`, `alleenHetHuis`) gaat dan weg, en het vooruitkijken van de wijn (`T.wijnNaDePluk`, slaapt) kan de raad
-weer gebruiken. Eerst een plan met Marcel. **Bezig in sessie `ccr-ba1fa562-g7kz8h`** (12 okt): het plan, met
-Marcel.
+weer gebruiken. **Het plan (Claude, 12 okt), en Marcel: "A gehucht, b ja, c ja":** de wijnboerderij wordt een
+gewoon huis van 5 bij 4 (de tekening `gebouwen/wijnhuis`, één tekening voor nu), met een gezin, vanaf het gehucht, voor
+18 hout en 8 goud, en de heer wil er 10 wijn per jaar voor; de wijngaard leg je als veld bij een wijnboerderij (dezelfde
+maten als een akker), een akker alleen bij een boerderij; het gezin plukt in wijnmaand en werkt verder elders; de raad
+zegt het weer als de wijn het jaar niet haalt (`T.wijnNaDePluk`); opslaan gaat een versie omhoog. **Bezig in sessie
+`ccr-ba1fa562-g7kz8h`** (12 okt): het bouwen.
 
 ## B2. Het hele eiland (vraag 117, stap 3)
 
