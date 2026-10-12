@@ -67,8 +67,9 @@ Mee in elke ronde: het commentaar in de code dat "zie CLAUDE.md" zegt (een stuk 
 Het plan staat in het archief bij vraag 152; 1a (optie 1), 1b (het lege land), 1c (het kamp, met het bouwmenu), 1d
 (binnen bereik, en met handen) en 1e (boeren uit het niets) zijn af; hoe het nu werkt: `spel.md`, "Zo werkt het lege
 begin nu".
-- **1f, een jaar zonder fouten:** een toets speelt een jaar vanaf een lege plek, met een speler in code die bouwt. Dan
-  is "Leeg" het enige begin, en volgt ronde 2 van A.
+- **1f, een jaar zonder fouten:** **Bezig in sessie `ccr-abaf0226-9lnbtq`** (12 okt): het plan, wacht op Marcel. Een
+  toets speelt een jaar vanaf een lege plek, met een speler in code die bouwt. Dan is "Leeg" het enige begin, en volgt
+  ronde 2 van A.
 
 ## B2. Het hele eiland (vraag 117, stap 3)
 
