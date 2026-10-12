@@ -534,12 +534,12 @@
     } else stop(e);
   }
 
-  // De boerderij met een wijngaard waar dit poppetje woont, als hij daar nu plukt (js/wijngaard.js): in de pluktijd, zolang er volle
+  // De wijnboerderij waar dit poppetje woont, als hij daar nu plukt (js/wijngaard.js): in de pluktijd, zolang er volle
   // ranken zijn, of als hij nog een mand naar huis moet brengen; of null. Wie te jong of te oud is om te werken, plukt niet.
   function wijngaardWaarHijPlukt(D, e, dag) {
     const p = T.bewonerVan(D, e);
     const g = p && p.huis;
-    if (!g || !T.heeftWijngaard(g) || p.weg || !T.LEEFTIJDEN[p.leeftijd] || T.LEEFTIJDEN[p.leeftijd].werkt == null) return null;
+    if (!T.isWijnboerderij(g) || p.weg || !T.LEEFTIJDEN[p.leeftijd] || T.LEEFTIJDEN[p.leeftijd].werkt == null) return null;
     if (e.mand > 0) return g;
     return T.isPluktijd(g, dag) && T.volleRanken(D, g, dag).length ? g : null;
   }
@@ -786,7 +786,9 @@
   // js/main.js, de andere dorpen vanuit T.werkDorpBij (js/dorp.js).
   T.werkVeldwerkBij = function (S, D) {
     const w = D.wereld;
-    if (!w || !w.akkers || !w.akkers.length || !D.kalender) return;
+    // Zonder land is er niets te doen: geen akker en geen wijngaard. (Tot vraag 155 telde alleen een akker: een dorp met
+    // alleen een wijnboerderij plukte dan nooit, want wie plukt, werkt hier ook.)
+    if (!w || !D.kalender || !((w.akkers && w.akkers.length) || (w.wijngaarden && w.wijngaarden.length))) return;
     const dag = D.kalender.dag;
     const datum = T.datumVanDag(dag);
     // Gewerkt wordt in de werkuren (js/dag.js), en niet op een hele feestdag (js/feesten.js).

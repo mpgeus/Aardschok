@@ -1,6 +1,6 @@
-// De wijnboerderij (werklijst vraag 136; Marcel, 8 okt: "Ik wil z.s.m. aan een wijnboerderij", en "Wijn wordt drank, zoals
-// bier. Mensen dronken geen water"): een boerderij met een gezin en wijngaarden, de pluk in wijnmaand, wijn als wens van
-// de ambachtslieden (10 okt), en de heer wil er wijn voor.
+// De wijnboerderij (werklijst vraag 136 en 155; Marcel, 8 okt: "Ik wil z.s.m. aan een wijnboerderij", "Wijn wordt drank, zoals
+// bier. Mensen dronken geen water", en 12 okt: "ik wil tóch een apart wijnboerderij gebouw"): een huis met een gezin en een
+// wijngaard ernaast, de pluk in wijnmaand, wijn als wens van de ambachtslieden (10 okt), en de heer wil er wijn voor.
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
@@ -9,11 +9,10 @@ const { proefDorp, legVeldBij, bouwAf, dagen, zetBijHetVuur, metVastToeval } = r
 
 T.ui = new Proxy({}, { get: () => () => undefined });
 
-// Het proefdorp (test/grond.cjs) met een boerderij die een wijngaard heeft: in het lege begin is de wijngaard een veld bij een
-// boerderij (de wijnboerderij, het huis met de wijngaard erbij, kan er niet: `nietLeeg`). Het proefdorp heeft alleen
-// boerderijen met een akker, dus komt er een tweede boerderij bij die nog geen veld heeft, waar na de eerste nacht een gezin
-// uit een hut intrekt, en de wijngaard als veld erbij, meteen af (de nacht erop is het land, met zijn ranken). Er is geen
-// wijnboerderij meer: `g` is de boerderij, `veld` de wijngaard.
+// Het proefdorp (test/grond.cjs) met een wijnboerderij en haar wijngaard: de wijngaard is een veld naast de wijnboerderij (vraag
+// 155). Het proefdorp heeft alleen boerderijen met een akker, dus komt er een wijnboerderij bij, waar na de eerste nacht een
+// gezin uit een hut intrekt, en de wijngaard als veld erbij, meteen af (de nacht erop is het land, met zijn ranken). `g` is
+// de wijnboerderij, `veld` de wijngaard.
 function dorp() {
   const { S, D, w } = proefDorp(T, { boerderijen: 1 });
   Object.assign(S, { vlaggen: new Set() });
@@ -25,8 +24,8 @@ function dorp() {
   let veld;
   try {
     metVastToeval(7, () => {
-      for (const [wat, k] of Object.entries(T.GEBOUWEN.boerderij.kosten || {})) T.wijzigVoorraad(D, wat, k);
-      g = zetBijHetVuur(T, D, 'boerderij');
+      for (const [wat, k] of Object.entries(T.GEBOUWEN.wijnboerderij.kosten || {})) T.wijzigVoorraad(D, wat, k);
+      g = zetBijHetVuur(T, D, 'wijnboerderij');
       bouwAf(T, D, g, dag);
     });
     dagen(T, S, dag + 1);
@@ -36,7 +35,7 @@ function dorp() {
     T.BEGIN_INSTELLINGEN.bouwBereik = echt;
   }
   veld = w.wijngaarden.find((v) => v.boerderij === g);
-  assert.ok(g.klaar && T.heeftWijngaard(g) && veld, 'een boerderij met een wijngaard');
+  assert.ok(g.klaar && T.isWijnboerderij(g) && veld, 'een wijnboerderij met een wijngaard');
   return { S, D, g, veld };
 }
 
@@ -67,7 +66,7 @@ function totUur(S, dag, tot) {
   }
 }
 
-test('de wijngaard: het huis is vast, de ranken staan in rijen met een pad ertussen, en bouwen kan er niet', () => {
+test('de wijngaard: de ranken staan in rijen met een pad ertussen naast het huis, en bouwen kan er niet', () => {
   const { D, g, veld } = dorp();
   try {
     const IN = T.WIJNGAARD_INSTELLINGEN;
@@ -79,6 +78,7 @@ test('de wijngaard: het huis is vast, de ranken staan in rijen met een pad ertus
       assert.ok(T.isBegaanbaar(D.wereld, v.x, v.y + 1) || v.y + 1 >= veld.y + veld.h, 'met een pad ernaast');
     }
     assert.ok(T.isVast(D.wereld, g.x, g.y), 'het huis is vast');
+    assert.ok(!ranken.some((v) => v.x >= g.x && v.x < g.x + 5 && v.y >= g.y && v.y < g.y + 4), 'de ranken staan niet in het huis');
     assert.ok(T.waaromNietOpDezeGrond(D, veld.x + 1, veld.y + 1), 'op het pad in de wijngaard bouw je niet');
   } finally {
     T.optiesTerug();
@@ -96,12 +96,18 @@ test('een rank door het jaar: kaal, blad, vol, en leeg als hij geplukt is', () =
   assert.equal(T.rankStand({ geplukt: null }, dagIn('slachtmaand')), 'leeg', 'na de pluk is wat er hing, verloren');
 });
 
-test('in wijnmaand plukt het gezin dat er woont, en de wijn is er pas als de mand binnen is', () => {
+// `zonderAkker`: een dorp met alleen een wijnboerderij (een wijnboer zonder een akker in het dorp) plukt ook (vraag 155).
+function pluktInWijnmaand(zonderAkker) {
   const dag = dagIn('wijnmaand', 3);
   const { S, D, g } = dorp();
   try {
     T.zetOptie('voorvallen', 'uit');
-    // Twee volwassenen van het dorp gaan bij het gezin van de boer wonen, op de boerderij met de wijngaard.
+    if (zonderAkker) {
+      D.wereld.akkers.length = 0;
+      for (const e of D.wereld.wezens) delete e.werkAkkers;
+    }
+    assert.equal(!!(D.wereld.akkers && D.wereld.akkers.length), !zonderAkker);
+    // Twee volwassenen van het dorp gaan bij het gezin van de boer wonen, op de wijnboerderij.
     const erbij = D.bewoners.mensen.filter((p) => p.wezen && !p.schout && p.huis !== g && !T.isBoer(D, p) && T.LEEFTIJDEN[p.leeftijd].werkt != null).slice(0, 2);
     assert.equal(erbij.length, 2);
     for (const p of erbij) p.huis = g;
@@ -122,7 +128,10 @@ test('in wijnmaand plukt het gezin dat er woont, en de wijn is er pas als de man
   } finally {
     T.optiesTerug();
   }
-});
+}
+
+test('in wijnmaand plukt het gezin dat er woont, en de wijn is er pas als de mand binnen is', () => pluktInWijnmaand(false));
+test('ook in een dorp zonder een akker plukt het gezin van de wijnboerderij, en komt de wijn binnen', () => pluktInWijnmaand(true));
 
 test('buiten wijnmaand plukt niemand, en in wijnmaand het gezin dat er woont', () => {
   const { S, D, g } = dorp();
@@ -142,10 +151,9 @@ test('buiten wijnmaand plukt niemand, en in wijnmaand het gezin dat er woont', (
   }
 });
 
-test('de boerderij met een wijngaard is een wijnboer, en er woont een gezin van boeren', () => {
+test('de wijnboerderij is een boerenhuis: er woont een gezin van boeren', () => {
   const { D, g } = dorp();
   try {
-    assert.equal(T.veldVan(g), 'wijngaard');
     assert.equal(T.standVan(g), 'boeren');
     assert.ok(D.bewoners.mensen.some((p) => p.huis === g), 'er woont een gezin');
     assert.ok(T.boerVan(D, g), 'met een boer');
@@ -172,18 +180,29 @@ test('de ambachtslieden willen wijn naast hun bier, en wijn telt niet als bier',
 // Marcel, 10 okt: "Laten we vooruitkijken doen". Wat er na de pluk ligt, moet het jaar halen, zoals het hout de winter.
 test('vooruitkijken: wat er bij de pluk ligt plus de pluk moet een jaar halen', () => {
   const huis = { soort: 'stenenHuis', x: 10, y: 10, voet: { b: 4, h: 4 }, klaar: true };
-  const boerderij = { soort: 'wijnboerderij', x: 30, y: 10, voet: { b: 10, h: 8 }, klaar: false };
+  const boerderij = { soort: 'wijnboerderij', x: 30, y: 10, voet: { b: 5, h: 4 }, klaar: false };
   const D = { gebouwen: [huis, boerderij], bewoners: { mensen: [] }, voorraad: T.nieuweVoorraad(), wereld: { voorwerpen: [] } };
   const mensen = (n) => (D.bewoners.mensen = Array.from({ length: n }, () => ({ huis })));
   const IN = T.WIJNGAARD_INSTELLINGEN;
-  const ranken = Math.ceil(IN.stuk.h / IN.rijOm) * IN.stuk.b;
-  const pluk = ranken * IN.wijnPerRank - T.GEBOUWEN.wijnboerderij.heer.wijn;
   const dag = dagIn('hooimaand', 1);
+  const heer = T.GEBOUWEN.wijnboerderij.heer.wijn;
   mensen(20);
   let v = T.wijnNaDePluk(D, dag);
   assert.equal(v.tot, 90, 'van 1 hooimaand tot 1 wijnmaand');
-  assert.equal(v.pluk, pluk, 'een wijnboerderij zonder ranken op de kaart plukt er zoveel als ze straks heeft, min de heer');
+  assert.equal(v.pluk, -heer, 'een wijnboerderij zonder wijngaard plukt niets, en de heer wil toch zijn wijn');
+  assert.ok(!v.haalt && v.dagen === 0, 'twintig ambachtslieden drinken, en er komt niets: dat haalt het jaar niet');
+  // Een wijngaard die de bouwers nog planten, telt mee met de ranken die er straks staan (een rij om de rij).
+  const aanleg = { soort: 'wijngaard', x: 36, y: 10, voet: { b: 5, h: 6 }, klaar: false, boerderij };
+  D.gebouwen.push(aanleg);
+  const ranken = Math.ceil(6 / IN.rijOm) * 5;
+  const pluk = ranken * IN.wijnPerRank - heer;
+  v = T.wijnNaDePluk(D, dag);
+  assert.equal(v.pluk, pluk);
   assert.ok(v.haalt, `twintig ambachtslieden drinken ${20 * 0.02} per dag, en ${pluk} haalt het jaar`);
+  // Is hij land, dan telt het wat er hangt: de ranken die nog niet geplukt zijn.
+  D.gebouwen.pop();
+  for (let i = 0; i < ranken; i++) D.wereld.voorwerpen.push({ soort: 'wijnrank', x: 36 + i, y: 10, boerderij, geplukt: null });
+  assert.equal(T.wijnNaDePluk(D, dag).pluk, pluk, 'ranken op de kaart tellen zoals ranken in aanleg');
   mensen(50);
   v = T.wijnNaDePluk(D, dag);
   assert.ok(!v.haalt && v.dagen === pluk, 'vijftig drinken een per dag: de pluk haalt het jaar niet');
@@ -193,4 +212,7 @@ test('vooruitkijken: wat er bij de pluk ligt plus de pluk moet een jaar halen', 
   assert.ok(T.wijnNaDePluk(D, dag).haalt, 'wat er bij de pluk nog ligt, telt mee');
   mensen(0);
   assert.ok(T.wijnNaDePluk(D, dag).haalt, 'wie geen wijn wil, drinkt niets');
+  // Een wijnboerderij is er niet: dan is er niets om te plukken, en niets dat de heer vraagt.
+  D.gebouwen.splice(D.gebouwen.indexOf(boerderij), 1);
+  assert.equal(T.wijnNaDePluk(D, dag).pluk, 0);
 });

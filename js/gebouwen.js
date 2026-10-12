@@ -47,9 +47,10 @@
 //                                    // trekt er een gezin uit het kamp in (js/begin.js)
 //     leeg:        true,             // alleen in het lege begin (js/begin.js, D.begin): het huis van de schout,
 //                                    // de akker en de wijngaard
-//     nietLeeg:    true,             // niet in het lege begin: de wijnboerderij (daar is de wijngaard een veld)
-//     veld:        true,             // een veld dat je bij een boerderij legt, als rechthoek (js/boerderij.js): de
-//                                    // akker en de wijngaard; de bouwers maken hem, en dan is het land
+//     veld:        'boerderij',      // een veld dat je bij een boerderij legt, als rechthoek (js/boerderij.js): de
+//                                    // akker en de wijngaard; de bouwers maken hem, en dan is het land. De soort zegt
+//                                    // bij welke boerderij hij hoort: de akker bij 'boerderij', de wijngaard bij
+//                                    // 'wijnboerderij'
 //     eenmalig:    true,             // staat maar één keer in het bouwmenu: is hij er (ook in aanbouw), dan niet meer
 //     opslag:      true,             // een opslag: als hij af is, bouw je ook binnen bereik van hem (T.inBouwBereik)
 //     menu:        true,             // false: niet via het bouwmenu (stadsmuur, palissade — die hebben
@@ -152,21 +153,36 @@
         + '(T.GRAAN_PER_TEGEL in js/akkers.js). Eerst stond hier een abstracte opbrengst, en dan ' // geen tekst
         + 'telde het dubbel.', // geen tekst
     },
+    // De wijnboerderij (werklijst vraag 136 en 155; Marcel, 8 okt: "Ik wil z.s.m. aan een wijnboerderij", "Wijn wordt
+    // drank, zoals bier. Mensen dronken geen water", en 12 okt: "ik wil tóch een apart wijnboerderij gebouw", "A gehucht,
+    // b ja, c ja"): een gewoon huis met een gezin van boeren, zoals de boerderij, maar voor wijn. Zijn velden zijn
+    // wijngaarden, die je erbij legt (`veld: 'wijnboerderij'` bij de wijngaard hieronder; js/boerderij.js, js/wijngaard.js).
+    // De ambachtslieden willen wijn naast hun bier (de wens `wijn` in js/wensen.js; Marcel, 10 okt). Hij maakt niets per
+    // dag: in wijnmaand (`alleenIn`, T.stilOp) plukt het gezin de ranken, en de wijn is er pas als de mand in het huis is
+    // (`oogst`: wat hij binnenhaalt, T.maaktGoed). De heer wil er wijn voor. `gebouwen/wijnhuis` is de enige tekening.
+    wijnboerderij: {
+      naam: T.t('vineyard farm'), meervoud: T.t('vineyard farms'), trede: 'gehucht', voet: { b: 5, h: 4 }, kosten: { hout: 18, goud: 8 },
+      heer: { wijn: 10 }, bouwtijd: 5, handen: 0, woonruimte: 4, maakt: null, oogst: 'wijn',
+      alleenIn: { maanden: ['wijnmaand'], waarom: T.t('the grapes are only picked in October') },
+      menu: true, tekening: 'gebouwen/wijnhuis', beschrijving: T.t('winegrowers for the vineyards: the grapes are picked in October'), // geen tekst
+      opmerking: '',
+    },
     // De akker en de wijngaard: velden die je in het lege begin bij een boerderij legt, als rechthoek (vraag 152, 1e;
     // js/boerderij.js). Geen gebouw: de bouwers rooien en ploegen of planten hem (`veldWerk` in T.BOUWEN_INSTELLINGEN,
-    // per tegel), en dan is het land. Het eerste veld van een boerderij bepaalt wat ze is (Marcel, 11 okt: "Dus 1
-    // boerderij, en het veld bepaald"). In het gehucht dat er al was, legt de kaart de akkers (js/kaart.js).
+    // per tegel), en dan is het land. De soort zegt bij welke boerderij hij hoort (`veld`): de akker bij een boerderij,
+    // de wijngaard bij een wijnboerderij (Marcel, 12 okt, vraag 155; tot dan bepaalde het eerste veld wat de boerderij
+    // was, Marcel, 11 okt: "Dus 1 boerderij, en het veld bepaald").
     akker: {
       naam: T.t('field'), meervoud: T.t('fields'), trede: 'gehucht', voet: null, kosten: {}, heer: {}, bouwtijd: 0,
-      handen: 0, woonruimte: 0, maakt: null, menu: true, leeg: true, veld: true,
+      handen: 0, woonruimte: 0, maakt: null, menu: true, leeg: true, veld: 'boerderij',
       tekening: null, beschrijving: T.t('grain by a farm: its farmer sows and reaps it'),
       opmerking: 'In het gehucht dat er al was een hele strook van de kaart: zie "akker" in js/kaart.js en ' // geen tekst
         + 'gereedschap/tiled/maak-gehucht.cjs. Het graan zelf: gereedschap/pixelart/graan.cjs.', // geen tekst
     },
     wijngaard: {
       naam: T.t('vineyard'), meervoud: T.t('vineyards'), trede: 'gehucht', voet: null, kosten: {}, heer: {}, bouwtijd: 0,
-      handen: 0, woonruimte: 0, maakt: null, menu: true, leeg: true, veld: true,
-      tekening: null, beschrijving: T.t('vines by a farm: its family picks the grapes in October'),
+      handen: 0, woonruimte: 0, maakt: null, menu: true, leeg: true, veld: 'wijnboerderij',
+      tekening: null, beschrijving: T.t('vines by a vineyard farm: its family picks the grapes in October'),
       opmerking: 'De ranken in rijen (js/wijngaard.js, gereedschap/pixelart/wijnrank.cjs).', // geen tekst
     },
     houthakker: {
@@ -288,22 +304,6 @@
       naam: T.t('bakery'), trede: 'dorp', voet: { b: 5, h: 5 }, kosten: { hout: 12, goud: 8 }, heer: { goud: 3 }, bouwtijd: 3,
       handen: 1, woonruimte: 0, maakt: { in: { meel: 2 }, uit: { brood: 2 } },
       menu: true, tekening: 'gebouwen/bakkerij', beschrijving: T.t('flour into bread'), opmerking: '', // geen tekst
-    },
-    // De wijnboerderij (werklijst vraag 136; Marcel, 8 okt: "Ik wil z.s.m. aan een wijnboerderij", "Wijn wordt drank,
-    // zoals bier. Mensen dronken geen water", en voor de wijngaard "Dat je de boeren ziet plukken, volle en lege ranken"):
-    // een huis met een gezin van boeren, en ernaast een wijngaard (`wijngaard`: binnen de voet van 10 bij 8 staat alleen het
-    // huis vast; de ranken staan erin als voorwerpen, js/wijngaard.js). De ambachtslieden willen wijn naast hun bier (de
-    // wens `wijn` in js/wensen.js; Marcel, 10 okt). Hij maakt niets per dag: in wijnmaand (`alleenIn`, T.stilOp) plukt
-    // het gezin de ranken, en de wijn is er pas als de mand in het huis is (`oogst`: wat hij binnenhaalt, T.maaktGoed).
-    // De heer wil er wijn voor.
-    wijnboerderij: {
-      naam: T.t('vineyard farm'), meervoud: T.t('vineyard farms'), trede: 'dorp', voet: { b: 10, h: 8 }, kosten: { hout: 18, goud: 8 },
-      heer: { wijn: 10 }, bouwtijd: 5, handen: 0, woonruimte: 4, maakt: null, oogst: 'wijn', wijngaard: true, nietLeeg: true,
-      alleenIn: { maanden: ['wijnmaand'], waarom: T.t('the grapes are only picked in October') },
-      // De tekening (gereedschap/pixelart/dorp2.cjs, `gebouwen/wijnhuis`): het huis met de wijntonnen bij de deur, achter in
-      // de hoek van de voet; `gebouwen/wijnboerderij` is het hele plaatje met de wijngaard erin, voor de proefplaten.
-      menu: true, tekening: 'gebouwen/wijnhuis', beschrijving: T.t('a farm with a vineyard: wine, picked in October'), // geen tekst
-      opmerking: '',
     },
     brouwerij: {
       naam: T.t('brewery'), trede: 'dorp', voet: { b: 5, h: 5 }, kosten: { hout: 14, goud: 10 }, heer: { goud: 4 }, bouwtijd: 4,
@@ -521,8 +521,6 @@
   T.gebouwVoet = function (soort, tekening) {
     const g = T.GEBOUWEN[soort];
     if (!g) return null;
-    // De wijnboerderij: het huis en zijn wijngaard samen (js/wijngaard.js); de tekening is alleen het huis.
-    if (g.wijngaard) return g.voet;
     const t = tekening || g.tekening;
     if (t && T.opzoekTegelNaam) {
       const opz = T.opzoekTegelNaam(t);
@@ -744,33 +742,22 @@
     if (natuur) return natuur;
     const n = T.GEBOUWEN_INSTELLINGEN.looppad;
     if (!T.looppadOm(D, { x, y, b: voet.b, h: voet.h }, n, kavel)) return T.t('There must be a walkway all round it: {n|one tile|# tiles} clear, with no building or tree.', { n });
-    return T.waaromNietOpIemand(D, { x, y, b: voet.b, h: voet.h }, undefined, wieErStaat) || zonderKringPlek(D, soort, { x, y, b: voet.b, h: voet.h }, tekening);
+    return T.waaromNietOpIemand(D, { x, y, b: voet.b, h: voet.h }, undefined, wieErStaat) || zonderKringPlek(D, soort, { x, y, b: voet.b, h: voet.h });
   };
 
   // Een gebouw waar een gezin woont (een wijnboerderij, of een huis dat jij zet) komt alleen waar dat gezin straks zijn
   // put en kapel haalt, en niet waar het een ander huis de laatste plek ervoor afneemt (T.waaromGeenKringPlek, js/wensen.js; werklijst vraag 136; Marcel, 10 okt: "Wijn haalt kapel"): in de
   // speeltest kwam een wijnboerderij ver van het dorp, en wilde haar gezin een jaar lang een kapel die nergens kon komen,
-  // zodat het dorp niet won. Bij de wijnboerderij woont het gezin in het huis in de hoek van de voet (alleenHetHuis), en
-  // daar meet ook de kring van haar wensen vanaf (T.voetVanGebouw). In het lege begin niet (Marcel, 12 okt: "b uit"): daar
+  // zodat het dorp niet won. In het lege begin niet (Marcel, 12 okt: "b uit"): daar
   // vond de kolonist op drie van de vijf eilanden na de oogst geen plek meer voor een tweede boerderij, want rond het plein
   // was geen ruimte meer voor een kapel binnen 40 tegels (werklijst B, 1f; ontwerp/speelbaar.md).
-  function zonderKringPlek(D, soort, r, tekening) {
+  function zonderKringPlek(D, soort, r) {
     const G = T.GEBOUWEN[soort];
     if (D.begin || !G.woonruimte || !T.standVan({ soort })) return null;
-    const vast = alleenHetHuis(soort, tekening || T.volgendeTekening(D, soort));
-    const huis = vast ? { x: r.x, y: r.y, b: vast.b, h: vast.h } : r;
     return T.waaromGeenKringPlek(D, {
-      grond: r, vast: r, huis, wil: (wens) => T.huisWil({ soort }, wens),
+      grond: r, vast: r, huis: r, wil: (wens) => T.huisWil({ soort }, wens),
       wie: () => T.t('{gebouw} here', { gebouw: T.hoofdletter(T.eenNaam(G.naam)) }), dit: T.t('{gebouw} here', { gebouw: T.eenNaam(G.naam) }),
     });
-  }
-
-  // Wat er van de voet vaststaat, als dat niet de hele voet is: bij de wijnboerderij alleen het huis (de tekening), want
-  // de rest is de wijngaard (js/wijngaard.js). { b, h }, of null.
-  function alleenHetHuis(soort, tekening) {
-    const opz = T.GEBOUWEN[soort].wijngaard && tekening && T.opzoekTegelNaam(tekening);
-    const eig = opz && opz.eig && opz.eig.beslaat;
-    return eig ? { b: eig[0], h: eig[1] } : null;
   }
 
   // ---------------------------------------------------------------------------------------------
@@ -990,13 +977,12 @@
     return !!g && vrij && g.menu !== false && nogTeBouwen(D, soort);
   };
   // Het huis van de schout (`leeg`, `eenmalig`) mag alleen in het lege begin, en één keer: staat hij er (ook in
-  // aanbouw), dan niet meer. De wijnboerderij (`nietLeeg`) daar niet: daar is de wijngaard een veld. Een veld (de akker,
-  // de wijngaard) pas als er een boerderij is die hem kan nemen (js/boerderij.js).
+  // aanbouw), dan niet meer. Een veld (de akker, de wijngaard) pas als er een boerderij is die hem kan nemen: de akker
+  // een boerderij, de wijngaard een wijnboerderij (`veld`; js/boerderij.js).
   function nogTeBouwen(D, soort) {
     const g = T.GEBOUWEN[soort];
     if (g.leeg && !D.begin) return false;
-    if (g.nietLeeg && D.begin) return false;
-    if (g.veld && !(D.gebouwen || []).some((x) => x.soort === 'boerderij' && (!T.veldVan(x) || T.veldVan(x) === soort))) return false;
+    if (g.veld && !(D.gebouwen || []).some((x) => x.soort === g.veld)) return false;
     return !(g.eenmalig && (D.gebouwen || []).some((x) => x.soort === soort));
   }
 
@@ -1099,9 +1085,7 @@
     const w = D.wereld;
     const tekening = instantie.tekening || g.tekening;
     const opz = tekening && T.opzoekTegelNaam(tekening);
-    const heleVoet = instantie.voet || T.gebouwVoet(instantie.soort, tekening) || { b: 1, h: 1 };
-    // Bij de wijnboerderij is alleen het huis vast: de rest van de voet is de wijngaard (js/wijngaard.js).
-    const voet = alleenHetHuis(instantie.soort, tekening) || heleVoet;
+    const voet = instantie.voet || T.gebouwVoet(instantie.soort, tekening) || { b: 1, h: 1 };
     const naam = 'gebouw:' + instantie.soort;
     T.registreerGebouwSoort(naam);
     const v = {
@@ -1131,8 +1115,7 @@
       }
     }
     // op een land met hoogte komt het op vlakke grond (js/hoogte.js; vraag 121, stap 2)
-    T.egaliseer(w, { x: instantie.x, y: instantie.y, b: heleVoet.b, h: heleVoet.h });
-    if (g.wijngaard) T.zetRanken(D, instantie);
+    T.egaliseer(w, { x: instantie.x, y: instantie.y, b: voet.b, h: voet.h });
     T.kaartVeranderd(w); // de voet is muur geworden: de eilanden (js/wereld.js)
     stapEraf(D, { x: instantie.x, y: instantie.y, b: voet.b, h: voet.h });
   }
@@ -1227,8 +1210,8 @@
       const soort = T.GEBOUWEN[g.soort];
       // Een houthakker zonder boom binnen zijn bereik wil geen handen: zijn hand werkt elders tot er weer een boom staat
       // (js/bos.js; werklijst vraag 129, e).
-      // En een boerderij van het lege begin zonder akker (js/boerderij.js): haar boer werkt elders of bouwt mee, en plukt
-      // als ze een wijngaard heeft in wijnmaand.
+      // En een boerderij van het lege begin zonder akker (js/boerderij.js): haar boer werkt elders of bouwt mee. (Een
+      // wijnboerderij vraagt geen handen: haar gezin werkt elders of bouwt mee, en plukt in wijnmaand.)
       if (!g.klaar || !soort.handen || T.houthakkerZonderBoom(g) || T.boerderijZonderAkker(D, g)) {
         g.handen = 0;
         continue;

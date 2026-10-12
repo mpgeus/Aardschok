@@ -681,9 +681,10 @@ test('2c: een huis zegt wie er woont, wat het wil met wat helpt, wat het als eer
 });
 
 // De wijn (werklijst vraag 136; Marcel, 10 okt: "Inwoners willen wijn en bier. Afwisseling", en "B1"): een stenen huis wil
-// wijn naast zijn bier, en in een dorp noemt het de wijnboerderij, zodat de raad erom vraagt.
-test('een stenen huis wil wijn, en in een dorp helpt een wijnboerderij', () => {
-  const D = Object.assign(kaalDorp(), { trede: 'dorp', kalender: T.nieuweKalender() });
+// wijn naast zijn bier, en vanaf het gehucht (vraag 155; Marcel, 12 okt: "A gehucht") noemt het de wijnboerderij, zodat de
+// raad erom vraagt.
+test('een stenen huis wil wijn, en vanaf het gehucht helpt een wijnboerderij', () => {
+  const D = Object.assign(kaalDorp(), { trede: 'gehucht', kalender: T.nieuweKalender() });
   zetHuis(D, 'stenenHuis', 10, 10, 8);
   T.zetVoorraad(D, 'bier', 100);
   T.onthoudWensen(D, T.berekenWensen(D, ZOMERDAG, alles));

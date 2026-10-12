@@ -1,6 +1,7 @@
 // Boeren uit het niets (js/boerderij.js; werklijst vraag 152, 1e; Marcel, 11 okt: "A2", "Inderdaad met b2", "Ja dat is
 // goed. De bouwers pakken het op", "De karakters zetten we even opzij"): in het lege begin wordt boer wie er op een
-// boerderij woont, en de velden leg jij bij een boerderij; het eerste veld bepaalt of het een akkerbouwer of een wijnboer is.
+// boerderij woont, en de velden leg jij bij een boerderij: een akker bij een boerderij, een wijngaard bij een wijnboerderij
+// (vraag 155; Marcel, 12 okt: "ik wil tóch een apart wijnboerderij gebouw", en "A gehucht, b ja, c ja").
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
@@ -97,7 +98,6 @@ test('een boerderij is een thuis: een gezin uit het kamp trekt erin, de man is d
   assert.ok(boer && !boer.hoofd && gezin.includes(boer), 'het hoofd van het gezin is de boer');
   assert.equal(boer.karakter, undefined, 'zonder karakter (Marcel: "De karakters zetten we even opzij")');
   assert.ok(gezegd.some((t) => /farmer|boer/.test(t)), 'het dorp zegt wie er boer wordt');
-  assert.equal(T.veldVan(g), null, 'nog geen veld: nog geen akkerbouwer of wijnboer');
   dagen(S, dag + 1, dag + 1);
   assert.equal(g.handen, 0, 'zonder akker werkt de boer elders, of bouwt hij mee');
   // Er trekt geen tweede gezin bij.
@@ -131,14 +131,12 @@ test('b2: is het kamp al leeg, dan verhuist een gezin uit een hut naar een lege 
   assert.ok(gezegd.some((t) => /move from their|verhuizen van/.test(t)));
 });
 
-test('velden: pas met een boerderij; groot genoeg, niet te groot, dichtbij; de wijnboerderij niet in het lege begin', () => {
+test('velden: pas met een boerderij; groot genoeg, niet te groot, dichtbij', () => {
   const { S, D } = leegBegin();
   dagen(S, 1, 1);
   assert.ok(!T.magGebouwd(D, 'akker') && !T.magGebouwd(D, 'wijngaard'), 'zonder boerderij geen veld');
-  assert.ok(!T.magGebouwd({ trede: 'dorp', begin: {}, gebouwen: [] }, 'wijnboerderij'), 'in het lege begin is de wijngaard een veld');
-  assert.ok(T.magGebouwd({ trede: 'dorp', gebouwen: [] }, 'wijnboerderij'), 'in het gehucht dat er al was, blijft ze');
   const [g] = zetGebouwen(D, 1, 'boerderij');
-  assert.ok(T.magGebouwd(D, 'akker') && T.magGebouwd(D, 'wijngaard'), 'met een boerderij, ook in aanbouw');
+  assert.ok(T.magGebouwd(D, 'akker'), 'met een boerderij, ook in aanbouw');
   const I = T.BOERDERIJ_INSTELLINGEN;
   const r = veldPlek(D, 'akker', g);
   assert.match(T.waaromPastVeldNiet(D, 'akker', { ...r, b: 2, h: 2 }), /at least|minstens/);
@@ -148,14 +146,85 @@ test('velden: pas met een boerderij; groot genoeg, niet te groot, dichtbij; de w
   assert.ok(T.waaromPastVeldNiet(D, 'akker', ver), 'ver weg niet');
   const plein = T.pleinTegels(D.wereld)[0];
   assert.ok(T.waaromPastVeldNiet(D, 'akker', { x: plein.x, y: plein.y, b: 4, h: 4 }), 'niet op het plein');
-  // Het eerste veld bepaalt wat de boerderij is.
   const uit = T.legVeld(D, 'akker', r);
   assert.ok(uit.gelukt, uit.reden);
-  assert.equal(T.veldVan(g), 'akker');
+  assert.equal(uit.instantie.boerderij, g, 'hij hoort bij zijn boerderij');
   assert.equal(uit.instantie.bouw.werk, T.bouwWerkVan('akker', { b: r.b, h: r.h }));
-  assert.ok(!T.magGebouwd(D, 'wijngaard'), 'een akkerbouwer krijgt geen wijngaard');
-  assert.match(T.boerderijVoorVeld(D, 'wijngaard', r).reden, /fields of grain|akkers/);
   assert.ok(T.waaromPastVeldNiet(D, 'akker', r), 'op een veld in aanleg komt geen tweede');
+  const tweede = veldPlek(D, 'akker', g);
+  assert.ok(T.legVeld(D, 'akker', tweede).gelukt, 'een boerderij neemt meer dan één akker');
+});
+
+// Marcel, 12 okt (vraag 155): "A gehucht, b ja, c ja": de wijngaard alleen bij een wijnboerderij, de akker alleen bij een boerderij.
+test('de wijngaard alleen bij een wijnboerderij, de akker alleen bij een boerderij', () => {
+  const { S, D } = leegBegin();
+  dagen(S, 1, 1);
+  assert.ok(T.magGebouwd(D, 'wijnboerderij'), 'de wijnboerderij staat in het bouwmenu van het lege begin, vanaf het gehucht');
+  assert.equal(T.GEBOUWEN.akker.veld, 'boerderij');
+  assert.equal(T.GEBOUWEN.wijngaard.veld, 'wijnboerderij');
+  const [g] = zetGebouwen(D, 1, 'boerderij');
+  assert.ok(T.magGebouwd(D, 'akker') && !T.magGebouwd(D, 'wijngaard'), 'een boerderij kan een akker nemen, geen wijngaard');
+  const r = veldPlek(D, 'akker', g);
+  assert.match(T.boerderijVoorVeld(D, 'wijngaard', r).reden, /A vineyard lies next to a vineyard farm/);
+  assert.match(T.waaromPastVeldNiet(D, 'wijngaard', r), /vineyard farm/, 'de muis zegt het ook');
+  assert.equal(T.legVeld(D, 'wijngaard', r).gelukt, false, 'en de klik legt hem niet');
+  assert.equal(T.boerderijVoorVeld(D, 'akker', r).boerderij, g);
+
+  const [w] = zetGebouwen(D, 1, 'wijnboerderij');
+  assert.ok(T.magGebouwd(D, 'wijngaard') && T.magGebouwd(D, 'akker'), 'nu is er voor allebei een boerderij');
+  const q = veldPlek(D, 'wijngaard', w);
+  assert.equal(T.boerderijVoorVeld(D, 'wijngaard', q).boerderij, w, 'de wijngaard hoort bij de wijnboerderij');
+  assert.equal(T.waaromPastVeldNiet(D, 'wijngaard', q), null);
+  const uit = T.legVeld(D, 'wijngaard', q);
+  assert.ok(uit.gelukt, uit.reden);
+  assert.equal(uit.instantie.boerderij, w);
+  assert.ok(!('veld' in w) && !('veld' in g), 'het eerste veld bepaalt niets meer: de soort zegt het');
+});
+
+// Marcel, 12 okt (vraag 155): de wijnboerderij is een gewoon huis met een gezin, zoals de boerderij.
+test('een wijnboerderij is een huis van 5 bij 4 voor een gezin: het trekt erin uit het kamp, de man is de boer', () => {
+  const G = T.GEBOUWEN.wijnboerderij;
+  assert.deepEqual([G.trede, G.voet, G.kosten, G.heer], ['gehucht', { b: 5, h: 4 }, { hout: 18, goud: 8 }, { wijn: 10 }]);
+  assert.deepEqual([G.oogst, G.alleenIn.maanden, G.tekening, G.tekeningen], ['wijn', ['wijnmaand'], 'gebouwen/wijnhuis', undefined]);
+  assert.deepEqual(T.gebouwVoet('wijnboerderij'), { b: 5, h: 4 }, 'de tekening beslaat 5 bij 4');
+  const { S, D } = leegBegin();
+  dagen(S, 1, 1);
+  const [g] = zetGebouwen(D, 1, 'wijnboerderij');
+  assert.deepEqual([T.voetVanGebouw(g).b, T.voetVanGebouw(g).h], [5, 4]);
+  gezegd.length = 0;
+  const kamp = T.kampTenten(D).length;
+  const dag = totAf(S, [g], 2);
+  const gezin = wonenIn(D, g);
+  assert.equal(gezin.length, 3, 'een gezin uit het kamp');
+  assert.equal(T.kampTenten(D).length, kamp - 1, 'en zijn tent gaat weg');
+  const boer = T.boerVan(D, g);
+  assert.ok(boer && !boer.hoofd && gezin.includes(boer), 'het hoofd van het gezin is de boer');
+  assert.ok(T.isBoer(D, boer), 'een wijnboer is een boer');
+  assert.equal(T.standVan(g), 'boeren');
+  assert.ok(gezegd.some((t) => /vineyard farm: .* is the farmer now/.test(t)), 'het dorp zegt wie er boer wordt');
+  dagen(S, dag + 1, dag + 1);
+  assert.equal(g.handen, 0, 'ze vraagt geen handen: haar gezin werkt elders, bouwt mee, en plukt in wijnmaand');
+  assert.equal(wonenIn(D, g).length, 3, 'er trekt geen tweede gezin bij');
+});
+
+test('b2: is het kamp al leeg, dan verhuist ook een gezin uit een hut naar een lege wijnboerderij', () => {
+  const gezinnen = T.BEGIN_INSTELLINGEN.gezinnen;
+  T.BEGIN_INSTELLINGEN.gezinnen = 2;
+  let S, D;
+  try {
+    ({ S, D } = leegBegin());
+  } finally {
+    T.BEGIN_INSTELLINGEN.gezinnen = gezinnen;
+  }
+  dagen(S, 1, 1);
+  const hutten = zetGebouwen(D, T.kampTenten(D).length, 'hut');
+  const [g] = zetGebouwen(D, 1, 'wijnboerderij');
+  gezegd.length = 0;
+  totAf(S, hutten, 2);
+  assert.equal(T.kampTenten(D).length, 0, 'het kamp is leeg');
+  totAf(S, [g], 2);
+  assert.equal(wonenIn(D, g).length, 3, 'een gezin trok erin');
+  assert.ok(gezegd.some((t) => /vineyard farm/.test(t)));
 });
 
 test('een akker: de bouwers maken hem, dan is hij van de boerderij, de boer werkt hem en zaait hem in de lente', () => {
@@ -186,19 +255,17 @@ test('een akker: de bouwers maken hem, dan is hij van de boerderij, de boer werk
 test('een wijngaard: de bouwers planten hem, de ranken staan in rijen, en in wijnmaand plukt het gezin', () => {
   const { S, D, w } = leegBegin();
   dagen(S, 1, 1);
-  const [g] = zetGebouwen(D, 1, 'boerderij');
+  const [g] = zetGebouwen(D, 1, 'wijnboerderij');
   const r = veldPlek(D, 'wijngaard', g);
   const veld = T.legVeld(D, 'wijngaard', r).instantie;
-  assert.equal(T.veldVan(g), 'wijngaard');
-  assert.ok(!T.magGebouwd(D, 'akker'), 'een wijnboer krijgt geen akker');
   const dag = totAf(S, [g, veld], 2);
-  assert.ok(T.heeftWijngaard(g));
+  assert.ok(T.isWijnboerderij(g));
   assert.equal(w.wijngaarden.length, 1);
+  assert.equal(w.wijngaarden[0].boerderij, g, 'de wijngaard hoort bij zijn wijnboerderij');
   const ranken = T.rankenVan(D, g);
   assert.equal(ranken.length, Math.ceil(r.h / T.WIJNGAARD_INSTELLINGEN.rijOm) * r.b, 'een rij ranken om de rij');
   assert.equal(T.wijngaardOp(D, r.x, r.y), g, 'daar bouw je niet');
   assert.ok(T.waaromNietOpDezeGrond(D, r.x, r.y));
-  assert.equal(T.boerderijZonderAkker(D, g), true, 'een wijnboer werkt buiten de pluk elders');
   const wijnmaand = T.MAANDEN.findIndex((m) => m.naam === 'wijnmaand') - T.TIJD_START_MAAND;
   const pluk = wijnmaand * T.DAGEN_PER_MAAND;
   dagen(S, dag + 1, pluk);
@@ -213,10 +280,11 @@ test('een wijngaard: de bouwers planten hem, de ranken staan in rijen, en in wij
 test('bewaren en laden: een veld in aanleg, een akker en een wijngaard blijven aan hun boerderij vast', () => {
   const { S, D } = leegBegin();
   dagen(S, 1, 1);
-  const [a, b] = zetGebouwen(D, 2, 'boerderij');
+  const [a] = zetGebouwen(D, 1, 'boerderij');
+  const [b] = zetGebouwen(D, 1, 'wijnboerderij');
   const akker = T.legVeld(D, 'akker', veldPlek(D, 'akker', a)).instantie;
   const wijn = T.legVeld(D, 'wijngaard', veldPlek(D, 'wijngaard', b)).instantie;
-  const dag = totAf(S, [a, akker], 2);
+  const dag = totAf(S, [a, akker, b], 2);
   dagen(S, dag + 1, dag + 1);
   assert.ok(D.gebouwen.includes(wijn) || D.wereld.wijngaarden, 'de wijngaard is er, af of in aanleg');
   Object.assign(S, { vlaggen: new Set() }, T.schermVelden());
@@ -225,6 +293,9 @@ test('bewaren en laden: een veld in aanleg, een akker en een wijngaard blijven a
   T.zetSpel(S2, T.leesSpel(tekst));
   assert.equal(T.bewaarSpel(S2, { nu: 0 }), tekst);
   const D2 = S2.dorp;
-  const a2 = D2.gebouwen.find((g) => g.soort === 'boerderij' && g.veld === 'akker');
+  const a2 = D2.gebouwen.find((g) => g.soort === 'boerderij');
   assert.ok(D2.wereld.akkers.some((x) => x.boerderij === a2), 'de akker hoort nog bij zijn boerderij');
+  const b2 = D2.gebouwen.find((g) => g.soort === 'wijnboerderij');
+  assert.ok(D2.gebouwen.some((g) => g.soort === 'wijngaard' && g.boerderij === b2) || D2.wereld.wijngaarden.some((x) => x.boerderij === b2),
+    'de wijngaard hoort nog bij zijn wijnboerderij');
 });

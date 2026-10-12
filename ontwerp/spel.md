@@ -97,23 +97,26 @@ uit de kar zijn het huis van de schout, twee hutten en een houthakker, als je op
 niets** (1e, `js/boerderij.js`; Marcel: "Je kiest dan agrariër of wijnboer. Zoals bij Knights and Merchants", en op het
 plan van Claude: "A2", "Inderdaad met b2", "Ja dat is goed. De bouwers pakken het op", "De karakters zetten we even
 opzij. Ik weet niet of die handig zijn in de nieuwe setting", en "2 ja"): een boer is wie er op een boerderij woont, niet
-een van de vijf van de kaart. Een boerderij is een thuis voor één gezin: is ze af, dan trekt er een gezin uit het kamp in
+een van de vijf van de kaart. Een boerderij, en sinds 12 okt ook een wijnboerderij (hieronder), is een thuis voor één gezin: is ze af, dan trekt er een gezin uit het kamp in
 zoals in een hut, en is het kamp al leeg, dan verhuist er een gezin uit een hut heen (het gezin met de minste mensen die
 al werk hebben), want een nieuw gezin over de weg komt niet zolang er weinig graan is, en dan sterf je met een lege
 boerderij ("de settlers worden wat jij bouwt"). De man is de boer, zonder karakter of eigenschappen (het lot en de
 karakters zijn weg sinds ronde 2 van het snoeien, stap 4, `snoeien.md`); zijn vrouw en kind helpen bij het zaaien en de oogst. **De velden leg jij**
-("A2: 1 boerderij, en het veld bepaald"): staat er een boerderij, ook nog in aanbouw, dan staan de akker en de wijngaard
-in het bouwmenu, en trek je een rechthoek: klik de ene hoek en dan de andere (slepen schuift het beeld), binnen 8 tegels
-van de boerderij en binnen bereik, van 12 tot 40 tegels, en een tegel vrij rond elk gebouw. Het eerste veld bepaalt wat
-de boerderij is, een akkerbouwer of een wijnboer, en daarna krijgt ze alleen nog velden van die soort: oogst en pluk
-botsen niet, maar met afwisseling als kern zou een gemengde boerderij de keuze weghalen. Een veld kost alleen werk: de
+("A2: 1 boerderij, en het veld bepaald"): je kiest agrariër of wijnboer door wat je bouwt (sinds 12 okt, vraag 155; Marcel:
+"ik wil tóch een apart wijnboerderij gebouw", en "A gehucht, b ja, c ja"; eerst bepaalde het eerste veld wat de boerderij
+was). De akker leg je alleen bij een boerderij, de wijngaard alleen bij een wijnboerderij: staat er zo'n boerderij, ook nog
+in aanbouw, dan staat het veld in het bouwmenu, en trek je een rechthoek: klik de ene hoek en dan de andere (slepen
+schuift het beeld), binnen 8 tegels van die boerderij en binnen bereik, van 12 tot 40 tegels, en een tegel vrij rond elk
+gebouw. Een boerderij neemt meer dan één veld van haar soort. Een veld kost alleen werk: de
 bouwers rooien het (een boom geeft 2 hout) en ploegen of planten het, een akker 0,05 werkdag per tegel en een wijngaard
 0,1; tot het af is, ligt het in goud. Een akker die vóór 1 bloeimaand af is, zaaien de boeren nog in van het graan uit
 de kar (de eerste lente is 60 dagen, zo'n 5 uur op 1×), anders in de lente erna; een wijngaard krijgt een rij ranken om
-de rij, en het gezin plukt hem in wijnmaand, zoals de wijnboerderij, die in het lege begin niet meer in het menu staat.
+de rij, en het gezin van de wijnboerderij plukt hem in wijnmaand.
 De boer ontgint niet zelf (`js/ontginnen.js` slaapt): in een proef kostte een stuk bos hem 41 tot 87 dagen, en dan mis je
-de eerste lente. Een boerderij zonder akker (een wijnboer, of nog geen veld) wil geen handen: haar boer werkt elders of
-bouwt mee, en die van een wijngaard plukt in wijnmaand. **Wijn is eten** (zie "Eten", hieronder), zodat een wijnboer het
+de eerste lente. Een boerderij zonder akker wil geen handen: haar boer werkt elders of bouwt mee. Een wijnboerderij
+vraagt nooit handen: haar gezin werkt het jaar door elders of bouwt mee, en plukt in wijnmaand. **De wijnboerderij** (een
+eigen gebouw, vanaf het gehucht): een gewoon huis van 5 bij 4 voor een gezin, 18 hout en 8 goud, en de heer wil er 10 wijn
+voor; zonder wijngaard geeft ze niets. **Wijn is eten** (zie "Eten", hieronder), zodat een wijnboer het
 dorp voedt; een tegel wijngaard voedt evenveel als een tegel akker. Te kiezen in de werkbank ("Boeren uit het niets" en
 "Meebouwen"). Nog niet: een jaar zonder fouten met een speler in code die bouwt (1f).
 
@@ -1878,19 +1881,20 @@ Nog open na deel 1 (vragen van Claude):
 - **Wijn** (8 okt; werklijst vraag 136; Marcel: "Ik wil z.s.m. aan een wijnboerderij", "Wijn wordt drank, zoals bier.
   Mensen dronken geen water", en "Ja zo bouwen"): een wijnboerderij is een boerderij met een gezin van boeren, en haar
   velden zijn wijngaarden. Ze komt in een dorp, en plukt in wijnmaand: dan maakt ze 10 wijn per dag met twee handen, de
-  rest van het jaar niets. Wijn bederft niet. De wens die bier heette, heet nu drank, en neemt bier of wijn, bier eerst.
+  rest van het jaar niets. (Sinds 12 okt, vraag 155: vanaf het gehucht, en alleen met een wijngaard ernaast; zie "Zo werkt
+  het lege begin nu".) Wijn bederft niet. De wens die bier heette, heet nu drank, en neemt bier of wijn, bier eerst.
   **Sinds 10 okt twee wensen** (Marcel: "Inwoners willen wijn en bier. Afwisseling. Je kunt niet leven op 1 ding", en
   "B1, 0,02 is goed"): de wens heet weer bier en neemt alleen bier, en de ambachtslieden willen er wijn bij (0,02 per mens
   per dag, bier 0,05: één wijnboerderij is genoeg voor zo'n 40 ambachtslieden). Zo vraagt het dorp er zelf om, zoals om
   elk gebouw dat maakt wat de huizen missen; daarvoor vroeg het voor drank altijd een herberg, en bouwde niemand er een.
   **Het dorp kijkt vooruit** (10 okt; Marcel: "Laten we vooruitkijken doen"), zoals bij het hout en het eten voor de
   winter: wat er bij de volgende pluk nog ligt, plus de pluk zelf, min de wijn voor de heer, moet een jaar halen. Haalt
-  het dat niet, dan vraagt een inwoner nu een wijnboerderij erbij, zodat ze er voor wijnmaand staat. Daarvoor vroeg het
-  dorp er pas een als de wijn al op was, en kwam ze na de pluk.
+  het dat niet, dan vroeg een inwoner een wijnboerderij erbij, zodat ze er voor wijnmaand stond; daarvoor vroeg het dorp
+  er pas een als de wijn al op was, en kwam ze na de pluk. Sinds ronde 2 van het snoeien vraagt niemand het meer.
   De heer wil voor een wijnboerderij 10 wijn. Geen vaten (de kuiper blijft zonder nut, vraag 135); wijngaarden op de
   zonkant van een heuvel misschien later.
   **Sinds later op 8 okt** (Marcel: "Dat je de boeren ziet plukken, volle en lege ranken", en "Alles telt pas als het
-  binnen is"): het huis met ernaast een wijngaard van vier rijen ranken. Een rank is kaal in de winter, groen in de lente
+  binnen is"): het huis met ernaast een wijngaard van rijen ranken (sinds 12 okt een veld dat je zelf legt: een rij om de rij). Een rank is kaal in de winter, groen in de lente
   en zomer, vol met trossen van oogstmaand tot hij geplukt is, en dan leeg. In wijnmaand plukt het gezin dat er woont rank
   voor rank met een mand, en de wijn (15 per rank) telt pas als de mand in het huis is; wat niet geplukt wordt, is weg.
 - **Het graan is pas binnen in de schuur** (8 okt; werklijst vraag 140; Marcel: "Alles telt pas als het binnen is"): wat

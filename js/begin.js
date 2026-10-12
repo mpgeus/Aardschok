@@ -203,14 +203,14 @@
   // Elke nacht, als de gebouwen van vandaag af zijn en vóór er een nieuw gezin kan komen (T.tikGebouwenDag, js/gebouwen.js):
   // in een woning die af is en plaats heeft (een hut, een huis), trekt een gezin uit het kamp, het eerste dat er past; past
   // er geen, dan het eerste in een woning waar nog niemand woont, ook als het krap is (Marcel, 11 okt). Zijn tent gaat weg
-  // zodra hij leeg is, en met de laatste tent het kampvuur; de kar blijft (Marcel, 11 okt: "Per tent"). Een boerderij is
-  // ook een thuis voor een gezin, en de man wordt er de boer (vraag 152, 1e; js/boerderij.js).
+  // zodra hij leeg is, en met de laatste tent het kampvuur; de kar blijft (Marcel, 11 okt: "Per tent"). Een boerderij of
+  // een wijnboerderij is ook een thuis voor een gezin, en de man wordt er de boer (vraag 152, 1e; js/boerderij.js).
   T.verhuisUitHetKamp = function (D) {
     if (!D.begin || D.begin.kamp !== 'op') return;
     verhuisDeSchout(D);
     for (const g of D.gebouwen.slice()) {
       const soort = T.GEBOUWEN[g.soort];
-      const boerderij = g.soort === 'boerderij';
+      const boerderij = T.isBoerderij(g);
       if (!g.klaar || !soort || !(soort.woning || boerderij)) continue;
       const wonen = inHuis(D, g).length;
       if (boerderij && wonen) continue; // op een boerderij woont één gezin
@@ -221,7 +221,7 @@
       const tent = gezin[0].huis;
       T.verhuis(D, gezin, g);
       const wie = (gezin.find((p) => !p.hoofd) || gezin[0]).naam;
-      if (boerderij) T.zeg(D, T.t('{wie} and family leave the camp for the farm: {wie} is the farmer now.', { wie }));
+      if (boerderij) T.zeg(D, T.t('{wie} and family leave the camp for the {boerderij}: {wie} is the farmer now.', { wie, boerderij: soort.naam }));
       else T.zeg(D, gezin.length > vrij
         ? T.t('{wie} and family leave the camp: their {gebouw} is ready, though it is cramped.', { wie, gebouw: soort.naam })
         : T.t('{wie} and family leave the camp: their {gebouw} is ready.', { wie, gebouw: soort.naam }));

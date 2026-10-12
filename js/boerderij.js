@@ -1,19 +1,21 @@
 // Boeren uit het niets (werklijst vraag 152, 1e; Marcel, 11 okt: "Je kiest dan agrariër of wijnboer. Zoals bij Knights
 // and Merchants", en op het plan: "A2", "Inderdaad met b2", "Ja dat is goed. De bouwers pakken het op", en "De karakters
 // zetten we even opzij"). In het lege begin (js/begin.js) is een boer wie er op een boerderij woont, niet een van de vijf
-// boeren van de kaart:
+// boeren van de kaart. Er zijn twee soorten boerderij (T.isBoerderij): de boerderij, met akkers, en de wijnboerderij, met
+// wijngaarden (Marcel, 12 okt, vraag 155: "ik wil tóch een apart wijnboerderij gebouw"; tot dan bepaalde het eerste veld
+// wat de boerderij was). Voor beide:
 //   - een boerderij is een thuis voor één gezin: een gezin uit het kamp trekt erin zoals in een hut (T.verhuisUitHetKamp,
 //     js/begin.js), en is het kamp al leeg, dan verhuist er een gezin uit een hut heen (b2), want een nieuw gezin over de
 //     weg komt niet zolang er weinig graan is;
 //   - het hoofd van dat gezin is de boer (T.boerVan, T.isBoer), zonder karakter of eigenschappen (het lot is weg sinds
-//     ronde 2 van het snoeien); hij werkt de akkers van zijn boerderij (`e.werkAkkers`, zoals de boeren van de kaart, js/kaart.js), en zijn
-//     vrouw en kinderen helpen zoals op elke boerderij (js/veldwerk.js);
-//   - de velden leg jij (T.legVeld): een akker of een wijngaard bij een boerderij, als rechthoek; de bouwers rooien en
-//     ploegen of planten hem (js/bouwen.js), en is hij af, dan is het land (D.wereld.akkers, of D.wereld.wijngaarden met
-//     de ranken van js/wijngaard.js). Het eerste veld bepaalt wat de boerderij is (`g.veld`): een akkerbouwer of een
-//     wijnboer, en daarna krijgt hij alleen nog velden van die soort.
-// Een boerderij zonder akker wil geen handen (T.boerderijZonderAkker, in T.verdeelHanden): de boer van een wijngaard, of
-// van een boerderij die nog geen veld heeft, werkt elders of bouwt mee, en plukt in wijnmaand (js/wijngaard.js).
+//     ronde 2 van het snoeien); een wijnboer is ook een boer. Hij werkt de akkers van zijn boerderij (`e.werkAkkers`, zoals
+//     de boeren van de kaart, js/kaart.js), en zijn vrouw en kinderen helpen zoals op elke boerderij (js/veldwerk.js);
+//   - de velden leg jij (T.legVeld): een akker bij een boerderij, een wijngaard bij een wijnboerderij (`veld` in
+//     T.GEBOUWEN), als rechthoek; de bouwers rooien en ploegen of planten hem (js/bouwen.js), en is hij af, dan is het land
+//     (D.wereld.akkers, of D.wereld.wijngaarden met de ranken van js/wijngaard.js).
+// Een boerderij zonder akker wil geen handen (T.boerderijZonderAkker, in T.verdeelHanden): haar boer werkt elders of bouwt
+// mee. De wijnboerderij vraagt nooit handen (`handen: 0`): haar gezin plukt in wijnmaand (js/wijngaard.js) en werkt het
+// jaar door elders of bouwt mee.
 // Regels zonder scherm, dus te toetsen (test/boerderij.test.cjs).
 (function (T) {
   'use strict';
@@ -31,18 +33,16 @@
   };
   const IN = () => T.BOERDERIJ_INSTELLINGEN;
 
-  const isBoerderij = (g) => !!g && g.soort === 'boerderij';
+  // Een boerderij met akkers, of een wijnboerderij met wijngaarden: allebei een thuis voor één gezin met een boer.
+  T.isBoerderij = (g) => !!g && (g.soort === 'boerderij' || g.soort === 'wijnboerderij');
   const wonenIn = (D, g) => ((D.bewoners && D.bewoners.mensen) || []).filter((p) => p.huis === g);
 
-  // Is dit een veld dat je legt (`veld` in T.GEBOUWEN: de akker en de wijngaard), geen gebouw?
+  // Is dit een veld dat je legt (`veld` in T.GEBOUWEN: de akker en de wijngaard), geen gebouw? Zijn `veld` zegt bij welke
+  // boerderij hij hoort: 'boerderij' of 'wijnboerderij'.
   T.isVeldSoort = (soort) => !!(T.GEBOUWEN[soort] && T.GEBOUWEN[soort].veld);
 
-  // Wat een boerderij verbouwt: 'akker', 'wijngaard', of null zolang hij nog geen veld heeft. De wijnboerderij van het
-  // gehucht dat er al was, is een wijngaard.
-  T.veldVan = (g) => (!g ? null : g.soort === 'wijnboerderij' ? 'wijngaard' : g.veld || null);
-
-  // De boer van een boerderij: het hoofd van het (eerste) gezin dat er woont, of anders een volwassene; null als er
-  // niemand woont.
+  // De boer van een boerderij (ook de wijnboer van een wijnboerderij): het hoofd van het (eerste) gezin dat er woont, of
+  // anders een volwassene; null als er niemand woont.
   T.boerVan = function (D, g) {
     const hier = wonenIn(D, g);
     return hier.filter((p) => !p.hoofd).sort((a, b) => a.gezin - b.gezin)[0] || hier.find((p) => p.leeftijd === 'volwassen') || null;
@@ -51,14 +51,15 @@
   // Is deze bewoner een boer: de boer van de boerderij waar hij woont (T.boerVan)? Eén vraag voor de voorvallen
   // (js/voorvallen.js) en de raadsman (js/raadsman.js). Tot 12 okt was een boer wie een karakter uit het lot had (de vijf
   // boeren van de kaart); het lot en de karakters zijn weg sinds ronde 2 van het snoeien, stap 4 (Marcel: "Ja, nu mee").
-  T.isBoer = (D, p) => !!p && isBoerderij(p.huis) && T.boerVan(D, p.huis) === p;
+  T.isBoer = (D, p) => !!p && T.isBoerderij(p.huis) && T.boerVan(D, p.huis) === p;
 
   // De akkers van een boerderij die jij legde (T.legVeld).
   T.akkersVanBoerderij = (D, g) => ((D.wereld && D.wereld.akkers) || []).filter((a) => a.boerderij === g);
 
   // Wil deze boerderij geen handen, omdat ze geen akker heeft (T.verdeelHanden, js/gebouwen.js)? Alleen in het lege
-  // begin: de boer van een wijngaard, of van een boerderij die nog geen veld heeft, werkt elders of bouwt mee.
-  T.boerderijZonderAkker = (D, g) => !!D.begin && isBoerderij(g) && !T.akkersVanBoerderij(D, g).length;
+  // begin: de boer van een boerderij die nog geen akker heeft, werkt elders of bouwt mee. (Een wijnboerderij vraagt zelf
+  // al geen handen.)
+  T.boerderijZonderAkker = (D, g) => !!D.begin && !!g && g.soort === 'boerderij' && !T.akkersVanBoerderij(D, g).length;
 
   // ---------------------------------------------------------------------------------------------
   // De boer en zijn velden
@@ -73,7 +74,7 @@
     if (!D.begin || !w || !D.bewoners) return;
     const akkersVan = new Map();
     for (const g of D.gebouwen) {
-      const boer = isBoerderij(g) && T.boerVan(D, g);
+      const boer = g.soort === 'boerderij' && T.boerVan(D, g);
       if (boer && boer.wezen) akkersVan.set(boer.wezen, T.akkersVanBoerderij(D, g));
     }
     for (const e of w.wezens || []) {
@@ -103,14 +104,14 @@
   function bemanDeBoerderijen(D) {
     if (!D.bewoners || T.kampTenten(D).length) return;
     for (const g of D.gebouwen) {
-      if (!isBoerderij(g) || !g.klaar || wonenIn(D, g).length) continue;
+      if (!T.isBoerderij(g) || !g.klaar || wonenIn(D, g).length) continue;
       const gezin = gezinUitEenHut(D);
       if (!gezin) return;
       const huis = gezin[0].huis;
       T.verhuis(D, gezin, g);
       const boer = T.boerVan(D, g);
-      T.zeg(D, T.t('{wie} and family move from their {huis} to the farm: {wie} is the farmer now.', {
-        wie: T.naamVanBewoner(boer), huis: T.GEBOUWEN[huis.soort].naam,
+      T.zeg(D, T.t('{wie} and family move from their {huis} to the {boerderij}: {wie} is the farmer now.', {
+        wie: T.naamVanBewoner(boer), huis: T.GEBOUWEN[huis.soort].naam, boerderij: T.GEBOUWEN[g.soort].naam,
       }));
     }
   }
@@ -145,27 +146,26 @@
     return Math.max(dx, dy);
   }
 
-  // Bij welke boerderij hoort een veld van deze soort op r: de dichtste binnen veldAfstand die nog geen veld heeft of
-  // dezelfde soort verbouwt, ook een die nog gebouwd wordt. { boerderij } of { reden }.
+  // Bij welke boerderij hoort een veld van deze soort op r: de dichtste van zijn soort (`veld` in T.GEBOUWEN: de akker bij
+  // een boerderij, de wijngaard bij een wijnboerderij) binnen veldAfstand, ook een die nog gebouwd wordt. { boerderij } of
+  // { reden }.
   T.boerderijVoorVeld = function (D, soort, r) {
+    const boerderij = T.GEBOUWEN[soort].veld;
     const dichtbij = (D.gebouwen || [])
-      .filter((g) => isBoerderij(g))
+      .filter((g) => g.soort === boerderij)
       .map((g) => ({ g, d: tussen(r, T.voetVanGebouw(g)) }))
       .filter((x) => x.d <= IN().veldAfstand)
-      .sort((a, b) => a.d - b.d);
-    const past = dichtbij.find((x) => !T.veldVan(x.g) || T.veldVan(x.g) === soort);
-    if (past) return { boerderij: past.g };
-    if (dichtbij.length) {
-      return { reden: T.veldVan(dichtbij[0].g) === 'wijngaard'
-        ? T.t('That farm has a vineyard: a farm keeps to the kind of its first field.')
-        : T.t('That farm has fields of grain: a farm keeps to the kind of its first field.') };
-    }
-    return { reden: T.t('A field lies next to a farm: within {n} tiles of it.', { n: IN().veldAfstand }) };
+      .sort((a, b) => a.d - b.d)[0];
+    if (dichtbij) return { boerderij: dichtbij.g };
+    return { reden: T.t('{veld} lies next to {boerderij}: within {n} tiles of it.', {
+      veld: T.hoofdletter(T.eenNaam(T.GEBOUWEN[soort].naam)), boerderij: T.eenNaam(T.GEBOUWEN[boerderij].naam), n: IN().veldAfstand,
+    }) };
   };
 
   // Kan er een veld van deze soort op r? Hij is groot genoeg en niet te groot, ligt binnen het bouwbereik, niet op het
   // plein, een pad, een ander veld of iets vasts (een boom of een struik rooien de bouwers), houdt een tegel vrij rond
-  // elk gebouw (zijn looppad), is niet te steil, en ligt bij een boerderij die hem kan nemen. De reden, of null; dezelfde
+  // elk gebouw (zijn looppad), is niet te steil, en ligt bij een boerderij die hem kan nemen (een akker bij een boerderij,
+  // een wijngaard bij een wijnboerderij). De reden, of null; dezelfde
   // vraag voor de muis (js/main.js) en de klik (T.legVeld).
   T.waaromPastVeldNiet = function (D, soort, r) {
     const I = IN();
@@ -194,9 +194,8 @@
   }
 
   // Een veld leggen (de tweede klik, js/main.js): een bouwplaats in D.gebouwen, zoals een gebouw, die de bouwers rooien
-  // en ploegen of planten (js/bouwen.js); hij kost alleen werk. Hij hoort bij zijn boerderij (`boerderij`), en is het
-  // haar eerste veld, dan is ze voortaan een akkerbouwer of een wijnboer (`g.veld`). Geeft { gelukt, instantie, bericht }
-  // of { gelukt: false, reden }.
+  // en ploegen of planten (js/bouwen.js); hij kost alleen werk. Hij hoort bij zijn boerderij (`boerderij`: een akker bij
+  // een boerderij, een wijngaard bij een wijnboerderij). Geeft { gelukt, instantie, bericht } of { gelukt: false, reden }.
   T.legVeld = function (D, soort, r) {
     if (!T.isVeldSoort(soort) || !T.magGebouwd(D, soort)) return { gelukt: false, reden: T.t('A field does not fit there.') };
     const reden = T.waaromPastVeldNiet(D, soort, r);
@@ -207,7 +206,6 @@
     const wat = T.teRooienOp(D, kavel).length ? T.rooiWoordenOp(D, kavel) : null;
     T.zetBouwplaats(D, veld, kavel);
     D.gebouwen.push(veld);
-    if (!boerderij.veld) boerderij.veld = soort;
     const naam = T.hoofdletter(T.GEBOUWEN[soort].naam);
     const werk = veld.bouw.werk;
     return { gelukt: true, instantie: veld, bericht: wat

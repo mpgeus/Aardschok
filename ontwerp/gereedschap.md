@@ -33,7 +33,8 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   vroeg of laat een bestand, en toetst de toets een ander spel dan er draait. Een toets die een dorp nodig heeft, speelt
   op het proefdorp (`test/grond.cjs`; sinds ronde 2 van het snoeien, stap 3, 12 okt): het lege begin op eiland 2 met het
   huis van de schout, boerderijen met hun akker en hutten, gebouwd met de regels van het spel en meteen af, op vast
-  toeval; met opties meer (`gebouwen: ['herberg']`, `weide: true`, `boerderijen: 3`). Het wordt één keer per proces
+  toeval; met opties meer (`gebouwen: ['herberg']`, `weide: true`, `boerderijen: 3`; een `'wijnboerderij'` erbij heeft nog geen
+  wijngaard: die leg je met `T.legVeld`, zoals `test/wijn.test.cjs`). Het wordt één keer per proces
   gebouwd en elke toets krijgt een vers exemplaar via opslaan en herstellen, dus een getal dat een toets vóór het
   proefdorp verandert, telt niet bij het bouwen. `leegBegin(T, zaad)` geeft alleen het lege begin. Het bouwen zelf staat
   sinds stap 6 in het spel (`T.proefdorp.maak`, `js/begin.js`), zodat het gereedschap in de browser hetzelfde dorp laadt
@@ -110,7 +111,11 @@ haalt hem weg, beloning en al); zonder fase zegt hij waar hij staat. Er zijn nog
 (`js/quests.js` is leeg). `Spel.debug.gaNaar('proefbos')` springt naar een ander gebied.
 `await Spel.debug.schermafdruk('naam')` bewaart het doek als PNG in
 `gereedschap/pixelart/uit/schermen/` (via de server, zonder de html-balken): zo laat je Marcel een
-blik op het spel zien zonder de afbeelding door je eigen gesprek te halen. In het gehucht:
+blik op het spel zien zonder de afbeelding door je eigen gesprek te halen. De camera naar een plek: sluit na
+`Spel.debug.begin(n)` eerst het titelscherm (`Spel.ui.sluitTitel(Spel.S)`; zolang het open staat, volgt de camera het
+titelscherm), dan `Spel.S.overzicht = { doel: <Spel.naarSchermOp(S.wereld, x, y)>, zoom: 1.8 }` en `Spel.S.zoom` hetzelfde, en
+`stap(3)` laat hem erheen glijden. Een brief die de klok stilzet, sluit `Spel.ui.sluitBrief(Spel.S)`, een voorval
+`Spel.sluitDialoog(Spel.S)` (of zet de spelregel `Spel.zetOptie('voorvallen', 'uit')`). In het gehucht:
 `Spel.debug.kalender(dag, snelheid)` springt door het jaar, `Spel.debug.uur(21)` naar een uur van deze
 dag (zonder getal zegt het hoe laat het is; een dag duurt vijf minuten bij 1×, dus `stap` gaat op 10×
 tien keer zo ver), `Spel.debug.geenNacht = true` zet de nacht uit, `Spel.debug.bouw('huis', x, y)` bouwt,

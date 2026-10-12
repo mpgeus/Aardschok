@@ -452,3 +452,25 @@ test('een jaar met de kolonist: alles wat hij neerzet, komt af, het kamp is leeg
   assert.ok(graan[6 * T.DAGEN_PER_MAAND] > graan[5 * T.DAGEN_PER_MAAND] + 100, 'de oogst is binnen');
   assert.ok(gehakt > 0, 'de houthakker hakt');
 });
+
+// Haalt het eten de winter niet, dan zet de kolonist na de oogst een wijnboerderij neer, en legt hij er een wijngaard bij
+// (vraag 155; Marcel, 12 okt: "ik wil tóch een apart wijnboerderij gebouw"): de wijngaard hoort bij een wijnboerderij, niet
+// meer bij een boerderij zonder veld.
+test('de kolonist: haalt het eten de winter niet, dan een wijnboerderij, en daarna een wijngaard erbij', () => {
+  const { S, D } = leegBegin();
+  dagen(S, 1, 1);
+  T.zetVoorraad(D, 'hout', 500);
+  T.zetVoorraad(D, 'goud', 100);
+  T.zetVoorraad(D, 'graan', 0);
+  const dag = 200; // na de oogst, vóór de pluk
+  S.kalender.dag = dag + 0.3;
+  const eerste = T.kolonistDag(D, dag);
+  assert.ok(eerste.some((d) => d.soort === 'wijnboerderij' && d.gelukt), eerste.map((d) => d.tekst).join('; '));
+  const wijn = D.gebouwen.find((g) => g.soort === 'wijnboerderij');
+  assert.ok(wijn, 'de wijnboerderij staat (in aanbouw)');
+  const tweede = T.kolonistDag(D, dag + 1);
+  assert.ok(tweede.some((d) => d.soort === 'wijngaard' && d.gelukt), tweede.map((d) => d.tekst).join('; '));
+  assert.equal(D.gebouwen.find((g) => g.soort === 'wijngaard').boerderij, wijn, 'de wijngaard hoort bij de wijnboerderij');
+  const derde = T.kolonistDag(D, dag + 2);
+  assert.ok(!derde.some((d) => d.soort === 'wijnboerderij' || d.soort === 'wijngaard'), 'en niet nog een');
+});

@@ -44,7 +44,10 @@
     // ontginnen (stap 2d): veld.ontginning leest niets meer.
     // 7 (12 okt): het plein heeft een marktplek (ronde 2, stap 6; js/markt.js): de maker zet hem in de kaart (`w.markt`),
     // en een oude kaart heeft er geen, dus daar kwam nooit een markt.
-    versie: 7,
+    // 8 (12 okt): een boerderij met een wijngaard bestaat niet meer (vraag 155): de wijngaard hoort bij een wijnboerderij,
+    // een eigen gebouw, en `g.veld` van een boerderij leest niets meer. Een bewaarde wijngaard (`w.wijngaarden`, en zijn
+    // ranken) hoort bij een boerderij die geen wijn plukt.
+    versie: 8,
     eigenPlekken: 5, // naast de ene die vanzelf gaat (vraag 48 B)
     // Op de hoogste snelheid (30×) slaat het spel niet elke ochtend vanzelf op, maar om de zoveel dagen: een dag duurt
     // dan tien seconden, en het opslaan kost bij 100 mensen 25 à 50 ms, een hapering die je ziet (gemeten op 3 okt).

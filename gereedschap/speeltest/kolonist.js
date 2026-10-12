@@ -7,13 +7,14 @@
 //   2. een boerderij, en zolang de akkers nog gezaaid worden (T.isNazaaitijd) akkers erbij, tot al het zaaigraan uit de
 //      kar erop past;
 //   3. een houthakker, als het hout laag wordt (onder `houtLaag`, of het haalt de winter niet);
-//   4. hutten, tot elk gezin in het kamp een woning heeft, af of in aanbouw (een boerderij is ook een woning);
+//   4. hutten, tot elk gezin in het kamp een woning heeft, af of in aanbouw (een boerderij en een wijnboerderij zijn ook
+//      een woning);
 //   5. een jager, als het spel zegt dat het eten niet haalt: het haalt de winter niet (het bericht dat het spel dan geeft,
 //      raadt zelf een jager aan), of er is honger (de status in de balk); hooguit één per `jagerNa` dagen (Marcel, 12 okt:
 //      "a ja");
 //   6. na de oogst (van `naDeOogst` tot `naDePluk`): haalt het eten de winter niet, dan een tweede veld. Een akker wordt
-//      pas in de lente gezaaid, dus een wijngaard, die het gezin nog in wijnmaand plukt; en omdat een boerderij bij de
-//      soort van haar eerste veld blijft, op een tweede boerderij.
+//      pas in de lente gezaaid, dus een wijngaard, die het gezin nog in wijnmaand plukt; en die hoort bij een
+//      wijnboerderij (vraag 155): eerst die, en als ze er staat, de wijngaard erbij.
 // Wat hij deed, geeft hij terug: [{ soort, gelukt, reden, tekst, instantie }], zonder scherm, dus ook in een toets; en wat
 // hij wil maar nog niet kan betalen, met `wacht` (dan morgen weer). Hij rekent niet vooruit en wacht niet op het juiste
 // moment; hij doet wat er vandaag kan, zoals een speler die elke ochtend kijkt wat er nodig is.
@@ -33,7 +34,7 @@
   };
   T.KOLONIST = IN;
 
-  const isWoning = (g) => !!(T.GEBOUWEN[g.soort] && T.GEBOUWEN[g.soort].woning) || g.soort === 'boerderij';
+  const isWoning = (g) => !!(T.GEBOUWEN[g.soort] && T.GEBOUWEN[g.soort].woning) || T.isBoerderij(g);
   const inHuis = (D, g) => D.bewoners.mensen.filter((p) => p.huis === g);
   const boerderijen = (D) => D.gebouwen.filter((g) => g.soort === 'boerderij');
   // Het hart van zijn dorp: het kampvuur op het plein (het blijft een plek, ook als het uit is).
@@ -109,7 +110,7 @@
 
   function legVeld(D, soort, g, tegels, waarom) {
     const r = veldPlek(D, soort, g, tegels);
-    if (!r) return { soort, gelukt: false, reden: 'geen plek', tekst: `vindt geen plek voor een ${soort} bij de boerderij (${waarom})` };
+    if (!r) return { soort, gelukt: false, reden: 'geen plek', tekst: `vindt geen plek voor een ${soort} bij de ${g.soort} (${waarom})` };
     const u = T.legVeld(D, soort, r);
     return { soort, gelukt: u.gelukt, reden: u.reden || null, instantie: u.instantie || null,
       tekst: u.gelukt ? `legt een ${soort} van ${r.b} bij ${r.h} (${waarom})` : `wil een ${soort} leggen (${waarom}), maar: ${u.reden}` };
@@ -144,7 +145,7 @@
     if (!boerderijen(D).length) doe(bouw(D, 'boerderij', hart(D), 'het eten'));
     const eerste = boerderijen(D)[0];
     const zaaigraan = T.BEGIN_INSTELLINGEN.kar.zaaigraan / T.ZAAIGRAAN_PER_TEGEL;
-    if (eerste && T.veldVan(eerste) !== 'wijngaard' && T.isNazaaitijd(dag)) {
+    if (eerste && T.isNazaaitijd(dag)) {
       const nog = zaaigraan - akkerTegels(D);
       if (nog >= T.BOERDERIJ_INSTELLINGEN.veldMin) doe(legVeld(D, 'akker', eerste, nog, `voor ${zaaigraan} zaaigraan`));
     }
@@ -166,12 +167,14 @@
     const jagers = D.gebouwen.filter((g) => g.soort === 'jager');
     if (etenHaaltNiet && jagers.every((g) => g.klaar && g.klaarOp <= dag - IN.jagerNa)) doe(bouw(D, 'jager', hart(D), 'het eten haalt het niet'));
 
-    // 6. Na de oogst: haalt het eten de winter niet, dan een wijngaard, op een boerderij die nog geen veld heeft.
+    // 6. Na de oogst: haalt het eten de winter niet, dan een wijnboerderij, en daarna een wijngaard erbij.
     const inJaar = dag % T.DAGEN_PER_JAAR;
     if (inJaar >= IN.naDeOogst && inJaar < IN.naDePluk && !T.etenVoorDeWinter(D, dag).haalt) {
-      const vrij = boerderijen(D).find((g) => !T.veldVan(g));
-      if (vrij) doe(legVeld(D, 'wijngaard', vrij, T.BOERDERIJ_INSTELLINGEN.veldMax, 'het eten haalt de winter niet'));
-      else if (!boerderijen(D).some((g) => T.veldVan(g) === 'wijngaard')) doe(bouw(D, 'boerderij', hart(D), 'voor een wijngaard: het eten haalt de winter niet'));
+      const wijn = D.gebouwen.find((g) => g.soort === 'wijnboerderij');
+      if (!wijn) doe(bouw(D, 'wijnboerderij', hart(D), 'voor een wijngaard: het eten haalt de winter niet'));
+      else if (!D.gebouwen.some((g) => g.soort === 'wijngaard' && g.boerderij === wijn) && !(D.wereld.wijngaarden || []).some((v) => v.boerderij === wijn)) {
+        doe(legVeld(D, 'wijngaard', wijn, T.BOERDERIJ_INSTELLINGEN.veldMax, 'het eten haalt de winter niet'));
+      }
     }
     return daden;
   };

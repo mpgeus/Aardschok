@@ -106,14 +106,15 @@
     return T.t('{n|# day|# days}', { n: g.bouwtijd });
   }
 
-  // De rij van een veld (de akker, de wijngaard; js/boerderij.js): hij kost niets dan werk, en je trekt hem bij een boerderij.
+  // De rij van een veld (de akker, de wijngaard; js/boerderij.js): hij kost niets dan werk, en je trekt hem bij zijn boerderij
+  // (een akker bij een boerderij, een wijngaard bij een wijnboerderij).
   function veldInBouwmenu(id, g) {
     const I = T.BOERDERIJ_INSTELLINGEN;
     return (
       `<button data-soort="${id}">` +
       `<span class="bouw-naam">${T.hoofdletter(g.naam)}</span>` +
       `<span class="bouw-kosten">${T.t('{min} to {max} tiles · {werk} workdays per 10 tiles', { min: I.veldMin, max: I.veldMax, werk: T.bouwWerkVan(id, { b: 10, h: 1 }) })}</span>` +
-      `<span class="bouw-uitleg">${g.beschrijving}. ${T.t('Click one corner, then the other, within {n} tiles of a farm; its first field decides what the farm grows.', { n: I.veldAfstand })}</span>` +
+      `<span class="bouw-uitleg">${g.beschrijving}. ${T.t('Click one corner, then the other, within {n} tiles of {boerderij}.', { n: I.veldAfstand, boerderij: T.eenNaam(T.GEBOUWEN[g.veld].naam) })}</span>` +
       `</button>`
     );
   }
