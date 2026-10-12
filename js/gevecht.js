@@ -19,7 +19,7 @@
   T.SLAAN = { kosten: 3, schade: [3, 5] };
   // Wat een slag van `v` aan schade doet, [van, tot]: een man van de militie met een wapen (js/ondernemers.js, T.bewapen)
   // slaat harder.
-  T.slagSchade = (v) => (v && v.gewapend ? T.SLAAN.schade.map((n) => n + T.ONDERNEMERS_INSTELLINGEN.wapens.schade) : T.SLAAN.schade);
+  T.slagSchade = (v) => (v && v.gewapend ? T.SLAAN.schade.map((n) => n + T.ROVERS_INSTELLINGEN.wapens.schade) : T.SLAAN.schade);
   T.DEUR_SLUITEN = 1;
 
   const worp = (b) => b[0] + Math.floor(Math.random() * (b[1] - b[0] + 1));

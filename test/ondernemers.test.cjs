@@ -238,20 +238,6 @@ test('de heer laat een wapenmaker op Sint-Maarten staan', () => {
   assert.ok(D.voorraad.wapens > 6, `hij maakt wapens (${D.voorraad.wapens})`);
 });
 
-test('wie van de militie een wapen heeft, slaat harder', () => {
-  const S = dorp();
-  const D = S.dorp;
-  T.zetVoorraad(D, 'wapens', 1);
-  const a = {};
-  const b = {};
-  assert.equal(T.bewapen(D, [a, b]), 1);
-  assert.ok(a.gewapend && !b.gewapend);
-  const extra = T.ONDERNEMERS_INSTELLINGEN.wapens.schade;
-  assert.deepEqual(T.slagSchade(a), T.SLAAN.schade.map((n) => n + extra));
-  assert.deepEqual(T.slagSchade(b), T.SLAAN.schade);
-  assert.deepEqual(T.slagSchade(S.schout), T.SLAAN.schade, 'de schout zelf niet');
-});
-
 test('ben je weg, dan beslist de raadsman het wapenverzoek, zoals elk verzoek', () => allemaal(() => {
   const S = dorp();
   const D = S.dorp;

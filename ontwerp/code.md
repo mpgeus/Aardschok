@@ -804,8 +804,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   oproepen, vóór wat het dorp mist), met een eigen voorval (`wapenverzoek`, `herbergverzoek`) en `L.bouw.eigen`. Ja
   (`T.eigenToegestaan`) en nee (`T.eigenGeweigerd`: na twee keer trekt hij weg) laten een stemming op zijn huis
   (`g.stemming`, `T.huisStemming` in `T.berekenWensen`), en wat een onderneming verder doet, staat bij haar (`ja`, `nee`,
-  `prijs` in `T.ONDERNEMINGEN`): de tweede herberg maakt de herbergierster boos (`g.weigert`: ze brouwt een tijd niet). De wapenmaker: wapens (`T.wapensInHetDorp`, `T.bewapen` bij een aanval,
-  `T.slagSchade` in `js/gevecht.js`), en die zijn niet verboden (Marcel, 7 okt: "Het is logisch dat er wapens zijn om de
+  `prijs` in `T.ONDERNEMINGEN`): de tweede herberg maakt de herbergierster boos (`g.weigert`: ze brouwt een tijd niet). De wapenmaker: wapens (`T.wapensInHetDorp` en `T.bewapen`
+  bij een aanval staan sinds ronde 2 van het snoeien in `js/rovers.js`, met de schade; `T.slagSchade` in `js/gevecht.js`),
+  en die zijn niet verboden (Marcel, 7 okt: "Het is logisch dat er wapens zijn om de
   stad te verdedigen. Alleen weerstand tegen de heer is inacceptabel"; vraag 131): de heer laat hem met rust,
   en wat de heer niet mocht zien (`verdacht` in `T.GEBOUWEN`), is er niet meer. De getallen in `T.ONDERNEMERS_INSTELLINGEN`.
 
@@ -1281,6 +1282,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   is uit de bende (`T.roverVerslagen`), een wachter een mond minder (`T.sneuvelt`, via `T.wijzigBevolking` met wie
   het is), en wie het overleeft, geneest na een nacht. De getallen in `T.ROVERS_INSTELLINGEN` (in de werkbank).
   Ook de veteranen van de heervaart vechten mee (`p.veteraan`, met het leven van `T.WEZENS.veteraan`).
+- **De wapens** (sinds ronde 2 van het snoeien, 12 okt; tot dan in `js/ondernemers.js`; Marcel: "h ja wapens blijven ook
+  voor later"): `T.wapensInHetDorp` (de wapens in de schuur) en `T.bewapen` (bij een aanval krijgen zoveel mannen van de
+  militie er een als er zijn), en wie er een heeft, slaat `wapens.schade` harder (`T.slagSchade`, `js/gevecht.js`).
 
 ### js/einde.js: het eind
 

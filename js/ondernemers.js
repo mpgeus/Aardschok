@@ -17,7 +17,9 @@
 // Wat een huis nadraagt (wrok, dank), staat op het huis (g.stemming) en slijt weg; T.huisStemming geeft het aan de
 // tevredenheid van dat huis (T.berekenWensen, js/wensen.js).
 //
-// De wapens: wie van de militie een wapen heeft, slaat harder (T.slagSchade, js/gevecht.js). Ze zijn niet verboden
+// De wapens: wie van de militie een wapen heeft, slaat harder (T.slagSchade, js/gevecht.js; T.bewapen en de schade staan
+// sinds ronde 2 van het snoeien, 12 okt, in js/rovers.js, want de wapens blijven: Marcel, "h ja wapens blijven ook voor
+// later"). Ze zijn niet verboden
 // (Marcel, 7 okt: "Het is logisch dat er wapens zijn om de stad te verdedigen. Alleen weerstand tegen de heer is
 // inacceptabel"; werklijst vraag 131). Tot dan verzegelde de heer de werkplaats als hij hem zag, en smeedde wie nee
 // hoorde stiekem.
@@ -45,8 +47,6 @@
     wapens: {
       // Na een aanval van de rovers wil hij zoveel dagen lang wapens maken; staat er een smidse, dan altijd.
       naAanval: 60,
-      // Wie van de militie een wapen heeft, slaat zoveel harder.
-      schade: 2,
     },
     herberg: {
       // Een tweede herberg vraagt iemand pas in een dorp met zoveel mensen.
@@ -263,23 +263,5 @@
       g.stemming = g.stemming.filter((s) => dag - s.dag < s.dagen);
       if (!g.stemming.length) delete g.stemming;
     }
-  };
-
-  // ---------------------------------------------------------------------------------------------
-  // De wapens
-  // ---------------------------------------------------------------------------------------------
-
-  // Hoeveel wapens er in het dorp zijn: in de schuur, van de wapenmaker.
-  T.wapensInHetDorp = function (D) {
-    return Math.floor(((D.voorraad && D.voorraad.wapens) || 0) + 1e-9);
-  };
-
-  // Bij een aanval (js/rovers.js): zoveel mannen van de militie als er wapens zijn, hebben er een. Geeft hoeveel.
-  T.bewapen = function (D, militie) {
-    const n = T.wapensInHetDorp(D);
-    militie.forEach((e, i) => {
-      e.gewapend = i < n;
-    });
-    return Math.min(n, militie.length);
   };
 })(globalThis.Spel = globalThis.Spel || {});

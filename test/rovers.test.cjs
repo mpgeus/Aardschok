@@ -319,3 +319,19 @@ test('de bende en een aanval gaan mee in een bewaard spel', () => {
   assert.equal(S2.dorp.rovers.aanval.fase, A.fase);
   for (const e of S2.dorp.rovers.aanval.rovers) assert.ok(S2.wereld.wezens.includes(e), 'een rover in de aanval is dezelfde als op de kaart');
 });
+
+// De wapens blijven (ronde 2 van het snoeien, 12 okt; Marcel: "h ja wapens blijven ook voor later"); tot dan stond deze
+// toets bij de ondernemers.
+test('wie van de militie een wapen heeft, slaat harder', () => {
+  const S = gehucht();
+  const D = S.dorp;
+  T.zetVoorraad(D, 'wapens', 1);
+  const a = {};
+  const b = {};
+  assert.equal(T.bewapen(D, [a, b]), 1);
+  assert.ok(a.gewapend && !b.gewapend);
+  const extra = T.ROVERS_INSTELLINGEN.wapens.schade;
+  assert.deepEqual(T.slagSchade(a), T.SLAAN.schade.map((n) => n + extra));
+  assert.deepEqual(T.slagSchade(b), T.SLAAN.schade);
+  assert.deepEqual(T.slagSchade(S.schout), T.SLAAN.schade, 'de schout zelf niet');
+});

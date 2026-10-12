@@ -43,6 +43,9 @@
     kansAkkerKapot: 0.3,
     // Hoe dicht een man van de militie bij de schout moet staan om mee te vechten.
     militieBij: 12,
+    // Wie van de militie een wapen heeft, slaat zoveel harder (T.slagSchade, js/gevecht.js; tot ronde 2 van het snoeien,
+    // 12 okt, in js/ondernemers.js; Marcel: "h ja wapens blijven ook voor later").
+    wapens: { schade: 2 },
   };
   const IN = () => T.ROVERS_INSTELLINGEN;
 
@@ -117,6 +120,20 @@
 
   // Wie in het wachthuis werkt, en wie van de heervaart terugkwam (js/heervaart.js; Marcel, 29 sep, vraag 60, B: ook
   // zonder wachthuis), met zijn poppetje. Wie nog weg is, of nog onderweg naar huis, vecht niet mee.
+  // Hoeveel wapens er in het dorp zijn: in de schuur.
+  T.wapensInHetDorp = function (D) {
+    return Math.floor(((D.voorraad && D.voorraad.wapens) || 0) + 1e-9);
+  };
+
+  // Bij een aanval: zoveel mannen van de militie als er wapens zijn, hebben er een. Geeft hoeveel.
+  T.bewapen = function (D, militie) {
+    const n = T.wapensInHetDorp(D);
+    militie.forEach((e, i) => {
+      e.gewapend = i < n;
+    });
+    return Math.min(n, militie.length);
+  };
+
   T.militieVan = (D) =>
     (D.bewoners ? D.bewoners.mensen : [])
       .filter((p) => ((p.werk && p.werk.soort === 'wachthuis') || p.veteraan) && !p.weg && !p.komt && p.wezen && !p.wezen.dood)
