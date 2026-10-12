@@ -154,6 +154,23 @@ waard"):
   grootte`, `maker`, `schermen`, `tekenmeting` en `samenvatting` hetzelfde dorp zien als de toetsen.
 - Gezien onderweg: in het lege begin komt er nooit vee (`opmerkingen.md`); een gat voor B.
 
+**Stap 6: af** (12 okt, sessie `claude/gallant-faraday-d5617b`):
+- **6a, de marktplek:** zoals in het plan. De maker kiest hem na het land (`T.zoekMarktPlek`, buiten de tegels van het
+  kamp; een ruimere rand om het kamp liet op de meeste eilanden geen plek), en hij staat in `w.markt`. Op twintig
+  eilanden minstens twee rijen van drie; past er dan minder dan `beginTegels`, dan komt de markt toch (er moet één kraam
+  passen) en komen de andere langs de weg, zoals wanneer hij meegroeit. Opslaan naar versie 7.
+- **6b, het dorp dat er al was:** de maker (2170 naar zo'n 1290 regels; het lege land op twaalf eilanden byte voor byte
+  gelijk, want waar weggehaalde code een toevalsgetal trok, trekt hij het nog), `opEiland` en het land zonder eiland,
+  `T.zetBestaandeGebouwen` en wat een kaart aan gebouwen, akkers, boeren bij hun huis, voorraad en bevolking meebracht,
+  de gezinnen die de kaart in een huis zette, boer1 tot boer5 en de herbergierster, en de namen van de vijf boeren in de
+  spelregels (`T.NAAM_OPTIES` is alleen nog de heer). De waard doet wat de herbergierster deed: het gesprek, 's avonds de
+  tap, de tap op een feest, geen praatje 's avonds. Het proefdorp staat in het spel (`T.proefdorp` in `js/begin.js`,
+  `Spel.debug.proefdorp`), en `npm run grootte`, `schermen`, `tekenmeting` en `samenvatting` spelen erop (het bulkbouwen
+  van `grootte` vraagt niet naar het bouwbereik). Twee agents zetten de toetsen om en snoeiden de maker; weg zijn alleen
+  toetsen die niets anders toetsten dan het oude dorp.
+- **Slaapt:** de meent (een kaart kan hem nog leggen, en het vee leest hem; geen kaart heeft er een), tot het vee een begin
+  heeft. **Gezien:** de natuur ligt vaak buiten het bouwbereik, en de samenvatting is oud (`opmerkingen.md`).
+
 **De kaart voor stap 2 tot 5** (een agent, 12 okt; regelnummers van toen, dus zoek op de naam):
 - **Verzoeken** (`js/verzoeken.js`, 440 regels; `VERZOEKEN_INSTELLINGEN.mensen`, de spelregel "Wie bouwt"): aangeroepen uit
   `js/voorvallen.js` (de voorvallen bouwverzoek, wapenverzoek en herbergverzoek, met `T.beginBouwverzoek`,

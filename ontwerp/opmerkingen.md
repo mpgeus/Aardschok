@@ -990,9 +990,20 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   alleen op de weide of de meent die de kaart legt, en het lege begin legt er geen; de marskramer die vee verkoopt, is er
   nog niet (`js/vee.js`, bovenaan). Dus komt er nooit een koe of schaap, en geen melk, kaas of wol (dus geen laken voor de
   weverij). Met het dorp dat er al was gaat ook de laatste meent weg. Een gat voor B: de kar brengt een paar dieren mee,
-  of de marskramer verkoopt ze, of de boer krijgt vee als hij een weide legt; Marcel kiest.
+  of de marskramer verkoopt ze, of de boer krijgt vee als hij een weide legt; Marcel kiest. Tot dan slaapt de meent: een
+  kaart kan er nog een leggen (`"meent"` in `js/kaart.js`), en `js/vee.js`, `js/bewoners.js`, `js/hud.js` en het hek om de
+  schapen (`T.hekOmDeSchapen`, `js/beesten.js`) lezen hem, maar geen kaart heeft er een. Ook zegt het spel als de wolven
+  een schaap pakken "The wolves have taken a sheep from the common.", ook als het van een weide was.
 - **Het plein achter het bos** (12 okt, bij de marktplek): op eiland 9 (`?kaart=gehucht` met het vaste toeval) vallen de
   kruinen van het bos vóór het plein (naar de camera) over een groot deel van het plein, zodat je het kamp en de
   marktplek half tussen de bomen ziet. De maker houdt alleen de eiken op het plein uit de voorkant (`eikenTot`), en de
   marktplek telt alleen bomen binnen zes tegels van het plein als ze iets afdekken (`T.zoekMarktPlek`, "zicht"). Voor
   het beeld (B2 of `beeld.md`): een strook zonder hoge bomen vóór het plein, of de doorkijk (`js/doorkijk.js`) ook daar.
+- **De natuur buiten het bouwbereik** (12 okt, stap 6 van ronde 2; agent A zag het bij het omzetten van de toetsen): in
+  het lege begin liggen de rotsen en het water op veel eilanden verder dan 16 tegels van het plein (het bouwbereik,
+  `T.BEGIN_INSTELLINGEN.bouwBereik`), dus kan daar geen steengroeve, visser of rietsnijder staan tot er een opslag in de
+  buurt is. `test/natuur.test.cjs` zet het bereik daarom op 120. Een spelvraag (B2, of het bereik), geen fout.
+- **De samenvatting is oud** (12 okt): `gereedschap/samenvatting/samenvatting.html` (en dus
+  `ontwerp/het-spel-in-het-kort.pdf`) beschrijft nog het spel van vóór 11 okt: de inwoners die vragen, de erven, de
+  oproepen, de ondernemers en de herbergierster. `npm run samenvatting -- --beelden` speelt sinds stap 6 op het
+  proefdorp, maar draaide nog niet; de tekst moet eerst opnieuw, met de richting van 11 okt (`gameloop.md`).

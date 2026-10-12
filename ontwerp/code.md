@@ -313,13 +313,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   per tegel de hoogte, de streek (`T.EILAND_STREKEN`: het water, strand en duinen, en de zes van de landkaart), de weg en
   de bomen, uit het nummer en de schets; een stuk is hetzelfde hoe je het ook vraagt, zodat het spel later het land maakt
   aan de rand van de mist. Alleen optellen, vermenigvuldigen, delen en wortels (een toets kijkt het na), zodat elke
-  browser hetzelfde eiland maakt. **Je dorp op het eiland** (stap 2a, Marcel: "C dorp dat er al was", en "Het eiland wordt
-  gewoon altijd gegenereerd bij een nieuw spel"): elk nieuw spel maakt het eiland (`T.MAKER_INSTELLINGEN.opEiland`; alleen een
-  toets of `npm run grootte` zet het uit, en dan legt de maker het gehucht dat er al was), en je land is het stuk ervan
-  om jouw dorp:
+  browser hetzelfde eiland maakt. **Je dorp op het eiland** (stap 2a, Marcel: "Het eiland wordt gewoon altijd gegenereerd bij
+  een nieuw spel"): elk nieuw spel maakt het eiland, en je land is het stuk ervan om jouw dorp:
   `T.landVanEiland(E, plek, b, h)` geeft de maker de streek per tegel en per hoekpunt, de bomen en waar de wegen het land
-  verlaten, en `T.eilandVan(zaad)` onthoudt het laatste eiland. De maker (`js/maker.js`, met `land`) legt het gehucht erop
-  als een dorp dat er al was; de kaart onthoudt waar hij ligt (`w.eiland`). **Het eiland om je land** (stap 2b): buiten
+  verlaten, en `T.eilandVan(zaad)` onthoudt het laatste eiland. De maker (`js/maker.js`) legt het lege land erop; de kaart
+  onthoudt waar hij ligt (`w.eiland`). (Tot ronde 2 van het snoeien, stap 6, legde hij er een dorp dat er al was, en
+  zonder `opEiland` een land zonder eiland.) **Het eiland om je land** (stap 2b): buiten
   de kaart loopt het eiland door, met de regels van de maker (`T.randVanHetEiland(w)` in `js/maker.js`, één keer per kaart,
   niet in `Spel.S`; `T.grondVanStreek`), en `js/tekenen.js` tekent het als het land en het bos om de kaart. **De grond
   van het eiland** (B van 2a): de zee, het strand, het veen en het broek hebben eigen tegels (`tegels/kust.png`, uit
@@ -331,24 +330,25 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 ### js/maker.js: de maker
 
-- `js/maker.js`: **de maker, elk spel een ander land** (vraag 69 en 70, 30 sep; sinds 4 okt de standaard, 100 bij 100,
-  met natuur, vraag 112): `T.maakGehucht(zaad)` legt een plan uit dezelfde delen als het ontworpen gehucht (het plein als
-  hart, de schout erachter, de herberg en hutten eromheen, vijf boerderijen met hun akkers aan de buitenkant, samen 209
-  tegels, de heide met de kooi, de weg met het bruggetje), met een bosrand met inhammen, bosjes, struiken, vijvers,
-  rotsen en ondergroei; een huis houdt het looppad en achter zich zijn dak vrij (`erfRand`, `dakRand`). Hij keurt het
-  zelf (`T.keurGehucht`) en probeert het anders tot het deugt; `T.kaartVanGehucht(plan)` maakt er een kaart met
-  betekenisbestand van, zoals Tiled en `gereedschap/wereld.html` ze maken (de grondtegels uit de groep van de
-  rand-tegels: "gras over zandpad: boven+rechts"), en `T.laadGemaaktGehucht` leest het in met `T.laadKaart`. Welk land
-  een nieuw spel krijgt, zegt `T.landVoorNieuwSpel` (`js/gebied.js`; een nummer van vijf cijfers, in het menu bij Nieuw
-  spel); `T.beginOpKaart(S, 'gehucht', zaad)` legt het, met het lege begin erop (met `leeg` uit, alleen voor de
-  toetsen, het gehucht dat er al was). Het zaad van het dorp is hetzelfde nummer (`D.lot.zaad`). Het gehucht
-  blijft `'gehucht'` heten, zodat alles wat het ontworpen gehucht kent, ook hier werkt; `w.maker` zegt uit welk zaad
-  het komt. **Op het eiland** (`land`, vraag 117, stap 2a): het water, het bos, de heide, het zand, de rotsen en de wegen
-  komen van het eiland (`js/eiland.js`), en het gehucht is een dorp dat er al was: eerst de huizen om het plein, dan de
-  weg van het eiland ernaartoe (`wegenOpEiland`: A\* om het water en de huizen heen, met rechte bruggetjes, `plan.bruggen`),
-  dan de boerderijen, akkers en de meent (liever op open land en de heide), en pas dan het bos van het eiland, met een
-  gerooide kern (`eilandKern`); lukt het op jouw plek niet, dan op die van een ander dorp (`gehuchtOpEiland`). Zonder
-  `land` legt hij byte voor byte wat hij altijd legde. **Wat er ligt, doet ertoe:** een houthakker bij het bos, een steengroeve bij de rotsen, een visser en een
+- `js/maker.js`: **de maker, elk spel een ander land** (vraag 69 en 70, 30 sep; 100 bij 100, vraag 112; sinds ronde 2 van
+  het snoeien, stap 6, 12 okt, alleen het lege land: Marcel, "Alles wordt door spelers geplaatst"): op het eiland
+  (`js/eiland.js`) komen het water, het bos, de heide, het zand, de rotsen en de wegen van het eiland, en de maker legt er
+  de open plek voor het plein bij (`leegRand`), de plek van het kamp op het plein (`kamp`: het vuur, een tent per gezin en
+  de kar; js/begin.js zet het op), de plek van de marskramer en de heer, en een paar eiken op het plein (niet aan de
+  voorkant, `eikenTot`, want daar komt de markt). Hij keurt het zelf (`T.keurGehucht`: kom je overal, staat er niets op
+  het plein dat er niet hoort) en probeert het anders tot het deugt. `T.maakGehucht(zaad, land, pogingen)` legt het plan
+  op een stuk van het eiland, `T.planOpEiland(zaad)` kiest het stuk (jouw plek, anders die van een ander dorp),
+  `T.kaartVanGehucht(plan)` maakt er een kaart met betekenisbestand van, zoals Tiled en `gereedschap/wereld.html` ze
+  maken (de grondtegels uit de groep van de rand-tegels: "gras over zandpad: boven+rechts"), en `T.laadGemaaktGehucht(zaad)`
+  leest het in met `T.laadKaart`, met de marktplek erbij (`w.markt`, `T.zoekMarktPlek` in `js/markt.js`). Welk land een
+  nieuw spel krijgt, zegt `T.landVoorNieuwSpel` (`js/gebied.js`; een nummer van vijf cijfers, in het menu bij Nieuw
+  spel); `T.beginOpKaart(S, 'gehucht', zaad)` legt het, met het lege begin erop. Het zaad van het dorp is hetzelfde
+  nummer (`D.lot.zaad`); de kaart heet `'gehucht'`, en `w.maker` zegt uit welk zaad hij komt. Waar de weg het land in
+  komt, legt `wegenOpEiland` (A\* om het water heen, met rechte bruggetjes, `plan.bruggen`). **Hetzelfde zaad, hetzelfde
+  land:** tot stap 6 legde de maker ook het dorp dat er al was (de huizen, vijf boerderijen met hun akkers, de meent, de
+  put en de bank) en een land zonder eiland; bij het weghalen bleef het lege land op twaalf eilanden byte voor byte
+  gelijk, want waar weggehaalde code een toevalsgetal trok, trekt de maker het nog. `npm run maker` schetst het lege land
+  (`gereedschap/maker/schets.cjs`). **Wat er ligt, doet ertoe:** een houthakker bij het bos, een steengroeve bij de rotsen, een visser en een
   rietsnijder aan het water (`bij` in `T.GEBOUWEN`, `T.natuurBij` in `js/gebouwen.js`). Wat plat op de
   grond ligt (niet vast, laag), tekent `js/tekenen.js` in de buffer van de grond (`isPlat`), en het maakt plaats voor
   een gebouw.
@@ -581,8 +581,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   **Wie geen naam hoeft te hebben, staat er niet in:** `{ x, y, zaad: 7 }` is menigte.
   **`T.WEZENS` gaat over wat een wezen ís** — wat vecht, met hoeveel levenspunten, wat in code
   wordt neergezet — en een dorpeling is dat niet. Daar staan alleen de schout en de monsters.
-  Er staan ook mensen in `mensen.js` zonder plek op een kaart (de smid, de herbergierster, de
-  molenaar, ...): voor als het gehucht een dorp wordt. Wie over de weg komt en op geen kaart staat
+  Er staan ook mensen in `mensen.js` zonder plek op een kaart (de smid, de molenaar, ...): voor als het gehucht een
+  dorp wordt. (Tot ronde 2 van het snoeien, stap 6, ook de vijf boeren en de herbergierster van het gehucht dat er al
+  was.) Wie over de weg komt en op geen kaart staat
   (de heer, de marskramer), heeft `bezoeker: true`.
 
 ### js/bewoners.js: wie er woont en waar hij werkt
@@ -796,8 +797,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   een werkplaats nodig heeft, `maakt.in`, en wie dat maakt: "de bakkerij heeft geen meel, bouw een molen [B]"). Met een put, een
   kapel, de herberg of een markt in de hand zie je de kring (`js/tekenen.js`) en zegt de muis wie hij bereikt
   (`T.kringTekst`). **Doorgroeien per huis** (2b, in `js/behoeften.js`): heeft een huis een maand op rij alles, dan
-  groeit het door naar de volgende stand, als de bouwstof er is (`bouwstof`: een huis hout, een stenen huis steen), ook
-  de woningen van het begin (`T.zetBestaandeGebouwen` geeft ze hun tekening als voorwerp), en het rijst op in de laatste
+  groeit het door naar de volgende stand, als de bouwstof er is (`bouwstof`: een huis hout, een stenen huis steen), en het rijst op in de laatste
   bouwfasen terwijl zijn mensen erin blijven wonen (alleen het voorwerp is `inAanbouw`, `groeiVanafFase`; G, vraag 114).
   Staat er alleen iets te rooien waar het groter wordt, dan rooit het gezin dat eerst (`T.groeiRooiPlan`,
   `T.rooiOmTeGroeien` in `js/bos.js`, `g.groeitNaRooien`), en anders zegt het briefje waarom (`T.waaromGroeitHetNiet`;
@@ -848,13 +848,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   en wie er was, maakt het dorp tevredener), en de lantaarn 's avonds (`T.herbergLicht`). Het brouwen is
   gewoon werk van het gebouw (`T.GEBOUWEN.herberg.maakt`), tot er genoeg ligt, zoals elke werkplaats die iets omzet
   (`T.maaktTot` in `js/gebouwen.js`, vraag 91, b), boven het bier dat ze apart houdt voor de huizen tot de oogst
-  (`T.bierApart`, `T.dagenTotDeOogst` in `js/akkers.js`; vraag 102, b): de gasten drinken wat erboven ligt. In het gehucht
-  staat hij vanaf het begin, en de herbergierster woont er. In de herberg wordt gepraat: de herbergierster vertelt jou
-  wie er zat, en de marskramer logeert er (`T.logiesAnker`). 's Avonds branden de ramen van de herberg,
+  (`T.bierApart`, `T.dagenTotDeOogst` in `js/akkers.js`; vraag 102, b): de gasten drinken wat erboven ligt. De mensen
+  bouwen hem zelf, en wie er werkt, is de waard (sinds ronde 2 van het snoeien, stap 6; tot dan woonde de herbergierster
+  erin): hij staat 's avonds achter de tap (`T.herbergAnker`) en op een feest aan de tap (`T.feestAnker`), en met hem
+  praat je over wie er zat (het gesprek `waard`, `js/verkennen.js`). De marskramer logeert er (`T.logiesAnker`). 's Avonds branden de ramen van de herberg,
   met de gasten erachter als schimmen: de huizenbouwer geeft per huis door waar de ramen zitten (`ramen`
   in `tegels.json`), en `js/tekenen.js` tekent ze zo dat wat ervoor staat ze afdekt (`brandendeRamen`). Er kan een
   tweede herberg komen (je bouwt hem zelf; tot ronde 2 van het snoeien vroeg een ondernemer erom): `T.herbergenVan` geeft ze allemaal, `T.herbergVan` de eerste
-  (waar de herbergierster woont en de marskramer logeert), en wie 's avonds gaat, gaat naar de dichtste
+  (waar de marskramer logeert), en wie 's avonds gaat, gaat naar de dichtste
   (`T.herbergVanGast`). De grote herberg, van twee lagen (`T.isDorpsVorm` in `js/bouwstijl.js`), trekt meer gasten:
   de kans dat iemand gaat, maal `groteHerberg` (vraag 133).
 

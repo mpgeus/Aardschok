@@ -14,15 +14,19 @@ onderwerp, niet hier. Wie aan een punt begint, zet er "**Bezig in sessie `<branc
 drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **B, 1c tot 1e zijn af** (11
 okt): het bouwmenu, verhuizen uit het kamp, het bouwbereik, het huis van de schout, meebouwen, bouwen in het bos, en
 boeren uit het niets (de boerderij, de velden die jij legt, wijn is eten). **Het spel is Engels** (11 okt, G). **B, 1f
-is af** (12 okt): de kolonist speelt het lege begin op vijf eilanden een jaar zonder fouten. **A, ronde 2, stap 1 tot
-5 zijn af** (12 okt), op de spelregel "De markt" na: de verzoeken, de ondernemers, de erven en het ontginnen zijn weg;
-"Leeg" is het enige begin, het ontworpen gehucht is weg, een boer is de man op een boerderij (het lot en de karakters
-zijn weg), en alleen de kolonist speelt nog in de speeltest. De toetsen spelen op een proefdorp (`test/grond.cjs`).
-**Het volgende** is het slot van ronde 2 (A, stap 6; Marcel koos op 12 okt): het dorp dat er al was gaat weg, en het
-plein krijgt plekken voor de markt. **Bezig in sessie `claude/gallant-faraday-d5617b`** (12 okt): het plan voor Marcel.
-Dan de wijnboerderij als eigen gebouw (B1, vraag 155), het hele eiland (B2), de afwisseling (B3), en ronde 3 na C.
+is af** (12 okt): de kolonist speelt het lege begin op vijf eilanden een jaar zonder fouten. **Ronde 2 van het
+snoeien is af** (A, 12 okt, stap 1 tot 6): de verzoeken, de ondernemers, de erven en het ontginnen zijn weg; "Leeg" is
+het enige begin, een boer is de man op een boerderij, alleen de kolonist speelt nog in de speeltest; het plein heeft
+een vaste marktplek (de spelregel "De markt" is weg), en de maker legt alleen nog het lege land: alles bouwt de speler.
+De toetsen en het gereedschap spelen op het proefdorp (`T.proefdorp`, `Spel.debug.proefdorp`). **Het volgende** is de
+wijnboerderij als eigen gebouw (B1, vraag 155), het hele eiland (B2), de afwisseling (B3), en ronde 3 na C.
 
 **Wacht op Marcel:**
+- **De marktplek bekijken** (stap 6a): Nieuw spel, en het bouwmenu (B): de marktplek ligt in zacht goud op het plein; met
+  de markt in de hand (vanaf een dorp) licht hij groen op, en een huis mag er niet tegenaan.
+- **Drie gaten die stap 6 liet zien** (`opmerkingen.md`): in het lege begin komt er nooit vee (geen melk, kaas of wol); de
+  rotsen en het water liggen vaak buiten het bouwbereik (geen steengroeve, visser of rietsnijder); en de samenvatting
+  (`het-spel-in-het-kort.pdf`) beschrijft nog het spel van vóór 11 okt.
 - **1c tot 1e bekijken:** Nieuw spel (of in de console `Spel.debug.begin(2)`). Is het kamp op, open dan het bouwmenu (B): het bouwbereik gloeit op de grond. Zet het huis van de schout neer, ook in het bos (de bouwers rooien eerst, en het hout
   komt in de voorraad), en een hut op open grond: wie geen werk heeft, loopt erheen en bouwt. Is de hut af, dan trekt
   er een gezin in; is het huis af, dan verhuist de schout en wordt de huifkar de ossenkar. Zet een boerderij neer en kies
@@ -62,9 +66,9 @@ ronden, want een deel hangt aan het oude begin of aan de proef:
    wat blijft; de verzoeken, de ondernemers, de erven en het ontginnen weg, met "Wie bouwt" en "Huizen"; de wijnboerderij
    blijft, vraag 155). **Stap 3 tot 5 zijn af** (12 okt; Marcel: "B: lege begin met een proefdorp", en stap 4 "nu mee"):
    "Leeg" is het enige begin, het ontworpen gehucht is weg, het lot en de karakters zijn weg (een boer is de man op een
-   boerderij), en alleen de kolonist speelt nog in de speeltest. **Stap 6** (Marcel, 12 okt: "Alles wordt door spelers geplaatst",
-   en "Plein krijgt plaatsen"): het dorp dat er al was gaat weg, ook voor de andere dorpen op het eiland, en het plein van
-   het lege begin krijgt vaste plekken voor de markt; de spelregel "De markt" gaat dan weg (`snoeien.md`, "Stap 6").
+   boerderij), en alleen de kolonist speelt nog in de speeltest. **Stap 6 is af** (12 okt; Marcel: "Alles wordt door spelers
+   geplaatst", en "Plein krijgt plaatsen"): het dorp dat er al was is weg, ook voor de andere dorpen op het eiland, en het
+   plein heeft een vaste marktplek; de spelregel "De markt" is weg (`snoeien.md`, "Stap 6"). **Ronde 2 is af.**
 3. **Ronde 3, na C:** wat de proef moet uitwijzen (`gameloop.md`, "Open"): de voorvallen, de raad, de raadsman, het
    rapport, de wensen per stand en de treden, de wetten, de feesten.
 
@@ -142,6 +146,13 @@ het graan vraagt", de schandpaal, de heervaart en de twee bazen.
   schrijven voor de nieuwe richting, als B en C er staan.
 
 ## Af (sinds 11 okt)
+
+- Ronde 2 van het snoeien, stap 6 (vraag 153; Marcel: "Alles wordt door spelers geplaatst", "Plein krijgt plaatsen", "In
+  het bouwmenu", "Naar de waard"): het plein heeft een vaste marktplek die de maker kiest (een huis blijft ervan af, en
+  hij licht op in het bouwmenu), de spelregel "De markt" is weg; de maker legt alleen nog het lege land (op twaalf
+  eilanden byte voor byte gelijk gebleven), een kaart zet geen gebouwen, akkers of voorraad meer, de vijf boeren en de
+  herbergierster zijn weg, en wat de herbergierster deed (het gesprek, de tap), doet de waard. Het proefdorp staat in het
+  spel, en het gereedschap speelt erop. `snoeien.md`, "Stap 6".
 
 - Ronde 2 van het snoeien, stap 3 tot 5 (vraag 153; Marcel: "B: lege begin met een proefdorp", "Ja, nu mee", "e Mag weg",
   "f alle vier weg", "g weg"): "Leeg" is het enige begin, het ontworpen gehucht is weg, een boer is de man op een

@@ -81,9 +81,10 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   vier beelden in `gereedschap/samenvatting/beelden/` (alle drie in git); `-- --beelden` speelt eerst het spel en maakt
   de beelden opnieuw, elk uit een vers spel op land 5 van de maker (een minuut). Lukt een beeld niet meer, dan zegt het
   waar het vastliep, en blijft het oude staan.
-- `npm run maker` legt gehuchten met de maker (`js/maker.js`, `T.maakGehucht(zaad)`: elk spel een ander gehucht, vraag
-  69 en 70) en tekent ze als plattegrond naast het ontworpen gehucht, in `gereedschap/maker/uit/` (niet in git);
-  `-- 7 12` voor andere zaden.
+- `npm run maker` legt het land van een paar eilanden met de maker (`js/maker.js`, `T.planOpEiland(zaad)`: elk spel een
+  ander land, vraag 69 en 70) en tekent het als plattegrond, met het plein, het kamp, de marskramer en de weg, in
+  `gereedschap/maker/uit/` (niet in git); `-- 7 12` voor andere zaden. Sinds ronde 2 van het snoeien (stap 6) zonder
+  huizen of akkers: die bouwt de speler.
 - `npm run teksten` leest elke `T.t('…')` uit `js/`, en de zinnen uit de gegevens die een bewerker terugschrijft (de
   gesprekken en de quests: `GEGEVENS` in `gereedschap/teksten.cjs`), en schrijft `taal/bron.js` (de lijst voor de vertaaltool), en zegt per taal
   in `taal/` wat ontbreekt, wat over is en wat niet past (`gereedschap/teksten.cjs`; vraag 147). Draai het na elke zin die

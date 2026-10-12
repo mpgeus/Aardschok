@@ -461,7 +461,7 @@ De spelregel "Wensen" op "Het dorp als geheel" is het spel van vóór 1 okt (de 
 letter voor letter mee zoals ervoor).
 - **Elk huis een stand, naar zijn soort.** Een stand wil wat de stand eronder wil, en meer. De boeren staan ernaast: hun
   boerderij groeit niet. Het huis van de schout en de herberg hebben geen wensen; die zijn van jou en van de
-  herbergierster.
+  waard.
 
   | Stand | Huis | Gebruikt | Wil in de buurt |
   |---|---|---|---|
@@ -1291,7 +1291,7 @@ viert het hele dorp het op het plein.
   louwmaand; elke avond branden zijn kaarsjes (`T.feestLicht`), en op kerstavond (24 wintermaand) viert het dorp de avond
   om de boom. Komt het ja na kerstavond, dan vanavond. De datums en het licht in `T.FEESTEN_INSTELLINGEN.kerstboom`.
 - **Op het feest** staat het hele dorp rond het midden van het plein, elk op zijn eigen plek in een kring van vijf
-  tegels, de kinderen wat ruimer; de herbergierster tapt naast het midden. 's Avonds brandt er licht op het plein
+  tegels, de kinderen wat ruimer; de waard (wie in de herberg werkt) tapt naast het midden. 's Avonds brandt er licht op het plein
   (`T.feestLicht`, zoals de lantaarns), en niemand gaat die avond naar de herberg. De schout kan erbij gaan staan; dat
   doet nog niets. Het rapport van de raadsman zegt de ochtend erna dat het dorp feest vierde.
 - **De spelregel "Feesten"** op "Alleen de stemming" is een feest wat het vóór 3 okt was: een prijs en een stemming. De
@@ -3653,8 +3653,9 @@ wordt gepraat:
   alles terug, dan is het verhaal niet meer waar. Een dorp zonder herberg hoort het toch wel, zoals
   vroeger. Bij de kelder zegt de muis "vertelt het in de herberg", of "heeft in de herberg al verteld wat
   hier ligt".
-- **De herbergierster vertelt je wie er gisteravond aan de tap zat,** en of de roddelaar over zijn kelder
-  praatte, of dat de herberg droog stond (haar gesprek in `js/gesprekken.js`; de vlaggen herbergGasten,
+- **De waard vertelt je wie er gisteravond aan de tap zat,** en of de herberg droog stond (zijn gesprek `waard` in
+  `js/gesprekken.js`; tot ronde 2 van het snoeien deed de herbergierster het, die in het gehucht dat er al was in de
+  herberg woonde; de vlaggen herbergGasten,
   herbergRoddel en herbergDroog zet `js/herberg.js` elke nacht). Zo weet je het op tijd, en kun je het
   graan nog verplaatsen vóór Sint-Maarten.
 - **Een zin kan een naam noemen:** `{woord}` in een zin vult het spel in (`T.GESPREK_WOORDEN`,

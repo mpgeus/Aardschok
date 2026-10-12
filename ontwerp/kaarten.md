@@ -42,13 +42,14 @@ komen, en daarna elk blaadje schildert. Het is één landschap; de schets zie je
 
 **Je dorp op het eiland (stap 2a, 8 okt; Marcel: "A ja B later C dorp dat er al was", en "Het eiland wordt gewoon altijd
 gegenereerd bij een nieuw spel"):** elk nieuw spel maakt het eiland, en je land van 100 bij 100 is het stuk van het eiland
-om jouw dorp (alleen een toets of `npm run grootte` zet het uit, `T.MAKER_INSTELLINGEN.opEiland`; de spelregel "Je
-gehucht" is weg sinds ronde 2 van het snoeien, stap 3). `T.landVanEiland(E, plek, b, h)` geeft
+om jouw dorp (de spelregel "Je gehucht" is weg sinds ronde 2 van het snoeien, stap 3, en het land zonder eiland,
+`opEiland`, sinds stap 6). `T.landVanEiland(E, plek, b, h)` geeft
 de maker per tegel en per hoekpunt de streek, de bomen en waar de wegen van het eiland het land verlaten (die naar het
 kasteel is de uitgang); `T.eilandVan(zaad)` onthoudt het laatste eiland, want het is uit het nummer te maken. De maker
-legt het gehucht erop zoals altijd, maar als een dorp dat er al was: eerst de huizen om het plein, dan de weg ernaartoe
-(A\* om het water en de huizen heen, met een recht bruggetje over smal water), dan de boerderijen en akkers (liever op open
-land) en de meent (liever op de heide), en pas dan het bos van het eiland, met een gerooide kern om het plein. De grond
+legt er het lege land op (sinds ronde 2 van het snoeien, stap 6; Marcel: "Alles wordt door spelers geplaatst"): de open
+plek voor het plein met de plek van het kamp, en de weg ernaartoe (A\* om het water heen, met een recht bruggetje over
+smal water), in het bos van het eiland. Tot dan legde hij er een dorp dat er al was: huizen om het plein, boerderijen met
+akkers en een meent. De grond
 komt van de streek (`T.grondVanStreek`; sinds B van 2a met eigen tegels, hieronder). Een kaart van het eiland onthoudt waar hij ligt (`w.eiland`: het nummer en
 de hoek van je land op het eiland). Lukt het gehucht op jouw plek niet, dan op die van een ander dorp.
 
@@ -76,7 +77,7 @@ water, de zee, een weg en de kasseien wijken nooit. Waar drie soorten in één t
 (een rivier die in zee loopt), wordt het er een met twee of één (`T.grondTegelHoeken`). De rand om de kaart doet
 hetzelfde, maar de kaart wijkt daar niet: kan wat naast de kaart ligt niet aan de zee grenzen, dan wijkt de zee ervoor
 (hooguit twee hoekpunten). **Op zand wordt niet gebouwd** (Marcel: "zand is geen solide basis"; `T.waaromNietOpDezeGrond`):
-geen huis, erf of akker; waar een huis van het dorp dat er al was met zijn erf op zand stond, ligt gras. De zee is water
+geen huis of akker. De zee is water
 (`T.isWaterGrond`): niet te belopen, de visser vist er, en ze ligt vlak met het andere water. Het veen en het broek zijn
 als gras (er groeit wat op gras groeit). Een land van de maker zonder het eiland blijft tegel voor tegel hetzelfde.
 
@@ -145,7 +146,7 @@ het plusje *Eigenschap toevoegen*, soort *string*):
 | Eigenschap | Waarde | Wat het doet |
 |---|---|---|
 | `wezen` | `wolf`, `reuzenspin`, `kobold`, ... | er staat hier een wezen (de lijst is `T.WEZENS` in `js/wereld.js`) |
-| `wezen` | `smid`, `herbergierster`, `boer`, `boerin`, `dorpsoudste`, `oudeman`, `smidsvrouw`, `bruid`, `bruidegom`, `jongen`, `meisje`, `kleuter` | een dorpeling met een naam; hij dwaalt rond waar je hem neerzet (met `straal` kies je hoe ver) |
+| `wezen` | `smid`, `boer`, `boerin`, `dorpsoudste`, `oudeman`, `smidsvrouw`, `bruid`, `bruidegom`, `jongen`, `meisje`, `kleuter` | een dorpeling met een naam; hij dwaalt rond waar je hem neerzet (met `straal` kies je hoe ver) |
 | `wezen` | `bakker`, `marskramer` | de twee van De koude oven. Ze zijn nog niet getekend en lenen tot fase B2b het vel van Wim, dus ze lopen wel, maar ze zien er als Wim uit |
 | `straal` | een getal | hoe ver het rondloopt |
 | `quest` | `bakker:zoeken` | dit voorwerp ligt er alleen zolang die quest in die fase staat (meer fasen mag: `bakker:zoeken,terug`). Zo ligt de leem pas in de kuil als de bakker erom vroeg. Het voorwerp mag niet vast zijn |
