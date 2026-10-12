@@ -67,9 +67,17 @@ Mee in elke ronde: het commentaar in de code dat "zie CLAUDE.md" zegt (een stuk 
 Het plan staat in het archief bij vraag 152; 1a (optie 1), 1b (het lege land), 1c (het kamp, met het bouwmenu), 1d
 (binnen bereik, en met handen) en 1e (boeren uit het niets) zijn af; hoe het nu werkt: `spel.md`, "Zo werkt het lege
 begin nu".
-- **1f, een jaar zonder fouten:** **Bezig in sessie `ccr-abaf0226-9lnbtq`** (12 okt): het plan, wacht op Marcel. Een
+- **1f, een jaar zonder fouten:** **Bezig in sessie `ccr-abaf0226-9lnbtq`** (12 okt): de kolonist bouwen. Een
   toets speelt een jaar vanaf een lege plek, met een speler in code die bouwt. Dan is "Leeg" het enige begin, en volgt
-  ronde 2 van A.
+  ronde 2 van A. **Het plan (Claude, 12 okt), met wat Marcel koos ("a1, b1, c1, d ja"):** de kolonist, een speler in
+  code die het lege begin speelt met de handelingen van het bouwmenu; elke dag loopt hij zijn regels af: het huis van de
+  schout, een boerderij met akkers vóór 1 mei, een houthakker als het hout laag wordt, hutten tot het kamp leeg is, en
+  een tweede veld als het graan de winter niet haalt (d ja). Hij speelt in de speeltest (`npm run speeltest --
+  kolonist`, vijf eilanden) én in een korte toets in `npm test`, met dezelfde keuzes uit één bestand (a1). "Zonder
+  fouten" is dat niets vastloopt (geen fout, niemand in een tent in de winter, geen bouwplaats die stilstaat, niemand
+  vast); het eten meten we, en wat scheef is, stellen we met Marcel bij met een getal uit de werkbank (b1). De grens
+  van 10 mensen (`EINDE_INSTELLINGEN.minstensOver`; met 17 begin je 7 erboven) eerst meten, dan kiezen (c1). Is het
+  groen, dan wordt "Leeg" de standaard, en spelen de oude spelers het oude begin tot ronde 2.
 
 ## B2. Het hele eiland (vraag 117, stap 3)
 

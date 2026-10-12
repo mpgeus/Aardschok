@@ -9,6 +9,10 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **De kolonist als brein van een ander dorp** (12 okt, een idee van Claude bij vraag 152, 1f; niet nu): de kolonist van
+  de speeltest (`gereedschap/speeltest/kolonist.js`) kiest uit dezelfde handelingen als het bouwmenu. Zo kan hij later
+  het brein zijn van de andere dorpen op het eiland (F, "erop uit"), zoals CLAUDE.md het wil: wat een ander dorp
+  beslist, kiest het uit dezelfde handelingen als een mens in zijn plaats.
 - **Het lege begin na 1c** (11 okt, vraag 152, 1c): het venster Spelregels laat bij "Huizen" en "Wie bouwt" nog hun eigen
   keuze zien, terwijl "Leeg" ze op "Jij" zet; dat gaat weg in ronde 2 van het snoeien, als die twee spelregels eruit gaan.
 - **Na het Engels, wat opviel** (11 okt, vraag 147, stap 2). Na te lopen:
