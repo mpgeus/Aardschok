@@ -9,6 +9,15 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Het eerste jaar van de kolonist, wat opviel** (12 okt, vraag 152, 1f; de speeltest staat in `speelbaar.md`). Na te
+  lopen:
+  - De houthakker werkt in het eerste jaar 5 tot 12 dagen zonder dat het spel zegt waarom (`werkt niet` in de tabel
+    "Het eerste jaar"). In een toets zonder beelden werkt hij nooit: wie nog naar zijn huis onderweg is (`p.komt`), telt
+    de hele dag als onderweg (`T.werkUrenVan`), en zonder lopen komt niemand aan.
+  - Een boer die na een voorjaar met honger een akker wei maakt (`weideErbij` in `js/akkers.js`), telt de akkers van
+    het lege begin als van één boer: ze hebben geen `huis`, alleen een `boerderij`. In een proef zonder beelden (dezelfde
+    stappen als de toets) werd zo een akker van de enige boerderij wei, terwijl er geen koe is; in de speeltest gebeurde
+    het niet.
 - **De kolonist als brein van een ander dorp** (12 okt, een idee van Claude bij vraag 152, 1f; niet nu): de kolonist van
   de speeltest (`gereedschap/speeltest/kolonist.js`) kiest uit dezelfde handelingen als het bouwmenu. Zo kan hij later
   het brein zijn van de andere dorpen op het eiland (F, "erop uit"), zoals CLAUDE.md het wil: wat een ander dorp

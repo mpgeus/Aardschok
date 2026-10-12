@@ -153,6 +153,39 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 12 okt: de kolonist, het eerste jaar vanaf een lege plek (werklijst B, 1f)
+
+`npm run speeltest -- kolonist --zaden 1-5`, op `66f6b0d` (branch `ccr-abaf0226-9lnbtq`; het spel van `bbae6d2`): de
+kolonist (`gereedschap/speeltest/kolonist.js`) speelt het lege begin op vijf eilanden, met de regels die Marcel koos
+("d ja"). Ervoor, als nulmeting, de brave speler die niets bouwt (eiland 2): 6 doden van honger, en op 19 januari streept
+de heer het dorp door, met nog 9 mensen (de grens van 10, `EINDE_INSTELLINGEN.minstensOver`).
+
+**Loopt er iets vast (b1)? Nee:** nul fouten in de console, op alle vijf het jaar uit. Alles wat hij neerzet, is binnen
+19 dagen af (het huis van de schout op dag 5 of 6, de boerderij en de akkers op dag 5 tot 10, de laatste hut op dag 13 tot
+19); het kamp is leeg op dag 13 tot 19, niemand woont in de winter in een tent, niemand blijft onderweg. Een bouwplaats
+staat soms tot 13 dagen stil, maar dat is de rij: de bouwers werken in de volgorde waarin je neerzette, hooguit vier per
+plaats. De houthakker werkt 5 tot 12 dagen niet zonder dat het spel zegt waarom; dat is nog na te lopen
+(`opmerkingen.md`).
+
+**Wat wel scheef is, voor Marcel (b1: met een getal uit de werkbank):**
+- **Het eten haalt het jaar niet.** Zestig akkertegels (al het zaaigraan uit de kar) geven zo'n 240 graan; 17 mensen eten
+  er 306 per jaar (0,05 per dag). Op vier van de vijf eilanden 24 tot 31 dagen honger in juni en juli (het laagste graan
+  voor de oogst is 3 tot 21), en op 1 lentemaand van het jaar erna is het graan op alle vijf 0 tot 10: geen zaaigraan voor het tweede jaar.
+  Niemand stierf van honger. Het spel raadt zelf een jager aan ("a hunter shoots 1 meat a day"; 8 hout, geen goud), maar
+  die staat niet in de regels van de kolonist.
+- **Geen plek voor een tweede boerderij** (regel 5, na de oogst) op eiland 3, 4 en 5, 21 tot 52 dagen lang. Niet door het
+  bouwbereik: de regel van 10 okt "Wijn haalt kapel" (`T.waaromGeenKringPlek`, vraag 136) laat een gebouw met een gezin
+  alleen toe waar het later een kapel binnen 40 tegels kan halen, en rond het plein is daar na een paar maanden geen
+  ruimte meer voor. Zonder die regel past een boerderij op alle drie binnen 12 tegels.
+- **Goud:** de kar brengt 20, het huis van de schout, de boerderij en de houthakker kosten er 14, en de voorvallen nemen
+  of geven er een paar; een tweede boerderij (6) wacht 8 tot 60 dagen op goud, en op eiland 1 komt ze nooit.
+- **Hout:** rooien in het bos geeft op vier van de vijf eilanden 1.000 tot 2.800 hout in het eerste jaar (een boom is 10
+  hout; vraag 152, 1d, a1: "na 1f meten we of het te veel is"). Het is te veel.
+- **De voorvallen:** 40 tot 55 in het eerste jaar, een keuze per minuut op 30×; ze horen bij ronde 3 van het snoeien.
+- **"Leeg" als standaard** (de laatste stap van het plan): in een losse kopie worden dan 53 van de 1155 toetsen rood,
+  allemaal over het oude begin (de erven, de verzoeken, de ondernemers, het gehucht op het eiland met 26 mensen). Dat is
+  het werk van ronde 2.
+
 ## De speeltest van 10 okt, avond: wijn haalt kapel (werklijst, vraag 136)
 
 `npm run speeltest -- bouwer sluw --jaren 4 --eiland --tegelijk 3`, op `877bdda` (branch `ccr-ff71f25d-flpbkd`), in een

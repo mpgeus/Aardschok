@@ -8,16 +8,23 @@ vraagnummer tot 153 dat elders genoemd wordt, vind je daar. Nieuwe punten tellen
 Houd deze lijst kort: wat af is, gaat eruit (één regel onder "Af"), en het hoe staat in het ontwerpbestand van het
 onderwerp, niet hier. Wie aan een punt begint, zet er "**Bezig in sessie `<branch>`** (datum)" bij, in `main` (CLAUDE.md).
 
-## Nu en daarna (11 okt)
+## Nu en daarna (12 okt)
 
 **Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en
 drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **B, 1c tot 1e zijn af** (11
 okt): het bouwmenu, verhuizen uit het kamp, het bouwbereik, het huis van de schout, meebouwen, bouwen in het bos, en
-boeren uit het niets (de boerderij, de velden die jij legt, wijn is eten). **Het spel is Engels** (11 okt, G). **Het
-volgende punt is B, 1f: een jaar zonder fouten.** Ronde 2 van het snoeien volgt na 1f, dan het hele eiland (B2), de
-afwisseling (B3), en ronde 3 na C.
+boeren uit het niets (de boerderij, de velden die jij legt, wijn is eten). **Het spel is Engels** (11 okt, G). **B, 1f
+loopt** (12 okt): de kolonist speelt het lege begin op vijf eilanden een jaar zonder fouten; wat scheef is, wacht op
+Marcel (hieronder). Ronde 2 van het snoeien volgt na 1f, dan het hele eiland (B2), de afwisseling (B3), en ronde 3 na C.
 
 **Wacht op Marcel:**
+- **1f, wat de kolonist vond** (12 okt; `speelbaar.md`, "De speeltest van 12 okt"): niets loopt vast, maar (a) het eten
+  haalt het jaar niet (honger in juni en juli, en in de lente geen zaaigraan voor jaar 2): eerst de kolonist een jager
+  laten bouwen als het spel zegt dat het eten de winter niet haalt (het raadt het zelf aan), of meteen een getal (graan
+  in de kar, graan per tegel)? (b) De regel "Wijn haalt kapel" houdt in het lege begin een tweede boerderij tegen (op 3
+  van 5 eilanden): in het lege begin uit, of eruit in ronde 2? (c) Rooien geeft 1.000 tot 2.800 hout in het eerste jaar:
+  minder hout per gerooide boom? (d) "Leeg" als standaard maakt 53 toetsen van het oude begin rood: als eerste stap van
+  ronde 2? De grens van 10 mensen (c1) beet niet: met de kolonist stierf niemand van honger.
 - **1c tot 1e bekijken:** Spelregels, "Het begin" op "Leeg", en dan Nieuw spel (of in de console
   `Spel.debug.begin('leeg', 2)`). Is het kamp op, open dan het bouwmenu (B): het bouwbereik gloeit op de grond. Zet het huis van de schout neer, ook in het bos (de bouwers rooien eerst, en het hout
   komt in de voorraad), en een hut op open grond: wie geen werk heeft, loopt erheen en bouwt. Is de hut af, dan trekt
@@ -67,7 +74,8 @@ Mee in elke ronde: het commentaar in de code dat "zie CLAUDE.md" zegt (een stuk 
 Het plan staat in het archief bij vraag 152; 1a (optie 1), 1b (het lege land), 1c (het kamp, met het bouwmenu), 1d
 (binnen bereik, en met handen) en 1e (boeren uit het niets) zijn af; hoe het nu werkt: `spel.md`, "Zo werkt het lege
 begin nu".
-- **1f, een jaar zonder fouten:** **Bezig in sessie `ccr-abaf0226-9lnbtq`** (12 okt): de kolonist bouwen. Een
+- **1f, een jaar zonder fouten:** **Bezig in sessie `ccr-abaf0226-9lnbtq`** (12 okt): de kolonist is er, en speelt op
+  vijf eilanden een jaar zonder fouten; wacht op Marcel (bovenaan, "Wacht op Marcel"). Een
   toets speelt een jaar vanaf een lege plek, met een speler in code die bouwt. Dan is "Leeg" het enige begin, en volgt
   ronde 2 van A. **Het plan (Claude, 12 okt), met wat Marcel koos ("a1, b1, c1, d ja"):** de kolonist, een speler in
   code die het lege begin speelt met de handelingen van het bouwmenu; elke dag loopt hij zijn regels af: het huis van de

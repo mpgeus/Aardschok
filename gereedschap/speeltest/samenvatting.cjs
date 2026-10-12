@@ -205,15 +205,22 @@ function hetBos(goed) {
 // eten en het hout meten we. Twee tabellen: wat er vastliep (speler.js, eersteJaar), en het eten en het hout.
 function hetEersteJaar(goed) {
   if (!goed.length) return [];
-  const uit = ['## Het eerste jaar: loopt er iets vast?', '', 'Wat de kolonist neerzette en op welke dag het af was (het langst dat het werk aan een bouwplaats stilstond, tussen haakjes, als het meer dan een dag was); wat hij wilde maar niet kon; hoeveel dagen hij wachtte tot hij iets kon betalen; op welke dag het kamp leeg was; wie er op 1 wintermaand nog in een tent woonde; wie na een dag nog naar zijn huis onderweg was (het langst, in dagen); en welke werkplaats af was maar niet werkte zonder dat het spel zei waarom (dagen).', ''];
+  const uit = ['## Het eerste jaar: loopt er iets vast?', '', 'Wat de kolonist neerzette en op welke dag het af was (het langst dat het werk aan een bouwplaats stilstond, tussen haakjes, als het meer dan een dag was); wat hij wilde maar niet kon (op hoeveel dagen, en vanaf welke); hoeveel dagen hij wachtte tot hij iets kon betalen; op welke dag het kamp leeg was; wie er op 1 wintermaand nog in een tent woonde; wie na een dag nog naar zijn huis onderweg was (het langst, in dagen); en welke werkplaats af was maar niet werkte zonder dat het spel zei waarom (dagen).', ''];
   const kop = ['speler', 'zaad', 'einde', 'af op dag', 'niet gelukt', 'wachtte (dagen)', 'kamp leeg op', 'in een tent', 'onderweg', 'werkt niet'];
   uit.push(regel(kop), regel(kop.map(() => '---')));
   for (const u of goed) {
     const E = u.eersteJaar;
     const af = E.gebouwd.map((g) => `${g.soort} ${g.af}${g.stil > 1 ? ` (${g.stil})` : ''}`);
-    const niet = (u.gebouwd || []).filter((g) => !g.gelukt).map((g) => `${g.soort} op ${Math.floor(g.dag)}: ${g.reden}`);
+    // Wat niet lukte, één keer per soort en reden: hij probeert het elke dag opnieuw.
+    const niet = [];
+    for (const g of (u.gebouwd || []).filter((x) => !x.gelukt)) {
+      const n = niet.find((x) => x.soort === g.soort && x.reden === g.reden);
+      if (n) n.dagen++;
+      else niet.push({ soort: g.soort, reden: g.reden, van: Math.floor(g.dag), dagen: 1 });
+    }
     uit.push(regel([
-      NAMEN[u.speler] || u.speler, u.zaad, u.eind.tekst, af.join(', ') || 'niets', niet.join('; ') || '',
+      NAMEN[u.speler] || u.speler, u.zaad, u.eind.tekst, af.join(', ') || 'niets',
+      niet.map((n) => `${n.soort}: ${n.reden} (${n.dagen} ${n.dagen === 1 ? 'dag' : 'dagen'}, vanaf ${n.van})`).join('; '),
       Object.entries(E.wacht || {}).map(([soort, w]) => `${soort} ${w.dagen} (${w.op})`).join(', '),
       E.kampLeeg == null ? 'nooit' : String(E.kampLeeg), E.inTent == null ? '' : String(E.inTent),
       E.onderweg.map((o) => `${o.naam} ${o.dagen}`).join(', '), E.werktNiet.map((w) => `${w.soort} ${w.dagen}`).join(', '),
