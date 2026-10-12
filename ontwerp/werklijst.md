@@ -24,7 +24,10 @@ Marcel (hieronder). Ronde 2 van het snoeien volgt na 1f, dan het hele eiland (B2
   in de kar, graan per tegel)? (b) De regel "Wijn haalt kapel" houdt in het lege begin een tweede boerderij tegen (op 3
   van 5 eilanden): in het lege begin uit, of eruit in ronde 2? (c) Rooien geeft 1.000 tot 2.800 hout in het eerste jaar:
   minder hout per gerooide boom? (d) "Leeg" als standaard maakt 53 toetsen van het oude begin rood: als eerste stap van
-  ronde 2? De grens van 10 mensen (c1) beet niet: met de kolonist stierf niemand van honger.
+  ronde 2? De grens van 10 mensen (c1) beet niet: met de kolonist stierf niemand van honger. **Marcel koos (12 okt): "a
+  ja, b uit, c ja, d ja"**: de kolonist bouwt een jager als het spel zegt dat het eten niet haalt, en dan meten we
+  opnieuw; de regel "Wijn haalt kapel" geldt in het lege begin niet; een gerooide boom geeft minder hout (een eigen getal
+  in de werkbank); en "Leeg" als standaard is de eerste stap van ronde 2. **Bezig in sessie `ccr-abaf0226-9lnbtq`**.
 - **1c tot 1e bekijken:** Spelregels, "Het begin" op "Leeg", en dan Nieuw spel (of in de console
   `Spel.debug.begin('leeg', 2)`). Is het kamp op, open dan het bouwmenu (B): het bouwbereik gloeit op de grond. Zet het huis van de schout neer, ook in het bos (de bouwers rooien eerst, en het hout
   komt in de voorraad), en een hut op open grond: wie geen werk heeft, loopt erheen en bouwt. Is de hut af, dan trekt
