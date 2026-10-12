@@ -208,7 +208,7 @@
 
   // De raden, van wat het zwaarst weegt naar wat het minst weegt. `als(S)` zegt of hij nu geldt, `tekst(S)` wat er
   // dan staat. Wat aan een dag hangt, gaat voor; dan de winter; dan de eerste dag; dan een vol dorp; dan de wensen
-  // (vraag 87); dan het doel en de groei.
+  // (vraag 87); dan de wijn een jaar vooruit (vraag 155); dan het doel en de groei.
   T.RADEN = [
     // Twee bazen (js/bazen.js; werklijst vraag 106): staat een van de twee onder de grens, dan gaat dat voor alles.
     {
@@ -323,6 +323,22 @@
       id: 'wens',
       als: (D) => !!watNuHelpt(D, 'wens'),
       tekst: (D) => wensTekst(D, watNuHelpt(D, 'wens')),
+    },
+    {
+      // De wijn (js/wijngaard.js, T.wijnNaDePluk; werklijst vraag 136 en 155; Marcel, 10 okt: "Laten we vooruitkijken
+      // doen"): is er een wijnboerderij en haalt wat er bij de pluk ligt plus de pluk het jaar niet, dan moet er een
+      // wijngaard bij. Is er geen wijnboerderij, dan zeggen de wensen dat er een bij moet (T.watDeHuizenMissen). Na de
+      // wensen: een jaar vooruit kijken, dus het wacht op wat er nu mist.
+      id: 'wijn',
+      als: (D) => heeft(D, 'wijnboerderij') && !T.wijnNaDePluk(D, D.kalender.dag).haalt,
+      tekst: (D) => {
+        const v = T.wijnNaDePluk(D, D.kalender.dag);
+        const woorden = { dagen: v.dagen, jaar: v.winter, boerderij: naamVan('wijnboerderij') };
+        const nog = (D.wereld.wijngaarden || []).length || D.gebouwen.some((g) => g.soort === 'wijngaard');
+        return nog
+          ? T.t('The wine from the harvest lasts {dagen} of the year\'s {jaar} days: lay another vineyard [B] by the {boerderij}.', woorden)
+          : T.t('The wine from the harvest lasts {dagen} of the year\'s {jaar} days: lay a vineyard [B] by the {boerderij}.', woorden);
+      },
     },
     {
       // Wat je mist voor wat het doel vraagt, en waar het vandaan komt (werklijst vraag 59, C; Marcel, 1 okt, vraag 78:

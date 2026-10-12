@@ -1024,9 +1024,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`T.wijnBinnen`, `wijnPerRank`). `T.werkVeldwerkBij` loopt ook als er alleen een wijngaard is en geen akker (tot 12 okt
   ging het alleen met een akker op de kaart: een dorp met alleen een wijnboerderij plukte nooit; gevonden in de browser).
   **Het dorp kijkt vooruit** (`T.wijnNaDePluk`, met `T.haaltDeWinter`): haalt wat er bij de pluk nog ligt plus de pluk het
-  jaar niet (de ranken die nog hangen en die van een wijngaard in aanleg, min wat de heer wil)? Niemand zegt het nog (het
-  slaapt tot de raad het weer zegt). Is er geen wijnboerderij, dan zeggen de wensen dat er een bij moet (`js/wensen.js`).
-  De getallen in `T.WIJNGAARD_INSTELLINGEN`.
+  jaar niet (de ranken die nog hangen en die van een wijngaard in aanleg, min wat de heer wil)? Is er dan een
+  wijnboerderij, dan zegt de raad dat er een wijngaard bij moet (`wijn` in `T.RADEN`, `js/raad.js`); is er geen, dan zeggen
+  de wensen dat er een wijnboerderij bij moet (`js/wensen.js`). De getallen in `T.WIJNGAARD_INSTELLINGEN`.
 
 ## Voorraad en handel
 
@@ -1112,7 +1112,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`[B]` wordt een toets): de eerste uit `T.RADEN` die nu geldt (`T.raadNu`). Hij vraagt het aan de regels zelf: of er
   een gezin komt aan de groei (`T.waaromGeenGezin` en `T.volgendeGezinDag` in `js/gebouwen.js`), het hout en het eten
   aan de winter, wat de huizen missen aan de wensen (`T.watDeHuizenMissen`, vóór het doel; vraag 87), en wat je mist voor
-  wat het doel vraagt aan de treden (`T.doelGebouwen`), met waar het vandaan komt. Na de laatste trede is er geen doel
+  wat het doel vraagt aan de treden (`T.doelGebouwen`), met waar het vandaan komt. Is er een wijnboerderij en haalt de wijn
+  het jaar na de pluk niet (`T.wijnNaDePluk`, `js/wijngaard.js`), dan zegt hij dat er een wijngaard bij moet (`wijn`: na de
+  wensen, voor het doel; vraag 155). Na de laatste trede is er geen doel
   meer (het winnen is op 11 okt weggehaald, `js/einde.js`), dus telt hij geen mensen meer. Haalt het eten de winter niet, dan zegt hij wat helpt (`T.watHelptAanEten`, vraag
   133, b: een visser per dertig mensen, een jager als er herten zijn, een graanschuur, meer weide, zaaigraan
   kopen), en vraagt het dorp het gebouw dat hij noemt. Na een voorjaar met honger maakt een boer zelf een veld weide

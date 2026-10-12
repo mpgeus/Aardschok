@@ -1163,6 +1163,8 @@ Spel.TAAL_BRON = [
   {"t":"A day is long: [+] speeds up time, and [Z] sleeps until morning.","waar":["js/raad.js"]},
   {"t":"An advisor brings you a report every morning: choose one [R].","waar":["js/raad.js"]},
   {"t":"No family is coming: the village is full. Build {hut} or {huis}: [B].","waar":["js/raad.js"]},
+  {"t":"The wine from the harvest lasts {dagen} of the year's {jaar} days: lay another vineyard [B] by the {boerderij}.","waar":["js/raad.js"]},
+  {"t":"The wine from the harvest lasts {dagen} of the year's {jaar} days: lay a vineyard [B] by the {boerderij}.","waar":["js/raad.js"]},
   {"t":"the {gebouw}","waar":["js/raad.js"]},
   {"t":"For {wat} you are short of {lijst}: {bronnen}.","waar":["js/raad.js"]},
   {"t":"No family is coming: the village is {nu}% content, and a family wants {drempel}%.","waar":["js/raad.js"]},

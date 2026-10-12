@@ -1890,7 +1890,9 @@ Nog open na deel 1 (vragen van Claude):
   **Het dorp kijkt vooruit** (10 okt; Marcel: "Laten we vooruitkijken doen"), zoals bij het hout en het eten voor de
   winter: wat er bij de volgende pluk nog ligt, plus de pluk zelf, min de wijn voor de heer, moet een jaar halen. Haalt
   het dat niet, dan vroeg een inwoner een wijnboerderij erbij, zodat ze er voor wijnmaand stond; daarvoor vroeg het dorp
-  er pas een als de wijn al op was, en kwam ze na de pluk. Sinds ronde 2 van het snoeien vraagt niemand het meer.
+  er pas een als de wijn al op was, en kwam ze na de pluk. Sinds 12 okt (vraag 155, nu er geen inwoners meer vragen) zegt
+  de raad het: is er een wijnboerderij en haalt de wijn het jaar niet, dan staat er onder het doel dat er een wijngaard
+  bij moet ("The wine from the harvest lasts 120 of the year's 360 days: lay another vineyard [B] by the vineyard farm").
   De heer wil voor een wijnboerderij 10 wijn. Geen vaten (de kuiper blijft zonder nut, vraag 135); wijngaarden op de
   zonkant van een heuvel misschien later.
   **Sinds later op 8 okt** (Marcel: "Dat je de boeren ziet plukken, volle en lege ranken", en "Alles telt pas als het

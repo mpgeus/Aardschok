@@ -324,6 +324,35 @@ function naEenNacht(S, dag) {
   return S;
 }
 
+// De wijn (js/wijngaard.js, T.wijnNaDePluk; werklijst vraag 155; Marcel, 10 okt: "Laten we vooruitkijken doen"): is er een
+// wijnboerderij en haalt de wijn het jaar niet, dan zegt de raad dat er een wijngaard bij moet.
+test('de wijn: is er een wijnboerderij en haalt de wijn het jaar niet, dan moet er een wijngaard bij', () => zonderWensen(() => {
+  const S = metRaadsman(opDag(dorp({ gebouwen: ['huis', 'wijnboerderij'] }), 40.5));
+  const D = S.dorp;
+  const wijnboerderij = D.gebouwen.find((g) => g.soort === 'wijnboerderij');
+  assert.ok(wijnboerderij && wijnboerderij.klaar, 'de wijnboerderij staat');
+  // Het huis is een stenen huis met alle mensen erin: zij willen wijn.
+  const huis = D.gebouwen.find((g) => g.soort === 'huis');
+  huis.soort = 'stenenHuis';
+  for (const p of D.bewoners.mensen) p.huis = huis;
+  assert.ok(T.wijnNaDePluk(D, S.kalender.dag).drinken > 0);
+  assert.equal(id(S), 'wijn', 'zonder wijngaard haalt de wijn het jaar niet');
+  assert.equal(raad(S).tekst, "The wine from the harvest lasts 0 of the year's 360 days: lay a vineyard [B] by the vineyard farm.");
+  // Plant de bouwers een wijngaard, die genoeg ranken geeft, dan zegt hij niets meer.
+  const aanleg = { soort: 'wijngaard', x: 0, y: 0, voet: { b: 8, h: 5 }, klaar: false, boerderij: wijnboerderij };
+  D.gebouwen.push(aanleg);
+  assert.notEqual(id(S), 'wijn', 'de wijngaard in aanleg telt mee');
+  // Een kleine wijngaard haalt het jaar voor zoveel mensen niet: nog een.
+  aanleg.voet = { b: 2, h: 6 };
+  const v = T.wijnNaDePluk(D, S.kalender.dag);
+  assert.ok(!v.haalt && v.dagen > 0, `${v.dagen} van de ${v.winter} dagen`);
+  assert.equal(id(S), 'wijn');
+  assert.equal(raad(S).tekst, `The wine from the harvest lasts ${v.dagen} of the year's ${v.winter} days: lay another vineyard [B] by the vineyard farm.`);
+  // Een wijnboerderij die er niet is, kan geen wijngaard krijgen: dan zeggen de wensen dat er een bij moet (js/wensen.js).
+  D.gebouwen.splice(D.gebouwen.indexOf(wijnboerderij), 1);
+  assert.notEqual(id(S), 'wijn');
+}));
+
 test('de wensen: na een nacht zegt de raad wat de meeste mensen missen, met de toets, vóór het doel en de groei', () => {
   const S = metRaadsman(opDag(dorpMetHuis(), 40.5));
   assert.equal(id(S), 'gezin', 'vóór de eerste nacht weet het dorp het nog niet');
