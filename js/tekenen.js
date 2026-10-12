@@ -482,6 +482,7 @@
       tekenRaster(ctx, S);
       tekenMarkeringen(ctx, S);
       tekenBouwBereik(ctx, S, vak);
+      tekenMarktPlek(ctx, S);
       tekenRooiPlaatsen(ctx, S);
       tekenBouwSpook(ctx, S);
     }
@@ -1797,6 +1798,21 @@
     });
   }
 
+  // De marktplek op het plein (js/markt.js; ronde 2 van het snoeien, stap 6; Marcel, 12 okt: "In het bouwmenu"), zolang
+  // het bouwmenu open is of je bouwt, en er nog geen markt staat: in zacht goud, zoals een plek waar iets komt, zodat je
+  // ziet waar de kramen komen en waarom een huis er niet tegenaan mag. Met de markt in de hand is hij het gebouw aan de
+  // muis (tekenBouwSpook).
+  function tekenMarktPlek(ctx, S) {
+    const D = S.dorp;
+    if (!(S.bouwSoort || S.bouwMenuOpen) || S.bouwSoort === 'markt' || !D || D.gebouwen.some((g) => g.soort === 'markt')) return;
+    ctx.fillStyle = 'rgba(226, 182, 74, 0.38)';
+    for (const t of T.marktTegels(D.wereld)) {
+      const p = opGrond(t.x, t.y);
+      T.ruit(ctx, p.x, p.y, 0.94);
+      ctx.fill();
+    }
+  }
+
   // Een bouwplaats van het lege begin die de bouwers nog rooien (js/bouwen.js): het gebouw staat nog niet op de kaart, dus
   // ligt zijn voet er in goud, zoals de plek van een verzoek, zodat je ziet waar het komt.
   function tekenRooiPlaatsen(ctx, S) {
@@ -1825,9 +1841,18 @@
     // De voet van de tekening die dit gebouw echt krijgt (T.volgendeTekening, js/gebouwen.js), of de rechthoek van het veld
     // dat je trekt (js/main.js, js/boerderij.js).
     const veld = S.bouwHover.veld;
+    ctx.fillStyle = S.bouwHover.ok ? 'rgba(134, 196, 111, 0.45)' : 'rgba(224, 96, 79, 0.45)';
+    // De markt komt op zijn plek op het plein, waar je ook wijst (js/markt.js): die plek licht op.
+    if (S.bouwSoort === 'markt') {
+      for (const t of T.marktTegels(S.dorp.wereld)) {
+        const p = opGrond(t.x, t.y);
+        T.ruit(ctx, p.x, p.y, 0.94);
+        ctx.fill();
+      }
+      return;
+    }
     const voet = veld || T.gebouwVoet(S.bouwSoort, T.volgendeTekening(S.dorp, S.bouwSoort));
     if (!voet) return;
-    ctx.fillStyle = S.bouwHover.ok ? 'rgba(134, 196, 111, 0.45)' : 'rgba(224, 96, 79, 0.45)';
     for (let dy = 0; dy < voet.h; dy++) {
       for (let dx = 0; dx < voet.b; dx++) {
         const p = opGrond(S.bouwHover.x + dx, S.bouwHover.y + dy);

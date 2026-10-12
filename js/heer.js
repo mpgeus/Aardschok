@@ -481,10 +481,10 @@
   // recht eronder), met zijn rug tegen de paal.
   const VOOR_DE_PAAL = { dx: 1, dy: 1 };
 
-  // Mag hier de paal, of iemand die eraan staat? Begaanbaar, en niet in een akker.
+  // Mag hier de paal, of iemand die eraan staat? Begaanbaar, niet in een akker, en niet op de marktplek (js/markt.js).
   function vrijOpHetPlein(w, x, y) {
     if (!w.tegels || !T.isBegaanbaar) return true;
-    if (!T.isBegaanbaar(w, x, y)) return false;
+    if (!T.isBegaanbaar(w, x, y) || T.opDeMarktPlek(w, x, y)) return false;
     return !(w.akkers || []).some((a) => x >= a.x && x < a.x + a.b && y >= a.y && y < a.y + a.h);
   }
 

@@ -822,17 +822,23 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 ### js/markt.js: de markt op het plein
 
 - `js/markt.js`: **de markt op het plein, die meegroeit** (vraag 110, d, en vraag 127, 6 okt; Marcel: "Grotere stad =
-  grotere markt"): met de spelregel "De markt" op "Op het plein" (`T.MARKT_INSTELLINGEN.opHetPlein`) komt een markt niet
-  als gebouw van 6 bij 6, maar als een marktblok op het plein: twee rijen kramen tegenover elkaar met een looppad
-  ertussen en een mand naast elke kraam (`T.marktBlok`: het grootste open stuk buiten het feest, `T.feestMidden`, en weg
-  van de heer, dat niemand tegenhoudt). Hij komt zoals elk gebouw (uit het bouwmenu): `T.plekVoor`,
-  `T.waaromPastHetNiet` en `T.plaatsGebouw` vragen het hier (`T.marktPlek`, `T.zetMarktOpHetPlein`). Elke nacht
-  (`T.tikMarktDag`) komt er een kraam bij tot er een per 15 mensen is (`T.kramenNodig`), eerst in het blok (`g.blok`),
-  dan langs de weg vanaf het plein (`T.straatPlek`, de marktstraat); en een kraam ligt vol als het dorp zijn waar heeft
-  (`T.heeftWaar`, `waren`), anders leeg. De markt staat in `D.gebouwen` met `opHetPlein`, `kramen`, `manden` en `blok`
-  (voorwerpen `kraam`, met `waar` en `leeg`, en `mand`, met `wat`), zonder voet, op het midden van het plein
-  (`T.marktMidden`). Wat hij kost, zegt `T.GEBOUWEN.markt.kosten`, naar de spelregel. De kramen per waar en de manden:
-  `gereedschap/pixelart/marktkraam.cjs` (`T.sprites.kraam(waar, leeg, richting)`, `T.sprites.mand(naam)`).
+  grotere markt"; de marktplek sinds 12 okt, ronde 2 van het snoeien, stap 6: "Plein krijgt plaatsen"): een markt is
+  geen gebouw met een voet, maar kramen op de **marktplek** van het plein: twee rijen tegenover elkaar met een looppad
+  ertussen en een mand naast elke kraam. De maker kiest die plek als hij het land legt (`T.zoekMarktPlek(w)`, vanuit
+  `T.laadGemaaktGehucht` in `js/maker.js`: het grootste open stuk buiten het feest, `T.feestMidden`, het kamp, de eiken en
+  weg van de heer, dat niemand tegenhoudt), en zet hem in de kaart (`w.markt`, `{ rijen }`; bewaard met de wereld).
+  `T.marktBlok(D)` geeft die rijen leeg terug, `T.marktTegels(w)` en `T.opDeMarktPlek(w, x, y)` de tegels (de rijen en het
+  looppad). Een gebouw blijft er `vrij` tegels vandaan (`T.waaromNietBijDeMarkt`, vanuit `T.waaromPastHetNiet` in
+  `js/gebouwen.js`), de schandpaal komt er niet op (`vrijOpHetPlein` in `js/heer.js`), en `js/tekenen.js` laat hem
+  oplichten als het bouwmenu open is (`tekenMarktPlek`, en `tekenBouwSpook` met de markt in de hand). Hij komt zoals elk
+  gebouw (uit het bouwmenu): `T.plekVoor`, `T.waaromPastHetNiet` en `T.plaatsGebouw` vragen het hier (`T.marktPlek`,
+  `T.waaromGeenMarktOpHetPlein`, `T.zetMarktOpHetPlein`). Elke nacht (`T.tikMarktDag`) komt er een kraam bij tot er een
+  tegel toonbank per 10 mensen is (`T.tegelsNodig`), eerst op de marktplek (`g.blok`), dan langs de weg vanaf het plein
+  (`T.straatPlek`, de marktstraat); en een kraam ligt vol als het dorp zijn waar heeft (`T.heeftWaar`, `waren`), anders
+  leeg. De markt staat in `D.gebouwen` met `opHetPlein`, `kramen`, `manden` en `blok` (voorwerpen `kraam`, met `waar` en
+  `leeg`, en `mand`, met `wat`), zonder voet, op het midden van het plein (`T.marktMidden`). Hij kost wat
+  `T.GEBOUWEN.markt.kosten` zegt (8 hout en 6 goud). De kramen per waar en de manden: `gereedschap/pixelart/marktkraam.cjs`
+  (`T.sprites.kraam(waar, leeg, richting)`, `T.sprites.mand(naam)`).
 
 ### js/herberg.js: de herberg
 

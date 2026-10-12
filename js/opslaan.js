@@ -42,7 +42,9 @@
     // woonruimte (g.erf) en wachtte op hout of op het rooien van zijn erf; zonder js/erven.js komt hij nooit af, en D.erven
     // leest niets meer. Ook de verzoeken en de ondernemers (stap 2a: D.verzoeken, g.meester, g.stemming) zijn weg, en het
     // ontginnen (stap 2d): veld.ontginning leest niets meer.
-    versie: 6,
+    // 7 (12 okt): het plein heeft een marktplek (ronde 2, stap 6; js/markt.js): de maker zet hem in de kaart (`w.markt`),
+    // en een oude kaart heeft er geen, dus daar kwam nooit een markt.
+    versie: 7,
     eigenPlekken: 5, // naast de ene die vanzelf gaat (vraag 48 B)
     // Op de hoogste snelheid (30×) slaat het spel niet elke ochtend vanzelf op, maar om de zoveel dagen: een dag duurt
     // dan tien seconden, en het opslaan kost bij 100 mensen 25 à 50 ms, een hapering die je ziet (gemeten op 3 okt).

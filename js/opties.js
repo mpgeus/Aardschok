@@ -477,17 +477,6 @@
           uitleg: T.t('A house wants the inn and a market within 30 tiles, like a well and a chapel within their range. A growing village then needs more of them, and there is not always room for that.') },
       ],
     },
-    // De markt (werklijst vraag 110, d; Marcel, 5 okt: "Voor nu a1, b tot e ja"; js/markt.js).
-    {
-      id: 'markt', naam: T.t('The market'), standaard: 'plein',
-      uitleg: T.t('Where the market goes: with stalls on the square, or as a building of its own on its own plot.'),
-      keuzes: [
-        { id: 'plein', naam: T.t('On the square'), zet: { 'MARKT_INSTELLINGEN.opHetPlein': true }, // geen tekst
-          uitleg: T.t('Four stalls on the edge of the square, which you walk between; the middle stays free for the feast and the lord. Stalls are not a house: 8 wood and 6 gold.') },
-        { id: 'gebouw', naam: T.t('A building of its own'), zet: { 'MARKT_INSTELLINGEN.opHetPlein': false }, // geen tekst
-          uitleg: T.t('A building of 6 by 6, with three tiles free all round, for 16 wood and 14 gold. That is how it was before 6 October.') },
-      ],
-    },
     // Achteruitgaan (werklijst vraag 85, c; Marcel, 1 okt: "c zacht"; js/behoeften.js). Alleen met de wensen per huis.
     {
       id: 'achteruit', naam: T.t('Decline'), standaard: 'zacht',
@@ -1166,6 +1155,7 @@
     kaarsSterkte: T.t('candle brightness'),
     // De markt, het eind, de verzoeken, de ondernemers
     kosten: T.t('cost'),
+    vrij: T.t('buildings keep clear by'),
     beginTegels: T.t('starting tiles'),
     perMensen: T.t('one tile per this many people'),
     rijLengte: T.t('row length'),

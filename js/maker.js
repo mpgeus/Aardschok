@@ -2165,6 +2165,7 @@
     if (plan.stijl) w.stijl = plan.stijl;
     if (plan.kamp) w.kamp = plan.kamp; // het lege begin: waar het kamp komt (js/begin.js)
     if (T.HOOGTE_INSTELLINGEN.aan) w.hoogte = T.legHoogte(plan, w); // de spelregel "Hoogte" (js/hoogte.js)
+    w.markt = T.zoekMarktPlek(w); // de marktplek op het plein (js/markt.js; Marcel, 12 okt: "Plein krijgt plaatsen")
     return w;
   };
 })(globalThis.Spel = globalThis.Spel || {});

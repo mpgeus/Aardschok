@@ -991,3 +991,8 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   nog niet (`js/vee.js`, bovenaan). Dus komt er nooit een koe of schaap, en geen melk, kaas of wol (dus geen laken voor de
   weverij). Met het dorp dat er al was gaat ook de laatste meent weg. Een gat voor B: de kar brengt een paar dieren mee,
   of de marskramer verkoopt ze, of de boer krijgt vee als hij een weide legt; Marcel kiest.
+- **Het plein achter het bos** (12 okt, bij de marktplek): op eiland 9 (`?kaart=gehucht` met het vaste toeval) vallen de
+  kruinen van het bos vóór het plein (naar de camera) over een groot deel van het plein, zodat je het kamp en de
+  marktplek half tussen de bomen ziet. De maker houdt alleen de eiken op het plein uit de voorkant (`eikenTot`), en de
+  marktplek telt alleen bomen binnen zes tegels van het plein als ze iets afdekken (`T.zoekMarktPlek`, "zicht"). Voor
+  het beeld (B2 of `beeld.md`): een strook zonder hoge bomen vóór het plein, of de doorkijk (`js/doorkijk.js`) ook daar.

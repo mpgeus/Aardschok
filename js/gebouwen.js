@@ -346,7 +346,8 @@
     // De markt en de weverij komen een trede eerder dan het marktrecht (Marcel, 2 okt, vraag 90, B): de ambachtslieden
     // willen brood, laken en een markt (js/wensen.js), en zo heeft een huis dat versteent meteen wat het wil.
     markt: {
-      naam: T.t('market'), trede: 'dorp', voet: { b: 6, h: 6 }, kosten: { hout: 16, goud: 14 }, heer: { goud: 10 }, bouwtijd: 4,
+      // kramen op de marktplek van het plein, geen huis (js/markt.js): 8 hout en 6 goud; een eigen gebouw kostte 16 en 14
+      naam: T.t('market'), trede: 'dorp', voet: { b: 6, h: 6 }, kosten: { hout: 8, goud: 6 }, heer: { goud: 10 }, bouwtijd: 4,
       handen: 1, woonruimte: 0, maakt: null, menu: true, lantaarn: true,
       tekening: 'gebouwen/dorpGroot1', beschrijving: T.t('trade with the outside; traders come'), // geen tekst
       opmerking: 'nieuw in gebouwen.tsx (de kraam bestaat als model in gereedschap/pixelart/dorp.cjs, ' // geen tekst
@@ -721,7 +722,7 @@
   // `wieErStaat` false: wie er nu staat, telt niet (die is morgen weg), voor wie vooruit kijkt (T.kanHierKomen).
   T.waaromPastHetNiet = function (D, soort, x, y, tekening, kavel = null, wieErStaat = true) {
     // De markt op het plein (js/markt.js): zijn plek is het plein, waar je ook wijst.
-    if (soort === 'markt' && T.marktOpHetPlein(D)) return T.waaromGeenMarktOpHetPlein(D);
+    if (soort === 'markt') return T.waaromGeenMarktOpHetPlein(D);
     const voet = T.gebouwVoet(soort, tekening || T.volgendeTekening(D, soort));
     const w = D.wereld;
     if (!voet || !w) return T.t('It does not fit there.');
@@ -739,6 +740,9 @@
     }
     if (vast) return T.t('It does not fit there.');
     if (reden) return reden;
+    // De marktplek (js/markt.js): er blijft een gebouw vandaan, zodat zijn deur er niet op uitkomt.
+    const markt = T.waaromNietBijDeMarkt(D, { x, y, b: voet.b, h: voet.h });
+    if (markt) return markt;
     if (T.teSteil(w, { x, y, b: voet.b, h: voet.h })) return T.t('It is too steep to build there.');
     const natuur = T.waaromNietBijDeNatuur(D, soort, { x, y, b: voet.b, h: voet.h });
     if (natuur) return natuur;
@@ -1147,7 +1151,7 @@
     const g = T.GEBOUWEN[soort];
     if (!g || g.menu === false || !nogTeBouwen(D, soort)) return { gelukt: false, reden: T.t('That cannot be built from the build menu.') };
     // De markt op het plein: kramen, geen gebouw met een voet (js/markt.js; werklijst vraag 110, d).
-    if (soort === 'markt' && T.marktOpHetPlein(D)) return T.zetMarktOpHetPlein(D);
+    if (soort === 'markt') return T.zetMarktOpHetPlein(D);
     // In het lege begin bouwen de mensen het zelf, en rooien ze eerst wat er op de plek staat (js/bouwen.js; vraag 152, 1d).
     const kavel = T.bouwKavel(D, soort, x, y);
     const past = T.waaromPastHetNiet(D, soort, x, y, null, kavel);

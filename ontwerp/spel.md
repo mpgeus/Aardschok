@@ -677,22 +677,28 @@ kan dood" (onderweg en op je kaart, ook de mannen van de heer, en iedereen kan s
 
 ## De markt op het plein, die meegroeit (Marcel, 5 en 6 okt 2026; werklijst vraag 110, d, en vraag 127)
 
-**Zo werkt het nu** (6 okt, zesendertigste sessie; `js/markt.js`; Marcel: "Voor nu a1, b tot e ja" bij 110, d, en "A ja, B
-ja, C c1 en c2, D ja, E marktdag" bij 127): de markt komt op het plein, met kramen, zonder eigen gebouw en zonder eigen
-grond, en groeit mee met het dorp ("Grotere stad = grotere markt"). In de speeltest van vier jaar (5 okt) kwam er in geen
+**Zo werkt het nu** (6 okt, zesendertigste sessie, en 12 okt, ronde 2 van het snoeien, stap 6; `js/markt.js`; Marcel: "Voor
+nu a1, b tot e ja" bij 110, d, "A ja, B ja, C c1 en c2, D ja, E marktdag" bij 127, en "Plein krijgt plaatsen" en "In het
+bouwmenu" op 12 okt): de markt komt op zijn plek op het plein, met kramen, zonder eigen gebouw en zonder eigen grond, en
+groeit mee met het dorp ("Grotere stad = grotere markt"). In de speeltest van vier jaar (5 okt) kwam er in geen
 spel een markt: een eigen gebouw van 6 bij 6 vroeg 12 bij 12 open grond, en die was op toen er goud was.
-- **Hoe hij komt (110, a1):** zoals elk gebouw: een inwoner vraagt het je (vanaf een dorp, als de stenen huizen hem
-  missen), of jij hangt een oproep op. Zijn plek is het plein ("... op het plein"); zolang hij het vraagt, liggen de
-  plekken van de eerste vier kramen in goud op de grond. Kramen zijn geen huis: 8 hout en 6 goud, in plaats van 16 en 14
-  (de werkbank, "De markt").
-- **Het marktblok (127, B):** twee rijen kramen tegenover elkaar, langs een as van de kaart, met twee tegels looppad
-  ertussen en een mand, kist, zak of ton naast elke kraam (`T.marktBlok`). Het spel zoekt een open stuk plein, tot twaalf
-  tegels per rij, buiten de kring van het feest (`T.feestMidden`, `js/feesten.js`), drie tegels van de plek van de heer,
-  niet op de plek van zijn schandpaal, twee tegels van een boom, en alleen als het niemand de weg verspert: wat je eerst
-  over het plein bereikte, bereik je nog. **Het blok dat je het best ziet, wint:** in ons beeld dekken de daken van de
-  huizen vóór het plein en de kruinen van de eiken veel af, dus het blok met de meeste tegels die niet achter een dak of
-  een kruin vallen, en dan het langste. Het blok ligt vast zodra de markt komt. Wie op de plek van een kraam staat, stapt
-  opzij. Tot de markt klaar is (vier dagen), staan de eerste kramen er bleek.
+- **Hoe hij komt (110, a1):** zoals elk gebouw, uit het bouwmenu (vanaf een dorp). Waar je ook wijst, hij komt op zijn
+  plek op het plein. Kramen zijn geen huis: 8 hout en 6 goud (een eigen gebouw kostte 16 en 14).
+- **De marktplek (stap 6 van ronde 2, 12 okt):** het plein heeft een vaste plek voor de markt, zoals het een plek heeft
+  voor de heer en de marskramer. De maker kiest hem als hij het land legt, en hij staat in de kaart (`w.markt`). Tot dan
+  zocht het spel hem pas als de markt kwam, en op het proefdorp hadden de deuren langs het plein hem op twee van de zeven
+  eilanden al genomen. Een gebouw blijft er twee tegels vandaan ("The market stalls go there."), zodat zijn deur er niet
+  op uitkomt; de schandpaal komt er niet op. Zolang het bouwmenu open is en er nog geen markt staat, ligt hij in zacht
+  goud op de grond, en met de markt in de hand licht hij groen op. Op twintig eilanden is hij minstens twee rijen van
+  drie; passen er dan minder dan 6 tegels kramen, dan komen de andere langs de weg.
+- **Het marktblok (127, B):** de marktplek is twee rijen kramen tegenover elkaar, langs een as van de kaart, met twee
+  tegels looppad ertussen en een mand, kist, zak of ton naast elke kraam (`T.zoekMarktPlek`). De maker zoekt een open
+  stuk plein, tot twaalf tegels per rij, buiten de kring van het feest (`T.feestMidden`, `js/feesten.js`), drie tegels
+  van de plek van de heer, twee tegels van een boom, niet in het kamp van het lege begin, en alleen als het niemand de
+  weg verspert: wat je eerst over het plein bereikte, bereik je nog. **Het blok dat je het best ziet, wint:** in ons beeld
+  dekken de daken en de kruinen van de eiken veel af, dus het blok met de meeste tegels die niet achter een dak of een
+  kruin vallen, en dan het langste. Wie op de plek van een kraam staat, stapt opzij. Tot de markt klaar is (vier dagen),
+  staan de eerste kramen er bleek.
 - **De kramen (127, a tot c; Marcel: "Misschien verschillende kramen? Ook in afmeting? Voornamelijk lengte", en "vormen en
   verdeling ja"):** elke kraam heeft een waar, een vorm en een lengte van één tot drie tegels, geloot uit het zaad van het
   spel naar wat bij de waar hoort (`kramen` in de werkbank, `T.kraamVoor`): groente en fruit een luifel, een kar of een
@@ -717,7 +723,8 @@ spel een markt: een eigen gebouw van 6 bij 6 vroeg 12 bij 12 open grond, en die 
   waar in `dorp.cjs`, `KRAAMWAREN` en `marktmand`).
 - De markt staat als gebouw in de lijst (`opHetPlein`, met `kramen`, `manden` en `blok`), zodat de wens van de stenen
   huizen hem telt, maar zonder voet: zijn plek is het midden van het plein.
-- **De spelregel "De markt":** "Op het plein" (de standaard) of "Een eigen gebouw", zoals tot 6 okt.
+- **De spelregel "De markt"** ("Op het plein" of "Een eigen gebouw", zoals tot 6 okt) is weg sinds 12 okt: met de
+  marktplek is een eigen gebouw geen goed antwoord meer (de afspraak van vraag 153).
 - **Nog niet (127, stap 3):** de kooplui achter de kramen en de boodschappen (D: om de paar dagen gaat iemand uit elk huis
   naar de kraam van wat het wil, en loopt met een mand terug), en de marktdag (E: door de week een paar kramen, op de
   marktdag alle, met meer volk). Later de handel met de buren (Marcel: "De markt wordt essentieel voor de handel, vanaf

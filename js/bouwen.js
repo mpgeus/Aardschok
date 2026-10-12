@@ -307,7 +307,7 @@
   function zoekPlek(D, soort, bij) {
     const w = D.wereld;
     // De markt op het plein (js/markt.js): het midden van het plein, met de kramen.
-    if (soort === 'markt' && T.marktOpHetPlein(D)) return T.marktPlek(D);
+    if (soort === 'markt') return T.marktPlek(D);
     if (heeftKring(soort)) {
       const voet = T.gebouwVoet(soort, T.volgendeTekening(D, soort)) || T.GEBOUWEN[soort].voet;
       const kring = T.kringTeller(D, soort);
