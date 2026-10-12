@@ -27,8 +27,9 @@ Marcel (hieronder). Ronde 2 van het snoeien volgt na 1f, dan het hele eiland (B2
   het eerste jaar), of laten tot F. (ii) **Het bouwbereik is na de zomer vol** op eiland 3: met 16 tegels in plaats van
   12 past er een tweede boerderij; of wachten op de schuur die bereik geeft (C, stap 3). (iii) **Ronde 2**: het voorstel
   staat in `snoeien.md` ("Ronde 2: voorstel van Claude"), met vier keuzes (e tot h), en "Leeg" als standaard in stap 3 in
-  plaats van 1, zodat 53 toetsen niet eerst omgebouwd worden en daarna weggaan. **Bezig in sessie
-  `ccr-abaf0226-9lnbtq`**.
+  plaats van 1, zodat 53 toetsen niet eerst omgebouwd worden en daarna weggaan. **Marcel koos (12 okt): "I. 3, II. Ja
+  prima, 16 tegels is goed, III. OK", en bij ronde 2 "e Mag weg, f alle vier weg, g weg, h ja wapens blijven ook voor
+  later"**: de gevechten blijven tot F, het bouwbereik wordt 16 tegels, en ronde 2 gaat zoals in `snoeien.md`.
 - **1c tot 1e bekijken:** Spelregels, "Het begin" op "Leeg", en dan Nieuw spel (of in de console
   `Spel.debug.begin('leeg', 2)`). Is het kamp op, open dan het bouwmenu (B): het bouwbereik gloeit op de grond. Zet het huis van de schout neer, ook in het bos (de bouwers rooien eerst, en het hout
   komt in de voorraad), en een hut op open grond: wie geen werk heeft, loopt erheen en bouwt. Is de hut af, dan trekt

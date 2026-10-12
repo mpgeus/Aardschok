@@ -35,7 +35,11 @@ gamedesigner (`het-spel-in-het-kort.pdf`) beschrijft nog het oude spel; dat staa
 6. **De quests** (`js/quest.js` en `js/quests.js`, met haken in `js/gesprek.js`): een raamwerk uit het oude spel, en
    de lijst is leeg. **Blijft voor nu** (Marcel).
 
-## Ronde 2: voorstel van Claude (12 okt), wacht op Marcel
+## Ronde 2: voorstel van Claude (12 okt), Marcel vinkte af
+
+**Marcel (12 okt): "III. OK", en "e Mag weg, f alle vier weg, g weg, h ja wapens blijven ook voor later".** Dus de
+volgorde hieronder (met "Leeg" als enige begin in stap 3); het ontworpen gehucht gaat ook als proefkaart weg (de toetsen
+krijgen een andere grond); alle vier de oude spelers gaan uit de speeltest; de karakters gaan weg; de wapens blijven.
 
 Na 1f (de kolonist speelt het lege begin een jaar zonder fouten). Marcel, 12 okt: "d ja": "Leeg" als standaard is de
 eerste stap. Een agent bracht in kaart wat eraan hangt; wat opviel:
