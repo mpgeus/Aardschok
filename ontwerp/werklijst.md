@@ -17,12 +17,9 @@ boeren uit het niets (de boerderij, de velden die jij legt, wijn is eten). **Het
 is af** (12 okt): de kolonist speelt het lege begin op vijf eilanden een jaar zonder fouten. **A, ronde 2, stap 1 en 2
 zijn af** (12 okt): de verzoeken, de ondernemers, de erven en het ontginnen zijn weg (de wijnboerderij blijft, vraag
 155). **Het volgende punt is A, ronde 2, stap 3** ("Leeg" is het enige begin; het plan in `snoeien.md`), dan stap 4 en
-5, het hele eiland (B2), de afwisseling (B3), en ronde 3 na C.
+5, dan de wijnboerderij als eigen gebouw (B1, vraag 155), het hele eiland (B2), de afwisseling (B3), en ronde 3 na C.
 
 **Wacht op Marcel:**
-- **De wijnboerderij als eigen gebouw** (vraag 155; Marcel, 12 okt: "ik wil tóch een apart wijnboerderij gebouw"):
-  hoe hij werkt (een eigen gebouw waarbij jij de wijngaard legt, of het oude gebouw met de wijngaard erin), en wanneer.
-  Tot dan slaapt het gebouw (`snoeien.md`, "Stap 2, het plan").
 - **1c tot 1e bekijken:** Spelregels, "Het begin" op "Leeg", en dan Nieuw spel (of in de console
   `Spel.debug.begin('leeg', 2)`). Is het kamp op, open dan het bouwmenu (B): het bouwbereik gloeit op de grond. Zet het huis van de schout neer, ook in het bos (de bouwers rooien eerst, en het hout
   komt in de voorraad), en een hut op open grond: wie geen werk heeft, loopt erheen en bouwt. Is de hut af, dan trekt
@@ -48,7 +45,7 @@ zijn af** (12 okt): de verzoeken, de ondernemers, de erven en het ontginnen zijn
 - Het geluid (vraag 145, 2): de sleutel `FREESOUND_KEY` in de omgeving en de domeinen van Freesound erbij; dan maakt een
   sessie het.
 
-**Daarna, in deze volgorde:** A, B, B2, B3, C, D, E, F; G loopt ernaast op het tijdpad van `commercieel.md`.
+**Daarna, in deze volgorde:** A, B1, B2, B3, C, D, E, F; G loopt ernaast op het tijdpad van `commercieel.md`.
 
 ## A. Opruimen (vraag 153, stap 3)
 
@@ -76,6 +73,16 @@ Mee in elke ronde: het commentaar in de code dat "zie CLAUDE.md" zegt (een stuk 
 Het plan staat in het archief bij vraag 152; 1a (optie 1), 1b (het lege land), 1c (het kamp, met het bouwmenu), 1d
 (binnen bereik, en met handen), 1e (boeren uit het niets) en 1f (een jaar zonder fouten) zijn af; hoe het nu werkt:
 `spel.md`, "Zo werkt het lege begin nu".
+
+## B1. De wijnboerderij als eigen gebouw (vraag 155)
+
+Marcel, 12 okt: "ik wil tóch een apart wijnboerderij gebouw", en op de keuze: "A, direct na ronde 2" (na stap 5 van A,
+vóór B2). **A:** een eigen gebouw "Wijnboerderij" in het bouwmenu, met de tekening die er al is
+(`gereedschap/pixelart/`, het huis van `T.GEBOUWEN.wijnboerderij`); daarnaast leg jij de wijngaard als veld, zoals bij
+de boerderij de akker (`js/boerderij.js`). De boerderij krijgt alleen akkers, en de regel "het eerste veld bepaalt wat
+de boerderij is" vervalt: zo is er één manier om wijn te maken. Het oude gebouw met de wijngaard binnen zijn eigen voet
+(`nietLeeg`, `alleenHetHuis`) gaat dan weg, en het vooruitkijken van de wijn (`T.wijnNaDePluk`, slaapt) kan de raad
+weer gebruiken. Eerst een plan met Marcel.
 
 ## B2. Het hele eiland (vraag 117, stap 3)
 

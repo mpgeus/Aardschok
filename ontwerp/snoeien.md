@@ -78,8 +78,8 @@ Voorstel, in stappen, elk met de toetsen groen:
 apart wijnboerderij gebouw"): in drie stukjes, elk een commit met de toetsen groen: **2a** de verzoeken en de ondernemers
 (met "Wie bouwt"), **2b** de erven (met "Huizen"), en opslaan naar versie 6 al hier, want een half gebouwde hut op een
 erf betekent iets anders zodra de erven weg zijn, **2d** het ontginnen. **De wijnboerderij blijft** (geen 2c): Marcel wil
-tóch een eigen wijnboerderij als gebouw, dus het gebouw en zijn tekening in `gereedschap/pixelart/` slapen tot we kiezen
-hoe (werklijst, vraag 155).
+tóch een eigen wijnboerderij als gebouw, dus het gebouw en zijn tekening in `gereedschap/pixelart/` slapen tot vraag 155
+(Marcel: "A, direct na ronde 2"; werklijst, B1).
 
 **2a is af** (12 okt): de verzoeken en de ondernemers zijn weg, met de spelregel "Wie bouwt", de oproepen, de meester,
 wat een huis nadroeg, en de lijst van de raad die alleen de verzoeken voedde (`T.watTeBouwen`). Het vooruitkijken van
