@@ -986,3 +986,8 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   gezin", maakt twee gehuchten zonder vast zaad en vergelijkt de bevolking van het ene op dag 10 met die van het andere
   vóór die dag. Komt er in het ene op dag 10 toevallig een kind bij, dan is hij rood (één keer gezien, 27 tegen 26; los
   veertien keer groen). Een vast zaad, of de bevolking van elk dorp met zichzelf vergelijken, maakt hem vast.
+- **Geen vee in het lege begin** (12 okt, stap 6 van ronde 2): de beginkudde (`T.zetBeginKudde`, `js/vee.js`) staat
+  alleen op de weide of de meent die de kaart legt, en het lege begin legt er geen; de marskramer die vee verkoopt, is er
+  nog niet (`js/vee.js`, bovenaan). Dus komt er nooit een koe of schaap, en geen melk, kaas of wol (dus geen laken voor de
+  weverij). Met het dorp dat er al was gaat ook de laatste meent weg. Een gat voor B: de kar brengt een paar dieren mee,
+  of de marskramer verkoopt ze, of de boer krijgt vee als hij een weide legt; Marcel kiest.
