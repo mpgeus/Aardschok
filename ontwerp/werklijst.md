@@ -18,14 +18,11 @@ is af** (12 okt): de kolonist speelt het lege begin op vijf eilanden een jaar zo
 5 zijn af** (12 okt), op de spelregel "De markt" na: de verzoeken, de ondernemers, de erven en het ontginnen zijn weg;
 "Leeg" is het enige begin, het ontworpen gehucht is weg, een boer is de man op een boerderij (het lot en de karakters
 zijn weg), en alleen de kolonist speelt nog in de speeltest. De toetsen spelen op een proefdorp (`test/grond.cjs`).
-**Het volgende** is wat Marcel kiest over het dorp dat er al was en de markt (hieronder), dan de wijnboerderij als eigen
-gebouw (B1, vraag 155), het hele eiland (B2), de afwisseling (B3), en ronde 3 na C.
+**Het volgende** is het slot van ronde 2 (A, stap 6; Marcel koos op 12 okt): het dorp dat er al was gaat weg, en het
+plein krijgt plekken voor de markt. **Bezig in sessie `claude/gallant-faraday-d5617b`** (12 okt): het plan voor Marcel.
+Dan de wijnboerderij als eigen gebouw (B1, vraag 155), het hele eiland (B2), de afwisseling (B3), en ronde 3 na C.
 
 **Wacht op Marcel:**
-- **Twee keuzes uit ronde 2 van het snoeien** (`snoeien.md`, "Open, voor Marcel"): het dorp dat er al was (de maker legt
-  het nog voor de toetsen en het gereedschap; houden voor de andere dorpen op het eiland, of weg?), en de spelregel "De
-  markt" (het plein van het lege begin heeft geen plek voor de kramen: de markt als gebouw dat jij zet, of het plein die
-  plekken geven?).
 - **1c tot 1e bekijken:** Nieuw spel (of in de console `Spel.debug.begin(2)`). Is het kamp op, open dan het bouwmenu (B): het bouwbereik gloeit op de grond. Zet het huis van de schout neer, ook in het bos (de bouwers rooien eerst, en het hout
   komt in de voorraad), en een hut op open grond: wie geen werk heeft, loopt erheen en bouwt. Is de hut af, dan trekt
   er een gezin in; is het huis af, dan verhuist de schout en wordt de huifkar de ossenkar. Zet een boerderij neer en kies
@@ -65,8 +62,9 @@ ronden, want een deel hangt aan het oude begin of aan de proef:
    wat blijft; de verzoeken, de ondernemers, de erven en het ontginnen weg, met "Wie bouwt" en "Huizen"; de wijnboerderij
    blijft, vraag 155). **Stap 3 tot 5 zijn af** (12 okt; Marcel: "B: lege begin met een proefdorp", en stap 4 "nu mee"):
    "Leeg" is het enige begin, het ontworpen gehucht is weg, het lot en de karakters zijn weg (een boer is de man op een
-   boerderij), en alleen de kolonist speelt nog in de speeltest. **Open:** de spelregel "De markt" (stap 4), en het dorp
-   dat er al was; allebei een keuze voor Marcel (`snoeien.md`, "Open, voor Marcel").
+   boerderij), en alleen de kolonist speelt nog in de speeltest. **Stap 6** (Marcel, 12 okt: "Alles wordt door spelers geplaatst",
+   en "Plein krijgt plaatsen"): het dorp dat er al was gaat weg, ook voor de andere dorpen op het eiland, en het plein van
+   het lege begin krijgt vaste plekken voor de markt; de spelregel "De markt" gaat dan weg (`snoeien.md`, "Stap 6").
 3. **Ronde 3, na C:** wat de proef moet uitwijzen (`gameloop.md`, "Open"): de voorvallen, de raad, de raadsman, het
    rapport, de wensen per stand en de treden, de wetten, de feesten.
 
