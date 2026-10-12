@@ -79,12 +79,16 @@
   T.laadSpel = function (plek) {
     const gelezen = T.leesVanPlek(plek);
     if (!gelezen.gelukt) return gelezen;
+    speelGelezen(gelezen);
+    return { gelukt: true, kop: gelezen.kop };
+  };
+  // Een gelezen spel (T.leesSpel, js/opslaan.js) spelen: een nieuw spel, en het gelezene erover.
+  function speelGelezen(gelezen) {
     T.nieuwSpel();
     T.zetSpel(S, gelezen);
     zetCameraOpSchout();
     T.ui.reset(S);
-    return { gelukt: true, kop: gelezen.kop };
-  };
+  }
 
   // Terug naar het titelscherm (het menu, en de twee eindschermen: je ambt kwijt, of gevallen). Daarachter
   // wacht een nieuw spel, zoals toen de bladzijde openging.
@@ -1199,6 +1203,17 @@
         hoek: [w.eiland.x0, w.eiland.y0],
         uitgang: w.overgangen ? w.overgangen.map((o) => [o.x, o.y]) : null,
       };
+    },
+    // Het proefdorp (T.proefdorp, js/begin.js; ronde 2 van het snoeien, stap 6): Spel.debug.proefdorp(5) speelt het dorp
+    // waarop de toetsen spelen, op het eiland van nummer 5 (zonder nummer 2), met de opties van T.proefdorp.maak erbij
+    // (Spel.debug.proefdorp(2, { gebouwen: ['herberg'] })). Het wordt stil gebouwd en dan geladen zoals een bewaard spel;
+    // de schermafdrukken, de tekenmeting en de samenvatting spelen erop.
+    proefdorp(zaad = 2, opties = {}) {
+      const gelezen = T.leesSpel(T.bewaarSpel(T.proefdorp.maak({ ...opties, zaad: Number(zaad) }), { nu: 0 }));
+      if (!gelezen.gelukt) return gelezen.reden;
+      speelGelezen(gelezen);
+      const D = S.dorp;
+      return `Het proefdorp op het eiland van ${zaad}: ${D.gebouwen.length} gebouwen, ${D.bevolking} mensen.`; // geen tekst
     },
     // Het lege begin (js/begin.js, vraag 152): Spel.debug.begin(5) begint een nieuw spel op het eiland van nummer 5,
     // zonder brief (Spel.debug.begin('nieuw') op een nieuw eiland). Zonder iets zegt het hoe het kamp ervoor staat: waar de
