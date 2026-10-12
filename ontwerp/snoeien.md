@@ -71,7 +71,39 @@ Voorstel, in stappen, elk met de toetsen groen:
 5. **De speeltest:** de oude spelers (braaf, slim, bouwer, sluw) spelen het oude begin; de brave blijft als nulmeting op
    het lege begin, de rest gaat eruit. Opslaan naar versie 6 (een half gebouwde hut op een erf betekent dan iets anders).
 
-Te kiezen: (e) het ontworpen gehucht als proefkaart houden, of ook weg; (f) de oude spelers: alleen de brave houden, of
+**Stap 1 is af** (12 okt, sessie `ccr-abaf0226-9lnbtq`): de plekzoeker staat in `js/bouwen.js`, `T.dobbelsteen` in
+`js/dorp.js`, de wapens (`T.bewapen`, `T.wapensInHetDorp`, `ROVERS_INSTELLINGEN.wapens.schade`) in `js/rovers.js`.
+
+**De kaart voor stap 2 tot 5** (een agent, 12 okt; regelnummers van toen, dus zoek op de naam):
+- **Verzoeken** (`js/verzoeken.js`, 440 regels; `VERZOEKEN_INSTELLINGEN.mensen`, de spelregel "Wie bouwt"): aangeroepen uit
+  `js/voorvallen.js` (de voorvallen bouwverzoek, wapenverzoek en herbergverzoek, met `T.beginBouwverzoek`,
+  `T.verzoekToegestaan`, `T.verzoekGeweigerd`, `T.kostenVanVerzoek`), hun gesprekken in `js/gesprekken.js`, de rijen
+  in de balk (`T.doeOproep`, `T.oproepVoor` in `js/hud.js`), `js/raad.js` en `js/raadsman.js` (`T.verzoekZin`,
+  `T.kostenVanVerzoek`), `js/tafel.js`, `js/wensen.js` en debug in `js/main.js`; `T.GESPREK_WOORDEN` krijgt er woorden
+  bij.
+- **Ondernemers** (`js/ondernemers.js`, 285 regels): `T.tikGebouwenDag` roept `T.tikOndernemersDag` elke dag aan;
+  `js/wensen.js` leest `T.huisStemming` en `T.huisNadraagtTekst`; `js/bode.js` en debug in `js/main.js`.
+- **Erven** (`js/erven.js`, 484 regels; `ERVEN_INSTELLINGEN.dorpBouwtZelf`, de spelregel "Huizen"): het gebouw `erf` in
+  `T.GEBOUWEN`, en in `js/gebouwen.js` `T.inBouwmenu`, `T.plaatsGebouw` (`T.legErfAan`), `T.gezinKomt`
+  (`T.gezinZoektEenErf`), `T.kanEenErfNemen`, `T.tikGebouwenDag` (`T.tikErvenDag`) en het looppad (`T.huisPlekOp`);
+  verder `js/paden.js`, `js/behoeften.js`, `js/bos.js` (`g.erf`, `T.kavelVanErf`), `js/tekenen.js` (`T.paaltjesVan`),
+  `js/wensen.js` (`T.huisPlekVan`, `T.erfKringTekst`), `js/hud.js`, `js/main.js`, `js/raad.js`, en `g.erf` op een hut in
+  `js/bewoners.js` en `js/dag.js`. Een half gebouwde hut op een erf telt als woonruimte (`g.klaar || g.erf`): opslaan
+  naar versie 6.
+- **Het lot en de karakters** (`js/boeren.js`, 179 regels; de spelregel "Wie de boeren zijn"): `T.nieuwDorp` loot de
+  boeren, en `T.lootBoeren` zet ook het zaad van het spel (`D.lot.zaad`, gelezen door een stuk of 14 bestanden): dat
+  zaad moet naar `T.nieuwDorp`. `T.isBoer`, `T.boerFactor`, `T.aanzienVan`, `T.overBoerTekst`, `T.overBoer` in
+  `js/voorvallen.js`, `js/raadsman.js`, `js/akkers.js`, `js/heer.js`, `js/hud.js`, `js/dialoog.js`, `js/verkennen.js`;
+  `T.KARAKTERS` in `js/mensen.js` met hun gesprekken in `js/gesprekken.js` (zo'n 245 regels), en de voorvallen die een
+  karakter vragen.
+- **Het ontworpen gehucht** (`kaarten/gehucht.tmj`, "e Mag weg"): 49 toetsbestanden beginnen er met
+  `T.beginOpKaart(S, 'gehucht')`, 23 zetten `T.zetOptie('wieBouwt', 'jij')`, 13 raken het lot. De toetsen van
+  `erven`, `verzoeken`, `ondernemers`, `boeren`, `rooien` en `gehucht` gaan grotendeels mee weg; de rest heeft een
+  andere grond nodig (het lege begin met een paar gebouwen, of een kleine proefkaart).
+- **De speeltest** ("f alle vier weg"): braaf, slim, bouwer en sluw, met wat alleen zij gebruiken in `speler.js` (bouwErf,
+  de verzoeken, de vrije erven); de kolonist blijft.
+
+Te kiezen (gekozen, zie boven): (e) het ontworpen gehucht als proefkaart houden, of ook weg; (f) de oude spelers: alleen de brave houden, of
 alle vier weg; (g) de karakters weg of laten slapen; (h) de wapens blijven (ze horen bij F, vechten).
 
 ## Later
