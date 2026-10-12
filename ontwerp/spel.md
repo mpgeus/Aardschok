@@ -80,7 +80,8 @@ Ons niet"). **Jij bouwt** (Marcel: "We willen dus een bouwmenu en zelf bouwen"):
 een hut of huis af, dan trekt er in die nacht een gezin uit het kamp in (past het niet, dan toch, krap), en zijn tent gaat
 weg (Marcel: "Per tent"); met de laatste tent gaat het kampvuur uit, en de kar blijft. Zolang er een gezin in het kamp
 woont, komt er geen nieuw gezin over de weg. **Binnen bereik, en met handen** (1d; Marcel: "a1, b ja, c ja, d ja, e
-ja"): je bouwt binnen 12 tegels van het plein en van elke opslag die af is; als je bouwt, ligt er een zachte gloed op de
+ja"): je bouwt binnen 16 tegels van het plein en van elke opslag die af is (tot 12 okt 12: toen paste er na de zomer
+geen tweede boerderij meer; 1f, Marcel: "16 tegels is goed"); als je bouwt, ligt er een zachte gloed op de
 grond die naar de rand uitdooft, zonder lijn ("Ik wil geen 'grens'"), en daarbuiten zegt de muis "Te ver weg". Een woning
 hoeft hier geen plek voor een kapel open te houden: "Wijn haalt kapel" (vraag 136) geldt in het lege begin niet, want
 anders paste er na een paar maanden geen tweede boerderij meer (1f; Marcel, 12 okt: "b uit"). Het huis

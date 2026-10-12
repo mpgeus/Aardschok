@@ -14,22 +14,11 @@ onderwerp, niet hier. Wie aan een punt begint, zet er "**Bezig in sessie `<branc
 drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **B, 1c tot 1e zijn af** (11
 okt): het bouwmenu, verhuizen uit het kamp, het bouwbereik, het huis van de schout, meebouwen, bouwen in het bos, en
 boeren uit het niets (de boerderij, de velden die jij legt, wijn is eten). **Het spel is Engels** (11 okt, G). **B, 1f
-loopt** (12 okt): de kolonist speelt het lege begin op vijf eilanden een jaar zonder fouten; wat scheef is, wacht op
-Marcel (hieronder). Ronde 2 van het snoeien volgt na 1f, dan het hele eiland (B2), de afwisseling (B3), en ronde 3 na C.
+is af** (12 okt): de kolonist speelt het lege begin op vijf eilanden een jaar zonder fouten. **Het volgende punt is A,
+ronde 2 van het snoeien** (het plan, met wat Marcel koos, in `snoeien.md`), dan het hele eiland (B2), de afwisseling
+(B3), en ronde 3 na C.
 
 **Wacht op Marcel:**
-- **1f, de tweede meting** (12 okt; `speelbaar.md`, "De speeltest van 12 okt, middag"; Marcel koos eerder "a ja, b uit,
-  c ja, d ja"): met de jager haalt het eten het jaar (geen honger, 81 tot 151 graan op 1 lentemaand), rooien geeft 220
-  tot 950 hout, en niets loopt vast. Nieuw: (i) **de schout valt alleen in een gevecht**, op 2 van de 5 eilanden (wolven
-  in de winter, een rover in november): in het lege begin is er geen militie (wachthuis of veteranen). Kiezen: de
-  kolonist bouwt een wachthuis (10 hout, 4 goud, 2 man; het goud is krap), het eerste jaar rust van rovers en wolven (de
-  rovers met een getal, `ROVERS_INSTELLINGEN.eersteWildeNa` van 60 naar 360; de wolven vragen een regel, zoals de heer
-  het eerste jaar), of laten tot F. (ii) **Het bouwbereik is na de zomer vol** op eiland 3: met 16 tegels in plaats van
-  12 past er een tweede boerderij; of wachten op de schuur die bereik geeft (C, stap 3). (iii) **Ronde 2**: het voorstel
-  staat in `snoeien.md` ("Ronde 2: voorstel van Claude"), met vier keuzes (e tot h), en "Leeg" als standaard in stap 3 in
-  plaats van 1, zodat 53 toetsen niet eerst omgebouwd worden en daarna weggaan. **Marcel koos (12 okt): "I. 3, II. Ja
-  prima, 16 tegels is goed, III. OK", en bij ronde 2 "e Mag weg, f alle vier weg, g weg, h ja wapens blijven ook voor
-  later"**: de gevechten blijven tot F, het bouwbereik wordt 16 tegels, en ronde 2 gaat zoals in `snoeien.md`.
 - **1c tot 1e bekijken:** Spelregels, "Het begin" op "Leeg", en dan Nieuw spel (of in de console
   `Spel.debug.begin('leeg', 2)`). Is het kamp op, open dan het bouwmenu (B): het bouwbereik gloeit op de grond. Zet het huis van de schout neer, ook in het bos (de bouwers rooien eerst, en het hout
   komt in de voorraad), en een hut op open grond: wie geen werk heeft, loopt erheen en bouwt. Is de hut af, dan trekt
@@ -65,7 +54,9 @@ systeem: **blijft**, **slaapt** (de code blijft, er wordt niet aan gebouwd) of *
 ronden, want een deel hangt aan het oude begin of aan de proef:
 
 1. **Ronde 1 is af** (11 okt): wat al om was en nergens meer aan hing (`snoeien.md`).
-2. **Ronde 2, na 1f:** wat het oude begin draaiende houdt: de mensen die vragen wat ze bouwen (`verzoeken`,
+2. **Ronde 2, na 1f:** **Bezig in sessie `ccr-abaf0226-9lnbtq`** (12 okt): stap 1, verhuizen wat blijft. Het plan, met
+   wat Marcel koos ("III. OK", "e Mag weg, f alle vier weg, g weg, h ja wapens blijven"), staat in `snoeien.md`, "Ronde 2".
+   Wat het oude begin draaiende houdt: de mensen die vragen wat ze bouwen (`verzoeken`,
    `ondernemers`), de erven waarop het dorp zelf bouwt (`erven`), de vaste boeren van de kaart, en de spelregels "Het
    begin", "Je gehucht", "Wie bouwt", "Huizen" en "Wie de boeren zijn".
 3. **Ronde 3, na C:** wat de proef moet uitwijzen (`gameloop.md`, "Open"): de voorvallen, de raad, de raadsman, het
@@ -77,20 +68,8 @@ Mee in elke ronde: het commentaar in de code dat "zie CLAUDE.md" zegt (een stuk 
 ## B. Zelf bouwen vanaf niets (vraag 152, stap 1)
 
 Het plan staat in het archief bij vraag 152; 1a (optie 1), 1b (het lege land), 1c (het kamp, met het bouwmenu), 1d
-(binnen bereik, en met handen) en 1e (boeren uit het niets) zijn af; hoe het nu werkt: `spel.md`, "Zo werkt het lege
-begin nu".
-- **1f, een jaar zonder fouten:** **Bezig in sessie `ccr-abaf0226-9lnbtq`** (12 okt): de kolonist is er, en speelt op
-  vijf eilanden een jaar zonder fouten; wacht op Marcel (bovenaan, "Wacht op Marcel"). Een
-  toets speelt een jaar vanaf een lege plek, met een speler in code die bouwt. Dan is "Leeg" het enige begin, en volgt
-  ronde 2 van A. **Het plan (Claude, 12 okt), met wat Marcel koos ("a1, b1, c1, d ja"):** de kolonist, een speler in
-  code die het lege begin speelt met de handelingen van het bouwmenu; elke dag loopt hij zijn regels af: het huis van de
-  schout, een boerderij met akkers vóór 1 mei, een houthakker als het hout laag wordt, hutten tot het kamp leeg is, en
-  een tweede veld als het graan de winter niet haalt (d ja). Hij speelt in de speeltest (`npm run speeltest --
-  kolonist`, vijf eilanden) én in een korte toets in `npm test`, met dezelfde keuzes uit één bestand (a1). "Zonder
-  fouten" is dat niets vastloopt (geen fout, niemand in een tent in de winter, geen bouwplaats die stilstaat, niemand
-  vast); het eten meten we, en wat scheef is, stellen we met Marcel bij met een getal uit de werkbank (b1). De grens
-  van 10 mensen (`EINDE_INSTELLINGEN.minstensOver`; met 17 begin je 7 erboven) eerst meten, dan kiezen (c1). Is het
-  groen, dan wordt "Leeg" de standaard, en spelen de oude spelers het oude begin tot ronde 2.
+(binnen bereik, en met handen), 1e (boeren uit het niets) en 1f (een jaar zonder fouten) zijn af; hoe het nu werkt:
+`spel.md`, "Zo werkt het lege begin nu".
 
 ## B2. Het hele eiland (vraag 117, stap 3)
 
@@ -147,6 +126,12 @@ het graan vraagt", de schandpaal, de heervaart en de twee bazen.
   schrijven voor de nieuwe richting, als B en C er staan.
 
 ## Af (sinds 11 okt)
+
+- Een jaar zonder fouten (vraag 152, 1f; Marcel: "a1, b1, c1, d ja", "a ja, b uit, c ja", "I. 3, II. 16 tegels"): de
+  kolonist (`gereedschap/speeltest/kolonist.js`), een speler in code die het lege begin speelt met de handelingen van het
+  bouwmenu, in de speeltest (`npm run speeltest -- kolonist`) en in een toets; op vijf eilanden een jaar zonder fouten.
+  Wat hij vond en wat erop volgde (een jager, de kapelregel uit in het lege begin, 2 hout per gerooide boom, het
+  bouwbereik 16 tegels; de schout die alleen vecht, blijft tot F): `speelbaar.md`, 12 okt.
 
 - Engels (vraag 147, stap 2; Marcel: "Alles gelijk in het Engels maken. Nederlands mag je mee stoppen", en op de vragen:
   alleen wat de speler ziet, het Nederlands weg maar `T.t` blijft, gewone maanden en Engelse namen): alle spelteksten in

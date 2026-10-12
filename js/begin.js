@@ -51,8 +51,10 @@
     // schrijft hij in wijnmaand dat hij je spaart (Marcel, 11 okt: "het eerste jaar vraagt de heer niets").
     heerVrij: 1,
     // Het bouwbereik (vraag 152, 1d; Marcel, 11 okt: "b ja"): je bouwt binnen zoveel tegels van het plein en van elke
-    // opslag die af is (het huis van de schout; in C ook een schuur), gemeten van het midden van een tegel.
-    bouwBereik: 12,
+    // opslag die af is (het huis van de schout; in C ook een schuur), gemeten van het midden van een tegel. Sinds 12 okt 16
+    // (1f; Marcel: "Ja prima, 16 tegels is goed"): met 12 paste er op een van de vijf eilanden na de zomer geen tweede
+    // boerderij meer (ontwerp/speelbaar.md).
+    bouwBereik: 16,
   };
   const IN = () => T.BEGIN_INSTELLINGEN;
 
