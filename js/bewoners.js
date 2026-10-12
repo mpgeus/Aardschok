@@ -578,7 +578,7 @@
   // laatste het eerst), en dan de jongeren van de boerderijen; een man of vrouw laat zijn gezin het
   // laatst achter.
   const STERFTE = { oud: 0, kleuter: 1, kind: 2, jong: 3, volwassen: 4 };
-  // Een boer, of wie met een naam op de kaart staat: die gaan nooit weg, niet naar de heervaart en niet in de militie.
+  // Een boer (T.isBoer), of wie met een naam op de kaart staat: die trekken nooit weg.
   const boerOfNaam = (D, p) => !!p.wie || T.isBoer(D, p);
   const VERTREK = { jong: 0, volwassen: 1, kind: 2, kleuter: 3, oud: 4 };
   // Wie het eerst gaat als er iemand wegtrekt of sterft, in volgorde; ook voor wie uit een bepaald huis wegtrekt (js/behoeften.js:
@@ -723,14 +723,15 @@
   // Een tijd weg, en terug (de heervaart, js/heervaart.js)
   // ---------------------------------------------------------------------------------------------
 
-  // Wie weerbaar is: mannen, jong of volwassen, die hier zijn. Nooit de schout, zijn gezin of een boer zelf (net als bij
-  // wie wegtrekt), en niet wie nog onderweg hierheen is of al weg is. Wie geen
+  // Wie weerbaar is: mannen, jong of volwassen, die hier zijn: wie te hulp schiet tegen de wolven, in de militie gaat, op
+  // jacht of mee met de bode. Nooit de schout, zijn gezin of wie met een naam op de kaart staat (p.wie); een boer van het
+  // lege begin wel (alleen naar de heervaart gaat hij niet, js/heervaart.js), en niet wie nog onderweg hierheen is of al weg is. Wie geen
   // werk heeft, het eerst; dan de volwassenen, en de jongens pas als er niet genoeg mannen zijn.
   const WEERBAAR = { volwassen: 0, jong: 1 };
   T.weerbareMannen = function (D) {
     if (!D.bewoners) return [];
     return D.bewoners.mensen
-      .filter((p) => p.geslacht === 'man' && WEERBAAR[p.leeftijd] != null && !boerOfNaam(D, p) && !vanSchout(p) && !p.komt && !p.weg)
+      .filter((p) => p.geslacht === 'man' && WEERBAAR[p.leeftijd] != null && !p.wie && !vanSchout(p) && !p.komt && !p.weg)
       .sort((a, b) => (!!a.werk - !!b.werk) || (WEERBAAR[a.leeftijd] - WEERBAAR[b.leeftijd]) || (a.id - b.id));
   };
 

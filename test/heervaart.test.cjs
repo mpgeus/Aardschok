@@ -89,10 +89,14 @@ test('wie gaat: mannen, jong of volwassen, nooit een boer of het gezin van de sc
   for (const p of alle) {
     assert.equal(p.geslacht, 'man');
     assert.ok(p.leeftijd === 'jong' || p.leeftijd === 'volwassen', p.leeftijd);
-    assert.ok(!T.isBoer(S.dorp, p) && !p.schout && !(p.hoofd && p.hoofd.schout), `${p.naam} hoort bij het verhaal`);
+    assert.ok(!p.schout && !(p.hoofd && p.hoofd.schout), `${p.naam} is van het gezin van de schout`);
   }
+  assert.ok(alle.some((p) => T.isBoer(S.dorp, p)), 'een boer is weerbaar: hij helpt tegen de wolven en vecht mee');
   const eersteMetWerk = alle.findIndex((p) => p.werk);
   if (eersteMetWerk >= 0) assert.ok(alle.slice(eersteMetWerk).every((p) => p.werk), 'wie geen werk heeft, staat vooraan');
+  // naar de heervaart gaat een boer nooit: zijn boerderij lag dan een half jaar stil
+  const vraag = T.vraagHeervaart(S.dorp, Math.floor(S.kalender.dag));
+  assert.ok(vraag.wie.length > 0 && vraag.wie.every((p) => !T.isBoer(S.dorp, p)), 'geen boer naar de heervaart');
 });
 
 test('sturen: ze lopen de weg af, tellen mee en eten, maar werken nergens, tot 1 herfstmaand', () => {

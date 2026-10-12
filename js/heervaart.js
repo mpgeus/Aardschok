@@ -1,7 +1,7 @@
 // De heervaart (werklijst vraag 60, A en B; Marcel, 29 sep: "A ja B ja"): "Dat kost u vanaf nu meer". Zodra het
 // gehucht een dorp is (js/treden.js), vraagt de heer elk jaar op 1 hooimaand ook mannen voor zijn oorlog: een man
 // per tien zielen, of drie goud per man. Twee keuzes, onder zijn brief (js/brieven.js):
-//   - sturen: het spel kiest wie (T.weerbareMannen, js/bewoners.js), en ze lopen de weg af tot 1 herfstmaand. Ze
+//   - sturen: het spel kiest wie (T.weerbareMannen, js/bewoners.js, maar geen boer), en ze lopen de weg af tot 1 herfstmaand. Ze
 //     blijven bewoner: ze tellen mee en eten, want het dorp voedt ze, en hun plaats in huis blijft van hen, maar ze
 //     werken nergens (T.stuurWeg). Van elke vier komt er gemiddeld één niet terug; wie terugkomt, is veteraan
 //     (p.veteraan): hij vecht mee als er rovers komen, ook zonder wachthuis (js/rovers.js), met het leven van
@@ -77,7 +77,8 @@
     const oorlogen = IN().oorlogen;
     H.vraag = {
       dag, jaar: d.jaar, mannen, goud: mannen * IN().goudPerMan,
-      wie: T.weerbareMannen(D).slice(0, mannen),
+      // Een boer gaat nooit (T.isBoer, js/boerderij.js): zijn boerderij lag dan een half jaar stil.
+      wie: T.weerbareMannen(D).filter((p) => !T.isBoer(D, p)).slice(0, mannen),
       oorlog: oorlogen[(((D.lot && D.lot.zaad) || 1) + d.jaar) % oorlogen.length],
       uiterlijk: dag + IN().kiesBinnenDagen,
     };
