@@ -155,38 +155,6 @@ test('wie doorgroeit, houdt zijn stand en krijgt het dak van nu: een huis wordt 
   assert.equal(T.metDeurNaar('huizen/huis3', 'o'), 'huizen/huis3', 'een tekening zonder stijl blijft zichzelf');
 });
 
-test('op een erf staat het huis met zijn deur naar de weg, achteraan, en het groeit door met het dak van zijn trede', () => {
-  for (const [weg, kant] of [[{ wegY: 46 }, 'z'], [{ wegX: 2 }, 'w'], [{ wegY: 3 }, 'n'], [{ wegX: 47 }, 'o']]) {
-    const D = leeg(weg);
-    const u = T.legErfAan(D, 20, 20);
-    assert.ok(u.gelukt, u.reden);
-    const erf = u.erf;
-    assert.equal(T.deurKantVan(erf.plan.huis), kant, `de weg ligt aan de kant ${kant}`);
-    assert.equal(T.deurKantVan(erf.plan.hut), kant, 'de hut staat zoals het huis');
-    // het huis achteraan: bij een deur naar het zuiden zo ver mogelijk naar het noorden, enzovoort
-    const voet = T.gebouwVoet('huis', erf.plan.huis);
-    const achter = { z: erf.plan.dy, n: erf.h - erf.plan.dy - erf.plan.h, w: erf.b - erf.plan.dx - erf.plan.b, o: erf.plan.dx }[kant];
-    assert.ok(achter <= 3, `het huis staat achteraan op zijn erf (${achter} tegels van de achterkant, voet ${voet.b}×${voet.h})`);
-
-    T.zetVoorraad(D, 'hout', T.GEBOUWEN.hut.kosten.hout);
-    const hut = T.gezinZoektEenErf(D);
-    for (let d = 1; d <= T.GEBOUWEN.hut.bouwtijd; d++) T.tikGebouwenDag(D, d);
-    assert.equal(hut.klaar, true);
-    T.zetVoorraad(D, 'graan', 100000);
-    T.zetVoorraad(D, 'groente', 1000);
-    T.zetVoorraad(D, 'vis', 1000);
-    T.zetVoorraad(D, 'vlees', 1000);
-    D.gebouwen.push({ soort: 'kapel', x: 40, y: 40, klaar: true, klaarOp: 0, handen: 0, voorwerp: null });
-    D.trede = 'dorp';
-    let dag = T.GEBOUWEN.hut.bouwtijd;
-    for (let i = 0; i < T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen; i++) T.tikGebouwenDag(D, ++dag);
-    assert.equal(hut.soort, 'huis');
-    assert.equal(hut.tekening, T.zoalsNu(D, erf.plan.huis, 'huis'), 'het huis van zijn erf, onder leien');
-    assert.equal(dakVan(hut.tekening), 'leien');
-    assert.equal(T.deurKantVan(hut.tekening), kant);
-  }
-});
-
 test('T.plekVoor keert een deur naar de weg, en de plek en het gebouw hebben dezelfde voet', () => {
   for (const [weg, kant] of [[{ wegY: 46 }, 'z'], [{ wegX: 2 }, 'w']]) {
     const D = leeg(weg);

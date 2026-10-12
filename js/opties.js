@@ -373,17 +373,6 @@
           uitleg: T.t('High hills in the wild land, a gentle swell around the village, and a ridge with a rock face by the rocks. Nobody walks through a rock face, nobody builds on steep ground, and a hill blocks the view and hides what is behind it.') },
       ],
     },
-    // Het dorp bouwt zelf (Marcel, 28 sep, werklijst vraag 52: "C ja"; js/erven.js).
-    {
-      id: 'huizen', naam: T.t('Houses'), standaard: 'dorpBouwtZelf',
-      uitleg: T.t('Who puts up the houses.'),
-      keuzes: [
-        { id: 'dorpBouwtZelf', naam: T.t('The village builds itself'), zet: { 'ERVEN_INSTELLINGEN.dorpBouwtZelf': true }, // geen tekst
-          uitleg: T.t('You point out plots, and a new family puts up a hut there itself, with wood from the stores. The hut and the house are not in the build menu.') },
-        { id: 'jij', naam: T.t('You put them up'), zet: { 'ERVEN_INSTELLINGEN.dorpBouwtZelf': false }, // geen tekst
-          uitleg: T.t('The hut and the house are in the build menu, and a new family only comes if there is a house with room. There are no plots.') },
-      ],
-    },
     // Twee bazen (werklijst vraag 106; Marcel, 3 okt: "106 a b c d ja"; js/bazen.js): de heer en het dorp kunnen je
     // allebei wegsturen. Uit is het spel van vóór 3 okt.
     {
@@ -627,17 +616,17 @@
     },
     // Het lege begin (werklijst vraag 152, stap 1b; Marcel, 11 okt: "We moeten ook zelf alles vanaf de start gaan bouwen";
     // js/begin.js): een lege plek op het eiland, een kar en vier gezinnen. Standaard het gehucht dat er al was, zodat de
-    // toetsen en de speeltest blijven spelen, tot het lege begin een jaar draait (vraag 152, 1f). "Leeg" zet ook "Huizen"
-    // op "Jij" (Marcel, 11 okt: "We willen dus een bouwmenu en zelf bouwen"); het komt daarna in deze lijst, dus het gaat
-    // voor. De spelregel "Wie bouwt" is weg sinds ronde 2 van het snoeien (12 okt): jij bouwt.
+    // toetsen en de speeltest blijven spelen, tot het lege begin een jaar draait (vraag 152, 1f). De spelregels "Huizen" en
+    // "Wie bouwt" zijn weg sinds ronde 2 van het snoeien (12 okt): jij bouwt (Marcel, 11 okt: "We willen dus een bouwmenu
+    // en zelf bouwen").
     {
       id: 'begin', naam: T.t('The start'), standaard: 'gehucht',
       uitleg: T.t('How a new game begins. Applies from the next new game.'),
       keuzes: [
         { id: 'gehucht', naam: T.t('The hamlet that was already there'), zet: { 'MAKER_INSTELLINGEN.leeg': false }, // geen tekst
           uitleg: T.t('You become reeve of a hamlet with houses, an inn, and farms with their fields.') },
-        { id: 'leeg', naam: T.t('Empty'), zet: { 'MAKER_INSTELLINGEN.leeg': true, 'ERVEN_INSTELLINGEN.dorpBouwtZelf': false }, // geen tekst
-          uitleg: T.t('An ox cart with a few belongings rolls into an empty stretch of the island, with your family and four families behind it. On the open ground that becomes the square you sleep in tents by the campfire. You build everything from the build menu (Houses then goes to you, at once), and when a hut or house is finished, a family from the camp moves in. Island only.') },
+        { id: 'leeg', naam: T.t('Empty'), zet: { 'MAKER_INSTELLINGEN.leeg': true }, // geen tekst
+          uitleg: T.t('An ox cart with a few belongings rolls into an empty stretch of the island, with your family and four families behind it. On the open ground that becomes the square you sleep in tents by the campfire. You build everything from the build menu, and when a hut or house is finished, a family from the camp moves in. Island only.') },
       ],
     },
   ];
@@ -670,7 +659,6 @@
     { naam: T.t('Walking'), blok: 'LOPEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Footpaths'), blok: 'PADEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Chats'), blok: 'PRAATJE_INSTELLINGEN' }, // geen tekst
-    { naam: T.t('The plots'), blok: 'ERVEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Village stages'), blok: 'TREDEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The laws'), blok: 'WETTEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The robbers'), blok: 'ROVERS_INSTELLINGEN' }, // geen tekst

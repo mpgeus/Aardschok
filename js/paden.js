@@ -159,7 +159,7 @@
     return net;
   };
 
-  // Is dit een paadje van een deur (aangelegd, niet gesleten)? Daar komt geen stuk bos en geen erf (js/bos.js).
+  // Is dit een paadje van een deur (aangelegd, niet gesleten)? Daar komt geen stuk bos (js/bos.js).
   T.isAangelegdPaadje = (D, x, y) => binnen(D.wereld, x, y) && T.aangelegdNet(D)[x + y * breedte(D.wereld)] === 2;
 
   // Is dit een paadje (aangelegd, of gesleten waar gelopen wordt)? De weg van de kaart telt niet: die is er al.
@@ -285,7 +285,7 @@
   // De lantaarns
   // ---------------------------------------------------------------------------------------------
 
-  // Een plek voor een lantaarn naast deze tegel: te belopen grond zonder iets erop, geen veld, geen erf, geen pad en
+  // Een plek voor een lantaarn naast deze tegel: te belopen grond zonder iets erop, geen veld, geen pad en
   // geen deur, en niet waar de herberg straks groter wordt (T.meegroeiGrondOp, js/behoeften.js). De eerste die past, in
   // een vaste volgorde.
   const NAAST = [[1, 0], [0, 1], [-1, 0], [0, -1], [1, 1], [-1, 1], [1, -1], [-1, -1]];
@@ -295,7 +295,7 @@
     for (const [dx, dy] of NAAST) {
       const x = t.x + dx;
       const y = t.y + dy;
-      if (!magPad(w, x, y) || net[x + y * b] || T.erfOp(D, x, y) || deuren.has(x + y * b) || T.meegroeiGrondOp(D, x, y)) continue;
+      if (!magPad(w, x, y) || net[x + y * b] || deuren.has(x + y * b) || T.meegroeiGrondOp(D, x, y)) continue;
       if (T.opHetPlein(w, x, y)) continue; // het plein blijft open
       return { x, y };
     }

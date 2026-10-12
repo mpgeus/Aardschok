@@ -3,7 +3,7 @@
 // ruwe paal tot de schouder van een dorpeling, met bovenaan een bos stro die eromheen gebonden is en naar onderen
 // uitwaaiert, een paar halmen die boven het touw uitsteken, en de paal in een hoopje aarde.
 //
-// Eén tekening, geen delen, op beelden/pestbos.png (naar-spel.cjs --alleen pestbos), zoals het paaltje (paaltje.cjs): een
+// Eén tekening, geen delen, op beelden/pestbos.png (naar-spel.cjs --alleen pestbos): een
 // voorwerp draait niet mee. Het model kijkt naar Z: lokaal +y is naar de camera, +x is links in beeld, z omhoog. Het
 // anker is het midden van de tegel, op de grond.
 //
@@ -36,7 +36,7 @@ const M = { hout: 0, stro: 1, touw: 2, aarde: 3, kei: 4 };
 
 const materialen = () => {
   const mat = [];
-  // Ruw hout, grijsbruin zoals het paaltje, onderaan donkerder.
+  // Ruw hout, grijsbruin, onderaan donkerder.
   mat[M.hout] = { ramp: 'schors', lo: 2.3, hi: 6.6, patroon: (x, y, z) => (z < 6 ? -(6 - z) * 0.1 : 0) };
   // Stro: halmen in de lengte, elk een eigen tint, naar onderen wat donkerder, want daar komt het licht er minder bij.
   mat[M.stro] = {
@@ -71,7 +71,7 @@ function paalDeel() {
       const as = paalAs(z);
       const dx = x - as[0];
       const dy = y - as[1];
-      // langs de kaart, zoals het paaltje: een afgerond vierkant, een kwartslag gedraaid
+      // langs de kaart: een afgerond vierkant, een kwartslag gedraaid
       const zij = sdf.doos((dx - dy) * S2, (dx + dy) * S2, 0, PAAL.half, PAAL.half, 1e3, 0.5);
       return Math.max(zij, z - PAAL.top, -z - 2) * 0.9;
     },

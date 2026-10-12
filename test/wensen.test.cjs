@@ -644,18 +644,6 @@ test('2c: een huis zegt wie er woont, wat het wil met wat helpt, wat het als eer
   }
 });
 
-test('2c: met een erf in de hand zegt de muis welke put en kapel een huis daar zou halen', () => {
-  const S = gehucht();
-  const D = S.dorp;
-  const put = T.plekkenVan(D, 'put')[0];
-  const bij = { x: put.x - 4, y: put.y + 2, b: 10, h: 10 };
-  assert.equal(T.erfKringTekst(D, bij), `A house on this plot has a well within ${T.WENSEN_INSTELLINGEN.kring.put} tiles, but no chapel within ${T.WENSEN_INSTELLINGEN.kring.kapel}.`);
-  assert.equal(T.erfKringTekst(D, { x: 0, y: 0, b: 10, h: 10 }), `A house on this plot has no well within ${T.WENSEN_INSTELLINGEN.kring.put} and no chapel within ${T.WENSEN_INSTELLINGEN.kring.kapel}.`);
-  // Een kapel in aanbouw telt mee: daar komt hij.
-  D.gebouwen.push({ soort: 'kapel', x: put.x + 3, y: put.y + 3, voet: { b: 4, h: 4 }, klaar: false });
-  assert.match(T.erfKringTekst(D, bij), /a chapel within/);
-});
-
 // De wijn (werklijst vraag 136; Marcel, 10 okt: "Inwoners willen wijn en bier. Afwisseling", en "B1"): een stenen huis wil
 // wijn naast zijn bier, en in een dorp noemt het de wijnboerderij, zodat de raad erom vraagt.
 test('een stenen huis wil wijn, en in een dorp helpt een wijnboerderij', () => {

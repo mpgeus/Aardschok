@@ -164,7 +164,7 @@ test('de eis van de proef van 28 sep, in de getallen gezet: 50 mensen, met een k
 test('in een dorp staan de gebouwen van het gehucht nog in het bouwmenu, met die van het dorp erbij; marktrecht net zo', () => {
   const gehuchtMenu = Object.keys(T.GEBOUWEN).filter((id) => T.inBouwmenu({ trede: 'gehucht' }, id));
   const dorpMenu = Object.keys(T.GEBOUWEN).filter((id) => T.inBouwmenu({ trede: 'dorp' }, id));
-  assert.ok(gehuchtMenu.includes('kapel') && gehuchtMenu.includes('put') && gehuchtMenu.includes('erf'));
+  assert.ok(gehuchtMenu.includes('kapel') && gehuchtMenu.includes('put') && gehuchtMenu.includes('hut'));
   assert.ok(!gehuchtMenu.includes('molen'), 'de molen hoort bij het dorp');
   for (const id of gehuchtMenu) assert.ok(dorpMenu.includes(id), `${id} staat in het dorp niet meer in het menu`);
   for (const id of ['timmerman', 'molen', 'bakkerij', 'wapenmaker', 'schuttershof']) assert.ok(dorpMenu.includes(id), id);

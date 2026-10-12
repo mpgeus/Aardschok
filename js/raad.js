@@ -308,9 +308,7 @@
     {
       id: 'plaats',
       als: (D) => mensenNodig(D) > 0 && T.waaromGeenGezin(D).includes('plaats'),
-      tekst: () => (T.ERVEN_INSTELLINGEN.dorpBouwtZelf
-        ? T.t('No family is coming: the village is full. Mark out a plot: [B], then {erf}.', { erf: T.hoofdletter(naamVan('erf')) })
-        : T.t('No family is coming: the village is full. Build {hut} or {huis}: [B].', { hut: eenNaam('hut'), huis: eenNaam('huis') })),
+      tekst: () => T.t('No family is coming: the village is full. Build {hut} or {huis}: [B].', { hut: eenNaam('hut'), huis: eenNaam('huis') }),
     },
     {
       // De wensen (werklijst vraag 86, a, en 87; Marcel, 2 okt: "a ja"): wat de huizen missen en wat helpt, zoals

@@ -1,13 +1,13 @@
 'use strict';
 // Een dorp van N bewoners bouwen op het gehucht (alleen voor de meting, npm run grootte). Ook in de bladzijde
 // (browser.cjs zet deze bron daar neer, met T = Spel), zodat het in Node en in de browser hetzelfde dorp is. Gebruikt de regels van het spel zelf:
-// T.legErfAan en T.zetHutOpErf (js/erven.js: zo groeit het dorp echt), T.plaatsGebouw (met T.waaromPastHetNiet),
-// T.wijzigBevolking (en daarmee de bewoners uit js/bewoners.js), T.verdeelHanden. Wat een speler met de hand zou doen,
+// T.plaatsGebouw (met T.waaromPastHetNiet, en dus het looppad om elk gebouw), T.wijzigBevolking (en daarmee de bewoners uit js/bewoners.js), T.verdeelHanden. Wat een speler met de hand zou doen,
 // doen we in bulk.
 //
 // Twee indelingen:
-//   'erven'   (standaard) elk gezin op een erf van 10 bij 10, zoals het spel het doet; werkplekken met twee tegels lucht.
-//   'compact' hutten zonder erf, met één tegel steeg ertussen (veel krapper dan het spel ooit bouwt).
+//   'ruim'    (standaard) hutten met twee tegels lucht, zoals de werkplekken. Tot ronde 2 van het snoeien (12 okt) stond
+//             hier 'erven': elk gezin op een erf van 10 bij 10 (js/erven.js), maar de erven zijn weg.
+//   'compact' hutten met één tegel steeg ertussen (veel krapper dan het spel ooit bouwt).
 const { T } = require('./harnas.cjs');
 
 // Kaart groter maken: nieuwe rijen en kolommen gras rechts en onder (de bestaande coördinaten blijven gelden).
@@ -34,7 +34,7 @@ function vergroot(S, L) {
 }
 
 // De vrije grond als raster. `muur`: er staat iets vast (T.isVast); `nee`: er mag niet gebouwd worden (plein, veld,
-// pad, erf: T.waaromNietOpDezeGrond).
+// pad: T.waaromNietOpDezeGrond).
 function maakRaster(D) {
   const w = D.wereld;
   const muur = new Uint8Array(w.b * w.h);
@@ -63,13 +63,6 @@ function pastMetLucht(r, x, y, b, h, lucht) {
   return true;
 }
 
-// Past een erf (b bij h) met zijn linkerbovenhoek op (x, y)? Het hele vak moet vrij zijn.
-function erfPast(r, x, y, b, h) {
-  if (x < 1 || y < 1 || x + b + 1 > r.b || y + h + 1 > r.h) return false;
-  for (let yy = y; yy < y + h; yy++) for (let xx = x; xx < x + b; xx++) if (r.muur[yy * r.b + xx] || r.nee[yy * r.b + xx]) return false;
-  return true;
-}
-
 // Alle plekken op volgorde van afstand tot het plein: het dorp groeit vanuit het midden.
 function kandidaten(D) {
   const w = D.wereld;
@@ -84,7 +77,6 @@ function kandidaten(D) {
 function klaarMaken(g) {
   g.klaar = true;
   g.klaarOp = 0;
-  g.wachtOpHout = false;
   if (g.voorwerp) g.voorwerp.inAanbouw = false;
 }
 
@@ -110,27 +102,6 @@ function zetGebouw(D, soort, r, kand, wijzer, lucht) {
     return res.instantie;
   }
   wijzer[sleutel] = i;
-  return null;
-}
-
-// Een erf aanwijzen en een hut erop zetten, zoals een gezin dat doet (T.zetHutOpErf), en meteen klaar.
-function zetErf(D, r, kand, wijzer) {
-  const { b, h } = T.erfMaat();
-  let i = wijzer.erf || 0;
-  for (; i < kand.length; i++) {
-    const k = kand[i];
-    if (!erfPast(r, k.x, k.y, b, h)) continue;
-    const res = T.legErfAan(D, k.x, k.y);
-    if (!res.gelukt) continue;
-    for (let yy = k.y; yy < k.y + h; yy++) for (let xx = k.x; xx < k.x + b; xx++) r.nee[yy * r.b + xx] = 1;
-    const hut = T.zetHutOpErf(D, res.erf);
-    if (!hut) return null;
-    klaarMaken(hut);
-    markeerVoet(r, hut);
-    wijzer.erf = i + 1;
-    return hut;
-  }
-  wijzer.erf = i;
   return null;
 }
 
@@ -177,10 +148,10 @@ function zetBijDeur(D) {
 }
 
 // Het hele dorp van N bewoners, op een kaart die zo groot is als nodig. opties: { werk: genoeg werkplekken,
-// indeling: 'erven' | 'compact', kaart: minimale maat }. Laat het spel in een rustige stand achter.
+// indeling: 'ruim' | 'compact', kaart: minimale maat }. Laat het spel in een rustige stand achter.
 function bouwDorp(S, N, opties = {}) {
   const D = S.dorp;
-  const indeling = opties.indeling || 'erven';
+  const indeling = opties.indeling || 'ruim';
   const lucht = opties.lucht != null ? opties.lucht : 2;
   vulVoorraad(D);
   const L0 = opties.kaart || S.wereld.b;
@@ -205,7 +176,7 @@ function bouwDorp(S, N, opties = {}) {
       // Verdeel de twee soorten gelijkmatig over de volgorde.
       const moetHuis = gehut < Math.round(((k + 1) * huizen) / totaal) || gewerkt >= werkNodig;
       if (moetHuis && gehut < huizen) {
-        const g = indeling === 'erven' ? zetErf(D, r, kand, wijzer) : zetGebouw(D, 'hut', r, kand, wijzer, 1);
+        const g = zetGebouw(D, 'hut', r, kand, wijzer, indeling === 'compact' ? 1 : lucht);
         if (!g) mislukt = true;
         else gehut++;
       } else if (gewerkt < werkNodig) {
@@ -247,4 +218,4 @@ function bouwDorp(S, N, opties = {}) {
   return { gelukt: false, reden };
 }
 
-module.exports = { T, vergroot, bouwDorp, maakRaster, kandidaten, zetGebouw, zetErf, vulVoorraad, zetBijDeur, klaarMaken, markeerVoet, handenVan };
+module.exports = { T, vergroot, bouwDorp, maakRaster, kandidaten, zetGebouw, vulVoorraad, zetBijDeur, klaarMaken, markeerVoet, handenVan };

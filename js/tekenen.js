@@ -515,14 +515,6 @@
       // één scalair dieptegetal niet genoeg, en zoekt tekenVolgorde zijn plek (zie hieronder).
       lijst.push({ d: diepteVan(v), l: 1, punt: { x: v.x, y: v.y }, gebouw: T.isGebouw(v) ? v : undefined, f: () => tekenVoorwerp(ctx, S, v, helder) });
     }
-    // De paaltjes op de hoeken van een vrij erf (js/erven.js): ze staan in de weg van niemand, maar
-    // worden als een voorwerp op hun tegel getekend, zodat wie ervoor loopt ervoor staat.
-    for (const erf of (D && D.erven) || []) {
-      for (const t of T.paaltjesVan(erf)) {
-        if (!inVak(vak, t.x, t.y) || !T.isZichtbaar(w, t.x, t.y)) continue;
-        lijst.push({ d: t.x + t.y, l: 1, punt: { x: t.x, y: t.y }, f: () => tekenPaaltje(ctx, t.x, t.y) });
-      }
-    }
     // De akkers (alleen het nieuwe spel, ?kaart=gehucht — ontwerp/werklijst.md punt 1b): welk
     // stadium en welke variant een tegel heeft, weet js/akkers.js (T.akkerStadium e.a.); hier
     // wordt alleen getekend, en alleen wat in beeld staat (vak, net als de muren-loop hierboven —
@@ -1774,29 +1766,6 @@
     ctx.restore();
   }
 
-  // Een paaltje op de hoek van een vrij erf (js/erven.js, T.paaltjesVan): de kunst als die er is
-  // (gereedschap/pixelart/paaltje.cjs), anders een dun houten paaltje in vlakken.
-  function tekenPaaltje(ctx, x, y) {
-    const p = opGrond(x, y);
-    const deel = metSprites() && T.sprites.paaltje && T.sprites.paaltje();
-    if (deel) T.sprites.teken(ctx, deel, p.x, p.y, 1);
-    else T.blok(ctx, p.x, p.y, 0.05, 0.05, 18, '#8a6a42', { helder: 1 });
-  }
-
-  // De randen van de erven (js/erven.js), zolang het bouwmenu open is of je bouwt: zo zie je waar ze
-  // liggen en welke vrij zijn (licht) of bewoond (gedempt). Een lijn langs de buitenkant, op de grond.
-  function tekenErfRanden(ctx, S) {
-    const erven = S.dorp && S.dorp.erven; // bouwen doe je in je eigen dorp (het bouwmenu, js/hud.js)
-    if (!(S.bouwSoort || S.bouwMenuOpen) || !(erven && erven.length)) return;
-    ctx.save();
-    ctx.lineWidth = 2;
-    for (const erf of erven) {
-      ctx.strokeStyle = erf.hut ? 'rgba(230, 220, 190, 0.35)' : 'rgba(240, 225, 170, 0.85)';
-      tekenRand(ctx, erf);
-    }
-    ctx.restore();
-  }
-
   // Het bouwbereik van het lege begin (js/begin.js; vraag 152, 1d), zolang het bouwmenu open is of je bouwt: een zachte
   // gloed op de grond waar je kunt bouwen, die in de laatste twee tegels uitdooft. Geen lijn (Marcel, 11 okt: "Ik wil geen
   // 'grens'"). Per sterkte één pad, zodat het duizenden tegels in drie keer vult.
@@ -1851,23 +1820,9 @@
 
   // Het gebouw dat de speler in de hand heeft (S.bouwSoort, het bouwmenu in js/hud.js): zijn hele
   // voet licht op, groen als T.gebouwPast hem daar toestaat, anders rood — dezelfde twee kleuren
-  // als tekenMarkeringen voor het looppad gebruikt (licht/rood hieronder). Met een erf in de hand op
-  // een vrij erf licht dat erf op: een klik haalt het weg (js/main.js).
+  // als tekenMarkeringen voor het looppad gebruikt (licht/rood hieronder).
   function tekenBouwSpook(ctx, S) {
-    tekenErfRanden(ctx, S);
     if (!S.bouwSoort || !S.bouwHover) return;
-    const weg = S.bouwHover.weghalen;
-    if (weg) {
-      ctx.fillStyle = 'rgba(224, 96, 79, 0.35)';
-      for (let dy = 0; dy < weg.h; dy++) {
-        for (let dx = 0; dx < weg.b; dx++) {
-          const p = opGrond(weg.x + dx, weg.y + dy);
-          T.ruit(ctx, p.x, p.y, 0.94);
-          ctx.fill();
-        }
-      }
-      return;
-    }
     // De voet van de tekening die dit gebouw echt krijgt (T.volgendeTekening, js/gebouwen.js), of de rechthoek van het veld
     // dat je trekt (js/main.js, js/boerderij.js).
     const veld = S.bouwHover.veld;
@@ -1902,7 +1857,7 @@
     ctx.stroke();
   }
 
-  // Een rechthoek van tegels { x, y, b, h } als lijn langs de buitenkant, op de grond (zoals de erven hierboven).
+  // Een rechthoek van tegels { x, y, b, h } als lijn langs de buitenkant, op de grond.
   function tekenRand(ctx, r) {
     const hoeken = [
       opGrond(r.x - 0.5, r.y - 0.5), opGrond(r.x + r.b - 0.5, r.y - 0.5),

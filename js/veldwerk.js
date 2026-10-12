@@ -10,9 +10,8 @@
 //   - en ontgint hij heide of bos (js/ontginnen.js), dan werkt hij daar, behalve als hij zaait: op de heide steekt hij
 //     plaggen, tegel voor tegel; in het bos hakt hij eerst de bomen om en rooit hij de stronken en de struiken, van naast
 //     die tegel, en spit hij de grond daarna om.
-// Net zo rooit het hoofd van een nieuw gezin zijn erf, als daar nog bomen, stronken of struiken staan, en een inwoner de
-// plek van de werkplaats die hij vroeg (js/bos.js; werklijst vraag 110, e): hij hakt en rooit, en het gezin van wie zijn
-// erf rooit, helpt, tot de bouwplaats kan komen. En de houthakker hakt aan zijn boom in het bos, en brengt het hout in
+// Net zo rooit het hoofd van een gezin wat er staat waar zijn huis groter wordt (js/bos.js; werklijst vraag 130): hij hakt
+// en rooit, en wie van zijn gezin geen werk heeft, helpt. En de houthakker hakt aan zijn boom in het bos, en brengt het hout in
 // bundels naar zijn schuur (js/bos.js; vraag 115). En de jager loert in het bos op de groep herten of de roedel waar hij op
 // jaagt, en gaat dan terug naar zijn hut (js/beesten.js; vraag 116, stap 3a).
 // Wat overblijft (dorsen, het vee, of er is niets te doen), doet hij bij zijn boerderij, zoals tot nu toe: T.dagAnker
@@ -420,9 +419,8 @@
   // De bewoner van dit poppetje: een nieuw poppetje draagt hem mee, een boer zoeken we op (T.bewonerVan, js/bewoners.js).
   const bewonerVan = (D, e) => e.bewoner || (e.werkAkkers && e.werkAkkers.length ? T.bewonerVan(D, e) : null);
 
-  // Het stuk dat dit poppetje rooit (js/bos.js; werklijst vraag 110, e): het erf van zijn hut als hij het hoofd is van het
-  // gezin, of de plek van de werkplaats die hij vroeg (ook een boer die om een put vroeg); of null. Het gezin van wie zijn
-  // erf rooit, helpt (T.helpAnker).
+  // Het stuk dat dit poppetje rooit (js/bos.js; werklijst vraag 130): waar zijn huis groter wordt, als hij het hoofd is van
+  // het gezin; of null. Zijn gezin helpt (T.helpAnker).
   function kavelDieHijRooit(D, e) {
     const g = T.rooitHij(bewonerVan(D, e));
     return g ? g.kavel : null;
@@ -464,7 +462,7 @@
       return;
     }
     if (e.pad.length) return; // onderweg naar zijn boom
-    // Hakte iemand anders zijn boom vandaag om (wie een erf rooit, een boer die ontgint), dan wacht hij tot morgen: de
+    // Hakte iemand anders zijn boom vandaag om (een gezin dat rooit, een boer die ontgint), dan wacht hij tot morgen: de
     // regel kiest 's nachts een nieuwe (T.boomVanHouthakker).
     if (T.ontginWerkOp(w, g.boom.x, g.boom.y) !== 'hakken') {
       stop(e);
@@ -806,7 +804,7 @@
   }
 
   // Elk beeld, na het maaien (T.werkOogstBij) en vóór het dwalen (T.dwaal): elke boer doet zijn werk van vandaag, en wie
-  // zijn erf rooit, rooit (met dezelfde bijl en op dezelfde manier als een boer die bos ontgint). Waar je bent vanuit
+  // rooit waar zijn huis groter wordt, rooit (met dezelfde bijl en op dezelfde manier als een boer die bos ontgint). Waar je bent vanuit
   // js/main.js, de andere dorpen vanuit T.werkDorpBij (js/dorp.js).
   T.werkVeldwerkBij = function (S, D) {
     const w = D.wereld;
@@ -880,9 +878,9 @@
     const p = e.bewoner;
     if (!p || !p.huis || p.weg || p.komt) return null;
     if (p.leeftijd !== 'volwassen' && p.leeftijd !== 'jong') return null;
-    // Het gezin van wie zijn erf rooit (js/erven.js; werklijst vraag 110, e) helpt net zo: zolang hij hakt of rooit,
-    // blijven ze dicht bij hem. Rooit hij waar zijn huis groter wordt (vraag 130), dan helpt wie geen werk heeft.
-    if (p.huis.wachtOpRooien || (p.huis.groeitNaRooien && !p.werk)) {
+    // Rooit het hoofd waar zijn huis groter wordt (js/bos.js; vraag 130), dan helpt wie van zijn gezin geen werk heeft: zolang
+    // hij hakt of rooit, blijven ze dicht bij hem.
+    if (p.huis.groeitNaRooien && !p.werk) {
       const hoofd = p.hoofd && p.hoofd.wezen;
       if (!hoofd || hoofd.dood || !hoofd.werkt || !ONTGINWERK.has(hoofd.werkt.soort)) return null;
       return { x: hoofd.tx, y: hoofd.ty, straal: IN().helpStraal, veld: false };

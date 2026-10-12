@@ -58,17 +58,6 @@ function zonderWensen(fn) {
   }
 }
 
-// Een plek voor een erf, zo dicht mogelijk bij het plein (zoals in test/erven.test.cjs).
-function erfPlek(S) {
-  const plein = T.pleinVan(S.wereld);
-  const plekken = [];
-  for (let y = 0; y < S.wereld.tegels.length; y++) {
-    for (let x = 0; x < S.wereld.tegels[0].length; x++) plekken.push({ x, y, d: Math.hypot(x + 5 - plein.x, y + 5 - plein.y) });
-  }
-  plekken.sort((a, b) => a.d - b.d);
-  return plekken.find((p) => !T.waaromPastErfNiet(S.dorp, p.x, p.y));
-}
-
 test('de eerste dag: hoe de tijd sneller gaat en hoe je slaapt, tot je de tijd zelf sneller zet', () => {
   const S = gehucht();
   assert.equal(id(S), 'tijd');
@@ -93,10 +82,13 @@ test('geen gezin: het dorp is vol, niet tevreden genoeg, of er ligt te weinig gr
   const S = metRaadsman(opDag(gehucht(), 3.5));
   T.wijzigBevolking(S.dorp, S.dorp.woonruimte - S.dorp.bevolking, 'groei');
   assert.equal(id(S), 'plaats');
-  assert.equal(raad(S).tekst, 'No family is coming: the village is full. Mark out a plot: [B], then Plot.');
-  // Met een vrij erf is er plaats.
-  const plek = erfPlek(S);
-  T.plaatsGebouw(S.dorp, 'erf', plek.x, plek.y);
+  assert.equal(raad(S).tekst, 'No family is coming: the village is full. Build a hut or a house: [B].');
+  // Met een hut die af is, is er plaats (tot ronde 2 van het snoeien: een vrij erf).
+  T.zetVoorraad(S.dorp, 'hout', 100);
+  const plek = T.plekVoor(S.dorp, 'hut', T.pleinVan(S.wereld));
+  const u = T.plaatsGebouw(S.dorp, 'hut', plek.x, plek.y);
+  assert.ok(u.gelukt, u.reden);
+  u.instantie.klaar = true;
   assert.equal(id(S), 'gezin');
   // Niet tevreden genoeg, en te weinig graan: dan eerst de tevredenheid, want daar is iets aan te doen.
   S.dorp.behoeften = Object.assign(T.nieuweBehoeften(), { tevredenheid: 0.4 });
@@ -380,8 +372,4 @@ test('na de laatste trede is er geen doel meer, dus telt de raad geen mensen mee
   // Het winnen is op 11 okt weggehaald (js/einde.js): na de laatste trede vraagt niets meer om mensen.
   assert.equal(T.tredeDoel(D), null);
   assert.ok(!raadVan('gezin').als(D), 'er is geen doel meer: over de groei zegt hij niets');
-  // Een vrij erf weghalen zegt de raad niet (Marcel, 8 okt: "2. B").
-  assert.ok(T.legErfAan(D, 48, 50).gelukt);
-  assert.ok(!raadVan('geenErf'), 'de raad over het vrije erf is weg');
-  assert.doesNotMatch(T.raadNu(D) ? T.raadNu(D).tekst : '', /erf weg/);
 });

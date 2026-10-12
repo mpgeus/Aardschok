@@ -47,7 +47,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Weides met koeien en schapen | stap 1 en 2 gebouwd (25 sep); sinds 30 sep kiezen de boeren hun velden en slachten ze zelf, en jij kunt het veranderen | 6a, vraag 74 |
 | Ontginnen | het verzoek van een boer is op 11 okt weggehaald (snoeironde, vraag 153): akkers leg jij nu zelf; het plaggen steken en het bos hakken op een veld in ontginning blijven en slapen tot stap 1d | 6b, vraag 107 |
 | Straten en paden | paadjes van de deuren en waar gelopen wordt, lantaarns en brandende ramen gebouwd (3 okt, vraag 108); sneller lopen, modder en keien nog niet | 6c, vraag 108 |
-| Een dorp dat leeft en groeit | de dag, de bewoners en de huizen van de huizenbouwer gebouwd (26 sep), de herberg stuk 1 (27 sep), het dorp bouwt zelf op erven (28 sep), de treden tot marktrecht (2 okt, "Van dorp tot stad"); sinds 4 okt lopen de mensen om wat vaststaat en lossen ze onderweg op wie er staat ("Lopen tussen anderen", vraag 119), en wie vrij is en toevallig een buur of iemand van zijn werk treft, blijft soms staan voor een praatje, met een wolkje (vraag 120, a en b); waar ze het over hebben komt met de mensen aan het werk; sinds 5 okt werken de boeren overdag op hun land, naar het seizoen ("De boeren aan het werk", vraag 111, stap 1); de rest een voorstel, grotendeels gekozen | 2, 3b, 11, 13, 14, vraag 90, 111, 119, 120 |
+| Een dorp dat leeft en groeit | de dag, de bewoners en de huizen van de huizenbouwer gebouwd (26 sep), de herberg stuk 1 (27 sep), het dorp bouwde zelf op erven (28 sep tot 12 okt, ronde 2 van het snoeien), de treden tot marktrecht (2 okt, "Van dorp tot stad"); sinds 4 okt lopen de mensen om wat vaststaat en lossen ze onderweg op wie er staat ("Lopen tussen anderen", vraag 119), en wie vrij is en toevallig een buur of iemand van zijn werk treft, blijft soms staan voor een praatje, met een wolkje (vraag 120, a en b); waar ze het over hebben komt met de mensen aan het werk; sinds 5 okt werken de boeren overdag op hun land, naar het seizoen ("De boeren aan het werk", vraag 111, stap 1); de rest een voorstel, grotendeels gekozen | 2, 3b, 11, 13, 14, vraag 90, 111, 119, 120 |
 | Welke gameplay er nog nodig is | het plan voor alles | 8 tot 18 |
 | Lords of the Realm 2 als voorbeeld | ideeën (25 sep), niets besloten | 8 tot 16 |
 | Open | de grote vragen | |
@@ -75,8 +75,8 @@ is zijn huis (slapen, het rapport). Een tent is zo groot als zijn gezin, dus er 
 hout, 140 graan, 60 zaaigraan, 20 goud en 5 gereedschap; met de schout komt zijn gezin mee (Marcel: "Met gezin"), en elk
 gezin is een man, een vrouw en een kind, zodat het in een hut past (Marcel: "Kleinere gezinnen"), samen 17 mensen. Het
 eerste jaar vraagt de heer niets: geen schatting en geen grillen, en in wijnmaand schrijft hij dat hij je spaart ("Bedank
-Ons niet"). **Jij bouwt** (Marcel: "We willen dus een bouwmenu en zelf bouwen"): "Leeg" zet "Huizen" op "Jij" (en "Wie
-bouwt" is weg sinds 12 okt), dus alles staat in het bouwmenu en jij zet het neer (het rijst nog vanzelf op in zijn bouwtijd). **Verhuizen:** is
+Ons niet"). **Jij bouwt** (Marcel: "We willen dus een bouwmenu en zelf bouwen"): de spelregels "Huizen" en "Wie bouwt" zijn
+weg sinds 12 okt, dus alles staat in het bouwmenu en jij zet het neer (het rijst nog vanzelf op in zijn bouwtijd). **Verhuizen:** is
 een hut of huis af, dan trekt er in die nacht een gezin uit het kamp in (past het niet, dan toch, krap), en zijn tent gaat
 weg (Marcel: "Per tent"); met de laatste tent gaat het kampvuur uit, en de kar blijft. Zolang er een gezin in het kamp
 woont, komt er geen nieuw gezin over de weg. **Binnen bereik, en met handen** (1d; Marcel: "a1, b ja, c ja, d ja, e
@@ -3665,7 +3665,15 @@ wordt gepraat:
 
 ### Het dorp bouwt zelf
 
-**Zo werkt het nu** (28 sep, veertiende sessie; `js/erven.js`, werklijst vraag 52, Marcel: "A ja B ja C ja D ja"):
+**Zo werkt het nu** (12 okt, ronde 2 van het snoeien, stap 2b; Marcel: "III. OK"): **de erven zijn weg.** Jij zet de hut
+en het huis neer met het bouwmenu, en een nieuw gezin komt alleen als er een huis met plaats is; anders zegt het dorp dat
+er geen plaats is. Weg: `js/erven.js`, het erf in het bouwmenu, de paaltjes (met hun pixel art), een gezin dat zijn erf
+rooit en zelf zijn hut zet, de spelregel "Huizen", en `Spel.debug.erven()`. Mee weg, omdat het alleen voor de erven was:
+het huis dat een hut op een erf al wist te worden (`wordtTekening`), de grond waar huizen nog heen kunnen groeien
+(`T.groeiGrond`), en het huis "van straks" in de kring van een put of kapel. Opslaan gaat naar versie 6. Git bewaart het
+(`git log -S legErfAan`). Wat hieronder staat, is hoe het tot 12 okt werkte.
+
+**Zo werkte het** (28 sep, veertiende sessie; `js/erven.js`, werklijst vraag 52, Marcel: "A ja B ja C ja D ja"):
 - **Een erf wijs je aan met het bouwmenu** (`B`, "Erf"), zoals een gebouw: een vak van 10 bij 10 tegels
   (`T.ERVEN_INSTELLINGEN`, ook in de werkbank), groot genoeg voor elk huis dat er ooit komt, met zijn deur en
   plaats voor een moestuin. Het moet helemaal vrij zijn: niet op het plein, een veld, een pad of iets vasts. Het

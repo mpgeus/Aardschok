@@ -238,9 +238,7 @@ function vanGehuchtTotDorp(goed) {
     const groei = u.groei || [];
     const telt = (reden) => groei.filter((g) => g.waarom.includes(reden)).length;
     const w = u.winter || {};
-    const gebouwd = (u.gebouwd || []).filter((g) => g.gelukt && g.soort !== 'erf').map((g) => `${g.soort} ${kort(g.datum)}`);
-    const erven = (u.gebouwd || []).filter((g) => g.gelukt && g.soort === 'erf').length;
-    if (erven) gebouwd.push(`${erven} erven`);
+    const gebouwd = (u.gebouwd || []).filter((g) => g.gelukt).map((g) => `${g.soort} ${kort(g.datum)}`);
     uit.push(regel([
       NAMEN[u.speler] || u.speler, u.zaad,
       u.dorp ? `${kort(u.dorp.datum)} (${u.dorp.mensen} mensen)` : 'nee',

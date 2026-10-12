@@ -272,16 +272,6 @@
       werkVeldHoverBij(x, y);
       return;
     }
-    // Met een erf in de hand op een vrij erf: een klik maakt het weer gewone grond (js/erven.js).
-    const erf = T.GEBOUWEN[S.bouwSoort].erf ? T.erfOp(S.dorp, x, y) : null;
-    if (erf && !erf.hut) {
-      S.bouwHover = { x, y, ok: false, weghalen: erf };
-      canvas.style.cursor = 'pointer';
-      T.ui.tooltip(T.t('Click: turn this plot back into ordinary ground.'), S.muis.x, S.muis.y);
-      S.hover = null;
-      S.handeling = null;
-      return;
-    }
     // Past hij niet, dan zegt de muis waarom (op het plein wordt niet gebouwd), net als de klik. In het lege begin rooien
     // de bouwers eerst wat er op de plek staat (js/bouwen.js): dezelfde kavel als bij de klik (T.plaatsGebouw).
     const kavel = T.bouwKavel(S.dorp, S.bouwSoort, x, y);
@@ -291,12 +281,10 @@
     // Een plek die een huis in de buurt wil (een put, een kapel, de herberg, een markt): wie hij hier bereikt. De kring is
     // groter dan het scherm, dus zegt de muis het ook in woorden (js/wensen.js).
     const voet = !reden && T.gebouwVoet(S.bouwSoort, T.volgendeTekening(S.dorp, S.bouwSoort));
-    // Met een erf in de hand: welke put en kapel een huis hier zou halen (2c, vraag 100, c).
     const rechthoek = voet && { x, y, b: voet.b, h: voet.h };
-    const kring = voet && (T.GEBOUWEN[S.bouwSoort].erf ? T.erfKringTekst(S.dorp, rechthoek) : T.kringTekst(S.dorp, S.bouwSoort, rechthoek));
-    // En op een erf: wat er eerst gerooid moet, en of het in het bos van de heer ligt (js/erven.js; vraag 110, e).
-    const rooien = !voet ? null : T.GEBOUWEN[S.bouwSoort].erf ? T.rooiTekst(S.dorp, rechthoek)
-      : kavel && T.teRooienOp(S.dorp, kavel).length ? T.t('The builders first clear {wat}.', { wat: T.rooiWoordenOp(S.dorp, kavel) }) : null;
+    const kring = voet && T.kringTekst(S.dorp, S.bouwSoort, rechthoek);
+    // En wat de bouwers er eerst rooien (js/bouwen.js).
+    const rooien = voet && kavel && T.teRooienOp(S.dorp, kavel).length ? T.t('The builders first clear {wat}.', { wat: T.rooiWoordenOp(S.dorp, kavel) }) : null;
     const tekst = [kring, rooien].filter(Boolean).join(' ');
     if (reden) T.ui.tooltip(reden, S.muis.x, S.muis.y, true);
     else if (tekst) T.ui.tooltip(tekst, S.muis.x, S.muis.y);
@@ -727,12 +715,6 @@
       const hover = S.bouwHover;
       if (T.isVeldSoort(soort)) {
         klikMetVeld(soort, hover);
-        return;
-      }
-      if (hover && hover.weghalen) {
-        const r = T.haalErfWeg(S.dorp, hover.weghalen);
-        T.ui.bericht(r.gelukt ? r.bericht : r.reden, r.gelukt ? null : 'gevaar');
-        S.bouwSoort = null;
         return;
       }
       if (!hover || !hover.ok) {
@@ -1179,16 +1161,12 @@
       return zoek ? lijst.filter((r) => JSON.stringify(r).includes(zoek)) : lijst;
     },
     // Een nieuw gezin laten komen, zonder op een groeidag te wachten: het komt overdag over de weg
-    // (js/bewoners.js). Is het dorp vol, dan neemt het een vrij erf, zoals op een groeidag (js/erven.js).
+    // (js/bewoners.js). Is het dorp vol, dan zegt het dat er geen plaats is, zoals op een groeidag.
     // Spel.debug.gezin(-4) laat er een wegtrekken, zoals als het dorp ontevreden is.
     gezin(n = 4) {
       if (!S.dorp.bewoners) return 'Er wonen hier geen bewoners.'; // geen tekst
       const plaats = n < 0 ? n : Math.max(0, Math.min(n, (S.dorp.woonruimte || 0) - S.dorp.bevolking));
-      if (plaats === 0) {
-        const hut = T.gezinZoektEenErf(S.dorp);
-        T.ui.toonBevolking(S.dorp);
-        return hut ? `Een gezin neemt het erf op (${hut.erf.x}, ${hut.erf.y}), en komt overdag over de weg.` : 'Er is geen plaats: wijs eerst een erf aan (Spel.debug.bouw(\'erf\', x, y)).'; // geen tekst
-      }
+      if (plaats === 0) return 'Er is geen plaats: bouw eerst een hut of een huis.'; // geen tekst
       const echt = plaats < 0 ? T.wijzigBevolking(S.dorp, plaats, 'vertrek', 'het dorp is niet tevreden genoeg') : T.wijzigBevolking(S.dorp, plaats, 'groei'); // geen tekst
       T.ui.toonBevolking(S.dorp);
       return echt < 0 ? `${-echt} trekken weg.` : `${echt} komen over de weg, overdag vanaf ${T.DAG_INSTELLINGEN.bezoekUur} uur.`; // geen tekst
@@ -1445,8 +1423,6 @@
       });
       return { wetten: lijst, boete: T.houtkapBoete(S.dorp), belastingRest: S.dorp.wetten ? S.dorp.wetten.belastingRest : 0 };
     },
-    // De erven (js/erven.js): waar ze liggen, en wie er woont of bouwt. Een erf aanwijzen gaat als een
-    // gebouw: Spel.debug.bouw('erf', 30, 20).
     // De wensen per huis (js/wensen.js): per huis met mensen zijn stand, wie er woont, hoe tevreden het is, en wat het
     // wil, met ✓ of ✗ (een goed dat maar deels gedekt is, met hoeveel), en hoe het met doorgroeien staat (werklijst vraag
     // 130: wat het gezin rooit, of waarom het niet groeit); daarboven het dorp per stand, en wat er gemist wordt.
@@ -1474,16 +1450,6 @@
           groei: groei(h.g),
         })),
       };
-    },
-    erven() {
-      return (S.dorp.erven || []).map((e) => {
-        const hut = e.hut;
-        const wie = hut && S.dorp.bewoners ? S.dorp.bewoners.mensen.filter((p) => p.huis === hut).map((p) => p.naam) : [];
-        const vrij = T.hutPastOpErf(S.dorp, e) ? 'vrij' : 'vrij, maar er past geen hut meer op (vraag 110, f)'; // geen tekst
-        const rooien = hut && hut.wachtOpRooien ? `het gezin rooit nog ${T.teRooienOp(S.dorp, hut.kavel).length} tegels, tot uiterlijk dag ${hut.rooienTot}` : null; // geen tekst
-        const staat = !hut ? vrij : rooien || (hut.wachtOpHout ? 'wacht op hout' : hut.klaar ? `een ${T.GEBOUWEN[hut.soort].naam}` : `in aanbouw, klaar op dag ${hut.klaarOp}`); // geen tekst
-        return { x: e.x, y: e.y, staat, wie: wie.join(', ') };
-      });
     },
     // De herberg (js/herberg.js): wie er vanavond gaat, hoe ver ze lopen, gisteravond, en het bier.
     // Spel.debug.herberg(30) zet eerst 30 bier in de voorraad.

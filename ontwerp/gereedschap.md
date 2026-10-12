@@ -62,7 +62,7 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   (niet in git): `index.html` bovenin en alleen wat het spel laadt, met de stand (datum, commit) klein op het
   titelscherm (`T.STAND`). Commit eerst. Met `-- --windows` is het het spel in Electron voor Windows, zoals straks op Steam
   (`Aardschok/Aardschok.exe`; Electron komt één keer van GitHub, in `uit/`; vraag 123, e).
-- `npm run grootte` meet hoe groot een dorp kan worden (vraag 74): het bouwt het gehucht uit tot N bewoners, met erven en
+- `npm run grootte` meet hoe groot een dorp kan worden (vraag 74): het bouwt het gehucht uit tot N bewoners, met hutten en
   werkplekken zoals het spel ze bouwt, en meet de wereld per beeld op 30×, de dagtik en het opslaan, elke N in een eigen
   Node (`gereedschap/grootte/`, uitleg bovenin `grootte.cjs`); `-- 26 800` voor andere N, `--browser` ook het tekenen
   (start zelf de server), `--astar` het zoeken van een pad, `--prof` een CPU-profiel, `--maker 5` op land 5 van de maker
@@ -119,9 +119,8 @@ tien keer zo ver), `Spel.debug.geenNacht = true` zet de nacht uit, `Spel.debug.b
 blijven binnen de weide en geven melk (`js/vee.js`); een schaap gaat naar de heide. Zonder weide rond
 een open plek bij de schout. `Spel.debug.bewoners()` zegt per bewoner wie het is, zijn huis, zijn werk,
 waar hij staat en waar hij nu hoort (`('herder')` zoekt er een). `Spel.debug.gezin()` laat nu een
-gezin komen (overdag over de weg; is het dorp vol, dan neemt het een vrij erf), `(-4)` laat er een wegtrekken.
-`Spel.debug.bouw('erf', 48, 50)` wijst een erf aan (daar is plaats, ten zuidoosten van het plein), en
-`Spel.debug.erven()` zegt per erf of het vrij is, wie er woont, en hoe ver de hut is. `Spel.debug.trede()` zegt
+gezin komen (overdag over de weg; is het dorp vol, dan zegt het dat er geen plaats is), `(-4)` laat er een
+wegtrekken. `Spel.debug.trede()` zegt
 hoe ver het gehucht is met de volgende trede, en `('dorp')` maakt er nu een dorp van, met de brief van de heer
 (`('marktrecht')` net zo).
 `Spel.debug.rovers()` zegt wie er in de bende zit, wanneer die en de wilde rovers komen, hoe een aanval ervoor

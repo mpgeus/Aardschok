@@ -74,15 +74,13 @@
   };
 
   // Het bouwmenu: de soorten van de huidige trede, met hun kosten en wat ze doen (ontwerp/spel.md,
-  // "Gebouwen"). Welke erin staan, zegt T.inBouwmenu (js/gebouwen.js): bouwt het dorp zelf, dan het erf
-  // en geen woningen. Een klik op een rij geeft T.S.bouwSoort dat gebouw mee — daarna richt de muis
+  // "Gebouwen"). Welke erin staan, zegt T.inBouwmenu (js/gebouwen.js). Een klik op een rij geeft T.S.bouwSoort dat gebouw mee — daarna richt de muis
   // een spookbeeld (js/main.js, js/tekenen.js) tot een klik op de kaart hem neerzet.
   function bouwmenuInhoud(S) {
     const rijen = Object.keys(T.GEBOUWEN)
       .filter((id) => T.inBouwmenu(S.dorp, id))
       .map((id) => {
         const g = T.GEBOUWEN[id];
-        if (g.erf) return erfRij(S, id, g);
         if (g.veld) return veldInBouwmenu(id, g);
         const kosten = kostenTekst(g.kosten);
         // Wat de heer er elk jaar voor wil (js/heer.js): zo weet je bij elk gebouw wat het je op
@@ -120,20 +118,6 @@
     );
   }
 
-  // De rij van het erf (js/erven.js): wat het kost is niets, maar er staat bij hoeveel er vrij zijn (waar nog een hut op
-  // past, T.bruikbareErven), en wat een gezin erop nodig heeft.
-  function erfRij(S, id, g) {
-    const maat = T.erfMaat();
-    const vrij = T.bruikbareErven(S.dorp).length;
-    const hout = T.GEBOUWEN.hut.kosten.hout;
-    return (
-      `<button data-soort="${id}">` +
-      `<span class="bouw-naam">${T.hoofdletter(g.naam)}</span>` +
-      `<span class="bouw-kosten">${T.t('{b} by {h} tiles · {vrij}', { b: maat.b, h: maat.h, vrij: vrij ? T.t('{n} free', { n: vrij }) : T.t('none free') })}</span>` +
-      `<span class="bouw-uitleg">${T.t('{beschrijving}: {hout} per hut. Click a free plot to remove it again.', { beschrijving: g.beschrijving, hout: T.hoeveel(hout, 'hout') })}</span>` +
-      `</button>`
-    );
-  }
 
   T.ui.toonBouwmenu = function (S) {
     const box = $('bouwmenu');

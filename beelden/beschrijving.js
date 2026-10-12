@@ -43450,17 +43450,6 @@
      "boerin-drinker": 51
     }
    },
-   "paaltje": {
-    "bestand": "paaltje.png",
-    "cel": [
-     20,
-     31
-    ],
-    "anker": [
-     10,
-     25
-    ]
-   },
    "meiboom": {
     "bestand": "meiboom.png",
     "cel": [

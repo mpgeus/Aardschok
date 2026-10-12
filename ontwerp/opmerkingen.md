@@ -964,3 +964,7 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   gezin komen, maar er is geen plaats. Wijs een erf aan (B)"; de status Vol speelt vanaf de eerste dag (elke tent is vol);
   het doel linksboven is nog "Naar een dorp" (het plan noemde "haal de eerste winter"); de brief zegt "met 4 gezinnen" in
   cijfers. De weg van het eiland loopt soms dwars door het kamp op het plein. Allemaal voor 1c en 1d, als je kunt bouwen.
+- **Een wankele toets** (12 okt, ronde 2 van het snoeien): `test/wetten.test.cjs`, "vreemden welkom: om de 10 dagen een
+  gezin", maakt twee gehuchten zonder vast zaad en vergelijkt de bevolking van het ene op dag 10 met die van het andere
+  vóór die dag. Komt er in het ene op dag 10 toevallig een kind bij, dan is hij rood (één keer gezien, 27 tegen 26; los
+  veertien keer groen). Een vast zaad, of de bevolking van elk dorp met zichzelf vergelijken, maakt hem vast.

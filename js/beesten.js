@@ -25,7 +25,7 @@
 //            blijft de honger, en die doet in stap 2b wat hij doet.
 //   jongen   elke lente krijgt elke groep jongen, tot hij groot is (zes); dan splitst hij, en de helft zoekt een eigen
 //            thuis als het bos plaats heeft, en trekt anders weg (e). Zonder jager wordt het bos zo elk jaar voller.
-//   verhuizen ligt een thuis niet meer diep genoeg in het bos (er kwam een erf, een werkplaats of een akker), dan zoekt
+//   verhuizen ligt een thuis niet meer diep genoeg in het bos (er kwam een huis, een werkplaats of een akker), dan zoekt
 //            de groep dieper een nieuw; is er geen bos meer dat diep genoeg is, dan trekt hij weg (d).
 //
 // Stap 2b is de dreiging (Marcel, 7 okt: "a ja", en "h ja, i ja"); nu raakt het het dorp:
@@ -218,7 +218,7 @@
   // Een tegel waar een dier kan staan: begaanbaar, en niemand erop.
   const vrij = (w, x, y) => T.isBegaanbaar(w, x, y, { wezensBlokkeren: true });
 
-  // Open grond waar een hert graast: geen akker of weide, geen pad, niet op het plein of een erf, en niet bij een gebouw.
+  // Open grond waar een hert graast: geen akker of weide, geen pad, niet op het plein, en niet bij een gebouw.
   function bebouwd(D) {
     const w = D.wereld;
     const B = w.tegels[0].length;
@@ -234,7 +234,6 @@
       if (v) zet(v.x, v.y, v.b, v.h, 3);
     }
     for (const v of w.akkers || []) zet(v.x, v.y, v.b, v.h, 0);
-    for (const e of D.erven || []) zet(e.x, e.y, e.b, e.h, 1);
     return uit;
   }
 
@@ -393,7 +392,7 @@
   }
 
   // Of een groep van deze soort op (x, y) aan de rand kan staan: een wolf net binnen het bos, een hert op open grond
-  // vlak bij het bos (geen akker, weide of erf, geen pad, niet op het plein en niet bij een gebouw).
+  // vlak bij het bos (geen akker of weide, geen pad, niet op het plein en niet bij een gebouw).
   function randGoed(w, kaart, open, x, y, soort) {
     const i = y * kaart.B + x;
     if (!T.isBegaanbaar(w, x, y)) return false;

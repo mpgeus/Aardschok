@@ -87,6 +87,11 @@ de wijn (`T.wijnNaDePluk`) had geen gebruiker meer, maar Marcel koos het zelf (1
 (vraag 155). **Voor ronde 3:** de raadsman besliste vooral over verzoeken als je weg was; nu beslist hij alleen nog over
 de gelote voorvallen, en de raad zegt alleen nog wat helpt, met [B].
 
+**2b is af** (12 okt): de erven zijn weg, met de spelregel "Huizen", de paaltjes en hun pixel art, en wat alleen voor de
+erven was (`wordtTekening`, `T.groeiGrond`, het huis "van straks" in de kring); opslaan is versie 6. De oude spelers van
+de speeltest bouwen nu een hut als er geen plaats is (tot stap 5), en `npm run grootte` bouwt hutten zonder erf
+(`--indeling ruim`).
+
 **De kaart voor stap 2 tot 5** (een agent, 12 okt; regelnummers van toen, dus zoek op de naam):
 - **Verzoeken** (`js/verzoeken.js`, 440 regels; `VERZOEKEN_INSTELLINGEN.mensen`, de spelregel "Wie bouwt"): aangeroepen uit
   `js/voorvallen.js` (de voorvallen bouwverzoek, wapenverzoek en herbergverzoek, met `T.beginBouwverzoek`,

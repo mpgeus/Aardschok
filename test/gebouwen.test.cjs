@@ -516,15 +516,7 @@ test('bouwen: niet waar iemand staat, en niet op de deur van een ander gebouw', 
   assert.equal(T.waaromPastHetNiet(S, 'put', deur.x + voet.b + 3, deur.y), null, 'ernaast mag het');
 });
 
-test('een erf laat een deur vrij', () => {
-  const S = maakS(40, 40);
-  const huis = { soort: 'houthakker', x: 2, y: 2, voet: { b: 4, h: 4 }, klaar: true };
-  S.gebouwen.push(huis);
-  const deur = T.deurVan(S.wereld, huis);
-  assert.equal(T.waaromPastErfNiet(S, deur.x - 2, deur.y), 'There is a door there.');
-});
-
-test('wie op een bouwplaats staat (een hut op een erf), stapt eraf en staat niet ingemetseld', () => {
+test('wie op een bouwplaats staat, stapt eraf en staat niet ingemetseld', () => {
   const S = maakS();
   const e = { soort: 'dorpeling', x: 7, y: 7, tx: 7, ty: 7, pad: [{ x: 8, y: 7 }], onderweg: false };
   S.wereld.wezens = [e];

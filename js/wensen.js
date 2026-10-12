@@ -261,11 +261,9 @@
 
   // Hetzelfde voor veel plekken na elkaar (T.plekVoor, js/bouwen.js, vraagt het voor elke tegel van de kaart): welke
   // huizen het willen en of ze er al een hebben, staat één keer vast, en per plek wordt alleen nog geteld. Geeft een
-  // functie van de plek, of een die null geeft als deze soort geen kring heeft.
-  // Met `straks` telt een hut op een erf alleen als de plek ook het huis haalt dat hij wordt (T.kringVoetenVan), en ook
-  // voor wat dat huis wil (T.wilStraks): zo kiest het dorp waar een put of een kapel komt. Zonder telt wat hij nu haalt,
-  // zoals de muis en de kring in beeld het zeggen.
-  T.kringTeller = function (D, soort, straks = false) {
+  // functie van de plek, of een die null geeft als deze soort geen kring heeft. (Tot ronde 2 van het snoeien telde
+  // `straks` ook het huis dat een hut op een erf zou worden; de erven zijn weg.)
+  T.kringTeller = function (D, soort) {
     const wens = Object.keys(T.WENSEN).find((id) => T.WENSEN[id].plek === soort);
     const straal = IN().kring[soort];
     if (!wens || !straal) return () => null;
@@ -273,16 +271,15 @@
     const tel = mensenPerHuis(D);
     const willen = [];
     for (const g of D.gebouwen || []) {
-      const stand = T.standVan(g);
-      if (!tel.get(g) || !(straks ? T.wilStraks(g, wens) : stand && T.wensenVanStand(stand).includes(wens))) continue;
-      const voeten = straks ? T.kringVoetenVan(g) : [T.voetVanGebouw(g)];
-      willen.push({ voeten, heeft: er.some((p) => haaltAlle(voeten, p, straal)) });
+      if (!tel.get(g) || !T.huisWil(g, wens)) continue;
+      const voet = T.voetVanGebouw(g);
+      willen.push({ voet, heeft: er.some((p) => T.inDeKring(voet, p, straal)) });
     }
     return (plek) => {
       let huizen = 0;
       let zonder = 0;
       for (const h of willen) {
-        if (!haaltAlle(h.voeten, plek, straal)) continue;
+        if (!T.inDeKring(h.voet, plek, straal)) continue;
         huizen++;
         if (!h.heeft) zonder++;
       }
@@ -290,41 +287,25 @@
     };
   };
 
-  // Wat een plek met een kring moet halen om een huis te dienen, ook als het groeit: zijn voet, en bij een hut op een erf
-  // ook het huis dat hij wordt (T.huisPlekVan, js/erven.js; werklijst vraag 117, 2d). Een put die alleen de hut haalt, is
-  // hij kwijt als hij groeit: op het eiland van 72022 kwam zo een put op 11,7 tegels van de hut en 12,35 van zijn huis, en
-  // zijn looppad nam de laatste plekken die het huis wel haalden.
-  T.kringVoetenVan = function (g) {
-    const voet = T.voetVanGebouw(g);
-    const huis = g.soort === 'hut' && g.erf && T.huisPlekVan(g.erf);
-    return huis ? [voet, huis] : [voet];
-  };
-  const haaltAlle = (voeten, plek, straal) => voeten.every((r) => T.inDeKring(r, plek, straal));
-
-  // Wil dit huis deze wens, nu of straks: wat zijn stand wil, en een hut op een erf ook wat het huis wil dat hij wordt
-  // (werklijst vraag 117, 2d): een kapel wil de hut nog niet, het huis wel, en dan moet er nog een plek voor zijn.
-  const standVanSoort = (soort) => Object.keys(T.STANDEN).find((s) => T.STANDEN[s].huis === soort);
-  T.wilStraks = function (g, wens) {
+  // Wil dit huis (of een gebouw van deze soort, { soort }) deze wens: wat zijn stand wil. (Tot ronde 2 van het snoeien
+  // wilde een hut op een erf ook al wat het huis wil dat hij wordt; de erven zijn weg.)
+  T.huisWil = function (g, wens) {
     const stand = T.standVan(g);
-    if (stand && T.wensenVanStand(stand).includes(wens)) return true;
-    const huis = g.soort === 'hut' && g.erf && standVanSoort('huis');
-    return !!huis && T.wensenVanStand(huis).includes(wens);
+    return !!stand && T.wensenVanStand(stand).includes(wens);
   };
 
   // Waar nog een plek met een kring kan komen, en wie hem nog mist (werklijst vraag 117, 2d; Marcel, 8 okt: "A ja", en voor
   // de kapel "Prima"): de plekken op de kaart waar er een kan komen (T.kanHierKomen, js/bouwen.js: op open grond of na
-  // het rooien), die er al staan, en de huizen die hem willen, nu of straks, en er geen in hun kring hebben, elk met de
-  // plekken die het zouden halen; ook het huis dat straks op een vrij erf komt. Geeft { straal, wens, er, plekken,
-  // zonder: [{ r, wie, plekken }] }, of null zonder kring. Geen spelstaat, maar wat uit de kaart, de gebouwen en de erven volgt, dus één keer per stand van het dorp en
-  // per dag, zoals T.groeiGrond (js/behoeften.js): een erf vraagt het op elke tegel waar het zou kunnen komen
-  // (T.waaromPastErfNiet, js/erven.js).
+  // het rooien), die er al staan, en de huizen die hem willen en er geen in hun kring hebben, elk met de plekken die het
+  // zouden halen. Geeft { straal, wens, er, plekken, zonder: [{ r, wie, plekken }] }, of null zonder kring. Geen
+  // spelstaat, maar wat uit de kaart en de gebouwen volgt, dus één keer per stand van het dorp en per dag, zoals
+  // T.meegroeiGrond (js/behoeften.js).
   const KRINGGROND = new WeakMap(); // dorp → { soort: { sleutel, grond } }
   T.kringGrond = function (D, soort) {
     const wens = Object.keys(T.WENSEN).find((id) => T.WENSEN[id].plek === soort);
     const straal = IN().kring[soort];
     if (!wens || !straal) return null;
     let sleutel = `${straal}:${T.kaartVersie(D.wereld)}:${Math.floor((D.kalender && D.kalender.dag) || 0)}:${(D.gebouwen || []).length}`;
-    for (const e of D.erven || []) sleutel += `:${e.x},${e.y}${e.hut ? 'h' : ''}`;
     let perSoort = KRINGGROND.get(D);
     if (!perSoort) KRINGGROND.set(D, (perSoort = {}));
     const oud = perSoort[soort];
@@ -336,24 +317,15 @@
     const plekkenNu = () => alle || (alle = plekkenVoor(D, soort, voet));
     const er = T.plekkenVan(D, soort);
     const zonder = [];
-    // `r`: waar het huis straks staat (het laatste van `voeten`), voor wie het naleest.
-    const mist = (voeten, wie) => {
-      if (er.some((p) => haaltAlle(voeten, p, straal))) return;
-      zonder.push({ r: voeten[voeten.length - 1], wie, plekken: plekkenNu().filter((p) => haaltAlle(voeten, p, straal)) });
+    // `r`: waar het huis staat, voor wie het naleest.
+    const mist = (r, wie) => {
+      if (er.some((p) => T.inDeKring(r, p, straal))) return;
+      zonder.push({ r, wie, plekken: plekkenNu().filter((p) => T.inDeKring(r, p, straal)) });
     };
-    // Een hut op een erf telt met zijn hut en met het huis dat hij wordt (T.kringVoetenVan), en wil wat dat huis wil
-    // (T.wilStraks): in de speeltest groeide op 73425 een hut met een put binnen zijn kring tot een huis waarvan het midden
-    // net buiten de kring viel, en toen lagen er al erven om hem heen, en was er geen plek meer.
     const tel = mensenPerHuis(D);
     for (const g of D.gebouwen || []) {
-      if (!tel.get(g) || !T.wilStraks(g, wens)) continue;
-      mist(T.kringVoetenVan(g), T.huisVan(D, g));
-    }
-    if (T.wilStraks({ soort: 'hut', erf: true }, wens)) {
-      const wie = T.wensenVanStand(standVanSoort('hut')).includes(wens)
-        ? T.t('the {gebouw} on another plot', { gebouw: T.GEBOUWEN.hut.naam })
-        : T.t('the {gebouw} on another plot', { gebouw: T.GEBOUWEN.huis.naam });
-      for (const e of T.vrijeErven(D)) if (e.plan) mist([T.huisPlekVan(e)], wie);
+      if (!tel.get(g) || !T.huisWil(g, wens)) continue;
+      mist(T.voetVanGebouw(g), T.huisVan(D, g));
     }
     const grond = { straal, wens, er, zonder, get plekken() { return plekkenNu(); } };
     perSoort[soort] = { sleutel, grond };
@@ -361,13 +333,13 @@
   };
 
   // Komt hier iets waar een gezin gaat wonen, haalt dat gezin dan straks elke plek met een kring die het wil (een put, een
-  // kapel), en neemt het geen ander huis de laatste plek ervoor af? Voor een erf (T.waaromPastErfNiet, js/erven.js;
-  // werklijst vraag 117, 2d) en een gebouw met een gezin (T.waaromPastHetNiet, js/gebouwen.js: de wijnboerderij, vraag
-  // 136; Marcel, 10 okt: "Wijn haalt kapel"). `nieuw` zegt wat er komt, elk als rechthoek { x, y, b, h }: `grond`, wat
-  // het neemt (daar komt geen put of kapel meer); `vast`, waar het looppad van een put of kapel niet over kan (de plek van
-  // het huis op een erf, de hele voet van een wijnboerderij, want haar ranken staan in de weg); `huis`, waar het gezin
-  // woont, voor de kring. Verder `wil(wens)`: wil het die, nu of straks (T.wilStraks); `wie(wens)`: hoe het in de zin
-  // heet ("De hut op dit erf"); en `dit`: wat de plek neemt ("dit erf"). Geeft de reden, of null.
+  // kapel), en neemt het geen ander huis de laatste plek ervoor af? Voor een gebouw met een gezin (T.waaromPastHetNiet,
+  // js/gebouwen.js: de wijnboerderij, vraag 136; Marcel, 10 okt: "Wijn haalt kapel"; tot ronde 2 van het snoeien ook een
+  // erf, werklijst vraag 117, 2d). `nieuw` zegt wat er komt, elk als rechthoek { x, y, b, h }: `grond`, wat
+  // het neemt (daar komt geen put of kapel meer); `vast`, waar het looppad van een put of kapel niet over kan (de hele
+  // voet van een wijnboerderij, want haar ranken staan in de weg); `huis`, waar het gezin woont, voor de kring. Verder
+  // `wil(wens)`: wil het die (T.huisWil); `wie(wens)`: hoe het in de zin heet; en `dit`: wat de plek neemt. Geeft de
+  // reden, of null.
   T.waaromGeenKringPlek = function (D, nieuw) {
     const { grond, vast, huis, wil, wie, dit } = nieuw;
     for (const soort of Object.keys(IN().kring)) {
@@ -395,7 +367,7 @@
 
   // Elke plek op de kaart waar een gebouw van deze soort met voet `voet` kan komen (T.kanHierKomen). Eerst per tegel of
   // er ooit een voet op kan (niet op het plein, niet wat vaststaat en niet te rooien is, niet op grond waar niet gebouwd
-  // wordt) en of er een looppad over kan (te belopen of te rooien, en niet de plek van het huis van een erf), elk met een
+  // wordt) en of er een looppad over kan (te belopen of te rooien), elk met een
   // optelsom erover: een plek waar het ergens niet kan, valt dan in één stap af, en alleen de rest vraagt het aan
   // T.kanHierKomen. Dezelfde plekken als elke tegel afvragen, maar vele malen sneller (een kapel over de hele kaart
   // kostte 1,2 tot 1,8 s). Buiten de kaart kan geen voet (daar staat alles vast, js/wereld.js), wel een looppad.
@@ -412,7 +384,7 @@
       for (let x = 0; x < B; x++) {
         const rooi = !!T.ontginWerkOp(w, x, y);
         if (T.opHetPlein(w, x, y) || (T.isVast(w, x, y) && !rooi) || T.waaromNietOpDezeGrond(D, x, y)) rijVoet++;
-        if (!(T.isBegaanbaar(w, x, y, { deurenOpenen: true }) || rooi) || T.huisPlekOp(D, x, y, null)) rijPad++;
+        if (!(T.isBegaanbaar(w, x, y, { deurenOpenen: true }) || rooi)) rijPad++;
         const i = (y + 1) * (B + 1) + x + 1;
         geenVoet[i] = geenVoet[i - B - 1] + rijVoet;
         geenPad[i] = geenPad[i - B - 1] + rijPad;
@@ -447,27 +419,6 @@
     else if (k.zonder === k.huizen) nu = een ? T.t('It has none now.') : T.t('They have none now.');
     else nu = T.t('{n|# of them has|# of them have} none now.', { n: k.zonder });
     return T.t('Within {straal} tiles: {wie}. {nu}', { straal: k.straal, wie, nu });
-  };
-
-  // Welke plekken een huis op dit erf in zijn kring zou hebben (2c, werklijst vraag 100, c; `opmerkingen.md`, 1 okt): voor
-  // de muis met een erf in de hand (js/main.js), zodat je niet pas na een jaar merkt dat het huis er nooit alles krijgt.
-  // Alleen de plekken met een kring (een put, een kapel); de herberg en een markt gelden voor het hele dorp. Een plek in
-  // aanbouw telt mee. `erf` is de rechthoek van het erf.
-  T.erfKringTekst = function (D, erf) {
-    const ja = [];
-    const nee = [];
-    for (const id of Object.keys(T.WENSEN)) {
-      const wens = T.WENSEN[id];
-      const straal = wens.plek && IN().kring[wens.plek];
-      if (!straal) continue;
-      const inBouw = (D.gebouwen || []).filter((g) => g.soort === wens.plek && !g.klaar).map((g) => T.voetVanGebouw(g));
-      if (T.plekkenVan(D, wens.plek).concat(inBouw).some((r) => T.inDeKring(erf, r, straal))) ja.push(T.t('{wens} within {straal} tiles', { wens: wens.naam, straal }));
-      else nee.push(T.t('no {wens} within {straal}', { wens: wens.naam.replace(/^an? /, ''), straal }));
-    }
-    if (!ja.length && !nee.length) return null;
-    if (!ja.length) return T.t('A house on this plot has {nee}.', { nee: T.opsomming(nee) });
-    if (!nee.length) return T.t('A house on this plot has {ja}.', { ja: T.opsomming(ja) });
-    return T.t('A house on this plot has {ja}, but {nee}.', { ja: T.opsomming(ja), nee: T.opsomming(nee) });
   };
 
   // ---------------------------------------------------------------------------------------------

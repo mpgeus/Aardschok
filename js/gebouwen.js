@@ -43,10 +43,8 @@
 //                                    // T.heeftKerk) — nu alleen de kapel, later ook de kerk zelf
 //     lantaarn:    true,             // van het dorp: als hij klaar is, komt er een lantaarn naast de
 //                                    // deur die 's avonds brandt (js/paden.js, T.zetLantaarns)
-//     woning:      true,             // een huis om in te wonen (hut, huis, stenen huis): als het dorp zelf
-//                                    // bouwt (js/erven.js, T.ERVEN_INSTELLINGEN.dorpBouwtZelf), zet jij
-//                                    // die niet neer, en staat hij niet in het bouwmenu (T.inBouwmenu).
-//     erf:         true,             // alleen bij "erf": bouwgrond voor een gezin, geen gebouw (js/erven.js)
+//     woning:      true,             // een huis om in te wonen (hut, huis, stenen huis): in het lege begin
+//                                    // trekt er een gezin uit het kamp in (js/begin.js)
 //     leeg:        true,             // alleen in het lege begin (js/begin.js, D.begin): het huis van de schout,
 //                                    // de akker en de wijngaard
 //     nietLeeg:    true,             // niet in het lege begin: de wijnboerderij (daar is de wijngaard een veld)
@@ -115,15 +113,6 @@
 
   T.GEBOUWEN = {
     // ── Gehucht ──
-    // Bouwgrond voor een nieuw gezin (werklijst vraag 52, Marcel, 28 sep; spel.md, "Het dorp bouwt
-    // zelf"): je zet het neer met het bouwmenu, zoals een gebouw, maar het is land, geen gebouw. Een
-    // gezin zet er zelf een hut op. De maat staat in T.ERVEN_INSTELLINGEN; de rest in js/erven.js.
-    erf: {
-      naam: T.t('plot'), trede: 'gehucht', voet: null, kosten: {}, heer: {}, bouwtijd: 0,
-      handen: 0, woonruimte: 0, maakt: null, menu: true, erf: true,
-      tekening: null, beschrijving: T.t('building land: a new family puts up its own hut on it, with wood from the stores'),
-      opmerking: '',
-    },
     hut: {
       naam: T.t('hut'), meervoud: T.t('huts'), trede: 'gehucht', voet: { b: 3, h: 3 }, kosten: { hout: 8 }, heer: {}, bouwtijd: 2,
       handen: 0, woonruimte: 3, wordt: 'huis', maakt: null, menu: true, woning: true,
@@ -532,7 +521,6 @@
   T.gebouwVoet = function (soort, tekening) {
     const g = T.GEBOUWEN[soort];
     if (!g) return null;
-    if (g.erf) return T.erfMaat();
     // De wijnboerderij: het huis en zijn wijngaard samen (js/wijngaard.js); de tekening is alleen het huis.
     if (g.wijngaard) return g.voet;
     const t = tekening || g.tekening;
@@ -689,9 +677,6 @@
     if (!g.klaar) {
       // De mensen bouwen het zelf (js/bouwen.js): wie er bouwt, en hoe ver het is.
       if (g.bouw) return T.bouwToestand(D, g);
-      // Nog niet begonnen: de plek wordt eerst gerooid (js/bos.js), of de bouwplaats wacht op hout (js/erven.js).
-      if (g.wachtOpRooien) return T.t('{naam}: the site is cleared first.', { naam });
-      if (g.klaarOp == null) return T.t('{naam}: the building site is waiting for wood.', { naam });
       const dagNu = D.kalender ? Math.floor(D.kalender.dag) : 0;
       const nog = Math.max(1, g.klaarOp - dagNu);
       return T.t('{naam}: under construction, {n|# day|# days} to go.', { naam, n: nog });
@@ -727,16 +712,14 @@
   // gewoon voorwerp)? Geeft de reden, voor de speler, of null als hij past. Niet op het plein
   // (T.opHetPlein, js/wereld.js; Marcel, 26 sep: "Op het Plein wordt niet gebouwd"), en binnen de
   // kaart nergens al vast: dat dekt zowel de rand van de wereld als een ander gebouw, een boom, of
-  // muur (T.isVast). Sinds 28 sep (werklijst vraag 52) ook niet op een akker of weide, een pad of een
-  // erf: tot dan kon een werkplaats midden op een akker staan. Een erf heeft een eigen regel
-  // (T.waaromPastErfNiet, js/erven.js). Het bouwmenu laat de reden zien bij de muis en na een klik
+  // muur (T.isVast). Sinds 28 sep (werklijst vraag 52) ook niet op een akker of weide of een pad: tot
+  // dan kon een werkplaats midden op een akker staan. Het bouwmenu laat de reden zien bij de muis en na een klik
   // (js/main.js).
   // Met `tekening` voor een andere tekening dan de volgende (een andere stand, js/bouwstijl.js).
   // `kavel` ({ x, y, b, h }, of null): een stuk dat eerst gerooid wordt (js/bos.js; werklijst vraag 110, e). Wat daarop te
   // rooien is (een boom, een stronk, een struik), telt dan als vrij, onder de voet en in het looppad.
   // `wieErStaat` false: wie er nu staat, telt niet (die is morgen weg), voor wie vooruit kijkt (T.kanHierKomen).
   T.waaromPastHetNiet = function (D, soort, x, y, tekening, kavel = null, wieErStaat = true) {
-    if (T.GEBOUWEN[soort] && T.GEBOUWEN[soort].erf) return T.waaromPastErfNiet(D, x, y);
     // De markt op het plein (js/markt.js): zijn plek is het plein, waar je ook wijst.
     if (soort === 'markt' && T.marktOpHetPlein(D)) return T.waaromGeenMarktOpHetPlein(D);
     const voet = T.gebouwVoet(soort, tekening || T.volgendeTekening(D, soort));
@@ -764,9 +747,8 @@
     return T.waaromNietOpIemand(D, { x, y, b: voet.b, h: voet.h }, undefined, wieErStaat) || zonderKringPlek(D, soort, { x, y, b: voet.b, h: voet.h }, tekening);
   };
 
-  // Een gebouw waar een gezin woont (een wijnboerderij; met de spelregel "Huizen" ook een huis dat jij zet) komt alleen
-  // waar dat gezin straks zijn put en kapel haalt, en niet waar het een ander huis de laatste plek ervoor afneemt, zoals
-  // een erf (T.waaromGeenKringPlek, js/wensen.js; werklijst vraag 136; Marcel, 10 okt: "Wijn haalt kapel"): in de
+  // Een gebouw waar een gezin woont (een wijnboerderij, of een huis dat jij zet) komt alleen waar dat gezin straks zijn
+  // put en kapel haalt, en niet waar het een ander huis de laatste plek ervoor afneemt (T.waaromGeenKringPlek, js/wensen.js; werklijst vraag 136; Marcel, 10 okt: "Wijn haalt kapel"): in de
   // speeltest kwam een wijnboerderij ver van het dorp, en wilde haar gezin een jaar lang een kapel die nergens kon komen,
   // zodat het dorp niet won. Bij de wijnboerderij woont het gezin in het huis in de hoek van de voet (alleenHetHuis), en
   // daar meet ook de kring van haar wensen vanaf (T.voetVanGebouw). In het lege begin niet (Marcel, 12 okt: "b uit"): daar
@@ -778,7 +760,7 @@
     const vast = alleenHetHuis(soort, tekening || T.volgendeTekening(D, soort));
     const huis = vast ? { x: r.x, y: r.y, b: vast.b, h: vast.h } : r;
     return T.waaromGeenKringPlek(D, {
-      grond: r, vast: r, huis, wil: (wens) => T.wilStraks({ soort }, wens),
+      grond: r, vast: r, huis, wil: (wens) => T.huisWil({ soort }, wens),
       wie: () => T.t('{gebouw} here', { gebouw: T.hoofdletter(T.eenNaam(G.naam)) }), dit: T.t('{gebouw} here', { gebouw: T.eenNaam(G.naam) }),
     });
   }
@@ -853,23 +835,22 @@
   };
 
   // Is er een looppad van `breed` tegels rondom de rechthoek r ({ x, y, b, h })? Elke tegel in die rand is te belopen
-  // (T.isBegaanbaar, js/wereld.js: geen muur, geen gebouw, geen boom) en niet de plek van het huis op een erf (T.huisPlekOp,
-  // js/erven.js; behalve van het erf `behalve`), of ligt buiten de kaart, waar niemand loopt. Op het stuk `rooien` (een
-  // rechthoek; zonder: `behalve`) telt wat te rooien is als vrij: het erf, het looppad om de hut op een erf, of het stuk
-  // dat gerooid wordt voor een werkplaats (js/bos.js).
-  T.looppadOm = function (D, r, breed, behalve = null, rooien = behalve) {
+  // (T.isBegaanbaar, js/wereld.js: geen muur, geen gebouw, geen boom), of ligt buiten de kaart, waar niemand loopt. Op het
+  // stuk `rooien` (een rechthoek, of null) telt wat te rooien is als vrij: de kavel van een bouwplaats die de bouwers
+  // eerst rooien (js/bouwen.js).
+  T.looppadOm = function (D, r, breed, rooien = null) {
     const w = D.wereld;
     const hoog = w.tegels.length;
     const wijd = w.tegels[0].length;
     // Op het stuk dat gerooid wordt, telt wat te rooien is (een boom, een stronk, een struik) als vrij: dat rooit wie er
     // komt, voor de bouwplaats er ligt (js/bos.js; werklijst vraag 110, e).
-    const opHetErf = (x, y) => rooien && x >= rooien.x && x < rooien.x + rooien.b && y >= rooien.y && y < rooien.y + rooien.h;
+    const opHetStuk = (x, y) => rooien && x >= rooien.x && x < rooien.x + rooien.b && y >= rooien.y && y < rooien.y + rooien.h;
     for (let y = r.y - breed; y < r.y + r.h + breed; y++) {
       for (let x = r.x - breed; x < r.x + r.b + breed; x++) {
         if (x >= r.x && x < r.x + r.b && y >= r.y && y < r.y + r.h) continue;
         if (x < 0 || y < 0 || x >= wijd || y >= hoog) continue;
-        const vrij = T.isBegaanbaar(w, x, y, { deurenOpenen: true }) || (opHetErf(x, y) && T.ontginWerkOp(w, x, y));
-        if (!vrij || T.huisPlekOp(D, x, y, behalve)) return false;
+        const vrij = T.isBegaanbaar(w, x, y, { deurenOpenen: true }) || (opHetStuk(x, y) && T.ontginWerkOp(w, x, y));
+        if (!vrij) return false;
       }
     }
     return true;
@@ -881,8 +862,8 @@
   // Tot 2 okt keek bouwen alleen of een tegel vast was (een muur, een boom), niet of er iemand stond of een deur was. In
   // de nulmeting van de speeltest stonden twee mensen vanaf dag 50 tot het eind ingemetseld in een hut die over hen heen
   // doorgroeide, en de bouwer die de wensen volgt, zette een put op de deur van de schout. Nu komt een gebouw niet op
-  // iemand en niet op een deur (hierboven, en het erf in js/erven.js), groeit een huis niet over iemand of een deur heen
-  // (js/behoeften.js), en wie toch op een bouwplaats staat (een hut die een gezin zelf op zijn erf zet), stapt eraf.
+  // iemand en niet op een deur (hierboven), groeit een huis niet over iemand of een deur heen (js/behoeften.js), en wie
+  // toch op een bouwplaats staat, stapt eraf.
 
   const opRechthoek = (r, x, y) => x >= r.x && x < r.x + r.b && y >= r.y && y < r.y + r.h;
 
@@ -934,8 +915,7 @@
     return null;
   };
 
-  // Wie toch op een bouwplaats staat (een gezin zet zijn hut op zijn erf, js/erven.js, terwijl er iemand over dat erf
-  // loopt), stapt eraf: naar de begaanbare tegel ernaast die het dichtst bij is. Anders staat hij ingemetseld. Ook voor
+  // Wie toch op een bouwplaats staat (een gebouw komt op de kaart terwijl er iemand over die plek loopt), stapt eraf: naar de begaanbare tegel ernaast die het dichtst bij is. Anders staat hij ingemetseld. Ook voor
   // de kramen van de markt (js/markt.js).
   T.stapEraf = stapEraf;
   function stapEraf(D, r) {
@@ -965,9 +945,8 @@
     }
   }
 
-  // Of er op deze tegel gebouwd mag worden, voor een gebouw en voor een erf: niet op een akker of weide
-  // (T.veldOp, js/akkers.js), niet op een pad (T.opPad, js/wereld.js), niet op een erf (T.erfOp,
-  // js/erven.js), niet in een wijngaard (T.wijngaardOp, js/wijngaard.js), en niet op een lantaarn. Geeft de reden, of null.
+  // Of er op deze tegel gebouwd mag worden: niet op een akker of weide (T.veldOp, js/akkers.js), niet op een pad
+  // (T.opPad, js/wereld.js), niet in een wijngaard (T.wijngaardOp, js/wijngaard.js), en niet op een lantaarn. Geeft de reden, of null.
   T.waaromNietOpDezeGrond = function (D, x, y) {
     const w = D.wereld;
     const komt = T.bouwplaatsOp(D, x, y);
@@ -978,7 +957,6 @@
     // van het eiland (tegels/kust.png; werklijst vraag 117, B van 2a).
     const g = w.grond && w.grond[y] && w.grond[y][x];
     if (g && g.naam === 'strand') return T.t('Nothing is built on sand.');
-    if (T.erfOp(D, x, y)) return T.t('There is a plot there.');
     if (T.wijngaardOp(D, x, y)) return T.t('There is a vineyard there.');
     // Waar de herberg straks met het dorp meegroeit (T.meegroeiGrond, js/behoeften.js), blijft de grond vrij.
     const groeit = T.meegroeiGrondOp(D, x, y);
@@ -990,13 +968,13 @@
   };
 
   // Het gebouw dat hier komt maar nog niet op de kaart staat, omdat zijn plek eerst gerooid wordt (`wachtOpRooien`: een
-  // werkplaats die een inwoner vroeg, of een bouwplaats van het lege begin, js/bouwen.js), of null. Zijn voet is nog geen
+  // bouwplaats van het lege begin, js/bouwen.js), of null. Zijn voet is nog geen
   // muur, maar er komt niets anders.
   T.bouwplaatsOp = function (D, x, y) {
     for (const g of D.gebouwen || []) {
       // een veld dat de bouwers nog maken (js/boerderij.js), ook als ze al ploegen: het heeft geen voorwerp op de kaart
       const veld = T.GEBOUWEN[g.soort] && T.GEBOUWEN[g.soort].veld;
-      if (!(g.wachtOpRooien || veld) || g.voorwerp || g.erf) continue;
+      if (!(g.wachtOpRooien || veld) || g.voorwerp) continue;
       const r = T.voetVanGebouw(g);
       if (x >= r.x && x < r.x + r.b && y >= r.y && y < r.y + r.h) return g;
     }
@@ -1022,17 +1000,10 @@
     return !(g.eenmalig && (D.gebouwen || []).some((x) => x.soort === soort));
   }
 
-  // Staat deze soort nu in het bouwmenu (js/hud.js)? Wat mag (T.magGebouwd), en wat jij neerzet. Bouwt het dorp zelf
-  // (js/erven.js, de spelregel "Huizen"), dan staat het erf erin en de woningen niet; anders andersom. De rest zet jij
-  // altijd neer (de spelregel "Wie bouwt", waarin de mensen het je vroegen, is weg sinds ronde 2 van het snoeien).
-  T.inBouwmenu = function (D, soort) {
-    if (!T.magGebouwd(D, soort)) return false;
-    const g = T.GEBOUWEN[soort];
-    const zelf = T.ERVEN_INSTELLINGEN.dorpBouwtZelf;
-    if (g.erf) return zelf;
-    if (g.woning) return !zelf;
-    return true;
-  };
+  // Staat deze soort nu in het bouwmenu (js/hud.js)? Wat mag (T.magGebouwd): jij zet alles neer (de spelregels "Huizen"
+  // en "Wie bouwt", waarin het dorp zelf bouwde op erven en de mensen het je vroegen, zijn weg sinds ronde 2 van het
+  // snoeien, 12 okt).
+  T.inBouwmenu = (D, soort) => T.magGebouwd(D, soort);
   T.gebouwPast = (D, soort, x, y, tekening) => !T.waaromPastHetNiet(D, soort, x, y, tekening);
 
   // Eén keer aan T.VOORWERPEN toevoegen, zoals kaart.js dat doet voor een tegel uit Tiled: hij
@@ -1055,7 +1026,7 @@
   const AANTAL_BOUWFASEN = 5;
   T.bouwFaseIndex = function (dagNu, klaarOp, bouwtijd, vanaf = 0, gedaan = null) {
     if (gedaan != null) return Math.max(vanaf, Math.min(AANTAL_BOUWFASEN - 1, vanaf + Math.floor(gedaan * (AANTAL_BOUWFASEN - vanaf))));
-    if (klaarOp == null) return vanaf; // nog niet begonnen: een bouwplaats die op hout wacht (js/erven.js)
+    if (klaarOp == null) return vanaf; // nog niet begonnen
     if (!(bouwtijd > 0)) return AANTAL_BOUWFASEN - 1; // bouwtijd 0: meteen de laatste fase
     const voortgang = 1 - (klaarOp - dagNu) / bouwtijd;
     return Math.max(vanaf, Math.min(AANTAL_BOUWFASEN - 1, vanaf + Math.floor(voortgang * (AANTAL_BOUWFASEN - vanaf))));
@@ -1175,8 +1146,6 @@
   T.plaatsGebouw = function (D, soort, x, y) {
     const g = T.GEBOUWEN[soort];
     if (!g || g.menu === false || !nogTeBouwen(D, soort)) return { gelukt: false, reden: T.t('That cannot be built from the build menu.') };
-    // Een erf is land, geen gebouw: het krijgt geen voorwerp en maakt de grond niet vast (js/erven.js).
-    if (g.erf) return T.legErfAan(D, x, y);
     // De markt op het plein: kramen, geen gebouw met een voet (js/markt.js; werklijst vraag 110, d).
     if (soort === 'markt' && T.marktOpHetPlein(D)) return T.zetMarktOpHetPlein(D);
     // In het lege begin bouwen de mensen het zelf, en rooien ze eerst wat er op de plek staat (js/bouwen.js; vraag 152, 1d).
@@ -1204,10 +1173,8 @@
   };
 
   // Een gebouw in het dorp zetten: in S.gebouwen, met zijn voorwerp op de kaart (zetGebouwVoorwerp
-  // hierboven). Voor wat de speler neerzet (T.plaatsGebouw) en voor de hut die een gezin op zijn erf
-  // zet (T.zetHutOpErf, js/erven.js): één manier voor allebei. Een hut op een erf dat het gezin nog rooit
-  // (`wachtOpRooien`, werklijst vraag 110, e) telt al als zijn huis, maar komt pas op de kaart als het erf vrij is
-  // (T.zetOpDeKaart, vanuit T.tikRooienDag in js/bos.js).
+  // hierboven). Een bouwplaats waar de bouwers eerst rooien (`wachtOpRooien`, js/bouwen.js) komt pas op de kaart als
+  // zijn plek vrij is (T.zetOpDeKaart).
   T.bouwGebouw = function (D, instantie) {
     D.gebouwen.push(instantie);
     if (!instantie.wachtOpRooien) zetGebouwVoorwerp(D, instantie);
@@ -1253,11 +1220,10 @@
     if (T.ui && T.ui.toonBevolking) T.ui.toonBevolking(D);
   };
 
-  // Woonruimte: de som van wat elk klaar gebouw geeft, en van de hut op een erf die nog oprijst: daar woont
-  // zijn gezin al (js/erven.js). Een huis dat jij neerzet, telt pas als het klaar is.
+  // Woonruimte: de som van wat elk klaar gebouw geeft. Een huis telt pas als het klaar is.
   T.telWoonruimte = function (D) {
     let woonruimte = 0;
-    for (const g of D.gebouwen) if (g.klaar || g.erf) woonruimte += T.woonruimteVan(D, g);
+    for (const g of D.gebouwen) if (g.klaar) woonruimte += T.woonruimteVan(D, g);
     return woonruimte;
   };
   // Hoeveel mensen er in gebouw g kunnen wonen: wat zijn soort zegt, en in een tent van het kamp (`tijdelijk`, js/begin.js)
@@ -1310,16 +1276,16 @@
     T.wijsWerkToe(D);
   };
 
-  // Er komt een gezin: in een huis met plaats, en is het dorp vol, dan neemt het een vrij erf en zet het er zelf een
-  // hut op, of zegt het dat er geen plaats is (js/erven.js). Voor de groei (T.tikGebouwenDag, stap 4) en een voorval
-  // (js/voorvallen.js: vreemdelingen die willen blijven).
+  // Er komt een gezin: in een huis met plaats, of het zegt dat er geen plaats is. Voor de groei (T.tikGebouwenDag,
+  // stap 4) en een voorval (js/voorvallen.js: vreemdelingen die willen blijven). Tot ronde 2 van het snoeien (12 okt) nam
+  // het in een vol dorp een vrij erf en zette het er zelf een hut op (js/erven.js).
   T.gezinKomt = function (D) {
     const woonruimte = T.telWoonruimte(D);
     if (D.bevolking < woonruimte) T.wijzigBevolking(D, Math.min(woonruimte, D.bevolking + T.GEBOUWEN_INSTELLINGEN.gezinGrootte) - D.bevolking, 'groei');
-    else T.gezinZoektEenErf(D);
+    else T.zeg(D, T.t('A family wants to come, but there is no room. Build a hut or a house (B).'));
   };
-  // Is er plaats voor een gezin: een huis met plaats, of een vrij erf?
-  T.plaatsVoorEenGezin = (D) => (D.bevolking || 0) < T.telWoonruimte(D) || T.kanEenErfNemen(D);
+  // Is er plaats voor een gezin: een huis met plaats?
+  T.plaatsVoorEenGezin = (D) => (D.bevolking || 0) < T.telWoonruimte(D);
 
   // Om de hoeveel dagen er een nieuw gezin kan komen: gezinDagen, en met de wet Vreemden welkom vaker
   // (js/wetten.js).
@@ -1334,15 +1300,14 @@
 
   // Waarom er nu geen gezin kan komen, als lijst: 'graan' (minder dan de buffer in de voorraad), 'tevreden' (onder
   // de drempel, js/behoeften.js), 'winter' (het hout of het eten haalt de winter niet, nu die in zicht is:
-  // gezinWachtOpDeWinter, T.watDeWinterNietHaalt in js/behoeften.js), 'plaats' (geen huis met plaats en geen vrij erf,
-  // js/erven.js) en 'kamp' (er woont nog een gezin in het kamp, js/begin.js). Een lege lijst als het kan. De groei vraagt het (T.tikGebouwenDag, stap 4, met de dag die hij tikt),
+  // gezinWachtOpDeWinter, T.watDeWinterNietHaalt in js/behoeften.js), 'plaats' (geen huis met plaats) en 'kamp' (er woont nog een gezin in het kamp, js/begin.js). Een lege lijst als het kan. De groei vraagt het (T.tikGebouwenDag, stap 4, met de dag die hij tikt),
   // en de raad linksboven ook (js/raad.js), zodat die zegt wat de groei doet en niet wat hij zelf denkt.
   T.waaromGeenGezin = function (D, dag = D.kalender ? Math.floor(D.kalender.dag) : 0) {
     const waarom = [];
     if ((D.voorraad.graan || 0) < T.GEBOUWEN_INSTELLINGEN.graanBufferVoorGroei) waarom.push('graan');
     if (D.behoeften && D.behoeften.tevredenheid < T.BEHOEFTEN_INSTELLINGEN.groeiDrempel) waarom.push('tevreden');
     if (T.GEBOUWEN_INSTELLINGEN.gezinWachtOpDeWinter && T.watDeWinterNietHaalt(D, dag).length) waarom.push('winter');
-    if ((D.bevolking || 0) >= T.telWoonruimte(D) && !T.kanEenErfNemen(D)) waarom.push('plaats');
+    if ((D.bevolking || 0) >= T.telWoonruimte(D)) waarom.push('plaats');
     // Woont er nog een gezin in het kamp van het lege begin, dan gaat een woning eerst naar hen (js/begin.js).
     if (T.kampTenten(D).length) waarom.push('kamp');
     return waarom;
@@ -1421,10 +1386,8 @@
     // En de feesten (js/feesten.js): begint er vandaag een, dan zegt het dorp het en staat de meiboom er; op een hele
     // feestdag werkt niemand (stap 6 hieronder).
     T.tikFeestenDag(D, dag);
-    // Een gebouw dat op het rooien wachtte (een hut op een erf, of een werkplaats in het bos), komt op de kaart als zijn
-    // stuk vrij is (js/bos.js); een hut op een erf die op hout wachtte, begint als het er nu is (js/erven.js).
+    // Een huis dat wil doorgroeien en waar het gezin eerst rooit wat in de weg staat (js/bos.js).
     T.tikRooienDag(D);
-    T.tikErvenDag(D);
     // In het lege begin: het werk van gisteren aan de bouwplaatsen (js/bouwen.js), vóór wat er vandaag klaarkomt.
     T.tikBouwenDag(D, dag);
     // Het bos (js/bos.js): een boompje wordt een jonge boom, een jonge boom een boom, en een oude stronk vergaat.
@@ -1434,7 +1397,7 @@
     T.tikBeestenDag(D, dag);
     // 1. Gebouwen die vandaag klaarkomen: het spookbeeld wordt de tekening zelf (dezelfde
     // voorwerp-ingang, zie zetGebouwVoorwerp hierboven — er komt er geen tweede bij). Een bouwplaats
-    // die nog niet begon (klaarOp null, js/erven.js), komt niet klaar.
+    // van het lege begin (klaarOp null, js/bouwen.js) komt klaar als het werk af is, niet op een dag.
     for (const g of D.gebouwen) {
       if (!g.klaar && g.klaarOp != null && dag >= g.klaarOp) {
         g.klaar = true;
@@ -1477,9 +1440,8 @@
     // (zodat een net geboren gezin niet meteen honger lijdt), het dorp tevreden genoeg is
     // (js/behoeften.js, T.BEHOEFTEN_INSTELLINGEN.groeiDrempel), en het de winter haalt als die in zicht
     // is (gezinWachtOpDeWinter); dat zegt T.waaromGeenGezin hierboven. Zonder D.behoeften (nog geen
-    // dag getikt) blokkeert de tevredenheid niets. Een huis met
-    // plaats gaat voor; is het dorp vol, dan neemt het een vrij erf en zet het er zelf een hut op, of
-    // zegt het dat er geen plaats is (js/erven.js). Met de wet Vreemden welkom kan dat vaker
+    // dag getikt) blokkeert de tevredenheid niets. Het komt in een
+    // huis met plaats, of zegt dat er geen plaats is. Met de wet Vreemden welkom kan dat vaker
     // (T.gezinDagen hierboven). Zolang er een gezin in het kamp van het lege begin woont, komt er niemand (js/begin.js).
     if (dag > 0 && dag % T.gezinDagen(D) === 0) {
       const waarom = T.waaromGeenGezin(D, dag);

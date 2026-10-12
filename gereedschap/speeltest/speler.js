@@ -24,7 +24,7 @@
 // houthakker.
 //
 // En een vijfde, voor de proef "van gehucht tot dorp" (werklijst, vraag 58, A; Marcel, 29 sep: "A Ja goed idee"):
-//   bouwer  doet wat het doel vraagt (js/treden.js), twee jaar lang: hij houdt steeds één erf vrij, neemt Vreemden
+//   bouwer  doet wat het doel vraagt (js/treden.js), twee jaar lang: hij bouwt een hut als er geen plaats is, neemt Vreemden
 //           welkom aan, bouwt wat het doel aan gebouwen vraagt zodra het goud en het hout er zijn (sinds 2 okt, vraag
 //           90, niets meer: een trede komt met de dorpelingen), een houthakker als het
 //           dorp zegt dat het hout de winter niet haalt, verkoopt de marskramer graan als het goud tekortschiet (en
@@ -34,13 +34,12 @@
 //           achterna. Sinds 2 okt (vraag 86, b, en 87, D) volgt hij ook de wensen, zoals de raad ze zegt
 //           (T.watDeHuizenMissen): een put of een kapel waar hij de meeste huizen zonder bereikt, een visser of een
 //           jager voor vlees of vis, en een houthakker of een steengroeve als een huis op bouwstof wacht, hooguit één
-//           per maand; en een houthakker vóór een nieuw erf, als er nog geen staat. Bij de marskramer verkoopt hij ook
+//           per maand; en een houthakker vóór een nieuwe hut, als er nog geen staat. Bij de marskramer verkoopt hij ook
 //           graan voor het goud van zijn volgende wens (vraag 89, c). Sinds vraag 90, D kent de raad de ketens, en
 //           de bouwer dus ook: een bakkerij en een molen voor brood, en een molen als de bakkerij geen meel heeft.
 //           Sinds vraag 91, a volgt hij ook wat de raad over goud zegt: zegt die dat de belasting goud brengt, dan
 //           neemt hij hem aan (W), en hij bouwt de eerste wens die hij kan betalen, in plaats van op de eerste te
-//           wachten. Sinds vraag 95, b wijst hij een erf aan waar het huis de herberg, een markt, een kapel en een put in
-//           zijn kring heeft (bouwErf), en niet meer gewoon zo dicht mogelijk bij zijn eigen deur. Sinds vraag 96, b bouwt
+//           wachten. (Van vraag 95, b tot ronde 2 van het snoeien wees hij erven aan, binnen de kringen.) Sinds vraag 96, b bouwt
 //           hij een keten in één keer: een bakkerij en een molen samen. Sinds vraag 99, c koopt hij laken bij de
 //           marskramer als de ambachtslieden het tot zijn volgende bezoek tekortkomen, met het goud dat hij niet nodig
 //           heeft voor zijn volgende wens. Sinds vraag 132, B koopt hij in de herfst het zout dat vis en vlees de winter
@@ -351,49 +350,6 @@
     return u.gelukt;
   }
 
-  // Een erf (werklijst vraag 95, b): waar het huis dat erop komt, de plekken die de huizen willen in zijn kring heeft
-  // (T.inDeKring, js/wensen.js), zoals een speler die met het erf in de hand naar de kringen kijkt: eerst de herberg (een
-  // tweede vond in de speeltest van vraag 94 geen plek meer), dan een markt, een kapel en een put. Het huis komt ergens op
-  // het erf, dus telt het midden van het erf, met 2 tegels speling. Van de plekken waar een erf past, die met de beste
-  // kringen; bij gelijk spel het dichtst bij de deur van de schout, zoals bouw(). Tot 3 okt kwam een erf gewoon zo dicht
-  // mogelijk bij de schout, en misten een paar huizen het hele tweede jaar de herberg of een markt. Sinds 6 okt mag een erf
-  // op struiken en bomen (vraag 110, e): hij legt het liever niet in het bos van de heer (dat kost zijn gunst), en bij
-  // gelijke kringen liever waar minder te rooien is.
-  const KRINGEN_VAN_EEN_ERF = [['herberg', 8], ['markt', 4], ['kapel', 2], ['put', 1]];
-  function bouwErf() {
-    const s = S();
-    const huis = huisVanDeSchout();
-    const midden = huis ? T.deurVan(s.wereld, huis) : schoutTegel();
-    const maat = T.erfMaat();
-    // Een plek zonder kring (de herberg en de markt sinds vraag 96, a: één voor het hele dorp) telt overal.
-    const straalVan = (soort) => (T.WENSEN_INSTELLINGEN.kring[soort] == null ? null : T.WENSEN_INSTELLINGEN.kring[soort] - 2);
-    const plekken = KRINGEN_VAN_EEN_ERF.map(([soort, telt]) => ({ soort, telt, er: T.plekkenVan(s.dorp, soort), straal: straalVan(soort) }));
-    let beste = null;
-    for (let y = 0; y < s.wereld.tegels.length; y++) {
-      for (let x = 0; x < s.wereld.tegels[0].length; x++) {
-        if (!T.gebouwPast(s.dorp, 'erf', x, y)) continue;
-        const erf = { x, y, b: maat.b, h: maat.h };
-        const bos = T.inHetBosVanDeHeer(s.dorp, erf) ? 1 : 0;
-        if (beste && bos > beste.bos) continue;
-        const kringen = plekken.filter((p) => p.er.some((r) => T.inDeKring(erf, r, p.straal)));
-        const n = kringen.reduce((som, p) => som + p.telt, 0);
-        const rooien = T.teRooienOp(s.dorp, T.kavelVanErf(s.dorp, erf)).length;
-        const d = Math.hypot(x - midden.x, y - midden.y);
-        const beter = !beste || bos < beste.bos || n > beste.n || (n === beste.n && (rooien < beste.rooien || (rooien === beste.rooien && d < beste.d)));
-        if (beter) beste = { x, y, n, d, kringen, bos, rooien };
-      }
-    }
-    if (!beste) {
-      daad('vindt geen plek voor een erf');
-      return false;
-    }
-    const u = T.plaatsGebouw(s.dorp, 'erf', beste.x, beste.y);
-    boek.gebouwd.push({ dag: heel(dagNu()), datum: datum(), soort: 'erf', gelukt: u.gelukt, reden: u.reden || null });
-    const bij = beste.kringen.map((p) => (p.soort === 'herberg' ? 'de herberg' : `een ${p.soort}`));
-    const rooi = beste.bos ? ', in het bos van de heer' : beste.rooien ? `, waar het gezin eerst ${beste.rooien} tegels rooit` : '';
-    daad(u.gelukt ? `wijst een erf aan${bij.length ? ` binnen de kring van ${bij.join(', ')}` : ', buiten elke kring'}${rooi}` : `wil een erf aanwijzen, maar: ${u.reden}`);
-    return u.gelukt;
-  }
 
   // De winter: zegt het dorp dat het hout hem niet haalt, dan een houthakker (alle vier de spelers).
   let gelezen = 0;
@@ -534,7 +490,7 @@
     const betaald = new Set(); // de jaren waarin hij de heer betaalde
     const deelVoorDeHeer = sluw ? 0.9 : 1; // wat hij de heer geeft van wat die vraagt
     let gelezenWinter = 0;
-    let erfNietVoor = 0; // paste een erf nergens, dan zoekt hij pas een maand later opnieuw
+    let hutNietVoor = 0; // paste een hut nergens, dan zoekt hij pas een maand later opnieuw
     let jagerNietVoor = 0; // een jager hooguit één keer per maand
     let wensNietVoor = 0; // een bouwwerk voor de wensen hooguit één keer per maand (vraag 87, D)
     let belastingNietVoor = 0; // de raad over de belasting: één keer per dag gelezen, en na een mislukking een maand niet
@@ -706,13 +662,13 @@
           jagerNietVoor = dagNu() + 30;
           bouw('jager');
         }
-        // Een houthakker vóór een nieuw erf, als er nog geen staat (vraag 86, b): elke hut kost 8 hout, en een bouwplaats
+        // Een houthakker vóór een nieuwe hut, als er nog geen staat (vraag 86, b): elke hut kost 8 hout, en een bouwplaats
         // neemt het hout zodra het er is; zo kwam de houthakker er bij zaad 2 nooit (de speeltest van 1 okt).
         const houthakker = s.dorp.gebouwen.some((g) => g.soort === 'houthakker');
         if (!houthakker && !wil.includes('houthakker') && dagNu() >= houthakkerNietVoor) wil.unshift('houthakker');
-        // Steeds één erf vrij, binnen de kringen (vraag 95, b). Een vrij erf waar geen hut meer op past, telt niet
-        // (T.bruikbareErven; vraag 110, f).
-        if (houthakker && !T.bruikbareErven(s.dorp).length && dagNu() >= erfNietVoor && !bouwErf()) erfNietVoor = dagNu() + 30;
+        // Is er geen plaats voor een gezin, dan een hut (tot ronde 2 van het snoeien, 12 okt, wees hij een erf aan).
+        const hutKomt = s.dorp.gebouwen.some((g) => g.soort === 'hut' && !g.klaar);
+        if (houthakker && !hutKomt && !T.plaatsVoorEenGezin(s.dorp) && dagNu() >= hutNietVoor && !bouw('hut')) hutNietVoor = dagNu() + 30;
         // Bouwen wat hij wil, zodra het goud en het hout er zijn; een kapel waar hij de meeste huizen bereikt. Wat het doel
         // vraagt en er al staat (een kapel voor de wensen), hoeft niet meer.
         while (wil.length && wil[0] !== 'houthakker' && !T.doelGebouwen(s.dorp).includes(wil[0])) wil.shift();
@@ -856,58 +812,6 @@
   // ── Opschrijven wat er gebeurt ──────────────────────────────────────────────────────────────────
   function eisKort(eis) {
     return Object.fromEntries(eis.volgorde.map((w) => [w, eis.per[w]]));
-  }
-
-  // Wat er in het looppad om de plek van de hut op een erf staat (zoals T.looppadOm het nakijkt), geteld per soort: een
-  // gebouw, een voorwerp, de plek van het huis op een ander erf, of iets anders wat niet te belopen is. Leeg als hij past.
-  function watStaatOmDeHut(D, e) {
-    const p = e.plan;
-    if (!p) return { 'geen plan': 1 };
-    const w = D.wereld;
-    const n = T.GEBOUWEN_INSTELLINGEN.looppad;
-    const r = { x: e.x + p.dx, y: e.y + p.dy, b: p.b, h: p.h };
-    const uit = {};
-    for (let y = r.y - n; y < r.y + r.h + n; y++) {
-      for (let x = r.x - n; x < r.x + r.b + n; x++) {
-        if ((x >= r.x && x < r.x + r.b && y >= r.y && y < r.y + r.h) || x < 0 || y < 0 || x >= w.tegels[0].length || y >= w.tegels.length) continue;
-        let wat = null;
-        if (T.huisPlekOp(D, x, y, e)) wat = 'de plek van een huis op een ander erf';
-        else if (!T.isBegaanbaar(w, x, y, { deurenOpenen: true })) {
-          const g = T.gebouwOp(D, x, y);
-          const v = T.voorwerpOp(w, x, y);
-          wat = g ? g.soort : v ? v.soort : 'iets vasts';
-        }
-        if (wat) uit[wat] = (uit[wat] || 0) + 1;
-      }
-    }
-    return uit;
-  }
-
-  // De gebouwen in het looppad om de plek van de hut op een erf: waar ze staan, hun voet, of ze zelf op een erf staan, en
-  // hoeveel van hun tegels op dit erf liggen.
-  function gebouwenOmDeHut(D, e) {
-    const p = e.plan;
-    if (!p) return [];
-    const n = T.GEBOUWEN_INSTELLINGEN.looppad;
-    const r = { x: e.x + p.dx - n, y: e.y + p.dy - n, b: p.b + 2 * n, h: p.h + 2 * n };
-    const binnen = (x, y, q) => x >= q.x && x < q.x + q.b && y >= q.y && y < q.y + q.h;
-    const uit = [];
-    for (const g of D.gebouwen || []) {
-      // De voet zoals T.gebouwOp (js/gebouwen.js) hem leest: wat het voorwerp beslaat, anders de voet van het gebouw.
-      const w = g.voorwerp;
-      const v = w && w.beslaat ? { x: w.x, y: w.y, b: w.beslaat[0], h: w.beslaat[1] } : g.voet ? { x: g.x, y: g.y, b: g.voet.b, h: g.voet.h } : null;
-      if (!v) continue;
-      let inRing = 0;
-      let opErf = 0;
-      for (let dy = 0; dy < v.h; dy++) {
-        for (let dx = 0; dx < v.b; dx++) {
-          if (binnen(v.x + dx, v.y + dy, r)) inRing++;
-          if (binnen(v.x + dx, v.y + dy, e)) opErf++;
-        }
-      }
-      if (inRing) uit.push({ soort: g.soort, tekening: g.tekening, ...v, inRing, opDitErf: opErf, eigenErf: g.erf ? { x: g.erf.x, y: g.erf.y } : null });
-    }
-    return uit;
   }
 
   function tel() {
@@ -1135,7 +1039,7 @@
     };
     na('waaromGeenGezin', (r) => {
       if (groeidag == null) return;
-      boek.groei.push({ dag: groeidag, datum: datum(groeidag), waarom: r.slice(), mensen: s.dorp.bevolking, woonruimte: T.telWoonruimte(s.dorp), vrijeErven: T.vrijeErven(s.dorp).length });
+      boek.groei.push({ dag: groeidag, datum: datum(groeidag), waarom: r.slice(), mensen: s.dorp.bevolking, woonruimte: T.telWoonruimte(s.dorp) });
     });
   }
 
@@ -1280,9 +1184,6 @@
       }
       boek.eind = eind();
       boek.winter = winter();
-      // De vrije erven aan het eind, en wat er in het looppad om de plek van hun hut staat (T.looppadOm, js/gebouwen.js):
-      // een erf dat vrij heet maar waar geen hut meer op past, houdt de groei tegen (werklijst vraag 107, stap 3).
-      boek.vrijeErven = T.vrijeErven(s.dorp).map((e) => ({ x: e.x, y: e.y, b: e.b, h: e.h, plan: e.plan && { dx: e.plan.dx, dy: e.plan.dy, b: e.plan.b, h: e.plan.h }, inDeWeg: watStaatOmDeHut(s.dorp, e), gebouwen: gebouwenOmDeHut(s.dorp, e) }));
       // De raadsman (js/raadsman.js): wie het was, en hoeveel voorvallen hij besliste.
       const rm = T.raadsmanVan(s.dorp);
       boek.raadsman = rm ? { over: T.overRaadsmanTekst(s.dorp, rm), door: (s.dorp.voorvallen && s.dorp.voorvallen.doorRaadsman) || 0, laatste: ((s.dorp.raadsman && s.dorp.raadsman.besluiten) || []).slice(-5) } : null;

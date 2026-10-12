@@ -1,5 +1,5 @@
 'use strict';
-// node meet.cjs N [--werk] [--indeling erven|compact] [--kaart L] [--dagen 1] [--start 20] [--snelheid 30] [--delen]
+// node meet.cjs N [--werk] [--indeling ruim|compact] [--kaart L] [--dagen 1] [--start 20] [--snelheid 30] [--delen]
 //                 [--prof bestand.cpuprofile] [--uit bestand.json]
 // Bouwt een dorp van N bewoners (bouw.cjs), speelt het op 30× (een beeld: dt = 1/60, dtWereld = 0,5 s) en meet per
 // beeld de tijd van de wereld (werkBij uit js/main.js, zonder scherm), de dagtik en het opslaan. Met --prof een
@@ -16,7 +16,7 @@ const arg = (naam, std) => {
 };
 const N = Number(process.argv[2] || 26);
 const metWerk = !!arg('werk', false);
-const indeling = arg('indeling', 'erven');
+const indeling = arg('indeling', 'ruim');
 const startUur = arg('start', 12);
 const kaart = arg('kaart', 0);
 const dagen = arg('dagen', 1);

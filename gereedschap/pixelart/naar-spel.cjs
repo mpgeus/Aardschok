@@ -4,7 +4,7 @@
 //   node gereedschap/pixelart/naar-spel.cjs      (of: npm run pixelart:spel)
 //   node gereedschap/pixelart/naar-spel.cjs --alleen heer,soldaat,inner
 //   node gereedschap/pixelart/naar-spel.cjs --alleen schandpaal
-//   node gereedschap/pixelart/naar-spel.cjs --alleen paaltje
+//   node gereedschap/pixelart/naar-spel.cjs --alleen meiboom
 //   node gereedschap/pixelart/naar-spel.cjs --alleen meiboom
 //   node gereedschap/pixelart/naar-spel.cjs --alleen kerstboom
 //   node gereedschap/pixelart/naar-spel.cjs --alleen pestbos
@@ -23,7 +23,7 @@
 // in git staat: in een verse kopie is het (bijna) leeg, en zonder --alleen bouwt dit script de
 // beschrijving opnieuw op uit wat daar staat — dan verdwijnen alle andere figuren uit het spel.
 // Een los vel dat hier zelf gerenderd wordt en niets uit uit/ nodig heeft (LOSSE_VELLEN: de
-// schandpaal, het paaltje, de meiboom, de kerstboom, de pestbos, het kamp, het wolvenhol, de wijnrank, de marktkraam, de tekens met het papier en de tafel) kan ook met --alleen: dan wordt alleen dat vel gerenderd en alleen zijn
+// schandpaal, de meiboom, de kerstboom, de pestbos, het kamp, het wolvenhol, de wijnrank, de marktkraam, de tekens met het papier en de tafel) kan ook met --alleen: dan wordt alleen dat vel gerenderd en alleen zijn
 // ingang gezet.
 //
 // Twee soorten werk:
@@ -40,7 +40,6 @@ const K = require('./kern.cjs');
 const Kamers = require('./kamers.cjs');
 const Graan = require('./graan-vel.cjs');
 const Schandpaal = require('./schandpaal.cjs');
-const Paaltje = require('./paaltje.cjs');
 const Meiboom = require('./meiboom.cjs');
 const Bomen = require('./bomen.cjs');
 const Pestbos = require('./pestbos.cjs');
@@ -152,15 +151,6 @@ function graan() {
 function schandpaal() {
   schrijf('schandpaal.png', Schandpaal.vel());
   return Schandpaal.beschrijving('schandpaal.png');
-}
-
-// ---------------------------------------------------------------- het paaltje
-//
-// Eén tekening: de landmeterspaal op de hoeken van een vrij erf (paaltje.cjs, ontwerp/werklijst.md,
-// vraag 52). js/sprites.js zoekt hem op met S.paaltje() en legt zijn anker op de tegel.
-function paaltje() {
-  schrijf('paaltje.png', Paaltje.vel());
-  return Paaltje.beschrijving('paaltje.png');
 }
 
 // ---------------------------------------------------------------- de meiboom
@@ -279,7 +269,7 @@ function tafel() {
   return Tafel.schrijfNaar(path.join(BEELDEN, 'tafel'));
 }
 
-const LOSSE_VELLEN = { schandpaal, paaltje, meiboom, kerstboom, pestbos, kamp, hol, wijnrank, marktkraam, tekens, tafel, uiterlijken };
+const LOSSE_VELLEN = { schandpaal, meiboom, kerstboom, pestbos, kamp, hol, wijnrank, marktkraam, tekens, tafel, uiterlijken };
 
 // ---------------------------------------------------------------- kopiëren
 

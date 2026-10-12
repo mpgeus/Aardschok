@@ -39,7 +39,10 @@
     // in ontginning (veld.ontginning) blijft gewoon.
     // 5 (11 okt): een wijnrank hoort bij zijn boerderij met `v.boerderij` in plaats van `v.wijnboerderij`, want een
     // wijngaard is in het lege begin een veld bij een gewone boerderij (vraag 152, 1e; js/boerderij.js).
-    versie: 5,
+    // 6 (12 okt): de erven zijn weg (ronde 2 van het snoeien, stap 2b): een half gebouwde hut op een erf telde als
+    // woonruimte (g.erf) en wachtte op hout of op het rooien van zijn erf; zonder js/erven.js komt hij nooit af, en D.erven
+    // leest niets meer. Ook de verzoeken en de ondernemers (stap 2a: D.verzoeken, g.meester, g.stemming) zijn weg.
+    versie: 6,
     eigenPlekken: 5, // naast de ene die vanzelf gaat (vraag 48 B)
     // Op de hoogste snelheid (30×) slaat het spel niet elke ochtend vanzelf op, maar om de zoveel dagen: een dag duurt
     // dan tien seconden, en het opslaan kost bij 100 mensen 25 à 50 ms, een hapering die je ziet (gemeten op 3 okt).

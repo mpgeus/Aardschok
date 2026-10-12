@@ -121,7 +121,7 @@ function leesOpdracht(argv) {
   // vergelijken blijft met de speeltests ervoor; met --maker de landen van de maker zonder het eiland. `proef`: het spel
   // neemt "Je gehucht" alleen uit de browser als een proef hem zette (T.laadOpties). De kolonist (speler.js; werklijst B,
   // 1f) speelt het lege begin, en dat is er alleen op het eiland: hij altijd daar, met "Het begin" op "Leeg"; de anderen
-  // spelen het gehucht dat er al was, want ze bouwen erven.
+  // spelen het gehucht dat er al was (tot stap 5 van ronde 2 van het snoeien).
   const keuzes = { gehucht: o.eiland ? 'eiland' : o.maker ? 'maker' : 'ontworpen', begin: 'gehucht', ...o.regels };
   o.spelregelsVoor = (speler) => ({
     keuzes: speler === 'kolonist' ? { ...keuzes, gehucht: 'eiland', begin: 'leeg' } : keuzes, namen: {}, getallen: o.getallen, proef: true,

@@ -69,7 +69,6 @@
       const vellen = [gegevens.muren.bestand, gegevens.vloeren.bestand, gegevens.voorwerpen.bestand];
       if (gegevens.graan) vellen.push(gegevens.graan.bestand);
       if (gegevens.schandpaal) vellen.push(gegevens.schandpaal.bestand);
-      if (gegevens.paaltje) vellen.push(gegevens.paaltje.bestand);
       if (gegevens.meiboom) vellen.push(gegevens.meiboom.bestand);
       if (gegevens.kerstboom) vellen.push(gegevens.kerstboom.bestand);
       if (gegevens.pestbos) vellen.push(gegevens.pestbos.bestand);
@@ -536,14 +535,6 @@
     return t.nek[naam] != null ? t.nek[naam] : t.nek[lijf] != null ? t.nek[lijf] : t.nek.standaard;
   };
 
-  // Het paaltje op de hoek van een vrij erf (gereedschap/pixelart/paaltje.cjs): één tekening, geen
-  // delen, met het anker op de grond in het midden van de tegel. Null als het vel er niet is.
-  S.paaltje = function () {
-    if (!gegevens || !gegevens.paaltje) return null;
-    const t = gegevens.paaltje;
-    return stuk(MAP + t.bestand, 0, 0, t.cel[0], t.cel[1], t.anker);
-  };
-
   // Het teken bij de deur van een huis dat iets mist (js/tekenen.js; 2c, vraag 100): een papiertje aan een spijker met
   // wat het als eerste mist, in dezelfde namen als T.WENSEN (gereedschap/pixelart/papieren.cjs). Null als het er niet is.
   S.huisTeken = function (naam) {
@@ -554,8 +545,8 @@
     return stuk(MAP + t.bestand, i * t.cel[0], 0, t.cel[0], t.cel[1], t.anker);
   };
 
-  // De meiboom op het plein (js/feesten.js, gereedschap/pixelart/meiboom.cjs): één tekening, zoals het paaltje, met
-  // het anker op de grond in het midden van de tegel. Null als het vel er niet is.
+  // De meiboom op het plein (js/feesten.js, gereedschap/pixelart/meiboom.cjs): één tekening, met het anker op de
+  // grond in het midden van de tegel. Null als het vel er niet is.
   S.meiboom = function () {
     if (!gegevens || !gegevens.meiboom) return null;
     const t = gegevens.meiboom;
@@ -570,8 +561,8 @@
     return stuk(MAP + t.bestand, 0, 0, t.cel[0], t.cel[1], t.anker);
   };
 
-  // De pestbos naast de deur van een huis met een zieke (js/koorts.js, gereedschap/pixelart/pestbos.cjs): één tekening,
-  // zoals het paaltje. Null als het vel er niet is.
+  // De pestbos naast de deur van een huis met een zieke (js/koorts.js, gereedschap/pixelart/pestbos.cjs): één tekening.
+  // Null als het vel er niet is.
   S.pestbos = function () {
     if (!gegevens || !gegevens.pestbos) return null;
     const t = gegevens.pestbos;

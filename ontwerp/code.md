@@ -380,8 +380,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`tekenGraan`, in smalle stroken en korte stukjes die elk de hoogte van de grond volgen, ver uitgezoomd grover); de grond
   met hoogte van achter naar voren. **Wat de hoogte doet** (stap 2, 8 okt; Marcel: "Akkoord"): niemand stapt door een wand
   (`T.kanStappen`; `T.zoekPad` en `T.bereik` krijgen de kaart mee, `wereld`, en de eilanden en de velden vragen het ook),
-  wel over een helling; een gebouw of erf niet op steile grond (`T.teSteil`, "te steil" in `T.waaromPastHetNiet` en
-  `T.waaromPastErfNiet`), en waar het komt, wordt de grond vlak (`T.egaliseer`, vanuit `zetGebouwVoorwerp` en het
+  wel over een helling; een gebouw niet op steile grond (`T.teSteil`, "te steil" in `T.waaromPastHetNiet`), en waar het komt, wordt de grond vlak (`T.egaliseer`, vanuit `zetGebouwVoorwerp` en het
   doorgroeien: een vlak stuk vooraan in `w.hoogte.vlakken`); een heuvel houdt het zicht tegen (`T.heuvelTussen` in
   `T.zichtTussen`) en wie hoog staat, ziet verder (`T.verderVanBoven` in `T.zietTegel`); en een tegel die iets achter zich
   afdekt (`T.dektAf`), komt nog eens in de tekenlijst (`heuvelsErvoor` in `js/tekenen.js`). De proefplaat:
@@ -503,8 +502,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.standVan` in `js/wensen.js`). Een nieuw huis krijgt het dak van de trede (dat van het gehucht, leien in een dorp,
   pannen met marktrecht), en een stenen huis baksteen pas met een steenbakkerij (`T.stijlTekeningen`, via
   `T.tekeningenVan` en `T.volgendeTekening` in `js/gebouwen.js`); wie doorgroeit, houdt zijn kant en krijgt het dak van nu
-  (`T.zoalsNu`, `kiesGroei` in `js/behoeften.js`). Op een erf kijkt de deur naar de weg en staat het huis achteraan
-  (`T.zijdenNaarDeWeg`, `js/erven.js`), `T.plekVoor` keert een deur naar de weg (`T.keerNaarDeWeg`, `js/bouwstijl.js`),
+  (`T.zoalsNu`, `kiesGroei` in `js/behoeften.js`). `T.plekVoor` keert een deur naar de weg (`T.keerNaarDeWeg`, `js/bouwstijl.js`),
   en de maker zet een huis ook vóór het plein, met zijn deur ernaartoe (`T.vormenVanStijl`). Elke tekening zegt in
   `tegels.js` wat ze is (`stijl`, en met `ook` de andere stijlen die haar nemen), uit `STIJLEN` in
   `gereedschap/pixelart/huizen.cjs`; wie doorgroeit, zoekt zijn nieuwe tekening in de stijl van zijn dorp. **De grote
@@ -665,9 +663,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   of slapen (`T.kampvuurStand`, `T.kampLicht`; `T.sprites.kamp` en `T.sprites.kampvuur`, uit
   `gereedschap/pixelart/kamp.cjs`). De benoeming is een andere (de wildernis, js/brieven.js), en het eerste jaar vraagt de
   heer niets (`T.heerLaatMetRust`, `heerVrij`: geen schatting en geen grillen; in wijnmaand de brief `gespaard`). Wat het
-  dorp van het begin weet, staat in `D.begin`. **Verhuizen uit het kamp** (1c, 11 okt): de keuze "Leeg" zet ook
-  `ERVEN_INSTELLINGEN.dorpBouwtZelf` uit (hij staat na "Huizen" in `T.OPTIES`, dus hij gaat voor), zodat jij de hut en
-  het huis neerzet. Elke nacht, na de gebouwen die af zijn en vóór de
+  dorp van het begin weet, staat in `D.begin`. **Verhuizen uit het kamp** (1c, 11 okt): jij zet de hut en het huis neer (de spelregel
+  "Huizen", waarin een gezin zelf een hut op een erf zette, is weg sinds ronde 2 van het snoeien). Elke nacht, na de gebouwen die af zijn en vóór de
   groei (`T.tikGebouwenDag`), trekt er in elke woning (`woning` in `T.GEBOUWEN`) die af is en plaats heeft een gezin uit
   het kamp: het eerste dat past, of anders het eerste in een woning waar nog niemand woont, krap (`T.verhuisUitHetKamp`;
   het verhuizen zelf is `T.verhuis` in `js/bewoners.js`: zijn thuis en zijn plekken gaan mee, en wie binnen is, komt de
@@ -759,28 +756,6 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   wachtte, wanneer het kamp leeg was, wie er in de winter in een tent woont, wie na een dag nog onderweg is, welke
   werkplaats niet werkt zonder dat het spel zegt waarom; en het eten en het hout.
 
-### js/erven.js: de erven
-
-- `js/erven.js`: **het dorp bouwt zelf** (stap 1 van de proef, vraag 52, 28 sep): jij wijst een erf aan met het
-  bouwmenu (10 bij 10 tegels, `T.ERVEN_INSTELLINGEN`; land, geen gebouw: `D.erven`), en is het dorp vol, dan
-  neemt een nieuw gezin een vrij erf (`T.kiesErf`) en zet er zelf een hut op met hout uit de voorraad
-  (`T.zetHutOpErf`; zonder hout wacht de bouwplaats, `T.tikErvenDag`), op de plek die bij het aanwijzen al vastlag, met
-  drie tegels looppad rondom (`erf.plan`, `T.huisPlekOp`; Marcel, 3 okt). Het woont er al terwijl de hut oprijst
-  (`T.telWoonruimte` in `js/gebouwen.js`), en de hut weet welk huis hij wordt (`wordtTekening`), zodat hij binnen
-  zijn erf doorgroeit. Zonder vrij erf zegt het dorp dat er geen plaats is (`T.gezinZoektEenErf`). Wat in het
-  bouwmenu staat, zegt `T.inBouwmenu`: het erf, en de woningen niet, tenzij de spelregel "Huizen" anders zegt. Op
-  een akker, een weide, een pad, een erf of zand (het strand van het eiland) bouw je niet (`T.waaromNietOpDezeGrond`). De paaltjes op een vrij erf
-  tekent `js/tekenen.js` (`T.paaltjesVan`, `T.sprites.paaltje`). **Een erf mag op struiken en bomen** (vraag 110, e, 6
-  okt): wat te rooien is (`T.ontginWerkOp` in `js/bos.js`) houdt het niet tegen (`T.rooiTekst` voor de muis), ook niet in
-  het looppad om de hut buiten het erf; het gezin dat het neemt, rooit het erf met dat looppad zelf (`T.kavelVanErf`), en
-  zolang wacht de hut, nog niet op de kaart (`js/bos.js`). Een erf in het bos van de heer kost zijn gunst. **Een erf houdt
-  plaats voor een put en een kapel** (vraag 117, 2d): het komt niet waar zijn huis straks geen put of kapel kan halen, of
-  waar het een ander huis de laatste plek ervoor afneemt; waar er nog een kan komen, op open grond of na het rooien, zegt
-  `T.kringGrond` (`js/wensen.js`, met `T.kanHierKomen` in `js/bouwen.js`), één keer per stand van het dorp, en de
-  plekken pas als een huis er straks geen haalt. Een hut op een erf telt daarbij met zijn hut en het huis dat hij wordt
-  (`T.kringVoetenVan`), en wil wat dat huis wil (`T.wilStraks`: de kapel); het dorp zet een put of kapel voor hem waar
-  hij die allebei haalt (`T.kringTeller` met `straks`, in `T.plekVoor`).
-
 ### js/treden.js: van gehucht tot dorp en marktrecht
 
 - `js/treden.js`: **van gehucht tot dorp, en tot marktrecht** (stap 2 van de proef, vraag 53, 29 sep; sinds 2 okt uit de
@@ -815,7 +790,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   aan graan (vraag 92); brood weegt minder in hoe blij een huis is (`blijheid`). Wat een huis wil en heeft, staat op het
   huis (`g.wensen`); wat een huis laat zien (2c, vraag 100), zegt `T.huisToestand` (het briefje bij de muis,
   `js/huisbriefje.js`, in de stijl van de schrijftafel, vraag 98, C) en `T.tekenVanHuis` (het teken bij zijn deur,
-  `js/tekenen.js`); met een erf in de hand zegt `T.erfKringTekst` welke put en kapel een huis daar haalt. **Wat de huizen
+  `js/tekenen.js`). Waar nog een put of kapel kan komen, op open grond of na het rooien, zegt `T.kringGrond` (met
+  `T.kanHierKomen` in `js/bouwen.js`), één keer per stand van het dorp; een gebouw met een gezin komt niet waar het een
+  ander huis de laatste plek ervoor afneemt (`T.waaromGeenKringPlek`; vraag 117, 2d, en 136). **Wat de huizen
   missen en wat helpt, zegt `T.watDeHuizenMissen`** (vraag 87): de raad, het rapport en de bouwer van de speeltest vragen
   het alle drie, eerst een huis dat op bouwstof wacht, dan wat de meeste mensen missen, met de ketens (vraag 90, D: wat
   een werkplaats nodig heeft, `maakt.in`, en wie dat maakt: "de bakkerij heeft geen meel, bouw een molen [B]"). Met een put, een
@@ -826,8 +803,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   bouwfasen terwijl zijn mensen erin blijven wonen (alleen het voorwerp is `inAanbouw`, `groeiVanafFase`; G, vraag 114).
   Staat er alleen iets te rooien waar het groter wordt, dan rooit het gezin dat eerst (`T.groeiRooiPlan`,
   `T.rooiOmTeGroeien` in `js/bos.js`, `g.groeitNaRooien`), en anders zegt het briefje waarom (`T.waaromGroeitHetNiet`;
-  vraag 130; de raad die het zei, hoorde bij het winnen en is op 11 okt weggehaald); een erf komt niet waar het een huis elke vorm
-  afneemt waarin het nog kan groeien (`T.groeiGrond`, in `T.waaromPastErfNiet`; d). Achteruitgaan is zacht (een
+  vraag 130; de raad die het zei, hoorde bij het winnen en is op 11 okt weggehaald). Achteruitgaan is zacht (een
   gezin trekt alleen weg uit een huis onder de vertrekdrempel) of streng (de spelregel "Achteruitgaan"); een hogere stand
   betaalt meer belasting (`T.belastbaar`). De spelregel "Wensen" op "Het dorp als geheel" is het spel van vóór 1 okt; de
   getallen in `T.WENSEN_INSTELLINGEN`.
@@ -916,7 +892,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   van zijn werk (`WERKFIGUREN`: de zaaier, de wieder, de sprokkelaar, en de hakker met de bijl in het bos; een boerin die van een
   vrouw, `werkVelVan`; wie naast zijn werk staat, kijkt ernaar, `e.werkt.op`). De schaft houdt hij op de akker. Zijn boerin en
   grote kinderen helpen bij het zaaien, de oogst en het ontginnen (`T.helpAnker`, voor `T.dagAnker`; een anker dat
-  meeloopt, zonder veld: `veld: false`). Net zo rooit wie zijn erf of de plek van zijn werkplaats rooit, en hakt de
+  meeloopt, zonder veld: `veld: false`). Net zo rooit het hoofd van een huis dat wil doorgroeien, en hakt de
   houthakker aan zijn boom (`js/bos.js`). De regels veranderen niet; de getallen in `T.VELDWERK_INSTELLINGEN`.
 
 ### js/ontginnen.js: ontginnen
@@ -935,8 +911,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   ontgonnen, en doen zijn mensen de rest (`T.tikOntginnenDag`, vanuit `T.tikGebouwenDag`); in lentemaand wordt het een
   akker (`js/akkers.js`). `T.inOntginning(w)` zegt welke velden dat zijn. Een veld op de meent maakt haar kleiner voor de
   schapen (`T.weideStand` en `T.graaslandVan` in `js/vee.js`). `T.ONTGINNEN_INSTELLINGEN` heeft nog twee getallen, die het
-  bos van de heer nodig heeft: `bosBomen` (een stuk is bos bij minstens zoveel bomen: `js/bos.js`, `js/erven.js`) en `gunst`
-  (wat een erf in zijn bos kost: `js/erven.js`). De toetsen
+  bos van de heer nodig heeft: `bosBomen` (een stuk is bos bij minstens zoveel bomen: `js/bos.js`) en `gunst` (wat een erf in
+  zijn bos kostte, tot ronde 2 van het snoeien). De toetsen
   (`test/ontginnen.test.cjs`) zetten zelf een veld in ontginning.
 
 ### js/bos.js: het bos
@@ -957,15 +933,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`T.houthakkerZonderBoom`, in `T.verdeelHanden`): zijn hand werkt elders tot er weer een boom staat; de raad zegt het
   (`geenBoom`), en een nieuwe houthakker vraagt het dorp pas als het hout de winter niet haalt (vraag 129, e). Hij komt
   alleen bij minstens 30 bomen binnen tien tegels (`bij` in `T.GEBOUWEN`; vraag 129, b). Zijn poppetje hakt aan zijn
-  boom en brengt het hout in bundels naar de schuur (`hakHout` in `js/veldwerk.js`). **Rooien:** een gebouw op een stuk
+  boom en brengt het hout in bundels naar de schuur (`hakHout` in `js/veldwerk.js`). **Rooien:** een bouwplaats van het lege begin op een stuk
   waar nog iets te rooien staat (een boom, een stronk, een struik: `T.teRooienOp`, `T.watTeRooien`), wacht erop
-  (`g.wachtOpRooien`, met `g.kavel` en `g.rooienTot`), nog niet op de kaart (`T.bouwGebouw` zet het er pas met
-  `T.zetOpDeKaart` op), maar telt al mee: de hut van een gezin op zijn erf (`js/erven.js`), of een werkplaats die een
-  inwoner vroeg waar geen open grond meer was (`T.plekVoor` in `js/bouwen.js`; `rooien` bij `T.plaatsGebouw` en
-  `T.waaromPastHetNiet`). Wie rooit (`T.rooitHij`: het hoofd van het gezin, of wie de werkplaats vroeg, `p.rooit`), hakt en
-  rooit met de bijl zoals een boer ontgint (`T.werkVeldwerkBij` in `js/veldwerk.js`; het gezin van een erf helpt,
-  `T.helpAnker`; net zo het hoofd van een huis dat wil doorgroeien, `g.groeitNaRooien`, vraag 130) en werkt zolang nergens; is het stuk vrij, dan ligt de bouwplaats er de volgende dag, en na `rooiDagen`
-  rooien de buren de rest (`T.tikRooienDag`). Een stuk in het bos van de heer (`T.inHetBosVanDeHeer`: zoveel bomen als een
+  (`g.wachtOpRooien`, met `g.kavel`), nog niet op de kaart (`T.bouwGebouw` zet het er pas met `T.zetOpDeKaart` op); dat
+  rooien de bouwers (`js/bouwen.js`). Een huis dat wil doorgroeien (`g.groeitNaRooien`, vraag 130) rooit het gezin zelf:
+  het hoofd (`T.rooitHij`) hakt en rooit met de bijl zoals een boer ontgint (`T.werkVeldwerkBij` in `js/veldwerk.js`; wie
+  van zijn gezin geen werk heeft, helpt, `T.helpAnker`) en werkt zolang nergens, en na `rooiDagen` rooien de buren de rest
+  (`T.tikRooienDag`). Tot ronde 2 van het snoeien (12 okt) rooide ook een gezin zijn erf (`js/erven.js`) en wie een
+  werkplaats vroeg zijn plek (`js/verzoeken.js`). Een stuk in het bos van de heer (`T.inHetBosVanDeHeer`: zoveel bomen als een
   stuk bos bij het ontginnen) kost zijn gunst. Een appelboom is van iemand, behalve waar het huis van een gezin groter
   wordt: die kapt het gezin zelf, als geen vorm zonder hem kan (`T.isEigenBoom`, `v.teKappen`; vraag 130, a2).
 
@@ -1145,8 +1120,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   een gezin komt aan de groei (`T.waaromGeenGezin` en `T.volgendeGezinDag` in `js/gebouwen.js`), het hout en het eten
   aan de winter, wat de huizen missen aan de wensen (`T.watDeHuizenMissen`, vóór het doel; vraag 87), en wat je mist voor
   wat het doel vraagt aan de treden (`T.doelGebouwen`), met waar het vandaan komt. Na de laatste trede is er geen doel
-  meer (het winnen is op 11 okt weggehaald, `js/einde.js`), dus telt hij geen mensen meer; dat je een vrij erf weghaalt,
-  zegt hij sinds 8 okt niet meer (Marcel: "2. B"). Haalt het eten de winter niet, dan zegt hij wat helpt (`T.watHelptAanEten`, vraag
+  meer (het winnen is op 11 okt weggehaald, `js/einde.js`), dus telt hij geen mensen meer. Haalt het eten de winter niet, dan zegt hij wat helpt (`T.watHelptAanEten`, vraag
   133, b: een visser per dertig mensen, een jager als er herten zijn, een graanschuur, meer weide, zaaigraan
   kopen), en vraagt het dorp het gebouw dat hij noemt. Na een voorjaar met honger maakt een boer zelf een veld weide
   (`weideErbij` in `T.boerenKiezenVelden`, `D.behoeften.voorjaarsHonger`). Vanaf de herfst zegt hij of vis en vlees de

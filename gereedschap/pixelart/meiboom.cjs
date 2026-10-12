@@ -3,7 +3,7 @@
 // kleuren die eraan hangen. Hij blijft een maand staan (js/feesten.js): zo zie je ook na het feest dat het dorp feest
 // vierde.
 //
-// Eén tekening, geen delen, op beelden/meiboom.png (naar-spel.cjs --alleen meiboom), zoals het paaltje (paaltje.cjs):
+// Eén tekening, geen delen, op beelden/meiboom.png (naar-spel.cjs --alleen meiboom):
 // een voorwerp draait niet mee. Het model kijkt naar Z: lokaal +y is naar de camera, +x is links in beeld, z omhoog.
 // Het anker is het midden van de tegel, op de grond.
 //

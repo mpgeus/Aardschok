@@ -206,10 +206,6 @@ test('hoogte, bouwen: niet op steile grond, en waar het komt, wordt de grond vla
     }
     assert.ok(steil, 'nergens te steil');
     assert.ok(vrij, 'nergens plaats');
-    // een erf ook niet
-    let erfSteil = false;
-    for (let y = 2; y < w.h - 12 && !erfSteil; y += 2) for (let x = 2; x < w.b - 12 && !erfSteil; x += 2) erfSteil = /too steep/.test(T.waaromPastErfNiet(D, x, y) || '');
-    assert.ok(erfSteil, 'nergens te steil voor een erf');
     // bouwen: de voet ligt vlak, en zijn buren delen hun hoeken nog (geen wand)
     for (const [k, n] of Object.entries(T.GEBOUWEN.houthakker.kosten || {})) T.wijzigVoorraad(D, k, n + 10);
     const versie = w.hoogte.versie || 0;

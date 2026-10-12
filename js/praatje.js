@@ -69,7 +69,6 @@
     if (!p || p.schout || p.komt || p.weg || p.leeftijd === 'kleuter') return false;
     if (deel === 'werk' && !T.vrijeDag(D, D.kalender.dag)) {
       if (p.werk || e.werkAkkers) return false;
-      if (p.huis && p.huis.erf && !p.huis.klaar) return false;
       if (T.helpAnker(D, e)) return false;
     }
     if (deel === 'avond' && T.herbergenVan(D).includes(p.huis)) return false;

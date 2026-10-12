@@ -144,11 +144,10 @@
   const vanSchout = (p) => !!(p.schout || (p.hoofd && p.hoofd.schout));
   // Kan hij werken? Iedereen, behalve de schout zelf, een kleuter, en wie een tijd weg is (p.weg: de heervaart,
   // js/heervaart.js). Het gezin van de schout werkt alleen als er niemand anders meer is (T.wijsWerkToe).
-  // Wie zijn erf nog rooit, werkt nog nergens: daar is zijn gezin druk mee; en wie de plek rooit van een werkplaats die
-  // hij vroeg, ook niet (js/bos.js; werklijst vraag 110, e), of wat er staat waar zijn huis groter wordt (vraag 130); en
-  // wie de graanschuur bewaakt evenmin (p.wacht, js/graanschuur.js; vraag 132).
+  // Wie rooit wat er staat waar zijn huis groter wordt, werkt nog nergens (js/bos.js; vraag 130); en wie de graanschuur
+  // bewaakt evenmin (p.wacht, js/graanschuur.js; vraag 132).
   // Wie in de wijnboerderij woont, plukt in wijnmaand (`g.plukt`, js/wijngaard.js) en werkt dan nergens anders.
-  const kanWerken = (p) => !p.schout && !p.weg && !p.wacht && !(p.huis && p.huis.plukt) && !(p.huis && p.huis.wachtOpRooien) && !(p.huis && p.huis.groeitNaRooien && !p.hoofd) && !!T.LEEFTIJDEN[p.leeftijd] && T.LEEFTIJDEN[p.leeftijd].werkt != null;
+  const kanWerken = (p) => !p.schout && !p.weg && !p.wacht && !(p.huis && p.huis.plukt) && !(p.huis && p.huis.groeitNaRooien && !p.hoofd) && !!T.LEEFTIJDEN[p.leeftijd] && T.LEEFTIJDEN[p.leeftijd].werkt != null;
   T.kanWerken = kanWerken;
 
   // De bewoner van een poppetje: een nieuw poppetje draagt hem mee (e.bewoner); de schout en de boeren
@@ -548,11 +547,10 @@
   // Hoeveel mensen er in huis g wonen.
   const inHetHuis = (D, g) => D.bewoners.mensen.filter((p) => p.huis === g).length;
 
-  // De huizen van het dorp: wat klaar is en mensen een plek geeft, met hoeveel er nog bij kunnen. Ook de
-  // hut op een erf die nog oprijst: daar woont zijn gezin al (js/erven.js).
+  // De huizen van het dorp: wat klaar is en mensen een plek geeft, met hoeveel er nog bij kunnen.
   function huizenMetPlaats(D) {
     return (D.gebouwen || [])
-      .filter((g) => (g.klaar || g.erf) && T.woonruimteVan(D, g) > 0)
+      .filter((g) => g.klaar && T.woonruimteVan(D, g) > 0)
       .map((g) => ({ g, vrij: T.woonruimteVan(D, g) - inHetHuis(D, g) }));
   }
 
@@ -579,14 +577,7 @@
         continue;
       }
       for (const p of leden) p.komt = true;
-      // Wie een erf nam (js/erven.js), bouwt daar zelf zijn hut, en staat er nog iets op, dan rooit hij het eerst.
-      const huis = leden[0].huis;
-      const gezin = gezinTekst(D, leden);
-      const n = leden.length;
-      const erf = huis && huis.erf && !huis.klaar ? (huis.wachtOpRooien ? 'rooit' : 'zet') : '';
-      const tekst = erf === 'rooit' ? T.t('A new family is coming along the road: {gezin}. They clear their plot, then build their hut. (+{n})', { gezin, n })
-        : erf === 'zet' ? T.t('A new family is coming along the road: {gezin}. They build a hut on their plot. (+{n})', { gezin, n })
-        : T.t('A new family is coming along the road: {gezin}. (+{n})', { gezin, n });
+      const tekst = T.t('A new family is coming along the road: {gezin}. (+{n})', { gezin: gezinTekst(D, leden), n: leden.length });
       B.komen.push({ mensen: leden, aankomst: { tekst } });
     }
     return gezinnen.flat();
