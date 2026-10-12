@@ -4,6 +4,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+const { proefDorp } = require('./grond.cjs');
 
 const berichten = [];
 const geopend = [];
@@ -12,30 +13,26 @@ T.ui = new Proxy({}, {
 });
 T.anim = { tekst() {}, wacht: () => new Promise(() => {}), loop: () => new Promise(() => {}), uitval: () => new Promise(() => {}) };
 
-// Het echte gehucht, zoals een nieuw spel begint, stil en met een vast zaad (zoals in test/raadsman.test.cjs). Met zaad
-// 7 kan Nicholas rekenen, Alice niet, en Kate niets bijzonders.
-function gehucht(zaad = 7) {
-  const echt = console.warn;
-  const toeval = Math.random;
-  let n = 11;
-  console.warn = () => {};
-  Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
-  const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht'));
-  } finally {
-    console.warn = echt;
-    Math.random = toeval;
-  }
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
+// Het proefdorp (test/grond.cjs) met drie boerderijen, op dag 2, en een vast zaad voor de vaardigheden van de boeren
+// (js/raadsman.js: uit het zaad en het nummer van de boer). Met zaad 1 kan de tweede boer rekenen, de eerste niet, en de
+// derde niets bijzonders.
+function dorp(zaad = 1, opties = {}) {
+  const S = proefDorp(T, { boerderijen: 3, ...opties }).S;
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set() });
   S.dorp.lot = Object.assign(S.dorp.lot || {}, { zaad });
   return S;
 }
 
-const boer = (S, naam) => S.dorp.bewoners.mensen.find((p) => T.isBoer(p.wezen) && T.naamVanBewoner(p) === naam);
+const boeren = (S) => S.dorp.bewoners.mensen.filter((p) => T.isBoer(S.dorp, p)).sort((a, b) => a.id - b.id);
+// De boer met dit rekenen: 'goed', 'slecht', of undefined (niets bijzonders).
+const boerMet = (S, rekenen) => {
+  const p = boeren(S).find((b) => T.vaardighedenVan(S.dorp, b).rekenen === rekenen);
+  assert.ok(p, `een boer met rekenen ${rekenen}`);
+  return p;
+};
 
-function metRaadsman(S, naam = 'Nicholas') {
-  const p = boer(S, naam);
+function metRaadsman(S, rekenen = 'goed') {
+  const p = boerMet(S, rekenen);
   assert.ok(T.kiesRaadsman(S.dorp, p).kan);
   return p;
 }
@@ -57,7 +54,7 @@ function nacht(S, dag) {
 }
 
 test('het dagboek schrijft op wie er kwam, stierf of wegtrok, met wie het zijn; elke nacht begint het opnieuw', () => {
-  const S = gehucht();
+  const S = dorp();
   const D = S.dorp;
   S.kalender.dag = 3.5;
   T.wijzigBevolking(D, -2, 'winter', 'The cold is harsh, for the wood has run out');
@@ -77,13 +74,13 @@ test('het dagboek schrijft op wie er kwam, stierf of wegtrok, met wie het zijn; 
 });
 
 test('zonder raadsman geen rapport; met een raadsman elke nacht een, en een stille dag is één regel', () => {
-  const S = gehucht();
+  const S = dorp();
   const D = S.dorp;
   assert.equal(nacht(S, 1), null);
   assert.ok(!T.rapportKlaar(D));
-  metRaadsman(S);
+  const klaas = metRaadsman(S);
   const R = nacht(S, 2);
-  assert.deepEqual([R.dag, R.door, R.gebracht, R.gelezen], [2, 'Nicholas', false, false]);
+  assert.deepEqual([R.dag, R.door, R.gebracht, R.gelezen], [2, T.naamVanBewoner(klaas), false, false]);
   assert.equal(R.regels.length, 1);
   assert.match(R.regels[0], /^Nothing special\./);
   assert.ok(T.rapportKlaar(D), 'de knop Rapport');
@@ -93,16 +90,16 @@ test('zonder raadsman geen rapport; met een raadsman elke nacht een, en een stil
 });
 
 test('wat erin staat: wie er ging en kwam, hoe het gaat sinds gisteren, en wat er speelt', () => {
-  const S = gehucht();
+  const S = dorp();
   const D = S.dorp;
-  metRaadsman(S); // Nicholas kan rekenen: zijn getallen kloppen
+  metRaadsman(S); // deze raadsman kan rekenen: zijn getallen kloppen
   nacht(S, 10);
   S.kalender.dag = 10.5;
   T.wijzigVoorraad(D, 'graan', -12);
   T.wijzigVoorraad(D, 'hout', 3);
   T.wijzigBevolking(D, -1, 'vertrek', 'the village is not content enough');
   const weg = D.dagboek.regels[0].wie;
-  T.wijzigBevolking(D, 4, 'groei');
+  T.wijzigBevolking(D, 2, 'groei'); // niet meer: het proefdorp heeft woonruimte voor 20, en zit op 17 (vol is een eigen regel)
   const nieuw = D.dagboek.regels[1].wie;
   assert.ok(T.zetWet(D, 'rantsoen', 'krap').kan);
   const R = nacht(S, 11);
@@ -117,26 +114,27 @@ test('wat erin staat: wie er ging en kwam, hoe het gaat sinds gisteren, en wat e
 });
 
 test('wat de boeren deden, wat hij besliste toen je weg was, en wie je zocht en niet sprak', () => {
-  const S = gehucht();
+  const S = dorp();
   const D = S.dorp;
-  metRaadsman(S);
+  const klaas = metRaadsman(S);
+  const [trijn, aaltje] = boeren(S).filter((p) => p !== klaas).map(T.naamVanBewoner);
   nacht(S, 20);
   S.kalender.dag = 20.5;
   T.schrijfOp(D, 'boeren', { tekst: 'The hay lasts the winter: the farmers kept all their cattle.' });
-  T.schrijfOp(D, 'besluit', { door: 'Nicholas', titel: 'the theft', antwoord: 'Make him give it back.', prijs: '' });
-  T.schrijfOp(D, 'besluit', { door: 'Alice', titel: 'the fire', antwoord: 'Everyone helps.', prijs: '5 wood' });
-  T.schrijfOp(D, 'voorbij', { wie: 'Gerard', titel: 'the brawl' });
+  T.schrijfOp(D, 'besluit', { door: T.naamVanBewoner(klaas), titel: 'the theft', antwoord: 'Make him give it back.', prijs: '' });
+  T.schrijfOp(D, 'besluit', { door: trijn, titel: 'the fire', antwoord: 'Everyone helps.', prijs: '5 wood' });
+  T.schrijfOp(D, 'voorbij', { wie: aaltje, titel: 'the brawl' });
   const R = nacht(S, 21);
   assert.deepEqual(R.regels.slice(0, 4), [
     'The hay lasts the winter: the farmers kept all their cattle.',
     'On the theft, I decided: "Make him give it back."',
-    'On the fire, Alice decided: "Everyone helps." (5 wood)',
-    'Gerard came to see you about the brawl, and did not get to speak to you.',
+    `On the fire, ${trijn} decided: "Everyone helps." (5 wood)`,
+    `${aaltje} came to see you about the brawl, and did not get to speak to you.`,
   ]);
 });
 
 test('de winter: vanaf drie maanden ervoor zegt hij of het hout en het eten hem halen, en in de winter hoe lang nog', () => {
-  const S = gehucht();
+  const S = dorp();
   const D = S.dorp;
   metRaadsman(S);
   T.zetVoorraad(D, 'hout', 0);
@@ -159,7 +157,7 @@ test('de winter: vanaf drie maanden ervoor zegt hij of het hout en het eten hem 
 });
 
 test('wat er komt: de marskramer vandaag, en de raden van de rovers, zonder de toets erbij', () => {
-  const S = gehucht();
+  const S = dorp();
   const D = S.dorp;
   metRaadsman(S);
   const komt = dagVan('oogstmaand', 15);
@@ -174,9 +172,9 @@ test('wat er komt: de marskramer vandaag, en de raden van de rovers, zonder de t
 });
 
 test('zijn rekenen: wie kan rekenen, zegt het precies; wie het niet bijzonder kan, rondt af; wie niet kan rekenen, zit ernaast', () => {
-  const S = gehucht();
+  const S = dorp();
   const D = S.dorp;
-  const [klaas, trijn, aaltje] = ['Nicholas', 'Kate', 'Alice'].map((n) => boer(S, n));
+  const [klaas, trijn, aaltje] = [boerMet(S, 'goed'), boerMet(S, undefined), boerMet(S, 'slecht')];
   assert.equal(T.vaardighedenVan(D, klaas).rekenen, 'goed');
   assert.equal(T.vaardighedenVan(D, trijn).rekenen, undefined);
   assert.equal(T.vaardighedenVan(D, aaltje).rekenen, 'slecht');
@@ -195,9 +193,9 @@ test('zijn rekenen: wie kan rekenen, zegt het precies; wie het niet bijzonder ka
 });
 
 test('wie niet kan rekenen, zegt dat het hout de winter haalt terwijl het dat niet doet, of andersom', () => {
-  const S = gehucht();
+  const S = dorp();
   const D = S.dorp;
-  metRaadsman(S, 'Alice');
+  metRaadsman(S, 'slecht');
   const herfst = dagVan('herfstmaand', 1);
   T.zetVoorraad(D, 'graan', 50000);
   let mis = 0;
@@ -210,11 +208,11 @@ test('wie niet kan rekenen, zegt dat het hout de winter haalt terwijl het dat ni
     const zegtHaalt = R.regels.some((r) => /^The wood( and the food)? lasts? the winter\./.test(r));
     if (zegtHaalt !== v.haalt) mis++;
   }
-  assert.ok(mis > 0, 'Alice zit er soms naast');
+  assert.ok(mis > 0, 'wie niet kan rekenen, zit er soms naast');
 });
 
 test('een rapport dat je niet las, gaat op in het nieuwe; een gelezen niet, en hij onthoudt niet alles', () => {
-  const S = gehucht();
+  const S = dorp();
   const D = S.dorp;
   metRaadsman(S);
   nacht(S, 5);
@@ -232,7 +230,7 @@ test('een rapport dat je niet las, gaat op in het nieuwe; een gelezen niet, en h
 });
 
 test('hij brengt het: hij vertrekt zo vroeg dat hij aan je deur staat als je opstaat, en komt naar je toe als je buiten bent', () => {
-  const S = gehucht();
+  const S = dorp();
   const D = S.dorp;
   const klaas = metRaadsman(S);
   const e = klaas.wezen;
@@ -242,6 +240,8 @@ test('hij brengt het: hij vertrekt zo vroeg dat hij aan je deur staat als je ops
   const ind = T.dagindeling(dag);
   const huis = D.gebouwen.find((g) => g.huis === 'schout');
   const deur = T.deurVan(D.wereld, huis);
+  // In het proefdorp staat de schout waar het lege begin hem zette; hier staat hij buiten bij zijn huis, aan zijn deur.
+  Object.assign(h, { x: deur.x, y: deur.y, tx: deur.x, ty: deur.y, pad: [], onderweg: false });
   const looptijd = T.looptijdVan(D.wereld, klaas, e.thuis, { x: deur.x, y: deur.y, straal: 1 }, 'rapport');
   assert.ok(looptijd > 0.5, `hij woont een eind weg: ${looptijd} uur`);
   const vertrek = ind.opstaan - looptijd - T.OCHTENDRAPPORT_INSTELLINGEN.marge;
@@ -258,7 +258,7 @@ test('hij brengt het: hij vertrekt zo vroeg dat hij aan je deur staat als je ops
   om(ind.opstaan + 0.1);
   assert.deepEqual(T.dagAnker(D, e), { x: h.tx, y: h.ty, straal: 1 });
   // Wie geen raadsman is, loopt zijn eigen dag.
-  assert.equal(T.rapportAnker(D, boer(S, 'Kate').wezen), null);
+  assert.equal(T.rapportAnker(D, boerMet(S, undefined).wezen), null);
   // Naast elkaar, en geen van beiden loopt: hij geeft het, en het papier gaat open.
   Object.assign(e, { tx: h.tx + 1, ty: h.ty, x: h.tx + 1, y: h.ty, binnen: false, pad: [] });
   S.slaap = { tot: dag + 1 };
@@ -278,7 +278,7 @@ test('hij brengt het: hij vertrekt zo vroeg dat hij aan je deur staat als je ops
 });
 
 test('was je er niet vóór het werk begint, dan gaat hij aan het werk en ligt het klaar', () => {
-  const S = gehucht();
+  const S = dorp();
   const D = S.dorp;
   const klaas = metRaadsman(S);
   const dag = 10;
@@ -292,7 +292,7 @@ test('was je er niet vóór het werk begint, dan gaat hij aan het werk en ligt h
 });
 
 test('de spelregel "Het rapport" uit: geen rapport, en de raadsman loopt zijn dag zoals vóór 1 okt', () => {
-  const S = gehucht();
+  const S = dorp();
   const D = S.dorp;
   const klaas = metRaadsman(S);
   const IN = T.OCHTENDRAPPORT_INSTELLINGEN;
@@ -309,7 +309,7 @@ test('de spelregel "Het rapport" uit: geen rapport, en de raadsman loopt zijn da
 });
 
 test('het rapport is het laatste van de dag, alleen jouw dorp krijgt er een, en bewaren en laden houdt het', () => {
-  const S = gehucht();
+  const S = dorp();
   const D = S.dorp;
   metRaadsman(S);
   S.kalender.dag = 2;
@@ -338,7 +338,7 @@ function gelezenNacht(S, dag) {
 }
 
 test('een oorzaak zegt hij als hij begint, om de week zolang hij blijft, en als hij voorbij is', () => {
-  const S = gehucht();
+  const S = dorp();
   const D = S.dorp;
   metRaadsman(S);
   gelezenNacht(S, 10);
@@ -353,7 +353,7 @@ test('een oorzaak zegt hij als hij begint, om de week zolang hij blijft, en als 
 });
 
 test('las je het rapport niet, dan zegt hij het de volgende dag nog eens', () => {
-  const S = gehucht();
+  const S = dorp();
   const D = S.dorp;
   metRaadsman(S);
   gelezenNacht(S, 10);
@@ -364,9 +364,9 @@ test('las je het rapport niet, dan zegt hij het de volgende dag nog eens', () =>
 });
 
 test('de winter zegt hij als hij omslaat of flink verschuift, en anders om de week', () => {
-  const S = gehucht();
+  const S = dorp();
   const D = S.dorp;
-  metRaadsman(S); // Nicholas kan rekenen
+  metRaadsman(S); // deze raadsman kan rekenen
   T.zetVoorraad(D, 'graan', 50000);
   T.zetVoorraad(D, 'hout', 0);
   const herfst = dagVan('herfstmaand', 1);
@@ -390,19 +390,43 @@ test('de winter zegt hij als hij omslaat of flink verschuift, en anders om de we
 // Wat de huizen missen, en wie er doorgroeide (werklijst vraag 86, a, en 87)
 // ---------------------------------------------------------------------------------------------
 
-// Een kapel die alle zes huizen bereikt die er een willen (de vijf boerderijen en het huis van het jonge gezin): zijn
-// midden op 40,34, binnen 40 tegels van elk van hen. Alleen de boekhouding: hij staat niet getekend.
-const kapelVoorIedereen = (D) => D.gebouwen.push({ soort: 'kapel', x: 39, y: 33, voet: { b: 2, h: 2 }, klaar: true });
+// Het proefdorp heeft boerderijen en een hut, maar geen dorpelingen (vlees of vis, de put, de herberg, bier). Dus een dorp
+// met een huis en een herberg erbij (de optie `gebouwen`) en bier in de voorraad, en het gezin van de hut trekt in het huis:
+// drie boerderijen en een huis, zoals het gehucht van vroeger met zijn jonge gezin.
+function dorpMetHuis() {
+  const S = dorp(1, { gebouwen: ['huis', 'herberg'] });
+  const D = S.dorp;
+  T.zetVoorraad(D, 'bier', 100);
+  const hut = D.gebouwen.find((g) => g.soort === 'hut');
+  const huis = D.gebouwen.find((g) => g.soort === 'huis');
+  for (const p of D.bewoners.mensen) if (p.huis === hut) p.huis = huis;
+  return S;
+}
+
+// Een kapel die alle huizen bereikt die er een willen (de drie boerderijen en het huis): zijn midden is het midden van die
+// huizen, binnen 40 tegels van elk van hen. Alleen de boekhouding: hij staat niet getekend.
+const kapelVoorIedereen = (D) => {
+  const midden = (g) => {
+    const r = T.voetVanGebouw(g);
+    return { x: r.x + r.b / 2, y: r.y + r.h / 2 };
+  };
+  const huizen = D.gebouwen.filter((g) => T.standVan(g) && D.bewoners.mensen.some((p) => p.huis === g));
+  const m = { x: huizen.reduce((n, g) => n + midden(g).x, 0) / huizen.length, y: huizen.reduce((n, g) => n + midden(g).y, 0) / huizen.length };
+  const kapel = { soort: 'kapel', x: Math.round(m.x) - 1, y: Math.round(m.y) - 1, voet: { b: 2, h: 2 }, klaar: true };
+  D.gebouwen.push(kapel);
+  for (const g of huizen) assert.ok(T.afstand(midden(kapel), midden(g)) <= T.WENSEN_INSTELLINGEN.kring.kapel, 'binnen zijn kring');
+  return kapel;
+};
 const wensRegelsVan = (R) => R.regels.filter((r) => / wants? |^Nobody lacks|^All the houses/.test(r));
 
 test('wat de huizen missen: als het begint, niet elke dag, om de week, en als het ophoudt', () => {
-  const S = gehucht();
+  const S = dorpMetHuis();
   const D = S.dorp;
   metRaadsman(S);
   T.tikBehoeftenDag(D, 10);
   let R = nacht(S, 11);
   assert.deepEqual(wensRegelsVan(R), [
-    'Five farms and a house want a chapel within 40 tiles.',
+    'Three farms and a house want a chapel within 40 tiles.',
     'A house wants a well within 12 tiles.',
     'A house wants meat or fish: build a fisherman or a hunter.',
   ], 'wat helpt, zonder de toets; het zwaarste eerst');
@@ -418,7 +442,7 @@ test('wat de huizen missen: als het begint, niet elke dag, om de week, en als he
 });
 
 test('wat de huizen missen: verandert wat helpt, dan zegt hij het; en hooguit zoveel per dag, de rest later', () => {
-  const S = gehucht();
+  const S = dorpMetHuis();
   const D = S.dorp;
   metRaadsman(S);
   T.tikBehoeftenDag(D, 10);
@@ -426,7 +450,7 @@ test('wat de huizen missen: verandert wat helpt, dan zegt hij het; en hooguit zo
   const oud = IN.wensenPerRapport;
   IN.wensenPerRapport = 1;
   try {
-    assert.deepEqual(wensRegelsVan(nacht(S, 11)), ['Five farms and a house want a chapel within 40 tiles.']);
+    assert.deepEqual(wensRegelsVan(nacht(S, 11)), ['Three farms and a house want a chapel within 40 tiles.']);
     T.leesRapport(D);
     assert.deepEqual(wensRegelsVan(nacht(S, 12)), ['A house wants a well within 12 tiles.']);
     T.leesRapport(D);
@@ -440,11 +464,11 @@ test('wat de huizen missen: verandert wat helpt, dan zegt hij het; en hooguit zo
 });
 
 test('heeft elk huis wat het wil, dan zegt hij dat één keer', () => {
-  const S = gehucht();
+  const S = dorpMetHuis();
   const D = S.dorp;
   metRaadsman(S);
   kapelVoorIedereen(D);
-  const huis = D.gebouwen.find((g) => g.bewoners === 'jongGezin');
+  const huis = D.gebouwen.find((g) => g.soort === 'huis');
   const r = T.voetVanGebouw(huis);
   D.gebouwen.push({ soort: 'put', x: r.x, y: r.y + r.h, voet: { b: 1, h: 1 }, klaar: true });
   T.zetVoorraad(D, 'vis', 20);
@@ -456,12 +480,15 @@ test('heeft elk huis wat het wil, dan zegt hij dat één keer', () => {
 });
 
 test('wie er doorgroeide: "De hut van ... is een huis geworden", in wat er gebeurde', () => {
-  const S = gehucht();
+  const S = dorp();
   const D = S.dorp;
   metRaadsman(S);
-  const hut = D.gebouwen.find((g) => g.bewoners === 'oudStel');
+  const hut = D.gebouwen.find((g) => g.soort === 'hut');
   const wie = D.bewoners.mensen.find((p) => p.huis === hut).naam;
-  // Binnen, zoals 's nachts: het oude stel staat bij het begin voor zijn deur, en daar groeit het huis niet overheen.
+  // Een put vlak bij de hut (alleen de boekhouding): dan heeft hij alles, en groeit hij door.
+  const r = T.voetVanGebouw(hut);
+  D.gebouwen.push({ soort: 'put', x: r.x, y: r.y + r.h, voet: { b: 1, h: 1 }, klaar: true });
+  // Binnen, zoals 's nachts: wie voor zijn deur staat, daar groeit het huis niet overheen.
   for (const p of D.bewoners.mensen) if (p.huis === hut && p.wezen) p.wezen.binnen = true;
   T.zetVoorraad(D, 'hout', 100);
   let dag = 30;
@@ -474,7 +501,7 @@ test('wie er doorgroeide: "De hut van ... is een huis geworden", in wat er gebeu
 
 // Met niveaus (werklijst vraag 77, stap 2): wordt het erger, dan zegt hij het meteen, en wordt het minder ook.
 test('een status die erger wordt of minder, zegt hij meteen: droogte, ernstige droogte, en weer droogte', () => {
-  const S = gehucht();
+  const S = dorp();
   const D = S.dorp;
   metRaadsman(S);
   const I = T.WEER_INSTELLINGEN;

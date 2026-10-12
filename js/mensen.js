@@ -27,17 +27,12 @@
 //     straal:   3,             // hoe ver hij van zijn plek af dwaalt (de kaart mag het overrulen)
 //     snelheid: 1.3,           // alleen als hij anders loopt dan zijn wezen of een dorpeling
 //     gesprek:  'heer',        // welk gesprek hij voert; zonder dit is het zijn eigen id
-//     karakter: 'zanger',      // alleen de boeren: wie hij is als er niet geloot wordt (T.KARAKTERS
-//                              // hieronder, js/boeren.js). Zijn gesprek is dan dat van zijn
-//                              // karakter, en alleen wie een karakter heeft, kan aan de schandpaal.
-//     geslacht: 'vrouw',       // een boer: een weduwe of vroedvrouw wordt altijd een boerin; en wie
-//                              // met een gezin in een huis woont (js/bewoners.js)
+//     geslacht: 'vrouw',       // wie met een gezin in een huis woont (js/bewoners.js)
 //     gezin:    [],            // wie er bij hem woont, als [band, leeftijd, geslacht], voor wie een
-//                              // huis heeft en geen karakter (js/bewoners.js): de herbergierster
-//                              // woont alleen. Een boer krijgt zijn gezin van zijn karakter of het lot.
-//     aanzien:  'geliefd',     // alleen de boeren: hoe het dorp hem ziet als er niet geloot wordt en
-//                              // zijn karakter het niet vastlegt (js/boeren.js)
+//                              // huis heeft (js/bewoners.js): de herbergierster woont alleen.
 //   }
+// Tot ronde 2 van het snoeien (stap 4, 12 okt) had een boer ook een karakter en een aanzien, uit de stapel karakters
+// (T.KARAKTERS), met elk zijn eigen gesprek; dat lot is weg.
 //
 // Zonder `wezen` en zonder `zaad` is hij zichzelf: zijn id is de naam van zijn vel. De veertien
 // dorpelingen stonden tot 22 sep als eigen ingang in T.WEZENS, met veertien keer dezelfde regel
@@ -102,34 +97,12 @@
     // het al heeft, om en om "boer" en "boerin" voor wat variatie.
     //
     // Sinds Sint-Maarten (24 sep, js/heer.js) hebben ze een naam, want wie de heer te weinig geeft,
-    // zet iemand aan de schandpaal, en dan moet je ze uit elkaar kunnen houden. Wie ze zijn en wat
-    // ze kunnen, wordt bij elk spel geloot (Marcel, 24 sep; js/boeren.js): de naam hoort bij de
-    // boer, het karakter niet. Wat hier als karakter staat, is wie ze zijn als er niet geloot wordt:
-    // zoals ze eerst geschreven waren.
-    boer1: { naam: 'Nicholas', vel: 'boer', geslacht: 'man', snelheid: 1.5, straal: 3, karakter: 'zanger', aanzien: 'geliefd' }, // geen tekst: eigennamen
-    boer2: { naam: 'Alice', vel: 'boerin', geslacht: 'vrouw', snelheid: 1.4, straal: 3, karakter: 'weduwe' }, // geen tekst: eigennamen
-    boer3: { naam: 'Gerard', vel: 'boer', geslacht: 'man', snelheid: 1.5, straal: 3, karakter: 'woekeraar' }, // geen tekst: eigennamen
-    boer4: { naam: 'Kate', vel: 'boerin', geslacht: 'vrouw', snelheid: 1.4, straal: 3, karakter: 'vroedvrouw' }, // geen tekst: eigennamen
-    boer5: { naam: 'Walter', vel: 'boer', geslacht: 'man', snelheid: 1.5, straal: 3, karakter: 'heethoofd' }, // geen tekst: eigennamen
-  };
-
-  // De stapel karakters waaruit de boeren trekken (js/boeren.js, T.lootBoeren): wie een boer is,
-  // in één woord (kort, bij de muis) en in een paar (lang, boven zijn gesprek en bij de
-  // schandpaal). Elk karakter voert zijn eigen gesprek in js/gesprekken.js, onder dezelfde naam.
-  // `geslacht` alleen waar het karakter het vastlegt; `aanzien` alleen waar het dorp er vanzelf
-  // iets van vindt (js/boeren.js, T.BOEREN_INSTELLINGEN.aanzien). De teksten zeggen
-  // geen hij of zij, want dezelfde zanger kan een boer of een boerin zijn.
-  T.KARAKTERS = {
-    zanger: { kort: T.t('singer'), lang: T.t('sings in the barn in the evenings, and the whole lane sings along') },
-    weduwe: { kort: T.t('widow'), lang: T.t('widow, with three small children'), geslacht: 'vrouw', aanzien: 'geliefd' },
-    woekeraar: { kort: T.t('moneylender'), lang: T.t('lends out grain at ruinous interest'), aanzien: 'gehaat' },
-    vroedvrouw: { kort: T.t('midwife'), lang: T.t('the midwife: she brought half the lane into the world'), geslacht: 'vrouw', aanzien: 'geliefd' },
-    heethoofd: { kort: T.t('hothead'), lang: T.t("a hothead; once struck one of the lord's servants") },
-    vrome: { kort: T.t('pious'), lang: T.t('prays three times a day, and once for the lord') },
-    roddelaar: { kort: T.t('gossip'), lang: T.t('knows everything about everyone, and tells it too') },
-    grijsaard: { kort: T.t('the elder'), lang: T.t('the eldest in the hamlet; saw three lords come and go') },
-    nieuwkomer: { kort: T.t('newcomer'), lang: T.t('came from the next village last year, and nobody knows why') },
-    drinker: { kort: T.t('drinker'), lang: T.t('drinks more ale than was ever brewed') },
+    // zet iemand aan de schandpaal, en dan moet je ze uit elkaar kunnen houden.
+    boer1: { naam: 'Nicholas', vel: 'boer', geslacht: 'man', snelheid: 1.5, straal: 3 }, // geen tekst: eigennamen
+    boer2: { naam: 'Alice', vel: 'boerin', geslacht: 'vrouw', snelheid: 1.4, straal: 3 }, // geen tekst: eigennamen
+    boer3: { naam: 'Gerard', vel: 'boer', geslacht: 'man', snelheid: 1.5, straal: 3 }, // geen tekst: eigennamen
+    boer4: { naam: 'Kate', vel: 'boerin', geslacht: 'vrouw', snelheid: 1.4, straal: 3 }, // geen tekst: eigennamen
+    boer5: { naam: 'Walter', vel: 'boer', geslacht: 'man', snelheid: 1.5, straal: 3 }, // geen tekst: eigennamen
   };
 
   // Hoe heet deze mens? Zijn eigen naam, anders die van het wezen dat hij leent (Wim, de
@@ -144,8 +117,7 @@
 
   // Welk gesprek voert hij? Zijn eigen id, tenzij er iets anders staat — zo kunnen de bruid en de
   // bruidegom desnoods hetzelfde gesprek delen zonder dat het een ongelukje lijkt.
-  // Een boer voert het gesprek van zijn karakter (js/boeren.js zet het geloote op zijn poppetje).
-  T.gesprekVanMens = (id) => (T.MENSEN[id] && (T.MENSEN[id].gesprek || T.MENSEN[id].karakter)) || id;
+  T.gesprekVanMens = (id) => (T.MENSEN[id] && T.MENSEN[id].gesprek) || id;
 
   // Een gewone dorpeling: geen gevecht, geen levensbalk, hij staat en kijkt en dwaalt wat rond.
   // Dezelfde vorm als maakWezen in wereld.js, maar zonder een ingang in T.WEZENS — want die

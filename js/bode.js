@@ -75,11 +75,11 @@
   const inWinter = (dag) => T.datumVanDag(dag).seizoen === 'winter';
   const vanSchout = (p) => !!(p.huis && p.huis.huis === 'schout');
 
-  // Wie de brief kan brengen: een volwassene of jongere, geen boer en niet van het huis van de schout, die er nu is; wie geen
+  // Wie de brief kan brengen: een volwassene of jongere, geen boer (T.isBoer) en niet van het huis van de schout, die er nu is; wie geen
   // werk heeft eerst.
   function wieBrengtHem(D, behalve = []) {
     if (!D.bewoners) return null;
-    const kan = D.bewoners.mensen.filter((p) => (p.leeftijd === 'volwassen' || p.leeftijd === 'jong') && !p.wie && !vanSchout(p) && !p.weg && !p.komt && !behalve.includes(p));
+    const kan = D.bewoners.mensen.filter((p) => (p.leeftijd === 'volwassen' || p.leeftijd === 'jong') && !p.wie && !T.isBoer(D, p) && !vanSchout(p) && !p.weg && !p.komt && !behalve.includes(p));
     kan.sort((a, b) => (!!a.werk - !!b.werk) || (a.id - b.id));
     return kan[0] || null;
   }

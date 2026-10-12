@@ -6,6 +6,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+const { proefDorp, bouwAf, dagen } = require('./grond.cjs');
 
 const IN = T.VEE_INSTELLINGEN;
 const bijna = (a, b) => Math.abs(a - b) < 1e-9;
@@ -56,6 +57,58 @@ function metInstelling(blok, waarden, fn) {
 }
 
 const sleutels = (set) => [...set].sort();
+
+// Het proefdorp met een weide en een schaapskooi, en een heide: het lege begin heeft geen meent (de kaart van het
+// ontworpen gehucht had er een), dus komt er een op open grond bij de weide, zoals de kaart hem legde, en de beginkudde
+// wordt opnieuw gezet, zodat de schapen erop grazen en de koeien op de weide.
+function dorp() {
+  const r = proefDorp(T, { weide: true, gebouwen: ['schaapskooi'] });
+  const { D, w, weide } = r;
+  const bezet = (x, y) => !T.isBegaanbaar(w, x, y)
+    || D.gebouwen.some((g) => { const v = T.voetVanGebouw(g); return x >= v.x - 1 && x < v.x + v.b + 1 && y >= v.y - 1 && y < v.y + v.h + 1; })
+    || w.akkers.some((a) => x >= a.x - 1 && x < a.x + a.b + 1 && y >= a.y - 1 && y < a.y + a.h + 1);
+  const b = 8;
+  const h = 6;
+  let beste = null;
+  for (let y = weide.y - 25; y < weide.y + 25; y++) {
+    for (let x = weide.x - 25; x < weide.x + 25; x++) {
+      let vrij = true;
+      for (let j = 0; j < h && vrij; j++) for (let i = 0; i < b && vrij; i++) if (bezet(x + i, y + j)) vrij = false;
+      const d = vrij && T.afstand({ x: x + b / 2, y: y + h / 2 }, { x: weide.x + weide.b / 2, y: weide.y + weide.h / 2 });
+      if (vrij && (!beste || d < beste.d)) beste = { x, y, d };
+    }
+  }
+  assert.ok(beste, 'open grond voor een heide');
+  (w.meenten || (w.meenten = [])).push({ naam: 'heide', x: beste.x, y: beste.y, b, h, meent: true });
+  w.wezens = w.wezens.filter((e) => !e.dier);
+  T.zetBeginKudde(D);
+  return r;
+}
+
+// Een strook van twee bij veertien (zoals die van het ontworpen gehucht) met één tegel gras tussen hem en het
+// veld, op de plek waar hij het langst langs het veld ligt, meteen land: de bouwers zijn klaar en de nacht erop is het een
+// akker. Geeft de akker.
+function strookNaast(r, veld) {
+  const { S, D, w } = r;
+  let beste = null;
+  for (const [b, h] of [[2, 14], [14, 2]]) {
+    for (let y = veld.y - h - 2; y <= veld.y + veld.h + 2; y++) {
+      for (let x = veld.x - b - 2; x <= veld.x + veld.b + 2; x++) {
+        const gatX = Math.max(x - (veld.x + veld.b), veld.x - (x + b));
+        const gatY = Math.max(y - (veld.y + veld.h), veld.y - (y + h));
+        const lang = gatX === 1 && gatY < 0 ? -gatY : gatY === 1 && gatX < 0 ? -gatX : 0;
+        if (lang && (!beste || lang > beste.lang) && !T.waaromPastVeldNiet(D, 'akker', { x, y, b, h })) beste = { x, y, b, h, lang };
+      }
+    }
+  }
+  assert.ok(beste, 'een strook naast het veld');
+  const uit = T.legVeld(D, 'akker', beste);
+  assert.ok(uit.gelukt, uit.reden);
+  const dag = Math.floor(S.kalender.dag);
+  bouwAf(T, D, uit.instantie, dag);
+  dagen(T, S, dag + 1);
+  return w.akkers.find((a) => a.x === beste.x && a.y === beste.y);
+}
 
 test('T.weideGroepen: velden die elkaar raken, of met één tegel ertussen, zijn samen één weide', () => {
   // a en b raken elkaar; c ligt één tegel onder b; d ligt twee tegels naast c; e raakt a alleen schuin.
@@ -110,25 +163,32 @@ test('alleen weides doen mee: een akker ertussen of ernaast is geen weide, en de
   assert.deepEqual(volgend.velden, [a, akker, b]);
 });
 
-test('in het gehucht: de weide van Nicholas en de strook van Walter ernaast worden samen één weide, met de strook ertussen', () => {
-  const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
-  assert.ok(T.beginOpKaart(S, 'gehucht'));
-  const veld = (naam) => S.wereld.akkers.find((a) => a.naam === naam);
-  const klaas = veld('akker6');
-  const wouter = veld('akker5');
+test('in het dorp: de weide en een strook ernaast worden samen één weide, met de strook gras ertussen', () => {
+  const r = dorp();
+  const { S, weide } = r;
   assert.equal(T.weideGroepen(S.wereld).length, 1);
-  wouter.bestemming = wouter.plan = 'weide';
+  const strook = strookNaast(r, weide);
+  strook.bestemming = strook.plan = 'weide';
   const [groep] = T.weideGroepen(S.wereld);
-  assert.deepEqual(groep.velden, [wouter, klaas]);
+  assert.deepEqual(groep.velden, [weide, strook], 'in de volgorde van w.akkers');
   assert.equal(groep.tegels, 28 + 30);
-  // De strook gras tussen de twee, zo lang als ze naast elkaar liggen (de weide is korter dan de
-  // strook van Walter). Uit de akkers zelf, zodat een nieuwe indeling van het gehucht de toets niet
-  // breekt zolang ze zo naast elkaar liggen.
-  const x = wouter.x + wouter.b;
-  assert.equal(klaas.x, x + 1, 'één tegel tussen de strook van Walter en de weide van Nicholas');
-  const strook = [];
-  for (let y = klaas.y; y < klaas.y + klaas.h; y++) strook.push(`${x},${y}`);
-  assert.deepEqual(sleutels(groep.tussen), strook);
+  // De strook gras tussen de twee, zo lang als ze naast elkaar liggen (de weide is korter dan de strook). Uit de akkers
+  // zelf, zodat het niet uitmaakt aan welke kant de strook ligt, zolang ze zo naast elkaar liggen.
+  const verwacht = [];
+  const links = strook.x < weide.x ? strook : weide;
+  const boven = strook.y < weide.y ? strook : weide;
+  if (links.x + links.b + 1 === (links === strook ? weide : strook).x) {
+    const y0 = Math.max(strook.y, weide.y);
+    const y1 = Math.min(strook.y + strook.h, weide.y + weide.h);
+    for (let y = y0; y < y1; y++) verwacht.push(`${links.x + links.b},${y}`);
+  } else {
+    assert.equal(boven.y + boven.h + 1, (boven === strook ? weide : strook).y, 'één tegel tussen de strook en de weide');
+    const x0 = Math.max(strook.x, weide.x);
+    const x1 = Math.min(strook.x + strook.b, weide.x + weide.b);
+    for (let x = x0; x < x1; x++) verwacht.push(`${x},${boven.y + boven.h}`);
+  }
+  assert.ok(verwacht.length >= 1, 'ze liggen langs elkaar');
+  assert.deepEqual(sleutels(groep.tussen), verwacht.sort());
 });
 
 test('één weide, één kudde: de stand en het vee gaan over de hele groep, van welk veld je ook vraagt', () => {
@@ -265,17 +325,15 @@ test('lammeren op de meent: alleen zolang er plaats is in de schaapskooi', () =>
 });
 
 test('de muis en het venster zeggen dat een weide samen met het veld ernaast één weide is', () => {
-  const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
-  assert.ok(T.beginOpKaart(S, 'gehucht'));
-  const veld = (naam) => S.wereld.akkers.find((a) => a.naam === naam);
-  const klaas = veld('akker6');
-  const wouter = veld('akker5');
-  assert.equal(T.samenMetTekst(S.dorp, klaas), '');
-  wouter.bestemming = wouter.plan = 'weide';
-  const boerWouter = T.boerVanVeld(S.dorp, wouter);
-  assert.equal(T.samenMetTekst(S.dorp, klaas), `one meadow with the field of ${boerWouter.naam}`);
-  assert.match(T.veldTekst(S.dorp, wouter), new RegExp(`one meadow with the field of ${T.boerVanVeld(S.dorp, klaas).naam}`));
-  assert.equal(T.opsomming(['Nicholas', 'Jan', 'Gerard']), 'Nicholas, Jan and Gerard');
+  const r = dorp();
+  const { S, weide } = r;
+  const strook = strookNaast(r, weide);
+  assert.equal(T.samenMetTekst(S.dorp, weide), '');
+  strook.bestemming = strook.plan = 'weide';
+  const boerStrook = T.boerVanVeld(S.dorp, strook);
+  assert.equal(T.samenMetTekst(S.dorp, weide), `one meadow with the field of ${boerStrook.naam}`);
+  assert.match(T.veldTekst(S.dorp, strook), new RegExp(`one meadow with the field of ${T.boerVanVeld(S.dorp, weide).naam}`));
+  assert.equal(T.opsomming(['Edmund', 'Jan', 'Geoffrey']), 'Edmund, Jan and Geoffrey');
 });
 
 // ---------------------------------------------------------------- de kooi: scheren en mest
@@ -325,8 +383,7 @@ test('de schaapskooi maakt zelf geen wol meer: die komt van de schapen', () => {
 });
 
 test('de muis op de heide: wie er graast, en hoeveel de kooi bergt', () => {
-  const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
-  assert.ok(T.beginOpKaart(S, 'gehucht'));
+  const { S } = dorp();
   const meent = T.meentVan(S.wereld);
   assert.equal(T.meentOp(S.wereld, meent.x + 2, meent.y + 3), meent);
   assert.equal(T.meentOp(S.wereld, meent.x - 1, meent.y), null);
@@ -397,9 +454,7 @@ test('met de optie "vanzelf" gaat de mest naar verhouding over alle akkers van v
 });
 
 test('de muis op een akker met mest zegt het', () => {
-  const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
-  assert.ok(T.beginOpKaart(S, 'gehucht'));
-  const akker = S.wereld.akkers.find((a) => a.naam === 'akker2');
+  const { S, akkers: [akker] } = dorp();
   T.zetMest(S.dorp, akker, true);
   assert.match(T.veldTekst(S.dorp, akker), / · gets dung on 1 March$/);
 });

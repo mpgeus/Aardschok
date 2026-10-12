@@ -4,6 +4,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+const { proefDorp } = require('./grond.cjs');
 
 const berichten = [];
 const brieven = [];
@@ -15,21 +16,12 @@ T.ui = new Proxy({}, {
   },
 });
 
-// Het echte gehucht, zoals een nieuw spel begint, stil en met een vast zaad.
+// Het proefdorp (test/grond.cjs), stil en met een vast zaad. Het eerste jaar laat de heer het lege begin met rust (js/begin.js,
+// T.heerLaatMetRust): voor zijn grillen is dat voorbij, dus `heerVrijTot` gaat op 0 (zoals een speler die een jaar speelt).
 function gehucht() {
-  const echt = console.warn;
-  const toeval = Math.random;
-  let n = 11;
-  console.warn = () => {};
-  Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
-  const S = { kalender: T.nieuweKalender() };
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht'));
-  } finally {
-    console.warn = echt;
-    Math.random = toeval;
-  }
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
+  const S = proefDorp(T).S;
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set() });
+  S.dorp.begin.heerVrijTot = 0;
   T.S = S;
   berichten.length = 0;
   brieven.length = 0;
@@ -96,10 +88,12 @@ test('een antwoord kost wat het zegt, en weegt de heer tegen het dorp', () => {
   assert.match(keuzes[0].prijs, /−6 gold, −16 wood/);
   assert.match(keuzes[0].prijs, /the lord's favour \+10, the village's trust −3/);
   assert.ok(keuzes.every((k) => !k.hoofd), 'het spel kiest niet voor je');
+  // Het vertrouwen is op dag 2 van het proefdorp al een stukje naar de tevredenheid gegaan (T.tikBazenDag): reken vanaf nu.
+  const voor = T.bazenNu(D);
   assert.ok(T.beantwoordGril(D, 0));
   assert.equal(D.voorraad.hout, 24);
   assert.equal(D.voorraad.goud, 14);
-  assert.deepEqual(T.bazenNu(D), { gunst: 60, vertrouwen: 47 });
+  assert.deepEqual(T.bazenNu(D), { gunst: voor.gunst + 10, vertrouwen: voor.vertrouwen - 3 });
   assert.equal(T.grilNu(D), null, 'de vraag is weg');
   assert.match(T.bazenTekst(D, 'gunst'), /\+10 the statue/);
 });
@@ -177,6 +171,9 @@ test('een gril die wacht, gaat mee in een opgeslagen spel', () => {
 test('wie hem alles weigert, is binnen het jaar zijn ambt kwijt, na een waarschuwing', () => {
   const S = gehucht();
   const D = S.dorp;
+  // Welke grillen er komen, loot het zaad van het dorp (T.lotVanDeDag). Wie alles weigert, verliest gemiddeld zo'n zes gunst
+  // per brief: bij de meeste zaden is hij in de elfde maand weg, bij een paar pas in de twaalfde. Dit zaad is er een van de meeste.
+  D.lot.zaad = 1;
   let geweigerd = 0;
   for (let m = 1; m < 12 && !D.einde; m++) {
     tik(S, m * T.DAGEN_PER_MAAND + IN().dag - 1);

@@ -5,24 +5,19 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+const { proefDorp } = require('./grond.cjs');
 T.ui = new Proxy({}, { get: () => () => undefined });
 
-function gehucht(dag) {
-  const echt = console.warn;
-  const toeval = Math.random;
-  let n = 11;
-  console.warn = () => {};
-  Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
-  const S = { kalender: T.nieuweKalender() };
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht'));
-  } finally {
-    console.warn = echt;
-    Math.random = toeval;
-  }
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
+// Het proefdorp (test/grond.cjs) op `dag`, met vaste toeval: twee boerderijen met hun boer en akker, en hutten. De akkers
+// zijn gezaaid zoals het voorjaar dat deed (het proefdorp is van dag 2; wat de boeren dan nog zaaien, staat in
+// `ongezaaid`), en de boeren hebben hun akkers (T.werkDeBoerenBij, anders pas na de eerste nacht).
+function dorpOp(dag) {
+  const { S, D, akkers } = proefDorp(T);
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() });
+  for (const a of akkers) a.ongezaaid.clear();
+  T.werkDeBoerenBij(D);
   S.kalender.dag = dag;
-  S.dorp.gebouwenDag = Math.floor(dag);
+  D.gebouwenDag = Math.floor(dag);
   return S;
 }
 
@@ -54,7 +49,7 @@ function dagIn(maand, dagVanMaand) {
 
 test('het graan blijft als zwad liggen, wordt gebonden, droogt in hokken, en komt pas binnen in de schuur', () => {
   const dag = dagIn('hooimaand', 15);
-  const S = gehucht(dag + 6 / 24);
+  const S = dorpOp(dag + 6 / 24);
   const D = S.dorp;
   T.zetOptie('voorvallen', 'uit');
   try {
@@ -89,7 +84,7 @@ test('het graan blijft als zwad liggen, wordt gebonden, droogt in hokken, en kom
 });
 
 test('wat nog op het veld staat als de oogsttijd om is, halen ze in één keer binnen', () => {
-  const S = gehucht(dagIn('oogstmaand', 20) + 0.5);
+  const S = dorpOp(dagIn('oogstmaand', 20) + 0.5);
   const D = S.dorp;
   const a = D.wereld.akkers.find((v) => T.planVan(v) === 'akker');
   a.geoogst = new Set(['x']);
@@ -103,7 +98,7 @@ test('wat nog op het veld staat als de oogsttijd om is, halen ze in één keer b
 // De dagloners (vraag 140; Marcel, 8 okt: "Dagloners is een goed idee", en "mensen in het dorp").
 test('in de oogst helpt wie in het dorp geen werk heeft de dichtste boerderij, tot drie per boerderij', () => {
   const dag = dagIn('hooimaand', 15);
-  const S = gehucht(dag + 6 / 24);
+  const S = dorpOp(dag + 6 / 24);
   const D = S.dorp;
   const vrij = D.bewoners.mensen.filter((p) => p.huis && p.huis.soort !== 'boerderij' && !p.werk && p.wezen && !p.komt
     && (p.leeftijd === 'volwassen' || p.leeftijd === 'jong') && T.kanWerken(p));
@@ -132,7 +127,7 @@ test('in de oogst helpt wie in het dorp geen werk heeft de dichtste boerderij, t
 
 test('een dagloner bindt en draagt de schoven van zijn boerderij naar de schuur', () => {
   const dag = dagIn('hooimaand', 15);
-  const S = gehucht(dag + 6 / 24);
+  const S = dorpOp(dag + 6 / 24);
   const D = S.dorp;
   T.zetOptie('voorvallen', 'uit');
   try {
@@ -160,7 +155,7 @@ test('een dagloner bindt en draagt de schoven van zijn boerderij naar de schuur'
 test('een dagloner maait het graan van zijn boerderij als er weinig zwad ligt, maar niet met de spelregel op binden', () => {
   const dag = dagIn('oogstmaand', 2);
   for (const keuze of ['maaien', 'binden']) {
-    const S = gehucht(dag + 6 / 24);
+    const S = dorpOp(dag + 6 / 24);
     const D = S.dorp;
     T.zetOptie('voorvallen', 'uit');
     T.zetOptie('dagloners', keuze);

@@ -88,8 +88,9 @@
   //   woorden  { blij, last }: wat de balk dan zegt, als het anders moet ("the wedding")
   //   wie      wie het je komt zeggen; ander: over wie het gaat (zonder: niemand). Een vraag, of een lijstje vragen
   //            waarvan de eerste die iemand oplevert telt: { geslacht, leeftijd (zonder: volwassen), boer (true of
-  //            false), karakter (de boer met dat karakter, js/boeren.js), werk (hij werkt in zo'n gebouw) }. In een
-  //            vervolg: 'wie' of 'ander' van de eerste keer (zonder: dezelfde als toen).
+  //            false: de boer van een boerderij, T.isBoer), werk (hij werkt in zo'n gebouw) }. In een vervolg: 'wie' of
+  //            'ander' van de eerste keer (zonder: dezelfde als toen). Tot ronde 2 van het snoeien (stap 4, 12 okt) kon
+  //            een vraag ook een karakter van een boer zijn (het heethoofd, de woekeraar, de weduwe).
   //   als      wanneer het kan: { maanden, seizoen, gebouw, nietGebouw, voorraad: { graan: 40 }, vee: { schaap: 3 },
   //            trede, en wat een gesprek ook kent (vlag, goud) }
   //   gewicht  hoe vaak, naast de andere die kunnen (zonder: 1); winter: het gewicht in de winter
@@ -118,7 +119,7 @@
     diefDank: { soort: 'kans', titel: T.t('the thief'), vervolg: true, wie: 'ander', ander: 'wie' },
     vechtpartij: {
       soort: 'recht', titel: T.t('the fight'), als: { gebouw: 'herberg' }, oorzaak: 'onvrede',
-      wie: MAN, ander: [{ karakter: 'heethoofd', geslacht: 'man' }, { karakter: 'drinker', geslacht: 'man' }, MAN],
+      wie: MAN, ander: MAN,
     },
     akkergrens: { soort: 'recht', titel: T.t('the field boundary'), wie: { boer: true }, ander: { boer: true } },
     akkergrensWraak: { soort: 'recht', titel: T.t('the field boundary'), vervolg: true },
@@ -130,7 +131,7 @@
       soort: 'recht', titel: T.t('the witch'), woorden: { blij: T.t('your verdict on the witch'), last: T.t('your verdict on the witch') }, pauze: 180,
       wie: {}, ander: { geslacht: 'vrouw', leeftijd: 'oud', boer: false },
     },
-    woeker: { soort: 'recht', titel: T.t('the debt to the moneylender'), oorzaak: 'honger', wie: { boer: false }, ander: { karakter: 'woekeraar' } },
+    woeker: { soort: 'recht', titel: T.t('the debt to the moneylender'), oorzaak: 'honger', wie: { boer: false }, ander: { boer: true } },
     woekerWraak: { soort: 'recht', titel: T.t('the moneylender'), vervolg: true, wie: 'ander', ander: 'wie' },
     // Verzoeken
     lening: { soort: 'verzoek', titel: T.t('the loan'), oorzaak: 'honger', wie: { boer: false } },
@@ -140,7 +141,6 @@
     smid: { soort: 'kans', titel: T.t('the smith from the town'), pauze: 360, wie: { leeftijd: ['volwassen', 'oud'] } },
     zaaigraan: { soort: 'verzoek', titel: T.t('the seed grain'), als: { maanden: ['lentemaand', 'grasmaand'] }, wie: { boer: true } },
     zaaigraanTerug: { soort: 'verzoek', titel: T.t('the seed grain'), vervolg: true, na: [120, 150] },
-    weduweDak: { soort: 'verzoek', titel: T.t("the widow's roof"), als: { seizoen: ['herfst', 'winter'] }, wie: { karakter: 'weduwe' } },
     // Rampen: iets doen kost iets, niets doen ook.
     brand: {
       soort: 'ramp', titel: T.t('the fire'), winter: 3, oorzaak: ['vol', 'brandgevaar'], roep: T.t('Fire! {wie} is coming to fetch you.'),
@@ -161,7 +161,7 @@
     heler: { soort: 'kans', titel: T.t("the lord's iron"), wie: MAN },
     vondst: { soort: 'kans', titel: T.t('the find'), wie: { leeftijd: ['kind', 'jong'] } },
     zwerver: { soort: 'kans', titel: T.t('the vagrant') },
-    wijsheid: { soort: 'kans', titel: T.t("the elder's advice"), wie: { karakter: 'grijsaard' } },
+    wijsheid: { soort: 'kans', titel: T.t("the elder's advice"), wie: { leeftijd: 'oud' } },
     // Feesten: graan op en een tevreden dorp (Lords of the Realm, idee 4).
     bruiloft: {
       soort: 'feest', titel: T.t('the wedding'), woorden: { blij: T.t('the wedding'), last: T.t('the wedding without a feast') },
@@ -171,8 +171,8 @@
       soort: 'feest', titel: T.t('the harvest feast'), woorden: { blij: T.t('the harvest feast'), last: T.t('the harvest feast that never was') },
       als: { maanden: ['oogstmaand', 'herfstmaand'], voorraad: { graan: 80 } }, pauze: 200, gewicht: 3, wie: { boer: true },
     },
-    klok: { soort: 'verzoek', titel: T.t('a bell for the chapel'), als: { gebouw: 'kapel' }, pauze: 360, wie: { karakter: 'vrome' } },
-    lied: { soort: 'feest', titel: T.t('the song about the lord'), als: { gebouw: 'herberg' }, wie: { karakter: 'zanger' } },
+    klok: { soort: 'verzoek', titel: T.t('a bell for the chapel'), als: { gebouw: 'kapel' }, pauze: 360, wie: { leeftijd: ['volwassen', 'oud'] } },
+    lied: { soort: 'feest', titel: T.t('the song about the lord'), als: { gebouw: 'herberg' }, wie: MAN },
     // De meiboom (werklijst vraag 97; Marcel, 3 okt: "De meiboom"): niet geloot, maar elk jaar op 30 grasmaand, zodat hij
     // op 1 bloeimaand op het plein staat (js/feesten.js). De jongeren komen het vragen.
     meiboom: {
@@ -226,23 +226,19 @@
     const e = p && p.wezen;
     return kanHetBetreffen(D, p) && !!e && !e.dood && !e.vertrekt && !e.opgeroepen && !e.moetNaar;
   }
-  const isBoer = (p) => T.isBoer(p.wezen);
-
-  // Past hij bij een vraag (zie T.VOORVALLEN)? Een karakter is altijd een boer, van elke leeftijd.
-  function past(p, vraag) {
+  // Past hij bij een vraag (zie T.VOORVALLEN)?
+  function past(D, p, vraag) {
     if (vraag.geslacht && p.geslacht !== vraag.geslacht) return false;
-    if (vraag.karakter) return isBoer(p) && !!p.wezen && p.wezen.karakter === vraag.karakter;
     if (!elk(vraag.leeftijd || 'volwassen').includes(p.leeftijd)) return false;
-    if (vraag.boer != null && isBoer(p) !== vraag.boer) return false;
+    if (vraag.boer != null && T.isBoer(D, p) !== vraag.boer) return false;
     if (vraag.werk && !(p.werk && p.werk.soort === vraag.werk)) return false;
     return true;
   }
 
-  // Wie het is: de eerste vraag uit een lijstje die iemand oplevert (zo gaat de heethoofd voor, en anders een man),
-  // geloot uit wie past. Niet wie het al is, en niet uit zijn gezin.
+  // Wie het is: de eerste vraag uit een lijstje die iemand oplevert, geloot uit wie past. Niet wie het al is, en niet uit zijn gezin.
   function kies(D, vragen, dag, n, kan, naast) {
     for (const vraag of elk(vragen)) {
-      const lijst = D.bewoners.mensen.filter((p) => kan(D, p) && past(p, vraag) && !(naast && (p === naast || p.gezin === naast.gezin)));
+      const lijst = D.bewoners.mensen.filter((p) => kan(D, p) && past(D, p, vraag) && !(naast && (p === naast || p.gezin === naast.gezin)));
       if (lijst.length) return lijst[Math.floor(lot(D, dag, n) * lijst.length)];
     }
     return null;

@@ -5,6 +5,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+const { proefDorp } = require('./grond.cjs');
 
 const berichten = [];
 T.ui = new Proxy({}, { get: (_, naam) => (naam === 'bericht' ? (t) => berichten.push(t) : () => {}) });
@@ -19,21 +20,11 @@ function dagVan(maand, d) {
 const HERFST = dagVan('herfstmaand', 10);
 const bijUur = (dag, uur) => Math.floor(dag) + uur / 24;
 
-// Het echte gehucht, zoals een nieuw spel begint, stil en met een vast zaad (zoals in test/voorvallen.test.cjs).
-function gehucht() {
-  const echt = console.warn;
-  const toeval = Math.random;
-  let n = 11;
-  console.warn = () => {};
-  Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
-  const S = { kalender: T.nieuweKalender() };
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht'));
-  } finally {
-    console.warn = echt;
-    Math.random = toeval;
-  }
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
+// Het proefdorp (test/grond.cjs): twee boerderijen, hutten, een herberg met zijn handen en een schaapskooi, op dag 2 en
+// iedereen thuis; stil en met een vast zaad (zoals in test/voorvallen.test.cjs).
+function gehucht(opties = { gebouwen: ['herberg', 'schaapskooi'] }) {
+  const S = proefDorp(T, opties).S;
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set() });
   S.dorp.lot = Object.assign(S.dorp.lot || {}, { zaad: 7 });
   S.dorp.voorvallen = T.nieuweVoorvallen();
   return S;
@@ -96,7 +87,7 @@ test('een groot oogstfeest: morgen werkt niemand, iedereen staat op het plein, e
     assert.match(T.gebouwToestand(D, g), /idle, the village is feasting/);
   }
 
-  // Overdag staat iedereen rond het midden: het hele dorp, ook de boeren; de herbergierster aan de tap.
+  // Overdag staat iedereen rond het midden: het hele dorp, ook de boeren (de herbergier ook, hij woont niet in de herberg).
   S.kalender.dag = bijUur(HERFST + 1, 11);
   assert.ok(T.feestOp(D, S.kalender.dag), 'om elf uur is het feest');
   let geteld = 0;
@@ -107,13 +98,17 @@ test('een groot oogstfeest: morgen werkt niemand, iedereen staat op het plein, e
     assert.ok(r(a, f.midden) <= T.FEESTEN_INSTELLINGEN.kring, `${T.naamVanBewoner(p)} staat bij het feest`);
     geteld++;
   }
-  assert.ok(geteld >= 20, `het hele dorp (${geteld})`);
-  const tapster = D.bewoners.mensen.find((p) => p.huis === T.herbergVan(D));
-  assert.equal(r(T.dagAnker(D, tapster.wezen), f.midden), 1, 'de herbergierster tapt naast het midden');
+  // Het proefdorp heeft 17 mensen, de schout niet meegeteld 16 (de schout loop jij).
+  assert.equal(geteld, D.bewoners.mensen.length - 1, `het hele dorp (${geteld})`);
+  // In het lege begin woont niemand in de herberg (de herbergier woont in een hut en werkt er): hij staat dus in de kring
+  // zoals iedereen, niet aan de tap.
+  const tapper = D.bewoners.mensen.find((p) => p.werk === T.herbergVan(D));
+  assert.ok(tapper && tapper.huis !== T.herbergVan(D), 'de herbergier werkt in de herberg, en woont elders');
+  assert.ok(r(T.dagAnker(D, tapper.wezen), f.midden) <= T.FEESTEN_INSTELLINGEN.kring, 'ook hij staat bij het feest');
   // 's Nachts slaapt iedereen weer thuis.
   S.kalender.dag = bijUur(HERFST + 1, 23.5);
   assert.ok(!T.feestOp(D, S.kalender.dag));
-  assert.ok(T.dagAnker(D, tapster.wezen).binnen, 'na bedtijd naar binnen');
+  assert.ok(T.dagAnker(D, tapper.wezen).binnen, 'na bedtijd naar binnen');
 
   // De dag erna: het feest is gevierd, en het werk gaat door.
   T.tikGebouwenDag(D, HERFST + 2);
@@ -245,6 +240,7 @@ test('op een hele feestdag maait niemand', () => {
   const D = S.dorp;
   let dag = dagVan('oogstmaand', 1);
   while (T.akkerStadium(T.datumVanDag(dag).maand, T.datumVanDag(dag).dagVanMaand) !== 'rijp') dag++;
+  T.werkDeBoerenBij(D); // het proefdorp zet de poppetjes pas na de laatste nacht neer: de boeren krijgen hun akkers nu
   const boer = S.wereld.wezens.find((e) => e.werkAkkers && e.werkAkkers.length);
   const akker = boer.werkAkkers[0];
   const slag = () => ({ x: akker.x, y: akker.y, sinds: 0, tot: 1e9, akker, hooi: false });
@@ -276,17 +272,10 @@ test('met de spelregel "Alleen de stemming" is een feest wat het was: een prijs 
   }
 });
 
-test('ook op een gehucht van de maker staat het dorp op zijn plein, rond de meiboom', () => {
+test('ook op een ander eiland staat het dorp op zijn plein, rond de meiboom', () => {
   for (const zaad of [1, 2, 3]) {
-    const echt = console.warn;
-    console.warn = () => {};
-    const S = { kalender: T.nieuweKalender() };
-    try {
-      assert.ok(T.beginOpKaart(S, 'gehucht', zaad));
-    } finally {
-      console.warn = echt;
-    }
-    Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
+    const S = proefDorp(T, { zaad }).S;
+    Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set() });
     const D = S.dorp;
     const f = T.zetFeest(D, 'meiboom', 'avond', bijUur(HERFST, 14));
     assert.ok(f.midden, `zaad ${zaad}: een midden`);

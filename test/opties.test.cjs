@@ -10,7 +10,7 @@ const T = require('./laad.cjs').spel();
 // De blokken zoals de bestanden ze zetten, vóór opties.js er iets mee doet.
 const BLOKKEN = [
   'GEBOUWEN_INSTELLINGEN', 'BEHOEFTEN_INSTELLINGEN', 'HANDEL_INSTELLINGEN', 'HEER_INSTELLINGEN',
-  'BOEREN_INSTELLINGEN', 'VELDEN_INSTELLINGEN', 'VEE_INSTELLINGEN', 'DAG_INSTELLINGEN',
+  'VELDEN_INSTELLINGEN', 'VEE_INSTELLINGEN', 'DAG_INSTELLINGEN',
   'BEWONERS_INSTELLINGEN', 'DOORKIJK_INSTELLINGEN', 'HERBERG_INSTELLINGEN', 'ZIEN_INSTELLINGEN',
 ];
 const LOS = ['GRAAN_PER_TEGEL', 'ZAAIGRAAN_PER_TEGEL', 'DAG_LENGTE', 'OOGST_UREN_PER_TEGEL'];
@@ -173,9 +173,6 @@ test('een naam komt overal: bij de mens, in zijn gesprek, en op zijn poppetje', 
   const S = { wereld: { wezens: [e] } };
   T.pasOptiesToe({ namen: { boer2: 'Grietje' } }, S);
   assert.equal(T.naamVanMens('boer2'), 'Grietje');
-  // Een boer voert het gesprek van zijn karakter (js/boeren.js); dat heet zoals het karakter, en de
-  // naam boven het gesprek komt van de boer zelf (js/dialoog.js).
-  assert.equal(T.GESPREKKEN.weduwe.naam, 'the widow');
   assert.equal(e.naam, 'Grietje');
   // Leeg, of alleen spaties, is de standaard.
   T.pasOptiesToe({ namen: { boer2: '   ' } }, S);

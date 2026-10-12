@@ -242,9 +242,8 @@ test('de dekking zegt wat het spel vraagt en nergens staat', () => {
   // is, horen deze regels vanzelf te verdwijnen — en dan zegt deze toets dat ze er niet meer zijn.
   for (const wie of Object.keys(T.GESPREKKEN)) {
     // Wie over de weg komt (de heer en zijn soldaten), hoeft nergens te staan, en het gesprek van een
-    // karakter (de zanger, de weduwe, …) voert een boer die het trekt (js/boeren.js). Dat van een
     // voorval (js/voorvallen.js) voert wie het spel ervoor kiest.
-    const staat = (T.MENSEN[wie] && T.MENSEN[wie].bezoeker) || (T.KARAKTERS && T.KARAKTERS[wie]) || T.VOORVALLEN[wie] || Object.values(T.GEBIEDEN).some((g) => g.maak().wezens.some((e) => e.soort === wie));
+    const staat = (T.MENSEN[wie] && T.MENSEN[wie].bezoeker) || T.VOORVALLEN[wie] || Object.values(T.GEBIEDEN).some((g) => g.maak().wezens.some((e) => e.soort === wie));
     assert.equal(!tekst.includes(`"${wie}" heeft een gesprek`), !!staat, `${wie}: de dekking en de wereld zijn het oneens`);
   }
 });
@@ -282,9 +281,9 @@ test('een mens die niet in de lijst staat, wordt bij naam genoemd', () => {
 });
 
 test('twee monden voor één tekst valt op', () => {
-  // Een boer en een dorpeling die zijn gesprek leent: ze zeggen dan woord voor woord hetzelfde.
-  const klachten = keur([UITGANG, { x: 2, y: 2, wie: 'boer1' }, { x: 4, y: 2, zaad: 3, gesprek: 'zanger' }]);
-  assert.match(teksten(klachten), /voert hetzelfde gesprek "zanger"/);
+  // De herbergierster en een dorpeling die haar gesprek leent: ze zeggen dan woord voor woord hetzelfde.
+  const klachten = keur([UITGANG, { x: 2, y: 2, wie: 'herbergierster' }, { x: 4, y: 2, zaad: 3, gesprek: 'herbergierster' }]);
+  assert.match(teksten(klachten), /voert hetzelfde gesprek "herbergierster"/);
 });
 
 test('een mens komt met zijn eigen naam en zijn eigen gesprek uit de kaart', () => {

@@ -764,7 +764,19 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   drie keer en in de hele reeks nog eens. Iets in die toets hangt dus van de volgorde of de tijd af; nalopen voordat het
   een push tegenhoudt.
 
+- **In het lege begin krijgt een deur in het bos geen paadje** (12 okt, gezien bij het verhuizen van de toetsen naar het
+  proefdorp, ronde 2 van het snoeien): `magPad` in js/paden.js laat geen paadje over een tegel met een voorwerp, ook
+  niet over heide of een graspol. In het ontworpen gehucht lag alles open; in het lege begin staat er overal begroeiing,
+  dus een boerderij aan de bosrand blijft zonder paadje (in het proefdorp de tweede boerderij). `test/paden.test.cjs`
+  ruimt de begroeiing daarom zelf op. Voor de spelregel "Paadjes", als de mensen erover lopen.
+
 ## Het beeld
+
+- **De vellen van de karakters hebben geen gebruiker meer** (12 okt, ronde 2 van het snoeien, stap 4): de karakters van
+  de boeren zijn weg, dus niemand draagt nog boer-zanger, boerin-weduwe en de rest (gereedschap/pixelart/karakters.cjs,
+  dorpelingen-anim.cjs, schandpaal.cjs; de nek per vel in `T.BEELDEN.schandpaal`). Ze staan nog in `beelden/`. Weg bij de
+  volgende ronde van de pixel art (`npm run pixelart:spel`), of houden voor de grijze oudste (`uiterlijk.cjs` leent
+  `KARAKTERS.grijsaard`).
 
 - **Het beeld is opdrachten aan de videokaart** (9 okt, gemeten op 2560×1440): ver uitgezoomd zijn het zo'n 3200
   opdrachten voor 3600 plaatjes, want bijna elk plaatje heeft een eigen vel (een vel per tekening, vraag 114) en de

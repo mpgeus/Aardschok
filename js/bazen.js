@@ -58,8 +58,8 @@
     gesneuveld: -2,
     // Soldaten van de heer in huis (een straf van Sint-Maarten).
     soldaten: -10,
-    // De schandpaal: zette je jezelf eraan, dan zoveel erbij; iemand anders, dan zijn aanzien (js/boeren.js: wat het
-    // het dorp aan tevredenheid kost) keer zoveel eraf.
+    // De schandpaal: zette je jezelf eraan, dan zoveel erbij; iemand anders, dan wat het het dorp aan tevredenheid kost
+    // (T.HEER_INSTELLINGEN.schandpaalKost) keer zoveel eraf.
     schandpaalZelf: 10,
     schandpaalPerAanzien: 100,
     // Elke dag gaat het vertrouwen een stukje naar hoe tevreden het dorp is (de tevredenheid × 100): het verschil gedeeld

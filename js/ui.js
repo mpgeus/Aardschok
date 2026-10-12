@@ -197,7 +197,7 @@
     toonDialoog(naam, tekst, lijst, wie) {
       keuzes = lijst;
       $('dialoog-naam').textContent = naam;
-      // Onder de naam: wie hij is en wat hij kan (een boer, js/boeren.js); anders niets.
+      // Onder de naam: wie hij is (bij een voorval, js/dialoog.js); anders niets.
       $('dialoog-wie').textContent = wie || '';
       $('dialoog-wie').classList.toggle('verborgen', !wie);
       $('dialoog-tekst').textContent = tekst;

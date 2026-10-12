@@ -5,33 +5,17 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+const { proefDorp } = require('./grond.cjs');
 
 T.ui = new Proxy({}, { get: () => () => undefined });
 
-// Het ontworpen gehucht, stil en met een vaste worp, met een graanschuur die klaar is; jij bouwt, en de voorvallen
-// komen alleen als de regels ze beginnen.
-function gehucht() {
-  const echt = console.warn;
-  const toeval = Math.random;
-  let n = 7;
-  console.warn = () => {};
-  Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
-  const S = { kalender: T.nieuweKalender() };
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht'));
-  } finally {
-    console.warn = echt;
-    Math.random = toeval;
-  }
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
+// Het proefdorp (test/grond.cjs) met een graanschuur die klaar is; jij bouwt, en de voorvallen komen alleen als de regels
+// ze beginnen.
+function dorp() {
+  const { S, D, gebouw } = proefDorp(T, { gebouwen: ['graanschuur'] });
+  Object.assign(S, { vlaggen: new Set() });
   T.S = S;
-  const D = S.dorp;
-  const huis = D.gebouwen.find((g) => g.huis === 'schout');
-  const plek = T.plekVoor(D, 'graanschuur', T.deurVan(D.wereld, huis));
-  const u = T.plaatsGebouw(D, 'graanschuur', plek.x, plek.y);
-  assert.ok(u.gelukt, u.reden);
-  u.instantie.klaar = true;
-  return { S, D, schuur: u.instantie };
+  return { S, D, schuur: gebouw('graanschuur') };
 }
 
 // Een dag in de winter, na de oogst en voor het zaaien: dan ligt er zaaigraan apart.
@@ -62,7 +46,7 @@ function luister(f) {
 }
 
 test('komt de honger aan het zaaigraan, dan zoekt een boer je; zet je er mannen bij, dan blijft het liggen', () => {
-  const { D } = gehucht();
+  const { D } = dorp();
   try {
     const dag = winterdag(D);
     D.kalender.dag = dag + 0.3;
@@ -96,14 +80,18 @@ test('komt de honger aan het zaaigraan, dan zoekt een boer je; zet je er mannen 
 });
 
 test('met te weinig wachters pakt het dorp een deel; de helft bewaken laat de helft vrij', () => {
-  const { D } = gehucht();
+  const { D } = dorp();
   try {
     const dag = winterdag(D);
     D.kalender.dag = dag + 0.3;
     alleenZaaigraan(D, dag);
     T.bewaakZaaigraan(D, 1);
     assert.equal(T.zaaigraanBeschermd(D), 1);
-    D.zaaigraan.wachters = D.zaaigraan.wachters.slice(0, 1);
+    // Eén van de twee wachters gaat weg (zijn stap naar de schuur houdt op): er zijn in het proefdorp maar twee mannen, dus
+    // hij is de volgende keer weer beschikbaar.
+    const weg = D.zaaigraan.wachters.pop();
+    delete weg.moetNaar;
+    T.bewonerVan(D, weg).wacht = false;
     assert.ok(Math.abs(T.zaaigraanBeschermd(D) - 1 / T.wachtersNodig(D)) < 1e-9, 'een van de wachters: dat deel');
     T.bewaakZaaigraan(D, 0.5);
     assert.ok(Math.abs(T.zaaigraanBeschermd(D) - 0.5) < 1e-9, 'de helft');
@@ -116,7 +104,7 @@ test('met te weinig wachters pakt het dorp een deel; de helft bewaken laat de he
 });
 
 test('honger terwijl het graan bewaakt wordt, kost vertrouwen; bij het zaaien gaan de wachters naar huis', () => {
-  const { D } = gehucht();
+  const { D } = dorp();
   try {
     const dag = winterdag(D);
     D.kalender.dag = dag + 0.3;
@@ -143,7 +131,7 @@ test('honger terwijl het graan bewaakt wordt, kost vertrouwen; bij het zaaien ga
 
 test('zonder graanschuur, of met de spelregel "Pas bij nood", eet het dorp het zaaigraan op zonder te vragen', () => {
   for (const zonder of ['schuur', 'regel']) {
-    const { D, schuur } = gehucht();
+    const { D, schuur } = dorp();
     try {
       if (zonder === 'schuur') D.gebouwen.splice(D.gebouwen.indexOf(schuur), 1);
       else T.zetOptie('zaaigraan', 'nood');
@@ -160,7 +148,7 @@ test('zonder graanschuur, of met de spelregel "Pas bij nood", eet het dorp het z
 });
 
 test('wat helpt aan eten: een graanschuur als die er niet is, en zaaigraan kopen als het te weinig is (vraag 132, b)', () => {
-  const { D, schuur } = gehucht();
+  const { D, schuur } = dorp();
   try {
     const dag = winterdag(D);
     D.kalender.dag = dag + 0.3;
@@ -179,7 +167,7 @@ test('wat helpt aan eten: een graanschuur als die er niet is, en zaaigraan kopen
 
 test('na een voorjaar met honger maakt een boer een veld weide, als het hooi geen koe meer draagt', () => {
   for (const honger of [0, 20]) {
-    const { D } = gehucht();
+    const { D } = dorp();
     try {
       D.behoeften.voorjaarsHonger = honger;
       const voor = D.wereld.akkers.filter((v) => T.planVan(v) === 'weide').length;
@@ -204,15 +192,8 @@ test('na een voorjaar met honger maakt een boer een veld weide, als het hooi gee
 });
 
 test('de raad vraagt meer vissers als het dorp groeit, en meer weide na een voorjaar met honger', () => {
-  const echt = console.warn;
-  console.warn = () => {};
-  const S = { kalender: T.nieuweKalender() };
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht', 62707));
-  } finally {
-    console.warn = echt;
-  }
-  const D = S.dorp;
+  // Een eiland met water in het land (zaad 62707; op het eiland van zaad 2 ligt er te weinig): een visser vraagt water.
+  const { D } = proefDorp(T, { zaad: 62707 });
   try {
     D.kalender.dag = 100.5; // hooimaand: de visser vist
     D.bevolking = 70;

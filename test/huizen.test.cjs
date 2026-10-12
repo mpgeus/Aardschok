@@ -8,7 +8,10 @@ const assert = require('node:assert/strict');
 const TEGELS = require('../tegels/tegels.json');
 const { HUIZEN } = require('../gereedschap/pixelart/huizen.cjs');
 
+const { proefDorp } = require('./grond.cjs');
+
 const T = require('./laad.cjs').spel();
+T.ui = new Proxy({}, { get: () => () => undefined });
 
 const opHetVel = () => TEGELS.huizen.tiles.filter((t) => t && t.naam);
 
@@ -89,25 +92,20 @@ test('T.deurVan neemt de deur van de tekening, en anders het midden van de zuidk
 });
 
 // Ronde 4b van de huizenbouwer (26 sep, achtste sessie; ontwerp/beeld.md, "Ronde 4b: de huizen in het
-// spel"): de huizen van het gehucht komen van de huizenbouwer, elk met zijn eigen deur, en niet allemaal
-// dezelfde kant op. Voor elke deur moet je kunnen staan: daar gaan de bewoners heen (T.deurVan).
-test('de huizen van het gehucht komen van de huizenbouwer, en voor elke deur kun je staan', () => {
-  const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
-  const waarschuw = console.warn;
-  console.warn = () => {};
-  assert.ok(T.beginOpKaart(S, 'gehucht'));
-  console.warn = waarschuw;
-  const w = S.wereld;
+// spel"): de huizen van het dorp komen van de huizenbouwer, elk met zijn eigen deur. Voor elke deur moet je kunnen staan:
+// daar gaan de bewoners heen (T.deurVan). Sinds 12 okt op het proefdorp (test/grond.cjs), met een herberg en een huis
+// erbij. (Dat de deuren van het ontworpen gehucht niet allemaal dezelfde kant op wezen, gold voor zijn indeling: het
+// proefdorp zet zijn huizen met T.plaatsGebouw neer, en dat laat de deur naar het zuiden; de speler keert hem met het
+// bouwmenu naar de weg, T.keerNaarDeWeg in js/bouwen.js.)
+test('de huizen van het proefdorp komen van de huizenbouwer, en voor elke deur kun je staan', () => {
+  const { S, w, hutten } = proefDorp(T, { gebouwen: ['herberg', 'huis'] });
   const huizen = S.dorp.gebouwen.filter((g) => g.tekening && g.tekening.startsWith('huizen/'));
-  assert.equal(huizen.length, 10, 'vijf boerderijen, de schout, een huis, twee hutten en de herberg');
-  const kanten = new Set();
+  assert.equal(huizen.length, 1 + 2 + hutten.length + 2, 'de schout, twee boerderijen, de hutten, de herberg en een huis');
   for (const g of huizen) {
     const eig = T.opzoekTegelNaam(g.tekening).eig;
     assert.deepEqual([g.voet.b, g.voet.h], eig.beslaat, `${g.tekening}: de voet van de tekening`);
     const deur = T.deurVan(w, g);
     assert.deepEqual(deur, { x: g.x + eig.deur[0], y: g.y + eig.deur[1] }, `${g.tekening}: de deur van de tekening`);
     assert.ok(T.isBegaanbaar(w, deur.x, deur.y), `${g.tekening}: voor de deur kun je staan`);
-    kanten.add(eig.deur[0] < 0 ? 'west' : eig.deur[1] < 0 ? 'noord' : eig.deur[0] >= eig.beslaat[0] ? 'oost' : 'zuid');
   }
-  assert.ok(kanten.size >= 3, `de deuren wijzen verschillende kanten op (${[...kanten].join(', ')})`);
 });

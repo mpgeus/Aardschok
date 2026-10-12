@@ -1,6 +1,6 @@
 // Het venster Raadsman (werklijst vraag 67; Marcel, 30 sep: "B"), onder R en met een knop in de balk: de boeren waaruit
-// je je raadsman kiest, elk een kaart met wie hij is, hoe hij beslist (zijn karakter) en wat hij kan (twee
-// vaardigheden, goed in groen, slecht in rood), en een knop om hem te kiezen; later kies je hier een ander. Onderaan
+// je je raadsman kiest, elk een kaart met wie hij is en wat hij kan (twee vaardigheden, goed in groen, slecht in
+// rood), en een knop om hem te kiezen; later kies je hier een ander. Onderaan
 // wat hij besloot. De regels staan in js/raadsman.js. Zolang het venster open is, staat de tijd stil. Een eigen
 // bestand, zoals het menu Wetten (js/wettenmenu.js), want js/hud.js is al groot genoeg (vraag 25, C).
 (function (T) {
@@ -10,13 +10,8 @@
   const veilig = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
   const naam = (p) => T.hoofdletter(T.naamVanBewoner(p));
 
-  // Eén boer: wie hij is, hoe hij beslist, wat hij kan, en de knop.
+  // Eén boer: wie hij is, wat hij kan, en de knop.
   function kaart(S, p, nu) {
-    const e = p.wezen;
-    const over = T.overBoer(e) || { kort: '', lang: '', eigenschappen: [] };
-    const eigenschappen = over.eigenschappen.filter((t) => t !== T.t('your advisor')); // dat zegt de knop al (js/boeren.js)
-    const wie = [T.hoofdletter(over.lang || over.kort || '')].concat(eigenschappen).filter(Boolean).join(' · ');
-    const neiging = T.RAADSMAN_NEIGINGEN[e.karakter];
     const kan = Object.entries(T.vaardighedenVan(S.dorp, p)).map(([soort, niveau]) => {
       const v = T.VAARDIGHEDEN[soort];
       return `<li class="${niveau === 'goed' ? 'goed' : 'kost'}">${niveau === 'goed' ? '+' : '−'} ${veilig(v[niveau])} <span>(${veilig(v.waarop)})</span></li>`;
@@ -24,12 +19,10 @@
     const gekozen = p === nu;
     const knop = gekozen
       ? `<span class="rs-knop gekozen">${T.t('Your advisor')}</span>`
-      : `<button class="rs-knop" data-wie="${veilig(p.wie)}">${T.t('Choose {naam}', { naam: veilig(naam(p)) })}</button>`;
+      : `<button class="rs-knop" data-wie="${p.id}">${T.t('Choose {naam}', { naam: veilig(naam(p)) })}</button>`;
     return (
       `<div class="rs-kaart${gekozen ? ' gekozen' : ''}">` +
       `<div class="rs-kop"><span class="rs-naam">${veilig(naam(p))}</span>${knop}</div>` +
-      `<p class="rs-wie">${veilig(wie)}</p>` +
-      (neiging ? `<p class="rs-neiging">${T.t('Decides {neiging}.', { neiging: veilig(neiging) })}</p>` : '') +
       (kan.length ? `<ul class="rs-kan">${kan.join('')}</ul>` : `<p class="rs-neiging">${T.t('Has no particular skills.')}</p>`) +
       '</div>'
     );
@@ -103,7 +96,7 @@
       return;
     }
     if (!b.dataset.wie) return;
-    const p = S.dorp.bewoners && S.dorp.bewoners.mensen.find((x) => x.wie === b.dataset.wie);
+    const p = S.dorp.bewoners && S.dorp.bewoners.mensen.find((x) => String(x.id) === b.dataset.wie);
     const r = p ? T.kiesRaadsman(S.dorp, p) : { kan: false, reden: T.t('That farmer is no longer here.') };
     if (!r.kan) T.ui.bericht(r.reden, 'gevaar');
     toon(S);

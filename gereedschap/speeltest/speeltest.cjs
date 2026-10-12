@@ -130,8 +130,8 @@ function leesOpdracht(argv) {
   return o;
 }
 
-// Een jaar: een schone browser, Math.random uit het zaad (daaruit loot het spel de boeren en zijn eigen
-// zaad, js/boeren.js), het spel zoals index.html het laadt, en dan de speler erbij. Met `opslaan` (de proef
+// Een jaar: een schone browser, Math.random uit het zaad (daaruit loot het spel zijn eigen zaad,
+// D.lot.zaad in js/dorp.js), het spel zoals index.html het laadt, en dan de speler erbij. Met `opslaan` (de proef
 // met opslaan): { dag, bewaar }, zie speler.js; slaat de speler op, dan herlaadt dit de bladzijde, en gaat
 // hij verder met Verder op het titelscherm. Met `maker` staat de spelregel "Je gehucht" op "Elk spel een
 // ander" (js/opties.js), zoals de browser het onthoudt als een speler hem kiest: dan legt de maker het gehucht

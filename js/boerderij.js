@@ -5,8 +5,8 @@
 //   - een boerderij is een thuis voor één gezin: een gezin uit het kamp trekt erin zoals in een hut (T.verhuisUitHetKamp,
 //     js/begin.js), en is het kamp al leeg, dan verhuist er een gezin uit een hut heen (b2), want een nieuw gezin over de
 //     weg komt niet zolang er weinig graan is;
-//   - het hoofd van dat gezin is de boer (T.boerVan), zonder karakter of eigenschappen (die slapen tot ronde 2 van het
-//     snoeien); hij werkt de akkers van zijn boerderij (`e.werkAkkers`, zoals de boeren van de kaart, js/kaart.js), en zijn
+//   - het hoofd van dat gezin is de boer (T.boerVan, T.isBoer), zonder karakter of eigenschappen (het lot is weg sinds
+//     ronde 2 van het snoeien); hij werkt de akkers van zijn boerderij (`e.werkAkkers`, zoals de boeren van de kaart, js/kaart.js), en zijn
 //     vrouw en kinderen helpen zoals op elke boerderij (js/veldwerk.js);
 //   - de velden leg jij (T.legVeld): een akker of een wijngaard bij een boerderij, als rechthoek; de bouwers rooien en
 //     ploegen of planten hem (js/bouwen.js), en is hij af, dan is het land (D.wereld.akkers, of D.wereld.wijngaarden met
@@ -47,6 +47,11 @@
     const hier = wonenIn(D, g);
     return hier.filter((p) => !p.hoofd).sort((a, b) => a.gezin - b.gezin)[0] || hier.find((p) => p.leeftijd === 'volwassen') || null;
   };
+
+  // Is deze bewoner een boer: de boer van de boerderij waar hij woont (T.boerVan)? Eén vraag voor de voorvallen
+  // (js/voorvallen.js) en de raadsman (js/raadsman.js). Tot 12 okt was een boer wie een karakter uit het lot had (de vijf
+  // boeren van de kaart); het lot en de karakters zijn weg sinds ronde 2 van het snoeien, stap 4 (Marcel: "Ja, nu mee").
+  T.isBoer = (D, p) => !!p && isBoerderij(p.huis) && T.boerVan(D, p.huis) === p;
 
   // De akkers van een boerderij die jij legde (T.legVeld).
   T.akkersVanBoerderij = (D, g) => ((D.wereld && D.wereld.akkers) || []).filter((a) => a.boerderij === g);

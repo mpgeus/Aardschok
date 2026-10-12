@@ -8,6 +8,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+const { proefDorp } = require('./grond.cjs');
 const Vee = require('../gereedschap/pixelart/vee.cjs');
 
 const HOUDINGEN = ['grazen', 'staan', 'lopen', 'liggen'];
@@ -265,7 +266,7 @@ function dagVan(maand, dagVanMaand, jaar) {
   return (jaar || 0) * T.DAGEN_PER_JAAR + ((m - T.TIJD_START_MAAND + 12) % 12) * T.DAGEN_PER_MAAND + dagVanMaand - 1;
 }
 
-// Een gehucht zonder kaart, met deze velden ({ x, y, b, h, bestemming }) en een vast lot. Het losse object S is het dorp
+// Een dorp zonder kaart, met deze velden ({ x, y, b, h, bestemming }) en een vast lot. Het losse object S is het dorp
 // zelf (D, js/dorp.js), met alleen wat de regels over vee, melk, eten en weides nodig hebben: die vragen het dorp, niet het
 // spel. Zo ook de losse S in de toetsen over het eten hieronder.
 function wereldMet(...velden) {
@@ -295,11 +296,28 @@ function metInstelling(blok, waarden, fn) {
 
 const binnen = (e, v) => e.tx >= v.x && e.tx < v.x + v.b && e.ty >= v.y && e.ty < v.y + v.h;
 
-test('de beginkudde: drie koeien op het blok van Nicholas (akker6), binnen de weide, en acht schapen op de heide', () => {
-  const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
-  assert.ok(T.beginOpKaart(S, 'gehucht'));
-  const weide = S.wereld.akkers.find((a) => a.naam === 'akker6');
-  assert.equal(weide.bestemming, 'weide', 'het betekenisbestand zegt het');
+test('de beginkudde: drie koeien op de weide van de eerste boerderij, binnen de weide, en acht schapen op de heide', () => {
+  // Het proefdorp heeft de beginkudde al (T.zetBeginKudde, zonder meent: dan grazen de schapen op de weide). De kaart van
+  // het ontworpen gehucht had een meent, het lege begin niet: hier komt er een op open grond bij de weide, en de beginkudde
+  // wordt opnieuw gezet.
+  const { S, D, w, weide } = proefDorp(T, { weide: true, gebouwen: ['schaapskooi'] });
+  const bezet = (x, y) => !T.isBegaanbaar(w, x, y)
+    || D.gebouwen.some((g) => { const v = T.voetVanGebouw(g); return x >= v.x - 1 && x < v.x + v.b + 1 && y >= v.y - 1 && y < v.y + v.h + 1; })
+    || w.akkers.some((a) => x >= a.x - 1 && x < a.x + a.b + 1 && y >= a.y - 1 && y < a.y + a.h + 1);
+  let plek = null;
+  for (let y = weide.y - 25; y < weide.y + 25; y++) {
+    for (let x = weide.x - 25; x < weide.x + 25; x++) {
+      let vrij = true;
+      for (let j = 0; j < 6 && vrij; j++) for (let i = 0; i < 8 && vrij; i++) if (bezet(x + i, y + j)) vrij = false;
+      const d = vrij && T.afstand({ x: x + 4, y: y + 3 }, { x: weide.x + weide.b / 2, y: weide.y + weide.h / 2 });
+      if (vrij && (!plek || d < plek.d)) plek = { x, y, d };
+    }
+  }
+  assert.ok(plek, 'open grond voor een heide');
+  (w.meenten || (w.meenten = [])).push({ naam: 'heide', x: plek.x, y: plek.y, b: 8, h: 6, meent: true });
+  w.wezens = w.wezens.filter((e) => !e.dier);
+  T.zetBeginKudde(D);
+  assert.equal(weide.bestemming, 'weide');
   assert.equal(weide.plan, 'weide');
   assert.ok(S.wereld.akkers.filter((a) => a !== weide).every((a) => a.bestemming === 'akker' && a.plan === 'akker'));
   assert.ok(S.wereld.akkers.every((a) => a.vruchtbaarheid === T.VELDEN_INSTELLINGEN.beginVruchtbaarheid));
@@ -309,7 +327,7 @@ test('de beginkudde: drie koeien op het blok van Nicholas (akker6), binnen de we
   // Sinds stap 2 van de weides staan de schapen op de heide, de meent (spel.md, "Marcel koos voor
   // stap 2"), en de koeien op de weide.
   const meent = T.meentVan(S.wereld);
-  assert.ok(meent, 'het gehucht heeft een meent');
+  assert.ok(meent, 'het dorp heeft een meent');
   for (const e of vee) {
     const plek = e.dier === 'koe' ? weide : meent;
     assert.equal(e.weide, plek);
@@ -544,8 +562,8 @@ test('groei staat uit met de optie "Groeit niet"', () => {
 
 test('T.kanBestemming: een weide wordt pas iets anders als zijn vee ergens anders plaats heeft', () => {
   const { S, velden: [oud, nieuw] } = wereldMet(
-    { x: 0, y: 0, b: 5, h: 6, bestemming: 'weide' }, // 30 tegels, zoals akker6
-    { x: 6, y: 0, b: 2, h: 14, bestemming: 'akker' }, // 28 tegels, zoals akker1
+    { x: 0, y: 0, b: 5, h: 6, bestemming: 'weide' }, // 30 tegels
+    { x: 6, y: 0, b: 2, h: 14, bestemming: 'akker' }, // 28 tegels
   );
   zet(S, oud, 'koe', 3);
   zet(S, oud, 'schaap', 8); // 28 nodig

@@ -603,7 +603,7 @@
 
   // Op 1 grasmaand werpt elk volwassen dier met zijn kans (IN().kansOpJong) een jong, zolang er op
   // zijn weide plaats is (Marcel, 25 sep: "de kudde groeit in de lente als er plaats is"). Het jong
-  // blijft bij zijn moeder. Het lot komt uit het zaad van het spel (S.lot.zaad, js/boeren.js), het
+  // blijft bij zijn moeder. Het lot komt uit het zaad van het spel (D.lot.zaad, js/dorp.js), het
   // jaar en het dier zelf, niet uit Math.random: hetzelfde spel werpt elk jaar dezelfde jongen, en
   // een toets komt vast uit. Wie het laagst loot, werpt het eerst, zodat bij krappe plaats niet
   // altijd dezelfde soort voorgaat. Geeft de nieuwe dieren.

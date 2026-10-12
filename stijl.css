@@ -968,7 +968,6 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
 }
 #raadsman button.rs-knop:hover { background: color-mix(in srgb, var(--goud) 16%, transparent); border-color: color-mix(in srgb, var(--goud) 60%, transparent); }
 #raadsman .rs-knop.gekozen { color: var(--op-goud); background: var(--goud); border-color: var(--goud); cursor: default; }
-#raadsman .rs-wie { margin: 3px 0 2px; font: italic 13px var(--boek); color: var(--gedempt); }
 #raadsman .rs-neiging { margin: 2px 0; font-size: 13px; color: var(--inkt); }
 #raadsman .rs-kan { margin: 2px 0 0; padding: 0; list-style: none; font-size: 12.5px; line-height: 1.45; }
 #raadsman .rs-kan span { color: var(--gedempt); }

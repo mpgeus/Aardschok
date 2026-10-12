@@ -5,27 +5,30 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+const { proefDorp, bouwAf, dagen } = require('./grond.cjs');
 
 T.ui = new Proxy({}, { get: () => () => undefined });
 
-// Het ontworpen gehucht, zoals een nieuw spel begint, stil en met een vaste worp.
-function gehucht(dag = 0) {
-  const echt = console.warn;
-  const toeval = Math.random;
-  let n = 11;
-  console.warn = () => {};
-  Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
-  const S = { kalender: T.nieuweKalender() };
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht'));
-  } finally {
-    console.warn = echt;
-    Math.random = toeval;
+// Het proefdorp (test/grond.cjs), stil en met een vaste worp: het huis van de schout, twee boerderijen met hun akker, en
+// hutten. In het lege begin bouwen de mensen zelf: wat een toets neerzet met T.plaatsGebouw is een bouwplaats, en `klaar`
+// maakt hem af (bouwAf, en de nacht erop).
+function dorp(dag, opties) {
+  const { S, D } = proefDorp(T, opties);
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() });
+  T.S = S;
+  if (dag != null) {
+    S.kalender.dag = dag;
+    D.gebouwenDag = Math.floor(dag);
   }
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
-  S.kalender.dag = dag;
-  S.dorp.gebouwenDag = Math.floor(dag);
   return S;
+}
+
+// Een gebouw dat jij neerzet, af: de bouwers zijn klaar en de nacht erop is het gebouw er.
+function klaar(S, g) {
+  const dag = Math.floor(S.kalender.dag);
+  bouwAf(T, S.dorp, g, dag);
+  dagen(T, S, dag + 1);
+  return g;
 }
 
 // Zonder voorvallen, met een vaste worp, en na afloop alles terug.
@@ -40,11 +43,6 @@ function zo(f) {
     T.optiesTerug();
     Math.random = toeval;
   }
-}
-
-// Het dorp vol: in elk huis zoveel mensen als er plaats is.
-function vol(S) {
-  T.wijzigBevolking(S.dorp, S.dorp.woonruimte - S.dorp.bevolking, 'groei');
 }
 
 // De plek voor een werkplaats die het dichtst bij het plein ligt en na het rooien past, met zoveel bomen op zijn
@@ -70,7 +68,7 @@ const BOS = () => T.BOS_INSTELLINGEN.bosVanDeHeer;
 
 test('een plek om te rooien voor een werkplaats: met zo weinig mogelijk bomen, en hij past pas na het rooien', () => {
   zo(() => {
-    const S = gehucht();
+    const S = dorp();
     const D = S.dorp;
     const bij = werkplaatsPlek(S, 'weverij', (n) => n >= BOS());
     const plek = T.plekOmTeRooien(D, 'weverij', { x: bij.x + 5, y: bij.y + 5 });
@@ -89,7 +87,7 @@ test('een plek om te rooien voor een werkplaats: met zo weinig mogelijk bomen, e
 
 test('een put op een plek om te rooien bereikt een huis dat er nog geen heeft, waar je ook zoekt; mist niemand er een, dan geen plek', () => {
   zo(() => {
-    const S = gehucht();
+    const S = dorp();
     const D = S.dorp;
     const voet = T.gebouwVoet('put', T.volgendeTekening(D, 'put'));
     const kring = T.kringTeller(D, 'put');
@@ -100,7 +98,12 @@ test('een put op een plek om te rooien bereikt een huis dat er nog geen heeft, w
       assert.ok(plek, 'er is een plek om te rooien');
       assert.ok(kring({ x: plek.x, y: plek.y, b: voet.b, h: voet.h }).zonder > 0, `${plek.x},${plek.y} bereikt een huis zonder put`);
     }
-    // Bereikt de put die er staat iedereen, dan is er geen plek: niemand mist er een.
+    // Bereikt de put die er staat iedereen, dan is er geen plek: niemand mist er een. Het lege begin heeft nog geen put:
+    // die zet de toets zelf neer, op de plek die hij vond, en maakt hem af.
+    const eerste = T.plekOmTeRooien(D, 'put', { x: 0, y: 0 });
+    const u = T.plaatsGebouw(D, 'put', eerste.x, eerste.y);
+    assert.ok(u.gelukt, u.reden);
+    klaar(S, u.instantie);
     const oud = T.WENSEN_INSTELLINGEN.kring.put;
     T.WENSEN_INSTELLINGEN.kring.put = 200;
     try {
@@ -111,29 +114,22 @@ test('een put op een plek om te rooien bereikt een huis dat er nog geen heeft, w
   });
 });
 
-// Doorgroeien (werklijst vraag 130; Marcel, 6 okt: "Ok"): op land 62707 van de maker stond de hut van een oud stel waar
-// het kleinste huis dat hij kan worden, één struik in de weg heeft. In de speeltest van vier jaar had die hut 1349 dagen
-// alles en groeide hij nooit, en won daarom geen dorp. Nu rooit het gezin wat in de weg staat, en dan groeit hij. Sinds de
-// grote gebouwen (vraag 114, stap 3) ligt dat land anders, en spelen de toetsen op land 62710, met net zo'n hut.
-function landVanDeMaker(zaad) {
-  const echt = console.warn;
-  const toeval = Math.random;
-  let n = 11;
-  console.warn = () => {};
-  Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
-  const S = { kalender: T.nieuweKalender() };
-  const opEiland = T.MAKER_INSTELLINGEN.opEiland;
-  T.MAKER_INSTELLINGEN.opEiland = false; // een land van de maker zonder het eiland: deze toetsen gaan over zijn landen (sinds 8 okt maakt een nieuw spel het eiland, vraag 117)
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht', zaad));
-  } finally {
-    T.MAKER_INSTELLINGEN.opEiland = opEiland;
-    console.warn = echt;
-    Math.random = toeval;
-  }
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
-  T.S = S;
-  return S;
+// Doorgroeien (werklijst vraag 130; Marcel, 6 okt: "Ok"): een hut die alles heeft, maar niet groter kan worden omdat er iets
+// in de weg staat. In het ontworpen gehucht en op de landen van de maker stond zo'n hut van een oud stel; nu is het de eerste
+// hut van het proefdorp waar een gezin woont. Rechts van een hut ligt elke vorm waar hij in groeit (in zijn stijl passen ze
+// in elkaar: 7 bij 5, 8 bij 6, 9 bij 8), dus daar zet de toets iets neer dat in de weg staat.
+
+// Een natuurvoorwerp (een struik, een appelboom, een rots) op een tegel, zoals de kaart het zette: de tegel zelf is vast.
+function zetNatuur(w, soort, x, y) {
+  const t = T.opzoekTegelNaam(soort);
+  const v = { soort, x, y, vel: t.vel, id: t.id, beslaat: [1, 1] };
+  T.kenSoortVan(v);
+  const daar = T.voorwerpOp(w, x, y);
+  if (daar) T.haalVoorwerpWeg(w, daar);
+  T.zetVoorwerp(w, v);
+  w.tegels[y][x] = 'muur';
+  T.kaartVeranderd(w);
+  return v;
 }
 // Een nacht, met genoeg graan en hout: zo heeft wie er woont te eten en te stoken.
 function nachtMetGenoeg(S, dag) {
@@ -143,15 +139,23 @@ function nachtMetGenoeg(S, dag) {
   S.kalender.stil = [];
   T.tikGebouwenDag(S.dorp, dag);
 }
-// De hut van het oude stel, met een put erbij: dan heeft hij alles.
-function hutMetAlles(S) {
+// De dag na vandaag: waar de nachten beginnen (het proefdorp is van dag 2, en een put bouwen kost nog een nacht).
+const morgen = (S) => Math.floor(S.kalender.dag) + 1;
+// De eerste hut waar een gezin woont, met een put erbij (af): dan heeft hij alles. Rechts ervan staat `wat` in de weg, op de
+// tegel naast zijn tweede rij.
+function hutMetAlles(S, wat = 'struik') {
   const D = S.dorp;
-  const hut = D.gebouwen.find((g) => g.soort === 'hut' && D.bewoners.mensen.some((p) => p.huis === g) && T.groeiRooiPlan(D, g));
-  assert.ok(hut, 'een bewoonde hut die eerst moet rooien');
+  const hut = D.gebouwen.find((g) => g.soort === 'hut' && D.bewoners.mensen.some((p) => p.huis === g));
+  assert.ok(hut, 'een bewoonde hut');
   const plek = T.plekVoor(D, 'put', T.deurVan(D.wereld, hut));
   assert.ok(plek, 'er is een plek voor een put');
   const u = T.plaatsGebouw(D, 'put', plek.x, plek.y);
   assert.ok(u.gelukt, u.reden);
+  klaar(S, u.instantie);
+  zetNatuur(D.wereld, wat, hut.x + hut.voet.b, hut.y + 1);
+  assert.ok(T.groeiRooiPlan(D, hut), 'hij kan alleen groeien als er eerst gerooid wordt');
+  // Het gezin is binnen, zoals 's nachts: wie bij de deur staat, staat een groter huis in de weg (T.wieStaatOp).
+  for (const p of D.bewoners.mensen) if (p.huis === hut && p.wezen) p.wezen.binnen = true;
   return hut;
 }
 
@@ -160,16 +164,17 @@ test('een hut die alles heeft maar niet past, rooit eerst wat in de weg staat, e
     const gezinDagen = T.GEBOUWEN_INSTELLINGEN.gezinDagen;
     T.GEBOUWEN_INSTELLINGEN.gezinDagen = 1e9; // geen nieuwe gezinnen: die lopen hier niet binnen
     try {
-      const S = landVanDeMaker(62710);
+      const S = dorp();
       const D = S.dorp;
       const hut = hutMetAlles(S);
       const plan = T.groeiRooiPlan(D, hut);
       const struiken = T.teRooienOp(D, plan);
       assert.ok(struiken.length >= 1, 'er staat iets te rooien');
       const hoofd = D.bewoners.mensen.find((p) => p.huis === hut && !p.hoofd);
-      let dag = 1;
+      const begin = morgen(S);
+      let dag = begin;
       // Een maand alles: dan wil hij groeien, maar het past niet, en het gezin gaat rooien.
-      while (!hut.groeitNaRooien && dag < 80) nachtMetGenoeg(S, dag++);
+      while (!hut.groeitNaRooien && dag < begin + 80) nachtMetGenoeg(S, dag++);
       assert.ok(hut.groeitNaRooien, `het gezin rooit (dag ${dag})`);
       assert.equal(hut.soort, 'hut', 'nog een hut');
       assert.deepEqual(hut.kavel, plan, 'het stuk dat vrij moet: de nieuwe voet');
@@ -197,20 +202,21 @@ test('rooit niemand het, dan doen de buren de rest na een maand; staat er iets w
     const gezinDagen = T.GEBOUWEN_INSTELLINGEN.gezinDagen;
     T.GEBOUWEN_INSTELLINGEN.gezinDagen = 1e9;
     try {
-      const S = landVanDeMaker(62710);
+      const S = dorp();
       const D = S.dorp;
       const hut = hutMetAlles(S);
-      let dag = 1;
-      while (!hut.groeitNaRooien && dag < 80) nachtMetGenoeg(S, dag++);
+      const begin = morgen(S);
+      let dag = begin;
+      while (!hut.groeitNaRooien && dag < begin + 80) nachtMetGenoeg(S, dag++);
       const tot = hut.rooienTot;
       assert.equal(tot, dag - 1 + T.BOS_INSTELLINGEN.rooiDagen);
       // Hier tikken alleen de nachten: niemand rooit, tot de maand om is.
       while (hut.soort === 'hut' && dag < tot + 5) nachtMetGenoeg(S, dag++);
       assert.equal(hut.soort, 'huis', `na een maand rooien de buren, en groeit hij (dag ${dag}, tot ${tot})`);
 
-      // Een ander land, dezelfde hut, maar met een rots waar elke vorm van het huis komt: niets te rooien, dus geen plan,
+      // Een ander dorp, dezelfde hut, maar met een rots waar elke vorm van het huis komt: niets te rooien, dus geen plan,
       // en het briefje zegt waarom.
-      const S2 = landVanDeMaker(62710);
+      const S2 = dorp();
       const D2 = S2.dorp;
       const hut2 = hutMetAlles(S2);
       const plan = T.groeiRooiPlan(D2, hut2);
@@ -218,17 +224,11 @@ test('rooit niemand het, dan doen de buren de rest na een maand; staat er iets w
       const x = hut2.x + 1;
       const y = hut2.y + oud.h; // net onder de hut, in elke grotere vorm
       assert.ok(y < plan.y + plan.h);
-      const t = T.opzoekTegelNaam('rots');
-      const rots = { soort: 'rots', x, y, vel: t.vel, id: t.id, beslaat: [1, 1] };
-      T.kenSoortVan(rots);
-      const daar = T.voorwerpOp(D2.wereld, x, y);
-      if (daar) T.haalVoorwerpWeg(D2.wereld, daar);
-      T.zetVoorwerp(D2.wereld, rots);
-      D2.wereld.tegels[y][x] = 'muur';
-      T.kaartVeranderd(D2.wereld);
+      zetNatuur(D2.wereld, 'rots', x, y);
       assert.equal(T.groeiRooiPlan(D2, hut2), null, 'een rots rooit niemand');
-      let dag2 = 1;
-      while (dag2 < 60) nachtMetGenoeg(S2, dag2++);
+      let dag2 = morgen(S2);
+      const eind2 = dag2 + 60;
+      while (dag2 < eind2) nachtMetGenoeg(S2, dag2++);
       assert.equal(hut2.soort, 'hut');
       assert.ok(!hut2.groeitNaRooien);
       assert.match(T.waaromGroeitHetNiet(D2, hut2), /there is a rock where it has to grow/);
@@ -253,16 +253,15 @@ test('rooit niemand het, dan doen de buren de rest na een maand; staat er iets w
 // appelboom; c2, de raad zegt het als een huis dat alles heeft, niet kan groeien (d, een erf kwam niet waar het een huis
 // elke vorm afneemt, is weg met de erven).
 
-test('a2: een appelboom is van iemand, maar staat hij waar het huis groter wordt, dan kapt het gezin hem, voor 10 hout', () => {
+test('a2: een appelboom is van iemand, maar staat hij waar het huis groter wordt, dan kapt het gezin hem, voor het hout van een gerooide boom', () => {
   zo(() => {
     const gezinDagen = T.GEBOUWEN_INSTELLINGEN.gezinDagen;
     T.GEBOUWEN_INSTELLINGEN.gezinDagen = 1e9;
     try {
-      // Op land 7777 staat een hut waar alleen een appelboom in de weg staat, bij elke vorm van het huis.
-      const S = landVanDeMaker(7777);
+      // Een hut waar alleen een appelboom in de weg staat, bij elke vorm van het huis.
+      const S = dorp();
       const D = S.dorp;
-      vol(S);
-      const hut = hutMetAlles(S);
+      const hut = hutMetAlles(S, 'appelboom');
       const plan = T.groeiRooiPlan(D, hut);
       const appels = [];
       for (let y = plan.y; y < plan.y + plan.h; y++) {
@@ -273,17 +272,18 @@ test('a2: een appelboom is van iemand, maar staat hij waar het huis groter wordt
       const appel = T.voorwerpOp(D.wereld, a.x, a.y);
       assert.equal(T.ontginWerkOp(D.wereld, a.x, a.y), null, 'wie ontgint of een bouwplaats rooit, laat hem staan');
       assert.equal(T.hakBoom(D, a.x, a.y), false, 'en omhakken kan niet');
-      let dag = 1;
-      while (!hut.groeitNaRooien && dag < 80) nachtMetGenoeg(S, dag++);
+      const begin = morgen(S);
+      let dag = begin;
+      while (!hut.groeitNaRooien && dag < begin + 80) nachtMetGenoeg(S, dag++);
       assert.ok(hut.groeitNaRooien, 'het gezin rooit');
       assert.equal(appel.teKappen, true);
       assert.equal(T.ontginWerkOp(D.wereld, a.x, a.y), 'hakken', 'nu is hij een boom als elke andere');
       assert.match(T.waaromGroeitHetNiet(D, hut), /one tree/);
       const hout = D.voorraad.hout;
       assert.equal(T.hakBoom(D, a.x, a.y), true);
-      assert.equal(D.voorraad.hout - hout, T.BOS_INSTELLINGEN.houtPerBoom);
+      assert.equal(D.voorraad.hout - hout, T.rooiHoutPerBoom(D), 'in het lege begin geeft een gerooide boom rooiHout');
       T.rooi(D, a.x, a.y);
-      while (hut.soort === 'hut' && dag < 80 + T.BOS_INSTELLINGEN.rooiDagen) nachtMetGenoeg(S, dag++);
+      while (hut.soort === 'hut' && dag < begin + 80 + T.BOS_INSTELLINGEN.rooiDagen) nachtMetGenoeg(S, dag++);
       assert.equal(hut.soort, 'huis', 'en de hut groeit');
     } finally {
       T.GEBOUWEN_INSTELLINGEN.gezinDagen = gezinDagen;
@@ -293,18 +293,14 @@ test('a2: een appelboom is van iemand, maar staat hij waar het huis groter wordt
 
 test('a2: woont er niemand meer in het huis dat zou groeien, dan is de appelboom weer van iemand', () => {
   zo(() => {
-    const S = landVanDeMaker(7777);
+    // Het proefdorp met een hut extra, waar niemand woont.
+    const S = dorp(null, { hutten: 3 });
     const D = S.dorp;
-    // een hut waar niemand woont, met een appelboom waar hij groter wordt
-    const metAppel = (g) => {
-      const p = T.groeiRooiPlan(D, g);
-      if (!p) return false;
-      for (let y = p.y; y < p.y + p.h; y++) for (let x = p.x; x < p.x + p.b; x++) if (T.isEigenBoom(T.voorwerpOp(D.wereld, x, y))) return true;
-      return false;
-    };
-    const hut = D.gebouwen.find((g) => g.soort === 'hut' && !D.bewoners.mensen.some((p) => p.huis === g) && metAppel(g));
-    assert.ok(hut, 'een lege hut met een appelboom in de weg');
+    const hut = D.gebouwen.find((g) => g.soort === 'hut' && !D.bewoners.mensen.some((p) => p.huis === g));
+    assert.ok(hut, 'een lege hut');
+    const appel = zetNatuur(D.wereld, 'appelboom', hut.x + hut.voet.b, hut.y + 1);
     const plan = T.groeiRooiPlan(D, hut);
+    assert.ok(plan, 'een lege hut met een appelboom in de weg');
     T.rooiOmTeGroeien(D, hut, plan);
     const appels = [];
     for (let y = plan.y; y < plan.y + plan.h; y++) {
@@ -313,7 +309,7 @@ test('a2: woont er niemand meer in het huis dat zou groeien, dan is de appelboom
         if (T.isEigenBoom(v)) appels.push(v);
       }
     }
-    assert.ok(appels.length && appels.every((v) => v.teKappen));
+    assert.ok(appels.includes(appel) && appels.every((v) => v.teKappen));
     S.kalender.dag = 1.3;
     T.tikRooienDag(D); // er woont niemand in deze hut
     assert.ok(!hut.groeitNaRooien);
@@ -323,42 +319,37 @@ test('a2: woont er niemand meer in het huis dat zou groeien, dan is de appelboom
 
 test('a2: de eigen appelboom gaat alleen om als geen vorm zonder hem kan (Marcel: "A")', () => {
   zo(() => {
-    const S = gehucht();
+    const S = dorp();
     const D = S.dorp;
     const w = S.wereld;
-    // De hut op 44, 44 in het ontworpen gehucht groeit naar rechts (x 50) of naar onder (y 50), elk een eigen vorm.
-    const hut = D.gebouwen.find((g) => g.soort === 'hut' && g.x === 44 && g.y === 44);
-    assert.ok(hut, 'de hut op 44, 44');
-    const zet = (soort, x, y) => {
-      const t = T.opzoekTegelNaam(soort);
-      const v = { soort, x, y, vel: t.vel, id: t.id, beslaat: [1, 1] };
-      T.kenSoortVan(v);
-      const daar = T.voorwerpOp(w, x, y);
-      if (daar) T.haalVoorwerpWeg(w, daar);
-      T.zetVoorwerp(w, v);
-      w.tegels[y][x] = 'muur';
-      T.kaartVeranderd(w);
-    };
-    zet('appelboom', 50, 46); // rechts: één appelboom
-    zet('struik', 45, 50); // onder: twee struiken
-    zet('struik', 47, 50);
+    // De vormen van het huis liggen in de stijl van het proefdorp in elkaar (7 bij 5, 8 bij 6, 9 bij 8): dan is er nooit een
+    // vorm zonder de appelboom naast een met. Daarom krijgt deze hut een losse tekening van een hut zonder stijl (zes bij
+    // vier, zoals de zijne), met als huis vormen die elkaar niet bevatten: 7 bij 5 (rechts), 5 bij 7 (onder) en groter.
+    const hut = D.gebouwen.find((g) => g.soort === 'hut' && D.bewoners.mensen.some((p) => p.huis === g));
+    assert.ok(hut, 'een bewoonde hut');
+    hut.tekening = 'huizen/hut3';
+    assert.deepEqual(hut.voet, T.gebouwVoet('hut', 'huizen/hut3'), 'dezelfde voet');
+    const zet = (soort, dx, dy) => zetNatuur(w, soort, hut.x + dx, hut.y + dy);
+    zet('appelboom', 6, 2); // rechts: één appelboom
+    zet('struik', 1, 6); // onder: twee struiken
+    zet('struik', 3, 6);
     const plan = T.groeiRooiPlan(D, hut);
     assert.ok(plan, 'het gezin kan rooien');
-    const appelErin = plan.x <= 50 && 50 < plan.x + plan.b && plan.y <= 46 && 46 < plan.y + plan.h;
+    const appelErin = plan.x <= hut.x + 6 && hut.x + 6 < plan.x + plan.b && plan.y <= hut.y + 2 && hut.y + 2 < plan.y + plan.h;
     assert.ok(!appelErin, 'twee struiken liever dan zijn appelboom');
-    assert.deepEqual(T.teRooienOp(D, plan).map((t) => `${t.x},${t.y}`).sort(), ['45,50', '47,50']);
+    assert.deepEqual(T.teRooienOp(D, plan).map((t) => `${t.x - hut.x},${t.y - hut.y}`).sort(), ['1,6', '3,6']);
     // Ligt er onder een rots, dan kan het niet anders: dan gaat de appelboom om.
-    zet('rots', 46, 50);
+    zet('rots', 2, 6);
     const nu = T.groeiRooiPlan(D, hut);
-    assert.ok(nu && nu.x <= 50 && 50 < nu.x + nu.b && nu.y <= 46 && 46 < nu.y + nu.h, 'nu de vorm met de appelboom');
+    assert.ok(nu && nu.x <= hut.x + 6 && hut.x + 6 < nu.x + nu.b && nu.y <= hut.y + 2 && hut.y + 2 < nu.y + nu.h, 'nu de vorm met de appelboom');
   });
 });
 
 test('wat het briefje en de raad over groeien vragen, loot geen volgende tekening (het spel loopt niet anders naar de muis)', () => {
   zo(() => {
-    const S = landVanDeMaker(62710);
+    const S = dorp();
     const D = S.dorp;
-    const hut = D.gebouwen.find((g) => g.soort === 'hut' && T.groeiRooiPlan(D, g, false));
+    const hut = hutMetAlles(S);
     hut.groeiDagen = T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen;
     if (D.volgendeTekening) delete D.volgendeTekening.huis;
     const toeval = Math.random;

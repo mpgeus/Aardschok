@@ -7,13 +7,45 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+const { proefDorp, legVeldBij, bouwAf, dagen } = require('./grond.cjs');
 
-// Het gehucht zoals het begint: de beginkudde op het blok van Nicholas (akker6).
-function gehucht() {
-  const S = { kalender: T.nieuweKalender(), tijd: 0, inventaris: new Set() }; // het spel; zijn dorp (S.dorp) komt met de kaart
-  assert.ok(T.beginOpKaart(S, 'gehucht'));
-  const veld = (naam) => S.wereld.akkers.find((a) => a.naam === naam);
-  return { S, veld };
+// Het proefdorp zoals het begint, met de beginkudde op de weide van de eerste boerderij en de schapen op de heide. Het
+// lege begin heeft geen meent (de kaart van het ontworpen gehucht had er een): hier komt er een op open grond bij de
+// weide, en de beginkudde wordt opnieuw gezet, zodat de schapen erop grazen. `veld(i)` is de i-de akker van de boerderijen.
+function dorp() {
+  const r = proefDorp(T, { weide: true, gebouwen: ['schaapskooi'] });
+  const { D, w, weide } = r;
+  T.werkDeBoerenBij(D); // het proefdorp zet de poppetjes pas na de laatste nacht neer: de boeren krijgen hun akkers nu
+  const bezet = (x, y) => !T.isBegaanbaar(w, x, y)
+    || D.gebouwen.some((g) => { const v = T.voetVanGebouw(g); return x >= v.x - 1 && x < v.x + v.b + 1 && y >= v.y - 1 && y < v.y + v.h + 1; })
+    || w.akkers.some((a) => x >= a.x - 1 && x < a.x + a.b + 1 && y >= a.y - 1 && y < a.y + a.h + 1);
+  const b = 8;
+  const h = 6;
+  let beste = null;
+  for (let y = weide.y - 25; y < weide.y + 25; y++) {
+    for (let x = weide.x - 25; x < weide.x + 25; x++) {
+      let vrij = true;
+      for (let j = 0; j < h && vrij; j++) for (let i = 0; i < b && vrij; i++) if (bezet(x + i, y + j)) vrij = false;
+      const d = vrij && T.afstand({ x: x + b / 2, y: y + h / 2 }, { x: weide.x + weide.b / 2, y: weide.y + weide.h / 2 });
+      if (vrij && (!beste || d < beste.d)) beste = { x, y, d };
+    }
+  }
+  assert.ok(beste, 'open grond voor een heide');
+  (w.meenten || (w.meenten = [])).push({ naam: 'heide', x: beste.x, y: beste.y, b, h, meent: true });
+  w.wezens = w.wezens.filter((e) => !e.dier);
+  T.zetBeginKudde(D);
+  return r;
+}
+
+// Een strook van b bij h bij boerderij `g` (de dichtste plek waar hij past), meteen land: de bouwers zijn klaar en de
+// nacht erop is het een akker. Twee bij veertien, zoals de smalle strook van het ontworpen gehucht.
+function strookBij(r, g, b = 2, h = 14) {
+  const { S, D } = r;
+  const bouw = legVeldBij(T, D, 'akker', g, b, h);
+  const dag = Math.floor(S.kalender.dag);
+  bouwAf(T, D, bouw, dag);
+  dagen(T, S, dag + 1);
+  return r.w.akkers.find((a) => a.x === bouw.x && a.y === bouw.y);
 }
 
 const binnen = (e, v) => e.tx >= v.x && e.tx < v.x + v.b && e.ty >= v.y && e.ty < v.y + v.h;
@@ -57,12 +89,10 @@ test('T.kuddeTekst: per soort geteld, in de volgorde van T.VEE', () => {
 });
 
 test('de muis op een veld: van wie, het vee, en hoe vruchtbaar', () => {
-  const { S, veld } = gehucht();
-  const weide = veld('akker6');
-  const akker = veld('akker2');
-  const klaas = T.boerVanVeld(S.dorp, weide).naam;
+  const { S, weide, akkers: [akker] } = dorp();
+  const boer = T.boerVanVeld(S.dorp, weide).naam;
   // De schapen staan op de heide (de meent), niet op de weide.
-  assert.equal(T.veldTekst(S.dorp, weide), `${klaas}'s meadow · 3 cows · fertility 100%`);
+  assert.equal(T.veldTekst(S.dorp, weide), `${boer}'s meadow · 3 cows · fertility 100%`);
   assert.equal(T.veldTekst(S.dorp, akker), `${T.boerVanVeld(S.dorp, akker).naam}'s field · fertility 100%`);
 
   // Wat het volgend jaar wordt, en wanneer.
@@ -72,14 +102,13 @@ test('de muis op een veld: van wie, het vee, en hoe vruchtbaar', () => {
 
   // Te veel vee op te weinig weide, en een weide zonder vee of zonder boer.
   for (let i = 0; i < 5; i++) S.wereld.wezens.push(T.zetOpWeide(T.maakDier('koe', weide.x, weide.y, 50 + i), weide));
-  assert.equal(T.veldTekst(S.dorp, weide), `${klaas}'s meadow · 8 cows (too full) · fertility 100%`);
+  assert.equal(T.veldTekst(S.dorp, weide), `${boer}'s meadow · 8 cows (too full) · fertility 100%`);
   const leeg = { naam: 'proef', x: 0, y: 0, b: 2, h: 2, huis: null, bestemming: 'weide', plan: 'weide', vruchtbaarheid: 1 };
   assert.equal(T.veldTekst(S.dorp, leeg), 'Meadow · no livestock yet · fertility 100%');
 });
 
 test('de muis op een veldtegel: die tekst, en een klik is gewoon erheen lopen', () => {
-  const { S, veld } = gehucht();
-  const akker = veld('akker3');
+  const { S, akkers: [, akker] } = dorp();
   const h = T.handelingVerkennen(S, { x: akker.x + 1, y: akker.y + 2 });
   assert.equal(h.tekst, T.veldTekst(S.dorp, akker));
   assert.equal(typeof h.doe, 'function', 'erheen lopen');
@@ -89,13 +118,14 @@ test('de muis op een veldtegel: die tekst, en een klik is gewoon erheen lopen', 
 });
 
 test('een dier op een weide stapt alleen binnen de rechthoek, niet op een ander dier en niet waar een ander heen loopt', () => {
-  const { S, veld } = gehucht();
-  const w = S.wereld;
+  const r = dorp();
+  const { S, w } = r;
   for (const e of T.veeVan(S.dorp)) e.dood = true; // een lege weide om in te proeven
-  // Een smalle strook, twee bij veertien (die van Walter): met de oude straal rond het midden kon een
-  // dier maar vier tegels op; nu de hele strook.
-  const strook = veld('akker5');
+  // Een smalle strook, twee bij veertien (zoals die van het ontworpen gehucht), bij de tweede boerderij, ver
+  // van de weide van de eerste: met de oude straal rond het midden kon een dier maar vier tegels op; nu de hele strook.
+  const strook = strookBij(r, r.boerderijen[1]);
   strook.bestemming = strook.plan = 'weide';
+  assert.equal(T.weideGroepen(w).length, 2, 'de strook is een weide op zich');
   const koe = T.zetOpWeide(T.maakDier('koe', strook.x, strook.y + 9, 3), strook);
   w.wezens.push(koe);
   const opties = (e) => T.dwaalTegelsOpWeide(w, e).map((t) => `${t.x},${t.y}`).sort();
@@ -114,8 +144,7 @@ test('een dier op een weide stapt alleen binnen de rechthoek, niet op een ander 
 });
 
 test('de beginkudde blijft binnen de weide en de schapen op de heide, en nooit twee dieren op één tegel', () => {
-  const { S, veld } = gehucht();
-  const weide = veld('akker6');
+  const { S, weide } = dorp();
   const meent = T.meentVan(S.wereld);
   const vee = T.veeVan(S.dorp);
   const plekken = new Set();
@@ -131,10 +160,7 @@ test('de beginkudde blijft binnen de weide en de schapen op de heide, en nooit t
 });
 
 test('na een wissel loopt het vee vanzelf naar zijn nieuwe weide, en blijft daar', () => {
-  const { S, veld } = gehucht();
-  const oud = veld('akker6');
-  const strook = veld('akker1');
-  const blok = veld('akker7');
+  const { S, weide: oud, akkers: [strook, blok] } = dorp();
   assert.equal(T.zetPlan(S.dorp, strook, 'weide').kan, true);
   assert.equal(T.zetPlan(S.dorp, blok, 'weide').kan, true);
   assert.equal(T.zetPlan(S.dorp, oud, 'akker').kan, true, 'er is elders plaats genoeg');
@@ -151,12 +177,12 @@ test('na een wissel loopt het vee vanzelf naar zijn nieuwe weide, en blijft daar
 });
 
 test('T.wegNaarWeide: de weg naar de dichtstbijzijnde vrije tegel, of null als het er al staat', () => {
-  const { S, veld } = gehucht();
-  const w = S.wereld;
+  const r = dorp();
+  const { S, w } = r;
   const koe = T.veeVan(S.dorp).find((e) => e.dier === 'koe');
   assert.equal(T.wegNaarWeide(w, koe), null, 'het staat al op zijn weide');
-  // De strook van Walter, één tegel naast de weide: er staat niets tussen, dus de weg is recht.
-  const strook = veld('akker5');
+  // Een strook bij dezelfde boerderij, met niets tussen hem en de weide: de weg ernaartoe is recht.
+  const strook = strookBij(r, r.boerderijen[0]);
   T.zetOpWeide(koe, strook);
   const weg = T.wegNaarWeide(w, koe);
   assert.ok(weg && weg.length, 'een weg erheen');

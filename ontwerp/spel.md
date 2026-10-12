@@ -24,7 +24,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Het land | gebouwd, stuk 1 van stap 1a (30 sep): over de weg je gehucht uit naar de kaart van het land, negen provincies uit het zaad, reizen in dagen, wat je niet zag is donker, en thuis gaat alles door zonder je; achter de spelregel Land, tot het buurdorp er is. De maker legt elk spel een ander land, sinds 4 okt de standaard: 100 bij 100, met natuur die ertoe doet, en het nummer van het land bij Nieuw spel (vraag 112). Stuk 2 (30 sep): de snellere dag, alles van een dorp bij elkaar, en elk dorp leeft, ook als je er niet bent; nog één dorp in het spel, tot het buurdorp (stuk 3) | vraag 63, 69, 70, 71 |
 | Tegenspelers | besloten (29 sep): dorpen met een AI die zelf bouwen, in een land met provincies waar je dagen reist (Lords of the Realm), elk met een karakter en een voorsprong, en een moeilijkheidsgraad; zelfsturende provincies zijn zwakker; winnen is voor nu alles veroveren, en een veroverd dorp leid je erbij | vraag 61, 62, 63 |
 | De voorvallen | gebouwd (29 sep): om de paar dagen komt iemand je zoeken met een vraag, een ruzie of een ramp, met twee of drie antwoorden en hun prijs; 35 voorvallen, sommige komen terug; sinds 30 sep heeft een probleem een oorzaak (honger, kou, vol, onvrede) | vraag 65, 74 |
-| De raadsman | gebouwd (30 sep): een van de boeren, met twee gelote vaardigheden, die de voorvallen beslist als je weg bent, naar zijn karakter; je kiest hem met de knop Raadsman (R) | vraag 64, 65, 66, 67, 68 |
+| De raadsman | gebouwd (30 sep): een van de boeren, met twee gelote vaardigheden, die de voorvallen beslist als je weg bent (sinds 12 okt zonder karakter); je kiest hem met de knop Raadsman (R) | vraag 64, 65, 66, 67, 68 |
 | Het rapport van de raadsman | gebouwd (1 okt): de eerste fase van de dag; elke ochtend brengt hij je aan je deur wat er gebeurde, hoe het graan en het hout gaan, of ze de winter halen, wat er speelt en wat er komt, met zijn rekenen in de getallen | vraag 75 |
 | De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf; sinds 1 okt ook wat je mist voor de kapel en de smidse, en waar het vandaan komt; sinds 2 okt wat de huizen missen, en de ketens (een molen voor de bakkerij) | vraag 58, 79, 87, 90 |
 | De houthakker hakt en plant | gebouwd (6 okt; Marcel: "A ja B ja C ja D zo"): zijn hout komt uit de bomen om zijn schuur, elke tien hout een boom; naast de stronk twee boompjes, in een jaar of twee bomen, zodat het bos om hem blijft; zonder boom staat hij stil, en werkt zijn hand elders; hij komt alleen bij minstens 30 bomen binnen tien tegels, en loopt tussen zijn stronken door (vraag 129, e, b en f); in de speeltest van vier jaar komt elk dorp boven de 100 en wint er voor het eerst een | vraag 115, 129 |
@@ -101,7 +101,7 @@ een van de vijf van de kaart. Een boerderij is een thuis voor één gezin: is ze
 zoals in een hut, en is het kamp al leeg, dan verhuist er een gezin uit een hut heen (het gezin met de minste mensen die
 al werk hebben), want een nieuw gezin over de weg komt niet zolang er weinig graan is, en dan sterf je met een lege
 boerderij ("de settlers worden wat jij bouwt"). De man is de boer, zonder karakter of eigenschappen (het lot en de
-karakters slapen tot ronde 2, `snoeien.md`); zijn vrouw en kind helpen bij het zaaien en de oogst. **De velden leg jij**
+karakters zijn weg sinds ronde 2 van het snoeien, stap 4, `snoeien.md`); zijn vrouw en kind helpen bij het zaaien en de oogst. **De velden leg jij**
 ("A2: 1 boerderij, en het veld bepaald"): staat er een boerderij, ook nog in aanbouw, dan staan de akker en de wijngaard
 in het bouwmenu, en trek je een rechthoek: klik de ene hoek en dan de andere (slepen schuift het beeld), binnen 8 tegels
 van de boerderij en binnen bereik, van 12 tot 40 tegels, en een tegel vrij rond elk gebouw. Het eerste veld bepaalt wat
@@ -994,7 +994,7 @@ beeld ziet, en droogte en een plaag erbij, hoort bij het plan voor een spel van 
   wolven (schapen in de winter) houden hun eigen regel; kansen, feesten, verzoeken en de grillen van de heer zijn geen
   problemen. `Spel.debug.voorval()` zegt welke oorzaken er spelen, en per voorval hoe zwaar het weegt.
 - **Wie het zegt, heeft een naam** en past bij het voorval: een vrouw die haar kippen kwijt is, twee boeren om een
-  grens, de weduwe, de vrome, de zanger of de oudste als die in het dorp wonen (de karakters, `js/boeren.js`). Over wie
+  grens, een oudere met wijze raad (tot 12 okt de karakters van de boeren: de weduwe, de vrome, de zanger). Over wie
   het gaat ({ander}), is van een ander gezin; nooit de schout of zijn gezin.
 - **Wat een antwoord doet:** de voorraad (graan, hout, bier, ijzer, vlees, goud), de tevredenheid (die in dertig dagen
   wegslijt, en in de balk staat: "Het is blij met de bruiloft"), de argwaan van de inner, iemand verbannen (hij trekt
@@ -1021,10 +1021,10 @@ beeld ziet, en droogte en een plaag erbij, hoort bij het plan voor een spel van 
 
 **Zo werkt het nu** (30 sep, zeventiende sessie; `js/raadsman.js`, toetsen in `test/raadsman.test.cjs`; Marcel, vraag 66:
 "A Ja, b Nee, c Nee, wordt automatisch als de schout er niet is. D prima"):
-- **Een van de boeren** wordt raadsman, met zijn karakter en aanzien (`js/boeren.js`) en twee gelote vaardigheden uit
+- **Een van de boeren** (de man op een boerderij, `T.isBoer`) wordt raadsman, met twee gelote vaardigheden uit
   vijf, elk goed of slecht: rechtspreken, zwijgen, rekenen, bouwen en vechten. Je kiest uit drie, vast per spel.
 - **Kiezen, wanneer je wilt** (vraag 67, Marcel: "B"): de knop Raadsman in de balk (of `R`) opent een venster met de
-  drie, elk een kaart met wie hij is, hoe hij beslist ("Beslist streng: wie steelt, moet het bos in") en wat hij kan,
+  drie, elk een kaart met wie hij is en wat hij kan,
   goed in groen, slecht in rood, met waar het over gaat. Daar kies je hem, en later een ander. Onderaan staat wat hij
   besloot. Zolang het venster open is, staat de tijd stil (`js/raadsmanvenster.js`). Tot je kiest, is er geen, en zodra
   er een voorval voorbijging dat hij had beslist (je was weg), zegt de raad onder het doel tien dagen lang: "Wat je
@@ -1036,7 +1036,8 @@ beeld ziet, en droogte en een plaag erbij, hoort bij het plan voor een spel van 
   bouwer met `Esc` alles aan zijn raadsman, en had hij geen voorvallen meer. Een bericht zegt wat hij deed: 'Aaltje, je
   raadsman, besliste over de diefstal: "Hij betaalt ze terug, en een goud boete voor de kist." (+1 goud,
   tevredenheid +3%)', en in de balk heet het naar hem ("Het is blij met wat Aaltje besliste over de diefstal").
-- **Naar zijn karakter:** elk karakter vindt iets anders een antwoord waard (tevredenheid, argwaan, goud, waren,
+- **Naar zijn karakter** (tot ronde 2 van het snoeien, stap 4, 12 okt; nu weegt elke raadsman hetzelfde,
+  `T.RAADSMAN_INSTELLINGEN.kiest`): elk karakter vond iets anders een antwoord waard (tevredenheid, argwaan, goud, waren,
   iemand het bos in, een kans op een dode, een gezin erbij). De heethoofd verbant de dief, de woekeraar legt een
   boete op voor de kist; bij koorts laat de vrome bidden en de vroedvrouw de put schoonmaken; de weduwe en de woekeraar
   houden het oogstfeest klein; en waar de oudste de heer zijn standbeeld bouwt, zet de zanger een vogelverschrikker neer
@@ -1047,7 +1048,7 @@ beeld ziet, en droogte en een plaag erbij, hoort bij het plan voor een spel van 
 - **Zijn prijs:** wie raadsman is, maait trager (maal 1,25). Bij de muis staat "je raadsman".
 - **Instelbaar:** de spelregel "Raadsman" ("Als je weg bent", de standaard; "Ook als je niet spreekt", zoals het tot
   vraag 68 was: wie je wegstuurt, laat je aan hem over; en uit), en de getallen in de werkbank
-  (`T.RAADSMAN_INSTELLINGEN`, met de neigingen per karakter). `Spel.debug.raadsman()` zegt wie het is, uit wie je
+  (`T.RAADSMAN_INSTELLINGEN`). `Spel.debug.raadsman()` zegt wie het is, uit wie je
   kiest en wat hij besloot, en `Spel.debug.raadsman('Aaltje')` maakt Aaltje raadsman.
 - **Nog niet:** staande orders (de heer, de heervaart, de marskramer) komen met het land (vraag 66, D).
 - **Sinds 1 okt brengt hij je elke ochtend een rapport:** zie hieronder.
@@ -2453,7 +2454,12 @@ Nog open: de voorinstellingen Mild en Streng (wat staat er dan?).
 
 ### De boeren krijgen willekeurige eigenschappen (Marcel, 24 sep 2026)
 
-**Zo werkt het nu** (25 sep; `js/boeren.js`, `T.KARAKTERS` in `js/mensen.js`):
+**Weg sinds 12 okt** (ronde 2 van het snoeien, stap 4; Marcel: "Ja, nu mee"): een boer is de man op een boerderij, zonder
+karakter of eigenschappen; `js/boeren.js` en `T.KARAKTERS` zijn weg, met de gesprekken van de karakters en de spelregel
+"Wie de boeren zijn". De vellen van de karakters (boer-zanger, ...) staan nog in `beelden/`, zonder gebruiker
+(`opmerkingen.md`). Wat hieronder staat, is hoe het was.
+
+**Zo werkte het** (25 sep; `js/boeren.js`, `T.KARAKTERS` in `js/mensen.js`):
 - Elk spel trekt elke boer een karakter uit tien (de zanger, de weduwe, de woekeraar, de vroedvrouw,
   het heethoofd, de vrome, de roddelaar, de oudste, de nieuwkomer, de drinker), elk met een eigen
   gesprek en sinds 25 sep een eigen gezicht. Een weduwe of vroedvrouw is altijd een boerin.

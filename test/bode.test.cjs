@@ -5,6 +5,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+const { proefDorp } = require('./grond.cjs');
 T.ui = new Proxy({}, { get: () => () => undefined });
 // T.optiesTerug zet nieuwe blokken neer: lees de instellingen dus elke keer opnieuw.
 const B = new Proxy({}, { get: (_, k) => T.BODE_INSTELLINGEN[k], set: (_, k, v) => ((T.BODE_INSTELLINGEN[k] = v), true) });
@@ -17,21 +18,10 @@ function dagVan(maand, dagVanMaand) {
   throw new Error(maand);
 }
 
-// Het ontworpen gehucht, met de kalender op `dag`, stil.
+// Het proefdorp (test/grond.cjs), met de kalender op `dag`, stil.
 function gehucht(dag) {
-  const echt = console.warn;
-  const toeval = Math.random;
-  let n = 11;
-  console.warn = () => {};
-  Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
-  const S = { kalender: T.nieuweKalender() };
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht'));
-  } finally {
-    console.warn = echt;
-    Math.random = toeval;
-  }
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
+  const S = proefDorp(T).S;
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set() });
   T.S = S;
   S.kalender.dag = dag;
   T.zetVoorraad(S.dorp, 'goud', 50);
@@ -184,6 +174,10 @@ test('met mannen erbij slaan ze de rovers af: de marskramer komt, en er kan er e
     B.kracht.man = 1000; // ze winnen zeker
     D.rovers = T.nieuweRovers();
     D.rovers.bende = [{ id: 999, naam: 'Gijs' }, { id: 998, naam: 'Kobus' }];
+    // Een boer brengt de brief niet en gaat niet mee (T.weerbareMannen): buiten de boerderijen heeft het proefdorp twee mannen.
+    // De bode en twee begeleiders zijn er drie, dus een jongen van een boer is opgegroeid.
+    const zoon = D.bewoners.mensen.find((p) => p.geslacht === 'man' && p.leeftijd === 'kind' && !(p.hoofd && p.hoofd.schout));
+    zoon.leeftijd = 'jong';
     try {
       const weerbaar = T.weerbareMannen(D).length;
       assert.ok(weerbaar >= 3, `${weerbaar} weerbare mannen`);

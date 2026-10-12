@@ -6,6 +6,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+const { proefDorp } = require('./grond.cjs');
 T.ui = new Proxy({}, { get: () => () => undefined });
 const IN = T.WEER_INSTELLINGEN;
 
@@ -64,7 +65,7 @@ test('lang geen regen in het groeiseizoen is droogte, en erger ernstige droogte;
     for (; D.weer.tekort < IN.ernstigVanaf; dag++) T.tikWeerDag(D, dag);
     assert.equal(T.droogteNiveau(D), 2, 'ernstige droogte');
     const akker = { x: 0, y: 0, b: 1, h: 1 };
-    assert.ok(T.oogstPerTegel(akker, null, D) < T.oogstPerTegel(akker, null), 'een akker geeft minder');
+    assert.ok(T.oogstPerTegel(akker, D) < T.oogstPerTegel(akker), 'een akker geeft minder');
     // Regen maakt het goed, en een nieuw jaar begint met een volle oogst.
     IN.blijftNat = 1;
     D.weer.vandaag = 'regen';
@@ -143,14 +144,7 @@ test('een beek valt in de droogte droog, een meer niet; een visser aan een beek 
 });
 
 test('de statussen hebben niveaus: droogte en ernstige droogte, met wat helpt', () => {
-  const echt = console.warn;
-  console.warn = () => {};
-  const S = { kalender: T.nieuweKalender() };
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht'));
-  } finally {
-    console.warn = echt;
-  }
+  const { S } = proefDorp(T);
   const D = S.dorp;
   const dag = dagVan('zomermaand', 10);
   S.kalender.dag = dag;
@@ -194,14 +188,7 @@ test('met de spelregel "Het weer" op "Altijd zon" is er geen weer, en op "Zonder
 });
 
 test('regent het op de dag van het zaaien, dan zaaien de boeren de eerste droge dag; tot dan blijft het zaaigraan apart', () => {
-  const echt = console.warn;
-  console.warn = () => {};
-  const S = { kalender: T.nieuweKalender() };
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht'));
-  } finally {
-    console.warn = echt;
-  }
+  const { S } = proefDorp(T);
   T.S = S;
   const D = S.dorp;
   const w = D.wereld;
@@ -228,14 +215,7 @@ test('regent het op de dag van het zaaien, dan zaaien de boeren de eerste droge 
 });
 
 test('na een droog jaar neemt de marskramer in de lente meer zaaigraan mee', () => {
-  const echt = console.warn;
-  console.warn = () => {};
-  const S = { kalender: T.nieuweKalender() };
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht'));
-  } finally {
-    console.warn = echt;
-  }
+  const { S } = proefDorp(T);
   T.S = S;
   const D = S.dorp;
   const gewoon = T.HANDEL_INSTELLINGEN.verkoopt.graan.heeft[0];

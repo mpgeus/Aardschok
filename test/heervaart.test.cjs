@@ -5,6 +5,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+const { proefDorp } = require('./grond.cjs');
 
 const berichten = [];
 const brieven = [];
@@ -13,23 +14,11 @@ T.ui = new Proxy({}, {
 });
 T.anim = { tekst() {}, wacht: () => new Promise(() => {}), loop: () => new Promise(() => {}), uitval: () => new Promise(() => {}) };
 
-// Het echte gehucht, zoals een nieuw spel begint, stil en met een vast zaad (zoals in test/rovers.test.cjs). Ook het
-// lot van de boeren ligt vast (het zegt wie er bij hen woont, en dus hoeveel weerbare mannen er zijn): anders is het
-// elke keer een ander gehucht.
+// Het proefdorp (test/grond.cjs): zeventien mensen, twee boerderijen en hutten. Met een vast zaad voor het dorp (het kiest
+// de oorlog van de heer), stil. Wie er woont, zegt hoeveel weerbare mannen er zijn.
 function gehucht() {
-  const echt = console.warn;
-  const toeval = Math.random;
-  let n = 11;
-  console.warn = () => {};
-  Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
-  const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht'));
-  } finally {
-    console.warn = echt;
-    Math.random = toeval;
-  }
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
+  const S = proefDorp(T).S;
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set() });
   S.dorp.lot = Object.assign(S.dorp.lot || {}, { zaad: 7 });
   return S;
 }
@@ -100,7 +89,7 @@ test('wie gaat: mannen, jong of volwassen, nooit een boer of het gezin van de sc
   for (const p of alle) {
     assert.equal(p.geslacht, 'man');
     assert.ok(p.leeftijd === 'jong' || p.leeftijd === 'volwassen', p.leeftijd);
-    assert.ok(!p.wie && !p.schout && !(p.hoofd && p.hoofd.schout), `${p.naam} hoort bij het verhaal`);
+    assert.ok(!T.isBoer(S.dorp, p) && !p.schout && !(p.hoofd && p.hoofd.schout), `${p.naam} hoort bij het verhaal`);
   }
   const eersteMetWerk = alle.findIndex((p) => p.werk);
   if (eersteMetWerk >= 0) assert.ok(alle.slice(eersteMetWerk).every((p) => p.werk), 'wie geen werk heeft, staat vooraan');

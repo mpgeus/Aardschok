@@ -506,15 +506,12 @@
   T.GRAAN_PER_TEGEL = 4; // de spelregel "Graan" op "Net rond" (Marcel, 8 okt, vraag 132: "A en B samen"; was Honger, 3,5)
   T.ZAAIGRAAN_PER_TEGEL = 1;
 
-  // Wat een boer kan (js/boeren.js: maaien, opbrengst, zaaien), als factor; 1 zonder dat bestand
-  // of voor wie gewoon is.
-  const factor = (e, soort) => (e && T.boerFactor ? T.boerFactor(e, soort) : 1);
-
   // Wat één gemaaide tegel van dit veld oplevert: T.GRAAN_PER_TEGEL, maal de vruchtbaarheid van het
-  // veld, maal wat zijn boer kan (groene vingers of slordig). Het maaien (T.werkOogstBij) en het
-  // vangnet (T.haalOogstBinnen) vragen het allemaal hier, zodat het nergens anders uitkomt.
-  // Met het dorp (`D`) telt ook wat de droogte dit jaar kostte (js/weer.js, T.droogteFactor).
-  T.oogstPerTegel = (veld, boer, D) => T.GRAAN_PER_TEGEL * T.vruchtbaarheidVan(veld) * factor(boer, 'opbrengst') * (D ? T.droogteFactor(D) : 1);
+  // veld. Het maaien (T.werkOogstBij) en het vangnet (T.haalOogstBinnen) vragen het allemaal hier, zodat
+  // het nergens anders uitkomt. Met het dorp (`D`) telt ook wat de droogte dit jaar kostte (js/weer.js,
+  // T.droogteFactor). Tot ronde 2 van het snoeien (stap 4, 12 okt) telde ook wat de boer kon uit zijn
+  // geloot karakter (groene vingers of slordig, snel of traag maaien, zuinig of kwistig zaaien).
+  T.oogstPerTegel = (veld, D) => T.GRAAN_PER_TEGEL * T.vruchtbaarheidVan(veld) * (D ? T.droogteFactor(D) : 1);
 
   // De tegels van een akker die nog te maaien zijn: gezaaid, en nog niet gemaaid. Een weide of
   // braak heeft er geen.
@@ -550,8 +547,8 @@
   //
   // In hooimaand maait de boer zijn weide, zoals hij in oogstmaand zijn graan maait: tegel voor
   // tegel, en eerst het hooi, dan het graan (dat is in hooimaand al rijp, maar hooi gaat voor; zo
-  // ging het ook). Elke gemaaide tegel geeft T.VEE_INSTELLINGEN.hooiPerTegel hooi, maal wat de boer
-  // kan (zijn opbrengst, js/boeren.js). Wat er op de eerste dag daarna nog staat, halen de boeren in
+  // ging het ook). Elke gemaaide tegel geeft T.VEE_INSTELLINGEN.hooiPerTegel hooi. Wat er op de eerste
+  // dag daarna nog staat, halen de boeren in
   // één keer binnen (T.haalHooiBinnen), net als het graan. Het vee eet het 's winters (js/vee.js,
   // T.voerHooi). Zonder winterzorg (een optie in de spelregels) is er geen hooi nodig, en maait
   // niemand het.
@@ -560,8 +557,8 @@
   const hooiMaand = () => maandIdx(VEE_IN() ? VEE_IN().hooien : 'hooimaand');
   // Is het vandaag hooitijd (de hele maand van het hooien)?
   T.isHooitijd = (datum) => hooien() && datum.maand === hooiMaand();
-  // Wat één gemaaide tegel weide aan hooi oplevert, met deze boer.
-  T.hooiPerTegel = (veld, boer) => (VEE_IN() ? VEE_IN().hooiPerTegel : 0) * factor(boer, 'opbrengst');
+  // Wat één gemaaide tegel weide aan hooi oplevert.
+  T.hooiPerTegel = () => (VEE_IN() ? VEE_IN().hooiPerTegel : 0);
 
   // De tegels van een weide die dit jaar nog gehooid moeten worden. Een akker of braak heeft er geen.
   function hooiTegels(veld) {
@@ -630,11 +627,11 @@
   // Een boer maait al zijn akkers, steeds de tegel die het dichtstbij staat. Tot 24 sep maaide hij
   // alleen de eerste (e.werkAkkers[0]), en rotte het tweede stuk van boer 1 en boer 3 op het veld:
   // 55 van de 209 tegels. In hooitijd maait hij eerst het hooi (maaiDoel hierboven).
-  // Een slag beginnen op de tegel waar hij staat: zo lang als een tegel duurt (met zijn eigen maat,
-  // js/boeren.js), min wat hij er eerder al maaide.
+  // Een slag beginnen op de tegel waar hij staat: zo lang als een tegel duurt (de raadsman trager,
+  // T.raadsmanMaait in js/raadsman.js), min wat hij er eerder al maaide.
   function begin(e, doel, nu) {
     const al = (doel.akker.half && doel.akker.half.get(sleutel(e.tx, e.ty))) || 0;
-    const duur = T.oogstTegelDuur() * factor(e, 'maaien');
+    const duur = T.oogstTegelDuur() * T.raadsmanMaait(e);
     return { x: e.tx, y: e.ty, sinds: nu, tot: nu + Math.max(0, duur - al), akker: doel.akker, hooi: !!doel.hooi };
   }
 
@@ -700,12 +697,12 @@
           a.half.delete(sleutel(e.maait.x, e.maait.y));
           if (e.maait.hooi) {
             a.gehooid.add(sleutel(e.maait.x, e.maait.y));
-            if (D.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(D, 'hooi', T.hooiPerTegel(a, boerVan(w, a) || e));
+            if (D.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(D, 'hooi', T.hooiPerTegel(a));
           } else {
             a.geoogst.add(sleutel(e.maait.x, e.maait.y));
             // Het zwad blijft liggen tot het gebonden, gedroogd en binnen is (vraag 140).
             if (!a.schoven) a.schoven = new Map();
-            a.schoven.set(sleutel(e.maait.x, e.maait.y), { graan: T.oogstPerTegel(a, boerVan(w, a) || e, D), gebonden: null });
+            a.schoven.set(sleutel(e.maait.x, e.maait.y), { graan: T.oogstPerTegel(a, D), gebonden: null });
           }
           e.maait = null;
           e.oogstDoel = null;
@@ -782,7 +779,7 @@
       for (const t of onbeslistTegels(akker)) {
         akker.geoogst.add(sleutel(t.x, t.y));
         tegels++;
-        graan += T.oogstPerTegel(akker, boer, D); // vruchtbaar of uitgeput, groene vingers of slordig
+        graan += T.oogstPerTegel(akker, D); // vruchtbaar of uitgeput
       }
       // En wat er nog als zwad of in hokken op het veld staat (vraag 140): dat gaat nu ook de schuur in.
       if (akker.schoven) {
@@ -873,7 +870,7 @@
       for (const t of hooiTegels(veld)) {
         veld.gehooid.add(sleutel(t.x, t.y));
         tegels++;
-        hooi += T.hooiPerTegel(veld, boer);
+        hooi += T.hooiPerTegel(veld);
       }
     }
     for (const e of w.wezens || []) if (e.maait && e.maait.hooi) e.maait = e.oogstDoel = null;
@@ -899,14 +896,10 @@
     let hooi = 0;
     for (const veld of w.akkers) {
       const boer = boerVan(w, veld);
-      if (boer) hooi += hooiTegels(veld).length * T.hooiPerTegel(veld, boer);
+      if (boer) hooi += hooiTegels(veld).length * T.hooiPerTegel(veld);
     }
     return hooi;
   };
-
-  // Wat een tegel aan zaaigraan kost, op deze akker: een zuinige boer zaait met minder, een kwistige met meer
-  // (js/boeren.js).
-  const zaaigraanPerTegel = (w, akker) => T.ZAAIGRAAN_PER_TEGEL * factor(boerVan(w, akker), 'zaaien');
 
   // Het zaaigraan dat de boeren achterhouden (werklijst vraag 81, VELDEN_INSTELLINGEN.zaaigraanApart): van de oogst (het
   // vangnet op 1 herfstmaand) tot het zaaien (1 lentemaand) zoveel graan als de akkers van volgend jaar vragen
@@ -920,7 +913,7 @@
     // Van het zaaien tot de oogst niet, behalve als het zaaien op een droge dag wacht.
     if (!w.zaaienNaRegen && nu < stadiumBegin('gemaaid') && nu >= stadiumBegin('geploegd')) return 0;
     let nodig = 0;
-    for (const veld of w.akkers) if (T.planVan(veld) === 'akker') nodig += veld.b * veld.h * zaaigraanPerTegel(w, veld);
+    for (const veld of w.akkers) if (T.planVan(veld) === 'akker') nodig += veld.b * veld.h * T.ZAAIGRAAN_PER_TEGEL;
     return nodig;
   };
 
@@ -959,7 +952,7 @@
     }
     if (!open.size) return 0;
     const akkers = [...open.keys()];
-    const { gezaaid, kost } = verdeelZaaigraan(akkers.map((a) => open.get(a).length), akkers.map((a) => zaaigraanPerTegel(w, a)), heb);
+    const { gezaaid, kost } = verdeelZaaigraan(akkers.map((a) => open.get(a).length), akkers.map(() => T.ZAAIGRAAN_PER_TEGEL), heb);
     const n = gezaaid.reduce((s, g) => s + g, 0);
     if (!n) return 0;
     akkers.forEach((a, i) => open.get(a).slice(0, gezaaid[i]).forEach((t) => a.ongezaaid.delete(sleutel(t.x, t.y))));
@@ -998,7 +991,7 @@
       if (akkers.length) T.zeg(D, T.t('It is raining: the farmers will sow on the first dry day.'));
       return { tegels: 0, gezaaid: 0, ongezaaid: 0, graan: 0, nat: true };
     }
-    const per = akkers.map((a) => zaaigraanPerTegel(w, a));
+    const per = akkers.map(() => T.ZAAIGRAAN_PER_TEGEL);
     const maat = akkers.map((a) => a.b * a.h);
     const totaal = maat.reduce((n, m) => n + m, 0);
     const { gezaaid, kost } = verdeelZaaigraan(maat, per, (D.voorraad && D.voorraad.graan) || 0);

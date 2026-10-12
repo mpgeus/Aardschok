@@ -138,7 +138,7 @@ De bestanden in `js/`, per onderwerp; elk heeft een kop in `ontwerp/code.md`:
   `land` en `landkaart`, `gebied`.
 - **Beeld en scherm:** `iso`, `tekenen`, `gl` (WebGL), `sprites`, `doorkijk`, `bouwstijl`, `kleinleven`, `zien` (het
   licht), `ui` (één manier om een venster te openen en te sluiten), `dialoog`, `tafel`, `hud`, `huisbriefje`.
-- **De mensen:** `mensen`, `bewoners`, `leven`, `boeren`, `gesprek` en `gesprekken`, `quest` en `quests`.
+- **De mensen:** `mensen`, `bewoners`, `leven`, `gesprek` en `gesprekken`, `quest` en `quests`.
 - **Bouwen en groeien:** `begin` (het lege begin), `bouwen` (meebouwen), `boerderij` (boeren uit het niets), `gebouwen`,
   `treden`, `wensen`, `behoeften`, `paden`, `markt`, `herberg`.
 - **Het land bewerken en de natuur:** `akkers`, `veldwerk`, `bos`, `beesten`, `vee`, `weer`, `graanschuur`,

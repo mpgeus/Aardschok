@@ -1,8 +1,10 @@
-// De bewoners (js/bewoners.js, sinds 26 sep): wie er in het gehucht woont, met wie en in welk huis,
+// De bewoners (js/bewoners.js, sinds 26 sep): wie er in het dorp woont, met wie en in welk huis,
 // wie waar werkt, en het ritme van de dag voor iedereen (T.dagAnker in js/dag.js). Zie
-// ontwerp/spel.md, "Mensen worden poppetjes", en de werklijst, punt 3b, stap 2.
+// ontwerp/spel.md, "Mensen worden poppetjes", en de werklijst, punt 3b, stap 2. Sinds 12 okt (snoeien, ronde 2, stap 3)
+// spelen de toetsen op het proefdorp (test/grond.cjs), niet meer op het ontworpen gehucht.
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const { proefDorp } = require('./grond.cjs');
 
 const T = require('./laad.cjs').spel();
 const IN = T.BEWONERS_INSTELLINGEN;
@@ -18,30 +20,23 @@ function dagVan(maand, d) {
 const GROEI = dagVan('bloeimaand', 10);
 const bijUur = (dag, uur) => Math.floor(dag) + uur / 24;
 
-// Het echte gehucht. Met `karakters` ({ boer2: 'grijsaard' }) wordt er niet geloot, en heeft elke
-// boer het karakter zoals het in T.MENSEN staat, of zoals het hier gezet wordt.
-function gehucht(opties = {}) {
-  const echt = console.warn;
-  const loten = T.BOEREN_INSTELLINGEN.loten;
-  const was = {};
-  console.warn = () => {};
-  if (opties.karakters) {
-    T.BOEREN_INSTELLINGEN.loten = false;
-    for (const id in opties.karakters) {
-      was[id] = T.MENSEN[id].karakter;
-      T.MENSEN[id].karakter = opties.karakters[id];
-    }
-  }
-  // Het spel, met zijn kalender vóór de kaart: het dorp (S.dorp, js/dorp.js) deelt hem.
-  const spel = { kalender: { dag: opties.dag != null ? opties.dag : bijUur(GROEI, 7), snelheid: opties.snelheid || 1 } };
-  try {
-    assert.ok(T.beginOpKaart(spel, 'gehucht'));
-  } finally {
-    console.warn = echt;
-    T.BOEREN_INSTELLINGEN.loten = loten;
-    for (const id in was) T.MENSEN[id].karakter = was[id];
-  }
-  return Object.assign(spel, { tijd: 0, wereldTijd: 0, modus: 'verkennen', effecten: [], wachters: [], bezocht: new Set(), inventaris: new Set() });
+// Het proefdorp (test/grond.cjs): het huis van de schout, twee boerderijen met een akker, en hutten; iedereen woont en
+// staat thuis. `dag` en `snelheid` zetten de kalender; de rest gaat naar proefDorp (zoals `gebouwen: ['schaapskooi']`).
+function proef(opties = {}) {
+  const { dag, snelheid, ...dorp } = opties;
+  const { S } = proefDorp(T, dorp);
+  Object.assign(S, { bezocht: new Set() });
+  Object.assign(S.kalender, { dag: dag != null ? dag : bijUur(GROEI, 7), snelheid: snelheid || 1 });
+  return S;
+}
+// Een meent (de heide) op open grond, zoals de kaart van het ontworpen gehucht er een had: het lege begin heeft er geen.
+// Wie al werk heeft, krijgt zijn plek opnieuw (T.verdeelHanden).
+function zetMeent(S) {
+  const w = S.wereld;
+  const plek = vrijePlek(S, { b: 5, h: 5 }, T.pleinVan(w));
+  (w.meenten || (w.meenten = [])).push({ naam: 'heide', x: plek.x, y: plek.y, b: 5, h: 5, meent: true });
+  T.verdeelHanden(S.dorp);
+  return w.meenten[0];
 }
 function stap(S, dt) {
   S.tijd += dt;
@@ -69,12 +64,12 @@ function vangBerichten() {
   return lijst;
 }
 const mensen = (S) => S.dorp.bewoners.mensen;
-const nieuwe = (S) => mensen(S).filter((p) => !p.schout && !p.wie); // wie hier een poppetje kreeg
+const nieuwe = (S) => mensen(S).filter((p) => !p.schout); // wie hier een poppetje kreeg: iedereen behalve de schout
 const vanSchout = (p) => !!(p.schout || (p.hoofd && p.hoofd.schout));
 const inHuis = (S, g) => mensen(S).filter((p) => p.huis === g);
 const opTegel = (e) => ({ x: e.tx, y: e.ty });
 // Een vrije plek op de kaart voor een voet, met een rand eromheen, zo dicht mogelijk bij `bij`: zo
-// breekt een nieuwe indeling van het gehucht de toetsen niet (26 sep: een plein, meer ruimte).
+// breekt een nieuwe indeling van het dorp de toetsen niet (26 sep: een plein, meer ruimte).
 function vrijePlek(S, voet, bij) {
   const w = S.wereld;
   let beste = null;
@@ -105,9 +100,8 @@ function bouwHuis(S) {
 // Wie er woont
 // ---------------------------------------------------------------------------------------------
 
-test('bij een nieuw spel is er één bewoner per mond, elk met een huis en een poppetje', () => {
-  const S = gehucht();
-  assert.equal(S.dorp.bevolking, 26, 'zoveel als de kaart zegt ("beginBevolking"): 25, en sinds 27 sep de herbergierster');
+test('in het proefdorp is er één bewoner per mond, elk met een huis en een poppetje', () => {
+  const S = proef();
   assert.ok(S.dorp.woonruimte > S.dorp.bevolking, 'ook al is er plaats voor meer');
   assert.equal(mensen(S).length, S.dorp.bevolking, 'het getal in de balk blijft de waarheid');
   for (const g of S.dorp.gebouwen) {
@@ -118,64 +112,50 @@ test('bij een nieuw spel is er één bewoner per mond, elk met een huis en een p
     assert.ok(p.wezen, `${p.id} heeft een poppetje`);
     assert.ok(S.wereld.wezens.includes(p.wezen), `${p.id} staat in de wereld`);
   }
-  assert.equal(nieuwe(S).length, 19, 'de schout, de vijf boeren en de herbergierster stonden er al; de rest is nieuw');
+  assert.equal(nieuwe(S).length, S.dorp.bevolking - 1, 'de schout stond er al; de rest kreeg hier een poppetje');
   const namen = nieuwe(S).map((p) => p.naam);
   assert.equal(new Set(namen).size, namen.length, 'geen twee dezelfde namen');
   for (const p of nieuwe(S)) {
-    // Wie in een gewoon huis het hoofd van zijn gezin is (het oude stel, het jonge gezin), heeft zelf
-    // geen hoofd; de rest hoort bij een gezin en woont daar.
+    // Wie het hoofd van zijn gezin is (de man van een gezin uit het kamp), heeft zelf geen hoofd; de rest hoort bij een
+    // gezin en woont daar.
     const hoofd = p.hoofd || p;
-    assert.ok(p.hoofd ? p.band : p.huis.bewoners, `${p.naam} hoort bij een gezin`);
+    assert.ok(p.hoofd ? p.band : p.gezin != null, `${p.naam} hoort bij een gezin`);
     assert.equal(p.huis, hoofd.huis, `${p.naam} woont bij zijn gezin`);
     assert.equal(p.wezen.bewoner, p);
     assert.equal(p.wezen.vel, T.LEEFTIJDEN[p.leeftijd][p.geslacht], `${p.naam} draagt het vel van zijn leeftijd`);
   }
 });
 
-// Marcel koos het op 26 sep (vraag 31): dezelfde 25 mensen, niet allemaal op een boerderij.
-test('wie waar woont: op een boerderij drie, in het huis een jong gezin, in een hut een oud stel, en een hut leeg', () => {
-  // Karakters zonder vast gezin, zodat elke boerderij er drie heeft.
-  const S = gehucht({ karakters: { boer1: 'zanger', boer2: 'woekeraar', boer3: 'vroedvrouw', boer4: 'heethoofd', boer5: 'drinker' } });
-  for (const g of S.dorp.gebouwen.filter((x) => x.soort === 'boerderij')) {
+// Marcel koos het op 26 sep (vraag 31): niet allemaal op een boerderij. Sinds het lege begin (11 okt) woont elk gezin
+// samen in één huis: de man op een boerderij is de boer, en de rest woont in hutten.
+test('wie waar woont: elk gezin onder één dak, de boer met zijn vrouw op zijn boerderij, de anderen in hutten', () => {
+  const S = proef();
+  const D = S.dorp;
+  const boerderijen = D.gebouwen.filter((x) => x.soort === 'boerderij');
+  assert.equal(boerderijen.length, 2);
+  for (const g of boerderijen) {
     const gezin = inHuis(S, g);
-    assert.ok(gezin.length === 3 || gezin.length === 4, `${g.huis}: ${gezin.length}`);
-    assert.ok(gezin.some((p) => p.band === 'vrouw' || p.band === 'man'), `${g.huis}: de boer en zijn vrouw of haar man`);
+    assert.ok(gezin.length >= 3 && gezin.length <= 4, `boerderij: ${gezin.length}`);
+    assert.ok(T.isBoer(D, T.boerVan(D, g)), 'er woont een boer');
+    assert.ok(gezin.some((p) => p.band === 'vrouw' || p.band === 'man'), 'de boer en zijn vrouw of haar man');
   }
-  const oud = inHuis(S, S.dorp.gebouwen.find((g) => g.bewoners === 'oudStel'));
-  assert.equal(oud.length, 2);
-  assert.ok(oud.every((p) => p.leeftijd === 'oud'), 'een oud stel');
-  // Het jonge gezin is wie er nog over is: drie, en twee als de weduwe (met haar drie kinderen) op
-  // een boerderij woont.
-  const jong = inHuis(S, S.dorp.gebouwen.find((g) => g.bewoners === 'jongGezin'));
-  assert.equal(jong.length, 3);
-  assert.deepEqual(jong.map((p) => p.leeftijd).slice(0, 2), ['volwassen', 'volwassen'], 'een man en een vrouw, en een kind');
-  const leeg = S.dorp.gebouwen.filter((g) => g.soort === 'hut' && !g.bewoners);
-  assert.equal(leeg.length, 1);
-  assert.equal(inHuis(S, leeg[0]).length, 0, 'de andere hut is leeg, voor het eerste gezin dat komt');
+  for (const g of D.gebouwen.filter((x) => x.soort !== 'schout' && T.GEBOUWEN[x.soort].woonruimte > 0)) {
+    const gezin = inHuis(S, g);
+    assert.ok(gezin.length > 0 && new Set(gezin.map((p) => p.gezin)).size === 1, `${g.soort}: één gezin onder één dak`);
+  }
+  const hutten = D.gebouwen.filter((x) => x.soort === 'hut');
+  assert.ok(hutten.length && hutten.every((h) => inHuis(S, h).length > 0), 'wie niet op een boerderij woont, woont in een hut');
 });
 
 test('de schout woont met zijn vrouw en drie kinderen (Marcel, vraag 27)', () => {
-  const S = gehucht();
-  const huis = S.dorp.gebouwen.find((g) => g.huis === 'schout');
+  const S = proef();
+  const huis = S.dorp.gebouwen.find((g) => g.soort === 'schout');
   const gezin = inHuis(S, huis);
   assert.equal(gezin.length, 5);
   assert.ok(gezin.find((p) => p.schout && p.wezen === S.schout), 'de schout zelf, met zijn eigen wezen');
   assert.equal(gezin.filter((p) => p.band === 'vrouw' && p.leeftijd === 'volwassen').length, 1);
   assert.equal(gezin.filter((p) => p.band === 'zoon' || p.band === 'dochter').length, 3);
   assert.ok(!S.schout.bewoner, 'de schout loopt waar de speler wil, niet op het ritme van de dag');
-});
-
-test('het gezin past bij het karakter: de weduwe heeft drie kleine kinderen, de oudste woont bij zijn zoon', () => {
-  const S = gehucht({ karakters: { boer2: 'weduwe', boer3: 'grijsaard' } });
-  const huisVan = (id) => S.dorp.gebouwen.find((g) => g.huis === id);
-  const weduwe = inHuis(S, huisVan('boer2'));
-  assert.equal(weduwe.length, 4);
-  assert.ok(!weduwe.some((p) => p.band === 'man'), 'geen man');
-  assert.equal(weduwe.filter((p) => p.leeftijd === 'kind' || p.leeftijd === 'kleuter').length, 3, 'drie kleine kinderen');
-  const oudste = inHuis(S, huisVan('boer3'));
-  assert.equal(oudste.find((p) => p.wie).leeftijd, 'oud');
-  assert.ok(oudste.some((p) => p.band === 'zoon' && p.leeftijd === 'volwassen'));
-  assert.ok(oudste.some((p) => p.band === 'schoondochter'));
 });
 
 // ---------------------------------------------------------------------------------------------
@@ -185,38 +165,37 @@ test('het gezin past bij het karakter: de weduwe heeft drie kleine kinderen, de 
 // De herder is wie het best past, zoals bij elk werk (Marcel, 26 sep: hij hoeft geen boerenzoon te
 // zijn): het liefst een knaap (`liefst` bij de schaapskooi), anders een volwassene zonder werk.
 test('wie werkt: elke hand is een mens, de boer op zijn eigen land, en de herder is wie het best past', () => {
-  for (let ronde = 0; ronde < 8; ronde++) {
-    const S = gehucht();
-    const handen = S.dorp.gebouwen.reduce((n, g) => n + (g.handen || 0), 0);
-    assert.equal(handen, 12, 'twee per boerderij, een herder, en de herbergierster in haar herberg');
-    const werkers = mensen(S).filter((p) => p.werk);
-    assert.equal(werkers.length, handen, 'elke hand is iemand');
-    for (const g of S.dorp.gebouwen) assert.equal(werkers.filter((p) => p.werk === g).length, g.handen || 0, `${g.soort} ${g.huis}`);
-    for (const p of mensen(S).filter((x) => x.wie)) assert.equal(p.werk, p.huis, `${p.wie} werkt op zijn eigen boerderij, of in haar eigen herberg`);
-    const herder = werkers.find((p) => p.werk.soort === 'schaapskooi');
-    const knaap = mensen(S).some((p) => p.leeftijd === 'jong' && !vanSchout(p));
-    if (knaap) assert.equal(herder.leeftijd, 'jong', `is er een knaap, dan hoedt een knaap (${herder.naam})`);
-    else assert.equal(herder.leeftijd, 'volwassen', `anders een volwassene (${herder.naam})`);
-    assert.ok(!werkers.some((p) => p.leeftijd === 'kleuter'), 'geen kleuter');
-    assert.ok(!werkers.some(vanSchout), 'het gezin van de schout werkt niet voor het dorp zolang er anderen zijn');
-  }
+  const S = proef({ gebouwen: ['schaapskooi'] });
+  const D = S.dorp;
+  const handen = D.gebouwen.reduce((n, g) => n + (g.handen || 0), 0);
+  assert.equal(handen, 5, 'twee per boerderij, en een herder');
+  const werkers = mensen(S).filter((p) => p.werk);
+  assert.equal(werkers.length, handen, 'elke hand is iemand');
+  for (const g of D.gebouwen) assert.equal(werkers.filter((p) => p.werk === g).length, g.handen || 0, `${g.soort} ${g.huis}`);
+  for (const p of mensen(S).filter((x) => T.isBoer(D, x))) assert.equal(p.werk, p.huis, `${p.naam} werkt op zijn eigen boerderij`);
+  const herder = werkers.find((p) => p.werk.soort === 'schaapskooi');
+  const knaap = mensen(S).some((p) => p.leeftijd === 'jong' && !vanSchout(p));
+  if (knaap) assert.equal(herder.leeftijd, 'jong', `is er een knaap, dan hoedt een knaap (${herder.naam})`);
+  else assert.equal(herder.leeftijd, 'volwassen', `anders een volwassene (${herder.naam})`);
+  assert.ok(!werkers.some((p) => p.leeftijd === 'kleuter'), 'geen kleuter');
+  assert.ok(!werkers.some(vanSchout), 'het gezin van de schout werkt niet voor het dorp zolang er anderen zijn');
 });
 
 test('T.werkendeHanden: wie kan werken, en zonder bewoners het hele getal', () => {
   assert.equal(T.werkendeHanden({ bevolking: 7 }), 7, 'zonder bewoners, zoals vóór de poppetjes');
-  const S = gehucht();
+  const S = proef();
   const kleuters = mensen(S).filter((p) => p.leeftijd === 'kleuter').length;
   assert.equal(T.werkendeHanden(S.dorp), S.dorp.bevolking - 1 - kleuters, 'iedereen behalve de schout en de kleuters');
 });
 
 test('wie werk heeft, houdt het, en een nieuwe werkplaats krijgt de vrije hand die het best past', () => {
-  const S = gehucht();
+  const S = proef();
   const voor = new Map(mensen(S).map((p) => [p, p.werk]));
   T.verdeelHanden(S.dorp);
   T.verdeelHanden(S.dorp);
-  for (const p of mensen(S)) assert.equal(p.werk, voor.get(p), `${p.naam || p.wie} houdt zijn werk`);
-  // Een houthakker bij de boerderij van boer 1.
-  const plek = vrijePlek(S, { b: 1, h: 1 }, T.deurVan(S.wereld, S.dorp.gebouwen.find((x) => x.huis === 'boer1')));
+  for (const p of mensen(S)) assert.equal(p.werk, voor.get(p), `${p.naam} houdt zijn werk`);
+  // Een kleiput bij de eerste boerderij.
+  const plek = vrijePlek(S, { b: 1, h: 1 }, T.deurVan(S.wereld, S.dorp.gebouwen.find((x) => x.soort === 'boerderij')));
   const g = { soort: 'kleiput', x: plek.x, y: plek.y, voet: { b: 1, h: 1 }, klaar: true, klaarOp: 0, handen: 0, voorwerp: null };
   S.dorp.gebouwen.push(g);
   const vrij = mensen(S).filter((p) => !p.werk && p.leeftijd !== 'kleuter' && !vanSchout(p));
@@ -233,8 +212,7 @@ test('wie werk heeft, houdt het, en een nieuwe werkplaats krijgt de vrije hand d
 // ---------------------------------------------------------------------------------------------
 
 test('T.wijzigBevolking: een nieuw gezin in een huis met plaats; wie sterft is eerst oud; wie wegtrekt kwam het laatst', () => {
-  const S = gehucht();
-  const metNaam = mensen(S).filter((p) => p.wie).length;
+  const S = proef();
   const huis = bouwHuis(S);
   assert.equal(T.wijzigBevolking(S.dorp, 4, 'groei'), 4);
   assert.equal(mensen(S).length, S.dorp.bevolking);
@@ -245,18 +223,19 @@ test('T.wijzigBevolking: een nieuw gezin in een huis met plaats; wie sterft is e
   const hoofd = gezin.find((p) => !p.hoofd);
   assert.ok(hoofd && gezin.some((p) => p.band === 'vrouw'), 'een man en zijn vrouw, met kinderen');
 
-  const ouden = mensen(S).filter((p) => p.leeftijd === 'oud' && !p.wie).length;
-  const weg = nieuwe(S).filter((p) => p.leeftijd === 'oud');
+  // Het proefdorp heeft geen oude (de gezinnen uit het kamp zijn jong); maak er een van een vrouw uit een hut.
+  const oma = nieuwe(S).find((p) => p.band === 'vrouw' && p.huis.soort === 'hut');
+  oma.leeftijd = 'oud';
+  T.poppetjeNaarLeeftijd(S.dorp, oma);
   T.wijzigBevolking(S.dorp, -1, 'winter');
-  assert.equal(mensen(S).filter((p) => p.leeftijd === 'oud' && !p.wie).length, Math.max(0, ouden - 1), 'de winter neemt eerst een oude');
+  assert.ok(!mensen(S).includes(oma), 'de winter neemt eerst een oude');
   assert.equal(mensen(S).length, S.dorp.bevolking);
-  for (const p of weg) if (!mensen(S).includes(p)) assert.ok(!S.wereld.wezens.includes(p.wezen), 'zijn poppetje is weg');
+  assert.ok(!S.wereld.wezens.includes(oma.wezen), 'zijn poppetje is weg');
 
   T.wijzigBevolking(S.dorp, -4, 'vertrek');
   assert.equal(inHuis(S, huis).length, 0, 'het gezin dat het laatst kwam, trekt weer weg');
   assert.equal(mensen(S).length, S.dorp.bevolking);
   assert.ok(mensen(S).find((p) => p.schout), 'de schout blijft');
-  assert.equal(mensen(S).filter((p) => p.wie).length, metNaam, 'de boeren en de herbergierster blijven');
 });
 
 // ---------------------------------------------------------------------------------------------
@@ -264,7 +243,7 @@ test('T.wijzigBevolking: een nieuw gezin in een huis met plaats; wie sterft is e
 // ---------------------------------------------------------------------------------------------
 
 test('komen: een nieuw gezin komt overdag over de weg binnen, met een bericht op naam, en loopt naar zijn huis', () => {
-  const S = gehucht(); // om zeven uur
+  const S = proef(); // om zeven uur
   const berichten = vangBerichten();
   const huis = bouwHuis(S);
   T.wijzigBevolking(S.dorp, 4, 'groei');
@@ -294,7 +273,7 @@ test('komen: een nieuw gezin komt overdag over de weg binnen, met een bericht op
 });
 
 test('gaan: wie wegtrekt, telt meteen niet meer mee, gaat bij het licht, loopt de weg af en verlaat de kaart', () => {
-  const S = gehucht();
+  const S = proef();
   const huis = bouwHuis(S);
   T.wijzigBevolking(S.dorp, 4, 'groei');
   const gezin = inHuis(S, huis);
@@ -323,7 +302,7 @@ test('gaan: wie wegtrekt, telt meteen niet meer mee, gaat bij het licht, loopt d
 });
 
 test('sterven: het bericht zegt wie het is, en wie hij voor iemand was', () => {
-  const S = gehucht();
+  const S = proef();
   const berichten = vangBerichten();
   const voor = mensen(S).slice();
   T.wijzigBevolking(S.dorp, -1, 'winter', 'The winter is harsh');
@@ -348,7 +327,9 @@ test('sterven: het bericht zegt wie het is, en wie hij voor iemand was', () => {
 // ---------------------------------------------------------------------------------------------
 
 test('T.dagAnker voor een bewoner: \'s nachts binnen, \'s ochtends de put of het erf, overdag werk of vrij', () => {
-  const S = gehucht();
+  // Met een put (wie water haalt), een herder en de heide (het lege begin heeft die niet: zie zetMeent).
+  const S = proef({ gebouwen: ['put', 'schaapskooi'] });
+  zetMeent(S);
   const waterhaler = nieuwe(S).find((p) => p.haaltWater);
   const e = waterhaler.wezen;
   const zet = (uur) => { S.kalender.dag = bijUur(GROEI, uur); };
@@ -371,8 +352,7 @@ test('T.dagAnker voor een bewoner: \'s nachts binnen, \'s ochtends de put of het
   assert.ok(new Set(plekken.map((a) => a.x + ',' + a.y)).size > 1, 'niet allemaal op dezelfde plek');
   const oud = nieuwe(S).find((p) => p.leeftijd === 'oud' || p.leeftijd === 'kleuter');
   assert.equal(T.dagAnker(S.dorp, oud.wezen).straal, IN.straalBijHuis, 'een oude of een kleuter blijft bij huis');
-  // 's Avonds is hij op zijn erf, of in de herberg als hij daar vanavond heen gaat (js/herberg.js; dat
-  // lot is per spel anders, want de gezinnen zijn het ook).
+  // 's Avonds is hij op zijn erf, of in de herberg als hij daar vanavond heen gaat (js/herberg.js; er is hier geen herberg).
   zet(20.5);
   const avond = T.gaatNaarDeHerberg(S.dorp, herder)
     ? T.herbergAnker(S.dorp, herder.wezen)
@@ -380,7 +360,7 @@ test('T.dagAnker voor een bewoner: \'s nachts binnen, \'s ochtends de put of het
   assert.deepEqual(T.dagAnker(S.dorp, herder.wezen), avond);
 });
 
-test('in het gehucht is iedereen \'s nachts binnen, overdag waar hij hoort, en \'s avonds thuis', () => {
+test('in het proefdorp is iedereen \'s nachts binnen, overdag waar hij hoort, en \'s avonds thuis', () => {
   // Met een vast zaad, zodat de toets elke keer dezelfde dag speelt (Marcel, 4 okt, vraag 114, E: "zodat een push er
   // niet op stukloopt"). Ongezaaid faalde hij in 7 van de 200 dagen, en het was steeds een paar dat een praatje maakte
   // (js/praatje.js, vraag 120): wie vrij is, blijft onderweg staan voor een bekende, en loopt daarna terug.
@@ -388,10 +368,10 @@ test('in het gehucht is iedereen \'s nachts binnen, overdag waar hij hoort, en \
   let n = 7;
   Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
   try {
-    const S = gehucht({ dag: bijUur(GROEI, 4), snelheid: 10 });
+    const S = proef({ dag: bijUur(GROEI, 4), snelheid: 10 });
     const binnen = (p) => p.wezen.binnen;
-    // Waar hij hoort: binnen de straal van zijn plek, of, als hij daar naar binnen hoort (de herberg,
-    // js/herberg.js), binnen, of voor die deur. Of hij praat, of praatte net en loopt terug (e.praatRust).
+    // Waar hij hoort: binnen de straal van zijn plek, of, als hij daar naar binnen hoort, binnen, of voor die deur. Of
+    // hij praat, of praatte net en loopt terug (e.praatRust).
     const binnenStraal = (p) => {
       if (p.wezen.praatje || p.wezen.praatRust > S.kalender.dag) return true;
       const a = T.dagAnker(S.dorp, p.wezen);
@@ -401,13 +381,8 @@ test('in het gehucht is iedereen \'s nachts binnen, overdag waar hij hoort, en \
     const verkeerd = nieuwe(S).filter((p) => !binnenStraal(p));
     assert.ok(verkeerd.length <= 1, `om elf uur is (bijna) iedereen waar hij hoort; niet: ${verkeerd.map((p) => p.naam).join(', ')}`);
     loopTot(S, bijUur(GROEI, 21.5));
-    // De herder mag dan nog onderweg zijn: in het gehucht van 26 sep ligt de heide ver van het plein en
-    // van de boerderijen aan de oostkant, en woont hij daar, dan loopt hij bijna de hele kaart over. 's
-    // Nachts is ook hij binnen (hieronder). Wie naar de herberg ging, zit daar (binnenStraal).
-    const nietThuis = nieuwe(S).filter((p) => !binnenStraal(p) && !(p.werk && p.werk.soort === 'schaapskooi'));
+    const nietThuis = nieuwe(S).filter((p) => !binnenStraal(p));
     assert.ok(nietThuis.length <= 1, `'s avonds is (bijna) iedereen op zijn erf; niet: ${nietThuis.map((p) => p.naam).join(', ')}`);
-    // Om twee uur 's nachts: wie in de herberg zat, liep bij bedtijd (tien uur) naar huis, en wie ver
-    // woont, doet daar ruim twee uur over (js/herberg.js; tot 27 sep stond hier half twaalf).
     loopTot(S, bijUur(GROEI + 1, 2));
     const buiten = nieuwe(S).filter((p) => !binnen(p));
     assert.equal(buiten.length, 0, `'s nachts is iedereen binnen; niet: ${buiten.map((p) => p.naam).join(', ')}`);
@@ -417,11 +392,12 @@ test('in het gehucht is iedereen \'s nachts binnen, overdag waar hij hoort, en \
 });
 
 test('staat de schout in zijn deur, dan gaat zijn gezin vanaf de tegel ernaast naar binnen', () => {
-  const S = gehucht({ dag: bijUur(GROEI, 20), snelheid: 10 });
-  const huis = S.dorp.gebouwen.find((g) => g.huis === 'schout');
+  const S = proef({ dag: bijUur(GROEI, 20), snelheid: 10 });
+  const huis = S.dorp.gebouwen.find((g) => g.soort === 'schout');
   const deur = T.deurVan(S.wereld, huis);
-  assert.deepEqual(opTegel(S.schout), deur, 'de schout begint voor zijn eigen deur');
-  // Om twee uur 's nachts, want zijn vrouw kan in de herberg zitten (js/herberg.js).
+  // In het proefdorp staat de schout nog op de weg waar de kar hem bracht: zet hem voor zijn eigen deur.
+  Object.assign(S.schout, { x: deur.x, y: deur.y, tx: deur.x, ty: deur.y, pad: [], onderweg: false });
+  assert.deepEqual(opTegel(S.schout), deur, 'de schout staat voor zijn eigen deur');
   loopTot(S, bijUur(GROEI + 1, 2));
   for (const p of inHuis(S, huis)) if (!p.schout) assert.ok(p.wezen.binnen, `${p.naam} is binnen`);
 });
@@ -445,10 +421,10 @@ test('T.zoekPad met tot: het pad eindigt binnen de straal, ook als het doel zelf
 // Werk telt in uren (stuk 2; Marcel koos op 26 sep de looptijd)
 // ---------------------------------------------------------------------------------------------
 
-// Het gehucht met een kleiput zo ver mogelijk van alle huizen (op een plek die je wel kunt
+// Het proefdorp met een kleiput zo ver mogelijk van alle huizen (op een plek die je wel kunt
 // bereiken), en wie er werkt. (Geen houthakker: die staat stil waar geen boom is, en het gaat hier om de uren.)
 function kleiputVerWeg(opties) {
-  const S = gehucht(opties);
+  const S = proef(opties);
   const w = S.wereld;
   const deuren = S.dorp.gebouwen.filter((g) => T.GEBOUWEN[g.soort].woonruimte > 0).map((g) => T.deurVan(w, g));
   let plek = null;
@@ -507,17 +483,11 @@ test('werk in uren: de weg heen is de weg die zijn poppetje loopt, met zijn eige
 });
 
 test('werk in uren: de werkplaats maakt naar de uren dat er gewerkt wordt, en zegt het bij de muis', () => {
-  const echt = T.lootBoeren;
-  T.lootBoeren = (S) => echt(S, 12345);
-  let ver;
-  try {
-    ver = kleiputVerWeg();
-  } finally {
-    T.lootBoeren = echt;
-  }
+  const ver = kleiputVerWeg();
   const D = ver.S.dorp;
   const dag = Math.floor(ver.S.kalender.dag) + 1;
   const IN = T.BEHOEFTEN_INSTELLINGEN;
+  T.zetVoorraad(D, 'gereedschap', 0); // het proefdorp heeft gereedschap, en dat versnelt het werk: hier telt alleen de weg
   T.tikGebouwenDag(D, dag);
   // Hoe hard het dorp werkt, naar de tevredenheid (js/behoeften.js): dat is wat een hele dag zou geven.
   const heleDag = IN.werkBasis + (1 - IN.werkBasis) * D.behoeften.tevredenheid;
@@ -529,13 +499,13 @@ test('werk in uren: de werkplaats maakt naar de uren dat er gewerkt wordt, en ze
 });
 
 test('bij de muis staat wie het is', () => {
-  const S = gehucht();
+  const S = proef({ gebouwen: ['schaapskooi'] });
   const herder = nieuwe(S).find((p) => p.werk && p.werk.soort === 'schaapskooi');
   const tekst = T.overBewonerTekst(S.dorp, herder.wezen);
   assert.match(tekst, new RegExp(`^${herder.naam}(, .+)? · shepherd$`), 'de naam, en wat hij of zij doet');
-  // Wie bij een boer hoort, heet naar de boer: "Geert, zoon van Nicholas".
-  const bijBoer = nieuwe(S).find((p) => p.hoofd && p.hoofd.wie);
-  assert.match(T.overBewonerTekst(S.dorp, bijBoer.wezen), new RegExp(`^${bijBoer.naam}, [a-z-]+ of ${T.naamVanMens(bijBoer.hoofd.wie)}`));
+  // Wie bij een boer hoort, heet naar de boer: "Rose, daughter of Edmund".
+  const bijBoer = nieuwe(S).find((p) => p.hoofd && T.isBoer(S.dorp, p.hoofd));
+  assert.match(T.overBewonerTekst(S.dorp, bijBoer.wezen), new RegExp(`^${bijBoer.naam}, [a-z-]+ of ${T.naamVanBewoner(bijBoer.hoofd)}`));
   const vrouw = nieuwe(S).find((p) => p.hoofd && p.hoofd.schout && p.band === 'vrouw');
   assert.equal(T.overBewonerTekst(S.dorp, vrouw.wezen), `${vrouw.naam}, wife of the reeve`);
   const h = T.handelingVerkennen(S, { wezen: herder.wezen });

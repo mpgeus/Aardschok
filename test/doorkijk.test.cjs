@@ -6,6 +6,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+const { proefDorp } = require('./grond.cjs');
 
 // Zonder scherm doet elke aanroep naar T.ui niets.
 T.ui = new Proxy({}, { get: () => () => {} });
@@ -13,28 +14,43 @@ T.ui = new Proxy({}, { get: () => () => {} });
 const standaard = { ...T.DOORKIJK_INSTELLINGEN };
 test.afterEach(() => Object.assign(T.DOORKIJK_INSTELLINGEN, standaard));
 
-// Het gehucht, met alleen de schout erin (aan de rand van de kaart); wie er verder nodig is, zet de
-// toets er zelf bij.
+// Het proefdorp (test/grond.cjs), met alleen de schout erin (ver weg van het plein); wie er verder nodig is, zet de toets
+// er zelf bij. Het plein ligt rond het oude kampvuur: `hart(S)` is een tegel in het midden ervan, en de proef zet de rest
+// ten opzichte daarvan neer.
 function gehucht() {
-  const w = T.laadKaart(T.KAARTEN.gehucht, T.BETEKENIS.gehucht);
-  const S = { wereld: w, spreektMet: null };
+  const { S, w } = proefDorp(T);
+  S.spreektMet = null;
   S.schout = T.maakWezen('schout', 20, 20);
   w.wezens = [S.schout];
   return S;
 }
+const hart = (S) => S.wereld.kamp.vuur;
+const naast = (S, dx, dy) => ({ x: hart(S).x + dx, y: hart(S).y + dy });
 const erbij = (S, e) => {
   S.wereld.wezens.push(e);
   return e;
 };
+// Een dorpeling op de tegel (dx, dy) van het hart van het plein.
+const dorpelingOp = (S, id, dx, dy) => {
+  const t = naast(S, dx, dy);
+  return T.maakDorpeling(id, t.x, t.y);
+};
+// Een eik op het plein (het lege begin heeft er geen: het kamp is gerooid), een tegel naast het hart.
+const eikOpHetPlein = (S) => {
+  const t = naast(S, 1, 1);
+  const eik = { soort: 'eik', x: t.x, y: t.y, vel: 'bomen', id: 0, beslaat: [1, 1] };
+  S.wereld.voorwerpen.push(eik);
+  return eik;
+};
 // Een huis vóór het plein, aan de kant van de camera, zoals in de proef van 26 sep.
-const huisVoorHetPlein = () => ({ soort: 'huis', x: 43, y: 46, vel: 'gebouwen', id: 4, beslaat: [7, 5] });
+const huisVoorHetPlein = (S) => ({ soort: 'huis', ...naast(S, 3, 8), vel: 'gebouwen', id: 4, beslaat: [7, 5] });
 
 test('wie je door een boom of een huis heen ziet: wie ertoe doet overal, het plein alleen door een huis', () => {
   const S = gehucht();
   const w = S.wereld;
-  assert.ok(T.opHetPlein(w, 40, 38) && !T.opHetPlein(w, 20, 21), 'de proef staat op en naast het plein');
-  const kind = erbij(S, T.maakDorpeling(3, 40, 38));
+  const kind = erbij(S, dorpelingOp(S, 3, 0, 0));
   const buiten = erbij(S, T.maakDorpeling(4, 20, 21));
+  assert.ok(T.opHetPlein(w, kind.tx, kind.ty) && !T.opHetPlein(w, buiten.tx, buiten.ty), 'de proef staat op en naast het plein');
   const kramer = erbij(S, T.maakMens('marskramer', 21, 20));
   assert.equal(T.zichtbaarDoor(S, S.schout), 'alles', 'de schout altijd');
   assert.equal(T.zichtbaarDoor(S, kramer), 'alles', 'een bezoeker ook, waar hij ook staat');
@@ -50,10 +66,10 @@ test('wie je door een boom of een huis heen ziet: wie ertoe doet overal, het ple
 
 test('achter een huis vóór het plein gaat het huis open; achter een eik alleen voor wie ertoe doet', () => {
   const S = gehucht();
-  const huis = huisVoorHetPlein();
-  const eik = S.wereld.voorwerpen.find((v) => v.soort === 'eik' && T.opHetPlein(S.wereld, v.x, v.y));
+  const huis = huisVoorHetPlein(S);
+  const eik = eikOpHetPlein(S);
   assert.ok(T.isGebouw(huis) && !T.isGebouw(eik), 'een huis beslaat meer dan één tegel, een eik niet');
-  const achterHuis = erbij(S, T.maakDorpeling(3, 41, 43));
+  const achterHuis = erbij(S, dorpelingOp(S, 3, 1, 5));
   const achterEik = erbij(S, T.maakDorpeling(5, eik.x - 2, eik.y - 2));
   assert.ok(T.opHetPlein(S.wereld, achterHuis.tx, achterHuis.ty) && T.opHetPlein(S.wereld, achterEik.tx, achterEik.ty));
   T.werkDoorkijkBij(S, 1, [huis, eik]);
@@ -73,8 +89,8 @@ test('achter een huis vóór het plein gaat het huis open; achter een eik alleen
 
 test('wie vóór het huis staat, laat het dicht; wie erachter staat, laat het in `tijd` seconden open en weer dicht', () => {
   const S = gehucht();
-  const huis = huisVoorHetPlein();
-  const e = erbij(S, T.maakDorpeling(3, 41, 43));
+  const huis = huisVoorHetPlein(S);
+  const e = erbij(S, dorpelingOp(S, 3, 1, 5));
   const t = T.DOORKIJK_INSTELLINGEN.tijd;
   T.werkDoorkijkBij(S, t / 2, [huis]);
   assert.ok(Math.abs(huis.doorkijk - 0.5) < 1e-9, 'halverwege open');
@@ -82,8 +98,8 @@ test('wie vóór het huis staat, laat het dicht; wie erachter staat, laat het in
   assert.equal(huis.doorkijk, 1);
   // Hij loopt om het huis heen naar de voorkant: het huis gaat dicht, en het kijkgat weet nog even
   // wie erachter stond, zodat het vloeiend dichtgaat.
-  e.x = e.tx = 44;
-  e.y = e.ty = 52;
+  e.x = e.tx = hart(S).x + 4;
+  e.y = e.ty = hart(S).y + 14;
   assert.ok(T.staatVoorGebouw(e.tx, e.ty, huis));
   T.werkDoorkijkBij(S, t / 2, [huis]);
   assert.ok(huis.doorkijk > 0 && huis.doorkijk < 1, 'halverwege dicht');
@@ -95,17 +111,10 @@ test('wie vóór het huis staat, laat het dicht; wie erachter staat, laat het in
 // Op een feest staat het hele dorp op het plein, en kreeg het dak van een huis ervoor een gat voor elk van hen (Marcel,
 // 10 okt: "Ja akkoord", op een feest alleen wie ertoe doet). Wie je zoekt met een voorval, zie je altijd.
 test('op een feest telt het plein niet mee, wie je zoekt met een voorval wel', () => {
-  const echt = console.warn;
-  console.warn = () => {};
-  const S = { kalender: T.nieuweKalender() };
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht'));
-  } finally {
-    console.warn = echt;
-  }
+  const { S } = proefDorp(T);
   const dag = Math.floor(S.kalender.dag) + 1;
   S.kalender.dag = dag + 11 / 24;
-  const kind = T.maakDorpeling(3, 40, 38);
+  const kind = dorpelingOp(S, 3, 0, 0);
   assert.ok(T.opHetPlein(S.wereld, kind.tx, kind.ty));
   assert.equal(T.zichtbaarDoor(S, kind), 'huis', 'op een gewone dag het plein, door een huis heen');
   assert.ok(T.vierVandaag(S.dorp, 'meiboom', dag));

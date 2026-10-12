@@ -4,20 +4,27 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+const { proefDorp } = require('./grond.cjs');
 
 T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {}, toonInventaris() {} };
 
-// Het echte gehucht, zoals een nieuw spel begint, stil (zoals in test/erven.test.cjs), op de eerste dag.
-function gehucht() {
-  const echt = console.warn;
-  console.warn = () => {};
-  const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht'));
-  } finally {
-    console.warn = echt;
-  }
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
+// Het proefdorp (test/grond.cjs), op dag 2: wat de speler speelt, met het lege begin, zijn schout en twee boerderijen.
+function dorp(opties = {}) {
+  const S = proefDorp(T, opties).S;
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set() });
+  return S;
+}
+
+// Het proefdorp heeft boerderijen en een hut, maar geen dorpelingen (vlees of vis, de put, de herberg, bier). Dus drie
+// boerderijen, een huis en een herberg erbij (de optie `gebouwen`), bier in de voorraad, en het gezin van de hut trekt in
+// het huis: drie boerderijen en een huis, zoals het gehucht van vroeger met zijn jonge gezin.
+function dorpMetHuis() {
+  const S = dorp({ boerderijen: 3, gebouwen: ['huis', 'herberg'] });
+  const D = S.dorp;
+  T.zetVoorraad(D, 'bier', 100);
+  const hut = D.gebouwen.find((g) => g.soort === 'hut');
+  const huis = D.gebouwen.find((g) => g.soort === 'huis');
+  for (const p of D.bewoners.mensen) if (p.huis === hut) p.huis = huis;
   return S;
 }
 
@@ -43,7 +50,7 @@ const id = (S) => (raad(S) || {}).id || null;
 // Met een raadsman: zonder zegt de raad de eerste dagen dat een raadsman je een rapport brengt (js/ochtendrapport.js),
 // en dat gaat voor de groei (zie de toets daarvan hieronder).
 function metRaadsman(S) {
-  assert.ok(T.kiesRaadsman(S.dorp, S.dorp.bewoners.mensen.find((p) => T.isBoer(p.wezen))).kan);
+  assert.ok(T.kiesRaadsman(S.dorp, S.dorp.bewoners.mensen.find((p) => T.isBoer(S.dorp, p))).kan);
   return S;
 }
 
@@ -59,7 +66,8 @@ function zonderWensen(fn) {
 }
 
 test('de eerste dag: hoe de tijd sneller gaat en hoe je slaapt, tot je de tijd zelf sneller zet', () => {
-  const S = gehucht();
+  const S = dorp();
+  S.kalender.dag = 0.3; // het proefdorp begint op dag 2: terug naar de eerste dag
   assert.equal(id(S), 'tijd');
   assert.match(raad(S).tekst, /\[\+\] speeds up time, and \[Z\] sleeps until morning/);
   S.kalender.snelheid = 3;
@@ -67,7 +75,7 @@ test('de eerste dag: hoe de tijd sneller gaat en hoe je slaapt, tot je de tijd z
 });
 
 test('niets houdt de groei tegen: wanneer het volgende gezin komt, zoals de groei het telt', () => zonderWensen(() => {
-  const S = metRaadsman(opDag(gehucht(), 0.5));
+  const S = metRaadsman(opDag(dorp(), 0.5));
   const n = T.GEBOUWEN_INSTELLINGEN.gezinDagen;
   assert.equal(raad(S).tekst, `The next family arrives in ${n} days.`);
   opDag(S, n - 0.5);
@@ -79,7 +87,7 @@ test('niets houdt de groei tegen: wanneer het volgende gezin komt, zoals de groe
 }));
 
 test('geen gezin: het dorp is vol, niet tevreden genoeg, of er ligt te weinig graan; vol weegt het zwaarst', () => {
-  const S = metRaadsman(opDag(gehucht(), 3.5));
+  const S = metRaadsman(opDag(dorp(), 3.5));
   T.wijzigBevolking(S.dorp, S.dorp.woonruimte - S.dorp.bevolking, 'groei');
   assert.equal(id(S), 'plaats');
   assert.equal(raad(S).tekst, 'No family is coming: the village is full. Build a hut or a house: [B].');
@@ -99,7 +107,7 @@ test('geen gezin: het dorp is vol, niet tevreden genoeg, of er ligt te weinig gr
 });
 
 test('is het doel voor de mensen gehaald, dan zegt de raad niets meer over de groei', () => {
-  const S = metRaadsman(opDag(gehucht(), 3.5));
+  const S = metRaadsman(opDag(dorp(), 3.5));
   assert.equal(id(S), 'gezin');
   // Een huis met zoveel bewoners als het doel nog dorpelingen vraagt (js/treden.js), zonder te bouwen.
   const huis = { soort: 'huis', x: 0, y: 0, klaar: true, handen: 0 };
@@ -110,7 +118,7 @@ test('is het doel voor de mensen gehaald, dan zegt de raad niets meer over de gr
 });
 
 test('het hout: vanaf drie maanden voor de winter, als het hem niet haalt, en dat gaat voor de groei', () => {
-  const S = gehucht();
+  const S = dorp();
   T.zetVoorraad(S.dorp, 'hout', 0);
   opDag(S, 10.5); // lentemaand: nog vroeg
   assert.notEqual(id(S), 'hout');
@@ -132,7 +140,7 @@ test('het hout: vanaf drie maanden voor de winter, als het hem niet haalt, en da
 });
 
 test('het eten: vanaf drie maanden voor de winter, als het hem niet haalt: wat er helpt (vraag 132, b)', () => {
-  const S = gehucht();
+  const S = dorp();
   T.zetVoorraad(S.dorp, 'hout', 5000);
   T.zetVoorraad(S.dorp, 'graan', 0);
   opDag(S, dagVan('herfstmaand', 1) + 0.5);
@@ -141,7 +149,7 @@ test('het eten: vanaf drie maanden voor de winter, als het hem niet haalt: wat e
   const hulp = T.watHelptAanEten(S.dorp).slice(0, 2);
   assert.ok(hulp.length, 'er is iets wat helpt');
   assert.equal(raad(S).tekst, `The food lasts ${v.dagen} of the ${v.winter} days of winter. What helps: ${T.opsomming(hulp.map((h) => h.zin))}. Until there is enough, no family will come.`);
-  // Wat er kan: op het ontworpen gehucht (zonder beesten) een jager.
+  // Wat er kan: in het proefdorp (zonder beesten) een jager.
   const ids = T.watHelptAanEten(S.dorp).map((h) => h.id);
   assert.ok(ids.includes('jager'), ids.join(', '));
   T.zetVoorraad(S.dorp, 'graan', 5000);
@@ -149,7 +157,7 @@ test('het eten: vanaf drie maanden voor de winter, als het hem niet haalt: wat e
 });
 
 test('vis en vlees voor de winter: zout bij de marskramer, en een voorraad voordat de beek dichtligt (vraag 132, B)', () => {
-  const S = gehucht();
+  const S = dorp();
   const D = S.dorp;
   T.zetVoorraad(D, 'hout', 5000);
   T.zetVoorraad(D, 'graan', 5000);
@@ -194,7 +202,7 @@ test('vis en vlees voor de winter: zout bij de marskramer, en een voorraad voord
 });
 
 test('na een aanval van de rovers: wat een wachthuis doet, als er geen is', () => {
-  const S = opDag(gehucht(), 40.5);
+  const S = opDag(dorp(), 40.5);
   S.dorp.rovers = Object.assign(T.nieuweRovers(), { laatsteAanval: 38 });
   assert.equal(raad(S).tekst, 'The robbers are coming back. A watch house [B] gives you two men to fight at your side.');
   opDag(S, 38 + T.RAAD_INSTELLINGEN.roversNa + 0.5);
@@ -205,19 +213,19 @@ test('na een aanval van de rovers: wat een wachthuis doet, als er geen is', () =
 });
 
 test('ging er een voorval voorbij terwijl je weg was: kies een raadsman, tot je er een hebt', () => {
-  const S = opDag(gehucht(), 40.5);
+  const S = opDag(dorp(), 40.5);
   S.dorp.voorvallen = Object.assign(T.nieuweVoorvallen(), { laatstVoorbij: 39 });
   assert.equal(raad(S).tekst, 'What you miss while you are away passes by: choose an advisor [R].');
   opDag(S, 39 + T.RAAD_INSTELLINGEN.raadsmanNa + 0.5);
   assert.notEqual(id(S), 'raadsman', 'een tijd, en dan zegt de raad weer wat anders');
   opDag(S, 40.5);
-  const boer = S.dorp.bewoners.mensen.find((p) => T.isBoer(p.wezen));
+  const boer = S.dorp.bewoners.mensen.find((p) => T.isBoer(S.dorp, p));
   T.kiesRaadsman(S.dorp, boer);
   assert.notEqual(id(S), 'raadsman', 'met een raadsman niet meer');
 });
 
 test('de eerste dagen zonder raadsman: een raadsman brengt je elke ochtend een rapport, en dat gaat voor de groei', () => {
-  const S = opDag(gehucht(), 1.5);
+  const S = opDag(dorp(), 1.5);
   assert.equal(raad(S).tekst, 'An advisor brings you a report every morning: choose one [R].');
   // De eerste dag gaat de tijd voor, en na de eerste dagen zegt de raad het niet meer.
   opDag(S, 0.5);
@@ -240,7 +248,7 @@ test('de eerste dagen zonder raadsman: een raadsman brengt je elke ochtend een r
 });
 
 test('de marskramer in de herfst, en te weinig goud voor de heer: verkoop hem graan', () => {
-  const S = opDag(gehucht(), dagVan('wijnmaand', 6) + 0.5);
+  const S = opDag(dorp(), dagVan('wijnmaand', 6) + 0.5);
   T.zetVoorraad(S.dorp, 'goud', 3);
   const herfst = T.HANDEL_INSTELLINGEN.bezoeken.findIndex((b) => b.naam === 'herfst');
   S.dorp.marskramer = { staat: true, weg: false, bezoek: herfst };
@@ -257,7 +265,7 @@ test('de marskramer in de herfst, en te weinig goud voor de heer: verkoop hem gr
 });
 
 test('de spelregel zet hem uit, en op een kaart zonder plein is er geen', () => {
-  const S = gehucht();
+  const S = dorp();
   const aan = T.RAAD_INSTELLINGEN.aan;
   T.RAAD_INSTELLINGEN.aan = false;
   try {
@@ -273,9 +281,9 @@ test('de spelregel zet hem uit, en op een kaart zonder plein is er geen', () => 
 test('bouwen: wat je mist voor wat het doel vraagt, en waar het vandaan komt (vraag 59, C)', () => zonderWensen(() => {
   // Gebouwen vraagt het doel alleen met de eis van de proef van 28 sep (js/treden.js; vraag 90, A; sinds 11 okt geen
   // spelregel meer, dus hier gezet in de getallen).
-  assert.deepEqual(T.doelGebouwen(gehucht().dorp), [], 'uit de standen vraagt het doel geen gebouwen');
+  assert.deepEqual(T.doelGebouwen(dorp().dorp), [], 'uit de standen vraagt het doel geen gebouwen');
   T.TREDEN_INSTELLINGEN.dorp = { mensen: 50, gebouwen: ['kapel', 'smidse'] };
-  const S = opDag(gehucht(), 40.5); // na de eerste dagen, en ver van de winter
+  const S = opDag(dorp(), 40.5); // na de eerste dagen, en ver van de winter
   const kosten = (wat, soorten) => soorten.reduce((som, s) => som + (T.GEBOUWEN[s].kosten[wat] || 0), 0);
   // In het begin kun je de kapel en de smidse allebei betalen: dan zegt hij niets.
   assert.deepEqual(T.doelGebouwen(S.dorp), ['kapel', 'smidse']);
@@ -309,7 +317,7 @@ test('bouwen: wat je mist voor wat het doel vraagt, en waar het vandaan komt (vr
 // De wensen (werklijst vraag 86, a, en 87): wat de huizen missen en wat helpt, vóór wat het doel vraagt
 // ---------------------------------------------------------------------------------------------
 
-// Een nacht in het gehucht: dan weten de huizen wat ze willen en hebben (T.tikBehoeftenDag, js/behoeften.js).
+// Een nacht in het dorp: dan weten de huizen wat ze willen en hebben (T.tikBehoeftenDag, js/behoeften.js).
 function naEenNacht(S, dag) {
   opDag(S, dag);
   T.tikBehoeftenDag(S.dorp, Math.floor(dag));
@@ -317,26 +325,26 @@ function naEenNacht(S, dag) {
 }
 
 test('de wensen: na een nacht zegt de raad wat de meeste mensen missen, met de toets, vóór het doel en de groei', () => {
-  const S = metRaadsman(opDag(gehucht(), 40.5));
+  const S = metRaadsman(opDag(dorpMetHuis(), 40.5));
   assert.equal(id(S), 'gezin', 'vóór de eerste nacht weet het dorp het nog niet');
   naEenNacht(S, 40.5);
   assert.equal(id(S), 'wens');
-  assert.equal(raad(S).tekst, 'Five farms and a house want a chapel within 40 tiles [B].');
+  assert.equal(raad(S).tekst, 'Three farms and a house want a chapel within 40 tiles [B].');
   // Kun je de kapel niet betalen, dan zegt hij erbij wat je mist en waar het vandaan komt: dat zei eerst het doel.
   T.zetVoorraad(S.dorp, 'goud', T.GEBOUWEN.kapel.kosten.goud - 6);
   const maand = T.MAANDEN.find((m) => m.naam === T.volgendeMarskramer(S.kalender.dag)).toon;
-  assert.equal(raad(S).tekst, `Five farms and a house want a chapel within 40 tiles [B]. For that you are short of 6 gold: the peddler buys grain in ${maand} and tax [W] brings in gold every month.`);
+  assert.equal(raad(S).tekst, `Three farms and a house want a chapel within 40 tiles [B]. For that you are short of 6 gold: the peddler buys grain in ${maand} and tax [W] brings in gold every month.`);
   // Wordt er een kapel gebouwd die ze allemaal bereikt, dan het volgende: de put van het huis.
   T.zetVoorraad(S.dorp, 'goud', 50);
-  const huis = S.dorp.gebouwen.find((g) => g.bewoners === 'jongGezin');
+  const huis = S.dorp.gebouwen.find((g) => g.soort === 'huis');
   const r = T.voetVanGebouw(huis);
   S.dorp.gebouwen.push({ soort: 'kapel', x: r.x, y: r.y, voet: { b: 1, h: 1 }, klaar: false });
   assert.equal(raad(S).tekst, 'A house wants a well within 12 tiles [B].');
 });
 
 test('de wensen: een huis dat op bouwstof wacht, gaat voor; is wat helpt zelf te duur, dan zegt hij wat je mist', () => {
-  const S = metRaadsman(naEenNacht(gehucht(), 40.5));
-  const hut = S.dorp.gebouwen.find((g) => g.bewoners === 'oudStel');
+  const S = metRaadsman(naEenNacht(dorp(), 40.5));
+  const hut = S.dorp.gebouwen.find((g) => g.soort === 'hut');
   hut.wachtOpBouwstof = true;
   T.zetVoorraad(S.dorp, 'hout', 3);
   assert.equal(id(S), 'doorgroeien');
@@ -345,16 +353,16 @@ test('de wensen: een huis dat op bouwstof wacht, gaat voor; is wat helpt zelf te
 });
 
 test('de wensen: wat je nu niet kunt doen, zegt de raad niet; de winter en de spelregel gaan voor', () => {
-  const S = metRaadsman(naEenNacht(gehucht(), 40.5));
-  // Een kapel in aanbouw die ze alle zes bereikt, een put bij het huis en vis: dan mist niemand meer iets wat je kunt bouwen.
-  const huis = S.dorp.gebouwen.find((g) => g.bewoners === 'jongGezin');
+  const S = metRaadsman(naEenNacht(dorpMetHuis(), 40.5));
+  // Een kapel in aanbouw die ze alle vier bereikt, een put bij het huis en vis: dan mist niemand meer iets wat je kunt bouwen.
+  const huis = S.dorp.gebouwen.find((g) => g.soort === 'huis');
   const r = T.voetVanGebouw(huis);
   S.dorp.gebouwen.push({ soort: 'kapel', x: r.x, y: r.y, voet: { b: 1, h: 1 }, klaar: false });
   S.dorp.gebouwen.push({ soort: 'put', x: r.x + 1, y: r.y, voet: { b: 1, h: 1 }, klaar: true });
   S.dorp.gebouwen.push({ soort: 'visser', x: 0, y: 0, voet: { b: 3, h: 3 }, klaar: false });
   assert.equal(id(S), 'gezin', 'alles wordt gebouwd: niets te doen');
   // De spelregel "Wensen" op het dorp als geheel: geen wensen per huis, dus ook geen raad erover.
-  const S2 = metRaadsman(naEenNacht(gehucht(), 40.5));
+  const S2 = metRaadsman(naEenNacht(dorpMetHuis(), 40.5));
   assert.equal(id(S2), 'wens');
   zonderWensen(() => {
     T.tikBehoeftenDag(S2.dorp, 41);
@@ -363,10 +371,10 @@ test('de wensen: wat je nu niet kunt doen, zegt de raad niet; de winter en de sp
 });
 
 test('na de laatste trede is er geen doel meer, dus telt de raad geen mensen meer, en over een vrij erf zegt hij niets', () => {
-  const S = metRaadsman(opDag(gehucht(), 3.5));
+  const S = metRaadsman(opDag(dorp(), 3.5));
   const D = S.dorp;
   const raadVan = (id) => T.RADEN.find((r) => r.id === id);
-  assert.ok(T.volgendeTrede(D), 'in het gehucht is er een trede te halen');
+  assert.ok(T.volgendeTrede(D), 'in het proefdorp is er een trede te halen');
   assert.ok(raadVan('gezin').als(D), 'dan zegt de raad wanneer het volgende gezin komt');
   while (T.volgendeTrede(D)) D.trede = T.volgendeTrede(D);
   // Het winnen is op 11 okt weggehaald (js/einde.js): na de laatste trede vraagt niets meer om mensen.

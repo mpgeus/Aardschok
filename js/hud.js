@@ -725,7 +725,7 @@
   function hooiVooruit(S, weides) {
     const VI = T.VEE_INSTELLINGEN;
     if (!VI.winterzorg || !weides.length) return '';
-    const hooi = weides.reduce((n, v) => n + v.b * v.h * T.hooiPerTegel(v, T.boerVanVeld(S.dorp, v)), 0);
+    const hooi = weides.reduce((n, v) => n + v.b * v.h * T.hooiPerTegel(v), 0);
     const koeien = Math.floor(hooi / (T.winterLengte() * (VI.hooiPerDag.koe || 1)));
     const nu = T.veeVan(S.dorp).filter((e) => e.dier === 'koe').length;
     return ` ${T.t('{n|That meadow gives|Those # meadows give} about {hooi} in {maand}: enough for {koeien|# cow|# cows} through the winter (a calf counts as half), and you now have {nu}.', {
@@ -873,10 +873,7 @@
       );
     }).join('');
     const namen = T.NAAM_OPTIES.map((id) => {
-      // Wie een boer nu is en wat hij kan (js/boeren.js), zoals het poppetje het in dit spel heeft.
-      const e = T.S && T.S.wereld && T.S.wereld.wezens.find((x) => x.wie === id);
-      const over = e ? T.overBoerTekst(e) : '';
-      const wie = id === 'heer' ? T.t('the lord, who has no name by default') : over;
+      const wie = id === 'heer' ? T.t('the lord, who has no name by default') : '';
       const leeg = id === 'heer' ? T.t('the lord') : T.standaardNaam(id);
       return (
         `<label class="naam-rij"><input type="text" maxlength="30" data-naam="${id}" value="${veilig(T.OPTIES_NU.namen[id] || '')}" placeholder="${veilig(leeg)}">` +
@@ -901,10 +898,7 @@
       `<button class="venster-sluit" data-actie="sluit" title="${T.t('Close (Esc)')}">✕</button></div>` +
       `<p class="venster-staat">${T.t('What you change applies at once, even in the middle of a game, and the browser remembers it. The default is what Marcel chose.')}</p>` +
       `<div class="kop">${T.t('The rules')}</div>${keuzes}` +
-      `<div class="kop">${T.t('Names, and who the farmers are')}</div><div class="namen">${namen}</div>` +
-      (T.lootBoeren && T.BOEREN_INSTELLINGEN && T.BOEREN_INSTELLINGEN.loten
-        ? `<div class="regels-voet"><button data-actie="loot">${T.t('Draw the farmers again')}</button><span>${T.t('A different character and different traits, right now.')}</span></div>`
-        : '') +
+      `<div class="kop">${T.t('Names')}</div><div class="namen">${namen}</div>` +
       `<div class="kop">${T.t('Workbench: all the numbers')}</div>` +
       `<p class="venster-staat">${T.t('Every number from the rules. What you set here goes before what a rule above sets; ↺ puts it back.')}</p>${werkbank}` +
       `<div class="regels-voet"><button data-actie="terug">${T.t('Everything back to the default')}</button>` +
@@ -963,9 +957,6 @@
       T.ui.sluitSpelregels(S);
     } else if (b.dataset.actie === 'terug') {
       T.optiesTerug(S);
-      toonSpelregels();
-    } else if (b.dataset.actie === 'loot') {
-      T.lootBoeren(S.dorp);
       toonSpelregels();
     } else if (b.dataset.optie) {
       T.zetOptie(b.dataset.optie, b.dataset.keuze, S);

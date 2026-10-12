@@ -6,29 +6,24 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+const { proefDorp } = require('./grond.cjs');
 
 T.ui = new Proxy({}, { get: () => () => undefined });
 
-// Het ontworpen gehucht, met een vast zaad, op `dag` (0 is 1 lentemaand, zeven uur 's ochtends is 7/24 erbij). Niemand
-// komt de schout zoeken met een voorval: dat haalt een boer van zijn land, en dat hoort niet bij deze toetsen.
-function gehucht(dag) {
+// Het proefdorp (test/grond.cjs), op `dag` (0 is 1 lentemaand, zeven uur 's ochtends is 7/24 erbij). Niemand komt de
+// schout zoeken met een voorval: dat haalt een boer van zijn land, en dat hoort niet bij deze toetsen. De akkers zijn
+// bezaaid (het proefdorp is van dag 2, wat de boeren dan nog zaaien staat in `ongezaaid`; het veldwerk loopt over de
+// tegels waar gezaaid is, T.veldwerkTegels), en de boeren hebben hun akkers (T.werkDeBoerenBij, anders pas na de eerste
+// nacht).
+function dorpOp(dag, opties) {
   // Deze toetsen gaan niet over het weer: er wordt gezaaid op 1 lentemaand, ook als het die dag regent (vraag 144, 1).
   T.VELDEN_INSTELLINGEN.nietInDeRegen = false;
-  const echt = console.warn;
-  const toeval = Math.random;
-  let n = 11;
-  console.warn = () => {};
-  Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
-  const S = { kalender: T.nieuweKalender() };
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht'));
-  } finally {
-    console.warn = echt;
-    Math.random = toeval;
-  }
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
+  const { S, D, akkers } = proefDorp(T, opties);
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() });
+  for (const a of akkers) a.ongezaaid.clear();
+  T.werkDeBoerenBij(D);
   S.kalender.dag = dag;
-  S.dorp.gebouwenDag = Math.floor(dag);
+  D.gebouwenDag = Math.floor(dag);
   return S;
 }
 
@@ -72,7 +67,7 @@ const opZijnLand = (S, e) => {
 const datumVan = (S) => T.datumVanDag(S.kalender.dag);
 
 test('wat een boer vandaag doet: zaaien, wieden, maaien (dat is de oogst), mest, spitten en sprokkelen', () => {
-  const S = gehucht(1 + 9 / 24); // 2 lentemaand
+  const S = dorpOp(1 + 9 / 24); // 2 lentemaand
   const D = S.dorp;
   const e = boerenVan(S)[0];
   const op = (dag) => {
@@ -106,54 +101,54 @@ test('wat een boer vandaag doet: zaaien, wieden, maaien (dat is de oogst), mest,
 });
 
 test('de tegels van zijn werk: zijn akkers rij voor rij, heen en terug, elke tegel één keer', () => {
-  const S = gehucht(1 + 9 / 24);
+  const S = dorpOp(1 + 9 / 24);
   for (const e of boerenVan(S)) {
     const lijst = T.veldwerkTegels(S.wereld, e, 'zaaien');
     const akkers = e.werkAkkers.filter((v) => T.bestemmingVan(v) === 'akker');
     const tegels = akkers.reduce((n, v) => n + v.b * v.h, 0);
-    assert.equal(lijst.length, tegels, `${e.wie}: al zijn akkertegels`);
-    assert.equal(new Set(lijst.map((t) => t.x + ',' + t.y)).size, lijst.length, `${e.wie}: elke tegel één keer`);
+    assert.equal(lijst.length, tegels, `${e.naam}: al zijn akkertegels`);
+    assert.equal(new Set(lijst.map((t) => t.x + ',' + t.y)).size, lijst.length, `${e.naam}: elke tegel één keer`);
     for (let i = 1; i < lijst.length; i++) {
       const zelfdeVeld = T.veldOp(S.wereld, lijst[i].x, lijst[i].y) === T.veldOp(S.wereld, lijst[i - 1].x, lijst[i - 1].y);
-      if (zelfdeVeld) assert.equal(T.afstand(lijst[i], lijst[i - 1]), 1, `${e.wie}: op een veld steeds de tegel ernaast`);
+      if (zelfdeVeld) assert.equal(T.afstand(lijst[i], lijst[i - 1]), 1, `${e.naam}: op een veld steeds de tegel ernaast`);
     }
   }
 });
 
 test('een dag zaaien: hij loopt naar zijn akker, zaait tegel voor tegel, schaft op de akker, en slaapt thuis', () => {
   zonderVoorvallen(() => {
-    const S = gehucht(1 + 7 / 24);
+    const S = dorpOp(1 + 7 / 24);
     const boeren = boerenVan(S);
     totUur(S, 1, 10);
     for (const e of boeren) {
-      assert.ok(opZijnLand(S, e), `${e.wie} staat om tien uur op zijn land (${e.tx},${e.ty})`);
-      assert.equal(e.werkt && e.werkt.soort, 'zaaien', `${e.wie} zaait`);
-      assert.ok(!T.kanPraten(S, S.dorp, e, 'werk'), `${e.wie} maakt geen praatje onder het werk`);
-      assert.ok(!T.magOpzij(S, e), `${e.wie} gaat niet opzij`);
+      assert.ok(opZijnLand(S, e), `${e.naam} staat om tien uur op zijn land (${e.tx},${e.ty})`);
+      assert.equal(e.werkt && e.werkt.soort, 'zaaien', `${e.naam} zaait`);
+      assert.ok(!T.kanPraten(S, S.dorp, e, 'werk'), `${e.naam} maakt geen praatje onder het werk`);
+      assert.ok(!T.magOpzij(S, e), `${e.naam} gaat niet opzij`);
     }
     const voor = boeren.map((e) => e.veldwerk.gedaan);
     totUur(S, 1, 12.5);
     for (const e of boeren) {
-      assert.ok(opZijnLand(S, e), `${e.wie} schaft op zijn akker`);
-      assert.ok(e.werkt && e.werkt.rust, `${e.wie} staat even`);
+      assert.ok(opZijnLand(S, e), `${e.naam} schaft op zijn akker`);
+      assert.ok(e.werkt && e.werkt.rust, `${e.naam} staat even`);
     }
     totUur(S, 1, 16);
-    boeren.forEach((e, i) => assert.ok(e.veldwerk.gedaan > voor[i] + 5, `${e.wie} zaaide door na de schaft (${e.veldwerk.gedaan})`));
+    boeren.forEach((e, i) => assert.ok(e.veldwerk.gedaan > voor[i] + 5, `${e.naam} zaaide door na de schaft (${e.veldwerk.gedaan})`));
     totUur(S, 1, 19);
-    for (const e of boeren) assert.equal(e.werkt, null, `${e.wie} werkt 's avonds niet`);
+    for (const e of boeren) assert.equal(e.werkt, null, `${e.naam} werkt 's avonds niet`);
     totUur(S, 1, 24); // wie 's avonds naar de herberg ging (js/herberg.js), is dan ook thuis
-    for (const e of boeren) assert.ok(e.binnen, `${e.wie} slaapt thuis (${e.tx},${e.ty})`);
+    for (const e of boeren) assert.ok(e.binnen, `${e.naam} slaapt thuis (${e.tx},${e.ty})`);
   });
 });
 
 test('zaaien doet hij één keer over al zijn akkers, en dan wiedt hij; de boerin en de grote kinderen helpen alleen bij het zaaien', () => {
   zonderVoorvallen(() => {
-    const S = gehucht(1 + 7 / 24);
+    const S = dorpOp(1 + 7 / 24);
     const D = S.dorp;
     const boeren = boerenVan(S);
     totUur(S, 1, 10);
     const helpers = S.wereld.wezens.filter((h) => T.helpAnker(D, h));
-    assert.ok(helpers.length >= 3, `${helpers.length} helpen bij het zaaien`);
+    assert.ok(helpers.length >= boeren.length, `${helpers.length} helpen bij het zaaien, bij ${boeren.length} boeren`); // minstens de boerin van elk gezin
     for (const h of helpers) {
       const p = T.bewonerVan(D, h);
       assert.equal(p.huis.soort, 'boerderij', 'van een boerderij');
@@ -166,8 +161,8 @@ test('zaaien doet hij één keer over al zijn akkers, en dan wiedt hij; de boeri
     totUur(S, 9, 10);
     const jaar = datumVan(S).jaar;
     for (const e of boeren) {
-      assert.equal(e.veldwerk.klaar.zaaien, jaar, `${e.wie} is klaar met zaaien`);
-      assert.equal(e.werkt && e.werkt.soort, 'wieden', `${e.wie} wiedt nu`);
+      assert.equal(e.veldwerk.klaar.zaaien, jaar, `${e.naam} is klaar met zaaien`);
+      assert.equal(e.werkt && e.werkt.soort, 'wieden', `${e.naam} wiedt nu`);
     }
     assert.equal(S.wereld.wezens.filter((h) => T.helpAnker(D, h)).length, 0, 'bij het wieden helpt niemand');
   });
@@ -175,15 +170,15 @@ test('zaaien doet hij één keer over al zijn akkers, en dan wiedt hij; de boeri
 
 test('in de winter sprokkelt hij aan de bosrand, en brengt hij een bundel hout naar huis', () => {
   zonderVoorvallen(() => {
-    const S = gehucht(275 + 7 / 24); // 6 wintermaand
+    const S = dorpOp(275 + 7 / 24); // 6 wintermaand
     const w = S.wereld;
     const D = S.dorp;
     const alle = boerenVan(S);
     // Een bosrand is de rand van een echt stuk bos, met de bomen achter hem; wie er geen in de buurt heeft, blijft bij
     // zijn boerderij.
     const boeren = alle.filter((e) => T.bosrandBij(D, e));
-    assert.ok(boeren.length >= 3, `${boeren.length} boeren hebben bos in de buurt`);
-    for (const e of alle) if (!boeren.includes(e)) assert.equal(T.veldwerkVandaag(D, e, datumVan(S)), 'dorsen', `${e.wie} dorst bij zijn boerderij`);
+    assert.ok(boeren.length >= 1, `${boeren.length} boeren hebben bos in de buurt`);
+    for (const e of alle) if (!boeren.includes(e)) assert.equal(T.veldwerkVandaag(D, e, datumVan(S)), 'dorsen', `${e.naam} dorst bij zijn boerderij`);
     const boom = (x, y) => T.NATUUR.bos.telt(w, x, y, T.voorwerpOp(w, x, y));
     const aanDeBosrand = (e) => boom(e.tx - 1, e.ty) || boom(e.tx, e.ty - 1) || boom(e.tx - 1, e.ty - 1);
     const gezien = new Map(boeren.map((e) => [e, { rapen: false, bundel: false }]));
@@ -193,7 +188,7 @@ test('in de winter sprokkelt hij aan de bosrand, en brengt hij een bundel hout n
         const g = gezien.get(e);
         if (e.werkt && e.werkt.soort === 'sprokkelen' && e.werkt.tot != null) {
           g.rapen = true;
-          assert.ok(aanDeBosrand(e), `${e.wie} raapt hout met een boom achter zich (${e.tx},${e.ty})`);
+          assert.ok(aanDeBosrand(e), `${e.naam} raapt hout met een boom achter zich (${e.tx},${e.ty})`);
           assert.equal(e.draagt, 'bundel');
         }
         if (e.draagt === 'bundel' && !e.werkt) g.bundel = true;
@@ -201,16 +196,16 @@ test('in de winter sprokkelt hij aan de bosrand, en brengt hij een bundel hout n
     }
     for (const e of boeren) {
       const g = gezien.get(e);
-      assert.ok(g.rapen && g.bundel, `${e.wie} raapte hout en bracht het naar huis`);
-      assert.equal(e.draagt, null, `${e.wie} legde de bundel thuis neer`);
-      assert.equal(e.veldwerk.klaar.sprokkelen, 275, `${e.wie} sprokkelde vandaag`);
+      assert.ok(g.rapen && g.bundel, `${e.naam} raapte hout en bracht het naar huis`);
+      assert.equal(e.draagt, null, `${e.naam} legde de bundel thuis neer`);
+      assert.equal(e.veldwerk.klaar.sprokkelen, 275, `${e.naam} sprokkelde vandaag`);
     }
   });
 });
 
 test('wie werkt, dwaalt niet weg; wie met de schout praat of een voorval brengt, houdt op', () => {
   zonderVoorvallen(() => {
-    const S = gehucht(45 + 7 / 24); // 16 grasmaand: wieden
+    const S = dorpOp(45 + 7 / 24); // 16 grasmaand: wieden
     const D = S.dorp;
     totUur(S, 45, 10);
     const [a, b] = boerenVan(S);
@@ -229,13 +224,13 @@ test('wie werkt, dwaalt niet weg; wie met de schout praat of een voorval brengt,
 
 test('wat hij doet, staat op zijn poppetje, en blijft na bewaren en laden hetzelfde', () => {
   zonderVoorvallen(() => {
-    const S = gehucht(45 + 7 / 24);
+    const S = dorpOp(45 + 7 / 24);
     totUur(S, 45, 10);
     const e = boerenVan(S)[0];
     assert.ok(e.werkt && e.veldwerk);
     const L = T.leesSpel(T.bewaarSpel(S, { nu: 0 }));
     assert.ok(L.gelukt, L.reden);
-    const f = L.staat.wereld.wezens.find((x) => x.wie === e.wie);
+    const f = L.staat.wereld.wezens.find((x) => x.naam === e.naam);
     assert.deepEqual(f.werkt, e.werkt);
     assert.deepEqual(f.veldwerk, e.veldwerk);
   });

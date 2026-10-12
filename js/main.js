@@ -1151,7 +1151,7 @@
         const e = p.wezen;
         const a = e && T.dagAnker(S.dorp, e);
         return {
-          wie: p.schout ? 'de schout' : p.wie ? `${T.naamVanMens(p.wie)}${T.MENSEN[p.wie] && T.MENSEN[p.wie].karakter ? ' (boer)' : ''}` : T.overBewonerTekst(S.dorp, e, p), // geen tekst
+          wie: p.schout ? 'de schout' : p.wie ? `${T.naamVanMens(p.wie)}${T.isBoer(S.dorp, p) ? ' (boer)' : ''}` : T.overBewonerTekst(S.dorp, e, p), // geen tekst
           leeftijd: p.leeftijd, huis: p.huis ? p.huis.huis || `${p.huis.soort} ${p.huis.x},${p.huis.y}` : '-',
           werk: p.werk ? `${p.werk.soort} ${p.werk.x},${p.werk.y}` : '-',
           staat: e ? (e.binnen ? 'binnen' : `${e.tx},${e.ty}`) : p.komt ? 'onderweg hierheen' : '-', // geen tekst

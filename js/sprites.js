@@ -265,16 +265,6 @@
     return n ? 'dorpeling' + S.dorpelingVariant(zaad, n) : null;
   }
 
-  // Het vel van een boer met een karakter (js/boeren.js zet e.karakter; ontwerp/beeld.md, "Een
-  // gezicht per karakter"): zijn lijf met het karakter erachter (boer-zanger, boerin-weduwe) als
-  // dat vel er is, en anders gewoon zijn lijf. Zo blijft een karakter dat nog geen eigen vel heeft
-  // de gewone boer of boerin. `heeft` vraagt of een vel bestaat (standaard S.figuurGegevens), zodat
-  // dit zonder scherm te toetsen is.
-  S.velMetKarakter = (vel, karakter, heeft = S.figuurGegevens) => {
-    const eigen = karakter ? `${vel}-${karakter}` : null;
-    return eigen && heeft(eigen) ? eigen : vel;
-  };
-
   // ---------------------------------------------------------------- vloeren, muren, voorwerpen
 
   // Een vloer is een lap van twee bij twee tegels, zodat de steen niet elke tegel herhaalt. Er
@@ -524,8 +514,8 @@
   };
 
   // Hoe hoog boven zijn voeten de halsband om de nek van dit wezen komt, in pixels. Gemeten op de
-  // vellen van wie aan de paal kan (de boer en de boerin, en hun karakters zoals boer-zanger:
-  // schandpaal.cjs). Voor een ander vel: die van de boer.
+  // vellen van wie aan de paal kan (de boer en de boerin: schandpaal.cjs). Voor een ander vel: die
+  // van de boer.
   S.nekHoogte = function (e) {
     const t = gegevens && gegevens.schandpaal;
     if (!t) return 0;
@@ -831,8 +821,8 @@
   // Welke figuur een wezen draagt. De schout draagt het vel van een gewone dorpeling, net als de
   // menigte; welk, kiest zijn zaad. (Tot 25 sep was hij de tovenaar van het oude spel.) Wie nog geen
   // eigen vel heeft, mag er een lenen (T.MENSEN, vel: 'boer'): zo lopen de vijf boeren van het
-  // gehucht rond op het vel van de boer en de boerin. Zie ontwerp/werklijst.md, fase B2b. Een boer
-  // met een karakter draagt dat karakter op zijn lijf (boer-zanger), als dat vel er al is. Een dier
+  // gehucht rond op het vel van de boer en de boerin. Zie ontwerp/werklijst.md, fase B2b. (Tot ronde 2
+  // van het snoeien droeg een boer met een karakter dat op zijn lijf, boer-zanger.) Een dier
   // (js/vee.js) heeft geen vel onder zijn soort, maar een per kleur: `vel` is koe0, koe1 of koe2.
   // Een bewoner met een uiterlijk (vraag 145; T.kiesUiterlijk in js/bewoners.js) draagt het vel van dat uiterlijk
   // (boer-u7, meisje-u3), als het er is; anders het vel van zijn leeftijd.
@@ -842,7 +832,7 @@
     if (S.figuurGegevens(naam) || !e.vel) return naam;
     // Alleen een bewoner heeft een uiterlijk; het gereedschap (gereedschap/wereld.html) laadt js/bewoners.js niet.
     const eigen = e.bewoner ? S.inKleren(e, S.figuurVanUiterlijk(e, T.UITERLIJK_LIJF[e.vel])) : null;
-    return eigen || S.velMetKarakter(e.vel, e.karakter);
+    return eigen || e.vel;
   }
   // Het vel van een uiterlijk in de kleren van zijn stand (vraag 149; T.klerenVan in js/bewoners.js): boer-u7-arm of
   // boerin-u3-deftig, als dat vel er is; anders zijn gewone. Alleen staand en lopend: het werk gaat in de gewone kleren.

@@ -94,16 +94,6 @@
       ],
     },
     {
-      id: 'boeren', naam: T.t('Who the farmers are'), standaard: 'geloot',
-      uitleg: T.t('Their character and what they can do: how fast they reap, how much their field gives, how thriftily they sow, and how the village sees them.'),
-      keuzes: [
-        { id: 'geloot', naam: T.t('Drawn by lot'), zet: { 'BOEREN_INSTELLINGEN.loten': true }, // geen tekst
-          uitleg: T.t('Different in every new game: one reaps faster than another, and you do not know in advance who the widow is.') },
-        { id: 'vast', naam: T.t('Fixed'), zet: { 'BOEREN_INSTELLINGEN.loten': false }, // geen tekst
-          uitleg: T.t('As they were first written (Nicholas sings, Alice is a widow, ...), and all equally good.') },
-      ],
-    },
-    {
       id: 'graanVoorDeHeer', naam: T.t('What the lord asks of the grain'), standaard: 'deel',
       uitleg: T.t('The grain on his bill.'),
       keuzes: [
@@ -682,7 +672,6 @@
     { naam: T.t('The empty start'), blok: 'BEGIN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Helping build'), blok: 'BOUWEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Farmers from nothing'), blok: 'BOERDERIJ_INSTELLINGEN' }, // geen tekst
-    { naam: T.t('The farmers'), blok: 'BOEREN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The fields'), blok: 'VELDEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Fieldwork'), blok: 'VELDWERK_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Animals in the forest'), blok: 'BEESTEN_INSTELLINGEN' }, // geen tekst
@@ -785,8 +774,6 @@
       if (eigen && eigen !== standaard.namen[id]) nu.namen[id] = eigen;
     }
     T.OPTIES_NU = nu;
-    // Geloot of vast (js/boeren.js): de poppetjes die er al staan, meteen bijwerken.
-    if (S && S.dorp && T.pasLotToe) T.pasLotToe(S.dorp);
     return nu;
   };
 
@@ -1091,9 +1078,6 @@
     raadsmanNa: T.t('advisor after'),
     kansPerAvond: T.t('chance per evening'),
     kansWinter: T.t('chance in winter'),
-    karakters: T.t('characters'),
-    drinker: T.t('drinker'),
-    vrome: T.t('pious'),
     verstWeg: T.t('furthest away'),
     minstensUren: T.t('least hours'),
     groteHerberg: T.t('large inn'),
@@ -1176,6 +1160,7 @@
     soldatenOntevreden: T.t('discontent from soldiers'),
     soldatenTot: T.t('soldiers until'),
     schandpaalDagen: T.t('pillory days'),
+    schandpaalKost: T.t('pillory cost'),
     wrokDagen: T.t('grudge days'),
     wachtDagen: T.t('waiting days'),
     waarde: T.t('value'),
@@ -1262,16 +1247,8 @@
     rekenen: T.t('figures'),
     bouwen: T.t('building'),
     vechten: T.t('fighting'),
-    zanger: T.t('singer'),
     verban: T.t('banish'),
     gezin: T.t('family'),
-    weduwe: T.t('widow'),
-    woekeraar: T.t('moneylender'),
-    vroedvrouw: T.t('midwife'),
-    heethoofd: T.t('hothead'),
-    roddelaar: T.t('gossip'),
-    grijsaard: T.t('the elder'),
-    nieuwkomer: T.t('newcomer'),
     marge: T.t('margin'),
     bijHuis: T.t('at his house'),
     slechtNaast: T.t('badly off by'),
@@ -1376,10 +1353,7 @@
     veldMax: T.t('largest field'),
     veldSmal: T.t('narrowest side'),
     veldAfstand: T.t('field distance'),
-    factor: T.t('factor'),
-    opbrengst: T.t('yield'),
     zaaien: T.t('sowing'),
-    aanzien: T.t('standing'),
     // De velden en het veldwerk
     weideNaHonger: T.t('meadow after hunger'),
     beginVruchtbaarheid: T.t('starting fertility'),
@@ -1505,7 +1479,7 @@
   const NAAM_VAN_PAD = {
     'KOORTS_INSTELLINGEN.begin': T.t('ill at the start'), // geen tekst
     'LICHT_INSTELLINGEN.kracht': T.t('lamp power'), // geen tekst
-    'RAADSMAN_INSTELLINGEN.gewoon': T.t('ordinary'), // geen tekst
+    'RAADSMAN_INSTELLINGEN.kiest': T.t('how the advisor weighs'), // geen tekst
     'BEESTEN_INSTELLINGEN.groot': T.t('splits at size'), // geen tekst
     'BEESTEN_INSTELLINGEN.jager.hooguit': T.t('pack size limit'), // geen tekst
     'MAKER_INSTELLINGEN.b': T.t('width'), // geen tekst

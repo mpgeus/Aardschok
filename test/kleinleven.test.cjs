@@ -4,21 +4,12 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+const { proefDorp } = require('./grond.cjs');
 T.ui = new Proxy({}, { get: () => () => undefined });
 
+// Het proefdorp (test/grond.cjs): twee boerderijen met hun boer, hutten voor de rest, en het huis van de schout.
 function gehucht() {
-  const echt = console.warn;
-  const toeval = Math.random;
-  let n = 7;
-  console.warn = () => {};
-  Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
-  const S = { kalender: T.nieuweKalender() };
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht'));
-  } finally {
-    console.warn = echt;
-    Math.random = toeval;
-  }
+  const { S } = proefDorp(T);
   Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
   T.S = S;
   return S;
@@ -80,7 +71,7 @@ test('het water: een beek stroomt langs zijn lengte, en wat geen beek is, ligt s
       else assert.ok(s.stil, `${x},${y} ligt stil`);
     }
   }
-  assert.ok(water > 0, 'het gehucht heeft water');
+  assert.ok(water > 0, 'het proefdorp heeft water');
 });
 
 test('twee kinderen die vrij zijn, gaan soms samen spelen, rennen om de plek, en houden op als het om is', () => {

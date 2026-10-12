@@ -51,23 +51,16 @@ test('de maker legt de nieuwe soorten, met een vaste keus per tegel: verder ligt
 });
 
 test('een kaart leest een gid zoals Tiled: een vel dat groeide, valt niet over het vel erna', () => {
-  // het ontworpen gehucht heeft de bomen op 601 en de begroeiing op 633, van toen de bomen 32 tegels hadden
-  const kaart = T.KAARTEN.gehucht;
+  // het proefbos heeft de bomen op 601 en de begroeiing op 633, van toen de bomen 32 tegels hadden (het ontworpen gehucht,
+  // dat dezelfde nummers had, is op 12 okt uit het spel gegaan: snoeien, ronde 2, stap 3)
+  const kaart = T.KAARTEN.proefbos;
   const sets = kaart.tilesets.map((t) => [t.source.split('/').pop(), t.firstgid]);
   const bomen = sets.find(([n]) => n === 'bomen.tsx')[1];
   const begroeiing = sets.find(([n]) => n === 'begroeiing.tsx')[1];
   assert.ok(vel.tiles.length > begroeiing - bomen, 'de bomen hebben nu meer tegels dan er plaats was');
-  const S = { kalender: T.nieuweKalender() };
-  const echt = console.warn;
-  console.warn = () => {};
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht'));
-  } finally {
-    console.warn = echt;
-  }
-  const w = S.wereld;
+  const w = T.laadKaart(kaart, T.BETEKENIS.proefbos);
   const begroeid = w.voorwerpen.filter((v) => v.vel === 'begroeiing');
-  assert.ok(begroeid.length > 0, 'de begroeiing van het gehucht komt nog uit het vel van de begroeiing');
+  assert.ok(begroeid.length > 0, 'de begroeiing van het proefbos komt nog uit het vel van de begroeiing');
   for (const v of w.voorwerpen.filter((v) => v.vel === 'bomen')) assert.ok(!vel.tiles[v.id].vorm, `${v.soort} op (${v.x}, ${v.y}) is een vorm, geen eerste tekening`);
 });
 

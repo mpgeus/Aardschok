@@ -152,7 +152,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   tekst in de code is): een gesprek doet dat in `T.vulWoordenIn` (`js/gesprek.js`), waar alles langs komt wat een gesprek
   toont, en een quest in `js/quest.js`. `npm run teksten` leest die zinnen uit de tabel (`GEGEVENS` in
   `gereedschap/teksten.cjs`: per tabel welke velden de speler ziet, en wat alleen voor de schrijver is, zoals de situaties),
-  zodat ze in `taal/bron.js` staan. Een tabel die gewone code is (`T.VOORVALLEN`, `T.OORZAKEN`, `T.KARAKTERS`), krijgt
+  zodat ze in `taal/bron.js` staan. Een tabel die gewone code is (`T.VOORVALLEN`, `T.OORZAKEN`), krijgt
   gewoon `T.t`.
 
 ### js/naam.js: de naam van het spel
@@ -162,7 +162,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   verandert nooit mee. `test/naam.test.cjs` bewaakt dat de naam nergens anders staat. `T.STAND` is leeg, behalve in
   een proefversie (`npm run proefversie` zet er de datum en de commit in).
 
-### js/tijd.js, js/dag.js, js/voorraad.js, js/gebouwen.js, js/behoeften.js, js/handel.js, js/heer.js, js/boeren.js, js/vee.js, js/opties.js, js/hud.js, js/brieven.js, js/gebied.js: het gehucht verder
+### js/tijd.js, js/dag.js, js/voorraad.js, js/gebouwen.js, js/behoeften.js, js/handel.js, js/heer.js, js/vee.js, js/opties.js, js/hud.js, js/brieven.js, js/gebied.js: het gehucht verder
 
 - **Het nieuwe spel (het gehucht), verder:** `js/tijd.js` (de kalender met oude maandnamen en het
   uur: een dag duurt vijf minuten bij 1×, een maand dertig dagen; eigen klok naast `S.tijd`; de
@@ -194,10 +194,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.GEBOUWEN[soort].heer`, `T.gevolgVanBetaling` voor venster en knop, de straffen tot je ambt
   kwijt, de gunst na het betalen, `T.gunstNaSchatting`; zaaien en braak staan in `js/akkers.js`; sinds 11 okt, vraag 151, optie 1, deel B1, kijkt hij
   niet meer op een rapport en kent hij geen argwaan, toeslag of rond kijken meer;
-  de inner zelf ging er op 11 okt ook uit), `js/boeren.js` (wie de boeren zijn, geloot per
-  spel: een karakter uit `T.KARAKTERS` in `js/mensen.js`, met een eigen gesprek onder dezelfde naam,
-  en de eigenschappen maaien, opbrengst, zaaien en aanzien; de regels vragen `T.boerFactor` en
-  `T.aanzienVan`, het scherm `T.overBoerTekst`), `js/vee.js` (het vee: `T.VEE` en `T.maakDier`,
+  de inner zelf ging er op 11 okt ook uit; de schandpaal kost het dorp `schandpaalKost`, en er kan alleen een boer met
+  een naam op de kaart aan, `e.wie`, dus in het lege begin alleen de schout), `js/vee.js` (het vee: `T.VEE` en `T.maakDier`,
   koeien en schapen die grazen, staan en liggen, `T.rustVanDier`; velden naast elkaar als één weide,
   `T.weideGroepen`; waar een dier graast, op een weide of op de meent (de heide), `T.graaslandVan`;
   het hooi in de winter, `T.voerHooi`; slachten, `T.slacht` en `T.slachtVoorstel`, en op 1 slachtmaand doen de boeren
@@ -717,8 +715,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   De bouwers pakken het op", en "De karakters zetten we even opzij"; `spel.md`, "Zo werkt het lege begin nu"). Alleen in
   het lege begin (`D.begin`). **De boer:** een boerderij is een thuis voor één gezin (uit het kamp,
   `T.verhuisUitHetKamp` in `js/begin.js`; is het kamp leeg, dan elke nacht een gezin uit een hut, `bemanDeBoerderijen`:
-  het gezin met de minste mensen die al werk hebben), en het hoofd van dat gezin is de boer (`T.boerVan`), zonder
-  karakter of eigenschappen (het lot van `js/boeren.js` geldt alleen voor de boeren van de kaart). Elke nacht krijgt zijn
+  het gezin met de minste mensen die al werk hebben), en het hoofd van dat gezin is de boer (`T.boerVan`; `T.isBoer(D, p)` vraagt
+  het voor de voorvallen en de raadsman), zonder karakter of eigenschappen: het lot van de boeren (`js/boeren.js`,
+  `T.KARAKTERS`) is weg sinds ronde 2 van het snoeien, stap 4 (12 okt). Elke nacht krijgt zijn
   poppetje de akkers van zijn boerderij (`T.werkDeBoerenBij`: `e.werkAkkers`, waar `js/akkers.js` en `js/veldwerk.js`
   naar kijken, zoals bij de boeren van de kaart). Een boerderij zonder akker wil geen handen
   (`T.boerderijZonderAkker`, in `T.verdeelHanden`): haar boer werkt elders of bouwt mee. **De velden:** de akker en de
@@ -839,7 +838,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 ### js/herberg.js: de herberg
 
 - `js/herberg.js`: **de herberg** (werklijst punt 2, 27 sep): wie er 's avonds heen gaat
-  (`T.herbergGasten`: naar karakter, seizoen en looptijd, en niet meer dan er bier is), het anker voor de
+  (`T.herbergGasten`: naar seizoen en looptijd, en niet meer dan er bier is), het anker voor de
   avond (`T.herbergAnker`, dat `T.dagAnker` vraagt), de afrekening elke nacht (`T.tikHerbergDag`: bier op,
   en wie er was, maakt het dorp tevredener), en de lantaarn 's avonds (`T.herbergLicht`). Het brouwen is
   gewoon werk van het gebouw (`T.GEBOUWEN.herberg.maakt`), tot er genoeg ligt, zoals elke werkplaats die iets omzet
@@ -1056,7 +1055,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.wijzigBevolking`, en elke dag `T.tikBazenDag`: het vertrouwen gaat een stukje naar de tevredenheid, vraag 106,
   stap 3). **De heer heeft één meter, de gunst** (11 okt, vraag 151, optie 1, deel B1): wat vroeger de argwaan
   veranderde (antwoorden met `doe.gunst`, de bode, de heervaart), verandert nu de gunst, en de raadsman
-  weegt hem met wat de argwaan woog (`gunst` in `T.RAADSMAN_INSTELLINGEN.karakters`). Onder 20 een waarschuwing (de brief `waarschuwing` in `js/brieven.js`, en de raad), op 0 weg (`T.ambtKwijt` met waarom, of `D.einde` met reden 'verjaagd'), maar altijd eerst
+  weegt hem met wat de argwaan woog (`gunst` in `T.RAADSMAN_INSTELLINGEN.kiest`). Onder 20 een waarschuwing (de brief `waarschuwing` in `js/brieven.js`, en de raad), op 0 weg (`T.ambtKwijt` met waarom, of `D.einde` met reden 'verjaagd'), maar altijd eerst
   de waarschuwing. De twee gezichten in de balk:
   `T.ui.toonBazen` (`js/hud.js`). De spelregel "Twee bazen"; de getallen in `T.BAZEN_INSTELLINGEN`. `T.bazenStemming`
   geeft een naam waar de regels op letten (`'boos'`, `js/tafel.js`); `T.bazenTekst` zegt hem in het Engels (*angry*).
@@ -1112,14 +1111,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 ### js/raadsman.js en js/raadsmanvenster.js: de raadsman
 
-- `js/raadsman.js`: **de raadsman** (vraag 66, 30 sep): een van de boeren (`T.isBoer` in `js/boeren.js`), met twee gelote
-  vaardigheden (`T.vaardighedenVan`: uit het zaad en zijn naam, zodat het lot van de boeren niet verandert). Is de schout
+- `js/raadsman.js`: **de raadsman** (vraag 66, 30 sep): een van de boeren (`T.isBoer` in `js/boerderij.js`), met twee
+  gelote vaardigheden (`T.vaardighedenVan`: uit het zaad van het dorp en zijn nummer). Is de schout
   weg (niet in het dorp als wie hem zoekt, gaat zoeken, of als diens tijd om is), dan beslist hij het voorval; wie je in
   het dorp niet op tijd spreekt, gaat voorbij (vraag 68, B; de spelregel "Raadsman" kan hem ook dan laten beslissen,
-  `nietGesproken`). Hij beslist met `T.raadsmanBeslist` (vanuit `js/voorvallen.js`): het antwoord dat zijn karakter het
-  meest waard vindt (`T.raadsmanKeuze`, de neigingen in `T.RAADSMAN_INSTELLINGEN.karakters`), met wat hij kan erin
-  (`T.metVaardigheden`).
-  Wie het is, staat op zijn poppetje (`e.raadsman`), want ook het maaien kijkt ernaar (`T.boerFactor`: hij maait
+  `nietGesproken`). Hij beslist met `T.raadsmanBeslist` (vanuit `js/voorvallen.js`): het antwoord dat hem het meest
+  waard is (`T.raadsmanKeuze`, met `T.RAADSMAN_INSTELLINGEN.kiest`; tot stap 4 van het snoeien naar zijn karakter), met
+  wat hij kan erin (`T.metVaardigheden`).
+  Wie het is, staat op zijn poppetje (`e.raadsman`), want ook het maaien kijkt ernaar (`T.raadsmanMaait`: hij maait
   trager). Uit wie je kiest: `T.raadsmanKandidaten`; kiezen: `T.kiesRaadsman`, in het venster Raadsman
   (`js/raadsmanvenster.js`, onder `R` en als knop in de balk; vraag 67, B). Ging er een voorval voorbij dat een
   raadsman had beslist, dan zegt de raad het (`js/raad.js`, `laatstVoorbij` in `D.voorvallen`).

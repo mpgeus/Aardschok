@@ -8,6 +8,7 @@ const assert = require('node:assert/strict');
 const HZ = require('../gereedschap/pixelart/huizen.cjs');
 const RU = require('../gereedschap/pixelart/ruines.cjs');
 const T = require('./laad.cjs').spel();
+const { proefDorp, bouwAf, dagen } = require('./grond.cjs');
 T.ui = new Proxy({}, { get: () => () => undefined });
 
 const tegels = () => T.TEGELS.huizen.tiles;
@@ -15,19 +16,9 @@ const naamVan = (v) => tegels()[v.id].naam;
 const delen = (s) => (s.delen ? s.delen.map((d) => d.spec) : [s]);
 const zonderLeeftijd = ({ knoppen, stijl, jong, fasen, ...rest }) => rest;
 
+// Het proefdorp (test/grond.cjs) op de dag die de toets kiest.
 function gehucht(dag) {
-  const echt = console.warn;
-  const toeval = Math.random;
-  let n = 7;
-  console.warn = () => {};
-  Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
-  const S = { kalender: T.nieuweKalender() };
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht'));
-  } finally {
-    console.warn = echt;
-    Math.random = toeval;
-  }
+  const { S } = proefDorp(T);
   Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
   T.S = S;
   S.kalender.dag = dag;
@@ -74,27 +65,37 @@ test('op het vel staan jong en oud met dezelfde voet en deur', () => {
   }
 });
 
-test('wat er bij het begin al staat, is oud; wat je bouwt, is jong en na twee jaar oud', () => {
+// Het lege begin heeft geen huizen die er al stonden (die waren oud, T.maakOud bij de gebouwen van een kaart; de toets dat
+// het dorp bij het begin oud was, ging op 12 okt weg met het ontworpen gehucht): in het proefdorp is alles gebouwd, dus jong.
+test('wat je bouwt, is jong en na twee jaar oud', () => {
   const dag = 40;
   const S = gehucht(dag);
   const D = S.dorp;
   const huizen = D.gebouwen.filter((g) => g.voorwerp && g.voorwerp.vel === 'huizen');
-  assert.ok(huizen.length > 5);
-  for (const g of huizen) assert.ok(T.isOudHuis(g.voorwerp), `${g.tekening} is niet oud`);
+  assert.ok(huizen.length >= 3, 'het huis van de schout, twee boerderijen en hutten');
+  for (const g of huizen) assert.ok(!T.isOudHuis(g.voorwerp), `${g.tekening} is al oud`);
   // de tekening van het gebouw blijft de jonge: de stijl, de deur en het doorgroeien merken niets
   for (const g of huizen) assert.ok(!g.tekening.endsWith(HZ.OUD));
 
   T.zetVoorraad(D, 'hout', 200);
-  // de eerste plek waar een hut past
+  // de eerste plek waar een hut past (een bouwplaats: de mensen bouwen zelf, dus hier maken we hem meteen af)
   let r = null;
   const w = D.wereld;
-  for (let y = 4; y < w.tegels.length - 4 && !(r && r.gelukt); y += 2) {
-    for (let x = 4; x < w.tegels[0].length - 4 && !(r && r.gelukt); x += 2) r = T.plaatsGebouw(D, 'hut', x, y);
+  const bereik = T.BEGIN_INSTELLINGEN.bouwBereik;
+  T.BEGIN_INSTELLINGEN.bouwBereik = 40;
+  try {
+    for (let y = 4; y < w.tegels.length - 4 && !(r && r.gelukt); y += 2) {
+      for (let x = 4; x < w.tegels[0].length - 4 && !(r && r.gelukt); x += 2) r = T.plaatsGebouw(D, 'hut', x, y);
+    }
+  } finally {
+    T.BEGIN_INSTELLINGEN.bouwBereik = bereik;
   }
   assert.ok(r.gelukt, r.reden);
   const hut = D.gebouwen[D.gebouwen.length - 1];
-  let d = dag;
-  while (!hut.klaar) T.tikGebouwenDag(D, ++d);
+  const d = dag;
+  bouwAf(T, D, hut, d);
+  dagen(T, S, d);
+  assert.ok(hut.klaar, 'vannacht komt hij klaar');
   const v = hut.voorwerp;
   assert.ok(!T.isOudHuis(v), 'een nieuwe hut is jong');
   assert.equal(v.gebouwdOp, d);

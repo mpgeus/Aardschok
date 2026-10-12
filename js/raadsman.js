@@ -1,8 +1,8 @@
 // De raadsman (werklijst vraag 64, 65 en 66; Marcel, 30 sep: "A Ja, b Nee, c Nee, wordt automatisch als de schout er
-// niet is. D prima"): een van de boeren, met zijn karakter en zijn aanzien (js/boeren.js), en twee gelote vaardigheden
-// erbij. Is de schout er niet als iemand hem met een voorval zoekt (js/voorvallen.js), dan beslist de raadsman: naar
-// zijn karakter, en wat hij kan, telt mee. Wat hij besloot, zegt een bericht. Zijn prijs: hij maait trager
-// (T.boerFactor in js/boeren.js). Regels zonder scherm; toetsen in test/raadsman.test.cjs.
+// niet is. D prima"): een van de boeren (T.isBoer, js/boerderij.js), met twee gelote vaardigheden. Is de schout er niet
+// als iemand hem met een voorval zoekt (js/voorvallen.js), dan beslist de raadsman, en wat hij kan, telt mee. Wat hij
+// besloot, zegt een bericht. Zijn prijs: hij maait trager (T.raadsmanMaait). Regels zonder scherm; toetsen in
+// test/raadsman.test.cjs.
 //
 // "Er niet" is: de schout is niet in het dorp (een ander gebied, straks op reis) als wie hem zoekt, gaat zoeken, of als
 // zijn tijd om is. Is hij in het dorp en spreekt hij hem niet op tijd, dan gaat het voorbij, ook met een raadsman
@@ -28,27 +28,12 @@
     // Wat een vaardigheid doet bij wat hij beslist (T.VAARDIGHEDEN hieronder): wie het goed kan, maakt wat slecht
     // uitvalt zoveel minder erg (0,5: de helft) en wat goed uitvalt zoveel beter; wie het slecht kan, andersom.
     vaardigheden: { rechtspreken: 0.5, zwijgen: 0.5, rekenen: 0.25, bouwen: 0.5, vechten: 0.5 },
-    // Hoe hij kiest, naar zijn karakter (T.KARAKTERS in js/mensen.js): wat een antwoord hem waard is, per procent
-    // tevredenheid (tevreden), per punt gunst van de heer (gunst), per goud (goud), per tien graan, hout,
-    // bier, ... (waren), voor iemand het bos in (verban: plus is streng, min is mild), per tien procent kans op een
-    // dode (dood), en per gezin erbij (gezin). Het antwoord dat hem het meest waard is, wint.
-    // Het gewicht van de gunst is het gewicht dat tot 11 okt de argwaan had (vraag 151, optie 1, deel B1): een
-    // antwoord dat 3% argwaan gaf, geeft nu 3 punten gunst minder, en weegt dus precies hetzelfde. Daarom is het
-    // teken omgedraaid in `waarde`: een antwoord dat gunst geeft, is hem iets waard, en een dat gunst kost, kost hem iets.
-    karakters: {
-      zanger: { tevreden: 2, gunst: 0.3, goud: 1, waren: 0.3, verban: -3, dood: 1, gezin: 1 },
-      weduwe: { tevreden: 1, gunst: 1, goud: 2, waren: 2, verban: -4, dood: 2, gezin: 1 },
-      woekeraar: { tevreden: 0.3, gunst: 1, goud: 4, waren: 1, verban: 2, dood: 0.5, gezin: 0 },
-      vroedvrouw: { tevreden: 1, gunst: 1, goud: 1, waren: 1, verban: -2, dood: 4, gezin: 2 },
-      heethoofd: { tevreden: 1, gunst: 0.3, goud: 1, waren: 0.5, verban: 5, dood: 0.5, gezin: 0 },
-      vrome: { tevreden: 1, gunst: 1, goud: 2, waren: 1, verban: -3, dood: 0.2, gezin: 1 },
-      roddelaar: { tevreden: 1.5, gunst: 0.3, goud: 1, waren: 1, verban: 1, dood: 1, gezin: 1 },
-      grijsaard: { tevreden: 1, gunst: 3, goud: 1, waren: 1, verban: 0, dood: 1, gezin: 1 },
-      nieuwkomer: { tevreden: 1, gunst: 1, goud: 1, waren: 1, verban: -4, dood: 1, gezin: 5 },
-      drinker: { tevreden: 1.5, gunst: 0.5, goud: 1, waren: 0.3, verban: 0, dood: 1, gezin: 1 },
-    },
-    // Wie geen karakter heeft (een boer zoals hij geschreven was), kiest zo.
-    gewoon: { tevreden: 1, gunst: 1, goud: 1, waren: 1, verban: 0, dood: 1, gezin: 1 },
+    // Hoe hij kiest: wat een antwoord hem waard is, per procent tevredenheid (tevreden), per punt gunst van de heer
+    // (gunst), per goud (goud), per tien graan, hout, bier, ... (waren), voor iemand het bos in (verban: plus is streng,
+    // min is mild), per tien procent kans op een dode (dood), en per gezin erbij (gezin). Het antwoord dat hem het meest
+    // waard is, wint. Tot ronde 2 van het snoeien (stap 4, 12 okt) koos elke boer naar zijn geloot karakter (de zanger
+    // gul, het heethoofd streng); het lot is weg, dus kiest elke raadsman zo.
+    kiest: { tevreden: 1, gunst: 1, goud: 1, waren: 1, verban: 0, dood: 1, gezin: 1 },
   };
   const IN = () => T.RAADSMAN_INSTELLINGEN;
 
@@ -62,32 +47,20 @@
     vechten: { goed: T.t('can fight'), slecht: T.t('timid'), waarop: T.t('the chance that someone dies'), op: ['sterfkans'] },
   };
 
-  // Hoe elk karakter beslist, in een paar woorden, voor het venster ("Decides generously: ..."): wat de neigingen
-  // hierboven (karakters) zeggen.
-  T.RAADSMAN_NEIGINGEN = {
-    zanger: T.t('generously: a feast is never too big, and the lord may hear of it'),
-    weduwe: T.t('frugally and mildly: nobody into the forest, and a small feast'),
-    woekeraar: T.t('by the money: a fine goes into the chest'),
-    vroedvrouw: T.t('with care: better that nobody dies, whatever it costs'),
-    heethoofd: T.t('harshly: whoever steals goes into the forest'),
-    vrome: T.t('piously: prayer helps too, and nobody into the forest'),
-    roddelaar: T.t('with a loose tongue, the lord included'),
-    grijsaard: T.t('cautiously: the lord must be content'),
-    nieuwkomer: T.t('hospitably: strangers are welcome, and nobody into the forest'),
-    drinker: T.t('sociably: the village must be happy, whatever it costs'),
-  };
   // Wat goed uitvalt voor het dorp: meer tevredenheid, gunst, goud en waren; en een kans op een dode nooit.
   const goedVoorHetDorp = (wat, n) => (wat === 'sterfkans' ? false : n > 0);
   const WAREN = T.VAARDIGHEDEN.rekenen.op.filter((w) => w !== 'goud').concat('hout');
 
   const dagNu = (D) => Math.floor(D.kalender ? D.kalender.dag : 0);
   const naam = (p) => T.naamVanBewoner(p);
-  const isBoer = (p) => !!p && T.isBoer(p.wezen);
   const hier = (D, p) => !!(D.bewoners && D.bewoners.mensen.includes(p)) && !p.weg && !!p.wezen && !p.wezen.dood;
 
   // S.raadsman: wat hij besloot, het laatste achteraan: [{ dag, id, door, wie, antwoord, prijs }]. Wíé raadsman is,
-  // staat op zijn poppetje (e.raadsman), want daar kijkt ook het maaien naar (T.boerFactor).
+  // staat op zijn poppetje (e.raadsman), want daar kijkt ook het maaien naar (T.raadsmanMaait).
   T.nieuweRaadsman = () => ({ besluiten: [] });
+
+  // Hoeveel keer zo lang hij over een tegel maaien doet (js/akkers.js): wie raadsman is, maait trager; dat is zijn prijs.
+  T.raadsmanMaait = (e) => (e && e.raadsman && IN().aan ? IN().maaien : 1);
 
   // De raadsman van nu (een bewoner), of null: geen gekozen, hij is er niet meer, of de spelregel staat uit.
   T.raadsmanVan = function (D) {
@@ -98,8 +71,8 @@
   // Uit wie je kiest: zoveel boeren als kandidaten zegt, vast per spel (uit het zaad), zodat een speeltest dezelfde
   // krijgt.
   T.raadsmanKandidaten = function (D) {
-    const boeren = D.bewoners ? D.bewoners.mensen.filter((p) => isBoer(p) && hier(D, p)) : [];
-    boeren.sort((a, b) => (a.wie < b.wie ? -1 : a.wie > b.wie ? 1 : 0));
+    const boeren = D.bewoners ? D.bewoners.mensen.filter((p) => T.isBoer(D, p) && hier(D, p)) : [];
+    boeren.sort((a, b) => a.id - b.id);
     const r = T.dobbelsteen(((((D.lot && D.lot.zaad) || 1) * 67) ^ 0x7a5b) >>> 0);
     const uit = [];
     while (boeren.length && uit.length < IN().kandidaten) uit.push(boeren.splice(Math.floor(r() * boeren.length), 1)[0]);
@@ -108,7 +81,7 @@
 
   // Een boer wordt raadsman; wie het was, is het niet meer. Geeft { kan, reden }.
   T.kiesRaadsman = function (D, p) {
-    if (!isBoer(p) || !hier(D, p)) return { kan: false, reden: T.t('Only a farmer who is here can become your advisor.') };
+    if (!T.isBoer(D, p) || !hier(D, p)) return { kan: false, reden: T.t('Only a farmer who is here can become your advisor.') };
     for (const x of D.bewoners.mensen) if (x.wezen && x !== p) x.wezen.raadsman = false;
     p.wezen.raadsman = true;
     if (!D.raadsman) D.raadsman = T.nieuweRaadsman();
@@ -117,12 +90,10 @@
   };
 
   // Zijn twee vaardigheden, geloot uit de vijf, goed of slecht: { rechtspreken: 'goed', zwijgen: 'slecht' }. Vast per
-  // spel en per boer (uit het zaad en zijn naam), zonder dat het lot van de boeren (js/boeren.js) verandert. Wordt er
-  // niet geloot (de spelregels), dan kan niemand iets bijzonders.
+  // spel en per boer (uit het zaad van het dorp en zijn nummer).
   T.vaardighedenVan = function (D, p) {
-    if (!isBoer(p) || !T.BOEREN_INSTELLINGEN.loten) return {};
-    let h = 0;
-    for (const c of p.wie) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+    if (!T.isBoer(D, p)) return {};
+    const h = Math.imul(p.id, 2654435761) >>> 0;
     const r = T.dobbelsteen(((((D.lot && D.lot.zaad) || 1) * 61) ^ h) >>> 0);
     const vrij = Object.keys(T.VAARDIGHEDEN);
     const uit = {};
@@ -133,12 +104,11 @@
     return uit;
   };
 
-  // Wie hij is en wat hij kan, als één regel: "Alice · widow · well loved · judges well · cannot keep a secret". Voor
-  // het kiezen, en voor het bericht.
+  // Wie hij is en wat hij kan, als één regel: "Alice · judges well · cannot keep a secret". Voor het kiezen, en voor
+  // het bericht.
   T.overRaadsmanTekst = function (D, p) {
-    const over = T.overBoer(p.wezen);
     const kan = Object.entries(T.vaardighedenVan(D, p)).map(([soort, niveau]) => T.VAARDIGHEDEN[soort][niveau]);
-    return [T.hoofdletter(naam(p)), over && over.kort].concat((over && over.eigenschappen) || [], kan).filter(Boolean).join(' · ');
+    return [T.hoofdletter(naam(p))].concat(kan).filter(Boolean).join(' · ');
   };
 
   // ---------------------------------------------------------------------------------------------
@@ -161,9 +131,9 @@
     return uit;
   };
 
-  // Wat een antwoord hem waard is, naar zijn karakter (karakters hierboven).
-  function waarde(p, doe) {
-    const t = IN().karakters[p.wezen.karakter] || IN().gewoon;
+  // Wat een antwoord hem waard is (kiest hierboven).
+  function waarde(doe) {
+    const t = IN().kiest;
     let n = (t.tevreden || 0) * (doe.tevreden || 0) + (t.gunst || 0) * (doe.gunst || 0) + (t.goud || 0) * (doe.goud || 0);
     for (const wat of WAREN) n += ((t.waren || 0) * (doe[wat] || 0)) / 10;
     for (const soort of Object.keys(T.VEE)) n += (t.waren || 0) * (doe[soort] || 0);
@@ -199,7 +169,7 @@
     for (const a of antwoordenVan(D, id)) {
       const doe = T.metVaardigheden(D, p, a.doe);
       if (!T.prijsVanKeuze(D, doe).kan) continue;
-      const w = waarde(p, doe);
+      const w = waarde(doe);
       if (!beste || w > beste.w) beste = { zeg: a.zeg, doe, w };
     }
     return beste && { zeg: beste.zeg, doe: beste.doe };

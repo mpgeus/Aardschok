@@ -5,21 +5,16 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+const { proefDorp } = require('./grond.cjs');
 // Wat het spel kent voor er een kaart is: zo begint een verse bladzijde (T.VOORWERPEN, js/wereld.js).
 const KENT_VERS = new Set(Object.keys(T.VOORWERPEN));
 
 T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {}, toonInventaris() {} };
 
-// Het echte gehucht, zoals een nieuw spel begint, stil en zonder venster.
+// Het proefdorp (test/grond.cjs): het lege begin met een huis voor de schout, twee boerderijen en hutten, stil en zonder
+// venster.
 function gehucht() {
-  const echt = console.warn;
-  console.warn = () => {};
-  const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht'));
-  } finally {
-    console.warn = echt;
-  }
+  const { S } = proefDorp(T);
   Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
   return S;
 }
@@ -46,7 +41,7 @@ test('bewaren, herstellen en weer bewaren geeft precies dezelfde tekst', () => {
   T.zetVlag(S.dorp, 'marskramerOpBezoek');
   const overgeslagen = [];
   const tekst = T.bewaarSpel(S, { nu: NU, overgeslagen });
-  assert.deepEqual(overgeslagen, [], 'een gehucht zonder scherm heeft niets wat niet te bewaren is');
+  assert.deepEqual(overgeslagen, [], 'een dorp zonder scherm heeft niets wat niet te bewaren is');
 
   const S2 = gehucht();
   const r = T.herstelSpel(S2, tekst);
@@ -197,6 +192,7 @@ test('wat de tijd stilzet, gaat niet mee, en blijft in het spel zelf staan', () 
   assert.deepEqual(S2.kalender.stil, [], 'een geladen spel staat niet stil');
   assert.deepEqual(S.kalender.stil, ['menu'], 'het spel waaruit je opsloeg, staat nog stil zolang het menu open is');
   const S3 = gehucht();
+  delete S3.kalender.stil; // zoals de kalender van een nieuw spel, voor iets de tijd stilzette (het proefdorp tikte dagen: test/grond.cjs)
   T.bewaarSpel(S3, { nu: NU });
   assert.equal('stil' in S3.kalender, false, 'bewaren laat geen leeg veld achter');
 });
@@ -336,28 +332,28 @@ test('vanzelf opslaan: elke ochtend één keer, als de mensen opstaan, en niet a
   assert.equal(T.werkOpslaanBij(S).gelukt, true, 'de volgende ochtend weer');
 });
 
-test('een verse bladzijde laadt een spel met een gebouw uit het spel, op een land van de maker', (t) => {
-  // Bewaard: land 3 van de maker, met een huis dat in het spel neergezet is.
-  const echt = console.warn;
-  console.warn = () => {};
-  const S = { kalender: T.nieuweKalender() };
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht', 3));
-  } finally {
-    console.warn = echt;
-  }
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
+test('een verse bladzijde laadt een spel met een gebouw uit het spel', (t) => {
+  // Bewaard: het proefdorp, met een huis dat in het spel neergezet is.
+  const S = gehucht();
+  // Het eerste huis dat past, ook ver van het plein (een ruimer bouwbereik dan de 16 tegels van het spel, zoals het
+  // proefdorp zelf bouwt: test/grond.cjs).
   let huis = null;
-  for (let y = 5; y < S.wereld.h - 5 && !huis; y++) {
-    for (let x = 5; x < S.wereld.b - 5 && !huis; x++) {
-      if (T.waaromPastHetNiet(S.dorp, 'huis', x, y)) continue;
-      const r = T.plaatsGebouw(S.dorp, 'huis', x, y);
-      if (r && r.gelukt) huis = r.instantie;
+  const bereik = T.BEGIN_INSTELLINGEN.bouwBereik;
+  T.BEGIN_INSTELLINGEN.bouwBereik = 40;
+  try {
+    for (let y = 5; y < S.wereld.h - 5 && !huis; y++) {
+      for (let x = 5; x < S.wereld.b - 5 && !huis; x++) {
+        if (T.waaromPastHetNiet(S.dorp, 'huis', x, y)) continue;
+        const r = T.plaatsGebouw(S.dorp, 'huis', x, y);
+        if (r && r.gelukt) huis = r.instantie;
+      }
     }
+  } finally {
+    T.BEGIN_INSTELLINGEN.bouwBereik = bereik;
   }
   assert.ok(huis, 'er staat een huis');
   const tekst = T.bewaarSpel(S, { nu: NU });
-  // Een verse bladzijde kent alleen wat het spel zelf kent, en wat het nieuwe spel neerzet (het ontworpen gehucht): niet
+  // Een verse bladzijde kent alleen wat het spel zelf kent, en wat het nieuwe spel neerzet (het proefdorp): niet
   // het gebouw uit het spel, en niet wat alleen op het land van de maker ligt.
   const weg = {};
   for (const k of Object.keys(T.VOORWERPEN)) {

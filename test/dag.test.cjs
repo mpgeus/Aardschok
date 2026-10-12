@@ -1,8 +1,10 @@
 // De dag (js/dag.js, sinds 26 sep): de zon per seizoen, de dagindeling, het licht, het ritme van
 // de boeren, het maaien in de werkuren, slapen tot de ochtend, en bezoekers die overdag komen. Zie
-// ontwerp/spel.md, "Een dorp dat leeft en groeit", en de werklijst, punt 3b.
+// ontwerp/spel.md, "Een dorp dat leeft en groeit", en de werklijst, punt 3b. Sinds 12 okt (snoeien, ronde 2, stap 3) speelt
+// wat een dorp nodig heeft op het proefdorp (test/grond.cjs).
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const { proefDorp } = require('./grond.cjs');
 
 const T = require('./laad.cjs').spel();
 const IN = T.DAG_INSTELLINGEN;
@@ -22,19 +24,15 @@ const GROEI = dagVan('bloeimaand', 10); // het graan staat groen: de boeren staa
 const HOOI = dagVan('hooimaand', 5);
 const bijUur = (dag, uur) => Math.floor(dag) + uur / 24;
 
-// Het echte gehucht, met alles wat het dagritme nodig heeft, en één beeld van de spellus zoals
-// js/main.js het doet (alleen wat hier telt).
-function gehucht(dag, snelheid) {
-  const echt = console.warn;
-  console.warn = () => {};
-  const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht'));
-  } finally {
-    console.warn = echt;
-  }
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', effecten: [], wachters: [], bezocht: new Set(), inventaris: new Set() });
+// Het proefdorp, met alles wat het dagritme nodig heeft, op `dag`, en één beeld van de spellus zoals js/main.js het doet
+// (alleen wat hier telt).
+function proef(dag, snelheid) {
+  const { S } = proefDorp(T);
+  Object.assign(S, { bezocht: new Set() });
   Object.assign(S.kalender, { dag, snelheid: snelheid || 1 });
+  // De boeren krijgen hun akkers elke nacht (T.tikBoerderijenDag), en hun poppetjes kwamen in het proefdorp pas daarna: zoals de
+  // eerstvolgende nacht het doet.
+  T.werkDeBoerenBij(S.dorp);
   return S;
 }
 function stap(S, dt) {
@@ -159,27 +157,26 @@ test('T.dagAnker: een boer is \'s nachts binnen, \'s ochtends en \'s avonds op z
   assert.equal(T.dagAnker({ kalender: { dag: bijUur(ZOMER, 23) } }, { ...e, moetNaar: { x: 9, y: 9 } }), null, 'de schandpaal gaat voor');
 });
 
-test('in het gehucht gaan de vijf boeren \'s avonds naar huis en \'s nachts naar binnen, en komen ze \'s ochtends weer naar buiten', () => {
-  const S = gehucht(bijUur(GROEI, 17), 10);
-  // Om twee uur 's nachts: een boer die naar de herberg ging (js/herberg.js), liep bij bedtijd naar
-  // huis, en de verste doet daar ruim twee uur over (tot 27 sep stond hier half twaalf).
+test('in het proefdorp gaan de boeren \'s avonds naar huis en \'s nachts naar binnen, en komen ze \'s ochtends weer naar buiten', () => {
+  const S = proef(bijUur(GROEI, 17), 10);
+  assert.equal(boeren(S).length, 2, 'twee boeren, elk met een akker');
   loopTot(S, bijUur(GROEI + 1, 2));
   // Met zijn gezin erbij (js/bewoners.js) staat er soms iemand in zijn deur, en dan gaat hij naar
   // binnen vanaf de tegel ernaast (T.laatDwalen, js/verkennen.js).
   for (const e of boeren(S)) {
-    assert.ok(e.binnen, `${e.wie} is binnen`);
-    assert.ok(T.afstand(e.thuis, { x: e.tx, y: e.ty }) <= 1, `${e.wie} ging bij zijn eigen deur naar binnen`);
+    assert.ok(e.binnen, `${e.naam} is binnen`);
+    assert.ok(T.afstand(e.thuis, { x: e.tx, y: e.ty }) <= 1, `${e.naam} ging bij zijn eigen deur naar binnen`);
   }
   assert.equal(T.wezenOp(S.wereld, boeren(S)[0].thuis.x, boeren(S)[0].thuis.y), null, 'wie binnen is, staat niemand in de weg');
   loopTot(S, bijUur(GROEI + 1, 9));
-  for (const e of boeren(S)) assert.ok(!e.binnen, `${e.wie} is weer buiten`);
+  for (const e of boeren(S)) assert.ok(!e.binnen, `${e.naam} is weer buiten`);
 });
 
 // Zonder dwalen en zonder lopen (hij staat op zijn akker, en een pad is meteen gelopen), zodat alleen
 // de klok telt. Tot 26 sep stond hier het hele gehucht, en dan scheelde het soms meer dan drie
 // tegels, omdat de boeren willekeurig dwalen: één keer op zo'n 35 rondes faalde de toets.
 function maaiDagen(snelheid, dagen) {
-  const akker = { x: 0, y: 0, b: 3, h: 3, huis: 'boer1', geoogst: new Set() };
+  const akker = { x: 0, y: 0, b: 3, h: 3, boerderij: {}, geoogst: new Set() };
   const boer = { tx: 0, ty: 0, x: 0, y: 0, dood: false, pad: [], werkAkkers: [akker] };
   const S = { wereld: { wezens: [boer], akkers: [akker] }, wereldTijd: 0, kalender: { dag: bijUur(HOOI, 0), snelheid }, voorraad: { graan: 0 } };
   const echtPad = T.zoekRoute;
@@ -211,7 +208,7 @@ test('maaien gaat op de tijd van de wereld: op 1× en op 10× precies even veel 
 });
 
 test('\'s avonds stopt het maaien, en wat hij van een tegel al deed, blijft liggen tot de ochtend', () => {
-  const akker = { x: 0, y: 0, b: 2, h: 2, huis: 'boer1', geoogst: new Set() };
+  const akker = { x: 0, y: 0, b: 2, h: 2, boerderij: {}, geoogst: new Set() };
   const boer = { tx: 0, ty: 0, x: 0, y: 0, dood: false, pad: [], werkAkkers: [akker] };
   const S = { wereld: { wezens: [boer], akkers: [akker] }, wereldTijd: 0, kalender: { dag: bijUur(HOOI, 15) }, voorraad: { graan: 0 } };
   T.werkOogstBij(S, S, 0.1);
@@ -234,10 +231,13 @@ test('\'s avonds stopt het maaien, en wat hij van een tegel al deed, blijft ligg
 // ---------------------------------------------------------------------------------------------
 
 test('slapen kan \'s avonds bij je eigen huis, en bij het eerste licht word je wakker, op de snelheid van ervoor', () => {
-  const S = gehucht(bijUur(GROEI, 12), 3);
+  const S = proef(bijUur(GROEI, 12), 3);
+  // In het proefdorp staat de schout nog op de weg waar de kar hem bracht: zet hem voor zijn eigen deur.
+  const deur = T.deurVan(S.wereld, S.dorp.gebouwen.find((g) => g.soort === 'schout'));
+  Object.assign(S.schout, { x: deur.x, y: deur.y, tx: deur.x, ty: deur.y, pad: [], onderweg: false });
   assert.ok(!T.magSlapen(S), 'niet midden op de dag');
   S.kalender.dag = bijUur(GROEI, 22);
-  assert.ok(T.magSlapen(S), 'wel om tien uur, voor je deur (daar begint de schout)');
+  assert.ok(T.magSlapen(S), 'wel om tien uur, voor je deur');
   const echt = { tx: S.schout.tx, ty: S.schout.ty };
   S.schout.tx = 2;
   S.schout.ty = 2;

@@ -7,6 +7,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
+const { proefDorp } = require('./grond.cjs');
 
 const WORTEL = path.join(__dirname, '..');
 const wacht = [];
@@ -64,23 +65,23 @@ test('de spelregel "Kleren": naar stand zonder laken, of iedereen gewoon', () =>
   });
 });
 
-test('in het gehucht: de oude in de hut blijft gewoon, een volwassene in die hut is arm, en de rest gewoon', () => {
-  const echt = console.warn;
-  console.warn = () => {};
-  const S = { kalender: T.nieuweKalender() };
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht'));
-  } finally {
-    console.warn = echt;
+// In het lege begin (11 okt) woont wie het kamp verliet in een hut: de volwassenen daar lopen arm.
+test('in het proefdorp: een volwassene in een hut is arm, een kind in die hut gewoon, en de rest gewoon', () => {
+  const { D, boerderijen } = proefDorp(T);
+  const mensen = D.bewoners.mensen;
+  const vader = mensen.find((x) => x.leeftijd === 'volwassen' && x.huis && x.huis.soort === 'hut');
+  assert.ok(vader, 'er woont een volwassene in een hut');
+  assert.equal(T.klerenVan(vader), 'arm');
+  const kind = mensen.find((x) => x.leeftijd !== 'volwassen' && x.huis === vader.huis);
+  assert.ok(kind, 'er woont een kind in die hut');
+  assert.equal(T.klerenVan(kind), 'gewoon');
+  for (const p of mensen) {
+    const arm = p.leeftijd === 'volwassen' && p.huis.soort === 'hut';
+    assert.equal(T.klerenVan(p), arm ? 'arm' : 'gewoon', `${p.naam} (${p.huis && p.huis.soort})`);
   }
-  const mensen = S.dorp.bewoners.mensen;
-  const oud = mensen.find((p) => p.leeftijd === 'oud' && p.huis && p.huis.soort === 'hut');
-  assert.ok(oud, 'er woont een oude in een hut');
-  assert.equal(T.klerenVan(oud), 'gewoon');
-  for (const p of mensen) assert.equal(T.klerenVan(p), 'gewoon', `${p.naam} (${p.huis && p.huis.soort}): bij het begin woont geen volwassene in een hut`);
-  const p = mensen.find((x) => x.leeftijd === 'volwassen' && x.huis && x.huis.soort === 'huis' && x.huis.huis !== 'schout');
-  p.huis = oud.huis;
-  assert.equal(T.klerenVan(p), 'arm');
+  // Het volgt het huis: verhuist hij naar een boerderij, dan loopt hij gewoon.
+  vader.huis = boerderijen[0];
+  assert.equal(T.klerenVan(vader), 'gewoon');
 });
 
 test('het vel: boer-u3-deftig als dat er is, en anders het gewone; elk uiterlijk heeft een arme en een deftige', async () => {

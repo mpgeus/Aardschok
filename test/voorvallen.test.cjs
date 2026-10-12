@@ -5,6 +5,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+const { proefDorp } = require('./grond.cjs');
 
 const berichten = [];
 const aangesproken = [];
@@ -13,21 +14,11 @@ T.ui = new Proxy({}, {
 });
 T.anim = { tekst() {}, wacht: () => new Promise(() => {}), loop: () => new Promise(() => {}), uitval: () => new Promise(() => {}) };
 
-// Het echte gehucht, zoals een nieuw spel begint, stil en met een vast zaad (zoals in test/heervaart.test.cjs).
-function gehucht() {
-  const echt = console.warn;
-  const toeval = Math.random;
-  let n = 11;
-  console.warn = () => {};
-  Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
-  const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht'));
-  } finally {
-    console.warn = echt;
-    Math.random = toeval;
-  }
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
+// Het proefdorp (test/grond.cjs): twee boerderijen met hun boer, hutten, een herberg, een kapel en een weide met de
+// beginkudde, op dag 2 en iedereen thuis. De voorvallen kiezen hun mensen uit wie er woont, dus dit is wat de speler heeft.
+function dorp() {
+  const S = proefDorp(T, { gebouwen: ['herberg', 'kapel'], weide: true }).S;
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set() });
   S.dorp.lot = Object.assign(S.dorp.lot || {}, { zaad: 7 });
   S.dorp.voorvallen = T.nieuweVoorvallen();
   return S;
@@ -106,7 +97,7 @@ test('elk voorval is te beantwoorden: er is altijd een antwoord waarvoor genoeg 
 });
 
 test('om de paar dagen een voorval, in de winter vaker, en niet in de eerste dagen', () => {
-  const S = gehucht();
+  const S = dorp();
   const dagen = [];
   for (let d = 1; d < T.DAGEN_PER_JAAR; d++) {
     S.kalender.dag = d;
@@ -127,8 +118,8 @@ test('om de paar dagen een voorval, in de winter vaker, en niet in de eerste dag
 });
 
 test('wie het zegt en over wie het gaat, passen bij het voorval, en zijn niet van hetzelfde gezin', () => {
-  const S = gehucht();
-  const boer = (p) => !!(p.wie && p.huis && p.huis.soort === 'boerderij');
+  const S = dorp();
+  const boer = (p) => T.isBoer(S.dorp, p); // de man op een boerderij
   const dief = T.voorvalKan(S.dorp, 'diefstal', 10);
   assert.ok(dief);
   assert.equal(dief.wie.geslacht, 'vrouw');
@@ -137,17 +128,40 @@ test('wie het zegt en over wie het gaat, passen bij het voorval, en zijn niet va
   assert.notEqual(dief.wie.gezin, dief.ander.gezin);
   const grens = T.voorvalKan(S.dorp, 'akkergrens', 10);
   assert.ok(grens && boer(grens.wie) && boer(grens.ander) && grens.wie !== grens.ander, 'twee boeren om een grens');
-  // Een karakter: de boer die het trok (js/boeren.js), en anders komt het voorval niet.
-  for (const [id, karakter] of [['weduweDak', 'weduwe'], ['lied', 'zanger'], ['klok', 'vrome'], ['wijsheid', 'grijsaard']]) {
-    const heeft = S.dorp.bewoners.mensen.some((p) => boer(p) && p.wezen.karakter === karakter);
+  // Geen karakter meer (snoeien, ronde 2, stap 4): wie het zegt, hangt alleen af van het voorval. De wijsheid vraagt een
+  // oudere, de klok een volwassene of oudere, het lied een man, en de weduwe en haar dak zijn weg met het lot.
+  assert.equal(T.VOORVALLEN.weduweDak, undefined, 'het dak van de weduwe is weg');
+  assert.equal(T.GESPREKKEN.weduweDak, undefined, 'en zijn gesprek ook');
+  const zonderVoorwaarde = (id, dag) => {
     const v = T.VOORVALLEN[id];
     const oud = v.als;
     v.als = undefined;
-    const m = T.voorvalKan(S.dorp, id, 10);
-    v.als = oud;
-    assert.equal(!!m, heeft, `${id}: alleen als er een ${karakter} is`);
-    if (m) assert.equal(m.wie.wezen.karakter, karakter);
-  }
+    try {
+      return T.voorvalKan(S.dorp, id, dag);
+    } finally {
+      v.als = oud;
+    }
+  };
+  const zoekers = (id) => {
+    const lijst = [];
+    for (let d = 1; d < 120; d += 3) {
+      const m = zonderVoorwaarde(id, d);
+      if (m) lijst.push(m.wie);
+    }
+    return lijst;
+  };
+  // Het proefdorp heeft geen oudere: dan komt de wijsheid niet. Zodra er een is, is hij het.
+  assert.equal(zonderVoorwaarde('wijsheid', 10), null, 'de wijsheid komt van een oudere, en die is er niet');
+  const grijsaard = S.dorp.bewoners.mensen.find((p) => !p.schout && !(p.hoofd && p.hoofd.schout) && p.leeftijd === 'volwassen' && !boer(p) && p.huis && p.huis.soort === 'hut');
+  assert.ok(grijsaard, 'een volwassene in een hut, om oud te laten worden');
+  grijsaard.leeftijd = 'oud';
+  const wijzen = zoekers('wijsheid');
+  assert.ok(wijzen.length && wijzen.every((p) => p === grijsaard), 'de wijsheid is van de oudere');
+  const klokken = zoekers('klok');
+  assert.ok(klokken.length && klokken.every((p) => ['volwassen', 'oud'].includes(p.leeftijd)), 'de klok is van een volwassene of oudere, niet van een kind');
+  assert.ok(klokken.some((p) => p.leeftijd === 'volwassen') && klokken.some((p) => p === grijsaard), 'allebei komen ze voor');
+  const liederen = zoekers('lied');
+  assert.ok(liederen.length && liederen.every((p) => p.geslacht === 'man'), 'het lied is van een man');
   // Niemand van het gezin van de schout, en de schout zelf niet.
   for (let d = 1; d < 200; d += 3) {
     for (const id of Object.keys(T.VOORVALLEN)) {
@@ -158,7 +172,7 @@ test('wie het zegt en over wie het gaat, passen bij het voorval, en zijn niet va
 });
 
 test('een voorval komt als het er de tijd voor is: de maand, een gebouw, de voorraad, het vee', () => {
-  const S = gehucht();
+  const S = dorp();
   const GRASMAAND = 1 * T.DAGEN_PER_MAAND;
   const HOOIMAAND = 4 * T.DAGEN_PER_MAAND;
   const OOGSTMAAND = 5 * T.DAGEN_PER_MAAND;
@@ -197,7 +211,7 @@ test('een voorval komt als het er de tijd voor is: de maand, een gebouw, de voor
 });
 
 test('het venster zegt vooraf wat een antwoord kost, en wat er niet is, kun je niet geven', () => {
-  const S = gehucht();
+  const S = dorp();
   const L = metVoorval(S, 'diefstal');
   const [verban, boete, laatGaan] = antwoorden('diefstal').map((k) => T.prijsVanKeuze(S.dorp, k.doe));
   assert.equal(verban.tekst, `contentment +3%, ${T.naamVanBewoner(L.ander)} must go into the forest`);
@@ -214,8 +228,13 @@ test('het venster zegt vooraf wat een antwoord kost, en wat er niet is, kun je n
 });
 
 test('een antwoord doet wat het zegt: de voorraad, de tevredenheid die wegslijt, en de gunst van de heer', () => {
-  const S = gehucht();
+  const S = dorp();
   S.dorp.behoeften = T.nieuweBehoeften();
+  // Een bruiloft vraagt een jonge man (de bruidegom); de gezinnen van het proefdorp hebben er geen, dus een jongen is opgegroeid.
+  const jongen = S.dorp.bewoners.mensen.find((p) => p.geslacht === 'man' && p.leeftijd === 'kind' && !(p.hoofd && p.hoofd.schout));
+  jongen.leeftijd = 'jong';
+  // En de bruid mag niet uit zijn gezin komen: met één jongen hangt dat van het lot af, dus zoek een zaad waarvoor het kan.
+  for (let n = 0; n < 50 && !T.voorvalKan(S.dorp, 'bruiloft', 40); n++) S.dorp.lot.zaad++;
   metVoorval(S, 'bruiloft', 40);
   T.zetVoorraad(S.dorp, 'graan', 100);
   T.zetVoorraad(S.dorp, 'bier', 30);
@@ -235,7 +254,7 @@ test('een antwoord doet wat het zegt: de voorraad, de tevredenheid die wegslijt,
 });
 
 test('verbannen: de dief trekt weg, en gaat het bos in als rover', () => {
-  const S = gehucht();
+  const S = dorp();
   const L = metVoorval(S, 'diefstal');
   const dief = L.ander;
   const voor = S.dorp.bevolking;
@@ -247,7 +266,7 @@ test('verbannen: de dief trekt weg, en gaat het bos in als rover', () => {
 });
 
 test('de koorts: met pech sterft er iemand; de wolven halen schapen; en een gezin komt als er plaats is', () => {
-  const S = gehucht();
+  const S = dorp();
   metVoorval(S, 'ziekte');
   const voor = S.dorp.bevolking;
   T.doeGevolg(S, S.dorp, { sterfkans: 100 });
@@ -268,7 +287,7 @@ test('de koorts: met pech sterft er iemand; de wolven halen schapen; en een gezi
 });
 
 test('een vervolg komt later, over dezelfde mensen, of zoals het vervolg zegt', () => {
-  const S = gehucht();
+  const S = dorp();
   const L = metVoorval(S, 'diefstal', 50);
   T.doeGevolg(S, S.dorp, { voorval: 'diefDank' });
   const w = S.dorp.voorvallen.wacht[0];
@@ -290,7 +309,7 @@ test('een vervolg komt later, over dezelfde mensen, of zoals het vervolg zegt', 
   T.doeGevolg(S, S.dorp, { voorval: ['niets'] });
   assert.equal(S.dorp.voorvallen.wacht.length, 0);
   // Een vervolg op zijn eigen tijd: het zaaigraan komt na de oogst terug.
-  const Z = gehucht();
+  const Z = dorp();
   T.zetVoorraad(Z.dorp, 'graan', 100);
   metVoorval(Z, 'zaaigraan', 35);
   T.doeGevolg(Z, Z.dorp, antwoorden('zaaigraan')[0].doe);
@@ -300,7 +319,7 @@ test('een vervolg komt later, over dezelfde mensen, of zoals het vervolg zegt', 
 });
 
 test('wie het zegt, zoekt de schout: hij loopt naar hem toe, spreekt hem aan, en gaat na je antwoord zijns weegs', () => {
-  const S = gehucht();
+  const S = dorp();
   const L = metVoorval(S, 'zwerver', 20);
   const e = L.wie.wezen;
   S.kalender.dag = L.vanaf - 0.01;
@@ -333,7 +352,7 @@ test('wie het zegt, zoekt de schout: hij loopt naar hem toe, spreekt hem aan, en
 });
 
 test("'s avonds gaat hij naar huis, en de volgende ochtend komt hij terug", () => {
-  const S = gehucht();
+  const S = dorp();
   const L = metVoorval(S, 'zwerver', 20);
   const e = L.wie.wezen;
   S.kalender.dag = L.vanaf + 0.01;
@@ -351,7 +370,7 @@ test("'s avonds gaat hij naar huis, en de volgende ochtend komt hij terug", () =
 });
 
 test('wie je niet sprak, gaat voorbij, en dat neemt het dorp je kwalijk', () => {
-  const S = gehucht();
+  const S = dorp();
   const L = metVoorval(S, 'lening', 30);
   S.dorp.voorvallen.volgende = 1e9;
   T.tikVoorvallenDag(S.dorp, 30 + T.VOORVALLEN_INSTELLINGEN.zoektDagen - 1);
@@ -366,7 +385,7 @@ test('wie je niet sprak, gaat voorbij, en dat neemt het dorp je kwalijk', () => 
   assert.equal(S.dorp.voorvallen.laatstVoorbij, undefined, 'een raadsman had hier niet beslist (vraag 68, B), dus de raad zegt niets');
 
   // Was de schout weg, dan had een raadsman beslist: de raad zegt het dan een tijd (js/raad.js).
-  const S2 = gehucht();
+  const S2 = dorp();
   metVoorval(S2, 'lening', 30);
   S2.dorp.voorvallen.volgende = 1e9;
   // Hij is elders: van de kaart van het dorp af en op een andere, zoals T.gaNaarGebied hem verzet (js/gebied.js).
@@ -383,7 +402,7 @@ test('wie je niet sprak, gaat voorbij, en dat neemt het dorp je kwalijk', () => 
 test('de spelregel: uit komt er niemand, en vaak komen ze vaker', () => {
   const tel = (keuze) => {
     T.zetOptie('voorvallen', keuze);
-    const S = gehucht();
+    const S = dorp();
     let n = 0;
     for (let d = 1; d < 180; d++) {
       T.tikVoorvallenDag(S.dorp, d);
@@ -407,10 +426,10 @@ test('de spelregel: uit komt er niemand, en vaak komen ze vaker', () => {
 });
 
 test('bewaren en laden: het voorval van nu, zijn mensen en wat nog komt, blijven hetzelfde', () => {
-  const S = gehucht();
+  const S = dorp();
   const L = metVoorval(S, 'diefstal', 50);
   T.doeGevolg(S, S.dorp, { voorval: 'diefDank', tevreden: 2 });
-  const S2 = gehucht();
+  const S2 = dorp();
   T.zetSpel(S2, T.leesSpel(T.bewaarSpel(S, { nu: 1790000000000 })));
   const L2 = S2.dorp.voorvallen.lopend;
   assert.equal(L2.id, 'diefstal');
@@ -427,9 +446,9 @@ test('bewaren en laden: het voorval van nu, zijn mensen en wat nog komt, blijven
 const WINTER = 10 * T.DAGEN_PER_MAAND + 3; // louwmaand
 const ZOMER = 4 * T.DAGEN_PER_MAAND + 3; // hooimaand
 
-// Het gehucht zonder oorzaak: gevoed, warm, tevreden, en met plaats in de huizen.
+// Het dorp zonder oorzaak: gevoed, warm, tevreden, en met plaats in de huizen.
 function zonderOorzaak() {
-  const S = gehucht();
+  const S = dorp();
   const D = S.dorp;
   D.behoeften.tevredenheid = 0.8;
   D.behoeften.mist = [];

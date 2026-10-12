@@ -5,6 +5,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+const { proefDorp } = require('./grond.cjs');
 T.ui = new Proxy({}, { get: () => () => undefined });
 
 function dagVan(maand, dagVanMaand) {
@@ -15,19 +16,9 @@ function dagVan(maand, dagVanMaand) {
   throw new Error(maand);
 }
 
+// Het proefdorp (test/grond.cjs) op de dag die de toets kiest.
 function gehucht(dag) {
-  const echt = console.warn;
-  const toeval = Math.random;
-  let n = 7;
-  console.warn = () => {};
-  Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
-  const S = { kalender: T.nieuweKalender() };
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht'));
-  } finally {
-    console.warn = echt;
-    Math.random = toeval;
-  }
+  const { S } = proefDorp(T);
   Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
   T.S = S;
   S.kalender.dag = dag;
@@ -134,7 +125,7 @@ test('met de emmers is het vuur na een uur uit, en blijft het huis meestal staan
 test('bij groot brandgevaar slaat het vuur over op het huis ernaast als niemand blust, en dat huis niet verder', () => {
   const O = { ...T.BRAND_INSTELLINGEN.overslaan };
   T.BRAND_INSTELLINGEN.overslaan.kans = 1;
-  T.BRAND_INSTELLINGEN.overslaan.afstand = 60; // op het ontworpen gehucht: er is altijd een huis
+  T.BRAND_INSTELLINGEN.overslaan.afstand = 60; // in het proefdorp: er is altijd een huis
   try {
     const dag = dagVan('zomermaand', 5);
     const brand = (droogte, antwoord) => {

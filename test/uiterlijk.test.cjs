@@ -1,9 +1,11 @@
 // Het uiterlijk van een bewoner (js/bewoners.js, T.kiesUiterlijk; werklijst vraag 145, 1; Marcel, 9 okt: "Kunnen we
 // iedereen uniek maken?"): het uiterlijk dat het minst voorkomt, niet dat van iemand uit zijn gezin, en een kind met het
 // haar van een ouder. De uiterlijken komen uit de beelden (T.BEELDEN.uiterlijken, gereedschap/pixelart/naar-spel.cjs);
-// hier een eigen lijst, zodat de toets niet op de kunst wacht.
+// hier een eigen lijst, zodat de toets niet op de kunst wacht. Sinds 12 okt (snoeien, ronde 2, stap 3) op het proefdorp
+// (test/grond.cjs).
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const { proefDorp } = require('./grond.cjs');
 
 const T = require('./laad.cjs').spel();
 T.ui = new Proxy({}, { get: () => () => undefined });
@@ -19,20 +21,9 @@ function metUiterlijken(doe) {
   }
 }
 
-function gehucht() {
-  const echt = console.warn;
-  const toeval = Math.random;
-  let n = 7;
-  console.warn = () => {};
-  Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
-  const S = { kalender: T.nieuweKalender() };
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht'));
-  } finally {
-    console.warn = echt;
-    Math.random = toeval;
-  }
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
+function proef() {
+  const { S } = proefDorp(T);
+  Object.assign(S, { vlaggen: new Set() });
   T.S = S;
   return S;
 }
@@ -41,7 +32,7 @@ test('zonder uiterlijken in de beelden heeft niemand er een', () => {
   const oud = T.BEELDEN;
   T.BEELDEN = { ...(oud || {}), uiterlijken: undefined };
   try {
-    const D = gehucht().dorp;
+    const D = proef().dorp;
     for (const p of D.bewoners.mensen) if (p.wezen && p.wezen.soort === 'bewoner') assert.equal(T.kiesUiterlijk(D, p), null);
   } finally {
     T.BEELDEN = oud;
@@ -50,7 +41,7 @@ test('zonder uiterlijken in de beelden heeft niemand er een', () => {
 
 test('in een gezin draagt niemand hetzelfde uiterlijk, en de kinderen hebben het haar van een ouder', () => {
   metUiterlijken(() => {
-    const D = gehucht().dorp;
+    const D = proef().dorp;
     const mensen = D.bewoners.mensen.filter((p) => p.wezen && p.wezen.soort === 'bewoner');
     for (const p of mensen) {
       delete p.uiterlijk;
@@ -81,7 +72,7 @@ test('in een gezin draagt niemand hetzelfde uiterlijk, en de kinderen hebben het
 
 test('wie een fase verder gaat, houdt zijn haar', () => {
   metUiterlijken(() => {
-    const D = gehucht().dorp;
+    const D = proef().dorp;
     T.tikLevenDag(D, 0);
     const p = D.bewoners.mensen.find((x) => x.leeftijd === 'kind' && T.wordtOuder(x) && x.wezen);
     assert.ok(p, 'er is een kind');

@@ -24,8 +24,7 @@
   };
 
   // Een eenvoudige dobbelsteen met een zaad (mulberry32): hetzelfde zaad geeft hetzelfde lot. Eén dobbelsteen voor het
-  // hele spel: het eiland, de maker, de bewoners, de voorvallen, de rovers, het weer (tot ronde 2 van het snoeien, 12 okt,
-  // in js/boeren.js, dat in stap 4 weggaat).
+  // hele spel: het eiland, de maker, de bewoners, de voorvallen, de rovers, het weer.
   T.dobbelsteen = function (zaad) {
     let a = zaad >>> 0;
     return function () {
@@ -38,7 +37,8 @@
   };
 
   // Een nieuw dorp op kaart w, met zijn schout: wat er op de kaart staat (de gebouwen, de boeren, het vee), en wie er
-  // verder woont. `zaad` is het lot van de boeren (js/boeren.js): hetzelfde zaad geeft hetzelfde dorp. `ander`: het is
+  // verder woont. `zaad` is het zaad van het dorp (D.lot.zaad; zonder: een willekeurig): hetzelfde zaad geeft hetzelfde
+  // dorp, want de bewoners, de voorvallen, het vee, de rovers en het weer gooien er hun dobbelsteen mee. `ander`: het is
   // niet jouw dorp (het buurdorp): het spreekt niet tegen jou.
   T.nieuwDorp = function (S, w, schout, opties) {
     const o = opties || {};
@@ -63,13 +63,13 @@
     T.zetBestaandeGebouwen(D);
     // In het lege begin (vraag 152) staat er nog niets: de kar brengt wat er is, en het kamp (js/begin.js).
     if (w.kamp) T.zetKamp(S, D);
-    // Wie de boeren zijn en wat ze kunnen, wordt bij elk nieuw dorp geloot (js/boeren.js).
-    T.lootBoeren(D, o.zaad != null ? o.zaad : undefined);
-    // De beginkudde op de weide(s) die de kaart noemt (js/vee.js), net als de gebouwen hierboven; ná het lot, want
-    // het zaad van het dorp kiest ook de kleuren van het vee.
+    // Het zaad van het dorp. Tot ronde 2 van het snoeien (stap 4, 12 okt) loot T.lootBoeren hiermee ook wie de boeren
+    // waren (hun karakter en wat ze konden); dat lot is weg, het zaad bleef, en heet nog zo.
+    D.lot = { zaad: o.zaad != null ? o.zaad : Math.floor(Math.random() * 2147483647) };
+    // De beginkudde op de weide(s) die de kaart noemt (js/vee.js), net als de gebouwen hierboven; het zaad van het dorp
+    // kiest ook de kleuren van het vee.
     T.zetBeginKudde(D);
-    // Wie er verder woont, en wie waar werkt (js/bewoners.js): ná het lot, want het karakter van een boer zegt wie er
-    // bij hem woont (de weduwe heeft drie kleine kinderen).
+    // Wie er verder woont, en wie waar werkt (js/bewoners.js).
     T.zetBeginBewoners(D);
     // Wat er gelopen wordt, telt vanaf de eerste stap, en wat van het dorp is, heeft meteen zijn lantaarn (js/paden.js).
     T.nieuwePaden(w);

@@ -5,7 +5,9 @@
 //
 //   const { leegBegin, proefDorp, dagen } = require('./grond.cjs');
 //   const { S, D, w } = leegBegin(T);       // de kar, het kamp en vier gezinnen, op dag 1
-//   const { S, D, w, ... } = proefDorp(T);  // en het dorp erop, op dag 2
+//   const { S, D, w, ... } = proefDorp(T);  // en het dorp erop, op dag 2, iedereen thuis
+//   proefDorp(T, { gebouwen: ['herberg'], weide: true, boerderijen: 3 })   // met meer erbij (zie bouwProefDorp)
+// proefDorp geeft ook: schout (zijn huis), boerderijen, hutten, akkers, weide, gebouw(soort) en boer(boerderij).
 //
 // Met een vaste reeks toeval, zodat elke toets hetzelfde dorp krijgt. `npm test` draait ook dit bestand (het staat in
 // test/): dan toetst het onderaan wat het proefdorp is.
@@ -96,40 +98,81 @@ function legVeldBij(T, D, soort, g, b = 6, h = 5) {
   return uit.instantie;
 }
 
-// Het proefdorp bouwen: het lege begin, en op dag 1 neergezet en meteen af het huis van de schout, twee boerderijen met elk een
-// akker, en hutten voor wie er dan nog in het kamp woont. Op dag 2 trekken de gezinnen erin, wordt de man op een boerderij
-// boer, en worden de akkers land; het kamp is dan leeg. Rond het vuur is het krap, dus bouwt het met een ruimer bereik
-// (`bereik` tegels; in het spel 16, T.BEGIN_INSTELLINGEN.bouwBereik), alleen zolang het neerzet. Geeft S, met S.kalender
-// op dag 2.
+// Iedereen thuis: wie nog over de weg komt, is er (T.werkBewonersBij maakt zijn poppetje bij de weg), en elk poppetje
+// staat bij zijn eigen deur, op een vrije tegel, zoals het spel een nieuw gezin bij zijn deur zet.
+function iedereenThuis(T, D) {
+  T.werkBewonersBij(D);
+  const w = D.wereld;
+  for (const p of D.bewoners.mensen) {
+    const e = p.wezen;
+    if (!e || p.schout) continue;
+    delete p.komt;
+    const deur = T.deurVan(w, p.huis);
+    let plek = null;
+    for (let r = 0; r <= 4 && !plek; r++) {
+      for (let y = deur.y - r; y <= deur.y + r && !plek; y++) {
+        for (let x = deur.x - r; x <= deur.x + r && !plek; x++) {
+          if (Math.max(Math.abs(x - deur.x), Math.abs(y - deur.y)) === r && T.isBegaanbaar(w, x, y, { wezensBlokkeren: true })) plek = { x, y };
+        }
+      }
+    }
+    if (!plek) continue;
+    Object.assign(e, { x: plek.x, y: plek.y, tx: plek.x, ty: plek.y, pad: [], onderweg: false });
+    e.thuis = { x: deur.x, y: deur.y };
+  }
+}
+
+// Het proefdorp bouwen: het lege begin, en op dag 1 neergezet en meteen af het huis van de schout, twee boerderijen met
+// elk een akker, en hutten voor wie er dan nog in het kamp woont. Op dag 2 trekken de gezinnen erin, wordt de man op een
+// boerderij boer, en worden de akkers land; het kamp is dan leeg, en iedereen staat thuis. Rond het vuur is het krap, dus
+// bouwt het met een ruimer bereik (`bereik` tegels; in het spel 16, T.BEGIN_INSTELLINGEN.bouwBereik), alleen zolang het
+// neerzet. Geeft S, met S.kalender op dag 2.
 //   zaad         het eiland (2)
 //   boerderijen  hoeveel boerderijen, elk met een akker (2)
 //   hutten       hoeveel hutten; standaard zoveel als er dan nog gezinnen in het kamp wonen
-function bouwProefDorp(T, { zaad = 2, boerderijen = 2, hutten = null, bereik = 40 } = {}) {
+//   gebouwen     wat er verder staat, af, zoals ['herberg', 'schaapskooi'] (een gebouw met handen krijgt ze op dag 2)
+//   weide        de eerste boerderij krijgt er een veld bij dat weide is, met de beginkudde erop (T.zetBeginKudde)
+function bouwProefDorp(T, { zaad = 2, boerderijen = 2, hutten = null, gebouwen = [], weide = false, bereik = 40 } = {}) {
   const { S, D, w } = leegBegin(T, zaad);
-  dagen(T, S, 1);
-  const echt = T.BEGIN_INSTELLINGEN.bouwBereik;
-  T.BEGIN_INSTELLINGEN.bouwBereik = bereik;
-  let dorp;
-  try {
-    dorp = metVastToeval(7, () => {
+  // Alles op een vaste reeks toeval, ook de dagen erna: anders kreeg elk proces (elk toetsbestand) een iets ander dorp.
+  return metVastToeval(7, () => {
+    dagen(T, S, 1);
+    const echt = T.BEGIN_INSTELLINGEN.bouwBereik;
+    T.BEGIN_INSTELLINGEN.bouwBereik = bereik;
+    let weiveld = null;
+    try {
       // Wat het kost, komt eerst in de voorraad, zodat die daarna is wat de kar bracht.
       const n = hutten != null ? hutten : Math.max(0, T.kampTenten(D).length - boerderijen);
-      const soorten = ['schout', ...Array(boerderijen).fill('boerderij'), ...Array(n).fill('hut')];
+      const soorten = ['schout', ...Array(boerderijen).fill('boerderij'), ...Array(n).fill('hut'), ...gebouwen];
       for (const soort of soorten) for (const [wat, k] of Object.entries(T.GEBOUWEN[soort].kosten || {})) T.wijzigVoorraad(D, wat, k);
       const schout = zetBijHetVuur(T, D, 'schout');
       const hoeven = [];
       for (let i = 0; i < boerderijen; i++) hoeven.push(zetBijHetVuur(T, D, 'boerderij'));
       const velden = hoeven.map((g) => legVeldBij(T, D, 'akker', g));
-      const huts = [];
-      for (let i = 0; i < n; i++) huts.push(zetBijHetVuur(T, D, 'hut'));
-      for (const g of [schout, ...hoeven, ...velden, ...huts]) bouwAf(T, D, g, 1);
-      return { schout, boerderijen: hoeven, hutten: huts };
-    });
-  } finally {
-    T.BEGIN_INSTELLINGEN.bouwBereik = echt;
-  }
-  dagen(T, S, 2);
-  return S;
+      if (weide) velden.push((weiveld = legVeldBij(T, D, 'akker', hoeven[0])));
+      const rest = [];
+      for (let i = 0; i < n; i++) rest.push(zetBijHetVuur(T, D, 'hut'));
+      for (const soort of gebouwen) rest.push(zetBijHetVuur(T, D, soort));
+      for (const g of [schout, ...hoeven, ...velden, ...rest]) bouwAf(T, D, g, 1);
+    } finally {
+      T.BEGIN_INSTELLINGEN.bouwBereik = echt;
+    }
+    dagen(T, S, 2);
+    if (weiveld) {
+      const a = w.akkers.find((x) => x.x === weiveld.x && x.y === weiveld.y);
+      a.bestemming = a.plan = 'weide';
+      a.ongezaaid.clear();
+      T.zetBeginKudde(D);
+    }
+    iedereenThuis(T, D);
+    T.verdeelHanden(D);
+    // De boeren krijgen hun akkers op hun poppetje, zoals elke nacht (js/boerderij.js): die poppetjes kwamen pas na de nacht.
+    T.werkDeBoerenBij(D);
+    // Welke tekening het volgende gebouw van elke soort krijgt (T.volgendeTekening), en dus hoe groot zijn voet is: hier
+    // al gekozen, zodat een toets die iets neerzet, elke keer dezelfde plek vindt.
+    for (const soort of Object.keys(T.GEBOUWEN)) T.volgendeTekening(D, soort);
+    return S;
+  });
 }
 
 // Het proefdorp wordt één keer gebouwd (per keus van de opties) en bewaard zoals het spel opslaat (T.bewaarSpel,
@@ -146,15 +189,21 @@ function proefDorp(T, opties = {}) {
   const D = S.dorp;
   const w = D.wereld;
   const boerderijen = D.gebouwen.filter((g) => g.soort === 'boerderij');
+  const akkers = (w.akkers || []).filter((a) => boerderijen.includes(a.boerderij));
   return {
     S, D, w, boerderijen,
     schout: D.gebouwen.find((g) => g.soort === 'schout'),
     hutten: D.gebouwen.filter((g) => g.soort === 'hut'),
-    akkers: (w.akkers || []).filter((a) => boerderijen.includes(a.boerderij)),
+    // De akkers van de boerderijen (de weide niet), en de weide als die er is.
+    akkers: akkers.filter((a) => T.bestemmingVan(a) !== 'weide'),
+    weide: akkers.find((a) => T.bestemmingVan(a) === 'weide') || null,
+    // Het eerste gebouw van deze soort (een van `gebouwen`), en de boer van een boerderij.
+    gebouw: (soort) => D.gebouwen.find((g) => g.soort === soort) || null,
+    boer: (g) => T.boerVan(D, g),
   };
 }
 
-module.exports = { leegBegin, proefDorp, dagen, bouwAf, metVastToeval };
+module.exports = { leegBegin, proefDorp, dagen, bouwAf, zetBijHetVuur, legVeldBij, metVastToeval };
 
 if (require.main === module) {
   const test = require('node:test');

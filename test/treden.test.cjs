@@ -7,20 +7,15 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+const { proefDorp } = require('./grond.cjs');
 
 T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {}, toonInventaris() {} };
 
-// Het echte gehucht, zoals een nieuw spel begint, stil (zoals in test/opslaan.test.cjs).
+// Het proefdorp (test/grond.cjs): het huis van de schout, twee boerderijen en hutten, zoals een nieuw spel na een dag
+// bouwen is; het dorp heeft de trede "gehucht". Stil, en met de velden die een toets van S verwacht.
 function gehucht() {
-  const echt = console.warn;
-  console.warn = () => {};
-  const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht'));
-  } finally {
-    console.warn = echt;
-  }
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
+  const S = proefDorp(T).S;
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set() });
   return S;
 }
 
@@ -63,7 +58,8 @@ test('het doel bij het begin: hoeveel dorpelingen er zijn, van de twintig', () =
   assert.equal(doel.kop, 'Towards a village');
   assert.equal(doel.klaar, false);
   const n = T.mensenVanStand(S.dorp, 'dorpelingen');
-  assert.ok(n > 0 && n < 20, `het gehucht begint met ${n} dorpelingen, in het ene huis dat er staat`);
+  // Het proefdorp heeft alleen hutten en boerderijen (en het huis van de schout): niemand woont in een huis, dus nog geen dorpeling.
+  assert.equal(n, 0, 'het dorp begint met niemand in een huis');
   assert.equal(doel.tekst, `${n} of 20 villagers`);
   assert.equal(T.tredeMensenNodig(S.dorp), 20 - n);
 });

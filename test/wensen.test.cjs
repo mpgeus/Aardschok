@@ -5,6 +5,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+const { proefDorp } = require('./grond.cjs');
 
 T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {}, toonInventaris() {} };
 
@@ -12,17 +13,24 @@ const bijna = (a, b) => Math.abs(a - b) < 1e-9;
 const ZOMERDAG = 30;
 const WINTERDAG = 280;
 
-// Het echte gehucht, zoals een nieuw spel begint, stil (zoals in test/treden.test.cjs).
-function gehucht() {
-  const echt = console.warn;
-  console.warn = () => {};
-  const S = { kalender: T.nieuweKalender() };
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht'));
-  } finally {
-    console.warn = echt;
-  }
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
+// Het proefdorp (test/grond.cjs), op dag 2: het lege begin, het huis van de schout, twee boerderijen met een akker, en hutten
+// voor wie nog in het kamp woonde; iedereen woont en staat thuis.
+function dorp(opties = {}) {
+  const S = proefDorp(T, opties).S;
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set() });
+  return S;
+}
+
+// Het proefdorp heeft boerderijen en hutten, maar geen dorpelingen (vlees of vis, de put, de herberg, bier). Dus drie
+// boerderijen, een huis en een herberg erbij (de optie `gebouwen`), bier in de voorraad, en het gezin van de hut trekt in
+// het huis: drie boerderijen en een huis, zoals het gehucht van vroeger met zijn jonge gezin. De hut blijft staan, leeg.
+function dorpMetHuis() {
+  const S = dorp({ boerderijen: 3, gebouwen: ['huis', 'herberg'] });
+  const D = S.dorp;
+  T.zetVoorraad(D, 'bier', 100);
+  const hut = D.gebouwen.find((g) => g.soort === 'hut');
+  const huis = D.gebouwen.find((g) => g.soort === 'huis');
+  for (const p of D.bewoners.mensen) if (p.huis === hut) p.huis = huis;
   return S;
 }
 
@@ -50,8 +58,8 @@ test('een stand wil wat de stand eronder wil, en meer; de boeren staan ernaast',
   }
 });
 
-test('in het gehucht: de boerderijen zijn van boeren, het huis van dorpelingen, de hutten van keuters; de schout en de herberg hebben geen wensen', () => {
-  const S = gehucht();
+test('in het proefdorp: de boerderijen zijn van boeren, het huis van dorpelingen, de hutten van keuters; de schout en de herberg hebben geen wensen', () => {
+  const S = dorpMetHuis();
   const D = S.dorp;
   for (const g of D.gebouwen) {
     const verwacht = g.huis === 'schout' ? null : { boerderij: 'boeren', huis: 'dorpelingen', hut: 'keuters' }[g.soort] || null;
@@ -186,11 +194,12 @@ test('eten en brandhout gelden voor het hele dorp: zonder eten zakt elk huis tot
   assert.ok(!huisVan(kou, hut).alles);
 });
 
-test('het gehucht begint op zo\'n 83%; met de spelregel "Wensen" op het dorp als geheel op 67%, zoals vóór 1 okt', () => {
-  const S = gehucht();
+test('het proefdorp begint op zo\'n 82%; met de spelregel "Wensen" op het dorp als geheel op 67%, zoals vóór 1 okt', () => {
+  const S = dorpMetHuis();
   const b = T.berekenTevredenheid(S.dorp, 0);
   assert.ok(b.wensen, 'per huis is de standaard');
-  assert.ok(Math.abs(b.tevredenheid - 0.83) < 0.03, `${b.tevredenheid}`);
+  // Drie boerderijen op 80% (ze missen de kapel) en het huis op 88% (het mist ook een put en vlees of vis): naar mensen 82%.
+  assert.ok(Math.abs(b.tevredenheid - 0.82) < 0.01, `${b.tevredenheid}`);
   assert.ok(b.mist.includes('a chapel'), 'de boeren en de dorpelingen missen een kapel');
   assert.ok(!b.mist.includes('a church'));
   T.zetOptie('wensen', 'dorp');
@@ -213,7 +222,7 @@ test('een dorp zonder bewoners rekent als geheel, zoals vóór 1 okt', () => {
 });
 
 test('na een dag staat op elk huis wat het wil en heeft, en de huizen namen hun goederen', () => {
-  const S = gehucht();
+  const S = dorpMetHuis();
   const D = S.dorp;
   T.zetVoorraad(D, 'bier', 50);
   T.zetVoorraad(D, 'vis', 5);
@@ -262,28 +271,38 @@ function berichten(fn) {
   }
   return gezegd;
 }
-const hutVanHetOudeStel = (D) => D.gebouwen.find((g) => g.bewoners === 'oudStel');
-const huisVanHetJongeGezin = (D) => D.gebouwen.find((g) => g.bewoners === 'jongGezin');
+// Is dit de tekening van een gebouw van deze soort, zoals het dorp ze bouwt: in de stijl van zijn land (T.stijlTekeningen,
+// js/bouwstijl.js), met de deur naar welke kant ook; en zonder stijl uit T.GEBOUWEN.
+const isTekeningVan = (D, soort, tekening) => (T.stijlTekeningen(D, soort) || T.GEBOUWEN[soort].tekeningen).includes(T.metDeurNaar(tekening, 'z'));
 const mensenIn = (D, g) => D.bewoners.mensen.filter((p) => p.huis === g);
+// Een hut met mensen erin (in het proefdorp: de hutten van wie in het kamp woonde), en het huis van dorpMetHuis.
+const eenHut = (D) => D.gebouwen.find((g) => g.soort === 'hut' && mensenIn(D, g).length);
+const eenHuis = (D) => D.gebouwen.find((g) => g.soort === 'huis');
+// Een put vlak bij dit huis (alleen de boekhouding: hij staat niet getekend), zodat het huis een put heeft.
+function putBij(D, g) {
+  const r = T.voetVanGebouw(g);
+  D.gebouwen.push({ soort: 'put', x: r.x, y: r.y + r.h, voet: { b: 1, h: 1 }, klaar: true });
+}
 // Wie in dit huis woont, is binnen, zoals 's nachts als een huis doorgroeit: in een toets loopt niemand, en het oude
 // stel staat bij het begin voor zijn deur, waar het huis overheen groeit (werklijst vraag 88: niet over iemand heen).
 function binnen(D, g) {
   for (const p of mensenIn(D, g)) if (p.wezen) p.wezen.binnen = true;
 }
 
-test('de woningen van het begin hebben hun tekening als voorwerp, zodat ze kunnen doorgroeien', () => {
-  const D = gehucht().dorp;
+test('de woningen hebben hun tekening als voorwerp, zodat ze kunnen doorgroeien', () => {
+  const D = dorpMetHuis().dorp;
   for (const g of D.gebouwen) {
     if (!g.tekening) continue;
     assert.ok(g.voorwerp, `${g.soort} op ${g.x},${g.y}`);
-    assert.equal(g.voorwerp.soort, g.tekening.split('/').pop());
+    assert.equal(g.voorwerp.tekeningNaam, g.tekening.split('/').pop());
     assert.ok(D.wereld.voorwerpen.includes(g.voorwerp), 'het voorwerp dat er al lag, geen tweede');
   }
 });
 
 test('een hut die een maand alles heeft, groeit door tot een huis, voor 8 hout, en wie erin woont, is dan dorpeling', () => metRegels({ seizoen: 'jij' }, () => {
-  const D = gehucht().dorp;
-  const hut = hutVanHetOudeStel(D);
+  const D = dorp().dorp;
+  const hut = eenHut(D);
+  putBij(D, hut);
   binnen(D, hut);
   assert.equal(T.berekenTevredenheid(D, ZOMERDAG).wensen.huizen.find((h) => h.g === hut).alles, true, 'de hut bij de put heeft alles');
   const hout = D.voorraad.hout;
@@ -296,7 +315,7 @@ test('een hut die een maand alles heeft, groeit door tot een huis, voor 8 hout, 
   assert.equal(D.voorraad.hout, hout - 8);
   assert.ok(gezegd.includes('A hut has grown into a house, for 8 wood: whoever lives there now belongs with the villagers.'), gezegd.join(' | '));
   assert.ok(hut.voorwerp.vel != null, 'met de tekening van een huis');
-  assert.ok(T.GEBOUWEN.huis.tekeningen.includes(hut.tekening));
+  assert.ok(isTekeningVan(D, 'huis', hut.tekening), hut.tekening);
   // Wie binnen was, komt door de nieuwe deur weer naar buiten, niet in de muur waar de oude deur was (vraag 88).
   const deur = T.deurVan(D.wereld, hut);
   for (const p of mensenIn(D, hut)) assert.deepEqual([p.wezen.tx, p.wezen.ty], [deur.x, deur.y]);
@@ -308,8 +327,9 @@ test('een hut die een maand alles heeft, groeit door tot een huis, voor 8 hout, 
 }));
 
 test('zonder hout wacht de hut, en zegt het dorp het één keer; met hout groeit hij de volgende dag', () => metRegels({ seizoen: 'jij' }, () => {
-  const D = gehucht().dorp;
-  const hut = hutVanHetOudeStel(D);
+  const D = dorp().dorp;
+  const hut = eenHut(D);
+  putBij(D, hut);
   binnen(D, hut);
   T.zetVoorraad(D, 'hout', 0);
   let dag = ZOMERDAG;
@@ -325,8 +345,8 @@ test('zonder hout wacht de hut, en zegt het dorp het één keer; met hout groeit
 }));
 
 test('een huis met alles groeit door tot een stenen huis, voor 12 steen; wie iets mist, groeit niet', () => metRegels({ seizoen: 'jij' }, () => {
-  const D = gehucht().dorp;
-  const huis = huisVanHetJongeGezin(D);
+  const D = dorpMetHuis().dorp;
+  const huis = eenHuis(D);
   let dag = ZOMERDAG;
   for (let i = 0; i < 40; i++) T.tikBehoeftenDag(D, ++dag);
   assert.equal(huis.soort, 'huis', 'zonder kapel, put en vlees of vis groeit het niet');
@@ -345,13 +365,16 @@ test('een huis met alles groeit door tot een stenen huis, voor 12 steen; wie iet
   assert.equal(huis.soort, 'stenenHuis');
   assert.equal(T.standVan(huis), 'ambachtslieden');
   assert.equal(D.voorraad.steen, 3);
-  // Het versteent tot zijn eigen broertje, op zijn eigen grond (vraag 85, d).
-  assert.equal(huis.tekening, T.GEBOUWEN.stenenHuis.broertjes[tekening]);
+  // Het versteent tot zijn eigen broertje ("huis11" wordt "steen11", met de deur naar dezelfde kant), op zijn eigen grond
+  // (vraag 85, d).
+  assert.ok(isTekeningVan(D, 'stenenHuis', huis.tekening), huis.tekening);
+  assert.equal(T.vormVan(huis.tekening), T.vormVan(tekening).replace('huis', 'steen'));
+  assert.equal(T.deurKantVan(huis.tekening), T.deurKantVan(tekening));
   assert.deepEqual(huis.voet, voet);
 }));
 
 test('zacht: er trekt pas een gezin weg uit huizen onder de vertrekdrempel, als het eten en het brandhout in de winter missen', () => {
-  const D = gehucht().dorp;
+  const D = dorpMetHuis().dorp;
   T.zetVoorraad(D, 'graan', 0);
   T.zetVoorraad(D, 'hout', 0);
   T.zetVoorraad(D, 'kaas', 0);
@@ -369,7 +392,7 @@ test('zacht: er trekt pas een gezin weg uit huizen onder de vertrekdrempel, als 
 });
 
 test('zacht: wie alleen een kapel mist, trekt niet weg', () => {
-  const D = gehucht().dorp;
+  const D = dorpMetHuis().dorp;
   const voor = D.bevolking;
   let dag = 0;
   for (let i = 0; i < 2 * T.GEBOUWEN_INSTELLINGEN.gezinDagen; i++) T.tikBehoeftenDag(D, ++dag);
@@ -377,7 +400,7 @@ test('zacht: wie alleen een kapel mist, trekt niet weg', () => {
 });
 
 test('streng: mist een huis een maand iets, dan trekt zijn gezin weg, hooguit één huis per dag', () => metRegels({ achteruit: 'streng' }, () => {
-  const D = gehucht().dorp;
+  const D = dorpMetHuis().dorp;
   const missen = T.berekenTevredenheid(D, 1).wensen.huizen.filter((h) => !h.alles).map((h) => h.g);
   assert.ok(missen.length >= 2);
   const voor = D.bevolking;
@@ -390,8 +413,17 @@ test('streng: mist een huis een maand iets, dan trekt zijn gezin weg, hooguit é
   assert.ok(eerste.some((t) => t.includes('their house has lacked')), eerste.join(' | '));
   T.tikBehoeftenDag(D, ++dag);
   assert.ok(D.bevolking < na1, 'de volgende dag het volgende huis');
-  // Een boer trekt niet weg: hij blijft op zijn boerderij.
-  for (const g of missen) if (g.soort === 'boerderij') assert.ok(mensenIn(D, g).some((p) => p.wie));
+}));
+
+// Wie het eerst gaat (T.wieGaatEerst, js/bewoners.js): nooit de schout, zijn gezin of een boer zelf. Dat was `p.wie` (de vijf
+// boeren van het gehucht van vroeger); in het lege begin heeft geen boer een `wie`, dus de boer gaat mee met zijn gezin.
+test('streng: een boer trekt niet weg, hij blijft op zijn boerderij', () => metRegels({ achteruit: 'streng' }, () => {
+  const D = dorpMetHuis().dorp;
+  const missen = T.berekenTevredenheid(D, 1).wensen.huizen.filter((h) => !h.alles).map((h) => h.g);
+  assert.ok(missen.some((g) => g.soort === 'boerderij'), 'de boerderijen missen de kapel');
+  let dag = 0;
+  for (let i = 0; i < T.WENSEN_INSTELLINGEN.missenDagen + 2; i++) T.tikBehoeftenDag(D, ++dag);
+  for (const g of missen) if (g.soort === 'boerderij') assert.ok(mensenIn(D, g).some((p) => T.isBoer(D, p)), `de boerderij op ${g.x},${g.y} heeft nog een boer`);
 }));
 
 test('een hogere stand betaalt meer belasting', () => {
@@ -419,14 +451,14 @@ test('elk huis heeft een stenen broertje dat op zijn eigen grond past', () => {
 const missen = (D) => T.watDeHuizenMissen(D);
 const vind = (D, id) => missen(D).find((x) => x.id === id);
 
-test('wat de huizen missen: vóór de eerste nacht niets; daarna in het gehucht de kapel, een put en vlees of vis, met wat helpt', () => {
-  const D = gehucht().dorp;
+test('wat de huizen missen: vóór de eerste nacht niets; daarna in het proefdorp de kapel, een put en vlees of vis, met wat helpt', () => {
+  const D = dorpMetHuis().dorp;
   assert.deepEqual(missen(D), [], 'het dorp weet het pas als een dag getikt heeft, zoals de balk');
   T.tikBehoeftenDag(D, ZOMERDAG);
   const lijst = missen(D);
   assert.deepEqual(lijst.map((x) => x.id), ['kapel', 'put', 'vleesOfVis'], 'wat de meeste mensen missen, eerst');
-  assert.equal(lijst[0].tekst, 'Five farms and a house want a chapel within 40 tiles [B].');
-  assert.deepEqual([lijst[0].huizen, lijst[0].kan, lijst[0].bouw], [6, true, 'kapel']);
+  assert.equal(lijst[0].tekst, 'Three farms and a house want a chapel within 40 tiles [B].');
+  assert.deepEqual([lijst[0].huizen, lijst[0].kan, lijst[0].bouw], [4, true, 'kapel']);
   assert.equal(lijst[1].tekst, 'A house wants a well within 12 tiles [B].');
   assert.equal(lijst[2].tekst, 'A house wants meat or fish: build a fisherman or a hunter [B].');
   assert.equal(lijst[2].bouw, 'visser', 'vis eerst, zoals het dorp hem eerst neemt');
@@ -434,9 +466,9 @@ test('wat de huizen missen: vóór de eerste nacht niets; daarna in het gehucht 
 });
 
 test('wat de huizen missen: een plek die vandaag klaar is, telt meteen; een in aanbouw laat wachten', () => {
-  const D = gehucht().dorp;
+  const D = dorpMetHuis().dorp;
   T.tikBehoeftenDag(D, ZOMERDAG);
-  const huis = huisVanHetJongeGezin(D);
+  const huis = eenHuis(D);
   const r = T.voetVanGebouw(huis);
   const put = { soort: 'put', x: r.x + Math.floor(r.b / 2), y: r.y + r.h + 1, voet: { b: 1, h: 1 }, klaar: false };
   D.gebouwen.push(put);
@@ -448,7 +480,7 @@ test('wat de huizen missen: een plek die vandaag klaar is, telt meteen; een in a
 });
 
 test('wat de huizen missen: in de winter ligt de visser stil, dus een jager; staat er een, dan nog een', () => {
-  const D = gehucht().dorp;
+  const D = dorpMetHuis().dorp;
   T.tikBehoeftenDag(D, ZOMERDAG);
   D.gebouwen.push({ soort: 'visser', x: 0, y: 0, voet: { b: 3, h: 3 }, klaar: true });
   D.kalender.dag = WINTERDAG;
@@ -547,12 +579,12 @@ test('de ketens: wol maakt geen werkplaats, die komt van de schapen; in een gehu
 // De herberg en de markt (werklijst vraag 96, a; Marcel, 3 okt: "1 markt 1 herberg voor nu"): één is genoeg voor het hele
 // dorp, waar het huis ook staat. Met de spelregel op "Binnen een kring" wil een huis ze binnen 30 tegels, zoals tot 3 okt.
 test('de herberg en de markt: één is genoeg voor het hele dorp, ook voor een huis ver weg', () => {
-  const D = Object.assign(gehucht().dorp, { trede: 'dorp' });
+  const D = Object.assign(dorp({ gebouwen: ['herberg'] }).dorp, { trede: 'dorp' });
   const herberg = T.plekkenVan(D, 'herberg')[0];
   const ver = zetHuis(D, 'stenenHuis', herberg.x + 40, herberg.y, 8);
   zetHuis(D, 'markt', herberg.x - 20, herberg.y, 0);
   T.onthoudWensen(D, T.berekenWensen(D, ZOMERDAG, alles));
-  assert.equal(ver.wensen.heeft.herberg, 1, 'de herberg van het gehucht');
+  assert.equal(ver.wensen.heeft.herberg, 1, 'de herberg van het dorp');
   assert.equal(ver.wensen.heeft.markt, 1, 'een markt 60 tegels verderop');
   assert.equal(vind(D, 'herberg'), undefined);
   assert.equal(vind(D, 'markt'), undefined);
@@ -560,10 +592,10 @@ test('de herberg en de markt: één is genoeg voor het hele dorp, ook voor een h
   assert.equal(T.watDeKringBereikt(D, 'herberg', { x: 0, y: 0, b: 6, h: 6 }), null);
 });
 
-test('wat de huizen missen: een huis buiten de kring van de herberg van het gehucht, en een tweede bouw je pas in een dorp', () => {
+test('wat de huizen missen: een huis buiten de kring van de herberg, en een tweede bouw je pas in een dorp', () => {
+  const D = dorp({ gebouwen: ['herberg'] }).dorp;
   T.pasOptiesToe({ keuzes: { herbergEnMarkt: 'kring' } });
   try {
-    const D = gehucht().dorp;
     const herberg = T.plekkenVan(D, 'herberg')[0];
     const g = zetHuis(D, 'huis', herberg.x + 40, herberg.y, 5);
     T.onthoudWensen(D, T.berekenWensen(D, ZOMERDAG, alles));
@@ -577,9 +609,9 @@ test('wat de huizen missen: een huis buiten de kring van de herberg van het gehu
 });
 
 test('wat de huizen missen: wie een maand alles had en op bouwstof wacht, gaat voor, met wat helpt', () => {
-  const D = gehucht().dorp;
+  const D = dorp().dorp;
   T.tikBehoeftenDag(D, ZOMERDAG);
-  const hut = hutVanHetOudeStel(D);
+  const hut = eenHut(D);
   hut.wachtOpBouwstof = true;
   T.zetVoorraad(D, 'hout', 3);
   let lijst = missen(D);
@@ -600,9 +632,10 @@ test('wat de huizen missen: wie een maand alles had en op bouwstof wacht, gaat v
 });
 
 test('een huis groeit niet over iemand heen die ervoor staat: dan morgen weer', () => metRegels({ seizoen: 'jij' }, () => {
-  const D = gehucht().dorp;
-  const hut = hutVanHetOudeStel(D);
-  // Het oude stel staat bij het begin voor zijn deur, buiten, en het huis zou over die tegels heen groeien.
+  const D = dorp().dorp;
+  const hut = eenHut(D);
+  putBij(D, hut);
+  // Wie in de hut woont, staat bij het begin voor zijn deur, buiten, en het huis zou over die tegels heen groeien.
   let dag = ZOMERDAG;
   for (let i = 0; i < T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen + 3; i++) T.tikBehoeftenDag(D, ++dag);
   assert.equal(hut.soort, 'hut', 'niet over iemand heen (vraag 88)');
@@ -616,7 +649,7 @@ test('een huis groeit niet over iemand heen die ervoor staat: dan morgen weer', 
 // ---------------------------------------------------------------------------------------------
 
 test('2c: een huis zegt wie er woont, wat het wil met wat helpt, wat het als eerste mist, en hoe ver het is met doorgroeien', () => {
-  const S = gehucht();
+  const S = dorpMetHuis();
   const D = S.dorp;
   T.zetVoorraad(D, 'bier', 50);
   T.tikBehoeftenDag(D, ZOMERDAG);
@@ -636,12 +669,15 @@ test('2c: een huis zegt wie er woont, wat het wil met wat helpt, wat het als eer
   assert.deepEqual(t.groei, { dagen: 0, nodig: T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen, wordt: 'stone house', kosten: T.WENSEN_INSTELLINGEN.bouwstof.stenenHuis, waarom: null });
   // Een huis zonder mensen laat niets zien.
   assert.equal(T.huisToestand(D, D.gebouwen.find((g) => g.huis === 'schout')), null);
-  // Heeft het alles, dan geen teken; wacht het op bouwstof, dan dat.
-  const hut = D.gebouwen.find((g) => g.soort === 'hut' && g.wensen && T.huisToestand(D, g).teken === null);
-  if (hut) {
-    hut.wachtOpBouwstof = true;
-    assert.equal(T.huisToestand(D, hut).teken, 'bouwstof');
-  }
+  // Heeft het alles, dan geen teken; wacht het op bouwstof, dan dat. (Een hut met mensen en een put: de hut van dorpMetHuis
+  // is leeg.)
+  const D2 = dorp().dorp;
+  const hut = eenHut(D2);
+  putBij(D2, hut);
+  T.tikBehoeftenDag(D2, ZOMERDAG);
+  assert.equal(T.huisToestand(D2, hut).teken, null, 'de hut bij de put heeft alles');
+  hut.wachtOpBouwstof = true;
+  assert.equal(T.huisToestand(D2, hut).teken, 'bouwstof');
 });
 
 // De wijn (werklijst vraag 136; Marcel, 10 okt: "Inwoners willen wijn en bier. Afwisseling", en "B1"): een stenen huis wil

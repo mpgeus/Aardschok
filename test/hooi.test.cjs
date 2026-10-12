@@ -7,6 +7,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+const { proefDorp } = require('./grond.cjs');
 
 const IN = T.VEE_INSTELLINGEN;
 const bijna = (a, b) => Math.abs(a - b) < 1e-9;
@@ -30,8 +31,8 @@ function metInstelling(blok, waarden, fn) {
 
 // Een wereld van 30 bij 30 open land, met deze velden, en een boer die ze allemaal bewerkt.
 function boerMet(velden, opties) {
-  const akkers = velden.map((v, i) => ({ naam: `veld${i}`, huis: 'boer1', plan: v.bestemming, vruchtbaarheid: 1, geoogst: new Set(), gehooid: new Set(), ...v }));
-  const boer = { naam: 'Nicholas', tx: 12, ty: 12, x: 12, y: 12, dood: false, pad: [], werkAkkers: akkers.slice(), huis: 'boer1' };
+  const akkers = velden.map((v, i) => ({ naam: `veld${i}`, huis: 'boerderij1', plan: v.bestemming, vruchtbaarheid: 1, geoogst: new Set(), gehooid: new Set(), ...v }));
+  const boer = { naam: 'Edmund', tx: 12, ty: 12, x: 12, y: 12, dood: false, pad: [], werkAkkers: akkers.slice(), huis: 'boerderij1' };
   const S = {
     voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0, tijd: 0,
     // 1 hooimaand om tien uur 's ochtends: in de werkuren, want 's nachts maait niemand (js/dag.js).
@@ -228,16 +229,18 @@ test('een winterdag in het spel: het vee eet hooi, en in de zomer niet', () => {
   });
 });
 
-test('het gehucht begint met hooi voor de rest van de winter: drie koeien, dertig dagen lentemaand', () => {
-  const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
-  assert.ok(T.beginOpKaart(S, 'gehucht'));
-  const koeien = () => T.veeVan(S.dorp).filter((e) => e.dier === 'koe').length;
+// Het ontworpen gehucht begon met 100 hooi (kaarten/gehucht.betekenis.json); het lege begin heeft geen hooi en geen vee,
+// het proefdorp alleen de beginkudde van de weide. Dit toetst dus niet meer dat het begin hooi heeft, maar wat daarachter
+// zat: met hooi voor de rest van de winter eet de beginkudde door, en niemand verhongert.
+test('de beginkudde haalt de rest van de winter met genoeg hooi: drie koeien, dertig dagen lentemaand', () => {
+  const { D } = proefDorp(T, { weide: true });
+  const koeien = () => T.veeVan(D).filter((e) => e.dier === 'koe').length;
   assert.equal(koeien(), IN.beginKudde.koe);
-  const begin = S.dorp.voorraad.hooi;
-  assert.ok(begin >= koeien() * 30, `${begin} hooi voor ${koeien()} koeien`);
-  for (let dag = 0; dag < 30; dag++) T.tikVeeDag(S.dorp, dag);
+  T.wijzigVoorraad(D, 'hooi', koeien() * 30 - (D.voorraad.hooi || 0));
+  const begin = D.voorraad.hooi;
+  for (let dag = 0; dag < 30; dag++) T.tikVeeDag(D, dag);
   assert.equal(koeien(), IN.beginKudde.koe, 'niemand verhongerd');
-  assert.ok(bijna(S.dorp.voorraad.hooi, begin - 30 * koeien()));
+  assert.ok(bijna(D.voorraad.hooi, begin - 30 * koeien()));
   assert.equal(T.isVeeWinter(30), false, 'op 1 grasmaand graast het weer');
 });
 

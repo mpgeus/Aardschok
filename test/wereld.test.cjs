@@ -7,12 +7,13 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+const { proefDorp } = require('./grond.cjs');
 
 // Zonder scherm doet elke aanroep naar T.ui niets.
 T.ui = new Proxy({}, { get: () => () => {} });
 
 test('de grond ligt per tegel klaar om te tekenen, uit de terreinsets van rand.tsx', () => {
-  const w = T.laadKaart(T.KAARTEN.gehucht, T.BETEKENIS.gehucht);
+  const { w } = proefDorp(T);
   const o = w.overgangen[0];
   const g = w.grond[o.y][o.x];
   assert.ok(g && g.vel === 'rand', 'elke tegel weet welk grondplaatje eronder ligt, uit tegels/rand.tsx');
@@ -242,7 +243,6 @@ test('elke kaart uit T.KAARTEN is vanzelf een gebied, zonder dat er iets geregis
   }
   assert.deepEqual(Object.keys(T.GEBIEDEN).sort(), Object.keys(T.KAARTEN).sort(), 'en er staat niets in code');
   // en de naam die de speler ziet komt uit de kaart zelf (de eigenschap "naam" van de map)
-  assert.equal(T.GEBIEDEN.gehucht.naam, 'The hamlet');
   assert.equal(T.GEBIEDEN.proefbos.naam, 'The test wood');
 });
 
@@ -267,19 +267,12 @@ test('een overgang naar een kaart die niet bestaat, laat de speler niet vastlope
   assert.ok(fouten.some((m) => String(m).includes('ditbestaatniet')), 'en het klaagt hoorbaar');
 });
 
-test('de weg het gehucht uit leidt bewust nergens heen: alleen mist, en geen fout in de console', () => {
+test('de weg het dorp uit leidt bewust nergens heen: alleen mist, en geen fout in de console', () => {
   // Zolang de spelregel "Land" uit staat (js/land.js), is er achter de weg nog niets; de speeltest telde die fout als
   // zijn schout de weg af liep (3 okt).
-  const echt = console.warn;
-  console.warn = () => {};
-  const S = { kalender: T.nieuweKalender() };
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht'));
-  } finally {
-    console.warn = echt;
-  }
+  const { S } = proefDorp(T);
   const uit = S.wereld.overgangen[0];
-  assert.ok(S.wereld.proef && uit && !T.GEBIEDEN[uit.naar], 'het gehucht is een proefkaart met een weg naar nergens');
+  assert.ok(S.wereld.proef && uit && !T.GEBIEDEN[uit.naar], 'het dorp is een proefkaart met een weg naar nergens');
   const fouten = [];
   const berichten = [];
   const oud = console.error;
@@ -312,31 +305,31 @@ function vergelijkElkeTegel(w, waar) {
   }
 }
 
-// Het gehucht zoals een nieuw spel begint, stil en zonder venster, met genoeg om te bouwen.
-function gehuchtOm(makerZaad) {
-  const echt = console.warn;
-  console.warn = () => {};
-  const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht', makerZaad));
-  } finally {
-    console.warn = echt;
-  }
+// Het proefdorp (test/grond.cjs) van het eiland met dit zaad, met genoeg om te bouwen.
+function gehuchtOm(zaad) {
+  const { S } = proefDorp(T, { zaad });
   Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
   for (const wat of ['hout', 'goud', 'steen']) T.zetVoorraad(S.dorp, wat, 500);
   return S;
 }
 
 test('de lijst per tegel geeft hetzelfde voorwerp als alle voorwerpen aflopen, ook na bouwen en weghalen', () => {
-  for (const zaad of [undefined, 1]) {
+  for (const zaad of [2, 3]) {
     const S = gehuchtOm(zaad);
     const w = S.wereld;
-    const waar = zaad == null ? 'het ontworpen gehucht' : `het gehucht van zaad ${zaad}`;
+    const waar = `het proefdorp van zaad ${zaad}`;
     vergelijkElkeTegel(w, waar);
     // Een hut erbij, waar hij past: zijn voorwerp komt erbij (js/gebouwen.js).
+    // (Met een ruimer bouwbereik dan de 16 tegels van het spel, zoals het proefdorp zelf bouwt: test/grond.cjs.)
     let gezet = null;
-    for (let y = 0; y < w.h && !gezet; y++) {
-      for (let x = 0; x < w.b && !gezet; x++) if (!T.waaromPastHetNiet(S.dorp, 'hut', x, y)) gezet = T.plaatsGebouw(S.dorp, 'hut', x, y);
+    const bereik = T.BEGIN_INSTELLINGEN.bouwBereik;
+    T.BEGIN_INSTELLINGEN.bouwBereik = 40;
+    try {
+      for (let y = 0; y < w.h && !gezet; y++) {
+        for (let x = 0; x < w.b && !gezet; x++) if (!T.waaromPastHetNiet(S.dorp, 'hut', x, y)) gezet = T.plaatsGebouw(S.dorp, 'hut', x, y);
+      }
+    } finally {
+      T.BEGIN_INSTELLINGEN.bouwBereik = bereik;
     }
     assert.ok(gezet && gezet.gelukt, `${waar}: ergens past een hut`);
     assert.equal(T.voorwerpOp(w, gezet.instantie.x, gezet.instantie.y), gezet.instantie.voorwerp, 'de nieuwe hut staat meteen in de lijst');
@@ -380,7 +373,7 @@ test('de tegels van het plein komen één keer per kaart, en een plek op het ple
     }
     return tegels.length ? tegels[(Math.imul(n | 0, 2654435761) >>> 0) % tegels.length] : null;
   };
-  for (const zaad of [undefined, 2]) {
+  for (const zaad of [2, 3]) {
     const w = gehuchtOm(zaad).wereld;
     assert.ok(T.pleinTegels(w).length > 50, 'het plein heeft tegels');
     assert.equal(T.pleinTegels(w), T.pleinTegels(w), 'één keer uitgerekend');

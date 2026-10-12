@@ -5,25 +5,21 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+const { proefDorp } = require('./grond.cjs');
 
 const berichten = [];
 T.ui = new Proxy({}, { get: (_, naam) => (naam === 'bericht' ? (t) => berichten.push(t) : () => {}) });
 T.anim = { tekst() {}, wacht: () => new Promise(() => {}), loop: () => new Promise(() => {}), uitval: () => new Promise(() => {}) };
 
-// Het echte gehucht, zoals een nieuw spel begint, stil (zoals in test/treden.test.cjs), met een vast zaad.
-function gehucht() {
-  const echt = console.warn;
-  console.warn = () => {};
-  const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht'));
-  } finally {
-    console.warn = echt;
-  }
+// Het proefdorp (test/grond.cjs), stil, met een vast zaad. De opties zijn die van proefDorp: wie een wachthuis nodig heeft,
+// vraagt het erbij (WACHTHUIS), en wie een weide nodig heeft, vraagt `weide`.
+function gehucht(opties) {
+  const { S } = proefDorp(T, opties);
   Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
   S.dorp.lot = Object.assign(S.dorp.lot || {}, { zaad: 7 });
   return S;
 }
+const WACHTHUIS = { gebouwen: ['wachthuis'] };
 
 function zet(e, x, y) {
   e.x = e.tx = x;
@@ -43,17 +39,12 @@ function aanval(S, aantal) {
   return S.dorp.rovers.aanval;
 }
 
-// Een wachthuis met zijn twee mannen (T.verdeelHanden en T.wijsWerkToe, js/gebouwen.js en js/bewoners.js).
+// De twee mannen van het wachthuis van het proefdorp (WACHTHUIS): het staat er af, en op dag 2 kregen zijn twee handen
+// hun werk (T.verdeelHanden en T.wijsWerkToe, js/gebouwen.js en js/bewoners.js).
 function metWachthuis(S) {
-  S.dorp.voorraad.hout = 100;
-  S.dorp.voorraad.goud = 100;
-  // Waar het past, met een looppad rondom (js/gebouwen.js), zo dicht mogelijk bij 49, 51 (ten zuidoosten van het plein).
-  const plek = T.plekVoor(S.dorp, 'wachthuis', { x: 49, y: 51 });
-  const r = T.plaatsGebouw(S.dorp, 'wachthuis', plek.x, plek.y);
-  assert.equal(r.gelukt, true, r.reden);
-  r.instantie.klaar = true;
-  T.verdeelHanden(S.dorp);
-  const mannen = S.dorp.bewoners.mensen.filter((p) => p.werk === r.instantie);
+  const huis = S.dorp.gebouwen.find((g) => g.soort === 'wachthuis');
+  assert.ok(huis && huis.klaar, 'het wachthuis staat er');
+  const mannen = S.dorp.bewoners.mensen.filter((p) => p.werk === huis);
   assert.equal(mannen.length, 2, 'het wachthuis heeft twee handen');
   return mannen.map((p) => p.wezen);
 }
@@ -66,7 +57,7 @@ test('wie wegtrekt, gaat het bos in: de jongeren en volwassenen worden rover, me
   const weg = voor.filter((p) => !S.dorp.bewoners.mensen.includes(p));
   const groot = weg.filter((p) => p.leeftijd === 'jong' || p.leeftijd === 'volwassen');
   assert.ok(groot.length > 0, 'er trekt iemand weg die rover kan worden');
-  assert.deepEqual(S.dorp.rovers.bende.map((l) => l.naam), groot.map((p) => p.naam));
+  assert.deepEqual(S.dorp.rovers.bende.map((l) => l.naam).sort(), groot.map((p) => p.naam).sort());
   assert.equal(S.dorp.rovers.bendeOp, 30 + T.ROVERS_INSTELLINGEN.terugNaDagen);
 });
 
@@ -171,7 +162,11 @@ test('halen ze hun akker niet, dan geven ze het op en gaan ze met lege handen', 
 });
 
 test('een vertrapte akker: wat erop stond, groeit dit jaar niet meer', () => {
-  const S = gehucht();
+  const S = gehucht({ weide: true });
+  // Het proefdorp is op 2 lentemaand van het eerste jaar: de akkers zijn nog niet gezaaid. Op 1 lentemaand van het tweede
+  // jaar zaaien de boeren (T.tikAkkersDag), en dan staat er iets op.
+  T.zetVoorraad(S.dorp, 'graan', 400);
+  T.tikAkkersDag(S.dorp, T.DAGEN_PER_JAAR);
   const veld = S.wereld.akkers.find((a) => T.bestemmingVan(a) === 'akker');
   const open = T.akkerOnbeslistTegels(veld).length;
   assert.ok(open > 0, 'er staat iets op');
@@ -183,7 +178,7 @@ test('een vertrapte akker: wat erop stond, groeit dit jaar niet meer', () => {
 });
 
 test('de militie: wie in het wachthuis werkt, loopt bij een aanval met de schout mee, en vecht naast hem', () => {
-  const S = gehucht();
+  const S = gehucht(WACHTHUIS);
   const [een, twee] = metWachthuis(S);
   opUur(S, 5, 17);
   const A = aanval(S, 3);
@@ -216,7 +211,7 @@ test('de militie: wie in het wachthuis werkt, loopt bij een aanval met de schout
 test('wie van de militie nog onderweg was, rent erheen en vecht mee zodra hij er is', () => {
   // Uit de speeltest (werklijst, 0c, punt 4): een schout viel alleen tegen drie wilde rovers, omdat zijn wachters nog
   // onderweg waren toen het gevecht begon; wie toen te ver weg stond, deed het hele gevecht niet mee.
-  const S = gehucht();
+  const S = gehucht(WACHTHUIS);
   const w = S.wereld;
   const [een, twee] = metWachthuis(S);
   opUur(S, 5, 17);
@@ -266,7 +261,7 @@ test('een rover zoekt de man van jouw kant die het dichtst bij staat', () => {
 });
 
 test('wie valt, is dood: een wachter is een mond minder, en ligt er tot de volgende dag', () => {
-  const S = gehucht();
+  const S = gehucht(WACHTHUIS);
   const [een] = metWachthuis(S);
   opUur(S, 5, 17);
   aanval(S, 2);
@@ -292,7 +287,7 @@ test('na een nacht heeft wie het overleefde weer al zijn leven', () => {
 });
 
 test('zijn alle rovers verslagen, dan is de aanval voorbij en gaat de militie naar huis', () => {
-  const S = gehucht();
+  const S = gehucht(WACHTHUIS);
   const mannen = metWachthuis(S);
   opUur(S, 5, 17);
   const A = aanval(S, 2);

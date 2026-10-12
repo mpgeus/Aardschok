@@ -1,25 +1,26 @@
 // Twee dorpen naast elkaar (js/dorp.js; werklijst, vraag 71). Alles van een dorp staat bij elkaar, zodat er twee
-// kunnen zijn: jouw gehucht en een buurdorp op een gehucht van de maker (js/maker.js). Ze delen de kalender, en verder
+// kunnen zijn: jouw dorp en een buurdorp op een gehucht van de maker (js/maker.js). Ze delen de kalender, en verder
 // niets: wat in het ene gebeurt, raakt het andere niet, en een ander dorp dan het jouwe spreekt niet tegen jou.
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+const { proefDorp } = require('./grond.cjs');
 
 // Wat er tegen het scherm gezegd wordt: een bericht, een brief, een venster.
 const gezegd = [];
 T.ui = new Proxy({}, { get: (_, naam) => (...args) => (naam === 'bericht' ? gezegd.push(args[0]) : undefined) });
 
-// Het spel op het ontworpen gehucht, met een vast zaad, en een buurdorp op een gehucht van de maker.
+// Het spel op het proefdorp (test/grond.cjs), en een buurdorp op een gehucht van de maker (dat is een dorp dat er al was,
+// niet leeg: zo is het buurdorp groter dan het jouwe).
 function tweeDorpen(zaad = 3) {
+  const { S } = proefDorp(T);
   const echt = console.warn;
   const toeval = Math.random;
   let n = 11;
   console.warn = () => {};
   Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
-  const S = { kalender: T.nieuweKalender(), tijd: 0, wereldTijd: 0, modus: 'verkennen', inventaris: new Set() };
   try {
-    assert.ok(T.beginOpKaart(S, 'gehucht'));
     const w = T.laadGemaaktGehucht(zaad);
     w.gebied = 'buurdorp';
     const schout = w.wezens.find((e) => e.soort === 'schout');

@@ -5,25 +5,15 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+const { proefDorp } = require('./grond.cjs');
 
 const berichten = [];
 T.ui = new Proxy({}, { get: (_, naam) => (naam === 'bericht' ? (t) => berichten.push(t) : () => {}) });
 T.anim = { tekst() {}, wacht: () => new Promise(() => {}), loop: () => new Promise(() => {}), uitval: () => new Promise(() => {}) };
 
-// Het echte gehucht, zoals een nieuw spel begint, stil en met een vast zaad (zoals in test/voorvallen.test.cjs).
+// Het proefdorp (test/grond.cjs), met het zaad van het land dat de toets kiest (het land komt uit het zaad van het dorp).
 function gehucht(zaad = 7) {
-  const echt = console.warn;
-  const toeval = Math.random;
-  let n = 11;
-  console.warn = () => {};
-  Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
-  const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht'));
-  } finally {
-    console.warn = echt;
-    Math.random = toeval;
-  }
+  const { S } = proefDorp(T);
   Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
   S.kalender.dag = 10.4;
   S.kalender.snelheid = 3;
@@ -42,7 +32,7 @@ function metLand(fn) {
   }
 }
 
-// Het gehucht met zijn land.
+// Het proefdorp met zijn land.
 function metZijnLand(zaad) {
   const S = gehucht(zaad);
   S.land = T.nieuwLand(S);
@@ -248,7 +238,7 @@ test('terwijl hij weg is, beslist de raadsman, roept niemand de militie, en vert
     const S = metZijnLand(5);
     const L = S.land;
     // Een raadsman, en een voorval dat nu begint.
-    const boer = S.dorp.bewoners.mensen.find((p) => T.isBoer(p.wezen));
+    const boer = S.dorp.bewoners.mensen.find((p) => T.isBoer(S.dorp, p));
     assert.ok(T.kiesRaadsman(S.dorp, boer).kan);
     T.openLand(S);
     T.beginReis(S, T.buurProvincies(L, L.thuis)[0]);

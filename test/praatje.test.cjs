@@ -4,26 +4,16 @@
 // dan een uur niet weer. De regels van het spel veranderen er niet door.
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const { proefDorp } = require('./grond.cjs');
 
 const T = require('./laad.cjs').spel();
 
 T.ui = new Proxy({}, { get: () => () => undefined });
 
-// Het ontworpen gehucht, met een vast zaad, op dag 40 (in de lente) om `uur`.
-function gehucht(uur = 20) {
-  const echt = console.warn;
-  const toeval = Math.random;
-  let n = 11;
-  console.warn = () => {};
-  Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
-  const S = { kalender: T.nieuweKalender() };
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht'));
-  } finally {
-    console.warn = echt;
-    Math.random = toeval;
-  }
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
+// Het proefdorp (test/grond.cjs; `opties` gaan naar proefDorp), op dag 40 (in de lente) om `uur`.
+function proef(uur = 20, opties = {}) {
+  const { S } = proefDorp(T, opties);
+  Object.assign(S, { vlaggen: new Set() });
   S.kalender.dag = 40 + uur / 24;
   S.dorp.gebouwenDag = 40;
   return S;
@@ -48,11 +38,9 @@ function zet(e, x, y) {
   Object.assign(e, { x, y, tx: x, ty: y, pad: [], padDoel: null, onderweg: false, binnen: false });
 }
 
-// Bewoners met een poppetje die vrij kunnen zijn: geen kleuter, niet de schout, niet de herbergierster.
+// Bewoners met een poppetje die vrij kunnen zijn: geen kleuter, en niet de schout.
 function vrijeMensen(S) {
-  const D = S.dorp;
-  const herberg = T.herbergVan(D);
-  return D.bewoners.mensen.filter((p) => p.wezen && !p.schout && p.leeftijd !== 'kleuter' && p.huis !== herberg);
+  return S.dorp.bewoners.mensen.filter((p) => p.wezen && !p.schout && p.leeftijd !== 'kleuter');
 }
 
 // `aantal` poppetjes: de eerste is wie de meeste mensen kent, en de rest kent hem (uit een ander huis). Om aan te
@@ -120,10 +108,10 @@ function stappen(S, seconden) {
 }
 
 test('wie vrij is: de ochtend, de schaft en de avond; overdag alleen wie geen werk heeft; nooit een kleuter of de schout', () => {
-  const S = gehucht();
+  const S = proef();
   const D = S.dorp;
-  const werker = D.bewoners.mensen.find((p) => p.wezen && p.werk && !p.schout && p.huis !== T.herbergVan(D)).wezen;
-  const zonder = D.bewoners.mensen.find((p) => p.wezen && !p.werk && !p.schout && p.leeftijd !== 'kleuter' && !p.wie).wezen;
+  const werker = D.bewoners.mensen.find((p) => p.wezen && p.werk && !p.schout).wezen;
+  const zonder = D.bewoners.mensen.find((p) => p.wezen && !p.werk && !p.schout && p.leeftijd !== 'kleuter').wezen;
   const kleuter = D.bewoners.mensen.find((p) => p.wezen && p.leeftijd === 'kleuter');
   for (const deel of ['ochtend', 'schaft', 'avond']) assert.ok(T.kanPraten(S, D, werker, deel), `wie werkt, is vrij in de ${deel}`);
   assert.ok(!T.kanPraten(S, D, werker, 'werk'), 'wie werkt, praat niet onder het werk');
@@ -136,12 +124,10 @@ test('wie vrij is: de ochtend, de schaft en de avond; overdag alleen wie geen we
     assert.ok(!T.kanPraten(S, D, werker, 'avond'), `wie ${bezig}, niet`);
     werker[bezig] = false;
   }
-  const herbergierster = D.bewoners.mensen.find((p) => p.wezen && p.huis === T.herbergVan(D));
-  if (herbergierster) assert.ok(!T.kanPraten(S, D, herbergierster.wezen, 'avond'), "de herbergierster tapt 's avonds");
 });
 
 test('wie elkaar kent: buren en wie samen werkt, niet wie onder één dak woont, en niet wie ver weg woont', () => {
-  const S = gehucht();
+  const S = proef();
   const D = S.dorp;
   const huis = (x, y) => ({ x, y });
   const werk = {};
@@ -153,7 +139,7 @@ test('wie elkaar kent: buren en wie samen werkt, niet wie onder één dak woont,
 });
 
 test('twee vrije bekenden blijven staan: de een loopt tot naast de ander, en ze kijken naar elkaar', () => {
-  const S = gehucht(20);
+  const S = proef(20);
   const D = S.dorp;
   const w = S.wereld;
   const [a, b] = bekenden(S, 2);
@@ -177,7 +163,7 @@ test('twee vrije bekenden blijven staan: de een loopt tot naast de ander, en ze 
 });
 
 test('wie een bekende ziet die al in een groepje staat, schuift aan, tot vier', () => {
-  const S = gehucht(20);
+  const S = proef(20);
   const D = S.dorp;
   const w = S.wereld;
   const mensen = bekenden(S, 5);
@@ -201,7 +187,7 @@ test('wie een bekende ziet die al in een groepje staat, schuift aan, tot vier', 
 });
 
 test('wie langsloopt en er een kent, schuift aan: één kans per keer dat hij langskomt', () => {
-  const S = gehucht(20);
+  const S = proef(20);
   const D = S.dorp;
   const [a, b, c, d] = bekenden(S, 4);
   const p = pleinPlek(S);
@@ -227,7 +213,7 @@ test('wie langsloopt en er een kent, schuift aan: één kans per keer dat hij la
 });
 
 test('onderweg: twee vrije bekenden die elkaar treffen, blijven staan in plaats van uit te wijken', () => {
-  const S = gehucht(20);
+  const S = proef(20);
   const w = S.wereld;
   const [a, b] = bekenden(S, 2);
   const p = pleinPlek(S);
@@ -246,7 +232,7 @@ test('onderweg: twee vrije bekenden die elkaar treffen, blijven staan in plaats 
 });
 
 test('onderweg: lopen ze door, dan is het één kans per keer dat ze elkaar treffen, ook op het plein', () => {
-  const S = gehucht(20);
+  const S = proef(20);
   const w = S.wereld;
   const [a, b] = bekenden(S, 2);
   const p = pleinPlek(S);
@@ -266,7 +252,7 @@ test('onderweg: lopen ze door, dan is het één kans per keer dat ze elkaar tref
 });
 
 test('het praatje is om na zijn tijd, en dan een uur rust, ook op het plein', () => {
-  const S = gehucht(20);
+  const S = proef(20);
   const D = S.dorp;
   const w = S.wereld;
   const [a, b] = bekenden(S, 2);
@@ -294,7 +280,7 @@ test('het praatje is om na zijn tijd, en dan een uur rust, ook op het plein', ()
 });
 
 test('wie niet meer vrij is, gaat; staat er nog maar één, dan is het praatje om', () => {
-  const S = gehucht(20);
+  const S = proef(20);
   const D = S.dorp;
   const [a, b, c] = bekenden(S, 3);
   const p = pleinPlek(S);
@@ -354,7 +340,7 @@ test('wie langs wil, loopt om een praatje heen; in een smalle doorgang gaat er e
 });
 
 test('de spelregel Praatjes uit: geen praatje, en wie praatte, gaat', () => {
-  const S = gehucht(20);
+  const S = proef(20);
   const D = S.dorp;
   const w = S.wereld;
   const [a, b] = bekenden(S, 2);
@@ -373,7 +359,7 @@ test('de spelregel Praatjes uit: geen praatje, en wie praatte, gaat', () => {
 });
 
 test('een bewaard spel heeft het praatje nog: één groepje, met dezelfde mensen', () => {
-  const S = gehucht(20);
+  const S = proef(20);
   const D = S.dorp;
   const [a, b] = bekenden(S, 2);
   const p = pleinPlek(S);
@@ -381,7 +367,7 @@ test('een bewaard spel heeft het praatje nog: één groepje, met dezelfde mensen
   zet(b, p.x + 1, p.y - 1);
   assert.ok(metWorp(0, () => T.beginPraatje(D, a, b)));
   const tekst = T.bewaarSpel(S, { nu: 1790000000000 });
-  const S2 = gehucht(20);
+  const S2 = proef(20);
   assert.equal(T.herstelSpel(S2, tekst).gelukt, true);
   const groepen = [...T.praatjesOp(S2.wereld)];
   assert.equal(groepen.length, 1, 'één groepje');
@@ -391,8 +377,8 @@ test('een bewaard spel heeft het praatje nog: één groepje, met dezelfde mensen
   assert.equal(g.tot, a.praatje.tot);
 });
 
-test('een dag in het gehucht: er wordt gepraat, nooit twee op één tegel, wie praat laat het werk niet liggen, en \'s nachts is iedereen binnen', (t) => {
-  const S = gehucht(5);
+test('een dag in het proefdorp: er wordt gepraat, nooit twee op één tegel, wie praat laat het werk niet liggen, en \'s nachts is iedereen binnen', (t) => {
+  const S = proef(5);
   const D = S.dorp;
   const w = S.wereld;
   // Met een vast toeval, zodat de dag elke keer dezelfde is.

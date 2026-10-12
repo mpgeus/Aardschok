@@ -4,6 +4,7 @@
 // kruisingen, en 's avonds de ramen van een huis waar iemand thuis is.
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const { proefDorp } = require('./grond.cjs');
 
 const T = require('./laad.cjs').spel();
 const IN = T.PADEN_INSTELLINGEN;
@@ -19,25 +20,25 @@ function dagVan(maand, d) {
 const ZOMER = dagVan('hooimaand', 10);
 const bijUur = (dag, uur) => Math.floor(dag) + uur / 24;
 
-// Het echte gehucht, met een vast zaad (zoals test/zien.test.cjs).
-function gehucht(dag = ZOMER) {
-  const echt = console.warn;
-  const loten = T.BOEREN_INSTELLINGEN.loten;
-  const echtLot = T.lootBoeren;
-  console.warn = () => {};
-  T.BOEREN_INSTELLINGEN.loten = false;
-  T.lootBoeren = (S2) => echtLot(S2, 1234);
-  const S = { kalender: T.nieuweKalender() };
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht'));
-  } finally {
-    console.warn = echt;
-    T.BOEREN_INSTELLINGEN.loten = loten;
-    T.lootBoeren = echtLot;
-  }
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', effecten: [], wachters: [], bezocht: new Set(), inventaris: new Set() }, T.schermVelden());
+// Het proefdorp (test/grond.cjs), op `dag`. `opties` gaan naar proefDorp.
+function proef(dag = ZOMER, opties = {}) {
+  const { S } = proefDorp(T, opties);
+  Object.assign(S, { bezocht: new Set() });
   Object.assign(S.kalender, { dag, snelheid: 1 });
   return S;
+}
+// Rond een dorp in het lege begin staan bos en heide, en elk voorwerp houdt een paadje tegen (magPad in js/paden.js): een
+// deur in het bos krijgt er geen. Een toets over het net van de deuren ruimt de begroeiing (bomen, struiken, heide) op in een
+// vak rond de gebouwen, zoals een dorp dat al een tijd staat.
+function ruimBegroeiingOp(D) {
+  const w = D.wereld;
+  const rand = 12;
+  const x1 = Math.min(...D.gebouwen.map((g) => g.x)) - rand;
+  const y1 = Math.min(...D.gebouwen.map((g) => g.y)) - rand;
+  const x2 = Math.max(...D.gebouwen.map((g) => g.x + g.voet.b)) + rand;
+  const y2 = Math.max(...D.gebouwen.map((g) => g.y + g.voet.h)) + rand;
+  w.voorwerpen = w.voorwerpen.filter((v) => !((v.vel === 'bomen' || v.vel === 'begroeiing') && v.x >= x1 && v.x <= x2 && v.y >= y1 && v.y <= y2));
+  T.kaartVeranderd(w);
 }
 const zet = (e, x, y) => Object.assign(e, { x, y, tx: x, ty: y, pad: [], binnen: false });
 const breedte = (w) => w.tegels[0].length;
@@ -77,8 +78,9 @@ function losGras(D) {
 }
 
 test('van elke deur loopt een paadje naar de weg', () => {
-  const S = gehucht();
+  const S = proef();
   const D = S.dorp;
+  ruimBegroeiingOp(D);
   const net = T.aangelegdNet(D);
   const b = breedte(D.wereld);
   assert.ok(net.some((v) => v === 2), 'er zijn paadjes van de deuren');
@@ -90,11 +92,11 @@ test('van elke deur loopt een paadje naar de weg', () => {
 });
 
 test('een nieuw gebouw krijgt meteen een paadje, en wie later bouwt, sluit aan', () => {
-  const S = gehucht();
+  const S = proef();
   const D = S.dorp;
   T.zetVoorraad(D, 'hout', 100);
   T.zetVoorraad(D, 'goud', 100);
-  const schout = D.gebouwen.find((g) => g.huis === 'schout');
+  const schout = D.gebouwen.find((g) => g.soort === 'schout');
   const plek = T.plekVoor(D, 'houthakker', T.deurVan(D.wereld, schout));
   const r = T.plaatsGebouw(D, 'houthakker', plek.x, plek.y);
   assert.ok(r.gelukt, r.reden);
@@ -108,7 +110,7 @@ test('een nieuw gebouw krijgt meteen een paadje, en wie later bouwt, sluit aan',
 });
 
 test('waar veel gelopen wordt, slijt het gras tot een paadje; waar niemand meer loopt, groeit het dicht', () => {
-  const S = gehucht();
+  const S = proef();
   const D = S.dorp;
   const w = D.wereld;
   const t = losGras(D);
@@ -129,7 +131,7 @@ test('waar veel gelopen wordt, slijt het gras tot een paadje; waar niemand meer 
 });
 
 test('op een veld slijt geen paadje, en een dier telt niet', () => {
-  const S = gehucht();
+  const S = proef();
   const D = S.dorp;
   const w = D.wereld;
   const akker = w.akkers[0];
@@ -155,7 +157,7 @@ test('op een veld slijt geen paadje, en een dier telt niet', () => {
 
 test('de spelregel "Paadjes": alleen van de deuren, of geen', (t) => {
   t.after(() => T.optiesTerug());
-  const S = gehucht();
+  const S = proef();
   const D = S.dorp;
   const w = D.wereld;
   const plek = losGras(D);
@@ -169,7 +171,7 @@ test('de spelregel "Paadjes": alleen van de deuren, of geen', (t) => {
 });
 
 test('hoe het eruitziet: een recht paadje is zand, de weg blijft zoals de kaart hem legde', () => {
-  const S = gehucht();
+  const S = proef();
   const D = S.dorp;
   const w = D.wereld;
   const b = breedte(w);
@@ -201,12 +203,12 @@ test('hoe het eruitziet: een recht paadje is zand, de weg blijft zoals de kaart 
 });
 
 test('een lantaarn bij de deur van de kapel als hij klaar is, en niet twee keer', () => {
-  const S = gehucht();
+  const S = proef();
   const D = S.dorp;
   const w = D.wereld;
   T.zetVoorraad(D, 'hout', 100);
   T.zetVoorraad(D, 'goud', 100);
-  const schout = D.gebouwen.find((g) => g.huis === 'schout');
+  const schout = D.gebouwen.find((g) => g.soort === 'schout');
   const plek = T.plekVoor(D, 'kapel', T.deurVan(w, schout));
   const r = T.plaatsGebouw(D, 'kapel', plek.x, plek.y);
   assert.ok(r.gelukt, r.reden);
@@ -227,13 +229,13 @@ test('een lantaarn bij de deur van de kapel als hij klaar is, en niet twee keer'
 });
 
 test('lantaarns op de kruisingen van het net, naast het pad en niet te dicht bij elkaar', () => {
-  const S = gehucht();
+  const S = proef();
   const D = S.dorp;
   const w = D.wereld;
   const b = breedte(w);
   const net = T.aangelegdNet(D);
   const nieuw = w.voorwerpen.filter((v) => v.vanHetDorp);
-  assert.ok(nieuw.length >= 1, 'het gehucht krijgt er bij het begin al een paar');
+  assert.ok(nieuw.length >= 1, 'het proefdorp heeft er al een');
   const alle = w.voorwerpen.filter((v) => v.soort === 'lantaarn');
   for (const l of nieuw) {
     assert.equal(net[l.x + l.y * b], 0, `${l.x},${l.y} staat niet op het pad`);
@@ -246,7 +248,7 @@ test('lantaarns op de kruisingen van het net, naast het pad en niet te dicht bij
 });
 
 test('\'s avonds branden de ramen van een huis waar iemand thuis is; zijn ze allemaal weg, of slapen ze, dan niet', () => {
-  const S = gehucht(bijUur(ZOMER, 21));
+  const S = proef(bijUur(ZOMER, 21));
   const D = S.dorp;
   const w = D.wereld;
   assert.equal(T.dagdeelVan(S.kalender.dag, T.isOogstDag(S.kalender.dag)), 'avond');
@@ -268,7 +270,7 @@ test('\'s avonds branden de ramen van een huis waar iemand thuis is; zijn ze all
 });
 
 test('bewaren en laden houdt wat er gesleten is', () => {
-  const S = gehucht();
+  const S = proef();
   const D = S.dorp;
   const w = D.wereld;
   const t = losGras(D);
@@ -276,7 +278,7 @@ test('bewaren en laden houdt wat er gesleten is', () => {
     for (let i = 0; i < 10; i++) T.telStap(w, t.x, t.y);
     T.tikPadenDag(D);
   }
-  const S2 = gehucht();
+  const S2 = proef();
   assert.equal(T.herstelSpel(S2, T.bewaarSpel(S, { nu: 1790000000000 })).gelukt, true);
   const P2 = S2.dorp.wereld.paden;
   assert.ok(P2.gesleten instanceof Set && P2.gesleten.has(t.x + t.y * breedte(w)));

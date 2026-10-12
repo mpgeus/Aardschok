@@ -86,7 +86,7 @@
 
   // Zijn getallen, naar zijn rekenen (T.vaardighedenVan, js/raadsman.js): wie kan rekenen, zegt ze precies; wie het
   // niet bijzonder kan, rondt af op afrondenOp, en onder telTot telt hij precies; wie niet kan rekenen, zit er tot
-  // slechtNaast naast, en rondt dan af zoals ieder ander. Geloot met de dobbelsteen van het spel (js/boeren.js), vast
+  // slechtNaast naast, en rondt dan af zoals ieder ander. Geloot met de dobbelsteen van het spel (js/dorp.js), vast
   // per dag, zodat de speeltest hetzelfde jaar speelt. Geeft een functie: getal (niet negatief) → { n, tekst }.
   T.rekenaarVan = function (D, p, dag) {
     const kan = T.vaardighedenVan(D, p).rekenen; // 'goed', 'slecht', of niets bijzonders

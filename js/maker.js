@@ -17,7 +17,7 @@
 // Marcel, 30 sep: "c ja") begint een nieuw spel op een gemaakt gehucht, uit het zaad van dat spel (T.beginOpKaart,
 // js/gebied.js). De schets (gereedschap/maker/schets.cjs, npm run maker) tekent plannen als plattegrond.
 //
-// Hij gebruikt de regels uit js/ zelf: de dobbelsteen (T.dobbelsteen, js/boeren.js), de rand van het plein
+// Hij gebruikt de regels uit js/ zelf: de dobbelsteen (T.dobbelsteen, js/dorp.js), de rand van het plein
 // (T.binnenRand, js/wereld.js), de maten en deuren van de tekeningen en de grondtegels (T.TEGELS, tegels/tegels.js).
 (function (T) {
   'use strict';

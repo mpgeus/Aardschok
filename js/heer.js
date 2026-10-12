@@ -72,9 +72,11 @@
     soldaatEetAls: 3,
     soldatenOntevreden: 0.1,
     soldatenTot: { maand: 'lentemaand', dag: 1 },
-    // De schandpaal: zoveel dagen staat hij er. Wat het het dorp kost, staat bij de mens zelf
-    // (T.MENSEN[id].schandpaal, js/mensen.js), en dat slijt in zoveel dagen weer weg.
+    // De schandpaal: zoveel dagen staat hij er, en wat het het dorp aan tevredenheid kost als er een boer staat (0,15:
+    // 15%), dat in zoveel dagen weer wegslijt. Tot ronde 2 van het snoeien (stap 4, 12 okt) kostte het naar zijn
+    // geloot aanzien: een geliefde boer 0,3, een gehate 0,05.
     schandpaalDagen: 3,
+    schandpaalKost: 0.15,
     wrokDagen: 120,
     // Komt de schout niet naar hem toe, dan neemt hij het na zoveel dagen zelf. Die dagen tellen
     // pas als hij op het plein staat en de tijd weer loopt: bij zijn komst staat hij stil.
@@ -448,18 +450,23 @@
     }
   }
 
-  // Wie er aan de schandpaal kan: de boeren (wie een karakter heeft, js/boeren.js), met wat het het
-  // dorp kost naar hun aanzien, en de schout zelf. [{ wie, naam, eigenschap, kost, boete }]: kost is
-  // de tevredenheid, boete het goud dat de heer erbij zet (alleen bij de schout).
+  // Wie aan de schandpaal kan staan, heet zo (`wie` in h.wrok en in het lijstje): een boer van de kaart
+  // naar zijn naam in T.MENSEN (e.wie), een andere bewoner naar zijn nummer ('bewoner7'); de schout
+  // heet 'schout'. Zijn poppetje, of null.
+  const wieVan = (p) => (p.wezen && p.wezen.wie) || `bewoner${p.id}`;
+  function poppetjeVan(D, wie) {
+    const p = ((D.bewoners && D.bewoners.mensen) || []).find((q) => wieVan(q) === wie);
+    return (p && p.wezen) || null;
+  }
+
+  // Wie er aan de schandpaal kan: de boeren (T.isBoer, js/boerderij.js), en de schout zelf.
+  // [{ wie, naam, eigenschap, kost, boete }]: kost is de tevredenheid (schandpaalKost), boete het goud
+  // dat de heer erbij zet (alleen bij de schout).
   T.schandpaalKeuzes = function (D) {
     const lijst = [];
-    const gezien = new Set();
-    for (const e of (D.wereld && D.wereld.wezens) || []) {
-      const kost = T.aanzienVan(e);
-      if (kost == null || e.dood || gezien.has(e.wie)) continue;
-      gezien.add(e.wie);
-      const eigenschap = T.overBoerTekst(e);
-      lijst.push({ wie: e.wie, naam: e.naam || T.naamVanMens(e.wie), eigenschap, kost, boete: 0 });
+    for (const p of (D.bewoners && D.bewoners.mensen) || []) {
+      if (!p.wezen || p.wezen.dood || !T.isBoer(D, p)) continue;
+      lijst.push({ wie: wieVan(p), naam: T.naamVanBewoner(p), eigenschap: T.t('farmer'), kost: IN().schandpaalKost, boete: 0 });
     }
     if (!IN().schoutMagZelf) return lijst;
     const h = D.heer;
@@ -533,16 +540,16 @@
     const y = h.paal.y + VOOR_DE_PAAL.dy;
     for (const wr of h.wrok) {
       if (!wr.staat || wr.vanaf == null) continue;
-      const e = w.wezens.find((m) => m.wie === wr.wie && !m.dood);
-      if (!e || !e.moetNaar || e.moetNaar.x !== x || e.moetNaar.y !== y) continue;
+      const e = poppetjeVan(D, wr.wie);
+      if (!e || e.dood || !e.moetNaar || e.moetNaar.x !== x || e.moetNaar.y !== y) continue;
       if (e.tx === x && e.ty === y && e.x === x && e.y === y && !(e.pad && e.pad.length)) return e;
     }
     return null;
   };
 
   // De vlag die een gesprek laat weten dat iemand aan de schandpaal stond, naar het gesprek dat hij
-  // voert: een boer met het karakter weduwe (js/boeren.js) krijgt "schandpaalWeduwe", en dat leest
-  // het gesprek van de weduwe. Elk karakter hoort in een spel bij één boer.
+  // voert, of anders naar wie hij is: "schandpaalBewoner7". (Tot ronde 2 van het snoeien voerde een
+  // boer het gesprek van zijn karakter, en las dat de vlag van zijn karakter, "schandpaalWeduwe".)
   T.schandpaalVlag = (wie) => 'schandpaal' + wie.charAt(0).toUpperCase() + wie.slice(1);
 
   T.zetAanDeSchandpaal = function (D, wie) {
@@ -564,10 +571,10 @@
       // moetNaar). Zijn dagen aan de paal tellen pas als hij er staat (T.werkHeerBij), net als bij
       // de marskramer: drie dagen zijn op 1× maar zeven seconden, en anders mocht hij al naar huis
       // voor hij er was. Zonder poppetje of zonder wereld om in te lopen staat hij er meteen.
-      const e = ((D.wereld && D.wereld.wezens) || []).find((x) => x.wie === wie && !x.dood);
-      const lopen = !!(e && kanLopen(D));
+      const e = poppetjeVan(D, wie);
+      const lopen = !!(e && !e.dood && kanLopen(D));
       h.wrok.push({ wie, dag: dagNu(D), kost: keuze.kost, staat: true, vanaf: lopen ? null : dagNu(D) });
-      T.zetVlag(D, T.schandpaalVlag(e ? T.gesprekIdVan(e) : wie));
+      T.zetVlag(D, T.schandpaalVlag((e && e.gesprek) || wie));
       if (e) e.moetNaar = { ...voorDePaal(D), straal: 0 };
       T.zeg(D, T.t('{naam} must stand in the pillory on the square for {n|# day|# days}. The village will remember it.', { naam: keuze.naam, n: IN().schandpaalDagen }), 'gevaar');
       T.wijzigVertrouwen(D, -keuze.kost * T.BAZEN_INSTELLINGEN.schandpaalPerAanzien, T.t('{naam} in the pillory', { naam: keuze.naam }));
@@ -705,7 +712,7 @@
       const klaar = w.vanaf != null ? dag >= w.vanaf + IN().schandpaalDagen : dag >= w.dag + IN().schandpaalDagen + 7;
       if (!klaar) continue;
       w.staat = false;
-      const e = ((D.wereld && D.wereld.wezens) || []).find((x) => x.wie === w.wie);
+      const e = poppetjeVan(D, w.wie);
       if (e) {
         e.moetNaar = null;
         e.kijkt = null;
@@ -784,7 +791,7 @@
     // naar de paal (e.kijkt, js/sprites.js): de paal staat een tegel schuin achter hem, dus naar Z.
     for (const wr of h.wrok) {
       if (!wr.staat || wr.vanaf != null) continue;
-      const e = w.wezens.find((x) => x.wie === wr.wie);
+      const e = poppetjeVan(D, wr.wie);
       if (e && e.moetNaar && e.tx === e.moetNaar.x && e.ty === e.moetNaar.y) {
         wr.vanaf = dagNu(D);
         e.kijkt = 'Z';

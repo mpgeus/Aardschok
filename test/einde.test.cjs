@@ -5,6 +5,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+const { proefDorp } = require('./grond.cjs');
 
 const berichten = [];
 const getoond = [];
@@ -23,21 +24,10 @@ function dagVan(maand, d, jaar = 0) {
   return dag + jaar * 360;
 }
 
-// Het echte gehucht, zoals een nieuw spel begint, stil en met een vast zaad (zoals in test/feesten.test.cjs).
+// Het proefdorp (test/grond.cjs): zeventien mensen op dag 2, stil.
 function gehucht() {
-  const echt = console.warn;
-  const toeval = Math.random;
-  let n = 11;
-  console.warn = () => {};
-  Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
-  const S = { kalender: T.nieuweKalender() };
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht'));
-  } finally {
-    console.warn = echt;
-    Math.random = toeval;
-  }
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
+  const S = proefDorp(T).S;
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set() });
   T.S = S;
   return S;
 }
@@ -83,6 +73,7 @@ test('het jaarboek telt het jaar, en op 1 lentemaand komt het jaarverslag', () =
   T.telOogstInJaarboek(D, 300.2); // de boeren maaien tegel voor tegel (js/akkers.js)
   T.telOogstInJaarboek(D, 100.1);
   D.feesten = { komt: null, boom: null, gevierd: [{ id: 'meiboom', dag: begin + 60, heel: true }] };
+  const begonMet = D.jaarboek.mensen; // de mensen van het proefdorp, aan het begin van het jaar
   D.bevolking = 30;
 
   const lente = dagVan('lentemaand', 1, 1);
@@ -93,7 +84,8 @@ test('het jaarboek telt het jaar, en op 1 lentemaand komt het jaarverslag', () =
   assert.deepEqual(getoond, ['toonBrief:jaarverslag']);
   const regels = D.jaarverslag.regels;
   assert.equal(D.jaarverslag.dag, lente);
-  assert.equal(regels[0], 'In the year 1323 Kleiwerd grew from 26 to 30 people.');
+  assert.equal(regels[0], `In the year 1323 Kleiwerd grew from ${begonMet} to 30 people.`);
+  assert.equal(begonMet, S.dorp.bewoners.mensen.length, 'het jaarboek begon met wie er woont');
   assert.ok(regels.includes('4 people joined, 3 died and 1 left.'), regels.join(' | '));
   assert.ok(regels.includes('The harvest brought 400 grain.'));
   assert.ok(regels.includes('One house grew larger.'));

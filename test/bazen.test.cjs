@@ -5,6 +5,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+const { proefDorp } = require('./grond.cjs');
 
 const berichten = [];
 const brieven = [];
@@ -18,21 +19,12 @@ T.ui = new Proxy({}, {
   },
 });
 
-// Het echte gehucht, zoals een nieuw spel begint, stil en met een vast zaad.
+// Het proefdorp (test/grond.cjs), stil. De meters beginnen op hun beginstand (50): het proefdorp heeft twee dagen
+// vertrouwen-slijten gehad (T.tikBazenDag), en deze toetsen rekenen vanaf het begin.
 function gehucht() {
-  const echt = console.warn;
-  const toeval = Math.random;
-  let n = 11;
-  console.warn = () => {};
-  Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
-  const S = { kalender: T.nieuweKalender() };
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht'));
-  } finally {
-    console.warn = echt;
-    Math.random = toeval;
-  }
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
+  const S = proefDorp(T).S;
+  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set() });
+  S.dorp.bazen = T.nieuweBazen();
   T.S = S;
   berichten.length = 0;
   brieven.length = 0;

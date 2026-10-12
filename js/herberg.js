@@ -7,8 +7,8 @@
 //     hoek tussen het plein en de weg, en daar woont de herbergierster (kaarten/gehucht.betekenis.json).
 //     Er kan een tweede komen (je bouwt hem zelf): wie 's avonds gaat, gaat naar de herberg die het dichtst
 //     bij zijn huis staat (T.herbergenVan);
-//   - wie er vanavond heen gaat (T.herbergGasten): een volwassene, naar zijn karakter (de drinker elke
-//     avond, de vrome nooit), vaker in de winter als de avond lang is, en minder vaak naarmate hij
+//   - wie er vanavond heen gaat (T.herbergGasten): een volwassene, vaker in de winter als de avond lang
+//     is, en minder vaak naarmate hij
 //     verder weg woont. Nooit meer dan er bier is. Het lot ligt vast per mens per dag, zodat het klopt
 //     als je slaapt, door de kalender springt of op 30× speelt;
 //   - waar ze 's avonds heen lopen (T.herbergAnker, voor T.dagAnker in js/dag.js): de herberg in, en bij
@@ -30,11 +30,10 @@
   // Alle getallen in één blok, zoals elders (CLAUDE.md); ze staan ook in de werkbank (js/opties.js).
   // Een eerste voorstel van Claude (27 sep).
   T.HERBERG_INSTELLINGEN = {
-    // De kans dat een volwassene vanavond gaat: gewoon, en in de winter, als de avond lang is. Een
-    // karakter kan het anders willen: de drinker gaat elke avond, de vrome nooit.
+    // De kans dat een volwassene vanavond gaat: gewoon, en in de winter, als de avond lang is. (Tot ronde 2 van het
+    // snoeien kon een karakter het anders willen: de drinker ging elke avond, de vrome nooit.)
     kansPerAvond: 0.3,
     kansWinter: 0.45,
-    karakters: { drinker: 1, vrome: 0 },
     // Wie ver woont, gaat minder vaak: de kans zakt met de weg erheen, tot niets bij zoveel uur lopen.
     // En hij gaat niet als hij er dan niet minstens zo lang kan zitten voor het bedtijd is.
     verstWeg: 3,
@@ -78,13 +77,6 @@
   // De herberg van het dorp: de eerste die klaar is, of null. Daar woont de herbergierster, en daar logeert de marskramer.
   T.herbergVan = (D) => T.herbergenVan(D)[0] || null;
 
-  // Het karakter van een bewoner: alleen een boer heeft er een (js/boeren.js zet het geloote op zijn
-  // poppetje).
-  function karakterVan(p) {
-    if (!p.wie) return null;
-    return (p.wezen && p.wezen.karakter) || (T.MENSEN && T.MENSEN[p.wie] && T.MENSEN[p.wie].karakter) || null;
-  }
-
   // Kan hij vanavond gaan? Een volwassene, niet de schout (die loop jij), niet wie net komt of
   // wegtrekt, en niet wie in een herberg woont: die is er al.
   function kanGaan(p, herbergen) {
@@ -93,7 +85,7 @@
   }
 
   // Een vast lot per mens per dag, tussen 0 en 1: uit het zaad van het spel (js/bewoners.js), met de
-  // dobbelsteen van js/boeren.js.
+  // dobbelsteen van js/dorp.js.
   function lot(B, p, dag) {
     const zaad = ((B.zaad >>> 0) + Math.imul(p.id, 7919) + Math.imul(dag + 1, 104729)) >>> 0;
     return T.dobbelsteen(zaad)();
@@ -112,9 +104,8 @@
   function kansVan(D, p, deur, dag, sleutel = 'herberg', maat = 1) {
     const B = D.bewoners;
     const w = B.wereld;
-    const k = karakterVan(p);
     const winter = T.datumVanDag(dag).seizoen === 'winter';
-    const basis = k && IN().karakters[k] != null ? IN().karakters[k] : winter ? IN().kansWinter : IN().kansPerAvond;
+    const basis = winter ? IN().kansWinter : IN().kansPerAvond;
     if (!(basis > 0) || !p.huis) return { kans: 0, heen: 0 };
     const heen = T.looptijdVan(w, p, T.deurVan(w, p.huis), { x: deur.x, y: deur.y, straal: 0 }, sleutel);
     if (heen + IN().minstensUren > avondUren(dag)) return { kans: 0, heen };

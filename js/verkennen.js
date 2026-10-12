@@ -161,9 +161,7 @@
       // Wie een gesprek heeft (js/gesprekken.js), daar praat je mee: een boer, de heer. Welk
       // gesprek dat is, zegt T.gesprekIdVan — een dorpeling kan er een eigen hebben.
       if (T.gesprekVan(e)) {
-        // Bij een boer ook wie hij is en wat hij kan (js/boeren.js; Marcel wilde het meteen zien).
-        const over = T.overBoerTekst ? T.overBoerTekst(e, true) : '';
-        return { tekst: over ? T.t('Talk to {wie} ({over})', { wie: e.naam, over }) : T.t('Talk to {wie}', { wie: e.naam }), doe: () => loopNaast(S, e, () => T.openDialoog(S, e)) };
+        return { tekst: T.t('Talk to {wie}', { wie: e.naam }), doe: () => loopNaast(S, e, () => T.openDialoog(S, e)) };
       }
       return null;
     }

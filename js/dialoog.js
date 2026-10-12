@@ -60,10 +60,9 @@
     const toon = (knoopId) => {
       const knoop = T.gesprekKnoop(S, D, wieId, knoopId);
       toonPortret(gesprek.portret);
-      // Een boer voert het gesprek van zijn karakter (js/boeren.js), maar heet zoals hij heet:
-      // Aaltje, en niet "de weduwe". Onder zijn naam staat wie hij is en wat hij kan; bij een voorval ook
-      // bij een gewone bewoner (js/bewoners.js). De naam van een voorval is {wie}: die vult het spel in.
-      const over = T.overBoerTekst(wie) || (voorval ? T.overBewonerTekst(D, wie) : '');
+      // Bij een voorval staat onder de naam wie hij is (js/bewoners.js). De naam van een voorval is {wie}: die vult het
+      // spel in.
+      const over = voorval ? T.overBewonerTekst(D, wie) : '';
       T.ui.toonDialoog(
         T.hoofdletter(over && wie.naam ? wie.naam : T.vulWoordenIn(D, gesprek.naam)),
         knoop.tekst,
