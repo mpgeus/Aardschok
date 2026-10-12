@@ -279,30 +279,6 @@ test('T.werkGebouwenBij: verwerkt elke verstreken dag apart, ook als de kalender
   assert.ok(Math.abs(S.voorraad.graan - verwacht) < 1e-9, `verwachtte ${verwacht}, kreeg ${S.voorraad.graan}`);
 });
 
-// ── T.zetBestaandeGebouwen (het gehucht dat niet leeg begint) — hier met een handgemaakte
-// w.gebouwenOpKaart; hoe die daar vanuit een betekenisbestand komt, staat in
-// test/gebouwen-kaart.test.cjs, samen met de rest van T.laadKaart. ──
-test('T.zetBestaandeGebouwen: zet elk gebouw op de kaart klaar neer, en de bevolking begint op hun woonruimte', () => {
-  const S = maakS();
-  S.wereld.gebouwenOpKaart = [
-    { soort: 'boerderij', x: 2, y: 2, b: 7, h: 8 },
-    { soort: 'huis', x: 20, y: 20, b: 6, h: 8 },
-  ];
-  T.zetBestaandeGebouwen(S);
-  assert.equal(S.gebouwen.length, 2);
-  assert.ok(S.gebouwen.every((g) => g.klaar === true));
-  const verwacht = T.GEBOUWEN.boerderij.woonruimte + T.GEBOUWEN.huis.woonruimte;
-  assert.equal(S.woonruimte, verwacht);
-  assert.equal(S.bevolking, verwacht);
-});
-
-test('T.zetBestaandeGebouwen: een onbekende soort wordt overgeslagen, niet een toets die crasht', () => {
-  const S = maakS();
-  S.wereld.gebouwenOpKaart = [{ soort: 'iets-dat-niet-bestaat', x: 0, y: 0, b: 1, h: 1 }];
-  assert.doesNotThrow(() => T.zetBestaandeGebouwen(S));
-  assert.equal(S.gebouwen.length, 0);
-});
-
 // T.bouwFaseIndex: welke van de vijf bouwfases (tegels/bouwfasen.json, js/tekenen.js) een gebouw
 // in aanbouw op een gegeven dag toont — de bouwtijd in vijf gelijke stukken. Puur, dus zonder
 // S of een echt gebouw te toetsen (ontwerp/werklijst.md, punt 2b).

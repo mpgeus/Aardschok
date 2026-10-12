@@ -20,7 +20,7 @@
 // WAT EEN DING BETEKENT. Eén ding in kaarten/<naam>.betekenis.json is een gewoon vakje met x en y
 // en daarnaast één van deze velden. Dezelfde namen gelden voor een object dat nog in Tiled staat
 // (als eigenschap), want er is maar één stel regels dat ze uitlegt — deze:
-//   wie        één mens uit T.MENSEN (js/mensen.js): "boer1", "koster". Dat is de gewone manier
+//   wie        één mens uit T.MENSEN (js/mensen.js): "smid", "koster". Dat is de gewone manier
 //              om iemand neer te zetten die een naam heeft — wie hij is, hoe hij eruitziet en wat
 //              hij zegt staat daar op één plek, en de kaart zegt alleen waar hij staat.
 //   wezen      welk wezen hier staat: een naam die T.maakWezen kent ('schout' voor de beginplek
@@ -53,31 +53,17 @@
 //              voorwerp op zijn eigen tegel plus, bij "beslaat", de tegels eromheen — precies zo
 //              vast als de tegel zelf zegt. In Tiled is dat een object met een gid.
 //   quest      "bakker:zoeken": dit ding ligt er alleen zolang die quest in die fase staat.
-//   akker      een naam ("akker1"): dit is geen los vakje maar een hele strook, x/y de
-//              linkerbovenhoek en b/h de maat in tegels (net als "beslaat" bij een gebouw), en
-//              "huis" welk huis (een vrije naam, bijvoorbeeld "boer1") hem bewerkt. Zolang er
-//              geen graantegels zijn (gereedschap/pixelart/graan*.cjs) is de grond zelf gewoon
-//              zandpad, getekend in de .tmj; dit ding zegt alleen wát er ligt en van wie. Zie
-//              gereedschap/tiled/maak-gehucht.cjs en ontwerp/werklijst.md, punt 1b. Met
-//              "bestemming" ("akker", "weide" of "braak") begint het veld als iets anders dan
-//              een akker (js/akkers.js, "Velden"): in het gehucht is akker6 een weide.
 //   meent      een naam ("heide"): open land van het dorp samen, waar de schapen grazen
-//              (js/vee.js, "Waar een dier graast"). Net als een akker een rechthoek: x/y de
-//              linkerbovenhoek, b/h de maat. De grond zelf (de heide) staat in de .tmj.
-//   gebouw     een soort uit T.GEBOUWEN (js/gebouwen.js): dit gebouw staat al op de kaart —
-//              x/y de linkerbovenhoek van zijn voet, b/h de maat in tegels (weer net als
-//              "beslaat"). Zijn tekening staat al in de .tmj zelf, als een gewoon Tiled-object
-//              (precies zoals een boom); dit ding voegt er alleen de betekenis aan toe, zodat
-//              T.zetBestaandeGebouwen hem als klaar gebouw meetelt (woonruimte, handen) zonder
-//              dat het spel leeg begint. Zie gereedschap/tiled/maak-gehucht.cjs, "HUIZEN". Met
-//              "bewoners" ("jongGezin", "oudStel") woont er bij het begin een vast gezin in een
-//              gewoon huis (js/bewoners.js, T.zetBeginBewoners).
+//              (js/vee.js, "Waar een dier graast"). Een rechthoek: x/y de linkerbovenhoek, b/h de
+//              maat. De grond zelf (de heide) staat in de .tmj. Sinds ronde 2 van het snoeien legt
+//              de maker er geen meer: hij slaapt, tot het vee een begin heeft (ontwerp/opmerkingen.md).
+//
+// Tot ronde 2 van het snoeien (stap 6, 12 okt; Marcel: "Alles wordt door spelers geplaatst") kon een kaart ook gebouwen
+// ("gebouw"), akkers ("akker") en een boer bij zijn huis ("huis") neerzetten, met een beginvoorraad en een bevolking:
+// het dorp dat er al was. Dat bouwt nu de speler; git bewaart het.
 //
 // En op het betekenisbestand zelf: "proef": true zegt dat de kaart alleen voor de toetsen bestaat
-// en in het spel niet meetelt; "beginVoorraad": { hout: 40, ... } geeft S.voorraad die waarden
-// mee zodra het spel op deze kaart begint (T.beginOpKaart, js/gebied.js), zodat een dorp niet met
-// lege handen begint; "beginBevolking": 25 zegt hoeveel mensen er dan wonen (zonder: zoveel als er
-// woonruimte is; T.zetBestaandeGebouwen, js/gebouwen.js); "marskramer": { x, y } is de plek waar de
+// en in het spel niet meetelt; "marskramer": { x, y } is de plek waar de
 // marskramer zijn waar uitstalt (js/handel.js), met "komt": { x, y } erbij als hij niet over de
 // eerste uitgang binnenkomt; en "plein": [[x, y], ...] is de rand van het plein, in tegels, waar
 // niet gebouwd wordt (T.opHetPlein, js/wereld.js).
@@ -234,9 +220,8 @@
     const questVoorwerpen = []; // wat aan een quest hangt; T.werkQuestVoorwerpen schuift het erin
     const wezens = [];
     const overgangen = [];
-    const akkers = []; // strokens land, geen vakjes; zie "akker" hierboven
-    const meenten = []; // de meent (de heide), ook een rechthoek; zie "meent" hierboven
-    const gebouwenOpKaart = []; // gebouwen die er al staan; zie "gebouw" hierboven
+    const akkers = []; // de velden die de speler legt (js/boerderij.js); een kaart legt er geen
+    const meenten = []; // de meent (de heide), een rechthoek; zie "meent" hierboven
 
     // 2. alles wat op de grond staat: bomen, huizen, deuren, wezens, dorpelingen, overgangen.
     // Dat komt uit twee bronnen, en allebei belanden ze in dezelfde `zetNeer` hieronder:
@@ -302,12 +287,7 @@
         // Eén mens uit T.MENSEN (js/mensen.js). De kaart zegt alleen waar hij staat; wie hij is,
         // hoe hij eruitziet en wat hij zegt staat daar, op één plek.
         try {
-          const e = T.maakMens(String(p.wie), gx, gy, Number(p.straal));
-          // "huis": dezelfde id als een akker se "huis" hieronder (bijv. "boer1") — zo koppelt
-          // T.laadKaart hieronder een boer aan zijn akker(s), voor T.wandelAnker/T.werkOogstBij
-          // (js/akkers.js, ontwerp/werklijst.md punt 1b: "huis koppelt akker en boer").
-          if (p.huis !== undefined) e.huis = String(p.huis);
-          wezens.push(e);
+          wezens.push(T.maakMens(String(p.wie), gx, gy, Number(p.straal)));
         } catch (e) {
           console.warn(`T.laadKaart: onbekende mens "${p.wie}" op (${gx}, ${gy}), overgeslagen`); // geen tekst
         }
@@ -317,45 +297,8 @@
         wezens.push(T.maakDorpeling(p.zaad, gx, gy, Number(p.straal) || 0, p.gesprek ? String(p.gesprek) : null));
         return;
       }
-      if (p.akker !== undefined) {
-        // Geen vakje maar een hele strook; de grond zelf staat al in de .tmj (kale zandgrond
-        // zolang er geen graantegels zijn), dit is alleen de betekenis erbij. Zie "akker"
-        // hierboven. Het plan voor volgend jaar begint gelijk aan de bestemming, en de
-        // vruchtbaarheid vol (js/akkers.js, T.VELDEN_INSTELLINGEN).
-        let bestemming = p.bestemming !== undefined ? String(p.bestemming) : 'akker';
-        // Een verschrijving moet opvallen, in plaats van stil een akker te worden (T.BESTEMMINGEN, js/akkers.js).
-        if (!T.BESTEMMINGEN.includes(bestemming)) {
-          console.warn(`T.laadKaart: akker "${p.akker}" heeft bestemming "${bestemming}"; dat is geen ${T.BESTEMMINGEN.join(', ')}. Hij wordt een akker.`); // geen tekst
-          bestemming = 'akker';
-        }
-        akkers.push({
-          naam: String(p.akker), x: gx, y: gy,
-          b: Number(p.b) || 1, h: Number(p.h) || 1,
-          huis: p.huis !== undefined ? String(p.huis) : null,
-          bestemming, plan: bestemming,
-          vruchtbaarheid: T.VELDEN_INSTELLINGEN ? T.VELDEN_INSTELLINGEN.beginVruchtbaarheid : 1,
-        });
-        return;
-      }
       if (p.meent !== undefined) {
         meenten.push({ naam: String(p.meent), x: gx, y: gy, b: Number(p.b) || 1, h: Number(p.h) || 1, meent: true });
-        return;
-      }
-      if (p.gebouw !== undefined) {
-        // Zijn tekening staat al in de .tmj (een gewoon Tiled-object, zoals een boom); dit is
-        // alleen de betekenis erbij. Zie "gebouw" hierboven en T.zetBestaandeGebouwen. "huis"
-        // zegt wie er woont, zoals bij een akker: de boer met dezelfde id, of "schout".
-        // "bewoners" zegt bij een gewoon huis wie er bij het begin woont
-        // ("jongGezin", "oudStel"; js/bewoners.js, T.zetBeginBewoners); zonder staat het leeg.
-        // "tekening" is de tekening die er op de kaart staat ("huizen/hut1"): die weet waar zijn
-        // deur is (T.deurVan, js/bewoners.js).
-        gebouwenOpKaart.push({
-          soort: String(p.gebouw), x: gx, y: gy,
-          b: Number(p.b) || 1, h: Number(p.h) || 1,
-          huis: p.huis !== undefined ? String(p.huis) : null,
-          bewoners: p.bewoners !== undefined ? String(p.bewoners) : null,
-          tekening: p.tekening !== undefined ? String(p.tekening) : null,
-        });
         return;
       }
       if (!t) return; // een leeg object zonder van bovenstaande: niets aan te doen
@@ -393,15 +336,6 @@
     for (const ding of (betekenis && betekenis.dingen) || []) {
       zetNeer(ding, Math.round(ding.x), Math.round(ding.y), ding.tegel ? opzoekNaam(ding.tegel) : null, `"${ding.tegel || ding.wezen || ding.overgang || ding.staat || 'ding'}" uit het betekenisbestand`); // geen tekst
     }
-    // Wie een "huis" draagt (een boer), krijgt de akkers met datzelfde "huis" erbij: meestal één,
-    // soms twee (boer1 en boer3 hebben er twee: een strook en een blok). js/akkers.js gebruikt
-    // dit om te bepalen waar hij in het groeiseizoen dwaalt en wat hij oogst.
-    if (akkers.length) {
-      for (const e of wezens) {
-        if (e.huis) e.werkAkkers = akkers.filter((a) => a.huis === e.huis);
-      }
-    }
-
     // 3. de deurrichting, net als T.maakProefkamers in wereld.js: loopt de muur rond de deur van
     // noord naar zuid, dan staat het deurpaneel dwars op x.
     const tegelBij = (x, y) => (binnenRaster(x, y) ? tegels[y][x] : 'buiten');
@@ -433,7 +367,7 @@
       b, h, tegels, grond, deuren, geheimen, kamers: [kamerBuiten],
       voorwerpen, questVoorwerpen, wezens,
       bekend: new Set(['buiten']), huidigeKamer: 'buiten',
-      burenKamers, overgangen, akkers, meenten, gebouwenOpKaart,
+      burenKamers, overgangen, akkers, meenten,
       buiten: true, // geen kamers met muren: het spel tekent gras en hoge dingen
       naam: typeof eig.naam === 'string' ? eig.naam : null,
       // "proef": true in het betekenisbestand zegt dat deze kaart alleen voor de toetsen bestaat
@@ -441,12 +375,6 @@
       // geheel gaat (een aansluiting die maar één kant heeft, bijvoorbeeld).
       proef: !!(betekenis && betekenis.proef),
       doof: Number.isFinite(eig.doof) ? eig.doof : 0,
-      // Een klein beginvoorraadje, zodat een dorp niet met lege handen begint (T.beginOpKaart,
-      // js/gebied.js zet het over naar S.voorraad); zonder "beginVoorraad" gebeurt er niets.
-      beginVoorraad: betekenis && betekenis.beginVoorraad ? { ...betekenis.beginVoorraad } : null,
-      // Hoeveel mensen er bij het begin wonen (T.zetBestaandeGebouwen, js/gebouwen.js); zonder
-      // "beginBevolking" zoveel als er woonruimte is.
-      beginBevolking: betekenis && Number.isFinite(betekenis.beginBevolking) ? betekenis.beginBevolking : null,
       // De rand van het plein, in tegels (T.opHetPlein, js/wereld.js); zonder "plein" heeft de kaart
       // er geen, en is de plek van de marskramer het plein (T.pleinVan, js/bewoners.js).
       plein: betekenis && Array.isArray(betekenis.plein) ? betekenis.plein.map(([x, y]) => [x, y]) : null,

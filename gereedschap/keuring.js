@@ -6,7 +6,7 @@
 // tékening te maken heeft — een gid die niet bestaat, een boom in de verkeerde laag, twee
 // gebouwen over elkaar — kijkt `npm run kaarten` na, want dat kent de tegelvellen op schijf.
 // Hier staat alles wat iets betékent: wie er staat, welke quest eraan hangt, en waar je heen
-// kunt. Voor Tiled is wie="boer1" een stuk tekst; hier is het de vraag of die boer een gesprek
+// kunt. Voor Tiled is wie="smid" een stuk tekst; hier is het de vraag of die smid een gesprek
 // heeft, of hij niet in een boom staat, en of wat een quest vraagt ergens te vinden is.
 //
 // Twee vragen, en ze wijzen tegengesteld:

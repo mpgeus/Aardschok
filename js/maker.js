@@ -1087,9 +1087,6 @@
       // het hangt nog aan geen andere kaart vast: de weg de wereld in leidt nergens heen (js/gebied.js)
       proef: true,
       uitleg: `Een gehucht van de maker (js/maker.js), uit zaad ${plan.zaad}.`, // geen tekst
-      // er is nog niets en er woont nog niemand: de kar brengt wat er is (js/begin.js)
-      beginVoorraad: {},
-      beginBevolking: 0,
       marskramer: { ...plan.marskramer },
       plein: plan.plein.map(([x, y]) => [x, y]),
       dingen,

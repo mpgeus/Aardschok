@@ -162,7 +162,8 @@
   };
 
   // Waar iemand 's avonds heen gaat, als het de herberg is (T.dagAnker, js/dag.js): de deur van de
-  // herberg, en naar binnen. Wie er woont, staat er 's avonds achter de tap. Anders null: dan gaat hij
+  // herberg, en naar binnen. Wie er werkt, de waard, staat er 's avonds achter de tap (tot ronde 2 van het snoeien de
+  // herbergierster, die er woonde). Anders null: dan gaat hij
   // naar zijn erf, zoals altijd. Bij bedtijd zegt T.dagAnker "naar huis", en dan komt hij naar buiten en
   // loopt hij in het donker naar zijn eigen deur (T.laatDwalen, js/verkennen.js).
   T.herbergAnker = function (D, e) {
@@ -170,7 +171,7 @@
     if (!herbergen.length || !D.bewoners || !D.kalender) return null;
     const p = T.bewonerVan(D, e);
     if (!p) return null;
-    const g = herbergen.includes(p.huis) ? p.huis : T.herbergVanGast(D, p, D.kalender.dag);
+    const g = herbergen.includes(p.werk) ? p.werk : T.herbergVanGast(D, p, D.kalender.dag);
     if (!g) return null;
     const deur = T.deurVan(D.bewoners.wereld, g);
     return { x: deur.x, y: deur.y, straal: 0, binnen: true };

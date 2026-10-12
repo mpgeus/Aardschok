@@ -428,9 +428,9 @@
 
   // Waar dwaalt deze boer nu rond? In het groeiseizoen (kiemend, groen, rijp) op en rond zijn
   // eigen akker (ontwerp/werklijst.md punt 1b, punt 5); anders (geploegd, of het veld is al
-  // gemaaid) gewoon bij zijn huis, zoals elke dwalende dorpeling. `e.werkAkkers` komt van
-  // T.laadKaart (js/kaart.js): de akkers waarvan `huis` gelijk is aan het `huis` van deze mens.
-  // Heeft hij er meer dan één (boer1 en boer3 hebben er twee: een strook en een blok), dan
+  // gemaaid) gewoon bij zijn huis, zoals elke dwalende dorpeling. `e.werkAkkers` zet js/boerderij.js elke nacht: de akkers
+  // van zijn boerderij (tot ronde 2 van het snoeien ook T.laadKaart, voor de boeren van de kaart). Heeft hij er meer dan
+  // één, dan
   // telt voorlopig alleen de eerste mee voor het dwalen — de tweede telt wel gewoon mee voor de
   // groei en de oogst hieronder, hij loopt er alleen niet expliciet naartoe om te dwalen.
   //
@@ -754,7 +754,7 @@
   // T.tikBehoeftenDag, dus een kalender die vooruitspringt slaat geen van beide over.
   // ---------------------------------------------------------------------------------------------
 
-  // Wie werkt deze akker? Een levende boer die hem in zijn werkAkkers heeft (js/kaart.js), of null.
+  // Wie werkt deze akker? Een levende boer die hem in zijn werkAkkers heeft (js/boerderij.js), of null.
   // T.boerVanVeld is dezelfde vraag voor het venster van een veld: van wie is het?
   function boerVan(w, akker) {
     return (w.wezens || []).find((e) => !e.dood && e.werkAkkers && e.werkAkkers.includes(akker)) || null;
@@ -1020,7 +1020,7 @@
   }
 
   // Over hoeveel dagen de oogst binnen is (het stadium 'gemaaid', 1 herfstmaand), vanaf dag `dag`; op die dag zelf een
-  // heel jaar. Voor de herbergierster, die tot dan bier apart houdt voor de huizen (T.bierApart, js/herberg.js).
+  // heel jaar. Voor de waard, die tot dan bier apart houdt voor de huizen (T.bierApart, js/herberg.js).
   T.dagenTotDeOogst = function (dag) {
     const d = T.datumVanDag(dag);
     const n = (stadiumBegin('gemaaid') - dagInJaar(d.maand, d.dagVanMaand) + T.DAGEN_PER_JAAR) % T.DAGEN_PER_JAAR;

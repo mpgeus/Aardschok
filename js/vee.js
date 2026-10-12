@@ -539,11 +539,10 @@
     });
   }
 
-  // Het begin: de beginkudde op de weide(s) die de kaart noemt (js/kaart.js; in het gehucht het blok
-  // van Klaas, akker6), en de schapen op de meent als er een is. T.beginOpKaart (js/gebied.js) roept
-  // dit aan, net als T.zetBestaandeGebouwen, ná het lot van de boeren, want het zaad van het spel
-  // kiest ook de kleuren van het vee. Zonder weide geen koeien, en zonder weide of meent geen
-  // schapen. Geeft de dieren.
+  // Het begin: de beginkudde op de weides die er zijn, en de schapen op de meent als er een is. T.nieuwDorp (js/dorp.js)
+  // roept dit aan, na het zaad van het dorp, want dat kiest ook de kleuren van het vee. Zonder weide geen koeien, en
+  // zonder weide of meent geen schapen; in het lege begin is er bij het begin geen van beide (ontwerp/opmerkingen.md,
+  // "Geen vee in het lege begin"). Geeft de dieren.
   T.zetBeginKudde = function (D) {
     const w = D.wereld;
     const weides = T.weideGroepen(w);

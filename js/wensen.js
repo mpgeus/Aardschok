@@ -58,7 +58,7 @@
     achteruit: 'zacht',
     missenDagen: 30,
     // Wat een mens van elke stand aan belasting opbrengt, als die wet is aangenomen (js/wetten.js): zoveel keer wat de
-    // wet per mens vraagt. Wie in geen huis met een stand woont (de schout en zijn huis, de herbergierster), telt als 1.
+    // wet per mens vraagt. Wie in geen huis met een stand woont (de schout en zijn huis), telt als 1.
     belasting: { keuters: 1, dorpelingen: 2, ambachtslieden: 3, boeren: 1 },
   };
   const IN = () => T.WENSEN_INSTELLINGEN;
@@ -113,7 +113,7 @@
   };
 
   // De stand van een gebouw, of null. Het huis van de schout en de herberg hebben geen wensen: die zijn van jou en van de
-  // herbergierster. Een werkplaats heeft geen stand.
+  // waard. Een werkplaats heeft geen stand.
   T.standVan = function (g) {
     if (!g || g.huis === 'schout') return null;
     for (const s of Object.keys(T.STANDEN)) if (T.STANDEN[s].huis === g.soort || (T.STANDEN[s].ook || []).includes(g.soort)) return s;

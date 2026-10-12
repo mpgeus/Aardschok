@@ -269,12 +269,12 @@
 
   // ---------------------------------------------------------------- neerzetten
   //
-  // Wat je neerzet, is een gewoon vakje in het betekenisbestand: { x, y, wie: 'boer1' } of
+  // Wat je neerzet, is een gewoon vakje in het betekenisbestand: { x, y, wie: 'smid' } of
   // { x, y, tegel: 'bomen/eik' }. De velden en wat ze betekenen staan boven in js/kaart.js; hier
   // staat alleen hoe je ze met de muis legt.
   const penseel = {
     soort: 'mens',
-    wie: 'boer1', wezen: 'wolf', zaad: 1, straal: 3, gesprek: '',
+    wie: 'smid', wezen: 'wolf', zaad: 1, straal: 3, gesprek: '',
     staat: 'dicht', vlag: '',
     naar: '', vel: 'bomen', tegel: 'eik', quest: '',
   };

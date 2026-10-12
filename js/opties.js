@@ -5,7 +5,8 @@
 //     waarden in de instellingenblokken die er al zijn (T.HEER_INSTELLINGEN, …), zodat elk getal
 //     één plek houdt. De standaard is wat Marcel koos, en dat zijn ook de waarden in de bestanden
 //     zelf (test/opties.test.cjs bewaakt dat).
-//   - T.NAAM_OPTIES: de namen van de heer en de vijf boeren.
+//   - T.NAAM_OPTIES: de naam van de heer (tot ronde 2 van het snoeien ook die van de vijf boeren van het gehucht dat er
+//     al was).
 //   - T.WERKBANK: alle getallen uit de instellingenblokken, elk apart te verzetten. Wat je daar
 //     zet, gaat vóór wat een keuze zet.
 // T.pasOptiesToe zet eerst alles terug op de bestanden, dan de keuzes, dan de werkbank, dan de
@@ -578,7 +579,7 @@
 
   // De namen die je zelf geeft (js/mensen.js). De heer heeft standaard geen naam: dan heet hij
   // "de heer", en tekent hij zijn brief zonder naam.
-  T.NAAM_OPTIES = ['heer', 'boer1', 'boer2', 'boer3', 'boer4', 'boer5'];
+  T.NAAM_OPTIES = ['heer'];
 
   // De werkbank: alle getallen uit deze blokken (T.<blok>), en een paar losse getallen in T.
   T.WERKBANK = [

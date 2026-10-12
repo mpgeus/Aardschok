@@ -3,7 +3,7 @@
 // het op het plein. Bij een groot feest (feest: 'dag' in een antwoord, js/gesprekken.js) werkt de dag erna niemand, en
 // staat iedereen er van het begin van het werk tot bedtijd; bij een klein feest (feest: 'avond') alleen 's avonds,
 // vanavond nog als het kan. Er brandt licht op het plein (T.feestLicht, voor T.lichtBronnen in js/zien.js), de
-// herbergierster tapt, en de schout kan erbij gaan staan. Wat het kost (graan, bier, hout), staat in het antwoord; een
+// waard tapt, en de schout kan erbij gaan staan. Wat het kost (graan, bier, hout), staat in het antwoord; een
 // hele dag kost ook een dag werk: de werkplaatsen maken niets (T.vrijeDag, in T.tikGebouwenDag) en de boeren maaien niet
 // (T.werkOogstBij). Wie er die avond is, gaat niet naar de herberg (T.herbergGasten). Regels zonder scherm; toetsen in
 // test/feesten.test.cjs.
@@ -217,15 +217,15 @@
   // ---------------------------------------------------------------------------------------------
 
   // Waar iemand op een feest staat (T.dagAnker, js/dag.js): het hele dorp rond het midden, elk op zijn eigen plek in de
-  // kring (zijn nummer kiest hem, zoals T.plekOpHetPlein), een kind wat ruimer, en de herbergierster naast het midden,
-  // aan de tap. Wie net komt (p.komt), gaat eerst naar zijn huis. Anders null.
+  // kring (zijn nummer kiest hem, zoals T.plekOpHetPlein), een kind wat ruimer, en de waard (wie in de herberg werkt) naast
+  // het midden, aan de tap. Wie net komt (p.komt), gaat eerst naar zijn huis. Anders null.
   T.feestAnker = function (D, e) {
     const f = D.kalender && T.feestOp(D, D.kalender.dag);
     if (!f || !f.midden) return null;
     const p = T.bewonerVan(D, e);
     if (!p || p.komt) return null;
     const w = D.wereld;
-    if (p.huis && p.huis === T.herbergVan(D)) return { x: f.midden.x + 1, y: f.midden.y, straal: 1 };
+    if (p.werk && p.werk === T.herbergVan(D)) return { x: f.midden.x + 1, y: f.midden.y, straal: 1 };
     const tegels = kringVan(w, f.midden);
     if (!tegels.length) return { x: f.midden.x, y: f.midden.y, straal: IN().kring };
     const t = tegels[(Math.imul((p.id | 0) + 1, 2654435761) >>> 0) % tegels.length];

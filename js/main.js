@@ -1345,11 +1345,11 @@
       };
     },
     // De raadsman (js/raadsman.js): wie het is en wat hij kan, uit wie je kiest, en wat hij besloot.
-    // Spel.debug.raadsman('boer2') of ('Aaltje') maakt die boer raadsman.
+    // Spel.debug.raadsman('Aaltje') maakt die bewoner raadsman.
     raadsman(wie) {
       if (wie) {
-        const p = S.dorp.bewoners && S.dorp.bewoners.mensen.find((x) => x.wie === wie || T.naamVanBewoner(x) === wie);
-        if (!p) return `Er is geen boer "${wie}".`; // geen tekst
+        const p = S.dorp.bewoners && S.dorp.bewoners.mensen.find((x) => T.naamVanBewoner(x) === wie);
+        if (!p) return `Er is geen bewoner "${wie}".`; // geen tekst
         const r = T.kiesRaadsman(S.dorp, p);
         if (!r.kan) return r.reden;
       }

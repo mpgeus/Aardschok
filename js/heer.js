@@ -450,10 +450,9 @@
     }
   }
 
-  // Wie aan de schandpaal kan staan, heet zo (`wie` in h.wrok en in het lijstje): een boer van de kaart
-  // naar zijn naam in T.MENSEN (e.wie), een andere bewoner naar zijn nummer ('bewoner7'); de schout
-  // heet 'schout'. Zijn poppetje, of null.
-  const wieVan = (p) => (p.wezen && p.wezen.wie) || `bewoner${p.id}`;
+  // Wie aan de schandpaal kan staan, heet zo (`wie` in h.wrok en in het lijstje): een bewoner naar zijn nummer
+  // ('bewoner7'); de schout heet 'schout'. Zijn poppetje, of null.
+  const wieVan = (p) => `bewoner${p.id}`;
   function poppetjeVan(D, wie) {
     const p = ((D.bewoners && D.bewoners.mensen) || []).find((q) => wieVan(q) === wie);
     return (p && p.wezen) || null;

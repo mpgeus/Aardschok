@@ -17,7 +17,7 @@ const LOS = ['GRAAN_PER_TEGEL', 'ZAAIGRAAN_PER_TEGEL', 'DAG_LENGTE', 'OOGST_UREN
 const bestanden = {};
 for (const k of BLOKKEN.concat(LOS)) bestanden[k] = JSON.parse(JSON.stringify(T[k]));
 const namen = {};
-for (const id of ['heer', 'boer1', 'boer2', 'boer3', 'boer4', 'boer5']) namen[id] = T.MENSEN[id].naam;
+for (const id of ['heer']) namen[id] = T.MENSEN[id].naam;
 
 // Elke toets begint en eindigt op de standaard (en de browser, die er hier niet is, onthoudt niets).
 test.afterEach(() => T.pasOptiesToe(null));
@@ -168,15 +168,16 @@ test('wat je in de werkbank zet, gaat vóór een keuze, en is terug te zetten', 
   assert.deepEqual(T.OPTIES_NU.getallen, {});
 });
 
+// (Tot ronde 2 van het snoeien, stap 6, gaf je ook de vijf boeren van het gehucht dat er al was een naam; nu alleen de heer.)
 test('een naam komt overal: bij de mens, in zijn gesprek, en op zijn poppetje', () => {
-  const e = T.maakMens('boer2', 3, 3);
+  const e = T.maakMens('heer', 3, 3);
   const S = { wereld: { wezens: [e] } };
-  T.pasOptiesToe({ namen: { boer2: 'Grietje' } }, S);
-  assert.equal(T.naamVanMens('boer2'), 'Grietje');
+  T.pasOptiesToe({ namen: { heer: 'Grietje' } }, S);
+  assert.equal(T.naamVanMens('heer'), 'Grietje');
   assert.equal(e.naam, 'Grietje');
   // Leeg, of alleen spaties, is de standaard.
-  T.pasOptiesToe({ namen: { boer2: '   ' } }, S);
-  assert.equal(e.naam, namen.boer2);
+  T.pasOptiesToe({ namen: { heer: '   ' } }, S);
+  assert.equal(e.naam, namen.heer);
   assert.deepEqual(T.OPTIES_NU.namen, {});
 });
 
@@ -190,11 +191,11 @@ test('de heer heeft standaard geen naam; geef je hem er een, dan draagt hij die'
 test('onthouden en teruglezen, en een kapotte of lege opslag breekt niets', () => {
   const geheugen = {};
   const opslag = { setItem: (k, v) => { geheugen[k] = v; }, getItem: (k) => (k in geheugen ? geheugen[k] : null) };
-  T.pasOptiesToe({ keuzes: { betalenIn: 'alleenGoud' }, namen: { boer1: 'Joost' }, getallen: { DAG_LENGTE: 1 } });
+  T.pasOptiesToe({ keuzes: { betalenIn: 'alleenGoud' }, namen: { heer: 'Joost' }, getallen: { DAG_LENGTE: 1 } });
   T.bewaarOpties(opslag);
   T.pasOptiesToe(null);
   const terug = T.laadOpties(opslag);
-  assert.deepEqual(terug, { keuzes: { betalenIn: 'alleenGoud' }, namen: { boer1: 'Joost' }, getallen: { DAG_LENGTE: 1 } });
+  assert.deepEqual(terug, { keuzes: { betalenIn: 'alleenGoud' }, namen: { heer: 'Joost' }, getallen: { DAG_LENGTE: 1 } });
   T.pasOptiesToe(terug);
   assert.equal(T.HEER_INSTELLINGEN.betalenIn, 'alleenGoud');
   assert.equal(T.DAG_LENGTE, 1);
@@ -218,16 +219,16 @@ test('een keus van vroeger voor een spelregel die er niet meer is, telt niet', (
 test('zetOptie, zetGetal, zetNaam en optiesTerug veranderen één ding en laten de rest staan', () => {
   T.zetOptie('graan', 'honger');
   T.zetGetal('HEER_INSTELLINGEN.wachtDagen', 5);
-  T.zetNaam('boer5', 'Hein');
+  T.zetNaam('heer', 'Hein');
   assert.equal(T.GRAAN_PER_TEGEL, 3.5);
   assert.equal(T.HEER_INSTELLINGEN.wachtDagen, 5);
-  assert.equal(T.naamVanMens('boer5'), 'Hein');
+  assert.equal(T.naamVanMens('heer'), 'Hein');
   T.zetGetal('HEER_INSTELLINGEN.wachtDagen', null);
   assert.equal(T.HEER_INSTELLINGEN.wachtDagen, bestanden.HEER_INSTELLINGEN.wachtDagen);
   assert.equal(T.GRAAN_PER_TEGEL, 3.5, 'de keuze blijft');
   T.optiesTerug();
   assert.equal(T.GRAAN_PER_TEGEL, 4);
-  assert.equal(T.naamVanMens('boer5'), namen.boer5);
+  assert.equal(T.naamVanMens('heer'), namen.heer);
 });
 
 test('een bereik voor de schuif past bij het getal', () => {

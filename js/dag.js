@@ -240,11 +240,11 @@
     // T.werkBewonersBij).
     if (e.vertrekt) return { x: e.vertrekt.x, y: e.vertrekt.y, straal: 1 };
     // Op een feest staat het hele dorp op het plein (js/feesten.js): een hele dag vanaf het begin van het werk, of
-    // 's avonds; ook een boer, en de herbergierster tapt er.
+    // 's avonds; ook een boer, en de waard tapt er.
     const feest = T.feestAnker ? T.feestAnker(D, e) : null;
     if (feest) return feest;
     const erf = { x: e.thuis.x, y: e.thuis.y, straal: IN().erfStraal };
-    // 's Avonds de herberg in, wie vanavond gaat (ook een boer, en de herbergierster zelf).
+    // 's Avonds de herberg in, wie vanavond gaat (ook een boer, en de waard zelf).
     const herberg = deel === 'avond' && T.herbergAnker ? T.herbergAnker(D, e) : null;
     if (herberg) return herberg;
     if (!p) return deel === 'ochtend' || deel === 'avond' ? erf : null;
@@ -289,8 +289,8 @@
   // Slapen tot de ochtend
   // ---------------------------------------------------------------------------------------------
 
-  // Hoe ver de schout van zijn huis staat, in tegels tot de rand ervan (het huis met huis: 'schout'
-  // in kaarten/gehucht.betekenis.json, door T.zetBestaandeGebouwen in S.gebouwen gezet). Voor het slapen,
+  // Hoe ver de schout van zijn huis staat, in tegels tot de rand ervan (het gebouw met huis: 'schout': zijn tent in het
+  // kamp, en dan zijn huis, js/begin.js). Voor het slapen,
   // en voor de raadsman die 's ochtends zijn rapport brengt (js/ochtendrapport.js).
   T.afstandTotHuis = function (D) {
     const g = (D.gebouwen || []).find((x) => x.huis === 'schout');

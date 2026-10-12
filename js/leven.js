@@ -8,9 +8,9 @@
 // js/bewoners.js), en wie werkt, zegt T.LEEFTIJDEN zoals altijd (de handen worden opnieuw verdeeld). Wie oud is, sterft
 // na zijn jaren, op een dag uit het lot, van ouderdom (T.wijzigBevolking met reden 'ouderdom'). Een gezin met een moeder
 // en een vader die volwassen zijn, krijgt soms een kind, als er plaats is in het huis (reden 'geboorte': een kleuter in
-// haar gezin). De schout en de mensen met een naam (de boeren, de herbergierster: p.wie) worden niet ouder; aan hen hangt
-// het spel. Wie weg is (de heervaart, de bode), ook niet, tot hij terug is. De spelregel "Ouder worden"; de getallen in
-// T.LEVEN_INSTELLINGEN.
+// haar gezin). De schout wordt niet ouder; aan hem hangt het spel (tot ronde 2 van het snoeien ook de mensen met een
+// naam van de kaart: de boeren en de herbergierster). Wie weg is (de heervaart, de bode), ook niet, tot hij terug is. De
+// spelregel "Ouder worden"; de getallen in T.LEVEN_INSTELLINGEN.
 (function (T) {
   'use strict';
 
@@ -32,8 +32,8 @@
   const beginVan = (fase) => FASEN.slice(0, FASEN.indexOf(fase)).reduce((n, f) => n + IN().fasen[f], 0) * JAAR();
   const duurVan = (fase) => IN().fasen[fase] * JAAR();
 
-  // Wordt deze bewoner ouder? Niet de schout, niet wie een naam heeft, en niet wie weg is.
-  T.wordtOuder = (p) => !p.schout && !p.wie && !p.weg && FASEN.includes(p.leeftijd);
+  // Wordt deze bewoner ouder? Niet de schout, en niet wie weg is.
+  T.wordtOuder = (p) => !p.schout && !p.weg && FASEN.includes(p.leeftijd);
 
   // Hoe oud iemand is, in jaren (voor het briefje en de toetsen), of null.
   T.leeftijdInJaren = (D, p) => (p.geboren == null ? null : Math.floor((D.kalender.dag - p.geboren) / JAAR()));

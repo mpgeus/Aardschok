@@ -8,7 +8,7 @@
 //
 // Nu is één mens één regel hier, en zegt de kaart alleen nog wáár hij staat:
 //
-//   kaarten/<naam>.betekenis.json:  { "x": 17, "y": 14, "wie": "boer1", "straal": 3 }
+//   kaarten/<naam>.betekenis.json:  { "x": 17, "y": 14, "wie": "smid", "straal": 3 }
 //
 // Wie geen naam hoeft te hebben, staat er niet in. Dat is de menigte: `{ x, y, zaad: 7 }` zet een
 // gewone dorpeling neer die niets zegt en nergens bij hoort. Zie ontwerp/wereld.md, "Een flink
@@ -27,12 +27,10 @@
 //     straal:   3,             // hoe ver hij van zijn plek af dwaalt (de kaart mag het overrulen)
 //     snelheid: 1.3,           // alleen als hij anders loopt dan zijn wezen of een dorpeling
 //     gesprek:  'heer',        // welk gesprek hij voert; zonder dit is het zijn eigen id
-//     geslacht: 'vrouw',       // wie met een gezin in een huis woont (js/bewoners.js)
-//     gezin:    [],            // wie er bij hem woont, als [band, leeftijd, geslacht], voor wie een
-//                              // huis heeft (js/bewoners.js): de herbergierster woont alleen.
 //   }
 // Tot ronde 2 van het snoeien (stap 4, 12 okt) had een boer ook een karakter en een aanzien, uit de stapel karakters
-// (T.KARAKTERS), met elk zijn eigen gesprek; dat lot is weg.
+// (T.KARAKTERS), met elk zijn eigen gesprek; dat lot is weg. En tot stap 6 stonden hier de vijf boeren (boer1 tot boer5)
+// en de herbergierster van het gehucht dat er al was, met hun geslacht en hun gezin: wie er bij hen in huis woonde.
 //
 // Zonder `wezen` en zonder `zaad` is hij zichzelf: zijn id is de naam van zijn vel. De veertien
 // dorpelingen stonden tot 22 sep als eigen ingang in T.WEZENS, met veertien keer dezelfde regel
@@ -49,9 +47,6 @@
     // anders gaan zijn voeten over de grond glijden.
     smid: { naam: T.t('the smith'), snelheid: 1.5, straal: 3 },
     smidsvrouw: { naam: T.t("the smith's wife"), snelheid: 1.45, straal: 3 },
-    // Sinds 27 sep staat zij in het gehucht (kaarten/gehucht.betekenis.json): in haar herberg, alleen, en
-    // ze brouwt zelf (js/herberg.js).
-    herbergierster: { naam: T.t('the innkeeper'), snelheid: 1.4, straal: 3, geslacht: 'vrouw', gezin: [] },
     boer: { naam: T.t('the farmer'), snelheid: 1.5, straal: 3 },
     boerin: { naam: T.t("the farmer's wife"), snelheid: 1.4, straal: 3 },
     dorpsoudste: { naam: T.t('the village elder'), snelheid: 1, straal: 3 },
@@ -89,20 +84,6 @@
     koster: { naam: T.t('the sexton'), zaad: 14, straal: 3 },
     wachter: { naam: T.t('the watchman'), zaad: 15, straal: 2 },
 
-    // De vijf boerengezinnen van het gehucht (kaarten/gehucht.betekenis.json, ontwerp/spel.md,
-    // "Het eerste proefje"), elk met zijn eigen akker (`huis` op de kaart koppelt hem aan zijn
-    // akker(s), js/kaart.js/js/akkers.js). Vijf eigen ingangen in plaats van steeds "boer"/
-    // "boerin" hierboven, want één mens kan van T.keurKaart maar op één plek staan (gereedschap/
-    // keuring.js) — dit zijn wél vijf keer hetzelfde geleende vel, en dat mag: ze lenen het van wie
-    // het al heeft, om en om "boer" en "boerin" voor wat variatie.
-    //
-    // Sinds Sint-Maarten (24 sep, js/heer.js) hebben ze een naam, want wie de heer te weinig geeft,
-    // zet iemand aan de schandpaal, en dan moet je ze uit elkaar kunnen houden.
-    boer1: { naam: 'Nicholas', vel: 'boer', geslacht: 'man', snelheid: 1.5, straal: 3 }, // geen tekst: eigennamen
-    boer2: { naam: 'Alice', vel: 'boerin', geslacht: 'vrouw', snelheid: 1.4, straal: 3 }, // geen tekst: eigennamen
-    boer3: { naam: 'Gerard', vel: 'boer', geslacht: 'man', snelheid: 1.5, straal: 3 }, // geen tekst: eigennamen
-    boer4: { naam: 'Kate', vel: 'boerin', geslacht: 'vrouw', snelheid: 1.4, straal: 3 }, // geen tekst: eigennamen
-    boer5: { naam: 'Walter', vel: 'boer', geslacht: 'man', snelheid: 1.5, straal: 3 }, // geen tekst: eigennamen
   };
 
   // Hoe heet deze mens? Zijn eigen naam, anders die van het wezen dat hij leent (Wim, de

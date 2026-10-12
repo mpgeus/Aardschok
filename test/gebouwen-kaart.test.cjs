@@ -1,58 +1,11 @@
-// Hoe een gebouw dat al op de kaart staat bij T.laadKaart terechtkomt (js/kaart.js, "gebouw" in
-// kaarten/<naam>.betekenis.json), en het beginvoorraadje van een kaart ("beginVoorraad"). Los van
-// test/gebouwen.test.cjs, want dat bestand test T.gebouwVoet zonder dat kaart.js geladen is (zijn
-// terugvaloptie); hier staat kaart.js er wél, tegen T.KAARTEN.proef, net als test/kaart.test.cjs.
+// De gebouwen met een kaart erbij (js/kaart.js): het plein van een kaart, en de tekeningen en voeten van de gebouwen.
+// Los van test/gebouwen.test.cjs, want dat bestand test T.gebouwVoet zonder dat kaart.js geladen is (zijn
+// terugvaloptie); hier staat kaart.js er wél, tegen T.KAARTEN.proef, net als test/kaart.test.cjs. Tot ronde 2 van het
+// snoeien (stap 6) toetste het ook gebouwen die de kaart zelf neerzette, met een beginvoorraad: dat is weg.
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
-
-test('een "gebouw" ding in de betekenis landt in w.gebouwenOpKaart, met zijn maat', () => {
-  const betekenis = { dingen: [{ gebouw: 'boerderij', x: 2, y: 2, b: 3, h: 4, tekening: 'huizen/boerderij1' }] };
-  const w = T.laadKaart(T.KAARTEN.proef, betekenis);
-  // "tekening": welke tekening er op de kaart staat; die weet waar de deur is (T.deurVan)
-  assert.deepEqual(w.gebouwenOpKaart, [{ soort: 'boerderij', x: 2, y: 2, b: 3, h: 4, huis: null, bewoners: null, tekening: 'huizen/boerderij1' }]);
-});
-
-test('zonder "b"/"h" op een gebouw-ding is de voet 1x1', () => {
-  const w = T.laadKaart(T.KAARTEN.proef, { dingen: [{ gebouw: 'put', x: 2, y: 2 }] });
-  assert.deepEqual(w.gebouwenOpKaart[0], { soort: 'put', x: 2, y: 2, b: 1, h: 1, huis: null, bewoners: null, tekening: null });
-});
-
-// Wie er woont, zegt "huis", zoals bij een akker: de boer met dezelfde id, of de schout. Het komt
-// mee tot op het gebouw in S.gebouwen.
-test('"huis" op een gebouw-ding zegt wie er woont, tot op het gebouw zelf', () => {
-  const betekenis = { dingen: [{ gebouw: 'boerderij', x: 2, y: 2, b: 2, h: 2, huis: 'boer1' }, { gebouw: 'huis', x: 6, y: 2, b: 2, h: 2, huis: 'schout' }] };
-  const S = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0 };
-  S.wereld = T.laadKaart(T.KAARTEN.proef, betekenis);
-  assert.equal(S.wereld.gebouwenOpKaart[0].huis, 'boer1');
-  T.zetBestaandeGebouwen(S);
-  assert.deepEqual(S.gebouwen.map((g) => g.huis), ['boer1', 'schout']);
-  // En een klik op zijn voet vindt hem, ook zonder eigen voorwerp (T.gebouwOp, js/gebouwen.js).
-  assert.equal(T.gebouwOp(S, 3, 3), S.gebouwen[0]);
-  assert.equal(T.gebouwOp(S, 5, 3), null);
-});
-
-// Hoeveel mensen er bij het begin wonen, zegt de kaart ("beginBevolking"; Marcel koos 26 sep voor 25
-// in het gehucht, ook al is er plaats voor meer), en "bewoners" wie er in een gewoon huis woont.
-test('"beginBevolking" zegt hoeveel mensen er wonen, en "bewoners" komt mee tot op het gebouw', () => {
-  const betekenis = {
-    beginBevolking: 4,
-    dingen: [{ gebouw: 'huis', x: 2, y: 2, b: 2, h: 2, bewoners: 'jongGezin' }, { gebouw: 'hut', x: 6, y: 2, b: 2, h: 2 }],
-  };
-  const S = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0 };
-  S.wereld = T.laadKaart(T.KAARTEN.proef, betekenis);
-  assert.equal(S.wereld.beginBevolking, 4);
-  T.zetBestaandeGebouwen(S);
-  assert.equal(S.woonruimte, T.GEBOUWEN.huis.woonruimte + T.GEBOUWEN.hut.woonruimte);
-  assert.equal(S.bevolking, 4, 'niet zoveel als er plaats is');
-  assert.deepEqual(S.gebouwen.map((g) => g.bewoners), ['jongGezin', null]);
-  // Zonder "beginBevolking" staan de huizen vol, zoals vroeger.
-  const vol = { voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0 };
-  vol.wereld = T.laadKaart(T.KAARTEN.proef, { dingen: betekenis.dingen });
-  T.zetBestaandeGebouwen(vol);
-  assert.equal(vol.bevolking, vol.woonruimte);
-});
 
 // Het plein ("plein": zijn rand, in tegels): een tegel ligt erop als zijn midden binnen de rand valt.
 test('"plein" op het betekenisbestand: T.opHetPlein zegt welke tegels erop liggen', () => {
@@ -62,17 +15,6 @@ test('"plein" op het betekenisbestand: T.opHetPlein zegt welke tegels erop ligge
   assert.equal(T.opHetPlein(w, 6, 3), false, 'de rand zelf loopt over de rand van de tegel');
   assert.equal(T.opHetPlein(w, 1, 3), false);
   assert.equal(T.opHetPlein(T.laadKaart(T.KAARTEN.proef, {}), 3, 3), false, 'zonder plein ligt er niets op');
-});
-
-test('"beginVoorraad" op het betekenisbestand landt op de wereld', () => {
-  const betekenis = { beginVoorraad: { hout: 40, goud: 20, graan: 60 } };
-  const w = T.laadKaart(T.KAARTEN.proef, betekenis);
-  assert.deepEqual(w.beginVoorraad, { hout: 40, goud: 20, graan: 60 });
-});
-
-test('zonder "beginVoorraad" is w.beginVoorraad null, geen leeg object', () => {
-  const w = T.laadKaart(T.KAARTEN.proef, { dingen: [] });
-  assert.equal(w.beginVoorraad, null);
 });
 
 test('T.opzoekTegelNaam (door kaart.js naar buiten gezet) vindt een gewone tegel op naam', () => {
@@ -103,17 +45,3 @@ test('T.gebouwVoet gebruikt de echte "beslaat" van de tekening als die er is', (
   assert.ok(voet && Number.isInteger(voet.b) && voet.b > 0 && Number.isInteger(voet.h) && voet.h > 0);
 });
 
-test('T.zetBestaandeGebouwen via een echt ingelezen wereld: de vijf boerderijen en het huis tellen mee', () => {
-  const dingen = [
-    { gebouw: 'boerderij', x: 2, y: 2, b: 2, h: 2 },
-    { gebouw: 'boerderij', x: 4, y: 2, b: 2, h: 2 },
-    { gebouw: 'huis', x: 6, y: 2, b: 2, h: 2 },
-  ];
-  const w = T.laadKaart(T.KAARTEN.proef, { dingen });
-  const S = { wereld: w, voorraad: T.nieuweVoorraad(), gebouwen: [], bevolking: 0, woonruimte: 0 };
-  T.zetBestaandeGebouwen(S);
-  assert.equal(S.gebouwen.length, 3);
-  assert.equal(S.woonruimte, 2 * T.GEBOUWEN.boerderij.woonruimte + T.GEBOUWEN.huis.woonruimte);
-  // Met hun voet (T.voetVanGebouw).
-  assert.deepEqual(S.gebouwen[2].voet, { b: 2, h: 2 });
-});

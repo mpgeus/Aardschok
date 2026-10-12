@@ -57,11 +57,8 @@
       goudGehad: false, // ooit goud gehad? dan blijft het vakje in beeld, ook op nul
       einde: null, // de heer ontsloeg de schout (js/heer.js, T.ambtKwijt); in jouw dorp is het spel dan uit
     };
-    // Een klein beginvoorraadje (kaarten/<naam>.betekenis.json, "beginVoorraad") en de gebouwen die al op de kaart
-    // staan (js/gebouwen.js), zodat een dorp niet leeg begint.
-    for (const wat in w.beginVoorraad || {}) T.zetVoorraad(D, wat, w.beginVoorraad[wat]);
-    T.zetBestaandeGebouwen(D);
-    // In het lege begin (vraag 152) staat er nog niets: de kar brengt wat er is, en het kamp (js/begin.js).
+    // Er staat nog niets (vraag 152; sinds ronde 2 van het snoeien legt een kaart geen gebouwen, velden of voorraad meer):
+    // de kar brengt wat er is, en het kamp (js/begin.js).
     if (w.kamp) T.zetKamp(S, D);
     // Het zaad van het dorp. Tot ronde 2 van het snoeien (stap 4, 12 okt) loot T.lootBoeren hiermee ook wie de boeren
     // waren (hun karakter en wat ze konden); dat lot is weg, het zaad bleef, en heet nog zo.

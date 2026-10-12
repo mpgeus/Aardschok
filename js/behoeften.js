@@ -624,8 +624,7 @@
     const tevredenGenoeg = b.tevredenheid >= IN.huisGroeiDrempel;
     for (const instantie of D.gebouwen) {
       const soort = T.GEBOUWEN[instantie.soort];
-      // Alleen een gebouw met een voorwerp groeit mee: dat van een huis dat de speler of een gezin bouwde, of de tekening
-      // die al op de kaart stond (T.zetBestaandeGebouwen, js/gebouwen.js).
+      // Alleen een gebouw met een voorwerp groeit mee: een huis dat de speler of een gezin bouwde.
       if (!instantie.klaar || !instantie.voorwerp || !soort || !soort.wordt || !magDoorgroeien(D, soort)) continue;
       instantie.groeiDagen = tevredenGenoeg ? (instantie.groeiDagen || 0) + 1 : 0;
       if (instantie.groeiDagen >= IN.huisGroeiDagen && groeiGebouw(D, instantie, soort)) {

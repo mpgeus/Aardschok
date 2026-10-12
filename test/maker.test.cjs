@@ -61,7 +61,6 @@ test('een gemaakt land leest het spel in als het lege begin: alleen de schout, g
   assert.deepEqual(w.maker.zaad, 3);
   assert.deepEqual(w.wezens.map((e) => e.wie || e.soort), ['schout'], 'de schout is de enige; de gezinnen komen met de kar');
   assert.equal((w.akkers || []).length, 0);
-  assert.equal(w.gebouwenOpKaart.length, 0);
   assert.equal(w.meenten.length, 0);
   assert.deepEqual(w.overgangen.map((o) => o.naar), ['wereld']);
   // elke tegel heeft grond, en het plein en de plek van de marskramer liggen erop

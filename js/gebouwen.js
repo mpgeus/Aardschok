@@ -321,8 +321,7 @@
       // de grote (js/bouwstijl.js).
       groeitMee: true,
       tekening: 'gebouwen/herberg', beschrijving: T.t('travellers, news and stories, ale'), // geen tekst
-      opmerking: 'In het gehucht staat er een vanaf het begin, met de herbergierster (kaarten/gehucht.betekenis.json), ' // geen tekst
-        + 'in een eigen tekening van vakwerk onder riet (huizen/herberg1). Wie hem in een land zonder stijl bouwt, krijgt ' // geen tekst
+      opmerking: 'In een land met een bouwstijl een eigen tekening van vakwerk onder riet (huizen/herberg1). Wie hem in een land zonder stijl bouwt, krijgt ' // geen tekst
         + 'nog de oude tekening van steen onder pannen, zonder ramen die branden. Plaatsen heeft hij niet: alleen het bier ' // geen tekst
         + 'houdt de gasten tegen; de grote trekt meer gasten (groteHerberg, js/herberg.js).', // geen tekst
     },
@@ -644,10 +643,8 @@
     return { handen, heeft, dekking, factor: 1 + IN.gereedschapBonus * dekking };
   };
 
-  // Het gebouw waarvan deze tegel onder de voet ligt, of null. Ook een gebouw dat al op de kaart
-  // stond (T.zetBestaandeGebouwen): dat heeft geen eigen voorwerp, maar wel een voet uit het
-  // betekenisbestand. Die telden hier eerst niet mee (ze maken niets, dus ze staan ook nooit
-  // stil), maar de muis zegt wel hoe het ermee staat (js/verkennen.js).
+  // Het gebouw waarvan deze tegel onder de voet ligt, of null. Ook een gebouw zonder eigen voorwerp (een tent in het kamp,
+  // een veld): dan telt zijn voet. De muis zegt hoe het ermee staat (js/verkennen.js).
   T.gebouwOp = function (D, x, y) {
     for (const g of D.gebouwen || []) {
       const v = g.voorwerp;
@@ -705,8 +702,7 @@
   }
 
   // ---------------------------------------------------------------------------------------------
-  // Neerzetten: past het, en dan echt neerzetten (bouwmenu, T.plaatsGebouw hieronder) — en de
-  // gebouwen die al op de kaart staan (js/gebied.js, T.zetBestaandeGebouwen)
+  // Neerzetten: past het, en dan echt neerzetten (bouwmenu, T.plaatsGebouw hieronder)
   // ---------------------------------------------------------------------------------------------
 
   // Waarom past soort niet op (x, y) (de linkerbovenhoek van zijn voet, net als "beslaat" bij een
@@ -1187,43 +1183,6 @@
   };
   T.zetOpDeKaart = (D, instantie) => zetGebouwVoorwerp(D, instantie);
 
-  // De gebouwen die al op de kaart staan (kaarten/<naam>.betekenis.json, ding "gebouw": de vijf
-  // boerderijen en het huis van de schout op het gehucht) meteen als klaar registreren, zodat het
-  // dorp niet leeg begint (ontwerp/werklijst.md, punt 2). Hun tekening staat al op de kaart zelf
-  // (ze zijn in Tiled neergezet, net als een boom), dus hier komt geen nieuw voorwerp bij — alleen
-  // de boekhouding: woonruimte, en straks handen. Hoeveel mensen er wonen, zegt de kaart
-  // ("beginBevolking": in het gehucht 25, ook al is er plaats voor meer; Marcel koos het op 26 sep,
-  // vraag 31); zegt hij niets, dan staan de huizen vol.
-  T.zetBestaandeGebouwen = function (D) {
-    const w = D.wereld;
-    if (!w || !w.gebouwenOpKaart || !w.gebouwenOpKaart.length) return;
-    let woonruimte = 0;
-    for (const d of w.gebouwenOpKaart) {
-      const g = T.GEBOUWEN[d.soort];
-      if (!g) {
-        console.warn(`T.zetBestaandeGebouwen: onbekende soort "${d.soort}" op (${d.x}, ${d.y}), overgeslagen`); // geen tekst
-        continue;
-      }
-      // Zijn voet uit het betekenisbestand (T.voetVanGebouw). En wie er woont (`huis`, de boer met dezelfde id of de
-      // schout). In een gewoon huis zegt `bewoners` wie er bij het begin woont (T.zetBeginBewoners, js/bewoners.js). En
-      // `tekening` weet waar de deur is (T.deurVan).
-      // Zijn tekening staat als voorwerp op de kaart, op dezelfde plek (uit Tiled, of van de maker): die neemt hij mee, zodat
-      // hij kan doorgroeien zoals een huis dat jij of een gezin bouwde (js/behoeften.js; werklijst vraag 85). Tot 1 okt
-      // had hij er geen, en groeiden de woningen van het begin nooit.
-      const naam = d.tekening ? d.tekening.split('/').pop() : null;
-      const voorwerp = (naam && (w.voorwerpen || []).find((v) => v.soort === naam && v.x === d.x && v.y === d.y)) || null;
-      D.gebouwen.push({ soort: d.soort, x: d.x, y: d.y, voet: { b: d.b || 1, h: d.h || 1 }, tekening: d.tekening || null, klaar: true, klaarOp: 0, handen: 0, voorwerp, huis: d.huis || null, bewoners: d.bewoners || null });
-      // wat er bij het begin al stond, is oud (T.maakOud hierboven)
-      if (voorwerp) T.maakOud(voorwerp);
-      woonruimte += g.woonruimte || 0;
-    }
-    // De boeren die je ziet lopen, wonen al in hun huis. Wie er verder woont, zet T.zetBeginBewoners
-    // (js/bewoners.js) straks, als de boeren hun karakter hebben.
-    T.wijzigBevolking(D, w.beginBevolking != null ? Math.min(w.beginBevolking, woonruimte) : woonruimte, 'begin');
-    D.woonruimte = woonruimte;
-    if (T.ui && T.ui.toonBevolking) T.ui.toonBevolking(D);
-  };
-
   // Woonruimte: de som van wat elk klaar gebouw geeft. Een huis telt pas als het klaar is.
   T.telWoonruimte = function (D) {
     let woonruimte = 0;
@@ -1331,7 +1290,7 @@
 
   // Tot hoeveel een gebouw maakt van wat het maakt: { wat: zoveel }, of null als het doormaakt. Wie iets omzet (maakt.in),
   // maakt tot er genoeg ligt (T.GEBOUWEN_INSTELLINGEN.werkplaatsMaaktTot; vraag 91, b); wie iets uit het land haalt,
-  // maakt door. Bier maakt hij tot er genoeg ligt boven wat de herbergierster apart houdt voor de huizen (T.bierApart, js/herberg.js;
+  // maakt door. Bier maakt hij tot er genoeg ligt boven wat de waard apart houdt voor de huizen (T.bierApart, js/herberg.js;
   // vraag 102, b), als je het dorp meegeeft.
   T.maaktTot = function (soort, D) {
     const m = soort.maakt;
