@@ -276,8 +276,6 @@
     // De mest gaat op wat volgend jaar akker is, bovenop wat het veld het afgelopen jaar deed.
     const mest = IN.vruchtbaarheid ? strooiMest(D) : new Map();
     for (const v of w.akkers) {
-      // Een veld dat nog ontgonnen wordt (js/ontginnen.js), wisselt niet: het wordt een akker als het klaar is.
-      if (v.ontginning) continue;
       const was = T.bestemmingVan(v);
       if (IN.vruchtbaarheid) {
         const erbij = (was === 'akker' ? -IN.akkerPutUit : was === 'braak' ? IN.braakRust : IN.weideMest) + (mest.get(v) || 0) * IN.mestErbij;
@@ -371,7 +369,7 @@
     if (!VIN().weideNaHonger || honger < VIN().weideNaHonger) return null;
     const koeien = T.veeVan(D).filter((e) => e.dier === 'koe').length;
     if (koeien + 1 <= koeienVoorHetHooi(w)) return null;
-    const vrij = w.akkers.filter((v) => v.planDoor !== 'schout' && T.planVan(v) !== 'weide' && !v.ontginning);
+    const vrij = w.akkers.filter((v) => v.planDoor !== 'schout' && T.planVan(v) !== 'weide');
     const vanBoer = (v) => w.akkers.filter((x) => x.huis === v.huis && T.planVan(x) === 'akker').length;
     const kies = vrij.find((v) => T.planVan(v) === 'braak') ||
       vrij.filter((v) => T.planVan(v) === 'akker' && vanBoer(v) > 1).sort((a, b) => T.vruchtbaarheidVan(a) - T.vruchtbaarheidVan(b))[0];
@@ -458,8 +456,6 @@
   // 'geploegd', tot er een eigen tekening voor braakland is (onkruid); dat is tekenwerk. Zo vraagt
   // js/tekenen.js het per tegel, en hoeft het zelf niets van bestemmingen te weten.
   T.akkerTegelStadium = function (akker, x, y, basisStadium) {
-    // Een veld dat nog ontgonnen wordt (js/ontginnen.js): wat de boer nog niet af heeft, is nog heide of bos.
-    if (akker.ontginning && !T.isGestoken(akker, x, y)) return akker.ontginning.op || 'heide';
     const bestemming = T.bestemmingVan(akker);
     if (bestemming === 'weide') return 'weide';
     if (bestemming === 'braak' || ongezaaidOp(akker, x, y)) return 'geploegd';
@@ -1038,8 +1034,7 @@
     return n || T.DAGEN_PER_JAAR;
   };
 
-  // Zaaien de boeren op deze dag na wat niet gezaaid is (T.zaaiNa)? Na 1 lentemaand, tot het graan groen wordt. Ook voor
-  // een stuk heide dat dan ontgonnen is (js/ontginnen.js): dat wordt meteen een akker, en ze zaaien het na.
+  // Zaaien de boeren op deze dag na wat niet gezaaid is (T.zaaiNa)? Na 1 lentemaand, tot het graan groen wordt.
   T.isNazaaitijd = function (dag) {
     const d = T.datumVanDag(dag);
     const nu = dagInJaar(d.maand, d.dagVanMaand);

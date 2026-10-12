@@ -539,7 +539,6 @@
             if (!T.isZichtbaar(w, x, y)) continue;
             const stadium = T.akkerTegelStadium(akker, x, y, basis);
             if (stadium === 'weide') continue; // dat is gras, al getekend (tekenWeides hieronder)
-            if (stadium === 'heide' || stadium === 'bos') continue; // nog niet ontgonnen (js/ontginnen.js): wat er al ligt
             const variant = T.akkerVariant(x, y, varianten);
             const p = opGrond(x, y);
             if (stadium === 'groen' || stadium === 'rijp') {

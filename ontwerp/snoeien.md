@@ -92,6 +92,10 @@ erven was (`wordtTekening`, `T.groeiGrond`, het huis "van straks" in de kring); 
 de speeltest bouwen nu een hut als er geen plaats is (tot stap 5), en `npm run grootte` bouwt hutten zonder erf
 (`--indeling ruim`).
 
+**2d is af** (12 okt): het ontginnen is weg (`js/ontginnen.js`, `veld.ontginning`, het plaggen steken); `bosBomen` staat
+nu als `bosVanDeHeer` in `T.BOS_INSTELLINGEN`, `T.groeitLaag` in `js/bos.js`, en het rooien met de bijl heet in `js/veldwerk.js` `rooiTegels`.
+**Stap 2 is daarmee af.** Het volgende is stap 3: "Leeg" is het enige begin.
+
 **De kaart voor stap 2 tot 5** (een agent, 12 okt; regelnummers van toen, dus zoek op de naam):
 - **Verzoeken** (`js/verzoeken.js`, 440 regels; `VERZOEKEN_INSTELLINGEN.mensen`, de spelregel "Wie bouwt"): aangeroepen uit
   `js/voorvallen.js` (de voorvallen bouwverzoek, wapenverzoek en herbergverzoek, met `T.beginBouwverzoek`,

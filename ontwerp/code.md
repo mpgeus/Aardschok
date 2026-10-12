@@ -891,29 +891,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `e.draagt`, `e.veldwerk`); wie werkt, dwaalt niet, praat niet en gaat niet opzij, en `js/sprites.js` geeft hem het vel
   van zijn werk (`WERKFIGUREN`: de zaaier, de wieder, de sprokkelaar, en de hakker met de bijl in het bos; een boerin die van een
   vrouw, `werkVelVan`; wie naast zijn werk staat, kijkt ernaar, `e.werkt.op`). De schaft houdt hij op de akker. Zijn boerin en
-  grote kinderen helpen bij het zaaien, de oogst en het ontginnen (`T.helpAnker`, voor `T.dagAnker`; een anker dat
+  grote kinderen helpen bij het zaaien en de oogst (`T.helpAnker`, voor `T.dagAnker`; een anker dat
   meeloopt, zonder veld: `veld: false`). Net zo rooit het hoofd van een huis dat wil doorgroeien, en hakt de
-  houthakker aan zijn boom (`js/bos.js`). De regels veranderen niet; de getallen in `T.VELDWERK_INSTELLINGEN`.
-
-### js/ontginnen.js: ontginnen
-
-- `js/ontginnen.js`: **het plaggen steken en het ontginnen van bos** (vraag 107, 5 okt; **het verzoek is op 11 okt
-  weggehaald**, snoeironde vraag 153: de boer die vroeg om heide of bos, het voorval `ontginverzoek` met zijn gesprek,
-  `T.beginOntginverzoek`, `T.ontginPlekVoor`, `T.bosPlekVoor`, `T.ontginVertrouwen`, `T.ontginPrijs`,
-  `T.ontginToegestaan`, `T.graanTekort`, `T.ontgonnenStukken`, de spelregel "Ontginnen", `Spel.debug.ontginnen`, de plekken
-  in goud op de grond en het advies "land ontginnen" van de raad; git bewaart het). Wat bleef, slaapt tot stap 1d, als jij een
-  akker op heide legt: een veld met `veld.ontginning` = { tot, op ('heide' of 'bos'), gestoken } (er maakt nu niets meer zo
-  een veld; de toetsen zetten het zelf). Het werk staat in `js/veldwerk.js` (`ontgin`, `T.volgendeOntginning`): plaggen
-  steken, en in het bos van recht naast de tegel een boom omhakken (`T.hakBoom` in `js/bos.js`: 10 hout, een stronk, en de
-  tegel wordt weer vloer) en een stronk of struik rooien (`T.rooi`, `T.ontginWerkOp`), en omspitten (`T.steekPlag`, die ook
-  wat laag groeit weghaalt, `T.groeitLaag`); een half werk onthoudt hij in `e.veldwerk.over`, en wat hij niet af heeft, is
-  nog heide of bos (`T.akkerTegelStadium`, `T.isGestoken`). Is het af, of is de maand of de winter om, dan is het
-  ontgonnen, en doen zijn mensen de rest (`T.tikOntginnenDag`, vanuit `T.tikGebouwenDag`); in lentemaand wordt het een
-  akker (`js/akkers.js`). `T.inOntginning(w)` zegt welke velden dat zijn. Een veld op de meent maakt haar kleiner voor de
-  schapen (`T.weideStand` en `T.graaslandVan` in `js/vee.js`). `T.ONTGINNEN_INSTELLINGEN` heeft nog twee getallen, die het
-  bos van de heer nodig heeft: `bosBomen` (een stuk is bos bij minstens zoveel bomen: `js/bos.js`) en `gunst` (wat een erf in
-  zijn bos kostte, tot ronde 2 van het snoeien). De toetsen
-  (`test/ontginnen.test.cjs`) zetten zelf een veld in ontginning.
+  houthakker aan zijn boom (`js/bos.js`). De regels veranderen niet; de getallen in `T.VELDWERK_INSTELLINGEN`. Tot ronde 2 van het snoeien (12 okt)
+  ontgon een boer ook heide of bos (`js/ontginnen.js`, `veld.ontginning`): dat is weg; wat bleef, is het rooien met de bijl
+  (`rooiTegels`), dat de houthakker en een gezin dat rooit gebruiken.
 
 ### js/bos.js: het bos
 
@@ -937,11 +919,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   waar nog iets te rooien staat (een boom, een stronk, een struik: `T.teRooienOp`, `T.watTeRooien`), wacht erop
   (`g.wachtOpRooien`, met `g.kavel`), nog niet op de kaart (`T.bouwGebouw` zet het er pas met `T.zetOpDeKaart` op); dat
   rooien de bouwers (`js/bouwen.js`). Een huis dat wil doorgroeien (`g.groeitNaRooien`, vraag 130) rooit het gezin zelf:
-  het hoofd (`T.rooitHij`) hakt en rooit met de bijl zoals een boer ontgint (`T.werkVeldwerkBij` in `js/veldwerk.js`; wie
+  het hoofd (`T.rooitHij`) hakt en rooit met de bijl (`T.werkVeldwerkBij` in `js/veldwerk.js`; wie
   van zijn gezin geen werk heeft, helpt, `T.helpAnker`) en werkt zolang nergens, en na `rooiDagen` rooien de buren de rest
   (`T.tikRooienDag`). Tot ronde 2 van het snoeien (12 okt) rooide ook een gezin zijn erf (`js/erven.js`) en wie een
-  werkplaats vroeg zijn plek (`js/verzoeken.js`). Een stuk in het bos van de heer (`T.inHetBosVanDeHeer`: zoveel bomen als een
-  stuk bos bij het ontginnen) kost zijn gunst. Een appelboom is van iemand, behalve waar het huis van een gezin groter
+  werkplaats vroeg zijn plek (`js/verzoeken.js`). Een stuk in het bos van de heer (`T.inHetBosVanDeHeer`: minstens `bosVanDeHeer`
+  bomen, in `T.BOS_INSTELLINGEN`) is van de heer. Een appelboom is van iemand, behalve waar het huis van een gezin groter
   wordt: die kapt het gezin zelf, als geen vorm zonder hem kan (`T.isEigenBoom`, `v.teKappen`; vraag 130, a2).
 
 ### js/beesten.js: het wild

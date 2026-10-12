@@ -823,8 +823,8 @@
     return G.soort === 'wolf' && (G.honger || 0) >= IN().dreiging.stout && T.lichtVan(D.kalender.dag).nacht >= IN().dreiging.donker;
   };
 
-  // Werk aan of in het bos (e.werkt.soort, js/veldwerk.js): de houthakker aan zijn boom, wie sprokkelt, rooit of ontgint.
-  const BOSWERK = new Set(['hakken', 'rooien', 'ontginnen', 'sprokkelen']);
+  // Werk aan of in het bos (e.werkt.soort, js/veldwerk.js): de houthakker aan zijn boom, wie sprokkelt of rooit.
+  const BOSWERK = new Set(['hakken', 'rooien', 'sprokkelen']);
 
   // Wie aan het bos werkt en een wolf van deze roedel ziet, rent naar huis: hij werkt die dag niet meer (T.blijftThuis,
   // js/bewoners.js), en wat zijn werkplaats die dag maakte (T.tikGebouwenDag schreef het bij het begin van de dag bij),

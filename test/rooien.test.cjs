@@ -64,7 +64,7 @@ function werkplaatsPlek(S, soort, wil) {
   }
   return null;
 }
-const BOS = () => T.ONTGINNEN_INSTELLINGEN.bosBomen;
+const BOS = () => T.BOS_INSTELLINGEN.bosVanDeHeer;
 
 // Stap 2: een werkplaats waar geen open grond meer is (T.plekVoor, js/bouwen.js).
 

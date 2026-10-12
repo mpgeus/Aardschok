@@ -785,7 +785,7 @@
     rotsen: { naam: T.t('the rocks'), meervoud: T.t('rocks'), telt: (w, x, y, v) => !!v && v.soort === 'rots' },
     // het water van een beek, een meer of een rivier, en de zee (tegels/kust.png): een visser vist er ook
     water: { naam: T.t('the water'), meervoud: T.t('tiles of water'), telt: (w, x, y) => !!(w.grond && w.grond[y] && w.grond[y][x] && T.isWaterGrond(w.grond[y][x].naam)) },
-    // Wat te rooien is en geen boom (een struik, een stronk; T.ontginWerkOp, js/ontginnen.js): voor wat er op een stuk te
+    // Wat te rooien is en geen boom (een struik, een stronk; T.ontginWerkOp, js/bos.js): voor wat er op een stuk te
     // rooien staat (T.watTeRooien, js/bos.js).
     struiken: { naam: T.t('the bushes'), meervoud: T.t('bushes and stumps'), telt: (w, x, y, v) => !!v && T.ontginWerkOp(w, x, y) === 'rooien' },
   };
@@ -1351,7 +1351,6 @@
     T.tikBeginDag(D); // het lege begin: staat het kamp nog niet, dan nu (js/begin.js)
     // 0. De akkers (js/akkers.js): zaaien op 1 lentemaand, en het vangnet na de oogsttijd. Als
     // eerste: de boeren zaaien 's morgens, en daarna eet het dorp van wat er over is.
-    T.tikOntginnenDag(D, dag); // een stuk heide waarvan de maand om is, is ontgonnen (js/ontginnen.js)
     T.tikAkkersDag(D, dag);
     // Het vee (js/vee.js): jongen op 1 grasmaand, en de melk van vandaag. Ná de akkers, want op 1
     // lentemaand verhuist het vee daar naar zijn nieuwe weide; vóór de behoeften, want het dorp eet

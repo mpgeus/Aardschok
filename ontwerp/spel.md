@@ -45,7 +45,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Sint-Maarten | gebouwd (24 sep) | 5 |
 | Instelbaar, en de boeren | gebouwd (24 sep): 17 keuzes, 188 getallen | |
 | Weides met koeien en schapen | stap 1 en 2 gebouwd (25 sep); sinds 30 sep kiezen de boeren hun velden en slachten ze zelf, en jij kunt het veranderen | 6a, vraag 74 |
-| Ontginnen | het verzoek van een boer is op 11 okt weggehaald (snoeironde, vraag 153): akkers leg jij nu zelf; het plaggen steken en het bos hakken op een veld in ontginning blijven en slapen tot stap 1d | 6b, vraag 107 |
+| Ontginnen | weg (12 okt, ronde 2 van het snoeien): het verzoek van een boer ging op 11 okt, het plaggen steken en het bos hakken op een veld in ontginning op 12 okt; een veld leg jij, en de bouwers rooien het (1e) | 6b, vraag 107 |
 | Straten en paden | paadjes van de deuren en waar gelopen wordt, lantaarns en brandende ramen gebouwd (3 okt, vraag 108); sneller lopen, modder en keien nog niet | 6c, vraag 108 |
 | Een dorp dat leeft en groeit | de dag, de bewoners en de huizen van de huizenbouwer gebouwd (26 sep), de herberg stuk 1 (27 sep), het dorp bouwde zelf op erven (28 sep tot 12 okt, ronde 2 van het snoeien), de treden tot marktrecht (2 okt, "Van dorp tot stad"); sinds 4 okt lopen de mensen om wat vaststaat en lossen ze onderweg op wie er staat ("Lopen tussen anderen", vraag 119), en wie vrij is en toevallig een buur of iemand van zijn werk treft, blijft soms staan voor een praatje, met een wolkje (vraag 120, a en b); waar ze het over hebben komt met de mensen aan het werk; sinds 5 okt werken de boeren overdag op hun land, naar het seizoen ("De boeren aan het werk", vraag 111, stap 1); de rest een voorstel, grotendeels gekozen | 2, 3b, 11, 13, 14, vraag 90, 111, 119, 120 |
 | Welke gameplay er nog nodig is | het plan voor alles | 8 tot 18 |
@@ -2797,7 +2797,13 @@ jaar later vol dan eerst in het derde jaar, tenzij je slacht.
 
 ## Ontginnen: nieuwe velden uit bos of heide (Marcel, 25 sep 2026; werklijst punt 6b)
 
-**Zo werkt het nu** (11 okt, snoeironde, vraag 153; Marcel koos "Weg"): **het verzoek is weggehaald.** Dat een boer, als
+**Zo werkt het nu** (12 okt, ronde 2 van het snoeien, stap 2d; Marcel: "III. OK"): **het ontginnen is weg.** Een veld
+leg jij bij een boerderij, en wat erop staat, rooien de bouwers (vraag 152, 1e); een boer ontgint geen heide of bos meer.
+Weg: `js/ontginnen.js`, `veld.ontginning`, het plaggen steken en omspitten, en `T.ONTGINNEN_INSTELLINGEN` (wat bleef,
+`bosBomen`, staat nu als `bosVanDeHeer` in `T.BOS_INSTELLINGEN`). Het rooien met de bijl blijft, voor de houthakker en een gezin dat rooit
+waar zijn huis groter wordt. Wat hieronder staat, is hoe het tot 12 okt werkte.
+
+**Zo werkte het** (11 okt, snoeironde, vraag 153; Marcel koos "Weg"): **het verzoek is weggehaald.** Dat een boer, als
 het graan tekortkomt, komt vragen om dertig tegels heide of bos te ontginnen, en dat jij koos (de heide tegen het
 vertrouwen van het dorp, het bos gemeld tegen de gunst van de heer), is uit het spel: het voorval `ontginverzoek`, de
 spelregel "Ontginnen", de goud-gekleurde plekken op de grond en `Spel.debug.ontginnen()`. Akkers leg jij nu zelf (vraag

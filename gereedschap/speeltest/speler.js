@@ -975,8 +975,7 @@
       if (!r || D_ !== s.dorp) return;
       const veld = T.veldOp(D_.wereld, x, y);
       const wie = hakt > 0 ? 'houthakker'
-        : (D_.gebouwen || []).some((g) => g.wachtOpRooien && inStuk(g.kavel, x, y)) ? 'rooien'
-          : veld && veld.ontginning ? 'ontginnen' : 'anders';
+        : (D_.gebouwen || []).some((g) => g.wachtOpRooien && inStuk(g.kavel, x, y)) ? 'rooien' : 'anders';
       const b = bosJaar();
       b.om[wie] = (b.om[wie] || 0) + 1;
     });

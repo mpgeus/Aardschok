@@ -875,8 +875,7 @@
     wieden: { figuur: 'wieder', houding: 'wieden' },
     spitten: { figuur: 'wieder', houding: 'wieden' },
     mesten: { figuur: 'wieder', houding: 'wieden' },
-    ontginnen: { figuur: 'wieder', houding: 'wieden' },
-    // In het bos (js/ontginnen.js, vraag 107, f): een boom omhakken en een stronk rooien, met de bijl.
+    // In het bos (js/veldwerk.js, vraag 107, f): een boom omhakken en een stronk rooien, met de bijl.
     hakken: { figuur: 'hakker', houding: 'hakken' },
     rooien: { figuur: 'hakker', houding: 'hakken' },
     // Meebouwen (js/bouwen.js, vraag 152, 1d): tot er een timmerman is om te tekenen, met de bijl.

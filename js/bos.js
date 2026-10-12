@@ -3,17 +3,17 @@
 //
 // Wat te rooien is (een boom, een stronk, een struik, een boompje, een jonge boom), zegt T.ontginWerkOp; een boom om met
 // T.hakBoom (het hout naar de schuur) of T.velBoom (zonder: dat geeft de houthakker zelf), en de rest eruit met T.rooi.
-// Zo ruimen een boer die bos ontgint (js/ontginnen.js), de bouwers van het lege begin (js/bouwen.js) en een gezin dat zijn
-// huis laat doorgroeien het op, met dezelfde bijl (js/veldwerk.js).
+// Zo ruimen de bouwers van het lege begin (js/bouwen.js) en een gezin dat zijn huis laat doorgroeien het op, met dezelfde
+// bijl (js/veldwerk.js).
 //
 // Een stuk dat gerooid moet worden (de kavel), hoort bij een bouwplaats van het lege begin die erop wacht
 // (`wachtOpRooien`; die rooien de bouwers, js/bouwen.js), of bij een huis dat wil doorgroeien (`groeitNaRooien`; dat rooit
 // het gezin, T.rooiOmTeGroeien). Wie het rooit, zegt T.rooitHij: het hoofd van het gezin. Hij werkt zolang nergens anders
 // (js/bewoners.js); na `rooiDagen` rooien de buren de rest in één keer (T.tikRooienDag). En het bos is van de heer: een
-// stuk met minstens zoveel bomen als een stuk bos bij het ontginnen (T.inHetBosVanDeHeer). (Tot ronde 2 van het snoeien,
-// 12 okt, rooide ook een gezin zijn erf, js/erven.js.)
+// stuk met minstens `bosVanDeHeer` bomen (T.inHetBosVanDeHeer). (Tot ronde 2 van het snoeien, 12 okt, rooide ook een gezin
+// zijn erf, js/erven.js, en ontgon een boer heide of bos, js/ontginnen.js.)
 //
-// Een appelboom is van iemand: wie ontgint of een bouwplaats rooit, laat hem staan. Maar staat hij waar het grotere huis van een
+// Een appelboom is van iemand: wie een bouwplaats rooit, laat hem staan. Maar staat hij waar het grotere huis van een
 // gezin moet komen, dan is hij van dat gezin, en kapt het hem zelf (werklijst vraag 130, a2; Marcel, 6 okt: "Eens alle
 // 3"; T.isEigenBoom): zolang het gezin rooit (T.rooiOmTeGroeien), heeft hij `teKappen`, en is hij een boom als elke andere.
 //
@@ -41,15 +41,18 @@
 
   // Alle getallen in één blok (ook in de werkbank van de spelregels, js/opties.js).
   T.BOS_INSTELLINGEN = {
-    // Een boom geeft zoveel hout, wie hem ook omhakt: een boer die ontgint, een gezin dat rooit, de houthakker
+    // Een stuk is bos van de heer als er minstens zoveel bomen op staan (T.inHetBosVanDeHeer). Tot ronde 2 van het
+    // snoeien (12 okt) stond dit getal als `bosBomen` bij het ontginnen (js/ontginnen.js), dat weg is.
+    bosVanDeHeer: 10,
+    // Een boom geeft zoveel hout, wie hem ook omhakt: de bouwers, een gezin dat rooit, de houthakker
     // (Marcel, 6 okt, bij vraag 115: "C ja"; tot dan 4). In het lege begin geeft rooien `rooiHout` (hieronder).
     houtPerBoom: 10,
-    // In het lege begin geeft een boom die gerooid wordt (door de bouwers, een boer die ontgint, een huis dat groeit; niet
+    // In het lege begin geeft een boom die gerooid wordt (door de bouwers, een huis dat groeit; niet
     // door de houthakker) zoveel hout (werklijst B, 1f; Marcel, 12 okt: "c ja"): met 10 gaf rooien in het eerste jaar
     // 1.000 tot 2.800 hout, omdat het bos vlak om het plein staat.
     rooiHout: 2,
     // Zoveel dagen rooit een gezin zelf wat zijn huis in de weg staat om te groeien; wat er daarna nog staat, rooien de
-    // buren in één keer (het vangnet, zoals bij het ontginnen).
+    // buren in één keer (het vangnet).
     rooiDagen: 30,
     // Binnen hoeveel tegels van de deur van zijn schuur de houthakker bomen omhakt en plant.
     hakStraal: 10,
@@ -156,7 +159,7 @@
     return v.soort;
   };
 
-  // Een boom omgehakt door wie ontgint of zijn plek rooit (js/veldwerk.js): het hout gaat naar de schuur, en de stronk
+  // Een boom omgehakt door wie een plek rooit (js/veldwerk.js): het hout gaat naar de schuur, en de stronk
   // blijft staan, tot hij die rooit.
   T.hakBoom = function (D, x, y) {
     if (!T.velBoom(D, x, y)) return false;
@@ -193,9 +196,9 @@
   // optelsommen van de natuur (T.natuurBij, js/gebouwen.js), want T.plekVoor vraagt het voor duizenden plekken.
   T.watTeRooien = (D, r) => ({ bomen: T.natuurBij(D.wereld, 'bos', r, 0), struiken: T.natuurBij(D.wereld, 'struiken', r, 0) });
 
-  // Ligt het vak r in het bos van de heer: staan er minstens zoveel bomen op als op een stuk bos dat een boer ontgint
-  // (T.ONTGINNEN_INSTELLINGEN.bosBomen)? Losse bomen en struiken in de wei zijn van niemand.
-  T.inHetBosVanDeHeer = (D, r) => T.watTeRooien(D, r).bomen >= T.ONTGINNEN_INSTELLINGEN.bosBomen;
+  // Ligt het vak r in het bos van de heer: staan er minstens bosVanDeHeer bomen op? Losse bomen en struiken in de wei zijn
+  // van niemand.
+  T.inHetBosVanDeHeer = (D, r) => T.watTeRooien(D, r).bomen >= IN().bosVanDeHeer;
 
   // "3 bomen en 2 struiken en stronken (+30 hout)": wat er gerooid wordt, en wat het de schuur oplevert.
   T.rooiWoorden = function (wat, perBoom = IN().houtPerBoom) {
@@ -391,8 +394,12 @@
   const alsBoompje = (v) => Math.round(IN().boompjeDagen * (1 + lot(v.x, v.y, v.geplant)));
   const alsJongeBoom = (v) => Math.round(IN().jongeBoomDagen * (1 + lot(v.y, v.x, v.geplant)));
 
-  // Mag hier een boompje komen? Te belopen, en leeg of met wat laag groeit (dat maakt plaats, T.groeitLaag,
-  // js/ontginnen.js), niemand die er staat, en geen plek waar het dorp loopt of bouwt: geen veld, weg of lantaarn
+  // Wat laag groeit (varens, gras, bloemen, een keitje) maakt plaats voor een boompje (hieronder); tot ronde 2 van het
+  // snoeien ging het ook mee als een boer ontgonnen grond omspitte (js/ontginnen.js).
+  const LAAG = new Set(['varen', 'grasPol', 'bloemen', 'paddenstoelen', 'hoogGras', 'kleineRots']);
+  T.groeitLaag = (v) => !!v && LAAG.has(v.soort);
+
+  // Mag hier een boompje komen? Te belopen, en leeg of met wat laag groeit (dat maakt plaats, T.groeitLaag), niemand die er staat, en geen plek waar het dorp loopt of bouwt: geen veld, weg of lantaarn
   // (T.waaromNietOpDezeGrond), niet op het plein, niet voor een deur en geen paadje van een deur.
   function magPlanten(D, x, y) {
     const w = D.wereld;

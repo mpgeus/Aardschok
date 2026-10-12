@@ -685,7 +685,6 @@
     { naam: T.t('The farmers'), blok: 'BOEREN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The fields'), blok: 'VELDEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Fieldwork'), blok: 'VELDWERK_INSTELLINGEN' }, // geen tekst
-    { naam: T.t('Clearing land'), blok: 'ONTGINNEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Animals in the forest'), blok: 'BEESTEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The granary and the seed grain'), blok: 'GRAANSCHUUR_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The forest'), blok: 'BOS_INSTELLINGEN' }, // geen tekst
@@ -1381,7 +1380,7 @@
     opbrengst: T.t('yield'),
     zaaien: T.t('sowing'),
     aanzien: T.t('standing'),
-    // De velden, het veldwerk, ontginnen
+    // De velden en het veldwerk
     weideNaHonger: T.t('meadow after hunger'),
     beginVruchtbaarheid: T.t('starting fertility'),
     akkerPutUit: T.t('arable field wears out'),
@@ -1396,14 +1395,14 @@
     mesten: T.t('dunging'),
     spitten: T.t('digging'),
     spittenRust: T.t('digging rest'),
-    ontginnen: T.t('clearing land'),
     hakken: T.t('chopping'),
     rooien: T.t('clearing'),
-    ontginnenRust: T.t('clearing rest'),
+    rooienRust: T.t('clearing rest'),
     rapen: T.t('gathering'),
     bosrandStraal: T.t('forest edge radius'),
     helpStraal: T.t('helping radius'),
     bosBomen: T.t('trees that make a forest'),
+    bosVanDeHeer: T.t("trees that make the lord's forest"),
     // De beesten in het bos
     bosPerRoedel: T.t('forest per pack'),
     bosPerKudde: T.t('forest per herd'),

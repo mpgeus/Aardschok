@@ -6,10 +6,8 @@
 //   - tot het graan rijp is: hij wiedt en schoffelt, tegel voor tegel, met een rustpoos ertussen;
 //   - in het hooi en de oogst maait hij (T.werkOogstBij; dat blijft daar);
 //   - in de herfst rijdt hij mest uit op een akker die mest krijgt (T.zetMest), en spit hij wat volgend jaar akker wordt;
-//   - in de winter sprokkelt hij aan de bosrand, en brengt hij een bundel hout naar huis;
-//   - en ontgint hij heide of bos (js/ontginnen.js), dan werkt hij daar, behalve als hij zaait: op de heide steekt hij
-//     plaggen, tegel voor tegel; in het bos hakt hij eerst de bomen om en rooit hij de stronken en de struiken, van naast
-//     die tegel, en spit hij de grond daarna om.
+//   - in de winter sprokkelt hij aan de bosrand, en brengt hij een bundel hout naar huis.
+// (Tot ronde 2 van het snoeien, 12 okt, ontgon hij ook heide of bos, js/ontginnen.js; dat is weg.)
 // Net zo rooit het hoofd van een gezin wat er staat waar zijn huis groter wordt (js/bos.js; werklijst vraag 130): hij hakt
 // en rooit, en wie van zijn gezin geen werk heeft, helpt. En de houthakker hakt aan zijn boom in het bos, en brengt het hout in
 // bundels naar zijn schuur (js/bos.js; vraag 115). En de jager loert in het bos op de groep herten of de roedel waar hij op
@@ -25,13 +23,13 @@
 //               loopt, `op` de tegel waar hij aan werkt als hij ernaast staat (een boom die hij omhakt: daar kijkt hij
 //               naar, js/sprites.js), `tot` (de tijd van de wereld, S.wereldTijd) wanneer die tegel af is, of null zolang
 //               hij er nog heen loopt, en `rust`: hij staat even (`schaft`: hij schaft op de akker). Wie werkt, dwaalt
-//               niet (T.dwaal), praat niet (js/praatje.js) en gaat niet opzij (js/lopen.js). Bij het ontginnen is de
-//               soort wat hij nu doet: 'hakken', 'rooien' of 'ontginnen' (plaggen steken, omspitten).
+//               niet (T.dwaal), praat niet (js/praatje.js) en gaat niet opzij (js/lopen.js). Bij het rooien is de
+//               soort wat hij nu doet: 'hakken' of 'rooien'.
 //   e.draagt    'bundel': hij heeft hout geraapt, en draagt het naar huis.
 //   e.veldwerk  { soort, i, gedaan, klaar, over }: hoe ver hij is. `i` is zijn tegel in de rij (T.veldwerkTegels),
 //               `gedaan` hoeveel hij er van dit werk deed, `klaar` wanneer hij klaar was met zaaien en mesten (het jaar)
-//               en met sprokkelen (de dag), en `over` { x, y, werk, uren }: wat de tegel die hij half af had (een plag,
-//               een boom, een stronk) nog vraagt.
+//               en met sprokkelen (de dag), en `over` { x, y, werk, uren }: wat de tegel die hij half af had (een boom,
+//               een stronk) nog vraagt.
 // Regels zonder scherm, dus te toetsen (test/veldwerk.test.cjs).
 (function (T) {
   'use strict';
@@ -47,13 +45,11 @@
     mesten: 0.5,
     spitten: 2,
     spittenRust: 0.5,
-    // Plaggen steken op heide die hij ontgint (js/ontginnen.js): zwaar werk, zo'n tegel per werkdag, zodat dertig tegels
-    // ongeveer de maand vullen die het duurt. In het bos spit hij zo lang de grond om, en eerst hakt hij een boom om en
-    // rooit hij de stobbe (of een struik): samen ruim twee werkdagen per boom, zodat een stuk bos een winter duurt.
-    ontginnen: 8,
+    // Een boom omhakken en de stobbe (of een struik) rooien: samen ruim twee werkdagen per boom (zo rooit een gezin wat
+    // in de weg staat als zijn huis groter wordt, js/bos.js), en daarna staat hij even.
     hakken: 6,
     rooien: 10,
-    ontginnenRust: 0.5,
+    rooienRust: 0.5,
     // Sprokkelen: zo lang raapt hij hout aan de bosrand, en zo ver van zijn deur zoekt hij die, in tegels. Wat bos is,
     // zegt T.isBos (js/bos.js): minder bomen is een boom tussen de huizen.
     rapen: 3,
@@ -91,10 +87,7 @@
     zaaien: { veld: (v) => T.bestemmingVan(v) === 'akker', tegel: (v, t) => T.akkerTegelStadium(v, t.x, t.y, 'groen') === 'groen' },
     wieden: { veld: (v) => T.bestemmingVan(v) === 'akker', tegel: (v, t) => T.akkerTegelStadium(v, t.x, t.y, 'groen') === 'groen' },
     mesten: { veld: (v) => !!v.mest },
-    spitten: { veld: (v) => T.planVan(v) === 'akker' && T.bestemmingVan(v) !== 'weide' && !v.ontginning },
-    // Ontginnen: wat hij van de heide of het bos nog niet af heeft (js/ontginnen.js), ook waar een boom, een stronk of een
-    // struik staat (`vast`): daar werkt hij van een tegel ernaast.
-    ontginnen: { veld: (v) => !!v.ontginning, tegel: (v, t) => !T.isGestoken(v, t.x, t.y), vast: true },
+    spitten: { veld: (v) => T.planVan(v) === 'akker' && T.bestemmingVan(v) !== 'weide' },
   };
 
   // De tegels waar hij dit werk doet, in de volgorde waarin hij ze afloopt: veld voor veld, en op een veld rij voor rij.
@@ -113,8 +106,6 @@
   // en vindt hetzelfde.
   const TEGELS = new WeakMap(); // poppetje → { dag, per: { soort: lijst } }
   function tegelsVan(D, e, soort) {
-    // Wat hij ontgint, wordt onder het werk kleiner: dat rekent hij elke keer uit (het zijn er dertig).
-    if (soort === 'ontginnen') return T.veldwerkTegels(D.wereld, e, soort);
     const dag = Math.floor(D.kalender.dag);
     let m = TEGELS.get(e);
     if (!m || m.dag !== dag) TEGELS.set(e, (m = { dag, per: {} }));
@@ -175,8 +166,6 @@
     const heeft = (soort) => tegelsVan(D, e, soort).length > 0;
     // Op een natte dag zaait niemand (js/akkers.js, VELDEN_INSTELLINGEN.nietInDeRegen).
     if (basis === 'geploegd' && klaar.zaaien !== datum.jaar && heeft('zaaien') && !(T.VELDEN_INSTELLINGEN.nietInDeRegen && T.isNat(D))) return 'zaaien';
-    // Ontgint hij heide (js/ontginnen.js), dan gaat dat voor het andere werk van het seizoen.
-    if (heeft('ontginnen')) return 'ontginnen';
     if (basis === 'geploegd' || basis === 'kiemend' || basis === 'groen') return heeft('wieden') ? 'wieden' : null;
     if (datum.seizoen === 'herfst') {
       if (klaar.mesten !== datum.jaar && heeft('mesten')) return 'mesten';
@@ -218,13 +207,13 @@
   }
   T.stopWerk = stop; // ook voor de bouwers (js/bouwen.js)
 
-  // Een plag steken, een boom omhakken of een stronk rooien is meer werk dan een halve dag (IN().ontginnen, en in de
-  // winter is een werkdag zes uur): houdt hij op voor hij af is (de schaft, het eind van de werkdag, iemand roept hem),
+  // Een boom omhakken of een stronk rooien is meer werk dan een halve dag (IN().hakken, IN().rooien, en in de winter is
+  // een werkdag zes uur): houdt hij op voor hij af is (de schaft, het eind van de werkdag, iemand roept hem),
   // dan onthoudt hij wat die tegel nog vraagt (e.veldwerk.over), en maakt hij hem de volgende keer af.
-  const ONTGINWERK = new Set(['ontginnen', 'hakken', 'rooien']);
-  function onthoudPlag(e, nu) {
+  const ROOIWERK = new Set(['hakken', 'rooien']);
+  function onthoudHalfWerk(e, nu) {
     const wt = e.werkt;
-    if (wt && ONTGINWERK.has(wt.soort) && wt.tot != null && !wt.rust && e.veldwerk) {
+    if (wt && ROOIWERK.has(wt.soort) && wt.tot != null && !wt.rust && e.veldwerk) {
       const t = wt.op || wt;
       e.veldwerk.over = { x: t.x, y: t.y, werk: wt.soort, uren: Math.max(0, wt.tot - nu) / uur() };
     }
@@ -260,10 +249,6 @@
       stop(e);
       return;
     }
-    if (vw.soort === 'ontginnen') {
-      ontgin(D, e, vw, nu, lijst);
-      return;
-    }
     const wt = e.werkt;
     if (wt && wt.tot != null) {
       if (nu < wt.tot) return;
@@ -296,19 +281,20 @@
     }
   }
 
-  // Ontginnen (js/ontginnen.js): wat er op zijn veld in ontginning nog niet af is, rij voor rij. Hij neemt de eerste tegel
-  // waar hij nu bij kan (T.volgendeOntginning), werkt er zijn tijd (een boom omhakken, een stronk rooien, of de grond
-  // omspitten), staat even, en neemt de volgende. Wat hij niet af krijgt, doen zijn mensen (T.tikOntginnenDag).
-  function ontgin(D, e, vw, nu, lijst) {
+  // Rooien (js/bos.js): de tegels van `lijst` waar iets te rooien staat, rij voor rij. Hij neemt de eerste tegel waar hij nu
+  // bij kan (volgendeTegelOmTeRooien), werkt er zijn tijd (een boom omhakken of een stronk rooien), staat even, en neemt
+  // de volgende. Wat hij niet af krijgt, doen de buren (T.tikRooienDag). (Tot ronde 2 van het snoeien ontgon een boer zo
+  // ook heide of bos, js/ontginnen.js.)
+  function rooiTegels(D, e, vw, nu, lijst) {
     const w = D.wereld;
     const wt = e.werkt;
     if (wt && wt.tot != null) {
       if (nu < wt.tot) return;
       if (!wt.rust) {
         klaarMet(D, wt);
-        if (IN().ontginnenRust > 0) {
+        if (IN().rooienRust > 0) {
           wt.rust = true;
-          wt.tot = nu + IN().ontginnenRust * uur();
+          wt.tot = nu + IN().rooienRust * uur();
           return;
         }
       }
@@ -316,7 +302,7 @@
       return;
     }
     if (e.pad.length) return; // onderweg naar zijn tegel
-    const keus = T.volgendeOntginning(w, e, lijst);
+    const keus = volgendeTegelOmTeRooien(w, e, lijst);
     if (!keus) {
       stop(e); // nu kan hij nergens bij (iemand staat ervoor): het volgende beeld kijkt opnieuw
       return;
@@ -326,14 +312,14 @@
     if (e.tx === staan.x && e.ty === staan.y) {
       let uren = IN()[werk];
       const over = vw.over;
-      if (over && over.x === tegel.x && over.y === tegel.y && (over.werk || 'ontginnen') === werk) {
+      if (over && over.x === tegel.x && over.y === tegel.y && over.werk === werk) {
         uren = over.uren;
         delete vw.over;
       }
       e.werkt = { soort: werk, x: staan.x, y: staan.y, op, tot: nu + uren * uur(), rust: false };
       return;
     }
-    // Een weg om wat vaststaat (js/lopen.js). Komt hij er toch niet, dan doen zijn mensen het (zoals aan het eind, js/ontginnen.js).
+    // Een weg om wat vaststaat (js/lopen.js). Komt hij er toch niet, dan is die tegel meteen af.
     const pad = T.zoekRoute(w, { x: e.tx, y: e.ty }, staan, {});
     if (pad && pad.length) {
       T.geefRoute(e, pad, staan);
@@ -344,37 +330,29 @@
     }
   }
 
-  // De volgende tegel die hij ontgint, en waar hij daarvoor staat: de eerste van de rij waar hij nu bij kan. Een tegel waar
-  // niets op staat, spit hij op de tegel zelf; een boom, een stronk of een struik (T.ontginWerkOp) hakt of rooit hij van een
-  // tegel recht ernaast (niet schuin: dan is de stam te ver, en slaat de bijl ernaast, gereedschap/pixelart/werkfiguren.cjs),
-  // waar niemand staat en waar hij kan komen. Zo werkt hij van de rand naar binnen. { tegel, staan, werk } of null.
+  // De volgende tegel die hij rooit, en waar hij daarvoor staat: de eerste van de rij waar hij nu bij kan. Een boom, een
+  // stronk of een struik (T.ontginWerkOp) hakt of rooit hij van een tegel recht ernaast (niet schuin: dan is de stam te
+  // ver, en slaat de bijl ernaast, gereedschap/pixelart/werkfiguren.cjs), waar niemand staat en waar hij kan komen. Zo
+  // werkt hij van de rand naar binnen. { tegel, staan, werk } of null.
   const NAAST = [[0, 1], [1, 0], [0, -1], [-1, 0]];
-  T.volgendeOntginning = function (w, e, lijst) {
+  function volgendeTegelOmTeRooien(w, e, lijst) {
     const van = { x: e.tx, y: e.ty };
     const vrij = (x, y) => (x === e.tx && y === e.ty) || (T.isBegaanbaar(w, x, y) && !T.wezenOp(w, x, y, e));
     for (const t of lijst) {
-      const werk = T.ontginWerkOp(w, t.x, t.y) || 'ontginnen';
-      if (werk === 'ontginnen') {
-        if (vrij(t.x, t.y) && T.kanErKomen(w, van, t)) return { tegel: t, staan: t, werk };
-        continue;
-      }
+      const werk = T.ontginWerkOp(w, t.x, t.y);
+      if (!werk) continue;
       for (const [dx, dy] of NAAST) {
         const s = { x: t.x + dx, y: t.y + dy };
         if (vrij(s.x, s.y) && T.kanErKomen(w, van, s)) return { tegel: t, staan: s, werk };
       }
     }
     return null;
-  };
+  }
 
-  // Een tegel af (js/ontginnen.js): een boom om (het hout naar de schuur, een stronk blijft staan), een stronk of een struik
-  // eruit, of de grond omgespit (kale grond, die uit de rij valt).
+  // Een tegel af: een boom om (het hout naar de schuur, een stronk blijft staan), of een stronk of een struik eruit.
   function klaarMet(D, wt) {
     if (wt.soort === 'hakken') T.hakBoom(D, wt.op.x, wt.op.y);
     else if (wt.soort === 'rooien') T.rooi(D, wt.op.x, wt.op.y);
-    else {
-      const veld = T.veldOp(D.wereld, wt.x, wt.y);
-      if (veld) T.steekPlag(veld, wt.x, wt.y, D.wereld);
-    }
   }
 
   // Sprokkelen: naar de bosrand (elke dag een ander stuk), daar hout rapen, en met de bundel naar huis. Dan is het
@@ -462,13 +440,13 @@
       return;
     }
     if (e.pad.length) return; // onderweg naar zijn boom
-    // Hakte iemand anders zijn boom vandaag om (een gezin dat rooit, een boer die ontgint), dan wacht hij tot morgen: de
+    // Hakte iemand anders zijn boom vandaag om (een gezin dat rooit, een bouwer), dan wacht hij tot morgen: de
     // regel kiest 's nachts een nieuwe (T.boomVanHouthakker).
     if (T.ontginWerkOp(w, g.boom.x, g.boom.y) !== 'hakken') {
       stop(e);
       return;
     }
-    const keus = T.volgendeOntginning(w, e, [g.boom]);
+    const keus = volgendeTegelOmTeRooien(w, e, [g.boom]);
     if (!keus) {
       stop(e); // nu kan hij er niet bij (iemand staat ervoor): het volgende beeld kijkt opnieuw
       return;
@@ -804,7 +782,7 @@
   }
 
   // Elk beeld, na het maaien (T.werkOogstBij) en vóór het dwalen (T.dwaal): elke boer doet zijn werk van vandaag, en wie
-  // rooit waar zijn huis groter wordt, rooit (met dezelfde bijl en op dezelfde manier als een boer die bos ontgint). Waar je bent vanuit
+  // rooit waar zijn huis groter wordt, rooit met de bijl. Waar je bent vanuit
   // js/main.js, de andere dorpen vanuit T.werkDorpBij (js/dorp.js).
   T.werkVeldwerkBij = function (S, D) {
     const w = D.wereld;
@@ -828,7 +806,7 @@
       // De schaft: brood op de akker (js/dag.js). Wie op zijn land werkt, blijft er staan tot het werk weer begint (wie
       // er net heen liep, komt er nog aan), en neemt dan de volgende tegel.
       if (deel === 'schaft' && e.werkt && !T.vrijeDag(D, dag) && magWerken(S, D, e)) {
-        onthoudPlag(e, nu);
+        onthoudHalfWerk(e, nu);
         if (e.werkt.tot != null) Object.assign(e.werkt, { rust: true, schaft: true });
         continue;
       }
@@ -838,7 +816,7 @@
       }
       const soort = werktijd && magWerken(S, D, e) ? (kavel ? 'rooien' : schuur ? 'hout' : hut ? 'jagen' : wijn ? 'plukken' : oogst ? 'binnenhalen' : T.veldwerkVandaag(D, e, datum)) : null;
       if (!soort) {
-        onthoudPlag(e, nu);
+        onthoudHalfWerk(e, nu);
         stop(e);
         continue;
       }
@@ -848,7 +826,7 @@
         vw = e.veldwerk = { soort, i: null, gedaan: 0, klaar: (vw && vw.klaar) || {} };
       }
       if (soort === 'sprokkelen') sprokkel(S, D, e, vw, nu);
-      else if (soort === 'rooien') ontgin(D, e, vw, nu, T.teRooienOp(D, kavel));
+      else if (soort === 'rooien') rooiTegels(D, e, vw, nu, T.teRooienOp(D, kavel));
       else if (soort === 'hout') hakHout(S, D, e, vw, nu, schuur);
       else if (soort === 'jagen') jaag(S, D, e, nu, hut);
       else if (soort === 'plukken') pluk(S, D, e, nu, wijn);
@@ -869,8 +847,7 @@
   }
 
   // Helpt dit poppetje nu op het veld (vraag 111, c)? De boerin en de grote kinderen van een boerderij helpen bij het
-  // zaaien, de oogst en het ontginnen (vraag 107: een winter in het bos is werk voor het hele gezin): overdag, zolang hun
-  // boer op zijn eigen land zaait, maait of ontgint, blijven ze dicht bij hem. Wie
+  // zaaien en de oogst: overdag, zolang hun boer op zijn eigen land zaait of maait, blijven ze dicht bij hem. Wie
   // ergens anders werkt, gaat daarheen. Het anker voor T.dagAnker (js/dag.js) in de werkuren, of null. Het loopt met de
   // boer mee, dus zonder veld (`veld: false`; een veld is voor een plek waar velen heen gaan, js/lopen.js).
   T.helpAnker = function (D, e) {
@@ -882,14 +859,14 @@
     // hij hakt of rooit, blijven ze dicht bij hem.
     if (p.huis.groeitNaRooien && !p.werk) {
       const hoofd = p.hoofd && p.hoofd.wezen;
-      if (!hoofd || hoofd.dood || !hoofd.werkt || !ONTGINWERK.has(hoofd.werkt.soort)) return null;
+      if (!hoofd || hoofd.dood || !hoofd.werkt || !ROOIWERK.has(hoofd.werkt.soort)) return null;
       return { x: hoofd.tx, y: hoofd.ty, straal: IN().helpStraal, veld: false };
     }
     if (!IN().aan || p.huis.soort !== 'boerderij') return null;
     if (p.werk && p.werk !== p.huis) return null;
     const boer = boerVanHuis(D, p.huis);
     if (!boer || boer.dood || boer.binnen) return null;
-    if (!(boer.maait || boer.oogstDoel || (boer.werkt && (boer.werkt.soort === 'zaaien' || ONTGINWERK.has(boer.werkt.soort))))) return null;
+    if (!(boer.maait || boer.oogstDoel || (boer.werkt && (boer.werkt.soort === 'zaaien' || ROOIWERK.has(boer.werkt.soort))))) return null;
     // Wie een boom omhakt, staat ernaast, soms net buiten zijn veld: dan telt de boom.
     const aan = (boer.werkt && boer.werkt.op) || { x: boer.tx, y: boer.ty };
     const v = T.veldOp(D.wereld, aan.x, aan.y);
