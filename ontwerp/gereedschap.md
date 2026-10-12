@@ -30,7 +30,12 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   spel zoals het draait, met `require('./laad.cjs').spel()`: de scripts uit `index.html`, in die
   volgorde, zonder wat alleen scherm is (`test/laad.cjs`). Een toets van het gereedschap laadt wat
   zijn bladzijde laadt (`.pagina('gereedschap/wereld.html')`). Nooit een eigen lijstje: dan mist er
-  vroeg of laat een bestand, en toetst de toets een ander spel dan er draait.
+  vroeg of laat een bestand, en toetst de toets een ander spel dan er draait. Een toets die een dorp nodig heeft, speelt
+  op het proefdorp (`test/grond.cjs`; sinds ronde 2 van het snoeien, stap 3, 12 okt): het lege begin op eiland 2 met het
+  huis van de schout, boerderijen met hun akker en hutten, gebouwd met de regels van het spel en meteen af, op vast
+  toeval; met opties meer (`gebouwen: ['herberg']`, `weide: true`, `boerderijen: 3`). Het wordt één keer per proces
+  gebouwd en elke toets krijgt een vers exemplaar via opslaan en herstellen, dus een getal dat een toets vóór het
+  proefdorp verandert, telt niet bij het bouwen. `leegBegin(T, zaad)` geeft alleen het lege begin.
 - `npm run speeltest` speelt het lege begin een jaar met de kolonist (`gereedschap/speeltest/kolonist.js`; werklijst B,
   1f), op het eiland van elk zaad (standaard 1 tot en met 3; `--zaad 2`, `--zaden 1-5`), in een onzichtbare browser, en
   zet de uitslag in `gereedschap/speeltest/uit/` (niet in git), met een tabel in `samenvatting.md`: "Het eerste jaar"

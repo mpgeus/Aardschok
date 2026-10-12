@@ -14,14 +14,19 @@ onderwerp, niet hier. Wie aan een punt begint, zet er "**Bezig in sessie `<branc
 drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **B, 1c tot 1e zijn af** (11
 okt): het bouwmenu, verhuizen uit het kamp, het bouwbereik, het huis van de schout, meebouwen, bouwen in het bos, en
 boeren uit het niets (de boerderij, de velden die jij legt, wijn is eten). **Het spel is Engels** (11 okt, G). **B, 1f
-is af** (12 okt): de kolonist speelt het lege begin op vijf eilanden een jaar zonder fouten. **A, ronde 2, stap 1 en 2
-zijn af** (12 okt): de verzoeken, de ondernemers, de erven en het ontginnen zijn weg (de wijnboerderij blijft, vraag
-155). **Het volgende punt is A, ronde 2, stap 3** ("Leeg" is het enige begin; het plan in `snoeien.md`), dan stap 4 en
-5, dan de wijnboerderij als eigen gebouw (B1, vraag 155), het hele eiland (B2), de afwisseling (B3), en ronde 3 na C.
+is af** (12 okt): de kolonist speelt het lege begin op vijf eilanden een jaar zonder fouten. **A, ronde 2, stap 1 tot
+5 zijn af** (12 okt), op de spelregel "De markt" na: de verzoeken, de ondernemers, de erven en het ontginnen zijn weg;
+"Leeg" is het enige begin, het ontworpen gehucht is weg, een boer is de man op een boerderij (het lot en de karakters
+zijn weg), en alleen de kolonist speelt nog in de speeltest. De toetsen spelen op een proefdorp (`test/grond.cjs`).
+**Het volgende** is wat Marcel kiest over het dorp dat er al was en de markt (hieronder), dan de wijnboerderij als eigen
+gebouw (B1, vraag 155), het hele eiland (B2), de afwisseling (B3), en ronde 3 na C.
 
 **Wacht op Marcel:**
-- **1c tot 1e bekijken:** Spelregels, "Het begin" op "Leeg", en dan Nieuw spel (of in de console
-  `Spel.debug.begin('leeg', 2)`). Is het kamp op, open dan het bouwmenu (B): het bouwbereik gloeit op de grond. Zet het huis van de schout neer, ook in het bos (de bouwers rooien eerst, en het hout
+- **Twee keuzes uit ronde 2 van het snoeien** (`snoeien.md`, "Open, voor Marcel"): het dorp dat er al was (de maker legt
+  het nog voor de toetsen en het gereedschap; houden voor de andere dorpen op het eiland, of weg?), en de spelregel "De
+  markt" (het plein van het lege begin heeft geen plek voor de kramen: de markt als gebouw dat jij zet, of het plein die
+  plekken geven?).
+- **1c tot 1e bekijken:** Nieuw spel (of in de console `Spel.debug.begin(2)`). Is het kamp op, open dan het bouwmenu (B): het bouwbereik gloeit op de grond. Zet het huis van de schout neer, ook in het bos (de bouwers rooien eerst, en het hout
   komt in de voorraad), en een hut op open grond: wie geen werk heeft, loopt erheen en bouwt. Is de hut af, dan trekt
   er een gezin in; is het huis af, dan verhuist de schout en wordt de huifkar de ossenkar. Zet een boerderij neer en kies
   in het bouwmenu de akker of de wijngaard: klik de ene hoek en dan de andere, bij de boerderij (rechtsklik haalt de
@@ -58,11 +63,10 @@ ronden, want een deel hangt aan het oude begin of aan de proef:
 2. **Ronde 2, na 1f:** het plan, met wat Marcel koos ("III. OK", "e Mag weg, f alle vier weg, g weg, h ja wapens
    blijven"), en de kaart van wat eraan hangt, staan in `snoeien.md`, "Ronde 2". **Stap 1 en 2 zijn af** (12 okt: verhuizen
    wat blijft; de verzoeken, de ondernemers, de erven en het ontginnen weg, met "Wie bouwt" en "Huizen"; de wijnboerderij
-   blijft, vraag 155). **Het volgende is stap 3. Bezig in sessie `claude/gallant-faraday-d5617b`** (12 okt): het plan
-   met Marcel. "Leeg" is het enige begin, en de spelregels "Het
-   begin" en "Je gehucht" gaan eruit; dan stap 4 (het lot en de karakters, "De markt") en 5 (de oude spelers van de
-   speeltest). Wat het oude begin nog draaiende houdt: de vaste boeren van de kaart, en de spelregels "Het begin", "Je
-   gehucht" en "Wie de boeren zijn".
+   blijft, vraag 155). **Stap 3 tot 5 zijn af** (12 okt; Marcel: "B: lege begin met een proefdorp", en stap 4 "nu mee"):
+   "Leeg" is het enige begin, het ontworpen gehucht is weg, het lot en de karakters zijn weg (een boer is de man op een
+   boerderij), en alleen de kolonist speelt nog in de speeltest. **Open:** de spelregel "De markt" (stap 4), en het dorp
+   dat er al was; allebei een keuze voor Marcel (`snoeien.md`, "Open, voor Marcel").
 3. **Ronde 3, na C:** wat de proef moet uitwijzen (`gameloop.md`, "Open"): de voorvallen, de raad, de raadsman, het
    rapport, de wensen per stand en de treden, de wetten, de feesten.
 
@@ -140,6 +144,12 @@ het graan vraagt", de schandpaal, de heervaart en de twee bazen.
   schrijven voor de nieuwe richting, als B en C er staan.
 
 ## Af (sinds 11 okt)
+
+- Ronde 2 van het snoeien, stap 3 tot 5 (vraag 153; Marcel: "B: lege begin met een proefdorp", "Ja, nu mee", "e Mag weg",
+  "f alle vier weg", "g weg"): "Leeg" is het enige begin, het ontworpen gehucht is weg, een boer is de man op een
+  boerderij (het lot en de karakters weg), alleen de kolonist speelt nog in de speeltest, en de toetsen spelen op een
+  proefdorp (`test/grond.cjs`). Wat er onderweg bleek en mee ging (boeren trokken weg in het lege begin, de schandpaal
+  voor een boer, wie te hulp schiet): `snoeien.md`, "Stap 3, 4 en 5".
 
 - Ronde 2 van het snoeien, stap 2 (vraag 153; Marcel: "III. OK", "1 ja 2 ja 3 houden voor nu"): de verzoeken en de
   ondernemers (met "Wie bouwt"), de erven (met "Huizen", en opslaan naar versie 6) en het ontginnen zijn weg; jij bouwt

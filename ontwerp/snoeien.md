@@ -114,6 +114,28 @@ de heer niet als boer; dat gold ook al in het spel zelf. Dus: **een boer is de m
 regel uit 1e), en het lot, de karakters met hun gesprekken en de spelregel "Wie de boeren zijn" gaan eruit; een voorval
 dat een karakter vroeg, vraagt een boer of een man. De spelregel "De markt" (ook stap 4) blijft een eigen stukje erna.
 
+**Stap 3, 4 en 5: af, zonder de markt** (12 okt, sessie `claude/gallant-faraday-d5617b`; npm test 1054 van 1054):
+- **3a en 4:** de 45 toetsbestanden spelen op het proefdorp (`test/grond.cjs`; vast toeval, één keer gebouwd per proces en
+  per toets hersteld via opslaan). Een boer is de man op een boerderij (`T.isBoer(D, p)`); `js/boeren.js`, `T.KARAKTERS`
+  met hun gesprekken, de eigenschappen en de spelregel "Wie de boeren zijn" zijn weg. De raadsman weegt met één weging
+  (`RAADSMAN_INSTELLINGEN.kiest`), de schandpaal kost voor elke boer `HEER_INSTELLINGEN.schandpaalKost`, en er kan ook een
+  boer van het lege begin aan. Een boer trekt niet weg, gaat niet naar de heervaart en brengt de brief niet; tegen de
+  wolven helpen, in de militie en op jacht gaat hij wel (zoals in het lege begin tot dan). Onderweg gevonden en
+  opgelost: in het lege begin trokken boeren weg en lagen hun boerderijen stil (die regels keken naar `p.wie`).
+- **3b:** "Leeg" is het enige begin; de spelregels "Het begin" en "Je gehucht" zijn weg. `Spel.debug.begin(5)`.
+- **3c:** het ontworpen gehucht is weg (`kaarten/gehucht.tmj`, `maak-gehucht.cjs`); je dorp is het land van de maker.
+- **5:** alleen de kolonist speelt nog in de speeltest; hij doet ook de proef met opslaan.
+
+**Open, voor Marcel:**
+- **Het dorp dat er al was** (de maker legt het nog, `T.laadGemaaktGehucht(zaad)` zonder `leeg`, en zonder eiland met
+  `opEiland` uit): geen speler begint er meer op, maar de toetsen van het buurdorp, de markt, `npm run grootte`, de
+  schermafdrukken en `Spel.debug.gehucht` spelen erop. Houden voor de andere dorpen op het eiland (F, B2), of weg (met
+  de vaste boeren boer1 tot boer5 en de herbergierster in `T.MENSEN`)?
+- **De spelregel "De markt"** (stap 4): op het plein of een eigen gebouw. Het plein van het lege begin heeft nog geen
+  plek voor de kramen, de heer en de marskramer (`w.marskramer` ontbreekt), dus daar kan de markt nu niet; de
+  markttoetsen spelen op het dorp dat er al was. Kiezen: de markt is een gebouw dat jij zet (en "op het plein" weg), of
+  het plein van het lege begin krijgt die plekken.
+
 **De kaart voor stap 2 tot 5** (een agent, 12 okt; regelnummers van toen, dus zoek op de naam):
 - **Verzoeken** (`js/verzoeken.js`, 440 regels; `VERZOEKEN_INSTELLINGEN.mensen`, de spelregel "Wie bouwt"): aangeroepen uit
   `js/voorvallen.js` (de voorvallen bouwverzoek, wapenverzoek en herbergverzoek, met `T.beginBouwverzoek`,

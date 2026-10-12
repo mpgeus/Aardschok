@@ -85,8 +85,8 @@ In detail in `ontwerp/gereedschap.md`.
   meteen in het bestand: commit het, en pas een toets aan die het oude getal verwacht).
 - `npm test` draait de toetsen in `test/`. Een toets laadt het spel zoals het draait, met `require('./laad.cjs').spel()`
   (of `.pagina('gereedschap/wereld.html')`), **nooit met een eigen lijstje**: dan mist er vroeg of laat een bestand, en
-  toetst hij een ander spel dan er draait.
-- `npm run speeltest`: spelers in code spelen het spel, met vaste zaden, dus na een ander getal zie je precies wat het
+  toetst hij een ander spel dan er draait. Een toets die een dorp nodig heeft, speelt op het proefdorp (`test/grond.cjs`).
+- `npm run speeltest`: de kolonist in code speelt het spel, met vaste zaden, dus na een ander getal zie je precies wat het
   deed (wat het vond: `ontwerp/speelbaar.md`). Verder `proefversie` (de zip voor een tester), `grootte`, `schermen`,
   `tekenmeting`, `samenvatting`, `maker`, `teksten` (na elke zin die erbij komt of verandert), en `pixelart` en
   `pixelart:spel` (de kunst naar `beelden/`, opnieuw als de kunst verandert).
