@@ -18,16 +18,17 @@ loopt** (12 okt): de kolonist speelt het lege begin op vijf eilanden een jaar zo
 Marcel (hieronder). Ronde 2 van het snoeien volgt na 1f, dan het hele eiland (B2), de afwisseling (B3), en ronde 3 na C.
 
 **Wacht op Marcel:**
-- **1f, wat de kolonist vond** (12 okt; `speelbaar.md`, "De speeltest van 12 okt"): niets loopt vast, maar (a) het eten
-  haalt het jaar niet (honger in juni en juli, en in de lente geen zaaigraan voor jaar 2): eerst de kolonist een jager
-  laten bouwen als het spel zegt dat het eten de winter niet haalt (het raadt het zelf aan), of meteen een getal (graan
-  in de kar, graan per tegel)? (b) De regel "Wijn haalt kapel" houdt in het lege begin een tweede boerderij tegen (op 3
-  van 5 eilanden): in het lege begin uit, of eruit in ronde 2? (c) Rooien geeft 1.000 tot 2.800 hout in het eerste jaar:
-  minder hout per gerooide boom? (d) "Leeg" als standaard maakt 53 toetsen van het oude begin rood: als eerste stap van
-  ronde 2? De grens van 10 mensen (c1) beet niet: met de kolonist stierf niemand van honger. **Marcel koos (12 okt): "a
-  ja, b uit, c ja, d ja"**: de kolonist bouwt een jager als het spel zegt dat het eten niet haalt, en dan meten we
-  opnieuw; de regel "Wijn haalt kapel" geldt in het lege begin niet; een gerooide boom geeft minder hout (een eigen getal
-  in de werkbank); en "Leeg" als standaard is de eerste stap van ronde 2. **Bezig in sessie `ccr-abaf0226-9lnbtq`**.
+- **1f, de tweede meting** (12 okt; `speelbaar.md`, "De speeltest van 12 okt, middag"; Marcel koos eerder "a ja, b uit,
+  c ja, d ja"): met de jager haalt het eten het jaar (geen honger, 81 tot 151 graan op 1 lentemaand), rooien geeft 220
+  tot 950 hout, en niets loopt vast. Nieuw: (i) **de schout valt alleen in een gevecht**, op 2 van de 5 eilanden (wolven
+  in de winter, een rover in november): in het lege begin is er geen militie (wachthuis of veteranen). Kiezen: de
+  kolonist bouwt een wachthuis (10 hout, 4 goud, 2 man; het goud is krap), het eerste jaar rust van rovers en wolven (de
+  rovers met een getal, `ROVERS_INSTELLINGEN.eersteWildeNa` van 60 naar 360; de wolven vragen een regel, zoals de heer
+  het eerste jaar), of laten tot F. (ii) **Het bouwbereik is na de zomer vol** op eiland 3: met 16 tegels in plaats van
+  12 past er een tweede boerderij; of wachten op de schuur die bereik geeft (C, stap 3). (iii) **Ronde 2**: het voorstel
+  staat in `snoeien.md` ("Ronde 2: voorstel van Claude"), met vier keuzes (e tot h), en "Leeg" als standaard in stap 3 in
+  plaats van 1, zodat 53 toetsen niet eerst omgebouwd worden en daarna weggaan. **Bezig in sessie
+  `ccr-abaf0226-9lnbtq`**.
 - **1c tot 1e bekijken:** Spelregels, "Het begin" op "Leeg", en dan Nieuw spel (of in de console
   `Spel.debug.begin('leeg', 2)`). Is het kamp op, open dan het bouwmenu (B): het bouwbereik gloeit op de grond. Zet het huis van de schout neer, ook in het bos (de bouwers rooien eerst, en het hout
   komt in de voorraad), en een hut op open grond: wie geen werk heeft, loopt erheen en bouwt. Is de hut af, dan trekt

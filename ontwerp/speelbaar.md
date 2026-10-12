@@ -153,6 +153,25 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 12 okt, middag: de kolonist na "a ja, b uit, c ja" (werklijst B, 1f)
+
+`npm run speeltest -- kolonist --zaden 1-5`, op `5afb924` (branch `ccr-abaf0226-9lnbtq`): de kolonist bouwt een jager als
+het spel zegt dat het eten niet haalt, "Wijn haalt kapel" geldt in het lege begin niet, en een gerooide boom geeft 2 hout.
+
+- **Nog steeds geen fout**, en niets loopt vast: alles af binnen 19 dagen, het kamp leeg op dag 13 tot 19.
+- **Het eten haalt het jaar:** geen dag honger (was 24 tot 31 in de lente van het jaar erna), en op 1 lentemaand ligt er
+  81 tot 151 graan, genoeg zaaigraan voor jaar 2. De jager komt na de oogst, als het spel zegt dat het eten de winter
+  niet haalt (dag 180), en op drie eilanden een tweede een of twee maanden later.
+- **Hout:** 220 tot 950 in het eerste jaar (was 1.000 tot 2.800). De hutten wachten de eerste twee weken op hout.
+- **De tweede boerderij** kwam er op eiland 4 (met een wijngaard); op eiland 1, 2 en 5 wachtte ze op goud, en op eiland 3
+  vond hij 50 dagen geen plek: het bouwbereik van 12 tegels is daar vol (de kolonist zegt nu zelf waarom: een boerderij
+  valt overal "Too far away" of op het plein). Met `--getal BEGIN_INSTELLINGEN.bouwBereik=16` komt ze er op dag 187, met
+  een wijngaard; de schout valt dan op 22 januari, weer tegen een wolf.
+- **Nieuw: de schout valt** op eiland 3 (18 februari, tegen een wolf: hij ging een man helpen die door wolven werd
+  aangevallen) en op eiland 5 (30 november, tegen een rover). In het lege begin is er geen militie (de mannen van het
+  wachthuis, of veteranen; `T.militieVan`), dus vecht hij alleen. In de eerste meting overleefde hij het nog: het jaar
+  liep daar anders. Valt de schout, dan is het spel uit (vraag 55).
+
 ## De speeltest van 12 okt: de kolonist, het eerste jaar vanaf een lege plek (werklijst B, 1f)
 
 `npm run speeltest -- kolonist --zaden 1-5`, op `66f6b0d` (branch `ccr-abaf0226-9lnbtq`; het spel van `bbae6d2`): de
@@ -169,9 +188,10 @@ plaats. De houthakker werkt 5 tot 12 dagen niet zonder dat het spel zegt waarom;
 
 **Wat wel scheef is, voor Marcel (b1: met een getal uit de werkbank):**
 - **Het eten haalt het jaar niet.** Zestig akkertegels (al het zaaigraan uit de kar) geven zo'n 240 graan; 17 mensen eten
-  er 306 per jaar (0,05 per dag). Op vier van de vijf eilanden 24 tot 31 dagen honger in juni en juli (het laagste graan
-  voor de oogst is 3 tot 21), en op 1 lentemaand van het jaar erna is het graan op alle vijf 0 tot 10: geen zaaigraan voor het tweede jaar.
-  Niemand stierf van honger. Het spel raadt zelf een jager aan ("a hunter shoots 1 meat a day"; 8 hout, geen goud), maar
+  er 306 per jaar (0,05 per dag). Voor de oogst zakt het graan tot 3 à 21, maar honger is er dan niet; op 1 lentemaand van
+  het jaar erna is het op alle vijf 0 tot 10: geen zaaigraan voor het tweede jaar, en op vier eilanden 24 tot 31 dagen
+  honger in die maand (eerst stond hier "in juni en juli": een herhaling van eiland 1 op deze stand liet zien dat de
+  honger in de maand van het jaar erna viel). Niemand stierf van honger. Het spel raadt zelf een jager aan ("a hunter shoots 1 meat a day"; 8 hout, geen goud), maar
   die staat niet in de regels van de kolonist.
 - **Geen plek voor een tweede boerderij** (regel 5, na de oogst) op eiland 3, 4 en 5, 21 tot 52 dagen lang. Niet door het
   bouwbereik: de regel van 10 okt "Wijn haalt kapel" (`T.waaromGeenKringPlek`, vraag 136) laat een gebouw met een gezin
