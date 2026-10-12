@@ -96,6 +96,24 @@ de speeltest bouwen nu een hut als er geen plaats is (tot stap 5), en `npm run g
 nu als `bosVanDeHeer` in `T.BOS_INSTELLINGEN`, `T.groeitLaag` in `js/bos.js`, en het rooien met de bijl heet in `js/veldwerk.js` `rooiTegels`.
 **Stap 2 is daarmee af.** Het volgende is stap 3: "Leeg" is het enige begin.
 
+**Stap 3, het plan** (12 okt, sessie `claude/gallant-faraday-d5617b`). Marcel koos "B: lege begin met een proefdorp" en
+"stap 5 samen met stap 3". De toetsen die op het ontworpen gehucht spelen (44 bestanden), krijgen het lege begin als
+grond: een proefdorp dat een hulp in `test/` bouwt met de regels van het spel (het huis van de schout, hutten, een
+boerderij met haar akker), zodat ze spelen wat de speler speelt. Gemeten vooraf: op een dorp van de maker (het "dorp dat
+er al was") bleven 450 van de 482 toetsen groen, maar dat begin bestaat voor de speler niet meer; het lege begin vraagt
+meer werk, ook aan toetsen van ronde 3. De vier oude spelers van de speeltest gaan in dezelfde stap weg (stap 5), want
+het begin dat zij spelen, gaat weg. In stukjes, elk met de toetsen groen: **3a** het proefdorp en de toetsen erheen,
+**3b** "Leeg" als enige begin (de spelregels "Het begin" en "Je gehucht" weg), **3c** het ontworpen gehucht weg
+(`kaarten/gehucht.tmj`, `gereedschap/tiled/maak-gehucht.cjs`), **3d** de oude spelers weg. Open: het dorp van de maker
+(niet leeg) heeft daarna geen speler meer; het blijft tot Marcel kiest of het de andere dorpen op het eiland wordt (F).
+
+**Stap 4 gaat mee** (Marcel, 12 okt: "Ja, nu mee"). Gemeten op het proefdorp: 188 van de 482 toetsen werden rood, en de
+grootste oorzaak was dat `T.isBoer` nog "iemand met een karakter uit het lot" betekent (de vijf boeren van het oude
+begin). In het lege begin heeft de boer op een boerderij geen karakter, dus telde hij voor de raadsman, de voorvallen en
+de heer niet als boer; dat gold ook al in het spel zelf. Dus: **een boer is de man op een boerderij** (`T.boerVan`, de
+regel uit 1e), en het lot, de karakters met hun gesprekken en de spelregel "Wie de boeren zijn" gaan eruit; een voorval
+dat een karakter vroeg, vraagt een boer of een man. De spelregel "De markt" (ook stap 4) blijft een eigen stukje erna.
+
 **De kaart voor stap 2 tot 5** (een agent, 12 okt; regelnummers van toen, dus zoek op de naam):
 - **Verzoeken** (`js/verzoeken.js`, 440 regels; `VERZOEKEN_INSTELLINGEN.mensen`, de spelregel "Wie bouwt"): aangeroepen uit
   `js/voorvallen.js` (de voorvallen bouwverzoek, wapenverzoek en herbergverzoek, met `T.beginBouwverzoek`,
