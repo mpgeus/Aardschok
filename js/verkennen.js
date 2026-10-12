@@ -156,7 +156,13 @@
       if (voorval) {
         return { tekst: T.t('Talk to {wie} (looking for you)', { wie: T.naamVanBewoner(voorval.wie) }), doe: () => loopNaast(S, e, () => T.openDialoog(S, e, voorval.id)) };
       }
-      // Een bewoner (js/bewoners.js) heeft nog geen gesprek: bij de muis staat wie hij is.
+      // Wie in de herberg werkt, is de waard (js/herberg.js): met hem praat je over gisteravond (het gesprek `waard`,
+      // js/gesprekken.js).
+      const p = e.bewoner && D ? T.bewonerVan(D, e) : null;
+      if (p && p.werk && p.werk.soort === 'herberg') {
+        return { tekst: T.t('Talk to {wie}, the innkeeper', { wie: T.naamVanBewoner(p) }), doe: () => loopNaast(S, e, () => T.openDialoog(S, e, 'waard')) };
+      }
+      // Een andere bewoner (js/bewoners.js) heeft nog geen gesprek: bij de muis staat wie hij is.
       if (e.bewoner && D && T.overBewonerTekst) return { tekst: T.overBewonerTekst(D, e) };
       // Wie een gesprek heeft (js/gesprekken.js), daar praat je mee: een boer, de heer. Welk
       // gesprek dat is, zegt T.gesprekIdVan — een dorpeling kan er een eigen hebben.

@@ -319,11 +319,26 @@ test('\'s avonds brandt de lantaarn van de herberg, en met meer gasten binnen is
 // Stuk 2: in de herberg wordt gepraat (Marcel koos B, 27 sep, vraag 38)
 // ---------------------------------------------------------------------------------------------
 
-// Het gesprek van de herbergierster staat nog in js/gesprekken.js, maar in het lege begin woont er niemand in de herberg
-// die het voert; de herberg onthoudt wel nog wie er zat (T.tikHerbergDag), en dat leest het gesprek.
-const zegt = (S) => T.gesprekKnoop(S, S.dorp, 'herbergierster', 'welkom').tekst;
+// Het gesprek van de waard: wie in de herberg werkt (Marcel, 12 okt: "Naar de waard"; tot dan de herbergierster, die in
+// het gehucht dat er al was in de herberg woonde). De herberg onthoudt wie er zat (T.tikHerbergDag), en dat leest het
+// gesprek.
+const zegt = (S) => T.gesprekKnoop(S, S.dorp, 'waard', 'welkom').tekst;
 
-test('de herberg onthoudt wie er gisteravond zat, en of het droog was (wat het gesprek van de herbergierster vertelt)', () => {
+test('wie in de herberg werkt, is de waard: met hem praat je, en met een ander zie je alleen wie hij is', () => {
+  const S = proef();
+  const g = T.herbergVan(S.dorp);
+  const waard = mensen(S).find((p) => p.werk === g);
+  assert.ok(waard && waard.wezen, 'er werkt iemand');
+  const h = T.handelingVerkennen(S, { wezen: waard.wezen, x: waard.wezen.x, y: waard.wezen.y });
+  assert.equal(h.tekst, `Talk to ${T.naamVanBewoner(waard)}, the innkeeper`);
+  assert.equal(typeof h.doe, 'function');
+  const ander = mensen(S).find((p) => p.wezen && p.werk !== g && !p.schout);
+  const a = T.handelingVerkennen(S, { wezen: ander.wezen, x: ander.wezen.x, y: ander.wezen.y });
+  assert.ok(!a.doe, 'een ander heeft nog geen gesprek');
+  assert.equal(T.GESPREKKEN.herbergierster, undefined);
+});
+
+test('de herberg onthoudt wie er gisteravond zat, en of het droog was (wat het gesprek van de waard vertelt)', () => {
   const S = proef();
   assert.match(zegt(S), /^Quiet last night/);
   const gasten = metKans(1, () => T.herbergGasten(S.dorp, HERFST));

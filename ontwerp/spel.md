@@ -3608,12 +3608,12 @@ eigen erf.
   zelf, vaak in de voorkamer van een gewoon huis.
 
 **Zo werkt het nu: de herberg, stuk 1** (27 sep; `js/herberg.js`, toetsen in `test/herberg.test.cjs`):
-- **De herberg staat er vanaf het begin,** met een lantaarn en een bankje bij de deur. Tot stuk 3
-  stond hij in de hoek tussen het plein en de weg (vijf bij zeven); nu aan de westkant van het plein,
-  groter (zie stuk 3). Vakwerk onder riet, van de huizenbouwer (`herberg1` in `gereedschap/pixelart/huizen.cjs`), met een zolder, dakkapellen, luiken
+- **De mensen bouwen de herberg zelf** (sinds ronde 2 van het snoeien, 12 okt: het lege begin), met een lantaarn bij
+  de deur. Tot dan stond hij er in het gehucht vanaf het begin, aan de westkant van het plein (zie stuk 3). Vakwerk onder riet, van de huizenbouwer (`herberg1` in `gereedschap/pixelart/huizen.cjs`), met een zolder, dakkapellen, luiken
   en bloembakken. Wie er een bouwt in het dorp, krijgt nog de oude tekening.
-- **De herbergierster woont er, alleen** (`js/mensen.js`, met haar eigen vel), en werkt er: het gehucht
-  telt nu 26 mensen. Ze brouwt van graan, zolang er niet genoeg bier ligt: acht kannen per dag voor
+- **De waard werkt er** (sinds 12 okt; Marcel: "Naar de waard"): wie in de herberg werkt, tapt en brouwt, en met hem
+  praat je over gisteravond (het gesprek `waard`; `js/verkennen.js`). Er woont niemand. Tot dan woonde de
+  herbergierster er, alleen (`js/mensen.js`, met haar eigen vel), in het gehucht dat er al was. Hij brouwt van graan, zolang er niet genoeg bier ligt: acht kannen per dag voor
   een vijfde graan, tot er dertig liggen (`T.GEBOUWEN.herberg.maakt`, met `tot`). Het gehucht begint met
   twintig bier. Het bier staat in de balk, naast het graan. **Sinds 3 okt houdt ze bier apart voor de huizen**
   (werklijst vraag 102, b; Marcel: "102 a b c d e ja"): wat de huizen drinken tot de oogst binnen is, hooguit 150 dagen
@@ -3633,7 +3633,7 @@ eigen erf.
   (`groteHerberg`); het bier blijft de grens.
 - **Erheen, en weer naar huis:** na het werk lopen ze de herberg in en zijn ze binnen. Bij bedtijd
   komen ze naar buiten en lopen ze in het donker naar hun eigen deur; wie ver woont, is pas na
-  middernacht thuis. De herbergierster staat 's avonds binnen, achter de tap. Bij de muis staat bij een
+  middernacht thuis. De waard staat 's avonds binnen, achter de tap. Bij de muis staat bij een
   bewoner "naar de herberg".
 - **'s Avonds brandt de lantaarn:** een warme gloed bij de deur, sterker en wijder naarmate er meer
   gasten binnen zitten. Zo zie je in het donker waar het dorp is.

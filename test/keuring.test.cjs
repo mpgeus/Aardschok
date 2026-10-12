@@ -268,9 +268,9 @@ test('een mens die niet in de lijst staat, wordt bij naam genoemd', () => {
 });
 
 test('twee monden voor één tekst valt op', () => {
-  // De herbergierster en een dorpeling die haar gesprek leent: ze zeggen dan woord voor woord hetzelfde.
-  const klachten = keur([UITGANG, { x: 2, y: 2, wie: 'herbergierster' }, { x: 4, y: 2, zaad: 3, gesprek: 'herbergierster' }]);
-  assert.match(teksten(klachten), /voert hetzelfde gesprek "herbergierster"/);
+  // De smid en een dorpeling die zijn gesprek leent: ze zeggen dan woord voor woord hetzelfde.
+  const klachten = keur([UITGANG, { x: 2, y: 2, wie: 'smid' }, { x: 4, y: 2, zaad: 3, gesprek: 'smid' }]);
+  assert.match(teksten(klachten), /voert hetzelfde gesprek "smid"/);
 });
 
 test('een mens komt met zijn eigen naam en zijn eigen gesprek uit de kaart', () => {

@@ -3,8 +3,8 @@
 // (vraag 35 tot en met 37). Regels zonder scherm, zoals js/dag.js; toetsen in test/herberg.test.cjs.
 //
 // Wat hier staat:
-//   - welke herberg het dorp heeft (T.herbergVan). In het gehucht staat er een vanaf het begin, in de
-//     hoek tussen het plein en de weg, en daar woont de herbergierster (kaarten/gehucht.betekenis.json).
+//   - welke herberg het dorp heeft (T.herbergVan): de mensen bouwen hem zelf, en wie er werkt, is de waard
+//     (tot ronde 2 van het snoeien woonde er in het gehucht dat er al was een herbergierster).
 //     Er kan een tweede komen (je bouwt hem zelf): wie 's avonds gaat, gaat naar de herberg die het dichtst
 //     bij zijn huis staat (T.herbergenVan);
 //   - wie er vanavond heen gaat (T.herbergGasten): een volwassene, vaker in de winter als de avond lang
@@ -12,18 +12,18 @@
 //     verder weg woont. Nooit meer dan er bier is. Het lot ligt vast per mens per dag, zodat het klopt
 //     als je slaapt, door de kalender springt of op 30× speelt;
 //   - waar ze 's avonds heen lopen (T.herbergAnker, voor T.dagAnker in js/dag.js): de herberg in, en bij
-//     bedtijd in het donker naar huis. De herbergierster staat 's avonds achter de tap;
+//     bedtijd in het donker naar huis. De waard staat 's avonds achter de tap;
 //   - de avond verrekend (T.tikHerbergDag, elke nacht vanuit T.tikGebouwenDag in js/gebouwen.js): elk
 //     bezoek drinkt bier, en wie er was, onthoudt de dag;
-//   - wat er gezegd werd (stuk 2, Marcel koos B op 27 sep, vraag 38): de herbergierster weet de volgende dag wie
-//     er zat (haar gesprek in js/gesprekken.js, met het woord {gisteravond}); wat de roddelaar vertelde over de
+//   - wat er gezegd werd (stuk 2, Marcel koos B op 27 sep, vraag 38): de waard weet de volgende dag wie
+//     er zat (zijn gesprek in js/gesprekken.js, met het woord {gisteravond}); wat de roddelaar vertelde over de
 //     kelders is er sinds 11 okt uit (vraag 151);
 //   - wie er logeert (T.logiesAnker): de marskramer zit er 's avonds en slaapt er;
 //   - wat het doet (T.herbergGezelligheid, voor js/behoeften.js): wie deze week in de herberg was, is
 //     tevredener;
 //   - wat er te zien is (T.herbergTekst, bij de muis op de herberg).
 // Het brouwen zelf is gewoon werk van een gebouw (T.GEBOUWEN.herberg.maakt, js/gebouwen.js): de
-// herbergierster brouwt graan tot bier, zolang er niet genoeg ligt.
+// waard brouwt graan tot bier, zolang er niet genoeg ligt.
 (function (T) {
   'use strict';
 
@@ -41,9 +41,9 @@
     // De grote herberg, van twee lagen, die in een dorp uit de kleine groeit (js/behoeften.js), trekt meer: de kans dat
     // iemand gaat, is zoveel keer zo groot (werklijst vraag 133; Marcel, 8 okt: "1. A"). Het bier blijft de grens.
     groteHerberg: 1.5,
-    // Wat een bezoek drinkt, aan bier. De herbergierster brouwt het zelf (T.GEBOUWEN.herberg.maakt).
+    // Wat een bezoek drinkt, aan bier. De waard brouwt het zelf (T.GEBOUWEN.herberg.maakt).
     bierPerBezoek: 1,
-    // Bier apart voor de huizen (werklijst vraag 102, b; Marcel, 3 okt: "102 a b c d e ja"): de herbergierster houdt
+    // Bier apart voor de huizen (werklijst vraag 102, b; Marcel, 3 okt: "102 a b c d e ja"): de waard houdt
     // achter wat de huizen drinken tot de volgende oogst, hooguit zoveel dagen, voor de magere maanden waarin er geen
     // graan over is om te brouwen, zoals de boeren het zaaigraan apart houden. De gasten drinken wat erboven ligt, en
     // wie bier maakt, maakt tot er erboven genoeg ligt (T.maaktTot, js/gebouwen.js). In de speeltest van 3 okt dronken de
@@ -64,7 +64,7 @@
     }
     return mensen * (T.WENSEN_INSTELLINGEN.perMens.bier || 0);
   };
-  // Hoeveel bier de herbergierster apart houdt voor de huizen: wat ze drinken tot de oogst binnen is
+  // Hoeveel bier de waard apart houdt voor de huizen: wat ze drinken tot de oogst binnen is
   // (T.dagenTotDeOogst, js/akkers.js), hooguit `bierApartDagen` dagen.
   T.bierApart = function (D, dag = D.kalender ? D.kalender.dag : 0) {
     return Math.ceil(T.bierVoorDeHuizen(D) * Math.min(IN().bierApartDagen, T.dagenTotDeOogst(dag)));
@@ -74,7 +74,7 @@
 
   // De herbergen van het dorp die klaar zijn, die van het begin eerst.
   T.herbergenVan = (D) => (D.gebouwen || []).filter((g) => g.soort === 'herberg' && g.klaar);
-  // De herberg van het dorp: de eerste die klaar is, of null. Daar woont de herbergierster, en daar logeert de marskramer.
+  // De herberg van het dorp: de eerste die klaar is, of null. Daar logeert de marskramer.
   T.herbergVan = (D) => T.herbergenVan(D)[0] || null;
 
   // Kan hij vanavond gaan? Een volwassene, niet de schout (die loop jij), niet wie net komt of
@@ -187,14 +187,14 @@
 
   // Elke nacht de avond verrekenen (T.tikGebouwenDag, js/gebouwen.js, aan het begin van dag `dag`): wie
   // er gisteravond was, dronk zijn bier en onthoudt dat (p.herbergDag, voor T.herbergGezelligheid).
-  // De herbergierster weet het de volgende dag (haar gesprek in js/gesprekken.js): de vlaggen herbergGasten en
+  // De waard weet het de volgende dag (zijn gesprek in js/gesprekken.js): de vlaggen herbergGasten en
   // herbergDroog, en de namen in S.herberg.gisteravond.
   T.tikHerbergDag = function (D, dag) {
     if (!T.herbergVan(D) || !D.bewoners) return;
     const gisteren = Math.floor(dag) - 1;
     const droog = T.herbergDroog(D);
     const gasten = T.herbergGasten(D, gisteren);
-    // Met een tweede herberg weet de herbergierster alleen wie er bij haar zat (de eerste herberg).
+    // Met een tweede herberg weet de waard alleen wie er bij hem zat (de eerste herberg).
     const waar = (D.herberg && D.herberg.gasten && D.herberg.gasten.waar) || [];
     const bijHaar = gasten.filter((p, i) => !waar[i]);
     const H = D.herberg || (D.herberg = {});
@@ -209,7 +209,7 @@
     for (const p of gasten) p.herbergDag = gisteren;
   };
 
-  // Wat de herbergierster invult in haar gesprek (js/gesprek.js, T.vulWoordenIn): wie er gisteravond
+  // Wat de waard invult in zijn gesprek (js/gesprek.js, T.vulWoordenIn): wie er gisteravond
   // aan de tap zat.
   T.GESPREK_WOORDEN = T.GESPREK_WOORDEN || {};
   T.GESPREK_WOORDEN.gisteravond = (D) => opsomming((D.herberg && D.herberg.gisteravond && D.herberg.gisteravond.namen) || []) || T.t('nobody');

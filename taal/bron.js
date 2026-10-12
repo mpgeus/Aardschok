@@ -1756,6 +1756,7 @@ Spel.TAAL_BRON = [
   {"t":"Attack the {wie}","waar":["js/verkennen.js"]},
   {"t":"The covered wagon, with everything you brought","waar":["js/verkennen.js"]},
   {"t":"Talk to {wie} (looking for you)","waar":["js/verkennen.js"]},
+  {"t":"Talk to {wie}, the innkeeper","waar":["js/verkennen.js"]},
   {"t":"Talk to {wie}","waar":["js/verkennen.js"]},
   {"t":"Look at the chest","waar":["js/verkennen.js"]},
   {"t":"A chest full of old rubbish. Nothing the lord would want.","waar":["js/verkennen.js"]},

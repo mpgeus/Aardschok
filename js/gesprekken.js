@@ -170,10 +170,13 @@
         },
       },
     },
-    // De herbergierster (js/herberg.js; spel.md, "Zaken waar de mensen zelf heen gaan"; Marcel koos op
-    // 27 sep dat er in de herberg gepraat wordt, vraag 38). Ze weet wie er gisteravond zat. herbergGasten en
-    // herbergDroog zet js/herberg.js elke nacht; {gisteravond} vult het spel in met de namen van wie er zat.
-    herbergierster: {
+    // De waard: wie in de herberg werkt (js/herberg.js; spel.md, "Zaken waar de mensen zelf heen gaan"; Marcel koos op
+    // 27 sep dat er in de herberg gepraat wordt, vraag 38). Hij weet wie er gisteravond zat. herbergGasten en
+    // herbergDroog zet js/herberg.js elke nacht; {gisteravond} vult het spel in met de namen van wie er zat. Tot ronde 2
+    // van het snoeien (stap 6, 12 okt) voerde de herbergierster dit gesprek, die in het gehucht dat er al was in de
+    // herberg woonde; in het lege begin werkt er een bewoner, en die voert het nu (Marcel: "Naar de waard";
+    // js/verkennen.js).
+    waard: {
       naam: 'the innkeeper',
       start: 'welkom',
       situaties: [
