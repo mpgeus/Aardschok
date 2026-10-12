@@ -1,5 +1,5 @@
 // Twee speeltests naast elkaar (werklijst vraag 142, stap 3; Marcel, 10 okt: een set getallen probeer je in de code, en de
-// speeltest zet hem naast de vorige). Een speeltest met een naam (`npm run speeltest -- bouwer --naam voor`) bewaart in
+// speeltest zet hem naast de vorige). Een speeltest met een naam (`npm run speeltest -- --naam voor`) bewaart in
 // uit/<naam>/ wat hij speelde: set.json met de stand en de opdracht, waarden.json met alle waarden van de bladzijde met
 // getallen (gelezen met gereedschap/instellingen/bron.js, zoals de bladzijde ze toont), en per spel zijn uitslag. Dit zet twee zulke
 // speeltests naast elkaar: welke waarden er anders waren, en per spel wat er anders afliep. Dezelfde speler met hetzelfde
@@ -10,7 +10,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const I = require('../instellingen/bron.js');
-const { NAMEN, BASIS } = require('./samenvatting.cjs');
+const { NAMEN } = require('./samenvatting.cjs');
 
 const WORTEL = path.join(__dirname, '..', '..');
 const UIT = path.join(__dirname, 'uit');
@@ -108,6 +108,8 @@ function matenVan(u) {
 function opdrachtTekst(o) {
   if (!o) return '?';
   const zaden = o.zaden && o.zaden.length > 1 ? `zaden ${o.zaden[0]} tot ${o.zaden[o.zaden.length - 1]}` : `zaad ${(o.zaden || [])[0]}`;
+  // Een speeltest van na 12 okt speelt altijd op het eiland; die van daarvoor in uit/ (de bouwer en de anderen) hadden ook
+  // `maker` en `ontworpen`, en die lezen we nog.
   const land = { eiland: 'op het eiland', maker: 'op gehuchten van de maker', ontworpen: 'op het ontworpen gehucht' }[o.land] || o.land;
   const anders = [...Object.entries(o.regels || {}), ...Object.entries(o.getallen || {})].map(([k, v]) => `${k}=${v}`);
   return `${(o.spelers || []).join(', ')}, ${zaden}${o.jaren ? `, ${o.jaren} jaar` : ''}, ${land}${anders.length ? `, met ${anders.join(', ')}` : ''}`;
@@ -165,7 +167,7 @@ function vergelijk(tegen, na) {
     const a = v ? matenVan(v) : null;
     const b = matenVan(u);
     spellen.push({
-      speler: u.speler, zaad: u.zaad, naam: `${BASIS[u.speler] || NAMEN[u.speler] || u.speler}, zaad ${u.zaad}`, gespeeldTegen: !!v,
+      speler: u.speler, zaad: u.zaad, naam: `${NAMEN[u.speler] || u.speler}, zaad ${u.zaad}`, gespeeldTegen: !!v,
       maten: b.map((m, i) => ({ id: m.id, naam: m.naam, voor: a ? a[i].waarde : null, na: m.waarde })),
     });
   }

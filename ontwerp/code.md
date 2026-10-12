@@ -213,10 +213,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   brieven van de heer op één plek** (vraag 60, het eerste stuk van hud.js splitsen): de benoeming waarmee een nieuw
   spel begint, de schatting op 1 wijnmaand, de heervaart, en een brief bij elke trede (het dorp, marktrecht), elk een
   soort in `BRIEVEN`, getoond met
-  `T.ui.toonBrief(D, soort)`, en alleen die aan jouw dorp komt in beeld; de knop Brief opent een brief die op je antwoord wacht. Een nieuw spel begint in
-  het gehucht met `T.beginOpKaart`
-  (`js/gebied.js`; `?kaart=<naam>` begint op een andere kaart, zonder brief); de kaart komt uit
-  `gereedschap/tiled/maak-gehucht.cjs`, de
+  `T.ui.toonBrief(D, soort)`, en alleen die aan jouw dorp komt in beeld; de knop Brief opent een brief die op je antwoord wacht. Een nieuw spel begint
+  met `T.beginOpKaart` (`js/gebied.js`; `?kaart=<naam>` begint op een andere kaart, zonder brief), op het land van de
+  maker (`js/maker.js`; tot ronde 2 van het snoeien, stap 3c, het ontworpen gehucht uit
+  `gereedschap/tiled/maak-gehucht.cjs`, beide weg), de
   bouwfases uit `gereedschap/pixelart/bouwfasen.cjs` (`tegels/bouwfasen/<tekening>.png` + `bouwfasen.json`). Getallen
   om bij te stellen staan telkens bovenaan in één blok (`T.GEBOUWEN_INSTELLINGEN`,
   `T.BEHOEFTEN_INSTELLINGEN`, `T.AKKER_STADIA`, `T.GRAAN_PER_TEGEL`, `T.HANDEL_INSTELLINGEN`,
@@ -742,12 +742,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   het zaaigraan uit de kar erop past (zolang `T.isNazaaitijd`), een houthakker als het hout laag wordt, hutten tot elk
   gezin in het kamp een woning heeft, een jager als het spel zegt dat het eten niet haalt (`T.watDeWinterNietHaalt`, of
   de status honger; hooguit één per `jagerNa` dagen; Marcel, 12 okt: "a ja"), en na de oogst een wijngaard op een tweede
-  boerderij als het eten de winter niet haalt. Hij vraagt `T.inBouwmenu`, dus hij speelt onder de spelregel "Leeg". Hij bouwt met de handelingen van het bouwmenu: `T.plaatsGebouw` op de plek van `T.plekVoor` (open grond, of
+  boerderij als het eten de winter niet haalt. Hij vraagt `T.inBouwmenu`, dus hij speelt het lege begin. Hij bouwt met de handelingen van het bouwmenu: `T.plaatsGebouw` op de plek van `T.plekVoor` (open grond, of
   waar het minst te rooien is), en `T.legVeld` op de rechthoek die hij zelf zoekt (de grootste maat die past, het minst
   te rooien, het dichtst bij de boerderij). Hij geeft terug wat hij deed (`{ soort, gelukt, reden, tekst, instantie }`),
   en wat hij nog niet kan betalen met `wacht`. Het is gereedschap, geen spel: het spel laadt hem niet.
-- **Twee die hem laden, met dezelfde keuzes** (a1): de speeltest (`speler.js`, de speler `kolonist`, die altijd op het
-  eiland met "Leeg" speelt) en `test/begin.test.cjs`, per dag. Zonder beelden lopen de mensen niet, dus zet de toets wie
+- **Twee die hem laden, met dezelfde keuzes** (a1): de speeltest (`speler.js`, sinds ronde 2 van het snoeien, stap 5, de
+  enige speler) en `test/begin.test.cjs`, per dag. Zonder beelden lopen de mensen niet, dus zet de toets wie
   nog onderweg is 's nachts thuis (`komAan`), anders werkt hij nooit (p.komt, `T.werkUrenVan`).
 - **Wat vastloopt** (b1) schrijft de speeltest op in `boek.eersteJaar` (`eersteJaar` in `speler.js`) en zet het in de
   tabellen "Het eerste jaar" (`samenvatting.cjs`): wanneer elk gebouw af was en hoe lang het werk stilstond, waarop hij

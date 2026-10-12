@@ -17,14 +17,13 @@
   const toon = (w) => (w == null ? '' : typeof w === 'boolean' ? (w ? 'ja' : 'nee') : typeof w === 'string' ? w : JSON.stringify(w));
   const pagina = () => globalThis.Spel && globalThis.Spel.instellingenPagina;
 
-  const SPELERS = [['bouwer', 'de bouwer'], ['sluw', 'de sluwe bouwer'], ['braaf', 'braaf'], ['slim', 'slim']];
-  const MEER_JAREN = new Set(['bouwer', 'sluw']); // de rest speelt één jaar (speler.js)
-  const LANDEN = [['eiland', 'op het eiland'], ['maker', 'op gehuchten van de maker'], ['ontworpen', 'op het ontworpen gehucht']];
-  // Snel (Marcel, 10 okt): de bouwer, zaad 1, twee jaar, op het eiland.
-  const SNEL = { spelers: ['bouwer'], zaden: '1', jaren: 2, land: 'eiland' };
-  // Hoeveel minuten een jaar kost, van tot: op het eiland zo'n vijf (10 okt: twee jaar van de bouwer 590 s), op een
-  // kleiner land anderhalf tot vier.
-  const MINUTEN_PER_JAAR = { eiland: [3, 6], maker: [1.5, 4], ontworpen: [1.5, 4] };
+  // De kolonist speelt het lege begin, een jaar, op het eiland van zijn zaad (gereedschap/speeltest/kolonist.js). Tot ronde 2
+  // van het snoeien (stap 5, 12 okt) waren er ook de bouwer, de sluwe bouwer, braaf en slim, op het gehucht dat er al was.
+  const SPELERS = [['kolonist', 'de kolonist']];
+  // Snel (Marcel, 10 okt): zaad 1.
+  const SNEL = { spelers: ['kolonist'], zaden: '1' };
+  // Hoeveel minuten een jaar kost, van tot (12 okt: de kolonist op zaad 1 in 124 s).
+  const MINUTEN_PER_JAAR = [2, 4];
   const TEGELIJK = 3; // zoveel spellen speelt speeltest.cjs tegelijk
 
   let stand = null; // het laatste antwoord van de server
@@ -32,7 +31,7 @@
   let regelsOpen = null; // of je "Wat hij zegt" open- of dichtklapte (het wordt elke drie seconden opnieuw neergezet)
 
   // ---------------------------------------------------------------------------------------------
-  // De keuze: wie, welke zaden, hoeveel jaar, welk land, en naast welke vorige
+  // De keuze: wie, welke zaden, en naast welke vorige
   // ---------------------------------------------------------------------------------------------
 
   const keuze = { ...SNEL, spelers: [...SNEL.spelers], tegen: undefined };
@@ -46,14 +45,14 @@
   const goedeZaden = (t) => /^\d{1,3}(-\d{1,3})?$/.test(String(t).trim()) && zadenVan(t).length >= 1 && zadenVan(t).length <= 20;
   // Wat er gespeeld wordt, als sleutel: twee speeltests met dezelfde sleutel zijn te vergelijken.
   const opdrachtSleutel = (o) => [(o.spelers || []).join(','), (o.zaden || []).join(','), o.jaren || '', o.land, JSON.stringify(o.regels || {}), JSON.stringify(o.getallen || {})].join('|');
-  const keuzeAlsOpdracht = () => ({ spelers: SPELERS.map(([id]) => id).filter((id) => keuze.spelers.includes(id)), zaden: zadenVan(keuze.zaden), jaren: keuze.jaren, land: keuze.land, regels: {}, getallen: {} });
+  const keuzeAlsOpdracht = () => ({ spelers: SPELERS.map(([id]) => id).filter((id) => keuze.spelers.includes(id)), zaden: zadenVan(keuze.zaden), land: 'eiland', regels: {}, getallen: {} });
 
   function hoeLang() {
     const zaden = goedeZaden(keuze.zaden) ? zadenVan(keuze.zaden).length : 1;
     const spellen = keuze.spelers.length * zaden;
-    const jaren = keuze.spelers.reduce((n, id) => n + (MEER_JAREN.has(id) ? keuze.jaren : 1), 0) * zaden;
+    const jaren = spellen;
     const tegelijk = Math.min(TEGELIJK, spellen) || 1;
-    const [van, tot] = MINUTEN_PER_JAAR[keuze.land];
+    const [van, tot] = MINUTEN_PER_JAAR;
     return `${spellen} ${spellen === 1 ? 'spel' : 'spellen'}, zo'n ${Math.ceil((jaren * van) / tegelijk)} à ${Math.ceil((jaren * tot) / tegelijk)} minuten`;
   }
 
@@ -80,26 +79,6 @@
       keuze.zaden = zaden.value.trim();
       werkBij();
     });
-    const jaren = maak('input');
-    jaren.type = 'number';
-    jaren.min = 1;
-    jaren.max = 10;
-    jaren.value = String(keuze.jaren);
-    jaren.addEventListener('input', () => {
-      keuze.jaren = Math.max(1, Math.min(10, Math.round(Number(jaren.value)) || 2));
-      werkBij();
-    });
-    const land = maak('select');
-    for (const [id, naam] of LANDEN) {
-      const o = maak('option', null, naam);
-      o.value = id;
-      land.appendChild(o);
-    }
-    land.value = keuze.land;
-    land.addEventListener('change', () => {
-      keuze.land = land.value;
-      werkBij();
-    });
     const tegen = maak('select');
     tegen.id = 'st-tegen';
     tegen.addEventListener('change', () => {
@@ -110,7 +89,7 @@
     start.id = 'st-start';
     start.addEventListener('click', begin);
     const snel = maak('button', null, 'Snel');
-    snel.title = 'De bouwer, zaad 1, twee jaar, op het eiland';
+    snel.title = 'De kolonist, zaad 1';
     snel.addEventListener('click', () => {
       Object.assign(keuze, { ...SNEL, spelers: [...SNEL.spelers], tegen: undefined });
       el.replaceChildren();
@@ -122,7 +101,7 @@
       l.append(maak('span', null, naam), invoer);
       return l;
     };
-    rij.append(wie, veld('zaden', zaden), veld('jaren (de bouwers)', jaren), veld('land', land), veld('naast', tegen), snel, start);
+    rij.append(wie, veld('zaden', zaden), veld('naast', tegen), snel, start);
     const duur = maak('div', 'in-gedempt st-duur');
     duur.id = 'st-duur';
     el.append(rij, duur);
@@ -173,7 +152,7 @@
     try {
       const o = keuzeAlsOpdracht();
       const zaden = o.zaden.length > 1 ? `${o.zaden[0]}-${o.zaden[o.zaden.length - 1]}` : String(o.zaden[0]);
-      await vraag('api/speeltest', { spelers: o.spelers, zaden, jaren: keuze.jaren, land: keuze.land, tegen: keuze.tegen || null });
+      await vraag('api/speeltest', { spelers: o.spelers, zaden, tegen: keuze.tegen || null });
       keuze.tegen = undefined;
       await volg();
     } catch (e) {

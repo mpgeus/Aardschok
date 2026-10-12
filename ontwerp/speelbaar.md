@@ -153,6 +153,21 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 12 okt, avond: de kolonist na ronde 2 van het snoeien (stap 3 tot 5)
+
+`npm run speeltest -- kolonist --zaad 1` en `-- kolonist --zaad 2 --opslaan`, op `ad5cb498` met de speeltest van stap 5
+(branch `claude/gallant-faraday-d5617b`): het lege begin is het enige begin, een boer is de man op een boerderij, en
+alleen de kolonist speelt nog.
+
+- **Geen fout**, op zaad 1 in 124 seconden. De schout valt op 11 januari tegen een wolf: hij kwam Peter helpen, en een
+  wolf in beurten wint het van hem alleen. Dat is wat de middag ook zag (eiland 3 en 5, en met bouwbereik 16 op 22
+  januari): in het lege begin vecht hij alleen. Op de stand van vanochtend (`f13fb8e`) overleefde zaad 1 het, maar daar
+  liep het jaar anders (de voorvallen en de raadsman gooien hun dobbelsteen nu anders). Eerst na te lopen bij F
+  (vechten).
+- **De proef met opslaan** loopt weer, nu met de kolonist (tot vandaag deed de brave speler hem): opgeslagen op 1
+  oogstmaand, herladen, Verder, en het jaar is hetzelfde op één ding na. Bij een wolf is zijn aanval in het ene spel een
+  verwijzing naar een gedeeld object en in het andere een eigen kopie, met dezelfde inhoud (`opmerkingen.md`).
+
 ## De speeltest van 12 okt, middag: de kolonist na "a ja, b uit, c ja" (werklijst B, 1f)
 
 `npm run speeltest -- kolonist --zaden 1-5`, op `5afb924` (branch `ccr-abaf0226-9lnbtq`): de kolonist bouwt een jager als

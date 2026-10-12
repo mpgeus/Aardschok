@@ -770,6 +770,12 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   dus een boerderij aan de bosrand blijft zonder paadje (in het proefdorp de tweede boerderij). `test/paden.test.cjs`
   ruimt de begroeiing daarom zelf op. Voor de spelregel "Paadjes", als de mensen erover lopen.
 
+- **De aanval van een wolf deelt een object, en opslaan ziet dat** (12 okt, de proef met opslaan van de kolonist, zaad
+  2): in het jaar zonder opslaan verwijst `wezens[28].aanval` naar een object dat een ander wezen ook heeft (`$r` in het
+  bewaarde spel), in het jaar met opslaan en herladen is het een eigen kopie (`kosten 3, schade [2, 4], "bites {doel}"`).
+  Speelt hetzelfde, maar de proef zegt "VERSCHIL op 4 plekken". Waarschijnlijk krijgt een nieuwe wolf de `aanval` uit
+  `T.WEZENS` zonder kopie (js/wereld.js, `T.maakWezen`), en heeft een geladen wolf er een eigen.
+
 ## Het beeld
 
 - **De vellen van de karakters hebben geen gebruiker meer** (12 okt, ronde 2 van het snoeien, stap 4): de karakters van

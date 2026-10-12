@@ -261,8 +261,7 @@ function zetInstelling(req, res) {
 // --tegen (gereedschap/speeltest/speeltest.cjs, de vergelijking in vergelijk.cjs). Wat de bladzijde meegeeft, wordt hier
 // nagekeken en tot opdrachten gemaakt; niets uit het verzoek komt ongezien op de opdrachtregel.
 const VERGELIJK = require('./gereedschap/speeltest/vergelijk.cjs');
-const SPEELTEST_SPELERS = ['braaf', 'slim', 'bouwer', 'sluw'];
-const SPEELTEST_LANDEN = { eiland: ['--eiland'], maker: ['--maker'], ontworpen: [] };
+const SPEELTEST_SPELERS = ['kolonist']; // tot ronde 2 van het snoeien (stap 5, 12 okt) ook braaf, slim, bouwer en sluw
 let speeltest = null; // { naam, tegen, totaal, begin, loopt, regels, code, kind }
 
 function speeltestStand(res) {
@@ -296,8 +295,6 @@ function startSpeeltest(req, res) {
       v = JSON.parse(body);
       if (!Array.isArray(v.spelers) || !v.spelers.length || !v.spelers.every((x) => SPEELTEST_SPELERS.includes(x))) throw new Error('kies een of meer spelers');
       if (!/^\d{1,3}(-\d{1,3})?$/.test(String(v.zaden))) throw new Error('zaden: een getal, of van-tot zoals 1-3');
-      if (v.jaren != null && !(Number.isInteger(v.jaren) && v.jaren >= 1 && v.jaren <= 10)) throw new Error('jaren: 1 tot 10');
-      if (!SPEELTEST_LANDEN[v.land]) throw new Error('land: eiland, maker of ontworpen');
       if (v.tegen != null && !VERGELIJK.leesSpeeltest(v.tegen)) throw new Error(`er is geen speeltest ${v.tegen}`);
     } catch (e) {
       stuurJson(res, 400, { fout: e.message });
@@ -310,8 +307,7 @@ function startSpeeltest(req, res) {
     for (let i = 0; fs.existsSync(path.join(VERGELIJK.UIT, naam)); i++) naam = naam.replace(/-[a-z]$/, '') + '-' + 'abcdefghijklmnopqrstuvwxyz'[i];
     const [van, tot] = String(v.zaden).split('-').map(Number);
     const opdracht = [path.join(MAP, 'gereedschap', 'speeltest', 'speeltest.cjs'), ...v.spelers,
-      ...(tot ? ['--zaden', `${van}-${tot}`] : ['--zaad', String(van)]), ...(v.jaren ? ['--jaren', String(v.jaren)] : []),
-      ...SPEELTEST_LANDEN[v.land], '--naam', naam, ...(v.tegen ? ['--tegen', v.tegen] : [])];
+      ...(tot ? ['--zaden', `${van}-${tot}`] : ['--zaad', String(van)]), '--naam', naam, ...(v.tegen ? ['--tegen', v.tegen] : [])];
     const kind = spawn(process.execPath, opdracht, { cwd: MAP });
     const s = (speeltest = { naam, tegen: v.tegen || null, totaal: v.spelers.length * ((tot || van) - van + 1), begin: Date.now(), loopt: true, regels: [], code: null, kind });
     let rest = '';

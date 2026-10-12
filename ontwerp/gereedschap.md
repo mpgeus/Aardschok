@@ -23,7 +23,7 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
     gewoon getal is (een som, `maandIdx(...)`), toont hij maar verandert hij niet. Verandert Marcel er iets, dan staat het
     als een gewone wijziging in de werkmap: commit het, en pas een toets die het oude getal verwacht aan. Bovenaan staat
     **de speeltest** (stap 3, `gereedschap/instellingen/speeltest.js`; Marcel: een set getallen probeer je in de code):
-    Start speelt `npm run speeltest` met een naam (standaard snel: de bouwer, zaad 1, twee jaar, op het eiland) en zet hem
+    Start speelt `npm run speeltest` met een naam (standaard snel: de kolonist, zaad 1) en zet hem
     naast de vorige: welke waarden anders waren, met een link naar hun rij, en per spel wat er anders afliep; een knop zet
     de waarden terug zoals ze bij de vorige waren. Zolang hij loopt, slaat de server geen getal op.
 - `npm test` draait `node --test`: de toetsen in `test/`, de regels zonder scherm. Een toets laadt het
@@ -31,33 +31,25 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   volgorde, zonder wat alleen scherm is (`test/laad.cjs`). Een toets van het gereedschap laadt wat
   zijn bladzijde laadt (`.pagina('gereedschap/wereld.html')`). Nooit een eigen lijstje: dan mist er
   vroeg of laat een bestand, en toetst de toets een ander spel dan er draait.
-- `npm run speeltest` speelt het gehucht een jaar met twee spelers in code (braaf, slim; vraag 45), en twee jaar met
-  een derde, de bouwer, die van gehucht tot dorp wil en de raad volgt (vraag 58), en een vierde, de sluwe bouwer, die
-  daarbij de heer 90% geeft (vraag 94),
-  elk met zaad 1 tot en met 3, in een onzichtbare browser, en zet de uitslag in
-  `gereedschap/speeltest/uit/` (niet in git), met een tabel in `samenvatting.md`; wie twee jaar speelt, krijgt er een
-  graanboek bij: per jaar waar het graan bleef, en hoeveel dagen er geen bier, brood of laken was. Hetzelfde zaad geeft
-  hetzelfde jaar, dus na het bijstellen van een getal zie je precies wat het deed (`-- slim --zaad 2` voor
-  één jaar). Met `-- bouwer sluw --jaren 4` spelen de bouwers vier jaar (er is geen winst meer om naartoe te spelen: het
-  winnen is op 11 okt weggehaald); `--tegelijk 4` speelt vier spellen tegelijk (standaard drie). Het speelt het spel zoals het draait: de speler klikt en drukt op de knoppen van de vensters
-  (`gereedschap/speeltest/speler.js`). Een jaar kost anderhalf tot vier minuten (5 okt: vier jaar op een land van de
-  maker 6 à 17 minuten, met drie tegelijk); nodig is Playwright (in de
-  cloud staat het klaar). Wat het vond, staat in `ontwerp/speelbaar.md`. Met `--opslaan` is het de proef met
-  opslaan: de speler slaat op 1 oogstmaand op via het menu, de bladzijde herlaadt, hij gaat verder met Verder,
-  en het jaar moet letter voor letter aflopen als hetzelfde jaar zonder opslaan (`uit/opslaan.md`). Met `--maker`
-  speelt het op gehuchten van de maker (de spelregel "Je gehucht" op "Elk spel een ander"; `uit/samenvatting-maker.md`).
-  Met `--eiland` speelt het op het eiland, zoals een nieuw spel sinds 8 okt begint (`uit/samenvatting-eiland.md`).
-  Met `--regel seizoen=jij` speelt het met een spelregel anders, en met `--getal VOORVALLEN_INSTELLINGEN.metOorzaak=1` met
-  een getal uit de werkbank anders (allebei zo vaak als je wilt; de uitslag krijgt `-regels` achter zijn naam). Een
-  taak op de achtergrond stopt na twee uur, dus een grote speeltest gaat in meer taken; `--samenvatting` speelt dan
-  niet, maar maakt de samenvatting opnieuw uit wat er al in `uit/` ligt, zodat de taken samen één tabel geven.
+- `npm run speeltest` speelt het lege begin een jaar met de kolonist (`gereedschap/speeltest/kolonist.js`; werklijst B,
+  1f), op het eiland van elk zaad (standaard 1 tot en met 3; `--zaad 2`, `--zaden 1-5`), in een onzichtbare browser, en
+  zet de uitslag in `gereedschap/speeltest/uit/` (niet in git), met een tabel in `samenvatting.md`: "Het eerste jaar"
+  (wat er vastliep, en het eten en het hout), de voorvallen, de twee bazen, het bos en het graanboek. Hetzelfde zaad geeft
+  hetzelfde jaar, dus na het bijstellen van een getal zie je precies wat het deed. `--tegelijk 4` speelt vier spellen
+  tegelijk (standaard drie). Het speelt het spel zoals het draait: de speler klikt en drukt op de knoppen van de vensters
+  (`gereedschap/speeltest/speler.js`). Een jaar kost zo'n twee minuten (12 okt: zaad 1 in 124 s); nodig is Playwright (in
+  de cloud staat het klaar). Wat het vond, staat in `ontwerp/speelbaar.md`. Met `--opslaan` is het de proef met
+  opslaan: de speler slaat op 1 oogstmaand op via het menu, de bladzijde herlaadt, hij gaat verder met Verder, en het
+  jaar moet letter voor letter aflopen als hetzelfde jaar zonder opslaan (`uit/opslaan.md`). Met `--regel seizoen=jij`
+  speelt het met een spelregel anders, en met `--getal VOORVALLEN_INSTELLINGEN.metOorzaak=1` met een getal uit de
+  werkbank anders (allebei zo vaak als je wilt; de uitslag krijgt `-regels` achter zijn naam). Een taak op de achtergrond
+  stopt na twee uur, dus een grote speeltest gaat in meer taken; `--samenvatting` speelt dan niet, maar maakt de
+  samenvatting opnieuw uit wat er al in `uit/` ligt, zodat de taken samen één tabel geven.
   **Naast de vorige** (vraag 142, stap 3): `--naam voor` bewaart de speeltest in `uit/voor/`, met alle waarden van de
   bladzijde met getallen, en `--naam na --tegen voor` zet hem ernaast in `uit/na/vergelijking.md`: welke waarden anders
   waren, en per spel wat er anders afliep (`gereedschap/speeltest/vergelijk.cjs`).
-  **De kolonist** (werklijst B, 1f): `npm run speeltest -- kolonist --zaden 1-5` speelt het lege begin, altijd op het
-  eiland met "Het begin" op "Leeg" (elk zaad een ander eiland), met de keuzes van `gereedschap/speeltest/kolonist.js`;
-  de andere spelers spelen het gehucht dat er al was. Zijn uitslag staat in de tabellen "Het eerste jaar": wat er
-  vastliep, en het eten en het hout. Een jaar kost zo'n 50 seconden.
+  Tot ronde 2 van het snoeien (stap 5, 12 okt) speelden ook braaf, slim, de bouwer en de sluwe bouwer, op het gehucht dat
+  er al was, met `--jaren`, `--maker` en `--eiland`; dat begin is weg.
 - `npm run proefversie` maakt de zip voor een tester (itch.io, `ontwerp/verpakken.md`) in `gereedschap/proefversie/uit/`
   (niet in git): `index.html` bovenin en alleen wat het spel laadt, met de stand (datum, commit) klein op het
   titelscherm (`T.STAND`). Commit eerst. Met `-- --windows` is het het spel in Electron voor Windows, zoals straks op Steam
