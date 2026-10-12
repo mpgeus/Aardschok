@@ -74,6 +74,13 @@ Voorstel, in stappen, elk met de toetsen groen:
 **Stap 1 is af** (12 okt, sessie `ccr-abaf0226-9lnbtq`): de plekzoeker staat in `js/bouwen.js`, `T.dobbelsteen` in
 `js/dorp.js`, de wapens (`T.bewapen`, `T.wapensInHetDorp`, `ROVERS_INSTELLINGEN.wapens.schade`) in `js/rovers.js`.
 
+**Stap 2, het plan** (12 okt, sessie `claude/festive-cray-rovfsg`; Marcel: "1 ja 2 ja 3 houden voor nu; ik wil tóch een
+apart wijnboerderij gebouw"): in drie stukjes, elk een commit met de toetsen groen: **2a** de verzoeken en de ondernemers
+(met "Wie bouwt"), **2b** de erven (met "Huizen"), en opslaan naar versie 6 al hier, want een half gebouwde hut op een
+erf betekent iets anders zodra de erven weg zijn, **2d** het ontginnen. **De wijnboerderij blijft** (geen 2c): Marcel wil
+tóch een eigen wijnboerderij als gebouw, dus het gebouw en zijn tekening in `gereedschap/pixelart/` slapen tot we kiezen
+hoe (werklijst, vraag 155).
+
 **De kaart voor stap 2 tot 5** (een agent, 12 okt; regelnummers van toen, dus zoek op de naam):
 - **Verzoeken** (`js/verzoeken.js`, 440 regels; `VERZOEKEN_INSTELLINGEN.mensen`, de spelregel "Wie bouwt"): aangeroepen uit
   `js/voorvallen.js` (de voorvallen bouwverzoek, wapenverzoek en herbergverzoek, met `T.beginBouwverzoek`,

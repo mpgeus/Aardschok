@@ -19,6 +19,9 @@ ronde 2 van het snoeien** (het plan, met wat Marcel koos, in `snoeien.md`), dan 
 (B3), en ronde 3 na C.
 
 **Wacht op Marcel:**
+- **De wijnboerderij als eigen gebouw** (vraag 155; Marcel, 12 okt: "ik wil tóch een apart wijnboerderij gebouw"):
+  hoe hij werkt (een eigen gebouw waarbij jij de wijngaard legt, of het oude gebouw met de wijngaard erin), en wanneer.
+  Tot dan slaapt het gebouw (`snoeien.md`, "Stap 2, het plan").
 - **1c tot 1e bekijken:** Spelregels, "Het begin" op "Leeg", en dan Nieuw spel (of in de console
   `Spel.debug.begin('leeg', 2)`). Is het kamp op, open dan het bouwmenu (B): het bouwbereik gloeit op de grond. Zet het huis van de schout neer, ook in het bos (de bouwers rooien eerst, en het hout
   komt in de voorraad), en een hut op open grond: wie geen werk heeft, loopt erheen en bouwt. Is de hut af, dan trekt
@@ -56,8 +59,8 @@ ronden, want een deel hangt aan het oude begin of aan de proef:
 1. **Ronde 1 is af** (11 okt): wat al om was en nergens meer aan hing (`snoeien.md`).
 2. **Ronde 2, na 1f:** het plan, met wat Marcel koos ("III. OK", "e Mag weg, f alle vier weg, g weg, h ja wapens
    blijven"), en de kaart van wat eraan hangt, staan in `snoeien.md`, "Ronde 2". **Stap 1 is af** (12 okt: verhuizen wat
-   blijft); **het volgende is stap 2** (**Bezig in sessie `claude/festive-cray-rovfsg`** (12 okt): eerst een plan voor Marcel, dan stap 2): de verzoeken, de ondernemers, de erven, de wijnboerderij en
-   het ontginnen weg, met "Wie bouwt" en "Huizen". Wat het oude begin draaiende houdt: de mensen die vragen wat ze bouwen (`verzoeken`,
+   blijft); **het volgende is stap 2** (**Bezig in sessie `claude/festive-cray-rovfsg`** (12 okt): eerst een plan voor Marcel, dan stap 2): de verzoeken, de ondernemers, de erven en
+   het ontginnen weg, met "Wie bouwt" en "Huizen" (de wijnboerderij blijft: vraag 155). Wat het oude begin draaiende houdt: de mensen die vragen wat ze bouwen (`verzoeken`,
    `ondernemers`), de erven waarop het dorp zelf bouwt (`erven`), de vaste boeren van de kaart, en de spelregels "Het
    begin", "Je gehucht", "Wie bouwt", "Huizen" en "Wie de boeren zijn".
 3. **Ronde 3, na C:** wat de proef moet uitwijzen (`gameloop.md`, "Open"): de voorvallen, de raad, de raadsman, het
