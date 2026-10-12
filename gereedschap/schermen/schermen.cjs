@@ -12,7 +12,9 @@
 // Vast blijft het zo: de spellus loopt niet (requestAnimationFrame staat stil), het toeval is een vaste reeks, het spel
 // gaat alleen verder met Spel.debug.stap (elk beeld 1/60 seconde), de mensen staan op hun plek voor het uur
 // (Meet.zetPlekken uit gereedschap/grootte/pagina.js), en elk beeld wacht tot alle plaatjes er zijn (T.sprites.bezig).
-// Het ontworpen gehucht en land 5 van de maker, op 1280 bij 800, zonder videokaart (zoals in de cloud).
+// Het lege begin (`?kaart=gehucht`: het eiland dat het vaste toeval kiest) en land 5 van de maker, op 1280 bij 800, zonder
+// videokaart (zoals in de cloud). Tot ronde 2 van het snoeien (stap 3c, 12 okt) was het eerste het ontworpen gehucht:
+// beelden van vóór die dag zijn dus niet te vergelijken.
 const fs = require('node:fs');
 const path = require('node:path');
 const http = require('node:http');
@@ -131,11 +133,11 @@ const zet = (page, { uur, zoom, op }) => page.evaluate(([uur, zoom, op]) => {
   if (op) Meet.cameraOp(op[0], op[1]);
 }, [uur, zoom, op]);
 
-async function hetOntworpenGehucht(context, beelden, meting) {
+async function hetLegeBegin(context, beelden, meting) {
   const { page, fouten } = await openSpel(context, URL + '?kaart=gehucht');
   await page.evaluate(() => Spel.debug.stap(0.5)); // het dorp komt op gang: wie er woont, staat er
   const zoom = await page.evaluate(() => Spel.S.zoom);
-  const plein = [35, 37];
+  const plein = await page.evaluate(() => [Spel.S.dorp.wereld.kamp.vuur.x, Spel.S.dorp.wereld.kamp.vuur.y]);
   await zet(page, { uur: 12, zoom, op: plein });
   beelden.plein = await afdruk(page);
   meting.bijHetBegin = await page.evaluate(() => Spel.debug.vellen('alles'));
@@ -162,20 +164,20 @@ async function hetOntworpenGehucht(context, beelden, meting) {
   beelden['plein-avond'] = await afdruk(page);
   // Twee bouwplaatsen, een uit elk vel (de smidse uit de gebouwen, een stenen huis uit de huizen), in hun vijf fases,
   // en dan klaar. Een fase volgt uit hoe ver de bouwtijd is (T.bouwFaseIndex): die zetten we hier recht.
-  const plaatsen = await page.evaluate(() => {
+  const plaatsen = await page.evaluate(([px, py]) => {
     const D = Spel.S.dorp;
     Spel.wijzigVoorraad(D, 'hout', 200);
     Spel.wijzigVoorraad(D, 'goud', 200);
     window.__bouwplaatsen = [];
     for (const soort of ['smidse', 'stenenHuis']) {
       let r = null;
-      for (let y = 44; y < 70 && !(r && r.gelukt); y++) {
-        for (let x = 40; x < 70 && !(r && r.gelukt); x++) r = Spel.debug.bouw(soort, x, y);
+      for (let y = py - 15; y < py + 15 && !(r && r.gelukt); y++) {
+        for (let x = px - 15; x < px + 15 && !(r && r.gelukt); x++) r = Spel.debug.bouw(soort, x, y);
       }
       if (r && r.gelukt) window.__bouwplaatsen.push({ soort, g: r.instantie });
     }
     return window.__bouwplaatsen.map((p) => ({ soort: p.soort, x: p.g.x, y: p.g.y, tekening: p.g.tekening }));
-  });
+  }, plein);
   meting.bouwplaatsen = plaatsen;
   for (const [i, p] of plaatsen.entries()) {
     for (let fase = 0; fase <= 5; fase++) {
@@ -258,7 +260,7 @@ function vergelijk(a, b) {
   const meting = { naam: NAAM, commit: execSync('git rev-parse --short HEAD', { cwd: WORTEL, encoding: 'utf8' }).trim() };
   try {
     const context = await browser.newContext({ viewport: VENSTER });
-    await hetOntworpenGehucht(context, beelden, meting);
+    await hetLegeBegin(context, beelden, meting);
     await eenLandVanDeMaker(context, beelden, meting);
     await context.close();
   } finally {

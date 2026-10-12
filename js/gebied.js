@@ -28,7 +28,9 @@
   }
 
   // De lijst opnieuw opbouwen uit T.KAARTEN. Dat gebeurt één keer bij het laden; wie tijdens het
-  // spelen een kaart bijzet (Spel.KAARTEN.bos = ...), roept dit daarna zelf nog eens aan.
+  // spelen een kaart bijzet (Spel.KAARTEN.bos = ...), roept dit daarna zelf nog eens aan. Je eigen dorp ("gehucht") staat
+  // er niet in: dat is geen kaart uit Tiled maar het land van de maker (js/maker.js), dat T.beginOpKaart meegeeft; tot
+  // ronde 2 van het snoeien (stap 3c, 12 okt) was het het ontworpen gehucht, kaarten/gehucht.tmj.
   T.maakGebieden = function () {
     const g = {};
     for (const naam of Object.keys(T.KAARTEN || {})) {
@@ -50,12 +52,12 @@
     if (!S.gebieden) S.gebieden = {};
     if (!S.gebieden[naam]) {
       const g = T.GEBIEDEN[naam];
-      if (!g) return null;
+      if (!g && !maak) return null;
       const w = (maak || g.maak)();
       w.gebied = naam;
       // Buiten is er één kamer die de hele kaart beslaat (js/kaart.js); die heet naar het gebied,
-      // zodat "Het erf" in beeld komt en niet "Buiten".
-      if (w.buiten && w.kamers.length === 1) w.kamers[0].naam = g.naam;
+      // zodat "Het erf" in beeld komt en niet "Buiten". Een gemaakte kaart (`maak`) heet naar zichzelf.
+      if (w.buiten && w.kamers.length === 1 && g) w.kamers[0].naam = g.naam;
       // Een gebied zonder uitgang is een val: daar kom je nooit meer weg. Dat moet hoorbaar zijn
       // zodra het gebeurt, niet pas als een speler vaststaat.
       if (!w.overgangen || !w.overgangen.length) {
@@ -200,18 +202,18 @@
   T.landVoorNieuwSpel = (gekozen) => (gekozen != null ? gekozen : T.nieuwLandZaad());
   T.nieuwLandZaad = () => 1 + Math.floor(Math.random() * T.MAKER_INSTELLINGEN.zaden);
 
-  // Een nieuw spel beginnen op een kaart: het gehucht, of een andere voor een proefje
+  // Een nieuw spel beginnen op een kaart: je dorp ('gehucht'), of een andere voor een proefje
   // (index.html?kaart=<naam>, zie js/main.js). Geeft true terug als het gelukt is; S.wereld en
   // S.schout staan dan klaar. Bestaat de kaart niet, dan false — de aanroeper valt dan terug op het
   // gehucht. Staat er geen "schout" op, dan zet het er zelf een neer.
   //
-  // Met `makerZaad` legt de maker je land (js/maker.js) uit dat zaad, met het lege begin erop (het enige begin sinds
-  // ronde 2 van het snoeien, stap 3; met `leeg` uit het gehucht dat er al was, zoals de maker het voor de andere dorpen
-  // legt: alleen voor de toetsen); anders is het het ontworpen gehucht. Welk land een nieuw spel krijgt, zegt
+  // Voor je dorp legt de maker je land (js/maker.js) uit `makerZaad` (zonder: een nieuw), met het lege begin erop (het
+  // enige begin sinds ronde 2 van het snoeien, stap 3; met `leeg` uit het gehucht dat er al was, zoals de maker het voor
+  // de andere dorpen legt: alleen voor de toetsen). Welk land een nieuw spel krijgt, zegt
   // T.landVoorNieuwSpel hierboven (vanuit T.nieuwSpel, js/main.js). Het zaad is ook het zaad van het dorp (D.lot.zaad),
   // zodat hetzelfde zaad hetzelfde spel geeft.
   T.beginOpKaart = function (S, naam, makerZaad, leeg = true) {
-    const zaad = naam === 'gehucht' && makerZaad != null ? makerZaad : null;
+    const zaad = naam === 'gehucht' ? (makerZaad != null ? makerZaad : T.nieuwLandZaad()) : null;
     const w = T.gebied(S, naam, zaad != null ? () => T.laadGemaaktGehucht(zaad, leeg) : null);
     if (!w) {
       console.warn(`Spel.beginOpKaart: kaart "${naam}" bestaat niet — draai npm run kaarten?`); // geen tekst

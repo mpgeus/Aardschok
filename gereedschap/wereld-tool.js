@@ -1441,8 +1441,8 @@
       o.textContent = naam;
       keuze.appendChild(o);
     }
-    // Het gehucht is de kaart waaraan gewerkt wordt; anders de eerste.
-    keuze.value = namen.includes('gehucht') ? 'gehucht' : namen[0];
+    // De proefkaart, anders de eerste (tot 12 okt het ontworpen gehucht, kaarten/gehucht.tmj, dat weg is).
+    keuze.value = namen.includes('proef') ? 'proef' : namen[0];
     keuze.addEventListener('change', () => laadKaart(keuze.value));
     el('wt-verversen').addEventListener('click', () => laadKaart(keuze.value, true));
     el('wt-passend').addEventListener('click', passend);

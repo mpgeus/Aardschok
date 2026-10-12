@@ -32,12 +32,14 @@ async function laadAlles() {
 const T = require('./laad.cjs').spel();
 T.ui = new Proxy({}, { get: () => () => {} });
 
-function nieuwSpel(zaad) {
+// Een dorp om te tekenen: het gehucht dat er al was, op een land van de maker (zonder zaad land 5; tot ronde 2 van het
+// snoeien, stap 3c, het ontworpen gehucht), met huizen, boeren en boerinnen.
+function nieuwSpel(zaad = 5) {
   const echt = console.warn;
   console.warn = () => {};
   const S = { kalender: T.nieuweKalender() };
   try {
-    assert.ok(T.beginOpKaart(S, 'gehucht', zaad));
+    assert.ok(T.beginOpKaart(S, 'gehucht', zaad, false));
   } finally {
     console.warn = echt;
   }
@@ -76,7 +78,7 @@ test('een kaart laadt precies de huizen, gebouwen en figuren die erop staan, elk
   const S = nieuwSpel();
   const op = tekeningenOp(S.wereld);
   const { namen, vellen } = figurenOp(S);
-  assert.ok(op.size >= 8, `${op.size} tekeningen op het ontworpen gehucht`);
+  assert.ok(op.size >= 8, `${op.size} tekeningen op land 5`);
   assert.ok(namen.has('maaier') && [...namen].some((n) => /^boer-u\d+$/.test(n)) && !namen.has('kobold'), [...namen].join(' ')); // een bewoner draagt zijn uiterlijk (vraag 145)
   const voor = gevraagd.length;
   T.sprites.laadWatErStaat(S.wereld);
@@ -108,7 +110,7 @@ test('een figuur die er nog niet was: eerst niets, en hij laadt; wie hem draagt,
 test('een tekening die nog niet geladen is: eerst niets, en hij laadt; daarna het plaatje', async () => {
   const id = T.TEGELS.huizen.tiles.findIndex((t) => t.naam === 'huis6');
   const bestand = T.TEGELS.huizen.tiles[id].bestand;
-  assert.ok(!gevraagd.includes(bestand), 'huis6 staat niet op het ontworpen gehucht');
+  assert.ok(!gevraagd.includes(bestand), 'huis6 staat niet op land 5');
   assert.equal(T.sprites.wachtOp('huizen', id), true);
   assert.equal(T.sprites.buiten('huizen', id), null);
   assert.ok(gevraagd.includes(bestand), 'de vraag zette het laden in gang');
@@ -149,7 +151,7 @@ test('wie op zijn land werkt, draagt het vel van zijn werk; een boerin dat van e
   const boeren = S.wereld.wezens.filter((e) => e.werkAkkers && e.werkAkkers.length);
   const boer = boeren.find((e) => e.vel === 'boer');
   const boerin = boeren.find((e) => e.vel === 'boerin');
-  assert.ok(boer && boerin, 'het ontworpen gehucht heeft boeren en boerinnen');
+  assert.ok(boer && boerin, 'het gehucht heeft boeren en boerinnen');
   for (const e of [boer, boerin]) e.werkt = { soort: 'zaaien', x: e.tx, y: e.ty, tot: 1, rust: false };
   const { naam, houding } = T.sprites.houding(S, boer);
   assert.deepEqual([naam, houding], ['zaaier', 'zaaien']);

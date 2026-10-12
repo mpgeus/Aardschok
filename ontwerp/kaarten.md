@@ -2,6 +2,11 @@
 
 Wat er op die kaarten komt te staan, staat in `wereld.md` en `toren.md`.
 
+**Sinds 12 okt** (ronde 2 van het snoeien, stap 3c) is er geen ontworpen gehucht meer: `kaarten/gehucht.tmj`, zijn
+betekenis en `gereedschap/tiled/maak-gehucht.cjs` zijn weg (git bewaart ze). Je dorp is het land van de maker op het
+eiland, met het lege begin erop; in Tiled staan nog de proefkaarten (`proef`, `proefbos`). Wat hieronder over het
+gehucht in Tiled staat, is hoe het was.
+
 ## Het eiland: de kaartenmaker (vraag 117, 8 okt 2026)
 
 Marcel (7 en 8 okt): "Uiteindelijk wil ik een random map generator met alles", "Ik wil 1 aaneengesloten landschap", en

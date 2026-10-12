@@ -27,7 +27,7 @@ const snelheid = arg('snelheid', 30);
 const profUit = arg('prof', null);
 const maxFrames = arg('frames', 0); // 0 = hele dagen
 const vanUur = arg('van', 0); // begin van de meting, in uren na 00:00
-const maker = arg('maker', null); // het nummer van een land van de maker, in plaats van het ontworpen gehucht
+const maker = arg('maker', null); // het nummer van een land van de maker, in plaats van land 5
 
 // ── Het dorp ──
 if (global.gc) global.gc();

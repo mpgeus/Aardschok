@@ -40,6 +40,10 @@
     // "Klein, bos dichtbij").
     leegRand: 2,
     eilandBrug: { lang: 7, kost: 12 },
+    // Het gehucht dat er al was (niet het lege begin): wat er in de schuur ligt, en hoeveel mensen er wonen (zoveel als
+    // er woonruimte is, hooguit dit). Tot ronde 2 van het snoeien (stap 3c) leende de maker ze van het ontworpen gehucht.
+    dorpVoorraad: { hout: 40, goud: 20, graan: 60, hooi: 100, bier: 20 },
+    dorpBevolking: 26,
     // Zo ver om de kaart weet de rand wat het eiland er heeft (tegels; T.randVanHetEiland): zo ver tekent js/tekenen.js
     // het bos om de kaart.
     eilandRand: 16,
@@ -1950,7 +1954,6 @@
         data[p.y * B + p.x] = g.brug[`${b.as} ${deel}`];
       });
     }
-    const ontworpen = (T.KAARTEN && T.KAARTEN.gehucht) || {};
     const kaart = {
       type: 'map',
       orientation: 'isometric',
@@ -1958,7 +1961,7 @@
       height: H,
       tilewidth: 64,
       tileheight: 32,
-      properties: (ontworpen.properties || [{ name: 'naam', type: 'string', value: T.t('The hamlet') }]).map((p) => ({ ...p })),
+      properties: [{ name: 'naam', type: 'string', value: T.t('The hamlet') }, { name: 'doof', type: 'int', value: 6 }],
       tilesets: [{ firstgid: 1, source: '../tegels/rand.tsx' }, ...(data.some((gid) => gid >= KUST_GID()) ? [{ firstgid: KUST_GID(), source: '../tegels/kust.tsx' }] : [])], // geen tekst
       layers: [{ type: 'tilelayer', name: 'grond', width: B, height: H, data }],
     };
@@ -1986,15 +1989,14 @@
     if (plan.meent) dingen.push({ ...plan.meent });
     dingen.push({ ...plan.uitgang, overgang: 'wereld', tekst: T.t('The road into the world') });
 
-    const eigen = (T.BETEKENIS && T.BETEKENIS.gehucht) || {};
     const betekenis = {
       versie: 1,
-      // net als het ontworpen gehucht hangt het nog aan geen andere kaart vast (gereedschap/tiled/maak-gehucht.cjs)
+      // het hangt nog aan geen andere kaart vast: de weg de wereld in leidt nergens heen (js/gebied.js)
       proef: true,
       uitleg: `Een gehucht van de maker (js/maker.js), uit zaad ${plan.zaad}.`, // geen tekst
       // in het lege begin brengt de kar wat er is (js/begin.js)
-      beginVoorraad: plan.leeg ? {} : { ...(eigen.beginVoorraad || {}) },
-      beginBevolking: plan.leeg ? 0 : eigen.beginBevolking,
+      beginVoorraad: plan.leeg ? {} : { ...IN().dorpVoorraad },
+      beginBevolking: plan.leeg ? 0 : IN().dorpBevolking,
       marskramer: { ...plan.marskramer },
       plein: plan.plein.map(([x, y]) => [x, y]),
       dingen,

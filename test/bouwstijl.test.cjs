@@ -63,13 +63,6 @@ test('elke tekening van een stijl staat op het vel, met de naam van zijn stijl, 
   assert.deepEqual(T.bouwstijlen(), Object.keys(HZ.STIJLEN).sort());
 });
 
-test('het ontworpen gehucht heeft geen stijl, en bouwt met de tekeningen van T.GEBOUWEN', () => {
-  const S = nieuwSpel();
-  assert.equal(T.stijlVan(S.dorp), null);
-  assert.ok(T.GEBOUWEN.huis.tekeningen.includes(T.volgendeTekening(S.dorp, 'huis')));
-  assert.ok(T.GEBOUWEN.boerderij.tekeningen.includes(T.volgendeTekening(S.dorp, 'boerderij')));
-});
-
 test('een land van de maker bouwt in zijn stijl: de hutten, het huis en de boerderijen van het begin ook', () => {
   const S = nieuwSpel(5);
   assert.equal(S.wereld.stijl, T.stijlVoorLand(5));

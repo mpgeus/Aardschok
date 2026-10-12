@@ -27,9 +27,9 @@ function geheugenOpslag() {
   };
 }
 
-// Een nieuw spel op het ontworpen gehucht, zoals tweeDorpen() in test/dorpen.test.cjs (zonder buurdorp); met `maker` op
-// het land van de maker uit dat nummer (js/maker.js, vraag 112), zonder het eiland (vraag 117), zodat de metingen te
-// vergelijken blijven met die ervoor.
+// Een nieuw spel op het land van de maker uit nummer `maker` (zonder: 5), zonder het eiland en met het gehucht dat er al
+// was (js/maker.js, vraag 112): een dorp om bewoners in te zetten, en zonder het eiland blijven de metingen te
+// vergelijken met die ervoor. Tot ronde 2 van het snoeien (stap 3c, 12 okt) was het zonder `maker` het ontworpen gehucht.
 function beginSpel({ zaad = 11, opslag = true, maker = null } = {}) {
   const echt = console.warn;
   console.warn = () => {};
@@ -43,7 +43,7 @@ function beginSpel({ zaad = 11, opslag = true, maker = null } = {}) {
   const opEiland = T.MAKER_INSTELLINGEN.opEiland;
   T.MAKER_INSTELLINGEN.opEiland = false;
   try {
-    if (!T.beginOpKaart(S, 'gehucht', maker)) throw new Error('beginOpKaart mislukte');
+    if (!T.beginOpKaart(S, 'gehucht', maker != null ? maker : 5, false)) throw new Error('beginOpKaart mislukte');
   } finally {
     console.warn = echt;
     T.MAKER_INSTELLINGEN.opEiland = opEiland;

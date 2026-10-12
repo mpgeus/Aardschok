@@ -52,19 +52,6 @@ test('de kaarten die er nu zijn, hebben geen enkele fout', () => {
   }
 });
 
-test('wat er op het gehucht nog "let op" is, staat hier zwart op wit', () => {
-  // Niet elke opmerking is een defect. De weg de wereld in leidt sinds 25 sep nergens heen (het
-  // gehucht is daarom nog een proefkaart), en achter de bomen liggen plukjes gras waar je niet bij
-  // kunt. Dat mag, maar het hoort hier te staan, zodat het opvalt als er iets bijkomt — dan is er
-  // waarschijnlijk een pad dichtgegroeid. (Tot 25 sep keek deze toets naar kaarten/wereld.tmj.)
-  const klachten = T.keurKaart('gehucht', T.KAARTEN.gehucht).klachten;
-  assert.deepEqual(klachten.map((k) => k.soort), ['let op', 'let op', 'let op']);
-  const tekst = teksten(klachten);
-  assert.match(tekst, /overgang naar "wereld": die kaart is er \(nog\) niet/);
-  assert.match(tekst, /de overgang naar "wereld" heeft geen "komt"/);
-  assert.match(tekst, /tegel\(s\) zijn begaanbaar maar vanaf geen enkele uitgang te bereiken/);
-});
-
 test('een kaart zonder uitgang is een val', () => {
   const klachten = keur([]);
   assert.equal(klachten.length, 1);

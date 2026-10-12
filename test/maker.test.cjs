@@ -30,14 +30,6 @@ test('de maker: elk gehucht deugt, met dezelfde delen als het ontworpen gehucht'
   }
 });
 
-test('de maker keurt het ontworpen gehucht goed: zijn keuring is niet strenger dan wat Marcel goedkeurde', () => {
-  const { ontworpen } = require('../gereedschap/maker/schets.cjs');
-  const g = ontworpen();
-  assert.equal(g.fout, undefined, g.fout);
-  assert.equal(g.maat.pleinTegels, 214);
-  assert.equal(g.maat.akkerTegels, 209);
-});
-
 // ---------------------------------------------------------------- de maker in het spel (vraag 70, C)
 
 T.ui = new Proxy({}, { get: () => () => {} });

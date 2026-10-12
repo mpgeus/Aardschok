@@ -1,8 +1,8 @@
 // De schets van de maker (ontwerp/werklijst.md, vraag 69 en 70): gehuchten van de maker als plattegrond, in de schuine
-// blik van het spel (de camera kijkt van onderen), met het ontworpen gehucht ernaast om te vergelijken. Elk gehucht
-// wordt een SVG in gereedschap/maker/uit/, met zijn maten in maten.json.
+// blik van het spel (de camera kijkt van onderen). Elk gehucht wordt een SVG in gereedschap/maker/uit/, met zijn maten
+// in maten.json. (Tot ronde 2 van het snoeien, stap 3c, stond het ontworpen gehucht ernaast om te vergelijken.)
 //
-//   npm run maker              de zaden 1, 2 en 3, en het ontworpen gehucht
+//   npm run maker              de zaden 1, 2 en 3
 //   npm run maker -- 7 12 40   andere zaden
 //
 // Het laadt het spel zoals een toets (test/laad.cjs), met de maker erin (js/maker.js), zodat hij de regels uit js/
@@ -14,57 +14,6 @@ const path = require('path');
 const WORTEL = path.join(__dirname, '..', '..');
 const UIT = path.join(__dirname, 'uit');
 const T = require(path.join(WORTEL, 'test', 'laad.cjs')).spel();
-
-// ---------------------------------------------------------------- het ontworpen gehucht als plan
-// Uit dezelfde delen als een plan van de maker (gereedschap/tiled/maak-gehucht.cjs), zodat de schets beide op
-// dezelfde manier tekent en keurt.
-function ontworpen() {
-  const G = require(path.join(WORTEL, 'gereedschap', 'tiled', 'maak-gehucht.cjs'));
-  const tekening = (naam) => {
-    for (const vel of Object.keys(T.TEGELS)) {
-      const t = T.TEGELS[vel].tiles.find((x) => x && x.naam === naam);
-      if (t) return { vel, beslaat: t.beslaat || [1, 1], deur: t.deur };
-    }
-    return null;
-  };
-  const huis = (h, meer) => {
-    const t = tekening(h.tegel);
-    const [b, d] = t.beslaat;
-    const deur = t.deur || [Math.floor(b / 2), d];
-    const kant = deur[1] >= d ? { x: 0, y: 1 } : deur[0] >= b ? { x: 1, y: 0 } : deur[0] < 0 ? { x: -1, y: 0 } : { x: 0, y: -1 };
-    return { tekening: h.tegel, vel: t.vel, x: h.x, y: h.y, b, d, deur: { x: h.x + deur[0], y: h.y + deur[1] }, kant, ...meer };
-  };
-  const huizen = [
-    huis(G.SCHOUT_HUIS, { rol: 'schout', huis: 'schout' }),
-    huis(G.HERBERG, { rol: 'herberg', huis: 'herbergierster' }),
-    ...G.GEWONE_HUIZEN.map((h) => huis(h, { rol: h.gebouw, bewoners: h.bewoners })),
-    ...Object.entries(G.HUIZEN).map(([id, h]) => huis(h, { rol: 'boerderij', huis: id })),
-    huis(G.KOOI, { rol: 'kooi' }),
-  ];
-  const grond = [];
-  for (let y = 0; y <= G.H; y++) {
-    let rij = '';
-    for (let x = 0; x <= G.B; x++) rij += { water: 'w', zandpad: 'z', heide: 'h', gras: 'g' }[G.soortOp(x, y)];
-    grond.push(rij);
-  }
-  const voorwerpen = G.kaart.layers[1].objects
-    .map((o) => {
-      const t = tekening(o.name);
-      const [b, d] = (t && t.beslaat) || [1, 1];
-      return { naam: o.name, x: o.x / 32, y: o.y / 32, b, d };
-    })
-    .filter((v) => !huizen.some((h) => h.x === v.x && h.y === v.y));
-  const brug = [];
-  for (let x = G.BRUG_X0; x <= G.BRUG_X1; x++) brug.push({ x, y: G.BRUG_Y });
-  const plan = {
-    zaad: null, b: G.B, h: G.H, grond, plein: G.PLEIN_RAND, zand: G.ZAND, marskramer: G.OP_HET_ZAND,
-    uitgang: { x: G.UITGANG.x, y: G.UITGANG.y }, brug, huizen, akkers: G.AKKERS, meent: G.MEENT, voorwerpen,
-    schout: huizen[0].deur,
-  };
-  const fout = T.keurGehucht(plan);
-  if (fout) plan.fout = fout;
-  return plan;
-}
 
 // ---------------------------------------------------------------- tekenen
 // Schuin van boven, zoals het spel: een tegel is een ruit van 2 bij 1, x loopt in beeld naar rechtsonder en y naar
@@ -253,10 +202,6 @@ if (require.main === module) {
   if (!zaden.length) zaden.push(1, 2, 3);
   fs.mkdirSync(UIT, { recursive: true });
   const maten = {};
-  const eigen = ontworpen();
-  fs.writeFileSync(path.join(UIT, 'ontworpen.svg'), svgVan(eigen, { namen: { boer1: 'Klaas', boer2: 'Aaltje', boer3: 'Gerrit', boer4: 'Trijn', boer5: 'Wouter' } }));
-  maten.ontworpen = eigen.maat || { fout: eigen.fout };
-  console.log(`ontworpen: ${JSON.stringify(maten.ontworpen)}`);
   for (const zaad of zaden) {
     const t0 = Date.now();
     const plan = T.maakGehucht(zaad);
@@ -268,4 +213,4 @@ if (require.main === module) {
   console.log(`klaar: ${path.relative(WORTEL, UIT)}/`);
 }
 
-module.exports = { svgVan, ontworpen };
+module.exports = { svgVan };
