@@ -211,7 +211,6 @@ test('een keus van vroeger voor een spelregel die er niet meer is, telt niet', (
   // en een nieuw spel begint toch leeg op het eiland.
   T.pasOptiesToe(T.laadOpties(opslag({ keuzes: { gehucht: 'maker', begin: 'gehucht', betalenIn: 'alleenGoud' }, namen: {}, getallen: {} })));
   assert.deepEqual(T.OPTIES_NU.keuzes, { betalenIn: 'alleenGoud' });
-  assert.equal(T.MAKER_INSTELLINGEN.opEiland, true);
   assert.equal(T.HEER_INSTELLINGEN.betalenIn, 'alleenGoud');
   T.pasOptiesToe(null);
 });

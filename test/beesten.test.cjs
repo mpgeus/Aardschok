@@ -10,24 +10,28 @@ const T = require('./laad.cjs').spel();
 
 T.ui = new Proxy({}, { get: () => () => undefined });
 
-// Een land van de maker, zoals een nieuw spel begint, stil en met een vaste worp.
-function landVanDeMaker(zaad) {
-  const echt = console.warn;
-  const toeval = Math.random;
-  let n = 11;
-  console.warn = () => {};
-  Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
-  const S = { kalender: T.nieuweKalender() };
-  const opEiland = T.MAKER_INSTELLINGEN.opEiland;
-  T.MAKER_INSTELLINGEN.opEiland = false; // een land van de maker zonder het eiland: deze toetsen gaan over zijn landen (sinds 8 okt maakt een nieuw spel het eiland, vraag 117)
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht', zaad));
-  } finally {
-    T.MAKER_INSTELLINGEN.opEiland = opEiland;
-    console.warn = echt;
-    Math.random = toeval;
-  }
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
+// Het eiland waar de beesten spelen: het lege begin van dit nummer heeft bos en herten rond het plein (hij is gekozen
+// omdat alle toetsen hieronder erop slagen; op sommige eilanden ligt het hol aan de rand van de kaart, of is er geen hert
+// dat een roedel kan halen).
+const LAND = 7;
+// De jager heeft een eiland nodig waar na een jaar jagen een groep onder de twee komt: dat hangt aan hoeveel herten er in
+// zijn bereik zijn (50 tegels), en dat verschilt per eiland.
+const JAGERLAND = 1;
+const grond = require('./grond.cjs');
+
+// Het lege begin op het eiland van `zaad`, zoals een nieuw spel begint, stil en met een vaste worp (test/grond.cjs).
+function leegLand(zaad = LAND) {
+  const { S } = grond.leegBegin(T, zaad);
+  Object.assign(S, { vlaggen: new Set() }, T.schermVelden());
+  T.S = S;
+  return S;
+}
+
+// Een dorp dat de speler bouwde (het proefdorp, test/grond.cjs), met een weide met koeien en schapen: er zijn mensen, een
+// werk en vee voor de wolven. Met `opties` meer erbij (zoals `gebouwen: ['jager']`).
+function dorp(opties = {}, zaad = LAND) {
+  const { S } = grond.proefDorp(T, { zaad, weide: true, ...opties });
+  Object.assign(S, { vlaggen: new Set() }, T.schermVelden());
   T.S = S;
   return S;
 }
@@ -46,7 +50,7 @@ function uren(S, n, stap = 0.5) {
   }
 }
 
-// Op dit uur van een zomerdag, en de schout ver weg (de schout van het gehucht staat bij zijn huis, midden in het dorp).
+// Op dit uur van een zomerdag, en de schout ver weg (in het lege begin staat hij bij de kar, midden op het plein).
 function opUur(S, uur, dag = 60) {
   S.kalender.dag = dag + uur / 24;
 }
@@ -54,9 +58,9 @@ function opUur(S, uur, dag = 60) {
 const groepVan = (S, soort) => T.beestenVan(S.dorp).find((g) => g.G.soort === soort);
 const leiderVan = (g) => g.leden.find((e) => e.leider);
 
-test('elk land van de maker heeft een roedel wolven en herten, uit het zaad: hetzelfde land geeft dezelfde', () => {
-  for (const zaad of [62707, 73425, 72022]) {
-    const S = landVanDeMaker(zaad);
+test('elk eiland heeft een roedel wolven en herten, uit het zaad: hetzelfde land geeft dezelfde', () => {
+  for (const zaad of [1, 3, LAND]) {
+    const S = leegLand(zaad);
     const groepen = T.zetBeesten(S.dorp);
     assert.ok(groepen.some((G) => G.soort === 'wolf'), `${zaad}: een roedel`);
     assert.ok(groepen.some((G) => G.soort === 'hert'), `${zaad}: herten`);
@@ -68,7 +72,7 @@ test('elk land van de maker heeft een roedel wolven en herten, uit het zaad: het
       assert.ok(G.rand.length >= 1, 'en hij heeft plekken aan de rand');
       for (const p of G.rand) assert.ok(T.zoekRoute(S.dorp.wereld, G.thuis, p, { tot: 0 }).length <= T.BEESTEN_INSTELLINGEN.randLopen);
     }
-    const nog = landVanDeMaker(zaad);
+    const nog = leegLand(zaad);
     T.zetBeesten(nog.dorp);
     const kort = (S2) => T.beestenVan(S2.dorp).map(({ G, leden }) => [G.soort, G.thuis, G.rand, leden.map((e) => [e.tx, e.ty, e.vel || e.soort])]);
     assert.deepEqual(kort(nog), kort(S), 'hetzelfde land: dezelfde dieren op dezelfde plek');
@@ -76,7 +80,7 @@ test('elk land van de maker heeft een roedel wolven en herten, uit het zaad: het
 });
 
 test('de herten: twee hindes en een hert met een gewei dat de groep leidt', () => {
-  const S = landVanDeMaker(62707);
+  const S = leegLand();
   T.zetBeesten(S.dorp);
   const g = groepVan(S, 'hert');
   assert.equal(leiderVan(g).vel, 'hert2');
@@ -86,7 +90,7 @@ test('de herten: twee hindes en een hert met een gewei dat de groep leidt', () =
 });
 
 test('overdag rust de roedel bij zijn hol; vanaf zonsondergang loopt hij langs de bosrand, en na zonsopgang terug', () => {
-  const S = landVanDeMaker(62707);
+  const S = leegLand();
   opUur(S, 12);
   uren(S, 1);
   const g = groepVan(S, 'wolf');
@@ -112,7 +116,7 @@ test('overdag rust de roedel bij zijn hol; vanaf zonsondergang loopt hij langs d
 });
 
 test('de herten grazen in de schemering aan de bosrand, en liggen de rest van de tijd op hun legerplek', () => {
-  const S = landVanDeMaker(62707);
+  const S = leegLand();
   opUur(S, 13);
   uren(S, 1);
   const g = groepVan(S, 'hert');
@@ -127,7 +131,7 @@ test('de herten grazen in de schemering aan de bosrand, en liggen de rest van de
 });
 
 test('komt er iemand dichtbij, dan gaan ze weg: de herten rennen; wie sluipt, komt dichterbij', () => {
-  const S = landVanDeMaker(62707);
+  const S = leegLand();
   const zon = T.zonVan(60);
   opUur(S, zon.onder - 0.5);
   uren(S, 1.5);
@@ -161,7 +165,7 @@ test('komt er iemand dichtbij, dan gaan ze weg: de herten rennen; wie sluipt, ko
 });
 
 test('een wolf begint geen gevecht, en wie hem aanklikt, kan hem aanvallen', () => {
-  const S = landVanDeMaker(62707);
+  const S = leegLand();
   T.zetBeesten(S.dorp);
   const wolf = leiderVan(groepVan(S, 'wolf'));
   const hert = leiderVan(groepVan(S, 'hert'));
@@ -173,7 +177,7 @@ test('een wolf begint geen gevecht, en wie hem aanklikt, kan hem aanvallen', () 
 });
 
 test('bewaren en laden houdt de groepen: hun dieren delen hun groep, en lopen verder', () => {
-  const S = landVanDeMaker(73425);
+  const S = leegLand();
   opUur(S, 19);
   uren(S, 0.5);
   const terug = T.leesSpel(T.bewaarSpel(S)).staat;
@@ -187,7 +191,7 @@ test('bewaren en laden houdt de groepen: hun dieren delen hun groep, en lopen ve
 });
 
 test('de spelregel "Beesten" uit: het bos is leeg', () => {
-  const S = landVanDeMaker(62707);
+  const S = leegLand();
   T.zetBeesten(S.dorp);
   assert.ok(S.dorp.wereld.wezens.some((e) => e.beest));
   T.zetOptie('beesten', 'uit');
@@ -257,8 +261,8 @@ function kaal(D, x0, y0, r) {
 const hertenIn = (D) => T.beestenVan(D).filter((g) => g.G.soort === 'hert').reduce((n, g) => n + g.leden.length, 0);
 
 test('eerst de herten, en een roedel woont alleen waar hij herten kan halen', () => {
-  for (const zaad of [62707, 73425, 72022, 11]) {
-    const S = landVanDeMaker(zaad);
+  for (const zaad of [1, 3, LAND, 11]) {
+    const S = leegLand(zaad);
     const groepen = T.zetBeesten(S.dorp);
     const herten = groepen.filter((G) => G.soort === 'hert');
     for (const G of groepen.filter((x) => x.soort === 'wolf')) {
@@ -268,7 +272,7 @@ test('eerst de herten, en een roedel woont alleen waar hij herten kan halen', ()
 });
 
 test('in de winter krijgt een roedel honger, en met honger vangt hij een hert uit de dichtste groep; buiten de winter niet', () => {
-  const S = landVanDeMaker(62707);
+  const S = leegLand();
   const D = S.dorp;
   T.zetBeesten(D);
   const { G, leden } = groepVan(S, 'wolf');
@@ -286,7 +290,7 @@ test('in de winter krijgt een roedel honger, en met honger vangt hij een hert ui
 });
 
 test('in de lente krijgen ze jongen, tot zes; dan splitst de groep, en de helft zoekt een eigen thuis of trekt weg', () => {
-  const S = landVanDeMaker(72022);
+  const S = leegLand();
   const D = S.dorp;
   T.zetBeesten(D);
   const G = groepVan(S, 'hert').G;
@@ -327,7 +331,7 @@ test('in de lente krijgen ze jongen, tot zes; dan splitst de groep, en de helft 
 });
 
 test('een roedel die de winter honger leed, krijgt in de lente geen jongen', () => {
-  const S = landVanDeMaker(62707);
+  const S = leegLand();
   const D = S.dorp;
   T.zetBeesten(D);
   const { G, leden } = groepVan(S, 'wolf');
@@ -341,7 +345,7 @@ test('een roedel die de winter honger leed, krijgt in de lente geen jongen', () 
 });
 
 test('wordt het bos om het hol te dun, dan zoekt de roedel dieper een nieuw; zonder bos trekt hij weg, en het dorp zegt het', () => {
-  const S = landVanDeMaker(73425); // op 62707 ligt het hol sinds de grote gebouwen (vraag 114, stap 3) aan de rand van de kaart, zonder ander bos dichtbij
+  const S = leegLand();
   const D = S.dorp;
   T.zetBeesten(D);
   const G = groepVan(S, 'wolf').G;
@@ -387,6 +391,24 @@ function zetBij(w, e, p) {
   return null;
 }
 
+// Een wezen op een open tegel zo'n `afstand` tegels van `van` (een wezen, of een plek), waar de roedel naartoe kan lopen:
+// in het bos dat rond een dorp van de speler ligt, is "tien tegels oostwaarts" niet altijd te bereiken. Geeft de tegel.
+function zetOpAfstand(w, e, van, afstand) {
+  const bron = van.tx != null ? T.tegelVan(van) : van;
+  for (let r = afstand; r <= afstand + 12; r++) {
+    for (let dy = -r; dy <= r; dy++) {
+      for (let dx = -r; dx <= r; dx++) {
+        const x = bron.x + dx;
+        const y = bron.y + dy;
+        if (Math.max(Math.abs(dx), Math.abs(dy)) !== r || !T.isBegaanbaar(w, x, y, { wezensBlokkeren: true }) || !T.kanErKomen(w, bron, { x, y })) continue;
+        Object.assign(e, { x, y, tx: x, ty: y, pad: [], onderweg: false });
+        return { x, y };
+      }
+    }
+  }
+  return null;
+}
+
 // Wat het dorp zegt (T.zeg), zolang de toets loopt.
 function luister(f) {
   const gezegd = [];
@@ -402,7 +424,7 @@ function luister(f) {
 // Een roedel met honger, op een avond in grasmaand om tien uur; de schout en het dorp binnen, en een hek om de schapen
 // (een toets zet weg wat hij nodig heeft).
 function stouteRoedel() {
-  const S = landVanDeMaker(62707);
+  const S = dorp();
   const D = S.dorp;
   T.zetBeesten(D);
   const { G, leden } = groepVan(S, 'wolf');
@@ -420,7 +442,7 @@ test('een roedel met honger komt in het donker en neemt een schaap; de herder ze
   const { S, D, G, leider } = stouteRoedel();
   D.beesten.hek = false;
   const schaap = T.veeVan(D).find((e) => e.dier === 'schaap');
-  zetBij(D.wereld, schaap, { x: leider.tx + 10, y: leider.ty });
+  assert.ok(zetOpAfstand(D.wereld, schaap, leider, 10), 'een plek voor het schaap');
   assert.ok(T.wolvenStout(D, G), 'honger en donker: stout');
   const voor = schapenIn(D);
   const toen = S.kalender.dag;
@@ -450,7 +472,7 @@ test('met een hek om de schapen zoekt hij wie alleen in het donker loopt: gewond
     const p = D.bewoners.mensen.find((q) => q.wezen && !q.schout && q.leeftijd === 'volwassen');
     const e = p.wezen;
     e.binnen = false;
-    zetBij(D.wereld, e, { x: leider.tx + 10, y: leider.ty });
+    assert.ok(zetOpAfstand(D.wereld, e, leider, 10), 'een plek voor hem');
     const bevolking = D.bevolking;
     luister((gezegd) => {
       uren(S, 3);
@@ -481,7 +503,7 @@ test('met de spelregel aan is wie de wolven aanvallen een enkele keer dood', () 
     const { S, D, leider } = stouteRoedel();
     const p = D.bewoners.mensen.find((q) => q.wezen && !q.schout && q.leeftijd === 'volwassen');
     p.wezen.binnen = false;
-    zetBij(D.wereld, p.wezen, { x: leider.tx + 10, y: leider.ty });
+    assert.ok(zetOpAfstand(D.wereld, p.wezen, leider, 10), 'een plek voor hem');
     const bevolking = D.bevolking;
     luister((gezegd) => {
       uren(S, 3);
@@ -497,7 +519,7 @@ test('met de spelregel aan is wie de wolven aanvallen een enkele keer dood', () 
 test('bij de schout met zijn lantaarn blijft de roedel aan de rand van het licht; wie sluipt, valt hij aan', () => {
   const { S, D, leden, leider } = stouteRoedel();
   S.schout.binnen = false;
-  zetBij(D.wereld, S.schout, { x: leider.tx + 12, y: leider.ty });
+  assert.ok(zetOpAfstand(D.wereld, S.schout, leider, 12), 'een plek voor de schout');
   assert.ok(T.draagtLantaarn(D));
   const r = T.ZIEN_INSTELLINGEN.lantaarn.straal;
   let dichtst = Infinity;
@@ -515,7 +537,7 @@ test('bij de schout met zijn lantaarn blijft de roedel aan de rand van het licht
 });
 
 test('wie aan het bos werkt en een roedel met honger ziet, rent naar huis: hij werkt die dag niet meer, en zijn werkplaats maakte de helft', () => {
-  const S = landVanDeMaker(62707);
+  const S = dorp();
   const D = S.dorp;
   T.zetBeesten(D);
   const { G, leden } = groepVan(S, 'wolf');
@@ -573,7 +595,7 @@ test('een jacht neemt de roedel die het schaap nam wolven af, en een hek houdt h
 });
 
 test('een wolf die in een gevecht viel, ligt er de volgende ochtend niet meer', () => {
-  const S = landVanDeMaker(62707);
+  const S = leegLand();
   const D = S.dorp;
   T.zetBeesten(D);
   const wolf = groepVan(S, 'wolf').leden[0];
@@ -586,23 +608,19 @@ test('een wolf die in een gevecht viel, ligt er de volgende ochtend niet meer', 
 // Stap 3a, de jager (Marcel, 7 okt: "Altijd een paar herten over houden. Anders krijgen we geen jonge hertjes meer")
 // ---------------------------------------------------------------------------------------------
 
-// Een jager bij het dorp, klaar, op een land van de maker met zijn beesten; jij bouwt, zonder voorvallen. `f` krijgt
-// { S, D, g }.
-function metJager(zaad, f) {
-  const S = landVanDeMaker(zaad);
+// Een jager bij het dorp, klaar, in het proefdorp met zijn beesten (test/grond.cjs: de hut staat er af, en op dag 2 gaat er
+// iemand werken); jij bouwt, zonder voorvallen. `f` krijgt { S, D, g }.
+function metJager(f) {
+  const S = dorp({ gebouwen: ['jager'] }, JAGERLAND);
   const D = S.dorp;
   T.zetOptie('voorvallen', 'uit');
   try {
     T.zetBeesten(D);
-    const huis = D.gebouwen.find((g) => g.huis === 'schout');
-    const plek = T.plekVoor(D, 'jager', T.deurVan(D.wereld, huis));
-    const u = T.plaatsGebouw(D, 'jager', plek.x, plek.y);
-    assert.ok(u.gelukt, u.reden);
     T.zetVoorraad(D, 'graan', 2000);
     T.zetVoorraad(D, 'hout', 100);
-    for (let d = 1; d <= T.GEBOUWEN.jager.bouwtijd + 1; d++) nachtVan(S, d);
-    assert.ok(u.instantie.klaar, 'de hut staat');
-    f({ S, D, g: u.instantie });
+    const g = D.gebouwen.find((x) => x.soort === 'jager');
+    assert.ok(g && g.klaar, 'de hut staat');
+    f({ S, D, g });
   } finally {
     T.optiesTerug();
   }
@@ -633,7 +651,7 @@ function telVlees(f) {
 
 const binnenBereik = (D, g) => T.beestenVan(D).filter(({ G }) => T.afstand(T.deurVan(D.wereld, g), G.thuis) <= T.BEESTEN_INSTELLINGEN.jager.straal);
 
-test('de jager schiet klein wild en herten in zijn bereik, laat er altijd twee per groep staan, en dan alleen klein wild', () => metJager(72022, ({ S, D, g }) => {
+test('de jager schiet klein wild en herten in zijn bereik, laat er altijd twee per groep staan, en dan alleen klein wild', () => metJager(({ S, D, g }) => {
   const J = T.BEESTEN_INSTELLINGEN.jager;
   // Zonder wolven: wat er van de herten verdwijnt, nam de jager.
   D.wereld.wezens = D.wereld.wezens.filter((e) => !(e.groep && e.groep.soort === 'wolf'));
@@ -673,7 +691,7 @@ test('de jager schiet klein wild en herten in zijn bereik, laat er altijd twee p
   assert.ok(vlees > 0);
 }));
 
-test('een roedel die groter is dan drie, verliest elke vijf dagen een wolf aan de jager; zonder herten schiet hij verder alleen klein wild', () => metJager(72022, ({ S, D, g }) => {
+test('een roedel die groter is dan drie, verliest elke vijf dagen een wolf aan de jager; zonder herten schiet hij verder alleen klein wild', () => metJager(({ S, D, g }) => {
   const J = T.BEESTEN_INSTELLINGEN.jager;
   // Een roedel van zes in zijn bereik, en geen herten die hij mag nemen.
   const roedel = () => binnenBereik(D, g).find(({ G }) => G.soort === 'wolf');
@@ -714,12 +732,12 @@ test('een roedel die groter is dan drie, verliest elke vijf dagen een wolf aan d
   assert.ok(Math.abs(vlees - werkte * T.GEBOUWEN.jager.maakt.uit.vlees * J.kleinWild) < 1e-6, `alleen klein wild, geen vlees van de wolven (${vlees})`);
 }));
 
-test('zonder beesten (het ontworpen gehucht, of de spelregel uit) maakt de jager zijn vlees zoals altijd', () => {
+test('zonder beesten (een dorp waar ze nog niet gezet zijn, of de spelregel uit) maakt de jager zijn vlees zoals altijd', () => {
   for (const regel of ['aan', 'uit']) {
-    const S = landVanDeMaker(62707);
+    const S = leegLand();
     T.zetOptie('beesten', regel);
     try {
-      if (regel === 'aan') delete S.dorp.beesten; // zoals het ontworpen gehucht: geen beesten gezet
+      if (regel === 'aan') delete S.dorp.beesten; // een dorp waar geen beesten gezet zijn
       const g = { soort: 'jager', klaar: true, x: 40, y: 40 };
       assert.equal(T.jagersZonderHerten(S.dorp), 0);
       const uit = { vlees: 1, huiden: 1 };
@@ -732,7 +750,7 @@ test('zonder beesten (het ontworpen gehucht, of de spelregel uit) maakt de jager
   }
 });
 
-test('overdag loert de jager in het bos op zijn groep, net buiten waar ze schuw worden, en gaat dan terug naar zijn hut', () => metJager(72022, ({ S, D, g }) => {
+test('overdag loert de jager in het bos op zijn groep, net buiten waar ze schuw worden, en gaat dan terug naar zijn hut', () => metJager(({ S, D, g }) => {
   const J = T.BEESTEN_INSTELLINGEN.jager;
   const p = D.bewoners.mensen.find((m) => m.werk === g);
   assert.ok(p && p.wezen, 'iemand werkt er');
@@ -771,7 +789,7 @@ test('overdag loert de jager in het bos op zijn groep, net buiten waar ze schuw 
 
 // Een jacht op de roedel die een schaap nam, op een zomerochtend; zonder militie gaan er twee weerbare mannen mee.
 function jacht() {
-  const S = landVanDeMaker(62707);
+  const S = dorp();
   const D = S.dorp;
   T.zetBeesten(D);
   const roedel = groepVan(S, 'wolf');
@@ -793,7 +811,8 @@ test('een jacht te voet: de mannen lopen met de schout mee, en bij de roedel beg
   assert.deepEqual(T.holVanDeJacht(D), roedel.G.thuis, 'het hol ligt in goud op de grond');
   // De schout loopt naar het hol, de mannen naast hem; binnen negen tegels van een wolf begint het gevecht.
   const leider = leiderVan(roedel);
-  const plek = zetBij(D.wereld, S.schout, { x: leider.tx + T.BEESTEN_INSTELLINGEN.jacht.bij, y: leider.ty });
+  const plek = zetOpAfstand(D.wereld, S.schout, leider, T.BEESTEN_INSTELLINGEN.jacht.bij);
+  assert.ok(plek, 'een plek voor de schout');
   for (const e of J.mannen) zetBij(D.wereld, e, plek);
   T.werkBeestenBij(S, D);
   assert.equal(S.modus, 'overgang', 'het gevecht begint');
@@ -829,7 +848,7 @@ test('gaat de schout niet binnen twee dagen, dan gaan de mannen zonder hem: de r
 });
 
 test('het voorval "wolven": "Een jacht" is een jacht te voet, en het venster zegt wat het vraagt', () => {
-  const S = landVanDeMaker(62707);
+  const S = leegLand();
   const D = S.dorp;
   T.zetBeesten(D);
   D.beesten.roedel = groepVan(S, 'wolf').G;
@@ -851,7 +870,7 @@ function aanval() {
   const p = D.bewoners.mensen.find((q) => q.wezen && !q.schout && q.leeftijd === 'volwassen');
   const e = p.wezen;
   e.binnen = false;
-  zetBij(D.wereld, e, { x: leider.tx + 10, y: leider.ty });
+  assert.ok(zetOpAfstand(D.wereld, e, leider, 10), 'een plek voor hem');
   const gezegd = [];
   luister((z) => {
     for (let k = 0; k < 400 && !G.aanval; k++) uren(S, 0.05);
@@ -899,39 +918,12 @@ test('komt er een buur, dan vluchten de wolven; komt de schout, dan is het een g
 });
 
 // ---------------------------------------------------------------------------------------------
-// Stap 3d, het hek op de kaart (Marcel, 7 okt: "D ja allebei")
-// ---------------------------------------------------------------------------------------------
-
-test('een hek om de schapen staat om de meent, met een hekje in elke zijde, en de meent blijft te bereiken', () => {
-  for (const zaad of [62707, 73425, 72022]) {
-    const S = landVanDeMaker(zaad);
-    const D = S.dorp;
-    const w = D.wereld;
-    const m = w.meenten[0];
-    const binnen = { x: m.x + Math.floor(m.b / 2), y: m.y + Math.floor(m.h / 2) };
-    const plein = T.pleinVan(w);
-    T.hekOmDeSchapen(D);
-    const hek = w.voorwerpen.filter((v) => v.hek);
-    assert.ok(hek.length >= m.b + m.h, `${zaad}: een hek (${hek.length} stukken)`);
-    for (const v of hek) {
-      const opRand = v.x === m.x || v.y === m.y || v.x === m.x + m.b - 1 || v.y === m.y + m.h - 1;
-      assert.ok(opRand, `${zaad}: op de rand van de meent`);
-    }
-    const hekjes = hek.filter((v) => v.soort.startsWith('hekje'));
-    assert.ok(hekjes.length >= 2, `${zaad}: hekjes om door te lopen`);
-    assert.ok(hekjes.every((v) => !T.isVast(w, v.x, v.y)), 'door een hekje loop je');
-    assert.ok(T.kanErKomen(w, plein, binnen), `${zaad}: de meent blijft te bereiken`);
-    for (const e of T.veeVan(D)) assert.ok(T.kanErKomen(w, plein, T.tegelVan(e)), `${zaad}: geen dier opgesloten`);
-  }
-});
-
-// ---------------------------------------------------------------------------------------------
 // Stap 3b, het hol op de kaart (Marcel, 7 okt: "een kuil onder een omgevallen boom, met botten ervoor")
 // ---------------------------------------------------------------------------------------------
 
 test('elke roedel heeft een hol op de kaart naast zijn thuis, vast, en zijn plekken blijven te bereiken', () => {
-  for (const zaad of [62707, 73425, 72022]) {
-    const S = landVanDeMaker(zaad);
+  for (const zaad of [1, 3, LAND]) {
+    const S = leegLand(zaad);
     const D = S.dorp;
     const w = D.wereld;
     T.zetBeesten(D);
@@ -952,9 +944,9 @@ test('elke roedel heeft een hol op de kaart naast zijn thuis, vast, en zijn plek
 });
 
 test('verhuist een roedel, dan gaat zijn hol mee; trekt hij weg, dan verdwijnt het', () => {
-  // Land 73425: sinds het eiland van 8 okt woont de roedel daar aan de rand van het land, met bos om te verhuizen (op 62707
-  // is er na het kappen geen bos meer dicht genoeg, en trekt hij meteen weg).
-  const S = landVanDeMaker(73425);
+  // Op sommige eilanden is er na het kappen geen bos meer dicht genoeg, en trekt de roedel meteen weg: LAND heeft bos om te
+  // verhuizen.
+  const S = leegLand();
   const D = S.dorp;
   T.zetBeesten(D);
   const G = groepVan(S, 'wolf').G;
@@ -983,7 +975,7 @@ test('een nieuwe roedel (de helft die splitst) krijgt een eigen hol, en een roed
   const { plaatsPerRoedel, uitElkaar } = IN;
   Object.assign(IN, { plaatsPerRoedel: 50, uitElkaar: 6 }); // plaats genoeg in het bos, zodat de helft een eigen thuis vindt
   try {
-    const S = landVanDeMaker(62707);
+    const S = leegLand();
     const D = S.dorp;
     T.zetBeesten(D);
     const w = D.wereld;
@@ -1008,7 +1000,7 @@ test('een nieuwe roedel (de helft die splitst) krijgt een eigen hol, en een roed
 });
 
 test('het hol blijft na opslaan en laden bij zijn roedel', () => {
-  const S = landVanDeMaker(62707);
+  const S = leegLand();
   T.zetBeesten(S.dorp);
   const terug = T.leesSpel(T.bewaarSpel(S)).staat;
   const D = terug.dorp;
@@ -1018,7 +1010,7 @@ test('het hol blijft na opslaan en laden bij zijn roedel', () => {
 });
 
 test('met de spelregel "Beesten" uit is het hol weg', () => {
-  const S = landVanDeMaker(62707);
+  const S = leegLand();
   const D = S.dorp;
   T.zetBeesten(D);
   assert.ok(D.wereld.voorwerpen.some((v) => v.soort === 'hol'));

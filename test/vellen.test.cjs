@@ -32,19 +32,15 @@ async function laadAlles() {
 const T = require('./laad.cjs').spel();
 T.ui = new Proxy({}, { get: () => () => {} });
 
-// Een dorp om te tekenen: het gehucht dat er al was, op een land van de maker (zonder zaad land 5; tot ronde 2 van het
-// snoeien, stap 3c, het ontworpen gehucht), met huizen, boeren en boerinnen.
-function nieuwSpel(zaad = 5) {
-  const echt = console.warn;
-  console.warn = () => {};
-  const S = { kalender: T.nieuweKalender() };
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht', zaad, false));
-  } finally {
-    console.warn = echt;
-  }
-  return S;
+// Een dorp om te tekenen: het proefdorp (test/grond.cjs) op het eiland van `zaad` (zonder zaad eiland 5; tot ronde 2 van
+// het snoeien, stap 6, het gehucht dat er al was), met het huis van de schout, boerderijen met hun boer en hutten met
+// hun gezinnen.
+const grond = require('./grond.cjs');
+function nieuwSpel(zaad = 5, opties = {}) {
+  return grond.proefDorp(T, { zaad, ...opties }).S;
 }
+// Een bewoner draagt zijn eigen uiterlijk (vraag 145): `zaaier-u1` is de zaaier in het uiterlijk van bewoner 1.
+const basis = (naam) => naam.replace(/-u\d+$/, '');
 const perTekening = (pad) => /^tegels\/(huizen|gebouwen)\//.test(pad);
 const figuur = (pad) => pad.startsWith('beelden/figuren/');
 const tekeningenOp = (w) => new Set(w.voorwerpen
@@ -75,11 +71,11 @@ test('bij het begin laadt geen enkel huis, gebouw of figuur; wel elk ander vel',
 });
 
 test('een kaart laadt precies de huizen, gebouwen en figuren die erop staan, elk één keer', async () => {
-  const S = nieuwSpel();
+  const S = nieuwSpel(5, { boerderijen: 3, gebouwen: ['herberg', 'schaapskooi', 'houthakker', 'graanschuur', 'kippenhok', 'smidse'] });
   const op = tekeningenOp(S.wereld);
   const { namen, vellen } = figurenOp(S);
-  assert.ok(op.size >= 8, `${op.size} tekeningen op land 5`);
-  assert.ok(namen.has('maaier') && [...namen].some((n) => /^boer-u\d+$/.test(n)) && !namen.has('kobold'), [...namen].join(' ')); // een bewoner draagt zijn uiterlijk (vraag 145)
+  assert.ok(op.size >= 8, `${op.size} tekeningen op het proefdorp`);
+  assert.ok([...namen].some((n) => basis(n) === 'maaier') && [...namen].some((n) => /^boer-u\d+$/.test(n)) && !namen.has('kobold'), [...namen].join(' '));
   const voor = gevraagd.length;
   T.sprites.laadWatErStaat(S.wereld);
   T.sprites.laadWatErStaat(S.wereld); // wat al onderweg is, vraagt het niet nog eens
@@ -96,7 +92,7 @@ test('een kaart laadt precies de huizen, gebouwen en figuren die erop staan, elk
 
 test('een figuur die er nog niet was: eerst niets, en hij laadt; wie hem draagt, wacht zolang', async () => {
   const S = nieuwSpel();
-  assert.ok(!gevraagd.some((p) => p.startsWith('beelden/figuren/wolf')), 'de wolf staat niet op het gehucht');
+  assert.ok(!gevraagd.some((p) => p.startsWith('beelden/figuren/wolf')), 'de wolf staat niet in het dorp');
   assert.equal(T.sprites.figuur('wolf', 'staan', 'Z', 0), null);
   assert.ok(gevraagd.some((p) => p.startsWith('beelden/figuren/wolf')), 'de vraag zette het laden in gang');
   const wolf = T.maakWezen('wolf', S.schout.x + 2, S.schout.y);
@@ -110,7 +106,7 @@ test('een figuur die er nog niet was: eerst niets, en hij laadt; wie hem draagt,
 test('een tekening die nog niet geladen is: eerst niets, en hij laadt; daarna het plaatje', async () => {
   const id = T.TEGELS.huizen.tiles.findIndex((t) => t.naam === 'huis6');
   const bestand = T.TEGELS.huizen.tiles[id].bestand;
-  assert.ok(!gevraagd.includes(bestand), 'huis6 staat niet op land 5');
+  assert.ok(!gevraagd.includes(bestand), 'huis6 staat niet op het proefdorp');
   assert.equal(T.sprites.wachtOp('huizen', id), true);
   assert.equal(T.sprites.buiten('huizen', id), null);
   assert.ok(gevraagd.includes(bestand), 'de vraag zette het laden in gang');
@@ -148,31 +144,31 @@ test('Spel.debug.vellen telt wat er geladen is: wat er niet staat, kost niets', 
 
 test('wie op zijn land werkt, draagt het vel van zijn werk; een boerin dat van een vrouw, als het er is (vraag 111)', () => {
   const S = nieuwSpel();
-  const boeren = S.wereld.wezens.filter((e) => e.werkAkkers && e.werkAkkers.length);
-  const boer = boeren.find((e) => e.vel === 'boer');
-  const boerin = boeren.find((e) => e.vel === 'boerin');
-  assert.ok(boer && boerin, 'het gehucht heeft boeren en boerinnen');
+  // De boer heeft zijn akkers; zijn vrouw werkt er pas mee als het werk begint (hieronder zet de toets het).
+  const boer = S.wereld.wezens.find((e) => e.vel === 'boer' && e.werkAkkers && e.werkAkkers.length);
+  const boerin = S.wereld.wezens.find((e) => e.vel === 'boerin');
+  assert.ok(boer && boerin, 'het dorp heeft boeren en boerinnen');
   for (const e of [boer, boerin]) e.werkt = { soort: 'zaaien', x: e.tx, y: e.ty, tot: 1, rust: false };
   const { naam, houding } = T.sprites.houding(S, boer);
-  assert.deepEqual([naam, houding], ['zaaier', 'zaaien']);
+  assert.deepEqual([basis(naam), houding], ['zaaier', 'zaaien']);
   const zaaister = T.BEELDEN.figuren.zaaister;
   try {
     delete T.BEELDEN.figuren.zaaister;
-    assert.equal(T.sprites.houding(S, boerin).naam, 'zaaier', 'zolang er geen zaaister is, het vel van de man');
+    assert.equal(basis(T.sprites.houding(S, boerin).naam), 'zaaier', 'zolang er geen zaaister is, het vel van de man');
     T.BEELDEN.figuren.zaaister = T.BEELDEN.figuren.zaaier;
-    assert.equal(T.sprites.houding(S, boerin).naam, 'zaaister');
-    assert.equal(T.sprites.houding(S, boer).naam, 'zaaier', 'een boer blijft een man');
+    assert.equal(basis(T.sprites.houding(S, boerin).naam), 'zaaister');
+    assert.equal(basis(T.sprites.houding(S, boer).naam), 'zaaier', 'een boer blijft een man');
   } finally {
     if (zaaister) T.BEELDEN.figuren.zaaister = zaaister;
     else delete T.BEELDEN.figuren.zaaister;
   }
   // Maaien: een boerin met de zeis is de maaister, als die er is.
-  assert.equal(T.sprites.maaierVan(boer), 'maaier');
-  assert.equal(T.sprites.maaierVan(boerin), T.sprites.figuurGegevens('maaister') ? 'maaister' : 'maaier');
+  assert.equal(basis(T.sprites.maaierVan(boer)), 'maaier');
+  assert.equal(basis(T.sprites.maaierVan(boerin)), T.sprites.figuurGegevens('maaister') ? 'maaister' : 'maaier');
   // Rust hij even, dan staat hij; met een bundel hout loopt hij als sprokkelaar naar huis.
   boer.werkt.rust = true;
   assert.equal(T.sprites.houding(S, boer).houding, 'staan');
   boer.werkt = null;
   boer.draagt = 'bundel';
-  assert.equal(T.sprites.houding(S, boer).naam, 'sprokkelaar');
+  assert.equal(basis(T.sprites.houding(S, boer).naam), 'sprokkelaar');
 });

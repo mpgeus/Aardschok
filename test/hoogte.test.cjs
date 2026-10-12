@@ -1,19 +1,19 @@
 // De hoogte van het land (js/hoogte.js; werklijst vraag 121, stap 1; Marcel, 7 okt: "ik doel ook meer op heuvels in het
 // landschap", en "a ja 32, b hoger"): met de spelregel "Hoogte" op "Heuvels" legt de maker hoge heuvels in het wilde
-// land, een zachte glooiing en een richel bij de rotsen; vlak waar een huis, het plein of het water ligt. Op "Vlak" (de
-// standaard) is er geen hoogte, en tekent en klikt alles als vroeger.
+// land, een zachte glooiing en een richel bij de rotsen; vlak waar het plein, een gebouw van de speler of het water ligt.
+// Op "Vlak" (de standaard) is er geen hoogte, en tekent en klikt alles als vroeger. De toetsen spelen op het land van het
+// lege begin (sinds ronde 2 van het snoeien, stap 6, het enige land van de maker).
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+const grond = require('./grond.cjs');
 
+// Het land van het lege begin op het eiland van `zaad`, met of zonder heuvels (de spelregel "Hoogte").
 function land(zaad, heuvels) {
   const echt = console.warn;
   console.warn = () => {};
   T.zetOptie('hoogte', heuvels ? 'heuvels' : 'vlak');
-  // een land van de maker zonder het eiland: deze toetsen leggen er het plan van de maker naast (sinds 8 okt maakt een
-  // nieuw spel het eiland, vraag 117; de hoogte van het eiland is stap 2b)
-  T.MAKER_INSTELLINGEN.opEiland = false;
   try {
     return T.laadGemaaktGehucht(zaad);
   } finally {
@@ -55,19 +55,18 @@ test('hoogte: uit hetzelfde nummer hetzelfde land, met heuvels en dalen die door
   assert.notDeepEqual(T.hoekHoogten(land(7, true), 20, 20), T.hoekHoogten(a, 20, 20));
 });
 
-test('hoogte: een huis met zijn looppad ligt vlak, en het plein ook', () => {
+test('hoogte: het plein ligt vlak, en het kamp erop met zijn looppad ook', () => {
   for (const zaad of [3, 5, 7]) {
     const w = land(zaad, true);
-    const plan = T.maakGehucht(zaad);
     const lp = T.GEBOUWEN_INSTELLINGEN.looppad;
-    for (const h of plan.huizen) {
+    for (const k of w.kamp.plekken) {
       const hoogten = new Set();
-      for (let y = h.y - lp; y < h.y + h.d + lp; y++) {
-        for (let x = h.x - lp; x < h.x + h.b + lp; x++) for (const v of T.hoekHoogten(w, x, y)) hoogten.add(Math.round(v * 100));
+      for (let y = k.voet.y - lp; y < k.voet.y + k.voet.h + lp; y++) {
+        for (let x = k.voet.x - lp; x < k.voet.x + k.voet.b + lp; x++) for (const v of T.hoekHoogten(w, x, y)) hoogten.add(Math.round(v * 100));
       }
-      assert.equal(hoogten.size, 1, `land ${zaad}: ${h.rol} op (${h.x}, ${h.y}) ligt niet vlak`);
+      assert.equal(hoogten.size, 1, `land ${zaad}: de tent op (${k.voet.x}, ${k.voet.y}) ligt niet vlak`);
     }
-    for (const [px, py] of plan.plein) {
+    for (const [px, py] of w.plein) {
       const hoeken = T.hoekHoogten(w, Math.round(px), Math.round(py));
       assert.ok(Math.max(...hoeken) - Math.min(...hoeken) < 1, `land ${zaad}: het plein op (${Math.round(px)}, ${Math.round(py)})`);
     }
@@ -135,7 +134,8 @@ test('hoogte: de hoogte op een punt ligt tussen de hoeken van zijn tegel', () =>
 test('hoogte, lopen: niet door een wand, wel over een helling; op "Vlak" verandert er niets', () => {
   const vlak = land(5, false);
   assert.equal(T.kanStappen(vlak, 40, 40, 41, 41), true);
-  for (const zaad of [3, 5, 7]) {
+  // (op sommige eilanden ligt de richel in het bos, zonder open weg vanaf het plein: die staan hier niet bij)
+  for (const zaad of [1, 3, 4]) {
     const w = land(zaad, true);
     const hel = w.hoogte.hellingen;
     // waar een wand staat, kun je er niet langs, van geen van beide kanten
@@ -169,23 +169,16 @@ test('hoogte, lopen: niet door een wand, wel over een helling; op "Vlak" verande
   }
 });
 
-// Een nieuw spel op land `zaad` van de maker met heuvels, stil en zonder venster (zoals test/bouwstijl.test.cjs).
+// Een nieuw spel op het eiland van `zaad` met heuvels, stil en zonder venster (het lege begin, test/grond.cjs).
 function spelMetHeuvels(zaad) {
-  const echt = console.warn;
-  console.warn = () => {};
-  const S = { kalender: T.nieuweKalender() };
-  const opEiland = T.MAKER_INSTELLINGEN.opEiland;
-  T.MAKER_INSTELLINGEN.opEiland = false;
   T.zetOptie('hoogte', 'heuvels');
   try {
-    assert.ok(T.beginOpKaart(S, 'gehucht', zaad));
+    const { S } = grond.leegBegin(T, zaad);
+    Object.assign(S, { vlaggen: new Set() }, T.schermVelden());
+    return S;
   } finally {
     T.zetOptie('hoogte', 'vlak');
-    T.MAKER_INSTELLINGEN.opEiland = opEiland;
-    console.warn = echt;
   }
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
-  return S;
 }
 
 test('hoogte, bouwen: niet op steile grond, en waar het komt, wordt de grond vlak', () => {

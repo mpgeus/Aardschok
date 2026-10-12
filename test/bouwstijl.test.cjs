@@ -1,7 +1,8 @@
 // De bouwstijl van een land (js/bouwstijl.js; werklijst vraag 114, stap 2a; Marcel, 4 okt: "A ja B ja C ik wil overal
 // bouwfase voor ... D ja"): elk land van de maker bouwt in één stijl, elke vorm in vier standen, onder het dak van de
 // trede waarin het gebouwd wordt of doorgroeit, en een stenen huis in baksteen pas met een steenbakkerij. De deur kijkt
-// naar de weg. Het ontworpen gehucht heeft geen stijl, en speelt zoals altijd.
+// naar de weg. De toetsen spelen op het lege begin en het proefdorp (test/grond.cjs); sinds ronde 2 van het snoeien
+// (stap 6) legt de maker zelf geen huizen meer, dus de stijl zit in wat de speler bouwt.
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
@@ -13,22 +14,11 @@ T.ui = new Proxy({}, { get: () => () => {} });
 const kantVan = ([b, d], [dx, dy]) => (dy === d ? 'z' : dx === b ? 'o' : dy === -1 ? 'n' : dx === -1 ? 'w' : '?');
 const dakVan = (tekening) => tekening.split('/').pop().split('-')[2];
 
-// Een nieuw spel, stil en zonder venster (zoals test/maker.test.cjs): met `zaad` op het land van de maker uit dat zaad,
-// zonder op het ontworpen gehucht.
-function nieuwSpel(zaad) {
-  const echt = console.warn;
-  console.warn = () => {};
-  const S = { kalender: T.nieuweKalender() };
-  const opEiland = T.MAKER_INSTELLINGEN.opEiland;
-  T.MAKER_INSTELLINGEN.opEiland = false; // de landen van de maker zelf, zonder het eiland (vraag 117)
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht', zaad));
-  } finally {
-    T.MAKER_INSTELLINGEN.opEiland = opEiland;
-    console.warn = echt;
-  }
-  Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
-  return S;
+// Een dorp van de speler, stil en zonder venster: het proefdorp (test/grond.cjs) op het eiland van `zaad`, met `opties`
+// erbij (zoals `gebouwen: ['herberg']`).
+const grond = require('./grond.cjs');
+function nieuwSpel(zaad, opties = {}) {
+  return grond.proefDorp(T, { zaad, ...opties }).S;
 }
 
 // Een lege wereld in de stijl wit, zoals in test/erven.test.cjs, met een weg (zandpad) langs de rij `wegY` of de kolom
@@ -63,14 +53,15 @@ test('elke tekening van een stijl staat op het vel, met de naam van zijn stijl, 
   assert.deepEqual(T.bouwstijlen(), Object.keys(HZ.STIJLEN).sort());
 });
 
-test('een land van de maker bouwt in zijn stijl: de hutten, het huis en de boerderijen van het begin ook', () => {
+test('een eiland bouwt in zijn stijl: de hutten, het huis en de boerderijen die de speler zet ook', () => {
   const S = nieuwSpel(5);
   assert.equal(S.wereld.stijl, T.stijlVoorLand(5));
   assert.equal(T.stijlVan(S.dorp), T.stijlVoorLand(5));
-  // (het huis van de schout houdt zijn eigen tekening tot stap 3, met de herberg en de kapel)
-  const woningen = S.dorp.gebouwen.filter((g) => ['hut', 'huis', 'boerderij'].includes(g.soort) && g.tekening !== 'huizen/schoutshuis');
-  assert.ok(woningen.length >= 8);
+  const woningen = S.dorp.gebouwen.filter((g) => ['hut', 'huis', 'boerderij'].includes(g.soort));
+  assert.ok(woningen.length >= 4, `${woningen.length} woningen`);
   for (const g of woningen) assert.ok(T.deurKantVan(g.tekening), `${g.soort} (${g.tekening}) is van de stijl`);
+  const schout = S.dorp.gebouwen.find((g) => g.huis === 'schout');
+  assert.ok(T.deurKantVan(schout.tekening), 'het huis van de schout ook');
   // en hij blijft het na bewaren en laden
   const terug = T.leesSpel(T.bewaarSpel(S, { nu: 0 }));
   assert.ok(terug.gelukt, terug.reden);
@@ -103,12 +94,15 @@ test('wie doorgroeit, krijgt de stijl van zijn dorp, ook vanuit een gedeelde hut
   assert.equal(T.zoalsNu(D, 'huizen/oker-huis2-riet-n', 'stenenHuis'), 'huizen/oker-steen2-leien-n');
 });
 
-test('de maker zet een huis ook vóór het plein, met zijn deur ernaartoe (vraag 114, D)', () => {
-  // Over een rij landen staan de huizen en hutten van het begin niet allemaal met hun deur naar zuid of oost: met vier
-  // standen kan een huis ook vóór het plein staan, met zijn deur van je af.
+test('een huis kan ook vóór het plein staan, met zijn deur ernaartoe (vraag 114, D)', () => {
+  // Over een rij eilanden staan de huizen die de speler zet (T.plekVoor kiest de plek en keert de deur naar de weg) niet
+  // allemaal met hun deur naar zuid of oost: met vier standen kan een huis ook vóór het plein staan, met zijn deur van je af.
   const standen = new Set();
   for (const zaad of [1, 2, 3, 4, 5, 6]) {
-    for (const h of T.maakGehucht(zaad).huizen) if (['huis', 'hut', 'boerderij'].includes(h.rol)) standen.add(T.deurKantVan(`huizen/${h.tekening}`));
+    const { D, w } = grond.leegBegin(T, zaad);
+    for (const soort of ['hut', 'boerderij', 'huis']) {
+      if (T.plekVoor(D, soort, T.pleinVan(w))) standen.add(T.deurKantVan(D.volgendeTekening[soort]));
+    }
   }
   assert.ok(standen.has('n') || standen.has('w'), `standen: ${[...standen].join(', ')}`);
 });
@@ -179,9 +173,9 @@ test('de kapel en de woontoren zijn van de steen van hun stijl, en van baksteen 
   assert.equal(T.standVan({ soort: 'woontoren' }), 'ambachtslieden');
 });
 
-test('de maker legt het huis van de schout en de herberg in de stijl van het land, met de deur naar het plein', () => {
-  for (const zaad of [5, 62710]) {
-    const S = nieuwSpel(zaad);
+test('het huis van de schout en de herberg die de speler zet, zijn in de stijl van het land, met een deur', () => {
+  for (const zaad of [5, 3]) {
+    const S = nieuwSpel(zaad, { gebouwen: ['herberg'] });
     const D = S.dorp;
     const schout = D.gebouwen.find((g) => g.huis === 'schout');
     const herberg = D.gebouwen.find((g) => g.soort === 'herberg');
@@ -193,7 +187,7 @@ test('de maker legt het huis van de schout en de herberg in de stijl van het lan
 });
 
 test('in een dorp groeit de herberg door tot de grote, met zijn deur aan dezelfde kant, voor hout', () => {
-  const S = nieuwSpel(5);
+  const S = nieuwSpel(5, { gebouwen: ['herberg'] });
   const D = S.dorp;
   const g = D.gebouwen.find((x) => x.soort === 'herberg');
   const kant = T.deurKantVan(g.tekening);
@@ -221,10 +215,10 @@ test('in een dorp groeit de herberg door tot de grote, met zijn deur aan dezelfd
   for (let y = na.y; y < na.y + na.h; y++) for (let x = na.x; x < na.x + na.b; x++) assert.equal(D.wereld.tegels[y][x], 'muur');
 });
 
-// Marcel, 8 okt ("Beiden"): in de speeltest van 7 okt bleef de herberg op 62707 klein, omdat er later iets op de grond
+// Marcel, 8 okt ("Beiden"): in de speeltest van 7 okt bleef de herberg op eiland 62707 klein, omdat er later iets op de grond
 // kwam waar hij groter wordt. Die grond blijft vrij.
 test('waar de herberg straks groter wordt, komt geen gebouw en geen erf', () => {
-  const S = nieuwSpel(5);
+  const S = nieuwSpel(5, { gebouwen: ['herberg'] });
   const D = S.dorp;
   const g = D.gebouwen.find((x) => x.soort === 'herberg');
   const grond = T.meegroeiGrond(D);
@@ -250,18 +244,32 @@ test('waar de herberg straks groter wordt, komt geen gebouw en geen erf', () => 
 });
 
 test('staat er alleen een struik waar de herberg groter wordt, dan gaat die er met de bouw uit', () => {
-  const S = nieuwSpel(62710); // een bessenstruik op 40,62, in de grond van de grote herberg
+  const S = nieuwSpel(5, { gebouwen: ['herberg'] });
   const D = S.dorp;
+  const w = D.wereld;
   const g = D.gebouwen.find((x) => x.soort === 'herberg');
-  assert.equal(T.voorwerpOp(D.wereld, 40, 62).soort, 'bessenStruik');
+  // een bessenstruik op een open tegel in de grond van de grote herberg, buiten de kleine
+  const r = T.meegroeiGrond(D)[0];
+  const voet = T.voetVanGebouw(g);
+  let tegel = null;
+  for (let y = r.y; y < r.y + r.h && !tegel; y++) {
+    for (let x = r.x; x < r.x + r.b; x++) {
+      const buiten = x < voet.x || y < voet.y || x >= voet.x + voet.b || y >= voet.y + voet.h;
+      if (buiten && !T.voorwerpOp(w, x, y) && !T.isVast(w, x, y)) { tegel = { x, y }; break; }
+    }
+  }
+  assert.ok(tegel, 'een open tegel waar de herberg groter wordt');
+  const struik = T.zetVoorwerp(w, { soort: 'bessenStruik', x: tegel.x, y: tegel.y, vel: 'begroeiing', id: T.TEGELS.begroeiing.tiles.findIndex((t) => t && t.naam === 'bessenStruik'), beslaat: [1, 1] });
+  assert.equal(T.voorwerpOp(w, tegel.x, tegel.y).soort, 'bessenStruik');
   T.zetVoorraad(D, 'hout', 100);
   D.trede = 'dorp';
   T.tikBehoeftenDag(D, 1);
   assert.equal(T.vormVan(g.tekening), 'herberg2');
+  assert.ok(!w.voorwerpen.includes(struik), 'de struik is weg');
 });
 
 test('kan de herberg niet meegroeien, dan zegt het dorp waarom, één keer', () => {
-  const S = nieuwSpel(5);
+  const S = nieuwSpel(5, { gebouwen: ['herberg'] });
   const D = S.dorp;
   const g = D.gebouwen.find((x) => x.soort === 'herberg');
   const r = T.meegroeiGrond(D)[0];

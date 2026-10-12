@@ -1,7 +1,8 @@
 // Het groen eronder (werklijst vraag 148, stap 3; Marcel, 11 okt: "Ja akkoord"): de struiken, varens, het gras, de bloemen
 // en de paddenstoelen in een paar vormen en in het jaar, zoals de bomen (test/boomvormen.test.cjs), en de nieuwe soorten,
-// die de maker legt met een vaste keus per tegel: langs de akkers, achter de huizen, op de heide, aan en op het water en
-// aan de bosrand. De braam en de brem staan in de weg en je rooit ze zoals een struik.
+// die de maker legt met een vaste keus per tegel: op de heide, aan en op het water en aan de bosrand (langs de akkers en
+// achter de huizen legde hij ze ook, zolang hij een dorp legde dat er al was; sinds ronde 2 van het snoeien, stap 6, is
+// dat weg). De braam en de brem staan in de weg en je rooit ze zoals een struik.
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
@@ -66,30 +67,24 @@ test('een vel per seizoen heeft elke plant op het nummer van de zomer, en de str
 
 test('de maker legt het groen eronder met een vaste keus per tegel: verder ligt alles waar het lag', () => {
   const G = T.MAKER_INSTELLINGEN.groei;
-  const plekken = ['akkerrand', 'achterHuis', 'heideGroen', 'oeverGroen', 'waterGroen', 'bosrand'];
+  const plekken = ['heideGroen', 'oeverGroen', 'waterGroen', 'bosrand'];
   const bewaar = Object.fromEntries(plekken.map((k) => [k, G[k]]));
   const zonder = (() => {
     for (const k of plekken) G[k] = {};
     try {
-      return T.maakGehucht(5);
+      return T.planOpEiland(5);
     } finally {
       Object.assign(G, bewaar);
     }
   })();
-  const plan = T.maakGehucht(5);
+  const plan = T.planOpEiland(5);
   assert.equal(plan.poging, zonder.poging);
   const sleutel = (v) => `${v.naam}@${v.x},${v.y}`;
   const nu = new Set(plan.voorwerpen.map(sleutel));
   for (const v of zonder.voorwerpen) assert.ok(nu.has(sleutel(v)), `${sleutel(v)} is weg`);
   const namen = new Set(plan.voorwerpen.map((v) => v.naam));
-  for (const naam of ['klaproos', 'korenbloem', 'brandnetel', 'heide', 'lisdodde', 'waterlelie', 'braam']) assert.ok(namen.has(naam), `geen ${naam} op land 5`);
-  // een waterlelie op het water, en een klaproos naast een akker
+  for (const naam of ['heide', 'lisdodde', 'waterlelie', 'braam']) assert.ok(namen.has(naam), `geen ${naam} op eiland 5`);
+  // een waterlelie op het water
   const water = (v) => [[0, 0], [1, 0], [0, 1], [1, 1]].some(([dx, dy]) => plan.grond[v.y + dy][v.x + dx] === 'w');
   for (const v of plan.voorwerpen.filter((v) => v.naam === 'waterlelie')) assert.ok(water(v), `waterlelie op (${v.x}, ${v.y})`);
-  const inAkker = (x, y) => plan.akkers.some((a) => x >= a.x && x < a.x + a.b && y >= a.y && y < a.y + a.h);
-  for (const v of plan.voorwerpen.filter((v) => v.naam === 'klaproos')) {
-    let naast = false;
-    for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) naast ||= inAkker(v.x + dx, v.y + dy);
-    assert.ok(naast && !inAkker(v.x, v.y), `klaproos op (${v.x}, ${v.y})`);
-  }
 });

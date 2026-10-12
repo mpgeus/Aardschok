@@ -42,11 +42,11 @@ test('een nieuwe soort telt mee: een beuk is bos, een meidoorn rooi je, een appe
 });
 
 test('de maker legt de nieuwe soorten, met een vaste keus per tegel: verder ligt alles waar het lag', () => {
-  const plan = T.maakGehucht(5);
+  const plan = T.planOpEiland(5);
   const namen = new Set(plan.voorwerpen.map((v) => v.naam));
-  for (const soort of ['linde', 'beuk', 'knotwilg']) assert.ok(namen.has(soort), `geen ${soort} op land 5`);
+  for (const soort of ['linde', 'beuk', 'knotwilg']) assert.ok(namen.has(soort), `geen ${soort} op eiland 5`);
   // hetzelfde nummer, hetzelfde land
-  const nog = T.maakGehucht(5);
+  const nog = T.planOpEiland(5);
   assert.deepEqual(nog.voorwerpen, plan.voorwerpen);
 });
 

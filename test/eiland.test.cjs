@@ -181,11 +181,6 @@ test('eiland: alleen rekenen dat in elke browser hetzelfde uitkomt (geen sinus, 
 
 // ---- stap 2: je dorp op het eiland (Marcel, 8 okt: "a1", en "A ja B later C dorp dat er al was") ----
 
-// Het eiland is de standaard; dit hulpje zegt het in de toets erbij, voor wie hem leest.
-function opEiland(f) {
-  assert.equal(T.MAKER_INSTELLINGEN.opEiland, true);
-  return f();
-}
 function nieuwSpel(zaad) {
   const echt = console.warn;
   console.warn = () => {};
@@ -199,17 +194,7 @@ function nieuwSpel(zaad) {
   return S;
 }
 
-test('je dorp op het eiland: elk nieuw spel maakt het eiland, zonder keuze; zonder land legt de maker zoals altijd', () => {
-  // Marcel, 8 okt: "Het eiland wordt gewoon altijd gegenereerd bij een nieuw spel. Ergens op dat eiland staat je gehucht."
-  assert.ok(!T.OPTIES.some((x) => x.id === 'gehucht'), 'geen spelregel "Je gehucht" meer');
-  assert.equal(T.MAKER_INSTELLINGEN.opEiland, true);
-  // zonder land weet het gehucht van de maker niets van het eiland
-  const plan = T.maakGehucht(5);
-  assert.equal(plan.eiland, undefined);
-  assert.equal(plan.bruggen, undefined);
-});
-
-test('je dorp op het eiland: het water en de wegen zijn die van het eiland, en het gehucht deugt', () => {
+test('je dorp op het eiland: het water en de wegen zijn die van het eiland, en het land deugt', () => {
   for (const zaad of [5, 62707]) {
     const E = eiland(zaad);
     const jij = E.plekken.find((p) => p.jij);
@@ -238,20 +223,18 @@ test('je dorp op het eiland: het water en de wegen zijn die van het eiland, en h
 });
 
 test('een nieuw spel op het eiland: je kamp op jouw plek, de gezinnen van de kar, en bewaren en laden geeft hetzelfde spel', () => {
-  opEiland(() => {
-    const S = nieuwSpel(5);
-    assert.equal(S.wereld.eiland.zaad, 5);
-    assert.equal(S.wereld.eiland.dorp, eiland(5).plekken.find((p) => p.jij).naam);
-    assert.equal(S.wereld.maker.zaad, 5);
-    assert.ok(S.dorp.begin && S.wereld.kamp, 'het lege begin');
-    assert.equal(S.dorp.bevolking, S.dorp.bewoners.mensen.length);
-    const tekst = T.bewaarSpel(S, { nu: 1790000000000 });
-    const S2 = nieuwSpel(3);
-    const r = T.herstelSpel(S2, tekst);
-    assert.equal(r.gelukt, true, r.reden);
-    assert.deepEqual(S2.wereld.eiland, S.wereld.eiland);
-    assert.equal(T.bewaarSpel(S2, { nu: 1790000000000 }), tekst);
-  });
+  const S = nieuwSpel(5);
+  assert.equal(S.wereld.eiland.zaad, 5);
+  assert.equal(S.wereld.eiland.dorp, eiland(5).plekken.find((p) => p.jij).naam);
+  assert.equal(S.wereld.maker.zaad, 5);
+  assert.ok(S.dorp.begin && S.wereld.kamp, 'het lege begin');
+  assert.equal(S.dorp.bevolking, S.dorp.bewoners.mensen.length);
+  const tekst = T.bewaarSpel(S, { nu: 1790000000000 });
+  const S2 = nieuwSpel(3);
+  const r = T.herstelSpel(S2, tekst);
+  assert.equal(r.gelukt, true, r.reden);
+  assert.deepEqual(S2.wereld.eiland, S.wereld.eiland);
+  assert.equal(T.bewaarSpel(S2, { nu: 1790000000000 }), tekst);
 });
 
 test('het eiland om je land: buiten de kaart de grond en de bomen van het eiland, en aan de naad past elke tegel (vraag 117, 2b)', () => {
@@ -356,30 +339,26 @@ test('de grond van het eiland: wat naast elkaar kan liggen, niet bouwen op zand,
   assert.deepEqual(T.grondTegelHoeken(['gras', 'heide', 'heide', 'gras']), ['gras', 'heide', 'heide', 'gras']);
 
   // land 1 ligt aan zee: het strand, de zee en het gras van het dorp
-  opEiland(() => {
-    const S = nieuwSpel(1);
-    const D = S.dorp;
-    const w = D.wereld;
-    const naam = (x, y) => w.grond[y][x].naam;
-    let strand = null;
-    let zee = null;
-    for (let y = 0; y < w.h; y++) {
-      for (let x = 0; x < w.b; x++) {
-        if (!strand && naam(x, y) === 'strand' && !T.veldOp(w, x, y) && !T.opPad(w, x, y)) strand = { x, y };
-        if (!zee && naam(x, y) === 'zee') zee = { x, y };
-      }
+  const S = nieuwSpel(1);
+  const D = S.dorp;
+  const w = D.wereld;
+  const naam = (x, y) => w.grond[y][x].naam;
+  let strand = null;
+  let zee = null;
+  for (let y = 0; y < w.h; y++) {
+    for (let x = 0; x < w.b; x++) {
+      if (!strand && naam(x, y) === 'strand' && !T.veldOp(w, x, y) && !T.opPad(w, x, y)) strand = { x, y };
+      if (!zee && naam(x, y) === 'zee') zee = { x, y };
     }
-    assert.ok(strand && zee, 'land 1 heeft strand en zee');
-    assert.equal(T.waaromNietOpDezeGrond(D, strand.x, strand.y), 'Nothing is built on sand.');
-    // het dorp was er al: geen huis op het zand
-    for (const g of D.gebouwen) {
-      const v = T.voetVanGebouw(g);
-      if (!v) continue;
-      for (let y = v.y; y < v.y + v.h; y++) for (let x = v.x; x < v.x + v.b; x++) assert.notEqual(naam(x, y), 'strand', `${g.soort} op (${x}, ${y}) staat op zand`);
-    }
-    // de zee is water: een visser vist er
-    assert.ok(T.isWaterGrond('zee') && T.isWaterGrond('water') && !T.isWaterGrond('strand'));
-    assert.ok(T.natuurBij(w, 'water', { x: zee.x, y: zee.y, b: 1, h: 1 }, 0) === 1, 'een tegel zee telt als water');
-    assert.ok(T.isVast(w, zee.x, zee.y), 'op de zee loop je niet');
-  });
+  }
+  assert.ok(strand && zee, 'land 1 heeft strand en zee');
+  assert.equal(T.waaromNietOpDezeGrond(D, strand.x, strand.y), 'Nothing is built on sand.');
+  // het kamp staat niet op het zand
+  for (const k of w.kamp.plekken) {
+    for (let y = k.voet.y; y < k.voet.y + k.voet.h; y++) for (let x = k.voet.x; x < k.voet.x + k.voet.b; x++) assert.notEqual(naam(x, y), 'strand', `de tent op (${x}, ${y}) staat op zand`);
+  }
+  // de zee is water: een visser vist er
+  assert.ok(T.isWaterGrond('zee') && T.isWaterGrond('water') && !T.isWaterGrond('strand'));
+  assert.ok(T.natuurBij(w, 'water', { x: zee.x, y: zee.y, b: 1, h: 1 }, 0) === 1, 'een tegel zee telt als water');
+  assert.ok(T.isVast(w, zee.x, zee.y), 'op de zee loop je niet');
 });

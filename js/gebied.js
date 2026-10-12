@@ -207,14 +207,14 @@
   // S.schout staan dan klaar. Bestaat de kaart niet, dan false — de aanroeper valt dan terug op het
   // gehucht. Staat er geen "schout" op, dan zet het er zelf een neer.
   //
-  // Voor je dorp legt de maker je land (js/maker.js) uit `makerZaad` (zonder: een nieuw), met het lege begin erop (het
-  // enige begin sinds ronde 2 van het snoeien, stap 3; met `leeg` uit het gehucht dat er al was, zoals de maker het voor
-  // de andere dorpen legt: alleen voor de toetsen). Welk land een nieuw spel krijgt, zegt
+  // Voor je dorp legt de maker je land (js/maker.js) uit `makerZaad` (zonder: een nieuw), op het eiland en met het lege
+  // begin erop: het land met een open plek voor het plein en het kamp (het enige begin sinds ronde 2 van het snoeien, stap 3,
+  // en het enige land sinds stap 6: "Alles wordt door spelers geplaatst"). Welk land een nieuw spel krijgt, zegt
   // T.landVoorNieuwSpel hierboven (vanuit T.nieuwSpel, js/main.js). Het zaad is ook het zaad van het dorp (D.lot.zaad),
   // zodat hetzelfde zaad hetzelfde spel geeft.
-  T.beginOpKaart = function (S, naam, makerZaad, leeg = true) {
+  T.beginOpKaart = function (S, naam, makerZaad) {
     const zaad = naam === 'gehucht' ? (makerZaad != null ? makerZaad : T.nieuwLandZaad()) : null;
-    const w = T.gebied(S, naam, zaad != null ? () => T.laadGemaaktGehucht(zaad, leeg) : null);
+    const w = T.gebied(S, naam, zaad != null ? () => T.laadGemaaktGehucht(zaad) : null);
     if (!w) {
       console.warn(`Spel.beginOpKaart: kaart "${naam}" bestaat niet — draai npm run kaarten?`); // geen tekst
       return false;

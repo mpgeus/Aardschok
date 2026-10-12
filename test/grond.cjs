@@ -22,14 +22,8 @@ const metVastToeval = (begin, doe) => globalThis.Spel.proefdorp.metVastToeval(be
 // Een nieuw spel op het eiland van `zaad`, met het lege begin, stil (T.proefdorp.begin). Zaad 2 heeft open grond bij het
 // plein.
 function leegBegin(T, zaad = 2) {
-  const maker = { ...T.MAKER_INSTELLINGEN };
-  T.MAKER_INSTELLINGEN.opEiland = true;
-  try {
-    const S = T.proefdorp.begin(zaad);
-    return { S, D: S.dorp, w: S.dorp.wereld };
-  } finally {
-    Object.assign(T.MAKER_INSTELLINGEN, maker);
-  }
+  const S = T.proefdorp.begin(zaad);
+  return { S, D: S.dorp, w: S.dorp.wereld };
 }
 
 // De stappen van het proefdorp, los (js/begin.js): dagen zoals het spel ze tikt, een bouwplaats meteen af, iets bij het

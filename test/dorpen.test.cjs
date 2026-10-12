@@ -1,5 +1,5 @@
 // Twee dorpen naast elkaar (js/dorp.js; werklijst, vraag 71). Alles van een dorp staat bij elkaar, zodat er twee
-// kunnen zijn: jouw dorp en een buurdorp op een gehucht van de maker (js/maker.js). Ze delen de kalender, en verder
+// kunnen zijn: jouw dorp en een buurdorp op een ander stuk van het eiland. Ze delen de kalender, en verder
 // niets: wat in het ene gebeurt, raakt het andere niet, en een ander dorp dan het jouwe spreekt niet tegen jou.
 const test = require('node:test');
 const assert = require('node:assert/strict');
@@ -11,25 +11,17 @@ const { proefDorp } = require('./grond.cjs');
 const gezegd = [];
 T.ui = new Proxy({}, { get: (_, naam) => (...args) => (naam === 'bericht' ? gezegd.push(args[0]) : undefined) });
 
-// Het spel op het proefdorp (test/grond.cjs), en een buurdorp op een gehucht van de maker (dat is een dorp dat er al was,
-// niet leeg: zo is het buurdorp groter dan het jouwe).
+// Het spel op het proefdorp (test/grond.cjs), en een buurdorp op een ander eiland: ook een proefdorp, dat het spel meeneemt
+// als een ander dorp (`ander`). Sinds ronde 2 van het snoeien (stap 6) legt de maker geen dorp meer dat er al was; wie
+// een buurdorp wordt, bouwt zelf, en is dus zo groot als zijn bouwers het maakten.
 function tweeDorpen(zaad = 3) {
   const { S } = proefDorp(T);
-  const echt = console.warn;
-  const toeval = Math.random;
-  let n = 11;
-  console.warn = () => {};
-  Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
-  try {
-    const w = T.laadGemaaktGehucht(zaad);
-    w.gebied = 'buurdorp';
-    const schout = w.wezens.find((e) => e.soort === 'schout');
-    S.dorpen.push(T.nieuwDorp(S, w, schout, { zaad, ander: true }));
-  } finally {
-    console.warn = echt;
-    Math.random = toeval;
-  }
-  return { S, jij: S.dorp, buur: S.dorpen[1] };
+  const buur = proefDorp(T, { zaad }).D;
+  buur.ander = true;
+  buur.kalender = S.kalender;
+  buur.wereld.gebied = 'buurdorp';
+  S.dorpen.push(buur);
+  return { S, jij: S.dorp, buur };
 }
 
 // Het dorp letter voor letter, zoals het opslaan het schrijft (js/opslaan.js), zonder de kalender die ze delen.
@@ -55,7 +47,7 @@ test('twee dorpen: elk zijn eigen kaart, voorraad, mensen en schout, en dezelfde
   assert.equal(buur.kalender, S.kalender, 'de kalender is voor alle dorpen dezelfde');
   assert.ok(!jij.ander, 'jouw dorp spreekt tegen jou');
   assert.equal(buur.ander, true, 'het buurdorp is een ander dorp');
-  assert.ok(buur.bevolking > 20 && buur.bewoners.mensen.length === buur.bevolking, 'het buurdorp heeft zijn eigen mensen');
+  assert.ok(buur.bevolking > 10 && buur.bewoners.mensen.length === buur.bevolking, 'het buurdorp heeft zijn eigen mensen');
   assert.equal(T.dorpHier(S), jij, 'je bent in je eigen dorp');
 });
 

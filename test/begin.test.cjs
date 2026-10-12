@@ -1,36 +1,20 @@
 // Het lege begin (js/begin.js; werklijst vraag 152, stap 1b; Marcel, 11 okt: "We moeten ook zelf alles vanaf de start gaan
-// bouwen"): met de spelregel "Het begin" op "Leeg" legt de maker op het eiland geen gehucht, maar alleen het land met een
-// open plek; een kar rijdt het land in, met de schout, zijn gezin en vier gezinnen, en op het plein zetten ze hun kamp op.
+// bouwen"): de maker legt op het eiland geen gehucht, maar alleen het land met een open plek (sinds ronde 2 van het snoeien
+// het enige begin, en geen spelregel meer); een kar rijdt het land in, met de schout, zijn gezin en vier gezinnen, en op het
+// plein zetten ze hun kamp op.
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
+// Een nieuw spel op het eiland van `zaad`, met het lege begin, stil en met een vaste reeks toeval (test/grond.cjs; standaard
+// zaad 2: daar is open grond voor vier hutten binnen het bouwbereik).
+const grond = require('./grond.cjs');
+const leegBegin = (zaad) => grond.leegBegin(T, zaad);
 
 // Wat er tegen het scherm gezegd wordt: een bericht, en welke brieven er kwamen.
 const gezegd = [];
 const brieven = [];
 T.ui = new Proxy({}, { get: (_, naam) => (...args) => (naam === 'bericht' ? gezegd.push(args[0]) : naam === 'toonBrief' ? brieven.push(args[1]) : undefined) });
-
-// Een nieuw spel op het eiland van `zaad`, met het lege begin, stil en met een vaste reeks toeval (zoals js/main.js het
-// begint, zonder scherm). Standaard zaad 2: daar is open grond voor vier hutten binnen het bouwbereik.
-function leegBegin(zaad = 2) {
-  const echt = console.warn;
-  const toeval = Math.random;
-  const maker = { ...T.MAKER_INSTELLINGEN };
-  let n = 11;
-  console.warn = () => {};
-  Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
-  T.MAKER_INSTELLINGEN.opEiland = true;
-  const S = { kalender: T.nieuweKalender(), tijd: 0, wereldTijd: 0, modus: 'verkennen', inventaris: new Set() };
-  try {
-    assert.ok(T.beginOpKaart(S, 'gehucht', zaad));
-  } finally {
-    console.warn = echt;
-    Math.random = toeval;
-    Object.assign(T.MAKER_INSTELLINGEN, maker);
-  }
-  return { S, D: S.dorp, w: S.dorp.wereld };
-}
 
 // Dagen zoals het spel ze tikt (js/gebouwen.js).
 function dagen(S, van, tot, elkeDag) {
@@ -229,18 +213,6 @@ test('bewaren en laden: het kamp en de kar blijven aan elkaar vast', () => {
   assert.equal(T.bewaarSpel(S2, { nu: 0 }), tekst);
 });
 
-test('alleen op het eiland: zonder eiland legt de maker het gehucht dat er al was', () => {
-  const maker = { ...T.MAKER_INSTELLINGEN };
-  T.MAKER_INSTELLINGEN.opEiland = false;
-  try {
-    const w = T.laadGemaaktGehucht(3, true);
-    assert.ok(!w.kamp);
-    assert.ok(w.gebouwenOpKaart.length > 5);
-  } finally {
-    Object.assign(T.MAKER_INSTELLINGEN, maker);
-  }
-});
-
 // ── 1d: jij bouwt alles, binnen bereik (vraag 152; Marcel, 11 okt: "a1, b ja, c ja, d ja, e ja") ──
 
 test('het bouwbereik: je bouwt binnen bouwBereik tegels van het plein, en verder niet; lopen kan overal', () => {
@@ -268,26 +240,7 @@ test('het bouwbereik: je bouwt binnen bouwBereik tegels van het plein, en verder
   assert.ok(T.isBegaanbaar(w, ver.x, ver.y) || T.isVast(w, ver.x, ver.y), 'buiten het bereik is gewoon land');
 });
 
-test('het bouwbereik is er alleen in het lege begin', () => {
-  const maker = { ...T.MAKER_INSTELLINGEN };
-  T.MAKER_INSTELLINGEN.opEiland = false;
-  try {
-    const S = { kalender: T.nieuweKalender(), tijd: 0, wereldTijd: 0, modus: 'verkennen', inventaris: new Set() };
-    const echt = console.warn;
-    console.warn = () => {};
-    try {
-      assert.ok(T.beginOpKaart(S, 'gehucht', 3));
-    } finally {
-      console.warn = echt;
-    }
-    assert.equal(T.bouwBereikVan(S.dorp), null);
-    assert.ok(T.inBouwBereik(S.dorp, 0, 0));
-  } finally {
-    Object.assign(T.MAKER_INSTELLINGEN, maker);
-  }
-});
-
-test('het huis van de schout: één keer in het bouwmenu, alleen in het lege begin; is het af, dan verhuist hij en wordt de huifkar de ossenkar', () => {
+test('het huis van de schout: één keer in het bouwmenu; is het af, dan verhuist hij en wordt de huifkar de ossenkar', () => {
   huisVanDeSchout();
 });
 function huisVanDeSchout() {
@@ -330,24 +283,6 @@ function huisVanDeSchout() {
   assert.equal(S2.dorp.begin.kar.vel, 'ossenkar-leeg');
   assert.equal(T.bewaarSpel(S2, { nu: 0 }), tekst);
 }
-
-test('het huis van de schout staat niet in het bouwmenu van het gehucht dat er al was', () => {
-  const maker = { ...T.MAKER_INSTELLINGEN };
-  T.MAKER_INSTELLINGEN.opEiland = false;
-  try {
-    const S = { kalender: T.nieuweKalender(), tijd: 0, wereldTijd: 0, modus: 'verkennen', inventaris: new Set() };
-    const echt = console.warn;
-    console.warn = () => {};
-    try {
-      assert.ok(T.beginOpKaart(S, 'gehucht', 3));
-    } finally {
-      console.warn = echt;
-    }
-    assert.ok(!T.magGebouwd(S.dorp, 'schout') && !T.inBouwmenu(S.dorp, 'schout'));
-  } finally {
-    Object.assign(T.MAKER_INSTELLINGEN, maker);
-  }
-});
 
 test('meebouwen: wie geen werk heeft, bouwt mee; hoe meer handen, hoe sneller, en zonder handen staat het stil', () => {
   const { S, D } = leegBegin();
@@ -475,25 +410,6 @@ test('meebouwen: met of zonder beelden komt er hetzelfde uit', (t) => {
     return JSON.stringify({ bouw: hut.bouw && { ...hut.bouw, vandaag: 0 }, klaar: hut.klaar, hout: D.voorraad.hout, over: T.teRooienOp(D, hut.kavel || hut).length });
   };
   assert.equal(spel(true), spel(false));
-});
-
-test('in het gehucht dat er al was, rijst een gebouw vanzelf op in zijn bouwtijd', () => {
-  const maker = { ...T.MAKER_INSTELLINGEN };
-  T.MAKER_INSTELLINGEN.opEiland = false;
-  try {
-    const S = { kalender: T.nieuweKalender(), tijd: 0, wereldTijd: 0, modus: 'verkennen', inventaris: new Set() };
-    const echt = console.warn;
-    console.warn = () => {};
-    try {
-      assert.ok(T.beginOpKaart(S, 'gehucht', 3));
-    } finally {
-      console.warn = echt;
-    }
-    assert.ok(!T.bouwenMetHanden(S.dorp));
-    assert.equal(T.bouwKavel(S.dorp, 'hut', 10, 10), null);
-  } finally {
-    Object.assign(T.MAKER_INSTELLINGEN, maker);
-  }
 });
 
 // De kolonist (werklijst B, 1f; Marcel, 12 okt: "a1, b1"): dezelfde speler in code als in de speeltest

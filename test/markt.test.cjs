@@ -59,7 +59,7 @@ test('op twintig eilanden heeft het plein een marktplek: twee rijen tegenover el
   console.warn = () => {};
   try {
     for (let zaad = 1; zaad <= 20; zaad++) {
-      const w = T.laadGemaaktGehucht(zaad, true);
+      const w = T.laadGemaaktGehucht(zaad);
       const [a, b] = w.markt.rijen;
       assert.ok(a && b, `eiland ${zaad}: een marktplek`);
       assert.ok(a.lengte >= 3 && b.lengte === a.lengte, `eiland ${zaad}: rijen van ${a.lengte}`);
