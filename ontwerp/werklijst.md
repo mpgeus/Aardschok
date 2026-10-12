@@ -89,7 +89,8 @@ vóór B2). **A:** een eigen gebouw "Wijnboerderij" in het bouwmenu, met de teke
 de boerderij de akker (`js/boerderij.js`). De boerderij krijgt alleen akkers, en de regel "het eerste veld bepaalt wat
 de boerderij is" vervalt: zo is er één manier om wijn te maken. Het oude gebouw met de wijngaard binnen zijn eigen voet
 (`nietLeeg`, `alleenHetHuis`) gaat dan weg, en het vooruitkijken van de wijn (`T.wijnNaDePluk`, slaapt) kan de raad
-weer gebruiken. Eerst een plan met Marcel.
+weer gebruiken. Eerst een plan met Marcel. **Bezig in sessie `ccr-ba1fa562-g7kz8h`** (12 okt): het plan, met
+Marcel.
 
 ## B2. Het hele eiland (vraag 117, stap 3)
 
