@@ -134,7 +134,25 @@ dat een karakter vroeg, vraagt een boer of een man. De spelregel "De markt" (ook
   toetsen en het gereedschap die erop speelden gaan naar het lege begin of het proefdorp.
 - **De markt: "Plein krijgt plaatsen."** Het plein van het lege begin krijgt vaste plekken voor de kramen, naast die van de
   heer en de marskramer (die is er al, `w.marskramer`). Daarmee is "een eigen gebouw" geen goed antwoord meer, en gaat
-  de spelregel "De markt" weg (de afspraak van vraag 153). Het plan staat hieronder zodra Marcel het zag.
+  de spelregel "De markt" weg (de afspraak van vraag 153).
+
+**Stap 6: het plan** (12 okt; Marcel koos: de marktplek "In het bouwmenu", en het gesprek van de herbergierster "Naar de
+waard"):
+- **6a, de marktplek.** Gemeten op zeven eilanden: op het lege plein past de markt altijd (twee rijen van 3 tot 6
+  tegels), maar op het proefdorp op twee van de zeven niet meer, want de deuren langs het plein nemen de ruimte; het spel
+  zocht de plek pas als de markt kwam. Nu kiest de maker hem als hij het land legt (dezelfde zoekregel, `T.marktBlok`), en
+  staat hij in de kaart, naast de plek van de heer en de marskramer. Een deur komt er niet op uit ("The market stalls go
+  there."), de schandpaal ook niet, en in het bouwmenu licht hij op, zoals het bouwbereik. Een toets over twintig eilanden:
+  hij past altijd. De spelregel "De markt" en de markt als eigen gebouw van 6 bij 6 gaan weg; opslaan naar een nieuwe
+  versie.
+- **6b, het dorp dat er al was.** In de maker alles wat hij buiten het lege begin legt (de huizen, de boerderijen, de
+  herberg, de velden, de meent, de put, de bank, de beginvoorraad), en het land zonder eiland (`opEiland`; "de wereld is
+  het hele eiland"). Boer1 tot boer5 en de herbergierster in `T.MENSEN`, en wat een kaart aan huizen en mensen meebrengt
+  (`js/kaart.js`, `T.zetBestaandeGebouwen`): geen kaart gebruikt het nog. Het gesprek van de herbergierster ("wat er
+  gisteravond gezegd werd", vraag 38) gaat naar de waard: wie in de herberg werkt. De toetsen (zo'n veertien bestanden)
+  naar het lege begin of het proefdorp; het proefdorp komt in het spel (`Spel.debug.proefdorp(zaad)`), zodat `npm run
+  grootte`, `maker`, `schermen`, `tekenmeting` en `samenvatting` hetzelfde dorp zien als de toetsen.
+- Gezien onderweg: in het lege begin komt er nooit vee (`opmerkingen.md`); een gat voor B.
 
 **De kaart voor stap 2 tot 5** (een agent, 12 okt; regelnummers van toen, dus zoek op de naam):
 - **Verzoeken** (`js/verzoeken.js`, 440 regels; `VERZOEKEN_INSTELLINGEN.mensen`, de spelregel "Wie bouwt"): aangeroepen uit
