@@ -149,7 +149,19 @@ function zetBijDeur(D) {
 
 // Het hele dorp van N bewoners, op een kaart die zo groot is als nodig. opties: { werk: genoeg werkplekken,
 // indeling: 'ruim' | 'compact', kaart: minimale maat }. Laat het spel in een rustige stand achter.
+// In het lege begin bouw je alleen binnen het bouwbereik van het plein en de opslagen (js/begin.js); in bulk bouwen we
+// over de hele (vergrote) kaart, dus vraagt T.waaromPastHetNiet er zolang niet naar. (Het bereik zelf groot zetten kan
+// niet: dat rekent een afstand uit voor elke tegel binnen het bereik van elke tegel van het plein.)
 function bouwDorp(S, N, opties = {}) {
+  const echt = T.waaromBuitenBouwBereik;
+  T.waaromBuitenBouwBereik = () => null;
+  try {
+    return bouwBinnen(S, N, opties);
+  } finally {
+    T.waaromBuitenBouwBereik = echt;
+  }
+}
+function bouwBinnen(S, N, opties) {
   const D = S.dorp;
   const indeling = opties.indeling || 'ruim';
   const lucht = opties.lucht != null ? opties.lucht : 2;

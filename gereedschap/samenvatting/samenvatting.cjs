@@ -9,7 +9,7 @@
 //
 // De pdf drukt Chromium af van de bladzijde zoals de server van het spel hem geeft (dan laden js/naam.js en de letters
 // zonder omweg); draait de server niet, dan start dit hem, en stopt hem na afloop. De beelden komen uit het spel zoals
-// het draait, elk uit een vers spel: land 5 van de maker op 6 hooimaand, met de videokaart (WebGL op de processor, zoals
+// het draait, elk uit een vers spel: het proefdorp op eiland 5 (tot 12 okt land 5 van de maker) op 6 hooimaand, met de videokaart (WebGL op de processor, zoals
 // npm run schermen -- --tekenen met), zonder spellus en met een vaste reeks toeval, zodat hetzelfde spel hetzelfde beeld
 // geeft. Lukt een beeld niet meer omdat het spel veranderde (er komt geen gesprek, de heer komt niet), dan zegt het waar
 // het vastliep, en blijft het oude beeld staan.
@@ -54,8 +54,8 @@ async function zorgVoorServer() {
 
 const stap = (page, s) => page.evaluate((s) => Spel.debug.stap(s), s);
 
-// Een vers spel in een eigen context (zonder wat een vorig spel in de opslag zette), klaar voor een beeld: land 5 van
-// de maker, op 6 hooimaand om negen uur, het graan rijp. Op dubbele maat, zodat een uitsnede scherp blijft.
+// Een vers spel in een eigen context (zonder wat een vorig spel in de opslag zette), klaar voor een beeld: het proefdorp
+// op eiland 5, op 6 hooimaand om negen uur, het graan rijp. Op dubbele maat, zodat een uitsnede scherp blijft.
 async function nieuwSpel(browser) {
   const context = await browser.newContext({ viewport: VENSTER, deviceScaleFactor: 2 });
   const page = await context.newPage();
@@ -75,7 +75,7 @@ async function nieuwSpel(browser) {
   if (await page.$('#menu [data-actie="ja"]')) await page.click('#menu [data-actie="ja"]');
   await page.click('#menu [data-actie="begin"]');
   await page.keyboard.press('Escape');
-  await page.evaluate(() => Spel.debug.gehucht(5));
+  await page.evaluate(() => Spel.debug.proefdorp(5));
   await stap(page, 0.5);
   await page.evaluate(() => Spel.debug.kalender(125 + 9 / 24)); // dag 125 na 1 lentemaand: 6 hooimaand
   await stap(page, 0.2);

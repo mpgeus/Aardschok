@@ -1,5 +1,5 @@
 'use strict';
-// Waar het tekenen zijn tijd kwijt is, per laag (npm run tekenmeting; werklijst vraag 123, f). Land 5 van de maker, op
+// Waar het tekenen zijn tijd kwijt is, per laag (npm run tekenmeting; werklijst vraag 123, f). Het proefdorp op eiland 5 (tot 12 okt land 5 van de maker), op
 // drie schermen: 1920 bij 1080, 4K zonder schaal (3840 bij 2160 css-pixels) en 4K op 200% (1920 bij 1080, ratio 2), elk
 // dichtbij en in het overzicht, overdag en 's avonds. Per beeld: alles (met een pixel teruggelezen, zodat de browser het
 // tekenwerk ook doet), alleen het rekenwerk (op een doek van 1 pixel), zonder de nacht, de grondbuffer alleen, hoeveel
@@ -66,7 +66,7 @@ async function meet(browser, scherm) {
   if (await page.$('#menu [data-actie="ja"]')) await page.click('#menu [data-actie="ja"]');
   await page.click('#menu [data-actie="begin"]');
   await page.keyboard.press('Escape');
-  await page.evaluate(() => Spel.debug.gehucht(5));
+  await page.evaluate(() => Spel.debug.proefdorp(5));
   await page.evaluate(() => Spel.debug.stap(0.5));
   await page.evaluate(() => { window.__rafStop = true; });
   await page.waitForTimeout(300);

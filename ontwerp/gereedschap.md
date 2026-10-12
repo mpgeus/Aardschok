@@ -35,7 +35,9 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   huis van de schout, boerderijen met hun akker en hutten, gebouwd met de regels van het spel en meteen af, op vast
   toeval; met opties meer (`gebouwen: ['herberg']`, `weide: true`, `boerderijen: 3`). Het wordt één keer per proces
   gebouwd en elke toets krijgt een vers exemplaar via opslaan en herstellen, dus een getal dat een toets vóór het
-  proefdorp verandert, telt niet bij het bouwen. `leegBegin(T, zaad)` geeft alleen het lege begin.
+  proefdorp verandert, telt niet bij het bouwen. `leegBegin(T, zaad)` geeft alleen het lege begin. Het bouwen zelf staat
+  sinds stap 6 in het spel (`T.proefdorp.maak`, `js/begin.js`), zodat het gereedschap in de browser hetzelfde dorp laadt
+  (`Spel.debug.proefdorp`).
 - `npm run speeltest` speelt het lege begin een jaar met de kolonist (`gereedschap/speeltest/kolonist.js`; werklijst B,
   1f), op het eiland van elk zaad (standaard 1 tot en met 3; `--zaad 2`, `--zaden 1-5`), in een onzichtbare browser, en
   zet de uitslag in `gereedschap/speeltest/uit/` (niet in git), met een tabel in `samenvatting.md`: "Het eerste jaar"
@@ -62,16 +64,17 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
 - `npm run grootte` meet hoe groot een dorp kan worden (vraag 74): het bouwt het gehucht uit tot N bewoners, met hutten en
   werkplekken zoals het spel ze bouwt, en meet de wereld per beeld op 30×, de dagtik en het opslaan, elke N in een eigen
   Node (`gereedschap/grootte/`, uitleg bovenin `grootte.cjs`); `-- 26 800` voor andere N, `--browser` ook het tekenen
-  (start zelf de server), `--astar` het zoeken van een pad, `--prof` een CPU-profiel, `--maker 5` op land 5 van de maker
-  (zonder het eiland) in plaats van het ontworpen gehucht. De uitslag in
+  (start zelf de server), `--astar` het zoeken van een pad, `--prof` een CPU-profiel, `--maker 7` op het proefdorp van
+  eiland 7 in plaats van eiland 5 (tot 12 okt het gehucht dat er al was: niet te vergelijken). Het bouwen in bulk vraagt
+  niet naar het bouwbereik van het lege begin. De uitslag in
   `gereedschap/grootte/uit/` (niet in git), met een tabel in `samenvatting.md`. Meet op een stille machine.
 - `npm run schermen` maakt twintig vaste schermafdrukken van het spel (het plein op vier zoomstanden, de herberg 's avonds,
-  de nacht, twee bouwplaatsen in hun fases, land 5 van de maker) en meet wat de browser aan plaatjes vasthoudt
+  de nacht, twee bouwplaatsen in hun fases, het proefdorp op eiland 5) en meet wat de browser aan plaatjes vasthoudt
   (`Spel.debug.vellen`) en hoe lang het eerste beeld na het uitzoomen duurt; `-- --naam voor`, en na een verandering aan
   het tekenen of het laden `-- --naam na --tegen voor`: dan zegt het per beeld of het byte voor byte gelijk bleef
   (vraag 114, stap 1; ook voor WebGL, vraag 123). In `gereedschap/schermen/uit/` (niet in git). Op 0,35 kan het
   verkleinen in een paar honderd pixels de buurpixel kiezen als alleen het vel van een tekening anders is.
-- `npm run tekenmeting` meet waar het tekenen zijn tijd kwijt is, per laag (vraag 123, f): land 5 van de maker op
+- `npm run tekenmeting` meet waar het tekenen zijn tijd kwijt is, per laag (vraag 123, f): het proefdorp op eiland 5, op
   1920×1080, 4K en 4K op 200%, dichtbij en in het overzicht, overdag en 's avonds; `-- 1920x1080@1` voor één scherm. In
   `gereedschap/schermen/uit/tekenmeting.json` (niet in git).
 - `npm run samenvatting` maakt `ontwerp/het-spel-in-het-kort.pdf` uit `gereedschap/samenvatting/samenvatting.html` en de
@@ -158,9 +161,10 @@ schout staat; `(5)` begint een nieuw spel op land 5 met heuvels (de spelregel "H
 schout op het hoogste punt.
 `Spel.debug.bomen = 'herfst'` laat de bomen en het groen eronder zien in een seizoen naar keus (`'lente'`, `'zomer'`, `'winter'`, `'sneeuw'`;
 `null` weer dat van de kalender), zonder door het jaar te springen.
-`Spel.debug.gehucht()` zegt of dit het ontworpen gehucht is of een van de maker, en uit welk zaad; `(3)` begint nu een
-nieuw spel op het gehucht van zaad 3 (zonder brief), zoals op de pagina "Gehuchten van de maker": het land van de maker
-zonder het eiland, waarop de vaste schermafdrukken, de tekenmeting en de samenvatting spelen.
+`Spel.debug.proefdorp(5)` speelt het proefdorp waarop de toetsen spelen (`T.proefdorp.maak`, `js/begin.js`), op het
+eiland van 5 (zonder nummer 2), met de opties erbij (`(2, { gebouwen: ['herberg'] })`): stil gebouwd en geladen zoals een
+bewaard spel. De vaste schermafdrukken, de tekenmeting en de samenvatting spelen erop (tot 12 okt `Spel.debug.gehucht`,
+het gehucht dat er al was op een land van de maker).
 `Spel.debug.eiland(5)` begint nu een spel op het eiland van 5 (zonder brief); zonder nummer zegt het in welk dorp je op het
 eiland ligt, wat voor plek het is en waar de uitgang is.
 `Spel.debug.begin(5)` begint nu een spel op het eiland van 5 (`('nieuw')` op een nieuw eiland), zonder brief; zonder

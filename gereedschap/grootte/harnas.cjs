@@ -27,12 +27,12 @@ function geheugenOpslag() {
   };
 }
 
-// Een nieuw spel op het land van de maker uit nummer `maker` (zonder: 5), zonder het eiland en met het gehucht dat er al
-// was (js/maker.js, vraag 112): een dorp om bewoners in te zetten, en zonder het eiland blijven de metingen te
-// vergelijken met die ervoor. Tot ronde 2 van het snoeien (stap 3c, 12 okt) was het zonder `maker` het ontworpen gehucht.
+// Een nieuw spel met het proefdorp op het eiland van nummer `maker` (zonder: 5; T.proefdorp, js/begin.js): een dorp om
+// bewoners in te zetten, hetzelfde als waarop de toetsen spelen. Tot ronde 2 van het snoeien (stap 6, 12 okt) was het het
+// gehucht dat er al was, op het land van de maker zonder het eiland (en tot stap 3c het ontworpen gehucht): metingen van
+// daarvoor zijn niet te vergelijken.
 function beginSpel({ zaad = 11, opslag = true, maker = null } = {}) {
-  const echt = console.warn;
-  console.warn = () => {};
+  const dorp = T.bewaarSpel(T.proefdorp.maak({ zaad: maker != null ? maker : 5 }), { nu: 0 });
   vastToeval(zaad);
   // De vorm van S zoals T.nieuwSpel in js/main.js hem maakt (plus wat alleen scherm is).
   const S = Object.assign({
@@ -40,14 +40,8 @@ function beginSpel({ zaad = 11, opslag = true, maker = null } = {}) {
     kalender: T.nieuweKalender(), quests: {}, questWeg: {}, questBeloond: new Set(), sleutelGebruikt: false,
     fonteinLeeg: false, sluipen: false, bezocht: new Set(['hal']), naarGebied: null, netGeland: null, zoom: 1,
   }, T.schermVelden());
-  const opEiland = T.MAKER_INSTELLINGEN.opEiland;
-  T.MAKER_INSTELLINGEN.opEiland = false;
-  try {
-    if (!T.beginOpKaart(S, 'gehucht', maker != null ? maker : 5, false)) throw new Error('beginOpKaart mislukte');
-  } finally {
-    console.warn = echt;
-    T.MAKER_INSTELLINGEN.opEiland = opEiland;
-  }
+  const uit = T.herstelSpel(S, dorp);
+  if (!uit.gelukt) throw new Error(uit.reden);
   if (opslag) T.gebruikOpslagPlek(geheugenOpslag());
   return S;
 }

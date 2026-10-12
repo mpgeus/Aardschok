@@ -12,9 +12,10 @@
 // Vast blijft het zo: de spellus loopt niet (requestAnimationFrame staat stil), het toeval is een vaste reeks, het spel
 // gaat alleen verder met Spel.debug.stap (elk beeld 1/60 seconde), de mensen staan op hun plek voor het uur
 // (Meet.zetPlekken uit gereedschap/grootte/pagina.js), en elk beeld wacht tot alle plaatjes er zijn (T.sprites.bezig).
-// Het lege begin (`?kaart=gehucht`: het eiland dat het vaste toeval kiest) en land 5 van de maker, op 1280 bij 800, zonder
-// videokaart (zoals in de cloud). Tot ronde 2 van het snoeien (stap 3c, 12 okt) was het eerste het ontworpen gehucht:
-// beelden van vóór die dag zijn dus niet te vergelijken.
+// Het lege begin (`?kaart=gehucht`: het eiland dat het vaste toeval kiest) en het proefdorp op eiland 5 (Spel.debug.proefdorp,
+// js/begin.js), op 1280 bij 800, zonder videokaart (zoals in de cloud). Tot ronde 2 van het snoeien (stap 3c, 12 okt) was
+// het eerste het ontworpen gehucht, en tot stap 6 het tweede het gehucht dat er al was op land 5 van de maker: beelden van
+// vóór die dag zijn dus niet te vergelijken.
 const fs = require('node:fs');
 const path = require('node:path');
 const http = require('node:http');
@@ -174,7 +175,16 @@ async function hetLegeBegin(context, beelden, meting) {
       for (let y = py - 15; y < py + 15 && !(r && r.gelukt); y++) {
         for (let x = px - 15; x < px + 15 && !(r && r.gelukt); x++) r = Spel.debug.bouw(soort, x, y);
       }
-      if (r && r.gelukt) window.__bouwplaatsen.push({ soort, g: r.instantie });
+      if (!(r && r.gelukt)) continue;
+      // In het bos rooien de bouwers eerst, en tot dan staat er geen bouwplaats (js/bouwen.js): hier meteen gerooid,
+      // zoals bij het proefdorp (T.proefdorp.bouwAf, js/begin.js).
+      const g = r.instantie;
+      if (g.wachtOpRooien) {
+        for (const t of Spel.teRooienOp(D, g.kavel)) Spel.rooiTegel(D, t);
+        g.wachtOpRooien = false;
+        Spel.zetOpDeKaart(D, g);
+      }
+      window.__bouwplaatsen.push({ soort, g });
     }
     return window.__bouwplaatsen.map((p) => ({ soort: p.soort, x: p.g.x, y: p.g.y, tekening: p.g.tekening }));
   }, plein);
@@ -196,22 +206,22 @@ async function hetLegeBegin(context, beelden, meting) {
   await page.close();
 }
 
-async function eenLandVanDeMaker(context, beelden, meting) {
+async function hetProefdorp(context, beelden, meting) {
   const { page, fouten } = await openSpel(context, URL);
   await page.click('#menu [data-actie="nieuw"]');
   if (await page.$('#menu [data-actie="ja"]')) await page.click('#menu [data-actie="ja"]');
   await page.click('#menu [data-actie="begin"]');
   await page.keyboard.press('Escape');
-  await page.evaluate(() => Spel.debug.gehucht(5));
+  await page.evaluate(() => Spel.debug.proefdorp(5));
   await page.evaluate(() => Spel.debug.stap(0.5));
   const zoom = await page.evaluate(() => Spel.S.zoom);
   const schout = await page.evaluate(() => [Spel.S.schout.tx, Spel.S.schout.ty]);
   await zet(page, { uur: 12, zoom, op: schout });
-  beelden.maker5 = await afdruk(page);
-  meting.maker5 = await page.evaluate(() => Spel.debug.vellen());
+  beelden.proefdorp5 = await afdruk(page);
+  meting.proefdorp5 = await page.evaluate(() => Spel.debug.vellen());
   await zet(page, { uur: 12, zoom: 0.5, op: schout });
-  beelden['maker5-zoom-0.5'] = await afdruk(page);
-  meting.makerFouten = fouten;
+  beelden['proefdorp5-zoom-0.5'] = await afdruk(page);
+  meting.proefdorpFouten = fouten;
   await page.close();
 }
 
@@ -261,7 +271,7 @@ function vergelijk(a, b) {
   try {
     const context = await browser.newContext({ viewport: VENSTER });
     await hetLegeBegin(context, beelden, meting);
-    await eenLandVanDeMaker(context, beelden, meting);
+    await hetProefdorp(context, beelden, meting);
     await context.close();
   } finally {
     await browser.close();
@@ -273,10 +283,10 @@ function vergelijk(a, b) {
   fs.writeFileSync(path.join(map, 'meting.json'), JSON.stringify(meting, null, 1) + '\n');
   const kort = (v) => v && `${v.samen} MB in ${v.vellen} vellen`;
   console.log(`${Object.keys(beelden).length} beelden in gereedschap/schermen/uit/${NAAM}/ (commit ${meting.commit})`);
-  console.log(`  plaatjes bij het begin: ${kort(meting.bijHetBegin)}; in het overzicht: ${kort(meting.inHetOverzicht)}; na de bouwplaatsen: ${kort(meting.naDeBouwplaatsen)}; land 5 van de maker: ${kort(meting.maker5)}`);
+  console.log(`  plaatjes bij het begin: ${kort(meting.bijHetBegin)}; in het overzicht: ${kort(meting.inHetOverzicht)}; na de bouwplaatsen: ${kort(meting.naDeBouwplaatsen)}; het proefdorp: ${kort(meting.proefdorp5)}`);
   console.log(`  het eerste beeld op 0,35: ${meting.eersteUitzoomen} ms; Chromium samen: ${meting.chromiumInHetOverzicht} MB in het overzicht, ${meting.chromiumNaDeBouwplaatsen} MB na de bouwplaatsen`);
   if (meting.bouwplaatsen.length < 2) console.log(`  let op: maar ${meting.bouwplaatsen.length} bouwplaats(en) gezet`);
-  const fouten = [...meting.fouten, ...meting.makerFouten];
+  const fouten = [...meting.fouten, ...meting.proefdorpFouten];
   if (fouten.length) console.log(`  fouten in de bladzijde:\n    ${fouten.join('\n    ')}`);
   if (TEGEN) {
     let gelijk = 0;
