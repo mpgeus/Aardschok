@@ -56,7 +56,7 @@ ronden, want een deel hangt aan het oude begin of aan de proef:
 1. **Ronde 1 is af** (11 okt): wat al om was en nergens meer aan hing (`snoeien.md`).
 2. **Ronde 2, na 1f:** het plan, met wat Marcel koos ("III. OK", "e Mag weg, f alle vier weg, g weg, h ja wapens
    blijven"), en de kaart van wat eraan hangt, staan in `snoeien.md`, "Ronde 2". **Stap 1 is af** (12 okt: verhuizen wat
-   blijft); **het volgende is stap 2**, in een nieuwe sessie: de verzoeken, de ondernemers, de erven, de wijnboerderij en
+   blijft); **het volgende is stap 2** (**Bezig in sessie `claude/festive-cray-rovfsg`** (12 okt): eerst een plan voor Marcel, dan stap 2): de verzoeken, de ondernemers, de erven, de wijnboerderij en
    het ontginnen weg, met "Wie bouwt" en "Huizen". Wat het oude begin draaiende houdt: de mensen die vragen wat ze bouwen (`verzoeken`,
    `ondernemers`), de erven waarop het dorp zelf bouwt (`erven`), de vaste boeren van de kaart, en de spelregels "Het
    begin", "Je gehucht", "Wie bouwt", "Huizen" en "Wie de boeren zijn".
