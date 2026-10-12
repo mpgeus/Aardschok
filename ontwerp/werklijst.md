@@ -58,7 +58,8 @@ ronden, want een deel hangt aan het oude begin of aan de proef:
 2. **Ronde 2, na 1f:** het plan, met wat Marcel koos ("III. OK", "e Mag weg, f alle vier weg, g weg, h ja wapens
    blijven"), en de kaart van wat eraan hangt, staan in `snoeien.md`, "Ronde 2". **Stap 1 en 2 zijn af** (12 okt: verhuizen
    wat blijft; de verzoeken, de ondernemers, de erven en het ontginnen weg, met "Wie bouwt" en "Huizen"; de wijnboerderij
-   blijft, vraag 155). **Het volgende is stap 3**, in een nieuwe sessie: "Leeg" is het enige begin, en de spelregels "Het
+   blijft, vraag 155). **Het volgende is stap 3. Bezig in sessie `claude/gallant-faraday-d5617b`** (12 okt): het plan
+   met Marcel. "Leeg" is het enige begin, en de spelregels "Het
    begin" en "Je gehucht" gaan eruit; dan stap 4 (het lot en de karakters, "De markt") en 5 (de oude spelers van de
    speeltest). Wat het oude begin nog draaiende houdt: de vaste boeren van de kaart, en de spelregels "Het begin", "Je
    gehucht" en "Wie de boeren zijn".
