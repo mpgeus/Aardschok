@@ -5,9 +5,6 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
-// Deze toetsen gaan over het spel waarin jij bouwt (de spelregel "Wie bouwt" op "Jij bouwt"; werklijst vraag 103):
-// de gelote voorvallen, zonder bouwverzoeken ertussen. Hoe het gaat als de mensen het vragen, staat in test/verzoeken.test.cjs.
-T.zetOptie('wieBouwt', 'jij');
 
 const berichten = [];
 const aangesproken = [];
@@ -405,7 +402,6 @@ test('de spelregel: uit komt er niemand, en vaak komen ze vaker', () => {
     assert.ok(tel('zelden') < gewoon);
   } finally {
     T.optiesTerug();
-    T.zetOptie('wieBouwt', 'jij');
   }
   assert.equal(T.VOORVALLEN_INSTELLINGEN.dagenTussen, 10, 'gewoon is de standaard');
 });

@@ -1309,6 +1309,7 @@
         bende: R.bende.map((l) => l.naam), bendeOp: R.bendeOp, wildeOp: R.wildeOp,
         aanval: A ? { soort: A.soort, fase: A.fase, rovers: (A.rovers || []).map((e) => `${e.tx},${e.ty}${e.dood ? ' dood' : ''}`), akker: A.veld } : null,
         militie: S.wereld.wezens.filter((e) => e.opgeroepen).map((e) => `${e.naam} (${e.leven} leven)`),
+        wapens: T.wapensInHetDorp(S.dorp),
       };
     },
     // De heervaart (js/heervaart.js): wat de heer vraagt, wie er weg is en tot wanneer, hoe het de laatste keer ging,
@@ -1522,73 +1523,6 @@
         boom: F.boom ? { soort: F.boom.soort || 'meiboom', staat: `${F.boom.x},${F.boom.y}`, tot: T.datumVanDag(F.boom.tot).tekst } : null,
         gevierd: F.gevierd.map((g) => `${naam(g)}, ${T.datumVanDag(g.dag).tekst}${g.heel ? ', de hele dag' : ', de avond'}`), // geen tekst
         vrij: T.vrijeDag(D, S.kalender.dag),
-      };
-    },
-    // De verzoeken (js/verzoeken.js; werklijst vraag 103): wat het dorp nu zou willen bouwen en waarom, wie er nu om vraagt
-    // en waar, je oproepen, en waar je nee op zei. Spel.debug.verzoek('nu') laat het eerste nu vragen (wie het vraagt,
-    // zoekt je meteen); ('oproep', 'weverij') hangt een oproep op of haalt hem weg; ('jij') of ('mensen') zet de spelregel
-    // "Wie bouwt".
-    verzoek(wat, soort) {
-      const D = S.dorp;
-      if (wat === 'oproep') return T.doeOproep(D, soort);
-      if (wat === 'jij' || wat === 'mensen') T.VERZOEKEN_INSTELLINGEN.mensen = wat === 'mensen';
-      if (wat === 'nu') {
-        const V = D.voorvallen || (D.voorvallen = T.nieuweVoorvallen());
-        if (V.lopend) T.voorvalBeantwoord(D, V.lopend.id);
-        if (D.verzoeken) D.verzoeken.volgende = 0;
-        const dag = Math.floor(S.kalender.dag);
-        if (!T.beginBouwverzoek(D, dag)) return 'Er is nu niets wat iemand wil bouwen (en kan betalen).'; // geen tekst
-        V.lopend.vanaf = S.kalender.dag;
-      }
-      const L = D.voorvallen && D.voorvallen.lopend;
-      const R = D.verzoeken || T.nieuweVerzoeken();
-      return {
-        wieBouwt: T.VERZOEKEN_INSTELLINGEN.mensen ? 'de mensen' : 'jij', // geen tekst
-        watTeBouwen: T.watTeBouwen(D).map((x) => `${x.soort}: ${x.waarom}`),
-        nu: L && L.bouw ? `${T.naamVanBewoner(L.wie)} wil een ${T.GEBOUWEN[L.bouw.soort].naam} op ${L.bouw.x},${L.bouw.y}: "${T.vulWoordenIn(D, T.GESPREKKEN[L.id].knopen.begin.tekst[0].zeg)}"` : null, // geen tekst
-        volgende: R.volgende,
-        oproepen: (R.oproepen || []).map((o) => `${o.soort}, sinds ${T.datumVanDag(o.dag).tekst}`),
-        nee: Object.entries(R.nee).map(([s2, dag]) => `${s2} op ${T.datumVanDag(dag).tekst}`),
-        ja: R.ja,
-        meesters: (D.gebouwen || []).filter((g) => g.meester).map((g) => `${T.GEBOUWEN[g.soort].naam}: ${T.naamVanBewoner(g.meester)}`),
-      };
-    },
-    // De ondernemers (js/ondernemers.js; werklijst vraag 104): wie wat wil beginnen, of hij het nu zou vragen, wat hij
-    // onthoudt (nee, ja), en de wapens in het dorp. Spel.debug.ondernemers('wapens') laat de eerste die wapens wil het nu
-    // vragen, alsof de rovers net kwamen (in een dorp: Spel.debug.trede('dorp')); ('herberg') de eerste die een tweede
-    // herberg wil (vanaf T.ONDERNEMERS_INSTELLINGEN.herberg.vanaf mensen).
-    ondernemers(wat) {
-      const D = S.dorp;
-      const dag = Math.floor(S.kalender.dag);
-      const mensen = (D.bewoners ? D.bewoners.mensen : []).filter((p) => T.ondernemingVan(D, p));
-      const eerste = (wil) => mensen.find((p) => T.ondernemingVan(D, p) === wil);
-      const o = T.ONDERNEMINGEN[wat];
-      if (o) {
-        if (!eerste(wat)) return `Niemand in dit dorp wil dat (een ander zaad geeft andere ondernemers).`; // geen tekst
-        if (!T.magGebouwd(D, o.soort)) return `Een ${T.GEBOUWEN[o.soort].naam} mag pas in een ${T.GEBOUWEN[o.soort].trede}: Spel.debug.trede('${T.GEBOUWEN[o.soort].trede}').`; // geen tekst
-        if (wat === 'wapens') (D.rovers || (D.rovers = T.nieuweRovers())).laatsteAanval = dag;
-        if (!o.wil(D, dag, eerste(wat))) return 'Hij wil het nu niet (de herberg: pas vanaf T.ONDERNEMERS_INSTELLINGEN.herberg.vanaf mensen, met één herberg).'; // geen tekst
-        const V = D.voorvallen || (D.voorvallen = T.nieuweVoorvallen());
-        if (V.lopend) T.voorvalBeantwoord(D, V.lopend.id);
-        if (D.verzoeken) {
-          D.verzoeken.volgende = 0;
-          delete D.verzoeken.nee[o.soort];
-        }
-        if (!T.beginBouwverzoek(D, dag) || V.lopend.bouw.eigen !== wat) return 'Er kwam iets anders tussen, of het dorp kan het niet betalen.'; // geen tekst
-        V.lopend.vanaf = S.kalender.dag;
-      }
-      const E = (D.verzoeken && D.verzoeken.eigen) || {};
-      return {
-        ondernemers: mensen.map((p) => {
-          const wil = T.ondernemingVan(D, p);
-          const o = T.ONDERNEMINGEN[wil];
-          const e = E[p.id];
-          const nu = !T.magGebouwd(D, o.soort) ? `pas in een ${T.GEBOUWEN[o.soort].trede}` : o.wil(D, dag, p) ? 'zou het nu vragen' : 'wil het nu niet'; // geen tekst
-          const onthoudt = e ? `, ${e.nee}× nee${e.ja != null ? `, ja op ${T.datumVanDag(e.ja).tekst}` : ''}` : ''; // geen tekst
-          return `${T.naamVanBewoner(p)} (${p.huis ? T.GEBOUWEN[p.huis.soort].naam : 'zonder huis'}): ${wil}, ${nu}${onthoudt}`; // geen tekst
-        }),
-        wapens: T.wapensInHetDorp(D),
-        herbergen: T.herbergenVan(D).map((g) => `${g.x},${g.y}${g.meester ? ` (${T.naamVanBewoner(g.meester)})` : ''}${g.weigert && S.kalender.dag < g.weigert.tot ? `: ${g.weigert.waarom}, tot ${T.datumVanDag(g.weigert.tot).tekst}` : ''}`),
       };
     },
     // Het weer (js/weer.js; werklijst vraag 77, stap 2): het weer van vandaag, hoe lang het droog is, het watertekort, de

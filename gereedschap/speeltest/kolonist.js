@@ -53,7 +53,7 @@
       const waaromNiet = waaromGeenPlek(D, soort);
       return { soort, gelukt: false, reden: `geen plek (${waaromNiet})`, tekst: `vindt geen plek voor een ${soort} (${waarom}): ${waaromNiet}` };
     }
-    const u = T.plaatsGebouw(D, soort, plek.x, plek.y, plek.rooien || null);
+    const u = T.plaatsGebouw(D, soort, plek.x, plek.y);
     return { soort, gelukt: u.gelukt, reden: u.reden || null, instantie: u.instantie || null,
       tekst: u.gelukt ? `bouwt een ${soort} (${waarom})${plek.rooien ? ', waar eerst gerooid wordt' : ''}` : `wil een ${soort} bouwen (${waarom}), maar: ${u.reden}` };
   }

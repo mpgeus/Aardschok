@@ -6,8 +6,6 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
-// Het bouwmenu zoals jij bouwt (de spelregel "Wie bouwt"; werklijst vraag 103).
-T.zetOptie('wieBouwt', 'jij');
 T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {}, toonInventaris() {} };
 
 // Een nieuw spel, stil: het ontworpen gehucht, of met `zaad` een land van de maker.
@@ -64,10 +62,10 @@ test('een steengroeve bouw je alleen bij de rotsen, en het bouwmenu zegt waarom 
   assert.equal(T.plaatsGebouw(D, 'steengroeve', plek.x, plek.y).gelukt, true);
 });
 
-test('een verzoek vindt de natuur ook ver van wie het vraagt (meer dan 44 tegels)', () => {
+test('T.plekVoor vindt de natuur ook ver van waar je zoekt (meer dan 44 tegels)', () => {
   const S = spel();
   const D = S.dorp;
-  // de rotsen liggen in het noordoosten (64, 9); wie het vraagt, woont in het zuidwesten
+  // de rotsen liggen in het noordoosten (64, 9); er wordt gezocht vanuit het zuidwesten
   const plek = T.plekVoor(D, 'steengroeve', { x: 8, y: 70 });
   assert.ok(plek, 'geen steengroeve gevonden');
   assert.ok(Math.max(Math.abs(plek.x - 8), Math.abs(plek.y - 70)) > 44);

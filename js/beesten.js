@@ -1085,8 +1085,8 @@
     return wild;
   };
 
-  // Hoeveel jagers er zijn die geen hert vinden dat ze mogen nemen (g.zonderHerten, gezet door T.wildVanJager): het dorp
-  // vraagt dan geen nieuwe jager (T.watTeBouwen, js/raad.js), en de heer vraagt van hen geen vlees (js/heer.js).
+  // Hoeveel jagers er zijn die geen hert vinden dat ze mogen nemen (g.zonderHerten, gezet door T.wildVanJager): de raad
+  // zegt dan niet dat een jager helpt (js/raad.js), en de heer vraagt van hen geen vlees (js/heer.js).
   T.jagersZonderHerten = (D) => (D.gebouwen || []).filter((g) => g.soort === 'jager' && g.klaar && g.zonderHerten).length;
 
   // Wat deze jager vandaag maakt (T.tikGebouwenDag, uit T.maaktUit): zonder herten die hij mag nemen alleen het klein wild,

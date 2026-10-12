@@ -97,7 +97,7 @@
   //            (metOorzaak, zonderOorzaak), en het bericht zegt waarom
   //   pauze    niet binnen zoveel dagen terug (zonder: de pauze uit het blok hierboven)
   //   vervolg  true: komt alleen als vervolg op een ander voorval; na: [van, tot], na zoveel dagen
-  //   zelf     true: wordt niet geloot; een ander deel van het spel begint het (het bouwverzoek, js/verzoeken.js).
+  //   zelf     true: wordt niet geloot; een ander deel van het spel begint het (zoals zaaigraanHonger).
   //            'beesten': zo zolang er beesten in het bos leven (de spelregel "Beesten"): de wolven namen dan echt een
   //            schaap (js/beesten.js); zonder beesten wordt het geloot, zoals voor 7 okt
   //   roep     het bericht als hij je gaat zoeken (zonder: "{wie} is looking for you."), met de woorden van een gesprek
@@ -172,14 +172,6 @@
       als: { maanden: ['oogstmaand', 'herfstmaand'], voorraad: { graan: 80 } }, pauze: 200, gewicht: 3, wie: { boer: true },
     },
     klok: { soort: 'verzoek', titel: T.t('a bell for the chapel'), als: { gebouw: 'kapel' }, pauze: 360, wie: { karakter: 'vrome' } },
-    // Een inwoner wil iets bouwen wat het dorp mist (js/verzoeken.js; werklijst vraag 103): wie, wat en waar zet dat
-    // bestand op het voorval (L.bouw), en de woorden ervan ook.
-    bouwverzoek: { soort: 'verzoek', titel: T.t('a request to build'), zelf: true, roep: T.t('{wie} wants to build {gebouw}, and is looking for you.') },
-    // Een ondernemer wil wapens maken, uit zichzelf (js/ondernemers.js; werklijst vraag 104). Zoals het bouwverzoek, met
-    // zijn eigen woorden.
-    wapenverzoek: { soort: 'verzoek', titel: T.t('the weapons'), zelf: true, roep: T.t('{wie} wants a word with you in private.') },
-    // En een ondernemer die een tweede herberg wil beginnen; de herbergierster heeft daar een mening over.
-    herbergverzoek: { soort: 'verzoek', titel: T.t('the second inn'), zelf: true, roep: T.t('{wie} wants to open an inn, and is looking for you.') },
     lied: { soort: 'feest', titel: T.t('the song about the lord'), als: { gebouw: 'herberg' }, wie: { karakter: 'zanger' } },
     // De meiboom (werklijst vraag 97; Marcel, 3 okt: "De meiboom"): niet geloot, maar elk jaar op 30 grasmaand, zodat hij
     // op 1 bloeimaand op het plein staat (js/feesten.js). De jongeren komen het vragen.
@@ -204,7 +196,7 @@
   // Een getal 0..1, vast per spel, per dag en per vraag `n` (zoals in js/rovers.js), zodat een speeltest met hetzelfde
   // zaad hetzelfde jaar speelt.
   const lot = (D, dag, n) => T.dobbelsteen(((D.lot && D.lot.zaad) || 1) * 43 + Math.floor(dag) * 7919 + n)();
-  T.lotVanDeDag = lot; // ook voor de verzoeken (js/verzoeken.js)
+  T.lotVanDeDag = lot; // ook voor de grillen van de heer (js/grillen.js)
   const elk = (v) => (v == null ? [] : Array.isArray(v) ? v : [v]);
   const naam = (p) => T.naamVanBewoner(p);
   const inWinter = (dag) => T.datumVanDag(dag).seizoen === 'winter';
@@ -234,7 +226,6 @@
     const e = p && p.wezen;
     return kanHetBetreffen(D, p) && !!e && !e.dood && !e.vertrekt && !e.opgeroepen && !e.moetNaar;
   }
-  T.kanJeKomenZoeken = kanKomen; // ook voor wie een verzoek doet (js/verzoeken.js)
   const isBoer = (p) => T.isBoer(p.wezen);
 
   // Past hij bij een vraag (zie T.VOORVALLEN)? Een karakter is altijd een boer, van elke leeftijd.
@@ -671,8 +662,6 @@
         return;
       }
     }
-    // Wil iemand iets bouwen wat het dorp mist (js/verzoeken.js; werklijst vraag 103), dan gaat dat voor.
-    if (T.beginBouwverzoek(D, dag)) return;
     if (V.volgende == null) V.volgende = IN().eersteNa;
     if (dag < V.volgende) return;
     const k = T.kiesVoorval(D, dag);
@@ -772,9 +761,9 @@
     for (const wat of WAREN) if (doe[wat]) T.wijzigVoorraad(D, wat, doe[wat]);
     for (const soort of Object.keys(T.VEE)) if (doe[soort] < 0) T.verliesVee(D, soort, -doe[soort]);
     if (doe.tevreden) stemming(D, doe.tevreden, v, dag, L.door);
-    // Twee bazen (js/bazen.js): wat het dorp van jóú vindt, naar hoe tevreden het het dorp maakt (een verzoek om te bouwen
-    // niet: dat is je werk); en een antwoord kan de heer of het dorp ook rechtstreeks raken (doe.gunst, doe.vertrouwen).
-    if (doe.tevreden && !L.bouw) T.vertrouwenNaVoorval(D, doe.tevreden, v.titel, !!L.door);
+    // Twee bazen (js/bazen.js): wat het dorp van jóú vindt, naar hoe tevreden het het dorp maakt; en een antwoord kan de
+    // heer of het dorp ook rechtstreeks raken (doe.gunst, doe.vertrouwen).
+    if (doe.tevreden) T.vertrouwenNaVoorval(D, doe.tevreden, v.titel, !!L.door);
     if (doe.gunst) T.wijzigGunst(D, doe.gunst, v.titel);
     if (doe.vertrouwen) T.wijzigVertrouwen(D, doe.vertrouwen, v.titel);
     for (let i = 0; i < (doe.gezin || 0); i++) T.gezinKomt(D);
@@ -790,9 +779,6 @@
     if (doe.koorts != null) T.koortsMaatregel(D, doe.koorts);
     // Een feest (js/feesten.js): het dorp viert dit voorval op het plein, morgen de hele dag of 's avonds.
     if (doe.feest && L.id) T.zetFeest(D, L.id, doe.feest, D.kalender ? D.kalender.dag : dag);
-    // Een bouwverzoek (js/verzoeken.js): ja, en het gebouw komt er; nee, en hij onthoudt het.
-    if (doe.bouw && L.bouw) T.verzoekToegestaan(D, L);
-    if (doe.weiger && L.bouw) T.verzoekGeweigerd(D, L);
     // De wolven (js/beesten.js): een jacht te voet naar de roedel die het schaap nam (doe.jacht; stap 3b), of meteen wolven
     // minder (doe.wolven), en een hek houdt ze bij de schapen weg. gereedschap/wereld.html laadt de beesten niet.
     if (doe.wolven < 0 && T.jaagOpDeWolven) T.jaagOpDeWolven(D, -doe.wolven);
@@ -816,15 +802,8 @@
     const L = (D.voorvallen && D.voorvallen.lopend) || {};
     const delen = [];
     const teken = (n) => (n > 0 ? '+' : '−');
-    // Wat een bouwverzoek het dorp kost (js/verzoeken.js): de kosten van het gebouw, zoals T.plaatsGebouw ze betaalt.
-    const kosten = doe.bouw && L.bouw ? T.kostenVanVerzoek(L.bouw) : {};
     // Een bedrag is een teken en een hoeveelheid (T.hoeveel, js/voorraad.js): "−14 wood", "+3 gold".
     const heeftTekst = (heeft, wat) => T.t('you have {wat}', { wat: T.hoeveel(heeft, wat) });
-    for (const [wat, n] of Object.entries(kosten)) {
-      delen.push(`−${T.hoeveel(n, wat)}`);
-      const heeft = Math.floor((D.voorraad && D.voorraad[wat]) || 0);
-      if (heeft < n && uit.kan) Object.assign(uit, { kan: false, waarom: heeftTekst(heeft, wat) });
-    }
     for (const wat of ['goud', ...WAREN]) {
       const n = doe[wat] || 0;
       if (!n) continue;
@@ -840,8 +819,6 @@
     if (doe.tevreden) delen.push(T.t('contentment {getal}%', { getal: getal(doe.tevreden) }));
     // Twee bazen (js/bazen.js): wat de heer en het dorp van je vinden, als de spelregel aan staat.
     if (doe.gunst && T.BAZEN_INSTELLINGEN.aan) delen.push(T.t("the lord's favour {getal}", { getal: getal(doe.gunst) }));
-    // Een werkplaats in het bos van de heer (js/verzoeken.js, js/bos.js; werklijst vraag 110, e): dat kost zijn gunst.
-    if (doe.bouw && L.bouw && L.bouw.bos && T.BAZEN_INSTELLINGEN.aan) delen.push(T.t("the lord's favour {getal}", { getal: getal(-T.ONTGINNEN_INSTELLINGEN.gunst) }));
     if (doe.vertrouwen && T.BAZEN_INSTELLINGEN.aan) delen.push(T.t("the village's trust {getal}", { getal: getal(doe.vertrouwen) }));
     // Wie verbannen wordt, gaat het bos in, en wie het bos in gaat, kan als rover terugkomen (js/rovers.js).
     if (doe.verban && L[doe.verban]) delen.push(T.t('{wie} must go into the forest', { wie: naam(L[doe.verban]) }));
@@ -866,9 +843,6 @@
     if (doe.jacht) delen.push(T.t('the men go with you to the wolves ({n|{getal} day|{getal} days})', { n: T.BEESTEN_INSTELLINGEN.jacht.dagen, getal: T.telwoord(T.BEESTEN_INSTELLINGEN.jacht.dagen) }));
     if (doe.hek) delen.push(T.t('a fence round the sheep'));
     if (doe.feest && T.feestPrijs(doe.feest, L.id)) delen.push(T.feestPrijs(doe.feest, L.id));
-    // Een ondernemer (js/ondernemers.js): nee, en hij neemt het je kwalijk of trekt weg; en wat de herbergierster ervan
-    // vindt.
-    if (L.bouw && L.bouw.eigen) delen.push(...T.eigenPrijs(D, L, doe));
     uit.tekst = delen.join(', ');
     return uit;
   };

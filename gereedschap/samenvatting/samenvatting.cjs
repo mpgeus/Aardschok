@@ -138,8 +138,8 @@ const BEELD = {
     await wachtOpPlaatjes(page);
     return { scale: 'css' };
   },
-  // Iemand die iets wil bouwen en de schout zoekt (js/verzoeken.js): elk antwoord zegt vooraf wat het kost. Wie de schout
-  // al zocht, krijgt eerst ja. (Tot 11 okt stond hier een boer die wil ontginnen, js/ontginnen.js.)
+  // Iemand die de schout zoekt met een vraag (het voorval 'lening', js/voorvallen.js): elk antwoord zegt vooraf wat het
+  // kost. Wie de schout al zocht, krijgt eerst ja. (Tot 12 okt stond hier iemand die iets wilde bouwen, js/verzoeken.js.)
   async vraag(page) {
     await zet(page, { uur: 10.5, zoom: 1 });
     if (await page.evaluate(() => !!(Spel.S.dorp.voorvallen && Spel.S.dorp.voorvallen.lopend))) {
@@ -147,9 +147,9 @@ const BEELD = {
       await page.keyboard.press('1');
       await stap(page, 0.5);
     }
-    const verzoek = await page.evaluate(() => Spel.debug.verzoek('nu'));
-    if (typeof verzoek === 'string') throw new Error(`niemand die iets wil bouwen: ${verzoek}`);
-    await wachtOpGesprek(page, 'wie iets wil bouwen');
+    const vraag = await page.evaluate(() => Spel.debug.voorval('lening'));
+    if (typeof vraag === 'string') throw new Error(`niemand die iets vraagt: ${vraag}`);
+    await wachtOpGesprek(page, 'wie iets vraagt');
     await page.evaluate(() => { Spel.S.zoom = 0.75; });
     await stap(page, 1.5); // de camera komt tot stilstand
     await wachtOpPlaatjes(page);

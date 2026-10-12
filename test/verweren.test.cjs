@@ -8,7 +8,6 @@ const assert = require('node:assert/strict');
 const HZ = require('../gereedschap/pixelart/huizen.cjs');
 const RU = require('../gereedschap/pixelart/ruines.cjs');
 const T = require('./laad.cjs').spel();
-T.zetOptie('wieBouwt', 'jij');
 T.ui = new Proxy({}, { get: () => () => undefined });
 
 const tegels = () => T.TEGELS.huizen.tiles;

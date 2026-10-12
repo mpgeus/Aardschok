@@ -15,7 +15,7 @@ T.ui = new Proxy({}, {
   },
 });
 
-// Het echte gehucht, zoals een nieuw spel begint, stil en met een vast zaad (zoals in test/verzoeken.test.cjs).
+// Het echte gehucht, zoals een nieuw spel begint, stil en met een vast zaad.
 function gehucht() {
   const echt = console.warn;
   const toeval = Math.random;

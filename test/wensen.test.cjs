@@ -5,9 +5,6 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
-// Deze toetsen gaan over het spel waarin jij bouwt (de spelregel "Wie bouwt" op "Jij bouwt"; werklijst vraag 103):
-// wat helpt zoals jij bouwt. Hoe het gaat als de mensen het vragen, staat in test/verzoeken.test.cjs.
-T.zetOptie('wieBouwt', 'jij');
 
 T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {}, toonInventaris() {} };
 
@@ -204,7 +201,6 @@ test('het gehucht begint op zo\'n 83%; met de spelregel "Wensen" op het dorp als
     assert.ok(oud.mist.includes('a church'));
   } finally {
     T.optiesTerug();
-    T.zetOptie('wieBouwt', 'jij');
   }
 });
 
@@ -252,7 +248,6 @@ function metRegels(regels, fn) {
     return fn();
   } finally {
     T.optiesTerug();
-    T.zetOptie('wieBouwt', 'jij');
   }
 }
 // De berichten die het dorp zegt, zolang fn loopt.
@@ -566,7 +561,7 @@ test('de herberg en de markt: één is genoeg voor het hele dorp, ook voor een h
 });
 
 test('wat de huizen missen: een huis buiten de kring van de herberg van het gehucht, en een tweede bouw je pas in een dorp', () => {
-  T.pasOptiesToe({ keuzes: { herbergEnMarkt: 'kring', wieBouwt: 'jij' } });
+  T.pasOptiesToe({ keuzes: { herbergEnMarkt: 'kring' } });
   try {
     const D = gehucht().dorp;
     const herberg = T.plekkenVan(D, 'herberg')[0];
@@ -577,7 +572,7 @@ test('wat de huizen missen: een huis buiten de kring van de herberg van het gehu
     assert.equal(x.tekst, 'A house wants the inn within 30 tiles: an inn can only be built in a village.');
     assert.equal(x.kan, false);
   } finally {
-    T.pasOptiesToe({ keuzes: { wieBouwt: 'jij' } });
+    T.pasOptiesToe({});
   }
 });
 
@@ -662,7 +657,7 @@ test('2c: met een erf in de hand zegt de muis welke put en kapel een huis daar z
 });
 
 // De wijn (werklijst vraag 136; Marcel, 10 okt: "Inwoners willen wijn en bier. Afwisseling", en "B1"): een stenen huis wil
-// wijn naast zijn bier, en in een dorp noemt het de wijnboerderij, zodat de raad en de verzoeken erom vragen.
+// wijn naast zijn bier, en in een dorp noemt het de wijnboerderij, zodat de raad erom vraagt.
 test('een stenen huis wil wijn, en in een dorp helpt een wijnboerderij', () => {
   const D = Object.assign(kaalDorp(), { trede: 'dorp', kalender: T.nieuweKalender() });
   zetHuis(D, 'stenenHuis', 10, 10, 8);

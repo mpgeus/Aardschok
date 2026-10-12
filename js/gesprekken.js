@@ -970,51 +970,6 @@
         },
       },
     },
-    bouwverzoek: {
-      naam: '{wie}',
-      start: 'begin',
-      knopen: {
-        begin: {
-          tekst: [
-            { zeg: 'Reeve, {wil} to build {gebouw}, {plek}. {waarom} The village pays {kosten}.' },
-          ],
-          keuzes: [
-            { zeg: 'Yes, build it.', sluit: true, doe: { bouw: true, tevreden: 3 } },
-            { zeg: 'No, not now.', sluit: true, doe: { weiger: true, tevreden: -2 } },
-          ],
-        },
-      },
-    },
-    wapenverzoek: {
-      naam: '{wie}',
-      start: 'begin',
-      knopen: {
-        begin: {
-          tekst: [
-            { zeg: 'Reeve, I want to make weapons, {plek}. {waarom} The village pays {kosten}.' },
-          ],
-          keuzes: [
-            { zeg: 'Yes, build it.', sluit: true, doe: { bouw: true, tevreden: 3 } },
-            { zeg: 'No, not now.', sluit: true, doe: { weiger: true, tevreden: -2 } },
-          ],
-        },
-      },
-    },
-    herbergverzoek: {
-      naam: '{wie}',
-      start: 'begin',
-      knopen: {
-        begin: {
-          tekst: [
-            { zeg: 'Reeve, I want to open a second inn, {plek}. {waarom} The village pays {kosten}.' },
-          ],
-          keuzes: [
-            { zeg: 'Yes. There is room for two.', sluit: true, doe: { bouw: true, tevreden: 3 } },
-            { zeg: 'No. The village has an inn.', sluit: true, doe: { weiger: true, bier: 10 } },
-          ],
-        },
-      },
-    },
     lied: {
       naam: '{wie}',
       start: 'begin',

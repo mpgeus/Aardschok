@@ -157,12 +157,11 @@ function totAf(S, gebouwen, van = 2, hooguit = 60) {
   return assert.fail('de gebouwen komen niet af');
 }
 
-test('"Leeg" zet Huizen en Wie bouwt op Jij: de hut en het huis staan in het bouwmenu, en het erf niet', () => {
+test('"Leeg" zet Huizen op Jij: de hut en het huis staan in het bouwmenu, en het erf niet', () => {
   try {
-    T.pasOptiesToe({ keuzes: { begin: 'leeg', huizen: 'dorpBouwtZelf', wieBouwt: 'mensen' } });
+    T.pasOptiesToe({ keuzes: { begin: 'leeg', huizen: 'dorpBouwtZelf' } });
     assert.equal(T.MAKER_INSTELLINGEN.leeg, true);
     assert.equal(T.ERVEN_INSTELLINGEN.dorpBouwtZelf, false);
-    assert.equal(T.VERZOEKEN_INSTELLINGEN.mensen, false);
     const { D } = leegBegin();
     assert.ok(T.inBouwmenu(D, 'hut') && T.inBouwmenu(D, 'huis') && T.inBouwmenu(D, 'houthakker'));
     assert.ok(!T.inBouwmenu(D, 'erf'));

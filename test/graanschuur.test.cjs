@@ -26,7 +26,6 @@ function gehucht() {
   Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
   T.S = S;
   const D = S.dorp;
-  T.zetOptie('wieBouwt', 'jij');
   const huis = D.gebouwen.find((g) => g.huis === 'schout');
   const plek = T.plekVoor(D, 'graanschuur', T.deurVan(D.wereld, huis));
   const u = T.plaatsGebouw(D, 'graanschuur', plek.x, plek.y);
@@ -157,20 +156,6 @@ test('zonder graanschuur, of met de spelregel "Pas bij nood", eet het dorp het z
     } finally {
       T.optiesTerug();
     }
-  }
-});
-
-test('het dorp vraagt een graanschuur zodra er zaaigraan apart ligt', () => {
-  const { D, schuur } = gehucht();
-  try {
-    D.gebouwen.splice(D.gebouwen.indexOf(schuur), 1);
-    const dag = winterdag(D);
-    D.kalender.dag = dag + 0.3;
-    assert.ok(T.watTeBouwen(D).some((x) => x.soort === 'graanschuur'), 'het dorp wil een graanschuur');
-    T.zetOptie('zaaigraan', 'nood');
-    assert.ok(!T.watTeBouwen(D).some((x) => x.soort === 'graanschuur'), 'met "Pas bij nood" niet');
-  } finally {
-    T.optiesTerug();
   }
 });
 

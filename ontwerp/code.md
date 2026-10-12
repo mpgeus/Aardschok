@@ -504,7 +504,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   pannen met marktrecht), en een stenen huis baksteen pas met een steenbakkerij (`T.stijlTekeningen`, via
   `T.tekeningenVan` en `T.volgendeTekening` in `js/gebouwen.js`); wie doorgroeit, houdt zijn kant en krijgt het dak van nu
   (`T.zoalsNu`, `kiesGroei` in `js/behoeften.js`). Op een erf kijkt de deur naar de weg en staat het huis achteraan
-  (`T.zijdenNaarDeWeg`, `js/erven.js`), een verzoek keert zijn deur naar de weg (`T.keerNaarDeWeg`, `js/verzoeken.js`),
+  (`T.zijdenNaarDeWeg`, `js/erven.js`), `T.plekVoor` keert een deur naar de weg (`T.keerNaarDeWeg`, `js/bouwstijl.js`),
   en de maker zet een huis ook vóór het plein, met zijn deur ernaartoe (`T.vormenVanStijl`). Elke tekening zegt in
   `tegels.js` wat ze is (`stijl`, en met `ook` de andere stijlen die haar nemen), uit `STIJLEN` in
   `gereedschap/pixelart/huizen.cjs`; wie doorgroeit, zoekt zijn nieuwe tekening in de stijl van zijn dorp. **De grote
@@ -666,8 +666,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `gereedschap/pixelart/kamp.cjs`). De benoeming is een andere (de wildernis, js/brieven.js), en het eerste jaar vraagt de
   heer niets (`T.heerLaatMetRust`, `heerVrij`: geen schatting en geen grillen; in wijnmaand de brief `gespaard`). Wat het
   dorp van het begin weet, staat in `D.begin`. **Verhuizen uit het kamp** (1c, 11 okt): de keuze "Leeg" zet ook
-  `ERVEN_INSTELLINGEN.dorpBouwtZelf` en `VERZOEKEN_INSTELLINGEN.mensen` uit (hij staat na "Huizen" en "Wie bouwt" in
-  `T.OPTIES`, dus hij gaat voor), zodat jij de hut en het huis neerzet. Elke nacht, na de gebouwen die af zijn en vóór de
+  `ERVEN_INSTELLINGEN.dorpBouwtZelf` uit (hij staat na "Huizen" in `T.OPTIES`, dus hij gaat voor), zodat jij de hut en
+  het huis neerzet. Elke nacht, na de gebouwen die af zijn en vóór de
   groei (`T.tikGebouwenDag`), trekt er in elke woning (`woning` in `T.GEBOUWEN`) die af is en plaats heeft een gezin uit
   het kamp: het eerste dat past, of anders het eerste in een woning waar nog niemand woont, krap (`T.verhuisUitHetKamp`;
   het verhuizen zelf is `T.verhuis` in `js/bewoners.js`: zijn thuis en zijn plekken gaan mee, en wie binnen is, komt de
@@ -681,8 +681,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   het, en `tekenBouwBereik` in `js/tekenen.js` tekent het als je bouwt (`T.bouwBereikVan`). Zonder `D.begin` (het oude
   begin) ligt alles erin. Let op: `S.bereik` is iets anders, waar de schout in een gevecht deze beurt kan komen. **Het
   huis van de schout** (1d): `schout` in `T.GEBOUWEN`, met `leeg` (alleen met `D.begin`), `eenmalig` (één keer, ook in
-  aanbouw telt) en `opslag` (bereik); `nogTeBouwen` in `T.magGebouwd` en `T.plaatsGebouw` vraagt het, dus ook de oproepen
-  van het oude begin laten hem weg. Zijn tekening komt uit de bouwstijl (`schout`, net als de maker), nog zonder
+  aanbouw telt) en `opslag` (bereik); `nogTeBouwen` in `T.magGebouwd` en `T.plaatsGebouw` vraagt het. Zijn tekening komt uit de bouwstijl (`schout`, net als de maker), nog zonder
   bouwfasen. Is hij af, dan verhuist de schout met zijn gezin erin (`verhuisDeSchout`, als eerste in
   `T.verhuisUitHetKamp`): het huis krijgt `huis: 'schout'`, de tent verliest het en gaat weg, en de kar heet de ossenkar
   met het vel `ossenkar-leeg`. Rooien en meebouwen: `js/bouwen.js`, hieronder; boeren en velden: `js/boerderij.js`.
@@ -711,7 +710,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   kaart (geen `T.zetOpDeKaart`).
 - **Waar een gebouw komt** (tot ronde 2 van het snoeien, 12 okt, in `js/verzoeken.js`): `T.plekVoor(D, soort, bij)` geeft
   de plek zo dicht mogelijk bij `bij` waar het past, op open grond of anders waar het minst te rooien is (`rooien`: de
-  kavel, voor `T.plaatsGebouw`); een plek met een kring (een put, een kapel) waar hij de meeste huizen bereikt die er nog
+  kavel; `T.plaatsGebouw` neemt in het lege begin zelf de kavel, `T.bouwKavel`); een plek met een kring (een put, een kapel) waar hij de meeste huizen bereikt die er nog
   geen hebben. `T.kanHierKomen` vraagt het voor één plek (de kringen van `js/wensen.js`). De kolonist van de speeltest
   zoekt zo zijn plek.
 
@@ -781,34 +780,6 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   plekken pas als een huis er straks geen haalt. Een hut op een erf telt daarbij met zijn hut en het huis dat hij wordt
   (`T.kringVoetenVan`), en wil wat dat huis wil (`T.wilStraks`: de kapel); het dorp zet een put of kapel voor hem waar
   hij die allebei haalt (`T.kringTeller` met `straks`, in `T.plekVoor`).
-
-### js/verzoeken.js: de mensen vragen wat het dorp mist
-
-- `js/verzoeken.js`: **de stad groeit door haar mensen** (vraag 103, 3 okt; Marcel: "De inwoners bouwen zelf een weverij
-  etc. Ze vragen alleen toestemming om te bouwen"): met de spelregel "Wie bouwt" op "De mensen"
-  (`T.VERZOEKEN_INSTELLINGEN.mensen`) staat alleen het erf in het bouwmenu, en vraagt een inwoner je wat het dorp mist
-  (`T.watTeBouwen` in `js/raad.js`): een voorval `bouwverzoek` (`T.beginBouwverzoek`, vanuit `T.tikVoorvallenDag`), met `L.bouw` = { soort, x,
-  y, waarom, nut } en de woorden `{wil}`, `{gebouw}`, `{plek}`, `{waarom}`, `{kosten}`. Waar het komt, zegt `T.plekVoor` (met drie tegels looppad rondom, zoals elk gebouw; is er geen open grond meer, dan een plek die hij eerst rooit, `js/bos.js`);
-  ja (`doe.bouw`) zet het neer (`T.verzoekToegestaan`, met `g.meester`), nee (`doe.weiger`) onthoudt het (`D.verzoeken`).
-  Een oproep op het plein (`T.doeOproep`, de rij Oproepen in het bouwmenu) gaat voor, met een premie bovenop de kosten.
-  Wat er mag (de trede), vraag je aan `T.magGebouwd`; wat jij in het bouwmenu hebt, aan `T.inBouwmenu` (`js/gebouwen.js`).
-  Het Engels (vraag 147): de woorden voor het gesprek zijn zo gekozen dat de zin in `js/gesprekken.js` doorloopt met "to build":
-  `{wil}` is "I want" of "the neighbours want", `{gebouw}` "a weaver's" (met `T.eenNaam`), `{plek}` "next to my house", `{kosten}`
-  "14 wood and 8 gold" (`T.hoeveel`). `T.metLidwoord` (het Nederlandse de/het) is weg: een zin zet *the* of *a/an* zelf.
-
-### js/ondernemers.js: de ondernemers
-
-- `js/ondernemers.js`: **wie iets wil beginnen wat niemand mist** (vraag 104, 3 okt; Marcel: "Stel er is een ondernemende
-  inwoner die wapens wil maken etc"): een op de zes volwassenen is ondernemer, uit het zaad en wie hij is
-  (`T.ondernemingVan`, `T.ONDERNEMINGEN`); wat hij nu wil vragen, geeft `T.eigenVerzoeken` aan `js/verzoeken.js` (na je
-  oproepen, vóór wat het dorp mist), met een eigen voorval (`wapenverzoek`, `herbergverzoek`) en `L.bouw.eigen`. Ja
-  (`T.eigenToegestaan`) en nee (`T.eigenGeweigerd`: na twee keer trekt hij weg) laten een stemming op zijn huis
-  (`g.stemming`, `T.huisStemming` in `T.berekenWensen`), en wat een onderneming verder doet, staat bij haar (`ja`, `nee`,
-  `prijs` in `T.ONDERNEMINGEN`): de tweede herberg maakt de herbergierster boos (`g.weigert`: ze brouwt een tijd niet). De wapenmaker: wapens (`T.wapensInHetDorp` en `T.bewapen`
-  bij een aanval staan sinds ronde 2 van het snoeien in `js/rovers.js`, met de schade; `T.slagSchade` in `js/gevecht.js`),
-  en die zijn niet verboden (Marcel, 7 okt: "Het is logisch dat er wapens zijn om de
-  stad te verdedigen. Alleen weerstand tegen de heer is inacceptabel"; vraag 131): de heer laat hem met rust,
-  en wat de heer niet mocht zien (`verdacht` in `T.GEBOUWEN`), is er niet meer. De getallen in `T.ONDERNEMERS_INSTELLINGEN`.
 
 ### js/treden.js: van gehucht tot dorp en marktrecht
 
@@ -880,7 +851,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   grotere markt"): met de spelregel "De markt" op "Op het plein" (`T.MARKT_INSTELLINGEN.opHetPlein`) komt een markt niet
   als gebouw van 6 bij 6, maar als een marktblok op het plein: twee rijen kramen tegenover elkaar met een looppad
   ertussen en een mand naast elke kraam (`T.marktBlok`: het grootste open stuk buiten het feest, `T.feestMidden`, en weg
-  van de heer, dat niemand tegenhoudt). Hij komt zoals elk gebouw (een verzoek of je oproep): `T.plekVoor`,
+  van de heer, dat niemand tegenhoudt). Hij komt zoals elk gebouw (uit het bouwmenu): `T.plekVoor`,
   `T.waaromPastHetNiet` en `T.plaatsGebouw` vragen het hier (`T.marktPlek`, `T.zetMarktOpHetPlein`). Elke nacht
   (`T.tikMarktDag`) komt er een kraam bij tot er een per 15 mensen is (`T.kramenNodig`), eerst in het blok (`g.blok`),
   dan langs de weg vanaf het plein (`T.straatPlek`, de marktstraat); en een kraam ligt vol als het dorp zijn waar heeft
@@ -901,8 +872,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   staat hij vanaf het begin, en de herbergierster woont er. In de herberg wordt gepraat: de herbergierster vertelt jou
   wie er zat, en de marskramer logeert er (`T.logiesAnker`). 's Avonds branden de ramen van de herberg,
   met de gasten erachter als schimmen: de huizenbouwer geeft per huis door waar de ramen zitten (`ramen`
-  in `tegels.json`), en `js/tekenen.js` tekent ze zo dat wat ervoor staat ze afdekt (`brandendeRamen`). Sinds vraag 104
-  kan er een tweede herberg komen (`js/ondernemers.js`): `T.herbergenVan` geeft ze allemaal, `T.herbergVan` de eerste
+  in `tegels.json`), en `js/tekenen.js` tekent ze zo dat wat ervoor staat ze afdekt (`brandendeRamen`). Er kan een
+  tweede herberg komen (je bouwt hem zelf; tot ronde 2 van het snoeien vroeg een ondernemer erom): `T.herbergenVan` geeft ze allemaal, `T.herbergVan` de eerste
   (waar de herbergierster woont en de marskramer logeert), en wie 's avonds gaat, gaat naar de dichtste
   (`T.herbergVanGast`). De grote herberg, van twee lagen (`T.isDorpsVorm` in `js/bouwstijl.js`), trekt meer gasten:
   de kans dat iemand gaat, maal `groteHerberg` (vraag 133).
@@ -965,7 +936,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   akker (`js/akkers.js`). `T.inOntginning(w)` zegt welke velden dat zijn. Een veld op de meent maakt haar kleiner voor de
   schapen (`T.weideStand` en `T.graaslandVan` in `js/vee.js`). `T.ONTGINNEN_INSTELLINGEN` heeft nog twee getallen, die het
   bos van de heer nodig heeft: `bosBomen` (een stuk is bos bij minstens zoveel bomen: `js/bos.js`, `js/erven.js`) en `gunst`
-  (wat een erf of een werkplaats in zijn bos kost: `js/erven.js`, `js/verzoeken.js`, `js/voorvallen.js`). De toetsen
+  (wat een erf in zijn bos kost: `js/erven.js`). De toetsen
   (`test/ontginnen.test.cjs`) zetten zelf een veld in ontginning.
 
 ### js/bos.js: het bos
@@ -1063,8 +1034,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 - `js/graanschuur.js`: **de graanschuur en de wachters bij het zaaigraan** (vraag 132, 8 okt; Marcel: "bij honger grijpen
   mensen alles aan. Je moet mensen inzetten om het warenhuis te beschermen", en "Ja, er moet een graanschuur komen"): het
-  zaaigraan ligt in de graanschuur (`T.GEBOUWEN.graanschuur`, `T.graanschuurVan`; het dorp vraagt er een zodra er
-  zaaigraan apart ligt, `T.watTeBouwen`); komt de honger eraan (`T.zaaigraanInGevaar`, vanuit `T.eetVandaag`), dan zoekt
+  zaaigraan ligt in de graanschuur (`T.GEBOUWEN.graanschuur`, `T.graanschuurVan`); komt de honger eraan (`T.zaaigraanInGevaar`, vanuit `T.eetVandaag`), dan zoekt
   een boer je (het voorval `zaaigraanHonger`), en met `doe.bewaak` staan er wachters bij de schuur (`T.bewaakZaaigraan`:
   een per twintig mensen, minstens twee, `T.wachtersNodig`; `p.wacht`, ze werken niet, en `moetNaar` met `wacht`), die
   zoveel beschermen als er staan (`T.zaaigraanBeschermd`). Honger kost dan elke dag vertrouwen, en bij het zaaien gaan ze
@@ -1082,7 +1052,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   elke nacht `T.tikWijngaardDag`; zolang werkt het nergens anders) rank voor rank met een mand (`pluk` in
   `js/veldwerk.js`, `e.mand`, de plukker of plukster), en pas als de mand in het huis is, is de wijn binnen
   (`T.wijnBinnen`, `wijnPerRank`). Het dorp kijkt vooruit (`T.wijnNaDePluk`, met `T.haaltDeWinter`): haalt wat er bij de
-  pluk nog ligt plus de pluk het jaar niet, dan vraagt het nu een wijnboerderij erbij (`T.watTeBouwen`). De getallen in
+  pluk nog ligt plus de pluk het jaar niet? Tot ronde 2 van het snoeien vroeg het dan een wijnboerderij erbij; nu vraagt
+  niemand het, en slaapt het tot vraag 155 (de wijnboerderij als eigen gebouw). De getallen in
   `T.WIJNGAARD_INSTELLINGEN`. **Sinds 11 okt (vraag 152, 1e) hoort een wijngaard bij een boerderij**: in het lege
   begin leg je hem als veld (`js/boerderij.js`, `D.wereld.wijngaarden`), en de ranken dragen hun boerderij (`v.boerderij`;
   tot dan `v.wijnboerderij`, opslaan versie 5). Welke boerderij er een heeft, zegt `T.heeftWijngaard` (`T.veldVan`), de
@@ -1282,8 +1253,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   is uit de bende (`T.roverVerslagen`), een wachter een mond minder (`T.sneuvelt`, via `T.wijzigBevolking` met wie
   het is), en wie het overleeft, geneest na een nacht. De getallen in `T.ROVERS_INSTELLINGEN` (in de werkbank).
   Ook de veteranen van de heervaart vechten mee (`p.veteraan`, met het leven van `T.WEZENS.veteraan`).
-- **De wapens** (sinds ronde 2 van het snoeien, 12 okt; tot dan in `js/ondernemers.js`; Marcel: "h ja wapens blijven ook
-  voor later"): `T.wapensInHetDorp` (de wapens in de schuur) en `T.bewapen` (bij een aanval krijgen zoveel mannen van de
+- **De wapens** (sinds ronde 2 van het snoeien, 12 okt; tot dan in `js/ondernemers.js`, dat weg is; Marcel: "h ja wapens
+  blijven ook voor later"; de wapenmaker zet jij neer, `Spel.debug.rovers()` telt ze): `T.wapensInHetDorp` (de wapens in de schuur) en `T.bewapen` (bij een aanval krijgen zoveel mannen van de
   militie er een als er zijn), en wie er een heeft, slaat `wapens.schade` harder (`T.slagSchade`, `js/gevecht.js`).
 
 ### js/einde.js: het eind

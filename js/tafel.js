@@ -59,7 +59,7 @@
     '<path d="M11 10.5l8.5 8.5" stroke="#8a5a2c" stroke-width="2.4" stroke-linecap="round"/>' +
     '<path d="M4.5 8.5l5-5 2.2 2.2-1.5 1.5 2.6 2.6-2.2 2.2-2.6-2.6-1.3 1.3z" fill="#8f949a" stroke="#c3c7cc" stroke-width="1.1" stroke-linejoin="round"/>' +
     '</svg>';
-  // Van de wapenmaker (js/ondernemers.js): een zwaard, schuin, met een houten gevest.
+  // Van de wapenmaker (T.wapensInHetDorp, js/rovers.js): een zwaard, schuin, met een houten gevest.
   const WAPENS_ICOON =
     '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
     '<path d="M18.5 4.5l1 1-9.6 9.6-1-1z" fill="#c3c7cc" stroke="#8f949a" stroke-width="1" stroke-linejoin="round"/>' +
@@ -360,8 +360,7 @@
     rekenboek: { naam: T.t('The ledger'), uitleg: () => T.t('What is on the table and how the village is doing. Point at a number to see what it says.') },
     bouwen: {
       naam: T.t('The building plan'),
-      uitleg: () => `${T.VERZOEKEN_INSTELLINGEN.mensen ? T.t('Mark out a plot, and pin a notice on the square.') : T.t('Build: choose what, and point to where.')}`
-        + ` ${T.t('A right click puts back what you are holding.')}`,
+      uitleg: () => `${T.t('Build: choose what, and point to where.')} ${T.t('A right click puts back what you are holding.')}`,
       toets: 'B',
     },
     velden: { naam: T.t('The fields'), uitleg: () => T.t('What each field is, who chose it, and what it becomes next year.'), toets: 'V' },

@@ -7,9 +7,6 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
-// Deze toetsen gaan over het spel waarin jij bouwt (de spelregel "Wie bouwt" op "Jij bouwt"; werklijst vraag 103):
-// het bouwmenu zoals jij bouwt. Hoe het gaat als de mensen het vragen, staat in test/verzoeken.test.cjs.
-T.zetOptie('wieBouwt', 'jij');
 
 T.ui = { bericht() {}, plek() {}, toonKalender() {}, toonVoorraad() {}, toonBevolking() {}, toonInventaris() {} };
 
@@ -30,7 +27,6 @@ function gehucht() {
 // Elke toets begint en eindigt op de standaard van de spelregels.
 test.afterEach(() => {
   T.optiesTerug();
-  T.zetOptie('wieBouwt', 'jij');
 });
 
 // Een gebouw erbij, klaar of in aanbouw, zonder te bouwen (de toets gaat over de trede, niet over bouwen).
@@ -162,7 +158,6 @@ test('de eis van de proef van 28 sep, in de getallen gezet: 50 mensen, met een k
   assert.equal(T.tredeDoel(S.dorp).kop, 'Towards a market town', 'marktrecht blijft bij de ambachtslieden');
   // Terug op de standaard telt het dorp weer zijn dorpelingen.
   T.optiesTerug();
-  T.zetOptie('wieBouwt', 'jij');
   assert.deepEqual(T.TREDEN_INSTELLINGEN.dorp, { stand: 'dorpelingen', mensen: 20, gebouwen: [] });
 });
 
@@ -209,7 +204,6 @@ test('de heer noemt het doel in zijn benoemingsbrief, met de getallen uit de wer
   T.zetGetal('TREDEN_INSTELLINGEN.dorp.mensen', 45);
   assert.equal(T.tredeEisTekst('dorp'), '45 souls in houses, not in huts');
   T.optiesTerug();
-  T.zetOptie('wieBouwt', 'jij');
   T.TREDEN_INSTELLINGEN.dorp = { mensen: 50, gebouwen: ['kapel', 'smidse'] };
   assert.equal(T.tredeEisTekst('dorp'), 'a chapel, a smithy and fifty souls');
 });

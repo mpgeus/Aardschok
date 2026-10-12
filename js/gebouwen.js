@@ -570,7 +570,7 @@
   // keuze ligt vast tot hij gebouwd is (S.volgendeTekening), zodat het spookbeeld van het bouwmenu de
   // voet laat zien die er echt komt. T.neemTekening zegt dat hij gebouwd is: de volgende wordt een
   // andere. In een land met een bouwstijl (js/bouwstijl.js) is het een vorm van die stijl, met het dak
-  // van nu; de keuze mag zijn deur naar een andere kant hebben (een verzoek keert hem naar de weg, js/verzoeken.js).
+  // van nu; de keuze mag zijn deur naar een andere kant hebben (T.keerNaarDeWeg keert hem naar de weg, js/bouwstijl.js).
   T.volgendeTekening = function (D, soort) {
     const g = T.GEBOUWEN[soort];
     if (!g) return null;
@@ -903,7 +903,7 @@
   // Het gebouw waarvan de deur (de tegel ervoor, T.deurVan in js/bewoners.js) op deze rechthoek ligt, of null. `behalve`
   // telt niet mee: een huis dat doorgroeit, krijgt zelf een nieuwe deur. De deuren worden bewaard tot de kaart of de
   // gebouwen veranderen (deurenVan): T.plekVoor vraagt dit voor elke tegel van de kaart, en tot 3 okt rekende het elke
-  // keer alle deuren opnieuw uit (in een dorp van 200 mensen een seconde per bouwverzoek).
+  // keer alle deuren opnieuw uit (in een dorp van 200 mensen een seconde per gebouw).
   T.deurOpRechthoek = function (D, r, behalve) {
     for (const { g, x, y } of deurenVan(D)) {
       if (g !== behalve && opRechthoek(r, x, y)) return g;
@@ -1005,7 +1005,7 @@
 
   // Mag deze soort hier al gebouwd worden, door wie dan ook? Die van de trede van nu en de treden ervoor (in een dorp
   // ook de put en de kapel van het gehucht; js/treden.js), behalve wat een eigen manier van neerzetten heeft (menu:
-  // false). Voor de raad en de verzoeken (js/wensen.js, js/verzoeken.js): wat mag, kan iemand je vragen.
+  // false). Ook voor de raad (js/wensen.js, js/raad.js): wat mag, zegt de raad.
   T.magGebouwd = function (D, soort) {
     const g = T.GEBOUWEN[soort];
     const vrij = T.GEBOUW_TREDEN.indexOf(g && g.trede) <= T.GEBOUW_TREDEN.indexOf(D.trede);
@@ -1023,15 +1023,15 @@
   }
 
   // Staat deze soort nu in het bouwmenu (js/hud.js)? Wat mag (T.magGebouwd), en wat jij neerzet. Bouwt het dorp zelf
-  // (js/erven.js, de spelregel "Huizen"), dan staat het erf erin en de woningen niet; anders andersom. Vragen de mensen
-  // het je (js/verzoeken.js, de spelregel "Wie bouwt"; werklijst vraag 103), dan staat de rest er niet in.
+  // (js/erven.js, de spelregel "Huizen"), dan staat het erf erin en de woningen niet; anders andersom. De rest zet jij
+  // altijd neer (de spelregel "Wie bouwt", waarin de mensen het je vroegen, is weg sinds ronde 2 van het snoeien).
   T.inBouwmenu = function (D, soort) {
     if (!T.magGebouwd(D, soort)) return false;
     const g = T.GEBOUWEN[soort];
     const zelf = T.ERVEN_INSTELLINGEN.dorpBouwtZelf;
     if (g.erf) return zelf;
     if (g.woning) return !zelf;
-    return !T.VERZOEKEN_INSTELLINGEN.mensen;
+    return true;
   };
   T.gebouwPast = (D, soort, x, y, tekening) => !T.waaromPastHetNiet(D, soort, x, y, tekening);
 
@@ -1172,9 +1172,7 @@
   // { gelukt, reden } terug (reden alleen als het niet lukte), zodat de aanroeper kan zeggen
   // waarom een klik niets deed — dezelfde vorm als handelingVerkennen/handelingGevecht
   // (CLAUDE.md, "Scherm en klik stellen dezelfde vraag").
-  // `rooien` ({ x, y, b, h }, of null): het stuk dat de inwoner die erom vroeg eerst rooit (js/verzoeken.js, js/bos.js;
-  // werklijst vraag 110, e). Dan wacht het gebouw, nog niet op de kaart, en begint het pas als dat stuk vrij is.
-  T.plaatsGebouw = function (D, soort, x, y, rooien = null) {
+  T.plaatsGebouw = function (D, soort, x, y) {
     const g = T.GEBOUWEN[soort];
     if (!g || g.menu === false || !nogTeBouwen(D, soort)) return { gelukt: false, reden: T.t('That cannot be built from the build menu.') };
     // Een erf is land, geen gebouw: het krijgt geen voorwerp en maakt de grond niet vast (js/erven.js).
@@ -1182,7 +1180,7 @@
     // De markt op het plein: kramen, geen gebouw met een voet (js/markt.js; werklijst vraag 110, d).
     if (soort === 'markt' && T.marktOpHetPlein(D)) return T.zetMarktOpHetPlein(D);
     // In het lege begin bouwen de mensen het zelf, en rooien ze eerst wat er op de plek staat (js/bouwen.js; vraag 152, 1d).
-    const kavel = rooien || T.bouwKavel(D, soort, x, y);
+    const kavel = T.bouwKavel(D, soort, x, y);
     const past = T.waaromPastHetNiet(D, soort, x, y, null, kavel);
     if (past) return { gelukt: false, reden: past };
     if (!T.kanBetalen(D, g.kosten)) return { gelukt: false, reden: T.t('The stores are not big enough for that.') };
@@ -1194,9 +1192,6 @@
     const instantie = { soort, x, y, tekening, voet, klaar: g.bouwtijd <= 0, klaarOp: dagNu + g.bouwtijd, handen: 0, voorwerp: null };
     const wat = kavel && T.rooiWoordenOp(D, kavel);
     if (T.bouwenMetHanden(D)) T.zetBouwplaats(D, instantie, kavel);
-    else if (rooien && T.teRooienOp(D, rooien).length) {
-      Object.assign(instantie, { klaar: false, klaarOp: null, wachtOpRooien: true, kavel: rooien, rooienTot: dagNu + T.BOS_INSTELLINGEN.rooiDagen });
-    }
     T.bouwGebouw(D, instantie);
     if (instantie.bouw) {
       const gebouw = T.hoofdletter(g.naam);
@@ -1205,7 +1200,6 @@
         ? T.t('{gebouw}: the builders first clear the site ({wat}), then build it ({werk} workdays).', { gebouw, wat, werk })
         : T.t('{gebouw}: the building site is ready ({werk} workdays, for whoever has no other work).', { gebouw, werk }) };
     }
-    if (instantie.wachtOpRooien) return { gelukt: true, instantie, bericht: T.t('{gebouw}: the site is cleared first.', { gebouw: T.hoofdletter(g.naam) }) };
     return { gelukt: true, instantie, bericht: T.t('{gebouw} under construction ({n|# day|# days}).', { gebouw: T.hoofdletter(g.naam), n: g.bouwtijd }) };
   };
 
@@ -1526,12 +1520,6 @@
         if (soort.alleenIn) g.stilWant = T.stilOp(soort, dag, seizoen);
         continue;
       }
-      // Wie er werkt en het een tijd weigert (de herbergierster die boos is om een tweede herberg, js/ondernemers.js),
-      // maakt tot dan niets.
-      if (g.weigert && dag < g.weigert.tot) {
-        g.stilWant = g.weigert.waarom;
-        continue;
-      }
       if (vrij && soort.handen > 0) {
         g.stilWant = T.t('the village is feasting');
         continue;
@@ -1601,8 +1589,6 @@
     for (const g of D.gebouwen) if (g.werkte > 0 && g.handen > 0) aanHetWerk += g.handen;
     const slijt = Math.min(D.voorraad.gereedschap || 0, aanHetWerk) / IN.gereedschapSlijtDagen;
     if (slijt > 0) T.wijzigVoorraad(D, 'gereedschap', -slijt);
-    // De ondernemers (js/ondernemers.js): wat een huis nadroeg, slijt.
-    T.tikOndernemersDag(D, dag);
     // 7. De wetten (js/wetten.js): wie vandaag in het bos van de heer hakte, en de belasting op de eerste van de maand.
     T.tikWettenDag(D, dag);
     // En de rovers (js/rovers.js): de doden begraven, wie het overleefde geneest, en komen ze vandaag?

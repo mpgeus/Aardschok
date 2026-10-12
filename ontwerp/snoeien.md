@@ -81,6 +81,12 @@ erf betekent iets anders zodra de erven weg zijn, **2d** het ontginnen. **De wij
 tóch een eigen wijnboerderij als gebouw, dus het gebouw en zijn tekening in `gereedschap/pixelart/` slapen tot we kiezen
 hoe (werklijst, vraag 155).
 
+**2a is af** (12 okt): de verzoeken en de ondernemers zijn weg, met de spelregel "Wie bouwt", de oproepen, de meester,
+wat een huis nadroeg, en de lijst van de raad die alleen de verzoeken voedde (`T.watTeBouwen`). Het vooruitkijken van
+de wijn (`T.wijnNaDePluk`) had geen gebruiker meer, maar Marcel koos het zelf (10 okt): het slaapt met de wijnboerderij
+(vraag 155). **Voor ronde 3:** de raadsman besliste vooral over verzoeken als je weg was; nu beslist hij alleen nog over
+de gelote voorvallen, en de raad zegt alleen nog wat helpt, met [B].
+
 **De kaart voor stap 2 tot 5** (een agent, 12 okt; regelnummers van toen, dus zoek op de naam):
 - **Verzoeken** (`js/verzoeken.js`, 440 regels; `VERZOEKEN_INSTELLINGEN.mensen`, de spelregel "Wie bouwt"): aangeroepen uit
   `js/voorvallen.js` (de voorvallen bouwverzoek, wapenverzoek en herbergverzoek, met `T.beginBouwverzoek`,

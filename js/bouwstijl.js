@@ -18,7 +18,7 @@
 //   T.metDeurNaar(tekening, kant)   dezelfde vorm, dak en steen, met de deur naar een andere kant
 //   T.zoalsNu(D, tekening, soort)   dezelfde vorm en kant, met het dak en de steen van nu (wie doorgroeit)
 //   T.zijdenNaarDeWeg(w, r)         de kanten van een erf of een voet, de kant die het dichtst bij de weg ligt eerst
-//   T.keerNaarDeWeg(D, soort, x, y) een verzoek keert zijn deur naar de weg (js/verzoeken.js)
+//   T.keerNaarDeWeg(D, soort, x, y) een huis of boerderij keert zijn deur naar de weg (js/bouwen.js)
 (function (T) {
   'use strict';
 
@@ -249,7 +249,7 @@
       .map((x) => x.kant);
   };
 
-  // Een gebouw van een bouwstijl op plek (x, y) (een verzoek, js/verzoeken.js): keer zijn deur naar de weg, naar de
+  // Een gebouw van een bouwstijl op plek (x, y) (T.plekVoor, js/bouwen.js): keer zijn deur naar de weg, naar de
   // eerste kant waarmee het daar past, en leg die vast als de volgende tekening van zijn soort (T.volgendeTekening,
   // js/gebouwen.js), zodat de plek in goud op de grond en het gebouw dat er komt dezelfde voet hebben. Geeft de tekening.
   T.keerNaarDeWeg = function (D, soort, x, y) {

@@ -5,7 +5,6 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
-T.zetOptie('wieBouwt', 'jij');
 T.ui = new Proxy({}, { get: () => () => undefined });
 // T.optiesTerug zet nieuwe blokken neer: lees de instellingen dus elke keer opnieuw.
 const B = new Proxy({}, { get: (_, k) => T.BODE_INSTELLINGEN[k], set: (_, k, v) => ((T.BODE_INSTELLINGEN[k] = v), true) });
@@ -245,7 +244,6 @@ test('met de spelregel "De bode" op Nee kan het niet', () => {
     assert.equal(T.kanBodeSturen(S.dorp).kan, false);
   } finally {
     T.optiesTerug();
-    T.zetOptie('wieBouwt', 'jij');
   }
 });
 

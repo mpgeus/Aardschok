@@ -99,37 +99,13 @@
         );
       })
       .join('');
-    return `<div class="kop">${T.t('Build — {trede}', { trede: T.tredeNaam(S.dorp) })}</div>${rijen || `<p class="bouw-leeg">${T.t('There is nothing to build here right now.')}</p>`}${oproepRijen(S)}`;
+    return `<div class="kop">${T.t('Build — {trede}', { trede: T.tredeNaam(S.dorp) })}</div>${rijen || `<p class="bouw-leeg">${T.t('There is nothing to build here right now.')}</p>`}`;
   }
 
   // Hoe lang het bouwen duurt: zijn bouwtijd, of in het lege begin het werk dat de bouwers eraan hebben (js/bouwen.js).
   function duur(D, id, g) {
     if (T.bouwenMetHanden(D)) return T.t('{n|# workday|# workdays}', { n: T.bouwWerkVan(id) });
     return T.t('{n|# day|# days}', { n: g.bouwtijd });
-  }
-
-  // De oproepen (js/verzoeken.js; werklijst vraag 103, c): vragen de mensen het je (de spelregel "Wie bouwt"), dan zet je
-  // niets zelf neer, maar laat je op het plein een oproep hangen: "The village wants a weaving shed", met een premie voor wie
-  // het bouwt. Een klik hangt hem op, nog een klik haalt hem weg.
-  function oproepRijen(S) {
-    if (!T.VERZOEKEN_INSTELLINGEN.mensen) return '';
-    const premie = T.VERZOEKEN_INSTELLINGEN.premie;
-    const rijen = Object.keys(T.GEBOUWEN)
-      .filter((id) => T.magGebouwd(S.dorp, id) && !T.GEBOUWEN[id].erf && !T.GEBOUWEN[id].woning)
-      .map((id) => {
-        const g = T.GEBOUWEN[id];
-        const hangt = T.oproepVoor(S.dorp, id);
-        const kosten = kostenTekst(g.kosten);
-        return (
-          `<button data-oproep="${id}"${hangt ? ' class="hangt"' : ''}>` +
-          `<span class="bouw-naam">${hangt ? T.t('{naam} · posted on the square', { naam: T.hoofdletter(g.naam) }) : T.hoofdletter(g.naam)}</span>` +
-          `<span class="bouw-kosten">${T.t('{kosten} · bounty {premie}', { kosten, premie: T.hoeveel(premie, 'goud') })}</span>` +
-          `<span class="bouw-uitleg">${hangt ? T.t('Click to take the notice down.') : g.beschrijving}</span>` +
-          `</button>`
-        );
-      })
-      .join('');
-    return `<div class="kop bouw-oproepen">${T.t('Notices — what the people will not ask for themselves')}</div>${rijen}`;
   }
 
   // De rij van een veld (de akker, de wijngaard; js/boerderij.js): hij kost niets dan werk, en je trekt hem bij een boerderij.
@@ -171,12 +147,6 @@
   $('bouwmenu').addEventListener('click', (ev) => {
     const b = ev.target.closest('button');
     if (!b || !T.S) return;
-    // Een oproep (js/verzoeken.js): hangt hem op of haalt hem weg, en het menu blijft open.
-    if (b.dataset.oproep) {
-      T.ui.bericht(T.doeOproep(T.S.dorp, b.dataset.oproep));
-      T.ui.toonBouwmenu(T.S);
-      return;
-    }
     T.S.bouwSoort = b.dataset.soort;
     T.S.veldHoek = null; // een veld begint weer bij zijn eerste hoek (js/main.js)
     T.S.bouwMenuOpen = false;

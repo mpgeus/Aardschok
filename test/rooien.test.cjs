@@ -29,13 +29,12 @@ function gehucht(dag = 0) {
   return S;
 }
 
-// Met de spelregels zoals de toetsen van de erven (jij wijst erven aan, de mensen vragen niets), zonder voorvallen, met
+// Met de spelregels zoals de toetsen van de erven (jij wijst erven aan), zonder voorvallen, met
 // een vaste worp, en na afloop alles terug.
 function zo(f) {
   const toeval = Math.random;
   let n = 7;
   Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
-  T.zetOptie('wieBouwt', 'jij');
   T.zetOptie('voorvallen', 'uit');
   try {
     return f();
@@ -372,7 +371,7 @@ test('bewaren en laden houdt een erf dat gerooid wordt, en de hut die erop wacht
   });
 });
 
-// Stap 2: een werkplaats waar geen open grond meer is (js/verzoeken.js, js/bos.js).
+// Stap 2: een werkplaats waar geen open grond meer is (T.plekVoor, js/bouwen.js).
 
 test('een plek om te rooien voor een werkplaats: met zo weinig mogelijk bomen, en hij past pas na het rooien', () => {
   zo(() => {
@@ -393,7 +392,7 @@ test('een plek om te rooien voor een werkplaats: met zo weinig mogelijk bomen, e
   });
 });
 
-test('een put op een plek om te rooien bereikt een huis dat er nog geen heeft, hoe ver wie hem vraagt ook woont; mist niemand er een, dan geen plek', () => {
+test('een put op een plek om te rooien bereikt een huis dat er nog geen heeft, waar je ook zoekt; mist niemand er een, dan geen plek', () => {
   zo(() => {
     const S = gehucht();
     const D = S.dorp;
@@ -414,74 +413,6 @@ test('een put op een plek om te rooien bereikt een huis dat er nog geen heeft, h
     } finally {
       T.WENSEN_INSTELLINGEN.kring.put = oud;
     }
-  });
-});
-
-test('ja kost de gunst die de prijs noemde: een plek die bij de vraag niet in het bos van de heer lag, kost niets', () => {
-  zo(() => {
-    const S = gehucht();
-    const D = S.dorp;
-    T.zetVoorraad(D, 'hout', 100);
-    T.zetVoorraad(D, 'goud', 100);
-    // Een plek in het bos, maar bij de vraag (zeg: voordat een boompje een boom werd) gold hij als wei.
-    const plek = werkplaatsPlek(S, 'weverij', (n) => n >= BOS());
-    const wie = D.bewoners.mensen.find((p) => p.leeftijd === 'volwassen' && !T.isBoer(p.wezen) && !p.schout);
-    const L = { wie, bouw: { soort: 'weverij', x: plek.x, y: plek.y, waarom: 'Het dorp wil laken.', rooien: plek.rooien, bos: false } };
-    D.voorvallen = D.voorvallen || T.nieuweVoorvallen();
-    D.voorvallen.lopend = L;
-    assert.doesNotMatch(T.prijsVanKeuze(D, { bouw: true }).tekst, /gunst/, 'de prijs noemt geen gunst');
-    const gunst = T.bazenNu(D).gunst;
-    T.verzoekToegestaan(D, L);
-    assert.ok(D.gebouwen.some((g) => g.soort === 'weverij' && g.wachtOpRooien), 'de werkplaats wacht op het rooien');
-    assert.equal(T.bazenNu(D).gunst, gunst, 'en het kostte geen gunst');
-  });
-});
-
-test('ja op een werkplaats in het bos: hij wacht, nog niet op de kaart; wie hem vroeg, rooit en werkt nergens; dan de bouw', () => {
-  zo(() => {
-    const S = gehucht();
-    const D = S.dorp;
-    T.zetVoorraad(D, 'hout', 100);
-    T.zetVoorraad(D, 'goud', 100);
-    const plek = werkplaatsPlek(S, 'weverij', (n) => n >= BOS());
-    assert.ok(plek, 'er is een plek in het bos');
-    assert.ok(T.inHetBosVanDeHeer(D, plek.rooien));
-    const wie = D.bewoners.mensen.find((p) => p.leeftijd === 'volwassen' && !T.isBoer(p.wezen) && !p.schout);
-    assert.ok(wie, 'er is iemand die het vraagt');
-    const L = { wie, bouw: { soort: 'weverij', x: plek.x, y: plek.y, waarom: 'Het dorp wil laken.', rooien: plek.rooien, bos: true } };
-    D.voorvallen = D.voorvallen || T.nieuweVoorvallen();
-    D.voorvallen.lopend = L;
-    // Hij zegt waar, en wat hij er eerst rooit, in het bos van de heer; en de prijs noemt zijn gunst.
-    assert.match(T.GESPREK_WOORDEN.plek(D), /where I will first clear .*, in the lord's forest/);
-    assert.match(T.prijsVanKeuze(D, { bouw: true }).tekst, new RegExp(`the lord's favour −${T.ONTGINNEN_INSTELLINGEN.gunst}`));
-    const gunst = T.bazenNu(D).gunst;
-    const hout = D.voorraad.hout;
-    T.verzoekToegestaan(D, L);
-    const g = D.gebouwen.find((x) => x.soort === 'weverij');
-    assert.ok(g, 'de weverij is er');
-    assert.equal(g.wachtOpRooien, true);
-    assert.equal(g.voorwerp, null, 'nog niet op de kaart');
-    assert.equal(g.klaarOp, null);
-    assert.match(T.gebouwToestand(D, g), /the site is cleared first/);
-    assert.equal(g.meester, wie);
-    assert.equal(wie.rooit, g);
-    assert.equal(D.voorraad.hout, hout - T.GEBOUWEN.weverij.kosten.hout, 'de kosten gaan er meteen af, zoals bij elk verzoek');
-    assert.equal(T.bazenNu(D).gunst, gunst - T.ONTGINNEN_INSTELLINGEN.gunst);
-    T.wijsWerkToe(D);
-    assert.equal(wie.werk, null, 'wie rooit, werkt nergens');
-    assert.equal(T.rooitHij(wie), g);
-    // Hij rooit alles; de volgende dag begint de bouw.
-    for (const t of T.teRooienOp(D, g.kavel)) {
-      if (T.ontginWerkOp(S.wereld, t.x, t.y) === 'hakken') T.hakBoom(D, t.x, t.y);
-      T.rooi(D, t.x, t.y);
-    }
-    S.kalender.dag = 1;
-    T.tikRooienDag(D);
-    assert.equal(g.wachtOpRooien, false);
-    assert.ok(g.voorwerp, 'de bouwplaats ligt er');
-    assert.equal(g.klaarOp, 1 + T.GEBOUWEN.weverij.bouwtijd);
-    assert.equal(wie.rooit, undefined);
-    assert.equal(T.rooitHij(wie), null);
   });
 });
 

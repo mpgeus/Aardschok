@@ -384,18 +384,6 @@
           uitleg: T.t('The hut and the house are in the build menu, and a new family only comes if there is a house with room. There are no plots.') },
       ],
     },
-    // Wie de rest bouwt (werklijst vraag 103; Marcel, 3 okt: "De inwoners bouwen zelf een weverij etc. Ze vragen alleen
-    // toestemming om te bouwen", en "103 a b c ja d ook verzoek e ja"; js/verzoeken.js). Jij is het spel van vóór 3 okt.
-    {
-      id: 'wieBouwt', naam: T.t('Who builds'), standaard: 'mensen',
-      uitleg: T.t('Who puts up the workshops, the well, the chapel and the market.'),
-      keuzes: [
-        { id: 'mensen', naam: T.t('People ask'), zet: { 'VERZOEKEN_INSTELLINGEN.mensen': true }, // geen tekst
-          uitleg: T.t('What the village lacks, a villager comes and asks you for, with the place he chose and what it costs. You say yes or no, and point out plots; if you are away, your advisor decides.') },
-        { id: 'jij', naam: T.t('You build'), zet: { 'VERZOEKEN_INSTELLINGEN.mensen': false }, // geen tekst
-          uitleg: T.t('Everything is in the build menu, and you put it where you want.') },
-      ],
-    },
     // Twee bazen (werklijst vraag 106; Marcel, 3 okt: "106 a b c d ja"; js/bazen.js): de heer en het dorp kunnen je
     // allebei wegsturen. Uit is het spel van vóór 3 okt.
     {
@@ -640,16 +628,16 @@
     // Het lege begin (werklijst vraag 152, stap 1b; Marcel, 11 okt: "We moeten ook zelf alles vanaf de start gaan bouwen";
     // js/begin.js): een lege plek op het eiland, een kar en vier gezinnen. Standaard het gehucht dat er al was, zodat de
     // toetsen en de speeltest blijven spelen, tot het lege begin een jaar draait (vraag 152, 1f). "Leeg" zet ook "Huizen"
-    // en "Wie bouwt" op "Jij" (Marcel, 11 okt: "We willen dus een bouwmenu en zelf bouwen"); het komt na die twee in deze
-    // lijst, dus het gaat voor.
+    // op "Jij" (Marcel, 11 okt: "We willen dus een bouwmenu en zelf bouwen"); het komt daarna in deze lijst, dus het gaat
+    // voor. De spelregel "Wie bouwt" is weg sinds ronde 2 van het snoeien (12 okt): jij bouwt.
     {
       id: 'begin', naam: T.t('The start'), standaard: 'gehucht',
       uitleg: T.t('How a new game begins. Applies from the next new game.'),
       keuzes: [
         { id: 'gehucht', naam: T.t('The hamlet that was already there'), zet: { 'MAKER_INSTELLINGEN.leeg': false }, // geen tekst
           uitleg: T.t('You become reeve of a hamlet with houses, an inn, and farms with their fields.') },
-        { id: 'leeg', naam: T.t('Empty'), zet: { 'MAKER_INSTELLINGEN.leeg': true, 'ERVEN_INSTELLINGEN.dorpBouwtZelf': false, 'VERZOEKEN_INSTELLINGEN.mensen': false }, // geen tekst
-          uitleg: T.t('An ox cart with a few belongings rolls into an empty stretch of the island, with your family and four families behind it. On the open ground that becomes the square you sleep in tents by the campfire. You build everything from the build menu (Houses and Who builds then both go to you, at once), and when a hut or house is finished, a family from the camp moves in. Island only.') },
+        { id: 'leeg', naam: T.t('Empty'), zet: { 'MAKER_INSTELLINGEN.leeg': true, 'ERVEN_INSTELLINGEN.dorpBouwtZelf': false }, // geen tekst
+          uitleg: T.t('An ox cart with a few belongings rolls into an empty stretch of the island, with your family and four families behind it. On the open ground that becomes the square you sleep in tents by the campfire. You build everything from the build menu (Houses then goes to you, at once), and when a hut or house is finished, a family from the camp moves in. Island only.') },
       ],
     },
   ];
@@ -697,8 +685,6 @@
     { naam: T.t('Feasts'), blok: 'FEESTEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The market'), blok: 'MARKT_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The ending'), blok: 'EINDE_INSTELLINGEN' }, // geen tekst
-    { naam: T.t('Requests'), blok: 'VERZOEKEN_INSTELLINGEN' }, // geen tekst
-    { naam: T.t('The tradesmen'), blok: 'ONDERNEMERS_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The two masters'), blok: 'BAZEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t("The lord's whims"), blok: 'GRILLEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The advisor'), blok: 'RAADSMAN_INSTELLINGEN' }, // geen tekst
@@ -1116,7 +1102,6 @@
     visEnVleesMarge: T.t('fish and meat margin'),
     roversNa: T.t('robbers after'),
     raadsmanNa: T.t('advisor after'),
-    oproepNa: T.t('notice after'),
     kansPerAvond: T.t('chance per evening'),
     kansWinter: T.t('chance in winter'),
     karakters: T.t('characters'),
@@ -1255,20 +1240,8 @@
     lengte: T.t('length'),
     potten: T.t('pots'),
     minstensOver: T.t('at least left'),
-    elke: T.t('every'),
-    naNee: T.t('after a no'),
-    naJa: T.t('after a yes'),
-    premie: T.t('bounty'),
-    nutPerMensen: T.t('use per this many people'),
-    nutTot: T.t('use up to'),
     wrok: T.t('grudge'),
-    dank: T.t('gratitude'),
-    dankDagen: T.t('gratitude days'),
-    wegNa: T.t('leaves after'),
-    nut: T.t('use'),
-    naAanval: T.t('after an attack'),
     schade: T.t('damage'),
-    boosDagen: T.t('angry days'),
     // De twee bazen, de grillen, de raadsman, het rapport
     gunstBegin: T.t('favour at the start'),
     vertrouwenBegin: T.t('trust at the start'),
@@ -1291,7 +1264,6 @@
     gesneuveld: T.t('fallen'),
     schandpaalZelf: T.t('pillory yourself'),
     schandpaalPerAanzien: T.t('pillory per standing'),
-    wegGetrokken: T.t('moved away'),
     volgDagen: T.t('days to follow'),
     nietVoor: T.t('not before'),
     antwoordBinnen: T.t('answer within'),

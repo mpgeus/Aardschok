@@ -181,12 +181,12 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   - Meet de snelheid voor en na achter elkaar: de eerste nulmeting (1,1 ms per beeld bij 200 mensen) lag een derde lager
     dan dezelfde meting een uur later (1,4 ms). Achter elkaar gemeten kostte het praatje niets meetbaars.
 
-- **De ondernemers, wat er nog niet is** (3 okt, vijfentwintigste sessie; vraag 104). Ideeën van Claude, niet gekozen:
+- **De wapenmaker en de tweede herberg, wat er nog niet is** (3 okt, vijfentwintigste sessie, bij de ondernemers van vraag
+  104; die zijn op 12 okt weg, ronde 2 van het snoeien, maar de wapenmaker en een tweede herberg zet je nog zelf neer).
+  Ideeën van Claude, niet gekozen:
   - De wapenmaker maakt wapens van hout en ijzer, en ijzer komt van de marskramer (of een ertsgraver). Zonder ijzer staat
     hij stil, en alleen de muis op het gebouw zegt het; de raad en het rapport zwijgen. Een regel in de raad ("De
     wapenmaker heeft geen ijzer: de marskramer verkoopt het") zou de keten laten zien zonder dat je hem bouwt.
-  - Twee ideeën over de verboden wapenmaker (de inner laten vergeten, het zegel breken) vervielen op 7 okt: wapens zijn
-    niet meer verboden (werklijst vraag 131).
   - Met twee herbergen weet de herbergierster alleen wie er bij háár zat. De tweede herbergier heeft nog geen gesprek; een
     eigen gesprek met zijn gasten en zijn roddel maakt van de twee herbergen twee bronnen.
 

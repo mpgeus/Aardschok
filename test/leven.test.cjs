@@ -4,7 +4,6 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
-T.zetOptie('wieBouwt', 'jij');
 T.ui = new Proxy({}, { get: () => () => undefined });
 const IN = new Proxy({}, { get: (_, k) => T.LEVEN_INSTELLINGEN[k] });
 const JAAR = T.DAGEN_PER_JAAR;

@@ -85,7 +85,6 @@ exports.maak = function (uitslagen, stand) {
   if (eenJaar.length) uit.push(...gemiddeldPerSpeler(eenJaar));
   uit.push(...hetEersteJaar(goed.filter((u) => u.eersteJaar)));
   uit.push(...deVoorvallen(goed));
-  uit.push(...deOndernemers(goed));
   uit.push(...deTweeBazen(goed));
   uit.push(...hetBos(goed));
   uit.push(...vanGehuchtTotDorp(goed.filter((u) => !u.eersteJaar)));
@@ -131,22 +130,6 @@ function deVoorvallen(goed) {
       u.raadsman ? `${u.raadsman.door}: ${u.raadsman.over}` : '',
       v.slice(0, 10).map((x) => x.id).join(', '),
     ]));
-  }
-  uit.push('');
-  return uit;
-}
-
-// De ondernemers (js/ondernemers.js, vraag 104): wat ze vroegen, wat de speler zei, en wat ervan kwam (de
-// herbergierster, wie wegtrok). Alleen wie er een had.
-function deOndernemers(goed) {
-  const met = goed.filter((u) => u.eind && u.eind.ondernemers && (u.eind.ondernemers.vroegen.length || u.eind.ondernemers.berichten.length));
-  const uit = ['## De ondernemers', ''];
-  if (!met.length) return uit.concat('Geen ondernemer vroeg iets.', '');
-  const kop = ['speler', 'zaad', 'vroegen', 'wat ervan kwam', 'wapens aan het eind', 'herbergen'];
-  uit.push(regel(kop), regel(kop.map(() => '---')));
-  for (const u of met) {
-    const o = u.eind.ondernemers;
-    uit.push(regel([NAMEN[u.speler] || u.speler, u.zaad, o.vroegen.join('; '), o.berichten.join('; '), String(o.wapens), String(o.herbergen)]));
   }
   uit.push('');
   return uit;

@@ -17,7 +17,7 @@
   // 25 sep speelde je een tovenaar die ook kon toveren, met zijn leeftijd als levensbalk; dat ging
   // eruit met het oude spel (ontwerp/werklijst.md, punt 7b).
   T.SLAAN = { kosten: 3, schade: [3, 5] };
-  // Wat een slag van `v` aan schade doet, [van, tot]: een man van de militie met een wapen (js/ondernemers.js, T.bewapen)
+  // Wat een slag van `v` aan schade doet, [van, tot]: een man van de militie met een wapen (T.bewapen, js/rovers.js)
   // slaat harder.
   T.slagSchade = (v) => (v && v.gewapend ? T.SLAAN.schade.map((n) => n + T.ROVERS_INSTELLINGEN.wapens.schade) : T.SLAAN.schade);
   T.DEUR_SLUITEN = 1;

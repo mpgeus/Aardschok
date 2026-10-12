@@ -28,12 +28,11 @@ function gehucht() {
   return S;
 }
 
-// Zonder voorvallen en verzoeken (jij bouwt), met een vaste worp, en na afloop alles terug.
+// Zonder voorvallen, met een vaste worp, en na afloop alles terug.
 function zo(f, regels = {}) {
   const toeval = Math.random;
   let n = 7;
   Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
-  T.zetOptie('wieBouwt', 'jij');
   T.zetOptie('voorvallen', 'uit');
   for (const id in regels) T.zetOptie(id, regels[id]);
   try {
@@ -223,12 +222,10 @@ test('staat er binnen tien tegels geen boom meer, dan staat hij stil en zegt de 
   const raad = T.RADEN.find((x) => x.id === 'geenBoom');
   assert.ok(raad.als(D), 'de raad zegt het');
   assert.match(raad.tekst(D), /The woodcutter stands idle.*His hand works elsewhere meanwhile/);
-  // Vraag 129, e: de volgende nacht wil hij geen handen meer, en zijn hand gaat; een nieuwe houthakker vraagt het dorp
-  // niet, want het hout haalt de winter (het is lente).
+  // Vraag 129, e: de volgende nacht wil hij geen handen meer, en zijn hand gaat.
   nacht(S, 11);
   assert.equal(g.handen, 0);
   assert.notEqual(hand.werk, g, 'zijn hand werkt er niet meer');
-  assert.ok(!T.watTeBouwen(D).some((x) => x.soort === 'houthakker'), 'geen nieuwe houthakker omdat hij stilstaat');
   // Staat er weer een boom (een boompje is opgegroeid), dan hakt hij weer, met een hand.
   const t = bomen[0];
   const stronk = T.voorwerpOp(w, t.x, t.y);

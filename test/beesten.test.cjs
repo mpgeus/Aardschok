@@ -591,7 +591,6 @@ test('een wolf die in een gevecht viel, ligt er de volgende ochtend niet meer', 
 function metJager(zaad, f) {
   const S = landVanDeMaker(zaad);
   const D = S.dorp;
-  T.zetOptie('wieBouwt', 'jij');
   T.zetOptie('voorvallen', 'uit');
   try {
     T.zetBeesten(D);
@@ -671,7 +670,6 @@ test('de jager schiet klein wild en herten in zijn bereik, laat er altijd twee p
   assert.ok(g.handen > 0, 'hij werkt door');
   assert.ok(Math.abs(nu - T.GEBOUWEN.jager.maakt.uit.vlees * J.kleinWild * g.werkte) < 1e-6, `klein wild: ${nu}`);
   assert.equal(T.jagersZonderHerten(D), 1);
-  assert.ok(!T.watTeBouwen(D).some((x) => x.soort === 'jager'), 'geen tweede jager');
   assert.ok(vlees > 0);
 }));
 

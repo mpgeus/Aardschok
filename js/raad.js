@@ -31,9 +31,6 @@
     // Zoveel dagen nadat een voorval voorbijging dat een raadsman had beslist, als je er een had (js/voorvallen.js: je
     // was weg), zegt de raad: kies een raadsman (js/raadsman.js).
     raadsmanNa: 10,
-    // Hangt je oproep zoveel dagen op het plein en kan het dorp hem niet betalen, dan zegt de raad wat er mist
-    // (js/verzoeken.js).
-    oproepNa: 7,
   };
   const IN = () => T.RAAD_INSTELLINGEN;
 
@@ -98,16 +95,12 @@
     if (mist.hout && voor !== 'houthakker') {
       const hakker = naamVan('houthakker');
       bronnen.push(heeft(D, 'houthakker') ? T.t('the {hakker} cuts wood', { hakker })
-        : T.VERZOEKEN_INSTELLINGEN.mensen ? T.t('{hakker} would cut wood', { hakker: eenNaam('houthakker') })
-          : T.t('{hakker} [B] cuts wood', { hakker: eenNaam('houthakker') }));
+        : T.t('{hakker} [B] cuts wood', { hakker: eenNaam('houthakker') }));
     }
     return bronnen;
   }
   const hoeveelTekst = (mist) => T.opsomming(Object.entries(mist).map(([wat, n]) => T.hoeveel(n, wat)));
 
-  // Bouwen de mensen (js/verzoeken.js, de spelregel "Wie bouwt"; werklijst vraag 103), dan zegt de raad wat zou helpen,
-  // zonder [B], en of iemand je er al om vraagt.
-  const mensenBouwen = () => T.VERZOEKEN_INSTELLINGEN.mensen;
   // Helpt een jager tegen een winter zonder eten: vlees vult een maag, en er is geen jager die geen hert vindt dat hij mag
   // schieten (T.jagersZonderHerten, js/beesten.js; Marcel, 7 okt, vraag 116, k). In de speeltest van 7 okt vroeg het dorp
   // anders jager na jager, tot er 9 tot 11 stonden, die alleen klein wild schoten.
@@ -122,7 +115,7 @@
     const dag = D.kalender.dag;
     const datum = T.datumVanDag(dag);
     const w = D.wereld;
-    const tB = mensenBouwen() ? '' : ' [B]';
+    const tB = ' [B]';
     // Vissers: een per vissersPer mensen, zolang er water genoeg is (een per waterPerVisser tegels).
     const water = w && w.tegels && w.tegels.length ? T.natuurBij(w, 'water', { x: 0, y: 0, b: w.tegels[0].length, h: w.tegels.length }, 0) : 0;
     const visser = T.GEBOUWEN.visser;
@@ -191,26 +184,7 @@
         ? T.t('Without salt it spoils: buy {zout} from the peddler, now that he is here; one salt keeps {aantal} fish or meat good.', woorden)
         : T.t('Without salt it spoils: buy {zout} from the peddler in {maand}; one salt keeps {aantal} fish or meat good.', woorden));
     }
-    const bouw = r.hulp.find((h) => h.bouw);
-    return `${zinnen.join(' ')}${bouw ? verzoekZin(D, bouw.bouw) : ''}`;
-  }
-
-  const verzoekZin = (D, soort) => (mensenBouwen() && soort ? T.verzoekZin(D, soort) : '');
-
-  // Je oproep op het plein (js/verzoeken.js; vraag 103, c) die er al oproepNa dagen hangt, terwijl het dorp niet kan
-  // betalen wat hij kost (met de premie): { soort, mist }, of null.
-  function oproepDieWacht(D) {
-    if (!mensenBouwen() || !D.verzoeken || !D.verzoeken.oproepen) return null;
-    for (const o of D.verzoeken.oproepen) {
-      if (dagNu(D) - o.dag < IN().oproepNa) continue;
-      const mist = {};
-      for (const [wat, n] of Object.entries(T.kostenVanVerzoek({ soort: o.soort, premie: T.VERZOEKEN_INSTELLINGEN.premie }))) {
-        const tekort = Math.ceil(n - (D.voorraad[wat] || 0) - 1e-9);
-        if (tekort > 0) mist[wat] = tekort;
-      }
-      if (Object.keys(mist).length) return { soort: o.soort, mist };
-    }
-    return null;
+    return zinnen.join(' ');
   }
 
   // Het eerste wat de huizen missen waar je nu iets aan kunt doen (T.watDeHuizenMissen, js/wensen.js), van deze soort
@@ -219,8 +193,6 @@
   // Wat erbij komt als je niet kunt betalen wat helpt: wat je mist, en waar het vandaan komt. Anders hoor je het niet
   // meer, want de wensen gaan voor wat het doel vraagt.
   function wensTekst(D, x) {
-    const vraagt = verzoekZin(D, x.bouw);
-    if (vraagt) return `${x.tekst}${vraagt}`;
     const mist = tekortVoor(D, [x.bouw]);
     if (!mist) return x.tekst;
     const bronnen = waarVandaan(D, mist, x.bouw);
@@ -260,9 +232,7 @@
       als: (D) => D.rovers && D.rovers.laatsteAanval != null && dagNu(D) - D.rovers.laatsteAanval < IN().roversNa && !heeft(D, 'wachthuis'),
       tekst: (D) => {
         const woorden = { gebouw: T.hoofdletter(eenNaam('wachthuis')), n: T.GEBOUWEN.wachthuis.handen, getal: T.telwoord(T.GEBOUWEN.wachthuis.handen) };
-        return mensenBouwen()
-          ? T.t('The robbers are coming back. {gebouw} would give you {n|{getal} man|{getal} men} to fight at your side.', woorden) + verzoekZin(D, 'wachthuis')
-          : T.t('The robbers are coming back. {gebouw} [B] gives you {n|{getal} man|{getal} men} to fight at your side.', woorden);
+        return T.t('The robbers are coming back. {gebouw} [B] gives you {n|{getal} man|{getal} men} to fight at your side.', woorden);
       },
     },
     // De wolven (js/beesten.js; werklijst vraag 116, stap 2b): ze namen een schaap of vielen iemand aan. Wat ertegen helpt:
@@ -275,9 +245,7 @@
         const zin = T.t('There are wolves near the village. Anyone who walks alone in the dark at night is in danger; light keeps them away.');
         if (T.jagerBijDeWolven(D)) return zin;
         const jager = T.hoofdletter(eenNaam('jager'));
-        return mensenBouwen()
-          ? `${zin} ${T.t('{jager} would keep the packs small.', { jager })}${verzoekZin(D, 'jager')}`
-          : `${zin} ${T.t('{jager} [B] keeps the packs small.', { jager })}`;
+        return `${zin} ${T.t('{jager} [B] keeps the packs small.', { jager })}`;
       },
     },
     {
@@ -286,9 +254,7 @@
       tekst: (D) => {
         const nog = heeft(D, 'houthakker');
         const hakker = nog ? naamVan('houthakker') : eenNaam('houthakker');
-        let helpt;
-        if (mensenBouwen()) helpt = (nog ? T.t('another {hakker} would help.', { hakker }) : T.t('{hakker} would help.', { hakker })) + verzoekZin(D, 'houthakker');
-        else helpt = nog ? T.t('another {hakker} [B] will cut more.', { hakker }) : T.t('build {hakker} [B].', { hakker });
+        const helpt = nog ? T.t('another {hakker} [B] will cut more.', { hakker }) : T.t('build {hakker} [B].', { hakker });
         return `${T.t('The wood lasts {haalt} of winter: {helpt}', { haalt: haalt(T.houtVoorDeWinter(D, D.kalender.dag)), helpt })}${geenGezin()}`;
       },
     },
@@ -298,10 +264,9 @@
       // Wat helpt, zegt het dorp ook: wat er nu kan en het meest oplevert (T.watHelptAanEten hieronder; vraag 132, b).
       tekst: (D) => {
         const hulp = T.watHelptAanEten(D).slice(0, 2);
-        const bouw = hulp.find((h) => h.bouw);
         const woorden = { haalt: haalt(T.etenVoorDeWinter(D, D.kalender.dag)), hulp: T.opsomming(hulp.map((h) => h.zin)) };
         const zin = hulp.length ? T.t('The food lasts {haalt} of winter. What helps: {hulp}.', woorden) : T.t('The food lasts {haalt} of winter.', woorden);
-        return `${zin}${bouw ? verzoekZin(D, bouw.bouw) : ''}${geenGezin()}`;
+        return `${zin}${geenGezin()}`;
       },
     },
     // Vis en vlees voor de winter (vraag 132, B): zout, en een voorraad voordat de vissers stilliggen.
@@ -374,18 +339,6 @@
       },
     },
     {
-      // Je oproep hangt al een week, en niemand kan hem bouwen: het dorp mist wat hij kost (werklijst vraag 103, c).
-      id: 'oproep',
-      als: (D) => !!oproepDieWacht(D),
-      tekst: (D) => {
-        const { soort, mist } = oproepDieWacht(D);
-        const bronnen = waarVandaan(D, mist, soort);
-        const woorden = { gebouw: eenNaam(soort), lijst: hoeveelTekst(mist), bronnen: T.opsomming(bronnen) };
-        return bronnen.length ? T.t('Your notice for {gebouw} hangs on the square, but the village lacks {lijst}: {bronnen}.', woorden)
-          : T.t('Your notice for {gebouw} hangs on the square, but the village lacks {lijst}.', woorden);
-      },
-    },
-    {
       id: 'tevreden',
       als: (D) => mensenNodig(D) > 0 && T.waaromGeenGezin(D).includes('tevreden'),
       tekst: (D) => T.t('No family is coming: the village is {nu}% content, and a family wants {drempel}%.',
@@ -402,54 +355,6 @@
       tekst: (D) => T.t('The next family arrives {wanneer}.', { wanneer: over(T.volgendeGezinDag(D) - dagNu(D)) }),
     },
   ];
-
-  // Wat het dorp nu zou willen bouwen, in de volgorde van de raad: [{ soort, waarom, voor }], met wat er gemist wordt in
-  // `waarom` ("Ten stone houses want cloth.") en waarvoor in `voor` ('rovers', 'winter', 'hout', 'bouwstof', 'wens',
-  // 'doel'). Voor de verzoeken (js/verzoeken.js; werklijst vraag 103): wat de raad je
-  // liet bouwen, vraagt een inwoner je. Alleen wat al gebouwd mag worden (T.magGebouwd, js/gebouwen.js), en niet wat er
-  // al gebouwd wordt. Een keten komt één voor één: staat de bakkerij er zonder meel, dan helpt een molen (js/wensen.js).
-  T.watTeBouwen = function (D) {
-    const uit = [];
-    if (!D.kalender || !D.voorraad) return uit;
-    const erbij = (soort, waarom, voor) => {
-      if (!soort || uit.some((x) => x.soort === soort) || !T.magGebouwd(D, soort)) return;
-      if ((D.gebouwen || []).some((g) => g.soort === soort && !g.klaar)) return;
-      uit.push({ soort, waarom, voor });
-    };
-    if (D.rovers && D.rovers.laatsteAanval != null && dagNu(D) - D.rovers.laatsteAanval < IN().roversNa && !heeft(D, 'wachthuis')) {
-      erbij('wachthuis', T.t('The robbers are coming back.'), 'rovers');
-    }
-    if (haaltHetNiet(D, T.houtVoorDeWinter)) erbij('houthakker', T.t('The wood lasts {haalt} of winter.', { haalt: haalt(T.houtVoorDeWinter(D, D.kalender.dag)) }), 'winter');
-    if (haaltHetNiet(D, T.etenVoorDeWinter)) {
-      const bouw = T.watHelptAanEten(D).find((h) => h.bouw);
-      if (bouw) erbij(bouw.bouw, T.t('The food lasts {haalt} of winter.', { haalt: haalt(T.etenVoorDeWinter(D, D.kalender.dag)) }), 'winter');
-    }
-    // De wijn (js/wijngaard.js; werklijst vraag 136): haalt wat er na de pluk ligt het jaar niet, dan nu een wijnboerderij
-    // erbij, zodat ze er voor de pluk staat. Daarvoor vroeg het dorp er pas een als de wijn al op was.
-    const wijn = T.wijnNaDePluk(D, D.kalender.dag);
-    if (!wijn.haalt) {
-      const waarom = T.t('What the {boerderijen} pick in {maand} does not last the year: {haalt}.',
-        { boerderijen: T.GEBOUWEN.wijnboerderij.meervoud, maand: maandToon('wijnmaand'), haalt: haalt(wijn) });
-      erbij('wijnboerderij', waarom, 'wijn');
-    }
-    const vis = T.visEnVleesRaad(D);
-    const visBouw = vis && vis.hulp.find((h) => h.bouw);
-    if (visBouw) erbij(visBouw.bouw, T.t('In winter the houses want more fish or meat than there will be.'), 'winter');
-    // Er hakt niemand hout: dan stopt alles, want elke hut op een erf (js/erven.js) en elk gebouw kost hout. Dus eerst een
-    // houthakker, zoals de bouwer van de speeltest hem er altijd eerst neerzette (vraag 86, b). Zonder dat at het dorp in
-    // de eerste speeltest van vraag 103 zijn hout op aan de kapel en de putten, en kon het daarna geen houthakker en geen
-    // jager meer betalen.
-    // Een houthakker die stilstaat omdat zijn bomen op zijn, is geen reden voor een nieuwe zolang het hout de winter
-    // haalt (werklijst vraag 129, e): in de speeltest van 6 okt stonden er zo na vier jaar 8 tot 10, die vooral stilstonden.
-    if (!heeft(D, 'houthakker')) erbij('houthakker', T.t('Nobody is cutting wood, and every hut and every building costs wood.'), 'hout');
-    // Het zaaigraan ligt nergens veilig (js/graanschuur.js; vraag 132): zodra er zaaigraan apart ligt, na de oogst.
-    if (T.GRAANSCHUUR_INSTELLINGEN.bewaken && !heeft(D, 'graanschuur') && T.zaaigraanApart(D, D.kalender.dag) > 0) {
-      erbij('graanschuur', T.t('The seed grain is safe nowhere: in a hungry winter the village eats it, and then the fields stay empty.'), 'zaaigraan');
-    }
-    for (const x of T.watDeHuizenMissen(D)) if (x.kan && x.bouw) erbij(x.bouw, x.zin, x.soort);
-    for (const soort of T.doelGebouwen(D)) erbij(soort, T.t('For the goal, {gebouw} is needed.', { gebouw: eenNaam(soort) }), 'doel');
-    return uit;
-  };
 
   // De raad van nu: { id, tekst }, of null. Alleen in het gehucht zelf (een wereld met een plein, waar de heer
   // komt), en niet als de spelregel hem uitzette.

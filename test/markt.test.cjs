@@ -92,7 +92,7 @@ for (const zaad of [undefined, 62707, 73425, 72022]) {
     const midden = T.marktMidden(w);
     const voor = bereik(w, midden);
 
-    // De plek die een verzoek kiest: het midden van het plein, met de eerste kramen.
+    // De plek die T.plekVoor kiest: het midden van het plein, met de eerste kramen.
     const plek = T.plekVoor(D, 'markt', T.deurVan(w, D.gebouwen.find((g) => g.huis === 'schout')));
     assert.deepEqual({ x: plek.x, y: plek.y }, midden);
     assert.ok(tegels(plek.kramen) >= T.MARKT_INSTELLINGEN.beginTegels, 'de eerste kramen: zoveel tegels toonbank');

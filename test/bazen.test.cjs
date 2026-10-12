@@ -18,7 +18,7 @@ T.ui = new Proxy({}, {
   },
 });
 
-// Het echte gehucht, zoals een nieuw spel begint, stil en met een vast zaad (zoals in test/verzoeken.test.cjs).
+// Het echte gehucht, zoals een nieuw spel begint, stil en met een vast zaad.
 function gehucht() {
   const echt = console.warn;
   const toeval = Math.random;
@@ -134,15 +134,6 @@ test('een antwoord op een voorval telt mee, ook als je raadsman het besliste', (
   T.beginVoorval(D, 'klok', D.bewoners.mensen.find((p) => p.leeftijd === 'volwassen'), null, 1);
   T.voorvalGevolg(D, { tevreden: 4 });
   assert.equal(T.bazenNu(D).vertrouwen, 50 + 4 * IN().voorval);
-});
-
-test('ja op een verzoek om te bouwen is je werk: het vertrouwen blijft', () => {
-  const S = gehucht();
-  const D = S.dorp;
-  const L = T.beginVoorval(D, 'bouwverzoek', D.bewoners.mensen.find((p) => p.leeftijd === 'volwassen'), null, 1);
-  L.bouw = { soort: 'put', x: 0, y: 0, waarom: '', voor: 'doel', nut: 1 };
-  T.voorvalGevolg(D, { tevreden: 3 });
-  assert.equal(T.bazenNu(D).vertrouwen, 50);
 });
 
 test('het vertrouwen gaat elke dag een stukje naar hoe tevreden het dorp is', () => {

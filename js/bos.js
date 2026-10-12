@@ -8,10 +8,9 @@
 // werkplaats het op, met dezelfde bijl (js/veldwerk.js).
 //
 // Een stuk dat gerooid moet worden (de kavel), hoort bij een gebouw dat erop wacht (`wachtOpRooien`): de hut van een gezin
-// op zijn erf (js/erven.js), of een werkplaats die een inwoner vroeg waar geen open grond meer was (js/verzoeken.js).
-// Zolang telt het gebouw al mee (de hut als huis van het gezin), maar staat het nog niet op de kaart (T.bouwGebouw,
-// js/gebouwen.js). Wie het rooit, zegt T.rooitHij: het hoofd van het gezin, of de inwoner die de werkplaats vroeg (zijn
-// meester). Hij werkt zolang nergens anders (js/bewoners.js). Is het stuk vrij, dan ligt de bouwplaats er de volgende
+// op zijn erf (js/erven.js), of een bouwplaats van het lege begin (die rooien de bouwers, js/bouwen.js). Zolang telt het
+// gebouw al mee (de hut als huis van het gezin), maar staat het nog niet op de kaart (T.bouwGebouw, js/gebouwen.js). Wie
+// een erf rooit, zegt T.rooitHij: het hoofd van het gezin. Hij werkt zolang nergens anders (js/bewoners.js). Is het stuk vrij, dan ligt de bouwplaats er de volgende
 // dag; na `rooiDagen` rooien de buren de rest in één keer (T.tikRooienDag). En het bos is van de heer: een stuk met
 // minstens zoveel bomen als een stuk bos bij het ontginnen, kost zijn gunst (T.inHetBosVanDeHeer).
 //
@@ -30,7 +29,6 @@
 //   g.kavel          { x, y, b, h }: het stuk dat eerst vrij moet (bij een erf het erf met het looppad om de hut,
 //                    T.kavelVanErf in js/erven.js; bij een werkplaats zijn voet met het looppad eromheen)
 //   g.rooienTot      de dag waarop de buren de rest rooien
-//   p.rooit          de werkplaats die deze inwoner vroeg en nu rooit (bij een hut volgt het uit het gezin)
 //   g.groeitNaRooien een huis dat wil doorgroeien, en waar het gezin eerst rooit wat in de weg staat (g.kavel: de nieuwe
 //                    voet; werklijst vraag 130)
 //   g.boom           { x, y }: de boom waar de houthakker aan hakt; null als er geen meer binnen bereik staat
@@ -231,20 +229,14 @@
   };
 
   // Het gebouw dat deze inwoner nu rooit, of null: zijn hut als hij het hoofd van het gezin is en de hut daarop wacht
-  // (js/erven.js), zijn huis als het wil doorgroeien (werklijst vraag 130), of de werkplaats die hij vroeg
-  // (js/verzoeken.js).
+  // (js/erven.js), of zijn huis als het wil doorgroeien (werklijst vraag 130).
   T.rooitHij = (p) => {
     if (!p) return null;
-    if (p.huis && (p.huis.wachtOpRooien || p.huis.groeitNaRooien) && !p.hoofd) return p.huis;
-    return p.rooit && p.rooit.wachtOpRooien ? p.rooit : null;
+    return p.huis && (p.huis.wachtOpRooien || p.huis.groeitNaRooien) && !p.hoofd ? p.huis : null;
   };
 
-  // Wie dit gebouw rooit: het hoofd van het gezin in de hut of het huis, of de meester van de werkplaats; null als hij er
-  // niet meer is.
-  function rooierVan(D, g) {
-    if (g.erf || g.groeitNaRooien) return (D.bewoners && D.bewoners.mensen.find((p) => p.huis === g && !p.hoofd)) || null;
-    return g.meester && D.bewoners && D.bewoners.mensen.includes(g.meester) ? g.meester : null;
-  }
+  // Wie dit gebouw rooit: het hoofd van het gezin in de hut of het huis; null als er niemand meer woont.
+  const rooierVan = (D, g) => (D.bewoners && D.bewoners.mensen.find((p) => p.huis === g && !p.hoofd)) || null;
 
   // Een huis dat wil doorgroeien, maar waar iets staat wat het gezin kan rooien (T.groeiRooiPlan, js/behoeften.js;
   // werklijst vraag 130; Marcel, 6 okt: "Ok"): het gezin rooit eerst het stuk `kavel` (de nieuwe voet), zoals zijn erf, met
@@ -277,9 +269,9 @@
   }
   T.rooiTegel = rooiNu; // ook voor de bouwers van het lege begin (js/bouwen.js)
 
-  // Elke dag (T.tikGebouwenDag, js/gebouwen.js, vóór de erven): een gebouw dat op het rooien wachtte en nu vrij is, komt op
-  // de kaart, en is de tijd om, dan rooien de buren eerst de rest. Een hut wacht dan op hout (T.tikErvenDag, js/erven.js),
-  // een werkplaats begint: zijn kosten zijn al betaald.
+  // Elke dag (T.tikGebouwenDag, js/gebouwen.js, vóór de erven): een hut die op het rooien van zijn erf wachtte en nu vrij
+  // is, komt op de kaart, en is de tijd om, dan rooien de buren eerst de rest. Dan wacht hij op hout (T.tikErvenDag,
+  // js/erven.js).
   T.tikRooienDag = function (D) {
     const dag = dagNu(D);
     for (const g of D.gebouwen || []) {
@@ -296,22 +288,11 @@
       delete g.rooienTot;
       T.zetOpDeKaart(D, g);
       const p = rooierVan(D, g);
-      if (p && p.rooit === g) delete p.rooit;
-      const naam = p && p.naam ? p.naam : null;
-      const wie = g.erf ? (naam ? T.t("{naam}'s family", { naam }) : T.t('a new family')) : naam || T.t('whoever asked');
-      if (g.erf) {
-        g.wachtOpHout = true;
-        T.zeg(D, over.length
-          ? T.t('The neighbours help {wie} clear the rest, and the building site for the hut is ready.', { wie })
-          : T.t('{wie} has cleared its plot, and the building site for the hut is ready.', { wie: T.hoofdletter(wie) }));
-      } else {
-        g.klaarOp = dag + T.GEBOUWEN[g.soort].bouwtijd;
-        if (g.voorwerp) g.voorwerp.klaarOp = g.klaarOp;
-        const gebouw = T.GEBOUWEN[g.soort].naam;
-        T.zeg(D, over.length
-          ? T.t('The neighbours help {wie} clear the rest, and work on the {gebouw} begins.', { wie, gebouw })
-          : T.t('{wie} has cleared the spot, and work on the {gebouw} begins.', { wie: T.hoofdletter(wie), gebouw }));
-      }
+      const wie = p && p.naam ? T.t("{naam}'s family", { naam: p.naam }) : T.t('a new family');
+      g.wachtOpHout = true;
+      T.zeg(D, over.length
+        ? T.t('The neighbours help {wie} clear the rest, and the building site for the hut is ready.', { wie })
+        : T.t('{wie} has cleared its plot, and the building site for the hut is ready.', { wie: T.hoofdletter(wie) }));
     }
   };
 

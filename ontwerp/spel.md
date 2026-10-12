@@ -30,7 +30,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | De houthakker hakt en plant | gebouwd (6 okt; Marcel: "A ja B ja C ja D zo"): zijn hout komt uit de bomen om zijn schuur, elke tien hout een boom; naast de stronk twee boompjes, in een jaar of twee bomen, zodat het bos om hem blijft; zonder boom staat hij stil, en werkt zijn hand elders; hij komt alleen bij minstens 30 bomen binnen tien tegels, en loopt tussen zijn stronken door (vraag 129, e, b en f); in de speeltest van vier jaar komt elk dorp boven de 100 en wint er voor het eerst een | vraag 115, 129 |
 | Beesten in het bos | stap 1, 2a en 2b gebouwd (7 okt; Marcel: "a ja, b ja, c ja", en d tot i): roedels wolven en groepjes herten, elk met een plek diep in het bos; overdag rusten ze, 's nachts lopen de wolven langs de bosrand met rode ogen, in de schemering grazen de herten aan de rand; ze gaan mensen uit de weg, en een wolf begint geen gevecht; in de winter jagen de wolven met honger op de herten, in de lente komen er jongen, en wie zijn bos kwijt is, verhuist of trekt weg; zijn de herten op, dan komen ze in het donker naar het dorp: een schaap, of wie alleen loopt, en wie werkt en ze ziet, rent naar huis; licht houdt ze weg (2b); de jager schiet klein wild en herten, laat twee per groepje staan en houdt de roedels klein (3a); de jacht te voet naar de roedel (3b); om hulp roepen en het hek komen nog | vraag 116 |
 | De markt op het plein | gebouwd (6 okt; vraag 110, d, en 127, stap 1 en 2): een marktblok van twee rijen kramen met manden op het plein, voor 8 hout en 6 goud, dat meegroeit met het dorp (een kraam per 15 mensen, daarna langs de weg), met kramen vol of leeg naar wat het dorp heeft; de maker legt een groter plein; de kooplui, de boodschappen en de marktdag nog niet | vraag 110, d; 127 |
-| De verzoeken | stap 1 tot en met 3 gebouwd (3 okt): wat het dorp mist, komt een inwoner je vragen, met de plek die hij koos en wat het kost; ja of nee, en ben je weg, dan beslist je raadsman; in het bouwmenu alleen nog het erf en oproepen met een premie (de spelregel "Wie bouwt"); de speeltest speelt zo; en uit eigen wil: een ondernemer die wapens wil maken (sinds 7 okt niet meer verboden, vraag 131) of een tweede herberg beginnen, met wat ja en nee aan gevolgen hebben (vraag 104); sinds 6 okt rooit wie een werkplaats vraagt zijn plek eerst, als er geen open grond meer is (vraag 110, e) | vraag 103, 104, 110 |
+| De verzoeken | weg (12 okt, ronde 2 van het snoeien): niemand vraagt meer wat hij bouwt, ook de ondernemers niet; jij bouwt alles uit het bouwmenu, en de spelregel "Wie bouwt" is weg | vraag 103, 104 |
 | Twee bazen | stap 1 en 2 gebouwd (3 okt; Marcel: "106 a b c d ja"): de gunst van de heer en het vertrouwen van het dorp in de balk, met een waarschuwing onder 20 en op 0 weg (ontslagen of weggejaagd); betrapt op verstoppen is de laatste waarschuwing; elke maand een gril van de heer in een brief, die zijn gunst tegen het dorp weegt | vraag 106 |
 | Dorpsfeesten | gebouwd (3 okt): het oogstfeest en de meiboom, en sinds 10 okt de kerstboom; zeg je ja, dan viert het hele dorp het op het plein, een hele dag (en niemand werkt) of een avond, met licht en de meiboom in pixel art; de rest (meer feesten, een grote bruiloft) later | vraag 84, 97 |
 | Besloten | het spel zelf (23 sep); geldt nog | |
@@ -75,8 +75,8 @@ is zijn huis (slapen, het rapport). Een tent is zo groot als zijn gezin, dus er 
 hout, 140 graan, 60 zaaigraan, 20 goud en 5 gereedschap; met de schout komt zijn gezin mee (Marcel: "Met gezin"), en elk
 gezin is een man, een vrouw en een kind, zodat het in een hut past (Marcel: "Kleinere gezinnen"), samen 17 mensen. Het
 eerste jaar vraagt de heer niets: geen schatting en geen grillen, en in wijnmaand schrijft hij dat hij je spaart ("Bedank
-Ons niet"). **Jij bouwt** (Marcel: "We willen dus een bouwmenu en zelf bouwen"): "Leeg" zet "Huizen" en "Wie bouwt" op
-"Jij", dus alles staat in het bouwmenu en jij zet het neer (het rijst nog vanzelf op in zijn bouwtijd). **Verhuizen:** is
+Ons niet"). **Jij bouwt** (Marcel: "We willen dus een bouwmenu en zelf bouwen"): "Leeg" zet "Huizen" op "Jij" (en "Wie
+bouwt" is weg sinds 12 okt), dus alles staat in het bouwmenu en jij zet het neer (het rijst nog vanzelf op in zijn bouwtijd). **Verhuizen:** is
 een hut of huis af, dan trekt er in die nacht een gezin uit het kamp in (past het niet, dan toch, krap), en zijn tent gaat
 weg (Marcel: "Per tent"); met de laatste tent gaat het kampvuur uit, en de kar blijft. Zolang er een gezin in het kamp
 woont, komt er geen nieuw gezin over de weg. **Binnen bereik, en met handen** (1d; Marcel: "a1, b ja, c ja, d ja, e
@@ -559,10 +559,10 @@ veranderde. Ze beginnen op 50.
   schandpaal −40; het venster zegt vooraf waar zijn gunst dan staat), niet naar het plein komen −10, de heervaart
   (mannen gestuurd +10, vrijgekocht +5, niet geantwoord −10). Wapens die zijn soldaten vonden, kostten tot 7 okt −30;
   sinds wapens niet meer verboden zijn, niet meer (vraag 131).
-- **Het vertrouwen van het dorp:** elk antwoord op een voorval of een verzoek, zo zwaar als het het dorp tevreden of
+- **Het vertrouwen van het dorp:** elk antwoord op een voorval, zo zwaar als het het dorp tevreden of
   ontevreden maakt (besliste je raadsman, de helft); niet gevonden of geen tijd −2; mannen naar de oorlog −8, vrijgekocht
   +8; wie verhongerde of bevroor −3 per mens, wie sneuvelde −2; soldaten in huis −10; jezelf aan de schandpaal +10,
-  iemand anders naar zijn aanzien; een ondernemer die na twee keer nee wegtrok −10. En elke dag gaat het een stukje
+  iemand anders naar zijn aanzien. En elke dag gaat het een stukje
   naar hoe tevreden het dorp is (een zestigste van het verschil): een tevreden dorp vertrouwt je, en een klap slijt in
   een paar maanden weg; een ellendig dorp vertrouwt je weinig, en een klap erbij jaagt je weg (vraag 106, stap 3; Marcel,
   3 okt: "vertrouwen ook ja"; tot dan telde het vooral de klappen op, en zakte het bij iedereen, `speelbaar.md`).
@@ -725,7 +725,14 @@ spel een markt: een eigen gebouw van 6 bij 6 vroeg 12 bij 12 open grond, en die 
 
 ## De stad groeit door haar mensen: de verzoeken (Marcel, 3 okt 2026; werklijst vraag 103)
 
-**Zo werkt het nu** (3 okt, vijfentwintigste sessie; stap 1 van vraag 103, `js/verzoeken.js`): met de spelregel "Wie
+**Zo werkt het nu** (12 okt, ronde 2 van het snoeien, stap 2a; Marcel: "III. OK"): **de verzoeken en de ondernemers zijn
+weg.** Niemand komt je meer vragen wat hij bouwt: `js/verzoeken.js` en `js/ondernemers.js`, de voorvallen `bouwverzoek`,
+`wapenverzoek` en `herbergverzoek` met hun gesprekken, de oproepen op het plein, de meester van een werkplaats, wat een
+huis nadroeg (wrok en dank), de lijst van de raad voor de verzoeken (`T.watTeBouwen`), de spelregel "Wie bouwt" en
+`Spel.debug.verzoek()` en `ondernemers()`. Jij bouwt alles uit het bouwmenu, en de wapenmaker en een tweede herberg zet
+je zelf neer. Git bewaart het (`git log -S beginBouwverzoek`). Wat hieronder staat, is hoe het tot 12 okt werkte.
+
+**Zo werkte het** (3 okt, vijfentwintigste sessie; stap 1 van vraag 103, `js/verzoeken.js`): met de spelregel "Wie
 bouwt" op **De mensen vragen het** (de standaard) staat in het bouwmenu alleen nog het erf. Wat het dorp mist, komt een
 inwoner je vragen: wat de raad je vroeger liet bouwen (`T.watTeBouwen`, `js/raad.js`): hout of eten voor de winter, een
 wachthuis na de rovers, de bouwstof en de wensen van de huizen, en wat het doel vraagt.

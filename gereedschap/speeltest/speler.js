@@ -261,39 +261,14 @@
     for (let i = 0; i < 4 && voorvalOpen(s); i++) {
       const L = s.dorp.voorvallen.lopend;
       const knoppen = [...document.querySelectorAll('#dialoog-keuzes button')].filter((b) => !b.disabled);
-      // Een bouwverzoek (js/verzoeken.js; werklijst vraag 103): ja als het kan, zoals de bouwer bouwde wat de raad zei,
-      // ook als het hout voor de winter krap is (daar waarschuwt de raad voor, en dan vraagt iemand een houthakker); kan
-      // het niet, dan nee. Een gewoon voorval: het eerste verstandige antwoord.
-      // Een werkplaats die eerst in het bos van de heer rooit (js/bos.js; werklijst vraag 110, e) kost zijn gunst, dus ja
-      // zolang de baas die het kost daarna op 30 of meer staat (de grens die de slimme ook bij een gril houdt). In de
-      // speeltest van 6 okt zei de bouwer op 62707 met 5 gunst nog ja tegen een jager in het bos, en was hij zijn ambt kwijt.
-      const verzoek = L.bouw;
-      const magJa = (b) => {
-        const bazen = T.bazenNu(s.dorp);
-        if (!(L.bouw && L.bouw.bos) || !bazen) return true;
-        const v = /vertrouwen van het dorp −(\d+)/.exec(prijsVan(b));
-        const g = /gunst van de heer −(\d+)/.exec(prijsVan(b));
-        return (!v || bazen.vertrouwen - Number(v[1]) >= 30) && (!g || bazen.gunst - Number(g[1]) >= 30);
-      };
-      const tekst = (b) => b.textContent.replace(/^\d/, '');
-      const ja = !verzoek ? null : knoppen.find((b) => /^Ja/.test(tekst(b)) && magJa(b));
-      const knop = verzoek ? ja || knoppen.find((b) => /^Nee/.test(tekst(b))) || knoppen[0] : knoppen.find((b) => verstandig(s, prijsVan(b))) || knoppen[0];
+      const knop = knoppen.find((b) => verstandig(s, prijsVan(b))) || knoppen[0];
       if (!knop) break;
       const antwoord = knop.textContent.replace(/^\d/, '');
       if (!geboekt.has(L)) {
         geboekt.add(L);
-        boek.voorvallen.push({ dag: heel(s.kalender.dag), datum: datum(), id: L.id, wie: T.naamVanBewoner(L.wie), antwoord, bouw: L.bouw ? L.bouw.soort : undefined });
+        boek.voorvallen.push({ dag: heel(s.kalender.dag), datum: datum(), id: L.id, wie: T.naamVanBewoner(L.wie), antwoord });
       }
-      const bouw = L.bouw && L.bouw.soort;
-      const voor = s.dorp.gebouwen.length;
       knop.click();
-      // Een bouwverzoek (js/verzoeken.js; werklijst vraag 103): wat er zo gebouwd werd, telt als gebouwd, zoals toen de
-      // speler het zelf deed.
-      if (bouw && /^Ja/.test(antwoord)) {
-        const gelukt = s.dorp.gebouwen.length > voor;
-        boek.gebouwd.push({ dag: heel(dagNu()), datum: datum(), soort: bouw, gelukt, reden: gelukt ? null : 'geen plek of geen bouwstof', door: 'verzoek' });
-        daad(`zegt ja tegen ${T.naamVanBewoner(L.wie)}: een ${bouw}`);
-      } else if (bouw) daad(`zegt nee tegen ${T.naamVanBewoner(L.wie)}: een ${bouw}`);
     }
     if (s.modus === 'raadsman' && !bezig.raadsman) T.ui.sluitRaadsman(s);
     if (s.modus === 'handel' && !bezig.handel) T.ui.sluitHandel(s.dorp);
@@ -356,13 +331,10 @@
   // ── Bouwen ──────────────────────────────────────────────────────────────────────────────────────
   const huisVanDeSchout = () => D().gebouwen.find((g) => g.huis === 'schout');
 
-  // Waar het past, zoals een inwoner die het vraagt het kiest (T.plekVoor, js/verzoeken.js): een put of een kapel waar hij
-  // de meeste huizen bereikt die er nog geen hebben (zoals een speler die met de put in de hand kijkt wat de muis zegt),
-  // de rest zo dicht mogelijk bij de deur van de schout. Vragen de mensen het je (de spelregel "Wie bouwt"; werklijst
-  // vraag 103), dan bouwt de speler zelf niets: dan komt het als verzoek, en zegt hij ja of nee (de voorvallen, in
-  // beantwoord hierboven).
+  // Waar het past (T.plekVoor, js/bouwen.js): een put of een kapel waar hij de meeste huizen bereikt die er nog geen
+  // hebben (zoals een speler die met de put in de hand kijkt wat de muis zegt), de rest zo dicht mogelijk bij de deur van
+  // de schout.
   function bouw(soort) {
-    if (T.VERZOEKEN_INSTELLINGEN.mensen) return false;
     const s = S();
     const huis = huisVanDeSchout();
     const midden = huis ? T.deurVan(s.wereld, huis) : schoutTegel();
@@ -738,11 +710,9 @@
         // neemt het hout zodra het er is; zo kwam de houthakker er bij zaad 2 nooit (de speeltest van 1 okt).
         const houthakker = s.dorp.gebouwen.some((g) => g.soort === 'houthakker');
         if (!houthakker && !wil.includes('houthakker') && dagNu() >= houthakkerNietVoor) wil.unshift('houthakker');
-        // Steeds één erf vrij, binnen de kringen (vraag 95, b). Vragen de mensen het je (vraag 103), dan zonder op een
-        // houthakker te wachten: een hut die op hout wacht, is wat de houthakker laat vragen (T.watTeBouwen, js/raad.js).
-        const erfMag = houthakker || T.VERZOEKEN_INSTELLINGEN.mensen;
-        // Een vrij erf waar geen hut meer op past, telt niet (T.bruikbareErven; vraag 110, f).
-        if (erfMag && !T.bruikbareErven(s.dorp).length && dagNu() >= erfNietVoor && !bouwErf()) erfNietVoor = dagNu() + 30;
+        // Steeds één erf vrij, binnen de kringen (vraag 95, b). Een vrij erf waar geen hut meer op past, telt niet
+        // (T.bruikbareErven; vraag 110, f).
+        if (houthakker && !T.bruikbareErven(s.dorp).length && dagNu() >= erfNietVoor && !bouwErf()) erfNietVoor = dagNu() + 30;
         // Bouwen wat hij wil, zodra het goud en het hout er zijn; een kapel waar hij de meeste huizen bereikt. Wat het doel
         // vraagt en er al staat (een kapel voor de wensen), hoeft niet meer.
         while (wil.length && wil[0] !== 'houthakker' && !T.doelGebouwen(s.dorp).includes(wil[0])) wil.shift();
@@ -888,14 +858,6 @@
     return Object.fromEntries(eis.volgorde.map((w) => [w, eis.per[w]]));
   }
 
-  // Het hart van het dorp, waar een verzoek zijn plek zoekt: de deur van het huis van de schout (zoals hartVan in
-  // js/verzoeken.js).
-  function hartVanHetDorp() {
-    const s = S();
-    const huis = s.dorp.gebouwen.find((g) => g.huis === 'schout');
-    return huis ? T.deurVan(s.wereld, huis) : { x: Math.floor(s.wereld.tegels[0].length / 2), y: Math.floor(s.wereld.tegels.length / 2) };
-  }
-
   // Wat er in het looppad om de plek van de hut op een erf staat (zoals T.looppadOm het nakijkt), geteld per soort: een
   // gebouw, een voorwerp, de plek van het huis op een ander erf, of iets anders wat niet te belopen is. Leeg als hij past.
   function watStaatOmDeHut(D, e) {
@@ -968,9 +930,6 @@
       woningen: Object.fromEntries(['hut', 'huis', 'stenenHuis'].map((soort) => [soort, s.dorp.gebouwen.filter((g) => g.soort === soort && g.huis !== 'schout').length])),
       // Wat de huizen missen, zoals de raad en het rapport het zeggen (T.watDeHuizenMissen, js/wensen.js; vraag 87).
       missen: T.watDeHuizenMissen(s.dorp).slice(0, 5).map((x) => x.tekst),
-      // Wat het dorp zou willen bouwen (T.watTeBouwen, js/raad.js), en of het te betalen is en er plek voor is bij het hart
-      // van het dorp (T.plekVoor, js/verzoeken.js): zo zie je waarom er geen verzoek komt (werklijst vraag 107, stap 3).
-      wilBouwen: T.watTeBouwen(s.dorp).slice(0, 4).map((x) => ({ soort: x.soort, betalen: T.kanBetalen(s.dorp, T.GEBOUWEN[x.soort].kosten || {}), plek: !!T.plekVoor(s.dorp, x.soort, hartVanHetDorp()) })),
       houthakkers: houthakkers.map((g) => ({ klaar: !!g.klaar, handen: g.handen || 0 })),
       // De twee bazen (js/bazen.js; vraag 106): de gunst van de heer en het vertrouwen van het dorp.
       bazen: T.bazenNu(s.dorp),
@@ -1218,15 +1177,6 @@
       },
       akkertegels: tegels, ongezaaid,
       jaren: s.dorp.heer.jaren,
-      // De ondernemers (js/ondernemers.js; vraag 104): wat ze vroegen en wat de speler zei, en wat ervan kwam.
-      ondernemers: {
-        vroegen: boek.voorvallen.filter((v) => v.id === 'wapenverzoek' || v.id === 'herbergverzoek')
-          .map((v) => `${v.datum}: ${v.wie}, ${v.id === 'wapenverzoek' ? 'wapens' : 'een tweede herberg'}: ${v.antwoord}`),
-        berichten: boek.berichten.filter((b) => /A second inn, reeve|barrel of ale|turned down by the reeve/.test(b.tekst))
-          .map((b) => `${b.datum}: ${b.tekst}`),
-        wapens: T.wapensInHetDorp(s.dorp),
-        herbergen: T.herbergenVan(s.dorp).length,
-      },
     });
   }
 

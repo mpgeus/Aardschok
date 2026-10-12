@@ -148,7 +148,7 @@
   // hij vroeg, ook niet (js/bos.js; werklijst vraag 110, e), of wat er staat waar zijn huis groter wordt (vraag 130); en
   // wie de graanschuur bewaakt evenmin (p.wacht, js/graanschuur.js; vraag 132).
   // Wie in de wijnboerderij woont, plukt in wijnmaand (`g.plukt`, js/wijngaard.js) en werkt dan nergens anders.
-  const kanWerken = (p) => !p.schout && !p.weg && !p.wacht && !(p.huis && p.huis.plukt) && !(p.huis && p.huis.wachtOpRooien) && !(p.rooit && p.rooit.wachtOpRooien) && !(p.huis && p.huis.groeitNaRooien && !p.hoofd) && !!T.LEEFTIJDEN[p.leeftijd] && T.LEEFTIJDEN[p.leeftijd].werkt != null;
+  const kanWerken = (p) => !p.schout && !p.weg && !p.wacht && !(p.huis && p.huis.plukt) && !(p.huis && p.huis.wachtOpRooien) && !(p.huis && p.huis.groeitNaRooien && !p.hoofd) && !!T.LEEFTIJDEN[p.leeftijd] && T.LEEFTIJDEN[p.leeftijd].werkt != null;
   T.kanWerken = kanWerken;
 
   // De bewoner van een poppetje: een nieuw poppetje draagt hem mee (e.bewoner); de schout en de boeren
@@ -916,12 +916,11 @@
   };
 
   // Hoe goed iemand past op een plek bij gebouw g: hoe lager, hoe liever. De boer op zijn eigen boerderij het eerst (ook
-  // de oudste: hij maait zelf), en de meester op de werkplaats die hij vroeg (js/verzoeken.js). Verder naar leeftijd
+  // de oudste: hij maait zelf). Verder naar leeftijd
   // (T.LEEFTIJDEN: eerst de volwassenen) en wie het dichtstbij woont; wie de werkplaats het liefst heeft
   // (T.GEBOUWEN[soort].liefst: de schaapskooi een knaap) gaat vóór, en het gezin van de schout het laatst.
   function voorkeur(D, p, g, deur) {
     if (p.wie && p.huis === g) return -1e6;
-    if (g.meester === p) return -1e6 + 1; // wie het vroeg, is er de meester (js/verzoeken.js)
     let s = T.LEEFTIJDEN[p.leeftijd].werkt * 100 + T.afstand(deur(p.huis), deur(g));
     const soort = T.GEBOUWEN[g.soort];
     if (soort && soort.liefst === p.leeftijd) s -= 500;

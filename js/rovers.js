@@ -43,8 +43,8 @@
     kansAkkerKapot: 0.3,
     // Hoe dicht een man van de militie bij de schout moet staan om mee te vechten.
     militieBij: 12,
-    // Wie van de militie een wapen heeft, slaat zoveel harder (T.slagSchade, js/gevecht.js; tot ronde 2 van het snoeien,
-    // 12 okt, in js/ondernemers.js; Marcel: "h ja wapens blijven ook voor later").
+    // Wie van de militie een wapen heeft, slaat zoveel harder (T.slagSchade, js/gevecht.js; de wapens blijven, Marcel,
+    // 12 okt: "h ja wapens blijven ook voor later").
     wapens: { schade: 2 },
   };
   const IN = () => T.ROVERS_INSTELLINGEN;
@@ -280,7 +280,7 @@
     // Is de schout weg (op reis, js/land.js), dan roept niemand de militie bij hem: de rovers hebben vrij spel.
     const militie = T.schoutIsWeg(D) ? [] : T.militieVan(D);
     for (const e of militie) roepOp(e);
-    // Wie een wapen heeft (js/ondernemers.js), slaat harder.
+    // Wie een wapen heeft (van de wapenmaker), slaat harder.
     const gewapend = T.bewapen(D, militie);
     const boer = T.boerVanVeld(D, w.akkers[A.veld]);
     const akker = boer ? T.t('the field of {boer}', { boer: boer.naam }) : T.t('the field');

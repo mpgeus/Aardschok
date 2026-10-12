@@ -44,9 +44,7 @@
     // De heervaart (js/heervaart.js): je stuurde de mannen, kocht ze vrij, of hij haalde ze op omdat je niet antwoordde.
     heervaart: { gestuurd: 10, vrijgekocht: 5, gehaald: -10 },
     // Het dorp. Een antwoord op een voorval telt zo zwaar als het het dorp tevreden of ontevreden maakt (doe.tevreden,
-    // in procenten), keer zoveel; besliste je raadsman, dan keer doorRaadsman. Een verzoek om te bouwen telt niet: ja
-    // zeggen op wat het dorp mist, is je werk (de speeltest van 3 okt: met +3 per ja stond het vertrouwen na een jaar
-    // bij iedereen op 90 à 100). Wat nee kost, zit bij de ondernemers (js/ondernemers.js).
+    // in procenten), keer zoveel; besliste je raadsman, dan keer doorRaadsman.
     voorval: 0.5,
     doorRaadsman: 0.5,
     // Wie je zocht, vond je niet, of je had geen tijd.
@@ -64,8 +62,6 @@
     // het dorp aan tevredenheid kost) keer zoveel eraf.
     schandpaalZelf: 10,
     schandpaalPerAanzien: 100,
-    // Een ondernemer trok weg na twee keer nee (js/ondernemers.js).
-    wegGetrokken: -10,
     // Elke dag gaat het vertrouwen een stukje naar hoe tevreden het dorp is (de tevredenheid × 100): het verschil gedeeld
     // door zoveel dagen. Een tevreden dorp vertrouwt je, en wat je het aandeed, slijt in een paar maanden weg; een dorp
     // dat het slecht heeft, vertrouwt je weinig, en een klap erbij jaagt je weg (werklijst vraag 106, stap 3; Marcel,

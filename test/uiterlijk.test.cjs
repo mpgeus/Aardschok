@@ -6,7 +6,6 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
-T.zetOptie('wieBouwt', 'jij');
 T.ui = new Proxy({}, { get: () => () => undefined });
 
 const HAREN = ['blond', 'bruin', 'zwart', 'rood', 'blond', 'bruin', 'zwart', 'rood'];

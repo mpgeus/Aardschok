@@ -484,7 +484,6 @@
       tekenBouwBereik(ctx, S, vak);
       tekenRooiPlaatsen(ctx, S);
       tekenBouwSpook(ctx, S);
-      tekenVerzoekPlek(ctx, S);
     }
 
     const lijst = [];
@@ -1901,39 +1900,6 @@
     ctx.strokeStyle = 'rgba(240, 200, 96, 0.9)';
     ctx.lineWidth = 2 / S.zoom;
     ctx.stroke();
-  }
-
-  // De plek van een bouwverzoek (js/verzoeken.js; werklijst vraag 103): zolang iemand je erom vraagt, ligt de voet van
-  // wat hij wil bouwen er in goud, met de kring erbij als het een put of een kapel is. Zo kun je gaan kijken waar het
-  // komt voor je ja zegt.
-  function tekenVerzoekPlek(ctx, S) {
-    const D = T.dorpHier(S);
-    const L = D && D.voorvallen && D.voorvallen.lopend;
-    if (!L || !L.bouw || S.bouwSoort) return;
-    const b = L.bouw;
-    if (b.kramen) {
-      // De markt op het plein (js/markt.js): waar de kramen komen.
-      ctx.fillStyle = 'rgba(226, 182, 74, 0.42)';
-      for (const k of b.kramen) {
-        for (const t of k.tegels || [k]) {
-          const p = opGrond(t.x, t.y);
-          T.ruit(ctx, p.x, p.y, 0.94);
-          ctx.fill();
-        }
-      }
-      return;
-    }
-    const voet = T.gebouwVoet(b.soort, T.volgendeTekening(D, b.soort)) || T.GEBOUWEN[b.soort].voet;
-    if (!voet) return;
-    ctx.fillStyle = 'rgba(226, 182, 74, 0.42)';
-    for (let dy = 0; dy < voet.h; dy++) {
-      for (let dx = 0; dx < voet.b; dx++) {
-        const p = opGrond(b.x + dx, b.y + dy);
-        T.ruit(ctx, p.x, p.y, 0.94);
-        ctx.fill();
-      }
-    }
-    tekenKring(ctx, S, b.soort, { x: b.x, y: b.y, b: voet.b, h: voet.h });
   }
 
   // Een rechthoek van tegels { x, y, b, h } als lijn langs de buitenkant, op de grond (zoals de erven hierboven).

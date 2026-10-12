@@ -25,7 +25,6 @@ function gehucht() {
   Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() }, T.schermVelden());
   T.S = S;
   const D = S.dorp;
-  T.zetOptie('wieBouwt', 'jij');
   const huis = D.gebouwen.find((g) => g.huis === 'schout');
   const plek = T.plekVoor(D, 'wijnboerderij', T.deurVan(D.wereld, huis));
   assert.ok(plek, 'er is plaats voor een wijnboerderij');
@@ -150,7 +149,7 @@ test('de ambachtslieden willen wijn naast hun bier, en wijn telt niet als bier',
   assert.deepEqual(T.WENSEN.wijn.goed, ['wijn']);
   assert.ok(!T.wensenVanStand('dorpelingen').includes('wijn'), 'de dorpelingen willen bier');
   assert.ok(T.wensenVanStand('ambachtslieden').includes('bier') && T.wensenVanStand('ambachtslieden').includes('wijn'));
-  assert.ok(T.maaktGoed('wijnboerderij', 'wijn'), 'de wijnboerderij maakt hem, dus de raad en de verzoeken noemen haar');
+  assert.ok(T.maaktGoed('wijnboerderij', 'wijn'), 'de wijnboerderij maakt hem, dus de raad noemt haar');
   assert.equal(T.WENSEN_INSTELLINGEN.perMens.wijn, 0.02);
   const D = { voorraad: T.nieuweVoorraad() };
   T.zetVoorraad(D, 'bier', 0);
@@ -183,24 +182,6 @@ test('vooruitkijken: wat er bij de pluk ligt plus de pluk moet een jaar halen', 
   assert.ok(T.wijnNaDePluk(D, dag).haalt, 'wat er bij de pluk nog ligt, telt mee');
   mensen(0);
   assert.ok(T.wijnNaDePluk(D, dag).haalt, 'wie geen wijn wil, drinkt niets');
-});
-
-test('haalt de wijn het jaar na de pluk niet, dan vraagt het dorp nu een wijnboerderij erbij', () => {
-  const { S, D } = gehucht();
-  const echt = T.wijnNaDePluk;
-  try {
-    D.trede = 'dorp';
-    S.kalender.dag = dagIn('hooimaand', 1);
-    T.wijnNaDePluk = () => ({ haalt: true, dagen: 360, winter: 360 });
-    assert.ok(!T.watTeBouwen(D).some((x) => x.soort === 'wijnboerderij'), 'haalt het, dan niet');
-    T.wijnNaDePluk = () => ({ haalt: false, dagen: 200, winter: 360 });
-    const x = T.watTeBouwen(D).find((y) => y.soort === 'wijnboerderij');
-    assert.ok(x, 'haalt het niet, dan nu, ook al staat er een');
-    assert.match(x.waarom, /200 of the 360 days/);
-  } finally {
-    T.wijnNaDePluk = echt;
-    T.optiesTerug();
-  }
 });
 
 // Marcel, 10 okt: "Wijn haalt kapel". In de speeltest van de wijn kwam een wijnboerderij ver van het dorp, en wilde haar

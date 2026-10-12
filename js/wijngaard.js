@@ -124,8 +124,9 @@
   // hout de winter (T.houtVoorDeWinter, js/behoeften.js), met dezelfde regel (T.haaltDeWinter): wat er bij de eerstvolgende
   // pluk nog ligt, plus wat de wijnboerderijen dan plukken, min wat de heer ervoor wil, tegen wat de huizen die wijn
   // willen per dag drinken, een jaar lang. Wat ze tot de pluk drinken, komt uit wat er nu ligt; dat maakt geen nieuwe
-  // wijnboerderij meer goed. Haalt het het jaar niet, dan vraagt het dorp nu een wijnboerderij erbij (T.watTeBouwen,
-  // js/raad.js), zodat ze er voor de pluk staat. Geeft wat T.haaltDeWinter geeft, met `tot` (de dagen tot de pluk), `pluk`
+  // wijnboerderij meer goed. Tot ronde 2 van het snoeien (12 okt) vroeg het dorp dan een wijnboerderij erbij (een
+  // verzoek, js/verzoeken.js); nu vraagt niemand het meer, en slaapt dit tot we weten hoe de wijnboerderij wordt (werklijst,
+  // vraag 155). Geeft wat T.haaltDeWinter geeft, met `tot` (de dagen tot de pluk), `pluk`
   // en `drinken` (per dag).
   T.wijnNaDePluk = function (D, dag) {
     const { tot } = T.periodeVanaf(dag, (d) => IN().pluk.includes(maandNaam(d)));

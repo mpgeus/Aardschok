@@ -124,8 +124,8 @@ gezin komen (overdag over de weg; is het dorp vol, dan neemt het een vrij erf), 
 `Spel.debug.erven()` zegt per erf of het vrij is, wie er woont, en hoe ver de hut is. `Spel.debug.trede()` zegt
 hoe ver het gehucht is met de volgende trede, en `('dorp')` maakt er nu een dorp van, met de brief van de heer
 (`('marktrecht')` net zo).
-`Spel.debug.rovers()` zegt wie er in de bende zit, wanneer die en de wilde rovers komen, en hoe een aanval ervoor
-staat; `(3)` laat nu drie wilde rovers komen, `('bende')` de bende.
+`Spel.debug.rovers()` zegt wie er in de bende zit, wanneer die en de wilde rovers komen, hoe een aanval ervoor
+staat en hoeveel wapens er zijn; `(3)` laat nu drie wilde rovers komen, `('bende')` de bende.
 `Spel.debug.heervaart()` zegt wat de heer vraagt, wie er weg is en tot wanneer, en wie veteraan is; `('vraag')` laat
 hem nu mannen vragen (ook in een gehucht), `('terug')` laat ze nu terugkomen.
 `Spel.debug.raad()` zegt welke raad er onder het doel staat en welke er nu allemaal gelden.
@@ -134,14 +134,6 @@ kerstboom); `('meiboom')` laat het vandaag beginnen, de hele dag (`('oogstfeest'
 zet de kerstboom); zet er het uur bij met `Spel.debug.uur(11)` of `(20)`.
 `Spel.debug.einde()` zegt wat het jaarboek tot nu telt en wat het laatste jaarverslag zei; `('jaarverslag')` toont het jaar
 in het kort nu. (Het winnen, met `('winst')` en `('gewonnen')`, is er sinds 11 okt niet meer.)
-`Spel.debug.verzoek()` zegt wat het dorp nu zou willen bouwen en waarom, wie er nu om vraagt en waar, en waar je nee op
-zei; `('nu')` laat het eerste nu vragen, `('oproep', 'steengroeve')` hangt een oproep op (of haalt hem weg), `('jij')` of
-`('mensen')` zet de spelregel "Wie bouwt". De oude toetsen spelen
-met "Jij bouwt" (`T.zetOptie('wieBouwt', 'jij')`); die van de verzoeken staan in `test/verzoeken.test.cjs`.
-`Spel.debug.ondernemers()` zegt wie wat wil beginnen, of hij het nu zou vragen, wat hij onthoudt en hoeveel wapens er
-zijn; `('wapens')` laat de eerste die wapens wil het nu vragen, alsof de rovers net kwamen (in een dorp:
-`Spel.debug.trede('dorp')`, en sluit dan de brief van de heer), `('herberg')` de eerste die een tweede herberg wil (vanaf
-`T.ONDERNEMERS_INSTELLINGEN.herberg.vanaf` mensen).
 `Spel.debug.beesten()` zegt per groep wolven of herten hoeveel het er zijn, waar de leider is en wat hij doet, wat de groep
 wil (thuis, aan de rand, of weg van iemand), zijn thuis en zijn plekken aan de rand, de honger van een roedel en hoeveel
 herten hij ving, en wanneer de groep jongen kreeg; `('hier')` zet de schout tien tegels van de dichtste groep, om ze te

@@ -3,7 +3,7 @@
 // marktdag"). In de speeltest van vier jaar kwam er in geen spel een markt: een eigen gebouw van 6 bij 6 vroeg 12 bij 12
 // open grond, en die was op toen er goud was. Zo hield een dorp ook markt: op het plein, met kramen.
 //
-// - Hoe hij komt (110, d, a1): zoals elk gebouw, een inwoner vraagt het je (js/verzoeken.js), of jij hangt een oproep op.
+// - Hoe hij komt (110, d, a1): zoals elk gebouw, uit het bouwmenu.
 //   Alleen de plek is het plein, niet een eigen stuk grond: T.plekVoor, T.waaromPastHetNiet en T.plaatsGebouw vragen het
 //   hier. Kramen zijn geen huis (`kosten` hieronder, in de werkbank); T.GEBOUWEN.markt.kosten zegt het, naar de spelregel
 //   "De markt" ("Op het plein", de standaard, of "Een eigen gebouw", zoals vóór 6 okt).

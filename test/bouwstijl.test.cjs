@@ -7,8 +7,6 @@ const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
 const HZ = require('../gereedschap/pixelart/huizen.cjs');
-// Deze toetsen gaan ook over wat jij zelf bouwt (de spelregel "Wie bouwt" op "Jij bouwt"), zoals test/erven.test.cjs.
-T.zetOptie('wieBouwt', 'jij');
 
 T.ui = new Proxy({}, { get: () => () => {} });
 
@@ -189,7 +187,7 @@ test('op een erf staat het huis met zijn deur naar de weg, achteraan, en het gro
   }
 });
 
-test('een verzoek keert zijn deur naar de weg, en het goud op de grond en het gebouw hebben dezelfde voet', () => {
+test('T.plekVoor keert een deur naar de weg, en de plek en het gebouw hebben dezelfde voet', () => {
   for (const [weg, kant] of [[{ wegY: 46 }, 'z'], [{ wegX: 2 }, 'w']]) {
     const D = leeg(weg);
     T.zetVoorraad(D, 'hout', 1000);

@@ -5,8 +5,8 @@
 // Wat hier staat:
 //   - welke herberg het dorp heeft (T.herbergVan). In het gehucht staat er een vanaf het begin, in de
 //     hoek tussen het plein en de weg, en daar woont de herbergierster (kaarten/gehucht.betekenis.json).
-//     Sinds vraag 104 kan er een tweede komen, als een ondernemer het vraagt (js/ondernemers.js): wie 's
-//     avonds gaat, gaat naar de herberg die het dichtst bij zijn huis staat (T.herbergenVan);
+//     Er kan een tweede komen (je bouwt hem zelf): wie 's avonds gaat, gaat naar de herberg die het dichtst
+//     bij zijn huis staat (T.herbergenVan);
 //   - wie er vanavond heen gaat (T.herbergGasten): een volwassene, naar zijn karakter (de drinker elke
 //     avond, de vrome nooit), vaker in de winter als de avond lang is, en minder vaak naarmate hij
 //     verder weg woont. Nooit meer dan er bier is. Het lot ligt vast per mens per dag, zodat het klopt

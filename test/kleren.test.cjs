@@ -27,7 +27,6 @@ async function laadAlles() {
 }
 
 const T = require('./laad.cjs').spel();
-T.zetOptie('wieBouwt', 'jij');
 T.ui = new Proxy({}, { get: () => () => undefined });
 
 const mens = (soort, o = {}) => ({ leeftijd: 'volwassen', geslacht: 'man', uiterlijk: 3, huis: { soort, ...(o.laken != null ? { wensen: { heeft: { laken: o.laken } } } : {}) }, ...o.p });

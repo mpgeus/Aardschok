@@ -236,8 +236,7 @@
       }
       h.alles = Object.values(h.heeft).every(gedekt);
       const deel = IN().gewichtEten * basis.eten + IN().gewichtBrandhout * basis.brandhout + IN().gewichtRest * (n ? rest / n : 1);
-      // Wat dit huis je nadraagt: een ondernemer die nee hoorde, of ja (js/ondernemers.js).
-      h.tevredenheid = Math.min(1, Math.max(0, deel + basis.erbij + T.huisStemming(h.g, dag)));
+      h.tevredenheid = Math.min(1, Math.max(0, deel + basis.erbij));
       const st = standen[h.stand] || (standen[h.stand] = { mensen: 0, huizen: 0, alles: 0, tevredenheid: 0 });
       st.mensen += h.mensen;
       st.huizen++;
@@ -534,13 +533,11 @@
     return erbij;
   }
 
-  // Hoe de raad zegt wat helpt: bouw het, met [B] (het bouwmenu); of, als de mensen het je vragen (js/verzoeken.js, de
-  // spelregel "Wie bouwt"; werklijst vraag 103), dat het zou helpen. `nog`: er staat er al een, dus `wat` is de kale naam
+  // Hoe de raad zegt wat helpt: bouw het, met [B] (het bouwmenu). `nog`: er staat er al een, dus `wat` is de kale naam
   // ("hunter" wordt "another hunter"); anders heeft `wat` zijn lidwoord ("a bakery and a mill"; voor twee gebouwen heeft
   // het Engels geen ander werkwoord, dus `meer` is vervallen).
   function helptZin(wat, nog) {
-    if (!T.VERZOEKEN_INSTELLINGEN.mensen) return nog ? T.t('another {wat} [B]', { wat }) : T.t('build {wat} [B]', { wat });
-    return nog ? T.t('another {wat} would help', { wat }) : T.t('{wat} would help', { wat });
+    return nog ? T.t('another {wat} [B]', { wat }) : T.t('build {wat} [B]', { wat });
   }
 
   // Wat helpt, uit de soorten die het maken (een visser of een jager voor vlees of vis, een houthakker voor hout): { kan,
@@ -571,7 +568,7 @@
     if (zonderHanden) return { kan: false, bouw: null, tekst: waaromTeWeinig(zonderHanden) };
     // Wat er bij kan. Wat in dit seizoen stilligt (een visser in de winter), helpt nu niet. Wat alleen in zijn maanden oogst
     // (de wijnboerderij, `alleenIn`), helpt ook daarbuiten, zolang er geen staat: zijn oogst moet er dan zijn. Staat er
-    // een, dan zegt het vooruitkijken of er meer bij moeten (T.wijnNaDePluk in js/wijngaard.js, in T.watTeBouwen), want wat
+    // een, dan zegt het vooruitkijken of er meer bij moeten (T.wijnNaDePluk in js/wijngaard.js), want wat
     // de huizen nu missen, maakt een nieuwe pas bij de volgende pluk goed (vraag 136; tot 10 okt vroeg het dorp er nooit
     // een, en daarna pas als de wijn al op was).
     const helpt = (s) => T.magGebouwd(D, s) && (T.GEBOUWEN[s].alleenIn ? !staan.some((g) => g.soort === s) : !stil(s));
@@ -606,11 +603,10 @@
   // alleen een plek in de buurt kijkt naar nu, zodat een put die vandaag klaar is, meteen telt.
   //
   // Eerst de huizen die een maand alles hadden en op bouwstof wachten (js/behoeften.js), dan wat de meeste mensen
-  // missen. Elk: { soort ('bouwstof' of 'wens'), id, huizen, mensen, kan, bouw, ook, tekst, zin }. `kan`: er is nu iets
+  // missen. Elk: { soort ('bouwstof' of 'wens'), id, huizen, mensen, kan, bouw, ook, tekst }. `kan`: er is nu iets
   // aan te doen (iets wat al gebouwd mag worden helpt, en er wordt er nog geen gebouwd); `bouw`: wat (een soort uit
   // T.GEBOUWEN); `ook`: wat de keten erbij nodig heeft (een molen bij een bakkerij; vraag 96, b), anders leeg; `tekst`:
-  // de zin met wat helpt, met [B] waar het bouwmenu helpt; `zin`: alleen wat er gemist wordt ("Tien stenen huizen willen
-  // laken."), voor een verzoek (js/verzoeken.js). Geen eten of brandhout: dat zeggen de winter en de oorzaken.
+  // de zin met wat helpt, met [B] waar het bouwmenu helpt. Geen eten of brandhout: dat zeggen de winter en de oorzaken.
   T.watDeHuizenMissen = function (D) {
     const huizen = (D.gebouwen || []).filter((g) => g.wensen && g.wensen.mensen > 0);
     const uit = [];
@@ -637,7 +633,7 @@
       });
       uit.push({
         soort: 'bouwstof', id: `bouwstof:${soort}`, huizen: n, mensen: lijst.reduce((m, g) => m + g.wensen.mensen, 0),
-        kan: h.kan, bouw: h.bouw, tekst: h.tekst ? `${zin}: ${h.tekst}.` : `${zin}.`, zin: `${zin}.`,
+        kan: h.kan, bouw: h.bouw, tekst: h.tekst ? `${zin}: ${h.tekst}.` : `${zin}.`,
       });
     }
 
@@ -679,7 +675,7 @@
         const woorden = { getal: T.hoofdletter(T.telwoord(w.wacht)), wens: w.wens.naam };
         const zin = w.wacht === 1 ? T.t('{getal} house is waiting for {wens}: one is being built.', woorden)
           : T.t('{getal} houses are waiting for {wens}: one is being built.', woorden);
-        uit.push({ soort: 'wens', id: w.id, huizen: w.wacht, mensen: 0, kan: false, bouw: null, tekst: zin, zin });
+        uit.push({ soort: 'wens', id: w.id, huizen: w.wacht, mensen: 0, kan: false, bouw: null, tekst: zin });
         continue;
       }
       const wie = T.hoofdletter(wieTekst(w.wie));
@@ -690,7 +686,7 @@
       const h = hulpVoorWens(D, w.wens);
       uit.push({
         soort: 'wens', id: w.id, huizen: w.n, mensen: w.mensen, kan: h.kan, bouw: h.bouw, ook: h.ook || [],
-        tekst: h.tekst ? `${zin}: ${h.tekst}.` : T.VERZOEKEN_INSTELLINGEN.mensen ? `${zin}.` : `${zin} [B].`, zin: `${zin}.`,
+        tekst: h.tekst ? `${zin}: ${h.tekst}.` : `${zin} [B].`,
       });
     }
     return uit;
@@ -724,7 +720,6 @@
         const h = hulpVoorWens(D, wens);
         const straal = wens.plek && IN().kring[wens.plek];
         if (h.tekst) helpt = h.tekst;
-        else if (T.VERZOEKEN_INSTELLINGEN.mensen) helpt = straal ? T.t('one within {straal} tiles would help', { straal }) : T.t('one would help');
         else helpt = straal ? T.t('build one within {straal} tiles [B]', { straal }) : T.t('build one [B]');
       }
       return { id, naam: wens.naam, heeft, helpt };
@@ -736,8 +731,6 @@
       wie: ((D.bewoners && D.bewoners.mensen) || []).filter((p) => p.huis === g).map(T.naamVanBewoner),
       wensen,
       teken: T.tekenVanHuis(g),
-      // Wat het huis je nadraagt: een ondernemer die nee of ja hoorde (js/ondernemers.js).
-      nadraagt: T.huisNadraagtTekst(g, D.kalender ? D.kalender.dag : 0),
       // Hoe ver het is met doorgroeien, en waarom het niet groeit terwijl het alles heeft (het gezin rooit eerst, of er
       // staat iets in de weg; T.waaromGroeitHetNiet in js/behoeften.js, werklijst vraag 130, c).
       groei: wordt
