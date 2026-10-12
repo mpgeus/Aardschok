@@ -54,6 +54,10 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   **Naast de vorige** (vraag 142, stap 3): `--naam voor` bewaart de speeltest in `uit/voor/`, met alle waarden van de
   bladzijde met getallen, en `--naam na --tegen voor` zet hem ernaast in `uit/na/vergelijking.md`: welke waarden anders
   waren, en per spel wat er anders afliep (`gereedschap/speeltest/vergelijk.cjs`).
+  **De kolonist** (werklijst B, 1f): `npm run speeltest -- kolonist --zaden 1-5` speelt het lege begin, altijd op het
+  eiland met "Het begin" op "Leeg" (elk zaad een ander eiland), met de keuzes van `gereedschap/speeltest/kolonist.js`;
+  de andere spelers spelen het gehucht dat er al was. Zijn uitslag staat in de tabellen "Het eerste jaar": wat er
+  vastliep, en het eten en het hout. Een jaar kost zo'n 50 seconden.
 - `npm run proefversie` maakt de zip voor een tester (itch.io, `ontwerp/verpakken.md`) in `gereedschap/proefversie/uit/`
   (niet in git): `index.html` bovenin en alleen wat het spel laadt, met de stand (datum, commit) klein op het
   titelscherm (`T.STAND`). Commit eerst. Met `-- --windows` is het het spel in Electron voor Windows, zoals straks op Steam

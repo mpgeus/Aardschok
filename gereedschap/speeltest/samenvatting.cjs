@@ -1,8 +1,9 @@
 // De tabellen van de speeltest (speeltest.cjs): per jaar twee tabellen (de heer; het dorp), en per speler het gemiddelde over zijn zaden. De getallen komen uit wat speler.js per
 // jaar teruggeeft; wat een jaar niet heeft, blijft leeg. Daarna, voor alle spelers, van gehucht tot dorp (vraag
 // 58): wanneer het een dorp werd, en waarom er op een groeidag geen gezin kwam; en voor wie twee jaar speelt het graanboek
-// (vraag 94, d).
-const NAMEN = { braaf: 'braaf', slim: 'slim', bouwer: 'bouwer, twee jaar', sluw: 'sluwe bouwer, twee jaar' };
+// (vraag 94, d). De kolonist (werklijst B, 1f) speelt het lege begin: voor hem het eerste jaar, in plaats van gehucht tot
+// dorp.
+const NAMEN = { kolonist: 'kolonist', braaf: 'braaf', slim: 'slim', bouwer: 'bouwer, twee jaar', sluw: 'sluwe bouwer, twee jaar' };
 const BASIS = { bouwer: 'bouwer', sluw: 'sluwe bouwer' };
 const TELWOORD = ['', 'een', 'twee', 'drie', 'vier', 'vijf', 'zes'];
 const RANG = ['', 'eerste', 'tweede', 'derde', 'vierde', 'vijfde', 'zesde', 'zevende'];
@@ -82,11 +83,12 @@ exports.maak = function (uitslagen, stand) {
     uit.push('');
   }
   if (eenJaar.length) uit.push(...gemiddeldPerSpeler(eenJaar));
+  uit.push(...hetEersteJaar(goed.filter((u) => u.eersteJaar)));
   uit.push(...deVoorvallen(goed));
   uit.push(...deOndernemers(goed));
   uit.push(...deTweeBazen(goed));
   uit.push(...hetBos(goed));
-  uit.push(...vanGehuchtTotDorp(goed));
+  uit.push(...vanGehuchtTotDorp(goed.filter((u) => !u.eersteJaar)));
   uit.push(...hetGraanboek(goed));
   return uit.join('\n') + '\n';
 };
@@ -199,7 +201,43 @@ function hetBos(goed) {
 // Van gehucht tot dorp (vraag 58): op welke dag het een dorp werd en marktrecht kreeg (vraag 90), en op de groeidagen
 // hoe vaak er een gezin kwam en waarom niet (T.waaromGeenGezin: een dag kan meer dan één reden hebben). En per jaar wat
 // de heer kreeg, en hoeveel dagen welke raad onder het doel stond (js/raad.js).
+// Het eerste jaar van de kolonist (werklijst B, 1f; Marcel, 12 okt: "b1"): zonder fouten is dat niets vastloopt, en het
+// eten en het hout meten we. Twee tabellen: wat er vastliep (speler.js, eersteJaar), en het eten en het hout.
+function hetEersteJaar(goed) {
+  if (!goed.length) return [];
+  const uit = ['## Het eerste jaar: loopt er iets vast?', '', 'Wat de kolonist neerzette en op welke dag het af was (het langst dat het werk aan een bouwplaats stilstond, tussen haakjes, als het meer dan een dag was); wat hij wilde maar niet kon; hoeveel dagen hij wachtte tot hij iets kon betalen; op welke dag het kamp leeg was; wie er op 1 wintermaand nog in een tent woonde; wie na een dag nog naar zijn huis onderweg was (het langst, in dagen); en welke werkplaats af was maar niet werkte zonder dat het spel zei waarom (dagen).', ''];
+  const kop = ['speler', 'zaad', 'einde', 'af op dag', 'niet gelukt', 'wachtte (dagen)', 'kamp leeg op', 'in een tent', 'onderweg', 'werkt niet'];
+  uit.push(regel(kop), regel(kop.map(() => '---')));
+  for (const u of goed) {
+    const E = u.eersteJaar;
+    const af = E.gebouwd.map((g) => `${g.soort} ${g.af}${g.stil > 1 ? ` (${g.stil})` : ''}`);
+    const niet = (u.gebouwd || []).filter((g) => !g.gelukt).map((g) => `${g.soort} op ${Math.floor(g.dag)}: ${g.reden}`);
+    uit.push(regel([
+      NAMEN[u.speler] || u.speler, u.zaad, u.eind.tekst, af.join(', ') || 'niets', niet.join('; ') || '',
+      Object.entries(E.wacht || {}).map(([soort, w]) => `${soort} ${w.dagen} (${w.op})`).join(', '),
+      E.kampLeeg == null ? 'nooit' : String(E.kampLeeg), E.inTent == null ? '' : String(E.inTent),
+      E.onderweg.map((o) => `${o.naam} ${o.dagen}`).join(', '), E.werktNiet.map((w) => `${w.soort} ${w.dagen}`).join(', '),
+    ]));
+  }
+  uit.push('', '## Het eerste jaar: eten en hout', '', 'Het graan en het hout op 1 hooimaand (voor de oogst), 1 herfstmaand (erna), 1 wintermaand en 1 lentemaand van het jaar erna; het laagste graan voor de oogst; de dagen met honger en met kou (de status in de balk); en wie er stierf.', '');
+  const kop2 = ['speler', 'zaad', 'mensen', 'doden (kou, honger)', 'graan laagst', 'graan', 'hout', 'dagen honger', 'dagen kou'];
+  uit.push(regel(kop2), regel(kop2.map(() => '---')));
+  const reeks = (x) => ['voor de oogst', 'na de oogst', 'de winter', 'de lente'].map((k) => getal(x[k])).join(' → ');
+  for (const u of goed) {
+    const E = u.eersteJaar;
+    const w = u.winter || {};
+    uit.push(regel([
+      NAMEN[u.speler] || u.speler, u.zaad, `${u.begin.bevolking} → ${u.eind.bevolking}`,
+      `${w.doden || 0} (${(w.kou || 0) + (w.beide || 0)}, ${(w.honger || 0) + (w.beide || 0)})`,
+      getal(E.graan.laagst), reeks(E.graan), reeks(E.hout), String(E.honger), String(E.kou),
+    ]));
+  }
+  uit.push('');
+  return uit;
+}
+
 function vanGehuchtTotDorp(goed) {
+  if (!goed.length) return [];
   const uit = ['## Van gehucht tot dorp', '', 'Een groeidag is elke 20ste dag (met Vreemden welkom elke 10de). Een dag zonder gezin kan meer dan één reden hebben.', ''];
   const kop = ['speler', 'zaad', 'een dorp op', 'marktrecht op', 'mensen', 'huizen met alles', 'groeidagen', 'een gezin', 'geen plaats', 'te weinig graan', 'niet tevreden', 'de winter niet gehaald', 'de heer kreeg', 'doden (kou, honger, gesneuveld)', 'gebouwd', 'de raad (dagen)'];
   uit.push(regel(kop), regel(kop.map(() => '---')));

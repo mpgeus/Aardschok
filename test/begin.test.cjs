@@ -485,3 +485,44 @@ test('in het gehucht dat er al was, rijst een gebouw vanzelf op in zijn bouwtijd
     Object.assign(T.MAKER_INSTELLINGEN, maker);
   }
 });
+
+// De kolonist (werklijst B, 1f; Marcel, 12 okt: "a1, b1"): dezelfde speler in code als in de speeltest
+// (gereedschap/speeltest/kolonist.js), hier per dag. Zonder beelden lopen de mensen niet: wie nog naar zijn huis onderweg
+// is (p.komt), staat 's nachts thuis, zoals het kamp 's nachts staat als de kar vastzat; anders werkt hij nooit. Of iemand
+// in het echte spel onderweg blijft hangen, meet de speeltest. "Zonder fouten" is dat niets vastloopt (b1): het eten en
+// het hout meet de speeltest, deze toets niet.
+require('../gereedschap/speeltest/kolonist.js');
+function komAan(D) {
+  T.werkBewonersBij(D);
+  for (const p of D.bewoners.mensen) {
+    if (p.komt && p.wezen && p.wezen.thuis) Object.assign(p.wezen, { tx: p.wezen.thuis.x, ty: p.wezen.thuis.y });
+  }
+  T.werkBewonersBij(D);
+}
+
+test('een jaar met de kolonist: alles wat hij neerzet, komt af, het kamp is leeg vóór de winter, en de akkers zijn geoogst', () => {
+  const { S, D, w } = leegBegin();
+  const gedaan = [];
+  const graan = {};
+  let gehakt = 0;
+  dagen(S, 1, T.DAGEN_PER_JAAR - 1, (dag) => {
+    komAan(D);
+    gedaan.push(...T.kolonistDag(D, dag));
+    graan[dag] = D.voorraad.graan;
+    gehakt += D.gebouwen.filter((g) => g.soort === 'houthakker').reduce((n, g) => n + (g.werkte || 0), 0);
+    if (dag !== 9 * T.DAGEN_PER_MAAND) return; // 1 wintermaand
+    assert.deepEqual(D.gebouwen.filter((g) => g.bouw && !g.klaar).map((g) => g.soort), [], 'geen bouwplaats over');
+    assert.equal(D.begin.kamp, 'weg', 'het kamp is leeg');
+    assert.ok(D.bewoners.mensen.every((p) => p.huis && p.huis.soort !== 'tent'), 'iedereen woont in een huis');
+    assert.ok(D.bewoners.mensen.find((p) => p.schout).huis.soort === 'schout', 'de schout woont in zijn huis');
+  });
+  const mislukt = gedaan.filter((d) => !d.gelukt && !d.wacht);
+  assert.deepEqual(mislukt.map((d) => d.tekst), [], 'wat hij kan betalen, lukt');
+  for (const soort of ['schout', 'boerderij', 'akker', 'houthakker', 'hut']) {
+    assert.ok(gedaan.some((d) => d.soort === soort), `hij bouwt een ${soort}`);
+  }
+  const akkers = w.akkers.filter((a) => a.boerderij);
+  assert.equal(akkers.reduce((n, a) => n + a.b * a.h, 0), T.BEGIN_INSTELLINGEN.kar.zaaigraan, 'akkers voor al het zaaigraan uit de kar');
+  assert.ok(graan[6 * T.DAGEN_PER_MAAND] > graan[5 * T.DAGEN_PER_MAAND] + 100, 'de oogst is binnen');
+  assert.ok(gehakt > 0, 'de houthakker hakt');
+});

@@ -736,6 +736,26 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   dan tekent `tekenRooiPlaatsen` hem in goud. De getallen in `T.BOERDERIJ_INSTELLINGEN` (de werkbank: "Boeren uit het
   niets").
 
+### gereedschap/speeltest/kolonist.js: de kolonist
+
+- **Een speler in code voor het lege begin** (werklijst B, 1f; Marcel, 12 okt: "a1, b1, c1, d ja"). `T.kolonistDag(D,
+  dag)` loopt elke dag zijn regels af en doet wat er vandaag kan: het huis van de schout, een boerderij met akkers tot al
+  het zaaigraan uit de kar erop past (zolang `T.isNazaaitijd`), een houthakker als het hout laag wordt, hutten tot elk
+  gezin in het kamp een woning heeft, en na de oogst een wijngaard op een tweede boerderij als het eten de winter niet
+  haalt. Hij bouwt met de handelingen van het bouwmenu: `T.plaatsGebouw` op de plek van `T.plekVoor` (open grond, of
+  waar het minst te rooien is), en `T.legVeld` op de rechthoek die hij zelf zoekt (de grootste maat die past, het minst
+  te rooien, het dichtst bij de boerderij). Hij geeft terug wat hij deed (`{ soort, gelukt, reden, tekst, instantie }`),
+  en wat hij nog niet kan betalen met `wacht`. Het is gereedschap, geen spel: het spel laadt hem niet.
+- **Twee die hem laden, met dezelfde keuzes** (a1): de speeltest (`speler.js`, de speler `kolonist`, die altijd op het
+  eiland met "Leeg" speelt) en `test/begin.test.cjs`, per dag. Zonder beelden lopen de mensen niet, dus zet de toets wie
+  nog onderweg is 's nachts thuis (`komAan`), anders werkt hij nooit (p.komt, `T.werkUrenVan`).
+- **Wat vastloopt** (b1) schrijft de speeltest op in `boek.eersteJaar` (`eersteJaar` in `speler.js`) en zet het in de
+  tabellen "Het eerste jaar" (`samenvatting.cjs`): wanneer elk gebouw af was en hoe lang het werk stilstond, waarop hij
+  wachtte, wanneer het kamp leeg was, wie er in de winter in een tent woont, wie na een dag nog onderweg is, welke
+  werkplaats niet werkt zonder dat het spel zegt waarom; en het eten en het hout.
+- **Let op bij ronde 2 van het snoeien:** `T.plekVoor` staat in `js/verzoeken.js`, dat dan weggaat; hij moet dan mee
+  naar `js/gebouwen.js` of `js/bouwen.js`.
+
 ### js/erven.js: de erven
 
 - `js/erven.js`: **het dorp bouwt zelf** (stap 1 van de proef, vraag 52, 28 sep): jij wijst een erf aan met het

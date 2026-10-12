@@ -4,7 +4,10 @@
 // vast zaad: hetzelfde zaad geeft dezelfde boeren en hetzelfde lot. Zo speel je na het bijstellen van een
 // getal hetzelfde jaar opnieuw, en zie je precies wat de wijziging deed.
 //
-//   npm run speeltest                          de vier spelers, elk met zaad 1, 2 en 3
+//   npm run speeltest                          alle spelers, elk met zaad 1, 2 en 3
+//   npm run speeltest -- kolonist --zaden 1-5  de kolonist (werklijst B, 1f): het lege begin, altijd op het eiland met
+//                                              "Het begin" op "Leeg" (elk zaad een ander eiland); de anderen spelen het
+//                                              gehucht dat er al was
 //   npm run speeltest -- slim                  één speler, met zaad 1, 2 en 3
 //   npm run speeltest -- bouwer                de bouwer, die twee jaar speelt (vraag 58): van gehucht tot dorp
 //   npm run speeltest -- sluw                  de sluwe bouwer (vraag 94): de bouwer, maar hij geeft de heer 90%
@@ -48,7 +51,7 @@ const V = require('./vergelijk.cjs');
 
 const WORTEL = path.join(__dirname, '..', '..');
 const UIT = path.join(__dirname, 'uit');
-const SPELERS = ['braaf', 'slim', 'bouwer', 'sluw'];
+const SPELERS = ['kolonist', 'braaf', 'slim', 'bouwer', 'sluw'];
 const TEGELIJK = 3; // zoveel spellen tegelijk, elk in een eigen tabblad (--tegelijk)
 
 function laadPlaywright() {
@@ -116,9 +119,13 @@ function leesOpdracht(argv) {
   // De spelregels zoals de browser ze onthoudt (js/opties.js, onder aardschok.spelregels). Het gehucht altijd: zonder
   // --maker of --eiland het ontworpen gehucht, ook nu een nieuw spel het eiland maakt (vraag 117), zodat een speeltest te
   // vergelijken blijft met de speeltests ervoor; met --maker de landen van de maker zonder het eiland. `proef`: het spel
-  // neemt "Je gehucht" alleen uit de browser als een proef hem zette (T.laadOpties).
-  const keuzes = { gehucht: o.eiland ? 'eiland' : o.maker ? 'maker' : 'ontworpen', ...o.regels };
-  o.spelregels = { keuzes, namen: {}, getallen: o.getallen, proef: true };
+  // neemt "Je gehucht" alleen uit de browser als een proef hem zette (T.laadOpties). De kolonist (speler.js; werklijst B,
+  // 1f) speelt het lege begin, en dat is er alleen op het eiland: hij altijd daar, met "Het begin" op "Leeg"; de anderen
+  // spelen het gehucht dat er al was, want ze bouwen erven en zeggen ja tegen verzoeken.
+  const keuzes = { gehucht: o.eiland ? 'eiland' : o.maker ? 'maker' : 'ontworpen', begin: 'gehucht', ...o.regels };
+  o.spelregelsVoor = (speler) => ({
+    keuzes: speler === 'kolonist' ? { ...keuzes, gehucht: 'eiland', begin: 'leeg' } : keuzes, namen: {}, getallen: o.getallen, proef: true,
+  });
   o.anders = [...Object.entries(o.regels), ...Object.entries(o.getallen)].map(([k, v]) => `${k}=${v}`);
   return o;
 }
@@ -151,6 +158,7 @@ async function speelJaar(browser, speler, zaad, opslaan = null, spelregels = nul
   }, { z: zaad, spelregels });
   const laad = async () => {
     await page.waitForFunction(() => globalThis.Spel && Spel.S && Spel.S.kalender && Spel.debug);
+    await page.addScriptTag({ path: path.join(__dirname, 'kolonist.js') });
     await page.addScriptTag({ path: path.join(__dirname, 'speler.js') });
   };
   await page.goto('file://' + path.join(WORTEL, 'index.html'));
@@ -184,7 +192,8 @@ async function main() {
   const vies = git(`status --porcelain ${SPEL}`);
   const stand = `het spel van ${git(`log -1 --format=%h ${SPEL}`)} (${git('rev-parse --abbrev-ref HEAD')} op ${git('rev-parse --short HEAD')})` +
     (vies ? ', met wijzigingen in het spel die nog niet gecommit zijn' : '');
-  const op = stand + (o.eiland ? ', op het eiland' : o.maker ? ', op gehuchten van de maker' : '') + (o.anders.length ? `, met ${o.anders.join(', ')}` : '');
+  const op = stand + (o.eiland ? ', op het eiland' : o.maker ? ', op gehuchten van de maker' : '') + (o.anders.length ? `, met ${o.anders.join(', ')}` : '')
+    + (o.spelers.includes('kolonist') ? '; de kolonist op het eiland, met het lege begin' : '');
   const achter = (o.eiland ? '-eiland' : o.maker ? '-maker' : '') + (o.anders.length ? '-regels' : '');
   // Met een naam komt alles in uit/<naam>/, met set.json (wat er gespeeld werd, op welke stand) en waarden.json (alle
   // waarden van de bladzijde met getallen zoals ze bij het begin in de code stonden; vergelijk.cjs). Zo staat de vorige
@@ -247,7 +256,7 @@ async function main() {
   async function werker() {
     while (volgende < rij.length) {
       const { speler, zaad } = rij[volgende++];
-      const u = await speelJaar(browser, speler, zaad, null, o.spelregels, o.jaren);
+      const u = await speelJaar(browser, speler, zaad, null, o.spelregelsVoor(speler), o.jaren);
       u.stand = op;
       uitslagen.push(u);
       fs.writeFileSync(path.join(map, `${speler}-${zaad}${achter}.json`), JSON.stringify(u, null, 1));
@@ -283,8 +292,8 @@ async function proefMetOpslaan(browser, o) {
   for (const speler of o.spelers) {
     for (const zaad of o.zaden) {
       const [gewoon, bewaard] = await Promise.all([
-        speelJaar(browser, speler, zaad, { dag: o.opslaan, bewaar: false }, o.spelregels),
-        speelJaar(browser, speler, zaad, { dag: o.opslaan, bewaar: true }, o.spelregels),
+        speelJaar(browser, speler, zaad, { dag: o.opslaan, bewaar: false }, o.spelregelsVoor(speler)),
+        speelJaar(browser, speler, zaad, { dag: o.opslaan, bewaar: true }, o.spelregelsVoor(speler)),
       ]);
       const wie = `${speler}, zaad ${zaad}`;
       let regel;

@@ -768,7 +768,99 @@
     };
   }
 
+  // De kolonist (werklijst B, 1f; Marcel, 12 okt: "a1, b1, c1, d ja"): het lege begin, met de keuzes van kolonist.js, één
+  // keer per dag, zoals de toets in test/begin.test.cjs; de heer geeft hij wat hij vraagt, zoals de brave speler. Wat er
+  // vastloopt, schrijft hij op in boek.eersteJaar (eersteJaar hieronder): "zonder fouten" is dat niets vastloopt (b1).
+  let kolonistDag = null;
+  function kolonist() {
+    return {
+      async begin() {
+        kolonistDag = null;
+        gezet.length = 0;
+        onderwegSinds.clear();
+        boek.eersteJaar = { gebouwd: [], wacht: {}, kampLeeg: null, inTent: null, onderweg: [], werktNiet: [], honger: 0, kou: 0, graan: {}, hout: {} };
+      },
+      async elkeStap() {
+        const s = S();
+        const dag = Math.floor(dagNu());
+        if (dag !== kolonistDag) {
+          kolonistDag = dag;
+          for (const d of T.kolonistDag(s.dorp, dag)) {
+            // Wat hij wil maar nog niet kan betalen: hoeveel dagen, en een daad op de eerste dag van het wachten.
+            if (d.wacht) {
+              const w = boek.eersteJaar.wacht[d.soort] || (boek.eersteJaar.wacht[d.soort] = { dagen: 0, op: d.reden, laatst: null });
+              if (w.laatst !== dag - 1) daad(d.tekst);
+              Object.assign(w, { dagen: w.dagen + 1, op: d.reden, laatst: dag });
+              continue;
+            }
+            boek.gebouwd.push({ dag: heel(dagNu()), datum: datum(), soort: d.soort, gelukt: d.gelukt, reden: d.reden || null });
+            daad(d.tekst);
+            if (d.instantie) gezet.push({ g: d.instantie, soort: d.soort, gezet: dag, af: null, laatst: dag, werk: 0, stil: 0 });
+          }
+          eersteJaar(dag);
+        }
+        if (heerOpHetPlein() && nuEenKeer('betaal')) await betaal(1);
+      },
+    };
+  }
+
+  // Wat de kolonist neerzette (gezet), en per dag wat er vastloopt: een bouwplaats waar het werk stilstaat (de langste
+  // reeks dagen), wie na een dag nog naar zijn huis onderweg is (p.komt), een werkplaats die af is maar niet werkt zonder
+  // dat het spel zegt waarom (zoals een houthakker wiens man de hele dag onderweg is), wie er op 1 wintermaand nog in een
+  // tent woont, en de dagen met honger en kou (T.OORZAKEN, js/voorvallen.js). Het graan en het hout op een paar dagen.
+  const gezet = [];
+  const onderwegSinds = new Map();
+  const DAGEN_GRAAN = { 'voor de oogst': 120, 'na de oogst': 180, 'de winter': 270, 'de lente': JAAR };
+  function eersteJaar(dag) {
+    const E = boek.eersteJaar;
+    const s = S();
+    for (const x of gezet) {
+      if (x.af != null) continue;
+      if (x.g.klaar) {
+        x.af = dag;
+        E.gebouwd.push({ soort: x.soort, gezet: x.gezet, af: dag, stil: x.stil });
+        continue;
+      }
+      const werk = x.g.bouw ? x.g.bouw.gedaan + x.g.bouw.tegoed : 0;
+      if (werk > x.werk + 1e-9) {
+        x.werk = werk;
+        x.laatst = dag;
+      }
+      x.stil = Math.max(x.stil, dag - x.laatst);
+    }
+    if (E.kampLeeg == null && s.dorp.begin.kamp === 'weg') E.kampLeeg = dag;
+    if (dag === 9 * T.DAGEN_PER_MAAND) E.inTent = s.dorp.bewoners.mensen.filter((p) => p.huis && p.huis.soort === 'tent').length;
+    for (const p of s.dorp.bewoners.mensen) {
+      if (!p.komt) {
+        onderwegSinds.delete(p);
+        continue;
+      }
+      if (!onderwegSinds.has(p)) onderwegSinds.set(p, dag);
+      const dagen = dag - onderwegSinds.get(p);
+      if (dagen < 2) continue;
+      const o = E.onderweg.find((x) => x.naam === p.naam);
+      if (o) o.dagen = Math.max(o.dagen, dagen);
+      else E.onderweg.push({ naam: p.naam, dagen });
+    }
+    for (const g of s.dorp.gebouwen) {
+      const soort = T.GEBOUWEN[g.soort];
+      if (!g.klaar || !soort || !soort.maakt || !(soort.handen > 0) || g.werkte > 0 || g.stilWant || T.vrijeDag(s.dorp, dag)) continue;
+      const w = E.werktNiet.find((x) => x.soort === g.soort && x.x === g.x && x.y === g.y);
+      if (w) w.dagen++;
+      else E.werktNiet.push({ soort: g.soort, x: g.x, y: g.y, dagen: 1 });
+    }
+    if (T.OORZAKEN.honger.speelt(s.dorp, dag)) E.honger++;
+    if (T.OORZAKEN.kou.speelt(s.dorp, dag)) E.kou++;
+    for (const [naam, d] of Object.entries(DAGEN_GRAAN)) {
+      if (dag !== d) continue;
+      E.graan[naam] = Math.round(s.dorp.voorraad.graan || 0);
+      E.hout[naam] = Math.round(s.dorp.voorraad.hout || 0);
+    }
+    if (dag < 160) E.graan.laagst = Math.min(E.graan.laagst == null ? Infinity : E.graan.laagst, Math.round(s.dorp.voorraad.graan || 0));
+  }
+
   const SPELERS = {
+    kolonist: kolonist(),
     bouwer: bouwer(),
     sluw: bouwer(true),
     braaf: {
