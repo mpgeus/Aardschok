@@ -31,7 +31,7 @@ function leegBegin(T, zaad = 2) {
   const echt = console.warn;
   const maker = { ...T.MAKER_INSTELLINGEN };
   console.warn = () => {};
-  Object.assign(T.MAKER_INSTELLINGEN, { eigenGehucht: true, opEiland: true, leeg: true });
+  T.MAKER_INSTELLINGEN.opEiland = true;
   const S = { kalender: T.nieuweKalender(), tijd: 0, wereldTijd: 0, modus: 'verkennen', inventaris: new Set() };
   try {
     metVastToeval(11, () => assert.ok(T.beginOpKaart(S, 'gehucht', zaad)));

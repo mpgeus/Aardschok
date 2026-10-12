@@ -7,7 +7,9 @@ const assert = require('node:assert/strict');
 const T = require('./laad.cjs').spel();
 T.ui = new Proxy({}, { get: () => () => {} });
 
-// Een nieuw spel, stil en met een vast toeval: het ontworpen gehucht (zonder zaad), of een land van de maker.
+// Een nieuw spel, stil en met een vast toeval: het ontworpen gehucht (zonder zaad), of het gehucht dat er al was op een
+// land van de maker (`leeg` uit in T.beginOpKaart): de markt staat op het plein van een dorp, en het lege begin heeft
+// nog geen plek voor de marskramer en de heer (de spelregel "De markt", ronde 2 van het snoeien).
 function nieuwSpel(zaad) {
   const echt = console.warn;
   const toeval = Math.random;
@@ -16,7 +18,7 @@ function nieuwSpel(zaad) {
   Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
   const S = { kalender: T.nieuweKalender() };
   try {
-    assert.ok(T.beginOpKaart(S, 'gehucht', zaad));
+    assert.ok(T.beginOpKaart(S, 'gehucht', zaad, false));
   } finally {
     console.warn = echt;
     Math.random = toeval;

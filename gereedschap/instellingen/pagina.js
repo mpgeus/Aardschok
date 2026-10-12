@@ -211,7 +211,7 @@
     const sr = deel('in-spelregels', 'Spelregels', 'js/opties.js', 'Wat een nieuw spel kiest als niemand iets anders koos. Een spelregel zet getallen hieronder; wie de standaard verandert, verandert het spel voor iedereen.');
     for (const regel of model.spelregels) {
       const blad = { blok: regel.blok, pad: regel.pad, soort: 'keuze', keuzes: regel.keuzes, waarde: regel.standaard, uitleg: [regel.uitleg || ''] };
-      const r = rij(blad, regel.naam || regel.id, regel.voorProeven ? `${regel.id} · voor de proeven` : regel.id, regel.keuzes.map((k) => `${k.naam} ${k.uitleg}`).join(' '));
+      const r = rij(blad, regel.naam || regel.id, regel.id, regel.keuzes.map((k) => `${k.naam} ${k.uitleg}`).join(' '));
       const uitleg = r.el.querySelector('.in-uitleg');
       for (const k of regel.keuzes) {
         const kz = maak('div', 'in-keuze' + (k.id === regel.standaard ? ' in-gekozen' : ''));

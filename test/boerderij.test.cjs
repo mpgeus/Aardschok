@@ -18,7 +18,7 @@ function leegBegin(zaad = 2) {
   let n = 11;
   console.warn = () => {};
   Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
-  Object.assign(T.MAKER_INSTELLINGEN, { eigenGehucht: true, opEiland: true, leeg: true });
+  T.MAKER_INSTELLINGEN.opEiland = true;
   const S = { kalender: T.nieuweKalender(), tijd: 0, wereldTijd: 0, modus: 'verkennen', inventaris: new Set() };
   try {
     assert.ok(T.beginOpKaart(S, 'gehucht', zaad));

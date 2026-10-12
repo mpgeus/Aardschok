@@ -44,12 +44,12 @@ T.ui = new Proxy({}, { get: () => () => {} });
 
 // Een nieuw spel op een gehucht, stil en zonder venster, zoals test/opslaan.test.cjs het ontworpen gehucht begint;
 // met `zaad` op het gehucht van de maker uit dat zaad.
-function nieuwSpel(zaad) {
+function nieuwSpel(zaad, leeg = true) {
   const echt = console.warn;
   console.warn = () => {};
   const S = { kalender: T.nieuweKalender() }; // het spel; zijn dorp (S.dorp) komt met de kaart
   try {
-    assert.ok(T.beginOpKaart(S, 'gehucht', zaad));
+    assert.ok(T.beginOpKaart(S, 'gehucht', zaad, leeg));
   } finally {
     console.warn = echt;
   }
@@ -80,22 +80,20 @@ test('een gemaakt gehucht leest het spel in zoals het ontworpen gehucht: dezelfd
   for (const e of w.wezens) assert.ok(e === schout || loop({ x: e.tx, y: e.ty }), `${e.wie} is niet te bereiken`);
 });
 
-test('een nieuw spel op een gemaakt gehucht: 26 mensen, en het zaad van het spel is het zaad van het gehucht', () => {
-  const S = nieuwSpel(5);
+test('het gehucht dat er al was, op een land van de maker: 26 mensen, en het zaad van het dorp is het zaad van het land', () => {
+  // Zo legt de maker een dorp dat er al was (`leeg` uit), voor de andere dorpen; een nieuw spel begint leeg.
+  const S = nieuwSpel(5, false);
   assert.equal(S.wereld.maker.zaad, 5);
   assert.equal(S.dorp.lot.zaad, 5);
   assert.equal(S.dorp.bevolking, 26);
   assert.equal(S.dorp.bewoners.mensen.length, 26);
   assert.equal(S.dorp.gebouwen.length, 11);
-  // hetzelfde zaad geeft hetzelfde spel, ook de boeren
-  assert.deepEqual(nieuwSpel(5).dorp.lot, S.dorp.lot);
+  // hetzelfde zaad geeft hetzelfde dorp
+  assert.deepEqual(nieuwSpel(5, false).dorp.lot, S.dorp.lot);
 });
 
-test('de spelregel "Je gehucht": elk nieuw spel het eiland (vraag 117), en de maker en het ontworpen gehucht blijven voor de toetsen', () => {
-  const o = T.OPTIES.find((x) => x.id === 'gehucht');
-  assert.equal(o.standaard, 'eiland');
-  assert.equal(o.voorProeven, true, 'geen keuze voor wie speelt (Marcel, 8 okt: "Het eiland wordt gewoon altijd gegenereerd")');
-  assert.equal(T.MAKER_INSTELLINGEN.eigenGehucht, true);
+test('elk nieuw spel het eiland (vraag 117), leeg (ronde 2 van het snoeien, stap 3), en geen spelregel meer om het om te zetten', () => {
+  assert.ok(!T.OPTIES.some((x) => x.id === 'gehucht' || x.id === 'begin'), 'de spelregels "Je gehucht" en "Het begin" zijn weg');
   assert.equal(T.MAKER_INSTELLINGEN.opEiland, true);
   // een nieuw spel krijgt een land van vijf cijfers, of het land dat je koos
   const zaad = T.landVoorNieuwSpel();
@@ -105,25 +103,7 @@ test('de spelregel "Je gehucht": elk nieuw spel het eiland (vraag 117), en de ma
   assert.equal(S.wereld.maker.zaad, 7);
   assert.equal(S.wereld.eiland.zaad, 7);
   assert.equal(S.dorp.lot.zaad, 7);
-  // zonder zaad is het het ontworpen gehucht: daar spelen de toetsen op
-  assert.equal(nieuwSpel().wereld.maker, undefined);
-  T.pasOptiesToe({ keuzes: { gehucht: 'maker' } });
-  try {
-    assert.equal(T.MAKER_INSTELLINGEN.opEiland, false);
-    assert.equal(nieuwSpel(7).wereld.eiland, undefined, 'met "maker" een land van de maker zonder het eiland');
-  } finally {
-    T.pasOptiesToe({});
-  }
-  T.pasOptiesToe({ keuzes: { gehucht: 'ontworpen' } });
-  try {
-    assert.equal(T.MAKER_INSTELLINGEN.eigenGehucht, false);
-    assert.equal(T.landVoorNieuwSpel(), null);
-    assert.equal(T.landVoorNieuwSpel(4321), null, 'met het ontworpen gehucht telt het gekozen land niet');
-  } finally {
-    T.pasOptiesToe({});
-  }
-  assert.equal(T.MAKER_INSTELLINGEN.eigenGehucht, true);
-  assert.equal(T.MAKER_INSTELLINGEN.opEiland, true);
+  assert.ok(S.dorp.begin && S.wereld.kamp, 'het lege begin: het kamp op een open plek');
 });
 
 test('een spel op een gemaakt gehucht bewaren en weer laden geeft precies hetzelfde spel', () => {

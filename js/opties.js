@@ -585,40 +585,6 @@
           uitleg: T.t('Walk out of your hamlet along the road and the map of the land opens: provinces where you travel for days, and what you have not seen is dark. At home everything goes on without you; you hear what happened when you are back. The next village is still to come.') },
       ],
     },
-    {
-      // Vraag 70, C (Marcel, 30 sep: "c ja"): de maker (js/maker.js) mag ook je eigen gehucht leggen. Sinds 4 okt de
-      // standaard (vraag 112, a; Marcel: "Eigenlijk een random map generator per nieuwe game"). Sinds 8 okt maakt elk nieuw
-      // spel het eiland, met je gehucht erop (vraag 117, stap 2; Marcel: "Het eiland wordt gewoon altijd gegenereerd bij
-      // een nieuw spel. Ergens op dat eiland staat je gehucht"): geen keuze voor wie speelt, dus niet in het venster
-      // Spelregels (`voorProeven`). De andere keuzes zijn er nog voor de toetsen en de speeltest.
-      id: 'gehucht', naam: T.t('Your hamlet'), standaard: 'eiland', voorProeven: true,
-      uitleg: T.t('Where a new game begins. Applies from the next new game.'),
-      keuzes: [
-        { id: 'maker', naam: T.t('A different one every game'), zet: { 'MAKER_INSTELLINGEN.eigenGehucht': true, 'MAKER_INSTELLINGEN.opEiland': false }, // geen tekst
-          uitleg: T.t('The maker lays out a different land for every new game, from the same parts: the square, the reeve behind it, the farms with their fields, the heath, the brook, the forest, ponds and rocks, but different every time. At New game you see the number of the land: a land you liked, you play again by typing in that number.') },
-        { id: 'ontworpen', naam: T.t('The designed hamlet'), zet: { 'MAKER_INSTELLINGEN.eigenGehucht': false, 'MAKER_INSTELLINGEN.opEiland': false }, // geen tekst
-          uitleg: T.t('The same hamlet every game, laid out by hand: the square as its heart, and Nicholas, Alice, Gerard, Kate and Walter by their fields.') },
-        // Vraag 117, stap 2 (Marcel, 8 okt: "A ja B later C dorp dat er al was"): je land is het stuk van het eiland om je
-        // dorp (js/eiland.js).
-        { id: 'eiland', naam: T.t('On the island'), zet: { 'MAKER_INSTELLINGEN.eigenGehucht': true, 'MAKER_INSTELLINGEN.opEiland': true }, // geen tekst
-          uitleg: T.t("Every number is an island, and your village lies on it: on the coast, by a river, on the heath or at the edge of the forest. The water, forest, heath and roads of your land are those of the island, and the road through your village leads to the lord's castle. The hamlet is a village that was already there: what it needs has been cleared.") },
-      ],
-    },
-    // Het lege begin (werklijst vraag 152, stap 1b; Marcel, 11 okt: "We moeten ook zelf alles vanaf de start gaan bouwen";
-    // js/begin.js): een lege plek op het eiland, een kar en vier gezinnen. Standaard het gehucht dat er al was, zodat de
-    // toetsen en de speeltest blijven spelen, tot het lege begin een jaar draait (vraag 152, 1f). De spelregels "Huizen" en
-    // "Wie bouwt" zijn weg sinds ronde 2 van het snoeien (12 okt): jij bouwt (Marcel, 11 okt: "We willen dus een bouwmenu
-    // en zelf bouwen").
-    {
-      id: 'begin', naam: T.t('The start'), standaard: 'gehucht',
-      uitleg: T.t('How a new game begins. Applies from the next new game.'),
-      keuzes: [
-        { id: 'gehucht', naam: T.t('The hamlet that was already there'), zet: { 'MAKER_INSTELLINGEN.leeg': false }, // geen tekst
-          uitleg: T.t('You become reeve of a hamlet with houses, an inn, and farms with their fields.') },
-        { id: 'leeg', naam: T.t('Empty'), zet: { 'MAKER_INSTELLINGEN.leeg': true }, // geen tekst
-          uitleg: T.t('An ox cart with a few belongings rolls into an empty stretch of the island, with your family and four families behind it. On the open ground that becomes the square you sleep in tents by the campfire. You build everything from the build menu, and when a hut or house is finished, a family from the camp moves in. Island only.') },
-      ],
-    },
   ];
 
   // De namen die je zelf geeft (js/mensen.js). De heer heeft standaard geen naam: dan heet hij
@@ -1602,17 +1568,14 @@
     }
   };
 
-  // Een spelregel voor de proeven (`voorProeven`, zoals "Je gehucht") staat niet in het venster, dus wat de browser
-  // ervan onthield, telt alleen als een proef het daar zette (de speeltest, met `proef`). Anders liet een keus van
-  // vroeger, toen hij nog in het venster stond, een nieuw spel stil ergens anders beginnen dan op het eiland, zonder dat
-  // je ziet waarom.
+  // Wat de browser onthield. Een keus voor een spelregel die er niet meer is (zoals "Het begin" en "Je gehucht", weg
+  // sinds ronde 2 van het snoeien, stap 3), telt niet: pasOptiesToe kent hem niet.
   T.laadOpties = function (waar) {
     const o = waar || opslag();
     try {
       const tekst = o && o.getItem(SLEUTEL);
       const i = tekst ? JSON.parse(tekst) : null;
       if (!i || typeof i !== 'object') return null;
-      if (!i.proef && i.keuzes) for (const optie of T.OPTIES) if (optie.voorProeven) delete i.keuzes[optie.id];
       return i;
     } catch (e) {
       return null;

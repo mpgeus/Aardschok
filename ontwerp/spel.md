@@ -64,8 +64,8 @@ en je vecht in beurten, om je dorp te verdedigen
 en om het eiland te veroveren tot het kasteel van de heer, zoals in Jagged Alliance 2. Het verstoppen en heel "arm
 lijken" gaan eruit ("Rijk worden en arm lijken"). Wat dat is, wat er al is en wat ontbreekt: `gameloop.md`.
 
-**Zo werkt het lege begin nu** (11 okt, vraag 152, stap 1b tot 1e; `js/begin.js`, `js/bouwen.js`, `js/boerderij.js`): achter de spelregel "Het begin" op "Leeg"
-(standaard nog het gehucht dat er al was, tot het lege begin een jaar draait, stap 1f). De maker legt op het eiland
+**Zo werkt het lege begin nu** (11 okt, vraag 152, stap 1b tot 1e; `js/begin.js`, `js/bouwen.js`, `js/boerderij.js`): elk nieuw spel (sinds 12 okt het enige begin;
+de spelregels "Het begin" en "Je gehucht" zijn weg, ronde 2 van het snoeien, stap 3). De maker legt op het eiland
 geen gehucht, alleen het land: het bos, het water, de heide en de wegen van het eiland, en een open plek die het plein
 wordt, met een paar oude eiken en het bos er vlak omheen (Marcel: "Klein, bos dichtbij"). Na de benoeming (de heer
 stuurt je met vier gezinnen naar een stuk van zijn wildernis) rijdt de huifkar over de weg het land in, de schout loopt
@@ -1127,8 +1127,8 @@ op het eiland, dan de kern, en het hele eiland met de mist later. **Je dorp op h
 er al was", en "Het eiland wordt gewoon altijd gegenereerd bij een nieuw spel. Ergens op dat eiland staat je gehucht"):
 elk nieuw spel maakt het eiland, en je dorp ligt op zijn plek erop, aan zee, aan een rivier, op de heide of in het bos,
 met het water, het bos en de wegen van het eiland; de weg door je dorp gaat naar het kasteel. Het gehucht is een dorp
-dat er al was: wat het nodig heeft, is gerooid. Een keuze is het niet (de spelregel "Je gehucht" is er alleen nog voor de
-toetsen en de speeltest). **Het eiland om je land** (stap 2b, 8 okt; "A ja"): buiten de kaart loopt het eiland door, de
+dat er al was: wat het nodig heeft, is gerooid. Een keuze is het niet. (Sinds 12 okt is er geen gehucht dat er al was meer: een
+nieuw spel begint leeg, "Zo werkt het lege begin nu".) **Het eiland om je land** (stap 2b, 8 okt; "A ja"): buiten de kaart loopt het eiland door, de
 zee, het strand, de heide, het bos en de weg naar de buren, tot het donker; en met "Hoogte" op "Heuvels" is het land dat
 van het eiland. **De grond van het eiland** (B van 2a, 8 okt): de zee, het strand, het veen en het broek hebben eigen
 tegels, en op zand wordt niet gebouwd (Marcel: "Onbebouwbaar denk ik, zand is geen solide basis").
@@ -1168,8 +1168,8 @@ tegels, en op zand wordt niet gebouwd (Marcel: "Onbebouwbaar denk ik, zand is ge
   `npm run maker` tekent ze als plattegrond. **Marcel koos (vraag 70):** de delen kloppen; voor nu verschilt een
   gehucht alleen in de ligging (het land eromheen naar de provincie komt later); en de maker mag ook je eigen gehucht
   leggen.
-- **Je eigen gehucht van de maker** (30 sep, achttiende sessie; vraag 70, C; sinds 4 okt de standaard, vraag 112, a):
-  de spelregel "Je gehucht" ("Elk spel een ander", of "Het ontworpen gehucht"). Een nieuw spel begint op een land van
+- **Je eigen gehucht van de maker** (30 sep, achttiende sessie; vraag 70, C; sinds 4 okt de standaard, vraag 112, a;
+  de spelregel "Je gehucht" is weg sinds 12 okt, en een nieuw spel begint leeg op het eiland). Een nieuw spel begint op een land van
   de maker, met een nummer van vijf cijfers (`T.landVoorNieuwSpel`, `js/gebied.js`): bij Nieuw spel staat het onder de
   naam van je dorp, met een knop Ander land die meteen een ander land achter het menu legt, en wie een nummer typt,
   krijgt precies dat land (Marcel: "Zodat je kunt herspelen"). Hetzelfde nummer geeft hetzelfde land en dezelfde

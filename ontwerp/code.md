@@ -314,8 +314,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   de bomen, uit het nummer en de schets; een stuk is hetzelfde hoe je het ook vraagt, zodat het spel later het land maakt
   aan de rand van de mist. Alleen optellen, vermenigvuldigen, delen en wortels (een toets kijkt het na), zodat elke
   browser hetzelfde eiland maakt. **Je dorp op het eiland** (stap 2a, Marcel: "C dorp dat er al was", en "Het eiland wordt
-  gewoon altijd gegenereerd bij een nieuw spel"): elk nieuw spel maakt het eiland (`T.MAKER_INSTELLINGEN.opEiland`; de
-  spelregel "Je gehucht" zet het alleen voor de toetsen en de speeltest uit, `voorProeven`), en je land is het stuk ervan
+  gewoon altijd gegenereerd bij een nieuw spel"): elk nieuw spel maakt het eiland (`T.MAKER_INSTELLINGEN.opEiland`; alleen een
+  toets of `npm run grootte` zet het uit, en dan legt de maker het gehucht dat er al was), en je land is het stuk ervan
   om jouw dorp:
   `T.landVanEiland(E, plek, b, h)` geeft de maker de streek per tegel en per hoekpunt, de bomen en waar de wegen het land
   verlaten, en `T.eilandVan(zaad)` onthoudt het laatste eiland. De maker (`js/maker.js`, met `land`) legt het gehucht erop
@@ -339,9 +339,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   zelf (`T.keurGehucht`) en probeert het anders tot het deugt; `T.kaartVanGehucht(plan)` maakt er een kaart met
   betekenisbestand van, zoals Tiled en `gereedschap/wereld.html` ze maken (de grondtegels uit de groep van de
   rand-tegels: "gras over zandpad: boven+rechts"), en `T.laadGemaaktGehucht` leest het in met `T.laadKaart`. Welk land
-  een nieuw spel krijgt, zegt `T.landVoorNieuwSpel` (`js/gebied.js`; de spelregel "Je gehucht", een nummer van vijf
-  cijfers, in het menu bij Nieuw spel); `T.beginOpKaart` legt alleen met een nummer een land van de maker, dus de
-  toetsen spelen op het ontworpen gehucht. De boeren worden uit hetzelfde nummer geloot (`D.lot.zaad`). Het gehucht
+  een nieuw spel krijgt, zegt `T.landVoorNieuwSpel` (`js/gebied.js`; een nummer van vijf cijfers, in het menu bij Nieuw
+  spel); `T.beginOpKaart(S, 'gehucht', zaad)` legt het, met het lege begin erop (met `leeg` uit, alleen voor de
+  toetsen, het gehucht dat er al was). Het zaad van het dorp is hetzelfde nummer (`D.lot.zaad`). Het gehucht
   blijft `'gehucht'` heten, zodat alles wat het ontworpen gehucht kent, ook hier werkt; `w.maker` zegt uit welk zaad
   het komt. **Op het eiland** (`land`, vraag 117, stap 2a): het water, het bos, de heide, het zand, de rotsen en de wegen
   komen van het eiland (`js/eiland.js`), en het gehucht is een dorp dat er al was: eerst de huizen om het plein, dan de
@@ -647,9 +647,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 ### js/begin.js: het lege begin
 
 - `js/begin.js`: **het lege begin** (vraag 152, stap 1b, 11 okt; Marcel: "We moeten ook zelf alles vanaf de start gaan
-  bouwen", en "Rijdt nu binnen"): met de spelregel "Het begin" op "Leeg" (`T.MAKER_INSTELLINGEN.leeg`, alleen op het
-  eiland; standaard nog het gehucht dat er al was, tot 1f) legt de maker geen gehucht maar alleen het land (`leeg` in
-  `js/maker.js`): het plein met `leegRand` tegels open eromheen en verder het bos van het eiland, een paar eiken, de plek
+  bouwen", en "Rijdt nu binnen"): elk nieuw spel (sinds ronde 2 van het snoeien, stap 3, het enige begin; alleen op het
+  eiland) legt de maker geen gehucht maar alleen het land (`leeg` in `js/maker.js`): het plein met `leegRand` tegels open eromheen en verder het bos van het eiland, een paar eiken, de plek
   van de marskramer waar de weg het plein raakt, en de plek van het kamp (`w.kamp`). `T.zetKamp` (vanuit `T.nieuwDorp`):
   de voorraad uit de kar (`T.BEGIN_INSTELLINGEN.kar`), een tent per gezin (`T.GEBOUWEN.tent`, `tijdelijk`: zo groot als
   zijn gezin, `T.woonruimteVan` in `js/gebouwen.js`, dus geen plaats voor een nieuw gezin; zijn deur zegt hij zelf,

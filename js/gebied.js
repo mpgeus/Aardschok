@@ -194,14 +194,10 @@
     return nieuw;
   };
 
-  // Het land van een nieuw spel (vraag 112, a; Marcel, 3 okt: "Eigenlijk een random map generator per nieuwe game"):
-  // met de spelregel "Je gehucht" op "Elk spel een ander" het zaad voor de maker (het land dat je bij Nieuw spel koos,
-  // of een nieuw), anders null, het ontworpen gehucht. Een zaad is een getal van vijf cijfers, zodat je een land dat je
-  // mooi vond, kunt onthouden en opnieuw spelen.
-  T.landVoorNieuwSpel = function (gekozen) {
-    if (!T.MAKER_INSTELLINGEN.eigenGehucht) return null;
-    return gekozen != null ? gekozen : T.nieuwLandZaad();
-  };
+  // Het land van een nieuw spel (vraag 112, a; Marcel, 3 okt: "Eigenlijk een random map generator per nieuwe game"): het
+  // zaad voor de maker, het land dat je bij Nieuw spel koos, of een nieuw. Een zaad is een getal van vijf cijfers, zodat
+  // je een land dat je mooi vond, kunt onthouden en opnieuw spelen.
+  T.landVoorNieuwSpel = (gekozen) => (gekozen != null ? gekozen : T.nieuwLandZaad());
   T.nieuwLandZaad = () => 1 + Math.floor(Math.random() * T.MAKER_INSTELLINGEN.zaden);
 
   // Een nieuw spel beginnen op een kaart: het gehucht, of een andere voor een proefje
@@ -209,13 +205,14 @@
   // S.schout staan dan klaar. Bestaat de kaart niet, dan false — de aanroeper valt dan terug op het
   // gehucht. Staat er geen "schout" op, dan zet het er zelf een neer.
   //
-  // Met `makerZaad` legt de maker het gehucht (js/maker.js) uit dat zaad, anders is het het ontworpen gehucht. Welk land
-  // een nieuw spel krijgt, zegt T.landVoorNieuwSpel hieronder (vanuit T.nieuwSpel, js/main.js). De boeren worden daarna
-  // uit hetzelfde zaad geloot, zodat het zaad van het spel (S.lot.zaad) ook het gehucht zegt, en hetzelfde zaad
-  // hetzelfde spel geeft.
-  T.beginOpKaart = function (S, naam, makerZaad) {
+  // Met `makerZaad` legt de maker je land (js/maker.js) uit dat zaad, met het lege begin erop (het enige begin sinds
+  // ronde 2 van het snoeien, stap 3; met `leeg` uit het gehucht dat er al was, zoals de maker het voor de andere dorpen
+  // legt: alleen voor de toetsen); anders is het het ontworpen gehucht. Welk land een nieuw spel krijgt, zegt
+  // T.landVoorNieuwSpel hierboven (vanuit T.nieuwSpel, js/main.js). Het zaad is ook het zaad van het dorp (D.lot.zaad),
+  // zodat hetzelfde zaad hetzelfde spel geeft.
+  T.beginOpKaart = function (S, naam, makerZaad, leeg = true) {
     const zaad = naam === 'gehucht' && makerZaad != null ? makerZaad : null;
-    const w = T.gebied(S, naam, zaad != null ? () => T.laadGemaaktGehucht(zaad) : null);
+    const w = T.gebied(S, naam, zaad != null ? () => T.laadGemaaktGehucht(zaad, leeg) : null);
     if (!w) {
       console.warn(`Spel.beginOpKaart: kaart "${naam}" bestaat niet — draai npm run kaarten?`); // geen tekst
       return false;

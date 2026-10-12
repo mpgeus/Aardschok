@@ -369,7 +369,7 @@
           }
           keuzes.push({ id: kid && kid.waarde, naam: I.tekstVan(knaam), uitleg: I.tekstVan(kuitleg), zet });
         }
-        spelregels.push({ id: id.waarde, naam: tekst('naam'), uitleg: tekst('uitleg'), standaard, keuzes, voorProeven: !!(deel(o, 'voorProeven') || {}).waarde,
+        spelregels.push({ id: id.waarde, naam: tekst('naam'), uitleg: tekst('uitleg'), standaard, keuzes,
           bestand: waar.OPTIES, blok: 'OPTIES', pad: [d.sleutel, 'standaard'], boven: d.uitleg });
       }
     }

@@ -203,18 +203,12 @@
   // Nieuw spel: eerst de naam van je dorp, met een voorstel (T.voorgesteldeDorpsnaam, js/treden.js). Het spel zelf
   // wacht al achter het titelscherm.
   function kiesNaam(S) {
-    // Zette je de spelregel "Je gehucht" om nadat dit spel klaarstond, dan eerst een vers spel (js/main.js), dat net
-    // zo stil achter het titelscherm wacht.
-    if (T.gehuchtNaarDeSpelregel()) {
-      T.houdTijdStil(S, 'titel');
-      S.camera = T.titelCamera();
-    }
     naamVoorstel = T.voorgesteldeDorpsnaam(S.dorp.lot && S.dorp.lot.zaad);
     toon(S);
   }
 
-  // Het nummer van het land achter het titelscherm, of null als het het ontworpen gehucht is (js/maker.js).
-  const landNu = (S) => (T.MAKER_INSTELLINGEN.eigenGehucht && S.wereld && S.wereld.maker ? S.wereld.maker.zaad : null);
+  // Het nummer van het land achter het titelscherm (js/maker.js), of null (een proefje).
+  const landNu = (S) => (S.wereld && S.wereld.maker ? S.wereld.maker.zaad : null);
   // Wat er in het veld van de naam staat, als je het land verandert: dat blijft staan (tenzij het het voorstel was).
   let naamNu = null;
 

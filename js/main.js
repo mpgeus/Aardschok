@@ -32,9 +32,9 @@
   // blijft. Het begint niet vanzelf: het titelscherm (js/menu.js, vraag 48) laat het erachter wachten, en
   // pas "Nieuw spel" geeft de benoemingsbrief van de heer, waarmee een spel begint sinds Marcel hem op
   // 25 sep koos (T.ui.toonBrief(S.dorp, 'benoeming'), js/brieven.js). Een proefje (?kaart=) begint meteen,
-  // zonder brief, en wordt nooit opgeslagen (S.proefje; js/opslaan.js). Het land zegt de spelregel "Je gehucht"
-  // (T.landVoorNieuwSpel, js/gebied.js); met `makerZaad` is het het gehucht van de maker uit dat zaad, ook zonder de
-  // spelregel (het land dat je bij Nieuw spel koos, js/menu.js; Spel.debug.gehucht).
+  // zonder brief, en wordt nooit opgeslagen (S.proefje; js/opslaan.js). Het land is dat van de maker uit `makerZaad`
+  // (het land dat je bij Nieuw spel koos, js/menu.js; Spel.debug.begin), of een nieuw (T.landVoorNieuwSpel, js/gebied.js),
+  // met het lege begin erop.
   T.nieuwSpel = function (makerZaad) {
     for (const k of Object.keys(S)) if (k !== 'zoom') delete S[k];
     S.zoom = zoomVenster; // ook als het vorige spel in het overzicht stond
@@ -66,22 +66,6 @@
     if (proefje) S.proefje = true;
     zetCameraOpSchout();
     T.ui.reset(S);
-  };
-
-  // Het spel dat achter het titelscherm klaarstaat, begint op het gehucht dat de spelregel "Je gehucht" nu zegt
-  // (js/maker.js). Het stond er al toen de bladzijde opende; wie de spelregel daarna omzette (op het titelscherm, of
-  // in een spel), krijgt bij Nieuw spel (js/menu.js) eerst een vers spel. Wie niets omzette, houdt het spel dat
-  // klaarstond, zodat hetzelfde zaad hetzelfde spel blijft geven (de speeltest).
-  // Geeft true als er een vers spel kwam.
-  T.gehuchtNaarDeSpelregel = function () {
-    const g = S.gebieden && S.gebieden.gehucht;
-    const gemaakt = !!(g && g.maker);
-    const opEiland = !!(g && g.eiland);
-    const leeg = !!(g && g.kamp); // het lege begin (js/begin.js)
-    const leegGevraagd = !!(T.MAKER_INSTELLINGEN.leeg && T.MAKER_INSTELLINGEN.opEiland);
-    if (S.proefje || (gemaakt === !!T.MAKER_INSTELLINGEN.eigenGehucht && opEiland === !!T.MAKER_INSTELLINGEN.opEiland && leeg === leegGevraagd)) return false;
-    T.nieuwSpel();
-    return true;
   };
 
   function zetCameraOpSchout() {
@@ -1200,15 +1184,12 @@
       return w && w.maker ? `Een gehucht van de maker, uit zaad ${w.maker.zaad}${stijl}.` : 'Het ontworpen gehucht.'; // geen tekst
     },
     // Je dorp op het eiland (js/eiland.js, vraag 117, stap 2): Spel.debug.eiland(5) begint nu een nieuw spel op het eiland
-    // van nummer 5, zonder brief (en zet de spelregel "Je gehucht" terug op het eiland, als een toets hem omzette);
-    // zonder nummer zegt het waar je dorp op het eiland ligt, wat voor plek het is, en waar de wegen je land verlaten.
+    // van nummer 5, zonder brief; zonder nummer zegt het waar je dorp op het eiland ligt, wat voor plek het is, en waar
+    // de wegen je land verlaten.
     eiland(zaad) {
-      if (zaad != null) {
-        T.zetOptie('gehucht', 'eiland');
-        T.nieuwSpel(Number(zaad));
-      }
+      if (zaad != null) T.nieuwSpel(Number(zaad));
       const w = S.gebieden && S.gebieden.gehucht;
-      if (!w || !w.eiland) return 'Dit gehucht ligt niet op het eiland (de spelregel "Je gehucht" staat niet op "Op het eiland").'; // geen tekst
+      if (!w || !w.eiland) return 'Dit gehucht ligt niet op het eiland (een proefje, of een oud spel).'; // geen tekst
       const E = T.eilandVan(w.eiland.zaad);
       const dorp = E.plekken.find((p) => p.naam === w.eiland.dorp);
       return {
@@ -1219,18 +1200,14 @@
         uitgang: w.overgangen ? w.overgangen.map((o) => [o.x, o.y]) : null,
       };
     },
-    // Het lege begin (js/begin.js, vraag 152): Spel.debug.begin('leeg') zet de spelregel "Het begin" op "Leeg" en begint
-    // een nieuw spel op het eiland (met een nummer erbij: Spel.debug.begin('leeg', 5)), zonder brief; ('gehucht') zet hem
-    // terug. Zonder iets zegt het hoe het kamp ervoor staat: waar de kar is, wie er woont, en tot wanneer de heer niets vraagt.
-    begin(wat, zaad) {
-      if (wat === 'leeg' || wat === 'gehucht') {
-        T.zetOptie('begin', wat);
-        T.zetOptie('gehucht', 'eiland');
-        T.nieuwSpel(zaad != null ? Number(zaad) : undefined);
-      }
+    // Het lege begin (js/begin.js, vraag 152): Spel.debug.begin(5) begint een nieuw spel op het eiland van nummer 5,
+    // zonder brief (Spel.debug.begin('nieuw') op een nieuw eiland). Zonder iets zegt het hoe het kamp ervoor staat: waar de
+    // kar is, wie er woont, en tot wanneer de heer niets vraagt.
+    begin(zaad) {
+      if (zaad != null) T.nieuwSpel(zaad === 'nieuw' ? undefined : Number(zaad));
       const D = S.dorp;
       const B = D && D.begin;
-      if (!B) return 'Dit spel begon in het gehucht dat er al was (de spelregel "Het begin" staat niet op "Leeg").'; // geen tekst
+      if (!B) return 'Dit spel begon niet leeg (een proefje, of een oud spel van vóór 12 okt).'; // geen tekst
       return {
         kamp: B.kamp,
         kar: { tegel: [B.kar.tx, B.kar.ty], naar: [D.wereld.kamp.kar.x, D.wereld.kamp.kar.y], nogTegels: B.kar.pad.length },

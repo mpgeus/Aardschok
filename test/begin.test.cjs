@@ -20,7 +20,7 @@ function leegBegin(zaad = 2) {
   let n = 11;
   console.warn = () => {};
   Math.random = () => (n = (n * 16807) % 2147483647) / 2147483647;
-  Object.assign(T.MAKER_INSTELLINGEN, { eigenGehucht: true, opEiland: true, leeg: true });
+  T.MAKER_INSTELLINGEN.opEiland = true;
   const S = { kalender: T.nieuweKalender(), tijd: 0, wereldTijd: 0, modus: 'verkennen', inventaris: new Set() };
   try {
     assert.ok(T.beginOpKaart(S, 'gehucht', zaad));
@@ -157,15 +157,9 @@ function totAf(S, gebouwen, van = 2, hooguit = 60) {
   return assert.fail('de gebouwen komen niet af');
 }
 
-test('"Leeg": de hut en het huis staan in het bouwmenu', () => {
-  try {
-    T.pasOptiesToe({ keuzes: { begin: 'leeg' } });
-    assert.equal(T.MAKER_INSTELLINGEN.leeg, true);
-    const { D } = leegBegin();
-    assert.ok(T.inBouwmenu(D, 'hut') && T.inBouwmenu(D, 'huis') && T.inBouwmenu(D, 'houthakker'));
-  } finally {
-    T.pasOptiesToe({});
-  }
+test('het lege begin: de hut en het huis staan in het bouwmenu', () => {
+  const { D } = leegBegin();
+  assert.ok(T.inBouwmenu(D, 'hut') && T.inBouwmenu(D, 'huis') && T.inBouwmenu(D, 'houthakker'));
 });
 
 test('verhuizen: is een hut af, dan trekt er een gezin uit het kamp in, en gaat zijn tent weg; die van de schout blijft', () => {
@@ -237,9 +231,9 @@ test('bewaren en laden: het kamp en de kar blijven aan elkaar vast', () => {
 
 test('alleen op het eiland: zonder eiland legt de maker het gehucht dat er al was', () => {
   const maker = { ...T.MAKER_INSTELLINGEN };
-  Object.assign(T.MAKER_INSTELLINGEN, { opEiland: false, leeg: true });
+  T.MAKER_INSTELLINGEN.opEiland = false;
   try {
-    const w = T.laadGemaaktGehucht(3);
+    const w = T.laadGemaaktGehucht(3, true);
     assert.ok(!w.kamp);
     assert.ok(w.gebouwenOpKaart.length > 5);
   } finally {
@@ -276,7 +270,7 @@ test('het bouwbereik: je bouwt binnen bouwBereik tegels van het plein, en verder
 
 test('het bouwbereik is er alleen in het lege begin', () => {
   const maker = { ...T.MAKER_INSTELLINGEN };
-  Object.assign(T.MAKER_INSTELLINGEN, { opEiland: false, leeg: false });
+  T.MAKER_INSTELLINGEN.opEiland = false;
   try {
     const S = { kalender: T.nieuweKalender(), tijd: 0, wereldTijd: 0, modus: 'verkennen', inventaris: new Set() };
     const echt = console.warn;
@@ -294,12 +288,7 @@ test('het bouwbereik is er alleen in het lege begin', () => {
 });
 
 test('het huis van de schout: één keer in het bouwmenu, alleen in het lege begin; is het af, dan verhuist hij en wordt de huifkar de ossenkar', () => {
-  T.pasOptiesToe({ keuzes: { begin: 'leeg' } });
-  try {
-    huisVanDeSchout();
-  } finally {
-    T.pasOptiesToe({});
-  }
+  huisVanDeSchout();
 });
 function huisVanDeSchout() {
   const { S, D, w } = leegBegin();
@@ -344,7 +333,7 @@ function huisVanDeSchout() {
 
 test('het huis van de schout staat niet in het bouwmenu van het gehucht dat er al was', () => {
   const maker = { ...T.MAKER_INSTELLINGEN };
-  Object.assign(T.MAKER_INSTELLINGEN, { opEiland: false, leeg: false });
+  T.MAKER_INSTELLINGEN.opEiland = false;
   try {
     const S = { kalender: T.nieuweKalender(), tijd: 0, wereldTijd: 0, modus: 'verkennen', inventaris: new Set() };
     const echt = console.warn;
@@ -490,7 +479,7 @@ test('meebouwen: met of zonder beelden komt er hetzelfde uit', (t) => {
 
 test('in het gehucht dat er al was, rijst een gebouw vanzelf op in zijn bouwtijd', () => {
   const maker = { ...T.MAKER_INSTELLINGEN };
-  Object.assign(T.MAKER_INSTELLINGEN, { opEiland: false, leeg: false });
+  T.MAKER_INSTELLINGEN.opEiland = false;
   try {
     const S = { kalender: T.nieuweKalender(), tijd: 0, wereldTijd: 0, modus: 'verkennen', inventaris: new Set() };
     const echt = console.warn;
@@ -521,10 +510,7 @@ function komAan(D) {
   T.werkBewonersBij(D);
 }
 
-test('een jaar met de kolonist: alles wat hij neerzet, komt af, het kamp is leeg vóór de winter, en de akkers zijn geoogst', (t) => {
-  // met de spelregel "Het begin" op "Leeg", zoals de speeltest: dan staan de woningen in het bouwmenu (T.inBouwmenu)
-  T.pasOptiesToe({ keuzes: { begin: 'leeg' } });
-  t.after(() => T.pasOptiesToe({}));
+test('een jaar met de kolonist: alles wat hij neerzet, komt af, het kamp is leeg vóór de winter, en de akkers zijn geoogst', () => {
   const { S, D, w } = leegBegin();
   const gedaan = [];
   const graan = {};

@@ -166,8 +166,8 @@ nieuw spel op het gehucht van zaad 3 (zonder brief), zoals op de pagina "Gehucht
 zonder het eiland, waarop de vaste schermafdrukken, de tekenmeting en de samenvatting spelen.
 `Spel.debug.eiland(5)` begint nu een spel op het eiland van 5 (zonder brief); zonder nummer zegt het in welk dorp je op het
 eiland ligt, wat voor plek het is en waar de uitgang is.
-`Spel.debug.begin('leeg')` begint nu een spel met het lege begin (vraag 152; `('leeg', 5)` op het eiland van 5,
-`('gehucht')` zet de spelregel terug); zonder iets zegt het hoe het kamp ervoor staat: waar de kar is en heen gaat, of de
+`Spel.debug.begin(5)` begint nu een spel op het eiland van 5 (`('nieuw')` op een nieuw eiland), zonder brief; zonder
+iets zegt het hoe het kamp ervoor staat: waar de kar is en heen gaat, of de
 schout meeloopt, wie er in welke tent woont, het vuur, en tot wanneer de heer niets vraagt.
 `Spel.debug.voorval()` zegt welk voorval er loopt, welke vervolgen nog komen, welke voorvallen er nu kunnen (met hoe
 zwaar ze wegen) en welke oorzaken er spelen;
@@ -200,8 +200,7 @@ zijn boom omhakken, `('groei')` laat elk boompje en elke jonge boom nu een maat 
 slachtmaand). `Spel.debug.opslaan('2')` zet het spel op plek 2, `Spel.debug.laden('auto')` laadt wat er vanzelf
 bewaard is, en `Spel.debug.spellen()` zegt wat er op de plekken staat.
 De spelregels die de browser onthield (`localStorage`, `aardschok.spelregels`) gelden ook voor wie
-test, behalve een spelregel voor de proeven (`voorProeven`, zoals "Je gehucht"): die alleen als een proef hem daar
-zette (`proef`, zoals de speeltest); `Spel.optiesTerug()` zet alles op de standaard, en een nieuwe Playwright-context begint leeg.
+test (een keus voor een spelregel die er niet meer is, telt niet); `Spel.optiesTerug()` zet alles op de standaard, en een nieuwe Playwright-context begint leeg.
 Een sprong met `kalender` tikt alle dagen ertussen af: valt 1 wijnmaand erin, dan staat de brief
 open en de tijd stil tot je hem sluit.
 

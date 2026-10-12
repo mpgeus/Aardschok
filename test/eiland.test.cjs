@@ -201,9 +201,7 @@ function nieuwSpel(zaad) {
 
 test('je dorp op het eiland: elk nieuw spel maakt het eiland, zonder keuze; zonder land legt de maker zoals altijd', () => {
   // Marcel, 8 okt: "Het eiland wordt gewoon altijd gegenereerd bij een nieuw spel. Ergens op dat eiland staat je gehucht."
-  const o = T.OPTIES.find((x) => x.id === 'gehucht');
-  assert.equal(o.standaard, 'eiland');
-  assert.equal(o.voorProeven, true);
+  assert.ok(!T.OPTIES.some((x) => x.id === 'gehucht'), 'geen spelregel "Je gehucht" meer');
   assert.equal(T.MAKER_INSTELLINGEN.opEiland, true);
   // zonder land weet het gehucht van de maker niets van het eiland
   const plan = T.maakGehucht(5);
@@ -239,13 +237,14 @@ test('je dorp op het eiland: het water en de wegen zijn die van het eiland, en h
   }
 });
 
-test('een nieuw spel op het eiland: je dorp op jouw plek, 26 mensen, en bewaren en laden geeft hetzelfde spel', () => {
+test('een nieuw spel op het eiland: je kamp op jouw plek, de gezinnen van de kar, en bewaren en laden geeft hetzelfde spel', () => {
   opEiland(() => {
     const S = nieuwSpel(5);
     assert.equal(S.wereld.eiland.zaad, 5);
     assert.equal(S.wereld.eiland.dorp, eiland(5).plekken.find((p) => p.jij).naam);
     assert.equal(S.wereld.maker.zaad, 5);
-    assert.equal(S.dorp.bevolking, 26);
+    assert.ok(S.dorp.begin && S.wereld.kamp, 'het lege begin');
+    assert.equal(S.dorp.bevolking, S.dorp.bewoners.mensen.length);
     const tekst = T.bewaarSpel(S, { nu: 1790000000000 });
     const S2 = nieuwSpel(3);
     const r = T.herstelSpel(S2, tekst);

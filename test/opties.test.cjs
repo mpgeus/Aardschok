@@ -205,20 +205,14 @@ test('onthouden en teruglezen, en een kapotte of lege opslag breekt niets', () =
   assert.doesNotThrow(() => T.bewaarOpties(stuk));
 });
 
-test('een keus van vroeger voor een spelregel die niet meer in het venster staat, telt niet; die van een proef wel', () => {
+test('een keus van vroeger voor een spelregel die er niet meer is, telt niet', () => {
   const opslag = (i) => ({ getItem: () => JSON.stringify(i), setItem: () => {} });
-  // Toen "Je gehucht" nog in het venster stond, onthield de browser "Elk spel een ander": nu maakt een nieuw spel
-  // toch het eiland (vraag 117), want die keus kun je niet meer zien of terugzetten.
-  const vroeger = T.laadOpties(opslag({ keuzes: { gehucht: 'maker', betalenIn: 'alleenGoud' }, namen: {}, getallen: {} }));
-  assert.deepEqual(vroeger.keuzes, { betalenIn: 'alleenGoud' });
-  T.pasOptiesToe(vroeger);
-  assert.equal(T.optieKeuze('gehucht'), 'eiland');
+  // De browser onthield "Je gehucht" en "Het begin" van vóór ronde 2 van het snoeien (stap 3): die spelregels zijn weg,
+  // en een nieuw spel begint toch leeg op het eiland.
+  T.pasOptiesToe(T.laadOpties(opslag({ keuzes: { gehucht: 'maker', begin: 'gehucht', betalenIn: 'alleenGoud' }, namen: {}, getallen: {} })));
+  assert.deepEqual(T.OPTIES_NU.keuzes, { betalenIn: 'alleenGoud' });
   assert.equal(T.MAKER_INSTELLINGEN.opEiland, true);
   assert.equal(T.HEER_INSTELLINGEN.betalenIn, 'alleenGoud');
-  // De speeltest zet hem wel (`proef`), met --maker of zonder (het ontworpen gehucht).
-  T.pasOptiesToe(T.laadOpties(opslag({ keuzes: { gehucht: 'maker' }, namen: {}, getallen: {}, proef: true })));
-  assert.equal(T.optieKeuze('gehucht'), 'maker');
-  assert.equal(T.MAKER_INSTELLINGEN.opEiland, false);
   T.pasOptiesToe(null);
 });
 

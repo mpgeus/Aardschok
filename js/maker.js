@@ -13,9 +13,11 @@
 //
 // T.maakGehucht(zaad) legt het plan (de indeling, zonder tegels); T.kaartVanGehucht(plan) maakt er een kaart met een
 // betekenisbestand van, in dezelfde vorm als een kaart uit Tiled, zodat het spel een gemaakt gehucht inleest zoals het
-// ontworpen gehucht (T.laadKaart, js/kaart.js). Met de spelregel "Je gehucht" op "Elk spel een ander" (vraag 70, C;
-// Marcel, 30 sep: "c ja") begint een nieuw spel op een gemaakt gehucht, uit het zaad van dat spel (T.beginOpKaart,
-// js/gebied.js). De schets (gereedschap/maker/schets.cjs, npm run maker) tekent plannen als plattegrond.
+// ontworpen gehucht (T.laadKaart, js/kaart.js). Een nieuw spel begint op het land van de maker, uit het zaad van dat spel,
+// op het eiland en leeg: alleen het land met een open plek die het plein wordt (T.beginOpKaart, js/gebied.js; sinds ronde
+// 2 van het snoeien, stap 3, het enige begin). Het gehucht dat er al was (`leeg` uit) legt hij nog voor de andere dorpen
+// (de toetsen van het buurdorp), tot Marcel kiest of dat de andere dorpen op het eiland worden. De schets
+// (gereedschap/maker/schets.cjs, npm run maker) tekent plannen als plattegrond.
 //
 // Hij gebruikt de regels uit js/ zelf: de dobbelsteen (T.dobbelsteen, js/dorp.js), de rand van het plein
 // (T.binnenRand, js/wereld.js), de maten en deuren van de tekeningen en de grondtegels (T.TEGELS, tegels/tegels.js).
@@ -23,23 +25,19 @@
   'use strict';
 
   T.MAKER_INSTELLINGEN = {
-    // Legt de maker ook je eigen gehucht? De spelregel "Je gehucht" (js/opties.js) zet dit. Sinds 4 okt is dat de
-    // standaard (vraag 112, a: "Zodat je kunt herspelen"); het ontworpen gehucht blijft een keuze, en de toetsen spelen
-    // erop (T.beginOpKaart zonder zaad).
-    eigenGehucht: true,
     // Legt hij het op het eiland (js/eiland.js; vraag 117, stap 2; Marcel, 8 okt: "A ja B later C dorp dat er al was", en
     // "Het eiland wordt gewoon altijd gegenereerd bij een nieuw spel. Ergens op dat eiland staat je gehucht")? Dan is je
     // land het stuk van het eiland om jouw plek: het water, het bos, de heide, de rotsen en de wegen komen van het
-    // eiland, en het gehucht is een dorp dat er al was: wat het nodig heeft, is gerooid. Elk nieuw spel; de spelregel
-    // "Je gehucht" zet het alleen voor de toetsen en de speeltest uit.
+    // eiland. Elk nieuw spel. Alleen een toets of `npm run grootte` zet het uit: dan legt hij een land van 100 bij 100
+    // zonder eiland, met het gehucht dat er al was (het lege begin is er alleen op het eiland). Tot ronde 2 van het
+    // snoeien (stap 3, 12 okt) waren er ook de spelregels "Je gehucht" en "Het begin" (`eigenGehucht`, `leeg`).
     opEiland: true,
     // Op het eiland: zo ver om het midden van het plein is alles gerooid (tegels), en een bruggetje is hooguit zo lang
     // (tegels water) en kost zoveel stappen extra, zodat een weg liever om het water heen loopt.
     eilandKern: 16,
-    // In het lege begin (vraag 152, de spelregel "Het begin"; js/begin.js): legt de maker geen gehucht, maar alleen het land
-    // met een open plek die het plein wordt; zo ver om het plein is het open (tegels), en verder staat het bos van het
-    // eiland (Marcel, 11 okt: "Klein, bos dichtbij").
-    leeg: false,
+    // In het lege begin (vraag 152; js/begin.js) legt de maker geen gehucht, maar alleen het land met een open plek die het
+    // plein wordt; zo ver om het plein is het open (tegels), en verder staat het bos van het eiland (Marcel, 11 okt:
+    // "Klein, bos dichtbij").
     leegRand: 2,
     eilandBrug: { lang: 7, kost: 12 },
     // Zo ver om de kaart weet de rand wat het eiland er heeft (tegels; T.randVanHetEiland): zo ver tekent js/tekenen.js
@@ -2007,14 +2005,14 @@
   // Het gehucht op het eiland van dit nummer (vraag 117, stap 2): op jouw plek (js/eiland.js), en lukt het daar niet, dan
   // op de plek van een ander dorp, in een vaste volgorde, zodat hetzelfde nummer hetzelfde spel geeft. Per plek minder
   // pogingen dan op een land van de maker, want een andere plek is er wel.
-  function gehuchtOpEiland(zaad) {
+  function gehuchtOpEiland(zaad, leeg) {
     const E = T.eilandVan(zaad);
     const dorpen = E.plekken.filter((p) => p.soort === 'dorp');
     const waarom = [];
     for (const p of [...dorpen.filter((d) => d.jij), ...dorpen.filter((d) => !d.jij)]) {
       const land = T.landVanEiland(E, p, IN().b, IN().h);
       try {
-        const plan = T.maakGehucht(zaad, land, 30, IN().leeg);
+        const plan = T.maakGehucht(zaad, land, 30, leeg);
         plan.eiland.dorp = p.naam;
         return plan;
       } catch (e) {
@@ -2154,9 +2152,10 @@
   };
 
   // Een gemaakt gehucht als wereld, zoals T.gebied (js/gebied.js) een kaart uit kaarten/ inleest. `maker` zegt uit welk
-  // zaad hij komt.
-  T.laadGemaaktGehucht = function (zaad) {
-    const plan = IN().opEiland ? gehuchtOpEiland(zaad) : T.maakGehucht(zaad);
+  // zaad hij komt. Met `leeg` het lege begin (alleen op het eiland), zoals een nieuw spel; zonder het gehucht dat er al
+  // was, zoals een buurdorp.
+  T.laadGemaaktGehucht = function (zaad, leeg = false) {
+    const plan = IN().opEiland ? gehuchtOpEiland(zaad, leeg) : T.maakGehucht(zaad);
     const { kaart, betekenis } = T.kaartVanGehucht(plan);
     const w = T.laadKaart(kaart, betekenis);
     w.maker = { zaad: plan.zaad, poging: plan.poging };
