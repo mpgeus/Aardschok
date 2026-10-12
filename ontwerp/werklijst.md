@@ -18,10 +18,14 @@ is af** (12 okt): de kolonist speelt het lege begin op vijf eilanden een jaar zo
 snoeien is af** (A, 12 okt, stap 1 tot 6): de verzoeken, de ondernemers, de erven en het ontginnen zijn weg; "Leeg" is
 het enige begin, een boer is de man op een boerderij, alleen de kolonist speelt nog in de speeltest; het plein heeft
 een vaste marktplek (de spelregel "De markt" is weg), en de maker legt alleen nog het lege land: alles bouwt de speler.
-De toetsen en het gereedschap spelen op het proefdorp (`T.proefdorp`, `Spel.debug.proefdorp`). **Het volgende** is de
-wijnboerderij als eigen gebouw (B1, vraag 155), het hele eiland (B2), de afwisseling (B3), en ronde 3 na C.
+De toetsen en het gereedschap spelen op het proefdorp (`T.proefdorp`, `Spel.debug.proefdorp`). **B1 is af** (12 okt): de
+wijnboerderij is een eigen gebouw, met de wijngaard als veld ernaast. **Het volgende** is het hele eiland (B2), de
+afwisseling (B3), en ronde 3 na C.
 
 **Wacht op Marcel:**
+- **De wijnboerderij bekijken** (B1): Nieuw spel, en in het bouwmenu (B) de wijnboerderij; is ze af, dan trekt er een
+  gezin in, en de wijngaard leg je met twee klikken ernaast (de akker kan alleen nog bij een boerderij). In wijnmaand
+  plukt het gezin. Haalt de wijn het jaar niet, dan zegt de raad onder het doel: leg een wijngaard erbij.
 - **De marktplek bekijken** (stap 6a): Nieuw spel, en het bouwmenu (B): de marktplek ligt in zacht goud op het plein; met
   de markt in de hand (vanaf een dorp) licht hij groen op, en een huis mag er niet tegenaan.
 - **Drie gaten die stap 6 liet zien** (`opmerkingen.md`): in het lege begin komt er nooit vee (geen melk, kaas of wol); de
@@ -81,20 +85,12 @@ Het plan staat in het archief bij vraag 152; 1a (optie 1), 1b (het lege land), 1
 (binnen bereik, en met handen), 1e (boeren uit het niets) en 1f (een jaar zonder fouten) zijn af; hoe het nu werkt:
 `spel.md`, "Zo werkt het lege begin nu".
 
-## B1. De wijnboerderij als eigen gebouw (vraag 155)
+## B1. De wijnboerderij als eigen gebouw (vraag 155): af
 
-Marcel, 12 okt: "ik wil tóch een apart wijnboerderij gebouw", en op de keuze: "A, direct na ronde 2" (na stap 5 van A,
-vóór B2). **A:** een eigen gebouw "Wijnboerderij" in het bouwmenu, met de tekening die er al is
-(`gereedschap/pixelart/`, het huis van `T.GEBOUWEN.wijnboerderij`); daarnaast leg jij de wijngaard als veld, zoals bij
-de boerderij de akker (`js/boerderij.js`). De boerderij krijgt alleen akkers, en de regel "het eerste veld bepaalt wat
-de boerderij is" vervalt: zo is er één manier om wijn te maken. Het oude gebouw met de wijngaard binnen zijn eigen voet
-(`nietLeeg`, `alleenHetHuis`) gaat dan weg, en het vooruitkijken van de wijn (`T.wijnNaDePluk`, slaapt) kan de raad
-weer gebruiken. **Het plan (Claude, 12 okt), en Marcel: "A gehucht, b ja, c ja":** de wijnboerderij wordt een
-gewoon huis van 5 bij 4 (de tekening `gebouwen/wijnhuis`, één tekening voor nu), met een gezin, vanaf het gehucht, voor
-18 hout en 8 goud, en de heer wil er 10 wijn per jaar voor; de wijngaard leg je als veld bij een wijnboerderij (dezelfde
-maten als een akker), een akker alleen bij een boerderij; het gezin plukt in wijnmaand en werkt verder elders; de raad
-zegt het weer als de wijn het jaar niet haalt (`T.wijnNaDePluk`); opslaan gaat een versie omhoog. **Bezig in sessie
-`ccr-ba1fa562-g7kz8h`** (12 okt): het bouwen.
+Af op 12 okt (Marcel: "ik wil tóch een apart wijnboerderij gebouw", en "A gehucht, b ja, c ja"): een huis van 5 bij 4
+met een gezin, vanaf het gehucht, 18 hout en 8 goud, de heer wil 10 wijn; de wijngaard is een veld bij een
+wijnboerderij, de akker bij een boerderij; de raad zegt het als de wijn het jaar niet haalt. Hoe het werkt: `spel.md`,
+"Zo werkt het lege begin nu", en `code.md` bij `js/boerderij.js` en `js/wijngaard.js`.
 
 ## B2. Het hele eiland (vraag 117, stap 3)
 
@@ -199,4 +195,5 @@ het graan vraagt", de schandpaal, de heervaart en de twee bazen.
 - Het lege land: de huifkar rijdt een leeg stuk van het eiland in, met het kamp op het plein (vraag 152, 1b).
 - CLAUDE.md van 153 naar 19 KB (vraag 153, stap 1), deze nieuwe werklijst (stap 2), en ronde 1 van het snoeien.
 - De ronde van alle huizen (vraag 144).
+- De wijnboerderij als eigen gebouw (B1, vraag 155).
 - De naam: Tithebreaker, vrij op Steam en in de merkenregisters (`commercieel.md`).
