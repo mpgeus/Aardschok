@@ -741,8 +741,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - **Een speler in code voor het lege begin** (werklijst B, 1f; Marcel, 12 okt: "a1, b1, c1, d ja"). `T.kolonistDag(D,
   dag)` loopt elke dag zijn regels af en doet wat er vandaag kan: het huis van de schout, een boerderij met akkers tot al
   het zaaigraan uit de kar erop past (zolang `T.isNazaaitijd`), een houthakker als het hout laag wordt, hutten tot elk
-  gezin in het kamp een woning heeft, en na de oogst een wijngaard op een tweede boerderij als het eten de winter niet
-  haalt. Hij bouwt met de handelingen van het bouwmenu: `T.plaatsGebouw` op de plek van `T.plekVoor` (open grond, of
+  gezin in het kamp een woning heeft, een jager als het spel zegt dat het eten niet haalt (`T.watDeWinterNietHaalt`, of
+  de status honger; hooguit één per `jagerNa` dagen; Marcel, 12 okt: "a ja"), en na de oogst een wijngaard op een tweede
+  boerderij als het eten de winter niet haalt. Hij vraagt `T.inBouwmenu`, dus hij speelt onder de spelregel "Leeg". Hij bouwt met de handelingen van het bouwmenu: `T.plaatsGebouw` op de plek van `T.plekVoor` (open grond, of
   waar het minst te rooien is), en `T.legVeld` op de rechthoek die hij zelf zoekt (de grootste maat die past, het minst
   te rooien, het dichtst bij de boerderij). Hij geeft terug wat hij deed (`{ soort, gelukt, reden, tekst, instantie }`),
   en wat hij nog niet kan betalen met `wacht`. Het is gereedschap, geen spel: het spel laadt hem niet.
@@ -968,7 +969,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - `js/bos.js`: **het bos: omhakken, rooien, planten en groeien** (vraag 110, e, met 115, 6 okt; Marcel: "A ja B ja C ja D
   zo"), met de getallen in `T.BOS_INSTELLINGEN`. Wat te rooien is, zegt `T.ontginWerkOp` ('hakken' voor een boom,
   'rooien' voor een stronk, een struik, een boompje of een jonge boom); een boom om met `T.hakBoom` (het hout naar de
-  schuur: `houtPerBoom`, wie hem ook omhakt) of `T.velBoom` (zonder), en de rest eruit met `T.rooi`. Bos is waar minstens
+  schuur: `houtPerBoom`, wie hem ook omhakt; in het lege begin `rooiHout`, `T.rooiHoutPerBoom`, behalve voor de
+  houthakker, die niet met `T.hakBoom` hakt) of `T.velBoom` (zonder), en de rest eruit met `T.rooi`. Bos is waar minstens
   `bosBomen` bomen in de vijf bij vijf tegels staan (`T.isBos`; ook de bosrand waar de boeren sprokkelen). **De
   houthakker** (vraag 115; "Hout uit het niets" is op 11 okt weggehaald, snoeironde vraag 153) maakt zijn hout zoals altijd (2 per dag, in `T.tikGebouwenDag`),
   maar uit een boom: de dichtste binnen `hakStraal` van zijn schuur (`T.boomVanHouthakker`, `g.boom`), en elke

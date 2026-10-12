@@ -35,6 +35,41 @@ gamedesigner (`het-spel-in-het-kort.pdf`) beschrijft nog het oude spel; dat staa
 6. **De quests** (`js/quest.js` en `js/quests.js`, met haken in `js/gesprek.js`): een raamwerk uit het oude spel, en
    de lijst is leeg. **Blijft voor nu** (Marcel).
 
+## Ronde 2: voorstel van Claude (12 okt), wacht op Marcel
+
+Na 1f (de kolonist speelt het lege begin een jaar zonder fouten). Marcel, 12 okt: "d ja": "Leeg" als standaard is de
+eerste stap. Een agent bracht in kaart wat eraan hangt; wat opviel:
+
+- **Het ontworpen gehucht is het proefveld van bijna alle toetsen:** 49 toetsbestanden beginnen er met
+  `T.beginOpKaart(S, 'gehucht')`, met zijn vijf boeren en hun akkers. Wie `kaarten/gehucht.tmj` weghaalt, moet die allemaal
+  op een nieuwe grond zetten.
+- **Wat het lege begin nog gebruikt, staat in bestanden die weg zouden gaan:** de plekzoeker (`T.plekVoor`,
+  `T.kanHierKomen`) in `js/verzoeken.js`; `T.dobbelsteen` en het zaad van het spel (`D.lot.zaad`, door 14 bestanden
+  gelezen) in `js/boeren.js`; de wapens van de militie (`T.bewapen`, `wapens.schade`) in `js/ondernemers.js`. Die
+  verhuizen eerst.
+- **`T.tikGebouwenDag` roept de erven en de ondernemers elke dag aan**, en `T.inBouwmenu` kijkt naar "Huizen" en "Wie
+  bouwt".
+- **Ronde 3 hangt eraan:** de raad en de raadsman gebruiken de verzoeken, het lot en de karakters.
+- **"Leeg" als standaard** maakt nu 53 toetsen rood; de meeste horen bij wat in deze ronde weggaat.
+
+Voorstel, in stappen, elk met de toetsen groen:
+1. **Verhuizen wat blijft:** de plekzoeker naar `js/bouwen.js`, de dobbelsteen en het zaad naar `js/dorp.js`, de wapens
+   naar `js/rovers.js`.
+2. **Weg:** de verzoeken en de ondernemers (met hun voorvallen, gesprekken en de rijen in de balk), de erven (met het erf
+   in het bouwmenu), de wijnboerderij en het ontginnen door de boer, met hun toetsen en de spelregels "Wie bouwt" en
+   "Huizen": wat "Leeg" zette, is gewoon zo.
+3. **"Leeg" is het enige begin:** de spelregels "Het begin" en "Je gehucht" gaan eruit. Na stap 2 zijn de meeste van de 53
+   rode toetsen al weg, met wat ze toetsten; de rest krijgt het lege begin. Het ontworpen gehucht blijft als proefkaart
+   voor de toetsen (zoals `?kaart=proef`), niet als begin dat een speler kiest. (Dat is een stap later dan Marcels "d ja":
+   "Leeg" eerst als standaard zou betekenen dat 53 toetsen eerst omgebouwd worden en een stap later weggaan.)
+4. **Weg:** het lot en de karakters van de boeren (`T.KARAKTERS` met hun gesprekken, zo'n 245 regels; de spelregel "Wie
+   de boeren zijn"), en de spelregel "De markt".
+5. **De speeltest:** de oude spelers (braaf, slim, bouwer, sluw) spelen het oude begin; de brave blijft als nulmeting op
+   het lege begin, de rest gaat eruit. Opslaan naar versie 6 (een half gebouwde hut op een erf betekent dan iets anders).
+
+Te kiezen: (e) het ontworpen gehucht als proefkaart houden, of ook weg; (f) de oude spelers: alleen de brave houden, of
+alle vier weg; (g) de karakters weg of laten slapen; (h) de wapens blijven (ze horen bij F, vechten).
+
 ## Later
 
 - **Ronde 2, na 1f:** `js/verzoeken.js` en `js/ondernemers.js` (de mensen vragen wat ze bouwen), `js/erven.js` (het

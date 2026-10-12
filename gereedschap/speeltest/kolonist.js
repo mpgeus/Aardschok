@@ -27,6 +27,7 @@
     naDeOogst: 180,
     naDePluk: 240,
     jagerNa: 30, // een nieuwe jager pas zoveel dagen nadat de vorige af was
+    waaromNa: 30, // waarom er geen plek is, zoekt hij zo vaak opnieuw uit
     // De maten die hij voor een veld probeert, de grootste eerst (T.BOERDERIJ_INSTELLINGEN: 12 tot 40 tegels).
     veldMaten: [[8, 5], [5, 8], [6, 6], [7, 5], [5, 7], [6, 5], [5, 6], [8, 4], [4, 8], [7, 4], [4, 7], [6, 4], [4, 6], [5, 4], [4, 5], [4, 4], [6, 2], [4, 3], [3, 4]],
   };
@@ -48,10 +49,37 @@
       return { soort, gelukt: false, wacht: true, reden: `wacht op ${mist.join(' en ')}`, tekst: `wil een ${soort} bouwen (${waarom}), maar wacht op ${mist.join(' en ')}` };
     }
     const plek = T.plekVoor(D, soort, bij);
-    if (!plek) return { soort, gelukt: false, reden: 'geen plek', tekst: `vindt geen plek voor een ${soort} (${waarom})` };
+    if (!plek) {
+      const waaromNiet = waaromGeenPlek(D, soort);
+      return { soort, gelukt: false, reden: `geen plek (${waaromNiet})`, tekst: `vindt geen plek voor een ${soort} (${waarom}): ${waaromNiet}` };
+    }
     const u = T.plaatsGebouw(D, soort, plek.x, plek.y, plek.rooien || null);
     return { soort, gelukt: u.gelukt, reden: u.reden || null, instantie: u.instantie || null,
       tekst: u.gelukt ? `bouwt een ${soort} (${waarom})${plek.rooien ? ', waar eerst gerooid wordt' : ''}` : `wil een ${soort} bouwen (${waarom}), maar: ${u.reden}` };
+  }
+
+  // Waarom er binnen het bouwbereik nergens een `soort` past: de twee redenen die het spel het vaakst geeft (zoals de muis
+  // ze zegt, T.waaromPastHetNiet), over elke plek in het vak van het bereik, met rooien en zonder wie er staat. Een keer per
+  // `waaromNa` dagen per soort, want het kost een halve seconde; het is voor de speeltest, die zo zelf zegt wat er klemt.
+  const WAAROM = new WeakMap();
+  function waaromGeenPlek(D, soort) {
+    const dag = Math.floor(D.kalender ? D.kalender.dag : 0);
+    const bij = WAAROM.get(D) || {};
+    WAAROM.set(D, bij);
+    if (bij[soort] && dag - bij[soort].dag < IN.waaromNa) return bij[soort].tekst;
+    const B = T.bouwBereikVan(D);
+    const voet = T.gebouwVoet(soort, T.volgendeTekening(D, soort)) || T.GEBOUWEN[soort].voet;
+    const tel = new Map();
+    for (let y = B.y0; y < B.y0 + B.h; y++) {
+      for (let x = B.x0; x < B.x0 + B.b; x++) {
+        if (!T.inBouwBereik(D, x, y)) continue;
+        const r = T.waaromPastHetNiet(D, soort, x, y, null, T.kavelVan(D, x, y, voet), false) || 'past';
+        tel.set(r, (tel.get(r) || 0) + 1);
+      }
+    }
+    const tekst = [...tel].sort((a, b) => b[1] - a[1]).slice(0, 2).map(([r, n]) => `${n}× "${r}"`).join(', ');
+    bij[soort] = { dag, tekst };
+    return tekst;
   }
 
   // Een veld bij boerderij `g`, zoals de speler het trekt: de grootste maat die past en niet groter is dan `tegels`, waar

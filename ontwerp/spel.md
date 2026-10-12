@@ -81,14 +81,16 @@ een hut of huis af, dan trekt er in die nacht een gezin uit het kamp in (past he
 weg (Marcel: "Per tent"); met de laatste tent gaat het kampvuur uit, en de kar blijft. Zolang er een gezin in het kamp
 woont, komt er geen nieuw gezin over de weg. **Binnen bereik, en met handen** (1d; Marcel: "a1, b ja, c ja, d ja, e
 ja"): je bouwt binnen 12 tegels van het plein en van elke opslag die af is; als je bouwt, ligt er een zachte gloed op de
-grond die naar de rand uitdooft, zonder lijn ("Ik wil geen 'grens'"), en daarbuiten zegt de muis "Te ver weg". Het huis
+grond die naar de rand uitdooft, zonder lijn ("Ik wil geen 'grens'"), en daarbuiten zegt de muis "Te ver weg". Een woning
+hoeft hier geen plek voor een kapel open te houden: "Wijn haalt kapel" (vraag 136) geldt in het lege begin niet, want
+anders paste er na een paar maanden geen tweede boerderij meer (1f; Marcel, 12 okt: "b uit"). Het huis
 van de schout staat één keer in het bouwmenu (16 hout en 4 goud): is het af, dan trekt de schout er met zijn gezin in,
 gaat zijn tent weg, wordt de huifkar de ossenkar, en is het de eerste opslag, met zijn eigen bereik. Een gebouw rijst niet
 vanzelf op: het vraagt zijn bouwtijd keer twee werkdagen, en wie kan werken en geen werk heeft, bouwt mee, hooguit vier
 per bouwplaats, in de volgorde waarin je ze neerzette; elke man in een werkplaats is dus een bouwer minder, en zonder
 bouwers staat het stil. Op bomen bouwen mag: de bouwers rooien eerst de voet en het looppad (een kwart werkdag per boom),
-en een boom geeft 10 hout, wie hem ook omhakt (a1: op de plek van een hut in het bos zo'n 350 hout; na 1f meten we of het
-te veel is). Tot de plek vrij is, ligt zijn voet in goud en komt er niets anders op. Waarom het bos: op negen van de
+en een gerooide boom geeft 2 hout (`BOS_INSTELLINGEN.rooiHout`; de houthakker 10). Met 10 (a1) gaf rooien in het eerste
+jaar 1.000 tot 2.800 hout (de kolonist, 1f; Marcel, 12 okt: "c ja"). Tot de plek vrij is, ligt zijn voet in goud en komt er niets anders op. Waarom het bos: op negen van de
 dertien gemeten landen paste er binnen 30 tegels van het plein geen hut, want het bos staat er vlak omheen. De 50 hout
 uit de kar zijn het huis van de schout, twee hutten en een houthakker, als je op open grond bouwt. **Boeren uit het
 niets** (1e, `js/boerderij.js`; Marcel: "Je kiest dan agrariër of wijnboer. Zoals bij Knights and Merchants", en op het
@@ -104,7 +106,7 @@ in het bouwmenu, en trek je een rechthoek: klik de ene hoek en dan de andere (sl
 van de boerderij en binnen bereik, van 12 tot 40 tegels, en een tegel vrij rond elk gebouw. Het eerste veld bepaalt wat
 de boerderij is, een akkerbouwer of een wijnboer, en daarna krijgt ze alleen nog velden van die soort: oogst en pluk
 botsen niet, maar met afwisseling als kern zou een gemengde boerderij de keuze weghalen. Een veld kost alleen werk: de
-bouwers rooien het (een boom geeft 10 hout) en ploegen of planten het, een akker 0,05 werkdag per tegel en een wijngaard
+bouwers rooien het (een boom geeft 2 hout) en ploegen of planten het, een akker 0,05 werkdag per tegel en een wijngaard
 0,1; tot het af is, ligt het in goud. Een akker die vóór 1 bloeimaand af is, zaaien de boeren nog in van het graan uit
 de kar (de eerste lente is 60 dagen, zo'n 5 uur op 1×), anders in de lente erna; een wijngaard krijgt een rij ranken om
 de rij, en het gezin plukt hem in wijnmaand, zoals de wijnboerderij, die in het lege begin niet meer in het menu staat.
