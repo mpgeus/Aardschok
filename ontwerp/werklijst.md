@@ -53,7 +53,8 @@ systeem: **blijft**, **slaapt** (de code blijft, er wordt niet aan gebouwd) of *
 ronden, want een deel hangt aan het oude begin of aan de proef:
 
 1. **Ronde 1 is af** (11 okt): wat al om was en nergens meer aan hing (`snoeien.md`).
-2. **Ronde 2, na 1f:** wat het oude begin draaiende houdt: de mensen die vragen wat ze bouwen (`verzoeken`,
+2. **Ronde 2, na 1f:** **Bezig in sessie `ccr-abaf0226-9lnbtq`** (12 okt): het plan staat op die branch in
+   `snoeien.md`; stap 1, verhuizen wat blijft. Wat het oude begin draaiende houdt: de mensen die vragen wat ze bouwen (`verzoeken`,
    `ondernemers`), de erven waarop het dorp zelf bouwt (`erven`), de vaste boeren van de kaart, en de spelregels "Het
    begin", "Je gehucht", "Wie bouwt", "Huizen" en "Wie de boeren zijn".
 3. **Ronde 3, na C:** wat de proef moet uitwijzen (`gameloop.md`, "Open"): de voorvallen, de raad, de raadsman, het
