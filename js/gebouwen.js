@@ -769,10 +769,12 @@
   // een erf (T.waaromGeenKringPlek, js/wensen.js; werklijst vraag 136; Marcel, 10 okt: "Wijn haalt kapel"): in de
   // speeltest kwam een wijnboerderij ver van het dorp, en wilde haar gezin een jaar lang een kapel die nergens kon komen,
   // zodat het dorp niet won. Bij de wijnboerderij woont het gezin in het huis in de hoek van de voet (alleenHetHuis), en
-  // daar meet ook de kring van haar wensen vanaf (T.voetVanGebouw).
+  // daar meet ook de kring van haar wensen vanaf (T.voetVanGebouw). In het lege begin niet (Marcel, 12 okt: "b uit"): daar
+  // vond de kolonist op drie van de vijf eilanden na de oogst geen plek meer voor een tweede boerderij, want rond het plein
+  // was geen ruimte meer voor een kapel binnen 40 tegels (werklijst B, 1f; ontwerp/speelbaar.md).
   function zonderKringPlek(D, soort, r, tekening) {
     const G = T.GEBOUWEN[soort];
-    if (!G.woonruimte || !T.standVan({ soort })) return null;
+    if (D.begin || !G.woonruimte || !T.standVan({ soort })) return null;
     const vast = alleenHetHuis(soort, tekening || T.volgendeTekening(D, soort));
     const huis = vast ? { x: r.x, y: r.y, b: vast.b, h: vast.h } : r;
     return T.waaromGeenKringPlek(D, {

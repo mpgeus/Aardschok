@@ -1504,6 +1504,7 @@
     vertrouwenPerHongerdag: T.t('trust per hungry day'),
     wachtStraal: T.t('guard radius'),
     houtPerBoom: T.t('wood per tree'),
+    rooiHout: T.t('wood per cleared tree (empty start)'),
     rooiDagen: T.t('clearing days'),
     hakStraal: T.t('chopping radius'),
     boompjesPerBoom: T.t('saplings per tree'),

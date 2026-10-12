@@ -430,7 +430,8 @@ test('rooien: in het bos rooien de bouwers eerst de plek, een boom geeft zijn ho
   const rooiWerk = bomen * I.rooiBoom + (tegels.length - bomen) * I.rooiStruik;
   const hout = D.voorraad.hout;
   const af = totAf(S, [hut]);
-  assert.equal(hut.bouw.hout, bomen * T.BOS_INSTELLINGEN.houtPerBoom, 'een boom geeft 10 hout, wie hem ook omhakt (a1)');
+  assert.equal(hut.bouw.hout, bomen * T.BOS_INSTELLINGEN.rooiHout, 'een gerooide boom geeft rooiHout (Marcel, 12 okt: "c ja")');
+  assert.ok(T.BOS_INSTELLINGEN.rooiHout < T.BOS_INSTELLINGEN.houtPerBoom, 'minder dan een boom van de houthakker');
   assert.ok(D.voorraad.hout > hout + hut.bouw.hout - 10, 'en dat ligt in de voorraad (min wat ze stookten)');
   assert.equal(T.teRooienOp(D, hut.kavel).length, 0, 'de kavel is vrij');
   assert.ok(hut.voorwerp && w.voorwerpen.includes(hut.voorwerp), 'en de hut staat op de kaart');
@@ -438,6 +439,21 @@ test('rooien: in het bos rooien de bouwers eerst de plek, een boom geeft zijn ho
   const dagenNodig = Math.ceil((rooiWerk + hut.bouw.werk) / I.perPlaats - 1e-9);
   assert.ok(af - 2 >= dagenNodig - 1 && af - 2 <= dagenNodig + 1, `${af - 2} dagen, verwacht zo'n ${dagenNodig}`);
   assert.ok(gezegd.some((t) => /gerooid|cleared/.test(t)), 'het dorp zegt dat de plek vrij is');
+});
+
+// "Wijn haalt kapel" (T.waaromGeenKringPlek, js/wensen.js; vraag 136) geldt in het lege begin niet (Marcel, 12 okt: "b
+// uit"): de kolonist vond op drie van de vijf eilanden na de oogst geen plek meer voor een tweede boerderij, omdat er rond
+// het plein geen ruimte meer was voor een kapel binnen 40 tegels. Hier zegt de regel overal nee.
+test('in het lege begin mag een woning ook waar ze later geen kapel haalt ("b uit")', () => {
+  const { D } = leegBegin();
+  const echt = T.waaromGeenKringPlek;
+  T.waaromGeenKringPlek = () => 'geen kapel';
+  try {
+    assert.ok(T.plekVoor(D, 'hut', D.wereld.kamp.vuur), 'een hut vindt een plek');
+    assert.ok(T.plekVoor(D, 'boerderij', D.wereld.kamp.vuur), 'een boerderij ook');
+  } finally {
+    T.waaromGeenKringPlek = echt;
+  }
 });
 
 test('meebouwen: met of zonder beelden komt er hetzelfde uit', () => {
@@ -500,7 +516,10 @@ function komAan(D) {
   T.werkBewonersBij(D);
 }
 
-test('een jaar met de kolonist: alles wat hij neerzet, komt af, het kamp is leeg vóór de winter, en de akkers zijn geoogst', () => {
+test('een jaar met de kolonist: alles wat hij neerzet, komt af, het kamp is leeg vóór de winter, en de akkers zijn geoogst', (t) => {
+  // met de spelregel "Het begin" op "Leeg", zoals de speeltest: dan staan de woningen in het bouwmenu (T.inBouwmenu)
+  T.pasOptiesToe({ keuzes: { begin: 'leeg' } });
+  t.after(() => T.pasOptiesToe({}));
   const { S, D, w } = leegBegin();
   const gedaan = [];
   const graan = {};

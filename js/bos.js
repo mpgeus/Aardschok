@@ -46,8 +46,12 @@
   // Alle getallen in één blok (ook in de werkbank van de spelregels, js/opties.js).
   T.BOS_INSTELLINGEN = {
     // Een boom geeft zoveel hout, wie hem ook omhakt: een boer die ontgint, een gezin dat zijn erf rooit, de houthakker
-    // (Marcel, 6 okt, bij vraag 115: "C ja"; tot dan 4).
+    // (Marcel, 6 okt, bij vraag 115: "C ja"; tot dan 4). In het lege begin geeft rooien `rooiHout` (hieronder).
     houtPerBoom: 10,
+    // In het lege begin geeft een boom die gerooid wordt (door de bouwers, een boer die ontgint, een huis dat groeit; niet
+    // door de houthakker) zoveel hout (werklijst B, 1f; Marcel, 12 okt: "c ja"): met 10 gaf rooien in het eerste jaar
+    // 1.000 tot 2.800 hout, omdat het bos vlak om het plein staat.
+    rooiHout: 2,
     // Zoveel dagen rooit wie er komt wonen of werken zijn plek zelf; wat er daarna nog staat, rooien de buren in één keer
     // (het vangnet, zoals bij het ontginnen). Een erf in de wei met een paar struiken is in een paar dagen vrij, een erf
     // vol bomen niet.
@@ -161,9 +165,12 @@
   // blijft staan, tot hij die rooit.
   T.hakBoom = function (D, x, y) {
     if (!T.velBoom(D, x, y)) return false;
-    T.wijzigVoorraad(D, 'hout', IN().houtPerBoom);
+    T.wijzigVoorraad(D, 'hout', T.rooiHoutPerBoom(D));
     return true;
   };
+  // Wat een gerooide boom dit dorp geeft: in het lege begin `rooiHout`, anders `houtPerBoom`. De houthakker hakt niet met
+  // T.hakBoom (T.houthakkerHakte): zijn boom geeft altijd houtPerBoom.
+  T.rooiHoutPerBoom = (D) => (D && D.begin ? IN().rooiHout : IN().houtPerBoom);
 
   // Een stronk, een struik, een boompje of een jonge boom gerooid: weg.
   T.rooi = function (D, x, y) {
@@ -196,11 +203,11 @@
   T.inHetBosVanDeHeer = (D, r) => T.watTeRooien(D, r).bomen >= T.ONTGINNEN_INSTELLINGEN.bosBomen;
 
   // "3 bomen en 2 struiken en stronken (+30 hout)": wat er gerooid wordt, en wat het de schuur oplevert.
-  T.rooiWoorden = function (wat) {
+  T.rooiWoorden = function (wat, perBoom = IN().houtPerBoom) {
     const delen = [];
     if (wat.bomen) delen.push(T.t('{n|one tree|# trees}', { n: wat.bomen }));
     if (wat.struiken) delen.push(T.t('{n|one bush or stump|# bushes and stumps}', { n: wat.struiken }));
-    const hout = wat.bomen * IN().houtPerBoom;
+    const hout = wat.bomen * perBoom;
     return hout ? T.t('{wat} (+{hout})', { wat: T.opsomming(delen), hout: T.hoeveel(hout, 'hout') }) : T.opsomming(delen);
   };
   // Net zo, maar geteld op de tegels zelf (T.teRooienOp), zodat ook een appelboom die het gezin kapt een boom is (vraag 130,
@@ -208,7 +215,7 @@
   T.rooiWoordenOp = function (D, r) {
     const tegels = T.teRooienOp(D, r);
     const bomen = tegels.filter((t) => T.ontginWerkOp(D.wereld, t.x, t.y) === 'hakken').length;
-    return T.rooiWoorden({ bomen, struiken: tegels.length - bomen });
+    return T.rooiWoorden({ bomen, struiken: tegels.length - bomen }, T.rooiHoutPerBoom(D));
   };
 
   // Het stuk dat vrij moet voor een gebouw met voet `voet` op (x, y): zijn voet en het looppad eromheen

@@ -8,7 +8,10 @@
 //      kar erop past;
 //   3. een houthakker, als het hout laag wordt (onder `houtLaag`, of het haalt de winter niet);
 //   4. hutten, tot elk gezin in het kamp een woning heeft, af of in aanbouw (een boerderij is ook een woning);
-//   5. na de oogst (van `naDeOogst` tot `naDePluk`): haalt het eten de winter niet, dan een tweede veld. Een akker wordt
+//   5. een jager, als het spel zegt dat het eten niet haalt: het haalt de winter niet (het bericht dat het spel dan geeft,
+//      raadt zelf een jager aan), of er is honger (de status in de balk); hooguit één per `jagerNa` dagen (Marcel, 12 okt:
+//      "a ja");
+//   6. na de oogst (van `naDeOogst` tot `naDePluk`): haalt het eten de winter niet, dan een tweede veld. Een akker wordt
 //      pas in de lente gezaaid, dus een wijngaard, die het gezin nog in wijnmaand plukt; en omdat een boerderij bij de
 //      soort van haar eerste veld blijft, op een tweede boerderij.
 // Wat hij deed, geeft hij terug: [{ soort, gelukt, reden, tekst, instantie }], zonder scherm, dus ook in een toets; en wat
@@ -23,6 +26,7 @@
     // draagt een wijngaard pas volgend jaar.
     naDeOogst: 180,
     naDePluk: 240,
+    jagerNa: 30, // een nieuwe jager pas zoveel dagen nadat de vorige af was
     // De maten die hij voor een veld probeert, de grootste eerst (T.BOERDERIJ_INSTELLINGEN: 12 tot 40 tegels).
     veldMaten: [[8, 5], [5, 8], [6, 6], [7, 5], [5, 7], [6, 5], [5, 6], [8, 4], [4, 8], [7, 4], [4, 7], [6, 4], [4, 6], [5, 4], [4, 5], [4, 4], [6, 2], [4, 3], [3, 4]],
   };
@@ -37,7 +41,7 @@
   // Een gebouw neerzetten zoals de speler het met het bouwmenu doet: waar het past, zo dicht mogelijk bij `bij`, op open
   // grond of anders waar het minst te rooien is (T.plekVoor, js/verzoeken.js; zo zoekt de bouwer van de speeltest ook).
   function bouw(D, soort, bij, waarom) {
-    if (!T.magGebouwd(D, soort)) return { soort, gelukt: false, reden: 'niet in het bouwmenu', tekst: `wil een ${soort} bouwen (${waarom}), maar hij staat niet in het bouwmenu` };
+    if (!T.inBouwmenu(D, soort)) return { soort, gelukt: false, reden: 'niet in het bouwmenu', tekst: `wil een ${soort} bouwen (${waarom}), maar hij staat niet in het bouwmenu` };
     const kosten = T.GEBOUWEN[soort].kosten;
     if (!T.kanBetalen(D, kosten)) {
       const mist = Object.keys(kosten).filter((wat) => (D.voorraad[wat] || 0) < kosten[wat]);
@@ -129,7 +133,12 @@
       if (!u.gelukt) break;
     }
 
-    // 5. Na de oogst: haalt het eten de winter niet, dan een wijngaard, op een boerderij die nog geen veld heeft.
+    // 5. Een jager, als het spel zegt dat het eten niet haalt; hooguit één per `jagerNa` dagen.
+    const etenHaaltNiet = T.watDeWinterNietHaalt(D, dag).includes('eten') || !!T.OORZAKEN.honger.speelt(D, dag);
+    const jagers = D.gebouwen.filter((g) => g.soort === 'jager');
+    if (etenHaaltNiet && jagers.every((g) => g.klaar && g.klaarOp <= dag - IN.jagerNa)) doe(bouw(D, 'jager', hart(D), 'het eten haalt het niet'));
+
+    // 6. Na de oogst: haalt het eten de winter niet, dan een wijngaard, op een boerderij die nog geen veld heeft.
     const inJaar = dag % T.DAGEN_PER_JAAR;
     if (inJaar >= IN.naDeOogst && inJaar < IN.naDePluk && !T.etenVoorDeWinter(D, dag).haalt) {
       const vrij = boerderijen(D).find((g) => !T.veldVan(g));

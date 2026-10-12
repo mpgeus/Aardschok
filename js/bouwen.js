@@ -85,7 +85,7 @@
         const kost = rooiKost(D, t);
         if (B.tegoed + 1e-9 < kost) break;
         B.tegoed -= kost;
-        if (T.ontginWerkOp(D.wereld, t.x, t.y) === 'hakken') B.hout += T.BOS_INSTELLINGEN.houtPerBoom;
+        if (T.ontginWerkOp(D.wereld, t.x, t.y) === 'hakken') B.hout += T.rooiHoutPerBoom(D);
         T.rooiTegel(D, t);
       }
       if (T.teRooienOp(D, g.kavel).length) return;

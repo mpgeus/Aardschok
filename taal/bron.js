@@ -2940,6 +2940,7 @@ Spel.TAAL_BRON = [
   {"t":"trust per hungry day","waar":["js/opties.js"]},
   {"t":"guard radius","waar":["js/opties.js"]},
   {"t":"wood per tree","waar":["js/opties.js"]},
+  {"t":"wood per cleared tree (empty start)","waar":["js/opties.js"]},
   {"t":"clearing days","waar":["js/opties.js"]},
   {"t":"chopping radius","waar":["js/opties.js"]},
   {"t":"saplings per tree","waar":["js/opties.js"]},
