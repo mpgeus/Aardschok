@@ -9,6 +9,9 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Een kaart van het eiland onder een toets** (idee van Claude, 13 okt; Marcel: "idee ja"): het eiland van boven, met
+  alleen wat je verkende en de rest in de mist, getekend zoals de plaat van de kaartenmaker
+  (`gereedschap/pixelart/eiland-plaat.cjs`), met je dorp, de wegen en de namen die je kent. Na de mist (B2c), niet erin.
 - **Het eerste jaar van de kolonist, wat opviel** (12 okt, vraag 152, 1f; de speeltest staat in `speelbaar.md`). Na te
   lopen:
   - De houthakker werkt in het eerste jaar 5 tot 12 dagen zonder dat het spel zegt waarom (`werkt niet` in de tabel

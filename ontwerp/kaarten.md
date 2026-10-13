@@ -81,8 +81,55 @@ geen huis of akker. De zee is water
 (`T.isWaterGrond`): niet te belopen, de visser vist er, en ze ligt vlak met het andere water. Het veen en het broek zijn
 als gras (er groeit wat op gras groeit). Een land van de maker zonder het eiland blijft tegel voor tegel hetzelfde.
 
-**Wat er nog komt:** 2c de speeltest; en
-daarna de mist en een kaart die meegroeit (de stukken, opslaan wat veranderde, HPA\*).
+**Wat er nog komt:** het hele eiland, met de mist en een kaart die meegroeit (B2, hieronder).
+
+## Het hele eiland: de kaart in stukken en de mist (B2, vraag 117, stap 3; plan van 13 okt 2026)
+
+Marcel, 11 okt: "de wereld moet 1 geheel worden het vlakke van 100x100 is niet hoe het blijft". Het plan (Claude, 13 okt,
+sessie `claude/amazing-maxwell-u0hq09`; **Marcel: "A ja, B1, C2"**).
+
+**Hoe het was (13 okt):** je land is één kaart van 100 bij 100, die de maker als een kaart uit Tiled laadt
+(`T.laadGemaaktGehucht`, `T.laadKaart`): `w.tegels[y][x]` (een woord per tegel) en `w.grond[y][x]` (een gedeelde
+tegel), elke boom een los voorwerp (zo'n 4000 bij een leeg begin), en eromheen 16 tegels eiland die alleen getekend
+worden (`T.randVanHetEiland`; de hoogte 48, `hg.eiland`). `w.tegels[` staat 39 keer in 15 bestanden, `w.b` en `w.h` 103
+keer in 12, en de afgeleide lijsten van b bij h (het vaste raster en de eilanden in `js/wereld.js`, de velden in
+`js/lopen.js`, de paden, het bos van de beesten, de natuur bij een gebouw, de beken van het weer) gaan van één rechthoek
+uit. Het bewaarde spel is bij een leeg begin 473 kB, vier vijfde de kaart. Er is geen mist. Wat al meewerkt: het tekenen
+gaat in stukken en alleen wat in beeld is (`js/tekenen.js`, sinds 9 okt), A\* (`js/pad.js`) heeft geen raster en zijn
+nummers passen op het hele eiland, en `T.eilandStuk` maakt elk stuk los (64 bij 64 in zo'n 12 ms in Node).
+
+**De stappen** (A: "ja"):
+1. **B2a, één weg naar de tegels.** Niets leest de rechthoek nog zelf: alles vraagt het via een paar functies in
+   `js/wereld.js` (`T.tegel` en `T.grondOp` zijn er al), ook de maat. Het spel verandert niet: de speeltest geeft
+   dezelfde uitkomst, en de schermen zijn byte voor byte gelijk. Daarna is B2b een verandering op één plek.
+2. **B2b, de kaart in stukken.** De kaart is het eiland, in stukken van 64 bij 64 als compacte getallen, in de
+   coördinaten van het eiland. Een stuk wordt uit het nummer gemaakt als het nodig is, verspreid over de beelden; de
+   bomen staan per stuk. De rand om je land en het donker erachter gaan weg, want het eiland is de kaart. Wat nu een
+   lijst over de hele kaart is, wordt per stuk of per gebied. Een kaart uit Tiled (de proefkaarten) is een eiland met
+   niets eromheen: één soort kaart.
+3. **B2c, de mist.** Zwart wat niemand van jou zag, grijs wat je zag maar nu niet ziet, helder waar je mensen kijken.
+   Elk van je mensen ziet een kring om zich heen (de schout verder), en je gebouwen ook; de getallen in de werkbank. Een
+   stuk wordt gemaakt aan de rand van de mist, en je bouwt alleen op land dat je kent. **Het grijs is het land zoals het
+   nu is** (B1): de grond, de bomen en de gebouwen, zonder wie er loopt (mensen, beesten, rovers). Precies zoals je het
+   het laatst zag (B2) kan later erbovenop, als een ander iets doet waar jij niet kijkt (F). **Bij het begin ken je een
+   kring van zo'n 50 tegels om je plek** (C2, een getal in de werkbank), ongeveer je land van nu; de rest is zwart.
+4. **B2d, opslaan wat veranderde.** Het eiland komt uit het nummer; het bewaarde spel houdt per stuk alleen wat er
+   gebouwd, gehakt en gelegd is, en wat je verkende. Een oud bewaard spel past dan niet meer (`versie` omhoog; tot de
+   release mag dat). Het moet ook klein blijven voor de opslag van de browser (een paar MB, `verpakken.md`).
+
+Klaar als: de kolonist speelt het lege begin op vijf eilanden een jaar zonder fouten (zoals 1f), de schout loopt van
+het kamp naar de kust zonder te haperen, en het bewaarde spel is kleiner dan nu. **Naar F** (A: "ja"): de lange tochten
+(HPA\* over de stukken) en wat ver weg is als getallen; C speelt in een paar honderd tegels om je dorp, en daar is A\*
+door land dat je kent goed genoeg.
+
+**Meer draden voor de stukken?** (Marcel, 13 okt: "misschien ook meerdere threads voor het maken van de blokken van
+64x64?") Kan, met Web Workers: een stuk is een rekensom uit het nummer en de schets, zonder iets van het spel, dus het
+kan op een andere kern, en het geeft daar hetzelfde. Wat het kost: een worker van een bestand werkt niet vanaf
+`file://` (wel in Electron, en als blob uit code die al geladen is), de schets moet eenmaal naar elke worker, en een
+stuk komt een paar beelden later, dus het spel moet het vooruit vragen (aan de rand van de mist) en kunnen wachten. Het
+voorstel van Claude: B2b maakt het stuk met één zuivere functie (nummer, schets en plek erin, getallen eruit), zodat een
+worker het later overneemt zonder herschrijven; we meten dan eerst wat een stuk in de browser kost, met de grond en de
+bomen erbij, terwijl de schout op 30× loopt. Hapert het, dan workers.
 
 ## Werken in Tiled: zo teken je een kaart (21 sep 2026)
 

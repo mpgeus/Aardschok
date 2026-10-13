@@ -8,7 +8,7 @@ vraagnummer tot 153 dat elders genoemd wordt, vind je daar. Nieuwe punten tellen
 Houd deze lijst kort: wat af is, gaat eruit (één regel onder "Af"), en het hoe staat in het ontwerpbestand van het
 onderwerp, niet hier. Wie aan een punt begint, zet er "**Bezig in sessie `<branch>`** (datum)" bij, in `main` (CLAUDE.md).
 
-## Nu en daarna (12 okt)
+## Nu en daarna (13 okt)
 
 **Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en
 drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **B, 1c tot 1e zijn af** (11
@@ -19,8 +19,8 @@ snoeien is af** (A, 12 okt, stap 1 tot 6): de verzoeken, de ondernemers, de erve
 het enige begin, een boer is de man op een boerderij, alleen de kolonist speelt nog in de speeltest; het plein heeft
 een vaste marktplek (de spelregel "De markt" is weg), en de maker legt alleen nog het lege land: alles bouwt de speler.
 De toetsen en het gereedschap spelen op het proefdorp (`T.proefdorp`, `Spel.debug.proefdorp`). **B1 is af** (12 okt): de
-wijnboerderij is een eigen gebouw, met de wijngaard als veld ernaast. **Het volgende** is het hele eiland (B2), de
-afwisseling (B3), en ronde 3 na C.
+wijnboerderij is een eigen gebouw, met de wijngaard als veld ernaast. **B2 is bezig** (13 okt): het plan staat
+(`kaarten.md`, "Het hele eiland"), en B2a loopt. Daarna de afwisseling (B3), en ronde 3 na C.
 
 **Wacht op Marcel:**
 - **De wijnboerderij bekijken** (B1): Nieuw spel, en in het bouwmenu (B) de wijnboerderij; is ze af, dan trekt er een
@@ -94,15 +94,19 @@ wijnboerderij, de akker bij een boerderij; de raad zegt het als de wijn het jaar
 
 ## B2. Het hele eiland (vraag 117, stap 3)
 
-**Bezig in sessie `claude/amazing-maxwell-u0hq09`** (13 okt): eerst het plan voor Marcel.
+**Bezig in sessie `claude/amazing-maxwell-u0hq09`** (13 okt): B2a.
 
-Marcel, 11 okt: "Let op, de wereld moet 1 geheel worden het vlakke van 100x100 is niet hoe het blijft. We hebben een heel
-land van 2500x2500", en op de vraag wanneer: "A ja", dus direct na B en vóór C, want C meet afstanden (de ossenkar, een
-schuur verder weg die daar bereik geeft), en die meet je op 100 bij 100 verkeerd. Wat het vraagt (`spel.md`, "Het
-land"; `kaarten.md`, "Het eiland"; het archief bij vraag 117): het eiland in stukken uit het nummer, gemaakt aan de rand
-van de mist; opslaan wat veranderde; de mist (wat je verkende maar nu niet ziet, is grijs); lange tochten over de
-stukken; en wat ver weg is als getallen. Eerst een plan met Marcel. Tot dan gaat niets nieuws uit van 100 bij 100
-(CLAUDE.md).
+Marcel, 11 okt: "de wereld moet 1 geheel worden het vlakke van 100x100 is niet hoe het blijft", vóór C, want C meet
+afstanden. Het plan (13 okt; Marcel: "A ja, B1, C2"), met het hoe en wat er nu is, in `kaarten.md`, "Het hele eiland":
+- **B2a, één weg naar de tegels:** niets leest de rechthoek van 100 bij 100 nog zelf; het spel verandert niet.
+- **B2b, de kaart in stukken** van 64 bij 64, in de coördinaten van het eiland, gemaakt als ze nodig zijn; de rand om
+  je land gaat weg. Meer draden (Marcel: "misschien ook meerdere threads"): eerst meten, het voorstel staat erbij.
+- **B2c, de mist:** zwart, grijs (het land zoals het nu is, zonder wie er loopt), en helder waar je mensen kijken; bij
+  het begin ken je een kring van zo'n 50 tegels.
+- **B2d, opslaan wat veranderde.**
+
+Klaar als: de kolonist op vijf eilanden een jaar zonder fouten, de schout van het kamp naar de kust zonder haperen, en
+een kleiner bewaard spel. De lange tochten (HPA\*) en wat ver weg is als getallen gaan naar F.
 
 ## B3. Afwisseling (vraag 154)
 
@@ -138,6 +142,7 @@ het graan vraagt", de schandpaal, de heervaart en de twee bazen.
 - Verdedigen: rovers en wolven tegen je dorp en je kar, met de militie (`js/rovers.js`). Voorstel van 11 okt, nog niet
   gekozen: een wapen maakt de soldaat (een hooivork militie, een speer een speerman), en elke soldaat is een werker minder.
 - Erop uit, zoals in Jagged Alliance 2: over het eiland (B2) naar een ander dorp, en naar het kasteel van de heer.
+  Daarvoor eerst de lange tochten (HPA\* over de stukken van B2) en wat ver weg is als getallen (Marcel, 13 okt: "A ja").
 
 ## G. Naar Steam (`commercieel.md`)
 
