@@ -153,6 +153,19 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 13 okt: de kaart van het eiland, in stukken (werklijst B2b)
+
+`npm run speeltest -- --zaden 1-5 --tegelijk 3`, op `84bfa69c` (branch `claude/funny-fermi-5fqm1u`): het land komt
+overal van het eiland, de maker legt alleen nog het plein, het kamp en de eiken, en de kaart is het eiland in stukken.
+
+- **Geen fout en geen doden** op de eilanden 1 tot 5, het hele jaar (vóór B2b viel de schout op 1 en 3). Het kamp is
+  leeg op dag 10 tot 18, niemand woont in de winter in een tent, en er is geen dag honger of kou.
+- **De houthakker staat stil**, op elk eiland 72 tot 218 dagen, en aan het eind staat er geen boom meer binnen zijn
+  tien tegels, alleen jonge. Dat deed hij vóór B2b ook (eiland 2 en 3: 174 en 197 dagen); over het geheel hakt hij nu
+  meer (281 tot 500 hout in het eerste jaar, was 232 tot 504). Waar de kolonist hem neerzet, is een vraag voor de
+  kolonist, niet voor het bos.
+- **De gunst van de heer** zakt op eiland 2 en 4 tot 31 en 37, de rest blijft boven de 45; niemand werd weggestuurd.
+
 ## De speeltest van 12 okt, avond: de kolonist na ronde 2 van het snoeien (stap 3 tot 5)
 
 `npm run speeltest -- kolonist --zaad 1` en `-- kolonist --zaad 2 --opslaan`, op `ad5cb498` met de speeltest van stap 5

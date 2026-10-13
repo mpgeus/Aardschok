@@ -135,13 +135,20 @@ nummers passen op het hele eiland, en `T.eilandStuk` maakt elk stuk los (64 bij 
    wat veranderde; dan meten (de kolonist op vijf eilanden, de schout naar de kust op 30×, de schermen).
    **Stap 1 is af** (13 okt): `T.landStuk` in `js/maker.js` (`code.md`), met `test/landstuk.test.cjs`; 40 ms per stuk in
    Node, twee derde in de ruis van het eiland. **De bruggetjes van het eiland zijn af** (`E.bruggen`, 0,1 s per schets).
-   **Stap 2 en 3 zijn gebouwd** (13 okt, sessie `claude/funny-fermi-5fqm1u`, nog niet in `main`): de kaart van het eiland
-   (`T.eilandKaart`, `test/eilandkaart.test.cjs`), de maker legt alleen nog het menselijke en de kaart neemt het verschil
-   over, de rand is uit het tekenen, en de hoogte rekent in de tegels van het eiland (`hg.ox`, `hg.oy`). Een nieuw spel kost
-   in Node 1,8 s, en het bewaarde spel is 15 kB (was 473 kB). Wat het opleverde: de weg van het eiland liep tot midden op
-   het plein (nu houdt hij op aan de rand), en `T.ruimLaagOp` zag niet wat er op het eiland groeit (nu `T.voorwerpenIn`).
-   Wat er nog rood is, zijn toetsen die op het land van vroeger rekenden: het proefdorp (zaad 2) ligt nu op heide, zonder
-   water, en de hutten staan er dichter op elkaar; dat wordt het kiezen van een ander zaad of de toetsen bijstellen.
+   **Stap 2, 3, 4 en 6 zijn af** (13 okt, sessie `claude/funny-fermi-5fqm1u`, nog niet in `main`): de kaart van het
+   eiland (`T.eilandKaart`, `test/eilandkaart.test.cjs`), de maker legt alleen nog het menselijke en de kaart neemt het
+   verschil over, de rand is uit het tekenen, en de hoogte rekent in de tegels van het eiland (`hg.ox`, `hg.oy`). Het
+   lopen (het vaste raster, de eilanden van A\*, de velden) beslaat alle open stukken (`T.loopVak`), de lijsten om het
+   dorp het dorpsvak (`T.kaartVak`). Opslaan: versie 10, het bewaarde spel is 15 kB (was 473 kB); een nieuw spel kost in
+   Node zo'n 2 s. Alle toetsen zijn groen, en de kolonist speelt de eilanden 1 tot 5 het jaar uit, zonder fouten en
+   zonder doden (vóór B2b viel de schout op 1 en 3). Wat het opleverde: de weg van het eiland liep tot midden op het
+   plein (nu houdt hij op aan de rand), `T.ruimLaagOp` zag niet wat er op het eiland groeit (nu `T.voorwerpenIn`), wie
+   buiten het dorpsvak stond vond geen weg (nu `T.loopVak`), en een boer die bij de schaft net aankwam, schafte niet. Het
+   proefdorp houdt zaad 2 (vijf andere zaden gaven meer rode toetsen) en zet zijn hutten met drie tegels ruimte, zodat ze
+   kunnen doorgroeien; de maker keurt nu ook de marktplek (rijen van minstens `marktRij`, 3: op eiland 8 en 9 waren het
+   er twee). Wat opviel en nog te kiezen is, staat in `opmerkingen.md`: een richel zonder helling blijft onbereikbaar,
+   en een hol kan tien tegels van het kamp liggen. **Nog te doen: stap 5** (stukken openen als je mensen in de buurt
+   komen) en het meten (de schout naar de kust op 30×, de schermen).
    **Het ontwerp van stap 2 tot 6** (Claude, 13 okt; zo kan een volgende sessie verder):
    - *Wat in S staat* (bewaard): wat veranderde, per tegelnummer (`T.tegelNummer`): `w.tegelsAnders` (Map naar het woord),
      `w.grondAnders` (Map naar de grondtegel; alleen de maker verandert de grond, het spel nooit), `w.gerooid` (Set: een
