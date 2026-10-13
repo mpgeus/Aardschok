@@ -128,14 +128,13 @@
     const sleutel = e.thuis.x + ',' + e.thuis.y;
     if (m.per.has(sleutel)) return m.per.get(sleutel);
     const r = IN().bosrandStraal;
-    const hoog = w.tegels.length;
-    const wijd = w.tegels[0].length;
-    const boom = (x, y) => x >= 0 && y >= 0 && x < wijd && y < hoog && T.NATUUR.bos.telt(w, x, y, T.voorwerpOp(w, x, y));
+    const vak = T.kaartVak(w);
+    const boom = (x, y) => T.opKaart(w, x, y) && T.NATUUR.bos.telt(w, x, y, T.voorwerpOp(w, x, y));
     const voeten = (D.gebouwen || []).map((g) => T.voetVanGebouw(g)).filter(Boolean);
     const gebouwVoor = (x, y) => voeten.some((f) => f.x + f.b > x && f.y + f.h > y && f.x <= x + 6 && f.y <= y + 6);
     const kandidaten = [];
-    for (let y = Math.max(0, e.thuis.y - r); y <= Math.min(hoog - 1, e.thuis.y + r); y++) {
-      for (let x = Math.max(0, e.thuis.x - r); x <= Math.min(wijd - 1, e.thuis.x + r); x++) {
+    for (let y = Math.max(vak.y, e.thuis.y - r); y <= Math.min(vak.y + vak.h - 1, e.thuis.y + r); y++) {
+      for (let x = Math.max(vak.x, e.thuis.x - r); x <= Math.min(vak.x + vak.b - 1, e.thuis.x + r); x++) {
         if (!T.isBegaanbaar(w, x, y) || T.bijDeur(w, x, y)) continue;
         if (!(boom(x - 1, y) || boom(x, y - 1) || boom(x - 1, y - 1))) continue;
         if (boom(x + 1, y) || boom(x, y + 1) || boom(x + 1, y + 1)) continue;

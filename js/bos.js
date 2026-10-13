@@ -131,8 +131,8 @@
   // wordt weer vloer; wat er daarna op komt (een stronk, een jonge boom), houdt hem zelf tegen.
   function haalWeg(w, v) {
     T.haalVoorwerpWeg(w, v);
-    if (w.tegels[v.y] && w.tegels[v.y][v.x] === 'muur') {
-      w.tegels[v.y][v.x] = 'vloer';
+    if (T.tegel(w, v.x, v.y) === 'muur') {
+      T.zetTegel(w, v.x, v.y, 'vloer');
       T.kaartVeranderd(w);
     }
   }
@@ -220,11 +220,11 @@
   // (T.GEBOUWEN_INSTELLINGEN.looppad), binnen de kaart.
   T.kavelVan = function (D, x, y, voet) {
     const n = T.GEBOUWEN_INSTELLINGEN.looppad;
-    const w = D.wereld;
-    const x0 = Math.max(0, x - n);
-    const y0 = Math.max(0, y - n);
-    const x1 = Math.min(w.tegels[0].length, x + voet.b + n);
-    const y1 = Math.min(w.tegels.length, y + voet.h + n);
+    const vak = T.kaartVak(D.wereld);
+    const x0 = Math.max(vak.x, x - n);
+    const y0 = Math.max(vak.y, y - n);
+    const x1 = Math.min(vak.x + vak.b, x + voet.b + n);
+    const y1 = Math.min(vak.y + vak.h, y + voet.h + n);
     return { x: x0, y: y0, b: x1 - x0, h: y1 - y0 };
   };
 
@@ -326,8 +326,9 @@
     const r = IN().hakStraal;
     const bezet = new Set((D.gebouwen || []).filter((h) => h !== g && h.boom).map((h) => `${h.boom.x},${h.boom.y}`));
     const bomen = [];
-    for (let y = Math.max(0, f.y - r); y < Math.min(w.tegels.length, f.y + f.h + r); y++) {
-      for (let x = Math.max(0, f.x - r); x < Math.min(w.tegels[0].length, f.x + f.b + r); x++) {
+    const vak = T.kaartVak(w);
+    for (let y = Math.max(vak.y, f.y - r); y < Math.min(vak.y + vak.h, f.y + f.h + r); y++) {
+      for (let x = Math.max(vak.x, f.x - r); x < Math.min(vak.x + vak.b, f.x + f.b + r); x++) {
         if (bezet.has(`${x},${y}`) || !isBoom(w, x, y, T.voorwerpOp(w, x, y))) continue;
         bomen.push({ x, y, d: Math.hypot(x - deur.x, y - deur.y) });
       }
@@ -403,7 +404,7 @@
   // (T.waaromNietOpDezeGrond), niet op het plein, niet voor een deur en geen paadje van een deur.
   function magPlanten(D, x, y) {
     const w = D.wereld;
-    if (x < 0 || y < 0 || y >= w.tegels.length || x >= w.tegels[0].length) return false;
+    if (!T.opKaart(w, x, y)) return false;
     if (!T.isBegaanbaar(w, x, y) || T.wezenOp(w, x, y)) return false;
     const v = T.voorwerpOp(w, x, y);
     if (v && !T.groeitLaag(v)) return false;

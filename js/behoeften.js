@@ -407,7 +407,7 @@
       for (let dx = 0; dx < nieuweVoet.b; dx++) {
         const yy = instantie.y + dy;
         const xx = instantie.x + dx;
-        if (w.tegels[yy] && w.tegels[yy][xx] !== undefined) w.tegels[yy][xx] = 'muur';
+        T.zetTegel(w, xx, yy, 'muur');
       }
     }
     for (let dy = 0; dy < oudeVoet.h; dy++) {
@@ -415,7 +415,7 @@
         if (inNieuw(dx, dy)) continue; // blijft vast: hoort nu bij de nieuwe voet
         const yy = oudY + dy;
         const xx = oudX + dx;
-        if (w.tegels[yy] && w.tegels[yy][xx] !== undefined) w.tegels[yy][xx] = 'vloer';
+        T.zetTegel(w, xx, yy, 'vloer');
       }
     }
     // op een land met hoogte: de grond onder de nieuwe voet vlak, op de hoogte waar het huis al stond (js/hoogte.js)

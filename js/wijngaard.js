@@ -54,7 +54,7 @@
       for (let dx = 0; dx < r.b; dx++) {
         const x = r.x + dx;
         const y = r.y + dy;
-        if (!w.tegels[y] || w.tegels[y][x] === undefined || T.voorwerpOp(w, x, y)) continue;
+        if (!T.opKaart(w, x, y) || T.voorwerpOp(w, x, y)) continue;
         T.zetVoorwerp(w, { soort: 'wijnrank', x, y, boerderij: g, variant: T.akkerVariant(x, y, IN().varianten), geplukt: null });
       }
     }

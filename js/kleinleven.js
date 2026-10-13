@@ -43,13 +43,16 @@
   // doorloopt, en bergaf als het land hoogte heeft. Per kaart één keer (niet in Spel.S), opnieuw als de kaart verandert.
   const stroming = new WeakMap();
   T.waterOp = function (w, x, y) {
-    if (!IN().aan || !w || !w.grond) return null;
+    if (!IN().aan || !T.heeftGrond(w)) return null;
     const versie = T.kaartVersie(w);
     let k = stroming.get(w);
     if (!k || k.versie !== versie) stroming.set(w, (k = { versie, tegels: new Map() }));
     const sleutel = y * 100000 + x;
     if (k.tegels.has(sleutel)) return k.tegels.get(sleutel);
-    const water = (a, b) => !!(w.grond[b] && w.grond[b][a] && w.grond[b][a].naam === 'water');
+    const water = (a, b) => {
+      const g = T.grondOp(w, a, b);
+      return !!(g && g.naam === 'water');
+    };
     let uit = null;
     if (water(x, y)) {
       if (!T.isBeek(w, x, y)) uit = { stil: true };

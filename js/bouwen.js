@@ -305,15 +305,15 @@
     }
   };
   function zoekPlek(D, soort, bij) {
-    const w = D.wereld;
+    const vak = T.kaartVak(D.wereld);
     // De markt op het plein (js/markt.js): het midden van het plein, met de kramen.
     if (soort === 'markt') return T.marktPlek(D);
     if (heeftKring(soort)) {
       const voet = T.gebouwVoet(soort, T.volgendeTekening(D, soort)) || T.GEBOUWEN[soort].voet;
       const kring = T.kringTeller(D, soort);
       let beste = null;
-      for (let y = 0; y < w.tegels.length; y++) {
-        for (let x = 0; x < w.tegels[0].length; x++) {
+      for (let y = vak.y; y < vak.y + vak.h; y++) {
+        for (let x = vak.x; x < vak.x + vak.b; x++) {
           // Eerst wat de plek bereikt (tellen), en alleen als hij beter is dan de beste tot nu toe, of hij past (duur).
           const zonder = kring({ x, y, b: voet.b, h: voet.h }).zonder;
           const d = Math.hypot(x - bij.x, y - bij.y);
@@ -329,7 +329,7 @@
     // vraag of de natuur er ligt: die kost één stap (T.natuurBij), gebouwPast veel meer.
     const g = T.GEBOUWEN[soort];
     const natuur = g.bij ? T.gebouwVoet(soort, T.volgendeTekening(D, soort)) || g.voet : null;
-    const tot = natuur ? Math.max(45, w.tegels.length, w.tegels[0].length) : 45;
+    const tot = natuur ? Math.max(45, vak.h, vak.b) : 45;
     const probeer = (x, y) => (!natuur || !T.waaromNietBijDeNatuur(D, soort, { x, y, b: natuur.b, h: natuur.h })) && T.gebouwPast(D, soort, x, y);
     // ring na ring om `bij`, en in elke ring van boven naar onder en van links naar rechts
     for (let r = 3; r < tot; r++) {
@@ -352,15 +352,15 @@
   // Eerst wat er op elke plek te rooien staat (één stap per plek, T.watTeRooien), dan van de beste plek af of hij past.
   // Geeft { x, y, rooien: het stuk dat eerst vrij moet }, of null.
   function zoekPlekOmTeRooien(D, soort, bij) {
-    const w = D.wereld;
+    const vak = T.kaartVak(D.wereld);
     const g = T.GEBOUWEN[soort];
     if (!g || soort === 'markt') return null;
     const voet = T.gebouwVoet(soort, T.volgendeTekening(D, soort)) || g.voet;
     const kring = heeftKring(soort) ? T.kringTeller(D, soort) : null;
-    const tot = g.bij || kring ? Math.max(45, w.tegels.length, w.tegels[0].length) : 45;
+    const tot = g.bij || kring ? Math.max(45, vak.h, vak.b) : 45;
     const plekken = [];
-    for (let y = Math.max(0, bij.y - tot); y < Math.min(w.tegels.length, bij.y + tot); y++) {
-      for (let x = Math.max(0, bij.x - tot); x < Math.min(w.tegels[0].length, bij.x + tot); x++) {
+    for (let y = Math.max(vak.y, bij.y - tot); y < Math.min(vak.y + vak.h, bij.y + tot); y++) {
+      for (let x = Math.max(vak.x, bij.x - tot); x < Math.min(vak.x + vak.b, bij.x + tot); x++) {
         const zonder = kring ? kring({ x, y, b: voet.b, h: voet.h }).zonder : 0;
         if (kring && !(zonder > 0)) continue;
         const kavel = T.kavelVan(D, x, y, voet);

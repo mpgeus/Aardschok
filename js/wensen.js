@@ -373,31 +373,32 @@
   // kostte 1,2 tot 1,8 s). Buiten de kaart kan geen voet (daar staat alles vast, js/wereld.js), wel een looppad.
   function plekkenVoor(D, soort, voet) {
     const w = D.wereld;
-    const H = w.tegels.length;
-    const B = w.tegels[0].length;
+    const vak = T.kaartVak(w);
+    const H = vak.h;
+    const B = vak.b;
     const n = T.GEBOUWEN_INSTELLINGEN.looppad;
     const geenVoet = new Int32Array((B + 1) * (H + 1));
     const geenPad = new Int32Array((B + 1) * (H + 1));
-    for (let y = 0; y < H; y++) {
+    for (let y = vak.y; y < vak.y + H; y++) {
       let rijVoet = 0;
       let rijPad = 0;
-      for (let x = 0; x < B; x++) {
+      for (let x = vak.x; x < vak.x + B; x++) {
         const rooi = !!T.ontginWerkOp(w, x, y);
         if (T.opHetPlein(w, x, y) || (T.isVast(w, x, y) && !rooi) || T.waaromNietOpDezeGrond(D, x, y)) rijVoet++;
         if (!(T.isBegaanbaar(w, x, y, { deurenOpenen: true }) || rooi)) rijPad++;
-        const i = (y + 1) * (B + 1) + x + 1;
+        const i = (y - vak.y + 1) * (B + 1) + (x - vak.x) + 1;
         geenVoet[i] = geenVoet[i - B - 1] + rijVoet;
         geenPad[i] = geenPad[i - B - 1] + rijPad;
       }
     }
     // hoeveel tegels van het vak (x0, y0)-(x1, y1), binnen de kaart, in de optelsom `som` meetellen
     const telIn = (som, x0, y0, x1, y1) => {
-      x0 = Math.max(0, x0); y0 = Math.max(0, y0); x1 = Math.min(B, x1); y1 = Math.min(H, y1);
+      x0 = Math.max(vak.x, x0) - vak.x; y0 = Math.max(vak.y, y0) - vak.y; x1 = Math.min(vak.x + B, x1) - vak.x; y1 = Math.min(vak.y + H, y1) - vak.y;
       return som[y1 * (B + 1) + x1] - som[y0 * (B + 1) + x1] - som[y1 * (B + 1) + x0] + som[y0 * (B + 1) + x0];
     };
     const plekken = [];
-    for (let y = 0; y + voet.h <= H; y++) {
-      for (let x = 0; x + voet.b <= B; x++) {
+    for (let y = vak.y; y + voet.h <= vak.y + H; y++) {
+      for (let x = vak.x; x + voet.b <= vak.x + B; x++) {
         if (telIn(geenVoet, x, y, x + voet.b, y + voet.h)) continue;
         if (telIn(geenPad, x - n, y - n, x + voet.b + n, y + voet.h + n) > telIn(geenPad, x, y, x + voet.b, y + voet.h)) continue;
         if (T.kanHierKomen(D, soort, x, y, voet)) plekken.push({ x, y, b: voet.b, h: voet.h });

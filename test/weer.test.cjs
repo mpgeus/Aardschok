@@ -113,7 +113,7 @@ function kaartMetWater() {
       grond[y].push({ naam: beek || meer ? 'water' : 'gras' });
     }
   }
-  return { grond, tegels: grond.map((r) => r.map(() => 'vloer')) };
+  return { b: 26, h: 14, grond, tegels: grond.map((r) => r.map(() => 'vloer')) };
 }
 
 test('een beek valt in de droogte droog, een meer niet; een visser aan een beek vangt dan niets', () => {

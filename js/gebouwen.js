@@ -771,7 +771,7 @@
     bos: { naam: T.t('the forest'), meervoud: T.t('trees'), telt: (w, x, y, v) => !!v && T.isBosBoom(v.soort) },
     rotsen: { naam: T.t('the rocks'), meervoud: T.t('rocks'), telt: (w, x, y, v) => !!v && v.soort === 'rots' },
     // het water van een beek, een meer of een rivier, en de zee (tegels/kust.png): een visser vist er ook
-    water: { naam: T.t('the water'), meervoud: T.t('tiles of water'), telt: (w, x, y) => !!(w.grond && w.grond[y] && w.grond[y][x] && T.isWaterGrond(w.grond[y][x].naam)) },
+    water: { naam: T.t('the water'), meervoud: T.t('tiles of water'), telt: (w, x, y) => { const g = T.grondOp(w, x, y); return !!(g && T.isWaterGrond(g.naam)); } },
     // Wat te rooien is en geen boom (een struik, een stronk; T.ontginWerkOp, js/bos.js): voor wat er op een stuk te
     // rooien staat (T.watTeRooien, js/bos.js).
     struiken: { naam: T.t('the bushes'), meervoud: T.t('bushes and stumps'), telt: (w, x, y, v) => !!v && T.ontginWerkOp(w, x, y) === 'rooien' },
@@ -785,26 +785,27 @@
     let per = NATUUR_SOMMEN.get(w);
     if (!per || per.versie !== versie) NATUUR_SOMMEN.set(w, (per = { versie }));
     if (per[soort]) return per[soort];
-    const b = w.tegels[0].length;
-    const h = w.tegels.length;
-    const s = new Int32Array((b + 1) * (h + 1));
+    const vak = T.kaartVak(w);
+    const b = vak.b;
+    const s = new Int32Array((b + 1) * (vak.h + 1));
     const telt = T.NATUUR[soort].telt;
-    for (let y = 0; y < h; y++) {
+    for (let y = vak.y; y < vak.y + vak.h; y++) {
       let rij = 0;
-      for (let x = 0; x < b; x++) {
+      for (let x = vak.x; x < vak.x + vak.b; x++) {
         if (telt(w, x, y, T.voorwerpOp(w, x, y))) rij++;
-        s[(y + 1) * (b + 1) + x + 1] = s[y * (b + 1) + x + 1] + rij;
+        s[(y - vak.y + 1) * (b + 1) + (x - vak.x) + 1] = s[(y - vak.y) * (b + 1) + (x - vak.x) + 1] + rij;
       }
     }
-    return (per[soort] = { s, b, h });
+    return (per[soort] = { s, vak });
   }
   // Hoeveel van deze soort (T.NATUUR) er binnen `straal` tegels van de rechthoek r ({ x, y, b, h }) ligt.
   T.natuurBij = function (w, soort, r, straal) {
-    const { s, b, h } = natuurSom(w, soort);
-    const x1 = Math.max(0, r.x - straal);
-    const y1 = Math.max(0, r.y - straal);
-    const x2 = Math.min(b, r.x + r.b + straal);
-    const y2 = Math.min(h, r.y + r.h + straal);
+    const { s, vak } = natuurSom(w, soort);
+    const b = vak.b;
+    const x1 = Math.max(vak.x, r.x - straal) - vak.x;
+    const y1 = Math.max(vak.y, r.y - straal) - vak.y;
+    const x2 = Math.min(vak.x + vak.b, r.x + r.b + straal) - vak.x;
+    const y2 = Math.min(vak.y + vak.h, r.y + r.h + straal) - vak.y;
     if (x2 <= x1 || y2 <= y1) return 0;
     return s[y2 * (b + 1) + x2] - s[y1 * (b + 1) + x2] - s[y2 * (b + 1) + x1] + s[y1 * (b + 1) + x1];
   };
@@ -827,15 +828,13 @@
   // eerst rooien (js/bouwen.js).
   T.looppadOm = function (D, r, breed, rooien = null) {
     const w = D.wereld;
-    const hoog = w.tegels.length;
-    const wijd = w.tegels[0].length;
     // Op het stuk dat gerooid wordt, telt wat te rooien is (een boom, een stronk, een struik) als vrij: dat rooit wie er
     // komt, voor de bouwplaats er ligt (js/bos.js; werklijst vraag 110, e).
     const opHetStuk = (x, y) => rooien && x >= rooien.x && x < rooien.x + rooien.b && y >= rooien.y && y < rooien.y + rooien.h;
     for (let y = r.y - breed; y < r.y + r.h + breed; y++) {
       for (let x = r.x - breed; x < r.x + r.b + breed; x++) {
         if (x >= r.x && x < r.x + r.b && y >= r.y && y < r.y + r.h) continue;
-        if (x < 0 || y < 0 || x >= wijd || y >= hoog) continue;
+        if (!T.opKaart(w, x, y)) continue;
         const vrij = T.isBegaanbaar(w, x, y, { deurenOpenen: true }) || (opHetStuk(x, y) && T.ontginWerkOp(w, x, y));
         if (!vrij) return false;
       }
@@ -942,7 +941,7 @@
     if (T.opPad(w, x, y)) return T.t('There is a path there.');
     // Op zand wordt niet gebouwd (Marcel, 8 okt: "zand is geen solide basis"): het strand, de duinen en het stuifzand
     // van het eiland (tegels/kust.png; werklijst vraag 117, B van 2a).
-    const g = w.grond && w.grond[y] && w.grond[y][x];
+    const g = T.grondOp(w, x, y);
     if (g && g.naam === 'strand') return T.t('Nothing is built on sand.');
     if (T.wijngaardOp(D, x, y)) return T.t('There is a vineyard there.');
     // Waar de herberg straks met het dorp meegroeit (T.meegroeiGrond, js/behoeften.js), blijft de grond vrij.
@@ -1111,7 +1110,7 @@
       for (let dx = 0; dx < voet.b; dx++) {
         const yy = instantie.y + dy;
         const xx = instantie.x + dx;
-        if (w.tegels[yy] && w.tegels[yy][xx] !== undefined) w.tegels[yy][xx] = 'muur';
+        T.zetTegel(w, xx, yy, 'muur');
       }
     }
     // op een land met hoogte komt het op vlakke grond (js/hoogte.js; vraag 121, stap 2)

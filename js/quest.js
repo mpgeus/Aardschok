@@ -208,11 +208,11 @@
       const staatEr = w.deuren.get(sleutel) === g;
       if (hoort && !staatEr) {
         w.deuren.set(sleutel, g);
-        w.tegels[g.y][g.x] = 'deur';
+        T.zetTegel(w, g.x, g.y, 'deur');
         T.kaartVeranderd(w); // een doorgang erbij: de eilanden (js/wereld.js)
       } else if (!hoort && staatEr) {
         w.deuren.delete(sleutel);
-        w.tegels[g.y][g.x] = g.onder;
+        T.zetTegel(w, g.x, g.y, g.onder);
         T.kaartVeranderd(w);
       }
     }

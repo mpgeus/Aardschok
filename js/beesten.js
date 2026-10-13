@@ -181,39 +181,43 @@
   // telt wat de houthakker kapt en inplant ook als bos (js/bos.js, vraag 129, f): 's nachts, als een groep kijkt of zijn
   // thuis nog goed is.
   function bosKaart(w, ookJong = false) {
-    const H = w.tegels.length;
-    const B = w.tegels[0].length;
-    const bos = new Uint8Array(B * H);
-    const diep = new Int16Array(B * H).fill(-1);
+    const vak = T.kaartVak(w);
+    const bos = new Uint8Array(vak.b * vak.h);
+    const diep = new Int16Array(vak.b * vak.h).fill(-1);
     const rij = [];
     let n = 0;
-    for (let y = 0; y < H; y++) {
-      for (let x = 0; x < B; x++) {
+    for (let y = vak.y; y < vak.y + vak.h; y++) {
+      for (let x = vak.x; x < vak.x + vak.b; x++) {
+        const i = plekInVak(vak, x, y);
         if (T.isBos(w, x, y, ookJong)) {
-          bos[y * B + x] = 1;
+          bos[i] = 1;
           n++;
         } else {
-          diep[y * B + x] = 0;
-          rij.push(y * B + x);
+          diep[i] = 0;
+          rij.push(i);
         }
       }
     }
     for (let k = 0; k < rij.length; k++) {
       const i = rij[k];
-      const x = i % B;
-      const y = (i - x) / B;
+      const kol = i % vak.b;
+      const x = vak.x + kol;
+      const y = vak.y + (i - kol) / vak.b;
       for (const [dx, dy] of BUREN) {
         const nx = x + dx;
         const ny = y + dy;
-        if (nx < 0 || ny < 0 || nx >= B || ny >= H) continue;
-        const j = ny * B + nx;
+        if (!T.opKaart(w, nx, ny)) continue;
+        const j = plekInVak(vak, nx, ny);
         if (diep[j] >= 0) continue;
         diep[j] = diep[i] + 1;
         rij.push(j);
       }
     }
-    return { bos, diep, n, B, H };
+    return { bos, diep, n, vak };
   }
+
+  // Waar tegel (x, y) in de lijsten van bosKaart en bebouwd ligt.
+  const plekInVak = (vak, x, y) => (y - vak.y) * vak.b + (x - vak.x);
 
   // Een tegel waar een dier kan staan: begaanbaar, en niemand erop.
   const vrij = (w, x, y) => T.isBegaanbaar(w, x, y, { wezensBlokkeren: true });
@@ -221,12 +225,11 @@
   // Open grond waar een hert graast: geen akker of weide, geen pad, niet op het plein, en niet bij een gebouw.
   function bebouwd(D) {
     const w = D.wereld;
-    const B = w.tegels[0].length;
-    const H = w.tegels.length;
-    const uit = new Uint8Array(B * H);
+    const vak = T.kaartVak(w);
+    const uit = new Uint8Array(vak.b * vak.h);
     const zet = (x0, y0, b, h, rand) => {
-      for (let y = Math.max(0, y0 - rand); y < Math.min(H, y0 + h + rand); y++) {
-        for (let x = Math.max(0, x0 - rand); x < Math.min(B, x0 + b + rand); x++) uit[y * B + x] = 1;
+      for (let y = Math.max(vak.y, y0 - rand); y < Math.min(vak.y + vak.h, y0 + h + rand); y++) {
+        for (let x = Math.max(vak.x, x0 - rand); x < Math.min(vak.x + vak.b, x0 + b + rand); x++) uit[plekInVak(vak, x, y)] = 1;
       }
     };
     for (const g of D.gebouwen || []) {
@@ -247,7 +250,7 @@
     const w = D.wereld;
     const B = D.beesten || (D.beesten = {});
     B.gezet = true;
-    if (!w || !w.tegels || !w.tegels.length) return [];
+    if (!T.heeftTegels(w)) return [];
     const kaart = bosKaart(w);
     const zaad = landZaad(D);
     const r = T.dobbelsteen(zaad * 7919 + 116);
@@ -296,6 +299,7 @@
   function zetHol(D, G) {
     const w = D.wereld;
     haalHolWeg(D, G);
+    const vak = T.kaartVak(w);
     const kandidaten = [];
     for (let ring = 1; ring <= 3; ring++) {
       for (let dy = -ring; dy <= ring; dy++) {
@@ -303,9 +307,9 @@
           if (Math.max(Math.abs(dx), Math.abs(dy)) !== ring) continue;
           const x = G.thuis.x + dx;
           const y = G.thuis.y + dy;
-          if (x < 0 || y < 0 || y >= w.tegels.length || x >= w.tegels[0].length) continue;
+          if (!T.opKaart(w, x, y)) continue;
           if (!vrij(w, x, y) || T.opPad(w, x, y) || G.rand.some((p) => p.x === x && p.y === y)) continue;
-          kandidaten.push({ x, y, ring, sleutel: lot(G.zaad, y * w.tegels[0].length + x, 118) });
+          kandidaten.push({ x, y, ring, sleutel: lot(G.zaad, y * vak.b + x, 118) });
         }
       }
     }
@@ -351,11 +355,12 @@
   // telt niet: dan zijn het dezelfde holen, wanneer ze er ook komen.
   function thuisKandidaten(w, kaart, midden, zaad) {
     const uit = [];
-    for (let y = 0; y < kaart.H; y++) {
-      for (let x = 0; x < kaart.B; x++) {
-        const i = y * kaart.B + x;
+    const vak = kaart.vak;
+    for (let y = vak.y; y < vak.y + vak.h; y++) {
+      for (let x = vak.x; x < vak.x + vak.b; x++) {
+        const i = plekInVak(vak, x, y);
         if (!kaart.bos[i] || kaart.diep[i] < IN().diep || !T.isBegaanbaar(w, x, y)) continue;
-        uit.push({ x, y, sleutel: lot(zaad, y * kaart.B + x, 117) }); // per tegel: een tegel meer of minder schudt de rest niet
+        uit.push({ x, y, sleutel: lot(zaad, y * vak.b + x, 117) }); // per tegel: een tegel meer of minder schudt de rest niet
       }
     }
     uit.sort((a, b) => a.sleutel - b.sleutel);
@@ -369,8 +374,9 @@
   function randVan(w, kaart, open, thuis, soort, midden) {
     const kandidaten = [];
     const R = IN().randBinnen;
-    for (let y = Math.max(0, thuis.y - R); y <= Math.min(kaart.H - 1, thuis.y + R); y++) {
-      for (let x = Math.max(0, thuis.x - R); x <= Math.min(kaart.B - 1, thuis.x + R); x++) {
+    const vak = kaart.vak;
+    for (let y = Math.max(vak.y, thuis.y - R); y <= Math.min(vak.y + vak.h - 1, thuis.y + R); y++) {
+      for (let x = Math.max(vak.x, thuis.x - R); x <= Math.min(vak.x + vak.b - 1, thuis.x + R); x++) {
         if (!randGoed(w, kaart, open, x, y, soort)) continue;
         const naar = soort === 'wolf' && midden ? midden : thuis;
         kandidaten.push({ x, y, d: Math.hypot(x - naar.x, y - naar.y) });
@@ -394,11 +400,11 @@
   // Of een groep van deze soort op (x, y) aan de rand kan staan: een wolf net binnen het bos, een hert op open grond
   // vlak bij het bos (geen akker of weide, geen pad, niet op het plein en niet bij een gebouw).
   function randGoed(w, kaart, open, x, y, soort) {
-    const i = y * kaart.B + x;
+    const i = plekInVak(kaart.vak, x, y);
     if (!T.isBegaanbaar(w, x, y)) return false;
     if (soort === 'wolf') return kaart.bos[i] === 1 && kaart.diep[i] <= 2;
     if (kaart.bos[i] || open[i] || T.opPad(w, x, y) || T.opHetPlein(w, x, y)) return false;
-    return BUREN.some(([dx, dy]) => x + dx >= 0 && y + dy >= 0 && x + dx < kaart.B && y + dy < kaart.H && kaart.bos[(y + dy) * kaart.B + (x + dx)]);
+    return BUREN.some(([dx, dy]) => T.opKaart(w, x + dx, y + dy) && kaart.bos[plekInVak(kaart.vak, x + dx, y + dy)]);
   }
 
   // Zoveel vrije tegels om een plek, de dichtste eerst: waar de dieren van een groep komen te staan, en de jongen.
@@ -696,7 +702,7 @@
         delete p.gewond;
       }
     }
-    if (!IN().aan || !D.beesten || !D.beesten.gezet || !w || !w.tegels || !w.tegels.length) return;
+    if (!IN().aan || !D.beesten || !D.beesten.gezet || !T.heeftTegels(w)) return;
     // Een wolf die in een gevecht viel, ligt er niet meer.
     if (w.wezens.some((e) => e.beest && e.dood)) w.wezens = w.wezens.filter((e) => !(e.beest && e.dood));
     onderhoudHollen(D);
@@ -718,7 +724,7 @@
   // zo dicht bij het oude als het kan (d). Vindt hij er geen, dan trekt hij weg, en zegt het dorp het.
   function blijfOfVerhuis(D, kaart, open, midden, { G }, groepen) {
     const w = D.wereld;
-    const i = G.thuis.y * kaart.B + G.thuis.x;
+    const i = plekInVak(kaart.vak, G.thuis.x, G.thuis.y);
     const thuisGoed = kaart.bos[i] === 1 && kaart.diep[i] >= IN().diepBlijven;
     if (thuisGoed && G.rand.length && G.rand.every((p) => randGoed(w, kaart, open, p.x, p.y, G.soort))) return;
     let plek = null;

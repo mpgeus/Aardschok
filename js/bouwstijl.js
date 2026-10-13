@@ -196,30 +196,32 @@
   function wegVeld(w) {
     let v = WEG.get(w);
     if (v) return v;
-    const H = w.tegels.length;
-    const B = w.tegels[0].length;
-    v = new Float64Array(B * H).fill(Infinity);
+    const vak = T.kaartVak(w);
+    v = new Float64Array(vak.b * vak.h).fill(Infinity);
     let rij = [];
-    for (let y = 0; y < H; y++) {
-      for (let x = 0; x < B; x++) {
+    for (let y = vak.y; y < vak.y + vak.h; y++) {
+      for (let x = vak.x; x < vak.x + vak.b; x++) {
         if (T.opPad(w, x, y) || T.opHetPlein(w, x, y)) {
-          v[y * B + x] = 0;
-          rij.push(y * B + x);
+          v[(y - vak.y) * vak.b + (x - vak.x)] = 0;
+          rij.push((y - vak.y) * vak.b + (x - vak.x));
         }
       }
     }
     for (let stap = 1; rij.length; stap++) {
       const volgende = [];
       for (const i of rij) {
-        const x = i % B;
-        const y = (i - x) / B;
+        const kol = i % vak.b;
+        const x = vak.x + kol;
+        const y = vak.y + (i - kol) / vak.b;
         for (let dy = -1; dy <= 1; dy++) {
           for (let dx = -1; dx <= 1; dx++) {
             const nx = x + dx;
             const ny = y + dy;
-            if (nx < 0 || ny < 0 || nx >= B || ny >= H || v[ny * B + nx] <= stap) continue;
-            v[ny * B + nx] = stap;
-            volgende.push(ny * B + nx);
+            if (!T.opKaart(w, nx, ny)) continue;
+            const j = (ny - vak.y) * vak.b + (nx - vak.x);
+            if (v[j] <= stap) continue;
+            v[j] = stap;
+            volgende.push(j);
           }
         }
       }
@@ -229,10 +231,9 @@
     return v;
   }
   T.afstandTotDeWeg = function (w, x, y) {
-    if (!w || !w.tegels || !w.tegels.length) return Infinity;
-    const B = w.tegels[0].length;
-    if (x < 0 || y < 0 || x >= B || y >= w.tegels.length) return Infinity;
-    return wegVeld(w)[y * B + x];
+    if (!T.heeftTegels(w) || !T.opKaart(w, x, y)) return Infinity;
+    const vak = T.kaartVak(w);
+    return wegVeld(w)[(y - vak.y) * vak.b + (x - vak.x)];
   };
 
   // De vier kanten van een rechthoek { x, y, b, h } (een erf, de voet van een gebouw), de kant die het dichtst bij de weg

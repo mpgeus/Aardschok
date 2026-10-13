@@ -117,7 +117,7 @@
     const w = D.wereld;
     const tB = ' [B]';
     // Vissers: een per vissersPer mensen, zolang er water genoeg is (een per waterPerVisser tegels).
-    const water = w && w.tegels && w.tegels.length ? T.natuurBij(w, 'water', { x: 0, y: 0, b: w.tegels[0].length, h: w.tegels.length }, 0) : 0;
+    const water = T.heeftTegels(w) ? T.natuurBij(w, 'water', T.kaartVak(w), 0) : 0;
     const visser = T.GEBOUWEN.visser;
     const vissers = (D.gebouwen || []).filter((g) => g.soort === 'visser').length;
     const kunnen = Math.min(Math.floor(water / IN().waterPerVisser), Math.max(1, Math.ceil((D.bevolking || 0) / IN().mensenPerVisser)));

@@ -169,26 +169,32 @@
     const oud = beken.get(w);
     if (oud && oud.versie === versie) return oud.set;
     const set = new Set();
-    const h = (w.grond || []).length;
-    const b = h ? w.grond[0].length : 0;
-    const water = (x, y) => !!(w.grond[y] && w.grond[y][x] && w.grond[y][x].naam === 'water');
-    // Hoeveel water er in een rechthoek ligt, met een tabel van sommen.
+    const vak = T.heeftGrond(w) ? T.kaartVak(w) : { x: 0, y: 0, b: 0, h: 0 };
+    const { b, h } = vak;
+    const water = (x, y) => {
+      const g = T.grondOp(w, x, y);
+      return !!(g && g.naam === 'water');
+    };
+    const plek = (x, y) => (y - vak.y) * b + (x - vak.x);
+    // Hoeveel water er in een rechthoek ligt, met een tabel van sommen (tegel (vak.x + kx, vak.y + ky) op rij ky, plek kx).
     const som = new Int32Array((b + 1) * (h + 1));
-    for (let y = 0; y < h; y++) for (let x = 0; x < b; x++) som[(y + 1) * (b + 1) + x + 1] = (water(x, y) ? 1 : 0) + som[y * (b + 1) + x + 1] + som[(y + 1) * (b + 1) + x] - som[y * (b + 1) + x];
+    for (let ky = 0; ky < h; ky++) for (let kx = 0; kx < b; kx++) som[(ky + 1) * (b + 1) + kx + 1] = (water(vak.x + kx, vak.y + ky) ? 1 : 0) + som[ky * (b + 1) + kx + 1] + som[(ky + 1) * (b + 1) + kx] - som[ky * (b + 1) + kx];
     const r = Math.floor((IN().meerBreed - 1) / 2);
     const vol = (x, y) => {
-      if (x - r < 0 || y - r < 0 || x + r >= b || y + r >= h) return false;
-      const n = som[(y + r + 1) * (b + 1) + x + r + 1] - som[(y - r) * (b + 1) + x + r + 1] - som[(y + r + 1) * (b + 1) + x - r] + som[(y - r) * (b + 1) + x - r];
+      const kx = x - vak.x;
+      const ky = y - vak.y;
+      if (kx - r < 0 || ky - r < 0 || kx + r >= b || ky + r >= h) return false;
+      const n = som[(ky + r + 1) * (b + 1) + kx + r + 1] - som[(ky - r) * (b + 1) + kx + r + 1] - som[(ky + r + 1) * (b + 1) + kx - r] + som[(ky - r) * (b + 1) + kx - r];
       return n === (2 * r + 1) * (2 * r + 1);
     };
     const gezien = new Uint8Array(b * h);
-    for (let y0 = 0; y0 < h; y0++) {
-      for (let x0 = 0; x0 < b; x0++) {
-        if (gezien[y0 * b + x0] || !water(x0, y0)) continue;
+    for (let y0 = vak.y; y0 < vak.y + h; y0++) {
+      for (let x0 = vak.x; x0 < vak.x + b; x0++) {
+        if (gezien[plek(x0, y0)] || !water(x0, y0)) continue;
         const stuk = [];
         let breed = false;
         const rij = [[x0, y0]];
-        gezien[y0 * b + x0] = 1;
+        gezien[plek(x0, y0)] = 1;
         while (rij.length) {
           const [x, y] = rij.pop();
           stuk.push(y * 100000 + x);
@@ -196,8 +202,8 @@
           for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
             const nx = x + dx;
             const ny = y + dy;
-            if (nx < 0 || ny < 0 || nx >= b || ny >= h || gezien[ny * b + nx] || !water(nx, ny)) continue;
-            gezien[ny * b + nx] = 1;
+            if (!T.opKaart(w, nx, ny) || gezien[plek(nx, ny)] || !water(nx, ny)) continue;
+            gezien[plek(nx, ny)] = 1;
             rij.push([nx, ny]);
           }
         }
@@ -243,8 +249,9 @@
     const r = T.voetVanGebouw(g);
     let alles = 0;
     let beek = 0;
-    for (let y = Math.max(0, r.y - bij.straal); y < Math.min(w.grond.length, r.y + r.h + bij.straal); y++) {
-      for (let x = Math.max(0, r.x - bij.straal); x < r.x + r.b + bij.straal; x++) {
+    const vak = T.kaartVak(w);
+    for (let y = Math.max(vak.y, r.y - bij.straal); y < Math.min(vak.y + vak.h, r.y + r.h + bij.straal); y++) {
+      for (let x = Math.max(vak.x, r.x - bij.straal); x < r.x + r.b + bij.straal; x++) {
         if (!T.NATUUR.water.telt(w, x, y)) continue;
         alles++;
         if (T.isBeek(w, x, y)) beek++;
