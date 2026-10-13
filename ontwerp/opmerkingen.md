@@ -12,6 +12,12 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 - **Een kaart van het eiland onder een toets** (idee van Claude, 13 okt; Marcel: "idee ja"): het eiland van boven, met
   alleen wat je verkende en de rest in de mist, getekend zoals de plaat van de kaartenmaker
   (`gereedschap/pixelart/eiland-plaat.cjs`), met je dorp, de wegen en de namen die je kent. Na de mist (B2c), niet erin.
+- **De nacht van het dorp is het zwaarste beeld** (13 okt, B2b, gemeten in de browser op het proefdorp): het beeld
+  waarin een nieuwe dag begint (de nacht van de gebouwen, de bewoners en de rest), kost 70 tot 120 ms; op 30× is dat
+  elke tien seconden een hapering. Het was er al voor de stukken. Iets om te meten en te verdelen als het opvalt.
+- **Een naam die twee keer gezet wordt** (13 okt, idee van Claude): `T.nieuwLand` bestond al in `js/land.js`, en een
+  nieuwe met dezelfde naam in `js/wereld.js` werd stil overschreven (de toetsen merkten het niet, de browser wel). Een
+  toets die bij het laden kijkt of geen bestand een naam in `Spel` zet die een ander al zette, vangt dat.
 - **Het hol vlak bij het kamp** (13 okt, B2b): het hol van een roedel ligt op een tegel diep in het bos die het lot
   kiest, zonder afstand tot het dorp (`thuisKandidaten` in `js/beesten.js`). Op eiland 7 ligt het tien tegels van de
   plek van de kar in het kamp, en een roedel schuwt de huifkar en de ossenkar zoals een mens (`mensBij`): komt hij 's
