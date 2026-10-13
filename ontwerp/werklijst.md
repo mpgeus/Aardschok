@@ -20,37 +20,18 @@ het enige begin, een boer is de man op een boerderij, alleen de kolonist speelt 
 een vaste marktplek (de spelregel "De markt" is weg), en de maker legt alleen nog het lege land: alles bouwt de speler.
 De toetsen en het gereedschap spelen op het proefdorp (`T.proefdorp`, `Spel.debug.proefdorp`). **B1 is af** (12 okt): de
 wijnboerderij is een eigen gebouw, met de wijngaard als veld ernaast. **B2 is bezig** (13 okt): het plan staat
-(`kaarten.md`, "Het hele eiland"), B2a, B2b (de kaart in stukken) en B2d zijn af; B2c (de mist) is het volgende. Daarna de afwisseling (B3), en ronde 3 na C.
+(`kaarten.md`, "Het hele eiland"), B2a, B2b (de kaart in stukken) en B2d zijn af, en het optimaliseren erna (13 okt);
+B2c (de mist) is het volgende. Daarna de afwisseling (B3), en ronde 3 na C.
 
-**Eerst optimaliseren** (Marcel, 13 okt: "noteren voor de nieuwe sessie dat we eerst meer optimalisaties
-uitvoeren"), vóór B2c. Meten met `npm run stukmeting` (de schout op 30× van het kamp naar de kust, in de browser; wat
-het nu geeft staat in `kaarten.md`, "Het hele eiland"). De nacht van het dorp is af (onder "Af"). Uitgezocht (13 okt,
-`kaarten.md`, "Wat de meting mat"): de trage tekenbeelden met een stilstaande schout en bij de meeschuivende camera
-zijn het bos: daar staan 20 tot 30 bomen vóór de schout, en elk tekent zijn eigen kijkgat om hem heen. En "tekenen" in
-de meting is alleen de tijd van de code: zonder videokaart schildert de browser het beeld grotendeels daarna. Het
-plan (Marcel, 13 okt: "volgorde 1 tot 4 is goed"; ook zonder videokaart moet het lopen: "Het liefste wel. Je zult net
-zien dat er een niche markt is voor spelers met low end hardware"). **Bezig in sessie `ccr-beba0277-q5zzk8`** (13 okt):
-1. **De meetlat: af** (13 okt): `npm run stukmeting` geeft ook de echte tijd tot het volgende beeld en de kijkgaten per
-   beeld, meet met `--tekenen met` het pad van de videokaart, en met `--reik 16 --stil 15` stilstaan in het bos.
-2. **Eén kijkgat per persoon: af** (13 okt): in het bos 24 kijkgaten naar 1, 83 naar 67 ms per beeld. Het gat is daar
-   kleiner en zachter van rand dan het was: de gestapelde gaten maakten het groter en harder dan bedoeld (een uitsnede
-   voor en na ging naar Marcel); achter één huis is het hetzelfde. Wil je het groter, dan `kijkgatStraal` in de werkbank.
-3. **Een kaartverandering tekent alleen de grond rond die plek opnieuw: af** (13 okt): zo'n 4 ms in plaats van 28, de
-   grond pixel voor pixel gelijk. En **het wegennet** (Marcel: "2 ja"): wat `T.aangelegdNet` per tegel nakijkt, gaat
-   alleen op de plekken die veranderden opnieuw; 10 ms naar 2 na een gevelde boom, met precies hetzelfde net.
-4. **Het stuk dat niet klaar lag: af** (13 okt): het vooruit maken kiest wat het eerst nodig is, langs het pad van wie
-   loopt (`nodigOver` in `js/wereld.js`), en krijgt zijn tijd per seconde (`vooruitMsPerSeconde`, 240; Marcel: "3 optie
-   a"). De stukmeting: van 8 naar 0 van de 18 stukken niet klaar, land maken hoogstens 23 ms in een beeld (was 57).
-5. **Daarna: het bos zonder videokaart.** In het bos 67 ms per beeld, ook zonder kijkgaten (1100 bomen, op de processor
-   twee keer vergroot); met een videokaart gaan ze in 60 tot 90 opdrachten. Wat het kan worden, eerst met Marcel.
-- Daarna, of tussendoor: de toets voor dubbele namen in `Spel` (`opmerkingen.md`).
+**Het optimaliseren is af** (13 okt, onder "Af"); B2c (de mist) is het volgende. Daarna, of tussendoor: de toets voor
+dubbele namen in `Spel` (`opmerkingen.md`).
 
 **Wacht op Marcel:**
 - **Meten op je eigen pc** (13 okt, Marcel: "kan ik straks wel even doen"): Nieuw spel, loop met de schout het bos in
   ten zuiden van het kamp, blijf staan en druk `F2`: hoeveel beelden per seconde, en wat zegt de meter over tekenen?
 - **Het hele eiland bekijken** (B2b): Nieuw spel, en loop met de schout het land uit, naar de kust (met `F2` de meter):
-  het land gaat open waar hij komt. Op 30× hapert het nog even als hij heel snel nieuw land in loopt; zeg het als je dat
-  ziet. Wat opviel en te kiezen is (`opmerkingen.md`): een richel zonder helling blijft onbereikbaar, en een hol kan
+  het land gaat open waar hij komt. Op 30× zou het niet meer moeten haperen (13 okt: alle stukken lagen klaar); zeg het
+  als je het toch ziet. Wat opviel en te kiezen is (`opmerkingen.md`): een richel zonder helling blijft onbereikbaar, en een hol kan
   tien tegels van het kamp liggen.
 - **De wijnboerderij bekijken** (B1): Nieuw spel, en in het bouwmenu (B) de wijnboerderij; is ze af, dan trekt er een
   gezin in, en de wijngaard leg je met twee klikken ernaast (de akker kan alleen nog bij een boerderij). In wijnmaand
@@ -185,6 +166,15 @@ het graan vraagt", de schandpaal, de heervaart en de twee bazen.
   schrijven voor de nieuwe richting, als B en C er staan.
 
 ## Af (sinds 11 okt)
+
+- Eerst optimaliseren (13 okt, Marcel: "volgorde 1 tot 4 is goed", "2 ja", "3 optie a"; ook zonder videokaart: "Het
+  liefste wel"). De meetlat: `npm run stukmeting` geeft ook de echte tijd per beeld (zonder videokaart schildert de
+  browser na het tekenen; `kaarten.md`, "Wat de meting mat"). Eén kijkgat per wezen (in het bos 24 naar 1, 83 naar 67
+  ms per beeld). Een kaartverandering tekent alleen de grond rond die plek opnieuw (28 naar 4 ms, pixel voor pixel
+  gelijk), en het wegennet kijkt alleen die plekken na (10 naar 2 ms, hetzelfde net). Het land vooruit maken kiest wat
+  het eerst nodig is en krijgt zijn tijd per seconde: op de tocht naar de kust van 8 naar 0 van de 18 stukken niet
+  klaar. Niet gedaan (Marcel: "Nee, je hebt gelijk, dat is zinloos"): het bos op halve maat tekenen zonder videokaart
+  (67 naar 17 ms per beeld), want een goedkope laptop heeft wel een videokaart in de processor.
 
 - De nacht van het dorp (eerst optimaliseren; 13 okt, Marcel: "Ja, bouw het zo"): het beeld waarin een nieuwe dag
   begint, kostte 100 tot 150 ms, waarvan 74 tot 94 in de beesten: elke nacht vroeg `bosKaart` voor alle tegels om het

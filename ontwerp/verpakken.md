@@ -62,8 +62,11 @@ Chromium-venster draagt de hele browser mee). Met een videokaart tekent allebei 
   beeld boven de 50 ms in gewoon spel, en het hele programma onder 1,5 GB bij 200 mensen; en een minimum voor de
   Steam-pagina (4 GB geheugen, een videokaart). De Steam Deck (1280 bij 800) is kleiner, en dus lichter.
   **Ook zonder videokaart** (Marcel, 13 okt: "Het liefste wel. Je zult net zien dat er een niche markt is voor spelers
-  met low end hardware"): het spel moet ook op de processor lopen, dus wat zonder videokaart traag is, is werk (het bos:
-  werklijst, "Eerst optimaliseren", stap 5).
+  met low end hardware"). Later die dag (Marcel: "Nee, je hebt gelijk, dat is zinloos"): een goedkope laptop heeft wel
+  een videokaart in de processor, en die gebruikt de browser gewoon; echt zonder zijn vooral virtuele machines en
+  computers waarvan de browser de videokaart weigert. Dus low end is: weinig werk per beeld voor de processor (de regels,
+  en wat de code van het tekenen kost) en weinig opdrachten voor de videokaart. Het bos op halve maat tekenen zonder
+  videokaart (67 naar 17 ms per beeld in de cloud, gemeten 13 okt) is daarom niet gedaan.
 - **Gemeten op die schermen** (dezelfde dag, de schil, zonder videokaart): op 1920 bij 1080 dichtbij zo'n 48 beelden
   per seconde en in het overzicht 30, samen ~950 MB; op 4K 15 beelden per seconde, het eerste keer uitzoomen 550 ms, en
   ~1,4 GB. Op 4K zijn er vier keer zoveel pixels als op 1920 bij 1080, en het spel tekent ze nu allemaal zelf: zonder
