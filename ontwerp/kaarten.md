@@ -159,6 +159,14 @@ nummers passen op het hele eiland, en `T.eilandStuk` maakt elk stuk los (64 bij 
    per beeld, en het raster alleen voor het nieuwe stuk bijwerken) en een worker. En **"Al je mensen"**: wie van jou in
    de buurt komt (de schout, je dorpelingen, de ossenkar), maakt het land open, zoals straks in de mist elk van je
    mensen een kring ziet.
+   **Stap 5 eenvoudig gebouwd en gemeten** (13 okt, `T.werkStukkenBij`): in de browser (Chromium zonder videokaart, 1920
+   bij 1080, het proefdorp op eiland 2), de schout op 30× van het kamp naar de kust (112 tegels naar het zuiden) en dan
+   langs de kust naar het noordwesten: 19 nieuwe stukken in 21 s, een per 1,1 s. Gewone beelden kosten 4 ms (mediaan),
+   maar het beeld waarin een stuk opengaat 100 tot 170 ms: het stuk maken 20 tot 47 ms, de rest van de regels (het raster
+   van het lopen en de wegen opnieuw) 11 tot 82 ms, groeiend met de rechthoek om de open stukken, en het tekenen 35 tot
+   58 ms. Dat hapert: op 30× ongeveer elke seconde een zesde seconde stil, op 1× elke halve minuut. Waar het in zit, alle
+   drie: het stuk zelf, het raster over de hele rechthoek (ook geheugen: een veld van het lopen is twee bytes per tegel
+   van die rechthoek), en het tekenen.
    **Het ontwerp van stap 2 tot 6** (Claude, 13 okt; zo kan een volgende sessie verder):
    - *Wat in S staat* (bewaard): wat veranderde, per tegelnummer (`T.tegelNummer`): `w.tegelsAnders` (Map naar het woord),
      `w.grondAnders` (Map naar de grondtegel; alleen de maker verandert de grond, het spel nooit), `w.gerooid` (Set: een
