@@ -109,6 +109,8 @@ wijnboerderij, de akker bij een boerderij; de raad zegt het als de wijn het jaar
 
 ## B3. Afwisseling (vraag 154)
 
+**Bezig in sessie `ccr-58035c3c-lckq21`** (13 okt): het plan met Marcel.
+
 Marcel, 11 okt: "Wijn wordt ook eten. Afwisseling wordt de kern. Mensen worden anders minder productief." Wie maar één
 ding eet, werkt minder; wat er al is en wat het vraagt: `gameloop.md`, "Besloten". Eerst een plan met Marcel: welke
 soorten eten tellen, hoe je afwisseling meet, en wat minder productief is. Na B2 en vóór C, zodat C de echte economie
