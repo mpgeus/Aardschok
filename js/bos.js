@@ -133,7 +133,7 @@
     T.haalVoorwerpWeg(w, v);
     if (T.tegel(w, v.x, v.y) === 'muur') {
       T.zetTegel(w, v.x, v.y, 'vloer');
-      T.kaartVeranderd(w);
+      T.kaartVeranderd(w, { x1: v.x, y1: v.y, x2: v.x, y2: v.y });
     }
   }
 

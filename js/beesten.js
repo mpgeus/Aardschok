@@ -1286,7 +1286,7 @@
         T.zetVoorwerp(w, v);
       }
     }
-    T.kaartVeranderd(w);
+    T.kaartVeranderd(w, { x1: m.x, y1: m.y, x2: x1, y2: y1 });
   }
 
   // De status "Wolven" (T.OORZAKEN.wolven, js/voorvallen.js): speelt hij, dan waarom (het stuk na "want"; '' als ze alleen

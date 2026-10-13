@@ -46,6 +46,9 @@
     // Zoveel velden (een plek waar velen heen gaan) onthoudt een kaart; daarboven vergeet hij het veld dat het langst
     // niet gevraagd is. Een veld is twee bytes per tegel: op een kaart van 160 bij 160 is dat 50 kB.
     veldenOnthouden: 64,
+    // Op het eiland beslaat een veld het vak om het dorp (T.kaartVak) en zoveel tegels eromheen, niet al het land dat je
+    // kent: dat groeit met elk stuk dat open gaat (B2b, stap 5). Wie van of naar daarbuiten loopt, zoekt zijn eigen weg.
+    veldRand: 32,
   };
   const IN = () => T.LOPEN_INSTELLINGEN;
 
@@ -66,17 +69,25 @@
     const open = !!o.deurenOpenen;
     // Een kaart met deuren (de proefkamers) onthoudt niets: een deur gaat open en dicht zonder dat de kaart verandert.
     const onthoudt = !(w.deuren && w.deuren.size);
-    if (o.veld && !naast && onthoudt) {
+    const vv = o.veld && veldVak(w);
+    if (o.veld && !naast && onthoudt && T.inVak(vv, van.x, van.y) && T.inVak(vv, doel.x, doel.y)) {
       if (T.afstand(van, doel) <= tot) return [];
-      return T.kanErKomen(w, van, doel, { tot }) ? wegUitVeld(w, veldVan(w, doel, tot, open), van) : null;
+      if (!T.kanErKomen(w, van, doel, { tot })) return null;
+      // Loopt de enige weg buiten het vak van het veld om (een meer dat het dorp afsnijdt), dan zoekt hij hem zelf.
+      const weg = wegUitVeld(w, veldVan(w, doel, tot, open), van);
+      if (weg || T.openGrootte(w) === 0) return weg;
     }
     let wegen = null;
     if (onthoudt) {
       const versie = T.kaartVersie(w);
       let m = WEGEN.get(w);
       if (!m || m.versie !== versie || m.wegen.size >= IN().wegenOnthouden) {
-        m = { versie, wegen: new Map() };
+        m = { versie, open: T.openGrootte(w), wegen: new Map() };
         WEGEN.set(w, m);
+      } else if (m.open !== T.openGrootte(w)) {
+        // Er ging land open (js/wereld.js): een weg die er was, blijft goed; wie geen weg had, zoekt opnieuw.
+        for (const [k, rij] of m.wegen) if (!rij) m.wegen.delete(k);
+        m.open = T.openGrootte(w);
       }
       wegen = m.wegen;
     }
@@ -117,9 +128,27 @@
   const RICHTINGEN = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]]; // zoals js/pad.js
   const VELDEN = new WeakMap(); // kaart → { versie, vak, velden: Map(sleutel → veld), in de volgorde van gebruik }
 
+  // Het vak van de velden: op een kaart uit Tiled de hele kaart, op het eiland het dorp met veldRand eromheen, binnen wat
+  // open is (T.loopVak). Eén ding per kaart zolang het niet verandert, zoals T.loopVak.
+  const VELDVAK = new WeakMap();
+  function veldVak(w) {
+    const lv = T.loopVak(w);
+    const al = VELDVAK.get(w);
+    if (al && al.lv === lv) return al.vak;
+    const k = T.kaartVak(w);
+    const R = T.openGrootte(w) ? IN().veldRand : 0;
+    const x0 = Math.max(lv.x, k.x - R);
+    const y0 = Math.max(lv.y, k.y - R);
+    const x1 = Math.min(lv.x + lv.b, k.x + k.b + R);
+    const y1 = Math.min(lv.y + lv.h, k.y + k.h + R);
+    const vak = al && al.vak.x === x0 && al.vak.y === y0 && al.vak.b === x1 - x0 && al.vak.h === y1 - y0 ? al.vak : { x: x0, y: y0, b: x1 - x0, h: y1 - y0 };
+    VELDVAK.set(w, { lv, vak });
+    return vak;
+  }
+
   function veldVan(w, doel, tot, open) {
     const versie = T.kaartVersie(w);
-    const vak = T.loopVak(w);
+    const vak = veldVak(w);
     let m = VELDEN.get(w);
     if (!m || m.versie !== versie || m.vak.x !== vak.x || m.vak.y !== vak.y || m.vak.b !== vak.b || m.vak.h !== vak.h) {
       m = { versie, vak, velden: new Map() };
@@ -136,9 +165,9 @@
     return v;
   }
 
-  // Een veld begint bij het doel: elke begaanbare tegel binnen `tot` ervan ligt er 0 stappen af. Het veld beslaat het
-  // vak waarin gelopen wordt (T.loopVak, js/wereld.js), zoals het raster van wat vaststaat: tegel (x, y) staat op plek
-  // (y - vak.y) * vak.b + (x - vak.x).
+  // Een veld begint bij het doel: elke begaanbare tegel binnen `tot` ervan ligt er 0 stappen af. Het veld beslaat zijn
+  // vak (veldVak): tegel (x, y) staat op plek (y - vak.y) * vak.b + (x - vak.x). Het raster van wat vaststaat beslaat
+  // T.loopVak (js/wereld.js), daar staat dezelfde tegel op (y - lv.y) * lv.b + (x - lv.x).
   function nieuwVeld(w, vak, doel, tot, open) {
     const afstand = new Uint16Array(vak.b * vak.h).fill(ONBEKEND);
     const rand = [];
@@ -173,6 +202,8 @@
   function groei(w, v) {
     const { b, h, x: x0, y: y0 } = v.vak;
     const raster = T.vastRaster(w);
+    const lv = T.loopVak(w);
+    const rj = (x, y) => (y + y0 - lv.y) * lv.b + (x + x0 - lv.x); // de plek in het raster van (x, y) in het veld
     const d = v.ring + 1;
     const volgende = [];
     for (const i of v.rand) {
@@ -185,8 +216,8 @@
         const ny = y + dy;
         if (nx < 0 || ny < 0 || nx >= b || ny >= h) continue;
         const j = ny * b + nx;
-        if (v.afstand[j] !== ONBEKEND || !vrijOp(w, raster, j, x0 + nx, y0 + ny, v.open)) continue;
-        if (dx && dy && (vastOp(w, raster, y * b + nx, x0 + nx, y0 + y) || vastOp(w, raster, ny * b + x, x0 + x, y0 + ny))) continue;
+        if (v.afstand[j] !== ONBEKEND || !vrijOp(w, raster, rj(nx, ny), x0 + nx, y0 + ny, v.open)) continue;
+        if (dx && dy && (vastOp(w, raster, rj(nx, y), x0 + nx, y0 + y) || vastOp(w, raster, rj(x, ny), x0 + x, y0 + ny))) continue;
         if (w.hoogte && !T.kanStappen(w, x0 + x, y0 + y, x0 + nx, y0 + ny)) continue; // niet door een wand (js/hoogte.js)
         v.afstand[j] = d;
         volgende.push(j);
@@ -201,6 +232,7 @@
   function burenInVeld(w, v, x, y) {
     const { b, h, x: x0, y: y0 } = v.vak;
     const raster = T.vastRaster(w);
+    const lv = T.loopVak(w);
     const uit = [];
     for (let r = 0; r < 8; r++) {
       const dx = DX[r];
@@ -210,7 +242,7 @@
       if (nx < x0 || ny < y0 || nx >= x0 + b || ny >= y0 + h) continue;
       const a = v.afstand[(ny - y0) * b + (nx - x0)];
       if (a === ONBEKEND) continue;
-      if (dx && dy && (vastOp(w, raster, (y - y0) * b + (nx - x0), nx, y) || vastOp(w, raster, (ny - y0) * b + (x - x0), x, ny))) continue;
+      if (dx && dy && (vastOp(w, raster, (y - lv.y) * lv.b + (nx - lv.x), nx, y) || vastOp(w, raster, (ny - lv.y) * lv.b + (x - lv.x), x, ny))) continue;
       if (w.hoogte && !T.kanStappen(w, x, y, nx, ny)) continue;
       uit.push({ x: nx, y: ny, a, r });
     }

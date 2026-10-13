@@ -181,15 +181,24 @@
     return !!(t && !t.vast && !t.beslaat && t.doos && t.doos[1] <= PLAT_HOOG);
   }
   // Per wereld de platte voorwerpen, opnieuw gezocht als de kaart veranderde (T.kaartVersie, js/wereld.js); `versie` gaat
-  // alleen omhoog als die lijst echt anders werd, want alleen dan hoeft de grond opnieuw.
+  // alleen omhoog als die lijst echt anders werd, want alleen dan hoeft de grond opnieuw. Ging er op het eiland alleen
+  // land open (T.openGrootte), dan komt het platte spul van de nieuwe stukken erbij zonder dat de versie omhoog gaat:
+  // werkGrondBij tekent dan alleen dat land opnieuw (Marcel, 13 okt: "Alles per stuk").
   const PLAT = new WeakMap();
   function platVan(w) {
     const kaart = T.kaartVersie(w);
+    const open = T.openGrootte(w);
     let p = PLAT.get(w);
-    if (p && p.kaart === kaart) return p;
+    if (p && p.kaart === kaart && p.open === open) return p;
+    if (p && p.kaart === kaart) {
+      const erbij = T.nieuweStukken(w, p.stukken).flatMap((r) => T.voorwerpenIn(w, r).filter(isPlat));
+      p = { ...p, open, stukken: new Set(w.open), lijst: p.lijst.concat(erbij) };
+      PLAT.set(w, p);
+      return p;
+    }
     const lijst = w.buiten ? T.voorwerpenIn(w, T.kaartGrens(w)).filter(isPlat) : [];
     const zelfde = p && p.lijst.length === lijst.length && p.lijst.every((v, i) => v === lijst[i]);
-    p = { kaart, lijst, versie: p ? p.versie + (zelfde ? 0 : 1) : 0 };
+    p = { kaart, open, stukken: new Set(w.open || []), lijst, versie: p ? p.versie + (zelfde ? 0 : 1) : 0 };
     PLAT.set(w, p);
     return p;
   }
@@ -309,19 +318,23 @@
       buf.stukken.delete(sl);
     }
     for (let j = j0; j <= j1; j++) {
-      for (let i = i0; i <= i1; i++) {
-        const sl = i + ',' + j;
-        if (buf.stukken.has(sl)) continue;
-        const canvas = stukDoek(buf);
-        const c = canvas.getContext('2d');
-        c.setTransform(k, 0, 0, k, f - i * STUK, f - j * STUK);
-        c.imageSmoothingEnabled = false;
-        const iets = teken(c, { x0: (i * STUK - f) / k, y0: (j * STUK - f) / k, x1: ((i + 1) * STUK - f) / k, y1: ((j + 1) * STUK - f) / k });
-        if (!iets) buf.vrij.push(canvas);
-        buf.stukken.set(sl, { i, j, canvas: iets ? canvas : null });
-      }
+      for (let i = i0; i <= i1; i++) if (!buf.stukken.has(i + ',' + j)) tekenBufferStuk(buf, i, j, teken);
     }
     if (buf.vrij.length > VOORRAAD) buf.vrij.length = VOORRAAD;
+  }
+  // Teken stuk (i, j) van de buffer (opnieuw); een oud doek gaat terug in de voorraad.
+  function tekenBufferStuk(buf, i, j, teken) {
+    const { k, fase: f } = buf;
+    const sl = i + ',' + j;
+    const oud = buf.stukken.get(sl);
+    const canvas = stukDoek(buf);
+    const c = canvas.getContext('2d');
+    c.setTransform(k, 0, 0, k, f - i * STUK, f - j * STUK);
+    c.imageSmoothingEnabled = false;
+    const iets = teken(c, { x0: (i * STUK - f) / k, y0: (j * STUK - f) / k, x1: ((i + 1) * STUK - f) / k, y1: ((j + 1) * STUK - f) / k });
+    if (!iets) buf.vrij.push(canvas);
+    if (oud && oud.canvas) buf.vrij.push(oud.canvas);
+    buf.stukken.set(sl, { i, j, canvas: iets ? canvas : null });
   }
   // Een leeg doek voor een stuk, uit de voorraad als er een is. Een doek dat opnieuw beschreven wordt, krijgt een nieuwe
   // versie: dan stuurt js/gl.js het opnieuw naar de kaart.
@@ -358,8 +371,40 @@
   function werkGrondBij(S, zicht, inBeeld, dpr) {
     if (!S.grond) S.grond = { k: 1, fase: 0, sleutel: '', stukken: new Map(), vrij: [] };
     const k = bufferSchaal(S, dpr);
-    werkStukkenBij(S.grond, grondSleutel(S) + '|' + k, k, zicht, (c, r) => tekenGrondIn(c, S, r, inBeeld));
+    vergeetNieuwLand(S.grond, S.wereld);
+    const teken = (c, r) => tekenGrondIn(c, S, r, inBeeld);
+    werkStukkenBij(S.grond, grondSleutel(S) + '|' + k, k, zicht, teken);
+    // van wat nieuw land raakt, één per beeld opnieuw; tot dan staat er wat er stond
+    const oud = S.grond.oud && S.grond.oud.find((sl) => S.grond.stukken.has(sl));
+    if (oud) {
+      S.grond.oud = S.grond.oud.filter((sl) => sl !== oud);
+      const { i, j } = S.grond.stukken.get(oud);
+      tekenBufferStuk(S.grond, i, j, teken);
+    } else S.grond.oud = null;
     return S.grond;
+  }
+  // Ging er op het eiland land open (js/wereld.js), dan alleen de stukken van de buffer die dat land raken opnieuw, één
+  // per beeld (buf.oud); het land eromheen blijft staan. In het vlak van het scherm is een stuk land een ruit
+  // (T.naarScherm), met de rand van de grond (GRONDRAND) en wat erop staat (PLAT_HOOG) erbij.
+  function vergeetNieuwLand(buf, w) {
+    const open = T.openGrootte(w);
+    if (buf.land && buf.land.w === w && buf.land.open !== open) {
+      for (const r of T.nieuweStukken(w, buf.land.stukken)) {
+        const hoeken = [[r.x, r.y], [r.x + r.b, r.y], [r.x, r.y + r.h], [r.x + r.b, r.y + r.h]].map(([x, y]) => T.naarScherm(x, y));
+        const x0 = Math.min(...hoeken.map((p) => p.x)) - GRONDRAND.rechts;
+        const x1 = Math.max(...hoeken.map((p) => p.x)) + GRONDRAND.links;
+        const y0 = Math.min(...hoeken.map((p) => p.y)) - GRONDRAND.onder - PLAT_HOOG;
+        const y1 = Math.max(...hoeken.map((p) => p.y)) + GRONDRAND.boven;
+        for (const [sl, s] of buf.stukken) {
+          const sx0 = (s.i * STUK - buf.fase) / buf.k;
+          const sy0 = (s.j * STUK - buf.fase) / buf.k;
+          if (sx0 > x1 || sy0 > y1 || sx0 + STUK / buf.k < x0 || sy0 + STUK / buf.k < y0) continue;
+          if (!buf.oud) buf.oud = [];
+          if (!buf.oud.includes(sl)) buf.oud.push(sl);
+        }
+      }
+    }
+    if (!buf.land || buf.land.w !== w || buf.land.open !== open) buf.land = { w, open, stukken: new Set(w.open || []) };
   }
 
   // Alles wat in de buffer van de grond ligt, in rechthoek r van de vlakte.

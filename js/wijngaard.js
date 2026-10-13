@@ -58,7 +58,7 @@
         T.zetVoorwerp(w, { soort: 'wijnrank', x, y, boerderij: g, variant: T.akkerVariant(x, y, IN().varianten), geplukt: null });
       }
     }
-    T.kaartVeranderd(w);
+    T.kaartVeranderd(w, { x1: r.x, y1: r.y, x2: r.x + r.b - 1, y2: r.y + r.h - 1 });
   };
 
   // Ligt deze tegel in een wijngaard die je legde? Daar bouw je niet (T.waaromNietOpDezeGrond, js/gebouwen.js). Geeft de

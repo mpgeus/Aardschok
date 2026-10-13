@@ -234,7 +234,7 @@
       ongezaaid: new Set(T.akkerTegels(r).map((t) => `${t.x},${t.y}`)),
     };
     w.akkers.push(akker);
-    T.kaartVeranderd(w);
+    T.kaartVeranderd(w, { x1: r.x, y1: r.y, x2: r.x + r.b - 1, y2: r.y + r.h - 1 });
     T.zeg(D, T.isNazaaitijd(dag)
       ? T.t('The field is ploughed: it is sown as soon as there is grain for it.')
       : T.t('The field is ploughed: it is sown in spring.'), 'goed');

@@ -1115,7 +1115,7 @@
     }
     // op een land met hoogte komt het op vlakke grond (js/hoogte.js; vraag 121, stap 2)
     T.egaliseer(w, { x: instantie.x, y: instantie.y, b: voet.b, h: voet.h });
-    T.kaartVeranderd(w); // de voet is muur geworden: de eilanden (js/wereld.js)
+    T.kaartVeranderd(w, { x1: instantie.x, y1: instantie.y, x2: instantie.x + voet.b - 1, y2: instantie.y + voet.h - 1 }); // de voet is muur geworden: de eilanden (js/wereld.js)
     stapEraf(D, { x: instantie.x, y: instantie.y, b: voet.b, h: voet.h });
   }
 

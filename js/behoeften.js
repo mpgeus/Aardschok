@@ -420,7 +420,9 @@
     }
     // op een land met hoogte: de grond onder de nieuwe voet vlak, op de hoogte waar het huis al stond (js/hoogte.js)
     if (w.hoogte) T.egaliseer(w, { x: instantie.x, y: instantie.y, b: nieuweVoet.b, h: nieuweVoet.h }, { x: oudX, y: oudY });
-    T.kaartVeranderd(w); // een andere soort en een andere voet: de lijst per tegel en de eilanden (js/wereld.js)
+    // een andere soort en een andere voet: de lijst per tegel en de eilanden (js/wereld.js), op de oude en de nieuwe voet
+    const [x1, y1] = [Math.min(instantie.x, oudX), Math.min(instantie.y, oudY)];
+    T.kaartVeranderd(w, { x1, y1, x2: Math.max(instantie.x + nieuweVoet.b, oudX + oudeVoet.b) - 1, y2: Math.max(instantie.y + nieuweVoet.h, oudY + oudeVoet.h) - 1 });
     // Het nieuwe huis rijst op in de laatste bouwfasen over de bouwtijd van zijn soort (groeiVanafFase; G), en wie erin
     // woont, blijft erin wonen: alleen het voorwerp is in aanbouw, het gebouw is klaar. Een tekening zonder bouwfasen
     // groeit in één nacht, zoals altijd. T.tikGebouwenDag (js/gebouwen.js) zet hem klaar.

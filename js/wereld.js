@@ -10,6 +10,12 @@
     // Op de kaart van het eiland gaat een stuk land open als een van je mensen binnen zoveel tegels komt (de schout, wie
     // in je dorp woont, de ossenkar; B2b, stap 5, Marcel: "Al je mensen"). In B2c wordt het de kring die ze zien.
     openRond: 16,
+    // Zoveel tegels verder dan openRond maakt het spel het land van een stuk alvast, in delen van zoveel bij zoveel tegels,
+    // zoveel ms per beeld (minstens één deel), zodat er niets meer te rekenen is als het open gaat (Marcel, 13 okt: "Alles
+    // per stuk"). Het is geen spelstaat: hoe snel het klaar is, verandert niets aan het land.
+    vooruit: 48,
+    vooruitDeel: 16,
+    vooruitMs: 4,
   };
   const IN = () => T.WERELD_INSTELLINGEN;
 
@@ -329,9 +335,10 @@
   // Op het eiland het hele eiland, dus maak er nooit een lijst over (daarvoor is T.kaartVak).
   T.kaartGrens = (w) => (opEiland(w) ? { x: 0, y: 0, b: EILAND_MAAT(), h: EILAND_MAAT() } : { x: 0, y: 0, b: w.b, h: w.h });
   // Het vak waarin gelopen wordt, { x, y, b, h }: op het eiland alle stukken die open zijn (B2b, stap 4: "Overal"), op een
-  // kaart uit Tiled de kaart. Het vaste raster, de eilanden van A* (hieronder) en de velden van het lopen (js/lopen.js)
-  // beslaan dit vak, zodat wie buiten het vak om het dorp staat (die over de weg binnenkwam), ook een weg vindt. Het groeit
-  // als er een stuk open gaat; tot dan is het hetzelfde ding, zodat wie het onthoudt, ziet of het veranderde.
+  // kaart uit Tiled de kaart. Het vaste raster en de eilanden van A* (hieronder) beslaan dit vak, zodat wie buiten het vak
+  // om het dorp staat (die over de weg binnenkwam), ook een weg vindt; de velden van het lopen het dorp met een rand
+  // (js/lopen.js). Het groeit als er een stuk open gaat; tot dan is het hetzelfde ding, zodat wie het onthoudt, ziet of
+  // het veranderde.
   const LOOPVAK = new WeakMap();
   T.loopVak = function (w) {
     const al = LOOPVAK.get(w);
@@ -414,12 +421,12 @@
     if (!s) m.set(n, (s = maakStuk(w, sx, sy)));
     return s;
   }
-  // Het land van het eiland (T.landStuk), met wat er anders werd erover.
+  // Het land van het eiland (T.landStuk, of `L` als het vooruit gemaakt is), met wat er anders werd erover.
   const NATUUR = new Map(); // naam → { vel, id, eig }: de tekening van wat er op het eiland groeit
-  function maakStuk(w, sx, sy) {
+  function maakStuk(w, sx, sy, L = null) {
     const x0 = sx * STUK;
     const y0 = sy * STUK;
-    const L = T.landStuk(T.eilandVan(w.eiland.zaad), x0, y0, STUK, STUK);
+    if (!L) L = T.landStuk(T.eilandVan(w.eiland.zaad), x0, y0, STUK, STUK);
     const tegel = new Uint8Array(STUK * STUK);
     const grond = new Uint16Array(STUK * STUK);
     const op = new Array(STUK * STUK).fill(null);
@@ -444,36 +451,90 @@
     }
     return { sx, sy, x0, y0, tegel, grond, op };
   }
-  // Maak de stukken open die (een deel van) dit vak raken.
+  // Maak de stukken open die (een deel van) dit vak raken. Een stuk dat open gaat, is geen verandering van de kaart (geen
+  // T.kaartVeranderd): er komt alleen land bij. Wat het land beslaat, kijkt zelf naar w.open, en neemt alleen het nieuwe
+  // stuk erbij (het raster en de eilanden hieronder, de velden en de wegen in js/lopen.js, de grond in js/tekenen.js;
+  // Marcel, 13 okt: "Alles per stuk").
   T.openVak = function (w, vak) {
     for (let sy = Math.max(0, Math.floor(vak.y / STUK)); sy * STUK < Math.min(EILAND_MAAT(), vak.y + vak.h); sy++) {
       for (let sx = Math.max(0, Math.floor(vak.x / STUK)); sx * STUK < Math.min(EILAND_MAAT(), vak.x + vak.b); sx++) w.open.add(T.stukNummer(sx, sy));
     }
-    T.kaartVeranderd(w);
   };
   // Het land gaat open waar je mensen komen (stap 5; Marcel, 13 okt: "Al je mensen"): een stuk binnen `openRond` tegels
-  // van de schout, van wie in het dorp woont of van de ossenkar. Hooguit één per beeld, want een stuk maken kost zo'n 50
-  // ms, en daarna rekent het lopen zijn raster opnieuw ("Eerst meten", kaarten.md). Geeft het stuknummer, of null.
+  // van de schout, van wie in het dorp woont of van de ossenkar. Hooguit één per beeld. Geeft het stuknummer, of null.
   T.werkStukkenBij = function (S, D) {
     const w = D.wereld;
     if (!opEiland(w)) return null;
     const R = IN().openRond;
-    const laatste = Math.floor((EILAND_MAAT() - 1) / STUK);
+    const rand = Math.floor((EILAND_MAAT() - 1) / STUK);
     for (const e of w.wezens) {
       if (e.dood || e.binnen || !(e === S.schout || e.bewoner || e.kar)) continue;
       const [x, y] = [Math.round(e.x), Math.round(e.y)];
-      for (let sy = Math.max(0, Math.floor((y - R) / STUK)); sy <= Math.min(laatste, Math.floor((y + R) / STUK)); sy++) {
-        for (let sx = Math.max(0, Math.floor((x - R) / STUK)); sx <= Math.min(laatste, Math.floor((x + R) / STUK)); sx++) {
+      for (let sy = Math.max(0, Math.floor((y - R) / STUK)); sy <= Math.min(rand, Math.floor((y + R) / STUK)); sy++) {
+        for (let sx = Math.max(0, Math.floor((x - R) / STUK)); sx <= Math.min(rand, Math.floor((x + R) / STUK)); sx++) {
           const n = T.stukNummer(sx, sy);
           if (w.open.has(n)) continue;
           w.open.add(n);
-          T.kaartVeranderd(w);
           return n;
         }
       }
     }
+    const tot = performance.now() + IN().vooruitMs;
+    while (maakVooruit(S, w, R + IN().vooruit) && performance.now() < tot);
     return null;
   };
+  // Vooruit: het stuk binnen R tegels van je mensen dat het dichtst bij een van hen ligt (wie loopt eerst: die komt er
+  // het eerst) en niet open is en nog niet gemaakt, een deel verder
+  // (T.landStuk op een deel van het stuk: het land is hetzelfde in welke delen je het maakt, test/landstuk.test.cjs). Is
+  // het laatste deel er, dan wordt het stuk gemaakt, en het wacht tot het open gaat (openStuk kijkt eerst naar w.open).
+  const VOORUIT = new WeakMap(); // kaart → { n, sx, sy, delen: [...] }: het stuk dat nu vooruit gemaakt wordt
+  function maakVooruit(S, w, R) {
+    const m = stukkenVan(w);
+    let v = VOORUIT.get(w);
+    if (v && (m.has(v.n) || w.open.has(v.n))) v = null;
+    if (!v) {
+      const rand = Math.floor((EILAND_MAAT() - 1) / STUK);
+      let ver = Infinity;
+      for (const e of w.wezens) {
+        if (e.dood || e.binnen || !(e === S.schout || e.bewoner || e.kar)) continue;
+        const [x, y] = [Math.round(e.x), Math.round(e.y)];
+        for (let sy = Math.max(0, Math.floor((y - R) / STUK)); sy <= Math.min(rand, Math.floor((y + R) / STUK)); sy++) {
+          for (let sx = Math.max(0, Math.floor((x - R) / STUK)); sx <= Math.min(rand, Math.floor((x + R) / STUK)); sx++) {
+            const n = T.stukNummer(sx, sy);
+            if (w.open.has(n) || m.has(n)) continue;
+            const d = Math.max(sx * STUK - x, x - (sx + 1) * STUK, sy * STUK - y, y - (sy + 1) * STUK, 0) - (e.pad && e.pad.length ? R : 0);
+            if (d < ver) [ver, v] = [d, { n, sx, sy, delen: [] }];
+          }
+        }
+      }
+      VOORUIT.set(w, v);
+      if (!v) return false;
+    }
+    const d = IN().vooruitDeel;
+    const per = Math.ceil(STUK / d);
+    if (v.delen.length < per * per) {
+      const i = v.delen.length;
+      v.delen.push(T.landStuk(T.eilandVan(w.eiland.zaad), v.sx * STUK + (i % per) * d, v.sy * STUK + Math.floor(i / per) * d, d, d));
+      return true;
+    }
+    const grond = new Uint16Array(STUK * STUK);
+    const dingen = [];
+    v.delen.forEach((L, i) => {
+      const [dx, dy] = [(i % per) * d, Math.floor(i / per) * d];
+      for (let y = 0; y < d; y++) for (let x = 0; x < d; x++) grond[(dy + y) * STUK + dx + x] = L.grond[y * d + x];
+      dingen.push(...L.dingen);
+    });
+    m.set(v.n, maakStuk(w, v.sx, v.sy, { grond, dingen }));
+    VOORUIT.delete(w);
+    return true;
+  }
+  // Hoeveel stukken er open zijn: wat het land beslaat, ziet zo dat er land bij kwam (een kaart uit Tiled: 0).
+  const openGrootte = (w) => (w.open ? w.open.size : 0);
+  T.openGrootte = openGrootte;
+  // De stukken die open gingen sinds `al` (een Set van stuknummers), als { x, y, b, h } in tegels.
+  const nieuweStukken = (w, al) => [...w.open].filter((n) => !al.has(n)).map((n) => ({ x: (n % 64) * STUK, y: Math.floor(n / 64) * STUK, b: STUK, h: STUK }));
+  T.nieuweStukken = nieuweStukken;
+  const binnenVak = (a, b) => a.x >= b.x && a.y >= b.y && a.x + a.b <= b.x + b.b && a.y + a.h <= b.y + b.h;
   // Het ding van het eiland op tegel (x, y), of null.
   function natuurOp(w, x, y) {
     const s = openStuk(w, x, y);
@@ -486,8 +547,10 @@
     const uit = (w.voorwerpen || []).filter(binnen);
     if (!opEiland(w)) return uit;
     for (const n of w.open) {
-      const s = stukkenVan(w).get(n) || openStuk(w, (n % 64) * STUK, Math.floor(n / 64) * STUK);
-      if (s.x0 >= vak.x + vak.b || s.y0 >= vak.y + vak.h || s.x0 + STUK <= vak.x || s.y0 + STUK <= vak.y) continue;
+      // eerst of het stuk het vak raakt, en dan pas maken: anders maakt één vraag over een klein vak elk open stuk
+      const [x0, y0] = [(n % 64) * STUK, Math.floor(n / 64) * STUK];
+      if (x0 >= vak.x + vak.b || y0 >= vak.y + vak.h || x0 + STUK <= vak.x || y0 + STUK <= vak.y) continue;
+      const s = stukkenVan(w).get(n) || openStuk(w, x0, y0);
       for (const v of s.op) if (v && binnen(v)) uit.push(v);
     }
     return uit;
@@ -543,7 +606,7 @@
   };
   T.zetVoorwerp = function (w, v) {
     (w.voorwerpen || (w.voorwerpen = [])).push(v);
-    T.kaartVeranderd(w);
+    T.kaartVeranderd(w, T.voetVan(v));
     return v;
   };
   // Wat van het eiland kwam (v.natuur), gaat uit zijn stuk, en het bewaarde spel onthoudt dat het weg is (w.gerooid).
@@ -553,18 +616,55 @@
     else if (v.natuur && opEiland(w)) {
       const s = openStuk(w, v.x, v.y);
       const j = s ? (v.y - s.y0) * STUK + (v.x - s.x0) : -1;
-      if (s && s.op[j] === v) s.op[j] = null;
+      if (s && s.op[j] === v) {
+        s.op[j] = null;
+        // de tegel wordt wat de grond is, zoals een geladen spel hem maakt (maakStuk)
+        const nr = T.tegelNummer(v.x, v.y);
+        if (!w.tegelsAnders.has(nr)) s.tegel[j] = T.grondVanGid(s.grond[j]) && T.grondVanGid(s.grond[j]).vast ? CODE.muur : CODE.vloer;
+      }
       w.gerooid.add(T.tegelNummer(v.x, v.y));
     }
-    T.kaartVeranderd(w);
+    T.kaartVeranderd(w, T.voetVan(v));
   };
   // De kaart is veranderd (een voorwerp, of een tegel die een muur werd of weer vloer): wat eruit volgt, rekent hij
-  // opnieuw uit als iemand het vraagt, de lijst per tegel en de eilanden (hieronder).
-  T.kaartVeranderd = function (w) {
+  // opnieuw uit als iemand het vraagt, de lijst per tegel en de eilanden (hieronder). Met `plek` ({ x1, y1, x2, y2 }, zoals
+  // T.voetVan) werkt het raster van wat vaststaat alleen die tegels bij, in plaats van het hele land opnieuw.
+  // Kwam er op die plek alleen ruimte bij (een boom om), dan worden de eilanden niet opnieuw gezocht: de tegels die vrij
+  // kwamen, gaan op in de eilanden ernaast (maakVrij). Kwam er iets vast bij, dan alles opnieuw, want een eiland kan in
+  // tweeën gaan.
+  T.kaartVeranderd = function (w, plek) {
     PER_TEGEL.delete(w);
+    const e = EILANDEN.get(w);
     EILANDEN.delete(w);
-    RASTERS.delete(w);
-    if (laatste && laatste.w === w) laatste = null;
+    const r = RASTERS.get(w);
+    if (plek && r && r.kaart === T.kaartVersie(w) && r.vak === T.loopVak(w) && r.open === openGrootte(w)) {
+      const v = r.vak;
+      const [x0, y0] = [Math.max(v.x, plek.x1), Math.max(v.y, plek.y1)];
+      const [x1, y1] = [Math.min(v.x + v.b - 1, plek.x2), Math.min(v.y + v.h - 1, plek.y2)];
+      const vrij = [];
+      let vaster = false;
+      if (x1 >= x0 && y1 >= y0) {
+        const was = [];
+        for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) was.push(r.raster[(y - v.y) * v.b + (x - v.x)]);
+        vulRaster(w, r.raster, v, x0, y0, x1 - x0 + 1, y1 - y0 + 1);
+        let i = 0;
+        for (let y = y0; y <= y1; y++) {
+          for (let x = x0; x <= x1; x++, i++) {
+            const nu = r.raster[(y - v.y) * v.b + (x - v.x)];
+            if (was[i] === VAST && nu !== VAST) vrij.push((y - v.y) * v.b + (x - v.x));
+            else if (was[i] !== VAST && nu === VAST) vaster = true;
+          }
+        }
+      }
+      Object.assign(r, { voorwerpen: w.voorwerpen, aantal: w.voorwerpen.length, kaart: T.kaartVersie(w) + 1 });
+      if (e && e.vak === v && e.open === openGrootte(w) && !vaster) {
+        maakVrij(w, e, r.raster, vrij);
+        EILANDEN.set(w, e);
+      }
+    } else {
+      RASTERS.delete(w);
+      if (laatste && laatste.w === w) laatste = null;
+    }
     VERSIES.set(w, T.kaartVersie(w) + 1);
   };
   // Hoe vaak de kaart al veranderde: wat er verder uit de kaart volgt (de paadjes van de deuren, js/paden.js), weet zo
@@ -580,25 +680,32 @@
   // kaart volgt: niet in S, en na T.kaartVeranderd opnieuw. Een eiland is ruim: een deur telt als open en wie er staat,
   // telt niet. Zo zegt het nooit "geen weg" waar er een is, en verandert er niets aan wie waar loopt; het gaat alleen
   // sneller (bij de bouwer van de speeltest liet een dichtgebouwde deur A* 4.000 keer per tien dagen de kaart afzoeken).
+  // Op het eiland gaat er land open (T.werkStukkenBij): dan krijgen alleen de tegels van het nieuwe stuk een eiland, en
+  // waar dat aan een eiland van het oude land raakt, worden ze één (`ouder`: elk eiland wijst naar het eiland waar het in
+  // opging, en T.eilandOp geeft het bovenste). Wat ruim is, leest het uit het raster van wat vaststaat (hieronder): een
+  // deur telt als open, een muur, buiten en wat in de weg staat niet.
   const EILANDEN = new WeakMap();
   const RUIM = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]];
-  function ruim(w, x, y) {
-    const t = T.tegel(w, x, y);
-    if (t === 'muur' || t === 'buiten') return false;
-    const v = T.voorwerpOp(w, x, y);
-    return !(v && T.VOORWERPEN[v.soort].blokkeert);
+  function bovenste(ouder, a) {
+    while (ouder[a] !== a) a = ouder[a] = ouder[ouder[a]];
+    return a;
   }
   function eilandenVan(w) {
-    const al = EILANDEN.get(w);
-    if (al && al.vak === T.loopVak(w)) return al;
     const vak = T.loopVak(w);
+    const al = EILANDEN.get(w);
+    if (al && al.vak === vak && al.open === openGrootte(w)) return al;
+    const raster = vastRaster(w);
     const { b, h } = vak;
-    const op = new Int32Array(b * h).fill(-1);
-    const kan = new Uint8Array(b * h);
-    for (let y = 0; y < h; y++) for (let x = 0; x < b; x++) kan[y * b + x] = ruim(w, vak.x + x, vak.y + y) ? 1 : 0;
-    let n = 0;
-    for (let i = 0; i < b * h; i++) {
-      if (!kan[i] || op[i] >= 0) continue;
+    // Kwam er land bij: het oude mee naar het (grotere) vak, en alleen het nieuwe land zoeken.
+    const erbij = al && opEiland(w) && binnenVak(al.vak, vak);
+    const op = erbij && al.vak === vak ? al.op : new Int32Array(b * h).fill(-1);
+    if (erbij && al.vak !== vak) for (let y = 0; y < al.vak.h; y++) op.set(al.op.subarray(y * al.vak.b, (y + 1) * al.vak.b), (al.vak.y + y - vak.y) * b + (al.vak.x - vak.x));
+    const ouder = erbij ? al.ouder : [];
+    const kan = (k) => raster[k] !== VAST;
+    const bekijk = (i) => {
+      if (!kan(i) || op[i] >= 0) return;
+      const n = ouder.length;
+      ouder.push(n);
       op[i] = n;
       const rij = [i];
       while (rij.length) {
@@ -610,27 +717,65 @@
           const ny = y + dy;
           if (nx < 0 || ny < 0 || nx >= b || ny >= h) continue;
           const k = ny * b + nx;
-          if (!kan[k] || op[k] >= 0) continue;
+          if (!kan(k) || op[k] === n) continue;
           // Schuin alleen als geen van de twee hoektegels vast is, zoals A* (js/pad.js).
-          if (dx && dy && (!kan[y * b + nx] || !kan[ny * b + x])) continue;
+          if (dx && dy && (!kan(y * b + nx) || !kan(ny * b + x))) continue;
           // en niet door een wand van de hoogte (js/hoogte.js; vraag 121, stap 2)
           if (w.hoogte && !T.kanStappen(w, vak.x + x, vak.y + y, vak.x + nx, vak.y + ny)) continue;
+          if (op[k] >= 0) {
+            // het oude land: één eiland met wat daar al was
+            const [p, q] = [bovenste(ouder, op[k]), bovenste(ouder, n)];
+            if (p !== q) ouder[q] = p;
+            continue;
+          }
           op[k] = n;
           rij.push(k);
         }
       }
-      n++;
-    }
-    const e = { op, vak };
+    };
+    if (erbij) {
+      for (const r of nieuweStukken(w, al.stukken)) {
+        for (let y = Math.max(r.y, vak.y); y < Math.min(r.y + r.h, vak.y + h); y++) {
+          for (let x = Math.max(r.x, vak.x); x < Math.min(r.x + r.b, vak.x + b); x++) bekijk((y - vak.y) * b + (x - vak.x));
+        }
+      }
+    } else for (let i = 0; i < b * h; i++) bekijk(i);
+    const e = { op, vak, ouder, open: openGrootte(w), stukken: new Set(w.open || []) };
     EILANDEN.set(w, e);
     return e;
   }
+  // Tegels die vrij kwamen (plekken in het raster), elk een eigen eiland, één met elk eiland ernaast waar je heen kunt
+  // stappen, zoals in eilandenVan.
+  function maakVrij(w, e, raster, vrij) {
+    const { op, vak, ouder } = e;
+    const { b, h } = vak;
+    const kan = (k) => raster[k] !== VAST;
+    for (const i of vrij) {
+      const x = i % b;
+      const y = (i - x) / b;
+      const n = ouder.length;
+      ouder.push(n);
+      op[i] = n;
+      for (const [dx, dy] of RUIM) {
+        const nx = x + dx;
+        const ny = y + dy;
+        if (nx < 0 || ny < 0 || nx >= b || ny >= h) continue;
+        const k = ny * b + nx;
+        if (!kan(k) || op[k] < 0) continue;
+        if (dx && dy && (!kan(y * b + nx) || !kan(ny * b + x))) continue;
+        if (w.hoogte && !T.kanStappen(w, vak.x + x, vak.y + y, vak.x + nx, vak.y + ny)) continue;
+        const [p, q] = [bovenste(ouder, op[k]), bovenste(ouder, n)];
+        if (p !== q) ouder[q] = p;
+      }
+    }
+  }
   // Het eiland van een tegel, of -1 (vast, of buiten de kaart).
   T.eilandOp = function (w, x, y) {
-    const { op, vak } = eilandenVan(w);
+    const { op, vak, ouder } = eilandenVan(w);
     const i = x - vak.x;
     const j = y - vak.y;
-    return i >= 0 && j >= 0 && i < vak.b && j < vak.h ? op[j * vak.b + i] : -1;
+    const n = i >= 0 && j >= 0 && i < vak.b && j < vak.h ? op[j * vak.b + i] : -1;
+    return n < 0 ? -1 : bovenste(ouder, n);
   };
 
   // Kan wie op `van` staat ooit bij `doel` komen, met de opties van T.zoekPad (js/pad.js: `tot`, `naast`)? Nee als geen
@@ -725,19 +870,37 @@
   const DEUR = 2;
   const RASTERS = new WeakMap();
   let laatste = null; // het raster waar het laatst naar gevraagd werd: A* vraagt duizenden keren achter elkaar dezelfde kaart
+  // Vul het raster (over `vak`) op de tegels van x0, y0, b bij h.
+  function vulRaster(w, raster, vak, x0, y0, b, h) {
+    for (let y = y0; y < y0 + h; y++) {
+      for (let x = x0; x < x0 + b; x++) {
+        const t = T.tegel(w, x, y);
+        const v = t === 'muur' || t === 'buiten' ? null : T.voorwerpOp(w, x, y);
+        raster[(y - vak.y) * vak.b + (x - vak.x)] = t === 'muur' || t === 'buiten' || (v && T.VOORWERPEN[v.soort].blokkeert) ? VAST : t === 'deur' ? DEUR : VRIJ;
+      }
+    }
+  }
+  const rasterGoed = (r, w) => r.voorwerpen === w.voorwerpen && r.aantal === w.voorwerpen.length && r.b === w.b && r.h === w.h && r.vak === T.loopVak(w) && r.open === openGrootte(w);
   function vastRaster(w) {
     let r = laatste && laatste.w === w ? laatste : RASTERS.get(w);
-    if (!(r && r.voorwerpen === w.voorwerpen && r.aantal === w.voorwerpen.length && r.b === w.b && r.h === w.h && r.vak === T.loopVak(w))) {
+    if (!(r && rasterGoed(r, w))) {
       const vak = T.loopVak(w);
-      const raster = new Uint8Array(vak.b * vak.h);
-      for (let y = 0; y < vak.h; y++) {
-        for (let x = 0; x < vak.b; x++) {
-          const t = T.tegel(w, vak.x + x, vak.y + y);
-          const v = t === 'muur' || t === 'buiten' ? null : T.voorwerpOp(w, vak.x + x, vak.y + y);
-          raster[y * vak.b + x] = t === 'muur' || t === 'buiten' || (v && T.VOORWERPEN[v.soort].blokkeert) ? VAST : t === 'deur' ? DEUR : VRIJ;
+      const zelfde = r && r.voorwerpen === w.voorwerpen && r.aantal === w.voorwerpen.length && r.kaart === T.kaartVersie(w);
+      if (zelfde && opEiland(w) && binnenVak(r.vak, vak)) {
+        // Er ging land open: het oude raster gaat mee naar het (grotere) vak, en alleen de nieuwe stukken worden gevuld;
+        // wat daartussen ligt en niet open is, is buiten (VAST).
+        let raster = r.raster;
+        if (r.vak !== vak) {
+          raster = new Uint8Array(vak.b * vak.h).fill(VAST);
+          for (let y = 0; y < r.vak.h; y++) raster.set(r.raster.subarray(y * r.vak.b, (y + 1) * r.vak.b), (r.vak.y + y - vak.y) * vak.b + (r.vak.x - vak.x));
         }
+        for (const n of nieuweStukken(w, r.stukken)) vulRaster(w, raster, vak, n.x, n.y, n.b, n.h);
+        r = { ...r, vak, raster, open: openGrootte(w), stukken: new Set(w.open) };
+      } else {
+        const raster = new Uint8Array(vak.b * vak.h);
+        vulRaster(w, raster, vak, vak.x, vak.y, vak.b, vak.h);
+        r = { w, voorwerpen: w.voorwerpen, aantal: w.voorwerpen.length, b: w.b, h: w.h, vak, raster, kaart: T.kaartVersie(w), open: openGrootte(w), stukken: new Set(w.open || []) };
       }
-      r = { w, voorwerpen: w.voorwerpen, aantal: w.voorwerpen.length, b: w.b, h: w.h, vak, raster };
       RASTERS.set(w, r);
     }
     laatste = r;
@@ -751,7 +914,7 @@
     if (!T.opKaart(w, x, y)) return VAST;
     if ((x | 0) === x && (y | 0) === y) {
       const l = laatste;
-      if (!(l && l.w === w && l.voorwerpen === w.voorwerpen && l.aantal === w.voorwerpen.length && l.b === w.b && l.h === w.h && l.vak === T.loopVak(w))) vastRaster(w);
+      if (!(l && l.w === w && rasterGoed(l, w))) vastRaster(w);
       const { vak, raster } = laatste;
       const i = x - vak.x;
       const j = y - vak.y;

@@ -1261,6 +1261,10 @@
     eikenTot: T.t('oaks up to'),
     marktRij: T.t('market row at least'),
     openRond: T.t('land opens within'),
+    vooruit: T.t('land made ahead within'),
+    vooruitDeel: T.t('land made in parts of'),
+    vooruitMs: T.t('ms per frame for land made ahead'),
+    veldRand: T.t('walking fields reach beyond the village'),
     // Het lege begin, meebouwen, boeren uit het niets, de boeren
     kar: T.t('cart'),
     zaaigraan: T.t('seed grain'),
