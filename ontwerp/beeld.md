@@ -557,7 +557,9 @@ gelden.
   plein (`T.zichtbaarDoor`), behalve op een feest (sinds 10 okt; Marcel: "Ja akkoord"): dan staat het hele dorp er, en
   kreeg het dak van een huis ervoor twintig gaten naast elkaar (`pleinOpEenFeest`). Hoe je erdoorheen kijkt, is een keuze in de spelregels ("Door een huis
   heen kijken"): het **kijkvenster** (de standaard), een zacht rond venster rond wie erachter staat,
-  waarin de grond achter het huis en wie daar staat opnieuw getekend worden (`T.tekenKijkgat`); of het
+  waarin de grond achter het huis en wie daar staat opnieuw getekend worden (`T.tekenKijkgat`), één per wezen, na
+  het voorste voorwerp dat hem bedekt (sinds 13 okt: in een bos tekenden 20 tot 30 bomen elk hetzelfde gat, en
+  daardoor was het gat daar groter en harder van rand dan bedoeld; Marcel: "Dat is prima"); of het
   **raster**, waarin het hele huis of de hele boom om de andere pixel opengaat (`T.tekenGerasterd`).
   Of het plein meetelt, is de tweede keuze ("Wie je door een huis heen ziet": ook het plein, behalve op een feest, de
   standaard; het plein, ook op een feest; of alleen wie ertoe doet). Een boom van de bosrand

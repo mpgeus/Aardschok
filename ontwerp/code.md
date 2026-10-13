@@ -537,7 +537,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 - `js/doorkijk.js`: wie je door een boom of een huis heen ziet (`T.zichtbaarDoor`,
   `T.werkDoorkijkBij`), en hoe: het kijkvenster (`T.tekenKijkgat`) of het raster (`T.tekenGerasterd`),
-  een keuze in de spelregels (`beeld.md`, "Doorkijk"). `js/tekenen.js` vraagt het aan. Het eerste stuk
+  een keuze in de spelregels (`beeld.md`, "Doorkijk"). `js/tekenen.js` vraagt het aan: één kijkgat per wezen, na
+  het voorste voorwerp in de volgorde van tekenen dat hem bedekt (`T.voorsteKijkgaten`, 13 okt). Het eerste stuk
   dat uit `tekenen.js` ging (vraag 25, D, 26 sep).
 
 ### js/bouwstijl.js: de bouwstijl van een land

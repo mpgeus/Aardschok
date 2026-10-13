@@ -494,6 +494,7 @@
       lijst.push({ d: deur.x + deur.y, l: 1, punt: { x: deur.x, y: deur.y }, f: () => tekenDeur(ctx, deur, laag, helder) });
     }
     const zichtbaar = [];
+    const kijkgaten = new Map(); // voorwerp → de kijkgaten die erna komen (voorsteKijkgaten, hieronder)
     for (const v of T.voorwerpenIn(w, { x: vak.x0, y: vak.y0, b: vak.x1 - vak.x0 + 1, h: vak.y1 - vak.y0 + 1 })) {
       if (!T.isZichtbaar(w, v.x, v.y) || isGebakken(w, v)) continue;
       zichtbaar.push(v);
@@ -501,7 +502,7 @@
       const helder = k && inBeeld(k.id) ? 1 : GEDIMD;
       // Een gebouw (T.isGebouw: breder of dieper dan één tegel) krijgt `gebouw` mee: alleen dan is
       // één scalair dieptegetal niet genoeg, en zoekt tekenVolgorde zijn plek (zie hieronder).
-      lijst.push({ d: diepteVan(v), l: 1, punt: { x: v.x, y: v.y }, gebouw: T.isGebouw(v) ? v : undefined, f: () => tekenVoorwerp(ctx, S, v, helder) });
+      lijst.push({ d: diepteVan(v), l: 1, punt: { x: v.x, y: v.y }, gebouw: T.isGebouw(v) ? v : undefined, voorwerp: v, f: () => tekenVoorwerp(ctx, S, v, helder, kijkgaten.get(v)) });
     }
     // De akkers (alleen het nieuwe spel, ?kaart=gehucht — ontwerp/werklijst.md punt 1b): welk
     // stadium en welke variant een tegel heeft, weet js/akkers.js (T.akkerStadium e.a.); hier
@@ -569,7 +570,9 @@
     // nacht licht wordt (brandendeRamen, hieronder).
     const ramen = brandendeRamen(S);
     tekenZonneschaduw(ctx, S, lijst);
-    for (const item of tekenVolgorde(lijst)) {
+    const volgorde = tekenVolgorde(lijst);
+    voorsteKijkgaten(volgorde, kijkgaten);
+    for (const item of volgorde) {
       item.f();
       for (const r of ramen) if (isTekeningVan(item, r.g)) ponsRamen(ctx, r);
     }
@@ -597,6 +600,29 @@
     ctx.restore();
     tekenVignet(ctx, S, bw, bh);
   };
+
+  // Het kijkgat (js/doorkijk.js) om wie achter hoge voorwerpen staat, één per wezen: na het voorste voorwerp dat hem
+  // bedekt, zo ver open als het verst openstaande (v.doorkijk). Zo'n gat tekent alles erachter opnieuw, dus wat een
+  // voorwerp ervoor tekende, valt er toch onder weg. Tot 13 okt tekende elk voorwerp zijn eigen gat: in een bos stonden
+  // er 20 tot 30 bomen voor de schout, elk beeld hetzelfde gat, en zonder videokaart kostte dat zo'n 16 ms per beeld
+  // (Marcel: "Dat is prima"; alleen de zachte rand gaat iets minder open door de bomen erachter). Vult kijkgaten:
+  // voorwerp → [{ e, sterkte }], in de volgorde van tekenen.
+  T.voorsteKijkgaten = voorsteKijkgaten; // ook voor test/doorkijk.test.cjs
+  function voorsteKijkgaten(volgorde, kijkgaten) {
+    const per = new Map(); // wezen → { v: het voorste voorwerp tot nu toe, sterkte }
+    for (const item of volgorde) {
+      const v = item.voorwerp;
+      if (!v || !v.kijkgat || !(v.doorkijk > 0.02)) continue;
+      for (const e of v.kijkgat) {
+        const was = per.get(e);
+        per.set(e, { v, sterkte: Math.max(v.doorkijk, was ? was.sterkte : 0) });
+      }
+    }
+    for (const [e, { v, sterkte }] of per) {
+      if (!kijkgaten.has(v)) kijkgaten.set(v, []);
+      kijkgaten.get(v).push({ e, sterkte });
+    }
+  }
 
   // Een heuvel voor iemand dekt hem af (werklijst vraag 121, stap 2; Marcel, 8 okt: "Akkoord"). De grond ligt als één
   // buffer onder alles (werkGrondBij), dus wie achter de rand van een richel staat, stond er bovenop. Een tegel die
@@ -2246,7 +2272,8 @@
   // tekenWezen). Alleen scherm, en weg met het voorwerp of het wezen.
   const vorigBeeld = new WeakMap();
 
-  function tekenVoorwerp(ctx, S, v, helder) {
+  // gaten: de kijkgaten die na dit voorwerp komen (voorsteKijkgaten), of niets.
+  function tekenVoorwerp(ctx, S, v, helder, gaten) {
     const p = opGrond(v.x, v.y);
     // Buiten komt het plaatje uit de tegelvellen (tegels/, zie js/sprites.js): een boom, een
     // struik, een gebouw. Het anker van de cel is de voet, dus hij valt precies op het
@@ -2286,7 +2313,7 @@
       if (sneeuwStuk && raster) T.tekenGerasterd(ctx, sneeuwStuk, p.x, p.y, helder, doorkijk);
       else if (sneeuwStuk) T.sprites.teken(ctx, sneeuwStuk, p.x, p.y, helder);
       if (alpha < 1) ctx.globalAlpha = 1;
-      if (!raster && doorkijk > 0.02 && v.kijkgat) for (const e of v.kijkgat) T.tekenKijkgat(ctx, S, e, doorkijk, v);
+      if (!raster && gaten) for (const { e, sterkte } of gaten) T.tekenKijkgat(ctx, S, e, sterkte, v);
       return;
     }
     // De pilaar staat nog niet in de kunst; die blijft vlakken.

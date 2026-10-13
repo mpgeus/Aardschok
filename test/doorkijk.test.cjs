@@ -128,3 +128,22 @@ test('op een feest telt het plein niet mee, wie je zoekt met een voorval wel', (
   T.zetOptie('doorkijkPlein', 'ookHetPlein');
   assert.equal(T.zichtbaarDoor(S, kind), null);
 });
+
+// Staan er meer hoge voorwerpen voor iemand, dan komt zijn kijkgat één keer, na het voorste in de volgorde van tekenen,
+// en zo ver open als het verst openstaande (js/tekenen.js, voorsteKijkgaten; 13 okt: in een bos tekenden 20 tot 30 bomen
+// elk beeld hetzelfde gat om de schout).
+test('één kijkgat per wezen, na het voorste voorwerp dat hem bedekt', () => {
+  const schout = { soort: 'schout' };
+  const kind = { soort: 'dorpeling' };
+  const achter = { kijkgat: [schout], doorkijk: 1 };
+  const midden = { kijkgat: [schout, kind], doorkijk: 1 };
+  const voor = { kijkgat: [schout], doorkijk: 0.4 }; // gaat net open
+  const dicht = { kijkgat: [kind], doorkijk: 0 }; // was dicht: telt niet
+  const volgorde = [achter, midden, dicht, voor].map((v) => ({ voorwerp: v }));
+  volgorde.splice(1, 0, { f: () => {} }); // een wezen of iets anders zonder voorwerp
+  const gaten = new Map();
+  T.voorsteKijkgaten(volgorde, gaten);
+  assert.deepEqual([...gaten.keys()], [voor, midden], 'alleen het voorste voor elk wezen');
+  assert.deepEqual(gaten.get(voor), [{ e: schout, sterkte: 1 }], 'zo open als het verst openstaande');
+  assert.deepEqual(gaten.get(midden), [{ e: kind, sterkte: 1 }]);
+});
