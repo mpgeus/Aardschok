@@ -805,15 +805,18 @@
       // Wie hout naar huis bracht, legt het bij zijn deur neer.
       if (e.draagt && !e.pad.length && e.thuis && T.afstand(e.thuis, { x: e.tx, y: e.ty }) <= 1) e.draagt = null;
       // De schaft: brood op de akker (js/dag.js). Wie op zijn land werkt, blijft er staan tot het werk weer begint (wie
-      // er net heen liep, komt er nog aan), en neemt dan de volgende tegel.
+      // er net heen liep, komt er nog aan en schaft daar), en neemt dan de volgende tegel.
       if (deel === 'schaft' && e.werkt && !T.vrijeDag(D, dag) && magWerken(S, D, e)) {
         onthoudHalfWerk(e, nu);
-        if (e.werkt.tot != null) Object.assign(e.werkt, { rust: true, schaft: true });
+        const aangekomen = !e.pad.length && e.tx === e.werkt.x && e.ty === e.werkt.y;
+        if (e.werkt.tot != null || aangekomen) Object.assign(e.werkt, { rust: true, schaft: true });
         continue;
       }
       if (e.werkt && e.werkt.schaft) {
         delete e.werkt.schaft;
-        e.werkt.tot = Math.min(e.werkt.tot, nu);
+        // wie er net aankwam, begint nu aan zijn tegel (opHetLand)
+        if (e.werkt.tot != null) e.werkt.tot = Math.min(e.werkt.tot, nu);
+        else e.werkt.rust = false;
       }
       const soort = werktijd && magWerken(S, D, e) ? (kavel ? 'rooien' : schuur ? 'hout' : hut ? 'jagen' : wijn ? 'plukken' : oogst ? 'binnenhalen' : T.veldwerkVandaag(D, e, datum)) : null;
       if (!soort) {
