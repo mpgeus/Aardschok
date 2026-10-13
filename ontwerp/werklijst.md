@@ -24,23 +24,27 @@ wijnboerderij is een eigen gebouw, met de wijngaard als veld ernaast. **B2 is be
 
 **Eerst optimaliseren** (Marcel, 13 okt: "noteren voor de nieuwe sessie dat we eerst meer optimalisaties
 uitvoeren"), vóór B2c. Meten met `npm run stukmeting` (de schout op 30× van het kamp naar de kust, in de browser; wat
-het nu geeft staat in `kaarten.md`, "Het hele eiland"), en wat het zwaarst is eerst. De nacht van het dorp is af (onder
-"Af"). Wat er nu ligt, gemeten 13 okt:
-- **Een stuk dat nog niet klaar lag** als het opengaat (twee stukken vlak na elkaar, of de schout die van richting
-  verandert): 20 tot 45 ms land maken. Vooruit maken in de richting waar hij heen loopt (het eind van zijn pad), of meer
-  tijd per beeld (`vooruit`, `vooruitMs` in `T.WERELD_INSTELLINGEN`).
-- **Het tekenen als de camera snel meeschuift**: 75 tot 100 ms als er veel grond tegelijk in beeld komt (alle nieuwe
-  stukken van de grondbuffer in één beeld, `werkStukkenBij` in `js/tekenen.js`); nieuw land doet het al een per beeld.
-- **Tekenbeelden van 90 tot 130 ms terwijl de schout stilstaat** (13 okt, gemeten na de nacht: het proefdorp op 30×,
-  zonder dat de kaart in dat beeld veranderde). Eerst uitzoeken wat er dan getekend wordt; misschien hetzelfde als het
-  punt hieronder (de hele grond opnieuw na een kaartverandering). **Bezig in sessie `ccr-beba0277-q5zzk8`** (13 okt):
-  uitgezocht, het plan ligt bij Marcel.
-- **Elke kaartverandering tekent de hele grond opnieuw** (een gevelde boom, een gebouw): de sleutel van de grondbuffer
-  hangt aan `T.kaartVersie` (via `padVersie` en de platte dingen), net als alle bewaarde wegen en velden. Nog niet
-  gemeten; per plek kan het, zoals nu bij nieuw land.
+het nu geeft staat in `kaarten.md`, "Het hele eiland"). De nacht van het dorp is af (onder "Af"). Uitgezocht (13 okt,
+`kaarten.md`, "Wat de meting mat"): de trage tekenbeelden met een stilstaande schout en bij de meeschuivende camera
+zijn het bos: daar staan 20 tot 30 bomen vóór de schout, en elk tekent zijn eigen kijkgat om hem heen. En "tekenen" in
+de meting is alleen de tijd van de code: zonder videokaart schildert de browser het beeld grotendeels daarna. Het
+plan (Marcel, 13 okt: "volgorde 1 tot 4 is goed"; ook zonder videokaart moet het lopen: "Het liefste wel. Je zult net
+zien dat er een niche markt is voor spelers met low end hardware"). **Bezig in sessie `ccr-beba0277-q5zzk8`** (13 okt):
+1. **De meetlat:** `npm run stukmeting` geeft ook de echte tijd tussen twee beelden, en meet ook met het pad van de
+   videokaart.
+2. **Eén kijkgat per persoon:** alleen het voorste voorwerp dat iemand bedekt, maakt het gat (Marcel: "Dat is prima";
+   alleen de zachte rand gaat iets minder open).
+3. **Een kaartverandering tekent alleen de grond rond die plek opnieuw** (een gevelde boom, een gebouw), een stuk per
+   beeld, zoals nieuw land; nu de hele grond in beeld (49 ms in plaats van 11).
+4. **Opnieuw meten, en het stuk dat niet klaar lag** (23 tot 64 ms land maken, 8 van de 18 stukken): verder vooruit
+   maken langs het pad van de schout (`vooruit`, `vooruitMs` in `T.WERELD_INSTELLINGEN`).
+5. **Daarna: het bos zonder videokaart.** In het bos 67 ms per beeld, ook zonder kijkgaten (1100 bomen, op de processor
+   twee keer vergroot); met een videokaart gaan ze in 60 tot 90 opdrachten. Wat het kan worden, eerst met Marcel.
 - Daarna, of tussendoor: de toets voor dubbele namen in `Spel` (`opmerkingen.md`).
 
 **Wacht op Marcel:**
+- **Meten op je eigen pc** (13 okt, Marcel: "kan ik straks wel even doen"): Nieuw spel, loop met de schout het bos in
+  ten zuiden van het kamp, blijf staan en druk `F2`: hoeveel beelden per seconde, en wat zegt de meter over tekenen?
 - **Het hele eiland bekijken** (B2b): Nieuw spel, en loop met de schout het land uit, naar de kust (met `F2` de meter):
   het land gaat open waar hij komt. Op 30× hapert het nog even als hij heel snel nieuw land in loopt; zeg het als je dat
   ziet. Wat opviel en te kiezen is (`opmerkingen.md`): een richel zonder helling blijft onbereikbaar, en een hol kan

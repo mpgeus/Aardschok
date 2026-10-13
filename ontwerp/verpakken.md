@@ -61,6 +61,9 @@ Chromium-venster draagt de hele browser mee). Met een videokaart tekent allebei 
 - **De lat**, zodat "geen lag" iets is wat je kunt nakijken: op **1920 bij 1080 en op 4K** 60 beelden per seconde, geen
   beeld boven de 50 ms in gewoon spel, en het hele programma onder 1,5 GB bij 200 mensen; en een minimum voor de
   Steam-pagina (4 GB geheugen, een videokaart). De Steam Deck (1280 bij 800) is kleiner, en dus lichter.
+  **Ook zonder videokaart** (Marcel, 13 okt: "Het liefste wel. Je zult net zien dat er een niche markt is voor spelers
+  met low end hardware"): het spel moet ook op de processor lopen, dus wat zonder videokaart traag is, is werk (het bos:
+  werklijst, "Eerst optimaliseren", stap 5).
 - **Gemeten op die schermen** (dezelfde dag, de schil, zonder videokaart): op 1920 bij 1080 dichtbij zo'n 48 beelden
   per seconde en in het overzicht 30, samen ~950 MB; op 4K 15 beelden per seconde, het eerste keer uitzoomen 550 ms, en
   ~1,4 GB. Op 4K zijn er vier keer zoveel pixels als op 1920 bij 1080, en het spel tekent ze nu allemaal zelf: zonder

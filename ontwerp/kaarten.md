@@ -178,6 +178,17 @@ nummers passen op het hele eiland, en `T.eilandStuk` maakt elk stuk los (64 bij 
    er drie keer zoveel tijd om vooruit te maken. Een gevelde boom kost het lopen nu niets meer, ook als je veel land
    kent (was 13 ms bij 54 stukken). De zwaarste beelden die overblijven, zijn de nacht van het dorp (70 tot 120 ms),
    die er al was: iets voor later, niet voor de stukken (13 okt opgelost met `T.bosInVak`: nu 29 tot 38 ms). Een worker is niet nodig.
+   **Wat de meting mat** (13 okt, stand 3dba66b, dezelfde browser zonder videokaart, het proefdorp op eiland 2, 30×):
+   met de schout stil bij het kamp kost het tekenen 11 ms, maar ligt er 50 ms tussen twee beelden (17 per seconde);
+   11 tegels zuidelijker, in het bos, 47 ms tekenen en 83 ms tussen twee beelden (12 per seconde). Twee dingen. Het
+   eerste: in het bos staan 19 tot 31 bomen vóór de schout, en elk tekent zijn eigen kijkgat om hem heen
+   (`T.tekenKijkgat`), elk beeld hetzelfde gat; zonder kijkgaten 10 ms tekenen en 67 ms tussen twee beelden. Het tweede:
+   "tekenen" is alleen de tijd van de code; zonder videokaart schildert de browser het beeld grotendeels daarna, en een
+   plaatje dat elk beeld nieuw is (zoals een kijkgat) dwingt hem dat midden in het tekenen te doen. Het getal schuift
+   dus heen en weer; eerlijk is de tijd tussen twee beelden. Met een videokaart (de spelregel Tekenen, standaard) gaan
+   de 1100 bomen in beeld in 57 tot 89 opdrachten, en kost elk kijkgat een plaatje naar de kaart (17 tot 32 per beeld).
+   Verder: een kaartverandering tekent alle grond in beeld opnieuw (zes stukken van de buffer, 49 ms tekenen in plaats
+   van 11), en 8 van de 18 nieuwe stukken lagen niet klaar (23 tot 64 ms land maken). Het plan staat in de werklijst.
    **Het ontwerp van stap 2 tot 6** (Claude, 13 okt; zo kan een volgende sessie verder):
    - *Wat in S staat* (bewaard): wat veranderde, per tegelnummer (`T.tegelNummer`): `w.tegelsAnders` (Map naar het woord),
      `w.grondAnders` (Map naar de grondtegel; alleen de maker verandert de grond, het spel nooit), `w.gerooid` (Set: een
