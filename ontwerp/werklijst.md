@@ -94,6 +94,8 @@ wijnboerderij, de akker bij een boerderij; de raad zegt het als de wijn het jaar
 
 ## B2. Het hele eiland (vraag 117, stap 3)
 
+**Bezig in sessie `claude/amazing-maxwell-u0hq09`** (13 okt): eerst het plan voor Marcel.
+
 Marcel, 11 okt: "Let op, de wereld moet 1 geheel worden het vlakke van 100x100 is niet hoe het blijft. We hebben een heel
 land van 2500x2500", en op de vraag wanneer: "A ja", dus direct na B en vóór C, want C meet afstanden (de ossenkar, een
 schuur verder weg die daar bereik geeft), en die meet je op 100 bij 100 verkeerd. Wat het vraagt (`spel.md`, "Het
