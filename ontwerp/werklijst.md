@@ -22,8 +22,8 @@ De toetsen en het gereedschap spelen op het proefdorp (`T.proefdorp`, `Spel.debu
 wijnboerderij is een eigen gebouw, met de wijngaard als veld ernaast. **B2 is af** (13 okt, onder "Af"), op Marcels blik
 na: het hele eiland in stukken, opslaan wat veranderde, het optimaliseren, en de mist (B2c).
 
-**Het volgende is B3, de afwisseling**: eerst een plan met Marcel. Daarna, of tussendoor: de toets voor dubbele namen in
-`Spel` (`opmerkingen.md`).
+**B3, de afwisseling, wordt gebouwd** (13 okt, Marcel: "A1, B1, C1, D1"; de stappen bij B3), met tussendoor de toets
+voor dubbele namen in `Spel` (`opmerkingen.md`; "ja, bouw die toets").
 
 **Wacht op Marcel:**
 - **De mist bekijken** (B2c, 13 okt; `spel.md`, "Zo werkt de mist nu"): Nieuw spel, en zoom uit (het wiel, of `Tab`):
@@ -109,12 +109,16 @@ wijnboerderij, de akker bij een boerderij; de raad zegt het als de wijn het jaar
 
 ## B3. Afwisseling (vraag 154)
 
-**Bezig in sessie `ccr-58035c3c-lckq21`** (13 okt): het plan met Marcel.
+**Bezig in sessie `ccr-58035c3c-lckq21`** (13 okt): het bouwen, stap 1 tot 5.
 
 Marcel, 11 okt: "Wijn wordt ook eten. Afwisseling wordt de kern. Mensen worden anders minder productief." Wie maar één
-ding eet, werkt minder; wat er al is en wat het vraagt: `gameloop.md`, "Besloten". Eerst een plan met Marcel: welke
-soorten eten tellen, hoe je afwisseling meet, en wat minder productief is. Na B2 en vóór C, zodat C de echte economie
-meet (Marcel: "3 ja").
+ding eet, werkt minder. Het plan, de maaltijd (Marcel, 13 okt: "A1, B1, C1, D1"), staat in `gameloop.md`, "Besloten". Na
+B2 en vóór C, zodat C de echte economie meet (Marcel: "3 ja"). De stappen:
+1. De maaltijd en de afwisseling (`js/behoeften.js`), met toetsen.
+2. Eén factor voor al het werk: de werkplaatsen, het bouwen en het veldwerk.
+3. Zien: een toestand in de balk, de raad zegt wat er mist; de kar brengt kaas en gezouten vlees.
+4. De kolonist leert het, en de speeltest meet hoeveel soorten en hoe lang op welk werk.
+5. `spel.md`, `code.md` en `gameloop.md` bij.
 
 ## C. De ossenkar (vraag 152, de proef)
 

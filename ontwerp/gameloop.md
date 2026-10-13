@@ -56,6 +56,15 @@ moet het hart zijn, en het gevecht wat ze oplevert; een goed gevecht is wat de a
   ging toen op in de wensen per stand (`js/wensen.js`), en voor de drank zei Marcel op 10 okt al "Afwisseling. Je kunt
   niet leven op 1 ding". Nieuw is dat het de mensen productiever maakt, niet tevredener. Een gedachte van Claude: dan
   kan het de eenvoudige opvolger worden van de wensen per stand, die in ronde 3 van het snoeien op de proef staan.
+  **Het plan, de maaltijd** (Marcel, 13 okt: "A1, B1, C1, D1"): het dorp eet elke dag één maaltijd, in gelijke delen
+  over de soorten die er liggen (is een soort op, dan vullen de andere aan; het zaaigraan blijft apart tot de nood, en
+  binnen een soort gaat eerst op wat bederft). De afwisseling is hoeveel soorten er vandaag minstens een tiende van de
+  maaltijd waren, en het werk volgt daaruit (eerste gok: 1 soort 60%, 2 75%, 3 90%, 4 of meer 100%; in de werkbank).
+  A1: elk eten is een eigen soort (graan, brood, vlees, vis, wijn, kaas met de melk, groente, eieren); groente en
+  eieren vullen een kleine maag (een moestuin voedt zo'n 5 mensen). B1: het geldt voor al het werk: de werkplaatsen, het
+  bouwen en het veldwerk. C1: de tevredenheid op het werk blijft voorlopig, en de twee vermenigvuldigen; ronde 3 beslist
+  over de wensen. D1: de kar brengt ook kaas en gezouten vlees voor een paar weken, zodat het dorp op 90% begint en het
+  werk zakt als die op zijn: vóór die tijd een jager en een moestuin.
 
 Daarmee gaan om: "geen hand van bovenaf" (30 sep, `concept.md`) en "de mensen bouwen zelf" (3 okt, vraag 103). Ook
 (Marcel, 11 okt): heel "rijk worden en arm lijken" gaat eruit (het verstoppen, de inner die
