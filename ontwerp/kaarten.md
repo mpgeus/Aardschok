@@ -99,9 +99,16 @@ gaat in stukken en alleen wat in beeld is (`js/tekenen.js`, sinds 9 okt), A\* (`
 nummers passen op het hele eiland, en `T.eilandStuk` maakt elk stuk los (64 bij 64 in zo'n 12 ms in Node).
 
 **De stappen** (A: "ja"):
-1. **B2a, één weg naar de tegels.** Niets leest de rechthoek nog zelf: alles vraagt het via een paar functies in
-   `js/wereld.js` (`T.tegel` en `T.grondOp` zijn er al), ook de maat. Het spel verandert niet: de speeltest geeft
-   dezelfde uitkomst, en de schermen zijn byte voor byte gelijk. Daarna is B2b een verandering op één plek.
+1. **B2a, één weg naar de tegels: af** (13 okt). Niets leest de rechthoek nog zelf: alles vraagt het aan
+   `js/wereld.js` (`T.tegel`, `T.zetTegel`, `T.grondOp`, `T.opKaart`, `T.kaartVak`, `code.md`), en
+   `test/tegels.test.cjs` houdt het zo. Het spel veranderde niet: de speeltest (kolonist, zaad 1 tot 3) liep op alle
+   drie de eilanden precies hetzelfde af, en de 23 schermen bleven byte voor byte gelijk. Wel nieuw: het slijten van
+   de paadjes telt per tegelnummer (`T.tegelNummer`), dus versie 9 van het bewaarde spel. **Wat B2b nog moet weten:**
+   een lijst over de hele kaart beslaat nu `T.kaartVak(w)` en moet een eigen vak krijgen; de rand van het eiland
+   (`T.randVanHetEiland`, en de bosrand en de grond erbuiten in `js/tekenen.js`) rekent vanaf de hoek van de kaart en
+   gaat weg; het toeval van de beesten (`lot(..., y * vak.b + x, ...)` in `js/beesten.js`) hangt aan de breedte van het
+   vak; een stuk of zes toetsen maken een kaart zonder `b` en `h` (boomvormen, groen, treden, wensen, hooi, weides), en
+   veel toetsen en het gereedschap (`gereedschap/grootte/`, `wereld-tool.js`, `keuring.js`) lezen `w.tegels` nog zelf.
 2. **B2b, de kaart in stukken.** De kaart is het eiland, in stukken van 64 bij 64 als compacte getallen, in de
    coördinaten van het eiland. Een stuk wordt uit het nummer gemaakt als het nodig is, verspreid over de beelden; de
    bomen staan per stuk. De rand om je land en het donker erachter gaan weg, want het eiland is de kaart. Wat nu een

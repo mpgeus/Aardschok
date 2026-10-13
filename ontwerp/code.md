@@ -227,6 +227,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 ### js/wereld.js: wezens, voorwerpen, bomen, en de vragen over een kaart
 
+- **Eén weg naar de tegels** (B2a, 13 okt; `kaarten.md`, "Het hele eiland"): wat een tegel is (`T.tegel`, `T.zetTegel`),
+  welke grond eronder ligt (`T.grondOp`), of een tegel op de kaart ligt (`T.opKaart`), wat de kaart beslaat
+  (`T.kaartVak(w)`: `{ x, y, b, h }`), de kamers om een tegel (`T.burenKamersOp`), of een kaart tegels en grond heeft
+  (`T.heeftTegels`, `T.heeftGrond`), en een tegel als getal dat niet van de maat afhangt (`T.tegelNummer`,
+  `T.tegelVanNummer`, voor wat per tegel bewaard wordt). Alleen `js/wereld.js` en `js/kaart.js` lezen `w.tegels`,
+  `w.grond`, `w.b` en `w.h` (`test/tegels.test.cjs`). Een lijst over de hele kaart (het vaste raster, de eilanden, de
+  velden van het lopen, het net van de paadjes, de natuur bij een gebouw, de beken, het bos van de beesten, de lichtkaart)
+  beslaat `T.kaartVak(w)`, met tegel (x, y) op plek `(y - vak.y) * vak.b + (x - vak.x)`; in B2b krijgt elk zijn eigen vak.
 - `js/wereld.js`: wat een wezen is (`T.WEZENS`) en wat een voorwerp is (`T.VOORWERPEN`), de bomen en de struiken op één
   plek (`T.BOMEN`, vraag 148: wat een boom van het bos is, `T.isBosBoom`, wat je rooit, wat de houthakker inplant, de
   wind en de bosrand; een nieuwe soort telt zo overal mee), de
