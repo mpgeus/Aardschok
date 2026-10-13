@@ -33,7 +33,8 @@ het nu geeft staat in `kaarten.md`, "Het hele eiland"), en wat het zwaarst is ee
   stukken van de grondbuffer in één beeld, `werkStukkenBij` in `js/tekenen.js`); nieuw land doet het al een per beeld.
 - **Tekenbeelden van 90 tot 130 ms terwijl de schout stilstaat** (13 okt, gemeten na de nacht: het proefdorp op 30×,
   zonder dat de kaart in dat beeld veranderde). Eerst uitzoeken wat er dan getekend wordt; misschien hetzelfde als het
-  punt hieronder (de hele grond opnieuw na een kaartverandering).
+  punt hieronder (de hele grond opnieuw na een kaartverandering). **Bezig in sessie `ccr-beba0277-q5zzk8`** (13 okt):
+  uitgezocht, het plan ligt bij Marcel.
 - **Elke kaartverandering tekent de hele grond opnieuw** (een gevelde boom, een gebouw): de sleutel van de grondbuffer
   hangt aan `T.kaartVersie` (via `padVersie` en de platte dingen), net als alle bewaarde wegen en velden. Nog niet
   gemeten; per plek kan het, zoals nu bij nieuw land.
