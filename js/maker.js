@@ -1476,11 +1476,12 @@
           else if (bijWater(x, y)) naam = trek(G.oeverGroen, lot(x, y, 954));
           else if (o === VRIJ && bosBij1[t]) naam = trek(G.bosrand, lot(x, y, 955));
         }
-        if (naam) leg(naam, x, y);
+        if (naam && !E.brugOp.has(y * E.maat + x)) leg(naam, x, y); // geen waterlelie onder een bruggetje
       }
     }
 
-    // Wat het stuk zelf is: de hoekpunten, de grondtegels en de dingen binnen het stuk.
+    // Wat het stuk zelf is: de hoekpunten, de grondtegels (een bruggetje van het eiland, js/eiland.js, ligt over het
+    // water) en de dingen binnen het stuk.
     const hoek = new Array((b + 1) * (h + 1));
     for (let vy = y0; vy <= y0 + h; vy++) for (let vx = x0; vx <= x0 + b; vx++) hoek[(vy - y0) * (b + 1) + (vx - x0)] = letter[hi(vx, vy)];
     const g = grondIndex();
@@ -1491,7 +1492,8 @@
         const hoeken = T.grondTegelHoeken([letter[hi(x, y)], letter[hi(x + 1, y)], letter[hi(x + 1, y + 1)], letter[hi(x, y + 1)]].map((l) => GRONDSOORT[l]));
         const lijst = new Set(hoeken).size === 1 ? g.vlak[hoeken[0]] : g.overgang[hoeken.join(',')];
         if (!lijst) throw new Error(`het eiland heeft geen grondtegel voor ${hoeken.join(', ')} op (${x}, ${y})`); // geen tekst
-        grond[(y - y0) * b + (x - x0)] = lijst[Math.floor(lot(x, y, 63) * lijst.length)];
+        const brug = E.brugOp.get(y * E.maat + x);
+        grond[(y - y0) * b + (x - x0)] = brug ? g.brug[`${brug.as} ${brug.deel}`] : lijst[Math.floor(lot(x, y, 63) * lijst.length)];
         const d = ding[ti(x, y)];
         if (d) dingen.push({ naam: d, x, y });
       }

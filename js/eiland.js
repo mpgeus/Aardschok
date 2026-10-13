@@ -69,6 +69,7 @@
       langsRivier: 3, // een vak met een rivier erin volgen
       bestaand: 0.35, // een vak waar al een weg ligt
       breed: 1.2, // halve breedte op de tegels
+      brugLang: 7, // een bruggetje over een rivier of een meer is hooguit zo lang (tegels water); langer, dan geen brug
     },
   };
   const IN = () => T.EILAND_INSTELLINGEN;
@@ -1340,6 +1341,95 @@
     E.wegIndex = indexVan(E, lijnen, () => W.breed + 1);
   }
 
+  // De bruggetjes (B2b; Marcel, 13 okt: de wegen zijn "die van het eiland"): langs elke weg, tegel voor tegel, waar hij
+  // tussen twee droge tegels over zoet water gaat (een rivier of een meer; over de zee niet), een recht bruggetje langs x
+  // of y, de kant op waar de weg heen gaat, van de ene droge tegel tot de overkant, hooguit `brugLang` tegels water. Een
+  // tegel is water als een van zijn hoekpunten nat is, zoals in T.landStuk (js/maker.js). `E.bruggen` is een lijst
+  // { as, tegels }, en `E.brugOp` zegt per tegel (y * E.maat + x) welk deel hij is: { as, deel } met deel 'begin',
+  // 'midden' of 'eind', zoals de grondtegels van een brug (tegels/rand.tsx).
+  function legBruggen(E) {
+    const lang = IN().wegen.brugLang;
+    const nat = new Map(); // per tegel: 0 droog, 1 zoet water, 2 de zee
+    // Eerst per vak: ligt er in de vakken eromheen geen zee, geen meer en geen rivier dichtbij, dan is de tegel droog, en
+    // hoeft hij niet uit de ruis te komen (dat kost per tegel de helft van een stuk eiland). Twee vakken ver, want een
+    // hoekpunt kan in het vak ernaast liggen, en een meer staat ook in de vakken naast het zijne (T.eilandStuk).
+    const misschienNat = (x, y) => {
+      const vx = Math.floor(x / E.vak);
+      const vy = Math.floor(y / E.vak);
+      for (let dy = -2; dy <= 2; dy++) {
+        for (let dx = -2; dx <= 2; dx++) {
+          if (vx + dx < 0 || vy + dy < 0 || vx + dx >= E.n || vy + dy >= E.n) return true;
+          const k = (vy + dy) * E.n + vx + dx;
+          if (E.zee[k] || E.meer[k] >= 0 || E.rivierAfstand[k] < 2 * E.vak + E.rivierBreed[k]) return true;
+        }
+      }
+      return false;
+    };
+    const natOp = (x, y) => {
+      const k = y * E.maat + x;
+      if (!nat.has(k) && !misschienNat(x, y)) nat.set(k, 0);
+      if (!nat.has(k)) {
+        const s = T.eilandStuk(E, x - 0.5, y - 0.5, 2, 2).streek;
+        let n = 0;
+        for (const i of s) {
+          if (i === S.zee) n = 2;
+          else if ((i === S.meer || i === S.rivier) && !n) n = 1;
+        }
+        nat.set(k, n);
+      }
+      return nat.get(k);
+    };
+    E.bruggen = [];
+    E.brugOp = new Map();
+    const probeer = (van, naar) => {
+      // recht vanaf `van`, langs de as waarlangs `naar` het verst weg ligt
+      const as = Math.abs(naar.x - van.x) >= Math.abs(naar.y - van.y) ? 'x' : 'y';
+      const dx = as === 'x' ? Math.sign(naar.x - van.x) : 0;
+      const dy = as === 'y' ? Math.sign(naar.y - van.y) : 0;
+      const tegels = [];
+      let x = van.x + dx;
+      let y = van.y + dy;
+      while (tegels.length <= lang && natOp(x, y) === 1) {
+        tegels.push({ x, y });
+        x += dx;
+        y += dy;
+      }
+      // de overkant moet droog zijn, en dicht bij waar de weg verder gaat
+      if (!tegels.length || tegels.length > lang || natOp(x, y) !== 0 || Math.max(Math.abs(x - naar.x), Math.abs(y - naar.y)) > 2) return null;
+      return { as, tegels };
+    };
+    for (const l of E.wegen) {
+      // de tegels waar de lijn langs gaat, in volgorde
+      const rij = [];
+      for (let i = 0; i + 1 < l.punten.length; i++) {
+        const [ax, ay] = l.punten[i];
+        const [bx, by] = l.punten[i + 1];
+        const stappen = Math.max(1, Math.ceil(Math.sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay)) * 4));
+        for (let s = 0; s <= stappen; s++) {
+          const x = Math.round(ax + ((bx - ax) * s) / stappen);
+          const y = Math.round(ay + ((by - ay) * s) / stappen);
+          const vorige = rij[rij.length - 1];
+          if (!vorige || vorige.x !== x || vorige.y !== y) rij.push({ x, y });
+        }
+      }
+      for (let i = 1; i < rij.length; i++) {
+        if (!natOp(rij[i].x, rij[i].y) || natOp(rij[i - 1].x, rij[i - 1].y)) continue;
+        let j = i;
+        while (j < rij.length && natOp(rij[j].x, rij[j].y)) j++;
+        if (j >= rij.length) break;
+        const zee = rij.slice(i, j).some((t) => natOp(t.x, t.y) === 2);
+        const brug = zee ? null : probeer(rij[i - 1], rij[j]) || probeer(rij[j], rij[i - 1]);
+        if (brug && !brug.tegels.some((t) => E.brugOp.has(t.y * E.maat + t.x))) {
+          // begin, midden en eind in de volgorde waarin het tekenen ze legt (van achter naar voor), zoals de maker
+          const op = brug.tegels.slice().sort((p, q) => p.x + p.y - (q.x + q.y));
+          op.forEach((t, k) => E.brugOp.set(t.y * E.maat + t.x, { as: brug.as, deel: k === 0 ? 'begin' : k === op.length - 1 ? 'eind' : 'midden' }));
+          E.bruggen.push(brug);
+        }
+        i = j;
+      }
+    }
+  }
+
   // ---- je land op het eiland (stap 2) --------------------------------------------------------------------------------
 
   // Het land van b bij h tegels om een plek van het eiland, voor de maker (js/maker.js, vraag 117, stap 2): per tegel de
@@ -1441,6 +1531,7 @@
     doe('streken', () => legStreken(E));
     doe('plekken', () => legPlekken(E, r));
     doe('wegen', () => legWegen(E));
+    doe('bruggen', () => legBruggen(E));
     E.tijd = Date.now() - begin;
     return E;
   };

@@ -155,6 +155,10 @@ nummers passen op het hele eiland, en `T.eilandStuk` maakt elk stuk los (64 bij 
      `T.randVanHetEiland`) gaat weg, de lichtkaart (`lichtKaartVan`) en `hoogsteVan` gaan per stuk, en de voorwerpen per
      stuk in beeld in plaats van elk beeld alle `w.voorwerpen`. De buffer van de grond werkt al in stukken van het
      scherm en hoeft niet om.
+   - *De wegen zijn die van het eiland* (Marcel, 13 okt: "Die van het eiland"): ze komen al op je plek uit, en de maker
+     legt geen eigen wegen meer. Waar een weg van het eiland een rivier of een meer kruist, legt het eiland een recht
+     bruggetje (in de schets, `E.bruggen`, hooguit `eilandBrug.lang` tegels water), zodat je over de wegen het hele
+     eiland over kunt.
    - *Nog te doen voor de spelregel Hoogte* (standaard uit): de hoogte per stuk (`w.hoogte` is nu één raster).
 3. **B2c, de mist.** Zwart wat niemand van jou zag, grijs wat je zag maar nu niet ziet, helder waar je mensen kijken.
    Elk van je mensen ziet een kring om zich heen (de schout verder), en je gebouwen ook; de getallen in de werkbank. Een

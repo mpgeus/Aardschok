@@ -70,3 +70,24 @@ test('landStuk: bomen in het bos, groen in de wei, en niets wat vaststaat in het
   assert.ok(bomen.reduce((n, b) => n + tel[b], 0) > 300, `bomen: ${JSON.stringify(tel)}`);
   for (const naam of ['varen', 'grasPol', 'struik']) assert.ok(tel[naam] > 0, `${naam}: ${JSON.stringify(tel)}`);
 });
+
+// De wegen van het eiland gaan over een rivier of een meer met een recht bruggetje (js/eiland.js, legBruggen; Marcel,
+// 13 okt: "Die van het eiland"), en een stuk legt het over het water.
+test('landStuk: een bruggetje van het eiland ligt recht over het water, van droog naar droog', () => {
+  const E = T.eilandVan(5);
+  assert.ok(E.bruggen.length > 0, 'op eiland 5 kruisen de wegen het water');
+  for (const b of E.bruggen) {
+    assert.ok(b.tegels.length <= T.EILAND_INSTELLINGEN.wegen.brugLang, `een bruggetje van ${b.tegels.length}`);
+    const op = b.tegels.slice().sort((p, q) => p.x + p.y - (q.x + q.y));
+    const [dx, dy] = b.as === 'x' ? [1, 0] : [0, 1];
+    op.forEach((t, i) => assert.ok(i === 0 || (t.x === op[i - 1].x + dx && t.y === op[i - 1].y + dy), `recht langs ${b.as}`));
+    const s = T.landStuk(E, op[0].x - 8, op[0].y - 8, 24, 24);
+    const nat = (x, y) => [hoekVan(s, x, y), hoekVan(s, x + 1, y), hoekVan(s, x + 1, y + 1), hoekVan(s, x, y + 1)].some((l) => l === 'w' || l === 'e');
+    for (const t of op) {
+      assert.match(T.TEGELS.rand.tiles[tegelVan(s, t.x, t.y) - 1].groep, new RegExp(`^brug ${b.as} `), `de grondtegel op (${t.x}, ${t.y})`);
+      assert.ok(nat(t.x, t.y), `onder het bruggetje is water op (${t.x}, ${t.y})`);
+      assert.ok(!s.dingen.some((d) => d.x === t.x && d.y === t.y), `er staat niets op het bruggetje op (${t.x}, ${t.y})`);
+    }
+    assert.ok(!nat(op[0].x - dx, op[0].y - dy) && !nat(op[op.length - 1].x + dx, op[op.length - 1].y + dy), 'aan beide kanten droog');
+  }
+});

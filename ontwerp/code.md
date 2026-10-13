@@ -318,7 +318,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   de rivier zich door de rest een weg slijt; de rivieren als gladde, slingerende lijnen (`E.rivieren`); de streek per vak;
   de plekken (`E.plekken`: het kasteel op een heuvel, de stad aan de grootste monding, acht dorpen met een naam uit
   `T.DORPSNAMEN`, elk waar een dorp kan groeien en zonder berg naar de camera toe, en één met `jij`); en de wegen
-  (`E.wegen`, A\* over de vakken, die samen lopen waar het kan). **Het detail** (`T.eilandStuk(E, x0, y0, b, h, stap)`):
+  (`E.wegen`, A\* over de vakken, die samen lopen waar het kan), met een recht bruggetje waar een weg een rivier of een
+  meer kruist (`E.bruggen`, `E.brugOp`; B2b, Marcel 13 okt: de wegen zijn "die van het eiland"; hooguit `wegen.brugLang`
+  tegels water, en een tegel is water als een hoekpunt nat is, zoals in `T.landStuk`; een voorselectie per vak houdt het
+  op zo'n 0,1 s). **Het detail** (`T.eilandStuk(E, x0, y0, b, h, stap)`):
   per tegel de hoogte, de streek (`T.EILAND_STREKEN`: het water, strand en duinen, en de zes van de landkaart), de weg en
   de bomen, uit het nummer en de schets; een stuk is hetzelfde hoe je het ook vraagt, zodat het spel later het land maakt
   aan de rand van de mist. Alleen optellen, vermenigvuldigen, delen en wortels (een toets kijkt het na), zodat elke
