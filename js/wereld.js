@@ -483,8 +483,8 @@
     while (maakVooruit(S, w, R + IN().vooruit) && performance.now() < tot);
     return null;
   };
-  // Vooruit: het stuk binnen R tegels van je mensen dat het dichtst bij een van hen ligt (wie loopt eerst: die komt er
-  // het eerst) en niet open is en nog niet gemaakt, een deel verder
+  // Vooruit: het stuk dat het eerst nodig is (nodigOver), binnen R tegels van je mensen of langs het pad van wie loopt,
+  // en dat niet open is en nog niet gemaakt, een deel verder
   // (T.landStuk op een deel van het stuk: het land is hetzelfde in welke delen je het maakt, test/landstuk.test.cjs). Is
   // het laatste deel er, dan wordt het stuk gemaakt, en het wacht tot het open gaat (openStuk kijkt eerst naar w.open).
   const VOORUIT = new WeakMap(); // kaart → { n, sx, sy, delen: [...] }: het stuk dat nu vooruit gemaakt wordt
@@ -497,14 +497,20 @@
       let ver = Infinity;
       for (const e of w.wezens) {
         if (e.dood || e.binnen || !(e === S.schout || e.bewoner || e.kar)) continue;
-        const [x, y] = [Math.round(e.x), Math.round(e.y)];
-        for (let sy = Math.max(0, Math.floor((y - R) / STUK)); sy <= Math.min(rand, Math.floor((y + R) / STUK)); sy++) {
-          for (let sx = Math.max(0, Math.floor((x - R) / STUK)); sx <= Math.min(rand, Math.floor((x + R) / STUK)); sx++) {
-            const n = T.stukNummer(sx, sy);
-            if (w.open.has(n) || m.has(n)) continue;
-            const d = Math.max(sx * STUK - x, x - (sx + 1) * STUK, sy * STUK - y, y - (sy + 1) * STUK, 0) - (e.pad && e.pad.length ? R : 0);
-            if (d < ver) [ver, v] = [d, { n, sx, sy, delen: [] }];
+        const kandidaten = (x, y, r) => {
+          [x, y] = [Math.round(x), Math.round(y)];
+          for (let sy = Math.max(0, Math.floor((y - r) / STUK)); sy <= Math.min(rand, Math.floor((y + r) / STUK)); sy++) {
+            for (let sx = Math.max(0, Math.floor((x - r) / STUK)); sx <= Math.min(rand, Math.floor((x + r) / STUK)); sx++) {
+              const n = T.stukNummer(sx, sy);
+              if (w.open.has(n) || m.has(n)) continue;
+              const d = nodigOver(e, sx, sy);
+              if (d < ver) [ver, v] = [d, { n, sx, sy, delen: [] }];
+            }
           }
+        };
+        kandidaten(e.x, e.y, R);
+        if (e.pad && e.pad.length) {
+          for (let i = 0; i < e.pad.length; i += PAD_STAP) kandidaten(e.pad[i].x, e.pad[i].y, IN().openRond);
         }
       }
       VOORUIT.set(w, v);
@@ -527,6 +533,21 @@
     m.set(v.n, maakStuk(w, v.sx, v.sy, { grond, dingen }));
     VOORUIT.delete(w);
     return true;
+  }
+  // Over hoeveel stappen stuk (sx, sy) nodig is voor wezen e: het gaat open als e binnen openRond tegels komt. Wie loopt,
+  // volgt zijn pad (e.pad[0] is de volgende stap), dus het stuk waar zijn pad het eerst langs komt, eerst; een stuk achter
+  // hem is pas nodig als hij terugkomt. Wie stilstaat, komt er misschien nooit: zijn stukken komen na wat een loper
+  // binnen `vooruit` tegels nodig heeft. Tot 13 okt telde alleen hoe dichtbij een stuk lag, ook achter de schout, en
+  // lag 8 van de 18 stukken van de stukmeting niet klaar als het open ging (21 tot 57 ms land maken in dat beeld).
+  const PAD_STAP = 4; // zo om de zoveel stappen kijkt het langs het pad
+  function nodigOver(e, sx, sy) {
+    const R = IN().openRond;
+    const af = (x, y) => Math.max(sx * STUK - x, x - (sx + 1) * STUK, sy * STUK - y, y - (sy + 1) * STUK, 0);
+    if (!e.pad || !e.pad.length) return Math.max(0, af(Math.round(e.x), Math.round(e.y)) - R) + IN().vooruit;
+    let nodig = Infinity;
+    for (let i = 0; i < e.pad.length; i += PAD_STAP) nodig = Math.min(nodig, i + Math.max(0, af(e.pad[i].x, e.pad[i].y) - R));
+    const eind = e.pad[e.pad.length - 1];
+    return Math.min(nodig, e.pad.length + Math.max(0, af(eind.x, eind.y) - R));
   }
   // Hoeveel stukken er open zijn: wat het land beslaat, ziet zo dat er land bij kwam (een kaart uit Tiled: 0).
   const openGrootte = (w) => (w.open ? w.open.size : 0);

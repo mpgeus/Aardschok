@@ -30,14 +30,21 @@ zijn het bos: daar staan 20 tot 30 bomen vóór de schout, en elk tekent zijn ei
 de meting is alleen de tijd van de code: zonder videokaart schildert de browser het beeld grotendeels daarna. Het
 plan (Marcel, 13 okt: "volgorde 1 tot 4 is goed"; ook zonder videokaart moet het lopen: "Het liefste wel. Je zult net
 zien dat er een niche markt is voor spelers met low end hardware"). **Bezig in sessie `ccr-beba0277-q5zzk8`** (13 okt):
-1. **De meetlat:** `npm run stukmeting` geeft ook de echte tijd tussen twee beelden, en meet ook met het pad van de
-   videokaart.
-2. **Eén kijkgat per persoon:** alleen het voorste voorwerp dat iemand bedekt, maakt het gat (Marcel: "Dat is prima";
-   alleen de zachte rand gaat iets minder open).
-3. **Een kaartverandering tekent alleen de grond rond die plek opnieuw** (een gevelde boom, een gebouw), een stuk per
-   beeld, zoals nieuw land; nu de hele grond in beeld (49 ms in plaats van 11).
-4. **Opnieuw meten, en het stuk dat niet klaar lag** (23 tot 64 ms land maken, 8 van de 18 stukken): verder vooruit
-   maken langs het pad van de schout (`vooruit`, `vooruitMs` in `T.WERELD_INSTELLINGEN`).
+1. **De meetlat: af** (13 okt): `npm run stukmeting` geeft ook de echte tijd tot het volgende beeld en de kijkgaten per
+   beeld, meet met `--tekenen met` het pad van de videokaart, en met `--reik 16 --stil 15` stilstaan in het bos.
+2. **Eén kijkgat per persoon: af** (13 okt): in het bos 24 kijkgaten naar 1, 83 naar 67 ms per beeld. Het gat is daar
+   kleiner en zachter van rand dan het was: de gestapelde gaten maakten het groter en harder dan bedoeld (een uitsnede
+   voor en na ging naar Marcel); achter één huis is het hetzelfde. Wil je het groter, dan `kijkgatStraal` in de werkbank.
+3. **Een kaartverandering tekent alleen de grond rond die plek opnieuw: af** (13 okt): zo'n 4 ms in plaats van 28, de
+   grond pixel voor pixel gelijk. Wat elke verandering nog kost: **het wegennet, zo'n 15 ms** (`T.aangelegdNet` in
+   `js/paden.js` legt de paadjes van alle deuren over het hele land opnieuw). Voorstel, eerst met Marcel: alleen
+   opnieuw als de plek bij een deur of een paadje ligt, of het net sneller leggen.
+4. **Het stuk dat niet klaar lag: grotendeels** (13 okt): het vooruit maken kiest wat het eerst nodig is, langs het pad
+   van wie loopt (`nodigOver` in `js/wereld.js`): van 8 naar 3 van de 18 stukken niet klaar. Die drie liggen aan de kust,
+   waar deze browser maar 10 beelden per seconde haalt, dus 4 ms per beeld (`vooruitMs`) te weinig is. Te kiezen met
+   Marcel: de tijd per seconde geven in plaats van per beeld, of een stuk pas openen als het klaar is (dan blijft de
+   rand van het beeld een paar beelden donker), of laten zo: op een pc met 60 beelden per seconde is er drie keer meer
+   tijd.
 5. **Daarna: het bos zonder videokaart.** In het bos 67 ms per beeld, ook zonder kijkgaten (1100 bomen, op de processor
    twee keer vergroot); met een videokaart gaan ze in 60 tot 90 opdrachten. Wat het kan worden, eerst met Marcel.
 - Daarna, of tussendoor: de toets voor dubbele namen in `Spel` (`opmerkingen.md`).

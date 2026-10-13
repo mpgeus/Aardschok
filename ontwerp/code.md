@@ -251,7 +251,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   versie)`, null als het niet bekend is, alleen scherm): de lijst platte dingen en de grondbuffer in `js/tekenen.js`
   werken alleen die plekken bij, een bufferstuk per beeld (`vergeetVeranderdeKaart`, 13 okt; eerst alle grond in beeld,
   49 ms), en waar het zand van de paadjes anders werd (`T.zandHoeken`) net zo. Het land wordt **vooruit** gemaakt (`maakVooruit`): binnen `vooruit`
-  tegels voorbij `openRond`, in delen van `vooruitDeel`, `vooruitMs` per beeld, eerst bij wie loopt; het wacht in de
+  tegels voorbij `openRond`, in delen van `vooruitDeel`, `vooruitMs` per beeld, eerst wat het eerst nodig is
+  (`nodigOver`, 13 okt: wie loopt, langs zijn pad; wie stilstaat, daarna); het wacht in de
   stukken tot het open gaat. De stukken zelf (`maakStuk`: `T.landStuk` met wat er anders werd
   erover, en de dingen van het eiland als voorwerpen met `v.natuur`) staan niet in S: een geladen spel maakt ze opnieuw
   (`test/eilandkaart.test.cjs`). `T.kaartVak(w)` is daar het vak om het dorp (`w.vak`), en wie wil weten wat er in een
