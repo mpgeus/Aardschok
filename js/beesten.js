@@ -179,23 +179,19 @@
   // Per tegel of hij bos is (T.isBos), en hoe ver (in stappen, ook schuin) hij van een tegel ligt die geen bos is. De
   // rand van de kaart telt niet als open grond: daar loopt het bos door (js/tekenen.js tekent het erachter). Met `ookJong`
   // telt wat de houthakker kapt en inplant ook als bos (js/bos.js, vraag 129, f): 's nachts, als een groep kijkt of zijn
-  // thuis nog goed is.
+  // thuis nog goed is. Het bos komt in één keer voor het hele vak (T.bosInVak), want per tegel was het de zwaarste regel
+  // van de nacht.
   function bosKaart(w, ookJong = false) {
     const vak = T.kaartVak(w);
-    const bos = new Uint8Array(vak.b * vak.h);
+    const bos = T.bosInVak(w, vak, ookJong);
     const diep = new Int16Array(vak.b * vak.h).fill(-1);
     const rij = [];
     let n = 0;
-    for (let y = vak.y; y < vak.y + vak.h; y++) {
-      for (let x = vak.x; x < vak.x + vak.b; x++) {
-        const i = plekInVak(vak, x, y);
-        if (T.isBos(w, x, y, ookJong)) {
-          bos[i] = 1;
-          n++;
-        } else {
-          diep[i] = 0;
-          rij.push(i);
-        }
+    for (let i = 0; i < bos.length; i++) {
+      if (bos[i]) n++;
+      else {
+        diep[i] = 0;
+        rij.push(i);
       }
     }
     for (let k = 0; k < rij.length; k++) {

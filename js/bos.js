@@ -119,12 +119,49 @@
     if (!ookJong) return T.natuurBij(w, 'bos', { x, y, b: 1, h: 1 }, 2) >= IN().bosBomen;
     let n = 0;
     for (let dy = -2; dy <= 2; dy++) {
-      for (let dx = -2; dx <= 2; dx++) {
-        const v = T.voorwerpOp(w, x + dx, y + dy);
-        if (v && (isBoom(w, x + dx, y + dy, v) || JONG_BOS.has(v.soort))) n++;
-      }
+      for (let dx = -2; dx <= 2; dx++) if (ookJongBos(w, x + dx, y + dy)) n++;
     }
     return n >= IN().bosBomen;
+  };
+  // Telt deze tegel mee voor T.isBos met het jonge bos: een boom, of het jonge bos.
+  const ookJongBos = (w, x, y) => {
+    const v = T.voorwerpOp(w, x, y);
+    return !!v && (isBoom(w, x, y, v) || JONG_BOS.has(v.soort));
+  };
+
+  // T.isBos voor elke tegel van het vak { x, y, b, h } in één keer: een lijst met 1 (bos) of 0, tegel (x, y) op plek
+  // (y - vak.y) * vak.b + (x - vak.x). Elke nacht kijken de wolven en de herten of hun thuis nog in het bos ligt, over alle
+  // tegels om het dorp (js/beesten.js); T.isBos met het jonge bos kijkt per tegel naar de 25 eromheen, en dat was het
+  // zwaarste van de nacht (13 okt: 50 ms). Hier kijkt elke tegel één keer, en komen de vijf bij vijf uit een optelsom,
+  // over het vak met een rand van twee tegels, zoals T.isBos ook over de rand van het vak kijkt. Zonder het jonge bos telt
+  // T.isBos al met een optelsom (T.natuurBij).
+  T.bosInVak = function (w, vak, ookJong = false) {
+    const uit = new Uint8Array(vak.b * vak.h);
+    if (!ookJong) {
+      for (let y = vak.y; y < vak.y + vak.h; y++) {
+        for (let x = vak.x; x < vak.x + vak.b; x++) uit[(y - vak.y) * vak.b + (x - vak.x)] = T.isBos(w, x, y) ? 1 : 0;
+      }
+      return uit;
+    }
+    const R = 2; // de vijf bij vijf van T.isBos
+    const b = vak.b + 2 * R;
+    const h = vak.h + 2 * R;
+    const som = new Int32Array((b + 1) * (h + 1)); // som[j * (b + 1) + i]: hoeveel er in de i kolommen en j rijen ervoor staan
+    for (let j = 0; j < h; j++) {
+      let rij = 0;
+      for (let i = 0; i < b; i++) {
+        if (ookJongBos(w, vak.x - R + i, vak.y - R + j)) rij++;
+        som[(j + 1) * (b + 1) + i + 1] = som[j * (b + 1) + i + 1] + rij;
+      }
+    }
+    const k = 2 * R + 1;
+    for (let j = 0; j < vak.h; j++) {
+      for (let i = 0; i < vak.b; i++) {
+        const n = som[(j + k) * (b + 1) + i + k] - som[j * (b + 1) + i + k] - som[(j + k) * (b + 1) + i] + som[j * (b + 1) + i];
+        uit[j * vak.b + i] = n >= IN().bosBomen ? 1 : 0;
+      }
+    }
+    return uit;
   };
 
   // Weg met wat op deze tegel stond. Van de kaart kwam het met een muur eronder (een vast ding, js/kaart.js), dus de tegel

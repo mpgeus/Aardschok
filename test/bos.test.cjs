@@ -393,3 +393,28 @@ test('het poppetje: de houthakker loopt naar zijn boom, hakt er met de bijl aan,
   assert.ok(bundel, 'hij droeg een bundel');
   assert.ok(afgeleverd, 'en legde die bij zijn schuur');
 }));
+
+test('het bos van een heel vak in één keer (T.bosInVak) is op elke tegel wat T.isBos zegt, met en zonder het jonge bos', () => zo(() => {
+  const S = dorp();
+  const D = S.dorp;
+  const w = D.wereld;
+  const vak = T.kaartVak(w);
+  // een op de drie bomen om, zodat het jonge bos (de stronken) ergens het verschil maakt
+  T.voorwerpenIn(w, vak).filter((v) => T.NATUUR.bos.telt(w, v.x, v.y, v)).forEach((v, i) => i % 3 || T.velBoom(D, v.x, v.y));
+  // het vak om het dorp, en een vak dat over de rand ervan en over land dat nog niet open is gaat
+  const ernaast = { x: vak.x + vak.b - 30, y: vak.y - 20, b: 70, h: 50 };
+  let anders = 0;
+  for (const v of [vak, ernaast]) {
+    const oud = T.bosInVak(w, v);
+    const jong = T.bosInVak(w, v, true);
+    for (let y = v.y; y < v.y + v.h; y++) {
+      for (let x = v.x; x < v.x + v.b; x++) {
+        const i = (y - v.y) * v.b + (x - v.x);
+        assert.equal(oud[i], T.isBos(w, x, y) ? 1 : 0, `zonder het jonge bos op ${x},${y}`);
+        assert.equal(jong[i], T.isBos(w, x, y, true) ? 1 : 0, `met het jonge bos op ${x},${y}`);
+        if (oud[i] !== jong[i]) anders++;
+      }
+    }
+  }
+  assert.ok(anders > 0, 'het jonge bos maakt ergens het verschil');
+}));

@@ -12,9 +12,12 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 - **Een kaart van het eiland onder een toets** (idee van Claude, 13 okt; Marcel: "idee ja"): het eiland van boven, met
   alleen wat je verkende en de rest in de mist, getekend zoals de plaat van de kaartenmaker
   (`gereedschap/pixelart/eiland-plaat.cjs`), met je dorp, de wegen en de namen die je kent. Na de mist (B2c), niet erin.
-- **De nacht van het dorp is het zwaarste beeld** (13 okt, B2b, gemeten in de browser op het proefdorp): het beeld
-  waarin een nieuwe dag begint (de nacht van de gebouwen, de bewoners en de rest), kost 70 tot 120 ms; op 30× is dat
-  elke tien seconden een hapering. Het was er al voor de stukken. Iets om te meten en te verdelen als het opvalt.
+- **De wolven en de herten kijken elke nacht over het hele vak om het dorp** (13 okt, idee van Claude): of hun thuis
+  nog in het bos ligt, rekent `bosKaart` (`js/beesten.js`) het bos en hoe diep het is uit voor alle tegels van
+  `T.kaartVak`, nu 100 bij 100. Sinds `T.bosInVak` kost dat een paar ms (was 50 tot 90, het zwaarste van de nacht).
+  Zuiniger kan nog: een groep hoeft alleen rond zijn thuis en zijn plekken aan de bosrand te kijken, en de hele kaart is
+  pas nodig als hij verhuist of splitst. Dat hangt dan niet meer af van hoe groot het vak om het dorp wordt. Pas als
+  het vak groeit of het weer opvalt.
 - **Een naam die twee keer gezet wordt** (13 okt, idee van Claude): `T.nieuwLand` bestond al in `js/land.js`, en een
   nieuwe met dezelfde naam in `js/wereld.js` werd stil overschreven (de toetsen merkten het niet, de browser wel). Een
   toets die bij het laden kijkt of geen bestand een naam in `Spel` zet die een ander al zette, vangt dat.

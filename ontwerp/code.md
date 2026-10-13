@@ -967,7 +967,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   maar uit een boom: de dichtste binnen `hakStraal` van zijn schuur (`T.boomVanHouthakker`, `g.boom`), en elke
   `houtPerBoom` hout is die om (`T.houthakkerHakte`, `g.gehakt`): een stronk (`v.gehaktOp`, vergaat na `stronkDagen`, en
   staat niet in de weg), en stond hij in het bos, twee boompjes ernaast (`boompjesPerBoom`, `T.plantNaast`, `v.geplant`,
-  `v.wordt`; wat hij kapt en inplant, blijft bos: `T.isBos` met `ookJong`, vraag 129, f), die in een jaar of twee via een
+  `v.wordt`; wat hij kapt en inplant, blijft bos: `T.isBos` met `ookJong`, vraag 129, f; voor een heel vak in één keer
+  `T.bosInVak`, met een optelsom, want per tegel telt `T.isBos` met het jonge bos de 25 tegels eromheen: zo kijken de
+  wolven en de herten elke nacht, en dat was het zwaarste van de nacht, 13 okt), die in een jaar of twee via een
   jonge boom een boom worden (`T.tikBosDag`; de tekeningen `boompje`, `jongeEik`, `jongeDen`, `jongeBerk` in het vel van
   de bomen). Staat er binnen zijn bereik geen boom meer, dan staat hij stil (`T.waaromHaktHijNiet`) en wil hij geen handen
   (`T.houthakkerZonderBoom`, in `T.verdeelHanden`): zijn hand werkt elders tot er weer een boom staat; de raad zegt het
@@ -1001,7 +1003,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   dichtste herten (`jaag`, `G.gevangen`); elke lente jongen tot zes (`jongen`), en dan splitst de groep (`splits`): de
   helft zoekt een eigen thuis of trekt weg (`G.trektWeg`: `T.werkBeestenBij` haalt hem van de kaart, niet midden in een
   gevecht); wie honger leed, krijgt geen jongen (`G.leedOp`); een thuis dat niet meer diep in het bos ligt, verhuist of de
-  groep trekt weg (`blijfOfVerhuis`; wat de houthakker inplant, telt als bos). **De dreiging** (stap 2b): wie aan het werk
+  groep trekt weg (`blijfOfVerhuis`; wat de houthakker inplant, telt als bos; het bos en hoe diep, over het vak om
+  het dorp: `bosKaart`, met `T.bosInVak` uit `js/bos.js`). **De dreiging** (stap 2b): wie aan het werk
   een roedel ziet, rent naar huis (`schrik`; `T.blijftThuis` in js/bewoners.js, `p.thuisTot`: hij werkt niet, en
   `T.dagAnker` houdt hem binnen), en zijn werkplaats maakte die dag de helft; een roedel met honger is in het donker stout
   (`T.wolvenStout`) en zoekt prooi (`kiesProoi`: een schaap, wie alleen in het donker loopt, of de schout), en slaat toe
