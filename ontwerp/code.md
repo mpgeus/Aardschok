@@ -361,6 +361,17 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   rietsnijder aan het water (`bij` in `T.GEBOUWEN`, `T.natuurBij` in `js/gebouwen.js`). Wat plat op de
   grond ligt (niet vast, laag), tekent `js/tekenen.js` in de buffer van de grond (`isPlat`), en het maakt plaats voor
   een gebouw.
+- **Het land van een stuk** (`T.landStuk(E, x0, y0, b, h)`, B2b stap 1, 13 okt; `kaarten.md`, "Het hele eiland"): de
+  grond per hoekpunt, de grondtegel per tegel en wat er staat (de rotsen en de bomen van het eiland, losse bomen en
+  groepjes struiken in de wei, het groen), alleen uit het nummer en de plek, met de regels van de maker. Elk lot komt uit
+  de plek van zijn tegel (`lotOp`, met het nummer van het eiland erin), een losse boom en een groepje struiken per vak
+  (`groei.losseBomen`, `groei.struikgroepjes`), en het wijken van de grond kijkt per ronde naar de vorige: zo is een stuk
+  hetzelfde in welke volgorde je het maakt (`test/landstuk.test.cjs`: zestien kleine stukken zeggen wat één groot zegt).
+  Het rekent `STUK_MARGE` (8) tegels om het stuk mee, uit wat een tegel nodig heeft: de grond wijkt tot vier hoekpunten
+  ver en kijkt dan één verder naar het water, en een boom twee tegels buiten het stuk (het groen eronder) kijkt vier
+  tegels ver naar een weg. In de praktijk was 2 al genoeg, maar dat is geluk. Een stuk van 64 bij 64 kost in Node zo'n
+  40 ms, twee derde daarvan in `T.eilandStuk` (de ruis van het eiland). Nog niet in het spel: de stappen erna maken de
+  kaart van zulke stukken.
 
 ### js/hoogte.js: de hoogte van het land
 

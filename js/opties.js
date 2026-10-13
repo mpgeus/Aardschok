@@ -1229,6 +1229,7 @@
     pogingen: T.t('attempts'),
     losseBomen: T.t('single trees'),
     struikgroepjes: T.t('clumps of shrubs'),
+    vak: T.t('per square of'),
     rotsen: T.t('rocks'),
     groei: T.t('growth'),
     bos: T.t('forest'),

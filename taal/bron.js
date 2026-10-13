@@ -2506,6 +2506,7 @@ Spel.TAAL_BRON = [
   {"t":"attempts","waar":["js/opties.js"]},
   {"t":"single trees","waar":["js/opties.js"]},
   {"t":"clumps of shrubs","waar":["js/opties.js"]},
+  {"t":"per square of","waar":["js/opties.js"]},
   {"t":"growth","waar":["js/opties.js"]},
   {"t":"forest","waar":["js/opties.js"]},
   {"t":"fern","waar":["js/opties.js"]},
