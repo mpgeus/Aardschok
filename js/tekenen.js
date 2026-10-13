@@ -749,16 +749,33 @@
   // De mist (B2c, js/mist.js; Marcel, 13 okt: "A2", donkerder en ontkleurd): zwart wat je niet kent, grijs wat je kent
   // maar nu niet ziet, en helder waar je mensen en je gebouwen kijken. Over de grond gaat één masker met een pixel per
   // tegel, schuin op de grond gelegd zoals het licht van de hellingen (lichtKaartVan): zo loopt de rand vanzelf zacht over
-  // een tegel uit. Het masker heeft twee helften naast elkaar: links hoeveel kleur eruit gaat (met de samenstelmodus
-  // 'saturation'), rechts hoeveel donkerder; met de videokaart doet ctx.tekenMist (js/gl.js) beide in één keer. Wat op
-  // de grond staat, krijgt het grijs naar de tegel waar het staat (mistOverLijst), anders werd een hoge boom aan de rand
-  // half grijs. Op een kaart met hoogte (de spelregel Hoogte, standaard uit) ligt het masker nog plat.
+  // een tegel uit. Met de videokaart heeft het masker twee helften naast elkaar, links hoeveel kleur eruit gaat en rechts
+  // hoeveel donkerder, en doet ctx.tekenMist (js/gl.js) beide in één keer. Zonder videokaart kostten twee schuine lagen
+  // over het hele scherm 50 ms per beeld (13 okt: van 33 naar 16 beelden per seconde, het ontkleuren met 'saturation'
+  // alleen 33 ms), dus daar is het één laag (eerst naar het grijs, dan donkerder, per tegel in één kleur), eerst op een
+  // klein doek recht op het scherm en dan opgeschaald (MIST_KLEIN; lopend op 30× 30 beelden per seconde, zonder mist 32).
+  // Daar is het grijs grijzer in plaats van ontkleurd, zoals de nacht zonder videokaart de eenvoudige laag bleef (Marcel,
+  // 4 okt: "zonder videokaart wordt er bijna niet meer gespeeld"). Wat op de grond staat, krijgt het grijs naar de tegel
+  // waar het staat (mistOverLijst), anders werd een hoge boom aan de rand half grijs. Op een kaart met hoogte (de spelregel Hoogte, standaard uit) ligt het masker nog plat.
   // Spel.debug.geenMist = true zet de mist in het beeld uit, om te vergelijken (de regels blijven).
   const MIST_STAP = 16; // het masker beslaat een vak op een veelvoud hiervan, zodat het niet bij elke stap nieuw is
   const MIST_KIER = 2; // pixels tussen de twee helften, zodat het uitsmeren de ene niet in de andere trekt
-  const mistMaskers = new WeakMap(); // kaart → { sleutel, basis, werk, x0, y0, b, h }
+  const MIST_KLEIN = 4; // zonder videokaart: het kleine doek is zoveel keer kleiner dan het scherm
+  const mistMaskers = new WeakMap(); // kaart → { sleutel, basis, werk, x0, y0, b, h, n }
   const metMist = (w) => T.opEiland(w) && !(T.debug && T.debug.geenMist);
-  function mistMasker(w, vak) {
+  // De kleur van een tegel van het masker, [r, g, b, a] (0..255): met de videokaart de twee helften (ontkleuren, donker),
+  // zonder één (zie hierboven): wat het doek eronder c maakt tot c·(1 − a) + kleur·a, zoals eerst een grijs over c met
+  // `ontkleurd`, dan het zwart met `donker`.
+  function mistKleuren(kaart, kent) {
+    const M = T.MIST_INSTELLINGEN;
+    const Z = M.zwart;
+    if (!kent) return kaart ? [[128, 128, 128, 255], [...Z, 255]] : [[...Z, 255]];
+    const [o, d] = [M.ontkleurd, M.donker];
+    if (kaart) return [[128, 128, 128, Math.round(o * 255)], [...Z, Math.round(d * 255)]];
+    const a = 1 - (1 - o) * (1 - d);
+    return [[...Z.map((z) => Math.round((128 * o * (1 - d) + z * d) / a)), Math.round(a * 255)]];
+  }
+  function mistMasker(w, vak, kaart) {
     const M = T.MIST_INSTELLINGEN;
     const x0 = Math.floor(vak.x0 / MIST_STAP) * MIST_STAP;
     const y0 = Math.floor(vak.y0 / MIST_STAP) * MIST_STAP;
@@ -766,9 +783,10 @@
     const h = Math.ceil((vak.y1 + 1) / MIST_STAP) * MIST_STAP - y0;
     let m = mistMaskers.get(w);
     // wat je kent: alleen opnieuw als er land bij kwam, het vak verschoof of een getal in de werkbank veranderde
-    const sleutel = [x0, y0, b, h, T.mistVersie(w), M.ontkleurd, M.donker, M.zwart.join()].join('|');
+    const sleutel = [x0, y0, b, h, T.mistVersie(w), M.ontkleurd, M.donker, M.zwart.join(), kaart].join('|');
     if (!m || m.sleutel !== sleutel) {
-      const B = 2 * b + MIST_KIER;
+      const n = kaart ? 2 : 1; // zoveel helften naast elkaar
+      const B = n * b + (n - 1) * MIST_KIER;
       if (!m) mistMaskers.set(w, (m = { basis: document.createElement('canvas'), werk: document.createElement('canvas') }));
       for (const c of [m.basis, m.werk]) {
         if (c.width !== B) c.width = B;
@@ -777,21 +795,15 @@
       const k = m.basis.getContext('2d');
       const beeld = k.createImageData(B, h);
       const d = beeld.data;
-      const ontkleurd = Math.round(M.ontkleurd * 255);
-      const donker = Math.round(M.donker * 255);
+      const kleuren = [mistKleuren(kaart, false), mistKleuren(kaart, true)];
       for (let j = 0; j < h; j++) {
         for (let i = 0; i < b; i++) {
-          const kent = T.kentTegel(w, x0 + i, y0 + j);
-          const o = (j * B + i) * 4;
-          d[o] = d[o + 1] = d[o + 2] = 128;
-          d[o + 3] = kent ? ontkleurd : 255;
-          const z = (j * B + b + MIST_KIER + i) * 4;
-          [d[z], d[z + 1], d[z + 2]] = M.zwart;
-          d[z + 3] = kent ? donker : 255;
+          const kl = kleuren[T.kentTegel(w, x0 + i, y0 + j) ? 1 : 0];
+          for (let helft = 0; helft < n; helft++) d.set(kl[helft], (j * B + helft * (b + MIST_KIER) + i) * 4);
         }
       }
       k.putImageData(beeld, 0, 0);
-      Object.assign(m, { sleutel, x0, y0, b, h });
+      Object.assign(m, { sleutel, x0, y0, b, h, n });
     }
     // waar je nu kijkt: elk beeld, op de plek waar ze staan (niet afgerond, zodat de kring meeglijdt)
     const k = m.werk.getContext('2d');
@@ -804,7 +816,8 @@
       const cx = z.x - x0 + 0.5;
       const cy = z.y - y0 + 0.5;
       if (cx + r1 < 0 || cy + r1 < 0 || cx - r1 > b || cy - r1 > h) continue;
-      for (const naast of [0, b + MIST_KIER]) {
+      for (let helft = 0; helft < m.n; helft++) {
+        const naast = helft * (b + MIST_KIER);
         const g = k.createRadialGradient(cx + naast, cy, r0, cx + naast, cy, r1);
         g.addColorStop(0, 'rgba(0,0,0,1)');
         g.addColorStop(1, 'rgba(0,0,0,0)');
@@ -820,21 +833,39 @@
     k.globalCompositeOperation = 'source-over';
     return m;
   }
+  let mistKlein = null; // het kleine doek zonder videokaart
   function tekenMist(ctx, w, vak) {
     if (!metMist(w)) return;
-    const m = mistMasker(w, vak);
+    const kaart = !!ctx.tekenMist;
+    const m = mistMasker(w, vak, kaart);
     const p = T.naarScherm(m.x0 - 0.5, m.y0 - 0.5);
-    ctx.save();
-    ctx.translate(p.x, p.y);
-    ctx.transform(32, 16, -32, 16, 0, 0); // van de tegels (een pixel van het masker is een tegel) naar het scherm
-    if (ctx.tekenMist) ctx.tekenMist(m.werk, m.b, m.h, MIST_KIER, T.MIST_INSTELLINGEN.zwart);
-    else {
-      ctx.imageSmoothingEnabled = true;
-      ctx.globalCompositeOperation = 'saturation';
-      ctx.drawImage(m.werk, 0, 0, m.b, m.h, 0, 0, m.b, m.h);
-      ctx.globalCompositeOperation = 'source-over';
-      ctx.drawImage(m.werk, m.b + MIST_KIER, 0, m.b, m.h, 0, 0, m.b, m.h);
+    if (kaart) {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.transform(32, 16, -32, 16, 0, 0); // van de tegels (een pixel van het masker is een tegel) naar het scherm
+      ctx.tekenMist(m.werk, m.b, m.h, MIST_KIER, T.MIST_INSTELLINGEN.zwart);
+      ctx.restore();
+      return;
     }
+    const st = ctx.getTransform();
+    const [B, H] = [Math.ceil(ctx.canvas.width / MIST_KLEIN), Math.ceil(ctx.canvas.height / MIST_KLEIN)];
+    if (!mistKlein) mistKlein = document.createElement('canvas');
+    if (mistKlein.width !== B) mistKlein.width = B;
+    if (mistKlein.height !== H) mistKlein.height = H;
+    const k = mistKlein.getContext('2d');
+    k.setTransform(1, 0, 0, 1, 0, 0);
+    k.clearRect(0, 0, B, H);
+    const f = 1 / MIST_KLEIN;
+    k.setTransform(st.a * f, st.b * f, st.c * f, st.d * f, st.e * f, st.f * f);
+    k.translate(p.x, p.y);
+    k.transform(32, 16, -32, 16, 0, 0);
+    k.imageSmoothingEnabled = true;
+    k.drawImage(m.werk, 0, 0, m.b, m.h, 0, 0, m.b, m.h);
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    // zonder uitsmeren: het kleine doek is al zacht, en uitgesmeerd opschalen kostte nog 6 beelden per seconde (13 okt)
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(mistKlein, 0, 0, B, H, 0, 0, B * MIST_KLEIN, H * MIST_KLEIN);
     ctx.restore();
   }
   // Wat op de grond staat, naar de tegel waar het staat (een gebouw: het midden van zijn voet): op land dat je niet kent

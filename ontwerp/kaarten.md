@@ -238,8 +238,15 @@ nummers passen op het hele eiland, en `T.eilandStuk` maakt elk stuk los (64 bij 
    videokaart kost een filter op het doek bij elk plaatje een bewerking van het hele vel (een vel bomen is 2000 bij
    1400), en het beeld liep er vast; daar tekent het een grijze kopie van het stukje, één keer gemaakt. De schaduwen van
    de zon komen vóór de mist (anders vielen ze over het zwart), en wat ui is erna (het pad naar een tegel in het zwart zie
-   je). Het bewaarde spel van een leeg begin is 23 kB (was 15): de zes stukken van de kring van 50 zijn half bekend. Nog
-   niet: op een kaart met hoogte (de spelregel Hoogte, standaard uit) ligt het masker plat.
+   je). Het bewaarde spel van een leeg begin is 23 kB (was 15): de zes stukken van de kring van 50 zijn half bekend.
+   **Gemeten** (13 okt, `npm run stukmeting`, Chromium zonder videokaart, 1920 bij 1080, de schout op 30× naar de kust):
+   zonder mist 32 beelden per seconde. De eerste mist (twee schuine lagen over het scherm: ontkleuren met 'saturation' en
+   donker maken) gaf 16: het ontkleuren kostte 33 ms per beeld, het donker maken 17, de grijze dingen en het masker niets.
+   Nu is het zonder videokaart één laag (grijzer en donkerder in één kleur per tegel), op een doek van een kwart van het
+   scherm en zonder uitsmeren opgeschaald: 30 beelden per seconde. Het grijs is daar dus grijzer in plaats van ontkleurd
+   (zoals de nacht zonder videokaart de eenvoudige laag bleef); met de videokaart is het precies A2. De kolonist speelt de
+   eilanden 1 tot 5 het jaar uit zonder fouten. Nog niet: op een kaart met hoogte (de spelregel Hoogte, standaard uit)
+   ligt het masker plat.
 4. **B2d, opslaan wat veranderde** (gaat mee in B2b, Marcel 13 okt: "Meteen mee"). Het eiland komt uit het nummer; het bewaarde spel houdt per stuk alleen wat er
    gebouwd, gehakt en gelegd is, en wat je verkende. Een oud bewaard spel past dan niet meer (`versie` omhoog; tot de
    release mag dat). Het moet ook klein blijven voor de opslag van de browser (een paar MB, `verpakken.md`).

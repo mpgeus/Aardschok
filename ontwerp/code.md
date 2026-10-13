@@ -498,7 +498,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   de rand; wie de grond wil (het kijkgat), vraagt `T.tekenGrondStukken`. Ver uitgezoomd liggen ze op de maat van het
   scherm. Het tekenen knipt af op `T.kaartGrens` (op het eiland het hele eiland: wat niet open is, is 'buiten' en blijft
   donker; **de mist**, B2c: na de grond en de schaduwen één masker met een pixel per tegel, schuin over de grond, links
-  hoeveel kleur eruit gaat en rechts hoeveel donkerder (`tekenMist`; zonder videokaart de samenstelmodus 'saturation'), en
+  hoeveel kleur eruit gaat en rechts hoeveel donkerder (`tekenMist`; zonder videokaart één laag, grijzer en donkerder, op
+  een klein doek en dan opgeschaald, `MIST_KLEIN`, want twee schuine lagen over het scherm kostten daar 50 ms), en
   wat erop staat naar zijn tegel (`mistOverLijst`: in het zwart niets, in het grijs grijs en zonder wie er loopt; zonder
   videokaart een grijze kopie van het stukje, `grijsStuk`, want een filter bewerkt daar het hele vel;
   `Spel.debug.geenMist`), en zoekt wat er staat met `T.voorwerpenIn` (ook wat er op het eiland groeit); tot B2b stond er een bosrand om
