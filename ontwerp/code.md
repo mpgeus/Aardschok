@@ -235,6 +235,15 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `w.grond`, `w.b` en `w.h` (`test/tegels.test.cjs`). Een lijst over de hele kaart (het vaste raster, de eilanden, de
   velden van het lopen, het net van de paadjes, de natuur bij een gebouw, de beken, het bos van de beesten, de lichtkaart)
   beslaat `T.kaartVak(w)`, met tegel (x, y) op plek `(y - vak.y) * vak.b + (x - vak.x)`; in B2b krijgt elk zijn eigen vak.
+- **De kaart van het eiland** (B2b, 13 okt; `kaarten.md`, "Het hele eiland"): `T.eilandKaart(zaad, vak)` is het hele
+  eiland in stukken van `T.STUK` (64) bij 64, achter dezelfde vragen als een kaart uit Tiled. In S staat alleen wat er
+  anders werd, per tegelnummer: `w.tegelsAnders` (`T.zetTegel`), `w.grondAnders` (de maker), `w.gerooid` (een ding van het
+  eiland dat weg is, `T.haalVoorwerpWeg`), wat iemand zette in `w.voorwerpen`, en welke stukken open zijn (`w.open`,
+  `T.openVak`). Een stuk dat niet open is, is 'buiten'. De stukken zelf (`maakStuk`: `T.landStuk` met wat er anders werd
+  erover, en de dingen van het eiland als voorwerpen met `v.natuur`) staan niet in S: een geladen spel maakt ze opnieuw
+  (`test/eilandkaart.test.cjs`). `T.kaartVak(w)` is daar het vak om het dorp (`w.vak`), en wie wil weten wat er in een
+  stuk land staat (ook wat er groeit), vraagt `T.voorwerpenIn(w, vak)`. Een voorwerp maak je op één manier
+  (`T.maakVoorwerp` in `js/kaart.js`), en de grond van het eiland per nummer met `T.grondVanGid`.
 - `js/wereld.js`: wat een wezen is (`T.WEZENS`) en wat een voorwerp is (`T.VOORWERPEN`), de bomen en de struiken op één
   plek (`T.BOMEN`, vraag 148: wat een boom van het bos is, `T.isBosBoom`, wat je rooit, wat de houthakker inplant, de
   wind en de bosrand; een nieuwe soort telt zo overal mee), de

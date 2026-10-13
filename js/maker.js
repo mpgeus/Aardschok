@@ -967,7 +967,6 @@
   const HOEKEN = ['boven', 'rechts', 'onder', 'links'];
   const GRONDSOORT = { g: 'gras', w: 'water', z: 'zandpad', h: 'heide', k: 'kasseien', e: 'zee', s: 'strand', v: 'veen', b: 'broek' };
   const LETTER = Object.fromEntries(Object.entries(GRONDSOORT).map(([l, naam]) => [naam, l])); // en terug: 'gras' is 'g'
-  const KUST_GID = () => 1 + T.TEGELS.rand.tiles.length;
   let grondTegels = null;
   function grondIndex() {
     if (grondTegels) return grondTegels;
@@ -994,7 +993,7 @@
       for (const k of Object.keys(overgangVan)) if (!overgang[k]) overgang[k] = overgangVan[k];
     };
     leesVel('rand', 1);
-    if (T.TEGELS.kust) leesVel('kust', KUST_GID());
+    if (T.TEGELS.kust) leesVel('kust', T.KUST_GID());
     return (grondTegels = { vlak, overgang, brug });
   }
   // Een vaste keus uit een paar varianten, per tegel (dezelfde als in maak-gehucht.cjs).
@@ -1027,6 +1026,10 @@
     for (const vel of VELLEN) if (T.TEGELS[vel] && T.TEGELS[vel].tiles.some((t) => t && t.naam === naam)) return `${vel}/${naam}`;
     throw new Error(`de maker kent geen voorwerp "${naam}" (tegels/tegels.js)`); // geen tekst
   }
+
+  // De tekening van wat er op het eiland groeit (T.landStuk geeft een naam, "eik"), in hetzelfde vel als de maker hem legt:
+  // "bomen/eik". Voor de stukken van een kaart van het eiland (js/wereld.js).
+  T.natuurTegel = (naam) => opNaam(naam);
 
   // Staat een voorwerp met deze naam in de weg (`vast` in tegels/tegels.js)? Een boom, een struik, een rots en de put
   // wel; een varen, een graspol en een kool niet.
@@ -1074,7 +1077,7 @@
       tilewidth: 64,
       tileheight: 32,
       properties: [{ name: 'naam', type: 'string', value: T.t('The hamlet') }, { name: 'doof', type: 'int', value: 6 }],
-      tilesets: [{ firstgid: 1, source: '../tegels/rand.tsx' }, ...(data.some((gid) => gid >= KUST_GID()) ? [{ firstgid: KUST_GID(), source: '../tegels/kust.tsx' }] : [])], // geen tekst
+      tilesets: [{ firstgid: 1, source: '../tegels/rand.tsx' }, ...(data.some((gid) => gid >= T.KUST_GID()) ? [{ firstgid: T.KUST_GID(), source: '../tegels/kust.tsx' }] : [])], // geen tekst
       layers: [{ type: 'tilelayer', name: 'grond', width: B, height: H, data }],
     };
 

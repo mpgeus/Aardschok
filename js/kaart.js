@@ -148,6 +148,33 @@
     if (!T.VOORWERPEN[naam]) T.VOORWERPEN[naam] = { blokkeert: !!vast, zichtDicht: !!vast };
   }
 
+  // Een voorwerp uit een tegel ({ vel, id, eig }, van bouwOpzoeker of T.opzoekTegelNaam) op tegel (x, y): vel en id erbij,
+  // zodat js/tekenen.js het plaatje kan opzoeken zonder de kaart opnieuw te lezen, en beslaat, zodat het sorteren weet
+  // hoeveel tegels eronder liggen. Eén manier, voor een kaart uit Tiled en voor een stuk van het eiland (js/wereld.js).
+  T.maakVoorwerp = function (t, x, y) {
+    registreerVoorwerp(t.eig.naam, t.eig.vast);
+    return { soort: t.eig.naam, x, y, vel: t.vel, id: t.id, beslaat: t.eig.beslaat || [1, 1] };
+  };
+
+  // De grond van het eiland (js/wereld.js, B2b): de grondtegels van tegels/rand.tsx vanaf 1, en die van tegels/kust.tsx
+  // erachter (T.KUST_GID), zoals de maker ze nummert (js/maker.js). Eén ding per soort tegel ({ vel, id, naam, vast }),
+  // zoals T.laadKaart, gedeeld door elke kaart van het eiland.
+  T.KUST_GID = () => 1 + T.TEGELS.rand.tiles.length;
+  let eilandGrond = null;
+  T.grondVanGid = function (gid) {
+    if (!eilandGrond) {
+      const opzoek = bouwOpzoeker({ tilesets: [{ firstgid: 1, source: 'rand.tsx' }, { firstgid: T.KUST_GID(), source: 'kust.tsx' }] });
+      eilandGrond = { opzoek, soort: new Map() };
+    }
+    let g = eilandGrond.soort.get(gid);
+    if (!g) {
+      const t = eilandGrond.opzoek(gid);
+      g = t ? { vel: t.vel, id: t.id, naam: t.eig.naam, vast: !!t.eig.vast } : null;
+      eilandGrond.soort.set(gid, g);
+    }
+    return g;
+  };
+
   // Kent het spel de soort van dit voorwerp? Zo niet, dan meldt hij hem aan zoals hij erbij kwam: een gebouw blokkeert
   // altijd (T.registreerGebouwSoort, js/gebouwen.js), en wat uit een tegelvel komt (een kaart, de maker, een lantaarn),
   // zoals het vel zegt. Voor een bewaard spel in een verse bladzijde (T.zetSpel, js/opslaan.js): die kent alleen de
@@ -303,17 +330,13 @@
       }
       if (!t) return; // een leeg object zonder van bovenstaande: niets aan te doen
       const eig = t.eig;
-      registreerVoorwerp(eig.naam, eig.vast);
-      const beslaat = eig.beslaat || [1, 1];
-      for (let dy = 0; dy < beslaat[1]; dy++) {
-        for (let dx = 0; dx < beslaat[0]; dx++) {
+      const v = T.maakVoorwerp(t, gx, gy);
+      for (let dy = 0; dy < v.beslaat[1]; dy++) {
+        for (let dx = 0; dx < v.beslaat[0]; dx++) {
           if (!eig.vast || !binnenRaster(gx + dx, gy + dy)) continue;
           tegels[gy + dy][gx + dx] = 'muur';
         }
       }
-      // vel en id erbij, zodat js/tekenen.js het plaatje kan opzoeken zonder de kaart opnieuw
-      // te hoeven lezen; beslaat, zodat het sorteren weet hoeveel tegels eronder liggen.
-      const v = { soort: eig.naam, x: gx, y: gy, vel: t.vel, id: t.id, beslaat };
       // quest="bakker:zoeken": dit ding ligt er alleen zolang die quest in die fase is. Vast
       // kan het niet zijn — dan zou er een muur komen en gaan waar net iemand liep.
       const grendel = p.quest !== undefined && T.questGrendel(String(p.quest));

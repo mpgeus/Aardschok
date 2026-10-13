@@ -282,32 +282,153 @@
     return r;
   }
 
-  // ── De kaart: één weg naar de tegels (B2a, vraag 117, stap 3; ontwerp/kaarten.md, "Het hele eiland") ──
+  // ── De kaart: één weg naar de tegels (B2a en B2b, vraag 117, stap 3; ontwerp/kaarten.md, "Het hele eiland") ──
   // Wat een tegel is (een woord: 'buiten', 'muur', 'vloer' of 'deur'), welke grond eronder ligt, en wat de kaart
   // beslaat, vraag en zet je alleen hier: niets anders leest w.tegels, w.grond, w.b of w.h zelf (test/tegels.test.cjs
-  // kijkt het na). Zo wordt de kaart in B2b op één plek stukken van het eiland.
-  T.opKaart = (w, x, y) => x >= 0 && y >= 0 && x < w.b && y < w.h;
-  T.tegel = (w, x, y) => (T.opKaart(w, x, y) ? w.tegels[y][x] : 'buiten');
-  // Buiten de kaart zet het niets.
+  // kijkt het na). Er zijn twee soorten kaart achter dezelfde vragen: een kaart uit Tiled (de proefkaarten, de kamers
+  // van de toetsen), met w.tegels en w.grond van (0, 0) tot (w.b, w.h), en een kaart van het eiland (T.eilandKaart
+  // hieronder), het hele eiland in stukken.
+  const opEiland = (w) => !!(w && w.eiland && !w.tegels);
+  T.opKaart = (w, x, y) => (opEiland(w) ? x >= 0 && y >= 0 && x < EILAND_MAAT() && y < EILAND_MAAT() : x >= 0 && y >= 0 && x < w.b && y < w.h);
+  T.tegel = function (w, x, y) {
+    if (!opEiland(w)) return T.opKaart(w, x, y) ? w.tegels[y][x] : 'buiten';
+    const s = openStuk(w, x, y);
+    return s ? WOORD[s.tegel[(y - s.y0) * STUK + (x - s.x0)]] : 'buiten';
+  };
+  // Buiten de kaart zet het niets, en op het eiland ook niet in een stuk dat niet open is.
   T.zetTegel = function (w, x, y, soort) {
-    if (T.opKaart(w, x, y)) w.tegels[y][x] = soort;
+    if (!opEiland(w)) {
+      if (T.opKaart(w, x, y)) w.tegels[y][x] = soort;
+      return;
+    }
+    const s = openStuk(w, x, y);
+    if (!s) return;
+    s.tegel[(y - s.y0) * STUK + (x - s.x0)] = CODE[soort];
+    w.tegelsAnders.set(T.tegelNummer(x, y), soort);
   };
   // De grond op tegel (x, y): één ding per soort tegel ({ vel, id, naam }, js/kaart.js), of null (buiten de kaart, of
   // een kaart zonder grond).
-  T.grondOp = (w, x, y) => (w && w.grond && T.opKaart(w, x, y) && w.grond[y][x]) || null;
-  // Het vak dat de hele kaart beslaat: { x, y, b, h }. Wat over de hele kaart gaat (een lijst per tegel, een lus over
-  // alle tegels), gaat over dit vak, met tegel (x, y) op plek (y - vak.y) * vak.b + (x - vak.x). In B2b houdt dit op,
-  // want het eiland is te groot voor één lijst: dan krijgt elk gebruik zijn eigen vak (om het dorp, binnen het bereik).
-  T.kaartVak = (w) => ({ x: 0, y: 0, b: w.b, h: w.h });
+  T.grondOp = function (w, x, y) {
+    if (!opEiland(w)) return (w && w.grond && T.opKaart(w, x, y) && w.grond[y][x]) || null;
+    const s = openStuk(w, x, y);
+    return s ? T.grondVanGid(s.grond[(y - s.y0) * STUK + (x - s.x0)]) : null;
+  };
+  // Het vak dat de kaart beslaat: { x, y, b, h }. Wat over de hele kaart gaat (een lijst per tegel, een lus over alle
+  // tegels), gaat over dit vak, met tegel (x, y) op plek (y - vak.y) * vak.b + (x - vak.x). Op het eiland is dat het vak
+  // om het dorp (w.vak), want het eiland is te groot voor één lijst: in B2b, stap 4, krijgt wat niet om het dorp gaat
+  // zijn eigen vak.
+  T.kaartVak = (w) => (opEiland(w) ? { ...w.vak } : { x: 0, y: 0, b: w.b, h: w.h });
   // Heeft deze kaart tegels, en grond? Een toets kan een kaart zonder maken (zoals die van het vee).
-  T.heeftTegels = (w) => !!(w && w.tegels && w.tegels.length);
-  T.heeftGrond = (w) => !!(w && w.grond && w.grond.length);
+  T.heeftTegels = (w) => opEiland(w) || !!(w && w.tegels && w.tegels.length);
+  T.heeftGrond = (w) => opEiland(w) || !!(w && w.grond && w.grond.length);
   // Een tegel als één getal dat niet van de maat van de kaart afhangt (het eiland is kleiner dan 4096 tegels), voor wat
-  // per tegel bewaard wordt (het slijten van de paadjes, js/paden.js); en terug.
+  // per tegel bewaard wordt (het slijten van de paadjes, js/paden.js; wat op het eiland veranderde); en terug.
   T.tegelNummer = (x, y) => y * 4096 + x;
   T.tegelVanNummer = (k) => ({ x: k % 4096, y: Math.floor(k / 4096) });
-  // Welke kamers er om tegel (x, y) liggen (berekenBurenKamers, hierboven); buiten de kaart geen.
-  T.burenKamersOp = (w, x, y) => (T.opKaart(w, x, y) ? w.burenKamers[y][x] : []);
+  // Welke kamers er om tegel (x, y) liggen (berekenBurenKamers, hierboven); buiten de kaart geen, en op het eiland is
+  // alles buiten.
+  const BUITEN = ['buiten'];
+  T.burenKamersOp = (w, x, y) => (!T.opKaart(w, x, y) ? [] : opEiland(w) ? BUITEN : w.burenKamers[y][x]);
+
+  // ── De kaart van het eiland, in stukken (B2b) ──
+  // Het eiland komt uit zijn nummer (js/eiland.js), en het land van elk stuk van STUK bij STUK tegels uit T.landStuk
+  // (js/maker.js). Wat in het spel bewaard wordt (in S), is alleen wat er anders werd: per tegelnummer het woord
+  // (w.tegelsAnders, T.zetTegel), de grond (w.grondAnders: de maker legt het plein en zijn grond), en wat er van het eiland
+  // weg is (w.gerooid, T.haalVoorwerpWeg); wat iemand neerzette staat in w.voorwerpen, zoals op elke kaart. En welke
+  // stukken open zijn (w.open, stuknummers): waar je mensen kwamen. Een stuk dat niet open is, is 'buiten', zodat A* nooit
+  // een stuk laat maken en wat er gebeurt niet van het scherm afhangt. De stukken zelf zijn geen spelstaat: ze staan per
+  // kaart in STUKKEN (niet in S), en een geladen spel maakt ze opnieuw, met wat er anders werd erover.
+  const STUK = 64;
+  T.STUK = STUK;
+  const EILAND_MAAT = () => T.EILAND_INSTELLINGEN.maat;
+  const WOORD = ['buiten', 'vloer', 'muur', 'deur'];
+  const CODE = { buiten: 0, vloer: 1, muur: 2, deur: 3 };
+  const STUKKEN = new WeakMap();
+  T.stukNummer = (sx, sy) => sy * 64 + sx;
+  T.stukVan = (x, y) => T.stukNummer(Math.floor(x / STUK), Math.floor(y / STUK));
+  // Een nieuwe kaart van het eiland van `zaad`, met `vak` het vak om het dorp (T.kaartVak). Nog zonder open stukken.
+  T.eilandKaart = function (zaad, vak) {
+    const kamer = { id: 'buiten', naam: T.t('Outside'), x1: 0, y1: 0, x2: EILAND_MAAT() - 1, y2: EILAND_MAAT() - 1, vloer: ['#3c5e1e', '#355f22'] };
+    return {
+      eiland: { zaad }, vak: { ...vak },
+      open: new Set(), tegelsAnders: new Map(), grondAnders: new Map(), gerooid: new Set(),
+      deuren: new Map(), geheimen: [], kamers: [kamer], voorwerpen: [], questVoorwerpen: [], wezens: [],
+      bekend: new Set(['buiten']), huidigeKamer: 'buiten', overgangen: [], akkers: [], meenten: [],
+      buiten: true, naam: null, proef: false, doof: 0, plein: null, marskramer: null, heer: null,
+    };
+  };
+  function stukkenVan(w) {
+    let m = STUKKEN.get(w);
+    if (!m) STUKKEN.set(w, (m = new Map()));
+    return m;
+  }
+  // Het stuk van tegel (x, y) als het open is (en dan gemaakt), anders null.
+  function openStuk(w, x, y) {
+    if (!(x >= 0 && y >= 0 && x < EILAND_MAAT() && y < EILAND_MAAT())) return null;
+    const sx = Math.floor(x / STUK);
+    const sy = Math.floor(y / STUK);
+    const n = T.stukNummer(sx, sy);
+    if (!w.open.has(n)) return null;
+    const m = stukkenVan(w);
+    let s = m.get(n);
+    if (!s) m.set(n, (s = maakStuk(w, sx, sy)));
+    return s;
+  }
+  // Het land van het eiland (T.landStuk), met wat er anders werd erover.
+  const NATUUR = new Map(); // naam → { vel, id, eig }: de tekening van wat er op het eiland groeit
+  function maakStuk(w, sx, sy) {
+    const x0 = sx * STUK;
+    const y0 = sy * STUK;
+    const L = T.landStuk(T.eilandVan(w.eiland.zaad), x0, y0, STUK, STUK);
+    const tegel = new Uint8Array(STUK * STUK);
+    const grond = new Uint16Array(STUK * STUK);
+    const op = new Array(STUK * STUK).fill(null);
+    for (let i = 0; i < STUK * STUK; i++) {
+      const n = T.tegelNummer(x0 + (i % STUK), y0 + Math.floor(i / STUK));
+      const anders = w.grondAnders.get(n);
+      grond[i] = anders != null ? anders : L.grond[i];
+      tegel[i] = T.grondVanGid(grond[i]) && T.grondVanGid(grond[i]).vast ? CODE.muur : CODE.vloer;
+    }
+    for (const d of L.dingen) {
+      if (w.gerooid.has(T.tegelNummer(d.x, d.y))) continue;
+      if (!NATUUR.has(d.naam)) NATUUR.set(d.naam, T.opzoekTegelNaam(T.natuurTegel(d.naam)));
+      const v = T.maakVoorwerp(NATUUR.get(d.naam), d.x, d.y);
+      v.natuur = true;
+      const i = (d.y - y0) * STUK + (d.x - x0);
+      op[i] = v;
+      if (NATUUR.get(d.naam).eig.vast) tegel[i] = CODE.muur; // zoals T.laadKaart: een vast ding staat op een muur
+    }
+    for (let i = 0; i < STUK * STUK; i++) {
+      const anders = w.tegelsAnders.get(T.tegelNummer(x0 + (i % STUK), y0 + Math.floor(i / STUK)));
+      if (anders) tegel[i] = CODE[anders];
+    }
+    return { sx, sy, x0, y0, tegel, grond, op };
+  }
+  // Maak de stukken open die (een deel van) dit vak raken.
+  T.openVak = function (w, vak) {
+    for (let sy = Math.max(0, Math.floor(vak.y / STUK)); sy * STUK < Math.min(EILAND_MAAT(), vak.y + vak.h); sy++) {
+      for (let sx = Math.max(0, Math.floor(vak.x / STUK)); sx * STUK < Math.min(EILAND_MAAT(), vak.x + vak.b); sx++) w.open.add(T.stukNummer(sx, sy));
+    }
+    T.kaartVeranderd(w);
+  };
+  // Het ding van het eiland op tegel (x, y), of null.
+  function natuurOp(w, x, y) {
+    const s = openStuk(w, x, y);
+    return s ? s.op[(y - s.y0) * STUK + (x - s.x0)] : null;
+  }
+  // Alles wat in dit vak staat: wat iemand zette (w.voorwerpen), en op het eiland wat er groeit, in de stukken die open
+  // zijn. Voor wie zoekt wat er in een stuk land staat (een boom, iets laags dat plaats maakt voor een gebouw).
+  T.voorwerpenIn = function (w, vak) {
+    const binnen = (v) => v.x >= vak.x && v.y >= vak.y && v.x < vak.x + vak.b && v.y < vak.y + vak.h;
+    const uit = (w.voorwerpen || []).filter(binnen);
+    if (!opEiland(w)) return uit;
+    for (const n of w.open) {
+      const s = stukkenVan(w).get(n) || openStuk(w, (n % 64) * STUK, Math.floor(n / 64) * STUK);
+      if (s.x0 >= vak.x + vak.b || s.y0 >= vak.y + vak.h || s.x0 + STUK <= vak.x || s.y0 + STUK <= vak.y) continue;
+      for (const v of s.op) if (v && binnen(v)) uit.push(v);
+    }
+    return uit;
+  };
   T.deurOp = (w, x, y) => w.deuren.get(sleutelVan(x, y)) || null;
   T.kamerVan = (w, x, y) => w.kamers.find((k) => x >= k.x1 && x <= k.x2 && y >= k.y1 && y <= k.y2) || null;
   // Een voorwerp staat meestal op één tegel, maar de spiraaltrap beslaat er drie bij drie: een
@@ -350,7 +471,7 @@
     return op;
   }
   T.voorwerpOp = function (w, x, y) {
-    if (Number.isInteger(x) && Number.isInteger(y)) return lijstPerTegel(w).get(tegelSleutel(x, y)) || null;
+    if (Number.isInteger(x) && Number.isInteger(y)) return lijstPerTegel(w).get(tegelSleutel(x, y)) || (opEiland(w) && natuurOp(w, x, y)) || null;
     // Tussen twee tegels in (een poppetje onderweg): zoals vroeger, langs alle voorwerpen.
     return w.voorwerpen.find((v) => {
       const f = T.voetVan(v);
@@ -362,9 +483,16 @@
     T.kaartVeranderd(w);
     return v;
   };
+  // Wat van het eiland kwam (v.natuur), gaat uit zijn stuk, en het bewaarde spel onthoudt dat het weg is (w.gerooid).
   T.haalVoorwerpWeg = function (w, v) {
     const i = w.voorwerpen.indexOf(v);
     if (i >= 0) w.voorwerpen.splice(i, 1);
+    else if (v.natuur && opEiland(w)) {
+      const s = openStuk(w, v.x, v.y);
+      const j = s ? (v.y - s.y0) * STUK + (v.x - s.x0) : -1;
+      if (s && s.op[j] === v) s.op[j] = null;
+      w.gerooid.add(T.tegelNummer(v.x, v.y));
+    }
     T.kaartVeranderd(w);
   };
   // De kaart is veranderd (een voorwerp, of een tegel die een muur werd of weer vloer): wat eruit volgt, rekent hij
@@ -536,7 +664,7 @@
   let laatste = null; // het raster waar het laatst naar gevraagd werd: A* vraagt duizenden keren achter elkaar dezelfde kaart
   function vastRaster(w) {
     let r = laatste && laatste.w === w ? laatste : RASTERS.get(w);
-    if (!(r && r.voorwerpen === w.voorwerpen && r.aantal === w.voorwerpen.length && r.b === w.b && r.h === w.h)) {
+    if (!(r && r.voorwerpen === w.voorwerpen && r.aantal === w.voorwerpen.length && r.b === w.b && r.h === w.h && r.wvak === w.vak)) {
       const vak = T.kaartVak(w);
       const raster = new Uint8Array(vak.b * vak.h);
       for (let y = 0; y < vak.h; y++) {
@@ -546,7 +674,7 @@
           raster[y * vak.b + x] = t === 'muur' || t === 'buiten' || (v && T.VOORWERPEN[v.soort].blokkeert) ? VAST : t === 'deur' ? DEUR : VRIJ;
         }
       }
-      r = { w, voorwerpen: w.voorwerpen, aantal: w.voorwerpen.length, b: w.b, h: w.h, vak, raster };
+      r = { w, voorwerpen: w.voorwerpen, aantal: w.voorwerpen.length, b: w.b, h: w.h, wvak: w.vak, vak, raster };
       RASTERS.set(w, r);
     }
     laatste = r;
@@ -560,11 +688,13 @@
     if (!T.opKaart(w, x, y)) return VAST;
     if ((x | 0) === x && (y | 0) === y) {
       const l = laatste;
-      if (!(l && l.w === w && l.voorwerpen === w.voorwerpen && l.aantal === w.voorwerpen.length && l.b === w.b && l.h === w.h)) vastRaster(w);
+      if (!(l && l.w === w && l.voorwerpen === w.voorwerpen && l.aantal === w.voorwerpen.length && l.b === w.b && l.h === w.h && l.wvak === w.vak)) vastRaster(w);
       const { vak, raster } = laatste;
-      return raster[(y - vak.y) * vak.b + (x - vak.x)];
+      const i = x - vak.x;
+      const j = y - vak.y;
+      if (i >= 0 && j >= 0 && i < vak.b && j < vak.h) return raster[j * vak.b + i];
     }
-    // tussen twee tegels in: zoals vroeger
+    // tussen twee tegels in, of op het eiland buiten het vak om het dorp: per tegel
     const t = T.tegel(w, x, y);
     if (t === 'muur' || t === 'buiten') return VAST;
     const v = T.voorwerpOp(w, x, y);
