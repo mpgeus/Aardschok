@@ -102,14 +102,14 @@ test('een put op een plek om te rooien bereikt een huis dat er nog geen heeft, w
     }
     // Bereikt de put die er staat iedereen, dan is er geen plek: niemand mist er een. Het lege begin heeft nog geen put:
     // die zet de toets zelf neer, op de plek die hij vond, en maakt hem af.
-    const eerste = T.plekOmTeRooien(D, 'put', { x: 0, y: 0 });
+    const eerste = T.plekOmTeRooien(D, 'put', { x: K.x, y: K.y });
     const u = T.plaatsGebouw(D, 'put', eerste.x, eerste.y);
     assert.ok(u.gelukt, u.reden);
     klaar(S, u.instantie);
     const oud = T.WENSEN_INSTELLINGEN.kring.put;
     T.WENSEN_INSTELLINGEN.kring.put = 200;
     try {
-      assert.equal(T.plekOmTeRooien(D, 'put', { x: 0, y: 0 }), null);
+      assert.equal(T.plekOmTeRooien(D, 'put', { x: K.x, y: K.y }), null);
     } finally {
       T.WENSEN_INSTELLINGEN.kring.put = oud;
     }
