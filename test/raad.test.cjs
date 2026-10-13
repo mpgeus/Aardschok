@@ -328,6 +328,29 @@ function naEenNacht(S, dag) {
 
 // De wijn (js/wijngaard.js, T.wijnNaDePluk; werklijst vraag 155; Marcel, 10 okt: "Laten we vooruitkijken doen"): is er een
 // wijnboerderij en haalt de wijn het jaar niet, dan zegt de raad dat er een wijngaard bij moet.
+test('de afwisseling: eet het dorp twee soorten of minder, dan zegt de raad wat een soort erbij brengt (vraag 154)', () => {
+  const S = dorp();
+  const D = S.dorp;
+  opDag(S, 20.5);
+  // Het proefdorp eet graan, kaas en vlees uit de kar: dat staat in de balk, maar de raad zegt het nog niet.
+  assert.deepEqual(D.behoeften.afwisseling, ['graan', 'vlees', 'kaas']);
+  assert.notEqual(id(S), 'afwisseling');
+  D.behoeften.afwisseling = ['graan'];
+  assert.equal(id(S), 'afwisseling');
+  assert.equal(raad(S).tekst, 'The village eats only grain, and works at 60%. Another kind of food helps: a hunter [B] (meat) and a vegetable garden [B] (vegetables).');
+  // Staat er een jager, en is zijn vlees nog geen tiende van de maaltijd, dan nog een.
+  D.gebouwen.push({ soort: 'jager', x: 0, y: 0, klaar: true });
+  assert.match(raad(S).tekst, /another hunter \[B\] \(meat\)/);
+  // Is er niets meer dat nu mag, dan zegt hij niets.
+  const mag = T.magGebouwd;
+  T.magGebouwd = () => false;
+  try {
+    assert.notEqual(id(S), 'afwisseling');
+  } finally {
+    T.magGebouwd = mag;
+  }
+});
+
 test('de wijn: is er een wijnboerderij en haalt de wijn het jaar niet, dan moet er een wijngaard bij', () => zonderWensen(() => {
   const S = metRaadsman(opDag(dorp({ gebouwen: ['huis', 'wijnboerderij'] }), 40.5));
   const D = S.dorp;

@@ -281,6 +281,25 @@
         return h.length ? T.opsomming(h.map((x) => x.zin)) : T.t('more food: more fields, livestock, a fisherman or a hunter');
       },
     },
+    // De afwisseling (vraag 154; Marcel, 13 okt: "A1, B1"): eet het dorp minder dan vier soorten, dan werkt het trager
+    // (T.werkVanAfwisseling, js/behoeften.js); met één soort het traagst. Wat helpt: T.watHelptAanAfwisseling (js/raad.js).
+    eentonig: {
+      naam: T.t('Plain fare'),
+      kop: T.t('The food is plain'),
+      nog: T.t('The food is still plain'),
+      voorbij: T.t('The food is varied again'),
+      speelt: (D) => (T.werkVanAfwisseling(D) < 1 ? T.t('the village eats only {soorten}, and works at {werk}%', afwisselingWoorden(D)) : null),
+      erger: {
+        naam: T.t('One dish'),
+        kop: T.t('The village eats one dish'),
+        minder: T.t('The village eats more than one dish again, but the food is still plain'),
+        speelt: (D) => (D.behoeften.afwisseling.length === 1 ? T.t('there is only {soorten}, and it works at {werk}%', afwisselingWoorden(D)) : null),
+      },
+      helpt: (D) => {
+        const h = T.watHelptAanAfwisseling(D);
+        return h.length ? T.opsomming(h.map((x) => x.zin)) : T.t('another kind of food');
+      },
+    },
     kou: {
       naam: T.t('Cold'),
       kop: T.t('It is cold in the houses'),
@@ -387,6 +406,11 @@
       },
     },
   };
+  // Wat het dorp eet en hoe hard het werkt, voor de status eentonig.
+  const afwisselingWoorden = (D) => ({
+    soorten: T.opsomming(D.behoeften.afwisseling.map((wat) => T.waarNaam(wat))),
+    werk: Math.round(T.werkVanAfwisseling(D) * 100),
+  });
   function droogteWaarom(D) {
     const W = T.weerVan(D);
     return W && W.droog >= 3 ? T.t('it has not rained for {getal} days', { getal: T.telwoord(W.droog) }) : T.t('too little rain is falling');

@@ -453,10 +453,28 @@ function zonderOorzaak() {
   D.behoeften.tevredenheid = 0.8;
   D.behoeften.mist = [];
   D.behoeften.last = [];
+  D.behoeften.afwisseling = ['graan', 'vlees', 'kaas', 'groente']; // vier soorten: het volle werk (vraag 154)
   D.bevolking = T.telWoonruimte(D) - 4;
   for (const o of Object.keys(T.OORZAKEN)) assert.equal(T.OORZAKEN[o].speelt(D, ZOMER), null, `${o} speelt niet`);
   return S;
 }
+
+test('eentonig eten is een status: minder dan vier soorten, en erger met één (vraag 154)', () => {
+  const D = zonderOorzaak().dorp;
+  const status = () => T.statussenVan(D, ZOMER).find((s) => s.id === 'eentonig') || null;
+  assert.equal(status(), null, 'met vier soorten werkt het dorp op volle kracht');
+  D.behoeften.afwisseling = ['graan', 'wijn'];
+  let s = status();
+  assert.equal(s.niveau, 1);
+  assert.equal(s.zin, 'The food is plain, for the village eats only grain and wine, and works at 75%.');
+  assert.match(s.helpt, /a hunter \[B\] \(meat\)/, 'wat een soort erbij brengt');
+  assert.doesNotMatch(s.helpt, /wine/, 'niet wat er al op tafel staat');
+  D.behoeften.afwisseling = ['graan'];
+  s = status();
+  assert.equal(s.niveau, 2);
+  assert.equal(s.naam, 'One dish');
+  assert.equal(s.zin, 'The village eats one dish, for there is only grain, and it works at 60%.');
+});
 
 test('een oorzaak speelt als het dorp hem heeft, en zegt waarom', () => {
   const D = zonderOorzaak().dorp;

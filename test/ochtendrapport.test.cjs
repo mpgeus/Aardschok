@@ -20,6 +20,9 @@ function dorp(zaad = 1, opties = {}) {
   const S = proefDorp(T, { boerderijen: 3, ...opties }).S;
   Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set() });
   S.dorp.lot = Object.assign(S.dorp.lot || {}, { zaad });
+  // Het proefdorp eet graan, kaas en vlees uit de kar: dat is de status eentonig (vraag 154). Hier at het vier soorten,
+  // zodat een stille dag stil is.
+  S.dorp.behoeften.afwisseling = ['graan', 'vlees', 'kaas', 'groente'];
   return S;
 }
 

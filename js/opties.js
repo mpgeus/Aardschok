@@ -1034,6 +1034,7 @@
     visEnVleesMarge: T.t('fish and meat margin'),
     roversNa: T.t('robbers after'),
     raadsmanNa: T.t('advisor after'),
+    afwisselingTot: T.t('advice at this many kinds of food'),
     kansPerAvond: T.t('chance per evening'),
     kansWinter: T.t('chance in winter'),
     verstWeg: T.t('furthest away'),

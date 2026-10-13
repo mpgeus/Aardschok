@@ -31,6 +31,9 @@
     // Zoveel dagen nadat een voorval voorbijging dat een raadsman had beslist, als je er een had (js/voorvallen.js: je
     // was weg), zegt de raad: kies een raadsman (js/raadsman.js).
     raadsmanNa: 10,
+    // De afwisseling (vraag 154): de raad zegt het als het dorp zoveel soorten eet of minder (2: 75% werk). Daarboven
+    // staat het alleen in de balk (de status eentonig, js/voorvallen.js), zodat het doel en de groei aan het woord blijven.
+    afwisselingTot: 2,
   };
   const IN = () => T.RAAD_INSTELLINGEN;
 
@@ -117,7 +120,7 @@
     const w = D.wereld;
     const tB = ' [B]';
     // Vissers: een per vissersPer mensen, zolang er water genoeg is (een per waterPerVisser tegels).
-    const water = T.heeftTegels(w) ? T.natuurBij(w, 'water', T.kaartVak(w), 0) : 0;
+    const water = waterBij(w);
     const visser = T.GEBOUWEN.visser;
     const vissers = (D.gebouwen || []).filter((g) => g.soort === 'visser').length;
     const kunnen = Math.min(Math.floor(water / IN().waterPerVisser), Math.max(1, Math.ceil((D.bevolking || 0) / IN().mensenPerVisser)));
@@ -148,6 +151,27 @@
     const zaai = T.zaaigraanApart(D, dag);
     if (zaai > 0 && ((D.voorraad && D.voorraad.graan) || 0) < zaai) {
       uit.push({ id: 'kopen', zin: T.t('buy seed grain from the peddler (in {maand})', { maand: marskramerMaand(dag) }) });
+    }
+    return uit;
+  };
+
+  // Hoeveel tegels water er in het vak om het dorp liggen (voor een visser).
+  const waterBij = (w) => (T.heeftTegels(w) ? T.natuurBij(w, 'water', T.kaartVak(w), 0) : 0);
+
+  // Wat een soort eten op tafel brengt die er nu niet bij is (vraag 154, de afwisseling; Marcel, 13 okt: "A1"): per
+  // soort het gebouw dat hem maakt, als het nu mag. Staat er al een, dan is wat hij maakt nog geen tiende van de
+  // maaltijd: "another". De vis alleen met water bij het dorp, de wijn alleen zonder wijnboerderij (meer wijngaard zegt
+  // de raad `wijn`), en het brood met een molen als die er niet is. Geeft [{ soort, bouw, zin }].
+  const MAAKT_SOORT = { vlees: 'jager', groente: 'moestuin', eieren: 'kippenhok', vis: 'visser', wijn: 'wijnboerderij', brood: 'bakkerij' };
+  T.watHelptAanAfwisseling = function (D) {
+    const op = (D.behoeften && D.behoeften.afwisseling) || [];
+    const uit = [];
+    for (const [soort, bouw] of Object.entries(MAAKT_SOORT)) {
+      if (op.includes(soort) || T.voedtAlsGraan(soort) <= 0 || !T.magGebouwd(D, bouw)) continue;
+      if ((bouw === 'visser' && !waterBij(D.wereld)) || (bouw === 'wijnboerderij' && heeft(D, bouw))) continue;
+      const namen = bouw === 'bakkerij' && !heeft(D, 'molen') ? [eenNaam('molen'), eenNaam(bouw)]
+        : [heeft(D, bouw) ? T.t('another {gebouw}', { gebouw: naamVan(bouw) }) : eenNaam(bouw)];
+      uit.push({ soort, bouw, zin: T.t('{gebouwen} [B] ({soort})', { gebouwen: T.opsomming(namen), soort: T.waarNaam(soort) }) });
     }
     return uit;
   };
@@ -207,8 +231,8 @@
   }
 
   // De raden, van wat het zwaarst weegt naar wat het minst weegt. `als(S)` zegt of hij nu geldt, `tekst(S)` wat er
-  // dan staat. Wat aan een dag hangt, gaat voor; dan de winter; dan de eerste dag; dan een vol dorp; dan de wensen
-  // (vraag 87); dan de wijn een jaar vooruit (vraag 155); dan het doel en de groei.
+  // dan staat. Wat aan een dag hangt, gaat voor; dan de winter; dan de eerste dag; dan een vol dorp; dan de afwisseling
+  // (vraag 154); dan de wensen (vraag 87); dan de wijn een jaar vooruit (vraag 155); dan het doel en de groei.
   T.RADEN = [
     // Twee bazen (js/bazen.js; werklijst vraag 106): staat een van de twee onder de grens, dan gaat dat voor alles.
     {
@@ -309,6 +333,20 @@
       id: 'plaats',
       als: (D) => mensenNodig(D) > 0 && T.waaromGeenGezin(D).includes('plaats'),
       tekst: () => T.t('No family is coming: the village is full. Build {hut} or {huis}: [B].', { hut: eenNaam('hut'), huis: eenNaam('huis') }),
+    },
+    // De afwisseling (vraag 154): eet het dorp weinig soorten (afwisselingTot), dan werkt het trager
+    // (T.werkVanAfwisseling, js/behoeften.js). Na een vol dorp, want eerst moet iedereen een dak hebben; vóór de wensen.
+    {
+      id: 'afwisseling',
+      als: (D) => {
+        const op = (D.behoeften && D.behoeften.afwisseling) || [];
+        return op.length > 0 && op.length <= IN().afwisselingTot && T.werkVanAfwisseling(D) < 1 && T.watHelptAanAfwisseling(D).length > 0;
+      },
+      tekst: (D) => T.t('The village eats only {soorten}, and works at {werk}%. Another kind of food helps: {hulp}.', {
+        soorten: T.opsomming(D.behoeften.afwisseling.map((wat) => T.waarNaam(wat))),
+        werk: Math.round(T.werkVanAfwisseling(D) * 100),
+        hulp: T.opsomming(T.watHelptAanAfwisseling(D).slice(0, 2).map((h) => h.zin)),
+      }),
     },
     {
       // De wensen (werklijst vraag 86, a, en 87; Marcel, 2 okt: "a ja"): wat de huizen missen en wat helpt, zoals
