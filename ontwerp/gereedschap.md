@@ -82,7 +82,12 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   de verste tegel die hij lopend haalt, naar het zuiden (de kust) en dan het westen; per beeld de regels, het maken van
   land en het tekenen apart, per stuk dat opengaat dat beeld en de drie erna, de zwaarste beelden (met een nieuwe dag
   of een stuk), en wie de kaart veranderde zonder plek. `-- --zaad 5 --richting oost,noord --duur 90 --afdruk kust.png`;
-  de uitslag ook in `gereedschap/schermen/uit/stukmeting.json` (niet in git).
+  de uitslag ook in `gereedschap/schermen/uit/stukmeting.json` (niet in git). Naast de tijd van de code ook de echte
+  tijd per beeld, tot het volgende beeld (13 okt): zonder videokaart schildert de browser het beeld grotendeels na het
+  tekenen, dus "tekenen" alleen zegt te weinig (`kaarten.md`, "Wat de meting mat"); en het aantal kijkgaten per beeld.
+  `-- --tekenen met` meet het pad van de videokaart (hier nagedaan op de processor: dan telt alleen de tijd van de
+  code), en `-- --richting zuid --reik 16 --duur 1 --stil 15` loopt hooguit 16 stappen (het bos in, waar 24 bomen een
+  kijkgat om de schout tekenen) en meet dan 15 s stilstaan apart.
 - `npm run samenvatting` maakt `ontwerp/het-spel-in-het-kort.pdf` uit `gereedschap/samenvatting/samenvatting.html` en de
   vier beelden in `gereedschap/samenvatting/beelden/` (alle drie in git); `-- --beelden` speelt eerst het spel en maakt
   de beelden opnieuw, elk uit een vers spel op land 5 van de maker (een minuut). Lukt een beeld niet meer, dan zegt het
