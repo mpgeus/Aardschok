@@ -98,7 +98,7 @@ Marcel, 11 okt: "de wereld moet 1 geheel worden het vlakke van 100x100 is niet h
 afstanden. Het plan (13 okt; Marcel: "A ja, B1, C2"), met het hoe en wat er nu is, in `kaarten.md`, "Het hele eiland":
 - **B2a, één weg naar de tegels: af** (13 okt): niets leest de rechthoek van 100 bij 100 nog zelf, en het spel
   veranderde niet (de speeltest en de schermen gelijk); versie 9 van het bewaarde spel.
-- **B2b, de kaart in stukken** van 64 bij 64, in de coördinaten van het eiland, gemaakt als ze nodig zijn; de rand om
+- **B2b, de kaart in stukken** (**Bezig in sessie `claude/funny-fermi-5fqm1u`** (13 okt): het plan voor Marcel) van 64 bij 64, in de coördinaten van het eiland, gemaakt als ze nodig zijn; de rand om
   je land gaat weg. Meer draden (Marcel: "misschien ook meerdere threads", en "eerst meten is goed"): het stuk komt uit
   één zuivere functie, en workers pas als het hapert.
 - **B2c, de mist:** zwart, grijs (het land zoals het nu is, zonder wie er loopt), en helder waar je mensen kijken; bij
