@@ -22,8 +22,7 @@ De toetsen en het gereedschap spelen op het proefdorp (`T.proefdorp`, `Spel.debu
 wijnboerderij is een eigen gebouw, met de wijngaard als veld ernaast. **B2 is af** (13 okt, onder "Af"), op Marcels blik
 na: het hele eiland in stukken, opslaan wat veranderde, het optimaliseren, en de mist (B2c).
 
-**B3, de afwisseling, wordt gebouwd** (13 okt, Marcel: "A1, B1, C1, D1"; de stappen bij B3), met tussendoor de toets
-voor dubbele namen in `Spel` (`opmerkingen.md`; "ja, bouw die toets").
+**B3, de afwisseling, wordt gebouwd** (13 okt, Marcel: "A1, B1, C1, D1"; de stappen bij B3).
 
 **Wacht op Marcel:**
 - **De mist bekijken** (B2c, 13 okt; `spel.md`, "Zo werkt de mist nu"): Nieuw spel, en zoom uit (het wiel, of `Tab`):
@@ -159,6 +158,9 @@ het graan vraagt", de schandpaal, de heervaart en de twee bazen.
   schrijven voor de nieuwe richting, als B en C er staan.
 
 ## Af (sinds 11 okt)
+
+- De toets voor dubbele namen (13 okt, Marcel: "ja, bouw die toets"): `test/namen.test.cjs` kijkt bij het laden of geen
+  bestand een naam in `Spel` zet die een ander al zette (`gereedschap.md`, bij `npm test`).
 
 - B2, het hele eiland (vraag 117, stap 3; 13 okt, Marcel: "A ja, B1, C2"; alles in `kaarten.md`, "Het hele eiland"): één
   weg naar de tegels (B2a), het eiland in stukken van 64 bij 64 die opengaan waar je mensen komen (B2b), opslaan wat

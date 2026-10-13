@@ -30,7 +30,9 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   spel zoals het draait, met `require('./laad.cjs').spel()`: de scripts uit `index.html`, in die
   volgorde, zonder wat alleen scherm is (`test/laad.cjs`). Een toets van het gereedschap laadt wat
   zijn bladzijde laadt (`.pagina('gereedschap/wereld.html')`). Nooit een eigen lijstje: dan mist er
-  vroeg of laat een bestand, en toetst de toets een ander spel dan er draait. Een toets die een dorp nodig heeft, speelt
+  vroeg of laat een bestand, en toetst de toets een ander spel dan er draait. `test/namen.test.cjs` kijkt bij het laden
+  mee of geen bestand een naam in `Spel` zet die een ander al zette (13 okt: `T.nieuwLand` stond in `js/land.js` en in
+  `js/wereld.js`, en het laatste won stil); alleen `js/opties.js` mag de blokken van de werkbank terugzetten. Een toets die een dorp nodig heeft, speelt
   op het proefdorp (`test/grond.cjs`; sinds ronde 2 van het snoeien, stap 3, 12 okt): het lege begin op eiland 2 met het
   huis van de schout, boerderijen met hun akker en hutten, gebouwd met de regels van het spel en meteen af, op vast
   toeval; met opties meer (`gebouwen: ['herberg']`, `weide: true`, `boerderijen: 3`; een `'wijnboerderij'` erbij heeft nog geen

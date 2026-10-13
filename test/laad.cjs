@@ -31,10 +31,15 @@ function scriptsVan(pagina) {
 // Laadt de bladzijde zonder wat alleen scherm is, en geeft de naamruimte terug. De toetsen spelen in het Engels, de
 // brontaal (vraag 147, js/taal.js): het Nederlands is op 11 okt uit het spel gegaan (Marcel: "Nederlands mag je mee
 // stoppen"), dus een toets verwacht de Engelse zin; wat nog niet om is, staat nog in het Nederlands in de code.
-function pagina(naam) {
+// `bijElk(s)` hoort vóór elk script welk het is (test/namen.test.cjs: wie zet welke naam).
+function pagina(naam, bijElk) {
   globalThis.Spel = globalThis.Spel || {};
   if (!globalThis.Spel.TAAL_GEZET) globalThis.Spel.TAAL_GEZET = 'en';
-  for (const s of scriptsVan(naam)) if (!ALLEEN_SCHERM.includes(s)) require(path.join(WORTEL, s));
+  for (const s of scriptsVan(naam)) {
+    if (ALLEEN_SCHERM.includes(s)) continue;
+    if (bijElk) bijElk(s);
+    require(path.join(WORTEL, s));
+  }
   return globalThis.Spel;
 }
 

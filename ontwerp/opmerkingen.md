@@ -18,9 +18,6 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   Zuiniger kan nog: een groep hoeft alleen rond zijn thuis en zijn plekken aan de bosrand te kijken, en de hele kaart is
   pas nodig als hij verhuist of splitst. Dat hangt dan niet meer af van hoe groot het vak om het dorp wordt. Pas als
   het vak groeit of het weer opvalt.
-- **Een naam die twee keer gezet wordt** (13 okt, idee van Claude): `T.nieuwLand` bestond al in `js/land.js`, en een
-  nieuwe met dezelfde naam in `js/wereld.js` werd stil overschreven (de toetsen merkten het niet, de browser wel). Een
-  toets die bij het laden kijkt of geen bestand een naam in `Spel` zet die een ander al zette, vangt dat.
 - **Het hol vlak bij het kamp** (13 okt, B2b): het hol van een roedel ligt op een tegel diep in het bos die het lot
   kiest, zonder afstand tot het dorp (`thuisKandidaten` in `js/beesten.js`). Op eiland 7 ligt het tien tegels van de
   plek van de kar in het kamp, en een roedel schuwt de huifkar en de ossenkar zoals een mens (`mensBij`): komt hij 's
