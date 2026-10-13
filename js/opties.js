@@ -1258,6 +1258,7 @@
     pleinDiep: T.t('square depth'),
     pleinTegels: T.t('square tiles'),
     eikenTot: T.t('oaks up to'),
+    marktRij: T.t('market row at least'),
     // Het lege begin, meebouwen, boeren uit het niets, de boeren
     kar: T.t('cart'),
     zaaigraan: T.t('seed grain'),

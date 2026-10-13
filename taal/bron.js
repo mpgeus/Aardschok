@@ -2532,6 +2532,7 @@ Spel.TAAL_BRON = [
   {"t":"square depth","waar":["js/opties.js"]},
   {"t":"square tiles","waar":["js/opties.js"]},
   {"t":"oaks up to","waar":["js/opties.js"]},
+  {"t":"market row at least","waar":["js/opties.js"]},
   {"t":"cart","waar":["js/opties.js"]},
   {"t":"children","waar":["js/opties.js"]},
   {"t":"grandfather","waar":["js/opties.js"]},
