@@ -170,6 +170,14 @@ nummers passen op het hele eiland, en `T.eilandStuk` maakt elk stuk los (64 bij 
    **Besloten** (Marcel, 13 okt: **"Alles per stuk"**): het raster van het lopen, het tekenen en het laden van de plaatjes
    werken alleen het nieuwe stuk bij, en het stuk wordt vooruit gemaakt voordat iemand er is. Geen worker; daarna
    opnieuw meten, en pas een worker als het stuk zelf dan nog hapert.
+   **Gebouwd en opnieuw gemeten** (13 okt, hoe het werkt in `code.md` bij de kaart van het eiland): een nieuw stuk is
+   geen kaartverandering meer, en alles neemt alleen het nieuwe stuk erbij. Dezelfde tocht naar de kust: het beeld
+   waarin een stuk opengaat, kost nu 1 tot 7 ms aan regels (was 31 tot 129) en 5 tot 30 ms aan tekenen (was 35 tot
+   58), en 13 van de 18 stukken lagen al klaar. Wat niet klaar lag (twee stukken vlak na elkaar, of de schout die van
+   richting verandert), kost nog 20 tot 40 ms: dat is in deze browser van 20 beelden per seconde; in een gewone van 60 is
+   er drie keer zoveel tijd om vooruit te maken. Een gevelde boom kost het lopen nu niets meer, ook als je veel land
+   kent (was 13 ms bij 54 stukken). De zwaarste beelden die overblijven, zijn de nacht van het dorp (70 tot 120 ms),
+   die er al was: iets voor later, niet voor de stukken. Een worker is niet nodig.
    **Het ontwerp van stap 2 tot 6** (Claude, 13 okt; zo kan een volgende sessie verder):
    - *Wat in S staat* (bewaard): wat veranderde, per tegelnummer (`T.tegelNummer`): `w.tegelsAnders` (Map naar het woord),
      `w.grondAnders` (Map naar de grondtegel; alleen de maker verandert de grond, het spel nooit), `w.gerooid` (Set: een

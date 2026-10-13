@@ -241,7 +241,15 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   eiland dat weg is, `T.haalVoorwerpWeg`), wat iemand zette in `w.voorwerpen`, en welke stukken open zijn (`w.open`,
   `T.openVak`). Een stuk dat niet open is, is 'buiten'. Open gaat het waar je mensen komen (`T.werkStukkenBij`, elk
   beeld in `T.werkDorpBij`; stap 5, Marcel: "Al je mensen"): een stuk binnen `openRond` tegels (16,
-  `T.WERELD_INSTELLINGEN`) van de schout, een dorpeling of de ossenkar, hooguit één per beeld. De stukken zelf (`maakStuk`: `T.landStuk` met wat er anders werd
+  `T.WERELD_INSTELLINGEN`) van de schout, een dorpeling of de ossenkar, hooguit één per beeld. **Alles per stuk**
+  (Marcel, 13 okt): een stuk dat open gaat, is geen kaartverandering (geen `T.kaartVeranderd`); wat het land beslaat,
+  kijkt naar `T.openGrootte(w)` en neemt alleen de nieuwe stukken erbij (`T.nieuweStukken`): het raster van wat vaststaat
+  en de eilanden van A\* (met een unie, `ouder`), de lijst platte dingen en de grondbuffer in `js/tekenen.js` (een
+  bufferstuk per beeld opnieuw, `buf.oud`), en de wegen in `js/lopen.js` (alleen 'geen weg' opnieuw). `T.kaartVeranderd(w,
+  plek)` met een plek (zoals `T.voetVan`) werkt alleen die tegels van het raster bij, en kwam er alleen ruimte bij, dan
+  gaan ze op in de eilanden ernaast (`maakVrij`). Het land wordt **vooruit** gemaakt (`maakVooruit`): binnen `vooruit`
+  tegels voorbij `openRond`, in delen van `vooruitDeel`, `vooruitMs` per beeld, eerst bij wie loopt; het wacht in de
+  stukken tot het open gaat. De stukken zelf (`maakStuk`: `T.landStuk` met wat er anders werd
   erover, en de dingen van het eiland als voorwerpen met `v.natuur`) staan niet in S: een geladen spel maakt ze opnieuw
   (`test/eilandkaart.test.cjs`). `T.kaartVak(w)` is daar het vak om het dorp (`w.vak`), en wie wil weten wat er in een
   stuk land staat (ook wat er groeit), vraagt `T.voorwerpenIn(w, vak)`. Een voorwerp maak je op één manier
@@ -284,7 +292,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   **De velden** (vraag 119, A): waar velen heen gaan (de plekken van `T.dagAnker`: hun deur, hun werk, de put, de
   herberg), vraagt het dwalen een weg met `veld: true`, en die komt uit een veld: vanaf het doel ring voor ring hoeveel
   stappen elke tegel ervan af ligt, zo ver als nodig, tot de kaart verandert (`veldenOnthouden`). Een veld is alleen uit
-  de kaart, dus een weg is dezelfde, hoe ver het veld ook al gegroeid was, en ook na het laden.
+  de kaart, dus een weg is dezelfde, hoe ver het veld ook al gegroeid was, en ook na het laden. Op het eiland beslaat
+  een veld het dorp met `veldRand` tegels eromheen (`veldVak`), niet al het land dat je kent; van of naar daarbuiten, of
+  als het veld geen weg vindt, zoekt hij hem zelf.
   **Meelopen met de schout** (`T.loopNaastDeSchout`): wie hem volgt (een voorval dat je zoekt, de militie, de jacht)
   loopt naast hem, en staat hij er niet, dan op een vrije tegel dicht erbij.
 
