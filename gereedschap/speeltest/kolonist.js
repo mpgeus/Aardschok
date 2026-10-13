@@ -14,7 +14,10 @@
 //      "a ja");
 //   6. na de oogst (van `naDeOogst` tot `naDePluk`): haalt het eten de winter niet, dan een tweede veld. Een akker wordt
 //      pas in de lente gezaaid, dus een wijngaard, die het gezin nog in wijnmaand plukt; en die hoort bij een
-//      wijnboerderij (vraag 155): eerst die, en als ze er staat, de wijngaard erbij.
+//      wijnboerderij (vraag 155): eerst die, en als ze er staat, de wijngaard erbij;
+//   7. eet het dorp eentonig (de status in de balk, vraag 154), dan wat het spel zegt dat een soort erbij brengt
+//      (T.watHelptAanAfwisseling, js/raad.js), het eerste dat één gebouw is (een jager, een moestuin, een kippenhok, een
+//      visser); hooguit één van een soort per `afwisselingNa` dagen. De wijn doet regel 6.
 // Wat hij deed, geeft hij terug: [{ soort, gelukt, reden, tekst, instantie }], zonder scherm, dus ook in een toets; en wat
 // hij wil maar nog niet kan betalen, met `wacht` (dan morgen weer). Hij rekent niet vooruit en wacht niet op het juiste
 // moment; hij doet wat er vandaag kan, zoals een speler die elke ochtend kijkt wat er nodig is.
@@ -28,6 +31,7 @@
     naDeOogst: 180,
     naDePluk: 240,
     jagerNa: 30, // een nieuwe jager pas zoveel dagen nadat de vorige af was
+    afwisselingNa: 20, // voor de afwisseling een tweede van een soort pas zoveel dagen nadat de vorige af was
     waaromNa: 30, // waarom er geen plek is, zoekt hij zo vaak opnieuw uit
     // De maten die hij voor een veld probeert, de grootste eerst (T.BOERDERIJ_INSTELLINGEN: 12 tot 40 tegels).
     veldMaten: [[8, 5], [5, 8], [6, 6], [7, 5], [5, 7], [6, 5], [5, 6], [8, 4], [4, 8], [7, 4], [4, 7], [6, 4], [4, 6], [5, 4], [4, 5], [4, 4], [6, 2], [4, 3], [3, 4]],
@@ -175,6 +179,13 @@
       else if (!D.gebouwen.some((g) => g.soort === 'wijngaard' && g.boerderij === wijn) && !(D.wereld.wijngaarden || []).some((v) => v.boerderij === wijn)) {
         doe(legVeld(D, 'wijngaard', wijn, T.BOERDERIJ_INSTELLINGEN.veldMax, 'het eten haalt de winter niet'));
       }
+    }
+
+    // 7. De afwisseling: eet het dorp eentonig, dan wat een soort erbij brengt.
+    if (T.OORZAKEN.eentonig.speelt(D, dag)) {
+      const h = T.watHelptAanAfwisseling(D).find((x) => ['jager', 'moestuin', 'kippenhok', 'visser'].includes(x.bouw));
+      const al = h ? D.gebouwen.filter((g) => g.soort === h.bouw) : [];
+      if (h && al.every((g) => g.klaar && g.klaarOp <= dag - IN.afwisselingNa)) doe(bouw(D, h.bouw, hart(D), `voor ${h.soort}: het dorp eet eentonig`));
     }
     return daden;
   };

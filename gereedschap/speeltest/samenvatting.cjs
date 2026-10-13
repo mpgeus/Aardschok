@@ -117,8 +117,8 @@ function hetEersteJaar(goed) {
       E.onderweg.map((o) => `${o.naam} ${o.dagen}`).join(', '), E.werktNiet.map((w) => `${w.soort} ${w.dagen}`).join(', '),
     ]));
   }
-  uit.push('', '## Het eerste jaar: eten en hout', '', 'Het graan en het hout op 1 hooimaand (voor de oogst), 1 herfstmaand (erna), 1 wintermaand en 1 lentemaand van het jaar erna; het laagste graan voor de oogst; de dagen met honger en met kou (de status in de balk); en wie er stierf.', '');
-  const kop2 = ['speler', 'zaad', 'mensen', 'doden (kou, honger)', 'graan laagst', 'graan', 'hout', 'dagen honger', 'dagen kou'];
+  uit.push('', '## Het eerste jaar: eten en hout', '', 'Het graan en het hout op 1 hooimaand (voor de oogst), 1 herfstmaand (erna), 1 wintermaand en 1 lentemaand van het jaar erna; het laagste graan voor de oogst; de dagen met honger en met kou (de status in de balk); de dagen met 1, 2, 3 en 4 of meer soorten eten (de afwisseling, vraag 154: 60, 75, 90 en 100% werk); en wie er stierf.', '');
+  const kop2 = ['speler', 'zaad', 'mensen', 'doden (kou, honger)', 'graan laagst', 'graan', 'hout', 'dagen honger', 'dagen kou', 'dagen met 1/2/3/4 soorten'];
   uit.push(regel(kop2), regel(kop2.map(() => '---')));
   const reeks = (x) => ['voor de oogst', 'na de oogst', 'de winter', 'de lente'].map((k) => getal(x[k])).join(' → ');
   for (const u of goed) {
@@ -128,6 +128,7 @@ function hetEersteJaar(goed) {
       NAMEN[u.speler] || u.speler, u.zaad, `${u.begin.bevolking} → ${u.eind.bevolking}`,
       `${w.doden || 0} (${(w.kou || 0) + (w.beide || 0)}, ${(w.honger || 0) + (w.beide || 0)})`,
       getal(E.graan.laagst), reeks(E.graan), reeks(E.hout), String(E.honger), String(E.kou),
+      [1, 2, 3, 4].map((n) => (E.soorten || {})[n] || 0).join(' / '),
     ]));
   }
   uit.push('');

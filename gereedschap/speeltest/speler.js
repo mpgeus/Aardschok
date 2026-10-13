@@ -316,7 +316,7 @@
   // keer per dag, zoals de toets in test/begin.test.cjs; de heer geeft hij alles wat hij vraagt. Wat er
   // vastloopt, schrijft hij op in boek.eersteJaar (eersteJaar hieronder): "zonder fouten" is dat niets vastloopt (b1).
   let kolonistDag = null;
-  const nieuwEersteJaar = () => ({ gebouwd: [], wacht: {}, kampLeeg: null, inTent: null, onderweg: [], werktNiet: [], honger: 0, kou: 0, graan: {}, hout: {} });
+  const nieuwEersteJaar = () => ({ gebouwd: [], wacht: {}, kampLeeg: null, inTent: null, onderweg: [], werktNiet: [], honger: 0, kou: 0, graan: {}, hout: {}, soorten: {} });
   function kolonist() {
     return {
       async begin() {
@@ -355,7 +355,8 @@
   // Wat de kolonist neerzette (gezet), en per dag wat er vastloopt: een bouwplaats waar het werk stilstaat (de langste
   // reeks dagen), wie na een dag nog naar zijn huis onderweg is (p.komt), een werkplaats die af is maar niet werkt zonder
   // dat het spel zegt waarom (zoals een houthakker wiens man de hele dag onderweg is), wie er op 1 wintermaand nog in een
-  // tent woont, en de dagen met honger en kou (T.OORZAKEN, js/voorvallen.js). Het graan en het hout op een paar dagen.
+  // tent woont, en de dagen met honger en kou (T.OORZAKEN, js/voorvallen.js). Het graan en het hout op een paar dagen, en
+  // per aantal soorten eten hoeveel dagen (vraag 154).
   const gezet = [];
   const onderwegSinds = new Map();
   const DAGEN_GRAAN = { 'voor de oogst': 120, 'na de oogst': 180, 'de winter': 270, 'de lente': JAAR };
@@ -399,6 +400,9 @@
     }
     if (T.OORZAKEN.honger.speelt(s.dorp, dag)) E.honger++;
     if (T.OORZAKEN.kou.speelt(s.dorp, dag)) E.kou++;
+    // De afwisseling (vraag 154): hoeveel dagen het dorp hoeveel soorten at (4: vier of meer, het volle werk).
+    const soorten = Math.min(4, ((s.dorp.behoeften && s.dorp.behoeften.afwisseling) || []).length);
+    E.soorten[soorten] = (E.soorten[soorten] || 0) + 1;
     for (const [naam, d] of Object.entries(DAGEN_GRAAN)) {
       if (dag !== d) continue;
       E.graan[naam] = Math.round(s.dorp.voorraad.graan || 0);
