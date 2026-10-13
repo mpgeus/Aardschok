@@ -20,10 +20,13 @@ het enige begin, een boer is de man op een boerderij, alleen de kolonist speelt 
 een vaste marktplek (de spelregel "De markt" is weg), en de maker legt alleen nog het lege land: alles bouwt de speler.
 De toetsen en het gereedschap spelen op het proefdorp (`T.proefdorp`, `Spel.debug.proefdorp`). **B1 is af** (12 okt): de
 wijnboerderij is een eigen gebouw, met de wijngaard als veld ernaast. **B2 is bezig** (13 okt): het plan staat
-(`kaarten.md`, "Het hele eiland"), B2a is af, en van B2b (de kaart in stukken) is alles af behalve stap 5 (stukken
-openen als je mensen komen) en het meten; het staat op de branch `claude/funny-fermi-5fqm1u`, nog niet in `main`. Daarna de afwisseling (B3), en ronde 3 na C.
+(`kaarten.md`, "Het hele eiland"), B2a, B2b (de kaart in stukken) en B2d zijn af; B2c (de mist) is het volgende. Daarna de afwisseling (B3), en ronde 3 na C.
 
 **Wacht op Marcel:**
+- **Het hele eiland bekijken** (B2b): Nieuw spel, en loop met de schout het land uit, naar de kust (met `F2` de meter):
+  het land gaat open waar hij komt. Op 30× hapert het nog even als hij heel snel nieuw land in loopt; zeg het als je dat
+  ziet. Wat opviel en te kiezen is (`opmerkingen.md`): een richel zonder helling blijft onbereikbaar, en een hol kan
+  tien tegels van het kamp liggen.
 - **De wijnboerderij bekijken** (B1): Nieuw spel, en in het bouwmenu (B) de wijnboerderij; is ze af, dan trekt er een
   gezin in, en de wijngaard leg je met twee klikken ernaast (de akker kan alleen nog bij een boerderij). In wijnmaand
   plukt het gezin. Haalt de wijn het jaar niet, dan zegt de raad onder het doel: leg een wijngaard erbij.
@@ -99,16 +102,14 @@ Marcel, 11 okt: "de wereld moet 1 geheel worden het vlakke van 100x100 is niet h
 afstanden. Het plan (13 okt; Marcel: "A ja, B1, C2"), met het hoe en wat er nu is, in `kaarten.md`, "Het hele eiland":
 - **B2a, één weg naar de tegels: af** (13 okt): niets leest de rechthoek van 100 bij 100 nog zelf, en het spel
   veranderde niet (de speeltest en de schermen gelijk); versie 9 van het bewaarde spel.
-- **B2b, de kaart in stukken** (**Bezig in sessie `claude/funny-fermi-5fqm1u`** (13 okt): stap 1 tot 4 en 6 zijn af,
-  alle toetsen groen, nog niet in `main`; te doen: stap 5, stukken openen als je mensen in de buurt komen (Marcel: "Al je mensen", en "Eerst meten": een stuk
-  per beeld, dan meten op 30×), en meten;
-  het plan met Marcels keuzes in `kaarten.md`: "Het eiland, overal", "Overal", B2d "Meteen mee", en de wegen "Die van
-  het eiland") van 64 bij 64, in de coördinaten van het eiland, gemaakt als ze nodig zijn; de rand om je land gaat weg.
-  Meer draden (Marcel: "misschien ook meerdere threads", en "eerst meten is goed"): het stuk komt uit één zuivere
-  functie, en workers pas als het hapert.
+- **B2b, de kaart in stukken: af** (13 okt; Marcel: "Het eiland, overal", "Overal", "Die van het eiland", "Al je
+  mensen", "Eerst meten", "Alles per stuk"): het hele eiland in stukken van 64 bij 64, het land overal van het eiland,
+  de rand weg; het land gaat open waar je mensen komen, en alles neemt alleen het nieuwe stuk erbij, vooruit gemaakt.
+  Hoe en wat het meten gaf: `kaarten.md`, "Het hele eiland". Nog voor later: de hoogte per stuk (de spelregel Hoogte,
+  standaard uit).
 - **B2c, de mist:** zwart, grijs (het land zoals het nu is, zonder wie er loopt), en helder waar je mensen kijken; bij
   het begin ken je een kring van zo'n 50 tegels.
-- **B2d, opslaan wat veranderde:** gaat mee in B2b (Marcel, 13 okt: "Meteen mee"); af op de branch: versie 10, 15 kB.
+- **B2d, opslaan wat veranderde: af** (met B2b; Marcel: "Meteen mee"): versie 10, het bewaarde spel 15 kB (was 473 kB).
 
 Klaar als: de kolonist op vijf eilanden een jaar zonder fouten, de schout van het kamp naar de kust zonder haperen, en
 een kleiner bewaard spel. De lange tochten (HPA\*) en wat ver weg is als getallen gaan naar F.
@@ -159,6 +160,12 @@ het graan vraagt", de schandpaal, de heervaart en de twee bazen.
   schrijven voor de nieuwe richting, als B en C er staan.
 
 ## Af (sinds 11 okt)
+
+- B2b en B2d, het hele eiland in stukken (vraag 117, stap 3; 13 okt): de kaart is het eiland in stukken van 64 bij 64,
+  het land komt overal van het eiland, en de maker legt alleen nog het plein, het kamp, de eiken en de marktplek (die
+  hij nu ook keurt). Het land gaat open waar je mensen komen, alles neemt alleen het nieuwe stuk erbij, en het wordt
+  vooruit gemaakt. Bewaard wordt alleen wat veranderde (15 kB, was 473). De kolonist speelt vijf eilanden het jaar uit
+  zonder fouten en zonder doden. `kaarten.md`, "Het hele eiland".
 
 - Ronde 2 van het snoeien, stap 6 (vraag 153; Marcel: "Alles wordt door spelers geplaatst", "Plein krijgt plaatsen", "In
   het bouwmenu", "Naar de waard"): het plein heeft een vaste marktplek die de maker kiest (een huis blijft ervan af, en
