@@ -89,3 +89,42 @@ test('eilandkaart: T.voorwerpenIn geeft wat er gezet is en wat er groeit, alleen
   for (let y = klein.y; y < klein.y + klein.h; y++) for (let x = klein.x; x < klein.x + klein.b; x++) if (T.voorwerpOp(w, x, y)) geteld++;
   assert.equal(lijst.length, geteld);
 });
+
+// Stap 5 (Marcel, 13 okt: "Al je mensen", en "Eerst meten"): waar de schout, een dorpeling of de ossenkar komt, gaat het
+// land open, binnen openRond tegels, en hooguit één stuk per beeld; wie binnen is of een wolf maakt niets open.
+test('eilandkaart: wie van jou bij de rand komt, maakt het stuk ernaast open, één per beeld', () => {
+  const w = nieuweKaart();
+  const R = T.WERELD_INSTELLINGEN.openRond;
+  const S = { schout: T.maakWezen('schout', vak.x + 50, vak.y + 50) };
+  const D = { wereld: w };
+  w.wezens.push(S.schout);
+  const open = w.open.size;
+  assert.equal(T.werkStukkenBij(S, D), null, 'midden in het land is alles om hem open');
+  // in de hoek van wat open is: daar raakt zijn kring drie stukken die dicht zijn
+  const rand = T.loopVak(w);
+  Object.assign(S.schout, { x: rand.x + rand.b - 2, y: rand.y + rand.h - 2 });
+  const buiten = { x: rand.x + rand.b + 1, y: rand.y + rand.h - 2 };
+  assert.equal(T.tegel(w, buiten.x, buiten.y), 'buiten');
+  for (let i = 1; i <= 3; i++) {
+    assert.ok(T.werkStukkenBij(S, D) != null, `stuk ${i} ging open`);
+    assert.equal(w.open.size, open + i, 'één per beeld');
+  }
+  assert.equal(T.werkStukkenBij(S, D), null, 'en dan niets meer');
+  assert.notEqual(T.tegel(w, buiten.x, buiten.y), 'buiten', 'daar is nu land');
+  // wie binnen is, en een wolf: niets; de ossenkar wel
+  const verder = { x: rand.x - R + 1, y: rand.y + 10 };
+  Object.assign(S.schout, { ...verder, binnen: true });
+  assert.equal(T.werkStukkenBij(S, D), null, 'wie binnen is, maakt niets open');
+  const wolf = Object.assign(T.maakWezen('schout', verder.x, verder.y), { beest: 'wolf' });
+  w.wezens.push(wolf);
+  assert.equal(T.werkStukkenBij(S, D), null, 'een wolf maakt niets open');
+  const kar = Object.assign(T.maakWezen('schout', verder.x, verder.y), { kar: true });
+  w.wezens.push(kar);
+  assert.ok(T.werkStukkenBij(S, D) != null, 'de ossenkar maakt open');
+  assert.ok(T.inVak(T.loopVak(w), verder.x - R, verder.y), 'en het lopen beslaat het nieuwe stuk');
+});
+
+test('eilandkaart: op een kaart uit Tiled gaat er niets open', () => {
+  const S = { schout: { x: 1, y: 1 } };
+  assert.equal(T.werkStukkenBij(S, { wereld: { tegels: [[1]], wezens: [S.schout] } }), null);
+});

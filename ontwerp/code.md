@@ -239,7 +239,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   eiland in stukken van `T.STUK` (64) bij 64, achter dezelfde vragen als een kaart uit Tiled. In S staat alleen wat er
   anders werd, per tegelnummer: `w.tegelsAnders` (`T.zetTegel`), `w.grondAnders` (de maker), `w.gerooid` (een ding van het
   eiland dat weg is, `T.haalVoorwerpWeg`), wat iemand zette in `w.voorwerpen`, en welke stukken open zijn (`w.open`,
-  `T.openVak`). Een stuk dat niet open is, is 'buiten'. De stukken zelf (`maakStuk`: `T.landStuk` met wat er anders werd
+  `T.openVak`). Een stuk dat niet open is, is 'buiten'. Open gaat het waar je mensen komen (`T.werkStukkenBij`, elk
+  beeld in `T.werkDorpBij`; stap 5, Marcel: "Al je mensen"): een stuk binnen `openRond` tegels (16,
+  `T.WERELD_INSTELLINGEN`) van de schout, een dorpeling of de ossenkar, hooguit één per beeld. De stukken zelf (`maakStuk`: `T.landStuk` met wat er anders werd
   erover, en de dingen van het eiland als voorwerpen met `v.natuur`) staan niet in S: een geladen spel maakt ze opnieuw
   (`test/eilandkaart.test.cjs`). `T.kaartVak(w)` is daar het vak om het dorp (`w.vak`), en wie wil weten wat er in een
   stuk land staat (ook wat er groeit), vraagt `T.voorwerpenIn(w, vak)`. Een voorwerp maak je op één manier

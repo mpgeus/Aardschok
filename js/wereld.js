@@ -6,6 +6,13 @@
 (function (T) {
   'use strict';
 
+  T.WERELD_INSTELLINGEN = {
+    // Op de kaart van het eiland gaat een stuk land open als een van je mensen binnen zoveel tegels komt (de schout, wie
+    // in je dorp woont, de ossenkar; B2b, stap 5, Marcel: "Al je mensen"). In B2c wordt het de kring die ze zien.
+    openRond: 16,
+  };
+  const IN = () => T.WERELD_INSTELLINGEN;
+
   // Legenda: # muur, . vloer, D deur (dicht), L deur (op slot), spatie = buiten.
   const PLATTEGROND = [
     '####################',
@@ -443,6 +450,29 @@
       for (let sx = Math.max(0, Math.floor(vak.x / STUK)); sx * STUK < Math.min(EILAND_MAAT(), vak.x + vak.b); sx++) w.open.add(T.stukNummer(sx, sy));
     }
     T.kaartVeranderd(w);
+  };
+  // Het land gaat open waar je mensen komen (stap 5; Marcel, 13 okt: "Al je mensen"): een stuk binnen `openRond` tegels
+  // van de schout, van wie in het dorp woont of van de ossenkar. Hooguit één per beeld, want een stuk maken kost zo'n 50
+  // ms, en daarna rekent het lopen zijn raster opnieuw ("Eerst meten", kaarten.md). Geeft het stuknummer, of null.
+  T.werkStukkenBij = function (S, D) {
+    const w = D.wereld;
+    if (!opEiland(w)) return null;
+    const R = IN().openRond;
+    const laatste = Math.floor((EILAND_MAAT() - 1) / STUK);
+    for (const e of w.wezens) {
+      if (e.dood || e.binnen || !(e === S.schout || e.bewoner || e.kar)) continue;
+      const [x, y] = [Math.round(e.x), Math.round(e.y)];
+      for (let sy = Math.max(0, Math.floor((y - R) / STUK)); sy <= Math.min(laatste, Math.floor((y + R) / STUK)); sy++) {
+        for (let sx = Math.max(0, Math.floor((x - R) / STUK)); sx <= Math.min(laatste, Math.floor((x + R) / STUK)); sx++) {
+          const n = T.stukNummer(sx, sy);
+          if (w.open.has(n)) continue;
+          w.open.add(n);
+          T.kaartVeranderd(w);
+          return n;
+        }
+      }
+    }
+    return null;
   };
   // Het ding van het eiland op tegel (x, y), of null.
   function natuurOp(w, x, y) {

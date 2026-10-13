@@ -602,6 +602,7 @@
     { naam: T.t('The light'), blok: 'LICHT_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Buildings and population'), blok: 'GEBOUWEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The residents'), blok: 'BEWONERS_INSTELLINGEN' }, // geen tekst
+    { naam: T.t('The island map'), blok: 'WERELD_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Walking'), blok: 'LOPEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Footpaths'), blok: 'PADEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Chats'), blok: 'PRAATJE_INSTELLINGEN' }, // geen tekst
@@ -1259,6 +1260,7 @@
     pleinTegels: T.t('square tiles'),
     eikenTot: T.t('oaks up to'),
     marktRij: T.t('market row at least'),
+    openRond: T.t('land opens within'),
     // Het lege begin, meebouwen, boeren uit het niets, de boeren
     kar: T.t('cart'),
     zaaigraan: T.t('seed grain'),
