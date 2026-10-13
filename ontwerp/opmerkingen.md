@@ -12,6 +12,12 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 - **Een kaart van het eiland onder een toets** (idee van Claude, 13 okt; Marcel: "idee ja"): het eiland van boven, met
   alleen wat je verkende en de rest in de mist, getekend zoals de plaat van de kaartenmaker
   (`gereedschap/pixelart/eiland-plaat.cjs`), met je dorp, de wegen en de namen die je kent. Na de mist (B2c), niet erin.
+- **Het hol vlak bij het kamp** (13 okt, B2b): het hol van een roedel ligt op een tegel diep in het bos die het lot
+  kiest, zonder afstand tot het dorp (`thuisKandidaten` in `js/beesten.js`). Op eiland 7 ligt het tien tegels van de
+  plek van de kar in het kamp, en een roedel schuwt de huifkar en de ossenkar zoals een mens (`mensBij`): komt hij 's
+  ochtends thuis, dan vlucht hij weer. Op het oude land lagen er ook holen op 10 tot 12 tegels van het plein. Te kiezen:
+  een hol minstens zoveel tegels van het plein, en of een kar een roedel wegjaagt. `test/beesten.test.cjs` houdt de kar
+  daarom bij de schout.
 - **Een richel zonder helling** (13 okt, B2b): de helling de richel op (`legHelling` in `js/hoogte.js`) komt alleen waar
   je op de helling en aan de voet kunt staan. Sinds het land van het eiland komt, ligt de richel vaker in het bos: op 7
   van de 10 eilanden is er geen weg van het plein naar boven (vroeger 5), en op eiland 4 staat er rondom een boom of een

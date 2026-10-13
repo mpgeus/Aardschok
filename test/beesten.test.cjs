@@ -91,6 +91,9 @@ test('de herten: twee hindes en een hert met een gewei dat de groep leidt', () =
 
 test('overdag rust de roedel bij zijn hol; vanaf zonsondergang loopt hij langs de bosrand, en na zonsopgang terug', () => {
   const S = leegLand();
+  // De huifkar blijft waar hij aankwam, bij de schout, ver weg: in het kamp staat hij op dit eiland tien tegels van het
+  // hol, en de roedel schuwt hem zoals een mens (B2b, 13 okt; ontwerp/opmerkingen.md).
+  S.dorp.wereld.wezens.find((m) => m.kar).pad = [];
   opUur(S, 12);
   uren(S, 1);
   const g = groepVan(S, 'wolf');
@@ -557,6 +560,8 @@ test('wie aan het bos werkt en een roedel met honger ziet, rent naar huis: hij w
   for (const e of leden) if (e !== leider) zetBij(D.wereld, e, { x: plein.x + 6, y: plein.y });
   for (const q of D.bewoners.mensen) if (q.wezen) q.wezen.binnen = true;
   S.schout.binnen = true;
+  // de ossenkar ook: die staat op het plein, en de roedel kijkt naar wie het dichtst bij een wolf is
+  for (const m of D.wereld.wezens) if (!m.dier && !m.beest) m.binnen = true;
   const p = D.bewoners.mensen.find((q) => q.wezen && !q.schout && q.leeftijd === 'volwassen');
   const e = p.wezen;
   e.binnen = false;
