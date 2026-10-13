@@ -133,7 +133,8 @@ test('de houthakker hakt de dichtste boom bij zijn schuur, en elke tien hout is 
 
 test('wat hij kapt en inplant, blijft bos: na vier jaar hakt hij minstens zoveel als in het eerste (vraag 129, f)', () => zo(() => {
   // Alleen de houthakker: geen nieuwe gezinnen (wie komt, loopt hier niet binnen, want alleen de nachten tikken), en
-  // genoeg graan en hout, zodat het dorp niet krimpt.
+  // genoeg graan en hout, zodat het dorp niet krimpt. Het gereedschap blijft ook wat het was: het slijt, en dan hakte hij
+  // in het vierde jaar minder, ook met bos genoeg (B2b, 13 okt: van een kwart harder werken in het eerste jaar naar 2%).
   const gezinDagen = T.GEBOUWEN_INSTELLINGEN.gezinDagen;
   const hakte = T.houthakkerHakte;
   T.GEBOUWEN_INSTELLINGEN.gezinDagen = 1e9;
@@ -148,20 +149,23 @@ test('wat hij kapt en inplant, blijft bos: na vier jaar hakt hij minstens zoveel
       return hakte(D2, g2, h);
     };
     let dag = volgende(S);
+    const gereedschap = D.voorraad.gereedschap || 0;
     for (let jaar = 0; jaar < 4; jaar++) {
       hout.push(0);
       stil.push(0);
       for (let i = 0; i < 360; i++, dag++) {
         T.zetVoorraad(D, 'graan', 2000);
         T.zetVoorraad(D, 'hout', 300);
+        T.zetVoorraad(D, 'gereedschap', gereedschap);
         nacht(S, dag);
         if (g.boom === null) stil[jaar]++;
       }
     }
     // Met één boompje, en alleen waar nog volgroeide bomen stonden, hakte hij in het vierde jaar 140 hout en stond hij
-    // 280 dagen stil; met twee, en het jonge bos meegeteld, 473 en 88. Het bos bij het proefdorp (zaad 2) geeft 510, 343,
-    // 406 en 504 hout in vier jaar: het hakt het dichtste bos leeg, dat groeit weer aan, en in het vierde jaar is het weer
-    // zoals in het eerste. Daarom met een marge van een tiende: het ging om de terugkeer, niet om een getal.
+    // 280 dagen stil; met twee, en het jonge bos meegeteld, 473 en 88. Het bos bij het proefdorp (zaad 2, op het land van
+    // het eiland) geeft 642, 515, 678 en 676 hout in vier jaar (vroeger 510, 343, 406 en 504): het hakt het dichtste bos
+    // leeg, dat groeit weer aan, en in het vierde jaar is het weer zoals in het eerste. Daarom met een marge van een
+    // tiende: het ging om de terugkeer, niet om een getal.
     assert.ok(hout[3] >= 0.9 * hout[0], `vierde jaar ${Math.round(hout[3])} hout, eerste ${Math.round(hout[0])}`);
     assert.ok(stil[3] < 180, `${stil[3]} dagen stil in het vierde jaar`);
   } finally {
