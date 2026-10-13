@@ -100,7 +100,8 @@ afstanden. Het plan (13 okt; Marcel: "A ja, B1, C2"), met het hoe en wat er nu i
 - **B2a, één weg naar de tegels: af** (13 okt): niets leest de rechthoek van 100 bij 100 nog zelf, en het spel
   veranderde niet (de speeltest en de schermen gelijk); versie 9 van het bewaarde spel.
 - **B2b, de kaart in stukken** (**Bezig in sessie `claude/funny-fermi-5fqm1u`** (13 okt): stap 1 tot 4 en 6 zijn af,
-  alle toetsen groen, nog niet in `main`; te doen: stap 5, stukken openen als je mensen in de buurt komen, en meten;
+  alle toetsen groen, nog niet in `main`; te doen: stap 5, stukken openen als je mensen in de buurt komen (Marcel: "Al je mensen", en "Eerst meten": een stuk
+  per beeld, dan meten op 30×), en meten;
   het plan met Marcels keuzes in `kaarten.md`: "Het eiland, overal", "Overal", B2d "Meteen mee", en de wegen "Die van
   het eiland") van 64 bij 64, in de coördinaten van het eiland, gemaakt als ze nodig zijn; de rand om je land gaat weg.
   Meer draden (Marcel: "misschien ook meerdere threads", en "eerst meten is goed"): het stuk komt uit één zuivere

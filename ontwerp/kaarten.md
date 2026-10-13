@@ -154,6 +154,11 @@ nummers passen op het hele eiland, en `T.eilandStuk` maakt elk stuk los (64 bij 
    nog 20 tot 45 ms, groeiend met de rechthoek om alle open stukken (van 192 bij 192 naar 704 bij 192). Samen 70 tot
    100 ms, vijf beelden: op 30× loopt de schout zo om de seconde een nieuw stuk in, dus dat hapert. Loopt hij schuin,
    dan groeit de rechthoek in twee richtingen, met vooral stukken die niet open zijn.
+   **Besloten voor stap 5** (Marcel, 13 okt): **"Eerst meten"**: eerst het eenvoudigste, een stuk per beeld openen, en
+   in de browser op 30× meten hoe erg het hapert; daarna kiezen tussen verdelen (het stuk vooruit maken, een paar rijen
+   per beeld, en het raster alleen voor het nieuwe stuk bijwerken) en een worker. En **"Al je mensen"**: wie van jou in
+   de buurt komt (de schout, je dorpelingen, de ossenkar), maakt het land open, zoals straks in de mist elk van je
+   mensen een kring ziet.
    **Het ontwerp van stap 2 tot 6** (Claude, 13 okt; zo kan een volgende sessie verder):
    - *Wat in S staat* (bewaard): wat veranderde, per tegelnummer (`T.tegelNummer`): `w.tegelsAnders` (Map naar het woord),
      `w.grondAnders` (Map naar de grondtegel; alleen de maker verandert de grond, het spel nooit), `w.gerooid` (Set: een
