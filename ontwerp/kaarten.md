@@ -136,7 +136,7 @@ kan op een andere kern, en het geeft daar hetzelfde. Wat het kost: een worker va
 stuk komt een paar beelden later, dus het spel moet het vooruit vragen (aan de rand van de mist) en kunnen wachten. Het
 voorstel van Claude: B2b maakt het stuk met één zuivere functie (nummer, schets en plek erin, getallen eruit), zodat een
 worker het later overneemt zonder herschrijven; we meten dan eerst wat een stuk in de browser kost, met de grond en de
-bomen erbij, terwijl de schout op 30× loopt. Hapert het, dan workers.
+bomen erbij, terwijl de schout op 30× loopt. Hapert het, dan workers. **Marcel (13 okt): "eerst meten is goed."**
 
 ## Werken in Tiled: zo teken je een kaart (21 sep 2026)
 

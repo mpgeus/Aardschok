@@ -23,9 +23,6 @@ wijnboerderij is een eigen gebouw, met de wijngaard als veld ernaast. **B2 is be
 (`kaarten.md`, "Het hele eiland"), B2a is af, en B2b (de kaart in stukken) is het volgende. Daarna de afwisseling (B3), en ronde 3 na C.
 
 **Wacht op Marcel:**
-- **Meer draden voor de stukken** (B2b; Marcel: "misschien ook meerdere threads"): het voorstel is eerst meten (het
-  stuk als één zuivere functie, zodat een worker het later overneemt), en workers als het hapert; of meteen workers?
-  (`kaarten.md`, "Het hele eiland").
 - **De wijnboerderij bekijken** (B1): Nieuw spel, en in het bouwmenu (B) de wijnboerderij; is ze af, dan trekt er een
   gezin in, en de wijngaard leg je met twee klikken ernaast (de akker kan alleen nog bij een boerderij). In wijnmaand
   plukt het gezin. Haalt de wijn het jaar niet, dan zegt de raad onder het doel: leg een wijngaard erbij.
@@ -97,14 +94,13 @@ wijnboerderij, de akker bij een boerderij; de raad zegt het als de wijn het jaar
 
 ## B2. Het hele eiland (vraag 117, stap 3)
 
-**Bezig in sessie `claude/amazing-maxwell-u0hq09`** (13 okt): B2a is af, B2b is het volgende.
-
 Marcel, 11 okt: "de wereld moet 1 geheel worden het vlakke van 100x100 is niet hoe het blijft", vóór C, want C meet
 afstanden. Het plan (13 okt; Marcel: "A ja, B1, C2"), met het hoe en wat er nu is, in `kaarten.md`, "Het hele eiland":
 - **B2a, één weg naar de tegels: af** (13 okt): niets leest de rechthoek van 100 bij 100 nog zelf, en het spel
   veranderde niet (de speeltest en de schermen gelijk); versie 9 van het bewaarde spel.
 - **B2b, de kaart in stukken** van 64 bij 64, in de coördinaten van het eiland, gemaakt als ze nodig zijn; de rand om
-  je land gaat weg. Meer draden (Marcel: "misschien ook meerdere threads"): eerst meten, het voorstel staat erbij.
+  je land gaat weg. Meer draden (Marcel: "misschien ook meerdere threads", en "eerst meten is goed"): het stuk komt uit
+  één zuivere functie, en workers pas als het hapert.
 - **B2c, de mist:** zwart, grijs (het land zoals het nu is, zonder wie er loopt), en helder waar je mensen kijken; bij
   het begin ken je een kring van zo'n 50 tegels.
 - **B2d, opslaan wat veranderde.**
