@@ -15,7 +15,7 @@ T.ui = new Proxy({}, { get: () => () => {} });
 test('de grond ligt per tegel klaar om te tekenen, uit de terreinsets van rand.tsx', () => {
   const { w } = proefDorp(T);
   const o = w.overgangen[0];
-  const g = w.grond[o.y][o.x];
+  const g = T.grondOp(w, o.x, o.y);
   assert.ok(g && g.vel === 'rand', 'elke tegel weet welk grondplaatje eronder ligt, uit tegels/rand.tsx');
   assert.ok(Number.isInteger(g.id));
   assert.ok(g.naam, 'en hoe die grond heet');
@@ -291,15 +291,17 @@ test('de weg het dorp uit leidt bewust nergens heen: alleen mist, en geen fout i
 
 // ------------------------------------------------- wat er op een tegel staat (js/wereld.js, werklijst vraag 71)
 
-// Zoals T.voorwerpOp het tot 30 sep deed: alle voorwerpen aflopen. De lijst per tegel moet precies dit geven.
-const langsAlle = (w, x, y) => w.voorwerpen.find((v) => {
+// Zoals T.voorwerpOp het tot 30 sep deed: alle voorwerpen aflopen. De lijst per tegel moet precies dit geven. (Op het
+// eiland ook wat er groeit, uit zijn stuk: T.voorwerpenIn.)
+const langsAlle = (w, x, y) => [...w.voorwerpen, ...(Number.isInteger(x) && Number.isInteger(y) ? T.voorwerpenIn(w, { x, y, b: 1, h: 1 }).filter((v) => v.natuur) : [])].find((v) => {
   const f = T.voetVan(v);
   return x >= f.x1 && x <= f.x2 && y >= f.y1 && y <= f.y2;
 }) || null;
 
 function vergelijkElkeTegel(w, waar) {
-  for (let y = -2; y < w.h + 2; y++) {
-    for (let x = -2; x < w.b + 2; x++) {
+  const K = T.kaartVak(w);
+  for (let y = K.y - 2; y < K.y + K.h + 2; y++) {
+    for (let x = K.x - 2; x < K.x + K.b + 2; x++) {
       if (T.voorwerpOp(w, x, y) !== langsAlle(w, x, y)) assert.fail(`${waar}: op ${x},${y} geeft de lijst per tegel iets anders dan alle voorwerpen aflopen`);
     }
   }
@@ -325,8 +327,9 @@ test('de lijst per tegel geeft hetzelfde voorwerp als alle voorwerpen aflopen, o
     const bereik = T.BEGIN_INSTELLINGEN.bouwBereik;
     T.BEGIN_INSTELLINGEN.bouwBereik = 40;
     try {
-      for (let y = 0; y < w.h && !gezet; y++) {
-        for (let x = 0; x < w.b && !gezet; x++) if (!T.waaromPastHetNiet(S.dorp, 'hut', x, y)) gezet = T.plaatsGebouw(S.dorp, 'hut', x, y);
+      const K = T.kaartVak(w);
+      for (let y = K.y; y < K.y + K.h && !gezet; y++) {
+        for (let x = K.x; x < K.x + K.b && !gezet; x++) if (!T.waaromPastHetNiet(S.dorp, 'hut', x, y)) gezet = T.plaatsGebouw(S.dorp, 'hut', x, y);
       }
     } finally {
       T.BEGIN_INSTELLINGEN.bouwBereik = bereik;
@@ -404,7 +407,7 @@ test('eilanden: twee kanten van een muur zijn twee eilanden, en een gat erin maa
   assert.equal(T.eilandOp(w, 4, 2), -1, 'een muur ligt op geen eiland');
   assert.equal(T.kanErKomen(w, { x: 1, y: 1 }, { x: 8, y: 4 }), false);
   assert.equal(T.zoekPad({ x: 1, y: 1 }, { x: 8, y: 4 }, (x, y) => T.isBegaanbaar(w, x, y), (x, y) => T.isVast(w, x, y)), null);
-  w.tegels[3][4] = 'vloer';
+  T.zetTegel(w, 4, 3, 'vloer');
   T.kaartVeranderd(w);
   assert.equal(T.eilandOp(w, 1, 1), T.eilandOp(w, 8, 1));
   assert.equal(T.kanErKomen(w, { x: 1, y: 1 }, { x: 8, y: 4 }), true);
@@ -412,7 +415,7 @@ test('eilanden: twee kanten van een muur zijn twee eilanden, en een gat erin maa
 
 test('eilanden: een voorwerp dat de doorgang sluit, en wie ingemetseld staat, of met tot en naast', () => {
   const w = kaartMetMuur(10, 6, 4);
-  w.tegels[3][4] = 'vloer';
+  T.zetTegel(w, 4, 3, 'vloer');
   T.kaartVeranderd(w);
   const blok = T.zetVoorwerp(w, { soort: 'blokkade', x: 4, y: 3 });
   T.VOORWERPEN.blokkade = T.VOORWERPEN.blokkade || { blokkeert: true };
@@ -424,7 +427,7 @@ test('eilanden: een voorwerp dat de doorgang sluit, en wie ingemetseld staat, of
   assert.equal(T.kanErKomen(w, { x: 1, y: 1 }, { x: 4, y: 0 }, { tot: 1 }), true);
   // Ingemetseld: op een muur, en alles eromheen muur.
   const dicht = kaartMetMuur(5, 5, 99);
-  for (let y = 1; y <= 3; y++) for (let x = 1; x <= 3; x++) dicht.tegels[y][x] = 'muur';
+  for (let y = 1; y <= 3; y++) for (let x = 1; x <= 3; x++) T.zetTegel(dicht, x, y, 'muur');
   T.kaartVeranderd(dicht);
   assert.equal(T.kanErKomen(dicht, { x: 2, y: 2 }, { x: 0, y: 0 }), false);
   assert.equal(T.kanErKomen(dicht, { x: 2, y: 2 }, { x: 2, y: 2 }), true, 'wie er al is, hoeft niet te zoeken');

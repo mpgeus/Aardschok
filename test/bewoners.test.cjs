@@ -74,8 +74,9 @@ function vrijePlek(S, voet, bij) {
   const w = S.wereld;
   let beste = null;
   let afstand = Infinity;
-  for (let y = 1; y + voet.h < w.h; y++) {
-    for (let x = 1; x + voet.b < w.b; x++) {
+  const K = T.kaartVak(w);
+  for (let y = K.y + 1; y + voet.h < K.y + K.h; y++) {
+    for (let x = K.x + 1; x + voet.b < K.x + K.b; x++) {
       let vrij = true;
       for (let dy = -1; dy <= voet.h && vrij; dy++) for (let dx = -1; dx <= voet.b && vrij; dx++) if (T.isVast(w, x + dx, y + dy)) vrij = false;
       const a = Math.hypot(x - bij.x, y - bij.y);
@@ -429,8 +430,9 @@ function kleiputVerWeg(opties) {
   const deuren = S.dorp.gebouwen.filter((g) => T.GEBOUWEN[g.soort].woonruimte > 0).map((g) => T.deurVan(w, g));
   let plek = null;
   let ver = -1;
-  for (let y = 1; y < w.h - 1; y++) {
-    for (let x = 1; x < w.b - 1; x++) {
+  const K = T.kaartVak(w);
+  for (let y = K.y + 1; y < K.y + K.h - 1; y++) {
+    for (let x = K.x + 1; x < K.x + K.b - 1; x++) {
       let vrij = true;
       for (let dy = -1; dy <= 1 && vrij; dy++) for (let dx = -1; dx <= 1 && vrij; dx++) if (T.isVast(w, x + dx, y + dy)) vrij = false;
       const a = vrij ? Math.min(...deuren.map((d) => T.afstand(d, { x, y }))) : -1;

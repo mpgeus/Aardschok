@@ -91,16 +91,20 @@
   // De hoogte van hoek k (0 noord, 1 oost, 2 zuid, 3 west) van tegel (x, y), in pixels. Uit een lijst die eens per
   // hoogte wordt uitgerekend (het tekenen vraagt het elk beeld voor duizenden tegels); verandert de hoogte, dan krijgt
   // ze een nieuwe `versie`, en wordt de lijst opnieuw gemaakt.
-  // De lijst loopt `RAND` tegels buiten de kaart door, voor het land eromheen dat het spel tekent.
+  // De lijst loopt `RAND` tegels buiten het land door, voor het land eromheen dat het spel tekent. Hij beslaat het raster
+  // van het land (hg.b bij hg.h), dat op de kaart bij (hg.ox, hg.oy) begint: op een kaart van het eiland (B2b) ligt alles in
+  // de tegels van het eiland, ook de vlakke stukken, de richel en de helling (T.legHoogte).
   const RAND = 48;
+  const oorsprong = (hg) => [hg.ox || 0, hg.oy || 0];
   const lijsten = new WeakMap();
   function hoekenLijst(hg) {
     let l = lijsten.get(hg);
     if (l && l.versie === (hg.versie || 0)) return l.hoeken;
+    const [ox, oy] = oorsprong(hg);
     const b = hg.b + 2 * RAND;
     const hoeken = new Float64Array(b * (hg.h + 2 * RAND) * 4);
     for (let y = -RAND; y < hg.h + RAND; y++) {
-      for (let x = -RAND; x < hg.b + RAND; x++) for (let k = 0; k < 4; k++) hoeken[((y + RAND) * b + x + RAND) * 4 + k] = rekenHoek(hg, x, y, k);
+      for (let x = -RAND; x < hg.b + RAND; x++) for (let k = 0; k < 4; k++) hoeken[((y + RAND) * b + x + RAND) * 4 + k] = rekenHoek(hg, ox + x, oy + y, k);
     }
     lijsten.set(hg, { versie: hg.versie || 0, hoeken });
     return hoeken;
@@ -110,8 +114,11 @@
   // eromheen uit één lijst, eens per hoogte uitgerekend (T.eilandStuk); het eiland komt uit zijn nummer, dus de lijst
   // wordt niet bewaard. Een ander punt (het midden van een huis) vraagt hij het eiland zelf.
   const eilandLijsten = new WeakMap();
-  function eilandOp(hg, vx, vy) {
+  function eilandOp(hg, px, py) {
     const { zaad, x0, y0 } = hg.eiland;
+    const [ox, oy] = oorsprong(hg);
+    const vx = px - ox; // in het raster van het land, waarvan (0, 0) op het eiland op (x0, y0) ligt
+    const vy = py - oy;
     const n = hg.b + 2 * RAND + 1;
     const opRooster = Number.isInteger(vx) && Number.isInteger(vy) && vx >= -RAND && vy >= -RAND && vx <= hg.b + RAND && vy <= hg.h + RAND;
     if (!opRooster) return Math.max(0, T.eilandStuk(T.eilandVan(zaad), x0 + vx - 0.5, y0 + vy - 0.5, 1, 1).hoogte[0]);
@@ -126,9 +133,12 @@
   T.hoekHoogte = function (w, x, y, k) {
     const hg = w && w.hoogte;
     if (!hg) return 0;
-    // het landschap loopt door, ook buiten de kaart
-    if (x < -RAND || y < -RAND || x >= hg.b + RAND || y >= hg.h + RAND) return rekenHoek(hg, x, y, k);
-    return hoekenLijst(hg)[((y + RAND) * (hg.b + 2 * RAND) + x + RAND) * 4 + k];
+    const [ox, oy] = oorsprong(hg);
+    const lx = x - ox;
+    const ly = y - oy;
+    // het landschap loopt door, ook buiten het land
+    if (lx < -RAND || ly < -RAND || lx >= hg.b + RAND || ly >= hg.h + RAND) return rekenHoek(hg, x, y, k);
+    return hoekenLijst(hg)[((ly + RAND) * (hg.b + 2 * RAND) + lx + RAND) * 4 + k];
   };
   function rekenHoek(hg, x, y, k) {
     const vx = x + (k === 1 || k === 2 ? 1 : 0);
@@ -156,12 +166,15 @@
   T.isSchuin = function (w, x, y) {
     if (!w || !w.hoogte) return false;
     const hg = w.hoogte;
-    if (x < -RAND || y < -RAND || x >= hg.b + RAND || y >= hg.h + RAND) {
+    const [ox, oy] = oorsprong(hg);
+    const lx = x - ox;
+    const ly = y - oy;
+    if (lx < -RAND || ly < -RAND || lx >= hg.b + RAND || ly >= hg.h + RAND) {
       const h = T.hoekHoogten(w, x, y);
       return h[0] !== h[1] || h[1] !== h[2] || h[2] !== h[3];
     }
     const l = hoekenLijst(hg);
-    const i = ((y + RAND) * (hg.b + 2 * RAND) + x + RAND) * 4;
+    const i = ((ly + RAND) * (hg.b + 2 * RAND) + lx + RAND) * 4;
     return l[i] !== l[i + 1] || l[i + 1] !== l[i + 2] || l[i + 2] !== l[i + 3];
   };
 
@@ -345,14 +358,17 @@
   const dekkerLijsten = new WeakMap();
   T.dektAf = function (w, x, y) {
     const hg = w && w.hoogte;
-    if (!hg || x < 0 || y < 0 || x >= hg.b || y >= hg.h) return false;
+    const [ox, oy] = hg ? oorsprong(hg) : [0, 0];
+    if (!hg || x < ox || y < oy || x >= ox + hg.b || y >= oy + hg.h) return false;
     let l = dekkerLijsten.get(hg);
     if (!l || l.versie !== (hg.versie || 0)) {
       l = { versie: hg.versie || 0, dekt: new Uint8Array(hg.b * hg.h) };
       const HH = T.naarScherm(1, 0).y; // een halve tegel hoog op het scherm (16)
       const voeten = (bx, by) => (bx + by) * HH - T.hoogteOp(w, bx, by);
-      for (let ty = 0; ty < hg.h; ty++) {
-        for (let tx = 0; tx < hg.b; tx++) {
+      for (let ry = 0; ry < hg.h; ry++) {
+        for (let rx = 0; rx < hg.b; rx++) {
+          const tx = ox + rx;
+          const ty = oy + ry;
           const h = T.hoekHoogten(w, tx, ty);
           // op het scherm: de noordhoek een halve rij terug, oost en west op de rij van de tegel
           const noord = (tx + ty - 1) * HH - h[0];
@@ -362,12 +378,12 @@
           for (const [i, j, rand] of [[1, 0, west], [0, 1, oost], [1, 1, noord], [2, 1, west], [1, 2, oost], [2, 2, noord]]) {
             if (rand < voeten(tx - i, ty - j) - 2) dekt = true;
           }
-          l.dekt[ty * hg.b + tx] = dekt ? 1 : 0;
+          l.dekt[ry * hg.b + rx] = dekt ? 1 : 0;
         }
       }
       dekkerLijsten.set(hg, l);
     }
-    return l.dekt[y * hg.b + x] === 1;
+    return l.dekt[(y - oy) * hg.b + (x - ox)] === 1;
   };
 
   // Bouwen (vraag 121, stap 2): een gebouw komt op vlakke grond. Waar het komt, maakt de bouwer de grond vlak
@@ -424,9 +440,10 @@
     if (l && l.versie === oud) {
       const r = IN().vrijRond + 1;
       const bl = hg.b + 2 * RAND;
-      for (let y = Math.max(-RAND, vlak.y0 - r); y < Math.min(hg.h + RAND, vlak.y1 + r); y++) {
-        for (let x = Math.max(-RAND, vlak.x0 - r); x < Math.min(hg.b + RAND, vlak.x1 + r); x++) {
-          for (let k = 0; k < 4; k++) l.hoeken[((y + RAND) * bl + x + RAND) * 4 + k] = rekenHoek(hg, x, y, k);
+      const [ox, oy] = oorsprong(hg);
+      for (let y = Math.max(-RAND, vlak.y0 - oy - r); y < Math.min(hg.h + RAND, vlak.y1 - oy + r); y++) {
+        for (let x = Math.max(-RAND, vlak.x0 - ox - r); x < Math.min(hg.b + RAND, vlak.x1 - ox + r); x++) {
+          for (let k = 0; k < 4; k++) l.hoeken[((y + RAND) * bl + x + RAND) * 4 + k] = rekenHoek(hg, ox + x, oy + y, k);
         }
       }
       l.versie = hg.versie;
@@ -453,6 +470,8 @@
     const cx = plan.plein.reduce((s, p) => s + p[0], 0) / plan.plein.length;
     const cy = plan.plein.reduce((s, p) => s + p[1], 0) / plan.plein.length;
     const hg = { trede: I.trede, zaad: plan.zaad, b: B, h: H, midden: [cx, cy], dorpHoogte: 0, vlakken: [], niveau: {}, hellingen: {} };
+    // waar het land op de kaart begint: op een kaart van het eiland (w.vak) waar het plan op het eiland ligt, anders (0, 0)
+    const oorsprongOp = w && w.vak && plan.eiland ? [plan.eiland.x0, plan.eiland.y0] : [0, 0];
     // op het eiland is het land dat van het eiland (vraag 117, 2b)
     if (plan.eiland) hg.eiland = { zaad: plan.eiland.zaad, x0: plan.eiland.x0, y0: plan.eiland.y0 };
     hg.dorpHoogte = Math.round(landOp(hg, cx, cy));
@@ -527,7 +546,22 @@
           else if (!hg.niveau[t] && buren >= 3) hg.niveau[t] = 1;
         }
       }
-      legHelling(hg.niveau, hg.hellingen, k, cx, cy, I.hellingBreed, B, H, w);
+      legHelling(hg.niveau, hg.hellingen, k, cx, cy, I.hellingBreed, B, H, w, oorsprongOp);
+    }
+    // Op een kaart van het eiland (js/wereld.js, B2b) liggen de tegels in de coördinaten van het eiland: dan gaat alles
+    // wat de hoogte bewaart daarheen, en begint het raster van het land op (ox, oy).
+    if (oorsprongOp[0] || oorsprongOp[1]) {
+      const [ox, oy] = oorsprongOp;
+      const schuif = (lijst) => Object.fromEntries(Object.entries(lijst).map(([t, v]) => {
+        const [x, y] = t.split(',').map(Number);
+        return [sleutel(x + ox, y + oy), v];
+      }));
+      hg.ox = ox;
+      hg.oy = oy;
+      hg.midden = [hg.midden[0] + ox, hg.midden[1] + oy];
+      for (const v of hg.vlakken) Object.assign(v, { x0: v.x0 + ox, y0: v.y0 + oy, x1: v.x1 + ox, y1: v.y1 + oy });
+      hg.niveau = schuif(hg.niveau);
+      hg.hellingen = schuif(hg.hellingen);
     }
     return hg;
   };
@@ -536,7 +570,7 @@
   // ligt buiten de richel: zijn twee hoeken aan de kant van de richel liggen een trede hoger. Met de kaart erbij (`w`)
   // alleen waar je op de helling kunt staan, en eronder ook: een struik of een boom aan de voet maakte er een doodlopende
   // helling van (land 5).
-  function legHelling(niveau, hellingen, k, cx, cy, breed, B, H, w) {
+  function legHelling(niveau, hellingen, k, cx, cy, breed, B, H, w, [ox, oy] = [0, 0]) {
     let beste = null;
     for (const s of Object.keys(niveau)) {
       const [x, y] = s.split(',').map(Number);
@@ -555,7 +589,7 @@
           // de voet: de tegel eronder
           const vx = kant === 'oost' ? hx + 1 : hx;
           const vy = kant === 'zuid' ? hy + 1 : hy;
-          if (w && past && (!T.isBegaanbaar(w, hx, hy) || !T.isBegaanbaar(w, vx, vy) || !T.isBegaanbaar(w, rx, ry))) past = false;
+          if (w && past && (!T.isBegaanbaar(w, ox + hx, oy + hy) || !T.isBegaanbaar(w, ox + vx, oy + vy) || !T.isBegaanbaar(w, ox + rx, oy + ry))) past = false;
         }
         if (!past) continue;
         const d = Math.hypot(bx - cx, by - cy);

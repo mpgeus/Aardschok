@@ -212,7 +212,7 @@ test('in een dorp groeit de herberg door tot de grote, met zijn deur aan dezelfd
   assert.equal(zijde(na), zijde(voor));
   assert.equal(g.voorwerp.x, g.x);
   assert.equal(g.voorwerp.y, g.y);
-  for (let y = na.y; y < na.y + na.h; y++) for (let x = na.x; x < na.x + na.b; x++) assert.equal(D.wereld.tegels[y][x], 'muur');
+  for (let y = na.y; y < na.y + na.h; y++) for (let x = na.x; x < na.x + na.b; x++) assert.equal(T.tegel(D.wereld, x, y), 'muur');
 });
 
 // Marcel, 8 okt ("Beiden"): in de speeltest van 7 okt bleef de herberg op eiland 62707 klein, omdat er later iets op de grond
@@ -282,7 +282,7 @@ test('kan de herberg niet meegroeien, dan zegt het dorp waarom, één keer', () 
     }
   }
   T.zetVoorwerp(D.wereld, { soort: 'rots', x: tegel.x, y: tegel.y });
-  D.wereld.tegels[tegel.y][tegel.x] = 'muur';
+  T.zetTegel(D.wereld, tegel.x, tegel.y, 'muur');
   T.kaartVeranderd(D.wereld);
   const gezegd = [];
   const zeg = T.zeg;

@@ -1433,8 +1433,8 @@
   // ---- je land op het eiland (stap 2) --------------------------------------------------------------------------------
 
   // Het land van b bij h tegels om een plek van het eiland, voor de maker (js/maker.js, vraag 117, stap 2): per tegel de
-  // streek, de bomen en de weg, per hoekpunt de streek (de grond van de maker gaat per hoekpunt), en waar de wegen van
-  // het eiland het land verlaten (`uitgangen`, op de rand van het land; die naar het kasteel heeft `kasteel`). Tegel
+  // streek, de bomen en de weg, per hoekpunt de streek, het land zelf (`stuk`, T.landStuk), de bruggetjes erin, en waar de
+  // wegen van het eiland het land verlaten (`uitgangen`, op de rand van het land; die naar het kasteel heeft `kasteel`). Tegel
   // (x, y) van het land is tegel (x0 + x, y0 + y) van het eiland, en zijn hoekpunt (x, y) ligt een halve tegel
   // linksboven het midden ervan.
   T.landVanEiland = function (E, plek, b, h) {
@@ -1485,12 +1485,20 @@
       beste.kasteel = true;
     }
     const naam = (lijst, i) => T.EILAND_STREKEN[lijst[i]];
+    // de bruggetjes van het eiland in het land (legBruggen), in de tegels van het land
+    const bruggen = E.bruggen
+      .filter((br) => br.tegels.every((t) => t.x >= x0 && t.y >= y0 && t.x < x0 + b && t.y < y0 + h))
+      .map((br) => ({ as: br.as, tegels: br.tegels.map((t) => ({ x: t.x - x0, y: t.y - y0 })) }));
     return {
       zaad: E.zaad,
       x0,
       y0,
       b,
       h,
+      // het land zoals het eiland het heeft, met de grond, de bomen en het groen (T.landStuk, js/maker.js), in de
+      // tegels van het eiland
+      stuk: T.landStuk(E, x0, y0, b, h),
+      bruggen,
       // de streek op tegel (x, y) of hoekpunt (x, y), als naam; buiten het land null
       streek: (x, y) => (x >= 0 && y >= 0 && x < b && y < h ? naam(tegels.streek, y * b + x) : null),
       hoek: (x, y) => (x >= 0 && y >= 0 && x <= b && y <= h ? naam(hoeken.streek, y * (b + 1) + x) : null),

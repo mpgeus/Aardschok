@@ -64,7 +64,8 @@ test('een gemaakt land leest het spel in als het lege begin: alleen de schout, g
   assert.equal(w.meenten.length, 0);
   assert.deepEqual(w.overgangen.map((o) => o.naar), ['wereld']);
   // elke tegel heeft grond, en het plein en de plek van de marskramer liggen erop
-  for (let y = 0; y < w.h; y++) for (let x = 0; x < w.b; x++) assert.ok(w.grond[y][x], `geen grond op (${x}, ${y})`);
+  const K = T.kaartVak(w);
+  for (let y = K.y; y < K.y + K.h; y++) for (let x = K.x; x < K.x + K.b; x++) assert.ok(T.grondOp(w, x, y), `geen grond op (${x}, ${y})`);
   assert.ok(T.opHetPlein(w, w.marskramer.x, w.marskramer.y));
   // en je loopt van de schout naar de uitgang, de marskramer, het kampvuur en de deur van elke tent van het kamp
   const schout = w.wezens.find((e) => e.soort === 'schout');

@@ -67,14 +67,14 @@ test('T.gebouwVoet: de voet van de tekening, en zonder tekening de geschatte voe
 test('T.gebouwPast: ja op lege grond, nee waar al iets vast staat', () => {
   const S = maakS();
   assert.equal(T.gebouwPast(S, 'put', 5, 5), true);
-  S.wereld.tegels[5][5] = 'muur';
+  T.zetTegel(S.wereld, 5, 5, 'muur');
   T.kaartVeranderd(S.wereld); // zoals elke regel die een tegel verandert (js/wereld.js)
   assert.equal(T.gebouwPast(S, 'put', 5, 5), false);
 });
 
 test('T.gebouwPast: de hele voet moet vrij zijn, niet alleen de linkerbovenhoek', () => {
   const S = maakS();
-  S.wereld.tegels[3][4] = 'muur'; // ergens binnen de voet van "huis" (6x6) vanaf (2, 2)
+  T.zetTegel(S.wereld, 4, 3, 'muur'); // ergens binnen de voet van "huis" (6x6) vanaf (2, 2)
   T.kaartVeranderd(S.wereld);
   assert.equal(T.gebouwPast(S, 'huis', 2, 2), false);
 });
@@ -90,7 +90,7 @@ test('op het plein wordt niet gebouwd, en het bouwmenu zegt waarom', () => {
   assert.equal(T.gebouwPast(S, 'hut', 6, 6), false, 'een hoek van de voet op het plein is ook op het plein');
   assert.equal(T.gebouwPast(S, 'put', 3, 3), true, 'ernaast mag het');
   assert.equal(T.waaromPastHetNiet(S, 'put', 3, 3), null);
-  S.wereld.tegels[3][3] = 'muur';
+  T.zetTegel(S.wereld, 3, 3, 'muur');
   T.kaartVeranderd(S.wereld);
   assert.equal(T.waaromPastHetNiet(S, 'put', 3, 3), 'It does not fit there.');
   const r = T.plaatsGebouw(S, 'put', 10, 10);
@@ -125,7 +125,7 @@ test('T.plaatsGebouw: mislukt als de voet niet past', () => {
   const S = maakS();
   T.zetVoorraad(S, 'hout', 100);
   T.zetVoorraad(S, 'goud', 100);
-  S.wereld.tegels[2][2] = 'muur';
+  T.zetTegel(S.wereld, 2, 2, 'muur');
   const r = T.plaatsGebouw(S, 'put', 2, 2);
   assert.equal(r.gelukt, false);
   assert.equal(S.gebouwen.length, 0);

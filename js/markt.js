@@ -178,7 +178,7 @@
     // de bomen bij het plein (verder weg dekken ze er niets van af)
     const pt = T.pleinTegels(w);
     const [px0, px1, py0, py1] = [Math.min(...pt.map((t) => t.x)) - 6, Math.max(...pt.map((t) => t.x)) + 6, Math.min(...pt.map((t) => t.y)) - 6, Math.max(...pt.map((t) => t.y)) + 6];
-    const bomen = (w.voorwerpen || []).filter((v) => v.x >= px0 && v.x <= px1 && v.y >= py0 && v.y <= py1 && T.NATUUR.bos.telt(w, v.x, v.y, v));
+    const bomen = T.voorwerpenIn(w, { x: px0, y: py0, b: px1 - px0 + 1, h: py1 - py0 + 1 }).filter((v) => T.NATUUR.bos.telt(w, v.x, v.y, v));
     const bijEenBoom = (x, y) => bomen.some((b) => cheb(b, { x, y }) <= IN().vanBomen);
     // Wat in ons beeld achter een gebouw of een boom valt: een tegel die binnen de breedte van zijn voet ligt, achter
     // zijn voorste hoek, en niet hoger dan het dak of de kruin reikt (in pixels van het beeld: x - y keer 32 opzij, x + y

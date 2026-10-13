@@ -1224,7 +1224,7 @@
     leegRand: T.t('empty margin'),
     eilandBrug: T.t('island bridge'),
     kost: T.t('cost'),
-    eilandRand: T.t('island edge'),
+    zicht: T.t('in sight'),
     zaden: T.t('seeds'),
     pogingen: T.t('attempts'),
     losseBomen: T.t('single trees'),

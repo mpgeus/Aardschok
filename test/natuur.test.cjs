@@ -30,8 +30,9 @@ test('wie bij de natuur hoort: de houthakker bij het bos, de steengroeve bij de 
   for (const s of NATUURGEBOUWEN) assert.ok(T.NATUUR[T.GEBOUWEN[s].bij.natuur], `${s}: onbekende natuur`);
 });
 
-// De rotsen van een land: de tegels met een rots.
-const rotsenVan = (w) => w.voorwerpen.filter((v) => v.soort === 'rots');
+// Wat er in het land staat (T.voorwerpenIn: ook wat er op het eiland groeit), en de rotsen ervan.
+const alles = (w) => T.voorwerpenIn(w, T.kaartVak(w));
+const rotsenVan = (w) => alles(w).filter((v) => v.soort === 'rots');
 const verVan = (a, b) => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
 // Waarom `soort` niet op (x, y) kan, zoals de speler het vraagt: met de kavel die de bouwers eerst rooien (T.bouwKavel,
 // js/bouwen.js), want in het lege begin bouwen de mensen zelf.
@@ -46,13 +47,13 @@ test('T.natuurBij telt de rotsen, de bomen en het water rond een plek', () => {
   const rond = rotsenVan(w).filter((r) => verVan(r, rots) <= 2).length;
   assert.equal(T.natuurBij(w, 'rotsen', { x: rots.x, y: rots.y, b: 1, h: 1 }, 2), rond, 'met een straal telt hij wat eromheen ligt');
   assert.equal(T.natuurBij(w, 'rotsen', { x: w.marskramer.x, y: w.marskramer.y, b: 1, h: 1 }, 2), 0, 'op het plein liggen geen rotsen');
-  const boom = w.voorwerpen.find((v) => T.isBosBoom(v.soort));
+  const boom = alles(w).find((v) => T.isBosBoom(v.soort));
   assert.ok(T.natuurBij(w, 'bos', { x: boom.x, y: boom.y, b: 1, h: 1 }, 0) === 1, 'een boom van het bos');
-  assert.ok(T.natuurBij(w, 'water', { x: 0, y: 0, b: w.b, h: w.h }, 0) > 50, 'het water');
+  assert.ok(T.natuurBij(w, 'water', T.kaartVak(w), 0) > 50, 'het water');
   // een gebouw verandert de kaart, en dan telt hij opnieuw
-  const voor = T.natuurBij(w, 'bos', { x: 0, y: 0, b: w.b, h: w.h }, 0);
+  const voor = T.natuurBij(w, 'bos', T.kaartVak(w), 0);
   T.haalVoorwerpWeg(w, boom);
-  assert.equal(T.natuurBij(w, 'bos', { x: 0, y: 0, b: w.b, h: w.h }, 0), voor - 1);
+  assert.equal(T.natuurBij(w, 'bos', T.kaartVak(w), 0), voor - 1);
 });
 
 test('een steengroeve bouw je alleen bij de rotsen, en het bouwmenu zegt waarom niet', () => {
@@ -61,8 +62,9 @@ test('een steengroeve bouw je alleen bij de rotsen, en het bouwmenu zegt waarom 
   const w = S.wereld;
   // ver van elke rots zegt het bouwmenu waarom niet, ook waar het verder zou passen (een hut past er)
   let ver = null;
-  for (let y = 0; y < w.h && !ver; y++) {
-    for (let x = 0; x < w.b && !ver; x++) {
+  const K = T.kaartVak(w);
+  for (let y = K.y; y < K.y + K.h && !ver; y++) {
+    for (let x = K.x; x < K.x + K.b && !ver; x++) {
       if (rotsenVan(w).every((r) => verVan(r, { x, y }) > 12) && !waarom(D, 'hut', x, y)) ver = { x, y };
     }
   }
@@ -81,7 +83,8 @@ test('T.plekVoor vindt de natuur ook ver van waar je zoekt (meer dan 44 tegels)'
   const D = S.dorp;
   const w = S.wereld;
   // gezocht vanuit de hoek van de kaart die het verst van alle rotsen ligt
-  const hoeken = [{ x: 5, y: 5 }, { x: w.b - 6, y: 5 }, { x: 5, y: w.h - 6 }, { x: w.b - 6, y: w.h - 6 }];
+  const K = T.kaartVak(w);
+  const hoeken = [{ x: K.x + 5, y: K.y + 5 }, { x: K.x + K.b - 6, y: K.y + 5 }, { x: K.x + 5, y: K.y + K.h - 6 }, { x: K.x + K.b - 6, y: K.y + K.h - 6 }];
   const afstand = (h) => Math.min(...rotsenVan(w).map((r) => verVan(r, h)));
   const van = hoeken.sort((a, b) => afstand(b) - afstand(a))[0];
   assert.ok(afstand(van) > 44, `de rotsen liggen dichter dan 44 tegels bij elke hoek (${afstand(van)})`);
@@ -97,11 +100,12 @@ test('waar de natuur op het eiland ligt, kan alles wat erbij hoort ergens staan'
     const S = spel(zaad);
     const D = S.dorp;
     const w = S.wereld;
-    const midden = { x: Math.round(w.b / 2), y: Math.round(w.h / 2) };
+    const K = T.kaartVak(w);
+    const midden = { x: Math.round(K.x + K.b / 2), y: Math.round(K.y + K.h / 2) };
     for (const soort of NATUURGEBOUWEN) {
       const bij = T.GEBOUWEN[soort].bij;
       // een eiland zonder water (2 en 3) heeft geen plek voor een visser of een rietsnijder: dat is de natuur, niet het gebouw
-      if (T.natuurBij(w, bij.natuur, { x: 0, y: 0, b: w.b, h: w.h }, 0) < bij.minstens) continue;
+      if (T.natuurBij(w, bij.natuur, K, 0) < bij.minstens) continue;
       gezien++;
       const plek = T.plekVoor(D, soort, midden);
       assert.ok(plek, `eiland ${zaad}: geen plek voor een ${soort}`);
@@ -117,7 +121,8 @@ test('wat laag groeit (een varen, bloemen), maakt plaats voor een gebouw; wat in
   const D = S.dorp;
   const w = S.wereld;
   // een plek waar een hut past, en daar een varen op
-  const plek = T.plekVoor(D, 'hut', { x: 50, y: 50 });
+  const K = T.kaartVak(w);
+  const plek = T.plekVoor(D, 'hut', { x: K.x + 50, y: K.y + 50 });
   assert.ok(plek);
   const varen = T.zetVoorwerp(w, { soort: 'varen', x: plek.x + 1, y: plek.y + 1, vel: 'begroeiing', id: T.TEGELS.begroeiing.tiles.findIndex((t) => t && t.naam === 'varen'), beslaat: [1, 1] });
   T.VOORWERPEN.varen = T.VOORWERPEN.varen || { blokkeert: false, zichtDicht: false };
@@ -130,11 +135,11 @@ test('wat laag groeit (een varen, bloemen), maakt plaats voor een gebouw; wat in
   // een rots is vast: daar bouw je niet op, ook niet als de bouwers rooien
   for (const rots of rotsenVan(w)) assert.ok(waarom(D, 'hut', rots.x, rots.y), `een hut op de rots op (${rots.x}, ${rots.y})`);
   // een struik is te rooien: de bouwers doen het eerst, en dan staat de hut er
-  const struik = w.voorwerpen.find((v) => v.soort === 'struik' && !waarom(D, 'hut', v.x, v.y));
+  const struik = alles(w).find((v) => v.soort === 'struik' && !waarom(D, 'hut', v.x, v.y));
   assert.ok(struik, 'er is een struik waar een hut op past');
   const nieuw = T.plaatsGebouw(D, 'hut', struik.x, struik.y);
   assert.equal(nieuw.gelukt, true);
   assert.equal(nieuw.instantie.wachtOpRooien, true, 'de bouwers rooien eerst');
   bouwAf(T, D, nieuw.instantie, 1);
-  assert.ok(!w.voorwerpen.includes(struik), 'de struik is gerooid');
+  assert.ok(T.voorwerpOp(w, struik.x, struik.y) !== struik, 'de struik is gerooid');
 });

@@ -2,18 +2,19 @@
 // ligt het land anders, uit het zaad van dat spel.
 //
 // Sinds ronde 2 van het snoeien (stap 6, 12 okt; Marcel: "Alles wordt door spelers geplaatst") legt hij alleen nog het land
-// zelf, op het eiland (js/eiland.js): het water, de heide, de rotsen, het bos en de wegen komen van het eiland, en de maker
-// maakt er de open plek voor het plein bij, en op dat plein de plek van het kamp waar de kar stopt (js/begin.js). Geen
-// huizen, boerderijen, akkers, herberg, meent, put of bank: dat bouwt de speler. Tot dan legde hij ook het dorp dat er al was,
-// en een land zonder eiland; ze staan in git.
+// zelf, op het eiland (js/eiland.js), en sinds B2b (13 okt; Marcel: "Het eiland, overal") alleen nog het menselijke: het
+// land, de grond, de wegen, de bomen en het groen komen van het eiland (T.landStuk hieronder), en de maker maakt er de open
+// plek voor het plein bij, op dat plein de plek van het kamp waar de kar stopt (js/begin.js), de plek van de marskramer,
+// een paar eiken en een rotspartij voor de steengroeve. Geen huizen, boerderijen, akkers, herberg, meent, put of bank: dat
+// bouwt de speler. Tot dan legde hij ook het dorp dat er al was, een land zonder eiland, en zijn eigen bomen, wegen en
+// bruggetjes; ze staan in git.
 //
 // Hij keurt zijn eigen werk (keur hieronder): kan iedereen overal komen, en staat er niets op het plein dat er niet hoort.
 // Deugt het niet, dan probeert hij het met hetzelfde zaad opnieuw, en hetzelfde zaad geeft altijd hetzelfde land.
 //
 // T.maakGehucht(zaad, land) legt het plan (de indeling, zonder tegels) op een stuk van het eiland, T.planOpEiland(zaad) kiest
-// dat stuk (jouw plek, anders die van een ander dorp), en T.kaartVanGehucht(plan) maakt er een kaart met een betekenisbestand
-// van, in dezelfde vorm als een kaart uit Tiled, zodat het spel het land inleest zoals een kaart (T.laadKaart, js/kaart.js).
-// T.laadGemaaktGehucht(zaad) doet alles in één keer. Een nieuw spel begint zo (T.beginOpKaart, js/gebied.js). De schets
+// dat stuk (jouw plek, anders die van een ander dorp), en T.laadGemaaktGehucht(zaad) maakt er een kaart van het eiland van
+// (T.eilandKaart, js/wereld.js), met alleen wat de maker anders legde dan het eiland. Een nieuw spel begint zo (T.beginOpKaart, js/gebied.js). De schets
 // (gereedschap/maker/schets.cjs, npm run maker) tekent plannen als plattegrond.
 //
 // Hij gebruikt de regels uit js/ zelf: de dobbelsteen (T.dobbelsteen, js/dorp.js), de rand van het plein
@@ -22,15 +23,12 @@
   'use strict';
 
   T.MAKER_INSTELLINGEN = {
-    // Op het eiland: een bruggetje is hooguit zo lang (tegels water) en kost zoveel stappen extra, zodat een weg liever om
-    // het water heen loopt.
-    eilandBrug: { lang: 7, kost: 12 },
     // Het lege begin (vraag 152; js/begin.js): de maker legt alleen het land met een open plek die het plein wordt; zo ver
     // om het plein is het open (tegels), en verder staat het bos van het eiland (Marcel, 11 okt: "Klein, bos dichtbij").
     leegRand: 2,
-    // Zo ver om de kaart weet de rand wat het eiland er heeft (tegels; T.randVanHetEiland): zo ver tekent js/tekenen.js
-    // het bos om de kaart.
-    eilandRand: 16,
+    // Zo ver om het land zijn de stukken van het eiland open bij een nieuw spel (tegels; js/wereld.js, T.openVak): zo ver
+    // zie je het land om je dorp. In B2c wordt het de kring die je bij het begin kent.
+    zicht: 16,
     // Uit zoveel zaden kiest een nieuw spel zijn land: een getal van vijf cijfers, om te onthouden.
     zaden: 99999,
     // Hoe groot het land is (vraag 112, b; Marcel, 3 okt: "Alles moet denk ik ook wijder opgezet worden").
@@ -38,9 +36,6 @@
     h: 100,
     // Zo vaak probeert hij het met hetzelfde zaad, tot een plan deugt.
     pogingen: 120,
-    // Losse bomen en groepjes struiken in de wei.
-    losseBomen: [14, 22],
-    struikgroepjes: [5, 9],
     // Een of twee rotspartijen (de tweede met deze kans): waar de steengroeve komt.
     rotsen: 0.55,
     // Wat er op een vrije tegel groeit, per soort plek (de kans per tegel). Een weide krijgt bloemen en hoog gras in
@@ -83,39 +78,10 @@
   const WATER = 3;
   const BOS = 4;
 
-  // Een vloeiende lijn door steunpunten (Catmull-Rom), als veel korte rechte stukjes, en de afstand van een punt
-  // tot zo'n lijn: dezelfde als in maak-gehucht.cjs, zodat een weg hier net zo slingert.
-  function vloeiend(punten, stappen = 8) {
-    const P = [punten[0], ...punten, punten[punten.length - 1]];
-    const uit = [];
-    for (let i = 1; i + 2 < P.length; i++) {
-      for (let s = 0; s < stappen; s++) {
-        const t = s / stappen;
-        const f = (a, b, c, d) => 0.5 * (2 * b + (c - a) * t + (2 * a - 5 * b + 4 * c - d) * t * t + (3 * b - a - 3 * c + d) * t * t * t);
-        uit.push([f(P[i - 1][0], P[i][0], P[i + 1][0], P[i + 2][0]), f(P[i - 1][1], P[i][1], P[i + 1][1], P[i + 2][1])]);
-      }
-    }
-    uit.push(punten[punten.length - 1]);
-    return uit;
-  }
-  function totLijn(punten, x, y) {
-    let d = 1e9;
-    for (let i = 0; i + 1 < punten.length; i++) {
-      const [ax, ay] = punten[i];
-      const [bx, by] = punten[i + 1];
-      const vx = bx - ax;
-      const vy = by - ay;
-      const t = Math.max(0, Math.min(1, ((x - ax) * vx + (y - ay) * vy) / (vx * vx + vy * vy || 1)));
-      d = Math.min(d, Math.hypot(x - ax - vx * t, y - ay - vy * t));
-    }
-    return d;
-  }
-
   // De grond op een hoekpunt van het eiland, uit zijn streek (js/eiland.js): de zee ('e'), het water van een meer of een
   // rivier ('w'), de heide ('h'), het strand, de duinen en het zand ('s', strand), het veen ('v'), het broek ('b'), en de
   // rest gras ('g'). Het strand, het veen, het broek en de zee hebben eigen tegels (tegels/kust.png; werklijst vraag 117,
-  // B van 2a). De maker legt zo de grond van je land (stap 11), en de rand om de kaart die van het eiland eromheen
-  // (T.randVanHetEiland).
+  // B van 2a). Zo legt het eiland zijn grond (T.landStuk).
   const GROND_VAN_STREEK = { zee: 'e', meer: 'w', rivier: 'w', heide: 'h', strand: 's', duinen: 's', zand: 's', veen: 'v', broek: 'b' };
   T.grondVanStreek = (s) => GROND_VAN_STREEK[s] || 'g';
   // Is deze grond water (de zee, een meer, een rivier)?
@@ -228,46 +194,18 @@
     };
     // Staat er in dit vak (met een rand eromheen) iets van deze soorten?
     const raakt = (x0, y0, b, h, rand, soorten) => somVan(soorten)(x0 - rand, y0 - rand, b + 2 * rand, h + 2 * rand) > 0;
-    // Ruis: een glad veld van 0 tot 1 uit het zaad, dat over zo'n `maat` tegels golft (willekeurige waarden op een
-    // rooster, glad ertussen). Voor de plekken waar de bloemen staan.
-    const ruis = (maat) => {
-      const nb = Math.ceil(B / maat) + 3;
-      const nh = Math.ceil(H / maat) + 3;
-      const rooster = new Float32Array(nb * nh);
-      for (let i = 0; i < rooster.length; i++) rooster[i] = r();
-      const glad = (t) => t * t * (3 - 2 * t);
-      const v = (a, b) => rooster[Math.min(nh - 1, Math.max(0, b)) * nb + Math.min(nb - 1, Math.max(0, a))];
-      return (x, y) => {
-        const fx = x / maat + 1;
-        const fy = y / maat + 1;
-        const ix = Math.floor(fx);
-        const iy = Math.floor(fy);
-        const tx = glad(fx - ix);
-        const ty = glad(fy - iy);
-        const boven = v(ix, iy) + (v(ix + 1, iy) - v(ix, iy)) * tx;
-        const onder = v(ix, iy + 1) + (v(ix + 1, iy + 1) - v(ix, iy + 1)) * tx;
-        return boven + (onder - boven) * ty;
-      };
-    };
+    // Het land zoals het eiland het heeft (T.landStuk, via land.stuk): de grond per hoekpunt, wat elke tegel is (vrij,
+    // weg, water, bos), en wat er groeit. De maker legt er alleen het menselijke over (B2b; Marcel, 13 okt: "Het eiland,
+    // overal"): het plein, open gemaakt, het kamp, de plek van de marskramer, de eiken op het plein en de rotspartij.
+    const st = land.stuk;
+    const lx = (x) => x - land.x0; // van het eiland naar het land
+    const ly = (y) => y - land.y0;
+    for (let i = 0; i < B * H; i++) vak[i] = st.soort[i];
+    const letterOp = (x, y) => st.hoek[y * (B + 1) + x];
 
-    // ---- 1. Trekkingen die niets meer leggen ----
-    // Tot ronde 2 van het snoeien (stap 6, 12 okt) koos de maker hier ook de as van de weg van rand tot rand, de kant van de
-    // beek en van de uitgang, de randen van het bos en de ruis voor zijn inhammen en open plekken, en iets verderop de
-    // beek zelf: voor een land zonder eiland en voor het dorp dat er al was. Het eiland doet dat nu. Maar elke trekking
-    // zet de dobbelsteen een stap verder, en alles erna (het plein, het kamp, de bomen en het groen) hangt aan die
-    // volgorde: haal je ze weg, dan ligt elk land, ook dat van een spel dat is bewaard, anders. Daarom worden ze nog
-    // getrokken, en niet gebruikt.
-    const gooiWeg = (aantal) => {
-      for (let i = 0; i < aantal; i++) r();
-    };
-    gooiWeg(4); // de as van de weg, de kant van de beek, de kant van de uitgang, en de eerste rand van het bos
-    if (r() < 0.45) gooiWeg(1); // en soms een tweede rand
-    ruis(13); // de inhammen van het bos
-    ruis(7); // en de open plekken erin
-
-    // ---- 2. Het plein: in het midden, groot, open en onregelmatig ----
+    // ---- 1. Het plein: in het midden, groot, open en onregelmatig ----
     // Getekend in (u, v) rond zijn midden, zoals de schets "Het plein als hart": u loopt in beeld naar rechts, v naar
-    // de camera. Een ellips die golft en een beetje scheef staat.
+    // de camera. Een ellips die golft en een beetje scheef staat. Het water blijft water.
     const cx = B / 2 + tussen(-4, 4);
     const cy = H / 2 + tussen(-4, 4);
     const naarTegel = (u, v) => [Math.round((cx + (u + v) * Math.SQRT1_2) * 10) / 10, Math.round((cy + (v - u) * Math.SQRT1_2) * 10) / 10];
@@ -288,199 +226,40 @@
     let pleinTegels = 0;
     for (let y = 0; y < H; y++) {
       for (let x = 0; x < B; x++) {
-        if (opPlein(x, y)) {
-          zet(x, y, PLEIN);
-          pleinTegels++;
-        }
+        if (!opPlein(x, y)) continue;
+        pleinTegels++;
+        if (op(x, y) !== WATER) zet(x, y, PLEIN);
       }
     }
     if (pleinTegels < I.pleinTegels[0] || pleinTegels > I.pleinTegels[1]) return mis(`het plein is ${pleinTegels} tegels`); // geen tekst
 
-    // ---- 3. Het water: dat van het eiland ----
-    gooiWeg(4); // (hier trok de maker de beek, zie stap 1)
-    // Een hoekpunt is nat waar het eiland water is: de zee, een meer of een rivier. Een tegel is water als een van zijn
-    // hoekpunten nat is; een bruggetje ligt over zulke tegels.
-    const natHoeken = new Uint8Array((B + 1) * (H + 1));
-    for (let y = 0; y <= H; y++) for (let x = 0; x <= B; x++) if (isNat(T.grondVanStreek(land.hoek(x, y)))) natHoeken[y * (B + 1) + x] = 1;
-    const nat = (x, y) => x >= 0 && y >= 0 && x <= B && y <= H && natHoeken[y * (B + 1) + x] === 1;
+    // ---- 2. Het water en de wegen: die van het eiland ----
+    // Een hoekpunt is nat waar het eiland water is: de zee, een meer of een rivier. De wegen zijn die van het eiland
+    // (Marcel, 13 okt: "Die van het eiland"), met zijn bruggetjes; de uitgang is waar de weg naar het kasteel het land
+    // verlaat, of anders een andere weg.
+    const nat = (x, y) => x >= 0 && y >= 0 && x <= B && y <= H && isNat(letterOp(x, y));
     const naastWater = (x, y) => {
       for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) if (nat(x + dx, y + dy)) return true;
       return false;
     };
-    const waterTegel = (x, y) => nat(x, y) || nat(x + 1, y) || nat(x, y + 1) || nat(x + 1, y + 1);
-    for (let y = 0; y < H; y++) for (let x = 0; x < B; x++) if (waterTegel(x, y)) zet(x, y, WATER);
-    const brug = []; // alle tegels van de bruggetjes
-    const bruggen = []; // elk bruggetje met zijn richting, { as, tegels }
-
-    // ---- 4. De wegen: die van het eiland door je land (vraag 117, stap 2) ----
-    // Van elke plek waar een weg van het eiland je land verlaat (land.uitgangen), naar het plein: om het water heen, en
-    // waar het smal is eroverheen met een recht bruggetje; door het bos en het veen liever niet. De uitgang is waar de weg
-    // naar het kasteel gaat.
-    const wegenOpEiland = () => {
-      const KOST = { woud: 0.6, broek: 0.8, veen: 0.8, heide: 0.1 };
-      const RICHTING = [[1, 0], [-1, 0], [0, 1], [0, -1]];
-      const isWater = (x, y) => op(x, y) === WATER;
-      const midden = (q) => [(q % B) + 0.5, Math.floor(q / B) + 0.5];
-      const schat = (x, y) => Math.max(0, Math.hypot(x + 0.5 - cx, y + 0.5 - cy) - 10);
-      const zoek = (start) => {
-        const g = new Float64Array(B * H).fill(Infinity);
-        const terug = new Int32Array(B * H).fill(-1);
-        const over = new Int8Array(B * H).fill(-1); // met welk bruggetje je er kwam (de richting), anders -1
-        const hoop = [];
-        const duw = (f, k) => {
-          hoop.push([f, k]);
-          for (let i = hoop.length - 1; i > 0; ) {
-            const o = (i - 1) >> 1;
-            if (hoop[o][0] <= hoop[i][0]) break;
-            [hoop[o], hoop[i]] = [hoop[i], hoop[o]];
-            i = o;
-          }
-        };
-        const pak = () => {
-          const top = hoop[0];
-          const laatste = hoop.pop();
-          if (hoop.length) {
-            hoop[0] = laatste;
-            for (let i = 0; ; ) {
-              const a = 2 * i + 1;
-              let k = i;
-              if (a < hoop.length && hoop[a][0] < hoop[k][0]) k = a;
-              if (a + 1 < hoop.length && hoop[a + 1][0] < hoop[k][0]) k = a + 1;
-              if (k === i) break;
-              [hoop[i], hoop[k]] = [hoop[k], hoop[i]];
-              i = k;
-            }
-          }
-          return top;
-        };
-        const naar = (k, q, kost, brugRichting) => {
-          const ng = g[k] + kost;
-          if (ng >= g[q]) return;
-          g[q] = ng;
-          terug[q] = k;
-          over[q] = brugRichting;
-          duw(ng + schat(q % B, Math.floor(q / B)), q);
-        };
-        const s0 = start.y * B + start.x;
-        g[s0] = 0;
-        duw(schat(start.x, start.y), s0);
-        let doel = -1;
-        while (hoop.length) {
-          const [f, k] = pak();
-          const x = k % B;
-          const y = (k - x) / B;
-          if (f > g[k] + schat(x, y) + 1e-9) continue;
-          if (op(x, y) === PLEIN) {
-            doel = k;
-            break;
-          }
-          for (let dy = -1; dy <= 1; dy++) {
-            for (let dx = -1; dx <= 1; dx++) {
-              const nx = x + dx;
-              const ny = y + dy;
-              if ((!dx && !dy) || !binnen(nx, ny) || isWater(nx, ny)) continue;
-              if (dx && dy && (isWater(x + dx, y) || isWater(x, y + dy))) continue;
-              naar(k, ny * B + nx, (dx && dy ? Math.SQRT2 : 1) + (KOST[land.streek(nx, ny)] || 0), -1);
-            }
-          }
-          // een bruggetje: recht over het water, als het smal is
-          for (let r = 0; r < 4; r++) {
-            const [dx, dy] = RICHTING[r];
-            let n = 0;
-            while (n <= I.eilandBrug.lang && isWater(x + dx * (n + 1), y + dy * (n + 1))) n++;
-            const nx = x + dx * (n + 1);
-            const ny = y + dy * (n + 1);
-            if (n === 0 || n > I.eilandBrug.lang || !binnen(nx, ny) || isWater(nx, ny)) continue;
-            naar(k, ny * B + nx, n + 1 + I.eilandBrug.kost, r);
-          }
-        }
-        if (doel < 0) return null;
-        const pad = [];
-        for (let q = doel; q >= 0; q = terug[q]) pad.push(q);
-        return { pad: pad.reverse(), over };
-      };
-      const lijnen = [];
-      let uit = null;
-      const gezien = new Set(); // de tegels van de bruggetjes die er al liggen
-      for (const u of land.uitgangen) {
-        // de tegel aan de rand waar de weg begint, en is die nat, dan de dichtste droge ernaast langs de rand
-        const langsY = u.x === 0 || u.x === B - 1;
-        let start = null;
-        for (let d = 0; d <= 12 && !start; d++) {
-          for (const t of [d, -d]) {
-            const x = langsY ? u.x : u.x + t;
-            const y = langsY ? u.y + t : u.y;
-            if (!start && binnen(x, y) && !isWater(x, y)) start = { x, y };
-          }
-        }
-        if (!start) continue;
-        const z = zoek(start);
-        if (!z) continue;
-        // de lijn van de weg: de kaart uit aan de rand, dan om de paar tegels een steunpunt, en recht over een bruggetje
-        const [sx, sy] = midden(z.pad[0]);
-        const steun = [[sx + (start.x === 0 ? -1.5 : start.x === B - 1 ? 1.5 : 0), sy + (start.y === 0 ? -1.5 : start.y === H - 1 ? 1.5 : 0)]];
-        let naBrug = null;
-        for (let i = 0; i < z.pad.length; i++) {
-          const q = z.pad[i];
-          const volgende = z.pad[i + 1];
-          if (volgende != null && z.over[volgende] >= 0) {
-            const [dx, dy] = RICHTING[z.over[volgende]];
-            const [x1, y1] = midden(q);
-            const [x2, y2] = midden(volgende);
-            // recht op het bruggetje af, en recht erover; wat er vlak voor lag, valt weg
-            while (steun.length > 1 && Math.hypot(steun[steun.length - 1][0] - x1, steun[steun.length - 1][1] - y1) < 2.5) steun.pop();
-            steun.push([x1 - dx * 2, y1 - dy * 2], [x1, y1], [x2, y2], [x2 + dx * 2, y2 + dy * 2]);
-            const tegels = [];
-            for (let t = 1; Math.floor(x1) + dx * t !== Math.floor(x2) || Math.floor(y1) + dy * t !== Math.floor(y2); t++) tegels.push({ x: Math.floor(x1) + dx * t, y: Math.floor(y1) + dy * t });
-            if (!gezien.has(tegels[0].x + ',' + tegels[0].y)) {
-              for (const t of tegels) {
-                gezien.add(t.x + ',' + t.y);
-                brug.push(t);
-              }
-              bruggen.push({ as: dx ? 'x' : 'y', tegels });
-            }
-            naBrug = [x2, y2];
-            i++;
-            continue;
-          }
-          const [mx, my] = midden(q);
-          if (naBrug && Math.hypot(mx - naBrug[0], my - naBrug[1]) < 3.5) continue;
-          if (i % 3 === 0 || i === z.pad.length - 1) steun.push([mx, my]);
-        }
-        lijnen.push(vloeiend(steun));
-        if (!uit || u.kasteel) uit = { x: start.x, y: start.y };
-      }
-      if (!lijnen.length) return { mis: 'geen weg van het eiland naar het plein' }; // geen tekst
-      return { wegen: lijnen, uitgang: uit };
-    };
-    const WEG_BREED = 0.75;
-    // Welke hoekpunten binnen `breed` van een van deze lijnen liggen, in één keer: per stukje lijn alleen de hoekpunten
-    // eromheen. (Per hoekpunt de hele lijn aflopen kostte de helft van de tijd van de maker.)
-    const langsLijnen = (lijnen, breed) => {
-      const bij = new Uint8Array((B + 1) * (H + 1));
-      for (const l of lijnen) {
-        for (let i = 0; i + 1 < l.length; i++) {
-          const stuk = [l[i], l[i + 1]];
-          const x0 = Math.max(0, Math.floor(Math.min(l[i][0], l[i + 1][0]) - breed));
-          const x1 = Math.min(B, Math.ceil(Math.max(l[i][0], l[i + 1][0]) + breed));
-          const y0 = Math.max(0, Math.floor(Math.min(l[i][1], l[i + 1][1]) - breed));
-          const y1 = Math.min(H, Math.ceil(Math.max(l[i][1], l[i + 1][1]) + breed));
-          for (let y = y0; y <= y1; y++) {
-            for (let x = x0; x <= x1; x++) if (!bij[y * (B + 1) + x] && totLijn(stuk, x, y) < breed) bij[y * (B + 1) + x] = 1;
-          }
+    const bruggen = land.bruggen;
+    const brug = bruggen.flatMap((b) => b.tegels);
+    let uitgang = null;
+    for (const u of [...land.uitgangen.filter((u) => u.kasteel), ...land.uitgangen.filter((u) => !u.kasteel)]) {
+      // de tegel aan de rand waar de weg begint, en is die nat, dan de dichtste droge ernaast langs de rand
+      const langsY = u.x === 0 || u.x === B - 1;
+      for (let d = 0; d <= 12 && !uitgang; d++) {
+        for (const t of [d, -d]) {
+          const x = langsY ? u.x : u.x + t;
+          const y = langsY ? u.y + t : u.y;
+          if (!uitgang && binnen(x, y) && op(x, y) !== WATER) uitgang = { x, y };
         }
       }
-      return (x, y) => x >= 0 && y >= 0 && x <= B && y <= H && bij[y * (B + 1) + x] === 1;
-    };
-    const aangelegd = wegenOpEiland();
-    if (aangelegd.mis) return mis(aangelegd.mis);
-    const wegen = aangelegd.wegen;
-    const uitgang = aangelegd.uitgang;
-    const opWeg = langsLijnen(wegen, WEG_BREED);
-    const wegTegel = (x, y) => opWeg(x, y) || opWeg(x + 1, y) || opWeg(x, y + 1) || opWeg(x + 1, y + 1);
-    for (let y = 0; y < H; y++) for (let x = 0; x < B; x++) if (op(x, y) === VRIJ && wegTegel(x, y)) zet(x, y, WEG);
+      if (uitgang) break;
+    }
+    if (!uitgang) return mis('geen weg van het eiland uit het land'); // geen tekst
 
-    // Hoeveel tegels in een vak rots van het eiland zijn, zodat de rotspartijen liever daar komen (stap 12).
+    // Hoeveel tegels in een vak rots van het eiland zijn, zodat de rotspartijen liever daar komen.
     const eilandRots = optelsom((x, y) => land.streek(x, y) === 'rots');
     // Hoe ver een tegel van het plein ligt (in stappen van een koning), tot 12.
     const pleinAfstand = new Uint8Array(B * H).fill(99);
@@ -527,49 +306,32 @@
       return kandidaten[Math.floor(r() * Math.min(3, kandidaten.length))];
     };
 
-    // ---- 5. Het bos van het eiland, om het open plein ----
-    // Wat het plein nodig heeft, is gerooid: het plein met `leegRand` tegels eromheen (vraag 152; Marcel, 11 okt: "Klein, bos
-    // dichtbij"), zodat het bos er vlak omheen staat. De rest is bos waar het eiland bos is, en een boom waar het eiland er
-    // een heeft (een bosje in de kampen), maar niet vlak naast een weg of het plein.
+    // ---- 3. Het plein open: wat het nodig heeft, is gerooid ----
+    // Het plein met `leegRand` tegels eromheen (vraag 152; Marcel, 11 okt: "Klein, bos dichtbij"), zodat het bos er vlak
+    // omheen staat: daar is geen bos meer, en de grond is gras (weiden en tuinen), behalve het water en de weg. De weg van
+    // het eiland houdt op aan de rand van het plein (hij loopt naar het midden van het dorp): op het plein is het gras.
     const inKern = (x, y) => totPlein(Math.floor(x), Math.floor(y)) <= I.leegRand;
-    {
-      const gebouwd = somVan([WEG, PLEIN]);
-      const bos = [];
-      for (let y = 0; y < H; y++) {
-        for (let x = 0; x < B; x++) {
-          if (op(x, y) !== VRIJ || inKern(x + 0.5, y + 0.5) || gebouwd(x - 1, y - 1, 3, 3)) continue;
-          const s = land.streek(x, y);
-          if (s === 'woud' || s === 'broek' || land.boom(x, y)) bos.push([x, y]);
-        }
-      }
-      for (const [x, y] of bos) zet(x, y, BOS);
-    }
-
-    // ---- 6. De grond per hoekpunt: water wint, dan zandpad, en de rest is die van het eiland ----
-    // De grond van het eiland (T.grondVanStreek; het water heeft `nat` hierboven al), en in de kern gras: weiden en tuinen.
-    const grondOpEiland = (x, y) => (inKern(x, y) ? 'g' : T.grondVanStreek(land.hoek(x, y)));
+    for (let y = 0; y < H; y++) for (let x = 0; x < B; x++) if (op(x, y) === BOS && inKern(x + 0.5, y + 0.5)) zet(x, y, VRIJ);
+    const binnenPlein = (x, y) => op(x - 1, y - 1) === PLEIN && op(x, y - 1) === PLEIN && op(x - 1, y) === PLEIN && op(x, y) === PLEIN;
     const hoeken = [];
     for (let y = 0; y <= H; y++) {
       const rij = [];
       for (let x = 0; x <= B; x++) {
-        if (nat(x, y)) rij.push(T.grondVanStreek(land.hoek(x, y)) === 'e' ? 'e' : 'w'); // de zee, of ander water
-        else if (naastWater(x, y)) rij.push('g');
-        else if (opWeg(x, y)) rij.push('z');
-        else rij.push(grondOpEiland(x, y));
+        const l = letterOp(x, y);
+        rij.push(inKern(x, y) && !isNat(l) && (l !== 'z' || binnenPlein(x, y)) && !naastWater(x, y) ? 'g' : l);
       }
       hoeken.push(rij);
     }
-    // Wat niet naast elkaar kan liggen (T.passendeGrond): heide grenst alleen aan gras en strand, het strand aan de zee,
-    // gras en heide, het veen en het broek alleen aan gras (net als zandpad vlak naast water, hierboven). Zo'n hoekpunt
-    // wordt gras, of naast de zee strand; tot er niets meer wijkt.
+    // Wat niet naast elkaar kan liggen (T.passendeGrond), zoals in T.landStuk: elke ronde kijkt naar de vorige.
     for (let ronde = 0; ronde < 4; ronde++) {
+      const vorige = hoeken.map((rij) => rij.slice());
       let geweken = false;
       for (let y = 0; y <= H; y++) {
         for (let x = 0; x <= B; x++) {
           const buren = [];
-          for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) if ((dx || dy) && (hoeken[y + dy] || [])[x + dx]) buren.push(hoeken[y + dy][x + dx]);
-          const l = T.passendeGrond(hoeken[y][x], buren);
-          if (l !== hoeken[y][x]) {
+          for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) if ((dx || dy) && (vorige[y + dy] || [])[x + dx]) buren.push(vorige[y + dy][x + dx]);
+          const l = T.passendeGrond(vorige[y][x], buren);
+          if (l !== vorige[y][x]) {
             hoeken[y][x] = l;
             geweken = true;
           }
@@ -580,11 +342,25 @@
     const grond = hoeken.map((rij) => rij.join(''));
     const opGras = (x, y) => [[0, 0], [1, 0], [1, 1], [0, 1]].every(([dx, dy]) => GROEIT.has((grond[y + dy] || '')[x + dx]));
 
-    // ---- 7. Wat er verder staat: het kamp op het plein, de eiken, bomen, struiken, rotsen en het groen ----
-    const voorwerpen = [];
-    const bezet = new Set();
+    // ---- 4. Wat er staat: wat het eiland heeft, behalve op het plein, en geen boom of struik vlak eromheen ----
     const sleutel = (x, y) => y * B + x;
+    const natuur = new Map(); // wat het eiland hier heeft en blijft staan, per tegel
+    const gerooid = []; // wat het eiland hier heeft en weg moet
+    for (const d of st.dingen) {
+      const x = lx(d.x);
+      const y = ly(d.y);
+      if (op(x, y) === PLEIN || (inKern(x + 0.5, y + 0.5) && isVastNaam(d.naam))) gerooid.push({ x, y, naam: d.naam });
+      else natuur.set(sleutel(x, y), { naam: d.naam, x, y });
+    }
+    const gelegd = []; // wat de maker erbij legt
+    const bezet = new Set(); // waar de maker iets legt, of het kamp komt
     const vrijVoor = (x, y) => binnen(x, y) && !bezet.has(sleutel(x, y));
+    const rooi = (x, y) => {
+      const d = natuur.get(sleutel(x, y));
+      if (!d) return;
+      natuur.delete(sleutel(x, y));
+      gerooid.push(d);
+    };
     // wat voor plek dit is, voor de nieuwe soorten (andereBoom)
     const plekVoorBoom = (x, y) =>
       op(x, y) === PLEIN ? 'plein'
@@ -594,11 +370,12 @@
               : raakt(x, y, 1, 1, 4, [WEG]) ? 'weg'
                 : 'wei';
     const leg1 = (naam, x, y) => {
-      voorwerpen.push({ naam: KAN_ANDERS.has(naam) ? andereBoom(naam, x, y, plekVoorBoom(x, y)) : naam, x, y });
+      rooi(x, y);
+      gelegd.push({ naam: KAN_ANDERS.has(naam) ? andereBoom(naam, x, y, plekVoorBoom(x, y)) : naam, x, y });
       bezet.add(sleutel(x, y));
     };
-    // Het kamp op het plein, waar de kar stopt (js/begin.js zet het op), en de plek van de marskramer waar de weg naar de
-    // uitgang het plein raakt. Een put of een lantaarn is er nog niet.
+
+    // ---- 5. Het kamp op het plein, en de plek van de marskramer ----
     // Waar het kamp komt (T.BEGIN_INSTELLINGEN.kamp): het vuur zo dicht mogelijk bij het midden van het plein, met de tenten
     // en de afdakken eromheen, elk met de tegel achter zich en zijn opening ervoor, en de plek van de kar, allemaal vrij
     // op het plein. Het kamp zelf zet js/begin.js op als de kar er is.
@@ -655,8 +432,9 @@
       }
       if (!marskramer) return mis('geen plek voor de marskramer aan de weg'); // geen tekst
     }
-    // Vier tot zes oude eiken op het plein, niet vlak bij het kamp, ver genoeg uit elkaar. Het kamp staat midden op het
-    // plein, en er zijn er zoveel als er passen.
+
+    // ---- 6. Vier tot zes oude eiken op het plein ----
+    // Niet vlak bij het kamp, ver genoeg uit elkaar. Het kamp staat midden op het plein, en er zijn er zoveel als er passen.
     {
       const eiken = [];
       const aantal = 4 + Math.floor(r() * 3);
@@ -679,47 +457,16 @@
         leg1('eik', x, y);
       }
     }
-    const losOpGras = (x, y) => vrijVoor(x, y) && opGras(x, y) && op(x, y) === VRIJ;
-    // Losse bomen op het land, niet te dicht bij een weg of bij elkaar: vooral eiken.
-    {
-      const bomen = [];
-      const aantal = I.losseBomen[0] + Math.floor(r() * (I.losseBomen[1] - I.losseBomen[0] + 1));
-      for (let n = 0; n < 600 && bomen.length < aantal; n++) {
-        const x = Math.floor(r() * B);
-        const y = Math.floor(r() * H);
-        if (op(x, y) !== VRIJ || !losOpGras(x, y)) continue;
-        if (raakt(x, y, 1, 1, 2, [WEG, PLEIN])) continue;
-        if (bomen.some(([ex, ey]) => Math.hypot(ex - x, ey - y) < 6)) continue;
-        bomen.push([x, y]);
-        leg1(r() < 0.75 ? 'eik' : 'berk', x, y);
-      }
-    }
-    // Groepjes struiken in de wei: twee tot vijf bij elkaar.
-    {
-      const aantal = I.struikgroepjes[0] + Math.floor(r() * (I.struikgroepjes[1] - I.struikgroepjes[0] + 1));
-      let gelegd = 0;
-      for (let n = 0; n < 400 && gelegd < aantal; n++) {
-        const x = 2 + Math.floor(r() * (B - 4));
-        const y = 2 + Math.floor(r() * (H - 4));
-        if (op(x, y) !== VRIJ || raakt(x - 1, y - 1, 3, 3, 2, [WEG, PLEIN, WATER])) continue;
-        gelegd++;
-        let struiken = 2 + Math.floor(r() * 4);
-        for (const [dx, dy] of schud([[0, 0], [1, 0], [0, 1], [-1, 0], [0, -1], [1, 1], [-1, 1], [1, -1], [-1, -1]])) {
-          if (struiken <= 0) break;
-          if (op(x + dx, y + dy) !== VRIJ || !losOpGras(x + dx, y + dy)) continue;
-          leg1(r() < 0.75 ? 'struik' : 'bessenStruik', x + dx, y + dy);
-          struiken--;
-        }
-      }
-    }
-    // Een of twee rotspartijen, het liefst aan de rand van het bos, ver van het plein: daar komt de steengroeve (vraag
-    // 112, c). Een kern van grote rotsen, en kleine eromheen.
+
+    // ---- 7. Een of twee rotspartijen, het liefst aan de rand van het bos, ver van het plein ----
+    // Daar komt de steengroeve (vraag 112, c). Een kern van grote rotsen, en kleine eromheen; wat het eiland daar heeft,
+    // maakt plaats.
     const rotsen = [];
     {
-      // Bij elke rotspartij een plek voor de steengroeve, die het bos en de struiken daarna vrijlaten: zijn voet, met
-      // genoeg grote rotsen binnen zijn bereik, en het looppad rondom (`voet` en `bij` van de steengroeve in
-      // js/gebouwen.js, en T.GEBOUWEN_INSTELLINGEN.looppad). Zonder die plek groeide het bos er soms helemaal omheen, en
-      // kon een land geen steen hakken (4 okt: land 3 en 5, nadat de bouwstijl het toeval van de maker veranderde).
+      // Bij elke rotspartij een plek voor de steengroeve, die het bos en de struiken vrijlaten: zijn voet, met genoeg grote
+      // rotsen binnen zijn bereik, en het looppad rondom (`voet` en `bij` van de steengroeve in js/gebouwen.js, en
+      // T.GEBOUWEN_INSTELLINGEN.looppad). Zonder die plek groeide het bos er soms helemaal omheen, en kon een land geen
+      // steen hakken (4 okt: land 3 en 5).
       const SG = T.GEBOUWEN.steengroeve;
       const lp = T.GEBOUWEN_INSTELLINGEN.looppad;
       let groeven = 0;
@@ -728,7 +475,7 @@
         for (let gy = k.y - 12; gy <= k.y + 12; gy++) {
           for (let gx = k.x - 12; gx <= k.x + 12; gx++) {
             const s = SG.bij.straal;
-            const rots = voorwerpen.filter((v) => v.naam === 'rots' && v.x >= gx - s && v.x < gx + SG.voet.b + s && v.y >= gy - s && v.y < gy + SG.voet.h + s).length;
+            const rots = gelegd.filter((v) => v.naam === 'rots' && v.x >= gx - s && v.x < gx + SG.voet.b + s && v.y >= gy - s && v.y < gy + SG.voet.h + s).length;
             if (rots < SG.bij.minstens) continue;
             let past = true;
             for (let y = gy - lp; y < gy + SG.voet.h + lp && past; y++) {
@@ -744,7 +491,10 @@
         if (!beste) return;
         groeven++;
         for (let y = beste.gy - lp; y < beste.gy + SG.voet.h + lp; y++) {
-          for (let x = beste.gx - lp; x < beste.gx + SG.voet.b + lp; x++) bezet.add(sleutel(x, y));
+          for (let x = beste.gx - lp; x < beste.gx + SG.voet.b + lp; x++) {
+            if (natuur.has(sleutel(x, y)) && isVastNaam(natuur.get(sleutel(x, y)).naam)) rooi(x, y);
+            bezet.add(sleutel(x, y));
+          }
         }
       };
       const aantal = 1 + (r() < I.rotsen ? 1 : 0);
@@ -786,85 +536,15 @@
       }
       if (!rotsen.length) return mis('geen plek voor de rotsen'); // geen tekst
       if (!groeven) return mis('geen plek voor de steengroeve bij de rotsen'); // geen tekst
-      // de rotsen van het eiland
-      for (let y = 1; y < H - 1; y++) {
-        for (let x = 1; x < B - 1; x++) {
-          if (land.streek(x, y) !== 'rots' || op(x, y) !== VRIJ || !vrijVoor(x, y) || !opGras(x, y)) continue;
-          const t = r();
-          if (t < 0.3) leg1('rots', x, y);
-          else if (t < 0.55) leg1('kleineRots', x, y);
-        }
-      }
-    }
-    // Het bos: een boom waar het eiland er een heeft.
-    for (let y = 0; y < H; y++) {
-      for (let x = 0; x < B; x++) {
-        if (op(x, y) !== BOS || !vrijVoor(x, y) || !opGras(x, y)) continue;
-        if (land.boom(x, y)) leg1(boomOpEiland(land.streek(x, y), r), x, y);
-      }
-    }
-    // Wat er verder groeit (vraag 112, c; Marcel: "Her en der wat foliage, bomen, stenen, water"): varens en struiken
-    // in het bos en onder de bomen, graspollen, bloemen en hoog gras in de wei (in plekken, uit een ruis), hoog gras langs
-    // het water, en wat graspollen op de hei. Alleen op vrije grond.
-    {
-      const G = I.groei;
-      const onderBoom = new Uint8Array(B * H);
-      for (const v of voorwerpen) {
-        if (!T.BOMEN[v.naam] || T.BOMEN[v.naam].struik) continue;
-        for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) if (binnen(v.x + dx, v.y + dy)) onderBoom[(v.y + dy) * B + v.x + dx] = 1;
-      }
-      const bloemRuis = ruis(9);
-      // aan het water: een hoekpunt van de tegel ernaast is nat
-      const bijWater = (x, y) => {
-        for (let dy = -1; dy <= 2; dy++) for (let dx = -1; dx <= 2; dx++) if (nat(x + dx, y + dy)) return true;
-        return false;
-      };
-      const trek = (kansen) => {
-        let t = r();
-        for (const naam in kansen) if ((t -= kansen[naam]) < 0) return naam;
-        return null;
-      };
-      for (let y = 1; y < H - 1; y++) {
-        for (let x = 1; x < B - 1; x++) {
-          if (!vrijVoor(x, y)) continue;
-          const o = op(x, y);
-          let naam = null;
-          if (o === VRIJ && land.streek(x, y) === 'heide') naam = trek(G.heide);
-          else if (![VRIJ, BOS].includes(o) || !opGras(x, y)) continue;
-          else if (o === VRIJ && ['veen', 'broek'].includes(land.streek(x, y)) && r() < 0.2) naam = 'hoogGras';
-          else if (o === BOS || onderBoom[y * B + x]) naam = trek(G.bos);
-          else if (bijWater(x, y) && r() < G.oever.hoogGras) naam = 'hoogGras';
-          else if (bloemRuis(x, y) > G.bloemen[0] && r() < G.bloemen[1]) naam = 'bloemen';
-          else naam = trek(G.weide);
-          if (naam) leg1(naam, x, y);
-        }
-      }
-      // Het groen eronder (vraag 148, stap 3): met een vaste keus per tegel (hash), niet met het lot (r), zodat de maker
-      // verder legt wat hij legde. Elke plek een eigen zout.
-      const vasteKeus = (kansen, x, y, zout) => {
-        let t = hash(x, y, zout);
-        for (const naam in kansen) if ((t -= kansen[naam]) < 0) return naam;
-        return null;
-      };
-      for (let y = 1; y < H - 1; y++) {
-        for (let x = 1; x < B - 1; x++) {
-          if (!vrijVoor(x, y)) continue;
-          const o = op(x, y);
-          let naam = null;
-          if (o === WATER) naam = land.streek(x, y) !== 'zee' ? vasteKeus(G.waterGroen, x, y, 951) : null;
-          else if (o === VRIJ && land.streek(x, y) === 'heide') naam = vasteKeus(G.heideGroen, x, y, 952);
-          else if (![VRIJ, BOS].includes(o) || !opGras(x, y)) continue;
-          else if (bijWater(x, y)) naam = vasteKeus(G.oeverGroen, x, y, 954);
-          else if (o === VRIJ && raakt(x, y, 1, 1, 1, [BOS])) naam = vasteKeus(G.bosrand, x, y, 955);
-          if (naam) leg1(naam, x, y);
-        }
-      }
     }
 
     // ---- 8. Keuren ----
     delete kamp.bezet;
     const plan = {
-      zaad, poging, stijl, b: B, h: H, grond, plein, marskramer, uitgang, brug, bruggen, voorwerpen, rotsen, wegen,
+      zaad, poging, stijl, b: B, h: H, grond, plein, marskramer, uitgang, brug, bruggen, rotsen,
+      // alles wat er staat (wat het eiland heeft en blijft staan, en wat de maker legde), wat de maker erbij legde, en wat
+      // er van het eiland weg moest: de kaart van het eiland (T.laadGemaaktGehucht) neemt alleen het verschil over
+      voorwerpen: [...natuur.values(), ...gelegd], gelegd, gerooid,
       // js/hoogte.js legt een vlak stuk onder elk huis van het plan: er staan er geen meer, het zijn de huizen van de speler
       huizen: [],
       schout: { ...kamp.plekken[0].deur }, kamp, eiland: { zaad: land.zaad, x0: land.x0, y0: land.y0 },
@@ -955,7 +635,7 @@
   T.keurGehucht = keur;
 
   // ---------------------------------------------------------------------------------------------
-  // Van plan naar kaart: een kaart en een betekenisbestand, zoals Tiled en gereedschap/wereld.html ze maken
+  // De grondtegels: welke tegel bij vier hoekpunten hoort, en wat er staat op naam
   // ---------------------------------------------------------------------------------------------
 
   // De grondtegels uit tegels/rand.tsx, en wat daar niet in staat uit tegels/kust.tsx (de zee, het strand, het veen
@@ -1012,7 +692,7 @@
   }
   // De grond in de vier hoeken van een tegel ('gras', 'zee', ...), zo dat er een grondtegel voor is: van drie soorten
   // twee (totTwee), en van een paar zonder tegel (T.grondPaar; waar een rivier in zee komt) één, wat er het meest ligt.
-  // Voor de kaart (T.kaartVanGehucht) en het eiland om de kaart (js/tekenen.js).
+  // Voor de grondtegels van het eiland (grondTegel).
   T.grondTegelHoeken = function (soorten) {
     const twee = totTwee(soorten);
     const [a, b] = [...new Set(twee)];
@@ -1042,64 +722,6 @@
     return VAST[naam];
   }
 
-  // Een plan wordt { kaart, betekenis }: de grond als tegellaag, en al het andere op naam in het betekenisbestand
-  // (js/kaart.js, "WAT EEN DING BETEKENT"), zoals Tiled een kaart schrijft.
-  T.kaartVanGehucht = function (plan) {
-    const B = plan.b;
-    const H = plan.h;
-    const g = grondIndex();
-    const data = new Array(B * H);
-    for (let y = 0; y < H; y++) {
-      for (let x = 0; x < B; x++) {
-        const soorten = [plan.grond[y][x], plan.grond[y][x + 1], plan.grond[y + 1][x + 1], plan.grond[y + 1][x]].map((s) => GRONDSOORT[s]);
-        const hoeken = T.grondTegelHoeken(soorten);
-        // waar een paar zonder tegel één soort werd (de monding van een rivier in zee), telt plan.grondNaden het
-        if (new Set(hoeken).size < new Set(totTwee(soorten)).size) plan.grondNaden = (plan.grondNaden || 0) + 1;
-        const kies = (lijst) => lijst[Math.floor((hash(x, y, 63) * 1e6) % lijst.length)];
-        const lijst = new Set(hoeken).size === 1 ? g.vlak[hoeken[0]] : g.overgang[hoeken.join(',')];
-        if (!lijst) throw new Error(`de maker heeft geen grondtegel voor ${hoeken.join(', ')} op (${x}, ${y})`); // geen tekst
-        data[y * B + x] = kies(lijst);
-      }
-    }
-    // De bruggetjes over het water, elk in zijn eigen richting (plan.bruggen): begin, midden en eind.
-    for (const b of plan.bruggen) {
-      const brug = b.tegels.slice().sort((p, q) => p.x + p.y - (q.x + q.y));
-      brug.forEach((p, i) => {
-        const deel = i === 0 ? 'begin' : i === brug.length - 1 ? 'eind' : 'midden';
-        data[p.y * B + p.x] = g.brug[`${b.as} ${deel}`];
-      });
-    }
-    const kaart = {
-      type: 'map',
-      orientation: 'isometric',
-      width: B,
-      height: H,
-      tilewidth: 64,
-      tileheight: 32,
-      properties: [{ name: 'naam', type: 'string', value: T.t('The hamlet') }, { name: 'doof', type: 'int', value: 6 }],
-      tilesets: [{ firstgid: 1, source: '../tegels/rand.tsx' }, ...(data.some((gid) => gid >= T.KUST_GID()) ? [{ firstgid: T.KUST_GID(), source: '../tegels/kust.tsx' }] : [])], // geen tekst
-      layers: [{ type: 'tilelayer', name: 'grond', width: B, height: H, data }],
-    };
-
-    const dingen = [];
-    // de tekeningen: alles wat er staat (bomen, struiken, rotsen, groen)
-    for (const v of plan.voorwerpen) dingen.push({ x: v.x, y: v.y, tegel: opNaam(v.naam) });
-    // wie er staat: alleen de schout, bij zijn tent in het kamp (js/begin.js zet hem bij de kar aan de rand)
-    dingen.push({ ...plan.schout, wezen: 'schout' });
-    dingen.push({ ...plan.uitgang, overgang: 'wereld', tekst: T.t('The road into the world') });
-
-    const betekenis = {
-      versie: 1,
-      // het hangt nog aan geen andere kaart vast: de weg de wereld in leidt nergens heen (js/gebied.js)
-      proef: true,
-      uitleg: `Een gehucht van de maker (js/maker.js), uit zaad ${plan.zaad}.`, // geen tekst
-      marskramer: { ...plan.marskramer },
-      plein: plan.plein.map(([x, y]) => [x, y]),
-      dingen,
-    };
-    return { kaart, betekenis };
-  };
-
   // Het plan op het eiland van dit nummer (vraag 117, stap 2): op jouw plek (js/eiland.js), en lukt het daar niet, dan
   // op de plek van een ander dorp, in een vaste volgorde, zodat hetzelfde nummer hetzelfde spel geeft. Per plek minder
   // pogingen dan op een land van de maker, want een andere plek is er wel.
@@ -1112,142 +734,13 @@
       try {
         const plan = T.maakGehucht(zaad, land, 30);
         plan.eiland.dorp = p.naam;
+        plan.stuk = land.stuk; // het land van het eiland zelf, voor het verschil (T.laadGemaaktGehucht)
         return plan;
       } catch (e) {
         waarom.push(`${p.naam}: ${e.message}`);
       }
     }
     throw new Error(`geen land op het eiland van ${zaad}: ${waarom.join('; ')}`); // geen tekst
-  };
-
-  // ---- Het eiland om je land (vraag 117, stap 2b) ----
-  // Buiten de kaart loopt het eiland door (Marcel, 8 okt: "A ja"), zoals de maker het binnen legt (stap 11 en 12): het
-  // water is water, wat ernaast ligt gras, de weg van het eiland zandpad, en verder de grond van zijn streek
-  // (T.grondVanStreek), met de heide alleen naast gras; een boom waar het eiland er een heeft, en de rotsen van het
-  // eiland, allebei op gras. Aan de naad past de rand zich aan de kaart aan: wat er niet naast kan liggen (water naast
-  // haar zandpad, zandpad naast haar heide), wordt gras (of naast de zee strand), want voor zo'n paar heeft
-  // tegels/rand.tsx of kust.tsx geen tegel (T.grondPaar). Alleen om
-  // te tekenen (js/tekenen.js: het land en het bos om de kaart); het komt uit het nummer van het eiland, dus het staat
-  // niet in Spel.S, en het wordt één keer per kaart uitgerekend.
-  const RAND = new WeakMap();
-  T.randVanHetEiland = function (w) {
-    let rand = RAND.get(w);
-    if (rand) return rand;
-    const D = IN().eilandRand;
-    const vak = T.kaartVak(w);
-    const B = vak.b;
-    const H = vak.h;
-    const nb = B + 2 * D; // het stuk eiland in tegels, vanaf (-D, -D)
-    const nh = H + 2 * D;
-    const n = nb + 1; // en in hoekpunten
-    const E = T.eilandVan(w.eiland.zaad);
-    const tegels = T.eilandStuk(E, w.eiland.x0 - D, w.eiland.y0 - D, nb, nh);
-    const punten = T.eilandStuk(E, w.eiland.x0 - D - 0.5, w.eiland.y0 - D - 0.5, n, nh + 1);
-    const hi = (vx, vy) => (vy + D) * n + vx + D; // hoekpunt (vx, vy), met (0, 0) de hoek van de kaart
-    const opKaart = (vx, vy) => vx >= 0 && vy >= 0 && vx <= B && vy <= H;
-    const inStuk = (vx, vy) => vx >= -D && vy >= -D && vx <= B + D && vy <= H + D;
-    const hoek = new Array(n * (nh + 1)).fill(null);
-    // Ligt er naast hoekpunt (vx, vy) iets waarvoor `test` ja zegt (met of die buur op de kaart ligt)?
-    const eenBuur = (vx, vy, test) => {
-      for (let dy = -1; dy <= 1; dy++) {
-        for (let dx = -1; dx <= 1; dx++) {
-          if ((!dx && !dy) || !inStuk(vx + dx, vy + dy)) continue;
-          const l = hoek[hi(vx + dx, vy + dy)];
-          if (l && test(l, opKaart(vx + dx, vy + dy))) return true;
-        }
-      }
-      return false;
-    };
-    // de grond van de buren van hoekpunt (vx, vy); met `alleenKaart` alleen die op de kaart
-    const burenVan = (vx, vy, alleenKaart = false) => {
-      const uit = [];
-      eenBuur(vx, vy, (l, kaart) => {
-        if (kaart || !alleenKaart) uit.push(l);
-        return false;
-      });
-      return uit;
-    };
-    // de rand van de kaart zelf: wat er ligt (alleen die raakt de hoekpunten erbuiten)
-    const vanKaart = (vx, vy) => {
-      hoek[hi(vx, vy)] = LETTER[T.sprites.grondHoekOp(w, vx, vy)] || 'g';
-    };
-    for (let vx = 0; vx <= B; vx++) {
-      vanKaart(vx, 0);
-      vanKaart(vx, H);
-    }
-    for (let vy = 0; vy <= H; vy++) {
-      vanKaart(0, vy);
-      vanKaart(B, vy);
-    }
-    const buiten = []; // de hoekpunten om de kaart
-    for (let vy = -D; vy <= H + D; vy++) for (let vx = -D; vx <= B + D; vx++) if (!opKaart(vx, vy)) buiten.push(hi(vx, vy), vx, vy);
-    const elk = (f) => {
-      for (let k = 0; k < buiten.length; k += 3) f(buiten[k], buiten[k + 1], buiten[k + 2]);
-    };
-    const streek = (i) => T.EILAND_STREKEN[punten.streek[i]];
-    // eerst het water (de zee, een meer, een rivier); wat ernaast ligt, is gras; dan de weg, en de grond van de streek
-    elk((i) => {
-      const l = T.grondVanStreek(streek(i));
-      if (isNat(l)) hoek[i] = l;
-    });
-    elk((i, vx, vy) => {
-      if (!isNat(hoek[i])) hoek[i] = eenBuur(vx, vy, isNat) ? 'g' : punten.weg[i] ? 'z' : T.grondVanStreek(streek(i));
-    });
-    // de naad: wat niet naast de rand van de kaart kan liggen, wijkt, naast de zee voor strand en anders voor gras; en
-    // kan wat er dan ligt niet aan de zee grenzen (gras, veen), dan wijkt de zee ernaast voor strand, want de kaart wijkt
-    // niet
-    elk((i, vx, vy) => {
-      const kaart = burenVan(vx, vy, true);
-      if (!kaart.length) return;
-      if (!kaart.every((m) => T.grondPaar(hoek[i], m))) hoek[i] = eenBuur(vx, vy, (l) => l === 'e') && kaart.every((m) => T.grondPaar('s', m)) ? 's' : 'g';
-      if (T.grondPaar(hoek[i], 'e')) return;
-      for (let dy = -1; dy <= 1; dy++) {
-        for (let dx = -1; dx <= 1; dx++) {
-          const j = hi(vx + dx, vy + dy);
-          if (inStuk(vx + dx, vy + dy) && !opKaart(vx + dx, vy + dy) && hoek[j] === 'e') hoek[j] = 's';
-        }
-      }
-    });
-    // en dan wijkt wat niet naast elkaar kan liggen, zoals in de maker (stap 11): de heide grenst alleen aan gras en
-    // strand, het strand aan de zee, enzovoort (T.passendeGrond)
-    for (let ronde = 0; ronde < 4; ronde++) {
-      let geweken = false;
-      elk((i, vx, vy) => {
-        const l = T.passendeGrond(hoek[i], burenVan(vx, vy));
-        if (l !== hoek[i]) {
-          hoek[i] = l;
-          geweken = true;
-        }
-      });
-      if (!geweken) break;
-    }
-    // de bomen en de rotsen, op gras (stap 12; ook op het veen en het broek)
-    const ding = new Array(nb * nh).fill(null);
-    const opGras = (x, y) => [hi(x, y), hi(x + 1, y), hi(x + 1, y + 1), hi(x, y + 1)].every((i) => GROEIT.has(hoek[i]));
-    for (let y = -D; y < H + D; y++) {
-      for (let x = -D; x < B + D; x++) {
-        if ((x >= 0 && y >= 0 && x < B && y < H) || !opGras(x, y)) continue;
-        const t = (y + D) * nb + x + D;
-        const s = T.EILAND_STREKEN[tegels.streek[t]];
-        let k = 0;
-        if (tegels.boom[t]) ding[t] = andereBoom(boomOpEiland(s, () => hash(x, y, 801 + k++)), x, y, PLEK_VAN_STREEK[s] || 'wei');
-        else if (s === 'rots') {
-          const lot = hash(x, y, 811);
-          ding[t] = lot < 0.3 ? 'rots' : lot < 0.55 ? 'kleineRots' : null;
-        }
-      }
-    }
-    rand = {
-      diep: D,
-      // de grond op hoekpunt (vx, vy) om de kaart ('gras', 'water', 'zandpad', 'heide', 'zee', 'strand', 'veen' of
-      // 'broek'); op de kaart, en verder dan
-      // `diep`, null
-      hoek: (vx, vy) => (opKaart(vx, vy) || !inStuk(vx, vy) ? null : GRONDSOORT[hoek[hi(vx, vy)]]),
-      // wat er op tegel (x, y) om de kaart staat: een boom of een rots (de naam van zijn tekening), of null
-      voorwerp: (x, y) => (x < -D || y < -D || x >= B + D || y >= H + D ? null : ding[(y + D) * nb + x + D]),
-    };
-    RAND.set(w, rand);
-    return rand;
   };
 
   // ---- Het land van een stuk van het eiland (B2b, vraag 117, stap 3; ontwerp/kaarten.md, "Het hele eiland") ----
@@ -1259,9 +752,10 @@
   // hangt af van wat er tot zo ver omheen ligt: de grond wijkt tot vier hoekpunten ver, en een boom kijkt vier tegels ver
   // naar een weg. Het menselijke (het plein, de wegen ernaartoe, het kamp) legt de maker erover. Eén zuivere functie, zodat
   // een worker het later kan overnemen (Marcel, 13 okt: "eerst meten is goed").
-  // Geeft { x0, y0, b, h, hoek, grond, dingen }: de grond per hoekpunt als letter (GRONDSOORT), hoekpunt (vx, vy) op plek
-  // (vy - y0) * (b + 1) + (vx - x0); per tegel het nummer van zijn grondtegel (een gid, zoals T.kaartVanGehucht), tegel
-  // (x, y) op plek (y - y0) * b + (x - x0); en wat er staat, als { naam, x, y }.
+  // Geeft { x0, y0, b, h, hoek, grond, soort, dingen }: de grond per hoekpunt als letter (GRONDSOORT), hoekpunt (vx, vy)
+  // op plek (vy - y0) * (b + 1) + (vx - x0); per tegel het nummer van zijn grondtegel (een gid: rand vanaf 1, kust erachter)
+  // en wat hij is (VRIJ, WEG, WATER of BOS, zoals in de maker), tegel (x, y) op plek (y - y0) * b + (x - x0); en wat er
+  // staat, als { naam, x, y }.
   const STUK_MARGE = 8;
   // Een getal van 0 tot 1 per tegel, per eiland (z) en per soort lot (zout).
   function lotOp(z, x, y, zout) {
@@ -1487,33 +981,80 @@
     // water) en de dingen binnen het stuk.
     const hoek = new Array((b + 1) * (h + 1));
     for (let vy = y0; vy <= y0 + h; vy++) for (let vx = x0; vx <= x0 + b; vx++) hoek[(vy - y0) * (b + 1) + (vx - x0)] = letter[hi(vx, vy)];
-    const g = grondIndex();
     const grond = new Uint16Array(b * h);
+    const soorten = new Uint8Array(b * h);
     const dingen = [];
     for (let y = y0; y < y0 + h; y++) {
       for (let x = x0; x < x0 + b; x++) {
-        const hoeken = T.grondTegelHoeken([letter[hi(x, y)], letter[hi(x + 1, y)], letter[hi(x + 1, y + 1)], letter[hi(x, y + 1)]].map((l) => GRONDSOORT[l]));
-        const lijst = new Set(hoeken).size === 1 ? g.vlak[hoeken[0]] : g.overgang[hoeken.join(',')];
-        if (!lijst) throw new Error(`het eiland heeft geen grondtegel voor ${hoeken.join(', ')} op (${x}, ${y})`); // geen tekst
         const brug = E.brugOp.get(y * E.maat + x);
-        grond[(y - y0) * b + (x - x0)] = brug ? g.brug[`${brug.as} ${brug.deel}`] : lijst[Math.floor(lot(x, y, 63) * lijst.length)];
+        const i = (y - y0) * b + (x - x0);
+        grond[i] = brug ? grondIndex().brug[`${brug.as} ${brug.deel}`] : grondTegel(E, x, y, [letter[hi(x, y)], letter[hi(x + 1, y)], letter[hi(x + 1, y + 1)], letter[hi(x, y + 1)]]);
+        soorten[i] = soort[ti(x, y)];
         const d = ding[ti(x, y)];
         if (d) dingen.push({ naam: d, x, y });
       }
     }
-    return { x0, y0, b, h, hoek, grond, dingen };
+    return { x0, y0, b, h, hoek, grond, soort: soorten, dingen };
   };
+  // De grondtegel (een gid) van tegel (x, y) van het eiland met deze vier hoekpunten (boven, rechts, onder, links; als
+  // letter), met een vaste keus uit de varianten per tegel. Voor T.landStuk, en voor de maker als hij de grond van zijn
+  // plein erover legt (T.laadGemaaktGehucht).
+  function grondTegel(E, x, y, letters) {
+    const hoeken = T.grondTegelHoeken(letters.map((l) => GRONDSOORT[l]));
+    const g = grondIndex();
+    const lijst = new Set(hoeken).size === 1 ? g.vlak[hoeken[0]] : g.overgang[hoeken.join(',')];
+    if (!lijst) throw new Error(`het eiland heeft geen grondtegel voor ${hoeken.join(', ')} op (${x}, ${y})`); // geen tekst
+    return lijst[Math.floor(lotOp(E.zaad, x, y, 63) * lijst.length)];
+  }
 
-  // Het land van de maker als wereld, zoals T.gebied (js/gebied.js) een kaart uit kaarten/ inleest. `maker` zegt uit welk
-  // zaad hij komt. Het is het lege begin van een nieuw spel: het land met een open plek voor het plein en het kamp erop.
+  // Het land van de maker als wereld (T.gebied, js/gebied.js): een kaart van het eiland (T.eilandKaart, js/wereld.js; B2b),
+  // met het plan erover. De kaart neemt alleen over wat de maker anders legde dan het eiland: de grond van het plein
+  // (w.grondAnders), wat er van het eiland weg moest (w.gerooid), en wat hij erbij legde (de eiken, de rotsen). Alles in
+  // de tegels van het eiland. Het is het lege begin van een nieuw spel: het land met een open plek voor het plein en het
+  // kamp erop. Open zijn de stukken om het land, tot `zicht` tegels erbuiten.
   T.laadGemaaktGehucht = function (zaad) {
     const plan = T.planOpEiland(zaad);
-    const { kaart, betekenis } = T.kaartVanGehucht(plan);
-    const w = T.laadKaart(kaart, betekenis);
+    const E = T.eilandVan(plan.eiland.zaad);
+    const { x0, y0 } = plan.eiland;
+    const B = plan.b;
+    const H = plan.h;
+    const st = plan.stuk;
+    const w = T.eilandKaart(plan.eiland.zaad, { x: x0, y: y0, b: B, h: H });
+    w.eiland.dorp = plan.eiland.dorp;
+    // de grond: waar de vier hoekpunten van een tegel anders zijn dan die van het eiland (een bruggetje blijft)
+    const nr = (x, y) => T.tegelNummer(x0 + x, y0 + y);
+    for (let y = 0; y < H; y++) {
+      for (let x = 0; x < B; x++) {
+        const hoeken = [[x, y], [x + 1, y], [x + 1, y + 1], [x, y + 1]];
+        if (hoeken.every(([vx, vy]) => plan.grond[vy][vx] === st.hoek[vy * (B + 1) + vx]) || E.brugOp.has((y0 + y) * E.maat + x0 + x)) continue;
+        w.grondAnders.set(nr(x, y), grondTegel(E, x0 + x, y0 + y, hoeken.map(([vx, vy]) => plan.grond[vy][vx])));
+      }
+    }
+    for (const d of plan.gerooid) w.gerooid.add(nr(d.x, d.y));
+    const D = IN().zicht;
+    T.openVak(w, { x: x0 - D, y: y0 - D, b: B + 2 * D, h: H + 2 * D });
+    for (const d of plan.gelegd) {
+      const t = T.opzoekTegelNaam(opNaam(d.naam));
+      T.zetVoorwerp(w, T.maakVoorwerp(t, x0 + d.x, y0 + d.y));
+      if (t.eig.vast) T.zetTegel(w, x0 + d.x, y0 + d.y, 'muur');
+    }
+    // het plein, de schout bij zijn tent in het kamp (js/begin.js zet hem bij de kar aan de rand), de weg de wereld in,
+    // en de plek van de marskramer
+    const op = (p) => ({ ...p, x: x0 + p.x, y: y0 + p.y });
+    w.naam = T.t('The hamlet');
+    w.proef = true; // het hangt nog aan geen andere kaart vast: de weg de wereld in leidt nergens heen (js/gebied.js)
+    w.plein = plan.plein.map(([x, y]) => [x0 + x, y0 + y]);
+    w.marskramer = op(plan.marskramer);
+    w.wezens.push(T.maakWezen('schout', x0 + plan.schout.x, y0 + plan.schout.y));
+    w.overgangen.push({ ...op(plan.uitgang), naar: 'wereld', komt: null, tekst: T.t('The road into the world') });
     w.maker = { zaad: plan.zaad, poging: plan.poging };
-    w.eiland = plan.eiland; // waar op het eiland (js/eiland.js), voor de rand om de kaart
     if (plan.stijl) w.stijl = plan.stijl;
-    w.kamp = plan.kamp; // waar het kamp komt (js/begin.js)
+    // waar het kamp komt (js/begin.js)
+    const k = plan.kamp;
+    w.kamp = {
+      vuur: op(k.vuur), kar: op(k.kar), straal: k.straal,
+      plekken: k.plekken.map((p) => ({ ...op(p), voet: op(p.voet), deur: op(p.deur) })),
+    };
     if (T.HOOGTE_INSTELLINGEN.aan) w.hoogte = T.legHoogte(plan, w); // de spelregel "Hoogte" (js/hoogte.js)
     w.markt = T.zoekMarktPlek(w); // de marktplek op het plein (js/markt.js; Marcel, 12 okt: "Plein krijgt plaatsen")
     return w;

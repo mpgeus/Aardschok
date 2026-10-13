@@ -217,7 +217,7 @@
           for (let dx = -1; dx <= 1; dx++) {
             const nx = x + dx;
             const ny = y + dy;
-            if (!T.opKaart(w, nx, ny)) continue;
+            if (!T.inVak(vak, nx, ny)) continue;
             const j = (ny - vak.y) * vak.b + (nx - vak.x);
             if (v[j] <= stap) continue;
             v[j] = stap;
@@ -231,8 +231,8 @@
     return v;
   }
   T.afstandTotDeWeg = function (w, x, y) {
-    if (!T.heeftTegels(w) || !T.opKaart(w, x, y)) return Infinity;
-    const vak = T.kaartVak(w);
+    const vak = T.heeftTegels(w) && T.kaartVak(w);
+    if (!vak || !T.inVak(vak, x, y)) return Infinity;
     return wegVeld(w)[(y - vak.y) * vak.b + (x - vak.x)];
   };
 

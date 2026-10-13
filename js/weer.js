@@ -202,7 +202,7 @@
           for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
             const nx = x + dx;
             const ny = y + dy;
-            if (!T.opKaart(w, nx, ny) || gezien[plek(nx, ny)] || !water(nx, ny)) continue;
+            if (!T.inVak(vak, nx, ny) || gezien[plek(nx, ny)] || !water(nx, ny)) continue;
             gezien[plek(nx, ny)] = 1;
             rij.push([nx, ny]);
           }

@@ -36,9 +36,10 @@ test('hoogte: uit hetzelfde nummer hetzelfde land, met heuvels en dalen die door
   const a = land(5, true);
   const b = land(5, true);
   assert.deepEqual(a.hoogte, b.hoogte);
+  const K = T.kaartVak(a);
   let laag = Infinity;
   let hoog = -Infinity;
-  for (let y = 0; y < a.h; y++) for (let x = 0; x < a.b; x++) {
+  for (let y = K.y; y < K.y + K.h; y++) for (let x = K.x; x < K.x + K.b; x++) {
     const h = T.hoogteOp(a, x, y);
     laag = Math.min(laag, h);
     hoog = Math.max(hoog, h);
@@ -46,13 +47,14 @@ test('hoogte: uit hetzelfde nummer hetzelfde land, met heuvels en dalen die door
   assert.ok(hoog - laag >= 200, `van dal tot top ${Math.round(hoog - laag)} pixels`);
   assert.ok(Object.keys(a.hoogte.niveau).length >= 12, 'een richel bij de rotsen');
   assert.ok(Object.keys(a.hoogte.hellingen).length >= 1, 'met een helling erop');
-  // het landschap loopt door buiten de kaart: geen vlakke rand
-  assert.notEqual(T.hoogteOp(a, -5, 40), 0);
-  assert.equal(T.hoekHoogte(a, -1, 40, 1), T.hoekHoogte(a, 0, 40, 0), 'de hoek buiten de kaart past op die erbinnen');
+  // het landschap loopt door buiten het land: geen vlakke rand
+  assert.notEqual(T.hoogteOp(a, K.x - 5, K.y + 40), 0);
+  assert.equal(T.hoekHoogte(a, K.x - 1, K.y + 40, 1), T.hoekHoogte(a, K.x, K.y + 40, 0), 'de hoek buiten het land past op die erbinnen');
   // wat bewaard wordt, is klein: het nummer en de vlakke stukken, niet een getal per hoekpunt
   assert.ok(JSON.stringify(a.hoogte).length < 20000);
   // een ander land is anders
-  assert.notDeepEqual(T.hoekHoogten(land(7, true), 20, 20), T.hoekHoogten(a, 20, 20));
+  const ander = land(7, true);
+  assert.notDeepEqual(T.hoekHoogten(ander, T.kaartVak(ander).x + 20, T.kaartVak(ander).y + 20), T.hoekHoogten(a, K.x + 20, K.y + 20));
 });
 
 test('hoogte: het plein ligt vlak, en het kamp erop met zijn looppad ook', () => {
@@ -75,9 +77,10 @@ test('hoogte: het plein ligt vlak, en het kamp erop met zijn looppad ook', () =>
 
 test('hoogte: buren delen hun hoek, behalve waar een wand staat; een wand alleen aan de zuid- en oostkant', () => {
   const w = land(5, true);
+  const K = T.kaartVak(w);
   let wanden = 0;
-  for (let y = 0; y < w.h - 1; y++) {
-    for (let x = 0; x < w.b - 1; x++) {
+  for (let y = K.y; y < K.y + K.h - 1; y++) {
+    for (let x = K.x; x < K.x + K.b - 1; x++) {
       const hier = T.hoekHoogten(w, x, y);
       const oost = T.hoekHoogten(w, x + 1, y);
       const zuid = T.hoekHoogten(w, x, y + 1);
@@ -101,8 +104,9 @@ test('hoogte: de muis vindt de tegel terug, of een tegel ervoor die hem afdekt',
   let schuin = 0;
   let zelf = 0;
   let alle = 0;
-  for (let y = 5; y < w.h - 5; y += 3) {
-    for (let x = 5; x < w.b - 5; x += 3) {
+  const K = T.kaartVak(w);
+  for (let y = K.y + 5; y < K.y + K.h - 5; y += 3) {
+    for (let x = K.x + 5; x < K.x + K.b - 5; x += 3) {
       if (T.isSchuin(w, x, y)) schuin++;
       const p = T.naarSchermOp(w, x + 0.1, y - 0.15);
       const terug = T.naarWereldOp(w, p.x, p.y);
@@ -119,8 +123,9 @@ test('hoogte: de muis vindt de tegel terug, of een tegel ervoor die hem afdekt',
 
 test('hoogte: de hoogte op een punt ligt tussen de hoeken van zijn tegel', () => {
   const w = land(5, true);
-  for (let y = 0; y < w.h; y += 7) {
-    for (let x = 0; x < w.b; x += 7) {
+  const K = T.kaartVak(w);
+  for (let y = K.y; y < K.y + K.h; y += 7) {
+    for (let x = K.x; x < K.x + K.b; x += 7) {
       const h = T.hoekHoogten(w, x, y);
       assert.equal(T.hoogteOp(w, x - 0.5, y - 0.5), h[0]);
       const m = T.hoogteOp(w, x, y);
@@ -140,8 +145,9 @@ test('hoogte, lopen: niet door een wand, wel over een helling; op "Vlak" verande
     const hel = w.hoogte.hellingen;
     // waar een wand staat, kun je er niet langs, van geen van beide kanten
     let wanden = 0;
-    for (let y = 1; y < w.h - 1; y++) {
-      for (let x = 1; x < w.b - 1; x++) {
+    const K = T.kaartVak(w);
+    for (let y = K.y + 1; y < K.y + K.h - 1; y++) {
+      for (let x = K.x + 1; x < K.x + K.b - 1; x++) {
         for (const wd of T.wandenVan(w, x, y)) {
           const [nx, ny] = wd.kant === 'oost' ? [x + 1, y] : [x, y + 1];
           assert.equal(T.kanStappen(w, x, y, nx, ny), false);
@@ -190,8 +196,9 @@ test('hoogte, bouwen: niet op steile grond, en waar het komt, wordt de grond vla
     // ergens is het te steil, en dat zegt het
     let steil = null;
     let vrij = null;
-    for (let y = 2; y < w.h - 8 && !(steil && vrij); y++) {
-      for (let x = 2; x < w.b - 8 && !(steil && vrij); x++) {
+    const K = T.kaartVak(w);
+    for (let y = K.y + 2; y < K.y + K.h - 8 && !(steil && vrij); y++) {
+      for (let x = K.x + 2; x < K.x + K.b - 8 && !(steil && vrij); x++) {
         const reden = T.waaromPastHetNiet(D, 'houthakker', x, y);
         if (!steil && reden && /too steep/.test(reden)) steil = { x, y };
         if (!vrij && !reden) vrij = { x, y };
@@ -223,25 +230,34 @@ test('hoogte, zien: een heuvel ertussen houdt het zicht tegen, en wie hoog staat
   const vlak = land(5, false);
   assert.equal(T.heuvelTussen(vlak, { x: 10, y: 10 }, { x: 30, y: 30 }), false);
   assert.equal(T.verderVanBoven(vlak, { x: 10, y: 10 }, { x: 30, y: 30 }), 0);
-  const w = land(5, true);
-  // ergens ligt een heuvel tussen twee tegels die elkaar op een vlak land wel zagen
+  // ergens ligt een heuvel tussen twee tegels die elkaar op een vlak land wel zagen (op eiland 5 staat het bos juist op
+  // de heuvels, B2b: dan op een ander eiland)
+  let w = null;
+  let K = null;
   let achter = null;
-  for (let y = 2; y < w.h - 2 && !achter; y += 3) {
-    for (let x = 2; x < w.b - 14 && !achter; x += 3) {
-      const a = { x, y };
-      const b = { x: x + 12, y };
-      if (T.zicht(w, a, b) && T.zicht(w, b, a) && T.heuvelTussen(w, a, b)) achter = [a, b];
+  for (const zaad of [5, 1, 7]) {
+    w = land(zaad, true);
+    K = T.kaartVak(w);
+    for (let y = K.y + 2; y < K.y + K.h - 2 && !achter; y += 3) {
+      for (let x = K.x + 2; x < K.x + K.b - 14 && !achter; x += 3) {
+        const a = { x, y };
+        const b = { x: x + 12, y };
+        if (T.zicht(w, a, b) && T.zicht(w, b, a) && T.heuvelTussen(w, a, b)) achter = [a, b];
+      }
     }
+    if (achter) break;
   }
   assert.ok(achter, 'nergens een heuvel ertussen');
   const [a, b] = achter;
   assert.equal(T.zichtTussen(w, a, b), false);
   assert.equal(T.zietTegel(w, a, b, 20), false);
   assert.equal(T.heuvelTussen(w, b, a), true, 'twee kanten op hetzelfde');
-  // de top: wie daar staat, ziet verder naar beneden, een tegel per twee treden
-  let top = { x: 0, y: 0 };
-  let dal = { x: 0, y: 0 };
-  for (let y = 0; y < w.h; y++) for (let x = 0; x < w.b; x++) {
+  // de top: wie daar staat, ziet verder naar beneden, een tegel per twee treden (op eiland 5, met hoge heuvels)
+  w = land(5, true);
+  K = T.kaartVak(w);
+  let top = { x: K.x, y: K.y };
+  let dal = { x: K.x, y: K.y };
+  for (let y = K.y; y < K.y + K.h; y++) for (let x = K.x; x < K.x + K.b; x++) {
     if (T.hoogteOp(w, x, y) > T.hoogteOp(w, top.x, top.y)) top = { x, y };
     if (T.hoogteOp(w, x, y) < T.hoogteOp(w, dal.x, dal.y)) dal = { x, y };
   }
@@ -256,9 +272,10 @@ test('hoogte, afdekken: alleen een tegel die hoog genoeg ligt, dekt af wat erach
   assert.equal(T.dektAf(vlak, 40, 40), false);
   const w = land(5, true);
   const dekkers = [];
-  for (let y = 0; y < w.h; y++) for (let x = 0; x < w.b; x++) if (T.dektAf(w, x, y)) dekkers.push([x, y]);
+  const K = T.kaartVak(w);
+  for (let y = K.y; y < K.y + K.h; y++) for (let x = K.x; x < K.x + K.b; x++) if (T.dektAf(w, x, y)) dekkers.push([x, y]);
   // de rand van de richel, niet de zachte glooiing
-  assert.ok(dekkers.length > 0 && dekkers.length < w.b * w.h * 0.02, `${dekkers.length} tegels dekken af`);
+  assert.ok(dekkers.length > 0 && dekkers.length < K.b * K.h * 0.02, `${dekkers.length} tegels dekken af`);
   // elke tegel die afdekt, ligt hoger dan een tegel achter hem, meer dan een halve tegel op het scherm (16 pixels)
   for (const [x, y] of dekkers) {
     const hoog = Math.max(...T.hoekHoogten(w, x, y));

@@ -237,53 +237,32 @@ test('een nieuw spel op het eiland: je kamp op jouw plek, de gezinnen van de kar
   assert.equal(T.bewaarSpel(S2, { nu: 1790000000000 }), tekst);
 });
 
-test('het eiland om je land: buiten de kaart de grond en de bomen van het eiland, en aan de naad past elke tegel (vraag 117, 2b)', () => {
+test('het eiland om je land: de stukken om het land zijn open, met het land van het eiland, en wat de maker legde, blijft in het land (B2b)', () => {
   const echt = console.warn;
   console.warn = () => {};
   try {
-    const LETTER = { gras: 'g', water: 'w', zandpad: 'z', heide: 'h', kasseien: 'k', zee: 'e', strand: 's', veen: 'v', broek: 'b' };
-    // land 3: daar lag het veen van de kaart twee hoekpunten van de zee
-    for (const zaad of [1, 3, 5]) {
+    for (const zaad of [1, 5]) {
       const w = T.laadGemaaktGehucht(zaad);
-      const R = T.randVanHetEiland(w);
-      assert.equal(T.randVanHetEiland(w), R, 'één keer per kaart');
-      const D = R.diep;
-      const n = w.b + 2 * D + 1;
-      const punten = T.eilandStuk(T.eilandVan(zaad), w.eiland.x0 - D - 0.5, w.eiland.y0 - D - 0.5, n, w.h + 2 * D + 1);
-      const streek = (vx, vy) => T.EILAND_STREKEN[punten.streek[(vy + D) * n + vx + D]];
-      const ring = (vx, vy) => Math.max(-vx, -vy, vx - w.b, vy - w.h);
-      const hoek = (vx, vy) => R.hoek(vx, vy) || T.sprites.grondHoekOp(w, vx, vy);
-      let water = 0;
-      for (let vy = -D; vy <= w.h + D; vy++) {
-        for (let vx = -D; vx <= w.b + D; vx++) {
-          const opKaart = ring(vx, vy) <= 0;
-          assert.equal(R.hoek(vx, vy) === null, opKaart, `land ${zaad}: (${vx}, ${vy}) op de kaart heeft de rand niets`);
-          if (opKaart) continue;
-          const nat = ['w', 'e'].includes(T.grondVanStreek(streek(vx, vy)));
-          const natHier = ['water', 'zee'].includes(R.hoek(vx, vy));
-          if (natHier) water++;
-          // water waar het eiland water is, en nergens anders (op de naad mag het gras of strand worden, en de zee wijkt
-          // daar twee ringen voor strand)
-          if (natHier) assert.ok(nat, `land ${zaad}: water op (${vx}, ${vy}) waar het eiland droog is`);
-          else if (ring(vx, vy) >= 3) assert.ok(!nat, `land ${zaad}: geen water op (${vx}, ${vy}) waar het eiland water is`);
+      const K = T.kaartVak(w);
+      const D = T.MAKER_INSTELLINGEN.zicht;
+      const E = T.eilandVan(zaad);
+      // wat de maker anders legde (de grond van het plein, wat hij rooide), ligt in het land
+      for (const n of [...w.grondAnders.keys(), ...w.gerooid]) assert.ok(T.inVak(K, ...Object.values(T.tegelVanNummer(n))), `land ${zaad}: ${JSON.stringify(T.tegelVanNummer(n))}`);
+      // erbuiten, tot `zicht` tegels ver, is het land zoals het eiland het heeft: open, met zijn grond en wat er groeit
+      const L = T.landStuk(E, K.x - D, K.y - D, K.b + 2 * D, K.h + 2 * D);
+      let buiten = 0;
+      for (let y = K.y - D; y < K.y + K.h + D; y++) {
+        for (let x = K.x - D; x < K.x + K.b + D; x++) {
+          if (T.inVak(K, x, y)) continue;
+          buiten++;
+          const i = (y - L.y0) * L.b + (x - L.x0);
+          assert.equal(T.grondOp(w, x, y), T.grondVanGid(L.grond[i]), `land ${zaad}: de grond op (${x}, ${y})`);
         }
       }
-      let dingen = 0;
-      for (let y = -D; y < w.h + D; y++) {
-        for (let x = -D; x < w.b + D; x++) {
-          if (x >= 0 && y >= 0 && x < w.b && y < w.h) continue;
-          // wat naast elkaar ligt, heeft samen een tegel in tegels/rand.tsx of kust.tsx (T.grondPaar)
-          const soorten = [...new Set([hoek(x, y), hoek(x + 1, y), hoek(x + 1, y + 1), hoek(x, y + 1)])];
-          for (const a of soorten) for (const b of soorten) assert.ok(T.grondPaar(LETTER[a], LETTER[b]), `land ${zaad}: tegel (${x}, ${y}) is ${soorten}`);
-          // een boom of een rots staat op gras, veen of broek
-          if (R.voorwerp(x, y)) {
-            dingen++;
-            assert.ok(soorten.every((s) => ['gras', 'veen', 'broek'].includes(s)), `land ${zaad}: ${R.voorwerp(x, y)} op (${x}, ${y}) staat op ${soorten}`);
-          }
-        }
-      }
-      if (zaad === 1) assert.ok(water > 2000, `land 1 ligt aan zee (${water} hoekpunten water om de kaart)`);
-      if (zaad === 5) assert.ok(dingen > 2000, `land 5 ligt in het bos (${dingen} bomen en rotsen om de kaart)`);
+      const binnen = (d) => !T.inVak(K, d.x, d.y);
+      const dingen = L.dingen.filter(binnen);
+      assert.equal(dingen.filter((d) => T.voorwerpOp(w, d.x, d.y)).length, dingen.length, `land ${zaad}: wat er om het land groeit`);
+      assert.ok(buiten > 6000 && dingen.length > 500, `land ${zaad}: ${buiten} tegels en ${dingen.length} dingen om het land`);
     }
   } finally {
     console.warn = echt;
@@ -297,13 +276,18 @@ test('het eiland om je land: met "Hoogte" op "Heuvels" is het land dat van het e
   try {
     const w = T.laadGemaaktGehucht(5);
     const hg = w.hoogte;
-    assert.deepEqual(hg.eiland, { zaad: 5, x0: w.eiland.x0, y0: w.eiland.y0 });
+    const K = T.kaartVak(w);
+    // het raster van de hoogte begint waar het land begint, en de tegels zijn die van het eiland
+    assert.deepEqual(hg.eiland, { zaad: 5, x0: K.x, y0: K.y });
+    assert.deepEqual([hg.ox, hg.oy], [K.x, K.y]);
     const E = T.eilandVan(5);
-    const eilandOp = (vx, vy) => Math.max(0, T.eilandStuk(E, w.eiland.x0 + vx - 0.5, w.eiland.y0 + vy - 0.5, 1, 1).hoogte[0]);
-    // ver van het dorp en van elk vlak stuk: precies de hoogte van het eiland, ook om de kaart
+    const eilandOp = (vx, vy) => Math.max(0, T.eilandStuk(E, vx - 0.5, vy - 0.5, 1, 1).hoogte[0]);
+    // ver van het dorp en van elk vlak stuk: precies de hoogte van het eiland, ook om het land
     const T_ = T.HOOGTE_INSTELLINGEN;
     let gekeken = 0;
-    for (const [x, y] of [[-12, -12], [-12, 110], [110, 50], [50, -14], [-30, 40], [120, 120]]) {
+    for (const [lx, ly] of [[-12, -12], [-12, 110], [110, 50], [50, -14], [-30, 40], [120, 120]]) {
+      const x = K.x + lx;
+      const y = K.y + ly;
       const vrij = hg.vlakken.every((v) => Math.max(v.x0 - x, 0, x - v.x1) >= T_.vrijRond || Math.max(v.y0 - y, 0, y - v.y1) >= T_.vrijRond);
       if (!vrij || Math.hypot(x - hg.midden[0], y - hg.midden[1]) < T_.vlakteTot) continue;
       gekeken++;
@@ -342,11 +326,12 @@ test('de grond van het eiland: wat naast elkaar kan liggen, niet bouwen op zand,
   const S = nieuwSpel(1);
   const D = S.dorp;
   const w = D.wereld;
-  const naam = (x, y) => w.grond[y][x].naam;
+  const naam = (x, y) => T.grondOp(w, x, y).naam;
   let strand = null;
   let zee = null;
-  for (let y = 0; y < w.h; y++) {
-    for (let x = 0; x < w.b; x++) {
+  const K = T.kaartVak(w);
+  for (let y = K.y; y < K.y + K.h; y++) {
+    for (let x = K.x; x < K.x + K.b; x++) {
       if (!strand && naam(x, y) === 'strand' && !T.veldOp(w, x, y) && !T.opPad(w, x, y)) strand = { x, y };
       if (!zee && naam(x, y) === 'zee') zee = { x, y };
     }

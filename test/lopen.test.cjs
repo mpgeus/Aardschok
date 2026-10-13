@@ -70,7 +70,7 @@ test('een weg gaat om wat vaststaat, niet om wie er staat, en de kaart onthoudt 
     assert.notEqual(nog, pad, 'een eigen lijst: wie loopt, haalt er stappen af');
     assert.equal(gezocht, 1, 'de tweede keer weet de kaart het nog');
     // een muur erbij: dan zoekt hij opnieuw
-    w.tegels[1][5] = 'muur';
+    T.zetTegel(w, 5, 1, 'muur');
     T.kaartVeranderd(w);
     const om = T.zoekRoute(w, { x: 1, y: 1 }, { x: 10, y: 1 }, {});
     assert.equal(gezocht, 2);
@@ -260,8 +260,8 @@ test('een veld weet ook dat er geen weg is, en vergeet zichzelf als de kaart ver
   const doel = { x: 13, y: 3 };
   assert.ok(T.zoekRoute(w, { x: 1, y: 1 }, doel, { veld: true }));
   // dicht de twee ingangen van het gangetje waar het doel in ligt (10,4 en 14,4)
-  w.tegels[4][10] = 'muur';
-  w.tegels[4][14] = 'muur';
+  T.zetTegel(w, 10, 4, 'muur');
+  T.zetTegel(w, 14, 4, 'muur');
   T.kaartVeranderd(w);
   assert.equal(T.zoekRoute(w, { x: 1, y: 1 }, doel, { veld: true }), null);
 });

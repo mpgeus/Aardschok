@@ -163,7 +163,7 @@
   let eilandGrond = null;
   T.grondVanGid = function (gid) {
     if (!eilandGrond) {
-      const opzoek = bouwOpzoeker({ tilesets: [{ firstgid: 1, source: 'rand.tsx' }, { firstgid: T.KUST_GID(), source: 'kust.tsx' }] });
+      const opzoek = bouwOpzoeker({ tilesets: [{ firstgid: 1, source: 'rand.tsx' }, { firstgid: T.KUST_GID(), source: 'kust.tsx' }] }); // geen tekst
       eilandGrond = { opzoek, soort: new Map() };
     }
     let g = eilandGrond.soort.get(gid);
@@ -381,9 +381,7 @@
     const rij = new Array(b).fill(buren);
     const burenKamers = new Array(h).fill(rij);
 
-    // Eigenschappen van de kaart zelf (in Tiled: de eigenschappen van de map). `doof` zegt over
-    // hoeveel ringen vanaf de rand het bos naar het donker toe wegdooft, zodat een speler nooit
-    // het einde van de plaat ziet (js/tekenen.js).
+    // Eigenschappen van de kaart zelf (in Tiled: de eigenschappen van de map).
     const eig = eigenschappenVan(kaart);
 
     return {
@@ -397,7 +395,6 @@
       // en in het spel niet meetelt. De keuring laat zo'n kaart met rust waar het om het spel als
       // geheel gaat (een aansluiting die maar één kant heeft, bijvoorbeeld).
       proef: !!(betekenis && betekenis.proef),
-      doof: Number.isFinite(eig.doof) ? eig.doof : 0,
       // De rand van het plein, in tegels (T.opHetPlein, js/wereld.js); zonder "plein" heeft de kaart
       // er geen, en is de plek van de marskramer het plein (T.pleinVan, js/bewoners.js).
       plein: betekenis && Array.isArray(betekenis.plein) ? betekenis.plein.map(([x, y]) => [x, y]) : null,

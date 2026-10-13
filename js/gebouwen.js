@@ -1076,7 +1076,7 @@
   // een gebouw op, of een veld (js/boerderij.js).
   T.ruimLaagOp = function (w, r) {
     const eronder = (o) => o.vel && !T.VOORWERPEN[o.soort].blokkeert && o.x >= r.x && o.x < r.x + r.b && o.y >= r.y && o.y < r.y + r.h;
-    for (const o of w.voorwerpen.filter(eronder)) T.haalVoorwerpWeg(w, o);
+    for (const o of T.voorwerpenIn(w, r).filter(eronder)) T.haalVoorwerpWeg(w, o);
   };
 
   function zetGebouwVoorwerp(D, instantie) {

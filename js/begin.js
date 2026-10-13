@@ -364,7 +364,7 @@
   // samenvatting, npm run grootte), zodat ze hetzelfde dorp zien. Sinds stap 6 legt de maker geen dorp meer dat er al was
   // (Marcel: "Alles wordt door spelers geplaatst"). Alles met een vaste reeks toeval, en stil: wat het dorp zegt, gaat
   // nergens heen, ook niet als het spel in de browser draait.
-  //   T.proefdorp.begin(zaad)   een nieuw spel op het eiland van `zaad` (2), met het lege begin, op dag 1: geeft S
+  //   T.proefdorp.begin(zaad)   een nieuw spel op het eiland van `zaad` (PROEF_ZAAD), met het lege begin, op dag 1: geeft S
   //   T.proefdorp.maak(opties)  en het dorp erop, op dag 2, iedereen thuis: geeft S (zie maak, hieronder)
   // De stappen ertussen (dagen, bouwAf, zetBijHetVuur, legVeldBij) gebruiken de toetsen ook los.
   const STIL = new Proxy({}, { get: () => () => undefined });
@@ -386,9 +386,11 @@
     }
   }
 
-  // Een nieuw spel op het eiland van `zaad`, met het lege begin, zoals js/main.js het begint, maar zonder scherm. Zaad 2
-  // heeft open grond bij het plein.
-  function begin(zaad = 2) {
+  // Het eiland van het proefdorp: één getal, voor de toetsen en het gereedschap. Het heeft open grond bij het plein, water,
+  // bos en rotsen in de buurt (B2b, 13 okt: sinds het land overal van het eiland komt, ligt elk land anders dan ervoor).
+  const PROEF_ZAAD = 2;
+  // Een nieuw spel op het eiland van `zaad`, met het lege begin, zoals js/main.js het begint, maar zonder scherm.
+  function begin(zaad = PROEF_ZAAD) {
     const S = { kalender: T.nieuweKalender(), tijd: 0, wereldTijd: 0, modus: 'verkennen', inventaris: new Set() };
     metVastToeval(11, () => {
       if (!T.beginOpKaart(S, 'gehucht', zaad)) throw new Error(`geen spel op het eiland van ${zaad}`); // geen tekst
@@ -481,12 +483,12 @@
   // boerderij boer, en worden de akkers land; het kamp is dan leeg, en iedereen staat thuis. Rond het vuur is het krap, dus
   // bouwt het met een ruimer bereik (`bereik` tegels; in het spel `bouwBereik` hierboven), alleen zolang het neerzet.
   // Geeft S, met S.kalender op dag 2.
-  //   zaad         het eiland (2)
+  //   zaad         het eiland (PROEF_ZAAD)
   //   boerderijen  hoeveel boerderijen, elk met een akker (2)
   //   hutten       hoeveel hutten; standaard zoveel als er dan nog gezinnen in het kamp wonen
   //   gebouwen     wat er verder staat, af, zoals ['herberg', 'schaapskooi'] (een gebouw met handen krijgt ze op dag 2)
   //   weide        de eerste boerderij krijgt er een veld bij dat weide is, met de beginkudde erop (T.zetBeginKudde)
-  function maak({ zaad = 2, boerderijen = 2, hutten = null, gebouwen = [], weide = false, bereik = 40 } = {}) {
+  function maak({ zaad = PROEF_ZAAD, boerderijen = 2, hutten = null, gebouwen = [], weide = false, bereik = 40 } = {}) {
     const S = begin(zaad);
     const D = S.dorp;
     const w = D.wereld;
@@ -531,5 +533,5 @@
     });
   }
 
-  T.proefdorp = { begin, maak, dagen, bouwAf, zetBijHetVuur, legVeldBij, metVastToeval };
+  T.proefdorp = { zaad: PROEF_ZAAD, begin, maak, dagen, bouwAf, zetBijHetVuur, legVeldBij, metVastToeval };
 })(globalThis.Spel = globalThis.Spel || {});

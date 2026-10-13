@@ -52,8 +52,9 @@ function werkplaatsPlek(S, soort, wil) {
   const plein = T.pleinVan(S.wereld);
   const voet = T.gebouwVoet(soort, T.volgendeTekening(D, soort));
   const plekken = [];
-  for (let y = 0; y < S.wereld.tegels.length; y++) {
-    for (let x = 0; x < S.wereld.tegels[0].length; x++) plekken.push({ x, y, d: Math.hypot(x - plein.x, y - plein.y) });
+  const K = T.kaartVak(S.wereld);
+  for (let y = K.y; y < K.y + K.h; y++) {
+    for (let x = K.x; x < K.x + K.b; x++) plekken.push({ x, y, d: Math.hypot(x - plein.x, y - plein.y) });
   }
   plekken.sort((a, b) => a.d - b.d);
   for (const p of plekken) {
@@ -93,7 +94,8 @@ test('een put op een plek om te rooien bereikt een huis dat er nog geen heeft, w
     const kring = T.kringTeller(D, 'put');
     // In de speeltest van 6 okt koos hij de plek met de minste bomen bij het hart van het dorp, en kwam er elke maand een
     // put die niemand bereikte.
-    for (const bij of [{ x: 0, y: 0 }, { x: S.wereld.b - 1, y: S.wereld.h - 1 }]) {
+    const K = T.kaartVak(S.wereld);
+    for (const bij of [{ x: K.x, y: K.y }, { x: K.x + K.b - 1, y: K.y + K.h - 1 }]) {
       const plek = T.plekOmTeRooien(D, 'put', bij);
       assert.ok(plek, 'er is een plek om te rooien');
       assert.ok(kring({ x: plek.x, y: plek.y, b: voet.b, h: voet.h }).zonder > 0, `${plek.x},${plek.y} bereikt een huis zonder put`);
@@ -127,7 +129,7 @@ function zetNatuur(w, soort, x, y) {
   const daar = T.voorwerpOp(w, x, y);
   if (daar) T.haalVoorwerpWeg(w, daar);
   T.zetVoorwerp(w, v);
-  w.tegels[y][x] = 'muur';
+  T.zetTegel(w, x, y, 'muur');
   T.kaartVeranderd(w);
   return v;
 }

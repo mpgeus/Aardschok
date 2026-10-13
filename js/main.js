@@ -213,7 +213,9 @@
         kandidaten.push({ d: e.x + e.y + 0.01, wezen: e, x: e.tx, y: e.ty });
       }
     }
-    for (const v of w.voorwerpen) {
+    // wat er staat rond de plek onder de muis (ook wat er op het eiland groeit, T.voorwerpenIn); een gebouw steekt ver uit
+    const onder = T.naarWereld(sx, sy);
+    for (const v of T.voorwerpenIn(w, { x: Math.floor(onder.x) - 12, y: Math.floor(onder.y) - 12, b: 28, h: 28 })) {
       const hoog = voorwerpHoogte(v);
       if (!hoog || !T.isZichtbaar(w, v.x, v.y)) continue;
       const p = T.naarSchermOp(S.wereld, v.x, v.y);

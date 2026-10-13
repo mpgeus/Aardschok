@@ -339,9 +339,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.landVanEiland(E, plek, b, h)` geeft de maker de streek per tegel en per hoekpunt, de bomen en waar de wegen het land
   verlaten, en `T.eilandVan(zaad)` onthoudt het laatste eiland. De maker (`js/maker.js`) legt het lege land erop; de kaart
   onthoudt waar hij ligt (`w.eiland`). (Tot ronde 2 van het snoeien, stap 6, legde hij er een dorp dat er al was, en
-  zonder `opEiland` een land zonder eiland.) **Het eiland om je land** (stap 2b): buiten
-  de kaart loopt het eiland door, met de regels van de maker (`T.randVanHetEiland(w)` in `js/maker.js`, één keer per kaart,
-  niet in `Spel.S`; `T.grondVanStreek`), en `js/tekenen.js` tekent het als het land en het bos om de kaart. **De grond
+  zonder `opEiland` een land zonder eiland.) **Het eiland om je land** (stap 2b, tot B2b een rand om de kaart): sinds B2b
+  (13 okt) is het eiland de kaart (`T.eilandKaart` in `js/wereld.js`, met het land uit `T.landStuk`), en is er geen rand
+  meer. **De grond
   van het eiland** (B van 2a): de zee, het strand, het veen en het broek hebben eigen tegels (`tegels/kust.png`, uit
   `node gereedschap/pixelart/randtegels.cjs kust`; `T.sprites.grondMetHoeken` zoekt in rand en kust); welke twee soorten
   samen een tegel hebben, zegt `T.grondPaar`, wat niet past wijkt (`T.passendeGrond`), en een tegel met drie soorten
@@ -353,22 +353,23 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 - `js/maker.js`: **de maker, elk spel een ander land** (vraag 69 en 70, 30 sep; 100 bij 100, vraag 112; sinds ronde 2 van
   het snoeien, stap 6, 12 okt, alleen het lege land: Marcel, "Alles wordt door spelers geplaatst"): op het eiland
-  (`js/eiland.js`) komen het water, het bos, de heide, het zand, de rotsen en de wegen van het eiland, en de maker legt er
-  de open plek voor het plein bij (`leegRand`), de plek van het kamp op het plein (`kamp`: het vuur, een tent per gezin en
-  de kar; js/begin.js zet het op), de plek van de marskramer en de heer, en een paar eiken op het plein (niet aan de
-  voorkant, `eikenTot`, want daar komt de markt). Hij keurt het zelf (`T.keurGehucht`: kom je overal, staat er niets op
-  het plein dat er niet hoort) en probeert het anders tot het deugt. `T.maakGehucht(zaad, land, pogingen)` legt het plan
-  op een stuk van het eiland, `T.planOpEiland(zaad)` kiest het stuk (jouw plek, anders die van een ander dorp),
-  `T.kaartVanGehucht(plan)` maakt er een kaart met betekenisbestand van, zoals Tiled en `gereedschap/wereld.html` ze
-  maken (de grondtegels uit de groep van de rand-tegels: "gras over zandpad: boven+rechts"), en `T.laadGemaaktGehucht(zaad)`
-  leest het in met `T.laadKaart`, met de marktplek erbij (`w.markt`, `T.zoekMarktPlek` in `js/markt.js`). Welk land een
+  (`js/eiland.js`) komt het land, en sinds B2b (13 okt; Marcel: "Het eiland, overal") ook alles wat erop groeit en de
+  wegen met hun bruggetjes (`T.landStuk`, hieronder); de maker legt er alleen het menselijke over: de open plek voor het
+  plein (`leegRand`; binnen het plein wordt de weg gras), de plek van het kamp op het plein (`kamp`: het vuur, een tent
+  per gezin en de kar; js/begin.js zet het op), de plek van de marskramer en de heer, een paar eiken op het plein (niet aan
+  de voorkant, `eikenTot`, want daar komt de markt), en een rotspartij met plaats voor de steengroeve. Hij keurt het zelf
+  (`T.keurGehucht`: kom je overal, staat er niets op het plein dat er niet hoort) en probeert het anders tot het deugt.
+  `T.maakGehucht(zaad, land, pogingen)` legt het plan op een stuk van het eiland (`plan.voorwerpen` alles wat er staat,
+  `plan.gelegd` wat hij erbij legde, `plan.gerooid` wat er van het eiland weg moest), `T.planOpEiland(zaad)` kiest het stuk
+  (jouw plek, anders die van een ander dorp), en `T.laadGemaaktGehucht(zaad)` maakt er een kaart van het eiland van, die
+  alleen het verschil met het eiland overneemt, met de marktplek erbij (`w.markt`, `T.zoekMarktPlek` in `js/markt.js`).
+  Open zijn de stukken om het land, tot `zicht` tegels erbuiten. Welk land een
   nieuw spel krijgt, zegt `T.landVoorNieuwSpel` (`js/gebied.js`; een nummer van vijf cijfers, in het menu bij Nieuw
   spel); `T.beginOpKaart(S, 'gehucht', zaad)` legt het, met het lege begin erop. Het zaad van het dorp is hetzelfde
-  nummer (`D.lot.zaad`); de kaart heet `'gehucht'`, en `w.maker` zegt uit welk zaad hij komt. Waar de weg het land in
-  komt, legt `wegenOpEiland` (A\* om het water heen, met rechte bruggetjes, `plan.bruggen`). **Hetzelfde zaad, hetzelfde
-  land:** tot stap 6 legde de maker ook het dorp dat er al was (de huizen, vijf boerderijen met hun akkers, de meent, de
-  put en de bank) en een land zonder eiland; bij het weghalen bleef het lege land op twaalf eilanden byte voor byte
-  gelijk, want waar weggehaalde code een toevalsgetal trok, trekt de maker het nog. `npm run maker` schetst het lege land
+  nummer (`D.lot.zaad`); de kaart heet `'gehucht'`, en `w.maker` zegt uit welk zaad hij komt. **Hetzelfde zaad,
+  hetzelfde land**, maar sinds B2b een ander land dan ervoor: wat er groeit komt per tegel uit het eiland, niet meer uit
+  de dobbelsteen van de maker (die trok tot B2b nog getallen die niets meer legden, om het land van een bewaard spel
+  gelijk te houden; een bewaard spel past sinds B2b toch niet meer). `npm run maker` schetst het lege land
   (`gereedschap/maker/schets.cjs`). **Wat er ligt, doet ertoe:** een houthakker bij het bos, een steengroeve bij de rotsen, een visser en een
   rietsnijder aan het water (`bij` in `T.GEBOUWEN`, `T.natuurBij` in `js/gebouwen.js`). Wat plat op de
   grond ligt (niet vast, laag), tekent `js/tekenen.js` in de buffer van de grond (`isPlat`), en het maakt plaats voor
@@ -458,7 +459,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   en de muis rekent om in `naarVlak`. De grond ligt in stukken van 512 pixels die aan de wereld vastzitten
   (`werkStukkenBij` in `js/tekenen.js`, 9 okt): wat in beeld komt, wordt getekend, en slepen tekent alleen de stukken aan
   de rand; wie de grond wil (het kijkgat), vraagt `T.tekenGrondStukken`. Ver uitgezoomd liggen ze op de maat van het
-  scherm, en het bos om de kaart heen ook in stukken (`bosGebakken`). **De
+  scherm. Het tekenen knipt af op `T.kaartGrens` (op het eiland het hele eiland: wat niet open is, is 'buiten' en blijft
+  donker), en zoekt wat er staat met `T.voorwerpenIn` (ook wat er op het eiland groeit); tot B2b stond er een bosrand om
+  de kaart, ver uitgezoomd in een eigen buffer (`bosGebakken`). **De
   meter** (`F2`): beelden per seconde, en wat de regels en het tekenen per beeld kosten.
 
 ### js/gl.js: tekenen met de videokaart

@@ -367,7 +367,7 @@ test('T.tikBehoeftenDag: een huis groeit niet door als er geen ruimte voor de ui
   for (let y = 0; y < 40; y++) {
     for (let x = 0; x < 40; x++) {
       if (x >= 10 && x < 13 && y >= 10 && y < 13) continue;
-      S.wereld.tegels[y][x] = 'muur';
+      T.zetTegel(S.wereld, x, y, 'muur');
     }
   }
   T.kaartVeranderd(S.wereld); // zoals elke regel die een tegel verandert (js/wereld.js)
@@ -397,7 +397,7 @@ test('T.tikBehoeftenDag: een huis dat van vorm wisselt (smal en diep naar breed 
     const S = maakS(30, 30);
     const instantie = { soort: '_proefSmal', x: 5, y: 5, klaar: true, klaarOp: 0, handen: 0, voorwerp: { soort: 'gebouw:_proefSmal', vel: null, id: null, beslaat: [3, 7] } };
     S.gebouwen.push(instantie);
-    for (let dy = 0; dy < 7; dy++) for (let dx = 0; dx < 3; dx++) S.wereld.tegels[5 + dy][5 + dx] = 'muur';
+    for (let dy = 0; dy < 7; dy++) for (let dx = 0; dx < 3; dx++) T.zetTegel(S.wereld, 5 + dx, 5 + dy, 'muur');
 
     S.bevolking = 4;
     T.zetVoorraad(S, 'graan', 100000);

@@ -40,7 +40,7 @@
 
   // Het net, de afstanden en de hoeken beslaan het vak van de kaart (T.kaartVak, js/wereld.js), met tegel (x, y) op plek
   // (x - vak.x) + (y - vak.y) * vak.b; wat bewaard wordt (het slijten), gaat per tegel als getal (T.tegelNummer).
-  const binnen = (w, x, y) => T.opKaart(w, x, y);
+  const binnen = (w, x, y) => T.inVak(T.kaartVak(w), x, y);
   const plekIn = (vak, x, y) => x - vak.x + (y - vak.y) * vak.b;
   const VIER = [[0, 1], [1, 0], [0, -1], [-1, 0]];
   // Van een tegel naar zijn vier hoeken: noord, oost, zuid, west, zoals T.sprites.grondHoeken ze geeft (en zoals HOEK in
@@ -278,8 +278,8 @@
   // De hoeken van deze tegel met de paadjes erin: wat gras was en zand wordt, is zandpad. Geeft null als er niets
   // verandert. `oud` zijn de hoeken zoals de kaart ze legde (T.sprites.grondHoeken).
   T.hoekenMetPaden = function (D, zand, x, y, oud) {
-    if (!oud) return null;
     const vak = T.kaartVak(D.wereld);
+    if (!oud || !T.inVak(vak, x, y)) return null;
     const b = vak.b + 1;
     let anders = false;
     const nieuw = oud.map((soort, i) => {

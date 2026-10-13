@@ -85,7 +85,8 @@ test('de bende komt terug op de dag die het zegt, tegen de avond, van de rand va
     assert.equal(e.kant, 'monster');
     assert.equal(e.rover, true);
   }
-  assert.ok(A.ingang.x === 0 || A.ingang.y === 0 || A.ingang.x === w.b - 1 || A.ingang.y === w.h - 1, 'aan de rand');
+  const K = T.kaartVak(w);
+  assert.ok(A.ingang.x === K.x || A.ingang.y === K.y || A.ingang.x === K.x + K.b - 1 || A.ingang.y === K.y + K.h - 1, 'aan de rand');
   assert.equal(T.bestemmingVan(w.akkers[A.veld]), 'akker', 'ze gaan naar een akker, niet naar een weide');
   assert.ok(berichten.some((t) => /^Robbers are coming\./.test(t) && t.includes(bende[0])), berichten.join(' | '));
   assert.equal(S.kalender.snelheid, 1, 'de tijd gaat naar 1×');

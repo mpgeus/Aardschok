@@ -84,8 +84,9 @@ test('wat je bouwt, is jong en na twee jaar oud', () => {
   const bereik = T.BEGIN_INSTELLINGEN.bouwBereik;
   T.BEGIN_INSTELLINGEN.bouwBereik = 40;
   try {
-    for (let y = 4; y < w.tegels.length - 4 && !(r && r.gelukt); y += 2) {
-      for (let x = 4; x < w.tegels[0].length - 4 && !(r && r.gelukt); x += 2) r = T.plaatsGebouw(D, 'hut', x, y);
+    const K = T.kaartVak(w);
+    for (let y = K.y + 4; y < K.y + K.h - 4 && !(r && r.gelukt); y += 2) {
+      for (let x = K.x + 4; x < K.x + K.b - 4 && !(r && r.gelukt); x += 2) r = T.plaatsGebouw(D, 'hut', x, y);
     }
   } finally {
     T.BEGIN_INSTELLINGEN.bouwBereik = bereik;

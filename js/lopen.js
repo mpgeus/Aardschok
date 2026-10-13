@@ -144,7 +144,7 @@
     const rand = [];
     for (let y = doel.y - tot; y <= doel.y + tot; y++) {
       for (let x = doel.x - tot; x <= doel.x + tot; x++) {
-        if (!T.opKaart(w, x, y) || !T.isBegaanbaar(w, x, y, { deurenOpenen: open })) continue;
+        if (!T.inVak(vak, x, y) || !T.isBegaanbaar(w, x, y, { deurenOpenen: open })) continue;
         afstand[(y - vak.y) * vak.b + (x - vak.x)] = 0;
         rand.push((y - vak.y) * vak.b + (x - vak.x));
       }

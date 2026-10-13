@@ -72,8 +72,9 @@ function gewonePlek(S) {
   const w = S.wereld;
   const D = S.dorp;
   const vrij = (x, y) => T.isBegaanbaar(w, x, y, { wezensBlokkeren: true }) && !T.bijDeur(w, x, y) && !T.opVastePlek(D, w, x, y);
-  for (let y = 5; y < w.h - 5; y++) {
-    for (let x = 5; x < w.b - 5; x++) {
+  const K = T.kaartVak(w);
+  for (let y = K.y + 5; y < K.y + K.h - 5; y++) {
+    for (let x = K.x + 5; x < K.x + K.b - 5; x++) {
       let ok = true;
       for (let dy = -3; dy <= 3 && ok; dy++) for (let dx = -3; dx <= 3 && ok; dx++) ok = vrij(x + dx, y + dy);
       if (ok) return { x, y };

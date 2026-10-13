@@ -138,13 +138,17 @@ test('komt er iemand dichtbij, dan gaan ze weg: de herten rennen; wie sluipt, ko
   const g = groepVan(S, 'hert');
   const l = leiderVan(g);
   const lt = T.tegelVan(l);
-  // De schout op een vrije tegel, zes tegels van de leider: binnen hoe schuw een hert is (zeven), maar sluipend niet.
+  // De schout op een vrije tegel, zes tegels van de leider: binnen hoe schuw een hert is (zeven), maar sluipend niet. Aan
+  // de kant waar de herten van hem weg kunnen: hun thuis of een plek aan de bosrand ligt dan ver van hem (B2b: op het land
+  // van eiland 7 ligt hun thuis vlak bij waar ze grazen).
   let plek = null;
-  for (let dy = -6; dy <= 6 && !plek; dy++) {
-    for (let dx = -6; dx <= 6 && !plek; dx++) {
+  const vluchtVan = (p) => Math.max(...[g.G.thuis, ...g.G.rand].map((q) => T.afstand(q, p)));
+  for (let dy = -6; dy <= 6; dy++) {
+    for (let dx = -6; dx <= 6; dx++) {
       if (Math.max(Math.abs(dx), Math.abs(dy)) !== 6 || !T.isBegaanbaar(S.wereld, lt.x + dx, lt.y + dy, { wezensBlokkeren: true })) continue;
       if (g.leden.some((e) => T.afstand(T.tegelVan(e), { x: lt.x + dx, y: lt.y + dy }) < 6)) continue;
-      plek = { x: lt.x + dx, y: lt.y + dy };
+      const p = { x: lt.x + dx, y: lt.y + dy };
+      if (!plek || vluchtVan(p) > vluchtVan(plek)) plek = p;
     }
   }
   assert.ok(plek, 'een plek voor de schout');
@@ -250,8 +254,8 @@ function eersteVan(S, maand) {
 // Een stuk kaal maken: elke boom om, en elke stronk en struik eruit (zoals een erf dat gerooid wordt).
 function kaal(D, x0, y0, r) {
   const w = D.wereld;
-  for (let y = Math.max(0, y0 - r); y <= Math.min(w.tegels.length - 1, y0 + r); y++) {
-    for (let x = Math.max(0, x0 - r); x <= Math.min(w.tegels[0].length - 1, x0 + r); x++) {
+  for (let y = y0 - r; y <= y0 + r; y++) {
+    for (let x = x0 - r; x <= x0 + r; x++) {
       T.velBoom(D, x, y);
       T.rooi(D, x, y);
     }
@@ -284,7 +288,9 @@ test('in de winter krijgt een roedel honger, en met honger vangt hij een hert ui
   let dag = winter;
   while (!G.gevangen && dag < winter + 90) T.tikBeestenDag(D, dag++);
   assert.equal(G.gevangen, 1, 'in de winter vangt hij een hert');
-  assert.equal(hertenIn(D), voor - 1);
+  // (een andere roedel kan in die tijd ook een hert vangen)
+  const gevangen = T.beestenVan(D).filter((g) => g.G.soort === 'wolf').reduce((n, g) => n + (g.G.gevangen || 0), 0);
+  assert.equal(hertenIn(D), voor - gevangen);
   assert.ok(((dag - winter) * leden.length) / 4 >= T.BEESTEN_INSTELLINGEN.honger.jagenVanaf, 'pas als hij honger heeft');
   assert.equal(G.honger, 0, 'en dan is zijn honger weg');
 });
@@ -362,7 +368,7 @@ test('wordt het bos om het hol te dun, dan zoekt de roedel dieper een nieuw; zon
     assert.notDeepEqual(G.thuis, oud, 'een nieuw hol');
     assert.ok(T.isBos(D.wereld, G.thuis.x, G.thuis.y, true), 'in het bos');
     assert.ok(!G.trektWeg && !gezegd.length);
-    kaal(D, 50, 50, 60);
+    kaal(D, T.kaartVak(D.wereld).x + 50, T.kaartVak(D.wereld).y + 50, 60);
     T.tikBeestenDag(D, dag + 2);
     assert.ok(G.trektWeg);
     assert.ok(gezegd.some((t) => /wolves have moved away/.test(t)), gezegd.join(' | '));
@@ -961,7 +967,7 @@ test('verhuist een roedel, dan gaat zijn hol mee; trekt hij weg, dan verdwijnt h
     const hol = T.holVan(D, G);
     assert.ok(hol && T.afstand(hol, G.thuis) <= 3, 'het hol staat nu bij het nieuwe thuis');
     assert.equal(D.wereld.voorwerpen.filter((v) => v.groep === G).length, 1, 'het oude is weg');
-    kaal(D, 50, 50, 60);
+    kaal(D, T.kaartVak(D.wereld).x + 50, T.kaartVak(D.wereld).y + 50, 60);
     T.tikBeestenDag(D, dag + 1);
     assert.ok(G.trektWeg);
     assert.ok(!T.holVan(D, G), 'de roedel trekt weg, het hol ook');

@@ -723,18 +723,6 @@
     return hoeken;
   };
 
-  // De grond van de kaart op hoekpunt (vx, vy), van de hoek van de kaart tot de hoek aan de andere kant (T.kaartVak):
-  // uit de tegel die eraan ligt; null zonder grond.
-  S.grondHoekOp = function (w, vx, vy) {
-    const vak = T.kaartVak(w);
-    const tx = Math.min(vx, vak.x + vak.b - 1);
-    const ty = Math.min(vy, vak.y + vak.h - 1);
-    const g = T.grondOp(w, tx, ty);
-    const hoeken = g && S.grondHoeken(g.vel, g.id);
-    if (!hoeken) return null;
-    return hoeken[vx === tx ? (vy === ty ? 0 : 3) : vy === ty ? 1 : 2]; // boven, rechts, onder, links
-  };
-
   // Eerst in het vel van de kaart zelf, dan in de andere vellen met grond: de grond van het eiland (tegels/kust.png:
   // de zee, het strand, het veen, het broek) staat naast die van rand, en een tegel aan de rand van de kaart of onder
   // een weide kan van het ene vel zijn terwijl zijn buur op het andere ligt (werklijst vraag 117, B van 2a).

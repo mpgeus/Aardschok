@@ -223,7 +223,8 @@ test('het bouwbereik: je bouwt binnen bouwBereik tegels van het plein, en verder
   const verst = (t) => Math.min(...plein.map((p) => Math.hypot(p.x - t.x, p.y - t.y)));
   for (const p of plein) assert.ok(T.inBouwBereik(D, p.x, p.y), 'het plein ligt erin');
   const B = T.bouwBereikVan(D);
-  assert.ok(B.b * B.h < (w.b * w.h) / 2, 'alleen een vak om het plein, niet de hele kaart (de wereld wordt het hele eiland)');
+  const K = T.kaartVak(w);
+  assert.ok(B.b * B.h < (K.b * K.h) / 2, 'alleen een vak om het plein, niet de hele kaart (de wereld is het hele eiland)');
   // een tegel op de rand, en een net erbuiten, recht naar rechts van de rechterrand van het plein
   const rechts = plein.reduce((a, p) => (p.x > a.x ? p : a));
   assert.ok(T.inBouwBereik(D, rechts.x + R, rechts.y));
@@ -272,7 +273,7 @@ function huisVanDeSchout() {
   const voet = T.voetVanGebouw(huis);
   const rond = [];
   for (let y = voet.y - R; y < voet.y + voet.h + R; y++) for (let x = voet.x - R; x < voet.x + voet.b + R; x++) {
-    if (x >= 0 && y >= 0 && x < w.b && y < w.h && vanPlein(x, y) > R + 0.5 && T.inBouwBereik(D, x, y)) rond.push({ x, y });
+    if (T.inVak(T.kaartVak(w), x, y) && vanPlein(x, y) > R + 0.5 && T.inBouwBereik(D, x, y)) rond.push({ x, y });
   }
   assert.ok(rond.length > 0, 'het huis geeft bereik waar het plein niet komt');
   // bewaren en laden
@@ -333,8 +334,9 @@ test('rooien: in het bos rooien de bouwers eerst de plek, een boom geeft zijn ho
   const I = T.BOUWEN_INSTELLINGEN;
   // een plek in het bos, binnen het bereik
   let hut = null;
-  for (let y = 0; y < w.h && !hut; y++) {
-    for (let x = 0; x < w.b && !hut; x++) {
+  const K = T.kaartVak(w);
+  for (let y = K.y; y < K.y + K.h && !hut; y++) {
+    for (let x = K.x; x < K.x + K.b && !hut; x++) {
       const kavel = T.bouwKavel(D, 'hut', x, y);
       if (!kavel || T.watTeRooien(D, kavel).bomen < 5 || T.waaromPastHetNiet(D, 'hut', x, y, null, kavel)) continue;
       const uit = T.plaatsGebouw(D, 'hut', x, y);
@@ -390,8 +392,9 @@ test('meebouwen: met of zonder beelden komt er hetzelfde uit', (t) => {
     const { S, D, w } = leegBegin();
     dagen(S, 1, 1);
     let hut = null;
-    for (let y = 0; y < w.h && !hut; y++) {
-      for (let x = 0; x < w.b && !hut; x++) {
+    const K = T.kaartVak(w);
+    for (let y = K.y; y < K.y + K.h && !hut; y++) {
+      for (let x = K.x; x < K.x + K.b && !hut; x++) {
         const kavel = T.bouwKavel(D, 'hut', x, y);
         if (!kavel || T.watTeRooien(D, kavel).bomen < 5 || T.waaromPastHetNiet(D, 'hut', x, y, null, kavel)) continue;
         hut = T.plaatsGebouw(D, 'hut', x, y).instantie;

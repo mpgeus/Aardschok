@@ -19,9 +19,9 @@ const assert = require('node:assert/strict');
 // zonder scherm).
 const metVastToeval = (begin, doe) => globalThis.Spel.proefdorp.metVastToeval(begin, doe);
 
-// Een nieuw spel op het eiland van `zaad`, met het lege begin, stil (T.proefdorp.begin). Zaad 2 heeft open grond bij het
-// plein.
-function leegBegin(T, zaad = 2) {
+// Een nieuw spel op het eiland van `zaad` (dat van het proefdorp, T.proefdorp.zaad), met het lege begin, stil
+// (T.proefdorp.begin).
+function leegBegin(T, zaad = T.proefdorp.zaad) {
   const S = T.proefdorp.begin(zaad);
   return { S, D: S.dorp, w: S.dorp.wereld };
 }

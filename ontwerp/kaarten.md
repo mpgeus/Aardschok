@@ -134,7 +134,14 @@ nummers passen op het hele eiland, en `T.eilandStuk` maakt elk stuk los (64 bij 
    rand gaat weg; (4) elke lijst over de hele kaart krijgt zijn eigen vak; (5) stukken als ze nodig zijn; (6) opslaan
    wat veranderde; dan meten (de kolonist op vijf eilanden, de schout naar de kust op 30×, de schermen).
    **Stap 1 is af** (13 okt): `T.landStuk` in `js/maker.js` (`code.md`), met `test/landstuk.test.cjs`; 40 ms per stuk in
-   Node, twee derde in de ruis van het eiland.
+   Node, twee derde in de ruis van het eiland. **De bruggetjes van het eiland zijn af** (`E.bruggen`, 0,1 s per schets).
+   **Stap 2 en 3 zijn gebouwd** (13 okt, sessie `claude/funny-fermi-5fqm1u`, nog niet in `main`): de kaart van het eiland
+   (`T.eilandKaart`, `test/eilandkaart.test.cjs`), de maker legt alleen nog het menselijke en de kaart neemt het verschil
+   over, de rand is uit het tekenen, en de hoogte rekent in de tegels van het eiland (`hg.ox`, `hg.oy`). Een nieuw spel kost
+   in Node 1,8 s, en het bewaarde spel is 15 kB (was 473 kB). Wat het opleverde: de weg van het eiland liep tot midden op
+   het plein (nu houdt hij op aan de rand), en `T.ruimLaagOp` zag niet wat er op het eiland groeit (nu `T.voorwerpenIn`).
+   Wat er nog rood is, zijn toetsen die op het land van vroeger rekenden: het proefdorp (zaad 2) ligt nu op heide, zonder
+   water, en de hutten staan er dichter op elkaar; dat wordt het kiezen van een ander zaad of de toetsen bijstellen.
    **Het ontwerp van stap 2 tot 6** (Claude, 13 okt; zo kan een volgende sessie verder):
    - *Wat in S staat* (bewaard): wat veranderde, per tegelnummer (`T.tegelNummer`): `w.tegelsAnders` (Map naar het woord),
      `w.grondAnders` (Map naar de grondtegel; alleen de maker verandert de grond, het spel nooit), `w.gerooid` (Set: een

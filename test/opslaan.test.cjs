@@ -341,8 +341,9 @@ test('een verse bladzijde laadt een spel met een gebouw uit het spel', (t) => {
   const bereik = T.BEGIN_INSTELLINGEN.bouwBereik;
   T.BEGIN_INSTELLINGEN.bouwBereik = 40;
   try {
-    for (let y = 5; y < S.wereld.h - 5 && !huis; y++) {
-      for (let x = 5; x < S.wereld.b - 5 && !huis; x++) {
+    const K = T.kaartVak(S.wereld);
+    for (let y = K.y + 5; y < K.y + K.h - 5 && !huis; y++) {
+      for (let x = K.x + 5; x < K.x + K.b - 5 && !huis; x++) {
         if (T.waaromPastHetNiet(S.dorp, 'huis', x, y)) continue;
         const r = T.plaatsGebouw(S.dorp, 'huis', x, y);
         if (r && r.gelukt) huis = r.instantie;

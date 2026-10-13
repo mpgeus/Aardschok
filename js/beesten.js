@@ -206,7 +206,7 @@
       for (const [dx, dy] of BUREN) {
         const nx = x + dx;
         const ny = y + dy;
-        if (!T.opKaart(w, nx, ny)) continue;
+        if (!T.inVak(vak, nx, ny)) continue;
         const j = plekInVak(vak, nx, ny);
         if (diep[j] >= 0) continue;
         diep[j] = diep[i] + 1;
@@ -307,7 +307,7 @@
           if (Math.max(Math.abs(dx), Math.abs(dy)) !== ring) continue;
           const x = G.thuis.x + dx;
           const y = G.thuis.y + dy;
-          if (!T.opKaart(w, x, y)) continue;
+          if (!T.inVak(vak, x, y)) continue;
           if (!vrij(w, x, y) || T.opPad(w, x, y) || G.rand.some((p) => p.x === x && p.y === y)) continue;
           kandidaten.push({ x, y, ring, sleutel: lot(G.zaad, y * vak.b + x, 118) });
         }
@@ -404,7 +404,7 @@
     if (!T.isBegaanbaar(w, x, y)) return false;
     if (soort === 'wolf') return kaart.bos[i] === 1 && kaart.diep[i] <= 2;
     if (kaart.bos[i] || open[i] || T.opPad(w, x, y) || T.opHetPlein(w, x, y)) return false;
-    return BUREN.some(([dx, dy]) => T.opKaart(w, x + dx, y + dy) && kaart.bos[plekInVak(kaart.vak, x + dx, y + dy)]);
+    return BUREN.some(([dx, dy]) => T.inVak(kaart.vak, x + dx, y + dy) && kaart.bos[plekInVak(kaart.vak, x + dx, y + dy)]);
   }
 
   // Zoveel vrije tegels om een plek, de dichtste eerst: waar de dieren van een groep komen te staan, en de jongen.

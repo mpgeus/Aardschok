@@ -69,8 +69,8 @@ const bomenBij = (D, g) => {
   const f = T.voetVanGebouw(g);
   const r = T.BOS_INSTELLINGEN.hakStraal;
   const uit = [];
-  for (let y = Math.max(0, f.y - r); y < Math.min(w.tegels.length, f.y + f.h + r); y++) {
-    for (let x = Math.max(0, f.x - r); x < Math.min(w.tegels[0].length, f.x + f.b + r); x++) if (boomOp(w, { x, y })) uit.push({ x, y });
+  for (let y = f.y - r; y < f.y + f.h + r; y++) {
+    for (let x = f.x - r; x < f.x + f.b + r; x++) if (boomOp(w, { x, y })) uit.push({ x, y });
   }
   return uit;
 };
@@ -174,7 +174,7 @@ test('een stronk staat niet in de weg: wie een boom omhakte, loopt verder het bo
   const S = dorp();
   const D = S.dorp;
   const w = D.wereld;
-  const boom = w.voorwerpen.find((v) => T.NATUUR.bos.telt(w, v.x, v.y, v));
+  const boom = T.voorwerpenIn(w, T.kaartVak(w)).find((v) => T.NATUUR.bos.telt(w, v.x, v.y, v));
   assert.ok(!T.isBegaanbaar(w, boom.x, boom.y), 'een boom staat in de weg');
   assert.ok(T.velBoom(D, boom.x, boom.y));
   assert.equal(soortOp(w, boom), 'boomstronk');
@@ -255,8 +255,9 @@ test('een houthakker komt alleen bij genoeg bos: minstens dertig bomen binnen ti
   // Een plek met wat bos, maar minder dan dertig bomen binnen tien tegels, zegt waarom niet; met dertig of meer niets.
   const voet = T.gebouwVoet('houthakker', T.volgendeTekening(D, 'houthakker'));
   const plekken = { weinig: null, genoeg: null };
-  for (let y = 0; y < D.wereld.tegels.length; y++) {
-    for (let x = 0; x < D.wereld.tegels[0].length; x++) {
+  const K = T.kaartVak(D.wereld);
+  for (let y = K.y; y < K.y + K.h; y++) {
+    for (let x = K.x; x < K.x + K.b; x++) {
       const r = { x, y, b: voet.b, h: voet.h };
       const n = T.natuurBij(D.wereld, 'bos', r, bij.straal);
       if (n >= 8 && n < 30) plekken.weinig = plekken.weinig || r;
@@ -274,7 +275,7 @@ test('een boompje wordt in een jaar of twee een jonge boom en dan een boom; een 
   const w = D.wereld;
   // Een boom in het bos, omgehakt op dag 10, met een boompje ernaast.
   S.kalender.dag = 10.3;
-  const plek = w.voorwerpen.find((v) => T.NATUUR.bos.telt(w, v.x, v.y, v) && v.soort === 'eik' && T.isBos(w, v.x, v.y));
+  const plek = T.voorwerpenIn(w, T.kaartVak(w)).find((v) => T.NATUUR.bos.telt(w, v.x, v.y, v) && v.soort === 'eik' && T.isBos(w, v.x, v.y));
   assert.ok(plek, 'er staat een eik in het bos');
   const t = { x: plek.x, y: plek.y };
   assert.equal(T.velBoom(D, t.x, t.y), 'eik');

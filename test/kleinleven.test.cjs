@@ -4,7 +4,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
-const { proefDorp } = require('./grond.cjs');
+const { proefDorp, leegBegin } = require('./grond.cjs');
 T.ui = new Proxy({}, { get: () => () => undefined });
 
 // Het proefdorp (test/grond.cjs): twee boerderijen met hun boer, hutten voor de rest, en het huis van de schout.
@@ -57,12 +57,14 @@ test('elk huis weet waar zijn rook uitkomt: de schoorsteen, of bij een hut de no
 });
 
 test('het water: een beek stroomt langs zijn lengte, en wat geen beek is, ligt stil', () => {
-  const S = gehucht();
+  // op een eiland met een beek bij het dorp (13; bij het proefdorp ligt sinds B2b geen water)
+  const { S } = leegBegin(T, 13);
   const w = S.dorp.wereld;
   let water = 0;
-  for (let y = 0; y < w.h; y++) {
-    for (let x = 0; x < w.b; x++) {
-      const isWater = !!(w.grond[y] && w.grond[y][x] && w.grond[y][x].naam === 'water');
+  const K = T.kaartVak(w);
+  for (let y = K.y; y < K.y + K.h; y++) {
+    for (let x = K.x; x < K.x + K.b; x++) {
+      const isWater = !!(T.grondOp(w, x, y) && T.grondOp(w, x, y).naam === 'water');
       const s = T.waterOp(w, x, y);
       assert.equal(!!s, isWater, `${x},${y}`);
       if (!s) continue;
@@ -71,7 +73,7 @@ test('het water: een beek stroomt langs zijn lengte, en wat geen beek is, ligt s
       else assert.ok(s.stil, `${x},${y} ligt stil`);
     }
   }
-  assert.ok(water > 0, 'het proefdorp heeft water');
+  assert.ok(water > 0, 'er is water');
 });
 
 test('twee kinderen die vrij zijn, gaan soms samen spelen, rennen om de plek, en houden op als het om is', () => {

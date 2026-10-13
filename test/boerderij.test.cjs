@@ -11,8 +11,8 @@ const gezegd = [];
 T.ui = new Proxy({}, { get: (_, naam) => (...args) => (naam === 'bericht' ? gezegd.push(args[0]) : undefined) });
 
 // Een nieuw spel op het eiland van `zaad`, met het lege begin, stil en met een vaste reeks toeval (zoals in
-// test/begin.test.cjs). Zaad 2 heeft open grond bij het plein.
-function leegBegin(zaad = 2) {
+// test/begin.test.cjs), op het eiland van het proefdorp (T.proefdorp.zaad).
+function leegBegin(zaad = T.proefdorp.zaad) {
   const echt = console.warn;
   const toeval = Math.random;
   let n = 11;

@@ -317,7 +317,13 @@
   // tegels), gaat over dit vak, met tegel (x, y) op plek (y - vak.y) * vak.b + (x - vak.x). Op het eiland is dat het vak
   // om het dorp (w.vak), want het eiland is te groot voor één lijst: in B2b, stap 4, krijgt wat niet om het dorp gaat
   // zijn eigen vak.
-  T.kaartVak = (w) => (opEiland(w) ? { ...w.vak } : { x: 0, y: 0, b: w.b, h: w.h });
+  T.kaartVak = (w) => (opEiland(w) ? w.vak : { x: 0, y: 0, b: w.b, h: w.h });
+  // Waar de kaart tegels kan hebben, { x, y, b, h }: om het tekenen af te knippen, en om te zoeken in wat er in beeld is.
+  // Op het eiland het hele eiland, dus maak er nooit een lijst over (daarvoor is T.kaartVak).
+  T.kaartGrens = (w) => (opEiland(w) ? { x: 0, y: 0, b: EILAND_MAAT(), h: EILAND_MAAT() } : { x: 0, y: 0, b: w.b, h: w.h });
+  // Ligt tegel (x, y) in dit vak? Wie een lijst over T.kaartVak bijhoudt, vraagt dit, niet T.opKaart: op het eiland is
+  // de kaart veel groter dan het vak.
+  T.inVak = (vak, x, y) => x >= vak.x && y >= vak.y && x < vak.x + vak.b && y < vak.y + vak.h;
   // Heeft deze kaart tegels, en grond? Een toets kan een kaart zonder maken (zoals die van het vee).
   T.heeftTegels = (w) => opEiland(w) || !!(w && w.tegels && w.tegels.length);
   T.heeftGrond = (w) => opEiland(w) || !!(w && w.grond && w.grond.length);
@@ -354,7 +360,7 @@
       open: new Set(), tegelsAnders: new Map(), grondAnders: new Map(), gerooid: new Set(),
       deuren: new Map(), geheimen: [], kamers: [kamer], voorwerpen: [], questVoorwerpen: [], wezens: [],
       bekend: new Set(['buiten']), huidigeKamer: 'buiten', overgangen: [], akkers: [], meenten: [],
-      buiten: true, naam: null, proef: false, doof: 0, plein: null, marskramer: null, heer: null,
+      buiten: true, naam: null, proef: false, plein: null, marskramer: null, heer: null,
     };
   };
   function stukkenVan(w) {

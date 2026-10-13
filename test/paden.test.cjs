@@ -37,27 +37,35 @@ function ruimBegroeiingOp(D) {
   const y1 = Math.min(...D.gebouwen.map((g) => g.y)) - rand;
   const x2 = Math.max(...D.gebouwen.map((g) => g.x + g.voet.b)) + rand;
   const y2 = Math.max(...D.gebouwen.map((g) => g.y + g.voet.h)) + rand;
-  w.voorwerpen = w.voorwerpen.filter((v) => !((v.vel === 'bomen' || v.vel === 'begroeiing') && v.x >= x1 && v.x <= x2 && v.y >= y1 && v.y <= y2));
+  for (const v of T.voorwerpenIn(w, { x: x1, y: y1, b: x2 - x1 + 1, h: y2 - y1 + 1 })) {
+    if (v.vel !== 'bomen' && v.vel !== 'begroeiing') continue;
+    T.haalVoorwerpWeg(w, v);
+    if (T.tegel(w, v.x, v.y) === 'muur') T.zetTegel(w, v.x, v.y, 'vloer');
+  }
   T.kaartVeranderd(w);
 }
 const zet = (e, x, y) => Object.assign(e, { x, y, tx: x, ty: y, pad: [], binnen: false });
 const breedte = (w) => T.kaartVak(w).b;
+// Waar tegel (x, y) in het net staat (T.aangelegdNet: over het vak van de kaart, T.kaartVak).
+const plekIn = (w, x, y) => {
+  const K = T.kaartVak(w);
+  return x - K.x + (y - K.y) * K.b;
+};
 
 // Kom je van deze tegel over het net (vier richtingen) bij de weg van de kaart?
 function naarDeWeg(D, start) {
   const w = D.wereld;
-  const b = breedte(w);
   const net = T.aangelegdNet(D);
-  const gezien = new Set([start.x + start.y * b]);
+  const gezien = new Set([plekIn(w, start.x, start.y)]);
   const rij = [start];
   while (rij.length) {
     const t = rij.pop();
-    if (net[t.x + t.y * b] === 1) return true;
+    if (net[plekIn(w, t.x, t.y)] === 1) return true;
     for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
       const x = t.x + dx;
       const y = t.y + dy;
-      const k = x + y * b;
-      if (x < 0 || y < 0 || x >= b || y >= T.kaartVak(w).h || gezien.has(k) || !net[k]) continue;
+      const k = plekIn(w, x, y);
+      if (!T.inVak(T.kaartVak(w), x, y) || gezien.has(k) || !net[k]) continue;
       gezien.add(k);
       rij.push({ x, y });
     }
@@ -69,9 +77,10 @@ function naarDeWeg(D, start) {
 function losGras(D) {
   const w = D.wereld;
   const net = T.aangelegdNet(D);
-  for (let y = 60; y < w.tegels.length - 4; y++) {
-    for (let x = 50; x < breedte(w) - 4; x++) {
-      if (T.isBegaanbaar(w, x, y) && !T.veldOp(w, x, y) && !T.voorwerpOp(w, x, y) && !net[x + y * breedte(w)]) return { x, y };
+  const K = T.kaartVak(w);
+  for (let y = K.y + 60; y < K.y + K.h - 4; y++) {
+    for (let x = K.x + 50; x < K.x + K.b - 4; x++) {
+      if (T.isBegaanbaar(w, x, y) && !T.veldOp(w, x, y) && !T.voorwerpOp(w, x, y) && !net[plekIn(w, x, y)]) return { x, y };
     }
   }
   throw new Error('geen los gras');
@@ -82,11 +91,10 @@ test('van elke deur loopt een paadje naar de weg', () => {
   const D = S.dorp;
   ruimBegroeiingOp(D);
   const net = T.aangelegdNet(D);
-  const b = breedte(D.wereld);
   assert.ok(net.some((v) => v === 2), 'er zijn paadjes van de deuren');
   for (const g of D.gebouwen) {
     const deur = T.deurVan(D.wereld, g);
-    assert.ok(net[deur.x + deur.y * b] >= 1, `de deur van ${g.soort} op ${g.x},${g.y} ligt aan het net`);
+    assert.ok(net[plekIn(D.wereld, deur.x, deur.y)] >= 1, `de deur van ${g.soort} op ${g.x},${g.y} ligt aan het net`);
     assert.ok(naarDeWeg(D, deur), `en van daar kom je over het net bij de weg (${g.soort} op ${g.x},${g.y})`);
   }
 });
@@ -101,12 +109,12 @@ test('een nieuw gebouw krijgt meteen een paadje, en wie later bouwt, sluit aan',
   const r = T.plaatsGebouw(D, 'houthakker', plek.x, plek.y);
   assert.ok(r.gelukt, r.reden);
   const deur = T.deurVan(D.wereld, r.instantie);
-  assert.ok(T.aangelegdNet(D)[deur.x + deur.y * breedte(D.wereld)] >= 1, 'in aanbouw ligt er al een paadje');
+  assert.ok(T.aangelegdNet(D)[plekIn(D.wereld, deur.x, deur.y)] >= 1, 'in aanbouw ligt er al een paadje');
   assert.ok(naarDeWeg(D, deur));
   // Het paadje loopt nergens over het nieuwe gebouw.
   const net = T.aangelegdNet(D);
   const v = T.voetVanGebouw(r.instantie);
-  for (let y = v.y; y < v.y + v.h; y++) for (let x = v.x; x < v.x + v.b; x++) assert.equal(net[x + y * breedte(D.wereld)], 0);
+  for (let y = v.y; y < v.y + v.h; y++) for (let x = v.x; x < v.x + v.b; x++) assert.equal(net[plekIn(D.wereld, x, y)], 0);
 });
 
 test('waar veel gelopen wordt, slijt het gras tot een paadje; waar niemand meer loopt, groeit het dicht', () => {
@@ -180,10 +188,11 @@ test('hoe het eruitziet: een recht paadje is zand, de weg blijft zoals de kaart 
   const gras = ['gras', 'gras', 'gras', 'gras'];
   // Een tegel midden in een recht paadje: zijn vier hoeken worden zand.
   let midden = null;
+  const K = T.kaartVak(w);
   for (let k = 0; k < net.length && !midden; k++) {
     const x = k % b;
     const y = (k - x) / b;
-    if (net[k] === 2 && net[k - 1] === 2 && net[k + 1] === 2 && x > 0) midden = { x, y };
+    if (net[k] === 2 && net[k - 1] === 2 && net[k + 1] === 2 && x > 0) midden = { x: K.x + x, y: K.y + y };
   }
   assert.ok(midden, 'er is een recht paadje');
   assert.deepEqual(T.hoekenMetPaden(D, zand, midden.x, midden.y, gras), ['zandpad', 'zandpad', 'zandpad', 'zandpad']);
@@ -238,10 +247,10 @@ test('lantaarns op de kruisingen van het net, naast het pad en niet te dicht bij
   assert.ok(nieuw.length >= 1, 'het proefdorp heeft er al een');
   const alle = w.voorwerpen.filter((v) => v.soort === 'lantaarn');
   for (const l of nieuw) {
-    assert.equal(net[l.x + l.y * b], 0, `${l.x},${l.y} staat niet op het pad`);
+    assert.equal(net[plekIn(w, l.x, l.y)], 0, `${l.x},${l.y} staat niet op het pad`);
     assert.ok(!T.opHetPlein(w, l.x, l.y), 'het plein blijft open');
     let aanHetNet = false;
-    for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) if (net[l.x + dx + (l.y + dy) * b]) aanHetNet = true;
+    for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) if (net[plekIn(w, l.x + dx, l.y + dy)]) aanHetNet = true;
     assert.ok(aanHetNet, `${l.x},${l.y} staat aan het pad`);
     for (const m of alle) if (m !== l) assert.ok(T.afstand(l, m) >= IN.lantaarnAfstand - 1, `${l.x},${l.y} niet vlak bij ${m.x},${m.y}`);
   }
