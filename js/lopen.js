@@ -115,38 +115,41 @@
   // gerekend wordt, geeft dezelfde wegen.
   const ONBEKEND = 0xffff;
   const RICHTINGEN = [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]]; // zoals js/pad.js
-  const VELDEN = new WeakMap(); // kaart → { versie, b, h, velden: Map(sleutel → veld), in de volgorde van gebruik }
+  const VELDEN = new WeakMap(); // kaart → { versie, vak, velden: Map(sleutel → veld), in de volgorde van gebruik }
 
   function veldVan(w, doel, tot, open) {
     const versie = T.kaartVersie(w);
+    const vak = T.kaartVak(w);
     let m = VELDEN.get(w);
-    if (!m || m.versie !== versie || m.b !== w.b || m.h !== w.h) {
-      m = { versie, b: w.b, h: w.h, velden: new Map() };
+    if (!m || m.versie !== versie || m.vak.x !== vak.x || m.vak.y !== vak.y || m.vak.b !== vak.b || m.vak.h !== vak.h) {
+      m = { versie, vak, velden: new Map() };
       VELDEN.set(w, m);
     }
     const sleutel = `${doel.x},${doel.y}|${tot}|${open ? 1 : 0}`;
     let v = m.velden.get(sleutel);
     if (v) m.velden.delete(sleutel); // achteraan: net gevraagd
     else {
-      v = nieuwVeld(w, doel, tot, open);
+      v = nieuwVeld(w, m.vak, doel, tot, open);
       if (m.velden.size >= IN().veldenOnthouden) m.velden.delete(m.velden.keys().next().value);
     }
     m.velden.set(sleutel, v);
     return v;
   }
 
-  // Een veld begint bij het doel: elke begaanbare tegel binnen `tot` ervan ligt er 0 stappen af.
-  function nieuwVeld(w, doel, tot, open) {
-    const afstand = new Uint16Array(w.b * w.h).fill(ONBEKEND);
+  // Een veld begint bij het doel: elke begaanbare tegel binnen `tot` ervan ligt er 0 stappen af. Het veld beslaat het
+  // vak van de kaart (T.kaartVak, js/wereld.js), zoals het raster van wat vaststaat: tegel (x, y) staat op plek
+  // (y - vak.y) * vak.b + (x - vak.x).
+  function nieuwVeld(w, vak, doel, tot, open) {
+    const afstand = new Uint16Array(vak.b * vak.h).fill(ONBEKEND);
     const rand = [];
     for (let y = doel.y - tot; y <= doel.y + tot; y++) {
       for (let x = doel.x - tot; x <= doel.x + tot; x++) {
-        if (x < 0 || y < 0 || x >= w.b || y >= w.h || !T.isBegaanbaar(w, x, y, { deurenOpenen: open })) continue;
-        afstand[y * w.b + x] = 0;
-        rand.push(y * w.b + x);
+        if (!T.opKaart(w, x, y) || !T.isBegaanbaar(w, x, y, { deurenOpenen: open })) continue;
+        afstand[(y - vak.y) * vak.b + (x - vak.x)] = 0;
+        rand.push((y - vak.y) * vak.b + (x - vak.x));
       }
     }
-    return { doel: { x: doel.x, y: doel.y }, open, afstand, rand, ring: 0, op: !rand.length };
+    return { doel: { x: doel.x, y: doel.y }, open, vak, afstand, rand, ring: 0, op: !rand.length };
   }
 
   // Mag je op tegel j (x, y) staan, en houdt hij een schuine stap om de hoek tegen? Uit het raster van wat vaststaat
@@ -166,9 +169,9 @@
 
   // Eén ring verder: de tegels die een stap verder liggen dan de vorige ring. Een schuine stap om een hoek telt niet,
   // zoals bij A*.
+  // Binnen het veld rekent het met de plek in het vak (x, y vanaf de hoek van het vak); de kaart krijgt de tegel zelf.
   function groei(w, v) {
-    const b = w.b;
-    const h = w.h;
+    const { b, h, x: x0, y: y0 } = v.vak;
     const raster = T.vastRaster(w);
     const d = v.ring + 1;
     const volgende = [];
@@ -182,9 +185,9 @@
         const ny = y + dy;
         if (nx < 0 || ny < 0 || nx >= b || ny >= h) continue;
         const j = ny * b + nx;
-        if (v.afstand[j] !== ONBEKEND || !vrijOp(w, raster, j, nx, ny, v.open)) continue;
-        if (dx && dy && (vastOp(w, raster, y * b + nx, nx, y) || vastOp(w, raster, ny * b + x, x, ny))) continue;
-        if (w.hoogte && !T.kanStappen(w, x, y, nx, ny)) continue; // niet door een wand (js/hoogte.js)
+        if (v.afstand[j] !== ONBEKEND || !vrijOp(w, raster, j, x0 + nx, y0 + ny, v.open)) continue;
+        if (dx && dy && (vastOp(w, raster, y * b + nx, x0 + nx, y0 + y) || vastOp(w, raster, ny * b + x, x0 + x, y0 + ny))) continue;
+        if (w.hoogte && !T.kanStappen(w, x0 + x, y0 + y, x0 + nx, y0 + ny)) continue; // niet door een wand (js/hoogte.js)
         v.afstand[j] = d;
         volgende.push(j);
       }
@@ -196,7 +199,7 @@
 
   // De buren van (x, y) waar je heen kunt stappen en die het veld al kent, met hun afstand.
   function burenInVeld(w, v, x, y) {
-    const b = w.b;
+    const { b, h, x: x0, y: y0 } = v.vak;
     const raster = T.vastRaster(w);
     const uit = [];
     for (let r = 0; r < 8; r++) {
@@ -204,10 +207,10 @@
       const dy = DY[r];
       const nx = x + dx;
       const ny = y + dy;
-      if (nx < 0 || ny < 0 || nx >= b || ny >= w.h) continue;
-      const a = v.afstand[ny * b + nx];
+      if (nx < x0 || ny < y0 || nx >= x0 + b || ny >= y0 + h) continue;
+      const a = v.afstand[(ny - y0) * b + (nx - x0)];
       if (a === ONBEKEND) continue;
-      if (dx && dy && (vastOp(w, raster, y * b + nx, nx, y) || vastOp(w, raster, ny * b + x, x, ny))) continue;
+      if (dx && dy && (vastOp(w, raster, (y - y0) * b + (nx - x0), nx, y) || vastOp(w, raster, (ny - y0) * b + (x - x0), x, ny))) continue;
       if (w.hoogte && !T.kanStappen(w, x, y, nx, ny)) continue;
       uit.push({ x: nx, y: ny, a, r });
     }

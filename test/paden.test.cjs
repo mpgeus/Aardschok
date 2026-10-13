@@ -41,7 +41,7 @@ function ruimBegroeiingOp(D) {
   T.kaartVeranderd(w);
 }
 const zet = (e, x, y) => Object.assign(e, { x, y, tx: x, ty: y, pad: [], binnen: false });
-const breedte = (w) => w.tegels[0].length;
+const breedte = (w) => T.kaartVak(w).b;
 
 // Kom je van deze tegel over het net (vier richtingen) bij de weg van de kaart?
 function naarDeWeg(D, start) {
@@ -57,7 +57,7 @@ function naarDeWeg(D, start) {
       const x = t.x + dx;
       const y = t.y + dy;
       const k = x + y * b;
-      if (x < 0 || y < 0 || x >= b || y >= w.tegels.length || gezien.has(k) || !net[k]) continue;
+      if (x < 0 || y < 0 || x >= b || y >= T.kaartVak(w).h || gezien.has(k) || !net[k]) continue;
       gezien.add(k);
       rij.push({ x, y });
     }
@@ -122,12 +122,12 @@ test('waar veel gelopen wordt, slijt het gras tot een paadje; waar niemand meer 
   assert.equal(T.isPaadje(D, t.x, t.y), true, 'tien stappen per dag, een maand lang: een paadje');
   const versie = T.padVersie(D);
   for (let d = 0; d < 20; d++) T.tikPadenDag(D);
-  assert.equal(T.isPaadje(D, t.x, t.y), true, `na twintig stille dagen nog (gemiddeld ${w.paden.slijt[t.x + t.y * breedte(w)]} per dag, boven ${IN.blijftPad})`);
+  assert.equal(T.isPaadje(D, t.x, t.y), true, `na twintig stille dagen nog (gemiddeld ${w.paden.slijt[T.tegelNummer(t.x, t.y)]} per dag, boven ${IN.blijftPad})`);
   for (let d = 0; d < 20; d++) T.tikPadenDag(D);
   assert.equal(T.isPaadje(D, t.x, t.y), false, 'na veertig niet meer');
   assert.notEqual(T.padVersie(D), versie, 'de grond wordt opnieuw getekend');
   for (let d = 0; d < 60; d++) T.tikPadenDag(D);
-  assert.equal(w.paden.slijt[t.x + t.y * breedte(w)], undefined, 'na honderd dagen telt het niet meer, en wordt het niet bewaard');
+  assert.equal(w.paden.slijt[T.tegelNummer(t.x, t.y)], undefined, 'na honderd dagen telt het niet meer, en wordt het niet bewaard');
 });
 
 test('op een veld slijt geen paadje, en een dier telt niet', () => {
@@ -148,11 +148,11 @@ test('op een veld slijt geen paadje, en een dier telt niet', () => {
   koe.pad = [{ x: t.x + 1, y: t.y }];
   T.beweegWezens(S, w, 10);
   assert.equal(koe.x, t.x + 1, 'de koe liep');
-  assert.equal(w.paden.vandaag[t.x + 1 + t.y * breedte(w)], undefined, 'een koe slijt geen paadje');
+  assert.equal(w.paden.vandaag[T.tegelNummer(t.x + 1, t.y)], undefined, 'een koe slijt geen paadje');
   zet(D.schout, t.x, t.y + 1);
   D.schout.pad = [{ x: t.x + 1, y: t.y + 1 }];
   T.beweegWezens(S, w, 10);
-  assert.equal(w.paden.vandaag[t.x + 1 + (t.y + 1) * breedte(w)], 1, 'een mens wel');
+  assert.equal(w.paden.vandaag[T.tegelNummer(t.x + 1, t.y + 1)], 1, 'een mens wel');
 });
 
 test('de spelregel "Paadjes": alleen van de deuren, of geen', (t) => {
@@ -163,7 +163,7 @@ test('de spelregel "Paadjes": alleen van de deuren, of geen', (t) => {
   const plek = losGras(D);
   T.zetOptie('paadjes', 'deuren');
   T.telStap(w, plek.x, plek.y);
-  assert.equal(w.paden.vandaag[plek.x + plek.y * breedte(w)], undefined, 'alleen van de deuren: lopen telt niet');
+  assert.equal(w.paden.vandaag[T.tegelNummer(plek.x, plek.y)], undefined, 'alleen van de deuren: lopen telt niet');
   assert.ok(T.aangelegdNet(D).some((v) => v === 2), 'maar de deuren hebben hun paadje');
   T.zetOptie('paadjes', 'uit');
   assert.ok(!T.aangelegdNet(D).some((v) => v === 2), 'geen: alleen de weg van de kaart');
@@ -281,7 +281,7 @@ test('bewaren en laden houdt wat er gesleten is', () => {
   const S2 = proef();
   assert.equal(T.herstelSpel(S2, T.bewaarSpel(S, { nu: 1790000000000 })).gelukt, true);
   const P2 = S2.dorp.wereld.paden;
-  assert.ok(P2.gesleten instanceof Set && P2.gesleten.has(t.x + t.y * breedte(w)));
+  assert.ok(P2.gesleten instanceof Set && P2.gesleten.has(T.tegelNummer(t.x, t.y)));
   assert.equal(T.isPaadje(S2.dorp, t.x, t.y), true);
   assert.deepEqual(P2.slijt, w.paden.slijt);
 });

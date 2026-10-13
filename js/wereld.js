@@ -264,9 +264,10 @@
   // zichtbaar zodra een van die kamers bekend is.
   function berekenBurenKamers(w) {
     const r = [];
-    for (let y = 0; y < w.h; y++) {
+    const vak = T.kaartVak(w);
+    for (let y = vak.y; y < vak.y + vak.h; y++) {
       const rij = [];
-      for (let x = 0; x < w.b; x++) {
+      for (let x = vak.x; x < vak.x + vak.b; x++) {
         const s = new Set();
         for (let dy = -1; dy <= 1; dy++) {
           for (let dx = -1; dx <= 1; dx++) {
@@ -281,7 +282,32 @@
     return r;
   }
 
-  T.tegel = (w, x, y) => (x >= 0 && y >= 0 && x < w.b && y < w.h ? w.tegels[y][x] : 'buiten');
+  // ── De kaart: één weg naar de tegels (B2a, vraag 117, stap 3; ontwerp/kaarten.md, "Het hele eiland") ──
+  // Wat een tegel is (een woord: 'buiten', 'muur', 'vloer' of 'deur'), welke grond eronder ligt, en wat de kaart
+  // beslaat, vraag en zet je alleen hier: niets anders leest w.tegels, w.grond, w.b of w.h zelf (test/tegels.test.cjs
+  // kijkt het na). Zo wordt de kaart in B2b op één plek stukken van het eiland.
+  T.opKaart = (w, x, y) => x >= 0 && y >= 0 && x < w.b && y < w.h;
+  T.tegel = (w, x, y) => (T.opKaart(w, x, y) ? w.tegels[y][x] : 'buiten');
+  // Buiten de kaart zet het niets.
+  T.zetTegel = function (w, x, y, soort) {
+    if (T.opKaart(w, x, y)) w.tegels[y][x] = soort;
+  };
+  // De grond op tegel (x, y): één ding per soort tegel ({ vel, id, naam }, js/kaart.js), of null (buiten de kaart, of
+  // een kaart zonder grond).
+  T.grondOp = (w, x, y) => (w && w.grond && T.opKaart(w, x, y) && w.grond[y][x]) || null;
+  // Het vak dat de hele kaart beslaat: { x, y, b, h }. Wat over de hele kaart gaat (een lijst per tegel, een lus over
+  // alle tegels), gaat over dit vak, met tegel (x, y) op plek (y - vak.y) * vak.b + (x - vak.x). In B2b houdt dit op,
+  // want het eiland is te groot voor één lijst: dan krijgt elk gebruik zijn eigen vak (om het dorp, binnen het bereik).
+  T.kaartVak = (w) => ({ x: 0, y: 0, b: w.b, h: w.h });
+  // Heeft deze kaart tegels, en grond? Een toets kan een kaart zonder maken (zoals die van het vee).
+  T.heeftTegels = (w) => !!(w && w.tegels && w.tegels.length);
+  T.heeftGrond = (w) => !!(w && w.grond && w.grond.length);
+  // Een tegel als één getal dat niet van de maat van de kaart afhangt (het eiland is kleiner dan 4096 tegels), voor wat
+  // per tegel bewaard wordt (het slijten van de paadjes, js/paden.js); en terug.
+  T.tegelNummer = (x, y) => y * 4096 + x;
+  T.tegelVanNummer = (k) => ({ x: k % 4096, y: Math.floor(k / 4096) });
+  // Welke kamers er om tegel (x, y) liggen (berekenBurenKamers, hierboven); buiten de kaart geen.
+  T.burenKamersOp = (w, x, y) => (T.opKaart(w, x, y) ? w.burenKamers[y][x] : []);
   T.deurOp = (w, x, y) => w.deuren.get(sleutelVan(x, y)) || null;
   T.kamerVan = (w, x, y) => w.kamers.find((k) => x >= k.x1 && x <= k.x2 && y >= k.y1 && y <= k.y2) || null;
   // Een voorwerp staat meestal op één tegel, maar de spiraaltrap beslaat er drie bij drie: een
@@ -374,11 +400,11 @@
   function eilandenVan(w) {
     const al = EILANDEN.get(w);
     if (al) return al;
-    const b = w.b;
-    const h = w.h;
+    const vak = T.kaartVak(w);
+    const { b, h } = vak;
     const op = new Int32Array(b * h).fill(-1);
     const kan = new Uint8Array(b * h);
-    for (let y = 0; y < h; y++) for (let x = 0; x < b; x++) kan[y * b + x] = ruim(w, x, y) ? 1 : 0;
+    for (let y = 0; y < h; y++) for (let x = 0; x < b; x++) kan[y * b + x] = ruim(w, vak.x + x, vak.y + y) ? 1 : 0;
     let n = 0;
     for (let i = 0; i < b * h; i++) {
       if (!kan[i] || op[i] >= 0) continue;
@@ -397,21 +423,23 @@
           // Schuin alleen als geen van de twee hoektegels vast is, zoals A* (js/pad.js).
           if (dx && dy && (!kan[y * b + nx] || !kan[ny * b + x])) continue;
           // en niet door een wand van de hoogte (js/hoogte.js; vraag 121, stap 2)
-          if (w.hoogte && !T.kanStappen(w, x, y, nx, ny)) continue;
+          if (w.hoogte && !T.kanStappen(w, vak.x + x, vak.y + y, vak.x + nx, vak.y + ny)) continue;
           op[k] = n;
           rij.push(k);
         }
       }
       n++;
     }
-    const e = { op, b, h };
+    const e = { op, vak };
     EILANDEN.set(w, e);
     return e;
   }
   // Het eiland van een tegel, of -1 (vast, of buiten de kaart).
   T.eilandOp = function (w, x, y) {
-    const e = eilandenVan(w);
-    return x >= 0 && y >= 0 && x < e.b && y < e.h ? e.op[y * e.b + x] : -1;
+    const { op, vak } = eilandenVan(w);
+    const i = x - vak.x;
+    const j = y - vak.y;
+    return i >= 0 && j >= 0 && i < vak.b && j < vak.h ? op[j * vak.b + i] : -1;
   };
 
   // Kan wie op `van` staat ooit bij `doel` komen, met de opties van T.zoekPad (js/pad.js: `tot`, `naast`)? Nee als geen
@@ -509,15 +537,16 @@
   function vastRaster(w) {
     let r = laatste && laatste.w === w ? laatste : RASTERS.get(w);
     if (!(r && r.voorwerpen === w.voorwerpen && r.aantal === w.voorwerpen.length && r.b === w.b && r.h === w.h)) {
-      const raster = new Uint8Array(w.b * w.h);
-      for (let y = 0; y < w.h; y++) {
-        for (let x = 0; x < w.b; x++) {
-          const t = w.tegels[y][x];
-          const v = t === 'muur' || t === 'buiten' ? null : T.voorwerpOp(w, x, y);
-          raster[y * w.b + x] = t === 'muur' || t === 'buiten' || (v && T.VOORWERPEN[v.soort].blokkeert) ? VAST : t === 'deur' ? DEUR : VRIJ;
+      const vak = T.kaartVak(w);
+      const raster = new Uint8Array(vak.b * vak.h);
+      for (let y = 0; y < vak.h; y++) {
+        for (let x = 0; x < vak.b; x++) {
+          const t = T.tegel(w, vak.x + x, vak.y + y);
+          const v = t === 'muur' || t === 'buiten' ? null : T.voorwerpOp(w, vak.x + x, vak.y + y);
+          raster[y * vak.b + x] = t === 'muur' || t === 'buiten' || (v && T.VOORWERPEN[v.soort].blokkeert) ? VAST : t === 'deur' ? DEUR : VRIJ;
         }
       }
-      r = { w, voorwerpen: w.voorwerpen, aantal: w.voorwerpen.length, b: w.b, h: w.h, raster };
+      r = { w, voorwerpen: w.voorwerpen, aantal: w.voorwerpen.length, b: w.b, h: w.h, vak, raster };
       RASTERS.set(w, r);
     }
     laatste = r;
@@ -528,11 +557,12 @@
   T.vastRaster = vastRaster;
   T.RASTER = { VRIJ, VAST, DEUR };
   function vastOp(w, x, y) {
-    if (!(x >= 0 && y >= 0 && x < w.b && y < w.h)) return VAST;
+    if (!T.opKaart(w, x, y)) return VAST;
     if ((x | 0) === x && (y | 0) === y) {
       const l = laatste;
-      const raster = l && l.w === w && l.voorwerpen === w.voorwerpen && l.aantal === w.voorwerpen.length && l.b === w.b && l.h === w.h ? l.raster : vastRaster(w);
-      return raster[y * w.b + x];
+      if (!(l && l.w === w && l.voorwerpen === w.voorwerpen && l.aantal === w.voorwerpen.length && l.b === w.b && l.h === w.h)) vastRaster(w);
+      const { vak, raster } = laatste;
+      return raster[(y - vak.y) * vak.b + (x - vak.x)];
     }
     // tussen twee tegels in: zoals vroeger
     const t = T.tegel(w, x, y);
@@ -587,7 +617,7 @@
   // kasseien. Op een pad wordt niet gebouwd (js/gebouwen.js, T.waaromPastHetNiet), en er komt geen erf.
   const PADEN = ['zandpad', 'kasseien'];
   T.opPad = function (w, x, y) {
-    const g = w && w.grond && w.grond[y] && w.grond[y][x];
+    const g = T.grondOp(w, x, y);
     return !!(g && PADEN.includes(g.naam));
   };
 
@@ -656,14 +686,14 @@
     const dy = naar.y - van.y;
     if (w.hoogte) ver += T.verderVanBoven(w, van, naar);
     if (dx * dx + dy * dy > ver * ver) return false;
-    return !w.tegels || T.zichtTussen(w, van, naar, open);
+    return !T.heeftTegels(w) || T.zichtTussen(w, van, naar, open);
   };
 
   T.isZichtbaar = function (w, x, y) {
     const t = T.tegel(w, x, y);
     if (t === 'buiten') return false;
     if (t === 'vloer') return w.bekend.has(T.kamerVan(w, x, y).id);
-    return w.burenKamers[y][x].some((id) => w.bekend.has(id));
+    return T.burenKamersOp(w, x, y).some((id) => w.bekend.has(id));
   };
 
   // Wie in een deuropening staat of een deur opendoet, kijkt in de kamers aan beide kanten.

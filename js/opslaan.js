@@ -47,7 +47,9 @@
     // 8 (12 okt): een boerderij met een wijngaard bestaat niet meer (vraag 155): de wijngaard hoort bij een wijnboerderij,
     // een eigen gebouw, en `g.veld` van een boerderij leest niets meer. Een bewaarde wijngaard (`w.wijngaarden`, en zijn
     // ranken) hoort bij een boerderij die geen wijn plukt.
-    versie: 8,
+    // 9 (13 okt): het slijten van de paadjes (`w.paden`, js/paden.js) telt per tegelnummer (T.tegelNummer, y * 4096 + x),
+    // niet meer per plek op een kaart van 100 breed (B2a: niets hangt nog aan de maat van de kaart).
+    versie: 9,
     eigenPlekken: 5, // naast de ene die vanzelf gaat (vraag 48 B)
     // Op de hoogste snelheid (30×) slaat het spel niet elke ochtend vanzelf op, maar om de zoveel dagen: een dag duurt
     // dan tien seconden, en het opslaan kost bij 100 mensen 25 à 50 ms, een hapering die je ziet (gemeten op 3 okt).

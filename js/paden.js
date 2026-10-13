@@ -38,9 +38,10 @@
   };
   const IN = () => T.PADEN_INSTELLINGEN;
 
-  const breedte = (w) => w.tegels[0].length;
-  const hoogte = (w) => w.tegels.length;
-  const binnen = (w, x, y) => x >= 0 && y >= 0 && x < breedte(w) && y < hoogte(w);
+  // Het net, de afstanden en de hoeken beslaan het vak van de kaart (T.kaartVak, js/wereld.js), met tegel (x, y) op plek
+  // (x - vak.x) + (y - vak.y) * vak.b; wat bewaard wordt (het slijten), gaat per tegel als getal (T.tegelNummer).
+  const binnen = (w, x, y) => T.opKaart(w, x, y);
+  const plekIn = (vak, x, y) => x - vak.x + (y - vak.y) * vak.b;
   const VIER = [[0, 1], [1, 0], [0, -1], [-1, 0]];
   // Van een tegel naar zijn vier hoeken: noord, oost, zuid, west, zoals T.sprites.grondHoeken ze geeft (en zoals HOEK in
   // tekenWeides, js/tekenen.js). Hoek (x, y) is de noordhoek van tegel (x, y).
@@ -69,21 +70,22 @@
   // Van een deur naar het dichtste stuk net, in vier richtingen (zo loopt een paadje recht en slaat het een hoek om,
   // zoals mensen het aanleggen). Geeft de tegels van de deur tot vlak voor het net, of null.
   function naarHetNet(w, net, start) {
-    const b = breedte(w);
-    const s = start.x + start.y * b;
+    const vak = T.kaartVak(w);
+    const b = vak.b;
+    const s = plekIn(vak, start.x, start.y);
     if (net[s]) return [];
     const van = new Map([[s, -1]]);
     let rij = [s];
     for (let stap = 0; stap < IN().deurZoekt && rij.length; stap++) {
       const volgende = [];
       for (const k of rij) {
-        const x = k % b;
-        const y = (k - x) / b;
+        const x = vak.x + (k % b);
+        const y = vak.y + (k - (k % b)) / b;
         for (const [dx, dy] of VIER) {
           const nx = x + dx;
           const ny = y + dy;
           if (!binnen(w, nx, ny)) continue;
-          const nk = nx + ny * b;
+          const nk = plekIn(vak, nx, ny);
           if (van.has(nk)) continue;
           if (net[nk]) {
             const pad = [];
@@ -102,19 +104,20 @@
 
   // Hoe ver elke tegel van de weg ligt, in stappen (één keer over de kaart), om de deuren op volgorde te leggen.
   function afstandTotDeWeg(w, net) {
-    const b = breedte(w);
-    const af = new Int32Array(b * hoogte(w)).fill(-1);
+    const vak = T.kaartVak(w);
+    const b = vak.b;
+    const af = new Int32Array(b * vak.h).fill(-1);
     let rij = [];
     for (let k = 0; k < net.length; k++) if (net[k]) { af[k] = 0; rij.push(k); }
     while (rij.length) {
       const volgende = [];
       for (const k of rij) {
-        const x = k % b;
-        const y = (k - x) / b;
+        const x = vak.x + (k % b);
+        const y = vak.y + (k - (k % b)) / b;
         for (const [dx, dy] of VIER) {
           const nx = x + dx;
           const ny = y + dy;
-          const nk = nx + ny * b;
+          const nk = plekIn(vak, nx, ny);
           if (!binnen(w, nx, ny) || af[nk] >= 0 || !magPad(w, nx, ny)) continue;
           af[nk] = af[k] + 1;
           volgende.push(nk);
@@ -129,17 +132,17 @@
   // eerst, zodat wie verder weg woont aansluit op het paadje van zijn buur in plaats van ernaast een eigen te leggen.
   function legNet(D) {
     const w = D.wereld;
-    const b = breedte(w);
-    const net = new Uint8Array(b * hoogte(w));
-    for (let y = 0; y < hoogte(w); y++) {
-      for (let x = 0; x < b; x++) if (T.opPad(w, x, y) && !T.veldOp(w, x, y)) net[x + y * b] = 1;
+    const vak = T.kaartVak(w);
+    const net = new Uint8Array(vak.b * vak.h);
+    for (let y = vak.y; y < vak.y + vak.h; y++) {
+      for (let x = vak.x; x < vak.x + vak.b; x++) if (T.opPad(w, x, y) && !T.veldOp(w, x, y)) net[plekIn(vak, x, y)] = 1;
     }
     if (IN().paadjes === 'uit' || !D.gebouwen) return net;
     const af = afstandTotDeWeg(w, net);
     const deuren = [];
     for (const g of D.gebouwen) {
       const d = T.deurVan(w, g);
-      if (d && binnen(w, d.x, d.y)) deuren.push({ d, af: af[d.x + d.y * b] < 0 ? Infinity : af[d.x + d.y * b] });
+      if (d && binnen(w, d.x, d.y)) deuren.push({ d, af: af[plekIn(vak, d.x, d.y)] < 0 ? Infinity : af[plekIn(vak, d.x, d.y)] });
     }
     deuren.sort((p, q) => p.af - q.af || p.d.y - q.d.y || p.d.x - q.d.x);
     for (const { d } of deuren) {
@@ -160,14 +163,14 @@
   };
 
   // Is dit een paadje van een deur (aangelegd, niet gesleten)? Daar komt geen stuk bos (js/bos.js).
-  T.isAangelegdPaadje = (D, x, y) => binnen(D.wereld, x, y) && T.aangelegdNet(D)[x + y * breedte(D.wereld)] === 2;
+  T.isAangelegdPaadje = (D, x, y) => binnen(D.wereld, x, y) && T.aangelegdNet(D)[plekIn(T.kaartVak(D.wereld), x, y)] === 2;
 
   // Is dit een paadje (aangelegd, of gesleten waar gelopen wordt)? De weg van de kaart telt niet: die is er al.
   T.isPaadje = function (D, x, y) {
     const w = D.wereld;
     if (!binnen(w, x, y)) return false;
     if (T.isAangelegdPaadje(D, x, y)) return true;
-    return IN().paadjes === 'lopen' && !!w.paden && w.paden.gesleten.has(x + y * breedte(w));
+    return IN().paadjes === 'lopen' && !!w.paden && w.paden.gesleten.has(T.tegelNummer(x, y));
   };
 
   // Loopt hier een spoor: een paadje, of gras dat slijt waar elke dag gelopen wordt (gemiddeld blijftPad stappen per dag of
@@ -176,7 +179,7 @@
   T.isSpoor = function (D, x, y) {
     const w = D.wereld;
     if (T.isPaadje(D, x, y)) return true;
-    return IN().paadjes === 'lopen' && !!w.paden && binnen(w, x, y) && (w.paden.slijt[x + y * breedte(w)] || 0) >= IN().blijftPad;
+    return IN().paadjes === 'lopen' && !!w.paden && binnen(w, x, y) && (w.paden.slijt[T.tegelNummer(x, y)] || 0) >= IN().blijftPad;
   };
 
   // ---------------------------------------------------------------------------------------------
@@ -186,18 +189,21 @@
   // Een mens zette een stap op deze tegel (js/anim.js, bij aankomst; een dier telt niet).
   T.telStap = function (w, x, y) {
     if (!w.paden || IN().paadjes !== 'lopen') return;
-    const k = x + y * breedte(w);
+    const k = T.tegelNummer(x, y);
     w.paden.vandaag[k] = (w.paden.vandaag[k] || 0) + 1;
   };
 
   // Mag hier een paadje slijten? Niet op een veld (daar maait en ploegt de boer, en het is al kale grond).
-  const magSlijten = (w, k) => !T.veldOp(w, k % breedte(w), Math.floor(k / breedte(w)));
+  const magSlijten = (w, k) => {
+    const t = T.tegelVanNummer(k);
+    return !T.veldOp(w, t.x, t.y);
+  };
 
   // Elke nacht (vanuit T.tikGebouwenDag, js/gebouwen.js): wat er vandaag gelopen werd, in het gemiddelde; welke tegels
   // nu paadje zijn; en de lantaarns.
   T.tikPadenDag = function (D) {
     const w = D.wereld;
-    if (!w || !w.tegels || !w.tegels.length) return; // een kaart zonder tegels (een toets van het vee): geen grond
+    if (!T.heeftTegels(w)) return; // een kaart zonder tegels (een toets van het vee): geen grond
     const P = padenVan(w);
     const a = 1 / IN().slijtDagen;
     const nieuw = {};
@@ -243,12 +249,14 @@
     const sleutel = T.padVersie(D);
     const al = HOEKEN.get(w);
     if (al && al.sleutel === sleutel) return al.zand;
-    const b = breedte(w);
-    const h = hoogte(w);
+    const vak = T.kaartVak(w);
+    const { b, h } = vak;
     const net = T.aangelegdNet(D);
     const gesleten = IN().paadjes === 'lopen' && w.paden ? w.paden.gesleten : null;
     const eigen = new Uint8Array(b * h);
-    for (let k = 0; k < net.length; k++) if (net[k] === 2 || (gesleten && gesleten.has(k))) eigen[k] = 1;
+    for (let k = 0; k < net.length; k++) {
+      if (net[k] === 2 || (gesleten && gesleten.has(T.tegelNummer(vak.x + (k % b), vak.y + (k - (k % b)) / b)))) eigen[k] = 1;
+    }
     const zand = new Uint8Array((b + 1) * (h + 1));
     for (let y = 0; y <= h; y++) {
       for (let x = 0; x <= b; x++) {
@@ -271,10 +279,11 @@
   // verandert. `oud` zijn de hoeken zoals de kaart ze legde (T.sprites.grondHoeken).
   T.hoekenMetPaden = function (D, zand, x, y, oud) {
     if (!oud) return null;
-    const b = breedte(D.wereld) + 1;
+    const vak = T.kaartVak(D.wereld);
+    const b = vak.b + 1;
     let anders = false;
     const nieuw = oud.map((soort, i) => {
-      if (soort !== 'gras' || !zand[x + HOEK[i][0] + (y + HOEK[i][1]) * b]) return soort;
+      if (soort !== 'gras' || !zand[x - vak.x + HOEK[i][0] + (y - vak.y + HOEK[i][1]) * b]) return soort;
       anders = true;
       return 'zandpad';
     });
@@ -291,11 +300,11 @@
   const NAAST = [[1, 0], [0, 1], [-1, 0], [0, -1], [1, 1], [-1, 1], [1, -1], [-1, -1]];
   function plekNaast(D, t, net, deuren) {
     const w = D.wereld;
-    const b = breedte(w);
+    const vak = T.kaartVak(w);
     for (const [dx, dy] of NAAST) {
       const x = t.x + dx;
       const y = t.y + dy;
-      if (!magPad(w, x, y) || net[x + y * b] || deuren.has(x + y * b) || T.meegroeiGrondOp(D, x, y)) continue;
+      if (!magPad(w, x, y) || net[plekIn(vak, x, y)] || deuren.has(plekIn(vak, x, y)) || T.meegroeiGrondOp(D, x, y)) continue;
       if (T.opHetPlein(w, x, y)) continue; // het plein blijft open
       return { x, y };
     }
@@ -314,12 +323,13 @@
   // net (drie of vier kanten pad, waarvan minstens één een paadje van een deur) waar nog geen licht in de buurt is.
   T.zetLantaarns = function (D) {
     const w = D.wereld;
-    if (!D.gebouwen || !w.tegels || !T.opzoekTegelNaam('lantaarn')) return;
-    const b = breedte(w);
+    if (!D.gebouwen || !T.heeftTegels(w) || !T.opzoekTegelNaam('lantaarn')) return;
+    const vak = T.kaartVak(w);
+    const b = vak.b;
     const deuren = new Set();
     for (const g of D.gebouwen) {
       const d = T.deurVan(w, g);
-      if (d) deuren.add(d.x + d.y * b);
+      if (d) deuren.add(plekIn(vak, d.x, d.y));
     }
     const net = T.aangelegdNet(D);
     const lichten = w.voorwerpen.filter((v) => v.soort === 'lantaarn').map((v) => ({ x: v.x, y: v.y }));
@@ -336,16 +346,16 @@
     const ver = IN().lantaarnAfstand;
     for (let k = 0; k < net.length; k++) {
       if (!net[k]) continue;
-      const x = k % b;
-      const y = (k - x) / b;
+      const x = vak.x + (k % b);
+      const y = vak.y + (k - (k % b)) / b;
       let kanten = 0;
       let paadje = net[k] === 2;
       for (const [dx, dy] of VIER) {
         const nx = x + dx;
         const ny = y + dy;
-        if (!binnen(w, nx, ny) || !net[nx + ny * b]) continue;
+        if (!binnen(w, nx, ny) || !net[plekIn(vak, nx, ny)]) continue;
         kanten++;
-        if (net[nx + ny * b] === 2) paadje = true;
+        if (net[plekIn(vak, nx, ny)] === 2) paadje = true;
       }
       if (kanten < 3 || !paadje || lichten.some((l) => T.afstand(l, { x, y }) < ver)) continue;
       const plek = plekNaast(D, { x, y }, net, deuren);
