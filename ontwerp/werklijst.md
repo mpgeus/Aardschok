@@ -19,14 +19,19 @@ snoeien is af** (A, 12 okt, stap 1 tot 6): de verzoeken, de ondernemers, de erve
 het enige begin, een boer is de man op een boerderij, alleen de kolonist speelt nog in de speeltest; het plein heeft
 een vaste marktplek (de spelregel "De markt" is weg), en de maker legt alleen nog het lege land: alles bouwt de speler.
 De toetsen en het gereedschap spelen op het proefdorp (`T.proefdorp`, `Spel.debug.proefdorp`). **B1 is af** (12 okt): de
-wijnboerderij is een eigen gebouw, met de wijngaard als veld ernaast. **B2 is bezig** (13 okt): het plan staat
-(`kaarten.md`, "Het hele eiland"), B2a, B2b (de kaart in stukken) en B2d zijn af, en het optimaliseren erna (13 okt);
-B2c (de mist) is het volgende. Daarna de afwisseling (B3), en ronde 3 na C.
+wijnboerderij is een eigen gebouw, met de wijngaard als veld ernaast. **B2 is af** (13 okt, onder "Af"), op Marcels blik
+na: het hele eiland in stukken, opslaan wat veranderde, het optimaliseren, en de mist (B2c).
 
-**Het optimaliseren is af** (13 okt, onder "Af"); B2c (de mist) is het volgende. Daarna, of tussendoor: de toets voor
-dubbele namen in `Spel` (`opmerkingen.md`).
+**Het volgende is B3, de afwisseling**: eerst een plan met Marcel. Daarna, of tussendoor: de toets voor dubbele namen in
+`Spel` (`opmerkingen.md`).
 
 **Wacht op Marcel:**
+- **De mist bekijken** (B2c, 13 okt; `spel.md`, "Zo werkt de mist nu"): Nieuw spel, en zoom uit (het wiel, of `Tab`):
+  zwart wat je niet kent, grijs (donkerder en ontkleurd) de kring van 50 tegels die je bij het begin kent, en helder
+  rond je mensen. Loop met de schout het zwart in. Is het grijs goed zo? Het zijn getallen in de werkbank ("The fog":
+  hoeveel kleur eruit, hoeveel donkerder, hoe zacht de rand). Twee dingen die ik erbij deed: **het plein kijkt ook**,
+  zoals een gebouw (anders werd je eigen plein grijs als er niemand stond), en **zonder videokaart** is het grijs één
+  laag, grijzer in plaats van ontkleurd (twee lagen kostten daar de helft van de beelden per seconde).
 - **Meten op je eigen pc** (13 okt, Marcel: "kan ik straks wel even doen"): Nieuw spel, loop met de schout het bos in
   ten zuiden van het kamp, blijf staan en druk `F2`: hoeveel beelden per seconde, en wat zegt de meter over tekenen?
 - **Het hele eiland bekijken** (B2b): Nieuw spel, en loop met de schout het land uit, naar de kust (met `F2` de meter):
@@ -65,7 +70,7 @@ dubbele namen in `Spel` (`opmerkingen.md`).
 - Het geluid (vraag 145, 2): de sleutel `FREESOUND_KEY` in de omgeving en de domeinen van Freesound erbij; dan maakt een
   sessie het.
 
-**Daarna, in deze volgorde:** A, B1, B2, B3, C, D, E, F; G loopt ernaast op het tijdpad van `commercieel.md`.
+**Daarna, in deze volgorde:** B3, C, D, E, F (ronde 3 van A na C); G loopt ernaast op het tijdpad van `commercieel.md`.
 
 ## A. Opruimen (vraag 153, stap 3)
 
@@ -101,24 +106,6 @@ Af op 12 okt (Marcel: "ik wil tóch een apart wijnboerderij gebouw", en "A gehuc
 met een gezin, vanaf het gehucht, 18 hout en 8 goud, de heer wil 10 wijn; de wijngaard is een veld bij een
 wijnboerderij, de akker bij een boerderij; de raad zegt het als de wijn het jaar niet haalt. Hoe het werkt: `spel.md`,
 "Zo werkt het lege begin nu", en `code.md` bij `js/boerderij.js` en `js/wijngaard.js`.
-
-## B2. Het hele eiland (vraag 117, stap 3)
-
-Marcel, 11 okt: "de wereld moet 1 geheel worden het vlakke van 100x100 is niet hoe het blijft", vóór C, want C meet
-afstanden. Het plan (13 okt; Marcel: "A ja, B1, C2"), met het hoe en wat er nu is, in `kaarten.md`, "Het hele eiland":
-- **B2a, één weg naar de tegels: af** (13 okt): niets leest de rechthoek van 100 bij 100 nog zelf, en het spel
-  veranderde niet (de speeltest en de schermen gelijk); versie 9 van het bewaarde spel.
-- **B2b, de kaart in stukken: af** (13 okt; Marcel: "Het eiland, overal", "Overal", "Die van het eiland", "Al je
-  mensen", "Eerst meten", "Alles per stuk"): het hele eiland in stukken van 64 bij 64, het land overal van het eiland,
-  de rand weg; het land gaat open waar je mensen komen, en alles neemt alleen het nieuwe stuk erbij, vooruit gemaakt.
-  Hoe en wat het meten gaf: `kaarten.md`, "Het hele eiland". Nog voor later: de hoogte per stuk (de spelregel Hoogte,
-  standaard uit).
-- **B2c, de mist:** **Bezig in sessie `ccr-1d9fab2a-huux51`** (13 okt): het plan, voor Marcel. Zwart, grijs (het land zoals het nu is, zonder wie er loopt), en helder waar je mensen kijken; bij
-  het begin ken je een kring van zo'n 50 tegels.
-- **B2d, opslaan wat veranderde: af** (met B2b; Marcel: "Meteen mee"): versie 10, het bewaarde spel 15 kB (was 473 kB).
-
-Klaar als: de kolonist op vijf eilanden een jaar zonder fouten, de schout van het kamp naar de kust zonder haperen, en
-een kleiner bewaard spel. De lange tochten (HPA\*) en wat ver weg is als getallen gaan naar F.
 
 ## B3. Afwisseling (vraag 154)
 
@@ -166,6 +153,12 @@ het graan vraagt", de schandpaal, de heervaart en de twee bazen.
   schrijven voor de nieuwe richting, als B en C er staan.
 
 ## Af (sinds 11 okt)
+
+- B2, het hele eiland (vraag 117, stap 3; 13 okt, Marcel: "A ja, B1, C2"; alles in `kaarten.md`, "Het hele eiland"): één
+  weg naar de tegels (B2a), het eiland in stukken van 64 bij 64 die opengaan waar je mensen komen (B2b), opslaan wat
+  veranderde (B2d, 15 kB, was 473), en de mist (B2c; "A2, B1, C ok"). De kolonist speelt de eilanden 1 tot 5 het jaar
+  uit zonder fouten. Nog voor later: de hoogte per stuk (de spelregel Hoogte, standaard uit); de lange tochten (HPA\*) en
+  wat ver weg is als getallen gaan naar F.
 
 - Eerst optimaliseren (13 okt, Marcel: "volgorde 1 tot 4 is goed", "2 ja", "3 optie a"; ook zonder videokaart: "Het
   liefste wel"). De meetlat: `npm run stukmeting` geeft ook de echte tijd per beeld (zonder videokaart schildert de
