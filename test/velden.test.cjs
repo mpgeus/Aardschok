@@ -181,14 +181,15 @@ test('T.wegNaarWeide: de weg naar de dichtstbijzijnde vrije tegel, of null als h
   const { S, w } = r;
   const koe = T.veeVan(S.dorp).find((e) => e.dier === 'koe');
   assert.equal(T.wegNaarWeide(w, koe), null, 'het staat al op zijn weide');
-  // Een strook bij dezelfde boerderij, met niets tussen hem en de weide: de weg ernaartoe is recht.
+  // Een strook bij dezelfde boerderij.
   const strook = strookBij(r, r.boerderijen[0]);
   T.zetOpWeide(koe, strook);
   const weg = T.wegNaarWeide(w, koe);
   assert.ok(weg && weg.length, 'een weg erheen');
   const eind = weg[weg.length - 1];
   assert.ok(binnen({ tx: eind.x, ty: eind.y }, strook), `eindigt op ${eind.x},${eind.y}`);
-  // de dichtstbijzijnde: zo ver als de kortste afstand tot de strook
-  const afstanden = T.akkerTegels(strook).map((t) => T.afstand({ x: koe.tx, y: koe.ty }, t));
-  assert.equal(weg.length, Math.min(...afstanden));
+  // de dichtstbijzijnde: zo ver als de kortste weg naar een tegel van de strook (tussen de koe en de strook kan de
+  // boerderij staan; B2b: op het land van nu ligt de strook schuin achter de schuur)
+  const wegen = T.akkerTegels(strook).map((t) => T.zoekRoute(w, { x: koe.tx, y: koe.ty }, t, {})).filter(Boolean);
+  assert.equal(weg.length, Math.min(...wegen.map((p) => p.length)));
 });
