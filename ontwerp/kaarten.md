@@ -167,6 +167,9 @@ nummers passen op het hele eiland, en `T.eilandStuk` maakt elk stuk los (64 bij 
    58 ms. Dat hapert: op 30× ongeveer elke seconde een zesde seconde stil, op 1× elke halve minuut. Waar het in zit, alle
    drie: het stuk zelf, het raster over de hele rechthoek (ook geheugen: een veld van het lopen is twee bytes per tegel
    van die rechthoek), en het tekenen.
+   **Besloten** (Marcel, 13 okt: **"Alles per stuk"**): het raster van het lopen, het tekenen en het laden van de plaatjes
+   werken alleen het nieuwe stuk bij, en het stuk wordt vooruit gemaakt voordat iemand er is. Geen worker; daarna
+   opnieuw meten, en pas een worker als het stuk zelf dan nog hapert.
    **Het ontwerp van stap 2 tot 6** (Claude, 13 okt; zo kan een volgende sessie verder):
    - *Wat in S staat* (bewaard): wat veranderde, per tegelnummer (`T.tegelNummer`): `w.tegelsAnders` (Map naar het woord),
      `w.grondAnders` (Map naar de grondtegel; alleen de maker verandert de grond, het spel nooit), `w.gerooid` (Set: een
