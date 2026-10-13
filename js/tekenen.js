@@ -109,6 +109,7 @@
   // bosrand hieronder telt zelf zoveel ringen mee als hij diep is.
   function tegelsIn(w, r, marge, rand = MARGE) {
     const m = marge || 0;
+    const kaartvak = T.kaartVak(w);
     const hoeken = [
       [r.x0 - rand.links, r.y0 - rand.boven],
       [r.x1 + rand.rechts, r.y0 - rand.boven],
@@ -127,10 +128,10 @@
       y1 = Math.max(y1, t.y);
     }
     return {
-      x0: Math.max(-m, Math.floor(x0)),
-      y0: Math.max(-m, Math.floor(y0)),
-      x1: Math.min(w.b - 1 + m, Math.ceil(x1)),
-      y1: Math.min(w.h - 1 + m, Math.ceil(y1)),
+      x0: Math.max(kaartvak.x - m, Math.floor(x0)),
+      y0: Math.max(kaartvak.y - m, Math.floor(y0)),
+      x1: Math.min(kaartvak.x + kaartvak.b - 1 + m, Math.ceil(x1)),
+      y1: Math.min(kaartvak.y + kaartvak.h - 1 + m, Math.ceil(y1)),
     };
   }
   const inVak = (v, x, y) => x >= v.x0 && x <= v.x1 && y >= v.y0 && y <= v.y1;
@@ -201,13 +202,17 @@
   function tekenPlatIn(c, S, vak) {
     const w = S.wereld;
     const paden = zandVan(S);
-    const bv = paden ? w.tegels[0].length + 1 : 0; // de hoekpunten, zoals T.zandHoeken ze legt
-    const opPaadje = (x, y) => paden && (paden.zand[y * bv + x] || paden.zand[y * bv + x + 1] || paden.zand[(y + 1) * bv + x] || paden.zand[(y + 1) * bv + x + 1]);
+    const kaartvak = T.kaartVak(w);
+    const bv = paden ? kaartvak.b + 1 : 0; // de hoekpunten, zoals T.zandHoeken ze legt
+    const opPaadje = (x, y) => {
+      const k = (y - kaartvak.y) * bv + x - kaartvak.x;
+      return paden && (paden.zand[k] || paden.zand[k + 1] || paden.zand[k + bv] || paden.zand[k + bv + 1]);
+    };
     const lijst = platVan(w).lijst.filter((v) => inVak(vak, v.x, v.y) && vak.binnen(v.x, v.y) && !opPaadje(v.x, v.y));
     lijst.sort((a, b) => a.x + a.y - (b.x + b.y) || a.y - b.y);
     for (const v of lijst) {
       const p = opGrond(v.x, v.y);
-      const dof = randDof(w, v.x, v.y);
+      const dof = randDof(w, v.x, v.y, kaartvak);
       const stuk = metSprites() && T.sprites.buitenAan && T.sprites.buitenVan(v, 0);
       if (!stuk || dof <= 0.02) continue;
       if (dof < 1) c.globalAlpha = dof;
@@ -251,8 +256,9 @@
     let hoog = 0;
     let laag = 0;
     const d = BOSRAND_DIEP + 1;
-    for (let y = -d; y <= w.h + d; y++) {
-      for (let x = -d; x <= w.b + d; x++) {
+    const kaartvak = T.kaartVak(w);
+    for (let y = kaartvak.y - d; y <= kaartvak.y + kaartvak.h + d; y++) {
+      for (let x = kaartvak.x - d; x <= kaartvak.x + kaartvak.b + d; x++) {
         const h = T.hoekHoogte(w, x, y, 0);
         hoog = Math.max(hoog, h);
         laag = Math.min(laag, h);
@@ -389,7 +395,7 @@
     const lijst = [];
     for (let y = vak.y0; y <= vak.y1; y++) {
       for (let x = vak.x0; x <= vak.x1; x++) {
-        if (x >= 0 && y >= 0 && x < w.b && y < w.h) continue;
+        if (T.opKaart(w, x, y)) continue;
         const v = bosrandOp(w, x, y);
         if (v && vak.binnen(x, y)) lijst.push(v);
       }
@@ -400,10 +406,11 @@
   // Ligt deze boom van de bosrand achter alles op de kaart? Ten noorden of westen ervan wel, ten zuiden of oosten
   // niet; in een hoek links of rechts in beeld naar de diepte van de hoek van de kaart ernaast.
   function bosAchter(w, v) {
-    const noordWest = v.x < 0 || v.y < 0;
-    const zuidOost = v.x >= w.b || v.y >= w.h;
+    const kaartvak = T.kaartVak(w);
+    const noordWest = v.x < kaartvak.x || v.y < kaartvak.y;
+    const zuidOost = v.x >= kaartvak.x + kaartvak.b || v.y >= kaartvak.y + kaartvak.h;
     if (noordWest !== zuidOost) return noordWest;
-    return v.x + v.y < (v.x >= w.b ? w.b - 1 : w.h - 1);
+    return v.x + v.y < kaartvak.x + kaartvak.y + (v.x >= kaartvak.x + kaartvak.b ? kaartvak.b - 1 : kaartvak.h - 1);
   }
 
   // Eén boom van de bosrand in een buffer: zoals tekenBosrandBoom, zonder wind en zonder doorkijk.
@@ -495,7 +502,7 @@
         for (let x = vak.x0; x <= vak.x1; x++) {
           if (T.tegel(w, x, y) !== 'muur' || !T.isZichtbaar(w, x, y)) continue;
           const laag = isVoorrand(open, x, y);
-          const helder = w.burenKamers[y][x].some(inBeeld) ? 1 : GEDIMD;
+          const helder = T.burenKamersOp(w, x, y).some(inBeeld) ? 1 : GEDIMD;
           lijst.push({ d: x + y, l: 0, punt: { x, y }, f: () => tekenMuur(ctx, w, x, y, laag, helder) });
         }
       }
@@ -503,7 +510,7 @@
     for (const deur of w.deuren.values()) {
       if (!inVak(vak, deur.x, deur.y) || !T.isZichtbaar(w, deur.x, deur.y)) continue;
       const laag = isVoorrand(open, deur.x, deur.y);
-      const helder = w.burenKamers[deur.y][deur.x].some(inBeeld) ? 1 : GEDIMD;
+      const helder = T.burenKamersOp(w, deur.x, deur.y).some(inBeeld) ? 1 : GEDIMD;
       lijst.push({ d: deur.x + deur.y, l: 1, punt: { x: deur.x, y: deur.y }, f: () => tekenDeur(ctx, deur, laag, helder) });
     }
     const zichtbaar = [];
@@ -569,7 +576,7 @@
       const randVak = tegelsIn(w, zicht, BOSRAND_DIEP);
       for (let y = randVak.y0; y <= randVak.y1; y++) {
         for (let x = randVak.x0; x <= randVak.x1; x++) {
-          if (x >= 0 && y >= 0 && x < w.b && y < w.h) continue; // dat hoort al bij de kaart zelf
+          if (T.opKaart(w, x, y)) continue; // dat hoort al bij de kaart zelf
           const v = bosrandOp(w, x, y);
           if (!v) continue;
           zichtbaar.push(v);
@@ -645,10 +652,11 @@
   function heuvelsErvoor(ctx, S, vak, lijst, g) {
     const w = S.wereld;
     if (!w.hoogte) return;
+    const kaartvak = T.kaartVak(w);
     let staat = null; // de tegels waar iets op staat dat getekend wordt
     let kijkgaten = null; // wezen → het item van de voorste tegel die hem afdekt
-    for (let y = Math.max(0, vak.y0); y <= Math.min(w.h - 1, vak.y1); y++) {
-      for (let x = Math.max(0, vak.x0); x <= Math.min(w.b - 1, vak.x1); x++) {
+    for (let y = Math.max(kaartvak.y, vak.y0); y <= Math.min(kaartvak.y + kaartvak.h - 1, vak.y1); y++) {
+      for (let x = Math.max(kaartvak.x, vak.x0); x <= Math.min(kaartvak.x + kaartvak.b - 1, vak.x1); x++) {
         if (!T.dektAf(w, x, y)) continue;
         if (!staat) {
           staat = new Set();
@@ -1148,7 +1156,7 @@
             ctx.fill();
             continue;
           }
-          const g = w.grond && w.grond[y] && w.grond[y][x];
+          const g = T.grondOp(w, x, y);
           const kaart = g && T.sprites.grondHoeken(g.vel, g.id);
           // Met de paadjes erin (js/paden.js), zoals de grond eronder getekend is.
           const oud = (paden && kaart && T.hoekenMetPaden(paden.D, paden.zand, x, y, kaart)) || kaart;
@@ -1283,25 +1291,27 @@
   //
   // De kromme is kwadratisch: dichtbij de rand gaat het snel naar zwart, en naar het erf toe loopt
   // hij zachtjes vol. Zo valt de overgang naar de echte achtergrond nergens op.
-  function randDof(w, x, y) {
+  function randDof(w, x, y, kaartvak = T.kaartVak(w)) {
     const ringen = w.doof || 0;
     if (!w.buiten || !ringen) return 1;
-    if (Math.min(x, y, w.b - 1 - x, w.h - 1 - y) >= ringen) return 1;
+    const lx = x - kaartvak.x; // vanaf de hoek van de kaart, zoals randBos
+    const ly = y - kaartvak.y;
+    if (Math.min(lx, ly, kaartvak.b - 1 - lx, kaartvak.h - 1 - ly) >= ringen) return 1;
     // Alleen naar een kant waar bos staat (Marcel, 4 okt: "Alleen aan de kant van het bos"): daar loopt de kaart over in
     // het donkere bos erbuiten. Aan een open kant loopt het land door (tekenBuitenGrond), en vervaagt er niets.
     const rb = randBos(w);
-    const cx = Math.max(0, Math.min(w.b - 1, x));
-    const cy = Math.max(0, Math.min(w.h - 1, y));
+    const cx = Math.max(0, Math.min(kaartvak.b - 1, lx));
+    const cy = Math.max(0, Math.min(kaartvak.h - 1, ly));
     let dof = 1;
     const vervaag = (d, bos) => {
       if (d >= ringen || bos <= 0) return;
       const t = (d + 0.5) / ringen;
       dof = Math.min(dof, 1 - (1 - Math.max(0.02, t * t)) * bos);
     };
-    vervaag(y, rb.noord[cx]);
-    vervaag(x, rb.west[cy]);
-    vervaag(w.h - 1 - y, rb.zuid[cx]);
-    vervaag(w.b - 1 - x, rb.oost[cy]);
+    vervaag(ly, rb.noord[cx]);
+    vervaag(lx, rb.west[cy]);
+    vervaag(kaartvak.h - 1 - ly, rb.zuid[cx]);
+    vervaag(kaartvak.b - 1 - lx, rb.oost[cy]);
     return dof;
   }
 
@@ -1314,10 +1324,11 @@
   function randBos(w) {
     let rb = RAND_BOS.get(w);
     if (rb) return rb;
-    const b = w.b;
-    const h = w.h;
+    const kaartvak = T.kaartVak(w);
+    const b = kaartvak.b;
+    const h = kaartvak.h;
     const boom = new Uint8Array(b * h);
-    for (const v of w.voorwerpen || []) if (T.isBosBoom(v.soort) && v.x >= 0 && v.y >= 0 && v.x < b && v.y < h) boom[v.y * b + v.x] = 1;
+    for (const v of w.voorwerpen || []) if (T.isBosBoom(v.soort) && T.opKaart(w, v.x, v.y)) boom[(v.y - kaartvak.y) * b + v.x - kaartvak.x] = 1;
     const deel = (x0, y0, x1, y1) => {
       let n = 0;
       let t = 0;
@@ -1346,15 +1357,17 @@
     return rb;
   }
   // Hoeveel bos er buiten de kaart staat op (x, y): dat van de kant (of in een hoek de twee kanten) waar hij ligt.
-  function bosBuiten(w, x, y) {
+  function bosBuiten(w, x, y, kaartvak = T.kaartVak(w)) {
     const rb = randBos(w);
-    const cx = Math.max(0, Math.min(w.b - 1, x));
-    const cy = Math.max(0, Math.min(w.h - 1, y));
+    const lx = x - kaartvak.x; // randBos telt vanaf de hoek van de kaart
+    const ly = y - kaartvak.y;
+    const cx = Math.max(0, Math.min(kaartvak.b - 1, lx));
+    const cy = Math.max(0, Math.min(kaartvak.h - 1, ly));
     let f = 0;
-    if (y < 0) f = Math.max(f, rb.noord[cx]);
-    if (y >= w.h) f = Math.max(f, rb.zuid[cx]);
-    if (x < 0) f = Math.max(f, rb.west[cy]);
-    if (x >= w.b) f = Math.max(f, rb.oost[cy]);
+    if (ly < 0) f = Math.max(f, rb.noord[cx]);
+    if (ly >= kaartvak.h) f = Math.max(f, rb.zuid[cx]);
+    if (lx < 0) f = Math.max(f, rb.west[cy]);
+    if (lx >= kaartvak.b) f = Math.max(f, rb.oost[cy]);
     return f;
   }
 
@@ -1366,26 +1379,28 @@
   // js/maker.js), ook onder het bos.
   const BUITENGROND_DIEP = 10; // zoveel ringen ver
   const BUITENGROND_VOL = 4; // tot hier ligt elke tegel er
-  function randHoek(w, vx, vy) {
+  function randHoek(w, vx, vy, kaartvak = T.kaartVak(w)) {
     const eiland = w.eiland && T.randVanHetEiland(w).hoek(vx, vy);
     if (eiland) return eiland;
-    return T.sprites.grondHoekOp(w, Math.max(0, Math.min(w.b, vx)), Math.max(0, Math.min(w.h, vy))) || 'gras';
+    return T.sprites.grondHoekOp(w, Math.max(kaartvak.x, Math.min(kaartvak.x + kaartvak.b, vx)), Math.max(kaartvak.y, Math.min(kaartvak.y + kaartvak.h, vy))) || 'gras';
   }
   function tekenBuitenGrond(c, S, r) {
     const w = S.wereld;
-    if (!metSprites() || !w.grond) return;
-    const vel = (w.grond[0] && w.grond[0][0] && w.grond[0][0].vel) || 'rand';
+    if (!metSprites() || !T.heeftGrond(w)) return;
+    const kaartvak = T.kaartVak(w);
+    const eerste = T.grondOp(w, kaartvak.x, kaartvak.y);
+    const vel = (eerste && eerste.vel) || 'rand';
     const zaad = bosrandZaad(w) + 7;
     const sneeuw = sneeuwLaag(S);
     const vak = tegelsVoorStuk(w, r, GRONDRAND, BUITENGROND_DIEP);
     for (let y = vak.y0; y <= vak.y1; y++) {
       for (let x = vak.x0; x <= vak.x1; x++) {
-        if ((x >= 0 && y >= 0 && x < w.b && y < w.h) || !vak.binnen(x, y)) continue;
-        const r = bosrandRing(w, x, y);
+        if (T.opKaart(w, x, y) || !vak.binnen(x, y)) continue;
+        const r = bosrandRing(w, x, y, kaartvak);
         if (r > BUITENGROND_DIEP) continue;
         const dicht = r <= BUITENGROND_VOL ? 1 : 1 - (r - BUITENGROND_VOL) / (BUITENGROND_DIEP - BUITENGROND_VOL + 1);
-        if (hasj(x, y, zaad) >= dicht * (1 - (w.eiland ? 0 : bosBuiten(w, x, y)))) continue;
-        const hoeken = [randHoek(w, x, y), randHoek(w, x + 1, y), randHoek(w, x + 1, y + 1), randHoek(w, x, y + 1)];
+        if (hasj(x, y, zaad) >= dicht * (1 - (w.eiland ? 0 : bosBuiten(w, x, y, kaartvak)))) continue;
+        const hoeken = [randHoek(w, x, y, kaartvak), randHoek(w, x + 1, y, kaartvak), randHoek(w, x + 1, y + 1, kaartvak), randHoek(w, x, y + 1, kaartvak)];
         // op het eiland kunnen er drie soorten in een tegel liggen (gras, heide en strand): dan zoals op de kaart
         const deel = T.sprites.grondMetHoeken(vel, w.eiland ? T.grondTegelHoeken(hoeken) : hoeken, x, y) || T.sprites.grasTegel(x, y);
         if (!deel) continue;
@@ -1405,6 +1420,7 @@
     const w = S.wereld;
     const sp = metSprites();
     const buiten = !!w.buiten;
+    const kaartvak = T.kaartVak(w);
     const paden = buiten ? zandVan(S) : null;
     const droog = paden && paden.D.weer && paden.D.weer.beekDroog ? paden.D : null;
     const hoog = T.heeftHoogte(w);
@@ -1417,7 +1433,7 @@
         // plaatje van de boom laat het gras eromheen zien.
         if (t === 'buiten' || (!buiten && t !== 'vloer' && t !== 'deur') || !T.isZichtbaar(w, x, y)) continue;
         const p = opGrond(x, y);
-        const g = buiten && w.grond && w.grond[y] ? w.grond[y][x] : null;
+        const g = buiten ? T.grondOp(w, x, y) : null;
         let hex;
         let helder;
         if (buiten) {
@@ -1430,7 +1446,7 @@
           helder = inBeeld(k.id) ? 1 : GEDIMD;
         } else {
           hex = '#5b4c3c';
-          helder = w.burenKamers[y][x].some(inBeeld) ? 1 : GEDIMD;
+          helder = T.burenKamersOp(w, x, y).some(inBeeld) ? 1 : GEDIMD;
         }
         // De tegels zijn al klaargeknipt (js/sprites.js snijdt de vloerlappen bij het laden, en
         // de grond van buiten komt per tegel uit de stempel van vier bij vier), dus hier is
@@ -1438,7 +1454,7 @@
         // Naar de rand van de kaart toe wordt het donker. Dat gaat met doorzichtigheid en niet
         // met een filter: een filter per tegel is in een browser duur, en hieronder ligt toch
         // het donker van de achtergrond.
-        const dof = buiten ? randDof(w, x, y) : 1;
+        const dof = buiten ? randDof(w, x, y, kaartvak) : 1;
         if (dof <= 0) continue;
         if (dof < 1) ctx.globalAlpha = dof;
         // Een paadje (js/paden.js) maakt de hoeken die gras waren zand, met de tegel uit hetzelfde vel die die hoeken heeft.
@@ -1549,16 +1565,17 @@
   function lichtKaartVan(w) {
     const hg = w.hoogte;
     const bestaand = lichtKaarten.get(hg);
-    if (bestaand && bestaand.versie === (hg.versie || 0)) return bestaand.canvas;
+    if (bestaand && bestaand.versie === (hg.versie || 0)) return bestaand;
     const R = LICHT_RAND;
+    const kaartvak = T.kaartVak(w);
     const c = document.createElement('canvas');
-    c.width = w.b + 1 + 2 * R;
-    c.height = w.h + 1 + 2 * R;
+    c.width = kaartvak.b + 1 + 2 * R;
+    c.height = kaartvak.h + 1 + 2 * R;
     const k = c.getContext('2d');
     const beeld = k.createImageData(c.width, c.height);
     for (let py = 0; py < c.height; py++) {
       for (let px = 0; px < c.width; px++) {
-        const f = T.lichtOpHoekpunt(w, px - R, py - R);
+        const f = T.lichtOpHoekpunt(w, px - R + kaartvak.x, py - R + kaartvak.y);
         const o = (py * c.width + px) * 4;
         if (f < 1) {
           beeld.data[o] = 20;
@@ -1574,8 +1591,9 @@
       }
     }
     k.putImageData(beeld, 0, 0);
-    lichtKaarten.set(hg, { versie: hg.versie || 0, canvas: c });
-    return c;
+    const uit = { versie: hg.versie || 0, canvas: c, kaartvak };
+    lichtKaarten.set(hg, uit);
+    return uit;
   }
   // Een grondtegel op een kaart met hoogte: eerst het licht in de tegel zelf (op een kladje: de tegel, en daarop het licht,
   // alleen waar de tegel is), dan de belichte tegel op het vlak van de tegel. Zo valt er tussen twee tegels geen naad
@@ -1586,14 +1604,16 @@
   const lichtInDeTegel = false;
   function tekenGrondMetLicht(ctx, w, deel, x, y) {
     const R = LICHT_RAND;
-    if (x < -R || y < -R || x > w.b + R - 1 || y > w.h + R - 1) return tekenSchuineTegel(ctx, w, deel, x, y);
+    const licht = lichtKaartVan(w);
+    const kaartvak = licht.kaartvak;
+    if (x < kaartvak.x - R || y < kaartvak.y - R || x > kaartvak.x + kaartvak.b + R - 1 || y > kaartvak.y + kaartvak.h + R - 1) return tekenSchuineTegel(ctx, w, deel, x, y);
     if (!lichtInDeTegel) {
       tekenSchuineTegel(ctx, w, deel, x, y);
       ctx.save();
       opTegelVlak(ctx, w, x, y);
       ctx.transform(32, 16, -32, 16, 0, 0); // van de wereld (een tegel is 1 bij 1) naar het scherm
       ctx.imageSmoothingEnabled = true;
-      ctx.drawImage(lichtKaartVan(w), x + R + 0.5, y + R + 0.5, 1, 1, -0.5, -0.5, 1, 1);
+      ctx.drawImage(licht.canvas, x - kaartvak.x + R + 0.5, y - kaartvak.y + R + 0.5, 1, 1, -0.5, -0.5, 1, 1);
       ctx.restore();
       return;
     }
@@ -1612,7 +1632,7 @@
     k.translate(deel.ax, deel.ay);
     k.transform(32, 16, -32, 16, 0, 0); // van de wereld (een tegel is 1 bij 1) naar de tegel
     k.imageSmoothingEnabled = true;
-    k.drawImage(lichtKaartVan(w), x + R + 0.5, y + R + 0.5, 1, 1, -0.5, -0.5, 1, 1);
+    k.drawImage(licht.canvas, x - kaartvak.x + R + 0.5, y - kaartvak.y + R + 0.5, 1, 1, -0.5, -0.5, 1, 1);
     k.restore();
     k.globalCompositeOperation = 'source-over';
     ctx.save();
@@ -2243,8 +2263,8 @@
   // Hoeveel ringen deze tegel buiten de kaart ligt (1 = er direct tegenaan, schuin telt ook als
   // één ring — dezelfde maat als T.afstand, maar dan tot de rechthoek van de kaart in plaats van
   // tot een punt). Binnen de kaart, of op de rand zelf, is dit 0.
-  function bosrandRing(w, x, y) {
-    return Math.max(0, -x, -y, x - (w.b - 1), y - (w.h - 1));
+  function bosrandRing(w, x, y, kaartvak = T.kaartVak(w)) {
+    return Math.max(0, kaartvak.x - x, kaartvak.y - y, x - (kaartvak.x + kaartvak.b - 1), y - (kaartvak.y + kaartvak.h - 1));
   }
 
   // Eén geheel getal uit de naam van het gebied, zodat het dorp en het erf niet toevallig
@@ -2425,8 +2445,9 @@
     const B = T.KLEIN_LEVEN_INSTELLINGEN.water;
     const D = T.dorpHier(S);
     const t = S.tijd || 0;
-    for (let y = Math.max(0, vak.y0); y <= Math.min(w.h - 1, vak.y1); y++) {
-      for (let x = Math.max(0, vak.x0); x <= Math.min(w.b - 1, vak.x1); x++) {
+    const kaartvak = T.kaartVak(w);
+    for (let y = Math.max(kaartvak.y, vak.y0); y <= Math.min(kaartvak.y + kaartvak.h - 1, vak.y1); y++) {
+      for (let x = Math.max(kaartvak.x, vak.x0); x <= Math.min(kaartvak.x + kaartvak.b - 1, vak.x1); x++) {
         const s = T.waterOp(w, x, y);
         if (!s) continue;
         const k = y * 977 + x;

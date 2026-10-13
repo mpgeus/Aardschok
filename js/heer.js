@@ -482,7 +482,7 @@
 
   // Mag hier de paal, of iemand die eraan staat? Begaanbaar, niet in een akker, en niet op de marktplek (js/markt.js).
   function vrijOpHetPlein(w, x, y) {
-    if (!w.tegels || !T.isBegaanbaar) return true;
+    if (!T.heeftTegels(w) || !T.isBegaanbaar) return true;
     if (!T.isBegaanbaar(w, x, y) || T.opDeMarktPlek(w, x, y)) return false;
     return !(w.akkers || []).some((a) => x >= a.x && x < a.x + a.b && y >= a.y && y < a.y + a.h);
   }

@@ -347,8 +347,9 @@
   // Een tegel naast de weg het dorp uit, zo dicht mogelijk bij het plein: daar komt de schout binnen.
   function binnenBijDeWeg(w) {
     const uit = T.wegInEnUit(w);
-    if (!uit) return { x: Math.floor(w.b / 2), y: Math.floor(w.h / 2) };
-    const doel = T.pleinVan(w) || { x: w.b / 2, y: w.h / 2 };
+    const vak = T.kaartVak(w);
+    if (!uit) return { x: Math.floor(vak.x + vak.b / 2), y: Math.floor(vak.y + vak.h / 2) };
+    const doel = T.pleinVan(w) || { x: vak.x + vak.b / 2, y: vak.y + vak.h / 2 };
     let beste = null;
     for (const [dx, dy] of [[0, 1], [1, 0], [0, -1], [-1, 0], [1, 1], [-1, 1], [1, -1], [-1, -1]]) {
       const x = uit.x + dx;

@@ -1128,8 +1128,9 @@
     let rand = RAND.get(w);
     if (rand) return rand;
     const D = IN().eilandRand;
-    const B = w.b;
-    const H = w.h;
+    const vak = T.kaartVak(w);
+    const B = vak.b;
+    const H = vak.h;
     const nb = B + 2 * D; // het stuk eiland in tegels, vanaf (-D, -D)
     const nh = H + 2 * D;
     const n = nb + 1; // en in hoekpunten

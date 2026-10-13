@@ -116,7 +116,10 @@
   T.landingIn = function (w, vanaf) {
     const lijst = w.overgangen || [];
     const o = lijst.find((x) => x.naar === vanaf) || lijst[0];
-    if (!o) return { x: Math.floor(w.b / 2), y: Math.floor(w.h / 2) };
+    if (!o) {
+      const vak = T.kaartVak(w);
+      return { x: Math.floor(vak.x + vak.b / 2), y: Math.floor(vak.y + vak.h / 2) };
+    }
     if (o.komt && deugt(w, o.komt.x, o.komt.y)) return { x: o.komt.x, y: o.komt.y };
     // eerst recht ernaast, dan schuin: de eerste die deugt
     for (const [dx, dy] of [[0, 1], [1, 0], [0, -1], [-1, 0], [1, 1], [-1, 1], [1, -1], [-1, -1]]) {

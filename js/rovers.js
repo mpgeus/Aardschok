@@ -224,8 +224,9 @@
   T.roverIngang = function (w, veld) {
     const midden = { x: veld.x + Math.floor(veld.b / 2), y: veld.y + Math.floor(veld.h / 2) };
     const rand = [];
-    for (let x = 0; x < w.b; x++) rand.push({ x, y: 0 }, { x, y: w.h - 1 });
-    for (let y = 1; y < w.h - 1; y++) rand.push({ x: 0, y }, { x: w.b - 1, y });
+    const vak = T.kaartVak(w);
+    for (let x = vak.x; x < vak.x + vak.b; x++) rand.push({ x, y: vak.y }, { x, y: vak.y + vak.h - 1 });
+    for (let y = vak.y + 1; y < vak.y + vak.h - 1; y++) rand.push({ x: vak.x, y }, { x: vak.x + vak.b - 1, y });
     const kan = rand.filter((t) => T.isBegaanbaar(w, t.x, t.y, {})).sort((a, b) => T.afstand(a, midden) - T.afstand(b, midden));
     for (const t of kan.slice(0, 12)) {
       if (T.zoekRoute(w, t, midden, { naast: true })) return t;

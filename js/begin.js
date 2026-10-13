@@ -284,10 +284,11 @@
     if (!bronnen.length) bronnen.push({ x: -1e6, y: -1e6 }); // geen plein: nergens bereik (het vak valt buiten de kaart)
     const R = Math.ceil(straal);
     // het vak: de bronnen met de straal eromheen, binnen de kaart
-    const x0 = Math.max(0, Math.min(...bronnen.map((b) => b.x)) - R);
-    const y0 = Math.max(0, Math.min(...bronnen.map((b) => b.y)) - R);
-    const b = Math.max(0, Math.min(w.b - 1, Math.max(...bronnen.map((q) => q.x)) + R) - x0 + 1);
-    const h = Math.max(0, Math.min(w.h - 1, Math.max(...bronnen.map((q) => q.y)) + R) - y0 + 1);
+    const vak = T.kaartVak(w);
+    const x0 = Math.max(vak.x, Math.min(...bronnen.map((b) => b.x)) - R);
+    const y0 = Math.max(vak.y, Math.min(...bronnen.map((b) => b.y)) - R);
+    const b = Math.max(0, Math.min(vak.x + vak.b - 1, Math.max(...bronnen.map((q) => q.x)) + R) - x0 + 1);
+    const h = Math.max(0, Math.min(vak.y + vak.h - 1, Math.max(...bronnen.map((q) => q.y)) + R) - y0 + 1);
     const afstand = new Float32Array(b * h).fill(Infinity);
     for (const q of bronnen) {
       for (let dy = -R; dy <= R; dy++) {

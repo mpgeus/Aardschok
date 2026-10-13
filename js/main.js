@@ -228,7 +228,7 @@
     const f = T.naarWereldOp(S.wereld, sx, sy);
     const x = Math.round(f.x);
     const y = Math.round(f.y);
-    if (x < 0 || y < 0 || x >= w.b || y >= w.h) return null;
+    if (!T.opKaart(w, x, y)) return null;
     return { x, y };
   }
 
@@ -900,10 +900,12 @@
       const D = S.dorp;
       const w = D.wereld;
       if (wat === 'nacht') T.tikPadenDag(D);
-      const b = w.tegels[0].length;
       const net = T.aangelegdNet(D);
       const P = w.paden || { slijt: {}, gesleten: new Set() };
-      const tegel = (k) => `${k % b},${Math.floor(k / b)}`;
+      const tegel = (k) => {
+        const t = T.tegelVanNummer(k);
+        return `${t.x},${t.y}`;
+      };
       return {
         spelregel: T.PADEN_INSTELLINGEN.paadjes,
         vanDeDeuren: net.filter((v) => v === 2).length,
@@ -1226,7 +1228,8 @@
       const w = S.wereld;
       if (!T.heeftHoogte(w)) return 'Deze kaart is vlak (de spelregel "Hoogte" staat op "Vlak", of het is het ontworpen gehucht).'; // geen tekst
       let top = null;
-      for (let y = 0; y < w.h; y++) for (let x = 0; x < w.b; x++) {
+      const vak = T.kaartVak(w);
+      for (let y = vak.y; y < vak.y + vak.h; y++) for (let x = vak.x; x < vak.x + vak.b; x++) {
         const h = T.hoogteOp(w, x, y);
         if (!top || h > top.h) top = { x, y, h: Math.round(h) };
       }

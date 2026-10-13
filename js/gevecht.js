@@ -105,22 +105,23 @@
 
   function rasterVoor(w, kamers, vechters) {
     const lijst = [];
+    const vak = T.kaartVak(w);
     if (w.buiten) {
       const wie = (vechters || []).filter((e) => !e.dood).map((e) => T.tegelVan(e));
       if (!wie.length) return lijst;
-      for (let y = 0; y < w.h; y++) {
-        for (let x = 0; x < w.b; x++) {
+      for (let y = vak.y; y < vak.y + vak.h; y++) {
+        for (let x = vak.x; x < vak.x + vak.b; x++) {
           if (T.tegel(w, x, y) !== 'vloer') continue;
           if (wie.some((p) => T.afstand(p, { x, y }) <= RASTER_BUITEN)) lijst.push({ x, y });
         }
       }
       return lijst;
     }
-    for (let y = 0; y < w.h; y++) {
-      for (let x = 0; x < w.b; x++) {
+    for (let y = vak.y; y < vak.y + vak.h; y++) {
+      for (let x = vak.x; x < vak.x + vak.b; x++) {
         const t = T.tegel(w, x, y);
         if (t === 'vloer' && kamers.has(T.kamerVan(w, x, y).id)) lijst.push({ x, y });
-        else if (t === 'deur' && w.burenKamers[y][x].some((id) => kamers.has(id))) lijst.push({ x, y });
+        else if (t === 'deur' && T.burenKamersOp(w, x, y).some((id) => kamers.has(id))) lijst.push({ x, y });
       }
     }
     return lijst;

@@ -251,10 +251,11 @@
   T.wandenVan = function (w, x, y) {
     if (!w || !w.hoogte) return [];
     const uit = [];
+    const vak = T.kaartVak(w);
     for (const kant of ['zuid', 'oost']) {
       const nx = kant === 'oost' ? x + 1 : x;
       const ny = kant === 'zuid' ? y + 1 : y;
-      if (nx >= w.b || ny >= w.h) continue;
+      if (nx >= vak.x + vak.b || ny >= vak.y + vak.h) continue;
       const [k1, k2] = kant === 'zuid' ? [3, 2] : [1, 2];
       const [b1, b2] = kant === 'zuid' ? [0, 1] : [0, 3];
       const boven = [T.hoekHoogte(w, x, y, k1), T.hoekHoogte(w, x, y, k2)];
