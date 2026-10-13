@@ -149,6 +149,11 @@ nummers passen op het hele eiland, en `T.eilandStuk` maakt elk stuk los (64 bij 
    er twee). Wat opviel en nog te kiezen is, staat in `opmerkingen.md`: een richel zonder helling blijft onbereikbaar,
    en een hol kan tien tegels van het kamp liggen. **Nog te doen: stap 5** (stukken openen als je mensen in de buurt
    komen) en het meten (de schout naar de kust op 30×, de schermen).
+   **Gemeten voor stap 5** (13 okt, Node, eiland 2, acht stukken op een rij naar het oosten): een stuk maken kost 45 tot
+   70 ms (`T.landStuk` en het stuk erover), en daarna het vaste raster en de eilanden van A\* opnieuw over `T.loopVak`
+   nog 20 tot 45 ms, groeiend met de rechthoek om alle open stukken (van 192 bij 192 naar 704 bij 192). Samen 70 tot
+   100 ms, vijf beelden: op 30× loopt de schout zo om de seconde een nieuw stuk in, dus dat hapert. Loopt hij schuin,
+   dan groeit de rechthoek in twee richtingen, met vooral stukken die niet open zijn.
    **Het ontwerp van stap 2 tot 6** (Claude, 13 okt; zo kan een volgende sessie verder):
    - *Wat in S staat* (bewaard): wat veranderde, per tegelnummer (`T.tegelNummer`): `w.tegelsAnders` (Map naar het woord),
      `w.grondAnders` (Map naar de grondtegel; alleen de maker verandert de grond, het spel nooit), `w.gerooid` (Set: een
