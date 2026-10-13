@@ -12,6 +12,12 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 - **Een kaart van het eiland onder een toets** (idee van Claude, 13 okt; Marcel: "idee ja"): het eiland van boven, met
   alleen wat je verkende en de rest in de mist, getekend zoals de plaat van de kaartenmaker
   (`gereedschap/pixelart/eiland-plaat.cjs`), met je dorp, de wegen en de namen die je kent. Na de mist (B2c), niet erin.
+- **Een richel zonder helling** (13 okt, B2b): de helling de richel op (`legHelling` in `js/hoogte.js`) komt alleen waar
+  je op de helling en aan de voet kunt staan. Sinds het land van het eiland komt, ligt de richel vaker in het bos: op 7
+  van de 10 eilanden is er geen weg van het plein naar boven (vroeger 5), en op eiland 4 staat er rondom een boom of een
+  rots, dus is er geen helling. Rooit iemand die bomen later, dan komt de helling er niet alsnog: de richel blijft
+  onbereikbaar. Te kiezen: de helling ook door het bos (de bomen erop gaan om, de rotsen niet), of de helling uitrekenen
+  als het land verandert. `test/hoogte.test.cjs` speelt de weg naar boven op 1, 7 en 10.
 - **Het eerste jaar van de kolonist, wat opviel** (12 okt, vraag 152, 1f; de speeltest staat in `speelbaar.md`). Na te
   lopen:
   - De houthakker werkt in het eerste jaar 5 tot 12 dagen zonder dat het spel zegt waarom (`werkt niet` in de tabel

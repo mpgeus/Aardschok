@@ -140,7 +140,7 @@ test('hoogte, lopen: niet door een wand, wel over een helling; op "Vlak" verande
   const vlak = land(5, false);
   assert.equal(T.kanStappen(vlak, 40, 40, 41, 41), true);
   // (op sommige eilanden ligt de richel in het bos, zonder open weg vanaf het plein: die staan hier niet bij)
-  for (const zaad of [1, 3, 4]) {
+  for (const zaad of [1, 7, 10]) {
     const w = land(zaad, true);
     const hel = w.hoogte.hellingen;
     // waar een wand staat, kun je er niet langs, van geen van beide kanten
@@ -276,10 +276,11 @@ test('hoogte, afdekken: alleen een tegel die hoog genoeg ligt, dekt af wat erach
   for (let y = K.y; y < K.y + K.h; y++) for (let x = K.x; x < K.x + K.b; x++) if (T.dektAf(w, x, y)) dekkers.push([x, y]);
   // de rand van de richel, niet de zachte glooiing
   assert.ok(dekkers.length > 0 && dekkers.length < K.b * K.h * 0.02, `${dekkers.length} tegels dekken af`);
-  // elke tegel die afdekt, ligt hoger dan een tegel achter hem, meer dan een halve tegel op het scherm (16 pixels)
+  // elke tegel die afdekt, ligt hoger dan een tegel achter hem (tot twee rijen terug, zoals T.dektAf kijkt), meer dan een
+  // halve tegel op het scherm (16 pixels)
   for (const [x, y] of dekkers) {
     const hoog = Math.max(...T.hoekHoogten(w, x, y));
-    const achter = Math.min(T.hoogteOp(w, x - 1, y), T.hoogteOp(w, x, y - 1), T.hoogteOp(w, x - 1, y - 1));
+    const achter = Math.min(...[[1, 0], [0, 1], [1, 1], [2, 1], [1, 2], [2, 2]].map(([i, j]) => T.hoogteOp(w, x - i, y - j)));
     assert.ok(hoog - achter > 16, `(${x}, ${y})`);
   }
 });
