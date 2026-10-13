@@ -24,15 +24,16 @@ wijnboerderij is een eigen gebouw, met de wijngaard als veld ernaast. **B2 is be
 
 **Eerst optimaliseren** (Marcel, 13 okt: "noteren voor de nieuwe sessie dat we eerst meer optimalisaties
 uitvoeren"), vóór B2c. Meten met `npm run stukmeting` (de schout op 30× van het kamp naar de kust, in de browser; wat
-het nu geeft staat in `kaarten.md`, "Het hele eiland"), en wat het zwaarst is eerst. Wat er nu ligt, gemeten 13 okt:
-- **De nacht van het dorp**: het beeld waarin een nieuwe dag begint, kost 70 tot 120 ms (op 30× elke tien seconden).
-  **Bezig in sessie `claude/sweet-turing-6eknnu`** (13 okt): meten welke regel van de nacht het is, dan een plan.
-  Eerst meten welke regel van de nacht het is, dan verdelen over beelden of sneller maken.
+het nu geeft staat in `kaarten.md`, "Het hele eiland"), en wat het zwaarst is eerst. De nacht van het dorp is af (onder
+"Af"). Wat er nu ligt, gemeten 13 okt:
 - **Een stuk dat nog niet klaar lag** als het opengaat (twee stukken vlak na elkaar, of de schout die van richting
   verandert): 20 tot 45 ms land maken. Vooruit maken in de richting waar hij heen loopt (het eind van zijn pad), of meer
   tijd per beeld (`vooruit`, `vooruitMs` in `T.WERELD_INSTELLINGEN`).
 - **Het tekenen als de camera snel meeschuift**: 75 tot 100 ms als er veel grond tegelijk in beeld komt (alle nieuwe
   stukken van de grondbuffer in één beeld, `werkStukkenBij` in `js/tekenen.js`); nieuw land doet het al een per beeld.
+- **Tekenbeelden van 90 tot 130 ms terwijl de schout stilstaat** (13 okt, gemeten na de nacht: het proefdorp op 30×,
+  zonder dat de kaart in dat beeld veranderde). Eerst uitzoeken wat er dan getekend wordt; misschien hetzelfde als het
+  punt hieronder (de hele grond opnieuw na een kaartverandering).
 - **Elke kaartverandering tekent de hele grond opnieuw** (een gevelde boom, een gebouw): de sleutel van de grondbuffer
   hangt aan `T.kaartVersie` (via `padVersie` en de platte dingen), net als alle bewaarde wegen en velden. Nog niet
   gemeten; per plek kan het, zoals nu bij nieuw land.
@@ -176,6 +177,12 @@ het graan vraagt", de schandpaal, de heervaart en de twee bazen.
   schrijven voor de nieuwe richting, als B en C er staan.
 
 ## Af (sinds 11 okt)
+
+- De nacht van het dorp (eerst optimaliseren; 13 okt, Marcel: "Ja, bouw het zo"): het beeld waarin een nieuwe dag
+  begint, kostte 100 tot 150 ms, waarvan 74 tot 94 in de beesten: elke nacht vroeg `bosKaart` voor alle tegels om het
+  dorp `T.isBos` met het jonge bos, 25 tegels per tegel. `T.bosInVak` (`js/bos.js`) doet het hele vak in één keer met
+  een optelsom, met dezelfde uitkomst (een toets, en de kolonist op vijf eilanden speelt precies hetzelfde jaar). Nu 29
+  tot 38 ms, als een gewoon beeld; de beesten 4 tot 7. Zuiniger kan nog (`opmerkingen.md`).
 
 - B2b en B2d, het hele eiland in stukken (vraag 117, stap 3; 13 okt): de kaart is het eiland in stukken van 64 bij 64,
   het land komt overal van het eiland, en de maker legt alleen nog het plein, het kamp, de eiken en de marktplek (die

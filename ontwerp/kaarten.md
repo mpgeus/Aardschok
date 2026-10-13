@@ -177,7 +177,7 @@ nummers passen op het hele eiland, en `T.eilandStuk` maakt elk stuk los (64 bij 
    richting verandert), kost nog 20 tot 40 ms: dat is in deze browser van 20 beelden per seconde; in een gewone van 60 is
    er drie keer zoveel tijd om vooruit te maken. Een gevelde boom kost het lopen nu niets meer, ook als je veel land
    kent (was 13 ms bij 54 stukken). De zwaarste beelden die overblijven, zijn de nacht van het dorp (70 tot 120 ms),
-   die er al was: iets voor later, niet voor de stukken. Een worker is niet nodig.
+   die er al was: iets voor later, niet voor de stukken (13 okt opgelost met `T.bosInVak`: nu 29 tot 38 ms). Een worker is niet nodig.
    **Het ontwerp van stap 2 tot 6** (Claude, 13 okt; zo kan een volgende sessie verder):
    - *Wat in S staat* (bewaard): wat veranderde, per tegelnummer (`T.tegelNummer`): `w.tegelsAnders` (Map naar het woord),
      `w.grondAnders` (Map naar de grondtegel; alleen de maker verandert de grond, het spel nooit), `w.gerooid` (Set: een
