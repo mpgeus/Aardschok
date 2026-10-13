@@ -251,7 +251,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   versie)`, null als het niet bekend is, alleen scherm): de lijst platte dingen en de grondbuffer in `js/tekenen.js`
   werken alleen die plekken bij, een bufferstuk per beeld (`vergeetVeranderdeKaart`, 13 okt; eerst alle grond in beeld,
   49 ms), en waar het zand van de paadjes anders werd (`T.zandHoeken`) net zo. Het land wordt **vooruit** gemaakt (`maakVooruit`): binnen `vooruit`
-  tegels voorbij `openRond`, in delen van `vooruitDeel`, `vooruitMs` per beeld, eerst wat het eerst nodig is
+  tegels voorbij `openRond`, in delen van `vooruitDeel`, `vooruitMsPerSeconde` (minstens een deel per beeld), eerst wat het eerst nodig is
   (`nodigOver`, 13 okt: wie loopt, langs zijn pad; wie stilstaat, daarna); het wacht in de
   stukken tot het open gaat. De stukken zelf (`maakStuk`: `T.landStuk` met wat er anders werd
   erover, en de dingen van het eiland als voorwerpen met `v.natuur`) staan niet in S: een geladen spel maakt ze opnieuw
@@ -868,7 +868,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 - `js/paden.js`: **de paadjes en de lantaarns** (vraag 108, b en d, 3 okt): van elke deur een paadje naar de weg, of naar
   het paadje van een buur (`T.aangelegdNet`, uit de kaart en de gebouwen, niet in S: na `T.kaartVeranderd` opnieuw, met
-  `T.kaartVersie` in `js/wereld.js`); waar mensen lopen, slijt het gras (`T.telStap` vanuit `js/anim.js`, een dier telt
+  `T.kaartVersie` in `js/wereld.js`; wat het per tegel nakijkt, de rasters `weg` en `mag`, alleen op de plekken die
+  veranderden, `T.kaartPlekkenSinds`, 13 okt: 10 ms naar 2); waar mensen lopen, slijt het gras (`T.telStap` vanuit `js/anim.js`, een dier telt
   niet; elke nacht `T.tikPadenDag`, in S als `w.paden`), en waar niemand meer loopt, groeit het dicht. Hoe het eruitziet:
   `T.zandHoeken` en `T.hoekenMetPaden` (de hoeken van de grond, zoals `T.sprites.grondHoeken`), in de buffer van de grond
   (`js/tekenen.js`). Een lantaarn bij de deur van wat `lantaarn` heeft in `T.GEBOUWEN` (de kapel, de herberg, de markt,

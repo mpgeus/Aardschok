@@ -107,7 +107,7 @@
     T.werkBrandBij(S, D); // de brand van een voorval: het huis brandt, tot het uit is of afgebrand (js/brand.js)
     T.werkVoorvallenBij(S, D); // wie je zoekt met een voorval, loopt naar je toe en spreekt je aan (js/voorvallen.js)
     T.werkOchtendrapportBij(S, D); // 's ochtends geeft je raadsman je zijn rapport (js/ochtendrapport.js)
-    T.werkStukkenBij(S, D); // waar je mensen komen, gaat het land van het eiland open (js/wereld.js)
+    T.werkStukkenBij(S, D, dt); // waar je mensen komen, gaat het land van het eiland open (js/wereld.js)
     if (D.wereld === S.wereld) return; // waar je bent, lopen en dwalen ze in js/main.js, en worden ze getekend
     T.werkBeestenBij(S, D); // de wolven en de herten in zijn bos (js/beesten.js)
     T.beweegWezens(S, D.wereld, dt, dtWereld); // lopen (js/anim.js)

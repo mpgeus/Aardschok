@@ -11,11 +11,13 @@
     // in je dorp woont, de ossenkar; B2b, stap 5, Marcel: "Al je mensen"). In B2c wordt het de kring die ze zien.
     openRond: 16,
     // Zoveel tegels verder dan openRond maakt het spel het land van een stuk alvast, in delen van zoveel bij zoveel tegels,
-    // zoveel ms per beeld (minstens één deel), zodat er niets meer te rekenen is als het open gaat (Marcel, 13 okt: "Alles
-    // per stuk"). Het is geen spelstaat: hoe snel het klaar is, verandert niets aan het land.
+    // zoveel ms per seconde (minstens één deel per beeld), zodat er niets meer te rekenen is als het open gaat (Marcel,
+    // 13 okt: "Alles per stuk"). Per seconde en niet per beeld (Marcel, 13 okt: "3 optie a"): bij weinig beelden per
+    // seconde kwam het anders niet bij (aan de kust, 10 per seconde). 240 is bij 60 beelden per seconde 4 ms per beeld.
+    // Het is geen spelstaat: hoe snel het klaar is, verandert niets aan het land.
     vooruit: 48,
     vooruitDeel: 16,
-    vooruitMs: 4,
+    vooruitMsPerSeconde: 240,
   };
   const IN = () => T.WERELD_INSTELLINGEN;
 
@@ -462,7 +464,8 @@
   };
   // Het land gaat open waar je mensen komen (stap 5; Marcel, 13 okt: "Al je mensen"): een stuk binnen `openRond` tegels
   // van de schout, van wie in het dorp woont of van de ossenkar. Hooguit één per beeld. Geeft het stuknummer, of null.
-  T.werkStukkenBij = function (S, D) {
+  // `dt` is de tijd van het scherm sinds het vorige beeld (js/dorp.js): zoveel tijd krijgt het vooruit maken.
+  T.werkStukkenBij = function (S, D, dt) {
     const w = D.wereld;
     if (!opEiland(w)) return null;
     const R = IN().openRond;
@@ -479,7 +482,7 @@
         }
       }
     }
-    const tot = performance.now() + IN().vooruitMs;
+    const tot = performance.now() + IN().vooruitMsPerSeconde * (dt || 0);
     while (maakVooruit(S, w, R + IN().vooruit) && performance.now() < tot);
     return null;
   };

@@ -2537,7 +2537,7 @@ Spel.TAAL_BRON = [
   {"t":"land opens within","waar":["js/opties.js"]},
   {"t":"land made ahead within","waar":["js/opties.js"]},
   {"t":"land made in parts of","waar":["js/opties.js"]},
-  {"t":"ms per frame for land made ahead","waar":["js/opties.js"]},
+  {"t":"ms per second for land made ahead","waar":["js/opties.js"]},
   {"t":"walking fields reach beyond the village","waar":["js/opties.js"]},
   {"t":"cart","waar":["js/opties.js"]},
   {"t":"children","waar":["js/opties.js"]},

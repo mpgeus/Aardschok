@@ -81,8 +81,8 @@ async function meet(page) {
     };
     meet('landStuk', '__land');
     const open = T.werkStukkenBij;
-    T.werkStukkenBij = (S, D) => {
-      const n = open(S, D);
+    T.werkStukkenBij = (...a) => {
+      const n = open(...a);
       if (n != null) window.__stuk = n;
       return n;
     };
