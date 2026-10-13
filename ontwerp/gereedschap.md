@@ -78,6 +78,11 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
 - `npm run tekenmeting` meet waar het tekenen zijn tijd kwijt is, per laag (vraag 123, f): het proefdorp op eiland 5, op
   1920×1080, 4K en 4K op 200%, dichtbij en in het overzicht, overdag en 's avonds; `-- 1920x1080@1` voor één scherm. In
   `gereedschap/schermen/uit/tekenmeting.json` (niet in git).
+- `npm run stukmeting` meet wat nieuw land kost (B2b, stap 5): het proefdorp op eiland 2, de schout op 30× steeds naar
+  de verste tegel die hij lopend haalt, naar het zuiden (de kust) en dan het westen; per beeld de regels, het maken van
+  land en het tekenen apart, per stuk dat opengaat dat beeld en de drie erna, de zwaarste beelden (met een nieuwe dag
+  of een stuk), en wie de kaart veranderde zonder plek. `-- --zaad 5 --richting oost,noord --duur 90 --afdruk kust.png`;
+  de uitslag ook in `gereedschap/schermen/uit/stukmeting.json` (niet in git).
 - `npm run samenvatting` maakt `ontwerp/het-spel-in-het-kort.pdf` uit `gereedschap/samenvatting/samenvatting.html` en de
   vier beelden in `gereedschap/samenvatting/beelden/` (alle drie in git); `-- --beelden` speelt eerst het spel en maakt
   de beelden opnieuw, elk uit een vers spel op land 5 van de maker (een minuut). Lukt een beeld niet meer, dan zegt het

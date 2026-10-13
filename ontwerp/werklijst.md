@@ -22,6 +22,21 @@ De toetsen en het gereedschap spelen op het proefdorp (`T.proefdorp`, `Spel.debu
 wijnboerderij is een eigen gebouw, met de wijngaard als veld ernaast. **B2 is bezig** (13 okt): het plan staat
 (`kaarten.md`, "Het hele eiland"), B2a, B2b (de kaart in stukken) en B2d zijn af; B2c (de mist) is het volgende. Daarna de afwisseling (B3), en ronde 3 na C.
 
+**Eerst optimaliseren** (Marcel, 13 okt: "noteren voor de nieuwe sessie dat we eerst meer optimalisaties
+uitvoeren"), vóór B2c. Meten met `npm run stukmeting` (de schout op 30× van het kamp naar de kust, in de browser; wat
+het nu geeft staat in `kaarten.md`, "Het hele eiland"), en wat het zwaarst is eerst. Wat er nu ligt, gemeten 13 okt:
+- **De nacht van het dorp**: het beeld waarin een nieuwe dag begint, kost 70 tot 120 ms (op 30× elke tien seconden).
+  Eerst meten welke regel van de nacht het is, dan verdelen over beelden of sneller maken.
+- **Een stuk dat nog niet klaar lag** als het opengaat (twee stukken vlak na elkaar, of de schout die van richting
+  verandert): 20 tot 45 ms land maken. Vooruit maken in de richting waar hij heen loopt (het eind van zijn pad), of meer
+  tijd per beeld (`vooruit`, `vooruitMs` in `T.WERELD_INSTELLINGEN`).
+- **Het tekenen als de camera snel meeschuift**: 75 tot 100 ms als er veel grond tegelijk in beeld komt (alle nieuwe
+  stukken van de grondbuffer in één beeld, `werkStukkenBij` in `js/tekenen.js`); nieuw land doet het al een per beeld.
+- **Elke kaartverandering tekent de hele grond opnieuw** (een gevelde boom, een gebouw): de sleutel van de grondbuffer
+  hangt aan `T.kaartVersie` (via `padVersie` en de platte dingen), net als alle bewaarde wegen en velden. Nog niet
+  gemeten; per plek kan het, zoals nu bij nieuw land.
+- Daarna, of tussendoor: de toets voor dubbele namen in `Spel` (`opmerkingen.md`).
+
 **Wacht op Marcel:**
 - **Het hele eiland bekijken** (B2b): Nieuw spel, en loop met de schout het land uit, naar de kust (met `F2` de meter):
   het land gaat open waar hij komt. Op 30× hapert het nog even als hij heel snel nieuw land in loopt; zeg het als je dat
