@@ -206,7 +206,7 @@
     const { x: sx, y: sy } = naarVlak(mx, my);
     const kandidaten = [];
     for (const e of w.wezens) {
-      if (e.dood || e.binnen || e === S.schout || !T.isZichtbaar(w, e.tx, e.ty)) continue;
+      if (e.dood || e.binnen || e === S.schout || !T.isZichtbaar(w, e.tx, e.ty) || !T.zieJeWezen(S, w, e)) continue;
       const p = T.naarSchermOp(S.wereld, e.x, e.y);
       const hoog = hoogteVan(e);
       if (sx > p.x - 17 && sx < p.x + 17 && sy > p.y - hoog && sy < p.y + 9) {
@@ -217,7 +217,7 @@
     const onder = T.naarWereld(sx, sy);
     for (const v of T.voorwerpenIn(w, { x: Math.floor(onder.x) - 12, y: Math.floor(onder.y) - 12, b: 28, h: 28 })) {
       const hoog = voorwerpHoogte(v);
-      if (!hoog || !T.isZichtbaar(w, v.x, v.y)) continue;
+      if (!hoog || !T.isZichtbaar(w, v.x, v.y) || !T.kentTegel(w, v.x, v.y)) continue; // niet in het zwart (js/mist.js)
       const p = T.naarSchermOp(S.wereld, v.x, v.y);
       if (sx > p.x - 20 && sx < p.x + 20 && sy > p.y - hoog && sy < p.y + 10) {
         kandidaten.push({ d: v.x + v.y, voorwerp: v, x: v.x, y: v.y });

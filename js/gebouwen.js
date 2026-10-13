@@ -721,7 +721,9 @@
     const w = D.wereld;
     if (!voet || !w) return T.t('It does not fit there.');
     // In het lege begin bouw je binnen het bereik van het plein en je opslagen (js/begin.js; vraag 152, 1d).
-    const ver = T.waaromBuitenBouwBereik(D, { x, y, b: voet.b, h: voet.h });
+    // En alleen op land dat je kent (B2c, js/mist.js).
+    const plek = { x, y, b: voet.b, h: voet.h };
+    const ver = T.waaromBuitenBouwBereik(D, plek) || T.waaromOnbekendLand(D, plek);
     if (ver) return ver;
     let vast = false;
     let reden = null;

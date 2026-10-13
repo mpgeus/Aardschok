@@ -108,6 +108,7 @@
     T.werkVoorvallenBij(S, D); // wie je zoekt met een voorval, loopt naar je toe en spreekt je aan (js/voorvallen.js)
     T.werkOchtendrapportBij(S, D); // 's ochtends geeft je raadsman je zijn rapport (js/ochtendrapport.js)
     T.werkStukkenBij(S, D, dt); // waar je mensen komen, gaat het land van het eiland open (js/wereld.js)
+    T.werkMistBij(S, D); // wat je mensen en je gebouwen zien, ken je voortaan (js/mist.js)
     if (D.wereld === S.wereld) return; // waar je bent, lopen en dwalen ze in js/main.js, en worden ze getekend
     T.werkBeestenBij(S, D); // de wolven en de herten in zijn bos (js/beesten.js)
     T.beweegWezens(S, D.wereld, dt, dtWereld); // lopen (js/anim.js)

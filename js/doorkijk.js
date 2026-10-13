@@ -53,7 +53,7 @@
   T.zichtbaarDoor = function (S, e) {
     if (e.binnen) return null; // wie slaapt of binnen is, zie je niet door een dak heen
     if (e === S.schout) return 'alles';
-    if (e.dood) return null;
+    if (e.dood || !T.zieJeWezen(S, S.wereld, e)) return null; // wie in de mist loopt, zie je niet (js/mist.js)
     if (e.alarm > 0) return 'alles';
     if (S.gevecht && S.gevecht.volgorde.includes(e)) return 'alles';
     if (S.overgang && S.overgang.aanleiding === e) return 'alles';

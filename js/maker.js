@@ -1055,6 +1055,7 @@
     for (const d of plan.gerooid) w.gerooid.add(nr(d.x, d.y));
     const D = IN().zicht;
     T.openVak(w, { x: x0 - D, y: y0 - D, b: B + 2 * D, h: H + 2 * D });
+    T.kenHetBegin(w, { x: x0, y: y0, b: B, h: H }); // wat je bij het begin kent (B2c, js/mist.js); de rest is mist
     for (const d of plan.gelegd) {
       const t = T.opzoekTegelNaam(opNaam(d.naam));
       T.zetVoorwerp(w, T.maakVoorwerp(t, x0 + d.x, y0 + d.y));

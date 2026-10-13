@@ -55,17 +55,21 @@
 
   // ---------------------------------------------------------------- de programma's
   const VERT = /* // geen tekst */ `
-    attribute vec2 aPlek; attribute vec2 aUv; attribute vec4 aKleur;
-    uniform vec2 uMaat; varying vec2 vUv; varying vec4 vKleur; varying vec2 vPlek;
+    attribute vec2 aPlek; attribute vec2 aUv; attribute vec4 aKleur; attribute float aGrijs;
+    uniform vec2 uMaat; varying vec2 vUv; varying vec4 vKleur; varying vec2 vPlek; varying float vGrijs;
     void main() {
-      vUv = aUv; vKleur = aKleur; vPlek = aPlek;
+      vUv = aUv; vKleur = aKleur; vPlek = aPlek; vGrijs = aGrijs;
       gl_Position = vec4(aPlek.x / uMaat.x * 2.0 - 1.0, 1.0 - aPlek.y / uMaat.y * 2.0, 0.0, 1.0);
     }`;
   // Een plaatje maal een kleur (voorvermenigvuldigd): helderheid en doorzichtigheid in één. Een vlak is het witte
-  // plaatje van één pixel maal zijn kleur.
+  // plaatje van één pixel maal zijn kleur. vGrijs haalt er zoveel kleur uit (het filter grayscale, voor wat in de mist
+  // staat; js/mist.js), met de helderheid van 'saturation' op het doek.
   const FRAG_BEELD = /* // geen tekst */ `
-    precision highp float; uniform sampler2D uBeeld; varying vec2 vUv; varying vec4 vKleur;
-    void main() { gl_FragColor = texture2D(uBeeld, vUv) * vKleur; }`;
+    precision highp float; uniform sampler2D uBeeld; varying vec2 vUv; varying vec4 vKleur; varying float vGrijs;
+    void main() {
+      vec4 c = texture2D(uBeeld, vUv) * vKleur;
+      gl_FragColor = vec4(mix(c.rgb, vec3(dot(c.rgb, vec3(0.3, 0.59, 0.11))), vGrijs), c.a);
+    }`;
   // Een rond verloop zoals createRadialGradient met één middelpunt: tot vier stops, lineair ertussen.
   const FRAG_VERLOOP = /* // geen tekst */ `
     precision highp float; varying vec2 vPlek; varying vec4 vKleur;
@@ -102,6 +106,28 @@
     precision highp float; uniform sampler2D uMasker; uniform vec2 uDoek; uniform vec4 uKleur;
     void main() { gl_FragColor = uKleur * texture2D(uMasker, gl_FragCoord.xy / uDoek).a; }`;
 
+  // De mist over de grond (js/tekenen.js, tekenMist; B2c): de wereld zoals hij tot nu toe getekend is (een kopie,
+  // uWereld), ontkleurd en donkerder naar het masker van de mist. Een pixel op het doek wordt een pixel van het masker
+  // met uNaarU en uNaarV (het omgekeerde van de stand van het doek); het masker is uMasker.x bij uMasker.y, de
+  // linkerhelft hoeveel kleur eruit gaat, de rechterhelft (uMasker.w verder, uMasker.z breed in totaal) hoeveel
+  // donkerder, naar uZwart.
+  const FRAG_MIST = /* // geen tekst */ `
+    precision highp float; uniform sampler2D uWereld; uniform sampler2D uMist; uniform vec2 uDoek;
+    uniform vec3 uNaarU; uniform vec3 uNaarV; uniform vec4 uMasker; uniform vec3 uZwart;
+    void main() {
+      vec4 c = texture2D(uWereld, gl_FragCoord.xy / uDoek);
+      vec3 p = vec3(gl_FragCoord.x, uDoek.y - gl_FragCoord.y, 1.0);
+      float u = dot(uNaarU, p);
+      float v = dot(uNaarV, p);
+      if (u > 0.0 && v > 0.0 && u < uMasker.x && v < uMasker.y) {
+        float o = texture2D(uMist, vec2(u / uMasker.z, v / uMasker.y)).a;
+        float d = texture2D(uMist, vec2((u + uMasker.w) / uMasker.z, v / uMasker.y)).a;
+        c.rgb = mix(c.rgb, vec3(dot(c.rgb, vec3(0.3, 0.59, 0.11))), o);
+        c.rgb = mix(c.rgb, uZwart * c.a, d);
+      }
+      gl_FragColor = c;
+    }`;
+
   function maakProgramma(vert, frag) {
     const p = gl.createProgram();
     for (const [soort, bron] of [[gl.VERTEX_SHADER, vert], [gl.FRAGMENT_SHADER, frag]]) {
@@ -114,6 +140,7 @@
     gl.bindAttribLocation(p, 0, 'aPlek');
     gl.bindAttribLocation(p, 1, 'aUv');
     gl.bindAttribLocation(p, 2, 'aKleur');
+    gl.bindAttribLocation(p, 3, 'aGrijs');
     gl.linkProgram(p);
     if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error('WebGL: ' + gl.getProgramInfoLog(p)); // geen tekst
     const u = {};
@@ -130,9 +157,11 @@
   let plasProg = null;
   let maalProg = null;
   let schaduwProg = null;
+  let mistProg = null;
   let wit = null; // een textuur van één witte pixel, voor vlakken
   let maxTextuur = 4096;
-  const PER_HOEK = 8; // x, y, u, v, r, g, b, a
+  const PER_HOEK = 9; // x, y, u, v, r, g, b, a, grijs
+  let grijsNu = 0; // hoeveel kleur eruit gaat (het filter grayscale van het doek); elke nieuwe hoek krijgt het mee
   let hoeken = new Float32Array(PER_HOEK * 6 * 2048);
   let aantal = 0; // hoeken in de rij
   let rijTextuur = null;
@@ -182,6 +211,7 @@
       plasProg = maakProgramma(VERT, FRAG_PLAS);
       maalProg = maakProgramma(VERT, FRAG_MAAL);
       schaduwProg = maakProgramma(VERT, FRAG_SCHADUW);
+      mistProg = maakProgramma(VERT, FRAG_MIST);
     } catch (e) {
       console.error(e);
       kapot = true;
@@ -194,9 +224,11 @@
     gl.enableVertexAttribArray(0);
     gl.enableVertexAttribArray(1);
     gl.enableVertexAttribArray(2);
+    gl.enableVertexAttribArray(3);
     gl.vertexAttribPointer(0, 2, gl.FLOAT, false, PER_HOEK * 4, 0);
     gl.vertexAttribPointer(1, 2, gl.FLOAT, false, PER_HOEK * 4, 8);
     gl.vertexAttribPointer(2, 4, gl.FLOAT, false, PER_HOEK * 4, 16);
+    gl.vertexAttribPointer(3, 1, gl.FLOAT, false, PER_HOEK * 4, 32);
     gl.enable(gl.BLEND);
     gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
     gl.activeTexture(gl.TEXTURE0); // er is maar één textuur tegelijk, altijd op plek 0
@@ -383,6 +415,7 @@
     hoeken[i + 5] = k[1];
     hoeken[i + 6] = k[2];
     hoeken[i + 7] = k[3];
+    hoeken[i + 8] = grijsNu;
     aantal++;
   }
   // Een vierhoek: vier punten op het doek (in pixels) met hun plek in de textuur (0..1).
@@ -422,6 +455,7 @@
     hoeken[i + 5] = h;
     hoeken[i + 6] = h;
     hoeken[i + 7] = al;
+    hoeken[i + 8] = grijsNu;
     aantal++;
   }
   // Een stuk dat buiten zijn bron valt, tekent een 2D-doek niet, en op een blad zou het de buren pakken: dus alleen het
@@ -546,11 +580,11 @@
   // opdracht (legSchaduwenAf), niet in de volgorde van de tekenlijst, waarin bijna elk plaatje een andere textuur heeft
   // (een vel per tekening, js/sprites.js). Zo kostten de schaduwen evenveel opdrachten als het hele beeld (Marcel, 9 okt:
   // "performance op fullscreen is ook ondermaats").
-  const schaduwRijen = new Map(); // textuur → [x, y, u, v, r, g, b, a, ...] per hoek
+  const schaduwRijen = new Map(); // textuur → [x, y, u, v, r, g, b, a, grijs, ...] per hoek
   function schaduwVierhoek(tex, p, uv, al) {
     let rij = schaduwRijen.get(tex);
     if (!rij) schaduwRijen.set(tex, (rij = []));
-    for (const [i, u, v] of [[0, 0, 1], [2, 2, 1], [4, 0, 3], [2, 2, 1], [6, 2, 3], [4, 0, 3]]) rij.push(p[i], p[i + 1], uv[u], uv[v], 0, 0, 0, al);
+    for (const [i, u, v] of [[0, 0, 1], [2, 2, 1], [4, 0, 3], [2, 2, 1], [6, 2, 3], [4, 0, 3]]) rij.push(p[i], p[i + 1], uv[u], uv[v], 0, 0, 0, al, 0);
   }
   function legSchaduwenAf() {
     legRijAf();
@@ -573,9 +607,54 @@
     const h = doek.height;
     gl.uniform2f(prog.u.uMaat, w, h);
     gl.uniform2f(prog.u.uDoek, w, h);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([0, 0, 0, 0, 0, 0, 0, 1, w, 0, 0, 0, 0, 0, 0, 1, 0, h, 0, 0, 0, 0, 0, 1, w, 0, 0, 0, 0, 0, 0, 1, w, h, 0, 0, 0, 0, 0, 1, 0, h, 0, 0, 0, 0, 0, 1]), gl.STREAM_DRAW);
+    const data = new Float32Array(6 * PER_HOEK);
+    [[0, 0], [w, 0], [0, h], [w, 0], [w, h], [0, h]].forEach(([x, y], i) => data.set([x, y, 0, 0, 0, 0, 0, 1, 0], i * PER_HOEK));
+    gl.bufferData(gl.ARRAY_BUFFER, data, gl.STREAM_DRAW);
     gl.drawArrays(gl.TRIANGLES, 0, 6);
     G.telling.opdrachten++;
+  }
+
+  // ---------------------------------------------------------------- de mist (B2c)
+  // Wat er tot nu toe getekend is (de grond), gaat als kopie naar een textuur, en komt met FRAG_MIST terug op het doek:
+  // ontkleuren kan de kaart niet met een mengstand, want daarvoor moet ze lezen wat er al staat.
+  let wereldKopie = null; // { tex, b, h }
+  let mistTex = null;
+  function tekenMistOpDeKaart(masker, b, h, kier, zwart, m) {
+    const W = doek.width;
+    const H = doek.height;
+    if (!wereldKopie) wereldKopie = { tex: nieuweTextuur(), b: 0, h: 0 };
+    bind(wereldKopie.tex);
+    if (wereldKopie.b !== W || wereldKopie.h !== H) {
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, W, H, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+      Object.assign(wereldKopie, { b: W, h: H });
+    }
+    gl.copyTexSubImage2D(gl.TEXTURE_2D, 0, 0, 0, 0, 0, W, H);
+    // het masker op plek 1, uitgesmeerd (de zachte rand)
+    gl.activeTexture(gl.TEXTURE1);
+    if (!mistTex) {
+      mistTex = gl.createTexture();
+      gl.bindTexture(gl.TEXTURE_2D, mistTex);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    } else gl.bindTexture(gl.TEXTURE_2D, mistTex);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, masker);
+    gl.activeTexture(gl.TEXTURE0);
+    gebruik(mistProg);
+    const u = mistProg.u;
+    gl.uniform1i(u.uWereld, 0);
+    gl.uniform1i(u.uMist, 1);
+    // van een pixel op het doek (van boven geteld) naar een pixel van het masker: het omgekeerde van de stand m
+    const det = m[0] * m[3] - m[1] * m[2];
+    gl.uniform3f(u.uNaarU, m[3] / det, -m[2] / det, (m[2] * m[5] - m[3] * m[4]) / det);
+    gl.uniform3f(u.uNaarV, -m[1] / det, m[0] / det, (m[1] * m[4] - m[0] * m[5]) / det);
+    gl.uniform4f(u.uMasker, b, h, 2 * b + kier, b + kier);
+    gl.uniform3f(u.uZwart, zwart[0] / 255, zwart[1] / 255, zwart[2] / 255);
+    gl.blendFuncSeparate(gl.ONE, gl.ZERO, gl.ONE, gl.ZERO);
+    nuMeng = null;
+    overHetDoek(mistProg);
+    G.telling.mist = 1;
   }
 
   // ---------------------------------------------------------------- het kladdoek
@@ -620,7 +699,10 @@
     const t = textuurVan(plak);
     if (!t) return;
     plekVoor(t.tex, MENG[kladMeng] ? kladMeng : 'source-over', 6);
+    const grijs = grijsNu; // het kladdoek tekende al met het filter
+    grijsNu = 0;
     vierhoek([x0, y0, x1, y0, x0, y1, x1, y1], [0, 0, b / t.tb, h / t.th], [1, 1, 1, 1]);
+    grijsNu = grijs;
     G.telling.klad++;
     G.telling.kladPixels += b * h;
   }
@@ -631,7 +713,7 @@
 
   class Doek {
     constructor() {
-      this.st = { m: [1, 0, 0, 1, 0, 0], alpha: 1, meng: 'source-over', filter: 'none', helder: 1, vul: '#000', clip: false };
+      this.st = { m: [1, 0, 0, 1, 0, 0], alpha: 1, meng: 'source-over', filter: 'none', helder: 1, grijs: 0, vul: '#000', clip: false };
       this.stapel = [];
       this.pad = []; // deelpaden: { p: [x, y, ...] in pixels, bol: true als het een ellips of cirkel is }
       this.padRond = false; // het pad heeft bochten die het snelle pad niet kent
@@ -651,6 +733,7 @@
     restore() {
       if (this.stapel.length) this.st = this.stapel.pop();
       this.k.restore();
+      grijsNu = this.st.grijs || 0;
     }
     setTransform(a, b, c, d, e, f) {
       if (typeof a === 'object') ({ a, b, c, d, e, f } = a);
@@ -692,11 +775,15 @@
     get filter() {
       return this.st.filter;
     }
+    // De kaart kent helderheid en grijs (grayscale, voor de mist; js/tekenen.js, mistOverLijst), samen in die volgorde.
     set filter(f) {
       this.st.filter = f;
       this.k.filter = f;
-      const h = /^brightness\(([\d.]+)\)$/.exec(f);
-      this.st.helder = f === 'none' ? 1 : h ? Number(h[1]) : null; // null: een filter dat alleen het kladdoek kent
+      const h = /^(?:grayscale\(([\d.]+)\))?\s*(?:brightness\(([\d.]+)\))?$/.exec(f);
+      const kent = f === 'none' || (h && (h[1] || h[2]));
+      this.st.helder = !kent ? null : h && h[2] ? Number(h[2]) : 1; // null: een filter dat alleen het kladdoek kent
+      this.st.grijs = kent && h && h[1] ? Number(h[1]) : 0;
+      grijsNu = this.st.grijs;
     }
     get fillStyle() {
       return this.st.vul;
@@ -759,6 +846,13 @@
       }
       const r = (rand || 0) * Math.hypot(m[0], m[1]) + 2;
       return [Math.min(...xs) - r, Math.min(...ys) - r, Math.max(...xs) + r, Math.max(...ys) + r];
+    }
+    // ---- de mist (js/tekenen.js, tekenMist; B2c): `masker` is het masker, links hoeveel kleur eruit gaat en rechts (na
+    // `kier` pixels) hoeveel donkerder, elk `b` bij `h` pixels; de stand zet een pixel van het masker op het doek.
+    tekenMist(masker, b, h, kier, zwart) {
+      legKladAf();
+      legRijAf();
+      tekenMistOpDeKaart(masker, b, h, kier, zwart, this.st.m);
     }
     // ---- plaatjes
     drawImage(bron, ...a) {
@@ -1080,7 +1174,7 @@
 
   // ---------------------------------------------------------------- een beeld
   let hetDoek = null;
-  G.telling = { plaatjes: 0, vormen: 0, opdrachten: 0, klad: 0, kladPixels: 0, opgestuurd: 0, lampen: 0 };
+  G.telling = { plaatjes: 0, vormen: 0, opdrachten: 0, klad: 0, kladPixels: 0, opgestuurd: 0, lampen: 0, mist: 0 };
   // Het doek even groot als dat van de browser (formaat in js/main.js), met dezelfde ratio.
   G.zetMaat = function (b, h, r) {
     if (!start()) return;
@@ -1092,7 +1186,8 @@
   G.begin = function () {
     if (!start()) return null;
     if (!hetDoek) hetDoek = new Doek();
-    hetDoek.st = { m: [ratio, 0, 0, ratio, 0, 0], alpha: 1, meng: 'source-over', filter: 'none', helder: 1, vul: '#000', clip: false };
+    hetDoek.st = { m: [ratio, 0, 0, ratio, 0, 0], alpha: 1, meng: 'source-over', filter: 'none', helder: 1, grijs: 0, vul: '#000', clip: false };
+    grijsNu = 0;
     hetDoek.stapel = [];
     hetDoek.schaduw = null;
     const k = kladdoek().ctx;

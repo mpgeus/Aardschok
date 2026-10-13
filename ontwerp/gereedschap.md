@@ -128,7 +128,7 @@ titelscherm), dan `Spel.S.overzicht = { doel: <Spel.naarSchermOp(S.wereld, x, y)
 `Spel.sluitDialoog(Spel.S)` (of zet de spelregel `Spel.zetOptie('voorvallen', 'uit')`). In het gehucht:
 `Spel.debug.kalender(dag, snelheid)` springt door het jaar, `Spel.debug.uur(21)` naar een uur van deze
 dag (zonder getal zegt het hoe laat het is; een dag duurt vijf minuten bij 1×, dus `stap` gaat op 10×
-tien keer zo ver), `Spel.debug.geenNacht = true` zet de nacht uit, `Spel.debug.bouw('huis', x, y)` bouwt,
+tien keer zo ver), `Spel.debug.geenNacht = true` zet de nacht uit, `Spel.debug.geenMist = true` de mist in het beeld (B2c; de regels blijven), `Spel.debug.bouw('huis', x, y)` bouwt,
 `Spel.debug.marskramer()` laat de marskramer nu komen (`(2)` voor zijn herfstbezoek),
 `Spel.debug.brief()` stuurt de brief van de heer nu, `Spel.debug.heer()` laat hem nu komen,
 `Spel.debug.vee('koe', 4)` zet vier koeien op de weide met de meeste plaats, bij de kudde: ze

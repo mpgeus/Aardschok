@@ -8,7 +8,8 @@
 
   T.WERELD_INSTELLINGEN = {
     // Op de kaart van het eiland gaat een stuk land open als een van je mensen binnen zoveel tegels komt (de schout, wie
-    // in je dorp woont, de ossenkar; B2b, stap 5, Marcel: "Al je mensen"). In B2c wordt het de kring die ze zien.
+    // in je dorp woont, de ossenkar; B2b, stap 5, Marcel: "Al je mensen"). Verder dan ze kijken (T.MIST_INSTELLINGEN,
+    // js/mist.js), zodat wat je ziet al klaar ligt.
     openRond: 16,
     // Zoveel tegels verder dan openRond maakt het spel het land van een stuk alvast, in delen van zoveel bij zoveel tegels,
     // zoveel ms per seconde (minstens één deel per beeld), zodat er niets meer te rekenen is als het open gaat (Marcel,
@@ -304,6 +305,7 @@
   // van de toetsen), met w.tegels en w.grond van (0, 0) tot (w.b, w.h), en een kaart van het eiland (T.eilandKaart
   // hieronder), het hele eiland in stukken.
   const opEiland = (w) => !!(w && w.eiland && !w.tegels);
+  T.opEiland = opEiland;
   T.opKaart = (w, x, y) => (opEiland(w) ? x >= 0 && y >= 0 && x < EILAND_MAAT() && y < EILAND_MAAT() : x >= 0 && y >= 0 && x < w.b && y < w.h);
   T.tegel = function (w, x, y) {
     if (!opEiland(w)) return T.opKaart(w, x, y) ? w.tegels[y][x] : 'buiten';
@@ -384,9 +386,10 @@
   // (js/maker.js). Wat in het spel bewaard wordt (in S), is alleen wat er anders werd: per tegelnummer het woord
   // (w.tegelsAnders, T.zetTegel), de grond (w.grondAnders: de maker legt het plein en zijn grond), en wat er van het eiland
   // weg is (w.gerooid, T.haalVoorwerpWeg); wat iemand neerzette staat in w.voorwerpen, zoals op elke kaart. En welke
-  // stukken open zijn (w.open, stuknummers): waar je mensen kwamen. Een stuk dat niet open is, is 'buiten', zodat A* nooit
-  // een stuk laat maken en wat er gebeurt niet van het scherm afhangt. De stukken zelf zijn geen spelstaat: ze staan per
-  // kaart in STUKKEN (niet in S), en een geladen spel maakt ze opnieuw, met wat er anders werd erover.
+  // stukken open zijn (w.open, stuknummers): waar je mensen kwamen; en wat je kent (w.gekend, js/mist.js). Een stuk dat
+  // niet open is, is 'buiten', zodat A* nooit een stuk laat maken en wat er gebeurt niet van het scherm afhangt. De
+  // stukken zelf zijn geen spelstaat: ze staan per kaart in STUKKEN (niet in S), en een geladen spel maakt ze opnieuw,
+  // met wat er anders werd erover.
   const STUK = 64;
   T.STUK = STUK;
   const EILAND_MAAT = () => T.EILAND_INSTELLINGEN.maat;
@@ -400,7 +403,7 @@
     const kamer = { id: 'buiten', naam: T.t('Outside'), x1: 0, y1: 0, x2: EILAND_MAAT() - 1, y2: EILAND_MAAT() - 1, vloer: ['#3c5e1e', '#355f22'] };
     return {
       eiland: { zaad }, vak: { ...vak },
-      open: new Set(), tegelsAnders: new Map(), grondAnders: new Map(), gerooid: new Set(),
+      open: new Set(), gekend: new Map(), tegelsAnders: new Map(), grondAnders: new Map(), gerooid: new Set(),
       deuren: new Map(), geheimen: [], kamers: [kamer], voorwerpen: [], questVoorwerpen: [], wezens: [],
       bekend: new Set(['buiten']), huidigeKamer: 'buiten', overgangen: [], akkers: [], meenten: [],
       buiten: true, naam: null, proef: false, plein: null, marskramer: null, heer: null,
@@ -462,6 +465,9 @@
       for (let sx = Math.max(0, Math.floor(vak.x / STUK)); sx * STUK < Math.min(EILAND_MAAT(), vak.x + vak.b); sx++) w.open.add(T.stukNummer(sx, sy));
     }
   };
+  // Wie van jou is en buiten staat: de schout, wie in het dorp woont, de ossenkar. Zij maken het land open (hieronder) en
+  // kijken door de mist (js/mist.js).
+  T.isVanJou = (S, e) => !e.dood && !e.binnen && (e === S.schout || !!e.bewoner || !!e.kar);
   // Het land gaat open waar je mensen komen (stap 5; Marcel, 13 okt: "Al je mensen"): een stuk binnen `openRond` tegels
   // van de schout, van wie in het dorp woont of van de ossenkar. Hooguit één per beeld. Geeft het stuknummer, of null.
   // `dt` is de tijd van het scherm sinds het vorige beeld (js/dorp.js): zoveel tijd krijgt het vooruit maken.
@@ -471,7 +477,7 @@
     const R = IN().openRond;
     const rand = Math.floor((EILAND_MAAT() - 1) / STUK);
     for (const e of w.wezens) {
-      if (e.dood || e.binnen || !(e === S.schout || e.bewoner || e.kar)) continue;
+      if (!T.isVanJou(S, e)) continue;
       const [x, y] = [Math.round(e.x), Math.round(e.y)];
       for (let sy = Math.max(0, Math.floor((y - R) / STUK)); sy <= Math.min(rand, Math.floor((y + R) / STUK)); sy++) {
         for (let sx = Math.max(0, Math.floor((x - R) / STUK)); sx <= Math.min(rand, Math.floor((x + R) / STUK)); sx++) {
@@ -499,7 +505,7 @@
       const rand = Math.floor((EILAND_MAAT() - 1) / STUK);
       let ver = Infinity;
       for (const e of w.wezens) {
-        if (e.dood || e.binnen || !(e === S.schout || e.bewoner || e.kar)) continue;
+        if (!T.isVanJou(S, e)) continue;
         const kandidaten = (x, y, r) => {
           [x, y] = [Math.round(x), Math.round(y)];
           for (let sy = Math.max(0, Math.floor((y - r) / STUK)); sy <= Math.min(rand, Math.floor((y + r) / STUK)); sy++) {

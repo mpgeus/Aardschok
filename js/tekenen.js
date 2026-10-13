@@ -505,18 +505,6 @@
     tekenStukken(ctx, g, zicht);
     tekenWaterLeven(ctx, S, w, vak);
     tekenWeides(ctx, S, vak);
-    // Wat ui is op het doek, niet in de fotomodus (js/main.js, werklijst vraag 146, e): het raster, de tegel onder de
-    // muis en het pad, een gebouw aan de muis, de plek van een verzoek, het spoor, de rand van de
-    // jacht, de tekens bij de deur, de zwevende tekst, en boven een wezen zijn uitroepteken en levensbalk.
-    // De wolkjes, de lantaarn en de ogen van de wolven blijven: die horen bij de wereld (Marcel, 10 okt).
-    if (!S.foto) {
-      tekenRaster(ctx, S);
-      tekenMarkeringen(ctx, S);
-      tekenBouwBereik(ctx, S, vak);
-      tekenMarktPlek(ctx, S);
-      tekenRooiPlaatsen(ctx, S);
-      tekenBouwSpook(ctx, S);
-    }
 
     const lijst = [];
     // Buiten zijn er geen muren: wat daar "muur" heet, is de voet van een boom of een gebouw, en
@@ -605,15 +593,31 @@
       if (e.dood && e.sterfTijd > 0.8 && !metSprites()) continue;
       if (e.binnen && !deurStap(S, e)) continue; // 's nachts in zijn huis (js/dag.js); net binnen: hij stapt nog de deur in
       if (!inVak(vak, e.tx, e.ty) || !T.isZichtbaar(w, e.tx, e.ty)) continue;
-      lijst.push({ d: e.x + e.y, l: e.dood ? 1.5 : 2, punt: { x: e.tx, y: e.ty }, f: () => tekenWezen(ctx, S, e) });
-      if (e === aanDePaal) lijst.push({ d: e.x + e.y, l: 2.5, punt: { x: e.tx, y: e.ty }, f: () => tekenHalsijzer(ctx, e) });
+      lijst.push({ d: e.x + e.y, l: e.dood ? 1.5 : 2, punt: { x: e.tx, y: e.ty }, wezen: e, f: () => tekenWezen(ctx, S, e) });
+      if (e === aanDePaal) lijst.push({ d: e.x + e.y, l: 2.5, punt: { x: e.tx, y: e.ty }, wezen: e, f: () => tekenHalsijzer(ctx, e) });
     }
     kleinLevenInLijst(ctx, S, w, D, vak, lijst);
     heuvelsErvoor(ctx, S, vak, lijst, g); // een heuvel voor iemand dekt hem af (js/hoogte.js; vraag 121, stap 2)
+    mistOverLijst(ctx, S, w, lijst); // in het zwart niets, in het grijs grijs en zonder wie er loopt (B2c, js/mist.js)
     // Ramen die branden: meteen na hun gebouw gaat er een gat in het doek waar ze zitten, dat na de
     // nacht licht wordt (brandendeRamen, hieronder).
     const ramen = brandendeRamen(S);
     tekenZonneschaduw(ctx, S, lijst);
+    // De mist over de grond (B2c, js/mist.js), na de schaduwen (anders vallen die over het zwart) en vóór wat ui is (het
+    // pad naar een tegel in het zwart moet je zien); wat erop staat, kreeg hem in mistOverLijst.
+    tekenMist(ctx, w, vak);
+    // Wat ui is op het doek, niet in de fotomodus (js/main.js, werklijst vraag 146, e): het raster, de tegel onder de
+    // muis en het pad, een gebouw aan de muis, de plek van een verzoek, het spoor, de rand van de
+    // jacht, de tekens bij de deur, de zwevende tekst, en boven een wezen zijn uitroepteken en levensbalk.
+    // De wolkjes, de lantaarn en de ogen van de wolven blijven: die horen bij de wereld (Marcel, 10 okt).
+    if (!S.foto) {
+      tekenRaster(ctx, S);
+      tekenMarkeringen(ctx, S);
+      tekenBouwBereik(ctx, S, vak);
+      tekenMarktPlek(ctx, S);
+      tekenRooiPlaatsen(ctx, S);
+      tekenBouwSpook(ctx, S);
+    }
     const volgorde = tekenVolgorde(lijst);
     voorsteKijkgaten(volgorde, kijkgaten);
     for (const item of volgorde) {
@@ -740,6 +744,175 @@
     ctx.clip();
     tekenStukken(ctx, g, r);
     ctx.restore();
+  }
+
+  // De mist (B2c, js/mist.js; Marcel, 13 okt: "A2", donkerder en ontkleurd): zwart wat je niet kent, grijs wat je kent
+  // maar nu niet ziet, en helder waar je mensen en je gebouwen kijken. Over de grond gaat één masker met een pixel per
+  // tegel, schuin op de grond gelegd zoals het licht van de hellingen (lichtKaartVan): zo loopt de rand vanzelf zacht over
+  // een tegel uit. Het masker heeft twee helften naast elkaar: links hoeveel kleur eruit gaat (met de samenstelmodus
+  // 'saturation'), rechts hoeveel donkerder; met de videokaart doet ctx.tekenMist (js/gl.js) beide in één keer. Wat op
+  // de grond staat, krijgt het grijs naar de tegel waar het staat (mistOverLijst), anders werd een hoge boom aan de rand
+  // half grijs. Op een kaart met hoogte (de spelregel Hoogte, standaard uit) ligt het masker nog plat.
+  // Spel.debug.geenMist = true zet de mist in het beeld uit, om te vergelijken (de regels blijven).
+  const MIST_STAP = 16; // het masker beslaat een vak op een veelvoud hiervan, zodat het niet bij elke stap nieuw is
+  const MIST_KIER = 2; // pixels tussen de twee helften, zodat het uitsmeren de ene niet in de andere trekt
+  const mistMaskers = new WeakMap(); // kaart → { sleutel, basis, werk, x0, y0, b, h }
+  const metMist = (w) => T.opEiland(w) && !(T.debug && T.debug.geenMist);
+  function mistMasker(w, vak) {
+    const M = T.MIST_INSTELLINGEN;
+    const x0 = Math.floor(vak.x0 / MIST_STAP) * MIST_STAP;
+    const y0 = Math.floor(vak.y0 / MIST_STAP) * MIST_STAP;
+    const b = Math.ceil((vak.x1 + 1) / MIST_STAP) * MIST_STAP - x0;
+    const h = Math.ceil((vak.y1 + 1) / MIST_STAP) * MIST_STAP - y0;
+    let m = mistMaskers.get(w);
+    // wat je kent: alleen opnieuw als er land bij kwam, het vak verschoof of een getal in de werkbank veranderde
+    const sleutel = [x0, y0, b, h, T.mistVersie(w), M.ontkleurd, M.donker, M.zwart.join()].join('|');
+    if (!m || m.sleutel !== sleutel) {
+      const B = 2 * b + MIST_KIER;
+      if (!m) mistMaskers.set(w, (m = { basis: document.createElement('canvas'), werk: document.createElement('canvas') }));
+      for (const c of [m.basis, m.werk]) {
+        if (c.width !== B) c.width = B;
+        if (c.height !== h) c.height = h;
+      }
+      const k = m.basis.getContext('2d');
+      const beeld = k.createImageData(B, h);
+      const d = beeld.data;
+      const ontkleurd = Math.round(M.ontkleurd * 255);
+      const donker = Math.round(M.donker * 255);
+      for (let j = 0; j < h; j++) {
+        for (let i = 0; i < b; i++) {
+          const kent = T.kentTegel(w, x0 + i, y0 + j);
+          const o = (j * B + i) * 4;
+          d[o] = d[o + 1] = d[o + 2] = 128;
+          d[o + 3] = kent ? ontkleurd : 255;
+          const z = (j * B + b + MIST_KIER + i) * 4;
+          [d[z], d[z + 1], d[z + 2]] = M.zwart;
+          d[z + 3] = kent ? donker : 255;
+        }
+      }
+      k.putImageData(beeld, 0, 0);
+      Object.assign(m, { sleutel, x0, y0, b, h });
+    }
+    // waar je nu kijkt: elk beeld, op de plek waar ze staan (niet afgerond, zodat de kring meeglijdt)
+    const k = m.werk.getContext('2d');
+    k.globalCompositeOperation = 'copy';
+    k.drawImage(m.basis, 0, 0);
+    k.globalCompositeOperation = 'destination-out';
+    for (const z of T.wieKijken(w)) {
+      const r0 = Math.max(0, z.r - M.rand / 2);
+      const r1 = z.r + M.rand / 2;
+      const cx = z.x - x0 + 0.5;
+      const cy = z.y - y0 + 0.5;
+      if (cx + r1 < 0 || cy + r1 < 0 || cx - r1 > b || cy - r1 > h) continue;
+      for (const naast of [0, b + MIST_KIER]) {
+        const g = k.createRadialGradient(cx + naast, cy, r0, cx + naast, cy, r1);
+        g.addColorStop(0, 'rgba(0,0,0,1)');
+        g.addColorStop(1, 'rgba(0,0,0,0)');
+        k.save();
+        k.beginPath();
+        k.rect(naast, 0, b, h);
+        k.clip();
+        k.fillStyle = g;
+        k.fillRect(cx + naast - r1, cy - r1, 2 * r1, 2 * r1);
+        k.restore();
+      }
+    }
+    k.globalCompositeOperation = 'source-over';
+    return m;
+  }
+  function tekenMist(ctx, w, vak) {
+    if (!metMist(w)) return;
+    const m = mistMasker(w, vak);
+    const p = T.naarScherm(m.x0 - 0.5, m.y0 - 0.5);
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.transform(32, 16, -32, 16, 0, 0); // van de tegels (een pixel van het masker is een tegel) naar het scherm
+    if (ctx.tekenMist) ctx.tekenMist(m.werk, m.b, m.h, MIST_KIER, T.MIST_INSTELLINGEN.zwart);
+    else {
+      ctx.imageSmoothingEnabled = true;
+      ctx.globalCompositeOperation = 'saturation';
+      ctx.drawImage(m.werk, 0, 0, m.b, m.h, 0, 0, m.b, m.h);
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.drawImage(m.werk, m.b + MIST_KIER, 0, m.b, m.h, 0, 0, m.b, m.h);
+    }
+    ctx.restore();
+  }
+  // Wat op de grond staat, naar de tegel waar het staat (een gebouw: het midden van zijn voet): op land dat je niet kent
+  // niets, en waar je nu niet kijkt grijs, zonder wie er loopt (een beest, een rover, een bezoeker; je eigen mensen zie
+  // je altijd). Haalt weg wat niet getekend wordt, ook voor de schaduwen. Met de videokaart is het grijs een filter op
+  // het doek (js/gl.js kent grayscale); zonder kost een filter bij elk plaatje een bewerking van het hele vel (een vel met
+  // bomen is 2000 bij 1400; 13 okt liep het beeld daar op vast), dus tekent het daar een grijze kopie van het stukje
+  // (grijsStuk).
+  function mistOverLijst(ctx, S, w, lijst) {
+    if (!metMist(w)) return;
+    const M = T.MIST_INSTELLINGEN;
+    const filter = `grayscale(${M.ontkleurd}) brightness(${1 - M.donker})`; // geen tekst
+    const grijs = ctx.tekenMist
+      ? (f) => {
+        ctx.filter = filter;
+        f();
+        ctx.filter = 'none';
+      }
+      : (f) => {
+        ctx.drawImage = function (bron, ...a) {
+          const [sx, sy, sw, sh, ...rest] = a.length === 8 ? a : [0, 0, bron.naturalWidth || bron.width, bron.naturalHeight || bron.height, ...a];
+          const op = rest.length === 2 ? [...rest, sw, sh] : rest;
+          const stuk = grijsStuk(bron, sx, sy, sw, sh, filter);
+          return stuk ? CanvasRenderingContext2D.prototype.drawImage.call(this, stuk, 0, 0, stuk.width, stuk.height, ...op)
+            : CanvasRenderingContext2D.prototype.drawImage.call(this, bron, ...a);
+        };
+        try {
+          f();
+        } finally {
+          delete ctx.drawImage;
+        }
+      };
+    let n = 0;
+    for (const item of lijst) {
+      const v = item.gebouw;
+      const b = v && v.beslaat ? v.beslaat : [1, 1];
+      const p = v ? { x: Math.round(v.x + (b[0] - 1) / 2), y: Math.round(v.y + (b[1] - 1) / 2) } : item.punt;
+      if (p && !T.zietNu(w, p.x, p.y)) {
+        if (!T.kentTegel(w, p.x, p.y) || (item.wezen && !T.isVanJou(S, item.wezen))) continue;
+        const f = item.f;
+        item.f = () => grijs(f);
+      }
+      lijst[n++] = item;
+    }
+    lijst.length = n;
+  }
+
+  // Een grijze kopie van een stukje van een plaatje (zonder videokaart, mistOverLijst), één keer gemaakt: eerst het stukje
+  // los, dan met het filter, zodat het filter alleen dat stukje bewerkt. Een doek dat elke keer anders is (zonder
+  // `versie`) krijgt er geen. Samen hooguit GRIJS_PIXELS pixels (vier bytes elk), dan begint het opnieuw.
+  const GRIJS_PIXELS = 16e6;
+  let grijzeStukken = new WeakMap(); // bron → Map(stukje → doek)
+  let grijsPixels = 0;
+  let grijsFilter = null;
+  function grijsStuk(bron, sx, sy, sw, sh, filter) {
+    const doek = typeof HTMLCanvasElement !== 'undefined' && bron instanceof HTMLCanvasElement;
+    if (doek && bron.versie === undefined) return null;
+    if (filter !== grijsFilter || grijsPixels > GRIJS_PIXELS) [grijzeStukken, grijsPixels, grijsFilter] = [new WeakMap(), 0, filter];
+    [sx, sy, sw, sh] = [Math.round(sx), Math.round(sy), Math.max(1, Math.round(sw)), Math.max(1, Math.round(sh))];
+    let per = grijzeStukken.get(bron);
+    if (!per) grijzeStukken.set(bron, (per = new Map()));
+    const sleutel = sx + ',' + sy + ',' + sw + ',' + sh + (doek ? ',' + bron.versie : '');
+    let c = per.get(sleutel);
+    if (!c) {
+      const los = document.createElement('canvas');
+      los.width = sw;
+      los.height = sh;
+      los.getContext('2d').drawImage(bron, sx, sy, sw, sh, 0, 0, sw, sh);
+      c = document.createElement('canvas');
+      c.width = sw;
+      c.height = sh;
+      const k = c.getContext('2d');
+      k.filter = filter;
+      k.drawImage(los, 0, 0);
+      per.set(sleutel, c);
+      grijsPixels += sw * sh;
+    }
+    return c;
   }
 
   // De nacht en de schemering (js/dag.js, T.lichtVan): een donkerblauwe laag over de wereld, lichter
@@ -2909,7 +3082,7 @@
     if (sterk <= 0) return;
     const k = 1 / Math.min(1, Math.max(0.3, S.zoom));
     for (const e of S.wereld.wezens) {
-      if (!e.beest || e.dood || !e.beeldStand || !e.beeldStand.laatste) continue;
+      if (!e.beest || e.dood || !e.beeldStand || !e.beeldStand.laatste || !T.zieJeWezen(S, S.wereld, e)) continue;
       const l = e.beeldStand.laatste;
       const rij = T.OGEN[l.naam] && T.OGEN[l.naam][l.houding] && T.OGEN[l.naam][l.houding][OOG_RICHTINGEN.indexOf(l.richting)];
       const ogen = rij && rij[l.beeld];
@@ -2939,7 +3112,7 @@
     const w = S.wereld;
     for (const [g, leden] of T.praatjesOp(w)) {
       // Met wie jij praat, praat niet met hen.
-      const erbij = leden.filter((e) => T.staatErbij(e) && e !== S.spreektMet && T.isZichtbaar(w, e.tx, e.ty));
+      const erbij = leden.filter((e) => T.staatErbij(e) && e !== S.spreektMet && T.isZichtbaar(w, e.tx, e.ty) && T.zieJeWezen(S, w, e));
       const n = erbij.length;
       if (n < 2) continue;
       const t = S.tijd / BEURT + (g.zaad % 10) / 10;

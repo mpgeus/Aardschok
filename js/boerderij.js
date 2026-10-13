@@ -174,7 +174,7 @@
     if (r.b * r.h < I.veldMin) return T.t('A field is at least {n} tiles.', { n: I.veldMin });
     if (r.b * r.h > I.veldMax) return T.t('A field is at most {n} tiles.', { n: I.veldMax });
     if (Math.min(r.b, r.h) < I.veldSmal) return T.t('A field is at least {n} tiles wide.', { n: I.veldSmal });
-    return T.waaromBuitenBouwBereik(D, r) || waaromNietOpDezeTegels(D, r) || (T.teSteil(w, r) ? T.t('It is too steep there for a field.') : null)
+    return T.waaromBuitenBouwBereik(D, r) || T.waaromOnbekendLand(D, r) || waaromNietOpDezeTegels(D, r) || (T.teSteil(w, r) ? T.t('It is too steep there for a field.') : null)
       || T.boerderijVoorVeld(D, soort, r).reden || null;
   };
   function waaromNietOpDezeTegels(D, r) {

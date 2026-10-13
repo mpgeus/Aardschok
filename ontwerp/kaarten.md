@@ -220,6 +220,26 @@ nummers passen op het hele eiland, en `T.eilandStuk` maakt elk stuk los (64 bij 
    nu is** (B1): de grond, de bomen en de gebouwen, zonder wie er loopt (mensen, beesten, rovers). Precies zoals je het
    het laatst zag (B2) kan later erbovenop, als een ander iets doet waar jij niet kijkt (F). **Bij het begin ken je een
    kring van zo'n 50 tegels om je plek** (C2, een getal in de werkbank), ongeveer je land van nu; de rest is zwart.
+   **Het plan van B2c** (Claude, 13 okt, sessie `ccr-1d9fab2a-huux51`; **Marcel: "A2, B1, C ok"**):
+   - *De regel* in `js/mist.js`: wat je kent staat in S en wordt bewaard (per stuk een bitpatroon, een stuk dat je
+     helemaal kent als `true`; versie 11); wat je nu ziet, rekent het spel elk beeld uit waar je mensen en je gebouwen
+     staan. Het land gaat open zoals in B2b (`openRond`, 16 tegels), verder dan iemand kijkt, dus wat je ziet ligt klaar.
+   - *Het grijs* (A2: "donkerder en ontkleurd"): over de grond een zacht masker (een pixel per tegel, schuin over de grond
+     gelegd), en elk ding (een boom, een huis) naar de tegel waar het staat, zodat een hoge boom aan de rand niet half
+     grijs wordt. Wie in het grijs of het zwart loopt (beesten, rovers, mensen van een ander), teken je niet en wijs je
+     niet aan.
+   - *Een klik in het zwart* (B1): de schout loopt erheen als er een weg is.
+   - *Hoe ver ze zien* (C: "ok"): de schout 12 tegels, een dorpeling 7, de ossenkar 7, een gebouw dat af is 6, en wat je
+     bij het begin kent 50; de getallen in de werkbank.
+   - *Bouwen alleen op land dat je kent*: een gebouw en een veld.
+   **Gebouwd** (13 okt, sessie `ccr-1d9fab2a-huux51`; hoe het werkt in `code.md` bij `js/mist.js`, en in `spel.md`, "Zo
+   werkt de mist nu"). Erbij, omdat de toetsen het lieten zien: **het plein kijkt ook**, zoals een gebouw dat af is (6
+   tegels vanaf zijn rand), anders werd je eigen plein grijs als er niemand stond. Wat het tekenen leerde: zonder
+   videokaart kost een filter op het doek bij elk plaatje een bewerking van het hele vel (een vel bomen is 2000 bij
+   1400), en het beeld liep er vast; daar tekent het een grijze kopie van het stukje, één keer gemaakt. De schaduwen van
+   de zon komen vóór de mist (anders vielen ze over het zwart), en wat ui is erna (het pad naar een tegel in het zwart zie
+   je). Het bewaarde spel van een leeg begin is 23 kB (was 15): de zes stukken van de kring van 50 zijn half bekend. Nog
+   niet: op een kaart met hoogte (de spelregel Hoogte, standaard uit) ligt het masker plat.
 4. **B2d, opslaan wat veranderde** (gaat mee in B2b, Marcel 13 okt: "Meteen mee"). Het eiland komt uit het nummer; het bewaarde spel houdt per stuk alleen wat er
    gebouwd, gehakt en gelegd is, en wat je verkende. Een oud bewaard spel past dan niet meer (`versie` omhoog; tot de
    release mag dat). Het moet ook klein blijven voor de opslag van de browser (een paar MB, `verpakken.md`).

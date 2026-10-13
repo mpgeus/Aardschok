@@ -603,6 +603,7 @@
     { naam: T.t('Buildings and population'), blok: 'GEBOUWEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The residents'), blok: 'BEWONERS_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The island map'), blok: 'WERELD_INSTELLINGEN' }, // geen tekst
+    { naam: T.t('The fog'), blok: 'MIST_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Walking'), blok: 'LOPEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Footpaths'), blok: 'PADEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Chats'), blok: 'PRAATJE_INSTELLINGEN' }, // geen tekst
@@ -1419,6 +1420,14 @@
   const NAAM_VAN_PAD = {
     'KOORTS_INSTELLINGEN.begin': T.t('ill at the start'), // geen tekst
     'LICHT_INSTELLINGEN.kracht': T.t('lamp power'), // geen tekst
+    'MIST_INSTELLINGEN.zicht': T.t('how far they see'), // geen tekst
+    'MIST_INSTELLINGEN.zicht.dorpeling': T.t('villager'), // geen tekst
+    'MIST_INSTELLINGEN.zicht.gebouw': T.t('building, from its edge'), // geen tekst
+    'MIST_INSTELLINGEN.beginKring': T.t('known at the start, within'), // geen tekst
+    'MIST_INSTELLINGEN.ontkleurd': T.t('colour taken out in the grey'), // geen tekst
+    'MIST_INSTELLINGEN.donker': T.t('darker in the grey'), // geen tekst
+    'MIST_INSTELLINGEN.zwart': T.t('black'), // geen tekst
+    'MIST_INSTELLINGEN.rand': T.t('soft edge'), // geen tekst
     'RAADSMAN_INSTELLINGEN.kiest': T.t('how the advisor weighs'), // geen tekst
     'BEESTEN_INSTELLINGEN.groot': T.t('splits at size'), // geen tekst
     'BEESTEN_INSTELLINGEN.jager.hooguit': T.t('pack size limit'), // geen tekst

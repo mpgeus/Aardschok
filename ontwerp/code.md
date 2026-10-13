@@ -238,8 +238,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - **De kaart van het eiland** (B2b, 13 okt; `kaarten.md`, "Het hele eiland"): `T.eilandKaart(zaad, vak)` is het hele
   eiland in stukken van `T.STUK` (64) bij 64, achter dezelfde vragen als een kaart uit Tiled. In S staat alleen wat er
   anders werd, per tegelnummer: `w.tegelsAnders` (`T.zetTegel`), `w.grondAnders` (de maker), `w.gerooid` (een ding van het
-  eiland dat weg is, `T.haalVoorwerpWeg`), wat iemand zette in `w.voorwerpen`, en welke stukken open zijn (`w.open`,
-  `T.openVak`). Een stuk dat niet open is, is 'buiten'. Open gaat het waar je mensen komen (`T.werkStukkenBij`, elk
+  eiland dat weg is, `T.haalVoorwerpWeg`), wat iemand zette in `w.voorwerpen`, welke stukken open zijn (`w.open`,
+  `T.openVak`), en wat je kent (`w.gekend`, `js/mist.js`). Een stuk dat niet open is, is 'buiten'. Open gaat het waar je mensen komen (`T.werkStukkenBij`, elk
   beeld in `T.werkDorpBij`; stap 5, Marcel: "Al je mensen"): een stuk binnen `openRond` tegels (16,
   `T.WERELD_INSTELLINGEN`) van de schout, een dorpeling of de ossenkar, hooguit één per beeld. **Alles per stuk**
   (Marcel, 13 okt): een stuk dat open gaat, is geen kaartverandering (geen `T.kaartVeranderd`); wat het land beslaat,
@@ -272,6 +272,25 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   Elke kaart van het spel komt uit Tiled (`js/kaart.js`). De speler is `S.schout`, met soort
   'schout' en kant 'speler' (Marcel, 26 sep: een man van de militie vecht later ook aan kant
   'speler' zonder de schout te zijn); hij draagt het vel van een gewone dorpeling (`js/sprites.js`).
+
+### js/mist.js: de mist
+
+- `js/mist.js`: **de mist** (B2c, 13 okt; Marcel: "A2, B1, C ok"; het plan in `kaarten.md`, "Het hele eiland"). Zwart wat
+  niemand van jou zag, grijs wat je zag maar nu niet ziet, helder waar je mensen kijken. **Wat je kent, is spelstaat**:
+  `w.gekend` op de kaart van het eiland, per stuk (`T.stukNummer`) een lijst van 128 getallen van 32 bits (64 rijen van
+  twee), of `true` als je het hele stuk kent, zodat het bewaarde spel klein blijft (een leeg begin 23 kB, was 15 kB; versie
+  11). `T.kentTegel(w, x, y)`, `T.kenKring(w, x, y, r)` (geeft true als er iets bij kwam, en hoogt `T.mistVersie(w)` op,
+  voor wie het bijhoudt), en `T.kenHetBegin(w, vak)`: de kring van `beginKring` (50) om het midden van je land, vanuit
+  `js/maker.js`. **Wat je nu ziet, is het niet**: `T.werkMistBij(S, D)` (elk beeld in `T.werkDorpBij`, na het openen van het
+  land) zet wie er kijkt in een WeakMap (`T.wieKijken(w)`): je mensen (`T.isVanJou`, in `js/wereld.js`, dezelfde als wie het
+  land open maakt), de gebouwen die af zijn (vanaf de rand van hun voet) en het plein; wie van tegel veranderde, maakt
+  zijn kring bekend. `T.zietNu(w, x, y)`, en `T.zieJeWezen(S, w, e)`: je eigen mensen altijd, een ander (een beest, een
+  rover, een bezoeker) alleen waar je nu kijkt; het tekenen, de muis (`zoekDoel` in `js/main.js`), de doorkijk
+  (`T.zichtbaarDoor`), de wolkjes en de ogen van de wolven vragen het. `T.waaromOnbekendLand(D, r)`: je bouwt alleen op land
+  dat je kent (`T.waaromPastHetNiet`, `T.waaromPastVeldNiet`). Een klik in het zwart (B1) loopt erheen als er een weg is:
+  het land gaat verder open dan iemand kijkt (`openRond`, 16), dus dat gaat zoals op elke tegel. Een kaart uit Tiled heeft
+  geen mist. De getallen in `T.MIST_INSTELLINGEN` (de werkbank, "The fog"); het tekenen in `js/tekenen.js` (`tekenMist`,
+  `mistOverLijst`) en `js/gl.js` (`tekenMist`, grayscale). Getoetst in `test/mist.test.cjs`.
 
 ### js/pad.js: A* en de eilanden
 
@@ -478,7 +497,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`werkStukkenBij` in `js/tekenen.js`, 9 okt): wat in beeld komt, wordt getekend, en slepen tekent alleen de stukken aan
   de rand; wie de grond wil (het kijkgat), vraagt `T.tekenGrondStukken`. Ver uitgezoomd liggen ze op de maat van het
   scherm. Het tekenen knipt af op `T.kaartGrens` (op het eiland het hele eiland: wat niet open is, is 'buiten' en blijft
-  donker), en zoekt wat er staat met `T.voorwerpenIn` (ook wat er op het eiland groeit); tot B2b stond er een bosrand om
+  donker; **de mist**, B2c: na de grond en de schaduwen één masker met een pixel per tegel, schuin over de grond, links
+  hoeveel kleur eruit gaat en rechts hoeveel donkerder (`tekenMist`; zonder videokaart de samenstelmodus 'saturation'), en
+  wat erop staat naar zijn tegel (`mistOverLijst`: in het zwart niets, in het grijs grijs en zonder wie er loopt; zonder
+  videokaart een grijze kopie van het stukje, `grijsStuk`, want een filter bewerkt daar het hele vel;
+  `Spel.debug.geenMist`), en zoekt wat er staat met `T.voorwerpenIn` (ook wat er op het eiland groeit); tot B2b stond er een bosrand om
   de kaart, ver uitgezoomd in een eigen buffer (`bosGebakken`). **De
   meter** (`F2`): beelden per seconde, en wat de regels en het tekenen per beeld kosten.
 
@@ -499,6 +522,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`tekenLichtkaart`); zonder videokaart blijft het de donkere laag van hiervoor. **De schaduwen** (vraag 125, B): wat in
   de tekenlijst staat, nog een keer als silhouet scheef over de grond (`tekenZonneschaduw`, `T.zonStand` in `js/dag.js`),
   op een masker dat in één keer over de grond gaat (`beginSchaduw`, `eindSchaduw`); de spelregel "Schaduwen".
+  **De mist** (B2c, `js/mist.js`): elk hoekpunt heeft een vijfde getal, hoeveel kleur eruit gaat (`aGrijs`; het filter
+  `grayscale(..) brightness(..)` zet het, `grijsNu`), zodat wat in het grijs staat zonder extra opdrachten grijs wordt; en
+  `tekenMist` kopieert wat er tot dan getekend is (de grond en de schaduwen) naar een textuur en legt het ontkleurd en
+  donkerder terug naar het masker (`FRAG_MIST`), want ontkleuren kan geen mengstand.
 
 ### js/sprites.js en js/kaart.js: de pixel art in het spel
 

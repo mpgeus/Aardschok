@@ -120,6 +120,15 @@ voor; zonder wijngaard geeft ze niets. **Wijn is eten** (zie "Eten", hieronder),
 dorp voedt; een tegel wijngaard voedt evenveel als een tegel akker. Te kiezen in de werkbank ("Boeren uit het niets" en
 "Meebouwen"). Nog niet: een jaar zonder fouten met een speler in code die bouwt (1f).
 
+**Zo werkt de mist nu** (13 okt, B2c; Marcel: "A2, B1, C ok"; `js/mist.js`, het plan in `kaarten.md`, "Het hele
+eiland"): het eiland is zwart waar niemand van jou kwam, grijs (donkerder en ontkleurd) wat je zag maar nu niet ziet, en
+helder waar je mensen kijken. Bij het begin ken je een kring van 50 tegels om het midden van je land. De schout kijkt 12
+tegels ver, een dorpeling en de ossenkar 7, een gebouw dat af is en het plein 6 vanaf hun rand; wat ze zagen, ken je
+voortaan, ook na opslaan. In het grijs staat het land zoals het nu is (de grond, de bomen, de gebouwen), maar wie er
+loopt (een beest, een rover, een bezoeker) zie je er niet, en je wijst hem niet aan; je eigen mensen zie je altijd. Een
+klik in het zwart: de schout loopt erheen als er een weg is. Je bouwt alleen op land dat je kent (een gebouw en een
+veld). De getallen in de werkbank ("The fog").
+
 ## Een nieuwe richting (Marcel, 28 sep 2026)
 
 **Zo staat het nu** (28 sep tot en met 5 okt): besloten; wat er sindsdien van gebouwd is, staat bij elk onderwerp. Marcel koos op vier vragen van Claude

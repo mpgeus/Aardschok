@@ -133,7 +133,7 @@ De bestanden in `js/`, per onderwerp; elk heeft een kop in `ontwerp/code.md`:
 
 - **Spel en dorp:** `dorp`, `opslaan`, `menu` (het titelscherm), `taal`, `naam`, `tijd`, `dag`, `opties`, `main` (de
   spellus, de invoer, de camera).
-- **Wereld en lopen:** `wereld`, `pad` (A*), `lopen`, `praatje`, `anim`, `verkennen`.
+- **Wereld en lopen:** `wereld`, `mist`, `pad` (A*), `lopen`, `praatje`, `anim`, `verkennen`.
 - **Het land:** `eiland` (2500 bij 2500 tegels uit één nummer), `maker` (je land erop), `hoogte`, `kaart` (uit Tiled),
   `land` en `landkaart`, `gebied`.
 - **Beeld en scherm:** `iso`, `tekenen`, `gl` (WebGL), `sprites`, `doorkijk`, `bouwstijl`, `kleinleven`, `zien` (het

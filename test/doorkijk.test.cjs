@@ -22,6 +22,7 @@ function gehucht() {
   S.spreektMet = null;
   S.schout = T.maakWezen('schout', 20, 20);
   w.wezens = [S.schout];
+  T.werkMistBij(S, S.dorp); // wie in de mist loopt, zie je ook niet door een boom heen (js/mist.js): de schout kijkt hier
   return S;
 }
 const hart = (S) => S.wereld.kamp.vuur;
@@ -112,6 +113,7 @@ test('wie vóór het huis staat, laat het dicht; wie erachter staat, laat het in
 // 10 okt: "Ja akkoord", op een feest alleen wie ertoe doet). Wie je zoekt met een voorval, zie je altijd.
 test('op een feest telt het plein niet mee, wie je zoekt met een voorval wel', () => {
   const { S } = proefDorp(T);
+  T.werkMistBij(S, S.dorp); // het plein kijkt (js/mist.js)
   const dag = Math.floor(S.kalender.dag) + 1;
   S.kalender.dag = dag + 11 / 24;
   const kind = dorpelingOp(S, 3, 0, 0);
