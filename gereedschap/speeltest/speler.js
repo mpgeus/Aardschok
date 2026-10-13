@@ -587,7 +587,7 @@
       });
       const kaart = { bomen: 0, jong: 0, boompjes: 0, stronken: 0 };
       const bij = { bomen: 0, jong: 0, boompjes: 0 };
-      for (const v of w_.voorwerpen) {
+      for (const v of T.voorwerpenIn(w_, T.kaartVak(w_))) {
         const wat = T.NATUUR.bos.telt(w_, v.x, v.y, v) ? 'bomen' : v.soort === 'boompje' ? 'boompjes' : v.geplant != null ? 'jong' : v.soort === 'boomstronk' ? 'stronken' : null;
         if (!wat) continue;
         kaart[wat]++;
