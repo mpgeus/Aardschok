@@ -49,7 +49,10 @@
     // ranken) hoort bij een boerderij die geen wijn plukt.
     // 9 (13 okt): het slijten van de paadjes (`w.paden`, js/paden.js) telt per tegelnummer (T.tegelNummer, y * 4096 + x),
     // niet meer per plek op een kaart van 100 breed (B2a: niets hangt nog aan de maat van de kaart).
-    versie: 9,
+    // 10 (13 okt): de kaart is het eiland, in stukken (B2b, met B2d): in de coördinaten van het eiland, zonder w.tegels en
+    // w.grond; hij bewaart alleen wat er anders werd (w.tegelsAnders, w.grondAnders, w.gerooid), welke stukken open zijn
+    // (w.open), en wat iemand neerzette (w.voorwerpen). Een oude kaart van 100 bij 100 met al zijn tegels past daar niet in.
+    versie: 10,
     eigenPlekken: 5, // naast de ene die vanzelf gaat (vraag 48 B)
     // Op de hoogste snelheid (30×) slaat het spel niet elke ochtend vanzelf op, maar om de zoveel dagen: een dag duurt
     // dan tien seconden, en het opslaan kost bij 100 mensen 25 à 50 ms, een hapering die je ziet (gemeten op 3 okt).
