@@ -119,7 +119,7 @@
 
   function veldVan(w, doel, tot, open) {
     const versie = T.kaartVersie(w);
-    const vak = T.kaartVak(w);
+    const vak = T.loopVak(w);
     let m = VELDEN.get(w);
     if (!m || m.versie !== versie || m.vak.x !== vak.x || m.vak.y !== vak.y || m.vak.b !== vak.b || m.vak.h !== vak.h) {
       m = { versie, vak, velden: new Map() };
@@ -137,7 +137,7 @@
   }
 
   // Een veld begint bij het doel: elke begaanbare tegel binnen `tot` ervan ligt er 0 stappen af. Het veld beslaat het
-  // vak van de kaart (T.kaartVak, js/wereld.js), zoals het raster van wat vaststaat: tegel (x, y) staat op plek
+  // vak waarin gelopen wordt (T.loopVak, js/wereld.js), zoals het raster van wat vaststaat: tegel (x, y) staat op plek
   // (y - vak.y) * vak.b + (x - vak.x).
   function nieuwVeld(w, vak, doel, tot, open) {
     const afstand = new Uint16Array(vak.b * vak.h).fill(ONBEKEND);

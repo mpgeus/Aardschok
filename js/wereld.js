@@ -321,6 +321,33 @@
   // Waar de kaart tegels kan hebben, { x, y, b, h }: om het tekenen af te knippen, en om te zoeken in wat er in beeld is.
   // Op het eiland het hele eiland, dus maak er nooit een lijst over (daarvoor is T.kaartVak).
   T.kaartGrens = (w) => (opEiland(w) ? { x: 0, y: 0, b: EILAND_MAAT(), h: EILAND_MAAT() } : { x: 0, y: 0, b: w.b, h: w.h });
+  // Het vak waarin gelopen wordt, { x, y, b, h }: op het eiland alle stukken die open zijn (B2b, stap 4: "Overal"), op een
+  // kaart uit Tiled de kaart. Het vaste raster, de eilanden van A* (hieronder) en de velden van het lopen (js/lopen.js)
+  // beslaan dit vak, zodat wie buiten het vak om het dorp staat (die over de weg binnenkwam), ook een weg vindt. Het groeit
+  // als er een stuk open gaat; tot dan is het hetzelfde ding, zodat wie het onthoudt, ziet of het veranderde.
+  const LOOPVAK = new WeakMap();
+  T.loopVak = function (w) {
+    const al = LOOPVAK.get(w);
+    if (!opEiland(w)) {
+      if (al && al.vak.b === w.b && al.vak.h === w.h) return al.vak;
+      const vak = T.kaartVak(w);
+      LOOPVAK.set(w, { vak });
+      return vak;
+    }
+    if (al && al.open === w.open.size) return al.vak;
+    let [x0, y0, x1, y1] = [Infinity, Infinity, -Infinity, -Infinity];
+    for (const n of w.open) {
+      const sx = n % 64;
+      const sy = Math.floor(n / 64);
+      x0 = Math.min(x0, sx * STUK);
+      y0 = Math.min(y0, sy * STUK);
+      x1 = Math.max(x1, (sx + 1) * STUK);
+      y1 = Math.max(y1, (sy + 1) * STUK);
+    }
+    const vak = w.open.size ? { x: x0, y: y0, b: x1 - x0, h: y1 - y0 } : { ...w.vak };
+    LOOPVAK.set(w, { open: w.open.size, vak });
+    return vak;
+  };
   // Ligt tegel (x, y) in dit vak? Wie een lijst over T.kaartVak bijhoudt, vraagt dit, niet T.opKaart: op het eiland is
   // de kaart veel groter dan het vak.
   T.inVak = (vak, x, y) => x >= vak.x && y >= vak.y && x < vak.x + vak.b && y < vak.y + vak.h;
@@ -533,8 +560,8 @@
   }
   function eilandenVan(w) {
     const al = EILANDEN.get(w);
-    if (al) return al;
-    const vak = T.kaartVak(w);
+    if (al && al.vak === T.loopVak(w)) return al;
+    const vak = T.loopVak(w);
     const { b, h } = vak;
     const op = new Int32Array(b * h).fill(-1);
     const kan = new Uint8Array(b * h);
@@ -670,8 +697,8 @@
   let laatste = null; // het raster waar het laatst naar gevraagd werd: A* vraagt duizenden keren achter elkaar dezelfde kaart
   function vastRaster(w) {
     let r = laatste && laatste.w === w ? laatste : RASTERS.get(w);
-    if (!(r && r.voorwerpen === w.voorwerpen && r.aantal === w.voorwerpen.length && r.b === w.b && r.h === w.h && r.wvak === w.vak)) {
-      const vak = T.kaartVak(w);
+    if (!(r && r.voorwerpen === w.voorwerpen && r.aantal === w.voorwerpen.length && r.b === w.b && r.h === w.h && r.vak === T.loopVak(w))) {
+      const vak = T.loopVak(w);
       const raster = new Uint8Array(vak.b * vak.h);
       for (let y = 0; y < vak.h; y++) {
         for (let x = 0; x < vak.b; x++) {
@@ -680,7 +707,7 @@
           raster[y * vak.b + x] = t === 'muur' || t === 'buiten' || (v && T.VOORWERPEN[v.soort].blokkeert) ? VAST : t === 'deur' ? DEUR : VRIJ;
         }
       }
-      r = { w, voorwerpen: w.voorwerpen, aantal: w.voorwerpen.length, b: w.b, h: w.h, wvak: w.vak, vak, raster };
+      r = { w, voorwerpen: w.voorwerpen, aantal: w.voorwerpen.length, b: w.b, h: w.h, vak, raster };
       RASTERS.set(w, r);
     }
     laatste = r;
@@ -694,7 +721,7 @@
     if (!T.opKaart(w, x, y)) return VAST;
     if ((x | 0) === x && (y | 0) === y) {
       const l = laatste;
-      if (!(l && l.w === w && l.voorwerpen === w.voorwerpen && l.aantal === w.voorwerpen.length && l.b === w.b && l.h === w.h && l.wvak === w.vak)) vastRaster(w);
+      if (!(l && l.w === w && l.voorwerpen === w.voorwerpen && l.aantal === w.voorwerpen.length && l.b === w.b && l.h === w.h && l.vak === T.loopVak(w))) vastRaster(w);
       const { vak, raster } = laatste;
       const i = x - vak.x;
       const j = y - vak.y;
