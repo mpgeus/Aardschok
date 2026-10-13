@@ -16,6 +16,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | De vertical slice | besloten (Marcel, 1 okt, vraag 77): het doel is de vertical slice uit het concept: je begint als gehucht, zoals nu, en groeit naar haar maat (een kleine stad van 100 tot 200 mensen; een dorp van 50 is als doel te klein), en uiteindelijk naar een stad van mogelijk 5000 of meer ("we moeten een manier zoeken", vraag 78, E), in zes stappen te beginnen met de wensen van de mensen, zoals in Anno 1602 (vraag 78; het plan is vraag 79); statussen met niveaus; een ambtenaar voor elke tak van het bestuur; en later een scherm met de statussen en de laatst bekende inventarisatie | vraag 77, 78, 79 |
 | De wensen per stand | besloten (Marcel, 1 okt, vraag 80 en 85); 2a en 2b gebouwd (1 okt): elk huis een stand (keuters, dorpelingen, ambachtslieden, en de boeren ernaast) met wensen zoals in Anno 1602, de hoogste stand neemt eerst, een kring om de kapel, de herberg en de markt (dat een jaar lang alles hebben iets won, is op 11 okt weggehaald, snoeironde vraag 153); 2d gebouwd (2 okt, vraag 90): de treden uit de standen, een dorp bij 20 dorpelingen en marktrecht bij 20 ambachtslieden, met de markt en de weverij al in een dorp; 2c en 2e gebouwd (3 okt, vraag 100 en 101): een teken bij de deur en een briefje bij de muis, en het eind: onder 10 mensen verloren, en op 1 lentemaand het jaarverslag (het winnen is op 11 okt weggehaald); sinds 6 okt rooit een huis dat niet past wat in de weg staat (ook zijn eigen appelboom), zeggen het briefje en de raad waarom een huis niet groeit, en komt een erf niet waar het een huis elke vorm afneemt (vraag 130) | vraag 79, 80, 82, 85, 90, 100, 101, 130 |
 | De economie van The Settlers, met gevechten in beurten | besloten (Marcel, 11 okt: "A ja, B ja, C allebei"), niets gebouwd: jij bouwt van bovenaf, binnen bereik van je stad, een kar haalt de grondstoffen (geen grens, geen vlaggen), en je vecht in beurten, verdedigend en op het eiland tot het kasteel; gooit "geen hand van bovenaf" en "de mensen bouwen zelf" om; eerst een proef met één keten | vraag 151, 152 |
+| De afwisseling | gebouwd (13 okt; Marcel: "A1, B1, C1, D1"): het dorp eet in gelijke delen van elke soort die er ligt, en hoe meer soorten, hoe harder al het werk gaat (60% met één, 100% met vier); de status Plain fare, en de kar brengt kaas en gezouten vlees ("Zo werkt de afwisseling nu") | vraag 154 |
 | Een nieuwe richting | besloten (Marcel, 28 sep): besturen en groeien worden het hart, de heer de druk van boven, en vechten begint bij je eigen dorp; sinds 29 sep: het hogere doel is al het land veroveren of met iedereen bevriend raken (Civilization), en sinds 1 okt: de hele wereld veroveren, en je mensen super gelukkig, met wensen zoals in Anno 1602, terwijl de heer geen doelen stelt maar het je moeilijk maakt (vraag 78), eenvoud boven werkelijkheid, en wetten in een menu zoals Democracy 3; sinds 30 sep: meer een management sim, met het concept als kompas (het poppetje is hoe je bestuurt, `concept.md`), de boeren die het seizoen doen, en eerst de kern; sinds 3 okt: de stad groeit door haar mensen (inwoners beginnen zelf een ambacht en vragen toestemming), en jij bepaalt de richting, want "weer een bouw spelletje" wordt te snel saai (het plan is vraag 103, open) | vraag 50, 51, 54, 73, 74, 78, 103 |
 | De heer als tegenstander | besloten (Marcel, 5 en 6 okt: "A ja B b2 en b3 C c3 D ja E ja F Ja G zo"), niets gebouwd: het eind van het spel is de heer verstoten en verslaan, met een kasteel op de kaart, bondgenoten en per spel een ander karakter; veroveren en bevriend raken zijn de weg erheen, langs drie wegen (de opstand, de koning, trouw, en dan ben jij de nieuwe heer); een bond sluit je te voet; het jaar van geluk blijft het eind van de demo en wordt in het hele spel kracht; samen spelen, met een speler als heer, na de release; niets hiervan vóór de kern | vraag 126 |
 | Informatie, de zitting en mensen die onthouden | besloten (Marcel, 6 okt: "A tot g allemaal, en de proef komt erna"); de proef, de verdwenen graanzak, is op 11 okt weggehaald (snoeironde, vraag 153), de rest is niet gebouwd: wat er gebeurde, wat er gezegd wordt en wat jij weet; 's middags een zitting met getuigen en bewijs; het vertrouwen per groep; mensen die onthouden wat je deed; een heer die van je leert; gevolgen in ketens; eerst een proef met één keten (de verdwenen graanzak, met een eerste zitting), na het beeld dat in de werklijst staat | vraag 105, 118, 128 |
@@ -72,7 +73,8 @@ stuurt je met vier gezinnen naar een stuk van zijn wildernis) rijdt de huifkar o
 ernaast tot je zelf ergens heen klikt, en de gezinnen lopen erachter (Marcel: "Rijdt nu binnen"). Op het plein zetten ze
 het kamp op: een tent of een afdak per gezin rond het kampvuur, en de kar ernaast. Daar wonen ze; de tent van de schout
 is zijn huis (slapen, het rapport). Een tent is zo groot als zijn gezin, dus er komt geen nieuw gezin bij. In de kar: 50
-hout, 140 graan, 60 zaaigraan, 20 goud en 5 gereedschap; met de schout komt zijn gezin mee (Marcel: "Met gezin"), en elk
+hout, 140 graan, 60 zaaigraan, 20 goud en 5 gereedschap, en sinds 13 okt (vraag 154, D1) 8 kaas, 8 vlees en 1 zout, zodat
+het dorp met drie soorten eten begint (zie "Zo werkt de afwisseling nu"); met de schout komt zijn gezin mee (Marcel: "Met gezin"), en elk
 gezin is een man, een vrouw en een kind, zodat het in een hut past (Marcel: "Kleinere gezinnen"), samen 17 mensen. Het
 eerste jaar vraagt de heer niets: geen schatting en geen grillen, en in wijnmaand schrijft hij dat hij je spaart ("Bedank
 Ons niet"). **Jij bouwt** (Marcel: "We willen dus een bouwmenu en zelf bouwen"): de spelregels "Huizen" en "Wie bouwt" zijn
@@ -1873,6 +1875,28 @@ Nog open na deel 1 (vragen van Claude):
 
 ## Het dorp: mensen, behoeften en de winter (werklijst punt 3, 23 sep 2026)
 
+**Zo werkt de afwisseling nu** (13 okt, vraag 154; Marcel: "Wijn wordt ook eten. Afwisseling wordt de kern. Mensen
+worden anders minder productief", en "A1, B1, C1, D1"; `js/behoeften.js`):
+- **De maaltijd:** elk mens eet 0,05 graan per dag, en het dorp eet dat in gelijke delen van elke soort die er ligt:
+  graan, brood, vlees, vis, wijn, kaas (met de melk van vandaag), groente en eieren. Wie minder heeft dan zijn deel, geeft
+  wat hij heeft, en de andere vullen aan. Binnen een soort gaat eerst op wat bederft (de melk, wat het zout niet goed
+  houdt), en het zaaigraan pas bij nood. Groente en eieren vullen een kleine maag (0,25: een moestuin of een kippenhok
+  voedt zo'n 5 mensen), wijn 0,4.
+- **De afwisseling** is hoeveel soorten er vandaag minstens een tiende van de maaltijd waren (met wat de huizen voor hun
+  wensen aten). Groeit het dorp, dan moet een soort meegroeien om te blijven tellen.
+- **Het werk:** met één soort 60%, met twee 75%, met drie 90%, met vier of meer 100% (de werkbank, "Needs and the
+  winter"). Dat geldt voor al het werk: wat een werkplaats maakt (en daar ook nog de tevredenheid, zoals het was), wat de
+  bouwers per dag doen, en hoe lang het veldwerk duurt (maaien, binden, plukken, rooien).
+- **Zien:** de status **Plain fare** in de balk zolang het minder dan vier soorten zijn, en erger **One dish** met één;
+  bij de muis wat een soort erbij brengt (een jager, een moestuin, een kippenhok, een visser bij water, een wijnboerderij,
+  een molen en een bakkerij). De raad zegt het pas bij twee soorten of minder, zodat het doel en de groei aan het woord
+  blijven.
+- **Het begin:** de kar brengt graan, kaas en gezouten vlees: drie soorten, 90%. Na zo'n maand zijn de kaas en het vlees
+  op, en zakt het naar 60% als er dan geen jager en geen moestuin staat.
+- **Wat ging:** tot 13 okt at het dorp in een vaste volgorde (de melk, wat bederft, het graan, de kaas, de wijn), en met
+  genoeg graan alleen graan; en in de spelregel "Wensen" op "Het dorp als geheel" maakten groente, vis en vlees erbij
+  tevredener. Nu maakt de afwisseling dat er harder gewerkt wordt, niet dat men tevredener is.
+
 **Zo werkt het nu** (28 sep; `js/behoeften.js`, `js/gebouwen.js`):
 - **Mensen** zijn het getal in de balk (26 bij het begin), en sinds 26 sep is ieder van hen ook een
   poppetje met een naam, een huis en werk ("Een dorp dat leeft en groeit"). Huizen geven woonruimte:
@@ -1880,13 +1904,13 @@ Nog open na deel 1 (vragen van Claude):
 - **Eten:** elk mens eet 0,05 graan per dag. Het dorp eet eerst de melk van vandaag, dan het vlees
   dat anders bederft, dan graan, en pas als het graan op is kaas en gezouten vlees (sinds 25 sep
   vult vlees een maag, een optie; sinds 28 sep telt het ook mee als het dorp kijkt of er eten is).
-  Groente, vis of vlees erbij maakt ook tevredener. Zonder zout bederven vis en vlees. **Sinds 8 okt vult vis een maag,
+  Sinds 13 okt eet het in gelijke delen van elke soort ("Zo werkt de afwisseling nu", hierboven). Zonder zout bederven vis en vlees. **Sinds 8 okt vult vis een maag,
   net als vlees** (Marcel: "Vis mag een maag vullen, zoals vlees"; de spelregel "Vis"): wat het zout niet goed houdt,
   eet het dorp vóór het graan, de gezouten vis na de kaas. Daarvoor at het dorp alleen de vis die de huizen wilden, en
   bedierf de rest, ook in een voorjaar met honger.
   **Sinds 11 okt vult ook wijn een maag** (Marcel, bij de boeren van 1e: "Wijn wordt ook eten. Afwisseling wordt de
   kern"; `wijnAlsGraan` in de werkbank, 0,4, zodat een tegel wijngaard evenveel voedt als een tegel akker): het dorp
-  eet hem na het graan en de kaas, want hij bederft niet. De afwisseling zelf is vraag 154.
+  eet hem sinds 13 okt in een gelijk deel, zoals elke soort (vraag 154, "Zo werkt de afwisseling nu").
 - **Wijn** (8 okt; werklijst vraag 136; Marcel: "Ik wil z.s.m. aan een wijnboerderij", "Wijn wordt drank, zoals bier.
   Mensen dronken geen water", en "Ja zo bouwen"): een wijnboerderij is een boerderij met een gezin van boeren, en haar
   velden zijn wijngaarden. Ze komt in een dorp, en plukt in wijnmaand: dan maakt ze 10 wijn per dag met twee handen, de

@@ -185,8 +185,16 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   ernaar, `T.winterInZicht`, voor de raad, het rapport en de groei: haalt het hem niet, dan komt er geen gezin,
   `T.watDeWinterNietHaalt`, de spelregel "Groei"; het hout dat de mensen elke dag
   sprokkelen, `T.sprokkelHout`, zo'n 40% van wat de winter vraagt, zodat een houthakker nodig blijft; een huis dat
-  doorgroeit; zout dat vis en vlees goed houdt; vis en vlees vullen ook een maag, `T.eetVandaag`, de spelregels "Vlees" en
-  "Vis"),
+  doorgroeit; zout dat vis en vlees goed houdt; vis en vlees vullen ook een maag, de spelregels "Vlees" en "Vis"; **de
+  maaltijd en de afwisseling**, vraag 154: `T.eetVandaag` eet in gelijke delen van elke soort in `T.SOORTEN_ETEN` die er
+  ligt, binnen een soort eerst wat bederft, het zaaigraan pas bij nood, en zet in `D.behoeften.afwisseling` de soorten die
+  minstens `afwisselingDeel` van de maaltijd waren, met wat de huizen voor hun wensen aten erbij (`T.gebruikGoederen` in
+  `js/wensen.js` geeft dat per soort); `T.werkVanAfwisseling` maakt er het werk van, en dat geldt voor de werkplaatsen
+  (maal de tevredenheid, `js/gebouwen.js` stap 6), de bouwers (`werkdagenVan` in `js/bouwen.js`) en de duur van het
+  veldwerk (`werkUur` in `js/veldwerk.js`, `begin` in `js/akkers.js`); `T.voedtAlsGraan` zegt wat een stuk vult, ook
+  voor de huizen, `T.etenNaastGraan` wat de andere soorten voeden, en `T.maaltijdDeel` wat het dorp per dag van één soort
+  eet, voor de wijn na de pluk; de status `eentonig` staat in `js/voorvallen.js`, en wat een soort erbij brengt,
+  `T.watHelptAanAfwisseling`, in `js/raad.js`),
   `js/handel.js` (de marskramer: drie bezoeken per jaar, prijzen per bezoek, `T.kanKopen` en
   `T.kanVerkopen`; in de lente ook zaaigraan, dat de boeren nazaaien tot 1 bloeimaand, en in een dorp laken (vraag 99), `T.zaaiNa` in `js/akkers.js`, waar
   ook staat hoeveel zaaigraan ze van de oogst tot het zaaien achterhouden, `T.zaaigraanApart`: het dorp eet het pas bij nood; hij staat op de plek `"marskramer"` uit het betekenisbestand), `js/heer.js`

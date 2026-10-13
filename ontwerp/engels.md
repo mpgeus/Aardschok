@@ -218,6 +218,7 @@ Het gevecht schrijft kort en in de tegenwoordige tijd ("You hit the wolf: 3 dama
 | de koorts, van ouderdom | the fever, old age | de reden bij een sterfgeval: "Old age: Henry died." |
 | een proefje, de opslag | a try-out, the browser storage | de redenen van `js/opslaan.js` |
 | de weg de wereld in | the road into the world | de uitgang van het gehucht |
+| de afwisseling (vraag 154, 13 okt): de status, en erger | Plain fare, One dish | "The food is plain, for the village eats only grain and wine, and works at 75%." |
 
 ## Erbij in deel 7 (de spelregels: `js/opties.js`)
 
