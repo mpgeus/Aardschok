@@ -359,7 +359,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   per gezin en de kar; js/begin.js zet het op), de plek van de marskramer en de heer, een paar eiken op het plein (niet aan
   de voorkant, `eikenTot`, want daar komt de markt), en een rotspartij met plaats voor de steengroeve. Hij keurt het zelf
   (`T.keurGehucht`: kom je overal, staat er niets op het plein dat er niet hoort) en probeert het anders tot het deugt.
-  `T.maakGehucht(zaad, land, pogingen)` legt het plan op een stuk van het eiland (`plan.voorwerpen` alles wat er staat,
+  Op het eiland keurt `T.planOpEiland` ook de marktplek: rijen korter dan `marktRij` (3) deugen niet. Daarvoor maakt hij
+  de kaart al (`wereldVanPlan`), en die krijgt `T.laadGemaaktGehucht` mee in plaats van hem opnieuw te maken.
+  `T.maakGehucht(zaad, land, pogingen, ookKeuren)` legt het plan op een stuk van het eiland (`plan.voorwerpen` alles wat er staat,
   `plan.gelegd` wat hij erbij legde, `plan.gerooid` wat er van het eiland weg moest), `T.planOpEiland(zaad)` kiest het stuk
   (jouw plek, anders die van een ander dorp), en `T.laadGemaaktGehucht(zaad)` maakt er een kaart van het eiland van, die
   alleen het verschil met het eiland overneemt, met de marktplek erbij (`w.markt`, `T.zoekMarktPlek` in `js/markt.js`).

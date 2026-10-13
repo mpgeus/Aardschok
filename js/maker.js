@@ -9,7 +9,8 @@
 // bouwt de speler. Tot dan legde hij ook het dorp dat er al was, een land zonder eiland, en zijn eigen bomen, wegen en
 // bruggetjes; ze staan in git.
 //
-// Hij keurt zijn eigen werk (keur hieronder): kan iedereen overal komen, en staat er niets op het plein dat er niet hoort.
+// Hij keurt zijn eigen werk (keur hieronder): kan iedereen overal komen, staat er niets op het plein dat er niet hoort, en
+// heeft het plein een marktplek (T.planOpEiland).
 // Deugt het niet, dan probeert hij het met hetzelfde zaad opnieuw, en hetzelfde zaad geeft altijd hetzelfde land.
 //
 // T.maakGehucht(zaad, land) legt het plan (de indeling, zonder tegels) op een stuk van het eiland, T.planOpEiland(zaad) kiest
@@ -36,6 +37,10 @@
     h: 100,
     // Zo vaak probeert hij het met hetzelfde zaad, tot een plan deugt.
     pogingen: 120,
+    // Een plein waar de twee rijen van de marktplek (js/markt.js) korter zijn dan dit, deugt niet: tussen het kamp, het
+    // feest en de eiken blijft er dan bijna geen markt over (B2b, 13 okt: op het land van het eiland kregen eiland 8 en 9
+    // rijen van twee). Alleen op het eiland (T.planOpEiland), want de marktplek vraagt de kaart.
+    marktRij: 3,
     // Een of twee rotspartijen (de tweede met deze kans): waar de steengroeve komt.
     rotsen: 0.55,
     // Wat er op een vrije tegel groeit, per soort plek (de kans per tegel). Een weide krijgt bloemen en hoog gras in
@@ -614,17 +619,19 @@
   // Het land uit dit zaad op dit stuk van het eiland (`land`, T.landVanEiland, js/eiland.js): hetzelfde zaad geeft altijd
   // hetzelfde land. Het is het lege land van vraag 152: het plein en de plek van het kamp, zonder huizen of akkers. Deugt de
   // eerste poging niet, dan probeert hij het opnieuw, tot T.MAKER_INSTELLINGEN.pogingen; `waarom` zegt wat er onderweg
-  // misging. Zonder `land` is er geen land: kies het stuk met T.planOpEiland.
-  T.maakGehucht = function (zaad, land, pogingen = IN().pogingen) {
+  // misging. Zonder `land` is er geen land: kies het stuk met T.planOpEiland. `ookKeuren(plan)` keurt een plan dat deugt
+  // nog verder, met de reden als het niet deugt, of null.
+  T.maakGehucht = function (zaad, land, pogingen = IN().pogingen, ookKeuren = null) {
     if (!land) throw new Error('de maker legt alleen een land op het eiland: geef een `land` (T.landVanEiland), of vraag T.planOpEiland(zaad)'); // geen tekst
     const waarom = [];
     for (let poging = 0; poging < pogingen; poging++) {
       const plan = leg(zaad, poging, land);
-      if (!plan.mis) {
+      const mis = plan.mis || (ookKeuren && ookKeuren(plan));
+      if (!mis) {
         plan.waarom = waarom;
         return plan;
       }
-      waarom.push(plan.mis);
+      waarom.push(mis);
     }
     const tel = {};
     for (const w of waarom) tel[w] = (tel[w] || 0) + 1;
@@ -724,18 +731,26 @@
 
   // Het plan op het eiland van dit nummer (vraag 117, stap 2): op jouw plek (js/eiland.js), en lukt het daar niet, dan
   // op de plek van een ander dorp, in een vaste volgorde, zodat hetzelfde nummer hetzelfde spel geeft. Per plek minder
-  // pogingen dan op een land van de maker, want een andere plek is er wel.
+  // pogingen dan op een land van de maker, want een andere plek is er wel. Een plan deugt hier pas als zijn plein een
+  // marktplek heeft met rijen van `marktRij` (daarvoor maakt hij de kaart al, en die bewaart hij voor
+  // T.laadGemaaktGehucht).
   T.planOpEiland = function (zaad) {
     const E = T.eilandVan(zaad);
     const dorpen = E.plekken.filter((p) => p.soort === 'dorp');
     const waarom = [];
     for (const p of [...dorpen.filter((d) => d.jij), ...dorpen.filter((d) => !d.jij)]) {
       const land = T.landVanEiland(E, p, IN().b, IN().h);
-      try {
-        const plan = T.maakGehucht(zaad, land, 30);
+      const metMarkt = (plan) => {
         plan.eiland.dorp = p.naam;
-        plan.stuk = land.stuk; // het land van het eiland zelf, voor het verschil (T.laadGemaaktGehucht)
-        return plan;
+        plan.stuk = land.stuk; // het land van het eiland zelf, voor het verschil (wereldVanPlan)
+        const w = wereldVanPlan(plan);
+        const rij = w.markt.rijen[0];
+        if (!rij || rij.lengte < IN().marktRij) return `de marktplek heeft rijen van ${rij ? rij.lengte : 0}`; // geen tekst
+        WERELD.set(plan, w);
+        return null;
+      };
+      try {
+        return T.maakGehucht(zaad, land, 30, metMarkt);
       } catch (e) {
         waarom.push(`${p.naam}: ${e.message}`);
       }
@@ -1014,6 +1029,13 @@
   // kamp erop. Open zijn de stukken om het land, tot `zicht` tegels erbuiten.
   T.laadGemaaktGehucht = function (zaad) {
     const plan = T.planOpEiland(zaad);
+    const w = WERELD.get(plan) || wereldVanPlan(plan);
+    WERELD.delete(plan);
+    return w;
+  };
+  // De kaart die T.planOpEiland voor zijn keuring maakte, bij het plan: een spel krijgt hem, zonder hem opnieuw te maken.
+  const WERELD = new WeakMap();
+  function wereldVanPlan(plan) {
     const E = T.eilandVan(plan.eiland.zaad);
     const { x0, y0 } = plan.eiland;
     const B = plan.b;
@@ -1058,5 +1080,5 @@
     if (T.HOOGTE_INSTELLINGEN.aan) w.hoogte = T.legHoogte(plan, w); // de spelregel "Hoogte" (js/hoogte.js)
     w.markt = T.zoekMarktPlek(w); // de marktplek op het plein (js/markt.js; Marcel, 12 okt: "Plein krijgt plaatsen")
     return w;
-  };
+  }
 })(globalThis.Spel = globalThis.Spel || {});
