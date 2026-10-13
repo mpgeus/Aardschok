@@ -58,18 +58,36 @@
   // Het aangelegde net: van elke deur een paadje
   // ---------------------------------------------------------------------------------------------
 
-  // Per kaart: { versie, net }, met in net per tegel 1 (de weg van de kaart, T.opPad), 2 (een paadje van een deur) of 0.
-  // Zoals de lijst per tegel in js/wereld.js: geen spelstaat maar iets wat uit de kaart volgt, opnieuw na een verandering.
+  // Per kaart: { versie, kaart, vak, net, weg, mag }, met in net per tegel 1 (de weg van de kaart, T.opPad), 2 (een paadje
+  // van een deur) of 0. Zoals de lijst per tegel in js/wereld.js: geen spelstaat maar iets wat uit de kaart volgt, opnieuw
+  // na een verandering. Wat het net per tegel nakijkt (weg: de weg van de kaart zonder veld; mag: magPad), gaat alleen
+  // op de plekken die veranderden opnieuw (T.kaartPlekkenSinds); het zoeken van de paadjes elke keer.
   const NETTEN = new WeakMap();
 
   // Mag een paadje hier lopen? Te belopen, geen veld, en niets erop (een bank, een lantaarn, een put).
   function magPad(w, x, y) {
     return binnen(w, x, y) && T.isBegaanbaar(w, x, y) && !T.veldOp(w, x, y) && !T.voorwerpOp(w, x, y);
   }
+  // De rasters waarop het net gelegd wordt, per tegel 1 of 0, zoals het net zelf: mag (magPad) en weg (de weg van de kaart,
+  // T.opPad, niet waar een veld ligt). Zonder `r` het hele vak, met `r` ({ x1, y1, x2, y2 }, zoals T.kaartPlekkenSinds)
+  // alleen die tegels, in de rasters die er al zijn. Tot 13 okt keek het zoeken magPad per buur na, vier keer per tegel,
+  // en ging het hele land opnieuw na elke verandering van de kaart (een gevelde boom): 10 tot 15 ms, nu zo'n 2.
+  function rastersVanHetNet(w, vak, r, weg = new Uint8Array(vak.b * vak.h), mag = new Uint8Array(vak.b * vak.h)) {
+    const [x1, y1] = r ? [Math.max(vak.x, r.x1), Math.max(vak.y, r.y1)] : [vak.x, vak.y];
+    const [x2, y2] = r ? [Math.min(vak.x + vak.b - 1, r.x2), Math.min(vak.y + vak.h - 1, r.y2)] : [vak.x + vak.b - 1, vak.y + vak.h - 1];
+    for (let y = y1; y <= y2; y++) {
+      for (let x = x1; x <= x2; x++) {
+        const k = plekIn(vak, x, y);
+        weg[k] = T.opPad(w, x, y) && !T.veldOp(w, x, y) ? 1 : 0;
+        mag[k] = magPad(w, x, y) ? 1 : 0;
+      }
+    }
+    return { weg, mag };
+  }
 
   // Van een deur naar het dichtste stuk net, in vier richtingen (zo loopt een paadje recht en slaat het een hoek om,
   // zoals mensen het aanleggen). Geeft de tegels van de deur tot vlak voor het net, of null.
-  function naarHetNet(w, net, start) {
+  function naarHetNet(w, net, mag, start) {
     const vak = T.kaartVak(w);
     const b = vak.b;
     const s = plekIn(vak, start.x, start.y);
@@ -92,7 +110,7 @@
             for (let j = k; j !== -1; j = van.get(j)) pad.push(j);
             return pad;
           }
-          if (!magPad(w, nx, ny)) continue;
+          if (!mag[nk]) continue;
           van.set(nk, k);
           volgende.push(nk);
         }
@@ -103,7 +121,7 @@
   }
 
   // Hoe ver elke tegel van de weg ligt, in stappen (één keer over de kaart), om de deuren op volgorde te leggen.
-  function afstandTotDeWeg(w, net) {
+  function afstandTotDeWeg(w, net, mag) {
     const vak = T.kaartVak(w);
     const b = vak.b;
     const af = new Int32Array(b * vak.h).fill(-1);
@@ -118,7 +136,7 @@
           const nx = x + dx;
           const ny = y + dy;
           const nk = plekIn(vak, nx, ny);
-          if (!binnen(w, nx, ny) || af[nk] >= 0 || !magPad(w, nx, ny)) continue;
+          if (!binnen(w, nx, ny) || af[nk] >= 0 || !mag[nk]) continue;
           af[nk] = af[k] + 1;
           volgende.push(nk);
         }
@@ -130,15 +148,11 @@
 
   // Het net leggen: eerst de weg van de kaart, dan van elke deur een paadje, de deur die het dichtst bij de weg ligt
   // eerst, zodat wie verder weg woont aansluit op het paadje van zijn buur in plaats van ernaast een eigen te leggen.
-  function legNet(D) {
+  function legNet(D, vak, { weg, mag }) {
     const w = D.wereld;
-    const vak = T.kaartVak(w);
-    const net = new Uint8Array(vak.b * vak.h);
-    for (let y = vak.y; y < vak.y + vak.h; y++) {
-      for (let x = vak.x; x < vak.x + vak.b; x++) if (T.opPad(w, x, y) && !T.veldOp(w, x, y)) net[plekIn(vak, x, y)] = 1;
-    }
+    const net = weg.slice();
     if (IN().paadjes === 'uit' || !D.gebouwen) return net;
-    const af = afstandTotDeWeg(w, net);
+    const af = afstandTotDeWeg(w, net, mag);
     const deuren = [];
     for (const g of D.gebouwen) {
       const d = T.deurVan(w, g);
@@ -146,7 +160,7 @@
     }
     deuren.sort((p, q) => p.af - q.af || p.d.y - q.d.y || p.d.x - q.d.x);
     for (const { d } of deuren) {
-      const pad = naarHetNet(w, net, d);
+      const pad = naarHetNet(w, net, mag, d);
       if (pad) for (const k of pad) net[k] = 2;
     }
     return net;
@@ -154,11 +168,20 @@
 
   T.aangelegdNet = function (D) {
     const w = D.wereld;
-    const versie = `${T.kaartVersie(w)}|${IN().paadjes}`;
+    const kaart = T.kaartVersie(w);
+    const versie = `${kaart}|${IN().paadjes}`;
     const al = NETTEN.get(w);
     if (al && al.versie === versie) return al.net;
-    const net = legNet(D);
-    NETTEN.set(w, { versie, net });
+    const vak = T.kaartVak(w);
+    const zelfdeVak = al && al.vak.x === vak.x && al.vak.y === vak.y && al.vak.b === vak.b && al.vak.h === vak.h;
+    const plekken = zelfdeVak ? T.kaartPlekkenSinds(w, al.kaart) : null;
+    let rasters;
+    if (plekken) {
+      rasters = { weg: al.weg, mag: al.mag };
+      for (const r of plekken) rastersVanHetNet(w, vak, r, rasters.weg, rasters.mag);
+    } else rasters = rastersVanHetNet(w, vak);
+    const net = legNet(D, vak, rasters);
+    NETTEN.set(w, { versie, kaart, vak: { ...vak }, net, ...rasters });
     return net;
   };
 

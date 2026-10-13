@@ -117,6 +117,29 @@ test('een nieuw gebouw krijgt meteen een paadje, en wie later bouwt, sluit aan',
   for (let y = v.y; y < v.y + v.h; y++) for (let x = v.x; x < v.x + v.b; x++) assert.equal(net[plekIn(D.wereld, x, y)], 0);
 });
 
+// Wat het net per tegel nakijkt, gaat alleen op de plekken die veranderden opnieuw (13 okt: 10 ms naar 2 na elke gevelde
+// boom); het net moet dan hetzelfde zijn als helemaal opnieuw gelegd (een verandering zonder plek: alles opnieuw).
+test('het net, per plek bijgewerkt, is hetzelfde als opnieuw gelegd', () => {
+  const { D, w } = proefDorp(T);
+  const vak = T.kaartVak(w);
+  const net0 = T.aangelegdNet(D);
+  const opPaadje = [];
+  for (let k = 0; k < net0.length; k += 7) if (net0[k] === 2) opPaadje.push({ x: vak.x + (k % vak.b), y: vak.y + Math.floor(k / vak.b) });
+  assert.ok(opPaadje.length >= 6, 'het proefdorp heeft paadjes');
+  const gezet = [];
+  let anders = 0;
+  for (const p of opPaadje.slice(0, 6)) {
+    gezet.push(T.zetVoorwerp(w, { soort: 'kist', x: p.x, y: p.y })); // met een plek (T.voetVan)
+    const perPlek = T.aangelegdNet(D).slice();
+    if (perPlek.some((n, k) => n !== net0[k])) anders++;
+    T.kaartVeranderd(w); // zonder plek: alles opnieuw
+    assert.deepEqual(perPlek, T.aangelegdNet(D), `na een kist op ${p.x},${p.y}`);
+  }
+  assert.ok(anders > 0, 'een kist op een paadje legt het net om');
+  for (const v of gezet) T.haalVoorwerpWeg(w, v);
+  assert.deepEqual(T.aangelegdNet(D), net0, 'weer weg: het net van eerst');
+});
+
 test('waar veel gelopen wordt, slijt het gras tot een paadje; waar niemand meer loopt, groeit het dicht', () => {
   const S = proef();
   const D = S.dorp;
