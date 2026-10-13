@@ -338,8 +338,9 @@ test('de wijn: is er een wijnboerderij en haalt de wijn het jaar niet, dan moet 
   assert.ok(T.wijnNaDePluk(D, S.kalender.dag).drinken > 0);
   assert.equal(id(S), 'wijn', 'zonder wijngaard haalt de wijn het jaar niet');
   assert.equal(raad(S).tekst, "The wine from the harvest lasts 0 of the year's 360 days: lay a vineyard [B] by the vineyard farm.");
-  // Plant de bouwers een wijngaard, die genoeg ranken geeft, dan zegt hij niets meer.
-  const aanleg = { soort: 'wijngaard', x: 0, y: 0, voet: { b: 8, h: 5 }, klaar: false, boerderij: wijnboerderij };
+  // Plant de bouwers een wijngaard, die genoeg ranken geeft, dan zegt hij niets meer. Het dorp eet de wijn ook (zijn deel
+  // van de maaltijd, vraag 154), dus het moet een grote zijn.
+  const aanleg = { soort: 'wijngaard', x: 0, y: 0, voet: { b: 16, h: 9 }, klaar: false, boerderij: wijnboerderij };
   D.gebouwen.push(aanleg);
   assert.notEqual(id(S), 'wijn', 'de wijngaard in aanleg telt mee');
   // Een kleine wijngaard haalt het jaar voor zoveel mensen niet: nog een.

@@ -131,7 +131,7 @@ test('vlees of vis: de vis gaat eerst op, want vlees vult ook een maag', () => {
   assert.ok(bijna(D.voorraad.vis, 0));
   assert.ok(bijna(D.voorraad.vlees, 10 - nodig / 2));
   assert.ok(bijna(bederfelijk, nodig), 'wat er van vis en vlees opging, neemt zijn zout mee');
-  assert.ok(bijna(gegeten, nodig), 'en het vult de magen: zoveel eet het dorp minder aan graan (vraag 92, a)');
+  assert.ok(bijna(gegeten.vis + gegeten.vlees, nodig), 'en het vult de magen: zoveel eet het dorp minder (vraag 92, a)');
 });
 
 // Brood is eten (werklijst vraag 92, a; Marcel, 2 okt: "A ja, maar brood is wel minder lekker en levert minder blijheid
@@ -144,10 +144,13 @@ test('brood is eten: wat de stenen huizen aan brood krijgen, eet het dorp minder
   const { gegeten } = T.gebruikGoederen(D, w);
   const brood = 8 * T.WENSEN_INSTELLINGEN.perMens.brood;
   assert.ok(bijna(D.voorraad.brood, 10 - brood));
-  assert.ok(bijna(gegeten, brood * T.BEHOEFTEN_INSTELLINGEN.broodAlsGraan), `gegeten ${gegeten}: alleen het brood vult een maag`);
+  assert.deepEqual(Object.keys(gegeten), ['brood'], 'alleen het brood vult een maag');
+  assert.ok(bijna(gegeten.brood, brood * T.BEHOEFTEN_INSTELLINGEN.broodAlsGraan));
+  // Wat het dorp daarna nog eet, is de rest van de maaltijd, in gelijke delen van het graan en het brood (vraag 154).
   const r = T.eetVandaag(D, ZOMERDAG, gegeten);
   const nodig = 8 * T.etenPerMens(D);
-  assert.ok(bijna(100 - D.voorraad.graan, nodig - gegeten), `graan ${D.voorraad.graan}`);
+  assert.ok(bijna(r.graan + r.brood * T.BEHOEFTEN_INSTELLINGEN.broodAlsGraan, nodig - gegeten.brood), JSON.stringify(r));
+  assert.ok(bijna(r.graan, (nodig - gegeten.brood) / 2));
   assert.ok(bijna(r.tekort, 0));
   assert.equal(T.voedtAlsGraan('bier'), 0);
   assert.equal(T.voedtAlsGraan('laken'), 0);
@@ -194,7 +197,7 @@ test('eten en brandhout gelden voor het hele dorp: zonder eten zakt elk huis tot
   assert.ok(!huisVan(kou, hut).alles);
 });
 
-test('het proefdorp begint op zo\'n 82%; met de spelregel "Wensen" op het dorp als geheel op 67%, zoals vóór 1 okt', () => {
+test('het proefdorp begint op zo\'n 82%; met de spelregel "Wensen" op het dorp als geheel op 92%', () => {
   const S = dorpMetHuis();
   const b = T.berekenTevredenheid(S.dorp, 0);
   assert.ok(b.wensen, 'per huis is de standaard');
@@ -206,7 +209,8 @@ test('het proefdorp begint op zo\'n 82%; met de spelregel "Wensen" op het dorp a
   try {
     const oud = T.berekenTevredenheid(S.dorp, 0);
     assert.equal(oud.wensen, null);
-    assert.ok(bijna(oud.tevredenheid, 0.5 * 0.5 + 0.3 + 0.2 * T.BEHOEFTEN_INSTELLINGEN.kerkBasis), `${oud.tevredenheid}`);
+    // Genoeg eten, zonder kerk; de afwisseling maakt sinds 13 okt niet meer tevredener, maar werkt harder (vraag 154).
+    assert.ok(bijna(oud.tevredenheid, 0.5 + 0.3 + 0.2 * T.BEHOEFTEN_INSTELLINGEN.kerkBasis), `${oud.tevredenheid}`);
     assert.ok(oud.mist.includes('a church'));
   } finally {
     T.optiesTerug();
@@ -218,7 +222,7 @@ test('een dorp zonder bewoners rekent als geheel, zoals vóór 1 okt', () => {
   D.voorraad.graan = 100;
   const b = T.berekenTevredenheid(D, ZOMERDAG);
   assert.equal(b.wensen, null);
-  assert.equal(b.voedselFactor, 0.5, 'de afwisseling telt dan nog');
+  assert.ok(bijna(b.tevredenheid, 0.5 + 0.3 + 0.2 * T.BEHOEFTEN_INSTELLINGEN.kerkBasis), `${b.tevredenheid}`);
 });
 
 test('na een dag staat op elk huis wat het wil en heeft, en de huizen namen hun goederen', () => {

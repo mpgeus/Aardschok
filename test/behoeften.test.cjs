@@ -92,26 +92,16 @@ test('T.berekenTevredenheid: te weinig graan geeft een voedseltekort en staat in
   assert.ok(b.mist.includes('food'));
 });
 
-test('T.berekenTevredenheid: genoeg graan zonder extra soorten geeft de halve voedselfactor', () => {
+test('T.berekenTevredenheid: het eten telt naar hoeveel er is; de soorten maken niet meer tevredener (vraag 154)', () => {
   const S = maakS();
   S.bevolking = 10;
   T.zetVoorraad(S, 'graan', 1000);
-  const b = T.berekenTevredenheid(S, ZOMERDAG);
-  assert.equal(b.voedselDekking, 1);
-  assert.equal(b.extraSoorten.length, 0);
-  assert.equal(b.voedselFactor, 0.5);
-});
-
-test('T.berekenTevredenheid: groente, vis en vlees op voorraad geven de volle voedselfactor', () => {
-  const S = maakS();
-  S.bevolking = 10;
-  T.zetVoorraad(S, 'graan', 1000);
+  const alleenGraan = T.berekenTevredenheid(S, ZOMERDAG);
+  assert.equal(alleenGraan.voedselDekking, 1);
   T.zetVoorraad(S, 'groente', 5);
   T.zetVoorraad(S, 'vis', 5);
   T.zetVoorraad(S, 'vlees', 5);
-  const b = T.berekenTevredenheid(S, ZOMERDAG);
-  assert.equal(b.extraSoorten.length, 3);
-  assert.equal(b.voedselFactor, 1);
+  assert.equal(T.berekenTevredenheid(S, ZOMERDAG).tevredenheid, alleenGraan.tevredenheid);
 });
 
 test('T.berekenTevredenheid: geen brandhoutstraf buiten de winter, ook zonder hout of turf', () => {
@@ -150,19 +140,71 @@ test('T.berekenTevredenheid: de drie gewichten opgeteld geven de tevredenheid', 
   T.zetVoorraad(S, 'graan', 1000);
   const IN = T.BEHOEFTEN_INSTELLINGEN;
   const b = T.berekenTevredenheid(S, ZOMERDAG);
-  const verwacht = IN.gewichtEten * b.voedselFactor + IN.gewichtBrandhout * b.brandhoutFactor + IN.gewichtKerk * b.kerkFactor;
+  const verwacht = IN.gewichtEten * b.voedselDekking + IN.gewichtBrandhout * b.brandhoutFactor + IN.gewichtKerk * b.kerkFactor;
   assert.ok(Math.abs(b.tevredenheid - verwacht) < 1e-9);
 });
 
 // ── T.tikBehoeftenDag: bijwerkingen ──
 
-test('T.tikBehoeftenDag: eet de extra soorten ook echt op, naar rato van de bevolking', () => {
+// ── De maaltijd en de afwisseling (vraag 154; Marcel, 13 okt: "A1, B1, C1") ──
+
+test('de maaltijd: het dorp eet in gelijke delen van elke soort die er ligt, en dat is zijn afwisseling', () => {
+  const IN = T.BEHOEFTEN_INSTELLINGEN;
   const S = maakS();
-  S.bevolking = 10;
-  T.zetVoorraad(S, 'groente', 5);
-  T.tikBehoeftenDag(S, ZOMERDAG);
-  const verwacht = 5 - 10 * T.BEHOEFTEN_INSTELLINGEN.extraVoedselPerMensPerDag;
-  assert.ok(Math.abs(S.voorraad.groente - verwacht) < 1e-9);
+  S.bevolking = 100;
+  const maaltijd = 100 * T.etenPerMens(S);
+  T.zetVoorraad(S, 'graan', 1000);
+  T.zetVoorraad(S, 'wijn', 1000);
+  T.zetVoorraad(S, 'groente', 1000);
+  const r = T.eetVandaag(S, ZOMERDAG);
+  assert.ok(bijna(r.graan, maaltijd / 3), JSON.stringify(r));
+  assert.ok(bijna(r.wijn * IN.wijnAlsGraan, maaltijd / 3));
+  assert.ok(bijna(r.groente * IN.groenteAlsGraan, maaltijd / 3), 'groente vult een kleine maag (A1)');
+  assert.ok(bijna(1000 - S.voorraad.wijn, r.wijn));
+  assert.deepEqual(r.afwisseling, ['graan', 'wijn', 'groente']);
+  assert.deepEqual(S.behoeften.afwisseling, r.afwisseling);
+});
+
+test('de maaltijd: wie minder heeft dan zijn deel, geeft alles, en telt pas vanaf een tiende van de maaltijd', () => {
+  const IN = T.BEHOEFTEN_INSTELLINGEN;
+  const S = maakS();
+  S.bevolking = 100;
+  const maaltijd = 100 * T.etenPerMens(S);
+  T.zetVoorraad(S, 'graan', 1000);
+  // Net genoeg groente voor een tiende: die gaat op, het graan vult aan, en het zijn twee soorten.
+  T.zetVoorraad(S, 'groente', maaltijd * IN.afwisselingDeel / IN.groenteAlsGraan);
+  let r = T.eetVandaag(S, ZOMERDAG);
+  assert.ok(bijna(S.voorraad.groente, 0));
+  assert.ok(bijna(r.graan, maaltijd * (1 - IN.afwisselingDeel)), JSON.stringify(r));
+  assert.deepEqual(r.afwisseling, ['graan', 'groente']);
+  // Een kruimel minder is geen gedekte tafel.
+  T.zetVoorraad(S, 'groente', maaltijd * IN.afwisselingDeel / IN.groenteAlsGraan * 0.9);
+  r = T.eetVandaag(S, ZOMERDAG);
+  assert.deepEqual(r.afwisseling, ['graan']);
+});
+
+test('de maaltijd: wat de huizen voor hun wensen aten, eet het dorp minder, en het telt mee in de afwisseling', () => {
+  const S = maakS();
+  S.bevolking = 100;
+  const maaltijd = 100 * T.etenPerMens(S);
+  T.zetVoorraad(S, 'graan', 1000);
+  const r = T.eetVandaag(S, ZOMERDAG, { brood: maaltijd / 2 });
+  assert.ok(bijna(r.graan, maaltijd / 2));
+  assert.deepEqual(r.afwisseling, ['graan', 'brood']);
+});
+
+test('het werk volgt de afwisseling: 60% met één soort, 15% meer per soort, tot het volle werk bij vier', () => {
+  const S = maakS();
+  assert.equal(T.werkVanAfwisseling(S), 1, 'zonder maaltijd volle kracht');
+  const werk = (soorten) => {
+    S.behoeften.afwisseling = soorten;
+    return T.werkVanAfwisseling(S);
+  };
+  assert.ok(bijna(werk(['graan']), 0.6));
+  assert.ok(bijna(werk(['graan', 'wijn']), 0.75));
+  assert.ok(bijna(werk(['graan', 'wijn', 'vlees']), 0.9));
+  assert.equal(werk(['graan', 'wijn', 'vlees', 'groente']), 1);
+  assert.equal(werk(['graan', 'wijn', 'vlees', 'groente', 'eieren']), 1);
 });
 
 test('T.tikBehoeftenDag: stookt in de winter turf vóór hout', () => alsJijHetSeizoenDoet(() => {
@@ -469,11 +511,11 @@ test('wie gezouten vis eet, eet het zout mee op', () => {
   S.bevolking = 100;
   S.voorraad.graan = 1000;
   S.voorraad.vis = 50;
-  S.voorraad.zout = 10;
-  T.tikBehoeftenDag(S, ZOMERDAG);
-  const gegeten = 100 * IN.extraVoedselPerMensPerDag;
-  assert.ok(Math.abs(S.voorraad.vis - (50 - gegeten)) < 1e-9, 'de vis is gegeten, en er bedierf niets');
-  assert.ok(Math.abs(S.voorraad.zout - (10 - gegeten / IN.zoutHoudtGoed)) < 1e-9);
+  S.voorraad.zout = 10; // houdt al de vis goed
+  const r = T.eetVandaag(S, ZOMERDAG);
+  assert.ok(r.vis > 0);
+  assert.ok(Math.abs(S.voorraad.vis - (50 - r.vis)) < 1e-9);
+  assert.ok(Math.abs(S.voorraad.zout - (10 - r.vis / IN.zoutHoudtGoed)) < 1e-9);
 });
 
 test('wie eet, eet eerst de verse vis: het zout gaat pas op aan wat gezouten was (vraag 132, B)', () => {
@@ -483,11 +525,12 @@ test('wie eet, eet eerst de verse vis: het zout gaat pas op aan wat gezouten was
   S.voorraad.graan = 1000;
   S.voorraad.vis = 100;
   S.voorraad.zout = 50 / IN.zoutHoudtGoed; // houdt de helft goed
-  T.tikBehoeftenDag(S, ZOMERDAG);
-  const gegeten = 100 * IN.extraVoedselPerMensPerDag;
-  assert.ok(gegeten < 50);
+  const r = T.eetVandaag(S, ZOMERDAG);
+  assert.ok(r.vis > 0 && r.vis < 50);
   assert.equal(S.voorraad.zout, 50 / IN.zoutHoudtGoed, 'het zout bleef: er werd verse vis gegeten');
-  assert.ok(Math.abs(S.voorraad.vis - (100 - gegeten - (50 - gegeten) * IN.bederfPerDag)) < 1e-9, 'van wat ongezouten bleef, bederft een deel');
+  // Van wat daarna nog ongezouten ligt, bederft een deel (T.tikBehoeftenDag, de volgende dag).
+  T.tikBehoeftenDag(S, ZOMERDAG + 1);
+  assert.ok(Math.abs(S.voorraad.vis - (100 - r.vis - (50 - r.vis) * IN.bederfPerDag)) < 1e-9);
 });
 
 test('de beek ligt \'s winters dicht: zonder zout is de vis dan op, met zout blijft hij', () => {
@@ -505,7 +548,7 @@ test('de beek ligt \'s winters dicht: zonder zout is de vis dan op, met zout bli
   }
   const zonder = winterMetVis(0);
   const met = winterMetVis(10);
-  assert.ok(zonder.voorraad.vis < IN.extraVoedselDrempel, `zonder zout: ${zonder.voorraad.vis}`);
+  assert.ok(zonder.voorraad.vis < 1, `zonder zout: ${zonder.voorraad.vis}`);
   assert.ok(met.voorraad.vis > 35, `met zout: ${met.voorraad.vis}`);
 });
 

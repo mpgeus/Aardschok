@@ -692,12 +692,12 @@
   };
 
   // De huizen nemen hun goederen uit de voorraad, zoals T.berekenWensen ze verdeelde (vanuit T.tikBehoeftenDag, vóór het
-  // eten). Wat eten is (brood, vis, vlees), eten ze op: zoveel eet het dorp daarna minder aan graan (vraag 92, a; Marcel,
-  // 2 okt: "A ja"). Geeft { bederfelijk: hoeveel vis en vlees er gebruikt werd, voor het zout (js/behoeften.js,
-  // pasBederfToe), gegeten: hoeveel graan dat eten vulde (T.voedtAlsGraan) }.
+  // eten). Wat eten is (brood, vis, vlees, wijn), eten ze op: zoveel eet het dorp daarna minder (vraag 92, a; Marcel,
+  // 2 okt: "A ja"), en het telt mee in de afwisseling (vraag 154). Geeft { bederfelijk: hoeveel vis en vlees er gebruikt
+  // werd, voor het zout (js/behoeften.js, pasBederfToe), gegeten: per soort hoeveel graan dat eten vulde (T.voedtAlsGraan) }.
   T.gebruikGoederen = function (D, wensen) {
     let bederfelijk = 0;
-    let gegeten = 0;
+    const gegeten = {};
     for (const id of Object.keys(wensen.goederen)) {
       let nodig = Object.values(wensen.goederen[id]).reduce((n, s) => n + s.krijgt, 0);
       for (const soort of T.WENSEN[id].goed) {
@@ -706,7 +706,7 @@
         T.wijzigVoorraad(D, soort, -neem);
         nodig -= neem;
         if (T.BEHOEFTEN_INSTELLINGEN.bederfelijk.includes(soort)) bederfelijk += neem;
-        gegeten += neem * T.voedtAlsGraan(soort);
+        if (T.voedtAlsGraan(soort) > 0) gegeten[soort] = (gegeten[soort] || 0) + neem * T.voedtAlsGraan(soort);
       }
     }
     return { bederfelijk, gegeten };

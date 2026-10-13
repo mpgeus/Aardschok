@@ -375,61 +375,57 @@ test('een kalf is nog geen koe: het geeft pas melk als het een jaar oud is', () 
   assert.ok(bijna(T.melkVanDag(S, dagVan('grasmaand', 1, 1)), 2 * MELK));
 });
 
-test('eten: eerst de melk van vandaag, dan graan, dan kaas; wat er van de melk over is, wordt kaas', () => {
+// De maaltijd (vraag 154; Marcel, 13 okt: "A1"): het dorp eet in gelijke delen van elke soort die er ligt, en kaas is
+// ook de melk van vandaag, die eerst opgaat, want melk houdt niet. Tot 13 okt at het de melk vóór al het andere.
+test('eten: graan en kaas in gelijke delen; de melk van vandaag gaat vóór de kaas, en wat ervan over is, wordt kaas', () => {
   const S = { voorraad: T.nieuweVoorraad(), bevolking: 20, vee: T.nieuwVee() };
   const nodig = 20 * ETEN;
   T.zetVoorraad(S, 'graan', 10);
   T.zetVoorraad(S, 'kaas', 5);
-  // Melk voor de helft: de rest uit het graan, en de kaas blijft liggen.
+  // Melk voor de helft: het deel van de kaas is de melk, en de kaas blijft liggen.
   S.vee.melk = nodig / 2;
   let r = T.eetVandaag(S);
   assert.ok(bijna(r.melk, nodig / 2) && bijna(r.graan, nodig / 2) && r.kaas === 0 && r.tekort === 0, JSON.stringify(r));
   assert.ok(bijna(S.voorraad.graan, 10 - nodig / 2));
   assert.equal(S.voorraad.kaas, 5);
   assert.equal(S.vee.melk, 0, 'melk houdt niet');
-  // Meer melk dan nodig: geen graan, en wat over is, wordt kaas.
+  assert.deepEqual(r.afwisseling, ['graan', 'kaas']);
+  // Meer melk dan nodig: nog steeds de helft graan, en wat er van de melk over is, wordt kaas.
   S.vee.melk = 3 * nodig;
   r = T.eetVandaag(S);
-  assert.equal(r.graan, 0);
-  assert.ok(bijna(r.kaasErbij, 2 * nodig * IN.melkNaarKaas));
-  assert.ok(bijna(S.voorraad.kaas, 5 + 2 * nodig * IN.melkNaarKaas));
-  // Geen melk en geen graan: pas dan de kaas.
+  assert.ok(bijna(r.graan, nodig / 2) && bijna(r.melk, nodig / 2), JSON.stringify(r));
+  assert.ok(bijna(r.kaasErbij, 2.5 * nodig * IN.melkNaarKaas));
+  assert.ok(bijna(S.voorraad.kaas, 5 + 2.5 * nodig * IN.melkNaarKaas));
+  // Geen melk en geen graan: alleen kaas.
   T.zetVoorraad(S, 'graan', 0);
   const kaas = S.voorraad.kaas;
   r = T.eetVandaag(S);
   assert.ok(bijna(r.kaas, nodig) && r.tekort === 0);
   assert.ok(bijna(S.voorraad.kaas, kaas - nodig));
+  assert.deepEqual(r.afwisseling, ['kaas']);
   // Alles op: honger.
   T.zetVoorraad(S, 'kaas', 0);
   assert.ok(bijna(T.eetVandaag(S).tekort, nodig));
 });
 
-// Vlees vult een maag (Marcel, 25 sep: "Ja vlees moet ook eten zijn"): wat het zout niet goed houdt,
-// eet het dorp vóór het graan, want dat bederft anders toch; gezouten vlees pas als het graan en de
-// kaas op zijn, en dan gaat het zout mee.
-test('eten: ongezouten vlees vóór het graan, gezouten vlees als laatste; de optie zet het uit', () => {
+// Vlees vult een maag (Marcel, 25 sep: "Ja vlees moet ook eten zijn"), en is een soort in de maaltijd. Wat het zout niet
+// goed houdt, gaat eerst op, want dat bederft anders toch; wie gezouten vlees eet, eet het zout mee op.
+test('eten: vlees is een soort naast het graan; wie gezouten vlees eet, eet het zout mee; de optie zet het uit', () => {
   const BH = T.BEHOEFTEN_INSTELLINGEN;
   const S = { voorraad: T.nieuweVoorraad(), bevolking: 20, vee: T.nieuwVee() };
   const nodig = 20 * ETEN;
   const perVlees = BH.vleesAlsGraan;
-  // Geen zout: het vlees gaat voor het graan.
   T.zetVoorraad(S, 'graan', 10);
   T.zetVoorraad(S, 'vlees', 100);
   let r = T.eetVandaag(S);
-  assert.ok(bijna(r.vlees, nodig / perVlees) && r.graan === 0 && r.tekort === 0, JSON.stringify(r));
-  assert.equal(S.voorraad.graan, 10);
-  // Genoeg zout voor al het vlees: dat bewaart het dorp, en het eet graan.
+  assert.ok(bijna(r.vlees, nodig / 2 / perVlees) && bijna(r.graan, nodig / 2) && r.tekort === 0, JSON.stringify(r));
+  // Genoeg zout voor al het vlees: hetzelfde deel, en het zout gaat mee.
   T.zetVoorraad(S, 'zout', 100);
   r = T.eetVandaag(S);
-  assert.ok(r.vlees === 0 && bijna(r.graan, nodig), JSON.stringify(r));
-  // Graan en kaas op: dan het gezouten vlees, en het zout gaat mee.
+  assert.ok(bijna(r.vlees, nodig / 2 / perVlees) && bijna(r.graan, nodig / 2), JSON.stringify(r));
+  assert.ok(bijna(S.voorraad.zout, 100 - nodig / 2 / perVlees / BH.zoutHoudtGoed));
+  // Vlees vult geen maag (de optie): zonder graan honger, en het vlees blijft liggen.
   T.zetVoorraad(S, 'graan', 0);
-  const vlees = S.voorraad.vlees;
-  r = T.eetVandaag(S);
-  assert.ok(bijna(r.vlees, nodig / perVlees) && r.tekort === 0, JSON.stringify(r));
-  assert.ok(bijna(S.voorraad.vlees, vlees - nodig / perVlees));
-  assert.ok(bijna(S.voorraad.zout, 100 - nodig / perVlees / BH.zoutHoudtGoed));
-  // Vlees vult geen maag (de optie): honger, en het vlees blijft liggen.
   const oud = BH.vleesIsEten;
   BH.vleesIsEten = false;
   try {
@@ -441,21 +437,21 @@ test('eten: ongezouten vlees vóór het graan, gezouten vlees als laatste; de op
 });
 
 // Vis net zo (Marcel, 8 okt: "Vis mag een maag vullen, zoals vlees"; werklijst vraag 132).
-test('eten: ongezouten vis vóór het graan, gezouten vis na de kaas, en het zout dekt vis en vlees samen; de optie zet het uit', () => {
+test('eten: vis is een soort; het zout dekt vis en vlees samen, en wat ongezouten is, gaat eerst op; de optie zet het uit', () => {
   const BH = T.BEHOEFTEN_INSTELLINGEN;
   const S = { voorraad: T.nieuweVoorraad(), bevolking: 20, vee: T.nieuwVee() };
   const nodig = 20 * ETEN;
   T.zetVoorraad(S, 'graan', 10);
   T.zetVoorraad(S, 'vis', 100);
   let r = T.eetVandaag(S);
-  assert.ok(bijna(r.vis, nodig / BH.visAlsGraan) && r.graan === 0 && r.tekort === 0, JSON.stringify(r));
-  // Vis en vlees, en zout voor de helft van wat er ligt: van elk eet het dorp de ongezouten helft eerst, vlees voorop.
+  assert.ok(bijna(r.vis, nodig / 2 / BH.visAlsGraan) && bijna(r.graan, nodig / 2) && r.tekort === 0, JSON.stringify(r));
+  // Vis en vlees, en zout voor de helft van wat er ligt: van elk eet het dorp eerst wat ongezouten is.
   T.zetVoorraad(S, 'vis', 50);
   T.zetVoorraad(S, 'vlees', 50);
   T.zetVoorraad(S, 'zout', 50 / BH.zoutHoudtGoed);
   T.zetVoorraad(S, 'graan', 0);
   r = T.eetVandaag(S);
-  assert.ok(bijna(r.vlees, nodig / BH.vleesAlsGraan) && r.vis === 0 && r.tekort === 0, JSON.stringify(r));
+  assert.ok(bijna(r.vlees, nodig / 2 / BH.vleesAlsGraan) && bijna(r.vis, nodig / 2 / BH.visAlsGraan) && r.tekort === 0, JSON.stringify(r));
   assert.ok(bijna(S.voorraad.zout, 50 / BH.zoutHoudtGoed), 'het zout bleef: dit was ongezouten');
   // Vis is geen eten (de optie): het dorp eet hem niet, en heeft honger.
   T.zetVoorraad(S, 'vlees', 0);
@@ -486,12 +482,15 @@ test('een dag: het vee komt vóór het eten, dus het dorp drinkt de melk van dez
   zet(S, weide, 'koe', 1);
   S.bevolking = IN.melkVoorMensen; // precies zoveel monden als één koe voedt
   T.zetVoorraad(S, 'graan', 10);
+  // De melk van vandaag is de helft van de maaltijd (graan en kaas in gelijke delen); zonder melk was het al het graan.
+  const maaltijd = IN.melkVoorMensen * ETEN;
   T.tikGebouwenDag(S, dagVan('grasmaand', 5));
-  assert.ok(bijna(S.voorraad.graan, 10), `de melk was genoeg, en toch ging er graan af: ${S.voorraad.graan}`);
+  assert.ok(bijna(S.voorraad.graan, 10 - maaltijd / 2), `de melk telde niet: ${S.voorraad.graan}`);
   assert.ok(!S.behoeften.mist.includes('eten'));
-  // In de winter geeft ze niets, en eet het dorp graan.
+  // In de winter geeft ze niets, en eet het dorp graan en de kaas van de melk die overbleef.
+  const voor = S.voorraad.graan + S.voorraad.kaas;
   T.tikGebouwenDag(S, dagVan('wintermaand', 5));
-  assert.ok(bijna(S.voorraad.graan, 10 - IN.melkVoorMensen * ETEN));
+  assert.ok(bijna(voor - S.voorraad.graan - S.voorraad.kaas, maaltijd));
 });
 
 test('groei: op 1 grasmaand werpen koeien en schapen jongen, uit het lot van het spel en niet uit Math.random', () => {

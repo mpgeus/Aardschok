@@ -1310,7 +1310,7 @@
     // Behoeften: eten, brandhout en een kerk, en de tevredenheid die daaruit volgt
     // (js/behoeften.js, T.tikBehoeftenDag) — vóór de rest, zodat stap 4 en 6 hieronder de
     // tevredenheid van vandaag gebruiken.
-    const alGegeten = T.tikBehoeftenDag(D, dag); // wat de huizen aan brood, vis en vlees aten (stap 3)
+    const alGegeten = T.tikBehoeftenDag(D, dag); // wat de huizen aan brood, vis, vlees en wijn aten, per soort (stap 3)
     // Twee bazen (js/bazen.js): het vertrouwen van het dorp volgt langzaam hoe het gaat.
     T.tikBazenDag(D);
     // En de marskramer (js/handel.js): komt hij vandaag, of is zijn tijd om?
@@ -1370,9 +1370,9 @@
     D.woonruimte = woonruimte;
     // 3. Eten: iedereen eet, of er genoeg is of niet (T.wijzigVoorraad zakt nooit onder nul — een
     // dorp dat te veel monden telt, eet zijn voorraad dus leeg; wat honger doet, staat in
-    // js/behoeften.js). Eerst de melk van vandaag, dan graan, dan kaas, en wat er van de melk over
-    // is, wordt kaas; het zaaigraan pas bij nood (T.eetVandaag, js/behoeften.js). Wat de huizen al aten aan brood, vis
-    // en vlees van hun wensen, eet het dorp minder (vraag 92, a).
+    // js/behoeften.js). De maaltijd, in gelijke delen van elke soort die er ligt, en daaruit de afwisseling; het
+    // zaaigraan pas bij nood (T.eetVandaag, js/behoeften.js; vraag 154). Wat de huizen al aten aan brood, vis, vlees en
+    // wijn van hun wensen, eet het dorp minder (vraag 92, a).
     const gegeten = T.eetVandaag(D, dag, alGegeten);
     // De wachters bij de graanschuur (js/graanschuur.js): na het zaaien naar huis, en honger kost vertrouwen.
     T.tikGraanschuurDag(D, dag, gegeten.tekort > 0);

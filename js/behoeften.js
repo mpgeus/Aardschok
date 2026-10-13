@@ -7,13 +7,11 @@
 //
 // T.tikGebouwenDag (js/gebouwen.js) roept T.tikBehoeftenDag hier als eerste stap aan, één keer
 // per verstreken kalenderdag. Wat hier per dag gebeurt:
-//   1. Eten: graan is de basis (T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag), en sinds het vee
-//      (25 sep) eet het dorp eerst de melk van vandaag, dan het vlees dat anders bederft, dan graan,
-//      en pas als het graan op is kaas en gezouten vlees (T.eetVandaag hieronder; gebouwen.js roept
-//      het aan in stap 3). Hier kijken of dat samen
-//      genoeg is, en of er ook groente, vis of vlees is. Meer soorten maakt tevredener, en wordt
-//      ook echt opgegeten. Vis en vlees bederven, tenzij ze gezouten zijn (pasBederfToe; zout komt
-//      van de marskramer).
+//   1. Eten: elk mens eet zoveel als T.GEBOUWEN_INSTELLINGEN.etenPerMensPerDag graan, en sinds 13 okt (vraag 154, de
+//      maaltijd) eet het dorp dat in gelijke delen van elke soort die er ligt (T.eetVandaag hieronder; gebouwen.js roept
+//      het aan in stap 3). Hoeveel soorten er op tafel kwamen, is de afwisseling, en die bepaalt hoe hard er gewerkt
+//      wordt (T.werkVanAfwisseling). Hier kijken of het eten genoeg is. Vis en vlees bederven, tenzij ze gezouten zijn
+//      (pasBederfToe; zout komt van de marskramer).
 //   2. Brandhout: hout of turf, per huishouden per dag, maar alleen gestookt in de winter.
 //   3. Een kerk: heeft het dorp een klare kapel (T.GEBOUWEN.kapel.kerk)?
 //   4. Daaruit volgt S.behoeften.tevredenheid (0..1) en S.behoeften.mist (wat het dorp mist, voor
@@ -32,12 +30,14 @@
   // zodat Marcel ze kan bijstellen. Bijna allemaal een eerste gok, nog niet door hem bekeken —
   // zie ook de opmerking bij T.WIND_GOLF_Y in js/akkers.js voor hoe dat eerder ging.
   T.BEHOEFTEN_INSTELLINGEN = {
-    // Eten: hoeveel van elke extra soort (naast graan) er per mens per dag bij gegeten wordt, als
-    // hij er is — klein, want het is variatie, geen tweede maaltijd. extraVoedselDrempel is hoeveel
-    // er minstens moet liggen voordat een soort meetelt (anders "telt" een kruimel al als een
-    // gedekte tafel).
-    extraVoedselPerMensPerDag: 0.01,
-    extraVoedselDrempel: 1,
+    // De afwisseling (vraag 154; Marcel, 11 okt: "Wijn wordt ook eten. Afwisseling wordt de kern. Mensen worden anders
+    // minder productief", en 13 okt: "A1, B1, C1"). Het dorp eet zijn maaltijd in gelijke delen van elke soort die er ligt
+    // (T.SOORTEN_ETEN, T.eetVandaag). Een soort telt als hij vandaag minstens afwisselingDeel van de maaltijd was, zodat
+    // een kruimel geen gedekte tafel is, en een soort met het dorp moet meegroeien. Het werk (T.werkVanAfwisseling): met
+    // één soort werkBijEenSoort, en elke soort erbij werkPerSoortErbij meer, tot het volle werk (1: 4 soorten).
+    afwisselingDeel: 0.1,
+    werkBijEenSoort: 0.6,
+    werkPerSoortErbij: 0.15,
     // Brandhout: hout of turf (eerst turf — dat stoken is toch al zijn enige nut, hout kan de
     // timmerman nog gebruiken), per huishouden (T.GEBOUWEN_INSTELLINGEN.gezinGrootte leent de
     // maat van een gezin, dezelfde als bij groei) per dag, alleen in wintermaand, louwmaand en
@@ -120,9 +120,27 @@
     // Wijn vult een maag (Marcel, 11 okt, bij de boeren van 1e: "Wijn wordt ook eten. Afwisseling wordt de kern"), zodat een
     // wijnboer het dorp voedt zoals een akkerbouwer: één wijn vult zoveel als wijnAlsGraan graan (0: geen eten). Zo voedt
     // een tegel wijngaard evenveel als een tegel akker: een rank om de rij geeft 7,5 wijn per tegel (js/wijngaard.js), een
-    // akker 4 graan, min 1 zaaigraan (js/akkers.js). Hij bederft niet, dus het dorp eet hem na het graan en de kaas,
-    // zoals gezouten vlees. De afwisseling zelf is vraag 154.
+    // akker 4 graan, min 1 zaaigraan (js/akkers.js).
     wijnAlsGraan: 0.4,
+    // Groente en eieren vullen een kleine maag (Marcel, 13 okt, vraag 154: "A1"): een moestuin of een kippenhok maakt er
+    // één per dag, en met 0,25 voedt hij zo'n 5 mensen (0,05 graan per mens). Met 1 voedde een moestuin van 2 hout er 20.
+    groenteAlsGraan: 0.25,
+    eierenAlsGraan: 0.25,
+  };
+
+  // De soorten eten (vraag 154, A1): elk een eigen soort in de maaltijd, met hoeveel graan één stuk vult (`als`, een getal
+  // uit het blok hierboven; zonder is het 1). Kaas is ook de melk van vandaag (js/vee.js), die eerst opgaat, want melk
+  // houdt niet. Vlees en vis alleen als ze een maag vullen (`alleenAls`: de spelregels "Vlees" en "Vis"). Wat geen eten is
+  // (bier, laken), staat er niet in. Hoe een soort heet: T.waarNaam (js/voorraad.js).
+  T.SOORTEN_ETEN = {
+    graan: {},
+    brood: { als: 'broodAlsGraan' },
+    vlees: { als: 'vleesAlsGraan', alleenAls: 'vleesIsEten' },
+    vis: { als: 'visAlsGraan', alleenAls: 'visIsEten' },
+    wijn: { als: 'wijnAlsGraan' },
+    kaas: {},
+    groente: { als: 'groenteAlsGraan' },
+    eieren: { als: 'eierenAlsGraan' },
   };
 
   // `gezegd`: wat het dorp deze winter al zei dat op raakte (het hout, het eten; zegDeWinter onderaan).
@@ -167,15 +185,14 @@
     const bevolking = D.bevolking || 0;
     const v = D.voorraad || {};
 
-    // Wat er vandaag te eten is: de melk van vandaag (js/vee.js, T.tikVeeDag), het graan, de kaas, en
-    // het vlees, de vis en de wijn als die een maag vullen (T.etenNaastGraan). Tot 28 sep telde het vlees hier niet, terwijl
-    // het dorp het wel at (T.eetVandaag): met alleen vlees in de schuur stierven er in de winter
-    // mensen van de honger.
+    // Wat er vandaag te eten is: de melk van vandaag (js/vee.js, T.tikVeeDag), het graan, de kaas, en de andere soorten
+    // (T.etenNaastGraan). Tot 28 sep telde het vlees hier niet, terwijl het dorp het wel at (T.eetVandaag): met alleen
+    // vlees in de schuur stierven er in de winter mensen van de honger. Tot 13 okt maakten groente, vis en vlees erbij
+    // ook tevredener (de afwisseling van vóór vraag 154); nu maakt de afwisseling dat er harder gewerkt wordt
+    // (T.werkVanAfwisseling), en telt hier alleen of het genoeg is.
     const voedselBenodigd = bevolking * T.etenPerMens(D);
     const voedsel = ((D.vee && D.vee.melk) || 0) + (v.graan || 0) + (v.kaas || 0) + T.etenNaastGraan(D);
     const voedselDekking = voedselBenodigd > 0 ? Math.min(1, voedsel / voedselBenodigd) : 1;
-    const extraSoorten = ['groente', 'vis', 'vlees'].filter((wat) => (v[wat] || 0) >= IN.extraVoedselDrempel);
-    const voedselFactor = voedselDekking * (0.5 + 0.5 * (extraSoorten.length / 3));
 
     const huishoudens = huishoudensVan(D);
     const brandhoutBenodigd = huishoudens * IN.brandhoutPerHuishoudenPerDag;
@@ -212,7 +229,7 @@
     const wensen = T.WENSEN_INSTELLINGEN.perHuis ? T.berekenWensen(D, dag, { eten: voedselDekking, brandhout: brandhoutFactor, erbij }) : null;
     const tevredenheid = wensen
       ? wensen.tevredenheid
-      : Math.min(1, Math.max(0, IN.gewichtEten * voedselFactor + IN.gewichtBrandhout * brandhoutFactor + IN.gewichtKerk * kerkFactor + erbij));
+      : Math.min(1, Math.max(0, IN.gewichtEten * voedselDekking + IN.gewichtBrandhout * brandhoutFactor + IN.gewichtKerk * kerkFactor + erbij));
 
     // Het brandhout mist het dorp ook als het de winter niet haalt (T.houtVoorDeWinter), niet pas als
     // het vandaag op is: dan zegt de balk het op tijd, net als het rode hout ernaast (js/hud.js).
@@ -229,7 +246,7 @@
 
     return {
       tevredenheid, mist, last: heer.waarom.concat(wetten.last, voorvallen.last), blij: wetten.blij.concat(voorvallen.blij), inWinter,
-      voedselDekking, extraSoorten: wensen ? [] : extraSoorten, voedselFactor: wensen ? voedselDekking : voedselFactor,
+      voedselDekking,
       brandhoutDekking, brandhoutBenodigd, brandhoutVoorraad, brandhoutFactor,
       huishoudens, heeftKerk, kerkFactor, gezelligheid, wensen,
     };
@@ -742,71 +759,101 @@
     }
   }
 
-  // Eten, één dag (Marcel koos op 25 sep; ontwerp/spel.md, "Weides met koeien en schapen"): het
-  // dorp eet eerst de melk van vandaag (js/vee.js, S.vee.melk), dan graan, en pas als het graan op
-  // is kaas. Wat er van de melk over is, wordt kaas (T.VEE_INSTELLINGEN.melkNaarKaas), want melk
-  // houdt niet en kaas wel. Zo helpt het vee tegen de honger in het voorjaar: de melk begint in
-  // grasmaand, als het graan van vorig jaar opraakt, en de kaas van vorige zomer is er dan nog.
-  // Alles in graan gerekend. T.tikGebouwenDag (js/gebouwen.js, stap 3) roept dit aan.
-  // Geeft { nodig, melk, graan, kaas, kaasErbij, tekort }: wat er van elk gegeten is.
-  // Sinds 25 sep telt ook vlees (vleesIsEten): wat het zout niet goed houdt, eet het dorp na de melk en
-  // vóór het graan, want dat bederft anders toch; gezouten vlees pas als het graan en de kaas op zijn.
-  // Sinds 11 okt ook wijn (wijnAlsGraan), na het graan en de kaas. Geeft ook `vlees`, `vis` en `wijn`: wat ervan gegeten
-  // is (in stuks, niet in graan). Wat de huizen vandaag al aten aan brood,
-  // vis en vlees van hun wensen (`alGegeten`, in graan; T.gebruikGoederen in js/wensen.js, vraag 92, a), hoeft het dorp
-  // niet meer te eten.
-  T.eetVandaag = function (D, dag = D.kalender ? Math.floor(D.kalender.dag) : 0, alGegeten = 0) {
+  // De maaltijd, één dag (vraag 154; Marcel, 13 okt: "A1, B1, C1, D1"; gameloop.md, "Besloten"). Het dorp eet in gelijke
+  // delen van elke soort die er ligt (T.SOORTEN_ETEN): wie minder heeft dan zijn deel, geeft wat hij heeft, en de
+  // andere vullen aan. Alles in graan gerekend. Binnen een soort gaat eerst op wat bederft: de melk van vandaag vóór de
+  // kaas (wat van de melk overblijft, wordt kaas, T.VEE_INSTELLINGEN.melkNaarKaas), en de vis en het vlees die het zout
+  // niet goed houdt vóór wat gezouten is (vraag 132, B; wie gezouten eet, eet het zout mee op). Het zaaigraan eet het
+  // dorp pas als er niets anders meer is (T.zaaigraanApart, js/akkers.js; vraag 81). Tot 13 okt at het in een vaste
+  // volgorde (de melk, wat bederft, het graan, de kaas, de wijn, wat gezouten is), en met genoeg graan at het alleen graan.
+  // T.tikGebouwenDag (js/gebouwen.js, stap 3) roept dit aan. Wat de huizen vandaag al aten voor hun wensen (`alGegeten`,
+  // per soort in graan; T.gebruikGoederen in js/wensen.js, vraag 92, a), hoeft het dorp niet meer te eten, en het telt
+  // mee in de afwisseling: de soorten die vandaag minstens afwisselingDeel van de maaltijd waren (D.behoeften.afwisseling,
+  // voor T.werkVanAfwisseling). Geeft wat er van elke soort gegeten is (in stuks; `graan` met het zaaigraan, `kaas`
+  // zonder de melk), en { nodig, melk, zaaigraan, kaasErbij, tekort, afwisseling }.
+  T.eetVandaag = function (D, dag = D.kalender ? Math.floor(D.kalender.dag) : 0, alGegeten = {}) {
     const IN = T.BEHOEFTEN_INSTELLINGEN;
-    const nodig = Math.max(0, (D.bevolking || 0) * T.etenPerMens(D) - alGegeten);
+    const maaltijd = (D.bevolking || 0) * T.etenPerMens(D);
+    const nodig = Math.max(0, maaltijd - Object.values(alGegeten).reduce((n, x) => n + x, 0));
     const v = D.voorraad;
     const melkVandaag = (D.vee && D.vee.melk) || 0;
-    const melk = Math.min(nodig, melkVandaag);
-    // Vlees en vis (als ze een maag vullen: vleesIsEten, visIsEten): wat het zout niet goed houdt, eerst, want dat bederft
-    // toch; wat gezouten is, pas na het graan en de kaas. Het zout dekt vis en vlees samen (T.zoutDekking), dus van elk
-    // hetzelfde deel.
-    const per = { vlees: IN.vleesIsEten ? IN.vleesAlsGraan || 0 : 0, vis: IN.visIsEten ? IN.visAlsGraan || 0 : 0 };
-    const soorten = ['vlees', 'vis'].filter((wat) => per[wat] > 0 && (v[wat] || 0) > 0);
-    const d = soorten.length ? T.zoutDekking(D) : null;
-    const deelOngezouten = d && d.totaal > 0 ? d.onbeschermd / d.totaal : 1;
-    const vers = { vlees: 0, vis: 0 };
-    const gezouten = { vlees: 0, vis: 0 };
-    let open = nodig - melk;
-    for (const wat of soorten) {
-      vers[wat] = Math.max(0, Math.min(open / per[wat], v[wat] * deelOngezouten));
-      open -= vers[wat] * per[wat];
-    }
-    // Het zaaigraan eet het dorp pas bij nood (T.zaaigraanApart, js/akkers.js; werklijst vraag 81): eerst het andere
-    // graan, dan de kaas en het gezouten vlees en de gezouten vis, en pas dan het zaaigraan, liever dan dat er mensen
-    // sterven. Wat er bij de graanschuur bewaakt wordt, pakt het niet (T.zaaigraanBeschermd, js/graanschuur.js; vraag 132).
+    // Wat er van elke soort ligt, in graan. Het zaaigraan blijft apart; wat er bij de graanschuur bewaakt wordt, pakt het
+    // dorp ook bij nood niet (T.zaaigraanBeschermd, js/graanschuur.js; vraag 132).
     const apart = Math.min(v.graan || 0, T.zaaigraanApart(D, dag));
-    const graan = Math.max(0, Math.min(open, (v.graan || 0) - apart));
-    const kaas = Math.max(0, Math.min(open - graan, v.kaas || 0));
-    const perWijn = IN.wijnAlsGraan || 0;
-    const wijn = perWijn > 0 ? Math.max(0, Math.min((open - graan - kaas) / perWijn, v.wijn || 0)) : 0;
-    let rest = open - graan - kaas - wijn * perWijn;
-    for (const wat of soorten) {
-      gezouten[wat] = Math.max(0, Math.min(rest / per[wat], v[wat] - vers[wat]));
-      rest -= gezouten[wat] * per[wat];
+    const ligt = {};
+    for (const wat of Object.keys(T.SOORTEN_ETEN)) {
+      const stuks = wat === 'graan' ? (v.graan || 0) - apart : (v[wat] || 0) + (wat === 'kaas' ? melkVandaag : 0);
+      if (stuks > 0 && T.voedtAlsGraan(wat) > 0) ligt[wat] = stuks * T.voedtAlsGraan(wat);
     }
-    const vrij = apart * (1 - T.zaaigraanBeschermd(D));
-    const zaaigraan = Math.max(0, Math.min(rest, vrij));
-    // Komt de honger aan het zaaigraan, dan zoekt een boer je (js/graanschuur.js).
-    if (rest > 0 && apart > 0) T.zaaigraanInGevaar(D, dag);
-    const vlees = vers.vlees + gezouten.vlees;
-    const vis = vers.vis + gezouten.vis;
-    if (graan + zaaigraan > 0) T.wijzigVoorraad(D, 'graan', -(graan + zaaigraan));
-    zegHetZaaigraan(D, zaaigraan, apart);
-    if (kaas > 0) T.wijzigVoorraad(D, 'kaas', -kaas);
-    if (wijn > 0) T.wijzigVoorraad(D, 'wijn', -wijn);
-    if (vlees > 0) T.wijzigVoorraad(D, 'vlees', -vlees);
-    if (vis > 0) T.wijzigVoorraad(D, 'vis', -vis);
-    // Wie gezouten vlees of vis eet, eet het zout mee op, net als in pasBederfToe hieronder.
-    const zoutGegeten = gezouten.vlees + gezouten.vis;
+    const deel = gelijkeDelen(ligt, nodig);
+    // Het zout dekt vis en vlees samen (T.zoutDekking), dus van elk hetzelfde deel: kijk vóór het eten wat ongezouten is.
+    const d = T.zoutDekking(D);
+    const deelOngezouten = d.totaal > 0 ? d.onbeschermd / d.totaal : 1;
+    const r = { nodig, melk: 0, zaaigraan: 0, kaasErbij: 0, tekort: 0 };
+    let zoutGegeten = 0;
+    for (const wat of Object.keys(T.SOORTEN_ETEN)) {
+      const stuks = (deel[wat] || 0) / (T.voedtAlsGraan(wat) || 1);
+      r[wat] = stuks;
+      if (stuks <= 0) continue;
+      if (wat === 'kaas') r.melk = Math.min(stuks, melkVandaag);
+      if (IN.bederfelijk.includes(wat)) zoutGegeten += Math.max(0, stuks - v[wat] * deelOngezouten);
+      const uitVoorraad = wat === 'kaas' ? stuks - r.melk : stuks;
+      if (wat === 'kaas') r.kaas = uitVoorraad;
+      if (uitVoorraad > 0) T.wijzigVoorraad(D, wat, -uitVoorraad);
+    }
     if (zoutGegeten > 0 && (v.zout || 0) > 0) T.wijzigVoorraad(D, 'zout', -Math.min(v.zout, zoutGegeten / IN.zoutHoudtGoed));
-    const kaasErbij = (melkVandaag - melk) * (T.VEE_INSTELLINGEN ? T.VEE_INSTELLINGEN.melkNaarKaas : 0);
-    if (kaasErbij > 0) T.wijzigVoorraad(D, 'kaas', kaasErbij);
+    // Is er niet genoeg, dan het zaaigraan, liever dan dat er mensen sterven; dan zoekt een boer je (js/graanschuur.js).
+    const rest = nodig - Object.values(deel).reduce((n, x) => n + x, 0);
+    if (rest > 1e-9 && apart > 0) {
+      T.zaaigraanInGevaar(D, dag);
+      r.zaaigraan = Math.min(rest, apart * (1 - T.zaaigraanBeschermd(D)));
+      if (r.zaaigraan > 0) T.wijzigVoorraad(D, 'graan', -r.zaaigraan);
+    }
+    zegHetZaaigraan(D, r.zaaigraan, apart);
+    r.graan += r.zaaigraan;
+    r.tekort = Math.max(0, rest - r.zaaigraan);
+    r.kaasErbij = (melkVandaag - r.melk) * (T.VEE_INSTELLINGEN ? T.VEE_INSTELLINGEN.melkNaarKaas : 0);
+    if (r.kaasErbij > 0) T.wijzigVoorraad(D, 'kaas', r.kaasErbij);
     if (D.vee) D.vee.melk = 0;
-    return { nodig, melk, vlees, vis, wijn, graan: graan + zaaigraan, zaaigraan, kaas, kaasErbij, tekort: Math.max(0, rest - zaaigraan) };
+    // De afwisseling: wat de huizen aten en wat het dorp at, per soort.
+    const genoeg = maaltijd * IN.afwisselingDeel;
+    const gegeten = (wat) => (alGegeten[wat] || 0) + (deel[wat] || 0) + (wat === 'graan' ? r.zaaigraan : 0);
+    r.afwisseling = Object.keys(T.SOORTEN_ETEN).filter((wat) => maaltijd > 0 && gegeten(wat) >= genoeg - 1e-9);
+    (D.behoeften || (D.behoeften = T.nieuweBehoeften())).afwisseling = r.afwisseling;
+    return r;
+  };
+
+  // Hoeveel stuks van een soort het dorp per dag eet zolang hij er ligt: zijn gelijke deel van de maaltijd, naast de
+  // soorten die er nu liggen. Voor wie een jaar vooruitkijkt: de wijn na de pluk (js/wijngaard.js).
+  T.maaltijdDeel = function (D, soort) {
+    const per = T.voedtAlsGraan(soort);
+    if (per <= 0) return 0;
+    const v = D.voorraad || {};
+    const n = Object.keys(T.SOORTEN_ETEN).filter((wat) => wat === soort || (T.voedtAlsGraan(wat) > 0 && (v[wat] || 0) > 0)).length;
+    return (D.bevolking || 0) * T.etenPerMens(D) / n / per;
+  };
+
+  // Verdeel `nodig` in gelijke delen over wat er `ligt` ({ soort: hoeveel }): wie minder heeft dan zijn deel, geeft alles,
+  // en de rest delen de anderen weer gelijk. Geeft { soort: hoeveel eruit }.
+  function gelijkeDelen(ligt, nodig) {
+    const soorten = Object.keys(ligt).sort((a, b) => ligt[a] - ligt[b]);
+    const uit = {};
+    let open = nodig;
+    soorten.forEach((wat, i) => {
+      uit[wat] = Math.min(ligt[wat], open / (soorten.length - i));
+      open -= uit[wat];
+    });
+    return uit;
+  }
+
+  // Hoe hard er gewerkt wordt naar de afwisseling van de laatste maaltijd (vraag 154, B1: al het werk): met één soort
+  // werkBijEenSoort, met elke soort erbij werkPerSoortErbij meer, tot 1. Zonder maaltijd (nog geen dag gegeten, of niemand
+  // die eet) volle kracht; wat honger doet, regelt de tevredenheid en de winter.
+  T.werkVanAfwisseling = function (D) {
+    const IN = T.BEHOEFTEN_INSTELLINGEN;
+    const soorten = D.behoeften && D.behoeften.afwisseling;
+    if (!soorten || !soorten.length) return 1;
+    return Math.min(1, IN.werkBijEenSoort + (soorten.length - 1) * IN.werkPerSoortErbij);
   };
 
   // Eet het dorp van het zaaigraan, dan zegt het dat één keer per winter, en schrijft het het op voor het rapport
@@ -823,22 +870,21 @@
     T.schrijfOp(D, 'boeren', { tekst: T.t('The farmers gave up some of the seed grain, for there was nothing else left to eat.') });
   }
 
-  // Hoeveel graan één stuk van dit goed vult, als een huis het krijgt voor zijn wensen (T.gebruikGoederen, js/wensen.js;
-  // vraag 92, a): brood, vis, wijn, en vlees als vlees eten is. Wat geen eten is (bier, laken), 0.
-  const ALS_GRAAN = { brood: 'broodAlsGraan', vis: 'visAlsGraan', vlees: 'vleesAlsGraan', wijn: 'wijnAlsGraan' };
+  // Hoeveel graan één stuk van een soort vult (T.SOORTEN_ETEN), of 0 als het geen eten is (bier, laken): voor de maaltijd,
+  // en voor wat een huis eet voor zijn wensen (T.gebruikGoederen, js/wensen.js; vraag 92, a).
   T.voedtAlsGraan = function (soort) {
     const IN = T.BEHOEFTEN_INSTELLINGEN;
-    if (!ALS_GRAAN[soort] || (soort === 'vlees' && !IN.vleesIsEten)) return 0;
-    return IN[ALS_GRAAN[soort]] || 0;
+    const s = T.SOORTEN_ETEN[soort];
+    if (!s || (s.alleenAls && !IN[s.alleenAls])) return 0;
+    return s.als ? IN[s.als] || 0 : 1;
   };
 
-  // Hoeveel het vlees, de vis en de wijn in de voorraad het dorp nog voeden, in graan (wat geen eten is, telt niet): voor
-  // het venster van de heer (js/heer.js, T.heerVooruitzicht) en of het eten de winter haalt.
+  // Hoeveel de soorten naast het graan en de kaas in de voorraad het dorp nog voeden, in graan: voor het venster van de
+  // heer (js/heer.js, T.heerVooruitzicht) en of het eten de winter haalt.
   T.etenNaastGraan = function (D) {
-    const IN = T.BEHOEFTEN_INSTELLINGEN;
     const v = D.voorraad || {};
-    return (IN.vleesIsEten ? (v.vlees || 0) * (IN.vleesAlsGraan || 0) : 0) + (IN.visIsEten ? (v.vis || 0) * (IN.visAlsGraan || 0) : 0)
-      + (v.wijn || 0) * (IN.wijnAlsGraan || 0);
+    return Object.keys(T.SOORTEN_ETEN).filter((wat) => wat !== 'graan' && wat !== 'kaas')
+      .reduce((n, wat) => n + (v[wat] || 0) * T.voedtAlsGraan(wat), 0);
   };
 
   // ---------------------------------------------------------------------------------------------
@@ -1047,7 +1093,6 @@
   // (die guards hierboven allemaal op S.bevolking > 0), en is dit bestand dus een stille no-op.
   T.tikBehoeftenDag = function (D, dag) {
     if (!D.behoeften) D.behoeften = T.nieuweBehoeften();
-    const IN = T.BEHOEFTEN_INSTELLINGEN;
     const b = T.berekenTevredenheid(D, dag);
     D.behoeften.tevredenheid = b.tevredenheid;
     D.behoeften.voedselDekking = b.voedselDekking; // voor de status hongersnood (T.OORZAKEN, js/voorvallen.js)
@@ -1063,17 +1108,10 @@
     // Of het hout en het eten de winter halen, vóór het stoken en het eten van vandaag.
     zegDeWinter(D, dag);
 
-    // De huizen nemen wat hun stand gebruikt (js/wensen.js), vóór het eten (stap 3 in T.tikGebouwenDag). Zonder de
-    // wensen per huis worden de extra soorten opgegeten, zoals vóór 1 okt, anders stapelt de moestuin zich oneindig op.
-    const goederen = b.wensen ? T.gebruikGoederen(D, b.wensen) : { bederfelijk: 0, gegeten: 0 };
-    let bederfelijkGegeten = goederen.bederfelijk;
-    for (const wat of b.extraSoorten) {
-      const hoeveel = Math.min(D.voorraad[wat] || 0, (D.bevolking || 0) * IN.extraVoedselPerMensPerDag);
-      T.wijzigVoorraad(D, wat, -hoeveel);
-      if (IN.bederfelijk.includes(wat)) bederfelijkGegeten += hoeveel;
-    }
+    // De huizen nemen wat hun stand gebruikt (js/wensen.js), vóór het eten (stap 3 in T.tikGebouwenDag).
+    const goederen = b.wensen ? T.gebruikGoederen(D, b.wensen) : { bederfelijk: 0, gegeten: {} };
 
-    pasBederfToe(D, bederfelijkGegeten);
+    pasBederfToe(D, goederen.bederfelijk);
     pasBrandhoutToe(D, b);
     const sprokkel = T.sprokkelHout(D); // het dode hout van vandaag, voor de winter
     if (sprokkel > 0) T.wijzigVoorraad(D, 'hout', sprokkel);
@@ -1084,7 +1122,8 @@
     laatMeegroeien(D);
 
     if (T.ui && T.ui.toonTevredenheid) T.ui.toonTevredenheid(D);
-    // Wat de huizen aan brood, vis en vlees aten, in graan: dat eet het dorp vandaag minder (T.eetVandaag, vraag 92, a).
+    // Wat de huizen aan brood, vis, vlees en wijn aten, per soort in graan: dat eet het dorp vandaag minder, en het telt
+    // mee in de afwisseling (T.eetVandaag; vraag 92, a, en 154).
     return goederen.gegeten;
   };
 })(globalThis.Spel = globalThis.Spel || {});
