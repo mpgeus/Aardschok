@@ -114,13 +114,32 @@ nummers passen op het hele eiland, en `T.eilandStuk` maakt elk stuk los (64 bij 
    bomen staan per stuk. De rand om je land en het donker erachter gaan weg, want het eiland is de kaart. Wat nu een
    lijst over de hele kaart is, wordt per stuk of per gebied. Een kaart uit Tiled (de proefkaarten) is een eiland met
    niets eromheen: één soort kaart.
+   **Het plan van B2b** (Claude, 13 okt, sessie `claude/funny-fermi-5fqm1u`; Marcel: "Het eiland, overal", "Overal",
+   en het opslaan "Meteen mee"). Gemeten: een stuk van 64 bij 64 met zijn hoekpunten kost in Node zo'n 12 ms
+   (`T.eilandStuk` twee keer), de schets 1 s (één keer per spel). Wat in de weg zat: de maker legt zijn bomen, struiken,
+   rotsen en groen met één dobbelsteen die van tegel naar tegel doorloopt, dus een stuk kan niet los; de rand om de kaart
+   (`T.randVanHetEiland`) is een tweede manier, met een naad. **Besloten:**
+   - **Het land komt overal van het eiland** ("Het eiland, overal"): de grond, de bomen, de rotsen en het groen per tegel
+     uit het nummer en de plek, nooit uit een dobbelsteen die doorloopt, zodat een stuk hetzelfde is in welke volgorde
+     je het maakt. De maker doet alleen nog wat mensen deden: het plein open, de wegen naar het plein, het kamp, de
+     marktplek, de eiken op het plein, en de rotspartij bij het dorp. De rand en zijn naad gaan weg. Je dorp ligt bij
+     hetzelfde zaad dus anders dan nu, en de speeltest geeft andere getallen (maar geen fouten).
+   - **De schout mag overal heen** ("Overal"), al vóór de mist: een stuk wordt gemaakt als het in beeld komt of als je
+     mensen in de buurt komen, hooguit één per beeld. Wat over de hele kaart rekende, rekent om je dorp of per stuk.
+   - **B2d gaat mee** ("Meteen mee"): het bewaarde spel houdt alleen wat er veranderde (wat gebouwd, gehakt en gelegd
+     is), niet de stukken; een geladen spel maakt ze opnieuw uit het nummer. `versie` omhoog.
+   **De stappen:** (1) het stuk: één zuivere functie (nummer, schets, plek erin; tegels, grond als getal, en de dingen
+   eruit), met een toets dat de naden passen en de volgorde niet uitmaakt; (2) de kaart is het eiland, in zijn
+   coördinaten, en de vragen naar een tegel kijken in de stukken; (3) de maker doet alleen nog het menselijke, en de
+   rand gaat weg; (4) elke lijst over de hele kaart krijgt zijn eigen vak; (5) stukken als ze nodig zijn; (6) opslaan
+   wat veranderde; dan meten (de kolonist op vijf eilanden, de schout naar de kust op 30×, de schermen).
 3. **B2c, de mist.** Zwart wat niemand van jou zag, grijs wat je zag maar nu niet ziet, helder waar je mensen kijken.
    Elk van je mensen ziet een kring om zich heen (de schout verder), en je gebouwen ook; de getallen in de werkbank. Een
    stuk wordt gemaakt aan de rand van de mist, en je bouwt alleen op land dat je kent. **Het grijs is het land zoals het
    nu is** (B1): de grond, de bomen en de gebouwen, zonder wie er loopt (mensen, beesten, rovers). Precies zoals je het
    het laatst zag (B2) kan later erbovenop, als een ander iets doet waar jij niet kijkt (F). **Bij het begin ken je een
    kring van zo'n 50 tegels om je plek** (C2, een getal in de werkbank), ongeveer je land van nu; de rest is zwart.
-4. **B2d, opslaan wat veranderde.** Het eiland komt uit het nummer; het bewaarde spel houdt per stuk alleen wat er
+4. **B2d, opslaan wat veranderde** (gaat mee in B2b, Marcel 13 okt: "Meteen mee"). Het eiland komt uit het nummer; het bewaarde spel houdt per stuk alleen wat er
    gebouwd, gehakt en gelegd is, en wat je verkende. Een oud bewaard spel past dan niet meer (`versie` omhoog; tot de
    release mag dat). Het moet ook klein blijven voor de opslag van de browser (een paar MB, `verpakken.md`).
 
