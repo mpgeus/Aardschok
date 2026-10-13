@@ -16,8 +16,10 @@
   T.BEGIN_INSTELLINGEN = {
     // Wat de kar meebrengt (Marcel, 11 okt: "Akkoord", en de schout met zijn gezin: 140 graan in plaats van 120). Het
     // zaaigraan is graan dat de boeren apart houden als er akkers zijn (T.zaaigraanApart, js/akkers.js); in de voorraad is
-    // het graan.
-    kar: { hout: 50, graan: 140, zaaigraan: 60, goud: 20, gereedschap: 5 },
+    // het graan. De kaas en het gezouten vlees (Marcel, 13 okt, vraag 154: "D1"): met het graan drie soorten, dus het dorp
+    // begint op 90% werk (T.werkVanAfwisseling, js/behoeften.js), en met 15 mensen zijn ze na zo'n maand op: vóór die tijd
+    // een jager en een moestuin. Het zout houdt het vlees goed (10 per zout).
+    kar: { hout: 50, graan: 140, zaaigraan: 60, goud: 20, gereedschap: 5, kaas: 8, vlees: 8, zout: 1 },
     // Hoeveel gezinnen er met de schout meekomen, en hoe groot: een man, een vrouw en `kinderen` kinderen (van tot), en
     // bij `grootvader` gezinnen een grootvader erbij. Een man, een vrouw en een kind, zodat een gezin in een hut past (plaats
     // voor 3; Marcel, 11 okt: "Kleinere gezinnen", vraag 152, 1c; tot dan 1 tot 3 kinderen en een grootvader, 3 tot 6 mensen).

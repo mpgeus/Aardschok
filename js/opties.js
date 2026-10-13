@@ -1104,6 +1104,7 @@
     groente: T.t('vegetables'),
     vis: T.t('fish'),
     vlees: T.t('meat'),
+    kaas: T.t('cheese'),
     huiden: T.t('hides'),
     // De heer, de heervaart, de voorvallen, de feesten
     brief: T.t('letter'),

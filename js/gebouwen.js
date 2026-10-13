@@ -1398,12 +1398,13 @@
     T.verdeelHanden(D);
     T.kiesBouwers(D);
     // 6. Productie: wat een gebouw maakt, gaat per dag naar de voorraad — naar rato van hoe bezet
-    // hij is (de helft van zijn handen geeft de helft van zijn opbrengst), en van de tevredenheid
+    // hij is (de helft van zijn handen geeft de helft van zijn opbrengst), van de tevredenheid
     // (js/behoeften.js: "hoe hard er gewerkt wordt"; T.BEHOEFTEN_INSTELLINGEN.werkBasis is de
-    // ondergrens bij 0% tevreden, 1 is geen effect). Zonder D.behoeften (nog geen dag getikt) op
+    // ondergrens bij 0% tevreden, 1 is geen effect), en van de afwisseling van de maaltijd van vandaag
+    // (T.werkVanAfwisseling; vraag 154, C1: de twee vermenigvuldigen). Zonder D.behoeften (nog geen dag getikt) op
     // volle kracht.
     const werkFactor = D.behoeften
-      ? T.BEHOEFTEN_INSTELLINGEN.werkBasis + (1 - T.BEHOEFTEN_INSTELLINGEN.werkBasis) * D.behoeften.tevredenheid
+      ? (T.BEHOEFTEN_INSTELLINGEN.werkBasis + (1 - T.BEHOEFTEN_INSTELLINGEN.werkBasis) * D.behoeften.tevredenheid) * T.werkVanAfwisseling(D)
       : 1;
     // Gereedschap: wie iets maakt en er gereedschap voor heeft, werkt harder (alleen wie handen
     // heeft: een kippenhok werkt niet harder met een hamer), en het slijt (hieronder, na het werk).

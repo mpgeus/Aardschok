@@ -58,8 +58,11 @@
     helpStraal: 2,
   };
   const IN = () => T.VELDWERK_INSTELLINGEN;
-  // Een uur van de dag in seconden van de wereld, zoals het maaien rekent (T.oogstTegelDuur, js/akkers.js).
+  // Een uur van de dag in seconden van de wereld, zoals het maaien rekent (T.oogstTegelDuur, js/akkers.js). Een uur werk
+  // duurt langer als het dorp eentonig eet (T.werkVanAfwisseling, js/behoeften.js; vraag 154, B1: al het werk): zo lang
+  // als een uur, gedeeld door hoe hard er gewerkt wordt. Een rustpoos en de schaft niet.
   const uur = () => (T.DAG_LENGTE || 300) / 24;
+  const werkUur = (D) => uur() / T.werkVanAfwisseling(D);
 
   // ---------------------------------------------------------------------------------------------
   // Wat hij vandaag doet, en waar
@@ -210,11 +213,11 @@
   // een werkdag zes uur): houdt hij op voor hij af is (de schaft, het eind van de werkdag, iemand roept hem),
   // dan onthoudt hij wat die tegel nog vraagt (e.veldwerk.over), en maakt hij hem de volgende keer af.
   const ROOIWERK = new Set(['hakken', 'rooien']);
-  function onthoudHalfWerk(e, nu) {
+  function onthoudHalfWerk(D, e, nu) {
     const wt = e.werkt;
     if (wt && ROOIWERK.has(wt.soort) && wt.tot != null && !wt.rust && e.veldwerk) {
       const t = wt.op || wt;
-      e.veldwerk.over = { x: t.x, y: t.y, werk: wt.soort, uren: Math.max(0, wt.tot - nu) / uur() };
+      e.veldwerk.over = { x: t.x, y: t.y, werk: wt.soort, uren: Math.max(0, wt.tot - nu) / werkUur(D) };
     }
   }
 
@@ -265,7 +268,7 @@
     if (vw.i == null || vw.i >= lijst.length) vw.i = dichtsteIn(lijst, e);
     const doel = lijst[vw.i];
     if (e.tx === doel.x && e.ty === doel.y) {
-      e.werkt = { soort: vw.soort, x: doel.x, y: doel.y, tot: nu + IN()[vw.soort] * uur(), rust: false };
+      e.werkt = { soort: vw.soort, x: doel.x, y: doel.y, tot: nu + IN()[vw.soort] * werkUur(D), rust: false };
       return;
     }
     // Een weg om wat vaststaat (js/lopen.js). Staat er al iemand op die tegel (wie helpt, een koe, de schout), of komt
@@ -315,7 +318,7 @@
         uren = over.uren;
         delete vw.over;
       }
-      e.werkt = { soort: werk, x: staan.x, y: staan.y, op, tot: nu + uren * uur(), rust: false };
+      e.werkt = { soort: werk, x: staan.x, y: staan.y, op, tot: nu + uren * werkUur(D), rust: false };
       return;
     }
     // Een weg om wat vaststaat (js/lopen.js). Komt hij er toch niet, dan is die tegel meteen af.
@@ -382,7 +385,7 @@
     }
     if (!doel) return;
     if (e.tx === doel.x && e.ty === doel.y) {
-      e.werkt = { soort: 'sprokkelen', x: doel.x, y: doel.y, tot: nu + IN().rapen * uur(), rust: false };
+      e.werkt = { soort: 'sprokkelen', x: doel.x, y: doel.y, tot: nu + IN().rapen * werkUur(D), rust: false };
       e.draagt = 'bundel';
       return;
     }
@@ -452,7 +455,7 @@
     }
     const { tegel, staan } = keus;
     if (e.tx === staan.x && e.ty === staan.y) {
-      e.werkt = { soort: 'hakken', x: staan.x, y: staan.y, op: { x: tegel.x, y: tegel.y }, tot: nu + T.BOS_INSTELLINGEN.hakUren * uur(), rust: false };
+      e.werkt = { soort: 'hakken', x: staan.x, y: staan.y, op: { x: tegel.x, y: tegel.y }, tot: nu + T.BOS_INSTELLINGEN.hakUren * werkUur(D), rust: false };
       return;
     }
     const pad = T.zoekRoute(w, { x: e.tx, y: e.ty }, staan, {});
@@ -516,7 +519,7 @@
       return;
     }
     if (wt && e.tx === wt.x && e.ty === wt.y) {
-      e.werkt = { soort: 'loeren', x: wt.x, y: wt.y, op: T.tegelVan(leider), tot: nu + T.BEESTEN_INSTELLINGEN.jager.loerUren * uur(), rust: false };
+      e.werkt = { soort: 'loeren', x: wt.x, y: wt.y, op: T.tegelVan(leider), tot: nu + T.BEESTEN_INSTELLINGEN.jager.loerUren * werkUur(D), rust: false };
       return;
     }
     const plek = loerPlek(w, e, leider, deur);
@@ -529,7 +532,7 @@
       T.geefRoute(e, pad, plek);
       e.werkt = { soort: 'loeren', x: plek.x, y: plek.y, op: T.tegelVan(leider), tot: null, rust: false };
     } else if (e.tx === plek.x && e.ty === plek.y) {
-      e.werkt = { soort: 'loeren', x: plek.x, y: plek.y, op: T.tegelVan(leider), tot: nu + T.BEESTEN_INSTELLINGEN.jager.loerUren * uur(), rust: false };
+      e.werkt = { soort: 'loeren', x: plek.x, y: plek.y, op: T.tegelVan(leider), tot: nu + T.BEESTEN_INSTELLINGEN.jager.loerUren * werkUur(D), rust: false };
     } else stop(e);
   }
 
@@ -608,7 +611,7 @@
       return;
     }
     const { rank, staan } = keus;
-    const tot = e.tx === staan.x && e.ty === staan.y ? nu + T.WIJNGAARD_INSTELLINGEN.plukUren * uur() : null;
+    const tot = e.tx === staan.x && e.ty === staan.y ? nu + T.WIJNGAARD_INSTELLINGEN.plukUren * werkUur(D) : null;
     if (tot == null) {
       const pad = T.zoekRoute(w, hier, staan, {});
       if (!pad || !pad.length) {
@@ -750,7 +753,7 @@
     }
     const t = zwad[0];
     if (!naar(t, 'binden')) return;
-    e.werkt = { soort: 'binden', x: t.x, y: t.y, op: { x: t.x, y: t.y }, tot: nu + T.SCHOVEN_INSTELLINGEN.bindUren * uur(), rust: false };
+    e.werkt = { soort: 'binden', x: t.x, y: t.y, op: { x: t.x, y: t.y }, tot: nu + T.SCHOVEN_INSTELLINGEN.bindUren * werkUur(D), rust: false };
   }
 
   // Dorsen (vraag 140): in de winter, als het hout geraapt is, dorst de boer in de deur van zijn schuur, met zijn vlegel
@@ -807,7 +810,7 @@
       // De schaft: brood op de akker (js/dag.js). Wie op zijn land werkt, blijft er staan tot het werk weer begint (wie
       // er net heen liep, komt er nog aan en schaft daar), en neemt dan de volgende tegel.
       if (deel === 'schaft' && e.werkt && !T.vrijeDag(D, dag) && magWerken(S, D, e)) {
-        onthoudHalfWerk(e, nu);
+        onthoudHalfWerk(D, e, nu);
         const aangekomen = !e.pad.length && e.tx === e.werkt.x && e.ty === e.werkt.y;
         if (e.werkt.tot != null || aangekomen) Object.assign(e.werkt, { rust: true, schaft: true });
         continue;
@@ -820,7 +823,7 @@
       }
       const soort = werktijd && magWerken(S, D, e) ? (kavel ? 'rooien' : schuur ? 'hout' : hut ? 'jagen' : wijn ? 'plukken' : oogst ? 'binnenhalen' : T.veldwerkVandaag(D, e, datum)) : null;
       if (!soort) {
-        onthoudHalfWerk(e, nu);
+        onthoudHalfWerk(D, e, nu);
         stop(e);
         continue;
       }

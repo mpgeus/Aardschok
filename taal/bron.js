@@ -38,7 +38,7 @@ Spel.TAAL_BRON = [
   {"t":"wood","waar":["js/voorraad.js","js/opties.js"]},
   {"t":"hides","waar":["js/voorraad.js","js/opties.js"]},
   {"t":"iron","waar":["js/voorraad.js","js/opties.js"]},
-  {"t":"cheese","waar":["js/voorraad.js"]},
+  {"t":"cheese","waar":["js/voorraad.js","js/opties.js"]},
   {"t":"lime","waar":["js/voorraad.js"]},
   {"t":"clay","waar":["js/voorraad.js"]},
   {"t":"cloth","waar":["js/voorraad.js","js/wensen.js","js/opties.js"]},

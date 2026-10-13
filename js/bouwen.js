@@ -3,7 +3,8 @@
 // bouwtijd, maar bouwen de mensen het. Een gebouw vraagt zijn bouwtijd keer `werkPerBouwdag` werkdagen. Elke ochtend
 // kiest het dorp wie vandaag bouwt: wie kan werken en geen werk heeft (zoals de dagloners in js/veldwerk.js), hooguit
 // `perPlaats` per bouwplaats, de bouwplaatsen in de volgorde waarin je ze neerzette. Elke bouwer doet er per dag één
-// werkdag aan; zonder bouwers staat het stil. Elke man in een werkplaats is dus een bouwer minder.
+// werkdag aan, minder als het dorp eentonig eet (T.werkVanAfwisseling, js/behoeften.js; vraag 154, B1); zonder bouwers
+// staat het stil. Elke man in een werkplaats is dus een bouwer minder.
 //
 // Staat er iets op de plek (de voet en het looppad eromheen, de kavel, T.kavelVan in js/bos.js), dan rooien de bouwers
 // dat eerst (Marcel, 11 okt: "a1"): een boom omhakken en zijn stobbe eruit kost `rooiBoom` werkdagen, een struik, een
@@ -112,6 +113,9 @@
 
   // Wie er vandaag aan deze bouwplaats bouwt (en het nog kan).
   const bouwersVan = (D, g) => D.bewoners.mensen.filter((p) => p.bouwt === g && T.kanWerken(p) && !p.werk);
+  // Hoeveel werkdagen zij samen per dag doen: één per bouwer, naar hoe hard er gewerkt wordt (de afwisseling van de
+  // laatste maaltijd; de nacht rekent zo met dezelfde maaltijd als de beelden overdag).
+  const werkdagenVan = (D, g) => bouwersVan(D, g).length * T.werkVanAfwisseling(D);
 
   // Elke nacht (T.tikGebouwenDag, vóór de gebouwen die klaarkomen): het werk van gisteren, voor wie er gisteren bouwde, min
   // wat de beelden al deden. Niet na een hele feestdag (js/feesten.js), want toen werkte niemand.
@@ -120,7 +124,7 @@
     const gisteren = dag - 1;
     const vrij = gisteren >= 0 && T.vrijeDag(D, gisteren);
     for (const g of bouwplaatsen(D)) {
-      const werk = vrij ? 0 : bouwersVan(D, g).length;
+      const werk = vrij ? 0 : werkdagenVan(D, g);
       if (werk > g.bouw.vandaag) werkAan(D, g, werk - g.bouw.vandaag, dag);
       g.bouw.vandaag = 0;
     }
@@ -172,7 +176,7 @@
     if (werktijd) {
       const f = werkdagGedaan(D);
       for (const g of plaatsen) {
-        const doel = bouwersVan(D, g).length * f;
+        const doel = werkdagenVan(D, g) * f;
         if (doel > g.bouw.vandaag + 1e-6) {
           werkAan(D, g, doel - g.bouw.vandaag, Math.floor(dag) + 1);
           g.bouw.vandaag = doel;

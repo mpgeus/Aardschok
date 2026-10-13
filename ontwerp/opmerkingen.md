@@ -9,6 +9,13 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Vis en vlees voor de winter rekent de maaltijd niet mee** (13 okt, B3): `T.visEnVleesVoorDeWinter` (de raad: "buy
+  salt from the peddler") rekent met wat de huizen voor hun wens vlees of vis eten, niet met het deel van de maaltijd dat
+  het dorp er sinds vraag 154 ook van eet. Dan ligt er in de winter minder dan hij zegt. De wijn na de pluk rekent het
+  wel mee (`T.maaltijdDeel`). Na te lopen als ronde 3 van het snoeien over de wensen beslist.
+- **Een moestuin en een kippenhok werken ook trager** (13 okt, B3): ze hebben geen handen, maar wat ze maken, gaat naar
+  de tevredenheid en de afwisseling, zoals elke werkplaats (`js/gebouwen.js`, stap 6). Wie eentonig eet, krijgt dus ook
+  minder groente; een kleine lus terug. Zo was het al met de tevredenheid.
 - **Een kaart van het eiland onder een toets** (idee van Claude, 13 okt; Marcel: "idee ja"): het eiland van boven, met
   alleen wat je verkende en de rest in de mist, getekend zoals de plaat van de kaartenmaker
   (`gereedschap/pixelart/eiland-plaat.cjs`), met je dorp, de wegen en de namen die je kent. Na de mist (B2c), niet erin.

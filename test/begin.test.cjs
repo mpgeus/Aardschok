@@ -287,6 +287,9 @@ function huisVanDeSchout() {
 
 test('meebouwen: wie geen werk heeft, bouwt mee; hoe meer handen, hoe sneller, en zonder handen staat het stil', () => {
   const { S, D } = leegBegin();
+  // Met vijf soorten eten werkt een bouwer een hele dag (de afwisseling, vraag 154; de toets hieronder).
+  T.zetVoorraad(D, 'groente', 50);
+  T.zetVoorraad(D, 'eieren', 50);
   dagen(S, 1, 1);
   const I = T.BOUWEN_INSTELLINGEN;
   const [a, b, c] = zetHutten(D, 3);
@@ -308,6 +311,23 @@ test('meebouwen: wie geen werk heeft, bouwt mee; hoe meer handen, hoe sneller, e
   assert.ok(a.klaar && b.klaar, 'vier bouwers zetten een hut in één dag');
   assert.equal(c.bouw.gedaan, Math.min(c.bouw.werk, opC), 'elke bouwer doet er één werkdag aan');
   assert.equal(bouwers(c).length, Math.min(I.perPlaats, vrij), 'zijn de eerste af, dan gaan de bouwers naar de volgende');
+});
+
+test('meebouwen: wie eentonig eet, bouwt trager (vraag 154, B1)', () => {
+  const { S, D } = leegBegin();
+  const I = T.BOUWEN_INSTELLINGEN;
+  // Alleen het graan uit de kar: één soort.
+  T.zetVoorraad(D, 'kaas', 0);
+  T.zetVoorraad(D, 'vlees', 0);
+  dagen(S, 1, 1);
+  const [a] = zetHutten(D, 1);
+  dagen(S, 2, 2);
+  assert.deepEqual(D.behoeften.afwisseling, ['graan']);
+  const bouwers = D.bewoners.mensen.filter((p) => p.bouwt === a).length;
+  assert.equal(bouwers, I.perPlaats);
+  dagen(S, 3, 3);
+  assert.ok(!a.klaar, 'vier bouwers zetten een hut niet meer in één dag');
+  assert.ok(Math.abs(a.bouw.gedaan - bouwers * T.BEHOEFTEN_INSTELLINGEN.werkBijEenSoort) < 1e-9, `${a.bouw.gedaan}`);
 });
 
 test('meebouwen: zonder bouwers staat de bouwplaats stil, en het briefje zegt het', () => {
@@ -410,7 +430,10 @@ test('meebouwen: met of zonder beelden komt er hetzelfde uit', (t) => {
       }
     }
     dagen(S, 5, 5);
-    return JSON.stringify({ bouw: hut.bouw && { ...hut.bouw, vandaag: 0 }, klaar: hut.klaar, hout: D.voorraad.hout, over: T.teRooienOp(D, hut.kavel || hut).length });
+    // Op een miljardste: met de afwisseling (vraag 154) is een dag werk geen heel getal meer, en de beelden tellen het in
+    // stukjes op.
+    const afgerond = (k, v) => (typeof v === 'number' ? Math.round(v * 1e9) / 1e9 : v);
+    return JSON.stringify({ bouw: hut.bouw && { ...hut.bouw, vandaag: 0 }, klaar: hut.klaar, hout: D.voorraad.hout, over: T.teRooienOp(D, hut.kavel || hut).length }, afgerond);
   };
   assert.equal(spel(true), spel(false));
 });

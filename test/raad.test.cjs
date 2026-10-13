@@ -22,6 +22,7 @@ function dorpMetHuis() {
   const S = dorp({ boerderijen: 3, gebouwen: ['huis', 'herberg'] });
   const D = S.dorp;
   T.zetVoorraad(D, 'bier', 100);
+  T.zetVoorraad(D, 'vlees', 0); // het gezouten vlees uit de kar (vraag 154, D1) is op, zoals na de eerste maand
   const hut = D.gebouwen.find((g) => g.soort === 'hut');
   const huis = D.gebouwen.find((g) => g.soort === 'huis');
   for (const p of D.bewoners.mensen) if (p.huis === hut) p.huis = huis;
@@ -161,6 +162,7 @@ test('vis en vlees voor de winter: zout bij de marskramer, en een voorraad voord
   const D = S.dorp;
   T.zetVoorraad(D, 'hout', 5000);
   T.zetVoorraad(D, 'graan', 5000);
+  T.zetVoorraad(D, 'vlees', 0); // het gezouten vlees uit de kar (vraag 154, D1): hier telt alleen de vis
   D.gebouwen = D.gebouwen.filter((g) => g.soort !== 'visser' && g.soort !== 'jager');
   D.gebouwen.push({ soort: 'visser', x: 0, y: 0, klaar: true });
   const vleesOfVis = T.WENSEN_INSTELLINGEN.perMens.vleesOfVis;

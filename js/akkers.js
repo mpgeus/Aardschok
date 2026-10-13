@@ -628,10 +628,11 @@
   // alleen de eerste (e.werkAkkers[0]), en rotte het tweede stuk van boer 1 en boer 3 op het veld:
   // 55 van de 209 tegels. In hooitijd maait hij eerst het hooi (maaiDoel hierboven).
   // Een slag beginnen op de tegel waar hij staat: zo lang als een tegel duurt (de raadsman trager,
-  // T.raadsmanMaait in js/raadsman.js), min wat hij er eerder al maaide.
-  function begin(e, doel, nu) {
+  // T.raadsmanMaait in js/raadsman.js; en wie eentonig eet ook, T.werkVanAfwisseling in js/behoeften.js, vraag 154), min
+  // wat hij er eerder al maaide.
+  function begin(D, e, doel, nu) {
     const al = (doel.akker.half && doel.akker.half.get(sleutel(e.tx, e.ty))) || 0;
-    const duur = T.oogstTegelDuur() * T.raadsmanMaait(e);
+    const duur = T.oogstTegelDuur() * T.raadsmanMaait(e) / T.werkVanAfwisseling(D);
     return { x: e.tx, y: e.ty, sinds: nu, tot: nu + Math.max(0, duur - al), akker: doel.akker, hooi: !!doel.hooi };
   }
 
@@ -720,7 +721,7 @@
       }
       if (e.pad && e.pad.length) continue; // onderweg naar zijn doel
       if (e.oogstDoel && e.tx === e.oogstDoel.x && e.ty === e.oogstDoel.y) {
-        e.maait = begin(e, e.oogstDoel, nu);
+        e.maait = begin(D, e, e.oogstDoel, nu);
         continue;
       }
       const doel = maaiDoel(w, e, akkers, hooitijd && isBoer, basis === 'rijp');
@@ -734,7 +735,7 @@
       // dwaalde. De proef van de weides (drie jaar zonder dwalen) liep daardoor twee oogsten mis.
       if (doel.x === e.tx && doel.y === e.ty) {
         e.oogstDoel = doel;
-        e.maait = begin(e, doel, nu);
+        e.maait = begin(D, e, doel, nu);
         continue;
       }
       // Een weg om wat vaststaat; wie er onderweg staat, lost hij onderweg op (js/lopen.js).

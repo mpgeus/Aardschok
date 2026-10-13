@@ -305,6 +305,20 @@ test('T.tikGebouwenDag: productie schaalt mee met de tevredenheid (T.BEHOEFTEN_I
   assert.ok(Math.abs(S.voorraad.klei - verwacht) < 1e-9, `verwachtte ${verwacht}, kreeg ${S.voorraad.klei}`);
 }));
 
+test('T.tikGebouwenDag: productie schaalt ook mee met de afwisseling, maal de tevredenheid (vraag 154, C1)', () => alsJijHetSeizoenDoet(() => {
+  const S = maakS();
+  const IN = T.BEHOEFTEN_INSTELLINGEN;
+  S.bevolking = T.GEBOUWEN.kleiput.handen;
+  S.gebouwen.push({ soort: 'kleiput', x: 0, y: 0, klaar: true, klaarOp: 0, handen: 0 });
+  T.zetVoorraad(S, 'graan', 100); // alleen graan: één soort
+  const dag = 1;
+  T.tikGebouwenDag(S, dag);
+  assert.deepEqual(S.behoeften.afwisseling, ['graan']);
+  const werkFactor = (IN.werkBasis + (1 - IN.werkBasis) * S.behoeften.tevredenheid) * IN.werkBijEenSoort;
+  const verwacht = T.GEBOUWEN.kleiput.maakt.uit.klei * werkFactor;
+  assert.ok(Math.abs(S.voorraad.klei - verwacht) < 1e-9, `verwachtte ${verwacht}, kreeg ${S.voorraad.klei}`);
+}));
+
 // ── Een huis dat doorgroeit ──
 
 test('T.tikBehoeftenDag: een huis groeit door (T.GEBOUWEN[x].wordt) als het lang genoeg tevreden genoeg is en er ruimte is', () => {

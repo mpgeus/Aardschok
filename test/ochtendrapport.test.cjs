@@ -397,6 +397,7 @@ function dorpMetHuis() {
   const S = dorp(1, { gebouwen: ['huis', 'herberg'] });
   const D = S.dorp;
   T.zetVoorraad(D, 'bier', 100);
+  T.zetVoorraad(D, 'vlees', 0); // het gezouten vlees uit de kar (vraag 154, D1) is op, zoals na de eerste maand
   const hut = D.gebouwen.find((g) => g.soort === 'hut');
   const huis = D.gebouwen.find((g) => g.soort === 'huis');
   for (const p of D.bewoners.mensen) if (p.huis === hut) p.huis = huis;
