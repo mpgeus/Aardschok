@@ -420,13 +420,21 @@
   }
 
   // Zet `soort` neer zo dicht mogelijk bij het kampvuur, zoals de speler het met het bouwmenu doet; in het bos ook (de
-  // kavel rooit bouwAf). Geeft het gebouw.
-  function zetBijHetVuur(D, soort) {
+  // kavel rooit bouwAf). Met `ruimte` blijft er zoveel tegels om zijn voet vrij van andere gebouwen, zoals een speler die
+  // wil dat zijn hut kan doorgroeien tot een huis. Geeft het gebouw.
+  function zetBijHetVuur(D, soort, ruimte = 0) {
     const v = D.wereld.kamp.vuur;
+    const voet = T.gebouwVoet(soort, T.volgendeTekening(D, soort)) || { b: 1, h: 1 };
+    const raakt = (a, b) => a.x < b.x + b.b && b.x < a.x + a.b && a.y < b.y + b.h && b.y < a.y + a.h;
+    const tekrap = (x, y) => {
+      const om = { x: x - ruimte, y: y - ruimte, b: voet.b + 2 * ruimte, h: voet.h + 2 * ruimte };
+      return D.gebouwen.some((g) => raakt(om, T.voetVanGebouw(g)));
+    };
     for (let r = 1; r < 40; r++) {
       for (let dy = -r; dy <= r; dy++) {
         for (let dx = -r; dx <= r; dx++) {
           if (Math.max(Math.abs(dx), Math.abs(dy)) !== r) continue;
+          if (ruimte && tekrap(v.x + dx, v.y + dy)) continue;
           const uit = T.plaatsGebouw(D, soort, v.x + dx, v.y + dy);
           if (uit.gelukt) return uit.instantie;
         }
@@ -509,7 +517,8 @@
         const velden = hoeven.map((g) => legVeldBij(D, 'akker', g));
         if (weide) velden.push((weiveld = legVeldBij(D, 'akker', hoeven[0])));
         const rest = [];
-        for (let i = 0; i < n; i++) rest.push(zetBijHetVuur(D, 'hut'));
+        // Drie tegels om elke hut, zodat hij kan doorgroeien (B2b, 13 okt: tegen elkaar stond de ene de andere in de weg).
+        for (let i = 0; i < n; i++) rest.push(zetBijHetVuur(D, 'hut', 3));
         for (const soort of gebouwen) rest.push(zetBijHetVuur(D, soort));
         for (const g of [schout, ...hoeven, ...velden, ...rest]) bouwAf(D, g, 1);
       } finally {
