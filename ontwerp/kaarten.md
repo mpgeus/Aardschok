@@ -133,6 +133,29 @@ nummers passen op het hele eiland, en `T.eilandStuk` maakt elk stuk los (64 bij 
    coördinaten, en de vragen naar een tegel kijken in de stukken; (3) de maker doet alleen nog het menselijke, en de
    rand gaat weg; (4) elke lijst over de hele kaart krijgt zijn eigen vak; (5) stukken als ze nodig zijn; (6) opslaan
    wat veranderde; dan meten (de kolonist op vijf eilanden, de schout naar de kust op 30×, de schermen).
+   **Stap 1 is af** (13 okt): `T.landStuk` in `js/maker.js` (`code.md`), met `test/landstuk.test.cjs`; 40 ms per stuk in
+   Node, twee derde in de ruis van het eiland.
+   **Het ontwerp van stap 2 tot 6** (Claude, 13 okt; zo kan een volgende sessie verder):
+   - *Wat in S staat* (bewaard): wat veranderde, per tegelnummer (`T.tegelNummer`): `w.tegelsAnders` (Map naar het woord),
+     `w.grondAnders` (Map naar de grondtegel; alleen de maker verandert de grond, het spel nooit), `w.gerooid` (Set: een
+     ding van het eiland dat weg is); de dingen die iemand zette in `w.voorwerpen`, zoals nu; en `w.open` (Set van
+     stuknummers: waar je mensen kwamen; B2c maakt er de mist van). Een boom wordt al met zijn plek aangewezen
+     (`g.boom = { x, y }`); `v.teKappen` gaat naar een Set op de kaart, want een ding van het eiland wordt niet bewaard.
+   - *Wat niet in S staat*: de stukken zelf (een WeakMap per kaart in `js/wereld.js`, zoals de lijst per tegel), elk
+     `{ tegel, grond, voorwerpen }`, gemaakt uit `T.landStuk` met wat veranderde erover; een geladen spel maakt ze opnieuw.
+   - *De vragen*: `T.tegel` zegt 'buiten' op een stuk dat niet open is, zodat A\* nooit een stuk laat maken en de regels
+     niet van de camera afhangen; het tekenen maakt wat in beeld is, hooguit één stuk per beeld. `T.voorwerpOp` kijkt eerst
+     in `w.voorwerpen`, dan in het stuk; `T.haalVoorwerpWeg` op een ding van het eiland zet zijn tegel in `w.gerooid`.
+     Wie nu alle `w.voorwerpen` afloopt om een boom te vinden (53 plekken), vraagt `T.voorwerpenIn(w, vak)`.
+   - *Het vak*: `T.kaartVak(w)` wordt op een kaart van het eiland het vak om het dorp (`w.vak`, eerst het land van 100 bij
+     100 van nu), zodat de lijsten om het dorp (de beesten, de paadjes, de natuur bij een gebouw) blijven werken; in stap 4
+     krijgt wat niet om het dorp gaat (het tekenen, de eilanden van A\*, de lichtkaart) een eigen vak.
+   - *Een kaart uit Tiled* (de proefkaarten) houdt `w.tegels` en `w.grond` achter dezelfde vragen; buiten is 'buiten'.
+   - *Het tekenen* (`js/tekenen.js`): de rand (`randDof`, `randBos`, `tekenBuitenGrond`, `bosrandOp`, `bosVoorBij`,
+     `T.randVanHetEiland`) gaat weg, de lichtkaart (`lichtKaartVan`) en `hoogsteVan` gaan per stuk, en de voorwerpen per
+     stuk in beeld in plaats van elk beeld alle `w.voorwerpen`. De buffer van de grond werkt al in stukken van het
+     scherm en hoeft niet om.
+   - *Nog te doen voor de spelregel Hoogte* (standaard uit): de hoogte per stuk (`w.hoogte` is nu één raster).
 3. **B2c, de mist.** Zwart wat niemand van jou zag, grijs wat je zag maar nu niet ziet, helder waar je mensen kijken.
    Elk van je mensen ziet een kring om zich heen (de schout verder), en je gebouwen ook; de getallen in de werkbank. Een
    stuk wordt gemaakt aan de rand van de mist, en je bouwt alleen op land dat je kent. **Het grijs is het land zoals het
