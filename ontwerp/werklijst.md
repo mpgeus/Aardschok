@@ -113,7 +113,7 @@ afstanden. Het plan (13 okt; Marcel: "A ja, B1, C2"), met het hoe en wat er nu i
   de rand weg; het land gaat open waar je mensen komen, en alles neemt alleen het nieuwe stuk erbij, vooruit gemaakt.
   Hoe en wat het meten gaf: `kaarten.md`, "Het hele eiland". Nog voor later: de hoogte per stuk (de spelregel Hoogte,
   standaard uit).
-- **B2c, de mist:** zwart, grijs (het land zoals het nu is, zonder wie er loopt), en helder waar je mensen kijken; bij
+- **B2c, de mist:** **Bezig in sessie `ccr-1d9fab2a-huux51`** (13 okt): het plan, voor Marcel. Zwart, grijs (het land zoals het nu is, zonder wie er loopt), en helder waar je mensen kijken; bij
   het begin ken je een kring van zo'n 50 tegels.
 - **B2d, opslaan wat veranderde: af** (met B2b; Marcel: "Meteen mee"): versie 10, het bewaarde spel 15 kB (was 473 kB).
 
