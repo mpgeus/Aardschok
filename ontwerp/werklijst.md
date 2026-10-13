@@ -26,6 +26,7 @@ wijnboerderij is een eigen gebouw, met de wijngaard als veld ernaast. **B2 is be
 uitvoeren"), vóór B2c. Meten met `npm run stukmeting` (de schout op 30× van het kamp naar de kust, in de browser; wat
 het nu geeft staat in `kaarten.md`, "Het hele eiland"), en wat het zwaarst is eerst. Wat er nu ligt, gemeten 13 okt:
 - **De nacht van het dorp**: het beeld waarin een nieuwe dag begint, kost 70 tot 120 ms (op 30× elke tien seconden).
+  **Bezig in sessie `claude/sweet-turing-6eknnu`** (13 okt): meten welke regel van de nacht het is, dan een plan.
   Eerst meten welke regel van de nacht het is, dan verdelen over beelden of sneller maken.
 - **Een stuk dat nog niet klaar lag** als het opengaat (twee stukken vlak na elkaar, of de schout die van richting
   verandert): 20 tot 45 ms land maken. Vooruit maken in de richting waar hij heen loopt (het eind van zijn pad), of meer
