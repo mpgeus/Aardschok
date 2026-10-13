@@ -400,8 +400,8 @@
     }
     if (T.OORZAKEN.honger.speelt(s.dorp, dag)) E.honger++;
     if (T.OORZAKEN.kou.speelt(s.dorp, dag)) E.kou++;
-    // De afwisseling (vraag 154): hoeveel dagen het dorp hoeveel soorten at (4: vier of meer, het volle werk).
-    const soorten = Math.min(4, ((s.dorp.behoeften && s.dorp.behoeften.afwisseling) || []).length);
+    // De afwisseling (vraag 154): hoeveel dagen het dorp hoeveel soorten at.
+    const soorten = ((s.dorp.behoeften && s.dorp.behoeften.afwisseling) || []).length;
     E.soorten[soorten] = (E.soorten[soorten] || 0) + 1;
     for (const [naam, d] of Object.entries(DAGEN_GRAAN)) {
       if (dag !== d) continue;

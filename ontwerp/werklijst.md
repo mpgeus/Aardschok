@@ -22,9 +22,21 @@ De toetsen en het gereedschap spelen op het proefdorp (`T.proefdorp`, `Spel.debu
 wijnboerderij is een eigen gebouw, met de wijngaard als veld ernaast. **B2 is af** (13 okt, onder "Af"), op Marcels blik
 na: het hele eiland in stukken, opslaan wat veranderde, het optimaliseren, en de mist (B2c).
 
-**B3, de afwisseling, wordt gebouwd** (13 okt, Marcel: "A1, B1, C1, D1"; de stappen bij B3).
+**B3 is af** (13 okt, onder "Af"; op branch `ccr-58035c3c-lckq21`, wacht op "push it"): het dorp eet in gelijke delen
+van elke soort, en hoe meer soorten, hoe harder al het werk gaat. **Het volgende is C, de ossenkar**: eerst een plan
+met Marcel.
 
 **Wacht op Marcel:**
+- **De afwisseling bekijken, en de lat kiezen** (B3, 13 okt; `spel.md`, "Zo werkt de afwisseling nu"): Nieuw spel, en
+  kijk in de balk naar **Plain fare** (bij de muis wat helpt); laat de kaas en het vlees uit de kar opgaan zonder jager
+  of moestuin, en zie het werk naar 60% zakken (**One dish**). De speeltest (`speelbaar.md`, 13 okt, avond): de kolonist
+  heeft met een moestuin, een jager en een kippenhok (14 hout) rond dag 40 vier soorten, en werkt dan het jaar op vol.
+  Zo is de afwisseling een klein klusje, nog geen kern. Te kiezen, met getallen in de werkbank ("Needs and the winter"):
+  **a** zo laten tot het dorp groeit (C), want een soort moet met het dorp meegroeien; **b** vol werk pas bij vijf
+  soorten (`werkPerSoortErbij` 0,1): dan moet er wijn, vis of brood bij, en blijft een dorp zonder water tot de eerste
+  wijn op 90%; **c** groente en eieren minder laten voeden (`groenteAlsGraan`, `eierenAlsGraan`), zodat er bij een groter
+  dorp meer moestuinen nodig zijn. Voorstel van Claude: **b**, omdat het de ketens (de wijngaard, de molen en de bakker)
+  een reden geeft, met de getallen die er al zijn.
 - **De mist bekijken** (B2c, 13 okt; `spel.md`, "Zo werkt de mist nu"): Nieuw spel, en zoom uit (het wiel, of `Tab`):
   zwart wat je niet kent, grijs (donkerder en ontkleurd) de kring van 50 tegels die je bij het begin kent, en helder
   rond je mensen. Loop met de schout het zwart in. Is het grijs goed zo? Het zijn getallen in de werkbank ("The fog":
@@ -108,16 +120,8 @@ wijnboerderij, de akker bij een boerderij; de raad zegt het als de wijn het jaar
 
 ## B3. Afwisseling (vraag 154)
 
-**Bezig in sessie `ccr-58035c3c-lckq21`** (13 okt): het bouwen, stap 1 tot 5.
-
-Marcel, 11 okt: "Wijn wordt ook eten. Afwisseling wordt de kern. Mensen worden anders minder productief." Wie maar één
-ding eet, werkt minder. Het plan, de maaltijd (Marcel, 13 okt: "A1, B1, C1, D1"), staat in `gameloop.md`, "Besloten". Na
-B2 en vóór C, zodat C de echte economie meet (Marcel: "3 ja"). De stappen:
-1. De maaltijd en de afwisseling (`js/behoeften.js`), met toetsen.
-2. Eén factor voor al het werk: de werkplaatsen, het bouwen en het veldwerk.
-3. Zien: een toestand in de balk, de raad zegt wat er mist; de kar brengt kaas en gezouten vlees.
-4. De kolonist leert het, en de speeltest meet hoeveel soorten en hoe lang op welk werk.
-5. `spel.md`, `code.md` en `gameloop.md` bij.
+Af op 13 okt (onder "Af"); hoe het werkt: `spel.md`, "Zo werkt de afwisseling nu". De lat (vier of vijf soorten voor vol
+werk) wacht op Marcel.
 
 ## C. De ossenkar (vraag 152, de proef)
 
@@ -159,6 +163,12 @@ het graan vraagt", de schandpaal, de heervaart en de twee bazen.
 
 ## Af (sinds 11 okt)
 
+- B3, de afwisseling (vraag 154; 13 okt, Marcel: "A1, B1, C1, D1"; `spel.md`, "Zo werkt de afwisseling nu"): het dorp
+  eet zijn maaltijd in gelijke delen van elke soort (graan, brood, vlees, vis, wijn, kaas, groente, eieren), en de
+  soorten die minstens een tiende waren, bepalen al het werk (60% met één, 100% met vier): de werkplaatsen (maal de
+  tevredenheid), de bouwers en het veldwerk. De status Plain fare (erger: One dish), de raad bij twee soorten of minder,
+  de kar met kaas en gezouten vlees, en de kolonist bouwt een moestuin, een jager en een kippenhok. De speeltest: vijf
+  eilanden zonder fouten (`speelbaar.md`).
 - De toets voor dubbele namen (13 okt, Marcel: "ja, bouw die toets"): `test/namen.test.cjs` kijkt bij het laden of geen
   bestand een naam in `Spel` zet die een ander al zette (`gereedschap.md`, bij `npm test`).
 

@@ -153,6 +153,24 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 13 okt, avond: de afwisseling (werklijst B3, vraag 154)
+
+`npm run speeltest -- --zaden 1-5 --tegelijk 3 --naam b3`, op `1b4dd077` met de kolonist van `4c9c6355` (branch
+`ccr-58035c3c-lckq21`): het dorp eet in gelijke delen van elke soort, het werk volgt de afwisseling (60, 75, 90 en vanaf
+vier soorten 100%), de kar brengt kaas en gezouten vlees, en de kolonist bouwt wat een soort erbij brengt (regel 7).
+
+- **Geen fout en geen doden**, op alle vijf het jaar uit; geen dag honger of kou. Er ligt meer graan dan op 12 okt (op 1
+  lentemaand 172 tot 229, was 81 tot 151): kaas, vlees, groente en eieren eten mee.
+- **De afwisseling is snel rond:** de kolonist zet op dag 1 een moestuin (2 hout, af op dag 6 tot 13), en als de kaas en
+  het vlees uit de kar op zijn, rond dag 35 een jager en een kippenhok. Dan eet het dorp vier soorten: 367 tot 377 van
+  de 391 dagen op vol werk, 9 tot 16 dagen op drie soorten, 4 tot 7 op twee, nooit op één.
+- **Het dorp groeit niet** (17 → 18): de kolonist bouwt hutten tot elk gezin uit het kamp een dak heeft, en daarna geen
+  woning meer. Dat was er al; daardoor zegt deze speeltest niets over een soort die met het dorp moet meegroeien.
+- **Met vijf soorten voor vol werk** (`--getal BEHOEFTEN_INSTELLINGEN.werkPerSoortErbij=0.1`, `--naam b3-vijf`: 60, 70,
+  80, 90 en vanaf vijf 100%): eiland 4 en 5 hebben water bij het dorp, de kolonist zet een visser, en ze eten 282 en 295
+  dagen vijf soorten; eiland 1 tot 3 blijven het jaar op vier (90%), want de kolonist bouwt alleen een wijnboerderij als
+  het eten de winter niet haalt.
+
 ## De speeltest van 13 okt: de kaart van het eiland, in stukken (werklijst B2b)
 
 `npm run speeltest -- --zaden 1-5 --tegelijk 3`, op `84bfa69c` (branch `claude/funny-fermi-5fqm1u`): het land komt
