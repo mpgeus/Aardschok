@@ -433,6 +433,26 @@ test('eilanden: een voorwerp dat de doorgang sluit, en wie ingemetseld staat, of
   assert.equal(T.kanErKomen(dicht, { x: 2, y: 2 }, { x: 2, y: 2 }), true, 'wie er al is, hoeft niet te zoeken');
 });
 
+// Waar de kaart veranderde (T.kaartPlekkenSinds): de grond in js/tekenen.js tekent alleen daar opnieuw (13 okt). Een
+// verandering zonder plek, of een te oude versie, is onbekend: dan alles.
+test('de kaart weet waar ze veranderde, tot een verandering zonder plek', () => {
+  const w = kaartMetMuur(10, 6, 4);
+  const begin = T.kaartVersie(w);
+  assert.deepEqual(T.kaartPlekkenSinds(w, begin), [], 'niets veranderd');
+  T.zetTegel(w, 4, 3, 'vloer');
+  T.kaartVeranderd(w, { x1: 4, y1: 3, x2: 4, y2: 3 });
+  T.kaartVeranderd(w, { x1: 1, y1: 1, x2: 2, y2: 2 });
+  assert.deepEqual(T.kaartPlekkenSinds(w, begin), [{ x1: 4, y1: 3, x2: 4, y2: 3 }, { x1: 1, y1: 1, x2: 2, y2: 2 }]);
+  assert.deepEqual(T.kaartPlekkenSinds(w, begin + 1), [{ x1: 1, y1: 1, x2: 2, y2: 2 }], 'alleen wat sindsdien veranderde');
+  const voor = T.kaartVersie(w);
+  T.kaartVeranderd(w);
+  assert.equal(T.kaartPlekkenSinds(w, begin), null, 'een verandering zonder plek: niet bekend waar');
+  T.kaartVeranderd(w, { x1: 5, y1: 5, x2: 5, y2: 5 });
+  assert.deepEqual(T.kaartPlekkenSinds(w, voor + 1), [{ x1: 5, y1: 5, x2: 5, y2: 5 }], 'erna weer wel');
+  for (let i = 0; i < 100; i++) T.kaartVeranderd(w, { x1: 0, y1: 0, x2: 0, y2: 0 });
+  assert.equal(T.kaartPlekkenSinds(w, voor + 1), null, 'te lang geleden');
+});
+
 test('wie een tegel van de kaart verandert, zegt het met T.kaartVeranderd', () => {
   // Anders kennen de eilanden de muur niet, en zegt T.kanErKomen "geen weg" waar er wel een is, of andersom.
   const fs = require('node:fs');

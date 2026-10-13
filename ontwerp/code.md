@@ -247,7 +247,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   en de eilanden van A\* (met een unie, `ouder`), de lijst platte dingen en de grondbuffer in `js/tekenen.js` (een
   bufferstuk per beeld opnieuw, `buf.oud`), en de wegen in `js/lopen.js` (alleen 'geen weg' opnieuw). `T.kaartVeranderd(w,
   plek)` met een plek (zoals `T.voetVan`) werkt alleen die tegels van het raster bij, en kwam er alleen ruimte bij, dan
-  gaan ze op in de eilanden ernaast (`maakVrij`). Het land wordt **vooruit** gemaakt (`maakVooruit`): binnen `vooruit`
+  gaan ze op in de eilanden ernaast (`maakVrij`). De kaart onthoudt de laatste 64 plekken (`T.kaartPlekkenSinds(w,
+  versie)`, null als het niet bekend is, alleen scherm): de lijst platte dingen en de grondbuffer in `js/tekenen.js`
+  werken alleen die plekken bij, een bufferstuk per beeld (`vergeetVeranderdeKaart`, 13 okt; eerst alle grond in beeld,
+  49 ms), en waar het zand van de paadjes anders werd (`T.zandHoeken`) net zo. Het land wordt **vooruit** gemaakt (`maakVooruit`): binnen `vooruit`
   tegels voorbij `openRond`, in delen van `vooruitDeel`, `vooruitMs` per beeld, eerst bij wie loopt; het wacht in de
   stukken tot het open gaat. De stukken zelf (`maakStuk`: `T.landStuk` met wat er anders werd
   erover, en de dingen van het eiland als voorwerpen met `v.natuur`) staan niet in S: een geladen spel maakt ze opnieuw

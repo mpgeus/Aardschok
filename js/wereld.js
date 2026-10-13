@@ -665,7 +665,28 @@
       RASTERS.delete(w);
       if (laatste && laatste.w === w) laatste = null;
     }
+    const log = PLEKKEN.get(w) || { van: T.kaartVersie(w), plekken: [] };
+    log.plekken.push(plek ? { ...plek } : null);
+    if (log.plekken.length > PLEKKEN_MAX) {
+      log.plekken.shift();
+      log.van++;
+    }
+    PLEKKEN.set(w, log);
     VERSIES.set(w, T.kaartVersie(w) + 1);
+  };
+  // Waar de kaart veranderde sinds versie `versie`: een lijst plekken ({ x1, y1, x2, y2 }), of null als dat niet bekend is
+  // (een verandering zonder plek, of meer dan PLEKKEN_MAX geleden). Zo tekent js/tekenen.js alleen de grond rond een
+  // gevelde boom of een nieuw gebouw opnieuw, in plaats van alle grond in beeld (13 okt: 49 ms in plaats van 11). Net als
+  // de versie geen spelstaat. `van` is de versie vóór de eerste plek in de lijst.
+  const PLEKKEN = new WeakMap();
+  const PLEKKEN_MAX = 64;
+  T.kaartPlekkenSinds = function (w, versie) {
+    const nu = T.kaartVersie(w);
+    if (versie === nu) return [];
+    const log = PLEKKEN.get(w);
+    if (!log || versie < log.van || versie > nu) return null;
+    const plekken = log.plekken.slice(versie - log.van);
+    return plekken.includes(null) ? null : plekken;
   };
   // Hoe vaak de kaart al veranderde: wat er verder uit de kaart volgt (de paadjes van de deuren, js/paden.js), weet zo
   // of het opnieuw moet. Ook geen spelstaat: een geladen kaart begint weer bij 0, en rekent alles opnieuw uit.

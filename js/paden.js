@@ -237,7 +237,8 @@
   // Hoe het eruitziet
   // ---------------------------------------------------------------------------------------------
 
-  // Een sleutel die verspringt als er iets aan de paadjes veranderde, voor de buffer van de grond (js/tekenen.js).
+  // Een sleutel die verspringt als er iets aan de paadjes veranderd kan zijn: dan rekent T.zandHoeken ze opnieuw uit. De
+  // grond (js/tekenen.js) tekent alleen opnieuw waar het zand dan anders werd.
   T.padVersie = (D) => `${T.kaartVersie(D.wereld)}|${(D.wereld.paden && D.wereld.paden.versie) || 0}|${IN().paadjes}`;
 
   // Per hoek van de kaart ((breedte + 1) × (hoogte + 1), hoek (x, y) is de noordhoek van tegel (x, y)): 1 als hij zand

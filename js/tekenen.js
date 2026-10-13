@@ -167,7 +167,10 @@
     // Het groen dat plat op de grond ligt, ligt erin: met een ander seizoen (de bomen en de begroeiing, vraag 148) ook
     // opnieuw.
     const bomen = metSprites() ? T.sprites.seizoenVanDeBomen() : '';
-    return `${w.gebied}|${w.huidigeKamer}|${w.bekend.size}|${g}|${metSprites() ? 1 : 0}|${Math.round(S.zoom * 100)}|${padVersie(S)}|${platVan(w).versie}|${beek}|${sneeuwStap(S)}|${bomen}`;
+    // Wat er op de kaart veranderde (een gevelde boom, een gebouw) en waar het zand van de paadjes anders werd, tekent
+    // werkGrondBij alleen daar opnieuw (vergeetVeranderdeKaart); de keuze voor de paadjes zelf tekent alles opnieuw.
+    const paadjes = T.PADEN_INSTELLINGEN ? T.PADEN_INSTELLINGEN.paadjes : '';
+    return `${w.gebied}|${w.huidigeKamer}|${w.bekend.size}|${g}|${metSprites() ? 1 : 0}|${Math.round(S.zoom * 100)}|${paadjes}|${platVan(w).versie}|${beek}|${sneeuwStap(S)}|${bomen}`;
   }
 
   // Wat plat op de grond groeit (een graspol, bloemen, een varen, paddenstoelen, een kleine steen, een rij kool; vraag
@@ -180,19 +183,31 @@
     const t = vel && vel.tiles[T.sprites.tekeningVan(v, true).id];
     return !!(t && !t.vast && !t.beslaat && t.doos && t.doos[1] <= PLAT_HOOG);
   }
-  // Per wereld de platte voorwerpen, opnieuw gezocht als de kaart veranderde (T.kaartVersie, js/wereld.js); `versie` gaat
-  // alleen omhoog als die lijst echt anders werd, want alleen dan hoeft de grond opnieuw. Ging er op het eiland alleen
-  // land open (T.openGrootte), dan komt het platte spul van de nieuwe stukken erbij zonder dat de versie omhoog gaat:
-  // werkGrondBij tekent dan alleen dat land opnieuw (Marcel, 13 okt: "Alles per stuk").
+  // Per wereld de platte voorwerpen, bijgewerkt als de kaart veranderde (T.kaartVersie, js/wereld.js). Weet de kaart waar
+  // (T.kaartPlekkenSinds), dan alleen op die plekken, en blijft `versie` gelijk: werkGrondBij tekent die plekken zelf
+  // opnieuw (vergeetVeranderdeKaart). Anders alles opnieuw gezocht, en gaat `versie` alleen omhoog als de lijst echt
+  // anders werd, want alleen dan hoeft alle grond opnieuw. Ging er op het eiland land open (T.openGrootte), dan komt het
+  // platte spul van de nieuwe stukken erbij zonder dat de versie omhoog gaat: werkGrondBij tekent dan alleen dat land
+  // opnieuw (Marcel, 13 okt: "Alles per stuk").
   const PLAT = new WeakMap();
   function platVan(w) {
     const kaart = T.kaartVersie(w);
     const open = T.openGrootte(w);
     let p = PLAT.get(w);
     if (p && p.kaart === kaart && p.open === open) return p;
-    if (p && p.kaart === kaart) {
-      const erbij = T.nieuweStukken(w, p.stukken).flatMap((r) => T.voorwerpenIn(w, r).filter(isPlat));
-      p = { ...p, open, stukken: new Set(w.open), lijst: p.lijst.concat(erbij) };
+    const plekken = p && (p.kaart === kaart ? [] : T.kaartPlekkenSinds(w, p.kaart));
+    if (p && plekken) {
+      const op = (v) => plekken.some((r) => v.x >= r.x1 && v.x <= r.x2 && v.y >= r.y1 && v.y <= r.y2);
+      const lijst = plekken.length ? p.lijst.filter((v) => !op(v)) : p.lijst.slice();
+      const gehad = new Set();
+      for (const r of plekken) {
+        for (const v of T.voorwerpenIn(w, { x: r.x1, y: r.y1, b: r.x2 - r.x1 + 1, h: r.y2 - r.y1 + 1 })) {
+          if (op(v) && !gehad.has(v) && isPlat(v)) lijst.push(v);
+          gehad.add(v);
+        }
+      }
+      if (p.open !== open) for (const r of T.nieuweStukken(w, p.stukken)) lijst.push(...T.voorwerpenIn(w, r).filter(isPlat));
+      p = { ...p, kaart, open, stukken: new Set(w.open || []), lijst };
       PLAT.set(w, p);
       return p;
     }
@@ -228,10 +243,6 @@
   function zandVan(S) {
     const D = T.dorpHier(S);
     return D && D.gebouwen && T.zandHoeken ? { D, zand: T.zandHoeken(D) } : null;
-  }
-  function padVersie(S) {
-    const D = T.dorpHier(S);
-    return D && D.gebouwen && T.padVersie ? T.padVersie(D) : '';
   }
 
   // Ver uitgezoomd (het overzicht, js/main.js, vraag 108, a) wordt de grond niet op de maat van de vlakte bewaard
@@ -301,8 +312,7 @@
   const VOORRAAD = 16; // zoveel lege doeken bewaart een buffer hooguit (elk een megabyte)
   function werkStukkenBij(buf, sleutel, k, r, teken) {
     if (buf.sleutel !== sleutel || buf.k !== k) {
-      for (const s of buf.stukken.values()) if (s.canvas) buf.vrij.push(s.canvas);
-      buf.stukken.clear();
+      leegBuffer(buf);
       buf.sleutel = sleutel;
       buf.k = k;
       buf.fase = faseVan(k);
@@ -321,6 +331,12 @@
       for (let i = i0; i <= i1; i++) if (!buf.stukken.has(i + ',' + j)) tekenBufferStuk(buf, i, j, teken);
     }
     if (buf.vrij.length > VOORRAAD) buf.vrij.length = VOORRAAD;
+  }
+  // Alle stukken weg (hun doeken terug in de voorraad), ook wat nog opnieuw moest.
+  function leegBuffer(buf) {
+    for (const s of buf.stukken.values()) if (s.canvas) buf.vrij.push(s.canvas);
+    buf.stukken.clear();
+    buf.oud = null;
   }
   // Teken stuk (i, j) van de buffer (opnieuw); een oud doek gaat terug in de voorraad.
   function tekenBufferStuk(buf, i, j, teken) {
@@ -372,6 +388,7 @@
     if (!S.grond) S.grond = { k: 1, fase: 0, sleutel: '', stukken: new Map(), vrij: [] };
     const k = bufferSchaal(S, dpr);
     vergeetNieuwLand(S.grond, S.wereld);
+    vergeetVeranderdeKaart(S.grond, S);
     const teken = (c, r) => tekenGrondIn(c, S, r, inBeeld);
     werkStukkenBij(S.grond, grondSleutel(S) + '|' + k, k, zicht, teken);
     // van wat nieuw land raakt, één per beeld opnieuw; tot dan staat er wat er stond
@@ -384,27 +401,54 @@
     return S.grond;
   }
   // Ging er op het eiland land open (js/wereld.js), dan alleen de stukken van de buffer die dat land raken opnieuw, één
-  // per beeld (buf.oud); het land eromheen blijft staan. In het vlak van het scherm is een stuk land een ruit
-  // (T.naarScherm), met de rand van de grond (GRONDRAND) en wat erop staat (PLAT_HOOG) erbij.
+  // per beeld (buf.oud); het land eromheen blijft staan.
   function vergeetNieuwLand(buf, w) {
     const open = T.openGrootte(w);
-    if (buf.land && buf.land.w === w && buf.land.open !== open) {
-      for (const r of T.nieuweStukken(w, buf.land.stukken)) {
-        const hoeken = [[r.x, r.y], [r.x + r.b, r.y], [r.x, r.y + r.h], [r.x + r.b, r.y + r.h]].map(([x, y]) => T.naarScherm(x, y));
-        const x0 = Math.min(...hoeken.map((p) => p.x)) - GRONDRAND.rechts;
-        const x1 = Math.max(...hoeken.map((p) => p.x)) + GRONDRAND.links;
-        const y0 = Math.min(...hoeken.map((p) => p.y)) - GRONDRAND.onder - PLAT_HOOG;
-        const y1 = Math.max(...hoeken.map((p) => p.y)) + GRONDRAND.boven;
-        for (const [sl, s] of buf.stukken) {
-          const sx0 = (s.i * STUK - buf.fase) / buf.k;
-          const sy0 = (s.j * STUK - buf.fase) / buf.k;
-          if (sx0 > x1 || sy0 > y1 || sx0 + STUK / buf.k < x0 || sy0 + STUK / buf.k < y0) continue;
-          if (!buf.oud) buf.oud = [];
-          if (!buf.oud.includes(sl)) buf.oud.push(sl);
-        }
-      }
-    }
+    if (buf.land && buf.land.w === w && buf.land.open !== open) for (const r of T.nieuweStukken(w, buf.land.stukken)) markeerOud(buf, w, r);
     if (!buf.land || buf.land.w !== w || buf.land.open !== open) buf.land = { w, open, stukken: new Set(w.open || []) };
+  }
+  // Veranderde de kaart (een gevelde boom, een gebouw, een veld: T.kaartPlekkenSinds in js/wereld.js), dan net zo alleen
+  // de stukken rond die plekken opnieuw, met een tegel erom (de grond van een tegel loopt over in die van zijn buren);
+  // weet de kaart niet waar, dan alles. En werd het zand van de paadjes ergens anders (T.zandHoeken, js/paden.js), dan
+  // de stukken rond die hoekpunten. Tot 13 okt tekende elke verandering alle grond in beeld opnieuw (49 ms in plaats
+  // van 11).
+  function vergeetVeranderdeKaart(buf, S) {
+    const w = S.wereld;
+    const kaart = T.kaartVersie(w);
+    if (buf.kaart && buf.kaart.w === w && buf.kaart.versie !== kaart) {
+      const plekken = T.kaartPlekkenSinds(w, buf.kaart.versie);
+      if (!plekken) leegBuffer(buf);
+      else for (const p of plekken) markeerOud(buf, w, { x: p.x1 - 1, y: p.y1 - 1, b: p.x2 - p.x1 + 3, h: p.y2 - p.y1 + 3 });
+    }
+    buf.kaart = { w, versie: kaart };
+    const paden = zandVan(S);
+    const zand = paden ? paden.zand : null;
+    if (zand === buf.zand) return;
+    if (buf.zand && zand && buf.zand.length === zand.length) {
+      const vak = T.kaartVak(w);
+      const bv = vak.b + 1; // de hoekpunten, zoals T.zandHoeken ze legt
+      for (let k = 0; k < zand.length; k++) {
+        if (zand[k] !== buf.zand[k]) markeerOud(buf, w, { x: vak.x + (k % bv) - 1, y: vak.y + Math.floor(k / bv) - 1, b: 2, h: 2 });
+      }
+    } else if (buf.stukken.size) leegBuffer(buf);
+    buf.zand = zand;
+  }
+  // De stukken van de buffer die rechthoek r van tegels raken, opnieuw, één per beeld (buf.oud). In het vlak van het
+  // scherm is r een ruit (T.naarScherm), met de rand van de grond (GRONDRAND), wat erop staat (PLAT_HOOG) en de hoogte erbij.
+  function markeerOud(buf, w, r) {
+    const { hoog, laag } = hoogsteVan(w);
+    const hoeken = [[r.x, r.y], [r.x + r.b, r.y], [r.x, r.y + r.h], [r.x + r.b, r.y + r.h]].map(([x, y]) => T.naarScherm(x, y));
+    const x0 = Math.min(...hoeken.map((p) => p.x)) - GRONDRAND.rechts;
+    const x1 = Math.max(...hoeken.map((p) => p.x)) + GRONDRAND.links;
+    const y0 = Math.min(...hoeken.map((p) => p.y)) - GRONDRAND.onder - PLAT_HOOG - hoog;
+    const y1 = Math.max(...hoeken.map((p) => p.y)) + GRONDRAND.boven - laag;
+    for (const [sl, s] of buf.stukken) {
+      const sx0 = (s.i * STUK - buf.fase) / buf.k;
+      const sy0 = (s.j * STUK - buf.fase) / buf.k;
+      if (sx0 > x1 || sy0 > y1 || sx0 + STUK / buf.k < x0 || sy0 + STUK / buf.k < y0) continue;
+      if (!buf.oud) buf.oud = [];
+      if (!buf.oud.includes(sl)) buf.oud.push(sl);
+    }
   }
 
   // Alles wat in de buffer van de grond ligt, in rechthoek r van de vlakte.
