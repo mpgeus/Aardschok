@@ -478,9 +478,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   meer vibrant"), een donkere tint over wat je niet kent alleen waar het eiland is (`onbekend`, `nevel`, met
   `source-atop`: je ziet de vorm, niet wat er is), de plekken die je kent, je gebouwen, de schout in rood, en het kader
   van de camera (`T.tekenMaat` gedeeld door `S.zoom`). **Er blijft geen ruit over** (Marcel: "een echte gefeatherde rand
-  ... dat je geen ruit meer overhoud"): als het beeld af is, vervaagt de zee vanaf de kust naar doorzichtig
-  (`vervaagDeZee`: een golf vanaf het land, `zeeVervaagt` vakken, met zachte ruis voor een rafelige rand, `rafel` en
-  `rafelVlek`), en vlak bij de rand van het vierkant altijd. Een klik of slepen kijkt daar: `T.kijkNaar` (`js/main.js`) zet het overzicht
+  ... dat je geen ruit meer overhoud"), **met een lijn van 1 pixel erom** ("Het gaat toch wat teveel op in het land"):
+  als het beeld af is, rekent `vervaagDeZee` voor de zee de afstand tot het land (rond, in twee gangen met stappen van 1
+  en √2, `afstandTotLand`); tot `zeeTotOmtrek` vakken ligt de zee (van heel naar `zeeBijOmtrek`), daar ligt de lijn
+  (`m.binnen`, en in `js/balk.js` `omtrekVan`: de rand ervan op de maat van het doek, één keer per maat), en daarbuiten
+  vervaagt hij in `zeeVervaagt` vakken, rafelig (`rafel`, `rafelVlek`); vlak bij de rand van het vierkant altijd. Een klik of slepen kijkt daar: `T.kijkNaar` (`js/main.js`) zet het overzicht
   (Tab) aan en de camera erheen.
 
 ### js/land.js en js/landkaart.js: het land met provincies

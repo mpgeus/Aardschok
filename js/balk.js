@@ -525,7 +525,7 @@
   };
   // De breedte van de ruit in pixels van de kunst: die van het kaartje (--kaart, stijl.css), want er is geen rand omheen.
   const miniBreed = () => $('minikaart').querySelector('canvas').clientWidth || 380;
-  const mini = { E: null, w: null, beeld: null, mist: null, klaar: -1, versie: -1, getekend: -Infinity, slepen: false };
+  const mini = { E: null, w: null, beeld: null, mist: null, omtrek: null, klaar: -1, versie: -1, getekend: -Infinity, slepen: false };
   const nieuwDoek = (n) => Object.assign(document.createElement('canvas'), { width: n, height: n });
 
   T.ui.werkMinikaartBij = function (S) {
@@ -537,7 +537,7 @@
     const IN = T.MINIKAART_INSTELLINGEN;
     const E = T.eilandVan(w.eiland.zaad);
     const m = T.minikaartBeeld(E);
-    if (mini.E !== E) Object.assign(mini, { E, beeld: nieuwDoek(m.n), mist: nieuwDoek(m.n), klaar: -1, versie: -1 });
+    if (mini.E !== E) Object.assign(mini, { E, beeld: nieuwDoek(m.n), mist: nieuwDoek(m.n), omtrek: null, klaar: -1, versie: -1 });
     // Het beeld verder maken, zolang het niet af is: zo lang per beeld van het spel.
     const t0 = performance.now();
     while (m.klaar < m.n && performance.now() - t0 < IN.msPerBeeld) T.maakMinikaart(E, IN.rijenPerKeer);
@@ -582,12 +582,16 @@
     c.imageSmoothingEnabled = false;
     // Een pixel van het beeld is vak (i, j), de tegels i * stap tot (i + 1) * stap: zo ligt het als het beeld.
     const s = (B / (2 * T.EILAND_INSTELLINGEN.maat)) * T.MINIKAART_INSTELLINGEN.stap * k;
-    c.setTransform(s, s / 2, -s, s / 2, (B / 2) * k, 0);
+    const ligt = [s, s / 2, -s, s / 2, (B / 2) * k, 0];
+    c.setTransform(...ligt);
     c.drawImage(mini.beeld, 0, 0);
     // Het donker over wat je niet kent, alleen waar het eiland is (niet waar de zee al doorzichtig is).
     c.globalCompositeOperation = 'source-atop';
     c.drawImage(mini.mist, 0, 0);
     c.globalCompositeOperation = 'source-over';
+    // De lijn om het eiland (één keer per maat uitgerekend, want de vorm verandert niet; pas als het beeld af is).
+    c.setTransform(1, 0, 0, 1, 0, 0);
+    if (mini.klaar >= n) c.drawImage(omtrekVan(pb, ph, ligt, k), 0, 0);
     c.setTransform(k, 0, 0, k, 0, 0);
     const stip = (x, y, maat, kleur) => {
       const p = T.minikaartPunt(x, y, B);
@@ -611,6 +615,47 @@
     c.strokeStyle = '#f3e3b8';
     c.lineWidth = 1 / k;
     c.strokeRect(p.x - kb / 2, p.y - kh / 2, kb, kh);
+  }
+
+  // De lijn om het eiland, op de maat van het doek (pb bij ph, de ruit gelegd met `ligt`): de rand van wat binnen de lijn
+  // ligt (m.binnen, js/minikaart.js), een pixel van de kunst breed (`k` pixels van het scherm). Uit een doek dat alleen uit
+  // ImageData komt (geen plaatje), dus het lezen ervan werkt ook vanaf file://.
+  function omtrekVan(pb, ph, ligt, k) {
+    const o = mini.omtrek;
+    if (o && o.width === pb && o.height === ph) return o;
+    const IN = T.MINIKAART_INSTELLINGEN;
+    const m = T.minikaartBeeld(mini.E);
+    const masker = new ImageData(m.n, m.n);
+    for (let i = 0; i < m.n * m.n; i++) masker.data[i * 4 + 3] = m.binnen[i] ? 255 : 0;
+    const bron = nieuwDoek(m.n);
+    bron.getContext('2d').putImageData(masker, 0, 0);
+    const vorm = Object.assign(document.createElement('canvas'), { width: pb, height: ph });
+    const v = vorm.getContext('2d');
+    v.setTransform(...ligt);
+    v.drawImage(bron, 0, 0);
+    const a = v.getImageData(0, 0, pb, ph).data;
+    const binnen = (x, y) => x >= 0 && y >= 0 && x < pb && y < ph && a[(y * pb + x) * 4 + 3] >= 128;
+    const dik = Math.max(1, Math.round(k));
+    const uit = new ImageData(pb, ph);
+    const [r, g, b, alfa] = IN.omtrek;
+    for (let y = 0; y < ph; y++) {
+      for (let x = 0; x < pb; x++) {
+        if (!binnen(x, y)) continue;
+        // op de rand: binnen, met een buur (zo ver als de lijn dik is) buiten
+        let rand = false;
+        for (let d = 1; d <= dik && !rand; d++) rand = !binnen(x - d, y) || !binnen(x + d, y) || !binnen(x, y - d) || !binnen(x, y + d);
+        if (!rand) continue;
+        const p = (y * pb + x) * 4;
+        uit.data[p] = r;
+        uit.data[p + 1] = g;
+        uit.data[p + 2] = b;
+        uit.data[p + 3] = Math.round(255 * alfa);
+      }
+    }
+    const lijn = Object.assign(document.createElement('canvas'), { width: pb, height: ph });
+    lijn.getContext('2d').putImageData(uit, 0, 0);
+    mini.omtrek = lijn;
+    return lijn;
   }
 
   // Een klik of slepen op de minikaart: kijk daar (het overzicht, js/main.js).

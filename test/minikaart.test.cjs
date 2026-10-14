@@ -30,6 +30,10 @@ test('het beeld van het eiland in stukjes is hetzelfde als in één keer', () =>
   const land = heel.zee.findIndex((z) => z === 0);
   assert.equal(alfa(land), 255, 'het land is heel');
   assert.ok(heel.zee.some((z, i) => z && alfa(i) > 0 && alfa(i) < 255), 'aan de kust vervaagt de zee');
+  // De lijn om het eiland (Marcel: "een 1px outline"): binnen ligt het land en de zee dicht bij de kust, de hoek niet.
+  assert.equal(heel.binnen[land], 1);
+  assert.equal(heel.binnen[0], 0);
+  assert.ok(heel.binnen.some((b, i) => b && heel.zee[i]), 'en een strook zee');
 });
 
 test('wat je kent, per vak: elk vak met een tegel die je kent, en geen ander', () => {

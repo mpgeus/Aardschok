@@ -23,11 +23,16 @@
     // en de kleur.
     onbekend: 0.35,
     nevel: [18, 14, 10],
-    // Geen ruit (Marcel: "een echte gefeatherde rand(om) dus dat je geen ruit meer overhoud"): de zee vervaagt vanaf de kust
-    // tot doorzichtig over zoveel vakken, en de rand rafelt met zoveel ruis, in vlekken van zoveel vakken.
-    zeeVervaagt: 45,
-    rafel: 0.45,
-    rafelVlek: 7,
+    // Geen ruit (Marcel: "een echte gefeatherde rand(om) dus dat je geen ruit meer overhoud"), en een lijn van 1 pixel
+    // eromheen ("Het gaat toch wat teveel op in het land"): de zee loopt tot zoveel vakken uit de kust, waar hij van heel
+    // naar zeeBijOmtrek doorzichtig wordt; daar ligt de lijn (`omtrek`, zijn kleur); daarbuiten vervaagt hij in zeeVervaagt
+    // vakken tot niets, rafelig met zoveel ruis, in vlekken van zoveel vakken.
+    zeeTotOmtrek: 18,
+    zeeBijOmtrek: 0.6,
+    zeeVervaagt: 9,
+    rafel: 0.35,
+    rafelVlek: 5,
+    omtrek: [44, 29, 18, 0.95],
     // De kleuren van de streken (in het spel worden het tegels), de zee van ondiep naar diep, en de weg en de brug.
     kleur: {
       meer: [64, 112, 158],
@@ -83,14 +88,15 @@
     return k.map((c) => (grijs + (c - grijs) * I.verzadiging) * I.helderheid);
   }
 
-  // Het beeld van eiland E, in wording: { n, rgba, zee, klaar } met n bij n pixels (n = de maat van het eiland gedeeld door
-  // stap, naar boven), en `zee` 1 waar het zee is. Eén per nummer.
+  // Het beeld van eiland E, in wording: { n, rgba, zee, binnen, klaar } met n bij n pixels (n = de maat van het eiland
+  // gedeeld door stap, naar boven), `zee` 1 waar het zee is, en als het af is `binnen` 1 binnen de lijn om het eiland
+  // (het land, en de zee tot zeeTotOmtrek vakken uit de kust). Eén per nummer.
   const BEELDEN = new Map();
   T.minikaartBeeld = function (E) {
     let m = BEELDEN.get(E);
     if (!m) {
       const n = Math.ceil(T.EILAND_INSTELLINGEN.maat / IN().stap);
-      m = { n, rgba: new Uint8ClampedArray(n * n * 4), zee: new Uint8Array(n * n), klaar: 0 };
+      m = { n, rgba: new Uint8ClampedArray(n * n * 4), zee: new Uint8Array(n * n), binnen: null, klaar: 0 };
       BEELDEN.set(E, m);
     }
     return m;
@@ -113,38 +119,57 @@
     return boven * (1 - fy) + onder * fy;
   }
 
-  // Als het beeld af is: hoe ver elk punt van de zee van het land ligt (in vakken, een golf vanaf de kust), en daarmee
-  // hoe doorzichtig het is: aan de kust heel, na zeeVervaagt vakken niets, met een rafelige rand. Zo blijft er geen ruit
-  // over, maar een eiland.
+  // Hoe ver elk punt van het land ligt, in vakken, rond gemeten (een afstandskaart in twee gangen met stappen van 1 en
+  // √2, zodat de lijn om het eiland niet hoekig wordt).
+  function afstandTotLand(m) {
+    const n = m.n;
+    const d = new Float32Array(n * n);
+    for (let i = 0; i < n * n; i++) d[i] = m.zee[i] ? Infinity : 0;
+    const R = Math.SQRT2;
+    for (let y = 0; y < n; y++) {
+      for (let x = 0; x < n; x++) {
+        const i = y * n + x;
+        if (x > 0) d[i] = Math.min(d[i], d[i - 1] + 1);
+        if (y > 0) {
+          d[i] = Math.min(d[i], d[i - n] + 1);
+          if (x > 0) d[i] = Math.min(d[i], d[i - n - 1] + R);
+          if (x < n - 1) d[i] = Math.min(d[i], d[i - n + 1] + R);
+        }
+      }
+    }
+    for (let y = n - 1; y >= 0; y--) {
+      for (let x = n - 1; x >= 0; x--) {
+        const i = y * n + x;
+        if (x < n - 1) d[i] = Math.min(d[i], d[i + 1] + 1);
+        if (y < n - 1) {
+          d[i] = Math.min(d[i], d[i + n] + 1);
+          if (x < n - 1) d[i] = Math.min(d[i], d[i + n + 1] + R);
+          if (x > 0) d[i] = Math.min(d[i], d[i + n - 1] + R);
+        }
+      }
+    }
+    return d;
+  }
+
+  // Als het beeld af is: hoe doorzichtig elk punt van de zee is, uit zijn afstand tot het land. Tot de lijn (zeeTotOmtrek)
+  // van heel naar zeeBijOmtrek, daarbuiten in zeeVervaagt vakken tot niets, rafelig; vlak bij de rand van het vierkant
+  // altijd niets, zodat daar nooit een rechte lijn staat. Zo blijft er geen ruit over, maar een eiland met een lijn erom.
   function vervaagDeZee(m) {
     const I = IN();
     const n = m.n;
-    const afstand = new Float32Array(n * n).fill(Infinity);
-    const rij = [];
+    const afstand = afstandTotLand(m);
+    m.binnen = new Uint8Array(n * n);
     for (let i = 0; i < n * n; i++) {
-      if (!m.zee[i]) {
-        afstand[i] = 0;
-        rij.push(i);
-      }
-    }
-    for (let k = 0; k < rij.length; k++) {
-      const i = rij[k];
-      const x = i % n;
-      const d = afstand[i] + 1;
-      for (const j of [x > 0 ? i - 1 : -1, x < n - 1 ? i + 1 : -1, i - n, i + n]) {
-        if (j < 0 || j >= n * n || afstand[j] <= d) continue;
-        afstand[j] = d;
-        rij.push(j);
-      }
-    }
-    for (let i = 0; i < n * n; i++) {
-      if (!m.zee[i]) continue;
       const x = i % n;
       const y = (i - x) / n;
-      // en vlak bij de rand van het vierkant toch op niets, zodat daar nooit een rechte lijn staat
+      const d = afstand[i];
+      if (d <= I.zeeTotOmtrek && Math.min(x, y, n - 1 - x, n - 1 - y) > 0) m.binnen[i] = 1;
+      if (!m.zee[i]) continue;
+      let a;
+      if (d <= I.zeeTotOmtrek) a = 1 - (1 - I.zeeBijOmtrek) * (d / I.zeeTotOmtrek);
+      else a = I.zeeBijOmtrek * (1 - (d - I.zeeTotOmtrek) / I.zeeVervaagt + (zachteRuis(x, y, I.rafelVlek) - 0.5) * 2 * I.rafel);
       const rand = Math.min(1, Math.min(x, y, n - 1 - x, n - 1 - y) / I.rafelVlek);
-      const a = (1 - afstand[i] / I.zeeVervaagt + (zachteRuis(x, y, I.rafelVlek) - 0.5) * 2 * I.rafel) * rand;
-      m.rgba[i * 4 + 3] = Math.round(255 * Math.max(0, Math.min(1, a)));
+      m.rgba[i * 4 + 3] = Math.round(255 * Math.max(0, Math.min(1, a * rand)));
     }
   }
 

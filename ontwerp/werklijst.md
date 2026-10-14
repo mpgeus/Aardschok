@@ -48,7 +48,7 @@ zagerij en de planken (het plan staat bij H en wacht op Marcel), en dan C6 met d
   linksonder de waren die je hebt, in het midden Build, en rechtsonder de minikaart: het hele eiland als een ruit, wat je
   kent in kleur; klik of sleep erop en de camera kijkt daar (Tab of een klik op de schout brengt je terug). Wijs een getal
   aan: het briefje zegt wat het is. De velden, het wetboek en de raadsman openen nog met V, W en R. De minimap bijstellen:
-  `verzadiging`, `onbekend` en `zeeVervaagt` in `js/minikaart.js`.
+  `verzadiging`, `onbekend`, `zeeTotOmtrek` en `omtrek` in `js/minikaart.js`.
 - **Het plan voor 157** (de zagerij en de planken; bij H): ja, of wat anders.
 - **De wegen en het afbreken bekijken** (C, stap 5, 14 okt): Nieuw spel, en in het bouwmenu (B) bovenaan **Road**: klik
   het begin en dan het eind, en zie de weg in groen, recht en haaks, met wat hij kost; na de klik is het eind het begin
@@ -315,7 +315,8 @@ niet perse. 8. Los ontwerp", op de vragen van Claude; in het gesprek heetten de 
   (14 okt, op de branch `claude/village-economy-gameplay-lmsnyg`; `js/minikaart.js`): de ruit in de hoek, zonder rand en
   licht doorschijnend (Marcel: "zonder 'rand' dus de kaart licht transparant"), levendig, en zonder ruit: de zee vervaagt
   vanaf de kust met een rafelige rand, zodat er een eiland overblijft ("Ik bedoelde meer vibrant. En een echte
-  gefeatherde rand"); wat je niet kent, een donkere tint;
+  gefeatherde rand"), met een lijn van 1 pixel om het eiland ("Het gaat toch wat teveel op in het land"); wat je niet
+  kent, een donkere tint;
   wat je niet kent is donker maar laat de vorm van het eiland zien (een getal, `onbekend`); de wegen zijn te klein om te
   zien (een weg is een tegel, een pixel is er acht), dus alleen je gebouwen, de schout en de plekken die je kent.
 - **166, een dunne balk bovenaan** (Marcel, 14 okt, na 164 en 165: "Minimap bedoel ik. Zoals bij age of Empires in de
