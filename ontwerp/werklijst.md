@@ -25,9 +25,9 @@ na: het hele eiland in stukken, opslaan wat veranderde, het optimaliseren, en de
 **B3 is af** (13 okt, onder "Af", in `main`): het dorp eet in gelijke delen van elke soort, en hoe meer soorten, hoe
 harder al het werk gaat. **C, de ossenkar, loopt** (14 okt): het plan staat bij C (Marcel: "A2, B2, C1, D2, E2").
 **Stap 1 is af** (14 okt, in `main`): het hout ligt op een stapel bij de deur tot de kar het haalt (`spel.md`, "Zo werkt
-de kar nu"). **Stap 2 is af** (14 okt, op branch `claude/relaxed-mendel-59zm3c`, wacht op "push it"): je betaalt bij het
-neerzetten alleen het goud, en de kar brengt het hout naar de bouwplaats en de timmerman. Het volgende is stap 3: de
-rest van wat een gebouw maakt.
+de kar nu"). **Stap 2 is af** (14 okt, in `main`): je betaalt bij het neerzetten alleen het goud, en de kar brengt het
+hout naar de bouwplaats en de timmerman. Stap 3 loopt: de rest van wat een gebouw maakt (Marcel: "a ja, b ja, c ja, d
+ja", bij C).
 
 **Wacht op Marcel:**
 - **De ossenkar bekijken** (C, stap 1, 14 okt): Nieuw spel. De huifkar komt aan, en pas dan staat zijn lading in de balk.
@@ -136,7 +136,7 @@ werk) wacht op Marcel.
 
 ## C. De ossenkar (vraag 152, de proef)
 
-**Bezig in sessie `claude/relaxed-mendel-59zm3c`** (14 okt): stap 1 is af (in `main`), stap 2 is af (op die branch).
+**Bezig in sessie `claude/relaxed-mendel-59zm3c`** (14 okt): stap 3 (stap 1 en 2 zijn af, in `main`).
 
 Besloten (Marcel, 11 okt): bouwen binnen bereik van het plein en elke opslag, geen grens en geen vlaggen; de kar rijdt
 overal, over een weg sneller; een ossenkar; de eerste opslag is het huis van de schout. **Het plan** (Marcel, 14 okt:
@@ -149,7 +149,11 @@ overal, over een weg sneller; een ossenkar; de eerste opslag is het huis van de 
    reikt ("4 of 16 wood"), en wat ze op de plek rooien, gaat eerst in dat gebouw. De timmerman krijgt zijn hout ook
    met de kar.
 3. **De rest** (A2): alles wat een gebouw maakt (vlees, vis, groente, eieren, steen, ...), en de oogst bij de boerderij
-   en de wijnboerderij. Niet met de kar: wat mensen zelf thuisbrengen (sprokkelhout), de marskramer, en goud.
+   en de wijnboerderij. Niet met de kar: wat mensen zelf thuisbrengen (sprokkelhout), de marskramer, en goud. Marcel, 14
+   okt ("a ja, b ja, c ja, d ja"): **a** eten telt pas (en wordt pas gegeten) als de kar het binnen heeft, ook voor de
+   afwisseling; **b** de schoven en de wijn blijven bij de boerderij tot de kar ze haalt (na de oogst dagen werk); **c**
+   wat van het vee komt (wol, melk en kaas, vlees bij het slachten, mest) gaat voorlopig meteen de voorraad in; **d** de
+   stapels van eten zijn de manden, tonnen en zakken van de markt, en voor steen komt een eigen stapel.
 4. **De schuur** (D2): een eigen gebouw, een opslag met zijn eigen bereik en zijn eigen kar, met de tekening van de
    blokhutschuur tot er een eigen is. De kar rijdt zelf, zonder hand (C1), en kost hout en goud. Zo komen ook de rotsen
    en het water binnen bereik (`opmerkingen.md`: de steengroeve, de visser).
