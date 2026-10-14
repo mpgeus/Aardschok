@@ -26,8 +26,8 @@ na: het hele eiland in stukken, opslaan wat veranderde, het optimaliseren, en de
 harder al het werk gaat. **C, de ossenkar, loopt** (14 okt): het plan staat bij C (Marcel: "A2, B2, C1, D2, E2").
 **Stap 1 tot 4 zijn af** (14 okt, in `main`; hoe het werkt: `spel.md`, "Zo werkt de kar nu"): alles wat een gebouw
 maakt, ligt bij de deur tot de kar het haalt, de bouwplaats en de werkplaats krijgen hun waren met de kar, en een schuur
-is een opslag met een eigen bereik en een eigen kar. **Het volgende is stap 5, wegen die jij legt:** de vragen a tot d
-staan bij C, stap 5, en wachten op Marcel.
+is een opslag met een eigen bereik en een eigen kar. **Stap 5, wegen die jij legt, is bezig** (14 okt, met Marcels keuzes
+bij C, stap 5).
 
 **Wacht op Marcel:**
 - **De ossenkar bekijken** (C, stap 1, 14 okt): Nieuw spel. De huifkar komt aan, en pas dan staat zijn lading in de balk.
@@ -162,12 +162,16 @@ overal, over een weg sneller; een ossenkar; de eerste opslag is het huis van de 
    één voorraad voor alle opslagen (de kar lost en laadt bij zijn eigen opslag, en de balk telt alles samen); **b** 15
    hout en 6 goud, vanaf het gehucht, met bereik 16 zoals het huis van de schout; **c** elke schuur heeft één kar, die
    haalt en brengt wat het dichtst bij zijn schuur ligt (een losse kar kopen komt later als het nodig blijkt).
-5. **Wegen die jij legt** (E2): een weg in het bouwmenu; de kar rijdt er sneller over, en zoekt hem op. Vragen van
-   Claude (14 okt), nog niet beantwoord: **a** je legt een weg zoals een veld (klik begin en eind, het spel trekt de
-   kortste weg ertussen, en je ziet hem voor je klikt); **b** hij kost alleen werk, zoals een veld (0,1 werkdag per
-   tegel, en eerst rooien wat in de weg staat; steen kan later); **c** de kar gaat er twee keer zo snel over, de mensen
-   1,3 keer (dan kiezen ze de weg ook zelf, en lopen ze er niet naast); of alleen de kar; **d** de weg van de kaart,
-   waarover de huifkar binnenkwam, telt ook als weg. Voorstel van Claude: allemaal ja.
+5. **Wegen die jij legt** (E2). **Bezig in sessie `ccr-8a863003-v6q1dt`** (14 okt): de wegen en de knop om af te
+   breken. Marcel, 14 okt ("a ja, b ja, c1, d ja, e we moeten een 'demolition' knop hebben ja, f ja"): **a** je legt een
+   weg zoals een veld: klik begin en eind, het spel trekt de kortste weg ertussen, recht en haaks (schuin raken twee
+   tegels elkaar alleen op een hoek, en dan is het geen band zand), en je ziet hem voor je klikt; **b** hij kost alleen
+   werk (0,1 werkdag per tegel, en eerst rooien wat in de weg staat); **c1** alleen de kar gaat er sneller over (twee
+   keer), de mensen niet (hun gedeelde velden in `js/lopen.js` tellen elke tegel even zwaar; dat komt pas als de proef
+   het vraagt); **d** de weg van de kaart telt ook als weg: een weg is zandpad in `w.grondAnders`, dus `T.opPad`, niet
+   bouwen op een pad en de paadjes van de deuren gelden vanzelf; **e** een knop om af te breken (demolition) in het
+   bouwmenu; **f** de kolonist legt ook wegen, van elke schuur naar het huis van de schout, zodat stap 6 meet wat een
+   weg doet.
 6. **Meten en spelen:** de speeltest vanaf een lege plek: hoeveel van de dag de kar rijdt, wat er wacht, hoe groot de
    stapels worden. Dan ronde 3 van A.
 
