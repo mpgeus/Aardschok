@@ -29,7 +29,12 @@ maakt, ligt bij de deur tot de kar het haalt, de bouwplaats en de werkplaats kri
 is een opslag met een eigen bereik en een eigen kar. **Stap 5 is af** (14 okt): wegen die jij legt, en afbreken (`spel.md`,
 "Zo werken de wegen en het afbreken nu"). **Het volgende is stap 6, meten en spelen.**
 
+**Marcel kwam op 14 okt met acht punten** (H, vraag 156 tot 163: een gebouw aanklikken, de keten van stammen tot
+planken, muren, soldaten uit wapens, handel, reizende gezelschappen, provincies, een kasteel). Het voorstel van Claude
+en de vragen staan bij H; er is nog niets gebouwd.
+
 **Wacht op Marcel:**
+- **De acht punten van 14 okt** (H): de volgorde, en de vragen bij 156 en 157 (daar beginnen we).
 - **De wegen en het afbreken bekijken** (C, stap 5, 14 okt): Nieuw spel, en in het bouwmenu (B) bovenaan **Road**: klik
   het begin en dan het eind, en zie de weg in groen, recht en haaks, met wat hij kost; na de klik is het eind het begin
   van het volgende stuk, en een rechtsklik houdt op. Wie geen werk heeft, legt hem (na de gebouwen), en de ossenkar rijdt
@@ -215,6 +220,60 @@ het graan vraagt", de schandpaal, de heervaart en de twee bazen.
 - Juni 2027: de demo in Steam Next Fest.
 - Het spel in het kort (`het-spel-in-het-kort.pdf`, `npm run samenvatting`) beschrijft nog het oude spel: opnieuw
   schrijven voor de nieuwe richting, als B en C er staan.
+
+## H. Marcels acht punten (vraag 156 tot 163, 14 okt)
+
+Marcel, 14 okt: "We gaan verder:", met acht punten. Nog niets gekozen; wat er al is, zocht een agent uit (14 okt).
+
+- **156, een gebouw aanklikken:** "De speler moet op een gebouw kunnen klikken om informatie over het gebouw te
+  krijgen, wat het doet en hoeveel indien aan de orde, het produceert." Nu geeft een klik dezelfde ene regel als de muis
+  (`T.gebouwToestand`, `js/verkennen.js`); de getallen zijn er al (`maakt`, `g.werkte`, `g.tekort`, `g.vol`).
+- **157, de keten:** "de houthakker levert boomstammen voor de houtzagerij die er weer planken van maakt." De timmerman
+  (dorp) maakt al planken van hout, met de kar, maar niets gebruikt ze; alles kost hout en goud, een paar ook steen.
+- **158, muren:** "eerst van houten palen en dan upgraden naar steen als we naar een stad gaan." `palissade` en
+  `stadsmuur` staan in `T.GEBOUWEN`, zonder plaatsing; de weg (`js/wegen.js`) en het hek (`zetHek`, `js/beesten.js`)
+  zijn het voorbeeld. De trede stad is nog niet te halen (`js/treden.js`).
+- **159, soldaten uit wapens:** "Iedereen is een mens, elk mens kan iets worden. Iemand pakt een zwaard en schild ->
+  zwaardvechter. Speer - spearman etc. Zoals Knights and merchants het doet." Nu is de militie de wachters van het
+  wachthuis en de veteranen van de heervaart, en `wapens` is één waar die 2 schade erbij geeft (`js/rovers.js`).
+- **160, handel:** "Het verzamelen van producten met overschot en afrijden naar andere steden of dorpen om deze
+  producten te verkopen." Nu alleen de marskramer en de bode; de andere dorpen leven niet (`S.dorpen` is je dorp).
+- **161, reizende gezelschappen:** "die gossip hebben en verhalen van steden dichtbij." Er is `T.bezoekerKomtAan`, de
+  herberg, en drie vaste zinnen van de marskramer ("Any news?").
+- **162, provincies:** "Elke provincie heeft 1 hoofdstad en een aantal kleine dorpjes. Je kunt hiermee handelen of
+  vechten natuurlijk." Het eiland heeft een kasteel, een stad en acht dorpen als punten, met wegen (`js/eiland.js`);
+  `js/land.js` heeft negen losse provincies, los van het eiland en standaard uit.
+- **163, een kasteel:** "Uiteindelijk wil ik ook dat je verdedigingen als een kasteel kunt bouwen. Dit zoals bij Lords of
+  the realm." Er is niets; de vijf maten uit Lords of the Realm 2 staan in `spel.md`.
+
+**Voorstel van Claude (14 okt), de volgorde:** 156, dan 157, dan C6 (meten, nu met de keten erin), dan 159 met 158 (het
+verdedigen van F, en het eind van de demo: het eerste gevecht), dan 162, 161, 160 en 163. Voor de demo tellen 156 tot
+159; 160 tot 163 maken het hele spel, en hangen alle vier aan 162 (zonder levende plaatsen is er niets om mee te
+handelen, over te roddelen of te veroveren). D gaat mee met 159 (je soldaten aanklikken), E met 162 (de heer in zijn
+provincie).
+
+**De vragen** (Claude, 14 okt; bij 156 en 157 met een voorstel, de rest kan later):
+- **156a** hoe: 1 een vast venster opzij, dat blijft tot je ergens anders klikt, terwijl het spel doorloopt (The
+  Settlers, Anno), of 2 een briefje bij de muis. Voorstel 1. **156b** wat erin: wat het doet, wie er werkt, wat het maakt
+  op vol en wat het de laatste zeven dagen echt maakte, wat erin gaat en wat er ligt, en wat het tegenhoudt (te weinig
+  stammen, de stapel vol, te weinig soorten eten); nog geen knoppen.
+- **157a** wie gebruikt planken: 1 elk gebouw (The Settlers), 2 het materiaal volgt de trede (een gehucht van stammen,
+  een dorp van planken, een stad van steen), of 3 een paar gebouwen. Voorstel 2: het begin blijft eenvoudig, en de
+  palissade van stammen en de stenen muur passen erin. **157b** de zagerij (gehucht) vervangt de timmerman, en hout
+  heet dan stammen (*logs*).
+- **158** een muur leg je zoals een weg; waar een weg hem kruist, komt vanzelf een poort (je mensen en de kar erdoor,
+  rovers en wolven niet). Steen bij marktrecht, of bij een nieuwe trede stad?
+- **159** 1 een soldaat is voltijds (hij legt zijn werk neer en eet, en kan zijn wapen weer inleveren), of 2 een militie
+  die doorwerkt en zijn wapen pakt als de klok luidt. Eerst drie wapens: de speer (planken), de boog (planken), zwaard
+  en schild (ijzer en planken); zonder wapen een hooivork.
+- **162** de provincies op het eiland zelf (`js/land.js` gaat eruit), zo'n vijf, elk met iets eigens (ijzer, vis, wijn,
+  hout), en wat ver weg is leeft als getallen tot je er bent.
+- **161** het nieuws is echt en bruikbaar (wat een stad tekortkomt, waar de mannen van de heer zijn, welk dorp morrt);
+  met een herberg blijven ze langer.
+- **160** eerst losse ritten (een kar met wat over is naar een stad, dagen onderweg, een escorte helpt), vaste routes
+  later.
+- **163** vaste ontwerpen zoals Lords of the Realm (een motte met palissade, een stenen toren, een burcht), neergezet
+  als geheel en maanden gebouwd, of vrij zoals Stronghold.
 
 ## Af (sinds 11 okt)
 
