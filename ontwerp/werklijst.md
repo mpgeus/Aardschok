@@ -31,7 +31,8 @@ is een opslag met een eigen bereik en een eigen kar. **Stap 5 is af** (14 okt): 
 
 **Marcel kwam op 14 okt met acht punten** (H, vraag 156 tot 163: een gebouw aanklikken, de keten van stammen tot
 planken, muren, soldaten uit wapens, handel, reizende gezelschappen, provincies, een kasteel), en koos de volgorde en de
-eerste antwoorden (bij H). **156, een gebouw aanklikken, is bezig**; daarna 157 (de zagerij), en dan C6 met de keten erin.
+eerste antwoorden (bij H). **156, een gebouw aanklikken: Bezig in sessie `claude/village-economy-gameplay-lmsnyg`**
+(14 okt); daarna 157 (de zagerij), en dan C6 met de keten erin.
 
 **Wacht op Marcel:**
 - **De wegen en het afbreken bekijken** (C, stap 5, 14 okt): Nieuw spel, en in het bouwmenu (B) bovenaan **Road**: klik
