@@ -153,6 +153,18 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 14 okt: de ossenkar, stap 1 (werklijst C)
+
+`npm run speeltest -- --zaden 1-3 --tegelijk 3`, op branch `claude/relaxed-mendel-59zm3c` (de commit van C, stap 1): het
+hout van de houthakker en van het rooien ligt op een stapel tot de ossenkar het haalt, en de lading van de kar telt pas
+als hij in het kamp staat.
+
+- **Geen fout en geen doden**, op alle drie het jaar uit; geen dag honger of kou, en 373 tot 377 dagen vier soorten eten.
+- **Het hout haalt het jaar:** op 1 lentemaand 159, 419 en 591 hout in de opslag. Een hut wacht een paar dagen op hout
+  (zoals op 13 okt): de kar zit het bouwen niet in de weg.
+- Hoe druk de kar is en hoe groot de stapels worden, meet stap 6, als alles met de kar gaat; nu is het alleen het hout,
+  en dan staat hij het grootste deel van de dag stil (`werklijst.md`, C).
+
 ## De speeltest van 13 okt, avond: de afwisseling (werklijst B3, vraag 154)
 
 `npm run speeltest -- --zaden 1-5 --tegelijk 3 --naam b3`, op `1b4dd077` met de kolonist van `4c9c6355` (branch

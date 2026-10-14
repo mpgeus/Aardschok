@@ -87,7 +87,7 @@
         if (B.tegoed + 1e-9 < kost) break;
         B.tegoed -= kost;
         if (T.ontginWerkOp(D.wereld, t.x, t.y) === 'hakken') B.hout += T.rooiHoutPerBoom(D);
-        T.rooiTegel(D, t);
+        T.rooiTegel(D, t, g); // het hout op de stapel van de bouwplaats (js/kar.js)
       }
       if (T.teRooienOp(D, g.kavel).length) return;
       over = B.tegoed;

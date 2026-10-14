@@ -24,8 +24,17 @@ na: het hele eiland in stukken, opslaan wat veranderde, het optimaliseren, en de
 
 **B3 is af** (13 okt, onder "Af", in `main`): het dorp eet in gelijke delen van elke soort, en hoe meer soorten, hoe
 harder al het werk gaat. **C, de ossenkar, loopt** (14 okt): het plan staat bij C (Marcel: "A2, B2, C1, D2, E2").
+**Stap 1 is af** (14 okt, op branch `claude/relaxed-mendel-59zm3c`, wacht op "push it"): het hout ligt op een stapel bij
+de deur tot de kar het haalt (`spel.md`, "Zo werkt de kar nu"). Het volgende is stap 2: de bouwplaats krijgt haar hout
+met de kar.
 
 **Wacht op Marcel:**
+- **De ossenkar bekijken** (C, stap 1, 14 okt): Nieuw spel. De huifkar komt aan, en pas dan staat zijn lading in de balk.
+  Zet een houthakker: elke nacht legt hij zijn hout op een stapel naast zijn deur (klein, half of vol), en overdag rijdt
+  de kar erheen, laadt, en brengt het naar het huis van de schout (zolang dat er niet is, naar zijn plek in het kamp).
+  Bij de muis zegt de kar wat hij doet; in de console `Spel.debug.kar()`. Te kiezen in de werkbank ("The ox cart"): de
+  lading per rit (8) en wanneer een stapel vol is (16). Wat opviel (`opmerkingen.md`): een stapel achter een gebouw zie
+  je niet.
 - **De afwisseling bekijken, en de lat kiezen** (B3, 13 okt; `spel.md`, "Zo werkt de afwisseling nu"): Nieuw spel, en
   kijk in de balk naar **Plain fare** (bij de muis wat helpt); laat de kaas en het vlees uit de kar opgaan zonder jager
   of moestuin, en zie het werk naar 60% zakken (**One dish**). De speeltest (`speelbaar.md`, 13 okt, avond): de kolonist
@@ -124,7 +133,7 @@ werk) wacht op Marcel.
 
 ## C. De ossenkar (vraag 152, de proef)
 
-**Bezig in sessie `claude/relaxed-mendel-59zm3c`** (14 okt): stap 1.
+**Bezig in sessie `claude/relaxed-mendel-59zm3c`** (14 okt): stap 1 is af (op die branch); stap 2 volgt.
 
 Besloten (Marcel, 11 okt): bouwen binnen bereik van het plein en elke opslag, geen grens en geen vlaggen; de kar rijdt
 overal, over een weg sneller; een ossenkar; de eerste opslag is het huis van de schout. **Het plan** (Marcel, 14 okt:
@@ -146,7 +155,7 @@ overal, over een weg sneller; een ossenkar; de eerste opslag is het huis van de 
    stapels worden. Dan ronde 3 van A.
 
 Wat Claude erbij zag (14 okt): met de getallen van nu is één kar ruim genoeg voor een gehucht (hij rijdt binnen 16
-tegels zo'n vier ritten per dag, een houthakker maakt 2 hout per dag); de keuze voor een tweede kar komt met de afstand
+tegels drie tot vier ritten per dag, een houthakker maakt 2 hout per dag); de keuze voor een tweede kar komt met de afstand
 en de groei. Wil je hem eerder voelen, dan is de lading per rit het getal (de werkbank).
 
 ## D. De besturing en de klok

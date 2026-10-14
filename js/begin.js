@@ -64,14 +64,13 @@
   // Het begin
   // ---------------------------------------------------------------------------------------------
 
-  // Een nieuw dorp op een lege plek (T.nieuwDorp, js/dorp.js, als de kaart een kamp heeft, w.kamp, van de maker): de
-  // voorraad uit de kar, een tent per gezin (nog niet opgezet: dat doen ze als de kar er is, T.zetKampOp), de kar aan de
-  // rand op de weg, met de schout ernaast, en de kar op weg naar het plein. Wie er woont, zet T.zetBeginBewoners
-  // (js/bewoners.js) erna: een gezin per tent, dat nog over de weg moet komen.
+  // Een nieuw dorp op een lege plek (T.nieuwDorp, js/dorp.js, als de kaart een kamp heeft, w.kamp, van de maker): een
+  // tent per gezin (nog niet opgezet: dat doen ze als de kar er is, T.zetKampOp), de kar aan de rand op de weg, met de
+  // schout ernaast, en de kar op weg naar het plein. Wat de kar meebrengt, telt pas als hij er is (werklijst C, stap 1).
+  // Wie er woont, zet T.zetBeginBewoners (js/bewoners.js) erna: een gezin per tent, dat nog over de weg moet komen.
   T.zetKamp = function (S, D) {
     const w = D.wereld;
     const I = IN();
-    for (const wat in I.kar) T.wijzigVoorraad(D, wat === 'zaaigraan' ? 'graan' : wat, I.kar[wat]);
     w.kamp.plekken.slice(0, 1 + I.gezinnen).forEach((p, i) => {
       D.gebouwen.push({
         soort: 'tent', x: p.voet.x, y: p.voet.y, voet: { b: p.voet.b, h: p.voet.h }, deur: { x: p.deur.x, y: p.deur.y },
@@ -165,7 +164,9 @@
   }
 
   // Het kamp opzetten: de tenten en de afdakken op hun plek, met wie er staat opzij, en het vuur in het midden; de kar
-  // staat op zijn plek (ook als hij er nog niet was: het vangnet van de nacht, T.tikBeginDag).
+  // staat op zijn plek (ook als hij er nog niet was: het vangnet van de nacht, T.tikBeginDag). Wat hij bracht, is
+  // uitgeladen en telt in de voorraad (de plek van de kar is de opslag tot het huis van de schout er is), en de kar gaat
+  // aan het werk: hij haalt de stapels (js/kar.js; werklijst C, stap 1).
   T.zetKampOp = function (D) {
     const B = D.begin;
     if (!B || B.kamp !== 'onderweg') return;
@@ -184,6 +185,8 @@
     T.stapEraf(D, { x: k.vuur.x, y: k.vuur.y, b: 1, h: 1 });
     T.zetVoorwerp(w, { soort: 'kampvuur', x: k.vuur.x, y: k.vuur.y });
     B.kamp = 'op';
+    for (const wat in IN().kar) T.wijzigVoorraad(D, wat === 'zaaigraan' ? 'graan' : wat, IN().kar[wat]);
+    T.karAanHetWerk(D, B.kar);
     if (!B.gezinnen) laatGezinnenKomen(D, true);
     T.zeg(D, T.t('The cart is on the open ground that will be the square. The families put up their tents around the campfire.'));
   };
@@ -234,8 +237,8 @@
 
   // Het huis van de schout (1d; `schout` in T.GEBOUWEN): is het af, dan trekt de schout er met zijn gezin in. Het is
   // voortaan zijn huis (`huis: 'schout'`: slapen, het rapport, de bode), zijn tent gaat weg (met de laatste tent ook het
-  // kampvuur), en de huifkar is uitgeladen en wordt de ossenkar die werkt (Marcel, 11 okt: "Huifkar wordt ossenkar"; wat
-  // de ossenkar doet, komt in C). Geen gezin uit het kamp trekt erin: het is geen woning.
+  // kampvuur), en de huifkar wordt de ossenkar (Marcel, 11 okt: "Huifkar wordt ossenkar"): het huis is voortaan de opslag
+  // waar hij lost (js/kar.js). Geen gezin uit het kamp trekt erin: het is geen woning.
   function verhuisDeSchout(D) {
     const huis = D.gebouwen.find((g) => g.soort === 'schout' && g.klaar && g.huis !== 'schout');
     const tent = huis && D.gebouwen.find((g) => g.soort === 'tent' && g.huis === 'schout');
@@ -244,6 +247,7 @@
     tent.huis = null;
     huis.huis = 'schout';
     Object.assign(D.begin.kar, { naam: T.t('ox cart'), vel: 'ossenkar-leeg' });
+    T.zetKarVel(D.begin.kar);
     T.zeg(D, T.t('Your house is ready: you and your family leave the tent, and the covered wagon becomes the ox cart.'));
     if (!inHuis(D, tent).length) haalTentWeg(D, tent);
   }

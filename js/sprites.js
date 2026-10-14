@@ -72,6 +72,7 @@
       if (gegevens.meiboom) vellen.push(gegevens.meiboom.bestand);
       if (gegevens.kerstboom) vellen.push(gegevens.kerstboom.bestand);
       if (gegevens.pestbos) vellen.push(gegevens.pestbos.bestand);
+      if (gegevens.stapels) vellen.push(gegevens.stapels.bestand);
       if (gegevens.hol) vellen.push(gegevens.hol.bestand);
       if (gegevens.wijnrank) vellen.push(gegevens.wijnrank.bestand);
       // De kramen en de manden van de markt laden pas als er een getekend wordt (S.kraam, S.mand): zo'n 24 MB.
@@ -557,6 +558,16 @@
     if (!gegevens || !gegevens.pestbos) return null;
     const t = gegevens.pestbos;
     return stuk(MAP + t.bestand, 0, 0, t.cel[0], t.cel[1], t.anker);
+  };
+
+  // Een stapel naast een deur, die de ossenkar nog moet halen (js/kar.js, gereedschap/pixelart/stapels.cjs): een rij per
+  // waar, een kolom per maat; `vol` van 0 tot 1 kiest klein, half of vol. Null als het vel of de waar er niet is.
+  S.stapel = function (wat, vol) {
+    const t = gegevens && gegevens.stapels;
+    const rij = t ? t.waren.indexOf(wat) : -1;
+    if (rij < 0) return null;
+    const kolom = Math.min(t.maten.length - 1, Math.floor(Math.max(0, vol) * t.maten.length));
+    return stuk(MAP + t.bestand, kolom * t.cel[0], rij * t.cel[1], t.cel[0], t.cel[1], t.anker);
   };
 
   // Het hol van een roedel wolven (js/beesten.js, gereedschap/pixelart/hol.cjs): één tekening, zoals de meiboom, met het

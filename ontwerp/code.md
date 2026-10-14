@@ -1123,6 +1123,26 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 ## Voorraad en handel
 
+### js/kar.js: de ossenkar en de stapels
+
+- `js/kar.js`: **de ossenkar** (werklijst C, stap 1, 14 okt; Marcel: "A2, B2, C1, D2, E2"). Wat een gebouw maakt, gaat
+  via `T.opStapel(D, g, wat, n)`: met een kar (`T.metDeKar`, `D.karren`) en een waar uit `waren` (stap 1: hout) op
+  `g.stapel` (een veld legt het bij zijn boerderij, `g.boerderij`), anders meteen in de voorraad. Zo komen erin: de
+  nachtlus van de werkplaatsen (`js/gebouwen.js`, stap 6, die ook niet meer maakt dan `T.ruimteOpStapel` toelaat; vol is
+  `stilWant`), en `T.hakBoom(D, x, y, bij)` in `js/bos.js` (de bouwers via `T.rooiTegel(D, t, g)` in `js/bouwen.js`, een
+  huis dat doorgroeit in `js/behoeften.js` en `js/veldwerk.js`). Wie zonder `bij` hakt, brengt het meteen binnen.
+- **De kar** is een wezen (`e.kar`, in `w.wezens`); `T.karAanHetWerk` zet hem in `D.karren` als het kamp op is
+  (`T.zetKampOp`, `js/begin.js`, dat dan ook pas de lading in de voorraad zet). Een rit is een regel op de kalender
+  (`e.rit`: `fase` heen, laden, terug, lossen; `tot` in dagen; `naar` het gebouw; `e.klok`): `werkKar` werkt hem bij tot
+  een moment, vanuit `T.werkKarBij` (elk beeld, in `T.werkDorpBij`; geeft het wezen zijn weg met `T.geefRoute`) en
+  `T.tikKarDag` (elke nacht als eerste in `T.tikGebouwenDag`, tot middernacht). Aan het eind van een stuk staat het wezen
+  op `rit.doel` (`staOp`), dus met of zonder beelden komt er hetzelfde uit. Een rit begint alleen in de werktijd
+  (`T.dagindeling`), naar de grootste stapel (`kiesStapel`; zonder weg laat hij hem een dag liggen, `g.karKanNietTot`), en
+  lost bij de dichtste opslag (een gebouw met `opslag` dat af is, anders de plek van de kar in het kamp). Het vel
+  (`T.zetKarVel`): de huifkar blijft de huifkar; de ossenkar is `ossenkar-leeg` of `ossenkar-hout`. Bij de muis
+  `T.karTekst`; getekend: `T.stapelsOp` en `T.stapelPlek` (naast de deur). Getallen in `T.KAR_INSTELLINGEN` (de
+  werkbank: "The ox cart"); getoetst in `test/kar.test.cjs`.
+
 ### js/bode.js: de bode naar de marskramer
 
 - `js/bode.js`: **de bode naar de marskramer** (vraag 143, 9 okt; Marcel: "soort van brief sturen met een bode", en "1.

@@ -1296,6 +1296,9 @@
     // visser en de balk vragen ernaar.
     T.tikWeerDag(D, dag);
     T.tikBeginDag(D); // het lege begin: staat het kamp nog niet, dan nu (js/begin.js)
+    // De ossenkar (js/kar.js): wat hij gisteren nog reed, tot middernacht; vóór het eten en het stoken, want wat hij
+    // binnenbracht, ligt in de opslag.
+    T.tikKarDag(D, dag);
     // 0. De akkers (js/akkers.js): zaaien op 1 lentemaand, en het vangnet na de oogsttijd. Als
     // eerste: de boeren zaaien 's morgens, en daarna eet het dorp van wat er over is.
     T.tikAkkersDag(D, dag);
@@ -1479,12 +1482,27 @@
           }
         }
       }
+      // Met de ossenkar (js/kar.js) legt hij wat hij maakt op de stapel bij zijn deur, en maakt hij niet meer dan erop
+      // past: is de stapel vol, dan staat hij stil tot de kar komt (werklijst C, stap 1).
+      const ruimte = T.ruimteOpStapel(D, g);
+      if (ruimte < Infinity) {
+        const per = T.maaktUit(D, soort);
+        let opStapel = 0;
+        for (const wat in per) if (T.gaatMetDeKar(D, wat)) opStapel += per[wat];
+        if (opStapel > 0 && ruimte / opStapel < factor) factor = ruimte / opStapel;
+        if (factor <= 0) {
+          g.stilWant = T.t('its stack is full, waiting for the ox cart');
+          if (!wasStil) T.zeg(D, T.t('The {naam} is idle: {waarom}.', { naam: soort.naam, waarom: g.stilWant }));
+          continue;
+        }
+      }
       g.werkte = factor;
       if (factor <= 0) continue;
       if (soort.maakt.in) for (const wat in soort.maakt.in) T.wijzigVoorraad(D, wat, -soort.maakt.in[wat] * factor);
       // De jager schiet klein wild, en herten als er een is dat hij mag nemen (js/beesten.js).
       const uit = T.watDeJagerSchiet(D, g, T.maaktUit(D, soort));
-      if (uit) for (const wat in uit) T.wijzigVoorraad(D, wat, uit[wat] * factor);
+      // Wat met de kar gaat, op zijn stapel; de rest meteen in de voorraad (T.opStapel, js/kar.js).
+      if (uit) for (const wat in uit) T.opStapel(D, g, wat, uit[wat] * factor);
       // Het hout van de houthakker kwam uit zijn boom: is die om, dan staat er een stronk, en hakt hij morgen de volgende
       // (js/bos.js).
       if (uit && uit.hout) T.houthakkerHakte(D, g, uit.hout * factor);

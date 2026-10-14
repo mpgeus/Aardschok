@@ -17,6 +17,7 @@ const { leegBegin, bouwAf } = require('./grond.cjs');
 T.BEGIN_INSTELLINGEN.bouwBereik = 120;
 function spel(zaad = 5) {
   const { S } = leegBegin(T, zaad);
+  T.zetKampOp(S.dorp); // de kar is er, en wat hij bracht telt (js/begin.js)
   Object.assign(S, { vlaggen: new Set() }, T.schermVelden());
   return S;
 }

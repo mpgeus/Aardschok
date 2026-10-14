@@ -122,6 +122,17 @@ voor; zonder wijngaard geeft ze niets. **Wijn is eten** (zie "Eten", hieronder),
 dorp voedt; een tegel wijngaard voedt evenveel als een tegel akker. Te kiezen in de werkbank ("Boeren uit het niets" en
 "Meebouwen"). Nog niet: een jaar zonder fouten met een speler in code die bouwt (1f).
 
+**Zo werkt de kar nu** (14 okt, C stap 1; Marcel: "A2, B2, C1, D2, E2", het plan in `werklijst.md` bij C; `js/kar.js`):
+wat de houthakker maakt en wat de bouwers rooien, ligt op een stapel naast de deur (het hout van een veld bij zijn
+boerderij), en telt pas in de voorraad als de ossenkar het in de opslag heeft: het huis van de schout, en tot dat er is de
+plek van de kar in het kamp. Wat de kar meebracht, telt ook pas als hij in het kamp staat. De kar rijdt zelf, in de
+werktijd van het dorp: naar de grootste stapel, laden (8 per rit), terug naar de dichtste opslag, lossen; een rit van 20
+tegels heen is zo'n twee uur, dus drie tot vier ritten per dag. Is een stapel vol (16), dan maakt het gebouw niets meer
+tot de kar komt, en het dorp zegt het ("its stack is full, waiting for the ox cart"). Je ziet de stapel klein, half of
+vol naast de deur, de kar leeg of met stammen, en bij de muis wat hij doet. Nog niet met de kar: de rest van wat een
+gebouw maakt (stap 3), en de bouwplaats krijgt haar hout nog bij het neerzetten (stap 2). De getallen in de werkbank ("The
+ox cart"). In de console: `Spel.debug.kar()`.
+
 **Zo werkt de mist nu** (13 okt, B2c; Marcel: "A2, B1, C ok"; `js/mist.js`, het plan in `kaarten.md`, "Het hele
 eiland"): het eiland is zwart waar niemand van jou kwam, grijs (donkerder en ontkleurd) wat je zag maar nu niet ziet, en
 helder waar je mensen kijken. Bij het begin ken je een kring van 50 tegels om het midden van je land. De schout kijkt 12

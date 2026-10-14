@@ -700,7 +700,7 @@
     if (!vorm) return;
     for (const t of vorm.inDeWeg) {
       for (let n = 0; n < 3 && T.ontginWerkOp(D.wereld, t.x, t.y); n++) {
-        if (T.ontginWerkOp(D.wereld, t.x, t.y) === 'hakken') T.hakBoom(D, t.x, t.y);
+        if (T.ontginWerkOp(D.wereld, t.x, t.y) === 'hakken') T.hakBoom(D, t.x, t.y, g);
         else T.rooi(D, t.x, t.y);
       }
     }

@@ -54,9 +54,11 @@ test('het kamp: een tent per gezin, die van de schout is zijn huis, en er is gee
   assert.ok(!T.plaatsVoorEenGezin(D), 'een nieuw gezin vindt er geen plaats');
 });
 
-test('de voorraad is wat de kar meebrengt', () => {
+test('de voorraad is wat de kar meebrengt, als hij er is (werklijst C, stap 1)', () => {
   const { D } = leegBegin();
   const K = T.BEGIN_INSTELLINGEN.kar;
+  assert.equal(D.voorraad.hout, 0, 'onderweg telt de lading nog niet');
+  T.zetKampOp(D);
   assert.equal(D.voorraad.hout, K.hout);
   assert.equal(D.voorraad.graan, K.graan + K.zaaigraan);
   assert.equal(D.voorraad.goud, K.goud);
@@ -317,9 +319,9 @@ test('meebouwen: wie eentonig eet, bouwt trager (vraag 154, B1)', () => {
   const { S, D } = leegBegin();
   const I = T.BOUWEN_INSTELLINGEN;
   // Alleen het graan uit de kar: één soort.
+  dagen(S, 1, 1);
   T.zetVoorraad(D, 'kaas', 0);
   T.zetVoorraad(D, 'vlees', 0);
-  dagen(S, 1, 1);
   const [a] = zetHutten(D, 1);
   dagen(S, 2, 2);
   assert.deepEqual(D.behoeften.afwisseling, ['graan']);
@@ -426,14 +428,18 @@ test('meebouwen: met of zonder beelden komt er hetzelfde uit', (t) => {
         for (let u = 0; u < 24; u += 0.5) {
           S.kalender.dag = dag + u / 24;
           T.werkBouwenBij(S, D);
+          T.werkKarBij(S, D);
         }
       }
     }
     dagen(S, 5, 5);
     // Op een miljardste: met de afwisseling (vraag 154) is een dag werk geen heel getal meer, en de beelden tellen het in
-    // stukjes op.
+    // stukjes op. Het hout telt met wat er op de stapels en de kar ligt (js/kar.js): met beelden valt een boom overdag, en
+    // haalt de kar hem eerder.
     const afgerond = (k, v) => (typeof v === 'number' ? Math.round(v * 1e9) / 1e9 : v);
-    return JSON.stringify({ bouw: hut.bouw && { ...hut.bouw, vandaag: 0 }, klaar: hut.klaar, hout: D.voorraad.hout, over: T.teRooienOp(D, hut.kavel || hut).length }, afgerond);
+    const kar = D.begin.kar.lading.hout || 0;
+    const hout = D.voorraad.hout + T.opDeStapels(D, 'hout') + kar;
+    return JSON.stringify({ bouw: hut.bouw && { ...hut.bouw, vandaag: 0 }, klaar: hut.klaar, hout, over: T.teRooienOp(D, hut.kavel || hut).length }, afgerond);
   };
   assert.equal(spel(true), spel(false));
 });

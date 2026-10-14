@@ -1001,6 +1001,18 @@ richting van de opening, en `beelden/kampvuur.png`, acht beelden van het branden
 de beschrijving staat onder `kamp`. Het spel tekent ze nog niet: dat is 1b en 1c van vraag 152 (een `T.sprites` erbij, zoals
 `S.kraam` voor de markt). `test/ossenkar.test.cjs` kijkt na dat het wiel rolt zonder te glijden en dat de vellen kloppen.
 
+## De stapels bij de deuren (14 okt 2026, werklijst C, stap 1)
+
+Wat een gebouw maakte en de ossenkar nog moet halen, ligt naast zijn deur (`js/kar.js`, `T.stapelsOp`).
+`gereedschap/pixelart/stapels.cjs` (de proefplaat `uit/stapels-proef.png`, naast een boer), en `naar-spel.cjs --alleen
+stapels` zet `beelden/stapels.png`: een rij per waar (stap 1: `hout`) en een kolom per maat (`klein`, `half`, `vol`), één
+richting, want een stapel draait niet mee; cel 80×60, anker (40, 44). Het hout is een hoop stammen met de gezaagde kop naar
+de kijker (oker met jaarringen, de schors grijsbruin), op wat zaagsel en schors. Eerst een nette piramide; Marcel, 14 okt:
+"mag de houtstapel iets minder 'perfect'": nu ligt elke stam een eind uit zijn rij, scheef en gekanteld, dikker of dunner,
+korter of langer en naar één kant smaller, met bij half en vol een stam dwars bovenop en bij vol een op de grond ernaast
+(`MATEN`, met een vaste reeks toeval per maat). Het spel kiest de maat naar hoe vol de stapel is (`S.stapel(wat, vol)`);
+zonder kunst een blok hout, zo hoog als hij vol is.
+
 ## De heide (25 sep 2026)
 
 Nieuwe grondsoort voor de meent, waar de schapen van het gehucht grazen (Marcel koos dit op 25 sep,

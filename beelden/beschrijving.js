@@ -43829,6 +43829,25 @@
       "uit"
      ]
     }
+   },
+   "stapels": {
+    "bestand": "stapels.png",
+    "cel": [
+     80,
+     60
+    ],
+    "anker": [
+     40,
+     44
+    ],
+    "waren": [
+     "hout"
+    ],
+    "maten": [
+     "klein",
+     "half",
+     "vol"
+    ]
    }
   };
 })(globalThis.Spel = globalThis.Spel || {});

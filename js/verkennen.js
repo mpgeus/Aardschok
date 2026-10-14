@@ -148,8 +148,8 @@
       if (e.kant === 'monster') return { tekst: T.t('Attack the {wie}', { wie: e.naam }), doe: () => T.startGevecht(S, e, true) };
       // Een dier (js/vee.js) of het wild (js/beesten.js) praat niet en doet nog niets: bij de muis staat alleen wat het is.
       if (e.dier || e.beest) return { tekst: T.hoofdletter(T.eenNaam(e.naam)) };
-      // De kar van het lege begin (js/begin.js) net zo.
-      if (e.kar) return { tekst: T.t('The covered wagon, with everything you brought') };
+      // De kar van het lege begin (js/begin.js) net zo: wat hij doet (js/kar.js).
+      if (e.kar) return { tekst: T.karTekst(D, e) };
       // Wie je zoekt met een voorval (js/voorvallen.js), daar praat je over het voorval, ook als hij een eigen
       // gesprek heeft.
       const voorval = D && T.voorvalVan(D, e);

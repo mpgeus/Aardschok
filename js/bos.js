@@ -197,10 +197,11 @@
   };
 
   // Een boom omgehakt door wie een plek rooit (js/veldwerk.js): het hout gaat naar de schuur, en de stronk
-  // blijft staan, tot hij die rooit.
-  T.hakBoom = function (D, x, y) {
+  // blijft staan, tot hij die rooit. Met `bij` (het gebouw waarvoor gerooid wordt) en de ossenkar komt het hout op de
+  // stapel van dat gebouw (T.opStapel, js/kar.js).
+  T.hakBoom = function (D, x, y, bij) {
     if (!T.velBoom(D, x, y)) return false;
-    T.wijzigVoorraad(D, 'hout', T.rooiHoutPerBoom(D));
+    T.opStapel(D, bij || null, 'hout', T.rooiHoutPerBoom(D));
     return true;
   };
   // Wat een gerooide boom dit dorp geeft: in het lege begin `rooiHout`, anders `houtPerBoom`. De houthakker hakt niet met
@@ -296,8 +297,8 @@
 
   // Wat er op deze tegel te rooien staat, in één keer weg: een boom om (het hout naar de schuur) en zijn stronk eruit, of
   // wat er verder staat eruit.
-  function rooiNu(D, t) {
-    if (T.ontginWerkOp(D.wereld, t.x, t.y) === 'hakken') T.hakBoom(D, t.x, t.y);
+  function rooiNu(D, t, bij) {
+    if (T.ontginWerkOp(D.wereld, t.x, t.y) === 'hakken') T.hakBoom(D, t.x, t.y, bij);
     T.rooi(D, t.x, t.y);
   }
   T.rooiTegel = rooiNu; // ook voor de bouwers van het lege begin (js/bouwen.js)

@@ -597,6 +597,7 @@
       if (e === aanDePaal) lijst.push({ d: e.x + e.y, l: 2.5, punt: { x: e.tx, y: e.ty }, wezen: e, f: () => tekenHalsijzer(ctx, e) });
     }
     kleinLevenInLijst(ctx, S, w, D, vak, lijst);
+    stapelsInLijst(ctx, S, w, D, vak, lijst);
     heuvelsErvoor(ctx, S, vak, lijst, g); // een heuvel voor iemand dekt hem af (js/hoogte.js; vraag 121, stap 2)
     mistOverLijst(ctx, S, w, lijst); // in het zwart niets, in het grijs grijs en zonder wie er loopt (B2c, js/mist.js)
     // Ramen die branden: meteen na hun gebouw gaat er een gat in het doek waar ze zitten, dat na de
@@ -3001,6 +3002,25 @@
       }
     }
     paal(b);
+  }
+
+  // De stapels naast de deuren (js/kar.js): wat een gebouw maakte en de ossenkar nog moet halen, klein, half of vol. Zonder
+  // kunst: een blok hout, zo hoog als hij vol is.
+  function stapelsInLijst(ctx, S, w, D, vak, lijst) {
+    if (!D || !T.metDeKar(D)) return;
+    for (const s of T.stapelsOp(D)) {
+      if (!inVak(vak, s.x, s.y) || !T.isZichtbaar(w, s.x, s.y)) continue;
+      const deel = metSprites() && T.sprites.stapel(s.wat, s.vol);
+      lijst.push({
+        d: s.x + s.y, l: 1, punt: { x: s.x, y: s.y }, f: () => {
+          if (deel) tekenKlein(ctx, deel, s.x, s.y, 0);
+          else {
+            const p = opGrond(s.x, s.y);
+            T.blok(ctx, p.x, p.y, 0.3, 0.2, 4 + 14 * Math.min(1, s.vol), '#8a6a3c');
+          }
+        },
+      });
+    }
   }
 
   function tekenKlein(ctx, deel, x, y, schaduw) {

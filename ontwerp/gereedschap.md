@@ -185,6 +185,8 @@ bewaard spel. De vaste schermafdrukken, de tekenmeting en de samenvatting spelen
 het gehucht dat er al was op een land van de maker).
 `Spel.debug.eiland(5)` begint nu een spel op het eiland van 5 (zonder brief); zonder nummer zegt het in welk dorp je op het
 eiland ligt, wat voor plek het is en waar de uitgang is.
+`Spel.debug.kar()` zegt wat de ossenkar doet (waar hij is, wat hij draagt, waar hij heen rijdt en hoe laat hij er is), en
+wat er op de stapels bij de deuren ligt (`js/kar.js`, werklijst C).
 `Spel.debug.begin(5)` begint nu een spel op het eiland van 5 (`('nieuw')` op een nieuw eiland), zonder brief; zonder
 iets zegt het hoe het kamp ervoor staat: waar de kar is en heen gaat, of de
 schout meeloopt, wie er in welke tent woont, het vuur, en tot wanneer de heer niets vraagt.

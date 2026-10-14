@@ -1198,6 +1198,19 @@
       const D = S.dorp;
       return `Het proefdorp op het eiland van ${zaad}: ${D.gebouwen.length} gebouwen, ${D.bevolking} mensen.`; // geen tekst
     },
+    // De ossenkar (js/kar.js; werklijst C): wat hij doet en wat hij draagt, en wat er op de stapels ligt.
+    kar() {
+      const D = S.dorp;
+      const karren = T.karrenVan(D);
+      if (!karren.length) return 'Er rijdt nog geen kar: het kamp staat nog niet, of dit spel begon niet leeg.'; // geen tekst
+      return {
+        karren: karren.map((e) => ({
+          tegel: [e.tx, e.ty], doet: T.karTekst(D, e), lading: e.lading,
+          rit: e.rit && { fase: e.rit.fase, naar: e.rit.naar && e.rit.naar.soort, klaarOm: T.uurTekst(e.rit.tot) },
+        })),
+        stapels: T.stapelsOp(D).map((s) => ({ gebouw: s.g.soort, tegel: [s.x, s.y], wat: s.wat, hoeveel: Math.round(s.hoeveel * 10) / 10 })),
+      };
+    },
     // Het lege begin (js/begin.js, vraag 152): Spel.debug.begin(5) begint een nieuw spel op het eiland van nummer 5,
     // zonder brief (Spel.debug.begin('nieuw') op een nieuw eiland). Zonder iets zegt het hoe het kamp ervoor staat: waar de
     // kar is, wie er woont, en tot wanneer de heer niets vraagt.

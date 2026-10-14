@@ -8,6 +8,7 @@
 //   node gereedschap/pixelart/naar-spel.cjs --alleen meiboom
 //   node gereedschap/pixelart/naar-spel.cjs --alleen kerstboom
 //   node gereedschap/pixelart/naar-spel.cjs --alleen pestbos
+//   node gereedschap/pixelart/naar-spel.cjs --alleen stapels
 //   node gereedschap/pixelart/naar-spel.cjs --alleen kamp
 //   node gereedschap/pixelart/naar-spel.cjs --alleen huifkar,ossenkar-leeg,ossenkar-hout
 //   node gereedschap/pixelart/naar-spel.cjs --alleen hol
@@ -23,7 +24,7 @@
 // in git staat: in een verse kopie is het (bijna) leeg, en zonder --alleen bouwt dit script de
 // beschrijving opnieuw op uit wat daar staat — dan verdwijnen alle andere figuren uit het spel.
 // Een los vel dat hier zelf gerenderd wordt en niets uit uit/ nodig heeft (LOSSE_VELLEN: de
-// schandpaal, de meiboom, de kerstboom, de pestbos, het kamp, het wolvenhol, de wijnrank, de marktkraam, de tekens met het papier en de tafel) kan ook met --alleen: dan wordt alleen dat vel gerenderd en alleen zijn
+// schandpaal, de meiboom, de kerstboom, de pestbos, de stapels, het kamp, het wolvenhol, de wijnrank, de marktkraam, de tekens met het papier en de tafel) kan ook met --alleen: dan wordt alleen dat vel gerenderd en alleen zijn
 // ingang gezet.
 //
 // Twee soorten werk:
@@ -43,6 +44,7 @@ const Schandpaal = require('./schandpaal.cjs');
 const Meiboom = require('./meiboom.cjs');
 const Bomen = require('./bomen.cjs');
 const Pestbos = require('./pestbos.cjs');
+const Stapels = require('./stapels.cjs');
 const Kamp = require('./kamp.cjs');
 const Hol = require('./hol.cjs');
 const Wijnrank = require('./wijnrank.cjs');
@@ -207,6 +209,15 @@ function pestbos() {
   return Pestbos.beschrijving('pestbos.png');
 }
 
+// ---------------------------------------------------------------- de stapels
+
+// Een rij cellen per waar, een kolom per maat (klein, half, vol): wat de ossenkar nog moet halen, naast een deur
+// (stapels.cjs; js/kar.js, werklijst C). js/sprites.js zoekt een cel op met S.stapel(wat, vol).
+function stapels() {
+  schrijf('stapels.png', Stapels.vel());
+  return Stapels.beschrijving('stapels.png');
+}
+
 // ---------------------------------------------------------------- het kamp
 //
 // Het kamp van het lege begin (kamp.cjs, ontwerp/werklijst.md, vraag 152): de tent, de bruine tent en het afdak, elk met
@@ -269,7 +280,7 @@ function tafel() {
   return Tafel.schrijfNaar(path.join(BEELDEN, 'tafel'));
 }
 
-const LOSSE_VELLEN = { schandpaal, meiboom, kerstboom, pestbos, kamp, hol, wijnrank, marktkraam, tekens, tafel, uiterlijken };
+const LOSSE_VELLEN = { schandpaal, meiboom, kerstboom, pestbos, stapels, kamp, hol, wijnrank, marktkraam, tekens, tafel, uiterlijken };
 
 // ---------------------------------------------------------------- kopiëren
 

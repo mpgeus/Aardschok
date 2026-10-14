@@ -629,6 +629,7 @@
     { naam: T.t('The maker'), blok: 'MAKER_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The empty start'), blok: 'BEGIN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Helping build'), blok: 'BOUWEN_INSTELLINGEN' }, // geen tekst
+    { naam: T.t('The ox cart'), blok: 'KAR_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Farmers from nothing'), blok: 'BOERDERIJ_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The fields'), blok: 'VELDEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Fieldwork'), blok: 'VELDWERK_INSTELLINGEN' }, // geen tekst
@@ -1293,6 +1294,10 @@
     rooiBoom: T.t('clearing a tree'),
     rooiStruik: T.t('clearing a shrub'),
     veldWerk: T.t('fieldwork'),
+    lading: T.t('load per trip'),
+    stapelVol: T.t('full stack'),
+    minstens: T.t('smallest stack fetched'),
+    laden: T.t('loading time'),
     akker: T.t('arable'),
     wijngaard: T.t('vineyard'),
     veldMin: T.t('smallest field'),

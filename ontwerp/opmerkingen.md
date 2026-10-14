@@ -9,6 +9,12 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Een stapel achter een gebouw zie je niet** (14 okt, C stap 1): de doorkijk (`js/doorkijk.js`) maakt een dak doorzichtig
+  voor een wezen, niet voor een stapel. In het proefdorp, waar alles tegen het vuur staat, lag de stapel van de houthakker
+  achter een boerderij. In het spel zet je meestal ruimer; als het stoort, de stapel meenemen in de doorkijk.
+- **De ossenkar staat na het huis van de schout nog bij het kamp** (14 okt, C stap 1): hij rijdt pas naar het huis als hij
+  zijn eerste stapel heeft gelost. Niet erg, maar hij zou er ook meteen heen kunnen rijden.
+
 - **Vis en vlees voor de winter rekent de maaltijd niet mee** (13 okt, B3): `T.visEnVleesVoorDeWinter` (de raad: "buy
   salt from the peddler") rekent met wat de huizen voor hun wens vlees of vis eten, niet met het deel van de maaltijd dat
   het dorp er sinds vraag 154 ook van eet. Dan ligt er in de winter minder dan hij zegt. De wijn na de pluk rekent het

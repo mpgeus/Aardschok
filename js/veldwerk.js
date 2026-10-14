@@ -293,7 +293,7 @@
     if (wt && wt.tot != null) {
       if (nu < wt.tot) return;
       if (!wt.rust) {
-        klaarMet(D, wt);
+        klaarMet(D, wt, T.rooitHij(bewonerVan(D, e)));
         if (IN().rooienRust > 0) {
           wt.rust = true;
           wt.tot = nu + IN().rooienRust * uur();
@@ -328,7 +328,7 @@
       e.werkt = { soort: werk, x: staan.x, y: staan.y, op, tot: null, rust: false };
     } else {
       e.werkt = null;
-      klaarMet(D, { soort: werk, x: staan.x, y: staan.y, op });
+      klaarMet(D, { soort: werk, x: staan.x, y: staan.y, op }, T.rooitHij(bewonerVan(D, e)));
     }
   }
 
@@ -351,9 +351,10 @@
     return null;
   }
 
-  // Een tegel af: een boom om (het hout naar de schuur, een stronk blijft staan), of een stronk of een struik eruit.
-  function klaarMet(D, wt) {
-    if (wt.soort === 'hakken') T.hakBoom(D, wt.op.x, wt.op.y);
+  // Een tegel af: een boom om (het hout naar de schuur, een stronk blijft staan), of een stronk of een struik eruit. Met
+  // `bij`, het huis dat hij rooit, komt het hout op de stapel bij de deur (js/kar.js).
+  function klaarMet(D, wt, bij) {
+    if (wt.soort === 'hakken') T.hakBoom(D, wt.op.x, wt.op.y, bij);
     else if (wt.soort === 'rooien') T.rooi(D, wt.op.x, wt.op.y);
   }
 
