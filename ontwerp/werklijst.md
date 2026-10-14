@@ -8,7 +8,7 @@ vraagnummer tot 153 dat elders genoemd wordt, vind je daar. Nieuwe punten tellen
 Houd deze lijst kort: wat af is, gaat eruit (één regel onder "Af"), en het hoe staat in het ontwerpbestand van het
 onderwerp, niet hier. Wie aan een punt begint, zet er "**Bezig in sessie `<branch>`** (datum)" bij, in `main` (CLAUDE.md).
 
-## Nu en daarna (13 okt)
+## Nu en daarna (14 okt)
 
 **Ronde 1 van het snoeien is af** (A, 11 okt): de graanzak, het oude doel van de demo, het ontginnen als verzoek en
 drie oude keuzes in de spelregels zijn eruit; het land en de quests blijven (`snoeien.md`). **B, 1c tot 1e zijn af** (11
@@ -24,12 +24,10 @@ na: het hele eiland in stukken, opslaan wat veranderde, het optimaliseren, en de
 
 **B3 is af** (13 okt, onder "Af", in `main`): het dorp eet in gelijke delen van elke soort, en hoe meer soorten, hoe
 harder al het werk gaat. **C, de ossenkar, loopt** (14 okt): het plan staat bij C (Marcel: "A2, B2, C1, D2, E2").
-**Stap 1 is af** (14 okt, in `main`): het hout ligt op een stapel bij de deur tot de kar het haalt (`spel.md`, "Zo werkt
-de kar nu"). **Stap 2 is af** (14 okt, in `main`): je betaalt bij het neerzetten alleen het goud, en de kar brengt het
-hout naar de bouwplaats en de timmerman. **Stap 3 is af** (14 okt, in `main`): alles wat een gebouw maakt, ligt bij de deur tot de kar het haalt, ook het eten en
-de oogst; alleen het goud niet, en wat van het vee komt, gaat meteen de voorraad in. **Stap 4 is af** (14 okt, op branch
-`claude/relaxed-mendel-59zm3c`, wacht op "push it"): de schuur, een opslag met een eigen bereik en een eigen kar. Het
-volgende is stap 5: wegen die jij legt.
+**Stap 1 tot 4 zijn af** (14 okt, in `main`; hoe het werkt: `spel.md`, "Zo werkt de kar nu"): alles wat een gebouw
+maakt, ligt bij de deur tot de kar het haalt, de bouwplaats en de werkplaats krijgen hun waren met de kar, en een schuur
+is een opslag met een eigen bereik en een eigen kar. **Het volgende is stap 5, wegen die jij legt:** de vragen a tot d
+staan bij C, stap 5, en wachten op Marcel.
 
 **Wacht op Marcel:**
 - **De ossenkar bekijken** (C, stap 1, 14 okt): Nieuw spel. De huifkar komt aan, en pas dan staat zijn lading in de balk.
@@ -142,8 +140,6 @@ werk) wacht op Marcel.
 
 ## C. De ossenkar (vraag 152, de proef)
 
-**Bezig in sessie `claude/relaxed-mendel-59zm3c`** (14 okt): stap 4 is af (op die branch; stap 1 tot 3 in `main`).
-
 Besloten (Marcel, 11 okt): bouwen binnen bereik van het plein en elke opslag, geen grens en geen vlaggen; de kar rijdt
 overal, over een weg sneller; een ossenkar; de eerste opslag is het huis van de schout. **Het plan** (Marcel, 14 okt:
 "A2, B2, C1, D2, E2", op een voorstel van Claude):
@@ -166,7 +162,12 @@ overal, over een weg sneller; een ossenkar; de eerste opslag is het huis van de 
    één voorraad voor alle opslagen (de kar lost en laadt bij zijn eigen opslag, en de balk telt alles samen); **b** 15
    hout en 6 goud, vanaf het gehucht, met bereik 16 zoals het huis van de schout; **c** elke schuur heeft één kar, die
    haalt en brengt wat het dichtst bij zijn schuur ligt (een losse kar kopen komt later als het nodig blijkt).
-5. **Wegen die jij legt** (E2): een weg in het bouwmenu; de kar rijdt er sneller over, en zoekt hem op.
+5. **Wegen die jij legt** (E2): een weg in het bouwmenu; de kar rijdt er sneller over, en zoekt hem op. Vragen van
+   Claude (14 okt), nog niet beantwoord: **a** je legt een weg zoals een veld (klik begin en eind, het spel trekt de
+   kortste weg ertussen, en je ziet hem voor je klikt); **b** hij kost alleen werk, zoals een veld (0,1 werkdag per
+   tegel, en eerst rooien wat in de weg staat; steen kan later); **c** de kar gaat er twee keer zo snel over, de mensen
+   1,3 keer (dan kiezen ze de weg ook zelf, en lopen ze er niet naast); of alleen de kar; **d** de weg van de kaart,
+   waarover de huifkar binnenkwam, telt ook als weg. Voorstel van Claude: allemaal ja.
 6. **Meten en spelen:** de speeltest vanaf een lege plek: hoeveel van de dag de kar rijdt, wat er wacht, hoe groot de
    stapels worden. Dan ronde 3 van A.
 
