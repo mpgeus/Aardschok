@@ -352,11 +352,9 @@
  </tile>
  <tile id="48">
   <properties>
-    <property name="naam" value="zagerij"/>
-    <property name="vast" type="bool" value="true"/>
-    <property name="beslaat" value="6x5"/>
+    <property name="naam" value=""/>
+    <property name="vast" type="bool" value="false"/>
   </properties>
-  <image source="gebouwen/zagerij.png" width="372" height="381"/>
  </tile>
  <tile id="49">
   <properties>

@@ -5433,32 +5433,13 @@
     "doos": null
    },
    {
-    "naam": "zagerij",
-    "vast": true,
-    "beslaat": [
-     6,
-     5
-    ],
+    "naam": null,
+    "vast": false,
+    "beslaat": null,
     "groep": null,
     "staat": null,
     "deur": null,
-    "doos": [
-     170,
-     219,
-     202,
-     162
-    ],
-    "bestand": "tegels/gebouwen/zagerij.png",
-    "cel": [
-     0,
-     0,
-     372,
-     381
-    ],
-    "anker": [
-     170,
-     219
-    ]
+    "doos": null
    },
    {
     "naam": null,
