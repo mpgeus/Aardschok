@@ -3,11 +3,14 @@
 // raadsman, de lantaarn, de kaars en de tekeningen van de tafel eraf). Tot dan lag hier de tafel van de schout (vraag
 // 146, c), met het rekenboek en de dingen erop; git bewaart haar.
 //
-// Drie kaartjes, zoals bovenaan en even breed (--kaart in stijl.css): linksonder de voorraad (het dorp: de kas, de mensen
-// en de tevredenheid, en dan elke waar waarvan er iets is, met een pictogram en het getal), in het midden Build (B), en
-// de brief, het rapport en de bode zolang ze er zijn, rechtsonder de snelheid en de twee bazen (js/bazen.js). De velden
-// (V), het wetboek (W), de raadsman (R), sluipen (S) en slapen (Z) hebben alleen nog hun toets. Wat een ding of getal
-// is, wat het nu zegt en zijn toets, staat op het briefje bij de muis (#wenk), niet op het ding.
+// Onderaan kaartjes in de hoeken, even breed (--kaart in stijl.css): linksonder de voorraad (elke waar waarvan er iets
+// is, met een pictogram en het getal), in het midden Build (B), en de brief, het rapport en de bode zolang ze er zijn,
+// rechtsonder de minikaart (js/minikaart.js; vraag 165, "zoals bij age of Empires"). Bovenaan een dunne balk (vraag 166;
+// Marcel: "Bovenaan een dunne ui balk met goud, aantal inwoners, happiness jaar en tijd", en "zo leeg mogelijk zonder
+// info te missen"): het dorp (de kas, de inwoners, de tevredenheid), de datum en het uur, de snelheid, de twee bazen
+// (js/bazen.js) en Menu. De velden (V), het wetboek (W), de raadsman (R), sluipen (S) en slapen (Z) hebben alleen nog hun
+// toets. Wat een ding of getal is, wat het nu zegt en zijn toets, staat op het briefje bij de muis (#wenk), niet op het
+// ding; zo ook het seizoen en het weer, bij de datum.
 //
 // Alle maten zijn pixels van de kunst: pasSchaal zet de zoom (--ui-zoom: op 1080 één, op 4K twee), en hoe hoog de
 // kaartjes linksonder en rechtsonder zijn (--onder-links, --onder-rechts), zodat wat erboven ligt (de berichten, de
@@ -206,8 +209,9 @@
     'wijn', 'bier', 'melk', 'hooi', 'wol', 'laken', 'huiden', 'leer', 'ijzer', 'gereedschap', 'wapens', 'zout', 'klei',
     'riet', 'turf', 'kalk', 'vaten', 'mest'];
 
-  // ── De voorraad, linksonder ──
-  // Bovenaan het dorp (de kas, de mensen en de woonruimte, de tevredenheid), dan elke waar waarvan er minstens één is.
+  // ── De voorraad, linksonder, en het dorp in de balk bovenaan ──
+  // Linksonder elke waar waarvan er minstens één is; bovenaan het dorp (de kas, de inwoners en de woonruimte, de
+  // tevredenheid).
   // Elk getal is een post met een pictogram en het getal; de naam en wat het nu zegt, staan op het briefje bij de muis
   // (data-naam, data-uitleg). Een post blijft staan zolang zijn waar er is, zodat het briefje bij de muis blijft kloppen.
   const NAAM = { goud: T.t('Treasury'), bevolking: T.t('People'), tevredenheid: T.t('Content') };
@@ -231,8 +235,9 @@
     el.dataset.uitleg = uitleg || '';
   };
 
+  // Het dorp staat in de balk bovenaan (vraag 166): de kas, de inwoners en de tevredenheid.
   function dorpPosten() {
-    const box = $('voorraad').querySelector('.voorraad-dorp');
+    const box = $('bovenbalk').querySelector('.balk-dorp');
     if (!box.children.length) {
       post(box, 'goud', GOUD_ICOON);
       post(box, 'bevolking', BEVOLKING_ICOON);
@@ -241,8 +246,8 @@
     return box;
   }
 
-  // De twee bazen (js/bazen.js; werklijst vraag 106, d): de gunst van de heer en het vertrouwen van het dorp, rechtsonder
-  // onder de snelheid, rood als hij boos is, en bij de muis waarom. Zonder de spelregel "Twee bazen" staan ze er niet.
+  // De twee bazen (js/bazen.js; werklijst vraag 106, d): de gunst van de heer en het vertrouwen van het dorp, in de balk
+  // bovenaan naast de snelheid, rood als hij boos is, en bij de muis waarom. Zonder de spelregel "Twee bazen" staan ze er niet.
   T.ui.toonBazen = function (D) {
     const S = T.S;
     if (!S || D !== S.dorp) return; // een ander dorp zegt het niet tegen jou (js/dorp.js; vraag 71, C)
@@ -347,8 +352,8 @@
       zet(el, Math.floor(v[wat]), uitleg[wat] || `${naamVan(wat)}.`);
       el.classList.toggle('laag', lager.has(wat));
     });
-    box.classList.toggle('verborgen', !waren.length);
-    // De twee bazen (js/bazen.js) staan rechtsonder, ook meteen bij een nieuw of geladen spel.
+    $('voorraad').classList.toggle('verborgen', !waren.length);
+    // De twee bazen (js/bazen.js) staan in de balk bovenaan, ook meteen bij een nieuw of geladen spel.
     T.ui.toonBazen(D);
   };
 
@@ -418,13 +423,16 @@
       uitleg: () => T.t('Save, load, the game rules, photo mode, and back to the title screen.'),
       toets: T.t('Esc (O for the game rules, H for photo mode)'),
     },
+    // De datum in de balk: het seizoen en het weer van vandaag staan hier, bij de muis (vraag 166).
     datum: {
       naam: T.t('Today'),
       uitleg: (S) => {
+        const seizoen = T.hoofdletter(T.SEIZOEN_TOON[T.datumVanDag(S.kalender.dag).seizoen]);
         const W = S.dorp && T.weerVan(S.dorp);
-        if (!W) return '';
-        if (W.droog <= 0) return T.t('It is raining today.');
-        return W.droog === 1 ? T.t('It has not rained since yesterday.') : T.t('It has not rained for {n} days.', { n: T.telwoord(W.droog) });
+        if (!W) return `${seizoen}.`;
+        const droog = W.droog <= 0 ? T.t('It is raining today.')
+          : W.droog === 1 ? T.t('It has not rained since yesterday.') : T.t('It has not rained for {n} days.', { n: T.telwoord(W.droog) });
+        return `${seizoen}, ${T.WEER_NAMEN[W.vandaag]}. ${droog}`;
       },
     },
   };
@@ -478,7 +486,7 @@
     box.classList.remove('verborgen');
     const onder = !!el.closest('.hoek-onder');
     const r = el.getBoundingClientRect();
-    const boven = (el.classList.contains('post') ? $('voorraad') : el).getBoundingClientRect().top;
+    const boven = (el.closest('#voorraad') ? $('voorraad') : el).getBoundingClientRect().top;
     const breed = box.offsetWidth * zoom;
     const hoog = box.offsetHeight * zoom;
     const links = Math.max(8, Math.min(window.innerWidth - breed - 8, (r.left + r.right) / 2 - breed / 2));
@@ -495,7 +503,7 @@
     return T.t('or press {toets}', { toets: toets.replace(/(^|[ ,(])([A-Z]|Esc|-|\+)(?=$|[ ,)])/g, (_, voor, k) => `${voor}<kbd>${k}</kbd>`) });
   }
 
-  const AANWIJSBAAR = '[data-ding], #voorraad .post, #kalender-knoppen button, #statussen .status'; // geen tekst
+  const AANWIJSBAAR = '[data-ding], .post, #kalender-knoppen button, #statussen .status'; // geen tekst
   for (const plek of document.querySelectorAll('.hoek-onder, #hud-gehucht')) {
     plek.addEventListener('mouseover', (ev) => {
       const el = ev.target.closest(AANWIJSBAAR);
@@ -513,9 +521,10 @@
   // T.mistVersie), je gebouwen, de schout, de plekken die je kent (het kasteel, de stad, de dorpen), en het kader waar de
   // camera kijkt. Een klik of slepen kijkt daar (T.kijkNaar, js/main.js: het overzicht, Tab).
   const MINI = {
-    breed: 328, // de breedte van de ruit in pixels van de kunst: het kaartje (--kaart) min zijn rand
     alle: 0.1, // zo vaak (seconden) wordt de ruit opnieuw getekend
   };
+  // De breedte van de ruit in pixels van de kunst: die van het kaartje (--kaart, stijl.css), want er is geen rand omheen.
+  const miniBreed = () => $('minikaart').querySelector('canvas').clientWidth || 380;
   const mini = { E: null, w: null, beeld: null, mist: null, klaar: -1, versie: -1, getekend: -Infinity, slepen: false };
   const nieuwDoek = (n) => Object.assign(document.createElement('canvas'), { width: n, height: n });
 
@@ -560,7 +569,7 @@
 
   function tekenMinikaart(S, w, E, n) {
     const doek = $('minikaart').querySelector('canvas');
-    const B = MINI.breed;
+    const B = miniBreed();
     const H = B / 2;
     // Op ware pixels: de ruit is B pixels van de kunst breed, en die zijn zoom maal dpr pixels van het scherm.
     const k = zoom * (window.devicePixelRatio || 1);
@@ -604,7 +613,8 @@
   // Een klik of slepen op de minikaart: kijk daar (het overzicht, js/main.js).
   function kijkOpMinikaart(ev) {
     const r = ev.currentTarget.getBoundingClientRect();
-    const t = T.minikaartTegel(((ev.clientX - r.left) / r.width) * MINI.breed, ((ev.clientY - r.top) / r.height) * (MINI.breed / 2), MINI.breed);
+    const B = miniBreed();
+    const t = T.minikaartTegel(((ev.clientX - r.left) / r.width) * B, ((ev.clientY - r.top) / r.height) * (B / 2), B);
     const p = T.naarScherm(t.x, t.y);
     T.kijkNaar(p.x, p.y);
     mini.getekend = -Infinity;
@@ -640,7 +650,7 @@
   window.addEventListener('resize', pasSchaal);
   pasSchaal();
   // Hoe hoog de hoeken onderaan zijn, in pixels van de kunst, voor wat erboven ligt: de berichten boven de voorraad, de
-  // meter en "opgeslagen" boven de klok (stijl.css, --onder-links en --onder-rechts).
+  // meter en "opgeslagen" boven de minikaart (stijl.css, --onder-links en --onder-rechts).
   const hoogte = new ResizeObserver(() => {
     for (const [id, naam] of [['linksonder', '--onder-links'], ['rechtsonder', '--onder-rechts']]) {
       document.documentElement.style.setProperty(naam, `${Math.ceil($(id).getBoundingClientRect().height / zoom) + 12}px`);

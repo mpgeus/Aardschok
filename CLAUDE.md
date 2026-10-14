@@ -188,6 +188,8 @@ Hoe we kiezen:
   de regel die klopt met vroeger.
 - **Eerst speelbaar** (Marcel, 26 sep: "We moeten oppassen voor functie creep"): een nieuw idee, ook een goed idee van
   Claude, gaat naar `ontwerp/opmerkingen.md` of achteraan de werklijst, niet in de stap die loopt.
+- **Het scherm zo leeg mogelijk** (Marcel, 14 okt: "zo leeg mogelijk houden zonder info te missen"): wat niet altijd
+  nodig is, staat op het briefje bij de muis; alle kaartjes even breed (`--kaart`, `code.md` bij `js/ui.js`).
 - **Niets erbij zonder overleg** (Marcel, 8 okt: "We moeten stoppen met het ene op te lossen met iets anders"): wat een
   speeltest scheef laat zien, los je eerst op met een getal uit de werkbank; iets nieuws (een regel, een gebouw, een
   grondstof) komt er alleen als Marcel het kiest.

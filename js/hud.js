@@ -64,11 +64,9 @@
     datumEl.textContent = d.tekst;
     datumEl.classList.toggle('sint-maarten', d.sintMaarten);
     const uur = T.t('{klok}, {deel}', { klok: T.uurTekst(S.kalender.dag), deel: DAGDELEN[T.dagdeelVan(S.kalender.dag)] });
-    // Het weer van vandaag (js/weer.js), tussen het seizoen en het uur; op hover hoe lang het al droog is.
-    // Hoe lang het al droog is, zegt het briefje bij de muis (js/balk.js, de datum).
-    const W = S.dorp && T.weerVan(S.dorp);
-    const weer = W ? ' · ' + T.WEER_NAMEN[W.vandaag] : '';
-    $('kalender-seizoen').textContent = T.hoofdletter(T.SEIZOEN_TOON[d.seizoen]) + weer + ' · ' + uur + (d.sintMaarten ? ` · ${T.t('Martinmas: the lord collects')}` : '');
+    // In de balk bovenaan (vraag 166: "zo leeg mogelijk zonder info te missen") alleen het uur, en Sint-Maarten; het
+    // seizoen, het weer van vandaag (js/weer.js) en hoe lang het al droog is, zegt het briefje bij de muis (js/balk.js).
+    $('kalender-seizoen').textContent = T.hoofdletter(uur) + (d.sintMaarten ? ` · ${T.t('Martinmas: the lord collects')}` : '');
     T.ui.werkBriefKnopBij(S);
     T.ui.werkBalkBij(S); // de lat van de snelheden (js/balk.js)
   };

@@ -33,7 +33,8 @@ is een opslag met een eigen bereik en een eigen kar. **Stap 5 is af** (14 okt): 
 planken, muren, soldaten uit wapens, handel, reizende gezelschappen, provincies, een kasteel), en koos de volgorde en de
 eerste antwoorden (bij H). **156, een gebouw aanklikken, is af** (14 okt, op de branch
 `claude/village-economy-gameplay-lmsnyg`; `spel.md`, "Zo werkt het briefje van een gebouw nu"), en **164, een minimale
-balk onderaan, en 165, een minimap van het hele eiland, ook** (14 okt, op dezelfde branch). **Het volgende is 157**, de
+balk onderaan, 165, een minimap van het hele eiland, en 166, een dunne balk bovenaan, ook** (14 okt, op dezelfde
+branch). **Het volgende is 157**, de
 zagerij en de planken (het plan staat bij H en wacht op Marcel), en dan C6 met de keten erin.
 
 **Wacht op Marcel:**
@@ -42,12 +43,12 @@ zagerij en de planken (het plan staat bij H en wacht op Marcel), en dan C6 met d
   dagen en dit jaar, wie er werkt, wat hem tegenhoudt (weinig afwisseling, de tevredenheid, uren onderweg, de stapel
   vol), en de stapel bij zijn deur. Klik ergens anders, of Esc, en het is weg. Probeer ook het huis van de schout (wat
   de kar doet), een boerderij (haar velden en de oogst) en een bouwplaats. In de console: `Spel.S.gekozen`.
-- **De balk onderaan bekijken** (164, 14 okt): Nieuw spel. Onderaan liggen drie kaartjes: linksonder de voorraad (de kas,
-  de mensen, de tevredenheid, en elke waar die je hebt), in het midden Build, rechtsonder de snelheid met de twee bazen.
-  Wijs een getal aan: het briefje zegt wat het is. De velden, het wetboek en de raadsman openen nog met V, W en R. In de
-  hoek de minikaart (165): het hele eiland als een ruit, wat je kent in kleur; klik of sleep erop en de camera kijkt daar
-  (Tab of een klik op de schout brengt je terug). Is het donker van wat je niet kent goed zo (`onbekend` in
-  `js/minikaart.js`)?
+- **De balken bekijken** (164 tot 166, 14 okt): Nieuw spel. Bovenaan een dunne balk: het goud, de inwoners, de
+  tevredenheid, de datum en het uur (het seizoen en het weer bij de muis), de snelheid, de twee bazen en Menu. Onderaan
+  linksonder de waren die je hebt, in het midden Build, en rechtsonder de minikaart: het hele eiland als een ruit, wat je
+  kent in kleur; klik of sleep erop en de camera kijkt daar (Tab of een klik op de schout brengt je terug). Wijs een getal
+  aan: het briefje zegt wat het is. De velden, het wetboek en de raadsman openen nog met V, W en R. Is het donker van wat
+  je niet kent goed zo (`onbekend` in `js/minikaart.js`)?
 - **Het plan voor 157** (de zagerij en de planken; bij H): ja, of wat anders.
 - **De wegen en het afbreken bekijken** (C, stap 5, 14 okt): Nieuw spel, en in het bouwmenu (B) bovenaan **Road**: klik
   het begin en dan het eind, en zie de weg in groen, recht en haaks, met wat hij kost; na de klik is het eind het begin
@@ -311,9 +312,20 @@ niet perse. 8. Los ontwerp", op de vragen van Claude; in het gesprek heetten de 
   eiland**. Voorstel van Claude: rechtsonder in de hoek, een kaartje even breed als de rest (`--kaart`), met de snelheid en
   de bazen erboven; een ruit die net zo ligt als het beeld (zoals in Age of Empires), wat je kent in kleur en de rest
   zwart (de mist), je gebouwen en wegen, een kader waar de camera kijkt, en een klik schuift de camera erheen. **Af**
-  (14 okt, op de branch `claude/village-economy-gameplay-lmsnyg`; `js/minikaart.js`): de ruit in de hoek, onder de klok;
+  (14 okt, op de branch `claude/village-economy-gameplay-lmsnyg`; `js/minikaart.js`): de ruit in de hoek, zonder rand en
+  licht doorschijnend (Marcel: "zonder 'rand' dus de kaart licht transparant");
   wat je niet kent is donker maar laat de vorm van het eiland zien (een getal, `onbekend`); de wegen zijn te klein om te
   zien (een weg is een tegel, een pixel is er acht), dus alleen je gebouwen, de schout en de plekken die je kent.
+- **166, een dunne balk bovenaan** (Marcel, 14 okt, na 164 en 165: "Minimap bedoel ik. Zoals bij age of Empires in de
+  onderste ui. Bovenaan een dunne ui balk met goud, aantal inwoners, happiness jaar en tijd"). Dus zijn "minimale" bij 164
+  was de minimap, en die ligt onderaan zoals in Age of Empires; bovenaan komt een dunne balk met het goud, de inwoners,
+  de tevredenheid, het jaar en de tijd (nu in de voorraad linksonder en op de datum rechtsboven). En (Marcel, 14 okt): "Ik
+  probeer het zo leeg mogelijk te houden zonder info te missen" (in CLAUDE.md, "Hoe we kiezen"). Zo gebouwd (Claude,
+  14 okt, naar dat principe): één dunne balk over de hele breedte bovenaan, met het goud, de inwoners, de tevredenheid,
+  de datum met het jaar en de tijd, en ernaast de snelheid, de twee bazen en Menu; het seizoen en het weer op het
+  briefje bij de muis op de datum (Sint-Maarten blijft staan). Het kaartje met de datum en de klok rechtsonder vervallen:
+  rechtsonder alleen de minimap, linksonder alleen de waren. **Af** (14 okt, op de branch
+  `claude/village-economy-gameplay-lmsnyg`; `code.md` bij `js/ui.js`).
 - **Nog open** (als we er zijn): **161**, het nieuws echt en bruikbaar (wat een stad tekortkomt, waar de mannen van de
   heer zijn, welk dorp morrt), en met een herberg blijven ze langer; **160**, eerst losse ritten (een kar met wat over
   is naar een stad, dagen onderweg, een escorte helpt), vaste routes later.

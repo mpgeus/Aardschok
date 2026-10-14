@@ -18,22 +18,37 @@
   </div>
 
   <!-- Het scherm van het gehuchtspel (js/hud.js): altijd aan (T.NIEUWE_HUD), en dan gaan de
-       panelen hierboven weg (stijl.css, .nieuwe-hud). Bovenaan alleen briefjes (vraag 146, d): linksboven het doel met de
-       raad (#opdracht, js/ui.js) en de statussen eronder, rechtsboven de datum met het lipje Menu ernaast, en na een klik
-       op een gebouw zijn briefje onder de datum. Alle kaartjes zijn even breed (--kaart in stijl.css). De spelregels
-       staan in het menu. -->
+       panelen hierboven weg (stijl.css, .nieuwe-hud). Bovenaan een dunne balk (vraag 166), en daaronder alleen briefjes:
+       linksboven het doel met de raad (#opdracht, js/ui.js) en de statussen eronder, rechts na een klik op een gebouw zijn
+       briefje. Alle kaartjes zijn even breed (--kaart in stijl.css). De spelregels staan in het menu. -->
   <div id="hud-gehucht">
+    <!-- De balk bovenaan (js/balk.js; vraag 166, Marcel: "Bovenaan een dunne ui balk met goud, aantal inwoners, happiness
+         jaar en tijd", en "zo leeg mogelijk zonder info te missen"): links het dorp, in het midden de datum en de tijd
+         (het seizoen en het weer bij de muis), rechts de snelheid, de twee bazen en Menu. -->
+    <div id="bovenbalk" class="briefje">
+      <div class="balk-links"><div class="balk-dorp"></div></div>
+      <div id="kalenderbalk" data-ding="datum"><span id="kalender-datum"></span><span id="kalender-seizoen"></span></div>
+      <div class="balk-rechts">
+        <div id="kalender-knoppen" role="group">
+          <button data-snelheid="0" data-toets="P"></button>
+          <button data-snelheid="1"></button>
+          <button data-snelheid="3"></button>
+          <button data-snelheid="10"></button>
+          <button data-snelheid="30"></button>
+        </div>
+        <div id="bazen" class="verborgen">
+          <div class="baas" data-ding="gunst"><span class="naam"></span><span class="getal">50</span></div>
+          <div class="baas" data-ding="vertrouwen"><span class="naam"></span><span class="getal">50</span></div>
+        </div>
+        <button id="menu-knop" data-ding="menu" data-t="menu"></button>
+      </div>
+    </div>
     <div id="linksboven">
       <div id="opdracht" class="briefje verborgen"></div>
       <!-- De statussen (js/hud.js, T.ui.toonStatussen): honger, droogte, ... zolang ze duren, onder het doel. -->
       <div id="statussen" class="verborgen"></div>
     </div>
     <div id="rechtsboven">
-      <button id="menu-knop" class="briefje" data-ding="menu" data-t="menu"></button>
-      <div id="kalenderbalk" class="briefje" data-ding="datum">
-        <div id="kalender-datum"></div>
-        <div id="kalender-seizoen"></div>
-      </div>
       <!-- Het briefje van een gebouw (js/gebouwbriefje.js, vraag 156): wat het doet en maakt, na een klik erop. -->
       <div id="gebouwbriefje" class="briefje verborgen"></div>
     </div>
@@ -41,11 +56,11 @@
 
   <!-- De balk onderaan (js/balk.js; werklijst vraag 164, Marcel, 14 okt: "De oude ui balk aan de onderkant moet leeg.
        En we hebben een minimale nodig"): kaartjes in de hoeken, zoals bovenaan en even breed. Linksonder de voorraad
-       (wat je hebt, en het dorp), in het midden bouwen, en de brief, het rapport en de bode zolang ze er zijn,
-       rechtsonder de snelheid en de twee bazen, en in de hoek de minikaart. Wat een knop doet, zit nog aan zijn id. -->
+       (de waren die je hebt), in het midden bouwen, en de brief, het rapport en de bode zolang ze er zijn, rechtsonder
+       de minikaart (vraag 165, zoals in Age of Empires). Het dorp, de datum, de snelheid en de bazen staan sinds vraag
+       166 in de balk bovenaan. Wat een knop doet, zit nog aan zijn id. -->
   <div id="linksonder" class="hoek-onder">
-    <div id="voorraad" class="briefje" data-ding="voorraad">
-      <div class="voorraad-dorp"></div>
+    <div id="voorraad" class="briefje verborgen" data-ding="voorraad">
       <div class="voorraad-waren"></div>
     </div>
   </div>
@@ -56,21 +71,8 @@
     <button id="bode-knop" class="briefje knop verborgen" data-ding="bode"></button>
   </div>
   <div id="rechtsonder" class="hoek-onder">
-    <div id="klok" class="briefje">
-      <div id="kalender-knoppen" role="group">
-        <button data-snelheid="0" data-toets="P"></button>
-        <button data-snelheid="1"></button>
-        <button data-snelheid="3"></button>
-        <button data-snelheid="10"></button>
-        <button data-snelheid="30"></button>
-      </div>
-      <div id="bazen" class="verborgen">
-        <div class="baas" data-ding="gunst"><span class="naam"></span><span class="getal">50</span></div>
-        <div class="baas" data-ding="vertrouwen"><span class="naam"></span><span class="getal">50</span></div>
-      </div>
-    </div>
     <!-- De minikaart (js/minikaart.js, js/balk.js; vraag 165): het hele eiland, zoals bij Age of Empires in de hoek. -->
-    <div id="minikaart" class="briefje verborgen"><canvas></canvas></div>
+    <div id="minikaart" class="verborgen"><canvas></canvas></div>
   </div>
   <!-- Het briefje bij de muis (js/balk.js): wat een ding of een getal is, wat het nu zegt, en de toets. -->
   <div id="wenk" class="verborgen" aria-live="polite"></div>

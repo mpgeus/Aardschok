@@ -31,6 +31,8 @@
   --onder-links: 200px;
   --onder-rechts: 140px;
   --onder-midden: 90px;
+  /* Waar onder de balk bovenaan de kaartjes beginnen, in pixels van de kunst (vraag 166). */
+  --boven: 64px;
 }
 
 * { box-sizing: border-box; }
@@ -117,18 +119,45 @@ kbd {
    .nieuwe-hud op body). De panelen van het oude spel (sluipen, goud en spullen linksboven, en de
    oude uitleg rechtsboven) gaan dan weg. De actiebalk onderaan blijft: die schuift in beeld als er gevochten wordt, ook in
    het gehucht.
-   Bovenaan liggen alleen briefjes (vraag 146, d; de plaat "De schrijftafel van de schout"): linksboven het doel met de
-   raad (#opdracht, js/ui.js) en de statussen eronder, rechtsboven de datum met het lipje Menu ernaast. Ze schalen mee met
-   de balk onderaan (--ui-zoom, js/balk.js), dus alle maten zijn pixels van de kunst: een pixel van het papier is een hele
-   pixel van het scherm. */
+   Bovenaan een dunne balk over de hele breedte (vraag 166), en daaronder alleen briefjes (vraag 146, d): linksboven het
+   doel met de raad (#opdracht, js/ui.js) en de statussen eronder, rechts het briefje van een gebouw. Ze schalen mee
+   (--ui-zoom, js/balk.js), dus alle maten zijn pixels van de kunst: een pixel van het papier is een hele pixel van het
+   scherm. Wat onder de balk begint, rekent met --boven. */
 #hud-gehucht { display: none; }
 .nieuwe-hud #hud-gehucht { display: block; }
 #linksboven,
 #rechtsboven { position: fixed; top: 0; zoom: var(--ui-zoom, 1); display: flex; align-items: flex-start; pointer-events: none; }
-#linksboven { left: 0; padding: 26px 0 0 26px; flex-direction: column; gap: 12px; }
-/* Rechts twee kolommen: het lipje Menu, en de kaartjes eronder elkaar (de datum, het briefje van een gebouw). */
-#rechtsboven { right: 0; padding: 26px 26px 0 0; display: grid; grid-template-columns: auto var(--kaart); gap: 12px 14px; }
+#linksboven { left: 0; padding: var(--boven) 0 0 26px; flex-direction: column; gap: 12px; }
+#rechtsboven { right: 0; padding: var(--boven) 26px 0 0; }
 #rechtsboven > * { pointer-events: auto; }
+
+/* De balk bovenaan (js/balk.js; vraag 166, Marcel: "Bovenaan een dunne ui balk met goud, aantal inwoners, happiness jaar
+   en tijd", en "zo leeg mogelijk zonder info te missen"): een strook papier over de hele breedte. Links het dorp (de kas,
+   de inwoners, de tevredenheid), in het midden de datum met het jaar en de tijd (het seizoen en het weer bij de muis),
+   rechts de snelheid, de twee bazen en Menu. */
+#bovenbalk {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: calc(100vw / var(--ui-zoom, 1));
+  zoom: var(--ui-zoom, 1);
+  z-index: 3;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 24px;
+  padding: 2px 18px 4px;
+  font-size: 19px;
+}
+#bovenbalk .balk-links,
+#bovenbalk .balk-rechts { display: flex; align-items: center; gap: 22px; }
+#bovenbalk .balk-rechts { justify-content: flex-end; }
+#bovenbalk .balk-dorp { display: flex; gap: 22px; }
+#bovenbalk .post { display: flex; align-items: center; gap: 6px; cursor: default; }
+#bovenbalk .icoon { display: flex; }
+#bovenbalk .icoon svg { width: 20px; height: 20px; filter: grayscale(1) brightness(0.28) sepia(0.9); }
+#bovenbalk .aantal { font-variant-numeric: lining-nums tabular-nums; }
+#bovenbalk .post.laag .aantal { color: var(--papier-rood); }
 
 /* Een briefje: het vel van het spel (beelden/papier.png) op ware pixels, met inkt, zoals het briefje bij de muis. */
 .briefje {
@@ -143,7 +172,7 @@ kbd {
 }
 .briefje kbd { font: 16px var(--boek); color: var(--papier-inkt); background: none; border: 1px solid var(--papier-grijs); border-bottom-width: 2px; padding: 0 5px; border-radius: 2px; }
 /* De spijker waaraan het hangt (beelden/spijker.png), zoals bij het briefje van een huis. */
-:is(#opdracht, #kalenderbalk, #gebouwbriefje)::before {
+:is(#opdracht, #gebouwbriefje)::before {
   content: '';
   position: absolute;
   left: 50%;
@@ -173,13 +202,14 @@ kbd {
 body.bouwmenu-open #statussen { visibility: hidden; }
 
 /* De datum, rechtsboven, met het lipje Menu ernaast (Esc; de spelregels staan in het menu). */
-#kalenderbalk { width: var(--kaart); padding: 10px 18px 14px; text-align: right; }
-#kalender-datum { font: 27px/1.1 var(--kop); }
+/* De datum in de balk: de dag en het jaar, en het uur; bij de muis het seizoen en het weer (js/balk.js). */
+#kalenderbalk { display: flex; align-items: baseline; gap: 12px; cursor: default; white-space: nowrap; }
+#kalender-datum { font: 23px/1.1 var(--kop); }
 #kalender-datum.sint-maarten { color: var(--papier-rood); }
-#kalender-seizoen { font-style: italic; color: var(--papier-grijs); font-size: 18px; }
-#menu-knop { margin-top: 4px; padding: 8px 16px 10px; font: 27px/1.1 var(--kop); background: none; cursor: pointer; transition: transform 0.12s; }
+#kalender-seizoen { font-style: italic; color: var(--papier-grijs); }
+#menu-knop { padding: 2px 4px; font: 23px/1.1 var(--kop); color: var(--papier-inkt); background: none; border: 0; cursor: pointer; }
 #menu-knop:hover,
-#menu-knop:focus-visible { transform: translateY(2px); }
+#menu-knop:focus-visible,
 #menu-knop.actief { color: var(--papier-rood); }
 .nieuwe-hud #hud,
 .nieuwe-hud #hulp { display: none; }
@@ -209,7 +239,7 @@ body.bouwmenu-open #statussen { visibility: hidden; }
 #volgorde {
   position: fixed;
   left: 50%;
-  top: 16px;
+  top: calc(var(--ui-zoom, 1) * var(--boven));
   display: flex;
   gap: 6px;
   align-items: center;
@@ -312,8 +342,8 @@ body.bouwmenu-open #statussen { visibility: hidden; }
 }
 
 /* De balk onderaan (js/balk.js; werklijst vraag 164, Marcel, 14 okt: "De oude ui balk aan de onderkant moet leeg. En we
-   hebben een minimale nodig"): kaartjes in de hoeken, zoals bovenaan en even breed (--kaart). Linksonder de voorraad,
-   in het midden Build en wat op je wacht (de brief, het rapport, de bode), rechtsonder de snelheid en de twee bazen.
+   hebben een minimale nodig"; dat was een minimap, vraag 165): kaartjes in de hoeken, even breed (--kaart). Linksonder de
+   voorraad, in het midden Build en wat op je wacht (de brief, het rapport, de bode), rechtsonder de minikaart.
    Alle maten zijn pixels van de kunst (--ui-zoom); hoe hoog de hoeken zijn, zet js/balk.js in --onder-links en
    --onder-rechts, voor wat erboven ligt. */
 .hoek-onder { position: fixed; bottom: 0; z-index: 3; zoom: var(--ui-zoom, 1); display: flex; align-items: flex-end; gap: 14px; pointer-events: none; }
@@ -322,13 +352,10 @@ body.bouwmenu-open #statussen { visibility: hidden; }
 #rechtsonder { right: 0; padding: 0 26px 26px 0; flex-direction: column; align-items: flex-end; gap: 12px; }
 #middenonder { left: 50%; transform: translateX(-50%); padding-bottom: 26px; }
 
-/* De voorraad: bovenaan het dorp (de kas, de mensen, de tevredenheid), dan elke waar waarvan er iets is, met een
-   pictogram en het getal; de naam en wat het zegt, staan op het briefje bij de muis. */
+/* De voorraad: elke waar waarvan er iets is, met een pictogram en het getal; de naam en wat het zegt, staan op het
+   briefje bij de muis. (Het dorp staat in de balk bovenaan.) */
 #voorraad { width: var(--kaart); padding: 10px 18px 14px; }
-#voorraad .voorraad-dorp,
 #voorraad .voorraad-waren { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2px 10px; }
-#voorraad .voorraad-dorp { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-#voorraad .voorraad-waren { border-top: 1px dotted var(--papier-lijn); margin-top: 6px; padding-top: 6px; }
 #voorraad .post { display: flex; align-items: center; gap: 6px; height: 26px; cursor: default; }
 #voorraad .icoon { display: flex; }
 #voorraad .icoon svg { width: 20px; height: 20px; filter: grayscale(1) brightness(0.28) sepia(0.9); }
@@ -345,24 +372,25 @@ body.bouwmenu-open #statussen { visibility: hidden; }
 @keyframes wip { 0%, 100% { transform: none; } 50% { transform: translateY(-4px); } }
 @media (prefers-reduced-motion: reduce) { .hoek-onder .knop.wacht { animation: none; } }
 
-/* De klok: de lat van de snelheden, en de twee bazen eronder (js/bazen.js), rood als hij boos is. */
-#klok { width: var(--kaart); padding: 10px 18px 14px; }
-#kalender-knoppen { display: flex; justify-content: space-between; }
+/* De snelheid en de twee bazen (js/bazen.js) in de balk bovenaan, de baas rood als hij boos is. */
+#kalender-knoppen { display: flex; gap: 4px; }
 #kalender-knoppen button { position: relative; padding: 2px 4px 4px; font: 22px/1 var(--boek); color: var(--papier-grijs); background: none; border: 0; cursor: pointer; }
 #kalender-knoppen button:hover { color: var(--papier-inkt); }
 #kalender-knoppen button.actief { color: var(--papier-rood); }
 #kalender-knoppen button.actief::after { content: ''; position: absolute; left: 50%; bottom: -6px; width: 6px; height: 6px; margin-left: -3px; background: var(--papier-rood); }
 #kalender-knoppen button:focus-visible { outline: 2px dashed var(--papier-grijs); }
-#bazen { display: flex; justify-content: space-between; border-top: 1px dotted var(--papier-lijn); margin-top: 8px; padding-top: 6px; }
+#bazen { display: flex; gap: 18px; }
 #bazen .baas { cursor: default; }
 #bazen .naam { font-style: italic; color: var(--papier-grijs); margin-right: 8px; }
 #bazen .getal { font: 22px/1 var(--kop); font-variant-numeric: lining-nums tabular-nums; }
 #bazen .baas.hoog .getal { color: var(--papier-rood); }
 
 /* De minikaart (js/minikaart.js en js/balk.js; vraag 165, Marcel: "Onder in de ui zoals bij age of Empires", "Het hele
-   eiland"): in de hoek rechtsonder, even breed als de rest; een ruit die ligt zoals het beeld, op ware pixels. Een klik
-   of slepen kijkt daar (het overzicht, Tab). */
-#minikaart { width: var(--kaart); padding: 10px 18px 12px; }
+   eiland", en "zonder 'rand' dus de kaart licht transparant"): in de hoek rechtsonder, even breed als de kaartjes, een
+   losse ruit die ligt zoals het beeld, op ware pixels, zonder papier eromheen en wat doorschijnend; met de muis erop
+   helemaal. Een klik of slepen kijkt daar (het overzicht, Tab). */
+#minikaart { width: var(--kaart); opacity: 0.85; transition: opacity 0.15s; }
+#minikaart:hover { opacity: 1; }
 #minikaart canvas { display: block; width: 100%; aspect-ratio: 2 / 1; cursor: crosshair; image-rendering: pixelated; }
 
 /* Het briefje bij de muis: wat een ding is, wat het nu zegt, en de toets (js/balk.js), op papier bij het ding. */
@@ -508,9 +536,9 @@ body.bouwmenu-open #statussen { visibility: hidden; }
 #bouwmenu {
   position: fixed;
   left: 16px;
-  top: 16px;
+  top: calc(var(--ui-zoom, 1) * var(--boven));
   width: 300px;
-  max-height: calc(100vh - 34px - var(--ui-zoom, 1) * var(--onder-links)); /* tot boven de voorraad */
+  max-height: calc(100vh - 18px - var(--ui-zoom, 1) * (var(--boven) + var(--onder-links))); /* tussen de balk en de voorraad */
   overflow-y: auto;
   padding: 10px 12px 12px;
 }
@@ -1173,7 +1201,7 @@ body.foto > :not(canvas, #foto-wenk) { display: none !important; }
    boven de klok rechtsonder, en is het langer, dan schuift het. */
 #gebouwbriefje {
   grid-column: 2;
-  max-height: calc(100vh / var(--ui-zoom, 1) - 190px - var(--onder-rechts));
+  max-height: calc(100vh / var(--ui-zoom, 1) - var(--boven) - 12px - var(--onder-rechts));
   overflow-y: auto;
   padding: 10px 18px 14px;
   font-size: 18px;

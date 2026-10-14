@@ -472,7 +472,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.helderheidVanVlak`, de wegen en de bomen (`T.minikaartKleur`); het wordt in stukjes gemaakt (`T.maakMinikaart(E,
   rijen)`, een rij zo'n 1 ms, het hele eiland 0,3 s), en hoort bij het eiland, niet bij het spel (niet bewaard). Wat je
   kent per vak, uit de bits van de mist (`T.minikaartGekend(w)`; `w.gekend`, `js/mist.js`). Het tekenen staat in
-  `js/balk.js` (alleen scherm): zo'n 4 ms per beeld aan het beeld tot het af is, de mist opnieuw als `T.mistVersie`
+  `js/balk.js` (alleen scherm), zonder papier eromheen en wat doorschijnend (Marcel: "zonder 'rand' dus de kaart licht
+  transparant"; `#minikaart` in `stijl.css`): zo'n 4 ms per beeld aan het beeld tot het af is, de mist opnieuw als `T.mistVersie`
   verandert, en tien keer per seconde de ruit: het eiland, het donker over wat je niet kent (`onbekend`, 0,75: je ziet de
   vorm, niet wat er is), de plekken die je kent, je gebouwen, de schout in rood, en het kader van de camera
   (`T.tekenMaat` gedeeld door `S.zoom`). Een klik of slepen kijkt daar: `T.kijkNaar` (`js/main.js`) zet het overzicht
@@ -508,19 +509,23 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `--kaart` (`:root` in `stijl.css`), en een nieuw kaartje ook; het briefje bij de muis en bij een huis hangen los en
   tellen niet mee; de letters zijn Grenze, `--kop`, en Alegreya, `--boek`, in `letters/`), `js/balk.js` (**de balk
   onderaan**, vraag 164, 14 okt; Marcel: "De oude ui balk aan de onderkant moet leeg. En we hebben een minimale nodig":
-  kaartjes in de hoeken, `.hoek-onder` in `stijl.css`. Linksonder de voorraad, `#voorraad`: het dorp (de kas, de mensen,
-  de tevredenheid) en elke waar waarvan er minstens één is, in `VOLGORDE`, met een pictogram uit `GRONDSTOF_ICOON` (een
-  zak als er geen is) en het getal; een post blijft staan zolang zijn waar er is, zodat het briefje bij de muis klopt. In
-  het midden Build (`#bouwmenu-knop`), en de brief, het rapport en de bode zolang ze er zijn (`T.ui.werkBriefKnopBij`,
-  `js/brieven.js`); rechtsonder de klok, `#klok`: de lat van de snelheden en de twee bazen. De velden (V), het wetboek
+  kaartjes in de hoeken, `.hoek-onder` in `stijl.css`. Linksonder de voorraad, `#voorraad`: elke waar waarvan er
+  minstens één is, in `VOLGORDE`, met een pictogram uit `GRONDSTOF_ICOON` (een zak als er geen is) en het getal; een post
+  blijft staan zolang zijn waar er is, zodat het briefje bij de muis klopt. In het midden Build (`#bouwmenu-knop`), en de
+  brief, het rapport en de bode zolang ze er zijn (`T.ui.werkBriefKnopBij`, `js/brieven.js`); rechtsonder de minikaart
+  (`js/minikaart.js`). **Bovenaan een dunne balk**, `#bovenbalk` (vraag 166; Marcel: "Bovenaan een dunne ui balk met
+  goud, aantal inwoners, happiness jaar en tijd", en "zo leeg mogelijk zonder info te missen"): links het dorp (de kas,
+  de inwoners, de tevredenheid), in het midden de datum en het uur (`T.ui.toonKalender`, `js/hud.js`; het seizoen en het
+  weer op het briefje bij de muis), rechts de lat van de snelheden, de twee bazen en Menu; wat eronder begint, rekent
+  met `--boven`. De velden (V), het wetboek
   (W), de raadsman (R), sluipen (S) en slapen (Z) hebben alleen hun toets; tot 14 okt lag hier de tafel van de schout,
   vraag 146, c, met haar kunst uit `gereedschap/pixelart/tafel.cjs`, en git bewaart haar. Wat een ding of een getal is
   en zijn toets, staan op het briefje bij de muis, `#wenk`, niet op het ding: onderaan erboven, bovenaan eronder. Alles op
   ware pixels: één pixel van de kunst op een hele schermpixel, 1080 één, 4K twee, `pasSchaal`, in `--ui-zoom`; hoe hoog
   de hoeken onderaan zijn, zet een `ResizeObserver` in `--onder-links` en `--onder-rechts`, en wat erboven ligt (de
   berichten, de meter, het bouwmenu, het briefje van een gebouw) rekent daarmee; bovenaan liggen alleen briefjes, vraag
-  146, d: het doel met de raad en de statussen linksboven, de datum en het lipje Menu rechtsboven, en het briefje bij de
-  muis werkt daar ook), `js/tekenen.js`, `js/main.js`
+  146, d: het doel met de raad en de statussen linksboven, onder de balk, en het briefje bij de muis werkt daar ook),
+  `js/tekenen.js`, `js/main.js`
   (spellus, invoer, zoom, camera). **Het overzicht** (vraag 108, a): `Tab` tilt de camera van de schout af en zoomt uit
   (`T.wisselOverzicht`, `S.overzicht`, alleen scherm); slepen of de pijltjes schuiven, het wiel zoomt, en wat je klikt,
   doet de schout nog altijd. `Tab`, een klik op de schout of een gevecht brengt je terug. **De fotomodus** (vraag 146,
