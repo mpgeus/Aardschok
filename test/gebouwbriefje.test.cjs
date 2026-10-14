@@ -34,16 +34,16 @@ test('de houthakker: wat hij doet, wie er werkt, wat hij maakt op vol, vandaag e
   const g = metHouthakker(S, D, dag);
   const b = T.gebouwBriefje(D, g);
   assert.equal(b.kop, 'Woodcutter');
-  assert.match(b.doet, /^Wood from the lord's forest\.$/);
+  assert.match(b.doet, /^Logs from the lord's forest\.$/);
   assert.match(regels(b, 'At work'), /^1 of 1 hands: \w+/, 'wie er werkt, bij naam');
   const maakt = regels(b, 'Makes');
-  assert.match(maakt, /At full strength: 2 wood a day\./);
-  assert.match(maakt, /Today: [\d.]+ wood \(\d+% of full strength\)/);
-  assert.match(maakt, /Last 7 days: [\d.]+ wood\./);
-  assert.match(maakt, /This year: [\d.]+ wood\./);
+  assert.match(maakt, /At full strength: 2 logs a day\./);
+  assert.match(maakt, /Today: [\d.]+ logs \(\d+% of full strength\)/);
+  assert.match(maakt, /Last 7 days: [\d.]+ logs?\./);
+  assert.match(maakt, /This year: [\d.]+ logs?\./);
   assert.ok(deel(b, 'Held back by'), 'en wat hem tegenhoudt (of niets)');
   // Wat hij maakte, ligt bij zijn deur tot de kar het haalt (js/kar.js).
-  if (T.stapelVan(g) >= 0.05) assert.match(regels(b, 'Here'), /At the door, for the ox cart: [\d.]+ wood \([\d.]+ of 16\)/);
+  if (T.stapelVan(g) >= 0.05) assert.match(regels(b, 'Here'), /At the door, for the ox cart: [\d.]+ logs? \([\d.]+ of 16\)/);
 });
 
 test('wat hij maakte, telt per dag: zeven dagen terug, en het jaar samen', () => {

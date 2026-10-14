@@ -56,7 +56,7 @@
       uitleg: T.t('What he asks for at Martinmas for what he sees. He always takes gold, in place of anything else.'),
       keuzes: [
         { id: 'watHijZiet', naam: T.t('By what he sees'), zet: { 'HEER_INSTELLINGEN.betalenIn': 'watHijZiet' }, // geen tekst
-          uitleg: T.t('Grain for the fields, wool for the sheep, eggs for the hens, wood for his forest, and the rest in gold.') },
+          uitleg: T.t('Grain for the fields, wool for the sheep, eggs for the hens, logs for his forest, and the rest in gold.') },
         { id: 'graanEnGoud', naam: T.t('Grain and gold'), zet: { 'HEER_INSTELLINGEN.betalenIn': 'graanEnGoud' }, // geen tekst
           uitleg: T.t('The rent in grain, and everything else converted to gold.') },
         { id: 'alleenGoud', naam: T.t('Gold only'), zet: { 'HEER_INSTELLINGEN.betalenIn': 'alleenGoud' }, // geen tekst
@@ -180,7 +180,7 @@
         { id: 'boeren', naam: T.t('The farmers'), zet: { 'VELDEN_INSTELLINGEN.boerenKiezen': true, 'VEE_INSTELLINGEN.boerenSlachten': true, 'BEHOEFTEN_INSTELLINGEN.sprokkelen': true }, // geen tekst
           uitleg: T.t('After the harvest each farmer chooses what his fields become next year: an exhausted field rests for a year, or gets dung. On 1 November they slaughter what the hay cannot carry, and all year round people gather firewood, though that is not enough for the winter. You keep an eye on things: in the fields window you see what they chose, and you can change it.') },
         { id: 'jij', naam: T.t('You'), zet: { 'VELDEN_INSTELLINGEN.boerenKiezen': false, 'VEE_INSTELLINGEN.boerenSlachten': false, 'BEHOEFTEN_INSTELLINGEN.sprokkelen': false }, // geen tekst
-          uitleg: T.t('In the fields window you choose what the fields become, on 1 November the slaughter window asks who goes to the butcher, and nobody gathers firewood: all the wood comes from the woodcutter.') },
+          uitleg: T.t('In the fields window you choose what the fields become, on 1 November the slaughter window asks who goes to the butcher, and nobody gathers firewood: all the logs come from the woodcutter.') },
       ],
     },
     // Marcel, 25 sep (een vraag uit de proef van stap 2 van de weides): "Ja vlees moet ook eten zijn."
@@ -435,7 +435,7 @@
       uitleg: T.t('Whether a family comes if the village does not get through the winter.'),
       keuzes: [
         { id: 'wacht', naam: T.t('A family waits for winter'), zet: { 'GEBOUWEN_INSTELLINGEN.gezinWachtOpDeWinter': true }, // geen tekst
-          uitleg: T.t('If the wood or the food will not last the winter, no family comes from 1 September until there is enough, or the winter is over. The village and the advice say so.') },
+          uitleg: T.t('If the logs or the food will not last the winter, no family comes from 1 September until there is enough, or the winter is over. The village and the advice say so.') },
         { id: 'altijd', naam: T.t('Always'), zet: { 'GEBOUWEN_INSTELLINGEN.gezinWachtOpDeWinter': false }, // geen tekst
           uitleg: T.t('A family comes as long as there is grain, room and contentment, even if the winter will not last. Anything gained then is lost again in winter.') },
       ],
@@ -495,7 +495,7 @@
       uitleg: T.t('A line under the goal at the top left.'),
       keuzes: [
         { id: 'aan', naam: T.t('On'), zet: { 'RAAD_INSTELLINGEN.aan': true }, // geen tekst
-          uitleg: T.t('Under the goal is what now stands between you and a village: why no family is coming, or when the next one will, the wood for winter, what you lack for the chapel and the smithy and where it comes from, the robbers. With the key to press beside it.') },
+          uitleg: T.t('Under the goal is what now stands between you and a village: why no family is coming, or when the next one will, the logs for winter, what you lack for the chapel and the smithy and where it comes from, the robbers. With the key to press beside it.') },
         { id: 'uit', naam: T.t('Off'), zet: { 'RAAD_INSTELLINGEN.aan': false }, // geen tekst
           uitleg: T.t('Only the goal. What the village tells you, you see in the messages.') },
       ],
@@ -558,7 +558,7 @@
       uitleg: T.t('Whether your advisor brings you a report every morning.'),
       keuzes: [
         { id: 'aan', naam: T.t('On'), zet: { 'OCHTENDRAPPORT_INSTELLINGEN.aan': true }, // geen tekst
-          uitleg: T.t('If you have an advisor, he is at your door in the morning with what happened, how the grain and the wood are doing, whether they will last the winter, what is going on and what is coming. How accurate his numbers are depends on how good he is with figures. If you were not there, it waits under the Morning report button.') },
+          uitleg: T.t('If you have an advisor, he is at your door in the morning with what happened, how the grain and the logs are doing, whether they will last the winter, what is going on and what is coming. How accurate his numbers are depends on how good he is with figures. If you were not there, it waits under the Morning report button.') },
         { id: 'uit', naam: T.t('Off'), zet: { 'OCHTENDRAPPORT_INSTELLINGEN.aan': false }, // geen tekst
           uitleg: T.t('No report: what happened, you see in the messages, and you make your own rounds.') },
       ],
@@ -868,7 +868,8 @@
     per: T.t('per'),
     prijs: T.t('price'),
     zout: T.t('salt'),
-    hout: T.t('wood'),
+    hout: T.t('logs'),
+    planken: T.t('planks'),
     ijzer: T.t('iron'),
     // De brand, de koorts, ouder worden
     brandUren: T.t('burning hours'),
@@ -877,8 +878,8 @@
     gevaar: T.t('fire risk'),
     puinDagen: T.t('rubble days'),
     rookDagen: T.t('smoke days'),
-    herbouwHout: T.t('wood for rebuilding'),
-    minHout: T.t('least wood'),
+    herbouwHout: T.t('logs for rebuilding'),
+    minHout: T.t('fewest logs'),
     herbouwVanFase: T.t('rebuild from stage'),
     puinFase: T.t('rubble stage'),
     overslaan: T.t('spreading'),
@@ -1395,8 +1396,8 @@
     minstensWachters: T.t('least guards'),
     vertrouwenPerHongerdag: T.t('trust per hungry day'),
     wachtStraal: T.t('guard radius'),
-    houtPerBoom: T.t('wood per tree'),
-    rooiHout: T.t('wood per cleared tree (empty start)'),
+    houtPerBoom: T.t('logs per tree'),
+    rooiHout: T.t('logs per cleared tree (empty start)'),
     rooiDagen: T.t('clearing days'),
     hakStraal: T.t('chopping radius'),
     boompjesPerBoom: T.t('saplings per tree'),

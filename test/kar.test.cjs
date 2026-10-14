@@ -177,7 +177,7 @@ test('de kar brengt het hout naar de bouwplaats, en de bouwers komen zo ver als 
   assert.ok(g.bouw.gedaan <= g.bouw.werk * deel + 1e-9, `zo ver als het hout reikt: ${g.bouw.gedaan}`);
   assert.ok(!g.klaar);
   assert.equal(T.wachtOpHout(g), true);
-  assert.match(T.gebouwToestand(D, g), /waiting for the ox cart to bring wood \(5 of 8 here\)/);
+  assert.match(T.gebouwToestand(D, g), /waiting for the ox cart to bring logs \(5 of 8 here\)/);
   // wie bouwt, gaat niet naar een plaats die op hout wacht
   dagen(T, S, dag + 4);
   assert.equal(D.bewoners.mensen.filter((p) => p.bouwt === g).length, 0, 'niemand staat te wachten');
@@ -211,12 +211,12 @@ test('de raad rekent het hout dat de bouwplaatsen nog vragen niet als brandhout'
   assert.notDeepEqual(met, zonder, 'met hout dat de hut nog vraagt, is er minder brandhout');
 });
 
-test('de timmerman neemt zijn hout uit wat de kar bij hem bracht, niet uit de opslag', () => {
-  const { S, D } = proefDorp(T, { gebouwen: ['timmerman'] });
+test('de zagerij neemt zijn stammen uit wat de kar bij hem bracht, niet uit de opslag', () => {
+  const { S, D } = proefDorp(T, { gebouwen: ['zagerij'] });
   Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() });
   T.S = S;
   const dag = Math.floor(S.kalender.dag);
-  const g = D.gebouwen.find((x) => x.soort === 'timmerman');
+  const g = D.gebouwen.find((x) => x.soort === 'zagerij');
   assert.ok(g.klaar);
   // Komt de kar er niet bij, dan staat hij stil, ook met hout in de opslag.
   g.in = {};

@@ -260,7 +260,7 @@
     if (i >= 0) D.wegwerk.splice(i, 1);
     weg.klaar = true;
     T.zeg(D, weg.bouw.hout
-      ? T.t('The road is finished (+{hout} wood from clearing it).', { hout: weg.bouw.hout })
+      ? T.t('The road is finished (+{hout|# log|# logs} from clearing it).', { hout: weg.bouw.hout })
       : T.t('The road is finished.'), 'goed');
   }
 

@@ -318,7 +318,7 @@ test('een hut die een maand alles heeft, groeit door tot een huis, voor 8 hout, 
   assert.equal(hut.soort, 'huis');
   assert.equal(T.standVan(hut), 'dorpelingen');
   assert.equal(D.voorraad.hout, hout - 8);
-  assert.ok(gezegd.includes('A hut has grown into a house, for 8 wood: whoever lives there now belongs with the villagers.'), gezegd.join(' | '));
+  assert.ok(gezegd.includes('A hut has grown into a house, for 8 logs: whoever lives there now belongs with the villagers.'), gezegd.join(' | '));
   assert.ok(hut.voorwerp.vel != null, 'met de tekening van een huis');
   assert.ok(isTekeningVan(D, 'huis', hut.tekening), hut.tekening);
   // Wie binnen was, komt door de nieuwe deur weer naar buiten, niet in de muur waar de oude deur was (vraag 88).
@@ -342,7 +342,7 @@ test('zonder hout wacht de hut, en zegt het dorp het één keer; met hout groeit
     for (let i = 0; i < T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen + 5; i++) T.tikBehoeftenDag(D, ++dag);
   });
   assert.equal(hut.soort, 'hut');
-  assert.deepEqual(gezegd.filter((t) => t.includes('can become a house')), ['A hut can become a house, but that takes 8 wood.']);
+  assert.deepEqual(gezegd.filter((t) => t.includes('can become a house')), ['A hut can become a house, but that takes 8 logs.']);
   T.zetVoorraad(D, 'hout', 10);
   T.tikBehoeftenDag(D, ++dag);
   assert.equal(hut.soort, 'huis');
@@ -622,7 +622,7 @@ test('wat de huizen missen: wie een maand alles had en op bouwstof wacht, gaat v
   let lijst = missen(D);
   assert.equal(lijst[0].id, 'bouwstof:hut');
   assert.equal(lijst[0].soort, 'bouwstof');
-  assert.equal(lijst[0].tekst, 'A hut can become a house, but the stores do not hold 8 wood: build a woodcutter [B].');
+  assert.equal(lijst[0].tekst, 'A hut can become a house, but the stores do not hold 8 logs: build a woodcutter [B].');
   assert.deepEqual([lijst[0].kan, lijst[0].bouw, lijst[0].huizen], [true, 'houthakker', 1]);
   const houthakker = { soort: 'houthakker', x: 0, y: 0, voet: { b: 4, h: 4 }, klaar: false };
   D.gebouwen.push(houthakker);

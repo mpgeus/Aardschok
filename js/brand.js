@@ -177,7 +177,7 @@
       const hout = T.herbouwHout(g);
       const naam = naamVan(D, g);
       if ((D.voorraad.hout || 0) < hout) {
-        if (!B.wacht) T.zeg(D, T.t('{naam} wants to rebuild the house, but there is not enough wood (it needs {hout}).', { naam: T.hoofdletter(naam), hout: T.hoeveel(hout, 'hout') }), 'gevaar');
+        if (!B.wacht) T.zeg(D, T.t('{naam} wants to rebuild the house, but there are not enough logs (it needs {hout}).', { naam: T.hoofdletter(naam), hout: T.hoeveel(hout, 'hout') }), 'gevaar');
         B.wacht = true;
         continue;
       }

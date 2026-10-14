@@ -172,7 +172,7 @@
     if (!T.winterInZicht(dag)) return [];
     const halen = [];
     const uit = [];
-    for (const [id, wat, v] of [['hout', T.t('the wood'), T.houtVoorDeWinter(D, dag)], ['eten', T.t('the food'), T.etenVoorDeWinter(D, dag)]]) {
+    for (const [id, wat, v] of [['hout', T.t('the firewood'), T.houtVoorDeWinter(D, dag)], ['eten', T.t('the food'), T.etenVoorDeWinter(D, dag)]]) {
       const opDag = dag + v.tot + v.dagen; // de dag waarop het op is, of het eind van de winter
       const m = oud[id];
       if (m && m.haalt === v.haalt && Math.abs(opDag - m.opDag) < IN().winterVerschil && !nogEens(dag, m)) {

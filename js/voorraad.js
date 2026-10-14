@@ -39,7 +39,7 @@
   const WAREN = {
     bier: () => T.t('ale'), brood: () => T.t('bread'), eieren: () => T.t('eggs'), gereedschap: () => T.t('tools'),
     goud: () => T.t('gold'), graan: () => T.t('grain'), groente: () => T.t('vegetables'), hooi: () => T.t('hay'),
-    hout: () => T.t('wood'), huiden: () => T.t('hides'), ijzer: () => T.t('iron'), kaas: () => T.t('cheese'),
+    hout: () => T.t('logs'), huiden: () => T.t('hides'), ijzer: () => T.t('iron'), kaas: () => T.t('cheese'),
     kalk: () => T.t('lime'), klei: () => T.t('clay'), laken: () => T.t('cloth'), leer: () => T.t('leather'),
     meel: () => T.t('flour'), melk: () => T.t('milk'), mest: () => T.t('dung'), planken: () => T.t('planks'),
     riet: () => T.t('reed'), steen: () => T.t('stone'), turf: () => T.t('peat'), vaten: () => T.t('barrels'),
@@ -50,6 +50,7 @@
   const TELBAAR = {
     brood: (n) => T.t('{n|# loaf|# loaves}', { n }), eieren: (n) => T.t('{n|# egg|# eggs}', { n }),
     gereedschap: (n) => T.t('{n|# tool|# tools}', { n }), huiden: (n) => T.t('{n|# hide|# hides}', { n }),
+    hout: (n) => T.t('{n|# log|# logs}', { n }),
     planken: (n) => T.t('{n|# plank|# planks}', { n }), vaten: (n) => T.t('{n|# barrel|# barrels}', { n }),
     wapens: (n) => T.t('{n|# weapon|# weapons}', { n }),
   };

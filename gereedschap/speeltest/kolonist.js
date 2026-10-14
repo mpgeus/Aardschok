@@ -8,7 +8,8 @@
 //      kar erop past;
 //   3. een houthakker, als het hout laag wordt (onder `houtLaag`, of het haalt de winter niet);
 //   4. hutten, tot elk gezin in het kamp een woning heeft, af of in aanbouw (een boerderij en een wijnboerderij zijn ook
-//      een woning);
+//      een woning); en dan, als er een houthakker is, een zagerij (vraag 157: een dorp bouw je van planken), zodat de
+//      speeltest de keten van stammen tot planken meet (C, stap 6);
 //   5. een jager, als het spel zegt dat het eten niet haalt: het haalt de winter niet (het bericht dat het spel dan geeft,
 //      raadt zelf een jager aan), of er is honger (de status in de balk); hooguit één per `jagerNa` dagen (Marcel, 12 okt:
 //      "a ja");
@@ -203,6 +204,9 @@
       doe(u);
       if (!u.gelukt) break;
     }
+
+    // 4b. Een zagerij, als iedereen een woning heeft en er een houthakker is.
+    if (!heeft('zagerij') && heeft('houthakker') && zonderWoning(D) === 0) doe(bouw(D, 'zagerij', hart(D), 'planken voor het dorp'));
 
     // 5. Een jager, als het spel zegt dat het eten niet haalt; hooguit één per `jagerNa` dagen.
     const etenHaaltNiet = T.watDeWinterNietHaalt(D, dag).includes('eten') || !!T.OORZAKEN.honger.speelt(D, dag);

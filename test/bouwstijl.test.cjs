@@ -186,26 +186,25 @@ test('het huis van de schout en de herberg die de speler zet, zijn in de stijl v
   }
 });
 
-test('in een dorp groeit de herberg door tot de grote, met zijn deur aan dezelfde kant, voor hout', () => {
+test('in een dorp groeit de herberg door tot de grote, met zijn deur aan dezelfde kant, voor planken', () => {
   const S = nieuwSpel(5, { gebouwen: ['herberg'] });
   const D = S.dorp;
   const g = D.gebouwen.find((x) => x.soort === 'herberg');
   const kant = T.deurKantVan(g.tekening);
   const voor = T.voetVanGebouw(g);
   T.zetVoorraad(D, 'graan', 2000);
-  T.zetVoorraad(D, 'hout', 0);
+  T.zetVoorraad(D, 'planken', 0);
   T.tikBehoeftenDag(D, 1);
   assert.equal(T.vormVan(g.tekening), 'herberg1', 'in het gehucht blijft hij klein');
   D.trede = 'dorp';
   T.tikBehoeftenDag(D, 2);
-  assert.equal(T.vormVan(g.tekening), 'herberg1', 'zonder hout wacht hij');
+  assert.equal(T.vormVan(g.tekening), 'herberg1', 'zonder planken wacht hij');
   assert.ok(g.wachtOpBouwstof);
-  T.zetVoorraad(D, 'hout', 100);
+  T.zetVoorraad(D, 'planken', 100);
   T.tikBehoeftenDag(D, 3);
   assert.equal(T.vormVan(g.tekening), 'herberg2');
   assert.equal(T.deurKantVan(g.tekening), kant);
-  // (de mensen sprokkelen die dag ook wat hout)
-  assert.ok(Math.abs(D.voorraad.hout - (100 - T.WENSEN_INSTELLINGEN.bouwstof.herberg.hout)) < 1, `${D.voorraad.hout} hout over`);
+  assert.equal(D.voorraad.planken, 100 - T.WENSEN_INSTELLINGEN.bouwstof.herberg.planken, 'voor planken (vraag 157)');
   // de kant van de deur ligt waar hij lag
   const na = T.voetVanGebouw(g);
   const zijde = (r) => ({ z: r.y + r.h, o: r.x + r.b, n: r.y, w: r.x })[kant];
@@ -236,7 +235,7 @@ test('waar de herberg straks groter wordt, komt geen gebouw en geen erf', () => 
   assert.equal(T.waaromNietOpDezeGrond(D, tegel.x, tegel.y), 'The inn will grow here.');
   assert.equal(T.meegroeiGrondOp(D, tegel.x, tegel.y, g), null, 'voor de herberg zelf is het zijn eigen grond');
   // en eenmaal groot, is er niets meer vrij te houden
-  T.zetVoorraad(D, 'hout', 100);
+  T.zetVoorraad(D, 'planken', 100);
   D.trede = 'dorp';
   T.tikBehoeftenDag(D, 1);
   assert.equal(T.vormVan(g.tekening), 'herberg2');
@@ -261,7 +260,7 @@ test('staat er alleen een struik waar de herberg groter wordt, dan gaat die er m
   assert.ok(tegel, 'een open tegel waar de herberg groter wordt');
   const struik = T.zetVoorwerp(w, { soort: 'bessenStruik', x: tegel.x, y: tegel.y, vel: 'begroeiing', id: T.TEGELS.begroeiing.tiles.findIndex((t) => t && t.naam === 'bessenStruik'), beslaat: [1, 1] });
   assert.equal(T.voorwerpOp(w, tegel.x, tegel.y).soort, 'bessenStruik');
-  T.zetVoorraad(D, 'hout', 100);
+  T.zetVoorraad(D, 'planken', 100);
   D.trede = 'dorp';
   T.tikBehoeftenDag(D, 1);
   assert.equal(T.vormVan(g.tekening), 'herberg2');
@@ -288,7 +287,7 @@ test('kan de herberg niet meegroeien, dan zegt het dorp waarom, één keer', () 
   const zeg = T.zeg;
   T.zeg = (DD, tekst) => gezegd.push(tekst);
   try {
-    T.zetVoorraad(D, 'hout', 100);
+    T.zetVoorraad(D, 'planken', 100);
     D.trede = 'dorp';
     T.tikBehoeftenDag(D, 1);
     T.tikBehoeftenDag(D, 2);

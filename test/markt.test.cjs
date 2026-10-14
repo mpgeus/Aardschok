@@ -11,6 +11,7 @@ const { leegBegin, proefDorp } = require('./grond.cjs');
 
 function rijk(D) {
   T.wijzigVoorraad(D, 'hout', 100);
+  T.wijzigVoorraad(D, 'planken', 100); // de markt is van het dorp, en een dorp bouw je van planken (vraag 157)
   T.wijzigVoorraad(D, 'goud', 100);
 }
 
@@ -48,8 +49,8 @@ function niemandTegen(w, midden, voor, markt) {
   for (const t of voor) if (!dicht.has(t)) assert.ok(na.has(t), `${t} is niet meer te bereiken`);
 }
 
-test('de markt kost 8 hout en 6 goud, en de spelregel "De markt" is weg', () => {
-  assert.deepEqual(T.GEBOUWEN.markt.kosten, { hout: 8, goud: 6 });
+test('de markt kost 8 planken en 6 goud, en de spelregel "De markt" is weg', () => {
+  assert.deepEqual(T.GEBOUWEN.markt.kosten, { planken: 8, goud: 6 });
   assert.ok(!T.OPTIES.some((o) => o.id === 'markt'));
   assert.equal(T.MARKT_INSTELLINGEN.opHetPlein, undefined);
 });
@@ -133,11 +134,11 @@ for (const zaad of [2, 11]) {
     assert.ok(tegels(plek.kramen) >= T.MARKT_INSTELLINGEN.beginTegels, 'de eerste kramen: zoveel tegels toonbank');
     assert.ok(T.gebouwPast(D, 'markt', plek.x, plek.y));
 
-    const hout = D.voorraad.hout;
+    const planken = D.voorraad.planken;
     const goud = D.voorraad.goud;
     const u = T.plaatsGebouw(D, 'markt', plek.x, plek.y);
     assert.ok(u.gelukt, u.reden);
-    assert.deepEqual([hout - D.voorraad.hout, goud - D.voorraad.goud], [8, 6]);
+    assert.deepEqual([planken - D.voorraad.planken, goud - D.voorraad.goud], [8, 6]);
     const markt = D.gebouwen.find((g) => g.soort === 'markt');
     const kramen = w.voorwerpen.filter((v) => v.soort === 'kraam');
     assert.ok(tegels(kramen) >= T.MARKT_INSTELLINGEN.beginTegels);

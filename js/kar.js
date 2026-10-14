@@ -12,7 +12,7 @@
 // Bouwen (stap 2, B2, zoals in The Settlers): je zet neer wanneer je wilt en betaalt alleen wat niet met de kar gaat (het
 // goud, T.bouwKosten); wat wel met de kar gaat, is wat de bouwplaats nodig heeft (g.bouw.nodig), en wat er is, ligt in
 // g.bouw.er. De bouwers komen zo ver als het hout reikt (T.bouwMateriaalDeel, js/bouwen.js), en wat ze op de plek rooien,
-// gaat eerst in het gebouw (T.opStapel). Een werkplaats die iets verwerkt dat met de kar gaat (de timmerman zijn hout),
+// gaat eerst in het gebouw (T.opStapel). Een werkplaats die iets verwerkt dat met de kar gaat (de zagerij zijn stammen),
 // neemt het uit wat bij hem ligt (g.in), en de kar vult dat aan tot `voorraadIn`.
 //
 // De kar rijdt zelf, zonder hand (C1), in de werktijd van het dorp (T.dagindeling, js/dag.js). Wat hij doet (kiesRit):
@@ -52,7 +52,7 @@
     stapelVol: 16,
     // Een stapel kleiner dan dit laat de kar liggen.
     minstens: 1,
-    // Zoveel houdt een werkplaats bij zich van wat hij verwerkt (de timmerman zijn hout); is de helft op, dan brengt de kar
+    // Zoveel houdt een werkplaats bij zich van wat hij verwerkt (de zagerij zijn stammen); is de helft op, dan brengt de kar
     // bij.
     voorraadIn: 8,
     // Zoveel dagen kost het laden of het lossen (0,01 is drie seconden op 1×, een kwartier in het dorp).

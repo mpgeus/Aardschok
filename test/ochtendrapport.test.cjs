@@ -109,7 +109,7 @@ test('wat erin staat: wie er ging en kwam, hoe het gaat sinds gisteren, en wat e
   assert.deepEqual(R.regels.slice(0, 4), [
     `${T.hoofdletter(weg)}${weg.includes(',') ? ',' : ''} left: the village is not content enough.`,
     `New in the village: ${nieuw}.`,
-    'Since yesterday there is 12 less grain and 3 more wood.',
+    'Since yesterday there is 12 less grain and 3 more logs.',
     'There is hunger, for the rations are short.',
   ]);
   // Daarna wat de huizen missen (vraag 87): de wet liet het dorp zijn tevredenheid opnieuw tellen, dus het weet het al.
@@ -147,7 +147,7 @@ test('de winter: vanaf drie maanden ervoor zegt hij of het hout en het eten hem 
   const R = nacht(S, herfst);
   const v = T.houtVoorDeWinter(D, herfst);
   assert.ok(!v.haalt);
-  assert.ok(R.regels.includes(`The wood lasts ${v.dagen} of the ${v.winter} days of winter.`), R.regels.join(' | '));
+  assert.ok(R.regels.includes(`The firewood lasts ${v.dagen} of the ${v.winter} days of winter.`), R.regels.join(' | '));
   assert.ok(R.regels.includes('The food lasts the winter.'));
   // In de winter zelf: wanneer het op is.
   const winter = dagVan('louwmaand', 10);
@@ -155,7 +155,7 @@ test('de winter: vanaf drie maanden ervoor zegt hij of het hout en het eten hem 
   const W = nacht(S, winter);
   const w = T.houtVoorDeWinter(D, winter);
   assert.equal(w.tot, 0);
-  assert.ok(W.regels.includes(`The wood has run out, and the winter lasts ${w.winter} more days.`), W.regels.join(' | '));
+  assert.ok(W.regels.includes(`The firewood has run out, and the winter lasts ${w.winter} more days.`), W.regels.join(' | '));
   assert.ok(W.regels.includes('The food lasts to the end of winter.'));
 });
 
@@ -208,7 +208,7 @@ test('wie niet kan rekenen, zegt dat het hout de winter haalt terwijl het dat ni
     T.zetVoorraad(D, 'hout', Math.max(0, (v0.stook - v0.erbij) * (v0.winter - 10) - v0.erbij * v0.tot));
     const v = T.houtVoorDeWinter(D, d);
     const R = nacht(S, d);
-    const zegtHaalt = R.regels.some((r) => /^The wood( and the food)? lasts? the winter\./.test(r));
+    const zegtHaalt = R.regels.some((r) => /^The firewood( and the food)? lasts? the winter\./.test(r));
     if (zegtHaalt !== v.haalt) mis++;
   }
   assert.ok(mis > 0, 'wie niet kan rekenen, zit er soms naast');
@@ -374,19 +374,19 @@ test('de winter zegt hij als hij omslaat of flink verschuift, en anders om de we
   T.zetVoorraad(D, 'hout', 0);
   const herfst = dagVan('herfstmaand', 1);
   const eerst = gelezenNacht(S, herfst).regels;
-  assert.ok(eerst.some((r) => /^The wood lasts \d+ of the 90 days of winter\.$/.test(r)), eerst.join(' | '));
+  assert.ok(eerst.some((r) => /^The firewood lasts \d+ of the 90 days of winter\.$/.test(r)), eerst.join(' | '));
   assert.ok(eerst.includes('The food lasts the winter.'));
   assert.ok(!gelezenNacht(S, herfst + 1).regels.some((r) => /winter/.test(r)), 'een dag later: hetzelfde, dus niets');
   // Genoeg hout: het slaat om, en dat zegt hij meteen (het eten niet: dat blijft hetzelfde).
   T.zetVoorraad(D, 'hout', 50000);
   const om = gelezenNacht(S, herfst + 2).regels.filter((r) => /winter/.test(r));
-  assert.deepEqual(om, ['The wood lasts the winter.']);
+  assert.deepEqual(om, ['The firewood lasts the winter.']);
   // Een week nadat hij het zei: het eten nog eens.
   assert.ok(!gelezenNacht(S, herfst + 6).regels.some((r) => /winter/.test(r)));
   assert.deepEqual(gelezenNacht(S, herfst + 7).regels.filter((r) => /winter/.test(r)), ['The food lasts the winter.']);
   // Weer zonder hout (een brand): het slaat weer om, en dat zegt hij meteen.
   T.zetVoorraad(D, 'hout', 0);
-  assert.ok(gelezenNacht(S, herfst + 8).regels.some((r) => /^The wood lasts/.test(r)));
+  assert.ok(gelezenNacht(S, herfst + 8).regels.some((r) => /^The firewood lasts/.test(r)));
 });
 
 // ---------------------------------------------------------------------------------------------

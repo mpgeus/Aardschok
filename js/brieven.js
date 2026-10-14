@@ -34,7 +34,7 @@
       aan: T.t('To Our new reeve,'),
       tekst:
         `<p>${T.t('It has pleased Us to send you, with {n|# family|# families}, to a piece of Our wilderness. Make a village of it. A village brings Us money; wilderness does not.', { n: I.gezinnen })}</p>` +
-        `<p>${T.t('The cart carries what We could spare: some wood, grain for the spring, seed grain, a few tools and {goud} gold. Do not expect more.', { goud: I.kar.goud })}</p>` +
+        `<p>${T.t('The cart carries what We could spare: some logs, grain for the spring, seed grain, a few tools and {goud} gold. Do not expect more.', { goud: I.kar.goud })}</p>` +
         `<p>${T.t('This year We ask nothing of you. We are generous. Next year, at Martinmas, We shall come in person to collect what is Ours.')}</p>` +
         `<p>${T.t('Laws you may make, as many as you like. Our forest you leave alone.')}</p>`,
       knoppen: [{ actie: 'sluit', tekst: T.t('To work'), hoofd: true }],

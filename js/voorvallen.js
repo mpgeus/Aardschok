@@ -318,14 +318,14 @@
       kop: T.t('It is cold in the houses'),
       nog: T.t('It is still cold in the houses'),
       voorbij: T.t('It is no longer cold in the houses'),
-      speelt: (D, dag) => (!inWinter(dag) || !mist(D, T.t('firewood for the winter')) ? null : brandhout(D) < 1 ? T.t('the firewood has run out') : T.t('the wood will not last the winter')),
+      speelt: (D, dag) => (!inWinter(dag) || !mist(D, T.t('firewood for the winter')) ? null : brandhout(D) < 1 ? T.t('the firewood has run out') : T.t('the logs will not last the winter')),
       erger: {
         naam: T.t('Bitter cold'),
         kop: T.t('It is freezing in the houses'),
         minder: T.t('It is no longer freezing in the houses, but it is still cold'),
         speelt: (D) => (brandhout(D) < 1 ? T.t('the firewood has run out') : null),
       },
-      helpt: () => T.t('firewood: a woodcutter, peat, or wood from the peddler'),
+      helpt: () => T.t('firewood: a woodcutter, peat, or logs from the peddler'),
     },
     vol: {
       naam: T.t('Full'),
@@ -394,7 +394,7 @@
         minder: T.t('The risk of fire is no longer high, but it is still there'),
         speelt: (D, dag) => (T.brandgevaarNiveau(D, dag) >= 2 ? (T.droogteNiveau(D) >= 2 ? T.t('the drought is severe') : T.t('it is dry, and the houses are full')) : null),
       },
-      helpt: () => T.t('rain; until then wood in store, to put out fires and rebuild, and a village that is not too full'),
+      helpt: () => T.t('rain; until then logs in store, to put out fires and rebuild, and a village that is not too full'),
     },
     onvrede: {
       naam: T.t('Discontent'),

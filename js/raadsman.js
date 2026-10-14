@@ -43,7 +43,7 @@
     rechtspreken: { goed: T.t('judges well'), slecht: T.t('judges badly'), waarop: T.t('how content the village is with the verdict'), op: ['tevreden'] },
     zwijgen: { goed: T.t('can hold their tongue'), slecht: T.t('cannot keep a secret'), waarop: T.t('what the lord gets to hear'), op: ['gunst'] },
     rekenen: { goed: T.t('good with figures'), slecht: T.t('bad with figures'), waarop: T.t('what it costs in gold and goods'), op: ['goud', 'graan', 'wol', 'bier', 'ijzer', 'zout', 'vlees', 'vis', 'kaas', 'hooi'] },
-    bouwen: { goed: T.t('handy'), slecht: T.t('all thumbs'), waarop: T.t('what it costs in wood'), op: ['hout'] },
+    bouwen: { goed: T.t('handy'), slecht: T.t('all thumbs'), waarop: T.t('what it costs in logs'), op: ['hout'] },
     vechten: { goed: T.t('can fight'), slecht: T.t('timid'), waarop: T.t('the chance that someone dies'), op: ['sterfkans'] },
   };
 

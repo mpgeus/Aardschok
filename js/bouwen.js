@@ -102,12 +102,12 @@
       // Een veld komt niet als gebouw op de kaart: het wordt land als het af is (js/boerderij.js).
       if (T.isVeldSoort(g.soort)) {
         T.zeg(D, B.hout
-          ? T.t('{gebouw}: the ground is cleared (+{hout} wood), and now they work it.', { gebouw, hout: B.hout })
+          ? T.t('{gebouw}: the ground is cleared (+{hout|# log|# logs}), and now they work it.', { gebouw, hout: B.hout })
           : T.t('{gebouw}: the ground is cleared, and now they work it.', { gebouw }));
       } else {
         T.zetOpDeKaart(D, g);
         T.zeg(D, B.hout
-          ? T.t('{gebouw}: the site is cleared (+{hout} wood), and now they build.', { gebouw, hout: B.hout })
+          ? T.t('{gebouw}: the site is cleared (+{hout|# log|# logs}), and now they build.', { gebouw, hout: B.hout })
           : T.t('{gebouw}: the site is cleared, and now they build.', { gebouw }));
       }
     }

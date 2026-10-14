@@ -174,7 +174,7 @@
         T.t('Build a better one. Your men have nothing to do anyway.'),
       ],
       keuzes: [
-        { tekst: T.t('Fifteen loads of wood, and the men.'), doe: { hout: -15, gunst: 8, vertrouwen: -5 } },
+        { tekst: T.t('Fifteen loads of logs, and the men.'), doe: { hout: -15, gunst: 8, vertrouwen: -5 } },
         { tekst: T.t('After the harvest, my lord.'), doe: { gunst: -4 } },
       ],
       stil: { gunst: -6 },

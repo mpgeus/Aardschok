@@ -85,7 +85,7 @@ test('een antwoord kost wat het zegt, en weegt de heer tegen het dorp', () => {
   T.zetVoorraad(D, 'goud', 20);
   const keuzes = T.grilKeuzes(D);
   assert.equal(keuzes.length, 3);
-  assert.match(keuzes[0].prijs, /−6 gold, −16 wood/);
+  assert.match(keuzes[0].prijs, /−6 gold, −16 logs/);
   assert.match(keuzes[0].prijs, /the lord's favour \+10, the village's trust −3/);
   assert.ok(keuzes.every((k) => !k.hoofd), 'het spel kiest niet voor je');
   // Het vertrouwen is op dag 2 van het proefdorp al een stukje naar de tevredenheid gegaan (T.tikBazenDag): reken vanaf nu.

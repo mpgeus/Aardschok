@@ -44,7 +44,7 @@ test('elke soort in T.GEBOUWEN heeft naam, trede, kosten en bouwtijd', () => {
 test('alle soorten uit spel.md staan erin', () => {
   for (const id of [
     'hut', 'huis', 'boerderij', 'akker', 'houthakker', 'schaapskooi', 'kippenhok', 'moestuin', 'put',
-    'smidse', 'timmerman', 'molen', 'bakkerij', 'brouwerij', 'herberg', 'kapel', 'tiendschuur',
+    'smidse', 'zagerij', 'molen', 'bakkerij', 'brouwerij', 'herberg', 'kapel', 'tiendschuur',
     'markt', 'weverij', 'pakhuis', 'kuiper', 'slager', 'leerlooier', 'steenbakkerij', 'badhuis', 'gasthuis',
     'stenenHuis', 'raadhuis', 'stadsmuur',
     'wapenmaker', 'schuttershof', 'palissade',
@@ -406,7 +406,7 @@ test('een molen zonder graan maalt niets', () => {
 test('wie iets omzet, maakt tot er genoeg ligt (vraag 91, b); wie iets uit het land haalt, maakt door', () => alsJijHetSeizoenDoet(() => {
   const genoeg = T.GEBOUWEN_INSTELLINGEN.werkplaatsMaaktTot;
   assert.deepEqual(T.maaktTot(T.GEBOUWEN.molen), { meel: genoeg });
-  assert.deepEqual(T.maaktTot(T.GEBOUWEN.timmerman), { planken: genoeg });
+  assert.deepEqual(T.maaktTot(T.GEBOUWEN.zagerij), { planken: genoeg });
   assert.equal(T.maaktTot(T.GEBOUWEN.kleiput), null);
   // Een molen maalt tot er genoeg meel ligt, en neemt dan geen graan meer: daarvoor maalde hij ruim 880 graan per jaar,
   // ook als niemand brood wilde.

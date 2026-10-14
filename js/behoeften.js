@@ -39,7 +39,7 @@
     werkBijEenSoort: 0.6,
     werkPerSoortErbij: 0.15,
     // Brandhout: hout of turf (eerst turf — dat stoken is toch al zijn enige nut, hout kan de
-    // timmerman nog gebruiken), per huishouden (T.GEBOUWEN_INSTELLINGEN.gezinGrootte leent de
+    // zagerij nog gebruiken), per huishouden (T.GEBOUWEN_INSTELLINGEN.gezinGrootte leent de
     // maat van een gezin, dezelfde als bij groei) per dag, alleen in wintermaand, louwmaand en
     // sprokkelmaand (T.MAANDEN: seizoen "winter").
     brandhoutPerHuishoudenPerDag: 0.15,
@@ -317,8 +317,8 @@
     // Waaraan (Marcel, 27 sep, vraag 44): tot 28 sep zei het bericht alleen "De winter is hard".
     const koud = b.inWinter && b.brandhoutDekking < 1;
     const honger = b.voedselDekking < 1;
-    const wat = koud && honger ? T.t('The winter is harsh, for the wood and the food have run out')
-      : koud ? T.t('The cold is harsh, for the wood has run out')
+    const wat = koud && honger ? T.t('The winter is harsh, for the logs and the food have run out')
+      : koud ? T.t('The cold is harsh, for the logs have run out')
       : T.t('The hunger is harsh, for the food has run out');
     // Met bewoners zegt het bericht wie het zijn (T.bewonersVolgen, js/bewoners.js); zonder (een toets
     // met een eigen, kleine wereld) alleen hoeveel.
@@ -1052,14 +1052,14 @@
     const eten = T.etenVoorDeWinter(D, dag);
     const wanneer = hout.tot > 0 ? T.t('In {wanneer} it will be winter.', { wanneer: MAANDEN_TEKST[hout.tot / T.DAGEN_PER_MAAND] || dagenTekst(hout.tot) }) : T.t('It is winter.');
     const zinnen = [wanneer];
-    if (hout.haalt && eten.haalt) zinnen.push(T.t('The wood and the food last the winter.'));
+    if (hout.haalt && eten.haalt) zinnen.push(T.t('The logs and the food last the winter.'));
     else {
       // Sprokkelen de mensen (vraag 74, stap 2), dan zegt het dat dat niet genoeg is.
-      if (hout.haalt) zinnen.push(T.t('The wood lasts the winter.'));
+      if (hout.haalt) zinnen.push(T.t('The logs last the winter.'));
       else {
         const woorden = { dagen: hout.dagen, winter: hout.winter, hulp: houtHelpt(D) };
-        zinnen.push(T.sprokkelHout(D) > 0 ? T.t('The wood lasts {dagen} of the {winter} days, even with what the people gather: {hulp}.', woorden)
-          : T.t('The wood lasts {dagen} of the {winter} days: {hulp}.', woorden));
+        zinnen.push(T.sprokkelHout(D) > 0 ? T.t('The logs last {dagen} of the {winter} days, even with what the people gather: {hulp}.', woorden)
+          : T.t('The logs last {dagen} of the {winter} days: {hulp}.', woorden));
       }
       zinnen.push(eten.haalt ? T.t('The food lasts the winter.') : etenHelpt(D, eten));
       // Een gezin wacht op de winter (js/gebouwen.js, T.waaromGeenGezin): dat zegt het dorp erbij.
@@ -1083,7 +1083,7 @@
     }
     const gezegd = B.gezegd || (B.gezegd = {});
     // De sleutels staan in het spel (B.gezegd); wat de speler leest, is de tweede.
-    const nu = [['het hout', T.t('the wood'), T.houtVoorDeWinter(D, dag)], ['het eten', T.t('the food'), T.etenVoorDeWinter(D, dag)]]; // geen tekst: de sleutels staan in het spel
+    const nu = [['het hout', T.t('the firewood'), T.houtVoorDeWinter(D, dag)], ['het eten', T.t('the food'), T.etenVoorDeWinter(D, dag)]]; // geen tekst: de sleutels staan in het spel
     for (const [sleutel, wat, v] of nu) {
       const tekst = !gezegd[sleutel] && T.raaktOp(wat, v, IN.opraakWaarschuwing);
       if (!tekst) continue;

@@ -160,7 +160,7 @@ test('wat een wet doet, in woorden, met de getallen van nu: eerst wat goed is, d
   assert.deepEqual(ruim.map((r) => r.tekst), ['10% more content', 'everyone eats half as much again: 2 grain a day instead of 1.3']);
   assert.deepEqual(T.watDeWetDoet(S.dorp, 'rantsoen', 'gewoon'), [], 'gewoon doet niets');
   assert.equal(T.watDeWetDoet(S.dorp, 'vreemden', 'aangenomen')[0].tekst, 'a new family twice as often: every 10 days instead of 20');
-  assert.match(T.watDeWetDoet(S.dorp, 'houtkap', 'aangenomen')[0].tekst, /twice as much wood \(there is no woodcutter yet\)/);
+  assert.match(T.watDeWetDoet(S.dorp, 'houtkap', 'aangenomen')[0].tekst, /brings in twice as much \(there is no woodcutter yet\)/);
   assert.equal(T.watDeWetDoet(S.dorp, 'belasting', 'aangenomen')[0].tekst, '1.3 gold into the chest every month');
 });
 

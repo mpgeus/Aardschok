@@ -51,7 +51,8 @@
     kring: { put: 12, kapel: 40, herberg: null, markt: null },
     // Doorgroeien (vraag 80, C; 2b): heeft een huis T.BEHOEFTEN_INSTELLINGEN.huisGroeiDagen op rij alles, dan groeit het
     // door naar de volgende stand, en dat kost bouwstof uit de voorraad, naar wat het wordt (zo krijgt steen een doel).
-    bouwstof: { huis: { hout: 8 }, stenenHuis: { steen: 12 }, woontoren: { steen: 20 }, herberg: { hout: 16 } },
+    // Het materiaal volgt de trede van wat het wordt (vraag 157): een huis (gehucht) van stammen, de herberg (dorp) van planken.
+    bouwstof: { huis: { hout: 8 }, stenenHuis: { steen: 12 }, woontoren: { steen: 20 }, herberg: { planken: 16 } },
     // Achteruitgaan (vraag 85, c; de spelregel "Achteruitgaan"): 'zacht' (de standaard, zoals in Anno 1602: een gezin
     // trekt pas weg uit een huis onder de vertrekdrempel, en dat gebeurt alleen als het eten of het brandhout mist) of
     // 'streng' (mist een huis missenDagen op rij iets, dan trekt zijn gezin weg; hooguit één huis per dag).

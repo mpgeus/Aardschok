@@ -127,11 +127,11 @@ test('het hout: vanaf drie maanden voor de winter, als het hem niet haalt, en da
   assert.equal(id(S), 'hout');
   const v = T.houtVoorDeWinter(S.dorp, S.kalender.dag);
   // Zolang komt er geen gezin (js/gebouwen.js, gezinWachtOpDeWinter; werklijst vraag 59, B), en dat zegt hij erbij.
-  assert.equal(raad(S).tekst, `The wood lasts ${v.dagen} of the ${v.winter} days of winter: build a woodcutter [B]. Until there is enough, no family will come.`);
+  assert.equal(raad(S).tekst, `The logs last ${v.dagen} of the ${v.winter} days of winter: build a woodcutter [B]. Until there is enough, no family will come.`);
   // Met de spelregel Groei op Altijd komt het gezin toch, en zegt hij dat niet.
   T.GEBOUWEN_INSTELLINGEN.gezinWachtOpDeWinter = false;
   try {
-    assert.equal(raad(S).tekst, `The wood lasts ${v.dagen} of the ${v.winter} days of winter: build a woodcutter [B].`);
+    assert.equal(raad(S).tekst, `The logs last ${v.dagen} of the ${v.winter} days of winter: build a woodcutter [B].`);
   } finally {
     T.GEBOUWEN_INSTELLINGEN.gezinWachtOpDeWinter = true;
   }
@@ -302,7 +302,7 @@ test('bouwen: wat je mist voor wat het doel vraagt, en waar het vandaan komt (vr
   S.dorp.marskramer = null;
   // Ook te weinig hout: dan ook een houthakker.
   T.zetVoorraad(S.dorp, 'hout', 5);
-  assert.match(raad(S).tekst, new RegExp(`^For the chapel and the smithy you are short of 6 gold and ${kosten('hout', ['kapel', 'smidse']) - 5} wood: .* and a woodcutter \\[B\\] cuts wood\\.$`));
+  assert.match(raad(S).tekst, new RegExp(`^For the chapel and the smithy you are short of 6 gold and ${kosten('hout', ['kapel', 'smidse']) - 5} logs: .* and a woodcutter \\[B\\] cuts logs\\.$`));
   // Staat de kapel er (of wordt hij gebouwd), dan telt alleen de smidse nog.
   T.zetVoorraad(S.dorp, 'hout', 500);
   S.dorp.gebouwen.push({ soort: 'kapel', x: 0, y: 0, klaar: false, handen: 0 });
@@ -404,7 +404,7 @@ test('de wensen: een huis dat op bouwstof wacht, gaat voor; is wat helpt zelf te
   T.zetVoorraad(S.dorp, 'hout', 3);
   assert.equal(id(S), 'doorgroeien');
   // Een houthakker kost zelf hout, en die hakt hij nog niet: dan zegt hij niet dat een houthakker hout hakt.
-  assert.equal(raad(S).tekst, `A hut can become a house, but the stores do not hold 8 wood: build a woodcutter [B]. For that you are short of ${T.GEBOUWEN.houthakker.kosten.hout - 3} wood.`);
+  assert.equal(raad(S).tekst, `A hut can become a house, but the stores do not hold 8 logs: build a woodcutter [B]. For that you are short of ${T.GEBOUWEN.houthakker.kosten.hout - 3} logs.`);
 });
 
 test('de wensen: wat je nu niet kunt doen, zegt de raad niet; de winter en de spelregel gaan voor', () => {

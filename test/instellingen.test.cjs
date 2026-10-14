@@ -79,8 +79,8 @@ test('een getal schrijven verandert alleen dat getal, en het commentaar blijft s
   assert.equal(I.knoopOp(I.leesBlok(I.zet(tekst, 'SCHOVEN_INSTELLINGEN', ['dagloners'], false), 'SCHOVEN_INSTELLINGEN').waarde, ['dagloners']).waarde, false);
   const zout = I.zet(bronnen['js/handel.js'], 'HANDEL_INSTELLINGEN', ['verkoopt', 'zout', 'heeft', 2], 50);
   assert.ok(zout.includes('heeft: [15, 15, 50]'));
-  const bakkerij = I.zet(bronnen['js/gebouwen.js'], 'GEBOUWEN', ['bakkerij', 'kosten', 'hout'], 14);
-  assert.equal(I.knoopOp(I.leesBlok(bakkerij, 'GEBOUWEN').waarde, ['bakkerij', 'kosten', 'hout']).waarde, 14);
+  const bakkerij = I.zet(bronnen['js/gebouwen.js'], 'GEBOUWEN', ['bakkerij', 'kosten', 'planken'], 14);
+  assert.equal(I.knoopOp(I.leesBlok(bakkerij, 'GEBOUWEN').waarde, ['bakkerij', 'kosten', 'planken']).waarde, 14);
   const r = model.spelregels.find((x) => x.id === 'dagloners');
   const opties = I.zet(bronnen['js/opties.js'], 'OPTIES', r.pad, 'binden');
   assert.equal(I.model({ 'js/opties.js': opties }).spelregels.find((x) => x.id === 'dagloners').standaard, 'binden');

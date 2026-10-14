@@ -97,8 +97,8 @@
     }
     if (mist.hout && voor !== 'houthakker') {
       const hakker = naamVan('houthakker');
-      bronnen.push(heeft(D, 'houthakker') ? T.t('the {hakker} cuts wood', { hakker })
-        : T.t('{hakker} [B] cuts wood', { hakker: eenNaam('houthakker') }));
+      bronnen.push(heeft(D, 'houthakker') ? T.t('the {hakker} cuts logs', { hakker })
+        : T.t('{hakker} [B] cuts logs', { hakker: eenNaam('houthakker') }));
     }
     return bronnen;
   }
@@ -279,7 +279,7 @@
         const nog = heeft(D, 'houthakker');
         const hakker = nog ? naamVan('houthakker') : eenNaam('houthakker');
         const helpt = nog ? T.t('another {hakker} [B] will cut more.', { hakker }) : T.t('build {hakker} [B].', { hakker });
-        return `${T.t('The wood lasts {haalt} of winter: {helpt}', { haalt: haalt(T.houtVoorDeWinter(D, D.kalender.dag)), helpt })}${geenGezin()}`;
+        return `${T.t('The logs last {haalt} of winter: {helpt}', { haalt: haalt(T.houtVoorDeWinter(D, D.kalender.dag)), helpt })}${geenGezin()}`;
       },
     },
     {

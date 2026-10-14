@@ -194,7 +194,7 @@
     }
     if (d.hout != null && d.hout !== 1) {
       const heeft = (D.gebouwen || []).some((g) => T.GEBOUWEN[g.soort].bos);
-      regels.push({ goed: d.hout > 1, tekst: heeft ? T.t('a woodcutter cuts {keer} wood', { keer: keer(d.hout) }) : T.t('a woodcutter cuts {keer} wood (there is no woodcutter yet)', { keer: keer(d.hout) }) });
+      regels.push({ goed: d.hout > 1, tekst: heeft ? T.t('a woodcutter brings in {keer}', { keer: keer(d.hout) }) : T.t('a woodcutter brings in {keer} (there is no woodcutter yet)', { keer: keer(d.hout) }) });
     }
     if (d.goud) regels.push({ goed: true, tekst: T.t('{goud} into the chest every month', { goud: T.hoeveel(getal(T.belastbaar(D) * d.goud), 'goud') }) });
     if (d.tevreden) {

@@ -491,7 +491,7 @@ test('een oorzaak speelt als het dorp hem heeft, en zegt waarom', () => {
   assert.equal(T.oorzaakVan(D, 'ziekte', ZOMER), null, 'kou is er alleen in de winter');
   D.voorraad.hout = 30;
   D.voorraad.turf = 0;
-  assert.equal(T.oorzaakVan(D, 'ziekte', WINTER).zin, 'It is cold in the houses, for the wood will not last the winter.');
+  assert.equal(T.oorzaakVan(D, 'ziekte', WINTER).zin, 'It is cold in the houses, for the logs will not last the winter.');
   D.voorraad.hout = 0;
   // Is het brandhout op, dan is het erger: strenge kou (werklijst vraag 77, stap 2).
   assert.equal(T.oorzaakVan(D, 'ziekte', WINTER).zin, 'It is freezing in the houses, for the firewood has run out.');

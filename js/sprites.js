@@ -890,7 +890,7 @@
     // In het bos (js/veldwerk.js, vraag 107, f): een boom omhakken en een stronk rooien, met de bijl.
     hakken: { figuur: 'hakker', houding: 'hakken' },
     rooien: { figuur: 'hakker', houding: 'hakken' },
-    // Meebouwen (js/bouwen.js, vraag 152, 1d): tot er een timmerman is om te tekenen, met de bijl.
+    // Meebouwen (js/bouwen.js, vraag 152, 1d): tot er een bouwer met een hamer is om te tekenen, met de bijl.
     bouwen: { figuur: 'hakker', houding: 'hakken' },
     sprokkelen: { figuur: 'sprokkelaar', houding: 'rapen' },
     // In de wijngaard (js/wijngaard.js, vraag 136): plukken met de mand aan de arm, en met de volle mand naar huis.

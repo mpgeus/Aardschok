@@ -188,7 +188,7 @@ test('de kerstboom komt op 20 wintermaand; met ja staat hij meteen, tot en met 6
   T.tikVoorvallenDag(D, dag);
   assert.equal(D.voorvallen.lopend && D.voorvallen.lopend.id, 'kerstboom', 'op 20 wintermaand wel');
   T.zetVoorraad(D, 'hout', 20);
-  assert.equal(T.prijsVanKeuze(D, antwoord('kerstboom', 0).doe).tekst, '−2 wood, contentment +4%, a feast on Christmas Eve');
+  assert.equal(T.prijsVanKeuze(D, antwoord('kerstboom', 0).doe).tekst, '−2 logs, contentment +4%, a feast on Christmas Eve');
   S.kalender.dag = bijUur(dag, 11);
   T.doeGevolg(S, D, antwoord('kerstboom', 0).doe);
   T.voorvalBeantwoord(D, 'kerstboom');
