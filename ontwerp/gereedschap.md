@@ -109,6 +109,11 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   want het spel heeft het nodig als het draait), met de cellen van de figuren gekrompen tot wat erin staat
   (`gereedschap/pixelart/inpakken.cjs`). Draai het opnieuw als de kunst verandert. `npm run tiled` en
   `bouwfasen.cjs` pakken hun vellen net zo in.
+- `npm run tiled huizen -- --erbij` rendert alleen de huizen die nog niet op het vel staan (vraag 157), zoals
+  `bouwfasen.cjs --erbij`; zonder `--erbij` gaan alle huizen opnieuw, ruim twee uur op vier kernen (`code.md`, bij
+  `gereedschap/pixelart/`). **Eerst goedkeuring, dan renderen** (Marcel, 14 okt): een nieuwe tekening eerst in woorden,
+  dan één proefplaat, dan pas alles (`beeld.md`). Een proefplaat van één huis: `HZ.renderHuis(HZ.HUIZEN[naam])` uit
+  `gereedschap/pixelart/huizen.cjs`, zo'n halve minuut.
 
 
 ## Testen in de browser

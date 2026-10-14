@@ -200,13 +200,15 @@
       tekening: 'gebouwen/houtschuur', beschrijving: T.t('logs from the lord\'s forest'), opmerking: '', // geen tekst
     },
     // De zagerij (werklijst vraag 157; Marcel, 14 okt: "de houthakker levert boomstammen voor de houtzagerij die er weer
-    // planken van maakt", en "Plan ja, zagerij nu een eigen tekening"): het materiaal volgt de trede, een gehucht bouw je
-    // van stammen, een dorp van planken, een stad van steen; dus staat de zagerij al in het gehucht. Tot 14 okt was dit de
-    // timmerman, in een dorp, en gebruikte niets zijn planken.
+    // planken van maakt"): het materiaal volgt de trede, een gehucht bouw je van stammen, een dorp van planken, een stad
+    // van steen; dus staat de zagerij al in het gehucht. Tot 14 okt was dit de timmerman, in een dorp, en gebruikte niets
+    // zijn planken. Hij is een kapschuur van de huizenbouwer in de stijl van het land (huizen.cjs, grootGebouw; "Het moet
+    // er 1 zijn als werkplaats"), onderaan open, met de zaagbok, de stammen en de planken eronder; een land zonder stijl
+    // neemt die van wit. Niemand woont er: de zager woont in zijn eigen huis.
     zagerij: {
-      naam: T.t('sawmill'), trede: 'gehucht', voet: { b: 6, h: 5 }, kosten: { hout: 12, goud: 6 }, heer: { goud: 3 }, bouwtijd: 3,
+      naam: T.t('sawmill'), trede: 'gehucht', voet: { b: 8, h: 4 }, kosten: { hout: 12, goud: 6 }, heer: { goud: 3 }, bouwtijd: 3,
       handen: 2, woonruimte: 0, maakt: { in: { hout: 2 }, uit: { planken: 2 } },
-      menu: true, tekening: 'gebouwen/zagerij', beschrijving: T.t('logs into planks: a village is built of planks'), // geen tekst
+      menu: true, tekening: 'huizen/wit-zagerij-riet-z', beschrijving: T.t('logs into planks: a village is built of planks'), // geen tekst
       opmerking: '', // geen tekst
     },
     // Sinds de weides, stap 2 (25 sep 2026) maakt de kooi zelf niets: de schapen van de heide slapen

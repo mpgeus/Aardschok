@@ -657,7 +657,6 @@ function gebouwenLijst() {
   }
   if (typeof P.schuur === 'function') lijst.push(['schuurBlokhut', () => P.schuur(0, 0, { b: 5, d: 7, muur: 'blokhut', dakMos: 0.7, zaad: 77 })]);
   if (typeof P.houtschuur === 'function') lijst.push(['houtschuur', () => P.houtschuur(0, 0)]);
-  if (typeof P.zagerij === 'function') lijst.push(['zagerij', () => P.zagerij(0, 0)]); // vraag 157
   if (typeof P.kippenhok === 'function') lijst.push(['kippenhok', () => P.kippenhok(0, 0)]);
   if (typeof P.kapel === 'function') lijst.push(['kapel', () => P.kapel(0, 0)]);
   if (typeof P.kerkhof === 'function') lijst.push(['kerkhof', () => P.kerkhof(0, 0, { b: 6, d: 4, rijen: 4, kol: 3 })]);
@@ -941,7 +940,12 @@ function bouwLosVel(veldNaam, items, notitie) {
 // minuut, dus ze gaan in draden tegelijk; daarom is dit het enige vel dat op zich laat wachten.
 // Elk huis beslaat een rechthoek (die js/kaart.js helemaal vastzet) en draagt `deur`: de tegel voor
 // zijn deur, vanaf de achterste tegel van de voet. Daar gaan de bewoners heen (T.deurVan).
+const HUIZEN_NOTITIE = 'De huizen van de huizenbouwer (huizen.cjs): de hutten, huizen en boerderijen van ronde 4b en het huis van de schout, en de huizen van de bouwstijlen in hun vier standen. Zet ze neer op de tegel linksboven van hun voet ("beslaat"); "deur" is de tegel voor de deur, gerekend vanaf die tegel.';
+// Een huis van een bouwstijl moet zijn deur hebben aan de kant die zijn stand zegt (huizen.cjs, STANDEN): het spel kiest er
+// de stand mee die zijn deur naar de weg keert.
+const kantVanDeur = ([b, d], [dx, dy]) => (dy === d ? 'z' : dx === b ? 'o' : dy === -1 ? 'n' : dx === -1 ? 'w' : '?');
 async function bouwHuizenVel() {
+  if (process.argv.includes('--erbij')) return bouwHuizenErbij();
   // Eerst of alles op het vel past, vóór een half uur renderen (4 okt: dat ging één keer pas aan het eind mis).
   const { capaciteit, kolommen } = VELCONFIG.huizen;
   const nodig = nodigeCapaciteit(TEGELS, 'huizen', Object.keys(HZ.HUIZEN), kolommen);
@@ -953,12 +957,59 @@ async function bouwHuizenVel() {
   // de sneeuw op de daken, uit dezelfde render (huizen.cjs, schrijfDaksneeuw; vraag 144, 4b)
   const sn = HZ.schrijfDaksneeuw(lijst);
   console.log(`  daksneeuw: ${sn.huizen} huizen, samen ${sn.mb} MB in de browser`);
-  // Een huis van een bouwstijl moet zijn deur hebben aan de kant die zijn stand zegt (huizen.cjs, STANDEN): het spel
-  // kiest er de stand mee die zijn deur naar de weg keert.
-  const kantVan = ([b, d], [dx, dy]) => (dy === d ? 'z' : dx === b ? 'o' : dy === -1 ? 'n' : dx === -1 ? 'w' : '?');
-  const scheef = items.filter((i) => i.stijl && kantVan(i.beslaat, i.deur) !== i.stijl.stand);
-  for (const i of scheef) console.warn(`  LET OP: ${i.naam} heeft zijn deur aan de kant ${kantVan(i.beslaat, i.deur)}, niet ${i.stijl.stand}`);
-  return bouwLosVel('huizen', items, 'De huizen van de huizenbouwer (huizen.cjs): de hutten, huizen en boerderijen van ronde 4b en het huis van de schout, en de huizen van de bouwstijlen in hun vier standen. Zet ze neer op de tegel linksboven van hun voet ("beslaat"); "deur" is de tegel voor de deur, gerekend vanaf die tegel.');
+  const scheef = items.filter((i) => i.stijl && kantVanDeur(i.beslaat, i.deur) !== i.stijl.stand);
+  for (const i of scheef) console.warn(`  LET OP: ${i.naam} heeft zijn deur aan de kant ${kantVanDeur(i.beslaat, i.deur)}, niet ${i.stijl.stand}`);
+  return bouwLosVel('huizen', items, HUIZEN_NOTITIE);
+}
+
+// --erbij (werklijst vraag 157; Marcel, 14 okt: "Eerst aanvullen bouwen"): alleen de huizen die nog niet op het vel staan.
+// Wat er al staat, houdt zijn bestand in tegels/huizen/ en zijn gegevens uit tegels.json, en zijn sneeuw; de nieuwe
+// komen achteraan in de vaste volgorde. Zonder --erbij gaan alle huizen opnieuw, want de cache in uit/huizen-cache
+// vervalt bij elke verandering aan de huizenbouwer: dat is ruim twee uur op vier kernen, voor een paar nieuwe huizen.
+// Verandert de huizenbouwer iets aan de huizen die er al staan, dan moet het toch zonder.
+async function bouwHuizenErbij() {
+  const { capaciteit, kolommen } = VELCONFIG.huizen;
+  const nodig = nodigeCapaciteit(TEGELS, 'huizen', Object.keys(HZ.HUIZEN), kolommen);
+  if (nodig > capaciteit) throw new Error(`huizen: ${nodig} vakken nodig, maar de vaste capaciteit is ${capaciteit} — verhoog VELCONFIG.huizen.capaciteit`);
+  const oud = JSON.parse(fs.readFileSync(path.join(TEGELS, 'tegels.json'), 'utf8')).huizen;
+  const er = new Map(oud.tiles.filter((t) => t && t.naam).map((t) => [t.naam, t]));
+  for (const naam of er.keys()) if (!HZ.HUIZEN[naam]) console.warn(`  huizen: ${naam} staat op het vel maar heeft geen opgave meer: hij gaat eraf`);
+  const nieuw = Object.keys(HZ.HUIZEN).filter((n) => !er.has(n));
+  const t0 = Date.now();
+  const lijst = nieuw.length ? await HZ.renderHuizen(nieuw) : [];
+  console.log(`  huizen erbij: ${lijst.length} in ${((Date.now() - t0) / 1000).toFixed(1)} s (${er.size} stonden er al)`);
+  const sn = HZ.schrijfDaksneeuw(lijst, { erbij: true });
+  console.log(`  daksneeuw: ${sn.huizen} huizen, samen ${sn.mb} MB in de browser`);
+  const items = [];
+  for (const [naam, t] of er) if (HZ.HUIZEN[naam]) items.push({ key: naam, tegel: { ...t, bestand: t.bestand.replace(/^tegels\//, '') } });
+  fs.mkdirSync(path.join(TEGELS, 'huizen'), { recursive: true });
+  for (const r of lijst) {
+    const los = I.snijLos(I.beeldVanPlaat(r.plaat), [{ cel: [0, 0, r.plaat.b, r.plaat.h], anker: [r.anker[0], r.anker[1] + 16] }])[0];
+    const bestand = `huizen/${r.naam}.png`;
+    fs.writeFileSync(path.join(TEGELS, bestand), I.pngVanBeeld(los.beeld));
+    const stijl = HZ.HUIZEN[r.naam].stijl;
+    if (stijl && kantVanDeur(r.voet, r.deur) !== stijl.stand) console.warn(`  LET OP: ${r.naam} heeft zijn deur aan de kant ${kantVanDeur(r.voet, r.deur)}, niet ${stijl.stand}`);
+    items.push({
+      key: r.naam,
+      tegel: {
+        naam: r.naam, vast: true, beslaat: r.voet, staat: null, deur: r.deur || null,
+        doos: [r.anker[0], r.anker[1] + 16, r.plaat.b - r.anker[0], r.plaat.h - r.anker[1] - 16],
+        ...(r.ramen ? { ramen: r.ramen } : {}),
+        ...(r.schoorsteen ? { schoorsteen: r.schoorsteen } : {}),
+        ...(r.nok ? { nok: r.nok } : {}),
+        ...(stijl ? { stijl } : {}),
+        bestand, cel: los.cel, anker: los.anker,
+      },
+    });
+  }
+  const geordend = vasteVolgordeEnCapaciteit('huizen', items, capaciteit, kolommen);
+  const beschrijving = {
+    naam: 'huizen', bestand: 'huizen.png', aantal: geordend.length, kolommen, ingepakt: true, perTekening: true, notitie: HUIZEN_NOTITIE,
+    tiles: geordend.map((it) => (it ? it.tegel : { naam: null, vast: false })),
+  };
+  schrijfTsx(beschrijving);
+  console.log(`${velVerslag(beschrijving)}  (${items.length} echte tegels van ${capaciteit}, ${lijst.length} erbij)`);
+  return beschrijving;
 }
 
 // ---------------------------------------------------------------- een vel dat elders gemaakt is

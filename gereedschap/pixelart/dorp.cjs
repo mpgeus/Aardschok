@@ -2581,14 +2581,6 @@ function uithangbord(o = {}) {
       } else if (teken === 'hoefijzer') {
         const r = Math.hypot(v, w - 1.5);
         if (Math.abs(r - 4.4) < 1.4 && (w < 1.5 ? Math.abs(v) > 3 : true)) return { ramp: 'ijzer', stap: 5 };
-      } else if (teken === 'zaag') {
-        // een handzaag (de zagerij): een houten handvat met een gat, en een blad dat naar de punt smaller
-        // wordt, met tandjes aan de onderkant
-        if (v > 3.4 && v < 8 && Math.abs(w) < 3.6 && !(v > 4.8 && v < 6.6 && w > -1.6 && w < 1.8)) return { ramp: 'hout', stap: 5 };
-        const tand = (((v % 1.6) + 1.6) % 1.6) - 0.8;
-        const onder = -2.2 - (0.8 - Math.abs(tand));
-        const boven = 2.8 - (3.4 - v) * 0.24;
-        if (v > -8.4 && v <= 3.4 && w > onder && w < boven) return { ramp: 'ijzer', stap: w > boven - 1 ? 6 : 4.5 };
       }
       // twee sterretjes
       if ((Math.abs(v - 5.5) < 0.8 && Math.abs(w - 4) < 0.8) || (Math.abs(v + 6) < 0.7 && Math.abs(w - 5.5) < 0.7)) return { ramp: 'goud', stap: 6 };

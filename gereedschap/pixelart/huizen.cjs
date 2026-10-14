@@ -1934,13 +1934,14 @@ function renderNieuw(namen, draden) {
 // voethoek, 16 pixels lager). Een laag per bestand, want een laag is zo groot als het huis (er ligt ook sneeuw op de
 // drempel en de vensterbanken), en zo houdt de browser alleen de laag vast die er ligt. Een oude tekening draagt de
 // sneeuw van zijn jonge: dezelfde vorm. naar-tiled.cjs schrijft het na het vel huizen; lijst is wat renderHuizen gaf.
-function schrijfDaksneeuw(lijst) {
+// o.erbij (naar-tiled.cjs huizen --erbij): de sneeuw van de huizen die er al stonden, blijft; alleen die van `lijst` komt erbij.
+function schrijfDaksneeuw(lijst, o = {}) {
   const I = require('./inpakken.cjs');
   const TEGELS = path.join(__dirname, '..', '..', 'tegels');
   const MAP = path.join(TEGELS, 'daksneeuw');
-  fs.rmSync(MAP, { recursive: true, force: true });
+  const lagen = o.erbij ? JSON.parse(fs.readFileSync(path.join(TEGELS, 'daksneeuw.json'), 'utf8')).lagen : {};
+  if (!o.erbij) fs.rmSync(MAP, { recursive: true, force: true });
   fs.mkdirSync(MAP, { recursive: true });
-  const lagen = {};
   let pixels = 0;
   for (const r of lijst) {
     if (!r.sneeuw || !r.sneeuw.some(Boolean)) continue;
@@ -1952,6 +1953,7 @@ function schrijfDaksneeuw(lijst) {
       return { bestand, b: s.plaat.b, h: s.plaat.h, anker: [r.anker[0] - s.dx, r.anker[1] - s.dy + 16] };
     });
   }
+  if (o.erbij) pixels = Object.values(lagen).flat().filter(Boolean).reduce((n, l) => n + l.b * l.h, 0);
   const data = {
     _lees_dit: 'De sneeuw op de daken van de huizen (gereedschap/pixelart/huizen.cjs, schrijfDaksneeuw; vraag 144, 4b) — '
       + 'niet met de hand bijwerken. Sleutel is de naam van de jonge tekening op het vel huizen (een oude, "<naam>-oud", '

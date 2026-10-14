@@ -43,8 +43,9 @@ test('elke tekening van een stijl staat op het vel, met de naam van zijn stijl, 
   const per = {};
   for (const tg of tegels) per[tg.stijl.stijl] = (per[tg.stijl.stijl] || 0) + 1;
   // elk 12 hutten, 36 huizen, 36 stenen huizen en 24 boerderijen; oker en roze nemen de hutten van wit (vraag 114, 2b);
-  // en elk 32 grote gebouwen: de kleine en de grote herberg, de kapel, de woontoren en het huis van de schout (stap 3)
-  assert.deepEqual(per, { wit: 140, oker: 128, planken: 140, roze: 128 });
+  // en elk 32 grote gebouwen: de kleine en de grote herberg, de kapel, de woontoren en het huis van de schout (stap 3);
+  // en elk 12 zagerijen, onder elk dak in vier standen (vraag 157)
+  assert.deepEqual(per, { wit: 152, oker: 140, planken: 152, roze: 140 });
   for (const t of tegels) {
     const s = t.stijl;
     assert.equal(t.naam, HZ.stijlNaam(s.stijl, s.vorm, s.steen === 'baksteen' ? 'baksteen' : s.dak, s.stand));
@@ -171,6 +172,17 @@ test('de kapel en de woontoren zijn van de steen van hun stijl, en van baksteen 
   assert.deepEqual(T.stijlTekeningen(D, 'woontoren'), ['huizen/wit-woontoren-baksteen-z']);
   // wie in een woontoren woont, is ambachtsman, zoals in een stenen huis
   assert.equal(T.standVan({ soort: 'woontoren' }), 'ambachtslieden');
+});
+
+// De zagerij (werklijst vraag 157; Marcel, 14 okt: "Kapschuur in de stijl"): een kapschuur van de huizenbouwer, onder het
+// dak van de trede waarin hij gebouwd wordt, zoals een huis.
+test('de zagerij is een kapschuur in de stijl, onder het dak van de trede', () => {
+  const D = leeg();
+  assert.deepEqual(T.stijlTekeningen(D, 'zagerij'), ['huizen/wit-zagerij-riet-z']);
+  D.trede = 'dorp';
+  assert.deepEqual(T.stijlTekeningen(D, 'zagerij'), ['huizen/wit-zagerij-leien-z']);
+  D.trede = T.GEBOUW_TREDEN[2];
+  assert.deepEqual(T.stijlTekeningen(D, 'zagerij'), ['huizen/wit-zagerij-pannen-z']);
 });
 
 test('het huis van de schout en de herberg die de speler zet, zijn in de stijl van het land, met een deur', () => {

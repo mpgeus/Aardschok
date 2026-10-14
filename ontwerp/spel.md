@@ -18,6 +18,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | De economie van The Settlers, met gevechten in beurten | besloten (Marcel, 11 okt: "A ja, B ja, C allebei"), niets gebouwd: jij bouwt van bovenaf, binnen bereik van je stad, een kar haalt de grondstoffen (geen grens, geen vlaggen), en je vecht in beurten, verdedigend en op het eiland tot het kasteel; gooit "geen hand van bovenaf" en "de mensen bouwen zelf" om; eerst een proef met één keten | vraag 151, 152 |
 | De afwisseling | gebouwd (13 okt; Marcel: "A1, B1, C1, D1"): het dorp eet in gelijke delen van elke soort die er ligt, en hoe meer soorten, hoe harder al het werk gaat (60% met één, 100% met vier); de status Plain fare, en de kar brengt kaas en gezouten vlees ("Zo werkt de afwisseling nu") | vraag 154 |
 | Een gebouw aanklikken | gebouwd (14 okt; Marcel: "1a1, 1b ja"): een klik op een gebouw legt rechts een briefje met wat het doet, wie er werkt, wat het maakt (op vol, vandaag, 7 dagen, dit jaar), wat het tegenhoudt en wat erbij ligt; het spel loopt door ("Zo werkt het briefje van een gebouw nu") | vraag 156 |
+| De keten van stammen tot planken | gebouwd (14 okt, vraag 157; Marcel: "2a2, 2b ja", en voor de tekening "Kapschuur in de stijl"): de houthakker hakt stammen (*logs*), de zagerij zaagt er planken van, en het materiaal volgt de trede: een gehucht bouw je van stammen, een dorp van planken, een stad van steen; de zagerij is een kapschuur in de stijl van het land | 157, 168 |
 | De balk onderaan | gebouwd (14 okt, vraag 164; Marcel: "De oude ui balk aan de onderkant moet leeg. En we hebben een minimale nodig", en dat was een minimap, vraag 165): kaartjes in de hoeken, even breed als bovenaan: de waren die je hebt, Build, en de minikaart; de velden, het wetboek en de raadsman alleen nog met hun toets; de tafel van de schout is weg (`code.md`, bij `js/ui.js`) | vraag 164 |
 | De minikaart | gebouwd (14 okt, vraag 165; Marcel: "Onder in de ui zoals bij age of Empires", "Het hele eiland"): rechtsonder in de hoek het hele eiland als een ruit die ligt zoals het beeld, wat je kent in kleur, je gebouwen en de schout, het kader van de camera; een klik of slepen kijkt daar (het overzicht) | vraag 165 |
 | De balk bovenaan | gebouwd (14 okt, vraag 166; Marcel: "Bovenaan een dunne ui balk met goud, aantal inwoners, happiness jaar en tijd", en "zo leeg mogelijk zonder info te missen"): het goud, de inwoners, de tevredenheid, de datum en het uur, de snelheid, de twee bazen en Menu in één strook; het seizoen en het weer bij de muis | vraag 166 |
@@ -138,7 +139,7 @@ The Settlers): je zet neer wanneer je wilt, en betaalt alleen het goud meteen; h
 waarin je bouwde, zodra de plek gerooid is. Wat de bouwers op de plek rooien, gaat eerst in het gebouw; wat over is, ligt
 op de stapel. De bouwers komen zo ver als het hout reikt, en het briefje zegt het ("waiting for the ox cart to bring wood
 (5 of 8 here)"); een plaats die op hout wacht en vandaag niets krijgt, slaan ze over. Een werkplaats die hout verwerkt (de
-timmerman, de kuiper) neemt het uit wat de kar bij hem bracht, tot 8. De kar brengt eerst, dan haalt hij. De raad telt
+zagerij, de kuiper) neemt het uit wat de kar bij hem bracht, tot 8. De kar brengt eerst, dan haalt hij. De raad telt
 het hout dat de bouwplaatsen nog vragen niet als brandhout. **Alles met de kar** (stap 3; Marcel: "a ja, b ja, c ja, d
 ja"): niet alleen het hout, maar alles wat een gebouw maakt (het vlees en de huiden van de jager, de vis, de groente, de
 eieren, de steen, het bier) ligt bij de deur tot de kar het haalt, en wat een werkplaats verwerkt (de molen zijn graan),
@@ -183,6 +184,20 @@ boerderij haar velden en de oogst; **wat het tegenhoudt** (geen handen, uren ond
 tevredenheid, te weinig om te bewerken, genoeg in de opslag, de stapel vol), en wat helpt (gereedschap); wat erbij ligt
 (wat de kar bracht, de stapel bij de deur, "6 of 16"); en bij een opslag wat zijn kar doet. Zo zie je waar het stokt,
 zoals in The Settlers. Bij de muis staat nog altijd de korte regel. Nog geen knoppen (stilzetten, afbreken).
+
+**Zo werkt de keten van stammen tot planken nu** (14 okt, vraag 157; Marcel: "de houthakker levert boomstammen voor de
+houtzagerij die er weer planken van maakt", en "2a2, 2b ja"; `js/gebouwen.js`): de houthakker hakt stammen (*logs*; in de
+code heet de waar nog `hout`), en ook het sprokkelhout en wat het dorp stookt zijn stammen. De zagerij (*sawmill*, in het
+gehucht, 12 stammen en 6 goud) zaagt met twee handen 2 stammen tot 2 planken per dag; de kar brengt de stammen en haalt de
+planken. Tot 14 okt was dit de timmerman, in een dorp, en gebruikte niets zijn planken. **Het materiaal volgt de trede**,
+met hetzelfde getal: een gehucht bouw je van stammen, een dorp en marktrecht van planken (het dorpsrecht, het marktrecht,
+de herberg die doorgroeit), een stad van steen (het stenen huis, het raadhuis, de kazerne); goud en steen die er al
+stonden, blijven. Wat een werkplaats van hout maakt (de wapenmaker, de kuiper), blijft voorlopig stammen: de wapens komen
+bij 159. De kolonist van de speeltest bouwt een zagerij vóór het dorp. **De tekening** (na vijf proefplaten; Marcel: "Het
+moet er 1 zijn als werkplaats. De persoon heeft een eigen huis ernaast", en "Kapschuur in de stijl"): een kapschuur van de
+huizenbouwer in de stijl van het land, onderaan open tussen palen, met de gevels en het dak van de stijl, en eronder de
+stammen, de planken en aan de rand de zaagbok; de zager woont in zijn eigen huis. Wie aan de zaagbok zaagt, komt bij
+vraag 168.
 
 **Zo werkt de mist nu** (13 okt, B2c; Marcel: "A2, B1, C ok"; `js/mist.js`, het plan in `kaarten.md`, "Het hele
 eiland"): het eiland is zwart waar niemand van jou kwam, grijs (donkerder en ontkleurd) wat je zag maar nu niet ziet, en
@@ -2201,7 +2216,7 @@ Bouwen vraagt materiaal, en dat moet ergens vandaan. Voorstel (Claude) voor wat 
 
 | Gebouw | Haalt | Waarvoor |
 |---|---|---|
-| Houthakker | hout uit het bos (van de heer: de keur houtkap) | bouwen, stoken, de timmerman |
+| Houthakker | stammen uit het bos (van de heer: de keur houtkap) | bouwen in het gehucht, stoken, de zagerij |
 | Steengroeve | steen | fundering, stenen huizen, de steenhouwer |
 | Kleiput | klei | de steenbakkerij (bakstenen: zo bouwde men hier echt) |
 | Rietsnijder | riet uit de beek en het moeras | rieten daken |

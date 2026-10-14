@@ -173,7 +173,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.wijzigVoorraad`), `js/gebouwen.js` (`T.GEBOUWEN`: 45
   soorten op één plek, zoals `T.MENSEN`; elk huis van de huizenbouwer jong en oud, vraag 144: wat er bij het begin al
   stond, is oud, wat gebouwd wordt, is jong en na `oudNaDagen` oud, en alleen het voorwerp wisselt van tekening, `T.maakOud`,
-  `T.tikVerwerenDag`; bevolking, woonruimte, handen, productie per dag,
+  `T.tikVerwerenDag`; bevolking, woonruimte, handen, productie per dag (de zagerij zaagt stammen, de waar `hout`, tot
+  planken, en wat je bouwt, kost stammen in het gehucht, planken in een dorp en steen in een stad: vraag 157),
   `T.plaatsGebouw`, bouwfases via `T.bouwFaseIndex`; niet op iemand en niet op een deur, `T.waaromNietOpIemand`, vraag 88, en altijd met drie tegels looppad rondom, `T.looppadOm` (Marcel, 3 okt); een gebouw maakt alleen wat zijn grondstof
   toelaat, wie iets omzet maakt tot er genoeg ligt, `T.maaktTot`, en gereedschap laat harder werken; wie stilligt, zegt
   `T.stilOp`: in een seizoen, `stilIn`, of buiten zijn maanden, `alleenIn`, zoals de wijnboerderij, die alleen in wijnmaand
@@ -683,7 +684,19 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   soort, en elke tekening heeft een oude naast zich (`<naam>-oud`, `OUD`) en de sneeuw op zijn dak in drie lagen
   (`sneeuwVan`, alleen op het dak: `GEEN_SNEEUW`; `schrijfDaksneeuw`); de proefplaat: `huis-sdf-export.cjs ronde wit`. De
   bouwfasen opnieuw in delen: `bouwfasen.cjs --opnieuw wit` (een stijl, een naam, of `huizen`); de brandfasen:
-  `ruines.cjs spel [--erbij]`.
+  `ruines.cjs spel [--erbij]`. **Alleen wat er nieuw bij komt** (vraag 157, 14 okt; Marcel: "Eerst aanvullen bouwen"):
+  `npm run tiled huizen -- --erbij` rendert alleen de opgaven die nog niet op het vel staan; de rest houdt zijn bestand,
+  zijn gegevens uit `tegels.json` en zijn sneeuw (`schrijfDaksneeuw(lijst, { erbij })`). Zonder `--erbij` gaat alles
+  opnieuw, want de cache vervalt bij elke verandering aan de huizenbouwer: op vier kernen en zo'n 55 seconden per huis is
+  dat ruim twee uur. Verandert de huizenbouwer iets aan huizen die er al staan, dan moet het toch zonder.
+  **De zagerij** (vraag 157; Marcel, 14 okt: "Kapschuur in de stijl"): `grootGebouw(stijl, 'zagerij')` is één kapschuur,
+  `open` in `huis-sdf.cjs` (`maakOpen`: wat de muren tekent, houdt op bij de muurplaat, `zOpen`; eronder palen op een steen
+  met schoren en een vloer van zaagsel; de gevels en het dak blijven van de stijl), zonder ramen (`ramen: false`) en zonder
+  schoorsteen. Eronder en ernaast staan delen die geen huis zijn: een deel met `tuin` in zijn opgave is een stuk van
+  `tuin-sdf.cjs` (`tuinWereld` in `huizen.cjs`; `stammen-x/y`, `planken-x/y`, `zaagbok-x/y`), groter dan een tegel, en het
+  draait met het gebouw mee; in de bouwfasen komt het pas als het gebouw af is (`fasenVanDelen`). Een opgave met delen
+  heeft altijd een huis als eerste deel (`W.H` en de deur komen daarvan). Onder elk dak in vier standen; bouwfasen eerst
+  alleen onder het dak van het gehucht (Marcel: "Eerst alleen het gehucht"), leien en pannen hebben `fasen: false`.
   Elk vel gaat ingepakt naar het spel (`inpakken.cjs`): een raster kost de browser elke lege pixel, en een
   vel groter dan 8192 pixels laadt niet elke videokaart. Een leeg vak in een vel kost dus niets meer.
 

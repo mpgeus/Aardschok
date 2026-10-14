@@ -84,7 +84,8 @@ Wat elke zin nodig heeft, staat op één plek, al in het Engels:
 | de wijngaard, de rank, plukken | the vineyard, the vine, pick | |
 | de hut, het huis, het stenen huis, de woontoren | the hut, the house, the stone house, the tower house | |
 | de boerderij, de wijnboerderij | the farm, the vineyard farm | |
-| de houthakker, de timmerman, de smidse | the woodcutter, the carpenter, the smithy | |
+| de houthakker, de zagerij, de smidse | the woodcutter, the sawmill, the smithy | de timmerman is sinds 14 okt de zagerij (vraag 157) |
+| hout (de waar), planken | logs, planks | in de code heet de waar nog `hout`; op het scherm *logs* (vraag 157) |
 | de molen, de bakkerij, de brouwerij | the mill, the bakery, the brewery | |
 | de weverij, de kuiper, de slager, de leerlooier | the weaver's, the cooper, the butcher, the tanner | |
 | de visser, de jager, de schaapskooi | the fisherman, the hunter, the sheepfold | |

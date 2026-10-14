@@ -153,6 +153,20 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 14 okt, avond: de zagerij en de planken (werklijst vraag 157)
+
+`npm run speeltest -- --zaden 1-5 --tegelijk 3`, op `0361e685` (branch `claude/village-economy-gameplay-lmsnyg`): de
+timmerman is de zagerij (in het gehucht), hout heet stammen, en wat je bouwt kost stammen, planken of steen naar de trede.
+De kolonist bouwt een zagerij zodra er een houthakker is en iedereen een woning heeft.
+
+- **Geen fout in de console**, op alle vijf de eilanden. De zagerij is af op dag 14 tot 27 (op eiland 1 en 2 kon de
+  kolonist hem 2 en 9 dagen niet zetten: te weinig stammen), en zaagt het jaar door; hij stond 4 tot 8 dagen stil op
+  eiland 1, 2 en 3. Geen dag honger of kou.
+- **De schout valt op eiland 2** op 12 December, tegen een rover: in het lege begin is er geen militie, en hij vecht
+  alleen. Dat zagen de speeltests van 12 okt ook (wolven en een rover, telkens op een ander eiland); na te lopen bij F
+  (vechten), niet bij de zagerij.
+- De tekening van de zagerij was in deze speeltest nog die van een dorpshuis; de kapschuur kwam later die avond.
+
 ## De speeltest van 14 okt: de ossenkar, stap 1 (werklijst C)
 
 `npm run speeltest -- --zaden 1-3 --tegelijk 3`, op branch `claude/relaxed-mendel-59zm3c` (de commit van C, stap 1): het
