@@ -442,6 +442,13 @@
     // De tent of het afdak van een gezin in het kamp van het lege begin (werklijst vraag 152; js/begin.js): niemand bouwt
     // hem, de kar bracht hem mee. Hij is zo groot als zijn gezin (`tijdelijk`, T.woonruimteVan): een nieuw gezin vindt er
     // geen plaats. Zijn voet en zijn deur zegt hij zelf, naar de kant van zijn opening.
+    // Wat er bij een afgebroken gebouw lag (js/afbreken.js): een stapel op zichzelf, tot de ossenkar hem haalt (js/kar.js).
+    stapel: {
+      naam: T.t('pile'), meervoud: T.t('piles'), trede: 'gehucht', voet: { b: 1, h: 1 }, kosten: {}, heer: {}, bouwtijd: 0,
+      handen: 0, woonruimte: 0, maakt: null, menu: false,
+      tekening: null, beschrijving: T.t('what lay by a demolished building, until the ox cart fetches it'),
+      opmerking: 'Geen gebouw: een stapel zonder huis (werklijst C, stap 5). Getekend als elke stapel (T.stapelsOp).', // geen tekst
+    },
     tent: {
       naam: T.t('tent'), meervoud: T.t('tents'), trede: 'gehucht', voet: { b: 2, h: 1 }, kosten: {}, heer: {}, bouwtijd: 0,
       handen: 0, woonruimte: 0, tijdelijk: true, maakt: null, menu: false,
@@ -951,6 +958,7 @@
     if (komt) return T.t('{gebouw} is already coming here.', { gebouw: T.hoofdletter(T.eenNaam(T.GEBOUWEN[komt.soort].naam)) });
     if (T.veldOp(w, x, y)) return T.t('There is a field there.');
     if (T.opPad(w, x, y)) return T.t('There is a path there.');
+    if (T.wegKomtOp(D, x, y)) return T.t('A road is coming here.');
     // Op zand wordt niet gebouwd (Marcel, 8 okt: "zand is geen solide basis"): het strand, de duinen en het stuifzand
     // van het eiland (tegels/kust.png; werklijst vraag 117, B van 2a).
     const g = T.grondOp(w, x, y);

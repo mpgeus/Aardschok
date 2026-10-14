@@ -258,6 +258,14 @@
     const f = T.naarWereldOp(S.wereld, sx, sy);
     const x = Math.round(f.x);
     const y = Math.round(f.y);
+    if (S.bouwSoort === 'weg') {
+      werkWegHoverBij(x, y);
+      return;
+    }
+    if (S.bouwSoort === 'afbreken') {
+      werkAfbreekHoverBij(x, y);
+      return;
+    }
     if (T.isVeldSoort(S.bouwSoort)) {
       werkVeldHoverBij(x, y);
       return;
@@ -301,6 +309,71 @@
     }
     S.hover = null;
     S.handeling = null;
+  }
+
+  // Een weg in de hand (js/wegen.js; werklijst C, stap 5): twee klikken, het begin en het eind, zoals een veld. Tot de eerste
+  // klik wijst de muis één tegel aan; daarna de weg van het begin tot de muis (T.planWeg, recht en haaks), met wat de klik
+  // zou zeggen. Het plan rekent hij alleen opnieuw als de muis naar een andere tegel ging of de kaart veranderde.
+  let wegPlan = null; // { sleutel, plan }: alleen scherm
+  function werkWegHoverBij(x, y) {
+    const begin = S.veldHoek && S.veldHoek.soort === 'weg' ? S.veldHoek : null;
+    let plan = null;
+    if (begin) {
+      const sleutel = `${begin.x},${begin.y}>${x},${y}|${T.kaartVersie(S.dorp.wereld)}|${(S.dorp.wegwerk || []).length}`;
+      if (!wegPlan || wegPlan.sleutel !== sleutel) wegPlan = { sleutel, plan: T.planWeg(S.dorp, begin, { x, y }) };
+      plan = wegPlan.plan;
+    }
+    const reden = plan ? plan.reden : T.waaromGeenWegOp(S.dorp, x, y);
+    S.bouwHover = { x, y, ok: !reden, reden, plekken: plan && plan.plekken.length ? plan.plekken : [{ x, y }], hoek: !!begin };
+    canvas.style.cursor = 'crosshair';
+    if (reden) T.ui.tooltip(reden, S.muis.x, S.muis.y, true);
+    else if (!plan) T.ui.tooltip(T.t('Click where the road begins, then where it ends.'), S.muis.x, S.muis.y);
+    else {
+      const rooien = plan.rooien.length ? ' ' + T.t('The builders first clear {wat}.', { wat: T.rooiWoordenVanWeg(S.dorp, plan.rooien) }) : '';
+      T.ui.tooltip(T.t('{n|One tile|# tiles}, {werk} workdays: click to lay the road here.', { n: plan.nieuw.length, werk: plan.werk }) + rooien, S.muis.x, S.muis.y);
+    }
+    S.hover = null;
+    S.handeling = null;
+  }
+
+  // De klik met een weg in de hand: de eerste zet het begin, de tweede legt de weg (T.legWeg). Daarna blijft de weg in de
+  // hand, met zijn eind als het begin van het volgende stuk: zo leg je een weg met een bocht in een paar klikken, en een
+  // rechtsklik houdt op.
+  function klikMetWeg(hover) {
+    if (!hover) return;
+    if (!hover.hoek) {
+      if (!hover.ok) T.ui.bericht(hover.reden, 'gevaar');
+      else S.veldHoek = { soort: 'weg', x: hover.x, y: hover.y };
+      return;
+    }
+    const r = T.legWeg(S.dorp, S.veldHoek, { x: hover.x, y: hover.y });
+    if (!r.gelukt) {
+      T.ui.bericht(r.reden, 'gevaar');
+      return;
+    }
+    T.ui.bericht(r.bericht, 'goed');
+    S.veldHoek = { soort: 'weg', x: hover.x, y: hover.y };
+  }
+
+  // Afbreken in de hand (js/afbreken.js; werklijst C, stap 5, e): de muis zegt wat een klik hier afbreekt, of waarom niet
+  // (T.handelingAfbreken), en de klik doet hetzelfde.
+  function werkAfbreekHoverBij(x, y) {
+    const h = T.handelingAfbreken(S.dorp, x, y);
+    S.bouwHover = { x, y, ok: !!(h && h.kan), reden: h && !h.kan ? h.tekst : null, afbreken: h };
+    canvas.style.cursor = 'crosshair';
+    if (!h) T.ui.tooltip(T.t('Click a road or a building to demolish it.'), S.muis.x, S.muis.y);
+    else T.ui.tooltip(h.tekst, S.muis.x, S.muis.y, !h.kan);
+    S.hover = null;
+    S.handeling = null;
+  }
+  function klikMetAfbreken(hover) {
+    const h = hover && hover.afbreken;
+    if (!h) return;
+    if (!h.kan) {
+      T.ui.bericht(h.tekst, 'gevaar');
+      return;
+    }
+    h.doe(); // afbreken blijft in de hand: een rechtsklik houdt op
   }
 
   // De klik met een veld in de hand: de eerste zet de ene hoek, de tweede legt het veld (T.legVeld). Past het niet, dan
@@ -703,6 +776,14 @@
     if (S.bouwSoort) {
       const soort = S.bouwSoort;
       const hover = S.bouwHover;
+      if (soort === 'weg') {
+        klikMetWeg(hover);
+        return;
+      }
+      if (soort === 'afbreken') {
+        klikMetAfbreken(hover);
+        return;
+      }
       if (T.isVeldSoort(soort)) {
         klikMetVeld(soort, hover);
         return;
@@ -726,7 +807,7 @@
   });
   canvas.addEventListener('contextmenu', (ev) => {
     ev.preventDefault();
-    // Met een veld in de hand haalt de eerste rechtsklik zijn eerste hoek weg (js/boerderij.js).
+    // Met een veld of een weg in de hand haalt de eerste rechtsklik zijn eerste hoek (of het begin) weg.
     if (S.bouwSoort && S.veldHoek) S.veldHoek = null;
     else if (S.bouwSoort) S.bouwSoort = null;
   });

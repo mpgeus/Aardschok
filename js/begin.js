@@ -108,7 +108,7 @@
     const w = D.wereld;
     const kar = D.begin.kar;
     const doel = w.kamp.kar;
-    const pad = T.zoekRoute(w, { x: kar.tx, y: kar.ty }, doel, {});
+    const pad = T.zoekRoute(w, { x: kar.tx, y: kar.ty }, doel, { kar: true }); // over de weg van de kaart, die hij opzoekt (js/wegen.js)
     if (pad && pad.length) T.geefRoute(kar, pad, doel);
     else zetNeer(w, kar, doel);
   }
@@ -209,8 +209,8 @@
   // zodra hij leeg is, en met de laatste tent het kampvuur; de kar blijft (Marcel, 11 okt: "Per tent"). Een boerderij of
   // een wijnboerderij is ook een thuis voor een gezin, en de man wordt er de boer (vraag 152, 1e; js/boerderij.js).
   T.verhuisUitHetKamp = function (D) {
-    if (!D.begin || D.begin.kamp !== 'op') return;
-    verhuisDeSchout(D);
+    if (!D.begin || D.begin.kamp === 'onderweg') return;
+    if (D.begin.kamp === 'op') verhuisDeSchout(D);
     for (const g of D.gebouwen.slice()) {
       const soort = T.GEBOUWEN[g.soort];
       const boerderij = T.isBoerderij(g);
@@ -218,17 +218,21 @@
       const wonen = inHuis(D, g).length;
       if (boerderij && wonen) continue; // op een boerderij woont één gezin
       const vrij = T.woonruimteVan(D, g) - wonen;
-      const gezinnen = T.kampTenten(D).map((t) => inHuis(D, t)).filter((l) => l.length);
+      // eerst wie in het kamp woont, dan wie geen huis meer heeft (js/afbreken.js)
+      const gezinnen = T.kampTenten(D).map((t) => inHuis(D, t)).concat(T.daklozeGezinnen(D)).filter((l) => l.length);
       const gezin = gezinnen.find((l) => l.length <= vrij) || (wonen === 0 ? gezinnen[0] : null);
       if (!gezin) continue;
       const tent = gezin[0].huis;
       T.verhuis(D, gezin, g);
       const wie = (gezin.find((p) => !p.hoofd) || gezin[0]).naam;
-      if (boerderij) T.zeg(D, T.t('{wie} and family leave the camp for the {boerderij}: {wie} is the farmer now.', { wie, boerderij: soort.naam }));
+      if (!tent) T.zeg(D, boerderij
+        ? T.t('{wie} and family have a home again, on the {boerderij}: {wie} is the farmer now.', { wie, boerderij: soort.naam })
+        : T.t('{wie} and family have a home again: the {gebouw}.', { wie, gebouw: soort.naam }), 'goed');
+      else if (boerderij) T.zeg(D, T.t('{wie} and family leave the camp for the {boerderij}: {wie} is the farmer now.', { wie, boerderij: soort.naam }));
       else T.zeg(D, gezin.length > vrij
         ? T.t('{wie} and family leave the camp: their {gebouw} is ready, though it is cramped.', { wie, gebouw: soort.naam })
         : T.t('{wie} and family leave the camp: their {gebouw} is ready.', { wie, gebouw: soort.naam }));
-      if (!inHuis(D, tent).length) haalTentWeg(D, tent);
+      if (tent && !inHuis(D, tent).length) haalTentWeg(D, tent);
     }
   };
   const inHuis = (D, g) => D.bewoners.mensen.filter((p) => p.huis === g);
@@ -477,7 +481,7 @@
       const e = p.wezen;
       if (!e || p.schout) continue;
       delete p.komt;
-      const deur = T.deurVan(w, p.huis);
+      const deur = T.deurVanBewoner(D, p);
       let plek = null;
       for (let r = 0; r <= 4 && !plek; r++) {
         for (let y = deur.y - r; y <= deur.y + r && !plek; y++) {

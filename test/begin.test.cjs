@@ -479,6 +479,9 @@ test('een jaar met de kolonist: alles wat hij neerzet, komt af, het kamp is leeg
   for (const soort of ['schout', 'boerderij', 'akker', 'houthakker', 'hut']) {
     assert.ok(gedaan.some((d) => d.soort === soort), `hij bouwt een ${soort}`);
   }
+  // (werklijst C, stap 5, f: als er niets anders gebouwd wordt, een weg voor de ossenkar)
+  assert.ok(gedaan.some((d) => d.soort === 'weg' && d.gelukt), 'hij legt een weg voor de ossenkar');
+  assert.ok(w.wegen && w.wegen.size > 0, 'en de bouwers leggen hem');
   const akkers = w.akkers.filter((a) => a.boerderij);
   assert.equal(akkers.reduce((n, a) => n + a.b * a.h, 0), T.BEGIN_INSTELLINGEN.kar.zaaigraan, 'akkers voor al het zaaigraan uit de kar');
   // (de oogst ligt eerst bij de boerderij, en de ossenkar haalt hem in een week binnen: js/kar.js, werklijst C, stap 3)

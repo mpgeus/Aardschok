@@ -293,8 +293,8 @@
   // (zijn werk kan veranderd zijn). T.dagAnker (js/dag.js) kiest er per deel van de dag een uit.
   function zetPlekken(D, p) {
     const w = D.bewoners && D.bewoners.wereld;
-    if (!w || !p.huis || p.schout) return;
-    const deur = T.deurVan(w, p.huis);
+    if (!w || p.schout) return;
+    const deur = T.deurVanBewoner(D, p);
     p.plek = { put: putBij(D, w, deur), werk: werkplekVan(D, w, p), vrij: vrijePlekVan(D, w, p, deur) };
     p.plek.heen = looptijd(w, p, deur);
   }
@@ -449,9 +449,9 @@
   // er al staat, schuift een tegel op. De schout en de boeren hebben er al een.
   function maakPoppetje(D, p, bij) {
     const w = D.bewoners.wereld;
-    if (p.wezen || !w || !p.huis) return p.wezen;
+    if (p.wezen || !w) return p.wezen;
     const L = T.LEEFTIJDEN[p.leeftijd];
-    const deur = T.deurVan(w, p.huis);
+    const deur = T.deurVanBewoner(D, p);
     const van = bij || deur;
     let plek = van;
     for (let r = 0; r <= 3; r++) {
@@ -792,6 +792,44 @@
     }
   };
 
+  // Waar een bewoner thuis is: de deur van zijn huis, of zonder huis zijn plek op het plein (T.dakloosPlek).
+  T.deurVanBewoner = (D, p) => (p.huis ? T.deurVan(D.wereld, p.huis) : T.dakloosPlek(D));
+
+  // Waar wie geen huis heeft, slaapt en rondhangt: de tegel van het plein die het dichtst bij zijn midden ligt (zonder
+  // plein, een kaart van de toetsen: de plek van de kar in het kamp, of de hoek van de kaart).
+  T.dakloosPlek = function (D) {
+    const w = D.wereld;
+    const tegels = T.pleinTegels(w);
+    if (!tegels.length) return w.kamp && w.kamp.kar ? { x: w.kamp.kar.x, y: w.kamp.kar.y } : { x: T.kaartVak(w).x, y: T.kaartVak(w).y };
+    const m = { x: tegels.reduce((s, t) => s + t.x, 0) / tegels.length, y: tegels.reduce((s, t) => s + t.y, 0) / tegels.length };
+    let beste = tegels[0];
+    for (const t of tegels) if (T.afstand(t, m) < T.afstand(beste, m)) beste = t;
+    return { x: beste.x, y: beste.y };
+  };
+
+  // Een gezin zonder huis (je brak het af, js/afbreken.js; werklijst C, stap 5; Marcel, 14 okt: "ze lopen los, met een
+  // melding dat er huizen nodig zijn"): het slaapt buiten op het plein (T.dagAnker, js/dag.js), werkt gewoon, en trekt in
+  // de eerste woning met plaats (T.verhuisUitHetKamp, js/begin.js). Zolang het duurt, is het een status (dakloos,
+  // js/voorvallen.js).
+  T.wordtDakloos = function (D, leden) {
+    const plek = T.dakloosPlek(D);
+    for (const p of leden) {
+      p.huis = null;
+      if (p.wezen) p.wezen.thuis = { x: plek.x, y: plek.y };
+      zetPlekken(D, p);
+    }
+  };
+  // De gezinnen zonder huis, elk als lijst van zijn leden (wie nog leeft en niet wegtrekt).
+  T.daklozeGezinnen = function (D) {
+    const per = new Map();
+    for (const p of (D.bewoners && D.bewoners.mensen) || []) {
+      if (p.huis || p.schout || p.weg) continue;
+      if (!per.has(p.gezin)) per.set(p.gezin, []);
+      per.get(p.gezin).push(p);
+    }
+    return [...per.values()];
+  };
+
   // Een gezin verhuist naar huis g (uit het kamp van het lege begin, js/begin.js): voortaan is dat zijn deur, en zijn
   // plekken (de put, het werk) gaan mee. Wie binnen is, komt de oude deur uit en loopt naar de nieuwe (js/verkennen.js:
   // zijn deur is niet meer die van zijn anker); wie nog onderweg is hierheen, loopt meteen naar de nieuwe.
@@ -843,7 +881,7 @@
   // (T.LEEFTIJDEN: eerst de volwassenen) en wie het dichtstbij woont; wie de werkplaats het liefst heeft
   // (T.GEBOUWEN[soort].liefst: de schaapskooi een knaap) gaat vóór, en het gezin van de schout het laatst.
   function voorkeur(D, p, g, deur) {
-    let s = T.LEEFTIJDEN[p.leeftijd].werkt * 100 + T.afstand(deur(p.huis), deur(g));
+    let s = T.LEEFTIJDEN[p.leeftijd].werkt * 100 + T.afstand(p.huis ? deur(p.huis) : T.deurVanBewoner(D, p), deur(g));
     const soort = T.GEBOUWEN[g.soort];
     if (soort && soort.liefst === p.leeftijd) s -= 500;
     if (vanSchout(p)) s += 10000;

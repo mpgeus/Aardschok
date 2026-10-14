@@ -15,9 +15,10 @@
 //
 // Hoe het eruitziet, zegt T.zandHoeken. De grond van de kaart legt zijn soort op de hoeken van de tegels
 // (T.sprites.grondHoeken, js/sprites.js), en een hoek wordt zand als twee van de vier tegels eromheen pad zijn, waarvan
-// minstens één een paadje (de weg zelf blijft zoals de kaart hem legde). Zo is een recht paadje een tegel breed met een
-// zachte rand, een schuin paadje smaller, en een losse tegel waar iemand eens stond niets. js/tekenen.js legt het in de
-// buffer van de grond. Een pad loopt nog niet sneller (spel.md: besloten, maar de getallen zijn nog open).
+// minstens één een paadje of een weg die jij legde (js/wegen.js; de weg van de kaart blijft zoals de kaart hem legde). Zo
+// is een recht paadje een tegel breed met een zachte rand, een schuin paadje smaller, en een losse tegel waar iemand eens
+// stond niets. js/tekenen.js legt het in de buffer van de grond. Een paadje loopt niet sneller; over een weg rijdt de
+// ossenkar sneller (js/wegen.js).
 (function (T) {
   'use strict';
 
@@ -277,9 +278,15 @@
     const { b, h } = vak;
     const net = T.aangelegdNet(D);
     const gesleten = IN().paadjes === 'lopen' && w.paden ? w.paden.gesleten : null;
+    // een weg die jij legde (js/wegen.js) is zand zoals een paadje, ook als de spelregel "Paadjes" uit staat
+    const wegen = w.wegen && w.wegen.size ? w.wegen : null;
     const eigen = new Uint8Array(b * h);
     for (let k = 0; k < net.length; k++) {
-      if (net[k] === 2 || (gesleten && gesleten.has(T.tegelNummer(vak.x + (k % b), vak.y + (k - (k % b)) / b)))) eigen[k] = 1;
+      if (net[k] === 2) eigen[k] = 1;
+      else if (gesleten || wegen) {
+        const n = T.tegelNummer(vak.x + (k % b), vak.y + (k - (k % b)) / b);
+        if ((gesleten && gesleten.has(n)) || (wegen && wegen.has(n))) eigen[k] = 1;
+      }
     }
     const zand = new Uint8Array((b + 1) * (h + 1));
     for (let y = 0; y <= h; y++) {

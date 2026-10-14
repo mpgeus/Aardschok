@@ -117,6 +117,8 @@
       // Wie sluipt, gaat half zo snel.
       let snelheid = S.gevecht && hier ? Math.max(3.2, T.snelheidVan(e) * 1.4) : T.snelheidVan(e);
       if (e === S.schout && S.sluipen && !S.gevecht) snelheid *= 0.5;
+      // De ossenkar rijdt sneller over een weg (js/wegen.js), net zo snel als de regel van zijn rit rekent (js/kar.js).
+      if (e.kar) snelheid /= T.karKostOp(w, volgende.x, volgende.y);
       if (!(snelheid > 0)) return;
       const nodig = afstand / snelheid;
       if (nodig <= rest) {

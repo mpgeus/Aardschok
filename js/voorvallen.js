@@ -300,6 +300,19 @@
         return h.length ? T.opsomming(h.map((x) => x.zin)) : T.t('another kind of food');
       },
     },
+    // Wie geen huis heeft (js/afbreken.js; werklijst C, stap 5; Marcel, 14 okt: "ze lopen los, met een melding dat er
+    // huizen nodig zijn"): het gezin slaapt op het plein tot er een woning met plaats is (T.verhuisUitHetKamp, js/begin.js).
+    dakloos: {
+      naam: T.t('Homeless'),
+      kop: T.t('People have no home'),
+      nog: T.t('People still have no home'),
+      voorbij: T.t('Everyone has a home again'),
+      speelt: (D) => {
+        const n = T.daklozeGezinnen(D).length;
+        return n ? T.t('{n|one family sleeps|# families sleep} on the square', { n }) : null;
+      },
+      helpt: () => T.t('a hut or a house with room for them'),
+    },
     kou: {
       naam: T.t('Cold'),
       kop: T.t('It is cold in the houses'),

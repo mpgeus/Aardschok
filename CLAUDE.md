@@ -140,7 +140,7 @@ De bestanden in `js/`, per onderwerp; elk heeft een kop in `ontwerp/code.md`:
   licht), `ui` (één manier om een venster te openen en te sluiten), `dialoog`, `tafel`, `hud`, `huisbriefje`.
 - **De mensen:** `mensen`, `bewoners`, `leven`, `gesprek` en `gesprekken`, `quest` en `quests`.
 - **Bouwen en groeien:** `begin` (het lege begin), `bouwen` (meebouwen), `boerderij` (boeren uit het niets), `gebouwen`,
-  `treden`, `wensen`, `behoeften`, `paden`, `markt`, `herberg`.
+  `treden`, `wensen`, `behoeften`, `paden`, `wegen` (die jij legt), `afbreken`, `markt`, `herberg`.
 - **Het land bewerken en de natuur:** `akkers`, `veldwerk`, `bos`, `beesten`, `vee`, `weer`, `graanschuur`,
   `wijngaard`.
 - **Voorraad en handel:** `voorraad`, `kar` (de ossenkar en de stapels), `handel` (de marskramer), `bode`.

@@ -18,6 +18,10 @@
 //   7. eet het dorp eentonig (de status in de balk, vraag 154), dan wat het spel zegt dat een soort erbij brengt
 //      (T.watHelptAanAfwisseling, js/raad.js), het eerste dat één gebouw is (een jager, een moestuin, een kippenhok, een
 //      visser); hooguit één van een soort per `afwisselingNa` dagen. De wijn doet regel 6.
+//   8. wordt er niets anders gebouwd (geen bouwplaats en geen weg in aanleg), dan een weg (werklijst C, stap 5, f; Marcel,
+//      14 okt: "f ja"): van de opslag (het huis van de schout of een schuur) naar een gebouw waar de ossenkar heen rijdt
+//      (een werkplaats, een boerderij, een schuur), het dichtste eerst, één per dag, zodat de speeltest meet wat een weg
+//      doet. Hij neemt een weg die er al ligt mee (T.planWeg, js/wegen.js), dus het wordt een net.
 // Wat hij deed, geeft hij terug: [{ soort, gelukt, reden, tekst, instantie }], zonder scherm, dus ook in een toets; en wat
 // hij wil maar nog niet kan betalen, met `wacht` (dan morgen weer). Hij rekent niet vooruit en wacht niet op het juiste
 // moment; hij doet wat er vandaag kan, zoals een speler die elke ochtend kijkt wat er nodig is.
@@ -139,6 +143,37 @@
     return inHetKamp - leeg;
   }
 
+  // Een gebouw waar de ossenkar heen rijdt: wat iets maakt (een werkplaats), een boerderij, en een schuur met een eigen kar.
+  const doorDeKar = (g) => g.klaar && (T.isBoerderij(g) || !!(T.GEBOUWEN[g.soort] && (T.GEBOUWEN[g.soort].maakt || T.GEBOUWEN[g.soort].kar)));
+  const isOpslag = (g) => g.klaar && !!(T.GEBOUWEN[g.soort] && T.GEBOUWEN[g.soort].opslag);
+  // Een tegel bij de deur van g waar een weg kan liggen (de deur zelf, of een tegel ernaast), of null.
+  function wegPlekBij(D, g) {
+    const d = T.deurVan(D.wereld, g);
+    for (const [dx, dy] of [[0, 0], [0, 1], [1, 0], [-1, 0], [0, -1], [1, 1], [-1, 1], [1, -1], [-1, -1]]) {
+      if (!T.waaromGeenWegOp(D, d.x + dx, d.y + dy)) return { x: d.x + dx, y: d.y + dy };
+    }
+    return null;
+  }
+  // Regel 8: de weg van de dichtste opslag naar het dichtste gebouw waar de kar heen rijdt en nog geen weg ligt.
+  function wegVoorDeKar(D) {
+    const opslagen = D.gebouwen.filter(isOpslag);
+    const keus = [];
+    for (const g of D.gebouwen) {
+      if (!doorDeKar(g) || (isOpslag(g) && !T.GEBOUWEN[g.soort].kar)) continue;
+      const a = wegPlekBij(D, g);
+      const o = opslagen.filter((x) => x !== g).map((x) => ({ x, b: wegPlekBij(D, x) })).filter((x) => x.b)
+        .sort((p, q) => T.afstand(p.b, a || p.b) - T.afstand(q.b, a || q.b))[0];
+      if (!a || !o) continue;
+      const plan = T.planWeg(D, o.b, a);
+      if (!plan.reden) keus.push({ g, van: o.b, naar: a, n: plan.nieuw.length, d: T.afstand(o.b, a) });
+    }
+    const k = keus.sort((p, q) => p.d - q.d)[0];
+    if (!k) return null;
+    const u = T.legWeg(D, k.van, k.naar);
+    return { soort: 'weg', gelukt: u.gelukt, reden: u.reden || null, instantie: u.weg || null,
+      tekst: u.gelukt ? `legt een weg van ${k.n} tegels naar de ${k.g.soort} (voor de ossenkar)` : `wil een weg naar de ${k.g.soort}, maar: ${u.reden}` };
+  }
+
   T.kolonistDag = function (D, dag) {
     if (!D.begin || D.begin.kamp === 'onderweg') return [];
     const daden = [];
@@ -189,6 +224,12 @@
       const h = T.watHelptAanAfwisseling(D).find((x) => ['jager', 'moestuin', 'kippenhok', 'visser'].includes(x.bouw));
       const al = h ? D.gebouwen.filter((g) => g.soort === h.bouw) : [];
       if (h && al.every((g) => g.klaar && g.klaarOp <= dag - IN.afwisselingNa)) doe(bouw(D, h.bouw, hart(D), `voor ${h.soort}: het dorp eet eentonig`));
+    }
+
+    // 8. Een weg voor de ossenkar, als er niets anders gebouwd wordt.
+    if (!D.gebouwen.some((g) => g.bouw && !g.klaar) && !(D.wegwerk || []).length) {
+      const u = wegVoorDeKar(D);
+      if (u) doe(u);
     }
     return daden;
   };

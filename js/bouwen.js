@@ -68,7 +68,9 @@
     return instantie;
   };
 
-  const bouwplaatsen = (D) => (D.gebouwen || []).filter((g) => g.bouw && !g.klaar);
+  // De bouwplaatsen in de volgorde waarin je ze neerzette, en dan de wegen in aanleg (js/wegen.js): eerst een dak.
+  const bouwplaatsen = (D) => (D.gebouwen || []).filter((g) => g.bouw && !g.klaar).concat(D.wegwerk || []);
+  const isWeg = (g) => g.soort === 'weg';
 
   // Wat een tegel van de kavel aan rooien kost, in werkdagen.
   const rooiKost = (D, t) => (T.ontginWerkOp(D.wereld, t.x, t.y) === 'hakken' ? IN().rooiBoom : IN().rooiStruik);
@@ -79,6 +81,7 @@
   // hem dan op klaar, zoals elk gebouw). Geeft het werk dat bleef liggen omdat het hout er nog niet was: overdag doen de
   // bouwers het later die dag, als de kar het bracht.
   function werkAan(D, g, werk, dag) {
+    if (isWeg(g)) return T.werkAanWeg(D, g, werk);
     const B = g.bouw;
     let over = werk;
     if (g.wachtOpRooien) {
@@ -153,7 +156,8 @@
     const krijgt = T.krijgtVandaagHout(D);
     for (const g of bouwplaatsen(D)) {
       if (T.wachtOpHout(g) && !krijgt.has(g)) continue; // daar komt vandaag geen hout: naar de volgende
-      const r = g.wachtOpRooien ? g.kavel : T.voetVanGebouw(g);
+      const r = isWeg(g) ? { ...T.wegNogTeDoen(g)[0], b: 1, h: 1 } : g.wachtOpRooien ? g.kavel : T.voetVanGebouw(g);
+      if (r.x == null) continue; // een weg die af is
       const midden = { x: r.x + r.b / 2, y: r.y + r.h / 2 };
       vrij.sort((p, q) => T.afstand(deur(p), midden) - T.afstand(deur(q), midden));
       for (const p of vrij.splice(0, IN().perPlaats)) p.bouwt = g;
@@ -214,9 +218,11 @@
     const w = D.wereld;
     const wt = e.werkt && e.werkt.bouw === g ? e.werkt : null;
     if (wt && wt.wacht && nu < wt.wacht) return; // hij kwam er niet: over een uur weer
-    const soort = g.wachtOpRooien ? 'hakken' : 'bouwen';
-    // nog te doen: de boom waar hij naar kijkt, of de voet
-    const opNogTeDoen = (op) => (soort === 'hakken' ? !!T.ontginWerkOp(w, op.x, op.y) : true);
+    // Aan een weg (js/wegen.js) werken ze aan de eerste tegels die nog niet liggen: hakken als daar iets staat.
+    const weg = isWeg(g) ? T.wegNogTeDoen(g).slice(0, IN().perPlaats) : null;
+    const soort = weg ? (weg.some((t) => T.ontginWerkOp(w, t.x, t.y)) ? 'hakken' : 'bouwen') : g.wachtOpRooien ? 'hakken' : 'bouwen';
+    // nog te doen: de boom waar hij naar kijkt, de tegel weg, of de voet
+    const opNogTeDoen = (op) => (soort === 'hakken' ? !!T.ontginWerkOp(w, op.x, op.y) : weg ? !T.opPad(w, op.x, op.y) : true);
     if (wt && wt.soort === soort && opNogTeDoen(wt.op)) {
       if (e.pad.length) return; // onderweg
       if (e.tx === wt.x && e.ty === wt.y) {
@@ -233,7 +239,8 @@
       const o = q.wezen && q.wezen !== e && q.wezen.werkt;
       if (o && o.bouw === g && o.op) bezet.add(o.op.x + ',' + o.op.y);
     }
-    const alle = soort === 'hakken' ? T.teRooienOp(D, g.kavel) : randVan(T.voetVanGebouw(g));
+    const alle = weg ? (soort === 'hakken' ? weg.filter((t) => T.ontginWerkOp(w, t.x, t.y)) : weg)
+      : soort === 'hakken' ? T.teRooienOp(D, g.kavel) : randVan(T.voetVanGebouw(g));
     const vrij = alle.filter((t) => !bezet.has(t.x + ',' + t.y));
     const tegels = vrij.length ? vrij : alle;
     let op = null;

@@ -1162,7 +1162,39 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   werkplaatsen tot `voorraadIn`, met `vraag` min wat al `onderweg` is), dan halen, en anders een halve vracht. Een
   werkplaats verwerkt via `T.verwerkVoorraad` en `T.verwerk` (uit `g.in`). `T.nogTeBrengen(D, wat)`: wat de bouwplaatsen
   nog vragen (de winter van het brandhout in `js/behoeften.js`, de kolonist). `T.brengMeteen(D, g)`: alsof de kar het
-  bracht (het proefdorp, `bouwAf`).
+  bracht (het proefdorp, `bouwAf`). Een losse stapel (`stapel` in `T.GEBOUWEN`, van een afgebroken gebouw, `js/afbreken.js`)
+  ligt op zijn eigen tegel (`T.stapelPlek`), en is weg als de kar hem leeg laadt.
+
+### js/wegen.js: de wegen die jij legt
+
+- `js/wegen.js`: **de wegen** (werklijst C, stap 5, 14 okt; Marcel: "a ja, b ja, c1, d ja, ... f ja"). Een gelegde weg is
+  een tegelnummer in `w.wegen` (een Set, in S); `T.opPad` (`js/wereld.js`) telt hem mee zoals de weg van de kaart en het
+  plein, dus er wordt niet op gebouwd, de paadjes van de deuren sluiten erop aan, en `T.zandHoeken` (`js/paden.js`) tekent
+  hem als zand. `T.planWeg(D, a, b)` is de ene vraag voor de muis en de klik: `T.trekWeg` zoekt recht en haaks (Dijkstra
+  over tegel en richting, met een kleine prijs per bocht, een stuk weg dat er al ligt voor `alWegKost`), in het vak om a
+  en b met een rand van 8; per tegel `T.waaromGeenWegOp`. `T.legWeg` zet een weg in aanleg in `D.wegwerk`
+  (`{ soort: 'weg', plekken, af, bouw }`; een eigenschap heet nooit `tegels`, dat is de kaart, `test/tegels.test.cjs`); in
+  `js/bouwen.js` is hij een bouwplaats na de gebouwen, en `T.werkAanWeg` legt hem tegel voor tegel (eerst rooien, het
+  hout meteen de voorraad in, dan `werkPerTegel`). `T.wegKomtOp` (een Set per weg, in een WeakMap) houdt gebouwen,
+  velden en bos van een weg in aanleg af (`T.waaromNietOpDezeGrond`). **De kar:** `T.karKostOp(w, x, y)` is wat een stap
+  kost (op een weg `1 / karSneller`): `T.zoekRoute(..., { kar: true })` (`js/lopen.js`) geeft het aan A* als `kost` met
+  `minKost` voor de schatting (`js/pad.js`; dan telt schuin √2), `js/kar.js` rekent er de duur van een rit mee, en
+  `js/anim.js` de snelheid van het wezen, zodat regel en beeld hetzelfde zeggen. De mensen lopen niet sneller (c1). Getallen
+  in `T.WEGEN_INSTELLINGEN` (de werkbank: "Roads"); getoetst in `test/wegen.test.cjs`.
+
+### js/afbreken.js: afbreken
+
+- `js/afbreken.js`: **afbreken** (werklijst C, stap 5, e; Marcel, 14 okt: "Wegen en gebouwen, nu", en "ze lopen los, met
+  een melding dat er huizen nodig zijn"). `T.handelingAfbreken(D, x, y)` geeft `{ tekst, kan, doe, plekken }` voor de muis
+  en de klik (`js/main.js`, met `S.bouwSoort` 'afbreken'): een gelegde weg (`T.haalWegWeg`), een weg in aanleg
+  (`T.stopWegwerk`), of een gebouw (`T.breekAf`). Niet: het huis van de schout, een tent, een losse stapel, een veld op
+  zichzelf, de weg van de kaart. `T.breekAf`: de bewoners `T.wordtDakloos` (`js/bewoners.js`: `p.huis` null, `e.thuis` op
+  `T.dakloosPlek`, het plein; `T.deurVanBewoner` is hun deur; ze slapen buiten, `T.dagAnker` in `js/dag.js`, en trekken in
+  de eerste woning met plaats, `T.verhuisUitHetKamp` in `js/begin.js`; de status `dakloos` in `js/voorvallen.js`), de
+  velden van een boerderij en de ranken mee, de kar van een schuur mee (`D.karren`, `w.wezens`), de lantaarn bij de deur,
+  de kramen van de markt, het voorwerp van de kaart en zijn voet weer `vloer`; wat erbij lag (stapel, `bouw.er` dat nog
+  niet verbouwd was, `g.in`, de lading van de kar) wordt een losse stapel; dan `T.verdeelHanden` (wie er werkte, is vrij)
+  en `T.werkDeBoerenBij`. Getoetst in `test/afbreken.test.cjs`.
 
 ### js/bode.js: de bode naar de marskramer
 

@@ -1927,6 +1927,14 @@
     const D = S.dorp;
     if (!D || !D.begin) return;
     ctx.fillStyle = 'rgba(226, 182, 74, 0.3)';
+    // en een weg die de bouwers nog leggen (js/wegen.js): de tegels die er nog niet liggen
+    for (const weg of D.wegwerk || []) {
+      for (const t of T.wegNogTeDoen(weg)) {
+        const p = opGrond(t.x, t.y);
+        T.ruit(ctx, p.x, p.y, 0.94);
+        ctx.fill();
+      }
+    }
     for (const g of D.gebouwen) {
       // ook een veld dat de bouwers nog ploegen of planten (js/boerderij.js): het heeft geen tekening tot het land is
       if (!g.bouw || !(g.wachtOpRooien || T.isVeldSoort(g.soort))) continue;
@@ -1950,6 +1958,17 @@
     // dat je trekt (js/main.js, js/boerderij.js).
     const veld = S.bouwHover.veld;
     ctx.fillStyle = S.bouwHover.ok ? 'rgba(134, 196, 111, 0.45)' : 'rgba(224, 96, 79, 0.45)';
+    // Een weg (js/wegen.js): zijn tegels; afbreken (js/afbreken.js): wat een klik afbreekt.
+    const plekken = S.bouwHover.plekken || (S.bouwHover.afbreken && S.bouwHover.afbreken.plekken);
+    if (plekken || S.bouwSoort === 'afbreken') {
+      if (S.bouwSoort === 'afbreken') ctx.fillStyle = S.bouwHover.ok ? 'rgba(224, 96, 79, 0.5)' : 'rgba(150, 150, 150, 0.35)';
+      for (const t of plekken || [{ x: S.bouwHover.x, y: S.bouwHover.y }]) {
+        const p = opGrond(t.x, t.y);
+        T.ruit(ctx, p.x, p.y, 0.94);
+        ctx.fill();
+      }
+      return;
+    }
     // De markt komt op zijn plek op het plein, waar je ook wijst (js/markt.js): die plek licht op.
     if (S.bouwSoort === 'markt') {
       for (const t of T.marktTegels(S.dorp.wereld)) {

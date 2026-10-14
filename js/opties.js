@@ -630,6 +630,7 @@
     { naam: T.t('The empty start'), blok: 'BEGIN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Helping build'), blok: 'BOUWEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The ox cart'), blok: 'KAR_INSTELLINGEN' }, // geen tekst
+    { naam: T.t('Roads'), blok: 'WEGEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Farmers from nothing'), blok: 'BOERDERIJ_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The fields'), blok: 'VELDEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Fieldwork'), blok: 'VELDWERK_INSTELLINGEN' }, // geen tekst
@@ -1300,6 +1301,10 @@
     laden: T.t('loading time'),
     voorraadIn: T.t('kept at a workshop'),
     nietMetDeKar: T.t('not by ox cart'),
+    werkPerTegel: T.t('workdays per tile'),
+    karSneller: T.t('ox cart faster on a road'),
+    langst: T.t('longest road at once'),
+    alWegKost: T.t('a tile of road already there costs'),
     akker: T.t('arable'),
     wijngaard: T.t('vineyard'),
     veldMin: T.t('smallest field'),

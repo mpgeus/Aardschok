@@ -97,7 +97,24 @@
         );
       })
       .join('');
-    return `<div class="kop">${T.t('Build — {trede}', { trede: T.tredeNaam(S.dorp) })}</div>${rijen || `<p class="bouw-leeg">${T.t('There is nothing to build here right now.')}</p>`}`;
+    return `<div class="kop">${T.t('Build — {trede}', { trede: T.tredeNaam(S.dorp) })}</div>${landInBouwmenu()}${rijen || `<p class="bouw-leeg">${T.t('There is nothing to build here right now.')}</p>`}`;
+  }
+
+  // Bovenaan wat je met het land doet, geen gebouw (werklijst C, stap 5): een weg leggen (js/wegen.js), en afbreken
+  // (js/afbreken.js). Beide blijven in de hand tot een rechtsklik.
+  function landInBouwmenu() {
+    const I = T.WEGEN_INSTELLINGEN;
+    return (
+      `<button data-soort="weg">` +
+      `<span class="bouw-naam">${T.t('Road')}</span>` +
+      `<span class="bouw-kosten">${T.t('{n|# workday|# workdays} per 10 tiles', { n: Math.round(10 * I.werkPerTegel * 100) / 100 })}</span>` +
+      `<span class="bouw-uitleg">${T.t('The ox cart drives {n}× as fast on a road. Click where it begins, then where it ends.', { n: I.karSneller })}</span>` +
+      `</button>` +
+      `<button data-soort="afbreken">` +
+      `<span class="bouw-naam">${T.t('Demolish')}</span>` +
+      `<span class="bouw-uitleg">${T.t('A road or a building. Nothing comes back.')}</span>` +
+      `</button>`
+    );
   }
 
   // Hoe lang het bouwen duurt: zijn bouwtijd, of in het lege begin het werk dat de bouwers eraan hebben (js/bouwen.js).

@@ -9,6 +9,20 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Een weg ziet er net zo uit als een paadje** (14 okt, C stap 5): allebei zand (`T.zandHoeken`). Een paadje komt vanzelf
+  van elke deur, een weg leg jij, en alleen over een weg rijdt de kar sneller; dat zie je nu niet. Een eigen tekening
+  (karrensporen, een rand van stenen) zou het zeggen. Mee in een ronde van de beelden.
+- **Het hout van wat ze voor een weg rooien, gaat meteen de opslag in** (14 okt, C stap 5): een weg heeft geen deur, dus
+  geen stapel; de bouwers dragen het zelf. Een kleine uitzondering op "alles met de kar". Een losse stapel bij de weg
+  (zoals bij afbreken) kan, als het stoort.
+- **Een veld breek je niet los af** (14 okt, C stap 5; Marcel koos "wegen en gebouwen", de velden gaan mee met hun
+  boerderij): ook een veld dat je net verkeerd legde en dat nog niet geploegd is, blijft. Als dat stoort: afbreken voor
+  een veld in aanleg.
+- **De kolonist bouwt geen schuur** (14 okt, C stap 5, f): de afspraak was een weg "van elke schuur naar het huis van de
+  schout"; omdat hij nooit een schuur zet, legt hij een weg van de opslag naar elk gebouw waar de kar heen rijdt.
+- **Een huis dat wilde groeien en dat je afbreekt** (14 okt, C stap 5): de appelbomen die het gezin ervoor zou kappen,
+  houden hun teken (`v.teKappen`, `js/bos.js`), en worden door een houthakker of bouwer als boom gehakt. Klein.
+
 - **Een stapel achter een gebouw zie je niet** (14 okt, C stap 1): de doorkijk (`js/doorkijk.js`) maakt een dak doorzichtig
   voor een wezen, niet voor een stapel. In het proefdorp, waar alles tegen het vuur staat, lag de stapel van de houthakker
   achter een boerderij. In het spel zet je meestal ruimer; als het stoort, de stapel meenemen in de doorkijk.

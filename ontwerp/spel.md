@@ -151,6 +151,25 @@ voor alle opslagen samen. Een kar zonder werk wacht bij zijn opslag. Zo kom je b
 de rand van het bereik, en dan de steengroeve erachter. De getallen in de werkbank ("The ox cart"). In de console:
 `Spel.debug.kar()`.
 
+**Zo werken de wegen en het afbreken nu** (14 okt, C stap 5; Marcel: "a ja, b ja, c1, d ja, e we moeten een
+'demolition' knop hebben ja, f ja", "Wegen en gebouwen, nu", en "ze lopen los, met een melding dat er huizen nodig
+zijn"; `js/wegen.js`, `js/afbreken.js`): bovenaan het bouwmenu staan **Road** en **Demolish**, en allebei blijven ze in
+de hand tot een rechtsklik. Een weg leg je met twee klikken, het begin en het eind; het spel trekt de kortste weg
+ertussen, recht en haaks, neemt een stuk weg dat er al ligt mee, en je ziet hem in groen voor je klikt, met wat hij kost.
+Na de tweede klik is het eind het begin van het volgende stuk, zodat je een bocht in een paar klikken legt. Een weg
+kost alleen werk: wie geen werk heeft, legt hem, na de gebouwen, 0,1 werkdag per tegel (een weg van 20 tegels is twee
+werkdagen), en rooit eerst wat in de weg staat (dat hout dragen ze zelf naar de opslag). Je ziet de tegels die nog komen
+in goud, en de weg groeien als zand. Over een weg rijdt de ossenkar twee keer zo snel (ook over de weg van de kaart en
+het plein), en hij zoekt hem op; de mensen lopen er niet sneller over. Op een weg, en waar een weg komt, wordt niet
+gebouwd en groeit geen bos. **Afbreken**: de muis zegt wat een klik doet. Een stuk weg wordt weer gras; een weg in aanleg
+stopt (wat er ligt, blijft). Een gebouw is weg, en er komt niets terug: wie erin woonde, heeft geen huis (een melding, en
+de status **Homeless** in de balk), slaapt buiten op het plein en werkt gewoon, tot er een woning met plaats is, waar het
+gezin vanzelf in trekt; wie er werkte, is vrij; wat erbij lag (de stapel, het hout dat de kar al naar een bouwplaats
+bracht, de lading van de kar van een schuur) blijft als losse stapel liggen tot de ossenkar hem haalt; de velden van een
+boerderij gaan mee, en de kar van een schuur ook. Niet af te breken: het huis van de schout, de tenten van het kamp, een
+veld op zichzelf, en de weg van de kaart. De getallen in de werkbank ("Roads"). De kolonist van de speeltest legt een weg
+van de opslag naar elk gebouw waar de kar heen rijdt, als er niets anders gebouwd wordt.
+
 **Zo werkt de mist nu** (13 okt, B2c; Marcel: "A2, B1, C ok"; `js/mist.js`, het plan in `kaarten.md`, "Het hele
 eiland"): het eiland is zwart waar niemand van jou kwam, grijs (donkerder en ontkleurd) wat je zag maar nu niet ziet, en
 helder waar je mensen kijken. Bij het begin ken je een kring van 50 tegels om het midden van je land. De schout kijkt 12

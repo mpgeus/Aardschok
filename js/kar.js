@@ -119,6 +119,7 @@
   // De tegel waar de stapel van g ligt, om hem te tekenen: naast de deur (links of rechts ervan, of erachter), op een
   // tegel waar je kunt staan; de deur zelf blijft vrij.
   T.stapelPlek = function (D, g) {
+    if (g.soort === 'stapel') return { x: g.x, y: g.y }; // een losse stapel ligt op zijn eigen tegel (js/afbreken.js)
     const w = D.wereld;
     const deur = T.deurVan(w, g);
     const r = T.voetVanGebouw(g);
@@ -330,14 +331,16 @@
   }
 
   // De weg van de kar naar `doel` ({ x, y, naast }), en hoe lang hij erover doet (in dagen), of null als er geen weg is.
+  // Over een weg rijdt hij sneller (T.karKostOp, js/wegen.js), en die zoekt hij op.
   function weg(D, e, doel) {
+    const w = D.wereld;
     const van = { x: e.tx, y: e.ty };
-    const pad = T.zoekRoute(D.wereld, van, doel, { naast: !!doel.naast });
+    const pad = T.zoekRoute(w, van, doel, { naast: !!doel.naast, kar: true });
     if (!pad) return null;
     let lengte = 0;
     let vorig = van;
     for (const t of pad) {
-      lengte += Math.hypot(t.x - vorig.x, t.y - vorig.y);
+      lengte += Math.hypot(t.x - vorig.x, t.y - vorig.y) * T.karKostOp(w, t.x, t.y);
       vorig = t;
     }
     const eind = pad.length ? pad[pad.length - 1] : van;
@@ -486,6 +489,8 @@
             if (g.stapel[wat] < 1e-6) delete g.stapel[wat];
             ruimte -= n;
           }
+          // een losse stapel van een afgebroken gebouw (js/afbreken.js): is hij leeg, dan is hij weg
+          if (g.soort === 'stapel' && !T.stapelVan(g)) D.gebouwen.splice(D.gebouwen.indexOf(g), 1);
         }
         zetVel(e);
         const o = thuisVan(D, e);

@@ -1021,9 +1021,11 @@
   };
 
   // Loopt hier een pad? Wat de grond zegt (js/kaart.js, `naam` bij de tegel in de .tmj): een zandpad of
-  // kasseien. Op een pad wordt niet gebouwd (js/gebouwen.js, T.waaromPastHetNiet), en er komt geen erf.
+  // kasseien, of een weg die jij legde (w.wegen, js/wegen.js). Op een pad wordt niet gebouwd (js/gebouwen.js,
+  // T.waaromPastHetNiet), en de ossenkar rijdt er sneller (T.karKostOp, js/wegen.js).
   const PADEN = ['zandpad', 'kasseien'];
   T.opPad = function (w, x, y) {
+    if (w.wegen && w.wegen.has(T.tegelNummer(x, y))) return true;
     const g = T.grondOp(w, x, y);
     return !!(g && PADEN.includes(g.naam));
   };

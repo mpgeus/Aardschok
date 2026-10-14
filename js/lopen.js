@@ -60,17 +60,19 @@
   const WEGEN = new WeakMap(); // kaart → { versie, wegen: Map(sleutel → Int16Array of null) }
 
   // De weg van `van` naar `doel` over wat vaststaat, zonder de starttegel, of null als er geen is. opties: `tot` en
-  // `naast` zoals T.zoekPad (js/pad.js), `deurenOpenen` (de schout duwt een dichte deur open), en `veld`: het doel is een
-  // plek waar velen heen gaan (hieronder, "Naar hetzelfde doel").
+  // `naast` zoals T.zoekPad (js/pad.js), `deurenOpenen` (de schout duwt een dichte deur open), `veld`: het doel is een
+  // plek waar velen heen gaan (hieronder, "Naar hetzelfde doel"), en `kar`: de ossenkar, die een weg opzoekt omdat hij er
+  // sneller rijdt (T.karKostOp, js/wegen.js; werklijst C, stap 5).
   T.zoekRoute = function (w, van, doel, opties) {
     const o = opties || {};
     const tot = o.tot >= 1 ? Math.floor(o.tot) : 0;
     const naast = !!o.naast;
     const open = !!o.deurenOpenen;
+    const kar = !!o.kar;
     // Een kaart met deuren (de proefkamers) onthoudt niets: een deur gaat open en dicht zonder dat de kaart verandert.
     const onthoudt = !(w.deuren && w.deuren.size);
     const vv = o.veld && veldVak(w);
-    if (o.veld && !naast && onthoudt && T.inVak(vv, van.x, van.y) && T.inVak(vv, doel.x, doel.y)) {
+    if (o.veld && !kar && !naast && onthoudt && T.inVak(vv, van.x, van.y) && T.inVak(vv, doel.x, doel.y)) {
       if (T.afstand(van, doel) <= tot) return [];
       if (!T.kanErKomen(w, van, doel, { tot })) return null;
       // Loopt de enige weg buiten het vak van het veld om (een meer dat het dorp afsnijdt), dan zoekt hij hem zelf.
@@ -91,10 +93,12 @@
       }
       wegen = m.wegen;
     }
-    const sleutel = `${van.x},${van.y}>${doel.x},${doel.y}|${tot}|${naast ? 1 : 0}|${open ? 1 : 0}`;
+    const sleutel = `${van.x},${van.y}>${doel.x},${doel.y}|${tot}|${naast ? 1 : 0}|${open ? 1 : 0}${kar ? '|kar' : ''}`;
     if (wegen && wegen.has(sleutel)) return alsPad(wegen.get(sleutel));
     const pad = T.kanErKomen(w, van, doel, { tot, naast })
-      ? T.zoekPad(van, doel, (x, y) => T.isBegaanbaar(w, x, y, { deurenOpenen: open }), (x, y) => T.isVast(w, x, y), { tot, naast, wereld: w })
+      ? T.zoekPad(van, doel, (x, y) => T.isBegaanbaar(w, x, y, { deurenOpenen: open }), (x, y) => T.isVast(w, x, y), {
+        tot, naast, wereld: w, ...(kar ? { kost: (x, y) => T.karKostOp(w, x, y), minKost: T.karKostMin() } : {}),
+      })
       : null;
     if (wegen) wegen.set(sleutel, alsRij(pad));
     return pad;

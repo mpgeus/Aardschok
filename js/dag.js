@@ -231,10 +231,13 @@
     if (!p && !e.werkAkkers) return null;
     // Wie rovers op de weg aanhouden (de bode, js/bode.js, en de hinderlaag in js/rovers.js), staat stil.
     if (e.aangehouden) return { x: e.aangehouden.x, y: e.aangehouden.y, straal: 0 };
+    const deel = T.dagdeelVan(D.kalender.dag, oogst);
+    // Wie geen huis heeft (js/afbreken.js, T.wordtDakloos), slaapt buiten op het plein en hangt er 's ochtends en 's avonds
+    // rond; overdag werkt hij zoals iedereen.
+    if (p && !p.huis && !p.schout && (deel === 'nacht' || deel === 'ochtend' || deel === 'avond')) return { x: e.thuis.x, y: e.thuis.y, straal: IN().erfStraal };
     // Wie de wolven zag of beten, blijft thuis (T.blijftThuis, js/bewoners.js; js/beesten.js). gereedschap/wereld.html
     // laadt de bewoners niet.
     if (T.blijftThuis && T.blijftThuis(p || T.bewonerVan(D, e), D.kalender.dag)) return { x: e.thuis.x, y: e.thuis.y, straal: 0, binnen: true };
-    const deel = T.dagdeelVan(D.kalender.dag, oogst);
     if (deel === 'nacht') return { x: e.thuis.x, y: e.thuis.y, straal: 0, binnen: true };
     // Wie wegtrekt, loopt overdag de weg af; wie nieuw is, loopt eerst naar zijn huis (js/bewoners.js,
     // T.werkBewonersBij).

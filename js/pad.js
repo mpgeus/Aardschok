@@ -109,6 +109,8 @@
   // zijn; zonder dit bleef wie naar het erf liep staan zolang er iemand voor de deur stond.
   // opties.max: bekijk hooguit zoveel tegels, en geef het dan op (een korte omweg om iemand heen, js/lopen.js).
   // opties.wereld: de kaart, voor de hoogte: geen stap door een wand (T.kanStappen, js/hoogte.js; vraag 121, stap 2).
+  // opties.kost(x, y): wat een stap naar deze tegel kost, als deel van een gewone stap (de ossenkar op een weg, js/wegen.js),
+  // met opties.minKost het goedkoopste; dan telt een schuine stap ook echt langer (√2), zoals de kar hem rijdt.
   // Geeft de stappen terug zonder de starttegel, of null als er geen weg is.
   // Tijdens het zoeken staat iedereen stil (T.iedereenStil, js/wereld.js): zo vraagt magBetreden wie er op een tegel
   // staat in één stap, in plaats van alle wezens af te lopen.
@@ -125,10 +127,12 @@
     const tot = opties && opties.tot >= 1 ? Math.floor(opties.tot) : 0;
     const max = opties && opties.max > 0 ? opties.max : Infinity;
     const hoog = opties && opties.wereld && opties.wereld.hoogte ? opties.wereld : null; // een kaart met hoogte (js/hoogte.js)
+    const kost = opties && opties.kost;
+    const minKost = kost ? opties.minKost : 1;
     let bekeken = 0;
     const schatting = (x, y) => {
       const d = Math.max(Math.abs(x - doel.x), Math.abs(y - doel.y));
-      return naast ? Math.max(0, d - 1) : Math.max(0, d - tot);
+      return (naast ? Math.max(0, d - 1) : Math.max(0, d - tot)) * minKost;
     };
     const isKlaar = (x, y) => {
       if (tot) return Math.max(Math.abs(x - doel.x), Math.abs(y - doel.y)) <= tot;
@@ -175,7 +179,7 @@
         if (hoog && !T.kanStappen(hoog, huidig.x, huidig.y, nx, ny)) continue;
         // Schuin kost een haar meer, zodat van twee even korte paden het rechtste wint.
         // Het verschil is te klein om ooit een langer pad te laten winnen.
-        const g = huidig.g + (schuin ? 1.001 : 1);
+        const g = huidig.g + (kost ? (schuin ? Math.SQRT2 : 1) * kost(nx, ny) : schuin ? 1.001 : 1);
         if (np >= 0 && g >= tabel.kosten[np]) continue;
         const q = np >= 0 ? np : plek(ns, true);
         tabel.kosten[q] = g;
