@@ -24,9 +24,8 @@ na: het hele eiland in stukken, opslaan wat veranderde, het optimaliseren, en de
 
 **B3 is af** (13 okt, onder "Af", in `main`): het dorp eet in gelijke delen van elke soort, en hoe meer soorten, hoe
 harder al het werk gaat. **C, de ossenkar, loopt** (14 okt): het plan staat bij C (Marcel: "A2, B2, C1, D2, E2").
-**Stap 1 is af** (14 okt, op branch `claude/relaxed-mendel-59zm3c`, wacht op "push it"): het hout ligt op een stapel bij
-de deur tot de kar het haalt (`spel.md`, "Zo werkt de kar nu"). Het volgende is stap 2: de bouwplaats krijgt haar hout
-met de kar.
+**Stap 1 is af** (14 okt, in `main`): het hout ligt op een stapel bij de deur tot de kar het haalt (`spel.md`, "Zo werkt
+de kar nu"). Stap 2 loopt: de bouwplaats krijgt haar hout met de kar.
 
 **Wacht op Marcel:**
 - **De ossenkar bekijken** (C, stap 1, 14 okt): Nieuw spel. De huifkar komt aan, en pas dan staat zijn lading in de balk.
@@ -133,7 +132,7 @@ werk) wacht op Marcel.
 
 ## C. De ossenkar (vraag 152, de proef)
 
-**Bezig in sessie `claude/relaxed-mendel-59zm3c`** (14 okt): stap 1 is af (op die branch); stap 2 volgt.
+**Bezig in sessie `claude/relaxed-mendel-59zm3c`** (14 okt): stap 2 (stap 1 is af, in `main`).
 
 Besloten (Marcel, 11 okt): bouwen binnen bereik van het plein en elke opslag, geen grens en geen vlaggen; de kar rijdt
 overal, over een weg sneller; een ossenkar; de eerste opslag is het huis van de schout. **Het plan** (Marcel, 14 okt:
