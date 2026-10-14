@@ -193,6 +193,7 @@ Hoe we kiezen:
 - **Niets erbij zonder overleg** (Marcel, 8 okt: "We moeten stoppen met het ene op te lossen met iets anders"): wat een
   speeltest scheef laat zien, los je eerst op met een getal uit de werkbank; iets nieuws (een regel, een gebouw, een
   grondstof) komt er alleen als Marcel het kiest.
+- **Eerst goedkeuring, dan renderen** (Marcel, 14 okt): een tekening eerst in woorden, dan één proefplaat (`beeld.md`).
 
 ## Afspraken in de code
 

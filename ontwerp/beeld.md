@@ -41,6 +41,18 @@ kapot aan één ding dat niet klopt** — een figuur die half in een put staat, 
 raster, een huis waarvan alleen het dak boven het gras uitsteekt. Zo'n breuk gaat voor op nieuw
 moois, want één ervan doet meer kwaad dan tien mooie huizen goedmaken.
 
+## Eerst goedkeuring, dan renderen (Marcel, 14 okt 2026)
+
+"Eerst voortaan even goedkeuring vragen, want anders is het zonde van de render tijd." Op 14 okt maakte Claude voor de
+zagerij (werklijst vraag 157) twee tekeningen na elkaar zonder te vragen, en allebei gingen ze weg: de open loods "ziet
+er niet uit", en het huis zoals de bakkerij was "veel te stijf" (alles recht, waar de huizen uit de huizenbouwer zakken
+en golven; zie hieronder, "Niets is waterpas"). Dus voor elke nieuwe tekening, of een tekening die verandert:
+
+1. **Eerst in woorden:** wat het wordt, waar het op lijkt (welk huis van de huizenbouwer, welke stijl), wat erbij staat,
+   en hoeveel tekeningen het worden. Marcel zegt ja of anders.
+2. **Dan één proefplaat**, één stijl en één kant, in een paar seconden. Marcel zegt ja of anders.
+3. **Pas dan alles**: de stijlen, de kanten, de oude versies en de bouwfasen, en het spel.
+
 ## Niets is waterpas (Marcel, 21 sep 2026)
 
 "Het moet echt aanvoelen. In de middeleeuwen was er geen laserlijn, er was geen waterpas. Dingen
