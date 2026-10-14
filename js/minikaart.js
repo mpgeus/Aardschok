@@ -16,7 +16,12 @@
     stap: 8,
     rijenPerKeer: 6, // zoveel rijen van het beeld per keer (een rij kost zo'n 1 ms)
     msPerBeeld: 4, // en zo lang per beeld van het spel, tot het af is
-    onbekend: 0.75, // hoe donker wat je niet kent (1 is zwart): je ziet de vorm van het eiland, niet wat er is
+    // Wat je niet kent, ligt onder een lichte waas, zoals een vervaagde oude kaart (Marcel, 14 okt: "iets transparant maar
+    // lichter maken"): je ziet de vorm van het eiland, niet wat er is. Hoe dik de waas is (1 is dicht), en zijn kleur.
+    onbekend: 0.6,
+    nevel: [226, 214, 186],
+    // De rand van de ruit vervaagt (Marcel: "Randen featheren?"), over zoveel van de breedte.
+    rand: 0.06,
     // De kleuren van de streken (in het spel worden het tegels), de zee van ondiep naar diep, en de weg en de brug.
     kleur: {
       meer: [64, 112, 158],

@@ -474,9 +474,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   kent per vak, uit de bits van de mist (`T.minikaartGekend(w)`; `w.gekend`, `js/mist.js`). Het tekenen staat in
   `js/balk.js` (alleen scherm), zonder papier eromheen en wat doorschijnend (Marcel: "zonder 'rand' dus de kaart licht
   transparant"; `#minikaart` in `stijl.css`): zo'n 4 ms per beeld aan het beeld tot het af is, de mist opnieuw als `T.mistVersie`
-  verandert, en tien keer per seconde de ruit: het eiland, het donker over wat je niet kent (`onbekend`, 0,75: je ziet de
-  vorm, niet wat er is), de plekken die je kent, je gebouwen, de schout in rood, en het kader van de camera
-  (`T.tekenMaat` gedeeld door `S.zoom`). Een klik of slepen kijkt daar: `T.kijkNaar` (`js/main.js`) zet het overzicht
+  verandert, en tien keer per seconde de ruit: het eiland, een lichte waas over wat je niet kent (`onbekend` 0,6 en
+  `nevel`, als een vervaagde oude kaart: je ziet de vorm, niet wat er is; Marcel: "iets transparant maar lichter maken"),
+  de plekken die je kent, je gebouwen, de schout in rood, en het kader van de camera (`T.tekenMaat` gedeeld door
+  `S.zoom`); de rand vervaagt (`rand`, een zachte ruit als masker; Marcel: "Randen featheren?"). Een klik of slepen kijkt daar: `T.kijkNaar` (`js/main.js`) zet het overzicht
   (Tab) aan en de camera erheen.
 
 ### js/land.js en js/landkaart.js: het land met provincies

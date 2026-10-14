@@ -386,10 +386,10 @@ body.bouwmenu-open #statussen { visibility: hidden; }
 #bazen .baas.hoog .getal { color: var(--papier-rood); }
 
 /* De minikaart (js/minikaart.js en js/balk.js; vraag 165, Marcel: "Onder in de ui zoals bij age of Empires", "Het hele
-   eiland", en "zonder 'rand' dus de kaart licht transparant"): in de hoek rechtsonder, even breed als de kaartjes, een
-   losse ruit die ligt zoals het beeld, op ware pixels, zonder papier eromheen en wat doorschijnend; met de muis erop
-   helemaal. Een klik of slepen kijkt daar (het overzicht, Tab). */
-#minikaart { width: var(--kaart); opacity: 0.85; transition: opacity 0.15s; }
+   eiland", "zonder 'rand' dus de kaart licht transparant", en "Randen featheren? En dan iets transparant maar lichter
+   maken"): in de hoek rechtsonder, even breed als de kaartjes, een losse ruit die ligt zoals het beeld, op ware pixels,
+   zonder papier eromheen, met een zachte rand (js/balk.js) en wat doorschijnend; met de muis erop helemaal. Een klik of slepen kijkt daar (het overzicht, Tab). */
+#minikaart { width: var(--kaart); opacity: 0.9; transition: opacity 0.15s; }
 #minikaart:hover { opacity: 1; }
 #minikaart canvas { display: block; width: 100%; aspect-ratio: 2 / 1; cursor: crosshair; image-rendering: pixelated; }
 
