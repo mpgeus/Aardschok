@@ -285,7 +285,12 @@ niet perse. 8. Los ontwerp", op de vragen van Claude; in het gesprek heetten de 
   kolonist van de speeltest bouwt een zagerij vóór het dorp, en de speeltest speelt vijf eilanden een jaar zonder fouten;
   **f** een oud spel past niet meer (de timmerman heet anders): opslaan een versie omhoog. **Besloten** (Marcel, 14 okt:
   "Plan ja, zagerij nu een eigen tekening"): het plan zoals hier, en de zagerij krijgt meteen een eigen tekening uit
-  code. **Bezig in sessie `claude/village-economy-gameplay-lmsnyg`** (14 okt).
+  code. **Bezig in sessie `claude/village-economy-gameplay-lmsnyg`** (14 okt). De eerste eigen tekening, een open
+  loods onder een zwaar rieten dak, zag er niet uit (Marcel: "Maak het meer zoals onze mooie huizen?"); de tweede, een
+  huis zoals de bakkerij, paste nog niet bij de huizen, want die komen uit de huizenbouwer in de bouwstijl van het land,
+  en geen werkplaats doet dat. **Besloten** (Marcel, 14 okt, op de vraag): de zagerij komt in de huizenbouwer, zoals
+  de kleine herberg: in de vier stijlen, met de deur naar elke kant en met bouwfasen, met stammen en planken ernaast.
+  De andere werkplaatsen volgen later (vraag 167).
 - **158** (3): een muur leg je zoals een weg, en waar een weg hem kruist, komt vanzelf een poort (je mensen en de kar
   erdoor, rovers en wolven niet). **Steen is meteen te gebruiken**: de stenen muur wacht niet op een trede.
 - **159** (4a, gelezen als de eerste keuze): een soldaat is voltijds: hij legt zijn werk neer en eet, en kan zijn wapen
@@ -329,6 +334,10 @@ niet perse. 8. Los ontwerp", op de vragen van Claude; in het gesprek heetten de 
   briefje bij de muis op de datum (Sint-Maarten blijft staan). Het kaartje met de datum en de klok rechtsonder vervallen:
   rechtsonder alleen de minimap, linksonder alleen de waren. **Af** (14 okt, op de branch
   `claude/village-economy-gameplay-lmsnyg`; `code.md` bij `js/ui.js`).
+- **167, de werkplaatsen in de bouwstijl** (Marcel, 14 okt, bij 157: na de zagerij "Alle werkplaatsen in de bouwstijl"
+  als eigen punt): de houthakker, de smidse, de bakkerij en de andere werkplaatsen komen nog uit de oude tekeningen
+  (`dorp.cjs`, `dorp2.cjs`), en passen niet bij de huizen uit de huizenbouwer. Zoals de zagerij (157): in de vier
+  stijlen, met de deur naar elke kant en met bouwfasen. Later, na de zagerij.
 - **Nog open** (als we er zijn): **161**, het nieuws echt en bruikbaar (wat een stad tekortkomt, waar de mannen van de
   heer zijn, welk dorp morrt), en met een herberg blijven ze langer; **160**, eerst losse ritten (een kar met wat over
   is naar een stad, dagen onderweg, een escorte helpt), vaste routes later.
