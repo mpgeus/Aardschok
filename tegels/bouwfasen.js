@@ -35429,66 +35429,1041 @@
       }
      ]
     },
-    "zagerij": {
+    "wit-zagerij-riet-z": {
      "gebouw": "zagerij",
      "beslaat": [
-      6,
-      5
+      8,
+      4
      ],
-     "bestand": "bouwfasen/zagerij.png",
+     "bestand": "bouwfasen/wit-zagerij-riet-z.png",
      "fasen": [
       {
-       "x": 0,
-       "y": 682,
-       "b": 491,
-       "h": 192,
+       "x": 680,
+       "y": 439,
+       "b": 105,
+       "h": 100,
        "anker": [
-        295,
-        30
+        175,
+        -18
        ],
        "naam": "fundering"
       },
       {
-       "x": 0,
-       "y": 387,
-       "b": 362,
-       "h": 293,
+       "x": 356,
+       "y": 439,
+       "b": 322,
+       "h": 326,
        "anker": [
-        165,
-        131
+        129,
+        192
        ],
        "naam": "geraamte"
       },
       {
-       "x": 364,
-       "y": 387,
-       "b": 376,
-       "h": 258,
+       "x": 0,
+       "y": 439,
+       "b": 354,
+       "h": 341,
        "anker": [
-        172,
-        92
+        145,
+        192
        ],
        "naam": "muren-steigers"
       },
       {
-       "x": 0,
+       "x": 422,
        "y": 0,
-       "b": 376,
-       "h": 385,
+       "b": 354,
+       "h": 437,
        "anker": [
-        172,
-        219
+        145,
+        288
        ],
        "naam": "dakgebinte"
       },
       {
-       "x": 378,
+       "x": 0,
        "y": 0,
-       "b": 374,
-       "h": 385,
+       "b": 420,
+       "h": 437,
        "anker": [
-        172,
-        219
+        178,
+        288
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "wit-zagerij-riet-o": {
+     "gebouw": "zagerij",
+     "beslaat": [
+      4,
+      8
+     ],
+     "bestand": "bouwfasen/wit-zagerij-riet-o.png",
+     "fasen": [
+      {
+       "x": 680,
+       "y": 437,
+       "b": 105,
+       "h": 100,
+       "anker": [
+        303,
+        -82
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 356,
+       "y": 437,
+       "b": 322,
+       "h": 326,
+       "anker": [
+        257,
+        160
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 0,
+       "y": 437,
+       "b": 354,
+       "h": 341,
+       "anker": [
+        273,
+        160
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 422,
+       "y": 0,
+       "b": 354,
+       "h": 435,
+       "anker": [
+        273,
+        254
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 420,
+       "h": 435,
+       "anker": [
+        306,
+        254
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "wit-zagerij-riet-n": {
+     "gebouw": "zagerij",
+     "beslaat": [
+      8,
+      4
+     ],
+     "bestand": "bouwfasen/wit-zagerij-riet-n.png",
+     "fasen": [
+      {
+       "x": 680,
+       "y": 437,
+       "b": 105,
+       "h": 100,
+       "anker": [
+        175,
+        -18
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 356,
+       "y": 437,
+       "b": 322,
+       "h": 326,
+       "anker": [
+        65,
+        160
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 0,
+       "y": 437,
+       "b": 354,
+       "h": 341,
+       "anker": [
+        81,
+        160
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 422,
+       "y": 0,
+       "b": 354,
+       "h": 435,
+       "anker": [
+        81,
+        254
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 420,
+       "h": 435,
+       "anker": [
+        114,
+        254
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "wit-zagerij-riet-w": {
+     "gebouw": "zagerij",
+     "beslaat": [
+      4,
+      8
+     ],
+     "bestand": "bouwfasen/wit-zagerij-riet-w.png",
+     "fasen": [
+      {
+       "x": 680,
+       "y": 439,
+       "b": 105,
+       "h": 100,
+       "anker": [
+        303,
+        -82
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 356,
+       "y": 439,
+       "b": 322,
+       "h": 326,
+       "anker": [
+        193,
+        192
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 0,
+       "y": 439,
+       "b": 354,
+       "h": 341,
+       "anker": [
+        209,
+        192
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 422,
+       "y": 0,
+       "b": 354,
+       "h": 437,
+       "anker": [
+        209,
+        288
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 420,
+       "h": 437,
+       "anker": [
+        242,
+        288
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "oker-zagerij-riet-z": {
+     "gebouw": "zagerij",
+     "beslaat": [
+      8,
+      4
+     ],
+     "bestand": "bouwfasen/oker-zagerij-riet-z.png",
+     "fasen": [
+      {
+       "x": 680,
+       "y": 439,
+       "b": 105,
+       "h": 100,
+       "anker": [
+        175,
+        -18
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 356,
+       "y": 439,
+       "b": 322,
+       "h": 326,
+       "anker": [
+        129,
+        192
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 0,
+       "y": 439,
+       "b": 354,
+       "h": 341,
+       "anker": [
+        145,
+        192
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 422,
+       "y": 0,
+       "b": 354,
+       "h": 437,
+       "anker": [
+        145,
+        288
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 420,
+       "h": 437,
+       "anker": [
+        178,
+        288
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "oker-zagerij-riet-o": {
+     "gebouw": "zagerij",
+     "beslaat": [
+      4,
+      8
+     ],
+     "bestand": "bouwfasen/oker-zagerij-riet-o.png",
+     "fasen": [
+      {
+       "x": 680,
+       "y": 437,
+       "b": 105,
+       "h": 100,
+       "anker": [
+        303,
+        -82
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 356,
+       "y": 437,
+       "b": 322,
+       "h": 326,
+       "anker": [
+        257,
+        160
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 0,
+       "y": 437,
+       "b": 354,
+       "h": 341,
+       "anker": [
+        273,
+        160
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 422,
+       "y": 0,
+       "b": 354,
+       "h": 435,
+       "anker": [
+        273,
+        254
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 420,
+       "h": 435,
+       "anker": [
+        306,
+        254
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "oker-zagerij-riet-n": {
+     "gebouw": "zagerij",
+     "beslaat": [
+      8,
+      4
+     ],
+     "bestand": "bouwfasen/oker-zagerij-riet-n.png",
+     "fasen": [
+      {
+       "x": 680,
+       "y": 437,
+       "b": 105,
+       "h": 100,
+       "anker": [
+        175,
+        -18
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 356,
+       "y": 437,
+       "b": 322,
+       "h": 326,
+       "anker": [
+        65,
+        160
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 0,
+       "y": 437,
+       "b": 354,
+       "h": 341,
+       "anker": [
+        81,
+        160
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 422,
+       "y": 0,
+       "b": 354,
+       "h": 435,
+       "anker": [
+        81,
+        254
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 420,
+       "h": 435,
+       "anker": [
+        114,
+        254
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "oker-zagerij-riet-w": {
+     "gebouw": "zagerij",
+     "beslaat": [
+      4,
+      8
+     ],
+     "bestand": "bouwfasen/oker-zagerij-riet-w.png",
+     "fasen": [
+      {
+       "x": 680,
+       "y": 439,
+       "b": 105,
+       "h": 100,
+       "anker": [
+        303,
+        -82
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 356,
+       "y": 439,
+       "b": 322,
+       "h": 326,
+       "anker": [
+        193,
+        192
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 0,
+       "y": 439,
+       "b": 354,
+       "h": 341,
+       "anker": [
+        209,
+        192
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 422,
+       "y": 0,
+       "b": 354,
+       "h": 437,
+       "anker": [
+        209,
+        288
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 420,
+       "h": 437,
+       "anker": [
+        242,
+        288
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "planken-zagerij-spanen-z": {
+     "gebouw": "zagerij",
+     "beslaat": [
+      8,
+      4
+     ],
+     "bestand": "bouwfasen/planken-zagerij-spanen-z.png",
+     "fasen": [
+      {
+       "x": 680,
+       "y": 401,
+       "b": 105,
+       "h": 100,
+       "anker": [
+        175,
+        -18
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 356,
+       "y": 401,
+       "b": 322,
+       "h": 306,
+       "anker": [
+        129,
+        172
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 0,
+       "y": 401,
+       "b": 354,
+       "h": 321,
+       "anker": [
+        145,
+        172
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 379,
+       "y": 0,
+       "b": 354,
+       "h": 399,
+       "anker": [
+        145,
+        250
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 377,
+       "h": 399,
+       "anker": [
+        156,
+        250
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "planken-zagerij-spanen-o": {
+     "gebouw": "zagerij",
+     "beslaat": [
+      4,
+      8
+     ],
+     "bestand": "bouwfasen/planken-zagerij-spanen-o.png",
+     "fasen": [
+      {
+       "x": 680,
+       "y": 399,
+       "b": 105,
+       "h": 100,
+       "anker": [
+        303,
+        -82
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 356,
+       "y": 399,
+       "b": 322,
+       "h": 306,
+       "anker": [
+        257,
+        140
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 0,
+       "y": 399,
+       "b": 354,
+       "h": 321,
+       "anker": [
+        273,
+        140
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 380,
+       "y": 0,
+       "b": 354,
+       "h": 397,
+       "anker": [
+        273,
+        216
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 378,
+       "h": 397,
+       "anker": [
+        285,
+        216
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "planken-zagerij-spanen-n": {
+     "gebouw": "zagerij",
+     "beslaat": [
+      8,
+      4
+     ],
+     "bestand": "bouwfasen/planken-zagerij-spanen-n.png",
+     "fasen": [
+      {
+       "x": 680,
+       "y": 399,
+       "b": 105,
+       "h": 100,
+       "anker": [
+        175,
+        -18
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 356,
+       "y": 399,
+       "b": 322,
+       "h": 306,
+       "anker": [
+        65,
+        140
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 0,
+       "y": 399,
+       "b": 354,
+       "h": 321,
+       "anker": [
+        81,
+        140
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 380,
+       "y": 0,
+       "b": 354,
+       "h": 397,
+       "anker": [
+        81,
+        216
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 378,
+       "h": 397,
+       "anker": [
+        93,
+        216
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "planken-zagerij-spanen-w": {
+     "gebouw": "zagerij",
+     "beslaat": [
+      4,
+      8
+     ],
+     "bestand": "bouwfasen/planken-zagerij-spanen-w.png",
+     "fasen": [
+      {
+       "x": 680,
+       "y": 401,
+       "b": 105,
+       "h": 100,
+       "anker": [
+        303,
+        -82
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 356,
+       "y": 401,
+       "b": 322,
+       "h": 306,
+       "anker": [
+        193,
+        172
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 0,
+       "y": 401,
+       "b": 354,
+       "h": 321,
+       "anker": [
+        209,
+        172
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 379,
+       "y": 0,
+       "b": 354,
+       "h": 399,
+       "anker": [
+        209,
+        250
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 377,
+       "h": 399,
+       "anker": [
+        221,
+        250
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-zagerij-riet-z": {
+     "gebouw": "zagerij",
+     "beslaat": [
+      8,
+      4
+     ],
+     "bestand": "bouwfasen/roze-zagerij-riet-z.png",
+     "fasen": [
+      {
+       "x": 0,
+       "y": 782,
+       "b": 370,
+       "h": 172,
+       "anker": [
+        175,
+        26
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 356,
+       "y": 439,
+       "b": 326,
+       "h": 338,
+       "anker": [
+        131,
+        192
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 0,
+       "y": 439,
+       "b": 354,
+       "h": 341,
+       "anker": [
+        145,
+        192
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 422,
+       "y": 0,
+       "b": 354,
+       "h": 437,
+       "anker": [
+        145,
+        288
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 420,
+       "h": 437,
+       "anker": [
+        178,
+        288
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-zagerij-riet-o": {
+     "gebouw": "zagerij",
+     "beslaat": [
+      4,
+      8
+     ],
+     "bestand": "bouwfasen/roze-zagerij-riet-o.png",
+     "fasen": [
+      {
+       "x": 680,
+       "y": 437,
+       "b": 105,
+       "h": 100,
+       "anker": [
+        303,
+        -82
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 356,
+       "y": 437,
+       "b": 322,
+       "h": 326,
+       "anker": [
+        257,
+        160
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 0,
+       "y": 437,
+       "b": 354,
+       "h": 341,
+       "anker": [
+        273,
+        160
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 422,
+       "y": 0,
+       "b": 354,
+       "h": 435,
+       "anker": [
+        273,
+        254
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 420,
+       "h": 435,
+       "anker": [
+        306,
+        254
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-zagerij-riet-n": {
+     "gebouw": "zagerij",
+     "beslaat": [
+      8,
+      4
+     ],
+     "bestand": "bouwfasen/roze-zagerij-riet-n.png",
+     "fasen": [
+      {
+       "x": 680,
+       "y": 437,
+       "b": 105,
+       "h": 100,
+       "anker": [
+        175,
+        -18
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 356,
+       "y": 437,
+       "b": 322,
+       "h": 326,
+       "anker": [
+        65,
+        160
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 0,
+       "y": 437,
+       "b": 354,
+       "h": 341,
+       "anker": [
+        81,
+        160
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 422,
+       "y": 0,
+       "b": 354,
+       "h": 435,
+       "anker": [
+        81,
+        254
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 420,
+       "h": 435,
+       "anker": [
+        114,
+        254
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "roze-zagerij-riet-w": {
+     "gebouw": "zagerij",
+     "beslaat": [
+      4,
+      8
+     ],
+     "bestand": "bouwfasen/roze-zagerij-riet-w.png",
+     "fasen": [
+      {
+       "x": 680,
+       "y": 439,
+       "b": 105,
+       "h": 100,
+       "anker": [
+        303,
+        -82
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 356,
+       "y": 439,
+       "b": 322,
+       "h": 326,
+       "anker": [
+        193,
+        192
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 0,
+       "y": 439,
+       "b": 354,
+       "h": 341,
+       "anker": [
+        209,
+        192
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 422,
+       "y": 0,
+       "b": 354,
+       "h": 437,
+       "anker": [
+        209,
+        288
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 420,
+       "h": 437,
+       "anker": [
+        242,
+        288
        ],
        "naam": "half-gedekt"
       }
