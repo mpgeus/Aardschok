@@ -21,6 +21,14 @@
 //   houtstapel-x, -y          blokken brandhout tegen een muur (de muur achter de tegel), de kopse kanten naar voren
 //   tonnen                    twee dichte tonnen en een krat
 //
+// Bij de zagerij (werklijst vraag 157; Marcel, 14 okt: "werkplaats + buiten"), groter dan een tegel, als deel van het
+// gebouw (huizen.cjs, grootGebouw), zodat ze met het huis meedraaien:
+//   stammen-x, -y             lange stammen op twee dwarsliggers, drie, twee en één, de kopse kanten naar voren
+//   planken-x, -y             gezaagde planken in lagen, met latjes ertussen zodat het hout droogt
+//   zaagbok-x, -y             twee schragen met een stam erop, en een spanzaag in de snede
+//   zaaghal-x, -y             een open hal op vier palen onder een zadeldak van ruwe planken, met het kapgebint in de
+//                             kopse kanten; x of y: waar de nok langs loopt
+//
 // Twee soorten hek (Marcel, 22 sep 2026): het eerste hek (ronde 3) was een dicht staketsel van
 // planken, en las op ware grootte als een palissade om een fort. 'tenen' (gevlochten wilgentenen
 // tussen paaltjes) en 'lat' (een paar latten op palen) zijn allebei laag en open — ruim de knie
@@ -610,6 +618,165 @@ function tonnen(W, H) {
   voeg(g, { ...balk(a, b, 8, kh, [0, 0, 1], 0.6), m: 'krat', deel: 8, zaad: 7, z0: 0, hw: 8 });
 }
 
+// Een stam: een cilinder tussen a en b met vlakke, gezaagde uiteinden (een stok is rond aan zijn eind).
+function stam(a, b, r) {
+  const ux = b[0] - a[0];
+  const uy = b[1] - a[1];
+  const uz = b[2] - a[2];
+  const L = Math.hypot(ux, uy, uz);
+  const u = [ux / L, uy / L, uz / L];
+  return {
+    f: (x, y, z) => {
+      const px = x - a[0];
+      const py = y - a[1];
+      const pz = z - a[2];
+      const l = px * u[0] + py * u[1] + pz * u[2];
+      const rad = Math.hypot(px - u[0] * l, py - u[1] * l, pz - u[2] * l);
+      const dr = rad - r;
+      const dl = Math.abs(l - L / 2) - L / 2;
+      return Math.min(Math.max(dr, dl), 0) + Math.hypot(Math.max(dr, 0), Math.max(dl, 0));
+    },
+    g: [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2, (a[2] + b[2]) / 2, L / 2 + r + 0.5],
+  };
+}
+// een stam als deel, met de kopse kanten licht (blokPatroon): l langs de stam, d dwars, z omhoog
+function stamDeel(H, P, l0, l1, d, z, r, k) {
+  const a = P(l0, d, z);
+  const b = P(l1, d + H.rs(4100 + k) * 2.5, z + H.rs(4200 + k) * 0.6);
+  const ax = b[0] - a[0];
+  const ay = b[1] - a[1];
+  const n = Math.hypot(ax, ay);
+  const c = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2, (a[2] + b[2]) / 2];
+  return { ...stam(a, b, r), m: 'blok', blok: [ax / n, ay / n, ...c, H.r(4300 + k) * 3 - 1.5, r] };
+}
+
+// Stammen voor de zagerij: drie, twee en één op twee dwarsliggers, geen even dik of even lang, en net niet evenwijdig.
+function stammen(W, H, langs) {
+  const g = W.groep('stammen');
+  const P = (l, d, z) => (langs === 'x' ? [l, d, z] : [d, l, z]);
+  const L = 108; // zo'n twee meter
+  for (const [i, lx] of [-L * 0.3, L * 0.28].entries()) {
+    voeg(g, { ...balk(P(lx + H.rs(4000 + i) * 2, -36, 2.6), P(lx + H.rs(4010 + i) * 2, 36, 2.6), 2.8, 2.5, [0, 0, 1], 0.4), m: 'houtOud', deel: 1 + i, zaad: 2.1 + i, toon: -0.4 });
+  }
+  let deel = 3;
+  const rijen = [3, 2, 1];
+  rijen.forEach((n, rij) => {
+    for (let i = 0; i < n; i++) {
+      const k = rij * 10 + i;
+      const r = 10 + 2 * H.r(4400 + k);
+      const d = (i - (n - 1) / 2) * 23 + H.rs(4500 + k) * 1.5;
+      const z = 5.2 + r + rij * 19;
+      const l0 = -L / 2 + H.rs(4600 + k) * 6;
+      const l1 = L / 2 + H.rs(4700 + k) * 8;
+      voeg(g, { ...stamDeel(H, P, l0, l1, d, z, r, k), deel: deel++ });
+    }
+  });
+}
+
+// Planken voor de zagerij: vijf lagen van vier, met drie latjes dwars ertussen, elke plank een tikje anders gelegd.
+function planken(W, H, langs) {
+  const g = W.groep('planken');
+  const P = (l, d, z) => (langs === 'x' ? [l, d, z] : [d, l, z]);
+  const L = 104; // zo'n twee meter
+  let deel = 1;
+  for (let laag = 0; laag < 6; laag++) {
+    const z = 2.8 + laag * 5;
+    for (let i = 0; i < 4; i++) {
+      const k = laag * 10 + i;
+      const d = -21 + i * 14 + H.rs(4800 + k) * 0.9;
+      const l = H.rs(4900 + k) * 2.5;
+      const scheef = H.rs(5000 + k) * 1.2;
+      voeg(g, { ...balk(P(l - L / 2, d - scheef, z), P(l + L / 2, d + scheef, z), 6.4, 1.3, [0, 0, 1], 0.25), m: 'hout', deel: deel++, zaad: 3 + k * 0.37, toon: H.rs(5100 + k) * 0.6 });
+    }
+    if (laag < 5) {
+      for (const [j, lx] of [-L * 0.4, 0, L * 0.4].entries()) {
+        const k = laag * 10 + j;
+        voeg(g, { ...balk(P(lx + H.rs(5200 + k) * 1.5, -30, z + 2.5), P(lx + H.rs(5300 + k) * 1.5, 30, z + 2.5), 1.3, 1.15, [0, 0, 1], 0.2), m: 'houtOud', deel: deel++, zaad: 5 + k * 0.29, toon: -0.3 });
+      }
+    }
+  }
+}
+
+// De zaagbok: twee schragen van gekruiste palen, een stam erop, en een spanzaag in de snede: een houten raam met het
+// blad onderin, half in de stam.
+function zaagbok(W, H, langs) {
+  const g = W.groep('zaagbok');
+  const P = (l, d, z) => (langs === 'x' ? [l, d, z] : [d, l, z]);
+  const zt = 40; // waar de palen kruisen, zo'n driekwart meter
+  let deel = 1;
+  for (const [i, lx] of [-30, 30].entries()) {
+    const s = H.rs(5400 + i) * 2;
+    voeg(g, { ...stok(P(lx + s, -16, 0), P(lx - s * 0.5, 12, zt + 12), 2.2), m: 'houtOud', deel: deel++, zaad: 7 + i, toon: -0.2 });
+    voeg(g, { ...stok(P(lx - s, 16, 0), P(lx + s * 0.5, -12, zt + 12), 2.2), m: 'houtOud', deel: deel++, zaad: 8 + i, toon: -0.2 });
+  }
+  // de stam tussen de benen van de schragen
+  const r = 9.5;
+  voeg(g, { ...stamDeel(H, P, -56, 54, 0, zt + r - 1, r, 90), deel: deel++ });
+  // de spanzaag: twee armen, een kruishout, en het blad onderin, in de stam
+  const ls = 8;
+  const zb = zt + r + 4;
+  const hoog = 34;
+  voeg(g, { ...stok(P(ls - 21, 1, zb - 3), P(ls - 23, 1, zb + hoog), 1.5), m: 'hout', deel: deel++, zaad: 11, toon: 0.2 });
+  voeg(g, { ...stok(P(ls + 21, 1, zb - 3), P(ls + 23, 1, zb + hoog), 1.5), m: 'hout', deel: deel++, zaad: 12, toon: 0.2 });
+  voeg(g, { ...stok(P(ls - 21.8, 1, zb + hoog * 0.55), P(ls + 21.8, 1, zb + hoog * 0.55), 1.3), m: 'hout', deel: deel++, zaad: 13, toon: 0.2 });
+  voeg(g, { ...balk(P(ls - 21, 1, zb - 5), P(ls + 21, 1, zb - 5), 0.45, 3, [0, 0, 1], 0.1), m: 'ijzer', deel: deel++ });
+  // een touw dat het raam spant, tussen de toppen
+  voeg(g, { ...stok(P(ls - 22.7, 1, zb + hoog - 2), P(ls + 22.7, 1, zb + hoog - 2), 0.6), m: 'houtOud', deel: deel++, zaad: 14, toon: -0.6 });
+}
+
+// De zaaghal van de zagerij (Marcel, 14 okt: "Het moet zagerij zijn en minder huis", en "Open zaaghal"): vier palen,
+// twee balken in de lengte, in elke kopse kant een kapgebint (een trekbalk, een makelaar en twee sporen), een nokbalk, en
+// een zadeldak van ruwe planken met een overstek; elke plank een tikje anders, de nok zakt in het midden wat door, en de
+// palen hebben schoren naar de balken. l langs de nok, d dwars.
+function zaaghal(W, H, langs) {
+  const g = W.groep('zaaghal');
+  const P = (l, d, z) => (langs === 'x' ? [l, d, z] : [d, l, z]);
+  const { sch } = H;
+  const L = 98; // de halve lengte tot de palen
+  const D = 58; // de halve diepte tot de palen
+  const zGoot = 140; // de balken op de palen: hoog genoeg om onder het dak in de hal te kijken
+  const zNok = 214;
+  const zak = (l) => sch * 4 * Math.max(0, 1 - (l / (L + 16)) ** 2); // de nok hangt in het midden wat door
+  let deel = 1;
+  const hout = (vorm, m, k, toon = 0) => voeg(g, { ...vorm, m, deel: deel++, zaad: 21 + k * 0.7, toon });
+  // de palen, elk een fractie uit het lood, met een schoor naar de balk in de lengte
+  for (const [k, [sl, sd]] of [[-1, -1], [1, -1], [-1, 1], [1, 1]].entries()) {
+    const l = sl * L;
+    const d = sd * D;
+    const top = [l + sch * H.rs(6000 + k) * 3, d + sch * H.rs(6100 + k) * 3];
+    hout(balk(P(l, d, -4), P(top[0], top[1], zGoot), 4, 4, [1, 0, 0], 0.6), 'hout', k, H.rs(6200 + k) * 0.4);
+    hout(balk(P(top[0], top[1], zGoot - 34), P(top[0] - sl * 30, top[1], zGoot - 2), 2, 2, [0, 1, 0], 0.4), 'houtOud', 10 + k, -0.3);
+  }
+  // de balken in de lengte, op de palen, iets doorgezakt
+  for (const [k, sd] of [-1, 1].entries()) hout(balk(P(-L - 12, sd * D, zGoot + 3.5), P(L + 12, sd * D, zGoot + 3.5 - sch * 2), 3.8, 3.6, [0, 0, 1], 0.5), 'hout', 20 + k, -0.2);
+  // het kapgebint in elke kopse kant: de trekbalk dwars, de makelaar recht op naar de nok, en twee sporen
+  for (const [k, sl] of [-1, 1].entries()) {
+    const l = sl * L;
+    hout(balk(P(l, -D - 10, zGoot + 10), P(l, D + 10, zGoot + 10), 3.6, 3.6, [0, 0, 1], 0.5), 'hout', 30 + k, -0.1);
+    hout(balk(P(l, 0, zGoot + 13), P(l, 0, zNok - 4), 3.2, 3.2, [1, 0, 0], 0.5), 'hout', 32 + k, 0);
+    for (const sd of [-1, 1]) hout(balk(P(l, sd * (D + 4), zGoot + 12), P(l, 0, zNok - 2), 3, 2.8, [0, 0, 1], 0.4), 'houtOud', 34 + k, -0.2);
+  }
+  // de nokbalk
+  hout(balk(P(-L - 14, 0, zNok - 2), P(L + 14, 0, zNok - 2 - zak(0)), 3.4, 3.4, [0, 0, 1], 0.5), 'hout', 40, -0.1);
+  // het dak: aan elke kant planken van de nok naar de goot, met een overstek, rij na rij met een kier ertussen
+  const n = 19;
+  const breed = (2 * L + 32) / n;
+  const helling = (zNok - zGoot) / D;
+  for (const [s, sd] of [-1, 1].entries()) {
+    for (let i = 0; i < n; i++) {
+      const k = s * 40 + i;
+      const l = -L - 16 + (i + 0.5) * breed + H.rs(6300 + k) * 0.8;
+      const d0 = sd * (2 + H.rs(6400 + k));
+      const d1 = sd * (D + 15 + H.rs(6500 + k) * 4);
+      const z0 = zNok + 4 - zak(l);
+      const z1 = zNok + 4 - Math.abs(d1) * helling - zak(l) * 0.4 + sch * H.rs(6600 + k) * 1.5;
+      hout(balk(P(l, d0, z0), P(l + H.rs(6700 + k) * 1.5, d1, z1), breed / 2 - 0.5, 1.4, [0, 0, 1], 0.3), 'houtOud', 50 + k * 0.3, H.rs(6800 + k) * 0.7);
+    }
+  }
+  // een plank over de nok, tegen de regen
+  hout(balk(P(-L - 16, 0, zNok + 6.5), P(L + 16, 0, zNok + 6.5 - zak(0)), 3.2, 1.3, [0, 0, 1], 0.3), 'houtOud', 90, -0.4);
+}
+
 // ---------------------------------------------------------------- de stukken
 
 // Elke richting bestaat één keer per soort hek (HEK_SOORTEN): hek-tenen-x, hek-lat-x, enz. Zo
@@ -646,6 +813,8 @@ const STUKKEN = [
 // Het stukje grond om een huis (het voorbeeldhuis, vraag 144, D): tuinstuk() kent ze, maar ze staan nog niet op het vel
 // van het spel (tegels/tuin.png, STUKKEN hierboven): dat doet vraag 148, d, met wat vast is en wat niet (keien niet).
 const GRONDSTUKKEN = ['keien', 'houtstapel-x', 'houtstapel-y', 'tonnen'];
+// de stukken van de zagerij (vraag 157): geen tegel van hun eigen, ze horen bij het gebouw
+const ZAGERIJSTUKKEN = ['stammen-x', 'stammen-y', 'planken-x', 'planken-y', 'zaagbok-x', 'zaagbok-y', 'zaaghal-x', 'zaaghal-y'];
 
 // Het hout van een tuin is meestal grijs verweerd; het zaad kiest, zoals bij de huizen.
 function knoppen(zaad) {
@@ -672,8 +841,9 @@ function tuinstuk(naam, zaad = 1) {
   else if (naam === 'keien') keien(W, H);
   else if (naam === 'houtstapel-x' || naam === 'houtstapel-y') houtstapel(W, H, naam.slice(-1));
   else if (naam === 'tonnen') tonnen(W, H);
-  else throw new Error(`onbekend tuinstuk: ${naam} (kies uit ${[...STUKKEN, ...GRONDSTUKKEN].join(', ')})`);
+  else if (/^(stammen|planken|zaagbok|zaaghal)-[xy]$/.test(naam)) ({ stammen, planken, zaagbok, zaaghal })[naam.slice(0, -2)](W, H, naam.slice(-1));
+  else throw new Error(`onbekend tuinstuk: ${naam} (kies uit ${[...STUKKEN, ...GRONDSTUKKEN, ...ZAGERIJSTUKKEN].join(', ')})`);
   return W;
 }
 
-module.exports = { tuinstuk, STUKKEN, GRONDSTUKKEN, HEKKEN, HEK_SOORTEN, REGELS, HALF, HEK_HOOG };
+module.exports = { tuinstuk, STUKKEN, GRONDSTUKKEN, ZAGERIJSTUKKEN, HEKKEN, HEK_SOORTEN, REGELS, HALF, HEK_HOOG };

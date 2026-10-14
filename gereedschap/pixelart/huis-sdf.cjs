@@ -481,8 +481,8 @@ function maten(zaad = 1, o = {}) {
   // de steen van een stenen muur: veldsteen, of (o.steen) gehakte blokken zandsteen of baksteen
   H.steenSoort = STENEN.includes(o.steen) ? o.steen : 'veldsteen';
   // de ramen: die van een huis, of (o.ramen: 'kerk') hoge smalle ramen met een spitsboog en glas in lood, voor het
-  // schip van een kapel (vraag 114, 2c)
-  H.ramenSoort = o.ramen === 'kerk' ? 'kerk' : null;
+  // schip van een kapel (vraag 114, 2c), of (o.ramen: false) geen: het schuurtje van de zagerij (vraag 157)
+  H.ramenSoort = o.ramen === 'kerk' ? 'kerk' : o.ramen === false ? 'geen' : null;
   H.boogDeur = !!o.boogdeur; // I: een voordeur in steen met een ronde boog (het stenen huis, vraag 144)
 
   // --- de hoogtes, in px. plaatH is de bovenregel van een lange muur. voetPx is de voet van het
@@ -490,6 +490,9 @@ function maten(zaad = 1, o = {}) {
   // dak ligt hoger, zodat zijn rand in beeld op dezelfde lijn valt als die van het riet.
   // Een hut (o.laag, ronde 4b) heeft lagere muren: het riet hangt tot vlak boven de deur.
   H.laag = !!o.laag && H.lagen === 1;
+  // Een kapschuur (o.open, vraag 157: de zagerij): onder de muurplaat geen muur maar palen met schoren, en daarboven de
+  // gevels en het dak zoals bij elk huis. Ramen heeft hij niet; zijn deur is waar je de schuur in loopt (voorDeDeur).
+  H.open = !!o.open && H.lagen === 1;
   const plaatH = (H.lagen === 2 ? 306 : H.lagen === 1.5 ? 222 : H.laag ? 136 : 166) - 36;
   const voetPx = plaatH + (H.dun ? 16 : 36);
   H.voetPx = voetPx;
@@ -498,6 +501,7 @@ function maten(zaad = 1, o = {}) {
   H.zM = E(H.muurH);
   H.plaatH = plaatH;
   H.trekH = plaatH + 20; // de trekbalk in de gevel
+  H.zOpen = E(plaatH - 6); // een kapschuur: tot hier is hij open
   H.zolderH = H.lagen === 1.5 ? 136 + Math.round(sch * rs(90) * 3) : 0; // de zolderbalk
   H.h1 = H.lagen === 2 ? 144 + Math.round(sch * rs(91) * 2) : 0; // de vloer van de bovenverdieping
   H.kraag = H.lagen === 2 ? (sp ? 12 : 8) + 4 * r(92) : 0; // hoever die overkraagt, in eenheden
@@ -1490,6 +1494,7 @@ function verdeel(H) {
   const kleiner = (P) => (P.wand === 'blokhut' ? 5 : STENEN_MUUR(P.wand) ? 3 : 0);
   const diepte = (P, basis) => (STENEN_MUUR(P.wand) ? basis + (sp ? 6 : 4) : basis + P.voor);
   const raam = (P, reg, u, h0, b, h, warm, extra = {}) => {
+    if (H.ramenSoort === 'geen') return { op: {} };
     const w = { P, reg, u, h0, b: b - kleiner(P) + (sch ? Math.round(RS() * 2) : 0), h: h - kleiner(P) + (sch ? Math.round(RS() * 3) : 0), hoek: sch * RS() * 2 * GRAAD, warm, ...extra };
     w.op = opening(P, w.u, w.h0, w.b, w.h, w.hoek, diepte(P, sp ? 7 : 5), warm ? 'glasWarm' : 'glas');
     Object.assign(w.op, { reg, raam: w });
@@ -4725,6 +4730,69 @@ function contrast(W, H) {
 
 // ---------------------------------------------------------------- het huis
 
+// De kapschuur (o.open): wat de muren tekent, houdt op bij de muurplaat (het lijf, het vakwerk, de deur), en eronder komen
+// palen op een steen, met een schoor naar de muurplaat langs elke muur, en een vloer van aangestampte aarde vol zaagsel.
+// Wat erboven zit (de gevels, het dak) blijft zoals bij elk huis, in de stijl van het dorp.
+const MUURGROEPEN = new Set(['romp', 'liggers', 'stijlen', 'schoor', 'blokhoek', 'luik', 'luiken', 'bloembak', 'ramen', 'glas', 'deur', 'boog', 'spuwer', 'afdak']);
+function maakOpen(W, H) {
+  const { sch, rs } = H;
+  const z0 = H.zOpen;
+  for (const g of W.groepen) {
+    if (!MUURGROEPEN.has(g.naam)) continue;
+    for (const d of g.delen) {
+      const f = d.f;
+      d.f = (x, y, z) => Math.max(f(x, y, z), z0 - z);
+      // de onderkant van wat blijft, is de zoldervloer: planken
+      if (g.naam === 'romp') {
+        const m = d.m;
+        d.m = (x, y, z) => (z < z0 + 2 ? 'hout' : typeof m === 'function' ? m(x, y, z) : m);
+      }
+    }
+  }
+  W.mat.zaagsel = { ramp: 'zand', lo: 1, hi: 5, schaduwKracht: 0.35, patroon: (C) => (hash(C.px, C.py, 61) % 9 === 0 ? 0.9 : hash(C.px, C.py, 62) % 7 === 0 ? -0.8 : ruis2(C.x * 0.05, C.y * 0.05, 63) < 0.35 ? -0.5 : 0) };
+  const palen = W.groep('palen');
+  let deel = 1;
+  let k = 0;
+  for (const V of H.vleugels) {
+    const r = 6; // hoe ver de palen binnen de rand van het lijf staan
+    const ha = V.ha - r;
+    const hq = V.hq - r;
+    // de vloer
+    voeg(palen, { f: (x, y, z) => { const [a, q] = V.lok(x, y); return sdf.doos(a, q, z - 0.6, V.ha - 3, V.hq - 3, 1.2, 1); }, g: [V.cx, V.cy, 0.6, Math.hypot(V.ha, V.hq) + 2], m: 'zaagsel', deel: deel++ });
+    // de palen: op de hoeken, en ertussen om de anderhalve tegel
+    const plekken = [];
+    for (const [L, langsA] of [[ha, true], [hq, false]]) {
+      const n = Math.max(1, Math.round((2 * L) / (1.6 * TEGEL)));
+      for (let i = 0; i <= n; i++) {
+        const t = -L + (2 * L * i) / n;
+        for (const kant of [-1, 1]) plekken.push(langsA ? [t, kant * hq] : [kant * ha, t]);
+      }
+    }
+    const gezien = new Set();
+    for (const [a, q] of plekken) {
+      const sleutel = `${Math.round(a)},${Math.round(q)}`;
+      if (gezien.has(sleutel)) continue;
+      gezien.add(sleutel);
+      k++;
+      const [x, y] = V.wereld(a, q);
+      const top = [x + sch * rs(7000 + k) * 2.5, y + sch * rs(7100 + k) * 2.5, z0 + 2];
+      voeg(palen, { ...balk([x, y, 3], top, 4.6, 4.6, [1, 0, 0], 0.7), m: 'hout', deel: deel++, zaad: 3 + k * 0.4, toon: rs(7200 + k) * 0.4 });
+      // de steen onder de paal
+      voeg(palen, { f: (px, py, pz) => sdf.doos(px - x, py - y, pz - 2, 7.5, 7.5, 3.5, 1.5), g: [x, y, 2, 12], m: 'drempel', deel: deel++ });
+      // schoren naar de muurplaat, langs de muren die bij deze paal komen (niet op een hoek naar buiten)
+      for (const [da, dq] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        const na = a + da * 26;
+        const nq = q + dq * 26;
+        if (Math.abs(na) > ha + 1 || Math.abs(nq) > hq + 1) continue;
+        if (da !== 0 && Math.abs(Math.abs(q) - hq) > 1) continue; // langs a alleen op de lange muren
+        if (dq !== 0 && Math.abs(Math.abs(a) - ha) > 1) continue; // langs q alleen op de gevels
+        const [bx, by] = V.wereld(na, nq);
+        voeg(palen, { ...balk([x, y, z0 - 30], [bx, by, z0 - 1], 2.2, 2.2, [0, 0, 1], 0.4), m: 'hout', deel: deel++, zaad: 5 + k * 0.3, toon: -0.3 });
+      }
+    }
+  }
+}
+
 function huis(zaad = 1, o = {}) {
   const H = maten(zaad, o);
   const { sp, sch, r, rs } = H;
@@ -5663,6 +5731,7 @@ function huis(zaad = 1, o = {}) {
       hh,
     });
   });
+  if (H.open) maakOpen(W, H);
   if (H.kn.verweer) verweer(W, H);
   // ruig riet is rossig, als het verweren het niet al grijs maakte
   if (H.kn.ruig) for (const naam of ['riet', 'nok']) if (W.mat[naam] && W.mat[naam].ramp === 'stro') W.mat[naam].ramp = 'rietRos';

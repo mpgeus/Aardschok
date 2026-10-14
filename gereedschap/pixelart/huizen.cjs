@@ -197,6 +197,25 @@ function grootGebouw(stijl, soort, o = {}) {
     const tent = TORENS[stijl].woontoren === 'tent';
     return { spec: { zaad: tent ? 52 : 54, dak: 'plat', steen, lagen: 4, b: 5, d: 5, ramen: 'woon', rondom: true, draai, ...(tent ? { torendak: 'tent', dekking: 'pannen' } : { kantelen: true }) } };
   }
+  if (soort === 'zagerij') {
+    // De zagerij (werklijst vraag 157; Marcel, 14 okt: "Het moet zagerij zijn en minder huis", "Het moet er 1 zijn als
+    // werkplaats. De persoon heeft een eigen huis ernaast", en "Kapschuur in de stijl"): één kapschuur, onderaan open
+    // tussen palen (huis-sdf.cjs, open), met de gevels en het dak van de stijl. Eronder de stammen die nog moeten, de
+    // planken, en aan de rand bij de deur de zaagbok (daar staat de zager, vraag 168); tegen de kopse kant nog een
+    // stapel stammen (tuin-sdf.cjs). Zonder ramen en zonder schoorsteen: er brandt geen vuur, en niemand woont er.
+    const schuur = { zaad: 77, vorm: 'rechthoek', b: 6, d: 4, lagen: 1, wand: 'vakwerk', ...wand, plint: 36, schoorsteen: false, schoor: false, ramen: false, open: true, ...rond, dak: o.dak || S.dak, uit: false };
+    const stuk = (tuin, zaad, plek) => ({ spec: { tuin, zaad }, plek });
+    return {
+      delen: [
+        { spec: schuur },
+        stuk('stammen-y', 71, [1.75, -0.35]),
+        stuk('planken-x', 72, [-1.35, -0.75]),
+        stuk('zaagbok-x', 73, [-0.2, 1.3]),
+        stuk('stammen-y', 76, [3.95, 0.15]),
+      ],
+      deurVan: 0,
+    };
+  }
   if (soort === 'schout') {
     const h = HUIZEN.schoutshuis;
     return { spec: { ...h, ...rond, dak: o.dak || S.dak, steen, boven: S.boven || 'vakwerk', uit: { ...h.uit, luiken: S.luiken } } };
@@ -298,6 +317,10 @@ function stijlHuizen() {
     groot('kapel', 'kapel', 'kapel', [[kapelDak, S.steen], [kapelDak, 'baksteen']], true);
     groot('woontoren', 'woontoren', 'woontoren', [['pannen', S.steen], ['pannen', 'baksteen']], true);
     groot('schout', 'schoutshuis', 'schout', [[S.dak, S.steen]], false);
+    // de zagerij (vraag 157) onder het dak van elke trede; bouwfasen eerst alleen onder dat van het gehucht (Marcel, 14
+    // okt: "Eerst alleen het gehucht"), leien en pannen later
+    groot('zagerij', 'zagerij', 'zagerij', [[S.dak]], true);
+    groot('zagerij', 'zagerij', 'zagerij', [['leien'], ['pannen']], false);
   }
   return uit;
 }
@@ -329,7 +352,7 @@ function knoppenVoor(spec, gebouw, oud) {
   return { verweer, diepte: true, grof: true, contrast: true, ruig: dak === 'riet', rond: true, bever: true };
 }
 function inDeRonde(spec, oud, gebouw = spec.gebouw) {
-  if (spec.delen) return { ...spec, delen: spec.delen.map((d) => (d.spec.erfmuur ? d : { ...d, spec: inDeRonde(d.spec, oud, gebouw) })) };
+  if (spec.delen) return { ...spec, delen: spec.delen.map((d) => (d.spec.erfmuur || d.spec.tuin ? d : { ...d, spec: inDeRonde(d.spec, oud, gebouw) })) };
   const uit = spec.uit === undefined ? undefined : { ...(spec.uit || {}) };
   const extra = {};
   if (MET_VORM.has(gebouw) && uit) {
@@ -354,9 +377,18 @@ for (const naam of Object.keys(HUIZEN)) {
 
 // De wereld van een opgave: een huis of een toren van de bouwer, of een gebouw uit delen ({ delen: [{ spec, plek }],
 // deurVan }: de kapel met haar toren, HS.samen; vraag 114, stap 3).
+// Een deel met `tuin` in zijn opgave is een stuk van tuin-sdf.cjs (de stammen bij de zagerij, vraag 157): zonder vleugels,
+// en voor het kader de hoeken van zijn ruimte (ruim, want het is groter dan een tegel).
+function tuinWereld(spec) {
+  const W = require('./tuin-sdf.cjs').tuinstuk(spec.tuin, spec.zaad || 1);
+  const h = TEGEL * 1.8;
+  W.H = { ...W.H, vleugels: [], uitPunten: [[-h, -h, 0], [h, -h, 0], [-h, h, 0], [h, h, 0], [0, 0, 170]] };
+  return W;
+}
+const deelVan = (spec) => (spec.erfmuur ? HS.erfmuur(spec.zaad, spec) : spec.tuin ? tuinWereld(spec) : HS.huis(spec.zaad, spec));
 function wereldVan(spec) {
   if (!spec.delen) return HS.huis(spec.zaad, spec);
-  const W = HS.samen(spec.delen.map((d) => ({ W: d.spec.erfmuur ? HS.erfmuur(d.spec.zaad, d.spec) : HS.huis(d.spec.zaad, d.spec), plek: d.plek })));
+  const W = HS.samen(spec.delen.map((d) => ({ W: deelVan(d.spec), plek: d.plek })));
   W.deurVan = spec.deurVan || 0;
   return W;
 }
@@ -893,7 +925,8 @@ function fasenVanHuis(W, m) {
 // Een gebouw uit delen (de kapel met haar toren; vraag 114, stap 3) bouwt elk deel op zijn eigen manier, met zijn eigen
 // steiger, en elke fase is de delen samen (HS.samen), zoals het afgewerkte gebouw (wereldVan).
 function fasenVanDelen(spec) {
-  const delen = spec.delen.map((d) => {
+  // een los stuk (de stammen bij de zagerij) komt pas als het gebouw af is
+  const delen = spec.delen.filter((d) => !d.spec.tuin).map((d) => {
     const Wd = HS.huis(d.spec.zaad, d.spec);
     return { fasen: fasenVanHuis(Wd, meetHuis(Wd, 0, { zonderDeur: true })), plek: d.plek };
   });
