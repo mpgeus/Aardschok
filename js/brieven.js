@@ -287,9 +287,9 @@
   // Wat er op je wacht: een rapport dat je nog niet las eerst (het geldt maar voor vandaag), dan de brief van de heer.
   const wachtend = (S) => (T.rapportKlaar(S.dorp) ? 'rapport' : briefVanDeHeer(S));
 
-  // De papieren op tafel (js/tafel.js; vraag 146, c) liggen er alleen zolang ze er zijn: de brief van de heer en het
-  // rapport zolang ze op je wachten (en dan lichten ze op, stijl.css), en de inktpot van de bode in een moeilijke tijd,
-  // zolang er niemand onderweg is (js/bode.js).
+  // De knoppen onderaan (js/balk.js; vraag 164) staan er alleen zolang ze er zijn: de brief van de heer en het rapport
+  // zolang ze op je wachten (en dan wippen ze, stijl.css), en de bode in een moeilijke tijd, zolang er niemand onderweg
+  // is (js/bode.js).
   T.ui.werkBriefKnopBij = function (S) {
     $('brief-knop').classList.toggle('verborgen', !briefVanDeHeer(S));
     $('rapport-knop').classList.toggle('verborgen', !T.rapportKlaar(S.dorp));

@@ -83,7 +83,7 @@
   };
 
   T.ui.meldVenster('raadsman', {
-    el: 'raadsman', knop: 'raadsman-knop', toets: 'r', open: (S) => T.ui.openRaadsman(S), sluit: (S) => T.ui.sluitRaadsman(S),
+    el: 'raadsman', toets: 'r', open: (S) => T.ui.openRaadsman(S), sluit: (S) => T.ui.sluitRaadsman(S),
   });
 
   $('raadsman').addEventListener('click', (ev) => {
@@ -100,10 +100,5 @@
     const r = p ? T.kiesRaadsman(S.dorp, p) : { kan: false, reden: T.t('That farmer is no longer here.') };
     if (!r.kan) T.ui.bericht(r.reden, 'gevaar');
     toon(S);
-  });
-
-  $('raadsman-knop').addEventListener('click', (ev) => {
-    ev.currentTarget.blur();
-    if (T.S) T.ui.wisselVenster(T.S, 'raadsman');
   });
 })(globalThis.Spel = globalThis.Spel || {});

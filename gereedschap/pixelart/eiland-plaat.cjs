@@ -22,24 +22,13 @@ if (!ZADEN.length) ZADEN.push(5, 62707, 73425);
 const UIT = path.join(__dirname, 'uit', 'eiland');
 fs.mkdirSync(UIT, { recursive: true });
 
-// De kleuren van de streken op de plaat (in het spel worden het tegels).
-const KLEUR = {
-  meer: [64, 112, 158],
-  rivier: [70, 122, 170],
-  strand: [230, 216, 172],
-  duinen: [204, 198, 150],
-  kampen: [132, 164, 84],
-  woud: [52, 92, 46],
-  heide: [138, 106, 116],
-  zand: [214, 198, 150],
-  veen: [106, 88, 66],
-  broek: [76, 110, 86],
-  rots: [150, 144, 136],
-};
-const ZEE_ONDIEP = [104, 158, 192];
-const ZEE_DIEP = [32, 62, 108];
-const WEG = [226, 190, 124];
-const BRUG = [124, 86, 48];
+// De kleuren van de streken op de plaat: die van de minikaart in het spel (js/minikaart.js), zodat de twee hetzelfde
+// eiland laten zien.
+const KLEUR = T.MINIKAART_INSTELLINGEN.kleur;
+const ZEE_ONDIEP = T.MINIKAART_INSTELLINGEN.zeeOndiep;
+const ZEE_DIEP = T.MINIKAART_INSTELLINGEN.zeeDiep;
+const WEG = T.MINIKAART_INSTELLINGEN.weg;
+const BRUG = T.MINIKAART_INSTELLINGEN.brug;
 const NAMEN = {
   meer: 'meer en rivier',
   strand: 'strand',

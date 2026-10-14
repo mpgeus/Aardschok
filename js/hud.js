@@ -1,7 +1,7 @@
 // Het scherm van het gehuchtspel: de kalender (dag, seizoen, jaar), de statussen, en de vensters (het bouwmenu, de
 // marskramer, de heer, ...) -- in de stijl en de plek van js/ui.js, maar in een eigen bestand, want het hoort bij het
 // nieuwe spel en niet bij De laatste klim. De voorraad, de twee bazen en de knoppen liggen sinds vraag 146, c op de
-// tafel onderin (js/tafel.js). Sinds de kaarten van het oude spel weg zijn
+// tafel onderin (js/balk.js). Sinds de kaarten van het oude spel weg zijn
 // (25 sep, ontwerp/werklijst.md punt 7c) staat het altijd aan; T.NIEUWE_HUD blijft bestaan omdat
 // een paar plekken er nog naar vragen. Het oude scherm linksboven (goud en spullen) staat nog in index.html, maar
 // verborgen: de spullen hebben in dit scherm nog geen plek.
@@ -34,7 +34,7 @@
     if (box.dataset.sleutel === sleutel) return;
     box.dataset.sleutel = sleutel;
     box.innerHTML = '';
-    // Een briefje per status: de naam en hoe lang al; wat het is en wat helpt, zegt het briefje bij de muis (js/tafel.js).
+    // Een briefje per status: de naam en hoe lang al; wat het is en wat helpt, zegt het briefje bij de muis (js/balk.js).
     for (const s of lijst) {
       const el = document.createElement('div');
       el.className = `briefje status${s.niveau === 2 ? ' erger' : ''}`; // geen tekst
@@ -65,12 +65,12 @@
     datumEl.classList.toggle('sint-maarten', d.sintMaarten);
     const uur = T.t('{klok}, {deel}', { klok: T.uurTekst(S.kalender.dag), deel: DAGDELEN[T.dagdeelVan(S.kalender.dag)] });
     // Het weer van vandaag (js/weer.js), tussen het seizoen en het uur; op hover hoe lang het al droog is.
-    // Hoe lang het al droog is, zegt het briefje bij de muis (js/tafel.js, de datum).
+    // Hoe lang het al droog is, zegt het briefje bij de muis (js/balk.js, de datum).
     const W = S.dorp && T.weerVan(S.dorp);
     const weer = W ? ' · ' + T.WEER_NAMEN[W.vandaag] : '';
     $('kalender-seizoen').textContent = T.hoofdletter(T.SEIZOEN_TOON[d.seizoen]) + weer + ' · ' + uur + (d.sintMaarten ? ` · ${T.t('Martinmas: the lord collects')}` : '');
     T.ui.werkBriefKnopBij(S);
-    T.ui.werkTafelBij(S); // de lat van de snelheden, de kaars en de lantaarn (js/tafel.js)
+    T.ui.werkBalkBij(S); // de lat van de snelheden (js/balk.js)
   };
 
   // Het bouwmenu: de soorten van de huidige trede, met hun kosten en wat ze doen (ontwerp/spel.md,
@@ -135,7 +135,6 @@
       `</button>`
     );
   }
-
 
   T.ui.toonBouwmenu = function (S) {
     const box = $('bouwmenu');
@@ -835,7 +834,7 @@
   };
 
   T.ui.meldVenster('velden', {
-    el: 'velden', knop: 'velden-knop', toets: 'v', open: (S) => T.ui.openVelden(S), sluit: (S) => T.ui.sluitVelden(S),
+    el: 'velden', toets: 'v', open: (S) => T.ui.openVelden(S), sluit: (S) => T.ui.sluitVelden(S),
   });
 
   $('velden').addEventListener('click', (ev) => {
@@ -864,11 +863,6 @@
     const r = T.zetPlan(S.dorp, veld, b.dataset.bestemming);
     if (!r.kan) T.ui.bericht(r.reden, 'gevaar');
     toonVelden(S);
-  });
-
-  $('velden-knop').addEventListener('click', (ev) => {
-    ev.currentTarget.blur();
-    if (T.S) T.ui.wisselVenster(T.S, 'velden');
   });
 
   // ── De spelregels (js/opties.js; spel.md, "Instelbaar") ──
@@ -1018,23 +1012,18 @@
     T.zetSnelheid(T.S, Number(b.dataset.snelheid));
   });
 
-  // De tijd stil, of weer op de snelheid van ervoor: P, en de zandloper op tafel (js/tafel.js).
+  // De tijd stil, of weer op de snelheid van ervoor: P, en pause op de klok (js/balk.js).
   T.ui.wisselPauze = function (S) {
     const k = S.kalender;
     if (S.slaap) T.wordWakker(S);
     T.zetSnelheid(S, k.snelheid > 0 ? 0 : k.laatsteSnelheid || 1);
   };
 
-  // Slapen tot de ochtend, of wakker worden: Z, en de kaars op tafel (js/tafel.js).
+  // Slapen tot de ochtend, of wakker worden: Z.
   T.ui.wisselSlapen = function (S) {
     if (S.slaap) T.wordWakker(S);
     else T.gaSlapen(S);
   };
-
-  $('slaap-knop').addEventListener('click', (ev) => {
-    ev.currentTarget.blur();
-    if (T.S && T.S.kalender) T.ui.wisselSlapen(T.S);
-  });
 
   // P, Z, - en = botsen nergens mee: de spatie en 1-4 zijn van het gevecht (CLAUDE.md). Z is slapen
   // tot de ochtend, of wakker worden (js/dag.js).

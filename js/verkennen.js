@@ -449,7 +449,6 @@
     // Wie sluipt, dooft zijn lantaarn (js/zien.js, T.draagtLantaarn; vraag 125, C): in het donker zien ze je dan
     // niet van ver, maar je ziet zelf ook minder. Wie weer gewoon loopt, steekt hem weer aan.
     if (S.schout) S.schout.lantaarnUit = S.sluipen;
-    T.ui.toonSluipen(S.sluipen);
     const donker = S.kalender && T.lichtVan(S.kalender.dag).nacht >= T.ZIEN_INSTELLINGEN.lantaarn.vanaf;
     if (S.sluipen) T.ui.bericht(donker ? T.t('You sneak and put out your lantern: slower, and in the dark they cannot see you.') : T.t('You sneak: slower, but less likely to be noticed.'));
     else T.ui.bericht(donker ? T.t('You walk normally again, with your lantern lit.') : T.t('You walk normally again.'));

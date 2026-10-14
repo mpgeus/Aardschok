@@ -25,7 +25,7 @@ const URL = 'http://localhost:8123/';
 const VENSTER = { width: 1600, height: 900 };
 // Wat alleen hulp is ('Opgeslagen'), en wat er voor een beeld zonder ui ook af gaat.
 const HULP = ['opgeslagen'];
-const UI = ['hud-gehucht', 'tafel', 'plek', 'volgorde', 'onder', 'berichten', 'opdracht'];
+const UI = ['hud-gehucht', 'linksonder', 'middenonder', 'rechtsonder', 'plek', 'volgorde', 'onder', 'berichten', 'opdracht'];
 
 // Playwright zoals de speeltest het vindt (gereedschap/speeltest/speeltest.cjs): hier, of algemeen geïnstalleerd.
 function laadPlaywright() {

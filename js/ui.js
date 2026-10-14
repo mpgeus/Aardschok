@@ -24,7 +24,6 @@
     reset(S) {
       $('berichten').innerHTML = '';
       vorigeAp = '';
-      this.toonSluipen(false);
       this.toonInventaris(S);
       this.toonGoud();
       this.toonGevecht(false);
@@ -41,6 +40,7 @@
       // De balk is die van je eigen dorp (js/dorp.js): met het spel zelf (S) bleef hij leeg tot er iets veranderde.
       if (this.toonVoorraad && S.dorp) this.toonVoorraad(S.dorp);
       if (this.toonBevolking && S.dorp) this.toonBevolking(S.dorp);
+      if (this.toonTevredenheid && S.dorp) this.toonTevredenheid(S.dorp); // en de tevredenheid ernaast (js/balk.js)
       if (this.toonStatussen && S.dorp && S.dorp.kalender) this.toonStatussen(S.dorp); // honger, droogte, ... (js/hud.js)
     },
 
@@ -348,7 +348,7 @@
   // ── De tekst van index.html (vraag 147) ──
   // De bladzijde zelf heeft geen tekst voor de speler: een element zegt met data-t (de tekst), data-t-html (tekst met
   // toetsen erin) of data-t-title (de uitleg bij de muis) welke zin erin hoort, en die staat hier, zodat een vertaling
-  // erbij kan. De tafel vult haar eigen stukken (js/tafel.js: de koppen van het rekenboek, de plaatjes, de snelheden).
+  // erbij kan. De balk onderaan vult haar eigen stukken (js/balk.js: de knoppen, de bazen, de snelheden).
   const kbd = (toets) => `<kbd>${toets}</kbd>`;
   const PAGINA = {
     menu: T.t('Menu'),

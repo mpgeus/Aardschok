@@ -136,11 +136,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   vertaling, zegt `T.keurVertaling`. **Alles in `js/` is om** (vraag 147, stap 2, 11 okt, in zeven
   delen): `test/taal.test.cjs` kijkt elk bestand na (`OMGEZET` is heel `js/`), dus een tekst buiten `T.t` in een nieuw bestand
   maakt de toets rood; wat alleen wij zien (de console, `Spel.debug`), krijgt `// geen tekst`. In `T.GEBOUWEN` staan de tekeningen en de `opmerking` voor ons, niet de speler: die regels hebben `// geen tekst`.
-- **De tekst van het scherm** (vraag 147, deel 3, 11 okt): `js/hud.js`, `js/tafel.js`, `js/ui.js`, `js/huisbriefje.js`,
+- **De tekst van het scherm** (vraag 147, deel 3, 11 okt): `js/hud.js`, `js/balk.js`, `js/ui.js`, `js/huisbriefje.js`,
   `js/dialoog.js`, `js/verkennen.js`, `js/landkaart.js`, `js/land.js` en `js/main.js` zijn om. **`index.html` heeft zelf geen
   tekst voor de speler meer**: een element zegt met `data-t` (tekst), `data-t-html` (tekst met toetsen) of `data-t-title` (de
-  uitleg bij de muis) welke zin erin hoort, en die staat in `PAGINA` onderaan `js/ui.js`; de tafel vult haar eigen stukken
-  (de koppen van het rekenboek, het plaatje van elk ding uit `DINGEN[...].naam`, de lat uit `SNELHEDEN`), en `document.title`
+  uitleg bij de muis) welke zin erin hoort, en die staat in `PAGINA` onderaan `js/ui.js`; de balk onderaan vult haar eigen
+  stukken (de knoppen uit `KNOPPEN`, de namen van de bazen, de lat uit `SNELHEDEN`), en `document.title`
   en `lang` komen ook uit `js/ui.js`. Een toets staat als `<kbd>` (`kbd('Esc')`, nooit in de zin), en `Spel.debug` en de
   meldingen in de console blijven Nederlands (`// geen tekst`, `main.js` heeft er zo'n honderd). De klok in de balk is
   `T.uurTekst` (`js/dag.js`: "seven o'clock", "half past seven"; ook bij een bewaard spel in `js/menu.js`), met het deel
@@ -462,6 +462,22 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   afdekt (`T.dektAf`), komt nog eens in de tekenlijst (`heuvelsErvoor` in `js/tekenen.js`). De proefplaat:
   `gereedschap/pixelart/hoogte-proef.cjs`.
 
+### js/minikaart.js: de minikaart
+
+- `js/minikaart.js` (werklijst vraag 165, 14 okt; Marcel: "Vergeet mn minimal niet", "Onder in de ui zoals bij age of
+  Empires", "Het hele eiland"): **het hele eiland in het klein**, in de hoek rechtsonder van de balk, als een ruit die
+  ligt zoals het beeld (tegel (0, 0) bovenaan, `T.minikaartPunt` en terug `T.minikaartTegel`). De regels zonder scherm
+  (`test/minikaart.test.cjs`): het beeld, een pixel per vak van `stap` (8) tegels, uit `T.eilandStuk` met een stap, in
+  de kleuren van `T.MINIKAART_INSTELLINGEN` (die ook `gereedschap/pixelart/eiland-plaat.cjs` gebruikt), het licht uit
+  `T.helderheidVanVlak`, de wegen en de bomen (`T.minikaartKleur`); het wordt in stukjes gemaakt (`T.maakMinikaart(E,
+  rijen)`, een rij zo'n 1 ms, het hele eiland 0,3 s), en hoort bij het eiland, niet bij het spel (niet bewaard). Wat je
+  kent per vak, uit de bits van de mist (`T.minikaartGekend(w)`; `w.gekend`, `js/mist.js`). Het tekenen staat in
+  `js/balk.js` (alleen scherm): zo'n 4 ms per beeld aan het beeld tot het af is, de mist opnieuw als `T.mistVersie`
+  verandert, en tien keer per seconde de ruit: het eiland, het donker over wat je niet kent (`onbekend`, 0,75: je ziet de
+  vorm, niet wat er is), de plekken die je kent, je gebouwen, de schout in rood, en het kader van de camera
+  (`T.tekenMaat` gedeeld door `S.zoom`). Een klik of slepen kijkt daar: `T.kijkNaar` (`js/main.js`) zet het overzicht
+  (Tab) aan en de camera erheen.
+
 ### js/land.js en js/landkaart.js: het land met provincies
 
 - `js/land.js`: **het land** (vraag 63 en 69, 30 sep; stap 1a, stuk 1): een kaart met provincies uit het zaad van het
@@ -481,7 +497,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 - `js/iso.js`: de isometrische projectie (tegel 64×32) en tekenhulpen (`ruit`, `blok`).
 
-### js/dialoog.js, js/ui.js, js/tafel.js, js/tekenen.js, js/main.js: de vensters, de tafel, het tekenen en de spellus
+### js/dialoog.js, js/ui.js, js/balk.js, js/tekenen.js, js/main.js: de vensters, de balk onderaan, het tekenen en de spellus
 
 - `js/dialoog.js`, `js/ui.js` (alle html over het beeld; **één manier om een venster te openen en te sluiten**, vraag 146,
   b2: een venster meldt zich aan met `T.ui.meldVenster`, zijn open en sluit roepen `T.ui.openVenster` en `T.ui.sluitVenster`,
@@ -490,13 +506,21 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   kleur; **alle kaartjes bovenaan zijn even breed** (Marcel, 14 okt: "Kaartjes in de ui moeten wel even breed zijn. Anders
   wordt het een zooitje"): het doel en de statussen linksboven, de datum en het briefje van een gebouw rechtsboven nemen
   `--kaart` (`:root` in `stijl.css`), en een nieuw kaartje ook; het briefje bij de muis en bij een huis hangen los en
-  tellen niet mee; de letters zijn Grenze, `--kop`, en Alegreya, `--boek`, in `letters/`), `js/tafel.js` (**de tafel van de schout**
-  onderin, vraag 146, c: het rekenboek met de voorraad en het dorp, en de dingen die een venster openen, elk met het id
-  van de knop die het was; wat een ding is en zijn toets staan op het briefje bij de muis, `#wenk`, niet op het ding; de
-  kunst uit `gereedschap/pixelart/tafel.cjs`, op ware pixels: één pixel van de kunst op een hele schermpixel, 1080 één,
-  4K twee, `pasSchaal`, en wat erboven ligt rekent met `--tafel-zoom`; bovenaan liggen alleen briefjes, vraag 146, d: het
-  doel met de raad en de statussen linksboven, de datum en het lipje Menu rechtsboven, en het briefje bij de muis werkt
-  daar ook), `js/tekenen.js`, `js/main.js`
+  tellen niet mee; de letters zijn Grenze, `--kop`, en Alegreya, `--boek`, in `letters/`), `js/balk.js` (**de balk
+  onderaan**, vraag 164, 14 okt; Marcel: "De oude ui balk aan de onderkant moet leeg. En we hebben een minimale nodig":
+  kaartjes in de hoeken, `.hoek-onder` in `stijl.css`. Linksonder de voorraad, `#voorraad`: het dorp (de kas, de mensen,
+  de tevredenheid) en elke waar waarvan er minstens één is, in `VOLGORDE`, met een pictogram uit `GRONDSTOF_ICOON` (een
+  zak als er geen is) en het getal; een post blijft staan zolang zijn waar er is, zodat het briefje bij de muis klopt. In
+  het midden Build (`#bouwmenu-knop`), en de brief, het rapport en de bode zolang ze er zijn (`T.ui.werkBriefKnopBij`,
+  `js/brieven.js`); rechtsonder de klok, `#klok`: de lat van de snelheden en de twee bazen. De velden (V), het wetboek
+  (W), de raadsman (R), sluipen (S) en slapen (Z) hebben alleen hun toets; tot 14 okt lag hier de tafel van de schout,
+  vraag 146, c, met haar kunst uit `gereedschap/pixelart/tafel.cjs`, en git bewaart haar. Wat een ding of een getal is
+  en zijn toets, staan op het briefje bij de muis, `#wenk`, niet op het ding: onderaan erboven, bovenaan eronder. Alles op
+  ware pixels: één pixel van de kunst op een hele schermpixel, 1080 één, 4K twee, `pasSchaal`, in `--ui-zoom`; hoe hoog
+  de hoeken onderaan zijn, zet een `ResizeObserver` in `--onder-links` en `--onder-rechts`, en wat erboven ligt (de
+  berichten, de meter, het bouwmenu, het briefje van een gebouw) rekent daarmee; bovenaan liggen alleen briefjes, vraag
+  146, d: het doel met de raad en de statussen linksboven, de datum en het lipje Menu rechtsboven, en het briefje bij de
+  muis werkt daar ook), `js/tekenen.js`, `js/main.js`
   (spellus, invoer, zoom, camera). **Het overzicht** (vraag 108, a): `Tab` tilt de camera van de schout af en zoomt uit
   (`T.wisselOverzicht`, `S.overzicht`, alleen scherm); slepen of de pijltjes schuiven, het wiel zoomt, en wat je klikt,
   doet de schout nog altijd. `Tab`, een klik op de schout of een gevecht brengt je terug. **De fotomodus** (vraag 146,
@@ -869,7 +893,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 ### js/wensen.js en js/huisbriefje.js: de wensen per stand
 
 - **Het Engels** (vraag 147): `T.WENSEN[x].naam` en `T.STANDEN[x].naam` zijn Engelse zinnen met hun lidwoord waar de naam er een
-  nodig heeft ("a well", "bread"), en `D.behoeften.mist` (js/behoeften.js) bevat die zinnen zelf: de balk (`js/tafel.js`) toont ze,
+  nodig heeft ("a well", "bread"), en `D.behoeften.mist` (js/behoeften.js) bevat die zinnen zelf: de balk (`js/balk.js`) toont ze,
   en `js/voorvallen.js` vergelijkt ermee ("firewood for the winter"). `T.raaktOp(wat, ...)` neemt de naam met lidwoord ("the
   wood", "the hay"). De zinnen met een stuk dat eraan hangt, zijn vol: `{waarom}, and {hulp}`; de toets staat als [B] in de zin.
 
@@ -1261,7 +1285,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   weegt hem met wat de argwaan woog (`gunst` in `T.RAADSMAN_INSTELLINGEN.kiest`). Onder 20 een waarschuwing (de brief `waarschuwing` in `js/brieven.js`, en de raad), op 0 weg (`T.ambtKwijt` met waarom, of `D.einde` met reden 'verjaagd'), maar altijd eerst
   de waarschuwing. De twee gezichten in de balk:
   `T.ui.toonBazen` (`js/hud.js`). De spelregel "Twee bazen"; de getallen in `T.BAZEN_INSTELLINGEN`. `T.bazenStemming`
-  geeft een naam waar de regels op letten (`'boos'`, `js/tafel.js`); `T.bazenTekst` zegt hem in het Engels (*angry*).
+  geeft een naam waar de regels op letten (`'boos'`, `js/balk.js`); `T.bazenTekst` zegt hem in het Engels (*angry*).
   Zo ook de straffen van Sint-Maarten: `'boete'` in de regels, `T.STRAF_TOON` (`js/heer.js`) voor wat de speler leest.
 
 ### js/grillen.js: de grillen van de heer

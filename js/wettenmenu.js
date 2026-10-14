@@ -79,7 +79,7 @@
   };
 
   T.ui.meldVenster('wetten', {
-    el: 'wetten', knop: 'wetten-knop', toets: 'w', open: (S) => T.ui.openWetten(S), sluit: (S) => T.ui.sluitWetten(S),
+    el: 'wetten', toets: 'w', open: (S) => T.ui.openWetten(S), sluit: (S) => T.ui.sluitWetten(S),
   });
 
   $('wetten').addEventListener('click', (ev) => {
@@ -95,10 +95,5 @@
     const r = T.zetWet(S.dorp, b.dataset.wet, b.dataset.stand);
     if (!r.kan) T.ui.bericht(r.reden, 'gevaar');
     toon(S);
-  });
-
-  $('wetten-knop').addEventListener('click', (ev) => {
-    ev.currentTarget.blur();
-    if (T.S) T.ui.wisselVenster(T.S, 'wetten');
   });
 })(globalThis.Spel = globalThis.Spel || {});

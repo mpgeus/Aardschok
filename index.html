@@ -39,42 +39,41 @@
     </div>
   </div>
 
-  <!-- De tafel van de schout, onderin over de hele breedte (js/tafel.js; werklijst vraag 146, c): links het rekenboek,
-       in het midden de dingen die een venster openen (de brief, het rapport en de inktpot alleen zolang ze er
-       zijn), rechts de lantaarn, de kaars, de zandloper met de lat, en de twee bazen. De kunst komt uit
-       gereedschap/pixelart/tafel.cjs. Elk ding houdt het id van de knop die het was. -->
-  <div id="tafel">
-    <div id="rekenboek" data-ding="rekenboek">
-      <div class="blad links"><h3></h3><div class="posten"></div></div>
-      <div class="blad rechts"><h3></h3><div class="posten"></div></div>
+  <!-- De balk onderaan (js/balk.js; werklijst vraag 164, Marcel, 14 okt: "De oude ui balk aan de onderkant moet leeg.
+       En we hebben een minimale nodig"): kaartjes in de hoeken, zoals bovenaan en even breed. Linksonder de voorraad
+       (wat je hebt, en het dorp), in het midden bouwen, en de brief, het rapport en de bode zolang ze er zijn,
+       rechtsonder de snelheid en de twee bazen, en in de hoek de minikaart. Wat een knop doet, zit nog aan zijn id. -->
+  <div id="linksonder" class="hoek-onder">
+    <div id="voorraad" class="briefje" data-ding="voorraad">
+      <div class="voorraad-dorp"></div>
+      <div class="voorraad-waren"></div>
     </div>
-    <div id="tafel-midden" class="tafel-rij">
-      <button id="bouwmenu-knop" class="ding" data-ding="bouwen"><img src="beelden/tafel/bouwen.png" alt=""></button>
-      <button id="velden-knop" class="ding" data-ding="velden"><img src="beelden/tafel/velden.png" alt=""></button>
-      <button id="wetten-knop" class="ding" data-ding="wetten"><img src="beelden/tafel/wetten.png" alt=""></button>
-      <button id="raadsman-knop" class="ding" data-ding="raadsman"><img src="beelden/tafel/raadsman.png" alt=""></button>
-      <button id="brief-knop" class="ding wacht verborgen" data-ding="brief"><img src="beelden/tafel/brief.png" alt=""></button>
-      <button id="rapport-knop" class="ding wacht verborgen" data-ding="rapport"><img src="beelden/tafel/rapport.png" alt=""></button>
-      <button id="bode-knop" class="ding verborgen" data-ding="bode"><img src="beelden/tafel/bode.png" alt=""></button>
-    </div>
-    <div id="tafel-rechts" class="tafel-rij">
-      <button id="sluip-knop" class="ding" data-ding="lantaarn"><img src="beelden/tafel/lantaarn-aan.png" alt=""></button>
-      <button id="slaap-knop" class="ding uit" data-ding="kaars"><img src="beelden/tafel/kaars-uit.png" alt=""></button>
-      <div id="snelheid">
-        <button id="zandloper" class="ding" data-ding="zandloper"><img src="beelden/tafel/zandloper.png" alt=""></button>
-        <div id="kalender-knoppen" role="group">
-          <button data-snelheid="0" data-toets="P"></button>
-          <button data-snelheid="1"></button>
-          <button data-snelheid="3"></button>
-          <button data-snelheid="10"></button>
-          <button data-snelheid="30"></button>
-        </div>
-      </div>
-      <div class="ding verborgen" data-ding="gunst"><img src="beelden/tafel/gunst.png" alt=""><span class="getal">50</span></div>
-      <div class="ding verborgen" data-ding="vertrouwen"><img src="beelden/tafel/vertrouwen.png" alt=""><span class="getal">50</span></div>
-    </div>
-    <div id="wenk" class="verborgen" aria-live="polite"></div>
   </div>
+  <div id="middenonder" class="hoek-onder">
+    <button id="bouwmenu-knop" class="briefje knop" data-ding="bouwen"></button>
+    <button id="brief-knop" class="briefje knop wacht verborgen" data-ding="brief"></button>
+    <button id="rapport-knop" class="briefje knop wacht verborgen" data-ding="rapport"></button>
+    <button id="bode-knop" class="briefje knop verborgen" data-ding="bode"></button>
+  </div>
+  <div id="rechtsonder" class="hoek-onder">
+    <div id="klok" class="briefje">
+      <div id="kalender-knoppen" role="group">
+        <button data-snelheid="0" data-toets="P"></button>
+        <button data-snelheid="1"></button>
+        <button data-snelheid="3"></button>
+        <button data-snelheid="10"></button>
+        <button data-snelheid="30"></button>
+      </div>
+      <div id="bazen" class="verborgen">
+        <div class="baas" data-ding="gunst"><span class="naam"></span><span class="getal">50</span></div>
+        <div class="baas" data-ding="vertrouwen"><span class="naam"></span><span class="getal">50</span></div>
+      </div>
+    </div>
+    <!-- De minikaart (js/minikaart.js, js/balk.js; vraag 165): het hele eiland, zoals bij Age of Empires in de hoek. -->
+    <div id="minikaart" class="briefje verborgen"><canvas></canvas></div>
+  </div>
+  <!-- Het briefje bij de muis (js/balk.js): wat een ding of een getal is, wat het nu zegt, en de toets. -->
+  <div id="wenk" class="verborgen" aria-live="polite"></div>
 
   <!-- Het bouwmenu (js/hud.js, T.ui.toonBouwmenu): de soorten van de huidige trede, met hun
        kosten en wat ze doen. Kies er een, en een spookbeeld volgt de muis (js/main.js,
@@ -192,6 +191,7 @@
   <script src="js/maker.js"></script>
   <script src="js/hoogte.js"></script>
   <script src="js/eiland.js"></script>
+  <script src="js/minikaart.js"></script>
   <script src="js/pad.js"></script>
   <script src="js/lopen.js"></script>
   <script src="js/akkers.js"></script>
@@ -232,7 +232,7 @@
   <script src="js/anim.js"></script>
   <script src="js/ui.js"></script>
   <script src="js/hud.js"></script>
-  <script src="js/tafel.js"></script>
+  <script src="js/balk.js"></script>
   <script src="js/huisbriefje.js"></script>
   <script src="js/gebouwbriefje.js"></script>
   <script src="js/brieven.js"></script>

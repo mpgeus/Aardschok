@@ -330,7 +330,6 @@
     S.naLopen = null;
     T.zetSnelheid(S, T.SLAAP_SNELHEID);
     bericht(T.t('You go to sleep. You wake at first light.'));
-    if (T.ui && T.ui.werkSlaapKnopBij) T.ui.werkSlaapKnopBij(S);
     return true;
   };
 
@@ -344,7 +343,6 @@
       S.schout.deurSinds = S.tijd;
     }
     if (S.kalender && S.kalender.snelheid === T.SLAAP_SNELHEID) T.zetSnelheid(S, vorige || 1);
-    if (T.ui && T.ui.werkSlaapKnopBij) T.ui.werkSlaapKnopBij(S);
   };
 
   // Elk beeld (js/main.js): is het ochtend, dan wordt de schout wakker.

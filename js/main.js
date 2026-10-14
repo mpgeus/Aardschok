@@ -584,6 +584,15 @@
     T.ui.toonOverzicht(S);
   }
   T.wisselOverzicht = wisselOverzicht;
+  // Kijk naar een plek (in pixels van de wereld, zoals S.camera): de minikaart (js/balk.js; vraag 165). Dat is het
+  // overzicht: de camera gaat los van de schout, en Tab of een klik op de schout brengt je terug.
+  T.kijkNaar = function (x, y) {
+    if (!S.overzicht) wisselOverzicht(true);
+    if (!S.overzicht) return; // alleen bij het rondlopen
+    S.overzicht.doel = { x, y };
+    S.camera.x = x;
+    S.camera.y = y;
+  };
   // Het beeld schuiven, in schermpixels: wat je sleept of met de pijltjes duwt, meteen, zonder na te glijden.
   function schuifOverzicht(dx, dy) {
     S.overzicht.doel.x += dx / S.zoom;
@@ -683,6 +692,7 @@
     S.camera.y += (doel.y - S.camera.y) * k;
     werkHoverBij();
     T.ui.werkGebouwbriefjeBij(S); // het briefje van het gekozen gebouw (js/huisbriefje.js)
+    T.ui.werkMinikaartBij(S); // de minikaart in de hoek (js/balk.js)
   }
 
   let vorige = 0;
@@ -920,10 +930,6 @@
     b.blur(); // anders drukt de spatiebalk straks ook deze knop nog eens in
     if (b.dataset.actie === 'einde') T.eindeBeurt(S);
     else if (b.dataset.actie === 'deur') T.deurDicht(S);
-  });
-  document.getElementById('sluip-knop').addEventListener('click', (ev) => {
-    ev.currentTarget.blur();
-    T.wisselSluipen(S);
   });
   window.addEventListener('resize', formaat);
 

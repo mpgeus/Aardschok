@@ -237,7 +237,7 @@
     // Het brandhout mist het dorp ook als het de winter niet haalt (T.houtVoorDeWinter), niet pas als
     // het vandaag op is: dan zegt de balk het op tijd, net als het rode hout ernaast (js/hud.js).
     const mist = [];
-    // Wat de speler ziet, en tegelijk waar js/voorvallen.js en de balk (js/tafel.js) op letten: dezelfde zin.
+    // Wat de speler ziet, en tegelijk waar js/voorvallen.js en de balk (js/balk.js) op letten: dezelfde zin.
     if (voedselDekking < 1) mist.push(T.t('food'));
     if (brandhoutDekking < 1 || !T.houtVoorDeWinter(D, dag).haalt) mist.push(T.t('firewood for the winter'));
     if (wensen) {

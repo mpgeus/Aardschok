@@ -204,7 +204,7 @@
   // ---------------------------------------------------------------------------------------------
 
   // Hoe hij erbij staat, in een woord: blij, tevreden, ontevreden, boos (onder de waarschuwing). Een naam waar de regels op
-  // letten (js/tafel.js); wat de speler ziet, staat in STEMMING.
+  // letten (js/balk.js); wat de speler ziet, staat in STEMMING.
   T.bazenStemming = (n) => (n >= 70 ? 'blij' : n >= 40 ? 'tevreden' : n >= IN().waarschuwing ? 'ontevreden' : 'boos');
   const STEMMING = { blij: T.t('pleased'), tevreden: T.t('content'), ontevreden: T.t('displeased'), boos: T.t('angry') };
 

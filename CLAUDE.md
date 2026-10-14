@@ -135,9 +135,9 @@ De bestanden in `js/`, per onderwerp; elk heeft een kop in `ontwerp/code.md`:
   spellus, de invoer, de camera).
 - **Wereld en lopen:** `wereld`, `mist`, `pad` (A*), `lopen`, `praatje`, `anim`, `verkennen`.
 - **Het land:** `eiland` (2500 bij 2500 tegels uit één nummer), `maker` (je land erop), `hoogte`, `kaart` (uit Tiled),
-  `land` en `landkaart`, `gebied`.
+  `land` en `landkaart`, `gebied`, `minikaart`.
 - **Beeld en scherm:** `iso`, `tekenen`, `gl` (WebGL), `sprites`, `doorkijk`, `bouwstijl`, `kleinleven`, `zien` (het
-  licht), `ui` (één manier om een venster te openen en te sluiten), `dialoog`, `tafel`, `hud`, `huisbriefje`,
+  licht), `ui` (één manier om een venster te openen en te sluiten), `dialoog`, `balk` (onderaan), `hud`, `huisbriefje`,
   `gebouwbriefje` (een gebouw aanklikken).
 - **De mensen:** `mensen`, `bewoners`, `leven`, `gesprek` en `gesprekken`, `quest` en `quests`.
 - **Bouwen en groeien:** `begin` (het lege begin), `bouwen` (meebouwen), `boerderij` (boeren uit het niets), `gebouwen`,
