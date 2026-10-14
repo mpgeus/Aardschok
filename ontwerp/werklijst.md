@@ -31,22 +31,22 @@ is een opslag met een eigen bereik en een eigen kar. **Stap 5 is af** (14 okt): 
 
 **Marcel kwam op 14 okt met acht punten** (H, vraag 156 tot 163: een gebouw aanklikken, de keten van stammen tot
 planken, muren, soldaten uit wapens, handel, reizende gezelschappen, provincies, een kasteel), en koos de volgorde en de
-eerste antwoorden (bij H). **156, een gebouw aanklikken, is af** (14 okt, op de branch
-`claude/village-economy-gameplay-lmsnyg`; `spel.md`, "Zo werkt het briefje van een gebouw nu"), en **164, een minimale
-balk onderaan, 165, een minimap van het hele eiland, en 166, een dunne balk bovenaan, ook** (14 okt, op dezelfde
-branch). **Het volgende is 157**, de
-zagerij en de planken (het plan staat bij H en wacht op Marcel), en dan C6 met de keten erin.
+eerste antwoorden (bij H). **156, een gebouw aanklikken, is af** (14 okt, in `main`; `spel.md`, "Zo werkt het briefje
+van een gebouw nu"), en **164, een minimale balk onderaan, 165, een minimap van het hele eiland, en 166, een dunne balk
+bovenaan, ook** (14 okt, in `main`; het scherm zo leeg mogelijk, CLAUDE.md). **Het volgende is 157**, de zagerij en de
+planken (het plan staat bij H en wacht op Marcel), en dan C6 met de keten erin.
 
 **Wacht op Marcel:**
 - **Het briefje van een gebouw bekijken** (156, 14 okt): Nieuw spel, zet een houthakker, en klik erop als hij af is:
-  rechts onder de datum ligt zijn briefje, even breed als de datum en het doel, en het spel loopt door. Wat hij maakt op volle kracht, vandaag, de laatste 7
+  rechts onder de balk ligt zijn briefje, even breed als het doel, en het spel loopt door. Wat hij maakt op volle kracht, vandaag, de laatste 7
   dagen en dit jaar, wie er werkt, wat hem tegenhoudt (weinig afwisseling, de tevredenheid, uren onderweg, de stapel
   vol), en de stapel bij zijn deur. Klik ergens anders, of Esc, en het is weg. Probeer ook het huis van de schout (wat
   de kar doet), een boerderij (haar velden en de oogst) en een bouwplaats. In de console: `Spel.S.gekozen`.
 - **De balken bekijken** (164 tot 166, 14 okt): Nieuw spel. Bovenaan een dunne balk: het goud, de inwoners, de
   tevredenheid, de datum en het uur (het seizoen en het weer bij de muis), de snelheid, de twee bazen en Menu. Onderaan
-  linksonder de waren die je hebt, in het midden Build, en rechtsonder de minikaart: het hele eiland als een ruit, wat je
-  kent in kleur; klik of sleep erop en de camera kijkt daar (Tab of een klik op de schout brengt je terug). Wijs een getal
+  linksonder de waren die je hebt, in het midden Build, en rechtsonder de minikaart: het hele eiland, levendig, met een
+  lijn langs de kust en een zoom die in het beeld vervaagt (geen ruit), wat je kent in kleur; klik of sleep erop en de
+  camera kijkt daar (Tab of een klik op de schout brengt je terug). Wijs een getal
   aan: het briefje zegt wat het is. De velden, het wetboek en de raadsman openen nog met V, W en R. De minimap bijstellen:
   `verzadiging`, `onbekend`, `zeeTotOmtrek` en `omtrek` in `js/minikaart.js`.
 - **Het plan voor 157** (de zagerij en de planken; bij H): ja, of wat anders.
