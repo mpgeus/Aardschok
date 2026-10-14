@@ -47,6 +47,10 @@ moet het hart zijn, en het gevecht wat ze oplevert; een goed gevecht is wat de a
   op (zoals de marktkarren in Anno 1602). En (Marcel, 11 okt): "a ja, b ja, c ja, d ja" (het bereik rond het plein en
   elke opslag, de kar overal maar over een weg sneller, een ossenkar, de eerste opslag het huis van de schout), en **"We
   moeten ook zelf alles vanaf de start gaan bouwen"**: geen gehucht dat er al was, je begint op een lege plek.
+  **Het plan van de kar** (Marcel, 14 okt: "A2, B2, C1, D2, E2"; werklijst C): alles wat een gebouw maakt, ligt op
+  een stapel bij zijn deur tot de kar het haalt (ook het eten en de oogst); het hout van een gebouw betaal je pas als de
+  kar het brengt, zoals in The Settlers; de kar rijdt zelf; een schuur is een opslag met een eigen bereik en een eigen
+  kar; en de wegen leg jij, en de kar rijdt er sneller over.
 - **C, vechten is allebei**: je dorp verdedigen, en erop uit over het eiland, tot het kasteel van de heer, zoals in
   Jagged Alliance 2.
 - **Afwisseling is de kern van de economie** (Marcel, 11 okt, bij de boeren van 1e: "Wijn wordt ook eten. Afwisseling

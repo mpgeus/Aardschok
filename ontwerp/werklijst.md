@@ -22,9 +22,8 @@ De toetsen en het gereedschap spelen op het proefdorp (`T.proefdorp`, `Spel.debu
 wijnboerderij is een eigen gebouw, met de wijngaard als veld ernaast. **B2 is af** (13 okt, onder "Af"), op Marcels blik
 na: het hele eiland in stukken, opslaan wat veranderde, het optimaliseren, en de mist (B2c).
 
-**B3 is af** (13 okt, onder "Af"; op branch `ccr-58035c3c-lckq21`, wacht op "push it"): het dorp eet in gelijke delen
-van elke soort, en hoe meer soorten, hoe harder al het werk gaat. **Het volgende is C, de ossenkar**: eerst een plan
-met Marcel.
+**B3 is af** (13 okt, onder "Af", in `main`): het dorp eet in gelijke delen van elke soort, en hoe meer soorten, hoe
+harder al het werk gaat. **C, de ossenkar, loopt** (14 okt): het plan staat bij C (Marcel: "A2, B2, C1, D2, E2").
 
 **Wacht op Marcel:**
 - **De afwisseling bekijken, en de lat kiezen** (B3, 13 okt; `spel.md`, "Zo werkt de afwisseling nu"): Nieuw spel, en
@@ -81,7 +80,7 @@ met Marcel.
 - Het geluid (vraag 145, 2): de sleutel `FREESOUND_KEY` in de omgeving en de domeinen van Freesound erbij; dan maakt een
   sessie het.
 
-**Daarna, in deze volgorde:** B3, C, D, E, F (ronde 3 van A na C); G loopt ernaast op het tijdpad van `commercieel.md`.
+**Daarna, in deze volgorde:** C, D, E, F (ronde 3 van A na C); G loopt ernaast op het tijdpad van `commercieel.md`.
 
 ## A. Opruimen (vraag 153, stap 3)
 
@@ -125,14 +124,30 @@ werk) wacht op Marcel.
 
 ## C. De ossenkar (vraag 152, de proef)
 
-**Bezig in sessie `claude/relaxed-mendel-59zm3c`** (14 okt): het plan met Marcel.
+**Bezig in sessie `claude/relaxed-mendel-59zm3c`** (14 okt): stap 1.
 
 Besloten (Marcel, 11 okt): bouwen binnen bereik van het plein en elke opslag, geen grens en geen vlaggen; de kar rijdt
-overal, over een weg sneller; een ossenkar; de eerste opslag is het huis van de schout.
-1. Wat een gebouw maakt, ligt in een stapel bij zijn deur; één kar haalt het hout, en het telt pas in de opslag.
-2. De bouwplaats en de timmerman krijgen hun hout met de kar; je ziet waar het stokt (de stapels groeien).
-3. Een schuur verder weg geeft daar bereik; een tweede kar.
-4. Meten en spelen: de speeltest vanaf een lege plek. Dan ronde 3 van A.
+overal, over een weg sneller; een ossenkar; de eerste opslag is het huis van de schout. **Het plan** (Marcel, 14 okt:
+"A2, B2, C1, D2, E2", op een voorstel van Claude):
+1. **De stapel en de kar, voor hout:** wat de houthakker maakt en de bouwers rooien, ligt op een stapel bij de deur (of
+   op de plek); de ossenkar rijdt overdag vanaf de opslag, haalt de stapels, en het hout telt pas in de opslag. Een
+   volle stapel zet het gebouw stil, zodat je ziet waar het stokt. De lading van de huifkar telt pas als hij aankomt.
+2. **De bouwplaats krijgt haar hout met de kar** (B2, zoals in The Settlers): je zet neer wanneer je wilt, en betaalt
+   alleen het goud meteen; de kar brengt het hout in de volgorde waarin je bouwde, de bouwers komen zo ver als het hout
+   reikt ("4 of 16 wood"), en wat ze op de plek rooien, gaat eerst in dat gebouw. De timmerman krijgt zijn hout ook
+   met de kar.
+3. **De rest** (A2): alles wat een gebouw maakt (vlees, vis, groente, eieren, steen, ...), en de oogst bij de boerderij
+   en de wijnboerderij. Niet met de kar: wat mensen zelf thuisbrengen (sprokkelhout), de marskramer, en goud.
+4. **De schuur** (D2): een eigen gebouw, een opslag met zijn eigen bereik en zijn eigen kar, met de tekening van de
+   blokhutschuur tot er een eigen is. De kar rijdt zelf, zonder hand (C1), en kost hout en goud. Zo komen ook de rotsen
+   en het water binnen bereik (`opmerkingen.md`: de steengroeve, de visser).
+5. **Wegen die jij legt** (E2): een weg in het bouwmenu; de kar rijdt er sneller over, en zoekt hem op.
+6. **Meten en spelen:** de speeltest vanaf een lege plek: hoeveel van de dag de kar rijdt, wat er wacht, hoe groot de
+   stapels worden. Dan ronde 3 van A.
+
+Wat Claude erbij zag (14 okt): met de getallen van nu is één kar ruim genoeg voor een gehucht (hij rijdt binnen 16
+tegels zo'n vier ritten per dag, een houthakker maakt 2 hout per dag); de keuze voor een tweede kar komt met de afstand
+en de groei. Wil je hem eerder voelen, dan is de lading per rit het getal (de werkbank).
 
 ## D. De besturing en de klok
 
