@@ -153,6 +153,9 @@
   // maat van een gezin (T.GEBOUWEN_INSTELLINGEN.gezinGrootte, dezelfde als bij groei).
   const BRANDHOUT = ['turf', 'hout'];
   const brandhoutVan = (D) => BRANDHOUT.reduce((n, wat) => n + ((D.voorraad && D.voorraad[wat]) || 0), 0);
+  // Het brandhout voor de winter: met de ossenkar (js/kar.js; werklijst C, stap 2) ook wat op de stapels ligt (dat komt
+  // nog binnen), maar niet wat de bouwplaatsen nog vragen (dat brengt de kar daarheen).
+  const brandhoutVoorDeWinter = (D) => Math.max(0, brandhoutVan(D) + T.opDeStapels(D, 'hout') - T.nogTeBrengen(D, 'hout'));
   const huishoudensVan = (D) => Math.ceil((D.bevolking || 0) / T.GEBOUWEN_INSTELLINGEN.gezinGrootte);
 
   // Hoeveel vis en vlees er ligt, en hoeveel daarvan het zout goed houdt. Puur; ook voor de balk
@@ -953,7 +956,7 @@
     const { tot, duur } = T.periodeVanaf(dag, isWinter);
     const stook = huishoudensVan(D) * T.BEHOEFTEN_INSTELLINGEN.brandhoutPerHuishoudenPerDag;
     const erbij = T.brandhoutErbij(D);
-    const v = T.haaltDeWinter({ voorraad: brandhoutVan(D), voorWinter: erbij * tot, perWinterdag: stook - erbij, winter: duur });
+    const v = T.haaltDeWinter({ voorraad: brandhoutVoorDeWinter(D), voorWinter: erbij * tot, perWinterdag: stook - erbij, winter: duur });
     return Object.assign(v, { tot, stook, erbij });
   };
 

@@ -413,8 +413,10 @@
     }
   }
 
-  // Een bouwplaats meteen af: de kavel gerooid en al het werk gedaan; die nacht komt hij klaar (T.tikGebouwenDag).
+  // Een bouwplaats meteen af: de kavel gerooid, het hout gebracht (uit de voorraad, alsof de kar het bracht; js/kar.js) en
+  // al het werk gedaan; die nacht komt hij klaar (T.tikGebouwenDag).
   function bouwAf(D, g, dag) {
+    T.brengMeteen(D, g);
     if (g.wachtOpRooien) {
       for (const t of T.teRooienOp(D, g.kavel)) T.rooiTegel(D, t);
       g.wachtOpRooien = false;

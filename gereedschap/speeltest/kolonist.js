@@ -49,8 +49,11 @@
   function bouw(D, soort, bij, waarom) {
     if (!T.inBouwmenu(D, soort)) return { soort, gelukt: false, reden: 'niet in het bouwmenu', tekst: `wil een ${soort} bouwen (${waarom}), maar hij staat niet in het bouwmenu` };
     const kosten = T.GEBOUWEN[soort].kosten;
-    if (!T.kanBetalen(D, kosten)) {
-      const mist = Object.keys(kosten).filter((wat) => (D.voorraad[wat] || 0) < kosten[wat]);
+    // Het hout dat de bouwplaatsen nog van de ossenkar vragen, is al vergeven (js/kar.js; werklijst C, stap 2): hij bouwt
+    // met wat er dan over is, ook al betaal je het hout pas als de kar het brengt.
+    const vrij = (wat) => (D.voorraad[wat] || 0) - (T.gaatMetDeKar(D, wat) ? T.nogTeBrengen(D, wat) : 0);
+    const mist = Object.keys(kosten).filter((wat) => vrij(wat) < kosten[wat]);
+    if (mist.length) {
       return { soort, gelukt: false, wacht: true, reden: `wacht op ${mist.join(' en ')}`, tekst: `wil een ${soort} bouwen (${waarom}), maar wacht op ${mist.join(' en ')}` };
     }
     const plek = T.plekVoor(D, soort, bij);
@@ -155,7 +158,7 @@
     }
 
     // 3. Een houthakker, als het hout laag wordt.
-    if (!heeft('houthakker') && ((D.voorraad.hout || 0) < IN.houtLaag || !T.houtVoorDeWinter(D, dag).haalt)) {
+    if (!heeft('houthakker') && ((D.voorraad.hout || 0) - T.nogTeBrengen(D, 'hout') < IN.houtLaag || !T.houtVoorDeWinter(D, dag).haalt)) {
       doe(bouw(D, 'houthakker', hart(D), 'het hout wordt laag'));
     }
 

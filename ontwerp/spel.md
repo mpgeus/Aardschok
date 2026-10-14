@@ -129,9 +129,14 @@ plek van de kar in het kamp. Wat de kar meebracht, telt ook pas als hij in het k
 werktijd van het dorp: naar de grootste stapel, laden (8 per rit), terug naar de dichtste opslag, lossen; een rit van 20
 tegels heen is zo'n twee uur, dus drie tot vier ritten per dag. Is een stapel vol (16), dan maakt het gebouw niets meer
 tot de kar komt, en het dorp zegt het ("its stack is full, waiting for the ox cart"). Je ziet de stapel klein, half of
-vol naast de deur, de kar leeg of met stammen, en bij de muis wat hij doet. Nog niet met de kar: de rest van wat een
-gebouw maakt (stap 3), en de bouwplaats krijgt haar hout nog bij het neerzetten (stap 2). De getallen in de werkbank ("The
-ox cart"). In de console: `Spel.debug.kar()`.
+vol naast de deur, de kar leeg of met stammen, en bij de muis wat hij doet. **Bouwen met de kar** (stap 2, B2, zoals in
+The Settlers): je zet neer wanneer je wilt, en betaalt alleen het goud meteen; het hout brengt de kar, in de volgorde
+waarin je bouwde, zodra de plek gerooid is. Wat de bouwers op de plek rooien, gaat eerst in het gebouw; wat over is, ligt
+op de stapel. De bouwers komen zo ver als het hout reikt, en het briefje zegt het ("waiting for the ox cart to bring wood
+(5 of 8 here)"); een plaats die op hout wacht en vandaag niets krijgt, slaan ze over. Een werkplaats die hout verwerkt (de
+timmerman, de kuiper) neemt het uit wat de kar bij hem bracht, tot 8. De kar brengt eerst, dan haalt hij. De raad telt
+het hout dat de bouwplaatsen nog vragen niet als brandhout. Nog niet met de kar: de rest van wat een gebouw maakt (stap
+3). De getallen in de werkbank ("The ox cart"). In de console: `Spel.debug.kar()`.
 
 **Zo werkt de mist nu** (13 okt, B2c; Marcel: "A2, B1, C ok"; `js/mist.js`, het plan in `kaarten.md`, "Het hele
 eiland"): het eiland is zwart waar niemand van jou kwam, grijs (donkerder en ontkleurd) wat je zag maar nu niet ziet, en

@@ -1136,15 +1136,21 @@
     const kavel = T.bouwKavel(D, soort, x, y);
     const past = T.waaromPastHetNiet(D, soort, x, y, null, kavel);
     if (past) return { gelukt: false, reden: past };
-    if (!T.kanBetalen(D, g.kosten)) return { gelukt: false, reden: T.t('The stores are not big enough for that.') };
-    T.betaalKosten(D, g.kosten);
+    // Met de ossenkar betaal je nu alleen wat niet met de kar gaat (het goud); het hout brengt de kar naar de bouwplaats
+    // (js/kar.js; werklijst C, stap 2, B2).
+    const kosten = T.bouwKosten(D, g.kosten);
+    if (!T.kanBetalen(D, kosten.nu)) return { gelukt: false, reden: T.t('The stores are not big enough for that.') };
+    T.betaalKosten(D, kosten.nu);
     const dagNu = D.kalender ? Math.floor(D.kalender.dag) : 0;
     // Zijn eigen tekening en de voet die daarbij hoort (T.volgendeTekening): een hut is niet elke hut.
     const tekening = T.neemTekening(D, soort);
     const voet = T.gebouwVoet(soort, tekening);
     const instantie = { soort, x, y, tekening, voet, klaar: g.bouwtijd <= 0, klaarOp: dagNu + g.bouwtijd, handen: 0, voorwerp: null };
     const wat = kavel && T.rooiWoordenOp(D, kavel);
-    if (T.bouwenMetHanden(D)) T.zetBouwplaats(D, instantie, kavel);
+    if (T.bouwenMetHanden(D)) {
+      T.zetBouwplaats(D, instantie, kavel);
+      T.zetBouwNodig(instantie, kosten.later);
+    }
     T.bouwGebouw(D, instantie);
     if (instantie.bouw) {
       const gebouw = T.hoofdletter(g.naam);
@@ -1459,7 +1465,8 @@
       // van 2 okt maalde de molen het op, en bleven de akkers in de lente ongezaaid.
       if (soort.maakt.in) {
         for (const wat in soort.maakt.in) {
-          const vrij = Math.max(0, (D.voorraad[wat] || 0) - (wat === 'graan' ? T.zaaigraanApart(D, dag) : 0));
+          // wat met de ossenkar gaat, uit wat bij hem ligt (js/kar.js, T.verwerkVoorraad)
+          const vrij = Math.max(0, T.verwerkVoorraad(D, g, wat) - (wat === 'graan' && !T.gaatMetDeKar(D, wat) ? T.zaaigraanApart(D, dag) : 0));
           const kan = vrij / soort.maakt.in[wat];
           if (kan < factor) {
             factor = kan;
@@ -1498,7 +1505,7 @@
       }
       g.werkte = factor;
       if (factor <= 0) continue;
-      if (soort.maakt.in) for (const wat in soort.maakt.in) T.wijzigVoorraad(D, wat, -soort.maakt.in[wat] * factor);
+      if (soort.maakt.in) for (const wat in soort.maakt.in) T.verwerk(D, g, wat, soort.maakt.in[wat] * factor);
       // De jager schiet klein wild, en herten als er een is dat hij mag nemen (js/beesten.js).
       const uit = T.watDeJagerSchiet(D, g, T.maaktUit(D, soort));
       // Wat met de kar gaat, op zijn stapel; de rest meteen in de voorraad (T.opStapel, js/kar.js).

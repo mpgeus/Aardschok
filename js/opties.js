@@ -1298,6 +1298,7 @@
     stapelVol: T.t('full stack'),
     minstens: T.t('smallest stack fetched'),
     laden: T.t('loading time'),
+    voorraadIn: T.t('kept at a workshop'),
     akker: T.t('arable'),
     wijngaard: T.t('vineyard'),
     veldMin: T.t('smallest field'),

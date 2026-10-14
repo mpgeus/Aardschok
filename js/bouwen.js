@@ -74,8 +74,10 @@
   const rooiKost = (D, t) => (T.ontginWerkOp(D.wereld, t.x, t.y) === 'hakken' ? IN().rooiBoom : IN().rooiStruik);
 
   // Werk aan een bouwplaats (in werkdagen): eerst het rooien, tegel voor tegel in de volgorde van de kavel, en wat over is
-  // naar het bouwen. Is de kavel vrij, dan komt het gebouw op de kaart; is het werk af, dan is hij vannacht klaar
-  // (T.tikGebouwenDag zet hem dan op klaar, zoals elk gebouw).
+  // naar het bouwen, zo ver als het hout reikt dat de ossenkar bracht (T.bouwMateriaalDeel, js/kar.js; werklijst C, stap
+  // 2). Is de kavel vrij, dan komt het gebouw op de kaart; is het werk af, dan is hij vannacht klaar (T.tikGebouwenDag zet
+  // hem dan op klaar, zoals elk gebouw). Geeft het werk dat bleef liggen omdat het hout er nog niet was: overdag doen de
+  // bouwers het later die dag, als de kar het bracht.
   function werkAan(D, g, werk, dag) {
     const B = g.bouw;
     let over = werk;
@@ -89,7 +91,7 @@
         if (T.ontginWerkOp(D.wereld, t.x, t.y) === 'hakken') B.hout += T.rooiHoutPerBoom(D);
         T.rooiTegel(D, t, g); // het hout op de stapel van de bouwplaats (js/kar.js)
       }
-      if (T.teRooienOp(D, g.kavel).length) return;
+      if (T.teRooienOp(D, g.kavel).length) return 0;
       over = B.tegoed;
       B.tegoed = 0;
       g.wachtOpRooien = false;
@@ -106,10 +108,17 @@
           : T.t('{gebouw}: the site is cleared, and now they build.', { gebouw }));
       }
     }
-    B.gedaan = Math.min(B.werk, B.gedaan + over);
+    const mag = Math.max(B.gedaan, B.werk * T.bouwMateriaalDeel(g));
+    const nieuw = Math.min(B.werk, mag, B.gedaan + over);
+    const liggen = mag < B.werk ? Math.max(0, B.gedaan + over - nieuw) : 0;
+    B.gedaan = nieuw;
     if (g.voorwerp) g.voorwerp.voortgang = B.gedaan / B.werk;
     if (B.gedaan >= B.werk - 1e-9) g.klaarOp = dag;
+    return liggen;
   }
+
+  // Wacht deze bouwplaats op hout: gerooid, en de bouwers kwamen zo ver als het hout reikt.
+  T.wachtOpHout = (g) => !!(g.bouw && !g.klaar && !g.wachtOpRooien && T.bouwMateriaalDeel(g) < 1 && g.bouw.gedaan >= g.bouw.werk * T.bouwMateriaalDeel(g) - 1e-9);
 
   // Wie er vandaag aan deze bouwplaats bouwt (en het nog kan).
   const bouwersVan = (D, g) => D.bewoners.mensen.filter((p) => p.bouwt === g && T.kanWerken(p) && !p.werk);
@@ -141,7 +150,9 @@
     if (!T.bouwenMetHanden(D)) return;
     const vrij = B.mensen.filter((p) => T.kanWerken(p) && !p.werk && !p.dagloner && (p.leeftijd === 'volwassen' || p.leeftijd === 'jong'));
     const deur = (p) => (p.wezen && p.wezen.thuis) || (p.huis && T.deurVan(D.wereld, p.huis)) || { x: 0, y: 0 };
+    const krijgt = T.krijgtVandaagHout(D);
     for (const g of bouwplaatsen(D)) {
+      if (T.wachtOpHout(g) && !krijgt.has(g)) continue; // daar komt vandaag geen hout: naar de volgende
       const r = g.wachtOpRooien ? g.kavel : T.voetVanGebouw(g);
       const midden = { x: r.x + r.b / 2, y: r.y + r.h / 2 };
       vrij.sort((p, q) => T.afstand(deur(p), midden) - T.afstand(deur(q), midden));
@@ -178,8 +189,9 @@
       for (const g of plaatsen) {
         const doel = werkdagenVan(D, g) * f;
         if (doel > g.bouw.vandaag + 1e-6) {
-          werkAan(D, g, doel - g.bouw.vandaag, Math.floor(dag) + 1);
-          g.bouw.vandaag = doel;
+          // wat bleef liggen omdat het hout er nog niet was, doen ze later vandaag (of vannacht, T.tikBouwenDag)
+          const liggen = werkAan(D, g, doel - g.bouw.vandaag, Math.floor(dag) + 1);
+          g.bouw.vandaag = doel - liggen;
         }
       }
     }
@@ -276,6 +288,15 @@
         : T.t('{gebouw}: the site still has to be cleared ({wat}), and everyone has other work.', { gebouw, wat: T.rooiWoordenOp(D, g.kavel) });
     }
     const gedaan = Math.floor(g.bouw.gedaan);
+    // Het hout dat de ossenkar brengt (js/kar.js): wacht hij erop, of hoeveel is er al.
+    const B = g.bouw;
+    if (B.nodig && T.bouwMateriaalDeel(g) < 1) {
+      const wat = Object.keys(B.nodig)[0];
+      const hout = { gebouw, er: Math.floor(B.er[wat] || 0), nodig: B.nodig[wat], waar: T.waarNaam(wat), gedaan, werk: B.werk };
+      return T.wachtOpHout(g)
+        ? T.t('{gebouw}: waiting for the ox cart to bring {waar} ({er} of {nodig} here); {gedaan} of {werk} workdays done.', hout)
+        : T.t('{gebouw}: {gedaan} of {werk} workdays done, as far as the {waar} goes ({er} of {nodig} here).', hout);
+    }
     return n
       ? T.t('{gebouw}: {n|# builder|# builders}, {gedaan} of {werk} workdays done.', { gebouw, n, gedaan, werk: g.bouw.werk })
       : T.t('{gebouw}: {gedaan} of {werk} workdays done; nobody is building, everyone has other work.', { gebouw, gedaan, werk: g.bouw.werk });

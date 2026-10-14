@@ -232,6 +232,7 @@ test('een akker: de bouwers maken hem, dan is hij van de boerderij, de boer werk
   dagen(S, 1, 1);
   T.werkBewonersBij(D); // de gezinnen van het kamp komen aan: ze krijgen een poppetje
   const [g] = zetGebouwen(D, 1, 'boerderij');
+  T.brengMeteen(D, g); // het hout is er al (js/kar.js), zodat de boerderij en de akker samen af zijn
   const veld = T.legVeld(D, 'akker', veldPlek(D, 'akker', g)).instantie;
   const dag = totAf(S, [g, veld], 2);
   assert.ok(T.isNazaaitijd(dag), 'nog in de lente');

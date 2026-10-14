@@ -12,6 +12,11 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 - **Een stapel achter een gebouw zie je niet** (14 okt, C stap 1): de doorkijk (`js/doorkijk.js`) maakt een dak doorzichtig
   voor een wezen, niet voor een stapel. In het proefdorp, waar alles tegen het vuur staat, lag de stapel van de houthakker
   achter een boerderij. In het spel zet je meestal ruimer; als het stoort, de stapel meenemen in de doorkijk.
+- **Een akker kan af zijn vóór zijn boerderij** (14 okt, C stap 2): een veld vraagt geen hout, de boerderij wel, dus met
+  de kar komt de akker vaak eerder af. Is het nazaaitijd, dan zaait het dorp hem in, ook al woont er nog geen boer. Dat
+  kon al als de boerderij in het bos stond; nu gebeurt het vaker. Niet erg, maar te zien.
+- **Een nieuwe bouwplaats krijgt pas de volgende ochtend bouwers** (14 okt, C stap 2; dat was al zo): wie bouwt, kiest
+  het dorp 's ochtends. Met de kar valt het meer op: hij brengt het hout nog dezelfde dag, en dan staat het een dag.
 - **De ossenkar staat na het huis van de schout nog bij het kamp** (14 okt, C stap 1): hij rijdt pas naar het huis als hij
   zijn eerste stapel heeft gelost. Niet erg, maar hij zou er ook meteen heen kunnen rijden.
 

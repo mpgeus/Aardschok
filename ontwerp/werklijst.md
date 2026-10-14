@@ -25,7 +25,9 @@ na: het hele eiland in stukken, opslaan wat veranderde, het optimaliseren, en de
 **B3 is af** (13 okt, onder "Af", in `main`): het dorp eet in gelijke delen van elke soort, en hoe meer soorten, hoe
 harder al het werk gaat. **C, de ossenkar, loopt** (14 okt): het plan staat bij C (Marcel: "A2, B2, C1, D2, E2").
 **Stap 1 is af** (14 okt, in `main`): het hout ligt op een stapel bij de deur tot de kar het haalt (`spel.md`, "Zo werkt
-de kar nu"). Stap 2 loopt: de bouwplaats krijgt haar hout met de kar.
+de kar nu"). **Stap 2 is af** (14 okt, op branch `claude/relaxed-mendel-59zm3c`, wacht op "push it"): je betaalt bij het
+neerzetten alleen het goud, en de kar brengt het hout naar de bouwplaats en de timmerman. Het volgende is stap 3: de
+rest van wat een gebouw maakt.
 
 **Wacht op Marcel:**
 - **De ossenkar bekijken** (C, stap 1, 14 okt): Nieuw spel. De huifkar komt aan, en pas dan staat zijn lading in de balk.
@@ -33,7 +35,9 @@ de kar nu"). Stap 2 loopt: de bouwplaats krijgt haar hout met de kar.
   de kar erheen, laadt, en brengt het naar het huis van de schout (zolang dat er niet is, naar zijn plek in het kamp).
   Bij de muis zegt de kar wat hij doet; in de console `Spel.debug.kar()`. Te kiezen in de werkbank ("The ox cart"): de
   lading per rit (8) en wanneer een stapel vol is (16). Wat opviel (`opmerkingen.md`): een stapel achter een gebouw zie
-  je niet.
+  je niet. **Stap 2:** zet een hut neer: het hout blijft in de balk staan, de kar haalt het uit de opslag en brengt het,
+  en het briefje van de bouwplaats zegt hoeveel er is ("5 of 8 here"); bouw meer dan je hout hebt, en zie de plaatsen
+  wachten. Wat opviel: een akker kan nu af zijn vóór zijn boerderij.
 - **De afwisseling bekijken, en de lat kiezen** (B3, 13 okt; `spel.md`, "Zo werkt de afwisseling nu"): Nieuw spel, en
   kijk in de balk naar **Plain fare** (bij de muis wat helpt); laat de kaas en het vlees uit de kar opgaan zonder jager
   of moestuin, en zie het werk naar 60% zakken (**One dish**). De speeltest (`speelbaar.md`, 13 okt, avond): de kolonist
@@ -132,7 +136,7 @@ werk) wacht op Marcel.
 
 ## C. De ossenkar (vraag 152, de proef)
 
-**Bezig in sessie `claude/relaxed-mendel-59zm3c`** (14 okt): stap 2 (stap 1 is af, in `main`).
+**Bezig in sessie `claude/relaxed-mendel-59zm3c`** (14 okt): stap 1 is af (in `main`), stap 2 is af (op die branch).
 
 Besloten (Marcel, 11 okt): bouwen binnen bereik van het plein en elke opslag, geen grens en geen vlaggen; de kar rijdt
 overal, over een weg sneller; een ossenkar; de eerste opslag is het huis van de schout. **Het plan** (Marcel, 14 okt:

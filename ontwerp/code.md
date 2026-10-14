@@ -1140,8 +1140,18 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   (`T.dagindeling`), naar de grootste stapel (`kiesStapel`; zonder weg laat hij hem een dag liggen, `g.karKanNietTot`), en
   lost bij de dichtste opslag (een gebouw met `opslag` dat af is, anders de plek van de kar in het kamp). Het vel
   (`T.zetKarVel`): de huifkar blijft de huifkar; de ossenkar is `ossenkar-leeg` of `ossenkar-hout`. Bij de muis
-  `T.karTekst`; getekend: `T.stapelsOp` en `T.stapelPlek` (naast de deur). Getallen in `T.KAR_INSTELLINGEN` (de
-  werkbank: "The ox cart"); getoetst in `test/kar.test.cjs`.
+  `T.karTekst`; getekend: `T.stapelsOp` en `T.stapelPlek` (naast de deur, met op een bouwplaats het hout dat er al is
+  maar nog niet verbouwd). Getallen in `T.KAR_INSTELLINGEN` (de werkbank: "The ox cart"); getoetst in `test/kar.test.cjs`.
+- **Bouwen met de kar** (stap 2, B2): `T.plaatsGebouw` betaalt alleen `T.bouwKosten(D, kosten).nu` (wat niet met de kar
+  gaat) en zet de rest met `T.zetBouwNodig` in `g.bouw.nodig`; wat er is, staat in `g.bouw.er` (de kar, en `T.opStapel`
+  vult eerst de bouwplaats). `T.bouwMateriaalDeel(g)` zegt hoe ver de bouwers mogen (`werkAan` in `js/bouwen.js` geeft
+  terug wat bleef liggen, zodat overdag het werk na de levering alsnog gebeurt, en met of zonder beelden hetzelfde uitkomt);
+  `T.wachtOpHout(g)` en `T.krijgtVandaagHout(D)` sturen `T.kiesBouwers`. Een rit heeft een `plan`: 'halen' (heen, laden,
+  terug, lossen) of 'brengen' (opslag, inladen, brengen, afladen); `kiesRit` brengt eerst (bouwplaatsen in volgorde, dan
+  werkplaatsen tot `voorraadIn`, met `vraag` min wat al `onderweg` is), dan halen, en anders een halve vracht. Een
+  werkplaats verwerkt via `T.verwerkVoorraad` en `T.verwerk` (uit `g.in`). `T.nogTeBrengen(D, wat)`: wat de bouwplaatsen
+  nog vragen (de winter van het brandhout in `js/behoeften.js`, de kolonist). `T.brengMeteen(D, g)`: alsof de kar het
+  bracht (het proefdorp, `bouwAf`).
 
 ### js/bode.js: de bode naar de marskramer
 

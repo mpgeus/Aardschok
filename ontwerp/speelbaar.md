@@ -164,6 +164,10 @@ als hij in het kamp staat.
   (zoals op 13 okt): de kar zit het bouwen niet in de weg.
 - Hoe druk de kar is en hoe groot de stapels worden, meet stap 6, als alles met de kar gaat; nu is het alleen het hout,
   en dan staat hij het grootste deel van de dag stil (`werklijst.md`, C).
+- **Stap 2** (`--naam c2`: de bouwplaats krijgt haar hout met de kar): weer geen fout en geen doden, en hetzelfde hout op
+  1 lentemaand. Een hut komt hier en daar een dag later af (hut 11 (6) in plaats van (5)). De kolonist bouwt alleen met
+  hout dat nog niet aan een bouwplaats beloofd is (`T.nogTeBrengen`); zonder dat zette hij op dag 1 een hut in plaats van
+  een houthakker, want het hout van zijn bouwplaatsen stond nog in de opslag.
 
 ## De speeltest van 13 okt, avond: de afwisseling (werklijst B3, vraag 154)
 
