@@ -176,6 +176,9 @@ als hij in het kamp staat.
   372 dagen, was 373 tot 377), en rond dag 42 zet de kolonist daarom een tweede moestuin. Het graan op 1 lentemaand: 215,
   147 en 201 (was 215, 188 en 202). De oogst ligt na het maaien een week bij de boerderij (in een proef 235 graan, in
   zes dagen binnen).
+- **Stap 4** (`--naam c4`, in `uit/c4/`: de schuur, en een kar zonder werk wacht bij zijn opslag): geen fout, geen
+  doden, geen dag honger of kou. De kolonist bouwt geen schuur, dus wat de schuur doet, staat in `test/kar.test.cjs`; wat
+  hier verandert, is dat de kar na elke rit naar huis rijdt. Het hout op 1 lentemaand: 161, 420 en 525.
 
 ## De speeltest van 13 okt, avond: de afwisseling (werklijst B3, vraag 154)
 

@@ -17,9 +17,6 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   kon al als de boerderij in het bos stond; nu gebeurt het vaker. Niet erg, maar te zien.
 - **Een nieuwe bouwplaats krijgt pas de volgende ochtend bouwers** (14 okt, C stap 2; dat was al zo): wie bouwt, kiest
   het dorp 's ochtends. Met de kar valt het meer op: hij brengt het hout nog dezelfde dag, en dan staat het een dag.
-- **De ossenkar staat na het huis van de schout nog bij het kamp** (14 okt, C stap 1): hij rijdt pas naar het huis als hij
-  zijn eerste stapel heeft gelost. Niet erg, maar hij zou er ook meteen heen kunnen rijden.
-
 - **Vis en vlees voor de winter rekent de maaltijd niet mee** (13 okt, B3): `T.visEnVleesVoorDeWinter` (de raad: "buy
   salt from the peddler") rekent met wat de huizen voor hun wens vlees of vis eten, niet met het deel van de maaltijd dat
   het dorp er sinds vraag 154 ook van eet. Dan ligt er in de winter minder dan hij zegt. De wijn na de pluk rekent het

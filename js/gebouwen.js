@@ -53,6 +53,7 @@
 //                                    // 'wijnboerderij'
 //     eenmalig:    true,             // staat maar één keer in het bouwmenu: is hij er (ook in aanbouw), dan niet meer
 //     opslag:      true,             // een opslag: als hij af is, bouw je ook binnen bereik van hem (T.inBouwBereik)
+//     kar:         true,             // en hij krijgt een eigen ossenkar als hij af is (de schuur; js/kar.js)
 //     menu:        true,             // false: niet via het bouwmenu (stadsmuur, palissade — die hebben
 //                                    // een eigen manier van neerzetten, geen enkele voet)
 //     tekening:    'gebouwen/dorpshuis1',  // "vel/naam" uit tegels/, zoals T.laadKaart "tegel" leest
@@ -209,6 +210,15 @@
       handen: 0, woonruimte: 0, maakt: null, menu: true,
       tekening: 'gebouwen/schuurBlokhut', beschrijving: T.t('the seed grain is kept here; with guards on it, the village does not eat it in a hungry winter'), // geen tekst
       opmerking: 'nieuw (vraag 132): nog niet getekend, leent voorlopig de blokhutschuur.', // geen tekst
+    },
+    // De schuur (werklijst C, stap 4; Marcel, 14 okt: "D2", en "a ja, b ja, c ja"): een opslag verder van het plein, met
+    // zijn eigen bouwbereik (T.inBouwBereik, js/begin.js) en zijn eigen ossenkar (js/kar.js), die haalt en brengt wat het
+    // dichtst bij hem ligt. De voorraad is één: wat hier ligt, telt in de balk zoals wat in het huis van de schout ligt.
+    schuur: {
+      naam: T.t('barn'), meervoud: T.t('barns'), trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 15, goud: 6 }, heer: {}, bouwtijd: 3,
+      handen: 0, woonruimte: 0, maakt: null, menu: true, leeg: true, opslag: true, kar: true,
+      tekening: 'gebouwen/schuurBlokhut', beschrijving: T.t('a store away from the square: you can build around it, and it has its own ox cart'), // geen tekst
+      opmerking: 'nieuw (werklijst C, stap 4): nog niet getekend, leent voorlopig de blokhutschuur.', // geen tekst
     },
     kippenhok: {
       naam: T.t('henhouse'), trede: 'gehucht', voet: { b: 2, h: 2 }, kosten: { hout: 4 }, heer: { eieren: 20 }, bouwtijd: 1,
@@ -1368,6 +1378,8 @@
     // Is er een hut of huis af, dan trekt er een gezin uit het kamp van het lege begin in, vóór er een nieuw gezin kan
     // komen (js/begin.js).
     T.verhuisUitHetKamp(D);
+    // Een schuur die af is, krijgt zijn ossenkar (js/kar.js; werklijst C, stap 4).
+    T.geefSchurenEenKar(D);
     // Een veld dat af is, wordt land; een lege boerderij krijgt een gezin; de boeren krijgen hun akkers (js/boerderij.js).
     T.tikBoerderijenDag(D, dag);
     // En wat oud genoeg is, draagt zijn oude tekening (hierboven, bij T.maakOud).

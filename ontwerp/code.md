@@ -1147,7 +1147,12 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `ossenkar-hout`, `-stenen`, `-spullen`, anders `-zakken`). De kar neemt geen zaaigraan mee (`beschikbaar`). Bij de muis
   `T.karTekst`; getekend: `T.stapelsOp` en `T.stapelPlek` (naast de deur, met op een bouwplaats het hout dat er al is
   maar nog niet verbouwd), met `T.sprites.stapelDelen` (`js/sprites.js`: een hoop hout of steen, of een tot drie manden
-  van de markt, `IN_DE_MAND`). Getallen in `T.KAR_INSTELLINGEN` (de werkbank: "The ox cart"); getoetst in `test/kar.test.cjs`.
+  van de markt, `IN_DE_MAND`).
+- **De schuur** (stap 4): `T.GEBOUWEN.schuur` (`opslag`, `kar`, `leeg`). `T.geefSchurenEenKar` (in `T.tikGebouwenDag`, na de
+  gebouwen die af kwamen) zet naast zijn deur een kar (`T.maakKar`, ook voor de huifkar van het begin) met `e.thuis` en
+  `g.kar`. `thuisVan(D, e)`: waar een kar laadt en lost (zijn schuur, anders het huis van de schout, anders de plek in
+  het kamp); `verantwoordelijk(D, g)`: de kar met zijn opslag het dichtst bij g, en alleen die neemt g in `kiesRit`. Een
+  kar zonder werk rijdt naar zijn opslag. Het bereik komt vanzelf uit `opslag` (`T.inBouwBereik`, `js/begin.js`). Getallen in `T.KAR_INSTELLINGEN` (de werkbank: "The ox cart"); getoetst in `test/kar.test.cjs`.
 - **Bouwen met de kar** (stap 2, B2): `T.plaatsGebouw` betaalt alleen `T.bouwKosten(D, kosten).nu` (wat niet met de kar
   gaat) en zet de rest met `T.zetBouwNodig` in `g.bouw.nodig`; wat er is, staat in `g.bouw.er` (de kar, en `T.opStapel`
   vult eerst de bouwplaats). `T.bouwMateriaalDeel(g)` zegt hoe ver de bouwers mogen (`werkAan` in `js/bouwen.js` geeft

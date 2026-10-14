@@ -270,3 +270,77 @@ test('de oogst ligt bij de boerderij tot de kar hem haalt; wat van het vee komt,
   T.opStapel(D, null, 'wol', 3);
   assert.equal(D.voorraad.wol, wol + 3);
 });
+
+// ---------------------------------------------------------------------------------------------
+// Stap 4: de schuur (Marcel, 14 okt: "a ja, b ja, c ja")
+// ---------------------------------------------------------------------------------------------
+
+// Een schuur zo ver mogelijk van het huis van de schout, maar nog binnen het bereik, meteen af (de nacht erop).
+function zetSchuur(S, D, schout, dag) {
+  T.wijzigVoorraad(D, 'hout', 30);
+  T.wijzigVoorraad(D, 'goud', 10);
+  const huis = T.deurVan(D.wereld, schout);
+  const plekken = [];
+  const K = T.kaartVak(D.wereld);
+  for (let y = K.y; y < K.y + K.h; y++) {
+    for (let x = K.x; x < K.x + K.b; x++) {
+      const d = Math.hypot(x - huis.x, y - huis.y);
+      if (d > 10 && d < 16) plekken.push({ x, y, d });
+    }
+  }
+  plekken.sort((a, b) => b.d - a.d);
+  for (const p of plekken) {
+    const u = T.plaatsGebouw(D, 'schuur', p.x, p.y); // (staat er bos, dan rooit bouwAf het)
+    if (!u.gelukt) continue;
+    bouwAf(T, D, u.instantie, dag);
+    dagen(T, S, dag + 1);
+    return u.instantie;
+  }
+  throw new Error('geen plek voor een schuur');
+}
+
+test('de schuur: 15 hout en 6 goud, alleen in het lege begin, een opslag met een eigen kar', () => {
+  const s = T.GEBOUWEN.schuur;
+  assert.deepEqual(s.kosten, { hout: 15, goud: 6 });
+  assert.equal(s.trede, 'gehucht');
+  assert.ok(s.opslag && s.kar && s.leeg);
+  const { S, D, schout, dag } = dorp();
+  assert.ok(T.inBouwmenu(D, 'schuur'));
+  const g = zetSchuur(S, D, schout, dag);
+  assert.ok(g.klaar);
+  assert.equal(D.karren.length, 2, 'de schuur kreeg zijn kar');
+  const kar = D.karren[1];
+  assert.equal(kar.thuis, g);
+  assert.equal(g.kar, kar);
+  assert.ok(D.wereld.wezens.includes(kar));
+  // en een tweede schuur in het bouwmenu kan ook (hij is niet eenmalig)
+  assert.ok(T.inBouwmenu(D, 'schuur'));
+});
+
+test('om de schuur heen kun je bouwen, ook waar het plein en het huis te ver zijn', () => {
+  const { S, D, schout, dag } = dorp();
+  const g = zetSchuur(S, D, schout, dag);
+  const deur = T.deurVan(D.wereld, g);
+  const huis = T.deurVan(D.wereld, schout);
+  // een tegel aan de andere kant van de schuur, 14 tegels van zijn deur
+  const r = Math.hypot(deur.x - huis.x, deur.y - huis.y);
+  const t = { x: Math.round(deur.x + ((deur.x - huis.x) / r) * 14), y: Math.round(deur.y + ((deur.y - huis.y) / r) * 14) };
+  assert.ok(T.inBouwBereik(D, t.x, t.y), 'binnen het bereik van de schuur');
+});
+
+test('elke kar haalt wat het dichtst bij zijn eigen opslag ligt, en lost daar', () => {
+  const { S, D, schout, dag } = dorp();
+  const g = zetSchuur(S, D, schout, dag);
+  const eerste = D.karren[0];
+  const tweede = D.karren[1];
+  // een stapel bij de schuur zelf: die is van de kar van de schuur
+  g.stapel = { steen: 10 };
+  const hout = D.voorraad.steen || 0;
+  dagen(T, S, dag + 2);
+  assert.ok(!g.stapel.steen, 'de kar van de schuur haalde hem');
+  assert.ok(D.voorraad.steen >= hout + 10 - 1e-9, 'één voorraad: hij telt in de balk');
+  const bijSchuur = T.afstand({ x: tweede.tx, y: tweede.ty }, T.deurVan(D.wereld, g));
+  assert.ok(bijSchuur <= 2, `de kar van de schuur staat bij zijn schuur (${bijSchuur})`);
+  const bijHuis = T.afstand({ x: eerste.tx, y: eerste.ty }, T.deurVan(D.wereld, schout));
+  assert.ok(bijHuis <= 2, `de eerste kar wacht bij het huis van de schout (${bijHuis})`);
+});

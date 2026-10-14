@@ -143,8 +143,13 @@ voor de winter met wat op de stapels ligt. De oogst, de schoven en de wijn blijv
 de oogst heeft hij een week werk (in de proef 235 graan, binnen in zes dagen). Wat niet van een gebouw komt, gaat meteen
 de voorraad in: wat het vee geeft (de wol, de melk en de kaas, het vlees van het slachten, de mest), het sprokkelhout en
 wat de marskramer brengt. Je ziet hout en steen als een hoop, en de rest in de manden, kratten, zakken en tonnen van de
-markt (een, twee of drie, naar hoe vol de stapel is); de kar rijdt met stammen, stenen, zakken of spullen. De getallen in
-de werkbank ("The ox cart"). In de console: `Spel.debug.kar()`.
+markt (een, twee of drie, naar hoe vol de stapel is); de kar rijdt met stammen, stenen, zakken of spullen. **De schuur**
+(stap 4; Marcel: "a ja, b ja, c ja"): een opslag verder weg, voor 15 hout en 6 goud, vanaf het gehucht en zo vaak als je
+wilt: om hem heen kun je bouwen (bereik 16, zoals het huis van de schout), en als hij af is, krijgt hij een eigen
+ossenkar. Elke kar haalt en brengt wat het dichtst bij zijn eigen opslag ligt, en laadt en lost daar; de voorraad is één,
+voor alle opslagen samen. Een kar zonder werk wacht bij zijn opslag. Zo kom je bij de rotsen en het water: een schuur aan
+de rand van het bereik, en dan de steengroeve erachter. De getallen in de werkbank ("The ox cart"). In de console:
+`Spel.debug.kar()`.
 
 **Zo werkt de mist nu** (13 okt, B2c; Marcel: "A2, B1, C ok"; `js/mist.js`, het plan in `kaarten.md`, "Het hele
 eiland"): het eiland is zwart waar niemand van jou kwam, grijs (donkerder en ontkleurd) wat je zag maar nu niet ziet, en

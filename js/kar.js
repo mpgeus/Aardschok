@@ -23,7 +23,13 @@
 // het eind van een stuk nog niet waar hij moet zijn (iemand stond in de weg), dan staat hij er. Zo komt er met of zonder
 // beelden hetzelfde uit (de toetsen spelen zonder), zoals bij het meebouwen (js/bouwen.js).
 //
-//   D.karren   de karren van het dorp, wezens in w.wezens (de ossenkar, D.begin.kar, zodra het kamp op is)
+// Een schuur (stap 4, D2; Marcel: "a ja, b ja, c ja") is een opslag met een eigen kar: elke kar haalt en brengt wat het
+// dichtst bij zijn eigen opslag ligt (`verantwoordelijk`), en laadt en lost daar. De voorraad is één, voor alle opslagen.
+//
+//   D.karren   de karren van het dorp, wezens in w.wezens (de ossenkar, D.begin.kar, zodra het kamp op is; en die van
+//              elke schuur, als hij af is)
+//   e.thuis    de schuur van de kar (null: het huis van de schout, en tot dat er is de plek van de kar in het kamp);
+//              g.kar is de kar van schuur g
 //   e.lading   { wat: hoeveel } wat de kar nu draagt
 //   e.rit      null, of { plan, fase, naar, wat, n, tot, doel }: `plan` 'halen' (fasen heen, laden, terug, lossen) of
 //              'brengen' (opslag, inladen, brengen, afladen); `naar` het gebouw; bij brengen `wat` en hoeveel (`n`); `tot`
@@ -242,6 +248,15 @@
   // De kar
   // ---------------------------------------------------------------------------------------------
 
+  // Een ossenkar op (x, y): een wezen op de kaart, dat in het tempo van de os rijdt (de huifkar van het begin, js/begin.js,
+  // en de kar van een schuur).
+  T.maakKar = function (D, x, y, naam, vel) {
+    const e = T.maakDorpeling(0, x, y, 0, null);
+    Object.assign(e, { soort: 'kar', naam, vel, kar: true, zaad: null, snelheid: T.BEGIN_INSTELLINGEN.karSnelheid });
+    D.wereld.wezens.push(e);
+    return e;
+  };
+
   // De kar gaat aan het werk (T.zetKampOp, js/begin.js): het kamp staat, en wat hij bracht is uitgeladen.
   T.karAanHetWerk = function (D, e) {
     if (!D.karren) D.karren = [];
@@ -250,22 +265,55 @@
     D.karren.push(e);
   };
 
-  // De opslagen van het dorp, als tegels waar de kar lost en laadt: de deur van elk gebouw met `opslag` dat af is (het
-  // huis van de schout), en zolang er geen is, de plek van de kar in het kamp.
-  function opslagen(D) {
+  // Elke nacht, als de gebouwen van vandaag af zijn (T.tikGebouwenDag, js/gebouwen.js): een schuur die af is, krijgt zijn
+  // kar (stap 4; Marcel: "c ja"), naast zijn deur.
+  T.geefSchurenEenKar = function (D) {
+    if (!T.metDeKar(D)) return;
     const w = D.wereld;
-    const uit = [];
     for (const g of D.gebouwen) {
-      if (g.klaar && T.GEBOUWEN[g.soort] && T.GEBOUWEN[g.soort].opslag) uit.push({ ...T.deurVan(w, g), naast: true });
+      const soort = T.GEBOUWEN[g.soort];
+      if (!g.klaar || !soort || !soort.kar || (g.kar && w.wezens.includes(g.kar))) continue;
+      const deur = T.deurVan(w, g);
+      let plek = deur;
+      for (const [dx, dy] of [[0, 1], [1, 0], [-1, 0], [0, -1], [1, 1], [-1, 1]]) {
+        if (T.isBegaanbaar(w, deur.x + dx, deur.y + dy, { wezensBlokkeren: true })) {
+          plek = { x: deur.x + dx, y: deur.y + dy };
+          break;
+        }
+      }
+      const e = T.maakKar(D, plek.x, plek.y, T.t('ox cart'), 'ossenkar-leeg');
+      e.thuis = g;
+      g.kar = e;
+      T.karAanHetWerk(D, e);
+      T.zeg(D, T.t('The {schuur} is ready: you can build around it, and it has its own ox cart.', { schuur: soort.naam }), 'goed');
     }
-    if (!uit.length && w.kamp && w.kamp.kar) uit.push({ x: w.kamp.kar.x, y: w.kamp.kar.y, naast: false });
-    return uit;
-  }
-  const dichtsteOpslag = (D, bij) => {
-    let beste = null;
-    for (const o of opslagen(D)) if (!beste || T.afstand(o, bij) < T.afstand(beste, bij)) beste = o;
-    return beste;
   };
+
+  // Waar de kar laadt en lost: zijn schuur, of (de eerste kar) het huis van de schout, en tot dat er is de plek van de kar
+  // in het kamp. Als tegel, met `naast` als hij naast de deur stopt.
+  function thuisVan(D, e) {
+    const w = D.wereld;
+    if (e.thuis && e.thuis.klaar && D.gebouwen.includes(e.thuis)) return { ...T.deurVan(w, e.thuis), naast: true };
+    const huis = D.gebouwen.find((g) => g.klaar && T.GEBOUWEN[g.soort] && T.GEBOUWEN[g.soort].opslag && !T.GEBOUWEN[g.soort].kar);
+    if (huis) return { ...T.deurVan(w, huis), naast: true };
+    return w.kamp && w.kamp.kar ? { x: w.kamp.kar.x, y: w.kamp.kar.y, naast: false } : null;
+  }
+
+  // Welke kar dit gebouw bedient: die met zijn opslag het dichtst bij zijn deur (Marcel: "c ja").
+  function verantwoordelijk(D, g) {
+    const deur = T.deurVan(D.wereld, g);
+    let beste = null;
+    let bij = Infinity;
+    for (const e of T.karrenVan(D)) {
+      const t = thuisVan(D, e);
+      const d = t ? T.afstand(t, deur) : Infinity;
+      if (d < bij) {
+        beste = e;
+        bij = d;
+      }
+    }
+    return beste;
+  }
 
   // De werktijd van de kar op de dag van moment t, in dagen: { begin, eind }.
   function werktijd(t) {
@@ -297,13 +345,25 @@
   }
 
   // Het wezen staat waar de regel zegt dat de kar is (aan het eind van een stuk): kwam hij er in de beelden niet, of
-  // speelden er geen beelden, dan staat hij er nu.
-  function staOp(e, t) {
+  // speelden er geen beelden, dan staat hij er nu. Staat daar iemand, dan op de dichtste vrije tegel ernaast, en anders
+  // blijft hij waar hij is: nooit twee op één tegel.
+  function staOp(D, e, t) {
     if (e.tx === t.x && e.ty === t.y && !e.onderweg) {
       e.pad = [];
       return;
     }
-    Object.assign(e, { x: t.x, y: t.y, tx: t.x, ty: t.y, pad: [], onderweg: false });
+    const w = D.wereld;
+    const vrij = (x, y) => T.isBegaanbaar(w, x, y, { wezensBlokkeren: true, wie: e });
+    let plek = vrij(t.x, t.y) ? t : null;
+    for (let r = 1; r <= 2 && !plek; r++) {
+      for (let dy = -r; dy <= r && !plek; dy++) {
+        for (let dx = -r; dx <= r && !plek; dx++) {
+          if (Math.max(Math.abs(dx), Math.abs(dy)) === r && vrij(t.x + dx, t.y + dy)) plek = { x: t.x + dx, y: t.y + dy };
+        }
+      }
+    }
+    if (!plek) plek = { x: e.tx, y: e.ty }; // (de tegel waar hij heen stapte, is van hem)
+    Object.assign(e, { x: plek.x, y: plek.y, tx: plek.x, ty: plek.y, pad: [], onderweg: false });
     e.padDoel = null;
   }
 
@@ -369,8 +429,9 @@
   function kiesRit(D, e, t) {
     let half = null;
     const bouwplaatsenEerst = [...D.gebouwen].sort((a, b) => (a.bouw && !a.klaar ? 0 : 1) - (b.bouw && !b.klaar ? 0 : 1));
+    const vanMij = (g) => T.karrenVan(D).length < 2 || verantwoordelijk(D, g) === e;
     for (const g of bouwplaatsenEerst) {
-      if ((g.karKanNietTot || 0) > t) continue;
+      if ((g.karKanNietTot || 0) > t || !watHetVraagt(D, g).length || !vanMij(g)) continue;
       for (const wat of watHetVraagt(D, g)) {
         const wil = vraag(D, g, wat);
         if (wil <= 1e-6) continue;
@@ -383,7 +444,7 @@
     let beste = null;
     for (const g of D.gebouwen) {
       const n = T.stapelVan(g);
-      if (n < IN().minstens || (g.karKanNietTot || 0) > t) continue;
+      if (n < IN().minstens || (g.karKanNietTot || 0) > t || !vanMij(g)) continue;
       if (T.karrenVan(D).some((k) => k !== e && k.rit && k.rit.plan === 'halen' && k.rit.naar === g)) continue;
       if (!beste || n > beste.n) beste = { g, n };
     }
@@ -394,7 +455,7 @@
   // Een rit begint: het eerste stuk.
   function beginRit(D, e, rit, t, metBeeld) {
     if (rit.plan === 'halen') return begin(D, e, rit, 'heen', deurDoel(D, rit.naar), t, metBeeld);
-    const o = dichtsteOpslag(D, T.deurVan(D.wereld, rit.naar));
+    const o = thuisVan(D, e);
     return !!o && begin(D, e, rit, 'opslag', o, t, metBeeld);
   }
 
@@ -404,7 +465,7 @@
     const t = R.tot;
     const g = R.naar;
     const erNog = g && D.gebouwen.includes(g);
-    staOp(e, R.doel);
+    staOp(D, e, R.doel);
     const verder = (fase, doel) => {
       if (begin(D, e, R, fase, doel, t, metBeeld)) return;
       e.rit = null;
@@ -427,7 +488,7 @@
           }
         }
         zetVel(e);
-        const o = dichtsteOpslag(D, { x: e.tx, y: e.ty });
+        const o = thuisVan(D, e);
         return o ? verder('terug', o) : (e.rit = null);
       }
       case 'terug':
@@ -500,14 +561,20 @@
       e.klok = t;
       // Nog iets op de kar (een rit die halverwege ophield): eerst naar de opslag.
       if (som(e.lading) > 0) {
-        const o = dichtsteOpslag(D, { x: e.tx, y: e.ty });
+        const o = thuisVan(D, e);
         if (o && begin(D, e, { plan: 'halen', naar: null }, 'terug', o, t, metBeeld)) continue;
       }
       const rit = kiesRit(D, e, t);
       if (rit && beginRit(D, e, rit, t, metBeeld)) continue;
       // geen weg naar die plaats: een dag laat hij hem liggen
-      if (rit) rit.naar.karKanNietTot = t + 1;
-      else e.klok = Math.min(tot, t + IN().rust);
+      if (rit) {
+        rit.naar.karKanNietTot = t + 1;
+        continue;
+      }
+      // Niets te doen: dan wacht hij bij zijn opslag (de eerste kar rijdt zo van het kamp naar het huis van de schout).
+      const thuis = thuisVan(D, e);
+      if (thuis && T.afstand({ x: e.tx, y: e.ty }, thuis) > 2 && begin(D, e, { plan: 'halen', naar: null }, 'terug', thuis, t, metBeeld)) continue;
+      e.klok = Math.min(tot, t + IN().rust);
       if (e.klok >= tot) break;
     }
   }
@@ -527,6 +594,7 @@
     }
     const lading = Object.keys(e.lading || {}).filter((wat) => e.lading[wat] >= 0.5).map((wat) => T.hoeveel(Math.round(e.lading[wat]), wat));
     if (lading.length) return T.t('{kar}, bringing {lading} to the stores', { kar, lading: lading.join(', ') });
+    if (R && R.fase === 'terug') return T.t('{kar}, on its way back to the stores', { kar });
     return T.t('{kar}, waiting for a stack to fetch', { kar });
   };
 

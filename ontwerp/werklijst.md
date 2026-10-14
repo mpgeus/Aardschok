@@ -27,8 +27,9 @@ harder al het werk gaat. **C, de ossenkar, loopt** (14 okt): het plan staat bij 
 **Stap 1 is af** (14 okt, in `main`): het hout ligt op een stapel bij de deur tot de kar het haalt (`spel.md`, "Zo werkt
 de kar nu"). **Stap 2 is af** (14 okt, in `main`): je betaalt bij het neerzetten alleen het goud, en de kar brengt het
 hout naar de bouwplaats en de timmerman. **Stap 3 is af** (14 okt, in `main`): alles wat een gebouw maakt, ligt bij de deur tot de kar het haalt, ook het eten en
-de oogst; alleen het goud niet, en wat van het vee komt, gaat meteen de voorraad in. Stap 4 loopt: de schuur (Marcel: "a
-ja, b ja, c ja", bij C).
+de oogst; alleen het goud niet, en wat van het vee komt, gaat meteen de voorraad in. **Stap 4 is af** (14 okt, op branch
+`claude/relaxed-mendel-59zm3c`, wacht op "push it"): de schuur, een opslag met een eigen bereik en een eigen kar. Het
+volgende is stap 5: wegen die jij legt.
 
 **Wacht op Marcel:**
 - **De ossenkar bekijken** (C, stap 1, 14 okt): Nieuw spel. De huifkar komt aan, en pas dan staat zijn lading in de balk.
@@ -40,7 +41,9 @@ ja, b ja, c ja", bij C).
   en het briefje van de bouwplaats zegt hoeveel er is ("5 of 8 here"); bouw meer dan je hout hebt, en zie de plaatsen
   wachten. Wat opviel: een akker kan nu af zijn vóór zijn boerderij. **Stap 3:** zet een jager, een moestuin en een
   kippenhok: bij hun deur staan een ton, een mand kool en een mand; het dorp eet ze pas als de kar ze binnen heeft. Na
-  de oogst ligt het graan in zakken bij de boerderij, en rijdt de kar er een week lang heen en weer.
+  de oogst ligt het graan in zakken bij de boerderij, en rijdt de kar er een week lang heen en weer. **Stap 4:** bouw een
+  schuur (B, "barn") aan de rand van het bereik: het bereik groeit om hem heen, en als hij af is, staat er een tweede
+  ossenkar bij zijn deur, die haalt wat bij de schuur ligt. Zo kom je bij de rotsen (de steengroeve) en het water.
 - **De afwisseling bekijken, en de lat kiezen** (B3, 13 okt; `spel.md`, "Zo werkt de afwisseling nu"): Nieuw spel, en
   kijk in de balk naar **Plain fare** (bij de muis wat helpt); laat de kaas en het vlees uit de kar opgaan zonder jager
   of moestuin, en zie het werk naar 60% zakken (**One dish**). De speeltest (`speelbaar.md`, 13 okt, avond): de kolonist
@@ -139,7 +142,7 @@ werk) wacht op Marcel.
 
 ## C. De ossenkar (vraag 152, de proef)
 
-**Bezig in sessie `claude/relaxed-mendel-59zm3c`** (14 okt): stap 4 (stap 1 tot 3 zijn af, in `main`).
+**Bezig in sessie `claude/relaxed-mendel-59zm3c`** (14 okt): stap 4 is af (op die branch; stap 1 tot 3 in `main`).
 
 Besloten (Marcel, 11 okt): bouwen binnen bereik van het plein en elke opslag, geen grens en geen vlaggen; de kar rijdt
 overal, over een weg sneller; een ossenkar; de eerste opslag is het huis van de schout. **Het plan** (Marcel, 14 okt:

@@ -80,9 +80,7 @@
     });
     // de kar aan de rand, waar de weg het land in komt, en de schout ernaast
     const van = T.wegInEnUit(w) || { x: w.kamp.kar.x, y: w.kamp.kar.y };
-    const kar = T.maakDorpeling(0, van.x, van.y, 0, null);
-    Object.assign(kar, { soort: 'kar', naam: T.t('covered wagon'), vel: 'huifkar', kar: true, zaad: null, snelheid: I.karSnelheid });
-    w.wezens.push(kar);
+    const kar = T.maakKar(D, van.x, van.y, T.t('covered wagon'), 'huifkar');
     const dag = D.kalender ? Math.floor(D.kalender.dag) : 0;
     D.begin = { kamp: 'onderweg', kar, van: { x: van.x, y: van.y }, gezinnen: false, volgt: !D.ander, heerVrijTot: dag + I.heerVrij * T.DAGEN_PER_JAAR };
     if (D.schout && !D.ander) zetNeer(w, D.schout, vrijNaast(w, van, D.schout) || van);
