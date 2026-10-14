@@ -732,7 +732,8 @@ const FASEN = ['fundering', 'geraamte', 'muren-steigers', 'dakgebinte', 'half-ge
 // Wat bij de muren hoort: tot de snede in fase 3, heel vanaf fase 4. Het dak zelf komt half in fase 5.
 // De rest (de nok, de windveren, de schoorsteen, luiken, bloembakken, de schoor, het dak van een
 // aanbouw) komt pas als het huis klaar is.
-const BIJ_DE_MUREN = new Set(['romp', 'liggers', 'stijlen', 'blokhoek', 'aanbouwhout', 'aanbouwstijlen', 'deur', 'ramen', 'glas']);
+// de palen van een kapschuur (huis-sdf.cjs, open; de zagerij, vraag 157) staan waar een huis zijn muren heeft
+const BIJ_DE_MUREN = new Set(['romp', 'liggers', 'stijlen', 'blokhoek', 'aanbouwhout', 'aanbouwstijlen', 'deur', 'ramen', 'glas', 'palen']);
 const HET_DAK = new Set(['riet', 'dak']);
 const FASE = {
   fundering: 12, // hoe hoog de ring van stenen is, in eenheden
@@ -897,10 +898,10 @@ function fasenVanHuis(W, m) {
   };
 
   const w = FASEN.map(() => nieuw());
-  // 1. fundering
-  neem(w[0], (n) => n === 'romp', schilTot(z0));
+  // 1. fundering (bij een kapschuur de stenen onder de palen, en de vloer)
+  neem(w[0], (n) => n === 'romp' || n === 'palen', schilTot(z0));
   // 2. geraamte
-  neem(w[1], (n) => n === 'romp', schilTot(z0));
+  neem(w[1], (n) => n === 'romp' || n === 'palen', schilTot(z0));
   geraamte(w[1]);
   // 3. muren tot twee derde, met steigers
   neem(w[2], muur, schilTot(zMuur));

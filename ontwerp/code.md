@@ -696,7 +696,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `tuin-sdf.cjs` (`tuinWereld` in `huizen.cjs`; `stammen-x/y`, `planken-x/y`, `zaagbok-x/y`), groter dan een tegel, en het
   draait met het gebouw mee; in de bouwfasen komt het pas als het gebouw af is (`fasenVanDelen`). Een opgave met delen
   heeft altijd een huis als eerste deel (`W.H` en de deur komen daarvan). Onder elk dak in vier standen; bouwfasen eerst
-  alleen onder het dak van het gehucht (Marcel: "Eerst alleen het gehucht"), leien en pannen hebben `fasen: false`.
+  alleen onder het dak van het gehucht (Marcel: "Eerst alleen het gehucht"), leien en pannen hebben `fasen: false`. In
+  de bouwfasen staan de palen (`palen`) waar een huis zijn muren heeft (`BIJ_DE_MUREN`), en de fundering is de vloer met
+  de stenen onder de palen.
   Elk vel gaat ingepakt naar het spel (`inpakken.cjs`): een raster kost de browser elke lege pixel, en een
   vel groter dan 8192 pixels laadt niet elke videokaart. Een leeg vak in een vel kost dus niets meer.
 
