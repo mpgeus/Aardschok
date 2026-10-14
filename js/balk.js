@@ -517,15 +517,15 @@
 
   // ── De minikaart, in de hoek rechtsonder (js/minikaart.js; vraag 165) ──
   // Het hele eiland als een ruit die ligt zoals het beeld: het beeld van het eiland (T.maakMinikaart, in stukjes van een
-  // paar ms per beeld), daarover een lichte waas over wat je niet kent (T.minikaartGekend, opnieuw als de mist verandert,
-  // T.mistVersie), je gebouwen, de schout, de plekken die je kent (het kasteel, de stad, de dorpen), en het kader waar de
-  // camera kijkt; de rand vervaagt. Een klik of slepen kijkt daar (T.kijkNaar, js/main.js: het overzicht, Tab).
+  // paar ms per beeld; de zee vervaagt naar doorzichtig, dus er blijft een eiland over en geen ruit), daarover een donkere
+  // tint over wat je niet kent (T.minikaartGekend, opnieuw als de mist verandert, T.mistVersie), je gebouwen, de schout,
+  // de plekken die je kent (het kasteel, de stad, de dorpen), en het kader waar de camera kijkt. Een klik of slepen kijkt daar (T.kijkNaar, js/main.js: het overzicht, Tab).
   const MINI = {
     alle: 0.1, // zo vaak (seconden) wordt de ruit opnieuw getekend
   };
   // De breedte van de ruit in pixels van de kunst: die van het kaartje (--kaart, stijl.css), want er is geen rand omheen.
   const miniBreed = () => $('minikaart').querySelector('canvas').clientWidth || 380;
-  const mini = { E: null, w: null, beeld: null, mist: null, masker: null, klaar: -1, versie: -1, getekend: -Infinity, slepen: false };
+  const mini = { E: null, w: null, beeld: null, mist: null, klaar: -1, versie: -1, getekend: -Infinity, slepen: false };
   const nieuwDoek = (n) => Object.assign(document.createElement('canvas'), { width: n, height: n });
 
   T.ui.werkMinikaartBij = function (S) {
@@ -584,7 +584,10 @@
     const s = (B / (2 * T.EILAND_INSTELLINGEN.maat)) * T.MINIKAART_INSTELLINGEN.stap * k;
     c.setTransform(s, s / 2, -s, s / 2, (B / 2) * k, 0);
     c.drawImage(mini.beeld, 0, 0);
+    // Het donker over wat je niet kent, alleen waar het eiland is (niet waar de zee al doorzichtig is).
+    c.globalCompositeOperation = 'source-atop';
     c.drawImage(mini.mist, 0, 0);
+    c.globalCompositeOperation = 'source-over';
     c.setTransform(k, 0, 0, k, 0, 0);
     const stip = (x, y, maat, kleur) => {
       const p = T.minikaartPunt(x, y, B);
@@ -608,30 +611,6 @@
     c.strokeStyle = '#f3e3b8';
     c.lineWidth = 1 / k;
     c.strokeRect(p.x - kb / 2, p.y - kh / 2, kb, kh);
-    // De rand vervaagt (Marcel: "Randen featheren?"): alles wat getekend is, door een zachte ruit.
-    c.setTransform(1, 0, 0, 1, 0, 0);
-    c.globalCompositeOperation = 'destination-in';
-    c.drawImage(randMasker(pb, ph), 0, 0);
-    c.globalCompositeOperation = 'source-over';
-  }
-
-  // Een ruit van pb bij ph pixels met een zachte rand (`rand` van de breedte), één keer per maat gemaakt.
-  function randMasker(pb, ph) {
-    if (mini.masker && mini.masker.width === pb && mini.masker.height === ph) return mini.masker;
-    const m = Object.assign(document.createElement('canvas'), { width: pb, height: ph });
-    const c = m.getContext('2d');
-    const f = Math.max(2, pb * T.MINIKAART_INSTELLINGEN.rand);
-    c.filter = `blur(${f / 2}px)`; // geen tekst
-    c.fillStyle = '#000';
-    c.beginPath();
-    c.moveTo(pb / 2, f / 2);
-    c.lineTo(pb - f, ph / 2);
-    c.lineTo(pb / 2, ph - f / 2);
-    c.lineTo(f, ph / 2);
-    c.closePath();
-    c.fill();
-    mini.masker = m;
-    return m;
   }
 
   // Een klik of slepen op de minikaart: kijk daar (het overzicht, js/main.js).

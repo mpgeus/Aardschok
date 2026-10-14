@@ -16,12 +16,18 @@
     stap: 8,
     rijenPerKeer: 6, // zoveel rijen van het beeld per keer (een rij kost zo'n 1 ms)
     msPerBeeld: 4, // en zo lang per beeld van het spel, tot het af is
-    // Wat je niet kent, ligt onder een lichte waas, zoals een vervaagde oude kaart (Marcel, 14 okt: "iets transparant maar
-    // lichter maken"): je ziet de vorm van het eiland, niet wat er is. Hoe dik de waas is (1 is dicht), en zijn kleur.
-    onbekend: 0.6,
-    nevel: [226, 214, 186],
-    // De rand van de ruit vervaagt (Marcel: "Randen featheren?"), over zoveel van de breedte.
-    rand: 0.06,
+    // Levendig (Marcel, 14 okt: "Ik bedoelde meer vibrant"): het beeld zoveel verzadigder en helderder dan de plaat.
+    verzadiging: 1.4,
+    helderheid: 1.1,
+    // Wat je niet kent, ligt onder een donkere tint: je ziet de vorm van het eiland, niet wat er is. Hoe dik (1 is dicht),
+    // en de kleur.
+    onbekend: 0.35,
+    nevel: [18, 14, 10],
+    // Geen ruit (Marcel: "een echte gefeatherde rand(om) dus dat je geen ruit meer overhoud"): de zee vervaagt vanaf de kust
+    // tot doorzichtig over zoveel vakken, en de rand rafelt met zoveel ruis, in vlekken van zoveel vakken.
+    zeeVervaagt: 45,
+    rafel: 0.45,
+    rafelVlek: 7,
     // De kleuren van de streken (in het spel worden het tegels), de zee van ondiep naar diep, en de weg en de brug.
     kleur: {
       meer: [64, 112, 158],
@@ -70,18 +76,77 @@
     return k;
   };
 
-  // Het beeld van eiland E, in wording: { n, rgba, klaar } met n bij n pixels (n = de maat van het eiland gedeeld door
-  // stap, naar boven). Eén per nummer.
+  // Een kleur levendiger maken: verzadigder (weg van zijn grijs) en helderder.
+  function levendig(k) {
+    const I = IN();
+    const grijs = 0.299 * k[0] + 0.587 * k[1] + 0.114 * k[2];
+    return k.map((c) => (grijs + (c - grijs) * I.verzadiging) * I.helderheid);
+  }
+
+  // Het beeld van eiland E, in wording: { n, rgba, zee, klaar } met n bij n pixels (n = de maat van het eiland gedeeld door
+  // stap, naar boven), en `zee` 1 waar het zee is. Eén per nummer.
   const BEELDEN = new Map();
   T.minikaartBeeld = function (E) {
     let m = BEELDEN.get(E);
     if (!m) {
       const n = Math.ceil(T.EILAND_INSTELLINGEN.maat / IN().stap);
-      m = { n, rgba: new Uint8ClampedArray(n * n * 4), klaar: 0 };
+      m = { n, rgba: new Uint8ClampedArray(n * n * 4), zee: new Uint8Array(n * n), klaar: 0 };
       BEELDEN.set(E, m);
     }
     return m;
   };
+
+  // Ruis van 0 tot 1 die zacht verloopt, in vlekken van `vlek` pixels (waarde-ruis, bilineair), voor de rafelige rand.
+  const hash = (x, y) => {
+    const h = Math.sin(x * 127.1 + y * 311.7) * 43758.5453;
+    return h - Math.floor(h);
+  };
+  function zachteRuis(x, y, vlek) {
+    const gx = x / vlek;
+    const gy = y / vlek;
+    const x0 = Math.floor(gx);
+    const y0 = Math.floor(gy);
+    const fx = gx - x0;
+    const fy = gy - y0;
+    const boven = hash(x0, y0) * (1 - fx) + hash(x0 + 1, y0) * fx;
+    const onder = hash(x0, y0 + 1) * (1 - fx) + hash(x0 + 1, y0 + 1) * fx;
+    return boven * (1 - fy) + onder * fy;
+  }
+
+  // Als het beeld af is: hoe ver elk punt van de zee van het land ligt (in vakken, een golf vanaf de kust), en daarmee
+  // hoe doorzichtig het is: aan de kust heel, na zeeVervaagt vakken niets, met een rafelige rand. Zo blijft er geen ruit
+  // over, maar een eiland.
+  function vervaagDeZee(m) {
+    const I = IN();
+    const n = m.n;
+    const afstand = new Float32Array(n * n).fill(Infinity);
+    const rij = [];
+    for (let i = 0; i < n * n; i++) {
+      if (!m.zee[i]) {
+        afstand[i] = 0;
+        rij.push(i);
+      }
+    }
+    for (let k = 0; k < rij.length; k++) {
+      const i = rij[k];
+      const x = i % n;
+      const d = afstand[i] + 1;
+      for (const j of [x > 0 ? i - 1 : -1, x < n - 1 ? i + 1 : -1, i - n, i + n]) {
+        if (j < 0 || j >= n * n || afstand[j] <= d) continue;
+        afstand[j] = d;
+        rij.push(j);
+      }
+    }
+    for (let i = 0; i < n * n; i++) {
+      if (!m.zee[i]) continue;
+      const x = i % n;
+      const y = (i - x) / n;
+      // en vlak bij de rand van het vierkant toch op niets, zodat daar nooit een rechte lijn staat
+      const rand = Math.min(1, Math.min(x, y, n - 1 - x, n - 1 - y) / I.rafelVlek);
+      const a = (1 - afstand[i] / I.zeeVervaagt + (zachteRuis(x, y, I.rafelVlek) - 0.5) * 2 * I.rafel) * rand;
+      m.rgba[i * 4 + 3] = Math.round(255 * Math.max(0, Math.min(1, a)));
+    }
+  }
 
   // Maak het beeld van E verder, `rijen` rijen (zonder: alles). Geeft true als het af is. Elke rij is een stuk van
   // T.eilandStuk, met een rij erboven en eronder voor het licht.
@@ -97,15 +162,19 @@
     const D = T.eilandStuk(E, stap / 2, (van - boven) * stap + stap / 2, m.n, h, stap);
     for (let y = boven; y < h - onder; y++) {
       for (let x = 0; x < m.n; x++) {
-        const k = T.minikaartKleur(D, y * m.n + x, m.n, h, stap);
-        const p = ((van + y - boven) * m.n + x) * 4;
-        m.rgba[p] = k[0];
-        m.rgba[p + 1] = k[1];
-        m.rgba[p + 2] = k[2];
-        m.rgba[p + 3] = 255;
+        const o = y * m.n + x;
+        const k = levendig(T.minikaartKleur(D, o, m.n, h, stap));
+        const i = (van + y - boven) * m.n + x;
+        const zee = T.EILAND_STREKEN[D.streek[o]] === 'zee';
+        m.zee[i] = zee ? 1 : 0;
+        m.rgba[i * 4] = k[0];
+        m.rgba[i * 4 + 1] = k[1];
+        m.rgba[i * 4 + 2] = k[2];
+        m.rgba[i * 4 + 3] = zee ? 0 : 255; // de zee komt erbij als het beeld af is (vervaagDeZee)
       }
     }
     m.klaar = tot;
+    if (m.klaar >= m.n) vervaagDeZee(m);
     return m.klaar >= m.n;
   };
 

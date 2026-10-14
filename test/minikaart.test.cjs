@@ -23,10 +23,13 @@ test('het beeld van het eiland in stukjes is hetzelfde als in één keer', () =>
   assert.ok(keer > 10, 'in stukjes');
   const stukjes = T.minikaartBeeld(E2);
   assert.deepEqual(stukjes.rgba, heel.rgba);
-  // Zee en land: de rand is zee, het midden van je land niet.
-  const kleur = (x, y) => [...heel.rgba.slice((y * heel.n + x) * 4, (y * heel.n + x) * 4 + 3)];
-  const zee = T.MINIKAART_INSTELLINGEN.zeeDiep;
-  assert.ok(kleur(0, 0).every((c, i) => Math.abs(c - zee[i]) < 30), `de hoek is diepe zee: ${kleur(0, 0)}`);
+  // Geen ruit (Marcel: "dat je geen ruit meer overhoud"): de zee ver van de kust is doorzichtig, het land heel.
+  const alfa = (i) => heel.rgba[i * 4 + 3];
+  assert.equal(heel.zee[0], 1, 'de hoek is zee');
+  assert.equal(alfa(0), 0, 'en doorzichtig');
+  const land = heel.zee.findIndex((z) => z === 0);
+  assert.equal(alfa(land), 255, 'het land is heel');
+  assert.ok(heel.zee.some((z, i) => z && alfa(i) > 0 && alfa(i) < 255), 'aan de kust vervaagt de zee');
 });
 
 test('wat je kent, per vak: elk vak met een tegel die je kent, en geen ander', () => {
