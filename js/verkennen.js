@@ -180,12 +180,9 @@
     }
     // Een gebouw dat de speler neerzette (js/gebouwen.js): de muis op zijn voet zegt hoe het ermee
     // staat — in aanbouw, aan het werk, of stil en waarom (spel.md, "Handel": een smidse zonder
-    // ijzer staat stil, en zegt dat).
-    const gebouw = D && T.gebouwOp && T.gebouwOp(D, doel.x, doel.y);
-    if (gebouw) {
-      const tekst = T.gebouwToestand(D, gebouw);
-      return { tekst, doe: () => T.ui.bericht(tekst) };
-    }
+    // ijzer staat stil, en zegt dat). Een klik legt zijn briefje rechts neer (js/gebouwbriefje.js; vraag 156).
+    const gebouw = D && T.gebouwOp(D, doel.x, doel.y);
+    if (gebouw) return { tekst: T.gebouwToestand(D, gebouw), doe: () => T.kiesGebouw(S, gebouw) };
     const d = T.deurOp(w, doel.x, doel.y);
     if (d && d.staat === 'opslot') {
       if (S.inventaris.has('sleutel')) return { tekst: T.t('Open the door with the key'), doe: () => loopNaast(S, d, () => ontsluit(S, d)) };

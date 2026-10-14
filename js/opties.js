@@ -969,6 +969,7 @@
     oudNaDagen: T.t('old after days'),
     werkplaatsMaaktTot: T.t('workshop makes up to'),
     looppad: T.t('walkway'),
+    gemaaktDagen: T.t('days counted on a building note'),
     snelheidVolwassen: T.t('adult speed'),
     snelheidKind: T.t('child speed'),
     snelheidOud: T.t('old person speed'),

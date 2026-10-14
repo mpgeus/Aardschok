@@ -487,7 +487,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   b2: een venster meldt zich aan met `T.ui.meldVenster`, zijn open en sluit roepen `T.ui.openVenster` en `T.ui.sluitVenster`,
   en er is hooguit één open, `T.ui.vensterOpen()`; **elk venster is papier**: een nieuw venster komt in de
   rij onderaan `stijl.css`, en zijn opmaak gebruikt de kleurnamen `--inkt`, `--gedempt`, `--goud`, `--rand`, nooit een vaste
-  kleur; de letters zijn Grenze, `--kop`, en Alegreya, `--boek`, in `letters/`), `js/tafel.js` (**de tafel van de schout**
+  kleur; **alle kaartjes bovenaan zijn even breed** (Marcel, 14 okt: "Kaartjes in de ui moeten wel even breed zijn. Anders
+  wordt het een zooitje"): het doel en de statussen linksboven, de datum en het briefje van een gebouw rechtsboven nemen
+  `--kaart` (`:root` in `stijl.css`), en een nieuw kaartje ook; het briefje bij de muis en bij een huis hangen los en
+  tellen niet mee; de letters zijn Grenze, `--kop`, en Alegreya, `--boek`, in `letters/`), `js/tafel.js` (**de tafel van de schout**
   onderin, vraag 146, c: het rekenboek met de voorraad en het dorp, en de dingen die een venster openen, elk met het id
   van de knop die het was; wat een ding is en zijn toets staan op het briefje bij de muis, `#wenk`, niet op het ding; de
   kunst uit `gereedschap/pixelart/tafel.cjs`, op ware pixels: één pixel van de kunst op een hele schermpixel, 1080 één,
@@ -899,6 +902,28 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   gezin trekt alleen weg uit een huis onder de vertrekdrempel) of streng (de spelregel "Achteruitgaan"); een hogere stand
   betaalt meer belasting (`T.belastbaar`). De spelregel "Wensen" op "Het dorp als geheel" is het spel van vóór 1 okt; de
   getallen in `T.WENSEN_INSTELLINGEN`.
+
+### js/gebouwbriefje.js: het briefje van een gebouw
+
+- `js/gebouwbriefje.js` (werklijst vraag 156, 14 okt; Marcel: "1a1, 1b ja"): een klik op een gebouw (`T.handelingVerkennen`
+  in `js/verkennen.js` geeft `doe: T.kiesGebouw`) zet `S.gekozen` (alleen scherm, `T.schermVelden`), en
+  `T.ui.werkGebouwbriefjeBij` (in `js/huisbriefje.js`, want dat bestand is alleen scherm en laadt niet in de toetsen;
+  elk beeld, `js/main.js`, en vier keer per seconde opnieuw opgemaakt) legt het briefje rechts
+  onder de datum, zolang je rondloopt (een gesprek, een venster of een gevecht legt het even weg). Een klik ergens anders
+  of Esc legt het weg; is het gebouw afgebroken, dan ook. Het spel loopt door: het is geen venster van `T.ui.openVenster`
+  (dat zet de tijd stil), maar papier zoals het huisbriefje (`#gebouwbriefje` in `stijl.css`).
+- **De inhoud is een regel zonder scherm**, `T.gebouwBriefje(D, g)` → `{ kop, doet, delen: [{ titel, regels }] }`
+  (`test/gebouwbriefje.test.cjs`): in aanbouw alleen `T.gebouwToestand`; anders wie er woont, wie er werkt (n van m
+  handen, bij naam), wat het maakt (op volle kracht uit `T.maaktUit` en `maakt.in`, vandaag uit `g.werkte`, de laatste
+  `gemaaktDagen` en dit jaar uit `T.gemaaktDoor`, de velden van een boerderij uit `w.akkers` en `w.wijngaarden`, en
+  `T.GEBOUW_ERBIJ`), wat het tegenhoudt (`g.stilWant`, de handen, `g.uren.onderweg`, het werktempo, `T.visserWater`,
+  `g.tekort`, `g.vol`; in de volgorde van de nachtlus), wat helpt (het gereedschap, `T.gereedschapDekking`), wat erbij
+  ligt (`g.in`, `g.stapel`), en bij een opslag wat zijn kar doet (`T.karTekst`).
+- **Wat het rekent, komt uit de regels zelf, met één weg:** het werktempo (tevredenheid maal afwisseling) is
+  `T.werkTempo(D)` in `js/gebouwen.js`, dat de nachtlus ook gebruikt; wat een gebouw maakte, telt `T.telGemaakt` (in
+  `g.gemaakt`, bewaard: `{ dagen: [{ dag, waren }], jaar, ditJaar }`), en dat roept `T.opStapel` (`js/kar.js`) aan, waar
+  alles langs gaat wat een gebouw maakt (de nachtlus, de oogst, de wijn). Wat de bouwers rooien, telt niet:
+  `T.hakBoom` (`js/bos.js`) geeft `{ gerooid: true }` mee.
 
 ### js/paden.js: de paadjes en de lantaarns
 

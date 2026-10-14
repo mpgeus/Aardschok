@@ -111,6 +111,9 @@
     // genoeg is: "Nee ik wil 3 tegels"): rondom moeten zoveel tegels te belopen zijn, zonder gebouw en zonder boom, ook in
     // het bouwmenu en voor wie zelf een plek kiest voor een verzoek (T.plekVoor, js/bouwen.js).
     looppad: 3,
+    // Het briefje van een gebouw (js/gebouwbriefje.js; werklijst vraag 156, Marcel: "1b ja") zegt wat het de laatste
+    // zoveel dagen echt maakte (T.telGemaakt).
+    gemaaktDagen: 7,
   };
 
   T.GEBOUWEN = {
@@ -656,6 +659,55 @@
     const heeft = (D.voorraad && D.voorraad.gereedschap) || 0;
     const dekking = handen > 0 ? Math.min(1, heeft / handen) : 0;
     return { handen, heeft, dekking, factor: 1 + IN.gereedschapBonus * dekking };
+  };
+
+  // Hoe hard het dorp vandaag werkt, voor al het werk met handen: naar de tevredenheid (js/behoeften.js: "hoe hard er
+  // gewerkt wordt"; T.BEHOEFTEN_INSTELLINGEN.werkBasis is de ondergrens bij 0% tevreden) en naar de afwisseling van de
+  // maaltijd (T.werkVanAfwisseling; vraag 154, C1: de twee vermenigvuldigen). Zonder D.behoeften (nog geen dag getikt)
+  // op volle kracht. Geeft de twee los en hun product (`factor`): de nachtlus hieronder werkt ermee, en het briefje van
+  // een gebouw (js/gebouwbriefje.js) zegt welke van de twee hem tegenhoudt.
+  T.werkTempo = function (D) {
+    if (!D.behoeften) return { tevreden: 1, afwisseling: 1, factor: 1 };
+    const basis = T.BEHOEFTEN_INSTELLINGEN.werkBasis;
+    const tevreden = basis + (1 - basis) * D.behoeften.tevredenheid;
+    const afwisseling = T.werkVanAfwisseling(D);
+    return { tevreden, afwisseling, factor: tevreden * afwisseling };
+  };
+
+  // Wat gebouw g maakte, voor zijn briefje (js/gebouwbriefje.js; vraag 156): per dag, de laatste gemaaktDagen, en dit
+  // jaar alles samen. T.opStapel (js/kar.js) telt het, want alles wat een gebouw maakt, gaat daarlangs: de nachtlus
+  // hieronder, de oogst bij de boerderij, de wijn bij de wijnboerderij. Gewone gegevens in g, dus bewaard:
+  //   g.gemaakt = { dagen: [{ dag, waren: { wat: hoeveel } }], jaar, ditJaar: { wat: hoeveel } }
+  T.telGemaakt = function (D, g, wat, hoeveel) {
+    if (!g || !(hoeveel > 0)) return;
+    const dag = Math.floor((D.kalender && D.kalender.dag) || 0);
+    const jaar = T.datumVanDag(dag).jaar;
+    const m = g.gemaakt || (g.gemaakt = { dagen: [], jaar, ditJaar: {} });
+    if (m.jaar !== jaar) {
+      m.jaar = jaar;
+      m.ditJaar = {};
+    }
+    m.ditJaar[wat] = (m.ditJaar[wat] || 0) + hoeveel;
+    let d = m.dagen[m.dagen.length - 1];
+    if (!d || d.dag !== dag) m.dagen.push((d = { dag, waren: {} }));
+    d.waren[wat] = (d.waren[wat] || 0) + hoeveel;
+    const tot = dag - T.GEBOUWEN_INSTELLINGEN.gemaaktDagen;
+    while (m.dagen.length && m.dagen[0].dag <= tot) m.dagen.shift();
+  };
+
+  // Wat g de laatste gemaaktDagen maakte ({ wat: hoeveel }), en dit jaar (`jaar` true); leeg als het niets maakte.
+  T.gemaaktDoor = function (D, g, jaar = false) {
+    const m = g.gemaakt;
+    if (!m) return {};
+    const dag = Math.floor((D.kalender && D.kalender.dag) || 0);
+    if (jaar) return m.jaar === T.datumVanDag(dag).jaar ? { ...m.ditJaar } : {};
+    const uit = {};
+    const tot = dag - T.GEBOUWEN_INSTELLINGEN.gemaaktDagen;
+    for (const d of m.dagen) {
+      if (d.dag <= tot) continue;
+      for (const wat in d.waren) uit[wat] = (uit[wat] || 0) + d.waren[wat];
+    }
+    return uit;
   };
 
   // Het gebouw waarvan deze tegel onder de voet ligt, of null. Ook een gebouw zonder eigen voorwerp (een tent in het kamp,
@@ -1427,14 +1479,9 @@
     T.verdeelHanden(D);
     T.kiesBouwers(D);
     // 6. Productie: wat een gebouw maakt, gaat per dag naar de voorraad — naar rato van hoe bezet
-    // hij is (de helft van zijn handen geeft de helft van zijn opbrengst), van de tevredenheid
-    // (js/behoeften.js: "hoe hard er gewerkt wordt"; T.BEHOEFTEN_INSTELLINGEN.werkBasis is de
-    // ondergrens bij 0% tevreden, 1 is geen effect), en van de afwisseling van de maaltijd van vandaag
-    // (T.werkVanAfwisseling; vraag 154, C1: de twee vermenigvuldigen). Zonder D.behoeften (nog geen dag getikt) op
-    // volle kracht.
-    const werkFactor = D.behoeften
-      ? (T.BEHOEFTEN_INSTELLINGEN.werkBasis + (1 - T.BEHOEFTEN_INSTELLINGEN.werkBasis) * D.behoeften.tevredenheid) * T.werkVanAfwisseling(D)
-      : 1;
+    // hij is (de helft van zijn handen geeft de helft van zijn opbrengst), en van het werktempo van het dorp: de
+    // tevredenheid en de afwisseling van de maaltijd van vandaag (T.werkTempo hieronder).
+    const werkFactor = T.werkTempo(D).factor;
     // Gereedschap: wie iets maakt en er gereedschap voor heeft, werkt harder (alleen wie handen
     // heeft: een kippenhok werkt niet harder met een hamer), en het slijt (hieronder, na het werk).
     // Wie vandaag stilligt (T.stilOp: de visser als de beek dichtligt, de wijnboerderij buiten de pluk), maakt vandaag

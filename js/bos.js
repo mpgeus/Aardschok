@@ -201,7 +201,7 @@
   // stapel van dat gebouw (T.opStapel, js/kar.js).
   T.hakBoom = function (D, x, y, bij) {
     if (!T.velBoom(D, x, y)) return false;
-    T.opStapel(D, bij || null, 'hout', T.rooiHoutPerBoom(D));
+    T.opStapel(D, bij || null, 'hout', T.rooiHoutPerBoom(D), { gerooid: true });
     return true;
   };
   // Wat een gerooide boom dit dorp geeft: in het lege begin `rooiHout`, anders `houtPerBoom`. De houthakker hakt niet met

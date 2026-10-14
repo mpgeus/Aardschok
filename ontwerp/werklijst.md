@@ -31,10 +31,17 @@ is een opslag met een eigen bereik en een eigen kar. **Stap 5 is af** (14 okt): 
 
 **Marcel kwam op 14 okt met acht punten** (H, vraag 156 tot 163: een gebouw aanklikken, de keten van stammen tot
 planken, muren, soldaten uit wapens, handel, reizende gezelschappen, provincies, een kasteel), en koos de volgorde en de
-eerste antwoorden (bij H). **156, een gebouw aanklikken: Bezig in sessie `claude/village-economy-gameplay-lmsnyg`**
-(14 okt); daarna 157 (de zagerij), en dan C6 met de keten erin.
+eerste antwoorden (bij H). **156, een gebouw aanklikken, is af** (14 okt, op de branch
+`claude/village-economy-gameplay-lmsnyg`; `spel.md`, "Zo werkt het briefje van een gebouw nu"). **Het volgende is 157**,
+de zagerij en de planken: het plan staat bij H en wacht op Marcel; dan C6 met de keten erin.
 
 **Wacht op Marcel:**
+- **Het briefje van een gebouw bekijken** (156, 14 okt): Nieuw spel, zet een houthakker, en klik erop als hij af is:
+  rechts onder de datum ligt zijn briefje, even breed als de datum en het doel, en het spel loopt door. Wat hij maakt op volle kracht, vandaag, de laatste 7
+  dagen en dit jaar, wie er werkt, wat hem tegenhoudt (weinig afwisseling, de tevredenheid, uren onderweg, de stapel
+  vol), en de stapel bij zijn deur. Klik ergens anders, of Esc, en het is weg. Probeer ook het huis van de schout (wat
+  de kar doet), een boerderij (haar velden en de oogst) en een bouwplaats. In de console: `Spel.S.gekozen`.
+- **Het plan voor 157** (de zagerij en de planken; bij H): ja, of wat anders.
 - **De wegen en het afbreken bekijken** (C, stap 5, 14 okt): Nieuw spel, en in het bouwmenu (B) bovenaan **Road**: klik
   het begin en dan het eind, en zie de weg in groen, recht en haaks, met wat hij kost; na de klik is het eind het begin
   van het volgende stuk, en een rechtsklik houdt op. Wie geen werk heeft, legt hem (na de gebouwen), en de ossenkar rijdt
@@ -253,12 +260,24 @@ niet perse. 8. Los ontwerp", op de vragen van Claude; in het gesprek heetten de 
   eind van de demo: het eerste gevecht), dan 162, 161, 160 en 163. Voor de demo tellen 156 tot 159; 160 tot 163 hangen
   aan 162 (zonder levende plaatsen is er niets om mee te handelen, over te roddelen of te veroveren). D gaat mee met 159
   (je soldaten aanklikken), E met 162 (de heer in zijn provincie).
-- **156** (1a1, 1b ja), **Bezig in sessie `claude/village-economy-gameplay-lmsnyg`** (14 okt): een klik op een gebouw
-  opent een vast venster opzij, dat blijft tot je ergens anders klikt, terwijl het spel doorloopt (The Settlers, Anno).
-  Erin: wat het doet, wie er werkt, wat het maakt op vol en wat het de laatste zeven dagen echt maakte, wat erin gaat
-  en wat er ligt, en wat het tegenhoudt (te weinig stammen, de stapel vol, te weinig soorten eten); nog geen knoppen.
+- **156** (1a1, 1b ja), **af** (14 okt; `spel.md`, "Zo werkt het briefje van een gebouw nu"; `js/gebouwbriefje.js`):
+  een klik op een gebouw legt rechts een briefje, dat blijft tot je ergens anders klikt, terwijl het spel doorloopt (The
+  Settlers, Anno). Erop: wat het doet, wie er werkt, wat het maakt op vol, vandaag, de laatste zeven dagen en dit jaar,
+  wat erin gaat en wat er ligt, en wat het tegenhoudt (en wat helpt: gereedschap); nog geen knoppen. Marcel erbij (14
+  okt): "Kaartjes in de ui moeten wel even breed zijn": het doel, de statussen, de datum en het briefje nemen nu één maat
+  (`--kaart` in `stijl.css`, `code.md` bij `js/ui.js`). En als notitie: beter gereedschap als upgrade (`opmerkingen.md`).
 - **157** (2a2, 2b ja): het materiaal volgt de trede: een gehucht bouw je van stammen, een dorp van planken, een stad van
-  steen. De zagerij (gehucht) vervangt de timmerman, en hout heet stammen (*logs*).
+  steen. De zagerij (gehucht) vervangt de timmerman, en hout heet stammen (*logs*). **Het plan** (Claude, 14 okt, wacht
+  op Marcel): **a** de zagerij (*sawmill*) neemt de plaats en de getallen van de timmerman over (2 handen, 2 stammen tot
+  2 planken per dag, 12 stammen en 6 goud), maar in het gehucht; **b** in de code blijft de waar `hout`, op het scherm
+  heet hij *logs* (ook het sprokkelhout en wat het dorp stookt: dat zijn dan stammen); **c** de kosten volgen de trede,
+  met hetzelfde getal: gehucht stammen (zoals nu), dorp en marktrecht planken, stad steen (het stenen huis 20 steen in
+  plaats van 20 hout), ook als een huis doorgroeit; goud en steen die er al staan, blijven; **d** wat een werkplaats
+  van hout maakt (de wapenmaker, de kuiper, de kalkbrander), blijft voorlopig stammen: de wapens komen bij 159; **e** de
+  kolonist van de speeltest bouwt een zagerij vóór het dorp, en de speeltest speelt vijf eilanden een jaar zonder fouten;
+  **f** een oud spel past niet meer (de timmerman heet anders): opslaan een versie omhoog. Vraag: de zagerij een eigen
+  tekening nu (uit code, zoals de andere), of eerst lenen en tekenen in een ronde met 158 en 159? Voorstel: nu, want het
+  is het eerste gebouw van de keten, en je ziet hem het hele spel.
 - **158** (3): een muur leg je zoals een weg, en waar een weg hem kruist, komt vanzelf een poort (je mensen en de kar
   erdoor, rovers en wolven niet). **Steen is meteen te gebruiken**: de stenen muur wacht niet op een trede.
 - **159** (4a, gelezen als de eerste keuze): een soldaat is voltijds: hij legt zijn werk neer en eet, en kan zijn wapen

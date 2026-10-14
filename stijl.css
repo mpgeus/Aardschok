@@ -23,6 +23,10 @@
   --papier-groen: #3e5624;
   --papier-lijn: #9a8260;
   --boek: 'Alegreya', Georgia, serif;
+  /* Alle kaartjes bovenaan zijn even breed (Marcel, 14 okt: "Kaartjes in de ui moeten wel even breed zijn. Anders wordt
+     het een zooitje"): het doel en de statussen linksboven, de datum en het briefje van een gebouw rechtsboven. In pixels
+     van de kunst, zoals alles daar (--tafel-zoom). */
+  --kaart: 380px;
 }
 
 * { box-sizing: border-box; }
@@ -118,7 +122,8 @@ kbd {
 #linksboven,
 #rechtsboven { position: fixed; top: 0; zoom: var(--tafel-zoom, 1); display: flex; align-items: flex-start; pointer-events: none; }
 #linksboven { left: 0; padding: 26px 0 0 26px; flex-direction: column; gap: 12px; }
-#rechtsboven { right: 0; padding: 26px 26px 0 0; gap: 14px; }
+/* Rechts twee kolommen: het lipje Menu, en de kaartjes eronder elkaar (de datum, het briefje van een gebouw). */
+#rechtsboven { right: 0; padding: 26px 26px 0 0; display: grid; grid-template-columns: auto var(--kaart); gap: 12px 14px; }
 #rechtsboven > * { pointer-events: auto; }
 
 /* Een briefje: het vel van het spel (beelden/papier.png) op ware pixels, met inkt, zoals het briefje bij de muis. */
@@ -134,7 +139,7 @@ kbd {
 }
 .briefje kbd { font: 16px var(--boek); color: var(--papier-inkt); background: none; border: 1px solid var(--papier-grijs); border-bottom-width: 2px; padding: 0 5px; border-radius: 2px; }
 /* De spijker waaraan het hangt (beelden/spijker.png), zoals bij het briefje van een huis. */
-:is(#opdracht, #kalenderbalk)::before {
+:is(#opdracht, #kalenderbalk, #gebouwbriefje)::before {
   content: '';
   position: absolute;
   left: 50%;
@@ -147,7 +152,7 @@ kbd {
 }
 
 /* Het doel, linksboven: de kop, hoe ver het is (met een streep), en de raad (js/raad.js) eronder. */
-#opdracht { width: 440px; padding: 10px 18px 14px; display: flex; flex-direction: column; gap: 3px; }
+#opdracht { width: var(--kaart); padding: 10px 18px 14px; display: flex; flex-direction: column; gap: 3px; }
 #opdracht .doel-kop { font: 27px/1.1 var(--kop); }
 #opdracht .doel-stand { font-style: italic; color: var(--papier-grijs); }
 #opdracht .doel-streep { height: 7px; border: 1px solid var(--papier-grijs); margin: 3px 0 4px; }
@@ -157,14 +162,14 @@ kbd {
 
 /* De statussen (js/hud.js, T.ui.toonStatussen; werklijst vraag 77, stap 2): onder het doel, een briefje per status
    zolang hij duurt, met de naam in rood en hoe lang al; wat het is en wat helpt, zegt het briefje bij de muis. */
-#statussen { display: flex; flex-wrap: wrap; gap: 10px; max-width: 460px; }
+#statussen { display: flex; flex-direction: column; gap: 10px; width: var(--kaart); }
 #statussen .status { padding: 8px 16px 10px; font-size: 17px; pointer-events: auto; cursor: help; }
 #statussen .status b { display: block; font: 18px/1.2 var(--kop); font-weight: normal; color: var(--papier-rood); }
 #statussen .status.erger { color: var(--papier-rood); }
 body.bouwmenu-open #statussen { visibility: hidden; }
 
 /* De datum, rechtsboven, met het lipje Menu ernaast (Esc; de spelregels staan in het menu). */
-#kalenderbalk { width: 300px; padding: 10px 18px 14px; text-align: right; }
+#kalenderbalk { width: var(--kaart); padding: 10px 18px 14px; text-align: right; }
 #kalender-datum { font: 27px/1.1 var(--kop); }
 #kalender-datum.sint-maarten { color: var(--papier-rood); }
 #kalender-seizoen { font-style: italic; color: var(--papier-grijs); font-size: 18px; }
@@ -1196,6 +1201,25 @@ body.foto > :not(canvas, #foto-wenk) { display: none !important; }
 #huisbriefje .briefje-groei { font-size: 15px; border-top: 1px dotted var(--papier-lijn); padding-top: 4px; }
 #huisbriefje .briefje-groei { font-style: italic; color: var(--papier-grijs); }
 #huisbriefje kbd { color: var(--papier-inkt); border-color: var(--papier-inkt); background: none; }
+
+/* Het briefje van een gebouw (js/gebouwbriefje.js, op het scherm door js/huisbriefje.js; werklijst vraag 156, Marcel:
+   "1a1"): na een klik op een gebouw een kaartje rechts, onder de datum en even breed (--kaart), en het blijft liggen tot
+   je ergens anders klikt; het spel loopt door. Het papier en de spijker zijn die van elk briefje (.briefje). Het past
+   boven de tafel, en is het langer, dan schuift het. */
+#gebouwbriefje {
+  grid-column: 2;
+  max-height: calc(100vh / var(--tafel-zoom, 1) - 400px);
+  overflow-y: auto;
+  padding: 10px 18px 14px;
+  font-size: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+#gebouwbriefje .briefje-kop { font: 27px/1.1 var(--kop); }
+#gebouwbriefje .briefje-doet { font-style: italic; color: var(--papier-grijs); }
+#gebouwbriefje .briefje-deel { border-top: 1px dotted var(--papier-lijn); padding-top: 5px; }
+#gebouwbriefje .briefje-deel b { display: block; font: 19px/1.2 var(--kop); font-weight: normal; }
 
 /* De meter (F2, js/main.js): rechtsonder boven de tafel, klein, en de muis gaat erdoorheen. */
 #meter {

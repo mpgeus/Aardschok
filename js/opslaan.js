@@ -88,6 +88,7 @@
     doorkijkTijd: 0, // de klok van de doorkijk, die met het tekenen meeloopt (js/tekenen.js)
     overzicht: null, // het overzicht (js/main.js, Tab): { doel, zoom }, of null als de camera de schout volgt
     foto: null, // de fotomodus (js/main.js, H): { inOverzicht }, of null
+    gekozen: null, // het gebouw waarvan het briefje rechts ligt (js/gebouwbriefje.js), of null
   });
   const NIET_MEE = new Set([...Object.keys(T.schermVelden()), 'camera', 'zoom']);
   // En wat alleen scherm is binnen een ding, waar het ook staat: hoe de tekening van een wezen erbij staat

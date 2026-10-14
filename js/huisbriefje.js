@@ -3,6 +3,8 @@
 // er woont, wat het huis wil (✓ en ✗) en wat helpt, en hoe ver het is met doorgroeien. Alles uit T.huisToestand
 // (js/wensen.js), zodat het zegt wat de raad zegt. Het
 // eerste venster in de stijl van de schrijftafel; de rest van de ui volgt later (vraag 98, c).
+// Onderaan ook het briefje van een gebouw na een klik (vraag 156): wat erop staat, zegt js/gebouwbriefje.js; hier
+// staat alleen hoe het op het scherm komt, want dit bestand is alleen scherm (het laadt niet in de toetsen).
 (function (T) {
   'use strict';
 
@@ -78,5 +80,38 @@
   T.ui.verbergHuisbriefje = function () {
     const box = $('huisbriefje');
     if (box) box.classList.add('verborgen');
+  };
+
+  // ── Het briefje van een gebouw (js/gebouwbriefje.js; vraag 156) ──
+  // Na een klik op een gebouw (S.gekozen) ligt het rechts onder de datum, zolang je rondloopt; wat erop staat, zegt
+  // T.gebouwBriefje.
+  let laatsteGebouw = '';
+  let bijgewerkt = -Infinity;
+  const ALLE = 0.25; // zo vaak (seconden) wordt het briefje opnieuw opgemaakt, want de dag loopt door
+
+  const html = (b) =>
+    `<div class="briefje-kop">${b.kop}</div>` +
+    (b.doet ? `<div class="briefje-doet">${b.doet}</div>` : '') +
+    b.delen.map((d) => `<div class="briefje-deel"><b>${d.titel}</b>${d.regels.map((r) => `<div>${r}</div>`).join('')}</div>`).join('');
+
+  // Elk beeld (js/main.js): het briefje van het gekozen gebouw, zolang je rondloopt. Is het gebouw weg (afgebroken), dan
+  // is er niets meer gekozen.
+  T.ui.werkGebouwbriefjeBij = function (S) {
+    const box = $('gebouwbriefje');
+    if (!box) return;
+    const g = S.gekozen;
+    const D = g ? (S.dorpen || []).find((d) => d.gebouwen.includes(g)) : null;
+    if (g && !D) S.gekozen = null;
+    if (!D || S.modus !== 'verkennen') {
+      box.classList.add('verborgen');
+      laatsteGebouw = '';
+      return;
+    }
+    box.classList.remove('verborgen');
+    if (laatsteGebouw && S.tijd - bijgewerkt < ALLE) return;
+    bijgewerkt = S.tijd;
+    const nu = html(T.gebouwBriefje(D, g));
+    if (nu !== laatsteGebouw) box.innerHTML = nu;
+    laatsteGebouw = nu;
   };
 })(globalThis.Spel = globalThis.Spel || {});

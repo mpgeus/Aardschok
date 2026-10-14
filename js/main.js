@@ -682,6 +682,7 @@
     S.camera.x += (doel.x - S.camera.x) * k;
     S.camera.y += (doel.y - S.camera.y) * k;
     werkHoverBij();
+    T.ui.werkGebouwbriefjeBij(S); // het briefje van het gekozen gebouw (js/huisbriefje.js)
   }
 
   let vorige = 0;
@@ -801,6 +802,8 @@
       S.bouwSoort = null;
       return;
     }
+    // Een klik ergens anders legt het briefje van een gebouw weg; een klik op een gebouw kiest het (js/gebouwbriefje.js).
+    S.gekozen = null;
     const h = S.handeling;
     if (!h || !h.doe || h.kan === false) return;
     h.doe();
@@ -894,6 +897,8 @@
         S.bouwSoort = null;
         S.bouwMenuOpen = false;
         if (T.ui.toonBouwmenu) T.ui.toonBouwmenu(S);
+      } else if (S.gekozen) {
+        S.gekozen = null; // het briefje van een gebouw (js/gebouwbriefje.js)
       } else {
         T.ui.openMenu(S); // is er niets anders om weg te leggen: het menu (js/menu.js, vraag 48 D)
       }
