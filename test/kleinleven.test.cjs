@@ -46,9 +46,9 @@ test('met de spelregel uit rookt er niets', () => {
   }
 });
 
-test('elk huis weet waar zijn rook uitkomt: de schoorsteen, of bij een hut de nok (de kapel stookt niet)', () => {
+test('elk huis weet waar zijn rook uitkomt: de schoorsteen, of bij een hut de nok (de kapel en de zagerij stoken niet)', () => {
   for (const t of T.TEGELS.huizen.tiles) {
-    if (!t || !t.naam || /kapel/.test(t.naam)) continue;
+    if (!t || !t.naam || /kapel|zagerij/.test(t.naam)) continue;
     const plek = t.schoorsteen || t.nok;
     assert.ok(Array.isArray(plek) && plek.length === 2, `${t.naam} heeft geen rookpunt: node gereedschap/pixelart/rookpunten.cjs`);
     // boven de voet, binnen de tekening

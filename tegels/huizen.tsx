@@ -10224,579 +10224,867 @@
  </tile>
  <tile id="1144">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="wit-zagerij-riet-z"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="3,4"/>
   </properties>
+  <image source="huizen/wit-zagerij-riet-z.png" width="423" height="465"/>
  </tile>
  <tile id="1145">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="wit-zagerij-riet-o"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="4,4"/>
   </properties>
+  <image source="huizen/wit-zagerij-riet-o.png" width="424" height="452"/>
  </tile>
  <tile id="1146">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="wit-zagerij-riet-n"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="4,-1"/>
   </properties>
+  <image source="huizen/wit-zagerij-riet-n.png" width="423" height="452"/>
  </tile>
  <tile id="1147">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="wit-zagerij-riet-w"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="-1,3"/>
   </properties>
+  <image source="huizen/wit-zagerij-riet-w.png" width="425" height="459"/>
  </tile>
  <tile id="1148">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="wit-zagerij-leien-z"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="3,4"/>
   </properties>
+  <image source="huizen/wit-zagerij-leien-z.png" width="388" height="424"/>
  </tile>
  <tile id="1149">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="wit-zagerij-leien-o"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="4,4"/>
   </properties>
+  <image source="huizen/wit-zagerij-leien-o.png" width="392" height="412"/>
  </tile>
  <tile id="1150">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="wit-zagerij-leien-n"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="4,-1"/>
   </properties>
+  <image source="huizen/wit-zagerij-leien-n.png" width="388" height="412"/>
  </tile>
  <tile id="1151">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="wit-zagerij-leien-w"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="-1,3"/>
   </properties>
+  <image source="huizen/wit-zagerij-leien-w.png" width="392" height="418"/>
  </tile>
  <tile id="1152">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="wit-zagerij-pannen-z"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="3,4"/>
   </properties>
+  <image source="huizen/wit-zagerij-pannen-z.png" width="388" height="398"/>
  </tile>
  <tile id="1153">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="wit-zagerij-pannen-o"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="4,4"/>
   </properties>
+  <image source="huizen/wit-zagerij-pannen-o.png" width="392" height="385"/>
  </tile>
  <tile id="1154">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="wit-zagerij-pannen-n"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="4,-1"/>
   </properties>
+  <image source="huizen/wit-zagerij-pannen-n.png" width="388" height="385"/>
  </tile>
  <tile id="1155">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="wit-zagerij-pannen-w"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="-1,3"/>
   </properties>
+  <image source="huizen/wit-zagerij-pannen-w.png" width="392" height="392"/>
  </tile>
  <tile id="1156">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="oker-zagerij-riet-z"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="3,4"/>
   </properties>
+  <image source="huizen/oker-zagerij-riet-z.png" width="423" height="465"/>
  </tile>
  <tile id="1157">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="oker-zagerij-riet-o"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="4,4"/>
   </properties>
+  <image source="huizen/oker-zagerij-riet-o.png" width="424" height="452"/>
  </tile>
  <tile id="1158">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="oker-zagerij-riet-n"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="4,-1"/>
   </properties>
+  <image source="huizen/oker-zagerij-riet-n.png" width="423" height="452"/>
  </tile>
  <tile id="1159">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="oker-zagerij-riet-w"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="-1,3"/>
   </properties>
+  <image source="huizen/oker-zagerij-riet-w.png" width="425" height="459"/>
  </tile>
  <tile id="1160">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="oker-zagerij-leien-z"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="3,4"/>
   </properties>
+  <image source="huizen/oker-zagerij-leien-z.png" width="388" height="424"/>
  </tile>
  <tile id="1161">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="oker-zagerij-leien-o"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="4,4"/>
   </properties>
+  <image source="huizen/oker-zagerij-leien-o.png" width="392" height="412"/>
  </tile>
  <tile id="1162">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="oker-zagerij-leien-n"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="4,-1"/>
   </properties>
+  <image source="huizen/oker-zagerij-leien-n.png" width="388" height="412"/>
  </tile>
  <tile id="1163">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="oker-zagerij-leien-w"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="-1,3"/>
   </properties>
+  <image source="huizen/oker-zagerij-leien-w.png" width="392" height="418"/>
  </tile>
  <tile id="1164">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="oker-zagerij-pannen-z"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="3,4"/>
   </properties>
+  <image source="huizen/oker-zagerij-pannen-z.png" width="388" height="398"/>
  </tile>
  <tile id="1165">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="oker-zagerij-pannen-o"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="4,4"/>
   </properties>
+  <image source="huizen/oker-zagerij-pannen-o.png" width="392" height="385"/>
  </tile>
  <tile id="1166">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="oker-zagerij-pannen-n"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="4,-1"/>
   </properties>
+  <image source="huizen/oker-zagerij-pannen-n.png" width="388" height="385"/>
  </tile>
  <tile id="1167">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="oker-zagerij-pannen-w"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="-1,3"/>
   </properties>
+  <image source="huizen/oker-zagerij-pannen-w.png" width="392" height="392"/>
  </tile>
  <tile id="1168">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="planken-zagerij-spanen-z"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="3,4"/>
   </properties>
+  <image source="huizen/planken-zagerij-spanen-z.png" width="388" height="412"/>
  </tile>
  <tile id="1169">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="planken-zagerij-spanen-o"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="4,4"/>
   </properties>
+  <image source="huizen/planken-zagerij-spanen-o.png" width="392" height="400"/>
  </tile>
  <tile id="1170">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="planken-zagerij-spanen-n"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="4,-1"/>
   </properties>
+  <image source="huizen/planken-zagerij-spanen-n.png" width="388" height="400"/>
  </tile>
  <tile id="1171">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="planken-zagerij-spanen-w"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="-1,3"/>
   </properties>
+  <image source="huizen/planken-zagerij-spanen-w.png" width="392" height="406"/>
  </tile>
  <tile id="1172">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="planken-zagerij-leien-z"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="3,4"/>
   </properties>
+  <image source="huizen/planken-zagerij-leien-z.png" width="388" height="424"/>
  </tile>
  <tile id="1173">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="planken-zagerij-leien-o"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="4,4"/>
   </properties>
+  <image source="huizen/planken-zagerij-leien-o.png" width="392" height="412"/>
  </tile>
  <tile id="1174">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="planken-zagerij-leien-n"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="4,-1"/>
   </properties>
+  <image source="huizen/planken-zagerij-leien-n.png" width="388" height="412"/>
  </tile>
  <tile id="1175">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="planken-zagerij-leien-w"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="-1,3"/>
   </properties>
+  <image source="huizen/planken-zagerij-leien-w.png" width="392" height="418"/>
  </tile>
  <tile id="1176">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="planken-zagerij-pannen-z"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="3,4"/>
   </properties>
+  <image source="huizen/planken-zagerij-pannen-z.png" width="388" height="398"/>
  </tile>
  <tile id="1177">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="planken-zagerij-pannen-o"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="4,4"/>
   </properties>
+  <image source="huizen/planken-zagerij-pannen-o.png" width="392" height="385"/>
  </tile>
  <tile id="1178">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="planken-zagerij-pannen-n"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="4,-1"/>
   </properties>
+  <image source="huizen/planken-zagerij-pannen-n.png" width="388" height="385"/>
  </tile>
  <tile id="1179">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="planken-zagerij-pannen-w"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="-1,3"/>
   </properties>
+  <image source="huizen/planken-zagerij-pannen-w.png" width="392" height="392"/>
  </tile>
  <tile id="1180">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="roze-zagerij-riet-z"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="3,4"/>
   </properties>
+  <image source="huizen/roze-zagerij-riet-z.png" width="423" height="465"/>
  </tile>
  <tile id="1181">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="roze-zagerij-riet-o"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="4,4"/>
   </properties>
+  <image source="huizen/roze-zagerij-riet-o.png" width="424" height="452"/>
  </tile>
  <tile id="1182">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="roze-zagerij-riet-n"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="4,-1"/>
   </properties>
+  <image source="huizen/roze-zagerij-riet-n.png" width="423" height="452"/>
  </tile>
  <tile id="1183">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="roze-zagerij-riet-w"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="-1,3"/>
   </properties>
+  <image source="huizen/roze-zagerij-riet-w.png" width="425" height="459"/>
  </tile>
  <tile id="1184">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="roze-zagerij-leien-z"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="3,4"/>
   </properties>
+  <image source="huizen/roze-zagerij-leien-z.png" width="388" height="424"/>
  </tile>
  <tile id="1185">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="roze-zagerij-leien-o"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="4,4"/>
   </properties>
+  <image source="huizen/roze-zagerij-leien-o.png" width="392" height="412"/>
  </tile>
  <tile id="1186">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="roze-zagerij-leien-n"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="4,-1"/>
   </properties>
+  <image source="huizen/roze-zagerij-leien-n.png" width="388" height="412"/>
  </tile>
  <tile id="1187">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="roze-zagerij-leien-w"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="-1,3"/>
   </properties>
+  <image source="huizen/roze-zagerij-leien-w.png" width="392" height="418"/>
  </tile>
  <tile id="1188">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="roze-zagerij-pannen-z"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="3,4"/>
   </properties>
+  <image source="huizen/roze-zagerij-pannen-z.png" width="388" height="398"/>
  </tile>
  <tile id="1189">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="roze-zagerij-pannen-o"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="4,4"/>
   </properties>
+  <image source="huizen/roze-zagerij-pannen-o.png" width="392" height="385"/>
  </tile>
  <tile id="1190">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="roze-zagerij-pannen-n"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="4,-1"/>
   </properties>
+  <image source="huizen/roze-zagerij-pannen-n.png" width="388" height="385"/>
  </tile>
  <tile id="1191">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="roze-zagerij-pannen-w"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="-1,3"/>
   </properties>
+  <image source="huizen/roze-zagerij-pannen-w.png" width="392" height="392"/>
  </tile>
  <tile id="1192">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="wit-zagerij-riet-z-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="3,4"/>
   </properties>
+  <image source="huizen/wit-zagerij-riet-z-oud.png" width="423" height="465"/>
  </tile>
  <tile id="1193">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="wit-zagerij-riet-o-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="4,4"/>
   </properties>
+  <image source="huizen/wit-zagerij-riet-o-oud.png" width="424" height="452"/>
  </tile>
  <tile id="1194">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="wit-zagerij-riet-n-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="4,-1"/>
   </properties>
+  <image source="huizen/wit-zagerij-riet-n-oud.png" width="423" height="452"/>
  </tile>
  <tile id="1195">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="wit-zagerij-riet-w-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="-1,3"/>
   </properties>
+  <image source="huizen/wit-zagerij-riet-w-oud.png" width="425" height="459"/>
  </tile>
  <tile id="1196">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="wit-zagerij-leien-z-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="3,4"/>
   </properties>
+  <image source="huizen/wit-zagerij-leien-z-oud.png" width="388" height="424"/>
  </tile>
  <tile id="1197">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="wit-zagerij-leien-o-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="4,4"/>
   </properties>
+  <image source="huizen/wit-zagerij-leien-o-oud.png" width="392" height="412"/>
  </tile>
  <tile id="1198">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="wit-zagerij-leien-n-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="4,-1"/>
   </properties>
+  <image source="huizen/wit-zagerij-leien-n-oud.png" width="388" height="412"/>
  </tile>
  <tile id="1199">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="wit-zagerij-leien-w-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="-1,3"/>
   </properties>
+  <image source="huizen/wit-zagerij-leien-w-oud.png" width="392" height="418"/>
  </tile>
  <tile id="1200">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="wit-zagerij-pannen-z-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="3,4"/>
   </properties>
+  <image source="huizen/wit-zagerij-pannen-z-oud.png" width="388" height="398"/>
  </tile>
  <tile id="1201">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="wit-zagerij-pannen-o-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="4,4"/>
   </properties>
+  <image source="huizen/wit-zagerij-pannen-o-oud.png" width="392" height="385"/>
  </tile>
  <tile id="1202">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="wit-zagerij-pannen-n-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="4,-1"/>
   </properties>
+  <image source="huizen/wit-zagerij-pannen-n-oud.png" width="388" height="385"/>
  </tile>
  <tile id="1203">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="wit-zagerij-pannen-w-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="-1,3"/>
   </properties>
+  <image source="huizen/wit-zagerij-pannen-w-oud.png" width="392" height="392"/>
  </tile>
  <tile id="1204">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="oker-zagerij-riet-z-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="3,4"/>
   </properties>
+  <image source="huizen/oker-zagerij-riet-z-oud.png" width="423" height="465"/>
  </tile>
  <tile id="1205">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="oker-zagerij-riet-o-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="4,4"/>
   </properties>
+  <image source="huizen/oker-zagerij-riet-o-oud.png" width="424" height="452"/>
  </tile>
  <tile id="1206">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="oker-zagerij-riet-n-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="4,-1"/>
   </properties>
+  <image source="huizen/oker-zagerij-riet-n-oud.png" width="423" height="452"/>
  </tile>
  <tile id="1207">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="oker-zagerij-riet-w-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="-1,3"/>
   </properties>
+  <image source="huizen/oker-zagerij-riet-w-oud.png" width="425" height="459"/>
  </tile>
  <tile id="1208">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="oker-zagerij-leien-z-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="3,4"/>
   </properties>
+  <image source="huizen/oker-zagerij-leien-z-oud.png" width="388" height="424"/>
  </tile>
  <tile id="1209">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="oker-zagerij-leien-o-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="4,4"/>
   </properties>
+  <image source="huizen/oker-zagerij-leien-o-oud.png" width="392" height="412"/>
  </tile>
  <tile id="1210">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="oker-zagerij-leien-n-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="4,-1"/>
   </properties>
+  <image source="huizen/oker-zagerij-leien-n-oud.png" width="388" height="412"/>
  </tile>
  <tile id="1211">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="oker-zagerij-leien-w-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="-1,3"/>
   </properties>
+  <image source="huizen/oker-zagerij-leien-w-oud.png" width="392" height="418"/>
  </tile>
  <tile id="1212">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="oker-zagerij-pannen-z-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="3,4"/>
   </properties>
+  <image source="huizen/oker-zagerij-pannen-z-oud.png" width="388" height="398"/>
  </tile>
  <tile id="1213">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="oker-zagerij-pannen-o-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="4,4"/>
   </properties>
+  <image source="huizen/oker-zagerij-pannen-o-oud.png" width="392" height="385"/>
  </tile>
  <tile id="1214">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="oker-zagerij-pannen-n-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="4,-1"/>
   </properties>
+  <image source="huizen/oker-zagerij-pannen-n-oud.png" width="388" height="385"/>
  </tile>
  <tile id="1215">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="oker-zagerij-pannen-w-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="-1,3"/>
   </properties>
+  <image source="huizen/oker-zagerij-pannen-w-oud.png" width="392" height="392"/>
  </tile>
  <tile id="1216">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="planken-zagerij-spanen-z-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="3,4"/>
   </properties>
+  <image source="huizen/planken-zagerij-spanen-z-oud.png" width="388" height="412"/>
  </tile>
  <tile id="1217">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="planken-zagerij-spanen-o-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="4,4"/>
   </properties>
+  <image source="huizen/planken-zagerij-spanen-o-oud.png" width="392" height="400"/>
  </tile>
  <tile id="1218">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="planken-zagerij-spanen-n-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="4,-1"/>
   </properties>
+  <image source="huizen/planken-zagerij-spanen-n-oud.png" width="388" height="400"/>
  </tile>
  <tile id="1219">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="planken-zagerij-spanen-w-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="-1,3"/>
   </properties>
+  <image source="huizen/planken-zagerij-spanen-w-oud.png" width="392" height="406"/>
  </tile>
  <tile id="1220">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="planken-zagerij-leien-z-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="3,4"/>
   </properties>
+  <image source="huizen/planken-zagerij-leien-z-oud.png" width="388" height="424"/>
  </tile>
  <tile id="1221">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="planken-zagerij-leien-o-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="4,4"/>
   </properties>
+  <image source="huizen/planken-zagerij-leien-o-oud.png" width="392" height="412"/>
  </tile>
  <tile id="1222">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="planken-zagerij-leien-n-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="4,-1"/>
   </properties>
+  <image source="huizen/planken-zagerij-leien-n-oud.png" width="388" height="412"/>
  </tile>
  <tile id="1223">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="planken-zagerij-leien-w-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="-1,3"/>
   </properties>
+  <image source="huizen/planken-zagerij-leien-w-oud.png" width="392" height="418"/>
  </tile>
  <tile id="1224">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="planken-zagerij-pannen-z-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="3,4"/>
   </properties>
+  <image source="huizen/planken-zagerij-pannen-z-oud.png" width="388" height="398"/>
  </tile>
  <tile id="1225">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="planken-zagerij-pannen-o-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="4,4"/>
   </properties>
+  <image source="huizen/planken-zagerij-pannen-o-oud.png" width="392" height="385"/>
  </tile>
  <tile id="1226">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="planken-zagerij-pannen-n-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="4,-1"/>
   </properties>
+  <image source="huizen/planken-zagerij-pannen-n-oud.png" width="388" height="385"/>
  </tile>
  <tile id="1227">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="planken-zagerij-pannen-w-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="-1,3"/>
   </properties>
+  <image source="huizen/planken-zagerij-pannen-w-oud.png" width="392" height="392"/>
  </tile>
  <tile id="1228">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="roze-zagerij-riet-z-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="3,4"/>
   </properties>
+  <image source="huizen/roze-zagerij-riet-z-oud.png" width="423" height="465"/>
  </tile>
  <tile id="1229">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="roze-zagerij-riet-o-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="4,4"/>
   </properties>
+  <image source="huizen/roze-zagerij-riet-o-oud.png" width="424" height="452"/>
  </tile>
  <tile id="1230">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="roze-zagerij-riet-n-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="4,-1"/>
   </properties>
+  <image source="huizen/roze-zagerij-riet-n-oud.png" width="423" height="452"/>
  </tile>
  <tile id="1231">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="roze-zagerij-riet-w-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="-1,3"/>
   </properties>
+  <image source="huizen/roze-zagerij-riet-w-oud.png" width="425" height="459"/>
  </tile>
  <tile id="1232">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="roze-zagerij-leien-z-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="3,4"/>
   </properties>
+  <image source="huizen/roze-zagerij-leien-z-oud.png" width="388" height="424"/>
  </tile>
  <tile id="1233">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="roze-zagerij-leien-o-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="4,4"/>
   </properties>
+  <image source="huizen/roze-zagerij-leien-o-oud.png" width="392" height="412"/>
  </tile>
  <tile id="1234">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="roze-zagerij-leien-n-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="4,-1"/>
   </properties>
+  <image source="huizen/roze-zagerij-leien-n-oud.png" width="388" height="412"/>
  </tile>
  <tile id="1235">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="roze-zagerij-leien-w-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="-1,3"/>
   </properties>
+  <image source="huizen/roze-zagerij-leien-w-oud.png" width="392" height="418"/>
  </tile>
  <tile id="1236">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="roze-zagerij-pannen-z-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="3,4"/>
   </properties>
+  <image source="huizen/roze-zagerij-pannen-z-oud.png" width="388" height="398"/>
  </tile>
  <tile id="1237">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="roze-zagerij-pannen-o-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="4,4"/>
   </properties>
+  <image source="huizen/roze-zagerij-pannen-o-oud.png" width="392" height="385"/>
  </tile>
  <tile id="1238">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="roze-zagerij-pannen-n-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="8x4"/>
+    <property name="deur" value="4,-1"/>
   </properties>
+  <image source="huizen/roze-zagerij-pannen-n-oud.png" width="388" height="385"/>
  </tile>
  <tile id="1239">
   <properties>
-    <property name="naam" value=""/>
-    <property name="vast" type="bool" value="false"/>
+    <property name="naam" value="roze-zagerij-pannen-w-oud"/>
+    <property name="vast" type="bool" value="true"/>
+    <property name="beslaat" value="4x8"/>
+    <property name="deur" value="-1,3"/>
   </properties>
+  <image source="huizen/roze-zagerij-pannen-w-oud.png" width="392" height="392"/>
  </tile>
  <tile id="1240">
   <properties>

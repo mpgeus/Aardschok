@@ -25,9 +25,10 @@ test('elke opgave ligt vast, ook de uitbouwen', () => {
   // Zonder `uit` kiest het zaad de uitbouwen, en dan zet een nieuwe kans in huis-sdf.cjs stil een
   // ander huis op het vel (werklijst, "Tegelijk: de huizenbouwer", ronde 4).
   // De grote gebouwen (vraag 114, stap 3) zijn een toren (de woontoren) of een gebouw uit delen (de kapel met haar
-  // toren): daar ligt elk deel vast met zijn zaad. Het huis van de schout heeft geen soort in T.GEBOUWEN: de maker zet het
-  // neer als een huis (js/maker.js).
-  const groot = ['kapel', 'woontoren', 'schout'];
+  // toren, de zagerij met haar stammen; vraag 157): daar ligt elk deel vast met zijn zaad, en een los stuk van
+  // tuin-sdf.cjs (`tuin`) heeft geen lagen. Het huis van de schout heeft geen soort in T.GEBOUWEN: de maker zet het neer
+  // als een huis (js/maker.js).
+  const groot = ['kapel', 'woontoren', 'schout', 'zagerij'];
   for (const [naam, o] of Object.entries(HUIZEN)) {
     // een oude tekening (vraag 144) is zijn jonge, met andere knoppen (test/verweren.test.cjs)
     if (o.jong) {
@@ -35,7 +36,7 @@ test('elke opgave ligt vast, ook de uitbouwen', () => {
       continue;
     }
     if (o.stijl && groot.includes(o.stijl.soort)) {
-      for (const d of o.delen || [{ spec: o }]) assert.ok(Number.isInteger(d.spec.zaad) && d.spec.lagen, `${naam}: een deel ligt niet vast`);
+      for (const d of o.delen || [{ spec: o }]) assert.ok(Number.isInteger(d.spec.zaad) && (d.spec.lagen || d.spec.tuin), `${naam}: een deel ligt niet vast`);
       continue;
     }
     assert.ok(o.uit !== undefined, `${naam}: geen uit`);

@@ -16214,6 +16214,1398 @@
        568
       ]
      }
+    ],
+    "wit-zagerij-riet-z": [
+     {
+      "bestand": "daksneeuw/wit-zagerij-riet-z-0.png",
+      "b": 416,
+      "h": 457,
+      "anker": [
+       177,
+       308
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-zagerij-riet-z-1.png",
+      "b": 421,
+      "h": 458,
+      "anker": [
+       177,
+       308
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-zagerij-riet-z-2.png",
+      "b": 422,
+      "h": 458,
+      "anker": [
+       177,
+       308
+      ]
+     }
+    ],
+    "wit-zagerij-riet-o": [
+     {
+      "bestand": "daksneeuw/wit-zagerij-riet-o-0.png",
+      "b": 418,
+      "h": 445,
+      "anker": [
+       304,
+       273
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-zagerij-riet-o-1.png",
+      "b": 421,
+      "h": 446,
+      "anker": [
+       305,
+       273
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-zagerij-riet-o-2.png",
+      "b": 422,
+      "h": 446,
+      "anker": [
+       305,
+       273
+      ]
+     }
+    ],
+    "wit-zagerij-riet-n": [
+     {
+      "bestand": "daksneeuw/wit-zagerij-riet-n-0.png",
+      "b": 420,
+      "h": 445,
+      "anker": [
+       115,
+       273
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-zagerij-riet-n-1.png",
+      "b": 421,
+      "h": 445,
+      "anker": [
+       116,
+       273
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-zagerij-riet-n-2.png",
+      "b": 422,
+      "h": 446,
+      "anker": [
+       117,
+       273
+      ]
+     }
+    ],
+    "wit-zagerij-riet-w": [
+     {
+      "bestand": "daksneeuw/wit-zagerij-riet-w-0.png",
+      "b": 423,
+      "h": 453,
+      "anker": [
+       245,
+       308
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-zagerij-riet-w-1.png",
+      "b": 423,
+      "h": 453,
+      "anker": [
+       245,
+       308
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-zagerij-riet-w-2.png",
+      "b": 424,
+      "h": 453,
+      "anker": [
+       246,
+       308
+      ]
+     }
+    ],
+    "wit-zagerij-leien-z": [
+     {
+      "bestand": "daksneeuw/wit-zagerij-leien-z-0.png",
+      "b": 373,
+      "h": 416,
+      "anker": [
+       160,
+       267
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-zagerij-leien-z-1.png",
+      "b": 375,
+      "h": 417,
+      "anker": [
+       161,
+       267
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-zagerij-leien-z-2.png",
+      "b": 376,
+      "h": 417,
+      "anker": [
+       161,
+       267
+      ]
+     }
+    ],
+    "wit-zagerij-leien-o": [
+     {
+      "bestand": "daksneeuw/wit-zagerij-leien-o-0.png",
+      "b": 354,
+      "h": 405,
+      "anker": [
+       257,
+       233
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-zagerij-leien-o-1.png",
+      "b": 370,
+      "h": 406,
+      "anker": [
+       273,
+       233
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-zagerij-leien-o-2.png",
+      "b": 372,
+      "h": 406,
+      "anker": [
+       275,
+       233
+      ]
+     }
+    ],
+    "wit-zagerij-leien-n": [
+     {
+      "bestand": "daksneeuw/wit-zagerij-leien-n-0.png",
+      "b": 353,
+      "h": 405,
+      "anker": [
+       96,
+       233
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-zagerij-leien-n-1.png",
+      "b": 372,
+      "h": 405,
+      "anker": [
+       97,
+       233
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-zagerij-leien-n-2.png",
+      "b": 372,
+      "h": 406,
+      "anker": [
+       97,
+       233
+      ]
+     }
+    ],
+    "wit-zagerij-leien-w": [
+     {
+      "bestand": "daksneeuw/wit-zagerij-leien-w-0.png",
+      "b": 388,
+      "h": 412,
+      "anker": [
+       227,
+       267
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-zagerij-leien-w-1.png",
+      "b": 389,
+      "h": 412,
+      "anker": [
+       228,
+       267
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-zagerij-leien-w-2.png",
+      "b": 390,
+      "h": 412,
+      "anker": [
+       229,
+       267
+      ]
+     }
+    ],
+    "wit-zagerij-pannen-z": [
+     {
+      "bestand": "daksneeuw/wit-zagerij-pannen-z-0.png",
+      "b": 373,
+      "h": 390,
+      "anker": [
+       160,
+       241
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-zagerij-pannen-z-1.png",
+      "b": 380,
+      "h": 391,
+      "anker": [
+       161,
+       241
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-zagerij-pannen-z-2.png",
+      "b": 384,
+      "h": 391,
+      "anker": [
+       161,
+       241
+      ]
+     }
+    ],
+    "wit-zagerij-pannen-o": [
+     {
+      "bestand": "daksneeuw/wit-zagerij-pannen-o-0.png",
+      "b": 353,
+      "h": 378,
+      "anker": [
+       257,
+       206
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-zagerij-pannen-o-1.png",
+      "b": 371,
+      "h": 379,
+      "anker": [
+       274,
+       206
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-zagerij-pannen-o-2.png",
+      "b": 383,
+      "h": 379,
+      "anker": [
+       286,
+       206
+      ]
+     }
+    ],
+    "wit-zagerij-pannen-n": [
+     {
+      "bestand": "daksneeuw/wit-zagerij-pannen-n-0.png",
+      "b": 353,
+      "h": 378,
+      "anker": [
+       96,
+       206
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-zagerij-pannen-n-1.png",
+      "b": 383,
+      "h": 378,
+      "anker": [
+       97,
+       206
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-zagerij-pannen-n-2.png",
+      "b": 384,
+      "h": 379,
+      "anker": [
+       97,
+       206
+      ]
+     }
+    ],
+    "wit-zagerij-pannen-w": [
+     {
+      "bestand": "daksneeuw/wit-zagerij-pannen-w-0.png",
+      "b": 387,
+      "h": 386,
+      "anker": [
+       227,
+       241
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-zagerij-pannen-w-1.png",
+      "b": 389,
+      "h": 386,
+      "anker": [
+       228,
+       241
+      ]
+     },
+     {
+      "bestand": "daksneeuw/wit-zagerij-pannen-w-2.png",
+      "b": 390,
+      "h": 386,
+      "anker": [
+       229,
+       241
+      ]
+     }
+    ],
+    "oker-zagerij-riet-z": [
+     {
+      "bestand": "daksneeuw/oker-zagerij-riet-z-0.png",
+      "b": 416,
+      "h": 457,
+      "anker": [
+       177,
+       308
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-zagerij-riet-z-1.png",
+      "b": 421,
+      "h": 458,
+      "anker": [
+       177,
+       308
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-zagerij-riet-z-2.png",
+      "b": 422,
+      "h": 458,
+      "anker": [
+       177,
+       308
+      ]
+     }
+    ],
+    "oker-zagerij-riet-o": [
+     {
+      "bestand": "daksneeuw/oker-zagerij-riet-o-0.png",
+      "b": 418,
+      "h": 445,
+      "anker": [
+       304,
+       273
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-zagerij-riet-o-1.png",
+      "b": 421,
+      "h": 446,
+      "anker": [
+       305,
+       273
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-zagerij-riet-o-2.png",
+      "b": 422,
+      "h": 446,
+      "anker": [
+       305,
+       273
+      ]
+     }
+    ],
+    "oker-zagerij-riet-n": [
+     {
+      "bestand": "daksneeuw/oker-zagerij-riet-n-0.png",
+      "b": 420,
+      "h": 445,
+      "anker": [
+       115,
+       273
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-zagerij-riet-n-1.png",
+      "b": 421,
+      "h": 445,
+      "anker": [
+       116,
+       273
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-zagerij-riet-n-2.png",
+      "b": 422,
+      "h": 446,
+      "anker": [
+       117,
+       273
+      ]
+     }
+    ],
+    "oker-zagerij-riet-w": [
+     {
+      "bestand": "daksneeuw/oker-zagerij-riet-w-0.png",
+      "b": 423,
+      "h": 453,
+      "anker": [
+       245,
+       308
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-zagerij-riet-w-1.png",
+      "b": 423,
+      "h": 453,
+      "anker": [
+       245,
+       308
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-zagerij-riet-w-2.png",
+      "b": 424,
+      "h": 453,
+      "anker": [
+       246,
+       308
+      ]
+     }
+    ],
+    "oker-zagerij-leien-z": [
+     {
+      "bestand": "daksneeuw/oker-zagerij-leien-z-0.png",
+      "b": 373,
+      "h": 416,
+      "anker": [
+       160,
+       267
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-zagerij-leien-z-1.png",
+      "b": 375,
+      "h": 417,
+      "anker": [
+       161,
+       267
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-zagerij-leien-z-2.png",
+      "b": 376,
+      "h": 417,
+      "anker": [
+       161,
+       267
+      ]
+     }
+    ],
+    "oker-zagerij-leien-o": [
+     {
+      "bestand": "daksneeuw/oker-zagerij-leien-o-0.png",
+      "b": 354,
+      "h": 405,
+      "anker": [
+       257,
+       233
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-zagerij-leien-o-1.png",
+      "b": 370,
+      "h": 406,
+      "anker": [
+       273,
+       233
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-zagerij-leien-o-2.png",
+      "b": 372,
+      "h": 406,
+      "anker": [
+       275,
+       233
+      ]
+     }
+    ],
+    "oker-zagerij-leien-n": [
+     {
+      "bestand": "daksneeuw/oker-zagerij-leien-n-0.png",
+      "b": 353,
+      "h": 405,
+      "anker": [
+       96,
+       233
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-zagerij-leien-n-1.png",
+      "b": 372,
+      "h": 405,
+      "anker": [
+       97,
+       233
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-zagerij-leien-n-2.png",
+      "b": 372,
+      "h": 406,
+      "anker": [
+       97,
+       233
+      ]
+     }
+    ],
+    "oker-zagerij-leien-w": [
+     {
+      "bestand": "daksneeuw/oker-zagerij-leien-w-0.png",
+      "b": 388,
+      "h": 412,
+      "anker": [
+       227,
+       267
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-zagerij-leien-w-1.png",
+      "b": 389,
+      "h": 412,
+      "anker": [
+       228,
+       267
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-zagerij-leien-w-2.png",
+      "b": 390,
+      "h": 412,
+      "anker": [
+       229,
+       267
+      ]
+     }
+    ],
+    "oker-zagerij-pannen-z": [
+     {
+      "bestand": "daksneeuw/oker-zagerij-pannen-z-0.png",
+      "b": 373,
+      "h": 390,
+      "anker": [
+       160,
+       241
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-zagerij-pannen-z-1.png",
+      "b": 380,
+      "h": 391,
+      "anker": [
+       161,
+       241
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-zagerij-pannen-z-2.png",
+      "b": 384,
+      "h": 391,
+      "anker": [
+       161,
+       241
+      ]
+     }
+    ],
+    "oker-zagerij-pannen-o": [
+     {
+      "bestand": "daksneeuw/oker-zagerij-pannen-o-0.png",
+      "b": 353,
+      "h": 378,
+      "anker": [
+       257,
+       206
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-zagerij-pannen-o-1.png",
+      "b": 371,
+      "h": 379,
+      "anker": [
+       274,
+       206
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-zagerij-pannen-o-2.png",
+      "b": 383,
+      "h": 379,
+      "anker": [
+       286,
+       206
+      ]
+     }
+    ],
+    "oker-zagerij-pannen-n": [
+     {
+      "bestand": "daksneeuw/oker-zagerij-pannen-n-0.png",
+      "b": 353,
+      "h": 378,
+      "anker": [
+       96,
+       206
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-zagerij-pannen-n-1.png",
+      "b": 383,
+      "h": 378,
+      "anker": [
+       97,
+       206
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-zagerij-pannen-n-2.png",
+      "b": 384,
+      "h": 379,
+      "anker": [
+       97,
+       206
+      ]
+     }
+    ],
+    "oker-zagerij-pannen-w": [
+     {
+      "bestand": "daksneeuw/oker-zagerij-pannen-w-0.png",
+      "b": 387,
+      "h": 386,
+      "anker": [
+       227,
+       241
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-zagerij-pannen-w-1.png",
+      "b": 389,
+      "h": 386,
+      "anker": [
+       228,
+       241
+      ]
+     },
+     {
+      "bestand": "daksneeuw/oker-zagerij-pannen-w-2.png",
+      "b": 390,
+      "h": 386,
+      "anker": [
+       229,
+       241
+      ]
+     }
+    ],
+    "planken-zagerij-spanen-z": [
+     {
+      "bestand": "daksneeuw/planken-zagerij-spanen-z-0.png",
+      "b": 374,
+      "h": 404,
+      "anker": [
+       161,
+       255
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-zagerij-spanen-z-1.png",
+      "b": 381,
+      "h": 405,
+      "anker": [
+       161,
+       255
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-zagerij-spanen-z-2.png",
+      "b": 384,
+      "h": 405,
+      "anker": [
+       161,
+       255
+      ]
+     }
+    ],
+    "planken-zagerij-spanen-o": [
+     {
+      "bestand": "daksneeuw/planken-zagerij-spanen-o-0.png",
+      "b": 354,
+      "h": 393,
+      "anker": [
+       257,
+       221
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-zagerij-spanen-o-1.png",
+      "b": 371,
+      "h": 394,
+      "anker": [
+       274,
+       221
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-zagerij-spanen-o-2.png",
+      "b": 381,
+      "h": 394,
+      "anker": [
+       284,
+       221
+      ]
+     }
+    ],
+    "planken-zagerij-spanen-n": [
+     {
+      "bestand": "daksneeuw/planken-zagerij-spanen-n-0.png",
+      "b": 359,
+      "h": 393,
+      "anker": [
+       97,
+       221
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-zagerij-spanen-n-1.png",
+      "b": 371,
+      "h": 393,
+      "anker": [
+       97,
+       221
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-zagerij-spanen-n-2.png",
+      "b": 381,
+      "h": 394,
+      "anker": [
+       97,
+       221
+      ]
+     }
+    ],
+    "planken-zagerij-spanen-w": [
+     {
+      "bestand": "daksneeuw/planken-zagerij-spanen-w-0.png",
+      "b": 388,
+      "h": 400,
+      "anker": [
+       227,
+       255
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-zagerij-spanen-w-1.png",
+      "b": 389,
+      "h": 400,
+      "anker": [
+       228,
+       255
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-zagerij-spanen-w-2.png",
+      "b": 390,
+      "h": 400,
+      "anker": [
+       229,
+       255
+      ]
+     }
+    ],
+    "planken-zagerij-leien-z": [
+     {
+      "bestand": "daksneeuw/planken-zagerij-leien-z-0.png",
+      "b": 373,
+      "h": 416,
+      "anker": [
+       160,
+       267
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-zagerij-leien-z-1.png",
+      "b": 375,
+      "h": 417,
+      "anker": [
+       161,
+       267
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-zagerij-leien-z-2.png",
+      "b": 376,
+      "h": 417,
+      "anker": [
+       161,
+       267
+      ]
+     }
+    ],
+    "planken-zagerij-leien-o": [
+     {
+      "bestand": "daksneeuw/planken-zagerij-leien-o-0.png",
+      "b": 354,
+      "h": 405,
+      "anker": [
+       257,
+       233
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-zagerij-leien-o-1.png",
+      "b": 370,
+      "h": 406,
+      "anker": [
+       273,
+       233
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-zagerij-leien-o-2.png",
+      "b": 372,
+      "h": 406,
+      "anker": [
+       275,
+       233
+      ]
+     }
+    ],
+    "planken-zagerij-leien-n": [
+     {
+      "bestand": "daksneeuw/planken-zagerij-leien-n-0.png",
+      "b": 353,
+      "h": 405,
+      "anker": [
+       96,
+       233
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-zagerij-leien-n-1.png",
+      "b": 372,
+      "h": 405,
+      "anker": [
+       97,
+       233
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-zagerij-leien-n-2.png",
+      "b": 372,
+      "h": 406,
+      "anker": [
+       97,
+       233
+      ]
+     }
+    ],
+    "planken-zagerij-leien-w": [
+     {
+      "bestand": "daksneeuw/planken-zagerij-leien-w-0.png",
+      "b": 388,
+      "h": 412,
+      "anker": [
+       227,
+       267
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-zagerij-leien-w-1.png",
+      "b": 389,
+      "h": 412,
+      "anker": [
+       228,
+       267
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-zagerij-leien-w-2.png",
+      "b": 390,
+      "h": 412,
+      "anker": [
+       229,
+       267
+      ]
+     }
+    ],
+    "planken-zagerij-pannen-z": [
+     {
+      "bestand": "daksneeuw/planken-zagerij-pannen-z-0.png",
+      "b": 373,
+      "h": 390,
+      "anker": [
+       160,
+       241
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-zagerij-pannen-z-1.png",
+      "b": 380,
+      "h": 391,
+      "anker": [
+       161,
+       241
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-zagerij-pannen-z-2.png",
+      "b": 384,
+      "h": 391,
+      "anker": [
+       161,
+       241
+      ]
+     }
+    ],
+    "planken-zagerij-pannen-o": [
+     {
+      "bestand": "daksneeuw/planken-zagerij-pannen-o-0.png",
+      "b": 353,
+      "h": 378,
+      "anker": [
+       257,
+       206
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-zagerij-pannen-o-1.png",
+      "b": 371,
+      "h": 379,
+      "anker": [
+       274,
+       206
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-zagerij-pannen-o-2.png",
+      "b": 383,
+      "h": 379,
+      "anker": [
+       286,
+       206
+      ]
+     }
+    ],
+    "planken-zagerij-pannen-n": [
+     {
+      "bestand": "daksneeuw/planken-zagerij-pannen-n-0.png",
+      "b": 353,
+      "h": 378,
+      "anker": [
+       96,
+       206
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-zagerij-pannen-n-1.png",
+      "b": 383,
+      "h": 378,
+      "anker": [
+       97,
+       206
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-zagerij-pannen-n-2.png",
+      "b": 384,
+      "h": 379,
+      "anker": [
+       97,
+       206
+      ]
+     }
+    ],
+    "planken-zagerij-pannen-w": [
+     {
+      "bestand": "daksneeuw/planken-zagerij-pannen-w-0.png",
+      "b": 387,
+      "h": 386,
+      "anker": [
+       227,
+       241
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-zagerij-pannen-w-1.png",
+      "b": 389,
+      "h": 386,
+      "anker": [
+       228,
+       241
+      ]
+     },
+     {
+      "bestand": "daksneeuw/planken-zagerij-pannen-w-2.png",
+      "b": 390,
+      "h": 386,
+      "anker": [
+       229,
+       241
+      ]
+     }
+    ],
+    "roze-zagerij-riet-z": [
+     {
+      "bestand": "daksneeuw/roze-zagerij-riet-z-0.png",
+      "b": 416,
+      "h": 457,
+      "anker": [
+       177,
+       308
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-zagerij-riet-z-1.png",
+      "b": 421,
+      "h": 458,
+      "anker": [
+       177,
+       308
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-zagerij-riet-z-2.png",
+      "b": 422,
+      "h": 458,
+      "anker": [
+       177,
+       308
+      ]
+     }
+    ],
+    "roze-zagerij-riet-o": [
+     {
+      "bestand": "daksneeuw/roze-zagerij-riet-o-0.png",
+      "b": 418,
+      "h": 445,
+      "anker": [
+       304,
+       273
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-zagerij-riet-o-1.png",
+      "b": 421,
+      "h": 446,
+      "anker": [
+       305,
+       273
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-zagerij-riet-o-2.png",
+      "b": 422,
+      "h": 446,
+      "anker": [
+       305,
+       273
+      ]
+     }
+    ],
+    "roze-zagerij-riet-n": [
+     {
+      "bestand": "daksneeuw/roze-zagerij-riet-n-0.png",
+      "b": 420,
+      "h": 445,
+      "anker": [
+       115,
+       273
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-zagerij-riet-n-1.png",
+      "b": 421,
+      "h": 445,
+      "anker": [
+       116,
+       273
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-zagerij-riet-n-2.png",
+      "b": 422,
+      "h": 446,
+      "anker": [
+       117,
+       273
+      ]
+     }
+    ],
+    "roze-zagerij-riet-w": [
+     {
+      "bestand": "daksneeuw/roze-zagerij-riet-w-0.png",
+      "b": 423,
+      "h": 453,
+      "anker": [
+       245,
+       308
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-zagerij-riet-w-1.png",
+      "b": 423,
+      "h": 453,
+      "anker": [
+       245,
+       308
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-zagerij-riet-w-2.png",
+      "b": 424,
+      "h": 453,
+      "anker": [
+       246,
+       308
+      ]
+     }
+    ],
+    "roze-zagerij-leien-z": [
+     {
+      "bestand": "daksneeuw/roze-zagerij-leien-z-0.png",
+      "b": 373,
+      "h": 416,
+      "anker": [
+       160,
+       267
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-zagerij-leien-z-1.png",
+      "b": 375,
+      "h": 417,
+      "anker": [
+       161,
+       267
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-zagerij-leien-z-2.png",
+      "b": 376,
+      "h": 417,
+      "anker": [
+       161,
+       267
+      ]
+     }
+    ],
+    "roze-zagerij-leien-o": [
+     {
+      "bestand": "daksneeuw/roze-zagerij-leien-o-0.png",
+      "b": 354,
+      "h": 405,
+      "anker": [
+       257,
+       233
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-zagerij-leien-o-1.png",
+      "b": 370,
+      "h": 406,
+      "anker": [
+       273,
+       233
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-zagerij-leien-o-2.png",
+      "b": 372,
+      "h": 406,
+      "anker": [
+       275,
+       233
+      ]
+     }
+    ],
+    "roze-zagerij-leien-n": [
+     {
+      "bestand": "daksneeuw/roze-zagerij-leien-n-0.png",
+      "b": 353,
+      "h": 405,
+      "anker": [
+       96,
+       233
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-zagerij-leien-n-1.png",
+      "b": 372,
+      "h": 405,
+      "anker": [
+       97,
+       233
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-zagerij-leien-n-2.png",
+      "b": 372,
+      "h": 406,
+      "anker": [
+       97,
+       233
+      ]
+     }
+    ],
+    "roze-zagerij-leien-w": [
+     {
+      "bestand": "daksneeuw/roze-zagerij-leien-w-0.png",
+      "b": 388,
+      "h": 412,
+      "anker": [
+       227,
+       267
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-zagerij-leien-w-1.png",
+      "b": 389,
+      "h": 412,
+      "anker": [
+       228,
+       267
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-zagerij-leien-w-2.png",
+      "b": 390,
+      "h": 412,
+      "anker": [
+       229,
+       267
+      ]
+     }
+    ],
+    "roze-zagerij-pannen-z": [
+     {
+      "bestand": "daksneeuw/roze-zagerij-pannen-z-0.png",
+      "b": 373,
+      "h": 390,
+      "anker": [
+       160,
+       241
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-zagerij-pannen-z-1.png",
+      "b": 380,
+      "h": 391,
+      "anker": [
+       161,
+       241
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-zagerij-pannen-z-2.png",
+      "b": 384,
+      "h": 391,
+      "anker": [
+       161,
+       241
+      ]
+     }
+    ],
+    "roze-zagerij-pannen-o": [
+     {
+      "bestand": "daksneeuw/roze-zagerij-pannen-o-0.png",
+      "b": 353,
+      "h": 378,
+      "anker": [
+       257,
+       206
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-zagerij-pannen-o-1.png",
+      "b": 371,
+      "h": 379,
+      "anker": [
+       274,
+       206
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-zagerij-pannen-o-2.png",
+      "b": 383,
+      "h": 379,
+      "anker": [
+       286,
+       206
+      ]
+     }
+    ],
+    "roze-zagerij-pannen-n": [
+     {
+      "bestand": "daksneeuw/roze-zagerij-pannen-n-0.png",
+      "b": 353,
+      "h": 378,
+      "anker": [
+       96,
+       206
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-zagerij-pannen-n-1.png",
+      "b": 383,
+      "h": 378,
+      "anker": [
+       97,
+       206
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-zagerij-pannen-n-2.png",
+      "b": 384,
+      "h": 379,
+      "anker": [
+       97,
+       206
+      ]
+     }
+    ],
+    "roze-zagerij-pannen-w": [
+     {
+      "bestand": "daksneeuw/roze-zagerij-pannen-w-0.png",
+      "b": 387,
+      "h": 386,
+      "anker": [
+       227,
+       241
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-zagerij-pannen-w-1.png",
+      "b": 389,
+      "h": 386,
+      "anker": [
+       228,
+       241
+      ]
+     },
+     {
+      "bestand": "daksneeuw/roze-zagerij-pannen-w-2.png",
+      "b": 390,
+      "h": 386,
+      "anker": [
+       229,
+       241
+      ]
+     }
     ]
    }
   };

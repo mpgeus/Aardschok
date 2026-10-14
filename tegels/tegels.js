@@ -381930,868 +381930,3460 @@
       "doos": null
      },
      {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
-     },
-     {
-      "naam": null,
-      "vast": false,
-      "beslaat": null,
-      "groep": null,
-      "staat": null,
-      "deur": null,
-      "doos": null
+      "naam": "wit-zagerij-riet-z",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       3,
+       4
+      ],
+      "doos": [
+       177,
+       309,
+       246,
+       156
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "wit",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "riet",
+       "steen": null,
+       "stand": "z"
+      },
+      "bestand": "tegels/huizen/wit-zagerij-riet-z.png",
+      "cel": [
+       0,
+       0,
+       423,
+       465
+      ],
+      "anker": [
+       177,
+       309
+      ]
+     },
+     {
+      "naam": "wit-zagerij-riet-o",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       4
+      ],
+      "doos": [
+       305,
+       274,
+       119,
+       178
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "wit",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "riet",
+       "steen": null,
+       "stand": "o"
+      },
+      "bestand": "tegels/huizen/wit-zagerij-riet-o.png",
+      "cel": [
+       0,
+       0,
+       424,
+       452
+      ],
+      "anker": [
+       305,
+       274
+      ]
+     },
+     {
+      "naam": "wit-zagerij-riet-n",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       -1
+      ],
+      "doos": [
+       118,
+       274,
+       305,
+       178
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "wit",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "riet",
+       "steen": null,
+       "stand": "n"
+      },
+      "bestand": "tegels/huizen/wit-zagerij-riet-n.png",
+      "cel": [
+       0,
+       0,
+       423,
+       452
+      ],
+      "anker": [
+       118,
+       274
+      ]
+     },
+     {
+      "naam": "wit-zagerij-riet-w",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       -1,
+       3
+      ],
+      "doos": [
+       247,
+       309,
+       178,
+       150
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "wit",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "riet",
+       "steen": null,
+       "stand": "w"
+      },
+      "bestand": "tegels/huizen/wit-zagerij-riet-w.png",
+      "cel": [
+       0,
+       0,
+       425,
+       459
+      ],
+      "anker": [
+       247,
+       309
+      ]
+     },
+     {
+      "naam": "wit-zagerij-leien-z",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       3,
+       4
+      ],
+      "doos": [
+       162,
+       268,
+       226,
+       156
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "wit",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "leien",
+       "steen": null,
+       "stand": "z"
+      },
+      "bestand": "tegels/huizen/wit-zagerij-leien-z.png",
+      "cel": [
+       0,
+       0,
+       388,
+       424
+      ],
+      "anker": [
+       162,
+       268
+      ]
+     },
+     {
+      "naam": "wit-zagerij-leien-o",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       4
+      ],
+      "doos": [
+       290,
+       234,
+       102,
+       178
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "wit",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "leien",
+       "steen": null,
+       "stand": "o"
+      },
+      "bestand": "tegels/huizen/wit-zagerij-leien-o.png",
+      "cel": [
+       0,
+       0,
+       392,
+       412
+      ],
+      "anker": [
+       290,
+       234
+      ]
+     },
+     {
+      "naam": "wit-zagerij-leien-n",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       -1
+      ],
+      "doos": [
+       98,
+       234,
+       290,
+       178
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "wit",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "leien",
+       "steen": null,
+       "stand": "n"
+      },
+      "bestand": "tegels/huizen/wit-zagerij-leien-n.png",
+      "cel": [
+       0,
+       0,
+       388,
+       412
+      ],
+      "anker": [
+       98,
+       234
+      ]
+     },
+     {
+      "naam": "wit-zagerij-leien-w",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       -1,
+       3
+      ],
+      "doos": [
+       230,
+       268,
+       162,
+       150
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "wit",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "leien",
+       "steen": null,
+       "stand": "w"
+      },
+      "bestand": "tegels/huizen/wit-zagerij-leien-w.png",
+      "cel": [
+       0,
+       0,
+       392,
+       418
+      ],
+      "anker": [
+       230,
+       268
+      ]
+     },
+     {
+      "naam": "wit-zagerij-pannen-z",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       3,
+       4
+      ],
+      "doos": [
+       162,
+       242,
+       226,
+       156
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "wit",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "pannen",
+       "steen": null,
+       "stand": "z"
+      },
+      "bestand": "tegels/huizen/wit-zagerij-pannen-z.png",
+      "cel": [
+       0,
+       0,
+       388,
+       398
+      ],
+      "anker": [
+       162,
+       242
+      ]
+     },
+     {
+      "naam": "wit-zagerij-pannen-o",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       4
+      ],
+      "doos": [
+       290,
+       207,
+       102,
+       178
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "wit",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "pannen",
+       "steen": null,
+       "stand": "o"
+      },
+      "bestand": "tegels/huizen/wit-zagerij-pannen-o.png",
+      "cel": [
+       0,
+       0,
+       392,
+       385
+      ],
+      "anker": [
+       290,
+       207
+      ]
+     },
+     {
+      "naam": "wit-zagerij-pannen-n",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       -1
+      ],
+      "doos": [
+       98,
+       207,
+       290,
+       178
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "wit",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "pannen",
+       "steen": null,
+       "stand": "n"
+      },
+      "bestand": "tegels/huizen/wit-zagerij-pannen-n.png",
+      "cel": [
+       0,
+       0,
+       388,
+       385
+      ],
+      "anker": [
+       98,
+       207
+      ]
+     },
+     {
+      "naam": "wit-zagerij-pannen-w",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       -1,
+       3
+      ],
+      "doos": [
+       230,
+       242,
+       162,
+       150
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "wit",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "pannen",
+       "steen": null,
+       "stand": "w"
+      },
+      "bestand": "tegels/huizen/wit-zagerij-pannen-w.png",
+      "cel": [
+       0,
+       0,
+       392,
+       392
+      ],
+      "anker": [
+       230,
+       242
+      ]
+     },
+     {
+      "naam": "oker-zagerij-riet-z",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       3,
+       4
+      ],
+      "doos": [
+       177,
+       309,
+       246,
+       156
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "oker",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "riet",
+       "steen": null,
+       "stand": "z"
+      },
+      "bestand": "tegels/huizen/oker-zagerij-riet-z.png",
+      "cel": [
+       0,
+       0,
+       423,
+       465
+      ],
+      "anker": [
+       177,
+       309
+      ]
+     },
+     {
+      "naam": "oker-zagerij-riet-o",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       4
+      ],
+      "doos": [
+       305,
+       274,
+       119,
+       178
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "oker",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "riet",
+       "steen": null,
+       "stand": "o"
+      },
+      "bestand": "tegels/huizen/oker-zagerij-riet-o.png",
+      "cel": [
+       0,
+       0,
+       424,
+       452
+      ],
+      "anker": [
+       305,
+       274
+      ]
+     },
+     {
+      "naam": "oker-zagerij-riet-n",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       -1
+      ],
+      "doos": [
+       118,
+       274,
+       305,
+       178
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "oker",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "riet",
+       "steen": null,
+       "stand": "n"
+      },
+      "bestand": "tegels/huizen/oker-zagerij-riet-n.png",
+      "cel": [
+       0,
+       0,
+       423,
+       452
+      ],
+      "anker": [
+       118,
+       274
+      ]
+     },
+     {
+      "naam": "oker-zagerij-riet-w",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       -1,
+       3
+      ],
+      "doos": [
+       247,
+       309,
+       178,
+       150
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "oker",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "riet",
+       "steen": null,
+       "stand": "w"
+      },
+      "bestand": "tegels/huizen/oker-zagerij-riet-w.png",
+      "cel": [
+       0,
+       0,
+       425,
+       459
+      ],
+      "anker": [
+       247,
+       309
+      ]
+     },
+     {
+      "naam": "oker-zagerij-leien-z",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       3,
+       4
+      ],
+      "doos": [
+       162,
+       268,
+       226,
+       156
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "oker",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "leien",
+       "steen": null,
+       "stand": "z"
+      },
+      "bestand": "tegels/huizen/oker-zagerij-leien-z.png",
+      "cel": [
+       0,
+       0,
+       388,
+       424
+      ],
+      "anker": [
+       162,
+       268
+      ]
+     },
+     {
+      "naam": "oker-zagerij-leien-o",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       4
+      ],
+      "doos": [
+       290,
+       234,
+       102,
+       178
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "oker",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "leien",
+       "steen": null,
+       "stand": "o"
+      },
+      "bestand": "tegels/huizen/oker-zagerij-leien-o.png",
+      "cel": [
+       0,
+       0,
+       392,
+       412
+      ],
+      "anker": [
+       290,
+       234
+      ]
+     },
+     {
+      "naam": "oker-zagerij-leien-n",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       -1
+      ],
+      "doos": [
+       98,
+       234,
+       290,
+       178
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "oker",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "leien",
+       "steen": null,
+       "stand": "n"
+      },
+      "bestand": "tegels/huizen/oker-zagerij-leien-n.png",
+      "cel": [
+       0,
+       0,
+       388,
+       412
+      ],
+      "anker": [
+       98,
+       234
+      ]
+     },
+     {
+      "naam": "oker-zagerij-leien-w",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       -1,
+       3
+      ],
+      "doos": [
+       230,
+       268,
+       162,
+       150
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "oker",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "leien",
+       "steen": null,
+       "stand": "w"
+      },
+      "bestand": "tegels/huizen/oker-zagerij-leien-w.png",
+      "cel": [
+       0,
+       0,
+       392,
+       418
+      ],
+      "anker": [
+       230,
+       268
+      ]
+     },
+     {
+      "naam": "oker-zagerij-pannen-z",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       3,
+       4
+      ],
+      "doos": [
+       162,
+       242,
+       226,
+       156
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "oker",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "pannen",
+       "steen": null,
+       "stand": "z"
+      },
+      "bestand": "tegels/huizen/oker-zagerij-pannen-z.png",
+      "cel": [
+       0,
+       0,
+       388,
+       398
+      ],
+      "anker": [
+       162,
+       242
+      ]
+     },
+     {
+      "naam": "oker-zagerij-pannen-o",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       4
+      ],
+      "doos": [
+       290,
+       207,
+       102,
+       178
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "oker",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "pannen",
+       "steen": null,
+       "stand": "o"
+      },
+      "bestand": "tegels/huizen/oker-zagerij-pannen-o.png",
+      "cel": [
+       0,
+       0,
+       392,
+       385
+      ],
+      "anker": [
+       290,
+       207
+      ]
+     },
+     {
+      "naam": "oker-zagerij-pannen-n",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       -1
+      ],
+      "doos": [
+       98,
+       207,
+       290,
+       178
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "oker",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "pannen",
+       "steen": null,
+       "stand": "n"
+      },
+      "bestand": "tegels/huizen/oker-zagerij-pannen-n.png",
+      "cel": [
+       0,
+       0,
+       388,
+       385
+      ],
+      "anker": [
+       98,
+       207
+      ]
+     },
+     {
+      "naam": "oker-zagerij-pannen-w",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       -1,
+       3
+      ],
+      "doos": [
+       230,
+       242,
+       162,
+       150
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "oker",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "pannen",
+       "steen": null,
+       "stand": "w"
+      },
+      "bestand": "tegels/huizen/oker-zagerij-pannen-w.png",
+      "cel": [
+       0,
+       0,
+       392,
+       392
+      ],
+      "anker": [
+       230,
+       242
+      ]
+     },
+     {
+      "naam": "planken-zagerij-spanen-z",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       3,
+       4
+      ],
+      "doos": [
+       162,
+       256,
+       226,
+       156
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "planken",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "spanen",
+       "steen": null,
+       "stand": "z"
+      },
+      "bestand": "tegels/huizen/planken-zagerij-spanen-z.png",
+      "cel": [
+       0,
+       0,
+       388,
+       412
+      ],
+      "anker": [
+       162,
+       256
+      ]
+     },
+     {
+      "naam": "planken-zagerij-spanen-o",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       4
+      ],
+      "doos": [
+       290,
+       222,
+       102,
+       178
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "planken",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "spanen",
+       "steen": null,
+       "stand": "o"
+      },
+      "bestand": "tegels/huizen/planken-zagerij-spanen-o.png",
+      "cel": [
+       0,
+       0,
+       392,
+       400
+      ],
+      "anker": [
+       290,
+       222
+      ]
+     },
+     {
+      "naam": "planken-zagerij-spanen-n",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       -1
+      ],
+      "doos": [
+       98,
+       222,
+       290,
+       178
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "planken",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "spanen",
+       "steen": null,
+       "stand": "n"
+      },
+      "bestand": "tegels/huizen/planken-zagerij-spanen-n.png",
+      "cel": [
+       0,
+       0,
+       388,
+       400
+      ],
+      "anker": [
+       98,
+       222
+      ]
+     },
+     {
+      "naam": "planken-zagerij-spanen-w",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       -1,
+       3
+      ],
+      "doos": [
+       230,
+       256,
+       162,
+       150
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "planken",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "spanen",
+       "steen": null,
+       "stand": "w"
+      },
+      "bestand": "tegels/huizen/planken-zagerij-spanen-w.png",
+      "cel": [
+       0,
+       0,
+       392,
+       406
+      ],
+      "anker": [
+       230,
+       256
+      ]
+     },
+     {
+      "naam": "planken-zagerij-leien-z",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       3,
+       4
+      ],
+      "doos": [
+       162,
+       268,
+       226,
+       156
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "planken",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "leien",
+       "steen": null,
+       "stand": "z"
+      },
+      "bestand": "tegels/huizen/planken-zagerij-leien-z.png",
+      "cel": [
+       0,
+       0,
+       388,
+       424
+      ],
+      "anker": [
+       162,
+       268
+      ]
+     },
+     {
+      "naam": "planken-zagerij-leien-o",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       4
+      ],
+      "doos": [
+       290,
+       234,
+       102,
+       178
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "planken",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "leien",
+       "steen": null,
+       "stand": "o"
+      },
+      "bestand": "tegels/huizen/planken-zagerij-leien-o.png",
+      "cel": [
+       0,
+       0,
+       392,
+       412
+      ],
+      "anker": [
+       290,
+       234
+      ]
+     },
+     {
+      "naam": "planken-zagerij-leien-n",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       -1
+      ],
+      "doos": [
+       98,
+       234,
+       290,
+       178
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "planken",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "leien",
+       "steen": null,
+       "stand": "n"
+      },
+      "bestand": "tegels/huizen/planken-zagerij-leien-n.png",
+      "cel": [
+       0,
+       0,
+       388,
+       412
+      ],
+      "anker": [
+       98,
+       234
+      ]
+     },
+     {
+      "naam": "planken-zagerij-leien-w",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       -1,
+       3
+      ],
+      "doos": [
+       230,
+       268,
+       162,
+       150
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "planken",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "leien",
+       "steen": null,
+       "stand": "w"
+      },
+      "bestand": "tegels/huizen/planken-zagerij-leien-w.png",
+      "cel": [
+       0,
+       0,
+       392,
+       418
+      ],
+      "anker": [
+       230,
+       268
+      ]
+     },
+     {
+      "naam": "planken-zagerij-pannen-z",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       3,
+       4
+      ],
+      "doos": [
+       162,
+       242,
+       226,
+       156
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "planken",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "pannen",
+       "steen": null,
+       "stand": "z"
+      },
+      "bestand": "tegels/huizen/planken-zagerij-pannen-z.png",
+      "cel": [
+       0,
+       0,
+       388,
+       398
+      ],
+      "anker": [
+       162,
+       242
+      ]
+     },
+     {
+      "naam": "planken-zagerij-pannen-o",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       4
+      ],
+      "doos": [
+       290,
+       207,
+       102,
+       178
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "planken",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "pannen",
+       "steen": null,
+       "stand": "o"
+      },
+      "bestand": "tegels/huizen/planken-zagerij-pannen-o.png",
+      "cel": [
+       0,
+       0,
+       392,
+       385
+      ],
+      "anker": [
+       290,
+       207
+      ]
+     },
+     {
+      "naam": "planken-zagerij-pannen-n",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       -1
+      ],
+      "doos": [
+       98,
+       207,
+       290,
+       178
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "planken",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "pannen",
+       "steen": null,
+       "stand": "n"
+      },
+      "bestand": "tegels/huizen/planken-zagerij-pannen-n.png",
+      "cel": [
+       0,
+       0,
+       388,
+       385
+      ],
+      "anker": [
+       98,
+       207
+      ]
+     },
+     {
+      "naam": "planken-zagerij-pannen-w",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       -1,
+       3
+      ],
+      "doos": [
+       230,
+       242,
+       162,
+       150
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "planken",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "pannen",
+       "steen": null,
+       "stand": "w"
+      },
+      "bestand": "tegels/huizen/planken-zagerij-pannen-w.png",
+      "cel": [
+       0,
+       0,
+       392,
+       392
+      ],
+      "anker": [
+       230,
+       242
+      ]
+     },
+     {
+      "naam": "roze-zagerij-riet-z",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       3,
+       4
+      ],
+      "doos": [
+       177,
+       309,
+       246,
+       156
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "roze",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "riet",
+       "steen": null,
+       "stand": "z"
+      },
+      "bestand": "tegels/huizen/roze-zagerij-riet-z.png",
+      "cel": [
+       0,
+       0,
+       423,
+       465
+      ],
+      "anker": [
+       177,
+       309
+      ]
+     },
+     {
+      "naam": "roze-zagerij-riet-o",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       4
+      ],
+      "doos": [
+       305,
+       274,
+       119,
+       178
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "roze",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "riet",
+       "steen": null,
+       "stand": "o"
+      },
+      "bestand": "tegels/huizen/roze-zagerij-riet-o.png",
+      "cel": [
+       0,
+       0,
+       424,
+       452
+      ],
+      "anker": [
+       305,
+       274
+      ]
+     },
+     {
+      "naam": "roze-zagerij-riet-n",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       -1
+      ],
+      "doos": [
+       118,
+       274,
+       305,
+       178
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "roze",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "riet",
+       "steen": null,
+       "stand": "n"
+      },
+      "bestand": "tegels/huizen/roze-zagerij-riet-n.png",
+      "cel": [
+       0,
+       0,
+       423,
+       452
+      ],
+      "anker": [
+       118,
+       274
+      ]
+     },
+     {
+      "naam": "roze-zagerij-riet-w",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       -1,
+       3
+      ],
+      "doos": [
+       247,
+       309,
+       178,
+       150
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "roze",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "riet",
+       "steen": null,
+       "stand": "w"
+      },
+      "bestand": "tegels/huizen/roze-zagerij-riet-w.png",
+      "cel": [
+       0,
+       0,
+       425,
+       459
+      ],
+      "anker": [
+       247,
+       309
+      ]
+     },
+     {
+      "naam": "roze-zagerij-leien-z",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       3,
+       4
+      ],
+      "doos": [
+       162,
+       268,
+       226,
+       156
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "roze",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "leien",
+       "steen": null,
+       "stand": "z"
+      },
+      "bestand": "tegels/huizen/roze-zagerij-leien-z.png",
+      "cel": [
+       0,
+       0,
+       388,
+       424
+      ],
+      "anker": [
+       162,
+       268
+      ]
+     },
+     {
+      "naam": "roze-zagerij-leien-o",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       4
+      ],
+      "doos": [
+       290,
+       234,
+       102,
+       178
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "roze",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "leien",
+       "steen": null,
+       "stand": "o"
+      },
+      "bestand": "tegels/huizen/roze-zagerij-leien-o.png",
+      "cel": [
+       0,
+       0,
+       392,
+       412
+      ],
+      "anker": [
+       290,
+       234
+      ]
+     },
+     {
+      "naam": "roze-zagerij-leien-n",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       -1
+      ],
+      "doos": [
+       98,
+       234,
+       290,
+       178
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "roze",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "leien",
+       "steen": null,
+       "stand": "n"
+      },
+      "bestand": "tegels/huizen/roze-zagerij-leien-n.png",
+      "cel": [
+       0,
+       0,
+       388,
+       412
+      ],
+      "anker": [
+       98,
+       234
+      ]
+     },
+     {
+      "naam": "roze-zagerij-leien-w",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       -1,
+       3
+      ],
+      "doos": [
+       230,
+       268,
+       162,
+       150
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "roze",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "leien",
+       "steen": null,
+       "stand": "w"
+      },
+      "bestand": "tegels/huizen/roze-zagerij-leien-w.png",
+      "cel": [
+       0,
+       0,
+       392,
+       418
+      ],
+      "anker": [
+       230,
+       268
+      ]
+     },
+     {
+      "naam": "roze-zagerij-pannen-z",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       3,
+       4
+      ],
+      "doos": [
+       162,
+       242,
+       226,
+       156
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "roze",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "pannen",
+       "steen": null,
+       "stand": "z"
+      },
+      "bestand": "tegels/huizen/roze-zagerij-pannen-z.png",
+      "cel": [
+       0,
+       0,
+       388,
+       398
+      ],
+      "anker": [
+       162,
+       242
+      ]
+     },
+     {
+      "naam": "roze-zagerij-pannen-o",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       4
+      ],
+      "doos": [
+       290,
+       207,
+       102,
+       178
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "roze",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "pannen",
+       "steen": null,
+       "stand": "o"
+      },
+      "bestand": "tegels/huizen/roze-zagerij-pannen-o.png",
+      "cel": [
+       0,
+       0,
+       392,
+       385
+      ],
+      "anker": [
+       290,
+       207
+      ]
+     },
+     {
+      "naam": "roze-zagerij-pannen-n",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       -1
+      ],
+      "doos": [
+       98,
+       207,
+       290,
+       178
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "roze",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "pannen",
+       "steen": null,
+       "stand": "n"
+      },
+      "bestand": "tegels/huizen/roze-zagerij-pannen-n.png",
+      "cel": [
+       0,
+       0,
+       388,
+       385
+      ],
+      "anker": [
+       98,
+       207
+      ]
+     },
+     {
+      "naam": "roze-zagerij-pannen-w",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       -1,
+       3
+      ],
+      "doos": [
+       230,
+       242,
+       162,
+       150
+      ],
+      "ramen": [],
+      "stijl": {
+       "stijl": "roze",
+       "vorm": "zagerij",
+       "soort": "zagerij",
+       "dak": "pannen",
+       "steen": null,
+       "stand": "w"
+      },
+      "bestand": "tegels/huizen/roze-zagerij-pannen-w.png",
+      "cel": [
+       0,
+       0,
+       392,
+       392
+      ],
+      "anker": [
+       230,
+       242
+      ]
+     },
+     {
+      "naam": "wit-zagerij-riet-z-oud",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       3,
+       4
+      ],
+      "doos": [
+       177,
+       309,
+       246,
+       156
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/wit-zagerij-riet-z-oud.png",
+      "cel": [
+       0,
+       0,
+       423,
+       465
+      ],
+      "anker": [
+       177,
+       309
+      ]
+     },
+     {
+      "naam": "wit-zagerij-riet-o-oud",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       4
+      ],
+      "doos": [
+       305,
+       274,
+       119,
+       178
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/wit-zagerij-riet-o-oud.png",
+      "cel": [
+       0,
+       0,
+       424,
+       452
+      ],
+      "anker": [
+       305,
+       274
+      ]
+     },
+     {
+      "naam": "wit-zagerij-riet-n-oud",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       -1
+      ],
+      "doos": [
+       118,
+       274,
+       305,
+       178
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/wit-zagerij-riet-n-oud.png",
+      "cel": [
+       0,
+       0,
+       423,
+       452
+      ],
+      "anker": [
+       118,
+       274
+      ]
+     },
+     {
+      "naam": "wit-zagerij-riet-w-oud",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       -1,
+       3
+      ],
+      "doos": [
+       247,
+       309,
+       178,
+       150
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/wit-zagerij-riet-w-oud.png",
+      "cel": [
+       0,
+       0,
+       425,
+       459
+      ],
+      "anker": [
+       247,
+       309
+      ]
+     },
+     {
+      "naam": "wit-zagerij-leien-z-oud",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       3,
+       4
+      ],
+      "doos": [
+       162,
+       268,
+       226,
+       156
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/wit-zagerij-leien-z-oud.png",
+      "cel": [
+       0,
+       0,
+       388,
+       424
+      ],
+      "anker": [
+       162,
+       268
+      ]
+     },
+     {
+      "naam": "wit-zagerij-leien-o-oud",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       4
+      ],
+      "doos": [
+       290,
+       234,
+       102,
+       178
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/wit-zagerij-leien-o-oud.png",
+      "cel": [
+       0,
+       0,
+       392,
+       412
+      ],
+      "anker": [
+       290,
+       234
+      ]
+     },
+     {
+      "naam": "wit-zagerij-leien-n-oud",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       -1
+      ],
+      "doos": [
+       98,
+       234,
+       290,
+       178
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/wit-zagerij-leien-n-oud.png",
+      "cel": [
+       0,
+       0,
+       388,
+       412
+      ],
+      "anker": [
+       98,
+       234
+      ]
+     },
+     {
+      "naam": "wit-zagerij-leien-w-oud",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       -1,
+       3
+      ],
+      "doos": [
+       230,
+       268,
+       162,
+       150
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/wit-zagerij-leien-w-oud.png",
+      "cel": [
+       0,
+       0,
+       392,
+       418
+      ],
+      "anker": [
+       230,
+       268
+      ]
+     },
+     {
+      "naam": "wit-zagerij-pannen-z-oud",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       3,
+       4
+      ],
+      "doos": [
+       162,
+       242,
+       226,
+       156
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/wit-zagerij-pannen-z-oud.png",
+      "cel": [
+       0,
+       0,
+       388,
+       398
+      ],
+      "anker": [
+       162,
+       242
+      ]
+     },
+     {
+      "naam": "wit-zagerij-pannen-o-oud",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       4
+      ],
+      "doos": [
+       290,
+       207,
+       102,
+       178
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/wit-zagerij-pannen-o-oud.png",
+      "cel": [
+       0,
+       0,
+       392,
+       385
+      ],
+      "anker": [
+       290,
+       207
+      ]
+     },
+     {
+      "naam": "wit-zagerij-pannen-n-oud",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       -1
+      ],
+      "doos": [
+       98,
+       207,
+       290,
+       178
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/wit-zagerij-pannen-n-oud.png",
+      "cel": [
+       0,
+       0,
+       388,
+       385
+      ],
+      "anker": [
+       98,
+       207
+      ]
+     },
+     {
+      "naam": "wit-zagerij-pannen-w-oud",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       -1,
+       3
+      ],
+      "doos": [
+       230,
+       242,
+       162,
+       150
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/wit-zagerij-pannen-w-oud.png",
+      "cel": [
+       0,
+       0,
+       392,
+       392
+      ],
+      "anker": [
+       230,
+       242
+      ]
+     },
+     {
+      "naam": "oker-zagerij-riet-z-oud",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       3,
+       4
+      ],
+      "doos": [
+       177,
+       309,
+       246,
+       156
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/oker-zagerij-riet-z-oud.png",
+      "cel": [
+       0,
+       0,
+       423,
+       465
+      ],
+      "anker": [
+       177,
+       309
+      ]
+     },
+     {
+      "naam": "oker-zagerij-riet-o-oud",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       4
+      ],
+      "doos": [
+       305,
+       274,
+       119,
+       178
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/oker-zagerij-riet-o-oud.png",
+      "cel": [
+       0,
+       0,
+       424,
+       452
+      ],
+      "anker": [
+       305,
+       274
+      ]
+     },
+     {
+      "naam": "oker-zagerij-riet-n-oud",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       -1
+      ],
+      "doos": [
+       118,
+       274,
+       305,
+       178
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/oker-zagerij-riet-n-oud.png",
+      "cel": [
+       0,
+       0,
+       423,
+       452
+      ],
+      "anker": [
+       118,
+       274
+      ]
+     },
+     {
+      "naam": "oker-zagerij-riet-w-oud",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       -1,
+       3
+      ],
+      "doos": [
+       247,
+       309,
+       178,
+       150
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/oker-zagerij-riet-w-oud.png",
+      "cel": [
+       0,
+       0,
+       425,
+       459
+      ],
+      "anker": [
+       247,
+       309
+      ]
+     },
+     {
+      "naam": "oker-zagerij-leien-z-oud",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       3,
+       4
+      ],
+      "doos": [
+       162,
+       268,
+       226,
+       156
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/oker-zagerij-leien-z-oud.png",
+      "cel": [
+       0,
+       0,
+       388,
+       424
+      ],
+      "anker": [
+       162,
+       268
+      ]
+     },
+     {
+      "naam": "oker-zagerij-leien-o-oud",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       4
+      ],
+      "doos": [
+       290,
+       234,
+       102,
+       178
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/oker-zagerij-leien-o-oud.png",
+      "cel": [
+       0,
+       0,
+       392,
+       412
+      ],
+      "anker": [
+       290,
+       234
+      ]
+     },
+     {
+      "naam": "oker-zagerij-leien-n-oud",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       -1
+      ],
+      "doos": [
+       98,
+       234,
+       290,
+       178
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/oker-zagerij-leien-n-oud.png",
+      "cel": [
+       0,
+       0,
+       388,
+       412
+      ],
+      "anker": [
+       98,
+       234
+      ]
+     },
+     {
+      "naam": "oker-zagerij-leien-w-oud",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       -1,
+       3
+      ],
+      "doos": [
+       230,
+       268,
+       162,
+       150
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/oker-zagerij-leien-w-oud.png",
+      "cel": [
+       0,
+       0,
+       392,
+       418
+      ],
+      "anker": [
+       230,
+       268
+      ]
+     },
+     {
+      "naam": "oker-zagerij-pannen-z-oud",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       3,
+       4
+      ],
+      "doos": [
+       162,
+       242,
+       226,
+       156
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/oker-zagerij-pannen-z-oud.png",
+      "cel": [
+       0,
+       0,
+       388,
+       398
+      ],
+      "anker": [
+       162,
+       242
+      ]
+     },
+     {
+      "naam": "oker-zagerij-pannen-o-oud",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       4
+      ],
+      "doos": [
+       290,
+       207,
+       102,
+       178
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/oker-zagerij-pannen-o-oud.png",
+      "cel": [
+       0,
+       0,
+       392,
+       385
+      ],
+      "anker": [
+       290,
+       207
+      ]
+     },
+     {
+      "naam": "oker-zagerij-pannen-n-oud",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       -1
+      ],
+      "doos": [
+       98,
+       207,
+       290,
+       178
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/oker-zagerij-pannen-n-oud.png",
+      "cel": [
+       0,
+       0,
+       388,
+       385
+      ],
+      "anker": [
+       98,
+       207
+      ]
+     },
+     {
+      "naam": "oker-zagerij-pannen-w-oud",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       -1,
+       3
+      ],
+      "doos": [
+       230,
+       242,
+       162,
+       150
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/oker-zagerij-pannen-w-oud.png",
+      "cel": [
+       0,
+       0,
+       392,
+       392
+      ],
+      "anker": [
+       230,
+       242
+      ]
+     },
+     {
+      "naam": "planken-zagerij-spanen-z-oud",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       3,
+       4
+      ],
+      "doos": [
+       162,
+       256,
+       226,
+       156
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/planken-zagerij-spanen-z-oud.png",
+      "cel": [
+       0,
+       0,
+       388,
+       412
+      ],
+      "anker": [
+       162,
+       256
+      ]
+     },
+     {
+      "naam": "planken-zagerij-spanen-o-oud",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       4
+      ],
+      "doos": [
+       290,
+       222,
+       102,
+       178
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/planken-zagerij-spanen-o-oud.png",
+      "cel": [
+       0,
+       0,
+       392,
+       400
+      ],
+      "anker": [
+       290,
+       222
+      ]
+     },
+     {
+      "naam": "planken-zagerij-spanen-n-oud",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       -1
+      ],
+      "doos": [
+       98,
+       222,
+       290,
+       178
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/planken-zagerij-spanen-n-oud.png",
+      "cel": [
+       0,
+       0,
+       388,
+       400
+      ],
+      "anker": [
+       98,
+       222
+      ]
+     },
+     {
+      "naam": "planken-zagerij-spanen-w-oud",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       -1,
+       3
+      ],
+      "doos": [
+       230,
+       256,
+       162,
+       150
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/planken-zagerij-spanen-w-oud.png",
+      "cel": [
+       0,
+       0,
+       392,
+       406
+      ],
+      "anker": [
+       230,
+       256
+      ]
+     },
+     {
+      "naam": "planken-zagerij-leien-z-oud",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       3,
+       4
+      ],
+      "doos": [
+       162,
+       268,
+       226,
+       156
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/planken-zagerij-leien-z-oud.png",
+      "cel": [
+       0,
+       0,
+       388,
+       424
+      ],
+      "anker": [
+       162,
+       268
+      ]
+     },
+     {
+      "naam": "planken-zagerij-leien-o-oud",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       4
+      ],
+      "doos": [
+       290,
+       234,
+       102,
+       178
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/planken-zagerij-leien-o-oud.png",
+      "cel": [
+       0,
+       0,
+       392,
+       412
+      ],
+      "anker": [
+       290,
+       234
+      ]
+     },
+     {
+      "naam": "planken-zagerij-leien-n-oud",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       -1
+      ],
+      "doos": [
+       98,
+       234,
+       290,
+       178
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/planken-zagerij-leien-n-oud.png",
+      "cel": [
+       0,
+       0,
+       388,
+       412
+      ],
+      "anker": [
+       98,
+       234
+      ]
+     },
+     {
+      "naam": "planken-zagerij-leien-w-oud",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       -1,
+       3
+      ],
+      "doos": [
+       230,
+       268,
+       162,
+       150
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/planken-zagerij-leien-w-oud.png",
+      "cel": [
+       0,
+       0,
+       392,
+       418
+      ],
+      "anker": [
+       230,
+       268
+      ]
+     },
+     {
+      "naam": "planken-zagerij-pannen-z-oud",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       3,
+       4
+      ],
+      "doos": [
+       162,
+       242,
+       226,
+       156
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/planken-zagerij-pannen-z-oud.png",
+      "cel": [
+       0,
+       0,
+       388,
+       398
+      ],
+      "anker": [
+       162,
+       242
+      ]
+     },
+     {
+      "naam": "planken-zagerij-pannen-o-oud",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       4
+      ],
+      "doos": [
+       290,
+       207,
+       102,
+       178
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/planken-zagerij-pannen-o-oud.png",
+      "cel": [
+       0,
+       0,
+       392,
+       385
+      ],
+      "anker": [
+       290,
+       207
+      ]
+     },
+     {
+      "naam": "planken-zagerij-pannen-n-oud",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       -1
+      ],
+      "doos": [
+       98,
+       207,
+       290,
+       178
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/planken-zagerij-pannen-n-oud.png",
+      "cel": [
+       0,
+       0,
+       388,
+       385
+      ],
+      "anker": [
+       98,
+       207
+      ]
+     },
+     {
+      "naam": "planken-zagerij-pannen-w-oud",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       -1,
+       3
+      ],
+      "doos": [
+       230,
+       242,
+       162,
+       150
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/planken-zagerij-pannen-w-oud.png",
+      "cel": [
+       0,
+       0,
+       392,
+       392
+      ],
+      "anker": [
+       230,
+       242
+      ]
+     },
+     {
+      "naam": "roze-zagerij-riet-z-oud",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       3,
+       4
+      ],
+      "doos": [
+       177,
+       309,
+       246,
+       156
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/roze-zagerij-riet-z-oud.png",
+      "cel": [
+       0,
+       0,
+       423,
+       465
+      ],
+      "anker": [
+       177,
+       309
+      ]
+     },
+     {
+      "naam": "roze-zagerij-riet-o-oud",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       4
+      ],
+      "doos": [
+       305,
+       274,
+       119,
+       178
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/roze-zagerij-riet-o-oud.png",
+      "cel": [
+       0,
+       0,
+       424,
+       452
+      ],
+      "anker": [
+       305,
+       274
+      ]
+     },
+     {
+      "naam": "roze-zagerij-riet-n-oud",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       -1
+      ],
+      "doos": [
+       118,
+       274,
+       305,
+       178
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/roze-zagerij-riet-n-oud.png",
+      "cel": [
+       0,
+       0,
+       423,
+       452
+      ],
+      "anker": [
+       118,
+       274
+      ]
+     },
+     {
+      "naam": "roze-zagerij-riet-w-oud",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       -1,
+       3
+      ],
+      "doos": [
+       247,
+       309,
+       178,
+       150
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/roze-zagerij-riet-w-oud.png",
+      "cel": [
+       0,
+       0,
+       425,
+       459
+      ],
+      "anker": [
+       247,
+       309
+      ]
+     },
+     {
+      "naam": "roze-zagerij-leien-z-oud",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       3,
+       4
+      ],
+      "doos": [
+       162,
+       268,
+       226,
+       156
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/roze-zagerij-leien-z-oud.png",
+      "cel": [
+       0,
+       0,
+       388,
+       424
+      ],
+      "anker": [
+       162,
+       268
+      ]
+     },
+     {
+      "naam": "roze-zagerij-leien-o-oud",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       4
+      ],
+      "doos": [
+       290,
+       234,
+       102,
+       178
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/roze-zagerij-leien-o-oud.png",
+      "cel": [
+       0,
+       0,
+       392,
+       412
+      ],
+      "anker": [
+       290,
+       234
+      ]
+     },
+     {
+      "naam": "roze-zagerij-leien-n-oud",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       -1
+      ],
+      "doos": [
+       98,
+       234,
+       290,
+       178
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/roze-zagerij-leien-n-oud.png",
+      "cel": [
+       0,
+       0,
+       388,
+       412
+      ],
+      "anker": [
+       98,
+       234
+      ]
+     },
+     {
+      "naam": "roze-zagerij-leien-w-oud",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       -1,
+       3
+      ],
+      "doos": [
+       230,
+       268,
+       162,
+       150
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/roze-zagerij-leien-w-oud.png",
+      "cel": [
+       0,
+       0,
+       392,
+       418
+      ],
+      "anker": [
+       230,
+       268
+      ]
+     },
+     {
+      "naam": "roze-zagerij-pannen-z-oud",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       3,
+       4
+      ],
+      "doos": [
+       162,
+       242,
+       226,
+       156
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/roze-zagerij-pannen-z-oud.png",
+      "cel": [
+       0,
+       0,
+       388,
+       398
+      ],
+      "anker": [
+       162,
+       242
+      ]
+     },
+     {
+      "naam": "roze-zagerij-pannen-o-oud",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       4
+      ],
+      "doos": [
+       290,
+       207,
+       102,
+       178
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/roze-zagerij-pannen-o-oud.png",
+      "cel": [
+       0,
+       0,
+       392,
+       385
+      ],
+      "anker": [
+       290,
+       207
+      ]
+     },
+     {
+      "naam": "roze-zagerij-pannen-n-oud",
+      "vast": true,
+      "beslaat": [
+       8,
+       4
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       4,
+       -1
+      ],
+      "doos": [
+       98,
+       207,
+       290,
+       178
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/roze-zagerij-pannen-n-oud.png",
+      "cel": [
+       0,
+       0,
+       388,
+       385
+      ],
+      "anker": [
+       98,
+       207
+      ]
+     },
+     {
+      "naam": "roze-zagerij-pannen-w-oud",
+      "vast": true,
+      "beslaat": [
+       4,
+       8
+      ],
+      "groep": null,
+      "staat": null,
+      "deur": [
+       -1,
+       3
+      ],
+      "doos": [
+       230,
+       242,
+       162,
+       150
+      ],
+      "ramen": [],
+      "bestand": "tegels/huizen/roze-zagerij-pannen-w-oud.png",
+      "cel": [
+       0,
+       0,
+       392,
+       392
+      ],
+      "anker": [
+       230,
+       242
+      ]
      },
      {
       "naam": null,
