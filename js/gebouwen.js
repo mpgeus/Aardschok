@@ -204,10 +204,10 @@
     // van stammen, een dorp van planken, een stad van steen; dus staat de zagerij al in het gehucht. Tot 14 okt was dit de
     // timmerman, in een dorp, en gebruikte niets zijn planken.
     zagerij: {
-      naam: T.t('sawmill'), trede: 'gehucht', voet: { b: 5, h: 5 }, kosten: { hout: 12, goud: 6 }, heer: { goud: 3 }, bouwtijd: 3,
+      naam: T.t('sawmill'), trede: 'gehucht', voet: { b: 6, h: 5 }, kosten: { hout: 12, goud: 6 }, heer: { goud: 3 }, bouwtijd: 3,
       handen: 2, woonruimte: 0, maakt: { in: { hout: 2 }, uit: { planken: 2 } },
-      menu: true, tekening: 'gebouwen/dorpshuis3', beschrijving: T.t('logs into planks: a village is built of planks'), // geen tekst
-      opmerking: 'Zijn eigen tekening komt uit gereedschap/pixelart/ (vraag 157).', // geen tekst
+      menu: true, tekening: 'gebouwen/zagerij', beschrijving: T.t('logs into planks: a village is built of planks'), // geen tekst
+      opmerking: '', // geen tekst
     },
     // Sinds de weides, stap 2 (25 sep 2026) maakt de kooi zelf niets: de schapen van de heide slapen
     // erin, en js/vee.js telt de mest die de herder (zijn hand) eruit haalt, en de wol als ze in

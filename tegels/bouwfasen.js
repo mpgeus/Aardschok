@@ -655,7 +655,7 @@
      ]
     },
     "dorpshuis3": {
-     "gebouw": "timmerman",
+     "gebouw": "dorpshuis3",
      "beslaat": [
       6,
       8
@@ -35424,6 +35424,71 @@
        "anker": [
         140,
         203
+       ],
+       "naam": "half-gedekt"
+      }
+     ]
+    },
+    "zagerij": {
+     "gebouw": "zagerij",
+     "beslaat": [
+      6,
+      5
+     ],
+     "bestand": "bouwfasen/zagerij.png",
+     "fasen": [
+      {
+       "x": 0,
+       "y": 682,
+       "b": 491,
+       "h": 192,
+       "anker": [
+        295,
+        30
+       ],
+       "naam": "fundering"
+      },
+      {
+       "x": 0,
+       "y": 387,
+       "b": 362,
+       "h": 293,
+       "anker": [
+        165,
+        131
+       ],
+       "naam": "geraamte"
+      },
+      {
+       "x": 364,
+       "y": 387,
+       "b": 376,
+       "h": 258,
+       "anker": [
+        172,
+        92
+       ],
+       "naam": "muren-steigers"
+      },
+      {
+       "x": 0,
+       "y": 0,
+       "b": 376,
+       "h": 385,
+       "anker": [
+        172,
+        219
+       ],
+       "naam": "dakgebinte"
+      },
+      {
+       "x": 378,
+       "y": 0,
+       "b": 374,
+       "h": 385,
+       "anker": [
+        172,
+        219
        ],
        "naam": "half-gedekt"
       }

@@ -657,6 +657,7 @@ function gebouwenLijst() {
   }
   if (typeof P.schuur === 'function') lijst.push(['schuurBlokhut', () => P.schuur(0, 0, { b: 5, d: 7, muur: 'blokhut', dakMos: 0.7, zaad: 77 })]);
   if (typeof P.houtschuur === 'function') lijst.push(['houtschuur', () => P.houtschuur(0, 0)]);
+  if (typeof P.zagerij === 'function') lijst.push(['zagerij', () => P.zagerij(0, 0)]); // vraag 157
   if (typeof P.kippenhok === 'function') lijst.push(['kippenhok', () => P.kippenhok(0, 0)]);
   if (typeof P.kapel === 'function') lijst.push(['kapel', () => P.kapel(0, 0)]);
   if (typeof P.kerkhof === 'function') lijst.push(['kerkhof', () => P.kerkhof(0, 0, { b: 6, d: 4, rijen: 4, kol: 3 })]);

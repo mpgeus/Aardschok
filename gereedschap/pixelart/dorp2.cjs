@@ -860,6 +860,132 @@ function houtschuur(gx, gy, o = {}) {
   return g;
 }
 
+// De zagerij (werklijst vraag 157; Marcel, 14 okt: "zagerij nu een eigen tekening", en toen de open loods er niet
+// uitzag: "Maak het meer zoals onze mooie huizen"): een huis zoals de bakkerij, op een stenen voet, met planken muren,
+// een dak van spanen, ramen met luiken en een uithangbord met een zaag. Rechts in de zonnige voorgevel is de werkplaats
+// open, zoals bij de smidse: je kijkt op een vloer vol zaagsel, de zaagbok met een stam (D.zaagbok), stammen die nog
+// moeten en een stapel gezaagde planken met latjes ertussen. Tegen de zijgevel liggen de stammen die de kar bracht.
+// 6 × 5 tegels, nok langs x, open in de wand 'y' (linksvoor).
+function zagerij(gx, gy, o = {}) {
+  const T = TEGEL;
+  const b = 6;
+  const d = 5;
+  const H = 112;
+  const zaad = o.zaad ?? 71;
+  const open = { u: 92, b: 88, hoog: 84 };
+  const g = D.huis({
+    gx, gy, b, d, nok: 'x', muurH: H, sokkelH: 16, muur: 'planken', hout: 'hout', dak: o.dak ?? 'spanen', zaad,
+    gevel: {
+      y: [
+        D.raamElement({ u: 22, b: 26, h: 54, hoog: 28, luiken: 'groen' }),
+        D.openElement(open),
+      ],
+      x: [
+        D.raamElement({ u: 34, b: 24, h: 54, hoog: 28, luiken: 'groen', bloembak: true }),
+        D.raamElement({ u: 70, b: 20, h: 140, hoog: 22, rijen: 1 }),
+      ],
+    },
+    bord: { vlak: 'y', u: 74, h: 100, teken: 'zaag', bordRamp: 'hout' },
+    ...o,
+  });
+  const x0 = (gx - 0.5) * T;
+  const x1 = (gx + b - 0.5) * T;
+  const y0 = (gy - 0.5) * T;
+  const y1 = (gy + d - 0.5) * T;
+  const xl = x0 + open.u / SQ;
+  const xr = x0 + (open.u + open.b) / SQ;
+  const yb = y1 - 92; // de binnenkant van de achterwand van de werkplaats
+  const DEEL = { vloer: 10, wand: 11 };
+  // de vloer: aangestampte aarde vol zaagsel en krullen
+  const vloerTex = (vlak, X, Y) => {
+    UIT.ramp = RAMP.zand;
+    const n = ruis2(X * 0.08, Y * 0.08, zaad + 5);
+    UIT.stap = n < 0.35 ? 2 : 3;
+    const h = hash(Math.floor((X - Y) * SQ), Math.floor((X + Y) * SQ * 0.5), zaad + 7) % 23;
+    if (h === 0) {
+      UIT.ramp = RAMP.hout;
+      UIT.stap = 4;
+    } else if (h < 3) UIT.stap = 4;
+  };
+  // de binnenkant: planken, rechtop, met een kier hier en daar, en bovenin het donker onder het dak
+  const binnenTex = (vlak, X, Y, Z) => {
+    const h = Z * PXH;
+    const u = vlak === 'y' ? (X - x0) * SQ : (y1 - Y) * SQ;
+    UIT.ramp = RAMP.hout;
+    const plank = Math.floor(u / 7);
+    UIT.stap = u - plank * 7 < 1 ? 0 : 1 + (hash(plank, 3, zaad) % 2);
+    if (h > H - 30) UIT.stap = Math.max(0, UIT.stap - 1);
+  };
+  g.vormen.push(D.blok(xl / T, yb / T, xr / T, (y1 - 1) / T, 0, 1, vloerTex, { deel: DEEL.vloer }));
+  g.vormen.push(D.blok(xl / T, (yb - 8) / T, xr / T, yb / T, 0, H, binnenTex, { deel: DEEL.wand }));
+  g.vormen.push(D.blok((xl - 8) / T, yb / T, xl / T, (y1 - 1) / T, 0, H, binnenTex, { deel: DEEL.wand }));
+  // binnen: vooraan de zaagbok met een stam, links tegen de zijwand de planken die klaar zijn, achterin de stammen die
+  // nog moeten, en een lamp aan de balk, zodat je de werkplaats ook in het donker ziet
+  g.modellen.push({ model: D.zaagbok(zaad), gx: (xl + xr) / 2 / T + 0.2, gy: (y1 - 30) / T, richting: o.bok ?? 'ZW', z: 1 / PXH });
+  g.modellen.push({ model: plankenStapel(zaad + 2), gx: (xl + 22) / T, gy: (yb + 46) / T, richting: 'ZO', z: 1 / PXH });
+  g.modellen.push({ model: stammenStapel(zaad + 1, 2), gx: (xr - 40) / T, gy: (yb + 20) / T, richting: 'ZW', z: 1 / PXH });
+  g.lichten.push({ pos: [(xl + xr) / 2, yb + 30, 70 / PXH], r: 80, sterk: 1.4, warm: 1, val: 1.3, zacht: 0.5 });
+  // buiten, tegen de zijgevel: de stammen die de ossenkar bracht
+  g.modellen.push({ model: stammenStapel(zaad, 3), gx: x1 / T + 0.34, gy: (y0 + 74) / T, richting: 'ZW', z: 0 });
+  return g;
+}
+
+// Een stapel stammen: drie, twee en één (of zoveel `rijen`), met de lichte kopse kant naar voren.
+function stammenStapel(zaad = 1, rijen = 3) {
+  const M = { stam: 0 };
+  const mat = [];
+  mat[M.stam] = {
+    ramp: 'schors',
+    lo: 1.2,
+    hi: 5.2,
+    patroon: (x, y, z, nx, ny, nz) => {
+      if (Math.abs(ny) > 0.55) {
+        // de kopse kant: licht spinthout met jaarringen
+        const r = Math.hypot(x - Math.round(x / 9.4) * 9.4, z - Math.round(z / 7.6) * 7.6);
+        return { ramp: 'zand', stap: (Math.floor(r * 0.9) % 2 === 0 ? 4.6 : 3.8) };
+      }
+      return ruis2(x * 0.7, z * 0.7, zaad + 11) > 0.6 ? -1 : 0;
+    },
+  };
+  const d = [];
+  const L = 19;
+  let n = 0;
+  for (let rij = 0; rij < rijen; rij++) {
+    for (let k = 0; k < rijen - rij; k++) {
+      const r = 4.4 + (rnd(zaad, n) - 0.5) * 0.8;
+      const x = -9.4 + k * 9.4 + rij * 4.7;
+      const z = 4.4 + rij * 7.6;
+      const y = (rnd(zaad, n + 30) - 0.5) * 4;
+      d.push(F.kegel([x, y - L, z], [x, y + L, z], r, r * 0.92, M.stam, 1));
+      n++;
+    }
+  }
+  return F.model(d, mat, { midden: [0, 0, 12], straal: 30 });
+}
+
+// Een stapel gezaagde planken: vier lagen van vier, met dwars latjes ertussen zodat het hout droogt.
+function plankenStapel(zaad = 1) {
+  const M = { plank: 0, lat: 1 };
+  const mat = [];
+  mat[M.plank] = {
+    ramp: 'hout',
+    lo: 2.4,
+    hi: 6,
+    patroon: (x, y, z, nx, ny, nz) => (Math.abs(ny) > 0.55 ? -0.6 : ruis2(x * 0.3, y * 0.9, zaad + 13) > 0.72 ? -0.6 : 0),
+  };
+  mat[M.lat] = { ramp: 'schors', lo: 1.4, hi: 4.4 };
+  const d = [];
+  for (let laag = 0; laag < 4; laag++) {
+    const z = 1.2 + laag * 3.4;
+    for (let k = 0; k < 4; k++) {
+      const x = -9 + k * 6 + (rnd(zaad, laag * 4 + k) - 0.5) * 0.8;
+      d.push(F.blok([x, (rnd(zaad, laag * 4 + k + 50) - 0.5) * 2, z], [2.7, 17, 1.1], 0.3, M.plank, 1));
+    }
+    if (laag < 3) for (const y of [-12, 0, 12]) d.push(F.blok([0, y, z + 1.7], [12.5, 0.8, 0.6], 0.2, M.lat, 2));
+  }
+  return F.model(d, mat, { midden: [0, 0, 7], straal: 24 });
+}
+
 // Een kippenhok: een piepklein onderkomen op een lage stenen voet, met een rieten dakje en een
 // laag luikje. D.kippenren (de rieten omheining) komt er alvast naast te staan, met zijn eigen
 // opening naar het hok toe. 2 × 2 tegels, nok langs y.
@@ -1582,6 +1708,6 @@ function beekProef(o = {}) {
 module.exports = {
   GLAS, glasraamElement, roosvensterElement, boogdeurElement, klimopElement, klokkentoren, sterSpits, kapel,
   grafsteen, tombe, kerkhofhek, kerkhof, molenrad, molensteen, watermolen, broodplank, bakkerij, schuur,
-  houtschuur, kippenhok,
+  houtschuur, zagerij, stammenStapel, plankenStapel, kippenhok,
   prikbord, ketel, kruidenrek, kruidenhut, gewei, huidenrek, jagershut, oudstehuis, wijnrij, wijnboerderij, brug, yCilinder, beekProef,
 };

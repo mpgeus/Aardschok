@@ -130,6 +130,7 @@ const BUILDINGEN = [
   { id: 'huis', tekening: 'dorpshuis1', maak: () => D.dorpshuis(0, 0, 1, { maat: [7, 5], rook: false }) },
   { id: 'boerderij', tekening: 'schuur', maak: () => P.schuur(0, 0) },
   { id: 'houthakker', tekening: 'houtschuur', maak: () => P.houtschuur(0, 0) },
+  { id: 'zagerij', tekening: 'zagerij', maak: () => P.zagerij(0, 0) }, // vraag 157
   { id: 'schaapskooi', tekening: 'schuurBlokhut', maak: () => P.schuur(0, 0, { b: 5, d: 7, muur: 'blokhut', dakMos: 0.7, zaad: 77 }) },
   { id: 'kippenhok', tekening: 'kippenhok', maak: () => P.kippenhok(0, 0) },
   // ── dorp en verder: zelfde recept (D.huis of D.dorpshuis), nog niet aan een GEBOUWEN-soort
@@ -138,7 +139,7 @@ const BUILDINGEN = [
   { id: 'stenenHuis', tekening: 'stenenHuis', maak: () => D.stenenHuis(0, 0) },
   { id: 'herberg', tekening: 'herberg', maak: () => D.herberg(0, 0, { rook: false }) },
   { id: 'smidse', tekening: 'smidse', maak: () => D.smidse(0, 0) },
-  { id: 'timmerman', tekening: 'dorpshuis3', maak: () => D.dorpshuis(0, 0, 3, { maat: [6, 8], rook: false }) },
+  { id: 'dorpshuis3', tekening: 'dorpshuis3', maak: () => D.dorpshuis(0, 0, 3, { maat: [6, 8], rook: false }) },
   { id: 'brouwerij', tekening: 'dorpshuis5', maak: () => D.dorpshuis(0, 0, 5, { maat: [5, 7], rook: false, muur: 'blokhut' }) },
   { id: 'dorpKlein1', tekening: 'dorpKlein1', maak: () => D.dorpshuis(0, 0, 101, { maat: [5, 7], muur: 'vlecht', dak: 'riet', rook: false }) },
   { id: 'dorpKlein3', tekening: 'dorpKlein3', maak: () => D.dorpshuis(0, 0, 103, { maat: [5, 7], muur: 'blokhut', dak: 'riet', rook: false }) },
