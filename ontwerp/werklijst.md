@@ -125,6 +125,8 @@ werk) wacht op Marcel.
 
 ## C. De ossenkar (vraag 152, de proef)
 
+**Bezig in sessie `claude/relaxed-mendel-59zm3c`** (14 okt): het plan met Marcel.
+
 Besloten (Marcel, 11 okt): bouwen binnen bereik van het plein en elke opslag, geen grens en geen vlaggen; de kar rijdt
 overal, over een weg sneller; een ossenkar; de eerste opslag is het huis van de schout.
 1. Wat een gebouw maakt, ligt in een stapel bij zijn deur; één kar haalt het hout, en het telt pas in de opslag.
