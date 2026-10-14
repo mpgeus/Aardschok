@@ -34,7 +34,8 @@ planken, muren, soldaten uit wapens, handel, reizende gezelschappen, provincies,
 eerste antwoorden (bij H). **156, een gebouw aanklikken, is af** (14 okt, in `main`; `spel.md`, "Zo werkt het briefje
 van een gebouw nu"), en **164, een minimale balk onderaan, 165, een minimap van het hele eiland, en 166, een dunne balk
 bovenaan, ook** (14 okt, in `main`; het scherm zo leeg mogelijk, CLAUDE.md). **Het volgende is 157**, de zagerij en de
-planken (het plan staat bij H en wacht op Marcel), en dan C6 met de keten erin.
+planken (Marcel: "Plan ja, zagerij nu een eigen tekening"; **Bezig in sessie `claude/village-economy-gameplay-lmsnyg`**,
+14 okt), en dan C6 met de keten erin.
 
 **Wacht op Marcel:**
 - **Het briefje van een gebouw bekijken** (156, 14 okt): Nieuw spel, zet een houthakker, en klik erop als hij af is:
@@ -49,7 +50,6 @@ planken (het plan staat bij H en wacht op Marcel), en dan C6 met de keten erin.
   camera kijkt daar (Tab of een klik op de schout brengt je terug). Wijs een getal
   aan: het briefje zegt wat het is. De velden, het wetboek en de raadsman openen nog met V, W en R. De minimap bijstellen:
   `verzadiging`, `onbekend`, `zeeTotOmtrek` en `omtrek` in `js/minikaart.js`.
-- **Het plan voor 157** (de zagerij en de planken; bij H): ja, of wat anders.
 - **De wegen en het afbreken bekijken** (C, stap 5, 14 okt): Nieuw spel, en in het bouwmenu (B) bovenaan **Road**: klik
   het begin en dan het eind, en zie de weg in groen, recht en haaks, met wat hij kost; na de klik is het eind het begin
   van het volgende stuk, en een rechtsklik houdt op. Wie geen werk heeft, legt hem (na de gebouwen), en de ossenkar rijdt
@@ -283,9 +283,9 @@ niet perse. 8. Los ontwerp", op de vragen van Claude; in het gesprek heetten de 
   plaats van 20 hout), ook als een huis doorgroeit; goud en steen die er al staan, blijven; **d** wat een werkplaats
   van hout maakt (de wapenmaker, de kuiper, de kalkbrander), blijft voorlopig stammen: de wapens komen bij 159; **e** de
   kolonist van de speeltest bouwt een zagerij vóór het dorp, en de speeltest speelt vijf eilanden een jaar zonder fouten;
-  **f** een oud spel past niet meer (de timmerman heet anders): opslaan een versie omhoog. Vraag: de zagerij een eigen
-  tekening nu (uit code, zoals de andere), of eerst lenen en tekenen in een ronde met 158 en 159? Voorstel: nu, want het
-  is het eerste gebouw van de keten, en je ziet hem het hele spel.
+  **f** een oud spel past niet meer (de timmerman heet anders): opslaan een versie omhoog. **Besloten** (Marcel, 14 okt:
+  "Plan ja, zagerij nu een eigen tekening"): het plan zoals hier, en de zagerij krijgt meteen een eigen tekening uit
+  code. **Bezig in sessie `claude/village-economy-gameplay-lmsnyg`** (14 okt).
 - **158** (3): een muur leg je zoals een weg, en waar een weg hem kruist, komt vanzelf een poort (je mensen en de kar
   erdoor, rovers en wolven niet). **Steen is meteen te gebruiken**: de stenen muur wacht niet op een trede.
 - **159** (4a, gelezen als de eerste keuze): een soldaat is voltijds: hij legt zijn werk neer en eet, en kan zijn wapen
