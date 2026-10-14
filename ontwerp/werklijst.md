@@ -30,11 +30,10 @@ is een opslag met een eigen bereik en een eigen kar. **Stap 5 is af** (14 okt): 
 "Zo werken de wegen en het afbreken nu"). **Het volgende is stap 6, meten en spelen.**
 
 **Marcel kwam op 14 okt met acht punten** (H, vraag 156 tot 163: een gebouw aanklikken, de keten van stammen tot
-planken, muren, soldaten uit wapens, handel, reizende gezelschappen, provincies, een kasteel). Het voorstel van Claude
-en de vragen staan bij H; er is nog niets gebouwd.
+planken, muren, soldaten uit wapens, handel, reizende gezelschappen, provincies, een kasteel), en koos de volgorde en de
+eerste antwoorden (bij H). **156, een gebouw aanklikken, is bezig**; daarna 157 (de zagerij), en dan C6 met de keten erin.
 
 **Wacht op Marcel:**
-- **De acht punten van 14 okt** (H): de volgorde, en de vragen bij 156 en 157 (daar beginnen we).
 - **De wegen en het afbreken bekijken** (C, stap 5, 14 okt): Nieuw spel, en in het bouwmenu (B) bovenaan **Road**: klik
   het begin en dan het eind, en zie de weg in groen, recht en haaks, met wat hij kost; na de klik is het eind het begin
   van het volgende stuk, en een rechtsklik houdt op. Wie geen werk heeft, legt hem (na de gebouwen), en de ossenkar rijdt
@@ -223,7 +222,8 @@ het graan vraagt", de schandpaal, de heervaart en de twee bazen.
 
 ## H. Marcels acht punten (vraag 156 tot 163, 14 okt)
 
-Marcel, 14 okt: "We gaan verder:", met acht punten. Nog niets gekozen; wat er al is, zocht een agent uit (14 okt).
+Marcel, 14 okt: "We gaan verder:", met acht punten; wat er al is, zocht een agent uit (14 okt). Zijn antwoorden staan
+onder "Besloten".
 
 - **156, een gebouw aanklikken:** "De speler moet op een gebouw kunnen klikken om informatie over het gebouw te
   krijgen, wat het doet en hoeveel indien aan de orde, het produceert." Nu geeft een klik dezelfde ene regel als de muis
@@ -246,34 +246,31 @@ Marcel, 14 okt: "We gaan verder:", met acht punten. Nog niets gekozen; wat er al
 - **163, een kasteel:** "Uiteindelijk wil ik ook dat je verdedigingen als een kasteel kunt bouwen. Dit zoals bij Lords of
   the realm." Er is niets; de vijf maten uit Lords of the Realm 2 staan in `spel.md`.
 
-**Voorstel van Claude (14 okt), de volgorde:** 156, dan 157, dan C6 (meten, nu met de keten erin), dan 159 met 158 (het
-verdedigen van F, en het eind van de demo: het eerste gevecht), dan 162, 161, 160 en 163. Voor de demo tellen 156 tot
-159; 160 tot 163 maken het hele spel, en hangen alle vier aan 162 (zonder levende plaatsen is er niets om mee te
-handelen, over te roddelen of te veroveren). D gaat mee met 159 (je soldaten aanklikken), E met 162 (de heer in zijn
-provincie).
-
-**De vragen** (Claude, 14 okt; bij 156 en 157 met een voorstel, de rest kan later):
-- **156a** hoe: 1 een vast venster opzij, dat blijft tot je ergens anders klikt, terwijl het spel doorloopt (The
-  Settlers, Anno), of 2 een briefje bij de muis. Voorstel 1. **156b** wat erin: wat het doet, wie er werkt, wat het maakt
-  op vol en wat het de laatste zeven dagen echt maakte, wat erin gaat en wat er ligt, en wat het tegenhoudt (te weinig
-  stammen, de stapel vol, te weinig soorten eten); nog geen knoppen.
-- **157a** wie gebruikt planken: 1 elk gebouw (The Settlers), 2 het materiaal volgt de trede (een gehucht van stammen,
-  een dorp van planken, een stad van steen), of 3 een paar gebouwen. Voorstel 2: het begin blijft eenvoudig, en de
-  palissade van stammen en de stenen muur passen erin. **157b** de zagerij (gehucht) vervangt de timmerman, en hout
-  heet dan stammen (*logs*).
-- **158** een muur leg je zoals een weg; waar een weg hem kruist, komt vanzelf een poort (je mensen en de kar erdoor,
-  rovers en wolven niet). Steen bij marktrecht, of bij een nieuwe trede stad?
-- **159** 1 een soldaat is voltijds (hij legt zijn werk neer en eet, en kan zijn wapen weer inleveren), of 2 een militie
-  die doorwerkt en zijn wapen pakt als de klok luidt. Eerst drie wapens: de speer (planken), de boog (planken), zwaard
-  en schild (ijzer en planken); zonder wapen een hooivork.
-- **162** de provincies op het eiland zelf (`js/land.js` gaat eruit), zo'n vijf, elk met iets eigens (ijzer, vis, wijn,
-  hout), en wat ver weg is leeft als getallen tot je er bent.
-- **161** het nieuws is echt en bruikbaar (wat een stad tekortkomt, waar de mannen van de heer zijn, welk dorp morrt);
-  met een herberg blijven ze langer.
-- **160** eerst losse ritten (een kar met wat over is naar een stad, dagen onderweg, een escorte helpt), vaste routes
-  later.
-- **163** vaste ontwerpen zoals Lords of the Realm (een motte met palissade, een stenen toren, een burcht), neergezet
-  als geheel en maanden gebouwd, of vrij zoals Stronghold.
+**Besloten** (Marcel, 14 okt: "V1, 1a1, 1b ja, 2a2, 2b ja, 3 steen is gelijk beschikbaar. 4a. 7. Iets specifieks hoeft
+niet perse. 8. Los ontwerp", op de vragen van Claude; in het gesprek heetten de punten 1 tot 8):
+- **De volgorde** (V1): 156, dan 157, dan C6 (meten, nu met de keten erin), dan 159 met 158 (het verdedigen van F, en het
+  eind van de demo: het eerste gevecht), dan 162, 161, 160 en 163. Voor de demo tellen 156 tot 159; 160 tot 163 hangen
+  aan 162 (zonder levende plaatsen is er niets om mee te handelen, over te roddelen of te veroveren). D gaat mee met 159
+  (je soldaten aanklikken), E met 162 (de heer in zijn provincie).
+- **156** (1a1, 1b ja), **Bezig in sessie `claude/village-economy-gameplay-lmsnyg`** (14 okt): een klik op een gebouw
+  opent een vast venster opzij, dat blijft tot je ergens anders klikt, terwijl het spel doorloopt (The Settlers, Anno).
+  Erin: wat het doet, wie er werkt, wat het maakt op vol en wat het de laatste zeven dagen echt maakte, wat erin gaat
+  en wat er ligt, en wat het tegenhoudt (te weinig stammen, de stapel vol, te weinig soorten eten); nog geen knoppen.
+- **157** (2a2, 2b ja): het materiaal volgt de trede: een gehucht bouw je van stammen, een dorp van planken, een stad van
+  steen. De zagerij (gehucht) vervangt de timmerman, en hout heet stammen (*logs*).
+- **158** (3): een muur leg je zoals een weg, en waar een weg hem kruist, komt vanzelf een poort (je mensen en de kar
+  erdoor, rovers en wolven niet). **Steen is meteen te gebruiken**: de stenen muur wacht niet op een trede.
+- **159** (4a, gelezen als de eerste keuze): een soldaat is voltijds: hij legt zijn werk neer en eet, en kan zijn wapen
+  weer inleveren. Eerst drie wapens: de speer (planken), de boog (planken), zwaard en schild (ijzer en planken); zonder
+  wapen een hooivork.
+- **162** (7): de provincies op het eiland, zo'n vijf, elk met een hoofdstad en een paar dorpen; iets eigens per
+  provincie hoeft niet. Op de rest van het voorstel (op het eiland zelf, `js/land.js` eruit, wat ver weg is leeft als
+  getallen tot je er bent) zei Marcel niets: bevestigen als we er zijn.
+- **163** (8, "Los ontwerp"): vrij bouwen, zoals Stronghold: muren, torens en poorten los, niet de vaste ontwerpen van
+  Lords of the Realm. Zo is het kasteel het vervolg van 158.
+- **Nog open** (als we er zijn): **161**, het nieuws echt en bruikbaar (wat een stad tekortkomt, waar de mannen van de
+  heer zijn, welk dorp morrt), en met een herberg blijven ze langer; **160**, eerst losse ritten (een kar met wat over
+  is naar een stad, dagen onderweg, een escorte helpt), vaste routes later.
 
 ## Af (sinds 11 okt)
 
