@@ -29,6 +29,11 @@ maakt, ligt bij de deur tot de kar het haalt, de bouwplaats en de werkplaats kri
 is een opslag met een eigen bereik en een eigen kar. **Stap 5 is af** (14 okt): wegen die jij legt, en afbreken (`spel.md`,
 "Zo werken de wegen en het afbreken nu"). **Het volgende is stap 6, meten en spelen.**
 
+**Marcel kwam op 14 okt met acht punten** (H, vraag 156 tot 163: een gebouw aanklikken, de keten van stammen tot
+planken, muren, soldaten uit wapens, handel, reizende gezelschappen, provincies, een kasteel), en koos de volgorde en de
+eerste antwoorden (bij H). **156, een gebouw aanklikken: Bezig in sessie `claude/village-economy-gameplay-lmsnyg`**
+(14 okt); daarna 157 (de zagerij), en dan C6 met de keten erin.
+
 **Wacht op Marcel:**
 - **De wegen en het afbreken bekijken** (C, stap 5, 14 okt): Nieuw spel, en in het bouwmenu (B) bovenaan **Road**: klik
   het begin en dan het eind, en zie de weg in groen, recht en haaks, met wat hij kost; na de klik is het eind het begin
