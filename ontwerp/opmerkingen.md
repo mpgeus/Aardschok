@@ -9,6 +9,15 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 
 ## Het spel
 
+- **Beter gereedschap als upgrade voor de arbeiders** (Marcel, 14 okt, als notitie bij 156: "arbeiders kunnen upgrades
+  krijgen in de vorm van beter gereedschap wat hun werk makkelijker maakt. We blijven wel in de geest van de tijd"). Wat
+  er al is: de smidse maakt van ijzer gereedschap, en wie het heeft, werkt 25% harder (`gereedschapBonus`,
+  `T.gereedschapDekking` in `js/gebouwen.js`); het slijt in 180 dagen, en het briefje van een gebouw zegt het onder
+  "Helped by". Dat is één soort gereedschap voor iedereen. Een gedachte van Claude voor als het aan de beurt is: per
+  ambacht een stap uit de tijd, zodat de smidse een keten krijgt en je ziet wat je kiest, bijvoorbeeld de houthakker van
+  de bijl naar de zware bijl, de boer van de houten ploeg naar de ploeg met een ijzeren schaar en van de sikkel naar de
+  zeis, de zagerij van de kuilzaag (twee man) naar de zaag op het water (een raderwerk, 13e eeuw). Niet nu (eerst
+  speelbaar); de plek in de volgorde kiest Marcel.
 - **Een weg ziet er net zo uit als een paadje** (14 okt, C stap 5): allebei zand (`T.zandHoeken`). Een paadje komt vanzelf
   van elke deur, een weg leg jij, en alleen over een weg rijdt de kar sneller; dat zie je nu niet. Een eigen tekening
   (karrensporen, een rand van stenen) zou het zeggen. Mee in een ronde van de beelden.
