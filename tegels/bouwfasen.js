@@ -35438,23 +35438,23 @@
      "bestand": "bouwfasen/wit-zagerij-riet-z.png",
      "fasen": [
       {
-       "x": 680,
-       "y": 439,
-       "b": 105,
-       "h": 100,
+       "x": 0,
+       "y": 782,
+       "b": 370,
+       "h": 172,
        "anker": [
         175,
-        -18
+        26
        ],
        "naam": "fundering"
       },
       {
        "x": 356,
        "y": 439,
-       "b": 322,
-       "h": 326,
+       "b": 326,
+       "h": 338,
        "anker": [
-        129,
+        131,
         192
        ],
        "naam": "geraamte"
@@ -35503,23 +35503,23 @@
      "bestand": "bouwfasen/wit-zagerij-riet-o.png",
      "fasen": [
       {
-       "x": 680,
-       "y": 437,
-       "b": 105,
-       "h": 100,
+       "x": 0,
+       "y": 780,
+       "b": 370,
+       "h": 176,
        "anker": [
         303,
-        -82
+        -6
        ],
        "naam": "fundering"
       },
       {
        "x": 356,
        "y": 437,
-       "b": 322,
-       "h": 326,
+       "b": 326,
+       "h": 338,
        "anker": [
-        257,
+        259,
         160
        ],
        "naam": "geraamte"
@@ -35568,23 +35568,23 @@
      "bestand": "bouwfasen/wit-zagerij-riet-n.png",
      "fasen": [
       {
-       "x": 680,
-       "y": 437,
-       "b": 105,
-       "h": 100,
+       "x": 0,
+       "y": 780,
+       "b": 434,
+       "h": 172,
        "anker": [
         175,
-        -18
+        -6
        ],
        "naam": "fundering"
       },
       {
        "x": 356,
        "y": 437,
-       "b": 322,
-       "h": 326,
+       "b": 326,
+       "h": 338,
        "anker": [
-        65,
+        67,
         160
        ],
        "naam": "geraamte"
@@ -35633,23 +35633,23 @@
      "bestand": "bouwfasen/wit-zagerij-riet-w.png",
      "fasen": [
       {
-       "x": 680,
-       "y": 439,
-       "b": 105,
-       "h": 100,
+       "x": 0,
+       "y": 782,
+       "b": 434,
+       "h": 208,
        "anker": [
         303,
-        -82
+        26
        ],
        "naam": "fundering"
       },
       {
        "x": 356,
        "y": 439,
-       "b": 322,
-       "h": 326,
+       "b": 326,
+       "h": 338,
        "anker": [
-        193,
+        195,
         192
        ],
        "naam": "geraamte"
@@ -35698,23 +35698,23 @@
      "bestand": "bouwfasen/oker-zagerij-riet-z.png",
      "fasen": [
       {
-       "x": 680,
-       "y": 439,
-       "b": 105,
-       "h": 100,
+       "x": 0,
+       "y": 782,
+       "b": 370,
+       "h": 172,
        "anker": [
         175,
-        -18
+        26
        ],
        "naam": "fundering"
       },
       {
        "x": 356,
        "y": 439,
-       "b": 322,
-       "h": 326,
+       "b": 326,
+       "h": 338,
        "anker": [
-        129,
+        131,
         192
        ],
        "naam": "geraamte"
@@ -35763,23 +35763,23 @@
      "bestand": "bouwfasen/oker-zagerij-riet-o.png",
      "fasen": [
       {
-       "x": 680,
-       "y": 437,
-       "b": 105,
-       "h": 100,
+       "x": 0,
+       "y": 780,
+       "b": 370,
+       "h": 176,
        "anker": [
         303,
-        -82
+        -6
        ],
        "naam": "fundering"
       },
       {
        "x": 356,
        "y": 437,
-       "b": 322,
-       "h": 326,
+       "b": 326,
+       "h": 338,
        "anker": [
-        257,
+        259,
         160
        ],
        "naam": "geraamte"
@@ -35828,23 +35828,23 @@
      "bestand": "bouwfasen/oker-zagerij-riet-n.png",
      "fasen": [
       {
-       "x": 680,
-       "y": 437,
-       "b": 105,
-       "h": 100,
+       "x": 0,
+       "y": 780,
+       "b": 434,
+       "h": 172,
        "anker": [
         175,
-        -18
+        -6
        ],
        "naam": "fundering"
       },
       {
        "x": 356,
        "y": 437,
-       "b": 322,
-       "h": 326,
+       "b": 326,
+       "h": 338,
        "anker": [
-        65,
+        67,
         160
        ],
        "naam": "geraamte"
@@ -35893,23 +35893,23 @@
      "bestand": "bouwfasen/oker-zagerij-riet-w.png",
      "fasen": [
       {
-       "x": 680,
-       "y": 439,
-       "b": 105,
-       "h": 100,
+       "x": 0,
+       "y": 782,
+       "b": 434,
+       "h": 208,
        "anker": [
         303,
-        -82
+        26
        ],
        "naam": "fundering"
       },
       {
        "x": 356,
        "y": 439,
-       "b": 322,
-       "h": 326,
+       "b": 326,
+       "h": 338,
        "anker": [
-        193,
+        195,
         192
        ],
        "naam": "geraamte"
@@ -35958,23 +35958,23 @@
      "bestand": "bouwfasen/planken-zagerij-spanen-z.png",
      "fasen": [
       {
-       "x": 680,
-       "y": 401,
-       "b": 105,
-       "h": 100,
+       "x": 0,
+       "y": 724,
+       "b": 370,
+       "h": 172,
        "anker": [
         175,
-        -18
+        26
        ],
        "naam": "fundering"
       },
       {
        "x": 356,
        "y": 401,
-       "b": 322,
-       "h": 306,
+       "b": 326,
+       "h": 318,
        "anker": [
-        129,
+        131,
         172
        ],
        "naam": "geraamte"
@@ -36023,23 +36023,23 @@
      "bestand": "bouwfasen/planken-zagerij-spanen-o.png",
      "fasen": [
       {
-       "x": 680,
-       "y": 399,
-       "b": 105,
-       "h": 100,
+       "x": 0,
+       "y": 722,
+       "b": 370,
+       "h": 176,
        "anker": [
         303,
-        -82
+        -6
        ],
        "naam": "fundering"
       },
       {
        "x": 356,
        "y": 399,
-       "b": 322,
-       "h": 306,
+       "b": 326,
+       "h": 318,
        "anker": [
-        257,
+        259,
         140
        ],
        "naam": "geraamte"
@@ -36088,23 +36088,23 @@
      "bestand": "bouwfasen/planken-zagerij-spanen-n.png",
      "fasen": [
       {
-       "x": 680,
-       "y": 399,
-       "b": 105,
-       "h": 100,
+       "x": 0,
+       "y": 722,
+       "b": 434,
+       "h": 172,
        "anker": [
         175,
-        -18
+        -6
        ],
        "naam": "fundering"
       },
       {
        "x": 356,
        "y": 399,
-       "b": 322,
-       "h": 306,
+       "b": 326,
+       "h": 318,
        "anker": [
-        65,
+        67,
         140
        ],
        "naam": "geraamte"
@@ -36153,23 +36153,23 @@
      "bestand": "bouwfasen/planken-zagerij-spanen-w.png",
      "fasen": [
       {
-       "x": 680,
-       "y": 401,
-       "b": 105,
-       "h": 100,
+       "x": 0,
+       "y": 724,
+       "b": 434,
+       "h": 208,
        "anker": [
         303,
-        -82
+        26
        ],
        "naam": "fundering"
       },
       {
        "x": 356,
        "y": 401,
-       "b": 322,
-       "h": 306,
+       "b": 326,
+       "h": 318,
        "anker": [
-        193,
+        195,
         172
        ],
        "naam": "geraamte"
@@ -36283,23 +36283,23 @@
      "bestand": "bouwfasen/roze-zagerij-riet-o.png",
      "fasen": [
       {
-       "x": 680,
-       "y": 437,
-       "b": 105,
-       "h": 100,
+       "x": 0,
+       "y": 780,
+       "b": 370,
+       "h": 176,
        "anker": [
         303,
-        -82
+        -6
        ],
        "naam": "fundering"
       },
       {
        "x": 356,
        "y": 437,
-       "b": 322,
-       "h": 326,
+       "b": 326,
+       "h": 338,
        "anker": [
-        257,
+        259,
         160
        ],
        "naam": "geraamte"
@@ -36348,23 +36348,23 @@
      "bestand": "bouwfasen/roze-zagerij-riet-n.png",
      "fasen": [
       {
-       "x": 680,
-       "y": 437,
-       "b": 105,
-       "h": 100,
+       "x": 0,
+       "y": 780,
+       "b": 434,
+       "h": 172,
        "anker": [
         175,
-        -18
+        -6
        ],
        "naam": "fundering"
       },
       {
        "x": 356,
        "y": 437,
-       "b": 322,
-       "h": 326,
+       "b": 326,
+       "h": 338,
        "anker": [
-        65,
+        67,
         160
        ],
        "naam": "geraamte"
@@ -36413,23 +36413,23 @@
      "bestand": "bouwfasen/roze-zagerij-riet-w.png",
      "fasen": [
       {
-       "x": 680,
-       "y": 439,
-       "b": 105,
-       "h": 100,
+       "x": 0,
+       "y": 782,
+       "b": 434,
+       "h": 208,
        "anker": [
         303,
-        -82
+        26
        ],
        "naam": "fundering"
       },
       {
        "x": 356,
        "y": 439,
-       "b": 322,
-       "h": 326,
+       "b": 326,
+       "h": 338,
        "anker": [
-        193,
+        195,
         192
        ],
        "naam": "geraamte"
