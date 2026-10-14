@@ -68,11 +68,15 @@ const FIG_ANKER = [56, 110];
 // Wat er op de kar ligt. Met het zeil zie je alleen wat er achter uit de opening steekt.
 const LADINGEN = ['huif', 'spullen', 'hout', 'stenen', 'zakken', 'leeg'];
 // De vellen voor het spel (ossenkar-anim.cjs, naar-spel.cjs), elk met de vale os (Marcel, 11 okt: "Vaal"): de huifkar van
-// het begin, en de ossenkar leeg en met stammen voor stap 2. De andere ladingen komen als het spel ze vraagt.
+// het begin, de ossenkar leeg en met stammen (werklijst C, stap 1), en met stenen, zakken of spullen (stap 3: de kar
+// haalt alles wat een gebouw maakt; js/kar.js kiest het vel naar wat hij het meest draagt).
 const VELLEN = [
   { naam: 'huifkar', lading: 'huif' },
   { naam: 'ossenkar-leeg', lading: 'leeg' },
   { naam: 'ossenkar-hout', lading: 'hout' },
+  { naam: 'ossenkar-stenen', lading: 'stenen' },
+  { naam: 'ossenkar-zakken', lading: 'zakken' },
+  { naam: 'ossenkar-spullen', lading: 'spullen' },
 ];
 
 // ---------------------------------------------------------------- materialen

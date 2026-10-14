@@ -1013,6 +1013,15 @@ korter of langer en naar één kant smaller, met bij half en vol een stam dwars 
 (`MATEN`, met een vaste reeks toeval per maat). Het spel kiest de maat naar hoe vol de stapel is (`S.stapel(wat, vol)`);
 zonder kunst een blok hout, zo hoog als hij vol is.
 
+**Stap 3** (14 okt; Marcel: "d ja"): een tweede rij, `steen`: een hoop ruw gehakte blokken met afgeronde hoeken, elk
+gedraaid en gekanteld op een heuvel die naar het midden oploopt, op wat gruis (4, 8 en 17 blokken; `steenhoop`). De klei
+en de kalk liggen op de steenhoop, de planken op de houthoop. De rest ligt in wat de markt al had (`beelden/marktmanden.png`):
+de groente in de mand kool, de eieren in de lege mand, het brood in de krat brood, de wol, het laken en de huiden in de
+krat wol, het vlees, de vis, het bier en de wijn in de ton, en het graan, het meel, het hooi en de rest in de zak; een,
+twee of drie naast elkaar, naar hoe vol de stapel is (`S.stapelDelen` in `js/sprites.js`). En de ossenkar kreeg drie
+ladingen erbij uit `LADINGEN` in `ossenkar.cjs`: `ossenkar-stenen`, `ossenkar-zakken` en `ossenkar-spullen`
+(`ossenkar-anim.cjs`, dan `naar-spel.cjs --alleen ossenkar-stenen,ossenkar-zakken,ossenkar-spullen`).
+
 ## De heide (25 sep 2026)
 
 Nieuwe grondsoort voor de meent, waar de schapen van het gehucht grazen (Marcel koos dit op 25 sep,

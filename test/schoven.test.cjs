@@ -92,7 +92,9 @@ test('wat nog op het veld staat als de oogsttijd om is, halen ze in één keer b
   T.zetVoorraad(D, 'graan', 0);
   T.haalOogstBinnen(D);
   assert.equal(a.schoven.size, 0);
-  assert.ok(D.voorraad.graan >= 8, `${D.voorraad.graan}`);
+  // bij de boerderij, tot de ossenkar het haalt (js/kar.js; werklijst C, stap 3)
+  const graan = D.voorraad.graan + T.opDeStapels(D, 'graan');
+  assert.ok(graan >= 8, `${graan}`);
 });
 
 // De dagloners (vraag 140; Marcel, 8 okt: "Dagloners is een goed idee", en "mensen in het dorp").

@@ -1125,9 +1125,13 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 ### js/kar.js: de ossenkar en de stapels
 
-- `js/kar.js`: **de ossenkar** (werklijst C, stap 1, 14 okt; Marcel: "A2, B2, C1, D2, E2"). Wat een gebouw maakt, gaat
-  via `T.opStapel(D, g, wat, n)`: met een kar (`T.metDeKar`, `D.karren`) en een waar uit `waren` (stap 1: hout) op
-  `g.stapel` (een veld legt het bij zijn boerderij, `g.boerderij`), anders meteen in de voorraad. Zo komen erin: de
+- `js/kar.js`: **de ossenkar** (werklijst C, 14 okt; Marcel: "A2, B2, C1, D2, E2"). Wat een gebouw maakt, gaat via
+  `T.opStapel(D, g, wat, n)`: met een kar (`T.metDeKar`, `D.karren`) en een waar die niet in `nietMetDeKar` staat (het
+  goud; `T.gaatMetDeKar`) op `g.stapel` (een veld legt het bij zijn boerderij, `g.boerderij`), anders, of zonder `g`,
+  meteen in de voorraad. Zo ook de oogst (`T.haalOogstBinnen`, `T.haalSchovenBinnen(D, graan, boerderij)`, met
+  `e.vrachtVoor` voor wat iemand 's nachts nog droeg, en het hooi per boerderij in `js/akkers.js`) en de wijn
+  (`T.wijnBinnen(D, ranken, g)`); wat het vee geeft, heeft geen `g`. `T.maaktTot` (de nachtlus) en `T.etenVoorDeWinter`
+  tellen wat op de stapels ligt mee; het dorp eet alleen uit de voorraad. Zo komen erin: de
   nachtlus van de werkplaatsen (`js/gebouwen.js`, stap 6, die ook niet meer maakt dan `T.ruimteOpStapel` toelaat; vol is
   `stilWant`), en `T.hakBoom(D, x, y, bij)` in `js/bos.js` (de bouwers via `T.rooiTegel(D, t, g)` in `js/bouwen.js`, een
   huis dat doorgroeit in `js/behoeften.js` en `js/veldwerk.js`). Wie zonder `bij` hakt, brengt het meteen binnen.
@@ -1139,9 +1143,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   op `rit.doel` (`staOp`), dus met of zonder beelden komt er hetzelfde uit. Een rit begint alleen in de werktijd
   (`T.dagindeling`), naar de grootste stapel (`kiesStapel`; zonder weg laat hij hem een dag liggen, `g.karKanNietTot`), en
   lost bij de dichtste opslag (een gebouw met `opslag` dat af is, anders de plek van de kar in het kamp). Het vel
-  (`T.zetKarVel`): de huifkar blijft de huifkar; de ossenkar is `ossenkar-leeg` of `ossenkar-hout`. Bij de muis
+  (`T.zetKarVel`): de huifkar blijft de huifkar; de ossenkar is leeg of draagt wat hij het meest heeft (`LADING_VEL`:
+  `ossenkar-hout`, `-stenen`, `-spullen`, anders `-zakken`). De kar neemt geen zaaigraan mee (`beschikbaar`). Bij de muis
   `T.karTekst`; getekend: `T.stapelsOp` en `T.stapelPlek` (naast de deur, met op een bouwplaats het hout dat er al is
-  maar nog niet verbouwd). Getallen in `T.KAR_INSTELLINGEN` (de werkbank: "The ox cart"); getoetst in `test/kar.test.cjs`.
+  maar nog niet verbouwd), met `T.sprites.stapelDelen` (`js/sprites.js`: een hoop hout of steen, of een tot drie manden
+  van de markt, `IN_DE_MAND`). Getallen in `T.KAR_INSTELLINGEN` (de werkbank: "The ox cart"); getoetst in `test/kar.test.cjs`.
 - **Bouwen met de kar** (stap 2, B2): `T.plaatsGebouw` betaalt alleen `T.bouwKosten(D, kosten).nu` (wat niet met de kar
   gaat) en zet de rest met `T.zetBouwNodig` in `g.bouw.nodig`; wat er is, staat in `g.bouw.er` (de kar, en `T.opStapel`
   vult eerst de bouwplaats). `T.bouwMateriaalDeel(g)` zegt hoe ver de bouwers mogen (`werkAan` in `js/bouwen.js` geeft

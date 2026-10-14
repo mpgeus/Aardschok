@@ -1,5 +1,6 @@
-// De stapels bij de deuren (werklijst C, stap 1; js/kar.js, T.stapelsOp): wat een gebouw maakte en de ossenkar nog moet
-// halen. Stap 1 is het hout: stammen op een hoop, met de gezaagde kant naar de kijker, zodat je de jaarringen ziet; in
+// De stapels bij de deuren (werklijst C; js/kar.js, T.stapelsOp): wat een gebouw maakte en de ossenkar nog moet halen.
+// Het hout: stammen op een hoop, met de gezaagde kant naar de kijker, zodat je de jaarringen ziet (stap 1); en de steen:
+// een hoop ruw gehakte blokken (stap 3; Marcel, 14 okt: "d ja": het eten zijn de manden van de markt, js/sprites.js). In
 // drie maten (klein, half, vol), zodat je ziet hoe vol een stapel is en waar het stokt.
 //
 // Een rij cellen per waar, een kolom per maat, op beelden/stapels.png (naar-spel.cjs --alleen stapels): een stapel
@@ -22,7 +23,7 @@ const ANKER = [40, 44];
 const FIG_CEL = [112, 124];
 const FIG_ANKER = [56, 110];
 
-const WAREN = ['hout'];
+const WAREN = ['hout', 'steen'];
 // Hoe een hoop eruitziet: hoeveel stammen per laag (van onder naar boven), en losse stammen erbij: `dwars` bovenop
 // (dwars over de hoop) en `grond` (een stam die ernaast op de grond rolde). Marcel, 14 okt: "mag de houtstapel iets
 // minder 'perfect'": geen nette piramide, maar een hoop zoals een ossenkar hem achterlaat.
@@ -33,10 +34,12 @@ const MATEN = [
 ];
 // Een stam: zijn straal, zijn lengte (naar de kijker), en hoe dicht ze tegen elkaar liggen.
 const STAM = { r: 4.2, lang: 28, tussen: 8.6 };
+// De steen: hoeveel blokken per maat, hoe groot een blok is (de halve zijde, van tot), en hoe breed en hoog de hoop.
+const STEEN = { stenen: { klein: 4, half: 8, vol: 17 }, half: [3.2, 5.6], breed: { klein: 9, half: 12, vol: 18 }, hoog: { klein: 6, half: 10, vol: 18 } };
 
 // ---------------------------------------------------------------- materialen
 
-const M = { schors: 0, kop: 1, aarde: 2 };
+const M = { schors: 0, kop: 1, aarde: 2, steen: 3 };
 
 // Een vaste reeks toeval per hoop, zodat elke maat elke keer dezelfde hoop is.
 function lot(zaad) {
@@ -132,6 +135,13 @@ const materialen = (lijst) => {
     },
   };
   mat[M.aarde] = { ramp: 'aarde', lo: 2.0, hi: 5.4 };
+  // Ruw gehakte steen: grijs, met vlekken en hier en daar een donkere kras.
+  mat[M.steen] = {
+    ramp: 'steen',
+    lo: 2.4,
+    hi: 6.6,
+    patroon: (x, y, z) => (ruis3(x * 0.6, y * 0.6, z * 0.6, 81) - 0.5) * 1.4 + (ruis3(x * 2.1, y * 2.1, z * 2.1, 82) > 0.78 ? -0.9 : 0),
+  };
   return mat;
 };
 
@@ -180,11 +190,64 @@ function hoop(maat) {
   return model(delen, materialen(lijst), { midden: [0, 0, hoog / 2], straal });
 }
 
+// Een hoop steen van de maat met deze naam: blokken met afgeronde hoeken, elk gedraaid en wat gekanteld, op een heuvel
+// die naar het midden oploopt, zodat ze op elkaar liggen zoals ze van een kar gekieperd zijn.
+function steenhoop(naam) {
+  const r = lot(31 + STEEN.stenen[naam]);
+  const tussen = (a, b) => a + (b - a) * r();
+  const breed = STEEN.breed[naam];
+  const hoog = STEEN.hoog[naam];
+  const stenen = [];
+  for (let i = 0; i < STEEN.stenen[naam]; i++) {
+    // de grootste eerst, onderop en aan de rand; de kleinere erop
+    const a = tussen(0, Math.PI * 2);
+    const ver = breed * Math.sqrt(tussen(0, 1)) * (i < 4 ? 1 : 0.6);
+    const x = Math.cos(a) * ver;
+    const y = Math.sin(a) * ver * 0.8;
+    const h = { x: tussen(STEEN.half[0], STEEN.half[1]), y: tussen(STEEN.half[0], STEEN.half[1]), z: tussen(STEEN.half[0] * 0.7, STEEN.half[1] * 0.8) };
+    const heuvel = hoog * Math.max(0, 1 - Math.hypot(x, y / 0.8) / (breed + 2));
+    stenen.push({ x, y, z: h.z + heuvel * (i < 4 ? 0.2 : 0.75), h, a: tussen(0, Math.PI), t: tussen(-0.25, 0.25), rond: tussen(0.5, 1.2) });
+  }
+  const top = stenen.reduce((m, s) => Math.max(m, s.z + s.h.z), 0);
+  const straal = Math.hypot(breed + 6, breed + 6, top / 2) + 2;
+  const delen = [{
+    f: (x, y, z) => {
+      let d = Infinity;
+      for (const s of stenen) {
+        const dx = x - s.x;
+        const dy = y - s.y;
+        const dz = z - s.z;
+        const ca = Math.cos(s.a);
+        const sa = Math.sin(s.a);
+        const lx = ca * dx + sa * dy;
+        const ly = -sa * dx + ca * dy;
+        const ct = Math.cos(s.t);
+        const st = Math.sin(s.t);
+        d = Math.min(d, K.sdf.doos(lx, ct * ly + st * dz, -st * ly + ct * dz, s.h.x, s.h.y, s.h.z, s.rond));
+      }
+      return d * 0.9;
+    },
+    g: [0, 0, top / 2, straal],
+    m: M.steen,
+    deel: 1,
+  }, {
+    // gruis eronder
+    f: (x, y, z) => Math.max(Math.hypot(x / (breed + 3), y / (breed + 1)) - 1 + (ruis3(x * 0.3, y * 0.3, 0, 83) - 0.5) * 0.4, z - 0.4, -z - 0.6) * 2,
+    g: [0, 0, 0, breed + 8],
+    m: M.aarde,
+    deel: 2,
+  }];
+  return model(delen, materialen([]), { midden: [0, 0, top / 2], straal });
+}
+
+// Het model van een stapel van deze waar en maat.
+const MODEL = { hout: (naam, maat) => hoop(maat), steen: (naam) => steenhoop(naam) };
+
 // ---------------------------------------------------------------- het vel
 
-function cel(maat) {
+function cel(wat, naam, maat) {
   const B = new K.Beeld(CEL[0], CEL[1], ANKER[0], ANKER[1]);
-  K.tekenModel(B, hoop(maat), { richting: 'Z' });
+  K.tekenModel(B, MODEL[wat](naam, maat), { richting: 'Z' });
   K.belicht(B);
   K.omlijn(B);
   return K.Plaat.van(K.kwantiseer(B));
@@ -192,7 +255,7 @@ function cel(maat) {
 
 function vel() {
   const uit = new K.Plaat(CEL[0] * MATEN.length, CEL[1] * WAREN.length);
-  WAREN.forEach((wat, rij) => MATEN.forEach(([, maat], k) => uit.plak(cel(maat), k * CEL[0], rij * CEL[1])));
+  WAREN.forEach((wat, rij) => MATEN.forEach(([naam, maat], k) => uit.plak(cel(wat, naam, maat), k * CEL[0], rij * CEL[1])));
   return uit;
 }
 
@@ -204,17 +267,23 @@ function beschrijving(bestand) {
 
 // ---------------------------------------------------------------- de proefplaat
 
-// De drie maten naast een boer, zoals het spel ze tekent, drie keer vergroot. Zegt ook hoeveel pixels de tekening van de
-// rand van zijn cel afblijft.
+// De drie maten van elke waar naast een boer, zoals het spel ze tekent, drie keer vergroot (een rij per waar). Zegt ook
+// hoeveel pixels de tekening van de rand van zijn cel afblijft.
 function proef() {
   const { boer } = require('./dorpelingen.cjs');
   const figuur = K.losRenderen(boer({ houding: 'staan', fase: 0 }), { b: FIG_CEL[0], h: FIG_CEL[1], anker: FIG_ANKER, richting: 'Z' });
-  const stuk = new K.Plaat(300, 130);
+  const stuk = new K.Plaat(300, 130 * WAREN.length);
   // naast elkaar, een tegel uit elkaar (op de kaart naar rechts: x + 1, y - 1)
-  const legOp = (p, anker, i) => stuk.plak(p, 50 + i * 72 - anker[0], 112 - anker[1]);
-  const cellen = MATEN.map(([, maat]) => cel(maat));
-  legOp(figuur, FIG_ANKER, 0);
-  cellen.forEach((c, i) => legOp(c, ANKER, i + 1));
+  const legOp = (p, anker, i, rij) => stuk.plak(p, 50 + i * 72 - anker[0], 112 + rij * 130 - anker[1]);
+  const cellen = [];
+  WAREN.forEach((wat, rij) => {
+    legOp(figuur, FIG_ANKER, 0, rij);
+    MATEN.forEach(([naam, maat], i) => {
+      const c = cel(wat, naam, maat);
+      cellen.push({ c, naam: `${wat} ${naam}` });
+      legOp(c, ANKER, i + 1, rij);
+    });
+  });
   const vergroot = (p, n) => {
     const uit = new K.Plaat(p.b * n, p.h * n);
     for (let y = 0; y < p.h; y++) {
@@ -229,7 +298,7 @@ function proef() {
   const uit = path.join(__dirname, 'uit');
   fs.mkdirSync(uit, { recursive: true });
   fs.writeFileSync(path.join(uit, 'stapels-proef.png'), K.png(plaat, 1, '#5e6a44'));
-  cellen.forEach((c, i) => {
+  cellen.forEach(({ c, naam }) => {
     let [x0, x1, y0, y1] = [c.b, -1, c.h, -1];
     for (let y = 0; y < c.h; y++) {
       for (let x = 0; x < c.b; x++) {
@@ -241,12 +310,12 @@ function proef() {
       }
     }
     const r = { boven: y0, links: x0, rechts: c.b - 1 - x1, onder: c.h - 1 - y1 };
-    console.log(`${MATEN[i][0]}: ruimte ${JSON.stringify(r)}`);
+    console.log(`${naam}: ruimte ${JSON.stringify(r)}`);
     if (Math.min(r.boven, r.links, r.rechts, r.onder) < 1) console.log('LET OP: de tekening raakt de rand van zijn cel');
   });
   console.log(`uit/stapels-proef.png (${plaat.b}×${plaat.h}); cel ${CEL.join('×')}, anker ${ANKER.join(',')}`);
 }
 
-module.exports = { hoop, vel, beschrijving, proef, CEL, ANKER, WAREN, MATEN };
+module.exports = { hoop, steenhoop, vel, beschrijving, proef, CEL, ANKER, WAREN, MATEN };
 
 if (require.main === module) proef();

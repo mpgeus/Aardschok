@@ -2591,6 +2591,7 @@ Spel.TAAL_BRON = [
   {"t":"smallest stack fetched","waar":["js/opties.js"]},
   {"t":"loading time","waar":["js/opties.js"]},
   {"t":"kept at a workshop","waar":["js/opties.js"]},
+  {"t":"not by ox cart","waar":["js/opties.js"]},
   {"t":"smallest field","waar":["js/opties.js"]},
   {"t":"largest field","waar":["js/opties.js"]},
   {"t":"narrowest side","waar":["js/opties.js"]},

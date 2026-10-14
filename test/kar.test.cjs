@@ -10,10 +10,10 @@ T.ui = new Proxy({}, { get: () => () => undefined });
 
 // Het proefdorp (test/grond.cjs), stil: het huis van de schout (de opslag), twee boerderijen en hutten.
 function dorp() {
-  const { S, D, w, schout } = proefDorp(T);
+  const { S, D, w, schout, boerderijen } = proefDorp(T);
   Object.assign(S, { tijd: 0, wereldTijd: 0, modus: 'verkennen', vlaggen: new Set(), inventaris: new Set() });
   T.S = S;
-  return { S, D, w, schout, kar: D.begin.kar, dag: Math.floor(S.kalender.dag) };
+  return { S, D, w, schout, boerderijen, kar: D.begin.kar, dag: Math.floor(S.kalender.dag) };
 }
 
 // Een houthakker bij het vuur, meteen af; geeft het gebouw en de dag erna.
@@ -102,10 +102,12 @@ test('wat de bouwers rooien, ligt op de stapel van de bouwplaats; het hout van e
   T.opStapel(D, veld, 'hout', 2);
   assert.equal(boerderijen[0].stapel.hout, 2);
   assert.equal(veld.stapel, undefined);
-  // graan gaat (nog) niet met de kar
-  const graan = D.voorraad.graan;
+  // goud gaat niet met de kar (stap 3: de rest wel)
+  const goud = D.voorraad.goud;
+  T.opStapel(D, g, 'goud', 5);
+  assert.equal(D.voorraad.goud, goud + 5);
   T.opStapel(D, g, 'graan', 5);
-  assert.equal(D.voorraad.graan, graan + 5);
+  assert.equal(g.stapel.graan, 5);
 });
 
 test('een kar halverwege zijn rit, bewaard en geladen, rijdt verder', () => {
@@ -227,10 +229,44 @@ test('de timmerman neemt zijn hout uit wat de kar bij hem bracht, niet uit de op
   // Dan brengt de kar hout, en zaagt hij.
   g.karKanNietTot = 0;
   T.zetVoorraad(D, 'hout', 40);
-  T.zetVoorraad(D, 'planken', 0);
   dagen(T, S, dag + 2);
   assert.ok(g.werkte > 0, 'hij zaagt');
-  assert.ok(D.voorraad.planken > 0);
+  assert.ok(g.stapel.planken > 0, 'de planken liggen bij zijn deur, tot de kar ze haalt');
   assert.ok(g.in.hout > 0 && g.in.hout < T.KAR_INSTELLINGEN.voorraadIn, `bij hem: ${g.in.hout}`);
   assert.ok(Math.abs(D.voorraad.hout - (40 - T.KAR_INSTELLINGEN.voorraadIn)) < 1, `de kar nam het mee: ${D.voorraad.hout}`);
+});
+
+// ---------------------------------------------------------------------------------------------
+// Stap 3: de rest van wat een gebouw maakt (Marcel, 14 okt: "a ja, b ja, c ja, d ja")
+// ---------------------------------------------------------------------------------------------
+
+test('eten op een stapel eet het dorp niet, maar het telt wel voor de winter; pas in de opslag eten ze het', () => {
+  const { S, D, schout, dag } = dorp();
+  T.zetVoorraad(D, 'vlees', 0);
+  const winterVoor = T.etenVoorDeWinter(D, dag).dagen;
+  schout.stapel = { vlees: 12 }; // (een stapel bij het huis van de schout, alsof een jager hem maakte)
+  schout.karKanNietTot = dag + 2; // de kar komt er nog niet bij
+  assert.ok(T.etenVoorDeWinter(D, dag).dagen >= winterVoor, 'het vlees komt nog binnen');
+  dagen(T, S, dag + 1);
+  assert.equal(D.voorraad.vlees || 0, 0, 'niet in de opslag');
+  assert.ok(!D.behoeften.afwisseling.includes('vlees'), 'en niet gegeten');
+  schout.karKanNietTot = 0;
+  dagen(T, S, dag + 2);
+  assert.ok((D.voorraad.vlees || 0) + T.opDeStapels(D, 'vlees') > 0);
+  assert.ok(T.opDeStapels(D, 'vlees') < 12, 'de kar haalde het');
+});
+
+test('de oogst ligt bij de boerderij tot de kar hem haalt; wat van het vee komt, gaat meteen de voorraad in', () => {
+  const { D, boerderijen } = dorp();
+  const g = boerderijen[0];
+  const graan = D.voorraad.graan;
+  T.haalSchovenBinnen(D, 20, g);
+  assert.equal(g.stapel.graan, 20);
+  assert.equal(D.voorraad.graan, graan);
+  T.wijnBinnen(D, 2, g);
+  assert.ok(g.stapel.wijn > 0);
+  // het vee hoort niet bij een gebouw (Marcel: "c ja"): zonder gebouw meteen de voorraad in
+  const wol = D.voorraad.wol || 0;
+  T.opStapel(D, null, 'wol', 3);
+  assert.equal(D.voorraad.wol, wol + 3);
 });

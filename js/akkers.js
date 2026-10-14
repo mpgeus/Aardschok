@@ -698,7 +698,7 @@
           a.half.delete(sleutel(e.maait.x, e.maait.y));
           if (e.maait.hooi) {
             a.gehooid.add(sleutel(e.maait.x, e.maait.y));
-            if (D.voorraad && T.wijzigVoorraad) T.wijzigVoorraad(D, 'hooi', T.hooiPerTegel(a));
+            if (D.voorraad) T.opStapel(D, a.boerderij || null, 'hooi', T.hooiPerTegel(a)); // bij de boerderij, tot de kar het haalt (js/kar.js)
           } else {
             a.geoogst.add(sleutel(e.maait.x, e.maait.y));
             // Het zwad blijft liggen tot het gebonden, gedroogd en binnen is (vraag 140).
@@ -773,10 +773,14 @@
     if (!w || !w.akkers) return 0;
     let tegels = 0;
     let graan = 0;
+    // Per boerderij, want daar ligt het tot de ossenkar het haalt (js/kar.js; werklijst C, stap 3).
+    const perBoerderij = new Map();
+    const bij = (g, n) => perBoerderij.set(g, (perBoerderij.get(g) || 0) + n);
     for (const akker of w.akkers) {
       const boer = boerVan(w, akker);
       if (!boer) continue;
       if (!akker.geoogst) akker.geoogst = new Set();
+      const voor = graan;
       for (const t of onbeslistTegels(akker)) {
         akker.geoogst.add(sleutel(t.x, t.y));
         tegels++;
@@ -790,16 +794,19 @@
         }
         akker.schoven.clear();
       }
+      bij(akker.boerderij || null, graan - voor);
     }
     // Wat ze nog droegen, is ook binnen.
     for (const e of w.wezens || []) {
       if (!(e.vracht > 0)) continue;
       graan += e.vracht;
+      bij(e.vrachtVoor || null, e.vracht);
       e.vracht = 0;
+      e.vrachtVoor = null;
       if (e.draagt === 'schoof') e.draagt = null;
     }
-    if (tegels && D.voorraad && T.wijzigVoorraad) {
-      T.wijzigVoorraad(D, 'graan', graan);
+    if (tegels && D.voorraad) {
+      for (const [g, n] of perBoerderij) T.opStapel(D, g, 'graan', n);
       T.telOogstInJaarboek(D, graan);
       T.zeg(D, T.t('The farmers bring in the rest of the harvest: {graan}.', { graan: T.hoeveel(Math.round(graan), 'graan') }), 'goed');
     }
@@ -831,10 +838,11 @@
     }
     return graan;
   };
-  // Het graan is in de schuur: in de voorraad, en in het jaarboek (js/einde.js).
-  T.haalSchovenBinnen = function (D, graan) {
+  // Het graan is in de schuur van boerderij `bij`: daar ligt het tot de ossenkar het haalt (js/kar.js; werklijst C, stap
+  // 3), zonder kar meteen in de voorraad; en in het jaarboek (js/einde.js).
+  T.haalSchovenBinnen = function (D, graan, bij) {
     if (!(graan > 0)) return;
-    T.wijzigVoorraad(D, 'graan', graan);
+    T.opStapel(D, bij || null, 'graan', graan);
     T.telOogstInJaarboek(D, graan);
   };
   // Hoeveel graan er nog op het veld staat, als zwad, in hokken of op iemands schouder: het komt binnen, dus het dorp
@@ -850,8 +858,9 @@
   T.tikSchovenDag = function (D) {
     for (const e of (D.wereld && D.wereld.wezens) || []) {
       if (!(e.vracht > 0)) continue;
-      T.haalSchovenBinnen(D, e.vracht);
+      T.haalSchovenBinnen(D, e.vracht, e.vrachtVoor);
       e.vracht = 0;
+      e.vrachtVoor = null;
       if (e.draagt === 'schoof') e.draagt = null;
     }
   };
@@ -864,19 +873,23 @@
     if (!w || !w.akkers) return 0;
     let tegels = 0;
     let hooi = 0;
+    const perBoerderij = new Map(); // daar ligt het tot de ossenkar het haalt (js/kar.js)
     for (const veld of w.akkers) {
       const boer = boerVan(w, veld);
       if (!boer) continue;
       if (!veld.gehooid) veld.gehooid = new Set();
+      const voor = hooi;
       for (const t of hooiTegels(veld)) {
         veld.gehooid.add(sleutel(t.x, t.y));
         tegels++;
         hooi += T.hooiPerTegel(veld);
       }
+      const g = veld.boerderij || null;
+      perBoerderij.set(g, (perBoerderij.get(g) || 0) + hooi - voor);
     }
     for (const e of w.wezens || []) if (e.maait && e.maait.hooi) e.maait = e.oogstDoel = null;
-    if (tegels && D.voorraad && T.wijzigVoorraad) {
-      T.wijzigVoorraad(D, 'hooi', hooi);
+    if (tegels && D.voorraad) {
+      for (const [g, n] of perBoerderij) T.opStapel(D, g, 'hooi', n);
       T.zeg(D, T.t('The farmers bring in the rest of the hay: {hooi}.', { hooi: T.hoeveel(Math.round(hooi), 'hooi') }), 'goed');
     }
     return tegels;

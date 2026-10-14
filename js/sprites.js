@@ -569,6 +569,27 @@
     const kolom = Math.min(t.maten.length - 1, Math.floor(Math.max(0, vol) * t.maten.length));
     return stuk(MAP + t.bestand, kolom * t.cel[0], rij * t.cel[1], t.cel[0], t.cel[1], t.anker);
   };
+  // Wat geen eigen stapel heeft, ligt in de manden, kratten, zakken en tonnen van de markt (werklijst C, stap 3; Marcel,
+  // 14 okt: "d ja"): welke bij welke waar; de rest in zakken. Planken liggen op de houtstapel.
+  const IN_DE_MAND = {
+    groente: 'mand kolen', eieren: 'mand leeg', brood: 'krat brood', // geen tekst
+    wol: 'krat wol', laken: 'krat wol', huiden: 'krat wol', leer: 'krat wol', riet: 'krat wol', // geen tekst
+    vlees: 'ton leeg', vis: 'ton leeg', bier: 'ton leeg', wijn: 'ton leeg', vaten: 'ton leeg', // geen tekst
+    graan: 'zak', meel: 'zak', hooi: 'zak',
+  };
+  const EIGEN_STAPEL = { planken: 'hout', klei: 'steen', kalk: 'steen' };
+  // De stukken van een stapel om te tekenen: [{ deel, dx, dy }] (in beeldpunten vanaf de tegel), of [] zonder vel. Een
+  // eigen stapel is één tekening; manden één, twee of drie naast elkaar, naar hoe vol hij is.
+  S.stapelDelen = function (wat, vol) {
+    const eigen = S.stapel(EIGEN_STAPEL[wat] || wat, vol);
+    if (eigen) return [{ deel: eigen, dx: 0, dy: 0 }];
+    const mand = S.mand(IN_DE_MAND[wat] || 'zak');
+    if (!mand) return [];
+    const plekken = [[0, 0], [-11, -4], [10, -5]];
+    const n = Math.min(plekken.length, 1 + Math.floor(Math.max(0, vol) * plekken.length));
+    // de achterste eerst, zodat de voorste ervoor staat
+    return plekken.slice(0, n).sort((a, b) => a[1] - b[1]).map(([dx, dy]) => ({ deel: mand, dx, dy }));
+  };
 
   // Het hol van een roedel wolven (js/beesten.js, gereedschap/pixelart/hol.cjs): één tekening, zoals de meiboom, met het
   // anker op de grond in het midden van de tegel. Null als het vel er niet is.

@@ -1481,7 +1481,8 @@
       if (tot) {
         for (const wat in tot) {
           const per = (soort.maakt.uit && soort.maakt.uit[wat]) || 0;
-          const kan = per > 0 ? Math.max(0, tot[wat] - (D.voorraad[wat] || 0)) / per : factor;
+          // (wat op de stapels ligt, komt nog binnen: js/kar.js)
+          const kan = per > 0 ? Math.max(0, tot[wat] - (D.voorraad[wat] || 0) - T.opDeStapels(D, wat)) / per : factor;
           if (kan < factor) {
             factor = kan;
             g.vol = wat;

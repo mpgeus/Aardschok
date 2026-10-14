@@ -240,14 +240,17 @@ test('de herberg brouwt van graan, tot er genoeg bier ligt', () => {
   const soort = T.GEBOUWEN.herberg;
   T.tikGebouwenDag(S.dorp, HERFST + 1);
   assert.ok(g.werkte > 0, T.gebouwToestand(S.dorp, g));
-  assert.ok(Math.abs(S.dorp.voorraad.bier - soort.maakt.uit.bier * g.werkte) < 1e-9, 'bier naar het werk van vandaag');
+  // (het bier ligt bij de herberg tot de ossenkar het haalt: js/kar.js, werklijst C, stap 3)
+  const bier = () => S.dorp.voorraad.bier + T.opDeStapels(S.dorp, 'bier');
+  assert.ok(Math.abs(bier() - soort.maakt.uit.bier * g.werkte) < 1e-9, 'bier naar het werk van vandaag');
   // Ligt er bijna genoeg, dan brouwt hij niet meer dan er nog bij kan. Gisteravond ging er niemand
   // (anders dronken ze eerst: met vijf gasten brouwt hij op één dag niet alles terug).
   metKans(0, () => {
+    g.stapel = {}; // het bier van gisteren ligt nu in de opslag
     T.zetVoorraad(S.dorp, 'bier', T.maaktTot(soort, S.dorp).bier - 1);
     T.tikGebouwenDag(S.dorp, HERFST + 2);
   });
-  assert.ok(Math.abs(S.dorp.voorraad.bier - T.maaktTot(soort, S.dorp).bier) < 1e-9, `${S.dorp.voorraad.bier}`);
+  assert.ok(Math.abs(bier() - T.maaktTot(soort, S.dorp).bier) < 1e-9, `${bier()}`);
   assert.equal(T.maaktTot(soort).bier, 60, 'sinds 8 okt (was 30): tot er 60 bier is, boven wat apart ligt voor de huizen');
   assert.equal(g.vol, 'bier');
   g.werkte = 0;

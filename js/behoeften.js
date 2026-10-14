@@ -884,6 +884,10 @@
 
   // Hoeveel de soorten naast het graan en de kaas in de voorraad het dorp nog voeden, in graan: voor het venster van de
   // heer (js/heer.js, T.heerVooruitzicht) en of het eten de winter haalt.
+  // Het eten dat op de stapels ligt (js/kar.js; werklijst C, stap 3), in graan: het komt nog binnen, dus het dorp rekent
+  // ermee als het kijkt of het eten de winter haalt, maar het eet het pas als de ossenkar het bracht.
+  const etenOpDeStapels = (D) => Object.keys(T.SOORTEN_ETEN).reduce((n, wat) => n + T.opDeStapels(D, wat) * T.voedtAlsGraan(wat), 0);
+
   T.etenNaastGraan = function (D) {
     const v = D.voorraad || {};
     return Object.keys(T.SOORTEN_ETEN).filter((wat) => wat !== 'graan' && wat !== 'kaas')
@@ -975,7 +979,7 @@
     // Wat er nog als schoven op het veld staat, komt binnen (js/akkers.js, vraag 140).
     const graan = Math.max(0, (v.graan || 0) + T.graanOpHetVeld(D) - T.zaaigraanApart(D, van));
     const r = T.haaltDeWinter({
-      voorraad: graan + (v.kaas || 0) + T.etenNaastGraan(D),
+      voorraad: graan + (v.kaas || 0) + T.etenNaastGraan(D) + etenOpDeStapels(D),
       voorWinter: melkVoor - eet * tot,
       perWinterdag: eet - melkIn,
       winter: duur,

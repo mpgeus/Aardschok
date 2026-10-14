@@ -135,8 +135,16 @@ waarin je bouwde, zodra de plek gerooid is. Wat de bouwers op de plek rooien, ga
 op de stapel. De bouwers komen zo ver als het hout reikt, en het briefje zegt het ("waiting for the ox cart to bring wood
 (5 of 8 here)"); een plaats die op hout wacht en vandaag niets krijgt, slaan ze over. Een werkplaats die hout verwerkt (de
 timmerman, de kuiper) neemt het uit wat de kar bij hem bracht, tot 8. De kar brengt eerst, dan haalt hij. De raad telt
-het hout dat de bouwplaatsen nog vragen niet als brandhout. Nog niet met de kar: de rest van wat een gebouw maakt (stap
-3). De getallen in de werkbank ("The ox cart"). In de console: `Spel.debug.kar()`.
+het hout dat de bouwplaatsen nog vragen niet als brandhout. **Alles met de kar** (stap 3; Marcel: "a ja, b ja, c ja, d
+ja"): niet alleen het hout, maar alles wat een gebouw maakt (het vlees en de huiden van de jager, de vis, de groente, de
+eieren, de steen, het bier) ligt bij de deur tot de kar het haalt, en wat een werkplaats verwerkt (de molen zijn graan),
+brengt de kar; alleen het goud niet. Het dorp eet pas wat in de opslag is, ook voor de afwisseling, maar de raad rekent
+voor de winter met wat op de stapels ligt. De oogst, de schoven en de wijn blijven bij hun boerderij tot de kar komt: na
+de oogst heeft hij een week werk (in de proef 235 graan, binnen in zes dagen). Wat niet van een gebouw komt, gaat meteen
+de voorraad in: wat het vee geeft (de wol, de melk en de kaas, het vlees van het slachten, de mest), het sprokkelhout en
+wat de marskramer brengt. Je ziet hout en steen als een hoop, en de rest in de manden, kratten, zakken en tonnen van de
+markt (een, twee of drie, naar hoe vol de stapel is); de kar rijdt met stammen, stenen, zakken of spullen. De getallen in
+de werkbank ("The ox cart"). In de console: `Spel.debug.kar()`.
 
 **Zo werkt de mist nu** (13 okt, B2c; Marcel: "A2, B1, C ok"; `js/mist.js`, het plan in `kaarten.md`, "Het hele
 eiland"): het eiland is zwart waar niemand van jou kwam, grijs (donkerder en ontkleurd) wat je zag maar nu niet ziet, en

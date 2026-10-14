@@ -83,9 +83,10 @@
   // De volle ranken die nog geplukt moeten worden.
   T.volleRanken = (D, g, dag) => T.rankenVan(D, g).filter((v) => T.rankStand(v, dag) === 'vol');
 
-  // De wijn van zoveel ranken is binnen: hij komt in de voorraad.
-  T.wijnBinnen = function (D, ranken) {
-    if (ranken > 0) T.wijzigVoorraad(D, 'wijn', ranken * IN().wijnPerRank);
+  // De wijn van zoveel ranken is binnen, bij wijnboerderij `bij`: daar ligt hij tot de ossenkar hem haalt (js/kar.js;
+  // werklijst C, stap 3), zonder kar meteen in de voorraad.
+  T.wijnBinnen = function (D, ranken, bij) {
+    if (ranken > 0) T.opStapel(D, bij || null, 'wijn', ranken * IN().wijnPerRank);
   };
 
   // Een rank is geplukt.
@@ -102,7 +103,7 @@
         if (!(e.mand > 0)) continue;
         const p = T.bewonerVan(D, e);
         if (!p || p.huis !== g) continue;
-        T.wijnBinnen(D, e.mand);
+        T.wijnBinnen(D, e.mand, g);
         e.mand = 0;
         if (e.draagt === 'mand') e.draagt = null;
       }

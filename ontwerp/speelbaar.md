@@ -164,10 +164,18 @@ als hij in het kamp staat.
   (zoals op 13 okt): de kar zit het bouwen niet in de weg.
 - Hoe druk de kar is en hoe groot de stapels worden, meet stap 6, als alles met de kar gaat; nu is het alleen het hout,
   en dan staat hij het grootste deel van de dag stil (`werklijst.md`, C).
-- **Stap 2** (`--naam c2`: de bouwplaats krijgt haar hout met de kar): weer geen fout en geen doden, en hetzelfde hout op
-  1 lentemaand. Een hut komt hier en daar een dag later af (hut 11 (6) in plaats van (5)). De kolonist bouwt alleen met
-  hout dat nog niet aan een bouwplaats beloofd is (`T.nogTeBrengen`); zonder dat zette hij op dag 1 een hut in plaats van
-  een houthakker, want het hout van zijn bouwplaatsen stond nog in de opslag.
+- **Stap 2** (`--naam c2`, de uitslag in `uit/c2/`: de bouwplaats krijgt haar hout met de kar): weer geen fout, geen
+  doden en geen kou. Een hut komt hier een dag later af en daar een dag eerder (eiland 3: hut 15 (9) in plaats van 14
+  (8)). Het hout op 1 lentemaand: 172, 419 en 437 (stap 1: 159, 419 en 591); waarom eiland 3 minder overhoudt, is niet
+  uitgezocht. De kolonist bouwt alleen met hout dat nog niet aan een bouwplaats beloofd is (`T.nogTeBrengen`); zonder dat
+  zette hij op dag 1 een hut in plaats van een houthakker, want het hout van zijn bouwplaatsen stond nog in de opslag.
+  (Eerst stond hier dat het hout gelijk bleef: dat kwam uit de samenvatting van stap 1, want met `--naam` schrijft de
+  speeltest in een eigen map.)
+- **Stap 3** (`--naam c3`, in `uit/c3/`: alles met de kar): geen fout, geen doden, geen dag honger of kou. Het eten ligt
+  eerst bij de deur, dus het dorp eet wat vaker minder soorten (eiland 3: 3 dagen één soort, was 0; vier soorten 368 tot
+  372 dagen, was 373 tot 377), en rond dag 42 zet de kolonist daarom een tweede moestuin. Het graan op 1 lentemaand: 215,
+  147 en 201 (was 215, 188 en 202). De oogst ligt na het maaien een week bij de boerderij (in een proef 235 graan, in
+  zes dagen binnen).
 
 ## De speeltest van 13 okt, avond: de afwisseling (werklijst B3, vraag 154)
 

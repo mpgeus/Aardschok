@@ -556,7 +556,7 @@
     const deur = T.deurVan(w, g);
     const hier = { x: e.tx, y: e.ty };
     const binnen = () => {
-      T.wijnBinnen(D, e.mand || 0);
+      T.wijnBinnen(D, e.mand || 0, g);
       e.mand = 0;
       e.draagt = null;
     };
@@ -698,8 +698,9 @@
     const deur = T.deurVan(w, o.schuur);
     const hier = { x: e.tx, y: e.ty };
     const inDeSchuur = () => {
-      T.haalSchovenBinnen(D, e.vracht || 0);
+      T.haalSchovenBinnen(D, e.vracht || 0, o.schuur);
       e.vracht = 0;
+      e.vrachtVoor = null;
       e.draagt = null;
     };
     const naarDeSchuur = () => {
@@ -744,6 +745,7 @@
       if (!naar(t, 'dragen')) return;
       const mee = droog.filter((d) => d.a === t.a).slice(0, T.SCHOVEN_INSTELLINGEN.perVracht);
       e.vracht = (e.vracht || 0) + T.neemSchoven(t.a, mee);
+      e.vrachtVoor = o.schuur; // waar het binnenkomt, ook als de nacht het brengt (T.tikSchovenDag)
       naarDeSchuur();
       return;
     }

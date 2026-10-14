@@ -4537,6 +4537,174 @@
       }
      }
     },
+    "ossenkar-stenen": {
+     "naam": "ossenkar-stenen",
+     "lading": "stenen",
+     "cel": [
+      216,
+      156
+     ],
+     "anker": [
+      108,
+      116
+     ],
+     "snelheid": 0.9,
+     "snelheidEenheid": "tegels per seconde",
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "ossenkar-stenen-staan.png",
+       "beelden": 8,
+       "fps": 5,
+       "herhaal": true,
+       "cel": [
+        208,
+        134
+       ],
+       "anker": [
+        104,
+        99
+       ]
+      },
+      "lopen": {
+       "bestand": "ossenkar-stenen-lopen.png",
+       "beelden": 8,
+       "fps": 8,
+       "herhaal": true,
+       "snelheid": 0.9,
+       "stap": 0.45,
+       "cel": [
+        208,
+        134
+       ],
+       "anker": [
+        104,
+        96
+       ]
+      }
+     }
+    },
+    "ossenkar-zakken": {
+     "naam": "ossenkar-zakken",
+     "lading": "zakken",
+     "cel": [
+      216,
+      156
+     ],
+     "anker": [
+      108,
+      116
+     ],
+     "snelheid": 0.9,
+     "snelheidEenheid": "tegels per seconde",
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "ossenkar-zakken-staan.png",
+       "beelden": 8,
+       "fps": 5,
+       "herhaal": true,
+       "cel": [
+        208,
+        134
+       ],
+       "anker": [
+        104,
+        99
+       ]
+      },
+      "lopen": {
+       "bestand": "ossenkar-zakken-lopen.png",
+       "beelden": 8,
+       "fps": 8,
+       "herhaal": true,
+       "snelheid": 0.9,
+       "stap": 0.45,
+       "cel": [
+        208,
+        134
+       ],
+       "anker": [
+        104,
+        96
+       ]
+      }
+     }
+    },
+    "ossenkar-spullen": {
+     "naam": "ossenkar-spullen",
+     "lading": "spullen",
+     "cel": [
+      216,
+      156
+     ],
+     "anker": [
+      108,
+      116
+     ],
+     "snelheid": 0.9,
+     "snelheidEenheid": "tegels per seconde",
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "ossenkar-spullen-staan.png",
+       "beelden": 8,
+       "fps": 5,
+       "herhaal": true,
+       "cel": [
+        208,
+        134
+       ],
+       "anker": [
+        104,
+        99
+       ]
+      },
+      "lopen": {
+       "bestand": "ossenkar-spullen-lopen.png",
+       "beelden": 8,
+       "fps": 8,
+       "herhaal": true,
+       "snelheid": 0.9,
+       "stap": 0.45,
+       "cel": [
+        208,
+        134
+       ],
+       "anker": [
+        104,
+        96
+       ]
+      }
+     }
+    },
     "kip0": {
      "naam": "kip0",
      "cel": [
@@ -43841,7 +44009,8 @@
      44
     ],
     "waren": [
-     "hout"
+     "hout",
+     "steen"
     ],
     "maten": [
      "klein",

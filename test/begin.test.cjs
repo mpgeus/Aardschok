@@ -481,7 +481,8 @@ test('een jaar met de kolonist: alles wat hij neerzet, komt af, het kamp is leeg
   }
   const akkers = w.akkers.filter((a) => a.boerderij);
   assert.equal(akkers.reduce((n, a) => n + a.b * a.h, 0), T.BEGIN_INSTELLINGEN.kar.zaaigraan, 'akkers voor al het zaaigraan uit de kar');
-  assert.ok(graan[6 * T.DAGEN_PER_MAAND] > graan[5 * T.DAGEN_PER_MAAND] + 100, 'de oogst is binnen');
+  // (de oogst ligt eerst bij de boerderij, en de ossenkar haalt hem in een week binnen: js/kar.js, werklijst C, stap 3)
+  assert.ok(graan[6 * T.DAGEN_PER_MAAND + 10] > graan[5 * T.DAGEN_PER_MAAND] + 100, 'de oogst is binnen');
   assert.ok(gehakt > 0, 'de houthakker hakt');
 });
 

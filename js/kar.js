@@ -1,8 +1,10 @@
 // De ossenkar (werklijst C; Marcel, 11 okt: "Misschien dat grondstoffen worden opgehaald met een kar?", en op het plan van
 // 14 okt: "A2, B2, C1, D2, E2"): wat een gebouw maakt, ligt op een stapel bij zijn deur tot de kar het haalt, en telt pas
 // in de voorraad als het in de opslag is (het huis van de schout; tot dat er is, de plek van de kar in het kamp); en wat
-// een bouwplaats of een werkplaats nodig heeft, brengt de kar uit de opslag. Het gaat om de waren in `waren` hieronder
-// (stap 1 en 2: het hout; de rest komt in stap 3).
+// een bouwplaats of een werkplaats nodig heeft, brengt de kar uit de opslag. Dat geldt voor alles behalve het goud
+// (`nietMetDeKar` hieronder; stap 3, A2). Wat niet van een gebouw komt, gaat meteen de voorraad in: wat het vee geeft (de
+// wol, de melk en de kaas, het vlees van het slachten, de mest; Marcel, 14 okt: "c ja"), het sprokkelhout, en wat de
+// marskramer brengt.
 //
 // De stapel ligt op het gebouw: g.stapel = { hout: 6 }. Een veld legt zijn hout op de stapel van zijn boerderij. Is een
 // stapel `stapelVol`, dan maakt het gebouw niets meer (T.ruimteOpStapel, js/gebouwen.js): zo zie je waar het stokt.
@@ -33,8 +35,9 @@
 
   // Alle getallen in één blok (ook in de werkbank van de spelregels, js/opties.js).
   T.KAR_INSTELLINGEN = {
-    // Wat met de kar gaat (stap 1 en 2: het hout; stap 3, A2: alles wat een gebouw maakt).
-    waren: ['hout'],
+    // Wat niet met de kar gaat: het goud, dat de schout zelf betaalt. De rest van wat een gebouw maakt of vraagt, gaat
+    // met de kar (stap 3, A2; tot dan alleen het hout).
+    nietMetDeKar: ['goud'],
     // Zoveel neemt de kar per rit mee. Met de getallen van 14 okt rijdt hij binnen het bouwbereik drie tot vier ritten
     // per dag (een rit van 20 tegels heen is zo'n twee uur), en maakt een houthakker 2 hout per dag: één kar is ruim
     // genoeg voor een gehucht. Wil je hem eerder voelen, dan is dit het getal.
@@ -67,7 +70,7 @@
   T.karrenVan = (D) => (D && D.karren) || [];
   T.metDeKar = (D) => T.karrenVan(D).length > 0;
   // Gaat deze waar in dit dorp op een stapel?
-  T.gaatMetDeKar = (D, wat) => T.metDeKar(D) && IN().waren.includes(wat);
+  T.gaatMetDeKar = (D, wat) => T.metDeKar(D) && !IN().nietMetDeKar.includes(wat);
 
   // Het gebouw waar wat hier gemaakt of gerooid wordt, op de stapel komt: een veld legt het bij zijn boerderij.
   const stapelGebouw = (g) => (g && T.isVeldSoort(g.soort) ? g.boerderij || null : g);
@@ -196,7 +199,6 @@
   T.krijgtVandaagHout = function (D) {
     const krijgt = new Set();
     const ligt = {};
-    for (const wat of IN().waren) ligt[wat] = D.voorraad[wat] || 0;
     for (const g of D.gebouwen) {
       const B = g.bouw;
       if (!B || g.klaar || !B.nodig) continue;
@@ -204,8 +206,9 @@
       for (const wat in B.nodig) {
         const rest = Math.max(0, B.nodig[wat] - (B.er[wat] || 0) - onderweg(D, g, wat));
         if (rest <= 1e-6) continue;
+        if (!(wat in ligt)) ligt[wat] = D.voorraad[wat] || 0;
         if (!(ligt[wat] >= IN().minstens)) alles = false;
-        ligt[wat] = Math.max(0, (ligt[wat] || 0) - rest);
+        ligt[wat] = Math.max(0, ligt[wat] - rest);
       }
       if (alles) krijgt.add(g);
     }
@@ -304,11 +307,18 @@
     e.padDoel = null;
   }
 
-  // Zijn vel: de huifkar blijft de huifkar tot het huis van de schout er is (js/begin.js); de ossenkar is leeg of
-  // geladen.
+  // Zijn vel: de huifkar blijft de huifkar tot het huis van de schout er is (js/begin.js); de ossenkar is leeg, of geladen
+  // met wat hij het meest draagt: stammen, stenen, spullen, of anders zakken (gereedschap/pixelart/ossenkar.cjs).
+  const LADING_VEL = {
+    hout: 'ossenkar-hout', planken: 'ossenkar-hout', steen: 'ossenkar-stenen', klei: 'ossenkar-stenen', kalk: 'ossenkar-stenen',
+    ijzer: 'ossenkar-stenen', gereedschap: 'ossenkar-spullen', wapens: 'ossenkar-spullen', vaten: 'ossenkar-spullen',
+    laken: 'ossenkar-spullen', huiden: 'ossenkar-spullen', leer: 'ossenkar-spullen', riet: 'ossenkar-spullen',
+  };
   function zetVel(e) {
     if (e.vel === 'huifkar') return;
-    e.vel = som(e.lading) > 0 ? 'ossenkar-hout' : 'ossenkar-leeg';
+    let meest = null;
+    for (const wat in e.lading || {}) if (e.lading[wat] > 1e-6 && (!meest || e.lading[wat] > e.lading[meest])) meest = wat;
+    e.vel = meest ? LADING_VEL[meest] || 'ossenkar-zakken' : 'ossenkar-leeg';
   }
   T.zetKarVel = zetVel;
 
@@ -329,6 +339,13 @@
   }
   const deurDoel = (D, g) => ({ ...T.deurVan(D.wereld, g), naast: true });
 
+  // Welke waren een bouwplaats (wat hij nodig heeft) of een werkplaats (wat hij verwerkt) van de kar kan willen.
+  function watHetVraagt(D, g) {
+    if (g.bouw && !g.klaar) return Object.keys(g.bouw.nodig || {});
+    const soort = T.GEBOUWEN[g.soort];
+    return g.klaar && soort && soort.maakt && soort.maakt.in ? Object.keys(soort.maakt.in).filter((wat) => T.gaatMetDeKar(D, wat)) : [];
+  }
+
   // Wat een bouwplaats of een werkplaats nog van `wat` wil, bovenop wat er is en wat onderweg is; 0 als niets.
   function vraag(D, g, wat) {
     const B = g.bouw;
@@ -342,6 +359,10 @@
     return rest >= IN().voorraadIn / 2 ? rest : 0;
   }
 
+  // Wat de kar uit de opslag mag meenemen: van het graan niet wat de boeren apart houden om te zaaien (T.zaaigraanApart,
+  // js/akkers.js), zoals de molen het ook niet nam.
+  const beschikbaar = (D, wat, t) => Math.max(0, (D.voorraad[wat] || 0) - (wat === 'graan' ? T.zaaigraanApart(D, Math.floor(t)) : 0));
+
   // Wat de kar nu gaat doen, of null. Eerst brengen, naar de bouwplaatsen in de volgorde waarin je ze neerzette en dan naar
   // de werkplaatsen, als er genoeg in de opslag ligt voor een goede vracht; anders halen, de grootste stapel; en is er
   // geen stapel, dan toch brengen wat er is.
@@ -350,10 +371,10 @@
     const bouwplaatsenEerst = [...D.gebouwen].sort((a, b) => (a.bouw && !a.klaar ? 0 : 1) - (b.bouw && !b.klaar ? 0 : 1));
     for (const g of bouwplaatsenEerst) {
       if ((g.karKanNietTot || 0) > t) continue;
-      for (const wat of IN().waren) {
+      for (const wat of watHetVraagt(D, g)) {
         const wil = vraag(D, g, wat);
         if (wil <= 1e-6) continue;
-        const ligt = D.voorraad[wat] || 0;
+        const ligt = beschikbaar(D, wat, t);
         const n = Math.min(IN().lading, wil, ligt);
         if (n >= Math.min(IN().lading, wil) - 1e-9 && n > 0) return { plan: 'brengen', naar: g, wat, n };
         if (!half && n >= IN().minstens) half = { plan: 'brengen', naar: g, wat, n };
@@ -421,7 +442,7 @@
         return verder('inladen');
       case 'inladen': {
         // wat er nu nog ligt (er kan intussen gestookt zijn), tot wat de plaats nog vraagt
-        const n = erNog ? Math.min(R.n, D.voorraad[R.wat] || 0) : 0;
+        const n = erNog ? Math.min(R.n, beschikbaar(D, R.wat, t)) : 0;
         if (n <= 0) {
           e.rit = null;
           return;

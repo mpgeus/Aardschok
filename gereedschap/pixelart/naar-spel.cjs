@@ -412,6 +412,10 @@ const FIGUURLIJST = {
   huifkar: { map: ['ossenkar', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'ossenkar-anim.cjs huifkar' },
   'ossenkar-leeg': { map: ['ossenkar', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'ossenkar-anim.cjs ossenkar-leeg' },
   'ossenkar-hout': { map: ['ossenkar', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'ossenkar-anim.cjs ossenkar-hout' },
+  // en met de andere ladingen (werklijst C, stap 3)
+  'ossenkar-stenen': { map: ['ossenkar', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'ossenkar-anim.cjs ossenkar-stenen' },
+  'ossenkar-zakken': { map: ['ossenkar', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'ossenkar-anim.cjs ossenkar-zakken' },
+  'ossenkar-spullen': { map: ['ossenkar', 'animaties'], houdingen: ['staan', 'lopen'], bron: 'ossenkar-anim.cjs ossenkar-spullen' },
 };
 // Het kleine leven (vraag 145, 3; klein-anim.cjs): de kippen en de honden, alleen beeld (js/kleinleven.js).
 for (const f of require('./klein-anim.cjs').FIGUREN) {

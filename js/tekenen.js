@@ -3004,20 +3004,19 @@
     paal(b);
   }
 
-  // De stapels naast de deuren (js/kar.js): wat een gebouw maakte en de ossenkar nog moet halen, klein, half of vol. Zonder
-  // kunst: een blok hout, zo hoog als hij vol is.
+  // De stapels naast de deuren (js/kar.js): wat een gebouw maakte en de ossenkar nog moet halen, klein, half of vol; hout
+  // en steen als hoop, de rest in manden, kratten, zakken en tonnen (T.sprites.stapelDelen). Zonder kunst: een blok, zo
+  // hoog als hij vol is.
   function stapelsInLijst(ctx, S, w, D, vak, lijst) {
     if (!D || !T.metDeKar(D)) return;
     for (const s of T.stapelsOp(D)) {
       if (!inVak(vak, s.x, s.y) || !T.isZichtbaar(w, s.x, s.y)) continue;
-      const deel = metSprites() && T.sprites.stapel(s.wat, s.vol);
+      const delen = metSprites() ? T.sprites.stapelDelen(s.wat, s.vol) : [];
       lijst.push({
         d: s.x + s.y, l: 1, punt: { x: s.x, y: s.y }, f: () => {
-          if (deel) tekenKlein(ctx, deel, s.x, s.y, 0);
-          else {
-            const p = opGrond(s.x, s.y);
-            T.blok(ctx, p.x, p.y, 0.3, 0.2, 4 + 14 * Math.min(1, s.vol), '#8a6a3c');
-          }
+          const p = opGrond(s.x, s.y);
+          if (delen.length) for (const d of delen) T.sprites.teken(ctx, d.deel, p.x + d.dx, p.y + d.dy);
+          else T.blok(ctx, p.x, p.y, 0.3, 0.2, 4 + 14 * Math.min(1, s.vol), '#8a6a3c');
         },
       });
     }
