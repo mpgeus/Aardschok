@@ -249,8 +249,12 @@ niet). Twee agents brachten in kaart wat elk systeem doet en wat eraan hangt; wa
 1. **Verhuizen wat blijft**, zonder dat het spel verandert: de statussen naar een eigen bestand (`js/statussen.js`), het
    dagboek naar `js/dag.js`, de prijs van een antwoord en het lot van de dag naar `js/grillen.js`, het midden van de
    marktplek naar `js/markt.js`.
-2. **Brand, koorts, wolven en het zaaigraan zonder voorval** (de vraag hieronder). De wolven raken `js/beesten.js`, waar
-   stap 2 van vraag 170 ook werkt: dat deel na stap 2, of zo klein mogelijk.
+2. **Brand, koorts, wolven en het zaaigraan zonder voorval.** Marcel (15 okt): **het dorp doet het zelf.** De brand
+   begint zelf (even vaak in de droogte), met een bericht met een plek, en het dorp blust altijd; de koorts begint zelf en
+   verspreidt zich zoals bij "bidden" (zonder middel); bij het zaaigraan valt de vraag weg, "Only in need" wordt de
+   standaard en "Guard it" gaat eruit; de wolven nemen een schaap, met een bericht met een plek, en jij stuurt je
+   soldaten (de jacht en het hek uit het voorval vervallen; een hek kan terugkomen met de muren, 158). De wolven raken
+   `js/beesten.js`, waar stap 2 van vraag 170 ook werkt: dat deel zo klein mogelijk.
 3. **Weg:** de voorvallen (met hun gesprekken, het uitroepteken en `e.zoektSchout`, de spelregel "Events"), de raadsman
    met zijn venster (R, de spelregel "Advisor", het trager maaien), het rapport (de knop, de spelregel), de feesten (de
    meiboom, de kerstboom, de vrije dag, de spelregel), en de raden die eraan hingen; het opslaan een versie omhoog; de
