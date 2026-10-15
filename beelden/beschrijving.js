@@ -5938,6 +5938,74 @@
       }
      }
     },
+    "zager-u0": {
+     "naam": "zager-u0",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zager-u0-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        82
+       ],
+       "anker": [
+        24,
+        77
+       ]
+      },
+      "lopen": {
+       "bestand": "zager-u0-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        88
+       ],
+       "anker": [
+        25,
+        77
+       ]
+      },
+      "zagen": {
+       "bestand": "zager-u0-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        86
+       ],
+       "anker": [
+        55,
+        81
+       ]
+      }
+     }
+    },
     "boer-u1": {
      "naam": "boer-u1",
      "cel": [
@@ -6555,6 +6623,74 @@
        "anker": [
         80,
         110
+       ]
+      }
+     }
+    },
+    "zager-u1": {
+     "naam": "zager-u1",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zager-u1-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        76
+       ],
+       "anker": [
+        24,
+        71
+       ]
+      },
+      "lopen": {
+       "bestand": "zager-u1-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        81
+       ],
+       "anker": [
+        25,
+        70
+       ]
+      },
+      "zagen": {
+       "bestand": "zager-u1-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        86
+       ],
+       "anker": [
+        55,
+        81
        ]
       }
      }
@@ -7180,6 +7316,74 @@
       }
      }
     },
+    "zager-u2": {
+     "naam": "zager-u2",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zager-u2-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        79
+       ],
+       "anker": [
+        24,
+        74
+       ]
+      },
+      "lopen": {
+       "bestand": "zager-u2-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        85
+       ],
+       "anker": [
+        25,
+        74
+       ]
+      },
+      "zagen": {
+       "bestand": "zager-u2-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        86
+       ],
+       "anker": [
+        55,
+        81
+       ]
+      }
+     }
+    },
     "boer-u3": {
      "naam": "boer-u3",
      "cel": [
@@ -7797,6 +8001,74 @@
        "anker": [
         80,
         110
+       ]
+      }
+     }
+    },
+    "zager-u3": {
+     "naam": "zager-u3",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zager-u3-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        77
+       ],
+       "anker": [
+        24,
+        72
+       ]
+      },
+      "lopen": {
+       "bestand": "zager-u3-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        83
+       ],
+       "anker": [
+        25,
+        72
+       ]
+      },
+      "zagen": {
+       "bestand": "zager-u3-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        86
+       ],
+       "anker": [
+        55,
+        81
        ]
       }
      }
@@ -8422,6 +8694,74 @@
       }
      }
     },
+    "zager-u4": {
+     "naam": "zager-u4",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zager-u4-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        82
+       ],
+       "anker": [
+        24,
+        77
+       ]
+      },
+      "lopen": {
+       "bestand": "zager-u4-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        88
+       ],
+       "anker": [
+        25,
+        77
+       ]
+      },
+      "zagen": {
+       "bestand": "zager-u4-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        86
+       ],
+       "anker": [
+        55,
+        81
+       ]
+      }
+     }
+    },
     "boer-u5": {
      "naam": "boer-u5",
      "cel": [
@@ -9039,6 +9379,74 @@
        "anker": [
         80,
         110
+       ]
+      }
+     }
+    },
+    "zager-u5": {
+     "naam": "zager-u5",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zager-u5-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        75
+       ],
+       "anker": [
+        24,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "zager-u5-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        81
+       ],
+       "anker": [
+        25,
+        70
+       ]
+      },
+      "zagen": {
+       "bestand": "zager-u5-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        86
+       ],
+       "anker": [
+        55,
+        81
        ]
       }
      }
@@ -9664,6 +10072,74 @@
       }
      }
     },
+    "zager-u6": {
+     "naam": "zager-u6",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zager-u6-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        79
+       ],
+       "anker": [
+        24,
+        74
+       ]
+      },
+      "lopen": {
+       "bestand": "zager-u6-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        85
+       ],
+       "anker": [
+        25,
+        74
+       ]
+      },
+      "zagen": {
+       "bestand": "zager-u6-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        86
+       ],
+       "anker": [
+        55,
+        81
+       ]
+      }
+     }
+    },
     "boer-u7": {
      "naam": "boer-u7",
      "cel": [
@@ -10281,6 +10757,74 @@
        "anker": [
         80,
         110
+       ]
+      }
+     }
+    },
+    "zager-u7": {
+     "naam": "zager-u7",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zager-u7-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        82
+       ],
+       "anker": [
+        24,
+        77
+       ]
+      },
+      "lopen": {
+       "bestand": "zager-u7-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        88
+       ],
+       "anker": [
+        25,
+        77
+       ]
+      },
+      "zagen": {
+       "bestand": "zager-u7-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        86
+       ],
+       "anker": [
+        55,
+        81
        ]
       }
      }
@@ -10906,6 +11450,74 @@
       }
      }
     },
+    "zager-u8": {
+     "naam": "zager-u8",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zager-u8-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        76
+       ],
+       "anker": [
+        24,
+        71
+       ]
+      },
+      "lopen": {
+       "bestand": "zager-u8-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        82
+       ],
+       "anker": [
+        25,
+        71
+       ]
+      },
+      "zagen": {
+       "bestand": "zager-u8-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        86
+       ],
+       "anker": [
+        55,
+        81
+       ]
+      }
+     }
+    },
     "boer-u9": {
      "naam": "boer-u9",
      "cel": [
@@ -11523,6 +12135,74 @@
        "anker": [
         80,
         110
+       ]
+      }
+     }
+    },
+    "zager-u9": {
+     "naam": "zager-u9",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zager-u9-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        76
+       ],
+       "anker": [
+        24,
+        71
+       ]
+      },
+      "lopen": {
+       "bestand": "zager-u9-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        82
+       ],
+       "anker": [
+        25,
+        71
+       ]
+      },
+      "zagen": {
+       "bestand": "zager-u9-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        86
+       ],
+       "anker": [
+        55,
+        81
        ]
       }
      }
@@ -12148,6 +12828,74 @@
       }
      }
     },
+    "zager-u10": {
+     "naam": "zager-u10",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zager-u10-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        76
+       ],
+       "anker": [
+        24,
+        71
+       ]
+      },
+      "lopen": {
+       "bestand": "zager-u10-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        81
+       ],
+       "anker": [
+        25,
+        70
+       ]
+      },
+      "zagen": {
+       "bestand": "zager-u10-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        86
+       ],
+       "anker": [
+        55,
+        81
+       ]
+      }
+     }
+    },
     "boer-u11": {
      "naam": "boer-u11",
      "cel": [
@@ -12765,6 +13513,74 @@
        "anker": [
         80,
         110
+       ]
+      }
+     }
+    },
+    "zager-u11": {
+     "naam": "zager-u11",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zager-u11-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        75
+       ],
+       "anker": [
+        24,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "zager-u11-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        81
+       ],
+       "anker": [
+        25,
+        70
+       ]
+      },
+      "zagen": {
+       "bestand": "zager-u11-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        86
+       ],
+       "anker": [
+        55,
+        81
        ]
       }
      }
@@ -13390,6 +14206,74 @@
       }
      }
     },
+    "zager-u12": {
+     "naam": "zager-u12",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zager-u12-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        82
+       ],
+       "anker": [
+        24,
+        77
+       ]
+      },
+      "lopen": {
+       "bestand": "zager-u12-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        88
+       ],
+       "anker": [
+        25,
+        77
+       ]
+      },
+      "zagen": {
+       "bestand": "zager-u12-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        86
+       ],
+       "anker": [
+        55,
+        81
+       ]
+      }
+     }
+    },
     "boer-u13": {
      "naam": "boer-u13",
      "cel": [
@@ -14007,6 +14891,74 @@
        "anker": [
         80,
         110
+       ]
+      }
+     }
+    },
+    "zager-u13": {
+     "naam": "zager-u13",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zager-u13-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        76
+       ],
+       "anker": [
+        24,
+        71
+       ]
+      },
+      "lopen": {
+       "bestand": "zager-u13-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        82
+       ],
+       "anker": [
+        25,
+        71
+       ]
+      },
+      "zagen": {
+       "bestand": "zager-u13-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        86
+       ],
+       "anker": [
+        55,
+        81
        ]
       }
      }
@@ -14632,6 +15584,74 @@
       }
      }
     },
+    "zager-u14": {
+     "naam": "zager-u14",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zager-u14-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        79
+       ],
+       "anker": [
+        24,
+        74
+       ]
+      },
+      "lopen": {
+       "bestand": "zager-u14-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        85
+       ],
+       "anker": [
+        25,
+        74
+       ]
+      },
+      "zagen": {
+       "bestand": "zager-u14-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        86
+       ],
+       "anker": [
+        55,
+        81
+       ]
+      }
+     }
+    },
     "boer-u15": {
      "naam": "boer-u15",
      "cel": [
@@ -15249,6 +16269,74 @@
        "anker": [
         80,
         110
+       ]
+      }
+     }
+    },
+    "zager-u15": {
+     "naam": "zager-u15",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zager-u15-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        81
+       ],
+       "anker": [
+        24,
+        76
+       ]
+      },
+      "lopen": {
+       "bestand": "zager-u15-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        86
+       ],
+       "anker": [
+        25,
+        75
+       ]
+      },
+      "zagen": {
+       "bestand": "zager-u15-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        86
+       ],
+       "anker": [
+        55,
+        81
        ]
       }
      }
@@ -15874,6 +16962,74 @@
       }
      }
     },
+    "zager-u16": {
+     "naam": "zager-u16",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zager-u16-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        82
+       ],
+       "anker": [
+        24,
+        77
+       ]
+      },
+      "lopen": {
+       "bestand": "zager-u16-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        88
+       ],
+       "anker": [
+        25,
+        77
+       ]
+      },
+      "zagen": {
+       "bestand": "zager-u16-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        86
+       ],
+       "anker": [
+        55,
+        81
+       ]
+      }
+     }
+    },
     "boer-u17": {
      "naam": "boer-u17",
      "cel": [
@@ -16491,6 +17647,74 @@
        "anker": [
         80,
         110
+       ]
+      }
+     }
+    },
+    "zager-u17": {
+     "naam": "zager-u17",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zager-u17-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        82
+       ],
+       "anker": [
+        24,
+        77
+       ]
+      },
+      "lopen": {
+       "bestand": "zager-u17-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        88
+       ],
+       "anker": [
+        25,
+        77
+       ]
+      },
+      "zagen": {
+       "bestand": "zager-u17-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        86
+       ],
+       "anker": [
+        55,
+        81
        ]
       }
      }
@@ -17116,6 +18340,74 @@
       }
      }
     },
+    "zager-u18": {
+     "naam": "zager-u18",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zager-u18-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        77
+       ],
+       "anker": [
+        24,
+        72
+       ]
+      },
+      "lopen": {
+       "bestand": "zager-u18-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        83
+       ],
+       "anker": [
+        25,
+        72
+       ]
+      },
+      "zagen": {
+       "bestand": "zager-u18-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        86
+       ],
+       "anker": [
+        55,
+        81
+       ]
+      }
+     }
+    },
     "boer-u19": {
      "naam": "boer-u19",
      "cel": [
@@ -17733,6 +19025,74 @@
        "anker": [
         80,
         110
+       ]
+      }
+     }
+    },
+    "zager-u19": {
+     "naam": "zager-u19",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zager-u19-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        79
+       ],
+       "anker": [
+        24,
+        74
+       ]
+      },
+      "lopen": {
+       "bestand": "zager-u19-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        85
+       ],
+       "anker": [
+        25,
+        74
+       ]
+      },
+      "zagen": {
+       "bestand": "zager-u19-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        86
+       ],
+       "anker": [
+        55,
+        81
        ]
       }
      }
@@ -18358,6 +19718,74 @@
       }
      }
     },
+    "zager-u20": {
+     "naam": "zager-u20",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zager-u20-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        76
+       ],
+       "anker": [
+        24,
+        71
+       ]
+      },
+      "lopen": {
+       "bestand": "zager-u20-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        81
+       ],
+       "anker": [
+        25,
+        70
+       ]
+      },
+      "zagen": {
+       "bestand": "zager-u20-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        86
+       ],
+       "anker": [
+        55,
+        81
+       ]
+      }
+     }
+    },
     "boer-u21": {
      "naam": "boer-u21",
      "cel": [
@@ -18975,6 +20403,74 @@
        "anker": [
         80,
         110
+       ]
+      }
+     }
+    },
+    "zager-u21": {
+     "naam": "zager-u21",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zager-u21-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        82
+       ],
+       "anker": [
+        24,
+        77
+       ]
+      },
+      "lopen": {
+       "bestand": "zager-u21-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        88
+       ],
+       "anker": [
+        25,
+        77
+       ]
+      },
+      "zagen": {
+       "bestand": "zager-u21-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        86
+       ],
+       "anker": [
+        55,
+        81
        ]
       }
      }
@@ -19600,6 +21096,74 @@
       }
      }
     },
+    "zager-u22": {
+     "naam": "zager-u22",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zager-u22-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        76
+       ],
+       "anker": [
+        24,
+        71
+       ]
+      },
+      "lopen": {
+       "bestand": "zager-u22-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        82
+       ],
+       "anker": [
+        25,
+        71
+       ]
+      },
+      "zagen": {
+       "bestand": "zager-u22-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        86
+       ],
+       "anker": [
+        55,
+        81
+       ]
+      }
+     }
+    },
     "boer-u23": {
      "naam": "boer-u23",
      "cel": [
@@ -20217,6 +21781,74 @@
        "anker": [
         80,
         110
+       ]
+      }
+     }
+    },
+    "zager-u23": {
+     "naam": "zager-u23",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.5,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zager-u23-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        82
+       ],
+       "anker": [
+        24,
+        77
+       ]
+      },
+      "lopen": {
+       "bestand": "zager-u23-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.5,
+       "stap": 0.6,
+       "cel": [
+        50,
+        88
+       ],
+       "anker": [
+        25,
+        77
+       ]
+      },
+      "zagen": {
+       "bestand": "zager-u23-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        86
+       ],
+       "anker": [
+        55,
+        81
        ]
       }
      }
@@ -20842,6 +22474,74 @@
       }
      }
     },
+    "zaagster-u0": {
+     "naam": "zaagster-u0",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zaagster-u0-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        79
+       ],
+       "anker": [
+        24,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "zaagster-u0-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        48,
+        81
+       ],
+       "anker": [
+        24,
+        70
+       ]
+      },
+      "zagen": {
+       "bestand": "zaagster-u0-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        90
+       ],
+       "anker": [
+        55,
+        81
+       ]
+      }
+     }
+    },
     "boerin-u1": {
      "naam": "boerin-u1",
      "cel": [
@@ -21459,6 +23159,74 @@
        "anker": [
         77,
         108
+       ]
+      }
+     }
+    },
+    "zaagster-u1": {
+     "naam": "zaagster-u1",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zaagster-u1-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        78
+       ],
+       "anker": [
+        24,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "zaagster-u1-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        48,
+        79
+       ],
+       "anker": [
+        24,
+        68
+       ]
+      },
+      "zagen": {
+       "bestand": "zaagster-u1-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        90
+       ],
+       "anker": [
+        55,
+        81
        ]
       }
      }
@@ -22084,6 +23852,74 @@
       }
      }
     },
+    "zaagster-u2": {
+     "naam": "zaagster-u2",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zaagster-u2-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        79
+       ],
+       "anker": [
+        24,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "zaagster-u2-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        48,
+        81
+       ],
+       "anker": [
+        24,
+        70
+       ]
+      },
+      "zagen": {
+       "bestand": "zaagster-u2-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        90
+       ],
+       "anker": [
+        55,
+        81
+       ]
+      }
+     }
+    },
     "boerin-u3": {
      "naam": "boerin-u3",
      "cel": [
@@ -22701,6 +24537,74 @@
        "anker": [
         77,
         108
+       ]
+      }
+     }
+    },
+    "zaagster-u3": {
+     "naam": "zaagster-u3",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zaagster-u3-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        78
+       ],
+       "anker": [
+        24,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "zaagster-u3-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        48,
+        79
+       ],
+       "anker": [
+        24,
+        68
+       ]
+      },
+      "zagen": {
+       "bestand": "zaagster-u3-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        90
+       ],
+       "anker": [
+        55,
+        81
        ]
       }
      }
@@ -23326,6 +25230,74 @@
       }
      }
     },
+    "zaagster-u4": {
+     "naam": "zaagster-u4",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zaagster-u4-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        79
+       ],
+       "anker": [
+        24,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "zaagster-u4-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        48,
+        81
+       ],
+       "anker": [
+        24,
+        70
+       ]
+      },
+      "zagen": {
+       "bestand": "zaagster-u4-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        90
+       ],
+       "anker": [
+        55,
+        81
+       ]
+      }
+     }
+    },
     "boerin-u5": {
      "naam": "boerin-u5",
      "cel": [
@@ -23943,6 +25915,74 @@
        "anker": [
         77,
         108
+       ]
+      }
+     }
+    },
+    "zaagster-u5": {
+     "naam": "zaagster-u5",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zaagster-u5-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        78
+       ],
+       "anker": [
+        24,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "zaagster-u5-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        48,
+        79
+       ],
+       "anker": [
+        24,
+        68
+       ]
+      },
+      "zagen": {
+       "bestand": "zaagster-u5-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        90
+       ],
+       "anker": [
+        55,
+        81
        ]
       }
      }
@@ -24568,6 +26608,74 @@
       }
      }
     },
+    "zaagster-u6": {
+     "naam": "zaagster-u6",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zaagster-u6-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        78
+       ],
+       "anker": [
+        24,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "zaagster-u6-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        48,
+        79
+       ],
+       "anker": [
+        24,
+        68
+       ]
+      },
+      "zagen": {
+       "bestand": "zaagster-u6-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        90
+       ],
+       "anker": [
+        55,
+        81
+       ]
+      }
+     }
+    },
     "boerin-u7": {
      "naam": "boerin-u7",
      "cel": [
@@ -25185,6 +27293,74 @@
        "anker": [
         77,
         108
+       ]
+      }
+     }
+    },
+    "zaagster-u7": {
+     "naam": "zaagster-u7",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zaagster-u7-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        78
+       ],
+       "anker": [
+        24,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "zaagster-u7-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        48,
+        79
+       ],
+       "anker": [
+        24,
+        68
+       ]
+      },
+      "zagen": {
+       "bestand": "zaagster-u7-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        90
+       ],
+       "anker": [
+        55,
+        81
        ]
       }
      }
@@ -25810,6 +27986,74 @@
       }
      }
     },
+    "zaagster-u8": {
+     "naam": "zaagster-u8",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zaagster-u8-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        78
+       ],
+       "anker": [
+        24,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "zaagster-u8-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        48,
+        79
+       ],
+       "anker": [
+        24,
+        68
+       ]
+      },
+      "zagen": {
+       "bestand": "zaagster-u8-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        90
+       ],
+       "anker": [
+        55,
+        81
+       ]
+      }
+     }
+    },
     "boerin-u9": {
      "naam": "boerin-u9",
      "cel": [
@@ -26427,6 +28671,74 @@
        "anker": [
         77,
         108
+       ]
+      }
+     }
+    },
+    "zaagster-u9": {
+     "naam": "zaagster-u9",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zaagster-u9-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        79
+       ],
+       "anker": [
+        24,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "zaagster-u9-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        48,
+        81
+       ],
+       "anker": [
+        24,
+        70
+       ]
+      },
+      "zagen": {
+       "bestand": "zaagster-u9-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        90
+       ],
+       "anker": [
+        55,
+        81
        ]
       }
      }
@@ -27052,6 +29364,74 @@
       }
      }
     },
+    "zaagster-u10": {
+     "naam": "zaagster-u10",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zaagster-u10-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        78
+       ],
+       "anker": [
+        24,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "zaagster-u10-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        48,
+        79
+       ],
+       "anker": [
+        24,
+        68
+       ]
+      },
+      "zagen": {
+       "bestand": "zaagster-u10-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        90
+       ],
+       "anker": [
+        55,
+        81
+       ]
+      }
+     }
+    },
     "boerin-u11": {
      "naam": "boerin-u11",
      "cel": [
@@ -27669,6 +30049,74 @@
        "anker": [
         77,
         108
+       ]
+      }
+     }
+    },
+    "zaagster-u11": {
+     "naam": "zaagster-u11",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zaagster-u11-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        78
+       ],
+       "anker": [
+        24,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "zaagster-u11-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        48,
+        80
+       ],
+       "anker": [
+        24,
+        69
+       ]
+      },
+      "zagen": {
+       "bestand": "zaagster-u11-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        90
+       ],
+       "anker": [
+        55,
+        81
        ]
       }
      }
@@ -28294,6 +30742,74 @@
       }
      }
     },
+    "zaagster-u12": {
+     "naam": "zaagster-u12",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zaagster-u12-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        79
+       ],
+       "anker": [
+        24,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "zaagster-u12-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        48,
+        81
+       ],
+       "anker": [
+        24,
+        70
+       ]
+      },
+      "zagen": {
+       "bestand": "zaagster-u12-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        90
+       ],
+       "anker": [
+        55,
+        81
+       ]
+      }
+     }
+    },
     "boerin-u13": {
      "naam": "boerin-u13",
      "cel": [
@@ -28911,6 +31427,74 @@
        "anker": [
         77,
         108
+       ]
+      }
+     }
+    },
+    "zaagster-u13": {
+     "naam": "zaagster-u13",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zaagster-u13-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        78
+       ],
+       "anker": [
+        24,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "zaagster-u13-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        48,
+        79
+       ],
+       "anker": [
+        24,
+        68
+       ]
+      },
+      "zagen": {
+       "bestand": "zaagster-u13-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        90
+       ],
+       "anker": [
+        55,
+        81
        ]
       }
      }
@@ -29536,6 +32120,74 @@
       }
      }
     },
+    "zaagster-u14": {
+     "naam": "zaagster-u14",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zaagster-u14-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        79
+       ],
+       "anker": [
+        24,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "zaagster-u14-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        48,
+        80
+       ],
+       "anker": [
+        24,
+        69
+       ]
+      },
+      "zagen": {
+       "bestand": "zaagster-u14-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        90
+       ],
+       "anker": [
+        55,
+        81
+       ]
+      }
+     }
+    },
     "boerin-u15": {
      "naam": "boerin-u15",
      "cel": [
@@ -30153,6 +32805,74 @@
        "anker": [
         77,
         108
+       ]
+      }
+     }
+    },
+    "zaagster-u15": {
+     "naam": "zaagster-u15",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zaagster-u15-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        79
+       ],
+       "anker": [
+        24,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "zaagster-u15-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        48,
+        81
+       ],
+       "anker": [
+        24,
+        70
+       ]
+      },
+      "zagen": {
+       "bestand": "zaagster-u15-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        90
+       ],
+       "anker": [
+        55,
+        81
        ]
       }
      }
@@ -30778,6 +33498,74 @@
       }
      }
     },
+    "zaagster-u16": {
+     "naam": "zaagster-u16",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zaagster-u16-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        79
+       ],
+       "anker": [
+        24,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "zaagster-u16-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        48,
+        81
+       ],
+       "anker": [
+        24,
+        70
+       ]
+      },
+      "zagen": {
+       "bestand": "zaagster-u16-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        90
+       ],
+       "anker": [
+        55,
+        81
+       ]
+      }
+     }
+    },
     "boerin-u17": {
      "naam": "boerin-u17",
      "cel": [
@@ -31395,6 +34183,74 @@
        "anker": [
         77,
         108
+       ]
+      }
+     }
+    },
+    "zaagster-u17": {
+     "naam": "zaagster-u17",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zaagster-u17-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        78
+       ],
+       "anker": [
+        24,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "zaagster-u17-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        48,
+        79
+       ],
+       "anker": [
+        24,
+        68
+       ]
+      },
+      "zagen": {
+       "bestand": "zaagster-u17-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        90
+       ],
+       "anker": [
+        55,
+        81
        ]
       }
      }
@@ -32020,6 +34876,74 @@
       }
      }
     },
+    "zaagster-u18": {
+     "naam": "zaagster-u18",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zaagster-u18-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        79
+       ],
+       "anker": [
+        24,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "zaagster-u18-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        48,
+        80
+       ],
+       "anker": [
+        24,
+        69
+       ]
+      },
+      "zagen": {
+       "bestand": "zaagster-u18-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        90
+       ],
+       "anker": [
+        55,
+        81
+       ]
+      }
+     }
+    },
     "boerin-u19": {
      "naam": "boerin-u19",
      "cel": [
@@ -32637,6 +35561,74 @@
        "anker": [
         77,
         108
+       ]
+      }
+     }
+    },
+    "zaagster-u19": {
+     "naam": "zaagster-u19",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zaagster-u19-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        79
+       ],
+       "anker": [
+        24,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "zaagster-u19-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        48,
+        81
+       ],
+       "anker": [
+        24,
+        70
+       ]
+      },
+      "zagen": {
+       "bestand": "zaagster-u19-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        90
+       ],
+       "anker": [
+        55,
+        81
        ]
       }
      }
@@ -33262,6 +36254,74 @@
       }
      }
     },
+    "zaagster-u20": {
+     "naam": "zaagster-u20",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zaagster-u20-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        78
+       ],
+       "anker": [
+        24,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "zaagster-u20-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        48,
+        79
+       ],
+       "anker": [
+        24,
+        68
+       ]
+      },
+      "zagen": {
+       "bestand": "zaagster-u20-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        90
+       ],
+       "anker": [
+        55,
+        81
+       ]
+      }
+     }
+    },
     "boerin-u21": {
      "naam": "boerin-u21",
      "cel": [
@@ -33879,6 +36939,74 @@
        "anker": [
         77,
         108
+       ]
+      }
+     }
+    },
+    "zaagster-u21": {
+     "naam": "zaagster-u21",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zaagster-u21-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        78
+       ],
+       "anker": [
+        24,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "zaagster-u21-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        48,
+        79
+       ],
+       "anker": [
+        24,
+        68
+       ]
+      },
+      "zagen": {
+       "bestand": "zaagster-u21-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        90
+       ],
+       "anker": [
+        55,
+        81
        ]
       }
      }
@@ -34504,6 +37632,74 @@
       }
      }
     },
+    "zaagster-u22": {
+     "naam": "zaagster-u22",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zaagster-u22-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        79
+       ],
+       "anker": [
+        24,
+        70
+       ]
+      },
+      "lopen": {
+       "bestand": "zaagster-u22-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        48,
+        81
+       ],
+       "anker": [
+        24,
+        70
+       ]
+      },
+      "zagen": {
+       "bestand": "zaagster-u22-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        90
+       ],
+       "anker": [
+        55,
+        81
+       ]
+      }
+     }
+    },
     "boerin-u23": {
      "naam": "boerin-u23",
      "cel": [
@@ -35121,6 +38317,74 @@
        "anker": [
         77,
         108
+       ]
+      }
+     }
+    },
+    "zaagster-u23": {
+     "naam": "zaagster-u23",
+     "cel": [
+      116,
+      98
+     ],
+     "anker": [
+      58,
+      84
+     ],
+     "snelheid": 1.4,
+     "richtingen": [
+      "Z",
+      "ZW",
+      "W",
+      "NW",
+      "N",
+      "NO",
+      "O",
+      "ZO"
+     ],
+     "houdingen": {
+      "staan": {
+       "bestand": "zaagster-u23-staan.png",
+       "beelden": 4,
+       "fps": 4,
+       "herhaal": true,
+       "cel": [
+        48,
+        78
+       ],
+       "anker": [
+        24,
+        69
+       ]
+      },
+      "lopen": {
+       "bestand": "zaagster-u23-lopen.png",
+       "beelden": 8,
+       "fps": 10,
+       "herhaal": true,
+       "snelheid": 1.4,
+       "stap": 0.56,
+       "cel": [
+        48,
+        79
+       ],
+       "anker": [
+        24,
+        68
+       ]
+      },
+      "zagen": {
+       "bestand": "zaagster-u23-zagen.png",
+       "beelden": 12,
+       "fps": 8,
+       "herhaal": true,
+       "cel": [
+        110,
+        90
+       ],
+       "anker": [
+        55,
+        81
        ]
       }
      }

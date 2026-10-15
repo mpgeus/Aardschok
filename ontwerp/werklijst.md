@@ -35,11 +35,14 @@ eerste antwoorden (bij H). **156, een gebouw aanklikken, is af** (14 okt, in `ma
 van een gebouw nu"), en **164, een minimale balk onderaan, 165, een minimap van het hele eiland, en 166, een dunne balk
 bovenaan, ook** (14 okt, in `main`; het scherm zo leeg mogelijk, CLAUDE.md). **157, de zagerij en de planken, is af**
 (14 okt, op de branch `claude/village-economy-gameplay-lmsnyg`; `spel.md`, "Zo werkt de keten van stammen tot planken
-nu"): een kapschuur in de stijl van het land, na vijf proefplaten. **Het volgende is 168**, de zager aan het werk (Marcel:
-"direct erna"; **Bezig in sessie `claude/village-economy-gameplay-lmsnyg`**, 15 okt: een werkfiguur die zaagt, eerst één
-proefplaat), en dan C6 met de keten erin.
+nu"): een kapschuur in de stijl van het land, na vijf proefplaten. **168, de zager aan het werk, is af** (15 okt, op
+dezelfde branch; `spel.md`, bij de keten): de eerste hand staat voor de deur en zaagt aan de zaagbok, in zijn eigen
+uiterlijk. **Het volgende is C6**, meten en spelen, met de keten erin.
 
 **Wacht op Marcel:**
+- **De zager bekijken** (168, 15 okt): zet een zagerij, en kijk overdag (niet in de schaft): de eerste hand staat op de
+  tegel voor de deur en zaagt met de spanzaag aan de stam op de bok. Heeft de zagerij geen stammen, of is zijn stapel
+  vol, dan staat er niemand.
 - **De zagerij bekijken** (157, 14 okt): Nieuw spel, zet een houthakker en een zagerij (in het bouwmenu, *Sawmill*). Hij
   is een kapschuur in de stijl van je eiland, en bouwt op in fasen; eronder de zaagbok, de stammen en de planken. Klik
   erop: zijn briefje zegt hoeveel planken hij maakt. Een dorp vraagt planken in plaats van stammen.
@@ -358,7 +361,8 @@ niet perse. 8. Los ontwerp", op de vragen van Claude; in het gesprek heetten de 
   rechtsonder alleen de minimap, linksonder alleen de waren. **Af** (14 okt, op de branch
   `claude/village-economy-gameplay-lmsnyg`; `code.md` bij `js/ui.js`).
 - **168, de zager aan het werk** (Marcel, 14 okt, bij 157: "Ik wil wel dat je iemand ziet werken", en "1 nu, 2 en 3
-  direct erna"): een nieuwe werkfiguur, de zager en de zaagster, zoals de hakker (`werkfiguren.cjs`): staan, lopen en
+  direct erna"). **Af** (15 okt, op de branch `claude/village-economy-gameplay-lmsnyg`; Marcel op de proefplaat: "Ja,
+  zo", de zaag uit de bok: "Ja, eruit", en de uiterlijken: "Ja, alle 48"). Het plan was: een nieuwe werkfiguur, de zager en de zaagster, zoals de hakker (`werkfiguren.cjs`): staan, lopen en
   zagen (de zaag heen en weer, het lijf leunt mee), eerst één proefplaat. In het spel staat een van de twee handen van de
   zagerij aan de zaagbok te zagen zolang hij werkt (`werk` bij de tekening, `js/bewoners.js` werkplekVan, `e.werkt`); staat
   hij stil, dan zaagt niemand. Een werkplek per soort werk stond al in `opmerkingen.md`.
