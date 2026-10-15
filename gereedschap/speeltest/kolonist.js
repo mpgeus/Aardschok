@@ -22,6 +22,9 @@
 //   7b. als er een zagerij is en iedereen een woning heeft, een schuur richting de rotsen (werklijst C, stap 6; Marcel, 15
 //      okt: "Ja, bij de rotsen"): zo meet de speeltest een tweede kar, en komen de rotsen binnen bereik; is de schuur af,
 //      dan een steengroeve erbij, zodat die tweede kar een eigen stapel heeft om te halen;
+//   7c. de soldaten (vraag 159): als er een zagerij is, iedereen een woning heeft en de schuur van 7b er staat (of er geen
+//      rotsen zijn), een wachthuis en een wapenmaker, en zijn die af, `speermannen` speermannen in het wachthuis (speer en
+//      schild, van planken): zo toetst de speeltest de hele keten, van de zagerij via de kar en de wapenmaker tot de soldaat;
 //   8. wordt er niets anders gebouwd (geen bouwplaats en geen weg in aanleg), dan een weg (werklijst C, stap 5, f; Marcel,
 //      14 okt: "f ja"): van de opslag (het huis van de schout of een schuur) naar een gebouw waar de ossenkar heen rijdt
 //      (een werkplaats, een boerderij, een schuur), het dichtste eerst, één per dag, zodat de speeltest meet wat een weg
@@ -46,6 +49,7 @@
     jagerNa: 30, // een nieuwe jager pas zoveel dagen nadat de vorige af was
     afwisselingNa: 20, // voor de afwisseling een tweede van een soort pas zoveel dagen nadat de vorige af was
     waaromNa: 30, // waarom er geen plek is, zoekt hij zo vaak opnieuw uit
+    speermannen: 2, // zoveel speermannen vraagt hij in het wachthuis (regel 7c)
     // De maten die hij voor een veld probeert, de grootste eerst (T.BOERDERIJ_INSTELLINGEN: 12 tot 40 tegels).
     veldMaten: [[8, 5], [5, 8], [6, 6], [7, 5], [5, 7], [6, 5], [5, 6], [8, 4], [4, 8], [7, 4], [4, 7], [6, 4], [4, 6], [5, 4], [4, 5], [4, 4], [6, 2], [4, 3], [3, 4]],
   };
@@ -304,6 +308,18 @@
       const u = bouw(D, 'steengroeve', { x: schuur.x, y: schuur.y }, 'steen, voor de kar van de schuur');
       if (!u.gelukt && !u.wacht) GROEVE.set(D, dag);
       doe(u);
+    }
+
+    // 7c. De soldaten: een wachthuis en een wapenmaker, en zijn die af, speermannen.
+    if (heeft('zagerij') && zonderWoning(D) === 0 && (heeft('schuur') || !rotsen)) {
+      if (!heeft('wachthuis')) doe(bouw(D, 'wachthuis', hart(D), 'soldaten tegen de rovers'));
+      else if (!heeft('wapenmaker')) doe(bouw(D, 'wapenmaker', hart(D), 'speren en schilden voor het wachthuis'));
+      const wachthuis = D.gebouwen.find((g) => g.soort === 'wachthuis' && g.klaar);
+      const nu = wachthuis ? (wachthuis.soldaten || {}).speerman || 0 : 0;
+      if (wachthuis && D.gebouwen.some((g) => g.soort === 'wapenmaker' && g.klaar) && nu < IN.speermannen) {
+        T.zetSoldaten(D, wachthuis, 'speerman', IN.speermannen - nu);
+        doe({ soort: 'soldaten', gelukt: true, reden: null, tekst: `vraagt ${IN.speermannen} speermannen in het wachthuis` });
+      }
     }
 
     // 8. Een weg voor de ossenkar, als er niets anders gebouwd wordt.

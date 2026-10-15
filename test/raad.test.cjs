@@ -206,7 +206,7 @@ test('vis en vlees voor de winter: zout bij de marskramer, en een voorraad voord
 test('na een aanval van de rovers: wat een wachthuis doet, als er geen is', () => {
   const S = opDag(dorp(), 40.5);
   S.dorp.rovers = Object.assign(T.nieuweRovers(), { laatsteAanval: 38 });
-  assert.equal(raad(S).tekst, 'The robbers are coming back. A watch house [B] gives you two men to fight at your side.');
+  assert.equal(raad(S).tekst, 'The robbers are coming back. In a watch house [B], up to six who have no work become soldiers, to fight at your side.');
   opDag(S, 38 + T.RAAD_INSTELLINGEN.roversNa + 0.5);
   assert.notEqual(id(S), 'rovers');
   opDag(S, 40.5);

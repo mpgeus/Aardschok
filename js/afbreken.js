@@ -124,10 +124,12 @@
         klaar: true, klaarOp: D.kalender ? Math.floor(D.kalender.dag) : 0, handen: 0, voorwerp: null, stapel: ligt,
       });
     }
-    // wie er werkte, is vrij, en de handen gaan opnieuw rond (js/gebouwen.js); de boeren kijken naar hun akkers
+    // wie er werkte, is vrij, en de handen gaan opnieuw rond (js/gebouwen.js); de boeren kijken naar hun akkers; en de
+    // soldaten van een wachthuis leveren hun wapen in (js/soldaten.js)
     if (D.bewoners) {
       T.verdeelHanden(D);
       T.werkDeBoerenBij(D);
+      T.tikSoldatenDag(D);
     }
     const naam = soort ? soort.naam : g.soort;
     T.zeg(D, g.klaar ? T.t('The {gebouw} is demolished.', { gebouw: naam }) : T.t('The {gebouw} will not be built.', { gebouw: naam }));

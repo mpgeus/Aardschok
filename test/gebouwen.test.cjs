@@ -47,10 +47,11 @@ test('alle soorten uit spel.md staan erin', () => {
     'smidse', 'zagerij', 'molen', 'bakkerij', 'brouwerij', 'herberg', 'kapel', 'tiendschuur',
     'markt', 'weverij', 'pakhuis', 'kuiper', 'slager', 'leerlooier', 'steenbakkerij', 'badhuis', 'gasthuis',
     'stenenHuis', 'raadhuis', 'stadsmuur',
-    'wapenmaker', 'schuttershof', 'palissade',
-    // grondstoffen halen, en orde en leger (Marcel, 23 sep)
+    'wapenmaker', 'palissade',
+    // grondstoffen halen, en orde en leger (Marcel, 23 sep); het schuttershof en het tuighuis deden niets, en zijn weg
+    // (vraag 159, F)
     'steengroeve', 'kleiput', 'rietsnijder', 'jager', 'visser', 'turfsteker', 'ertsgraver', 'kalkbrander',
-    'wachthuis', 'gevang', 'tuighuis', 'kazerne',
+    'wachthuis', 'gevang', 'kazerne',
   ]) {
     assert.ok(T.GEBOUWEN[id], `"${id}" ontbreekt in T.GEBOUWEN`);
   }

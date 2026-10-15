@@ -1224,6 +1224,7 @@ body.foto > :not(canvas, #foto-wenk) { display: none !important; }
    boven de klok rechtsonder, en is het langer, dan schuift het. */
 #gebouwbriefje {
   grid-column: 2;
+  width: var(--kaart);
   max-height: calc(100vh / var(--ui-zoom, 1) - var(--boven) - 12px - var(--onder-rechts));
   overflow-y: auto;
   padding: 10px 18px 14px;
@@ -1236,6 +1237,21 @@ body.foto > :not(canvas, #foto-wenk) { display: none !important; }
 #gebouwbriefje .briefje-doet { font-style: italic; color: var(--papier-grijs); }
 #gebouwbriefje .briefje-deel { border-top: 1px dotted var(--papier-lijn); padding-top: 5px; }
 #gebouwbriefje .briefje-deel b { display: block; font: 19px/1.2 var(--kop); font-weight: normal; }
+/* Een regel met knoppen (het wachthuis, js/soldaten.js): de tekst links, − en + rechts, in de inkt van het papier. */
+#gebouwbriefje .briefje-regel { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+#gebouwbriefje .briefje-knoppen { display: flex; gap: 4px; flex: none; }
+#gebouwbriefje .briefje-knop {
+  min-width: 26px;
+  padding: 0 6px 2px;
+  font: 18px/1.1 var(--boek);
+  color: var(--papier-inkt);
+  background: none;
+  border: 1px solid var(--papier-grijs);
+  border-bottom-width: 2px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+#gebouwbriefje .briefje-knop:disabled { opacity: 0.35; cursor: default; }
 
 /* De meter (F2, js/main.js): rechtsonder boven de klok, klein, en de muis gaat erdoorheen. */
 #meter {

@@ -4,22 +4,21 @@
 // je rondliep, is het slagveld, met dezelfde deuren en kisten.
 //
 // Aan jouw kant (kant 'speler') vecht de schout, en sinds de rovers (werklijst vraag 55, 29 sep) ook de
-// mannen van het wachthuis die met hem meeliepen (T.militieInGevecht, js/rovers.js). Elk heeft zijn eigen
-// beurt en actiepunten, en jij bestuurt wie aan de beurt is (T.aanDeBeurt), zoals in Jagged Alliance 2. Een
-// vijand zoekt de man van jouw kant die het dichtst bij staat. Wie valt, is dood (Marcel, 29 sep: "mensen
-// kunnen sterven"): een vijand is verslagen, een wachter is een mond minder (T.sneuvelt), en valt de schout,
-// dan is het spel uit.
+// militie die met hem meeliep (T.militieInGevecht, js/rovers.js): de soldaten van het wachthuis en de veteranen. Elk
+// heeft zijn eigen beurt en actiepunten, en jij bestuurt wie aan de beurt is (T.aanDeBeurt), zoals in Jagged Alliance
+// 2. Elk slaat met zijn eigen wapen (T.slagVan, js/soldaten.js; vraag 159): de speer en de piek reiken twee tegels, de
+// boog en de kruisboog schieten ver, en schild en harnas vangen een deel van een klap af (T.vangtAf). Een vijand zoekt
+// de man van jouw kant die het dichtst bij staat. Wie valt, is dood (Marcel, 29 sep: "mensen kunnen sterven"): een
+// vijand is verslagen, een soldaat is een mond minder (T.sneuvelt), en valt de schout, dan is het spel uit.
 (function (T) {
   'use strict';
 
   // Eén potje actiepunten per beurt voor lopen (1 per stap), slaan en een deur dichtgooien. Een
   // klap kost levenspunten, bij een monster net als bij de schout (js/wereld.js, T.WEZENS). Tot
   // 25 sep speelde je een tovenaar die ook kon toveren, met zijn leeftijd als levensbalk; dat ging
-  // eruit met het oude spel (ontwerp/werklijst.md, punt 7b).
+  // eruit met het oude spel (ontwerp/werklijst.md, punt 7b). Zo slaat de schout; de militie slaat met haar wapen
+  // (T.slagVan, js/soldaten.js).
   T.SLAAN = { kosten: 3, schade: [3, 5] };
-  // Wat een slag van `v` aan schade doet, [van, tot]: een man van de militie met een wapen (T.bewapen, js/rovers.js)
-  // slaat harder.
-  T.slagSchade = (v) => (v && v.gewapend ? T.SLAAN.schade.map((n) => n + T.ROVERS_INSTELLINGEN.wapens.schade) : T.SLAAN.schade);
   T.DEUR_SLUITEN = 1;
 
   const worp = (b) => b[0] + Math.floor(Math.random() * (b[1] - b[0] + 1));
@@ -236,6 +235,31 @@
     );
   };
 
+  // Staat er een vijand naast tegel t? Dan kan wie schiet daar niet schieten (vraag 159, D1).
+  function vijandNaast(S, t) {
+    return S.gevecht.monsters.some((m) => !m.dood && T.afstand(T.tegelVan(m), t) === 1);
+  }
+
+  // Kan v (van jouw kant) monster m raken vanaf tegel `van` (standaard waar hij staat), met zijn wapen (T.slagVan)? Ernaast
+  // zoals altijd (T.raakt); verder weg tot zijn bereik, als hij ziet waar hij heen steekt of schiet (T.zichtTussen: een
+  // ander wezen ertussen houdt het niet tegen, dus een speer steekt langs een zwaard); en wie schiet, niet met een vijand
+  // naast zich.
+  function kanRaken(S, v, m, van = T.tegelVan(v)) {
+    const slag = T.slagVan(v);
+    if (slag.schiet && vijandNaast(S, van)) return false;
+    const p = T.tegelVan(m);
+    if (T.raakt(S.wereld, van, p)) return true;
+    const d = T.afstand(van, p);
+    return d >= 2 && d <= slag.bereik && T.zichtTussen(S.wereld, van, p);
+  }
+  T.kanRaken = kanRaken;
+
+  // Hoe een slag heet, bij de muis en in het bericht: slaan, steken (van verder dan ernaast) of schieten.
+  function soortSlag(S, v, m) {
+    if (T.slagVan(v).schiet) return 'schiet';
+    return T.afstand(T.tegelVan(v), T.tegelVan(m)) >= 2 ? 'steek' : 'sla';
+  }
+
   function padVoor(S, v, doel, naast) {
     const w = S.wereld;
     return T.zoekPad(
@@ -262,12 +286,33 @@
     if (doel.wezen && doel.wezen.kant === 'monster' && !doel.wezen.dood) {
       const m = doel.wezen;
       const p = T.tegelVan(m);
-      const k = T.SLAAN.kosten;
-      if (T.raakt(w, h, p)) return { tekst: T.t('Hit ({schade} damage)', { schade: T.slagSchade(v).join('–') }), kosten: k, kan: ap >= k, doe: () => slaan(S, v, m, []) };
-      const pad = padVoor(S, v, p, true);
+      const slag = T.slagVan(v);
+      const k = slag.kosten;
+      const schade = slag.schade.join('–');
+      if (kanRaken(S, v, m)) {
+        const soort = soortSlag(S, v, m);
+        const tekst = soort === 'schiet' ? T.t('Shoot ({schade} damage)', { schade }) : soort === 'steek' ? T.t('Thrust ({schade} damage)', { schade }) : T.t('Hit ({schade} damage)', { schade });
+        return { tekst, kosten: k, kan: ap >= k, doe: () => slaan(S, v, m, []) };
+      }
+      if (slag.schiet && vijandNaast(S, h)) return { tekst: T.t('Too close to shoot: step away first'), kosten: 0, kan: false };
+      // Wie verder reikt dan ernaast, loopt naar de dichtste tegel vanwaar hij raakt (in wat hij deze beurt haalt); anders,
+      // of als die er niet is, naast hem.
+      let pad = null;
+      if (slag.bereik > 1) {
+        const bereik = S.bereik || new Map();
+        let beste = null;
+        for (const [sleutel, stappen] of bereik) {
+          if (beste && stappen >= beste.stappen) continue;
+          const [x, y] = sleutel.split(',').map(Number);
+          if (kanRaken(S, v, m, { x, y })) beste = { x, y, stappen };
+        }
+        if (beste) pad = padVoor(S, v, { x: beste.x, y: beste.y }, false);
+      }
+      if (!pad && slag.schiet) return { tekst: T.t('Too far to shoot this turn'), kosten: 0, kan: false };
+      if (!pad) pad = padVoor(S, v, p, true);
       if (!pad) return { tekst: T.t('You cannot reach it'), kosten: 0, kan: false };
       const totaal = pad.length + k;
-      return { tekst: T.t('Walk there and hit'), kosten: totaal, kan: ap >= totaal, doe: () => slaan(S, v, m, pad), pad };
+      return { tekst: slag.schiet ? T.t('Walk there and shoot') : T.t('Walk there and hit'), kosten: totaal, kan: ap >= totaal, doe: () => slaan(S, v, m, pad), pad };
     }
 
     if (doel.x === h.x && doel.y === h.y) return null;
@@ -292,15 +337,21 @@
   async function slaan(S, v, m, pad) {
     bezigMet(S);
     if (pad.length) await T.anim.loop(v, pad);
-    if (m.dood || !T.raakt(S.wereld, T.tegelVan(v), T.tegelVan(m))) {
+    if (m.dood || !kanRaken(S, v, m)) {
       naHandeling(S);
       return;
     }
-    v.ap -= T.SLAAN.kosten;
+    const slag = T.slagVan(v);
+    const soort = soortSlag(S, v, m);
+    v.ap -= slag.kosten;
     T.ui.toonAp(v.ap, v.maxAp, 0, true);
     await T.anim.uitval(v, T.tegelVan(m));
-    const n = worp(T.slagSchade(v));
-    T.ui.bericht(v === S.schout ? T.t('You hit the {wezen}: {n} damage.', { wezen: m.naam, n }) : T.t('{naam} hits the {wezen}: {n} damage.', { naam: v.naam, wezen: m.naam, n }));
+    const n = Math.max(0, worp(slag.schade) - T.vangtAf(m, v));
+    const woorden = { naam: v.naam, wezen: m.naam, n };
+    T.ui.bericht(v === S.schout ? T.t('You hit the {wezen}: {n} damage.', woorden)
+      : soort === 'schiet' ? T.t('{naam} shoots at the {wezen}: {n} damage.', woorden)
+        : soort === 'steek' ? T.t('{naam} thrusts at the {wezen}: {n} damage.', woorden)
+          : T.t('{naam} hits the {wezen}: {n} damage.', woorden));
     raak(S, m, n);
     await T.anim.wacht(S, 320);
     naHandeling(S);
@@ -455,9 +506,14 @@
       if (!doel || doel.dood || !S.gevecht) break;
       if (!T.raakt(w, T.tegelVan(m), T.tegelVan(doel))) break;
       await T.anim.uitval(m, T.tegelVan(doel));
-      const n = worp(m.aanval.schade);
+      // Schild en harnas vangen een deel af (js/soldaten.js).
+      const ruw = worp(m.aanval.schade);
+      const af = Math.min(ruw, T.vangtAf(doel, null));
+      const n = ruw - af;
       const wat = T.vulTekst(m.aanval.zin, { doel: doel === S.schout ? T.t('you') : doel.naam }, T.taalLocale());
-      T.ui.bericht(T.t('The {wezen} {wat}: {n} damage.', { wezen: m.naam, wat, n }), 'gevaar');
+      T.ui.bericht(af > 0
+        ? T.t('The {wezen} {wat}: {n} damage ({af} stopped by shield and armour).', { wezen: m.naam, wat, n, af })
+        : T.t('The {wezen} {wat}: {n} damage.', { wezen: m.naam, wat, n }), 'gevaar');
       raak(S, doel, n);
       await T.anim.wacht(S, 380);
     }

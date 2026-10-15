@@ -171,7 +171,7 @@ test('wat er komt: de marskramer vandaag, en de raden van de rovers, zonder de t
   D.marskramer = null;
   D.rovers = Object.assign(T.nieuweRovers(), { laatsteAanval: komt + 3 });
   const rovers = nacht(S, komt + 4).regels;
-  assert.ok(rovers.includes('The robbers are coming back. A watch house gives you two men to fight at your side.'), 'zonder de toets erbij');
+  assert.ok(rovers.includes('The robbers are coming back. In a watch house, up to six who have no work become soldiers, to fight at your side.'), 'zonder de toets erbij');
 });
 
 test('zijn rekenen: wie kan rekenen, zegt het precies; wie het niet bijzonder kan, rondt af; wie niet kan rekenen, zit ernaast', () => {

@@ -255,8 +255,8 @@
       id: 'rovers',
       als: (D) => D.rovers && D.rovers.laatsteAanval != null && dagNu(D) - D.rovers.laatsteAanval < IN().roversNa && !heeft(D, 'wachthuis'),
       tekst: (D) => {
-        const woorden = { gebouw: T.hoofdletter(eenNaam('wachthuis')), n: T.GEBOUWEN.wachthuis.handen, getal: T.telwoord(T.GEBOUWEN.wachthuis.handen) };
-        return T.t('The robbers are coming back. {gebouw} [B] gives you {n|{getal} man|{getal} men} to fight at your side.', woorden);
+        const woorden = { gebouw: eenNaam('wachthuis'), getal: T.telwoord(T.SOLDATEN_INSTELLINGEN.plaatsen) };
+        return T.t('The robbers are coming back. In {gebouw} [B], up to {getal} who have no work become soldiers, to fight at your side.', woorden);
       },
     },
     // De wolven (js/beesten.js; werklijst vraag 116, stap 2b): ze namen een schaap of vielen iemand aan. Wat ertegen helpt:

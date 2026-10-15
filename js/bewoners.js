@@ -101,7 +101,8 @@
   //     komt: true,                // hij is nieuw en nog niet bij zijn huis (T.werkBewonersBij)
   //     schout: true,              // alleen de schout zelf
   //     weg: { waarom: 'heervaart' },  // hij is een tijd weg (T.stuurWeg): hij telt mee, maar werkt nergens
-  //     veteraan: true }           // hij kwam terug van de heervaart, en vecht mee als er rovers komen
+  //     veteraan: true,            // hij kwam terug van de heervaart, en vecht mee als er rovers komen
+  //     soldaat: { wapen, wachthuis } } // hij is soldaat (js/soldaten.js): hij werkt nergens, en staat overdag bij het wachthuis
   // Wie wegtrekt, staat niet meer in S.bewoners.mensen; zijn poppetje loopt nog tot de uitgang
   // (e.vertrekt, S.bewoners.vertrekken).
 
@@ -111,12 +112,14 @@
   T.naamVanBewoner = naamVan;
   // Hoort hij bij het gezin van de schout?
   const vanSchout = (p) => !!(p.schout || (p.hoofd && p.hoofd.schout));
+  T.vanSchout = vanSchout;
   // Kan hij werken? Iedereen, behalve de schout zelf, een kleuter, en wie een tijd weg is (p.weg: de heervaart,
   // js/heervaart.js). Het gezin van de schout werkt alleen als er niemand anders meer is (T.wijsWerkToe).
   // Wie rooit wat er staat waar zijn huis groter wordt, werkt nog nergens (js/bos.js; vraag 130); en wie de graanschuur
   // bewaakt evenmin (p.wacht, js/graanschuur.js; vraag 132).
-  // Wie in de wijnboerderij woont, plukt in wijnmaand (`g.plukt`, js/wijngaard.js) en werkt dan nergens anders.
-  const kanWerken = (p) => !p.schout && !p.weg && !p.wacht && !(p.huis && p.huis.plukt) && !(p.huis && p.huis.groeitNaRooien && !p.hoofd) && !!T.LEEFTIJDEN[p.leeftijd] && T.LEEFTIJDEN[p.leeftijd].werkt != null;
+  // Wie in de wijnboerderij woont, plukt in wijnmaand (`g.plukt`, js/wijngaard.js) en werkt dan nergens anders. En een
+  // soldaat werkt nergens (p.soldaat, js/soldaten.js; vraag 159: "een soldaat is voltijds").
+  const kanWerken = (p) => !p.schout && !p.weg && !p.wacht && !p.soldaat && !(p.huis && p.huis.plukt) && !(p.huis && p.huis.groeitNaRooien && !p.hoofd) && !!T.LEEFTIJDEN[p.leeftijd] && T.LEEFTIJDEN[p.leeftijd].werkt != null;
   T.kanWerken = kanWerken;
 
   // De bewoner van een poppetje: een nieuw poppetje draagt hem mee (e.bewoner); de schout heeft zijn wezen al van de
@@ -232,9 +235,10 @@
 
   // Waar iemand werkt: op de heide bij de schapen (de herder), op het erf van een boerderij, en
   // anders bij de deur van zijn werkplaats. Een eigen plek per soort werk (de houthakker bij de
-  // bomen, de visser aan het water) komt later (ontwerp/opmerkingen.md).
+  // bomen, de visser aan het water) komt later (ontwerp/opmerkingen.md). Een soldaat staat bij zijn wachthuis
+  // (js/soldaten.js).
   function werkplekVan(D, w, p) {
-    const g = p.werk;
+    const g = p.werk || (p.soldaat && p.soldaat.wachthuis);
     if (!g) return null;
     if (g.soort === 'schaapskooi') {
       const meent = T.meentVan(w);
@@ -298,6 +302,7 @@
     p.plek = { put: putBij(D, w, deur), werk: werkplekVan(D, w, p), vrij: vrijePlekVan(D, w, p, deur) };
     p.plek.heen = looptijd(w, p, deur);
   }
+  T.zetPlekken = zetPlekken; // ook als iemand soldaat wordt of zijn wapen inlevert (js/soldaten.js)
 
   // ---------------------------------------------------------------------------------------------
   // Gezinnen en poppetjes

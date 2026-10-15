@@ -9,9 +9,9 @@
 // Een aanval (S.rovers.aanval) gaat zo: tegen de avond komen ze van de rand van de kaart die het dichtst bij een
 // akker ligt, lopen erheen, roven er een paar uur, en gaan weg met graan uit de voorraad; soms maken ze de akker
 // kapot (wat erop staat, groeit dit jaar niet meer: T.vertrapAkker, js/akkers.js). Een bericht zegt het, en de tijd
-// gaat naar 1× (T.bezoekerKomtAan, js/dag.js). De mannen van het wachthuis lopen dan met de schout mee
+// gaat naar 1× (T.bezoekerKomtAan, js/dag.js). De soldaten van het wachthuis (js/soldaten.js) lopen dan met de schout mee
 // (T.loopNaastDeSchout), en ziet een rover de schout, dan begint het gevecht in beurten (js/gevecht.js), met de hele
-// bende en de militie die bij hem is. Wie valt, is dood: een rover is uit zijn bende, een wachter is een mond minder
+// bende en de militie die bij hem is. Wie valt, is dood: een rover is uit zijn bende, een soldaat is een mond minder
 // (T.sneuvelt), en valt de schout, dan is het spel uit. Wie het overleeft, staat de volgende ochtend weer met al zijn
 // leven op (werklijst vraag 11).
 //
@@ -43,9 +43,6 @@
     kansAkkerKapot: 0.3,
     // Hoe dicht een man van de militie bij de schout moet staan om mee te vechten.
     militieBij: 12,
-    // Wie van de militie een wapen heeft, slaat zoveel harder (T.slagSchade, js/gevecht.js; de wapens blijven, Marcel,
-    // 12 okt: "h ja wapens blijven ook voor later").
-    wapens: { schade: 2 },
   };
   const IN = () => T.ROVERS_INSTELLINGEN;
 
@@ -108,43 +105,30 @@
     }
   }
 
-  // Na een nacht heeft wie het overleefde weer al zijn leven: de schout, en de mannen van het wachthuis.
+  // Na een nacht heeft wie het overleefde weer al zijn leven: de schout, en de soldaten.
   function genees(D) {
     const wie = [D.schout, ...(D.bewoners ? D.bewoners.mensen.map((p) => p.wezen) : [])];
     for (const e of wie) if (e && !e.dood && e.maxLeven > 0) e.leven = e.maxLeven;
   }
 
   // ---------------------------------------------------------------------------------------------
-  // De militie: de mannen van het wachthuis, en de veteranen van de heervaart
+  // De militie: de soldaten van het wachthuis, en de veteranen van de heervaart
   // ---------------------------------------------------------------------------------------------
 
-  // Wie in het wachthuis werkt, en wie van de heervaart terugkwam (js/heervaart.js; Marcel, 29 sep, vraag 60, B: ook
-  // zonder wachthuis), met zijn poppetje. Wie nog weg is, of nog onderweg naar huis, vecht niet mee.
-  // Hoeveel wapens er in het dorp zijn: in de schuur.
-  T.wapensInHetDorp = function (D) {
-    return Math.floor(((D.voorraad && D.voorraad.wapens) || 0) + 1e-9);
-  };
-
-  // Bij een aanval: zoveel mannen van de militie als er wapens zijn, hebben er een. Geeft hoeveel.
-  T.bewapen = function (D, militie) {
-    const n = T.wapensInHetDorp(D);
-    militie.forEach((e, i) => {
-      e.gewapend = i < n;
-    });
-    return Math.min(n, militie.length);
-  };
-
+  // Wie soldaat is (js/soldaten.js; vraag 159), en wie van de heervaart terugkwam (js/heervaart.js; Marcel, 29 sep, vraag
+  // 60, B: ook zonder wachthuis), met zijn poppetje. Wie nog weg is, of nog onderweg naar huis, vecht niet mee. Met welk
+  // wapen hij vecht, zegt T.slagVan (js/soldaten.js): een veteraan zonder soort met een hooivork.
   T.militieVan = (D) =>
     (D.bewoners ? D.bewoners.mensen : [])
-      .filter((p) => ((p.werk && p.werk.soort === 'wachthuis') || p.veteraan) && !p.weg && !p.komt && p.wezen && !p.wezen.dood)
+      .filter((p) => (p.soldaat || p.veteraan) && !p.weg && !p.komt && p.wezen && !p.wezen.dood)
       .map((p) => p.wezen);
   const opgeroepen = (D) => (D.wereld ? D.wereld.wezens.filter((e) => e.opgeroepen && !e.dood) : []);
 
-  // Bij een aanval komt hij naar de schout: hij vecht aan jouw kant, met wat een wachter kan (T.WEZENS.wachter) of een
+  // Bij een aanval komt hij naar de schout: hij vecht aan jouw kant, met wat een soldaat kan (T.WEZENS.soldaat) of een
   // veteraan (T.WEZENS.veteraan), en met het leven dat hij nog heeft. Ook voor de jacht op de wolven (js/beesten.js).
   T.roepOp = roepOp;
   function roepOp(e) {
-    const s = T.WEZENS[e.bewoner && e.bewoner.veteraan ? 'veteraan' : 'wachter'];
+    const s = T.WEZENS[e.bewoner && e.bewoner.veteraan ? 'veteraan' : 'soldaat'];
     e.opgeroepen = true;
     e.binnen = false;
     e.kant = 'speler';
@@ -161,7 +145,6 @@
   // Na de aanval gaat hij weer naar huis of aan het werk (T.dagAnker, js/dag.js). Ook na de jacht (js/beesten.js).
   T.laatGaan = function (e) {
     e.opgeroepen = false;
-    e.gewapend = false;
     e.kant = 'neutraal';
     if (!e.onderweg) e.pad = [];
   };
@@ -194,7 +177,7 @@
     for (const e of onderweg) {
       if (e.pad.length) continue;
       const pad = T.zoekRoute(D.wereld, { x: e.tx, y: e.ty }, { x: h.tx, y: h.ty }, { naast: true });
-      if (pad && pad.length) e.pad = pad.slice(0, e.maxAp || T.WEZENS.wachter.ap);
+      if (pad && pad.length) e.pad = pad.slice(0, e.maxAp || T.WEZENS.soldaat.ap);
     }
     return { erbij, onderweg };
   };
@@ -281,19 +264,16 @@
     // Is de schout weg (op reis, js/land.js), dan roept niemand de militie bij hem: de rovers hebben vrij spel.
     const militie = T.schoutIsWeg(D) ? [] : T.militieVan(D);
     for (const e of militie) roepOp(e);
-    // Wie een wapen heeft (van de wapenmaker), slaat harder.
-    const gewapend = T.bewapen(D, militie);
     const boer = T.boerVanVeld(D, w.akkers[A.veld]);
     const akker = boer ? T.t('the field of {boer}', { boer: boer.naam }) : T.t('the field');
     const wie = A.soort === 'bende'
       ? T.t('{n|{namen}, who left, comes back as a robber|{namen}, who left, come back as robbers}', { n: leden.length, namen: T.opsomming(leden.map((l) => l.naam)) })
       : T.t('{n|A wild robber turns up|{aantal} wild robbers turn up}', { n: leden.length, aantal: T.hoofdletter(T.telwoord(leden.length)) });
-    // Wie er komt: de wachters, de veteranen van de heervaart, of allebei.
-    const veteranen = militie.filter((e) => e.bewoner && e.bewoner.veteraan).length;
-    const wachters = militie.length - veteranen;
-    const metWapens = !gewapend ? '' : gewapend === militie.length ? T.t(', armed') : T.t(', {n} of them armed', { n: T.telwoord(gewapend) });
-    const hulpWie = wachters && veteranen ? T.t('The guards and the veterans come') : wachters ? T.t('The guards come') : veteranen === 1 ? T.t('The veteran comes') : T.t('The veterans come');
-    const hulp = !militie.length ? '' : ` ${T.t('{wie} to your side{wapens}.', { wie: hulpWie, wapens: metWapens })}`;
+    // Wie er komt: de soldaten, de veteranen van de heervaart, of allebei.
+    const veteranen = militie.filter((e) => e.bewoner && e.bewoner.veteraan && !e.bewoner.soldaat).length;
+    const soldaten = militie.length - veteranen;
+    const hulpWie = soldaten && veteranen ? T.t('The soldiers and the veterans come') : soldaten ? T.t('The soldiers come') : veteranen === 1 ? T.t('The veteran comes') : T.t('The veterans come');
+    const hulp = !militie.length ? '' : ` ${T.t('{wie} to your side.', { wie: hulpWie })}`;
     T.bezoekerKomtAan(D, { meteen: true, aankomst: { tekst: T.t('Robbers are coming. {wie}, heading for {akker}.{hulp}', { wie, akker, hulp }), soort: 'gevaar', naarGewoon: true } });
   }
 
@@ -346,7 +326,6 @@
     for (const e of mee) roepOp(e);
     const militie = T.schoutIsWeg(D) ? [] : T.militieVan(D).filter((e) => !mee.includes(e));
     for (const e of militie) roepOp(e);
-    T.bewapen(D, [...mee, ...militie]);
     const naam = T.naamVanBewoner(B.wie[0]);
     const wie = R.bende.length ? T.t('{namen}, who left,', { namen: T.opsomming(leden.map((l) => l.naam)) }) : T.t('{aantal} robbers', { aantal: T.hoofdletter(T.telwoord(leden.length)) });
     const hulp = militie.length ? ` ${T.t('The militia comes to your side.')}` : '';

@@ -153,6 +153,16 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 15 okt, middag: de soldaten (vraag 159, stap 1)
+
+Op de branch `claude/werklijst-doorzetten-4m1kji`, met de kolonist (regel 7c: een wachthuis, een wapenmaker, en dan twee
+speermannen). Op alle drie de eilanden loopt het jaar uit zonder vast te lopen; het wachthuis is af rond dag 135, de
+wapenmaker rond dag 220 (hij wacht zo'n 85 dagen op goud), en de eerste speerman komt op dag 224, 226 en 301; aan het eind
+zijn er steeds twee. De eerste keer kwam er maar één: de wapenmaker maakte zijn stukken in delen, en 0,8 speer in de opslag
+met 0,2 op zijn stapel telde als één, terwijl de kar het stapeltje liet liggen. Nu maakt hij hele stukken (`code.md`, bij
+`js/soldaten.js`). Op eiland 1 duurt het van de wapenmaker tot de eerste speerman 80 dagen; waarom (niemand zonder werk,
+B1, of de kar), is nog niet uitgezocht.
+
 ## De speeltest van 15 okt: de ossenkar gemeten, met de keten erin (werklijst C, stap 6)
 
 `npm run speeltest -- --zaden 1-5 --tegelijk 3 --naam c6`, en twee jaar op eiland 3 en 4 (`--zaden 3-4 --jaren 2 --naam

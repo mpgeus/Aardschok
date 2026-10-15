@@ -376,8 +376,11 @@
   // met wat hij het meest draagt: stammen, stenen, spullen, of anders zakken (gereedschap/pixelart/ossenkar.cjs).
   const LADING_VEL = {
     hout: 'ossenkar-hout', planken: 'ossenkar-hout', steen: 'ossenkar-stenen', klei: 'ossenkar-stenen', kalk: 'ossenkar-stenen',
-    ijzer: 'ossenkar-stenen', gereedschap: 'ossenkar-spullen', wapens: 'ossenkar-spullen', vaten: 'ossenkar-spullen',
+    ijzer: 'ossenkar-stenen', gereedschap: 'ossenkar-spullen', vaten: 'ossenkar-spullen',
     laken: 'ossenkar-spullen', huiden: 'ossenkar-spullen', leer: 'ossenkar-spullen', riet: 'ossenkar-spullen',
+    // de stukken van de wapenmaker (js/soldaten.js)
+    speren: 'ossenkar-spullen', pieken: 'ossenkar-spullen', zwaarden: 'ossenkar-spullen', schilden: 'ossenkar-spullen',
+    bogen: 'ossenkar-spullen', kruisbogen: 'ossenkar-spullen', harnassen: 'ossenkar-spullen',
   };
   function zetVel(e) {
     if (e.vel === 'huifkar') return;
@@ -404,11 +407,11 @@
   }
   const deurDoel = (D, g) => ({ ...T.deurVan(D.wereld, g), naast: true });
 
-  // Welke waren een bouwplaats (wat hij nodig heeft) of een werkplaats (wat hij verwerkt) van de kar kan willen.
+  // Welke waren een bouwplaats (wat hij nodig heeft) of een werkplaats (wat hij verwerkt; T.watErIngaat, js/gebouwen.js:
+  // de wapenmaker alleen voor wat er gevraagd wordt) van de kar kan willen.
   function watHetVraagt(D, g) {
     if (g.bouw && !g.klaar) return Object.keys(g.bouw.nodig || {});
-    const soort = T.GEBOUWEN[g.soort];
-    return g.klaar && soort && soort.maakt && soort.maakt.in ? Object.keys(soort.maakt.in).filter((wat) => T.gaatMetDeKar(D, wat)) : [];
+    return g.klaar ? Object.keys(T.watErIngaat(D, g)).filter((wat) => T.gaatMetDeKar(D, wat)) : [];
   }
 
   // Wat een bouwplaats of een werkplaats nog van `wat` wil, bovenop wat er is en wat onderweg is; 0 als niets.
@@ -418,8 +421,7 @@
       if (g.wachtOpRooien || !B.nodig || !B.nodig[wat]) return 0; // eerst rooien: het hout van de plek gaat er eerst in
       return Math.max(0, B.nodig[wat] - (B.er[wat] || 0) - onderweg(D, g, wat));
     }
-    const soort = T.GEBOUWEN[g.soort];
-    if (!g.klaar || !soort || !soort.maakt || !soort.maakt.in || !soort.maakt.in[wat]) return 0;
+    if (!g.klaar || !T.watErIngaat(D, g)[wat]) return 0;
     const rest = IN().voorraadIn - ((g.in && g.in[wat]) || 0) - onderweg(D, g, wat);
     return rest >= IN().voorraadIn / 2 ? rest : 0;
   }
@@ -484,7 +486,8 @@
         if (erNog && g.stapel) {
           let ruimte = IN().lading - som(e.lading);
           for (const wat of Object.keys(g.stapel)) {
-            const n = Math.min(ruimte, g.stapel[wat]);
+            // een stuk van de wapenmaker alleen heel (js/soldaten.js): een halve speer kan niemand pakken
+            const n = T.isStuk(wat) ? Math.floor(Math.min(ruimte, g.stapel[wat]) + 1e-9) : Math.min(ruimte, g.stapel[wat]);
             if (n <= 0) continue;
             e.lading[wat] = (e.lading[wat] || 0) + n;
             g.stapel[wat] -= n;

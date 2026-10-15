@@ -198,7 +198,7 @@ test('op 1 herfstmaand komen ze terug als veteraan, over de weg; wie sneuvelde, 
   });
 });
 
-test('een veteraan vecht mee als er rovers komen, ook zonder wachthuis, met meer leven dan een wachter', () => {
+test('een veteraan vecht mee als er rovers komen, ook zonder wachthuis, met meer leven dan een soldaat, en met een hooivork', () => {
   const S = met({ kansNietTerug: 0 }, () => {
     const spel = dorpMetBrief();
     T.stuurHeervaart(spel.dorp, 'gestuurd');
@@ -225,7 +225,8 @@ test('een veteraan vecht mee als er rovers komen, ook zonder wachthuis, met meer
   for (const e of opgeroepen) {
     assert.equal(e.kant, 'speler');
     assert.equal(e.maxLeven, T.WEZENS.veteraan.leven);
-    assert.ok(T.WEZENS.veteraan.leven > T.WEZENS.wachter.leven);
+    assert.ok(T.WEZENS.veteraan.leven > T.WEZENS.soldaat.leven);
+    assert.equal(T.slagVan(e).wapen, 'hooivork', 'zonder soort vecht hij met een hooivork (js/soldaten.js)');
   }
   assert.ok(berichten.some((b) => /The (veteran comes|veterans come) to your side/.test(b)));
 });

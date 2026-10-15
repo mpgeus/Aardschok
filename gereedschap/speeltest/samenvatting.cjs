@@ -98,7 +98,7 @@ function hetBos(goed) {
 function hetEersteJaar(goed) {
   if (!goed.length) return [];
   const uit = ['## Het eerste jaar: loopt er iets vast?', '', 'Wat de kolonist neerzette en op welke dag het af was (het langst dat het werk aan een bouwplaats stilstond, tussen haakjes, als het meer dan een dag was); wat hij wilde maar niet kon (op hoeveel dagen, en vanaf welke); hoeveel dagen hij wachtte tot hij iets kon betalen; op welke dag het kamp leeg was; wie er op 1 wintermaand nog in een tent woonde; wie na een dag nog naar zijn huis onderweg was (het langst, in dagen); en welke werkplaats af was maar niet werkte zonder dat het spel zei waarom (dagen).', ''];
-  const kop = ['speler', 'zaad', 'einde', 'af op dag', 'niet gelukt', 'wachtte (dagen)', 'kamp leeg op', 'in een tent', 'onderweg', 'werkt niet'];
+  const kop = ['speler', 'zaad', 'einde', 'af op dag', 'niet gelukt', 'wachtte (dagen)', 'kamp leeg op', 'in een tent', 'onderweg', 'werkt niet', 'soldaten (eerste op dag)'];
   uit.push(regel(kop), regel(kop.map(() => '---')));
   for (const u of goed) {
     const E = u.eersteJaar;
@@ -116,6 +116,7 @@ function hetEersteJaar(goed) {
       Object.entries(E.wacht || {}).map(([soort, w]) => `${soort} ${w.dagen} (${w.op})`).join(', '),
       E.kampLeeg == null ? 'nooit' : String(E.kampLeeg), E.inTent == null ? '' : String(E.inTent),
       E.onderweg.map((o) => `${o.naam} ${o.dagen}`).join(', '), E.werktNiet.map((w) => `${w.soort} ${w.dagen}`).join(', '),
+      E.soldaten ? `${E.soldaten.nu}${E.soldaten.eerste != null ? ` (${E.soldaten.eerste})` : ''}` : '',
     ]));
   }
   uit.push('', '## Het eerste jaar: eten en hout', '', 'Het graan en het hout op 1 hooimaand (voor de oogst), 1 herfstmaand (erna), 1 wintermaand en 1 lentemaand van het jaar erna; het laagste graan voor de oogst; de dagen met honger en met kou (de status in de balk); de dagen met 1, 2, 3, 4 en 5 of meer soorten eten (de afwisseling, vraag 154; het werk staat in de werkbank: 60, 75, 90 en vanaf vier 100%); en wie er stierf.', '');

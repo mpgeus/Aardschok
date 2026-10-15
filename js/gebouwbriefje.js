@@ -6,7 +6,9 @@
 // laatste is de andere helft van "hoeveel": The Settlers draait om zien waar het stokt.
 //
 // T.gebouwBriefje(D, g) is de regel zonder scherm (test/gebouwbriefje.test.cjs): de kop, wat het doet, en de delen,
-// elk met een titel en regels tekst. Alles wat erop staat, rekent het spel al: de nachtlus van de gebouwen (g.werkte,
+// elk met een titel en regels tekst. Een regel kan knoppen hebben ({ tekst, knoppen: [{ tekst, uitleg, kan, doe }] },
+// zoals een handeling): het wachthuis, waar je soldaten zet (js/soldaten.js; vraag 159). Een ander bestand geeft zijn
+// eigen delen in T.GEBOUW_DELEN[soort](D, g). Alles wat erop staat, rekent het spel al: de nachtlus van de gebouwen (g.werkte,
 // g.tekort, g.vol, g.stilWant, g.uren; js/gebouwen.js), het werktempo (T.werkTempo), en wat het maakte (T.telGemaakt, via
 // T.opStapel in js/kar.js). T.kiesGebouw zet S.gekozen (alleen scherm, T.schermVelden in js/opslaan.js), een klik op een
 // gebouw (T.handelingVerkennen, js/verkennen.js); het briefje op het scherm legt T.ui.werkGebouwbriefjeBij (js/huisbriefje.js,
@@ -95,7 +97,21 @@
     const jaar = T.gemaaktDoor(D, g, true);
     const dagen = T.GEBOUWEN_INSTELLINGEN.gemaaktDagen;
     const maakt = [];
-    if (soort.maakt) {
+    if (soort.maakt && soort.maakt.keuze) {
+      // Wie kiest (de wapenmaker): één stuk per dag, wat er gevraagd wordt (T.receptVan, js/gebouwen.js); wat van hetzelfde
+      // gemaakt wordt, samen.
+      const van = new Map();
+      for (const wat in soort.maakt.keuze) {
+        const uit = waren(soort.maakt.keuze[wat]);
+        van.set(uit, [...(van.get(uit) || []), T.waarNaam(wat)]);
+      }
+      maakt.push(T.t('At full strength: one piece a day, of what is asked for. {stukken}.', {
+        stukken: T.hoofdletter([...van].map(([uit, wat]) => T.t('{wat} from {uit}', { wat: T.opsomming(wat), uit })).join('; ')),
+      }));
+      maakt.push(g.werkte > 0 && g.maaktNu
+        ? T.t('Today: {uit} ({p}% of full strength).', { uit: waren({ [g.maaktNu]: soort.maakt.uit[g.maaktNu] * g.werkte }), p: procent(g.werkte) })
+        : T.t('Today: nothing.'));
+    } else if (soort.maakt) {
       const vol = T.maaktUit(D, soort);
       maakt.push(soort.maakt.in
         ? T.t('At full strength: {uit} a day, from {in}.', { uit: waren(vol), in: waren(soort.maakt.in) })
@@ -122,8 +138,12 @@
     if (heeftWaren(jaar)) maakt.push(T.t('This year: {uit}.', { uit: waren(jaar) }));
     // Wat een ander bestand er nog over weet: in de herberg de gasten en het bier (js/herberg.js).
     const meer = T.GEBOUW_ERBIJ[g.soort];
-    if (meer) maakt.push(zin(meer(D, g)));
+    // (wie niets maakt, zoals het wachthuis, zegt dat in een eigen deel, hieronder)
+    if (meer && soort.maakt) maakt.push(zin(meer(D, g)));
     deel(T.t('Makes'), maakt);
+    // Wat een ander bestand er als eigen deel bij zet: bij het wachthuis de soldaten, met knoppen (js/soldaten.js).
+    const eigen = T.GEBOUW_DELEN[g.soort];
+    if (eigen) for (const d of eigen(D, g)) deel(d.titel, d.regels);
     if (soort.maakt) {
       const r = remmen(D, g, soort);
       deel(T.t('Held back by'), r.length ? r : [T.t('Nothing: it works at full strength.')]);
@@ -157,4 +177,5 @@
   T.kiesGebouw = function (S, g) {
     S.gekozen = g;
   };
+  T.GEBOUW_DELEN = T.GEBOUW_DELEN || {};
 })(globalThis.Spel = globalThis.Spel || {});

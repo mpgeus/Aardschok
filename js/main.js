@@ -1367,7 +1367,8 @@
       return {
         bende: R.bende.map((l) => l.naam), bendeOp: R.bendeOp, wildeOp: R.wildeOp,
         aanval: A ? { soort: A.soort, fase: A.fase, rovers: (A.rovers || []).map((e) => `${e.tx},${e.ty}${e.dood ? ' dood' : ''}`), akker: A.veld } : null,
-        militie: S.wereld.wezens.filter((e) => e.opgeroepen).map((e) => `${e.naam} (${e.leven} leven)`),
+        militie: S.wereld.wezens.filter((e) => e.opgeroepen).map((e) => `${e.naam} (${e.leven} leven, ${T.slagVan(e).wapen || 'vuist'})`),
+        soldaten: T.soldatenVan(S.dorp).map((p) => `${p.naam} (${p.soldaat.soort})`),
         wapens: T.wapensInHetDorp(S.dorp),
       };
     },

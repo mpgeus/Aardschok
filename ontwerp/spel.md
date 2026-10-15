@@ -985,6 +985,33 @@ aanvallen, roept om hulp (nog niet gebouwd; werklijst vraag 116, bij stap 3).
 
 ## Rovers en de militie (Marcel, 28 en 29 sep 2026; werklijst vraag 51 en 55)
 
+**Zo werken de soldaten nu** (15 okt, vraag 159; Marcel: "A1, B1, C1, D1", en de wapens "sword, spear, shield, pike, bow,
+crossbow, armor", in vaste soorten zoals Knights and Merchants; `js/soldaten.js`, `test/soldaten.test.cjs`):
+- **Soldaat word je in het wachthuis.** Klik erop: op zijn briefje staan zes soorten, elk met een − en een +, samen
+  hooguit zes per wachthuis. De militie heeft een hooivork (die heeft elke boer), de speerman speer en schild, de
+  piekenier piek en harnas, de zwaardvechter zwaard, schild en harnas, de boogschutter een boog, en de
+  kruisboogschutter kruisboog en harnas. Liggen al zijn stukken in de opslag, dan wordt wie geen werk heeft (geen
+  werkplaats en geen boerderij; wie alleen meebouwt, wel), volwassen of jong, soldaat: hij pakt ze, werkt en bouwt niet
+  meer, eet mee zoals iedereen, staat overdag bij het wachthuis en slaapt thuis. Anders zegt het briefje waarop hij
+  wacht ("waiting for shields from the weaponsmith", of "nobody without work"). Met − levert hij alles weer in en is
+  hij vrij; wordt het wachthuis afgebroken, dan ook. Valt hij, dan zijn zijn stukken weg. Het wachthuis heeft geen
+  wachters meer (geen handen).
+- **De wapenmaker** staat in het gehucht (12 stammen en 14 goud) en maakt alleen wat de wachthuizen vragen, één stuk
+  per dag: speer, schild en boog van een plank, piek en kruisboog van een plank en ijzer, het zwaard van ijzer, en
+  het harnas van twee huiden (een ijzeren harnas komt later). Hij maakt hele stukken (wat half af is, maakt hij de
+  volgende dag af), eerst waarvoor hij heeft wat erin gaat, en de
+  ossenkar brengt hem alleen wat daarvoor nodig is. Vraagt niemand iets, dan staat hij stil. Hij leent het beeld van de
+  smidse; zijn eigen gebouw komt met de werkplaatsen in de bouwstijl (vraag 167).
+- **In het gevecht slaat elk wapen anders** (de getallen in de werkbank, "Soldiers"): de hooivork zwak (2 tot 3), de
+  speer tot twee tegels ver (3 tot 5), de piek ook, maar harder (4 tot 6), het zwaard hard (5 tot 7); de boog en de
+  kruisboog schieten tot 8 tegels waar ze zien (2 tot 4, 4 punten), maar niet met een vijand naast zich. Een speer
+  steekt langs wie ertussen staat. Het schild vangt 2 af van elke klap, het harnas 1, maar van een bout uit een
+  kruisboog niets. Wie zonder soort meevecht (een veteraan, wie met de bode meegaat, de jacht), vecht met een hooivork;
+  de schout slaat zoals altijd (3 tot 5). Bij de muis: "Hit", "Thrust" of "Shoot", en anders loopt hij naar de dichtste
+  tegel vanwaar hij raakt.
+- **Nog niet:** een eigen figuur per soort (stap 4 van het plan, eerst in woorden), de soldaten aanklikken (stap 2),
+  en de muren (stap 3).
+
 **Zo werkt het nu** (29 sep, vijftiende sessie; `js/rovers.js`, het gevecht voor een groep in `js/gevecht.js`, toetsen
 in `test/rovers.test.cjs`; Marcel: "A, Ja en ook 'wilde' rovers. B, ze roven de velden, graan etc ook maken ze soms
 velden kapot. C, Ja. D, mensen kunnen sterven"):
@@ -998,7 +1025,7 @@ velden kapot. C, Ja. D, mensen kunnen sterven"):
   dan gaan ze weg met 10 graan per rover uit de voorraad, en met een kans van 30% is de akker vertrapt: wat erop
   stond, groeit dit jaar niet meer (kale grond, geen oogst). Een rover draagt het vel van een gewone dorpeling en
   altijd zijn levensbalk, zodat je hem herkent.
-- **De militie is het wachthuis.** Wie er werkt (twee handen), loopt bij een aanval naar de schout en met hem mee,
+- **De militie is het wachthuis** (sinds 15 okt: zijn soldaten, hierboven). Wie er werkt (twee handen), loopt bij een aanval naar de schout en met hem mee,
   zoals de inner. Ziet een rover de schout, dan begint het gevecht in beurten, met de hele bende en de wachters die
   binnen twaalf tegels van hem staan. Wie verder weg is, rent erheen (elke ronde zo ver als zijn punten reiken; "Jan
   is nog onderweg"), en vecht mee vanaf de ronde dat hij er is ("Jan komt erbij"; sinds 5 okt: tot dan deed hij het
@@ -2243,7 +2270,8 @@ Sinds 7 okt (vraag 131) hangt wat de heer ervan vindt niet meer af van wat het i
 "Alleen weerstand tegen de heer is inacceptabel").
 
 Gebouwen erbij: wachthuis, gevang, schuttershof (doelen), tuighuis (wapens), en later een kazerne en
-een poort met wacht. Daartegenover staan de soldaten van de heer, die hij bij je inkwartiert. Wie je
+een poort met wacht. (Sinds 15 okt is het wachthuis waar je soldaat wordt, en zijn het schuttershof en het tuighuis weg:
+vraag 159, "Zo werken de soldaten nu".) Daartegenover staan de soldaten van de heer, die hij bij je inkwartiert. Wie je
 ordebewaarders zijn, is ook politiek: een rakker die door de heer betaald wordt, is een verklikker
 met een knuppel.
 

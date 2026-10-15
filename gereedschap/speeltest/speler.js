@@ -318,7 +318,7 @@
   // keer per dag, zoals de toets in test/begin.test.cjs; de heer geeft hij alles wat hij vraagt. Wat er
   // vastloopt, schrijft hij op in boek.eersteJaar (eersteJaar hieronder): "zonder fouten" is dat niets vastloopt (b1).
   let kolonistDag = null;
-  const nieuwEersteJaar = () => ({ gebouwd: [], wacht: {}, kampLeeg: null, inTent: null, onderweg: [], werktNiet: [], honger: 0, kou: 0, graan: {}, hout: {}, planken: {}, soorten: {} });
+  const nieuwEersteJaar = () => ({ gebouwd: [], wacht: {}, kampLeeg: null, inTent: null, onderweg: [], werktNiet: [], honger: 0, kou: 0, graan: {}, hout: {}, planken: {}, soorten: {}, soldaten: { eerste: null, nu: 0 } });
   function kolonist() {
     return {
       async begin() {
@@ -383,6 +383,9 @@
       x.stil = Math.max(x.stil, dag - x.laatst);
     }
     if (E.kampLeeg == null && s.dorp.begin.kamp === 'weg') E.kampLeeg = dag;
+    // De soldaten (vraag 159): de dag van de eerste, en hoeveel er nu zijn.
+    E.soldaten.nu = T.soldatenVan(s.dorp).length;
+    if (E.soldaten.nu && E.soldaten.eerste == null) E.soldaten.eerste = dag;
     if (dag === 9 * T.DAGEN_PER_MAAND) E.inTent = s.dorp.bewoners.mensen.filter((p) => p.huis && p.huis.soort === 'tent').length;
     for (const p of s.dorp.bewoners.mensen) {
       if (!p.komt) {

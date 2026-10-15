@@ -32,6 +32,9 @@
 //                                    // bezetting (T.tikGebouwenDag schaalt mee met hoe bezet hij is
 //                                    // én, sinds js/behoeften.js, met de tevredenheid). Wie iets
 //                                    // omzet (met `in`), maakt tot er genoeg ligt (T.maaktTot).
+//                                    // Met `keuze` (de wapenmaker) maakt hij per dag één van zijn
+//                                    // waren, met keuze[wat] als wat erin gaat; `in` is dan alles
+//                                    // wat hij kan vragen (T.receptVan).
 //     bij:         null,             // of { natuur: 'bos', straal: 10, minstens: 30 }: hij hoort bij het
 //                                    // bos, de rotsen of het water (T.NATUUR), en wordt alleen gebouwd
 //                                    // waar daarvan zoveel binnen `straal` tegels van zijn voet ligt.
@@ -295,12 +298,14 @@
       tekening: 'erf/schuurtje', beschrijving: T.t('fish from the brook'), // geen tekst
       opmerking: 'nieuw: nog niet getekend, leent voorlopig het schuurtje. Hoort aan het water.', // geen tekst
     },
+    // Hier word je soldaat (vraag 159, A1; js/soldaten.js): wie geen werk heeft, pakt een wapen. Geen handen: een soldaat
+    // werkt niet, en zijn plaatsen staan in T.SOLDATEN_INSTELLINGEN.
     wachthuis: {
       naam: T.t('watch house'), trede: 'gehucht', voet: { b: 3, h: 3 }, kosten: { hout: 10, goud: 4 }, heer: { goud: 2 }, bouwtijd: 3,
-      handen: 2, woonruimte: 0, maakt: null, menu: true, lantaarn: true,
-      tekening: 'gebouwen/dorpKlein3', beschrijving: T.t('constables and the night watch: keep order, catch thieves, enforce the bylaws, or look away'), // geen tekst
+      handen: 0, woonruimte: 0, maakt: null, menu: true, lantaarn: true,
+      tekening: 'gebouwen/dorpKlein3', beschrijving: T.t('whoever has no work becomes a soldier here, with a pitchfork or a weapon from the weaponsmith'), // geen tekst
       opmerking: 'nieuw (Marcel, 23 sep: "orde bewaarders, leger etc moeten een optie zijn"): nog niet getekend, ' // geen tekst
-        + 'leent voorlopig een klein dorpshuis. De heer vindt het goed; voor wie de rakkers echt werken, is de vraag.', // geen tekst
+        + 'leent voorlopig een klein dorpshuis.', // geen tekst
     },
 
     // Al in het gehucht (Marcel, 24 sep 2026; spel.md, "Handel"): eerst hangt hij voor zijn ijzer
@@ -480,29 +485,29 @@
 
     // ── Verdediging: wapens zijn niet verboden (Marcel, 7 okt: "Het is logisch dat er wapens zijn om de stad te
     // verdedigen. Alleen weerstand tegen de heer is inacceptabel"; werklijst vraag 131) ──
+    // In het gehucht (vraag 159, C1; Marcel, 15 okt: "iemand kan gewoon wapensmid worden. Daar moet nog een gebouw voor
+    // komen"): hij maakt wat de wachthuizen vragen (T.wapensGevraagd, js/soldaten.js), één stuk per dag: speer, schild en
+    // boog van planken, piek en kruisboog van planken en ijzer, het zwaard van ijzer, en het harnas van huiden (een ijzeren
+    // harnas komt later). Het tuighuis en het schuttershof deden niets, en zijn weg (vraag 159, F).
     wapenmaker: {
-      naam: T.t('weaponsmith'), trede: 'dorp', voet: { b: 4, h: 4 }, kosten: { planken: 12, goud: 14 }, heer: { goud: 4 }, bouwtijd: 4,
-      handen: 2, woonruimte: 0, maakt: { in: { hout: 1, ijzer: 1 }, uit: { wapens: 1 } },
-      menu: true, tekening: 'gebouwen/smidse', beschrijving: T.t('iron and logs into weapons, to defend the village'), // geen tekst
-      opmerking: 'nieuw: nog niet getekend, leent voorlopig het vel van de smidse.', // geen tekst
-    },
-    schuttershof: {
-      naam: T.t('archery butts'), trede: 'dorp', voet: { b: 6, h: 6 }, kosten: { planken: 10, goud: 10 }, heer: { goud: 3 }, bouwtijd: 3,
-      handen: 0, woonruimte: 0, maakt: null, menu: true,
-      tekening: 'gebouwen/dorpKlein1', beschrijving: T.t('the militia trains here with bow and spear'), // geen tekst
-      opmerking: 'nieuw: nog niet getekend, leent voorlopig een klein dorpshuis.', // geen tekst
+      naam: T.t('weaponsmith'), trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 12, goud: 14 }, heer: { goud: 4 }, bouwtijd: 4,
+      handen: 2, woonruimte: 0,
+      maakt: {
+        in: { planken: 1, ijzer: 1, huiden: 2 },
+        uit: { speren: 1, pieken: 1, zwaarden: 1, schilden: 1, bogen: 1, kruisbogen: 1, harnassen: 1 },
+        keuze: {
+          speren: { planken: 1 }, pieken: { planken: 1, ijzer: 1 }, zwaarden: { ijzer: 1 }, schilden: { planken: 1 },
+          bogen: { planken: 1 }, kruisbogen: { planken: 1, ijzer: 1 }, harnassen: { huiden: 2 },
+        },
+      },
+      menu: true, tekening: 'gebouwen/smidse', beschrijving: T.t('weapons, shields and armour for the soldiers of the watch house, one piece a day'), // geen tekst
+      opmerking: 'nieuw: nog niet getekend, leent voorlopig het vel van de smidse; een eigen gebouw komt met de werkplaatsen in de bouwstijl (vraag 167).', // geen tekst
     },
     palissade: {
       naam: T.t('palisade'), trede: 'dorp', voet: null, kosten: { hout: 40 }, heer: { goud: 5 }, bouwtijd: 10,
       handen: 0, woonruimte: 0, maakt: null, menu: false,
       tekening: null, beschrijving: T.t('a wall of stakes around the village, against robbers and wolves'),
       opmerking: 'Zelfde reden als stadsmuur hierboven: geen los blokje, gaat niet via dit bouwmenu.', // geen tekst
-    },
-    tuighuis: {
-      naam: T.t('armoury'), trede: 'dorp', voet: { b: 4, h: 4 }, kosten: { planken: 14, goud: 10 }, heer: { goud: 3 }, bouwtijd: 4,
-      handen: 0, woonruimte: 0, maakt: null, menu: true,
-      tekening: 'gebouwen/schuur', beschrijving: T.t('where the militia\'s weapons are kept'), // geen tekst
-      opmerking: 'nieuw: nog niet getekend, leent voorlopig de schuur. Bergt wat de wapenmaker maakt.', // geen tekst
     },
     kazerne: {
       naam: T.t('barracks'), trede: 'stad', voet: { b: 6, h: 6 }, kosten: { steen: 60, goud: 30 }, heer: { goud: 10 }, bouwtijd: 8,
@@ -656,9 +661,10 @@
     for (const g of D.gebouwen || []) {
       const soort = T.GEBOUWEN[g.soort];
       if (!g.klaar || !soort || !soort.maakt || !(g.handen > 0)) continue;
-      // Wie niets te bewerken heeft (een smidse zonder ijzer) of in dit seizoen stilligt (de
+      // Wie niets te bewerken heeft (een smidse zonder ijzer, een wapenmaker zonder vraag) of in dit seizoen stilligt (de
       // visser als de beek dichtligt), gebruikt ook geen gereedschap.
-      if (soort.maakt.in && Object.keys(soort.maakt.in).some((wat) => !((D.voorraad || {})[wat] > 0))) continue;
+      const m = T.receptVan(D, g);
+      if (!m || (m.in && Object.keys(m.in).some((wat) => !((D.voorraad || {})[wat] > 0)))) continue;
       if (T.stilOp(soort, D.kalender && D.kalender.dag, nu)) continue;
       handen += g.handen;
     }
@@ -1371,9 +1377,50 @@
   T.maaktTot = function (soort, D) {
     const m = soort.maakt;
     if (!m || !m.in || !m.uit) return null;
+    // De wapenmaker maakt wat de wachthuizen vragen (js/soldaten.js), niet tot er genoeg ligt.
+    if (m.keuze) return D ? T.wapensGevraagd(D) : {};
     const tot = {};
     for (const wat in m.uit) tot[wat] = T.GEBOUWEN_INSTELLINGEN.werkplaatsMaaktTot + (wat === 'bier' && D ? T.bierApart(D) : 0);
     return tot;
+  };
+
+  // Wat gebouw g vandaag maakt, en waarvan: { in, uit } zoals T.GEBOUWEN[x].maakt, of null. Wie kiest (maakt.keuze: de
+  // wapenmaker, vraag 159), maakt één waar per dag: die waarvan er het meest gevraagd wordt en nog niet ligt (T.maaktTot,
+  // min de voorraad, de stapels en wat hij al half af heeft, g.half), het liefst een waarvoor hij heeft wat erin gaat; met
+  // keuze[wat] als wat erin gaat. Hij maakt hele stukken: wat half af is, blijft in g.half tot het heel is (de nachtlus).
+  // Vraagt niemand iets, dan null.
+  const halfAf = (g, wat) => (g.half && g.half[wat]) || 0;
+  const nogNodig = (D, g, tot, wat) => (tot[wat] || 0) - ((D.voorraad && D.voorraad[wat]) || 0) - T.opDeStapels(D, wat) - halfAf(g, wat);
+  T.receptVan = function (D, g) {
+    const soort = T.GEBOUWEN[g.soort];
+    const m = soort && soort.maakt;
+    if (!m || !m.keuze) return m || null;
+    const tot = T.maaktTot(soort, D);
+    let beste = null;
+    for (const wat in m.keuze) {
+      const nodig = nogNodig(D, g, tot, wat);
+      if (nodig <= 1e-9) continue;
+      const kan = Object.keys(m.keuze[wat]).every((x) => T.verwerkVoorraad(D, g, x) > 1e-9);
+      const score = (kan ? 1000 : 0) + nodig;
+      if (!beste || score > beste.score) beste = { wat, score };
+    }
+    return beste ? { in: m.keuze[beste.wat], uit: { [beste.wat]: m.uit[beste.wat] } } : null;
+  };
+
+  // Wat er bij gebouw g in kan gaan, voor de ossenkar die het brengt (js/kar.js): wat hij verwerkt (maakt.in), en bij
+  // wie kiest alleen wat erin gaat voor wat er gevraagd wordt. { wat: per dag }, of {}.
+  T.watErIngaat = function (D, g) {
+    const soort = T.GEBOUWEN[g.soort];
+    const m = soort && soort.maakt;
+    if (!m || !m.in) return {};
+    if (!m.keuze) return m.in;
+    const tot = T.maaktTot(soort, D);
+    const uit = {};
+    for (const wat in m.keuze) {
+      if (nogNodig(D, g, tot, wat) <= 1e-9) continue;
+      for (const x in m.keuze[wat]) uit[x] = Math.max(uit[x] || 0, m.keuze[wat][x]);
+    }
+    return uit;
   };
 
   // ---------------------------------------------------------------------------------------------
@@ -1488,8 +1535,9 @@
       if (!['graan', 'tevreden', 'winter', 'kamp'].some((w) => waarom.includes(w))) T.gezinKomt(D);
     }
     // 5. Handen: verdeeld over de werkplaatsen, en wie waar werkt (T.verdeelHanden hierboven). Wie dan geen werk heeft,
-    // bouwt vandaag mee, in het lege begin (js/bouwen.js).
+    // kan soldaat worden (js/soldaten.js; vraag 159, B1), en wie dan nog over is, bouwt vandaag mee (js/bouwen.js).
     T.verdeelHanden(D);
+    T.tikSoldatenDag(D);
     T.kiesBouwers(D);
     // 6. Productie: wat een gebouw maakt, gaat per dag naar de voorraad — naar rato van hoe bezet
     // hij is (de helft van zijn handen geeft de helft van zijn opbrengst), en van het werktempo van het dorp: de
@@ -1530,6 +1578,13 @@
         if (!wasStil && T.ui && T.ui.bericht && !soort.alleenIn) T.zeg(D, T.t('The {naam} is idle: {waarom}.', { naam: soort.naam, waarom: stil }));
         continue;
       }
+      // Wat hij vandaag maakt (T.receptVan): voor de meesten wat hij altijd maakt, voor de wapenmaker wat er gevraagd wordt.
+      const m = T.receptVan(D, g);
+      g.maaktNu = m && m !== soort.maakt ? Object.keys(m.uit)[0] : null;
+      if (!m) {
+        g.stilWant = T.t('nobody has asked for weapons');
+        continue;
+      }
       // Werk telt in uren (js/bewoners.js, T.werkUrenVan; Marcel koos op 26 sep de looptijd): wie ver van zijn werk
       // woont, is langer onderweg, en de werkplaats maakt naar de uren dat hij er echt is. Zonder bewoners (een toets
       // met een eigen, kleine wereld), naar het aantal handen.
@@ -1543,11 +1598,11 @@
       // niets, en maalde een molen zonder graan toch meel (spel.md, "Handel"). Het zaaigraan dat de
       // boeren achterhouden, neemt hij niet (T.zaaigraanApart, js/akkers.js; vraag 81): in de speeltest
       // van 2 okt maalde de molen het op, en bleven de akkers in de lente ongezaaid.
-      if (soort.maakt.in) {
-        for (const wat in soort.maakt.in) {
+      if (m.in) {
+        for (const wat in m.in) {
           // wat met de ossenkar gaat, uit wat bij hem ligt (js/kar.js, T.verwerkVoorraad)
           const vrij = Math.max(0, T.verwerkVoorraad(D, g, wat) - (wat === 'graan' && !T.gaatMetDeKar(D, wat) ? T.zaaigraanApart(D, dag) : 0));
-          const kan = vrij / soort.maakt.in[wat];
+          const kan = vrij / m.in[wat];
           if (kan < factor) {
             factor = kan;
             g.tekort = wat;
@@ -1560,9 +1615,9 @@
       const tot = T.maaktTot(soort, D);
       if (tot) {
         for (const wat in tot) {
-          const per = (soort.maakt.uit && soort.maakt.uit[wat]) || 0;
+          const per = (m.uit && m.uit[wat]) || 0;
           // (wat op de stapels ligt, komt nog binnen: js/kar.js)
-          const kan = per > 0 ? Math.max(0, tot[wat] - (D.voorraad[wat] || 0) - T.opDeStapels(D, wat)) / per : factor;
+          const kan = per > 0 ? Math.max(0, tot[wat] - (D.voorraad[wat] || 0) - T.opDeStapels(D, wat) - halfAf(g, wat)) / per : factor;
           if (kan < factor) {
             factor = kan;
             g.vol = wat;
@@ -1572,9 +1627,10 @@
       }
       // Met de ossenkar (js/kar.js) legt hij wat hij maakt op de stapel bij zijn deur, en maakt hij niet meer dan erop
       // past: is de stapel vol, dan staat hij stil tot de kar komt (werklijst C, stap 1).
+      const perDag = m === soort.maakt ? T.maaktUit(D, soort) : m.uit;
       const ruimte = T.ruimteOpStapel(D, g);
       if (ruimte < Infinity) {
-        const per = T.maaktUit(D, soort);
+        const per = perDag;
         let opStapel = 0;
         for (const wat in per) if (T.gaatMetDeKar(D, wat)) opStapel += per[wat];
         if (opStapel > 0 && ruimte / opStapel < factor) factor = ruimte / opStapel;
@@ -1586,11 +1642,21 @@
       }
       g.werkte = factor;
       if (factor <= 0) continue;
-      if (soort.maakt.in) for (const wat in soort.maakt.in) T.verwerk(D, g, wat, soort.maakt.in[wat] * factor);
+      if (m.in) for (const wat in m.in) T.verwerk(D, g, wat, m.in[wat] * factor);
       // De jager schiet klein wild, en herten als er een is dat hij mag nemen (js/beesten.js).
-      const uit = T.watDeJagerSchiet(D, g, T.maaktUit(D, soort));
-      // Wat met de kar gaat, op zijn stapel; de rest meteen in de voorraad (T.opStapel, js/kar.js).
-      if (uit) for (const wat in uit) T.opStapel(D, g, wat, uit[wat] * factor);
+      const uit = T.watDeJagerSchiet(D, g, perDag);
+      // Wat met de kar gaat, op zijn stapel; de rest meteen in de voorraad (T.opStapel, js/kar.js). Wie kiest (de
+      // wapenmaker), legt er alleen hele stukken neer, en onthoudt wat half af is (g.half): een halve speer haalt de kar
+      // niet, en kan niemand pakken.
+      if (uit && soort.maakt.keuze) {
+        const half = g.half || (g.half = {});
+        for (const wat in uit) {
+          half[wat] = (half[wat] || 0) + uit[wat] * factor;
+          const heel = Math.floor(half[wat] + 1e-9);
+          half[wat] = Math.max(0, half[wat] - heel);
+          if (heel > 0) T.opStapel(D, g, wat, heel);
+        }
+      } else if (uit) for (const wat in uit) T.opStapel(D, g, wat, uit[wat] * factor);
       // Het hout van de houthakker kwam uit zijn boom: is die om, dan staat er een stronk, en hakt hij morgen de volgende
       // (js/bos.js).
       if (uit && uit.hout) T.houthakkerHakte(D, g, uit.hout * factor);

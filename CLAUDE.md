@@ -71,8 +71,7 @@ gesprek komt.
 - Een speeltest of proef zegt op welke stand hij speelt (branch en commit). Op 27 sep speelde er een op
   `main`, terwijl een andere sessie de kern op haar branch al verder had gebouwd.
 - Haal in een verse kloon eerst de hele geschiedenis op (`git fetch --unshallow`):
-  `test/tegelvolgorde.test.cjs` leest een oude commit, en in een ondiepe kloon falen er dan twee
-  toetsen die niets met je werk te maken hebben.
+  `test/tegelvolgorde.test.cjs` leest een oude commit, anders falen er twee toetsen.
 
 ## Draaien en testen
 
@@ -147,7 +146,8 @@ De bestanden in `js/`, per onderwerp; elk heeft een kop in `ontwerp/code.md`:
 - **Voorraad en handel:** `voorraad`, `kar` (de ossenkar en de stapels), `handel` (de marskramer), `bode`.
 - **De heer en het bestuur:** `heer`, `brieven`, `bazen`, `grillen`, `heervaart`, `wetten` en `wettenmenu`, `raad`,
   `raadsman` en `raadsmanvenster`, `ochtendrapport`, `voorvallen`, `feesten`, `brand`, `koorts`, `rovers`, `einde`.
-- **Het gevecht:** `gevecht` (de overgang, de beurten, de actiepunten, de militie), op hetzelfde raster als het lopen.
+- **Het gevecht:** `gevecht` (de overgang, de beurten, de actiepunten) en `soldaten` (het wachthuis, de wapens), op
+  hetzelfde raster als het lopen.
 
 ## Het spel in het kort
 

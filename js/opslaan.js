@@ -55,7 +55,9 @@
     // 11 (13 okt): de mist (B2c, js/mist.js): de kaart onthoudt wat je kent (w.gekend). Een spel van daarvoor zou
     // helemaal in het zwart beginnen.
     // 12 (14 okt): de timmerman is de zagerij (vraag 157), in het gehucht; een spel met een timmerman kent dat gebouw niet.
-    versie: 12,
+    // 13 (15 okt): de soldaten (vraag 159, js/soldaten.js): het wachthuis heeft geen handen meer maar soldaten, de waar
+    // `wapens` is zeven stukken, en het tuighuis en het schuttershof zijn weg.
+    versie: 13,
     eigenPlekken: 5, // naast de ene die vanzelf gaat (vraag 48 B)
     // Op de hoogste snelheid (30×) slaat het spel niet elke ochtend vanzelf op, maar om de zoveel dagen: een dag duurt
     // dan tien seconden, en het opslaan kost bij 100 mensen 25 à 50 ms, een hapering die je ziet (gemeten op 3 okt).

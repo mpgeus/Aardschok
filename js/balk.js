@@ -64,8 +64,8 @@
     '<path d="M11 10.5l8.5 8.5" stroke="#8a5a2c" stroke-width="2.4" stroke-linecap="round"/>' +
     '<path d="M4.5 8.5l5-5 2.2 2.2-1.5 1.5 2.6 2.6-2.2 2.2-2.6-2.6-1.3 1.3z" fill="#8f949a" stroke="#c3c7cc" stroke-width="1.1" stroke-linejoin="round"/>' +
     '</svg>';
-  // Van de wapenmaker (T.wapensInHetDorp, js/rovers.js): een zwaard, schuin, met een houten gevest.
-  const WAPENS_ICOON =
+  // Van de wapenmaker (js/soldaten.js): een zwaard, schuin, met een houten gevest. De andere stukken staan onder svg().
+  const ZWAARD_ICOON =
     '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">' +
     '<path d="M18.5 4.5l1 1-9.6 9.6-1-1z" fill="#c3c7cc" stroke="#8f949a" stroke-width="1" stroke-linejoin="round"/>' +
     '<path d="M6.8 13.2l4 4" stroke="#8a5a2c" stroke-width="2.2" stroke-linecap="round"/>' +
@@ -127,7 +127,7 @@
     goud: GOUD_ICOON, graan: GRAAN_ICOON, wol: WOL_ICOON, hout: HOUT_ICOON,
     ijzer: IJZER_ICOON, zout: ZOUT_ICOON, gereedschap: GEREEDSCHAP_ICOON, kaas: KAAS_ICOON,
     hooi: HOOI_ICOON, mest: MEST_ICOON, vlees: VLEES_ICOON, huiden: HUIDEN_ICOON, bier: BIER_ICOON, wijn: WIJN_ICOON,
-    wapens: WAPENS_ICOON,
+    zwaarden: ZWAARD_ICOON,
   };
   // Een maand zoals de speler hem ziet (js/tijd.js, T.MAANDEN[i].toon), uit de naam waar de regels op letten.
   const maandToon = (naam) => (T.MAANDEN.find((m) => m.naam === naam) || { toon: naam }).toon;
@@ -149,7 +149,13 @@
     vlees: T.t('Meat. From the slaughter: it fills a stomach. What you do not salt spoils, so the village eats that first; salted meat keeps until the grain runs out.'),
     huiden: T.t('Hides. From the slaughter.'),
     bier: T.t('Ale. The innkeeper brews it from grain, and whoever sits in the inn in the evening drinks it. Whoever was there this week is more content.'),
-    wapens: T.t('Weapons. From the weaponsmith: a militiaman who has one hits harder when the robbers come.'),
+    speren: T.t('Spears. From the weaponsmith: a spearman reaches two tiles.'),
+    pieken: T.t('Pikes. From the weaponsmith: a pikeman reaches two tiles, and hits harder than a spear.'),
+    zwaarden: T.t('Swords. From the weaponsmith: a swordsman hits hardest.'),
+    schilden: T.t('Shields. From the weaponsmith: a shield stops part of every blow, but not a crossbow bolt.'),
+    bogen: T.t('Bows. From the weaponsmith: an archer shoots far, but not with an enemy alongside.'),
+    kruisbogen: T.t('Crossbows. From the weaponsmith: a bolt goes through shield and armour.'),
+    harnassen: T.t('Leather armour. The weaponsmith makes it from hides: it stops part of every blow, but not a crossbow bolt.'),
     wijn: T.t('Wine. From the vineyard farm, picked in {maand}: the craftsmen want it alongside their ale, and it does not spoil.', { maand: maandToon('wijnmaand') }),
   };
   // Het aantal mensen, en hoeveel woonruimte er is (js/gebouwen.js): dezelfde stijl als een
@@ -197,16 +203,33 @@
   const VATEN_ICOON = svg('<path d="M7 4h10c1.6 2.5 2.4 5.2 2.4 8s-.8 5.5-2.4 8H7c-1.6-2.5-2.4-5.2-2.4-8S5.4 6.5 7 4z" fill="#a87a3a" stroke="#6a4a2c" stroke-width="1.1"/>' +
     '<path d="M5 8.5h14M5 15.5h14" stroke="#3a2414" stroke-width="1.3"/>');
   const MELK_ICOON = svg('<path d="M8 4h7v3l2 3v9.5a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 6 19.5V10l2-3z" fill="#efe6d2" stroke="#b5a78c" stroke-width="1.1" stroke-linejoin="round"/>');
+  // De stukken van de wapenmaker (js/soldaten.js; vraag 159): het zwaard staat bovenaan (ZWAARD_ICOON).
+  const SPEER_ICOON = svg('<path d="M5 19L16 8" stroke="#8a5a2c" stroke-width="2" stroke-linecap="round"/>' +
+    '<path d="M15 9l2-5 3 3z" fill="#c3c7cc" stroke="#8f949a" stroke-width="1" stroke-linejoin="round"/>');
+  const PIEK_ICOON = svg('<path d="M3.5 20.5L17 7" stroke="#8a5a2c" stroke-width="1.8" stroke-linecap="round"/>' +
+    '<path d="M16.2 7.8L21 3l-1.2 4.4z" fill="#c3c7cc" stroke="#8f949a" stroke-width=".9" stroke-linejoin="round"/>');
+  const SCHILD_ICOON = svg('<path d="M12 3.5l7 2.5v5.5c0 4.2-3 7.3-7 9-4-1.7-7-4.8-7-9V6z" fill="#8a5a2c" stroke="#c9972f" stroke-width="1.2" stroke-linejoin="round"/>' +
+    '<path d="M12 4v16.5M5.5 10.5h13" stroke="#c9972f" stroke-width="1"/>');
+  const BOOG_ICOON = svg('<path d="M7 3.5c7 3 7 14 0 17" fill="none" stroke="#8a5a2c" stroke-width="2" stroke-linecap="round"/>' +
+    '<path d="M7 3.5v17" stroke="#e6d3ad" stroke-width=".9"/>');
+  const KRUISBOOG_ICOON = svg('<path d="M12 20V6" stroke="#8a5a2c" stroke-width="2.4" stroke-linecap="round"/>' +
+    '<path d="M4.5 9.5c2.5-2.5 12.5-2.5 15 0" fill="none" stroke="#8f949a" stroke-width="1.8" stroke-linecap="round"/>' +
+    '<path d="M4.5 9.5L12 12l7.5-2.5" fill="none" stroke="#e6d3ad" stroke-width=".8"/>');
+  const HARNAS_ICOON = svg('<path d="M8 4l4 2 4-2 3 3-2 3v9.5H7V10L5 7z" fill="#a0683a" stroke="#c98f55" stroke-width="1.1" stroke-linejoin="round"/>' +
+    '<path d="M7.5 13.5h9" stroke="#6e4220" stroke-width="1"/>');
   const KLEI_ICOON = svg('<path d="M4 17c0-4 3-7 8-7s8 3 8 7c0 1.5-1 2-3 2H7c-2 0-3-.5-3-2z" fill="#b5653c" stroke="#7a3a1c" stroke-width="1.1"/>');
   Object.assign(GRONDSTOF_ICOON, {
     planken: PLANKEN_ICOON, steen: STEEN_ICOON, groente: GROENTE_ICOON, eieren: EIEREN_ICOON, vis: VIS_ICOON,
     brood: BROOD_ICOON, meel: ZAK_ICOON, kalk: ZAK_ICOON, riet: RIET_ICOON, turf: TURF_ICOON, laken: LAKEN_ICOON,
     vaten: VATEN_ICOON, melk: MELK_ICOON, klei: KLEI_ICOON, leer: GRONDSTOF_ICOON.huiden,
+    speren: SPEER_ICOON, pieken: PIEK_ICOON, schilden: SCHILD_ICOON, bogen: BOOG_ICOON, kruisbogen: KRUISBOOG_ICOON,
+    harnassen: HARNAS_ICOON,
   });
   // De volgorde in de voorraad: eerst wat je bouwt, dan het eten, dan de rest; een waar die hier niet staat, komt
   // achteraan, met een zak als pictogram.
   const VOLGORDE = ['hout', 'planken', 'steen', 'graan', 'brood', 'meel', 'vlees', 'vis', 'kaas', 'groente', 'eieren',
-    'wijn', 'bier', 'melk', 'hooi', 'wol', 'laken', 'huiden', 'leer', 'ijzer', 'gereedschap', 'wapens', 'zout', 'klei',
+    'wijn', 'bier', 'melk', 'hooi', 'wol', 'laken', 'huiden', 'leer', 'ijzer', 'gereedschap', 'speren', 'pieken',
+    'zwaarden', 'schilden', 'bogen', 'kruisbogen', 'harnassen', 'zout', 'klei',
     'riet', 'turf', 'kalk', 'vaten', 'mest'];
 
   // ── De voorraad, linksonder, en het dorp in de balk bovenaan ──

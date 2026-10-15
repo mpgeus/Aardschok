@@ -154,7 +154,8 @@ wegtrekken. `Spel.debug.trede()` zegt
 hoe ver het gehucht is met de volgende trede, en `('dorp')` maakt er nu een dorp van, met de brief van de heer
 (`('marktrecht')` net zo).
 `Spel.debug.rovers()` zegt wie er in de bende zit, wanneer die en de wilde rovers komen, hoe een aanval ervoor
-staat en hoeveel wapens er zijn; `(3)` laat nu drie wilde rovers komen, `('bende')` de bende.
+staat, wie er soldaat is (en met welk wapen de militie vecht) en hoeveel wapens er in de opslag liggen; `(3)` laat nu
+drie wilde rovers komen, `('bende')` de bende.
 `Spel.debug.heervaart()` zegt wat de heer vraagt, wie er weg is en tot wanneer, en wie veteraan is; `('vraag')` laat
 hem nu mannen vragen (ook in een gehucht), `('terug')` laat ze nu terugkomen.
 `Spel.debug.raad()` zegt welke raad er onder het doel staat en welke er nu allemaal gelden.

@@ -43,8 +43,11 @@
     kalk: () => T.t('lime'), klei: () => T.t('clay'), laken: () => T.t('cloth'), leer: () => T.t('leather'),
     meel: () => T.t('flour'), melk: () => T.t('milk'), mest: () => T.t('dung'), planken: () => T.t('planks'),
     riet: () => T.t('reed'), steen: () => T.t('stone'), turf: () => T.t('peat'), vaten: () => T.t('barrels'),
-    vis: () => T.t('fish'), vlees: () => T.t('meat'), wapens: () => T.t('weapons'), wijn: () => T.t('wine'),
+    vis: () => T.t('fish'), vlees: () => T.t('meat'), wijn: () => T.t('wine'),
     wol: () => T.t('wool'), zaaigraan: () => T.t('seed grain'), zout: () => T.t('salt'),
+    // de stukken van de wapenmaker, voor de soldaten (js/soldaten.js)
+    speren: () => T.t('spears'), pieken: () => T.t('pikes'), zwaarden: () => T.t('swords'), schilden: () => T.t('shields'),
+    bogen: () => T.t('bows'), kruisbogen: () => T.t('crossbows'), harnassen: () => T.t('leather armour'),
   };
   // Wat je telt, heeft een enkelvoud; de rest is een hoeveelheid ("3 grain").
   const TELBAAR = {
@@ -52,7 +55,10 @@
     gereedschap: (n) => T.t('{n|# tool|# tools}', { n }), huiden: (n) => T.t('{n|# hide|# hides}', { n }),
     hout: (n) => T.t('{n|# log|# logs}', { n }),
     planken: (n) => T.t('{n|# plank|# planks}', { n }), vaten: (n) => T.t('{n|# barrel|# barrels}', { n }),
-    wapens: (n) => T.t('{n|# weapon|# weapons}', { n }),
+    speren: (n) => T.t('{n|# spear|# spears}', { n }), pieken: (n) => T.t('{n|# pike|# pikes}', { n }),
+    zwaarden: (n) => T.t('{n|# sword|# swords}', { n }), schilden: (n) => T.t('{n|# shield|# shields}', { n }),
+    bogen: (n) => T.t('{n|# bow|# bows}', { n }), kruisbogen: (n) => T.t('{n|# crossbow|# crossbows}', { n }),
+    harnassen: (n) => T.t('{n|# leather armour|# leather armours}', { n }),
   };
   T.waarNaam = (wat) => (WAREN[wat] ? WAREN[wat]() : wat);
   T.hoeveel = (n, wat) => (TELBAAR[wat] ? TELBAAR[wat](n) : T.t('{n} {waar}', { n, waar: T.waarNaam(wat) }));

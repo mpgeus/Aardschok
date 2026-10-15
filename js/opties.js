@@ -610,6 +610,7 @@
     { naam: T.t('Village stages'), blok: 'TREDEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The laws'), blok: 'WETTEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The robbers'), blok: 'ROVERS_INSTELLINGEN' }, // geen tekst
+    { naam: T.t('Soldiers'), blok: 'SOLDATEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Advice'), blok: 'RAAD_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The inn'), blok: 'HERBERG_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Needs and the winter'), blok: 'BEHOEFTEN_INSTELLINGEN' }, // geen tekst
@@ -857,6 +858,19 @@
     man: T.t('man'),
     veteraan: T.t('veteran'),
     wapens: T.t('weapons'),
+    // de soldaten (js/soldaten.js)
+    plaatsen: T.t('places'),
+    kosten: T.t('action points'),
+    bereik: T.t('reach in tiles'),
+    bescherming: T.t('stops damage'),
+    hooivork: T.t('pitchfork'),
+    speer: T.t('spear'),
+    piek: T.t('pike'),
+    zwaard: T.t('sword'),
+    boog: T.t('bow'),
+    kruisboog: T.t('crossbow'),
+    schild: T.t('shield'),
+    harnas: T.t('leather armour'),
     afgeslagen: T.t('beaten off'),
     dood: T.t('death'),
     gewond: T.t('wounded'),

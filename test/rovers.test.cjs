@@ -39,13 +39,14 @@ function aanval(S, aantal) {
   return S.dorp.rovers.aanval;
 }
 
-// De twee mannen van het wachthuis van het proefdorp (WACHTHUIS): het staat er af, en op dag 2 kregen zijn twee handen
-// hun werk (T.verdeelHanden en T.wijsWerkToe, js/gebouwen.js en js/bewoners.js).
+// Twee soldaten van het wachthuis van het proefdorp (WACHTHUIS; js/soldaten.js, vraag 159): het staat er af, en twee die
+// geen werk hebben, worden militie (een hooivork: daarvoor hoeft er niets in de opslag te liggen).
 function metWachthuis(S) {
   const huis = S.dorp.gebouwen.find((g) => g.soort === 'wachthuis');
   assert.ok(huis && huis.klaar, 'het wachthuis staat er');
-  const mannen = S.dorp.bewoners.mensen.filter((p) => p.werk === huis);
-  assert.equal(mannen.length, 2, 'het wachthuis heeft twee handen');
+  T.zetSoldaten(S.dorp, huis, 'militie', 2);
+  const mannen = T.soldatenVan(S.dorp, huis);
+  assert.equal(mannen.length, 2, 'het wachthuis heeft twee soldaten');
   return mannen.map((p) => p.wezen);
 }
 
@@ -178,7 +179,7 @@ test('een vertrapte akker: wat erop stond, groeit dit jaar niet meer', () => {
   assert.equal(T.vertrapAkker(weide), 0, 'op een weide staat geen graan');
 });
 
-test('de militie: wie in het wachthuis werkt, loopt bij een aanval met de schout mee, en vecht naast hem', () => {
+test('de militie: de soldaten van het wachthuis lopen bij een aanval met de schout mee, en vechten naast hem', () => {
   const S = gehucht(WACHTHUIS);
   const [een, twee] = metWachthuis(S);
   opUur(S, 5, 17);
@@ -186,7 +187,7 @@ test('de militie: wie in het wachthuis werkt, loopt bij een aanval met de schout
   for (const e of [een, twee]) {
     assert.equal(e.opgeroepen, true);
     assert.equal(e.kant, 'speler');
-    assert.equal(e.leven, T.WEZENS.wachter.leven);
+    assert.equal(e.leven, T.WEZENS.soldaat.leven);
     assert.equal(T.dagAnker(S.dorp, e), null, 'zijn gewone dag telt even niet');
   }
   // De eerste staat bij de schout, de tweede nog ver weg: alleen wie dichtbij is, vecht mee.
@@ -194,7 +195,7 @@ test('de militie: wie in het wachthuis werkt, loopt bij een aanval met de schout
   zet(een, h.tx + 1, h.ty);
   zet(twee, h.tx + 30, h.ty);
   assert.deepEqual(T.militieInGevecht(S.dorp), [een]);
-  // Het gevecht: de schout, dan de wachter, dan de hele bende.
+  // Het gevecht: de schout, dan de soldaat, dan de hele bende.
   S.overgang = { aanleiding: A.rovers[0] };
   T.beginGevecht(S);
   assert.equal(S.modus, 'gevecht');
@@ -202,7 +203,7 @@ test('de militie: wie in het wachthuis werkt, loopt bij een aanval met de schout
   assert.equal(S.gevecht.monsters.length, 3, 'de hele bende doet mee');
   assert.equal(T.aanDeBeurt(S), h);
   T.eindeBeurt(S);
-  assert.equal(T.aanDeBeurt(S), een, 'na de schout is de wachter aan de beurt');
+  assert.equal(T.aanDeBeurt(S), een, 'na de schout is de soldaat aan de beurt');
   assert.equal(T.spelerAanDeBeurt(S), true, 'en die bestuur jij');
   const hdl = T.handelingGevecht(S, { x: een.tx, y: een.ty + 1 });
   assert.equal(hdl.tekst, 'Walk');
@@ -210,8 +211,8 @@ test('de militie: wie in het wachthuis werkt, loopt bij een aanval met de schout
 });
 
 test('wie van de militie nog onderweg was, rent erheen en vecht mee zodra hij er is', () => {
-  // Uit de speeltest (werklijst, 0c, punt 4): een schout viel alleen tegen drie wilde rovers, omdat zijn wachters nog
-  // onderweg waren toen het gevecht begon; wie toen te ver weg stond, deed het hele gevecht niet mee.
+  // Uit de speeltest (werklijst, 0c, punt 4): een schout viel alleen tegen drie wilde rovers, omdat zijn wachters (nu de
+  // soldaten) nog onderweg waren toen het gevecht begon; wie toen te ver weg stond, deed het hele gevecht niet mee.
   const S = gehucht(WACHTHUIS);
   const w = S.wereld;
   const [een, twee] = metWachthuis(S);
@@ -242,7 +243,7 @@ test('wie van de militie nog onderweg was, rent erheen en vecht mee zodra hij er
   const { erbij, onderweg } = T.militieKomtErbij(S, S.dorp);
   assert.deepEqual(erbij, [twee]);
   assert.deepEqual(onderweg, []);
-  assert.deepEqual(S.gevecht.volgorde.slice(0, 3), [h, een, twee], 'na de schout en de eerste wachter');
+  assert.deepEqual(S.gevecht.volgorde.slice(0, 3), [h, een, twee], 'na de schout en de eerste soldaat');
   assert.ok(S.gevecht.volgorde.slice(3).every((e) => e.kant === 'monster'), 'en dan de bende');
   assert.equal(T.aanDeBeurt(S), h, 'wie aan de beurt was, blijft aan de beurt');
 });
@@ -250,18 +251,18 @@ test('wie van de militie nog onderweg was, rent erheen en vecht mee zodra hij er
 test('een rover zoekt de man van jouw kant die het dichtst bij staat', () => {
   const w = T.maakProefkamers();
   const schout = w.wezens.find((e) => e.soort === 'schout');
-  const wachter = T.maakWezen('wachter', 0, 0);
+  const soldaat = T.maakWezen('soldaat', 0, 0);
   const rover = T.maakWezen('rover', 0, 0);
-  w.wezens.push(wachter, rover);
+  w.wezens.push(soldaat, rover);
   zet(schout, 1, 7);
-  zet(wachter, 6, 3);
+  zet(soldaat, 6, 3);
   zet(rover, 8, 3);
-  const plan = T.planMonsterBeurt(w, rover, [schout, wachter]);
-  assert.equal(plan.doel, wachter);
+  const plan = T.planMonsterBeurt(w, rover, [schout, soldaat]);
+  assert.equal(plan.doel, soldaat);
   assert.equal(plan.aanvallen, 1, 'zes punten: één stap, en dan past er één klap van drie');
 });
 
-test('wie valt, is dood: een wachter is een mond minder, en ligt er tot de volgende dag', () => {
+test('wie valt, is dood: een soldaat is een mond minder, en ligt er tot de volgende dag', () => {
   const S = gehucht(WACHTHUIS);
   const [een] = metWachthuis(S);
   opUur(S, 5, 17);
@@ -316,18 +317,4 @@ test('de bende en een aanval gaan mee in een bewaard spel', () => {
   for (const e of S2.dorp.rovers.aanval.rovers) assert.ok(S2.wereld.wezens.includes(e), 'een rover in de aanval is dezelfde als op de kaart');
 });
 
-// De wapens blijven (ronde 2 van het snoeien, 12 okt; Marcel: "h ja wapens blijven ook voor later"); tot dan stond deze
-// toets bij de ondernemers.
-test('wie van de militie een wapen heeft, slaat harder', () => {
-  const S = gehucht();
-  const D = S.dorp;
-  T.zetVoorraad(D, 'wapens', 1);
-  const a = {};
-  const b = {};
-  assert.equal(T.bewapen(D, [a, b]), 1);
-  assert.ok(a.gewapend && !b.gewapend);
-  const extra = T.ROVERS_INSTELLINGEN.wapens.schade;
-  assert.deepEqual(T.slagSchade(a), T.SLAAN.schade.map((n) => n + extra));
-  assert.deepEqual(T.slagSchade(b), T.SLAAN.schade);
-  assert.deepEqual(T.slagSchade(S.schout), T.SLAAN.schade, 'de schout zelf niet');
-});
+// Hoe de wapens slaan, staat sinds vraag 159 in test/soldaten.test.cjs.

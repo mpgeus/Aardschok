@@ -177,11 +177,12 @@
       naam: T.t('robber'), kant: 'monster', leven: 12, ap: 6, initiatief: 6, snelheid: 2.2, zicht: 6, dwaalt: false, vel: 'boer',
       aanval: { kosten: 3, schade: [2, 4], zin: T.t('hits {doel} with a club') },
     },
-    // Een man van de militie, uit het wachthuis: wat hij kan als hij bij een aanval naast de schout vecht
-    // (js/rovers.js). Hij is een bewoner met zijn eigen poppetje; dit is alleen zijn leven en zijn punten.
-    wachter: { naam: T.t('guard'), kant: 'speler', leven: 16, ap: 8, initiatief: 8, snelheid: 2.4, vel: 'boer' },
+    // Een soldaat van het wachthuis (js/soldaten.js; vraag 159): wat hij kan als hij bij een aanval naast de schout vecht
+    // (js/rovers.js). Hij is een bewoner met zijn eigen poppetje; dit is alleen zijn leven en zijn punten, en hoe hij slaat
+    // zegt zijn wapen (T.slagVan).
+    soldaat: { naam: T.t('soldier'), kant: 'speler', leven: 16, ap: 8, initiatief: 8, snelheid: 2.4, vel: 'boer' },
     // Wie van de heervaart terugkwam (js/heervaart.js; Marcel, 29 sep, vraag 60, B): hij heeft leren vechten. Hij
-    // vecht mee als er rovers komen, ook zonder wachthuis, en houdt meer klappen uit dan een wachter.
+    // vecht mee als er rovers komen, ook zonder wachthuis, en houdt meer klappen uit dan een soldaat.
     veteraan: { naam: T.t('veteran'), kant: 'speler', leven: 20, ap: 8, initiatief: 8, snelheid: 2.4, vel: 'boer' },
   };
 

@@ -163,7 +163,7 @@ test('in een dorp staan de gebouwen van het gehucht nog in het bouwmenu, met die
   assert.ok(gehuchtMenu.includes('kapel') && gehuchtMenu.includes('put') && gehuchtMenu.includes('hut'));
   assert.ok(!gehuchtMenu.includes('molen'), 'de molen hoort bij het dorp');
   for (const id of gehuchtMenu) assert.ok(dorpMenu.includes(id), `${id} staat in het dorp niet meer in het menu`);
-  for (const id of ['zagerij', 'molen', 'bakkerij', 'wapenmaker', 'schuttershof']) assert.ok(dorpMenu.includes(id), id);
+  for (const id of ['zagerij', 'molen', 'bakkerij', 'wapenmaker']) assert.ok(dorpMenu.includes(id), id);
   // De markt en de weverij komen al in een dorp (vraag 90, B): wat de ambachtslieden willen, een trede eerder.
   for (const id of ['markt', 'weverij']) assert.ok(dorpMenu.includes(id), id);
   const marktrechtMenu = Object.keys(T.GEBOUWEN).filter((id) => T.inBouwmenu({ trede: 'marktrecht' }, id));

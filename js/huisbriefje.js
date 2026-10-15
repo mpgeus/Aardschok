@@ -89,10 +89,31 @@
   let bijgewerkt = -Infinity;
   const ALLE = 0.25; // zo vaak (seconden) wordt het briefje opnieuw opgemaakt, want de dag loopt door
 
+  // Een regel is tekst, of tekst met knoppen (het wachthuis, js/soldaten.js): een knop draagt waar hij staat (deel, regel,
+  // knop), zodat een klik hem terugvindt in het briefje dat er ligt (`huidig`), en daar zijn `doe` doet.
+  let huidig = null;
+  const attr = (t) => String(t || '').replace(/"/g, '&quot;');
+  const regel = (r, i, j) =>
+    typeof r === 'string'
+      ? `<div>${r}</div>`
+      : `<div class="briefje-regel"><span>${r.tekst}</span><span class="briefje-knoppen">${r.knoppen
+        .map((k, n) => `<button type="button" class="briefje-knop" data-knop="${i}.${j}.${n}" title="${attr(k.uitleg)}"${k.kan ? '' : ' disabled'}>${k.tekst}</button>`)
+        .join('')}</span></div>`;
   const html = (b) =>
     `<div class="briefje-kop">${b.kop}</div>` +
     (b.doet ? `<div class="briefje-doet">${b.doet}</div>` : '') +
-    b.delen.map((d) => `<div class="briefje-deel"><b>${d.titel}</b>${d.regels.map((r) => `<div>${r}</div>`).join('')}</div>`).join('');
+    b.delen.map((d, i) => `<div class="briefje-deel"><b>${d.titel}</b>${d.regels.map((r, j) => regel(r, i, j)).join('')}</div>`).join('');
+
+  function knopGeklikt(ev) {
+    const knop = ev.target.closest && ev.target.closest('[data-knop]');
+    if (!knop || !huidig) return;
+    const [i, j, n] = knop.dataset.knop.split('.').map(Number);
+    const r = huidig.delen[i] && huidig.delen[i].regels[j];
+    const k = r && r.knoppen && r.knoppen[n];
+    if (k && k.kan) k.doe();
+    laatsteGebouw = ''; // meteen opnieuw opmaken
+    bijgewerkt = -Infinity;
+  }
 
   // Elk beeld (js/main.js): het briefje van het gekozen gebouw, zolang je rondloopt. Is het gebouw weg (afgebroken), dan
   // is er niets meer gekozen.
@@ -108,9 +129,14 @@
       return;
     }
     box.classList.remove('verborgen');
+    if (!box.dataset.knoppen) {
+      box.addEventListener('click', knopGeklikt);
+      box.dataset.knoppen = '1';
+    }
     if (laatsteGebouw && S.tijd - bijgewerkt < ALLE) return;
     bijgewerkt = S.tijd;
-    const nu = html(T.gebouwBriefje(D, g));
+    huidig = T.gebouwBriefje(D, g);
+    const nu = html(huidig);
     if (nu !== laatsteGebouw) box.innerHTML = nu;
     laatsteGebouw = nu;
   };

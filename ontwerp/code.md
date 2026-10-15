@@ -176,7 +176,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `T.tikVerwerenDag`; bevolking, woonruimte, handen, productie per dag (de zagerij zaagt stammen, de waar `hout`, tot
   planken, en wat je bouwt, kost stammen in het gehucht, planken in een dorp en steen in een stad: vraag 157),
   `T.plaatsGebouw`, bouwfases via `T.bouwFaseIndex`; niet op iemand en niet op een deur, `T.waaromNietOpIemand`, vraag 88, en altijd met drie tegels looppad rondom, `T.looppadOm` (Marcel, 3 okt); een gebouw maakt alleen wat zijn grondstof
-  toelaat, wie iets omzet maakt tot er genoeg ligt, `T.maaktTot`, en gereedschap laat harder werken; wie stilligt, zegt
+  toelaat, wie iets omzet maakt tot er genoeg ligt, `T.maaktTot`, en gereedschap laat harder werken; wat hij vandaag maakt,
+  zegt `T.receptVan(D, g)`: zijn `maakt`, of bij wie kiest (`maakt.keuze`, de wapenmaker, vraag 159) één stuk per dag, wat
+  de wachthuizen vragen (`T.wapensGevraagd`), en de kar brengt hem `T.watErIngaat`; wie stilligt, zegt
   `T.stilOp`: in een seizoen, `stilIn`, of buiten zijn maanden, `alleenIn`, zoals de wijnboerderij, die alleen in wijnmaand
   plukt (vraag 136 en 155: een gewoon huis van 5 bij 4 met een gezin van boeren, vanaf het gehucht, met wijngaarden als
   velden ernaast; `veld` bij de akker en de wijngaard zegt bij welke boerderij hij hoort; de dorpelingen willen bier, de
@@ -972,7 +974,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `gemaaktDagen` en dit jaar uit `T.gemaaktDoor`, de velden van een boerderij uit `w.akkers` en `w.wijngaarden`, en
   `T.GEBOUW_ERBIJ`), wat het tegenhoudt (`g.stilWant`, de handen, `g.uren.onderweg`, het werktempo, `T.visserWater`,
   `g.tekort`, `g.vol`; in de volgorde van de nachtlus), wat helpt (het gereedschap, `T.gereedschapDekking`), wat erbij
-  ligt (`g.in`, `g.stapel`), en bij een opslag wat zijn kar doet (`T.karTekst`).
+  ligt (`g.in`, `g.stapel`), en bij een opslag wat zijn kar doet (`T.karTekst`). Een ander bestand zet er een eigen deel
+  bij met `T.GEBOUW_DELEN[soort](D, g)`, en een regel kan knoppen hebben (`{ tekst, knoppen: [{ tekst, uitleg, kan, doe
+  }] }`, zoals een handeling): het wachthuis (`js/soldaten.js`). Op het scherm draagt een knop waar hij staat (deel,
+  regel, knop), en een klik doet de `doe` uit het briefje dat er ligt (`js/huisbriefje.js`).
 - **Wat het rekent, komt uit de regels zelf, met één weg:** het werktempo (tevredenheid maal afwisseling) is
   `T.werkTempo(D)` in `js/gebouwen.js`, dat de nachtlus ook gebruikt; wat een gebouw maakte, telt `T.telGemaakt` (in
   `g.gemaakt`, bewaard: `{ dagen: [{ dag, waren }], jaar, ditJaar }`), en dat roept `T.opStapel` (`js/kar.js`) aan, waar
@@ -1479,14 +1484,15 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   komt terug als rover (`D.rovers.bende`, `T.wordtRover` vanuit `js/bewoners.js`), en er komen wilde rovers van buiten
   (`T.tikRoversDag`). Een aanval (`D.rovers.aanval`, `T.werkRoversBij`): tegen de avond van de rand van de kaart
   (`T.roverIngang`) naar een akker, twee uur roven (graan uit de voorraad, en soms de akker kapot: `T.vertrapAkker` in
-  `js/akkers.js`), en weer weg. De mannen van het wachthuis lopen dan met de schout mee (`opgeroepen`, zodat
+  `js/akkers.js`), en weer weg. De soldaten van het wachthuis lopen dan met de schout mee (`opgeroepen`, zodat
   `T.dagAnker` en het dwalen ze met rust laten) en vechten mee (`T.militieInGevecht`). Wie valt, is dood: een rover
-  is uit de bende (`T.roverVerslagen`), een wachter een mond minder (`T.sneuvelt`, via `T.wijzigBevolking` met wie
+  is uit de bende (`T.roverVerslagen`), een soldaat een mond minder (`T.sneuvelt`, via `T.wijzigBevolking` met wie
   het is), en wie het overleeft, geneest na een nacht. De getallen in `T.ROVERS_INSTELLINGEN` (in de werkbank).
   Ook de veteranen van de heervaart vechten mee (`p.veteraan`, met het leven van `T.WEZENS.veteraan`).
-- **De wapens** (sinds ronde 2 van het snoeien, 12 okt; tot dan in `js/ondernemers.js`, dat weg is; Marcel: "h ja wapens
-  blijven ook voor later"; de wapenmaker zet jij neer, `Spel.debug.rovers()` telt ze): `T.wapensInHetDorp` (de wapens in de schuur) en `T.bewapen` (bij een aanval krijgen zoveel mannen van de
-  militie er een als er zijn), en wie er een heeft, slaat `wapens.schade` harder (`T.slagSchade`, `js/gevecht.js`).
+- **De wapens** (sinds vraag 159, 15 okt): de militie zijn de soldaten van het wachthuis en de veteranen (`T.militieVan`),
+  en elk slaat met zijn eigen wapen (`js/soldaten.js`). Tot dan was `wapens` één waar die bij een aanval de eerste
+  mannen 2 schade extra gaf (`T.bewapen`, `T.slagSchade`); die zijn weg. `T.wapensInHetDorp` telt nu alle wapens in de
+  opslag (de bode, `js/bode.js`), en `Spel.debug.rovers()` toont de soldaten.
 
 ### js/einde.js: het eind
 
@@ -1508,4 +1514,30 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - `js/gevecht.js`: de overgang, beurtvolgorde, actiepunten, handelingen, monster-AI
   (`planMonsterBeurt`, los van het scherm en dus te toetsen). Sinds 29 sep voor een groep: aan jouw kant (kant
   'speler') de schout en de militie, elk met een eigen beurt; wie aan de beurt is, zegt `T.aanDeBeurt`, en een
-  vijand zoekt de man van jouw kant die het dichtst bij staat.
+  vijand zoekt de man van jouw kant die het dichtst bij staat. Sinds vraag 159 (15 okt) slaat elk met zijn wapen
+  (`T.slagVan`, `js/soldaten.js`): `T.kanRaken(S, v, m, van)` is de ene vraag of het raakt (ernaast met `T.raakt`, verder
+  tot het bereik als `T.zichtTussen` het ziet, en wie schiet, niet met een vijand naast zich), voor de muis
+  (`T.handelingGevecht`: slaan, steken of schieten, en anders erheen lopen, naar de dichtste tegel in `S.bereik` vanwaar
+  het raakt) en voor de klap zelf; een vijand slaat minder hard op schild en harnas (`T.vangtAf`).
+
+### js/soldaten.js: de soldaten en hun wapens
+
+- `js/soldaten.js` (werklijst vraag 159, 15 okt; Marcel: "A1, B1, C1, D1", de wapens "sword, spear, shield, pike, bow,
+  crossbow, armor", in vaste soorten): **in het wachthuis word je soldaat.** Per wachthuis `g.soldaten` (hoeveel je er
+  per soort wilt, samen hooguit `plaatsen`), per bewoner `p.soldaat = { soort, wachthuis }`. Zes soorten met vaste
+  stukken (`T.SOLDAAT_SOORTEN`: militie met een hooivork, speerman, piekenier, zwaardvechter, boogschutter,
+  kruisboogschutter), en zeven stukken als waren (`T.STUKKEN`: speren, pieken, zwaarden, schilden, bogen, kruisbogen,
+  harnassen; de hooivork heeft elke boer). `T.werkSoldatenBij` (elke ochtend na `T.verdeelHanden` via `T.tikSoldatenDag`,
+  na het afbreken, en meteen na een knop, `T.zetSoldaten`): wie er te veel is, levert zijn stukken in, en wie er te
+  weinig is, komt erbij uit wie geen werk heeft (B1: `T.kanWerken` en geen `p.werk`, volwassen of jong, niet van het
+  gezin van de schout), zodra al zijn stukken in de opslag liggen. Een soldaat werkt en bouwt niet (`p.soldaat` in
+  `kanWerken`, `js/bewoners.js`), staat overdag bij zijn wachthuis (`werkplekVan`) en vecht bij een aanval mee
+  (`T.militieVan`, `js/rovers.js`; wie valt, zijn stukken zijn weg).
+- **De wapenmaker** (in het gehucht, C1) maakt per dag één stuk van wat `T.wapensGevraagd` vraagt (`maakt.keuze` en
+  `T.receptVan` in `js/gebouwen.js`); bij de muis en op zijn briefje wat er gevraagd wordt (`T.GEBOUW_ERBIJ`). **Een stuk
+  bestaat alleen heel** (`T.isStuk`): wat half af is, blijft in `g.half` tot het heel is, en de kar laadt een stuk alleen
+  heel (`js/kar.js`). Tot dan lag er 0,8 speer in de opslag en 0,2 op zijn stapel: samen een, dus hij maakte niets meer,
+  maar de kar liet het stapeltje liggen (onder `minstens`), en met 0,8 speer kon niemand speerman worden.
+- **In het gevecht** (D1): `T.slagVan(e)` (de schout `T.SLAAN`; wie zonder soort meevecht, een veteraan of wie met de
+  bode meegaat, een hooivork), `T.vangtAf(doel, van)` (schild en harnas, niet tegen een kruisboog). De getallen in
+  `T.SOLDATEN_INSTELLINGEN` (de werkbank: "Soldiers"); getoetst in `test/soldaten.test.cjs`.
