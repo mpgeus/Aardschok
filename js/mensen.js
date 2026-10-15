@@ -61,7 +61,7 @@
     // (gereedschap/pixelart/dorpelingen3.cjs; ontwerp/beeld.md, "De marskramer loopt"), en dat is
     // op deze snelheid gemaakt. Hij komt over de weg en staat op geen kaart (`bezoeker`, zie de heer
     // hieronder): tot 25 sep stond hij ook in het dorp van het oude spel.
-    marskramer: { naam: T.t('the peddler'), snelheid: 1.4, straal: 2, bezoeker: true },
+    marskramer: { naam: T.t('the merchant'), snelheid: 1.4, straal: 2, bezoeker: true },
 
     // De heer en zijn soldaten (js/heer.js): ze komen op Sint-Maarten over de weg, en niet op een
     // kaart. Sinds 24 sep hebben ze hun eigen vellen, in rood en geel, het huis van de heer

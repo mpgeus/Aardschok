@@ -219,7 +219,7 @@
     // Op bestelling (de bode, js/bode.js) is het geen ronde van het seizoen.
     const maand = m.bestelling ? T.t('on order') : maandToon(H.bezoeken[m.bezoek].maand);
     return (
-      `<div class="handel-kop"><span class="handel-titel">${T.t('The peddler')}</span><span class="handel-wanneer">${maand}</span>` +
+      `<div class="handel-kop"><span class="handel-titel">${T.t('The merchant')}</span><span class="handel-wanneer">${maand}</span>` +
       `<button class="handel-sluit" data-actie="sluit" title="${T.t('Close (Esc)')}">✕</button></div>` +
       `<p class="handel-staat">${T.t('He has {goud} on him and room for {pakken}. You have {jouwGoud}.', {
         goud: `<b>${T.hoeveel(m.beurs, 'goud')}</b>`,

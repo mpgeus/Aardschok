@@ -158,7 +158,7 @@ test('wat helpt aan eten: een graanschuur als die er niet is, en zaaigraan kopen
     const ids = hulp.map((h) => h.id);
     assert.ok(ids.includes('graanschuur'), ids.join(', '));
     const kopen = hulp.find((h) => h.id === 'kopen');
-    assert.ok(kopen && /peddler/.test(kopen.zin), 'zaaigraan kopen bij de marskramer');
+    assert.ok(kopen && /merchant/.test(kopen.zin), 'zaaigraan kopen bij de marskramer');
     assert.ok(hulp.filter((h) => h.bouw).every((h) => T.GEBOUWEN[h.bouw]), 'wat het dorp vraagt, is een gebouw');
   } finally {
     T.optiesTerug();

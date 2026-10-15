@@ -181,7 +181,7 @@ test('vis en vlees voor de winter: zout bij de marskramer, en een voorraad voord
   assert.equal(v.zout, Math.ceil(v.nodig / T.BEHOEFTEN_INSTELLINGEN.zoutHoudtGoed));
   assert.ok(raadVis().als(D));
   const tekst = raadVis().tekst(D);
-  assert.match(tekst, new RegExp(`buy ${v.zout} salt from the peddler in October`), tekst);
+  assert.match(tekst, new RegExp(`buy ${v.zout} salt from the merchant in October`), tekst);
   assert.doesNotMatch(tekst, /there will then be about/, 'er is genoeg');
   // Met genoeg zout zegt hij niets.
   T.zetVoorraad(D, 'zout', v.zout);
@@ -256,7 +256,7 @@ test('de marskramer in de herfst, en te weinig goud voor de heer: verkoop hem gr
   S.dorp.marskramer = { staat: true, weg: false, bezoek: herfst };
   const eis = Math.ceil(T.eisVanDeHeer(S.dorp).per.goud);
   assert.ok(eis > 3, `de heer vraagt ${eis} goud`);
-  assert.equal(raad(S).tekst, `The lord wants ${eis} gold, and you have 3. The peddler buys grain, as long as he is here.`);
+  assert.equal(raad(S).tekst, `The lord wants ${eis} gold, and you have 3. The merchant buys grain, as long as he is here.`);
   // In de lente, of met genoeg goud, niet. (Wie meer goud heeft, moet ook meer geven: de heer vraagt een deel
   // van de kist.)
   T.zetVoorraad(S.dorp, 'goud', 500);
@@ -294,11 +294,11 @@ test('bouwen: wat je mist voor wat het doel vraagt, en waar het vandaan komt (vr
   const goud = kosten('goud', ['kapel', 'smidse']) - 6;
   T.zetVoorraad(S.dorp, 'goud', goud);
   const maand = T.MAANDEN.find((m) => m.naam === T.volgendeMarskramer(S.kalender.dag)).toon;
-  assert.equal(raad(S).tekst, `For the chapel and the smithy you are short of 6 gold: the peddler buys grain in ${maand} and tax [W] brings in gold every month.`);
+  assert.equal(raad(S).tekst, `For the chapel and the smithy you are short of 6 gold: the merchant buys grain in ${maand} and tax [W] brings in gold every month.`);
   // Is de belasting al aangenomen, en staat de marskramer op het plein, dan zegt hij dat.
   T.zetWet(S.dorp, 'belasting', 'aangenomen');
   S.dorp.marskramer = { staat: true, weg: false, bezoek: 0 };
-  assert.equal(raad(S).tekst, 'For the chapel and the smithy you are short of 6 gold: the peddler buys grain while he is here and the tax brings in gold every month.');
+  assert.equal(raad(S).tekst, 'For the chapel and the smithy you are short of 6 gold: the merchant buys grain while he is here and the tax brings in gold every month.');
   S.dorp.marskramer = null;
   // Ook te weinig hout: dan ook een houthakker.
   T.zetVoorraad(S.dorp, 'hout', 5);
@@ -388,7 +388,7 @@ test('de wensen: na een nacht zegt de raad wat de meeste mensen missen, met de t
   // Kun je de kapel niet betalen, dan zegt hij erbij wat je mist en waar het vandaan komt: dat zei eerst het doel.
   T.zetVoorraad(S.dorp, 'goud', T.GEBOUWEN.kapel.kosten.goud - 6);
   const maand = T.MAANDEN.find((m) => m.naam === T.volgendeMarskramer(S.kalender.dag)).toon;
-  assert.equal(raad(S).tekst, `Three farms and a house want a chapel within 40 tiles [B]. For that you are short of 6 gold: the peddler buys grain in ${maand} and tax [W] brings in gold every month.`);
+  assert.equal(raad(S).tekst, `Three farms and a house want a chapel within 40 tiles [B]. For that you are short of 6 gold: the merchant buys grain in ${maand} and tax [W] brings in gold every month.`);
   // Wordt er een kapel gebouwd die ze allemaal bereikt, dan het volgende: de put van het huis.
   T.zetVoorraad(S.dorp, 'goud', 50);
   const huis = S.dorp.gebouwen.find((g) => g.soort === 'huis');

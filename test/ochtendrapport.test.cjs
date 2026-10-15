@@ -167,7 +167,7 @@ test('wat er komt: de marskramer vandaag, en de raden van de rovers, zonder de t
   T.zetVoorraad(D, 'hout', 50000); // anders gaat het over de winter
   T.zetVoorraad(D, 'graan', 50000);
   D.marskramer = { komtOp: komt - 1, weg: false, staat: false, bezoek: 0 };
-  assert.ok(nacht(S, komt - 1).regels.includes('The peddler comes today.'));
+  assert.ok(nacht(S, komt - 1).regels.includes('The merchant comes today.'));
   D.marskramer = null;
   D.rovers = Object.assign(T.nieuweRovers(), { laatsteAanval: komt + 3 });
   const rovers = nacht(S, komt + 4).regels;

@@ -72,7 +72,7 @@
     // marskramerOpBezoek, marskramerLente, -Zomer, -Herfst, marskramerBode (op bestelling, js/bode.js) en marskramerVertrekt zet js/handel.js
     // zolang hij er is. (Tot 25 sep verkocht hij in het oude spel ook vuurklei voor de bakker.)
     marskramer: {
-      naam: 'the peddler',
+      naam: 'the merchant',
       start: 'welkom',
       situaties: [
         { naam: 'In het gehucht, grasmaand', als: { vlag: ['marskramerOpBezoek', 'marskramerLente'] } },
@@ -192,7 +192,7 @@
             { zeg: "Quiet last night. Nobody came. Then I pour for myself, and I'm a poor customer." },
           ],
           keuzes: [
-            { zeg: 'And the peddler?', naar: 'marskramer', als: { vlag: 'marskramerOpBezoek' } },
+            { zeg: 'And the merchant?', naar: 'marskramer', als: { vlag: 'marskramerOpBezoek' } },
             { zeg: 'Keep your ears open.', sluit: true },
           ],
         },

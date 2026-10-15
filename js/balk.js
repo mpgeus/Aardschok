@@ -136,8 +136,8 @@
     graan: T.t('Grain. From the fields: food, seed grain, and rent at Martinmas.'),
     wol: T.t('Wool. From the sheep on the common.'),
     hout: T.t("Logs. From the lord's forest."),
-    ijzer: T.t('Iron. From the peddler; the smithy makes tools from it.'),
-    zout: T.t('Salt. From the peddler: it keeps fish and meat good.'),
+    ijzer: T.t('Iron. From the merchant; the smithy makes tools from it.'),
+    zout: T.t('Salt. From the merchant: it keeps fish and meat good.'),
     gereedschap: T.t('Tools. From the smithy: whoever has them works harder. They wear out.'),
     kaas: T.t('Cheese. From the milk the village does not drink the same day: cheese keeps well, and is only eaten when the grain runs out.'),
     hooi: T.t('Hay. Mown from the meadows in {maaien}: the livestock eat it from {van} to {tot}.', {
@@ -412,7 +412,7 @@
       naam: T.t('A messenger'),
       uitleg: (S) => {
         const k = T.kanBodeSturen(S.dorp);
-        return `${T.t('A messenger to the peddler, in hard times: you write what you want and choose who goes along.')}${k.kan ? '' : ` ${k.reden}`}`;
+        return `${T.t('A messenger to the merchant, in hard times: you write what you want and choose who goes along.')}${k.kan ? '' : ` ${k.reden}`}`;
       },
     },
     gunst: { naam: T.t("The lord's favour"), uitleg: (S) => T.bazenTekst(S.dorp, 'gunst') },

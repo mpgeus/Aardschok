@@ -56,7 +56,7 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
 - **Een nieuwe bouwplaats krijgt pas de volgende ochtend bouwers** (14 okt, C stap 2; dat was al zo): wie bouwt, kiest
   het dorp 's ochtends. Met de kar valt het meer op: hij brengt het hout nog dezelfde dag, en dan staat het een dag.
 - **Vis en vlees voor de winter rekent de maaltijd niet mee** (13 okt, B3): `T.visEnVleesVoorDeWinter` (de raad: "buy
-  salt from the peddler") rekent met wat de huizen voor hun wens vlees of vis eten, niet met het deel van de maaltijd dat
+  salt from the merchant") rekent met wat de huizen voor hun wens vlees of vis eten, niet met het deel van de maaltijd dat
   het dorp er sinds vraag 154 ook van eet. Dan ligt er in de winter minder dan hij zegt. De wijn na de pluk rekent het
   wel mee (`T.maaltijdDeel`). Na te lopen als ronde 3 van het snoeien over de wensen beslist.
 - **Een moestuin en een kippenhok werken ook trager** (13 okt, B3): ze hebben geen handen, maar wat ze maken, gaat naar

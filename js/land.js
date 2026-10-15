@@ -42,7 +42,7 @@
   T.LANDSOORTEN = {
     gehucht: { naam: null, uitleg: T.t('Your own hamlet.') },
     kasteel: { naam: T.t('the castle'), uitleg: T.t('The lord lives here. He receives no reeve he has not sent for.') },
-    stad: { naam: T.t('the town'), uitleg: T.t('The peddler comes from here. The gate stays shut to a reeve without a letter.') },
+    stad: { naam: T.t('the town'), uitleg: T.t('The merchant comes from here. The gate stays shut to a reeve without a letter.') },
     woud: { naam: T.t('the forest'), uitleg: T.t('Woodland as far as you can see.') },
     heide: { naam: T.t('the heath'), uitleg: T.t('Heath and wind, and nobody else.') },
     veen: { naam: T.t('the fen'), uitleg: T.t('Wet land. Whoever strays from the road is found again in spring.') },

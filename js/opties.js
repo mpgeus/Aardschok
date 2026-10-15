@@ -60,7 +60,7 @@
         { id: 'graanEnGoud', naam: T.t('Grain and gold'), zet: { 'HEER_INSTELLINGEN.betalenIn': 'graanEnGoud' }, // geen tekst
           uitleg: T.t('The rent in grain, and everything else converted to gold.') },
         { id: 'alleenGoud', naam: T.t('Gold only'), zet: { 'HEER_INSTELLINGEN.betalenIn': 'alleenGoud' }, // geen tekst
-          uitleg: T.t('Everything in gold, the rent too. Then you have to sell to the peddler first.') },
+          uitleg: T.t('Everything in gold, the rent too. Then you have to sell to the merchant first.') },
       ],
     },
     {
@@ -234,12 +234,12 @@
     // Marcel, 9 okt (werklijst vraag 143): "soort van brief sturen met een bode".
     {
       id: 'bode', naam: T.t('The messenger'), standaard: 'aan',
-      uitleg: T.t('Whether in a hard time you can send a messenger with a letter to the peddler.'),
+      uitleg: T.t('Whether in a hard time you can send a messenger with a letter to the merchant.'),
       keuzes: [
         { id: 'aan', naam: T.t('Yes'), zet: { 'BODE_INSTELLINGEN.aan': true }, // geen tekst
-          uitleg: T.t('In hunger, cold or drought you write a letter at your house; a villager carries it, and after a few days the peddler comes with what you asked for, dearer than usual.') },
+          uitleg: T.t('In hunger, cold or drought you write a letter at your house; a villager carries it, and after a few days the merchant comes with what you asked for, dearer than usual.') },
         { id: 'uit', naam: T.t('No'), zet: { 'BODE_INSTELLINGEN.aan': false }, // geen tekst
-          uitleg: T.t('The peddler comes only on his three fixed rounds. As before 9 October.') },
+          uitleg: T.t('The merchant comes only on his three fixed rounds. As before 9 October.') },
       ],
     },
     // Marcel, 9 okt (werklijst vraag 144, 3): "Ziekte en brand als status is ook goed".
@@ -329,7 +329,7 @@
     },
     {
       id: 'doorkijkPlein', naam: T.t('Who you see through a house'), standaard: 'ookHetPlein',
-      uitleg: T.t('Always the reeve, whoever you are talking to, whoever you are looking for, whoever is fighting, and the lord, the peddler and the soldiers.'),
+      uitleg: T.t('Always the reeve, whoever you are talking to, whoever you are looking for, whoever is fighting, and the lord, the merchant and the soldiers.'),
       keuzes: [
         // De standaard houdt zijn naam (Marcel, 10 okt: op een feest niet), zodat een browser die hem onthield, meegaat.
         { id: 'ookHetPlein', naam: T.t('The square too'), zet: { 'DOORKIJK_INSTELLINGEN.plein': true, 'DOORKIJK_INSTELLINGEN.pleinOpEenFeest': false }, // geen tekst
@@ -614,7 +614,7 @@
     { naam: T.t('The inn'), blok: 'HERBERG_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Needs and the winter'), blok: 'BEHOEFTEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Wants'), blok: 'WENSEN_INSTELLINGEN' }, // geen tekst
-    { naam: T.t('The peddler'), blok: 'HANDEL_INSTELLINGEN' }, // geen tekst
+    { naam: T.t('The merchant'), blok: 'HANDEL_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The lord'), blok: 'HEER_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The levy'), blok: 'HEERVAART_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Events'), blok: 'VOORVALLEN_INSTELLINGEN' }, // geen tekst

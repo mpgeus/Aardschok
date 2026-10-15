@@ -281,7 +281,7 @@
       ? binnen ? T.t('{n|# guest|# guests} inside', { n: binnen }) : T.t('nobody inside yet')
       : gasten.length ? T.t('{n|# guest|# guests} tonight', { n: gasten.length }) : T.t('no guests tonight');
     const m = D.marskramer;
-    const logeert = m && m.staat && !m.weg && g === T.herbergVan(D) ? T.t('; the peddler is lodging here') : '';
+    const logeert = m && m.staat && !m.weg && g === T.herbergVan(D) ? T.t('; the merchant is lodging here') : '';
     const apart = Math.min(bier, T.bierApart(D));
     const bierTekst = bier
       ? apart ? T.t('{bier}, of which {apart} set aside for the houses', { bier: T.hoeveel(bier, 'bier'), apart }) : T.hoeveel(bier, 'bier')

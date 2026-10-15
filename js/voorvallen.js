@@ -325,7 +325,7 @@
         minder: T.t('It is no longer freezing in the houses, but it is still cold'),
         speelt: (D) => (brandhout(D) < 1 ? T.t('the firewood has run out') : null),
       },
-      helpt: () => T.t('firewood: a woodcutter, peat, or logs from the peddler'),
+      helpt: () => T.t('firewood: a woodcutter, peat, or logs from the merchant'),
     },
     vol: {
       naam: T.t('Full'),
@@ -364,7 +364,7 @@
         minder: T.t('The drought is no longer severe, but it is still dry'),
         speelt: (D) => (T.droogteNiveau(D) >= 2 ? droogteWaarom(D) : null),
       },
-      helpt: (D) => T.t('rain; until then it costs the harvest ({n}% less now), and the brooks are dry. Keep grain aside for the winter, or buy it from the peddler', { n: Math.round((1 - T.droogteFactor(D)) * 100) }),
+      helpt: (D) => T.t('rain; until then it costs the harvest ({n}% less now), and the brooks are dry. Keep grain aside for the winter, or buy it from the merchant', { n: Math.round((1 - T.droogteFactor(D)) * 100) }),
     },
     // De koorts (js/koorts.js; vraag 144, 3): zolang er iemand ziek is.
     koorts: {

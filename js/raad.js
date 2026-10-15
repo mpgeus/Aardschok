@@ -92,7 +92,7 @@
   function waarVandaan(D, mist, voor) {
     const bronnen = [];
     if (mist.goud) {
-      bronnen.push(T.kanHandelen(D) ? T.t('the peddler buys grain while he is here') : T.t('the peddler buys grain in {maand}', { maand: marskramerMaand(D.kalender.dag) }));
+      bronnen.push(T.kanHandelen(D) ? T.t('the merchant buys grain while he is here') : T.t('the merchant buys grain in {maand}', { maand: marskramerMaand(D.kalender.dag) }));
       bronnen.push(T.standVanWet(D, 'belasting') === 'aangenomen' ? T.t('the tax brings in gold every month') : T.t('tax [W] brings in gold every month'));
     }
     if (mist.hout && voor !== 'houthakker') {
@@ -150,7 +150,7 @@
     }
     const zaai = T.zaaigraanApart(D, dag);
     if (zaai > 0 && ((D.voorraad && D.voorraad.graan) || 0) < zaai) {
-      uit.push({ id: 'kopen', zin: T.t('buy seed grain from the peddler (in {maand})', { maand: marskramerMaand(dag) }) });
+      uit.push({ id: 'kopen', zin: T.t('buy seed grain from the merchant (in {maand})', { maand: marskramerMaand(dag) }) });
     }
     return uit;
   };
@@ -205,8 +205,8 @@
     if (r.zout) {
       const woorden = { zout: T.hoeveel(v.zout, 'zout'), aantal: T.telwoord(T.BEHOEFTEN_INSTELLINGEN.zoutHoudtGoed), maand: marskramerMaand(D.kalender.dag) };
       zinnen.push(T.kanHandelen(D)
-        ? T.t('Without salt it spoils: buy {zout} from the peddler, now that he is here; one salt keeps {aantal} fish or meat good.', woorden)
-        : T.t('Without salt it spoils: buy {zout} from the peddler in {maand}; one salt keeps {aantal} fish or meat good.', woorden));
+        ? T.t('Without salt it spoils: buy {zout} from the merchant, now that he is here; one salt keeps {aantal} fish or meat good.', woorden)
+        : T.t('Without salt it spoils: buy {zout} from the merchant in {maand}; one salt keeps {aantal} fish or meat good.', woorden));
     }
     return zinnen.join(' ');
   }
@@ -248,7 +248,7 @@
     {
       id: 'heerGoud',
       als: (D) => marskramerInDeHerfst(D) && (D.voorraad.goud || 0) < (T.eisVanDeHeer(D).per.goud || 0),
-      tekst: (D) => T.t('The lord wants {eis}, and you have {heb}. The peddler buys grain, as long as he is here.',
+      tekst: (D) => T.t('The lord wants {eis}, and you have {heb}. The merchant buys grain, as long as he is here.',
         { eis: T.hoeveel(Math.ceil(T.eisVanDeHeer(D).per.goud), 'goud'), heb: Math.floor(D.voorraad.goud || 0) }),
     },
     {

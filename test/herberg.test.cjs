@@ -375,7 +375,7 @@ test('de marskramer zit \'s avonds in de herberg en slaapt er, en staat overdag 
   assert.ok(m.staat && T.afstand(e.thuis, { x: e.tx, y: e.ty }) <= 1, 'overdag staat hij bij zijn waar op het plein');
   tot(bijUur(HERFST, d.slapen + 1));
   assert.ok(e.binnen && zelfde(e.deur, deur), 'hij slaapt in de herberg');
-  assert.match(T.gebouwToestand(S.dorp, T.herbergVan(S.dorp)), /the peddler is lodging here\.$/);
+  assert.match(T.gebouwToestand(S.dorp, T.herbergVan(S.dorp)), /the merchant is lodging here\.$/);
   tot(bijUur(HERFST + 1, 12));
   assert.ok(!e.binnen && T.afstand(e.thuis, { x: e.tx, y: e.ty }) <= 1, 'de volgende ochtend staat hij er weer');
 });

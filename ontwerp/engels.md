@@ -48,7 +48,7 @@ Wat elke zin nodig heeft, staat op één plek, al in het Engels:
 | de heervaart | the levy | mannen voor de heer |
 | de grillen van de heer | the lord's whims | |
 | de schandpaal | the pillory | |
-| de marskramer | the peddler | |
+| de marskramer | the merchant | Marcel, 15 okt: "peddler wordt trouwens merchant", "vind ik beter" |
 | de bode | the messenger | |
 | de raadsman, het rapport | the advisor, the morning report | |
 | de raad (linksboven) | advice | |

@@ -240,9 +240,9 @@
         : k.maal === 1.5 ? T.t('He can be here in {n|a day|{dagen} days}, and he asks half as much again as usual.', dagen)
           : T.t('He can be here in {n|a day|{dagen} days}, and he asks {maal} times what he usually asks.', dagen);
       return {
-        titel: T.t('A letter to the peddler'),
+        titel: T.t('A letter to the merchant'),
         wanneer: vandaag(S),
-        aan: T.t('To the peddler, wherever he may be,'),
+        aan: T.t('To the merchant, wherever he may be,'),
         tekst: `<p>${veilig(k.status ? k.status.zin : '')} ${T.t('Come to {dorp}, and bring:', { dorp: veilig(T.dorpsnaam(D) || T.t('our village')) })}</p>${rijen.join('')}${mee}${gevaar}`,
         groet: T.t('Your reeve'),
         staat: `<p class="venster-staat">${waarom ? veilig(waarom) : `${tijd} ${T.t('The messenger gets {zilver} silver from the chest.', { zilver: Math.round(B.loon * 10) })}`}</p>`,
@@ -277,7 +277,7 @@
     if (!bezoek || !S.kalender) return '';
     const nu = T.datumVanDag(S.kalender.dag);
     const komtNog = T.MAANDEN[nu.maand].naam === bezoek.maand && nu.dagVanMaand < bezoek.dag;
-    return komtNog ? ` ${T.t('The peddler comes on {datum}: you can still sell to him for gold then.', { datum: datumZonderJaar(bezoek) })}` : '';
+    return komtNog ? ` ${T.t('The merchant comes on {datum}: you can still sell to him for gold then.', { datum: datumZonderJaar(bezoek) })}` : '';
   }
 
   // Welke brief van de heer op je wacht: de heervaart (daar hoort een dag bij), dan een gril, dan de schatting.

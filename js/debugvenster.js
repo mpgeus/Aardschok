@@ -34,7 +34,7 @@
       knop('erbij', T.t('+{n} each of {waren}', { n: IN().erbij, waren })) +
       knop('gezin', T.t('A family comes')) +
       knop('af', T.t('Finish all building sites')) +
-      knop('marskramer', T.t('The peddler comes now')) +
+      knop('marskramer', T.t('The merchant comes now')) +
       '</div>' +
       (gedaan ? `<p class="venster-staat">${gedaan}</p>` : '') +
       `<p class="venster-voet">${T.t('While this is open, time stands still. <kbd>Esc</kbd> or <kbd>D</kbd> closes it.')}</p>`
@@ -68,7 +68,7 @@
     }
     if (actie === 'marskramer') {
       T.debug.marskramer();
-      return T.t('The peddler is on his way.');
+      return T.t('The merchant is on his way.');
     }
     return '';
   }

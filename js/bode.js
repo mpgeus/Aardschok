@@ -95,11 +95,11 @@
     const dag = dagNu(D);
     const winter = inWinter(dag);
     const uit = { kan: false, zichtbaar: false, winter, dagen: IN().dagen[winter ? 'winter' : 'gewoon'], maal: IN().prijsMaal[winter ? 'winter' : 'gewoon'], loon: IN().loon };
-    if (!IN().aan || !D.wereld || !D.wereld.marskramer) return { ...uit, reden: T.t('No peddler comes here.') };
+    if (!IN().aan || !D.wereld || !D.wereld.marskramer) return { ...uit, reden: T.t('No merchant comes here.') };
     const status = T.statusVoorDeBode(D, dag);
     uit.status = status;
-    if (D.bode) return { ...uit, reden: T.t('The messenger is on his way; the peddler will come around {datum}.', { datum: T.datumVanDag(D.bode.komt).tekst }) };
-    if (D.marskramer) return { ...uit, reden: T.t('The peddler is here already.') };
+    if (D.bode) return { ...uit, reden: T.t('The messenger is on his way; the merchant will come around {datum}.', { datum: T.datumVanDag(D.bode.komt).tekst }) };
+    if (D.marskramer) return { ...uit, reden: T.t('The merchant is here already.') };
     if (!status) return { ...uit, reden: T.t('Only in hard times: hunger, cold or drought.') };
     uit.zichtbaar = true;
     if (!wieBrengtHem(D)) return { ...uit, reden: T.t('There is nobody to carry the letter.') };
@@ -188,9 +188,9 @@
     const mee2 = T.opsomming(begeleiders.map((p) => T.naamVanBewoner(p)));
     const datum = T.datumVanDag(D.bode.komt).tekst;
     T.zeg(D, begeleiders.length
-      ? T.t('{naam} sets off down the road with your letter, with {mee} along. The peddler may be here around {datum}.', { naam, mee: mee2, datum })
-      : T.t('{naam} sets off down the road with your letter. The peddler may be here around {datum}.', { naam, datum }), 'goed');
-    T.schrijfOp(D, 'bode', { tekst: begeleiders.length ? T.t('{naam} took your letter to the peddler, with {mee} along.', { naam, mee: mee2 }) : T.t('{naam} took your letter to the peddler.', { naam }) });
+      ? T.t('{naam} sets off down the road with your letter, with {mee} along. The merchant may be here around {datum}.', { naam, mee: mee2, datum })
+      : T.t('{naam} sets off down the road with your letter. The merchant may be here around {datum}.', { naam, datum }), 'goed');
+    T.schrijfOp(D, 'bode', { tekst: begeleiders.length ? T.t('{naam} took your letter to the merchant, with {mee} along.', { naam, mee: mee2 }) : T.t('{naam} took your letter to the merchant.', { naam }) });
     return { kan: true, bode, begeleiders, begeleider: begeleiders[0] || null, komt: D.bode.komt };
   };
 
@@ -286,7 +286,7 @@
     D.bode = null;
     const n = B.wie.length;
     const tekst = leeft.length
-      ? T.t('{n|{naam} is back without the peddler: robbers stopped him on the road and took everything.{over}|{naam} is back without the peddler: robbers stopped them on the road and took everything.{over}}', { n, naam: T.naamVanBewoner(leeft[0]), over })
+      ? T.t('{n|{naam} is back without the merchant: robbers stopped him on the road and took everything.{over}|{naam} is back without the merchant: robbers stopped them on the road and took everything.{over}}', { n, naam: T.naamVanBewoner(leeft[0]), over })
       : T.t('{n|The messenger does not come back: robbers stopped him on the road.{over}|The messenger does not come back: robbers stopped them on the road.{over}}', { n, over });
     if (leeft.length) T.komtTerug(D, leeft, { tekst, soort: 'gevaar' });
     else T.zeg(D, tekst, 'gevaar');
@@ -337,8 +337,8 @@
     D.bode = null;
     const naam = T.naamVanBewoner(B.wie[0]);
     if (o.door === 'heer') {
-      T.wijzigGunst(D, -IN().heer.gunst, T.t('the lord read your letter to the peddler: you had gold to spend'));
-      const tekst = T.t('{naam} is back without the peddler: the lord\'s men stopped him and took your letter. Now the lord knows you have gold to spend.', { naam });
+      T.wijzigGunst(D, -IN().heer.gunst, T.t('the lord read your letter to the merchant: you had gold to spend'));
+      const tekst = T.t('{naam} is back without the merchant: the lord\'s men stopped him and took your letter. Now the lord knows you have gold to spend.', { naam });
       T.komtTerug(D, B.wie, { tekst, soort: 'gevaar' });
       T.schrijfOp(D, 'bode', { tekst });
       return;
@@ -351,7 +351,7 @@
     const r = T.marskramerOpBestelling(D, B.bestelling, dag, B.winter);
     const niet = r.niet.length ? ` ${T.t('He did not have {wat}.', { wat: T.opsomming(r.niet.map((w) => T.waarNaam(w))) })}` : '';
     const aanval = o.door === 'rovers' ? ` ${T.t('On the road robbers attacked them, but they drove the robbers off.')}${over}` : B.aanval || '';
-    const tekst = `${T.t('{naam} is back from the peddler.', { naam: leeft.length ? T.naamVanBewoner(leeft[0]) : naam })}${aanval}${niet}`;
+    const tekst = `${T.t('{naam} is back from the merchant.', { naam: leeft.length ? T.naamVanBewoner(leeft[0]) : naam })}${aanval}${niet}`;
     if (leeft.length) T.komtTerug(D, leeft, { tekst, soort: aanval ? 'gevaar' : 'goed' });
     else T.zeg(D, tekst, 'gevaar');
     T.schrijfOp(D, 'bode', { tekst });

@@ -521,7 +521,7 @@
     ertsgraver: {
       naam: T.t('ore digger'), trede: 'dorp', voet: { b: 4, h: 4 }, kosten: { planken: 14, goud: 8 }, heer: { goud: 4 }, bouwtijd: 4,
       handen: 2, woonruimte: 0, maakt: { uit: { ijzer: 1 } }, menu: true,
-      tekening: 'gebouwen/houtschuur', beschrijving: T.t('bog iron from the ground: iron without the peddler'), // geen tekst
+      tekening: 'gebouwen/houtschuur', beschrijving: T.t('bog iron from the ground: iron without the merchant'), // geen tekst
       opmerking: 'nieuw: nog niet getekend, leent voorlopig de houtschuur. IJzer wordt ook wapens.', // geen tekst
     },
     kalkbrander: {

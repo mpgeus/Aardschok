@@ -264,7 +264,7 @@
   function watErKomt(D, dag) {
     const uit = [];
     const m = D.marskramer;
-    if (m && m.komtOp === dag && !m.weg) uit.push(T.t('The peddler comes today.'));
+    if (m && m.komtOp === dag && !m.weg) uit.push(T.t('The merchant comes today.'));
     if (D.heer && D.heer.bezoek && !D.heer.bezoek.aangekomen) uit.push(T.t('The lord comes today.'));
     for (const id of RADEN_DIE_KOMEN) {
       const r = T.RADEN.find((x) => x.id === id);
