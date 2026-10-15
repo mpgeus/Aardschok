@@ -29,8 +29,8 @@ const RUIM = { b: 260, h: 240, anker: [130, 180] }; // de ruime cel, zoals in we
 
 // Per lijf: hoe het gebouwd wordt, hoe snel het loopt, en (bij de man en de vrouw) de werkfiguren met hun naam.
 const LIJVEN = {
-  boer: { bouw: boer, snelheid: BOER_SNELHEID, werk: ['maaier', 'zaaier', 'wieder', 'sprokkelaar', 'hakker', 'plukker', 'binder', 'drager', 'dorser'] },
-  boerin: { bouw: boerin, snelheid: BOERIN_SNELHEID, werk: ['maaister', 'zaaister', 'wiedster', 'sprokkelaarster', 'hakster', 'plukster', 'binster', 'draagster', 'dorster'] },
+  boer: { bouw: boer, snelheid: BOER_SNELHEID, werk: ['maaier', 'zaaier', 'wieder', 'sprokkelaar', 'hakker', 'plukker', 'binder', 'drager', 'dorser', 'zager'] },
+  boerin: { bouw: boerin, snelheid: BOERIN_SNELHEID, werk: ['maaister', 'zaaister', 'wiedster', 'sprokkelaarster', 'hakster', 'plukster', 'binster', 'draagster', 'dorster', 'zaagster'] },
   jongen: { bouw: jongen, snelheid: JONGEN_SNELHEID },
   meisje: { bouw: meisje, snelheid: MEISJE_SNELHEID },
   kleuter: { bouw: kleuter, snelheid: KLEUTER_SNELHEID },
