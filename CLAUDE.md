@@ -145,7 +145,7 @@ De bestanden in `js/`, per onderwerp; elk heeft een kop in `ontwerp/code.md`:
   `wijngaard`.
 - **Voorraad en handel:** `voorraad`, `kar` (de ossenkar en de stapels), `handel` (de marskramer), `bode`.
 - **De heer en het bestuur:** `heer`, `brieven`, `bazen`, `grillen`, `heervaart`, `wetten` en `wettenmenu`, `raad`,
-  `raadsman` en `raadsmanvenster`, `ochtendrapport`, `voorvallen`, `feesten`, `brand`, `koorts`, `rovers`, `einde`.
+  `raadsman` en `raadsmanvenster`, `ochtendrapport`, `voorvallen`, `statussen`, `feesten`, `brand`, `koorts`, `rovers`, `einde`.
 - **Het gevecht:** `gevecht` (de overgang, de beurten, de actiepunten), `soldaten` (het wachthuis, de wapens) en `kiezen`
   (kijken, kiezen en sturen als een god), op hetzelfde raster als het lopen.
 

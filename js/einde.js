@@ -9,8 +9,8 @@
 // Verliezen: je ambt kwijt (js/heer.js), de schout gevallen (js/gevecht.js), en sinds 3 okt ook een dorp met minder
 // dan `minstensOver` mensen (10): de heer streept het door (T.tikEindeDag, met het eindscherm in js/hud.js).
 //
-// Het jaar in het kort: wat er gebeurde, telt het dorp elke nacht op in zijn jaarboek (uit het dagboek van de
-// raadsman, js/ochtendrapport.js, vóór dat opnieuw begint, en de oogst uit js/akkers.js), en op 1 lentemaand komt het
+// Het jaar in het kort: wat er gebeurde, telt het dorp elke nacht op in zijn jaarboek (uit het dagboek, T.schrijfOp
+// hieronder, vóór dat opnieuw begint, en de oogst uit js/akkers.js), en op 1 lentemaand komt het
 // jaarverslag (js/brieven.js, soort 'jaarverslag'): hoeveel mensen er kwamen, stierven en wegtrokken, wat de oogst
 // bracht, welke huizen doorgroeiden, welke feesten er waren, wat de heer kreeg, en wat het meest gemist werd. Regels
 // zonder scherm; toetsen in test/einde.test.cjs.
@@ -27,6 +27,32 @@
     minstensOver: 10,
   };
   const IN = () => T.EINDE_INSTELLINGEN;
+
+  // ---------------------------------------------------------------------------------------------
+  // Het dagboek: wat er vandaag gebeurde
+  // ---------------------------------------------------------------------------------------------
+
+  const dagNu = (D) => Math.floor((D.kalender && D.kalender.dag) || 0);
+
+  // Het dagboek van de dag die begint: een lege bladzijde, en wat er dan aan graan en hout ligt (voor "sinds gisteren" in
+  // het rapport van de raadsman, js/ochtendrapport.js).
+  T.nieuwDagboek = function (D, dag) {
+    const voorraad = {};
+    for (const wat of ['graan', 'hout']) voorraad[wat] = (D.voorraad && D.voorraad[wat]) || 0;
+    return { dag, voorraad, regels: [] };
+  };
+
+  // Schrijf op wat er vandaag gebeurde (D.dagboek), voor het jaarboek hieronder en het rapport van morgen. `soort`:
+  // 'mensen' (wie er kwam, stierf of wegtrok: verschil, reden, waarom en wie, T.wijzigBevolking), 'boeren' (wat ze uit
+  // zichzelf deden: tekst), 'besluit' (wat de raadsman besliste: door, titel, antwoord en prijs), 'voorbij' (wie je
+  // zocht en niet sprak: wie en titel), 'huis' (een huis groeide door: wie er woont, van, naar en de stand,
+  // js/behoeften.js) of 'feest' (het dorp vierde feest: tekst, js/feesten.js). Tot 15 okt stond het dagboek bij het
+  // rapport; het verhuisde in ronde 3 van het snoeien (ontwerp/snoeien.md), omdat het rapport weggaat en het jaarboek
+  // blijft.
+  T.schrijfOp = function (D, soort, wat) {
+    const boek = D.dagboek || (D.dagboek = T.nieuwDagboek(D, dagNu(D)));
+    boek.regels.push({ dag: dagNu(D), soort, ...wat });
+  };
 
   // ---------------------------------------------------------------------------------------------
   // Het jaarboek en het jaarverslag

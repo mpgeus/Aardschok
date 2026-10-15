@@ -615,6 +615,7 @@
     { naam: T.t('Advice'), blok: 'RAAD_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The inn'), blok: 'HERBERG_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Needs and the winter'), blok: 'BEHOEFTEN_INSTELLINGEN' }, // geen tekst
+    { naam: T.t('Statuses'), blok: 'STATUSSEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Wants'), blok: 'WENSEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The merchant'), blok: 'HANDEL_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The lord'), blok: 'HEER_INSTELLINGEN' }, // geen tekst
@@ -1190,7 +1191,7 @@
     perMensen: T.t('one tile per this many people'),
     rijLengte: T.t('row length'),
     tussenRijen: T.t('between rows'),
-    vanHetFeest: T.t('from the feast'),
+    vanHetMidden: T.t('from the middle'),
     vanDeHeer: T.t('from the lord'),
     vanBomen: T.t('from trees'),
     achterDak: T.t('behind a roof'),

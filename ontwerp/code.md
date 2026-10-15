@@ -1050,7 +1050,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   grotere markt"; de marktplek sinds 12 okt, ronde 2 van het snoeien, stap 6: "Plein krijgt plaatsen"): een markt is
   geen gebouw met een voet, maar kramen op de **marktplek** van het plein: twee rijen tegenover elkaar met een looppad
   ertussen en een mand naast elke kraam. De maker kiest die plek als hij het land legt (`T.zoekMarktPlek(w)`, vanuit
-  `T.laadGemaaktGehucht` in `js/maker.js`: het grootste open stuk buiten het feest, `T.feestMidden`, het kamp, de eiken en
+  `T.laadGemaaktGehucht` in `js/maker.js`: het grootste open stuk buiten het open midden, `T.openMidden` met
+  `vanHetMidden`, tot 15 okt de kring van het feest, het kamp, de eiken en
   weg van de heer, dat niemand tegenhoudt), en zet hem in de kaart (`w.markt`, `{ rijen }`; bewaard met de wereld).
   `T.marktBlok(D)` geeft die rijen leeg terug, `T.marktTegels(w)` en `T.opDeMarktPlek(w, x, y)` de tegels (de rijen en het
   looppad). Een gebouw blijft er `vrij` tegels vandaan (`T.waaromNietBijDeMarkt`, vanuit `T.waaromPastHetNiet` in
@@ -1453,10 +1454,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 ### js/ochtendrapport.js: het rapport
 
 - `js/ochtendrapport.js`: **het rapport van de raadsman, 's ochtends** (vraag 75, 3a, 1 okt; de dag in fasen): wat er
-  gebeurde, schrijft het dorp in een dagboek (`T.schrijfOp`, `D.dagboek`: `T.wijzigBevolking` met wie het zijn, wat de
-  boeren uit zichzelf deden, wat de raadsman besliste, wie je niet sprak), en elke nacht maakt hij er als laatste stap
+  gebeurde, schrijft het dorp in een dagboek (`T.schrijfOp`, `D.dagboek`, sinds 15 okt in `js/einde.js`), en elke nacht maakt hij er als laatste stap
   van de dag zijn rapport van (`T.tikOchtendrapportDag`, `D.ochtendrapport`): wat er gebeurde, hoe het graan en het hout
-  gaan sinds gisteren, de winter, de oorzaken (`T.oorzakenNu` in `js/voorvallen.js`) en wat er komt. Het zegt wat de
+  gaan sinds gisteren, de winter, de statussen (`T.oorzakenNu` in `js/statussen.js`) en wat er komt. Het zegt wat de
   balk niet zegt, en wat de huizen missen, als status (vraag 87), en zijn rekenen kleurt de getallen (`T.rekenaarVan`).
   Hij brengt het: hij staat aan je deur als je
   opstaat (`T.rapportAnker`, voor `T.dagAnker`), en naast je opent het papier (`T.werkOchtendrapportBij`, het venster
@@ -1477,11 +1477,18 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   `sterfkans`, `gezin` (`T.gezinKomt` in `js/gebouwen.js`, dezelfde als de groei), het vee (`T.verliesVee`), en
   `voorval` (een vervolg, later, over dezelfde mensen). Wie je niet sprak, gaat na twee dagen voorbij; ben je weg (een
   ander gebied), dan beslist je raadsman (vraag 68, B). De spelregel "Voorvallen", de getallen in
-  `T.VOORVALLEN_INSTELLINGEN`. **De statussen** (vraag 77, stap 2, 9 okt): een oorzaak uit `T.OORZAKEN` is een status met
-  een `naam` en een tweede niveau (`erger`: hongersnood, strenge kou, overvol, onrust, ernstige droogte), en `helpt` zegt
-  wat helpt; `T.oorzakenNu` geeft `niveau` en `naam` mee. Elke nacht onthoudt het dorp sinds wanneer (`T.tikStatussenDag`,
-  `D.statussen`), voor de kaartjes naast het doel linksboven (`T.statussenVan`, `T.ui.toonStatussen` in js/hud.js,
-  `#statussen`); het rapport zegt het begin, erger, minder (`erger.minder`) en het eind (js/ochtendrapport.js).
+  `T.VOORVALLEN_INSTELLINGEN`. De oorzaken zijn de statussen (`js/statussen.js`). Gaat weg in ronde 3 van het snoeien
+  (`snoeien.md`).
+
+### js/statussen.js: de statussen
+
+- `js/statussen.js`: **de statussen van het dorp** (vraag 77, stap 2, 9 okt; tot 15 okt in `js/voorvallen.js`, verhuisd
+  in ronde 3 van het snoeien): `T.OORZAKEN` (honger, eentonig, dakloos, kou, vol, wolven, droogte, koorts, brandgevaar,
+  onvrede) zegt per status of hij speelt en waarom (`speelt`), met een tweede niveau (`erger`: hongersnood, strenge kou,
+  overvol, onrust, ernstige droogte) en wat helpt (`helpt`); `T.oorzaakNu` en `T.oorzakenNu` geven `niveau` en `naam`
+  mee. Elke nacht onthoudt het dorp sinds wanneer (`T.tikStatussenDag`, `D.statussen`), voor de kaartjes naast het doel
+  linksboven (`T.statussenVan`, `T.ui.toonStatussen` in js/hud.js, `#statussen`). De getallen (de grens van onvrede,
+  onrust en hongersnood) in `T.STATUSSEN_INSTELLINGEN`; toetsen in `test/statussen.test.cjs`.
 
 ### js/feesten.js: de feesten
 
@@ -1545,8 +1552,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - `js/einde.js`: **het eind en het jaar in het kort** (2e, vraag 101, 3 okt). Elke nacht (`T.tikEindeDag`, vanuit
   `T.tikGebouwenDag`) is het spel uit onder 10 mensen (`D.einde`, reden `'leeg'`, het eindscherm in `js/hud.js`, getal
   `T.EINDE_INSTELLINGEN.minstensOver`), en schrijft het dorp op wat er gebeurde in zijn jaarboek (`D.jaarboek`, uit het
-  dagboek en de oogst, `T.telOogstInJaarboek`), dat op 1 lentemaand het jaarverslag wordt (`T.jaarverslagRegels`; een
-  brief, soort `'jaarverslag'`, `D.jaarverslag`). **Het winnen staat er niet meer** (11 okt, snoeironde, vraag 153;
+  dagboek en de oogst, `T.telOogstInJaarboek`). Het dagboek (`T.schrijfOp`, `D.dagboek`, `T.nieuwDagboek`) staat hier
+  sinds 15 okt (ronde 3 van het snoeien): wie er kwam, stierf of wegtrok (`T.wijzigBevolking`), wat de boeren uit
+  zichzelf deden, welk huis doorgroeide. Het jaarboek wordt op 1 lentemaand het jaarverslag (`T.jaarverslagRegels`;
+  een brief, soort `'jaarverslag'`, `D.jaarverslag`). **Het winnen staat er niet meer** (11 okt, snoeironde, vraag 153;
   Marcel koos "Weg"): de teller van dagen op rij (`D.eind`), `T.iedereenGelukkig`, het doel linksboven (`T.eindDoel`),
   het eindscherm (`T.ui.toonGewonnen`), het grote feest (`T.FEESTEN.stad`) en de spelregel "Het eind" zijn weg, en met
   hen de raad `groeitNiet` ("Genoeg mensen voor de winst") en de tweede knop van het overlay. Het nieuwe doel van de demo

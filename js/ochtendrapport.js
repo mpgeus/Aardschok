@@ -4,7 +4,7 @@
 // hij je elke ochtend een papier: wat er gebeurde, hoe het gaat, of het hout en het eten de winter halen, wat er speelt
 // en wat er komt. Zonder raadsman geen rapport: dan ga je zelf rond ("Vroeger moest ik zelf naar de markt").
 //
-//   - Wat er gebeurde, houdt het dorp bij in een dagboek (D.dagboek, T.schrijfOp): wie er kwam, stierf of wegtrok
+//   - Wat er gebeurde, houdt het dorp bij in een dagboek (D.dagboek, T.schrijfOp in js/einde.js): wie er kwam, stierf of wegtrok
 //     (T.wijzigBevolking in js/gebouwen.js, de enige weg), wat de boeren uit zichzelf deden (js/akkers.js, js/vee.js),
 //     wat de raadsman besliste (js/raadsman.js), wie je zocht en niet sprak (js/voorvallen.js), en welk huis
 //     doorgroeide (js/behoeften.js; vraag 87).
@@ -58,27 +58,6 @@
   const naam = (p) => T.naamVanBewoner(p);
   // Waar de trend over gaat: wat het dorp eet en stookt.
   const TREND = ['graan', 'hout'];
-
-  // ---------------------------------------------------------------------------------------------
-  // Het dagboek: wat er gebeurde
-  // ---------------------------------------------------------------------------------------------
-
-  // Het dagboek van de dag die begint: wat er dan ligt (voor "sinds gisteren"), en een lege bladzijde.
-  function nieuwDagboek(D, dag) {
-    const voorraad = {};
-    for (const wat of TREND) voorraad[wat] = (D.voorraad && D.voorraad[wat]) || 0;
-    return { dag, voorraad, regels: [] };
-  }
-
-  // Schrijf op wat er gebeurde, voor het rapport van morgen. `soort`: 'mensen' (wie er kwam, stierf of wegtrok:
-  // verschil, reden, waarom en wie, T.wijzigBevolking), 'boeren' (wat ze uit zichzelf deden: tekst), 'besluit' (wat de
-  // raadsman besliste: door, titel, antwoord en prijs), 'voorbij' (wie je zocht en niet sprak: wie en titel), 'huis'
-  // (een huis groeide door: wie er woont, van, naar en de stand, js/behoeften.js) of 'feest' (het dorp vierde feest:
-  // tekst, js/feesten.js).
-  T.schrijfOp = function (D, soort, wat) {
-    const boek = D.dagboek || (D.dagboek = nieuwDagboek(D, dagNu(D)));
-    boek.regels.push({ dag: dagNu(D), soort, ...wat });
-  };
 
   // ---------------------------------------------------------------------------------------------
   // Zijn rekenen
@@ -300,8 +279,8 @@
   // er gebeurde, blijft erin staan tot je het leest (de laatste gebeurdOnthouden), en wat erin stond over de winter en
   // wat er speelt, geldt als niet gezegd. Een ander dorp dan het jouwe brengt niemand een rapport.
   T.tikOchtendrapportDag = function (D, dag) {
-    const boek = D.dagboek || nieuwDagboek(D, dag);
-    D.dagboek = nieuwDagboek(D, dag);
+    const boek = D.dagboek || T.nieuwDagboek(D, dag);
+    D.dagboek = T.nieuwDagboek(D, dag);
     const p = IN().aan && !D.ander ? T.raadsmanVan(D) : null;
     const vorig = D.ochtendrapport;
     if (!p) {

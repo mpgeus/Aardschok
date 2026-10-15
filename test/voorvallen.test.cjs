@@ -459,23 +459,6 @@ function zonderOorzaak() {
   return S;
 }
 
-test('eentonig eten is een status: minder dan vier soorten, en erger met één (vraag 154)', () => {
-  const D = zonderOorzaak().dorp;
-  const status = () => T.statussenVan(D, ZOMER).find((s) => s.id === 'eentonig') || null;
-  assert.equal(status(), null, 'met vier soorten werkt het dorp op volle kracht');
-  D.behoeften.afwisseling = ['graan', 'wijn'];
-  let s = status();
-  assert.equal(s.niveau, 1);
-  assert.equal(s.zin, 'The food is plain, for the village eats only grain and wine, and works at 75%.');
-  assert.match(s.helpt, /a hunter \[B\] \(meat\)/, 'wat een soort erbij brengt');
-  assert.doesNotMatch(s.helpt, /wine/, 'niet wat er al op tafel staat');
-  D.behoeften.afwisseling = ['graan'];
-  s = status();
-  assert.equal(s.niveau, 2);
-  assert.equal(s.naam, 'One dish');
-  assert.equal(s.zin, 'The village eats one dish, for there is only grain, and it works at 60%.');
-});
-
 test('een oorzaak speelt als het dorp hem heeft, en zegt waarom', () => {
   const D = zonderOorzaak().dorp;
   assert.equal(T.oorzaakVan(D, 'diefstal', ZOMER), null, 'zonder honger komt een diefstal uit de lucht');
@@ -503,7 +486,7 @@ test('een oorzaak speelt als het dorp hem heeft, en zegt waarom', () => {
   assert.equal(T.oorzaakVan(D, 'ziekte', ZOMER).id, 'vol', 'de koorts komt van kou, of van een vol dorp');
   D.bevolking -= 4;
 
-  D.behoeften.tevredenheid = T.VOORVALLEN_INSTELLINGEN.onvrede - 0.1;
+  D.behoeften.tevredenheid = T.STATUSSEN_INSTELLINGEN.onvrede - 0.1;
   D.behoeften.last = ['the tax'];
   assert.equal(T.oorzaakVan(D, 'vechtpartij', ZOMER).zin, 'The village is discontented, for it is troubled by the tax.');
   assert.equal(T.oorzaakVan(D, 'zwerver', ZOMER), null, 'een kans heeft geen oorzaak');

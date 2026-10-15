@@ -55,7 +55,7 @@ test('de markt kost 8 planken en 6 goud, en de spelregel "De markt" is weg', () 
   assert.equal(T.MARKT_INSTELLINGEN.opHetPlein, undefined);
 });
 
-test('op twintig eilanden heeft het plein een marktplek: twee rijen tegenover elkaar, buiten het feest, het kamp, de heer en de eiken', () => {
+test('op twintig eilanden heeft het plein een marktplek: twee rijen tegenover elkaar, buiten het open midden, het kamp, de heer en de eiken', () => {
   const echt = console.warn;
   console.warn = () => {};
   try {
@@ -70,7 +70,7 @@ test('op twintig eilanden heeft het plein een marktplek: twee rijen tegenover el
       assert.deepEqual(richting[b.richting], [0 - dx || 0, 0 - dy || 0], 'ze kijken elkaar aan');
       const plek = T.marktTegels(w);
       assert.equal(plek.length, a.lengte * (n + 1), 'de twee rijen en het looppad ertussen');
-      const feest = T.feestMidden(w);
+      const midden = T.openMidden(w);
       const heer = w.heer || w.marskramer;
       const kamp = [w.kamp.vuur, w.kamp.kar, ...w.kamp.plekken];
       const eiken = w.voorwerpen.filter((v) => T.opHetPlein(w, v.x, v.y) && T.NATUUR.bos.telt(w, v.x, v.y, v));
@@ -78,7 +78,7 @@ test('op twintig eilanden heeft het plein een marktplek: twee rijen tegenover el
         for (let k = 0; k < r.lengte; k++) {
           const t = { x: r.x + r.ax * k, y: r.y + r.ay * k };
           assert.ok(T.opHetPlein(w, t.x, t.y) && T.isBegaanbaar(w, t.x, t.y), `eiland ${zaad}: een kraam op het plein`);
-          assert.ok(cheb(t, feest) > T.FEESTEN_INSTELLINGEN.kring, 'buiten de kring van het feest');
+          assert.ok(cheb(t, midden) > T.MARKT_INSTELLINGEN.vanHetMidden, 'buiten het open midden');
           assert.ok(cheb(t, heer) > T.MARKT_INSTELLINGEN.vanDeHeer, 'weg van de heer en de marskramer');
           assert.ok(kamp.every((p) => p.x !== t.x || p.y !== t.y), 'niet in het kamp');
           assert.ok(eiken.every((e) => cheb(e, t) > T.MARKT_INSTELLINGEN.vanBomen), 'weg van de eiken');
@@ -119,11 +119,11 @@ test('een gebouw blijft van de marktplek af (zijn deur zou erop uitkomen), en de
 for (const zaad of [2, 11]) {
   // Op het proefdorp van deze eilanden paste de markt niet meer toen het spel de plek pas zocht als hij kwam: de deuren
   // langs het plein hadden hem genomen.
-  test(`het proefdorp op eiland ${zaad}: de markt komt op zijn plek, houdt niemand tegen, en het feest en de heer houden de hunne`, () => {
+  test(`het proefdorp op eiland ${zaad}: de markt komt op zijn plek, houdt niemand tegen, en het open midden en de heer houden de hunne`, () => {
     const { S, D, w } = proefDorp(T, { zaad });
     rijk(D);
     const heer = w.heer || w.marskramer;
-    const feest = T.feestMidden(w);
+    const open = T.openMidden(w);
     const paal = T.plekVoorDeSchandpaal(D);
     const midden = T.marktMidden(w);
     const voor = bereik(w, midden);
@@ -153,7 +153,7 @@ for (const zaad of [2, 11]) {
         // (wat niet op de marktplek past, komt langs de weg, de marktstraat)
         assert.ok(!T.opHetPlein(w, t.x, t.y) || T.opDeMarktPlek(w, t.x, t.y), 'op het plein staat een kraam op de marktplek');
         assert.ok(!T.isBegaanbaar(w, t.x, t.y), 'een kraam staat er echt, over zijn hele lengte');
-        assert.ok(!T.opHetPlein(w, t.x, t.y) || cheb(t, feest) > T.FEESTEN_INSTELLINGEN.kring, 'buiten de kring van het feest');
+        assert.ok(!T.opHetPlein(w, t.x, t.y) || cheb(t, open) > T.MARKT_INSTELLINGEN.vanHetMidden, 'buiten het open midden');
         assert.ok(cheb(t, heer) > T.MARKT_INSTELLINGEN.vanDeHeer, 'weg van de heer');
         const [fx, fy] = richting[k.richting];
         assert.ok(T.isBegaanbaar(w, t.x + fx, t.y + fy), 'voor de toonbank is plaats voor de klant');
@@ -168,8 +168,8 @@ for (const zaad of [2, 11]) {
       assert.ok(bereik(w, midden).has(`${d.x},${d.y}`) || !voor.has(`${d.x},${d.y}`), 'elke deur blijft te bereiken');
     }
 
-    // Het feest, de heer en zijn schandpaal houden hun plek.
-    assert.deepEqual(T.feestMidden(w), feest);
+    // Het open midden, de heer en zijn schandpaal houden hun plek.
+    assert.deepEqual(T.openMidden(w), open);
     assert.ok(T.isBegaanbaar(w, heer.x, heer.y) && !T.voorwerpOp(w, heer.x, heer.y));
     assert.deepEqual(T.plekVoorDeSchandpaal(D), paal);
 

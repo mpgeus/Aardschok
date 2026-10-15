@@ -15,9 +15,8 @@
 //   vandaan (T.waaromNietBijDeMarkt, vanuit T.waaromPastHetNiet in js/gebouwen.js), komt de schandpaal er niet op
 //   (js/heer.js), en licht hij op als het bouwmenu open is (js/tekenen.js; Marcel: "In het bouwmenu").
 // - Het marktblok (127, B): twee rijen kramen tegenover elkaar, langs een as van de kaart, met twee tegels looppad ertussen
-//   en een mand of kist naast elke kraam: de marktplek. De maker zoekt het langste open stuk plein buiten de kring van het
-//   feest (T.feestMidden, js/feesten.js), weg van de heer, de eiken en het kamp van het lege begin, waar het niemand de weg
-//   verspert. Komt de markt, dan krijgt hij die plek (`g.blok`), en de rijen vullen zich kraam voor kraam.
+//   en een mand of kist naast elke kraam: de marktplek. De maker zoekt het langste open stuk plein buiten het open midden
+//   (T.openMidden), weg van de heer, de eiken en het kamp van het lege begin, waar het niemand de weg verspert. Komt de markt, dan krijgt hij die plek (`g.blok`), en de rijen vullen zich kraam voor kraam.
 // - De kramen (127, a tot c; Marcel: "Misschien verschillende kramen? Ook in afmeting? Voornamelijk lengte"): elke kraam
 //   heeft een waar, een vorm (de luifel, het puntdak, het zeil of de kar) en een lengte van één tot drie tegels, geloot
 //   naar de waar (`kramen` hieronder, T.kraamVoor).
@@ -48,9 +47,9 @@
     // ertegenover inbegrepen: bij 3 ligt er een looppad van twee tegels tussen).
     rijLengte: 12,
     tussenRijen: 3,
-    // Een kraam staat buiten de kring van het feest (T.FEESTEN_INSTELLINGEN.kring, om T.feestMidden), en nog zoveel
-    // tegels verder.
-    vanHetFeest: 0,
+    // Een kraam staat verder dan zoveel tegels van het open midden van het plein (T.openMidden), zodat het dorp er kan
+    // staan (tot 15 okt de kring van een feest).
+    vanHetMidden: 5,
     // Zo ver blijft een kraam van de plek van de heer (en de marskramer), in tegels.
     vanDeHeer: 3,
     // En zo ver van een boom (de eiken op het plein), en niet op een tegel die in ons beeld achter een dak of een kruin
@@ -115,6 +114,28 @@
     }
     return { x: beste.x, y: beste.y };
   };
+  // Het open midden van het plein: de tegel van het plein het dichtst bij zijn zwaartepunt waar niets staat:
+  // begaanbaar, geen voorwerp, en niet de plek van de marskramer (T.pleinVan, js/bewoners.js). Null als de kaart geen
+  // plein heeft. Met `wezens` ook waar nu niemand staat; zonder (de kramen hieronder) blijft het vast. Anders dan
+  // T.marktMidden (de markt als gebouw) slaat het een voorwerp over, zoals een bank.
+  T.openMidden = function (w, wezens = false) {
+    const tegels = T.pleinTegels(w);
+    if (!tegels.length) return null;
+    const m = zwaartepunt(tegels);
+    const kraam = T.pleinVan(w);
+    let beste = null;
+    let afstand = Infinity;
+    for (const t of tegels) {
+      if (kraam && t.x === kraam.x && t.y === kraam.y) continue;
+      if (!T.isBegaanbaar(w, t.x, t.y) || T.voorwerpOp(w, t.x, t.y) || (wezens && T.wezenOp(w, t.x, t.y))) continue;
+      const a = Math.hypot(t.x - m.x, t.y - m.y);
+      if (a < afstand) {
+        afstand = a;
+        beste = t;
+      }
+    }
+    return beste && { x: beste.x, y: beste.y };
+  };
   function zwaartepunt(tegels) {
     return { x: tegels.reduce((s, t) => s + t.x, 0) / tegels.length, y: tegels.reduce((s, t) => s + t.y, 0) / tegels.length };
   }
@@ -160,12 +181,12 @@
     return tegels;
   }
 
-  // Wat een kraam in de weg zou staan: een deur, de heer en zijn schandpaal, het feest, het kamp van het lege begin (zijn
+  // Wat een kraam in de weg zou staan: een deur, de heer en zijn schandpaal, het open midden, het kamp van het lege begin (zijn
   // tenten staan er nog niet als de maker de marktplek kiest; js/begin.js). `gebouwen`: die van het dorp, voor hun deuren
   // (bij de marktstraat; op het lege land zijn er nog geen).
   function regels(w, gebouwen = []) {
     const tegels = T.pleinTegels(w);
-    const midden = T.feestMidden(w) || zwaartepunt(tegels);
+    const midden = T.openMidden(w) || zwaartepunt(tegels);
     const heer = w.heer || w.marskramer || null;
     const paal = (w.voorwerpen || []).find((v) => v.soort === 'schandpaal');
     const weg = new Set(paal ? [sleutel(paal.x, paal.y), sleutel(paal.x + 1, paal.y + 1)] : []);
@@ -174,7 +195,7 @@
     const inKamp = (x, y) => kamp.has(sleutel(x, y));
     const open = (x, y) => T.isBegaanbaar(w, x, y) && !T.voorwerpOp(w, x, y) && !T.bijDeur(w, x, y)
       && !weg.has(sleutel(x, y)) && !inKamp(x, y) && !deuren.some((d) => cheb({ x, y }, d) <= 1);
-    const feest = T.FEESTEN_INSTELLINGEN.kring + IN().vanHetFeest;
+    const vrijMidden = IN().vanHetMidden;
     // de bomen bij het plein (verder weg dekken ze er niets van af)
     const pt = T.pleinTegels(w);
     const [px0, px1, py0, py1] = [Math.min(...pt.map((t) => t.x)) - 6, Math.max(...pt.map((t) => t.x)) + 6, Math.min(...pt.map((t) => t.y)) - 6, Math.max(...pt.map((t) => t.y)) + 6];
@@ -195,7 +216,7 @@
       const top = (d.x0 + d.y0) * 16 - d.hoog; // het dak staat boven de hele voet, dus vanaf de achterste hoek
       return x + y < d.x1 + d.y1 && sx >= (d.x0 - d.y1) * 32 - 32 && sx <= (d.x1 - d.y0) * 32 + 32 && sy < voor && sy > top;
     });
-    const kraamMag = (x, y) => open(x, y) && cheb({ x, y }, midden) > feest && (!heer || cheb({ x, y }, heer) > IN().vanDeHeer)
+    const kraamMag = (x, y) => open(x, y) && cheb({ x, y }, midden) > vrijMidden && (!heer || cheb({ x, y }, heer) > IN().vanDeHeer)
       && !bijEenBoom(x, y);
     const nietBijDeHeer = (x, y) => !heer || cheb({ x, y }, heer) > IN().vanDeHeer;
     return { w, midden, open, kraamMag, nietBijDeHeer, verborgen };
@@ -205,7 +226,7 @@
   // met `tussenRijen - 1` tegels looppad ertussen: { rijen: [{ x, y, ax, ay, richting, lengte, vol }] }, met per rij het
   // begin, de as (+x of +y), waarheen de kramen kijken, hoe lang hij is en hoeveel er al vol is (in tegels). Het blok dat
   // niemand tegenhoudt en waarvan je de meeste tegels ziet (niet achter een dak of een kruin), dan het langste, tot
-  // `rijLengte`; bij gelijkspel het verst van het midden van het feest. Op het land zoals de maker het legt, nog zonder
+  // `rijLengte`; bij gelijkspel het verst van het open midden. Op het land zoals de maker het legt, nog zonder
   // gebouwen (T.laadGemaaktGehucht, js/maker.js), en wat hij vindt, staat in de kaart (`w.markt`). Puur: zet niets neer.
   T.zoekMarktPlek = function (w) {
     const R = regels(w);
