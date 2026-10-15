@@ -890,7 +890,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   het zaaigraan uit de kar erop past (zolang `T.isNazaaitijd`), een houthakker als het hout laag wordt, hutten tot elk
   gezin in het kamp een woning heeft, een jager als het spel zegt dat het eten niet haalt (`T.watDeWinterNietHaalt`, of
   de status honger; hooguit één per `jagerNa` dagen; Marcel, 12 okt: "a ja"), en na de oogst een wijnboerderij en daarna een
-  wijngaard erbij als het eten de winter niet haalt (sinds vraag 155; eerst een wijngaard op een tweede boerderij). Hij vraagt `T.inBouwmenu`, dus hij speelt het lege begin. Hij bouwt met de handelingen van het bouwmenu: `T.plaatsGebouw` op de plek van `T.plekVoor` (open grond, of
+  wijngaard erbij als het eten de winter niet haalt (sinds vraag 155; eerst een wijngaard op een tweede boerderij). Voor
+  C, stap 6 (Marcel, 15 okt): een schuur richting de rotsen (`rotsenBij`: de dichtste rotsen waar een steengroeve bij
+  kan) en als die af is een steengroeve erbij, zodat de speeltest een tweede kar meet; en wacht hij op goud terwijl de
+  marskramer er is, dan verkoopt hij hout en graan die de winter niet nodig heeft (`verkoopVoorGoud`, met
+  `T.verkoop`, zoals de knop; regel 9). Hij vraagt `T.inBouwmenu`, dus hij speelt het lege begin. Hij bouwt met de handelingen van het bouwmenu: `T.plaatsGebouw` op de plek van `T.plekVoor` (open grond, of
   waar het minst te rooien is), en `T.legVeld` op de rechthoek die hij zelf zoekt (de grootste maat die past, het minst
   te rooien, het dichtst bij de boerderij). Hij geeft terug wat hij deed (`{ soort, gelukt, reden, tekst, instantie }`),
   en wat hij nog niet kan betalen met `wacht`. Het is gereedschap, geen spel: het spel laadt hem niet.

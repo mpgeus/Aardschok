@@ -25,8 +25,10 @@
 (function (T) {
   'use strict';
 
-  const EIND = 390; // 1 grasmaand van het jaar erna
   const JAAR = 360;
+  // Tot 1 grasmaand van het jaar erna; met `jaren` (speeltest.cjs --jaren 2) zoveel jaren (C, stap 6: twee eilanden spelen
+  // door tot het dorp er is).
+  let EIND = JAAR + 30;
   const STAP = 0.25; // schermseconden per stap; op 30× ruim een half uur
 
   let boek = null; // wat er gebeurde, voor speeltest.cjs
@@ -316,7 +318,7 @@
   // keer per dag, zoals de toets in test/begin.test.cjs; de heer geeft hij alles wat hij vraagt. Wat er
   // vastloopt, schrijft hij op in boek.eersteJaar (eersteJaar hieronder): "zonder fouten" is dat niets vastloopt (b1).
   let kolonistDag = null;
-  const nieuwEersteJaar = () => ({ gebouwd: [], wacht: {}, kampLeeg: null, inTent: null, onderweg: [], werktNiet: [], honger: 0, kou: 0, graan: {}, hout: {}, soorten: {} });
+  const nieuwEersteJaar = () => ({ gebouwd: [], wacht: {}, kampLeeg: null, inTent: null, onderweg: [], werktNiet: [], honger: 0, kou: 0, graan: {}, hout: {}, planken: {}, soorten: {} });
   function kolonist() {
     return {
       async begin() {
@@ -324,11 +326,13 @@
         gezet.length = 0;
         onderwegSinds.clear();
         boek.eersteJaar = nieuwEersteJaar();
+        boek.kar = nieuweKar();
       },
       async elkeStap() {
         // Na het herladen van de proef met opslaan begint zijn boekhouding opnieuw (begin() komt dan niet); wat hij
         // beslist, leest hij uit het spel (T.kolonistDag), dus dat loopt door.
         if (!boek.eersteJaar) boek.eersteJaar = nieuwEersteJaar();
+        if (!boek.kar) boek.kar = nieuweKar();
         const s = S();
         const dag = Math.floor(dagNu());
         if (dag !== kolonistDag) {
@@ -346,6 +350,7 @@
             if (d.instantie) gezet.push({ g: d.instantie, soort: d.soort, gezet: dag, af: null, laatst: dag, werk: 0, stil: 0 });
           }
           eersteJaar(dag);
+          karDag(dag);
         }
         if (heerOpHetPlein() && nuEenKeer('betaal')) await betaal();
       },
@@ -407,8 +412,96 @@
       if (dag !== d) continue;
       E.graan[naam] = Math.round(s.dorp.voorraad.graan || 0);
       E.hout[naam] = Math.round(s.dorp.voorraad.hout || 0);
+      E.planken[naam] = Math.round(s.dorp.voorraad.planken || 0);
     }
     if (dag < 160) E.graan.laagst = Math.min(E.graan.laagst == null ? Infinity : E.graan.laagst, Math.round(s.dorp.voorraad.graan || 0));
+  }
+
+  // De ossenkar (werklijst C, stap 6; Marcel, 15 okt): wat elke kar doet, hoeveel hij vervoert, hoe groot de stapels worden
+  // en wat er op hem wacht. Gemeten in de speeltest, niet in het spel: elk beeld, na T.werkKarBij (js/kar.js), kijkt dit
+  // naar elke kar. Een stuk van een rit duurt minstens een kwartier (het laden), een beeld op 30× een paar minuten, dus
+  // elk stuk komt langs. Per kar:
+  //   werktijd   de dagen werktijd die hij er was (T.dagindeling: van werkBegin tot werkEind, zoals de kar zelf rekent)
+  //   vol, leeg  daarvan rijdend met en zonder lading; laden: laden, lossen, inladen en afladen; de rest stond hij stil
+  //   overwerk   een rit die na de werktijd nog doorliep
+  //   halen, brengen, opgehaald, vervoerd
+  //              de ritten die eindigden (lossen met lading, afladen), wat hij van de stapels haalde, en alles per waar
+  //   maanden    per maand de werktijd en wat hij bezig was
+  // En voor het dorp: elk half uur wat er op alle stapels ligt (gemiddeld en het meest) en de grootste stapel per soort
+  // gebouw; elke ochtend de stapels die vol zijn, de bouwplaatsen die op de kar wachten (T.wachtOpHout), de werkplaatsen
+  // die iets missen dat met de kar komt (g.tekort, en of de opslag het wel had), en de dag waarop het dorp een dorp werd.
+  const RIJDEN = new Set(['heen', 'terug', 'opslag', 'brengen']);
+  const somVan = (o) => Object.values(o || {}).reduce((n, x) => n + x, 0);
+  const nieuweKar = () => ({ karren: [], stapels: {}, opDeStapels: { som: 0, keer: 0, meest: 0 }, dagen: 0, vol: {}, bouwWacht: 0, tekort: {}, dorp: null });
+  const laatsteRit = new WeakMap(); // per kar het stuk van de rit dat hij het laatst zag (niet in het boek: e.rit kent zijn gebouw)
+  const werkKarBij = T.werkKarBij;
+  T.werkKarBij = function (s, d) {
+    werkKarBij(s, d);
+    if (boek && boek.kar && d === D()) meetKar(d);
+  };
+  function meetKar(d) {
+    const K = boek.kar;
+    const t = d.kalender.dag;
+    T.karrenVan(d).forEach((e, i) => {
+      const k = K.karren[i] || (K.karren[i] = { thuis: d.gebouwen.includes(e.thuis) ? e.thuis.soort : 'schout', vanaf: Math.floor(t), werktijd: 0, vol: 0, leeg: 0, laden: 0, overwerk: 0, halen: 0, brengen: 0, opgehaald: 0, vervoerd: {}, maanden: {} });
+      const R = e.rit;
+      if (R && R !== laatsteRit.get(e)) {
+        // een nieuw stuk van een rit (js/kar.js begint elk stuk met een nieuw e.rit)
+        laatsteRit.set(e, R);
+        if (R.fase === 'lossen' && somVan(e.lading) > 0) {
+          k.halen++;
+          k.opgehaald += somVan(e.lading);
+          for (const wat in e.lading) k.vervoerd[wat] = (k.vervoerd[wat] || 0) + e.lading[wat];
+        }
+        if (R.fase === 'afladen') {
+          k.brengen++;
+          k.vervoerd[R.wat] = (k.vervoerd[R.wat] || 0) + R.n;
+        }
+      }
+      const dt = k.t == null ? 0 : t - k.t;
+      k.t = t;
+      if (!(dt > 0)) return;
+      const w = T.dagindeling(t);
+      const uur = (t - Math.floor(t)) * 24;
+      const wat = !R ? null : RIJDEN.has(R.fase) ? (somVan(e.lading) > 0 ? 'vol' : 'leeg') : 'laden';
+      if (uur >= w.werkBegin && uur < w.werkEind) {
+        k.werktijd += dt;
+        if (wat) k[wat] += dt;
+        const m = k.maanden[Math.floor(t / T.DAGEN_PER_MAAND)] || (k.maanden[Math.floor(t / T.DAGEN_PER_MAAND)] = { werktijd: 0, bezig: 0 });
+        m.werktijd += dt;
+        if (wat) m.bezig += dt;
+      } else if (wat) k.overwerk += dt;
+    });
+    const half = Math.floor(t * 48);
+    if (half === K.half || !T.karrenVan(d).length) return;
+    K.half = half;
+    let n = 0;
+    for (const g of d.gebouwen) {
+      const op = T.stapelVan(g);
+      if (!(op > 0)) continue;
+      n += op;
+      K.stapels[g.soort] = Math.max(K.stapels[g.soort] || 0, op);
+    }
+    K.opDeStapels.som += n;
+    K.opDeStapels.keer++;
+    K.opDeStapels.meest = Math.max(K.opDeStapels.meest, n);
+  }
+  function karDag(dag) {
+    const K = boek.kar;
+    const d = D();
+    if (!K.dorp && T.tredeMinstens(d, 'dorp')) K.dorp = dag;
+    if (!T.karrenVan(d).length) return;
+    K.dagen++;
+    const vol = T.KAR_INSTELLINGEN.stapelVol - 1e-6;
+    for (const g of d.gebouwen) {
+      if (T.stapelVan(g) >= vol) K.vol[g.soort] = (K.vol[g.soort] || 0) + 1;
+      if (T.wachtOpHout(g)) K.bouwWacht++;
+      if (g.klaar && g.tekort && T.gaatMetDeKar(d, g.tekort)) {
+        const x = K.tekort[g.soort] || (K.tekort[g.soort] = { wat: g.tekort, dagen: 0, metVoorraad: 0 });
+        x.dagen++;
+        if ((d.voorraad[g.tekort] || 0) >= T.KAR_INSTELLINGEN.lading) x.metVoorraad++;
+      }
+    }
   }
 
   const SPELERS = { kolonist: kolonist() };
@@ -699,7 +792,8 @@
     // opslaan: { dag, bewaar }: op de eerste stille stap vanaf die dag opslaan en stoppen (bewaar), of alleen
     // het lot opnieuw trekken (hetzelfde jaar zonder opslaan). verder: { eenKeer }: na het herladen verder
     // met Verder op het titelscherm, met wat de speler al één keer deed.
-    async speel({ speler, zaad, opslaan = null, verder = null }) {
+    async speel({ speler, zaad, opslaan = null, verder = null, jaren = 1 }) {
+      EIND = JAAR * jaren + 30;
       if (!verder) {
         zaai(Math.imul(zaad, 2654435761) ^ 0x5eed);
         // En de klok van het scherm op nul: of een koe ligt of graast, hangt ervan af (T.rustVanDier,
@@ -709,7 +803,7 @@
       boek = {
         speler, zaad, berichten: [], bevolking: [], daden: [], maanden: [], gebouwd: [],
         heer: null, brief: null, luisterFouten: [], dorp: null, marktrecht: null, voorvallen: [], graan: [], geluk: [],
-        reeks: { nu: 0, langste: 0 }, bos: [],
+        reeks: { nu: 0, langste: 0 }, bos: [], jaren,
       };
       const s = S();
       luister();

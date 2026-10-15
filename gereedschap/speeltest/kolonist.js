@@ -19,10 +19,17 @@
 //   7. eet het dorp eentonig (de status in de balk, vraag 154), dan wat het spel zegt dat een soort erbij brengt
 //      (T.watHelptAanAfwisseling, js/raad.js), het eerste dat één gebouw is (een jager, een moestuin, een kippenhok, een
 //      visser); hooguit één van een soort per `afwisselingNa` dagen. De wijn doet regel 6.
+//   7b. als er een zagerij is en iedereen een woning heeft, een schuur richting de rotsen (werklijst C, stap 6; Marcel, 15
+//      okt: "Ja, bij de rotsen"): zo meet de speeltest een tweede kar, en komen de rotsen binnen bereik; is de schuur af,
+//      dan een steengroeve erbij, zodat die tweede kar een eigen stapel heeft om te halen;
 //   8. wordt er niets anders gebouwd (geen bouwplaats en geen weg in aanleg), dan een weg (werklijst C, stap 5, f; Marcel,
 //      14 okt: "f ja"): van de opslag (het huis van de schout of een schuur) naar een gebouw waar de ossenkar heen rijdt
 //      (een werkplaats, een boerderij, een schuur), het dichtste eerst, één per dag, zodat de speeltest meet wat een weg
 //      doet. Hij neemt een weg die er al ligt mee (T.planWeg, js/wegen.js), dus het wordt een net.
+//   9. wacht hij op goud en is de marskramer er, dan verkoopt hij hem wat de winter niet nodig heeft, tot hij het goud heeft
+//      (werklijst C, stap 6; Marcel, 15 okt: "Kolonist verkoopt"): eerst hout boven `houtHouden` en wat de bouwplaatsen
+//      nog vragen, dan graan boven het zaaigraan, zolang het dorp de winter haalt; met T.verkoop, zoals de knop in het
+//      venster (js/handel.js). Zonder verkopen was na de zagerij het goud op, en kwam de schuur er pas na een jaar.
 // Wat hij deed, geeft hij terug: [{ soort, gelukt, reden, tekst, instantie }], zonder scherm, dus ook in een toets; en wat
 // hij wil maar nog niet kan betalen, met `wacht` (dan morgen weer). Hij rekent niet vooruit en wacht niet op het juiste
 // moment; hij doet wat er vandaag kan, zoals een speler die elke ochtend kijkt wat er nodig is.
@@ -31,6 +38,7 @@
 
   const IN = {
     houtLaag: 20, // onder zoveel hout een houthakker
+    houtHouden: 40, // als hij hout verkoopt, houdt hij zoveel boven wat de bouwplaatsen nog vragen
     // Van 1 herfstmaand (na de oogst) tot 1 slachtmaand (na de pluk) kijkt hij of het eten de winter haalt; daarna
     // draagt een wijngaard pas volgend jaar.
     naDeOogst: 180,
@@ -144,6 +152,62 @@
     return inHetKamp - leeg;
   }
 
+  // De rotsen het dichtst bij het hart waar een steengroeve bij kan (`bij` van de steengroeve in js/gebouwen.js: zoveel
+  // rotsen binnen zijn straal), ring na ring over het vak van de kaart; of null. Eén keer per dorp: rotsen lopen niet weg.
+  const ROTSEN = new WeakMap();
+  const GROEVE = new WeakMap(); // de dag waarop hij bij de schuur geen plek voor een steengroeve vond
+  function rotsenBij(D) {
+    if (ROTSEN.has(D)) return ROTSEN.get(D);
+    const w = D.wereld;
+    const vak = T.kaartVak(w);
+    const { straal, minstens } = T.GEBOUWEN.steengroeve.bij;
+    const h = hart(D);
+    let gevonden = null;
+    for (let r = 0; !gevonden && r < Math.max(vak.b, vak.h); r++) {
+      for (let dy = -r; dy <= r && !gevonden; dy++) {
+        const rand = Math.abs(dy) === r;
+        for (let dx = -r; dx <= r; dx += rand ? 1 : 2 * r) {
+          const x = h.x + dx;
+          const y = h.y + dy;
+          if (x < vak.x || y < vak.y || x >= vak.x + vak.b || y >= vak.y + vak.h) continue;
+          if (!T.NATUUR.rotsen.telt(w, x, y, T.voorwerpOp(w, x, y)) || T.natuurBij(w, 'rotsen', { x, y, b: 1, h: 1 }, straal) < minstens) continue;
+          gevonden = { x, y };
+          break;
+        }
+      }
+    }
+    ROTSEN.set(D, gevonden);
+    return gevonden;
+  }
+
+  // Regel 9: haalt het dorp de winter nog met `n` minder `wat` (hout of graan)? Even uitrekenen met minder in de opslag, en
+  // het weer terug (zoals haaltHetNog in speler.js).
+  function haaltMetMinder(D, wat, n, dag) {
+    const oud = D.voorraad[wat] || 0;
+    D.voorraad[wat] = oud - n;
+    const haalt = (wat === 'hout' ? T.houtVoorDeWinter(D, dag) : T.etenVoorDeWinter(D, dag)).haalt;
+    D.voorraad[wat] = oud;
+    return haalt;
+  }
+  // Pak voor pak verkopen tot er `nodig` goud is: wat er over is (hout boven `houtHouden` en wat de bouwplaatsen nog
+  // vragen, graan boven het zaaigraan), zolang de winter het haalt en hij het wil hebben (T.kanVerkopen).
+  function verkoopVoorGoud(D, dag, nodig, waarom) {
+    const verkocht = {};
+    let goud = 0;
+    for (const wat of ['hout', 'graan']) {
+      const per = T.HANDEL_INSTELLINGEN.koopt[wat].per;
+      while ((D.voorraad.goud || 0) < nodig) {
+        const over = (D.voorraad[wat] || 0) - (wat === 'hout' ? T.nogTeBrengen(D, 'hout') + IN.houtHouden : T.zaaigraanApart(D, dag));
+        if (over < per || !T.kanVerkopen(D, wat, 1).kan || !haaltMetMinder(D, wat, per, dag)) break;
+        goud += T.verkoop(D, wat, 1).opbrengst;
+        verkocht[wat] = (verkocht[wat] || 0) + per;
+      }
+    }
+    if (!goud) return null;
+    const wat = Object.entries(verkocht).map(([w, n]) => `${n} ${w}`).join(' en ');
+    return { soort: 'verkoop', gelukt: true, reden: null, tekst: `verkoopt ${wat} aan de marskramer, voor ${goud} goud (${waarom})` };
+  }
+
   // Een gebouw waar de ossenkar heen rijdt: wat iets maakt (een werkplaats), een boerderij, en een schuur met een eigen kar.
   const doorDeKar = (g) => g.klaar && (T.isBoerderij(g) || !!(T.GEBOUWEN[g.soort] && (T.GEBOUWEN[g.soort].maakt || T.GEBOUWEN[g.soort].kar)));
   const isOpslag = (g) => g.klaar && !!(T.GEBOUWEN[g.soort] && T.GEBOUWEN[g.soort].opslag);
@@ -230,9 +294,28 @@
       if (h && al.every((g) => g.klaar && g.klaarOp <= dag - IN.afwisselingNa)) doe(bouw(D, h.bouw, hart(D), `voor ${h.soort}: het dorp eet eentonig`));
     }
 
+    // 7b. Een schuur richting de rotsen, en als hij af is een steengroeve erbij.
+    const rotsen = heeft('zagerij') && zonderWoning(D) === 0 ? rotsenBij(D) : null;
+    if (rotsen && !heeft('schuur')) doe(bouw(D, 'schuur', rotsen, 'richting de rotsen: een tweede kar'));
+    // (liggen de rotsen ook voor de schuur te ver, dan zoekt hij pas na `waaromNa` dagen opnieuw een plek)
+    const schuur = D.gebouwen.find((g) => g.soort === 'schuur' && g.klaar);
+    const groeve = GROEVE.get(D);
+    if (rotsen && schuur && !heeft('steengroeve') && !(groeve != null && dag - groeve < IN.waaromNa)) {
+      const u = bouw(D, 'steengroeve', { x: schuur.x, y: schuur.y }, 'steen, voor de kar van de schuur');
+      if (!u.gelukt && !u.wacht) GROEVE.set(D, dag);
+      doe(u);
+    }
+
     // 8. Een weg voor de ossenkar, als er niets anders gebouwd wordt.
     if (!D.gebouwen.some((g) => g.bouw && !g.klaar) && !(D.wegwerk || []).length) {
       const u = wegVoorDeKar(D);
+      if (u) doe(u);
+    }
+
+    // 9. Wacht hij op goud, en is de marskramer er, dan verkoopt hij wat de winter niet nodig heeft.
+    const opGoud = daden.filter((d) => d.wacht && /goud/.test(d.reden)).sort((a, b) => (T.GEBOUWEN[b.soort].kosten.goud || 0) - (T.GEBOUWEN[a.soort].kosten.goud || 0))[0];
+    if (opGoud && T.kanHandelen(D)) {
+      const u = verkoopVoorGoud(D, dag, T.GEBOUWEN[opGoud.soort].kosten.goud, `voor een ${opGoud.soort}`);
       if (u) doe(u);
     }
     return daden;
