@@ -388,7 +388,7 @@ body.bouwmenu-open #statussen { visibility: hidden; }
 /* De minikaart (js/minikaart.js en js/balk.js; vraag 165, Marcel: "Onder in de ui zoals bij age of Empires", "Het hele
    eiland", "zonder 'rand' dus de kaart licht transparant", en "meer vibrant ... dat je geen ruit meer overhoud"): in de
    hoek rechtsonder, even breed als de kaartjes, het eiland zoals het beeld ligt, op ware pixels, zonder papier eromheen;
-   de zee vervaagt vanaf de kust (js/minikaart.js), en het geheel is wat doorschijnend; met de muis erop helemaal. Een klik of slepen kijkt daar (het overzicht, Tab). */
+   de zee vervaagt vanaf de kust (js/minikaart.js), en het geheel is wat doorschijnend; met de muis erop helemaal. Een klik of slepen kijkt daar (T.kijkNaar, js/main.js). */
 #minikaart { width: var(--kaart); opacity: 0.9; transition: opacity 0.15s; }
 #minikaart:hover { opacity: 1; }
 #minikaart canvas { display: block; width: 100%; aspect-ratio: 2 / 1; cursor: crosshair; image-rendering: pixelated; }
@@ -514,21 +514,6 @@ body.bouwmenu-open #statussen { visibility: hidden; }
   background: rgba(22, 18, 14, 0.6);
   border-radius: 8px;
   text-align: right;
-}
-
-/* Het overzicht (Tab, js/main.js; werklijst vraag 108, a): onderaan in het midden, boven de knop Build. */
-#overzicht-label {
-  position: fixed;
-  left: 50%;
-  bottom: calc(var(--ui-zoom, 1) * var(--onder-midden));
-  transform: translateX(-50%);
-  padding: 6px 14px;
-  font-size: 12px;
-  color: var(--gedempt);
-  background: rgba(22, 18, 14, 0.72);
-  border-radius: 8px;
-  white-space: nowrap;
-  pointer-events: none;
 }
 
 /* Het bouwmenu (js/hud.js, js/gebouwen.js): het paneel met de soorten van de huidige trede, linksboven op de plek van

@@ -189,6 +189,7 @@
     // glijden zou een reis door het niets zijn.
     const p = T.naarSchermOp(nieuw, S.schout.x, S.schout.y);
     S.camera = { x: p.x, y: p.y - 24 };
+    S.kijk = { x: S.camera.x, y: S.camera.y };
     if (S.grond) S.grond.sleutel = ''; // de grondbuffer opnieuw tekenen (js/tekenen.js)
 
     // Binnen zegt de kamer waar je bent ("De hal"), buiten heet de enige kamer naar het gebied

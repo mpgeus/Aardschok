@@ -69,6 +69,7 @@
   function cameraOp(x, y) {
     const p = T.naarScherm(x, y);
     S().camera = { x: p.x, y: p.y - 24 };
+    S().kijk = { x: p.x, y: p.y - 24 }; // en daar blijft hij (js/main.js: de camera kijkt waar jij kijkt)
   }
 
   // Het tekenen: `K` beelden achter elkaar, met een eerste reeks om op te warmen (de grondbuffer wordt getekend bij

@@ -146,8 +146,8 @@ De bestanden in `js/`, per onderwerp; elk heeft een kop in `ontwerp/code.md`:
 - **Voorraad en handel:** `voorraad`, `kar` (de ossenkar en de stapels), `handel` (de marskramer), `bode`.
 - **De heer en het bestuur:** `heer`, `brieven`, `bazen`, `grillen`, `heervaart`, `wetten` en `wettenmenu`, `raad`,
   `raadsman` en `raadsmanvenster`, `ochtendrapport`, `voorvallen`, `feesten`, `brand`, `koorts`, `rovers`, `einde`.
-- **Het gevecht:** `gevecht` (de overgang, de beurten, de actiepunten) en `soldaten` (het wachthuis, de wapens), op
-  hetzelfde raster als het lopen.
+- **Het gevecht:** `gevecht` (de overgang, de beurten, de actiepunten), `soldaten` (het wachthuis, de wapens) en `kiezen`
+  (kijken, kiezen en sturen als een god), op hetzelfde raster als het lopen.
 
 ## Het spel in het kort
 
@@ -229,10 +229,5 @@ zonder op beelden te wachten (een verborgen paneel tekent maar af en toe), `Spel
 schermpositie van een tegel, en `await Spel.debug.schermafdruk('naam')` bewaart het doek als PNG in
 `gereedschap/pixelart/uit/schermen/`, zodat Marcel het spel ziet zonder dat het beeld door het gesprek gaat. Elk
 onderwerp heeft zijn eigen `Spel.debug`: de lijst staat in `ontwerp/gereedschap.md`. De spelregels die de browser
-onthield, gelden ook voor wie test; `Spel.optiesTerug()` zet alles op de standaard. Drie dingen die bij het mikken
-misgaan:
-
-- een open venster vangt de klik: het spel opent op het titelscherm (Nieuw spel, dan Begin), en dan staat de
-  benoemingsbrief open; sluit hem eerst (`.heer-geef-knop`, of Esc). Op `?kaart=proef` is er geen titelscherm en geen brief;
-- de camera glijdt mee: reken de schermpositie pas uit als hij stilstaat (een seconde `stap`);
-- mik op het lijf van een wezen (zo'n 16 pixels boven zijn tegel), niet op zijn voeten.
+onthield, gelden ook voor wie test; `Spel.optiesTerug()` zet alles op de standaard. Wat bij het mikken misgaat (een open
+venster, de camera die glijdt, het lijf van een wezen), staat in `ontwerp/gereedschap.md`.

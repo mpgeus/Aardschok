@@ -32,7 +32,6 @@
       this.verbergOverlay();
       this.verbergTooltip();
       this.opdracht(null);
-      this.toonOverzicht(S); // een geladen of nieuw spel volgt de schout weer
       $('terug').classList.add('verborgen'); // wat er gebeurde toen je op reis was (js/landkaart.js)
       // De kalender en de voorraad van het gehuchtspel (js/hud.js); dat bestand laadt na dit
       // bestand, dus staan de functies er dan al, maar niet als ui.js ooit alleen gebruikt wordt.
@@ -42,11 +41,6 @@
       if (this.toonBevolking && S.dorp) this.toonBevolking(S.dorp);
       if (this.toonTevredenheid && S.dorp) this.toonTevredenheid(S.dorp); // en de tevredenheid ernaast (js/balk.js)
       if (this.toonStatussen && S.dorp && S.dorp.kalender) this.toonStatussen(S.dorp); // honger, droogte, ... (js/hud.js)
-    },
-
-    // Het overzicht (js/main.js, Tab; werklijst vraag 108, a): het label bovenin zegt hoe je kijkt en hoe je terugkomt.
-    toonOverzicht(S) {
-      $('overzicht-label').classList.toggle('verborgen', !S.overzicht);
     },
 
     toonInventaris(S) {
@@ -361,7 +355,6 @@
     spatie: T.t('Space'),
     hulp: T.t('Click to walk, talk or use something. {toets}: sneak', { toets: kbd('S') }) + '<br>' +
       T.t('In a fight: {slaan}: strike · {deur}: close door · {spatie}: end turn', { slaan: kbd('1'), deur: kbd('D'), spatie: kbd(T.t('Space')) }),
-    overzicht: T.t('Overview · drag or use the arrow keys to look · wheel: zoom out or in · {tab} or a click on the reeve: back', { tab: kbd('Tab') }),
   };
   document.documentElement.lang = T.taalNu();
   document.title = T.t('{naam} · prototype', { naam: T.NAAM });

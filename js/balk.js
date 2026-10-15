@@ -542,7 +542,7 @@
   // Het hele eiland als een ruit die ligt zoals het beeld: het beeld van het eiland (T.maakMinikaart, in stukjes van een
   // paar ms per beeld; de zee vervaagt naar doorzichtig, dus er blijft een eiland over en geen ruit), daarover een donkere
   // tint over wat je niet kent (T.minikaartGekend, opnieuw als de mist verandert, T.mistVersie), je gebouwen, de schout,
-  // de plekken die je kent (het kasteel, de stad, de dorpen), en het kader waar de camera kijkt. Een klik of slepen kijkt daar (T.kijkNaar, js/main.js: het overzicht, Tab).
+  // de plekken die je kent (het kasteel, de stad, de dorpen), en het kader waar de camera kijkt. Een klik of slepen kijkt daar (T.kijkNaar, js/main.js).
   const MINI = {
     alle: 0.1, // zo vaak (seconden) wordt de ruit opnieuw getekend
   };
@@ -681,7 +681,7 @@
     return lijn;
   }
 
-  // Een klik of slepen op de minikaart: kijk daar (het overzicht, js/main.js).
+  // Een klik of slepen op de minikaart: kijk daar (T.kijkNaar, js/main.js).
   function kijkOpMinikaart(ev) {
     const r = ev.currentTarget.getBoundingClientRect();
     const B = miniBreed();

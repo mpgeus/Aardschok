@@ -611,6 +611,7 @@
     { naam: T.t('The laws'), blok: 'WETTEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The robbers'), blok: 'ROVERS_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Soldiers'), blok: 'SOLDATEN_INSTELLINGEN' }, // geen tekst
+    { naam: T.t('Choosing and sending'), blok: 'KIEZEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Advice'), blok: 'RAAD_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The inn'), blok: 'HERBERG_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Needs and the winter'), blok: 'BEHOEFTEN_INSTELLINGEN' }, // geen tekst
@@ -885,6 +886,10 @@
     hout: T.t('logs'),
     planken: T.t('planks'),
     ijzer: T.t('iron'),
+    // kijken, kiezen en sturen (js/kiezen.js)
+    camera: T.t('camera'),
+    rand: T.t('screen edge that scrolls, in pixels'),
+    snelheid: T.t('scrolling speed, pixels per second'),
     // De brand, de koorts, ouder worden
     brandUren: T.t('burning hours'),
     blusUren: T.t('extinguishing hours'),

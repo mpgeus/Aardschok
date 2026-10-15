@@ -89,8 +89,8 @@
     naLopen: null, // wat er gebeurt als de schout er is, zoals een venster dat opengaat
     spreektMet: null, // een gesprek dat openstaat
     doorkijkTijd: 0, // de klok van de doorkijk, die met het tekenen meeloopt (js/tekenen.js)
-    overzicht: null, // het overzicht (js/main.js, Tab): { doel, zoom }, of null als de camera de schout volgt
-    foto: null, // de fotomodus (js/main.js, H): { inOverzicht }, of null
+    kijk: null, // waar de camera heen kijkt (js/main.js; vraag 170, stap 1): { x, y } in pixels van de wereld
+    foto: null, // de fotomodus (js/main.js, H): { zoom } van daarvoor, of null
     gekozen: null, // het gebouw waarvan het briefje rechts ligt (js/gebouwbriefje.js), of null
   });
   const NIET_MEE = new Set([...Object.keys(T.schermVelden()), 'camera', 'zoom']);

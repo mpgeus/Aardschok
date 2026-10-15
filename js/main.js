@@ -10,7 +10,7 @@
   let cssB = 0; // de maat van het venster in css-pixels
   let cssH = 0;
   let perPunt = 1; // css-pixels per getekende pixel: 1, of 2 op een 4K-scherm zonder schaal
-  let zoomVenster = 1; // de zoom die bij het venster hoort (formaat); het overzicht zoomt verder uit
+  let zoomVenster = 1; // de zoom die bij het venster hoort (formaat); het wiel zoomt verder uit
   const S = (T.S = { tijd: 0, wind: 0 });
 
   // Een nieuw spel begint in het gehucht. Met index.html?kaart=<naam> begint het op een andere
@@ -37,7 +37,7 @@
   // met het lege begin erop.
   T.nieuwSpel = function (makerZaad) {
     for (const k of Object.keys(S)) if (k !== 'zoom') delete S[k];
-    S.zoom = zoomVenster; // ook als het vorige spel in het overzicht stond
+    S.zoom = zoomVenster; // ook als het vorige spel verder uitgezoomd was
     Object.assign(S, {
       tijd: 0,
       gebieden: {}, // een nieuw spel begint met schone gebieden
@@ -71,6 +71,7 @@
   function zetCameraOpSchout() {
     const p = T.naarSchermOp(S.wereld, S.schout.x, S.schout.y);
     S.camera = { x: p.x, y: p.y - 24 };
+    S.kijk = { x: S.camera.x, y: S.camera.y };
   }
 
   // Een bewaard spel laden (js/opslaan.js). Eerst lezen: lukt dat niet, dan blijft het spel zoals het was.
@@ -135,8 +136,10 @@
     ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
     tekenRatio = ratio;
     if (metVideokaart()) T.gl.zetMaat(canvas.width, canvas.height, ratio);
+    // Wie op de zoom van het venster stond, blijft daarop; wie met het wiel verder uitzoomde, blijft op zijn stand.
+    const oud = zoomVenster;
     zoomVenster = Math.max(1, Math.min(2, Math.min(bw / 900, bh / 540)));
-    S.zoom = S.overzicht ? S.overzicht.zoom : zoomVenster;
+    if (!S.zoom || Math.abs(S.zoom - oud) < 1e-6 || (S.zoom > zoomVenster && !S.foto)) S.zoom = zoomVenster;
   }
 
   // Van schermpixels naar de isometrische vlakte waarop getekend wordt, en terug. Precies
@@ -438,22 +441,12 @@
     werkHuisbriefjeBij();
   }
 
-  // Bij het rondlopen volgt de camera de schout; in een gevecht zoekt hij het midden tussen
-  // iedereen die meedoet, zodat het hele slagveld in beeld schuift.
-  //
-  // Dat begint al bij de overgang, vóór het gevecht: het monster dat je ziet, komt meteen in
-  // beeld, tegelijk met de melding. Buiten is dat het verschil tussen een gevecht dat begint en
-  // aangevallen worden door iets wat je niet kunt zien.
-  // Vroeger hield de camera hier een marge aan tot de rand van de kaart (begrensCamera), zodat
-  // je nooit de lege ruimte erachter zag: de camera stopte al een halve schermmaat van de rand.
-  // Op een kleine kaart (het dorp, 48×40) liep de schout daardoor ver uit het midden door en
-  // verdween in de hoek, tot onder het paneel linksboven (Marcel, 21 sep 2026) — de camera volgde
-  // niet meer mee terwijl de schout nog een heel eind verder kon lopen. Nu js/tekenen.js voorbij de
-  // rand een bosrand tekent (zie daar "het bos om de kaart heen") is die marge niet meer nodig:
-  // wat er te zien komt voorbij de kaart is bos, geen leegte, dus de camera volgt de schout gewoon
-  // altijd. Dat houdt hem ook vanzelf uit de buurt van het paneel en de knoppen onderaan, want
-  // zijn plek op het scherm staat dan vast in plaats van dat hij naar een bevroren camera toe kan
-  // weglopen.
+  // De camera (werklijst vraag 170, stap 1; Marcel, 15 okt: "we gaan toch als 'god' sturen en bouwen"): hij volgt de
+  // schout niet meer, maar kijkt waar jij kijkt (S.kijk, alleen scherm: T.schermVelden in js/opslaan.js). De pijltjes
+  // en de muis tegen de rand van het scherm schuiven hem (Marcel: "Muis tegen de zijkant van het scherm bewegen, beweegt
+  // het beeld in die richting"; T.KIEZEN_INSTELLINGEN.camera in js/kiezen.js), de minikaart zet hem ergens neer
+  // (T.kijkNaar), het wiel zoomt, en Tab kijkt naar de held. Alleen een gevecht in beurten kijkt nog zelf mee
+  // (cameraDoel), tot stap 2. Tot 15 okt volgde hij de schout, en tilde Tab hem eraf in het overzicht (vraag 108, a).
   // Achter het titelscherm glijdt de camera langzaam rond het plein (vraag 48 C): een rondje in twee
   // minuten, op de klok van het scherm, want de wereld staat daar stil.
   function titelCamera() {
@@ -470,17 +463,14 @@
   }
   T.titelCamera = titelCamera;
 
-  // In een gevecht kijkt de camera naar wie van jouw kant aan de beurt is (de schout, of een man van de
-  // militie) en de vijanden die nog staan.
+  // Waar de camera heen glijdt: waar jij kijkt (S.kijk). In een gevecht in beurten kijkt hij naar wie van jouw kant aan
+  // de beurt is (de schout, of een man van de militie) en de vijanden die nog staan, en dat al bij de overgang, vóór het
+  // gevecht: het monster komt meteen in beeld, tegelijk met de melding. Na het gevecht blijft hij daar.
   function cameraDoel() {
-    if (S.overzicht) return S.overzicht.doel;
     const aanleiding = S.overgang && S.overgang.aanleiding;
+    if (!S.gevecht && !(aanleiding && !aanleiding.dood)) return S.kijk || S.camera;
     const wie = T.spelerAanDeBeurt(S) ? T.aanDeBeurt(S) : S.schout;
-    const lijst = S.gevecht
-      ? [wie, ...S.gevecht.monsters.filter((m) => !m.dood)]
-      : aanleiding && !aanleiding.dood
-        ? [S.schout, aanleiding]
-        : [S.schout];
+    const lijst = S.gevecht ? [wie, ...S.gevecht.monsters.filter((m) => !m.dood)] : [S.schout, aanleiding];
     let x = 0;
     let y = 0;
     for (const e of lijst) {
@@ -488,33 +478,27 @@
       x += p.x;
       y += p.y;
     }
-    return { x: x / lijst.length, y: y / lijst.length - 24 };
+    S.kijk = { x: x / lijst.length, y: y / lijst.length - 24 };
+    return S.kijk;
   }
 
-  // Het overzicht (werklijst vraag 108, a; Marcel, 3 okt: "108 a tab", op "we hebben misschien toch een overview modus
-  // nodig. Dus dat we wisselen tussen volgen van de speler en een overview"). Tab tilt de camera van de schout af en zoomt
-  // uit, zodat je over je dorp kijkt en plant: slepen of de pijltjes schuiven het beeld, het wiel zoomt. Wat je doet, doet
-  // de schout nog altijd: een klik op iemand of ergens heen, en hij loopt erheen (het poppetje blijft de manier waarop je
-  // bestuurt; geen god boven het dorp, commercieel.md). Tab, of een klik op de schout, brengt je terug. Een gevecht ook.
-  // Alleen scherm: S.overzicht staat in T.schermVelden (js/opslaan.js), en wordt niet bewaard.
-  const OVERZICHT = {
-    zoom: [0.5, 0.35], // waar Tab heen zoomt, en verder uit met het wiel (dichterbij gaat tot de zoom van het venster)
-    stap: 64, // zoveel schermpixels per druk op een pijltje
-    sleepVanaf: 6, // zoveel pixels moet de muis bewegen voor het slepen is in plaats van een klik
+  const CAMERA = {
+    zoom: [0.5, 0.35], // verder uit met het wiel (dichterbij gaat tot de zoom van het venster)
+    sleepVanaf: 6, // in de fotomodus: zoveel pixels moet de muis bewegen voor het slepen is in plaats van een klik
   };
   // De fotomodus (werklijst vraag 146, e; Marcel, 1 okt: een "goed idee voor de Steam pagina", en 10 okt: `H`, met een
   // regel in het menu, `Enter` bewaart een plaatje, en zoomen tot twee keer dichterbij). H haalt alles van het beeld: de
-  // html erover (body.foto in stijl.css) en wat op het doek ui is (S.foto in js/tekenen.js). De camera gaat los zoals in
-  // het overzicht, waarvan hij het slepen, de pijltjes en het wiel leent. Een klik doet niets, het spel loopt door (P zet
-  // het stil), en wat je nodig hebt (een venster, een brief, een gesprek, een gevecht) haalt je eruit. H of Esc brengt je
-  // terug waar je was: bij de schout, of in het overzicht. Alleen scherm: S.foto staat in T.schermVelden (js/opslaan.js).
+  // html erover (body.foto in stijl.css) en wat op het doek ui is (S.foto in js/tekenen.js). De camera schuift zoals
+  // altijd, en ook met slepen, want een klik doet hier niets; het wiel zoomt tot twee keer dichterbij. Het spel loopt
+  // door (P zet het stil), en wat je nodig hebt (een venster, een brief, een gesprek, een gevecht) haalt je eruit. H of Esc
+  // brengt je terug, op de zoom van daarvoor. Alleen scherm: S.foto staat in T.schermVelden (js/opslaan.js).
   const FOTO = {
-    zoom: [2, 1.5, 1, 0.75, 0.5], // maal de zoom van het venster; verder uit tot het overzicht (OVERZICHT.zoom)
+    zoom: [2, 1.5, 1, 0.75, 0.5], // maal de zoom van het venster; verder uit tot de standen van het wiel (CAMERA.zoom)
   };
   const zoomStanden = () =>
     S.foto
-      ? [...new Set([...FOTO.zoom.map((z) => z * zoomVenster), ...OVERZICHT.zoom])].sort((a, b) => b - a)
-      : [zoomVenster, ...OVERZICHT.zoom];
+      ? [...new Set([...FOTO.zoom.map((z) => z * zoomVenster), ...CAMERA.zoom])].sort((a, b) => b - a)
+      : [zoomVenster, ...CAMERA.zoom];
   const fotoKan = () =>
     S.modus === 'verkennen' && !T.ui.vensterOpen() && !T.ui.briefOpen() && !T.ui.titelOpen() && !T.ui.menuOpen() && !T.ui.terugOpen();
   function zetFoto(aan = !S.foto) {
@@ -523,16 +507,12 @@
       S.bouwSoort = null; // een gebouw dat nog aan de muis hing, ligt weer weg, zoals bij het menu
       S.bouwMenuOpen = false;
       T.ui.toonBouwmenu(S);
-      S.foto = { inOverzicht: !!S.overzicht };
-      if (!S.overzicht) S.overzicht = { doel: { x: S.camera.x, y: S.camera.y }, zoom: S.zoom };
+      S.foto = { zoom: S.zoom };
     } else {
-      const inOverzicht = S.foto.inOverzicht;
+      S.zoom = S.foto.zoom;
       S.foto = null;
-      if (!inOverzicht) wisselOverzicht(false);
-      else S.zoom = S.overzicht.zoom = Math.min(S.overzicht.zoom, zoomVenster);
     }
     document.body.classList.toggle('foto', aan);
-    T.ui.toonOverzicht(S);
     if (aan) fotoWenk(T.t('Photo mode · drag or arrows to look · wheel to zoom · [Enter] saves a picture · [H] or [Esc] to return'));
     else document.getElementById('foto-wenk').classList.remove('flits');
     return true;
@@ -573,45 +553,88 @@
       fotoWenk(T.t('Picture saved: {naam}', { naam }));
     }, 'image/png'); // geen tekst
   }
-  function wisselOverzicht(aan = !S.overzicht) {
-    if (aan && S.modus !== 'verkennen') return;
-    S.overzicht = aan ? { doel: { x: S.camera.x, y: S.camera.y }, zoom: OVERZICHT.zoom[0] } : null;
-    S.zoom = aan ? S.overzicht.zoom : zoomVenster;
-    T.ui.toonOverzicht(S);
+  // Houd de camera boven de kaart: het punt waar hij naar kijkt (24 pixels boven een tegel, zoals zetCameraOpSchout),
+  // op een tegel binnen T.kaartGrens (op het eiland het hele eiland).
+  function begrens(k) {
+    if (!S.wereld) return k;
+    const g = T.kaartGrens(S.wereld);
+    const t = T.naarWereld(k.x, k.y + 24);
+    const x = Math.max(g.x, Math.min(g.x + g.b - 1, t.x));
+    const y = Math.max(g.y, Math.min(g.y + g.h - 1, t.y));
+    if (x === t.x && y === t.y) return k;
+    const p = T.naarScherm(x, y);
+    return { x: p.x, y: p.y - 24 };
   }
-  T.wisselOverzicht = wisselOverzicht;
-  // Kijk naar een plek (in pixels van de wereld, zoals S.camera): de minikaart (js/balk.js; vraag 165). Dat is het
-  // overzicht: de camera gaat los van de schout, en Tab of een klik op de schout brengt je terug.
+  // Kijk naar een plek (in pixels van de wereld, zoals S.camera), meteen: de minikaart (js/balk.js; vraag 165).
   T.kijkNaar = function (x, y) {
-    if (!S.overzicht) wisselOverzicht(true);
-    if (!S.overzicht) return; // alleen bij het rondlopen
-    S.overzicht.doel = { x, y };
-    S.camera.x = x;
-    S.camera.y = y;
+    S.kijk = begrens({ x, y });
+    S.camera.x = S.kijk.x;
+    S.camera.y = S.kijk.y;
   };
-  // Het beeld schuiven, in schermpixels: wat je sleept of met de pijltjes duwt, meteen, zonder na te glijden.
-  function schuifOverzicht(dx, dy) {
-    S.overzicht.doel.x += dx / S.zoom;
-    S.overzicht.doel.y += dy / S.zoom;
-    S.camera.x = S.overzicht.doel.x;
-    S.camera.y = S.overzicht.doel.y;
+  // Glij naar een tegel (Tab naar de held, een groep, een bericht met een plek).
+  function glijNaar(x, y) {
+    const p = T.naarSchermOp(S.wereld, x, y);
+    S.kijk = begrens({ x: p.x, y: p.y - 24 });
+  }
+  T.glijNaar = glijNaar;
+  // Het beeld schuiven, in getekende pixels: wat je duwt of sleept, meteen, zonder na te glijden.
+  function schuif(dx, dy) {
+    const k = S.kijk || S.camera;
+    S.kijk = begrens({ x: k.x + dx / S.zoom, y: k.y + dy / S.zoom });
+    S.camera.x = S.kijk.x;
+    S.camera.y = S.kijk.y;
   }
   // Een stand verder uit (+1) of dichterbij (-1), met het wiel: de eerste stand voorbij de zoom van nu (die na de
   // fotomodus ook een stand van de foto kan zijn).
-  function zoomOverzicht(richting) {
+  function zoom(richting) {
     const z = zoomStanden();
-    const nu = S.overzicht.zoom;
+    const nu = S.zoom;
     const volgende = richting > 0 ? z.find((s) => s < nu - 1e-6) : z.filter((s) => s > nu + 1e-6).pop();
-    if (volgende != null) S.zoom = S.overzicht.zoom = volgende;
-  }
-  // Staat de muis op het lijf van de schout (met dezelfde maten als zoekDoel)?
-  function opDeSchout(mx, my) {
-    const { x: sx, y: sy } = naarVlak(mx, my);
-    const p = T.naarSchermOp(S.wereld, S.schout.x, S.schout.y);
-    return sx > p.x - 17 && sx < p.x + 17 && sy > p.y - hoogteVan(S.schout) && sy < p.y + 9;
+    if (volgende != null) S.zoom = volgende;
   }
   const SCHUIF = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] };
-  let slepen = null; // { x, y, bewogen }: de muis ging omlaag in het overzicht
+  // De pijltjes die je ingedrukt houdt, en waar de muis in het venster is (ook boven de balken, die over het doek
+  // liggen): elk beeld schuift de camera zolang je duwt (schuifBij). Alleen scherm.
+  const pijlen = new Set();
+  let randMuis = null;
+  window.addEventListener('keydown', (ev) => {
+    if (SCHUIF[ev.key]) pijlen.add(ev.key);
+  });
+  window.addEventListener('keyup', (ev) => pijlen.delete(ev.key));
+  window.addEventListener('blur', () => {
+    pijlen.clear();
+    randMuis = null;
+  });
+  window.addEventListener('mousemove', (ev) => {
+    randMuis = { x: ev.clientX, y: ev.clientY };
+  });
+  document.documentElement.addEventListener('mouseleave', () => {
+    randMuis = null;
+  });
+  // Elk beeld: de pijltjes en de muis tegen de rand schuiven het beeld, even snel in elke richting en op elke zoom. Bij
+  // het rondlopen en in de fotomodus, niet achter een venster, een brief of het titelscherm.
+  function schuifBij(dt) {
+    if (!(S.modus === 'verkennen' || S.foto) || T.ui.vensterOpen() || T.ui.briefOpen() || T.ui.titelOpen() || T.ui.menuOpen()) return;
+    const IN = T.KIEZEN_INSTELLINGEN.camera;
+    let dx = 0;
+    let dy = 0;
+    for (const k of pijlen) {
+      dx += SCHUIF[k][0];
+      dy += SCHUIF[k][1];
+    }
+    if (IN.rand > 0 && randMuis) {
+      if (randMuis.x <= IN.rand) dx--;
+      else if (randMuis.x >= cssB - 1 - IN.rand) dx++;
+      if (randMuis.y <= IN.rand) dy--;
+      else if (randMuis.y >= cssH - 1 - IN.rand) dy++;
+    }
+    dx = Math.sign(dx);
+    dy = Math.sign(dy);
+    if (!dx && !dy) return;
+    const v = (IN.snelheid * dt) / Math.hypot(dx, dy);
+    schuif(dx * v, dy * v);
+  }
+  let slepen = null; // { x, y, bewogen }: de muis ging omlaag in de fotomodus
 
   // De raad onder het doel (js/raad.js) rekent met de groei en de winter, en dat hoeft niet elk beeld: om de halve
   // seconde is genoeg. Hij verandert niets, en is alleen scherm, dus hij staat niet in S.
@@ -647,8 +670,9 @@
     S.rasterAlpha += (doelAlpha - S.rasterAlpha) * Math.min(1, dt * 5);
     // Wat je nodig hebt (een venster, een brief, een gesprek, een gevecht), haalt je uit de fotomodus.
     if (S.foto && !fotoKan()) zetFoto(false);
-    // Een gevecht begint: dan terug naar de schout, want het gevecht wil je zien.
-    if (S.overzicht && (S.modus === 'overgang' || S.modus === 'gevecht')) wisselOverzicht(false);
+    // Een gevecht begint: dan dichtbij genoeg om het te zien (de camera kijkt er zelf heen, cameraDoel).
+    if ((S.modus === 'overgang' || S.modus === 'gevecht') && S.zoom < zoomVenster) S.zoom = zoomVenster;
+    schuifBij(dt);
     const doel = T.ui.titelOpen() ? titelCamera() : cameraDoel();
     const k = 1 - Math.exp(-dt * 5);
     S.camera.x += (doel.x - S.camera.x) * k;
@@ -707,43 +731,39 @@
   }
 
   canvas.addEventListener('mousedown', (ev) => {
-    slepen = ev.button === 0 && S.overzicht ? { x: ev.clientX, y: ev.clientY, bewogen: false } : null;
+    slepen = ev.button === 0 && S.foto ? { x: ev.clientX, y: ev.clientY, bewogen: false } : null;
   });
   canvas.addEventListener('mousemove', (ev) => {
     S.muis = { x: ev.clientX, y: ev.clientY };
-    // Slepen in het overzicht schuift het beeld (pas na een paar pixels: anders is het een klik).
-    if (!slepen || !S.overzicht) return;
+    // Slepen in de fotomodus schuift het beeld (pas na een paar pixels: anders is het een klik).
+    if (!slepen || !S.foto) return;
     if (!(ev.buttons & 1)) {
       slepen = null;
       return;
     }
     const dx = ev.clientX - slepen.x;
     const dy = ev.clientY - slepen.y;
-    if (!slepen.bewogen && Math.hypot(dx, dy) < OVERZICHT.sleepVanaf) return;
+    if (!slepen.bewogen && Math.hypot(dx, dy) < CAMERA.sleepVanaf) return;
     slepen.bewogen = true;
-    schuifOverzicht(-dx / perPunt, -dy / perPunt);
+    schuif(-dx / perPunt, -dy / perPunt);
     slepen.x = ev.clientX;
     slepen.y = ev.clientY;
   });
   canvas.addEventListener('wheel', (ev) => {
-    if (!S.overzicht) return;
+    if (S.modus !== 'verkennen') return;
     ev.preventDefault();
-    zoomOverzicht(ev.deltaY > 0 ? 1 : -1);
+    zoom(ev.deltaY > 0 ? 1 : -1);
   }, { passive: false });
   canvas.addEventListener('mouseleave', () => {
     S.muis = null;
   });
   canvas.addEventListener('click', (ev) => {
     S.muis = { x: ev.clientX, y: ev.clientY };
-    // Na het slepen is het loslaten geen klik; in het overzicht brengt een klik op de schout je terug.
+    // Na het slepen is het loslaten geen klik.
     const gesleept = slepen && slepen.bewogen;
     slepen = null;
     if (gesleept) return;
     if (S.foto) return; // in de fotomodus doet een klik niets
-    if (S.overzicht && opDeSchout(ev.clientX, ev.clientY)) {
-      wisselOverzicht(false);
-      return;
-    }
     // Wie slaapt en ergens heen wil, is wakker (js/dag.js).
     if (S.slaap && T.wordWakker) T.wordWakker(S);
     werkHoverBij();
@@ -800,7 +820,6 @@
     if (S.foto) {
       if (ev.key === 'h' || ev.key === 'H' || ev.key === 'Escape') zetFoto(false);
       else if (ev.key === 'Enter') bewaarFoto();
-      else if (SCHUIF[ev.key]) schuifOverzicht(SCHUIF[ev.key][0] * OVERZICHT.stap, SCHUIF[ev.key][1] * OVERZICHT.stap);
       if (ev.key === 'Tab' || ev.key === 'Enter' || SCHUIF[ev.key]) ev.preventDefault();
       return;
     }
@@ -826,10 +845,10 @@
       return;
     }
     if (S.modus !== 'verkennen' && S.modus !== 'gevecht') return;
-    // Tab: het overzicht (werklijst vraag 108, a), alleen bij het rondlopen; in het overzicht schuiven de pijltjes het beeld.
+    // Tab: kijk naar de held (de schout), bij het rondlopen. Tot 15 okt was het het overzicht (vraag 108, a).
     if (ev.key === 'Tab') {
       ev.preventDefault();
-      if (S.modus === 'verkennen') wisselOverzicht();
+      if (S.modus === 'verkennen') glijNaar(S.schout.x, S.schout.y);
       return;
     }
     // H: de fotomodus (hierboven), alleen bij het rondlopen.
@@ -837,9 +856,9 @@
       zetFoto(true);
       return;
     }
-    if (S.overzicht && SCHUIF[ev.key]) {
+    // De pijltjes schuiven het beeld zolang je ze indrukt (schuifBij), niet de bladzijde.
+    if (SCHUIF[ev.key]) {
       ev.preventDefault();
-      schuifOverzicht(SCHUIF[ev.key][0] * OVERZICHT.stap, SCHUIF[ev.key][1] * OVERZICHT.stap);
       return;
     }
     // O, V, W en R: de spelregels, de velden, de wetten en je raadsman (de toets staat bij het venster, js/ui.js),

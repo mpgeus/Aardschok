@@ -572,11 +572,14 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   berichten, de meter, het bouwmenu, het briefje van een gebouw) rekent daarmee; bovenaan liggen alleen briefjes, vraag
   146, d: het doel met de raad en de statussen linksboven, onder de balk, en het briefje bij de muis werkt daar ook),
   `js/tekenen.js`, `js/main.js`
-  (spellus, invoer, zoom, camera). **Het overzicht** (vraag 108, a): `Tab` tilt de camera van de schout af en zoomt uit
-  (`T.wisselOverzicht`, `S.overzicht`, alleen scherm); slepen of de pijltjes schuiven, het wiel zoomt, en wat je klikt,
-  doet de schout nog altijd. `Tab`, een klik op de schout of een gevecht brengt je terug. **De fotomodus** (vraag 146,
+  (spellus, invoer, zoom, camera). **De camera is los** (vraag 170, stap 1; `js/kiezen.js`): hij glijdt naar `S.kijk`
+  (alleen scherm), en volgt de schout niet meer; de pijltjes en de muis tegen de rand van het venster schuiven hem
+  (`schuifBij`, elk beeld, met `T.KIEZEN_INSTELLINGEN.camera`), de minikaart zet hem neer (`T.kijkNaar`), `T.glijNaar`
+  laat hem naar een tegel glijden (Tab naar de held), het wiel zoomt altijd (`zoomStanden`), en `begrens` houdt hem boven
+  `T.kaartGrens`. Alleen een gevecht in beurten kijkt zelf mee (`cameraDoel`), tot stap 2. Tot 15 okt volgde hij de
+  schout, en tilde Tab hem eraf in het overzicht (vraag 108, a; `S.overzicht`, weg). **De fotomodus** (vraag 146,
   e): `H` (of Fotomodus in het menu) haalt alles van het beeld (`body.foto` in `stijl.css`, en wat ui is op het doek,
-  `S.foto` in `js/tekenen.js`) en laat de camera los zoals het overzicht, tot twee keer dichterbij; een klik doet niets,
+  `S.foto` in `js/tekenen.js`); de camera schuift ook met slepen, tot twee keer dichterbij; een klik doet niets,
   en `Enter` bewaart het beeld als PNG op de maat van het scherm (`bewaarFoto`; in de versie voor Windows in Afbeeldingen). Op een groot scherm tekent het spel op een hele deling ervan, minstens
   1920×1080 (de tussenbuffer, `formaat`, vraag 123): op 4K 1920×1080 maal twee; wat er getekend wordt, zegt `T.tekenMaat()`,
   en de muis rekent om in `naarVlak`. De grond ligt in stukken van 512 pixels die aan de wereld vastzitten
@@ -1578,3 +1581,9 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - **In het gevecht** (D1): `T.slagVan(e)` (de schout `T.SLAAN`; wie zonder soort meevecht, een veteraan of wie met de
   bode meegaat, een hooivork), `T.vangtAf(doel, van)` (schild en harnas, niet tegen een kruisboog). De getallen in
   `T.SOLDATEN_INSTELLINGEN` (de werkbank: "Soldiers"); getoetst in `test/soldaten.test.cjs`.
+
+### js/kiezen.js: kijken, kiezen en sturen als een god
+
+- `js/kiezen.js` (werklijst vraag 170, stap 1; Marcel, 15 okt: "we gaan toch als 'god' sturen en bouwen"): de regels
+  zonder scherm van kijken, kiezen en sturen, met de getallen in `T.KIEZEN_INSTELLINGEN` (de werkbank: "Choosing and
+  sending"); de camera, de muis en het kader staan in `js/main.js`.
