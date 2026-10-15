@@ -336,22 +336,16 @@
     S.handeling = null;
   }
 
-  // De klik met een weg in de hand: de eerste zet het begin, de tweede legt de weg (T.legWeg). Daarna blijft de weg in de
-  // hand, met zijn eind als het begin van het volgende stuk: zo leg je een weg met een bocht in een paar klikken, en een
-  // rechtsklik houdt op.
+  // De klik met een weg in de hand: de eerste zet het begin, de tweede geeft de opdracht de weg te leggen (T.legWeg, bij de
+  // volgende tik: js/tik.js). De muis vroeg al hetzelfde (T.planWeg). Daarna blijft de weg in de hand, met zijn eind als het
+  // begin van het volgende stuk: zo leg je een weg met een bocht in een paar klikken, en een rechtsklik houdt op.
   function klikMetWeg(hover) {
     if (!hover) return;
-    if (!hover.hoek) {
-      if (!hover.ok) T.ui.bericht(hover.reden, 'gevaar');
-      else S.veldHoek = { soort: 'weg', x: hover.x, y: hover.y };
+    if (!hover.ok) {
+      T.ui.bericht(hover.reden, 'gevaar');
       return;
     }
-    const r = T.legWeg(S.dorp, S.veldHoek, { x: hover.x, y: hover.y });
-    if (!r.gelukt) {
-      T.ui.bericht(r.reden, 'gevaar');
-      return;
-    }
-    T.ui.bericht(r.bericht, 'goed');
+    if (hover.hoek) T.geefOpdracht(S, { soort: 'weg', van: { x: S.veldHoek.x, y: S.veldHoek.y }, tot: { x: hover.x, y: hover.y } });
     S.veldHoek = { soort: 'weg', x: hover.x, y: hover.y };
   }
 
@@ -373,23 +367,25 @@
       T.ui.bericht(h.tekst, 'gevaar');
       return;
     }
-    h.doe(); // afbreken blijft in de hand: een rechtsklik houdt op
+    // De opdracht stelt bij de tik dezelfde vraag (js/tik.js). Afbreken blijft in de hand: een rechtsklik houdt op.
+    T.geefOpdracht(S, { soort: 'afbreken', x: hover.x, y: hover.y });
   }
 
-  // De klik met een veld in de hand: de eerste zet de ene hoek, de tweede legt het veld (T.legVeld). Past het niet, dan
-  // blijft de eerste hoek liggen, zodat je de andere kunt verzetten.
+  // De klik met een veld in de hand: de eerste zet de ene hoek, de tweede geeft de opdracht het veld te leggen (T.legVeld,
+  // bij de volgende tik: js/tik.js). De muis vroeg al hetzelfde (T.waaromPastVeldNiet). Past het niet, dan blijft de eerste
+  // hoek liggen, zodat je de andere kunt verzetten.
   function klikMetVeld(soort, hover) {
     if (!hover) return;
     if (!hover.hoek) {
       S.veldHoek = { soort, x: hover.x, y: hover.y };
       return;
     }
-    const r = T.legVeld(S.dorp, soort, hover.veld);
-    if (!r.gelukt) {
-      T.ui.bericht(r.reden, 'gevaar');
+    if (!hover.ok) {
+      T.ui.bericht(hover.reden, 'gevaar');
       return;
     }
-    T.ui.bericht(r.bericht, 'goed');
+    const v = hover.veld;
+    T.geefOpdracht(S, { soort: 'veld', veld: soort, rechthoek: { x: v.x, y: v.y, b: v.b, h: v.h } });
     S.bouwSoort = null;
     S.veldHoek = null;
   }
@@ -770,12 +766,8 @@
         T.ui.bericht((hover && hover.reden) || T.t('It does not fit there.'), 'gevaar');
         return;
       }
-      const r = T.plaatsGebouw(S.dorp, soort, hover.x, hover.y);
-      if (!r.gelukt) {
-        T.ui.bericht(r.reden, 'gevaar');
-        return;
-      }
-      T.ui.bericht(r.bericht, 'goed');
+      // De opdracht gaat in bij de volgende tik (js/tik.js); wat er gebeurde, zegt de regel (T.plaatsGebouw).
+      T.geefOpdracht(S, { soort: 'bouw', gebouw: soort, x: hover.x, y: hover.y });
       S.bouwSoort = null;
       return;
     }

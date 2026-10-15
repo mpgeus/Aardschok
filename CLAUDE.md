@@ -4,7 +4,7 @@ Tithebreaker (de werknaam sinds 11 okt, `ontwerp/commercieel.md`; de map en de o
 los programma verpakt; `ontwerp/commercieel.md`). **De economie van The Settlers (11 okt), met gevechten in real time (15
 okt)** (vraag 151 en 170, `ontwerp/gameloop.md`): je komt met een huifkar en een paar gezinnen op een lege plek op een
 eiland, je bouwt alles zelf, binnen bereik van je plein en je opslag, een ossenkar haalt de grondstoffen op, en je vecht
-(RTS, als Age of Empires): eerst om je dorp te verdedigen, dan over het eiland tot het kasteel van de heer. Je stuurt
+(RTS): eerst om je dorp te verdedigen, dan over het eiland tot het kasteel van de heer. Je stuurt
 als een god van bovenaf; de schout (de speler in het spel) woont in het dorp en vecht mee. **Het doel is de heer verstoten en verslaan** (vraag 126). Het beeld is
 isometrisch (Mystic Towers), de HD-pixel art komt uit code, rijk aan details.
 
@@ -167,9 +167,8 @@ Het ontwerp staat in `ontwerp/spel.md` en `ontwerp/gameloop.md`; hier staat wat 
 - **Twee bazen** (vraag 106): de gunst van de heer en het vertrouwen van het dorp kunnen je allebei wegsturen; onder een
   grens een waarschuwing, op 0 ben je weg.
 - **Het doel van de demo is open** (werklijst, "Wacht op Marcel"); het oude doel is op 11 okt weggehaald (vraag 153).
-- **Geld verdienen** (Marcel, 1 okt: "Ik wil hier eigenlijk geld mee verdienen"; `commercieel.md`): in januari 2027 de
-  naam, geluid, Engels en de Steam-pagina, in juni 2027 de demo in Next Fest. Er is weinig geld ("Ik gebruik jou ☺️"):
-  wat kan, maakt Claude, zoals de beelden uit code; Marcel kiest, luistert en plaatst.
+- **Geld verdienen** (`commercieel.md`): in januari 2027 de Steam-pagina, in juni 2027 de demo in Next Fest. Er is weinig
+  geld: wat kan, maakt Claude, zoals de beelden uit code; Marcel kiest, luistert en plaatst.
 - **Wie valt, is dood** (vraag 55); valt de held (de schout), dan staat een veteraan op (vraag 170). Wie het overleeft,
   geneest na een nacht.
 
@@ -206,9 +205,10 @@ Hoe we kiezen:
   of betekent iets anders), verhoog dan `T.OPSLAAN_INSTELLINGEN.versie`.
 - **Geen bewakers voor regels:** een toets laadt het hele spel, dus geen `T.x && T.x(...)` of `if (T.x)` voor een regel
   uit `js/`; alleen op `T.ui`, op gegevens, en waar een bladzijde een deel van het spel laadt.
-- **Zo dat live samen spelen kan, al in de demo** (vraag 126, f, en 170): wat de heer of een ander dorp beslist, kiest hij uit dezelfde
-  handelingen als een mens in zijn plaats (zoals `T.raadsmanKeuze`), en een keuze die op de speler wacht, heeft een
-  termijn en een uitkomst als die om is.
+- **Zo dat live samen spelen kan, al in de demo** (vraag 126, f, en 170; `code.md` bij `js/tik.js`): de wereld tikt
+  (`T.wereldTik`), haar toeval is `T.toeval` of `T.vastLot`, **nooit `Math.random`**, en een klik die haar verandert,
+  geeft een opdracht (`T.geefOpdracht`). De heer of een ander dorp kiest uit de handelingen van een mens in zijn plaats
+  (`T.raadsmanKeuze`); een keuze die op de speler wacht, heeft een termijn en een uitkomst als die om is.
 - **Scherm en klik stellen dezelfde vraag:** `handelingVerkennen` en `handelingGevecht` geven `{ tekst, kosten, kan, doe }`,
   en de tekst bij de muis, het pad, de actiepunten en de klik komen uit hetzelfde antwoord.
 - **Eén weg voor:** de voorraad (`T.wijzigVoorraad`), het getal in de balk (`T.wijzigBevolking(S, verschil, reden,

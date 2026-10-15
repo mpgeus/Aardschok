@@ -223,8 +223,8 @@
       regels.push({
         tekst,
         knoppen: [
-          { tekst: '−', uitleg: T.t('One {soort} less: the pieces go back into store.', { soort: T.soortNaam(soort) }), kan: w > 0, doe: () => T.zetSoldaten(D, g, soort, -1) },
-          { tekst: '+', uitleg: T.t('One {soort} more.', { soort: T.soortNaam(soort) }), kan: som(wil) < IN().plaatsen, doe: () => T.zetSoldaten(D, g, soort, 1) },
+          { tekst: '−', uitleg: T.t('One {soort} less: the pieces go back into store.', { soort: T.soortNaam(soort) }), kan: w > 0, opdracht: { soort: 'soldaten', x: g.x, y: g.y, soldaat: soort, verschil: -1 } },
+          { tekst: '+', uitleg: T.t('One {soort} more.', { soort: T.soortNaam(soort) }), kan: som(wil) < IN().plaatsen, opdracht: { soort: 'soldaten', x: g.x, y: g.y, soldaat: soort, verschil: 1 } },
         ],
       });
     }

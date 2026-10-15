@@ -68,10 +68,11 @@ test('een speerman wacht tot speer en schild in de opslag liggen; dan pakt hij z
   assert.equal(D.voorraad.speren, 0);
   assert.equal(D.voorraad.schilden, 0);
   assert.equal(T.wapensGevraagd(D).speren, 0, 'er wordt niets meer gevraagd');
-  // De knop eraf, zoals op het briefje.
+  // De knop eraf, zoals op het briefje: zijn opdracht, zoals de tik hem uitvoert (js/tik.js).
   const min = regelVan(D, huis, 'Spearman').knoppen[0];
   assert.equal(min.kan, true);
-  min.doe();
+  assert.deepEqual(min.opdracht, { soort: 'soldaten', x: huis.x, y: huis.y, soldaat: 'speerman', verschil: -1 });
+  T.OPDRACHTEN.soldaten(null, D, min.opdracht);
   assert.ok(!p.soldaat);
   assert.equal(T.kanWerken(p), true, 'hij is weer vrij');
   assert.equal(D.voorraad.speren, 1);

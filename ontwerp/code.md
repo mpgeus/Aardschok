@@ -130,6 +130,17 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   het lopen) roept die delen zelf. Wat alleen scherm is (de camera, de muis, de briefjes, de zwevende teksten en wie in
   een beurt op een animatie wacht: `T.werkEffectenBij`, js/anim.js), werkt js/main.js elk beeld bij; ook het vanzelf
   opslaan, want wat een computer bewaart en wanneer, is van hem alleen.
+- **De opdrachten van de spelers** (js/tik.js): een klik die de wereld verandert, roept de regel niet zelf aan, maar geeft
+  een opdracht, als gegevens (`T.geefOpdracht(S, { soort, ... })`: namen, plekken en nummers, geen dingen; een gebouw
+  heeft geen nummer, dus zijn plek). Ze staat in `S.opdrachten` tot de volgende tik, en daar doet `T.OPDRACHTEN[soort]`
+  hem in het dorp (`o.dorp`, het nummer in `S.dorpen`). In lockstep gaat precies die opdracht over de lijn en gaat hij
+  bij elke computer in dezelfde tik in. Het scherm vraagt vooraf hetzelfde als de regel (`hover.ok`, `T.handelingAfbreken`),
+  en wat er gebeurde, zegt de regel tegen het dorp (`T.zeg`). Nu: bouwen, een weg, een veld, afbreken (js/main.js) en de
+  soldaten (de knoppen op het briefje van het wachthuis dragen een `opdracht`, js/huisbriefje.js). `test/tik.test.cjs`
+  kijkt na dat het scherm die regels niet zelf aanroept. **Nog niet** (stap 6 van vraag 170, als een venster de tijd niet
+  meer stilzet): de vensters (de handel, de velden, het slachten, de heer, de wetten, de raadsman, de brieven, de bode),
+  de snelheid en het slapen, en het debugvenster; het lopen van de schout en het gevecht in beurten gaan eruit (stap 2
+  en 5). De kolonist van de speeltest roept de regels nog zelf aan, tussen de tikken.
 
 
 ### js/opslaan.js en js/menu.js: opslaan en laden, het titelscherm

@@ -6,8 +6,9 @@
 // laatste is de andere helft van "hoeveel": The Settlers draait om zien waar het stokt.
 //
 // T.gebouwBriefje(D, g) is de regel zonder scherm (test/gebouwbriefje.test.cjs): de kop, wat het doet, en de delen,
-// elk met een titel en regels tekst. Een regel kan knoppen hebben ({ tekst, knoppen: [{ tekst, uitleg, kan, doe }] },
-// zoals een handeling): het wachthuis, waar je soldaten zet (js/soldaten.js; vraag 159). Een ander bestand geeft zijn
+// elk met een titel en regels tekst. Een regel kan knoppen hebben ({ tekst, knoppen: [{ tekst, uitleg, kan, opdracht }] }:
+// een klik geeft de opdracht, als gegevens, en die gaat in bij de volgende tik; js/tik.js, vraag 170): het wachthuis, waar
+// je soldaten zet (js/soldaten.js; vraag 159). Een ander bestand geeft zijn
 // eigen delen in T.GEBOUW_DELEN[soort](D, g). Alles wat erop staat, rekent het spel al: de nachtlus van de gebouwen (g.werkte,
 // g.tekort, g.vol, g.stilWant, g.uren; js/gebouwen.js), het werktempo (T.werkTempo), en wat het maakte (T.telGemaakt, via
 // T.opStapel in js/kar.js). T.kiesGebouw zet S.gekozen (alleen scherm, T.schermVelden in js/opslaan.js), een klik op een

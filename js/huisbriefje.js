@@ -90,8 +90,9 @@
   const ALLE = 0.25; // zo vaak (seconden) wordt het briefje opnieuw opgemaakt, want de dag loopt door
 
   // Een regel is tekst, of tekst met knoppen (het wachthuis, js/soldaten.js): een knop draagt waar hij staat (deel, regel,
-  // knop), zodat een klik hem terugvindt in het briefje dat er ligt (`huidig`), en daar zijn `doe` doet.
+  // knop), zodat een klik hem terugvindt in het briefje dat er ligt (`huidig`), en daar zijn opdracht geeft.
   let huidig = null;
+  const briefjeVan = { S: null, D: null }; // het spel en het dorp van dat briefje, voor de opdracht van een knop
   const attr = (t) => String(t || '').replace(/"/g, '&quot;');
   const regel = (r, i, j) =>
     typeof r === 'string'
@@ -110,7 +111,8 @@
     const [i, j, n] = knop.dataset.knop.split('.').map(Number);
     const r = huidig.delen[i] && huidig.delen[i].regels[j];
     const k = r && r.knoppen && r.knoppen[n];
-    if (k && k.kan) k.doe();
+    // Een knop geeft een opdracht (js/tik.js): hij gaat in bij de volgende tik, en het briefje laat het dan zien.
+    if (k && k.kan) T.geefOpdracht(briefjeVan.S, Object.assign({ dorp: briefjeVan.S.dorpen.indexOf(briefjeVan.D) }, k.opdracht));
     laatsteGebouw = ''; // meteen opnieuw opmaken
     bijgewerkt = -Infinity;
   }
@@ -136,6 +138,8 @@
     if (laatsteGebouw && S.tijd - bijgewerkt < ALLE) return;
     bijgewerkt = S.tijd;
     huidig = T.gebouwBriefje(D, g);
+    briefjeVan.S = S;
+    briefjeVan.D = D;
     const nu = html(huidig);
     if (nu !== laatsteGebouw) box.innerHTML = nu;
     laatsteGebouw = nu;

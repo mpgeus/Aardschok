@@ -153,6 +153,16 @@ treden, stadsrechten, de opstand). Van deel F alleen wat hierboven staat; verpak
 - **33d.** Hoe krijgt een tester het: een bladzijde op internet, of een programma? Voorstel (29 sep): een zip
   met `index.html`, want het spel draait en bewaart ook als los bestand (werklijst, vraag 58, C).
 
+## De speeltest van 15 okt, avond: de wereld in vaste tikken (vraag 170, stap 0)
+
+Op de branch `claude/sleepy-fermat-wrxjuc` (vanaf `9ee639b4`, met de opdrachten erbij), de kolonist op eiland 1, 2 en 3:
+alle drie zonder fouten in de console, 2 en 3 het jaar uit. Op eiland 1 viel de schout op 8 februari: Isabel riep om
+hulp tegen de wolven, de kolonist viel ze alleen aan, en twee wolven beten hem in een paar beurten neer. Vóór stap 0
+(`b8b40d1e`) haalde eiland 1 het jaar. Dat is toeval en geen fout: het dwalen en de praatjes trekken nu uit het zaad van
+het dorp in plaats van uit het toeval van de browser, dus het jaar loopt anders, en wie de wolven tegenkomt ook. Het
+gevecht zelf veranderde niet (alleen de worp komt nu uit `T.toeval`). In de echte browser gaf een klik met een hut, een
+weg en afbreken in de hand een opdracht die bij de volgende tik inging, met het bericht van de regel.
+
 ## De speeltest van 15 okt, middag: de soldaten (vraag 159, stap 1)
 
 Op de branch `claude/werklijst-doorzetten-4m1kji`, met de kolonist (regel 7c: een wachthuis, een wapenmaker, en dan twee

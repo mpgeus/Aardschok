@@ -51,7 +51,11 @@ meevechten, en het gevecht is in real time, zodat er later live samen gespeeld k
 hij A (Age of Empires, groepen met Ctrl+1), B2, C1, D1, diensten (E) en G2 (bij H). Op het plan voor 170 koos hij op 15 okt
 een held die opnieuw opstaat, het praten geparkeerd, en **live samen spelen al in de demo** (bij I); **het bijgestelde
 plan staat bij I, en Marcel koos het zoals voorgesteld ("A1, B1, C1, D1, E1, F1"). Bezig in sessie
-`claude/sleepy-fermat-wrxjuc`** (15 okt): stap 0, de grond voor samen spelen.
+`claude/sleepy-fermat-wrxjuc`** (15 okt). **Stap 0 is af** (15 okt, op die branch; `code.md` bij `js/tik.js`): de
+wereld tikt zestig keer per seconde, los van de beelden, haar toeval komt uit het zaad (nooit `Math.random`), en bouwen,
+wegen, velden, afbreken en de soldaten zijn opdrachten die op een tik ingaan; `test/tik.test.cjs` houdt twee werelden
+letter voor letter gelijk, en de speeltest speelt drie eilanden zonder fouten. Het volgende is stap 1, kijken en kiezen
+als een god (bij I).
 
 **Wacht op Marcel:**
 - **De soldaten bekijken** (159, stap 1, 15 okt): Nieuw spel, en zet een wachthuis (B). Klik erop als het af is: op zijn
@@ -515,7 +519,9 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   praten is geparkeerd (een klik op iemand geeft zijn briefje, de marskramer opent zijn handel met een klik; de code van
   de gesprekken blijft tot we weten wat ermee gebeurt); eruit: sluipen, de lantaarn, sleutel en kist, oprapen, de camera
   die hem volgt, reizen met hem over de landkaart, en het gevecht in beurten.
-- **6, samen spelen:** twee spelers (vraag C), eerst over onze eigen server (`npm start`, twee browsers), later over
+- **6, samen spelen:** de vensters zetten de tijd niet meer stil (E1), en wat erin gebeurt (de handel, de velden, het
+  slachten, de heer, de wetten, de raadsman, de brieven, de bode), de snelheid en het debugvenster worden opdrachten,
+  zoals bouwen al is (stap 0); twee spelers (vraag C), eerst over onze eigen server (`npm start`, twee browsers), later over
   Steam; meedoen is het opgeslagen spel krijgen (alles staat al in `S`), en een controle dat de werelden gelijk blijven.
 Daarna de muren (158) en de tekeningen van de soldaten.
 
