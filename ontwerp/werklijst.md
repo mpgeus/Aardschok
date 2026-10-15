@@ -539,8 +539,25 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   is een opdracht (js/tik.js). **1d** Ctrl+1 tot 9 (en Shift+1 tot 9) maakt een groep, 1 tot 9 kiest hem, twee keer en de
   camera gaat erheen; een groep is alleen scherm. **Erbij:** een bericht met een plek (rovers, een brand) brengt de camera
   erheen met een klik of Spatie, en de plek knippert op de minikaart.
-- **2, het gevecht in real time:** **Bezig in sessie `ccr-c0f9d2a2-6j0scf`** (15 okt): het plan voor Marcel. Elk kiest de dichtste vijand die hij ziet, loopt tot hij raakt en slaat, met de regels
-  van 159; de actiepunten van een slag worden de tijd tussen twee slagen; rovers en wolven vallen aan wie ze tegenkomen.
+- **2, het gevecht in real time:** **Bezig in sessie `ccr-c0f9d2a2-6j0scf`** (15 okt): bouwen. Elk kiest de dichtste
+  vijand die hij ziet, loopt tot hij raakt en slaat, met de regels van 159; de actiepunten van een slag worden de tijd
+  tussen twee slagen; rovers en wolven vallen aan wie ze tegenkomen.
+  **Het plan** (Claude, 15 okt; **besloten**, Marcel: "Aanvallen, dan terug", "Niemand vanzelf", "Iedereen, wie kan
+  vlucht", "We hebben dan een 'town hall' nodig. Daar kunnen mensen schuilen", "Huis schout wordt town hall", "Iedereen"):
+  **2a** de slag in de tik (`js/gevecht.js`, zonder scherm, met toetsen): wie geen doel heeft, kiest de dichtste vijand die
+  hij ziet, loopt tot hij raakt (`T.kanRaken`) en slaat; de kosten van een slag maal de seconden per punt (0,4) is de tijd
+  tot de volgende; toeval uit `T.toeval`, geen `await`. Wie vijand is, zegt één vraag (in stap 6 de mannen van een andere
+  speler erbij). **2b** wie wat doet: een man valt aan wat hij ziet (8 tegels), loopt het hooguit 10 tegels van zijn post na,
+  en gaat dan terug; bij een aanval komt niemand vanzelf (jij stuurt; het bericht brengt je erheen); een bevel erheen is
+  lopen, een vijand aanklikken is die aanvallen. Rovers slaan wie ze tegenkomen, ook een dorpeling; een dorpeling die een
+  vijand ziet, vlucht naar het **town hall** en blijft daar tot het rustig is (wie ze inhalen, kan vallen). De wolven
+  houden hun jacht (wie ze kiezen, het licht, om hulp roepen), maar vechten in real time met wie ze aanvallen en wie hen
+  aanvalt. **Het town hall** is het huis van de schout (de eerste opslag, het midden van je bereik), vanaf dag 1, en
+  iedereen past erin; het oude raadhuis (stad, de schepenen) gaat eruit. **2c** het gevecht is een status (de tijd op 1×,
+  E1; een bericht als het begint en ophoudt, met de plek); opslaan mag ook in een gevecht. **2d** het beeld: een levensbalk
+  boven wie vecht, de schade als getal, de uitval, en een pijl of bout als korte streep (in code). **2e** het gevecht in
+  beurten gaat er nu al uit (het raster, de actiepunten, einde beurt, de deur), niet pas in stap 5; de held die valt,
+  blijft tot stap 5 het eind. De speeltest vecht niet meer zelf. De getallen in de werkbank ("Fighting").
 - **3, formaties en de post:** *Line* en *Ring* (C1), op wapen gesorteerd, kijkend waar ze heen liepen (D1).
 - **4, de diensten** (5a), en vijanden kunnen op elk uur komen.
 - **5, de held en het opruimen:** de schout heet voortaan anders (vraag A), en valt hij, dan staat er een veteraan op; het
