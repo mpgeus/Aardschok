@@ -52,8 +52,8 @@ besloten. **Stap 0 is af** (15 okt, in `main`; `code.md` bij `js/tik.js`): de we
 van de beelden, haar toeval komt uit het zaad (nooit `Math.random`), en bouwen, wegen, velden, afbreken en de soldaten
 zijn opdrachten die op een tik ingaan. **Stap 1 is af** (15 okt, in `main`;
 `spel.md`, "Zo werkt kijken, kiezen en sturen nu"): de camera los, links kiezen, rechts sturen (de post), groepen onder
-een cijfer, en een bericht brengt je erheen. **Stap 2 is af** (15 okt, op de branch `ccr-c0f9d2a2-6j0scf`, nog niet in
-`main`; `spel.md`, "Zo werkt het gevecht nu"): het gevecht in real time, in de tik; aanvallen en dan terug naar de post;
+een cijfer, en een bericht brengt je erheen. **Stap 2 is af** (15 okt, in `main`; `spel.md`, "Zo werkt het gevecht
+nu"): het gevecht in real time, in de tik; aanvallen en dan terug naar de post;
 niemand vanzelf; een rover slaat ook een dorpeling, die vlucht naar het **town hall** (het huis van de schout); het
 gevecht is een status met de tijd op 1×; het gevecht in beurten is eruit. **Het volgende is stap 3, formaties en de
 post** (bij I). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
@@ -555,8 +555,8 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   is een opdracht (js/tik.js). **1d** Ctrl+1 tot 9 (en Shift+1 tot 9) maakt een groep, 1 tot 9 kiest hem, twee keer en de
   camera gaat erheen; een groep is alleen scherm. **Erbij:** een bericht met een plek (rovers, een brand) brengt de camera
   erheen met een klik of Spatie, en de plek knippert op de minikaart.
-- **2, het gevecht in real time:** **af** (15 okt, op de branch `ccr-c0f9d2a2-6j0scf`; `spel.md`, "Zo werkt het gevecht
-  nu"; `code.md` bij `js/gevecht.js`). Elk kiest de dichtste
+- **2, het gevecht in real time:** **af** (15 okt, in `main`; `spel.md`, "Zo werkt het gevecht nu"; `code.md` bij
+  `js/gevecht.js`). Elk kiest de dichtste
   vijand die hij ziet, loopt tot hij raakt en slaat, met de regels van 159; de actiepunten van een slag worden de tijd
   tussen twee slagen; rovers en wolven vallen aan wie ze tegenkomen.
   **Het plan** (Claude, 15 okt; **besloten**, Marcel: "Aanvallen, dan terug", "Niemand vanzelf", "Iedereen, wie kan
