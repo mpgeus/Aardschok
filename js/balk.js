@@ -4,11 +4,11 @@
 // 146, c), met het rekenboek en de dingen erop; git bewaart haar.
 //
 // Onderaan kaartjes in de hoeken, even breed (--kaart in stijl.css): linksonder de voorraad (elke waar waarvan er iets
-// is, met een pictogram en het getal), in het midden Build (B), en de brief, het rapport en de bode zolang ze er zijn,
+// is, met een pictogram en het getal), in het midden Build (B), en de brief en de bode zolang ze er zijn,
 // rechtsonder de minikaart (js/minikaart.js; vraag 165, "zoals bij age of Empires"). Bovenaan een dunne balk (vraag 166;
 // Marcel: "Bovenaan een dunne ui balk met goud, aantal inwoners, happiness jaar en tijd", en "zo leeg mogelijk zonder
 // info te missen"): het dorp (de kas, de inwoners, de tevredenheid), de datum en het uur, de snelheid, de twee bazen
-// (js/bazen.js) en Menu. De velden (V), het wetboek (W), de raadsman (R), sluipen (S) en slapen (Z) hebben alleen nog hun
+// (js/bazen.js) en Menu. De velden (V), het wetboek (W), sluipen (S) en slapen (Z) hebben alleen nog hun
 // toets. Wat een ding of getal is, wat het nu zegt en zijn toets, staat op het briefje bij de muis (#wenk), niet op het
 // ding; zo ook het seizoen en het weer, bij de datum.
 //
@@ -430,7 +430,6 @@
       toets: 'B',
     },
     brief: { naam: T.t('A letter from the lord'), uitleg: () => T.t('It is waiting for your answer.') },
-    rapport: { naam: T.t('The morning report'), uitleg: () => T.t('From your advisor, this morning. You have not read it yet.') },
     bode: {
       naam: T.t('A messenger'),
       uitleg: (S) => {
@@ -462,7 +461,7 @@
 
   // Wat in index.html geen tekst heeft (vraag 147): de knoppen in het midden, de bazen en de lat van de snelheden. De
   // tekst staat hier, zodat een vertaling erbij kan.
-  const KNOPPEN = { bouwen: T.t('Build'), brief: T.t('Letter'), rapport: T.t('Report'), bode: T.t('Messenger') };
+  const KNOPPEN = { bouwen: T.t('Build'), brief: T.t('Letter'), bode: T.t('Messenger') };
   for (const b of document.querySelectorAll('#middenonder [data-ding]')) b.textContent = KNOPPEN[b.dataset.ding];
   $('bazen').querySelector('[data-ding="gunst"] .naam').textContent = T.t('Lord'); // geen tekst
   $('bazen').querySelector('[data-ding="vertrouwen"] .naam').textContent = T.t('Village'); // geen tekst

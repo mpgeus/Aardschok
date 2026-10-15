@@ -267,7 +267,7 @@ body.bouwmenu-open #statussen { visibility: hidden; }
 
 /* De balk onderaan (js/balk.js; werklijst vraag 164, Marcel, 14 okt: "De oude ui balk aan de onderkant moet leeg. En we
    hebben een minimale nodig"; dat was een minimap, vraag 165): kaartjes in de hoeken, even breed (--kaart). Linksonder de
-   voorraad, in het midden Build en wat op je wacht (de brief, het rapport, de bode), rechtsonder de minikaart.
+   voorraad, in het midden Build en wat op je wacht (de brief, de bode), rechtsonder de minikaart.
    Alle maten zijn pixels van de kunst (--ui-zoom); hoe hoog de hoeken zijn, zet js/balk.js in --onder-links en
    --onder-rechts, voor wat erboven ligt. */
 .hoek-onder { position: fixed; bottom: 0; z-index: 3; zoom: var(--ui-zoom, 1); display: flex; align-items: flex-end; gap: 14px; pointer-events: none; }
@@ -287,7 +287,7 @@ body.bouwmenu-open #statussen { visibility: hidden; }
 /* Rood: de tevredenheid onder de vertrekdrempel, en hooi en hout die de winter niet halen (js/balk.js). */
 #voorraad .post.laag .aantal { color: var(--papier-rood); }
 
-/* De knoppen in het midden: een lipje papier, zoals Menu bovenaan. Wat op je wacht (de brief, het rapport), wipt. */
+/* De knoppen in het midden: een lipje papier, zoals Menu bovenaan. Wat op je wacht (de brief), wipt. */
 .hoek-onder .knop { padding: 8px 18px 10px; font: 27px/1.1 var(--kop); background: none; cursor: pointer; transition: transform 0.12s; }
 .hoek-onder .knop:hover,
 .hoek-onder .knop:focus-visible { transform: translateY(-3px); }
@@ -378,8 +378,6 @@ body.foto #kader { display: none; }
   grid-template-columns: 1fr;
 }
 #dialoog-naam { font: 17px var(--kop); color: var(--goud); }
-/* Wie een boer is en wat hij kan (js/boeren.js), onder zijn naam. */
-#dialoog-wie { font: italic 12.5px var(--boek); color: var(--gedempt); margin-top: 1px; }
 #dialoog-tekst { margin: 6px 0 12px; font-size: 15px; line-height: 1.55; }
 #dialoog-keuzes { display: flex; flex-direction: column; gap: 5px; }
 #dialoog-keuzes button {
@@ -394,10 +392,6 @@ body.foto #kader { display: none; }
 }
 #dialoog-keuzes button:hover { background: color-mix(in srgb, var(--inkt) 9%, transparent); border-color: color-mix(in srgb, var(--goud) 50%, transparent); }
 #dialoog-keuzes kbd { margin-right: 8px; }
-/* Wat een antwoord kost of oplevert (een voorval, js/voorvallen.js), onder het antwoord. */
-#dialoog-keuzes .dialoog-prijs { display: block; margin: 2px 0 0 26px; font-size: 12.5px; color: var(--gedempt); }
-#dialoog-keuzes button:disabled { opacity: 0.5; cursor: default; }
-#dialoog-keuzes button:disabled:hover { background: color-mix(in srgb, var(--inkt) 4%, transparent); border-color: var(--rand); }
 #dialoog-portret {
   display: none;
   grid-row: 1 / span 3;
@@ -412,7 +406,6 @@ body.foto #kader { display: none; }
 #dialoog.met-portret { grid-template-columns: 72px 1fr; column-gap: 14px; align-items: start; }
 #dialoog.met-portret #dialoog-portret { display: block; }
 #dialoog.met-portret #dialoog-naam,
-#dialoog.met-portret #dialoog-wie,
 #dialoog.met-portret #dialoog-tekst,
 #dialoog.met-portret #dialoog-keuzes { grid-column: 2; }
 
@@ -594,8 +587,7 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
 #brief .brief-lijst span { color: var(--gedempt); font-size: 12.5px; }
 #brief .brief-samen { font-style: normal; font-size: 13px; }
 #brief .brief-groet { text-align: right; margin-bottom: 0; }
-/* Het rapport van de raadsman (js/ochtendrapport.js): in zijn hand, niet in die van de heer. */
-#brief[data-soort="rapport"] .brief-tekst,
+/* Het jaar in het kort (js/einde.js): niet in de hand van de heer. */
 #brief[data-soort="jaarverslag"] .brief-tekst { font-style: normal; }
 
 :is(#heer, #slachten) .heer-rij {
@@ -847,7 +839,7 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
 #wetten .wet-doet .goed { color: var(--groen); }
 #wetten .wet-doet .kost { color: var(--rood); }
 
-/* Het debugvenster (js/debugvenster.js, onder D; werklijst 169): vier knoppen onder elkaar, zoals die van de raadsman. */
+/* Het debugvenster (js/debugvenster.js, onder D; werklijst 169): vier knoppen onder elkaar. */
 #debug {
   position: fixed;
   left: 50%;
@@ -869,53 +861,6 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
   cursor: pointer;
 }
 #debug .db-knop:hover { background: color-mix(in srgb, var(--goud) 16%, transparent); border-color: color-mix(in srgb, var(--goud) 60%, transparent); }
-
-/* Je raadsman (js/raadsmanvenster.js; js/raadsman.js): de knop naast de wetten, en een venster zoals dat van de
-   wetten. Elke boer waaruit je kiest, is een kaart; wat hij kan, staat in groen (+) en rood (−), en wie je koos,
-   krijgt de gouden streep. */
-#raadsman {
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: min(620px, calc(100vw - 32px));
-  max-height: calc(100vh - 120px);
-  overflow-y: auto;
-  padding: 12px 16px 14px;
-  z-index: 5;
-}
-#raadsman .venster-staat b { color: var(--inkt); font-weight: normal; }
-#raadsman .rs-kaart {
-  padding: 8px 12px;
-  margin-bottom: 6px;
-  background: color-mix(in srgb, var(--inkt) 3%, transparent);
-  border: 1px solid var(--rand);
-  border-left: 3px solid transparent;
-  border-radius: 6px;
-}
-#raadsman .rs-kaart.gekozen { border-left-color: var(--goud); }
-#raadsman .rs-kop { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-#raadsman .rs-naam { font: 16px var(--kop); color: var(--inkt); }
-#raadsman .rs-knop {
-  padding: 4px 10px;
-  font: 12.5px var(--boek);
-  color: var(--inkt);
-  background: color-mix(in srgb, var(--inkt) 5%, transparent);
-  border: 1px solid var(--rand);
-  border-radius: 6px;
-  cursor: pointer;
-}
-#raadsman button.rs-knop:hover { background: color-mix(in srgb, var(--goud) 16%, transparent); border-color: color-mix(in srgb, var(--goud) 60%, transparent); }
-#raadsman .rs-knop.gekozen { color: var(--op-goud); background: var(--goud); border-color: var(--goud); cursor: default; }
-#raadsman .rs-neiging { margin: 2px 0; font-size: 13px; color: var(--inkt); }
-#raadsman .rs-kan { margin: 2px 0 0; padding: 0; list-style: none; font-size: 12.5px; line-height: 1.45; }
-#raadsman .rs-kan span { color: var(--gedempt); }
-#raadsman .rs-kan .goed { color: var(--groen); }
-#raadsman .rs-kan .kost { color: var(--rood); }
-#raadsman .rs-besluiten { margin-top: 10px; font-size: 12.5px; }
-#raadsman .rs-besluiten-kop { font: 12px var(--kop); color: var(--gedempt); letter-spacing: 0.04em; text-transform: uppercase; }
-#raadsman .rs-besluiten ul { margin: 4px 0 0; padding-left: 18px; line-height: 1.45; }
-#raadsman .rs-besluiten span { color: var(--gedempt); }
 
 /* Het titelscherm en het menu (js/menu.js, js/opslaan.js; vraag 48). Het titelscherm ligt over het gehucht,
    dat erachter blijft staan: donker boven en onder, en in het midden zie je het dorp. Het menu is een venster

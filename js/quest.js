@@ -132,7 +132,7 @@
   // ── Wat een gesprek ermee kan (de haken uit gesprek.js) ──
 
   // Een voorwaarde. quest zonder fase betekent "die quest loopt"; fase mag een lijstje zijn. De quests zijn van
-  // jou (S; zonder spel, als de raadsman beslist, loopt er geen), het goud van het dorp (D).
+  // jou (S; zonder spel loopt er geen), het goud van het dorp (D).
   T.questVoorwaarde = function (S, D, als) {
     if (!S && (als.quest || als.questAf)) return false;
     if (als.quest) {

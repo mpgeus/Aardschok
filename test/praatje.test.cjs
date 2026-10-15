@@ -112,7 +112,7 @@ test('wie vrij is: de ochtend, de schaft en de avond; overdag alleen wie geen we
   assert.ok(!T.kanPraten(S, D, werker, 'nacht'), "'s nachts niet");
   if (kleuter) assert.ok(!T.kanPraten(S, D, kleuter.wezen, 'ochtend'), 'een kleuter niet');
   assert.ok(!T.kanPraten(S, D, S.schout, 'avond'), 'de schout niet: dat ben jij');
-  for (const bezig of ['maait', 'zoektSchout', 'opgeroepen', 'binnen']) {
+  for (const bezig of ['maait', 'opgeroepen', 'binnen']) {
     werker[bezig] = true;
     assert.ok(!T.kanPraten(S, D, werker, 'avond'), `wie ${bezig}, niet`);
     werker[bezig] = false;
@@ -282,16 +282,16 @@ test('wie niet meer vrij is, gaat; staat er nog maar één, dan is het praatje o
   zet(c, p.x - 1, p.y + 1);
   assert.ok(metWorp(0, () => T.beginPraatje(D, b, a)));
   c.praatje = a.praatje;
-  c.zoektSchout = true; // een voorval: hij komt de schout zoeken
+  c.opgeroepen = true; // hij gaat met de militie mee (js/rovers.js)
   T.werkPraatjesBij(S, D);
-  assert.ok(!c.praatje, 'wie de schout zoekt, gaat');
+  assert.ok(!c.praatje, 'wie wordt opgeroepen, gaat');
   assert.ok(a.praatje && b.praatje, 'de andere twee praten door');
-  b.zoektSchout = true;
+  b.opgeroepen = true;
   T.werkPraatjesBij(S, D);
   assert.ok(!a.praatje && !b.praatje, 'alleen praat je niet');
   // 's Nachts gaat iedereen naar huis.
-  b.zoektSchout = false;
-  c.zoektSchout = false;
+  b.opgeroepen = false;
+  c.opgeroepen = false;
   assert.ok(metWorp(0, () => T.beginPraatje(D, b, a)));
   S.kalender.dag = Math.floor(S.kalender.dag) + 23.5 / 24;
   T.werkPraatjesBij(S, D);

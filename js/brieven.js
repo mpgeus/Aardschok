@@ -4,10 +4,9 @@
 // brief bij elke trede: als het gehucht een dorp is, en als het dorp marktrecht krijgt (js/treden.js). Elke brief is
 // een soort in BRIEVEN hieronder: wat erin staat, en welke knoppen eronder staan. T.ui.toonBrief(D, soort) zet hem
 // neer (D: het dorp waar hij heen gaat; alleen jouw dorp komt in beeld), en zolang je leest, staat de tijd stil. In
-// hetzelfde venster, in een andere hand: het rapport van je raadsman, 's ochtends (js/ochtendrapport.js; werklijst
-// vraag 75, 3a).
-// Een brief die op je wacht (de schatting tot je betaald hebt, de heervaart tot je kiest, het rapport tot je het las),
-// opent de knop Brief bovenin weer; voor het rapport heet hij Rapport. Wat een knop doet, vraagt de brief aan de regels
+// hetzelfde venster, in een andere hand: de brief aan de marskramer (js/bode.js) en het jaar in het kort (js/einde.js).
+// Een brief die op je wacht (de schatting tot je betaald hebt, de heervaart tot je kiest), opent de knop Brief weer. Wat
+// een knop doet, vraagt de brief aan de regels
 // (T.heervaartKeuzes), zodat de knop en wat hij doet uit hetzelfde antwoord komen.
 (function (T) {
   'use strict';
@@ -46,7 +45,7 @@
 
   // Het venster: een kop met de datum, de brief in de hand van de heer (aanhef, tekst, groet), en daaronder wat
   // het spel er zelf bij zegt (staat), de knoppen en een voetregel. Een knop die nu niet kan, staat er wel, maar
-  // grijs; waarom zegt de staat. Wie geen brief van de heer is (het rapport), geeft zijn eigen titel en groet.
+  // grijs; waarom zegt de staat. Wie geen brief van de heer is (het jaar in het kort), geeft zijn eigen titel en groet.
   function venster({ titel = T.t('A letter from the lord'), wanneer, aan, tekst, groet, staat = '', knoppen = [], voet = '' }) {
     const naam = T.naamVanDeHeer();
     const knop = (k) => `<button${k.hoofd ? ' class="heer-geef-knop"' : ''} data-actie="${k.actie}"${k.kan === false ? ' disabled' : ''}>${k.tekst}</button>`;
@@ -191,28 +190,6 @@
       knoppen: [{ actie: 'sluit', tekst: T.t('To work'), hoofd: true }],
     }),
 
-    // Het rapport van je raadsman, 's ochtends (js/ochtendrapport.js; werklijst vraag 75, 3a): wat er gebeurde, hoe het
-    // gaat, de winter, wat er speelt en wat er komt. In zijn hand, niet in die van de heer. Wat het spel erbij zegt (de
-    // staat), is hoe goed hij rekent: daar hangt af hoe ver je zijn getallen kunt vertrouwen.
-    rapport: (S) => {
-      const R = S.dorp.ochtendrapport;
-      if (!R) return null;
-      const p = T.raadsmanVan(S.dorp);
-      const rekenen = p && T.vaardighedenVan(S.dorp, p).rekenen;
-      const staat = !p ? '' : rekenen === 'goed' ? T.t('He can reckon: his figures are right.')
-        : rekenen === 'slecht' ? T.t('He cannot reckon: his figures are sometimes well off. If you want to be sure, go and look for yourself.')
-        : T.t('He reckons like anyone else: whatever he says, he rounds off.');
-      return {
-        titel: T.t('The report from {naam}', { naam: veilig(R.door) }),
-        wanneer: T.datumVanDag(R.dag).tekst,
-        aan: T.t('Master reeve,'),
-        tekst: R.regels.map((r) => `<p>${veilig(r)}</p>`).join(''),
-        groet: `${T.t('Your advisor,')}<br>${veilig(R.door)}`,
-        staat: staat ? `<p class="venster-staat">${staat}</p>` : '',
-        knoppen: [{ actie: 'sluit', tekst: T.t('To work'), hoofd: true }],
-        voet: `<p class="venster-voet">${T.t('While you read, time stands still. <kbd>Esc</kbd> closes it.')}</p>`,
-      };
-    },
     // De brief aan de marskramer (js/bode.js; werklijst vraag 143; Marcel, 9 okt: "soort van brief sturen met een bode"):
     // jouw papier, bij je huis, in een moeilijke tijd. Je schrijft wat hij moet brengen, en een dorpeling brengt hem; tot
     // drie weerbare mannen kunnen mee, tegen de rovers onderweg (het gevaar staat eronder, T.bodeGevaarTekst).
@@ -253,18 +230,17 @@
         voet: `<p class="venster-voet">${T.t('While you write, time stands still. <kbd>Esc</kbd> closes it.')}</p>`,
       };
     },
-    // Het jaar in het kort (js/einde.js; werklijst vraag 101, e): op 1 lentemaand, in de hand van je raadsman, zoals zijn
-    // rapport; zonder raadsman staat het gewoon in het jaarboek.
+    // Het jaar in het kort (js/einde.js; werklijst vraag 101, e): op 1 lentemaand, uit het jaarboek (tot 15 okt in de
+    // hand van je raadsman, die in ronde 3 van het snoeien wegging).
     jaarverslag: (S) => {
       const J = S.dorp.jaarverslag;
       if (!J) return null;
-      const p = T.raadsmanVan(S.dorp);
       return {
         titel: T.t('The year in brief'),
         wanneer: T.datumVanDag(J.dag).tekst,
         aan: T.t('Master reeve,'),
         tekst: J.regels.map((r) => `<p>${veilig(r)}</p>`).join(''),
-        groet: p ? `${T.t('Your advisor,')}<br>${veilig(T.naamVanBewoner(p))}` : T.t('Entered in the yearbook'),
+        groet: T.t('Entered in the yearbook'),
         knoppen: [{ actie: 'sluit', tekst: T.t('A new year'), hoofd: true }],
         voet: `<p class="venster-voet">${T.t('While you read, time stands still. <kbd>Esc</kbd> closes it.')}</p>`,
       };
@@ -284,15 +260,11 @@
   const briefVanDeHeer = (S) => (S.dorp.heervaart && S.dorp.heervaart.vraag ? 'heervaart'
     : T.grilNu(S.dorp) ? 'gril'
     : S.dorp.heer && S.dorp.heer.brief ? 'schatting' : null);
-  // Wat er op je wacht: een rapport dat je nog niet las eerst (het geldt maar voor vandaag), dan de brief van de heer.
-  const wachtend = (S) => (T.rapportKlaar(S.dorp) ? 'rapport' : briefVanDeHeer(S));
-
-  // De knoppen onderaan (js/balk.js; vraag 164) staan er alleen zolang ze er zijn: de brief van de heer en het rapport
-  // zolang ze op je wachten (en dan wippen ze, stijl.css), en de bode in een moeilijke tijd, zolang er niemand onderweg
+  // De knoppen onderaan (js/balk.js; vraag 164) staan er alleen zolang ze er zijn: de brief van de heer zolang hij op
+  // je wacht (en dan wippen ze, stijl.css), en de bode in een moeilijke tijd, zolang er niemand onderweg
   // is (js/bode.js).
   T.ui.werkBriefKnopBij = function (S) {
     $('brief-knop').classList.toggle('verborgen', !briefVanDeHeer(S));
-    $('rapport-knop').classList.toggle('verborgen', !T.rapportKlaar(S.dorp));
     $('bode-knop').classList.toggle('verborgen', !(S.dorp.kalender && T.kanBodeSturen(S.dorp).zichtbaar));
   };
 
@@ -305,14 +277,13 @@
       T.briefVoorLater(S, soort);
       return;
     }
-    soort = soort || wachtend(S);
+    soort = soort || briefVanDeHeer(S);
     const brief = soort && BRIEVEN[soort] && BRIEVEN[soort](S);
     if (!brief) return;
     open = soort;
     const box = $('brief');
     box.innerHTML = venster(brief);
     box.dataset.soort = soort; // de hand (stijl.css), en wat de speeltest leest
-    if (soort === 'rapport') T.leesRapport(S.dorp);
     T.houdTijdStil(S, 'brief');
     box.classList.remove('verborgen');
     T.ui.werkBriefKnopBij(S);
@@ -386,12 +357,5 @@
     if (!T.S) return;
     if (T.ui.briefOpen()) T.ui.sluitBrief(T.S);
     else T.ui.toonBrief(T.S.dorp, briefVanDeHeer(T.S));
-  });
-
-  $('rapport-knop').addEventListener('click', (ev) => {
-    ev.currentTarget.blur();
-    if (!T.S) return;
-    if (open === 'rapport') T.ui.sluitBrief(T.S);
-    else T.ui.toonBrief(T.S.dorp, 'rapport');
   });
 })(globalThis.Spel = globalThis.Spel || {});

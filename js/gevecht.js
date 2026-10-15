@@ -26,7 +26,7 @@
 // je bereik), en zit daar binnen tot er geen rover meer op de kaart is (p.schuilt, en T.blijftThuis in js/bewoners.js: wie
 // schuilt, werkt niet). Is er nog geen town hall, dan naar zijn eigen huis.
 //
-// Het gevecht is een status (D.gevecht, T.OORZAKEN.gevecht in js/voorvallen.js; de richtlijn van 1 okt): het begint als
+// Het gevecht is een status (D.gevecht, T.OORZAKEN.gevecht in js/statussen.js; de richtlijn van 1 okt): het begint als
 // iemand een doel kiest, met een bericht met de plek, en houdt op als er rustNa seconden niemand meer vecht. Zolang het
 // duurt, loopt de tijd hooguit op 1× (T.snelheidNu, js/tijd.js; Marcel, 15 okt: "een gevecht ergens zet iedereen op 1×").
 // Wie valt, is dood (Marcel, 29 sep: "mensen kunnen sterven"): een rover is uit zijn bende, een soldaat of een dorpeling is

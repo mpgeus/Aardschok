@@ -33,31 +33,6 @@
 
   let boek = null; // wat er gebeurde, voor speeltest.cjs
   const bezig = {}; // welk venster de speler zelf openhoudt (de heer, een gesprek): dat sluit beantwoord() niet
-  const geboekt = new WeakSet(); // de voorvallen die al in het boek staan
-  // Staat het gesprek van een voorval open (js/voorvallen.js): praat de schout met wie hem zocht?
-  const voorvalOpen = (s) => s.modus === 'dialoog' && !!(s.dorp.voorvallen && s.dorp.voorvallen.lopend) && s.spreektMet === s.dorp.voorvallen.lopend.wie.wezen;
-  // Wat een antwoord kost, zoals het venster het onder het antwoord zet (T.prijsVanKeuze in js/voorvallen.js).
-  const prijsVan = (b) => (b.querySelector('.dialoog-prijs') || {}).textContent || '';
-  // Haalt het dorp de winter nog als dit eraf gaat (T.etenVoorDeWinter, T.houtVoorDeWinter in js/behoeften.js)? Even
-  // uitrekenen met minder in de schuur, en de schuur weer terug.
-  function haaltHetNog(s, wat, n) {
-    const oud = s.dorp.voorraad[wat] || 0;
-    s.dorp.voorraad[wat] = oud - n;
-    const dag = Math.floor(s.kalender.dag);
-    const haalt = (wat === 'hout' ? T.houtVoorDeWinter(s.dorp, dag) : T.etenVoorDeWinter(s.dorp, dag)).haalt;
-    s.dorp.voorraad[wat] = oud;
-    return haalt;
-  }
-  // Een verstandig antwoord: niemand het bos in (wie het bos in gaat, komt terug als rover, en de kolonist loopt de
-  // rovers niet achterna), en geen graan of hout dat de winter nodig heeft.
-  function verstandig(s, prijs) {
-    if (/must go into the forest/.test(prijs)) return false;
-    for (const wat of ['graan', 'hout']) {
-      const m = new RegExp(`−(\\d+) ${T.waarNaam(wat)}`).exec(prijs);
-      if (m && !haaltHetNog(s, wat, Number(m[1]))) return false;
-    }
-    return true;
-  }
 
   const S = () => T.S;
   const D = () => T.S.dorp; // je eigen dorp (js/dorp.js)
@@ -101,29 +76,6 @@
     return false;
   }
 
-  // Wat vanzelf opengaat: de brief van de heer (1 wijnmaand) en het slachten (1 slachtmaand). De brief
-  // lees je en sluit je; bij het slachten neem je het voorstel van het spel (zo weinig als kan, zodat
-  // het hooi de winter haalt). Een venster dat de speler niet zelf openhoudt, gaat dicht.
-  // Welke soort regel er in een rapport staat (js/ochtendrapport.js), voor de telling hierboven.
-  const RAPPORT_SOORTEN = [
-    ['stil', /^Nothing special/],
-    ['nieuw', /^New in the village/],
-    ['gestorven', /died\.$|fell for the lord/],
-    ['weg', / left: /],
-    ['boeren', /the farmers/i],
-    ['besluit', /^On .* decided/],
-    ['nietGesproken', /came to see you about/],
-    ['sindsGisteren', /^Since yesterday/],
-    ['nogSteeds', /^Still |, for \d+ days? now/],
-    ['voorbij', /is over\.$| any more\.$|no longer|room again/],
-    ['winter', /winter/],
-    ['honger', /^There is hunger/],
-    ['kou', /^It is (cold|freezing)/],
-    ['vol', /^The houses are full/],
-    ['onvrede', /^The village is discontented/],
-    ['komt', /comes today|robber|^The lord wants/i],
-  ];
-
   // Een gril van de heer (js/grillen.js; werklijst vraag 106, stap 2): de kolonist weegt de heer tegen het dorp, en redt wie
   // het dichtst bij de grens zit (js/bazen.js), zoals de slimme en de sluwe speler deden. Geeft de keuze (een getal), of null
   // als er niets kan.
@@ -145,10 +97,12 @@
     return beste((i) => gunst(i) + vertrouwen(i) - kost(i) / 5);
   }
 
+  // Wat vanzelf opengaat: de brief van de heer (1 wijnmaand) en het slachten (1 slachtmaand). De brief
+  // lees je en sluit je; bij het slachten neem je het voorstel van het spel (zo weinig als kan, zodat
+  // het hooi de winter haalt). Een venster dat de speler niet zelf openhoudt, gaat dicht.
   function beantwoord() {
     const s = S();
-    // Wacht er een gril, en is er geen brief open (het rapport kwam ertussen), dan opent hij hem met de knop Brief, zoals
-    // een mens.
+    // Wacht er een gril, en is er geen brief open, dan opent hij hem met de knop Brief, zoals een mens.
     if (T.grilNu(s.dorp) && !T.ui.briefOpen() && s.modus === 'verkennen') T.ui.toonBrief(s.dorp, 'gril');
     // Een gril van de heer: antwoorden, en opschrijven wat hij koos (js/grillen.js; vraag 106).
     if (T.ui.briefOpen() && document.querySelector('#brief').dataset.soort === 'gril') {
@@ -177,22 +131,6 @@
       if (v) (boek.heervaart = boek.heervaart || []).push({ dag: heel(s.kalender.dag), datum: datum(), mannen: v.wie.length, goud: v.goud });
       if (!klik('#brief [data-actie="stuur"]')) T.ui.sluitBrief(s);
     }
-    // Het rapport van de raadsman ('s ochtends, js/ochtendrapport.js): lezen en dicht, en geen brief van de heer. De
-    // speler telt hoe vaak hij het kreeg, hoe vaak het "Niets bijzonders" was en welke soort regels erin stonden, en
-    // schrijft de eerste vijf op die iets zeiden, zodat de uitslag laat zien wat erin staat.
-    if (T.ui.briefOpen() && document.querySelector('#brief').dataset.soort === 'rapport') {
-      const R = s.dorp.ochtendrapport;
-      const r = boek.rapporten || (boek.rapporten = { gelezen: 0, stil: 0, soorten: {}, voorbeelden: [] });
-      r.gelezen++;
-      if (R && /^Niets bijzonders/.test(R.regels[0])) r.stil++;
-      else if (R && r.voorbeelden.length < 5) r.voorbeelden.push({ datum: datum(), door: R.door, regels: R.regels.slice() });
-      for (const regel of (R && R.regels) || []) {
-        const soort = RAPPORT_SOORTEN.find(([, re]) => re.test(regel));
-        const naam = soort ? soort[0] : 'anders';
-        r.soorten[naam] = (r.soorten[naam] || 0) + 1;
-      }
-      if (!klik('#brief [data-actie="sluit"]')) T.ui.sluitBrief(s);
-    }
     // Het jaar in het kort (1 lentemaand, js/einde.js): de speler schrijft het op, en leest door. Het is geen brief van de
     // heer.
     if (T.ui.briefOpen() && document.querySelector('#brief').dataset.soort === 'jaarverslag') {
@@ -207,22 +145,6 @@
       if (!klik('#slachten [data-actie="slacht"]')) klik('#slachten [data-actie="sluit"]');
       if (T.ui.vensterOpen() === 'slachten') T.ui.sluitSlachten(s);
     }
-    // Een voorval (js/voorvallen.js): wie de schout zoekt, spreekt hem aan. De speler leest de prijs onder de
-    // antwoorden en kiest het eerste verstandige (hieronder), met de knop zoals een mens, en anders het eerste dat kan;
-    // heeft het gesprek nog een knoop, dan daar weer.
-    for (let i = 0; i < 4 && voorvalOpen(s); i++) {
-      const L = s.dorp.voorvallen.lopend;
-      const knoppen = [...document.querySelectorAll('#dialoog-keuzes button')].filter((b) => !b.disabled);
-      const knop = knoppen.find((b) => verstandig(s, prijsVan(b))) || knoppen[0];
-      if (!knop) break;
-      const antwoord = knop.textContent.replace(/^\d/, '');
-      if (!geboekt.has(L)) {
-        geboekt.add(L);
-        boek.voorvallen.push({ dag: heel(s.kalender.dag), datum: datum(), id: L.id, wie: T.naamVanBewoner(L.wie), antwoord });
-      }
-      knop.click();
-    }
-    if (s.modus === 'raadsman' && !bezig.raadsman) T.ui.sluitRaadsman(s);
     if (s.modus === 'handel' && !bezig.handel) T.ui.sluitHandel(s.dorp);
     if (s.modus === 'heer' && !bezig.heer) T.ui.sluitHeer(s);
     if (s.modus === 'dialoog' && !bezig.praten) T.sluitDialoog(s);
@@ -361,7 +283,7 @@
   // Wat de kolonist neerzette (gezet), en per dag wat er vastloopt: een bouwplaats waar het werk stilstaat (de langste
   // reeks dagen), wie na een dag nog naar zijn huis onderweg is (p.komt), een werkplaats die af is maar niet werkt zonder
   // dat het spel zegt waarom (zoals een houthakker wiens man de hele dag onderweg is), wie er op 1 wintermaand nog in een
-  // tent woont, en de dagen met honger en kou (T.OORZAKEN, js/voorvallen.js). Het graan en het hout op een paar dagen, en
+  // tent woont, en de dagen met honger en kou (T.OORZAKEN, js/statussen.js). Het graan en het hout op een paar dagen, en
   // per aantal soorten eten hoeveel dagen (vraag 154).
   const gezet = [];
   const onderwegSinds = new Map();
@@ -402,7 +324,7 @@
     }
     for (const g of s.dorp.gebouwen) {
       const soort = T.GEBOUWEN[g.soort];
-      if (!g.klaar || !soort || !soort.maakt || !(soort.handen > 0) || g.werkte > 0 || g.stilWant || T.vrijeDag(s.dorp, dag)) continue;
+      if (!g.klaar || !soort || !soort.maakt || !(soort.handen > 0) || g.werkte > 0 || g.stilWant) continue;
       const w = E.werktNiet.find((x) => x.soort === g.soort && x.x === g.x && x.y === g.y);
       if (w) w.dagen++;
       else E.werktNiet.push({ soort: g.soort, x: g.x, y: g.y, dagen: 1 });
@@ -533,7 +455,7 @@
       // huizen alles hebben, en hoeveel woningen er van elke soort staan (wat er doorgroeide).
       standen: s.dorp.behoeften.standen ? Object.fromEntries(Object.entries(s.dorp.behoeften.standen).map(([k, x]) => [k, { mensen: x.mensen, huizen: x.huizen, alles: x.alles, tevreden: heel(x.tevredenheid * 100) / 100 }])) : null,
       woningen: Object.fromEntries(['hut', 'huis', 'stenenHuis'].map((soort) => [soort, s.dorp.gebouwen.filter((g) => g.soort === soort && g.huis !== 'schout').length])),
-      // Wat de huizen missen, zoals de raad en het rapport het zeggen (T.watDeHuizenMissen, js/wensen.js; vraag 87).
+      // Wat de huizen missen, zoals de raad het zegt (T.watDeHuizenMissen, js/wensen.js; vraag 87).
       missen: T.watDeHuizenMissen(s.dorp).slice(0, 5).map((x) => x.tekst),
       houthakkers: houthakkers.map((g) => ({ klaar: !!g.klaar, handen: g.handen || 0 })),
       // De twee bazen (js/bazen.js; vraag 106): de gunst van de heer en het vertrouwen van het dorp.
@@ -605,7 +527,7 @@
     const BRONNEN = [
       ['werkOogstBij', 'oogst'], ['haalOogstBinnen', 'oogst'], ['zaaiAkkers', 'zaaien'], ['zaaiNa', 'zaaien'],
       ['eetVandaag', 'gegeten'], ['koop', 'gekocht'], ['verkoop', 'verkocht'], ['betaalHeer', 'heer'],
-      ['tikHeerDag', 'soldaten'], ['werkRoversBij', 'rovers'], ['tikRoversDag', 'rovers'], ['voorvalGevolg', 'voorvallen'],
+      ['tikHeerDag', 'soldaten'], ['werkRoversBij', 'rovers'], ['tikRoversDag', 'rovers'],
       ['tikGebouwenDag', 'werk'],
     ];
     for (const [naam, waar] of BRONNEN) {
@@ -806,7 +728,7 @@
       }
       boek = {
         speler, zaad, berichten: [], bevolking: [], daden: [], maanden: [], gebouwd: [],
-        heer: null, brief: null, luisterFouten: [], dorp: null, marktrecht: null, voorvallen: [], graan: [], geluk: [],
+        heer: null, brief: null, luisterFouten: [], dorp: null, marktrecht: null, graan: [], geluk: [],
         reeks: { nu: 0, langste: 0 }, bos: [], jaren,
       };
       const s = S();
@@ -852,9 +774,6 @@
       }
       boek.eind = eind();
       boek.winter = winter();
-      // De raadsman (js/raadsman.js): wie het was, en hoeveel voorvallen hij besliste.
-      const rm = T.raadsmanVan(s.dorp);
-      boek.raadsman = rm ? { over: T.overRaadsmanTekst(s.dorp, rm), door: (s.dorp.voorvallen && s.dorp.voorvallen.doorRaadsman) || 0, laatste: ((s.dorp.raadsman && s.dorp.raadsman.besluiten) || []).slice(-5) } : null;
       // Voor de proef met opslaan: het hele spel aan het eind, om twee jaren letter voor letter te vergelijken.
       if (opslaan || verder) boek.eindStaat = T.bewaarSpel(s, { plek: 'eind', nu: 0 });
       return JSON.parse(JSON.stringify(boek));

@@ -165,7 +165,7 @@ function meiboom() {
 // ---------------------------------------------------------------- de kerstboom
 //
 // Eén tekening: de kerstboom op het plein, van 20 wintermaand tot 6 louwmaand (bomen.cjs, `kerstboom`: een spar met
-// appels, strosterren, kaarsjes en een ster; js/feesten.js, werklijst vraag 148). Gerenderd zoals de bomen van het spel
+// appels, strosterren, kaarsjes en een ster; js/versiering.js, werklijst vraag 148). Gerenderd zoals de bomen van het spel
 // (export-bomen.cjs), en dan bijgesneden tot wat erin staat. js/sprites.js zoekt hem op met S.kerstboom() en legt zijn
 // anker op de tegel. Zo'n minuut renderen.
 function kerstboom() {

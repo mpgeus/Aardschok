@@ -56,7 +56,7 @@
 
   <!-- De balk onderaan (js/balk.js; werklijst vraag 164, Marcel, 14 okt: "De oude ui balk aan de onderkant moet leeg.
        En we hebben een minimale nodig"): kaartjes in de hoeken, zoals bovenaan en even breed. Linksonder de voorraad
-       (de waren die je hebt), in het midden bouwen, en de brief, het rapport en de bode zolang ze er zijn, rechtsonder
+       (de waren die je hebt), in het midden bouwen, en de brief en de bode zolang ze er zijn, rechtsonder
        de minikaart (vraag 165, zoals in Age of Empires). Het dorp, de datum, de snelheid en de bazen staan sinds vraag
        166 in de balk bovenaan. Wat een knop doet, zit nog aan zijn id. -->
   <div id="linksonder" class="hoek-onder">
@@ -67,7 +67,6 @@
   <div id="middenonder" class="hoek-onder">
     <button id="bouwmenu-knop" class="briefje knop" data-ding="bouwen"></button>
     <button id="brief-knop" class="briefje knop wacht verborgen" data-ding="brief"></button>
-    <button id="rapport-knop" class="briefje knop wacht verborgen" data-ding="rapport"></button>
     <button id="bode-knop" class="briefje knop verborgen" data-ding="bode"></button>
   </div>
   <div id="rechtsonder" class="hoek-onder">
@@ -102,8 +101,6 @@
   <!-- De wetten (js/wettenmenu.js, T.ui.openWetten; de regels in js/wetten.js): een menu zoals in
        Democracy 3, elke wet een kaart met wat hij doet, en een knop om hem aan te nemen of af te schaffen. -->
   <div id="wetten" class="paneel verborgen"></div>
-  <!-- Je raadsman (js/raadsmanvenster.js, T.ui.openRaadsman): uit wie je kiest, en wat hij besloot. -->
-  <div id="raadsman" class="paneel verborgen"></div>
   <!-- Het debugvenster (js/debugvenster.js, onder D; werklijst 169): +50 bouwmateriaal, een gezin, de bouwplaatsen af,
        de marskramer. Aan tot de Steam-versie (T.DEBUG_INSTELLINGEN.aan). -->
   <div id="debug" class="paneel verborgen"></div>
@@ -128,7 +125,6 @@
 
   <div id="dialoog" class="paneel verborgen">
     <div id="dialoog-naam"></div>
-    <div id="dialoog-wie" class="verborgen"></div>
     <p id="dialoog-tekst"></p>
     <div id="dialoog-keuzes"></div>
   </div>
@@ -205,19 +201,16 @@
   <script src="js/heervaart.js"></script>
   <script src="js/land.js"></script>
   <script src="js/statussen.js"></script>
-  <script src="js/voorvallen.js"></script>
   <script src="js/brand.js"></script>
   <script src="js/koorts.js"></script>
   <script src="js/leven.js"></script>
   <script src="js/kleinleven.js"></script>
-  <script src="js/feesten.js"></script>
+  <script src="js/versiering.js"></script>
   <script src="js/markt.js"></script>
   <script src="js/praatje.js"></script>
   <script src="js/einde.js"></script>
   <script src="js/bazen.js"></script>
   <script src="js/grillen.js"></script>
-  <script src="js/raadsman.js"></script>
-  <script src="js/ochtendrapport.js"></script>
   <script src="js/raad.js"></script>
   <script src="js/iso.js"></script>
   <script src="js/sprites.js"></script>
@@ -229,7 +222,6 @@
   <script src="js/gebouwbriefje.js"></script>
   <script src="js/brieven.js"></script>
   <script src="js/wettenmenu.js"></script>
-  <script src="js/raadsmanvenster.js"></script>
   <script src="js/debugvenster.js"></script>
   <script src="js/landkaart.js"></script>
   <script src="js/gesprekken.js"></script>

@@ -146,12 +146,9 @@
       vorigeTip = '';
     },
 
-    toonDialoog(naam, tekst, lijst, wie) {
+    toonDialoog(naam, tekst, lijst) {
       keuzes = lijst;
       $('dialoog-naam').textContent = naam;
-      // Onder de naam: wie hij is (bij een voorval, js/dialoog.js); anders niets.
-      $('dialoog-wie').textContent = wie || '';
-      $('dialoog-wie').classList.toggle('verborgen', !wie);
       $('dialoog-tekst').textContent = tekst;
       const box = $('dialoog-keuzes');
       box.innerHTML = '';
@@ -159,15 +156,6 @@
         const b = document.createElement('button');
         b.innerHTML = `<kbd>${i + 1}</kbd>`;
         b.appendChild(document.createTextNode(k.tekst));
-        // Wat het kost of oplevert (een voorval, js/voorvallen.js), onder het antwoord; kan het niet, dan staat de
-        // knop uit, met erbij waarom.
-        if (k.prijs) {
-          const p = document.createElement('span');
-          p.className = 'dialoog-prijs';
-          p.textContent = k.kan === false && k.waarom ? `${k.prijs} · ${k.waarom}` : k.prijs;
-          b.appendChild(p);
-        }
-        b.disabled = k.kan === false;
         b.addEventListener('click', () => k.kies());
         box.appendChild(b);
       });
@@ -182,7 +170,7 @@
 
     kiesKeuze(i) {
       const k = keuzes[i];
-      if (k && k.kan !== false) k.kies();
+      if (k) k.kies();
     },
 
     // Een scherm over het spel, met een knop.

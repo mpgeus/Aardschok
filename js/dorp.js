@@ -2,8 +2,7 @@
 //
 // Het spel (S, in de browser Spel.S) is: de kalender, het land, jij (de schout, S.schout), waar je bent (S.wereld),
 // wat er op het scherm is, en de dorpen (S.dorpen). Een dorp (D) heeft alles van zichzelf: zijn kaart (D.wereld), zijn
-// voorraad, gebouwen en mensen, zijn wetten, hoe de heer ertegenover staat, zijn rovers, voorvallen en
-// raadsman, zijn trede en zijn vee, en zijn eigen schout (D.schout; in jouw dorp ben jij dat, in een buurdorp later
+// voorraad, gebouwen en mensen, zijn wetten, hoe de heer ertegenover staat, zijn rovers, zijn trede en zijn vee, en zijn eigen schout (D.schout; in jouw dorp ben jij dat, in een buurdorp later
 // een schout in code). De kalender is voor alle dorpen dezelfde: D.kalender is S.kalender.
 //
 // Een regel over een dorp krijgt het dorp mee (D). Heeft hij ook het spel nodig (of je vecht, praat of slaapt, de
@@ -89,8 +88,7 @@
   };
 
   // Is de schout van dit dorp weg: op reis over het land (js/land.js haalt hem dan van de kaart), in een andere
-  // provincie, of in een ander gebied (js/gebied.js)? Dan beslist de raadsman (js/voorvallen.js), en roept niemand de
-  // militie bij hem (js/rovers.js). Een dorp zonder schout heeft er ook geen die er is.
+  // provincie, of in een ander gebied (js/gebied.js)? Dan roept niemand de militie bij hem (js/rovers.js). Een dorp zonder schout heeft er ook geen die er is.
   T.schoutIsWeg = (D) => !D.schout || !D.wereld.wezens.includes(D.schout);
 
   // Wat een dorp tegen het scherm zegt (vraag 71, C): een bericht komt bij jou als het jouw dorp is. Een ander dorp
@@ -109,8 +107,7 @@
     if (g.length > T.DORP_INSTELLINGEN.gezegd) g.shift();
   };
 
-  // Elk beeld, voor elk dorp (js/main.js): zijn dag, zijn bezoekers, zijn mensen, zijn rovers, zijn voorvallen en het
-  // rapport van de raadsman. Ligt het dorp niet waar je bent (S.wereld), dan lopen, maaien en dwalen zijn poppetjes hier
+  // Elk beeld, voor elk dorp (js/main.js): zijn dag, zijn bezoekers, zijn mensen, zijn rovers en zijn brand. Ligt het dorp niet waar je bent (S.wereld), dan lopen, maaien en dwalen zijn poppetjes hier
   // ook, zoals js/main.js het doet voor waar je wel bent: op zijn eigen kaart, en niet getekend. `dt` is de tijd van het
   // scherm, `dtWereld` die van de wereld (js/tijd.js).
   T.werkDorpBij = function (S, D, dt, dtWereld) {
@@ -124,9 +121,7 @@
     T.werkRoversBij(S, D); // rovers komen naar een akker, roven en gaan weer (js/rovers.js)
     T.werkSturenBij(S, D); // je mannen met een bevel: hun post, en wie een vijand volgt die viel (js/kiezen.js)
     T.werkGevechtBij(S, D); // wie vecht, kiest, loopt en slaat; wie een rover ziet, vlucht (js/gevecht.js)
-    T.werkBrandBij(S, D); // de brand van een voorval: het huis brandt, tot het uit is of afgebrand (js/brand.js)
-    T.werkVoorvallenBij(S, D); // wie je zoekt met een voorval, loopt naar je toe en spreekt je aan (js/voorvallen.js)
-    T.werkOchtendrapportBij(S, D); // 's ochtends geeft je raadsman je zijn rapport (js/ochtendrapport.js)
+    T.werkBrandBij(S, D); // de brand: het huis brandt, tot de buren hem geblust hebben of het afgebrand is (js/brand.js)
     T.werkStukkenBij(S, D, dt); // waar je mensen komen, gaat het land van het eiland open (js/wereld.js)
     T.werkMistBij(S, D); // wat je mensen en je gebouwen zien, ken je voortaan (js/mist.js)
     if (D.wereld === S.wereld) return; // waar je bent, lopen en dwalen ze in js/main.js, en worden ze getekend

@@ -536,7 +536,7 @@
     return stuk(MAP + t.bestand, i * t.cel[0], 0, t.cel[0], t.cel[1], t.anker);
   };
 
-  // De meiboom op het plein (js/feesten.js, gereedschap/pixelart/meiboom.cjs): één tekening, met het anker op de
+  // De meiboom op het plein (js/versiering.js, gereedschap/pixelart/meiboom.cjs): één tekening, met het anker op de
   // grond in het midden van de tegel. Null als het vel er niet is.
   S.meiboom = function () {
     if (!gegevens || !gegevens.meiboom) return null;
@@ -544,7 +544,7 @@
     return stuk(MAP + t.bestand, 0, 0, t.cel[0], t.cel[1], t.anker);
   };
 
-  // De kerstboom op het plein (js/feesten.js; gereedschap/pixelart/naar-spel.cjs, uit `kerstboom` in bomen.cjs): één
+  // De kerstboom op het plein (js/versiering.js; gereedschap/pixelart/naar-spel.cjs, uit `kerstboom` in bomen.cjs): één
   // tekening, zoals de meiboom. Null als het vel er niet is.
   S.kerstboom = function () {
     if (!gegevens || !gegevens.kerstboom) return null;

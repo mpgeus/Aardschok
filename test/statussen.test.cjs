@@ -86,3 +86,33 @@ test('een status houdt bij sinds wanneer hij speelt, met wat helpt', () => {
   T.tikStatussenDag(D, ZOMER + 4);
   assert.equal(D.statussen.honger, undefined, 'over is over');
 });
+
+// Sinds ronde 3 van het snoeien (15 okt) zegt een status het zelf, want het rapport van de raadsman is weg (CLAUDE.md:
+// "een bericht zegt het als het begint, erger of minder wordt, of ophoudt").
+test('een status zegt het als hij begint, erger of minder wordt, en ophoudt', () => {
+  const D = zonderOorzaak().dorp;
+  D.statussen = {}; // wat het proefdorp al had, telt niet
+  const gezegd = [];
+  const zeg = T.zeg;
+  T.zeg = (D2, tekst) => gezegd.push(tekst);
+  try {
+    D.behoeften.mist = ['firewood for the winter'];
+    D.voorraad.hout = 30;
+    D.voorraad.turf = 0;
+    T.tikStatussenDag(D, WINTER);
+    assert.deepEqual(gezegd, ['It is cold in the houses, for the logs will not last the winter.'], 'het begin');
+    T.tikStatussenDag(D, WINTER + 1);
+    assert.equal(gezegd.length, 1, 'zolang het zo blijft, niets');
+    D.voorraad.hout = 0;
+    T.tikStatussenDag(D, WINTER + 2);
+    assert.equal(gezegd[1], 'It is freezing in the houses, for the firewood has run out.', 'erger');
+    D.voorraad.hout = 30;
+    T.tikStatussenDag(D, WINTER + 3);
+    assert.equal(gezegd[2], 'It is no longer freezing in the houses, but it is still cold.', 'minder');
+    D.behoeften.mist = [];
+    T.tikStatussenDag(D, WINTER + 4);
+    assert.equal(gezegd[3], 'It is no longer cold in the houses.', 'over');
+  } finally {
+    T.zeg = zeg;
+  }
+});

@@ -1286,7 +1286,7 @@
   // in een huis met plaats, of wie sterft of wegtrekt. `reden`: 'begin', 'groei', 'winter', 'vertrek',
   // 'gesneuveld' of 'ziekte'; `waarom` is het begin van het bericht dat zegt wie het zijn ("De winter is hard"). `wie`:
   // als het om bepaalde mensen gaat (een wachter die sneuvelt tegen de rovers, js/rovers.js), wie dat zijn. Het dagboek
-  // schrijft het op, met wie het zijn (T.schrijfOp, js/ochtendrapport.js): voor het rapport van de raadsman.
+  // schrijft het op, met wie het zijn (T.schrijfOp, js/einde.js): voor het jaarboek.
   // Geeft terug hoeveel het echt veranderde.
   T.wijzigBevolking = function (D, verschil, reden, waarom, wie) {
     const voor = D.bevolking || 0;
@@ -1323,7 +1323,7 @@
   };
 
   // Er komt een gezin: in een huis met plaats, of het zegt dat er geen plaats is. Voor de groei (T.tikGebouwenDag,
-  // stap 4) en een voorval (js/voorvallen.js: vreemdelingen die willen blijven). Tot ronde 2 van het snoeien (12 okt) nam
+  // stap 4) en het debugvenster (js/debugvenster.js). Tot ronde 2 van het snoeien (12 okt) nam
   // het in een vol dorp een vrij erf en zette het er zelf een hut op (js/erven.js).
   T.gezinKomt = function (D) {
     const woonruimte = T.telWoonruimte(D);
@@ -1466,15 +1466,12 @@
     T.tikHeervaartDag(D, dag);
     // En zijn grillen (js/grillen.js): elke maand een brief met iets wat hij wil (met de spelregel "Twee bazen").
     T.tikGrillenDag(D, dag);
-    // En de voorvallen (js/voorvallen.js): om de paar dagen komt iemand je zoeken met een vraag, een ruzie of een ramp.
-    T.tikVoorvallenDag(D, dag);
     // Een huis dat afbrandde, bouwt het gezin weer op (js/brand.js); en de koorts gaat rond, of is voorbij (js/koorts.js).
     T.tikBrandDag(D, dag);
     T.tikKoortsDag(D, dag);
     T.tikLevenDag(D, dag); // ouder worden, geboren worden en sterven (js/leven.js)
-    // En de feesten (js/feesten.js): begint er vandaag een, dan zegt het dorp het en staat de meiboom er; op een hele
-    // feestdag werkt niemand (stap 6 hieronder).
-    T.tikFeestenDag(D, dag);
+    // De meiboom en de kerstboom op het plein, in hun tijd (js/versiering.js).
+    T.tikVersieringDag(D, dag);
     // Een huis dat wil doorgroeien en waar het gezin eerst rooit wat in de weg staat (js/bos.js).
     T.tikRooienDag(D);
     // In het lege begin: het werk van gisteren aan de bouwplaatsen (js/bouwen.js), vóór wat er vandaag klaarkomt.
@@ -1548,8 +1545,6 @@
     // niets; de eerste dag dat het zo is, zegt het dorp het (de pluk niet: die stilte hoort bij het jaar).
     const seizoen = seizoenVan(dag);
     const gereedschap = T.gereedschapDekking(D, seizoen);
-    // Op een hele feestdag (js/feesten.js, T.vrijeDag) werkt niemand: wie handen heeft, maakt vandaag niets.
-    const vrij = T.vrijeDag(D, dag);
     for (const g of D.gebouwen) {
       const soort = T.GEBOUWEN[g.soort];
       const wasStil = g.stilWant;
@@ -1563,10 +1558,6 @@
       // de raad dat (T.watDeHuizenMissen), en niet dat hij te weinig maakt.
       if (!soort.maakt) {
         if (soort.alleenIn) g.stilWant = T.stilOp(soort, dag, seizoen);
-        continue;
-      }
-      if (vrij && soort.handen > 0) {
-        g.stilWant = T.t('the village is feasting');
         continue;
       }
       // Wie in dit seizoen stilligt, of een houthakker die binnen zijn bereik geen boom meer vindt (js/bos.js).
@@ -1681,10 +1672,10 @@
     // De paadjes (js/paden.js): waar vandaag gelopen werd, slijt het gras; en een lantaarn bij wat er van het dorp klaar
     // kwam, en op een nieuwe kruising.
     T.tikPadenDag(D);
-    // 10. Als laatste het rapport (js/ochtendrapport.js): de raadsman schrijft op wat er gebeurde en hoe het gaat, en
-    // brengt het je morgenvroeg; het dagboek begint opnieuw.
-    T.tikStatussenDag(D, dag); // wat er speelt, en sinds wanneer, voor de balk (js/voorvallen.js)
-    T.tikOchtendrapportDag(D, dag);
+    // 10. Als laatste wat er speelt, en sinds wanneer, voor de balk en een bericht (js/statussen.js); en het dagboek
+    // begint opnieuw (js/einde.js).
+    T.tikStatussenDag(D, dag);
+    D.dagboek = T.nieuwDagboek(D, dag);
     if (T.ui && T.ui.toonBevolking) T.ui.toonBevolking(D);
   };
 

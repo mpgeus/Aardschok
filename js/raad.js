@@ -28,11 +28,8 @@
     visEnVleesMarge: 0.1,
     // Zoveel dagen na een aanval van de rovers zegt de raad wat een wachthuis doet, als er geen is.
     roversNa: 10,
-    // Zoveel dagen nadat een voorval voorbijging dat een raadsman had beslist, als je er een had (js/voorvallen.js: je
-    // was weg), zegt de raad: kies een raadsman (js/raadsman.js).
-    raadsmanNa: 10,
     // De afwisseling (vraag 154): de raad zegt het als het dorp zoveel soorten eet of minder (2: 75% werk). Daarboven
-    // staat het alleen in de balk (de status eentonig, js/voorvallen.js), zodat het doel en de groei aan het woord blijven.
+    // staat het alleen in de balk (de status eentonig, js/statussen.js), zodat het doel en de groei aan het woord blijven.
     afwisselingTot: 2,
   };
   const IN = () => T.RAAD_INSTELLINGEN;
@@ -305,25 +302,9 @@
         { hakker: naamVan('houthakker'), n: T.telwoord(T.BOS_INSTELLINGEN.hakStraal) }),
     },
     {
-      // Marcel koos het zo (vraag 67, B): de raad zegt het zodra er een voorval voorbijging dat een raadsman had
-      // beslist (vraag 68, B: je was weg), en de knop Raadsman (R) opent het venster (js/raadsmanvenster.js).
-      id: 'raadsman',
-      als: (D) => T.RAADSMAN_INSTELLINGEN.aan && !T.raadsmanVan(D) && D.voorvallen && D.voorvallen.laatstVoorbij != null
-        && dagNu(D) - D.voorvallen.laatstVoorbij < IN().raadsmanNa,
-      tekst: () => T.t('What you miss while you are away passes by: choose an advisor [R].'),
-    },
-    {
       id: 'tijd',
       als: (D) => D.kalender.dag < 1 && !(D.kalender.snelheid > 1),
       tekst: () => T.t('A day is long: [+] speeds up time, and [Z] sleeps until morning.'),
-    },
-    {
-      // Een nieuw spel begint zonder raadsman, en zonder raadsman geen rapport (js/ochtendrapport.js): de eerste dagen
-      // zegt de raad het (werklijst vraag 75, c; Marcel: "c ja").
-      id: 'rapport',
-      als: (D) => T.OCHTENDRAPPORT_INSTELLINGEN.aan && T.RAADSMAN_INSTELLINGEN.aan && !T.raadsmanVan(D)
-        && D.kalender.dag >= 1 && dagNu(D) < T.OCHTENDRAPPORT_INSTELLINGEN.raadTot,
-      tekst: () => T.t('An advisor brings you a report every morning: choose one [R].'),
     },
     {
       id: 'plaats',

@@ -7,7 +7,7 @@
 //
 // Een tent is een gebouw met één gezin erin (`T.GEBOUWEN.tent`), zo groot als zijn gezin: hij telt niet als plaats voor
 // een nieuw gezin (T.woonruimteVan, js/gebouwen.js). De tent van de schout is zijn huis (`huis: 'schout'`): daar slaapt
-// hij, daar brengt de raadsman zijn rapport, en daar vertrekt de bode, tot zijn huis er staat.
+// hij, en daar vertrekt de bode, tot zijn huis er staat.
 //
 // Wat het dorp van het lege begin weet, staat in D.begin (vanaf T.nieuwDorp, js/dorp.js): { kar: <het wezen>, kamp:
 // 'onderweg', 'op' of 'weg' (de laatste tent is weg), en hoe ver de aankomst is }.

@@ -914,8 +914,7 @@
       wisselMeter();
       return;
     }
-    // Een venster (js/ui.js; de marskramer, de heer, het slachten, de spelregels, de velden, de wetten, de
-    // raadsman): zolang het open is, ligt de rest stil. Esc sluit het, en de toets van een ander venster of B gaat er
+    // Een venster (js/ui.js; de marskramer, de heer, het slachten, de spelregels, de velden, de wetten): zolang het open is, ligt de rest stil. Esc sluit het, en de toets van een ander venster of B gaat er
     // meteen heen (hieronder); wat precies, zegt T.ui.toetsBijVenster.
     if (T.ui.toetsBijVenster(S, ev)) return;
     if (S.modus === 'einde') return;
@@ -965,7 +964,7 @@
       ev.preventDefault();
       return;
     }
-    // O, V, W en R: de spelregels, de velden, de wetten en je raadsman (de toets staat bij het venster, js/ui.js),
+    // O, V en W: de spelregels, de velden en de wetten (de toets staat bij het venster, js/ui.js),
     // alleen in het nieuwe spel.
     const venster = T.NIEUWE_HUD && T.ui.vensterMetToets(ev.key);
     if (venster) {
@@ -1475,41 +1474,6 @@
         veteranen: (S.dorp.bewoners ? S.dorp.bewoners.mensen.filter((p) => p.veteraan) : []).map(naam),
       };
     },
-    // De voorvallen (js/voorvallen.js): wat er nu loopt, welke vervolgen nog komen, wanneer het volgende komt, en
-    // welke er nu kunnen. Spel.debug.voorval('diefstal') laat dat nu beginnen, over mensen die erbij passen (ook als
-    // het er nu de tijd niet voor is); wie het zegt, zoekt je meteen.
-    voorval(id) {
-      const dag = Math.floor(S.kalender.dag);
-      if (!S.dorp.voorvallen) S.dorp.voorvallen = T.nieuweVoorvallen();
-      if (id) {
-        if (!T.VOORVALLEN[id]) return `Er is geen voorval "${id}". Er zijn: ${Object.keys(T.VOORVALLEN).join(', ')}.`; // geen tekst
-        const v = T.VOORVALLEN[id];
-        // Ook een voorval dat de beesten zelf beginnen ('wolven', js/beesten.js); dan zonder dat de wolven echt iets namen.
-        const oud = { vervolg: v.vervolg, als: v.als, pauze: v.pauze, zelf: v.zelf };
-        Object.assign(v, { vervolg: false, als: undefined, pauze: 0, zelf: v.zelf === true });
-        const mensen = T.voorvalKan(S.dorp, id, dag);
-        Object.assign(v, oud);
-        if (!mensen) return `Voor "${id}" is er nu niemand die het kan zeggen, of over wie het kan gaan.`; // geen tekst
-        if (S.dorp.voorvallen.lopend) T.voorvalBeantwoord(S.dorp, S.dorp.voorvallen.lopend.id);
-        T.beginVoorval(S.dorp, id, mensen.wie, mensen.ander, dag).vanaf = S.kalender.dag;
-      }
-      const V = S.dorp.voorvallen;
-      const naam = (p) => (p ? T.naamVanBewoner(p) : null);
-      return {
-        lopend: V.lopend ? { id: V.lopend.id, wie: naam(V.lopend.wie), ander: naam(V.lopend.ander), vanaf: T.uurTekst(V.lopend.vanaf), zoekt: !!(V.lopend.wie.wezen && V.lopend.wie.wezen.zoektSchout), oorzaak: V.lopend.oorzaak ? V.lopend.oorzaak.zin : null } : null,
-        wacht: V.wacht.map((w) => ({ id: w.id, op: T.datumVanDag(w.op).tekst, wie: naam(w.wie), ander: naam(w.ander) })),
-        volgende: V.volgende != null ? T.datumVanDag(V.volgende).tekst : null,
-        // Wat er nu kan, met hoe zwaar het weegt, en waar het van komt als er een oorzaak speelt (vraag 74, B).
-        kunnen: Object.keys(T.VOORVALLEN).filter((v) => T.voorvalKan(S.dorp, v, dag)).map((v) => {
-          const o = T.oorzaakVan(S.dorp, v, dag);
-          return `${v} (${Math.round(T.gewichtVanVoorval(S.dorp, v, dag) * 100) / 100})${o ? `: ${o.zin}` : ''}`;
-        }),
-        oorzaken: T.oorzakenNu(S.dorp, dag).map((o) => o.id),
-        aantal: V.aantal,
-        beantwoord: V.beantwoord,
-        stemming: T.voorvalStemming(S.dorp, dag),
-      };
-    },
     // Het land (js/land.js): waar de schout is, of hij reist, wat hij zag en welke wegen er zijn. ('open') opent de
     // kaart, ('reis', 'De heide') of ('reis', 'p3') reist erheen, ('alles') laat het hele land zien, ('nieuw') maakt
     // het land opnieuw uit het zaad. Staat de spelregel Land uit, dan zet hij hem eerst aan.
@@ -1539,42 +1503,6 @@
         wegen: M.wegen.map((w) => `${naam(T.provincie(M, w.van))} — ${naam(T.provincie(M, w.naar))}: ${w.dagen} ${w.dagen === 1 ? 'dag' : 'dagen'}`),
         gemist: M.gemist.length,
         brieven: M.brieven.slice(),
-      };
-    },
-    // De raadsman (js/raadsman.js): wie het is en wat hij kan, uit wie je kiest, en wat hij besloot.
-    // Spel.debug.raadsman('Aaltje') maakt die bewoner raadsman.
-    raadsman(wie) {
-      if (wie) {
-        const p = S.dorp.bewoners && S.dorp.bewoners.mensen.find((x) => T.naamVanBewoner(x) === wie);
-        if (!p) return `Er is geen bewoner "${wie}".`; // geen tekst
-        const r = T.kiesRaadsman(S.dorp, p);
-        if (!r.kan) return r.reden;
-      }
-      const nu = T.raadsmanVan(S.dorp);
-      return {
-        raadsman: nu ? T.overRaadsmanTekst(S.dorp, nu) : null,
-        kandidaten: T.raadsmanKandidaten(S.dorp).map((p) => T.overRaadsmanTekst(S.dorp, p)),
-        besluiten: ((S.dorp.raadsman && S.dorp.raadsman.besluiten) || []).slice(-5).map((b) => `${T.datumVanDag(b.dag).tekst}: ${b.id}, "${b.antwoord}"${b.prijs ? ` (${b.prijs})` : ''}`),
-      };
-    },
-    // Het rapport van de raadsman (js/ochtendrapport.js): wat erin staat, of hij het bracht en of je het las, hoe hij
-    // rekent, en wat het dagboek van vandaag al heeft. ('nu') maakt nu een rapport, uit het dagboek van vandaag (hij
-    // brengt het niet: het ligt klaar onder de knop Rapport), ('open') opent het papier.
-    rapport(wat) {
-      const D = S.dorp;
-      const p = T.raadsmanVan(D);
-      if (wat === 'nu') {
-        if (!p) return 'Er is geen raadsman: kies er een met R, of met Spel.debug.raadsman("Alice").'; // geen tekst
-        T.tikOchtendrapportDag(D, Math.floor(S.kalender.dag));
-        D.ochtendrapport.gebracht = true;
-      }
-      if (wat === 'open') T.ui.toonBrief(D, 'rapport');
-      const R = D.ochtendrapport;
-      return {
-        raadsman: p ? T.overRaadsmanTekst(D, p) : null,
-        rekenen: p ? T.vaardighedenVan(D, p).rekenen || 'gewoon' : null,
-        rapport: R ? { dag: T.datumVanDag(R.dag).tekst, door: R.door, gebracht: R.gebracht, gelezen: R.gelezen, regels: R.regels } : null,
-        dagboek: D.dagboek ? D.dagboek.regels.map((r) => `${r.soort}: ${r.wie || r.tekst || r.titel || ''}`) : [],
       };
     },
     // De wetten (js/wetten.js): per wet de stand, en wat hij dan doet. Spel.debug.wetten('rantsoen', 'krap')
@@ -1634,30 +1562,10 @@
       }));
       return { deur: `${deur.x},${deur.y}`, bier: Math.floor(S.dorp.voorraad.bier || 0), apartVoorDeHuizen: T.bierApart(S.dorp), vanavond, gisteravond: S.dorp.herberg && S.dorp.herberg.gisteravond, tekst: T.gebouwToestand(S.dorp, g) };
     },
-    // De feesten (js/feesten.js): welk feest er komt of nu is, waar het dorp staat, de boom op het plein (de meiboom of de
-    // kerstboom), en wat er gevierd werd. Spel.debug.feest('oogstfeest') laat het vandaag beginnen, de hele dag;
-    // ('meiboom', 'avond') alleen vanavond, en ('kerstboom') zet de kerstboom en viert vanavond kerstavond. Zet er de tijd
-    // bij met Spel.debug.uur(10) (overdag) of (20) (de avond).
-    feest(id, hoe) {
-      const D = S.dorp;
-      if (id) {
-        if (!T.FEESTEN[id]) return `Er is geen feest "${id}". Er zijn: ${Object.keys(T.FEESTEN).join(', ')}.`; // geen tekst
-        if (!T.FEESTEN_INSTELLINGEN.vieren) return 'De spelregel Feesten staat op "Alleen de stemming".'; // geen tekst
-        const f = T.zetFeest(D, id, hoe || 'dag', S.kalender.dag);
-        if (f.dag !== Math.floor(S.kalender.dag)) {
-          f.dag = Math.floor(S.kalender.dag);
-          T.feestBegint(D, f);
-        }
-      }
-      const F = D.feesten || T.nieuweFeesten();
-      const f = F.komt;
-      const naam = (x) => T.FEESTEN[x.id].naam;
-      return {
-        komt: f ? { feest: naam(f), op: T.datumVanDag(f.dag).tekst, heel: f.heel, midden: f.midden && `${f.midden.x},${f.midden.y}`, nu: !!T.feestOp(D, S.kalender.dag) } : null,
-        boom: F.boom ? { soort: F.boom.soort || 'meiboom', staat: `${F.boom.x},${F.boom.y}`, tot: T.datumVanDag(F.boom.tot).tekst } : null,
-        gevierd: F.gevierd.map((g) => `${naam(g)}, ${T.datumVanDag(g.dag).tekst}${g.heel ? ', de hele dag' : ', de avond'}`), // geen tekst
-        vrij: T.vrijeDag(D, S.kalender.dag),
-      };
+    // De meiboom en de kerstboom op het plein (js/versiering.js): welke boom er staat, en waar.
+    versiering() {
+      const V = S.dorp.versiering;
+      return V && V.boom ? { boom: V.boom.soort, staat: `${V.boom.x},${V.boom.y}` } : 'Er staat geen boom.'; // geen tekst
     },
     // Het weer (js/weer.js; werklijst vraag 77, stap 2): het weer van vandaag, hoe lang het droog is, het watertekort, de
     // droogte en wat die de oogst kost, de beekjes en de vissers. Spel.debug.weer('regen') zet het weer van vandaag

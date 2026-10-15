@@ -144,7 +144,7 @@ De bestanden in `js/`, per onderwerp; elk heeft een kop in `ontwerp/code.md`:
 - **Het land bewerken en de natuur:** `akkers`, `veldwerk`, `bos`, `beesten`, `vee`, `weer`, `wijngaard`.
 - **Voorraad en handel:** `voorraad`, `kar` (de ossenkar en de stapels), `handel` (de marskramer), `bode`.
 - **De heer en het bestuur:** `heer`, `brieven`, `bazen`, `grillen`, `heervaart`, `wetten` en `wettenmenu`, `raad`,
-  `raadsman` en `raadsmanvenster`, `ochtendrapport`, `voorvallen`, `statussen`, `feesten`, `brand`, `koorts`, `rovers`, `einde`.
+  `statussen`, `versiering` (de bomen op het plein), `brand`, `koorts`, `rovers`, `einde`.
 - **Het gevecht:** `gevecht` (in real time, in de tik; vluchten naar het town hall), `soldaten` (het wachthuis, de wapens)
   en `kiezen` (kijken, kiezen en sturen als een god), op hetzelfde raster als het lopen.
 
@@ -206,8 +206,8 @@ Hoe we kiezen:
   uit `js/`; alleen op `T.ui`, op gegevens, en waar een bladzijde een deel van het spel laadt.
 - **Zo dat live samen spelen kan, al in de demo** (vraag 126, f, en 170; `code.md` bij `js/tik.js`): de wereld tikt
   (`T.wereldTik`), haar toeval is `T.toeval` of `T.vastLot`, **nooit `Math.random`**, en een klik die haar verandert,
-  geeft een opdracht (`T.geefOpdracht`). De heer of een ander dorp kiest uit de handelingen van een mens in zijn plaats
-  (`T.raadsmanKeuze`); een keuze die op de speler wacht, heeft een termijn en een uitkomst als die om is.
+  geeft een opdracht (`T.geefOpdracht`). De heer of een ander dorp kiest uit de handelingen van een mens in zijn plaats;
+  een keuze die op de speler wacht, heeft een termijn en een uitkomst als die om is (zoals een gril van de heer).
 - **Scherm en klik stellen dezelfde vraag:** `handelingVerkennen` (links) en `handelingSturen` (rechts) geven `{ tekst,
   kan, doe }`, en de tekst bij de muis en de klik komen uit hetzelfde antwoord.
 - **Eén weg voor:** de voorraad (`T.wijzigVoorraad`), het getal in de balk (`T.wijzigBevolking(S, verschil, reden,

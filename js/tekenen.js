@@ -48,7 +48,7 @@
       lantaarn: { r: 255, g: 176, b: 92 },
       herberg: { r: 255, g: 166, b: 80 },
       huis: { r: 255, g: 192, b: 112 },
-      feest: { r: 255, g: 158, b: 76 },
+      kaars: { r: 255, g: 158, b: 76 },
       schout: { r: 255, g: 196, b: 120 },
       brand: { r: 255, g: 128, b: 48 },
     },
@@ -2590,7 +2590,7 @@
       return;
     }
     if (v.soort === 'meiboom') {
-      // De meiboom (js/feesten.js): een berk met een kroon, een krans en linten. Zonder kunst: een witte paal met een
+      // De meiboom (js/versiering.js): een berk met een kroon, een krans en linten. Zonder kunst: een witte paal met een
       // groene kroon.
       const boom = metSprites() && T.sprites.meiboom && T.sprites.meiboom();
       if (boom) {
@@ -2602,7 +2602,7 @@
       return;
     }
     if (v.soort === 'kerstboom') {
-      // De kerstboom (js/feesten.js): een spar met appels, strosterren, kaarsjes en een ster. Zonder kunst: een groene
+      // De kerstboom (js/versiering.js): een spar met appels, strosterren, kaarsjes en een ster. Zonder kunst: een groene
       // kegel van drie blokken.
       const boom = metSprites() && T.sprites.kerstboom();
       if (boom) {
@@ -3065,8 +3065,6 @@
     // het vel van een gewone dorpeling, en zo zie je dat hij geen dorpeling is.
     if (!e.dood && e.maxLeven > 0 && (e.doelwit || e.volgt || e.leven < e.maxLeven || e.rover)) levensbalk(ctx, cx, top - 9, e);
     if (e.alarm > 0) roep(ctx, '!', cx, top - 14 - Math.abs(Math.sin(e.alarm * 9)) * 4, '#ffd24a');
-    // Wie de schout zoekt met een voorval (js/voorvallen.js): een uitroepteken dat zacht op en neer gaat.
-    else if (e.zoektSchout && !e.binnen) roep(ctx, '!', cx, top - 12 - Math.abs(Math.sin(S.tijd * 3)) * 3, '#f3e2a4');
     // Wie de wolven aanvallen, roept om hulp (js/beesten.js): een rood uitroepteken dat sneller springt.
     else if (e.roeptOmHulp) roep(ctx, '!', cx, top - 12 - Math.abs(Math.sin(S.tijd * 8)) * 4, '#ff6a50');
   }

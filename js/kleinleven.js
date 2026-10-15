@@ -84,7 +84,7 @@
 
   // Kan dit kind nu spelen? Een kind of een kleuter, overdag, zonder werk, en niet in de regen.
   T.kanSpelen = function (S, D, e, deel) {
-    if (e.dood || e.binnen || e.maait || e.werkt || e.opgeroepen || e.zoektSchout || e.moetNaar || e.vertrekt || e.praatje) return false;
+    if (e.dood || e.binnen || e.maait || e.werkt || e.opgeroepen || e.moetNaar || e.vertrekt || e.praatje) return false;
     if (deel !== 'ochtend' && deel !== 'werk' && deel !== 'schaft') return false;
     if (D.gevecht) return false; // niet midden in een gevecht (js/gevecht.js)
     const p = e.bewoner;

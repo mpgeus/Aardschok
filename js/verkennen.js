@@ -111,10 +111,7 @@
       if (e.kar) return { tekst: T.karTekst(D, e) };
       // Je mannen: de held, een soldaat, een veteraan (js/kiezen.js).
       if (D && T.isMan(D, e)) return { tekst: T.manTekst(D, e), kies: e };
-      // Wie je zoekt met een voorval (js/voorvallen.js), en de waard (js/herberg.js): op hun briefje staat Talk
-      // (T.gesprekBij, js/kiezen.js).
-      const voorval = D && T.voorvalVan(D, e);
-      if (voorval) return { tekst: T.t('{wie} (looking for you)', { wie: T.naamVanBewoner(voorval.wie) }), kies: e };
+      // De waard (js/herberg.js): op zijn briefje staat Talk (T.gesprekBij, js/kiezen.js).
       const p = e.bewoner && D ? T.bewonerVan(D, e) : null;
       if (p && p.werk && p.werk.soort === 'herberg') return { tekst: T.t('{wie}, the innkeeper', { wie: T.naamVanBewoner(p) }), kies: e };
       // Een andere bewoner (js/bewoners.js): wie hij is.
@@ -247,9 +244,9 @@
     let zoekNog = T.LOPEN_INSTELLINGEN.zoekPerBeeld;
     for (const m of w.wezens) {
       // Wie op de jacht met de held meeloopt, dwaalt niet (js/beesten.js), en wie vecht ook niet: die loopt en slaat in
-      // het gevecht (js/gevecht.js). Wie de schout zoekt met een voorval, ook niet (js/voorvallen.js), wie een praatje
-      // maakt evenmin (js/praatje.js), en een boer die op zijn land werkt ook niet (js/veldwerk.js).
-      if (m.dood || !m.dwaalt || m.pad.length || m === S.spreektMet || m.maait || m.werkt || m.opgeroepen || m.doelwit || m.volgt || m.zoektSchout || m.praatje) continue;
+      // het gevecht (js/gevecht.js). Wie een praatje maakt evenmin (js/praatje.js), en een boer die op zijn land werkt
+      // ook niet (js/veldwerk.js).
+      if (m.dood || !m.dwaalt || m.pad.length || m === S.spreektMet || m.maait || m.werkt || m.opgeroepen || m.doelwit || m.volgt || m.praatje) continue;
       // Een dier dat ligt, blijft liggen tot zijn rust zegt dat het weer opstaat (js/vee.js).
       if (m.dier && T.rustVanDier && T.rustVanDier(m, S.tijd || 0) === 'liggen') continue;
       // Het ritme van de dag (js/dag.js): 's ochtends en 's avonds op zijn erf, 's nachts binnen. Wie

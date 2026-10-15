@@ -34,21 +34,14 @@
 
   const dagNu = (D) => Math.floor((D.kalender && D.kalender.dag) || 0);
 
-  // Het dagboek van de dag die begint: een lege bladzijde, en wat er dan aan graan en hout ligt (voor "sinds gisteren" in
-  // het rapport van de raadsman, js/ochtendrapport.js).
-  T.nieuwDagboek = function (D, dag) {
-    const voorraad = {};
-    for (const wat of ['graan', 'hout']) voorraad[wat] = (D.voorraad && D.voorraad[wat]) || 0;
-    return { dag, voorraad, regels: [] };
-  };
+  // Het dagboek van de dag die begint: een lege bladzijde (elke nacht, T.tikGebouwenDag, na het jaarboek).
+  T.nieuwDagboek = (D, dag) => ({ dag, regels: [] });
 
-  // Schrijf op wat er vandaag gebeurde (D.dagboek), voor het jaarboek hieronder en het rapport van morgen. `soort`:
-  // 'mensen' (wie er kwam, stierf of wegtrok: verschil, reden, waarom en wie, T.wijzigBevolking), 'boeren' (wat ze uit
-  // zichzelf deden: tekst), 'besluit' (wat de raadsman besliste: door, titel, antwoord en prijs), 'voorbij' (wie je
-  // zocht en niet sprak: wie en titel), 'huis' (een huis groeide door: wie er woont, van, naar en de stand,
-  // js/behoeften.js) of 'feest' (het dorp vierde feest: tekst, js/feesten.js). Tot 15 okt stond het dagboek bij het
-  // rapport; het verhuisde in ronde 3 van het snoeien (ontwerp/snoeien.md), omdat het rapport weggaat en het jaarboek
-  // blijft.
+  // Schrijf op wat er vandaag gebeurde (D.dagboek), voor het jaarboek hieronder. `soort`: 'mensen' (wie er kwam, stierf
+  // of wegtrok: verschil, reden, waarom en wie, T.wijzigBevolking), 'huis' (een huis groeide door: wie er woont, van, naar
+  // en de stand, js/behoeften.js), en wat het jaarboek niet telt maar wel gebeurde ('boeren', 'brand', 'bode': tekst).
+  // Tot 15 okt stond het dagboek bij het rapport van de raadsman; het verhuisde in ronde 3 van het snoeien
+  // (ontwerp/snoeien.md), omdat het rapport wegging en het jaarboek bleef.
   T.schrijfOp = function (D, soort, wat) {
     const boek = D.dagboek || (D.dagboek = T.nieuwDagboek(D, dagNu(D)));
     boek.regels.push({ dag: dagNu(D), soort, ...wat });
@@ -82,7 +75,7 @@
 
   const jaarVan = (dag) => T.datumVanDag(dag).jaar;
 
-  // Het jaar in het kort, als regels in de hand van de raadsman: uit jaarboek J, tot dag `dag`.
+  // Het jaar in het kort, als regels: uit jaarboek J, tot dag `dag`.
   T.jaarverslagRegels = function (D, J, dag) {
     const regels = [];
     const nu = D.bevolking || 0;
@@ -98,8 +91,6 @@
     if (mensen.length) regels.push(`${T.opsomming(mensen)}.`);
     if (J.geoogst) regels.push(T.t('The harvest brought {graan}.', { graan: T.hoeveel(Math.round(J.geoogst), 'graan') }));
     if (J.doorgegroeid) regels.push(T.t('{n|One house grew larger.|{getal} houses grew larger.}', { n: J.doorgegroeid, getal: T.hoofdletter(T.telwoord(J.doorgegroeid)) }));
-    const feesten = ((D.feesten && D.feesten.gevierd) || []).filter((f) => f.dag >= J.begin && f.dag < dag).map((f) => T.FEESTEN[f.id].naam);
-    if (feesten.length) regels.push(T.t('We celebrated {feesten}.', { feesten: T.opsomming(feesten) }));
     const heer = ((D.heer && D.heer.jaren) || []).find((j) => j.jaar === jaarVan(J.begin));
     if (heer) {
       const pct = Math.floor(heer.deel * 100 + 1e-9);
@@ -120,7 +111,7 @@
   // Elke nacht
   // ---------------------------------------------------------------------------------------------
 
-  // Elke nacht (T.tikGebouwenDag, js/gebouwen.js, vóór het rapport): het jaarboek, op 1 lentemaand het jaarverslag, en of
+  // Elke nacht (T.tikGebouwenDag, js/gebouwen.js): het jaarboek, op 1 lentemaand het jaarverslag, en of
   // het spel verloren is. Een ander dorp (het buurdorp) verliest nog niet.
   T.tikEindeDag = function (D, dag) {
     if (D.einde || D.ander) return;

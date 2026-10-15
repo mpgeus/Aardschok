@@ -228,9 +228,8 @@ test('de dekking zegt wat het spel vraagt en nergens staat', () => {
   // De koude oven is geschreven maar nog niet in Tiled neergezet (22 sep 2026). Zodra dat wel zo
   // is, horen deze regels vanzelf te verdwijnen — en dan zegt deze toets dat ze er niet meer zijn.
   for (const wie of Object.keys(T.GESPREKKEN)) {
-    // Wie over de weg komt (de heer en zijn soldaten), hoeft nergens te staan, en het gesprek van een
-    // voorval (js/voorvallen.js) voert wie het spel ervoor kiest.
-    const staat = (T.MENSEN[wie] && T.MENSEN[wie].bezoeker) || T.VOORVALLEN[wie] || Object.values(T.GEBIEDEN).some((g) => g.maak().wezens.some((e) => e.soort === wie));
+    // Wie over de weg komt (de heer en zijn soldaten), hoeft nergens te staan.
+    const staat = (T.MENSEN[wie] && T.MENSEN[wie].bezoeker) || Object.values(T.GEBIEDEN).some((g) => g.maak().wezens.some((e) => e.soort === wie));
     assert.equal(!tekst.includes(`"${wie}" heeft een gesprek`), !!staat, `${wie}: de dekking en de wereld zijn het oneens`);
   }
 });
@@ -268,9 +267,9 @@ test('een mens die niet in de lijst staat, wordt bij naam genoemd', () => {
 });
 
 test('twee monden voor één tekst valt op', () => {
-  // De smid en een dorpeling die zijn gesprek leent: ze zeggen dan woord voor woord hetzelfde.
-  const klachten = keur([UITGANG, { x: 2, y: 2, wie: 'smid' }, { x: 4, y: 2, zaad: 3, gesprek: 'smid' }]);
-  assert.match(teksten(klachten), /voert hetzelfde gesprek "smid"/);
+  // De marskramer en een dorpeling die zijn gesprek leent: ze zeggen dan woord voor woord hetzelfde.
+  const klachten = keur([UITGANG, { x: 2, y: 2, wie: 'marskramer' }, { x: 4, y: 2, zaad: 3, gesprek: 'marskramer' }]);
+  assert.match(teksten(klachten), /voert hetzelfde gesprek "marskramer"/);
 });
 
 test('een mens komt met zijn eigen naam en zijn eigen gesprek uit de kaart', () => {

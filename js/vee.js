@@ -761,7 +761,7 @@
   // Dit dier gaat weg: een wolf nam het (js/beesten.js).
   T.verliesDier = (D, e) => haalWeg(D, e);
 
-  // Het vee verliest dieren van een soort (de wolven, js/voorvallen.js): het jongste eerst, want dat pakt een wolf.
+  // Het vee verliest dieren van een soort: het jongste eerst, want dat pakt een wolf.
   // Geeft hoeveel.
   T.verliesVee = function (D, soort, n) {
     const dieren = T.veeVan(D).filter((e) => e.dier === soort).sort(oudsteEerst).reverse().slice(0, Math.max(0, n));
@@ -852,7 +852,7 @@
     const eters = T.veeVan(D).filter((e) => T.hooiVanDier(e, dag) > 0);
     if (!eters.length) return { vlees: 0, huiden: 0 };
     const voorstel = T.slachtVoorstel(D, dag);
-    // Wat ze deden, schrijft het dagboek op, voor het rapport van de raadsman (js/ochtendrapport.js).
+    // Wat ze deden, schrijft het dagboek op (js/einde.js).
     if (!voorstel.dieren.length) {
       T.zeg(D, T.t('The hay will last the winter: the farmers keep all their cattle.'), 'goed');
       T.schrijfOp(D, 'boeren', { tekst: T.t('The hay will last the winter, so the farmers kept all their cattle.') });

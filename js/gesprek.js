@@ -7,8 +7,7 @@
 //
 // Een gesprek speelt tussen jou en iemand in een dorp (js/dorp.js; werklijst, vraag 71). Het krijgt daarom twee
 // dingen mee: het spel (S: wat je in je tas hebt, je quests) en het dorp waar het gesprek is (D: wat er in het dorp
-// speelt, als vlaggen, en het goud). De gespreksschrijver geeft twee keer dezelfde proefstaat mee. Wie beslist
-// zonder jou (de raadsman, js/raadsman.js), geeft geen spel mee: dan telt niets uit je tas.
+// speelt, als vlaggen, en het goud). De gespreksschrijver geeft twee keer dezelfde proefstaat mee.
 (function (T) {
   'use strict';
 
@@ -71,7 +70,7 @@
   // anders is, zoals wie er gisteravond in de herberg zat (js/herberg.js). Een woord dat niemand kent, blijft staan.
   // Een zin uit T.GESPREKKEN is gegevens (de gespreksschrijver schrijft hem terug), dus hij gaat eerst naar de taal van
   // nu (T.tGegevens, js/taal.js; vraag 147), en dan komen de woorden erin. Alles wat een gesprek toont, komt hierlangs:
-  // de naam erboven, de tekst van een knoop, een antwoord (js/dialoog.js), en wat de raadsman antwoordde.
+  // de naam erboven, de tekst van een knoop, en een antwoord (js/dialoog.js).
   T.GESPREK_WOORDEN = T.GESPREK_WOORDEN || {};
   T.vulWoordenIn = (D, zin) => T.tGegevens(zin).replace(/\{(\w+)\}/g, (heel, w) => (T.GESPREK_WOORDEN[w] ? T.GESPREK_WOORDEN[w](D) : heel));
 
@@ -90,7 +89,7 @@
     const lijst = (v) => (v == null ? [] : Array.isArray(v) ? v : [v]);
     for (const naam of lijst(doe.zetVlag)) T.zetVlag(D, naam);
     for (const naam of lijst(doe.wisVlag)) T.wisVlag(D, naam);
-    // Je tas: alleen als jij het gesprek voert (de raadsman heeft geen tas van je).
+    // Je tas: alleen als jij het gesprek voert.
     const tas = S ? lijst(doe.geef).concat(lijst(doe.neem)) : [];
     if (S) for (const soort of lijst(doe.geef)) S.inventaris.add(soort);
     if (S) for (const soort of lijst(doe.neem)) S.inventaris.delete(soort);
@@ -103,8 +102,5 @@
     if (doe.handel && T.ui && T.ui.openHandel) T.ui.openHandel(D);
     // De heer betalen op Sint-Maarten (js/heer.js): net zo, het venster staat in js/hud.js.
     if (doe.heer && S && T.ui && T.ui.openHeer) T.ui.openHeer(S);
-    // Wat een antwoord op een voorval doet (js/voorvallen.js): graan, tevreden, verban, een vervolg, ... De
-    // gespreksschrijver laadt dat bestand niet.
-    if (T.voorvalGevolg) T.voorvalGevolg(D, doe);
   };
 })(globalThis.Spel = globalThis.Spel || {});

@@ -41,17 +41,13 @@
     e.pad = e.onderweg && e.pad[0] ? [e.pad[0]] : [];
   };
 
-  // `gesprekId`: een ander gesprek dan het zijne, zoals een voorval (js/voorvallen.js) dat hij je komt vertellen.
+  // `gesprekId`: een ander gesprek dan het zijne.
   T.openDialoog = function (S, wie, gesprekId) {
     // Het gesprek speelt in het dorp waar je bent (js/dorp.js), en buiten een dorp in dat van jezelf.
     const D = T.dorpHier(S) || S.dorp;
     const wieId = gesprekId || T.gesprekIdVan(wie);
     const gesprek = T.GESPREKKEN[wieId];
-    const voorval = !!T.VOORVALLEN[wieId];
     S.modus = 'dialoog';
-    // Een voorval is een keuze met een prijs: de tijd staat stil tot je kiest, zoals bij een brief. Een gewoon gesprek
-    // laat de dag doorlopen.
-    if (voorval) T.houdTijdStil(S, 'voorval');
     staStil(S.schout);
     // Met wie je praat, staat stil en blijft zichtbaar: hij komt door een boom of een huis heen
     // (js/doorkijk.js) en hij dwaalt niet weg midden in het gesprek.
@@ -60,30 +56,17 @@
     const toon = (knoopId) => {
       const knoop = T.gesprekKnoop(S, D, wieId, knoopId);
       toonPortret(gesprek.portret);
-      // Bij een voorval staat onder de naam wie hij is (js/bewoners.js). De naam van een voorval is {wie}: die vult het
-      // spel in.
-      const over = voorval ? T.overBewonerTekst(D, wie) : '';
       T.ui.toonDialoog(
-        T.hoofdletter(over && wie.naam ? wie.naam : T.vulWoordenIn(D, gesprek.naam)),
+        T.hoofdletter(T.vulWoordenIn(D, gesprek.naam)),
         knoop.tekst,
-        knoop.keuzes.map((keuze) => {
-          // Wat het kost of oplevert, zegt het venster vooraf; wat er niet is, kun je niet geven.
-          const prijs = T.prijsVanKeuze(D, keuze.doe);
-          return {
-            tekst: T.vulWoordenIn(D, keuze.zeg),
-            prijs: prijs.tekst,
-            kan: prijs.kan,
-            waarom: prijs.waarom,
-            kies: () => {
-              T.doeGevolg(S, D, keuze.doe);
-              if (keuze.sluit) {
-                T.voorvalBeantwoord(D, wieId);
-                T.sluitDialoog(S);
-              } else toon(keuze.naar);
-            },
-          };
-        }),
-        over,
+        knoop.keuzes.map((keuze) => ({
+          tekst: T.vulWoordenIn(D, keuze.zeg),
+          kies: () => {
+            T.doeGevolg(S, D, keuze.doe);
+            if (keuze.sluit) T.sluitDialoog(S);
+            else toon(keuze.naar);
+          },
+        })),
       );
     };
     toon(gesprek.start);
@@ -93,10 +76,5 @@
     T.ui.sluitDialoog();
     S.spreektMet = null;
     if (S.modus === 'dialoog') S.modus = 'verkennen';
-    T.laatTijdGaan(S, 'voorval');
   };
-
-  // Iemand spreekt de schout aan met een voorval (js/voorvallen.js, T.werkVoorvallenBij): de regels zeggen wanneer,
-  // en het scherm opent het gesprek.
-  T.ui.spreekAan = (S, wie, gesprekId) => T.openDialoog(S, wie, gesprekId);
 })(globalThis.Spel = globalThis.Spel || {});

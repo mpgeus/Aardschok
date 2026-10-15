@@ -288,7 +288,6 @@
     graan: Math.floor((S.dorp.voorraad && S.dorp.voorraad.graan) || 0),
     hout: Math.floor((S.dorp.voorraad && S.dorp.voorraad.hout) || 0),
     goud: Math.floor((S.dorp.voorraad && S.dorp.voorraad.goud) || 0),
-    doorRaadsman: (S.dorp.voorvallen && S.dorp.voorvallen.doorRaadsman) || 0,
   });
 
   // ---------------------------------------------------------------------------------------------
@@ -447,8 +446,6 @@
     const verschil = (a, b) => (b - a > 0 ? `+${b - a}` : b - a < 0 ? `−${a - b}` : T.t('no change'));
     regels.push(T.t('{n|# person|# people} ({verschil})', { n: n.bevolking, verschil: verschil(v.bevolking, n.bevolking) }));
     for (const ding of ['graan', 'hout', 'goud']) regels.push(T.t('{wat} ({verschil})', { wat: T.hoeveel(n[ding], ding), verschil: verschil(v[ding], n[ding]) }));
-    const raad = n.doorRaadsman - v.doorRaadsman;
-    if (raad > 0) regels.push(T.t('{n|your advisor decided an event|your advisor decided # events}', { n: raad }));
     return regels;
   };
 })(globalThis.Spel = globalThis.Spel || {});

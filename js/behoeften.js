@@ -74,7 +74,7 @@
     winterVooraf: [{ maand: 'herfstmaand', dag: 1 }, { maand: 'slachtmaand', dag: 1 }],
     opraakWaarschuwing: 15,
     // Vanaf zoveel dagen vóór de winter kijkt het dorp of het hout en het eten hem halen (90: vanaf 1 herfstmaand, de
-    // eerste dag hierboven). Dan zeggen de raad (js/raad.js) en het rapport (js/ochtendrapport.js) het, en haalt het hem
+    // eerste dag hierboven). Dan zegt de raad (js/raad.js) het, en haalt het hem
     // niet, dan komt er geen gezin (T.waaromGeenGezin in js/gebouwen.js; werklijst vraag 59, B). Eén getal voor alle
     // drie, zodat ze niet uit elkaar lopen.
     winterVoorafDagen: 90,
@@ -220,10 +220,7 @@
     // komt erbij.
     const wetten = T.wettenTevredenheid(D);
 
-    // De voorvallen (js/voorvallen.js, sinds 29 sep): wat het dorp je antwoorden nadraagt, en dat slijt weg.
-    const voorvallen = T.voorvalStemming(D, dag);
-
-    const erbij = gezelligheid + wetten.erbij + voorvallen.erbij - heer.minder;
+    const erbij = gezelligheid + wetten.erbij - heer.minder;
 
     // De wensen per huis (js/wensen.js, sinds 1 okt; werklijst vraag 80 en 85): elk huis zijn eigen tevredenheid uit wat
     // zijn stand wil, en het dorp het gemiddelde, naar mensen. De afwisseling van groente, vis en vlees ging daarin op
@@ -237,7 +234,7 @@
     // Het brandhout mist het dorp ook als het de winter niet haalt (T.houtVoorDeWinter), niet pas als
     // het vandaag op is: dan zegt de balk het op tijd, net als het rode hout ernaast (js/hud.js).
     const mist = [];
-    // Wat de speler ziet, en tegelijk waar js/voorvallen.js en de balk (js/balk.js) op letten: dezelfde zin.
+    // Wat de speler ziet, en tegelijk waar de statussen (js/statussen.js) en de balk (js/balk.js) op letten: dezelfde zin.
     if (voedselDekking < 1) mist.push(T.t('food'));
     if (brandhoutDekking < 1 || !T.houtVoorDeWinter(D, dag).haalt) mist.push(T.t('firewood for the winter'));
     if (wensen) {
@@ -248,15 +245,14 @@
     }
 
     return {
-      tevredenheid, mist, last: heer.waarom.concat(wetten.last, voorvallen.last), blij: wetten.blij.concat(voorvallen.blij), inWinter,
+      tevredenheid, mist, last: heer.waarom.concat(wetten.last), blij: wetten.blij, inWinter,
       voedselDekking,
       brandhoutDekking, brandhoutBenodigd, brandhoutVoorraad, brandhoutFactor,
       huishoudens, heeftKerk, kerkFactor, gezelligheid, wensen,
     };
   };
 
-  // De balk zegt de tevredenheid meteen zoals ze nu is, niet pas morgen: na een wet die je aannam (js/wetten.js) of
-  // een antwoord op een voorval (js/voorvallen.js). Zonder dat er al een dag getikt is, wacht het op die dag.
+  // De balk zegt de tevredenheid meteen zoals ze nu is, niet pas morgen: na een wet die je aannam (js/wetten.js). Zonder dat er al een dag getikt is, wacht het op die dag.
   T.tevredenheidOpnieuw = function (D) {
     if (!D.behoeften || !D.kalender) return;
     const b = T.berekenTevredenheid(D, Math.floor(D.kalender.dag));
@@ -758,7 +754,7 @@
       const woorden = { van: T.hoofdletter(T.eenNaam(soort.naam)), naar: T.eenNaam(nieuw.naam), kosten: kostenTekst(kosten), stand: T.STANDEN[T.standVan(g)].naam };
       T.zeg(D, Object.keys(kosten).length ? T.t('{van} has grown into {naar}, for {kosten}: whoever lives there now belongs with the {stand}.', woorden)
         : T.t('{van} has grown into {naar}: whoever lives there now belongs with the {stand}.', woorden), 'goed');
-      // Voor het rapport van de raadsman (js/ochtendrapport.js; vraag 87): "The hut of Gerard has become a house".
+      // Voor het dagboek (js/einde.js; vraag 87): het jaarboek telt de huizen die doorgroeiden.
       const p = ((D.bewoners && D.bewoners.mensen) || []).find((m) => m.huis === g);
       T.schrijfOp(D, 'huis', { wie: p ? p.naam : null, van: soort.naam, naar: nieuw.naam, stand: T.standVan(g) });
     }
@@ -859,8 +855,7 @@
     return Math.min(1, IN.werkBijEenSoort + (soorten.length - 1) * IN.werkPerSoortErbij);
   };
 
-  // Eet het dorp van het zaaigraan, dan zegt het dat één keer per winter, en schrijft het het op voor het rapport
-  // (js/ochtendrapport.js). Wordt er niets achtergehouden (na het zaaien), dan mag het de volgende keer weer.
+  // Eet het dorp van het zaaigraan, dan zegt het dat één keer per winter. Wordt er niets achtergehouden (na het zaaien), dan mag het de volgende keer weer.
   function zegHetZaaigraan(D, gegeten, apart) {
     if (apart <= 0) {
       if (D.behoeften) D.behoeften.zaaigraanGegeten = false;
@@ -1102,7 +1097,7 @@
     if (!D.behoeften) D.behoeften = T.nieuweBehoeften();
     const b = T.berekenTevredenheid(D, dag);
     D.behoeften.tevredenheid = b.tevredenheid;
-    D.behoeften.voedselDekking = b.voedselDekking; // voor de status hongersnood (T.OORZAKEN, js/voorvallen.js)
+    D.behoeften.voedselDekking = b.voedselDekking; // voor de status hongersnood (T.OORZAKEN, js/statussen.js)
     D.behoeften.mist = b.mist;
     D.behoeften.last = b.last;
     D.behoeften.blij = b.blij;

@@ -379,10 +379,8 @@
       letOp(`${ontbreekt.length} van de ${Object.keys(T.MENSEN).length} mensen staan nog nergens: ${ontbreekt.join(', ')}`);
     }
 
-    // Het gesprek van een voorval hoort bij geen kaart: wie het zegt, kiest het spel (js/voorvallen.js).
-    const voorval = (id) => !!(T.VOORVALLEN && T.VOORVALLEN[id]);
     for (const id of Object.keys(T.GESPREKKEN || {})) {
-      if (!wezens.has(id) && !bezoeker(id) && !voorval(id)) fout(`"${id}" heeft een gesprek, maar staat nergens in de wereld. Zet hem neer met gereedschap/wereld.html`);
+      if (!wezens.has(id) && !bezoeker(id)) fout(`"${id}" heeft een gesprek, maar staat nergens in de wereld. Zet hem neer met gereedschap/wereld.html`);
     }
     for (const [id, q] of Object.entries(T.QUESTS || {})) {
       if (q.gever && !wezens.has(q.gever)) fout(`quest "${q.naam || id}" komt van "${q.gever}", en die staat nergens in de wereld`);

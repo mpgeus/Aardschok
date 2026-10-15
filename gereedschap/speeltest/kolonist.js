@@ -185,7 +185,7 @@
   }
 
   // Regel 9: haalt het dorp de winter nog met `n` minder `wat` (hout of graan)? Even uitrekenen met minder in de opslag, en
-  // het weer terug (zoals haaltHetNog in speler.js).
+  // het weer terug.
   function haaltMetMinder(D, wat, n, dag) {
     const oud = D.voorraad[wat] || 0;
     D.voorraad[wat] = oud - n;

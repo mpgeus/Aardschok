@@ -310,11 +310,8 @@
       id: 'doorkijkPlein', naam: T.t('Who you see through a house'), standaard: 'ookHetPlein',
       uitleg: T.t('Always the reeve, whoever you are talking to, whoever you are looking for, whoever is fighting, and the lord, the merchant and the soldiers.'),
       keuzes: [
-        // De standaard houdt zijn naam (Marcel, 10 okt: op een feest niet), zodat een browser die hem onthield, meegaat.
-        { id: 'ookHetPlein', naam: T.t('The square too'), zet: { 'DOORKIJK_INSTELLINGEN.plein': true, 'DOORKIJK_INSTELLINGEN.pleinOpEenFeest': false }, // geen tekst
-          uitleg: T.t('Everyone standing on the square as well, so that you can see the square, except at a feast: then the whole village is there, and a roof in front of it would be full of holes. Not through a tree, or the oaks would be full of holes as long as the children play.') },
-        { id: 'ookOpEenFeest', naam: T.t('The square, even at a feast'), zet: { 'DOORKIJK_INSTELLINGEN.plein': true, 'DOORKIJK_INSTELLINGEN.pleinOpEenFeest': true }, // geen tekst
-          uitleg: T.t('Everyone on the square, always, as before 10 October 2026: at a feast a roof in front of them gets a hole for each person.') },
+        { id: 'ookHetPlein', naam: T.t('The square too'), zet: { 'DOORKIJK_INSTELLINGEN.plein': true }, // geen tekst
+          uitleg: T.t('Everyone standing on the square as well, so that you can see the square. Not through a tree, or the oaks would be full of holes as long as the children play.') },
         { id: 'wieErToeDoet', naam: T.t('Only those who matter'), zet: { 'DOORKIJK_INSTELLINGEN.plein': false }, // geen tekst
           uitleg: T.t('Whoever plays on the square disappears behind a house, as everywhere in the village.') },
       ],
@@ -489,58 +486,6 @@
           uitleg: T.t('He asks only for gold and grain, at Martinmas.') },
       ],
     },
-    // De voorvallen (Marcel, 29 sep, werklijst vraag 65: "A ja"; js/voorvallen.js).
-    {
-      id: 'voorvallen', naam: T.t('Events'), standaard: 'gewoon',
-      uitleg: T.t('How often somebody from the village comes looking for you with a question, a quarrel or a disaster.'),
-      keuzes: [
-        { id: 'vaak', naam: T.t('Often'), zet: { 'VOORVALLEN_INSTELLINGEN.aan': true, 'VOORVALLEN_INSTELLINGEN.dagenTussen': 6, 'VOORVALLEN_INSTELLINGEN.dagenTussenWinter': 4 }, // geen tekst
-          uitleg: T.t('About every six days, in winter every four.') },
-        { id: 'gewoon', naam: T.t('Normal'), zet: { 'VOORVALLEN_INSTELLINGEN.aan': true, 'VOORVALLEN_INSTELLINGEN.dagenTussen': 10, 'VOORVALLEN_INSTELLINGEN.dagenTussenWinter': 6 }, // geen tekst
-          uitleg: T.t('About every ten days, in winter every six. Every answer says in advance what it costs.') },
-        { id: 'zelden', naam: T.t('Rarely'), zet: { 'VOORVALLEN_INSTELLINGEN.aan': true, 'VOORVALLEN_INSTELLINGEN.dagenTussen': 20, 'VOORVALLEN_INSTELLINGEN.dagenTussenWinter': 12 }, // geen tekst
-          uitleg: T.t('About every twenty days, in winter every twelve.') },
-        { id: 'uit', naam: T.t('Off'), zet: { 'VOORVALLEN_INSTELLINGEN.aan': false }, // geen tekst
-          uitleg: T.t('Nobody comes looking for you. The village goes its own way.') },
-      ],
-    },
-    // De feesten (Marcel, 3 okt, werklijst vraag 97: het oogstfeest "Ja, een hele dag vrij", en "De meiboom"; js/feesten.js).
-    {
-      id: 'feesten', naam: T.t('Feasts'), standaard: 'vieren',
-      uitleg: T.t('What happens when you say yes to a feast, such as the harvest feast or the maypole.'),
-      keuzes: [
-        { id: 'vieren', naam: T.t('The village celebrates'), zet: { 'FEESTEN_INSTELLINGEN.vieren': true }, // geen tekst
-          uitleg: T.t("The whole village is on the square, with light and ale. After a big feast nobody works the next day: that costs a day's work.") },
-        { id: 'stemming', naam: T.t('Mood only'), zet: { 'FEESTEN_INSTELLINGEN.vieren': false }, // geen tekst
-          uitleg: T.t('A feast costs what the answer says and makes the village happy, but you see nothing of it. As before 3 October.') },
-      ],
-    },
-    // De raadsman (Marcel, 30 sep, werklijst vraag 66: "c Nee, wordt automatisch als de schout er niet is"; en vraag 68:
-    // "Ja B inderdaad", alleen als je echt weg bent; js/raadsman.js).
-    {
-      id: 'raadsman', naam: T.t('Advisor'), standaard: 'aan',
-      uitleg: T.t('When your advisor decides an event.'),
-      keuzes: [
-        { id: 'aan', naam: T.t('When you are away'), zet: { 'RAADSMAN_INSTELLINGEN.aan': true, 'RAADSMAN_INSTELLINGEN.nietGesproken': false }, // geen tekst
-          uitleg: T.t('If you are not in the village when somebody comes looking for you with an event, your advisor decides, according to his character and what he can do. If you are there but do not speak to whoever is looking for you, it passes. Whoever is the advisor reaps more slowly.') },
-        { id: 'ook', naam: T.t('Even when you do not speak'), zet: { 'RAADSMAN_INSTELLINGEN.aan': true, 'RAADSMAN_INSTELLINGEN.nietGesproken': true }, // geen tekst
-          uitleg: T.t('He also decides when you are in the village but do not speak in time to whoever is looking for you; anyone you send away, you leave to him.') },
-        { id: 'uit', naam: T.t('Off'), zet: { 'RAADSMAN_INSTELLINGEN.aan': false, 'RAADSMAN_INSTELLINGEN.nietGesproken': false }, // geen tekst
-          uitleg: T.t('What you miss passes, and the village holds it against you.') },
-      ],
-    },
-    // Het rapport van de raadsman, 's ochtends (werklijst vraag 75, 3a; Marcel, 1 okt: "A Ja dat is goed";
-    // js/ochtendrapport.js). Uit is het spel van vóór 1 okt.
-    {
-      id: 'rapport', naam: T.t('The morning report'), standaard: 'aan',
-      uitleg: T.t('Whether your advisor brings you a report every morning.'),
-      keuzes: [
-        { id: 'aan', naam: T.t('On'), zet: { 'OCHTENDRAPPORT_INSTELLINGEN.aan': true }, // geen tekst
-          uitleg: T.t('If you have an advisor, he is at your door in the morning with what happened, how the grain and the logs are doing, whether they will last the winter, what is going on and what is coming. How accurate his numbers are depends on how good he is with figures. If you were not there, it waits under the Morning report button.') },
-        { id: 'uit', naam: T.t('Off'), zet: { 'OCHTENDRAPPORT_INSTELLINGEN.aan': false }, // geen tekst
-          uitleg: T.t('No report: what happened, you see in the messages, and you make your own rounds.') },
-      ],
-    },
     // Het land (werklijst vraag 63 en 69; js/land.js): tot het buurdorp er is, staat het uit, en speelt de proef zoals
     // nu. Dan wordt het een keuze bij Nieuw spel: 0 of 1 tegenspeler.
     {
@@ -599,14 +544,11 @@
     { naam: T.t('The merchant'), blok: 'HANDEL_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The lord'), blok: 'HEER_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The levy'), blok: 'HEERVAART_INSTELLINGEN' }, // geen tekst
-    { naam: T.t('Events'), blok: 'VOORVALLEN_INSTELLINGEN' }, // geen tekst
-    { naam: T.t('Feasts'), blok: 'FEESTEN_INSTELLINGEN' }, // geen tekst
+    { naam: T.t('Decorations'), blok: 'VERSIERING_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The market'), blok: 'MARKT_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The ending'), blok: 'EINDE_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The two masters'), blok: 'BAZEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t("The lord's whims"), blok: 'GRILLEN_INSTELLINGEN' }, // geen tekst
-    { naam: T.t('The advisor'), blok: 'RAADSMAN_INSTELLINGEN' }, // geen tekst
-    { naam: T.t('The morning report'), blok: 'OCHTENDRAPPORT_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The land'), blok: 'LAND_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The maker'), blok: 'MAKER_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The empty start'), blok: 'BEGIN_INSTELLINGEN' }, // geen tekst
@@ -960,7 +902,7 @@
     lantaarn: T.t('lantern'),
     herberg: T.t('inn'),
     huis: T.t('house'),
-    feest: T.t('feast'),
+    kaars: T.t('candles'),
     schout: T.t('reeve'),
     brand: T.t('fire'),
     flakkeren: T.t('flicker'),
@@ -1043,7 +985,6 @@
     waterPerVisser: T.t('water per fisherman'),
     visEnVleesMarge: T.t('fish and meat margin'),
     roversNa: T.t('robbers after'),
-    raadsmanNa: T.t('advisor after'),
     afwisselingTot: T.t('advice at this many kinds of food'),
     kansPerAvond: T.t('chance per evening'),
     kansWinter: T.t('chance in winter'),
@@ -1117,7 +1058,7 @@
     vlees: T.t('meat'),
     kaas: T.t('cheese'),
     huiden: T.t('hides'),
-    // De heer, de heervaart, de voorvallen, de feesten
+    // De heer, de heervaart, de statussen, de versiering
     brief: T.t('letter'),
     pachtPerAkkertegel: T.t('rent per arable tile'),
     hoofdgeldPerMens: T.t('poll tax per person'),
@@ -1144,27 +1085,13 @@
     goudPerMan: T.t('gold per man'),
     kansNietTerug: T.t('chance of not returning'),
     gunstPerGoud: T.t('favour per gold'),
-    dagenTussen: T.t('days between'),
-    dagenTussenWinter: T.t('days between in winter'),
-    spreiding: T.t('spread'),
-    eersteNa: T.t('first after'),
     pauze: T.t('pause'),
-    vastMarge: T.t('fixed-day margin'),
-    vervolgVan: T.t('follow-up from'),
-    vervolgTot: T.t('follow-up to'),
-    zoektVanaf: T.t('looks for you from'),
-    zoektTot: T.t('looks for you until'),
-    zoektDagen: T.t('days looking'),
-    stemmingDagen: T.t('mood days'),
-    nietGevonden: T.t('not found'),
-    metOorzaak: T.t('with a cause'),
-    zonderOorzaak: T.t('without a cause'),
     onvrede: T.t('discontent'),
     onrust: T.t('unrest'),
     hongersnood: T.t('famine'),
-    lichtSterkte: T.t('light brightness'),
-    meiboomDagen: T.t('maypole days'),
+    meiboom: T.t('maypole'),
     kerstboom: T.t('Christmas tree'),
+    van: T.t('from'),
     tot: T.t('until'),
     kaarsStraal: T.t('candle radius'),
     kaarsSterkte: T.t('candle brightness'),
@@ -1186,7 +1113,7 @@
     potten: T.t('pots'),
     minstensOver: T.t('at least left'),
     schade: T.t('damage'),
-    // De twee bazen, de grillen, de raadsman, het rapport
+    // De twee bazen, de grillen
     gunstBegin: T.t('favour at the start'),
     vertrouwenBegin: T.t('trust at the start'),
     waarschuwing: T.t('warning'),
@@ -1200,8 +1127,6 @@
     gestuurd: T.t('sent'),
     vrijgekocht: T.t('bought out'),
     gehaald: T.t('taken by the lord'),
-    voorval: T.t('event'),
-    doorRaadsman: T.t('by the advisor'),
     heervaartWeg: T.t('levy men away'),
     heervaartVrij: T.t('levy bought out'),
     doodDoorWinter: T.t('death by winter'),
@@ -1211,26 +1136,6 @@
     volgDagen: T.t('days to follow'),
     nietVoor: T.t('not before'),
     antwoordBinnen: T.t('answer within'),
-    kandidaten: T.t('candidates'),
-    maaien: T.t('reaping'),
-    vaardigheden: T.t('skills'),
-    rechtspreken: T.t('judging'),
-    zwijgen: T.t('keeping quiet'),
-    rekenen: T.t('figures'),
-    bouwen: T.t('building'),
-    vechten: T.t('fighting'),
-    verban: T.t('banish'),
-    gezin: T.t('family'),
-    marge: T.t('margin'),
-    bijHuis: T.t('at his house'),
-    slechtNaast: T.t('badly off by'),
-    afrondenOp: T.t('round to'),
-    telTot: T.t('counts exactly up to'),
-    gebeurdOnthouden: T.t('events remembered'),
-    herhaalNa: T.t('repeat after'),
-    winterVerschil: T.t('winter difference'),
-    wensenPerRapport: T.t('wants per report'),
-    raadTot: T.t('advice until'),
     // Het land, de maker
     provincies: T.t('provinces'),
     dagenMin: T.t('least days'),
@@ -1450,7 +1355,6 @@
     'MIST_INSTELLINGEN.donker': T.t('darker in the grey'), // geen tekst
     'MIST_INSTELLINGEN.zwart': T.t('black'), // geen tekst
     'MIST_INSTELLINGEN.rand': T.t('soft edge'), // geen tekst
-    'RAADSMAN_INSTELLINGEN.kiest': T.t('how the advisor weighs'), // geen tekst
     'BEESTEN_INSTELLINGEN.groot': T.t('splits at size'), // geen tekst
     'BEESTEN_INSTELLINGEN.jager.hooguit': T.t('pack size limit'), // geen tekst
     'MAKER_INSTELLINGEN.b': T.t('width'), // geen tekst

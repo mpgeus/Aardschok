@@ -26,9 +26,10 @@
   const IN = () => T.ZIEN_INSTELLINGEN;
 
   // Het licht in het dorp: de herberg, met zijn eigen lantaarn en zijn ramen (T.herbergLicht), elke
-  // andere lantaarn op de kaart, die 's avonds brandt, en op een feest het plein (T.feestLicht, js/feesten.js). Wie ze aansteekt, komt later (de koster; spel.md,
+  // andere lantaarn op de kaart, die 's avonds brandt, en de kaarsjes van de kerstboom (T.versieringLicht,
+  // js/versiering.js). Wie ze aansteekt, komt later (de koster; spel.md,
   // "lichtbronnen in het dorp"). En de lantaarn van de schout, als hij er een draagt (T.draagtLantaarn, vraag 125, C).
-  // Geeft een lijst { x, y, straal, sterkte, soort } (tegels, 0 tot 1; soort is 'herberg', 'lantaarn', 'feest', 'huis'
+  // Geeft een lijst { x, y, straal, sterkte, soort } (tegels, 0 tot 1; soort is 'herberg', 'lantaarn', 'kaars', 'huis'
   // of 'schout', voor de kleur in js/tekenen.js), bij de herberg en de huizen ook met ramenVan en schimmen.
   T.lichtBronnen = function (D) {
     const w = D.wereld;
@@ -46,9 +47,9 @@
     const lantaarns = w.voorwerpen
       .filter((v) => v.soort === 'lantaarn' && !vanDeHerberg(v))
       .map((v) => ({ x: v.x, y: v.y, straal: IN().lantaarnStraal, sterkte: IN().lantaarnSterkte, soort: 'lantaarn' }));
-    // En op een feest het licht op het plein (js/feesten.js).
-    const feest = T.feestLicht(D).map((b) => ({ ...b, soort: 'feest' }));
-    return herberg.concat(lantaarns, feest, huizen, brand, kamp, schout);
+    // En de kaarsjes van de kerstboom (js/versiering.js).
+    const kaarsen = T.versieringLicht(D).map((b) => ({ ...b, soort: 'kaars' }));
+    return herberg.concat(lantaarns, kaarsen, huizen, brand, kamp, schout);
   };
 
   // Draagt de schout van dit dorp nu een brandende lantaarn? Buiten, op de kaart van zijn dorp, als het donker genoeg

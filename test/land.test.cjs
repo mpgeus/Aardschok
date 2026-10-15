@@ -18,7 +18,6 @@ function gehucht(zaad = 7) {
   S.kalender.dag = 10.4;
   S.kalender.snelheid = 3;
   S.dorp.lot = Object.assign(S.dorp.lot || {}, { zaad });
-  S.dorp.voorvallen = T.nieuweVoorvallen();
   return S;
 }
 
@@ -233,30 +232,12 @@ test('de weg het dorp uit opent de kaart, en wie er net terugkwam, moet er eerst
   });
 });
 
-test('terwijl hij weg is, beslist de raadsman, roept niemand de militie, en vertraagt de heer de reis niet', () => {
+test('terwijl hij weg is, vertraagt de heer de reis niet', () => {
   metLand(() => {
     const S = metZijnLand(5);
     const L = S.land;
-    // Een raadsman, en een voorval dat nu begint.
-    const boer = S.dorp.bewoners.mensen.find((p) => T.isBoer(S.dorp, p));
-    assert.ok(T.kiesRaadsman(S.dorp, boer).kan);
     T.openLand(S);
     T.beginReis(S, T.buurProvincies(L, L.thuis)[0]);
-    const v = T.VOORVALLEN.lening;
-    const oud = { vervolg: v.vervolg, als: v.als };
-    Object.assign(v, { vervolg: false, als: undefined });
-    let mensen = null;
-    for (let d = 11; d < 60 && !mensen; d++) {
-      const m = T.voorvalKan(S.dorp, 'lening', d);
-      if (m && m.wie !== boer) mensen = m;
-    }
-    Object.assign(v, oud);
-    const Lv = T.beginVoorval(S.dorp, 'lening', mensen.wie, mensen.ander, Math.floor(S.kalender.dag));
-    S.dorp.voorvallen.volgende = 1e9;
-    S.kalender.dag = Lv.vanaf + 0.01;
-    T.werkVoorvallenBij(S, S.dorp);
-    assert.equal(S.dorp.voorvallen.lopend, null, 'het voorval is beslist');
-    assert.equal(S.dorp.voorvallen.doorRaadsman, 1, 'door de raadsman');
     // De heer die op het plein staat, of een bezoeker die komt: de reis gaat op zijn snelheid door.
     T.naarGewoneSnelheid(S.dorp);
     assert.equal(S.kalender.snelheid, T.LAND_INSTELLINGEN.reisSnelheid);

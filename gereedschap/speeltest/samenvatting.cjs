@@ -1,6 +1,6 @@
 // De tabellen van de speeltest (speeltest.cjs). De getallen komen uit wat speler.js per jaar teruggeeft; wat een jaar niet
 // heeft, blijft leeg. De kolonist (werklijst B, 1f) speelt het lege begin, een jaar: voor hem het eerste jaar (loopt er iets
-// vast, en het eten en het hout), de voorvallen, de twee bazen, het bos en het graanboek (vraag 94, d). Tot 12 okt stonden hier
+// vast, en het eten en het hout), de twee bazen, het bos en het graanboek (vraag 94, d). Tot 12 okt stonden hier
 // ook de tabellen van de spelers braaf, slim, bouwer en sluw (de heer, het dorp, gemiddeld per speler, van gehucht tot dorp).
 const NAMEN = { kolonist: 'kolonist' };
 const VOLGORDE = Object.keys(NAMEN);
@@ -19,33 +19,11 @@ exports.maak = function (uitslagen, stand) {
   uit.push(fouten.length ? fouten.map((u) => `- **Fouten** bij ${NAMEN[u.speler]}, zaad ${u.zaad}: ${[...u.fouten, ...(u.luisterFouten || [])].slice(0, 3).join(' / ')}`).join('\n') : 'Geen fouten in de console.', '');
   uit.push(...hetEersteJaar(goed.filter((u) => u.eersteJaar)));
   uit.push(...deOssenkar(goed.filter((u) => u.kar)));
-  uit.push(...deVoorvallen(goed));
   uit.push(...deTweeBazen(goed));
   uit.push(...hetBos(goed));
   uit.push(...hetGraanboek(goed));
   return uit.join('\n') + '\n';
 };
-
-// De voorvallen (js/voorvallen.js, vraag 65): hoeveel er waren, en hoe vaak het spel dan een keuze vraagt. Een jaar is
-// een uur op 30×, en het had er al een keer of acht (vraag 65: drie keer de marskramer, de inner, Sint-Maarten, twee
-// keer de rovers, het slachten); "Klaar als" vraagt een keuze per één à twee minuten.
-const KEUZES_ZONDER = 8;
-function deVoorvallen(goed) {
-  const uit = ['## De voorvallen', '', `Een jaar is een uur op 30×; met de ${KEUZES_ZONDER} keuzes die een jaar al had, vraagt het spel een keuze per zoveel minuten.`, ''];
-  const kop = ['speler', 'zaad', 'voorvallen', 'een keuze per', 'door de raadsman', 'welke (de eerste tien)'];
-  uit.push(regel(kop), regel(kop.map(() => '---')));
-  for (const u of goed) {
-    const v = u.voorvallen || [];
-    uit.push(regel([
-      NAMEN[u.speler] || u.speler, u.zaad, String(v.length),
-      `${(60 / (v.length + KEUZES_ZONDER)).toFixed(1).replace('.', ',')} min`,
-      u.raadsman ? `${u.raadsman.door}: ${u.raadsman.over}` : '',
-      v.slice(0, 10).map((x) => x.id).join(', '),
-    ]));
-  }
-  uit.push('');
-  return uit;
-}
 
 // De twee bazen (js/bazen.js, vraag 106): de gunst van de heer en het vertrouwen van het dorp aan het eind en op hun
 // laagst, de waarschuwingen, of je weg moest en waarom, en wat de speler op de grillen van de heer antwoordde.
@@ -207,9 +185,9 @@ function hetGraanboek(goed) {
   if (!met.length) return [];
   const teken = (x) => (x == null || Math.abs(x) < 0.5 ? '' : x > 0 ? `+${Math.round(x)}` : `−${Math.round(-x)}`);
   const samen = (b, ...namen) => namen.reduce((n, k) => n + (b[k] || 0), 0);
-  const BEKEND = ['oogst', 'gegeten', 'zaaien', 'heer', 'herberg', 'molen', 'brouwerij', 'gekocht', 'verkocht', 'rovers', 'soldaten', 'voorvallen'];
+  const BEKEND = ['oogst', 'gegeten', 'zaaien', 'heer', 'herberg', 'molen', 'brouwerij', 'gekocht', 'verkocht', 'rovers', 'soldaten'];
   const uit = ['## Het graanboek', '', 'Per jaar waar het graan bleef (erbij +, eraf −), en wat dat deed. Het laatste jaar is de eerste maand, tot 1 grasmaand.', ''];
-  const kop = ['speler', 'zaad', 'jaar', 'oogst', 'gegeten', 'zaaien', 'de heer', 'herberg', 'molen', 'brouwerij', 'handel', 'rovers, soldaten, voorvallen', 'anders', 'dagen zonder bier', 'dagen zonder brood', 'dagen zonder laken', 'huizen met alles', 'dagen alle huizen alles'];
+  const kop = ['speler', 'zaad', 'jaar', 'oogst', 'gegeten', 'zaaien', 'de heer', 'herberg', 'molen', 'brouwerij', 'handel', 'rovers en soldaten', 'anders', 'dagen zonder bier', 'dagen zonder brood', 'dagen zonder laken', 'huizen met alles', 'dagen alle huizen alles'];
   uit.push(regel(kop), regel(kop.map(() => '---')));
   for (const u of met) {
     u.graan.forEach((jaar, j) => {
@@ -219,7 +197,7 @@ function hetGraanboek(goed) {
       uit.push(regel([
         NAMEN[u.speler] || u.speler, u.zaad, String(j + 1),
         teken(b.oogst), teken(b.gegeten), teken(b.zaaien), teken(b.heer), teken(b.herberg), teken(b.molen), teken(b.brouwerij),
-        teken(samen(b, 'gekocht', 'verkocht')), teken(samen(b, 'rovers', 'soldaten', 'voorvallen')),
+        teken(samen(b, 'gekocht', 'verkocht')), teken(samen(b, 'rovers', 'soldaten')),
         teken(anders),
         g.dagen ? String(g.zonderBier) : '', g.dagen ? String(g.zonderBrood) : '', g.dagen && g.zonderLaken != null ? String(g.zonderLaken) : '',
         g.dagen ? pct(g.alles / g.dagen) : '', g.dagen ? `${g.allemaal} van ${g.dagen}` : '',

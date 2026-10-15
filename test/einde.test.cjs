@@ -72,7 +72,6 @@ test('het jaarboek telt het jaar, en op 1 lentemaand komt het jaarverslag', () =
   );
   T.telOogstInJaarboek(D, 300.2); // de boeren maaien tegel voor tegel (js/akkers.js)
   T.telOogstInJaarboek(D, 100.1);
-  D.feesten = { komt: null, boom: null, gevierd: [{ id: 'meiboom', dag: begin + 60, heel: true }] };
   const begonMet = D.jaarboek.mensen; // de mensen van het proefdorp, aan het begin van het jaar
   D.bevolking = 30;
 
@@ -89,7 +88,6 @@ test('het jaarboek telt het jaar, en op 1 lentemaand komt het jaarverslag', () =
   assert.ok(regels.includes('4 people joined, 3 died and 1 left.'), regels.join(' | '));
   assert.ok(regels.includes('The harvest brought 400 grain.'));
   assert.ok(regels.includes('One house grew larger.'));
-  assert.ok(regels.includes(`We celebrated ${T.FEESTEN.meiboom.naam}.`));
   assert.ok(regels.some((r) => /^The most missed was ale, for 2 days\.$/.test(r)), regels.join(' | '));
   assert.ok(!regels.some((r) => /iedereen alles/.test(r)), 'het winnen is weg: ook de regel over de dagen waarop iedereen alles had');
   assert.equal(D.jaarboek.begin, lente, 'en het nieuwe jaar begint een nieuw jaarboek');

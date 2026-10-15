@@ -814,7 +814,7 @@
   // Een gezin zonder huis (je brak het af, js/afbreken.js; werklijst C, stap 5; Marcel, 14 okt: "ze lopen los, met een
   // melding dat er huizen nodig zijn"): het slaapt buiten op het plein (T.dagAnker, js/dag.js), werkt gewoon, en trekt in
   // de eerste woning met plaats (T.verhuisUitHetKamp, js/begin.js). Zolang het duurt, is het een status (dakloos,
-  // js/voorvallen.js).
+  // js/statussen.js).
   T.wordtDakloos = function (D, leden) {
     const plek = T.dakloosPlek(D);
     for (const p of leden) {
@@ -852,7 +852,7 @@
   // (een wachter tegen de rovers, js/rovers.js; `wie` zegt dan wie). Het begin ('begin') regelt
   // T.zetBeginBewoners zelf. Met `waarom` (js/behoeften.js: "De winter is
   // hard") komt er een bericht dat zegt wie het zijn. Geeft wie het zijn, in woorden ("old John, father of Nicholas"),
-  // voor het dagboek (js/ochtendrapport.js), of '' zonder bewoners.
+  // voor het dagboek (js/einde.js), of '' zonder bewoners.
   T.bewonersVolgen = function (D, verschil, reden, waarom, wie) {
     if (!D.bewoners || reden === 'begin') return '';
     // Een kind dat geboren wordt (js/leven.js): in het gezin van zijn moeder (`wie`), niet als een nieuw gezin.

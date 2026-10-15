@@ -48,8 +48,7 @@
     return hier.filter((p) => !p.hoofd).sort((a, b) => a.gezin - b.gezin)[0] || hier.find((p) => p.leeftijd === 'volwassen') || null;
   };
 
-  // Is deze bewoner een boer: de boer van de boerderij waar hij woont (T.boerVan)? Eén vraag voor de voorvallen
-  // (js/voorvallen.js) en de raadsman (js/raadsman.js). Tot 12 okt was een boer wie een karakter uit het lot had (de vijf
+  // Is deze bewoner een boer: de boer van de boerderij waar hij woont (T.boerVan)? Tot 12 okt was een boer wie een karakter uit het lot had (de vijf
   // boeren van de kaart); het lot en de karakters zijn weg sinds ronde 2 van het snoeien, stap 4 (Marcel: "Ja, nu mee").
   T.isBoer = (D, p) => !!p && T.isBoerderij(p.huis) && T.boerVan(D, p.huis) === p;
 

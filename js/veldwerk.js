@@ -187,12 +187,10 @@
   // ---------------------------------------------------------------------------------------------
 
   // Kan hij nu op zijn land werken? Niet als hij maait (T.werkOogstBij), binnen is, of ergens anders moet zijn: met de
-  // schout praten, de schout zoeken met een voorval (js/voorvallen.js), met de militie mee (js/rovers.js), naar de
-  // schandpaal (js/heer.js), zijn rapport brengen (js/ochtendrapport.js), wegtrekken of een tijd weg zijn
+  // schout praten, met de militie mee (js/rovers.js), naar de schandpaal (js/heer.js), wegtrekken of een tijd weg zijn
   // (js/bewoners.js, js/heervaart.js), of midden in een praatje (dat houdt na de schaft vanzelf op, js/praatje.js).
   function magWerken(S, D, e) {
-    if (e.maait || e.oogstDoel || e.binnen || e === S.spreektMet || e.zoektSchout || e.opgeroepen || e.moetNaar || e.vertrekt || e.praatje) return false;
-    if (T.rapportAnker(D, e)) return false;
+    if (e.maait || e.oogstDoel || e.binnen || e === S.spreektMet || e.opgeroepen || e.moetNaar || e.vertrekt || e.praatje) return false;
     const p = T.bewonerVan(D, e);
     return !(p && (p.weg || p.komt || T.blijftThuis(p, D.kalender.dag)));
   }
@@ -828,9 +826,9 @@
     if (!w || !D.kalender || !((w.akkers && w.akkers.length) || (w.wijngaarden && w.wijngaarden.length))) return;
     const dag = D.kalender.dag;
     const datum = T.datumVanDag(dag);
-    // Gewerkt wordt in de werkuren (js/dag.js), en niet op een hele feestdag (js/feesten.js).
+    // Gewerkt wordt in de werkuren (js/dag.js).
     const deel = T.dagdeelVan(dag, false);
-    const werktijd = deel === 'werk' && !T.vrijeDag(D, dag);
+    const werktijd = deel === 'werk';
     const nu = S.wereldTijd || 0;
     for (const e of w.wezens) {
       if (e.dood) continue;
@@ -845,7 +843,7 @@
       if (e.draagt && !e.pad.length && e.thuis && T.afstand(e.thuis, { x: e.tx, y: e.ty }) <= 1) e.draagt = null;
       // De schaft: brood op de akker (js/dag.js). Wie op zijn land werkt, blijft er staan tot het werk weer begint (wie
       // er net heen liep, komt er nog aan en schaft daar), en neemt dan de volgende tegel.
-      if (deel === 'schaft' && e.werkt && !T.vrijeDag(D, dag) && magWerken(S, D, e)) {
+      if (deel === 'schaft' && e.werkt && magWerken(S, D, e)) {
         onthoudHalfWerk(D, e, nu);
         const aangekomen = !e.pad.length && e.tx === e.werkt.x && e.ty === e.werkt.y;
         if (e.werkt.tot != null || aangekomen) Object.assign(e.werkt, { rust: true, schaft: true });

@@ -100,7 +100,7 @@ test('een regel over een dorp zegt het met T.zeg, nooit rechtstreeks tegen het s
   // Rechtstreeks tegen het scherm spreken alleen het scherm zelf en de regels van het spel: jij (slapen, een gesprek,
   // een quest), het land, een gevecht, en T.zeg zelf. Een nieuw bestand met regels over een dorp staat hier niet
   // tussen, en spreekt dus met T.zeg: dan komt een ander dorp niet bij jou (vraag 71, C).
-  const SPEL = ['dorp.js', 'ui.js', 'hud.js', 'brieven.js', 'wettenmenu.js', 'raadsmanvenster.js', 'landkaart.js', 'menu.js',
+  const SPEL = ['dorp.js', 'ui.js', 'hud.js', 'brieven.js', 'wettenmenu.js', 'landkaart.js', 'menu.js',
     'main.js', 'dialoog.js', 'gesprek.js', 'quest.js', 'verkennen.js', 'gevecht.js', 'gebied.js', 'land.js', 'dag.js', 'tijd.js',
     'opslaan.js', 'opties.js', 'tekenen.js'];
   const fs = require('node:fs');

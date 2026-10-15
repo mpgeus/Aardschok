@@ -43,12 +43,6 @@
     nietGekomen: -10,
     // De heervaart (js/heervaart.js): je stuurde de mannen, kocht ze vrij, of hij haalde ze op omdat je niet antwoordde.
     heervaart: { gestuurd: 10, vrijgekocht: 5, gehaald: -10 },
-    // Het dorp. Een antwoord op een voorval telt zo zwaar als het het dorp tevreden of ontevreden maakt (doe.tevreden,
-    // in procenten), keer zoveel; besliste je raadsman, dan keer doorRaadsman.
-    voorval: 0.5,
-    doorRaadsman: 0.5,
-    // Wie je zocht, vond je niet, of je had geen tijd.
-    nietGevonden: -2,
     // De heervaart: mannen naar de oorlog, of vrijgekocht.
     heervaartWeg: -8,
     heervaartVrij: 8,
@@ -169,11 +163,6 @@
     const b = bazenVan(D);
     return { erbij, na: naar(b, 'gunst', b.gunst + erbij) };
   };
-
-  // Een antwoord op een voorval (js/voorvallen.js): zo zwaar als het het dorp tevreden maakt, en minder als je raadsman
-  // het besliste.
-  T.vertrouwenNaVoorval = (D, tevreden, titel, doorRaadsman) =>
-    T.wijzigVertrouwen(D, tevreden * IN().voorval * (doorRaadsman ? IN().doorRaadsman : 1), titel);
 
   // Wie het dorp verlaat (T.wijzigBevolking, js/gebouwen.js): wie verhongerde of bevroor, en wie sneuvelde.
   T.vertrouwenNaBevolking = function (D, verschil, reden) {

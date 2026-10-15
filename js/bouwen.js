@@ -130,13 +130,11 @@
   const werkdagenVan = (D, g) => bouwersVan(D, g).length * T.werkVanAfwisseling(D);
 
   // Elke nacht (T.tikGebouwenDag, vóór de gebouwen die klaarkomen): het werk van gisteren, voor wie er gisteren bouwde, min
-  // wat de beelden al deden. Niet na een hele feestdag (js/feesten.js), want toen werkte niemand.
+  // wat de beelden al deden.
   T.tikBouwenDag = function (D, dag) {
     if (!T.bouwenMetHanden(D) || !D.bewoners) return;
-    const gisteren = dag - 1;
-    const vrij = gisteren >= 0 && T.vrijeDag(D, gisteren);
     for (const g of bouwplaatsen(D)) {
-      const werk = vrij ? 0 : werkdagenVan(D, g);
+      const werk = werkdagenVan(D, g);
       if (werk > g.bouw.vandaag) werkAan(D, g, werk - g.bouw.vandaag, dag);
       g.bouw.vandaag = 0;
     }
@@ -186,7 +184,7 @@
   T.werkBouwenBij = function (S, D) {
     if (!T.bouwenMetHanden(D) || !D.bewoners || !D.kalender || !D.wereld) return;
     const dag = D.kalender.dag;
-    const werktijd = T.dagdeelVan(dag, T.isOogstDag(dag)) === 'werk' && !T.vrijeDag(D, dag);
+    const werktijd = T.dagdeelVan(dag, T.isOogstDag(dag)) === 'werk';
     const plaatsen = bouwplaatsen(D);
     if (werktijd) {
       const f = werkdagGedaan(D);

@@ -1,7 +1,6 @@
 // De meiboom (ontwerp/werklijst.md, vraag 97; Marcel, 3 okt: "De meiboom"): op 1 bloeimaand zetten de jongeren een
 // berk op het plein, ontdaan van zijn takken op de kroon na, met een krans van groen met bloemen erin, en linten in vier
-// kleuren die eraan hangen. Hij blijft een maand staan (js/feesten.js): zo zie je ook na het feest dat het dorp feest
-// vierde.
+// kleuren die eraan hangen. Hij staat in bloeimaand op het plein (js/versiering.js; tot 15 okt kwam hij met een feest).
 //
 // Eén tekening, geen delen, op beelden/meiboom.png (naar-spel.cjs --alleen meiboom):
 // een voorwerp draait niet mee. Het model kijkt naar Z: lokaal +y is naar de camera, +x is links in beeld, z omhoog.

@@ -28,8 +28,8 @@
   // veranderen. Zo komt een ramp niet uit de lucht, maar uit iets wat je had kunnen zien (het concept,
   // ontwerp/concept.md: "problemen hebben oorzaken"). Per oorzaak: wat er dan is (kop), en of hij nu speelt (speelt:
   // geeft waarom, het stuk zin na "want", of '' als er niets bij hoeft; null als hij niet speelt). Voor het rapport van
-  // de raadsman (js/ochtendrapport.js; werklijst vraag 76) ook hoe je zegt dat hij blijft (nog) en dat hij over is
-  // (voorbij).
+  // de raadsman (tot 15 okt, js/ochtendrapport.js) ook hoe je zegt dat hij blijft (nog) en dat hij over is (voorbij).
+  // Een status die zijn begin en eind zelf zegt (het gevecht, de koorts), heeft `zegtZelf`.
   //
   // Sinds 9 okt (werklijst vraag 77, stap 2; de richtlijn van 1 okt: "Iets wat begint en eindigt. Mogelijk in
   // verschillende niveaus") is een oorzaak een status: `naam` voor de balk, en `erger` het tweede niveau, met zijn eigen
@@ -38,6 +38,7 @@
   T.OORZAKEN = {
     // Een gevecht (js/gevecht.js; werklijst vraag 170, stap 2): zolang er gevochten wordt, loopt de tijd hooguit op 1×.
     gevecht: {
+      zegtZelf: true,
       naam: T.t('Fighting'),
       kop: T.t('There is fighting'),
       nog: T.t('There is still fighting'),
@@ -149,6 +150,7 @@
     },
     // De koorts (js/koorts.js; vraag 144, 3): zolang er iemand ziek is.
     koorts: {
+      zegtZelf: true,
       naam: T.t('Fever'),
       kop: T.t('There is fever in the village'),
       nog: T.t('There is still fever in the village'),
@@ -224,19 +226,26 @@
     return { id: o, niveau: erger != null ? 2 : 1, naam: N.naam, zin, waarom: w };
   };
 
-  // Welke oorzaken er nu spelen, in de volgorde van T.OORZAKEN, als [{ id, zin }]: voor het rapport van de raadsman
-  // (js/ochtendrapport.js) en Spel.debug.voorval().
+  // Welke oorzaken er nu spelen, in de volgorde van T.OORZAKEN, als [{ id, zin }].
   T.oorzakenNu = (D, dag) => Object.keys(T.OORZAKEN).map((o) => T.oorzaakNu(D, o, dag)).filter(Boolean);
 
   // De statussen van het dorp (werklijst vraag 77, stap 2; de richtlijn van 1 okt: "Iets wat begint en eindigt"): wat er
-  // nu speelt, met sinds wanneer en op welk niveau (`D.statussen`, elke nacht, vóór het rapport), voor de kaartjes in de
-  // balk (js/hud.js). Zo is te zien hoe lang iets al duurt, ook als je het rapport niet las.
+  // nu speelt, met sinds wanneer en op welk niveau (`D.statussen`, elke nacht), voor de kaartjes in de balk (js/hud.js).
+  // Een bericht zegt het als hij begint, erger of minder wordt, of ophoudt (CLAUDE.md, "Een toestand is een status"; tot
+  // 15 okt zei het rapport van de raadsman dat, en dat ging in ronde 3 van het snoeien weg).
   T.tikStatussenDag = function (D, dag) {
     const oud = D.statussen || {};
     const nieuw = {};
     for (const o of T.oorzakenNu(D, dag)) {
       const m = oud[o.id];
       nieuw[o.id] = { sinds: m ? m.sinds : dag, niveau: o.niveau };
+      if (T.OORZAKEN[o.id].zegtZelf) continue;
+      if (!m || o.niveau > m.niveau) T.zeg(D, o.zin, 'gevaar');
+      else if (o.niveau < m.niveau) T.zeg(D, `${T.OORZAKEN[o.id].erger.minder}.`);
+    }
+    for (const id of Object.keys(oud)) {
+      const O = T.OORZAKEN[id];
+      if (!nieuw[id] && O && !O.zegtZelf) T.zeg(D, `${O.voorbij}.`, 'goed');
     }
     D.statussen = nieuw;
     if (T.ui && T.ui.toonStatussen) T.ui.toonStatussen(D);

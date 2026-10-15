@@ -338,7 +338,7 @@
 
   // Wie met de schout meeloopt, loopt naast hem: staat hij er niet, of loopt de schout door, dan een
   // nieuw pad naar een vrije tegel naast hem. `opnieuw`: in elk geval een nieuw pad (hij liep nog niet
-  // mee). Voor wie de schout volgt (js/voorvallen.js, js/rovers.js, js/beesten.js).
+  // mee). Voor wie de schout volgt (js/rovers.js).
   T.loopNaastDeSchout = function (D, e, opnieuw) {
     const h = D.schout;
     const afstand = T.afstand({ x: h.tx, y: h.ty }, { x: e.tx, y: e.ty });
@@ -353,12 +353,12 @@
   // ── Onderweg: wie er in de weg staat ──
 
   // Mag b een stap opzij gaan voor wie langs wil? Alleen wie maar wat staat: niet de schout (dat ben jij), niet wie
-  // bezig is (maaien, op zijn land werken, een gesprek, de schout zoeken met een voorval), geen dier, geen kar
+  // bezig is (maaien, op zijn land werken, een gesprek), geen dier, geen kar
   // (js/begin.js) en geen monster, en niet wie vecht (js/gevecht.js). Wie een praatje maakt (js/praatje.js), is ook bezig, maar gaat
   // in een smalle doorgang toch even opzij (`ookPraatje`, hieronder).
   T.magOpzij = (S, b, ookPraatje) =>
     !b.dood && !b.binnen && b !== S.schout && !b.dier && !b.beest && !b.kar && b.kant !== 'monster' && !b.maait && !b.werkt && b !== S.spreektMet &&
-    !b.zoektSchout && !b.doelwit && !b.volgt && !b.onderweg && !b.pad.length && (ookPraatje || !b.praatje);
+    !b.doelwit && !b.volgt && !b.onderweg && !b.pad.length && (ookPraatje || !b.praatje);
 
   // Wat doet e, die zijn volgende tegel bezet vindt (js/anim.js)? 'wacht': hij blijft staan, en kijkt het volgende beeld
   // opnieuw. 'verder': hij stapt nu (ze schuiven langs elkaar), of zijn weg is anders (een omweg). 'klaar': hij is er

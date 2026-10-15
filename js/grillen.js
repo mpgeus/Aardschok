@@ -5,8 +5,8 @@
 // binnen `antwoordBinnen` dagen, dan neemt hij het je kwalijk (`stil`).
 //
 // Zoals de heervaart (js/heervaart.js): een vraag die wacht (D.grillen.vraag), een brief met knoppen (js/brieven.js,
-// soort 'gril'; de knop Brief opent hem weer), en wat een antwoord kost, zegt hetzelfde als bij een voorval
-// (T.prijsVanKeuze, js/voorvallen.js). Alleen met de spelregel "Twee bazen" (T.bazenTellen).
+// soort 'gril'; de knop Brief opent hem weer), en wat een antwoord kost, zegt de knop vooraf (prijsVan). Alleen met de
+// spelregel "Twee bazen" (T.bazenTellen).
 //
 // D.grillen: { vraag: { id, dag, uiterlijk }, geweest: { id: dag }, aantal, beantwoord, stil }
 (function (T) {
@@ -28,7 +28,7 @@
   const IN = () => T.GRILLEN_INSTELLINGEN;
 
   // Wat hij kan willen. Per gril: de titel (voor de brief en het waarom bij de balk), de tekst van zijn brief, de
-  // antwoorden (`doe`: goud en waren, gunst en vertrouwen in punten; zoals een voorval, js/voorvallen.js), en
+  // antwoorden (`doe`: goud en waren, gunst en vertrouwen in punten), en
   // wat het kost als je niet antwoordt (`stil`).
   T.GRILLEN = {
     standbeeld: {
@@ -232,7 +232,7 @@
     if ((h && (h.brief || h.bezoek)) || (D.heervaart && D.heervaart.vraag)) return;
     const kan = Object.keys(T.GRILLEN).filter((id) => G.geweest[id] == null || dag - G.geweest[id] >= IN().pauze);
     if (!kan.length) return;
-    const id = kan[Math.floor(T.lotVanDeDag(D, dag, 61) * kan.length)];
+    const id = kan[Math.floor(T.vastLot(D, dag, 61) * kan.length)];
     G.vraag = { id, dag, uiterlijk: dag + IN().antwoordBinnen };
     G.geweest[id] = dag;
     G.aantal++;
@@ -257,14 +257,35 @@
     return g ? { id: v.id, titel: g.titel, tekst: g.tekst, dag: v.dag, uiterlijk: v.uiterlijk } : null;
   };
 
-  // De knoppen onder zijn brief (js/brieven.js): elk antwoord met wat het kost (T.prijsVanKeuze, js/voorvallen.js), en
+  // Wat een antwoord kost of oplevert, voor de knop: { tekst, kan, waarom }. Wat eraf gaat, moet er zijn; wat erbij komt,
+  // is er altijd. (Tot 15 okt was dit T.prijsVanKeuze in js/voorvallen.js, dat in ronde 3 van het snoeien wegging.)
+  function prijsVan(D, doe) {
+    const uit = { tekst: '', kan: true, waarom: '' };
+    const delen = [];
+    const teken = (n) => (n > 0 ? '+' : '−');
+    for (const wat of WAREN) {
+      const n = doe[wat] || 0;
+      if (!n) continue;
+      // Een bedrag is een teken en een hoeveelheid (T.hoeveel, js/voorraad.js): "−14 wood", "+3 gold".
+      delen.push(`${teken(n)}${T.hoeveel(Math.abs(n), wat)}`);
+      const heeft = Math.floor((D.voorraad ? D.voorraad[wat] : wat === 'goud' ? D.goud : 0) || 0);
+      if (n < 0 && heeft < -n && uit.kan) Object.assign(uit, { kan: false, waarom: T.t('you have {wat}', { wat: T.hoeveel(heeft, wat) }) });
+    }
+    const getal = (n) => `${teken(n)}${Math.abs(n)}`;
+    if (doe.gunst && T.BAZEN_INSTELLINGEN.aan) delen.push(T.t("the lord's favour {getal}", { getal: getal(doe.gunst) }));
+    if (doe.vertrouwen && T.BAZEN_INSTELLINGEN.aan) delen.push(T.t("the village's trust {getal}", { getal: getal(doe.vertrouwen) }));
+    uit.tekst = delen.join(', ');
+    return uit;
+  }
+
+  // De knoppen onder zijn brief (js/brieven.js): elk antwoord met wat het kost (prijsVan hierboven), en
   // of het kan. [{ actie, tekst, prijs, kan, waarom, hoofd, doe }]
   T.grilKeuzes = function (D) {
     const v = D.grillen && D.grillen.vraag;
     const g = v && T.GRILLEN[v.id];
     if (!g) return [];
     return g.keuzes.map((k, i) => {
-      const prijs = T.prijsVanKeuze(D, k.doe);
+      const prijs = prijsVan(D, k.doe);
       // Geen knop gaat voor: het spel kiest niet voor je tussen de heer en het dorp.
       return { actie: `gril${i}`, tekst: k.tekst, prijs: prijs.tekst, kan: prijs.kan, waarom: prijs.waarom, hoofd: false, doe: () => T.beantwoordGril(D, i) };
     });
@@ -275,7 +296,7 @@
     const G = grillenVan(D);
     const g = G.vraag && T.GRILLEN[G.vraag.id];
     const k = g && g.keuzes[i];
-    if (!k || !T.prijsVanKeuze(D, k.doe).kan) return false;
+    if (!k || !prijsVan(D, k.doe).kan) return false;
     G.vraag = null;
     G.beantwoord++;
     pasToe(D, k.doe, g.titel);

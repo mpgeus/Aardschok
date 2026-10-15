@@ -5,7 +5,7 @@
 // git, zodat een sessie die alleen de tekst bijwerkt, altijd een pdf kan maken, ook als een beeld niet meer lukt.
 //
 //   npm run samenvatting                maakt de pdf uit de tekst en de beelden die er zijn
-//   npm run samenvatting -- --beelden   speelt eerst het spel en maakt de vier beelden opnieuw (een minuut of twee)
+//   npm run samenvatting -- --beelden   speelt eerst het spel en maakt de beelden opnieuw (een minuut of twee)
 //
 // De pdf drukt Chromium af van de bladzijde zoals de server van het spel hem geeft (dan laden js/naam.js en de letters
 // zonder omweg); draait de server niet, dan start dit hem, en stopt hem na afloop. De beelden komen uit het spel zoals
@@ -120,16 +120,7 @@ async function wachtOpPlaatjes(page) {
   }
 }
 
-// Laat het spel lopen tot iemand de schout aanspreekt (js/voorvallen.js, T.ui.spreekAan).
-async function wachtOpGesprek(page, wat) {
-  for (let i = 0; i < 180; i++) {
-    if ((await page.evaluate(() => Spel.S.modus)) === 'dialoog') return;
-    await stap(page, 1);
-  }
-  throw new Error(`er kwam geen gesprek (${wat})`);
-}
-
-// De vier beelden: wat elk in het spel doet, en welk stuk van het scherm erin komt. Een uitsnede (clip, in css-pixels)
+// De beelden: wat elk in het spel doet, en welk stuk van het scherm erin komt. Een uitsnede (clip, in css-pixels)
 // staat in de pdf klein en blijft op dubbele maat; een heel scherm komt op de maat van het venster (scale 'css').
 const BEELD = {
   // Het gehucht van boven, met de balk.
@@ -138,23 +129,8 @@ const BEELD = {
     await wachtOpPlaatjes(page);
     return { scale: 'css' };
   },
-  // Iemand die de schout zoekt met een vraag (het voorval 'lening', js/voorvallen.js): elk antwoord zegt vooraf wat het
-  // kost. Wie de schout al zocht, krijgt eerst ja. (Tot 12 okt stond hier iemand die iets wilde bouwen, js/verzoeken.js.)
-  async vraag(page) {
-    await zet(page, { uur: 10.5, zoom: 1 });
-    if (await page.evaluate(() => !!(Spel.S.dorp.voorvallen && Spel.S.dorp.voorvallen.lopend))) {
-      await wachtOpGesprek(page, 'het voorval dat al liep');
-      await page.keyboard.press('1');
-      await stap(page, 0.5);
-    }
-    const vraag = await page.evaluate(() => Spel.debug.voorval('lening'));
-    if (typeof vraag === 'string') throw new Error(`niemand die iets vraagt: ${vraag}`);
-    await wachtOpGesprek(page, 'wie iets vraagt');
-    await page.evaluate(() => { Spel.S.zoom = 0.75; });
-    await stap(page, 1.5); // de camera komt tot stilstand
-    await wachtOpPlaatjes(page);
-    return { clip: { x: 450, y: 320, width: 700, height: 580 } };
-  },
+  // (Tot 15 okt stond hier iemand die de schout zocht met een vraag, het voorval 'lening': de voorvallen gingen weg in
+  // ronde 3 van het snoeien. beelden/vraag.jpg blijft tot de tekst opnieuw geschreven is, werklijst G.)
   // De heer met zijn twee soldaten (js/heer.js, T.werkHeerBij), op de weg het dorp in, zo'n 22 tegels van het plein.
   async heer(page) {
     await verberg(page, UI);

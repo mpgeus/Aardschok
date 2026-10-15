@@ -194,7 +194,7 @@ test('in de winter sprokkelt hij aan de bosrand, en brengt hij een bundel hout n
   });
 });
 
-test('wie werkt, dwaalt niet weg; wie met de schout praat of een voorval brengt, houdt op', () => {
+test('wie werkt, dwaalt niet weg; wie met de schout praat of met de militie mee moet, houdt op', () => {
   zonderVoorvallen(() => {
     const S = dorpOp(45 + 7 / 24); // 16 grasmaand: wieden
     const D = S.dorp;
@@ -202,12 +202,12 @@ test('wie werkt, dwaalt niet weg; wie met de schout praat of een voorval brengt,
     const [a, b] = boerenVan(S);
     assert.ok(a.werkt && b.werkt, 'ze wieden');
     S.spreektMet = a;
-    b.zoektSchout = true;
+    b.opgeroepen = true;
     T.werkVeldwerkBij(S, D);
     assert.equal(a.werkt, null, 'wie met de schout praat, werkt niet');
-    assert.equal(b.werkt, null, 'wie de schout zoekt, ook niet');
+    assert.equal(b.werkt, null, 'wie met de militie mee moet, ook niet');
     S.spreektMet = null;
-    delete b.zoektSchout;
+    delete b.opgeroepen;
     totUur(S, 45, 11);
     assert.ok(a.werkt && b.werkt, 'daarna gaan ze weer aan het werk');
   });

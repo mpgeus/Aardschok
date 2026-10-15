@@ -284,10 +284,8 @@
     return { kop: over[0], doet: over[1] ? T.hoofdletter(over[1]) : '', delen: [{ titel: T.t('The villager'), regels }] };
   };
 
-  // Heeft hij iets te zeggen: wie je zoekt met een voorval (js/voorvallen.js), de waard (js/herberg.js). Geeft { id, tekst }.
+  // Heeft hij iets te zeggen: de waard (js/herberg.js). Geeft { id, tekst }.
   T.gesprekBij = function (D, e) {
-    const voorval = T.voorvalVan(D, e);
-    if (voorval) return { id: voorval.id, tekst: T.t('{wie} is looking for you', { wie: T.naamVanBewoner(voorval.wie) }) };
     const p = T.bewonerVan(D, e);
     if (p && p.werk && p.werk.soort === 'herberg') return { id: 'waard', tekst: T.t('About last night at the inn') };
     return null;

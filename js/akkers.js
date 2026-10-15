@@ -347,7 +347,7 @@
       });
       const zin = T.t('After the harvest the farmers chose what their fields will be next year: {wat}.', { wat: T.opsomming(wat) });
       T.zeg(D, T.t('{zin} You can change it in the fields window (V).', { zin }));
-      T.schrijfOp(D, 'boeren', { tekst: zin }); // voor het rapport van de raadsman (js/ochtendrapport.js)
+      T.schrijfOp(D, 'boeren', { tekst: zin }); // in het dagboek (js/einde.js)
     }
     return anders;
   };
@@ -627,12 +627,11 @@
   // Een boer maait al zijn akkers, steeds de tegel die het dichtstbij staat. Tot 24 sep maaide hij
   // alleen de eerste (e.werkAkkers[0]), en rotte het tweede stuk van boer 1 en boer 3 op het veld:
   // 55 van de 209 tegels. In hooitijd maait hij eerst het hooi (maaiDoel hierboven).
-  // Een slag beginnen op de tegel waar hij staat: zo lang als een tegel duurt (de raadsman trager,
-  // T.raadsmanMaait in js/raadsman.js; en wie eentonig eet ook, T.werkVanAfwisseling in js/behoeften.js, vraag 154), min
-  // wat hij er eerder al maaide.
+  // Een slag beginnen op de tegel waar hij staat: zo lang als een tegel duurt (wie eentonig eet, trager:
+  // T.werkVanAfwisseling in js/behoeften.js, vraag 154), min wat hij er eerder al maaide.
   function begin(D, e, doel, nu) {
     const al = (doel.akker.half && doel.akker.half.get(sleutel(e.tx, e.ty))) || 0;
-    const duur = T.oogstTegelDuur() * T.raadsmanMaait(e) / T.werkVanAfwisseling(D);
+    const duur = T.oogstTegelDuur() / T.werkVanAfwisseling(D);
     return { x: e.tx, y: e.ty, sinds: nu, tot: nu + Math.max(0, duur - al), akker: doel.akker, hooi: !!doel.hooi };
   }
 
@@ -645,8 +644,6 @@
     // Gemaaid wordt in de werkuren, in de oogst tot het donker (js/dag.js); zonder de dag (een
     // toets die js/dag.js niet laadt) altijd.
     const werktijd = T.isWerktijd(D.kalender.dag, true);
-    // Op een hele feestdag (js/feesten.js) maait niemand: het dorp staat op het plein.
-    const vrij = T.vrijeDag(D, D.kalender.dag);
     const nu = S.wereldTijd || 0;
     for (const e of w.wezens) {
       if (e.dood) continue;
@@ -681,8 +678,7 @@
       }
       if (e.binnen) continue; // 's nachts in zijn huis
       if (e.draagt === 'schoof') continue; // eerst brengt hij zijn schoven naar de schuur (js/veldwerk.js)
-      // Wie de schout zoekt met een voorval (js/voorvallen.js), maait niet: hij stopt zoals in de schaft.
-      const werkt = werktijd && !e.zoektSchout && !vrij;
+      const werkt = werktijd;
       if (e.maait) {
         // Schaft of avond: hij stopt, en wat hij van deze tegel al maaide, blijft liggen voor morgen.
         if (!werkt) {
@@ -973,7 +969,7 @@
     T.wijzigVoorraad(D, 'graan', -kost);
     const zin = T.t('The farmers sow what was missed: {n|# more field tile|# more field tiles}, using {graan}.', { n, graan: T.hoeveel(Math.round(kost), 'graan') });
     T.zeg(D, zin, 'goed');
-    T.schrijfOp(D, 'boeren', { tekst: zin }); // voor het rapport van de raadsman (js/ochtendrapport.js)
+    T.schrijfOp(D, 'boeren', { tekst: zin }); // in het dagboek (js/einde.js)
     return n;
   };
 

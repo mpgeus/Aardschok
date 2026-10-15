@@ -550,8 +550,8 @@
   }
 
   // Wat de huizen missen, en wat helpt (werklijst vraag 86, a, en 87; Marcel, 2 okt: "a ja b ja"), voor de raad onder
-  // het doel (js/raad.js), het rapport van de raadsman (js/ochtendrapport.js) en de bouwer van de speeltest
-  // (gereedschap/speeltest/speler.js): zo zeggen ze alle drie hetzelfde. Uit wat elk huis op de laatste dag wilde en had
+  // het doel (js/raad.js) en de bouwer van de speeltest (gereedschap/speeltest/speler.js): zo zeggen ze allebei
+  // hetzelfde. Uit wat elk huis op de laatste dag wilde en had
   // (g.wensen, T.onthoudWensen hieronder), zoals de balk het zegt, dus vóór de eerste nacht weet het dorp het nog niet;
   // alleen een plek in de buurt kijkt naar nu, zodat een put die vandaag klaar is, meteen telt.
   //

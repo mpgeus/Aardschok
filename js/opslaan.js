@@ -57,8 +57,9 @@
     // 12 (14 okt): de timmerman is de zagerij (vraag 157), in het gehucht; een spel met een timmerman kent dat gebouw niet.
     // 13 (15 okt): de soldaten (vraag 159, js/soldaten.js): het wachthuis heeft geen handen meer maar soldaten, de waar
     // `wapens` is zeven stukken, en het tuighuis en het schuttershof zijn weg.
-    // 14 (15 okt): ronde 3 van het snoeien (ontwerp/snoeien.md): de brand, de koorts en het zaaigraan zijn geen voorval
-    // meer. Een brand van daarvoor wachtte op je antwoord, en wachters bij de graanschuur (p.wacht) bleven er staan.
+    // 14 (15 okt): ronde 3 van het snoeien (ontwerp/snoeien.md): de voorvallen, de raadsman, het rapport en de feesten
+    // zijn weg, en de brand, de koorts en het zaaigraan zijn geen voorval meer. Een voorval of een feest van daarvoor zou
+    // blijven wachten, een brand op je antwoord, en wachters bij de graanschuur (p.wacht) bleven er staan.
     versie: 14,
     eigenPlekken: 5, // naast de ene die vanzelf gaat (vraag 48 B)
     // Op de hoogste snelheid (30×) slaat het spel niet elke ochtend vanzelf op, maar om de zoveel dagen: een dag duurt
@@ -285,7 +286,6 @@
     for (const k of Object.keys(vers)) if (!(k in S)) S[k] = vers[k];
     Object.assign(S, T.schermVelden());
     kenDeSoorten(S);
-    for (const D of S.dorpen || []) T.vergeetOnbekendeVoorvallen(D);
   };
 
   // Wat er op de kaarten ligt, moet het spel kennen (T.VOORWERPEN). Een verse bladzijde kent alleen wat ze zelf

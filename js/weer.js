@@ -4,7 +4,7 @@
 // wie nat begint, blijft vaker nat, en elk jaar is wat droger of natter dan het vorige.
 //
 // Valt er in het groeiseizoen lang geen regen, dan komt er droogte, en erger: ernstige droogte (een status, T.OORZAKEN in
-// js/voorvallen.js). Het dorp telt een watertekort (`tekort`): elke droge dag één erbij, elke natte dag er een paar af.
+// js/statussen.js). Het dorp telt een watertekort (`tekort`): elke droge dag één erbij, elke natte dag er een paar af.
 // Zolang het droog is, verliezen de akkers van hun oogst (`verlies`, T.droogteFactor in T.oogstPerTegel, js/akkers.js),
 // tot op 1 lentemaand het jaar opnieuw begint. En de kleine beekjes vallen droog (T.isBeek): een visser die alleen aan een
 // beek staat, vangt niets meer, en een visser met ook groot water vangt naar wat er van zijn water over is

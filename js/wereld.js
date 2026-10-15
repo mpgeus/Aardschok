@@ -59,10 +59,10 @@
     // De schandpaal van de heer op het plein: komt er de eerste keer dat hij iemand straft, en blijft
     // staan (js/heer.js, T.zetSchandpaalNeer).
     schandpaal: { blokkeert: true, zichtDicht: false, naam: T.t('the pillory') },
-    // De meiboom op het plein: de jongeren zetten hem op 1 bloeimaand, en hij blijft een maand staan (js/feesten.js).
+    // De meiboom op het plein: in bloeimaand (js/versiering.js).
     meiboom: { blokkeert: true, zichtDicht: false, naam: T.t('the maypole') },
     // De kerstboom op het plein: van 20 wintermaand tot en met 6 louwmaand, met kaarsjes die 's avonds branden
-    // (js/feesten.js).
+    // (js/versiering.js).
     kerstboom: { blokkeert: true, zichtDicht: false, naam: T.t('the Christmas tree') },
     // Het hol van een roedel wolven, op een tegel naast zijn thuis diep in het bos (js/beesten.js, T.zetHol): een kuil onder een
     // omgevallen boom. Je loopt er niet overheen, maar langs.

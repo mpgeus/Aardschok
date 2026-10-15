@@ -19,7 +19,7 @@
   // Wat iets kost, of wat de heer eist: "3 wood, 2 planks" (de waren: js/voorraad.js).
   const kostenTekst = (k) => Object.entries(k).map(([wat, n]) => T.hoeveel(n, wat)).join(', ');
 
-  // De statussen (js/voorvallen.js, T.statussenVan; werklijst vraag 77, stap 2): een kaartje per status zolang hij
+  // De statussen (js/statussen.js, T.statussenVan; werklijst vraag 77, stap 2): een kaartje per status zolang hij
   // duurt, naast het doel linksboven, rood als het erger is (hongersnood, strenge kou, ...). Op hover: wat er is, sinds
   // wanneer, en wat helpt.
   T.ui.toonStatussen = function (D) {

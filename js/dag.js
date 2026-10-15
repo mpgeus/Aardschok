@@ -207,7 +207,6 @@
   //   - overdag, bij het werk en de schaft, bij zijn werk. Wie geen werk heeft: een kind op het plein,
   //     een oude en een kleuter bij huis (de plekken zet js/bewoners.js, per bewoner);
   //   - 's avonds op zijn erf, of in de herberg als hij vanavond gaat (js/herberg.js, T.herbergAnker);
-  //   - op een feest op het plein: een hele dag, of de avond (js/feesten.js, T.feestAnker);
   //   - wie net in het gehucht komt, eerst naar zijn huis, en wie wegtrekt, overdag naar de uitgang
   //     van de kaart (js/bewoners.js, T.werkBewonersBij).
   // Een boer volgt hetzelfde. Overdag werkt hij op zijn land (T.werkVeldwerkBij, js/veldwerk.js) en maait hij in de
@@ -217,19 +216,15 @@
   // Voor de boeren (een huis en een akker) en de bewoners (e.bewoner, js/bewoners.js); de schout, het
   // vee en een bezoeker volgen hun eigen weg, en een man van de militie bij een aanval ook (opgeroepen: hij
   // loopt met de schout mee, js/rovers.js). Wie ergens anders moet zijn (moetNaar: de schandpaal,
-  // js/heer.js), volgt dat en niet de dag, en wie de schout zoekt met een voorval ook (js/voorvallen.js).
+  // js/heer.js), volgt dat en niet de dag.
   T.dagAnker = function (D, e, oogst) {
-    if (!D || !D.kalender || !e || !e.thuis || e.moetNaar || e.opgeroepen || e.zoektSchout) return null;
+    if (!D || !D.kalender || !e || !e.thuis || e.moetNaar || e.opgeroepen) return null;
     // Een man met een bevel (js/kiezen.js; vraag 170, stap 1): op zijn post, of achter de vijand aan die hij volgt.
     const bevel = T.bevelAnker(D, e);
     if (bevel) return bevel;
     // Wie in de herberg logeert (de marskramer), zit er 's avonds en slaapt er (js/herberg.js).
     const logies = T.logiesAnker ? T.logiesAnker(D, e) : null;
     if (logies) return logies;
-    // De raadsman die zijn rapport brengt (js/ochtendrapport.js): vóór het opstaan al naar de deur van de schout, en
-    // staat die buiten bij zijn huis, naar hem toe. Ook als het nog nacht is.
-    const rapport = T.rapportAnker ? T.rapportAnker(D, e) : null;
-    if (rapport) return rapport;
     const p = e.bewoner;
     if (!p && !e.werkAkkers) return null;
     // Wie rovers op de weg aanhouden (de bode, js/bode.js, en de hinderlaag in js/rovers.js), staat stil.
@@ -247,10 +242,6 @@
     // Wie wegtrekt, loopt overdag de weg af; wie nieuw is, loopt eerst naar zijn huis (js/bewoners.js,
     // T.werkBewonersBij).
     if (e.vertrekt) return { x: e.vertrekt.x, y: e.vertrekt.y, straal: 1 };
-    // Op een feest staat het hele dorp op het plein (js/feesten.js): een hele dag vanaf het begin van het werk, of
-    // 's avonds; ook een boer, en de waard tapt er.
-    const feest = T.feestAnker ? T.feestAnker(D, e) : null;
-    if (feest) return feest;
     const erf = { x: e.thuis.x, y: e.thuis.y, straal: IN().erfStraal };
     // 's Avonds de herberg in, wie vanavond gaat (ook een boer, en de waard zelf).
     const herberg = deel === 'avond' && T.herbergAnker ? T.herbergAnker(D, e) : null;
@@ -298,8 +289,7 @@
   // ---------------------------------------------------------------------------------------------
 
   // Hoe ver de schout van zijn huis staat, in tegels tot de rand ervan (het gebouw met huis: 'schout': zijn tent in het
-  // kamp, en dan zijn huis, js/begin.js). Voor het slapen,
-  // en voor de raadsman die 's ochtends zijn rapport brengt (js/ochtendrapport.js).
+  // kamp, en dan zijn huis, js/begin.js). Voor het slapen.
   T.afstandTotHuis = function (D) {
     const g = (D.gebouwen || []).find((x) => x.huis === 'schout');
     const h = D.schout;

@@ -268,7 +268,19 @@ niet). Twee agents brachten in kaart wat elk systeem doet en wat eraan hangt; wa
 3. **Weg:** de voorvallen (met hun gesprekken, het uitroepteken en `e.zoektSchout`, de spelregel "Events"), de raadsman
    met zijn venster (R, de spelregel "Advisor", het trager maaien), het rapport (de knop, de spelregel), de feesten (de
    meiboom, de kerstboom, de vrije dag, de spelregel), en de raden die eraan hingen; het opslaan een versie omhoog; de
-   speeltest antwoordt niet meer op voorvallen.
+   speeltest antwoordt niet meer op voorvallen. Marcel (15 okt), op de vraag of de meiboom en de kerstboom meegaan:
+   **"Blijven als versiering"**: zonder feest staan ze vanzelf op het plein, de meiboom in bloeimaand en de kerstboom van
+   20 wintermaand tot 6 louwmaand, met zijn kaarsjes ('s avonds licht); `js/feesten.js` wordt `js/versiering.js`.
+   **Af** (15 okt), in één stap, want de voorvallen, de raadsman en het rapport hangen aan elkaar: weg zijn
+   `js/voorvallen.js`, `js/raadsman.js`, `js/raadsmanvenster.js`, `js/ochtendrapport.js` en `js/feesten.js` met hun
+   toetsen, de gesprekken van de voorvallen (er blijven er vier: de marskramer, de heer, de soldaat en de waard), het
+   uitroepteken en het zoeken van de schout, de prijs onder een antwoord in het gespreksvenster, de knop Rapport, het
+   venster van de raadsman (R), de vrije dag en het hele dorp op het plein, de raden over de raadsman en het rapport, het
+   vertrouwen na een voorval (`js/bazen.js`), en de spelregels "Events", "Advisor", "The morning report" en "Feasts".
+   Wat bleef: **de statussen zeggen het nu zelf** als ze beginnen, erger of minder worden of ophouden (dat deed het
+   rapport; het gevecht en de koorts zeggen het al zelf); het dagboek voedt alleen het jaarboek, en het jaarverslag
+   tekent "Entered in the yearbook"; de grillen van de heer hebben hun eigen prijs onder een knop. Opslaan blijft
+   versie 14 (die kwam in stap 2, en ging nog niet naar `main`). De speeltest boekt geen voorvallen en rapporten meer.
 4. **Het werk alleen op de afwisseling.**
 5. **De wetten:** rantsoen en belasting.
 6. **De wensen en de groei**, als Marcel gekozen heeft.

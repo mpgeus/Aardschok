@@ -4,7 +4,7 @@
 // keer heeft hij iets niet. 4. Ja voor nu maar mee beginnen; in de winterperiode of in het donker misschien ook
 // bescherming mee?").
 //
-// Speelt er een status waarin kopen helpt (honger, kou, droogte; T.OORZAKEN in js/voorvallen.js), dan schrijf je bij je
+// Speelt er een status waarin kopen helpt (honger, kou, droogte; T.OORZAKEN in js/statussen.js), dan schrijf je bij je
 // huis een brief aan de marskramer, met wat je van hem wilt (het papier `bode` in js/brieven.js), en een dorpeling zonder
 // werk brengt hem (T.stuurBode): hij loopt de weg af (T.stuurWeg, js/bewoners.js) en krijgt loon uit de kas. Na een paar
 // dagen (in de winter langer) staat de marskramer op het plein, buiten zijn vaste rondes, met wat je vroeg
