@@ -220,6 +220,9 @@
   // js/heer.js), volgt dat en niet de dag, en wie de schout zoekt met een voorval ook (js/voorvallen.js).
   T.dagAnker = function (D, e, oogst) {
     if (!D || !D.kalender || !e || !e.thuis || e.moetNaar || e.opgeroepen || e.zoektSchout) return null;
+    // Een man met een bevel (js/kiezen.js; vraag 170, stap 1): op zijn post, of achter de vijand aan die hij volgt.
+    const bevel = T.bevelAnker(D, e);
+    if (bevel) return bevel;
     // Wie in de herberg logeert (de marskramer), zit er 's avonds en slaapt er (js/herberg.js).
     const logies = T.logiesAnker ? T.logiesAnker(D, e) : null;
     if (logies) return logies;

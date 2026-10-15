@@ -327,17 +327,18 @@ test('\'s avonds brandt de lantaarn van de herberg, en met meer gasten binnen is
 // gesprek.
 const zegt = (S) => T.gesprekKnoop(S, S.dorp, 'waard', 'welkom').tekst;
 
-test('wie in de herberg werkt, is de waard: met hem praat je, en met een ander zie je alleen wie hij is', () => {
+test('wie in de herberg werkt, is de waard: op zijn briefje praat je met hem, en een ander heeft niets te zeggen', () => {
   const S = proef();
   const g = T.herbergVan(S.dorp);
   const waard = mensen(S).find((p) => p.werk === g);
   assert.ok(waard && waard.wezen, 'er werkt iemand');
+  // Een klik kiest hem, en zijn briefje heeft Talk (js/kiezen.js; vraag 170, stap 1).
   const h = T.handelingVerkennen(S, { wezen: waard.wezen, x: waard.wezen.x, y: waard.wezen.y });
-  assert.equal(h.tekst, `Talk to ${T.naamVanBewoner(waard)}, the innkeeper`);
-  assert.equal(typeof h.doe, 'function');
-  const ander = mensen(S).find((p) => p.wezen && p.werk !== g && !p.schout);
-  const a = T.handelingVerkennen(S, { wezen: ander.wezen, x: ander.wezen.x, y: ander.wezen.y });
-  assert.ok(!a.doe, 'een ander heeft nog geen gesprek');
+  assert.equal(h.tekst, `${T.naamVanBewoner(waard)}, the innkeeper`);
+  assert.equal(h.kies, waard.wezen);
+  assert.equal(T.gesprekBij(S.dorp, waard.wezen).id, 'waard');
+  const ander = mensen(S).find((p) => p.wezen && p.werk !== g && !p.schout && !p.soldaat);
+  assert.equal(T.gesprekBij(S.dorp, ander.wezen), null, 'een ander heeft nog geen gesprek');
   assert.equal(T.GESPREKKEN.herbergierster, undefined);
 });
 

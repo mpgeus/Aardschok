@@ -137,8 +137,9 @@ haalt hem weg, beloning en al); zonder fase zegt hij waar hij staat. Er zijn nog
 `gereedschap/pixelart/uit/schermen/` (via de server, zonder de html-balken): zo laat je Marcel een
 blik op het spel zien zonder de afbeelding door je eigen gesprek te halen. De camera naar een plek: sluit na
 `Spel.debug.begin(n)` eerst het titelscherm (`Spel.ui.sluitTitel(Spel.S)`; zolang het open staat, volgt de camera het
-titelscherm), dan `Spel.S.overzicht = { doel: <Spel.naarSchermOp(S.wereld, x, y)>, zoom: 1.8 }` en `Spel.S.zoom` hetzelfde, en
-`stap(3)` laat hem erheen glijden. Een brief die de klok stilzet, sluit `Spel.ui.sluitBrief(Spel.S)`, een voorval
+titelscherm), dan `Spel.glijNaar(x, y)` (een tegel; sinds vraag 170, stap 1, volgt de camera de schout niet meer) en
+`Spel.S.zoom = 1.8`, en `stap(3)` laat hem erheen glijden (`Spel.kijkNaar(px, py)` springt er meteen heen, in pixels van de
+wereld). Wat je koos, staat in `Spel.S.gekozen`, en je gekozen mannen geeft `Spel.gekozenMannen(Spel.S)` (`js/kiezen.js`). Een brief die de klok stilzet, sluit `Spel.ui.sluitBrief(Spel.S)`, een voorval
 `Spel.sluitDialoog(Spel.S)` (of zet de spelregel `Spel.zetOptie('voorvallen', 'uit')`). In het gehucht:
 `Spel.debug.kalender(dag, snelheid)` springt door het jaar, `Spel.debug.uur(21)` naar een uur van deze
 dag (zonder getal zegt het hoe laat het is; een dag duurt vijf minuten bij 1×, dus `stap` gaat op 10×

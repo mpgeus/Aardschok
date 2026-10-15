@@ -392,7 +392,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 ### js/verkennen.js: rondlopen en dwalen
 
-- `js/verkennen.js`: rondlopen, klikhandelingen, dwalende monsters, ontdekt worden. Dwalen gaat op een kaart met het dorp
+- `js/verkennen.js`: wat een klik links kiest (`T.handelingVerkennen`; sinds vraag 170, stap 1, loopt de schout er niet
+  meer heen: `js/kiezen.js`), dwalende monsters, ontdekt worden. Dwalen gaat op een kaart met het dorp
   dat er ligt (`T.dwaal(S, w, D, dt)`; `T.laatDwalen(S, dt)` is dat voor waar je bent). Wie twee keer na elkaar geen weg
   vindt naar waar hij hoort, wacht een uur (de rem, `T.LOPEN_INSTELLINGEN` in `js/lopen.js`; Marcel, vraag 88), en per
   beeld zoeken hooguit `zoekPerBeeld` mensen een weg (de drukte 's ochtends en 's avonds, 3 okt).
@@ -1584,6 +1585,27 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 
 ### js/kiezen.js: kijken, kiezen en sturen als een god
 
-- `js/kiezen.js` (werklijst vraag 170, stap 1; Marcel, 15 okt: "we gaan toch als 'god' sturen en bouwen"): de regels
-  zonder scherm van kijken, kiezen en sturen, met de getallen in `T.KIEZEN_INSTELLINGEN` (de werkbank: "Choosing and
-  sending"); de camera, de muis en het kader staan in `js/main.js`.
+- `js/kiezen.js` (werklijst vraag 170, stap 1; Marcel, 15 okt: "we gaan toch als 'god' sturen en bouwen", "Een post,
+  tot je terugroept"): de regels zonder scherm van kijken, kiezen en sturen, met de getallen in `T.KIEZEN_INSTELLINGEN`
+  (de werkbank: "Choosing and sending"), getoetst in `test/kiezen.test.cjs`; de camera, de muis, het kader en de groepen
+  staan in `js/main.js`, de ring om de voeten in `tekenWezen` (`js/tekenen.js`), het briefje in `js/huisbriefje.js`.
+- **Je mannen** (4a): `T.isMan(D, e)` (de held, een soldaat, een veteraan; een dorpeling werkt vanzelf), `T.mannenVan(D)`,
+  en wat er gekozen is: `S.gekozen` (alleen scherm) is een gebouw, één wezen of een lijst van je mannen;
+  `T.gekozenMannen(S)` haalt er je mannen uit.
+- **Links en rechts stellen dezelfde vraag als het scherm:** links is `T.handelingVerkennen` (`js/verkennen.js`): `{ tekst,
+  kies }` voor een man of een dorpeling, `{ tekst, doe }` voor een gebouw of wie een gesprek heeft en geen dorpeling is;
+  rechts is `T.handelingSturen(S, doel, mannen)`: `{ tekst, kan, opdracht, doe }`. Bij de muis staat wat rechts doet,
+  behalve boven wat links te kiezen is.
+- **Een bevel is een opdracht** (`T.OPDRACHTEN` in `js/tik.js`), met de nummers van de mannen (`p.id` van hun bewoner,
+  `T.nummersVan`): `stuur` (`T.stuurMannen`: de dichtste man naar de dichtste vrije tegel rond de plek, en daar is
+  `e.post`), `volg` (`T.volgVijand`: de vijand van die soort het dichtst bij waar je klikte, in `e.volgt`; een vijand heeft
+  geen nummer, dus zijn soort en plek), en `terug` (`T.roepTerug`). **De post** werkt via `T.dagAnker` (`js/dag.js`), dat
+  eerst `T.bevelAnker` vraagt: de vijand die hij volgt (straal 1), of zijn post (straal 0), niet 's nachts, tenzij hij
+  die nacht zijn bevel kreeg (`post.wakker`). Het dwalen (`T.dwaal`, `js/verkennen.js`) brengt hem er, zoals iedereen naar
+  zijn anker; het bevel geeft hem meteen een weg. `T.werkSturenBij` (elke tik, in elk dorp, `T.werkDorpBij`) loopt de
+  vijand na als die verder liep (hooguit `zoekPerTik` wegen per tik), en wie geen man meer is, verliest zijn bevel. Wie
+  bij een aanval met de schout meeliep (`e.opgeroepen`, `js/rovers.js`), volgt na een bevel jouw bevel.
+- **Het briefje** (`T.gekozenBriefje(S)` → `{ D, briefje, wie }`, in de vorm van `T.gebouwBriefje`): `T.manBriefje`,
+  `T.mannenBriefje` en `T.dorpelingBriefje`, met een knop die een opdracht geeft (*Back to the guardhouse*) of een gesprek
+  opent (`gesprek: { id }`, *Talk*; `T.gesprekBij`). Het leven van een man komt uit `T.levenAlsMan` (`js/rovers.js`), dat
+  ook het oproepen gebruikt.

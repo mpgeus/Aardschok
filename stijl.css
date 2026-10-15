@@ -428,6 +428,15 @@ body.bouwmenu-open #statussen { visibility: hidden; }
 }
 #tooltip.fout { color: #f3b1a5; border-color: color-mix(in srgb, var(--rood) 50%, transparent); }
 
+/* Het kader om je mannen (js/main.js; werklijst vraag 170, stap 1): slepen met links. */
+#kader {
+  position: fixed;
+  border: 1px solid var(--goud);
+  background: color-mix(in srgb, var(--goud) 10%, transparent);
+  pointer-events: none;
+}
+body.foto #kader { display: none; }
+
 /* Gesprek */
 /* Een gesprek: midden in wat er boven de balk van het beeld over is, zoals de andere papieren (Marcel, 9 okt: "die popup
    moet misschien wat meer midden op het scherm staan"). */

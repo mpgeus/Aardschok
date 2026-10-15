@@ -107,14 +107,13 @@ test('de muis op een veld: van wie, het vee, en hoe vruchtbaar', () => {
   assert.equal(T.veldTekst(S.dorp, leeg), 'Meadow · no livestock yet · fertility 100%');
 });
 
-test('de muis op een veldtegel: die tekst, en een klik is gewoon erheen lopen', () => {
+test('de muis op een veldtegel: die tekst, en links valt er niets te kiezen', () => {
   const { S, akkers: [, akker] } = dorp();
   const h = T.handelingVerkennen(S, { x: akker.x + 1, y: akker.y + 2 });
   assert.equal(h.tekst, T.veldTekst(S.dorp, akker));
-  assert.equal(typeof h.doe, 'function', 'erheen lopen');
-  // en naast de velden verandert er niets
-  const buiten = T.handelingVerkennen(S, { x: S.schout.tx + 1, y: S.schout.ty });
-  assert.equal(buiten.tekst, null);
+  assert.equal(h.doe, undefined);
+  // en naast de velden is er niets
+  assert.equal(T.handelingVerkennen(S, { x: S.schout.tx + 1, y: S.schout.ty }), null);
 });
 
 test('een dier op een weide stapt alleen binnen de rechthoek, niet op een ander dier en niet waar een ander heen loopt', () => {

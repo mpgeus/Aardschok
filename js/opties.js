@@ -890,6 +890,9 @@
     camera: T.t('camera'),
     rand: T.t('screen edge that scrolls, in pixels'),
     snelheid: T.t('scrolling speed, pixels per second'),
+    vijandBij: T.t('an enemy is found within tiles'),
+    zoekPerTik: T.t('pursuers finding a way per tick'),
+    briefjeRegels: T.t('men named on the note'),
     // De brand, de koorts, ouder worden
     brandUren: T.t('burning hours'),
     blusUren: T.t('extinguishing hours'),

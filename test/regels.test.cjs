@@ -126,14 +126,12 @@ test('een monster ziet je vanaf vijf stappen, niet vanaf zes', () => {
 
 // Klikken op een open deur naast je deed eerst iets anders dan je verwacht: de deur ging
 // dicht, terwijl je erdoor wilde. Een klik op een deur is nu altijd erheen lopen.
-test('een klik op een open deur is erheen lopen, ook als je ernaast staat', () => {
+test('een open deur is een doorgang: links valt er niets te kiezen (rechts stuurt je mannen erheen, js/kiezen.js)', () => {
   const w = T.maakProefkamers();
   const S = { wereld: w, schout: wezen(w, 'schout'), inventaris: new Set() };
   zet(S.schout, 8, 4);
   T.deurOp(w, 9, 4).staat = 'open';
-  const h = T.handelingVerkennen(S, { x: 9, y: 4 });
-  assert.equal(h.tekst, null);
-  assert.equal(typeof h.doe, 'function');
+  assert.equal(T.handelingVerkennen(S, { x: 9, y: 4 }), null);
 });
 
 test('de deurknop hoort bij een open deur naast wie aan de beurt is, waar niemand in staat', () => {

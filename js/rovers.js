@@ -132,15 +132,21 @@
     e.opgeroepen = true;
     e.binnen = false;
     e.kant = 'speler';
-    if (e.maxLeven !== s.leven) {
-      // Nieuw in de militie, of intussen veteraan: het leven dat erbij komt, krijgt hij ook.
-      e.leven = (e.maxLeven ? e.leven : 0) + s.leven - (e.maxLeven || 0);
-      e.maxLeven = s.leven;
-    }
+    const l = T.levenAlsMan(e);
+    e.leven = l.leven;
+    e.maxLeven = l.max;
     e.ap = s.ap;
     e.maxAp = s.ap;
     e.initiatief = s.initiatief;
   }
+
+  // Zijn leven als man van de militie: { leven, max }. Nieuw in de militie, of intussen veteraan: het leven dat erbij komt,
+  // krijgt hij ook. Ook voor zijn briefje (js/kiezen.js), vóór hij ooit opgeroepen werd.
+  T.levenAlsMan = function (e) {
+    const s = T.WEZENS[e.bewoner && e.bewoner.veteraan ? 'veteraan' : 'soldaat'];
+    if (e.maxLeven === s.leven) return { leven: e.leven, max: s.leven };
+    return { leven: (e.maxLeven ? e.leven : 0) + s.leven - (e.maxLeven || 0), max: s.leven };
+  };
 
   // Na de aanval gaat hij weer naar huis of aan het werk (T.dagAnker, js/dag.js). Ook na de jacht (js/beesten.js).
   T.laatGaan = function (e) {

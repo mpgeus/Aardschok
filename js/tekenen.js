@@ -3082,6 +3082,16 @@
     ctx.beginPath();
     ctx.ellipse(p.x, p.y, 14, 7, 0, 0, Math.PI * 2);
     ctx.fill();
+    // Wie je koos (js/kiezen.js; werklijst vraag 170, stap 1): een ring om zijn voeten, in goud voor je mannen en licht
+    // voor een dorpeling. Niet in de fotomodus.
+    const g = S.gekozen;
+    if (!S.foto && g && (g === e || (Array.isArray(g) && g.includes(e)))) {
+      ctx.strokeStyle = T.isMan(S.dorp, e) ? '#e2b64a' : 'rgba(243, 227, 184, 0.85)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.ellipse(p.x, p.y, 17, 8.5, 0, 0, Math.PI * 2);
+      ctx.stroke();
+    }
     const bob = Math.sin(S.tijd * 2.6 + e.fase) * 1.3;
     const huppel = !deel && e.onderweg ? Math.abs(Math.sin(S.tijd * 14)) * 2.5 : 0;
     let top;

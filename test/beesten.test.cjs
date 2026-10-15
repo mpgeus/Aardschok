@@ -171,7 +171,7 @@ test('komt er iemand dichtbij, dan gaan ze weg: de herten rennen; wie sluipt, ko
   assert.ok(T.afstand(T.tegelVan(l), plek) > voor, 'verder van de schout');
 });
 
-test('een wolf begint geen gevecht, en wie hem aanklikt, kan hem aanvallen', () => {
+test('een wolf begint geen gevecht, en wie je mannen op hem afstuurt, valt hem aan', () => {
   const S = leegLand();
   T.zetBeesten(S.dorp);
   const wolf = leiderVan(groepVan(S, 'wolf'));
@@ -179,7 +179,9 @@ test('een wolf begint geen gevecht, en wie hem aanklikt, kan hem aanvallen', () 
   // De schout naast de wolf: een monster dat hem ziet, begint een gevecht, een wolf niet.
   Object.assign(S.schout, { x: wolf.tx + 1, y: wolf.ty, tx: wolf.tx + 1, ty: wolf.ty });
   assert.equal(T.zoekOntdekking(S), null);
-  assert.match(T.handelingVerkennen(S, { wezen: wolf }).tekst, /Attack the wolf/);
+  // Links zegt wat het is; rechts, met de held gekozen, valt hem aan (js/kiezen.js; vraag 170, stap 1).
+  assert.equal(T.handelingVerkennen(S, { wezen: wolf }).tekst, 'A wolf');
+  assert.match(T.handelingSturen(S, { wezen: wolf }, [S.schout]).tekst, /Attack the wolf/);
   assert.equal(T.handelingVerkennen(S, { wezen: hert }).tekst, 'A deer');
 });
 

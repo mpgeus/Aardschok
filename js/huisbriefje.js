@@ -92,7 +92,8 @@
   // Een regel is tekst, of tekst met knoppen (het wachthuis, js/soldaten.js): een knop draagt waar hij staat (deel, regel,
   // knop), zodat een klik hem terugvindt in het briefje dat er ligt (`huidig`), en daar zijn opdracht geeft.
   let huidig = null;
-  const briefjeVan = { S: null, D: null }; // het spel en het dorp van dat briefje, voor de opdracht van een knop
+  const briefjeVan = { S: null, D: null, wie: null }; // het spel, het dorp en het wezen van dat briefje, voor een knop
+  let laatsteKeus = null; // wat er gekozen was toen het briefje opgemaakt werd
   const attr = (t) => String(t || '').replace(/"/g, '&quot;');
   const regel = (r, i, j) =>
     typeof r === 'string'
@@ -111,19 +112,30 @@
     const [i, j, n] = knop.dataset.knop.split('.').map(Number);
     const r = huidig.delen[i] && huidig.delen[i].regels[j];
     const k = r && r.knoppen && r.knoppen[n];
-    // Een knop geeft een opdracht (js/tik.js): hij gaat in bij de volgende tik, en het briefje laat het dan zien.
-    if (k && k.kan) T.geefOpdracht(briefjeVan.S, Object.assign({ dorp: briefjeVan.S.dorpen.indexOf(briefjeVan.D) }, k.opdracht));
+    // Een knop geeft een opdracht (js/tik.js): hij gaat in bij de volgende tik, en het briefje laat het dan zien. Talk op
+    // het briefje van een dorpeling (js/kiezen.js) opent zijn gesprek, meteen (tot stap 6 van vraag 170 is een gesprek
+    // geen opdracht).
+    if (k && k.kan && k.gesprek) T.openDialoog(briefjeVan.S, briefjeVan.wie, k.gesprek.id);
+    else if (k && k.kan) T.geefOpdracht(briefjeVan.S, Object.assign({ dorp: briefjeVan.S.dorpen.indexOf(briefjeVan.D) }, k.opdracht));
     laatsteGebouw = ''; // meteen opnieuw opmaken
     bijgewerkt = -Infinity;
   }
 
   // Elk beeld (js/main.js): het briefje van het gekozen gebouw, zolang je rondloopt. Is het gebouw weg (afgebroken), dan
-  // is er niets meer gekozen.
+  // is er niets meer gekozen. Op dezelfde plek het briefje van een wezen of van je mannen (T.gekozenBriefje, js/kiezen.js;
+  // vraag 170, stap 1): wie gevallen is, valt eruit.
   T.ui.werkGebouwbriefjeBij = function (S) {
     const box = $('gebouwbriefje');
     if (!box) return;
+    if (Array.isArray(S.gekozen)) {
+      const m = T.gekozenMannen(S);
+      if (m.length !== S.gekozen.length) S.gekozen = m.length > 1 ? m : m[0] || null;
+    }
     const g = S.gekozen;
-    const D = g ? (S.dorpen || []).find((d) => d.gebouwen.includes(g)) : null;
+    const isWezen = !!g && g.tx != null;
+    const keus = isWezen || Array.isArray(g) ? T.gekozenBriefje(S) : null;
+    if ((isWezen || Array.isArray(g)) && !keus) S.gekozen = null;
+    const D = keus ? keus.D : g && !Array.isArray(g) ? (S.dorpen || []).find((d) => d.gebouwen.includes(g)) : null;
     if (g && !D) S.gekozen = null;
     if (!D || S.modus !== 'verkennen') {
       box.classList.add('verborgen');
@@ -135,11 +147,13 @@
       box.addEventListener('click', knopGeklikt);
       box.dataset.knoppen = '1';
     }
-    if (laatsteGebouw && S.tijd - bijgewerkt < ALLE) return;
+    if (laatsteGebouw && laatsteKeus === S.gekozen && S.tijd - bijgewerkt < ALLE) return;
     bijgewerkt = S.tijd;
-    huidig = T.gebouwBriefje(D, g);
+    laatsteKeus = S.gekozen;
+    huidig = keus ? keus.briefje : T.gebouwBriefje(D, g);
     briefjeVan.S = S;
     briefjeVan.D = D;
+    briefjeVan.wie = keus ? keus.wie : null;
     const nu = html(huidig);
     if (nu !== laatsteGebouw) box.innerHTML = nu;
     laatsteGebouw = nu;

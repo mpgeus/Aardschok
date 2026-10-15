@@ -1009,8 +1009,31 @@ crossbow, armor", in vaste soorten zoals Knights and Merchants; `js/soldaten.js`
   kruisboog niets. Wie zonder soort meevecht (een veteraan, wie met de bode meegaat, de jacht), vecht met een hooivork;
   de schout slaat zoals altijd (3 tot 5). Bij de muis: "Hit", "Thrust" of "Shoot", en anders loopt hij naar de dichtste
   tegel vanwaar hij raakt.
-- **Nog niet:** een eigen figuur per soort (stap 4 van het plan, eerst in woorden), de soldaten aanklikken (stap 2),
-  en de muren (stap 3).
+- **Nog niet:** een eigen figuur per soort (stap 4 van het plan, eerst in woorden) en de muren (stap 3). De soldaten
+  aanklikken en sturen kwam met vraag 170 (hieronder).
+
+**Zo werkt kijken, kiezen en sturen nu** (15 okt, vraag 170, stap 1; Marcel: "Een post, tot je terugroept", "Muis tegen de
+zijkant van het scherm bewegen, beweegt het beeld in die richting", en erbij "Een bericht brengt je erheen" en "Dubbelklik
+kiest zijn soort"; `js/kiezen.js`, `test/kiezen.test.cjs`):
+- **De camera is los.** Hij volgt de schout niet meer: de pijltjes en de muis tegen de rand van het scherm schuiven het
+  beeld, een klik op de minikaart zet het daar neer, het wiel zoomt altijd, en Tab kiest de held en kijkt naar hem. Het
+  overzicht (Tab tot 15 okt) is weg. Alleen een gevecht in beurten kijkt nog zelf mee, tot stap 2.
+- **Links kiest.** Een klik op een soldaat, een veteraan of de held kiest hem (een gouden ring om zijn voeten), met Shift
+  komt er een bij (of gaat er een af), een dubbelklik kiest alle van zijn soort in beeld, en slepen trekt een kader om je
+  mannen. Een klik op een dorpeling geeft zijn briefje (een lichte ring), een klik op een gebouw het zijne, en een klik
+  ergens anders legt het weg. Rechts ligt het briefje: van één man zijn naam, zijn soort, wat hij doet, zijn leven en
+  wat hij draagt; van meer mannen een lijstje; van een dorpeling wat hij doet en waar hij woont. Wie iets te zeggen
+  heeft (wie je zoekt met een voorval, de waard), heeft *Talk* op zijn briefje: het gesprek gaat meteen open, zonder dat
+  de held erheen loopt. De heer en de marskramer spreek je aan met een klik.
+- **Rechts stuurt.** Met je mannen gekozen zegt de muis wat rechts doet. Op de grond: *Send 2 men here*; ze verdelen
+  zich over de dichtste vrije tegels, en die plek is hun **post**: daar staan ze van het opstaan tot het slapen,
+  's nachts slapen ze thuis, en 's ochtends gaan ze terug, tot je ze terugroept met *Back to the guardhouse* op hun
+  briefje. Een bevel in de nacht houdt hen die nacht op hun post. Op een vijand: *Attack the wolf*; ze lopen hem na tot
+  ze naast hem staan, en is hij weg, dan blijven ze waar ze zijn. Slaan doen ze pas in stap 2: tot dan begint het
+  gevecht in beurten zoals altijd, als een vijand de held ziet. De held heeft geen post: hij blijft waar je hem
+  neerzet. Een bevel is een opdracht die op een tik ingaat (js/tik.js), zoals bouwen.
+- **Nog niet:** groepen onder een cijfer en een bericht dat je erheen brengt (1d, hieronder zodra het er is), het
+  gevecht in real time (stap 2), formaties (stap 3), en de diensten (stap 4).
 
 **Zo werkt het nu** (29 sep, vijftiende sessie; `js/rovers.js`, het gevecht voor een groep in `js/gevecht.js`, toetsen
 in `test/rovers.test.cjs`; Marcel: "A, Ja en ook 'wilde' rovers. B, ze roven de velden, graan etc ook maken ze soms

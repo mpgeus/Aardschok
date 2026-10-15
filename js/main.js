@@ -209,7 +209,8 @@
     const { x: sx, y: sy } = naarVlak(mx, my);
     const kandidaten = [];
     for (const e of w.wezens) {
-      if (e.dood || e.binnen || e === S.schout || !T.isZichtbaar(w, e.tx, e.ty) || !T.zieJeWezen(S, w, e)) continue;
+      // De schout is in het rondlopen te kiezen (js/kiezen.js); in een gevecht in beurten wijs je hem niet aan.
+      if (e.dood || e.binnen || (e === S.schout && S.modus !== 'verkennen') || !T.isZichtbaar(w, e.tx, e.ty) || !T.zieJeWezen(S, w, e)) continue;
       const p = T.naarSchermOp(S.wereld, e.x, e.y);
       const hoog = hoogteVan(e);
       if (sx > p.x - 17 && sx < p.x + 17 && sy > p.y - hoog && sy < p.y + 9) {
@@ -431,13 +432,18 @@
     S.hover = zoekDoel(S.muis.x, S.muis.y);
     const h = S.modus === 'verkennen' ? T.handelingVerkennen(S, S.hover) : T.handelingGevecht(S, S.hover);
     S.handeling = h;
+    // Met je mannen gekozen: wat rechts doet (js/kiezen.js). Bij de muis staat dat, behalve boven wat links te kiezen
+    // is (een man, een dorpeling, een gebouw): daar zegt de muis wie of wat het is.
+    const r = S.modus === 'verkennen' ? T.handelingSturen(S, S.hover, T.gekozenMannen(S)) : null;
+    S.sturen = r;
     if (S.modus === 'gevecht') {
       const v = T.aanDeBeurt(S);
       T.ui.toonAp(v.ap, v.maxAp, h ? h.kosten || 0 : 0, !h || h.kan !== false);
     }
-    if (h && h.tekst) T.ui.tooltip(tipTekst(h), S.muis.x, S.muis.y, !!h.fout || h.kan === false);
+    const tip = r && !(h && (h.kies || h.doe)) ? r : h;
+    if (tip && tip.tekst) T.ui.tooltip(tipTekst(tip), S.muis.x, S.muis.y, !!tip.fout || tip.kan === false);
     else T.ui.verbergTooltip();
-    canvas.style.cursor = h ? 'pointer' : 'default';
+    canvas.style.cursor = h || (r && r.kan) ? 'pointer' : 'default';
     werkHuisbriefjeBij();
   }
 
@@ -636,6 +642,72 @@
   }
   let slepen = null; // { x, y, bewogen }: de muis ging omlaag in de fotomodus
 
+  // ── Kiezen (werklijst vraag 170, stap 1; js/kiezen.js) ──
+  // Links kiest een man (met Shift erbij of eraf), een dubbelklik alle van zijn soort in beeld, en slepen met links trekt
+  // een kader om je mannen. Wat je koos, staat in S.gekozen (alleen scherm): één wezen, of een lijst van je mannen.
+  let kader = null; // { x0, y0, x, y, bewogen }: de muis ging omlaag om een kader te trekken
+  let netGekaderd = false; // de klik die na het kader komt, is geen klik
+  function kiesMannen(lijst, erbij, wissel) {
+    let nu = erbij ? T.gekozenMannen(S) : [];
+    for (const e of lijst) {
+      if (!nu.includes(e)) nu.push(e);
+      else if (wissel) nu = nu.filter((m) => m !== e);
+    }
+    S.gekozen = nu.length === 0 ? null : nu.length === 1 ? nu[0] : nu;
+  }
+  // Waar een man staat op het scherm (in css-pixels): zijn lijf, zo'n 16 pixels boven zijn tegel.
+  function opScherm(e) {
+    const p = T.naarSchermOp(S.wereld, e.x, e.y);
+    return vanVlak(p.x, p.y - 16);
+  }
+  const mannenInBeeld = () =>
+    T.mannenVan(S.dorp).filter((e) => {
+      if (e.binnen || !T.isZichtbaar(S.wereld, e.tx, e.ty)) return false;
+      const p = opScherm(e);
+      return p.x >= 0 && p.y >= 0 && p.x <= cssB && p.y <= cssH;
+    });
+  function kiesWezen(e, erbij, dubbel) {
+    if (!T.isMan(S.dorp, e)) {
+      S.gekozen = e; // een dorpeling: zijn briefje, alleen hij
+      return;
+    }
+    if (dubbel) {
+      const soort = T.soortVanMan(S.dorp, e);
+      kiesMannen(mannenInBeeld().filter((m) => T.soortVanMan(S.dorp, m) === soort), erbij, false);
+    } else kiesMannen([e], erbij, erbij);
+  }
+  function kiesInKader(k, erbij) {
+    if (T.dorpHier(S) !== S.dorp) return;
+    const [x0, x1] = [Math.min(k.x0, k.x), Math.max(k.x0, k.x)];
+    const [y0, y1] = [Math.min(k.y0, k.y), Math.max(k.y0, k.y)];
+    const binnen = mannenInBeeld().filter((e) => {
+      const p = opScherm(e);
+      return p.x >= x0 && p.x <= x1 && p.y >= y0 && p.y <= y1;
+    });
+    kiesMannen(binnen, erbij, false);
+  }
+  function toonKader(k) {
+    let el = document.getElementById('kader');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'kader'; // geen tekst
+      document.body.appendChild(el);
+    }
+    el.classList.toggle('verborgen', !k);
+    if (!k) return;
+    Object.assign(el.style, {
+      left: Math.min(k.x0, k.x) + 'px',
+      top: Math.min(k.y0, k.y) + 'px',
+      width: Math.abs(k.x - k.x0) + 'px',
+      height: Math.abs(k.y - k.y0) + 'px',
+    });
+  }
+  // Tab: de held kiezen en naar hem kijken.
+  function naarDeHeld() {
+    if (T.isMan(S.dorp, S.schout)) S.gekozen = S.schout;
+    glijNaar(S.schout.x, S.schout.y);
+  }
+
   // De raad onder het doel (js/raad.js) rekent met de groei en de winter, en dat hoeft niet elk beeld: om de halve
   // seconde is genoeg. Hij verandert niets, en is alleen scherm, dus hij staat niet in S.
   const RAAD_ELKE = 0.5;
@@ -732,6 +804,29 @@
 
   canvas.addEventListener('mousedown', (ev) => {
     slepen = ev.button === 0 && S.foto ? { x: ev.clientX, y: ev.clientY, bewogen: false } : null;
+    netGekaderd = false;
+    kader = ev.button === 0 && !S.foto && !S.bouwSoort && S.modus === 'verkennen' ? { x0: ev.clientX, y0: ev.clientY, x: ev.clientX, y: ev.clientY, bewogen: false } : null;
+  });
+  window.addEventListener('mousemove', (ev) => {
+    if (!kader) return;
+    if (!(ev.buttons & 1)) {
+      kader = null;
+      toonKader(null);
+      return;
+    }
+    kader.x = ev.clientX;
+    kader.y = ev.clientY;
+    if (!kader.bewogen && Math.hypot(kader.x - kader.x0, kader.y - kader.y0) >= CAMERA.sleepVanaf) kader.bewogen = true;
+    if (kader.bewogen) toonKader(kader);
+  });
+  window.addEventListener('mouseup', (ev) => {
+    if (!kader || ev.button !== 0) return;
+    if (kader.bewogen) {
+      kiesInKader(kader, ev.shiftKey);
+      netGekaderd = true;
+    }
+    kader = null;
+    toonKader(null);
   });
   canvas.addEventListener('mousemove', (ev) => {
     S.muis = { x: ev.clientX, y: ev.clientY };
@@ -759,9 +854,10 @@
   });
   canvas.addEventListener('click', (ev) => {
     S.muis = { x: ev.clientX, y: ev.clientY };
-    // Na het slepen is het loslaten geen klik.
-    const gesleept = slepen && slepen.bewogen;
+    // Na het slepen (de fotomodus) of een kader is het loslaten geen klik.
+    const gesleept = (slepen && slepen.bewogen) || netGekaderd;
     slepen = null;
+    netGekaderd = false;
     if (gesleept) return;
     if (S.foto) return; // in de fotomodus doet een klik niets
     // Wie slaapt en ergens heen wil, is wakker (js/dag.js).
@@ -791,9 +887,14 @@
       S.bouwSoort = null;
       return;
     }
-    // Een klik ergens anders legt het briefje van een gebouw weg; een klik op een gebouw kiest het (js/gebouwbriefje.js).
-    S.gekozen = null;
+    // Links kiest (js/verkennen.js, js/kiezen.js): een man of een dorpeling, met zijn briefje, of een gebouw
+    // (js/gebouwbriefje.js). Een klik ergens anders legt het briefje weg, behalve met Shift.
     const h = S.handeling;
+    if (S.modus === 'verkennen' && h && h.kies) {
+      kiesWezen(h.kies, ev.shiftKey, ev.detail >= 2);
+      return;
+    }
+    if (!(S.modus === 'verkennen' && ev.shiftKey)) S.gekozen = null;
     if (!h || !h.doe || h.kan === false) return;
     h.doe();
   });
@@ -802,6 +903,17 @@
     // Met een veld of een weg in de hand haalt de eerste rechtsklik zijn eerste hoek (of het begin) weg.
     if (S.bouwSoort && S.veldHoek) S.veldHoek = null;
     else if (S.bouwSoort) S.bouwSoort = null;
+    else if (S.modus === 'verkennen' && !S.foto) {
+      // Rechts stuurt je gekozen mannen (js/kiezen.js): erheen, of een vijand achterna. De opdracht gaat in bij de
+      // volgende tik (js/tik.js).
+      S.muis = { x: ev.clientX, y: ev.clientY };
+      werkHoverBij();
+      const r = S.sturen;
+      if (r && r.kan && r.doe) {
+        if (S.slaap && T.wordWakker) T.wordWakker(S);
+        r.doe();
+      } else if (r && r.tekst) T.ui.bericht(r.tekst, 'gevaar');
+    }
   });
   window.addEventListener('keydown', (ev) => {
     // F2: de meter (hierboven), altijd, ook als er een venster openstaat.
@@ -845,10 +957,10 @@
       return;
     }
     if (S.modus !== 'verkennen' && S.modus !== 'gevecht') return;
-    // Tab: kijk naar de held (de schout), bij het rondlopen. Tot 15 okt was het het overzicht (vraag 108, a).
+    // Tab: kies de held (de schout) en kijk naar hem, bij het rondlopen. Tot 15 okt was het het overzicht (vraag 108, a).
     if (ev.key === 'Tab') {
       ev.preventDefault();
-      if (S.modus === 'verkennen') glijNaar(S.schout.x, S.schout.y);
+      if (S.modus === 'verkennen') naarDeHeld();
       return;
     }
     // H: de fotomodus (hierboven), alleen bij het rondlopen.

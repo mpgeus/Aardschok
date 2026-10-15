@@ -76,7 +76,8 @@
     hover: null, // wat onder de muis is, en wat een klik daar zou doen
     bouwHover: null,
     veldHoek: null, // de eerste hoek van een veld dat je trekt (js/main.js, js/boerderij.js)
-    handeling: null,
+    handeling: null, // wat links zou doen (js/verkennen.js, of js/gevecht.js)
+    sturen: null, // wat rechts zou doen met je gekozen mannen (js/kiezen.js)
     effecten: [], // wat nu beweegt: een flits, zwevende tekst
     wachters: [], // een beurt die op een beweging wacht (js/anim.js)
     rasterAlpha: 0, // het raster van een gevecht, dat in- en uitfaadt
@@ -91,7 +92,8 @@
     doorkijkTijd: 0, // de klok van de doorkijk, die met het tekenen meeloopt (js/tekenen.js)
     kijk: null, // waar de camera heen kijkt (js/main.js; vraag 170, stap 1): { x, y } in pixels van de wereld
     foto: null, // de fotomodus (js/main.js, H): { zoom } van daarvoor, of null
-    gekozen: null, // het gebouw waarvan het briefje rechts ligt (js/gebouwbriefje.js), of null
+    gekozen: null, // wat je koos, met zijn briefje rechts: een gebouw (js/gebouwbriefje.js), een wezen, of een lijst van je
+    // mannen (js/kiezen.js); of null
   });
   const NIET_MEE = new Set([...Object.keys(T.schermVelden()), 'camera', 'zoom']);
   // En wat alleen scherm is binnen een ding, waar het ook staat: hoe de tekening van een wezen erbij staat
