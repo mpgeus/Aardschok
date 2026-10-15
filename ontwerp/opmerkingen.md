@@ -29,7 +29,13 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   een veld in aanleg.
 - **De kolonist laat het dorp niet groeien** (15 okt, C stap 6): hij bouwt hutten alleen voor de gezinnen uit het kamp,
   ook als het spel zegt dat er een gezin wil komen, en nooit een put, die een keuter wil voor zijn hut tot een huis groeit.
-  Zo blijft het dorp twee jaar 17 mensen, wordt het nooit een dorp, en meet de speeltest de planken niet.
+  Zo blijft het dorp twee jaar 17 mensen, wordt het nooit een dorp, en meet de speeltest de planken niet. Een proef met
+  twee regels erbij (een hut als alleen de plaats een gezin tegenhoudt, `T.waaromGeenGezin`, en wat de raad zegt dat de
+  huizen missen, `T.watDeHuizenMissen`) gaf zonder beelden een dorp op dag 180 en 450, tot 53 mensen; Marcel koos daarna
+  dat hij het groeien zelf test (169), dus die regels zijn er niet. Wat de proef liet zien: **de raad zegt "kan" bij een
+  kapel waar nergens plek is** (`kan` is: het mag gebouwd worden, niet: er is een plek; de kring van de kapel moet huizen
+  bij een boerderij buiten het bouwbereik halen); **één houthakker is te weinig voor 45 mensen** (het hout op in de
+  winter); en **de gebouwen van het dorp kosten 6 tot 14 goud**, dat alleen van de marskramer komt (1 goud per 20 hout).
 - **In het gehucht zijn planken nergens voor** (15 okt, C stap 6): de zagerij maakt er 60 (`T.maaktTot`) en staat dan stil,
   en de marskramer koopt ze niet. Ze tellen pas als het dorp er is.
 - **De kar haalt al een stapel van 1** (15 okt, C stap 6): gemiddeld 2 van de 8 per rit, en de helft van zijn rijden is

@@ -39,15 +39,13 @@ nu"): een kapschuur in de stijl van het land, na vijf proefplaten. **168, de zag
 dezelfde branch; `spel.md`, bij de keten): de eerste hand staat voor de deur en zaagt aan de zaagbok, in zijn eigen
 uiterlijk. **C6 is gemeten** (15 okt; `speelbaar.md`, "De speeltest van 15 okt"): één kar is ruim genoeg voor een gehucht
 (45 tot 60% bezig), een waar ligt minder dan een dag op een stapel, en weinig wacht op de kar; maar het dorp groeit niet
-(de kolonist bouwt geen put en geen hut voor wie erbij wil), dus de planken meet het nog niet. **Het volgende wacht op
-Marcel** (hieronder).
+(de kolonist bouwt geen put en geen hut voor wie erbij wil), dus de planken meet het nog niet. Dat laten we zo (Marcel, 15
+okt: "Uiteindelijke balancing wordt later gedaan", "Ikzelf test het echte spel wel", "jij hoeft alleen te testen of het
+werkt zoals het moet werken"): **de speeltest toetst of het werkt, niet de balans**, en het groeien test Marcel zelf, met
+een debugvenster (169). **Het volgende is 169** (H), en dan 159 met 158.
 
 **Wacht op Marcel:**
-- **Na C6 kiezen** (15 okt): **a** de kolonist laat het dorp groeien zoals een speler die naar de raad luistert (een put
-  als de hutten hem missen, een hut als er een gezin wil komen), en dan nog eens twee jaar op eiland 3 en 4: haalt het
-  het dorp, gebruikt het de planken, en hoe druk wordt de kar dan; of **b** C6 is af zoals het is, en door naar ronde 3
-  van A. Voorstel van Claude: **a**, want zonder groei meet geen speeltest de keten, het dorp of een volle kar. En
-  `minstens` (de kleinste stapel die de kar haalt) blijft 1: met 4 ligt een waar twee dagen op de stapel.
+- **Het debugvenster (169), wat erin komt** (15 okt): het plan staat bij 169 (H).
 - **De zager bekijken** (168, 15 okt): zet een zagerij, en kijk overdag (niet in de schaft): de eerste hand staat op de
   tegel voor de deur en zaagt met de spanzaag aan de stam op de bok. Heeft de zagerij geen stammen, of is zijn stapel
   vol, dan staat er niemand.
@@ -217,7 +215,7 @@ overal, over een weg sneller; een ossenkar; de eerste opslag is het huis van de 
    de velden van een boerderij gaan mee; niet af te breken zijn het huis van de schout en het plein; **f** de kolonist legt ook wegen, van elke schuur naar het huis van de schout, zodat stap 6 meet wat een
    weg doet.
 6. **Meten en spelen:** de speeltest vanaf een lege plek: hoeveel van de dag de kar rijdt, wat er wacht, hoe groot de
-   stapels worden. Dan ronde 3 van A. **Bezig in sessie `claude/wizardly-sagan-qw7f8f`** (15 okt). **Besloten**
+   stapels worden. Dan ronde 3 van A. **Af** (15 okt, op de branch `claude/wizardly-sagan-qw7f8f`). **Besloten**
    (Marcel, 15 okt, op twee vragen van Claude): **de kolonist zet een schuur richting de rotsen**, zodat de speeltest ook
    een tweede kar meet en de steengroeve binnen bereik komt; en **vijf eilanden spelen een jaar, twee spelen door tot
    het tweede jaar**, zodat het dorp er komt en de planken ook gebruikt worden. Na de zagerij bleek het goud op (de 20
@@ -225,7 +223,10 @@ overal, over een weg sneller; een ossenkar; de eerste opslag is het huis van de 
    verkoopt nu aan de marskramer** wat de winter niet nodig heeft als hij op goud wacht (Marcel, 15 okt). Het meten zit in de speeltest, niet in
    het spel: wat elke kar doet (rijden, vol of leeg, laden, stil), de ritten, hoe groot de stapels worden en hoe lang
    een waar erop ligt, en wat er op de kar wacht (een bouwplaats, een werkplaats zonder stammen, een volle stapel).
-   **Gemeten** (15 okt; `speelbaar.md`, "De speeltest van 15 okt"); wat nu, staat bij "Wacht op Marcel".
+   **Gemeten** (15 okt; `speelbaar.md`, "De speeltest van 15 okt"). Daarna koos Marcel eerst dat de kolonist het dorp
+   laat groeien (een put, een hut voor wie erbij wil), en toen, terwijl dat liep: de balans komt later, hij test het
+   groeien zelf met een debugvenster (169), en de speeltest toetst alleen of het werkt. Wat die proef al liet zien,
+   staat in `opmerkingen.md`.
 
 Wat Claude erbij zag (14 okt): met de getallen van nu is één kar ruim genoeg voor een gehucht (hij rijdt binnen 16
 tegels drie tot vier ritten per dag, een houthakker maakt 2 hout per dag); de keuze voor een tweede kar komt met de afstand
@@ -386,12 +387,20 @@ niet perse. 8. Los ontwerp", op de vragen van Claude; in het gesprek heetten de 
   als eigen punt): de houthakker, de smidse, de bakkerij en de andere werkplaatsen komen nog uit de oude tekeningen
   (`dorp.cjs`, `dorp2.cjs`), en passen niet bij de huizen uit de huizenbouwer. Zoals de zagerij (157): in de vier
   stijlen, met de deur naar elke kant en met bouwfasen. Later, na de zagerij.
+- **169, een debugvenster** (Marcel, 15 okt, bij C6: "we kunnen ook een debug venster toevoegen. Uiteindelijke balancing
+  wordt later gedaan. misschien letter "D" en dan debug menu op laten komen. +50 voor bouwmaterialen etc.", en "dan kunnen
+  we gewoon het daadwerkelijke groeien testen"). D is vrij bij het rondlopen (in een gevecht sluit D een deur, en dat
+  blijft); het venster komt in de lijst van vensters met een toets (`VENSTERS`, `js/ui.js`), zoals O, V, W en R. Het
+  plan wacht op Marcel (wat erin komt, en of het in de proefversie en op Steam blijft).
 - **Nog open** (als we er zijn): **161**, het nieuws echt en bruikbaar (wat een stad tekortkomt, waar de mannen van de
   heer zijn, welk dorp morrt), en met een herberg blijven ze langer; **160**, eerst losse ritten (een kar met wat over
   is naar een stad, dagen onderweg, een escorte helpt), vaste routes later.
 
 ## Af (sinds 11 okt)
 
+- C6, meten en spelen (15 okt; `speelbaar.md`, "De speeltest van 15 okt"): de speeltest meet de ossenkar (tabel "De
+  ossenkar"), speelt met `--jaren 2` twee jaar, en de kolonist zet een schuur richting de rotsen en verkoopt de
+  marskramer wat over is als hij op goud wacht. Eén kar is ruim genoeg voor een gehucht.
 - B3, de afwisseling (vraag 154; 13 okt, Marcel: "A1, B1, C1, D1"; `spel.md`, "Zo werkt de afwisseling nu"): het dorp
   eet zijn maaltijd in gelijke delen van elke soort (graan, brood, vlees, vis, wijn, kaas, groente, eieren), en de
   soorten die minstens een tiende waren, bepalen al het werk (60% met één, 100% met vier): de werkplaatsen (maal de
