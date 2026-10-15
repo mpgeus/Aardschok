@@ -52,10 +52,25 @@ besloten. **Stap 0 is af** (15 okt, in `main`; `code.md` bij `js/tik.js`): de we
 van de beelden, haar toeval komt uit het zaad (nooit `Math.random`), en bouwen, wegen, velden, afbreken en de soldaten
 zijn opdrachten die op een tik ingaan. **Stap 1 is af** (15 okt, in `main`;
 `spel.md`, "Zo werkt kijken, kiezen en sturen nu"): de camera los, links kiezen, rechts sturen (de post), groepen onder
-een cijfer, en een bericht brengt je erheen. **Het volgende is stap 2, het gevecht in real time** (bij I). Let op:
-CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een afspraak bij moet.
+een cijfer, en een bericht brengt je erheen. **Stap 2 is af** (15 okt, op de branch `ccr-c0f9d2a2-6j0scf`, nog niet in
+`main`; `spel.md`, "Zo werkt het gevecht nu"): het gevecht in real time, in de tik; aanvallen en dan terug naar de post;
+niemand vanzelf; een rover slaat ook een dorpeling, die vlucht naar het **town hall** (het huis van de schout); het
+gevecht is een status met de tijd op 1×; het gevecht in beurten is eruit. **Het volgende is stap 3, formaties en de
+post** (bij I). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
+afspraak bij moet.
 
 **Wacht op Marcel:**
+- **Het gevecht in real time bekijken** (vraag 170, stap 2, 15 okt): Nieuw spel, zet een wachthuis (B) met twee man
+  militie (+), en laat rovers komen (`Spel.debug.rovers(3)`). Het bericht zegt waar ze heen gaan en hoe je stuurt: kies
+  je soldaten en klik rechts op een rover. Ze lopen erheen en slaan (een levensbalk boven wie vecht, de schade zweeft
+  boven het hoofd, een pijl vliegt), *Fighting* staat in de balk, de randen kleuren rood, en de tijd loopt op 1×. Een
+  dorpeling die een rover ziet, rent naar het **town hall** (zo heet het huis van de schout nu) en komt eruit als de
+  rovers weg zijn. Een soldaat bij het wachthuis valt uit zichzelf aan wat binnen 8 tegels komt, en laat het gaan op 10
+  tegels van zijn post. Opslaan mag midden in een gevecht. Te kiezen in de werkbank ("Fighting"). **Twee dingen om naar te
+  kijken:** (1) de held kiest zelf geen vijand, maar vecht als je hem stuurt of als hij geraakt wordt (een keuze van
+  Claude: anders liep hij van zijn plek een gevecht in dat het spel kan beëindigen); (2) het is nu dodelijk: twee wilde
+  rovers in de oogst doodden in een toets drie dorpelingen, en twee man militie verliest van drie rovers. De balans komt
+  later; de knoppen zijn `vluchtZicht`, `zicht` en `leiband` ("Fighting"), en de rovers in "The robbers".
 - **Kijken, kiezen en sturen bekijken** (vraag 170, stap 1, 15 okt): Nieuw spel. De
   camera volgt de schout niet meer: de pijltjes of de muis tegen de rand van het scherm schuiven het beeld, het wiel zoomt,
   een klik op de minikaart kijkt daar, en Tab kiest de held en kijkt naar hem. Zet een wachthuis (B) en op zijn briefje
@@ -64,8 +79,8 @@ CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand 
   ze voortaan van het opstaan tot het slapen, tot je *Back to the guardhouse* drukt op hun briefje. Shift+1 maakt er groep
   1 van (Ctrl+1 neemt Chrome zelf), 1 kiest hem, en 1 twee keer kijkt ernaar. Klik op een dorpeling: zijn briefje; de
   waard heeft *Talk*. Laat rovers komen (`Spel.debug.rovers(3)`): het bericht is onderstreept, een klik erop of Spatie
-  brengt je erheen, en de plek knippert op de minikaart; rechts op een rover stuurt je mannen erop af. Slaan doen ze pas in
-  stap 2: tot dan begint het gevecht in beurten als een rover de held ziet. Te kiezen in de werkbank ("Choosing and
+  brengt je erheen, en de plek knippert op de minikaart; rechts op een rover stuurt je mannen erop af (sinds stap 2 slaan
+  ze ook, hierboven). Te kiezen in de werkbank ("Choosing and
   sending"): hoe dicht bij de rand de muis schuift (8 pixels; 0 zet het uit) en hoe snel (900).
 - **Spelen na stap 0** (vraag 170, 15 okt): het spel moet er precies zo uitzien en zo spelen als ervoor; de wereld rekent
   nu in vaste tikken van een zestigste seconde. Let op of het lopen hortend oogt, vooral op een scherm van meer dan 60 Hz:
@@ -74,8 +89,8 @@ CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand 
   briefje zes soorten met − en +. Druk + bij Militia: wie geen werk heeft, pakt een hooivork en staat overdag bij het
   wachthuis. Zet dan een wapenmaker (in het gehucht, 12 stammen en 14 goud), geef jezelf planken (D, +50), en druk +
   bij Spearman: de wapenmaker maakt een speer en een schild, de kar brengt ze binnen, en dan wordt er een speerman.
-  Laat rovers komen (in de console `Spel.debug.rovers(3)`), en kijk in het gevecht: de speerman steekt van twee tegels
-  ("Thrust"), een boogschutter schiet ("Shoot"), en schild en harnas vangen een deel af. De getallen in de werkbank
+  Laat rovers komen (in de console `Spel.debug.rovers(3)`), stuur ze erop af, en kijk in het gevecht: de speerman steekt
+  van twee tegels, een boogschutter schiet van ver, en schild en harnas vangen een deel af. De getallen in de werkbank
   ("Soldiers"). Het briefje van een gebouw is nu even breed als de andere kaartjes (het groeide met zijn regels mee).
 - **Het debugvenster bekijken** (169, 15 okt): Nieuw spel, en druk D bij het rondlopen: +50 stammen, planken, steen en
   goud, een gezin (zonder plaats zegt het spel dat), de bouwplaatsen meteen af (wie erin trekt, komt die nacht), en de
@@ -539,7 +554,8 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   is een opdracht (js/tik.js). **1d** Ctrl+1 tot 9 (en Shift+1 tot 9) maakt een groep, 1 tot 9 kiest hem, twee keer en de
   camera gaat erheen; een groep is alleen scherm. **Erbij:** een bericht met een plek (rovers, een brand) brengt de camera
   erheen met een klik of Spatie, en de plek knippert op de minikaart.
-- **2, het gevecht in real time:** **Bezig in sessie `ccr-c0f9d2a2-6j0scf`** (15 okt): bouwen. Elk kiest de dichtste
+- **2, het gevecht in real time:** **af** (15 okt, op de branch `ccr-c0f9d2a2-6j0scf`; `spel.md`, "Zo werkt het gevecht
+  nu"; `code.md` bij `js/gevecht.js`). Elk kiest de dichtste
   vijand die hij ziet, loopt tot hij raakt en slaat, met de regels van 159; de actiepunten van een slag worden de tijd
   tussen twee slagen; rovers en wolven vallen aan wie ze tegenkomen.
   **Het plan** (Claude, 15 okt; **besloten**, Marcel: "Aanvallen, dan terug", "Niemand vanzelf", "Iedereen, wie kan
@@ -563,7 +579,9 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
 - **5, de held en het opruimen:** de schout heet voortaan anders (vraag A), en valt hij, dan staat er een veteraan op; het
   praten is geparkeerd (een klik op iemand geeft zijn briefje, de marskramer opent zijn handel met een klik; de code van
   de gesprekken blijft tot we weten wat ermee gebeurt); eruit: sluipen, de lantaarn, sleutel en kist, oprapen, de camera
-  die hem volgt, reizen met hem over de landkaart, en het gevecht in beurten; en wat sinds stap 1 niets meer doet: het
+  die hem volgt, en reizen met hem over de landkaart (het gevecht in beurten ging er al in stap 2 uit); in de code heet het
+  town hall nog `schout` (`T.GEBOUWEN.schout`), en de jacht op de wolven roept nog mannen op die met de held meelopen
+  (`T.roepOp`); en wat sinds stap 1 niets meer doet: het
   lopen na een klik (`S.naLopen` en zijn afloop in `T.bijAankomst`), de tekst *Pick up the key* en de uitleg `hulp` in
   `js/ui.js` ("Click to walk, talk or use something").
 - **6, samen spelen:** de vensters zetten de tijd niet meer stil (E1), en wat erin gebeurt (de handel, de velden, het
