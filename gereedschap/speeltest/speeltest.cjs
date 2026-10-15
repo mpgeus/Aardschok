@@ -16,7 +16,7 @@
 //   npm run speeltest -- --samenvatting        niet spelen, maar de samenvatting opnieuw maken uit wat er al in uit/ ligt: zo
 //                                              geeft een speeltest die over meer taken verdeeld is, één tabel
 //   npm run speeltest -- --regel seizoen=jij   met een spelregel anders dan de standaard (T.OPTIES in js/opties.js),
-//   npm run speeltest -- --getal VOORVALLEN_INSTELLINGEN.metOorzaak=1
+//   npm run speeltest -- --getal BOS_INSTELLINGEN.bosVanDeHeer=20
 //                                              of met een getal uit de werkbank; allebei zo vaak als je wilt, zoals
 //                                              de browser ze onthoudt als een speler ze kiest
 //   npm run speeltest -- --naam voor           bewaart deze speeltest in uit/voor/, met de stand en alle waarden van de
@@ -75,7 +75,7 @@ function leesOpdracht(argv) {
     else if (a === '--regel' || a === '--getal') {
       const [naam, waarde] = String(argv[++i] || '').split('=');
       if (!naam || waarde == null || waarde === '') {
-        console.error(`${a} wil naam=waarde, zoals --regel seizoen=jij of --getal VOORVALLEN_INSTELLINGEN.metOorzaak=1.`);
+        console.error(`${a} wil naam=waarde, zoals --regel seizoen=jij of --getal BOS_INSTELLINGEN.bosVanDeHeer=20.`);
         process.exit(1);
       }
       if (a === '--regel') o.regels[naam] = waarde;

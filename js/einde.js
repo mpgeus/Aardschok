@@ -12,7 +12,7 @@
 // Het jaar in het kort: wat er gebeurde, telt het dorp elke nacht op in zijn jaarboek (uit het dagboek, T.schrijfOp
 // hieronder, vóór dat opnieuw begint, en de oogst uit js/akkers.js), en op 1 lentemaand komt het
 // jaarverslag (js/brieven.js, soort 'jaarverslag'): hoeveel mensen er kwamen, stierven en wegtrokken, wat de oogst
-// bracht, welke huizen doorgroeiden, welke feesten er waren, wat de heer kreeg, en wat het meest gemist werd. Regels
+// bracht, welke huizen doorgroeiden, wat de heer kreeg, en wat het meest gemist werd. Regels
 // zonder scherm; toetsen in test/einde.test.cjs.
 //
 // D.jaarboek:    { begin, mensen, kwamen, stierven, weg, doorgegroeid, geoogst, gemist: { wens: dagen } },

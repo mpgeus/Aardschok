@@ -19,7 +19,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | De afwisseling | gebouwd (13 okt; Marcel: "A1, B1, C1, D1"): het dorp eet in gelijke delen van elke soort die er ligt, en hoe meer soorten, hoe harder al het werk gaat (60% met één, 100% met vier); de status Plain fare, en de kar brengt kaas en gezouten vlees ("Zo werkt de afwisseling nu") | vraag 154 |
 | Een gebouw aanklikken | gebouwd (14 okt; Marcel: "1a1, 1b ja"): een klik op een gebouw legt rechts een briefje met wat het doet, wie er werkt, wat het maakt (op vol, vandaag, 7 dagen, dit jaar), wat het tegenhoudt en wat erbij ligt; het spel loopt door ("Zo werkt het briefje van een gebouw nu") | vraag 156 |
 | De keten van stammen tot planken | gebouwd (14 okt, vraag 157; Marcel: "2a2, 2b ja", en voor de tekening "Kapschuur in de stijl"): de houthakker hakt stammen (*logs*), de zagerij zaagt er planken van, en het materiaal volgt de trede: een gehucht bouw je van stammen, een dorp van planken, een stad van steen; de zagerij is een kapschuur in de stijl van het land | 157, 168 |
-| De balk onderaan | gebouwd (14 okt, vraag 164; Marcel: "De oude ui balk aan de onderkant moet leeg. En we hebben een minimale nodig", en dat was een minimap, vraag 165): kaartjes in de hoeken, even breed als bovenaan: de waren die je hebt, Build, en de minikaart; de velden, het wetboek en de raadsman alleen nog met hun toets; de tafel van de schout is weg (`code.md`, bij `js/ui.js`) | vraag 164 |
+| De balk onderaan | gebouwd (14 okt, vraag 164; Marcel: "De oude ui balk aan de onderkant moet leeg. En we hebben een minimale nodig", en dat was een minimap, vraag 165): kaartjes in de hoeken, even breed als bovenaan: de waren die je hebt, Build, en de minikaart; de velden en het wetboek alleen nog met hun toets (de raadsman is weg sinds 15 okt); de tafel van de schout is weg (`code.md`, bij `js/ui.js`) | vraag 164 |
 | De minikaart | gebouwd (14 okt, vraag 165; Marcel: "Onder in de ui zoals bij age of Empires", "Het hele eiland"): rechtsonder in de hoek het hele eiland als een ruit die ligt zoals het beeld, wat je kent in kleur, je gebouwen en de schout, het kader van de camera; een klik of slepen kijkt daar (het overzicht) | vraag 165 |
 | De balk bovenaan | gebouwd (14 okt, vraag 166; Marcel: "Bovenaan een dunne ui balk met goud, aantal inwoners, happiness jaar en tijd", en "zo leeg mogelijk zonder info te missen"): het goud, de inwoners, de tevredenheid, de datum en het uur, de snelheid, de twee bazen en Menu in één strook; het seizoen en het weer bij de muis | vraag 166 |
 | Een nieuwe richting | besloten (Marcel, 28 sep): besturen en groeien worden het hart, de heer de druk van boven, en vechten begint bij je eigen dorp; sinds 29 sep: het hogere doel is al het land veroveren of met iedereen bevriend raken (Civilization), en sinds 1 okt: de hele wereld veroveren, en je mensen super gelukkig, met wensen zoals in Anno 1602, terwijl de heer geen doelen stelt maar het je moeilijk maakt (vraag 78), eenvoud boven werkelijkheid, en wetten in een menu zoals Democracy 3; sinds 30 sep: meer een management sim, met het concept als kompas (het poppetje is hoe je bestuurt, `concept.md`), de boeren die het seizoen doen, en eerst de kern; sinds 3 okt: de stad groeit door haar mensen (inwoners beginnen zelf een ambacht en vragen toestemming), en jij bepaalt de richting, want "weer een bouw spelletje" wordt te snel saai (het plan is vraag 103, open) | vraag 50, 51, 54, 73, 74, 78, 103 |
@@ -31,16 +31,16 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | De heervaart | gebouwd (29 sep): in een dorp vraagt de heer op 1 hooimaand mannen of goud; wie terugkomt, is veteraan en vecht mee | vraag 60 |
 | Het land | gebouwd, stuk 1 van stap 1a (30 sep): over de weg je gehucht uit naar de kaart van het land, negen provincies uit het zaad, reizen in dagen, wat je niet zag is donker, en thuis gaat alles door zonder je; achter de spelregel Land, tot het buurdorp er is. De maker legt elk spel een ander land, sinds 4 okt de standaard: 100 bij 100, met natuur die ertoe doet, en het nummer van het land bij Nieuw spel (vraag 112). Stuk 2 (30 sep): de snellere dag, alles van een dorp bij elkaar, en elk dorp leeft, ook als je er niet bent; nog één dorp in het spel, tot het buurdorp (stuk 3) | vraag 63, 69, 70, 71 |
 | Tegenspelers | besloten (29 sep): dorpen met een AI die zelf bouwen, in een land met provincies waar je dagen reist (Lords of the Realm), elk met een karakter en een voorsprong, en een moeilijkheidsgraad; zelfsturende provincies zijn zwakker; winnen is voor nu alles veroveren, en een veroverd dorp leid je erbij | vraag 61, 62, 63 |
-| De voorvallen | gebouwd (29 sep): om de paar dagen komt iemand je zoeken met een vraag, een ruzie of een ramp, met twee of drie antwoorden en hun prijs; 35 voorvallen, sommige komen terug; sinds 30 sep heeft een probleem een oorzaak (honger, kou, vol, onvrede) | vraag 65, 74 |
-| De raadsman | gebouwd (30 sep): een van de boeren, met twee gelote vaardigheden, die de voorvallen beslist als je weg bent (sinds 12 okt zonder karakter); je kiest hem met de knop Raadsman (R) | vraag 64, 65, 66, 67, 68 |
-| Het rapport van de raadsman | gebouwd (1 okt): de eerste fase van de dag; elke ochtend brengt hij je aan je deur wat er gebeurde, hoe het graan en het hout gaan, of ze de winter halen, wat er speelt en wat er komt, met zijn rekenen in de getallen | vraag 75 |
+| De voorvallen | weg (15 okt, ronde 3 van het snoeien): niemand zoekt de schout meer met een vraag, een ruzie of een ramp, en de tijd staat niet meer stil voor een antwoord; de statussen (honger, kou, vol, onvrede, ...) bleven en zeggen zelf met een bericht wat er speelt, en de brand, de koorts en de wolven beginnen zelf | vraag 65, 74 |
+| De raadsman | weg (15 okt, ronde 3 van het snoeien): hij beslist niets meer als je weg bent, en het venster onder R en de knop zijn weg | vraag 64, 65, 66, 67, 68 |
+| Het rapport van de raadsman | weg (15 okt, ronde 3 van het snoeien): de brief elke ochtend en de knop Rapport; de statussen zeggen zelf met een bericht wanneer ze beginnen, erger of minder worden of ophouden | vraag 75 |
 | De raad onder het doel | gebouwd (29 sep): één regel onder het doel die zegt wat nu tussen jou en een dorp staat, uit de regels zelf; sinds 1 okt ook wat je mist voor de kapel en de smidse, en waar het vandaan komt; sinds 2 okt wat de huizen missen, en de ketens (een molen voor de bakkerij) | vraag 58, 79, 87, 90 |
 | De houthakker hakt en plant | gebouwd (6 okt; Marcel: "A ja B ja C ja D zo"): zijn hout komt uit de bomen om zijn schuur, elke tien hout een boom; naast de stronk twee boompjes, in een jaar of twee bomen, zodat het bos om hem blijft; zonder boom staat hij stil, en werkt zijn hand elders; hij komt alleen bij minstens 30 bomen binnen tien tegels, en loopt tussen zijn stronken door (vraag 129, e, b en f); in de speeltest van vier jaar komt elk dorp boven de 100 en wint er voor het eerst een | vraag 115, 129 |
 | Beesten in het bos | stap 1, 2a en 2b gebouwd (7 okt; Marcel: "a ja, b ja, c ja", en d tot i): roedels wolven en groepjes herten, elk met een plek diep in het bos; overdag rusten ze, 's nachts lopen de wolven langs de bosrand met rode ogen, in de schemering grazen de herten aan de rand; ze gaan mensen uit de weg, en een wolf begint geen gevecht; in de winter jagen de wolven met honger op de herten, in de lente komen er jongen, en wie zijn bos kwijt is, verhuist of trekt weg; zijn de herten op, dan komen ze in het donker naar het dorp: een schaap, of wie alleen loopt, en wie werkt en ze ziet, rent naar huis; licht houdt ze weg (2b); de jager schiet klein wild en herten, laat twee per groepje staan en houdt de roedels klein (3a); de jacht te voet naar de roedel (3b); om hulp roepen en het hek komen nog | vraag 116 |
 | De markt op het plein | gebouwd (6 okt; vraag 110, d, en 127, stap 1 en 2): een marktblok van twee rijen kramen met manden op het plein, voor 8 hout en 6 goud, dat meegroeit met het dorp (een kraam per 15 mensen, daarna langs de weg), met kramen vol of leeg naar wat het dorp heeft; de maker legt een groter plein; de kooplui, de boodschappen en de marktdag nog niet | vraag 110, d; 127 |
 | De verzoeken | weg (12 okt, ronde 2 van het snoeien): niemand vraagt meer wat hij bouwt, ook de ondernemers niet; jij bouwt alles uit het bouwmenu, en de spelregel "Wie bouwt" is weg | vraag 103, 104 |
 | Twee bazen | stap 1 en 2 gebouwd (3 okt; Marcel: "106 a b c d ja"): de gunst van de heer en het vertrouwen van het dorp in de balk, met een waarschuwing onder 20 en op 0 weg (ontslagen of weggejaagd); betrapt op verstoppen is de laatste waarschuwing; elke maand een gril van de heer in een brief, die zijn gunst tegen het dorp weegt | vraag 106 |
-| Dorpsfeesten | gebouwd (3 okt): het oogstfeest en de meiboom, en sinds 10 okt de kerstboom; zeg je ja, dan viert het hele dorp het op het plein, een hele dag (en niemand werkt) of een avond, met licht en de meiboom in pixel art; de rest (meer feesten, een grote bruiloft) later | vraag 84, 97 |
+| Dorpsfeesten | weg (15 okt, ronde 3 van het snoeien): het oogstfeest, een vrije dag en het dorp op het plein; de meiboom en de kerstboom bleven als versiering op het plein, zonder feest; meer feesten en een grote bruiloft later | vraag 84, 97 |
 | Besloten | het spel zelf (23 sep); geldt nog | |
 | Hoe het zou kunnen spelen | voorstel; de kern ervan werd de richting | 8 tot 16 |
 | De wetten (in "Keuren en politiek") | gebouwd (29 sep): een menu zoals Democracy 3 onder W, met rantsoen, vreemden welkom, houtkap en belasting | vraag 54 |
@@ -79,7 +79,7 @@ wordt, met een paar oude eiken en het bos er vlak omheen (Marcel: "Klein, bos di
 stuurt je met vier gezinnen naar een stuk van zijn wildernis) rijdt de huifkar over de weg het land in, de schout loopt
 ernaast tot je zelf ergens heen klikt, en de gezinnen lopen erachter (Marcel: "Rijdt nu binnen"). Op het plein zetten ze
 het kamp op: een tent of een afdak per gezin rond het kampvuur, en de kar ernaast. Daar wonen ze; de tent van de schout
-is zijn huis (slapen, het rapport). Een tent is zo groot als zijn gezin, dus er komt geen nieuw gezin bij. In de kar: 50
+is zijn huis (slapen, de bode). Een tent is zo groot als zijn gezin, dus er komt geen nieuw gezin bij. In de kar: 50
 hout, 140 graan, 60 zaaigraan, 20 goud en 5 gereedschap, en sinds 13 okt (vraag 154, D1) 8 kaas, 8 vlees en 1 zout, zodat
 het dorp met drie soorten eten begint (zie "Zo werkt de afwisseling nu"); met de schout komt zijn gezin mee (Marcel: "Met gezin"), en elk
 gezin is een man, een vrouw en een kind, zodat het in een hut past (Marcel: "Kleinere gezinnen"), samen 17 mensen. Het
@@ -256,8 +256,9 @@ veld). De getallen in de werkbank ("The fog").
   het oogsten en de winter. Jij moet als schout wel een oogje in het zeil houden dat alles goed blijft verlopen." Het
   concept dat Marcel meebracht (`concept.md`) is het kompas: wat elders één klik is, gaat hier via een persoon, een
   plek, een papier of een handeling, en de toets is of je na een uur denkt "ik moet even gaan kijken wat daar aan de
-  hand is". Eerst de kern (voorvallen met een oorzaak, de dag in fasen, zelf gaan kijken), dan het buurdorp. Het plan:
-  werklijst, vraag 74.
+  hand is". Eerst de kern (voorvallen met een oorzaak, de dag in fasen, zelf gaan kijken; de voorvallen en de dag in
+  fasen zijn weg
+  sinds 15 okt, ronde 3 van het snoeien), dan het buurdorp. Het plan: werklijst, vraag 74.
 - **Het hart:** groeien en besturen. De heer met zijn inner en het verstoppen blijft als de druk van boven, niet
   meer als de puzzel waar alles om draait. Er gaat niets weg.
 - **Besturen is allebei:** knoppen met een prijs (de keuren, "Keuren en politiek") én bouwen en plannen
@@ -399,7 +400,8 @@ spel naartoe gaat:
     geen haak, maar krijgt een doel;
   - zijn grillen (vraag 106, stap 2) zijn bewijs voor de koning: bewaar zijn brieven;
   - de marskramer is je weg naar buiten: hij kan een brief meenemen, maar hij praat ook met de inner;
-  - de raadsman bestuurt thuis als jij op het kasteel of onderweg bent;
+  - de raadsman bestuurde thuis als jij op het kasteel of onderweg bent (weg sinds 15 okt, ronde 3 van het snoeien: wie
+    thuis bestuurt, is weer open);
   - de militie en het gevecht in beurten zijn de bestorming van het kasteel, op dezelfde tegels.
 - **Drie wegen, die je onderweg voorbereidt, niet vooraf kiest:**
   - **de opstand:** wapens, mannen, bondgenoten, en het kasteel bestormen in beurten; met een palissade "tegen de
@@ -425,7 +427,8 @@ spel naartoe gaat:
 - **Diplomatie te voet.** In bijna elk spel met diplomatie is het een menu. Bij ons is het poppetje hoe je bestuurt
   (`concept.md`): je reist zelf naar het kasteel om zijn bond te vragen, of naar een ander dorp om samen te zweren; je
   ziet de schout van het buurdorp met een kar naar het kasteel rijden, en weet wat dat betekent; en terwijl je weg bent,
-  bestuurt je raadsman. Zo blijft de haak heel, ook in het grote spel.
+  gaat thuis alles door (de raadsman die het bestuurde, is weg sinds 15 okt, ronde 3 van het snoeien). Zo blijft de haak
+  heel, ook in het grote spel.
 - **Samen spelen, met een speler als heer** (na de release, als update):
   - Het wordt een spel van twee kanten: de heer met wie hem dient, tegen wie hem wil afzetten, en wie van kant wisselt,
     verraadt. De heer weet niet wie er naar de koning schrijft. Hij moet zelf iets te winnen hebben (heer blijven en rijk
@@ -437,13 +440,13 @@ spel naartoe gaat:
     en elk dorp heeft zijn eigen schout die kiest (jij, of code), dus een mens als heer is een andere manier van kiezen.
   - Wat het vraagt: de regels in vaste tikken in plaats van per beeld (nu hangt een stap af van hoe snel een computer
     tekent, `js/main.js`); geen `Math.random` meer in de regels (de speeltest vervangt het nu door een vaste
-    dobbelsteen); tijd die niet stilstaat (een brief of een voorval zet nu de tijd stil; samen krijgt elke keuze een
-    termijn, zoals de grillen al hebben, en anders beslist de raadsman); en Steam voor het vinden en verbinden (lobby's
+    dobbelsteen); tijd die niet stilstaat (een brief zet nu de tijd stil; samen krijgt elke keuze een
+    termijn, zoals de grillen al hebben); en Steam voor het vinden en verbinden (lobby's
     en verbinding via Steamworks, zonder eigen server).
   - Commercieel: alleen met vrienden, met een uitnodiging via Steam, zonder matchmaking, want een klein spel heeft lege
     lobby's.
-  - Tot dan bouwen we zo dat het kan: de heer kiest uit dezelfde knoppen als een mens zou hebben (zoals de raadsman nu al
-    kiest uit de antwoorden van een voorval, `T.raadsmanKeuze`), en elke pauze krijgt ook een termijn.
+  - Tot dan bouwen we zo dat het kan: de heer kiest uit dezelfde knoppen als een mens zou hebben (zoals de raadsman deed,
+    die op 15 okt wegging), en elke pauze krijgt ook een termijn.
 - **Voor de demo en de Steam-pagina.** De haak krijgt een eind: "The lord wants gold. The village wants to live. Serve
   him, betray him, or overthrow him." (`commercieel.md`, kandidaat 5). En de demo kan eindigen op het moment dat de heer
   je zijn bond aanbiedt: een vraag die je pas in het spel beantwoordt. (Marcel koos b3: de demo eindigt met het jaar
@@ -487,15 +490,18 @@ kwam uit een analyse van buiten van onze samenvatting ("Richting & Game Design I
 omvang, dieper in menselijke gevolgen. Zijn vraag bij elke beslissing: "Wat gebeurde er in mijn dorp, waarom gebeurde
 het, wat weet ik ervan, en wie wordt boos als ik ingrijp?"
 - **a, informatie in drie lagen:** wat er echt gebeurde, wat er gezegd wordt, en wat jij weet. Je weet iets door er
-  zelf te zijn, te praten, in de herberg, door de raadsman iets te laten uitzoeken of een wachter te laten kijken, de
+  zelf te zijn, te praten, in de herberg, door de raadsman iets te laten uitzoeken (weg sinds 15 okt) of een wachter te
+  laten kijken, de
   boeken na te lezen, iemand te volgen, of een tegenstrijdig verhaal te herkennen. Een gerucht heeft een andere status
   dan een feit. Dit is ook vraag 105, b (de balk toont wat er het laatst geteld werd) en e (het dorp praat, en je ziet
   het gaan). Wat er al is: de getuigen (`js/zien.js`), de roddelaar in de herberg (`js/verstoppen.js`), en de inner die
-  alleen telt wat hij ziet. Waarom: nu komt bijna alles naar je toe (elk verzoek, het rapport, de echte voorraad in de
+  alleen telt wat hij ziet. Waarom, op 6 okt: toen kwam bijna alles naar je toe (elk verzoek, het rapport, de echte
+  voorraad in de
   balk), dus lopen is fijn, maar voor een keuze nog niet nodig.
 - **b, de zitting:** 's middags, als er rechtszaken zijn (3b, vraag 75), met een aanklager, een verdachte, getuigen,
   bewijs, geruchten, wat jij zelf weet, en de druk van het dorp. Soms weet je dat iemand schuldig is, maar kun je het
-  niet bewijzen, of heb je bewijs dat de heer liever niet ziet. Nu is rechtspraak een soort voorval ("De voorvallen").
+  niet bewijzen, of heb je bewijs dat de heer liever niet ziet. Toen was rechtspraak een soort voorval (weg sinds 15
+  okt, "De voorvallen").
 - **c, het dorp is verdeeld:** het vertrouwen van het dorp (`D.bazen`) per groep, zodat je ziet: "De boeren zijn voor
   mij, maar de ambachtslieden zijn tegen." Voorstel (open): eerst per stand (keuters, dorpelingen, ambachtslieden,
   boeren), want de wensen en de wetten werken al per stand; groepen als de geestelijkheid en de wachters later.
@@ -512,7 +518,8 @@ het, wat weet ik ervan, en wie wordt boos als ik ingrijp?"
 - **De volgorde:** eerst het beeld dat in de werklijst staat, dan de proef: één keten van begin tot eind, **de
   verdwenen graanzak**. Er verdwijnt graan uit de voorraad en iemand wordt beschuldigd; je gaat kijken en vraagt rond,
   ook in de herberg; het graan blijkt naar een zieke familie te zijn gegaan; in een eerste zitting kies je straffen,
-  vrijspreken of verbergen; en later merkt de heer het tekort. Alles op wat er al is: een voorval met een vervolg, de
+  vrijspreken of verbergen; en later merkt de heer het tekort. Alles op wat er toen al was: een voorval met een vervolg
+  (de voorvallen zijn weg sinds 15 okt), de
   getuigen, de herberg en de inner. Speelt dat goed, dan c, d en e (voorstel van Claude).
 - **Wat blijft zoals het was:** de demo gaat van gehucht tot een stad van 100 tot 200 mensen, met het jaar van geluk als
   eind (Marcel, 1 okt, en vraag 126, b3); het advies van buiten was 30 tot 50 inwoners en één grote politieke keuze.
@@ -539,10 +546,11 @@ een stand, en elke stand wil iets.
   een jaar lang iedereen super gelukkig (de teller van dagen op rij, het doel linksboven, het eindscherm, het grote feest
   en de spelregel "Het eind"), hoort bij het oude spel. Het nieuwe doel van de demo wacht op Marcel (werklijst, "Wacht op
   Marcel"). **Verliezen:** je ambt kwijt, gevallen, en sinds 3 okt ook minder dan 10 mensen ("Het dorp is leeg").
-  **Het jaar in het kort:** het dorp houdt een jaarboek bij (uit het dagboek van de raadsman, en de oogst), en op 1
-  lentemaand komt het jaarverslag, als een brief in de hand van je raadsman: hoe het dorp groeide of kromp, wie er kwam,
-  stierf en wegtrok, wat de oogst bracht, welke huizen doorgroeiden, welke feesten er waren, wat de heer kreeg, en wat het
-  meest gemist werd. De getallen in de werkbank ("Het eind": 10 over); `Spel.debug.einde('jaarverslag')` toont het
+  **Het jaar in het kort:** het dorp houdt een jaarboek bij (uit het dagboek, `T.schrijfOp`, en de oogst), en op 1
+  lentemaand komt het jaarverslag, als een brief die tekent "Entered in the yearbook" (tot 15 okt in de hand van je
+  raadsman, ronde 3 van het snoeien): hoe het dorp groeide of kromp, wie er kwam, stierf en wegtrok, wat de oogst bracht,
+  welke huizen doorgroeiden, wat de heer kreeg, en wat het meest gemist werd (de feesten staan er niet meer in). De
+  getallen in de werkbank ("Het eind": 10 over); `Spel.debug.einde('jaarverslag')` toont het
   verslag nu. De speeltest schrijft het jaarverslag op.
 Klein (vraag 82): drie standen, op de huizen die er al zijn; de poorters en hun huis komen later. Wat er nu al te zien is:
 de tevredenheid in de balk is het gemiddelde van de huizen, en bij de muis staat hij per stand, met wat er gemist wordt
@@ -591,9 +599,9 @@ letter voor letter mee zoals ervoor).
   haalde één kapel hooguit vier van de zes huizen die er een willen). Een put telt ook als hij op de kaart staat, zoals
   die op het plein.
 - **Elk huis zijn eigen tevredenheid,** uit zijn wensen: eten de helft, brandhout 0,3 (alleen in de winter) en de rest
-  samen 0,2, met de herberg, de wetten, de voorvallen en de heer erbij of eraf, zoals voor het hele dorp. Heeft een huis
+  samen 0,2, met de herberg, de wetten en de heer erbij of eraf, zoals voor het hele dorp. Heeft een huis
   alles, dan is het **super gelukkig**. De tevredenheid van het dorp is het gemiddelde, naar mensen, zodat de groei, het
-  werk, de voorvallen en de raad gewoon doorwerken. De afwisseling van vroeger (groente, vis of vlees maakt tevredener)
+  werk en de raad gewoon doorwerken. De afwisseling van vroeger (groente, vis of vlees maakt tevredener)
   ging op in de wensen; groente telt dus niet meer voor de tevredenheid. Het gehucht begint zo op zo'n 85% in plaats van
   67%.
 - **Doorgroeien (2b):** heeft een huis 30 dagen op rij alles, dan groeit het door naar de volgende stand, als de bouwstof
@@ -626,7 +634,8 @@ letter voor letter mee zoals ervoor).
   met een huis van twee lagen in baksteen, een badhuis en een gasthuis); wat een huis wil, zie je pas in 2c. De speeltest
   na 2a en 2b (`speelbaar.md`): wie de wensen niet geeft, blijft een gehucht van hutten, want een hut op een erf mist een
   put en groeit dan niet door; en elke nieuwe hut kost 8 hout. Wat eruit volgt, is werklijst vraag 86 (Marcel, 1 okt: "a
-  ja b ja c ja"): eerst zeggen de raad en het rapport wat de huizen missen, vóór de pagina met ontwerpen voor de ui; dan
+  ja b ja c ja"): eerst zeggen de raad en het rapport (weg sinds 15 okt) wat de huizen missen, vóór de pagina met
+  ontwerpen voor de ui; dan
   volgt de bouwer van de speeltest de wensen; en wegtrekken bij honger blijft zoals het is. Dat is gebouwd (2 okt, vraag
   87): wie de wensen volgt, groeit in twee jaar tot honderd mensen zonder één dode, maar alleen de boerderijen hebben
   alles; bier genoeg, een herberg dichtbij, brood, laken en een markt komen pas in een dorp of met marktrecht (2d), en
@@ -653,9 +662,9 @@ veranderde. Ze beginnen op 50.
   schandpaal −40; het venster zegt vooraf waar zijn gunst dan staat), niet naar het plein komen −10, de heervaart
   (mannen gestuurd +10, vrijgekocht +5, niet geantwoord −10). Wapens die zijn soldaten vonden, kostten tot 7 okt −30;
   sinds wapens niet meer verboden zijn, niet meer (vraag 131).
-- **Het vertrouwen van het dorp:** elk antwoord op een voorval, zo zwaar als het het dorp tevreden of
-  ontevreden maakt (besliste je raadsman, de helft); niet gevonden of geen tijd −2; mannen naar de oorlog −8, vrijgekocht
-  +8; wie verhongerde of bevroor −3 per mens, wie sneuvelde −2; soldaten in huis −10; jezelf aan de schandpaal +10,
+- **Het vertrouwen van het dorp:** mannen naar de oorlog −8, vrijgekocht +8 (tot 15 okt, ronde 3 van het snoeien, telde
+  ook elk antwoord op een voorval, zo zwaar als het het dorp tevreden of ontevreden maakte, en niet gevonden of geen tijd
+  −2); wie verhongerde of bevroor −3 per mens, wie sneuvelde −2; soldaten in huis −10; jezelf aan de schandpaal +10,
   iemand anders naar zijn aanzien. En elke dag gaat het een stukje
   naar hoe tevreden het dorp is (een zestigste van het verschil): een tevreden dorp vertrouwt je, en een klap slijt in
   een paar maanden weg; een ellendig dorp vertrouwt je weinig, en een klap erbij jaagt je weg (vraag 106, stap 3; Marcel,
@@ -682,7 +691,8 @@ veranderde. Ze beginnen op 50.
 
 ## Het weer, en de statussen met niveaus (Marcel, 9 okt 2026; werklijst vraag 77, stap 2, en vraag 82, c)
 
-**Zo werkt het nu** (9 okt; `js/weer.js`, `T.OORZAKEN` in `js/voorvallen.js`): elke dag is het zon, bewolkt, regen of (in
+**Zo werkt het nu** (9 okt; `js/weer.js`, `T.OORZAKEN` in `js/statussen.js`, tot 15 okt in `js/voorvallen.js`): elke
+dag is het zon, bewolkt, regen of (in
 de winter) sneeuw, uit het nummer van het land: hetzelfde spel heeft hetzelfde weer. Wie nat begint, blijft vaker nat, en
 elk jaar is wat droger of natter. Het weer staat bij de datum, en is te zien: regen als strepen, sneeuw als vlokjes, en
 het licht grijzer als het regent. Valt er in het groeiseizoen (grasmaand tot oogstmaand) lang geen regen, dan is het
@@ -701,7 +711,8 @@ herstellen.
 De statussen: wat een tijd duurt, is een status met een naam en twee niveaus: honger en hongersnood (minder dan een half
 rantsoen), kou en strenge kou (het brandhout is op), vol en overvol, onvrede en onrust, wolven, en droogte en ernstige
 droogte. Zolang er een speelt, staat er een kaartje naast het doel linksboven (rood als het erger is), met op de muis wat
-er is, sinds wanneer en wat helpt. Het rapport van de raadsman zegt het begin, of het erger of minder wordt, en het eind.
+er is, sinds wanneer en wat helpt. Een bericht zegt het begin, of het erger of minder wordt, en het eind (dat deed tot
+15 okt het rapport van de raadsman).
 De spelregel "Het weer": met droogte, zonder droogte (alleen te zien), of altijd zon.
 
 **Besloten** (Marcel, 9 okt: "1. Beiden 2. Ook in beeld 3. Ja kleine beekjes ook, goed idee!"): de statussen en het weer
@@ -785,7 +796,8 @@ spel een markt: een eigen gebouw van 6 bij 6 vroeg 12 bij 12 open grond, en die 
   drie; passen er dan minder dan 6 tegels kramen, dan komen de andere langs de weg.
 - **Het marktblok (127, B):** de marktplek is twee rijen kramen tegenover elkaar, langs een as van de kaart, met twee
   tegels looppad ertussen en een mand, kist, zak of ton naast elke kraam (`T.zoekMarktPlek`). De maker zoekt een open
-  stuk plein, tot twaalf tegels per rij, buiten de kring van het feest (`T.feestMidden`, `js/feesten.js`), drie tegels
+  stuk plein, tot twaalf tegels per rij, buiten het open midden van het plein (`T.openMidden`, `js/markt.js`; tot 15
+  okt de kring van een feest), drie tegels
   van de plek van de heer, twee tegels van een boom, niet in het kamp van het lege begin, en alleen als het niemand de
   weg verspert: wat je eerst over het plein bereikte, bereik je nog. **Het blok dat je het best ziet, wint:** in ons beeld
   dekken de daken en de kruinen van de eiken veel af, dus het blok met de meeste tegels die niet achter een dak of een
@@ -1017,7 +1029,7 @@ kiest zijn soort"; `js/kiezen.js`, `test/kiezen.test.cjs`):
   mannen. Een klik op een dorpeling geeft zijn briefje (een lichte ring), een klik op een gebouw het zijne, en een klik
   ergens anders legt het weg. Rechts ligt het briefje: van één man zijn naam, zijn soort, wat hij doet, zijn leven en
   wat hij draagt; van meer mannen een lijstje; van een dorpeling wat hij doet en waar hij woont. Wie iets te zeggen
-  heeft (wie je zoekt met een voorval, de waard), heeft *Talk* op zijn briefje: het gesprek gaat meteen open, zonder dat
+  heeft (de waard), heeft *Talk* op zijn briefje: het gesprek gaat meteen open, zonder dat
   de held erheen loopt. De heer en de marskramer spreek je aan met een klik.
 - **Rechts stuurt.** Met je mannen gekozen zegt de muis wat rechts doet. Op de grond: *Send 2 men here*; ze verdelen
   zich over de dichtste vrije tegels, en die plek is hun **post**: daar staan ze van het opstaan tot het slapen,
@@ -1028,7 +1040,7 @@ kiest zijn soort"; `js/kiezen.js`, `test/kiezen.test.cjs`):
 - **Groepen en berichten.** Ctrl of Shift met een cijfer maakt een groep van wie je koos (in de browser neemt Chrome
   Ctrl+1 zelf; in de versie voor Steam werkt Ctrl), een cijfer kiest hem, en twee keer vlak na elkaar kijkt de camera
   ernaar. Een bericht over iets dat ergens gebeurt (rovers op weg naar een akker of bij de uitgang, een huis dat
-  afbrandt, iemand die de wolven aanvallen, het hol van de wolven bij de jacht, wie je zoekt met een voorval) is
+  afbrandt, iemand die de wolven aanvallen, het hol van de wolven bij de jacht) is
   gestippeld onderstreept: een klik erop, of Spatie, brengt de camera erheen, en zolang het te lezen is, knippert de plek
   met een ring op de minikaart.
 - **Nog niet:** formaties (stap 3), en de diensten (stap 4).
@@ -1134,142 +1146,37 @@ beginnen, zodat de proef bleef zoals hij getest was en "Dat kost u vanaf nu meer
 **Richtlijn** (Marcel, 1 okt: "Honger, droogte of een plaag, moet een status zijn. Als richtlijn", en "Iets wat begint
 en eindigt. Mogelijk in verschillende niveaus. Ernstige droogte, en droogte bijvoorbeeld"): wat een tijd duurt, is een
 status, met een begin en een eind, soms in niveaus (droogte, ernstige droogte), en te zien zolang het duurt; een bericht
-of het rapport zegt het als het begint, erger of minder wordt, of ophoudt, niet elke dag. De oorzaken hieronder (honger, kou, vol, onvrede) zijn zulke statussen; hoe je ze in
-beeld ziet, en droogte en een plaag erbij, hoort bij het plan voor een spel van begin tot eind (werklijst, vraag 77).
+zegt het als het begint, erger of minder wordt, of ophoudt, niet elke dag.
 
-**Zo werkt het nu** (29 sep, zeventiende sessie; `js/voorvallen.js`, de woorden in `js/gesprekken.js`, toetsen in
-`test/voorvallen.test.cjs`; Marcel: "A ja", bij "Het voelt gewoon nog leeg nu"):
-- **Om de paar dagen** komt iemand uit het dorp de schout zoeken: gemiddeld om de tien dagen, in de winter om de zes,
-  en niet in de eerste vier dagen. Hij krijgt een uitroepteken boven zijn hoofd, het bericht zegt "Trijn zoekt je."
-  (bij een ramp: "Brand! Harm komt je halen."), en hij loopt naar je toe. Staat de schout stil, dan spreekt hij hem
-  aan: het gesprek gaat open, en de tijd staat stil tot je kiest.
-- **Twee of drie antwoorden, elk met zijn prijs eronder:** "+1 goud, tevredenheid +2%", "−20 graan", "Geert moet het bos in",
-  "30% kans op een dode". Wat er niet is, kun je niet geven: dan staat de knop uit, met waarom ("je hebt 5 graan").
-  Elk voorval heeft een antwoord dat altijd kan. Of het later terugkomt, zegt het venster niet.
-- **35 voorvallen, van zes soorten:** rechtspraak (een diefstal, een vechtpartij in de herberg, twee boeren om een
-  akkergrens, een stroper in het bos van de heer, een heks, een schuld bij de woekeraar), verzoeken (een lening,
-  vreemdelingen die willen blijven, zaaigraan in de lente, het dak van de weduwe, een klok voor de kapel), rampen
-  (brand, vaker in de winter; koorts uit de put; wolven bij de schapen, in de winter; storm; muizen), kansen (ijzer met
-  het wapen van de heer, spotgoedkoop; een pot met munten; een zwerver die wil werken; een smid uit de stad; de raad
-  van de oudste), feesten (een bruiloft, het oogstfeest, een lied over de heer) en de grillen van de heer, via zijn
-  bode (een standbeeld van eik, een jacht, een belasting op ramen).
-- **Een probleem heeft een oorzaak** (30 sep, negentiende sessie; werklijst vraag 74, B; Marcel: "a ja"; toetsen in
-  `test/voorvallen.test.cjs`). Vier oorzaken die je kunt zien en zelf kunt veranderen (`T.OORZAKEN`): *honger* (het
-  rantsoen is krap, of het dorp mist eten), *kou* (in de winter, als het hout de winter niet haalt of op is), *vol* (geen
-  plaats meer in de huizen) en *onvrede* (tevredenheid onder de 50%). Diefstal, de stroper, de lening en de woeker komen
-  van honger, de vechtpartij van onvrede, de koorts van kou of een vol dorp, en de brand van een vol dorp. Speelt de
-  oorzaak, dan komt zo'n voorval drie keer zo vaak; speelt hij niet, een kwart zo vaak (`metOorzaak`, `zonderOorzaak`
-  en `onvrede` in de werkbank; op 1 en 1 is het zoals vóór 30 sep). Het bericht zegt waarom: "Trijn zoekt je. Er is
-  honger, want het rantsoen is krap."; ook als de raadsman beslist. Een gesprek kan het zeggen met `{oorzaak}` (een hele
-  zin, of niets als het uit de lucht kwam); de gesprekken zelf doen dat nog niet. Gemeten, met elke dag van een jaar een
-  keuze: met een krap rantsoen 57 keer een diefstal, met een gewoon 5 keer. De storm, de muizen (een volle schuur) en de
-  wolven (schapen in de winter) houden hun eigen regel; kansen, feesten, verzoeken en de grillen van de heer zijn geen
-  problemen. `Spel.debug.voorval()` zegt welke oorzaken er spelen, en per voorval hoe zwaar het weegt.
-- **Wie het zegt, heeft een naam** en past bij het voorval: een vrouw die haar kippen kwijt is, twee boeren om een
-  grens, een oudere met wijze raad (tot 12 okt de karakters van de boeren: de weduwe, de vrome, de zanger). Over wie
-  het gaat ({ander}), is van een ander gezin; nooit de schout of zijn gezin.
-- **Wat een antwoord doet:** de voorraad (graan, hout, bier, ijzer, vlees, goud), de tevredenheid (die in dertig dagen
-  wegslijt, en in de balk staat: "Het is blij met de bruiloft"), de argwaan van de inner, iemand verbannen (hij trekt
-  weg, en komt terug als rover), een kans op een dode, een gezin erbij (als er plaats is), schapen die de wolven halen.
-- **Sommige komen terug:** wie je liet gaan, steelt weer, of brengt je later een haas; wie een boete kreeg, gooit
-  soms je luiken in; een lening komt terug, met rente, of later; het zaaigraan komt na de oogst terug, met tien extra;
-  en de woekeraar die je tegensprak, gaat naar de inner, tenzij je hem vijf goud geeft.
-- **Wie je niet spreekt,** gaat 's avonds naar huis en komt de volgende ochtend terug; na twee dagen gaat het voorbij,
-  en dat neemt het dorp je kwalijk ("een schout die geen tijd had"). Ben je niet in het dorp, dan beslist je raadsman,
-  en heb je er geen, dan gaat het ook voorbij ("een schout die er niet was"). Sluit je het gesprek zonder antwoord
-  (Esc), dan wacht hij met zijn uitroepteken tot je hem aanspreekt; wegsturen laat het dus voorbijgaan (vraag 68, B).
-- **Instelbaar:** de spelregel "Voorvallen" (vaak, gewoon, zelden, uit), en de getallen in de werkbank
-  (`T.VOORVALLEN_INSTELLINGEN`). `Spel.debug.voorval()` zegt wat er loopt en wat er nu kan, en
-  `Spel.debug.voorval('brand')` laat er nu een beginnen.
-- **Zelf schrijven:** een voorval is een gesprek onder dezelfde naam als in `T.VOORVALLEN` (dat zegt wanneer, en over
-  wie), met '{wie}' als naam; je leest en schrijft het in de gespreksschrijver, die de nieuwe gevolgen kent.
-- **In de speeltest** (`speelbaar.md`): 47 tot 53 voorvallen in een jaar, dus met wat er al was een keuze per ruim een
-  minuut op 30×; wie verstandig kiest, speelt het jaar zoals zonder voorvallen. Wie altijd het eerste antwoord neemt,
-  verbant een dief, die als rover terugkomt, en kan het dorp laten verhongeren (`opmerkingen.md`).
-- **Nog niet:** voorvallen die de kaart veranderen (een huis dat afbrandt), en wie je veroordeelde, keert zich nog
-  niet in een gevecht tegen je. Ben je er niet, dan beslist sinds 30 sep de raadsman ("De raadsman" hieronder).
+**Weg sinds 15 okt** (ronde 3 van het snoeien, `snoeien.md`; Marcel: de voorvallen, de raadsman, het rapport en de
+feesten, alle vier weg): niemand komt de schout meer zoeken met een vraag, een ruzie of een ramp, en de tijd staat niet
+meer stil tot je een antwoord met een prijs kiest. Weg: `js/voorvallen.js`, de voorvallen met hun gesprekken, en de
+spelregel "Events". Wat bleef:
+- **De statussen** (`T.OORZAKEN`: honger, kou, vol, onvrede, droogte, ...) staan in `js/statussen.js` en zeggen zelf met
+  een bericht wanneer ze beginnen, erger of minder worden of ophouden (dat deed het rapport). Zie "Het weer, en de
+  statussen met niveaus".
+- **De brand, de koorts en de wolven** beginnen zelf, als een bericht met een plek (zoals de rovers), niet meer als
+  voorval.
+- **De prijs van een antwoord en het lot van de dag** (`T.prijsVanKeuze`, `T.lotVanDeDag`) staan in `js/grillen.js`, voor
+  de grillen van de heer.
+
+Willen we later weer besluiten, dan komt dat als nieuw ontwerp: met een termijn, zonder lopen naar de schout (Marcel,
+15 okt). Hoe het werkte, bewaart git (`git log -- js/voorvallen.js`).
 
 ## De raadsman (Marcel, 29 en 30 sep 2026; werklijst vraag 64, 65, 66 en 67)
 
-**Zo werkt het nu** (30 sep, zeventiende sessie; `js/raadsman.js`, toetsen in `test/raadsman.test.cjs`; Marcel, vraag 66:
-"A Ja, b Nee, c Nee, wordt automatisch als de schout er niet is. D prima"):
-- **Een van de boeren** (de man op een boerderij, `T.isBoer`) wordt raadsman, met twee gelote vaardigheden uit
-  vijf, elk goed of slecht: rechtspreken, zwijgen, rekenen, bouwen en vechten. Je kiest uit drie, vast per spel.
-- **Kiezen, wanneer je wilt** (vraag 67, Marcel: "B"): de knop Raadsman in de balk (of `R`) opent een venster met de
-  drie, elk een kaart met wie hij is en wat hij kan,
-  goed in groen, slecht in rood, met waar het over gaat. Daar kies je hem, en later een ander. Onderaan staat wat hij
-  besloot. Zolang het venster open is, staat de tijd stil (`js/raadsmanvenster.js`). Tot je kiest, is er geen, en zodra
-  er een voorval voorbijging dat hij had beslist (je was weg), zegt de raad onder het doel tien dagen lang: "Wat je
-  mist als je weg bent, gaat voorbij: kies een raadsman [R]".
-- **Hij beslist vanzelf als de schout weg is:** is de schout niet in het dorp (een ander gebied, straks op reis) als
-  iemand hem met een voorval gaat zoeken, of als diens tijd om is, dan beslist de raadsman (zonder raadsman gaat het
-  voorbij, en neemt het dorp het je kwalijk). Ben je in het dorp en spreek je wie je zoekt niet binnen twee dagen, dan
-  gaat het voorbij, ook met een raadsman: Marcel koos B (vraag 68, "Ja B inderdaad"), want in de speeltest liet de
-  bouwer met `Esc` alles aan zijn raadsman, en had hij geen voorvallen meer. Een bericht zegt wat hij deed: 'Aaltje, je
-  raadsman, besliste over de diefstal: "Hij betaalt ze terug, en een goud boete voor de kist." (+1 goud,
-  tevredenheid +3%)', en in de balk heet het naar hem ("Het is blij met wat Aaltje besliste over de diefstal").
-- **Naar zijn karakter** (tot ronde 2 van het snoeien, stap 4, 12 okt; nu weegt elke raadsman hetzelfde,
-  `T.RAADSMAN_INSTELLINGEN.kiest`): elk karakter vond iets anders een antwoord waard (tevredenheid, argwaan, goud, waren,
-  iemand het bos in, een kans op een dode, een gezin erbij). De heethoofd verbant de dief, de woekeraar legt een
-  boete op voor de kist; bij koorts laat de vrome bidden en de vroedvrouw de put schoonmaken; de weduwe en de woekeraar
-  houden het oogstfeest klein; en waar de oudste de heer zijn standbeeld bouwt, zet de zanger een vogelverschrikker neer
-  in een oude jas van de heer. Hij kiest alleen wat er te betalen valt.
-- **Wat hij kan, telt mee** in wat hij beslist: wie goed recht spreekt, maakt het dorp met zijn vonnis tevredener
-  (en minder ontevreden); wie niets voor zich kan houden, maakt de inner argwanender; rekenen werkt op het goud en de
-  waren, bouwen op het hout, vechten op de kans op een dode.
-- **Zijn prijs:** wie raadsman is, maait trager (maal 1,25). Bij de muis staat "je raadsman".
-- **Instelbaar:** de spelregel "Raadsman" ("Als je weg bent", de standaard; "Ook als je niet spreekt", zoals het tot
-  vraag 68 was: wie je wegstuurt, laat je aan hem over; en uit), en de getallen in de werkbank
-  (`T.RAADSMAN_INSTELLINGEN`). `Spel.debug.raadsman()` zegt wie het is, uit wie je
-  kiest en wat hij besloot, en `Spel.debug.raadsman('Aaltje')` maakt Aaltje raadsman.
-- **Nog niet:** staande orders (de heer, de heervaart, de marskramer) komen met het land (vraag 66, D).
-- **Sinds 1 okt brengt hij je elke ochtend een rapport:** zie hieronder.
+**Weg sinds 15 okt** (ronde 3 van het snoeien, `snoeien.md`): de raadsman, een van de boeren die de voorvallen beslist als
+je weg bent (en trager maait), bestaat niet meer. Weg: `js/raadsman.js`, het venster onder R en de knop in de balk, en
+de spelregel "Advisor". Zonder voorvallen was er niets meer om te beslissen. Git bewaart hoe hij werkte
+(`git log -- js/raadsman.js`).
 
 ## Het rapport van de raadsman: de dag in fasen, 's ochtends (Marcel, 1 okt 2026; werklijst vraag 75)
 
-**Zo werkt het nu** (1 okt, twintigste sessie; `js/ochtendrapport.js`, het papier in `js/brieven.js`, toetsen in
-`test/ochtendrapport.test.cjs`; Marcel, vraag 75: "A Ja dat is goed", en bij het nakijken van het plan "a ja b ja c
-ja"). De dag krijgt fasen, zoals in het concept (`concept.md`): 's ochtends het rapport (3a, dit), 's middags de
-zitting (3b) en 's avonds de herberg (3c) komen nog.
-- **Wat erin staat:** wat er gebeurde (wie er kwam, stierf of wegtrok, met wie het zijn en waarom; wat de boeren uit
-  zichzelf deden, hun velden kiezen en slachten; wat hij besliste toen je weg was; en wie je zocht en niet sprak), hoe
-  het gaat ("Sinds gisteren is er 12 graan minder en 3 hout meer"), vanaf drie maanden voor de winter of het hout en
-  het eten hem halen ("Het hout haalt 52 van de 90 dagen van de winter"), wat er speelt (de oorzaken van de voorvallen:
-  "Er is honger, want het rantsoen is krap") en wat er komt (de marskramer, de heer of de inner vandaag, de inner over
-  een paar dagen, de rovers, het goud voor de heer). Op een stille dag is het één regel, onder de aanhef "Heer
-  schout,": "Niets bijzonders. Sinds gisteren is er 3 graan minder."
-- **Wat de balk niet zegt** (vraag 75, b): het rapport herhaalt niet wat er ligt, want dat zegt de balk precies. Het
-  zegt hoe het gaat en hoe lang het duurt.
-- **Wat de huizen missen** (2 okt, drieëntwintigste sessie; vraag 86, a, en 87): zoals de raad het zegt, zonder de toets
-  ("Vijf boerderijen en een huis willen een kapel binnen 40 tegels."), en ook wat je nu niet kunt doen ("Een stenen huis
-  wil brood: een bakkerij bouw je pas in een dorp."), als status: als het begint of verandert, zolang het blijft één keer
-  per week, en als het ophoudt ("Niemand mist nog een kapel."); hooguit drie per dag (`wensenPerRapport`), de rest later.
-  Heeft elk huis alles, dan zegt hij dat één keer: "Alle huizen hebben wat ze willen." En bij wat er gebeurde staat wie
-  er doorgroeide: "De hut van Geert is een huis geworden: ze horen nu bij de dorpelingen."
-- **Wat blijft zoals het was, zegt hij niet elke dag** (vraag 76; Marcel: "a ja b ja c nu"): een oorzaak als hij begint
-  ("Er is honger, want het rantsoen is krap."), zolang hij duurt één keer per week ("Er is nog steeds honger, al
-  twaalf dagen: het rantsoen is krap.") en als hij over is ("De honger is voorbij."); de winter de eerste keer, als hij
-  omslaat (haalt het hem of niet), als de dag waarop het op is tien dagen verschuift, en anders één keer per week. Las
-  je een rapport niet, dan geldt wat erin stond als niet gezegd. Bij de bouwer werd zo de helft van de rapporten stil
-  (`speelbaar.md`). De getallen (`herhaalNa`, `winterVerschil`) in de werkbank; op 1 zegt hij alles elke dag.
-- **Zijn rekenen kleurt de getallen:** wie kan rekenen, zegt ze precies; wie het niet bijzonder kan, rondt af ("zo'n
-  15"; onder tien telt iedereen); wie niet kan rekenen, zit er tot 30% naast, elke dag anders. Zo zegt hij soms dat het
-  hout de winter haalt terwijl het dat niet doet. Onder het papier staat hoe hij rekent, en wie het zeker wil weten,
-  gaat zelf kijken. Wie er kwam of ging, zegt hij altijd goed.
-- **Hij brengt het** (vraag 75, a): hij vertrekt zo vroeg dat hij aan je deur staat als je opstaat (zijn looptijd,
-  plus een kwartier; de boeren wonen 16 tot 27 stappen van je deur). Sta je buiten bij je huis, dan komt hij naar je
-  toe, en sta je stil naast hem, dan gaat het papier open en staat de tijd stil. Ben je er niet vóór het werk begint,
-  dan gaat hij aan het werk, en ligt het rapport klaar: de knop Brief bovenin heet dan Rapport. Las je het niet, dan
-  gaat het op in het rapport van de volgende dag (hij onthoudt de laatste twaalf dingen die gebeurden).
-- **Zonder raadsman geen rapport**, en dan ga je zelf rond. Een nieuw spel begint zonder raadsman; de eerste dagen zegt
-  de raad onder het doel: "Een raadsman brengt je elke ochtend een rapport: kies er een [R]" (vraag 75, c).
-- **Het dagboek:** wat er gebeurde, schrijft het dorp op (`D.dagboek`, `T.schrijfOp`), en elke nacht, als laatste stap
-  van de dag, maakt de raadsman er het rapport van (`D.ochtendrapport`). Het wordt bewaard met het spel.
-- **Instelbaar:** de spelregel "Het rapport" (aan, de standaard; uit is het spel van vóór 1 okt), en de getallen in de
-  werkbank (`T.OCHTENDRAPPORT_INSTELLINGEN`). `Spel.debug.rapport()` zegt wat erin staat, of hij het bracht en hoe hij
-  rekent; `('nu')` maakt er nu een, `('open')` opent het papier.
-- **Nog niet:** de zitting (3b) en het gepraat in de herberg (3c); en "of als je thuiskomt": wie de hele ochtend weg
-  was, vindt het rapport onder de knop, de raadsman komt het niet later nog brengen.
+**Weg sinds 15 okt** (ronde 3 van het snoeien, `snoeien.md`): de brief elke ochtend, de knop Rapport en de spelregel "The
+morning report" zijn weg (`js/ochtendrapport.js`). Wat het rapport zei, doen de statussen nu zelf: zij melden met een
+bericht wanneer ze beginnen, erger of minder worden of ophouden, en de raad onder het doel zegt wat de huizen missen.
+Het dagboek (`T.schrijfOp`) bleef, in `js/einde.js`, en voedt alleen het jaarboek; het jaarverslag tekent "Entered in the
+yearbook". Hoe het werkte, bewaart git (`git log -- js/ochtendrapport.js`).
 
 ## Het land (Marcel, 29 en 30 sep 2026; werklijst vraag 63 en 69)
 
@@ -1320,12 +1227,13 @@ tegels, en op zand wordt niet gebouwd (Marcel: "Onbebouwbaar denk ik, zand is ge
   zin over wat je er ziet ("Stuifzand, waar niets wil groeien"), en de tijd staat stil tot je verder kiest. Esc of de
   knop brengt je van de weg terug het gehucht in, zolang je nog thuis bent.
 - **Thuis gaat alles door zonder je.** Wie reist, verlaat de kaart van het dorp niet: de schout gaat eruit, en het dorp
-  blijft de wereld van het spel. Er wordt gemaaid en gedwaald, de raadsman beslist de voorvallen (vraag 68), de heer
+  blijft de wereld van het spel. Er wordt gemaaid en gedwaald (tot 15 okt besliste de raadsman ook de voorvallen, vraag
+  68), de heer
   wacht op het plein en neemt het zelf, de inner loopt zijn eigen ronde, de soldaten zoeken zelf, niemand roept de
   militie tegen de rovers, en een bezoeker die komt, zet de reis niet op 1×. Een brief van de heer wacht tot je thuis
   bent, en de berichten ook.
 - **Terug:** je staat net binnen de weg, en een venster zegt hoe lang je weg was, hoe het dorp ervoor staat ("26 mensen
-  (gelijk) · 54 graan (−6)", en wat je raadsman besliste), en wat er gebeurde; daarna komen de brieven.
+  (gelijk) · 54 graan (−6)", tot 15 okt ook wat je raadsman besliste), en wat er gebeurde; daarna komen de brieven.
 - **Instelbaar:** de spelregel "Land" (uit, de standaard, tot het buurdorp er is: dan speelt de proef zoals nu; en aan),
   en de getallen in de werkbank (`T.LAND_INSTELLINGEN`: hoeveel provincies, hoeveel dagen per weg, hoe snel de reis).
   `Spel.debug.land()` zegt waar de schout is, wat hij zag en welke wegen er zijn; `('open')`, `('reis', 'De heide')`,
@@ -1371,7 +1279,8 @@ tegels, en op zand wordt niet gebouwd (Marcel: "Onbebouwbaar denk ik, zand is ge
   tegel).
 - **Eén dorp als één ding** (30 sep, negentiende sessie; stuk 2 van stap 1a, vraag 71; `js/dorp.js`; Marcel: "A ja B ja
   C ja, oud spel mag vervallen"). Alles van een dorp staat bij elkaar: zijn kaart, voorraad, gebouwen en mensen, zijn
-  wetten, hoe de heer en de inner ertegenover staan, zijn rovers, voorvallen en raadsman, zijn trede, zijn vee, en zijn
+  wetten, hoe de heer en de inner ertegenover staan, zijn rovers (tot 15 okt ook zijn voorvallen en raadsman), zijn
+  trede, zijn vee, en zijn
   eigen schout (in jouw dorp ben jij dat). Het spel heeft de kalender, het land, jou, het scherm en de dorpen; er is er
   nu nog één, maar er kunnen er meer zijn. Je balk en je vensters gaan over je eigen dorp, en een venster dat een ander
   dorp zou openen (een brief van de heer, het slachten, de handel), komt niet bij jou (vraag 71, C). Aan het spel zie je
@@ -1382,12 +1291,13 @@ tegels, en op zand wordt niet gebouwd (Marcel: "Onbebouwbaar denk ik, zand is ge
   Nu houdt elke kaart een lijst per tegel bij (`js/wereld.js`): een dag kost 0,5 ms, met dag voor dag dezelfde
   uitkomst, en lopen is ook goedkoper. Het haperen elke speeldag is weg.
 - **Elk dorp leeft** (30 sep, negentiende sessie; stap 3 van stuk 2, vraag 71, A en C): elk beeld doet elk dorp zijn dag,
-  zijn bezoekers, zijn mensen, zijn rovers en zijn voorvallen, ook als je er niet bent. Een dorp waar je niet bent, heeft
+  zijn bezoekers, zijn mensen, zijn rovers en (tot 15 okt) zijn voorvallen, ook als je er niet bent. Een dorp waar je
+  niet bent, heeft
   zijn poppetjes, die lopen, maaien en dwalen zoals thuis, op hun eigen kaart, alleen niet getekend; zo is wat je ziet
   als je er aankomt, wat er echt gebeurde. Een ander dorp dan het jouwe spreekt niet tegen jou: wat het zegt, bewaart
-  het (de laatste twintig berichten), zodat later de marskramer, of wie je stuurt, kan vertellen hoe het er staat. Een
-  voorval in een ander dorp beslist zijn raadsman, als het er een heeft (kiezen doet het nog niet: dat komt met het
-  buurdorp), tot zijn schout in code kiest (stap 1b). Nagekeken met twee dorpen
+  het (de laatste twintig berichten), zodat later de marskramer, of wie je stuurt, kan vertellen hoe het er staat. (Tot
+  15 okt besliste de raadsman van een ander dorp zijn voorvallen; nu zijn er geen voorvallen en geen raadsman meer.)
+  Nagekeken met twee dorpen
   naast elkaar, jouw gehucht en een van de maker: een jaar van het een laat het ander letter voor letter ongemoeid, en
   in het dorp waar je niet bent, lopen de mensen rond. In het spel is er nog maar één dorp, dus speelt alles zoals
   ervoor.
@@ -1400,7 +1310,7 @@ tegels, en op zand wordt niet gebouwd (Marcel: "Onbebouwbaar denk ik, zand is ge
 ## De raad onder het doel (Marcel, 29 sep 2026; werklijst vraag 58)
 
 **Zo werkt het nu** (29 sep, zestiende sessie; `js/raad.js`, toetsen in `test/raad.test.cjs`; Marcel: "B onder het
-doel"):
+doel"; de raad blijft, ronde 3 van het snoeien, 15 okt, maar de raden over de raadsman en het rapport zijn weg):
 - **Onder het doel** linksboven ("2 van 20 dorpelingen", `js/treden.js`; tot 2 okt "26 van 50 mensen · nog geen kapel ·
   nog geen smidse") staat in goud
   één regel die zegt wat nu tussen jou en een dorp staat, met de toets erbij. Het is de eerste die nu geldt, in deze
@@ -1424,10 +1334,10 @@ doel"):
   [B]."); staat de bakkerij zonder meel, dan wie dat maakt ("de bakkerij heeft geen meel, bouw een molen [B]") in plaats
   van nog een bakkerij; en wat geen werkplaats maakt, zegt waar het vandaan komt ("de weverij heeft geen wol, en wol komt
   van de schapen, in zomermaand"). Een werkplaats met te weinig handen krijgt geen "nog een": een tweede zonder handen
-  helpt niet. Het rapport zegt hetzelfde, en de bouwer van de speeltest volgt het.
+  helpt niet. De bouwer van de speeltest volgt het.
 - **Uit de regels zelf:** de raad vraagt het aan de groei (`T.waaromGeenGezin` en `T.volgendeGezinDag` in
   `js/gebouwen.js`, dezelfde vraag die de groei stelt), aan de winter (`T.houtVoorDeWinter`, `T.etenVoorDeWinter`) en
-  aan de wensen (`T.watDeHuizenMissen` in `js/wensen.js`, die het rapport en de bouwer van de speeltest ook stellen),
+  aan de wensen (`T.watDeHuizenMissen` in `js/wensen.js`, die de bouwer van de speeltest ook stelt),
   zodat hij zegt wat het spel doet.
 - **De eerste weken** (vraag 47, herschreven): geen rij opdrachten die je afwerkt, maar wat nu telt. Zo blijft niemand
   op een stap hangen, komt een toets pas als je hem nodig hebt, en blijft het na de eerste weken nuttig.
@@ -1437,40 +1347,17 @@ doel"):
 
 ## Dorpsfeesten (Marcel, 1 okt 2026; de eerste twee gebouwd op 3 okt, vraag 97)
 
-**Zo werkt het nu** (3 okt, `js/feesten.js`; Marcel: "Wel met 1 of 2 feesten erin voor de demo", en bij het plan: het
-oogstfeest "Ja, een hele dag vrij", en "De meiboom"): twee feesten komen als voorval (js/voorvallen.js), en zeg je ja, dan
-viert het hele dorp het op het plein.
-- **Het oogstfeest:** na de oogst komt een boer het vragen (zoals sinds 29 sep). Een groot feest (−40 graan, −15 bier) is
-  morgen de hele dag: niemand werkt, de werkplaatsen maken niets ("staat stil, het dorp viert feest") en de boeren maaien
-  niet, en van het begin van het werk tot bedtijd staat iedereen op het plein. Een klein feest (−15 graan) is vanavond, na
-  het werk. Het venster zegt het vooraf: "morgen werkt niemand", of "'s avonds feest op het plein".
-- **De meiboom:** niet geloot, maar elk jaar op 30 grasmaand (een vaste dag, `op` in T.VOORVALLEN) komen de jongeren het
-  vragen: "Zet hem maar op. Morgen werkt niemand." (−2 hout) is 1 bloeimaand de hele dag feest; "Na het werk, dan." (−2
-  hout) vanavond. Er komt een meiboom op het plein, in pixel art (`gereedschap/pixelart/meiboom.cjs`: een berk met een
-  kroon, een krans met bloemen en linten in vier kleuren), en hij blijft dertig dagen staan. Geen bier: in de lente is er
-  bijna geen (een speeltest van 3 okt had er 7). Het spel begint op 1 lentemaand, dus dit is het eerste feest dat een
-  speler ziet.
-- **De kerstboom** (10 okt; Marcel: "we hebben ook een kerstboom nodig :)", en voor het feest "Feestavond"): elk jaar op
-  20 wintermaand komen de jongeren het vragen. "Zet hem maar op." (−2 hout) zet hem meteen op het plein (een spar met
-  appels, strosterren, kaarsjes en een ster, uit `kerstboom` in `gereedschap/pixelart/bomen.cjs`), tot en met 6
-  louwmaand; elke avond branden zijn kaarsjes (`T.feestLicht`), en op kerstavond (24 wintermaand) viert het dorp de avond
-  om de boom. Komt het ja na kerstavond, dan vanavond. De datums en het licht in `T.FEESTEN_INSTELLINGEN.kerstboom`.
-- **Op het feest** staat het hele dorp rond het midden van het plein, elk op zijn eigen plek in een kring van vijf
-  tegels, de kinderen wat ruimer; de waard (wie in de herberg werkt) tapt naast het midden. 's Avonds brandt er licht op het plein
-  (`T.feestLicht`, zoals de lantaarns), en niemand gaat die avond naar de herberg. De schout kan erbij gaan staan; dat
-  doet nog niets. Het rapport van de raadsman zegt de ochtend erna dat het dorp feest vierde.
-- **De spelregel "Feesten"** op "Alleen de stemming" is een feest wat het vóór 3 okt was: een prijs en een stemming. De
-  getallen in de werkbank (`T.FEESTEN_INSTELLINGEN`: de kring, het licht, hoe lang de meiboom staat).
-- **Met één regel erbij** wordt ook een ander voorval een feest: `feest: 'dag'` of `'avond'` in een antwoord, en het
-  voorval in `T.FEESTEN`. De bruiloft zou zo kunnen (Marcel, 1 okt: "Ook een bruiloft wordt groots gevierd").
+**Weg sinds 15 okt** (ronde 3 van het snoeien, `snoeien.md`): de feesten zijn weg, want ze begonnen alleen met een ja op
+een voorval: het oogstfeest, een vrije dag, het dorp op het plein, `js/feesten.js` en de spelregel "Feasts". **Wat bleef:**
+de meiboom en de kerstboom staan als versiering op het plein, zonder feest (`js/versiering.js`; `Spel.debug.versiering()`
+zegt welke boom er staat en waar): de meiboom vanzelf in bloeimaand, de kerstboom van 20 wintermaand tot 6 louwmaand, met
+kaarsjes die 's avonds licht geven. Het midden van de marktplek (`T.openMidden`) staat in `js/markt.js`.
 
-Wat Marcel op 1 okt zei: "Later wil ik ook dorpsfeesten die passen bij het seizoen, hier wil ik het hele dorp wat mee
-doet etc. Ook een bruiloft wordt groots gevierd. Er zijn veel soorten feesten die we kunnen gebruiken hiervoor. Voor nu
-een notitie later pas bouwen."
+Wat Marcel op 1 okt zei (een wens voor later, niet gebouwd): "Later wil ik ook dorpsfeesten die passen bij het seizoen,
+hier wil ik het hele dorp wat mee doet etc. Ook een bruiloft wordt groots gevierd. Er zijn veel soorten feesten die we
+kunnen gebruiken hiervoor. Voor nu een notitie later pas bouwen."
 
-- **Wat er al is:** drie voorvallen zijn feesten (een bruiloft, het oogstfeest, een lied over de heer), met een
-  stemming die wegslijt ("Het is blij met de bruiloft"; "De voorvallen" hierboven), en de raadsman die het oogstfeest
-  klein houdt. In "Lords of the Realm 2 als voorbeeld" (idee 4) laat een kermis of een bruiloft vlak voor de inner een
+- **In "Lords of the Realm 2 als voorbeeld"** (idee 4) laat een kermis of een bruiloft vlak voor de inner een
   overschot verdwijnen: wat op is, kan hij niet tellen.
 - **Ideeën erbij** (Claude, voorstel, niets besloten):
   - Bij het seizoen, uit de kalender die er al is: de meiboom (1 bloeimaand), het vuur van Sint-Jan (zomermaand), het
@@ -2147,7 +2034,7 @@ worden anders minder productief", en "A1, B1, C1, D1"; `js/behoeften.js`):
   het genoeg is of de winter voorbij. Het bericht vooraf zegt het erbij ("Tot het genoeg is, komt er geen nieuw
   gezin."), en de raad ook. Zo groeit een dorp niet een winter in die het niet haalt: de bouwer van de speeltest groeide
   in de herfst van 51 naar 74 mensen en verloor er in de winter 42 tot 53. Hetzelfde venster van 90 dagen geldt voor de
-  raad en het rapport (`T.winterInZicht`). De spelregel "Groei" (Altijd: het spel van vóór 1 okt).
+  raad (`T.winterInZicht`; tot 15 okt ook voor het rapport). De spelregel "Groei" (Altijd: het spel van vóór 1 okt).
 - **Nog open:** de winter is hard (in een proef van 25 naar 2 mensen zonder hout); het eerste
   voorjaar is krap (60 graan voor 25 mensen); moet ook vis eten zijn, nu vlees het is? Brand en
   ziekte komen bij punt 8. Het bericht vooraf rekent nog niet met wat de heer op Sint-Maarten neemt,
@@ -3548,7 +3435,7 @@ zijn boerderij. De schaft houdt hij op de akker, met zijn brood; 's
 avonds en 's nachts is hij thuis, of in de herberg. Wat overblijft (dorsen, het vee, of er is niets te doen), doet hij
 bij zijn boerderij, zoals tot nu toe. Zijn boerin en grote kinderen helpen bij het zaaien: ze blijven dicht bij hem op
 het veld, en in de oogst net zo; wie ergens anders werkt, gaat daarheen. Wie werkt of helpt, maakt geen praatje en gaat
-niet opzij; wie met de schout praat of hem zoekt met een voorval, houdt op. De regels veranderen er niet door: het
+niet opzij; wie met de schout praat, houdt op. De regels veranderen er niet door: het
 zaaien, de oogst en het sprokkelen gaan zoals ze gingen; dit zegt alleen waar de boer is en wat hij doet. De getallen
 (hoe lang een tegel duurt, hoe ver de bosrand mag zijn) staan in `T.VELDWERK_INSTELLINGEN`, in de werkbank; wat je
 vandaag aan een veld verandert, doet hij morgen. In de browser: `Spel.debug.veldwerk()`.
@@ -4202,7 +4089,9 @@ in vier lagen:
 **De drie die het spel maken:** voorvallen met een keuze (zonder wordt een bouwspel een
 spreadsheet), argwaan met verstopplekken en het bezoek van de inner (de kern), en behoeften met de
 winter (die maken groeien moeilijk genoeg om over na te denken). Rechtspraak is de vierde: dat
-heeft geen ander bouwspel. (Op 29 sep kwamen de voorvallen erbij, met rechtspraak erin: "De voorvallen" bovenaan.)
+heeft geen ander bouwspel. (Op 29 sep kwamen de voorvallen erbij, met rechtspraak erin: "De voorvallen" bovenaan; ze
+zijn weg sinds 15 okt,
+ronde 3 van het snoeien.)
 
 **Besloten (Marcel, 23 sep): "Ik wil het allemaal."** Alle vier de lagen komen erin. De volgorde
 staat in `werklijst.md`: eerst een dorp dat draait, dan de heer en de kern, dan verhalen en
@@ -4382,9 +4271,11 @@ en over de heervaart [Wikipedia](https://nl.wikipedia.org/wiki/Heervaart).
   lastig. Misschien voelt het handiger als we een soort raadsman en aansturen die je regels oplegt?"): het voorstel
   van Claude, besturen van bovenaf met één toets en een raadsman per dorp die jouw regels uitvoert, staat in de
   werklijst, vraag 64. **Besloten (29 sep):** een raadsman per dorp, met een karakter en gelote eigenschappen die
-  hem in bepaalde gevallen beter maken, en jij kiest hem op zijn karakter en wat hij kan. Over besturen van bovenaf:
+  hem in bepaalde gevallen beter maken, en jij kiest hem op zijn karakter en wat hij kan (hij is weg sinds 15 okt).
+  Over besturen van bovenaf:
   "Hier moeten nog even dieper op ingaan. Het voelt gewoon nog leeg nu." Dat werd vraag 65: het dorp spreekt je aan,
-  met voorvallen (gebouwd, 29 sep: "De voorvallen" hierboven); het dorp van bovenaf bleef open (Marcel: "nee niet
+  met voorvallen (gebouwd 29 sep, weg sinds 15 okt: "De voorvallen" hierboven); het dorp van bovenaf bleef open
+  (Marcel: "nee niet
   bovenaf, ik denk hier nog over na").
 - Hoe ver gaat de politiek: keuren, schepenen en groepen zoals hierboven, of ook verkiezingen,
   partijen en intriges aan het hof van de heer?
@@ -4607,13 +4498,10 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   provincie een kaart waar je loopt en vecht; elke tegenspeler een karakter met een voorsprong; een provincie zonder
   karakter bestuurt zichzelf en is zwakker. Met 0 tegenspelers blijft het spel zoals nu. Je eigen dorp krijgt bij
   Nieuw spel een naam die je zelf kiest.
-- **De raadsman** (Marcel, 29 sep, vraag 64): elk dorp heeft er een, met een karakter en gelote eigenschappen, en
-  jij kiest hem; hij voert je regels uit waar je niet bent. Sinds 30 sep (vraag 66): een van de boeren, die vanzelf de
-  voorvallen beslist als de schout weg is, en alleen dan (vraag 68, B) (`js/raadsman.js`); je kiest hem wanneer je wilt,
-  met de knop Raadsman (vraag 67, B). Sinds 1 okt brengt hij je elke ochtend een rapport, de eerste fase van de dag
-  (vraag 75, `js/ochtendrapport.js`). En "Het voelt
-  gewoon nog leeg nu": sinds 29 sep spreekt het dorp je aan, met voorvallen (vraag 65, `js/voorvallen.js`); het dorp
-  van bovenaf komt er niet (vraag 74, d).
+- **De raadsman, het rapport en de voorvallen** (Marcel, 29 sep, vraag 64, 65 en 75; **weg sinds 15 okt**, ronde 3 van
+  het snoeien, `snoeien.md`): elk dorp had een raadsman, een van de boeren, die de voorvallen besliste als de schout weg
+  was en elke ochtend een rapport bracht; en na "Het voelt gewoon nog leeg nu" sprak het dorp je aan, met voorvallen.
+  Het dorp van bovenaf komt er niet (vraag 74, d).
 - **Het hart is besturen en groeien** (Marcel, 28 sep, vraag 50): knoppen met een prijs (keuren) én
   bouwen en plannen. **Rijk worden en arm lijken** (de inner, de argwaan en het verstoppen) is er sinds 11 okt
   uit (vraag 151); de druk van boven blijft de heer. **Vechten** begint met aanvallen op je eigen dorp (rovers, de
@@ -4630,8 +4518,8 @@ Gekozen door Marcel op 23 sep 2026; het ontwerp staat in `ontwerp/spel.md`.
   ("Ik gebruik jou ☺️"): wat kan, maakt Claude, zoals de beelden uit code; Marcel kiest, luistert en plaatst.
 - **Een toestand is een status** (Marcel, 1 okt, als richtlijn: "Honger, droogte of een plaag, moet een status zijn",
   en "Iets wat begint en eindigt. Mogelijk in verschillende niveaus. Ernstige droogte, en droogte bijvoorbeeld"): wat
-  een tijd duurt, heeft een begin en een eind, soms in niveaus, en is te zien zolang het duurt; een bericht of het
-  rapport zegt het als het begint, erger of minder wordt, of ophoudt, niet elke dag (vraag 76). Nu zijn dat de oorzaken
+  een tijd duurt, heeft een begin en een eind, soms in niveaus, en is te zien zolang het duurt; een bericht
+  zegt het als het begint, erger of minder wordt, of ophoudt, niet elke dag (vraag 76). Nu zijn dat de oorzaken
   (`T.OORZAKEN`: honger, kou, vol, onvrede); de rest hoort bij het plan voor de vertical slice (vraag 77).
 - **Het doel is de vertical slice uit het concept** (Marcel, 1 okt: "Laten we eerst eens een speelbaar spel maken van
   begin tot eind", en "Gebruik de slice in de pdf"): één kleine stad met 100 tot 200 mensen, markt, woonwijk,

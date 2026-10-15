@@ -131,7 +131,7 @@ een zandbak, want de groei loopt sneller dan elke dreiging. Bij ons komt dat al 
   nog open).
 - **Yes, Your Grace** (2020): je bent koning; elke week staan er verzoekers in de troonzaal, je helpt ze of spaart je
   middelen, en je gezin heeft eigen zorgen. De kritiek: sterk in gevoel, dun en herhalend als bestuur. *Les:* alleen
-  verzoekers is te dun; dat zijn onze voorvallen nu.
+  verzoekers is te dun; dat waren onze voorvallen (weg sinds 15 okt, ronde 3 van het snoeien, `snoeien.md`).
 
 **Een klok die je opjaagt** (de boog):
 - **Frostpunk** (2018): de kou neemt toe, en de laatste storm komt op een vaste dag; wetten hebben een prijs die je niet
@@ -151,8 +151,8 @@ een zandbak, want de groei loopt sneller dan elke dreiging. Bij ons komt dat al 
   je eerder koos. De maker nam Sid Meier als leidraad: "een spel is een reeks interessante beslissingen". *Les:* een
   raad die het oneens is, laat je denken; onze raad geeft het ene goede antwoord.
 - **Reigns** (2016): ja of nee op kaarten, met vier meters die niet te hoog en niet te laag mogen. Je ziet welke meters
-  bewegen, niet hoeveel. *Les:* spanning uit balans en uit wat je niet precies weet. Onze twee bazen zijn dit al, maar
-  een voorval zegt vooraf precies wat het kost.
+  bewegen, niet hoeveel. *Les:* spanning uit balans en uit wat je niet precies weet. Onze twee bazen zijn dit al; de
+  voorvallen, die vooraf precies zeiden wat het kostte, zijn weg sinds 15 okt (ronde 3 van het snoeien, `snoeien.md`).
 
 **Speuren en rechtspraak:**
 - **Pentiment** (2022): een moord in een dorp; je hebt maar zoveel dagen, dus wie de ene draad volgt, laat een andere
@@ -185,10 +185,11 @@ een zandbak, want de groei loopt sneller dan elke dreiging. Bij ons komt dat al 
    (Against the Storm). Wij: Sint-Maarten, eens per jaar, en een jaar is 30 uur op 1×.
 3. **Een klok die harder gaat**: de kou, het ongeduld van de koningin, de sekte, strengere regels. Wij: geen.
 4. **Twee dingen die allebei moeten, en je kunt er één**: huur of medicijn, geld of geweten, de meters in balans. Wij:
-   de twee bazen, maar een voorval zegt vooraf wat goed is.
+   de twee bazen (de voorvallen, die vooraf zeiden wat goed is, zijn weg sinds 15 okt, ronde 3 van het snoeien, `snoeien.md`).
 5. **Je weet niet alles**: Pentiment, Beholder, Reigns. Wij: de balk zegt elk getal precies, de raad wijst de weg.
 6. **Een raad die het oneens is**, met belangen die je kunt lezen (King of Dragon Pass). Wij: één raad, één antwoord.
-7. **Gevolgen die later terugkomen**, met een gezicht. Wij: deels (een voorval met een vervolg).
+7. **Gevolgen die later terugkomen**, met een gezicht. Wij: eerst deels (een voorval met een vervolg), sinds 15 okt weg
+(ronde 3 van het snoeien, `snoeien.md`).
 8. **Korte ronden**, zodat het eind niet saai wordt (Against the Storm, The Reeve). Wij: een spel duurt jaren.
 
 ## Wat het voor ons betekent: drie lagen (voorstel van Claude)
@@ -203,7 +204,8 @@ Een loop heeft drie lagen, en wij missen ze alle drie:
   karakter, en jouw aanzien moet sneller groeien dan zijn ongeduld (Against the Storm, Frostpunk; kern C van vraag 151).
 
 **Kleine stappen die meteen iets doen, zonder iets nieuws:**
-- **Een voorval zegt niet meer precies wat het kost**, alleen wat het raakt (Reigns): dan moet je nadenken.
+- **Een voorval zegt niet meer precies wat het kost**, alleen wat het raakt (Reigns): dan moet je nadenken. Vervallen:
+  de voorvallen zijn weg sinds 15 okt (ronde 3 van het snoeien, `snoeien.md`).
 - **De raad zegt niet meer wat je moet doen**, maar wat er speelt; of hij spreekt met meer stemmen die het oneens zijn
   (King of Dragon Pass).
 - **De speeltest als toets van de loop:** zolang een script dat de raad volgt, wint, is er voor de speler niets te
@@ -227,14 +229,15 @@ ons spel. **Ons spel in één zin: het dorp van Manor Lords, met de mensen van T
 
 **Wat er klein uit te halen is** (voorstel van Claude, niets besloten):
 - uit Frostpunk: een wet staat vast tot de volgende zitting of een jaar, zodat aannemen een keuze is; en een belofte
-  als voorval: een groep eist iets voor een datum, jij belooft het of niet.
+  als voorval: een groep eist iets voor een datum, jij belooft het of niet (de voorvallen zijn weg sinds 15 okt, ronde 3
+  van het snoeien, `snoeien.md`; komen ze terug, dan als nieuw ontwerp, met een termijn).
 - uit The Guild: een rivaal voor je ambt (iemand in het dorp die schout wil worden, en bij de heer en het dorp tegen je
   werkt), en een aanklacht met bewijs op de zitting (de graanzak is de proef).
 
 ## Open
 
-- Wat er van de rest blijft (de voorvallen, de raad, de raadsman, het rapport, de wensen per stand, de wetten): na de
-  proef, als we weten wat de economie zelf vraagt.
+- Wat er van de rest blijft (de raad, de wensen per stand, de wetten): na de proef, als we weten wat de economie zelf
+  vraagt. De voorvallen, de raadsman en het rapport zijn weg sinds 15 okt (ronde 3 van het snoeien, `snoeien.md`).
 
 - Welke loop het wordt (vraag 151: A de schout is maar één mens, B rechtspraak, C de heer als klok, of samen), en hoe
   lang een ronde is: een dag, een seizoen, een jaar, of een spel van een paar uur zoals Against the Storm.

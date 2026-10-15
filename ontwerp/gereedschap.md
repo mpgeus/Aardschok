@@ -46,7 +46,7 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   zet de uitslag in `gereedschap/speeltest/uit/` (niet in git), met een tabel in `samenvatting.md`: "Het eerste jaar"
   (wat er vastliep, en het eten en het hout), de ossenkar (werklijst C, stap 6: per kar hoeveel van de werktijd hij
   bezig was, vol, leeg of ladend, per seizoen, de ritten en wat hij vervoerde; en de stapels, hoe lang een waar erop ligt,
-  en wat er op de kar wachtte; gemeten in `speler.js`, `meetKar` en `karDag`, niet in het spel), de voorvallen, de twee
+  en wat er op de kar wachtte; gemeten in `speler.js`, `meetKar` en `karDag`, niet in het spel), de twee
   bazen, het bos en het graanboek. `--jaren 2` speelt twee jaar in plaats van één. Hetzelfde zaad geeft
   hetzelfde jaar, dus na het bijstellen van een getal zie je precies wat het deed. `--tegelijk 4` speelt vier spellen
   tegelijk (standaard drie). Het speelt het spel zoals het draait: de speler klikt en drukt op de knoppen van de vensters
@@ -54,7 +54,7 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
   de cloud staat het klaar). Wat het vond, staat in `ontwerp/speelbaar.md`. Met `--opslaan` is het de proef met
   opslaan: de speler slaat op 1 oogstmaand op via het menu, de bladzijde herlaadt, hij gaat verder met Verder, en het
   jaar moet letter voor letter aflopen als hetzelfde jaar zonder opslaan (`uit/opslaan.md`). Met `--regel seizoen=jij`
-  speelt het met een spelregel anders, en met `--getal VOORVALLEN_INSTELLINGEN.metOorzaak=1` met een getal uit de
+  speelt het met een spelregel anders, en met `--getal BOS_INSTELLINGEN.bosVanDeHeer=20` met een getal uit de
   werkbank anders (allebei zo vaak als je wilt; de uitslag krijgt `-regels` achter zijn naam). Een taak op de achtergrond
   stopt na twee uur, dus een grote speeltest gaat in meer taken; `--samenvatting` speelt dan niet, maar maakt de
   samenvatting opnieuw uit wat er al in `uit/` ligt, zodat de taken samen één tabel geven.
@@ -139,8 +139,8 @@ blik op het spel zien zonder de afbeelding door je eigen gesprek te halen. De ca
 `Spel.debug.begin(n)` eerst het titelscherm (`Spel.ui.sluitTitel(Spel.S)`; zolang het open staat, volgt de camera het
 titelscherm), dan `Spel.glijNaar(x, y)` (een tegel; sinds vraag 170, stap 1, volgt de camera de schout niet meer) en
 `Spel.S.zoom = 1.8`, en `stap(3)` laat hem erheen glijden (`Spel.kijkNaar(px, py)` springt er meteen heen, in pixels van de
-wereld). Wat je koos, staat in `Spel.S.gekozen`, en je gekozen mannen geeft `Spel.gekozenMannen(Spel.S)` (`js/kiezen.js`). Een brief die de klok stilzet, sluit `Spel.ui.sluitBrief(Spel.S)`, een voorval
-`Spel.sluitDialoog(Spel.S)` (of zet de spelregel `Spel.zetOptie('voorvallen', 'uit')`). In het gehucht:
+wereld). Wat je koos, staat in `Spel.S.gekozen`, en je gekozen mannen geeft `Spel.gekozenMannen(Spel.S)` (`js/kiezen.js`). Een brief die de klok stilzet, sluit `Spel.ui.sluitBrief(Spel.S)`, een gesprek
+`Spel.sluitDialoog(Spel.S)`. In het gehucht:
 `Spel.debug.kalender(dag, snelheid)` springt door het jaar, `Spel.debug.uur(21)` naar een uur van deze
 dag (zonder getal zegt het hoe laat het is; een dag duurt vijf minuten bij 1×, dus `stap` gaat op 10×
 tien keer zo ver), `Spel.debug.geenNacht = true` zet de nacht uit, `Spel.debug.geenMist = true` de mist in het beeld (B2c; de regels blijven), `Spel.debug.bouw('huis', x, y)` bouwt,
@@ -161,9 +161,7 @@ drie wilde rovers komen, `('bende')` de bende.
 `Spel.debug.heervaart()` zegt wat de heer vraagt, wie er weg is en tot wanneer, en wie veteraan is; `('vraag')` laat
 hem nu mannen vragen (ook in een gehucht), `('terug')` laat ze nu terugkomen.
 `Spel.debug.raad()` zegt welke raad er onder het doel staat en welke er nu allemaal gelden.
-`Spel.debug.feest()` zegt welk feest er komt of nu is, waar het dorp staat en de boom op het plein (de meiboom of de
-kerstboom); `('meiboom')` laat het vandaag beginnen, de hele dag (`('oogstfeest', 'avond')` alleen vanavond, `('kerstboom')`
-zet de kerstboom); zet er het uur bij met `Spel.debug.uur(11)` of `(20)`.
+`Spel.debug.versiering()` zegt welke boom er op het plein staat (de meiboom of de kerstboom) en waar.
 `Spel.debug.einde()` zegt wat het jaarboek tot nu telt en wat het laatste jaarverslag zei; `('jaarverslag')` toont het jaar
 in het kort nu. (Het winnen, met `('winst')` en `('gewonnen')`, is er sinds 11 okt niet meer.)
 `Spel.debug.beesten()` zegt per groep wolven of herten hoeveel het er zijn, waar de leider is en wat hij doet, wat de groep
@@ -205,20 +203,12 @@ wat er op de stapels bij de deuren ligt (`js/kar.js`, werklijst C).
 `Spel.debug.begin(5)` begint nu een spel op het eiland van 5 (`('nieuw')` op een nieuw eiland), zonder brief; zonder
 iets zegt het hoe het kamp ervoor staat: waar de kar is en heen gaat, of de
 schout meeloopt, wie er in welke tent woont, het vuur, en tot wanneer de heer niets vraagt.
-`Spel.debug.voorval()` zegt welk voorval er loopt, welke vervolgen nog komen, welke voorvallen er nu kunnen (met hoe
-zwaar ze wegen) en welke oorzaken er spelen;
-`('diefstal')` laat er nu een beginnen, over mensen die erbij passen, en wie het zegt, zoekt je meteen.
 `Spel.debug.brand()` zegt het brandgevaar, de kans dat de emmers een huis redden, en welke huizen branden, in puin liggen of
 op hout wachten; `('nu')` laat de brand nu beginnen (ook zonder brandgevaar), `('puin')` laat wat brandt nu afbranden, `('herbouw')` laat het puin
 nu weer opbouwen. `Spel.debug.koorts()` zegt wie er ziek is en tot wanneer, en hoeveel het hadden; `('nu')` laat de koorts
 nu beginnen.
 `Spel.debug.kleren()` zegt hoeveel volwassenen arm, gewoon en deftig lopen, en per volwassene zijn kleren, zijn huis (met
 hoeveel laken het kreeg) en welk vel hij draagt (vraag 149).
-`Spel.debug.raadsman()` zegt wie je raadsman is en wat hij kan, uit wie je kiest, en wat hij besloot; `('Aaltje')` of
-`('boer2')` maakt die boer raadsman. Ga dan met `Spel.debug.gaNaar('proef')` weg, en hij beslist het volgende voorval.
-`Spel.debug.rapport()` zegt wat er in zijn rapport staat, of hij het bracht en je het las, hoe hij rekent en wat het
-dagboek van vandaag heeft; `('nu')` maakt nu een rapport, `('open')` opent het papier. Hij brengt het 's ochtends:
-slaap bij je huis (`Z`), en bij het opstaan staat hij er.
 `Spel.debug.land()` zegt waar de schout is in het land, of hij reist, wat hij zag en welke wegen er zijn (en zet de
 spelregel Land aan); `('open')` opent de kaart, `('reis', 'De heide')` reist erheen, `('alles')` laat het hele land
 zien, `('nieuw')` maakt het opnieuw uit het zaad.
