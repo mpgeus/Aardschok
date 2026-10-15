@@ -34,7 +34,7 @@
 //
 // Zonder `wezen` en zonder `zaad` is hij zichzelf: zijn id is de naam van zijn vel. De veertien
 // dorpelingen stonden tot 22 sep als eigen ingang in T.WEZENS, met veertien keer dezelfde regel
-// `kant: 'neutraal', leven: 10, ap: 0, initiatief: 0`. Die tabel gaat over wat een wezen ís — wat
+// `kant: 'neutraal', leven: 10`. Die tabel gaat over wat een wezen ís — wat
 // vecht, wat in code wordt neergezet — en een dorpeling is dat niet; hier staat hij in één regel.
 (function (T) {
   'use strict';
@@ -110,8 +110,8 @@
     const lot = T.dobbelsteen(Math.floor(zaad || 0) * 31 + 7);
     return {
       soort: 'dorpeling', naam: T.t('villager'), kant: 'neutraal', zaad, gesprek: gesprek || null,
-      x, y, tx: x, ty: y, pad: [], onderweg: false, opKlaar: null,
-      leven: 0, maxLeven: 0, ap: 0, maxAp: 0, initiatief: 0, snelheid: 1.2, zicht: 0,
+      x, y, tx: x, ty: y, pad: [], onderweg: false,
+      leven: 0, maxLeven: 0, snelheid: 1.2, zicht: 0,
       // Waar hij hoort en hoe ver hij daarvandaan loopt: de smid bij de smidse, de boerin bij de
       // akker. Zonder straal blijft hij staan waar hij staat. Hij begint nooit een gevecht (hij is
       // neutraal) en telt niet mee in de beurtvolgorde.

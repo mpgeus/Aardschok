@@ -11,9 +11,8 @@
 //   - erheen (`stuur`): de plek is zijn post (Marcel: "Een post, tot je terugroept"). Daar staat hij van het opstaan tot
 //     het slapen; 's nachts slaapt hij thuis, en 's ochtends gaat hij terug (e.post, en T.bevelAnker in js/dag.js). Krijgt
 //     hij het bevel 's nachts, dan blijft hij die nacht op zijn post (post.wakker). In stap 4 wordt het zijn dienst.
-//   - een vijand achterna (`volg`): hij loopt hem na tot hij naast hem staat (e.volgt). Slaan doet hij pas in stap 2;
-//     tot dan begint het gevecht in beurten zoals altijd, als een vijand de schout ziet. Is de vijand weg, dan is waar hij
-//     staat zijn post.
+//   - een vijand aanvallen (`volg`): hij zit hem na tot hij hem raakt, en slaat (e.volgt; het gevecht, js/gevecht.js,
+//     zonder leiband). Is de vijand gevallen of weg, dan is waar hij staat zijn post.
 //   - terug (`terug`): de post is weg, en hij gaat weer naar zijn wachthuis (of aan het werk).
 // De held heeft geen dag om naar terug te gaan: hij blijft waar je hem neerzet.
 (function (T) {
@@ -24,8 +23,7 @@
       rand: 8, // zo dicht bij de rand van het scherm (in pixels) schuift de muis het beeld; 0 zet het uit
       snelheid: 900, // zoveel pixels van het beeld per seconde schuiven de pijltjes en de rand
     },
-    vijandBij: 3, // een vijand die je achterna stuurt, zoekt het bevel binnen zoveel tegels van waar je klikte
-    zoekPerTik: 4, // zoveel mannen die een vijand volgen, zoeken per tik een nieuwe weg (de vijand liep verder)
+    vijandBij: 3, // een vijand die je aanwijst, zoekt het bevel binnen zoveel tegels van waar je klikte
     briefjeRegels: 8, // zoveel mannen staan er bij naam op het briefje van meer gekozen mannen
   };
   const IN = () => T.KIEZEN_INSTELLINGEN;
@@ -65,7 +63,7 @@
 
   // ── Wat rechts doet (de muis en de klik vragen hetzelfde, zoals T.handelingVerkennen) ──
 
-  // Is dit een vijand die je achterna kunt sturen: een rover, een wolf, een monster?
+  // Is dit een vijand die je kunt aanvallen: een rover, een wolf, een monster?
   const isVijand = (e) => !!e && !e.dood && e.kant === 'monster';
   // Met `mannen` gekozen: wat een rechtsklik op `doel` doet ({ tekst, kan, opdracht, doe }), of null.
   T.handelingSturen = function (S, doel, mannen) {
@@ -131,7 +129,8 @@
     delete e.volgt;
   }
 
-  // Erheen (`stuur`): de dichtste man naar de dichtste plek, en dat is zijn post.
+  // Erheen (`stuur`): de dichtste man naar de dichtste plek, en dat is zijn post. Wie vocht, laat zijn doel gaan: een bevel
+  // erheen is lopen (en daar valt hij aan wat hij ziet, js/gevecht.js).
   T.stuurMannen = function (D, wie, naar) {
     const mannen = mannenMet(D, wie);
     if (!mannen.length) return;
@@ -141,12 +140,15 @@
     opAfstand.forEach((e, i) => {
       const plek = plekken[i] || plekken[plekken.length - 1] || naar;
       neemBevel(e);
+      delete e.doelwit;
+      delete e.vanaf;
       if (e !== D.schout) e.post = nacht ? { x: plek.x, y: plek.y, wakker: true } : { x: plek.x, y: plek.y };
       if (!loop(D, e, plek, false)) T.zeg(D, T.t('{wie} cannot get there.', { wie: naamVan(D, e) }), 'gevaar');
     });
   };
 
-  // Een vijand achterna (`volg`): de vijand van die soort het dichtst bij waar je klikte.
+  // Een vijand aanvallen (`volg`): de vijand van die soort het dichtst bij waar je klikte. Het gevecht (js/gevecht.js)
+  // brengt hem erheen en laat hem slaan.
   T.volgVijand = function (D, wie, doel) {
     const mannen = mannenMet(D, wie);
     let vijand = null;
@@ -163,6 +165,7 @@
     for (const e of mannen) {
       neemBevel(e);
       delete e.post;
+      delete e.doelwit;
       e.volgt = vijand;
       loop(D, e, T.tegelVan(vijand), true);
     }
@@ -173,6 +176,8 @@
     for (const e of mannenMet(D, wie)) {
       delete e.post;
       delete e.volgt;
+      delete e.doelwit;
+      delete e.vanaf;
       if (!e.onderweg) e.pad = [];
       e.dwaalTijd = 0;
     }
@@ -193,26 +198,18 @@
     return { x: e.post.x, y: e.post.y, straal: 0 };
   };
 
-  // Elke tik, in elk dorp (T.werkDorpBij, js/dorp.js): wie een vijand volgt, loopt hem na als hij verder liep, en is de
-  // vijand weg, dan blijft hij staan (zijn post); wie 's nachts een bevel kreeg, slaapt de volgende nacht weer thuis.
+  // Elke tik, in elk dorp (T.werkDorpBij, js/dorp.js): is de vijand die hij aanviel gevallen of weg, dan blijft hij staan
+  // (zijn post); wie 's nachts een bevel kreeg, slaapt de volgende nacht weer thuis. Erheen lopen en slaan doet het gevecht
+  // (js/gevecht.js).
   T.werkSturenBij = function (S, D) {
     if (!D.wereld) return;
     const nacht = D.kalender && T.dagdeelVan(D.kalender.dag) === 'nacht';
-    let zoekNog = IN().zoekPerTik;
     for (const e of T.mannenVan(D)) {
       if (e.post && e.post.wakker && !nacht) delete e.post.wakker;
       const v = e.volgt;
-      if (!v) continue;
-      if (v.dood || !D.wereld.wezens.includes(v)) {
-        delete e.volgt;
-        if (e !== D.schout) e.post = { x: e.tx, y: e.ty };
-        continue;
-      }
-      if (e.onderweg || e.binnen || T.raakt(D.wereld, T.tegelVan(e), T.tegelVan(v))) continue;
-      const doel = e.pad.length && e.padDoel;
-      if (doel && T.afstand(doel, T.tegelVan(v)) <= 1) continue;
-      if (zoekNog-- <= 0) break;
-      loop(D, e, T.tegelVan(v), true);
+      if (!v || !(v.dood || !D.wereld.wezens.includes(v))) continue;
+      delete e.volgt;
+      if (e !== D.schout) e.post = { x: e.tx, y: e.ty };
     }
   };
 
@@ -225,6 +222,7 @@
   // Wat hij nu doet, in een paar woorden.
   function doetNu(D, e) {
     if (e.volgt) return T.t('after the {wie}', { wie: e.volgt.naam });
+    if (e.doelwit) return T.t('fighting the {wie}', { wie: e.doelwit.naam });
     if (e.opgeroepen) return T.t('with the reeve');
     if (e.binnen) return T.t('at home');
     if (e.post) return e.onderweg || e.pad.length ? T.t('on his way to his post') : T.t('at his post');

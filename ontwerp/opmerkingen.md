@@ -1088,3 +1088,9 @@ het). De keuzes die op Marcel wachten, staan in de werklijst onder "Wacht op Mar
   `ontwerp/het-spel-in-het-kort.pdf`) beschrijft nog het spel van vóór 11 okt: de inwoners die vragen, de erven, de
   oproepen, de ondernemers en de herbergierster. `npm run samenvatting -- --beelden` speelt sinds stap 6 op het
   proefdorp, maar draaide nog niet; de tekst moet eerst opnieuw, met de richting van 11 okt (`gameloop.md`).
+- **Het gevecht in real time, wat opviel** (15 okt, vraag 170, stap 2): (1) wie vlucht, loopt op zijn gewone snelheid
+  (1,2 tot 1,5 tegels per seconde), een rover op 2,2: wie ver van het town hall werkt, halen ze bijna altijd in. Rennen
+  bij het vluchten (zoals een hert, `e.rent`) zou helpen, maar is een regel erbij. (2) Alle dorpelingen rennen naar één
+  deur, die van het town hall; bij veel mensen staat er een rij voor de deur (wie naast de deur staat, mag ook naar
+  binnen). (3) `Spel.debug.proefdorp()` laat het titelscherm open staan. (4) Een rover die een dorpeling najaagt,
+  laat zijn akker even los; komt hij niet binnen zijn opUren terug, dan geeft de aanval het op (`T.werkRoversBij`).

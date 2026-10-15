@@ -11,8 +11,8 @@
 //            open grond aan de bosrand, en liggen de rest van de tijd op hun legerplek.
 //   schuw    komt er een mens dichtbij (de schout, een bewoner, een bezoeker), dan gaat de groep van hem weg, terug het
 //            bos in: de wolven sluipen weg, de herten rennen. Wie sluipt (S), komt dichterbij (T.SLUIP_ZICHT). Een wolf
-//            begint nooit zelf een gevecht (T.zoekOntdekking in js/verkennen.js); de schout kan hem wel aanvallen
-//            (Marcel: "a ja"). Dat ze in de winter met honger toch komen, is stap 2.
+//            begint nooit zelf een gevecht; je mannen kunnen hem wel aanvallen (Marcel: "a ja"; js/gevecht.js), en dan
+//            vecht zijn roedel terug (T.wolvenVechten). Dat ze in de winter met honger toch komen, is stap 2.
 //   groep    alleen de leider zoekt een weg (T.zoekRoute, js/lopen.js); de anderen lopen in zijn spoor (G.spoor), en
 //            staan om hem heen als hij stilstaat: Marcels "group steering" (2 okt, werklijst vraag 117). Een roedel
 //            kost zo bijna niets.
@@ -38,8 +38,8 @@
 //            het je de ochtend erna zeggen (het voorval "wolven"); wie hij aanvalt, is gewond en ligt een paar dagen in
 //            bed, of is een enkele keer dood (de spelregel "Beesten": "Zonder doden" maakt het alleen gewond).
 //   licht    licht houdt hem weg: wie in het licht staat, valt hij niet aan, en bij de schout met zijn lantaarn blijft hij
-//            aan de rand van het licht, met zijn ogen. Wie sluipt, heeft geen licht: die valt hij aan, en dan is het een
-//            gevecht in beurten.
+//            aan de rand van het licht, met zijn ogen. Wie sluipt, heeft geen licht: die valt hij aan, en dan vecht de
+//            roedel met hem, in real time (T.wolvenVechten; js/gevecht.js).
 //   status   "Er zijn wolven bij het dorp" (T.OORZAKEN.wolven, js/voorvallen.js) voor het rapport, zolang ze het laatst
 //            iets deden niet lang geleden is; en de raad zegt het.
 //
@@ -137,13 +137,13 @@
     // ── Stap 3b, de jacht te voet ──
     // Een jacht op de wolven (het voorval "wolven"; Marcel, 7 okt: "Ja dat is goed"): de mannen van de militie, of zonder
     // militie zoveel weerbare mannen, lopen met de schout mee naar de roedel; komt hij binnen bij tegels van een wolf, dan
-    // is het een gevecht in beurten. Gaat hij niet binnen dagen dagen, dan gaan ze zonder hem: de roedel verliest
+    // vecht de roedel (T.wolvenVechten). Gaat hij niet binnen dagen dagen, dan gaan ze zonder hem: de roedel verliest
     // zonderJou wolven, en met sterfkans procent kans komt een van de mannen niet terug.
     jacht: { mannen: 2, bij: 9, dagen: 2, zonderJou: 2, sterfkans: 15 },
     // ── Stap 3c, om hulp roepen ──
     // Wie de wolven aanvallen, roept om hulp: zoveel uur blijven ze bij hem (een kwartier), wie binnen hoort tegels is,
-    // komt erheen, en is de schout binnen schout tegels, dan is het een gevecht in beurten.
-    hulp: { uren: 0.25, hoort: 12, schout: 6 },
+    // komt erheen, en is een man van je (de held, een soldaat; js/gevecht.js) binnen man tegels, dan vecht de roedel met hem.
+    hulp: { uren: 0.25, hoort: 12, man: 6 },
 
     // ── Stap 3a, de jager ──
     // De jager jaagt echt (vraag 116, stap 3; Marcel, 7 okt: "Altijd een paar herten over houden. Anders krijgen we geen
@@ -483,7 +483,7 @@
       else groepen.set(e.groep, [e]);
     }
     // Een groep die wegtrekt (T.tikBeestenDag), gaat van de kaart; niet midden in een gevecht, waar een wolf meevecht.
-    if (weg && S.modus !== 'gevecht') w.wezens = w.wezens.filter((e) => !(e.groep && e.groep.trektWeg));
+    if (weg && !D.gevecht) w.wezens = w.wezens.filter((e) => !(e.groep && e.groep.trektWeg));
     for (const [G, leden] of groepen) werkGroepBij(S, D, G, leden);
   };
 
@@ -532,6 +532,8 @@
       werkAanvalBij(S, D, G, leider);
       return;
     }
+    // Vecht de roedel (T.wolvenVechten), dan beweegt het gevecht hem (js/gevecht.js), tot het voorbij is.
+    if (G.vecht) return;
     // 0. Een roedel met honger, in het donker (stap 2b): niet schuw, maar op zoek naar prooi.
     const stout = G.soort === 'wolf' && T.wolvenStout(D, G);
     // 1. Komt er een mens? Dan weg van hem: naar de plek (zijn thuis of een plek aan de rand) die het verst van hem ligt.
@@ -922,14 +924,15 @@
   }
 
   // De roedel slaat toe: een schaap neemt hij mee, en de herder zegt het je de ochtend erna; wie hij aanvalt, is gewond
-  // of dood (bijt); de schout zonder licht vecht met hem, in beurten. Daarna is zijn honger weg (een gevecht beslist zelf),
+  // of dood (bijt); met de schout zonder licht vecht hij, in real time (T.wolvenVechten). Daarna is zijn honger weg (een gevecht beslist zelf),
   // en gaat hij terug naar zijn hol. Ook voor Spel.debug.beesten('schaap').
   T.wolvenSlaanToe = (S, D, G, leider, prooi) => slaToe(S, D, G, leider, prooi);
   function slaToe(S, D, G, leider, prooi) {
     const dag = D.kalender.dag;
     const B = D.beesten;
     if (prooi.soort === 'schout') {
-      if (S.modus === 'verkennen' && S.wereld === D.wereld && !S.spreektMet) T.startGevecht(S, leider, false);
+      T.wolvenVechten(D, G, prooi.e);
+      return;
     } else if (prooi.soort === 'schaap') {
       T.verliesDier(D, prooi.e);
       B.gezien = { dag, wat: 'schaap', wie: null };
@@ -974,7 +977,7 @@
     T.naarGewoneSnelheid(D);
   }
 
-  // Elk beeld zolang de roedel iemand aanvalt: komt de schout binnen hulp.schout tegels, dan is het een gevecht in beurten;
+  // Elk beeld zolang de roedel iemand aanvalt: komt een man van je binnen hulp.man tegels, dan vecht de roedel met hem;
   // staat er een ander binnen dreiging.alleen tegels, dan vlucht de roedel; is de tijd om, dan bijt hij (bijt).
   function werkAanvalBij(S, D, G, leider) {
     const A = G.aanval;
@@ -986,11 +989,10 @@
       eindAanval(D, G);
       return;
     }
-    if (S.modus === 'gevecht' || S.modus === 'overgang') return;
     const schout = D.schout;
-    if (!T.schoutIsWeg(D) && S.wereld === D.wereld && S.modus === 'verkennen' && T.afstand(T.tegelVan(schout), plek) <= IN().hulp.schout) {
-      eindAanval(D, G);
-      T.startGevecht(S, leider, true);
+    const man = D.wereld.wezens.find((m) => T.vechtVoor(D, m) && !m.binnen && T.afstand(T.tegelVan(m), plek) <= IN().hulp.man);
+    if (man) {
+      T.wolvenVechten(D, G, man);
       return;
     }
     const mensen = D.wereld.wezens.filter((m) => m !== e && (m.bewoner || m.werkAkkers) && !m.binnen && !m.dood && !m.beest && !m.dier);
@@ -1010,6 +1012,50 @@
     G.weg = D.kalender.dag + IN().wegUren / 24;
     G.vluchtNaar = { x: G.thuis.x, y: G.thuis.y };
   }
+
+  // ── Vechten (werklijst vraag 170, stap 2) ──
+  // De roedel vecht in real time (js/gevecht.js) met wie hem aanvalt (een man die een wolf raakt), met de held zonder licht
+  // die hij aanvalt, met een man die bij wie om hulp roept komt (hulp.man), en op de jacht. Elke wolf neemt de dichtste van
+  // jouw kant die hij ziet (T.vechtVoor), of `tegen`; zolang G.vecht staat, beweegt het gevecht de roedel. Is het voorbij,
+  // dan gaat hij terug naar zijn hol (T.wolvenNaHetGevecht).
+  T.wolvenVechten = function (D, G, tegen) {
+    if (G.aanval) eindAanval(D, G);
+    G.vecht = true;
+    const w = D.wereld;
+    const onze = w.wezens.filter((x) => T.vechtVoor(D, x) && !x.binnen);
+    for (const e of w.wezens) {
+      if (e.groep !== G || e.dood || e.doelwit) continue;
+      const hier = T.tegelVan(e);
+      let doel = tegen;
+      for (const x of onze) {
+        const a = T.afstand(T.tegelVan(x), hier);
+        if (a <= (e.zicht || 6) && a < T.afstand(T.tegelVan(doel), hier)) doel = x;
+      }
+      e.doelwit = doel;
+      e.vanaf = hier;
+      e.snelheid = T.BEESTEN[G.soort].vlucht;
+    }
+  };
+
+  // Het gevecht is voorbij (T.gevechtVoorbij, js/gevecht.js): elke roedel die vocht, gaat terug naar zijn hol, en zijn
+  // honger is weg.
+  T.wolvenNaHetGevecht = function (D) {
+    const w = D.wereld;
+    if (!w || !D.kalender) return;
+    for (const e of w.wezens) {
+      const G = e.groep;
+      if (!G || !G.vecht) continue;
+      delete e.doelwit;
+      delete e.vanaf;
+    }
+    for (const G of new Set(w.wezens.filter((e) => e.groep && e.groep.vecht).map((e) => e.groep))) {
+      G.vecht = false;
+      G.honger = 0;
+      G.prooi = null;
+      G.weg = D.kalender.dag + IN().wegUren / 24;
+      G.vluchtNaar = { x: G.thuis.x, y: G.thuis.y };
+    }
+  };
 
   // De aanval is voorbij: wie riep en wie hielp, gaan weer hun gang.
   function eindAanval(D, G) {
@@ -1179,7 +1225,7 @@
   };
 
   // Elk beeld (T.werkBeestenBij): de mannen lopen met de schout mee, en komt hij binnen jacht.bij tegels van een wolf van
-  // de roedel, dan begint het gevecht. Is zijn tijd om, dan gaan ze zonder hem.
+  // de roedel, dan vecht de roedel (T.wolvenVechten; js/gevecht.js). Is zijn tijd om, dan gaan ze zonder hem.
   function werkJachtBij(S, D) {
     const J = D.beesten.jacht;
     const leden = D.wereld.wezens.filter((e) => e.groep === J.roedel && !e.dood);
@@ -1187,20 +1233,20 @@
       eindJacht(D, T.t('The hunt: the pack has gone.'));
       return;
     }
-    if (S.modus === 'gevecht' || S.modus === 'overgang' || S.modus === 'dood') return;
+    if (S.modus === 'dood' || J.gevecht) return;
     if (D.kalender.dag >= J.tot) {
       zonderJou(D, J);
       return;
     }
     if (T.schoutIsWeg(D)) return;
-    for (const e of J.mannen) if (!e.dood && e.opgeroepen && !e.onderweg) T.loopNaastDeSchout(D, e);
-    if (S.modus !== 'verkennen' || S.wereld !== D.wereld || S.spreektMet) return;
+    for (const e of J.mannen) if (!e.dood && e.opgeroepen && !e.onderweg && !e.doelwit) T.loopNaastDeSchout(D, e);
+    if (S.wereld !== D.wereld) return;
     const h = T.tegelVan(D.schout);
     let wolf = null;
     for (const e of leden) if (T.afstand(h, T.tegelVan(e)) <= IN().jacht.bij && (!wolf || T.afstand(h, T.tegelVan(e)) < T.afstand(h, T.tegelVan(wolf)))) wolf = e;
     if (!wolf) return;
     J.gevecht = true;
-    T.startGevecht(S, wolf, true);
+    T.wolvenVechten(D, J.roedel, D.schout);
   }
 
   // De tijd is om: de mannen gingen zonder de schout. De roedel verliest wolven, en een van de mannen komt misschien
@@ -1217,7 +1263,7 @@
     eindJacht(D, mannen.length ? T.t('The men went hunting without you.') : null);
   }
 
-  // Na een gevecht (T.eindeGevecht, js/gevecht.js): was het de jacht, dan is hij voorbij. Wie van de roedel overbleef,
+  // Na een gevecht (T.gevechtVoorbij, js/gevecht.js): was het de jacht, dan is hij voorbij. Wie van de roedel overbleef,
   // vlucht naar zijn hol.
   T.naJacht = function (D) {
     const J = D.beesten && D.beesten.jacht;

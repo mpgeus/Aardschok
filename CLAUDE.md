@@ -145,8 +145,8 @@ De bestanden in `js/`, per onderwerp; elk heeft een kop in `ontwerp/code.md`:
 - **Voorraad en handel:** `voorraad`, `kar` (de ossenkar en de stapels), `handel` (de marskramer), `bode`.
 - **De heer en het bestuur:** `heer`, `brieven`, `bazen`, `grillen`, `heervaart`, `wetten` en `wettenmenu`, `raad`,
   `raadsman` en `raadsmanvenster`, `ochtendrapport`, `voorvallen`, `statussen`, `feesten`, `brand`, `koorts`, `rovers`, `einde`.
-- **Het gevecht:** `gevecht` (de overgang, de beurten, de actiepunten), `soldaten` (het wachthuis, de wapens) en `kiezen`
-  (kijken, kiezen en sturen als een god), op hetzelfde raster als het lopen.
+- **Het gevecht:** `gevecht` (in real time, in de tik; vluchten naar het town hall), `soldaten` (het wachthuis, de wapens)
+  en `kiezen` (kijken, kiezen en sturen als een god), op hetzelfde raster als het lopen.
 
 ## Het spel in het kort
 
@@ -208,8 +208,8 @@ Hoe we kiezen:
   (`T.wereldTik`), haar toeval is `T.toeval` of `T.vastLot`, **nooit `Math.random`**, en een klik die haar verandert,
   geeft een opdracht (`T.geefOpdracht`). De heer of een ander dorp kiest uit de handelingen van een mens in zijn plaats
   (`T.raadsmanKeuze`); een keuze die op de speler wacht, heeft een termijn en een uitkomst als die om is.
-- **Scherm en klik stellen dezelfde vraag:** `handelingVerkennen` en `handelingGevecht` geven `{ tekst, kosten, kan, doe }`,
-  en de tekst bij de muis, het pad, de actiepunten en de klik komen uit hetzelfde antwoord.
+- **Scherm en klik stellen dezelfde vraag:** `handelingVerkennen` (links) en `handelingSturen` (rechts) geven `{ tekst,
+  kan, doe }`, en de tekst bij de muis en de klik komen uit hetzelfde antwoord.
 - **Eén weg voor:** de voorraad (`T.wijzigVoorraad`), het getal in de balk (`T.wijzigBevolking(S, verschil, reden,
   waarom)`), de tijd stilzetten (`T.houdTijdStil(S, reden)` en `T.laatTijdGaan`; een venster zet nooit zelf `snelheid`),
   een bezoeker (`T.bezoekerKomtAan`), en een venster (`T.ui.openVenster`, `T.ui.sluitVenster`).

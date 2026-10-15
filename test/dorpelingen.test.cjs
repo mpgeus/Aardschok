@@ -17,7 +17,7 @@ function zet(e, x, y) {
 }
 
 // Dezelfde vorm als maakDorpeling in js/kaart.js, maar zonder de kaart erbij te halen: alleen de
-// velden waar T.laatDwalen, T.zoekOntdekking en T.deelnemers naar kijken.
+// velden waar T.laatDwalen en het gevecht (T.isVijandig, js/gevecht.js) naar kijken.
 function maakDorpeling(x, y, straal) {
   return {
     soort: 'dorpeling', naam: 'dorpeling', kant: 'neutraal',
@@ -27,20 +27,14 @@ function maakDorpeling(x, y, straal) {
   };
 }
 
-test('een dorpeling wordt nooit ontdekt en telt nooit mee als deelnemer, ook niet als aanleiding', () => {
+test('een dorpeling is nooit een vijand: je mannen vallen hem niet vanzelf aan', () => {
   const w = T.maakProefkamers();
-  const schout = wezen(w, 'schout');
-  wezen(w, 'slijm').dood = true;
-  wezen(w, 'skelet').dood = true;
   const wim = wezen(w, 'wim');
   const dorpeling = maakDorpeling(6, 3, 3);
   w.wezens.push(dorpeling);
-  zet(schout, 5, 3); // vlak naast allebei
-  const S = { wereld: w, schout, sluipen: false };
-
-  assert.equal(T.zoekOntdekking(S), null);
-  assert.deepEqual(T.deelnemers(w, schout, wim), []);
-  assert.deepEqual(T.deelnemers(w, schout, dorpeling), []);
+  assert.equal(T.isVijandig(wim), false);
+  assert.equal(T.isVijandig(dorpeling), false);
+  assert.equal(T.isVijandig(wezen(w, 'slijm')), true, 'een monster wel');
 });
 
 // De mensen van het dorp staan sinds 22 sep in js/mensen.js en niet meer als eigen ingang in
@@ -48,19 +42,12 @@ test('een dorpeling wordt nooit ontdekt en telt nooit mee als deelnemer, ook nie
 // niet veranderd en wordt hier over de hele lijst getoetst in plaats van per persoon: dwalen en
 // nooit ontdekt worden is de gewone regel voor elk neutraal wezen. Dat deze toets over T.MENSEN heen loopt en niet over een lijst hier, is het punt:
 // wie er morgen bij komt, wordt vanzelf meegetoetst.
-test('elke mens is neutraal, wordt nooit ontdekt en telt nooit mee als deelnemer', () => {
+test('elke mens is neutraal, en nooit een vijand', () => {
   for (const id of Object.keys(T.MENSEN)) {
-    const w = T.maakProefkamers();
-    const schout = wezen(w, 'schout');
     const e = T.maakMens(id, 6, 3);
-    w.wezens.push(e);
-    zet(schout, 5, 3); // vlak naast hem
-    const S = { wereld: w, schout, sluipen: false };
-
     assert.equal(e.kant, 'neutraal', `${id} is neutraal`);
-    assert.notEqual(e.kant, 'monster'); // alleen 'monster' laat T.startGevecht/de klik aanvallen
-    assert.equal(T.zoekOntdekking(S), null, `${id} wordt niet ontdekt`);
-    assert.deepEqual(T.deelnemers(w, schout, e), [], `${id} telt niet mee als deelnemer`);
+    assert.notEqual(e.kant, 'monster'); // alleen 'monster' laat het gevecht en de klik aanvallen (js/gevecht.js, js/kiezen.js)
+    assert.equal(T.isVijandig(e), false, `${id} is geen vijand`);
     assert.equal(e.naam, T.naamVanMens(id), `${id} draagt zijn eigen naam`);
     assert.equal(e.wie, id);
   }

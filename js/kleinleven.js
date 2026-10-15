@@ -86,7 +86,7 @@
   T.kanSpelen = function (S, D, e, deel) {
     if (e.dood || e.binnen || e.maait || e.werkt || e.opgeroepen || e.zoektSchout || e.moetNaar || e.vertrekt || e.praatje) return false;
     if (deel !== 'ochtend' && deel !== 'werk' && deel !== 'schaft') return false;
-    if (S.gevecht && D.wereld === S.wereld) return false;
+    if (D.gevecht) return false; // niet midden in een gevecht (js/gevecht.js)
     const p = e.bewoner;
     if (!p || p.komt || p.weg || p.werk || p.ziek || (p.leeftijd !== 'kind' && p.leeftijd !== 'kleuter')) return false;
     if (T.helpAnker(D, e)) return false;

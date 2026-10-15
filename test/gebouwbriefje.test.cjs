@@ -103,7 +103,7 @@ test('in aanbouw zegt het briefje hoe ver het is; een opslag zegt wat zijn kar d
   assert.ok(deel(b, 'Under construction'), JSON.stringify(b));
   assert.equal(b.delen.length, 1);
   const s = T.gebouwBriefje(D, schout);
-  assert.equal(s.kop, 'Your house');
+  assert.equal(s.kop, 'Town hall');
   assert.match(regels(s, 'Its ox cart'), /ox cart/i);
   assert.ok(deel(s, 'Lives here'), 'de schout woont er');
 });

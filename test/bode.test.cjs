@@ -290,7 +290,8 @@ test('de hinderlaag op je kaart: bij de uitgang houden de rovers hem aan, en kom
     assert.equal(A.fase, 'roven');
     assert.ok(A.rovers.length >= B.rovers.aanvallers, 'de rovers staan op de kaart');
     assert.ok(bode.aangehouden, 'de bode staat stil');
-    assert.ok(r.begeleiders[0].wezen.opgeroepen, 'wie meegaat, vecht aan jouw kant');
+    assert.ok(r.begeleiders[0].wezen.aangehouden, 'wie meegaat, staat ook stil: de rovers houden hem vast, en slaan hem niet');
+    assert.ok(!r.begeleiders[0].wezen.opgeroepen, 'niemand komt vanzelf (vraag 170, stap 2)');
     assert.deepEqual(T.dagAnker(D, bode), { x: bode.aangehouden.x, y: bode.aangehouden.y, straal: 0 });
     // De tijd is om, en de schout kwam niet: het lot beslist.
     S.kalender.dag += (B.hinderlaag.uren + 0.1) / 24;
@@ -302,7 +303,7 @@ test('de hinderlaag op je kaart: bij de uitgang houden de rovers hem aan, en kom
   });
 });
 
-test('de schout verslaat de rovers van de hinderlaag: de bode gaat verder', () => {
+test('je mannen verslaan de rovers van de hinderlaag: de bode gaat verder', () => {
   metGevaar(1, 0, () => {
     const dag = dagVan('zomermaand', 5);
     const S = gehucht(dag + 0.5);
@@ -317,8 +318,7 @@ test('de schout verslaat de rovers van de hinderlaag: de bode gaat verder', () =
     bode.ty = bode.y = uitgang.y - 3;
     T.werkRoversBij(S, D);
     const A = D.rovers.aanval;
-    for (const e of A.rovers) e.dood = true; // het gevecht in beurten
-    T.naGevecht(D);
+    for (const e of A.rovers) T.raak(S, D, e, 100, null); // het gevecht (js/gevecht.js): de laatste maakt het af
     assert.equal(D.rovers.aanval, null);
     assert.ok(D.bode && !D.bode.onderschept && !D.bode.hinderlaag);
     assert.ok(!bode.aangehouden);

@@ -27,8 +27,8 @@
   // Hoe lang een tik duurt, in seconden echte tijd.
   T.TIK = 1 / T.TIK_INSTELLINGEN.perSeconde;
 
-  // Eén tik van de wereld: de kalender, elk dorp, wie er loopt, en waar de schout is het maaien, het veldwerk, het wild,
-  // het dwalen en wie hem ziet. `dt` is de tik in echte seconden (waarop een uitval of een flits loopt); de wereld schuift
+  // Eén tik van de wereld: de kalender, elk dorp (met het gevecht, js/gevecht.js), wie er loopt, en waar de schout is het
+  // maaien, het veldwerk, het wild en het dwalen. `dt` is de tik in echte seconden (waarop een uitval of een flits loopt); de wereld schuift
   // dt maal de snelheid op (`dtWereld`). `meet(naam, f)`, als het er is, doet f en meet hoe lang een deel duurt (de
   // meting van `npm run grootte`, gereedschap/grootte/harnas.cjs).
   const zonderMeten = (naam, f) => f();
@@ -69,10 +69,7 @@
         meet('beesten', () => T.werkBeestenBij(S, hier)); // de wolven en de herten in het bos (js/beesten.js)
       }
       meet('dwalen', () => T.laatDwalen(S, dtWereld));
-      const m = S.modus === 'verkennen' && T.zoekOntdekking(S);
-      if (m) T.startGevecht(S, m, false);
     }
-    if (S.modus === 'overgang' && S.wereld.wezens.every((e) => !e.pad.length)) T.beginGevecht(S);
   };
 
   // ── De opdrachten van de spelers ──

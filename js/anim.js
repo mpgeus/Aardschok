@@ -1,40 +1,22 @@
-// Beweging en effecten. De spellus werkt ze elk beeld bij. De functies in T.anim geven een
-// belofte terug die afloopt als de animatie klaar is, zodat een beurt in het gevecht leest
-// als gewone code: loop hierheen, sla toe, wacht even.
+// Beweging en effecten. Wie loopt, loopt in de tik van de wereld (T.beweegWezens); wat alleen scherm is (de zwevende
+// schade, de pijl die vliegt), staat in S.effecten en werkt de spellus elk beeld bij. Tot 15 okt gaven de functies in
+// T.anim een belofte terug, zodat een beurt in het gevecht las als gewone code (loop hierheen, sla toe, wacht even); het
+// gevecht is nu in real time, in de tik (js/gevecht.js; werklijst vraag 170, stap 2).
 (function (T) {
   'use strict';
 
   T.anim = {
-    loop(e, pad) {
-      return new Promise((klaar) => {
-        if (!pad.length) {
-          klaar();
-          return;
-        }
-        e.pad = pad.slice();
-        e.padDoel = null; // een pad van een beurt: staat er iemand, dan stopt hij (js/lopen.js)
-        e.opKlaar = klaar;
-      });
-    },
-
-    // Een uitval naar het doel en terug. De belofte loopt af op het moment van de klap.
-    uitval(e, doel) {
-      return new Promise((klaar) => {
-        e.uitval = { doel: { x: doel.x, y: doel.y }, t: 0, duur: 0.3, opKlap: klaar, geklapt: false };
-      });
-    },
-
-    // Wachten in speltijd, niet in kloktijd: staat het spel stil (een verborgen tab, of
-    // straks een pauzeknop), dan wacht dit mee.
-    wacht(S, ms) {
-      return new Promise((klaar) => S.wachters.push({ tot: S.tijd + ms / 1000, klaar }));
-    },
-
     // opties.na: zoveel seconden later beginnen, zodat twee teksten boven hetzelfde hoofd
     // elkaar niet in de weg zitten (de jaren eerst, dan de trede). opties.duur: hoe lang.
     tekst(S, e, tekst, kleur, opties) {
       const o = opties || {};
       S.effecten.push({ soort: 'tekst', x: e.x, y: e.y, tekst, kleur, t: -(o.na || 0), duur: o.duur || 1.1 });
+    },
+
+    // Een pijl of een bout die van tegel `van` naar tegel `naar` vliegt (js/gevecht.js): een korte streep, in code
+    // getekend (js/tekenen.js, tekenEffecten).
+    pijl(S, van, naar) {
+      S.effecten.push({ soort: 'pijl', van: { x: van.x, y: van.y }, naar: { x: naar.x, y: naar.y }, t: 0, duur: 0.25 });
     },
   };
 
@@ -46,14 +28,10 @@
     const lopen = dtLopen == null ? dt : dtLopen;
     for (const e of w.wezens) {
       beweeg(S, w, e, lopen);
+      // Een uitval naar wie hij slaat (js/gevecht.js), en terug.
       if (e.uitval) {
-        const u = e.uitval;
-        u.t += dt / u.duur;
-        if (!u.geklapt && u.t >= 0.5) {
-          u.geklapt = true;
-          u.opKlap();
-        }
-        if (u.t >= 1) e.uitval = null;
+        e.uitval.t += dt / e.uitval.duur;
+        if (e.uitval.t >= 1) e.uitval = null;
       }
       if (e.flits > 0) e.flits = Math.max(0, e.flits - dt);
       if (e.alarm > 0) e.alarm = Math.max(0, e.alarm - dt);
@@ -61,17 +39,9 @@
     }
   };
 
-  // Elk beeld (js/main.js): wie in een beurt op een animatie wacht (T.anim.wacht, op de klok van het scherm), en de
-  // zwevende teksten. Alleen scherm; wie loopt, loopt in de tik van de wereld (T.beweegWezens in T.wereldTik, js/tik.js).
+  // Elk beeld (js/main.js): de zwevende teksten en de pijlen. Alleen scherm; wie loopt, loopt in de tik van de wereld
+  // (T.beweegWezens in T.wereldTik, js/tik.js).
   T.werkEffectenBij = function (S, dt) {
-    if (S.wachters.length) {
-      const nogNiet = [];
-      for (const w of S.wachters) {
-        if (S.tijd >= w.tot) w.klaar();
-        else nogNiet.push(w);
-      }
-      S.wachters = nogNiet;
-    }
     const blijft = [];
     for (const fx of S.effecten) {
       fx.t += dt;
@@ -113,10 +83,9 @@
       const dx = volgende.x - e.x;
       const dy = volgende.y - e.y;
       const afstand = Math.hypot(dx, dy);
-      // In een gevecht lopen ook de trage monsters wat vlotter, anders duurt hun beurt te lang.
       // Wie sluipt, gaat half zo snel.
-      let snelheid = S.gevecht && hier ? Math.max(3.2, T.snelheidVan(e) * 1.4) : T.snelheidVan(e);
-      if (e === S.schout && S.sluipen && !S.gevecht) snelheid *= 0.5;
+      let snelheid = T.snelheidVan(e);
+      if (e === S.schout && S.sluipen) snelheid *= 0.5;
       // De ossenkar rijdt sneller over een weg (js/wegen.js), net zo snel als de regel van zijn rit rekent (js/kar.js).
       if (e.kar) snelheid /= T.karKostOp(w, volgende.x, volgende.y);
       if (!(snelheid > 0)) return;
@@ -143,10 +112,5 @@
   // Zijn weg is af, of hij gaf het op: zijn doel is er niet meer (js/lopen.js).
   function klaar(e) {
     if (e.padDoel) e.padDoel = null;
-    if (e.opKlaar) {
-      const k = e.opKlaar;
-      e.opKlaar = null;
-      k();
-    }
   }
 })(globalThis.Spel = globalThis.Spel || {});

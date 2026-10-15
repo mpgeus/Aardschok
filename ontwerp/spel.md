@@ -26,7 +26,8 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | De heer als tegenstander | besloten (Marcel, 5 en 6 okt: "A ja B b2 en b3 C c3 D ja E ja F Ja G zo"), niets gebouwd: het eind van het spel is de heer verstoten en verslaan, met een kasteel op de kaart, bondgenoten en per spel een ander karakter; veroveren en bevriend raken zijn de weg erheen, langs drie wegen (de opstand, de koning, trouw, en dan ben jij de nieuwe heer); een bond sluit je te voet; het jaar van geluk blijft het eind van de demo en wordt in het hele spel kracht; samen spelen, met een speler als heer, na de release; niets hiervan vóór de kern | vraag 126 |
 | Informatie, de zitting en mensen die onthouden | besloten (Marcel, 6 okt: "A tot g allemaal, en de proef komt erna"); de proef, de verdwenen graanzak, is op 11 okt weggehaald (snoeironde, vraag 153), de rest is niet gebouwd: wat er gebeurde, wat er gezegd wordt en wat jij weet; 's middags een zitting met getuigen en bewijs; het vertrouwen per groep; mensen die onthouden wat je deed; een heer die van je leert; gevolgen in ketens; eerst een proef met één keten (de verdwenen graanzak, met een eerste zitting), na het beeld dat in de werklijst staat | vraag 105, 118, 128 |
 | Kijken, kiezen en sturen | gebouwd (15 okt, vraag 170, stap 1; Marcel: "Een post, tot je terugroept"): de camera volgt de schout niet meer (de pijltjes, de rand van het scherm, de minikaart, Tab naar de held); links kiest (een kader, Shift, een dubbelklik), rechts stuurt je mannen erheen (hun post) of een vijand achterna; groepen onder een cijfer; een bericht met een plek brengt je erheen ("Zo werkt kijken, kiezen en sturen nu", bij Rovers en de militie) | vraag 170 |
-| Rovers en de militie | gebouwd (29 sep): wie wegtrekt komt als rover terug, wilde rovers van buiten, ze roven een akker, de wachters vechten mee, en wie valt is dood | vraag 55 |
+| Het gevecht in real time | gebouwd (15 okt, vraag 170, stap 2; Marcel: "Aanvallen, dan terug", "Niemand vanzelf", "Iedereen, wie kan vlucht", "Huis schout wordt town hall"): elk kiest de dichtste vijand die hij ziet en slaat met zijn wapen, in de tik; je mannen houden een leiband om hun post; bij een aanval stuur jij ze; een rover slaat ook een dorpeling, en die vlucht naar het town hall; het gevecht is een status, met de tijd op 1× ("Zo werkt het gevecht nu", bij Rovers en de militie) | vraag 170 |
+| Rovers en de militie | gebouwd (29 sep): wie wegtrekt komt als rover terug, wilde rovers van buiten, ze roven een akker, jij stuurt je soldaten, en wie valt is dood | vraag 55 |
 | De heervaart | gebouwd (29 sep): in een dorp vraagt de heer op 1 hooimaand mannen of goud; wie terugkomt, is veteraan en vecht mee | vraag 60 |
 | Het land | gebouwd, stuk 1 van stap 1a (30 sep): over de weg je gehucht uit naar de kaart van het land, negen provincies uit het zaad, reizen in dagen, wat je niet zag is donker, en thuis gaat alles door zonder je; achter de spelregel Land, tot het buurdorp er is. De maker legt elk spel een ander land, sinds 4 okt de standaard: 100 bij 100, met natuur die ertoe doet, en het nummer van het land bij Nieuw spel (vraag 112). Stuk 2 (30 sep): de snellere dag, alles van een dorp bij elkaar, en elk dorp leeft, ook als je er niet bent; nog één dorp in het spel, tot het buurdorp (stuk 3) | vraag 63, 69, 70, 71 |
 | Tegenspelers | besloten (29 sep): dorpen met een AI die zelf bouwen, in een land met provincies waar je dagen reist (Lords of the Realm), elk met een karakter en een voorsprong, en een moeilijkheidsgraad; zelfsturende provincies zijn zwakker; winnen is voor nu alles veroveren, en een veroverd dorp leid je erbij | vraag 61, 62, 63 |
@@ -1005,9 +1006,8 @@ crossbow, armor", in vaste soorten zoals Knights and Merchants; `js/soldaten.js`
   speer tot twee tegels ver (3 tot 5), de piek ook, maar harder (4 tot 6), het zwaard hard (5 tot 7); de boog en de
   kruisboog schieten tot 8 tegels waar ze zien (2 tot 4, 4 punten), maar niet met een vijand naast zich. Een speer
   steekt langs wie ertussen staat. Het schild vangt 2 af van elke klap, het harnas 1, maar van een bout uit een
-  kruisboog niets. Wie zonder soort meevecht (een veteraan, wie met de bode meegaat, de jacht), vecht met een hooivork;
-  de schout slaat zoals altijd (3 tot 5). Bij de muis: "Hit", "Thrust" of "Shoot", en anders loopt hij naar de dichtste
-  tegel vanwaar hij raakt.
+  kruisboog niets. Wie zonder soort meevecht (een veteraan, wie meegaat op de jacht), vecht met een hooivork; de schout
+  slaat zoals altijd (3 tot 5). Hoe vaak, zegt het gevecht in real time (hieronder).
 - **Nog niet:** een eigen figuur per soort (stap 4 van het plan, eerst in woorden) en de muren (stap 3). De soldaten
   aanklikken en sturen kwam met vraag 170 (hieronder).
 
@@ -1016,7 +1016,7 @@ zijkant van het scherm bewegen, beweegt het beeld in die richting", en erbij "Ee
 kiest zijn soort"; `js/kiezen.js`, `test/kiezen.test.cjs`):
 - **De camera is los.** Hij volgt de schout niet meer: de pijltjes en de muis tegen de rand van het scherm schuiven het
   beeld, een klik op de minikaart zet het daar neer, het wiel zoomt altijd, en Tab kiest de held en kijkt naar hem. Het
-  overzicht (Tab tot 15 okt) is weg. Alleen een gevecht in beurten kijkt nog zelf mee, tot stap 2.
+  overzicht (Tab tot 15 okt) is weg. Ook een gevecht trekt de camera niet mee: het bericht brengt je erheen.
 - **Links kiest.** Een klik op een soldaat, een veteraan of de held kiest hem (een gouden ring om zijn voeten), met Shift
   komt er een bij (of gaat er een af), een dubbelklik kiest alle van zijn soort in beeld, en slepen trekt een kader om je
   mannen. Een klik op een dorpeling geeft zijn briefje (een lichte ring), een klik op een gebouw het zijne, en een klik
@@ -1028,16 +1028,46 @@ kiest zijn soort"; `js/kiezen.js`, `test/kiezen.test.cjs`):
   zich over de dichtste vrije tegels, en die plek is hun **post**: daar staan ze van het opstaan tot het slapen,
   's nachts slapen ze thuis, en 's ochtends gaan ze terug, tot je ze terugroept met *Back to the guardhouse* op hun
   briefje. Een bevel in de nacht houdt hen die nacht op hun post. Op een vijand: *Attack the wolf*; ze lopen hem na tot
-  ze naast hem staan, en is hij weg, dan blijven ze waar ze zijn. Slaan doen ze pas in stap 2: tot dan begint het
-  gevecht in beurten zoals altijd, als een vijand de held ziet. De held heeft geen post: hij blijft waar je hem
-  neerzet. Een bevel is een opdracht die op een tik ingaat (js/tik.js), zoals bouwen.
+  ze hem raken, en slaan (hieronder); is hij gevallen of weg, dan blijven ze waar ze zijn. De held heeft geen post: hij
+  blijft waar je hem neerzet. Een bevel is een opdracht die op een tik ingaat (js/tik.js), zoals bouwen.
 - **Groepen en berichten.** Ctrl of Shift met een cijfer maakt een groep van wie je koos (in de browser neemt Chrome
   Ctrl+1 zelf; in de versie voor Steam werkt Ctrl), een cijfer kiest hem, en twee keer vlak na elkaar kijkt de camera
   ernaar. Een bericht over iets dat ergens gebeurt (rovers op weg naar een akker of bij de uitgang, een huis dat
   afbrandt, iemand die de wolven aanvallen, het hol van de wolven bij de jacht, wie je zoekt met een voorval) is
   gestippeld onderstreept: een klik erop, of Spatie, brengt de camera erheen, en zolang het te lezen is, knippert de plek
   met een ring op de minikaart.
-- **Nog niet:** het gevecht in real time (stap 2), formaties (stap 3), en de diensten (stap 4).
+- **Nog niet:** formaties (stap 3), en de diensten (stap 4).
+
+**Zo werkt het gevecht nu** (15 okt, vraag 170, stap 2; Marcel: "Aanvallen, dan terug", "Niemand vanzelf", "Iedereen, wie
+kan vlucht", "We hebben dan een 'town hall' nodig. Daar kunnen mensen schuilen", "Huis schout wordt town hall",
+"Iedereen"; `js/gevecht.js`, `test/gevecht.test.cjs`):
+- **In real time.** Er zijn geen beurten, geen actiepunten en geen raster meer: wie vecht, loopt tot hij raakt en slaat,
+  en de kosten van zijn slag (de punten van vroeger) maal 0,4 seconde is de tijd tot de volgende (een zwaard elke 1,2
+  seconde, een boog elke 1,6). Een boogschutter blijft op afstand staan en schiet, en stapt opzij als er een vijand naast
+  hem staat. Boven wie vecht staat zijn levensbalk, de schade zweeft boven het hoofd, een pijl vliegt als een streep.
+- **Aanvallen, dan terug.** Een soldaat of een veteraan valt uit zichzelf de dichtste vijand aan die hij ziet (8 tegels),
+  maar alleen binnen 10 tegels van zijn post (of van het wachthuis); loopt die verder weg, dan laat hij hem gaan en gaat
+  terug. Een vijand die jij aanwijst (rechts), zit hij na zonder die grens. Wie geraakt wordt en niets deed, slaat terug.
+  **De held** kiest zelf niets: hij vecht als je hem stuurt, of terug als hij geraakt wordt (valt hij, dan is het spel
+  nog uit, tot stap 5).
+- **Niemand vanzelf.** Bij een aanval van rovers komt er niemand naar je toe: het bericht zegt waar ze heen gaan en hoe je
+  je soldaten stuurt (kiezen, en rechts op een rover), en de tijd gaat naar 1×. Wie bij het wachthuis of op zijn post
+  staat, vecht alleen als de rovers in zijn buurt komen.
+- **Iedereen, wie kan vlucht.** Een rover slaat wie hij tegenkomt, ook een dorpeling. Een dorpeling die een rover ziet (6
+  tegels), of die geraakt wordt, laat zijn werk vallen en rent naar het **town hall**, en zit daar binnen tot er geen
+  rover meer op de kaart is; wie ze inhalen, kan vallen. Een wolf valt alleen je mannen aan, en zijn roedel vecht als je
+  hem aanvalt, als hij de held zonder licht aanvalt, als een man van je komt bij wie om hulp roept, of op de jacht; daarna
+  gaat hij terug naar zijn hol. Wie de wolven aanvallen, roept nog altijd om hulp.
+- **Het town hall** is het huis van de schout: het eerste gebouw, de eerste opslag, het midden van je bereik, en sinds 15
+  okt de plek waar iedereen schuilt (iedereen past erin). Het oude raadhuis (de stad, de schepenen) is weg.
+- **Het gevecht is een status.** Zodra iemand vecht, zegt een bericht met de plek het (*Fighting breaks out.*; een klik of
+  Spatie brengt je erheen), staat *Fighting* in de balk, kleuren de randen van het beeld rood, en loopt de tijd hooguit op
+  1× (pauze kan); zes seconden nadat niemand meer vecht, is het voorbij (*The fighting is over.*) en loopt de tijd weer
+  op je eigen snelheid. Opslaan mag ook midden in een gevecht. De getallen in de werkbank ("Fighting").
+- **Gemeten** (15 okt, in de browser en in de toetsen): twee man militie tegen twee wilde rovers wint, tegen drie verliest
+  hij; twee wilde rovers in de oogst zonder soldaten doodden drie dorpelingen. De balans komt later (Marcel, 15 okt).
+- **Nog niet:** formaties (stap 3), de diensten en vijanden op elk uur (stap 4), de held die als veteraan opstaat (stap 5),
+  en de mannen van een andere speler als vijand (stap 6).
 
 **Zo werkt het nu** (29 sep, vijftiende sessie; `js/rovers.js`, het gevecht voor een groep in `js/gevecht.js`, toetsen
 in `test/rovers.test.cjs`; Marcel: "A, Ja en ook 'wilde' rovers. B, ze roven de velden, graan etc ook maken ze soms
@@ -1052,21 +1082,15 @@ velden kapot. C, Ja. D, mensen kunnen sterven"):
   dan gaan ze weg met 10 graan per rover uit de voorraad, en met een kans van 30% is de akker vertrapt: wat erop
   stond, groeit dit jaar niet meer (kale grond, geen oogst). Een rover draagt het vel van een gewone dorpeling en
   altijd zijn levensbalk, zodat je hem herkent.
-- **De militie is het wachthuis** (sinds 15 okt: zijn soldaten, hierboven). Wie er werkt (twee handen), loopt bij een aanval naar de schout en met hem mee,
-  zoals de inner. Ziet een rover de schout, dan begint het gevecht in beurten, met de hele bende en de wachters die
-  binnen twaalf tegels van hem staan. Wie verder weg is, rent erheen (elke ronde zo ver als zijn punten reiken; "Jan
-  is nog onderweg"), en vecht mee vanaf de ronde dat hij er is ("Jan komt erbij"; sinds 5 okt: tot dan deed hij het
-  hele gevecht niet mee, en viel een schout in de speeltest alleen tegen drie rovers). Elk heeft zijn eigen beurt en
-  actiepunten (een wachter: 16 leven, 8 punten), en
-  jij bestuurt wie aan de beurt is; de camera kijkt met hem mee. Een rover zoekt wie van jouw kant het dichtst bij
-  staat. Zonder wachthuis vecht de schout alleen, tenzij er veteranen van de heervaart zijn: die komen ook (sinds 29
-  sep, "De heervaart" hieronder).
+- **De militie is het wachthuis** (sinds 15 okt: zijn soldaten, hierboven), met de veteranen van de heervaart. Het
+  gevecht is sinds 15 okt in real time, en er komt niemand vanzelf ("Zo werkt het gevecht nu", hierboven). Tot dan liep
+  de militie bij een aanval met de schout mee, en begon een gevecht in beurten als een rover de schout zag.
 - **Wie valt, is dood.** Een rover is uit de bende, een wachter is een mond minder (het bericht zegt wie het was), en
   valt de schout, dan is het spel uit. Wie viel, ligt er tot de volgende dag. Wie het overleeft, staat de volgende
   ochtend weer met al zijn leven op (werklijst vraag 11).
 - **De getallen** staan in de werkbank (`T.ROVERS_INSTELLINGEN`), het leven en de klappen in `T.WEZENS` (`rover`,
   `wachter`). `Spel.debug.rovers(3)` laat nu drie wilde rovers komen, en `Spel.debug.rovers('bende')` de bende.
-- **Nog niet:** rovers vallen geen dorpelingen aan, alleen de schout en de wachters, en ze nemen alleen graan mee;
+- **Nog niet:** ze nemen alleen graan mee;
   een eigen tekening voor een rover (ze dragen nu het vel van een boer of een boerin); oefenen, wapens en de
   schutterij (punt 13); een rivaal (de tegenspelers, werklijst vraag 61). De heervaart is er sinds 29 sep.
 - **Een kazerne** (Marcel, 1 okt: "Extra gebouwen als barakken of iets om te soldaten te trainen / rekruteren"): een

@@ -354,19 +354,19 @@
 
   // Mag b een stap opzij gaan voor wie langs wil? Alleen wie maar wat staat: niet de schout (dat ben jij), niet wie
   // bezig is (maaien, op zijn land werken, een gesprek, de schout zoeken met een voorval), geen dier, geen kar
-  // (js/begin.js) en geen monster, en niet in een gevecht. Wie een praatje maakt (js/praatje.js), is ook bezig, maar gaat
+  // (js/begin.js) en geen monster, en niet wie vecht (js/gevecht.js). Wie een praatje maakt (js/praatje.js), is ook bezig, maar gaat
   // in een smalle doorgang toch even opzij (`ookPraatje`, hieronder).
   T.magOpzij = (S, b, ookPraatje) =>
     !b.dood && !b.binnen && b !== S.schout && !b.dier && !b.beest && !b.kar && b.kant !== 'monster' && !b.maait && !b.werkt && b !== S.spreektMet &&
-    !b.zoektSchout && !S.gevecht && !b.onderweg && !b.pad.length && (ookPraatje || !b.praatje);
+    !b.zoektSchout && !b.doelwit && !b.volgt && !b.onderweg && !b.pad.length && (ookPraatje || !b.praatje);
 
   // Wat doet e, die zijn volgende tegel bezet vindt (js/anim.js)? 'wacht': hij blijft staan, en kijkt het volgende beeld
   // opnieuw. 'verder': hij stapt nu (ze schuiven langs elkaar), of zijn weg is anders (een omweg). 'klaar': hij is er
   // (dichtbij genoeg), of hij geeft het op. `dt`: hoe lang hij dit beeld stond (de tijd van de wereld).
   T.ontwijk = function (S, w, e, volgende, dt) {
     // Is de tegel zelf dicht (een deur, iets wat er sinds het zoeken kwam), of heeft hij geen doel (een stap van het
-    // dwalen, een gevecht), dan stopt hij: wie hem stuurde, kiest opnieuw.
-    if (!e.padDoel || (S.gevecht && w === S.wereld)) return 'klaar';
+    // dwalen), dan stopt hij: wie hem stuurde, kiest opnieuw.
+    if (!e.padDoel) return 'klaar';
     if (!T.isBegaanbaar(w, volgende.x, volgende.y, { deurenOpenen: e === S.schout })) return 'klaar';
     const ander = T.wezenOp(w, volgende.x, volgende.y, e);
     if (!ander) return 'verder';

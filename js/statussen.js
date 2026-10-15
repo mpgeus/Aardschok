@@ -36,6 +36,15 @@
   // naam, kop en `speelt` (dat alleen gevraagd wordt als het eerste niveau speelt). `helpt` zegt wat helpt, voor het
   // kaartje in de balk (js/hud.js).
   T.OORZAKEN = {
+    // Een gevecht (js/gevecht.js; werklijst vraag 170, stap 2): zolang er gevochten wordt, loopt de tijd hooguit op 1×.
+    gevecht: {
+      naam: T.t('Fighting'),
+      kop: T.t('There is fighting'),
+      nog: T.t('There is still fighting'),
+      voorbij: T.t('The fighting is over'),
+      speelt: (D) => (D.gevecht ? '' : null),
+      helpt: () => T.t('your soldiers: choose them, and right-click an enemy'),
+    },
     honger: {
       naam: T.t('Hunger'),
       kop: T.t('There is hunger'),

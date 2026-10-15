@@ -122,7 +122,7 @@
   // voeten glijden bij geen enkele snelheid.
   T.SCHOUT_SNELHEID = 2.2;
 
-  // leven: levenspunten; wie op nul komt, valt. ap: actiepunten per beurt. snelheid: tegels per
+  // leven: levenspunten; wie op nul komt, valt. snelheid: tegels per
   // seconde tijdens het rondlopen. zicht: vanaf hoe ver een monster je opmerkt. aanval.schade:
   // wat een klap kost aan levenspunten. Namen staan met een kleine letter, omdat ze bijna altijd
   // midden in een zin staan.
@@ -134,17 +134,17 @@
   // Zijn kant heet 'speler' en niet 'schout' (Marcel, 26 sep): soort en kant zijn twee dingen, en
   // een man van de militie (punt 13) vecht straks aan jouw kant zonder de schout te zijn.
   const WEZENS = {
-    schout: { naam: T.t('you'), kant: 'speler', leven: 20, ap: 8, initiatief: 10, snelheid: T.SCHOUT_SNELHEID },
+    schout: { naam: T.t('you'), kant: 'speler', leven: 20, snelheid: T.SCHOUT_SNELHEID },
     // De mensen van het dorp staan niet hier maar in js/mensen.js: wie ze zijn, hoe ze heten, hoe
     // snel ze lopen en welk vel ze krijgen. Deze tabel gaat over wat een wezen ís — wat vecht,
     // wat in code wordt neergezet — en een dorpeling is dat niet. Zie
     // ontwerp/wereld.md, "Wie is wie, als het er honderd worden".
     slijm: {
-      naam: T.t('slime crawler'), kant: 'monster', leven: 10, ap: 4, initiatief: 4, snelheid: 1.4, zicht: 5, dwaalt: true,
+      naam: T.t('slime crawler'), kant: 'monster', leven: 10, snelheid: 1.4, zicht: 5, dwaalt: true,
       aanval: { kosten: 3, schade: [2, 3], zin: T.t('bites {doel}') },
     },
     skelet: {
-      naam: T.t('skeleton guard'), kant: 'monster', leven: 18, ap: 6, initiatief: 6, snelheid: 2.2, zicht: 5, dwaalt: false,
+      naam: T.t('skeleton guard'), kant: 'monster', leven: 18, snelheid: 2.2, zicht: 5, dwaalt: false,
       aanval: { kosten: 3, schade: [3, 5], zin: T.t('hits {doel} with his sword') },
     },
     // Buiten, in het bos. Hij loopt harder dan de schout en ziet verder dan wat er
@@ -152,7 +152,7 @@
     // slijmkruiper in een kelder. Sluipen (T.SLUIP_ZICHT) scheelt dan twee tegels, en dat is
     // precies genoeg om hem te ontlopen als je hem op tijd ziet.
     wolf: {
-      naam: T.t('wolf'), kant: 'monster', leven: 12, ap: 6, initiatief: 8, snelheid: 2.6, zicht: 6, dwaalt: true,
+      naam: T.t('wolf'), kant: 'monster', leven: 12, snelheid: 2.6, zicht: 6, dwaalt: true,
       aanval: { kosten: 3, schade: [2, 4], zin: T.t('bites {doel}') },
     },
     // Dieper het bos in. De sleutel is hier de naam: js/sprites.js zoekt het figuur op de soort
@@ -163,27 +163,27 @@
     // De spin is traag maar taai en bijt gif: wie haar ziet aankomen, loopt om. De kobold loopt
     // bijna zo hard als een wolf en steekt met een speer, dus hij is juist niet te ontlopen.
     reuzenspin: {
-      naam: T.t('giant spider'), kant: 'monster', leven: 14, ap: 5, initiatief: 5, snelheid: 2.0, zicht: 6, dwaalt: true,
+      naam: T.t('giant spider'), kant: 'monster', leven: 14, snelheid: 2.0, zicht: 6, dwaalt: true,
       aanval: { kosten: 3, schade: [3, 4], zin: T.t('bites {doel} with her fangs') },
     },
     kobold: {
-      naam: T.t('kobold'), kant: 'monster', leven: 16, ap: 6, initiatief: 7, snelheid: 2.4, zicht: 6, dwaalt: true,
+      naam: T.t('kobold'), kant: 'monster', leven: 16, snelheid: 2.4, zicht: 6, dwaalt: true,
       aanval: { kosten: 3, schade: [2, 4], zin: T.t('stabs {doel} with his spear') },
     },
     // De rovers (js/rovers.js; werklijst vraag 55, 29 sep): wie wegtrok, of wilde rovers van buiten. Ze dwalen niet
     // maar lopen waar hun aanval ze heen stuurt, en dragen het vel van gewone mensen (e.vel, zie S.houding in
     // js/sprites.js): er hoeft niets voor getekend te worden.
     rover: {
-      naam: T.t('robber'), kant: 'monster', leven: 12, ap: 6, initiatief: 6, snelheid: 2.2, zicht: 6, dwaalt: false, vel: 'boer',
+      naam: T.t('robber'), kant: 'monster', leven: 12, snelheid: 2.2, zicht: 6, dwaalt: false, vel: 'boer',
       aanval: { kosten: 3, schade: [2, 4], zin: T.t('hits {doel} with a club') },
     },
     // Een soldaat van het wachthuis (js/soldaten.js; vraag 159): wat hij kan als hij bij een aanval naast de schout vecht
     // (js/rovers.js). Hij is een bewoner met zijn eigen poppetje; dit is alleen zijn leven en zijn punten, en hoe hij slaat
     // zegt zijn wapen (T.slagVan).
-    soldaat: { naam: T.t('soldier'), kant: 'speler', leven: 16, ap: 8, initiatief: 8, snelheid: 2.4, vel: 'boer' },
+    soldaat: { naam: T.t('soldier'), kant: 'speler', leven: 16, snelheid: 2.4, vel: 'boer' },
     // Wie van de heervaart terugkwam (js/heervaart.js; Marcel, 29 sep, vraag 60, B): hij heeft leren vechten. Hij
     // vecht mee als er rovers komen, ook zonder wachthuis, en houdt meer klappen uit dan een soldaat.
-    veteraan: { naam: T.t('veteran'), kant: 'speler', leven: 20, ap: 8, initiatief: 8, snelheid: 2.4, vel: 'boer' },
+    veteraan: { naam: T.t('veteran'), kant: 'speler', leven: 20, snelheid: 2.4, vel: 'boer' },
   };
 
   const sleutelVan = (x, y) => x + ',' + y;
@@ -265,9 +265,8 @@
     const s = WEZENS[soort];
     return {
       soort, naam: s.naam, kant: s.kant,
-      x, y, tx: x, ty: y, pad: [], onderweg: false, opKlaar: null,
-      leven: s.leven, maxLeven: s.leven, ap: s.ap, maxAp: s.ap,
-      initiatief: s.initiatief, snelheid: s.snelheid, zicht: s.zicht || 0,
+      x, y, tx: x, ty: y, pad: [], onderweg: false,
+      leven: s.leven, maxLeven: s.leven, snelheid: s.snelheid, zicht: s.zicht || 0,
       // Waar hij hoort en hoe ver hij daarvandaan dwaalt. Zonder thuis blijft hij in zijn eigen
       // kamer; dat werkt binnen, maar buiten is de hele kaart één kamer (zie T.laatDwalen).
       dwaalt: !!s.dwaalt, thuis: s.straal ? { x, y } : null, straal: s.straal || 0,
@@ -1091,7 +1090,7 @@
   T.zichtTussen = (w, a, b, open) => (T.zicht(w, a, b, open) || T.zicht(w, b, a, open)) && !(w.hoogte && T.heuvelTussen(w, a, b));
 
   // Ziet wie op `van` staat de tegel `naar`, als hij `ver` tegels ver kijkt? Hemelsbreed (een cirkel,
-  // geen vierkant) en met niets ertussen. Een monster kijkt nog in een vierkant (T.zoekOntdekking, js/verkennen.js). Wie hoger staat, ziet verder
+  // geen vierkant) en met niets ertussen. In het gevecht kijkt wie vecht nog in een vierkant (js/gevecht.js). Wie hoger staat, ziet verder
   // (T.verderVanBoven, js/hoogte.js; vraag 121, stap 2).
   T.zietTegel = function (w, van, naar, ver, open) {
     const dx = naar.x - van.x;

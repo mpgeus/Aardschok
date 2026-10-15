@@ -20,10 +20,8 @@
   // maar leeg: er wordt hier niet gespeeld, alleen gekeken. T.S, zodat je er in de console bij kunt.
   const S = (T.S = {
     tijd: 0, wind: 0, zoom: 1, camera: { x: 0, y: 0 },
-    wereld: null, schout: null, modus: 'verkennen', gevecht: null, overgang: null,
-    bezig: false, bereik: null, handeling: null, hover: null,
-    effecten: [], wachters: [], grond: null, doorkijkTijd: 0,
-    rasterAlpha: 0, rasterTegels: [], rasterStart: 0, rasterVan: null,
+    wereld: null, schout: null, modus: 'verkennen', handeling: null, hover: null,
+    effecten: [], grond: null, doorkijkTijd: 0, gevechtGloed: 0,
     inventaris: new Set(), vlaggen: new Set(), bezocht: new Set(),
     quests: {}, questWeg: {}, questBeloond: new Set(),
     goud: 0, goudGehad: false, sluipen: false, fonteinLeeg: false, spreektMet: null,

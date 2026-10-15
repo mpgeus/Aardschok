@@ -78,15 +78,10 @@
     hover: null, // wat onder de muis is, en wat een klik daar zou doen
     bouwHover: null,
     veldHoek: null, // de eerste hoek van een veld dat je trekt (js/main.js, js/boerderij.js)
-    handeling: null, // wat links zou doen (js/verkennen.js, of js/gevecht.js)
+    handeling: null, // wat links zou doen (js/verkennen.js)
     sturen: null, // wat rechts zou doen met je gekozen mannen (js/kiezen.js)
-    effecten: [], // wat nu beweegt: een flits, zwevende tekst
-    wachters: [], // een beurt die op een beweging wacht (js/anim.js)
-    rasterAlpha: 0, // het raster van een gevecht, dat in- en uitfaadt
-    rasterTegels: [],
-    rasterStart: 0,
-    rasterVan: null,
-    bereik: null,
+    effecten: [], // wat nu beweegt: zwevende tekst, een pijl (js/anim.js)
+    gevechtGloed: 0, // de rode rand van het beeld in een gevecht, die in- en uitfaadt (js/main.js, js/tekenen.js)
     bouwSoort: null, // het bouwmenu (js/hud.js)
     bouwMenuOpen: false,
     naLopen: null, // wat er gebeurt als de schout er is, zoals een venster dat opengaat
@@ -337,9 +332,10 @@
     // Een proefje (?kaart=, js/main.js) is geen spel: het mag het spel van de speler niet overschrijven.
     if (S.proefje) return T.t('A try-out is not saved.');
     if (S.dorp.einde || S.modus === 'einde') return T.t('The game is over.');
-    if (S.gevecht || S.overgang || S.modus === 'gevecht' || S.modus === 'overgang') return T.t('You cannot save during a fight.');
     if (S.modus !== 'verkennen' || (S.kalender.stil || []).some((r) => r !== 'menu')) return T.t('Close the window first.');
-    if ((S.wachters && S.wachters.length) || S.naarGebied) return T.t('Wait a moment: something is still moving.');
+    // Een gevecht (js/gevecht.js) mag: het staat helemaal in S, in de tik (werklijst vraag 170, stap 2). Tot 15 okt kon het
+    // niet, want een gevecht in beurten wachtte op een beweging op het scherm.
+    if (S.naarGebied) return T.t('Wait a moment: something is still moving.');
     return null;
   };
 

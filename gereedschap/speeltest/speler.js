@@ -232,26 +232,28 @@
     vecht();
   }
 
-  // Een gevecht (rovers, js/rovers.js; werklijst vraag 55): wie van jouw kant aan de beurt is, slaat de rover die
-  // hij kan halen; anders loopt hij er zo ver heen als zijn punten reiken; en kan hij niets, dan eindigt hij zijn
-  // beurt. Zo verdedigt elke speler zijn dorp, met de schout en de mannen van het wachthuis. Het gaat, zoals een
-  // speler, via dezelfde vraag als de klik (T.handelingGevecht, js/gevecht.js).
+  // Een gevecht (rovers, js/rovers.js; het gevecht in real time, js/gevecht.js; werklijst vraag 170, stap 2): er komt
+  // niemand vanzelf, dus zoals een speler stuurt hij zijn soldaten op de vijand af die het dichtst bij het wachthuis staat
+  // (rechts op een vijand, T.handelingSturen in js/kiezen.js; alleen wie nog niets volgt), en roept hij ze terug als er
+  // geen vijand meer is. De held laat hij thuis: valt hij, dan is het spel uit.
   function vecht() {
     const s = S();
-    if (s.modus !== 'gevecht' || s.bezig || !T.spelerAanDeBeurt(s)) return;
-    const v = T.aanDeBeurt(s);
-    const bij = (m) => T.afstand(T.tegelVan(m), T.tegelVan(v));
-    const vijanden = s.gevecht.monsters.filter((m) => !m.dood).sort((a, b) => bij(a) - bij(b));
-    for (const m of vijanden) {
-      const h = T.handelingGevecht(s, { wezen: m, x: m.tx, y: m.ty });
-      if (h && h.doe && h.kan !== false) return h.doe();
-      if (h && h.pad && h.pad.length && v.ap > 0) {
-        const t = h.pad[Math.min(v.ap, h.pad.length) - 1];
-        const lopen = T.handelingGevecht(s, { x: t.x, y: t.y });
-        if (lopen && lopen.doe && lopen.kan !== false) return lopen.doe();
-      }
+    if (s.modus !== 'verkennen') return;
+    const D = s.dorp;
+    const mannen = T.mannenVan(D).filter((e) => e !== D.schout && !e.binnen);
+    if (!mannen.length) return;
+    const vijanden = D.wereld.wezens.filter(T.isVijandig);
+    if (!vijanden.length) {
+      const terug = mannen.filter((e) => e.post || e.volgt);
+      if (terug.length) T.geefOpdracht(s, { soort: 'terug', wie: T.nummersVan(D, terug) });
+      return;
     }
-    T.eindeBeurt(s);
+    const vrij = mannen.filter((e) => !e.volgt);
+    if (!vrij.length) return;
+    const bij = T.tegelVan(vrij[0]);
+    const m = vijanden.sort((a, b) => T.afstand(T.tegelVan(a), bij) - T.afstand(T.tegelVan(b), bij))[0];
+    const r = T.handelingSturen(s, { wezen: m, x: m.tx, y: m.ty }, vrij);
+    if (r && r.kan && r.doe) r.doe();
   }
 
   // ── Lopen en klikken ────────────────────────────────────────────────────────────────────────────
@@ -263,8 +265,7 @@
     const tot = dagNu() + maxUren / 24;
     let klaar = false;
     for (let poging = 0; poging < 8 && !klaar; poging++) {
-      // Midden in een gevecht (rovers) klikt een speler niet om ergens heen te lopen: de muis doet dan alleen het
-      // gevecht (js/main.js). Eerst het gevecht uit, dat vecht() hierboven voert.
+      // Staat er iets open (een venster, een gesprek), dan eerst dat uit.
       if (S().modus !== 'verkennen') await wachtTot(() => S().modus === 'verkennen', 24);
       if (S().modus !== 'verkennen') return false;
       const h = T.handelingVerkennen(S(), doel);
@@ -749,8 +750,8 @@
       // De rovers (js/rovers.js): hoe vaak ze kwamen, hoe vaak ze verslagen werden, en wat ze meenamen.
       rovers: {
         kwamen: boek.berichten.filter((b) => /^Robbers are coming\./.test(b.tekst)).length,
-        verslagen: boek.berichten.filter((b) => b.tekst === 'De rovers zijn verslagen.').length,
-        roofden: boek.berichten.filter((b) => /gaan ervandoor/.test(b.tekst)).map((b) => `${b.datum}: ${b.tekst}`),
+        verslagen: boek.berichten.filter((b) => b.tekst === 'The robbers are defeated.').length,
+        roofden: boek.berichten.filter((b) => /^The robbers make off/.test(b.tekst)).map((b) => `${b.datum}: ${b.tekst}`),
         gesneuveld: boek.bevolking.filter((b) => b.reden === 'gesneuveld').length,
       },
       akkertegels: tegels, ongezaaid,

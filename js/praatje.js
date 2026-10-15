@@ -63,7 +63,7 @@
   T.kanPraten = function (S, D, e, deel) {
     if (e.dood || e.binnen || e.dier || e.beest || e.maait || e.werkt || e.opgeroepen || e.zoektSchout || e.moetNaar || e.vertrekt) return false;
     if (e === S.schout || e === D.schout || e === S.spreektMet || e.kant === 'monster') return false;
-    if (S.gevecht && D.wereld === S.wereld) return false;
+    if (D.gevecht) return false; // niet midden in een gevecht (js/gevecht.js)
     if (deel === 'nacht') return false;
     const p = T.bewonerVan(D, e);
     if (!p || p.schout || p.komt || p.weg || p.leeftijd === 'kleuter') return false;

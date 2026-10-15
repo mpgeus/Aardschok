@@ -234,6 +234,8 @@
     if (!p && !e.werkAkkers) return null;
     // Wie rovers op de weg aanhouden (de bode, js/bode.js, en de hinderlaag in js/rovers.js), staat stil.
     if (e.aangehouden) return { x: e.aangehouden.x, y: e.aangehouden.y, straal: 0 };
+    // Wie voor rovers vlucht, zit in het town hall tot het rustig is (js/gevecht.js; vraag 170, stap 2).
+    if (p && p.schuilt) return { x: p.schuilt.x, y: p.schuilt.y, straal: 0, binnen: true };
     const deel = T.dagdeelVan(D.kalender.dag, oogst);
     // Wie geen huis heeft (js/afbreken.js, T.wordtDakloos), slaapt buiten op het plein en hangt er 's ochtends en 's avonds
     // rond; overdag werkt hij zoals iedereen.

@@ -225,14 +225,17 @@ test('wanneer er opgeslagen mag worden: alleen als er niets openstaat of halverw
   T.laatTijdGaan(S, 'brief');
   S.modus = 'handel';
   assert.match(T.waaromNietOpslaan(S), /window/);
-  S.modus = 'gevecht';
-  assert.match(T.waaromNietOpslaan(S), /fight/);
+  // Midden in een gevecht mag het (js/gevecht.js, vraag 170, stap 2): het staat helemaal in S.
+  S.modus = 'verkennen';
+  S.dorp.gevecht = { sinds: 0, laatst: 0, plek: { x: 0, y: 0 } };
+  assert.equal(T.waaromNietOpslaan(S), null);
+  S.dorp.gevecht = null;
   S.modus = 'einde';
   assert.match(T.waaromNietOpslaan(S), /over/);
   S.modus = 'verkennen';
-  S.wachters.push({});
+  S.naarGebied = 'proefbos';
   assert.match(T.waaromNietOpslaan(S), /moving/);
-  S.wachters.length = 0;
+  S.naarGebied = null;
   S.proefje = true;
   assert.match(T.waaromNietOpslaan(S), /try-out/, 'een proefje (?kaart=) overschrijft het spel van de speler niet');
 });

@@ -589,6 +589,7 @@
     { naam: T.t('The laws'), blok: 'WETTEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The robbers'), blok: 'ROVERS_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Soldiers'), blok: 'SOLDATEN_INSTELLINGEN' }, // geen tekst
+    { naam: T.t('Fighting'), blok: 'GEVECHT_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Choosing and sending'), blok: 'KIEZEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Advice'), blok: 'RAAD_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The inn'), blok: 'HERBERG_INSTELLINGEN' }, // geen tekst
@@ -871,6 +872,13 @@
     vijandBij: T.t('an enemy is found within tiles'),
     zoekPerTik: T.t('pursuers finding a way per tick'),
     briefjeRegels: T.t('men named on the note'),
+    // het gevecht in real time (js/gevecht.js)
+    secondenPerPunt: T.t('seconds per point of a blow'),
+    leiband: T.t('pursued up to tiles from the post'),
+    kijkElke: T.t('looks around every seconds'),
+    rustNaLoslaten: T.t('waits after letting go, seconds'),
+    rustNa: T.t('fight over after quiet seconds'),
+    vluchtZicht: T.t('flees from a robber within tiles'),
     // De brand, de koorts, ouder worden
     blusUren: T.t('extinguishing hours'),
     redKans: T.t('chance of saving the house'),
@@ -1031,7 +1039,6 @@
     opUren: T.t('give up after hours'),
     graanPerRover: T.t('grain per robber'),
     kansAkkerKapot: T.t('chance a field is ruined'),
-    militieBij: T.t('militia within'),
     mensenPerVisser: T.t('people per fisherman'),
     waterPerVisser: T.t('water per fisherman'),
     visEnVleesMarge: T.t('fish and meat margin'),
@@ -1439,6 +1446,8 @@
     'BRAND_INSTELLINGEN.uur': T.t('a fire starts between the hours'), // geen tekst
     'LICHT_INSTELLINGEN.kracht': T.t('lamp power'), // geen tekst
     'MIST_INSTELLINGEN.zicht': T.t('how far they see'), // geen tekst
+    'GEVECHT_INSTELLINGEN.zicht': T.t('your men see an enemy within'), // geen tekst
+    'GEVECHT_INSTELLINGEN.leven': T.t('life of a villager'), // geen tekst
     'MIST_INSTELLINGEN.zicht.dorpeling': T.t('villager'), // geen tekst
     'MIST_INSTELLINGEN.zicht.gebouw': T.t('building, from its edge'), // geen tekst
     'MIST_INSTELLINGEN.beginKring': T.t('known at the start, within'), // geen tekst

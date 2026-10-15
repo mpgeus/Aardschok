@@ -147,7 +147,7 @@
   function volgDeKar(S, D) {
     const B = D.begin;
     const h = D.schout;
-    if (!B.volgt || !h || T.schoutIsWeg(D) || S.gevecht || S.modus !== 'verkennen') return;
+    if (!B.volgt || !h || T.schoutIsWeg(D) || S.modus !== 'verkennen') return;
     if (h.pad.length && !(h.padDoel && h.padDoel.metDeKar)) {
       B.volgt = false;
       return;
@@ -250,7 +250,7 @@
     huis.huis = 'schout';
     Object.assign(D.begin.kar, { naam: T.t('ox cart'), vel: 'ossenkar-leeg' });
     T.zetKarVel(D.begin.kar);
-    T.zeg(D, T.t('Your house is ready: you and your family leave the tent, and the covered wagon becomes the ox cart.'));
+    T.zeg(D, T.t('The town hall is ready: you and your family leave the tent, and the covered wagon becomes the ox cart.'));
     if (!inHuis(D, tent).length) haalTentWeg(D, tent);
   }
 
