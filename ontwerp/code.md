@@ -1372,12 +1372,11 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 ### js/wetten.js en js/wettenmenu.js: de wetten
 
 - `js/wetten.js`: **de wetten** (stap 3 van de proef, vraag 54, 29 sep; eerst keuren genoemd): een menu zoals in
-  Democracy 3 (`js/wettenmenu.js`, onder `W` en als knop in de balk), met het rantsoen, vreemden welkom, houtkap in
-  het bos van de heer en de belasting. Wat een wet doet, staat als getallen per stand in één blok
+  Democracy 3 (`js/wettenmenu.js`, onder `W` en als knop in de balk), met het rantsoen en de belasting (sinds 15 okt,
+  ronde 3 van het snoeien; vreemden welkom en houtkap in het bos van de heer zijn weg). Wat een wet doet, staat als getallen per stand in één blok
   (`T.WETTEN_INSTELLINGEN`, in de werkbank); de regels vragen het aan `T.wetFactor` en `T.wetSom`: wat een mens eet
-  (`T.etenPerMens` in `js/behoeften.js`, één plek voor het rantsoen), de tevredenheid (`T.wettenTevredenheid`), om de
-  hoeveel dagen een gezin kan komen (`T.gezinDagen`) en wat een houthakker hakt (`T.maaktUit`, met `bos` op het
-  gebouw) in `js/gebouwen.js`, en de boete voor de houtkap op de rekening van de heer (`T.houtkapBoete`). Wat een
+  (`T.etenPerMens` in `js/behoeften.js`, één plek voor het rantsoen), de tevredenheid (`T.wettenTevredenheid`) en de belasting
+  (`T.tikWettenDag`). Wat een
   kaart in het menu zegt, komt uit dezelfde getallen (`T.watDeWetDoet`). Wat je aannam, staat in `D.wetten`; zonder
   staat elke wet op zijn standaard, en speelt het spel zoals ervoor. De standen (`'krap'`, `'aangenomen'`) zijn namen
   waar de regels op letten; wat de speler van een stand ziet, staat in `T.WETTEN[id].toon` (vraag 147: *short, normal,

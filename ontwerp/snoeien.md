@@ -285,7 +285,9 @@ niet). Twee agents brachten in kaart wat elk systeem doet en wat eraan hangt; wa
    `T.werkVanAfwisseling`, net als het bouwen en het veldwerk al deden (de tevredenheid woog alleen in de werkplaatsen).
    Erbij, omdat het anders scheef ging: **een leeg bord telt als één soort** (60%). Tot nu toe trok de tevredenheid een
    dorp zonder eten omlaag; zonder haar werkte zo'n dorp op 100%.
-5. **De wetten:** rantsoen en belasting.
+5. **De wetten:** rantsoen en belasting. **Af** (15 okt): vreemden welkom en houtkap in het bos van de heer zijn weg,
+   met de boete op de rekening van de heer en het meer hakken (`T.maaktUit` geeft nu gewoon wat een gebouw maakt). Dat
+   een klik in het wettenmenu een opdracht wordt en het venster de tijd niet stilzet, komt in stap 6 van vraag 170.
 6. **De wensen en de groei**, als Marcel gekozen heeft.
 
 ## Later

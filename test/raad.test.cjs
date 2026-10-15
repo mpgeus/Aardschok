@@ -74,10 +74,6 @@ test('niets houdt de groei tegen: wanneer het volgende gezin komt, zoals de groe
   assert.equal(raad(S).tekst, `The next family arrives in ${n} days.`);
   opDag(S, n - 0.5);
   assert.equal(raad(S).tekst, 'The next family arrives tomorrow.');
-  // Met Vreemden welkom vaker: de raad telt met de groei mee (T.volgendeGezinDag).
-  opDag(S, 1.5);
-  T.zetWet(S.dorp, 'vreemden', 'aangenomen');
-  assert.equal(raad(S).tekst, `The next family arrives in ${T.gezinDagen(S.dorp) - 1} days.`);
 }));
 
 test('geen gezin: het dorp is vol, niet tevreden genoeg, of er ligt te weinig graan; vol weegt het zwaarst', () => {

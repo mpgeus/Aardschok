@@ -1506,8 +1506,7 @@
       };
     },
     // De wetten (js/wetten.js): per wet de stand, en wat hij dan doet. Spel.debug.wetten('rantsoen', 'krap')
-    // zet er eerst een, zoals het menu (W) dat doet; de boete voor de houtkap en wat de belasting nog meeneemt,
-    // staan erbij.
+    // zet er eerst een, zoals het menu (W) dat doet; wat de belasting nog meeneemt, staat erbij.
     wetten(id, stand) {
       if (id) {
         const r = T.zetWet(S.dorp, id, stand);
@@ -1517,7 +1516,7 @@
         const s = T.standVanWet(S.dorp, w);
         return { wet: w, stand: s, doet: T.watDeWetDoet(S.dorp, w, s).map((r) => (r.goed ? '+ ' : '− ') + r.tekst).join(' · ') };
       });
-      return { wetten: lijst, boete: T.houtkapBoete(S.dorp), belastingRest: S.dorp.wetten ? S.dorp.wetten.belastingRest : 0 };
+      return { wetten: lijst, belastingRest: S.dorp.wetten ? S.dorp.wetten.belastingRest : 0 };
     },
     // De wensen per huis (js/wensen.js): per huis met mensen zijn stand, wie er woont, hoe tevreden het is, en wat het
     // wil, met ✓ of ✗ (een goed dat maar deels gedekt is, met hoeveel), en hoe het met doorgroeien staat (werklijst vraag

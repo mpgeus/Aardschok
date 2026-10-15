@@ -43,7 +43,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Dorpsfeesten | weg (15 okt, ronde 3 van het snoeien): het oogstfeest, een vrije dag en het dorp op het plein; de meiboom en de kerstboom bleven als versiering op het plein, zonder feest; meer feesten en een grote bruiloft later | vraag 84, 97 |
 | Besloten | het spel zelf (23 sep); geldt nog | |
 | Hoe het zou kunnen spelen | voorstel; de kern ervan werd de richting | 8 tot 16 |
-| De wetten (in "Keuren en politiek") | gebouwd (29 sep): een menu zoals Democracy 3 onder W, met rantsoen, vreemden welkom, houtkap en belasting | vraag 54 |
+| De wetten (in "Keuren en politiek") | gebouwd (29 sep): een menu zoals Democracy 3 onder W, met rantsoen en belasting (vreemden welkom en houtkap weg sinds 15 okt, ronde 3 van het snoeien) | vraag 54 |
 | Het eerste proefje | gebouwd (23 sep); de kaart sinds 26 sep rond het plein (vierde versie) | 1 |
 | De kern voor het tweede proefje | voorstel; de heer en de inner kwamen anders, groepen en keuren wachten | 9 |
 | Rijk worden en arm lijken | eruit (11 okt, optie 1) | 4, 6, vraag 151 |
@@ -1457,17 +1457,14 @@ kunt aannemen etc. Maak het niet te ingewikkeld", en op het plan: "A ja B ja, C 
   knop per stand. Een wet geldt meteen, ook in de balk, en aannemen kost niets: zijn nadeel is de prijs. Een wet die
   niet op zijn standaard staat, krijgt een gouden streep. Zolang het menu open is, staat de tijd stil. Bovenin staat
   hoe tevreden het dorp is, en dat er vanaf 55% nieuwe gezinnen komen.
-- **Vier wetten in het gehucht,** met de getallen in de werkbank (`T.WETTEN_INSTELLINGEN`):
+- **Twee wetten in het gehucht,** zoals in Stronghold (sinds 15 okt; Marcel, ronde 3 van het snoeien: "Rantsoen en
+  belasting"; vreemden welkom en houtkap in het bos van de heer zijn weg), met de getallen in de werkbank
+  (`T.WETTEN_INSTELLINGEN`):
   - *Rantsoen* (krap, gewoon, ruim): krap is driekwart eten en 15% minder tevreden, ruim anderhalf keer zoveel eten
     en 10% tevredener.
-  - *Vreemden welkom:* om de 10 dagen kan er een gezin komen in plaats van om de 20, en het dorp is 5% minder
-    tevreden.
-  - *Houtkap in het bos van de heer:* een houthakker hakt twee keer zoveel (het bericht over de winter rekent ermee),
-    en heeft hij dat jaar in het bos van de heer gehakt, dan rekent de heer op Sint-Maarten 5 goud boete, ook als de
-    wet intussen weer is afgeschaft. Zonder houthakker kost de wet niets.
   - *Belasting:* op de eerste van de maand 0,05 goud per mens in de kist (26 mensen: 1, 1, 1 en dan 2 goud; wat geen
     heel goud is, gaat mee), en het dorp is 10% minder tevreden.
-- **Bij de tevredenheid** in de balk zegt het dorp waar het last van heeft ("het krappe rantsoen", "de vreemden",
+- **Bij de tevredenheid** in de balk zegt het dorp waar het last van heeft ("het krappe rantsoen",
   "de belasting") en waar het blij mee is ("het ruime rantsoen").
 - **Wetten horen bij een trede,** zoals de gebouwen in het bouwmenu: het menu toont de wetten van deze trede en de
   treden ervoor. Alle vier zijn van het gehucht; het dorp krijgt er later meer bij.
@@ -3460,7 +3457,7 @@ achter een dak; nu is het de rand van een echt stuk bos, waar je de boer ziet.
 
 **Zo werkt het nu** (6 okt, de sessie van de heer; stap 3 van vraag 110, e, met 115; `js/bos.js`; Marcel: "De houthakker
 hakt bomen om uiteindelijk en plant nieuwe boompjes terug", en "A ja B ja C ja D zo"): de houthakker maakt evenveel hout
-als altijd, 2 per dag (4 met de wet Houtkap), maar het komt uit een boom. Hij hakt aan de boom binnen tien tegels van
+als altijd, 2 per dag, maar het komt uit een boom. Hij hakt aan de boom binnen tien tegels van
 zijn schuur die het dichtst bij zijn deur staat, en elke tien hout is die om: er blijft een stronk staan, die na een
 jaar vergaan is en waar je tussendoor loopt, zoals in een kapvlakte, zodat hij bij de bomen erachter komt (een stronk
 die de maker legde, staat wel in de weg; `opmerkingen.md`), en stond de boom in het bos (minstens vier bomen in de vijf
@@ -3469,7 +3466,7 @@ bos), dan plant hij er twee boompjes naast (vraag 129, f), nooit op een veld, ee
 deur. Een boompje is na een half jaar tot een jaar een jonge boom, en na nog eens zo lang een boom van dezelfde soort
 (een wilg of een dode boom wordt een eik): in een jaar of twee. Zo wordt het bos om de schuur eerst dunner, met
 stronken, boompjes en jonge bomen, en daarna jonger en dichter dan het was: in het vierde jaar hakt hij weer bijna het
-hele jaar. Met de wet Houtkap of een tweede houthakker gaat het harder. Staat er binnen tien tegels geen boom meer, dan
+hele jaar. Met een tweede houthakker gaat het harder. Staat er binnen tien tegels geen boom meer, dan
 staat hij stil: het dorp zegt het de eerste dag, de raad zolang het duurt ("De houthakker staat stil: er staat geen boom
 meer binnen tien tegels van zijn schuur, tot zijn boompjes bomen zijn. Zijn hand werkt zolang ergens anders."), en zijn
 hand werkt elders. Een nieuwe houthakker vraagt het dorp pas als het hout de winter niet haalt, niet omdat hij stilstaat

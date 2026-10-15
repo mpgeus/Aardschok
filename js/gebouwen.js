@@ -197,7 +197,7 @@
     },
     houthakker: {
       naam: T.t('woodcutter'), trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 10, goud: 4 }, heer: { hout: 20 }, bouwtijd: 3,
-      // bos: hij hakt in het bos van de heer, dus de wet Houtkap laat hem meer hakken (js/wetten.js, T.maaktUit).
+      // bos: hij hakt bomen in het bos (js/bos.js).
       handen: 1, woonruimte: 0, maakt: { uit: { hout: 2 } }, bos: true, menu: true,
       // Bij genoeg bos voor een tijd werk (werklijst vraag 129, b; Marcel, 6 okt: "Eens"): zijn bereik is tien tegels
       // (T.BOS_INSTELLINGEN.hakStraal, js/bos.js), en hij hakt 73 bomen per jaar. Tot dan 8 bomen binnen 7 tegels: dan stond
@@ -1320,9 +1320,9 @@
   // Is er plaats voor een gezin: een huis met plaats?
   T.plaatsVoorEenGezin = (D) => (D.bevolking || 0) < T.telWoonruimte(D);
 
-  // Om de hoeveel dagen er een nieuw gezin kan komen: gezinDagen, en met de wet Vreemden welkom vaker
-  // (js/wetten.js).
-  T.gezinDagen = (D) => Math.max(1, Math.round(T.GEBOUWEN_INSTELLINGEN.gezinDagen / T.wetFactor(D, 'gezinnen')));
+  // Om de hoeveel dagen er een nieuw gezin kan komen (tot 15 okt met de wet Vreemden welkom vaker; ronde 3 van het
+  // snoeien).
+  T.gezinDagen = () => T.GEBOUWEN_INSTELLINGEN.gezinDagen;
 
   // De eerstvolgende dag waarop er een gezin kan komen (T.tikGebouwenDag, stap 4): na vandaag, want die dag is al
   // geteld.
@@ -1346,17 +1346,9 @@
     return waarom;
   };
 
-  // Wat een gebouw per dag maakt als het helemaal bezet is (T.GEBOUWEN[x].maakt.uit), met wat de wetten erbij
-  // doen: wie in het bos van de heer hakt (bos), hakt met de wet Houtkap meer (js/wetten.js). Of null.
-  T.maaktUit = function (D, soort) {
-    const uit = soort.maakt && soort.maakt.uit;
-    if (!uit || !soort.bos) return uit || null;
-    const f = T.wetFactor(D, 'hout');
-    if (f === 1) return uit;
-    const r = {};
-    for (const wat in uit) r[wat] = uit[wat] * f;
-    return r;
-  };
+  // Wat een gebouw per dag maakt als het helemaal bezet is (T.GEBOUWEN[x].maakt.uit), of null. (Tot 15 okt hakte een
+  // houthakker met de wet Houtkap meer; ronde 3 van het snoeien.)
+  T.maaktUit = (D, soort) => (soort.maakt && soort.maakt.uit) || null;
 
   // Tot hoeveel een gebouw maakt van wat het maakt: { wat: zoveel }, of null als het doormaakt. Wie iets omzet (maakt.in),
   // maakt tot er genoeg ligt (T.GEBOUWEN_INSTELLINGEN.werkplaatsMaaktTot; vraag 91, b); wie iets uit het land haalt,
@@ -1511,8 +1503,7 @@
     // (js/behoeften.js, T.BEHOEFTEN_INSTELLINGEN.groeiDrempel), en het de winter haalt als die in zicht
     // is (gezinWachtOpDeWinter); dat zegt T.waaromGeenGezin hierboven. Zonder D.behoeften (nog geen
     // dag getikt) blokkeert de tevredenheid niets. Het komt in een
-    // huis met plaats, of zegt dat er geen plaats is. Met de wet Vreemden welkom kan dat vaker
-    // (T.gezinDagen hierboven). Zolang er een gezin in het kamp van het lege begin woont, komt er niemand (js/begin.js).
+    // huis met plaats, of zegt dat er geen plaats is (T.gezinDagen hierboven). Zolang er een gezin in het kamp van het lege begin woont, komt er niemand (js/begin.js).
     if (dag > 0 && dag % T.gezinDagen(D) === 0) {
       const waarom = T.waaromGeenGezin(D, dag);
       if (!['graan', 'tevreden', 'winter', 'kamp'].some((w) => waarom.includes(w))) T.gezinKomt(D);

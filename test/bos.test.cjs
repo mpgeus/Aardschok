@@ -194,23 +194,6 @@ test('een stronk staat niet in de weg: wie een boom omhakte, loopt verder het bo
   assert.equal(stil, 0, 'nooit stil met bomen binnen bereik');
 }));
 
-test('met de wet Houtkap hakt hij twee keer zo hard, en gaan er twee keer zoveel bomen om', () => {
-  const telBomen = (houtkap) => zo(() => {
-    const S = dorp();
-    const D = S.dorp;
-    const g = metHouthakker(S);
-    if (houtkap) T.zetWet(D, 'houtkap', 'aangenomen');
-    const voor = bomenBij(D, g).length;
-    const begin = volgende(S);
-    for (let dag = begin; dag < begin + 30; dag++) nacht(S, dag);
-    return voor - bomenBij(D, g).length;
-  });
-  const gewoon = telBomen(false);
-  const kap = telBomen(true);
-  assert.ok(gewoon >= 2, `${gewoon} bomen in dertig dagen`);
-  assert.ok(kap > gewoon, `met de houtkap ${kap}, zonder ${gewoon}`);
-});
-
 test('staat er binnen tien tegels geen boom meer, dan staat hij stil en zegt de raad het; zijn hand werkt elders, en het dorp vraagt geen nieuwe', () => zo(() => {
   const S = dorp();
   const D = S.dorp;

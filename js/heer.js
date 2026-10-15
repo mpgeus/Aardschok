@@ -174,9 +174,6 @@
     }
     const h = D.heer;
     if (h && h.schuld > 0) tel('goud', h.schuld, T.t('what you still owed from last year, with the fine'));
-    // Heeft een houthakker dit jaar in zijn bos gekapt (de wet Houtkap, js/wetten.js), dan rekent hij een boete.
-    const boete = T.houtkapBoete(D);
-    if (boete > 0) tel('goud', boete, T.t('a fine for the trees you took from Our forest'));
     // Wil hij (een deel) in goud, dan rekent hij om, naar boven: de rest van de pacht, of alles.
     const wijze = IN().betalenIn;
     if (wijze === 'graanEnGoud' || wijze === 'alleenGoud') {
@@ -372,8 +369,6 @@
     h.jaren.push({ jaar: T.datumVanDag(dagNu(D)).jaar, deel: g.deel, straf: g.straf });
     // Twee bazen (js/bazen.js): zijn gunst; op 0 ontslaat hij je (hieronder, of al via de meter).
     if (g.gunst) T.wijzigGunst(D, g.gunst.erbij, g.gunst.erbij > 0 ? T.t('you paid what he asked') : T.t('you paid too little'));
-    // De boete voor de houtkap is betaald.
-    T.wettenNaSintMaarten(D);
     if (T.zetVlag) {
       T.zetVlag(D, 'heerBetaald');
       T.wisVlag(D, 'heerSchuld');

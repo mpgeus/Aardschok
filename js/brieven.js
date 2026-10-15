@@ -74,7 +74,7 @@
         `<p>${T.t('We trust you completely. We shall count it again all the same.')}</p>` +
         // Het doel van de proef (js/treden.js; Marcel, 29 sep, vraag 53, A): de heer wil groei, want hij verdient eraan.
         `<p>${T.t('We expect Our hamlet to become a village, with {eis}. A village brings Us more.', { eis: T.tredeEisTekst('dorp') })}</p>` +
-        // De wetten (js/wetten.js; Marcel, 29 sep, vraag 54): het menu onder W. De houtkap in zijn bos is er een van.
+        // De wetten (js/wetten.js; Marcel, 29 sep, vraag 54): het menu onder W.
         `<p>${T.t('Laws you may make, as many as you like. Our forest you leave alone.')}</p>`,
       knoppen: [{ actie: 'sluit', tekst: T.t('To work'), hoofd: true }],
     }),

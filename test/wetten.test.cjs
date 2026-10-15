@@ -1,5 +1,6 @@
 // De wetten (js/wetten.js; werklijst vraag 54, Marcel, 29 sep: "een menu zoals in diplomacy 3, waar je weten kunt
-// aannemen", en "A ja B ja"): het rantsoen, vreemden welkom, houtkap in het bos van de heer en de belasting. Elke
+// aannemen", en "A ja B ja"): het rantsoen en de belasting (sinds ronde 3 van het snoeien, 15 okt; vreemden welkom en
+// houtkap in het bos van de heer zijn weg). Elke
 // wet heeft een voordeel en een nadeel, hij geldt meteen, en zonder wetten speelt het spel zoals ervoor.
 const test = require('node:test');
 const assert = require('node:assert/strict');
@@ -31,14 +32,14 @@ test('zonder wetten staat elke wet op zijn standaard, en speelt het spel zoals e
   assert.equal(T.gezinDagen(S.dorp), T.GEBOUWEN_INSTELLINGEN.gezinDagen);
   assert.deepEqual(T.maaktUit(S.dorp, T.GEBOUWEN.houthakker), T.GEBOUWEN.houthakker.maakt.uit);
   assert.deepEqual(T.wettenTevredenheid(S.dorp), { erbij: 0, last: [], blij: [] });
-  assert.equal(T.houtkapBoete(S.dorp), 0);
 });
 
-test('het gehucht heeft vier wetten, in de volgorde van het menu', () => {
+// Sinds 15 okt twee, zoals in Stronghold (ronde 3 van het snoeien; Marcel: "Rantsoen en belasting").
+test('het gehucht heeft twee wetten, in de volgorde van het menu: het rantsoen en de belasting', () => {
   const S = gehucht();
-  assert.deepEqual(T.wettenVanNu(S.dorp), ['rantsoen', 'vreemden', 'houtkap', 'belasting']);
+  assert.deepEqual(T.wettenVanNu(S.dorp), ['rantsoen', 'belasting']);
   assert.equal(T.wetIsAanUit('rantsoen'), false, 'het rantsoen heeft drie standen');
-  assert.equal(T.wetIsAanUit('vreemden'), true);
+  assert.equal(T.wetIsAanUit('belasting'), true);
 });
 
 test('een krap rantsoen: ieder eet driekwart, en het dorp is 15% minder tevreden', () => {
@@ -68,57 +69,6 @@ test('een ruim rantsoen: anderhalf keer zoveel eten, en 10% tevredener', () => {
   // Terug naar gewoon: zoals ervoor.
   T.zetWet(S.dorp, 'rantsoen', 'gewoon');
   assert.ok(bijna(tevreden(S).tevredenheid, voor.tevredenheid));
-});
-
-test('vreemden welkom: om de 10 dagen een gezin in plaats van 20, en 5% minder tevreden', () => {
-  const zonder = gehucht();
-  const met = gehucht();
-  // Hetzelfde dorp vóór en na de wet: wie in welk huis woont, is elk spel anders, en de tevredenheid is het gemiddelde
-  // van de huizen (js/wensen.js).
-  const voorDeWet = tevreden(met).tevredenheid;
-  T.zetWet(met.dorp, 'vreemden', 'aangenomen');
-  assert.equal(T.gezinDagen(met.dorp), 10);
-  assert.ok(bijna(voorDeWet - tevreden(met).tevredenheid, 0.05));
-  assert.ok(tevreden(met).last.includes('the strangers'));
-  // Op dag 10 komt er alleen met de wet een gezin: er is plaats, graan genoeg, en het dorp is tevreden genoeg.
-  const voor = met.dorp.bevolking;
-  T.tikGebouwenDag(zonder.dorp, 10);
-  T.tikGebouwenDag(met.dorp, 10);
-  assert.equal(zonder.dorp.bevolking, voor, 'zonder de wet wacht het tot dag 20');
-  assert.ok(met.dorp.bevolking > voor, `met de wet komt er een gezin (${voor} → ${met.dorp.bevolking})`);
-});
-
-test('houtkap: de houthakker hakt twee keer zoveel, en de heer rekent een boete, ook als de wet weer weg is', () => {
-  const S = gehucht();
-  S.dorp.gebouwen.push({ soort: 'houthakker', x: 0, y: 0, klaar: true, klaarOp: 0, handen: 1, werkte: 1, voorwerp: null });
-  // Wat de houthakker erbij doet; wat de mensen sprokkelen (T.sprokkelHout, vraag 74) verandert niet mee.
-  const hakt = T.brandhoutErbij(S.dorp) - T.sprokkelHout(S.dorp);
-  T.zetWet(S.dorp, 'houtkap', 'aangenomen');
-  assert.deepEqual(T.maaktUit(S.dorp, T.GEBOUWEN.houthakker), { hout: 2 * T.GEBOUWEN.houthakker.maakt.uit.hout });
-  assert.ok(bijna(T.brandhoutErbij(S.dorp) - T.sprokkelHout(S.dorp), 2 * hakt), 'ook het bericht over de winter rekent ermee');
-  // Een boer hakt geen hout: alleen wie in het bos hakt (bos), hakt meer.
-  assert.deepEqual(T.maaktUit(S.dorp, T.GEBOUWEN.visser), T.GEBOUWEN.visser.maakt.uit);
-
-  assert.equal(T.houtkapBoete(S.dorp), 0, 'nog niets gekapt');
-  T.tikWettenDag(S.dorp, 5);
-  assert.equal(T.houtkapBoete(S.dorp), 5);
-  // De wet weer afschaffen, vlak voor Sint-Maarten, helpt niet: er is dit jaar gekapt.
-  T.zetWet(S.dorp, 'houtkap', 'afgeschaft');
-  T.tikWettenDag(S.dorp, 6);
-  const eis = T.eisVanDeHeer(S.dorp);
-  assert.ok(eis.regels.some((r) => r.wat === 'goud' && r.aantal === 5 && /trees/.test(r.waarom)), JSON.stringify(eis.regels));
-  // Na Sint-Maarten is de boete betaald.
-  T.wettenNaSintMaarten(S.dorp);
-  assert.equal(T.houtkapBoete(S.dorp), 0);
-  assert.ok(!T.eisVanDeHeer(S.dorp).regels.some((r) => /trees/.test(r.waarom)));
-});
-
-test('houtkap zonder houthakker kost niets: dan is er niet gekapt', () => {
-  const S = gehucht();
-  assert.ok(!S.dorp.gebouwen.some((g) => T.GEBOUWEN[g.soort].bos), 'het gehucht begint zonder houthakker');
-  T.zetWet(S.dorp, 'houtkap', 'aangenomen');
-  T.tikWettenDag(S.dorp, 5);
-  assert.equal(T.houtkapBoete(S.dorp), 0);
 });
 
 test('de belasting: op de eerste van de maand goud in de kist, en wat geen heel goud is, gaat mee', () => {
@@ -159,8 +109,6 @@ test('wat een wet doet, in woorden, met de getallen van nu: eerst wat goed is, d
   const ruim = T.watDeWetDoet(S.dorp, 'rantsoen', 'ruim');
   assert.deepEqual(ruim.map((r) => r.tekst), ['10% more content', 'everyone eats half as much again: 2 grain a day instead of 1.3']);
   assert.deepEqual(T.watDeWetDoet(S.dorp, 'rantsoen', 'gewoon'), [], 'gewoon doet niets');
-  assert.equal(T.watDeWetDoet(S.dorp, 'vreemden', 'aangenomen')[0].tekst, 'a new family twice as often: every 10 days instead of 20');
-  assert.match(T.watDeWetDoet(S.dorp, 'houtkap', 'aangenomen')[0].tekst, /brings in twice as much \(there is no woodcutter yet\)/);
   assert.equal(T.watDeWetDoet(S.dorp, 'belasting', 'aangenomen')[0].tekst, '1.3 gold into the chest every month');
 });
 
@@ -168,14 +116,11 @@ test('de wetten gaan mee in een bewaard spel', () => {
   const S = gehucht();
   T.zetWet(S.dorp, 'rantsoen', 'krap');
   T.zetWet(S.dorp, 'belasting', 'aangenomen');
-  S.dorp.wetten.gekapt = true;
   S.dorp.wetten.belastingRest = 0.6;
   const S2 = gehucht();
   assert.equal(T.herstelSpel(S2, T.bewaarSpel(S, { nu: 1790000000000 })).gelukt, true);
   assert.equal(T.standVanWet(S2.dorp, 'rantsoen'), 'krap');
   assert.equal(T.standVanWet(S2.dorp, 'belasting'), 'aangenomen');
-  assert.equal(T.standVanWet(S2.dorp, 'vreemden'), 'afgeschaft');
-  assert.equal(T.houtkapBoete(S2.dorp), 5);
   assert.equal(S2.dorp.wetten.belastingRest, 0.6);
 });
 
@@ -183,7 +128,7 @@ test('de getallen van de wetten staan in de werkbank', () => {
   const deel = T.WERKBANK.find((d) => d.blok === 'WETTEN_INSTELLINGEN');
   assert.ok(deel, 'de wetten hebben een deel in de werkbank');
   const paden = T.werkbankGetallen(deel).map((g) => g.pad);
-  for (const pad of ['rantsoen.krap.eten', 'rantsoen.ruim.tevreden', 'vreemden.aangenomen.gezinnen', 'houtkap.aangenomen.boete', 'belasting.aangenomen.goud']) {
+  for (const pad of ['rantsoen.krap.eten', 'rantsoen.ruim.tevreden', 'belasting.aangenomen.goud']) {
     assert.ok(paden.includes(`WETTEN_INSTELLINGEN.${pad}`), pad);
   }
   // Wat een wet van de tevredenheid afhaalt, is negatief: de schuif loopt dan tot nul, niet van nul tot één.
