@@ -48,7 +48,7 @@ is af** (15 okt, in `main`; `spel.md`, "Zo werken de soldaten nu"): zes soorten 
 gehucht met zeven stukken, en elk wapen een eigen slag. **Het volgende is stap 2, en meer dan een briefje** (Marcel, 15
 okt: "bij stap 2 gelijk meer. Soldaten moeten te sturen zijn. Ook wil ik basis formaties. Dit doen we in een nieuwe
 sessie"): soldaten aanklikken, sturen, en eenvoudige formaties; begin met een plan voor Marcel (bij H, "Het plan voor
-159 met 158").
+159 met 158"). **Bezig in sessie `claude/sleepy-fermat-wrxjuc`** (15 okt): het plan voor stap 2.
 
 **Wacht op Marcel:**
 - **De soldaten bekijken** (159, stap 1, 15 okt): Nieuw spel, en zet een wachthuis (B). Klik erop als het af is: op zijn
