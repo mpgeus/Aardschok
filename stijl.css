@@ -929,6 +929,29 @@ body.bouwmenu-open #opdracht { visibility: hidden; }
 #wetten .wet-doet .goed { color: var(--groen); }
 #wetten .wet-doet .kost { color: var(--rood); }
 
+/* Het debugvenster (js/debugvenster.js, onder D; werklijst 169): vier knoppen onder elkaar, zoals die van de raadsman. */
+#debug {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(420px, calc(100vw - 32px));
+  padding: 12px 16px 14px;
+  z-index: 5;
+}
+#debug .db-knoppen { display: flex; flex-direction: column; gap: 6px; }
+#debug .db-knop {
+  padding: 6px 10px;
+  font: 13px var(--boek);
+  text-align: left;
+  color: var(--inkt);
+  background: color-mix(in srgb, var(--inkt) 5%, transparent);
+  border: 1px solid var(--rand);
+  border-radius: 6px;
+  cursor: pointer;
+}
+#debug .db-knop:hover { background: color-mix(in srgb, var(--goud) 16%, transparent); border-color: color-mix(in srgb, var(--goud) 60%, transparent); }
+
 /* Je raadsman (js/raadsmanvenster.js; js/raadsman.js): de knop naast de wetten, en een venster zoals dat van de
    wetten. Elke boer waaruit je kiest, is een kaart; wat hij kan, staat in groen (+) en rood (−), en wie je koos,
    krijgt de gouden streep. */

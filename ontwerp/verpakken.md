@@ -88,6 +88,9 @@ Chromium-venster draagt de hele browser mee). Met een videokaart tekent allebei 
 
 ## Wat we tot die tijd niet mogen breken
 
+0. **Het debugvenster gaat uit voor Steam** (werklijst 169; Marcel, 15 okt: "Aan tot Steam"): bij het verpakken voor
+   Steam `T.DEBUG_INSTELLINGEN.aan` op false (`js/debugvenster.js`). In de proefversie voor een tester blijft het aan.
+
 1. **Geen bouwstap, gewone scripts.** Bewust gekozen, en het maakt verpakken bijna niets.
 2. **Geen `fetch` voor spullen.** `beelden/beschrijving.js` is met opzet een gewoon script. Dat
    lijkt een detail maar het is precies wat `file://` en de meeste schillen breekt.

@@ -1373,6 +1373,18 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   B): hoeveel zout er bij moet (de marskramer heeft er in de herfst het meest), en een visser of jager als er dan te
   weinig ligt. Wie eet, eet eerst wat ongezouten is. Uit te zetten in de spelregels ("Raad").
 
+### js/debugvenster.js: het debugvenster
+
+- `js/debugvenster.js` (werklijst 169; Marcel, 15 okt: "misschien letter "D" en dan debug menu op laten komen. +50 voor
+  bouwmaterialen etc."): een venster onder D bij het rondlopen (`T.ui.meldVenster` met `toets: 'd'`; in een gevecht
+  blijft D een deur sluiten), dat alleen regels aanroept die er al zijn: +50 van `T.DEBUG_INSTELLINGEN.waren` (stammen,
+  planken, steen, goud) met `T.wijzigVoorraad`; een gezin met `T.gezinKomt`; de bouwplaatsen af met `T.proefdorp.bouwAf`
+  en `T.komtKlaar` (`js/gebouwen.js`, de stap "een gebouw komt klaar" uit de nachtlus, zodat de nacht en het venster
+  dezelfde weg gaan; wie erin trekt, volgt de nacht erna); en de marskramer met `T.debug.marskramer`. Alleen scherm
+  (`ALLEEN_SCHERM` in `test/laad.cjs`); de regels die het aanroept, hebben hun eigen toetsen.
+- **Aan tot de Steam-versie** (Marcel, 15 okt), ook in de proefversie: `T.DEBUG_INSTELLINGEN.aan` gaat voor Steam op
+  false (`ontwerp/verpakken.md`), en dan meldt het venster zich niet aan.
+
 ### js/raadsman.js en js/raadsmanvenster.js: de raadsman
 
 - `js/raadsman.js`: **de raadsman** (vraag 66, 30 sep): een van de boeren (`T.isBoer` in `js/boerderij.js`), met twee

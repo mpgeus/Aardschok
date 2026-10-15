@@ -121,6 +121,10 @@ opdracht of een `Spel.debug` erbij maakt of verandert, werkt het hier bij.
 
 ## Testen in de browser
 
+**In het spel zelf: het debugvenster onder D** (werklijst 169; Marcel, 15 okt): +50 stammen, planken, steen en goud,
+een gezin, de bouwplaatsen meteen af, en de marskramer nu, zodat je het groeien test zonder te wachten
+(`js/debugvenster.js`). Aan tot de Steam-versie.
+
 `Spel.S` is de spelstaat, en `Spel.S.dorp` je eigen dorp (`js/dorp.js`). `Spel.debug.naarBeeld(x, y)` geeft de schermpositie van een tegel
 (css-pixels), `await Spel.debug.stap(seconden)` laat het spel vooruitlopen zonder op beelden te
 wachten. Dat is nodig omdat een verborgen browserpaneel maar af en toe een beeld tekent; ook

@@ -42,10 +42,14 @@ uiterlijk. **C6 is gemeten** (15 okt; `speelbaar.md`, "De speeltest van 15 okt")
 (de kolonist bouwt geen put en geen hut voor wie erbij wil), dus de planken meet het nog niet. Dat laten we zo (Marcel, 15
 okt: "Uiteindelijke balancing wordt later gedaan", "Ikzelf test het echte spel wel", "jij hoeft alleen te testen of het
 werkt zoals het moet werken"): **de speeltest toetst of het werkt, niet de balans**, en het groeien test Marcel zelf, met
-een debugvenster (169). **Het volgende is 169** (H), en dan 159 met 158.
+een debugvenster. **169, het debugvenster onder D, is af** (15 okt, op de branch `claude/wizardly-sagan-qw7f8f`;
+`code.md`, bij `js/debugvenster.js`). **Het volgende is 159 met 158** (H).
 
 **Wacht op Marcel:**
-- **Het debugvenster (169), wat erin komt** (15 okt): het plan staat bij 169 (H).
+- **Het debugvenster bekijken** (169, 15 okt): Nieuw spel, en druk D bij het rondlopen: +50 stammen, planken, steen en
+  goud, een gezin (zonder plaats zegt het spel dat), de bouwplaatsen meteen af (wie erin trekt, komt die nacht), en de
+  marskramer nu. De tijd staat stil zolang het open is; D of Esc sluit het. Voor Steam gaat het uit
+  (`T.DEBUG_INSTELLINGEN.aan`, `verpakken.md`).
 - **De zager bekijken** (168, 15 okt): zet een zagerij, en kijk overdag (niet in de schaft): de eerste hand staat op de
   tegel voor de deur en zaagt met de spanzaag aan de stam op de bok. Heeft de zagerij geen stammen, of is zijn stapel
   vol, dan staat er niemand.
@@ -390,14 +394,21 @@ niet perse. 8. Los ontwerp", op de vragen van Claude; in het gesprek heetten de 
 - **169, een debugvenster** (Marcel, 15 okt, bij C6: "we kunnen ook een debug venster toevoegen. Uiteindelijke balancing
   wordt later gedaan. misschien letter "D" en dan debug menu op laten komen. +50 voor bouwmaterialen etc.", en "dan kunnen
   we gewoon het daadwerkelijke groeien testen"). D is vrij bij het rondlopen (in een gevecht sluit D een deur, en dat
-  blijft); het venster komt in de lijst van vensters met een toets (`VENSTERS`, `js/ui.js`), zoals O, V, W en R. Het
-  plan wacht op Marcel (wat erin komt, en of het in de proefversie en op Steam blijft).
+  blijft); het venster komt in de lijst van vensters met een toets (`VENSTERS`, `js/ui.js`), zoals O, V, W en R.
+  **Besloten** (Marcel, 15 okt, op twee vragen van Claude): vier knoppen, elk met wat er al is: **+50 stammen, planken,
+  steen en goud**, **een gezin erbij** (zoals `Spel.debug.gezin`), **de bouwplaatsen meteen af**, en **de marskramer
+  nu** (`Spel.debug.marskramer`); en het venster blijft **aan tot de Steam-versie**, ook in de proefversie, en gaat bij
+  het verpakken voor Steam uit met één schakelaar. **Af** (15 okt, op de branch `claude/wizardly-sagan-qw7f8f`;
+  `js/debugvenster.js`, en `T.komtKlaar` in `js/gebouwen.js`: de nacht en het venster maken een gebouw op dezelfde
+  manier af).
 - **Nog open** (als we er zijn): **161**, het nieuws echt en bruikbaar (wat een stad tekortkomt, waar de mannen van de
   heer zijn, welk dorp morrt), en met een herberg blijven ze langer; **160**, eerst losse ritten (een kar met wat over
   is naar een stad, dagen onderweg, een escorte helpt), vaste routes later.
 
 ## Af (sinds 11 okt)
 
+- 169, het debugvenster onder D (15 okt; `code.md`, bij `js/debugvenster.js`): +50 bouwmateriaal en goud, een gezin, de
+  bouwplaatsen meteen af, en de marskramer nu; aan tot de Steam-versie.
 - C6, meten en spelen (15 okt; `speelbaar.md`, "De speeltest van 15 okt"): de speeltest meet de ossenkar (tabel "De
   ossenkar"), speelt met `--jaren 2` twee jaar, en de kolonist zet een schuur richting de rotsen en verkoopt de
   marskramer wat over is als hij op goud wacht. Eén kar is ruim genoeg voor een gehucht.

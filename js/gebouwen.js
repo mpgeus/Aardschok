@@ -837,6 +837,16 @@
     });
   }
 
+  // Een gebouw komt klaar: het spookbeeld wordt de tekening zelf, en de kramen van de markt staan. De nachtlus doet het
+  // (T.tikGebouwenDag, stap 1), en het debugvenster (js/debugvenster.js, werklijst 169) meteen; wat er dan nog volgt (wie
+  // erin trekt, de kar van een schuur, het veld dat land wordt), doet de nacht daarna voor allebei.
+  T.komtKlaar = function (D, g, dag) {
+    g.klaar = true;
+    if (g.voorwerp) g.voorwerp.inAanbouw = false;
+    if (g.voorwerp) T.maakJong(g.voorwerp, dag);
+    for (const k of g.kramen || []) k.inAanbouw = false; // de markt op het plein (js/markt.js)
+  };
+
   // ---------------------------------------------------------------------------------------------
   // Wat er ligt, doet ertoe (werklijst vraag 112, c; Marcel, 3 okt: "Her en der wat foliage, bomen, stenen, water")
   // ---------------------------------------------------------------------------------------------
@@ -1431,10 +1441,7 @@
     // van het lege begin (klaarOp null, js/bouwen.js) komt klaar als het werk af is, niet op een dag.
     for (const g of D.gebouwen) {
       if (!g.klaar && g.klaarOp != null && dag >= g.klaarOp) {
-        g.klaar = true;
-        if (g.voorwerp) g.voorwerp.inAanbouw = false;
-        if (g.voorwerp) T.maakJong(g.voorwerp, dag);
-        for (const k of g.kramen || []) k.inAanbouw = false; // de markt op het plein (js/markt.js)
+        T.komtKlaar(D, g, dag);
       } else if (g.klaar && g.voorwerp && g.voorwerp.inAanbouw && g.voorwerp.klaarOp != null && dag >= g.voorwerp.klaarOp) {
         // een huis dat doorgroeide (js/behoeften.js, groeiGebouw) of na een brand herrees (js/brand.js), is opgerezen
         g.voorwerp.inAanbouw = false;
