@@ -44,9 +44,11 @@ okt: "Uiteindelijke balancing wordt later gedaan", "Ikzelf test het echte spel w
 werkt zoals het moet werken"): **de speeltest toetst of het werkt, niet de balans**, en het groeien test Marcel zelf, met
 een debugvenster. **169, het debugvenster onder D, is af** (15 okt, op de branch `claude/wizardly-sagan-qw7f8f`;
 `code.md`, bij `js/debugvenster.js`). **159 met 158 loopt** (het plan bij H, besloten 15 okt): **stap 1, de soldaten,
-is af** (15 okt, op de branch `claude/werklijst-doorzetten-4m1kji`; `spel.md`, "Zo werken de soldaten nu"): zes soorten
-in het wachthuis, de wapenmaker in het gehucht met zeven stukken, en elk wapen een eigen slag. **Het volgende is stap 2,
-een soldaat aanklikken.** **Bezig in sessie `claude/werklijst-doorzetten-4m1kji`** (15 okt): stap 1 wacht op "push it".
+is af** (15 okt, in `main`; `spel.md`, "Zo werken de soldaten nu"): zes soorten in het wachthuis, de wapenmaker in het
+gehucht met zeven stukken, en elk wapen een eigen slag. **Het volgende is stap 2, en meer dan een briefje** (Marcel, 15
+okt: "bij stap 2 gelijk meer. Soldaten moeten te sturen zijn. Ook wil ik basis formaties. Dit doen we in een nieuwe
+sessie"): soldaten aanklikken, sturen, en eenvoudige formaties; begin met een plan voor Marcel (bij H, "Het plan voor
+159 met 158").
 
 **Wacht op Marcel:**
 - **De soldaten bekijken** (159, stap 1, 15 okt): Nieuw spel, en zet een wachthuis (B). Klik erop als het af is: op zijn
@@ -360,7 +362,9 @@ niet perse. 8. Los ontwerp", op de vragen van Claude; in het gesprek heetten de 
   deuren), en vinden rovers geen weg, dan komen ze stil niet. Wat Claude erin ziet: 158 en 159 versterken elkaar (de
   speer reikt twee tegels en de boog schiet ver, dus achter de palissade tellen ze; zwaard en schild houden de poort).
   Vier stappen: **1** soldaten zonder nieuwe tekeningen (drie waren, de wapenmaker, voltijds, inleveren, elk wapen een
-  eigen slag in het gevecht); **2** een soldaat aanklikken (D): zijn briefje; **3** muren: de weg wordt een lijn met een
+  eigen slag in het gevecht); **2** een soldaat aanklikken (D): zijn briefje, en (Marcel, 15 okt: "bij stap 2 gelijk meer.
+  Soldaten moeten te sturen zijn. Ook wil ik basis formaties. Dit doen we in een nieuwe sessie") ze sturen, en eenvoudige
+  formaties; **3** muren: de weg wordt een lijn met een
   soort (weg, palissade, stenen muur), een poort waar een weg kruist, open voor je mensen en de kar, dicht voor rovers en
   wolven; een palissade 1 stam per tegel, een stenen muur 2 steen, en steen over een palissade bouwt hem om; **4** de
   tekeningen, eerst in woorden, dan één proefplaat. De vragen (voorstel van Claude steeds de eerste): **A** waar wordt
@@ -371,7 +375,7 @@ niet perse. 8. Los ontwerp", op de vragen van Claude; in het gesprek heetten de 
   tegels waar hij ziet maar niet met een vijand naast zich, zwaard en schild slaan hard en vangen 2 schade af), D2 alleen
   de schade verschilt; **E** rovers voor een dichte muur: E1 ze nemen wat erbuiten ligt, en anders komen ze niet, E2 ze
   hakken op de poort tot hij open is (een poort met leven); **F** het tuighuis en het schuttershof eruit (ze doen niets),
-  de kazerne blijft voor later; **G** de volgorde: G1 stap 1 tot 4 zo, G2 de proefplaat van de soldaten al na stap 1. Marcel erbij (15 okt): "iemand kan gewoon wapensmid worden. Daar moet nog een gebouw voor komen": de wapenmaker is een werkplaats in het gehucht waar een dorpeling wapensmid is; hij leent nu het beeld van de smidse, en zijn eigen tekening komt met de werkplaatsen in de bouwstijl (167). **De wapens** (Marcel, 15 okt: "kwa wapens wil ik: sword, spear, shield, pike, bow, crossbow, armor", en op vier vragen: vaste soorten, "Piek reikt 2, slaat harder", "Kruisboog door het harnas", "Allebei, later"): zes vaste soorten soldaten, zoals in Knights and Merchants, en een soort wacht tot al zijn stukken er zijn: militie (hooivork), speerman (speer en schild), piekenier (piek en harnas), zwaardvechter (zwaard, schild en harnas), boogschutter (boog), kruisboogschutter (kruisboog en harnas). De speer en de piek reiken twee tegels, de piek slaat harder en kost ijzer; de kruisboog schiet zo ver en zo vaak als de boog, maar schild en harnas vangen van een bout niets af; het harnas is nu van huiden (de jager), een ijzeren harnas komt later, als het dorp ijzer heeft. De wapenmaker maakt ze alle zeven. **Stap 1 is af** (15 okt, op de branch `claude/werklijst-doorzetten-4m1kji`; `js/soldaten.js`, `spel.md`, "Zo werken de soldaten nu"): het tuighuis en het schuttershof zijn weg, en de kolonist van de speeltest zet een wachthuis en een wapenmaker en vraagt twee speermannen (regel 7c).
+  de kazerne blijft voor later; **G** de volgorde: G1 stap 1 tot 4 zo, G2 de proefplaat van de soldaten al na stap 1. Marcel erbij (15 okt): "iemand kan gewoon wapensmid worden. Daar moet nog een gebouw voor komen": de wapenmaker is een werkplaats in het gehucht waar een dorpeling wapensmid is; hij leent nu het beeld van de smidse, en zijn eigen tekening komt met de werkplaatsen in de bouwstijl (167). **De wapens** (Marcel, 15 okt: "kwa wapens wil ik: sword, spear, shield, pike, bow, crossbow, armor", en op vier vragen: vaste soorten, "Piek reikt 2, slaat harder", "Kruisboog door het harnas", "Allebei, later"): zes vaste soorten soldaten, zoals in Knights and Merchants, en een soort wacht tot al zijn stukken er zijn: militie (hooivork), speerman (speer en schild), piekenier (piek en harnas), zwaardvechter (zwaard, schild en harnas), boogschutter (boog), kruisboogschutter (kruisboog en harnas). De speer en de piek reiken twee tegels, de piek slaat harder en kost ijzer; de kruisboog schiet zo ver en zo vaak als de boog, maar schild en harnas vangen van een bout niets af; het harnas is nu van huiden (de jager), een ijzeren harnas komt later, als het dorp ijzer heeft. De wapenmaker maakt ze alle zeven. **Stap 1 is af** (15 okt, in `main`; `js/soldaten.js`, `spel.md`, "Zo werken de soldaten nu"): het tuighuis en het schuttershof zijn weg, en de kolonist van de speeltest zet een wachthuis en een wapenmaker en vraagt twee speermannen (regel 7c).
 - **162** (7): de provincies op het eiland, zo'n vijf, elk met een hoofdstad en een paar dorpen; iets eigens per
   provincie hoeft niet. Op de rest van het voorstel (op het eiland zelf, `js/land.js` eruit, wat ver weg is leeft als
   getallen tot je er bent) zei Marcel niets: bevestigen als we er zijn.
