@@ -44,7 +44,7 @@ okt: "Uiteindelijke balancing wordt later gedaan", "Ikzelf test het echte spel w
 werkt zoals het moet werken"): **de speeltest toetst of het werkt, niet de balans**, en het groeien test Marcel zelf, met
 een debugvenster. **169, het debugvenster onder D, is af** (15 okt, op de branch `claude/wizardly-sagan-qw7f8f`;
 `code.md`, bij `js/debugvenster.js`). **Het volgende is 159 met 158** (H). **Bezig in sessie
-`claude/werklijst-doorzetten-4m1kji`** (15 okt): het plan voor 159 met 158, voor Marcel.
+`claude/werklijst-doorzetten-4m1kji`** (15 okt): het plan is besloten (bij H), nu stap 1, de soldaten.
 
 **Wacht op Marcel:**
 - **Het debugvenster bekijken** (169, 15 okt): Nieuw spel, en druk D bij het rondlopen: +50 stammen, planken, steen en
@@ -344,7 +344,7 @@ niet perse. 8. Los ontwerp", op de vragen van Claude; in het gesprek heetten de 
 - **159** (4a, gelezen als de eerste keuze): een soldaat is voltijds: hij legt zijn werk neer en eet, en kan zijn wapen
   weer inleveren. Eerst drie wapens: de speer (planken), de boog (planken), zwaard en schild (ijzer en planken); zonder
   wapen een hooivork.
-- **Het plan voor 159 met 158** (Claude, 15 okt, wacht op Marcel; wat er is, zochten twee agents uit). Nu: de militie is
+- **Het plan voor 159 met 158** (Claude, 15 okt; **besloten**, Marcel: "A1, B1, C1, D1, E1, F ja, G1", dus steeds de eerste; wat er is, zochten twee agents uit). Nu: de militie is
   wie in het wachthuis werkt (2 handen) plus de veteranen; `wapens` is één waar (+2 schade); het gevecht kent alleen
   slaan op de tegel ernaast; het tuighuis, het schuttershof en de kazerne staan in het bouwmenu maar doen niets; een
   muur is alleen gegevens, `js/wegen.js` kent alleen de weg, begaanbaar is voor iedereen gelijk (alleen de schout opent
