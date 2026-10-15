@@ -539,7 +539,7 @@ en nacht, standaard dag; **6a** wat de schout als held was en het gevecht in beu
   is een opdracht (js/tik.js). **1d** Ctrl+1 tot 9 (en Shift+1 tot 9) maakt een groep, 1 tot 9 kiest hem, twee keer en de
   camera gaat erheen; een groep is alleen scherm. **Erbij:** een bericht met een plek (rovers, een brand) brengt de camera
   erheen met een klik of Spatie, en de plek knippert op de minikaart.
-- **2, het gevecht in real time:** elk kiest de dichtste vijand die hij ziet, loopt tot hij raakt en slaat, met de regels
+- **2, het gevecht in real time:** **Bezig in sessie `ccr-c0f9d2a2-6j0scf`** (15 okt): het plan voor Marcel. Elk kiest de dichtste vijand die hij ziet, loopt tot hij raakt en slaat, met de regels
   van 159; de actiepunten van een slag worden de tijd tussen twee slagen; rovers en wolven vallen aan wie ze tegenkomen.
 - **3, formaties en de post:** *Line* en *Ring* (C1), op wapen gesorteerd, kijkend waar ze heen liepen (D1).
 - **4, de diensten** (5a), en vijanden kunnen op elk uur komen.
