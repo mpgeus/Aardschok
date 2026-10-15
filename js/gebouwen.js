@@ -226,8 +226,8 @@
     graanschuur: {
       naam: T.t('granary'), trede: 'gehucht', voet: { b: 4, h: 4 }, kosten: { hout: 15 }, heer: {}, bouwtijd: 3,
       handen: 0, woonruimte: 0, maakt: null, menu: true,
-      tekening: 'gebouwen/schuurBlokhut', beschrijving: T.t('the seed grain is kept here; with guards on it, the village does not eat it in a hungry winter'), // geen tekst
-      opmerking: 'nieuw (vraag 132): nog niet getekend, leent voorlopig de blokhutschuur.', // geen tekst
+      tekening: 'gebouwen/schuurBlokhut', beschrijving: T.t('a barn for the grain'), // geen tekst
+      opmerking: 'nieuw (vraag 132): nog niet getekend, leent voorlopig de blokhutschuur. Sinds 15 okt zonder werk (ronde 3 van het snoeien: het bewaken van het zaaigraan is weg), tot we hem een taak geven.', // geen tekst
     },
     // De schuur (werklijst C, stap 4; Marcel, 14 okt: "D2", en "a ja, b ja, c ja"): een opslag verder van het plein, met
     // zijn eigen bouwbereik (T.inBouwBereik, js/begin.js) en zijn eigen ossenkar (js/kar.js), die haalt en brengt wat het
@@ -1519,8 +1519,6 @@
     // zaaigraan pas bij nood (T.eetVandaag, js/behoeften.js; vraag 154). Wat de huizen al aten aan brood, vis, vlees en
     // wijn van hun wensen, eet het dorp minder (vraag 92, a).
     const gegeten = T.eetVandaag(D, dag, alGegeten);
-    // De wachters bij de graanschuur (js/graanschuur.js): na het zaaien naar huis, en honger kost vertrouwen.
-    T.tikGraanschuurDag(D, dag, gegeten.tekort > 0);
     T.tikWijngaardDag(D, dag); // de wijn die nog in de manden zat, en of het gezin morgen plukt (js/wijngaard.js)
     // Honger in het voorjaar en de zomer, van 1 lentemaand tot de oogst: dan maken de boeren na de oogst een weide erbij
     // (T.boerenKiezenVelden, js/akkers.js; vraag 132).

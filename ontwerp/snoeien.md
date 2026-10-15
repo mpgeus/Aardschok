@@ -259,6 +259,10 @@ niet). Twee agents brachten in kaart wat elk systeem doet en wat eraan hangt; wa
    komen alleen bij hun eigen status** (de brand bij brandgevaar, de koorts bij kou of een vol dorp, in de winter vaker),
    en **het vuur slaat over als de emmers het niet redden**, bij groot brandgevaar (zo blijft zijn keuze van 10 okt).
    De spelregels "Fire" en "Fever" vervallen: hun "uit" was het voorval zonder vuur of zieken.
+   **Af** (15 okt) voor de brand, de koorts en het zaaigraan: `js/graanschuur.js` en zijn toets zijn weg, de spelregels
+   "Fire" en "Fever" ook, en "Seed grain" heeft "Only in need" en "Like other grain"; opslaan is versie 14.
+   Stap 3 en de wolven bouwen op de branch van stap 2 van vraag 170 (`ccr-c0f9d2a2-6j0scf`; Marcel, 15 okt: "Bouw op
+   zijn branch"): die gaat zo mee naar `main`.
 3. **Weg:** de voorvallen (met hun gesprekken, het uitroepteken en `e.zoektSchout`, de spelregel "Events"), de raadsman
    met zijn venster (R, de spelregel "Advisor", het trager maaien), het rapport (de knop, de spelregel), de feesten (de
    meiboom, de kerstboom, de vrije dag, de spelregel), en de raden die eraan hingen; het opslaan een versie omhoog; de

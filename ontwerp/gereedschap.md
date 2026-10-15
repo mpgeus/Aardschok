@@ -206,9 +206,9 @@ iets zegt het hoe het kamp ervoor staat: waar de kar is en heen gaat, of de
 schout meeloopt, wie er in welke tent woont, het vuur, en tot wanneer de heer niets vraagt.
 `Spel.debug.voorval()` zegt welk voorval er loopt, welke vervolgen nog komen, welke voorvallen er nu kunnen (met hoe
 zwaar ze wegen) en welke oorzaken er spelen;
-`('brand')` laat er nu een beginnen, over mensen die erbij passen, en wie het zegt, zoekt je meteen.
+`('diefstal')` laat er nu een beginnen, over mensen die erbij passen, en wie het zegt, zoekt je meteen.
 `Spel.debug.brand()` zegt het brandgevaar, de kans dat de emmers een huis redden, en welke huizen branden, in puin liggen of
-op hout wachten; `('nu')` laat de brand nu beginnen, `('puin')` laat wat brandt nu afbranden, `('herbouw')` laat het puin
+op hout wachten; `('nu')` laat de brand nu beginnen (ook zonder brandgevaar), `('puin')` laat wat brandt nu afbranden, `('herbouw')` laat het puin
 nu weer opbouwen. `Spel.debug.koorts()` zegt wie er ziek is en tot wanneer, en hoeveel het hadden; `('nu')` laat de koorts
 nu beginnen.
 `Spel.debug.kleren()` zegt hoeveel volwassenen arm, gewoon en deftig lopen, en per volwassene zijn kleren, zijn huis (met

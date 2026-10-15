@@ -113,17 +113,15 @@ test('wat je bouwt, is jong en na twee jaar oud', () => {
 test('de fasen van het afbranden: het huis, geschroeid, het dak valt; binnengestort, ingestort, opgeruimd', () => {
   const B = T.BRAND_INSTELLINGEN;
   const D = { kalender: { dag: 10 } };
-  const g = { brand: { fase: 'brandt', sinds: 10, antwoord: null, op: 10 } };
+  const g = { brand: { fase: 'brandt', sinds: 10 } };
   const op = (dag) => {
     D.kalender.dag = dag;
     return T.brandfaseVan(D, g);
   };
   const uur = 1 / 24;
+  // zolang de buren blussen (blusUren), van het huis zelf tot het dak dat valt
   assert.equal(op(10), null, 'eerst brandt het huis zelf');
-  assert.equal(op(10 + B.brandUren * 0.5 * uur), 'geschroeid');
-  assert.equal(op(10 + B.brandUren * 0.8 * uur), 'dakvalt');
-  // met de emmers is het eerder om: de fasen gaan sneller
-  Object.assign(g.brand, { antwoord: 'blus', op: 10 });
+  assert.equal(op(10 + B.blusUren * 0.5 * uur), 'geschroeid');
   assert.equal(op(10 + B.blusUren * 0.8 * uur), 'dakvalt');
   g.brand = { fase: 'puin', sinds: 20 };
   assert.equal(op(20.5), 'binnengestort');

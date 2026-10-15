@@ -172,31 +172,6 @@ test('de gunst van de heer weegt mee: wie haar veel waard vindt, bouwt het stand
   assert.match(kies(0), /scarecrow/, 'zonder gunst: -4 tegen 2,7');
 });
 
-test('hij weegt een dode zwaarder of lichter: de put laten schoonmaken, of bidden', () => {
-  // De ziekte: de put schoonmaken (goud -2, koorts 40), bier (bier -15, koorts 70) of bidden (koorts 100). Een dode weegt
-  // per tien procent kans; de koorts telt voor een vijfde van een sterfkans.
-  const kies = (dood) => metWeging({ dood }, () => {
-    const S = dorp();
-    const L = metVoorval(S, 'ziekte');
-    T.zetVoorraad(S.dorp, 'goud', 20);
-    T.zetVoorraad(S.dorp, 'bier', 30);
-    const p = raadsman(S, [L.wie]);
-    return metKunde({}, () => T.raadsmanKeuze(S.dorp, p, 'ziekte').zeg);
-  });
-  assert.match(kies(T.RAADSMAN_INSTELLINGEN.kiest.dood), /Pray/, 'de standaard: -2 tegen -2,8 en -2,9');
-  assert.match(kies(5), /well/, 'wie een dode zwaar weegt, laat de put schoonmaken');
-});
-
-test('hij kiest wat er te betalen valt', () => {
-  const S = dorp();
-  const L = metVoorval(S, 'ziekte');
-  T.zetVoorraad(S.dorp, 'goud', 0);
-  T.zetVoorraad(S.dorp, 'bier', 0);
-  const p = raadsman(S, [L.wie]);
-  // Weegt hij een dode zwaar, dan laat hij liever de put schoonmaken; maar dat kost goud, dus zonder goud en bier...
-  metWeging({ dood: 5 }, () => assert.match(metKunde({}, () => T.raadsmanKeuze(S.dorp, p, 'ziekte').zeg), /Pray/, 'zonder goud en bier blijft alleen bidden over'));
-});
-
 test('wat hij kan, telt mee: goed maakt wat slecht uitvalt minder erg, slecht maakt het erger', () => {
   const S = dorp();
   const p = boeren(S)[0];

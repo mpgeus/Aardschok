@@ -780,8 +780,7 @@
     const nodig = Math.max(0, maaltijd - Object.values(alGegeten).reduce((n, x) => n + x, 0));
     const v = D.voorraad;
     const melkVandaag = (D.vee && D.vee.melk) || 0;
-    // Wat er van elke soort ligt, in graan. Het zaaigraan blijft apart; wat er bij de graanschuur bewaakt wordt, pakt het
-    // dorp ook bij nood niet (T.zaaigraanBeschermd, js/graanschuur.js; vraag 132).
+    // Wat er van elke soort ligt, in graan. Het zaaigraan blijft apart (vraag 132).
     const apart = Math.min(v.graan || 0, T.zaaigraanApart(D, dag));
     const ligt = {};
     for (const wat of Object.keys(T.SOORTEN_ETEN)) {
@@ -805,11 +804,10 @@
       if (uitVoorraad > 0) T.wijzigVoorraad(D, wat, -uitVoorraad);
     }
     if (zoutGegeten > 0 && (v.zout || 0) > 0) T.wijzigVoorraad(D, 'zout', -Math.min(v.zout, zoutGegeten / IN.zoutHoudtGoed));
-    // Is er niet genoeg, dan het zaaigraan, liever dan dat er mensen sterven; dan zoekt een boer je (js/graanschuur.js).
+    // Is er niet genoeg, dan het zaaigraan, liever dan dat er mensen sterven.
     const rest = nodig - Object.values(deel).reduce((n, x) => n + x, 0);
     if (rest > 1e-9 && apart > 0) {
-      T.zaaigraanInGevaar(D, dag);
-      r.zaaigraan = Math.min(rest, apart * (1 - T.zaaigraanBeschermd(D)));
+      r.zaaigraan = Math.min(rest, apart);
       if (r.zaaigraan > 0) T.wijzigVoorraad(D, 'graan', -r.zaaigraan);
     }
     zegHetZaaigraan(D, r.zaaigraan, apart);

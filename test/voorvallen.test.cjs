@@ -42,7 +42,7 @@ const antwoorden = (id) => knoopVan(id).keuzes;
 
 // Wat een antwoord mag doen: wat elk gesprek kan, en wat js/voorvallen.js erbij doet (het kop-commentaar daar).
 const WAREN = ['graan', 'hout', 'wol', 'bier', 'ijzer', 'zout', 'vlees', 'vis', 'kaas', 'hooi'];
-const GEVOLGEN = new Set(['zetVlag', 'wisVlag', 'geef', 'neem', 'goud', ...WAREN, 'tevreden', 'gunst', 'vertrouwen', 'verban', 'sterfkans', 'gezin', 'voorval', 'feest', 'bouw', 'weiger', 'wolven', 'jacht', 'bewaak', 'hek', 'blus', 'brand', 'koorts', ...Object.keys(T.VEE)]);
+const GEVOLGEN = new Set(['zetVlag', 'wisVlag', 'geef', 'neem', 'goud', ...WAREN, 'tevreden', 'gunst', 'vertrouwen', 'verban', 'sterfkans', 'gezin', 'voorval', 'feest', 'bouw', 'weiger', 'wolven', 'jacht', 'hek', ...Object.keys(T.VEE)]);
 
 test('elk voorval heeft een gesprek onder zijn naam, en elk antwoord gaat ergens heen en doet wat het spel kent', () => {
   for (const [id, v] of Object.entries(T.VOORVALLEN)) {
@@ -265,13 +265,13 @@ test('verbannen: de dief trekt weg, en gaat het bos in als rover', () => {
   assert.ok(berichten.some((t) => t.startsWith(dief.naam) && t.includes('leaves: banished by the reeve')));
 });
 
-test('de koorts: met pech sterft er iemand; de wolven halen schapen; en een gezin komt als er plaats is', () => {
+test('met pech sterft er iemand; de wolven halen schapen; en een gezin komt als er plaats is', () => {
   const S = dorp();
-  metVoorval(S, 'ziekte');
+  metVoorval(S, 'diefstal');
   const voor = S.dorp.bevolking;
   T.doeGevolg(S, S.dorp, { sterfkans: 100 });
   assert.equal(S.dorp.bevolking, voor - 1, 'bij honderd procent sterft er een');
-  assert.ok(berichten.some((t) => t.startsWith('The fever: ')));
+  assert.ok(berichten.some((t) => t.startsWith('The theft: ')));
   T.doeGevolg(S, S.dorp, { sterfkans: 0 });
   assert.equal(S.dorp.bevolking, voor - 1);
   const schapen = () => T.veeVan(S.dorp).filter((e) => e.dier === 'schaap').length;
@@ -470,21 +470,6 @@ test('een oorzaak speelt als het dorp hem heeft, en zegt waarom', () => {
   assert.equal(T.oorzaakVan(D, 'stroper', ZOMER).zin, 'There is hunger, for there is not enough food.');
   D.behoeften.mist = [];
 
-  D.behoeften.mist = ['firewood for the winter'];
-  assert.equal(T.oorzaakVan(D, 'ziekte', ZOMER), null, 'kou is er alleen in de winter');
-  D.voorraad.hout = 30;
-  D.voorraad.turf = 0;
-  assert.equal(T.oorzaakVan(D, 'ziekte', WINTER).zin, 'It is cold in the houses, for the logs will not last the winter.');
-  D.voorraad.hout = 0;
-  // Is het brandhout op, dan is het erger: strenge kou (werklijst vraag 77, stap 2).
-  assert.equal(T.oorzaakVan(D, 'ziekte', WINTER).zin, 'It is freezing in the houses, for the firewood has run out.');
-  assert.equal(T.oorzaakVan(D, 'ziekte', WINTER).niveau, 2);
-  D.behoeften.mist = [];
-
-  D.bevolking = T.telWoonruimte(D);
-  assert.deepEqual(T.oorzaakVan(D, 'brand', ZOMER), { id: 'vol', niveau: 1, naam: 'Full', zin: 'The houses are full.', waarom: '' });
-  assert.equal(T.oorzaakVan(D, 'ziekte', ZOMER).id, 'vol', 'de koorts komt van kou, of van een vol dorp');
-  D.bevolking -= 4;
 
   D.behoeften.tevredenheid = T.STATUSSEN_INSTELLINGEN.onvrede - 0.1;
   D.behoeften.last = ['the tax'];
@@ -497,14 +482,14 @@ test('met een oorzaak komt een probleem vaker, zonder zelden; op 1 en 1 zoals v√
   const IN = T.VOORVALLEN_INSTELLINGEN;
   assert.equal(T.gewichtVanVoorval(D, 'diefstal', ZOMER), IN.zonderOorzaak);
   assert.equal(T.gewichtVanVoorval(D, 'zwerver', ZOMER), 1, 'zonder oorzaak in T.VOORVALLEN verandert er niets');
-  assert.equal(T.gewichtVanVoorval(D, 'brand', WINTER), 3 * IN.zonderOorzaak, 'het wintergewicht blijft');
+  assert.equal(T.gewichtVanVoorval(D, 'wolven', WINTER), 3 * IN.zonderOorzaak, 'het wintergewicht blijft');
   T.zetWet(D, 'rantsoen', 'krap');
   assert.equal(T.gewichtVanVoorval(D, 'diefstal', ZOMER), IN.metOorzaak);
   const oud = { met: IN.metOorzaak, zonder: IN.zonderOorzaak };
   try {
     Object.assign(IN, { metOorzaak: 1, zonderOorzaak: 1 });
     assert.equal(T.gewichtVanVoorval(D, 'diefstal', ZOMER), 1);
-    assert.equal(T.gewichtVanVoorval(D, 'brand', WINTER), 3);
+    assert.equal(T.gewichtVanVoorval(D, 'wolven', WINTER), 3);
   } finally {
     Object.assign(IN, { metOorzaak: oud.met, zonderOorzaak: oud.zonder });
   }

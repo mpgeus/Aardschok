@@ -6,7 +6,6 @@ const assert = require('node:assert/strict');
 
 const T = require('./laad.cjs').spel();
 const { proefDorp } = require('./grond.cjs');
-T.ui = new Proxy({}, { get: () => () => undefined });
 
 function dagVan(maand, dagVanMaand) {
   for (let d = 0; d < T.DAGEN_PER_JAAR; d++) {
@@ -25,13 +24,28 @@ function gehucht(dag) {
   return S;
 }
 
-// Een voorval met wie het zegt en over wie het gaat: twee volwassenen uit verschillende huizen met een stand.
-function voorval(D, id, dag) {
-  const mensen = D.bewoners.mensen.filter((p) => p.leeftijd === 'volwassen' && p.huis && T.standVan(p.huis) && !p.wie);
-  const ander = mensen[0];
-  const wie = mensen.find((p) => p.huis !== ander.huis);
-  return T.beginVoorval(D, id, wie, ander, dag);
+// Wat het spel zegt, met de plek waar een klik je heen brengt.
+const berichten = [];
+T.ui = new Proxy({}, { get: (_, naam) => (naam === 'bericht' ? (tekst, soort, plek) => berichten.push({ tekst, soort, plek }) : () => undefined) });
+
+// Met deze getallen in een blok, en daarna weer de oude.
+function met(blok, getallen, doe) {
+  const oud = JSON.parse(JSON.stringify(blok));
+  Object.assign(blok, getallen);
+  try {
+    return doe();
+  } finally {
+    Object.assign(blok, oud);
+  }
 }
+
+// Een brand, nu: het eerste huis dat vlam vat.
+function brandNu(S, D) {
+  D.brandKomt = S.kalender.dag;
+  T.werkBrandBij(S, D);
+  return T.brandendeHuizen(D)[0];
+}
+const droogte = (D, tekort) => (D.weer = { vandaag: 'zon', droog: 30, tekort, verlies: 0 });
 
 test('brandgevaar in de droogte, groot in een ernstige droogte; niet in de winter', () => {
   const dag = dagVan('zomermaand', 5);
@@ -47,135 +61,141 @@ test('brandgevaar in de droogte, groot in een ernstige droogte; niet in de winte
   assert.equal(T.brandgevaarNiveau(D, dagVan('louwmaand', 5)), 0);
 });
 
-test('laat je het branden, dan is het een uur na je antwoord afgebrand', () => {
+// Ronde 3 van het snoeien (15 okt; Marcel: "het dorp doet het zelf"): de brand is geen voorval meer, maar komt bij
+// brandgevaar met een kleine kans per dag, en de buren blussen altijd.
+test('bij brandgevaar komt er soms een brand, op een uur overdag, en het bericht brengt je erheen; zonder niet', () => {
   const dag = dagVan('zomermaand', 5);
-  const S = gehucht(dag);
-  const D = S.dorp;
-  const L = voorval(D, 'brand', dag);
-  S.kalender.dag = L.vanaf;
-  T.werkBrandBij(S, D);
-  const g = L.brandHuis;
-  S.kalender.dag += 2 / 24;
-  T.werkBrandBij(S, D);
-  assert.equal(g.brand.fase, 'brandt', 'het brandt nog: niemand deed iets');
-  T.voorvalGevolg(D, { brand: 'laat', tevreden: -5 });
-  S.kalender.dag += (T.BRAND_INSTELLINGEN.blusUren + 0.05) / 24;
-  T.werkBrandBij(S, D);
-  assert.equal(g.brand.fase, 'puin');
-});
-
-test('het huis brandt als het voorval begint; zonder emmers brandt het af, en het gezin bouwt het weer op', () => {
-  const dag = dagVan('zomermaand', 5);
-  const S = gehucht(dag);
-  const D = S.dorp;
-  const L = voorval(D, 'brand', dag);
-  T.werkBrandBij(S, D);
-  assert.ok(!L.brandHuis, 'nog niet: wie het zegt, komt pas om', L.vanaf);
-  S.kalender.dag = L.vanaf;
-  T.werkBrandBij(S, D);
-  const g = L.brandHuis;
-  assert.equal(g, L.ander.huis, 'het huis van wie het betreft');
-  assert.equal(g.brand.fase, 'brandt');
-  assert.equal(g.voorwerp.brand, 'brandt');
-  assert.ok(T.lichtBronnen(D).some((b) => b.soort === 'brand'), 'het geeft licht');
-  S.kalender.dag += (T.BRAND_INSTELLINGEN.brandUren + 0.1) / 24;
-  T.werkBrandBij(S, D);
-  assert.equal(g.brand.fase, 'puin');
-  assert.equal(g.voorwerp.brand, 'puin');
-  assert.ok(D.bewoners.mensen.includes(L.ander), 'het gezin woont nog in het dorp');
-  // Na de dagen puin: met hout weer op, in de bouwfasen.
-  const hout = T.herbouwHout(g);
-  T.zetVoorraad(D, 'hout', hout - 1);
-  const terug = Math.floor(S.kalender.dag) + T.BRAND_INSTELLINGEN.puinDagen + 1;
-  T.tikBrandDag(D, terug);
-  assert.ok(g.brand && g.brand.wacht, 'zonder hout wacht het');
-  T.zetVoorraad(D, 'hout', hout + 3);
-  T.tikBrandDag(D, terug + 1);
-  assert.ok(!g.brand && !g.voorwerp.brand);
-  assert.equal(D.voorraad.hout, 3);
-  assert.ok(g.voorwerp.inAanbouw, 'het rijst weer op');
-  assert.equal(g.voorwerp.vanFase, T.BRAND_INSTELLINGEN.herbouwVanFase);
-  T.tikGebouwenDag(D, g.voorwerp.klaarOp);
-  assert.ok(!g.voorwerp.inAanbouw, 'en staat weer');
-});
-
-test('met de emmers is het vuur na een uur uit, en blijft het huis meestal staan', () => {
-  const red = T.BRAND_INSTELLINGEN.redKans;
-  T.BRAND_INSTELLINGEN.redKans = 1;
-  try {
-    const dag = dagVan('zomermaand', 5);
+  met(T.BRAND_INSTELLINGEN, { kans: 1 }, () => {
     const S = gehucht(dag);
     const D = S.dorp;
-    const L = voorval(D, 'brand', dag);
-    assert.match(T.prijsVanKeuze(D, { blus: true }).tekst, /the house survives 100 times in 100/);
-    T.voorvalGevolg(D, { blus: true }); // je antwoordde al voor het begon: het geldt toch
-    S.kalender.dag = L.vanaf;
+    T.tikBrandDag(D, dag);
+    assert.equal(D.brandKomt, undefined, 'zonder droogte geen brand');
+    droogte(D, T.WEER_INSTELLINGEN.droogteVanaf);
+    T.tikBrandDag(D, dag);
+    const [van, tot] = T.BRAND_INSTELLINGEN.uur;
+    assert.ok(D.brandKomt >= dag + van / 24 && D.brandKomt <= dag + tot / 24, 'overdag');
+    S.kalender.dag = D.brandKomt - 0.01;
     T.werkBrandBij(S, D);
-    const g = L.brandHuis;
-    assert.equal(g.brand.antwoord, 'blus');
-    S.kalender.dag += (T.BRAND_INSTELLINGEN.blusUren + 0.05) / 24;
+    assert.equal(T.brandendeHuizen(D).length, 0, 'nog niet');
+    berichten.length = 0;
+    S.kalender.dag = D.brandKomt;
     T.werkBrandBij(S, D);
-    assert.ok(!g.brand && !g.voorwerp.brand, 'uit, en het huis staat');
-  } finally {
-    T.BRAND_INSTELLINGEN.redKans = red;
-  }
+    const g = T.brandendeHuizen(D)[0];
+    assert.ok(g && T.standVan(g), 'een woonhuis brandt');
+    assert.equal(g.brand.fase, 'brandt');
+    assert.equal(g.voorwerp.brand, 'brandt');
+    assert.equal(D.brandKomt, null);
+    assert.ok(T.lichtBronnen(D).some((b) => b.soort === 'brand'), 'het geeft licht');
+    const b = berichten.find((x) => x.tekst.startsWith('Fire!'));
+    assert.ok(b, 'het spel zegt het');
+    assert.deepEqual(b.plek, T.deurVan(D.wereld, g), 'met de plek');
+  });
 });
 
-// Marcel, 10 okt: "Ja, zo": bij groot brandgevaar, als niemand blust, slaat het vuur soms over op één huis ernaast.
-test('bij groot brandgevaar slaat het vuur over op het huis ernaast als niemand blust, en dat huis niet verder', () => {
+test('de buren blussen: na een uur is het uit, of het huis brandt af en het gezin bouwt het weer op', () => {
+  const dag = dagVan('zomermaand', 5);
+  met(T.BRAND_INSTELLINGEN, { redKans: 1 }, () => {
+    const S = gehucht(dag);
+    const D = S.dorp;
+    const g = brandNu(S, D);
+    S.kalender.dag += (T.BRAND_INSTELLINGEN.blusUren - 0.1) / 24;
+    T.werkBrandBij(S, D);
+    assert.equal(g.brand.fase, 'brandt', 'ze zijn nog bezig');
+    S.kalender.dag += 0.2 / 24;
+    T.werkBrandBij(S, D);
+    assert.ok(!g.brand && !g.voorwerp.brand, 'uit, en het huis staat');
+  });
+  met(T.BRAND_INSTELLINGEN, { redKans: 0 }, () => {
+    const S = gehucht(dag);
+    const D = S.dorp;
+    const g = brandNu(S, D);
+    const wie = D.bewoners.mensen.filter((p) => p.huis === g);
+    S.kalender.dag += (T.BRAND_INSTELLINGEN.blusUren + 0.1) / 24;
+    T.werkBrandBij(S, D);
+    assert.equal(g.brand.fase, 'puin');
+    assert.equal(g.voorwerp.brand, 'puin');
+    assert.ok(wie.every((p) => D.bewoners.mensen.includes(p)), 'het gezin woont nog in het dorp');
+    // Na de dagen puin: met hout weer op, in de bouwfasen.
+    const hout = T.herbouwHout(g);
+    T.zetVoorraad(D, 'hout', hout - 1);
+    const terug = Math.floor(S.kalender.dag) + T.BRAND_INSTELLINGEN.puinDagen + 1;
+    T.tikBrandDag(D, terug);
+    assert.ok(g.brand && g.brand.wacht, 'zonder hout wacht het');
+    T.zetVoorraad(D, 'hout', hout + 3);
+    T.tikBrandDag(D, terug + 1);
+    assert.ok(!g.brand && !g.voorwerp.brand);
+    assert.equal(D.voorraad.hout, 3);
+    assert.ok(g.voorwerp.inAanbouw, 'het rijst weer op');
+    assert.equal(g.voorwerp.vanFase, T.BRAND_INSTELLINGEN.herbouwVanFase);
+    T.tikGebouwenDag(D, g.voorwerp.klaarOp);
+    assert.ok(!g.voorwerp.inAanbouw, 'en staat weer');
+  });
+});
+
+// Marcel, 10 okt: "Ja, zo": bij groot brandgevaar slaat het vuur soms over op één huis ernaast; sinds 15 okt als de
+// emmers het huis niet redden.
+test('bij groot brandgevaar slaat het vuur over op het huis ernaast als het afbrandt, en dat huis niet verder', () => {
   const O = { ...T.BRAND_INSTELLINGEN.overslaan };
   T.BRAND_INSTELLINGEN.overslaan.kans = 1;
   T.BRAND_INSTELLINGEN.overslaan.afstand = 60; // in het proefdorp: er is altijd een huis
   try {
-    const dag = dagVan('zomermaand', 5);
-    const brand = (droogte, antwoord) => {
-      const S = gehucht(dag);
-      const D = S.dorp;
-      D.weer = { vandaag: 'zon', droog: 30, tekort: droogte, verlies: 0 };
-      const L = voorval(D, 'brand', dag);
-      S.kalender.dag = L.vanaf;
+    met(T.BRAND_INSTELLINGEN, { redKans: 0 }, () => {
+      const dag = dagVan('zomermaand', 5);
+      const brand = (tekort) => {
+        const S = gehucht(dag);
+        const D = S.dorp;
+        droogte(D, tekort);
+        const g = brandNu(S, D);
+        S.kalender.dag += (T.BRAND_INSTELLINGEN.blusUren + 0.1) / 24;
+        T.werkBrandBij(S, D);
+        return { S, D, g, branden: T.brandendeHuizen(D).filter((h) => h.brand.fase === 'brandt') };
+      };
+      const W = T.WEER_INSTELLINGEN;
+      const { S, D, g, branden } = brand(W.ernstigVanaf);
+      assert.equal(T.brandgevaarNiveau(D), 2);
+      assert.equal(g.brand.fase, 'puin');
+      assert.equal(branden.length, 1, 'één buurhuis brandt');
+      const buur = branden[0];
+      assert.ok(buur.brand.overgeslagen);
+      assert.ok(T.standVan(buur), 'een woonhuis');
+      const afstand = (a, b) => Math.max(0, b.x - (a.x + a.b), a.x - (b.x + b.b), b.y - (a.y + a.h), a.y - (b.y + b.h));
+      const voet = T.voetVanGebouw(g);
+      for (const h of D.gebouwen) if (h !== g && h !== buur && T.standVan(h) && h.klaar) assert.ok(afstand(voet, T.voetVanGebouw(h)) >= afstand(voet, T.voetVanGebouw(buur)), 'het dichtste');
+      // Het buurhuis brandt af en slaat niet verder over.
+      S.kalender.dag += (T.BRAND_INSTELLINGEN.blusUren + 0.1) / 24;
       T.werkBrandBij(S, D);
-      if (antwoord) T.voorvalGevolg(D, antwoord);
-      S.kalender.dag += (T.BRAND_INSTELLINGEN.brandUren + 0.1) / 24;
-      T.werkBrandBij(S, D);
-      return { S, D, g: L.brandHuis, branden: T.brandendeHuizen(D).filter((h) => h.brand.fase === 'brandt') };
-    };
-    const W = T.WEER_INSTELLINGEN;
-    // Groot brandgevaar, en niemand deed iets: het dichtste huis vat vlam.
-    const { S, D, g, branden } = brand(W.ernstigVanaf);
-    assert.equal(T.brandgevaarNiveau(D), 2);
-    assert.equal(g.brand.fase, 'puin');
-    assert.equal(branden.length, 1, 'één buurhuis brandt');
-    const buur = branden[0];
-    assert.ok(buur.brand.overgeslagen);
-    assert.ok(T.standVan(buur), 'een woonhuis');
-    const afstand = (a, b) => Math.max(0, b.x - (a.x + a.b), a.x - (b.x + b.b), b.y - (a.y + a.h), a.y - (b.y + b.h));
-    const voet = T.voetVanGebouw(g);
-    for (const h of D.gebouwen) if (h !== g && h !== buur && T.standVan(h) && h.klaar) assert.ok(afstand(voet, T.voetVanGebouw(h)) >= afstand(voet, T.voetVanGebouw(buur)), 'het dichtste');
-    // Het buurhuis brandt af en slaat niet verder over.
-    S.kalender.dag += (T.BRAND_INSTELLINGEN.brandUren + 0.1) / 24;
-    T.werkBrandBij(S, D);
-    assert.equal(buur.brand.fase, 'puin');
-    assert.equal(T.brandendeHuizen(D).filter((h) => h.brand.fase === 'brandt').length, 0, 'niet verder');
-
-    // Gewoon brandgevaar: niet.
-    assert.equal(brand(W.droogteVanaf).branden.length, 0, 'alleen bij groot brandgevaar');
-    // Met de emmers, ook als ze het huis niet redden: niet.
-    const red = T.BRAND_INSTELLINGEN.redKans;
-    T.BRAND_INSTELLINGEN.redKans = 0;
-    try {
-      const b = brand(W.ernstigVanaf, { blus: true });
-      assert.equal(b.g.brand.fase, 'puin');
-      assert.equal(b.branden.length, 0, 'wie blust, houdt het vuur bij het huis');
-    } finally {
-      T.BRAND_INSTELLINGEN.redKans = red;
-    }
+      assert.equal(buur.brand.fase, 'puin');
+      assert.equal(T.brandendeHuizen(D).filter((h) => h.brand.fase === 'brandt').length, 0, 'niet verder');
+      // Gewoon brandgevaar: niet.
+      assert.equal(brand(W.droogteVanaf).branden.length, 0, 'alleen bij groot brandgevaar');
+    });
   } finally {
     Object.assign(T.BRAND_INSTELLINGEN.overslaan, O);
   }
 });
 
-test('de koorts: wie het zegt en zijn gezin zijn ziek, ze steekt aan, en is na een tijd voorbij', () => {
+// Ronde 3 van het snoeien (15 okt): de koorts is geen voorval meer, maar begint zelf in de kou of in een vol dorp.
+test('de koorts begint alleen in de kou of in een vol dorp, met een bericht met een plek', () => {
+  const dag = dagVan('louwmaand', 5);
+  met(T.KOORTS_INSTELLINGEN, { kans: 1 }, () => {
+    const S = gehucht(dag);
+    const D = S.dorp;
+    D.bevolking = T.telWoonruimte(D) - 4;
+    T.tikKoortsDag(D, dag);
+    assert.equal(D.koorts, undefined, 'zonder kou of een vol dorp niet');
+    D.bevolking = T.telWoonruimte(D);
+    berichten.length = 0;
+    T.tikKoortsDag(D, dag);
+    assert.ok(D.koorts, 'in een vol dorp wel');
+    const zieken = T.zieken(D);
+    assert.ok(zieken.length >= 1 && zieken.length <= T.KOORTS_INSTELLINGEN.begin);
+    assert.ok(zieken.every((p) => p.gezin === zieken[0].gezin), 'iemand en zijn gezin');
+    const b = berichten.find((x) => x.tekst.startsWith('Fever!'));
+    assert.ok(b && b.plek, 'het spel zegt het, met de plek');
+  });
+});
+
+test('de koorts steekt aan, en is na een tijd voorbij', () => {
   const K = T.KOORTS_INSTELLINGEN;
   const besmet = K.besmet;
   K.besmet = 1;
@@ -183,12 +203,11 @@ test('de koorts: wie het zegt en zijn gezin zijn ziek, ze steekt aan, en is na e
     const dag = dagVan('louwmaand', 5);
     const S = gehucht(dag);
     const D = S.dorp;
-    const L = voorval(D, 'ziekte', dag);
-    T.tikKoortsDag(D, dag);
+    T.beginKoorts(D, dag);
     const eerst = T.zieken(D).length;
     assert.ok(eerst >= 1 && eerst <= K.begin, `${eerst} ziek`);
-    assert.ok(L.ander.ziek, 'wie het betreft');
-    assert.ok(T.blijftThuis(L.ander, dag + 1), 'in bed');
+    const p = T.zieken(D)[0];
+    assert.ok(T.blijftThuis(p, dag + 1), 'in bed');
     assert.equal(T.statussenVan(D, dag).find((s) => s.id === 'koorts').naam, 'Fever');
     let meest = eerst;
     let d = dag + 1;
@@ -199,7 +218,7 @@ test('de koorts: wie het zegt en zijn gezin zijn ziek, ze steekt aan, en is na e
     }
     assert.ok(meest > eerst, 'ze stak anderen aan');
     assert.equal(D.koorts, null, 'en is voorbij');
-    assert.ok(!D.bewoners.mensen.some((p) => p.ziek));
+    assert.ok(!D.bewoners.mensen.some((m) => m.ziek));
   } finally {
     K.besmet = besmet;
   }
@@ -211,12 +230,10 @@ test('de pestbos: naast de deur van elk huis met een zieke, tegen de muur, zolan
   const S = gehucht(dag);
   const D = S.dorp;
   assert.deepEqual(T.pestbossen(D, S.wereld), [], 'zonder koorts geen');
-  const L = voorval(D, 'ziekte', dag);
-  T.tikKoortsDag(D, dag);
+  T.beginKoorts(D, dag);
   const bossen = T.pestbossen(D, S.wereld);
   const huizen = new Set(T.zieken(D).map((p) => p.huis));
   assert.equal(bossen.length, huizen.size, 'één per huis met een zieke');
-  assert.ok(bossen.some((b) => b.g === L.ander.huis));
   for (const b of bossen) {
     const deur = T.deurVan(S.wereld, b.g);
     assert.ok(Math.abs(b.x - deur.x) + Math.abs(b.y - deur.y) <= 1, 'naast de deur');
@@ -225,15 +242,4 @@ test('de pestbos: naast de deur van elk huis met een zieke, tegen de muur, zolan
   }
   for (const p of D.bewoners.mensen) delete p.ziek;
   assert.deepEqual(T.pestbossen(D, S.wereld), [], 'beter: weg');
-});
-
-test('een schone put maakt dat de koorts minder overgaat, en het venster zegt het vooraf', () => {
-  const dag = dagVan('louwmaand', 5);
-  const S = gehucht(dag);
-  const D = S.dorp;
-  voorval(D, 'ziekte', dag);
-  assert.match(T.prijsVanKeuze(D, { goud: -2, koorts: 40 }).tekst, /half as often/);
-  T.voorvalGevolg(D, { koorts: 40 }); // je antwoordde voor de nacht: het geldt als ze begint
-  T.tikKoortsDag(D, dag);
-  assert.equal(D.koorts.maat, 0.4);
 });

@@ -1749,45 +1749,42 @@
       };
     },
     // De brand (js/brand.js; werklijst vraag 144, 3): het brandgevaar, en welke huizen branden, in puin liggen of op hout
-    // wachten. Spel.debug.brand('nu') laat de brand nu beginnen (zoals Spel.debug.voorval('brand')), ('puin') laat wat
-    // brandt nu afbranden, ('herbouw') laat wat in puin ligt nu weer opbouwen (als er hout is).
+    // wachten. Spel.debug.brand('nu') laat de brand nu beginnen (ook zonder brandgevaar), ('puin') laat wat brandt nu
+    // afbranden, ('herbouw') laat wat in puin ligt nu weer opbouwen (als er hout is).
     brand(wat) {
       const D = S.dorp;
       if (wat === 'nu') {
-        const r = this.voorval('brand');
-        if (typeof r === 'string') return r;
+        D.brandKomt = S.kalender.dag;
         T.werkBrandBij(S, D);
+        if (!T.brandendeHuizen(D).length) return 'Er is geen woonhuis dat kan branden.'; // geen tekst
       }
       for (const g of T.brandendeHuizen(D)) {
-        if (wat === 'puin' && g.brand.fase === 'brandt') g.brand.sinds -= T.BRAND_INSTELLINGEN.brandUren / 24 + 0.01;
-        if (wat === 'puin') g.brand.antwoord = null;
+        if (wat === 'puin' && g.brand.fase === 'brandt') {
+          g.brand = { fase: 'puin', sinds: S.kalender.dag };
+          g.voorwerp.brand = 'puin';
+        }
         if (wat === 'herbouw' && g.brand.fase === 'puin') g.brand.sinds -= T.BRAND_INSTELLINGEN.puinDagen + 1;
       }
-      if (wat === 'puin') T.werkBrandBij(S, D);
       if (wat === 'herbouw') T.tikBrandDag(D, Math.floor(S.kalender.dag));
       const niveau = T.brandgevaarNiveau(D);
       return {
         gevaar: ['geen', 'brandgevaar', 'groot brandgevaar'][niveau], // geen tekst
         redKans: `${Math.round(T.redKans(D) * 100)} van de 100`, // geen tekst
         huizen: T.brandendeHuizen(D).map((g) => ({
-          huis: `${g.soort} op ${g.x},${g.y}`, fase: g.brand.fase, sinds: T.uurTekst(g.brand.sinds), antwoord: g.brand.antwoord || null,
+          huis: `${g.soort} op ${g.x},${g.y}`, fase: g.brand.fase, sinds: T.uurTekst(g.brand.sinds),
           wachtOpHout: !!g.brand.wacht, hout: T.herbouwHout(g),
         })),
       };
     },
     // De koorts (js/koorts.js; werklijst vraag 144, 3): wie er ziek is en tot wanneer, wie het had, en hoe snel ze overgaat.
-    // Spel.debug.koorts('nu') laat de koorts nu beginnen (het voorval, en de nacht erna).
+    // Spel.debug.koorts('nu') laat de koorts nu beginnen (ook zonder kou of een vol dorp).
     koorts(wat) {
       const D = S.dorp;
-      if (wat === 'nu') {
-        const r = this.voorval('ziekte');
-        if (typeof r === 'string') return r;
-        T.tikKoortsDag(D, Math.floor(S.kalender.dag));
-      }
+      if (wat === 'nu' && !D.koorts) T.beginKoorts(D, Math.floor(S.kalender.dag));
       const K = D.koorts;
       return K
         ? {
-          niveau: ['geen', 'koorts', 'epidemie'][T.koortsNiveau(D)], sinds: T.datumVanDag(K.sinds).tekst, maat: K.maat,
+          niveau: ['geen', 'koorts', 'epidemie'][T.koortsNiveau(D)], sinds: T.datumVanDag(K.sinds).tekst,
           ziek: T.zieken(D).map((p) => `${T.naamVanBewoner(p)} (${p.leeftijd}), tot ${T.datumVanDag(p.ziek).tekst}`), gehad: K.gehad.length,
         }
         : 'Er is geen koorts.'; // geen tekst

@@ -52,9 +52,8 @@
 // Een voorval (js/voorvallen.js) is een gesprek dat de ander begint, onder dezelfde naam als in T.VOORVALLEN. Zijn
 // naam is '{wie}': wie het je komt zeggen. Een antwoord mag daar ook hebben: graan: -20 (of hout, bier, ijzer, ...),
 // tevreden: 5, gunst: -3, verban: 'ander', sterfkans: 30, gezin: 1, schaap: -2, voorval: 'x' (een vervolg) en
-// feest: 'dag' of 'avond' (het dorp viert het op het plein, js/feesten.js), blus: true of brand: 'laat' (de brand,
-// js/brand.js) en koorts: 40 (de koorts gaat zo vaak over als 40 op 100, js/koorts.js). Wat dat is, staat boven in
-// js/voorvallen.js; het venster zegt de prijs vooraf.
+// feest: 'dag' of 'avond' (het dorp viert het op het plein, js/feesten.js). Wat dat is, staat boven in js/voorvallen.js;
+// het venster zegt de prijs vooraf.
 //
 // In een zin mag {woord} staan: dat vult het spel in (T.GESPREK_WOORDEN in js/gesprek.js), zoals
 // {gisteravond}, wie er gisteravond in de herberg zat (js/herberg.js), en in een voorval {wie} en {ander}.
@@ -485,55 +484,6 @@
           keuzes: [
             { zeg: 'Thank you.', sluit: true, doe: { graan: 30 } },
             { zeg: 'Twenty is enough.', sluit: true, doe: { graan: 20, tevreden: 1 } },
-          ],
-        },
-      },
-    },
-    brand: {
-      naam: '{wie}',
-      start: 'begin',
-      knopen: {
-        begin: {
-          tekst: [
-            { zeg: "Fire, reeve! {ander}'s roof is on fire! The thatch burns like straw. It is straw." },
-          ],
-          keuzes: [
-            { zeg: 'Everyone to the buckets!', sluit: true, doe: { blus: true, tevreden: 2 } },
-            { zeg: 'Let it burn. They can build again.', sluit: true, doe: { brand: 'laat', tevreden: -5 } },
-          ],
-        },
-      },
-    },
-    ziekte: {
-      naam: '{wie}',
-      start: 'begin',
-      knopen: {
-        begin: {
-          tekst: [
-            { zeg: "There's fever in the village, reeve. First next door, now in our house too. The midwife says it comes from the well. There's something in it. Something dead." },
-          ],
-          keuzes: [
-            { zeg: 'Have the well emptied and cleaned.', sluit: true, doe: { goud: -2, koorts: 40 } },
-            { zeg: 'Drink ale, not water, until it passes.', sluit: true, doe: { bier: -15, koorts: 70 } },
-            { zeg: 'Pray. That helps too.', sluit: true, doe: { koorts: 100 } },
-          ],
-        },
-      },
-    },
-    zaaigraanHonger: {
-      naam: '{wie}',
-      start: 'begin',
-      // De honger komt aan het zaaigraan in de graanschuur (js/graanschuur.js; werklijst vraag 132; Marcel, 8 okt: "bij
-      // honger grijpen mensen alles aan. Je moet mensen inzetten om het warenhuis te beschermen").
-      knopen: {
-        begin: {
-          tekst: [
-            { zeg: 'Reeve, the people are hungry. They are talking about the granary. If they eat the seed grain now, the fields stay empty in spring.' },
-          ],
-          keuzes: [
-            { zeg: 'Put men at the granary. The seed grain stays where it is.', sluit: true, doe: { bewaak: 1, vertrouwen: -3 } },
-            { zeg: 'Give them half, and guard the rest.', sluit: true, doe: { bewaak: 0.5, vertrouwen: -1 } },
-            { zeg: 'Let them eat. Hunger is worse.', sluit: true, doe: { tevreden: 2 } },
           ],
         },
       },

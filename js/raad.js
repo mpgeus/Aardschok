@@ -111,8 +111,7 @@
   // Wat er helpt als het eten de winter niet haalt (Marcel, 8 okt, vraag 132, b: "ze mogen advies geven op wat te doen.
   // dit kan kopen, planten, bakken etc zijn"): wat er nu kan, in deze volgorde, elk { id, zin, bouw (de soort die het
   // dorp dan vraagt, of geen) }. Een visser als er water is en het nog geen winter is, een jager als er herten zijn
-  // (jagerHelpt), een graanschuur om het zaaigraan te houden (js/graanschuur.js), en in de lente zaaigraan kopen als er te
-  // weinig is om te zaaien.
+  // (jagerHelpt), en in de lente zaaigraan kopen als er te weinig is om te zaaien.
   T.watHelptAanEten = function (D) {
     const uit = [];
     const dag = D.kalender.dag;
@@ -144,9 +143,6 @@
         zin: T.t('{jager}{toets} ({vlees} a day, and deer in the woods)', { jager: eenNaam('jager'), toets: tB, vlees: T.hoeveel(T.GEBOUWEN.jager.maakt.uit.vlees, 'vlees') }),
         bouw: 'jager',
       });
-    }
-    if (T.GRAANSCHUUR_INSTELLINGEN.bewaken && !heeft(D, 'graanschuur') && T.zaaigraanApart(D, dag) > 0 && T.magGebouwd(D, 'graanschuur')) {
-      uit.push({ id: 'graanschuur', zin: T.t('{schuur}{toets}, so that the seed grain is kept', { schuur: eenNaam('graanschuur'), toets: tB }), bouw: 'graanschuur' });
     }
     const zaai = T.zaaigraanApart(D, dag);
     if (zaai > 0 && ((D.voorraad && D.voorraad.graan) || 0) < zaai) {

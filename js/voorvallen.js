@@ -21,7 +21,6 @@
 //                     lijstje is: niets. Dat zegt het venster niet: wie je liet gaan, kan terugkomen.
 //   feest: 'dag'      het dorp viert dit voorval op het plein (js/feesten.js): 'dag' is morgen de hele dag, en niemand
 //                     werkt; 'avond' is 's avonds, vanavond nog als het kan
-//   bewaak: 1         mannen bij de graanschuur, die het zaaigraan bewaken (0.5: de helft; js/graanschuur.js)
 //   jacht: true       een jacht te voet op de wolven (js/beesten.js): de mannen lopen met de schout mee naar de roedel
 //   wolven: -2        de roedel verliest meteen twee wolven; hek: true, een hek om de schapen (js/beesten.js)
 // Een voorval komt geloot, of op een vaste dag (op: { maand, dag }, de meiboom).
@@ -92,7 +91,7 @@
   //            (metOorzaak, zonderOorzaak), en het bericht zegt waarom
   //   pauze    niet binnen zoveel dagen terug (zonder: de pauze uit het blok hierboven)
   //   vervolg  true: komt alleen als vervolg op een ander voorval; na: [van, tot], na zoveel dagen
-  //   zelf     true: wordt niet geloot; een ander deel van het spel begint het (zoals zaaigraanHonger).
+  //   zelf     true: wordt niet geloot; een ander deel van het spel begint het.
   //            'beesten': zo zolang er beesten in het bos leven (de spelregel "Beesten"): de wolven namen dan echt een
   //            schaap (js/beesten.js); zonder beesten wordt het geloot, zoals voor 7 okt
   //   roep     het bericht als hij je gaat zoeken (zonder: "{wie} is looking for you."), met de woorden van een gesprek
@@ -136,13 +135,6 @@
     zaaigraan: { soort: 'verzoek', titel: T.t('the seed grain'), als: { maanden: ['lentemaand', 'grasmaand'] }, wie: { boer: true } },
     zaaigraanTerug: { soort: 'verzoek', titel: T.t('the seed grain'), vervolg: true, na: [120, 150] },
     // Rampen: iets doen kost iets, niets doen ook.
-    brand: {
-      soort: 'ramp', titel: T.t('the fire'), winter: 3, oorzaak: ['vol', 'brandgevaar'], roep: T.t('Fire! {wie} is coming to fetch you.'),
-      wie: { leeftijd: ['jong', 'volwassen'] }, ander: { boer: false },
-    },
-    ziekte: { soort: 'ramp', titel: T.t('the fever'), winter: 2, oorzaak: ['kou', 'vol'], sterft: T.t('The fever'), wie: { geslacht: 'vrouw' } },
-    // De honger komt aan het zaaigraan in de graanschuur (js/graanschuur.js; vraag 132): een boer zoekt je.
-    zaaigraanHonger: { soort: 'ramp', titel: T.t('the seed grain'), zelf: true, oorzaak: 'honger', roep: T.t('{wie} is looking for you: the village wants to eat the seed grain.'), wie: [{ boer: true }, MAN] },
     wolven: {
       soort: 'ramp', titel: T.t('the wolves'), als: { seizoen: 'winter', vee: { schaap: 3 } }, winter: 3, sterft: T.t('The wolf hunt'), zelf: 'beesten', oorzaak: 'wolven',
       roep: T.t('Wolves! {wie} is coming to fetch you.'), wie: [{ werk: 'schaapskooi' }, MAN], ander: MAN,
@@ -580,18 +572,12 @@
       const wie = L.ander && kanHetBetreffen(D, L.ander) ? [L.ander] : undefined;
       T.wijzigBevolking(D, -1, 'ziekte', v.sterft || T.hoofdletter(v.titel), wie);
     }
-    // De brand (js/brand.js): met de emmers; en de koorts (js/koorts.js): wat je doet, maakt dat ze zich minder verspreidt.
-    if (doe.blus) T.blusBrand(D);
-    if (doe.brand === 'laat') T.laatBranden(D);
-    if (doe.koorts != null) T.koortsMaatregel(D, doe.koorts);
     // Een feest (js/feesten.js): het dorp viert dit voorval op het plein, morgen de hele dag of 's avonds.
     if (doe.feest && L.id) T.zetFeest(D, L.id, doe.feest, D.kalender ? D.kalender.dag : dag);
     // De wolven (js/beesten.js): een jacht te voet naar de roedel die het schaap nam (doe.jacht; stap 3b), of meteen wolven
     // minder (doe.wolven), en een hek houdt ze bij de schapen weg. gereedschap/wereld.html laadt de beesten niet.
     if (doe.wolven < 0 && T.jaagOpDeWolven) T.jaagOpDeWolven(D, -doe.wolven);
     if (doe.jacht && T.beginJacht) T.beginJacht(D, D.kalender ? D.kalender.dag : dag);
-    // Het zaaigraan bewaken (js/graanschuur.js): mannen bij de graanschuur, voor alles of een deel.
-    if (doe.bewaak && T.bewaakZaaigraan) T.bewaakZaaigraan(D, doe.bewaak);
     if (doe.hek && T.hekOmDeSchapen) T.hekOmDeSchapen(D);
     if (doe.voorval && L.wie) {
       const lijst = elk(doe.voorval);
@@ -634,19 +620,7 @@
       if (!T.plaatsVoorEenGezin(D) && uit.kan) Object.assign(uit, { kan: false, waarom: T.t('there is no room: mark out a plot (B)') });
     }
     if (doe.sterfkans) delen.push(T.t('{n}% chance of a death', { n: doe.sterfkans }));
-    if (doe.blus) delen.push(T.t('the neighbours fight the fire: the house survives {n} times in 100', { n: Math.round(T.redKans(D) * 100) }));
-    if (doe.brand === 'laat') delen.push(T.t('the house burns down, and the family builds it again'));
-    if (doe.koorts != null) {
-      if (doe.koorts >= 100) delen.push(T.t('the fever runs its course'));
-      else delen.push(doe.koorts <= 50 ? T.t('the fever spreads half as often') : T.t('the fever spreads a little less often'));
-    }
     if (doe.wolven < 0) delen.push(T.t('{n|one wolf fewer|{getal} fewer wolves}', { n: -doe.wolven, getal: T.telwoord(-doe.wolven) }));
-    if (doe.bewaak && T.wachtersNodig) {
-      const wachters = { n: T.wachtersNodig(D), getal: T.telwoord(T.wachtersNodig(D)) };
-      delen.push(doe.bewaak < 1
-        ? T.t('{n|{getal} man|{getal} men} at the granary until sowing, half for the village; every day of hunger costs trust', wachters)
-        : T.t('{n|{getal} man|{getal} men} at the granary until sowing; every day of hunger costs trust', wachters));
-    }
     if (doe.jacht) delen.push(T.t('the men go with you to the wolves ({n|{getal} day|{getal} days})', { n: T.BEESTEN_INSTELLINGEN.jacht.dagen, getal: T.telwoord(T.BEESTEN_INSTELLINGEN.jacht.dagen) }));
     if (doe.hek) delen.push(T.t('a fence round the sheep'));
     if (doe.feest && T.feestPrijs(doe.feest, L.id)) delen.push(T.feestPrijs(doe.feest, L.id));

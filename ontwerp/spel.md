@@ -46,7 +46,7 @@ bouwt of verandert, werkt het blok bovenaan bij (Marcel, 25 sep: "op orde stelle
 | Het eerste proefje | gebouwd (23 sep); de kaart sinds 26 sep rond het plein (vierde versie) | 1 |
 | De kern voor het tweede proefje | voorstel; de heer en de inner kwamen anders, groepen en keuren wachten | 9 |
 | Rijk worden en arm lijken | eruit (11 okt, optie 1) | 4, 6, vraag 151 |
-| Het dorp: mensen, behoeften en de winter | gebouwd (23 sep); de winter zie je aankomen (28 sep); de mensen sprokkelen hout, maar niet genoeg (30 sep); een gezin wacht op de winter als het hout of het eten hem niet haalt, en het zaaigraan eet het dorp pas bij nood (1 okt), tenzij er wachters bij de graanschuur staan (8 okt) | 3, vraag 74, 79, 81, 132 |
+| Het dorp: mensen, behoeften en de winter | gebouwd (23 sep); de winter zie je aankomen (28 sep); de mensen sprokkelen hout, maar niet genoeg (30 sep); een gezin wacht op de winter als het hout of het eten hem niet haalt, en het zaaigraan eet het dorp pas bij nood (1 okt) | 3, vraag 74, 79, 81, 132 |
 | Gebouwen | 45 soorten; 16 in het bouwmenu van het gehucht | 2, 14 |
 | Handel: de marskramer | gebouwd (24 sep); in de lente ook zaaigraan, en de boeren zaaien na tot 1 bloeimaand (1 okt) | 4, vraag 79 |
 | Sint-Maarten | gebouwd (24 sep) | 5 |
@@ -708,23 +708,21 @@ in één keer, het weer ook in beeld, en bij droogte de beekjes droog, zodat de 
 het beeld van het weer samen met zijn regels, de kleur van het weer op de lichtkaart.
 
 De brand (`js/brand.js`): in de droogte is er brandgevaar, en groot brandgevaar in een ernstige droogte of een droogte
-in een vol dorp; dan komt de brand vaker. Als iemand je komt halen, staat het huis echt in brand: vuurtongen over het dak,
-vonken, rook en een gloed die 's nachts de buurt verlicht. Met de emmers is het een uur na je antwoord uit, en blijft het huis 65
-van de 100 keer staan (bij brandgevaar minder); laat je het branden, dan is het een uur later afgebrand, en doet niemand
-iets, na zes uur. Terwijl het brandt, zie je het afbranden (vraag 144, de ronde van alle tekeningen, 11 okt): het dak
+in een vol dorp; alleen dan komt er een brand, zo'n twee keer op de honderd dagen (sinds 15 okt, ronde 3 van het snoeien:
+tot dan was het een voorval waarin je koos). Op een uur overdag staat een woonhuis in brand, en een bericht brengt je
+erheen: vuurtongen over het dak, vonken, rook en een gloed die 's nachts de buurt verlicht. De buren blussen altijd: na
+een uur is het uit, en blijft het huis 65 van de 100 keer staan (bij brandgevaar minder), of het is afgebrand. Terwijl het brandt, zie je het afbranden (vraag 144, de ronde van alle tekeningen, 11 okt): het dak
 schroeit en valt; afgebrand ligt het binnengestort, dan ingestort, en de laatste dag voor het opbouwen opgeruimd. Het
 smeult twee dagen. Het gezin woont zolang bij de buren, en na drie dagen bouwt het zijn
-huis weer op, met de helft van het hout dat het kostte, in de bouwfasen; zonder hout wacht het. Bij groot brandgevaar, en
-als niemand blust, slaat het vuur de helft van de keren over op het dichtste huis binnen vijf tegels, als het eerste
-afbrandt; dat huis brandt ook af en wordt ook weer opgebouwd, en slaat zelf niet verder over (10 okt; Marcel: "Ja, zo").
+huis weer op, met de helft van het hout dat het kostte, in de bouwfasen; zonder hout wacht het. Bij groot brandgevaar
+slaat het vuur de helft van de keren over op het dichtste huis binnen vijf tegels, als het eerste afbrandt; dat huis brandt ook af en wordt ook weer opgebouwd, en slaat zelf niet verder over (10 okt; Marcel: "Ja, zo").
 
-De koorts (`js/koorts.js`): begint met het voorval, bij wie het betreft en zijn gezin. Wie ziek is, ligt een week in bed
-en werkt niet, en steekt elke nacht soms een ander aan, vaker in een vol dorp en in de kou. Wat je antwoordde, telt: de
-put schoonmaken (minder dan de helft zo vaak), bier in plaats van water, of bidden (dan gaat ze haar gang). Een enkele
-keer sterft er iemand, de ouden en de kinderen vaker; wie het had, krijgt het deze keer niet weer. Zolang er iemand ziek
+De koorts (`js/koorts.js`): begint zelf, alleen in de kou of in een vol dorp, zo'n twee keer op de honderd dagen en in de
+winter dubbel (sinds 15 okt; tot dan een voorval, waarin je koos tussen de put, bier of bidden): iemand en zijn gezin
+zijn ziek, en een bericht brengt je naar zijn huis. Wie ziek is, ligt een week in bed en werkt niet, en steekt elke
+nacht soms een ander aan, vaker in een vol dorp en in de kou. Een enkele keer sterft er iemand, de ouden en de kinderen vaker; wie het had, krijgt het deze keer niet weer. Zolang er iemand ziek
 is, is het de status Koorts, en Epidemie als een tiende van het dorp ziek is. Naast de deur van een huis met een zieke
-staat een pestbos, een bos stro aan een paal, zolang er iemand ziek is (10 okt; alleen beeld). De spelregels "Brand" en
-"Koorts".
+staat een pestbos, een bos stro aan een paal, zolang er iemand ziek is (10 okt; alleen beeld).
 
 Sneeuw blijft liggen: elke sneeuwdag legt er een derde bij, in de winter smelt er elke dag een twintigste af, en
 daarbuiten snel. Op de grond, de weides en de kale akkers ligt hij eerst in plukjes, en daarna helemaal wit; op een paadje
@@ -2082,18 +2080,13 @@ worden anders minder productief", en "A1, B1, C1, D1"; `js/behoeften.js`):
   de kaas en het gezouten vlees, en zegt het als het zover is ("De honger is groot: het dorp eet van het zaaigraan."). De
   winter rekent het eten zonder het zaaigraan, en bij de muis op het graan in de balk staat hoeveel ervan zaaigraan is.
   De spelregel "Zaaigraan" (Als ander graan: het spel van vóór 1 okt).
-- **De graanschuur en de wachters** (8 okt; werklijst vraag 132; Marcel: "bij honger grijpen mensen alles aan. Je moet
-  mensen inzetten om het warenhuis te beschermen", "Ja, er moet een graanschuur komen", en een wachter per twintig mensen,
-  "anders maken ze geen kans"; `js/graanschuur.js`): het zaaigraan ligt in de graanschuur, en zodra er zaaigraan apart
-  ligt, vraagt het dorp er een. Komt de honger eraan, dan zoekt een boer je: "Ze praten over de graanschuur." Je zet er
-  mannen bij (alles, of de helft, en de rest mag het dorp eten), of je laat ze eten. Wachters (de militie eerst, dan de
-  weerbare mannen), een per twintig mensen en minstens twee, staan dag en nacht bij de schuur en werken nergens; met te
-  weinig pakt het dorp een deel. Elke dag honger terwijl het graan bewaakt wordt, kost vertrouwen; bij het zaaien gaan ze
-  naar huis. Zonder graanschuur eet het dorp het op zoals hierboven. De spelregel "Zaaigraan" op "Bewaken" (de
-  standaard), "Pas bij nood" of "Als ander graan". De graanschuur leent nog de tekening van de blokhutschuur.
+- **De graanschuur** (8 okt; werklijst vraag 132): staat in het bouwmenu, en leent nog de tekening van de blokhutschuur.
+  Het bewaken van het zaaigraan (wachters bij de schuur, gevraagd door een boer als de honger eraan kwam) is weg sinds 15
+  okt (ronde 3 van het snoeien: het was een voorval); de schuur blijft, zonder werk, tot we hem een taak geven (Marcel).
+  De spelregel "Zaaigraan": "Pas bij nood" (de standaard) of "Als ander graan".
 - **Wat helpt aan eten** (8 okt; vraag 132, b; Marcel: "ze mogen advies geven op wat te doen. dit kan kopen, planten,
   bakken etc zijn"): haalt het eten de winter niet, dan zegt de raad wat er nu kan en helpt, de eerste twee: een
-  visser aan het water (niet in de winter), een jager als er herten zijn, een graanschuur voor het zaaigraan, en zaaigraan kopen bij de marskramer als er te weinig is om te zaaien. Het dorp vraagt
+  visser aan het water (niet in de winter), een jager als er herten zijn, en zaaigraan kopen bij de marskramer als er te weinig is om te zaaien. Het dorp vraagt
   het gebouw dat hij noemt; tot 8 okt vroeg het alleen een jager.
 - **Vee en vissers tegen de honger in het voorjaar** (8 okt; vraag 132; Marcel: "1 en 2 allebei, vee en meer vissers"):
   had het dorp tussen lentemaand en de oogst tien dagen of meer honger, en brengt het hooi geen koe meer de winter door,

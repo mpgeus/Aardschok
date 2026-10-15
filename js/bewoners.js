@@ -115,11 +115,10 @@
   T.vanSchout = vanSchout;
   // Kan hij werken? Iedereen, behalve de schout zelf, een kleuter, en wie een tijd weg is (p.weg: de heervaart,
   // js/heervaart.js). Het gezin van de schout werkt alleen als er niemand anders meer is (T.wijsWerkToe).
-  // Wie rooit wat er staat waar zijn huis groter wordt, werkt nog nergens (js/bos.js; vraag 130); en wie de graanschuur
-  // bewaakt evenmin (p.wacht, js/graanschuur.js; vraag 132).
+  // Wie rooit wat er staat waar zijn huis groter wordt, werkt nog nergens (js/bos.js; vraag 130).
   // Wie in de wijnboerderij woont, plukt in wijnmaand (`g.plukt`, js/wijngaard.js) en werkt dan nergens anders. En een
   // soldaat werkt nergens (p.soldaat, js/soldaten.js; vraag 159: "een soldaat is voltijds").
-  const kanWerken = (p) => !p.schout && !p.weg && !p.wacht && !p.soldaat && !(p.huis && p.huis.plukt) && !(p.huis && p.huis.groeitNaRooien && !p.hoofd) && !!T.LEEFTIJDEN[p.leeftijd] && T.LEEFTIJDEN[p.leeftijd].werkt != null;
+  const kanWerken = (p) => !p.schout && !p.weg && !p.soldaat && !(p.huis && p.huis.plukt) && !(p.huis && p.huis.groeitNaRooien && !p.hoofd) && !!T.LEEFTIJDEN[p.leeftijd] && T.LEEFTIJDEN[p.leeftijd].werkt != null;
   T.kanWerken = kanWerken;
 
   // De bewoner van een poppetje: een nieuw poppetje draagt hem mee (e.bewoner); de schout heeft zijn wezen al van de

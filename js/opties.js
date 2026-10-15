@@ -242,17 +242,6 @@
           uitleg: T.t('The merchant comes only on his three fixed rounds. As before 9 October.') },
       ],
     },
-    // Marcel, 9 okt (werklijst vraag 144, 3): "Ziekte en brand als status is ook goed".
-    {
-      id: 'brand', naam: T.t('Fire'), standaard: 'aan',
-      uitleg: T.t('Whether a fire really burns a house down, and whether there is a fire risk in a drought.'),
-      keuzes: [
-        { id: 'aan', naam: T.t('Yes'), zet: { 'BRAND_INSTELLINGEN.aan': true }, // geen tekst
-          uitleg: T.t('The house burns; with the buckets it mostly survives, otherwise it burns down and the family rebuilds it. In a drought there is a fire risk, and fires are more frequent.') },
-        { id: 'uit', naam: T.t('No'), zet: { 'BRAND_INSTELLINGEN.aan': false }, // geen tekst
-          uitleg: T.t('Fire is only a question with a price, and there is no fire risk. As before 9 October.') },
-      ],
-    },
     {
       id: 'ouderWorden', naam: T.t('Growing old'), standaard: 'aan',
       uitleg: T.t('Whether people grow older, have children and die of old age.'),
@@ -281,16 +270,6 @@
       keuzes: [
         { id: 'aan', naam: T.t('Yes'), zet: { 'KLEIN_LEVEN_INSTELLINGEN.aan': true }, uitleg: T.t('The village lives: whoever is at home lights a fire, and all manner of creatures potter about.') }, // geen tekst
         { id: 'uit', naam: T.t('No'), zet: { 'KLEIN_LEVEN_INSTELLINGEN.aan': false }, uitleg: T.t('Without, as before 9 October.') }, // geen tekst
-      ],
-    },
-    {
-      id: 'koorts', naam: T.t('Fever'), standaard: 'aan',
-      uitleg: T.t('Whether the fever goes round for a time, or is only a chance that someone dies.'),
-      keuzes: [
-        { id: 'aan', naam: T.t('Yes'), zet: { 'KOORTS_INSTELLINGEN.aan': true }, // geen tekst
-          uitleg: T.t('Whoever is ill lies in bed for a week and sometimes infects another, more often in the cold and in a crowded village; now and then someone dies. What you do makes it spread less.') },
-        { id: 'uit', naam: T.t('No'), zet: { 'KOORTS_INSTELLINGEN.aan': false }, // geen tekst
-          uitleg: T.t('The event costs only what it costs, and nobody falls ill.') },
       ],
     },
     {
@@ -441,16 +420,15 @@
       ],
     },
     // Het zaaigraan (werklijst vraag 81; Marcel, 1 okt: "zaaigraan wordt bij nood opgegeten, anders sterven er mensen";
-    // js/akkers.js, T.zaaigraanApart). Als ander graan is het spel van vóór 1 okt.
+    // js/akkers.js, T.zaaigraanApart). Als ander graan is het spel van vóór 1 okt. Het bewaken in de graanschuur (vraag
+    // 132) is sinds 15 okt weg: dat vroeg het voorval (ronde 3 van het snoeien).
     {
-      id: 'zaaigraan', naam: T.t('Seed grain'), standaard: 'bewaken',
+      id: 'zaaigraan', naam: T.t('Seed grain'), standaard: 'nood',
       uitleg: T.t('When the village eats the seed grain for next year.'),
       keuzes: [
-        { id: 'bewaken', naam: T.t('Guard it'), zet: { 'VELDEN_INSTELLINGEN.zaaigraanApart': true, 'GRAANSCHUUR_INSTELLINGEN.bewaken': true }, // geen tekst
-          uitleg: T.t('From the harvest to the sowing the seed grain lies in the granary. If hunger is coming, a farmer asks you what is to happen: if you put men on guard, one per twenty people, it stays, but every hungry day costs trust. Without a granary the village eats it in need (question 132, 8 October).') },
-        { id: 'nood', naam: T.t('Only in need'), zet: { 'VELDEN_INSTELLINGEN.zaaigraanApart': true, 'GRAANSCHUUR_INSTELLINGEN.bewaken': false }, // geen tekst
+        { id: 'nood', naam: T.t('Only in need'), zet: { 'VELDEN_INSTELLINGEN.zaaigraanApart': true }, // geen tekst
           uitleg: T.t('From the harvest to the sowing the farmers keep the seed grain back. The village eats it only when there is nothing else, and the winter counts the food without it.') },
-        { id: 'gewoon', naam: T.t('Like other grain'), zet: { 'VELDEN_INSTELLINGEN.zaaigraanApart': false, 'GRAANSCHUUR_INSTELLINGEN.bewaken': false }, // geen tekst
+        { id: 'gewoon', naam: T.t('Like other grain'), zet: { 'VELDEN_INSTELLINGEN.zaaigraanApart': false }, // geen tekst
           uitleg: T.t('The village eats the seed grain like any other grain. Whoever eats everything in winter has nothing to sow in spring.') },
       ],
     },
@@ -638,7 +616,6 @@
     { naam: T.t('The fields'), blok: 'VELDEN_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Fieldwork'), blok: 'VELDWERK_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Animals in the forest'), blok: 'BEESTEN_INSTELLINGEN' }, // geen tekst
-    { naam: T.t('The granary and the seed grain'), blok: 'GRAANSCHUUR_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The forest'), blok: 'BOS_INSTELLINGEN' }, // geen tekst
     { naam: T.t('The livestock'), blok: 'VEE_INSTELLINGEN' }, // geen tekst
     { naam: T.t('Seeing through houses'), blok: 'DOORKIJK_INSTELLINGEN' }, // geen tekst
@@ -895,7 +872,6 @@
     zoekPerTik: T.t('pursuers finding a way per tick'),
     briefjeRegels: T.t('men named on the note'),
     // De brand, de koorts, ouder worden
-    brandUren: T.t('burning hours'),
     blusUren: T.t('extinguishing hours'),
     redKans: T.t('chance of saving the house'),
     gevaar: T.t('fire risk'),
@@ -1414,11 +1390,7 @@
     wolfDagen: T.t('days per wolf'),
     loerAfstand: T.t('lurking distance'),
     loerUren: T.t('lurking hours'),
-    // De graanschuur, het bos, het vee
-    mensenPerWachter: T.t('people per guard'),
-    minstensWachters: T.t('least guards'),
-    vertrouwenPerHongerdag: T.t('trust per hungry day'),
-    wachtStraal: T.t('guard radius'),
+    // Het bos, het vee
     houtPerBoom: T.t('logs per tree'),
     rooiHout: T.t('logs per cleared tree (empty start)'),
     rooiDagen: T.t('clearing days'),
@@ -1461,6 +1433,10 @@
   };
   const NAAM_VAN_PAD = {
     'KOORTS_INSTELLINGEN.begin': T.t('ill at the start'), // geen tekst
+    'KOORTS_INSTELLINGEN.kans': T.t('chance a day, in the cold or a full village'), // geen tekst
+    'KOORTS_INSTELLINGEN.winter': T.t('times as often in winter'), // geen tekst
+    'BRAND_INSTELLINGEN.kans': T.t('chance a day, in a fire risk'), // geen tekst
+    'BRAND_INSTELLINGEN.uur': T.t('a fire starts between the hours'), // geen tekst
     'LICHT_INSTELLINGEN.kracht': T.t('lamp power'), // geen tekst
     'MIST_INSTELLINGEN.zicht': T.t('how far they see'), // geen tekst
     'MIST_INSTELLINGEN.zicht.dorpeling': T.t('villager'), // geen tekst

@@ -1226,17 +1226,6 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   datum (`T.ui.toonKalender`). De spelregel "Het weer" (met droogte, zonder, of altijd zon); de getallen in
   `T.WEER_INSTELLINGEN`.
 
-### js/graanschuur.js: de graanschuur
-
-- `js/graanschuur.js`: **de graanschuur en de wachters bij het zaaigraan** (vraag 132, 8 okt; Marcel: "bij honger grijpen
-  mensen alles aan. Je moet mensen inzetten om het warenhuis te beschermen", en "Ja, er moet een graanschuur komen"): het
-  zaaigraan ligt in de graanschuur (`T.GEBOUWEN.graanschuur`, `T.graanschuurVan`); komt de honger eraan (`T.zaaigraanInGevaar`, vanuit `T.eetVandaag`), dan zoekt
-  een boer je (het voorval `zaaigraanHonger`), en met `doe.bewaak` staan er wachters bij de schuur (`T.bewaakZaaigraan`:
-  een per twintig mensen, minstens twee, `T.wachtersNodig`; `p.wacht`, ze werken niet, en `moetNaar` met `wacht`), die
-  zoveel beschermen als er staan (`T.zaaigraanBeschermd`). Honger kost dan elke dag vertrouwen, en bij het zaaien gaan ze
-  naar huis (`T.tikGraanschuurDag`). De spelregel "Zaaigraan" (bewaken, pas bij nood, als ander graan); de getallen in
-  `T.GRAANSCHUUR_INSTELLINGEN`.
-
 ### js/wijngaard.js: de wijngaard
 
 - `js/wijngaard.js`: **de wijngaard van de wijnboerderij** (vraag 136, 8 okt; Marcel: "Dat je de boeren ziet plukken,
@@ -1418,7 +1407,7 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   het jaar na de pluk niet (`T.wijnNaDePluk`, `js/wijngaard.js`), dan zegt hij dat er een wijngaard bij moet (`wijn`: na de
   wensen, voor het doel; vraag 155). Na de laatste trede is er geen doel
   meer (het winnen is op 11 okt weggehaald, `js/einde.js`), dus telt hij geen mensen meer. Haalt het eten de winter niet, dan zegt hij wat helpt (`T.watHelptAanEten`, vraag
-  133, b: een visser per dertig mensen, een jager als er herten zijn, een graanschuur, meer weide, zaaigraan
+  133, b: een visser per dertig mensen, een jager als er herten zijn, meer weide, zaaigraan
   kopen), en vraagt het dorp het gebouw dat hij noemt. Na een voorjaar met honger maakt een boer zelf een veld weide
   (`weideErbij` in `T.boerenKiezenVelden`, `D.behoeften.voorjaarsHonger`). Vanaf de herfst zegt hij of vis en vlees de
   winter halen, als de beek dichtligt (`T.visEnVleesVoorDeWinter` in `js/behoeften.js`, `T.visEnVleesRaad`; vraag 132,
@@ -1507,29 +1496,31 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
 - `js/brand.js`: **de brand** (vraag 144, 3, 9 okt; Marcel: "Ziekte en brand als status is ook goed. We hebben dan nog
   wel vuur nodig en huizen die 'afgefikt' zijn als art. Dan kunnen ze weer worden opgebouwd"): brandgevaar is een status
   (`T.brandgevaarNiveau`: in de droogte, groot in een ernstige droogte of een vol dorp; `brandgevaar` in `T.OORZAKEN`), en
-  het voorval `brand` komt dan vaker. Begint het (`L.vanaf`, `T.werkBrandBij` vanuit `T.werkDorpBij`), dan brandt het huis
-  van wie het betreft echt (`g.brand`, op het voorwerp `v.brand`, `L.brandHuis`); met de emmers (`doe.blus`, `T.blusBrand`)
-  is het `blusUren` na het antwoord uit en blijft het meestal staan (`T.redKans`); laat je het branden (`doe.brand`
-  'laat', `T.laatBranden`), dan is het `blusUren` later puin, en doet niemand iets, na `brandUren`. Het gezin woont
+  alleen dan komt er een brand (sinds 15 okt, ronde 3 van het snoeien; tot dan het voorval `brand`): elke nacht met `kans`
+  (`T.tikBrandDag`, `D.brandKomt`: de dag met het uur tussen de twee van `uur`), en op dat uur brandt een woonhuis
+  (`T.werkBrandBij` vanuit `T.werkDorpBij`, geloot met `T.vastLot`; `g.brand`, op het voorwerp `v.brand`), met een
+  bericht met de plek. De buren blussen altijd: na `blusUren` is het uit en blijft het meestal staan (`T.redKans`), of
+  het is puin. Het gezin woont
   bij de buren, en na `puinDagen` bouwt het zijn huis weer op met hout (`T.tikBrandDag`, `T.herbouwHout`), in de
   bouwfasen zoals een huis dat doorgroeit (`v.inAanbouw` met `vanFase`). Het beeld in `js/tekenen.js`: vuurtongen over
   het dak, vonken en een gloed (`tekenVuur`, na de nacht), rook (`tekenRook`), licht (`T.brandLicht` in
   `T.lichtBronnen`), en de fasen van het afbranden (`T.brandfaseVan`, vraag 144: terwijl het brandt geschroeid en het dak
   dat valt, dan binnengestort, ingestort en opgeruimd; uit het huis zelf gesneden, `node gereedschap/pixelart/ruines.cjs
   spel`, `tegels/brandfasen/`, `T.sprites.brandfase`; zonder fasen de verkoolde bouwfase `puinFase`, `puinVan`), een paar
-  dagen smeulend (`T.smeult`, sintels). Bij groot brandgevaar, als niemand blust, slaat het vuur soms over op het dichtste huis
-  ernaast als het eerste afbrandt (`T.slaatOver`, `overslaan`; één keer, `g.brand.overgeslagen`). De spelregel "Brand";
-  de getallen in `T.BRAND_INSTELLINGEN`.
+  dagen smeulend (`T.smeult`, sintels). Bij groot brandgevaar slaat het vuur soms over op het dichtste huis ernaast als het
+  eerste afbrandt (`T.slaatOver`, `overslaan`; één keer, `g.brand.overgeslagen`). De getallen in `T.BRAND_INSTELLINGEN`;
+  `Spel.debug.brand('nu')`.
 
 ### js/koorts.js: de koorts
 
-- `js/koorts.js`: **de koorts** (vraag 144, 3): het voorval `ziekte` is het begin (`T.tikKoortsDag`): wie het betreft en
-  zijn gezin zijn ziek (`p.ziek`, de dag dat hij beter is, en `p.thuisTot`: in bed), elke nacht steekt een zieke soms een
-  ander aan (`besmet`, maal `vol` en `kou`, maal wat je antwoordde: `doe.koorts` in procenten, `T.koortsMaatregel`), een
+- `js/koorts.js`: **de koorts** (vraag 144, 3): ze begint zelf in de kou of in een vol dorp (sinds 15 okt, ronde 3 van
+  het snoeien; tot dan het voorval `ziekte`): elke nacht met `kans`, in de winter maal `winter` (`T.tikKoortsDag`,
+  `T.beginKoorts`, met een bericht met de plek): iemand en zijn gezin zijn ziek (`p.ziek`, de dag dat hij beter is, en
+  `p.thuisTot`: in bed), elke nacht steekt een zieke soms een ander aan (`besmet`, maal `vol` en `kou`), een
   enkele keer sterft iemand (`sterft` per leeftijd), en wie het had, krijgt het deze keer niet weer (`D.koorts.gehad`).
   De status `koorts` in `T.OORZAKEN` (`T.koortsNiveau`: Koorts, en Epidemie als een tiende ziek is). Naast de deur van
-  een huis met een zieke staat de pestbos (`T.pestbossen`, alleen beeld; `gereedschap/pixelart/pestbos.cjs`). De spelregel
-  "Koorts"; de getallen in `T.KOORTS_INSTELLINGEN`.
+  een huis met een zieke staat de pestbos (`T.pestbossen`, alleen beeld; `gereedschap/pixelart/pestbos.cjs`). De getallen
+  in `T.KOORTS_INSTELLINGEN`; `Spel.debug.koorts('nu')`.
 
 ### js/rovers.js: de rovers en de militie
 
