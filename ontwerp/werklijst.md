@@ -59,7 +59,24 @@ gevecht is een status met de tijd op 1×; het gevecht in beurten is eruit. **Het
 post** (bij I). Let op: CLAUDE.md zit tegen de grens van 20 KB; haal eerst iets naar een ontwerpbestand als er een
 afspraak bij moet.
 
+**Ronde 3 van het snoeien loopt** (A, naast I; sessie `ccr-74384ea2-mxeou7`, op zijn branch, met stap 2 van I erin):
+**stap 1 tot 5 zijn af** (15 okt; `snoeien.md`, "Ronde 3"): de voorvallen, de raadsman, het rapport en de feesten zijn
+weg; brand, koorts en wolven beginnen zelf met een bericht met een plek; de statussen zeggen zelf wanneer ze beginnen en
+ophouden; de meiboom en de kerstboom staan als versiering op het plein; het werk volgt alleen de afwisseling; de wetten
+zijn het rantsoen en de belasting. Zo'n 4500 regels minder. **Stap 6, de wensen en de groei, wacht op Marcel** (hieronder).
+
 **Wacht op Marcel:**
+- **Ronde 3 van het snoeien bekijken** (15 okt, op de branch `ccr-74384ea2-mxeou7`): Nieuw spel. Er komt niemand meer
+  met een uitroepteken naar je toe, R en de knop Rapport zijn weg, en de wetten (W) zijn het rantsoen en de belasting.
+  Een status zegt het nu zelf in een bericht ("It is cold in the houses, for ..."; en als hij over is). In de droogte
+  kan er een huis gaan branden: een bericht brengt je erheen, de buren blussen (`Spel.debug.brand('nu')`); de koorts
+  begint zelf in de kou of een vol dorp (`Spel.debug.koorts('nu')`). In bloeimaand staat de meiboom op het plein, en
+  vanaf 20 wintermaand de kerstboom met kaarsjes (`Spel.debug.versiering()`). Erbij gedaan, zeg het als het anders
+  moet: **een leeg bord telt als één soort** (60% werk), want zonder de tevredenheid werkte een dorp zonder eten op 100%.
+- **De wensen en de groei kiezen** (ronde 3, stap 6; `snoeien.md`): de wensen per huis zijn de motor van de groei (hut,
+  huis, dorp, en zo de planken). Voorstel van Claude: de wensen weg, en de huizen groeien als het dorp een maand genoeg
+  soorten eet en warm is (de trede blijft: twintig mensen in huizen); of bouwen wat je wilt (The Settlers: geen groei,
+  de trede op het aantal inwoners); of de wensen houden (Anno).
 - **Het gevecht in real time bekijken** (vraag 170, stap 2, 15 okt): Nieuw spel, zet een wachthuis (B) met twee man
   militie (+), en laat rovers komen (`Spel.debug.rovers(3)`). Het bericht zegt waar ze heen gaan en hoe je stuurt: kies
   je soldaten en klik rechts op een rover. Ze lopen erheen en slaan (een levensbalk boven wie vecht, de schade zweeft
