@@ -203,6 +203,62 @@ waard"):
 Te kiezen (gekozen, zie boven): (e) het ontworpen gehucht als proefkaart houden, of ook weg; (f) de oude spelers: alleen de brave houden, of
 alle vier weg; (g) de karakters weg of laten slapen; (h) de wapens blijven (ze horen bij F, vechten).
 
+## Ronde 3: voorstel van Claude (15 okt), Marcel vinkte af
+
+Na C (de ossenkar, gemeten op 15 okt), naast stap 2 van vraag 170 (sessie `ccr-74384ea2-mxeou7`; het raakt het gevecht
+niet). Twee agents brachten in kaart wat elk systeem doet en wat eraan hangt; wat opviel:
+
+- **De voorvallen zijn gesprekken** (de namen in `T.GESPREKKEN` zijn die van de voorvallen): een dorpeling loopt naar de
+  schout, en de tijd staat stil tot je antwoordt. De nieuwe richting haalde alle drie weg (het praten, de schout als
+  jij, en een venster dat de tijd stilzet bij samen spelen). De raadsman, het rapport en de feesten bestaan alleen door
+  de voorvallen: de raadsman beslist ze als je weg bent en brengt het rapport, een feest begint alleen met een ja op een
+  voorval.
+- **In wat weg kan, staat wat blijft:** de statussen (`T.OORZAKEN`: honger, eentonig, dakloos, kou, vol, wolven, droogte,
+  koorts, brandgevaar, onvrede) in `js/voorvallen.js`; het dagboek (`T.schrijfOp`, 17 aanroepers, en het jaarboek in
+  `js/einde.js`) in `js/ochtendrapport.js`; de prijs van een antwoord (`T.prijsVanKeuze`, `T.lotVanDeDag`) die de grillen
+  van de heer gebruiken; het midden van de marktplek (`T.feestMidden`, `FEESTEN_INSTELLINGEN.kring`) in `js/feesten.js`.
+- **Vier voorvallen zijn de knop van een echt systeem:** de brand (blussen of laten branden), de koorts (de put, bier of
+  bidden), het zaaigraan (bewaken of laten eten) en de wolven (een jacht of een hek). Zonder voorval begint elk zelf.
+- **De wensen zijn de motor van een keten:** een huis met alles wat zijn stand wil, groeit door (hut, huis, stenen huis),
+  wie in een huis woont is dorpeling, en twintig dorpelingen maken het een dorp (`T.TREDEN_INSTELLINGEN`), waarmee de
+  planken en het bouwmenu komen (157). Wensen weg vraagt een andere motor. De wensen zijn verder hooguit een vijfde van
+  de tevredenheid (0,5 eten, 0,3 brandhout, 0,2 wensen, en wat erbij komt), en de vraag naar bier en laken.
+- **Het werk heeft twee vermenigvuldigers:** de tevredenheid (`0,5 + 0,5 × tevredenheid`) en de afwisseling; het eten
+  telt zo twee keer (C1 van 13 okt: "voorlopig, ronde 3 beslist").
+- **De wetten** (vier, alle standaard uit) lijken op Stronghold, waar rantsoen en belasting de hefboom tussen goud en
+  tevredenheid zijn; de belasting is de enige vaste bron van goud uit het dorp (in C6 raakte het goud op).
+- **Samen spelen:** een keuze in een venster (`T.zetWet`, `T.kiesRaadsman`, een antwoord in een gesprek) is nu geen
+  opdracht. Wat blijft, moet dat in stap 6 worden; wat weggaat, niet meer.
+- **De raad blijft** (Claude): de ene regel onder het doel is de uitleg van de economie voor een nieuwe speler in de
+  demo, en raakt de tijd en het samen spelen niet; alleen de raden over de raadsman en het rapport gaan mee weg.
+
+**Marcel (15 okt), op vier vragen:**
+- **De voorvallen, de raadsman, het rapport en de feesten: alle vier weg.** Eerst verhuist wat blijft; brand, koorts en
+  wolven beginnen voortaan zelf, als een bericht met een plek (zoals de rovers). Willen we later weer besluiten, dan
+  komen die als nieuw ontwerp: met een termijn, zonder lopen naar de schout.
+- **Het werk volgt alleen de afwisseling.** De tevredenheid (eten, warmte, de herberg, de heer) beslist of gezinnen
+  komen of gaan, en is het vertrouwen van het dorp.
+- **De wetten: rantsoen en belasting blijven** (zoals in Stronghold); vreemdelingen welkom en kappen in het bos van de
+  heer gaan weg. In stap 6 wordt een klik een opdracht en zet het venster de tijd niet meer stil.
+- **De wensen en de groei: nog geen keuze** ("geen voorkeur"); de vraag komt terug bij die stap. Het voorstel van Claude:
+  de wensen weg, en de huizen groeien als het dorp een maand genoeg soorten eet en warm is (de spelregel "Wants" heeft
+  die weg al, "het dorp als geheel", nu op de tevredenheid); de trede blijft zoals nu. De twee andere: bouwen wat je wilt
+  (The Settlers: geen groei, de trede op het aantal inwoners), of de wensen houden (Anno).
+
+**De stappen**, elk een commit met de toetsen groen, `npm run teksten`, en `code.md` en `spel.md` bij:
+1. **Verhuizen wat blijft**, zonder dat het spel verandert: de statussen naar een eigen bestand (`js/statussen.js`), het
+   dagboek naar `js/dag.js`, de prijs van een antwoord en het lot van de dag naar `js/grillen.js`, het midden van de
+   marktplek naar `js/markt.js`.
+2. **Brand, koorts, wolven en het zaaigraan zonder voorval** (de vraag hieronder). De wolven raken `js/beesten.js`, waar
+   stap 2 van vraag 170 ook werkt: dat deel na stap 2, of zo klein mogelijk.
+3. **Weg:** de voorvallen (met hun gesprekken, het uitroepteken en `e.zoektSchout`, de spelregel "Events"), de raadsman
+   met zijn venster (R, de spelregel "Advisor", het trager maaien), het rapport (de knop, de spelregel), de feesten (de
+   meiboom, de kerstboom, de vrije dag, de spelregel), en de raden die eraan hingen; het opslaan een versie omhoog; de
+   speeltest antwoordt niet meer op voorvallen.
+4. **Het werk alleen op de afwisseling.**
+5. **De wetten:** rantsoen en belasting.
+6. **De wensen en de groei**, als Marcel gekozen heeft.
+
 ## Later
 
 - **Ronde 2, na 1f:** `js/verzoeken.js` en `js/ondernemers.js` (de mensen vragen wat ze bouwen), `js/erven.js` (het

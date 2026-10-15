@@ -190,9 +190,9 @@ ronden, want een deel hangt aan het oude begin of aan de proef:
    boerderij), en alleen de kolonist speelt nog in de speeltest. **Stap 6 is af** (12 okt; Marcel: "Alles wordt door spelers
    geplaatst", en "Plein krijgt plaatsen"): het dorp dat er al was is weg, ook voor de andere dorpen op het eiland, en het
    plein heeft een vaste marktplek; de spelregel "De markt" is weg (`snoeien.md`, "Stap 6"). **Ronde 2 is af.**
-3. **Ronde 3, na C:** **Bezig in sessie `ccr-74384ea2-mxeou7`** (15 okt): het plan voor Marcel, per systeem blijft,
-   slaapt of weg, met wat eraan hangt. Wat de proef moet uitwijzen (`gameloop.md`, "Open"): de voorvallen, de raad, de raadsman, het
-   rapport, de wensen per stand en de treden, de wetten, de feesten.
+3. **Ronde 3, na C:** **Bezig in sessie `ccr-74384ea2-mxeou7`** (15 okt). Het plan en wat Marcel koos staan in
+   `snoeien.md`, "Ronde 3": de voorvallen, de raadsman, het rapport en de feesten weg; het werk alleen op de
+   afwisseling; van de wetten rantsoen en belasting; de wensen en de groei nog te kiezen.
 
 Mee in elke ronde: het commentaar in de code dat "zie CLAUDE.md" zegt (een stuk of twintig) wijst naar `code.md` of
 `gereedschap.md`, en `code.md` krimpt mee met de code.
