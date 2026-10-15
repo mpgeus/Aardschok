@@ -34,13 +34,14 @@
 //            het laatste werkuur, want de wolven komen een uur voor zonsondergang naar de rand, en het werk houdt op met de
 //            zon; en honger is er alleen in de winter.
 //   stout    een roedel met honger is in het donker niet schuw meer (T.wolvenStout): hij zoekt prooi in het dorp, eerst een
-//            schaap op de meent (zonder hek), en anders wie alleen in het donker loopt. Hij neemt het schaap, en de herder komt
-//            het je de ochtend erna zeggen (het voorval "wolven"); wie hij aanvalt, is gewond en ligt een paar dagen in
+//            schaap op de meent, en anders wie alleen in het donker loopt. Hij neemt het schaap, en een bericht brengt je
+//            erheen, zodat je je soldaten op hem af kunt sturen (sinds 15 okt; tot dan kwam de herder het zeggen, het
+//            voorval "wolven", met een jacht of een hek); wie hij aanvalt, is gewond en ligt een paar dagen in
 //            bed, of is een enkele keer dood (de spelregel "Beesten": "Zonder doden" maakt het alleen gewond).
 //   licht    licht houdt hem weg: wie in het licht staat, valt hij niet aan, en bij de schout met zijn lantaarn blijft hij
 //            aan de rand van het licht, met zijn ogen. Wie sluipt, heeft geen licht: die valt hij aan, en dan vecht de
 //            roedel met hem, in real time (T.wolvenVechten; js/gevecht.js).
-//   status   "Er zijn wolven bij het dorp" (T.OORZAKEN.wolven, js/voorvallen.js) voor het rapport, zolang ze het laatst
+//   status   "Er zijn wolven bij het dorp" (T.OORZAKEN.wolven, js/statussen.js), zolang ze het laatst
 //            iets deden niet lang geleden is; en de raad zegt het.
 //
 // Een groep is een ding dat de dieren delen (e.groep, zoals e.praatje in js/praatje.js), zonder lijst ernaast:
@@ -56,8 +57,7 @@
 //         een prooi kiest) }
 // Het hol van een roedel is een voorwerp op de kaart naast zijn thuis, { soort: 'hol', x, y, groep: G } (T.holVan, stap 3b).
 // In het dorp: D.beesten = { gezet, gezien { dag, wat ('gezien', 'schaap' of 'aanval'), wie } (het laatste wat de wolven
-// bij het dorp deden: de status), roedel (de roedel die het laatst een schaap nam: daar gaat de jacht heen), hek (true:
-// een hek om de schapen) }. Op een bewoner: p.thuisTot en p.gewond.
+// bij het dorp deden: de status) }. Op een bewoner: p.thuisTot en p.gewond.
 // Op een dier: e.beest (zijn soort), e.groep, e.leider, e.rust (wat het doet als het stilstaat: 'staan', 'grazen',
 // 'liggen'; js/sprites.js), e.rent (een hert dat vlucht: dan 'rennen'), e.zoektWeg (S.wereldTijd waarna een volger weer
 // een weg mag zoeken). In het dorp: D.beesten = { gezet }.
@@ -134,12 +134,6 @@
     // Wie aan het werk de wolven ziet: alleen wie aan of in het bos werkt (BOSWERK), alleen als de roedel honger heeft
     // (vanaf honger.jagenVanaf: dan laten ze zich zien), en per uur met schrikKans.
     dreiging: { stout: 30, donker: 0.6, zoekStraal: 30, alleen: 4, gewondDagen: 3, doodKans: 0.2, schrik: 0.5, schrikKans: 0.5, statusDagen: 10 },
-    // ── Stap 3b, de jacht te voet ──
-    // Een jacht op de wolven (het voorval "wolven"; Marcel, 7 okt: "Ja dat is goed"): de mannen van de militie, of zonder
-    // militie zoveel weerbare mannen, lopen met de schout mee naar de roedel; komt hij binnen bij tegels van een wolf, dan
-    // vecht de roedel (T.wolvenVechten). Gaat hij niet binnen dagen dagen, dan gaan ze zonder hem: de roedel verliest
-    // zonderJou wolven, en met sterfkans procent kans komt een van de mannen niet terug.
-    jacht: { mannen: 2, bij: 9, dagen: 2, zonderJou: 2, sterfkans: 15 },
     // ── Stap 3c, om hulp roepen ──
     // Wie de wolven aanvallen, roept om hulp: zoveel uur blijven ze bij hem (een kwartier), wie binnen hoort tegels is,
     // komt erheen, en is een man van je (de held, een soldaat; js/gevecht.js) binnen man tegels, dan vecht de roedel met hem.
@@ -469,7 +463,6 @@
       return;
     }
     if (!B.gezet) T.zetBeesten(D);
-    if (B.jacht) werkJachtBij(S, D);
     const groepen = new Map();
     let weg = false;
     for (const e of w.wezens) {
@@ -875,7 +868,7 @@
     return { ...P, doel: T.tegelVan(P.e), slaat: true };
   }
 
-  // De prooi: eerst een schaap (het dichtste, waar het ook staat), zonder hek om de schapen; anders de dichtste binnen
+  // De prooi: eerst een schaap (het dichtste, waar het ook staat); anders de dichtste binnen
   // zoekStraal van de leider: wie van het dorp alleen in het donker buiten is (niemand anders binnen `alleen` tegels, en
   // geen licht om hem heen), of de schout. Geeft { e, soort ('schaap', 'mens' of 'schout') } of null.
   function kiesProoi(D, leider) {
@@ -894,11 +887,9 @@
         beste = { e, soort };
       }
     };
-    if (!D.beesten.hek) {
-      let schaap = null;
-      for (const e of w.wezens) if (e.dier === 'schaap' && !e.dood && (!schaap || T.afstand(lt, T.tegelVan(e)) < T.afstand(lt, T.tegelVan(schaap)))) schaap = e;
-      if (schaap && T.kanErKomen(w, lt, T.tegelVan(schaap))) return { e: schaap, soort: 'schaap' };
-    }
+    let schaap = null;
+    for (const e of w.wezens) if (e.dier === 'schaap' && !e.dood && (!schaap || T.afstand(lt, T.tegelVan(e)) < T.afstand(lt, T.tegelVan(schaap)))) schaap = e;
+    if (schaap && T.kanErKomen(w, lt, T.tegelVan(schaap))) return { e: schaap, soort: 'schaap' };
     for (const e of mensen) {
       if (e === D.schout) {
         if (!T.schoutIsWeg(D)) neem(e, 'schout');
@@ -923,7 +914,7 @@
     return T.isBegaanbaar(w, p.x, p.y) ? p : plekkenBij(w, p, 1)[0] || { x: lt.x, y: lt.y };
   }
 
-  // De roedel slaat toe: een schaap neemt hij mee, en de herder zegt het je de ochtend erna; wie hij aanvalt, is gewond
+  // De roedel slaat toe: een schaap neemt hij mee, en een bericht brengt je erheen; wie hij aanvalt, is gewond
   // of dood (bijt); met de schout zonder licht vecht hij, in real time (T.wolvenVechten). Daarna is zijn honger weg (een gevecht beslist zelf),
   // en gaat hij terug naar zijn hol. Ook voor Spel.debug.beesten('schaap').
   T.wolvenSlaanToe = (S, D, G, leider, prooi) => slaToe(S, D, G, leider, prooi);
@@ -934,11 +925,10 @@
       T.wolvenVechten(D, G, prooi.e);
       return;
     } else if (prooi.soort === 'schaap') {
+      const plek = T.tegelVan(prooi.e);
       T.verliesDier(D, prooi.e);
       B.gezien = { dag, wat: 'schaap', wie: null };
-      B.roedel = G;
-      T.zeg(D, T.t('The wolves have taken a sheep from the common.'), 'gevaar');
-      wolvenVoorval(D, dag);
+      T.zeg(D, T.t('The wolves have taken a sheep from the common.'), 'gevaar', plek);
     } else {
       const p = T.bewonerVan(D, prooi.e);
       if (!p) {
@@ -1015,7 +1005,7 @@
 
   // ── Vechten (werklijst vraag 170, stap 2) ──
   // De roedel vecht in real time (js/gevecht.js) met wie hem aanvalt (een man die een wolf raakt), met de held zonder licht
-  // die hij aanvalt, met een man die bij wie om hulp roept komt (hulp.man), en op de jacht. Elke wolf neemt de dichtste van
+  // die hij aanvalt, en met een man die bij wie om hulp roept komt (hulp.man). Elke wolf neemt de dichtste van
   // jouw kant die hij ziet (T.vechtVoor), of `tegen`; zolang G.vecht staat, beweegt het gevecht de roedel. Is het voorbij,
   // dan gaat hij terug naar zijn hol (T.wolvenNaHetGevecht).
   T.wolvenVechten = function (D, G, tegen) {
@@ -1079,23 +1069,6 @@
     p.thuisTot = Math.floor(dag) + 1 + IN().dreiging.gewondDagen;
     p.gewond = true;
     T.zeg(D, T.t('{naam} was bitten by the wolves in the dark, and is laid up in bed for {n|# day|# days}.', { naam, n: IN().dreiging.gewondDagen }), 'gevaar');
-  }
-
-  // Het voorval "wolven" (js/voorvallen.js, met de vlag wolvenNamenSchaap: dan zijn de antwoorden echt): de herder, of een
-  // man, komt het je zeggen, de ochtend erna. Loopt er al een voorval, dan wacht het (V.wacht), en komt er geen tweede.
-  function wolvenVoorval(D, dag) {
-    const V = D.voorvallen || (D.voorvallen = T.nieuweVoorvallen());
-    if (V.wacht.some((x) => x.id === 'wolven') || (V.lopend && V.lopend.id === 'wolven')) return;
-    const morgen = Math.floor(dag) + (T.uurVanDag(dag) >= 12 ? 1 : 0);
-    const mensen = T.wieZegtHet(D, 'wolven', morgen);
-    if (!mensen) return; // er is niemand die het kan zeggen
-    if (V.lopend) {
-      V.wacht.push({ id: 'wolven', op: morgen, wie: mensen.wie, ander: mensen.ander, vlaggen: ['wolvenNamenSchaap'] });
-      return;
-    }
-    const L = T.beginVoorval(D, 'wolven', mensen.wie, mensen.ander, morgen);
-    L.vlaggen = ['wolvenNamenSchaap'];
-    T.zetVlag(D, 'wolvenNamenSchaap');
   }
 
   // ---------------------------------------------------------------------------------------------
@@ -1184,154 +1157,7 @@
     }));
   };
 
-  // Een jacht op de wolven (het voorval "wolven"): de roedel die het laatst een schaap nam (of, is die er niet meer, de
-  // roedel met de meeste honger) verliest er zoveel, de leider het laatst. Geeft hoeveel.
-  T.jaagOpDeWolven = function (D, n = IN().jacht.zonderJou) {
-    const doel = roedelVoorDeJacht(D);
-    if (!doel) return 0;
-    const weg = doel.leden.filter((e) => !e.leider).concat(doel.leden.filter((e) => e.leider)).slice(0, n);
-    D.wereld.wezens = D.wereld.wezens.filter((e) => !weg.includes(e));
-    T.zeg(D, weg.length === doel.leden.length ? T.t('The hunt: the pack is gone.') : T.t('The hunt: {n|one wolf|# wolves} fewer.', { n: weg.length }), 'goed');
-    return weg.length;
-  };
-
-  // De roedel waar een jacht heen gaat: die het laatst een schaap nam, of, is die er niet meer, die met de meeste honger.
-  // Geeft { G, leden } of null.
-  function roedelVoorDeJacht(D) {
-    const roedels = T.beestenVan(D).filter(({ G }) => G.soort === 'wolf' && !G.trektWeg);
-    return roedels.find(({ G }) => G === D.beesten.roedel) || roedels.sort((a, b) => (b.G.honger || 0) - (a.G.honger || 0))[0] || null;
-  }
-
-  // ---------------------------------------------------------------------------------------------
-  // De jacht te voet (stap 3b)
-  // ---------------------------------------------------------------------------------------------
-  // D.beesten.jacht = { roedel (G), tot (de dag waarop de mannen zonder je gaan), mannen [wezens] }, zolang hij loopt.
-
-  // Een jacht begint (het voorval "wolven", doe.jacht): de mannen van de militie (T.militieVan, js/rovers.js), of zonder
-  // militie de weerbare mannen (T.weerbareMannen, js/bewoners.js), komen bij de schout en lopen met hem mee.
-  T.beginJacht = function (D, dag) {
-    const doel = roedelVoorDeJacht(D);
-    if (!doel) {
-      T.zeg(D, T.t('The wolves have already gone: there is nothing left to hunt.'));
-      return null;
-    }
-    const militie = T.militieVan(D);
-    const mannen = (militie.length ? militie : T.weerbareMannen(D).filter((p) => p.wezen && !p.wezen.dood).slice(0, IN().jacht.mannen).map((p) => p.wezen));
-    for (const e of mannen) T.roepOp(e);
-    D.beesten.jacht = { roedel: doel.G, tot: dag + IN().jacht.dagen, mannen };
-    const wie = mannen.length ? T.t('{mannen} {n|goes|go} with you', { mannen: T.opsomming(mannen.map((e) => e.naam)), n: mannen.length }) : T.t('nobody is going with you');
-    T.zeg(D, T.t('The hunt for the wolves: {wie}. Their den lies in the forest, marked in gold on the ground. If you do not go within {n|# day|# days}, they go without you.', { wie, n: IN().jacht.dagen }), '', doel.G.thuis);
-    return D.beesten.jacht;
-  };
-
-  // Elk beeld (T.werkBeestenBij): de mannen lopen met de schout mee, en komt hij binnen jacht.bij tegels van een wolf van
-  // de roedel, dan vecht de roedel (T.wolvenVechten; js/gevecht.js). Is zijn tijd om, dan gaan ze zonder hem.
-  function werkJachtBij(S, D) {
-    const J = D.beesten.jacht;
-    const leden = D.wereld.wezens.filter((e) => e.groep === J.roedel && !e.dood);
-    if (!leden.length || J.roedel.trektWeg) {
-      eindJacht(D, T.t('The hunt: the pack has gone.'));
-      return;
-    }
-    if (S.modus === 'dood' || J.gevecht) return;
-    if (D.kalender.dag >= J.tot) {
-      zonderJou(D, J);
-      return;
-    }
-    if (T.schoutIsWeg(D)) return;
-    for (const e of J.mannen) if (!e.dood && e.opgeroepen && !e.onderweg && !e.doelwit) T.loopNaastDeSchout(D, e);
-    if (S.wereld !== D.wereld) return;
-    const h = T.tegelVan(D.schout);
-    let wolf = null;
-    for (const e of leden) if (T.afstand(h, T.tegelVan(e)) <= IN().jacht.bij && (!wolf || T.afstand(h, T.tegelVan(e)) < T.afstand(h, T.tegelVan(wolf)))) wolf = e;
-    if (!wolf) return;
-    J.gevecht = true;
-    T.wolvenVechten(D, J.roedel, D.schout);
-  }
-
-  // De tijd is om: de mannen gingen zonder de schout. De roedel verliest wolven, en een van de mannen komt misschien
-  // niet terug.
-  function zonderJou(D, J) {
-    const dag = D.kalender.dag;
-    const mannen = J.mannen.filter((e) => !e.dood);
-    T.jaagOpDeWolven(D);
-    if (mannen.length && lot(J.roedel.zaad, Math.floor(dag), 61) < IN().jacht.sterfkans / 100) {
-      const e = mannen[Math.floor(lot(J.roedel.zaad, Math.floor(dag), 63) * mannen.length)];
-      const p = T.bewonerVan(D, e);
-      if (p) T.wijzigBevolking(D, -1, 'wolven', T.t('He did not come back from the hunt for the wolves'), [p]);
-    }
-    eindJacht(D, mannen.length ? T.t('The men went hunting without you.') : null);
-  }
-
-  // Na een gevecht (T.gevechtVoorbij, js/gevecht.js): was het de jacht, dan is hij voorbij. Wie van de roedel overbleef,
-  // vlucht naar zijn hol.
-  T.naJacht = function (D) {
-    const J = D.beesten && D.beesten.jacht;
-    if (!J || !J.gevecht) return;
-    const leden = D.wereld.wezens.filter((e) => e.groep === J.roedel && !e.dood);
-    const dood = D.wereld.wezens.filter((e) => e.groep === J.roedel && e.dood).length;
-    if (leden.length) {
-      J.roedel.weg = D.kalender.dag + IN().wegUren / 24;
-      J.roedel.vluchtNaar = { x: J.roedel.thuis.x, y: J.roedel.thuis.y };
-    }
-    eindJacht(D, !leden.length ? T.t('The hunt: the pack is gone.') : dood ? T.t('The hunt: {n|one wolf|# wolves} fewer, and the rest have fled.', { n: dood }) : T.t('The hunt: the wolves have fled.'));
-  };
-
-  // De jacht is voorbij: de mannen gaan naar huis of aan het werk.
-  function eindJacht(D, tekst) {
-    const J = D.beesten.jacht;
-    for (const e of J.mannen) if (!e.dood) T.laatGaan(e);
-    D.beesten.jacht = null;
-    if (tekst) T.zeg(D, tekst, 'goed');
-  }
-
-  // Het hol waar de jacht heen gaat, voor js/tekenen.js (in goud op de grond): { x, y }, of null.
-  T.holVanDeJacht = function (D) {
-    const J = D && D.beesten && D.beesten.jacht;
-    return J ? { x: J.roedel.thuis.x, y: J.roedel.thuis.y } : null;
-  };
-
-  // Een hek om de schapen (het voorval "wolven"): een roedel met honger laat ze voortaan met rust, en zoekt andere prooi.
-  // Het hek staat op de kaart (stap 3d; Marcel, 7 okt: "D ja allebei"), om de meent waar ze grazen (zetHek).
-  T.hekOmDeSchapen = function (D) {
-    (D.beesten || (D.beesten = {})).hek = true;
-    if (D.wereld && D.wereld.meenten) for (const m of D.wereld.meenten) zetHek(D, m);
-  };
-
-  // Het hek om een meent (een rechthoek, js/kaart.js): latten op de rand, met een hoekpaal op elke hoek (de tekeningen van
-  // de tuinen, `hek-lat-*` in tegels/), en een hekje waar je doorheen loopt midden in elke zijde, waar een pad of een
-  // paadje de rand kruist, en waar iemand staat. Waar al iets ligt, op een akker (een ontgonnen stuk heide), of waar je
-  // niet kunt staan (water), blijft de rand open.
-  function zetHek(D, m) {
-    const w = D.wereld;
-    const x1 = m.x + m.b - 1;
-    const y1 = m.y + m.h - 1;
-    const midX = m.x + Math.floor(m.b / 2);
-    const midY = m.y + Math.floor(m.h / 2);
-    const akker = (x, y) => (w.akkers || []).some((a) => x >= a.x && x < a.x + a.b && y >= a.y && y < a.y + a.h);
-    for (let y = m.y; y <= y1; y++) {
-      for (let x = m.x; x <= x1; x++) {
-        const rand = { boven: y === m.y, onder: y === y1, links: x === m.x, rechts: x === x1 };
-        if (!rand.boven && !rand.onder && !rand.links && !rand.rechts) continue;
-        if (T.voorwerpOp(w, x, y) || akker(x, y) || !T.isBegaanbaar(w, x, y)) continue;
-        const langsX = rand.boven || rand.onder; // de zijde loopt langs x
-        const hoek = (rand.boven || rand.onder) && (rand.links || rand.rechts);
-        const doorgang = T.opPad(w, x, y) || T.isSpoor(D, x, y) || T.wezenOp(w, x, y) || (langsX ? x === midX : y === midY);
-        let naam;
-        if (hoek) naam = `hek-lat-hoek-${rand.boven ? (rand.links ? 'boven' : 'rechts') : rand.links ? 'links' : 'onder'}`;
-        else naam = `${doorgang ? 'hekje' : 'hek'}-lat-${langsX ? 'x' : 'y'}`;
-        if (hoek && doorgang) continue; // een hoek waar je doorloopt, blijft open
-        const t = T.opzoekTegelNaam(naam);
-        if (!t) continue;
-        const v = { soort: naam, x, y, vel: t.vel, id: t.id, beslaat: [1, 1], hek: true };
-        T.kenSoortVan(v);
-        T.zetVoorwerp(w, v);
-      }
-    }
-    T.kaartVeranderd(w, { x1: m.x, y1: m.y, x2: x1, y2: y1 });
-  }
-
-  // De status "Wolven" (T.OORZAKEN.wolven, js/voorvallen.js): speelt hij, dan waarom (het stuk na "want"; '' als ze alleen
+  // De status "Wolven" (T.OORZAKEN.wolven, js/statussen.js): speelt hij, dan waarom (het stuk na "want"; '' als ze alleen
   // gezien zijn), anders null. Hij speelt tot statusDagen na wat de wolven het laatst bij het dorp deden.
   T.wolvenBijHetDorp = function (D, dag) {
     const g = D.beesten && D.beesten.gezien;

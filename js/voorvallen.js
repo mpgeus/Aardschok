@@ -21,8 +21,6 @@
 //                     lijstje is: niets. Dat zegt het venster niet: wie je liet gaan, kan terugkomen.
 //   feest: 'dag'      het dorp viert dit voorval op het plein (js/feesten.js): 'dag' is morgen de hele dag, en niemand
 //                     werkt; 'avond' is 's avonds, vanavond nog als het kan
-//   jacht: true       een jacht te voet op de wolven (js/beesten.js): de mannen lopen met de schout mee naar de roedel
-//   wolven: -2        de roedel verliest meteen twee wolven; hek: true, een hek om de schapen (js/beesten.js)
 // Een voorval komt geloot, of op een vaste dag (op: { maand, dag }, de meiboom).
 //
 // Wanneer er een komt en welke, zegt dit bestand (T.VOORVALLEN hieronder). Wie je zoekt, loopt naar de schout en
@@ -92,8 +90,6 @@
   //   pauze    niet binnen zoveel dagen terug (zonder: de pauze uit het blok hierboven)
   //   vervolg  true: komt alleen als vervolg op een ander voorval; na: [van, tot], na zoveel dagen
   //   zelf     true: wordt niet geloot; een ander deel van het spel begint het.
-  //            'beesten': zo zolang er beesten in het bos leven (de spelregel "Beesten"): de wolven namen dan echt een
-  //            schaap (js/beesten.js); zonder beesten wordt het geloot, zoals voor 7 okt
   //   roep     het bericht als hij je gaat zoeken (zonder: "{wie} is looking for you."), met de woorden van een gesprek
   //            (js/gesprek.js)
   //   sterft   wie er sterft, zegt het bericht zo: "The fever: ..." (zonder: de titel)
@@ -135,10 +131,6 @@
     zaaigraan: { soort: 'verzoek', titel: T.t('the seed grain'), als: { maanden: ['lentemaand', 'grasmaand'] }, wie: { boer: true } },
     zaaigraanTerug: { soort: 'verzoek', titel: T.t('the seed grain'), vervolg: true, na: [120, 150] },
     // Rampen: iets doen kost iets, niets doen ook.
-    wolven: {
-      soort: 'ramp', titel: T.t('the wolves'), als: { seizoen: 'winter', vee: { schaap: 3 } }, winter: 3, sterft: T.t('The wolf hunt'), zelf: 'beesten', oorzaak: 'wolven',
-      roep: T.t('Wolves! {wie} is coming to fetch you.'), wie: [{ werk: 'schaapskooi' }, MAN], ander: MAN,
-    },
     storm: {
       soort: 'ramp', titel: T.t('the storm'), als: { maanden: ['herfstmaand', 'wijnmaand', 'slachtmaand', 'sprokkelmaand'], voorraad: { graan: 40 } },
     },
@@ -277,9 +269,8 @@
     return T.wieZegtHet(D, id, dag);
   };
 
-  // Of een ander deel van het spel dit voorval begint (zelf): dan wordt het niet geloot. gereedschap/wereld.html laadt de
-  // beesten niet.
-  const zelfBegonnen = (v) => v.zelf === true || (v.zelf === 'beesten' && !!T.BEESTEN_INSTELLINGEN && T.BEESTEN_INSTELLINGEN.aan);
+  // Of een ander deel van het spel dit voorval begint (zelf): dan wordt het niet geloot.
+  const zelfBegonnen = (v) => v.zelf === true;
 
   // Wie een voorval komt zeggen en over wie het gaat (zijn wie en ander), zonder te vragen of het nu kan: ook voor een
   // deel van het spel dat het zelf begint (js/beesten.js). Geeft { wie, ander } of null.
@@ -574,11 +565,6 @@
     }
     // Een feest (js/feesten.js): het dorp viert dit voorval op het plein, morgen de hele dag of 's avonds.
     if (doe.feest && L.id) T.zetFeest(D, L.id, doe.feest, D.kalender ? D.kalender.dag : dag);
-    // De wolven (js/beesten.js): een jacht te voet naar de roedel die het schaap nam (doe.jacht; stap 3b), of meteen wolven
-    // minder (doe.wolven), en een hek houdt ze bij de schapen weg. gereedschap/wereld.html laadt de beesten niet.
-    if (doe.wolven < 0 && T.jaagOpDeWolven) T.jaagOpDeWolven(D, -doe.wolven);
-    if (doe.jacht && T.beginJacht) T.beginJacht(D, D.kalender ? D.kalender.dag : dag);
-    if (doe.hek && T.hekOmDeSchapen) T.hekOmDeSchapen(D);
     if (doe.voorval && L.wie) {
       const lijst = elk(doe.voorval);
       const id = lijst[Math.floor(lot(D, dag, 41 + V.aantal) * lijst.length)];
@@ -620,9 +606,6 @@
       if (!T.plaatsVoorEenGezin(D) && uit.kan) Object.assign(uit, { kan: false, waarom: T.t('there is no room: mark out a plot (B)') });
     }
     if (doe.sterfkans) delen.push(T.t('{n}% chance of a death', { n: doe.sterfkans }));
-    if (doe.wolven < 0) delen.push(T.t('{n|one wolf fewer|{getal} fewer wolves}', { n: -doe.wolven, getal: T.telwoord(-doe.wolven) }));
-    if (doe.jacht) delen.push(T.t('the men go with you to the wolves ({n|{getal} day|{getal} days})', { n: T.BEESTEN_INSTELLINGEN.jacht.dagen, getal: T.telwoord(T.BEESTEN_INSTELLINGEN.jacht.dagen) }));
-    if (doe.hek) delen.push(T.t('a fence round the sheep'));
     if (doe.feest && T.feestPrijs(doe.feest, L.id)) delen.push(T.feestPrijs(doe.feest, L.id));
     uit.tekst = delen.join(', ');
     return uit;

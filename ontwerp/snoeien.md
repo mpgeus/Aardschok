@@ -261,6 +261,8 @@ niet). Twee agents brachten in kaart wat elk systeem doet en wat eraan hangt; wa
    De spelregels "Fire" en "Fever" vervallen: hun "uit" was het voorval zonder vuur of zieken.
    **Af** (15 okt) voor de brand, de koorts en het zaaigraan: `js/graanschuur.js` en zijn toets zijn weg, de spelregels
    "Fire" en "Fever" ook, en "Seed grain" heeft "Only in need" en "Like other grain"; opslaan is versie 14.
+   **De wolven ook** (15 okt, na stap 2 van vraag 170): het voorval "wolven" is weg met de jacht te voet en het hek om
+   de schapen; de roedel neemt een schaap en een bericht brengt je erheen. **Stap 2 is af.**
    Stap 3 en de wolven bouwen op de branch van stap 2 van vraag 170 (`ccr-c0f9d2a2-6j0scf`; Marcel, 15 okt: "Bouw op
    zijn branch"): die gaat zo mee naar `main`.
 3. **Weg:** de voorvallen (met hun gesprekken, het uitroepteken en `e.zoektSchout`, de spelregel "Events"), de raadsman

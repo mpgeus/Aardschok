@@ -935,13 +935,12 @@ helft van de keren); hij werkt die dag niet meer, en zijn werkplaats maakte die 
 laatste werkuur, want de wolven komen een uur voor zonsondergang naar de rand en het werk houdt op met de zon, en honger
 is er alleen in de winter. Het dorp zegt het als de status begint, niet elke keer. Met meer honger (dertig dagen voor een
 roedel van vier, als er geen hert te vangen is) is hij in het donker niet schuw meer: eerst neemt hij een schaap van de
-meent, en de herder komt het je de ochtend erna zeggen (het voorval "wolven", dat met beesten in het bos niet meer
-zomaar komt; een jacht kost de roedel twee wolven, een hek houdt hem bij de schapen weg). Met een hek, of zonder schapen,
-zoekt hij wie alleen in het donker loopt (niemand binnen vier tegels, en geen licht): die is gewond en ligt drie dagen in
+meent, en een bericht brengt je erheen: stuur je soldaten op hem af (sinds 15 okt; tot dan kwam de herder het je zeggen,
+het voorval "wolven", met een jacht of een hek). Zonder schapen zoekt hij wie alleen in het donker loopt (niemand binnen vier tegels, en geen licht): die is gewond en ligt drie dagen in
 bed, zonder werk, of is een op de vijf keer dood (de spelregel "Zonder doden": alleen gewond). Licht houdt hem weg: bij de
 schout met zijn lantaarn blijft de roedel aan de rand van het licht, met zijn rode ogen; wie sluipt, heeft geen licht, en
-die valt hij aan, in een gevecht in beurten. Zolang de wolven iets deden (tien dagen), speelt de status "Er zijn wolven
-bij het dorp" in het rapport, en namen ze een schaap of een mens, dan zegt de raad het.
+die valt hij aan, in een gevecht. Zolang de wolven iets deden (tien dagen), speelt de status "Er zijn wolven bij het
+dorp", en namen ze een schaap of een mens, dan zegt de raad het.
 
 **De jager** (stap 3a, 7 okt; Marcel: "Altijd een paar herten over houden. Anders krijgen we geen jonge hertjes meer",
 en na de speeltest "J1 vind ik goed idee. J2 logisch eigenlijk ... K, klopt"): de helft van zijn vlees is klein wild
@@ -956,13 +955,9 @@ Waarom klein wild: met alleen herten vielen alle bouwers van de speeltest in het
 op vlees uit het niets, en vroeg jager na jager. **Het dorp eet gevarieerd** (Marcel: "Graan, brood, vlees, vis etc."):
 een richting, zie `opmerkingen.md`.
 
-**De jacht te voet** (stap 3b, 7 okt; Marcel: "Ja dat is goed"): "Een jacht" in het voorval van de wolven stuurt de
-mannen van de militie (zonder militie twee weerbare mannen) met de schout mee, en het hol ligt in goud op de grond. Komt
-hij binnen negen tegels van een wolf van de roedel, dan is het een gevecht in beurten, met de mannen aan zijn kant; wie
-overblijft, vlucht naar het hol, en de jacht is voorbij. Gaat hij niet binnen twee dagen, dan gaan de mannen zonder hem:
-de roedel verliest twee wolven, en een op de zeven keer komt een van de mannen niet terug. **Nog niet:** het hol als
-tekening op de kaart, om hulp roepen (3c) en het hek op de kaart (3d); de lantaarns aan de bosrand vallen weg (Marcel: "D
-ja allebei"). Zie de werklijst, vraag 116.
+**De jacht te voet** (stap 3b, 7 okt) en **het hek om de schapen** (3d) zijn weg sinds 15 okt (ronde 3 van het
+snoeien: ze kwamen uit het voorval "wolven"); je stuurt je soldaten op de wolven af (vraag 170). Een hek kan terugkomen
+met de muren (158).
 
 "Ik wil dat er beesten kunnen rondlopen in het bos. Wolven etc. Die de houthakker kunnen bedreigen. Rode ogen uit het
 duister." Het voorstel (vraag 116): wolven in roedels diep in het bos, herten die wegrennen, later een zwijn of een beer;

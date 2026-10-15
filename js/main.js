@@ -1184,7 +1184,7 @@
       }
       const nu = T.uurTekst(D.kalender.dag);
       return {
-        aan: T.BEESTEN_INSTELLINGEN.aan, uur: nu, hek: !!(D.beesten && D.beesten.hek),
+        aan: T.BEESTEN_INSTELLINGEN.aan, uur: nu,
         status: T.wolvenBijHetDorp(D, D.kalender.dag),
         groepen: groepen.map(({ G, leden }) => {
           const l = leden.find((e) => e.leider) || leden[0];

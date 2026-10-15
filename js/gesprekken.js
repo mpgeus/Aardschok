@@ -488,32 +488,6 @@
         },
       },
     },
-    wolven: {
-      naam: '{wie}',
-      start: 'begin',
-      // Met beesten in het bos (js/beesten.js; werklijst vraag 116, stap 2b) namen de wolven het schaap echt, en komt dit
-      // de ochtend erna: dan is de jacht een jacht te voet, met de mannen naar de roedel (stap 3b), en doet het hek wat het
-      // zegt. Zonder beesten komt het zomaar, en zegt het antwoord wat het kost, zoals voor 7 okt.
-      situaties: [
-        { naam: 'De wolven namen een schaap', als: { vlag: 'wolvenNamenSchaap' } },
-        { naam: 'Zonder beesten in het bos', als: { nietVlag: 'wolvenNamenSchaap' } },
-      ],
-      knopen: {
-        begin: {
-          tekst: [
-            { zeg: "Wolves, reeve! Last night, at the sheep. They took one, and they'll be back. Wolves always come back." },
-          ],
-          keuzes: [
-            { zeg: 'A hunt. {ander} knows where they are.', sluit: true, als: { vlag: 'wolvenNamenSchaap' }, doe: { tevreden: 2, jacht: true } },
-            { zeg: 'A higher fence round the sheep.', sluit: true, als: { vlag: 'wolvenNamenSchaap' }, doe: { hout: -12, hek: true } },
-            { zeg: 'It was only one sheep.', sluit: true, als: { vlag: 'wolvenNamenSchaap' } },
-            { zeg: 'A hunt. {ander} knows where they are.', sluit: true, als: { nietVlag: 'wolvenNamenSchaap' }, doe: { tevreden: 2, sterfkans: 15, schaap: -1 } },
-            { zeg: 'A higher fence round the sheep.', sluit: true, als: { nietVlag: 'wolvenNamenSchaap' }, doe: { hout: -12, schaap: -1 } },
-            { zeg: 'It was only one sheep.', sluit: true, als: { nietVlag: 'wolvenNamenSchaap' }, doe: { schaap: -4 } },
-          ],
-        },
-      },
-    },
     storm: {
       naam: '{wie}',
       start: 'begin',

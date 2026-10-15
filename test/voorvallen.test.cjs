@@ -42,7 +42,7 @@ const antwoorden = (id) => knoopVan(id).keuzes;
 
 // Wat een antwoord mag doen: wat elk gesprek kan, en wat js/voorvallen.js erbij doet (het kop-commentaar daar).
 const WAREN = ['graan', 'hout', 'wol', 'bier', 'ijzer', 'zout', 'vlees', 'vis', 'kaas', 'hooi'];
-const GEVOLGEN = new Set(['zetVlag', 'wisVlag', 'geef', 'neem', 'goud', ...WAREN, 'tevreden', 'gunst', 'vertrouwen', 'verban', 'sterfkans', 'gezin', 'voorval', 'feest', 'bouw', 'weiger', 'wolven', 'jacht', 'hek', ...Object.keys(T.VEE)]);
+const GEVOLGEN = new Set(['zetVlag', 'wisVlag', 'geef', 'neem', 'goud', ...WAREN, 'tevreden', 'gunst', 'vertrouwen', 'verban', 'sterfkans', 'gezin', 'voorval', 'feest', 'bouw', 'weiger', ...Object.keys(T.VEE)]);
 
 test('elk voorval heeft een gesprek onder zijn naam, en elk antwoord gaat ergens heen en doet wat het spel kent', () => {
   for (const [id, v] of Object.entries(T.VOORVALLEN)) {
@@ -189,18 +189,6 @@ test('een voorval komt als het er de tijd voor is: de maand, een gebouw, de voor
   herberg.klaar = false;
   assert.equal(T.voorvalKan(S.dorp, 'vechtpartij', 10), null);
   herberg.klaar = true;
-  // Wolven in de winter, en alleen als er schapen zijn om te halen; met beesten in het bos komen ze niet zomaar, maar als
-  // de wolven echt een schaap namen (js/beesten.js, test/beesten.test.cjs).
-  const LOUWMAAND = 10 * T.DAGEN_PER_MAAND;
-  const schapen = T.veeVan(S.dorp).filter((e) => e.dier === 'schaap').length;
-  assert.equal(T.voorvalKan(S.dorp, 'wolven', LOUWMAAND + 3), null, 'met beesten in het bos niet zomaar');
-  T.zetOptie('beesten', 'uit');
-  try {
-    assert.equal(!!T.voorvalKan(S.dorp, 'wolven', LOUWMAAND + 3), schapen >= 3, `wolven met ${schapen} schapen`);
-    assert.equal(T.voorvalKan(S.dorp, 'wolven', GRASMAAND + 3), null, 'niet in grasmaand');
-  } finally {
-    T.zetOptie('beesten', 'aan');
-  }
   // Hetzelfde voorval niet binnen zijn pauze.
   metVoorval(S, 'zwerver', 20);
   T.voorvalBeantwoord(S.dorp, 'zwerver');
@@ -482,14 +470,12 @@ test('met een oorzaak komt een probleem vaker, zonder zelden; op 1 en 1 zoals v√
   const IN = T.VOORVALLEN_INSTELLINGEN;
   assert.equal(T.gewichtVanVoorval(D, 'diefstal', ZOMER), IN.zonderOorzaak);
   assert.equal(T.gewichtVanVoorval(D, 'zwerver', ZOMER), 1, 'zonder oorzaak in T.VOORVALLEN verandert er niets');
-  assert.equal(T.gewichtVanVoorval(D, 'wolven', WINTER), 3 * IN.zonderOorzaak, 'het wintergewicht blijft');
   T.zetWet(D, 'rantsoen', 'krap');
   assert.equal(T.gewichtVanVoorval(D, 'diefstal', ZOMER), IN.metOorzaak);
   const oud = { met: IN.metOorzaak, zonder: IN.zonderOorzaak };
   try {
     Object.assign(IN, { metOorzaak: 1, zonderOorzaak: 1 });
     assert.equal(T.gewichtVanVoorval(D, 'diefstal', ZOMER), 1);
-    assert.equal(T.gewichtVanVoorval(D, 'wolven', WINTER), 3);
   } finally {
     Object.assign(IN, { metOorzaak: oud.met, zonderOorzaak: oud.zonder });
   }

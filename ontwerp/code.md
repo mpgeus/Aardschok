@@ -1180,8 +1180,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   een roedel ziet, rent naar huis (`schrik`; `T.blijftThuis` in js/bewoners.js, `p.thuisTot`: hij werkt niet, en
   `T.dagAnker` houdt hem binnen), en zijn werkplaats maakte die dag de helft; een roedel met honger is in het donker stout
   (`T.wolvenStout`) en zoekt prooi (`kiesProoi`: een schaap, wie alleen in het donker loopt, of de schout), en slaat toe
-  (`slaToe`): een schaap (`T.verliesDier` in js/vee.js, en het voorval "wolven" de ochtend erna, met de vlag
-  `wolvenNamenSchaap`: dan doen de jacht, `T.jaagOpDeWolven`, en het hek, `T.hekOmDeSchapen`, echt iets), een mens
+  (`slaToe`): een schaap (`T.verliesDier` in js/vee.js, met een bericht met de plek; tot 15 okt het voorval "wolven",
+  met een jacht of een hek, weg in ronde 3 van het snoeien), een mens
   (`bijt`: gewond, `p.gewond`, of dood), of de schout zonder licht (een gevecht); bij zijn lantaarn blijft hij aan de rand
   van het licht (`randVanHetLicht`). De status "Wolven" (`T.wolvenBijHetDorp`, in `T.OORZAKEN`) en de raad. De spelregel
   "Beesten" (aan, zonder doden of uit); de getallen in `T.BEESTEN_INSTELLINGEN`. **De jager** (stap 3a): de helft van zijn vlees
@@ -1190,13 +1190,10 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   kleiner; vindt hij geen hert (`g.zonderHerten`, `T.jagersZonderHerten`), dan vraagt het dorp geen nieuwe jager en de heer
   van hem geen vlees. Zijn poppetje loert in het bos (`jaag` in `js/veldwerk.js`). **Het hol** (`zetHol`, `T.holVan`):
   elke roedel heeft er een op de kaart, naast zijn thuis, dat meegaat als hij verhuist (`gereedschap/pixelart/hol.cjs`).
-  **De jacht te voet** (stap 3b): "Een jacht" in het voorval (`doe.jacht`, `T.beginJacht`, `D.beesten.jacht`) roept de
-  militie op (`T.roepOp`, `T.laatGaan`, `T.militieVan` in `js/rovers.js`), het hol ligt in goud (`T.holVanDeJacht`), bij
-  de roedel vecht hij (`T.wolvenVechten`; `T.naJacht` vanuit `T.gevechtVoorbij`), en na twee dagen gaan de mannen zonder
-  je. **Om hulp roepen** (3c, `G.aanval`, `e.roeptOmHulp`): wie de wolven aanvallen, roept, de mannen die het horen komen
+  **Om hulp roepen** (3c, `G.aanval`, `e.roeptOmHulp`): wie de wolven aanvallen, roept, de mannen die het horen komen
   (`moetNaar` met `hulp`), een buur jaagt ze weg, een man van je (`hulp.man`) vecht met ze, en na een kwartier bijten ze.
-  Na een gevecht gaat een roedel terug naar zijn hol (`T.wolvenNaHetGevecht`). **Het hek** (3d,
-  `T.hekOmDeSchapen`): latten om de meent, met hekjes.
+  Na een gevecht gaat een roedel terug naar zijn hol (`T.wolvenNaHetGevecht`). De jacht te voet (3b) en het hek om de
+  meent (3d, `zetHek`) zijn weg sinds 15 okt (ronde 3 van het snoeien): je stuurt je soldaten op de wolven af.
 
 ### js/weer.js: het weer
 
@@ -1576,8 +1573,8 @@ de browser en in de Node-tests werkt. De volgorde van de scripts in `index.html`
   hall (`T.schuil`, `p.schuilt`, `D.schuilen`; zonder town hall naar zijn eigen huis): `T.dagAnker` zet hem daar binnen, en
   `T.blijftThuis` houdt hem van het werk. Is er geen rover meer op de kaart, dan komt iedereen weer naar buiten.
 - **Het gevecht als status:** `D.gevecht = { sinds, laatst, plek }` zolang iemand een doel heeft, en `rustNa` seconden
-  erna (`T.OORZAKEN.gevecht`, js/voorvallen.js); een bericht met de plek als het begint en ophoudt (`T.gevechtVoorbij`:
-  ook `T.naJacht` en `T.wolvenNaHetGevecht`), de tijd hooguit op 1× (`T.erWordtGevochten` in `T.snelheidNu`, js/tijd.js),
+  erna (`T.OORZAKEN.gevecht`, js/statussen.js); een bericht met de plek als het begint en ophoudt (`T.gevechtVoorbij`:
+  ook `T.wolvenNaHetGevecht`), de tijd hooguit op 1× (`T.erWordtGevochten` in `T.snelheidNu`, js/tijd.js),
   en de randen van het beeld kleuren rood (`S.gevechtGloed`). Opslaan mag ook in een gevecht.
 - Valt de held, dan is het spel uit (`T.schoutGevallen`), tot stap 5. Tot 15 okt was dit het gevecht in beurten: de
   overgang, het raster, de actiepunten, de beurtvolgorde, de deur dichtgooien en `planMonsterBeurt` (git bewaart het).

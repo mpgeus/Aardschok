@@ -350,9 +350,9 @@
   }
 
   // Het eind van een aanval: wie nog leeft, is de kaart af. Wie in een spel van vóór 15 okt nog met de schout meeliep,
-  // gaat weer naar huis (behalve op de jacht op de wolven, js/beesten.js).
+  // gaat weer naar huis.
   function eind(D) {
-    if (!(D.beesten && D.beesten.jacht)) laatGaan(D);
+    laatGaan(D);
     D.rovers.aanval = null;
   }
 

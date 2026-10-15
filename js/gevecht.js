@@ -371,11 +371,10 @@
     if (T.ui && T.ui.werkBalkBij && D === S.dorp) T.ui.werkBalkBij(S);
   }
 
-  // Het gevecht is voorbij: de jacht op de wolven is af (js/beesten.js), een roedel die vocht gaat terug naar zijn hol.
+  // Het gevecht is voorbij: een roedel die vocht, gaat terug naar zijn hol (js/beesten.js).
   T.gevechtVoorbij = function (S, D) {
     D.gevecht = null;
     T.zeg(D, T.t('The fighting is over.'), 'rust');
-    T.naJacht(D);
     T.wolvenNaHetGevecht(D);
     toonInDeBalk(S, D);
   };

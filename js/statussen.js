@@ -130,7 +130,7 @@
       nog: T.t('There are still wolves near the village'),
       voorbij: T.t('The wolves keep to the forest again'),
       speelt: (D, dag) => (T.wolvenBijHetDorp ? T.wolvenBijHetDorp(D, dag) : null), // wereld.html laadt de beesten niet
-      helpt: () => T.t('a hunt for the wolves, a fence round the sheep, and light in the dark'),
+      helpt: () => T.t('your soldiers: choose them, and right-click a wolf; and light in the dark'),
     },
     // De droogte (js/weer.js; Marcel, 9 okt): lang geen regen in het groeiseizoen.
     droogte: {
