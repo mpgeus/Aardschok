@@ -35,7 +35,9 @@ eerste antwoorden (bij H). **156, een gebouw aanklikken, is af** (14 okt, in `ma
 van een gebouw nu"), en **164, een minimale balk onderaan, 165, een minimap van het hele eiland, en 166, een dunne balk
 bovenaan, ook** (14 okt, in `main`; het scherm zo leeg mogelijk, CLAUDE.md). **Het volgende is 157**, de zagerij en de
 planken (Marcel: "Plan ja, zagerij nu een eigen tekening"; **Bezig in sessie `claude/village-economy-gameplay-lmsnyg`**,
-14 okt), en dan C6 met de keten erin.
+14 okt), en dan 168, de zager aan het werk (Marcel, 14 okt: "Ik wil wel dat je iemand ziet werken"; **Bezig in sessie
+`claude/village-economy-gameplay-lmsnyg`**, 15 okt: een werkfiguur die zaagt, eerst één proefplaat), en dan C6 met de keten
+erin.
 
 **Wacht op Marcel:**
 - **Het briefje van een gebouw bekijken** (156, 14 okt): Nieuw spel, zet een houthakker, en klik erop als hij af is:
