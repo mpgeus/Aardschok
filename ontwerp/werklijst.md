@@ -209,7 +209,8 @@ overal, over een weg sneller; een ossenkar; de eerste opslag is het huis van de 
    de velden van een boerderij gaan mee; niet af te breken zijn het huis van de schout en het plein; **f** de kolonist legt ook wegen, van elke schuur naar het huis van de schout, zodat stap 6 meet wat een
    weg doet.
 6. **Meten en spelen:** de speeltest vanaf een lege plek: hoeveel van de dag de kar rijdt, wat er wacht, hoe groot de
-   stapels worden. Dan ronde 3 van A.
+   stapels worden. Dan ronde 3 van A. **Bezig in sessie `claude/wizardly-sagan-qw7f8f`** (15 okt): het plan voor het
+   meten, wacht op Marcel.
 
 Wat Claude erbij zag (14 okt): met de getallen van nu is één kar ruim genoeg voor een gehucht (hij rijdt binnen 16
 tegels drie tot vier ritten per dag, een houthakker maakt 2 hout per dag); de keuze voor een tweede kar komt met de afstand
